@@ -1,72 +1,34 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Sun,  9 Sep 2018 11:43:17 +0200
-Subject: [Buildroot] [PATCH] shairport-sync: add upstream patch to fix soxr
- configure issue
-Message-ID: <20180909094317.10873-1-joerg.krause@embedded.rocks>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  9 Sep 2018 11:53:02 +0200
+Subject: [Buildroot] [PATCH 1/1] glibc: fix hash for LICENSES
+Message-ID: <20180909095302.2697-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit b06639cf7a adds an upstream patch to fix a build issue with soxr.
-The patch also adds detecting soxr using pkg-config. Upstream detected
-an config issue [1], where the resulting binary lacks soxr support, although
-libsoxr was correctly detected.
+When bumping to 2.28, LICENSES file changed to remove the
+stdio-common/tst-printf.c part:
+https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=5a357506659f9a00fcf5bc9c5d8fc676175c89a7
 
-This patch adds a define for `HAVE_LIBSOXR` when using pkg-config.
+Fixes:
+ - http://autobuild.buildroot.org/results/72824137037f675e4efe3284089451803f944abf
 
-Backported from: cd6a99a7cfde1c5e1c1cc74ee6a77041bb4012d9
-
-[1] https://github.com/mikebrady/shairport-sync/issues/740
-
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Should be committed to 2018.02.x and 2018.05.x, too.
----
- ...f-HAVE_LIBSOXR-with-using-pkg_config.patch | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/shairport-sync/0002-Include-a-definition-of-HAVE_LIBSOXR-with-using-pkg_config.patch
+ package/glibc/glibc.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/shairport-sync/0002-Include-a-definition-of-HAVE_LIBSOXR-with-using-pkg_config.patch b/package/shairport-sync/0002-Include-a-definition-of-HAVE_LIBSOXR-with-using-pkg_config.patch
-new file mode 100644
-index 0000000000..e10142a201
---- /dev/null
-+++ b/package/shairport-sync/0002-Include-a-definition-of-HAVE_LIBSOXR-with-using-pkg_config.patch
-@@ -0,0 +1,34 @@
-+From cd6a99a7cfde1c5e1c1cc74ee6a77041bb4012d9 Mon Sep 17 00:00:00 2001
-+From: Mike Brady <mikebrady@eircom.net>
-+Date: Sat, 8 Sep 2018 15:06:18 +0100
-+Subject: [PATCH] Include a definition of HAVE_LIBSOXR with using pkg_config
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Commit b06639cf7a adds an upstream patch to fix a build issue with soxr.
-+The patch also adds detecting soxr using pkg-config. Upstream detected
-+a config issue [1], where the resulting binary lacks soxr support, although
-+libsoxr was correctly detected.
-+
-+Backported from: cd6a99a7cfde1c5e1c1cc74ee6a77041bb4012d9
-+
-+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-+---
-+ configure.ac | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/configure.ac b/configure.ac
-+index ceec4af..690a774 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -180,6 +180,7 @@ AC_ARG_WITH(soxr, [  --with-soxr = choose libsoxr for high-quality interpolation
-+     PKG_CHECK_MODULES(
-+         [SOXR], [soxr],
-+         [LIBS="${SOXR_LIBS} ${LIBS}"])
-++    AC_DEFINE([HAVE_LIBSOXR],[1],[Define to 1 if you are including support for soxr interpolation])
-+   else
-+     AC_CHECK_LIB([avutil],[av_get_cpu_flags])
-+     if  test "x${ac_cv_lib_avutil_av_get_cpu_flags}" = xyes ; then
-+-- 
-+2.18.0
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+index 85afd6fd6b..096393ff9b 100644
+--- a/package/glibc/glibc.hash
++++ b/package/glibc/glibc.hash
+@@ -5,4 +5,4 @@ sha256  e08ab67b2db2d0f0e8f3311d23c54fb8f6d4c1ef6fa0b4047fd5da400e3ce9de     gli
+ 
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+-sha256  61abdd6930c9c599062d89e916b3e7968783879b6be0ee1c6229dd6169def431  LICENSES
++sha256  35bdb41dc0bcb10702ddacbd51ec4c0fe6fb3129f734e8c85fc02e4d3eb0ce3f  LICENSES
 -- 
-2.18.0
+2.17.1
