@@ -1,50 +1,66 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  9 Sep 2018 21:50:23 +0200
-Subject: [Buildroot] [PATCH 1/1] fio: fix license
-Message-ID: <20180909195023.23907-1-fontaine.fabrice@gmail.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Sun, 9 Sep 2018 22:17:15 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] php: pdo mysql
+ extension needs hash as well
+In-Reply-To: <5562cbe3-3df3-94b7-fe85-2bad30175f69@micronovasrl.com>
+References: <20180903072218.4E3CD81DF3@busybox.osuosl.org>
+ <5562cbe3-3df3-94b7-fe85-2bad30175f69@micronovasrl.com>
+Message-ID: <d44ba2b9-598a-b0cd-7e16-83cb8bb775e5@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fio does not have any special conditions since version 2.2.6 indeed
-MORAL-LICENSE has been updated to replace "promising" by "encouraged"
-and "must" by "should":
-https://github.com/axboe/fio/commit/67f4822ce3dc6af76b963c6ac467a8f0471a7faf
+Hello,
 
-So fix LICENSE, add MORAL-LICENSE to LICENSE_FILES and add hash for both
-licenses
+Il 08/09/2018 01:34, Giulio Benetti ha scritto:
+> Hello,
+> 
+> Il 03/09/2018 09:22, Peter Korsgaard ha scritto:
+>> commit: 
+>> https://git.buildroot.net/buildroot/commit/?id=dc589d21fa268c345cf910f6fa7165240ca8105d 
+>>
+>> branch: 
+>> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/69cf9326539c8df8fa50c5e7acb2ce3bb985ede2/ 
+>>
+>>
+>> The PDO mysql extension also needs the hash extension - so select it,
+>> similar to how it was done for the mysqli extension in commit 65f96452636
+>> (php: fix build with mysqli).
+>>
+>> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+>> (cherry picked from commit 45215ffc8a75377228a477bebbf2ad9c78d40a35)
+>> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+>> ---
+>> ? package/php/Config.ext | 1 +
+>> ? 1 file changed, 1 insertion(+)
+>>
+>> diff --git a/package/php/Config.ext b/package/php/Config.ext
+>> index 60ef1aee7c..51dcbbf4a4 100644
+>> --- a/package/php/Config.ext
+>> +++ b/package/php/Config.ext
+>> @@ -132,6 +132,7 @@ if BR2_PACKAGE_PHP_EXT_PDO
+>> ? config BR2_PACKAGE_PHP_EXT_PDO_MYSQL
+>> ????? bool "MySQL"
+>> +??? select BR2_PACKAGE_PHP_EXT_HASH
+>> ????? help
+>> ??????? PDO driver for MySQL
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+> 
+> Since I don't see any new php patch on queue, I would like to signal 
+> that this patch and https://patchwork.ozlabs.org/patch/962514/ are 
+> needed for master branch too.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/fio/fio.hash | 2 ++
- package/fio/fio.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
+Sorry, I got confused, commit is present also in master branch.
+And autobuilds are precedent to that commit.
 
-diff --git a/package/fio/fio.hash b/package/fio/fio.hash
-index 7eb08140c5..d136fd595b 100644
---- a/package/fio/fio.hash
-+++ b/package/fio/fio.hash
-@@ -1,2 +1,4 @@
- # Locally computed
- sha256 1952db4d534221e6e8454f851dfcc38328b0ed4a3f499ea25a51ca2b5ccc8136  fio-fio-2.20.tar.gz
-+sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
-+sha256 8a240c1ad13d1fe3e58588643d81d0695899be4a669fe6d8fafa76ca6a89db2c  MORAL-LICENSE
-diff --git a/package/fio/fio.mk b/package/fio/fio.mk
-index c109f0795c..aabdff9925 100644
---- a/package/fio/fio.mk
-+++ b/package/fio/fio.mk
-@@ -6,8 +6,8 @@
- 
- FIO_VERSION = fio-2.20
- FIO_SITE = git://git.kernel.dk/fio.git
--FIO_LICENSE = GPL-2.0 + special obligations
--FIO_LICENSE_FILES = COPYING
-+FIO_LICENSE = GPL-2.0
-+FIO_LICENSE_FILES = COPYING MORAL-LICENSE
- 
- ifeq ($(BR2_PACKAGE_LIBAIO),y)
- FIO_DEPENDENCIES += libaio
--- 
-2.17.1
+Kind regards
+Giulio Benetti
