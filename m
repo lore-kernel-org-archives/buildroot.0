@@ -1,304 +1,161 @@
-From: Philipp Richter <richterphilipp.pops@gmail.com>
-Date: Sun,  9 Sep 2018 19:53:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libtorrent-rasterbar: new package
-Message-ID: <20180909175317.26638-1-richterphilipp.pops@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 9 Sep 2018 20:55:18 +0200
+Subject: [Buildroot] [PATCH v5 0/3] Add tainting support to buildroot
+In-Reply-To: <CA+_SqVZ8-qKU9AxV+kAo6ch4QGKtPJWKS_jOGKMGPjsVTTp5mA@mail.gmail.com>
+References: <1536186133-9933-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20180909073616.GC2841@scaer>
+ <20180909141037.69b16e95@windsurf.home>
+ <CA+_SqVbJqv2On+9UPE4pcoyiK1wfDZp=t1h1yMdfVB-CQGp91g@mail.gmail.com>
+ <20180909133341.GJ2841@scaer>
+ <CA+_SqVafj+DAsaBtSPJkf2bwbmh_3JojRjBrzG0oT6GduKTG4g@mail.gmail.com>
+ <20180909142019.GK2841@scaer>
+ <CA+_SqVZ8-qKU9AxV+kAo6ch4QGKtPJWKS_jOGKMGPjsVTTp5mA@mail.gmail.com>
+Message-ID: <20180909185518.GA2409@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libtorrent is a feature complete C++ bittorrent implementation
-focusing on efficiency and scalability.
+Angelo, All,
 
-https://www.libtorrent.org/
+This is the last email I'll be sending in this thread, because it looks
+like the both of us are re-hashing the same arguments again and again...
+Yet, let me reply to parts of your email...
 
-Signed-off-by: Philipp Richter <richterphilipp.pops@gmail.com>
----
- DEVELOPERS                                    |   3 +
- package/Config.in                             |   1 +
- package/libtorrent-rasterbar/Config.in        | 133 ++++++++++++++++++
- .../libtorrent-rasterbar.hash                 |   3 +
- .../libtorrent-rasterbar.mk                   |  95 +++++++++++++
- 5 files changed, 235 insertions(+)
- create mode 100644 package/libtorrent-rasterbar/Config.in
- create mode 100644 package/libtorrent-rasterbar/libtorrent-rasterbar.hash
- create mode 100644 package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+On 2018-09-09 17:58 +0100, Angelo Compagnucci spake thusly:
+> On Sun, Sep 9, 2018 at 3:20 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> >
+> > On 2018-09-09 14:44 +0100, Angelo Compagnucci spake thusly:
+> > > On Sun, Sep 9, 2018 at 2:33 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > > > On 2018-09-09 13:25 +0100, Angelo Compagnucci spake thusly:
+[--SNIP--]
+> > > My concern here is that you start from a reproducible build, add your
+> > > packages right and so maintain your build reproducible, buildroot will
+> > > work as before.
+> >
+> > So you are, like I am, in fact arguing that we should have actual packages
+> > for such external modules? ;-)
+> 
+> I can't see any value on having hundreds of npm packages probably
+> outdated at wich you should add hundreds of php composer packages, go
+> modules, cargo packages and so on.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1f081e651f..e5b0482b61 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1663,6 +1663,9 @@ F:	package/psplash/
- F:	package/sispmctl/
- F:	package/zsh/
- 
-+N:	Philipp Richter <richterphilipp.pops@gmail.com>
-+F:	package/libtorrent-rasterbar/
-+
- N:	Philippe Proulx <eeppeliteloop@gmail.com>
- F:	package/lttng-babeltrace/
- F:	package/lttng-libust/
-diff --git a/package/Config.in b/package/Config.in
-index fb4d328846..d1b4147833 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1497,6 +1497,7 @@ menu "Networking"
- 	source "package/libstrophe/Config.in"
- 	source "package/libtirpc/Config.in"
- 	source "package/libtorrent/Config.in"
-+	source "package/libtorrent-rasterbar/Config.in"
- 	source "package/libupnp/Config.in"
- 	source "package/libupnp18/Config.in"
- 	source "package/libupnpp/Config.in"
-diff --git a/package/libtorrent-rasterbar/Config.in b/package/libtorrent-rasterbar/Config.in
-new file mode 100644
-index 0000000000..0ce9496b70
---- /dev/null
-+++ b/package/libtorrent-rasterbar/Config.in
-@@ -0,0 +1,133 @@
-+comment "libtorrent-rasterbar needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
-+config BR2_PACKAGE_LIBTORRENT_RASTERBAR
-+	bool "libtorrent-rasterbar"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	select BR2_PACKAGE_HOST_PKGCONF
-+	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_BOOST_CHRONO
-+	select BR2_PACKAGE_BOOST_SYSTEM
-+	select BR2_PACKAGE_BOOST_RANDOM
-+	help
-+	  libtorrent is a feature complete C++ bittorrent implementation
-+	  focusing on efficiency and scalability.
-+
-+	  https://www.libtorrent.org/
-+
-+if BR2_PACKAGE_LIBTORRENT_RASTERBAR
-+
-+config BR2_PACKAGE_LIBTORRENT_RASTERBAR_LOGGING
-+	bool "Logging alerts"
-+	default y
-+	help
-+	  Enable support for logging alerts,
-+	  like log_alert, torrent_log_alert and peer_log_alert.
-+
-+	  Default: yes
-+
-+config BR2_PACKAGE_LIBTORRENT_RASTERBAR_DEBUG
-+	bool "Debug"
-+	help
-+	  Enable debug build.
-+
-+	  Default: no
-+
-+config BR2_PACKAGE_LIBTORRENT_RASTERBAR_DHT
-+	bool "DHT"
-+	default y
-+	help
-+	  Enable support for trackerless torrents.
-+
-+	  Default: yes
-+
-+config BR2_PACKAGE_LIBTORRENT_RASTERBAR_ENCRYPTION
-+	bool "Encryption"
-+	default y
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  Enable encryption support.
-+	  Encryption support is the encrypted peer connection
-+	  supported by clients such as uTorrent, Azureus and KTorrent.
-+
-+	  Default: yes
-+
-+config BR2_PACKAGE_LIBTORRENT_RASTERBAR_EXPORT_ALL_SYMBOLS
-+	bool "Export all symbols"
-+	help
-+	  Export all symbols from libtorrent, including non-public ones.
-+
-+	  Default: no
-+
-+config BR2_PACKAGE_LIBTORRENT_RASTERBAR_POOL_ALLOCATORS
-+	bool "Pool allocators"
-+	default y
-+	help
-+	  Enable pool allocators for send buffers using boost::pool<>.
-+
-+	  Default: yes
-+
-+config BR2_PACKAGE_LIBTORRENT_RASTERBAR_INVARIANT_CHECKS
-+	bool "Invariant checks"
-+	default y
-+	depends on BR2_PACKAGE_LIBTORRENT_RASTERBAR_DEBUG
-+	help
-+	  Enable invariant checks.
-+
-+	  Default: yes
-+
-+comment "Invariant checks need debug build"
-+	depends on !BR2_PACKAGE_LIBTORRENT_RASTERBAR_DEBUG
-+
-+if BR2_PACKAGE_LIBTORRENT_RASTERBAR_INVARIANT_CHECKS
-+
-+choice
-+	prompt "Invariant checks type"
-+	default BR2_PACKAGE_LIBTORRENT_RASTERBAR_INVARIANT_CHECKS_YES
-+	help
-+	  Select the type of invariant checks to use.
-+
-+config BR2_PACKAGE_LIBTORRENT_RASTERBAR_INVARIANT_CHECKS_YES
-+	bool "yes"
-+	help
-+	  Standard invariant checks.
-+
-+config BR2_PACKAGE_LIBTORRENT_RASTERBAR_INVARIANT_CHECKS_FULL
-+	bool "full"
-+	help
-+	  Turn on extra expensive invariant checks.
-+
-+endchoice
-+
-+endif
-+
-+config BR2_PACKAGE_LIBTORRENT_RASTERBAR_DEPRECATED_FUNCTIONS
-+	bool "Deprecated functions"
-+	default y
-+	help
-+	  Enable deprecated functions in the API.
-+
-+	  Default: yes
-+
-+config BR2_PACKAGE_LIBTORRENT_RASTERBAR_DISK_STATS
-+	bool "Disk stats"
-+	help
-+	  Enable disk activity logging feature.
-+
-+	  Default: no
-+
-+config BR2_PACKAGE_LIBTORRENT_RASTERBAR_EXAMPLES
-+	bool "Examples"
-+	help
-+	  Build example files.
-+
-+	  Default: no
-+
-+config BR2_PACKAGE_LIBTORRENT_RASTERBAR_TESTS
-+	bool "Tests"
-+	help
-+	  Build test files.
-+
-+	  Default: no
-+
-+endif
-diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.hash b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
-new file mode 100644
-index 0000000000..01ac303bae
---- /dev/null
-+++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 d57a0f5b159f58003c3031943463503f0d05ae3e428dd7c2383d1e35fb2c4e8c libtorrent-rasterbar-1.1.9.tar.gz
-+sha256 f3a5dd1558cce616b12edad521427ec8976ce2bb0af33f7f359cfa648bf55ad8 COPYING
-diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-new file mode 100644
-index 0000000000..19f0a9304d
---- /dev/null
-+++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-@@ -0,0 +1,95 @@
-+################################################################################
-+#
-+# libtorrent-rasterbar
-+#
-+################################################################################
-+
-+LIBTORRENT_RASTERBAR_VERSION = 1.1.9
-+LIBTORRENT_RASTERBAR_SITE = https://github.com/arvidn/libtorrent/releases/download/libtorrent-$(subst .,_,$(LIBTORRENT_RASTERBAR_VERSION))
-+LIBTORRENT_RASTERBAR_LICENSE = BSD-2-Clause
-+LIBTORRENT_RASTERBAR_LICENSE_FILES = COPYING
-+LIBTORRENT_RASTERBAR_DEPENDENCIES = host-pkgconf boost $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-+LIBTORRENT_RASTERBAR_INSTALL_STAGING = YES
-+LIBTORRENT_RASTERBAR_CONF_OPTS += --with-boost-libdir="$(STAGING_DIR)/usr/lib"
-+LIBTORRENT_RASTERBAR_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
-+
-+ifeq ($(BR2_ENABLE_LOCALE)$(BR2_PACKAGE_LIBICONV),y)
-+LIBTORRENT_RASTERBAR_CONF_OPTS += --with-libiconv
-+else
-+LIBTORRENT_RASTERBAR_CONF_OPTS += --without-libiconv
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBTORRENT_RASTERBAR_LOGGING),y)
-+LIBTORRENT_RASTERBAR_CONF_OPTS += --enable-logging
-+else
-+LIBTORRENT_RASTERBAR_CONF_OPTS += --disable-logging
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBTORRENT_RASTERBAR_DEBUG),y)
-+LIBTORRENT_RASTERBAR_CONF_OPTS += --enable-debug
-+else
-+LIBTORRENT_RASTERBAR_CONF_OPTS += --disable-debug
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBTORRENT_RASTERBAR_DHT),y)
-+LIBTORRENT_RASTERBAR_CONF_OPTS += --enable-dht
-+else
-+LIBTORRENT_RASTERBAR_CONF_OPTS += --disable-dht
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBTORRENT_RASTERBAR_ENCRYPTION),y)
-+LIBTORRENT_RASTERBAR_CONF_OPTS += --enable-encryption
-+LIBTORRENT_RASTERBAR_DEPENDENCIES += openssl
-+else
-+LIBTORRENT_RASTERBAR_CONF_OPTS += --disable-encryption
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBTORRENT_RASTERBAR_EXPORT_ALL_SYMBOLS),y)
-+LIBTORRENT_RASTERBAR_CONF_OPTS += --enable-export-all
-+else
-+LIBTORRENT_RASTERBAR_CONF_OPTS += --disable-export-all
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBTORRENT_RASTERBAR_POOL_ALLOCATORS),y)
-+LIBTORRENT_RASTERBAR_CONF_OPTS += --enable-pool-allocators
-+else
-+LIBTORRENT_RASTERBAR_CONF_OPTS += --disable-pool-allocators
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBTORRENT_RASTERBAR_INVARIANT_CHECKS),y)
-+ifeq ($(BR2_PACKAGE_LIBTORRENT_RASTERBAR_INVARIANT_CHECKS_YES),y)
-+LIBTORRENT_RASTERBAR_CONF_OPTS += --enable-invariant-checks=yes
-+else
-+ifeq ($(BR2_PACKAGE_LIBTORRENT_RASTERBAR_INVARIANT_CHECKS_FULL),y)
-+LIBTORRENT_RASTERBAR_CONF_OPTS += --enable-invariant-checks=full
-+endif
-+endif
-+else
-+LIBTORRENT_RASTERBAR_CONF_OPTS += --disable-invariant-checks
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBTORRENT_RASTERBAR_DEPRECATED_FUNCTIONS),y)
-+LIBTORRENT_RASTERBAR_CONF_OPTS += --enable-deprecated-functions
-+else
-+LIBTORRENT_RASTERBAR_CONF_OPTS += --disable-deprecated-functions
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBTORRENT_RASTERBAR_DISK_STATS),y)
-+LIBTORRENT_RASTERBAR_CONF_OPTS += --enable-disk-stats
-+else
-+LIBTORRENT_RASTERBAR_CONF_OPTS += --disable-disk-stats
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBTORRENT_RASTERBAR_EXAMPLES),y)
-+LIBTORRENT_RASTERBAR_CONF_OPTS += --enable-examples
-+else
-+LIBTORRENT_RASTERBAR_CONF_OPTS += --disable-examples
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBTORRENT_RASTERBAR_TESTS),y)
-+LIBTORRENT_RASTERBAR_CONF_OPTS += --enable-tests
-+else
-+LIBTORRENT_RASTERBAR_CONF_OPTS += --disable-tests
-+endif
-+
-+$(eval $(autotools-package))
+Why not? We do have hundreds (~270, which literaly makes that number
+'hundreds') of python packages, some (a lot?) of them probably outdated.
+
+Worse, yet: we *do* have thousands of packages, a lot of them outdated.
+
+I don't see why we would single out npm packages at all.
+
+(Besides the fact that I don't like them; I don't like perl either, but
+I'm still quite happy to see perl packages.)
+
+> >> > As soon you use a package manager tainting will be
+> > > signaled.
+> >
+> > This is where I disagree.
+> >
+> > Using such package managers does not imply that the build is tainted.
+> > This is a false dichotomy.
+> 
+> Probably it is but my experience says not,
+
+And in my experience, it can be.
+
+If you are using an internal repository of which you control the
+content, then the list of nodejs modules *is* reproducible. This is
+not a theoretical situation, by the way; this is a real situation.
+
+Your heursitic is indeed not a heuristic, but a policy. Your policy
+states "any external module taints the build". My policy states "use
+our internal repository of trusted and known modules, anything else
+taints the build".
+
+So, the code currently expreses your policy, and precludes using mine,
+which I believe is still superior because I do not even rely on external
+data which may disapear at the whim of an external entity; everything I
+need is already internal and stable.
+
+> anyway, if you are dealing
+> with a complex php software for example you can:
+> * call php composer manually on the modules you are sure being
+> reproducible in your .mk and live happy
+
+I have no idea what php-composer is. I guess it would download and
+install php files, not unlike npm does, and probably looks as ugly as
+npm.
+
+> * use the package host-composer distributed with buildroot asking it
+> to do a "composer install" living with the fact that it could do
+> anything and you build will be tainted.
+>
+> > > Taint is mean to signal that there is a potential problem, and if you
+> > > don't want to slip into it, you can always do the right thing and
+> > > package your software and packaging also it's dependencies.
+> >
+> > And what I am saying is that the heuristic you suggest to decide whether
+> > a build should be considered tainted or not is incorrect.
+> 
+> It's not an heuristic, it's a rule: you ask to a package manager to
+> resolve your dependencies, your build _could_ be tainted. You want to
+> be sure: you write your own rule.
+
+So, because the build _could_ be tainted, you want to make all builds as
+tainted? That's insane...
+
+> If you write a clean mk that does everything right you shouldn't add
+> FOO_TAINTS, that's it.
+> 
+> I can agree with you that some packages could be considered first
+> class citizens, the others based on package managers could not be as
+> good as first ones. But at least, you give the tools to developers who
+> wants to add a non trivial web package or similar to buildroot.
+
+Well, the tainted stuff is basically orthogonal to the package manager
+stuff, I think. Even if I despise the package managers, I can see that
+people are so keen on using them...
+
+What I am arguing in this thread, is that the tainted status can *not*
+be deduced from the configuratioe tainted stuff is basically orthogonal
+to the package manager stuff, I think. Even if I despise the package
+managers, I can see that people are so keen on using them...
+
+What I am arguing in this thread, is that the tainted status can *not*
+be deduced from the configuration. The way you are currently coding the
+tainted flag would break for the people that are already doing it right,
+and for whom this tainted flag would ultimately prove to be the most
+valuable.
+
+Regards,
+Yann E. MORIN.
+
+> What I'm saying here is that we don't have such a rule we simply
+> cannot add any time soon any software based on package managers.
+> 
+> Probably there is some other smarter way to do it that I cannot see ...
+> 
+> I'm open to suggestions!
+> 
+> >
+> > > As soon as you do this, the taint disappear. I thin it could even be a
+> > > deterrent to package the software randomly!
+> >
+> > Regards,
+> > Yann E. MORIN.
+> >
+> > --
+> > .-----------------.--------------------.------------------.--------------------.
+> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> > | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> > '------------------------------^-------^------------------^--------------------'
+
 -- 
-2.18.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
