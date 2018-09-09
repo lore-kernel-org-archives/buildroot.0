@@ -1,45 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 9 Sep 2018 15:20:30 +0200
-Subject: [Buildroot] [git commit] e2fsprogs: bump to version 1.44.4
-Message-ID: <20180909131937.4088E838BE@busybox.osuosl.org>
+Date: Sun, 9 Sep 2018 15:20:25 +0200
+Subject: [Buildroot] [git commit] lsscsi: bump to version 0.30
+Message-ID: <20180909131937.39784838BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94c0a0555dc3aac6171b1966b4dfe613326f1e4e
+commit: https://git.buildroot.net/buildroot/commit/?id=9e775815845c6b1f721c9ef75e8b485e9071086c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+- Add hash for license file
+- Fix build with glibc 2.28: <sys/sysmacros.h> is no longer included
+  from <sys/types.h>, and therefore <sys/sysmacros.h> must be included
+  explicitly when major()/minor() are used
+
+Fixes:
+ - http://autobuild.buildroot.org/results/60ec736ec524dcffedcef8f92d98aa29fb8987aa
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/e2fsprogs/e2fsprogs.hash | 4 ++--
- package/e2fsprogs/e2fsprogs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/lsscsi/lsscsi.hash | 3 ++-
+ package/lsscsi/lsscsi.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
-index 65a6e199c9..71653c933f 100644
---- a/package/e2fsprogs/e2fsprogs.hash
-+++ b/package/e2fsprogs/e2fsprogs.hash
-@@ -1,5 +1,5 @@
--# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.44.2/sha256sums.asc
--sha256 8324cf0b6e81805a741d94087b00e99f7e16144f1ee5a413709a1fa6948b126c  e2fsprogs-1.44.2.tar.xz
-+# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.44.4/sha256sums.asc
-+sha256 ee03b2f2180614c5ae5f6dd2666f8808de61c3d8b37d22ba86cc6daea25be55a  e2fsprogs-1.44.4.tar.xz
+diff --git a/package/lsscsi/lsscsi.hash b/package/lsscsi/lsscsi.hash
+index d39da9bc80..fe1bc5d8b4 100644
+--- a/package/lsscsi/lsscsi.hash
++++ b/package/lsscsi/lsscsi.hash
+@@ -1,2 +1,3 @@
  # Locally calculated
- sha256 5da5ef153e559c1d990d4c3eedbedd4442db892d37eae1f35fff069de8ec9020  NOTICE
- sha256 032989b508f1a72ebee5b3417e55d06d473f9ee203e45ab11864a7e49cdec63d  lib/ss/mit-sipb-copyright.h
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index fecef118ac..2c5098883a 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
+-sha256 025d009a1af42bc5b2fca664c44c9ecdfd754356e4a44f5c6aced2420afadd50  lsscsi-0.28.tgz
++sha256 619a2187405f02c5f57682f3478bffc75326803cd08839e39d434250c5518b15  lsscsi-0.30.tgz
++sha256 dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
+diff --git a/package/lsscsi/lsscsi.mk b/package/lsscsi/lsscsi.mk
+index 649aad9a38..70c5226d9b 100644
+--- a/package/lsscsi/lsscsi.mk
++++ b/package/lsscsi/lsscsi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--E2FSPROGS_VERSION = 1.44.2
-+E2FSPROGS_VERSION = 1.44.4
- E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
- E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
- E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
+-LSSCSI_VERSION = 0.28
++LSSCSI_VERSION = 0.30
+ LSSCSI_SOURCE = lsscsi-$(LSSCSI_VERSION).tgz
+ LSSCSI_SITE = http://sg.danny.cz/scsi
+ LSSCSI_LICENSE = GPL-2.0+
