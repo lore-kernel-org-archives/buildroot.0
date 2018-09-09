@@ -1,39 +1,72 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sun,  9 Sep 2018 11:27:17 +0200
-Subject: [Buildroot] [PATCH] pkg-perl: move PERL_INC in configure step
-Message-ID: <20180909092717.19375-1-francois.perrad@gadz.org>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Sun,  9 Sep 2018 11:43:17 +0200
+Subject: [Buildroot] [PATCH] shairport-sync: add upstream patch to fix soxr
+ configure issue
+Message-ID: <20180909094317.10873-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-this workaround for old ExtUtils-MakeMaker is now useless
+Commit b06639cf7a adds an upstream patch to fix a build issue with soxr.
+The patch also adds detecting soxr using pkg-config. Upstream detected
+an config issue [1], where the resulting binary lacks soxr support, although
+libsoxr was correctly detected.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+This patch adds a define for `HAVE_LIBSOXR` when using pkg-config.
+
+Backported from: cd6a99a7cfde1c5e1c1cc74ee6a77041bb4012d9
+
+[1] https://github.com/mikebrady/shairport-sync/issues/740
+
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/pkg-perl.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Should be committed to 2018.02.x and 2018.05.x, too.
+---
+ ...f-HAVE_LIBSOXR-with-using-pkg_config.patch | 34 +++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 package/shairport-sync/0002-Include-a-definition-of-HAVE_LIBSOXR-with-using-pkg_config.patch
 
-diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
-index b0d5789ac..2888872dc 100644
---- a/package/pkg-perl.mk
-+++ b/package/pkg-perl.mk
-@@ -102,6 +102,7 @@ define $(2)_CONFIGURE_CMDS
- 			LD="$$(TARGET_CC)" \
- 			LDDLFLAGS="-shared $$(TARGET_LDFLAGS)" \
- 			LDFLAGS="$$(TARGET_LDFLAGS)" \
-+			PERL_INC=$$(STAGING_DIR)/usr/lib/$$(PERL_INSTALL_NAME)/$$(PERL_VERSION)/$$(PERL_ARCHNAME)/CORE \
- 			DESTDIR=$$(TARGET_DIR) \
- 			INSTALLDIRS=vendor \
- 			INSTALLVENDORLIB=/usr/lib/perl5/site_perl/$$(PERL_VERSION) \
-@@ -147,7 +148,6 @@ define $(2)_BUILD_CMDS
- 		$$(PERL_RUN) Build $$($(2)_BUILD_OPTS) build; \
- 	else \
- 		$$(MAKE1) \
--			PERL_INC=$$(STAGING_DIR)/usr/lib/perl5/$$(PERL_VERSION)/$$(PERL_ARCHNAME)/CORE \
- 			FIXIN=: \
- 			$$($(2)_BUILD_OPTS) pure_all; \
- 	fi
+diff --git a/package/shairport-sync/0002-Include-a-definition-of-HAVE_LIBSOXR-with-using-pkg_config.patch b/package/shairport-sync/0002-Include-a-definition-of-HAVE_LIBSOXR-with-using-pkg_config.patch
+new file mode 100644
+index 0000000000..e10142a201
+--- /dev/null
++++ b/package/shairport-sync/0002-Include-a-definition-of-HAVE_LIBSOXR-with-using-pkg_config.patch
+@@ -0,0 +1,34 @@
++From cd6a99a7cfde1c5e1c1cc74ee6a77041bb4012d9 Mon Sep 17 00:00:00 2001
++From: Mike Brady <mikebrady@eircom.net>
++Date: Sat, 8 Sep 2018 15:06:18 +0100
++Subject: [PATCH] Include a definition of HAVE_LIBSOXR with using pkg_config
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Commit b06639cf7a adds an upstream patch to fix a build issue with soxr.
++The patch also adds detecting soxr using pkg-config. Upstream detected
++a config issue [1], where the resulting binary lacks soxr support, although
++libsoxr was correctly detected.
++
++Backported from: cd6a99a7cfde1c5e1c1cc74ee6a77041bb4012d9
++
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
++---
++ configure.ac | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/configure.ac b/configure.ac
++index ceec4af..690a774 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -180,6 +180,7 @@ AC_ARG_WITH(soxr, [  --with-soxr = choose libsoxr for high-quality interpolation
++     PKG_CHECK_MODULES(
++         [SOXR], [soxr],
++         [LIBS="${SOXR_LIBS} ${LIBS}"])
+++    AC_DEFINE([HAVE_LIBSOXR],[1],[Define to 1 if you are including support for soxr interpolation])
++   else
++     AC_CHECK_LIB([avutil],[av_get_cpu_flags])
++     if  test "x${ac_cv_lib_avutil_av_get_cpu_flags}" = xyes ; then
++-- 
++2.18.0
 -- 
-2.17.1
+2.18.0
