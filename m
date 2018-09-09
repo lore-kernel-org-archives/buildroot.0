@@ -1,34 +1,79 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  9 Sep 2018 11:53:02 +0200
-Subject: [Buildroot] [PATCH 1/1] glibc: fix hash for LICENSES
-Message-ID: <20180909095302.2697-1-fontaine.fabrice@gmail.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Sun,  9 Sep 2018 11:59:39 +0200
+Subject: [Buildroot] [PATCH] android-tools: fix minor()/major() build
+ failure due to glibc 2.28
+Message-ID: <20180909095939.17089-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When bumping to 2.28, LICENSES file changed to remove the
-stdio-common/tst-printf.c part:
-https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=5a357506659f9a00fcf5bc9c5d8fc676175c89a7
+glibc 2.28 no longer includes <sys/sysmacros.h> from <sys/types.h>,
+and therefore <sys/sysmacros.h> must be included explicitly when
+major()/minor() are used.
+
+This commit adds a patch to directly include <sys/sysmacros.h> into
+all usb_linux.c files where minor() and major() macros are used.
 
 Fixes:
- - http://autobuild.buildroot.org/results/72824137037f675e4efe3284089451803f944abf
+http://autobuild.buildroot.net/results/901/9011c6af71fb81988c2a05f2acee913a2bae2eff//
+http://autobuild.buildroot.net/results/142/142c5672fdc44f2d68f18df3509e5051b3295df5//
+http://autobuild.buildroot.net/results/b55/b55aa69654e758af5232ae69618ba1ea5c245074//
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- package/glibc/glibc.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...smacros.h-to-compile-with-glibc-2.28.patch | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/android-tools/0008-Include-sysmacros.h-to-compile-with-glibc-2.28.patch
 
-diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-index 85afd6fd6b..096393ff9b 100644
---- a/package/glibc/glibc.hash
-+++ b/package/glibc/glibc.hash
-@@ -5,4 +5,4 @@ sha256  e08ab67b2db2d0f0e8f3311d23c54fb8f6d4c1ef6fa0b4047fd5da400e3ce9de     gli
- 
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
--sha256  61abdd6930c9c599062d89e916b3e7968783879b6be0ee1c6229dd6169def431  LICENSES
-+sha256  35bdb41dc0bcb10702ddacbd51ec4c0fe6fb3129f734e8c85fc02e4d3eb0ce3f  LICENSES
+diff --git a/package/android-tools/0008-Include-sysmacros.h-to-compile-with-glibc-2.28.patch b/package/android-tools/0008-Include-sysmacros.h-to-compile-with-glibc-2.28.patch
+new file mode 100644
+index 0000000000..77b457f604
+--- /dev/null
++++ b/package/android-tools/0008-Include-sysmacros.h-to-compile-with-glibc-2.28.patch
+@@ -0,0 +1,42 @@
++usb_linux.c: fix minor()/major() build failure due to glibc 2.28
++
++glibc 2.28 no longer includes <sys/sysmacros.h> from <sys/types.h>,
++and therefore <sys/sysmacros.h> must be included explicitly when
++major()/minor() are used.
++
++This commit adds a patch to directly include <sys/sysmacros.h> into
++all usb_linux.c files where minor() and major() macros are used.
++
++diff -urpN host-android-tools-4.2.2+git20130218.orig/core/adb/usb_linux.c host-android-tools-4.2.2+git20130218/core/adb/usb_linux.c
++--- host-android-tools-4.2.2+git20130218.orig/core/adb/usb_linux.c	2013-02-18 15:49:03.000000000 +0100
+++++ host-android-tools-4.2.2+git20130218/core/adb/usb_linux.c	2018-09-09 11:47:16.476292546 +0200
++@@ -20,6 +20,7 @@
++ #include <string.h>
++ 
++ #include <sys/ioctl.h>
+++#include <sys/sysmacros.h>
++ #include <sys/types.h>
++ #include <sys/time.h>
++ #include <dirent.h>
++diff -urpN host-android-tools-4.2.2+git20130218.orig/core/adbd/usb_linux.c host-android-tools-4.2.2+git20130218/core/adbd/usb_linux.c
++--- host-android-tools-4.2.2+git20130218.orig/core/adbd/usb_linux.c	2018-09-09 02:32:57.154503866 +0200
+++++ host-android-tools-4.2.2+git20130218/core/adbd/usb_linux.c	2018-09-09 11:47:28.148353880 +0200
++@@ -20,6 +20,7 @@
++ #include <string.h>
++ 
++ #include <sys/ioctl.h>
+++#include <sys/sysmacros.h>
++ #include <sys/types.h>
++ #include <sys/time.h>
++ #include <dirent.h>
++diff -urpN host-android-tools-4.2.2+git20130218.orig/core/fastboot/usb_linux.c host-android-tools-4.2.2+git20130218/core/fastboot/usb_linux.c
++--- host-android-tools-4.2.2+git20130218.orig/core/fastboot/usb_linux.c	2013-02-18 15:49:03.000000000 +0100
+++++ host-android-tools-4.2.2+git20130218/core/fastboot/usb_linux.c	2018-09-09 11:46:53.028169154 +0200
++@@ -33,6 +33,7 @@
++ 
++ #include <sys/ioctl.h>
++ #include <sys/stat.h>
+++#include <sys/sysmacros.h>
++ #include <sys/types.h>
++ #include <dirent.h>
++ #include <fcntl.h>
 -- 
 2.17.1
