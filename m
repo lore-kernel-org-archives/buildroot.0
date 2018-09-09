@@ -1,71 +1,48 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun,  9 Sep 2018 13:14:28 +0200
-Subject: [Buildroot] [PATCH] package/gdb: use stat() privided by the system
-Message-ID: <20180909111428.28570-1-romain.naour@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  9 Sep 2018 13:58:48 +0200
+Subject: [Buildroot] [PATCH 1/1] lsscsi: bump to version 0.30
+Message-ID: <20180909115848.4014-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use the same workaround [1] as gnulib use to get the original
-definition of stat. Otherwise with musl toolchains, gnulib try to use
-rpl_stat which is not defined.
+- Add hash for license file
+- Fix build with glibc 2.28: <sys/sysmacros.h> is no longer included
+  from <sys/types.h>, and therefore <sys/sysmacros.h> must be included
+  explicitly when major()/minor() are used
 
 Fixes:
-https://gitlab.com/free-electrons/toolchains-builder/-/jobs/95552308
+ - http://autobuild.buildroot.org/results/60ec736ec524dcffedcef8f92d98aa29fb8987aa
 
-[1] http://git.savannah.gnu.org/cgit/gnulib.git/commit/lib/stat.c?id=c9d72f69bd201a1ab31464d91f234ea1817fe0e1
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...mon-utils-use-stat-privided-by-the-system.patch | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/gdb/8.1/0006-gdb-common-utils-use-stat-privided-by-the-system.patch
+ package/lsscsi/lsscsi.hash | 3 ++-
+ package/lsscsi/lsscsi.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/gdb/8.1/0006-gdb-common-utils-use-stat-privided-by-the-system.patch b/package/gdb/8.1/0006-gdb-common-utils-use-stat-privided-by-the-system.patch
-new file mode 100644
-index 0000000000..448e716388
---- /dev/null
-+++ b/package/gdb/8.1/0006-gdb-common-utils-use-stat-privided-by-the-system.patch
-@@ -0,0 +1,37 @@
-+From e38a28a537652115f8ab78089bc35d351e7c32f6 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Sun, 9 Sep 2018 12:53:34 +0200
-+Subject: [PATCH] gdb/common-utils: use stat() privided by the system.
-+
-+Use the same workaround [1] as gnulib use to get the original
-+definition of stat. Otherwise with musl toolchains, gnulib try to use
-+rpl_stat which is not defined.
-+
-+Fixes:
-+https://gitlab.com/free-electrons/toolchains-builder/-/jobs/95552308
-+
-+[1] http://git.savannah.gnu.org/cgit/gnulib.git/commit/lib/stat.c?id=c9d72f69bd201a1ab31464d91f234ea1817fe0e1
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ gdb/common/common-utils.c | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/gdb/common/common-utils.c b/gdb/common/common-utils.c
-+index 80de826ba78..d3577c7ff5c 100644
-+--- a/gdb/common/common-utils.c
-++++ b/gdb/common/common-utils.c
-+@@ -20,7 +20,10 @@
-+ #include "common-defs.h"
-+ #include "common-utils.h"
-+ #include "host-defs.h"
-++/* Get the original definition of stat.  It might be defined as a macro.  */
-++#define __need_system_sys_stat_h
-+ #include <sys/stat.h>
-++#undef __need_system_sys_stat_h
-+ #include <ctype.h>
-+ 
-+ /* The xmalloc() (libiberty.h) family of memory management routines.
-+-- 
-+2.14.4
-+
+diff --git a/package/lsscsi/lsscsi.hash b/package/lsscsi/lsscsi.hash
+index d39da9bc80..fe1bc5d8b4 100644
+--- a/package/lsscsi/lsscsi.hash
++++ b/package/lsscsi/lsscsi.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 025d009a1af42bc5b2fca664c44c9ecdfd754356e4a44f5c6aced2420afadd50  lsscsi-0.28.tgz
++sha256 619a2187405f02c5f57682f3478bffc75326803cd08839e39d434250c5518b15  lsscsi-0.30.tgz
++sha256 dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
+diff --git a/package/lsscsi/lsscsi.mk b/package/lsscsi/lsscsi.mk
+index 649aad9a38..70c5226d9b 100644
+--- a/package/lsscsi/lsscsi.mk
++++ b/package/lsscsi/lsscsi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LSSCSI_VERSION = 0.28
++LSSCSI_VERSION = 0.30
+ LSSCSI_SOURCE = lsscsi-$(LSSCSI_VERSION).tgz
+ LSSCSI_SITE = http://sg.danny.cz/scsi
+ LSSCSI_LICENSE = GPL-2.0+
 -- 
-2.14.4
+2.17.1
