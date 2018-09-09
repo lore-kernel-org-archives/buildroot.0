@@ -1,129 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 9 Sep 2018 15:20:58 +0200
-Subject: [Buildroot] [git commit] circus: fix build with Python 3.7.0
-Message-ID: <20180909132006.7587B838C4@busybox.osuosl.org>
+Date: Sun, 9 Sep 2018 15:21:06 +0200
+Subject: [Buildroot] [PATCH 1/1] lsscsi: bump to version 0.30
+In-Reply-To: <20180909115848.4014-1-fontaine.fabrice@gmail.com>
+References: <20180909115848.4014-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180909152106.7b2dadf2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4190ef068118ffa5fc307d84ad9f9d5c1d1943a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Python 3.7.0 makes 'async' a reserved keyword, but circus uses it as a
-method argument. This commit adds a patch to the circus package, which
-has been submitted upstream, to resolve this issue.
+On Sun,  9 Sep 2018 13:58:48 +0200, Fabrice Fontaine wrote:
+> - Add hash for license file
+> - Fix build with glibc 2.28: <sys/sysmacros.h> is no longer included
+>   from <sys/types.h>, and therefore <sys/sysmacros.h> must be included
+>   explicitly when major()/minor() are used
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/60ec736ec524dcffedcef8f92d98aa29fb8987aa
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/lsscsi/lsscsi.hash | 3 ++-
+>  package/lsscsi/lsscsi.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 2 deletions(-)
 
-Fixes:
+Applied to master, thanks.
 
-  http://autobuild.buildroot.net/results/8122a00644810722b827cd5e0b90181996dc5657/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...s-rename-async-argument-of-_create_circus.patch | 97 ++++++++++++++++++++++
- 1 file changed, 97 insertions(+)
-
-diff --git a/package/circus/0001-circus-tests-rename-async-argument-of-_create_circus.patch b/package/circus/0001-circus-tests-rename-async-argument-of-_create_circus.patch
-new file mode 100644
-index 0000000000..6af8d87254
---- /dev/null
-+++ b/package/circus/0001-circus-tests-rename-async-argument-of-_create_circus.patch
-@@ -0,0 +1,97 @@
-+From 7fd0495cf3520508fb1cca301ad3d792b56b5656 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sat, 8 Sep 2018 22:24:24 +0200
-+Subject: [PATCH] circus/tests: rename async argument of _create_circus() to
-+ use_async
-+
-+In Python 3.7.0, 'async' is now a reserved keyword of the language, so
-+it cannot be used as an method argument name. When used, it causes the
-+following byte-compilation failure:
-+
-+Traceback (most recent call last):
-+  File "/home/thomas/projets/buildroot/output/host/lib/python3.7/py_compile.py", line 136, in compile
-+    _optimize=optimize)
-+  File "<frozen importlib._bootstrap_external>", line 763, in source_to_code
-+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
-+  File "usr/lib/python3.7/site-packages/circus/tests/support.py", line 210
-+    debug=debug, async=True, **kw)
-+                     ^
-+SyntaxError: invalid syntax
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Upstream-status: https://github.com/circus-tent/circus/pull/1079
-+---
-+ circus/tests/support.py      | 6 +++---
-+ circus/tests/test_client.py  | 2 +-
-+ circus/tests/test_watcher.py | 4 ++--
-+ 3 files changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/circus/tests/support.py b/circus/tests/support.py
-+index 38964cc..794a9c7 100644
-+--- a/circus/tests/support.py
-++++ b/circus/tests/support.py
-+@@ -217,7 +217,7 @@ class TestCircus(AsyncTestCase):
-+                       stdout_stream=None, debug=True, **kw):
-+         testfile, arbiter = self._create_circus(
-+             cmd, stdout_stream=stdout_stream,
-+-            debug=debug, async=True, **kw)
-++            debug=debug, use_async=True, **kw)
-+         self.test_file = testfile
-+         self.arbiter = arbiter
-+         self.arbiters.append(arbiter)
-+@@ -265,7 +265,7 @@ class TestCircus(AsyncTestCase):
-+ 
-+     @classmethod
-+     def _create_circus(cls, callable_path, plugins=None, stats=False,
-+-                       async=False, arbiter_kw=None, **kw):
-++                       use_async=False, arbiter_kw=None, **kw):
-+         fd, testfile = mkstemp()
-+         os.close(fd)
-+         wdir = os.path.dirname(os.path.dirname(os.path.dirname(
-+@@ -292,7 +292,7 @@ class TestCircus(AsyncTestCase):
-+             arbiter_kw['stats_endpoint'] = "tcp://127.0.0.1:%d" % _gp()
-+             arbiter_kw['statsd_close_outputs'] = not debug
-+ 
-+-        if async:
-++        if use_async:
-+             arbiter_kw['background'] = False
-+             arbiter_kw['loop'] = get_ioloop()
-+         else:
-+diff --git a/circus/tests/test_client.py b/circus/tests/test_client.py
-+index 9a56a11..a0cfca0 100644
-+--- a/circus/tests/test_client.py
-++++ b/circus/tests/test_client.py
-+@@ -90,7 +90,7 @@ class TestWithHook(TestCircus):
-+         self.stream = QueueStream()
-+         self.errstream = QueueStream()
-+         dummy_process = 'circus.tests.support.run_process'
-+-        return self._create_circus(dummy_process, async=True,
-++        return self._create_circus(dummy_process, use_async=True,
-+                                    stdout_stream={'stream': self.stream},
-+                                    stderr_stream={'stream': self.errstream},
-+                                    hooks=hooks)
-+diff --git a/circus/tests/test_watcher.py b/circus/tests/test_watcher.py
-+index 5dd857c..4299ed1 100644
-+--- a/circus/tests/test_watcher.py
-++++ b/circus/tests/test_watcher.py
-+@@ -376,7 +376,7 @@ class TestWatcherHooks(TestCircus):
-+         return self._create_circus(dummy_process,
-+                                    stdout_stream=stdout_stream,
-+                                    stderr_stream=stderr_stream,
-+-                                   hooks=hooks, debug=True, async=True)
-++                                   hooks=hooks, debug=True, use_async=True)
-+ 
-+     @tornado.gen.coroutine
-+     def _stop(self):
-+@@ -601,7 +601,7 @@ class RespawnTest(TestCircus):
-+     def test_not_respawning(self):
-+         oneshot_process = 'circus.tests.test_watcher.oneshot_process'
-+         testfile, arbiter = self._create_circus(oneshot_process,
-+-                                                respawn=False, async=True)
-++                                                respawn=False, use_async=True)
-+         yield arbiter.start()
-+         watcher = arbiter.watchers[-1]
-+         try:
-+-- 
-+2.14.4
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
