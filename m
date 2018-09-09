@@ -1,144 +1,53 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 9 Sep 2018 15:01:48 +0200
-Subject: [Buildroot] [PATCH v5 3/3] package/nodejs: taint the build on
- external modules
-In-Reply-To: <CA+_SqVaUZuk-gvvEFbFDQ8Hmj228nYwgaQC8hxbKfwNZw75thg@mail.gmail.com>
-References: <1536186133-9933-1-git-send-email-angelo.compagnucci@gmail.com>
- <1536186133-9933-4-git-send-email-angelo.compagnucci@gmail.com>
- <20180909074908.GD2841@scaer>
- <CA+_SqVaUZuk-gvvEFbFDQ8Hmj228nYwgaQC8hxbKfwNZw75thg@mail.gmail.com>
-Message-ID: <20180909130148.GH2841@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 9 Sep 2018 15:02:00 +0200
+Subject: [Buildroot] [git commit] python-pyroute2: bump to version 0.5.2
+Message-ID: <20180909130639.DA24D8132B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Angelo, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=6066c991fa4b798b4107f8d79acb9663995ba016
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2018-09-09 13:17 +0100, Angelo Compagnucci spake thusly:
-> On Sun, Sep 9, 2018 at 8:49 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > On 2018-09-06 00:22 +0200, Angelo Compagnucci spake thusly:
-> > > This patch enables the tainting of the build when an
-> > > external module is added.
-> > >
-> > > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-> > > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> > > ---
-> > >  package/nodejs/nodejs.mk | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-> > > index e2c94ba..322a1ec 100644
-> > > --- a/package/nodejs/nodejs.mk
-> > > +++ b/package/nodejs/nodejs.mk
-> > > @@ -160,6 +160,7 @@ NPM = $(TARGET_CONFIGURE_OPTS) \
-> > >  # We can only call NPM if there's something to install.
-> > >  #
-> > >  ifneq ($(NODEJS_MODULES_LIST),)
-> > > +NODEJS_TAINTS = YES
-> >
-> > That is not even true.
-> >
-> > If I have a Buildroot .config that contains:
-> >
-> >     BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL="http://myserver/node-mods/VERSION/foo"
-> >
-> > Then this is 100% reproducible, because *I* manage and guarantee that it
-> > is, as this is *my* repository.
-> >
-> > I could even have:
-> >
-> >     BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL="$(BR2_EXTERANL_MY_TREE_PATH)/mods/foo"
-> >
-> > which is also reproducible, by way of being in my git-versioned br2-external
-> > tree.
-> >
-> > And if you were to have:
-> >
-> >     BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL="foo at 1.2.3"
-> >
-> > then it would also be preproducible, because the version is specified.
-> >
-> > So, no, we can't set the tainted flag as soon as an external set of npm
-> > modules are used; this would be plain wrong for people that already do
-> > the "right thing".
-> 
-> Unfortunately, that's not true. Yo have to trust the entire dependency
-> chain to make an assumptin like that,
+Also added license hashes.
 
-True, but there *are* cases where this is trusted, e.g. when said chain
-is listed in the modules list, and that each dependency is specified by
-version, and/or that the modules are identified by an exact URL pointing
-to an internal, stable, reproducible repository.
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-pyroute2/python-pyroute2.hash | 10 +++++++---
+ package/python-pyroute2/python-pyroute2.mk   |  4 ++--
+ 2 files changed, 9 insertions(+), 5 deletions(-)
 
-I only provided a few trivial examples to explain where the assumption
-you made about taint is wrong.
-
-What I mean is that there cases where using additional nodejs modules
-will taint the build (as per your tainting definition), but there are
-also cases where said modules will not taint the build (again, by your
-definition of taint).
-
-To get to the bottom of it: we have no way to know whether a set of
-additional nodejs modules will taint or not the build. As such, marking
-the build as tainted as soon as such modules are used is not correct.
-
-So, if I were to use a list of modules for which I know that they are
-reproducible, why would you want to mark my build as tainted when it is
-not? Your patch would always mark my builds as tainted, and an actual
-taint would be undetectable.
-
-> but in my experience there is
-> always some dependency in the chain that points to master.
-> A couple of years ago a simple npm package almost broke the internet,
-> I rember my company had tought time tring to find a workaround for
-> that single package[1].
-
-Yeah, I know about the leftpad fiasco. It really made me laugh out loud
-for a good while! And I'm still amused that people are stil keen on
-using this, well... how could I put it and stay politically correct?
-There is only a 4-letter word that comes to mind... ;-]
-
-> So I honestly think we cannot trust a chain of tens or hundreds of
-> dependencies that points to random git repositories around the
-> internet.
-
-No we can't. But what your patch does is also wrong for people who
-actually *know* what they are doing, see above.
-
-Regards,
-Yann E. MORIN.
-
-> [1] http://mentalfloss.com/article/77951/how-11-lost-lines-code-almost-broke-internet
-> 
-> >
-> > Regards,
-> > Yann E. MORIN.
-> >
-> > >  define NODEJS_INSTALL_MODULES
-> > >       # If you're having trouble with module installation, adding -d to the
-> > >       # npm install call below and setting npm_config_rollback=false can both
-> > > --
-> > > 2.7.4
-> > >
-> > > _______________________________________________
-> > > buildroot mailing list
-> > > buildroot at busybox.net
-> > > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
-> > --
-> > .-----------------.--------------------.------------------.--------------------.
-> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> > | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> > '------------------------------^-------^------------------^--------------------'
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/python-pyroute2/python-pyroute2.hash b/package/python-pyroute2/python-pyroute2.hash
+index dbf09c97ac..941157fdb3 100644
+--- a/package/python-pyroute2/python-pyroute2.hash
++++ b/package/python-pyroute2/python-pyroute2.hash
+@@ -1,3 +1,7 @@
+-# md5 from https://pypi.python.org/pypi/pyroute2/json, sha256 locally computed
+-md5 ef4282b1401bcd07a9cf4ec0696aba24 pyroute2-0.4.13.tar.gz
+-sha256 93f3d72f58b3627036427b5571f8e27c93dbb6d01372dc4c452707d6610c0a39 pyroute2-0.4.13.tar.gz
++# md5, sha256 from https://pypi.org/pypi/pyroute2/json
++md5    2f6f951e94356ae9d224f417dc6ebed2  pyroute2-0.5.2.tar.gz
++sha256 42bf74495d95a0196a74dd171357f660175aba2bfc23f9b5f63e3830ccbef9ac  pyroute2-0.5.2.tar.gz
++# Locally computed sha256
++sha256 4739b32a2478e9c204bf010bad5d565d188e59ff905e3c8f71fe3398098b7093  LICENSE.Apache.v2
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL.v2
++sha256 e329111754f1340de20b6084cae4d264b7b4fc8fb48964173f8ee0cb7440a51c  README.license.md
+diff --git a/package/python-pyroute2/python-pyroute2.mk b/package/python-pyroute2/python-pyroute2.mk
+index eed8eb415b..204ff33e7f 100644
+--- a/package/python-pyroute2/python-pyroute2.mk
++++ b/package/python-pyroute2/python-pyroute2.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PYROUTE2_VERSION = 0.4.13
++PYTHON_PYROUTE2_VERSION = 0.5.2
+ PYTHON_PYROUTE2_SOURCE = pyroute2-$(PYTHON_PYROUTE2_VERSION).tar.gz
+-PYTHON_PYROUTE2_SITE = https://pypi.python.org/packages/91/e7/814f60e355078dc51625cd2e7e715ed4a06111ddf2ac5580f2f10e79c94a
++PYTHON_PYROUTE2_SITE = https://files.pythonhosted.org/packages/18/64/33858f79b0f2b44a0af7bb42eda3d477253de5311dae1eb12b966085909f
+ PYTHON_PYROUTE2_LICENSE = Apache-2.0 or GPL-2.0+
+ PYTHON_PYROUTE2_LICENSE_FILES = LICENSE.Apache.v2 LICENSE.GPL.v2 README.license.md
+ PYTHON_PYROUTE2_SETUP_TYPE = distutils
