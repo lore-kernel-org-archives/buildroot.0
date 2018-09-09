@@ -1,52 +1,63 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Sun, 09 Sep 2018 21:03:57 +0200
-Subject: [Buildroot] [PATCH] shairport-sync: add upstream patch to fix
- soxr configure issue
-In-Reply-To: <20180909151344.2eadead8@windsurf.home>
-References: <20180909094317.10873-1-joerg.krause@embedded.rocks>
- <20180909151344.2eadead8@windsurf.home>
-Message-ID: <37290764ba05504ae3c5b862de98989528fb35e5.camel@embedded.rocks>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Sun,  9 Sep 2018 21:33:43 +0200
+Subject: [Buildroot] [PATCH] motion: fix build failure due to missing
+ drmGetVersion() and drmFreeVersion()
+Message-ID: <20180909193343.117159-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+During static linking -ldrm is listed too early respect -lavutil.
+This cause build failure.
 
-On Sun, 2018-09-09 at 15:13 +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Sun,  9 Sep 2018 11:43:17 +0200, J?rg Krause wrote:
-> > Commit b06639cf7a adds an upstream patch to fix a build issue with soxr.
-> 
-> I don't have any commit with the hash b06639cf7a in Buildroot. Are you
-> talking about e047dee241fe0660d92311a124757065c6c4c93d instead ?
+Append extra -ldrm at the tail of $(LIBS) list.
 
-Sorry. Yes, I am talking about
-e047dee241fe0660d92311a124757065c6c4c93d. My bad!
+Fixes:
+http://autobuild.buildroot.net/results/395/395be1a9cab824b82ef34c2ebd84d54243029b33//
 
-> > Should be committed to 2018.02.x and 2018.05.x, too.
-> 
-> Well e047dee241fe0660d92311a124757065c6c4c93d was not backported to
-> 2018.02.x and 2018.05.x.
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+ ...-fix-static-linking-for-ldrm-library.patch | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/motion/0002-Makefile.in-fix-static-linking-for-ldrm-library.patch
 
-The commit for 2018.02.x is 2aafa0366f0fe73afdf97a9a52917b2f1dbdf392
-[1] and for 2018.05.x is 72f10180f5cbc6f4f3914e4a142d25e13c322f08
-
-> Are you sure 2018.02.x and 2018.05.x are
-> affected by the soxr build issue that
-> e047dee241fe0660d92311a124757065c6c4c93d is fixing ? Indeed, I don't
-> see any autobuilder failure:
-> http://autobuild.buildroot.net/?reason=shairport%.
-
-Peter commited the patch to 2018.02.x and 2018.05.x [3]. You're right,
-there aren't any autobuild failures and I didn't checked these branches
-for the build failure back then.
-
-[1] https://git.buildroot.net/buildroot/commit/?h=2018.02.x&id=2aafa0366f0fe73afdf97a9a52917b2f1dbdf392
-[2] https://git.buildroot.net/buildroot/commit/?h=2018.05.x&id=72f10180f5cbc6f4f3914e4a142d25e13c322f08
-[3] https://patchwork.ozlabs.org/patch/962789/
-
-Best regards,
-J?rg Krause
+diff --git a/package/motion/0002-Makefile.in-fix-static-linking-for-ldrm-library.patch b/package/motion/0002-Makefile.in-fix-static-linking-for-ldrm-library.patch
+new file mode 100644
+index 0000000000..591cca66eb
+--- /dev/null
++++ b/package/motion/0002-Makefile.in-fix-static-linking-for-ldrm-library.patch
+@@ -0,0 +1,30 @@
++From 7098dafaf297d70bb73a5320bdc522b66c456a56 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@micronovasrl.com>
++Date: Sun, 9 Sep 2018 20:30:33 +0200
++Subject: [PATCH] Makefile.in: fix static linking for -ldrm library
++
++While linking statically -ldrm library is listed too early than -lavutil.
++
++Append additional -ldrm entry to linker $(LIBS) list.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
++---
++ Makefile.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile.in b/Makefile.in
++index 94c7d40..5cfb490 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -39,7 +39,7 @@ CFLAGS       = @CFLAGS@ -Wall \
++ 	 -DMOTIONDOCDIR=\"$(DESTDIR)$(docdir)\"    \
++ 	 @FFMPEG_CFLAGS@ @MMAL_CFLAGS@
++ LDFLAGS      = @LDFLAGS@
++-LIBS         = @LIBS@  @MMAL_LIBS@ @FFMPEG_LIBS@
+++LIBS         = @LIBS@ @FFMPEG_LIBS@ @MMAL_LIBS@ -ldrm
++ OBJ          = motion.o logger.o conf.o draw.o jpegutils.o \
++ 			   video_loopback.o video_v4l2.o video_common.o video_bktr.o \
++ 			   netcam.o netcam_http.o netcam_ftp.o netcam_jpeg.o netcam_wget.o \
++-- 
++2.17.1
++
+-- 
+2.17.1
