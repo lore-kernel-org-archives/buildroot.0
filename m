@@ -1,83 +1,156 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 10 Sep 2018 17:07:11 +0200
-Subject: [Buildroot] [git commit] file: bump to version 5.34
-Message-ID: <20180910151848.4551D8397C@busybox.osuosl.org>
+Date: Sun, 9 Sep 2018 16:01:20 +0200
+Subject: [Buildroot] [git commit] package/rdesktop: Fix build with OpenSSL
+ 1.1.x
+Message-ID: <20180910151848.2CEFA83A1C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30b058cb20aaf5bbd6252fb7e7f25f1eaf298f6f
+commit: https://git.buildroot.net/buildroot/commit/?id=003f579d58fd0b535c2a5e8df4acd45a76190570
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove patch (already in version)
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...d-reading-past-the-end-of-buffer-Rui-Reis.patch | 30 ----------------------
- package/file/file.hash                             |  2 +-
- package/file/file.mk                               |  2 +-
- 3 files changed, 2 insertions(+), 32 deletions(-)
+ package/rdesktop/0002-openssl11.patch | 130 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 130 insertions(+)
 
-diff --git a/package/file/0001-Avoid-reading-past-the-end-of-buffer-Rui-Reis.patch b/package/file/0001-Avoid-reading-past-the-end-of-buffer-Rui-Reis.patch
-deleted file mode 100644
-index daff866692..0000000000
---- a/package/file/0001-Avoid-reading-past-the-end-of-buffer-Rui-Reis.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From a642587a9c9e2dd7feacdf513c3643ce26ad3c22 Mon Sep 17 00:00:00 2001
--From: Christos Zoulas <christos@zoulas.com>
--Date: Sat, 9 Jun 2018 16:00:06 +0000
--Subject: [PATCH] Avoid reading past the end of buffer (Rui Reis)
--
--[baruch: drop file version string update hunk]
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: commit a642587a9c9 in github mirror
--
-- src/readelf.c | 5 +++--
-- 1 file changed, 3 insertions(+), 2 deletions(-)
--
--diff --git a/src/readelf.c b/src/readelf.c
--index 79c83f9f5048..1f41b46113c3 100644
----- a/src/readelf.c
--+++ b/src/readelf.c
--@@ -842,7 +842,8 @@ do_core_note(struct magic_set *ms, unsigned char *nbuf, uint32_t type,
-- 
-- 				cname = (unsigned char *)
-- 				    &nbuf[doff + prpsoffsets(i)];
---				for (cp = cname; *cp && isprint(*cp); cp++)
--+				for (cp = cname; cp < nbuf + size && *cp
--+				    && isprint(*cp); cp++)
-- 					continue;
-- 				/*
-- 				 * Linux apparently appends a space@the end
---- 
--2.17.1
--
-diff --git a/package/file/file.hash b/package/file/file.hash
-index a6b40be349..c279dff6e1 100644
---- a/package/file/file.hash
-+++ b/package/file/file.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256 1c52c8c3d271cd898d5511c36a68059cda94036111ab293f01f83c3525b737c6  file-5.33.tar.gz
-+sha256 f15a50dbbfa83fec0bd1161e8e191b092ec832720e30cd14536e044ac623b20a  file-5.34.tar.gz
- sha256 3c0ad13c36f891a9b4f951e59eb2fc108065a46f849697cc6fd3cdb41cc23a3d  COPYING
- sha256 d98ee4d8d95e7d021a5dfc41f137ecc3b624a7b98e8bd793130202d12a21ed57  src/mygetopt.h
- sha256 85e358d575ad4ac5b38b623a25b24246ccff3c7e680d930c0a9ff5228fe434b6  src/vasprintf.c
-diff --git a/package/file/file.mk b/package/file/file.mk
-index 422e29b1ce..42131c4888 100644
---- a/package/file/file.mk
-+++ b/package/file/file.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FILE_VERSION = 5.33
-+FILE_VERSION = 5.34
- FILE_SITE = ftp://ftp.astron.com/pub/file
- FILE_DEPENDENCIES = host-file zlib
- HOST_FILE_DEPENDENCIES = host-zlib
+diff --git a/package/rdesktop/0002-openssl11.patch b/package/rdesktop/0002-openssl11.patch
+new file mode 100644
+index 0000000000..050d6f6903
+--- /dev/null
++++ b/package/rdesktop/0002-openssl11.patch
+@@ -0,0 +1,130 @@
++From bd6aa6acddf0ba640a49834807872f4cc0d0a773 Mon Sep 17 00:00:00 2001
++From: Jani Hakala <jjhakala@gmail.com>
++Date: Thu, 16 Jun 2016 14:28:15 +0300
++Subject: [PATCH] Fix OpenSSL 1.1 compability issues
++
++Some data types have been made opaque in OpenSSL version 1.1 so
++stack allocation and accessing struct fields directly does not work.
++
++Downloaded from upstream commit
++https://github.com/rdesktop/rdesktop/commit/bd6aa6acddf0ba640a49834807872f4cc0d0a773
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ ssl.c | 65 ++++++++++++++++++++++++++++++++++++-----------------------
++ 1 file changed, 40 insertions(+), 25 deletions(-)
++
++diff --git a/ssl.c b/ssl.c
++index 48751255..032e9b9e 100644
++--- a/ssl.c
+++++ b/ssl.c
++@@ -88,7 +88,7 @@ rdssl_rsa_encrypt(uint8 * out, uint8 * in, int len, uint32 modulus_size, uint8 *
++ 		  uint8 * exponent)
++ {
++ 	BN_CTX *ctx;
++-	BIGNUM mod, exp, x, y;
+++	BIGNUM *mod, *exp, *x, *y;
++ 	uint8 inr[SEC_MAX_MODULUS_SIZE];
++ 	int outlen;
++ 
++@@ -98,24 +98,24 @@ rdssl_rsa_encrypt(uint8 * out, uint8 * in, int len, uint32 modulus_size, uint8 *
++ 	reverse(inr, len);
++ 
++ 	ctx = BN_CTX_new();
++-	BN_init(&mod);
++-	BN_init(&exp);
++-	BN_init(&x);
++-	BN_init(&y);
++-
++-	BN_bin2bn(modulus, modulus_size, &mod);
++-	BN_bin2bn(exponent, SEC_EXPONENT_SIZE, &exp);
++-	BN_bin2bn(inr, len, &x);
++-	BN_mod_exp(&y, &x, &exp, &mod, ctx);
++-	outlen = BN_bn2bin(&y, out);
+++	mod = BN_new();
+++	exp = BN_new();
+++	x = BN_new();
+++	y = BN_new();
+++
+++	BN_bin2bn(modulus, modulus_size, mod);
+++	BN_bin2bn(exponent, SEC_EXPONENT_SIZE, exp);
+++	BN_bin2bn(inr, len, x);
+++	BN_mod_exp(y, x, exp, mod, ctx);
+++	outlen = BN_bn2bin(y, out);
++ 	reverse(out, outlen);
++ 	if (outlen < (int) modulus_size)
++ 		memset(out + outlen, 0, modulus_size - outlen);
++ 
++-	BN_free(&y);
++-	BN_clear_free(&x);
++-	BN_free(&exp);
++-	BN_free(&mod);
+++	BN_free(y);
+++	BN_clear_free(x);
+++	BN_free(exp);
+++	BN_free(mod);
++ 	BN_CTX_free(ctx);
++ }
++ 
++@@ -146,12 +146,20 @@ rdssl_cert_to_rkey(RDSSL_CERT * cert, uint32 * key_len)
++ 
++ 	   Kudos to Richard Levitte for the following (. intiutive .) 
++ 	   lines of code that resets the OID and let's us extract the key. */
++-	nid = OBJ_obj2nid(cert->cert_info->key->algor->algorithm);
+++
+++	X509_PUBKEY *key = NULL;
+++	X509_ALGOR *algor = NULL;
+++
+++	key = X509_get_X509_PUBKEY(cert);
+++	algor = X509_PUBKEY_get0_param(NULL, NULL, 0, &algor, key);
+++
+++	nid = OBJ_obj2nid(algor->algorithm);
+++
++ 	if ((nid == NID_md5WithRSAEncryption) || (nid == NID_shaWithRSAEncryption))
++ 	{
++ 		DEBUG_RDP5(("Re-setting algorithm type to RSA in server certificate\n"));
++-		ASN1_OBJECT_free(cert->cert_info->key->algor->algorithm);
++-		cert->cert_info->key->algor->algorithm = OBJ_nid2obj(NID_rsaEncryption);
+++		X509_PUBKEY_set0_param(key, OBJ_nid2obj(NID_rsaEncryption),
+++				       0, NULL, NULL, 0);
++ 	}
++ 	epk = X509_get_pubkey(cert);
++ 	if (NULL == epk)
++@@ -201,14 +209,24 @@ rdssl_rkey_get_exp_mod(RDSSL_RKEY * rkey, uint8 * exponent, uint32 max_exp_len,
++ {
++ 	int len;
++ 
++-	if ((BN_num_bytes(rkey->e) > (int) max_exp_len) ||
++-	    (BN_num_bytes(rkey->n) > (int) max_mod_len))
+++	BIGNUM *e = NULL;
+++	BIGNUM *n = NULL;
+++
+++#if OPENSSL_VERSION_NUMBER < 0x10100000L
+++	e = rkey->e;
+++	n = rkey->n;
+++#else
+++	RSA_get0_key(rkey, &e, &n, NULL);
+++#endif
+++
+++	if ((BN_num_bytes(e) > (int) max_exp_len) ||
+++	    (BN_num_bytes(n) > (int) max_mod_len))
++ 	{
++ 		return 1;
++ 	}
++-	len = BN_bn2bin(rkey->e, exponent);
+++	len = BN_bn2bin(e, exponent);
++ 	reverse(exponent, len);
++-	len = BN_bn2bin(rkey->n, modulus);
+++	len = BN_bn2bin(n, modulus);
++ 	reverse(modulus, len);
++ 	return 0;
++ }
++@@ -229,8 +247,5 @@ void
++ rdssl_hmac_md5(const void *key, int key_len, const unsigned char *msg, int msg_len,
++ 	       unsigned char *md)
++ {
++-	HMAC_CTX ctx;
++-	HMAC_CTX_init(&ctx);
++ 	HMAC(EVP_md5(), key, key_len, msg, msg_len, md, NULL);
++-	HMAC_CTX_cleanup(&ctx);
++ }
