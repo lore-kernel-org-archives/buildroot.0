@@ -1,75 +1,182 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Sun, 9 Sep 2018 14:44:24 +0100
-Subject: [Buildroot] [PATCH v5 0/3] Add tainting support to buildroot
-In-Reply-To: <20180909133341.GJ2841@scaer>
-References: <1536186133-9933-1-git-send-email-angelo.compagnucci@gmail.com>
- <20180909073616.GC2841@scaer> <20180909141037.69b16e95@windsurf.home>
- <CA+_SqVbJqv2On+9UPE4pcoyiK1wfDZp=t1h1yMdfVB-CQGp91g@mail.gmail.com>
- <20180909133341.GJ2841@scaer>
-Message-ID: <CA+_SqVafj+DAsaBtSPJkf2bwbmh_3JojRjBrzG0oT6GduKTG4g@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 9 Sep 2018 15:46:56 +0200
+Subject: [Buildroot] [git commit] package/liboauth: Fix build with OpenSSL
+ 1.1.x
+Message-ID: <20180909135053.F3A0A8396F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
-On Sun, Sep 9, 2018 at 2:33 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Angelo, Thomas, All,
->
-> On 2018-09-09 13:25 +0100, Angelo Compagnucci spake thusly:
-> > On Sun, Sep 9, 2018 at 1:10 PM Thomas Petazzoni
-> > <thomas.petazzoni@bootlin.com> wrote:
-> [--SNIP--]
-> > Thomas said evrithing exceptionally well, but I would like to
-> > underling another thing: automated building infrastructures like
-> > continuos integration.
-> >
-> > If a project hasa nedd of reproducibility, the countinous integration
-> > could check if a random developer introduced something not
-> > reproducible and mark the build as invalid. I think this is really a
-> > big plus of this solution.
->
-> I do understand the concern, trust me, I do.
->
-> What I am saying is that the solution you propose will not allow that,
-> because there is no way to decide whether a specific .config is or is
-> not reproducible, as per the examples I provided in the nodejs case.
->
-> If a build is imprperly marked as tainted, then users will just
-> disregard that information and never consult it, and just not use it in
-> their automated buildsystemsd (jenkins, gitlab-ci, whatever). And even
-> if they do have a job doing the check, that job can detect a change from
-> "not tainted" to "tainted" because the job will always report "tainted".
+commit: https://git.buildroot.net/buildroot/commit/?id=088f08c8d7e3afa51ec1a9b9b705616e135ce4a5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-My concern here is that you start from a reproducible build, add your
-packages right and so maintain your build reproducible, buildroot will
-work as before. As soon you use a package manager tainting will be
-signaled.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...0001-Fixes-build-issue-with-OpenSSL-1.1.0.patch | 156 +++++++++++++++++++++
+ 1 file changed, 156 insertions(+)
 
-Taint is mean to signal that there is a potential problem, and if you
-don't want to slip into it, you can always do the right thing and
-package your software and packaging also it's dependencies.
-
-As soon as you do this, the taint disappear. I thin it could even be a
-deterrent to package the software randomly!
-
-Sincerely, Angelo
-
-
-
->
-> So, your solution does not even cover your automated builds use-case
-> either.
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+diff --git a/package/liboauth/0001-Fixes-build-issue-with-OpenSSL-1.1.0.patch b/package/liboauth/0001-Fixes-build-issue-with-OpenSSL-1.1.0.patch
+new file mode 100644
+index 0000000000..945307bba8
+--- /dev/null
++++ b/package/liboauth/0001-Fixes-build-issue-with-OpenSSL-1.1.0.patch
+@@ -0,0 +1,156 @@
++From 5f1c949b1703367f7f06454fcff650bdb7bac840 Mon Sep 17 00:00:00 2001
++From: DJ Lucas <dj@linuxfromscratch.org>
++Date: Sun, 9 Sep 2018 15:46:15 +0200
++Subject: [PATCH] Fixes build issue with OpenSSL-1.1.0
++
++Downloaded from
++http://www.linuxfromscratch.org/patches/blfs/svn/liboauth-1.0.3-openssl-1.1.0-2.patch
++
++Patch was sent upstream: https://github.com/x42/liboauth/issues/9
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/hash.c | 65 ++++++++++++++++++++++++++++++++++++++++++--------------------
++ 1 file changed, 44 insertions(+), 21 deletions(-)
++
++diff --git a/src/hash.c b/src/hash.c
++index 17ff5c8..b7958f7 100644
++--- a/src/hash.c
+++++ b/src/hash.c
++@@ -362,6 +362,11 @@ looser:
++ #include "oauth.h" // base64 encode fn's.
++ #include <openssl/hmac.h>
++ 
+++#if OPENSSL_VERSION_NUMBER < 0x10100000
+++#define EVP_MD_CTX_new EVP_MD_CTX_create
+++#define EVP_MD_CTX_free EVP_MD_CTX_destroy
+++#endif
+++
++ char *oauth_sign_hmac_sha1 (const char *m, const char *k) {
++   return(oauth_sign_hmac_sha1_raw (m, strlen(m), k, strlen(k)));
++ }
++@@ -386,7 +391,7 @@ char *oauth_sign_rsa_sha1 (const char *m, const char *k) {
++   unsigned char *sig = NULL;
++   unsigned char *passphrase = NULL;
++   unsigned int len=0;
++-  EVP_MD_CTX md_ctx;
+++  EVP_MD_CTX *md_ctx;
++ 
++   EVP_PKEY *pkey;
++   BIO *in;
++@@ -399,24 +404,31 @@ char *oauth_sign_rsa_sha1 (const char *m, const char *k) {
++     return xstrdup("liboauth/OpenSSL: can not read private key");
++   }
++ 
+++  md_ctx = EVP_MD_CTX_new();
+++  if (md_ctx == NULL) {
+++          return xstrdup("liboauth/OpenSSL: failed to allocate EVP_MD_CTX");
+++  }
+++
++   len = EVP_PKEY_size(pkey);
++   sig = (unsigned char*)xmalloc((len+1)*sizeof(char));
++ 
++-  EVP_SignInit(&md_ctx, EVP_sha1());
++-  EVP_SignUpdate(&md_ctx, m, strlen(m));
++-  if (EVP_SignFinal (&md_ctx, sig, &len, pkey)) {
+++  EVP_SignInit(md_ctx, EVP_sha1());
+++  EVP_SignUpdate(md_ctx, m, strlen(m));
+++  if (EVP_SignFinal (md_ctx, sig, &len, pkey)) {
++     char *tmp;
++     sig[len] = '\0';
++     tmp = oauth_encode_base64(len,sig);
++     OPENSSL_free(sig);
++     EVP_PKEY_free(pkey);
+++    EVP_MD_CTX_free(md_ctx);
++     return tmp;
++   }
+++  EVP_MD_CTX_free(md_ctx);
++   return xstrdup("liboauth/OpenSSL: rsa-sha1 signing failed");
++ }
++ 
++ int oauth_verify_rsa_sha1 (const char *m, const char *c, const char *s) {
++-  EVP_MD_CTX md_ctx;
+++  EVP_MD_CTX *md_ctx;
++   EVP_PKEY *pkey;
++   BIO *in;
++   X509 *cert = NULL;
++@@ -437,13 +449,18 @@ int oauth_verify_rsa_sha1 (const char *m, const char *c, const char *s) {
++     return -2;
++   }
++ 
+++	md_ctx = EVP_MD_CTX_new();
+++	if (md_ctx == NULL) {
+++		return -2;
+++	}
+++
++   b64d= (unsigned char*) xmalloc(sizeof(char)*strlen(s));
++   slen = oauth_decode_base64(b64d, s);
++ 
++-  EVP_VerifyInit(&md_ctx, EVP_sha1());
++-  EVP_VerifyUpdate(&md_ctx, m, strlen(m));
++-  err = EVP_VerifyFinal(&md_ctx, b64d, slen, pkey);
++-  EVP_MD_CTX_cleanup(&md_ctx);
+++  EVP_VerifyInit(md_ctx, EVP_sha1());
+++  EVP_VerifyUpdate(md_ctx, m, strlen(m));
+++  err = EVP_VerifyFinal(md_ctx, b64d, slen, pkey);
+++  EVP_MD_CTX_free(pkey);
++   EVP_PKEY_free(pkey);
++   xfree(b64d);
++   return (err);
++@@ -455,35 +472,41 @@ int oauth_verify_rsa_sha1 (const char *m, const char *c, const char *s) {
++  */
++ char *oauth_body_hash_file(char *filename) {
++   unsigned char fb[BUFSIZ];
++-  EVP_MD_CTX ctx;
+++  EVP_MD_CTX *ctx;
++   size_t len=0;
++   unsigned char *md;
++   FILE *F= fopen(filename, "r");
++   if (!F) return NULL;
++ 
++-  EVP_MD_CTX_init(&ctx);
++-  EVP_DigestInit(&ctx,EVP_sha1());
+++  ctx = EVP_MD_CTX_new();
+++  if (ctx == NULL) {
+++          return xstrdup("liboauth/OpenSSL: failed to allocate EVP_MD_CTX");
+++  }
+++  EVP_DigestInit(ctx,EVP_sha1());
++   while (!feof(F) && (len=fread(fb,sizeof(char),BUFSIZ, F))>0) {
++-    EVP_DigestUpdate(&ctx, fb, len);
+++    EVP_DigestUpdate(ctx, fb, len);
++   }
++   fclose(F);
++   len=0;
++   md=(unsigned char*) xcalloc(EVP_MD_size(EVP_sha1()),sizeof(unsigned char));
++-  EVP_DigestFinal(&ctx, md,(unsigned int*) &len);
++-  EVP_MD_CTX_cleanup(&ctx);
+++  EVP_DigestFinal(ctx, md,(unsigned int*) &len);
+++  EVP_MD_CTX_free(ctx);
++   return oauth_body_hash_encode(len, md);
++ }
++ 
++ char *oauth_body_hash_data(size_t length, const char *data) {
++-  EVP_MD_CTX ctx;
+++  EVP_MD_CTX *ctx;
++   size_t len=0;
++   unsigned char *md;
++   md=(unsigned char*) xcalloc(EVP_MD_size(EVP_sha1()),sizeof(unsigned char));
++-  EVP_MD_CTX_init(&ctx);
++-  EVP_DigestInit(&ctx,EVP_sha1());
++-  EVP_DigestUpdate(&ctx, data, length);
++-  EVP_DigestFinal(&ctx, md,(unsigned int*) &len);
++-  EVP_MD_CTX_cleanup(&ctx);
+++  ctx = EVP_MD_CTX_new();
+++  if (ctx == NULL) {
+++          return xstrdup("liboauth/OpenSSL: failed to allocate EVP_MD_CTX");
+++  }
+++  EVP_DigestInit(ctx,EVP_sha1());
+++  EVP_DigestUpdate(ctx, data, length);
+++  EVP_DigestFinal(ctx, md,(unsigned int*) &len);
+++  EVP_MD_CTX_free(ctx);
++   return oauth_body_hash_encode(len, md);
++ }
++ 
++-- 
++2.14.4
++
