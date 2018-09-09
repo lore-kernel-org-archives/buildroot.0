@@ -1,45 +1,59 @@
-From: David Lechner <david@lechnology.com>
-Date: Sat,  8 Sep 2018 20:39:50 -0500
-Subject: [Buildroot] [PATCH] Config.in.legacy: fix typo in config option
-Message-ID: <20180909013950.14184-1-david@lechnology.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sun,  9 Sep 2018 08:17:48 +0300
+Subject: [Buildroot] [PATCH 1/1] python-pexpect: bump to version 4.6.0
+Message-ID: <20180909051748.9471-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The commit message of a2d44ec6bf12 ("linux-headers: drop old unsupported
-4.{10,11,12,13,15} versions") says, "select an older kernel headers
-(4.9)". However a couple lines are selecting 4.19.
+Add hash for license.
+Adjust post-patch for 4.6.0 (async.py was renamed to _async.py).
 
-Change BR2_KERNEL_HEADERS_4_19 to BR2_KERNEL_HEADERS_4_9 as intended.
-
-Signed-off-by: David Lechner <david@lechnology.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- Config.in.legacy | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/python-pexpect/python-pexpect.hash | 8 +++++---
+ package/python-pexpect/python-pexpect.mk   | 6 +++---
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index aae8d28e13..cbdac59631 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -167,7 +167,7 @@ config BR2_KERNEL_HEADERS_4_11
+diff --git a/package/python-pexpect/python-pexpect.hash b/package/python-pexpect/python-pexpect.hash
+index e3836074ec..bdeedefaa0 100644
+--- a/package/python-pexpect/python-pexpect.hash
++++ b/package/python-pexpect/python-pexpect.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/pexpect/json, sha256 locally computed
+-md5	3694410001a99dff83f0b500a1ca1c95  pexpect-4.2.1.tar.gz
+-sha256	3d132465a75b57aa818341c6521392a06cc660feb3988d7f1074f39bd23c9a92  pexpect-4.2.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/pexpect/json
++md5	d4f3372965a996238d57d19b95d2e03a  pexpect-4.6.0.tar.gz
++sha256	2a8e88259839571d1251d278476f3eec5db26deb73a70be5ed5dc5435e418aba  pexpect-4.6.0.tar.gz
++# Locally computed sha256 checksums
++sha256	4a483ae1c4dc738a6c8b73feb49074e1835da02ab5aa686f2675029906fa364d  LICENSE
+diff --git a/package/python-pexpect/python-pexpect.mk b/package/python-pexpect/python-pexpect.mk
+index f1f9903946..5c385cefb0 100644
+--- a/package/python-pexpect/python-pexpect.mk
++++ b/package/python-pexpect/python-pexpect.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- config BR2_KERNEL_HEADERS_4_12
- 	bool "kernel headers version 4.12.x are no longer supported"
--	select BR2_KERNEL_HEADERS_4_19
-+	select BR2_KERNEL_HEADERS_4_9
- 	select BR2_LEGACY
- 	help
- 	  Version 4.12.x of the Linux kernel headers are no longer
-@@ -177,7 +177,7 @@ config BR2_KERNEL_HEADERS_4_12
- 
- config BR2_KERNEL_HEADERS_4_13
- 	bool "kernel headers version 4.13.x are no longer supported"
--	select BR2_KERNEL_HEADERS_4_19
-+	select BR2_KERNEL_HEADERS_4_9
- 	select BR2_LEGACY
- 	help
- 	  Version 4.13.x of the Linux kernel headers are no longer
+-PYTHON_PEXPECT_VERSION = 4.2.1
++PYTHON_PEXPECT_VERSION = 4.6.0
+ PYTHON_PEXPECT_SOURCE = pexpect-$(PYTHON_PEXPECT_VERSION).tar.gz
+-PYTHON_PEXPECT_SITE = https://pypi.python.org/packages/e8/13/d0b0599099d6cd23663043a2a0bb7c61e58c6ba359b2656e6fb000ef5b98
++PYTHON_PEXPECT_SITE = https://files.pythonhosted.org/packages/89/43/07d07654ee3e25235d8cea4164cdee0ec39d1fda8e9203156ebe403ffda4
+ PYTHON_PEXPECT_LICENSE = ISC
+ PYTHON_PEXPECT_LICENSE_FILES = LICENSE
+ PYTHON_PEXPECT_SETUP_TYPE = distutils
+@@ -16,7 +16,7 @@ PYTHON_PEXPECT_SETUP_TYPE = distutils
+ # https://github.com/pexpect/pexpect/issues/290
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ define PYTHON_PEXPECT_REMOVE_ASYNC_PY
+-	$(RM) $(@D)/pexpect/async.py
++	$(RM) $(@D)/pexpect/_async.py
+ endef
+ PYTHON_PEXPECT_POST_PATCH_HOOKS += PYTHON_PEXPECT_REMOVE_ASYNC_PY
+ endif
 -- 
 2.17.1
