@@ -1,100 +1,135 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 9 Sep 2018 15:56:48 +0200
-Subject: [Buildroot] [git commit] libtorrent: use patch file names generated
- by git format-patch
-Message-ID: <20180909135606.459B08397D@busybox.osuosl.org>
+Date: Sun, 9 Sep 2018 15:55:35 +0200
+Subject: [Buildroot] [git commit] package/libtorrent: Fix build with OpenSSL
+ 1.1.x
+Message-ID: <20180909135606.3DF468397D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7abf197e21bdc0818aab34fde3d4d0a4d7b4bc0
+commit: https://git.buildroot.net/buildroot/commit/?id=39a9125364c90a79576201870d23fb2863fa3509
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...ix-cross-compilation-based-on-OpenWRT-patch.patch} | 19 +++++++++----------
- ...patch => 0002-Added-support-for-openssl-1.1.patch} |  5 ++++-
- 2 files changed, 13 insertions(+), 11 deletions(-)
+ package/libtorrent/0002-openssl110.patch | 109 +++++++++++++++++++++++++++++++
+ 1 file changed, 109 insertions(+)
 
-diff --git a/package/libtorrent/0001-cross_compile.patch b/package/libtorrent/0001-Fix-cross-compilation-based-on-OpenWRT-patch.patch
-similarity index 79%
-rename from package/libtorrent/0001-cross_compile.patch
-rename to package/libtorrent/0001-Fix-cross-compilation-based-on-OpenWRT-patch.patch
-index 9febfa7f3c..ba0c6127af 100644
---- a/package/libtorrent/0001-cross_compile.patch
-+++ b/package/libtorrent/0001-Fix-cross-compilation-based-on-OpenWRT-patch.patch
-@@ -1,4 +1,4 @@
--From c4cc0ba76c81e1967c648be423f5f0312ac9d87f Mon Sep 17 00:00:00 2001
-+From c99179777d8f4cf69c51378b91ae580c49cb57a2 Mon Sep 17 00:00:00 2001
- From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- Date: Mon, 5 Oct 2015 00:40:25 +0100
- Subject: [PATCH] Fix cross compilation, based on OpenWRT patch.
-@@ -10,13 +10,12 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-- configure.ac      |    1 -
-- scripts/checks.m4 |    2 +-
-- scripts/common.m4 |    4 ++--
-- 3 files changed, 3 insertions(+), 4 deletions(-)
-+ scripts/checks.m4 | 2 +-
-+ scripts/common.m4 | 4 ++--
-+ 2 files changed, 3 insertions(+), 3 deletions(-)
- 
- diff --git a/scripts/checks.m4 b/scripts/checks.m4
--index 598f39b..0e5abe0 100644
-+index 8d77fc5e..c446995b 100644
- --- a/scripts/checks.m4
- +++ b/scripts/checks.m4
- @@ -96,7 +96,7 @@ AC_DEFUN([TORRENT_CHECK_KQUEUE], [
-@@ -29,10 +28,10 @@ index 598f39b..0e5abe0 100644
-        #include <stdlib.h>
-        #include <unistd.h>
- diff --git a/scripts/common.m4 b/scripts/common.m4
--index 5127624..cc68269 100644
-+index ff023928..932b205c 100644
- --- a/scripts/common.m4
- +++ b/scripts/common.m4
--@@ -223,7 +223,7 @@ dnl   Need to fix this so that it uses the stuff defined by the system.
-+@@ -153,7 +153,7 @@ dnl   Need to fix this so that it uses the stuff defined by the system.
-  AC_DEFUN([TORRENT_CHECK_EXECINFO], [
-    AC_MSG_CHECKING(for execinfo.h)
-  
-@@ -41,7 +40,7 @@ index 5127624..cc68269 100644
-        #include <execinfo.h>
-        int main() { backtrace((void**)0, 0); backtrace_symbols((char**)0, 0); return 0;}
-        ])],
--@@ -238,7 +238,7 @@ AC_DEFUN([TORRENT_CHECK_EXECINFO], [
-+@@ -168,7 +168,7 @@ AC_DEFUN([TORRENT_CHECK_EXECINFO], [
-  AC_DEFUN([TORRENT_CHECK_ALIGNED], [
-    AC_MSG_CHECKING(the byte alignment)
-  
-@@ -51,5 +50,5 @@ index 5127624..cc68269 100644
-        int main() {
-          char buf@<:@8@:>@ = { 0, 0, 0, 0, 1, 0, 0, 0 };
- -- 
--1.7.1
-+2.14.4
- 
-diff --git a/package/libtorrent/0002-openssl110.patch b/package/libtorrent/0002-Added-support-for-openssl-1.1.patch
-similarity index 97%
-rename from package/libtorrent/0002-openssl110.patch
-rename to package/libtorrent/0002-Added-support-for-openssl-1.1.patch
-index b0cfc2deef..463c8ac9bc 100644
---- a/package/libtorrent/0002-openssl110.patch
-+++ b/package/libtorrent/0002-Added-support-for-openssl-1.1.patch
-@@ -1,4 +1,4 @@
--From 7b29b6bd2547e72e22b9b7981df27092842d2a10 Mon Sep 17 00:00:00 2001
-+From 9af3be81c75b44415a6e7efe19f8f89d55091f84 Mon Sep 17 00:00:00 2001
- From: rakshasa <sundell.software@gmail.com>
- Date: Tue, 20 Dec 2016 19:51:02 +0900
- Subject: [PATCH] Added support for openssl 1.1.
-@@ -107,3 +107,6 @@ index aa653d45..7ec13165 100644
-  #endif
-  }
-  
-+-- 
-+2.14.4
+diff --git a/package/libtorrent/0002-openssl110.patch b/package/libtorrent/0002-openssl110.patch
+new file mode 100644
+index 0000000000..b0cfc2deef
+--- /dev/null
++++ b/package/libtorrent/0002-openssl110.patch
+@@ -0,0 +1,109 @@
++From 7b29b6bd2547e72e22b9b7981df27092842d2a10 Mon Sep 17 00:00:00 2001
++From: rakshasa <sundell.software@gmail.com>
++Date: Tue, 20 Dec 2016 19:51:02 +0900
++Subject: [PATCH] Added support for openssl 1.1.
 +
++Downloaded from upstream commit
++https://github.com/rakshasa/libtorrent/commit/7b29b6bd2547e72e22b9b7981df27092842d2a10
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ configure.ac                |  4 ++++
++ src/utils/diffie_hellman.cc | 36 ++++++++++++++++++++++++++++++++++--
++ 2 files changed, 38 insertions(+), 2 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 5b1ea237..b885714d 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -71,12 +71,15 @@ AC_ARG_ENABLE(openssl,
++   [  --disable-openssl       Don't use OpenSSL's SHA1 implementation.],
++   [
++     if test "$enableval" = "yes"; then
+++dnl move to scripts.
++       PKG_CHECK_MODULES(OPENSSL, libcrypto,
++         CXXFLAGS="$CXXFLAGS $OPENSSL_CFLAGS";
++         LIBS="$LIBS $OPENSSL_LIBS")
++ 
++       AC_DEFINE(USE_OPENSSL, 1, Using OpenSSL.)
++       AC_DEFINE(USE_OPENSSL_SHA, 1, Using OpenSSL's SHA1 implementation.)
+++      AC_CHECK_LIB([crypto], [DH_set0_pqg], [AC_DEFINE(USE_OPENSSL_1_1, 1, Using OpenSSL 1.1.)])
+++
++     else
++       AC_DEFINE(USE_NSS_SHA, 1, Using Mozilla's SHA1 implementation.)
++     fi
++@@ -87,6 +90,7 @@ AC_ARG_ENABLE(openssl,
++ 
++     AC_DEFINE(USE_OPENSSL, 1, Using OpenSSL.)
++     AC_DEFINE(USE_OPENSSL_SHA, 1, Using OpenSSL's SHA1 implementation.)
+++    AC_CHECK_LIB([crypto], [DH_set0_pqg], [AC_DEFINE(USE_OPENSSL_1_1, 1, Using OpenSSL 1.1.)])
++   ]
++ )
++ 
++diff --git a/src/utils/diffie_hellman.cc b/src/utils/diffie_hellman.cc
++index aa653d45..7ec13165 100644
++--- a/src/utils/diffie_hellman.cc
+++++ b/src/utils/diffie_hellman.cc
++@@ -54,11 +54,23 @@ DiffieHellman::DiffieHellman(const unsigned char *prime, int primeLength,
++   m_secret(NULL), m_size(0) {
++ 
++ #ifdef USE_OPENSSL
+++
++   m_dh = DH_new();
+++
+++#ifdef USE_OPENSSL_1_1
+++  BIGNUM * const dh_p = BN_bin2bn(prime, primeLength, NULL);
+++  BIGNUM * const dh_g = BN_bin2bn(generator, generatorLength, NULL);
+++
+++  if (dh_p == NULL || dh_g == NULL ||
+++      !DH_set0_pqg(m_dh, dh_p, NULL, dh_g))
+++	  throw internal_error("Could not generate Diffie-Hellman parameters");
+++#else
++   m_dh->p = BN_bin2bn(prime, primeLength, NULL);
++   m_dh->g = BN_bin2bn(generator, generatorLength, NULL);
+++#endif
++ 
++   DH_generate_key(m_dh);
+++
++ #else
++   throw internal_error("Compiled without encryption support.");
++ #endif
++@@ -74,7 +86,19 @@ DiffieHellman::~DiffieHellman() {
++ bool
++ DiffieHellman::is_valid() const {
++ #ifdef USE_OPENSSL
+++  if (m_dh == NULL)
+++    return false;
+++
+++#ifdef USE_OPENSSL_1_1
+++  const BIGNUM *pub_key;
+++
+++  DH_get0_key(m_dh, &pub_key, NULL);
+++
+++  return pub_key != NULL;
+++#else
++   return m_dh != NULL && m_dh->pub_key != NULL;
+++#endif
+++
++ #else
++   return false;
++ #endif
++@@ -103,8 +127,16 @@ DiffieHellman::store_pub_key(unsigned char* dest, unsigned int length) {
++ #ifdef USE_OPENSSL
++   std::memset(dest, 0, length);
++ 
++-  if ((int)length >= BN_num_bytes(m_dh->pub_key))
++-    BN_bn2bin(m_dh->pub_key, dest + length - BN_num_bytes(m_dh->pub_key));
+++  const BIGNUM *pub_key;
+++
+++#ifdef USE_OPENSSL_1_1
+++  DH_get0_key(m_dh, &pub_key, NULL);
+++#else
+++  pub_key = m_dh->pub_key;
+++#endif
+++
+++  if ((int)length >= BN_num_bytes(pub_key))
+++    BN_bn2bin(pub_key, dest + length - BN_num_bytes(pub_key));
++ #endif
++ }
++ 
