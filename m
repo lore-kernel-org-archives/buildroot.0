@@ -1,59 +1,51 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sun,  9 Sep 2018 08:17:48 +0300
-Subject: [Buildroot] [PATCH 1/1] python-pexpect: bump to version 4.6.0
-Message-ID: <20180909051748.9471-1-asafka7@gmail.com>
+Date: Sun,  9 Sep 2018 08:56:39 +0300
+Subject: [Buildroot] [PATCH 1/1] python-pyroute2: bump to version 0.5.2
+Message-ID: <20180909055639.20429-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash for license.
-Adjust post-patch for 4.6.0 (async.py was renamed to _async.py).
+Also added license hashes.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-pexpect/python-pexpect.hash | 8 +++++---
- package/python-pexpect/python-pexpect.mk   | 6 +++---
- 2 files changed, 8 insertions(+), 6 deletions(-)
+ package/python-pyroute2/python-pyroute2.hash | 10 +++++++---
+ package/python-pyroute2/python-pyroute2.mk   |  4 ++--
+ 2 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pexpect/python-pexpect.hash b/package/python-pexpect/python-pexpect.hash
-index e3836074ec..bdeedefaa0 100644
---- a/package/python-pexpect/python-pexpect.hash
-+++ b/package/python-pexpect/python-pexpect.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/pexpect/json, sha256 locally computed
--md5	3694410001a99dff83f0b500a1ca1c95  pexpect-4.2.1.tar.gz
--sha256	3d132465a75b57aa818341c6521392a06cc660feb3988d7f1074f39bd23c9a92  pexpect-4.2.1.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/pexpect/json
-+md5	d4f3372965a996238d57d19b95d2e03a  pexpect-4.6.0.tar.gz
-+sha256	2a8e88259839571d1251d278476f3eec5db26deb73a70be5ed5dc5435e418aba  pexpect-4.6.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	4a483ae1c4dc738a6c8b73feb49074e1835da02ab5aa686f2675029906fa364d  LICENSE
-diff --git a/package/python-pexpect/python-pexpect.mk b/package/python-pexpect/python-pexpect.mk
-index f1f9903946..5c385cefb0 100644
---- a/package/python-pexpect/python-pexpect.mk
-+++ b/package/python-pexpect/python-pexpect.mk
+diff --git a/package/python-pyroute2/python-pyroute2.hash b/package/python-pyroute2/python-pyroute2.hash
+index dbf09c97ac..941157fdb3 100644
+--- a/package/python-pyroute2/python-pyroute2.hash
++++ b/package/python-pyroute2/python-pyroute2.hash
+@@ -1,3 +1,7 @@
+-# md5 from https://pypi.python.org/pypi/pyroute2/json, sha256 locally computed
+-md5 ef4282b1401bcd07a9cf4ec0696aba24 pyroute2-0.4.13.tar.gz
+-sha256 93f3d72f58b3627036427b5571f8e27c93dbb6d01372dc4c452707d6610c0a39 pyroute2-0.4.13.tar.gz
++# md5, sha256 from https://pypi.org/pypi/pyroute2/json
++md5    2f6f951e94356ae9d224f417dc6ebed2  pyroute2-0.5.2.tar.gz
++sha256 42bf74495d95a0196a74dd171357f660175aba2bfc23f9b5f63e3830ccbef9ac  pyroute2-0.5.2.tar.gz
++# Locally computed sha256
++sha256 4739b32a2478e9c204bf010bad5d565d188e59ff905e3c8f71fe3398098b7093  LICENSE.Apache.v2
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL.v2
++sha256 e329111754f1340de20b6084cae4d264b7b4fc8fb48964173f8ee0cb7440a51c  README.license.md
+diff --git a/package/python-pyroute2/python-pyroute2.mk b/package/python-pyroute2/python-pyroute2.mk
+index eed8eb415b..204ff33e7f 100644
+--- a/package/python-pyroute2/python-pyroute2.mk
++++ b/package/python-pyroute2/python-pyroute2.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PEXPECT_VERSION = 4.2.1
-+PYTHON_PEXPECT_VERSION = 4.6.0
- PYTHON_PEXPECT_SOURCE = pexpect-$(PYTHON_PEXPECT_VERSION).tar.gz
--PYTHON_PEXPECT_SITE = https://pypi.python.org/packages/e8/13/d0b0599099d6cd23663043a2a0bb7c61e58c6ba359b2656e6fb000ef5b98
-+PYTHON_PEXPECT_SITE = https://files.pythonhosted.org/packages/89/43/07d07654ee3e25235d8cea4164cdee0ec39d1fda8e9203156ebe403ffda4
- PYTHON_PEXPECT_LICENSE = ISC
- PYTHON_PEXPECT_LICENSE_FILES = LICENSE
- PYTHON_PEXPECT_SETUP_TYPE = distutils
-@@ -16,7 +16,7 @@ PYTHON_PEXPECT_SETUP_TYPE = distutils
- # https://github.com/pexpect/pexpect/issues/290
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- define PYTHON_PEXPECT_REMOVE_ASYNC_PY
--	$(RM) $(@D)/pexpect/async.py
-+	$(RM) $(@D)/pexpect/_async.py
- endef
- PYTHON_PEXPECT_POST_PATCH_HOOKS += PYTHON_PEXPECT_REMOVE_ASYNC_PY
- endif
+-PYTHON_PYROUTE2_VERSION = 0.4.13
++PYTHON_PYROUTE2_VERSION = 0.5.2
+ PYTHON_PYROUTE2_SOURCE = pyroute2-$(PYTHON_PYROUTE2_VERSION).tar.gz
+-PYTHON_PYROUTE2_SITE = https://pypi.python.org/packages/91/e7/814f60e355078dc51625cd2e7e715ed4a06111ddf2ac5580f2f10e79c94a
++PYTHON_PYROUTE2_SITE = https://files.pythonhosted.org/packages/18/64/33858f79b0f2b44a0af7bb42eda3d477253de5311dae1eb12b966085909f
+ PYTHON_PYROUTE2_LICENSE = Apache-2.0 or GPL-2.0+
+ PYTHON_PYROUTE2_LICENSE_FILES = LICENSE.Apache.v2 LICENSE.GPL.v2 README.license.md
+ PYTHON_PYROUTE2_SETUP_TYPE = distutils
 -- 
 2.17.1
