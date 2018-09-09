@@ -1,101 +1,149 @@
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Sun, 9 Sep 2018 13:17:38 +0100
-Subject: [Buildroot] [PATCH v5 3/3] package/nodejs: taint the build on
- external modules
-In-Reply-To: <20180909074908.GD2841@scaer>
+Date: Sun, 9 Sep 2018 13:25:56 +0100
+Subject: [Buildroot] [PATCH v5 0/3] Add tainting support to buildroot
+In-Reply-To: <20180909141037.69b16e95@windsurf.home>
 References: <1536186133-9933-1-git-send-email-angelo.compagnucci@gmail.com>
- <1536186133-9933-4-git-send-email-angelo.compagnucci@gmail.com>
- <20180909074908.GD2841@scaer>
-Message-ID: <CA+_SqVaUZuk-gvvEFbFDQ8Hmj228nYwgaQC8hxbKfwNZw75thg@mail.gmail.com>
+ <20180909073616.GC2841@scaer> <20180909141037.69b16e95@windsurf.home>
+Message-ID: <CA+_SqVbJqv2On+9UPE4pcoyiK1wfDZp=t1h1yMdfVB-CQGp91g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
-On Sun, Sep 9, 2018 at 8:49 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+Thomas, Yann,
+On Sun, Sep 9, 2018 at 1:10 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 >
-> Angelo, All,
+> Hello Yann,
 >
-> On 2018-09-06 00:22 +0200, Angelo Compagnucci spake thusly:
-> > This patch enables the tainting of the build when an
-> > external module is added.
+> On Sun, 9 Sep 2018 09:36:16 +0200, Yann E. MORIN wrote:
+>
+> > So, I am not in favour of having support for such package managers in
+> > Buildroot, to begin with.
+>
+> We already had this discussion in the first iteration of this patch
+> series, and even before. I think everybody agrees that such package
+> managers (npm and al.) are really not nice in the context of Linux
+> distributions or build systems.
+>
+> However, from a practical point of view, some people want those
+> features, and are ready to trade the reproducibility against "ease of
+> use". In addition, specifically for nodejs/npm, the number of packages
+> is so enormous that I am not sure it is really realistic to create one
+> Buildroot package for each nodejs module, and keep things sane.
+> Especially if only a few people are interested in nodejs modules.
+>
+> > As you say, the reproducibility of a build, as offered by Buildroot, is
+> > really a very important point. In my opinion, reproducibility is even
+> > paramount. Whatever gets in the way should be banned.
+>
+> I disagree on the "should be banned", and that's the whole point of
+> this series: allow it, while making sure that the user is well aware of
+> the fact that he has given up on the "reproducibility" by using one of
+> those package managers.
+>
+> > > This patch adds a tainting mechanism in the form of a
+> > > variable FOO_TAINTS that can be used to signal that
+> > > a package harms the reproducibility or licensing under
+> > > certain conditions.
 > >
-> > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-> > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> > ---
-> >  package/nodejs/nodejs.mk | 1 +
-> >  1 file changed, 1 insertion(+)
+> > When I read that, it comes that the tainting mechanism serves two
+> > purposes: first, mark (non-)reproducibility, and second, mark incorrect
+> > and/or incomplete licensing information.
 > >
-> > diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-> > index e2c94ba..322a1ec 100644
-> > --- a/package/nodejs/nodejs.mk
-> > +++ b/package/nodejs/nodejs.mk
-> > @@ -160,6 +160,7 @@ NPM = $(TARGET_CONFIGURE_OPTS) \
-> >  # We can only call NPM if there's something to install.
-> >  #
-> >  ifneq ($(NODEJS_MODULES_LIST),)
-> > +NODEJS_TAINTS = YES
->
-> That is not even true.
->
-> If I have a Buildroot .config that contains:
->
->     BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL="http://myserver/node-mods/VERSION/foo"
->
-> Then this is 100% reproducible, because *I* manage and guarantee that it
-> is, as this is *my* repository.
->
-> I could even have:
->
->     BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL="$(BR2_EXTERANL_MY_TREE_PATH)/mods/foo"
->
-> which is also reproducible, by way of being in my git-versioned br2-external
-> tree.
->
-> And if you were to have:
->
->     BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL="foo at 1.2.3"
->
-> then it would also be preproducible, because the version is specified.
->
-> So, no, we can't set the tainted flag as soon as an external set of npm
-> modules are used; this would be plain wrong for people that already do
-> the "right thing".
-
-Unfortunately, that's not true. Yo have to trust the entire dependency
-chain to make an assumptin like that, but in my experience there is
-always some dependency in the chain that points to master.
-A couple of years ago a simple npm package almost broke the internet,
-I rember my company had tought time tring to find a workaround for
-that single package[1].
-
-So I honestly think we cannot trust a chain of tens or hundreds of
-dependencies that points to random git repositories around the
-internet.
-
-[1] http://mentalfloss.com/article/77951/how-11-lost-lines-code-almost-broke-internet
-
->
-> Regards,
-> Yann E. MORIN.
->
-> >  define NODEJS_INSTALL_MODULES
-> >       # If you're having trouble with module installation, adding -d to the
-> >       # npm install call below and setting npm_config_rollback=false can both
-> > --
-> > 2.7.4
+> > This does not sound nice to me.
 > >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
+> > For the licensing information, I would just rely on the existing
+> > licensing infra, and be done with it, i.e. add :
+> >
+> >     ifneq ($(FOO_NON_REPRODUCIBLE_EXTERNAL_DATA),)
+> >     FOO_LICENSE += Unknown (non reproducible external data)
+> >     endif
 >
+> That's true.
+>
+> > Now, what would be the purpose for this "tainted" flag? I understand
+> > clearly what it provides, indeed, technically, but what would it serve
+> > to the user?
+>
+> See above: it makes it absolutely clear to the user that he is using
+> some feature that kills one key advantage of build system:
+> reproducibility. Hiding this information in the manual or in a
+> Config.in help text is IMO not enough: we really want the user to have
+> a prominent warning at the end of the build.
+>
+> > If I were to use a non-reproduible set of data ffor;, say, nodejs, then
+> > I know that this is not handled by Buildroot, and thus it is not
+> > reproducible. I don't need to be told it, escept maybe as a note in the
+> > manual: "If you use external data from npm/pypi, cpan, whatnot, then
+> > your build is not reproducible; that will be hurting kittens."
+>
+> I disagree, newcomers are unlikely to realize this and read our manual
+> end to end.
+>
+> > Instead, I am more in favour of packaging such external stuff as
+> > Buildroot packages, like we've been doing for erlang, lua, perl, and
+> > python, even if we have to add new infrastructures for thos (npm, I'm
+> > looking at you!)
+>
+> Yes, that is the ideal situation. But that is not necessarily realistic
+> for npm modules (due to their number), and having this option of using
+> the provided package manager is reasonable, as long as the user is
+> aware of the drawbacks.
+>
+> > Besides, you're missing a big piece of potential non-reproducibility
+> > source: br2-external trees. If we ever were to have such a tainting
+> > mechanism, we should mark the build as tainted as soon as there is a
+> > br2-external tree.
+>
+> I disagree, a BR2_EXTERNAL does not make the build non-reproducible. As
+> long as you have the same BR2_EXTERNAL + Buildroot, you can rebuild the
+> same system.
+>
+> > Ditto as soon as we have a FOO_OVERRIDE_SRCDIR set, which should mark
+> > the build as tainted. Except we already use FOO_OVERRIDE_SRCDIR when
+> > FOO_SITE = local...
+>
+> FOO_OVERRIDE_SRCDIR is indeed a better example of thing that makes the
+> build non-reproducible, we could potentially include this in the
+> tainted mechanism.
+>
+> Though to me, this is somewhat less important: only advanced users are
+> likely to use <pkg>_OVERRIDE_SRCDIR, and if they do, they will
+> definitely realize the impact on reproducibility. While the newcomer
+> toying around with nodejs/npm may not realize the impact of using a
+> third-party package manager on reproducibility.
+>
+> So, yes, perhaps <pkg>_OVERRIDE_SRCDIR should ultimately taint the
+> build, but I don't see handling that as a requirement to start
+> introducing this "taint" flag.
+>
+> > Instead, why not provide a helper script (or enhance the existing ones
+> > if need be), than generated buildroot packages for those external packge
+> > managers?
+>
+> We really don't want thousands of npm packages I believe :-/
+
+Thomas said evrithing exceptionally well, but I would like to
+underling another thing: automated building infrastructures like
+continuos integration.
+
+If a project hasa nedd of reproducibility, the countinous integration
+could check if a random developer introduced something not
+reproducible and mark the build as invalid. I think this is really a
+big plus of this solution.
+
+Sincerely, Angelo
+>
+> Best regards,
+>
+> Thomas
 > --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
