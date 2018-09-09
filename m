@@ -1,58 +1,71 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sun, 9 Sep 2018 13:04:53 +0200
-Subject: [Buildroot] [PATCH] lua: remove 5.2.x version
-In-Reply-To: <20180908213537.72485d66@windsurf.home>
-References: <20180908161118.4493-1-francois.perrad@gadz.org>
- <20180908213537.72485d66@windsurf.home>
-Message-ID: <CAB0FRstkE99C=mEK9BBSnQhd4Fqa0Ym1g_LBfteOJGuN1LXqHA@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun,  9 Sep 2018 13:14:28 +0200
+Subject: [Buildroot] [PATCH] package/gdb: use stat() privided by the system
+Message-ID: <20180909111428.28570-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2018-09-08 21:35 GMT+02:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
+Use the same workaround [1] as gnulib use to get the original
+definition of stat. Otherwise with musl toolchains, gnulib try to use
+rpl_stat which is not defined.
 
-> Hello,
->
-> On Sat,  8 Sep 2018 18:11:18 +0200, Francois Perrad wrote:
-> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->
-> Could you give some justification in the commit log ?
->
-> Why remove 5.2 and remove 5.1 ?
->
->
-Lua 5.3.5 will be the last one of its serie.
-Lua 5.4 is up coming (lua-5.4.0-work2 is already available).
-Lua 5.2.4 was released on 2015.
-For various reasons in the Lua ecosystem, the Lua 5.1 will stay.
-On BR, Lua 5.3 is the default version since 2016.02.
+Fixes:
+https://gitlab.com/free-electrons/toolchains-builder/-/jobs/95552308
 
-So, the serie which could be removed is the 5.2.x.
-We could wait some days for other user feedback.
+[1] http://git.savannah.gnu.org/cgit/gnulib.git/commit/lib/stat.c?id=c9d72f69bd201a1ab31464d91f234ea1817fe0e1
 
-Note: see discussion when 5.3.x was introduced :
-http://lists.busybox.net/pipermail/buildroot/2015-January/117638.html
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...mon-utils-use-stat-privided-by-the-system.patch | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/gdb/8.1/0006-gdb-common-utils-use-stat-privided-by-the-system.patch
 
-Fran?ois
-
-
-
-> We already said it numerous time: an empty commit log is never good!
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180909/bd4ff594/attachment.html>
+diff --git a/package/gdb/8.1/0006-gdb-common-utils-use-stat-privided-by-the-system.patch b/package/gdb/8.1/0006-gdb-common-utils-use-stat-privided-by-the-system.patch
+new file mode 100644
+index 0000000000..448e716388
+--- /dev/null
++++ b/package/gdb/8.1/0006-gdb-common-utils-use-stat-privided-by-the-system.patch
+@@ -0,0 +1,37 @@
++From e38a28a537652115f8ab78089bc35d351e7c32f6 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Sun, 9 Sep 2018 12:53:34 +0200
++Subject: [PATCH] gdb/common-utils: use stat() privided by the system.
++
++Use the same workaround [1] as gnulib use to get the original
++definition of stat. Otherwise with musl toolchains, gnulib try to use
++rpl_stat which is not defined.
++
++Fixes:
++https://gitlab.com/free-electrons/toolchains-builder/-/jobs/95552308
++
++[1] http://git.savannah.gnu.org/cgit/gnulib.git/commit/lib/stat.c?id=c9d72f69bd201a1ab31464d91f234ea1817fe0e1
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ gdb/common/common-utils.c | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/gdb/common/common-utils.c b/gdb/common/common-utils.c
++index 80de826ba78..d3577c7ff5c 100644
++--- a/gdb/common/common-utils.c
+++++ b/gdb/common/common-utils.c
++@@ -20,7 +20,10 @@
++ #include "common-defs.h"
++ #include "common-utils.h"
++ #include "host-defs.h"
+++/* Get the original definition of stat.  It might be defined as a macro.  */
+++#define __need_system_sys_stat_h
++ #include <sys/stat.h>
+++#undef __need_system_sys_stat_h
++ #include <ctype.h>
++ 
++ /* The xmalloc() (libiberty.h) family of memory management routines.
++-- 
++2.14.4
++
+-- 
+2.14.4
