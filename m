@@ -1,74 +1,115 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun,  9 Sep 2018 18:37:50 +0200
-Subject: [Buildroot] [PATCH 2/2] package/gdb: use stat() privided by the
- system
-In-Reply-To: <20180909163750.14196-1-romain.naour@gmail.com>
-References: <20180909163750.14196-1-romain.naour@gmail.com>
-Message-ID: <20180909163750.14196-2-romain.naour@gmail.com>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Sun, 9 Sep 2018 17:58:09 +0100
+Subject: [Buildroot] [PATCH v5 0/3] Add tainting support to buildroot
+In-Reply-To: <20180909142019.GK2841@scaer>
+References: <1536186133-9933-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20180909073616.GC2841@scaer> <20180909141037.69b16e95@windsurf.home>
+ <CA+_SqVbJqv2On+9UPE4pcoyiK1wfDZp=t1h1yMdfVB-CQGp91g@mail.gmail.com>
+ <20180909133341.GJ2841@scaer>
+ <CA+_SqVafj+DAsaBtSPJkf2bwbmh_3JojRjBrzG0oT6GduKTG4g@mail.gmail.com>
+ <20180909142019.GK2841@scaer>
+Message-ID: <CA+_SqVZ8-qKU9AxV+kAo6ch4QGKtPJWKS_jOGKMGPjsVTTp5mA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use the same workaround [1] as gnulib use to get the original
-definition of stat. Otherwise with musl toolchains, gnulib try to use
-rpl_stat which is not defined.
+Yann, All
+On Sun, Sep 9, 2018 at 3:20 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> Angelo, All,
+>
+> On 2018-09-09 14:44 +0100, Angelo Compagnucci spake thusly:
+> > On Sun, Sep 9, 2018 at 2:33 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > > On 2018-09-09 13:25 +0100, Angelo Compagnucci spake thusly:
+> > > > On Sun, Sep 9, 2018 at 1:10 PM Thomas Petazzoni
+> > > > <thomas.petazzoni@bootlin.com> wrote:
+> > > [--SNIP--]
+> > > > Thomas said evrithing exceptionally well, but I would like to
+> > > > underling another thing: automated building infrastructures like
+> > > > continuos integration.
+> > > >
+> > > > If a project hasa nedd of reproducibility, the countinous integration
+> > > > could check if a random developer introduced something not
+> > > > reproducible and mark the build as invalid. I think this is really a
+> > > > big plus of this solution.
+> > >
+> > > I do understand the concern, trust me, I do.
+> > >
+> > > What I am saying is that the solution you propose will not allow that,
+> > > because there is no way to decide whether a specific .config is or is
+> > > not reproducible, as per the examples I provided in the nodejs case.
+> > >
+> > > If a build is imprperly marked as tainted, then users will just
+> > > disregard that information and never consult it, and just not use it in
+> > > their automated buildsystemsd (jenkins, gitlab-ci, whatever). And even
+> > > if they do have a job doing the check, that job can detect a change from
+> > > "not tainted" to "tainted" because the job will always report "tainted".
+> >
+> > My concern here is that you start from a reproducible build, add your
+> > packages right and so maintain your build reproducible, buildroot will
+> > work as before.
+>
+> So you are, like I am, in fact arguing that we should have actual packages
+> for such external modules? ;-)
 
-Fixes:
-https://gitlab.com/free-electrons/toolchains-builder/-/jobs/95552308
+I can't see any value on having hundreds of npm packages probably
+outdated at wich you should add hundreds of php composer packages, go
+modules, cargo packages and so on.
 
-[1] http://git.savannah.gnu.org/cgit/gnulib.git/commit/lib/stat.c?id=c9d72f69bd201a1ab31464d91f234ea1817fe0e1
+>> > As soon you use a package manager tainting will be
+> > signaled.
+>
+> This is where I disagree.
+>
+> Using such package managers does not imply that the build is tainted.
+> This is a false dichotomy.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...mon-utils-use-stat-privided-by-the-system.patch | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/gdb/8.1.1/0006-gdb-common-utils-use-stat-privided-by-the-system.patch
+Probably it is but my experience says not, anyway, if you are dealing
+with a complex php software for example you can:
+* call php composer manually on the modules you are sure being
+reproducible in your .mk and live happy
+* use the package host-composer distributed with buildroot asking it
+to do a "composer install" living with the fact that it could do
+anything and you build will be tainted.
 
-diff --git a/package/gdb/8.1.1/0006-gdb-common-utils-use-stat-privided-by-the-system.patch b/package/gdb/8.1.1/0006-gdb-common-utils-use-stat-privided-by-the-system.patch
-new file mode 100644
-index 0000000000..650d963b9e
---- /dev/null
-+++ b/package/gdb/8.1.1/0006-gdb-common-utils-use-stat-privided-by-the-system.patch
-@@ -0,0 +1,37 @@
-+From a7848d4244ffa8db7bf4ab0d5152f57e71600420 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Sun, 9 Sep 2018 12:53:34 +0200
-+Subject: [PATCH] gdb/common-utils: use stat() privided by the system
-+
-+Use the same workaround [1] as gnulib use to get the original
-+definition of stat. Otherwise with musl toolchains, gnulib try to use
-+rpl_stat which is not defined.
-+
-+Fixes:
-+https://gitlab.com/free-electrons/toolchains-builder/-/jobs/95552308
-+
-+[1] http://git.savannah.gnu.org/cgit/gnulib.git/commit/lib/stat.c?id=c9d72f69bd201a1ab31464d91f234ea1817fe0e1
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ gdb/common/common-utils.c | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/gdb/common/common-utils.c b/gdb/common/common-utils.c
-+index 80de826ba78..d3577c7ff5c 100644
-+--- a/gdb/common/common-utils.c
-++++ b/gdb/common/common-utils.c
-+@@ -20,7 +20,10 @@
-+ #include "common-defs.h"
-+ #include "common-utils.h"
-+ #include "host-defs.h"
-++/* Get the original definition of stat.  It might be defined as a macro.  */
-++#define __need_system_sys_stat_h
-+ #include <sys/stat.h>
-++#undef __need_system_sys_stat_h
-+ #include <ctype.h>
-+ 
-+ /* The xmalloc() (libiberty.h) family of memory management routines.
-+-- 
-+2.14.4
-+
--- 
-2.14.4
+> > Taint is mean to signal that there is a potential problem, and if you
+> > don't want to slip into it, you can always do the right thing and
+> > package your software and packaging also it's dependencies.
+>
+> And what I am saying is that the heuristic you suggest to decide whether
+> a build should be considered tainted or not is incorrect.
+
+It's not an heuristic, it's a rule: you ask to a package manager to
+resolve your dependencies, your build _could_ be tainted. You want to
+be sure: you write your own rule.
+If you write a clean mk that does everything right you shouldn't add
+FOO_TAINTS, that's it.
+
+I can agree with you that some packages could be considered first
+class citizens, the others based on package managers could not be as
+good as first ones. But at least, you give the tools to developers who
+wants to add a non trivial web package or similar to buildroot.
+
+What I'm saying here is that we don't have such a rule we simply
+cannot add any time soon any software based on package managers.
+
+Probably there is some other smarter way to do it that I cannot see ...
+
+I'm open to suggestions!
+
+>
+> > As soon as you do this, the taint disappear. I thin it could even be a
+> > deterrent to package the software randomly!
+>
+> Regards,
+> Yann E. MORIN.
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
