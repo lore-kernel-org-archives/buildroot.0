@@ -1,33 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 9 Sep 2018 15:57:21 +0200
-Subject: [Buildroot] [PATCH/next 5/7] package/libtorrent: Fix build with
- OpenSSL 1.1.x
-In-Reply-To: <20180825091702.28471-6-bernd.kuhls@t-online.de>
-References: <20180825091702.28471-1-bernd.kuhls@t-online.de>
- <20180825091702.28471-6-bernd.kuhls@t-online.de>
-Message-ID: <20180909155721.4da0773a@windsurf.home>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sun,  9 Sep 2018 16:02:06 +0200
+Subject: [Buildroot] [PATCH] pkg-perl: fix previous commit
+Message-ID: <20180909140206.21822-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+there is no variable PERL_INSTALL_NAME in master
 
-On Sat, 25 Aug 2018 11:17:00 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/libtorrent/0002-openssl110.patch | 109 +++++++++++++++++++++++
->  1 file changed, 109 insertions(+)
->  create mode 100644 package/libtorrent/0002-openssl110.patch
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/pkg-perl.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks. Please use "git format-patch" to generate
-patches, and keep the file name proposed by git format-patch.
-
-Thanks!
-
-Thomas
+diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
+index 2888872dc..ebc6710bd 100644
+--- a/package/pkg-perl.mk
++++ b/package/pkg-perl.mk
+@@ -102,7 +102,7 @@ define $(2)_CONFIGURE_CMDS
+ 			LD="$$(TARGET_CC)" \
+ 			LDDLFLAGS="-shared $$(TARGET_LDFLAGS)" \
+ 			LDFLAGS="$$(TARGET_LDFLAGS)" \
+-			PERL_INC=$$(STAGING_DIR)/usr/lib/$$(PERL_INSTALL_NAME)/$$(PERL_VERSION)/$$(PERL_ARCHNAME)/CORE \
++			PERL_INC=$$(STAGING_DIR)/usr/lib/perl5/$$(PERL_VERSION)/$$(PERL_ARCHNAME)/CORE \
+ 			DESTDIR=$$(TARGET_DIR) \
+ 			INSTALLDIRS=vendor \
+ 			INSTALLVENDORLIB=/usr/lib/perl5/site_perl/$$(PERL_VERSION) \
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
