@@ -1,135 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 9 Sep 2018 15:55:35 +0200
-Subject: [Buildroot] [git commit] package/libtorrent: Fix build with OpenSSL
- 1.1.x
-Message-ID: <20180909135606.3DF468397D@busybox.osuosl.org>
+Date: Sun, 9 Sep 2018 15:57:21 +0200
+Subject: [Buildroot] [PATCH/next 5/7] package/libtorrent: Fix build with
+ OpenSSL 1.1.x
+In-Reply-To: <20180825091702.28471-6-bernd.kuhls@t-online.de>
+References: <20180825091702.28471-1-bernd.kuhls@t-online.de>
+ <20180825091702.28471-6-bernd.kuhls@t-online.de>
+Message-ID: <20180909155721.4da0773a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39a9125364c90a79576201870d23fb2863fa3509
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libtorrent/0002-openssl110.patch | 109 +++++++++++++++++++++++++++++++
- 1 file changed, 109 insertions(+)
+On Sat, 25 Aug 2018 11:17:00 +0200, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/libtorrent/0002-openssl110.patch | 109 +++++++++++++++++++++++
+>  1 file changed, 109 insertions(+)
+>  create mode 100644 package/libtorrent/0002-openssl110.patch
 
-diff --git a/package/libtorrent/0002-openssl110.patch b/package/libtorrent/0002-openssl110.patch
-new file mode 100644
-index 0000000000..b0cfc2deef
---- /dev/null
-+++ b/package/libtorrent/0002-openssl110.patch
-@@ -0,0 +1,109 @@
-+From 7b29b6bd2547e72e22b9b7981df27092842d2a10 Mon Sep 17 00:00:00 2001
-+From: rakshasa <sundell.software@gmail.com>
-+Date: Tue, 20 Dec 2016 19:51:02 +0900
-+Subject: [PATCH] Added support for openssl 1.1.
-+
-+Downloaded from upstream commit
-+https://github.com/rakshasa/libtorrent/commit/7b29b6bd2547e72e22b9b7981df27092842d2a10
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ configure.ac                |  4 ++++
-+ src/utils/diffie_hellman.cc | 36 ++++++++++++++++++++++++++++++++++--
-+ 2 files changed, 38 insertions(+), 2 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 5b1ea237..b885714d 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -71,12 +71,15 @@ AC_ARG_ENABLE(openssl,
-+   [  --disable-openssl       Don't use OpenSSL's SHA1 implementation.],
-+   [
-+     if test "$enableval" = "yes"; then
-++dnl move to scripts.
-+       PKG_CHECK_MODULES(OPENSSL, libcrypto,
-+         CXXFLAGS="$CXXFLAGS $OPENSSL_CFLAGS";
-+         LIBS="$LIBS $OPENSSL_LIBS")
-+ 
-+       AC_DEFINE(USE_OPENSSL, 1, Using OpenSSL.)
-+       AC_DEFINE(USE_OPENSSL_SHA, 1, Using OpenSSL's SHA1 implementation.)
-++      AC_CHECK_LIB([crypto], [DH_set0_pqg], [AC_DEFINE(USE_OPENSSL_1_1, 1, Using OpenSSL 1.1.)])
-++
-+     else
-+       AC_DEFINE(USE_NSS_SHA, 1, Using Mozilla's SHA1 implementation.)
-+     fi
-+@@ -87,6 +90,7 @@ AC_ARG_ENABLE(openssl,
-+ 
-+     AC_DEFINE(USE_OPENSSL, 1, Using OpenSSL.)
-+     AC_DEFINE(USE_OPENSSL_SHA, 1, Using OpenSSL's SHA1 implementation.)
-++    AC_CHECK_LIB([crypto], [DH_set0_pqg], [AC_DEFINE(USE_OPENSSL_1_1, 1, Using OpenSSL 1.1.)])
-+   ]
-+ )
-+ 
-+diff --git a/src/utils/diffie_hellman.cc b/src/utils/diffie_hellman.cc
-+index aa653d45..7ec13165 100644
-+--- a/src/utils/diffie_hellman.cc
-++++ b/src/utils/diffie_hellman.cc
-+@@ -54,11 +54,23 @@ DiffieHellman::DiffieHellman(const unsigned char *prime, int primeLength,
-+   m_secret(NULL), m_size(0) {
-+ 
-+ #ifdef USE_OPENSSL
-++
-+   m_dh = DH_new();
-++
-++#ifdef USE_OPENSSL_1_1
-++  BIGNUM * const dh_p = BN_bin2bn(prime, primeLength, NULL);
-++  BIGNUM * const dh_g = BN_bin2bn(generator, generatorLength, NULL);
-++
-++  if (dh_p == NULL || dh_g == NULL ||
-++      !DH_set0_pqg(m_dh, dh_p, NULL, dh_g))
-++	  throw internal_error("Could not generate Diffie-Hellman parameters");
-++#else
-+   m_dh->p = BN_bin2bn(prime, primeLength, NULL);
-+   m_dh->g = BN_bin2bn(generator, generatorLength, NULL);
-++#endif
-+ 
-+   DH_generate_key(m_dh);
-++
-+ #else
-+   throw internal_error("Compiled without encryption support.");
-+ #endif
-+@@ -74,7 +86,19 @@ DiffieHellman::~DiffieHellman() {
-+ bool
-+ DiffieHellman::is_valid() const {
-+ #ifdef USE_OPENSSL
-++  if (m_dh == NULL)
-++    return false;
-++
-++#ifdef USE_OPENSSL_1_1
-++  const BIGNUM *pub_key;
-++
-++  DH_get0_key(m_dh, &pub_key, NULL);
-++
-++  return pub_key != NULL;
-++#else
-+   return m_dh != NULL && m_dh->pub_key != NULL;
-++#endif
-++
-+ #else
-+   return false;
-+ #endif
-+@@ -103,8 +127,16 @@ DiffieHellman::store_pub_key(unsigned char* dest, unsigned int length) {
-+ #ifdef USE_OPENSSL
-+   std::memset(dest, 0, length);
-+ 
-+-  if ((int)length >= BN_num_bytes(m_dh->pub_key))
-+-    BN_bn2bin(m_dh->pub_key, dest + length - BN_num_bytes(m_dh->pub_key));
-++  const BIGNUM *pub_key;
-++
-++#ifdef USE_OPENSSL_1_1
-++  DH_get0_key(m_dh, &pub_key, NULL);
-++#else
-++  pub_key = m_dh->pub_key;
-++#endif
-++
-++  if ((int)length >= BN_num_bytes(pub_key))
-++    BN_bn2bin(pub_key, dest + length - BN_num_bytes(pub_key));
-+ #endif
-+ }
-+ 
+Applied to master, thanks. Please use "git format-patch" to generate
+patches, and keep the file name proposed by git format-patch.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
