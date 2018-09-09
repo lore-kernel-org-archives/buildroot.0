@@ -1,39 +1,76 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 9 Sep 2018 12:20:28 +0200
-Subject: [Buildroot] [PATCH 1/1] mongoose: fix hash
-In-Reply-To: <20180907091210.6ad78022@windsurf.home>
-References: <20180906214220.854-1-fontaine.fabrice@gmail.com>
- <87musu3rpi.fsf@tkos.co.il> <20180907091210.6ad78022@windsurf.home>
-Message-ID: <20180909102028.GF2841@scaer>
+Date: Sun, 9 Sep 2018 12:42:26 +0200
+Subject: [Buildroot] [PATCH v1 4/4] qt5virtualkeyboard: add hashes of
+ 3rd-party licenses
+In-Reply-To: <20180905233435.2e2d72c9@windsurf>
+References: <20180903123747.5234-1-gael.portay@savoirfairelinux.com>
+ <20180903123747.5234-5-gael.portay@savoirfairelinux.com>
+ <20180905233435.2e2d72c9@windsurf>
+Message-ID: <20180909104226.GG2841@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, Thomas, All,
+Thomas, Ga?l, All,
 
-On 2018-09-07 09:12 +0200, Thomas Petazzoni spake thusly:
-> On Fri, 07 Sep 2018 06:35:21 +0300, Baruch Siach wrote:
-> > But the current github download is indeed different. Not sure what went
-> > wrong here, but this description is not correct.
-> I saw Yann and Peter talking about github tarballs having changed again:
+On 2018-09-05 23:34 +0200, Thomas Petazzoni spake thusly:
+> On Mon,  3 Sep 2018 08:37:47 -0400, Ga?l PORTAY wrote:
+> > Add missing license hashes for those three third-parties:
+[--SNIP--]
+> >  package/qt5/qt5virtualkeyboard/2.0/qt5virtualkeyboard.hash | 5 +++++
+> >  package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash     | 3 +++
+> I'm not happy with how we handle per-version hash files. What you did
+> is identical to what we do in qt5base, and you don't have much choice
+> right now, but it's not great.
 > 
-> 18:29 < Jacmet> hmm, looks like github tarballs again changed content :/
-> 18:29 < Jacmet> http://autobuild.buildroot.net/results/599/599920bc0a5821fd3fb0a028574a25a22e12430f/build-end.log
-> 18:42 < y_morin> Jacmet: At the same time, the fallback to s.b.o timeout, so maybe it is not a github issue either?
-> 18:43 < Jacmet> y_morin: well, it did get a tarball from github and the hash didn't match
-> 18:43 < y_morin> Jacmet: Arg, indeed. I even had another sha256 than the one in the report.
-> 18:44 < Jacmet> y_morin: and downloading it from github here I also get the same (wrong) hash
+> The download infrastructure only checks the main hash file, i.e
+> package/<pkg>/<pkg>.hash, so we have to list in this file the hashes
+> for all files that are downloaded, regardless of their version.
+> 
+> However, the legal-info stuff looks first in
+> package/<pkg>/<version>/<pkg>.hash, and only if it doesn't exist, it
+> looks in package/<pkg>/<pkg>.hash. This means that we can store
+> per-version hashes for license files in
+> package/<pkg>/<version>/<pkg>.hash. This is needed because a file named
+> COPYING may exist in two different versions of a given package, but
+> with different contents, and therefore different hashes.
+> 
+> I think this is not very consistent today. I see two possible options:
+> 
+>  (1) Make the download stuff consistent with the legal-info stuff so
+>      that we can move the hashes for the downloaded stuff to the
+>      per-version folders.
+> 
+>  (2) Keep things as they are today in terms of infra, but move the
+>      hashes for license files in qt5base and qt5virtualkeyboard to
+>      per-version directories.
+> 
+> I am fine with (2), but I find the current situation where hashes for
+> some license files are in the main folder, and some hashes are in a
+> per-version folder is very confusing.
+> 
+> Yann ?
 
-That does not happen for all archives, though... :-/
+I think we should do (1). However, it might not be so trivial... :-/
 
-And I can see that indeed the generated tarball is different from the
-one on s.b.o.: it slightly differ in the way directory entries are
-stored... Except for that, the actual content is the same.
+Then, (1) implies we have to do (2) as well.
+
+Furthermore, we should also check that, if there is a versioned
+sub-directory, then there is no un-versioned .hash file, because it is
+not going to be used.
 
 Regards,
 Yann E. MORIN.
+
+> Best regards,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
