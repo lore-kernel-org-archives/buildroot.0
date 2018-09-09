@@ -1,41 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 9 Sep 2018 15:19:18 +0200
-Subject: [Buildroot] [PATCH] android-tools: fix minor()/major() build
- failure due to glibc 2.28
-In-Reply-To: <20180909095939.17089-1-giulio.benetti@micronovasrl.com>
-References: <20180909095939.17089-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20180909151918.0d640d18@windsurf.home>
+Date: Sun, 9 Sep 2018 15:19:27 +0200
+Subject: [Buildroot] [git commit] libatomic_ops: bump to version 7.6.6
+Message-ID: <20180909131839.56051838A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7d2b57fd7b7608713181b99610fb49499c1bad06
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  9 Sep 2018 11:59:39 +0200, Giulio Benetti wrote:
-> glibc 2.28 no longer includes <sys/sysmacros.h> from <sys/types.h>,
-> and therefore <sys/sysmacros.h> must be included explicitly when
-> major()/minor() are used.
-> 
-> This commit adds a patch to directly include <sys/sysmacros.h> into
-> all usb_linux.c files where minor() and major() macros are used.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/901/9011c6af71fb81988c2a05f2acee913a2bae2eff//
-> http://autobuild.buildroot.net/results/142/142c5672fdc44f2d68f18df3509e5051b3295df5//
-> http://autobuild.buildroot.net/results/b55/b55aa69654e758af5232ae69618ba1ea5c245074//
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
->  ...smacros.h-to-compile-with-glibc-2.28.patch | 42 +++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 package/android-tools/0008-Include-sysmacros.h-to-compile-with-glibc-2.28.patch
+Update COPYING hash: sync with FSF's gpl-2.0.txt (see
+https://github.com/ivmai/libatomic_ops/commit/aed079e7ce21a033dd7ccb8fa5808d76e4ecb8d5)
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libatomic_ops/libatomic_ops.hash | 4 ++--
+ package/libatomic_ops/libatomic_ops.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libatomic_ops/libatomic_ops.hash b/package/libatomic_ops/libatomic_ops.hash
+index 90af18dc38..a913023e21 100644
+--- a/package/libatomic_ops/libatomic_ops.hash
++++ b/package/libatomic_ops/libatomic_ops.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256 7ee6a1772a49d02711b97c600bd214bd86ba8a31bd7c6d6e850b502780de367c  libatomic_ops-v7.4.10.tar.gz
++sha256 61754aa60bb8052ea64175794df2afae8baacca5420e06eb150230681e71ff5e  libatomic_ops-v7.6.6.tar.gz
+ sha256 f0e630c0ca489767033da5a0c869fb4231db522c5ff479ce55a853a923a00f69  doc/LICENSING.txt
+-sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/libatomic_ops/libatomic_ops.mk b/package/libatomic_ops/libatomic_ops.mk
+index dff62c51b0..100ad70257 100644
+--- a/package/libatomic_ops/libatomic_ops.mk
++++ b/package/libatomic_ops/libatomic_ops.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBATOMIC_OPS_VERSION = v7.4.10
++LIBATOMIC_OPS_VERSION = v7.6.6
+ LIBATOMIC_OPS_SITE = $(call github,ivmai,libatomic_ops,$(LIBATOMIC_OPS_VERSION))
+ LIBATOMIC_OPS_AUTORECONF = YES
+ 
