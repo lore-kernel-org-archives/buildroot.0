@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 9 Sep 2018 15:19:03 +0200
-Subject: [Buildroot] [PATCH] lua: remove 5.2.x version
-In-Reply-To: <CAB0FRstkE99C=mEK9BBSnQhd4Fqa0Ym1g_LBfteOJGuN1LXqHA@mail.gmail.com>
-References: <20180908161118.4493-1-francois.perrad@gadz.org>
- <20180908213537.72485d66@windsurf.home>
- <CAB0FRstkE99C=mEK9BBSnQhd4Fqa0Ym1g_LBfteOJGuN1LXqHA@mail.gmail.com>
-Message-ID: <20180909151903.0fecb844@windsurf.home>
+Date: Sun, 9 Sep 2018 15:19:18 +0200
+Subject: [Buildroot] [PATCH] android-tools: fix minor()/major() build
+ failure due to glibc 2.28
+In-Reply-To: <20180909095939.17089-1-giulio.benetti@micronovasrl.com>
+References: <20180909095939.17089-1-giulio.benetti@micronovasrl.com>
+Message-ID: <20180909151918.0d640d18@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,27 +13,29 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 9 Sep 2018 13:04:53 +0200, Fran?ois Perrad wrote:
-
-> Lua 5.3.5 will be the last one of its serie.
-> Lua 5.4 is up coming (lua-5.4.0-work2 is already available).
-> Lua 5.2.4 was released on 2015.
-> For various reasons in the Lua ecosystem, the Lua 5.1 will stay.
-> On BR, Lua 5.3 is the default version since 2016.02.
+On Sun,  9 Sep 2018 11:59:39 +0200, Giulio Benetti wrote:
+> glibc 2.28 no longer includes <sys/sysmacros.h> from <sys/types.h>,
+> and therefore <sys/sysmacros.h> must be included explicitly when
+> major()/minor() are used.
 > 
-> So, the serie which could be removed is the 5.2.x.
-> We could wait some days for other user feedback.
+> This commit adds a patch to directly include <sys/sysmacros.h> into
+> all usb_linux.c files where minor() and major() macros are used.
 > 
-> Note: see discussion when 5.3.x was introduced :
-> http://lists.busybox.net/pipermail/buildroot/2015-January/117638.html
+> Fixes:
+> http://autobuild.buildroot.net/results/901/9011c6af71fb81988c2a05f2acee913a2bae2eff//
+> http://autobuild.buildroot.net/results/142/142c5672fdc44f2d68f18df3509e5051b3295df5//
+> http://autobuild.buildroot.net/results/b55/b55aa69654e758af5232ae69618ba1ea5c245074//
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+>  ...smacros.h-to-compile-with-glibc-2.28.patch | 42 +++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+>  create mode 100644 package/android-tools/0008-Include-sysmacros.h-to-compile-with-glibc-2.28.patch
 
-Thanks for those explanations. Could you resend the same commit, but
-with a similar explanation in the commit log ?
-
-Thanks,
+Applied to master, thanks.
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
 Embedded Linux and Kernel engineering
 https://bootlin.com
