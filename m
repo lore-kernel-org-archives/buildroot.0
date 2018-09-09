@@ -1,35 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 09 Sep 2018 08:56:12 +0000
-Subject: [Buildroot] [Bug 11266] qt5base-5.11.1 does not compile with musl,
- complains about redefinitions
-In-Reply-To: <bug-11266-163@https.bugs.busybox.net/>
-References: <bug-11266-163@https.bugs.busybox.net/>
-Message-ID: <bug-11266-163-LlJ0B17F7W@https.bugs.busybox.net/>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Sun,  9 Sep 2018 11:17:50 +0200
+Subject: [Buildroot] [PATCH] mpd: bump to version 0.20.21
+Message-ID: <20180909091750.32490-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11266
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Philipp Richter <richterphilipp.pops@gmail.com> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|NEW                         |RESOLVED
-
---- Comment #2 from Philipp Richter <richterphilipp.pops@gmail.com> ---
-(In reply to Peter Seiderer from comment #1)
-
-Hello Peter,
-
-I can confirm that it compiles now with this change. Thank you very much.
-
-Best Regards,
-Philipp Richter
-
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index 6eb384e763..f48782be39 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  a9e458c6e07cdf62649de7722e1e5a7f13aa82eeb397bfbbebc07cf5cf273584  mpd-0.20.20.tar.xz
++sha256  8322764dc265c20f05c8c8fdfdd578b0722e74626bef56fcd8eebfb01acc58dc  mpd-0.20.21.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index a0bbc7222a..b61a4627d2 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MPD_VERSION_MAJOR = 0.20
+-MPD_VERSION = $(MPD_VERSION_MAJOR).20
++MPD_VERSION = $(MPD_VERSION_MAJOR).21
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.18.0
