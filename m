@@ -1,31 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 9 Sep 2018 15:19:39 +0200
-Subject: [Buildroot] [PATCH 1/1] libatomic_ops: bump to version 7.6.6
-In-Reply-To: <20180909100630.18763-1-fontaine.fabrice@gmail.com>
-References: <20180909100630.18763-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180909151939.05575a27@windsurf.home>
+Date: Sun, 9 Sep 2018 15:19:51 +0200
+Subject: [Buildroot] [git commit] acpid: depends on BR2_USE_MMU
+Message-ID: <20180909131906.A7698838B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=448d67e3d5e6085151e9cf61b9a3c90d3a889f28
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  9 Sep 2018 12:06:30 +0200, Fabrice Fontaine wrote:
-> Update COPYING hash: sync with FSF's gpl-2.0.txt (see
-> https://github.com/ivmai/libatomic_ops/commit/aed079e7ce21a033dd7ccb8fa5808d76e4ecb8d5)
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libatomic_ops/libatomic_ops.hash | 4 ++--
->  package/libatomic_ops/libatomic_ops.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+acpid needs fork
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/2cb0435d36a2aa2d75b6c1dfecc93bb49b0f6266
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/acpid/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/acpid/Config.in b/package/acpid/Config.in
+index b74e9d2262..0c8ecf2473 100644
+--- a/package/acpid/Config.in
++++ b/package/acpid/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_ACPID
+ 	bool "acpid"
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Advanced Configuration and Power Interface event daemon.
+ 
