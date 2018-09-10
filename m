@@ -1,54 +1,71 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Mon, 10 Sep 2018 15:48:50 +0200
-Subject: [Buildroot] [PATCH] parted: fix minor()/major() build failure
+Date: Mon, 10 Sep 2018 16:04:20 +0200
+Subject: [Buildroot] [PATCH v2] parted: fix minor()/major() build failure
  due to glibc 2.28
-In-Reply-To: <20180910140823.2794d1da@windsurf>
-References: <20180909172917.55169-1-giulio.benetti@micronovasrl.com>
- <20180910092510.66b51de5@windsurf.home>
- <13c74cee-bfbb-15af-9b9a-cd7864a5026b@micronovasrl.com>
- <CAGm1_ktVLoCsxUou+ax6qEc0y8mbOj7FBhid4_vjz9AtHaueqA@mail.gmail.com>
- <20180910140823.2794d1da@windsurf>
-Message-ID: <39eb5d29-39ab-b25e-9f2c-a9c023c4251e@micronovasrl.com>
+Message-ID: <20180910140420.125870-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+glibc 2.28 no longer includes <sys/sysmacros.h> from <sys/types.h>,
+and therefore <sys/sysmacros.h> must be included explicitly when
+major()/minor() are used.
 
-Il 10/09/2018 14:08, Thomas Petazzoni ha scritto:
-> Hello,
-> 
-> On Mon, 10 Sep 2018 13:46:07 +0200, Yegor Yefremov wrote:
-> 
->>> I still can't find upstream commits in general, I think I don't know
->>> enough some tool you use or I don't know the best way to find them.
->>> Can you point me some hint for this?
->>> Maybe using git in certain way, or checking open PR on various git in a
->>> certain way in repositories etc.
->>
->> Install "tig" and invoke:
->>
->> tig blame libparted/arch/linux.c
-> 
-> What I typically do is just:
-> 
-> 	git log -p <file>
-> 
-> and then use the search to find if there is a commit that looks
-> relevant.
+This commit adds a patch to directly include <sys/sysmacros.h> into
+libparted/arch/linux.c files where minor() and major() macros are used.
 
-Thanks for pointing me both tig and git log -p,
-I was checking on wrong git Repo:
-salsa.debian.org
-instead the official one is this:
-http://git.savannah.gnu.org/cgit/parted.git
+Patch has been taken from parted upstream commit:
+http://git.savannah.gnu.org/cgit/parted.git/commit/?id=ba5e0451b51c983e40afd123b6e0d3eddb55e610
 
-Now all is clear!
+Fixes:
+http://autobuild.buildroot.net/results/323/3230abaf78b8df8d23310b37b4099050fdc76eb0//
+http://autobuild.buildroot.net/results/d3a/d3a3cd9963e5a2be1cec8fb553f5b20fc2e3c85c//
+http://autobuild.buildroot.net/results/ecf/ecfb634b5e6dac2c88b399fc1f1adc68ca42504c//
 
-Thanks gentlemen!
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+Changes V1->V2:
+* use upstream patch instead of creating new one
+* add entry into Fixes: list
 
-Going to submit v2 with upstream.
+ ...lude-sys-sysmacros.h-for-major-macro.patch | 27 +++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 package/parted/0005-linux-Include-sys-sysmacros.h-for-major-macro.patch
 
-Giulio Benetti
+diff --git a/package/parted/0005-linux-Include-sys-sysmacros.h-for-major-macro.patch b/package/parted/0005-linux-Include-sys-sysmacros.h-for-major-macro.patch
+new file mode 100644
+index 0000000000..e0b4c2acba
+--- /dev/null
++++ b/package/parted/0005-linux-Include-sys-sysmacros.h-for-major-macro.patch
+@@ -0,0 +1,27 @@
++From ba5e0451b51c983e40afd123b6e0d3eddb55e610 Mon Sep 17 00:00:00 2001
++From: "Richard W.M. Jones" <rjones@redhat.com>
++Date: Sat, 24 Mar 2018 17:37:02 +0000
++Subject: [PATCH] linux: Include <sys/sysmacros.h> for major() macro.
++
++Since glibc 2.27 this header is required.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
++---
++ libparted/arch/linux.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/libparted/arch/linux.c b/libparted/arch/linux.c
++index 31b98ab..7e86b51 100644
++--- a/libparted/arch/linux.c
+++++ b/libparted/arch/linux.c
++@@ -41,6 +41,7 @@
++ #include <sys/utsname.h>        /* for uname() */
++ #include <scsi/scsi.h>
++ #include <assert.h>
+++#include <sys/sysmacros.h>
++ #ifdef ENABLE_DEVICE_MAPPER
++ #include <libdevmapper.h>
++ #endif
++-- 
++2.17.1
++
+-- 
+2.17.1
