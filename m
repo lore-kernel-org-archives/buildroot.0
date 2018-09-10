@@ -1,53 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 10 Sep 2018 17:39:50 +0200
-Subject: [Buildroot] [git commit] python-asn1crypto: bump to version 0.24.0
-Message-ID: <20180910154024.54E9483AFB@busybox.osuosl.org>
+Date: Mon, 10 Sep 2018 17:41:15 +0200
+Subject: [Buildroot] [git commit] python-psycopg2: bump to version 2.7.5
+Message-ID: <20180910154024.6B68083AE1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b62171fbe506067340b7077a556457178597a910
+commit: https://git.buildroot.net/buildroot/commit/?id=8046df8243255baf900d0398e404742ebc390f4f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add license file.
+license file was updated too - they removed a paragraph related
+to files that were previously removed from the repository.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-asn1crypto/python-asn1crypto.hash | 8 +++++---
- package/python-asn1crypto/python-asn1crypto.mk   | 5 +++--
- 2 files changed, 8 insertions(+), 5 deletions(-)
+ package/python-psycopg2/python-psycopg2.hash | 9 +++++----
+ package/python-psycopg2/python-psycopg2.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-asn1crypto/python-asn1crypto.hash b/package/python-asn1crypto/python-asn1crypto.hash
-index ec5d7cfc2b..41aa602300 100644
---- a/package/python-asn1crypto/python-asn1crypto.hash
-+++ b/package/python-asn1crypto/python-asn1crypto.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/asn1crypto/json, sha256 locally computed
--md5	74a8b9402625b38ef19cf3fa69ef8470  asn1crypto-0.22.0.tar.gz
--sha256	cbbadd640d3165ab24b06ef25d1dca09a3441611ac15f6a6b452474fdf0aed1a  asn1crypto-0.22.0.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/asn1crypto/json
-+md5	de3520426e81a6581352d4366f310eb1  asn1crypto-0.24.0.tar.gz
-+sha256	9d5c20441baf0cb60a4ac34cc447c6c189024b6b4c6cd7877034f4965c464e49  asn1crypto-0.24.0.tar.gz
+diff --git a/package/python-psycopg2/python-psycopg2.hash b/package/python-psycopg2/python-psycopg2.hash
+index ea4a07697b..5dedd61abc 100644
+--- a/package/python-psycopg2/python-psycopg2.hash
++++ b/package/python-psycopg2/python-psycopg2.hash
+@@ -1,4 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/psycopg2/json, sha256 locally computed
+-md5    70fc57072e084565a42689d416cf2c5c  psycopg2-2.7.4.tar.gz
+-sha256 8bf51191d60f6987482ef0cfe8511bbf4877a5aa7f313d7b488b53189cf26209  psycopg2-2.7.4.tar.gz
+-sha256 1752db3c786e12b62ca804178dca033adce8bff4c4b3d98d3449d407fe45210d  LICENSE
++# md5, sha256 from https://pypi.org/pypi/psycopg2/json
++md5	9e7d6f695fc7f8d1c42a7905449246c9  psycopg2-2.7.5.tar.gz
++sha256	eccf962d41ca46e6326b97c8fe0a6687b58dfc1a5f6540ed071ff1474cea749e  psycopg2-2.7.5.tar.gz
 +# Locally computed sha256 checksums
-+sha256	7871ddf1918d53fd549943aad007cd4ad674b0e1da732a9aea4a79e1436d1eb5  LICENSE
-diff --git a/package/python-asn1crypto/python-asn1crypto.mk b/package/python-asn1crypto/python-asn1crypto.mk
-index 681dfd5c16..4cd30e8ca7 100644
---- a/package/python-asn1crypto/python-asn1crypto.mk
-+++ b/package/python-asn1crypto/python-asn1crypto.mk
-@@ -4,10 +4,11 @@
++sha256	3c2b037df24cb85ca1a48739dcab60a5037644b436f87173f6db0d101636b525  LICENSE
+diff --git a/package/python-psycopg2/python-psycopg2.mk b/package/python-psycopg2/python-psycopg2.mk
+index e9327f4607..c8c328d801 100644
+--- a/package/python-psycopg2/python-psycopg2.mk
++++ b/package/python-psycopg2/python-psycopg2.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ASN1CRYPTO_VERSION = 0.22.0
-+PYTHON_ASN1CRYPTO_VERSION = 0.24.0
- PYTHON_ASN1CRYPTO_SOURCE = asn1crypto-$(PYTHON_ASN1CRYPTO_VERSION).tar.gz
--PYTHON_ASN1CRYPTO_SITE = https://pypi.python.org/packages/67/14/5d66588868c4304f804ebaff9397255f6ec5559e46724c2496e0f26e68d6
-+PYTHON_ASN1CRYPTO_SITE = https://files.pythonhosted.org/packages/fc/f1/8db7daa71f414ddabfa056c4ef792e1461ff655c2ae2928a2b675bfed6b4
- PYTHON_ASN1CRYPTO_SETUP_TYPE = setuptools
- PYTHON_ASN1CRYPTO_LICENSE = MIT
-+PYTHON_ASN1CRYPTO_LICENSE_FILES = LICENSE
- 
- $(eval $(python-package))
+-PYTHON_PSYCOPG2_VERSION = 2.7.4
++PYTHON_PSYCOPG2_VERSION = 2.7.5
+ PYTHON_PSYCOPG2_SOURCE = psycopg2-$(PYTHON_PSYCOPG2_VERSION).tar.gz
+-PYTHON_PSYCOPG2_SITE = https://pypi.python.org/packages/74/83/51580322ed0e82cba7ad8e0af590b8fb2cf11bd5aaa1ed872661bd36f462
++PYTHON_PSYCOPG2_SITE = https://files.pythonhosted.org/packages/b2/c1/7bf6c464e903ffc4f3f5907c389e5a4199666bf57f6cd6bf46c17912a1f9
+ PYTHON_PSYCOPG2_SETUP_TYPE = setuptools
+ PYTHON_PSYCOPG2_LICENSE = LGPL-3.0+
+ PYTHON_PSYCOPG2_LICENSE_FILES = LICENSE
