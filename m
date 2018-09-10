@@ -1,9 +1,11 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 10 Sep 2018 23:55:12 +0200
-Subject: [Buildroot] [PATCH 1/1] i2pd: bump to version 2.20
-In-Reply-To: <20180910214654.9157-1-fontaine.fabrice@gmail.com>
-References: <20180910214654.9157-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180910235512.7d210f3f@windsurf>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Mon, 10 Sep 2018 23:56:51 +0200
+Subject: [Buildroot] [PATCH v2] python-numpy: correct LICENSE.txt hash
+ value
+In-Reply-To: <20180910085618.1fe20101@windsurf.home>
+References: <20180909214747.25154-1-giulio.benetti@micronovasrl.com>
+ <20180910085618.1fe20101@windsurf.home>
+Message-ID: <83463954-1b71-58d5-8447-445a521d80c1@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +14,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 10 Sep 2018 23:46:54 +0200, Fabrice Fontaine wrote:
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/i2pd/i2pd.hash | 2 +-
->  package/i2pd/i2pd.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Il 10/09/2018 08:56, Thomas Petazzoni ha scritto:
+> Hello,
+> 
+> On Sun,  9 Sep 2018 23:47:47 +0200, Giulio Benetti wrote:
+>> LICENSE.txt sha256 is wrong. After version bumping from 1.13.3 to 1.15.1
+>> LICENSE.txt sha256 has not be re-calculated.
+>>
+>> New LICENSE.txt lists licenses for bundled libraries:
+>> - Numpydoc -> 2-clause BSD
+>> - scipy-sphinx-theme -> 3-clause BSD, PSF and Apache 2.0
+>> - lapack-lite -> 3-clause BSD
+>> - tempita -> BSD derived
+>> - dragon4 -> specific to library, need to refer to dragon4.c file
+> 
+> Then, should we update the license information to list the licenses of
+> the bundled libraries, or do we keep the fact that python-numpy has a
+> whole is distributed under BSD-3-Clause ?
 
-Applied to master, thanks.
+As discussed on IRC, I'm going to submit a patch to include them all 
+through a patch since upstream Release lacks all sublibraries license files.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Kind regards
+Giulio Benetti
