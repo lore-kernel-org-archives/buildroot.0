@@ -1,51 +1,66 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 10 Sep 2018 11:11:39 +0300
-Subject: [Buildroot] [PATCH 1/1] python-psycopg2: bump to version 2.7.5
-Message-ID: <20180910081139.25014-1-asafka7@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 10 Sep 2018 11:51:33 +0200
+Subject: [Buildroot] [PATCH 1/3] package/Makefile.in: Use '-isystem'
+ instead of '-I' in HOST_CFLAGS globally
+In-Reply-To: <20180909153221.6b803c9f@windsurf.home>
+References: <20180831142024.27548-1-david.degrave@mind.be>
+ <20180909153221.6b803c9f@windsurf.home>
+Message-ID: <5eeda9cf-ba1a-a83b-6413-d3e43f87dfff@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-license file was updated too - they removed a paragraph related
-to files that were previously removed from the repository.
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-psycopg2/python-psycopg2.hash | 9 +++++----
- package/python-psycopg2/python-psycopg2.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-psycopg2/python-psycopg2.hash b/package/python-psycopg2/python-psycopg2.hash
-index ea4a07697b..5dedd61abc 100644
---- a/package/python-psycopg2/python-psycopg2.hash
-+++ b/package/python-psycopg2/python-psycopg2.hash
-@@ -1,4 +1,5 @@
--# md5 from https://pypi.python.org/pypi/psycopg2/json, sha256 locally computed
--md5    70fc57072e084565a42689d416cf2c5c  psycopg2-2.7.4.tar.gz
--sha256 8bf51191d60f6987482ef0cfe8511bbf4877a5aa7f313d7b488b53189cf26209  psycopg2-2.7.4.tar.gz
--sha256 1752db3c786e12b62ca804178dca033adce8bff4c4b3d98d3449d407fe45210d  LICENSE
-+# md5, sha256 from https://pypi.org/pypi/psycopg2/json
-+md5	9e7d6f695fc7f8d1c42a7905449246c9  psycopg2-2.7.5.tar.gz
-+sha256	eccf962d41ca46e6326b97c8fe0a6687b58dfc1a5f6540ed071ff1474cea749e  psycopg2-2.7.5.tar.gz
-+# Locally computed sha256 checksums
-+sha256	3c2b037df24cb85ca1a48739dcab60a5037644b436f87173f6db0d101636b525  LICENSE
-diff --git a/package/python-psycopg2/python-psycopg2.mk b/package/python-psycopg2/python-psycopg2.mk
-index e9327f4607..c8c328d801 100644
---- a/package/python-psycopg2/python-psycopg2.mk
-+++ b/package/python-psycopg2/python-psycopg2.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PSYCOPG2_VERSION = 2.7.4
-+PYTHON_PSYCOPG2_VERSION = 2.7.5
- PYTHON_PSYCOPG2_SOURCE = psycopg2-$(PYTHON_PSYCOPG2_VERSION).tar.gz
--PYTHON_PSYCOPG2_SITE = https://pypi.python.org/packages/74/83/51580322ed0e82cba7ad8e0af590b8fb2cf11bd5aaa1ed872661bd36f462
-+PYTHON_PSYCOPG2_SITE = https://files.pythonhosted.org/packages/b2/c1/7bf6c464e903ffc4f3f5907c389e5a4199666bf57f6cd6bf46c17912a1f9
- PYTHON_PSYCOPG2_SETUP_TYPE = setuptools
- PYTHON_PSYCOPG2_LICENSE = LGPL-3.0+
- PYTHON_PSYCOPG2_LICENSE_FILES = LICENSE
+On 09/09/2018 15:32, Thomas Petazzoni wrote:
+> Hello David,
+> 
+> On Fri, 31 Aug 2018 16:20:22 +0200, David De Grave (Essensium/Mind)
+> wrote:
+>>  As the $(HOST_DIR) is the buildroot's system install directory, and that
+>> all the builds should use that one in priority (it's even mandatory for
+>> uboot and linux), it make sense to use '-isystem' to ensure it is searched
+>> right before the system directories and still let the possibility for the
+>> packages to use specific ones using '-I'.
+> 
+> Could you give a few more details about the motivation for this change.
+> Is it just because it is "cleaner" to refer to Buildroot
+> $(HOST_DIR)/include using -isystem, or does this fix some actual
+> problem/build issue ?
+
+ It fixes the existing problem for u-boot and linux in a more generic way. Also,
+the same issue might exist for any host package that we have. The exported
+headers are often in an 'include' directory that is accessed with a -I flag. If
+that -I flag is added after the CFLAGS passed in by us, then the compiler will
+first find the host-installed headers rather than the local headers.
+Autobuilders will usually not find such an issue, because they have a rather
+minimal set of devel packages installed on the system.
+
+ It's true that these issues are rare: normally the local -I flags are added
+*before* the CFLAGS passed in by the user. However, I'm pretty sure that
+packages do exist that don't do this (e.g. if the Makefile just does 'CFLAGS +=
+...'). It's pretty hard to detect such cases, because *usually* it doesn't give
+an error (because the system headers are probably compatible with the local
+headers).
+
+ Regards,
+ Arnout
+
+> 
+> Doing such a change is pretty invasive, it could potentially cause
+> some build failures, so I'd like to understand the motivation.
+> 
+> Thanks!
+> 
+> Thomas
+> 
+
 -- 
-2.17.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
