@@ -1,48 +1,40 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 10 Sep 2018 23:39:24 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/python-cryptography: bump
- version to 2.3.1
-References: <20180819184242.21134-1-bernd.kuhls@t-online.de>
- <CAGm1_kvHG2zGtw8U200teJtVnjAOf57t_5XCxRsb3TsBjLi69Q@mail.gmail.com>
- <9fro4fx8c7.ln2@ID-313208.user.individual.net>
- <CAGm1_ktoBnagq89z6WbQcTCB4Fkc5bY2YqEnpy3PeVZbMST_hA@mail.gmail.com>
-Message-ID: <ct4j6fxcf3.ln2@ID-313208.user.individual.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 10 Sep 2018 23:46:54 +0200
+Subject: [Buildroot] [PATCH 1/1] i2pd: bump to version 2.20
+Message-ID: <20180910214654.9157-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mon, 20 Aug 2018 10:05:15 +0200 schrieb Yegor Yefremov:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/i2pd/i2pd.hash | 2 +-
+ package/i2pd/i2pd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> I've performed a runtime test and I still get:
-[...]
-> ImportError:
-> /usr/lib/python3.6/site-packages/cryptography/hazmat/bindings/
-_openssl.abi3.so:
-> undefined symbol: pthread_atfork
-
-Hi,
-
-I did not find the time to do a run-time test yet, sorry, but it seems 
-you are not the only one hitting the problem:
-
-https://www.mail-archive.com/yocto at yoctoproject.org/msg38512.html
-
-https://forums.gentoo.org/viewtopic-p-8120220.html?
-sid=b50fe8a26a38d18882c5f2915a030408
-
-https://lists.yoctoproject.org/pipermail/yocto/2017-December/039398.html
-
-The solution is to add "-pthread":
-
-https://patchwork.openembedded.org/patch/146240/
-
-https://bugs.gentoo.org/630578
-
-https://gitweb.gentoo.org/repo/gentoo.git/commit/?
-id=c824d1c44fcf4556de21d2c8b8ae3732b0fc0c5b
-
-Could you please do another runtime test with this fix added?
-
-Regards, Bernd
+diff --git a/package/i2pd/i2pd.hash b/package/i2pd/i2pd.hash
+index 753df0be5a..451ee006a4 100644
+--- a/package/i2pd/i2pd.hash
++++ b/package/i2pd/i2pd.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	7202497ffc3db632d0f7fed93eafaf39aa75efea199705dae7d022249b069eb9	i2pd-2.19.0.tar.gz
++sha256	e424c368f92be5050f3dd5e98ed9ce2ea8d6076e36444c99b96e3b10f69420b1	i2pd-2.20.0.tar.gz
+ sha256	d147a6acdaf8ec9f6513802ef6cad4a4afcdb5ab6b98d9f6bb26d2b7f4cf454c	LICENSE
+diff --git a/package/i2pd/i2pd.mk b/package/i2pd/i2pd.mk
+index b7ebd718a5..8447f3e06b 100644
+--- a/package/i2pd/i2pd.mk
++++ b/package/i2pd/i2pd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-I2PD_VERSION = 2.19.0
++I2PD_VERSION = 2.20.0
+ I2PD_SITE = $(call github,PurpleI2P,i2pd,$(I2PD_VERSION))
+ I2PD_LICENSE = BSD-3-Clause
+ I2PD_LICENSE_FILES = LICENSE
+-- 
+2.17.1
