@@ -1,115 +1,99 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Sep 2018 20:07:05 +0200
-Subject: [Buildroot] [PATCH v5 0/3] Add tainting support to buildroot
-In-Reply-To: <CA+TH9Vm1m+xUC3NydquYNw67SCFLNYvi_rqufxVw3BTtmOS=xQ@mail.gmail.com>
-References: <CA+_SqVbJqv2On+9UPE4pcoyiK1wfDZp=t1h1yMdfVB-CQGp91g@mail.gmail.com>
- <20180909133341.GJ2841@scaer>
- <CA+_SqVafj+DAsaBtSPJkf2bwbmh_3JojRjBrzG0oT6GduKTG4g@mail.gmail.com>
- <20180909142019.GK2841@scaer>
- <CA+_SqVZ8-qKU9AxV+kAo6ch4QGKtPJWKS_jOGKMGPjsVTTp5mA@mail.gmail.com>
- <20180909185518.GA2409@scaer>
- <CA+_SqVa2EiU2OXNoc0O=o7GwB0wW15jMjmnY60LL6bKV2PSeRQ@mail.gmail.com>
- <CA+_SqVbyxT0xCg-7mtryFm-=GRCqwZo2hPpwNaVe8nG8_wxxbA@mail.gmail.com>
- <20180910150009.GA2674@scaer>
- <CA+TH9Vm1m+xUC3NydquYNw67SCFLNYvi_rqufxVw3BTtmOS=xQ@mail.gmail.com>
-Message-ID: <20180910180705.GF2674@scaer>
+Date: Mon, 10 Sep 2018 20:18:37 +0200
+Subject: [Buildroot] [PATCH] Fix issue with printvars executing giant
+ shell command
+In-Reply-To: <1536601546.22056.12.camel@impinj.com>
+References: <20180817231548.29867-1-tpiepho@impinj.com>
+ <20180829204929.GA2617@scaer>
+ <1536601546.22056.12.camel@impinj.com>
+Message-ID: <20180910181837.GG2674@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Angelo, All,
+Trent, All,
 
-On 2018-09-10 19:10 +0200, Angelo Compagnucci spake thusly:
-> Il giorno lun 10 set 2018 alle ore 17:00 Yann E. MORIN
-> <yann.morin.1998@free.fr> ha scritto:
-> I can agree with you, but what do you propose for handling package
-> managers: Simply put a !BR2_REPRODUCIBLE for a package that needs
-> dependencies resolved and cannot handle dependencies cleanly?
-
-Yes, see below...
-
-> > [0] For example, consider an explicit and complete list such as (spitted
-> >     for readability):
-> >         BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL="
-> >             http://internal-server/node/mod-1
-> >             http://internal-server/node/mod-2
-> >             http://internal-server/node/mod-3
-> >             http://internal-server/node/mod-4
-> >         "
-> >     and that all the dependencies of those modules *are* present in that
-> >     list, leaving npm no chance to download anything.
+On 2018-09-10 17:45 +0000, Trent Piepho spake thusly:
+> On Wed, 2018-08-29 at 22:49 +0200, Yann E. MORIN wrote:
+> > On 2018-08-17 16:15 -0700, Trent Piepho spake thusly:
+> > > 
+> > > The solution here is to use $(strip $(foreach ...)), so the command
+> > > expands to "@:", which make is smart enough to not even execute and
+> > > wouldn't exceed any limits if it did.
 > 
-> As I said previously, hiding npm inside nodejs is wrong. What if you
-> have a couple nodejs based software and for one you have a clear
-> picture of dependencies but not for the other?
-> Npm should decoupled and used each time a nodejs software needs it.
+> > > --- a/Makefile
+> > > +++ b/Makefile
+> > > @@ -988,13 +988,13 @@ $(BUILD_DIR)/.br2-external.in: $(BUILD_DIR)
+> > >  # displayed.
+> > >  .PHONY: printvars
+> > >  printvars:
+> > > -	@:$(foreach V, \
+> > > +	@:$(strip $(foreach V, \
+> > 
+> > Why do we even need an actual command here? It works exactly the same
+> > without a rule, and this indeed also gets rid of a call to a shell (and
+> > consequently won't exceed the command line length limit).
+> 
+> Not quite exactly the same.  There's no longer a recipe at all, only
+> the definition of a dependency for printvars, so the output will
+> include:
+> 
+> make[1]: Nothing to be done for 'printvars'.
 
-npm (the utility) comes from nodejs (the source tree). So, the npm we
-use in Buildroot comes from host-nodejs (the Buildroot package). Thus,
-the package that calls npm (i.e. nodejs today) is already decorelated
-from the package that installs npm.
+So what about:
 
-And you can already use npm from a generic-package in Buildroot as it is
-today...
+diff --git a/Makefile b/Makefile
+index 2c6af12989..57e776056c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -988,7 +988,8 @@ $(BUILD_DIR)/.br2-external.in: $(BUILD_DIR)
+ # displayed.
+ .PHONY: printvars
+ printvars:
+-	@:$(foreach V, \
++	@:
++	$(foreach V, \
+ 		$(sort $(if $(VARS),$(filter $(VARS),$(.VARIABLES)),$(.VARIABLES))), \
+ 		$(if $(filter-out environment% default automatic, \
+ 				$(origin $V)), \
 
-There are two ways to install stuff with npm in Buildroot:
+> Which isn't expected output for something that was parsing printvars.
 
-  - add a pacakge name (URL, name and version, or just name) in the
-    existing BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL config option;
+Which should probably have already called it with 'make -s' because
+that is what is also needed when printvars is called from an
+out-of-tree build, by the way.
 
-  - add a new generic-package that calls npm as part of its
-    _INSTALL_CMDS.
+> I'll also mention that we saw this error running buildroot in certain
+> docker containers, but not everywhere.  Whether or not make will pass a
+> giant sequence of whitespace to a shell ends up not being so simple,
+> and I couldn't find any precise rules that govern it.  So just because
+> it works as desired in one test doesn't mean is must work that way
+> everywhere.
 
-In either case you may or may not have reproducibility. In the former,
-Buildroot can not decide either way, because only a human can tell, so
-your patch 3 can't be applied, because it is wring.
+Before my suggested hange:
 
-As for the latter case, the human was in charge of writing the .mk and
-Config.in. Whether they write TAINT=YES in the .mk, or depends on
-!BR2_REPRODUCIBLE in the Config.in has the same effect. As we already
-have BR2_REPRODUCIBLE, we don't need TAINT.
+    $ strace -ff -s 1048576 -o n.log -e trace=process -- make printvars >/dev/null
+    $ grep execve n.log* |grep '                  '
+    --> hit!
 
-Or I don't understand the problem...
+With the above change:
 
-> This is what I did with watchtower:
-[--SNIP--]
-> +WATCHTOWER_TAINTS = YES
+    $ strace -ff -s 1048576 -o n.log -e trace=process -- make printvars >/dev/null
+    $ grep execve n.log* |grep '                  '
+    --> no hit!
 
-If you are going so far as to explicitly write this line, just hide the
-package behing BR2_REPRODUCIBLE instead, yes.
+In a recipe, a command line that contains only spaces will not be executed
+by make.
 
-And even better yet, for packages we would include in Buildroot, provide
-a clean and reproducible list of packages for the dependencies for those
-packages. Although this would be the ideal situation, if that is not
-possible, then hide behind !BR2_REPRODUCIBLE.
+So with the above, you get the silence from a rule, and no long-shell
+commands that break.
 
-For packages that stay in a br2-external or a random fork elsewhere, I
-don't think we should care, as I explained previously.
+> However, it is clearly defined that strip will convert a sequence of
+> whitespace to an empty string, so I figured better to relay on that.
 
-For a parallel: if I do a build without threads, then packages than need
-threads are hidden (with a comment). Similarly, if I want a reproducible
-build, the packages that can't be reproducible are hidden (with a
-comment).
-
-By the way, this has nothing to do with whether they are packages coming
-from a "package manager". Even "traditional" packages may want to do
-unclean downloads at build time; for example, some care had to be taken
-for asterisk, or it would download some sound stuff during the install
-step (although that was reproducible).
-
-> +cd $(WATCHTOWER_SRC_PATH) && GOPATH="$(@D)/$(WATCHTOWER_WORKSPACE)" $(HOST_DIR)/usr/bin/glide install
-
-What would prevent having a script like we have in utils/scancpan or
-utils/scanpypi to do the same processing for Go packages? Or npm
-modules?
-
-Yes, some people are afraid we get thousands of them. But we don't know
-how far we'll go. Today, we're pretty happy adding random python modules.
-Why would it be different for the other "package managers"?
-
-If we find that this is going "way too far", we can revisit that later.
+I'm just trying to keep it simple.
 
 Regards,
 Yann E. MORIN.
