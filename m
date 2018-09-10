@@ -1,35 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 10 Sep 2018 22:44:26 +0200
-Subject: [Buildroot] [git commit] download/git: fix code-style
-Message-ID: <20180910204332.F3FB783C76@busybox.osuosl.org>
+Date: Mon, 10 Sep 2018 22:44:37 +0200
+Subject: [Buildroot] [PATCH 1/5] download/git: fix code-style
+In-Reply-To: <b1b9518e481aaf3efffea2d6a269041af0c9ae07.1534972250.git.yann.morin.1998@free.fr>
+References: <cover.1534972250.git.yann.morin.1998@free.fr>
+ <b1b9518e481aaf3efffea2d6a269041af0c9ae07.1534972250.git.yann.morin.1998@free.fr>
+Message-ID: <20180910224437.681c9d5b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63a0593566451c0f3a623fe069cb679cd1deb9dd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-This file uses leading spaces, not TABs.
+On Wed, 22 Aug 2018 23:10:54 +0200, Yann E. MORIN wrote:
+> This file uses leading spaces, not TABs.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> 
+> ---
+> ;-)
+> ---
+>  support/download/git | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/download/git | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to master, thanks.
 
-diff --git a/support/download/git b/support/download/git
-index 11bb52c1e1..17ca04eb98 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -185,7 +185,7 @@ fi
- # the state of the remote server. It also would generate large tarballs
- # (gigabytes for some linux trees) when a full clone took place.
- find . -not -type d \
--	-and -not -path "./.git/*" >"${output}.list"
-+       -and -not -path "./.git/*" >"${output}.list"
- LC_ALL=C sort <"${output}.list" >"${output}.list.sorted"
- 
- # Create GNU-format tarballs, since that's the format of the tarballs on
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
