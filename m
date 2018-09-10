@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 10 Sep 2018 17:43:17 +0200
-Subject: [Buildroot] [PATCH] imx-lib: bump to version used in
- 4.9.88-2.0.0_ga
-In-Reply-To: <20180904212822.48852-1-1baldgeek@gmail.com>
-References: <20180904212822.48852-1-1baldgeek@gmail.com>
-Message-ID: <20180910174317.74b61c36@windsurf>
+Date: Mon, 10 Sep 2018 17:49:00 +0200
+Subject: [Buildroot] [PATCH 2/2] package/gdb: use stat() privided by the
+ system
+In-Reply-To: <20180909163750.14196-2-romain.naour@gmail.com>
+References: <20180909163750.14196-1-romain.naour@gmail.com>
+ <20180909163750.14196-2-romain.naour@gmail.com>
+Message-ID: <20180910174900.0b9f4133@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +14,40 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  4 Sep 2018 17:28:22 -0400, Dan Riegsecker wrote:
-> In the latest release from NXP, Yocto Rocko 4.9.88-2.0.0_ga,
-> imx-lib was switched from a specific branch or tag release to the
-> master branch and a specific commit. See the link below for
-> reference.
+On Sun,  9 Sep 2018 18:37:50 +0200, Romain Naour wrote:
+> Use the same workaround [1] as gnulib use to get the original
+> definition of stat. Otherwise with musl toolchains, gnulib try to use
+> rpl_stat which is not defined.
 > 
-> https://source.codeaurora.org/external/imx/meta-fsl-bsp-release/commit/?h=rocko-4.9.88-2.0.0_ga&id=ded1a9ea3d723c56058524fc9ebd420a3510ae05
+> Fixes:
+> https://gitlab.com/free-electrons/toolchains-builder/-/jobs/95552308
 > 
-> Signed-off-by: Dan Riegsecker <1baldgeek@gmail.com>
-> ---
->  package/freescale-imx/imx-lib/imx-lib.hash | 2 +-
->  package/freescale-imx/imx-lib/imx-lib.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> [1] http://git.savannah.gnu.org/cgit/gnulib.git/commit/lib/stat.c?id=c9d72f69bd201a1ab31464d91f234ea1817fe0e1
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Applied to master, thanks. Thanks Dan for the patch, thanks Gary for
-the review!
+I am confused by this patch. Why do we need that? The <sys/stat.h> on
+my system doesn't test __need_system_sys_stat_h. Is this a workaround
+to force gnulib to not provide its own stat() replacement ?
+
+Why is gnulib misbehaving here ? We have tons of gnulib related hacks
+in gdb.mk, and this start to pile up quite a bit. Why do we have all
+those gnulib issues with gdb ? Why not with tons of other packages that
+also use gnulib ?
+
+> +Use the same workaround [1] as gnulib use to get the original
+> +definition of stat. Otherwise with musl toolchains, gnulib try to use
+> +rpl_stat which is not defined.
+
+Well rpl_stat() is supposed to be implemented by gnulib. So basically
+gnulib tells gdb: please don't use stat() but my rpl_stat() wrapper,
+but then gnulib doesn't provide rpl_stat().
+
+Any idea what's happening here ?
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Thomas Petazzoni, CTO, Bootlin
 Embedded Linux and Kernel engineering
 https://bootlin.com
