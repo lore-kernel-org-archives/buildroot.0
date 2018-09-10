@@ -1,24 +1,24 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 10 Sep 2018 07:15:49 +0000
-Subject: [Buildroot] [Bug 11291] Hacked By KingSkrupellos CyBeRiZM.OrG
+Date: Mon, 10 Sep 2018 07:15:59 +0000
+Subject: [Buildroot] [Bug 11311] Hacked By KingSkrupellos CyBeRiZM.OrG
  Digital Security Technological Turkish Moslem Army
-In-Reply-To: <bug-11291-163@https.bugs.busybox.net/>
-References: <bug-11291-163@https.bugs.busybox.net/>
-Message-ID: <bug-11291-163-os5B5PYHTG@https.bugs.busybox.net/>
+In-Reply-To: <bug-11311-163@https.bugs.busybox.net/>
+References: <bug-11311-163@https.bugs.busybox.net/>
+Message-ID: <bug-11311-163-yi2btkGQtB@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11291
+https://bugs.busybox.net/show_bug.cgi?id=11311
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
          Resolution|---                         |INVALID
+             Status|NEW                         |RESOLVED
 
 -- 
 You are receiving this mail because:
