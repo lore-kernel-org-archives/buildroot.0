@@ -1,41 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 10 Sep 2018 17:22:26 +0200
-Subject: [Buildroot] [PATCH 1/2] package/gdb: move patch directory
-In-Reply-To: <20180909163750.14196-1-romain.naour@gmail.com>
-References: <20180909163750.14196-1-romain.naour@gmail.com>
-Message-ID: <20180910172226.3f9cab12@windsurf>
+Date: Mon, 10 Sep 2018 17:22:41 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 4.18.x series
+Message-ID: <20180910152148.BC2B7839D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c194dd1271147166ca108a7beba577fc13c7ae85
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  9 Sep 2018 18:37:49 +0200, Romain Naour wrote:
-> commit 9cf4964da56863dfe4ce729c32400bd9acf25ee7 forgot to move patch directory.
-> 
-> Fixes:
-> https://gitlab.com/free-electrons/toolchains-builder/-/jobs/95552306
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  .../0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch       | 0
->  .../0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch       | 0
->  package/gdb/{8.1 => 8.1.1}/0003-use-asm-sgidefs.h.patch                   | 0
->  package/gdb/{8.1 => 8.1.1}/0004-gdbserver-fix-build-for-m68k.patch        | 0
->  .../{8.1 => 8.1.1}/0005-nat-fork-inferior-include-linux-ptrace.h.patch    | 0
->  5 files changed, 0 insertions(+), 0 deletions(-)
->  rename package/gdb/{8.1 => 8.1.1}/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch (100%)
->  rename package/gdb/{8.1 => 8.1.1}/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch (100%)
->  rename package/gdb/{8.1 => 8.1.1}/0003-use-asm-sgidefs.h.patch (100%)
->  rename package/gdb/{8.1 => 8.1.1}/0004-gdbserver-fix-build-for-m68k.patch (100%)
->  rename package/gdb/{8.1 => 8.1.1}/0005-nat-fork-inferior-include-linux-ptrace.h.patch (100%)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index c2c0443af2..cc2d86db3a 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -258,5 +258,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.9.125"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.14.68"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
+-	default "4.18.5"	if BR2_KERNEL_HEADERS_4_18
++	default "4.18.7"	if BR2_KERNEL_HEADERS_4_18
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
