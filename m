@@ -1,66 +1,55 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Sep 2018 11:51:33 +0200
-Subject: [Buildroot] [PATCH 1/3] package/Makefile.in: Use '-isystem'
- instead of '-I' in HOST_CFLAGS globally
-In-Reply-To: <20180909153221.6b803c9f@windsurf.home>
-References: <20180831142024.27548-1-david.degrave@mind.be>
- <20180909153221.6b803c9f@windsurf.home>
-Message-ID: <5eeda9cf-ba1a-a83b-6413-d3e43f87dfff@mind.be>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Mon, 10 Sep 2018 12:49:03 +0200
+Subject: [Buildroot] [PATCH] parted: fix minor()/major() build failure
+ due to glibc 2.28
+In-Reply-To: <20180910092510.66b51de5@windsurf.home>
+References: <20180909172917.55169-1-giulio.benetti@micronovasrl.com>
+ <20180910092510.66b51de5@windsurf.home>
+Message-ID: <13c74cee-bfbb-15af-9b9a-cd7864a5026b@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-
-On 09/09/2018 15:32, Thomas Petazzoni wrote:
-> Hello David,
+Il 10/09/2018 09:25, Thomas Petazzoni ha scritto:
+> Hello,
 > 
-> On Fri, 31 Aug 2018 16:20:22 +0200, David De Grave (Essensium/Mind)
-> wrote:
->>  As the $(HOST_DIR) is the buildroot's system install directory, and that
->> all the builds should use that one in priority (it's even mandatory for
->> uboot and linux), it make sense to use '-isystem' to ensure it is searched
->> right before the system directories and still let the possibility for the
->> packages to use specific ones using '-I'.
+> On Sun,  9 Sep 2018 19:29:17 +0200, Giulio Benetti wrote:
 > 
-> Could you give a few more details about the motivation for this change.
-> Is it just because it is "cleaner" to refer to Buildroot
-> $(HOST_DIR)/include using -isystem, or does this fix some actual
-> problem/build issue ?
-
- It fixes the existing problem for u-boot and linux in a more generic way. Also,
-the same issue might exist for any host package that we have. The exported
-headers are often in an 'include' directory that is accessed with a -I flag. If
-that -I flag is added after the CFLAGS passed in by us, then the compiler will
-first find the host-installed headers rather than the local headers.
-Autobuilders will usually not find such an issue, because they have a rather
-minimal set of devel packages installed on the system.
-
- It's true that these issues are rare: normally the local -I flags are added
-*before* the CFLAGS passed in by the user. However, I'm pretty sure that
-packages do exist that don't do this (e.g. if the Makefile just does 'CFLAGS +=
-...'). It's pretty hard to detect such cases, because *usually* it doesn't give
-an error (because the system headers are probably compatible with the local
-headers).
-
- Regards,
- Arnout
-
+>> diff --git a/package/parted/0005-libparted-include-sys-sysmacros.h-to-compile-with-gl.patch b/package/parted/0005-libparted-include-sys-sysmacros.h-to-compile-with-gl.patch
+>> new file mode 100644
+>> index 0000000000..63dda4c4ff
+>> --- /dev/null
+>> +++ b/package/parted/0005-libparted-include-sys-sysmacros.h-to-compile-with-gl.patch
+>> @@ -0,0 +1,33 @@
+>> +From 715e3e937536326af272c45a86cc3765f00297f7 Mon Sep 17 00:00:00 2001
+>> +From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+>> +Date: Sun, 9 Sep 2018 19:19:19 +0200
+>> +Subject: [PATCH] libparted: include <sys/sysmacros.h> to compile with
+>> + glibc-2.28
+>> +
+>> +glibc 2.28 no longer includes <sys/sysmacros.h> from <sys/types.h>,
+>> +and therefore <sys/sysmacros.h> must be included explicitly when
+>> +major()/minor() are used.
+>> +
+>> +Include <sys/sysmacros.h> into libparted/arch/linux.c where minor() and
+>> +major() macros are used.
+>> +
+>> +Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 > 
-> Doing such a change is pretty invasive, it could potentially cause
-> some build failures, so I'd like to understand the motivation.
-> 
-> Thanks!
-> 
-> Thomas
-> 
+> Please backport upstream commit
+> ba5e0451b51c983e40afd123b6e0d3eddb55e610 instead of coming up with your
+> one fix. Thanks!
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+I still can't find upstream commits in general, I think I don't know 
+enough some tool you use or I don't know the best way to find them.
+Can you point me some hint for this?
+Maybe using git in certain way, or checking open PR on various git in a 
+certain way in repositories etc.
+
+Thanks in advance
+
+Giulio Benetti
