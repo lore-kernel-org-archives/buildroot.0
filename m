@@ -1,29 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 10 Sep 2018 17:42:28 +0200
-Subject: [Buildroot] [PATCH] pkg-perl: fix previous commit
-In-Reply-To: <20180909140206.21822-1-francois.perrad@gadz.org>
-References: <20180909140206.21822-1-francois.perrad@gadz.org>
-Message-ID: <20180910174228.0b464f43@windsurf>
+Date: Mon, 10 Sep 2018 17:42:57 +0200
+Subject: [Buildroot] [git commit] imx-lib: bump to version used in
+ 4.9.88-2.0.0_ga
+Message-ID: <20180910154203.6413E83B1C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1d3e682b1281c99ff7e69d2353f5f905338190b0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  9 Sep 2018 16:02:06 +0200, Francois Perrad wrote:
-> there is no variable PERL_INSTALL_NAME in master
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/pkg-perl.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+In the latest release from NXP, Yocto Rocko 4.9.88-2.0.0_ga,
+imx-lib was switched from a specific branch or tag release to the
+master branch and a specific commit. See the link below for
+reference.
 
-Applied to master, thanks.
+https://source.codeaurora.org/external/imx/meta-fsl-bsp-release/commit/?h=rocko-4.9.88-2.0.0_ga&id=ded1a9ea3d723c56058524fc9ebd420a3510ae05
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Dan Riegsecker <1baldgeek@gmail.com>
+Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/freescale-imx/imx-lib/imx-lib.hash | 2 +-
+ package/freescale-imx/imx-lib/imx-lib.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/freescale-imx/imx-lib/imx-lib.hash b/package/freescale-imx/imx-lib/imx-lib.hash
+index b3fce59d53..abbf017459 100644
+--- a/package/freescale-imx/imx-lib/imx-lib.hash
++++ b/package/freescale-imx/imx-lib/imx-lib.hash
+@@ -1,2 +1,2 @@
+ # locally computed
+-sha256 245ace9b2c50d6c13a804d9c4492a5a850c626e7537f0d0bad81670b2824892f  imx-lib-rel_imx_4.9.x_1.0.0_ga.tar.gz
++sha256 ced5ad0a179887ef1dd93e8103a9ab7372017cc1c241d28cded164cdece4b918  imx-lib-3f777974c0c146817e2ff5cb0340ca66a1f99e57.tar.gz
+diff --git a/package/freescale-imx/imx-lib/imx-lib.mk b/package/freescale-imx/imx-lib/imx-lib.mk
+index e82368588d..721c20e5f8 100644
+--- a/package/freescale-imx/imx-lib/imx-lib.mk
++++ b/package/freescale-imx/imx-lib/imx-lib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMX_LIB_VERSION = rel_imx_4.9.x_1.0.0_ga
++IMX_LIB_VERSION = 3f777974c0c146817e2ff5cb0340ca66a1f99e57
+ IMX_LIB_SITE = https://source.codeaurora.org/external/imx/imx-lib
+ IMX_LIB_SITE_METHOD = git
+ IMX_LIB_LICENSE = LGPL-2.1+
