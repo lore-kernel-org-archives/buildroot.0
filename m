@@ -1,62 +1,67 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 10 Sep 2018 09:24:05 +0300
-Subject: [Buildroot] [PATCH 1/1] python-gunicorn: bump to version 19.9.0
-Message-ID: <20180910062405.20103-1-asafka7@gmail.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Mon, 10 Sep 2018 08:35:33 +0200
+Subject: [Buildroot] [PATCH] motion: fix build failure due to missing
+ drmGetVersion() and drmFreeVersion()
+In-Reply-To: <20180909193343.117159-1-giulio.benetti@micronovasrl.com>
+References: <20180909193343.117159-1-giulio.benetti@micronovasrl.com>
+Message-ID: <650a624a-e642-bcc5-3c26-66d5ea564022@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-No need for setuptools on target anymore.
-Add license hash.
+Hello,09/09/2018 21:33, Giulio Benetti ha scritto:
+> During static linking -ldrm is listed too early respect -lavutil.
+> This cause build failure.
+> 
+> Append extra -ldrm at the tail of $(LIBS) list.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/395/395be1a9cab824b82ef34c2ebd84d54243029b33//
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+>   ...-fix-static-linking-for-ldrm-library.patch | 30 +++++++++++++++++++
+>   1 file changed, 30 insertions(+)
+>   create mode 100644 package/motion/0002-Makefile.in-fix-static-linking-for-ldrm-library.patch
+> 
+> diff --git a/package/motion/0002-Makefile.in-fix-static-linking-for-ldrm-library.patch b/package/motion/0002-Makefile.in-fix-static-linking-for-ldrm-library.patch
+> new file mode 100644
+> index 0000000000..591cca66eb
+> --- /dev/null
+> +++ b/package/motion/0002-Makefile.in-fix-static-linking-for-ldrm-library.patch
+> @@ -0,0 +1,30 @@
+> +From 7098dafaf297d70bb73a5320bdc522b66c456a56 Mon Sep 17 00:00:00 2001
+> +From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> +Date: Sun, 9 Sep 2018 20:30:33 +0200
+> +Subject: [PATCH] Makefile.in: fix static linking for -ldrm library
+> +
+> +While linking statically -ldrm library is listed too early than -lavutil.
+> +
+> +Append additional -ldrm entry to linker $(LIBS) list.
+> +
+> +Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> +---
+> + Makefile.in | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/Makefile.in b/Makefile.in
+> +index 94c7d40..5cfb490 100644
+> +--- a/Makefile.in
+> ++++ b/Makefile.in
+> +@@ -39,7 +39,7 @@ CFLAGS       = @CFLAGS@ -Wall \
+> + 	 -DMOTIONDOCDIR=\"$(DESTDIR)$(docdir)\"    \
+> + 	 @FFMPEG_CFLAGS@ @MMAL_CFLAGS@
+> + LDFLAGS      = @LDFLAGS@
+> +-LIBS         = @LIBS@  @MMAL_LIBS@ @FFMPEG_LIBS@
+> ++LIBS         = @LIBS@ @FFMPEG_LIBS@ @MMAL_LIBS@ -ldrm
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-gunicorn/Config.in            | 1 -
- package/python-gunicorn/python-gunicorn.hash | 8 +++++---
- package/python-gunicorn/python-gunicorn.mk   | 4 ++--
- 3 files changed, 7 insertions(+), 6 deletions(-)
+As pointed here:
+https://github.com/Motion-Project/motion/pull/800
+It makes more sense to fix at FFmpeg level the variable FFMPEG_LIBS.
+Otherwise this bug will keep coming out again and again.
+So please discard this patch and I'm going to fix on ffmpeg package.
 
-diff --git a/package/python-gunicorn/Config.in b/package/python-gunicorn/Config.in
-index 79cda3eaa6..098c3fa6b0 100644
---- a/package/python-gunicorn/Config.in
-+++ b/package/python-gunicorn/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_PYTHON_GUNICORN
- 	bool "python-gunicorn"
--	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
- 	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
- 	help
-diff --git a/package/python-gunicorn/python-gunicorn.hash b/package/python-gunicorn/python-gunicorn.hash
-index a282bc995d..402250ea78 100644
---- a/package/python-gunicorn/python-gunicorn.hash
-+++ b/package/python-gunicorn/python-gunicorn.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/gunicorn/json, sha256 locally computed
--md5	338e5e8a83ea0f0625f768dba4597530  gunicorn-19.6.0.tar.gz
--sha256	813f6916d18a4c8e90efde72f419308b357692f81333cb1125f80013d22fb618  gunicorn-19.6.0.tar.gz
-+# md5, sha256 from https://pypi.python.org/pypi/gunicorn/json
-+md5	f581937e9d8569ebd3fd6af1f9ab809f  gunicorn-19.9.0.tar.gz
-+sha256	fa2662097c66f920f53f70621c6c58ca4a3c4d3434205e608e121b5b3b71f4f3  gunicorn-19.9.0.tar.gz
-+# Locally computed sha256
-+sha256	789fe11b92e1cabfbcf744b5fcc392c9bd5c6798603a4e89f925b6337984d1df  LICENSE
-diff --git a/package/python-gunicorn/python-gunicorn.mk b/package/python-gunicorn/python-gunicorn.mk
-index cfb7da110c..d113f75185 100644
---- a/package/python-gunicorn/python-gunicorn.mk
-+++ b/package/python-gunicorn/python-gunicorn.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_GUNICORN_VERSION = 19.6.0
-+PYTHON_GUNICORN_VERSION = 19.9.0
- PYTHON_GUNICORN_SOURCE = gunicorn-$(PYTHON_GUNICORN_VERSION).tar.gz
--PYTHON_GUNICORN_SITE = https://pypi.python.org/packages/84/ce/7ea5396efad1cef682bbc4068e72a0276341d9d9d0f501da609fab9fcb80
-+PYTHON_GUNICORN_SITE = https://files.pythonhosted.org/packages/47/52/68ba8e5e8ba251e54006a49441f7ccabca83b6bef5aedacb4890596c7911
- PYTHON_GUNICORN_SETUP_TYPE = setuptools
- PYTHON_GUNICORN_LICENSE = MIT
- PYTHON_GUNICORN_LICENSE_FILES = LICENSE
--- 
-2.17.1
+Thanks
+Giulio Benetti
