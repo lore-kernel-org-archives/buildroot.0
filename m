@@ -1,67 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 10 Sep 2018 17:19:11 +0200
-Subject: [Buildroot] [git commit] python-gunicorn: bump to version 19.9.0
-Message-ID: <20180910151848.58FA08397C@busybox.osuosl.org>
+Date: Mon, 10 Sep 2018 17:07:11 +0200
+Subject: [Buildroot] [git commit] file: bump to version 5.34
+Message-ID: <20180910151848.4551D8397C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dca4f1726ca17d5d118c257ac29174236582f1a3
+commit: https://git.buildroot.net/buildroot/commit/?id=30b058cb20aaf5bbd6252fb7e7f25f1eaf298f6f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-No need for setuptools on target anymore.
-Add license hash.
+Remove patch (already in version)
 
-Fixes:
-http://autobuild.buildroot.net/results/3d5/3d526c23ae17f03cbd771f6ad18390567c1c5d3a/
-
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-gunicorn/Config.in            | 1 -
- package/python-gunicorn/python-gunicorn.hash | 8 +++++---
- package/python-gunicorn/python-gunicorn.mk   | 4 ++--
- 3 files changed, 7 insertions(+), 6 deletions(-)
+ ...d-reading-past-the-end-of-buffer-Rui-Reis.patch | 30 ----------------------
+ package/file/file.hash                             |  2 +-
+ package/file/file.mk                               |  2 +-
+ 3 files changed, 2 insertions(+), 32 deletions(-)
 
-diff --git a/package/python-gunicorn/Config.in b/package/python-gunicorn/Config.in
-index 79cda3eaa6..098c3fa6b0 100644
---- a/package/python-gunicorn/Config.in
-+++ b/package/python-gunicorn/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_PYTHON_GUNICORN
- 	bool "python-gunicorn"
--	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
- 	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
- 	help
-diff --git a/package/python-gunicorn/python-gunicorn.hash b/package/python-gunicorn/python-gunicorn.hash
-index a282bc995d..402250ea78 100644
---- a/package/python-gunicorn/python-gunicorn.hash
-+++ b/package/python-gunicorn/python-gunicorn.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/gunicorn/json, sha256 locally computed
--md5	338e5e8a83ea0f0625f768dba4597530  gunicorn-19.6.0.tar.gz
--sha256	813f6916d18a4c8e90efde72f419308b357692f81333cb1125f80013d22fb618  gunicorn-19.6.0.tar.gz
-+# md5, sha256 from https://pypi.python.org/pypi/gunicorn/json
-+md5	f581937e9d8569ebd3fd6af1f9ab809f  gunicorn-19.9.0.tar.gz
-+sha256	fa2662097c66f920f53f70621c6c58ca4a3c4d3434205e608e121b5b3b71f4f3  gunicorn-19.9.0.tar.gz
-+# Locally computed sha256
-+sha256	789fe11b92e1cabfbcf744b5fcc392c9bd5c6798603a4e89f925b6337984d1df  LICENSE
-diff --git a/package/python-gunicorn/python-gunicorn.mk b/package/python-gunicorn/python-gunicorn.mk
-index cfb7da110c..d113f75185 100644
---- a/package/python-gunicorn/python-gunicorn.mk
-+++ b/package/python-gunicorn/python-gunicorn.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/file/0001-Avoid-reading-past-the-end-of-buffer-Rui-Reis.patch b/package/file/0001-Avoid-reading-past-the-end-of-buffer-Rui-Reis.patch
+deleted file mode 100644
+index daff866692..0000000000
+--- a/package/file/0001-Avoid-reading-past-the-end-of-buffer-Rui-Reis.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From a642587a9c9e2dd7feacdf513c3643ce26ad3c22 Mon Sep 17 00:00:00 2001
+-From: Christos Zoulas <christos@zoulas.com>
+-Date: Sat, 9 Jun 2018 16:00:06 +0000
+-Subject: [PATCH] Avoid reading past the end of buffer (Rui Reis)
+-
+-[baruch: drop file version string update hunk]
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: commit a642587a9c9 in github mirror
+-
+- src/readelf.c | 5 +++--
+- 1 file changed, 3 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/readelf.c b/src/readelf.c
+-index 79c83f9f5048..1f41b46113c3 100644
+---- a/src/readelf.c
+-+++ b/src/readelf.c
+-@@ -842,7 +842,8 @@ do_core_note(struct magic_set *ms, unsigned char *nbuf, uint32_t type,
+- 
+- 				cname = (unsigned char *)
+- 				    &nbuf[doff + prpsoffsets(i)];
+--				for (cp = cname; *cp && isprint(*cp); cp++)
+-+				for (cp = cname; cp < nbuf + size && *cp
+-+				    && isprint(*cp); cp++)
+- 					continue;
+- 				/*
+- 				 * Linux apparently appends a space@the end
+--- 
+-2.17.1
+-
+diff --git a/package/file/file.hash b/package/file/file.hash
+index a6b40be349..c279dff6e1 100644
+--- a/package/file/file.hash
++++ b/package/file/file.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256 1c52c8c3d271cd898d5511c36a68059cda94036111ab293f01f83c3525b737c6  file-5.33.tar.gz
++sha256 f15a50dbbfa83fec0bd1161e8e191b092ec832720e30cd14536e044ac623b20a  file-5.34.tar.gz
+ sha256 3c0ad13c36f891a9b4f951e59eb2fc108065a46f849697cc6fd3cdb41cc23a3d  COPYING
+ sha256 d98ee4d8d95e7d021a5dfc41f137ecc3b624a7b98e8bd793130202d12a21ed57  src/mygetopt.h
+ sha256 85e358d575ad4ac5b38b623a25b24246ccff3c7e680d930c0a9ff5228fe434b6  src/vasprintf.c
+diff --git a/package/file/file.mk b/package/file/file.mk
+index 422e29b1ce..42131c4888 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_GUNICORN_VERSION = 19.6.0
-+PYTHON_GUNICORN_VERSION = 19.9.0
- PYTHON_GUNICORN_SOURCE = gunicorn-$(PYTHON_GUNICORN_VERSION).tar.gz
--PYTHON_GUNICORN_SITE = https://pypi.python.org/packages/84/ce/7ea5396efad1cef682bbc4068e72a0276341d9d9d0f501da609fab9fcb80
-+PYTHON_GUNICORN_SITE = https://files.pythonhosted.org/packages/47/52/68ba8e5e8ba251e54006a49441f7ccabca83b6bef5aedacb4890596c7911
- PYTHON_GUNICORN_SETUP_TYPE = setuptools
- PYTHON_GUNICORN_LICENSE = MIT
- PYTHON_GUNICORN_LICENSE_FILES = LICENSE
+-FILE_VERSION = 5.33
++FILE_VERSION = 5.34
+ FILE_SITE = ftp://ftp.astron.com/pub/file
+ FILE_DEPENDENCIES = host-file zlib
+ HOST_FILE_DEPENDENCIES = host-zlib
