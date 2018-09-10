@@ -1,51 +1,87 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 10 Sep 2018 15:52:37 +0300
-Subject: [Buildroot] [PATCH 1/1] python-asn1crypto: bump to version 0.24.0
-Message-ID: <20180910125237.1406-1-asafka7@gmail.com>
+From: David De Grave <david.degrave@mind.be>
+Date: Mon, 10 Sep 2018 15:00:01 +0200
+Subject: [Buildroot] [PATCH 1/3] package/Makefile.in: Use '-isystem'
+ instead of '-I' in HOST_CFLAGS globally
+In-Reply-To: <5eeda9cf-ba1a-a83b-6413-d3e43f87dfff@mind.be>
+References: <20180831142024.27548-1-david.degrave@mind.be>
+ <20180909153221.6b803c9f@windsurf.home>
+ <5eeda9cf-ba1a-a83b-6413-d3e43f87dfff@mind.be>
+Message-ID: <CAD6XyYx9Uy4-Jpu9q7PYmmaYj-PFk44uFx9HAK_3xNomZwhTiw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add license hash
+Hello Thomas, Arnout,
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-asn1crypto/python-asn1crypto.hash | 8 +++++---
- package/python-asn1crypto/python-asn1crypto.mk   | 5 +++--
- 2 files changed, 8 insertions(+), 5 deletions(-)
+On Mon, Sep 10, 2018 at 11:51 AM, Arnout Vandecappelle <arnout@mind.be>
+wrote:
 
-diff --git a/package/python-asn1crypto/python-asn1crypto.hash b/package/python-asn1crypto/python-asn1crypto.hash
-index ec5d7cfc2b..41aa602300 100644
---- a/package/python-asn1crypto/python-asn1crypto.hash
-+++ b/package/python-asn1crypto/python-asn1crypto.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/asn1crypto/json, sha256 locally computed
--md5	74a8b9402625b38ef19cf3fa69ef8470  asn1crypto-0.22.0.tar.gz
--sha256	cbbadd640d3165ab24b06ef25d1dca09a3441611ac15f6a6b452474fdf0aed1a  asn1crypto-0.22.0.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/asn1crypto/json
-+md5	de3520426e81a6581352d4366f310eb1  asn1crypto-0.24.0.tar.gz
-+sha256	9d5c20441baf0cb60a4ac34cc447c6c189024b6b4c6cd7877034f4965c464e49  asn1crypto-0.24.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	7871ddf1918d53fd549943aad007cd4ad674b0e1da732a9aea4a79e1436d1eb5  LICENSE
-diff --git a/package/python-asn1crypto/python-asn1crypto.mk b/package/python-asn1crypto/python-asn1crypto.mk
-index 681dfd5c16..4cd30e8ca7 100644
---- a/package/python-asn1crypto/python-asn1crypto.mk
-+++ b/package/python-asn1crypto/python-asn1crypto.mk
-@@ -4,10 +4,11 @@
- #
- ################################################################################
- 
--PYTHON_ASN1CRYPTO_VERSION = 0.22.0
-+PYTHON_ASN1CRYPTO_VERSION = 0.24.0
- PYTHON_ASN1CRYPTO_SOURCE = asn1crypto-$(PYTHON_ASN1CRYPTO_VERSION).tar.gz
--PYTHON_ASN1CRYPTO_SITE = https://pypi.python.org/packages/67/14/5d66588868c4304f804ebaff9397255f6ec5559e46724c2496e0f26e68d6
-+PYTHON_ASN1CRYPTO_SITE = https://files.pythonhosted.org/packages/fc/f1/8db7daa71f414ddabfa056c4ef792e1461ff655c2ae2928a2b675bfed6b4
- PYTHON_ASN1CRYPTO_SETUP_TYPE = setuptools
- PYTHON_ASN1CRYPTO_LICENSE = MIT
-+PYTHON_ASN1CRYPTO_LICENSE_FILES = LICENSE
- 
- $(eval $(python-package))
+
+> > Could you give a few more details about the motivation for this change.
+> > Is it just because it is "cleaner" to refer to Buildroot
+> > $(HOST_DIR)/include using -isystem, or does this fix some actual
+> > problem/build issue ?
+>
+
+More than making things cleaner/logic, it fixes a build issue I've with the
+beagle bone
+black's Linux kernel: https://github.com/beagleboard/linux.git
+
+They implemented a driver who handle DTBs overlays and what they call
+"capes"
+(PCB extensions to the bbb mother board). Since the update of the DTC
+package few
+weeks ago, my build is throwing compilation errors in linux when it starts
+to compile
+their own version of the dtc. Due to the way they include their headers,
+some of them
+were taken from the host while some others are taken from local dir.
+Moreover, their
+dtc version use different names in their defines (a missing underscore) and
+this why
+at a certain point, it throws a "function redefinition error". Maybe other
+kernels are
+suffering from the same problem, I don't know...
+
+I first fixed the issue by adding a patch to my project to change the
+involved sources
+in the Kernel tree...
+
+But then I thought that other people may suffers from this problem too and
+decided to
+make it more generic by patching buildroot itself, so that I could save
+them few hours
+of investigations. This is why I submitted my first patch who applied the
+same kind of
+change in the linux.mk file.
+
+Then, I discussed this with Arnout and we thought it would be even more
+benefit to
+make it global as it's already a requirement for uboot and now linux too.
+Moreover it
+sounds more logic/cleaner to make it that way, but that was not the main
+idea.
+
+So, that's why I submitted this patch series.
+
+> Doing such a change is pretty invasive, it could potentially cause
+> > some build failures, so I'd like to understand the motivation.
+>
+
+I understand, no problem :-)
+
+Regards,
+David.
+
 -- 
-2.17.1
+
+*David De Grave*
+Senior Embedded Software Developer
+Gsm : +32(0)496.364.960 | Tel : +32-16-28.65.00 | Fax : +32-16-28a.65.01
+Essensium-Mind <https://www.mind.be/> - Gaston Geenslaan 9, B-3001 Leuven,
+Belgium
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180910/1fdc15a7/attachment.html>
