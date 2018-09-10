@@ -1,69 +1,48 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Mon, 10 Sep 2018 23:20:58 +0200
-Subject: [Buildroot] [PATCH 2/2] package/gdb: use stat() privided by the
- system
-In-Reply-To: <20180910174900.0b9f4133@windsurf>
-References: <20180909163750.14196-1-romain.naour@gmail.com>
- <20180909163750.14196-2-romain.naour@gmail.com>
- <20180910174900.0b9f4133@windsurf>
-Message-ID: <d588888e-dccc-50c8-5a6e-9c5c46a512cb@smile.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 10 Sep 2018 23:39:24 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/python-cryptography: bump
+ version to 2.3.1
+References: <20180819184242.21134-1-bernd.kuhls@t-online.de>
+ <CAGm1_kvHG2zGtw8U200teJtVnjAOf57t_5XCxRsb3TsBjLi69Q@mail.gmail.com>
+ <9fro4fx8c7.ln2@ID-313208.user.individual.net>
+ <CAGm1_ktoBnagq89z6WbQcTCB4Fkc5bY2YqEnpy3PeVZbMST_hA@mail.gmail.com>
+Message-ID: <ct4j6fxcf3.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Am Mon, 20 Aug 2018 10:05:15 +0200 schrieb Yegor Yefremov:
 
-Adding the gdb-patches ml and Rich Felker in Cc.
+> I've performed a runtime test and I still get:
+[...]
+> ImportError:
+> /usr/lib/python3.6/site-packages/cryptography/hazmat/bindings/
+_openssl.abi3.so:
+> undefined symbol: pthread_atfork
 
-Le 10/09/2018 ? 17:49, Thomas Petazzoni a ?crit?:
-> Hello,
-> 
-> On Sun,  9 Sep 2018 18:37:50 +0200, Romain Naour wrote:
->> Use the same workaround [1] as gnulib use to get the original
->> definition of stat. Otherwise with musl toolchains, gnulib try to use
->> rpl_stat which is not defined.
->>
->> Fixes:
->> https://gitlab.com/free-electrons/toolchains-builder/-/jobs/95552308
->>
->> [1] http://git.savannah.gnu.org/cgit/gnulib.git/commit/lib/stat.c?id=c9d72f69bd201a1ab31464d91f234ea1817fe0e1
->>
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> 
-> I am confused by this patch. Why do we need that? The <sys/stat.h> on
-> my system doesn't test __need_system_sys_stat_h. Is this a workaround
-> to force gnulib to not provide its own stat() replacement ?
-> 
-> Why is gnulib misbehaving here ? We have tons of gnulib related hacks
-> in gdb.mk, and this start to pile up quite a bit. Why do we have all
-> those gnulib issues with gdb ? Why not with tons of other packages that
-> also use gnulib ?
+Hi,
 
-There are too many questions here, I can't answer.
-There are some (old) hack with coreutils like gl_cv_func_gettimeofday_clobber
-which is in Buildroot since a long time. I can't tell for every gnulib based
-packages...
+I did not find the time to do a run-time test yet, sorry, but it seems 
+you are not the only one hitting the problem:
 
-> 
->> +Use the same workaround [1] as gnulib use to get the original
->> +definition of stat. Otherwise with musl toolchains, gnulib try to use
->> +rpl_stat which is not defined.
-> 
-> Well rpl_stat() is supposed to be implemented by gnulib. So basically
-> gnulib tells gdb: please don't use stat() but my rpl_stat() wrapper,
-> but then gnulib doesn't provide rpl_stat().
-> 
-> Any idea what's happening here ?
+https://www.mail-archive.com/yocto at yoctoproject.org/msg38512.html
 
-As far I can tell, the regression has been introduced by this commit:
-https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=2441702a72f324e41a1624dc042b334f375e2d81
+https://forums.gentoo.org/viewtopic-p-8120220.html?
+sid=b50fe8a26a38d18882c5f2915a030408
 
-Best regards,
-Romain
+https://lists.yoctoproject.org/pipermail/yocto/2017-December/039398.html
 
-> 
-> Thomas
-> 
+The solution is to add "-pthread":
+
+https://patchwork.openembedded.org/patch/146240/
+
+https://bugs.gentoo.org/630578
+
+https://gitweb.gentoo.org/repo/gentoo.git/commit/?
+id=c824d1c44fcf4556de21d2c8b8ae3732b0fc0c5b
+
+Could you please do another runtime test with this fix added?
+
+Regards, Bernd
