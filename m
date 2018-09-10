@@ -1,28 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 10 Sep 2018 17:23:33 +0200
-Subject: [Buildroot] [git commit] package/ibrcommon: add license hashes
-Message-ID: <20180910152238.D2E4583A42@busybox.osuosl.org>
+Date: Mon, 10 Sep 2018 17:23:30 +0200
+Subject: [Buildroot] [git commit] package/squeezelite: add license hash
+Message-ID: <20180910152238.C954083A42@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bbedf882e5d756363b4fda253cfe2a3c7501d081
+commit: https://git.buildroot.net/buildroot/commit/?id=2fc1abb2dcfa325446aee291c201918c955d9874
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ibrcommon/ibrcommon.hash | 2 ++
- 1 file changed, 2 insertions(+)
+ package/squeezelite/squeezelite.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/ibrcommon/ibrcommon.hash b/package/ibrcommon/ibrcommon.hash
-index 21a0ec6f19..9d13f06d38 100644
---- a/package/ibrcommon/ibrcommon.hash
-+++ b/package/ibrcommon/ibrcommon.hash
-@@ -1,2 +1,4 @@
+diff --git a/package/squeezelite/squeezelite.hash b/package/squeezelite/squeezelite.hash
+index 1dbb4c155a..d56f5da665 100644
+--- a/package/squeezelite/squeezelite.hash
++++ b/package/squeezelite/squeezelite.hash
+@@ -1,2 +1,3 @@
  # Locally calculated
- sha256	  9c457c1ebc01e6216524636628c647bef34ab11bd96f0e0788be8749374fdc20	ibrcommon-1.0.1.tar.gz
-+sha256	  1a0b57773a46d9d4cc2f0d1780a17acc38af506bb1e0234aaa85f8ccd6dc0b92	COPYING
-+sha256	  9b8a430c2136ebcf76bd37f50da7d7a80ede413ec6604cc4694ea536e779854c	README
+ sha256 0c844e7714d3f15325629c59ee75e6309763116e61a6b73486b502e2e5cce5fd squeezelite-v1.8.tar.gz
++sha256 3e4379e1f34b8c5da00e545cfe94369b94a57745902c5d12be43b6332c34c04e LICENSE.txt
