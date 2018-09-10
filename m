@@ -1,71 +1,68 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Mon, 10 Sep 2018 16:04:20 +0200
-Subject: [Buildroot] [PATCH v2] parted: fix minor()/major() build failure
- due to glibc 2.28
-Message-ID: <20180910140420.125870-1-giulio.benetti@micronovasrl.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Mon, 10 Sep 2018 17:37:18 +0300
+Subject: [Buildroot] [PATCH v2 1/1] python-gunicorn: bump to version 19.9.0
+Message-ID: <20180910143718.5845-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-glibc 2.28 no longer includes <sys/sysmacros.h> from <sys/types.h>,
-and therefore <sys/sysmacros.h> must be included explicitly when
-major()/minor() are used.
-
-This commit adds a patch to directly include <sys/sysmacros.h> into
-libparted/arch/linux.c files where minor() and major() macros are used.
-
-Patch has been taken from parted upstream commit:
-http://git.savannah.gnu.org/cgit/parted.git/commit/?id=ba5e0451b51c983e40afd123b6e0d3eddb55e610
+No need for setuptools on target anymore.
+Add license hash.
 
 Fixes:
-http://autobuild.buildroot.net/results/323/3230abaf78b8df8d23310b37b4099050fdc76eb0//
-http://autobuild.buildroot.net/results/d3a/d3a3cd9963e5a2be1cec8fb553f5b20fc2e3c85c//
-http://autobuild.buildroot.net/results/ecf/ecfb634b5e6dac2c88b399fc1f1adc68ca42504c//
+http://autobuild.buildroot.net/results/3d5/3d526c23ae17f03cbd771f6ad18390567c1c5d3a/
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+
 ---
-Changes V1->V2:
-* use upstream patch instead of creating new one
-* add entry into Fixes: list
+v1->v2: add autobuild issue being fixed by the commit.
+---
+ package/python-gunicorn/Config.in            | 1 -
+ package/python-gunicorn/python-gunicorn.hash | 8 +++++---
+ package/python-gunicorn/python-gunicorn.mk   | 4 ++--
+ 3 files changed, 7 insertions(+), 6 deletions(-)
 
- ...lude-sys-sysmacros.h-for-major-macro.patch | 27 +++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 package/parted/0005-linux-Include-sys-sysmacros.h-for-major-macro.patch
-
-diff --git a/package/parted/0005-linux-Include-sys-sysmacros.h-for-major-macro.patch b/package/parted/0005-linux-Include-sys-sysmacros.h-for-major-macro.patch
-new file mode 100644
-index 0000000000..e0b4c2acba
---- /dev/null
-+++ b/package/parted/0005-linux-Include-sys-sysmacros.h-for-major-macro.patch
-@@ -0,0 +1,27 @@
-+From ba5e0451b51c983e40afd123b6e0d3eddb55e610 Mon Sep 17 00:00:00 2001
-+From: "Richard W.M. Jones" <rjones@redhat.com>
-+Date: Sat, 24 Mar 2018 17:37:02 +0000
-+Subject: [PATCH] linux: Include <sys/sysmacros.h> for major() macro.
-+
-+Since glibc 2.27 this header is required.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-+---
-+ libparted/arch/linux.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/libparted/arch/linux.c b/libparted/arch/linux.c
-+index 31b98ab..7e86b51 100644
-+--- a/libparted/arch/linux.c
-++++ b/libparted/arch/linux.c
-+@@ -41,6 +41,7 @@
-+ #include <sys/utsname.h>        /* for uname() */
-+ #include <scsi/scsi.h>
-+ #include <assert.h>
-++#include <sys/sysmacros.h>
-+ #ifdef ENABLE_DEVICE_MAPPER
-+ #include <libdevmapper.h>
-+ #endif
-+-- 
-+2.17.1
-+
+diff --git a/package/python-gunicorn/Config.in b/package/python-gunicorn/Config.in
+index 79cda3eaa6..098c3fa6b0 100644
+--- a/package/python-gunicorn/Config.in
++++ b/package/python-gunicorn/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PYTHON_GUNICORN
+ 	bool "python-gunicorn"
+-	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+ 	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
+ 	help
+diff --git a/package/python-gunicorn/python-gunicorn.hash b/package/python-gunicorn/python-gunicorn.hash
+index a282bc995d..402250ea78 100644
+--- a/package/python-gunicorn/python-gunicorn.hash
++++ b/package/python-gunicorn/python-gunicorn.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/gunicorn/json, sha256 locally computed
+-md5	338e5e8a83ea0f0625f768dba4597530  gunicorn-19.6.0.tar.gz
+-sha256	813f6916d18a4c8e90efde72f419308b357692f81333cb1125f80013d22fb618  gunicorn-19.6.0.tar.gz
++# md5, sha256 from https://pypi.python.org/pypi/gunicorn/json
++md5	f581937e9d8569ebd3fd6af1f9ab809f  gunicorn-19.9.0.tar.gz
++sha256	fa2662097c66f920f53f70621c6c58ca4a3c4d3434205e608e121b5b3b71f4f3  gunicorn-19.9.0.tar.gz
++# Locally computed sha256
++sha256	789fe11b92e1cabfbcf744b5fcc392c9bd5c6798603a4e89f925b6337984d1df  LICENSE
+diff --git a/package/python-gunicorn/python-gunicorn.mk b/package/python-gunicorn/python-gunicorn.mk
+index cfb7da110c..d113f75185 100644
+--- a/package/python-gunicorn/python-gunicorn.mk
++++ b/package/python-gunicorn/python-gunicorn.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_GUNICORN_VERSION = 19.6.0
++PYTHON_GUNICORN_VERSION = 19.9.0
+ PYTHON_GUNICORN_SOURCE = gunicorn-$(PYTHON_GUNICORN_VERSION).tar.gz
+-PYTHON_GUNICORN_SITE = https://pypi.python.org/packages/84/ce/7ea5396efad1cef682bbc4068e72a0276341d9d9d0f501da609fab9fcb80
++PYTHON_GUNICORN_SITE = https://files.pythonhosted.org/packages/47/52/68ba8e5e8ba251e54006a49441f7ccabca83b6bef5aedacb4890596c7911
+ PYTHON_GUNICORN_SETUP_TYPE = setuptools
+ PYTHON_GUNICORN_LICENSE = MIT
+ PYTHON_GUNICORN_LICENSE_FILES = LICENSE
 -- 
 2.17.1
