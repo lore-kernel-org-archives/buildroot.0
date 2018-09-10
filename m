@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 10 Sep 2018 17:38:49 +0200
-Subject: [Buildroot] [PATCH v4 1/1] package/freeswitch: Fix build with
- FFmpeg 4.0
-In-Reply-To: <20180909141934.6814-1-bernd.kuhls@t-online.de>
-References: <20180909141934.6814-1-bernd.kuhls@t-online.de>
-Message-ID: <20180910173849.2c435f59@windsurf>
+Date: Mon, 10 Sep 2018 17:39:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 18.1.8
+In-Reply-To: <20180909143620.17436-1-bernd.kuhls@t-online.de>
+References: <20180909143620.17436-1-bernd.kuhls@t-online.de>
+Message-ID: <20180910173901.53b80832@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +13,11 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  9 Sep 2018 16:19:34 +0200, Bernd Kuhls wrote:
+On Sun,  9 Sep 2018 16:36:20 +0200, Bernd Kuhls wrote:
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
-> v4: send again as standalone patch, rebased for buildroot master after
->     freeswitch bump to 1.8.1 (Thomas)
->     build-tested without bumping ffmpeg to 4.0.2,
->     AV_INPUT_BUFFER_PADDING_SIZE was added to ffmpeg 2.8 in 2015:
->     http://git.videolan.org/?p=ffmpeg.git;a=commitdiff;h=29d147c94dd40a78ca3981f39365cc77dae9a0da
-> v3: re-integrated in ffmpeg bump series
-> v2: split patch from v1 series, added missing license hashes,
->     git-formatted patch 0002
->     patch 0001 can not be reformatted because Makefile.in is not part of
->     the git repository
+> Mesa3d 18.2.0 was released as well, after a runtime test I will send
+> the next version bump, for now we stay at 18.1.x.
 
 Applied to master, thanks.
 
