@@ -1,156 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 9 Sep 2018 16:01:20 +0200
-Subject: [Buildroot] [git commit] package/rdesktop: Fix build with OpenSSL
- 1.1.x
-Message-ID: <20180910151848.2CEFA83A1C@busybox.osuosl.org>
+Date: Mon, 10 Sep 2018 17:19:50 +0200
+Subject: [Buildroot] [PATCH v2 1/1] python-gunicorn: bump to version
+ 19.9.0
+In-Reply-To: <20180910143718.5845-1-asafka7@gmail.com>
+References: <20180910143718.5845-1-asafka7@gmail.com>
+Message-ID: <20180910171950.1d680be5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=003f579d58fd0b535c2a5e8df4acd45a76190570
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/rdesktop/0002-openssl11.patch | 130 ++++++++++++++++++++++++++++++++++
- 1 file changed, 130 insertions(+)
+On Mon, 10 Sep 2018 17:37:18 +0300, Asaf Kahlon wrote:
+> No need for setuptools on target anymore.
+> Add license hash.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/3d5/3d526c23ae17f03cbd771f6ad18390567c1c5d3a/
+> 
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> 
+> ---
+> v1->v2: add autobuild issue being fixed by the commit.
+> ---
+>  package/python-gunicorn/Config.in            | 1 -
+>  package/python-gunicorn/python-gunicorn.hash | 8 +++++---
+>  package/python-gunicorn/python-gunicorn.mk   | 4 ++--
+>  3 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/rdesktop/0002-openssl11.patch b/package/rdesktop/0002-openssl11.patch
-new file mode 100644
-index 0000000000..050d6f6903
---- /dev/null
-+++ b/package/rdesktop/0002-openssl11.patch
-@@ -0,0 +1,130 @@
-+From bd6aa6acddf0ba640a49834807872f4cc0d0a773 Mon Sep 17 00:00:00 2001
-+From: Jani Hakala <jjhakala@gmail.com>
-+Date: Thu, 16 Jun 2016 14:28:15 +0300
-+Subject: [PATCH] Fix OpenSSL 1.1 compability issues
-+
-+Some data types have been made opaque in OpenSSL version 1.1 so
-+stack allocation and accessing struct fields directly does not work.
-+
-+Downloaded from upstream commit
-+https://github.com/rdesktop/rdesktop/commit/bd6aa6acddf0ba640a49834807872f4cc0d0a773
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ ssl.c | 65 ++++++++++++++++++++++++++++++++++++-----------------------
-+ 1 file changed, 40 insertions(+), 25 deletions(-)
-+
-+diff --git a/ssl.c b/ssl.c
-+index 48751255..032e9b9e 100644
-+--- a/ssl.c
-++++ b/ssl.c
-+@@ -88,7 +88,7 @@ rdssl_rsa_encrypt(uint8 * out, uint8 * in, int len, uint32 modulus_size, uint8 *
-+ 		  uint8 * exponent)
-+ {
-+ 	BN_CTX *ctx;
-+-	BIGNUM mod, exp, x, y;
-++	BIGNUM *mod, *exp, *x, *y;
-+ 	uint8 inr[SEC_MAX_MODULUS_SIZE];
-+ 	int outlen;
-+ 
-+@@ -98,24 +98,24 @@ rdssl_rsa_encrypt(uint8 * out, uint8 * in, int len, uint32 modulus_size, uint8 *
-+ 	reverse(inr, len);
-+ 
-+ 	ctx = BN_CTX_new();
-+-	BN_init(&mod);
-+-	BN_init(&exp);
-+-	BN_init(&x);
-+-	BN_init(&y);
-+-
-+-	BN_bin2bn(modulus, modulus_size, &mod);
-+-	BN_bin2bn(exponent, SEC_EXPONENT_SIZE, &exp);
-+-	BN_bin2bn(inr, len, &x);
-+-	BN_mod_exp(&y, &x, &exp, &mod, ctx);
-+-	outlen = BN_bn2bin(&y, out);
-++	mod = BN_new();
-++	exp = BN_new();
-++	x = BN_new();
-++	y = BN_new();
-++
-++	BN_bin2bn(modulus, modulus_size, mod);
-++	BN_bin2bn(exponent, SEC_EXPONENT_SIZE, exp);
-++	BN_bin2bn(inr, len, x);
-++	BN_mod_exp(y, x, exp, mod, ctx);
-++	outlen = BN_bn2bin(y, out);
-+ 	reverse(out, outlen);
-+ 	if (outlen < (int) modulus_size)
-+ 		memset(out + outlen, 0, modulus_size - outlen);
-+ 
-+-	BN_free(&y);
-+-	BN_clear_free(&x);
-+-	BN_free(&exp);
-+-	BN_free(&mod);
-++	BN_free(y);
-++	BN_clear_free(x);
-++	BN_free(exp);
-++	BN_free(mod);
-+ 	BN_CTX_free(ctx);
-+ }
-+ 
-+@@ -146,12 +146,20 @@ rdssl_cert_to_rkey(RDSSL_CERT * cert, uint32 * key_len)
-+ 
-+ 	   Kudos to Richard Levitte for the following (. intiutive .) 
-+ 	   lines of code that resets the OID and let's us extract the key. */
-+-	nid = OBJ_obj2nid(cert->cert_info->key->algor->algorithm);
-++
-++	X509_PUBKEY *key = NULL;
-++	X509_ALGOR *algor = NULL;
-++
-++	key = X509_get_X509_PUBKEY(cert);
-++	algor = X509_PUBKEY_get0_param(NULL, NULL, 0, &algor, key);
-++
-++	nid = OBJ_obj2nid(algor->algorithm);
-++
-+ 	if ((nid == NID_md5WithRSAEncryption) || (nid == NID_shaWithRSAEncryption))
-+ 	{
-+ 		DEBUG_RDP5(("Re-setting algorithm type to RSA in server certificate\n"));
-+-		ASN1_OBJECT_free(cert->cert_info->key->algor->algorithm);
-+-		cert->cert_info->key->algor->algorithm = OBJ_nid2obj(NID_rsaEncryption);
-++		X509_PUBKEY_set0_param(key, OBJ_nid2obj(NID_rsaEncryption),
-++				       0, NULL, NULL, 0);
-+ 	}
-+ 	epk = X509_get_pubkey(cert);
-+ 	if (NULL == epk)
-+@@ -201,14 +209,24 @@ rdssl_rkey_get_exp_mod(RDSSL_RKEY * rkey, uint8 * exponent, uint32 max_exp_len,
-+ {
-+ 	int len;
-+ 
-+-	if ((BN_num_bytes(rkey->e) > (int) max_exp_len) ||
-+-	    (BN_num_bytes(rkey->n) > (int) max_mod_len))
-++	BIGNUM *e = NULL;
-++	BIGNUM *n = NULL;
-++
-++#if OPENSSL_VERSION_NUMBER < 0x10100000L
-++	e = rkey->e;
-++	n = rkey->n;
-++#else
-++	RSA_get0_key(rkey, &e, &n, NULL);
-++#endif
-++
-++	if ((BN_num_bytes(e) > (int) max_exp_len) ||
-++	    (BN_num_bytes(n) > (int) max_mod_len))
-+ 	{
-+ 		return 1;
-+ 	}
-+-	len = BN_bn2bin(rkey->e, exponent);
-++	len = BN_bn2bin(e, exponent);
-+ 	reverse(exponent, len);
-+-	len = BN_bn2bin(rkey->n, modulus);
-++	len = BN_bn2bin(n, modulus);
-+ 	reverse(modulus, len);
-+ 	return 0;
-+ }
-+@@ -229,8 +247,5 @@ void
-+ rdssl_hmac_md5(const void *key, int key_len, const unsigned char *msg, int msg_len,
-+ 	       unsigned char *md)
-+ {
-+-	HMAC_CTX ctx;
-+-	HMAC_CTX_init(&ctx);
-+ 	HMAC(EVP_md5(), key, key_len, msg, msg_len, md, NULL);
-+-	HMAC_CTX_cleanup(&ctx);
-+ }
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
