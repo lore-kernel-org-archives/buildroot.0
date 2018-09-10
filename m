@@ -1,40 +1,47 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Mon, 10 Sep 2018 18:35:21 +0000
-Subject: [Buildroot] [PATCH v2 1/1] qemu: add support for python3
-In-Reply-To: <20180904183934.12291-1-aduskett@gmail.com>
-References: <20180904183934.12291-1-aduskett@gmail.com>
-Message-ID: <1536604521.22056.20.camel@impinj.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 10 Sep 2018 21:10:10 +0200
+Subject: [Buildroot] [git commit] acpid: use shutdown for poweroff,
+ if available, not /sbin/poweroff
+Message-ID: <20180910190927.766DE83B75@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 2018-09-04 at 14:39 -0400, Adam Duskett wrote:
-> qemu 2.12.0 now supports building against python3.
-> see: https://wiki.qemu.org/ChangeLog/2.12#Build_Dependencies
-> 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> ---
-> Changes v1 -> v2:
->   - Split the python version check into two seperate checks for
->     readability, one for the target, one for the host.
->   - Fix location of the python version check for target and host.
+commit: https://git.buildroot.net/buildroot/commit/?id=ab842ce21df58e7731dae675e08894c6e9024e56
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+It's preferable to use "shutdown -hP now" to ensure that the runlevel is
+known, preventing this message on the system console and log:
 
->  
-> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
-> +HOST_QEMU_DEPENDENCIES += host-python3
-> +HOST_QEMU_CONFIGURE_CMDS += --python=$(HOST_DIR)/bin/python3
-> +else
-> +HOST_QEMU_DEPENDENCIES += host-python
-> +HOST_QEMU_CONFIGURE_CMDS += --python=$(HOST_DIR)/bin/python2
-> +endif
+  WARNING: could not determine runlevel - doing soft poweroff
+    (it's better to use shutdown instead of poweroff from the command line)
 
-This will mean that if the target system does not have python at all,
-then one is forced to use host python 2.
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/acpid/acpid.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Which is an existing buildroot problem.  But I wish it could be fixed
-instead of further ingraining the concept of "host python version is
-target python version or python 2 if no target python."  Because that
-concept just isn't right.
+diff --git a/package/acpid/acpid.mk b/package/acpid/acpid.mk
+index 33e87cf50a..48fe005e5e 100644
+--- a/package/acpid/acpid.mk
++++ b/package/acpid/acpid.mk
+@@ -15,9 +15,15 @@ define ACPID_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S02acpid
+ endef
+ 
++ifeq ($(BR2_INIT_SYSV)$(BR2_INIT_SYSTEMD),y)
++ACPID_POWEROFF_CMD = /sbin/shutdown -hP now
++else
++ACPID_POWEROFF_CMD = /sbin/poweroff
++endif
++
+ define ACPID_SET_EVENTS
+ 	mkdir -p $(TARGET_DIR)/etc/acpi/events
+-	printf "event=button[ /]power\naction=/sbin/poweroff\n" \
++	printf 'event=button[ /]power\naction=%s\n' '$(ACPID_POWEROFF_CMD)' \
+ 		>$(TARGET_DIR)/etc/acpi/events/powerbtn
+ endef
+ 
