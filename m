@@ -1,35 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 10 Sep 2018 20:46:32 +0200
-Subject: [Buildroot] Sponsoring needed for the Buildroot Developers
- Meeting
-In-Reply-To: <41631f0a-c8c8-c6b3-8785-d71852376cdf@mind.be>
-References: <20180908143652.5965f7eb@windsurf.home>
- <41631f0a-c8c8-c6b3-8785-d71852376cdf@mind.be>
-Message-ID: <20180910204632.51837b8f@windsurf>
+From: Trent Piepho <tpiepho@impinj.com>
+Date: Mon, 10 Sep 2018 18:35:21 +0000
+Subject: [Buildroot] [PATCH v2 1/1] qemu: add support for python3
+In-Reply-To: <20180904183934.12291-1-aduskett@gmail.com>
+References: <20180904183934.12291-1-aduskett@gmail.com>
+Message-ID: <1536604521.22056.20.camel@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Mon, 10 Sep 2018 18:30:38 +0200, Arnout Vandecappelle wrote:
-
-> > Of course, donations from individuals are also welcome, but considering
-> > the number of companies using Buildroot, we believe it should be
-> > possible to find 2/3 small companies willing to help the project.  
+On Tue, 2018-09-04 at 14:39 -0400, Adam Duskett wrote:
+> qemu 2.12.0 now supports building against python3.
+> see: https://wiki.qemu.org/ChangeLog/2.12#Build_Dependencies
 > 
->  Essensium/Mind will certainly be a sponsor for the meeting room. Additional
-> sponsors are still welcome, though.
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> ---
+> Changes v1 -> v2:
+>   - Split the python version check into two seperate checks for
+>     readability, one for the target, one for the host.
+>   - Fix location of the python version check for target and host.
 
-I've had privately proposals from two other companies to sponsor the
-event, so it looks like this call for sponsoring worked well!
 
-Thanks a lot,
+>  
+> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
+> +HOST_QEMU_DEPENDENCIES += host-python3
+> +HOST_QEMU_CONFIGURE_CMDS += --python=$(HOST_DIR)/bin/python3
+> +else
+> +HOST_QEMU_DEPENDENCIES += host-python
+> +HOST_QEMU_CONFIGURE_CMDS += --python=$(HOST_DIR)/bin/python2
+> +endif
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+This will mean that if the target system does not have python at all,
+then one is forced to use host python 2.
+
+Which is an existing buildroot problem.  But I wish it could be fixed
+instead of further ingraining the concept of "host python version is
+target python version or python 2 if no target python."  Because that
+concept just isn't right.
