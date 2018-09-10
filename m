@@ -1,68 +1,91 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 10 Sep 2018 17:37:18 +0300
-Subject: [Buildroot] [PATCH v2 1/1] python-gunicorn: bump to version 19.9.0
-Message-ID: <20180910143718.5845-1-asafka7@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 10 Sep 2018 17:00:09 +0200
+Subject: [Buildroot] [PATCH v5 0/3] Add tainting support to buildroot
+In-Reply-To: <CA+_SqVbyxT0xCg-7mtryFm-=GRCqwZo2hPpwNaVe8nG8_wxxbA@mail.gmail.com>
+References: <20180909073616.GC2841@scaer>
+ <20180909141037.69b16e95@windsurf.home>
+ <CA+_SqVbJqv2On+9UPE4pcoyiK1wfDZp=t1h1yMdfVB-CQGp91g@mail.gmail.com>
+ <20180909133341.GJ2841@scaer>
+ <CA+_SqVafj+DAsaBtSPJkf2bwbmh_3JojRjBrzG0oT6GduKTG4g@mail.gmail.com>
+ <20180909142019.GK2841@scaer>
+ <CA+_SqVZ8-qKU9AxV+kAo6ch4QGKtPJWKS_jOGKMGPjsVTTp5mA@mail.gmail.com>
+ <20180909185518.GA2409@scaer>
+ <CA+_SqVa2EiU2OXNoc0O=o7GwB0wW15jMjmnY60LL6bKV2PSeRQ@mail.gmail.com>
+ <CA+_SqVbyxT0xCg-7mtryFm-=GRCqwZo2hPpwNaVe8nG8_wxxbA@mail.gmail.com>
+Message-ID: <20180910150009.GA2674@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-No need for setuptools on target anymore.
-Add license hash.
+Angelo, All,
 
-Fixes:
-http://autobuild.buildroot.net/results/3d5/3d526c23ae17f03cbd771f6ad18390567c1c5d3a/
+On 2018-09-10 09:50 +0200, Angelo Compagnucci spake thusly:
+> > Last one, I promise!
+[--SNIP--]
+> I just pushed o POC on my local branch if you want to have a look.
+> It's what I mean for tainting applied to a package with a more robust
+> ad correct approach that the npm case:
+> https://github.com/angeloc/buildroot/commits/watchtower
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+So, here is my last stance on the subject, in which I tried to summarise
+my position.
 
----
-v1->v2: add autobuild issue being fixed by the commit.
----
- package/python-gunicorn/Config.in            | 1 -
- package/python-gunicorn/python-gunicorn.hash | 8 +++++---
- package/python-gunicorn/python-gunicorn.mk   | 4 ++--
- 3 files changed, 7 insertions(+), 6 deletions(-)
+Why would the "tainted" flag be set?
 
-diff --git a/package/python-gunicorn/Config.in b/package/python-gunicorn/Config.in
-index 79cda3eaa6..098c3fa6b0 100644
---- a/package/python-gunicorn/Config.in
-+++ b/package/python-gunicorn/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_PYTHON_GUNICORN
- 	bool "python-gunicorn"
--	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
- 	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
- 	help
-diff --git a/package/python-gunicorn/python-gunicorn.hash b/package/python-gunicorn/python-gunicorn.hash
-index a282bc995d..402250ea78 100644
---- a/package/python-gunicorn/python-gunicorn.hash
-+++ b/package/python-gunicorn/python-gunicorn.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/gunicorn/json, sha256 locally computed
--md5	338e5e8a83ea0f0625f768dba4597530  gunicorn-19.6.0.tar.gz
--sha256	813f6916d18a4c8e90efde72f419308b357692f81333cb1125f80013d22fb618  gunicorn-19.6.0.tar.gz
-+# md5, sha256 from https://pypi.python.org/pypi/gunicorn/json
-+md5	f581937e9d8569ebd3fd6af1f9ab809f  gunicorn-19.9.0.tar.gz
-+sha256	fa2662097c66f920f53f70621c6c58ca4a3c4d3434205e608e121b5b3b71f4f3  gunicorn-19.9.0.tar.gz
-+# Locally computed sha256
-+sha256	789fe11b92e1cabfbcf744b5fcc392c9bd5c6798603a4e89f925b6337984d1df  LICENSE
-diff --git a/package/python-gunicorn/python-gunicorn.mk b/package/python-gunicorn/python-gunicorn.mk
-index cfb7da110c..d113f75185 100644
---- a/package/python-gunicorn/python-gunicorn.mk
-+++ b/package/python-gunicorn/python-gunicorn.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_GUNICORN_VERSION = 19.6.0
-+PYTHON_GUNICORN_VERSION = 19.9.0
- PYTHON_GUNICORN_SOURCE = gunicorn-$(PYTHON_GUNICORN_VERSION).tar.gz
--PYTHON_GUNICORN_SITE = https://pypi.python.org/packages/84/ce/7ea5396efad1cef682bbc4068e72a0276341d9d9d0f501da609fab9fcb80
-+PYTHON_GUNICORN_SITE = https://files.pythonhosted.org/packages/47/52/68ba8e5e8ba251e54006a49441f7ccabca83b6bef5aedacb4890596c7911
- PYTHON_GUNICORN_SETUP_TYPE = setuptools
- PYTHON_GUNICORN_LICENSE = MIT
- PYTHON_GUNICORN_LICENSE_FILES = LICENSE
+  - unknown licensing information: it is better to use the existing
+    licensing infrastructure, which is made for this very purpose:
+    FOO_LICENSE := $(FOO_LICENSE), Unknown (external data used)
+
+  - non-reproducible packages in Buildroot: I don't think we should
+    accept packages in Buildroot that would taint the build; and if we
+    were, we could hide them behind !BR2_REPRODUCIBLE (with or without
+    a comment stating "foo is not reproducible");
+
+  - packages that are in a br2-external, or in a private fork: I believe
+    that people who do non-reproducible packages either don't care,
+    have no choice, or both. If they did care, they would not create
+    tainting packages; if they did care but still had no choice, they
+    could also decide to hide them behind !BR2_REPRODUCIBLE;
+
+  - packages with a list of external resources, like we have for
+    nodejs/npm: we can't know if that list references reproducible
+    resources or not.
+
+That last point is very important: there *are* people that do care about
+the reproduciblity of a build, and thus have already taken care that
+BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL *does* point to stable and
+reproducible set of nodejs modules [0]. Patch 3 in the series would mark
+for them that the build is tainted when it is not; since those people do
+care, the tainted flag would be most important to them, but by always
+marking their build as tainted, the flag becomes useless to the very
+people that do care...
+
+Yes, a lot of people will just use a non-stable list, and they even
+probably do not care either. I do not want to have to impose that
+limitation unto those who know what they are doing.
+
+So, I still conclude that we do not need to have a tainted flag.
+
+[0] For example, consider an explicit and complete list such as (spitted
+    for readability):
+        BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL="
+            http://internal-server/node/mod-1
+            http://internal-server/node/mod-2
+            http://internal-server/node/mod-3
+            http://internal-server/node/mod-4
+        "
+    and that all the dependencies of those modules *are* present in that
+    list, leaving npm no chance to download anything.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.17.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
