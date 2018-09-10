@@ -1,317 +1,144 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 10 Sep 2018 18:30:53 +0200
-Subject: [Buildroot] [RFC] lua: remove 5.2.x version
-Message-ID: <20180910163053.24572-1-francois.perrad@gadz.org>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Mon, 10 Sep 2018 19:10:30 +0200
+Subject: [Buildroot] [PATCH v5 0/3] Add tainting support to buildroot
+In-Reply-To: <20180910150009.GA2674@scaer>
+References: <20180909073616.GC2841@scaer>
+ <20180909141037.69b16e95@windsurf.home>
+ <CA+_SqVbJqv2On+9UPE4pcoyiK1wfDZp=t1h1yMdfVB-CQGp91g@mail.gmail.com>
+ <20180909133341.GJ2841@scaer>
+ <CA+_SqVafj+DAsaBtSPJkf2bwbmh_3JojRjBrzG0oT6GduKTG4g@mail.gmail.com>
+ <20180909142019.GK2841@scaer>
+ <CA+_SqVZ8-qKU9AxV+kAo6ch4QGKtPJWKS_jOGKMGPjsVTTp5mA@mail.gmail.com>
+ <20180909185518.GA2409@scaer>
+ <CA+_SqVa2EiU2OXNoc0O=o7GwB0wW15jMjmnY60LL6bKV2PSeRQ@mail.gmail.com>
+ <CA+_SqVbyxT0xCg-7mtryFm-=GRCqwZo2hPpwNaVe8nG8_wxxbA@mail.gmail.com>
+ <20180910150009.GA2674@scaer>
+Message-ID: <CA+TH9Vm1m+xUC3NydquYNw67SCFLNYvi_rqufxVw3BTtmOS=xQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-At this time :
-- Lua 5.3.5 will be the last one of its serie.
-- Lua 5.4 is up coming (lua-5.4.0-work2 is already available).
-- Lua 5.2.4 was released on 2015.
-For various reasons in the Lua ecosystem, the Lua 5.1 will stay.
-On BR, Lua 5.3 is the default version since 2016.02.
+Yann, All,
+Il giorno lun 10 set 2018 alle ore 17:00 Yann E. MORIN
+<yann.morin.1998@free.fr> ha scritto:
+>
+> Angelo, All,
+>
+> On 2018-09-10 09:50 +0200, Angelo Compagnucci spake thusly:
+> > > Last one, I promise!
+> [--SNIP--]
+> > I just pushed o POC on my local branch if you want to have a look.
+> > It's what I mean for tainting applied to a package with a more robust
+> > ad correct approach that the npm case:
+> > https://github.com/angeloc/buildroot/commits/watchtower
+>
+> So, here is my last stance on the subject, in which I tried to summarise
+> my position.
+>
+> Why would the "tainted" flag be set?
+>
+>   - unknown licensing information: it is better to use the existing
+>     licensing infrastructure, which is made for this very purpose:
+>     FOO_LICENSE := $(FOO_LICENSE), Unknown (external data used)
+>
+>   - non-reproducible packages in Buildroot: I don't think we should
+>     accept packages in Buildroot that would taint the build; and if we
+>     were, we could hide them behind !BR2_REPRODUCIBLE (with or without
+>     a comment stating "foo is not reproducible");
+>
+>   - packages that are in a br2-external, or in a private fork: I believe
+>     that people who do non-reproducible packages either don't care,
+>     have no choice, or both. If they did care, they would not create
+>     tainting packages; if they did care but still had no choice, they
+>     could also decide to hide them behind !BR2_REPRODUCIBLE;
+>
+>   - packages with a list of external resources, like we have for
+>     nodejs/npm: we can't know if that list references reproducible
+>     resources or not.
+>
+> That last point is very important: there *are* people that do care about
+> the reproduciblity of a build, and thus have already taken care that
+> BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL *does* point to stable and
+> reproducible set of nodejs modules [0]. Patch 3 in the series would mark
+> for them that the build is tainted when it is not; since those people do
+> care, the tainted flag would be most important to them, but by always
+> marking their build as tainted, the flag becomes useless to the very
+> people that do care...
+>
+> Yes, a lot of people will just use a non-stable list, and they even
+> probably do not care either. I do not want to have to impose that
+> limitation unto those who know what they are doing.
+>
+> So, I still conclude that we do not need to have a tainted flag.
 
-So, the serie which could be removed is the 5.2.x.
-We could wait some days for other user feedback.
+I can agree with you, but what do you propose for handling package
+managers: Simply put a !BR2_REPRODUCIBLE for a package that needs
+dependencies resolved and cannot handle dependencies cleanly?
 
-Note: see discussion when 5.3.x was introduced : http://lists.busybox.net/pipermail/buildroot/2015-January/117638.html
+>
+> [0] For example, consider an explicit and complete list such as (spitted
+>     for readability):
+>         BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL="
+>             http://internal-server/node/mod-1
+>             http://internal-server/node/mod-2
+>             http://internal-server/node/mod-3
+>             http://internal-server/node/mod-4
+>         "
+>     and that all the dependencies of those modules *are* present in that
+>     list, leaving npm no chance to download anything.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- Config.in.legacy                              | 10 +++
- package/domoticz/Config.in                    |  4 +-
- package/lrandom/lrandom.mk                    |  2 +-
- package/lua/5.2.4/0001-root-path.patch        | 17 ----
- .../lua/5.2.4/0002-shared-libs-for-lua.patch  | 78 -------------------
- package/lua/5.2.4/0011-linenoise.patch        | 26 -------
- package/lua/Config.in                         |  4 -
- package/lua/lua.hash                          |  3 -
- package/lua/lua.mk                            | 10 +--
- package/mpv/mpv.mk                            |  2 +-
- 10 files changed, 15 insertions(+), 141 deletions(-)
- delete mode 100644 package/lua/5.2.4/0001-root-path.patch
- delete mode 100644 package/lua/5.2.4/0002-shared-libs-for-lua.patch
- delete mode 100644 package/lua/5.2.4/0011-linenoise.patch
+As I said previously, hiding npm inside nodejs is wrong. What if you
+have a couple nodejs based software and for one you have a clear
+picture of dependencies but not for the other?
+Npm should decoupled and used each time a nodejs software needs it.
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 29d5b6adc..bca30ea79 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -143,6 +143,16 @@ comment "----------------------------------------------------"
- endif
- 
- ###############################################################################
+This is what I did with watchtower:
+
++################################################################################
++#
++# watchtower
++#
++################################################################################
 +
-+comment "Legacy options removed in 2018.11"
++WATCHTOWER_VERSION = v0.3.0
++WATCHTOWER_SITE = $(call github,v2tec,watchtower,$(WATCHTOWER_VERSION))
++WATCHTOWER_LICENSE = Apache-2.0
++WATCHTOWER_LICENSE_FILES = LICENSE.md
++WATCHTOWER_DEPENDENCIES = host-glide
++WATCHTOWER_TAINTS = YES
 +
-+config BR2_PACKAGE_LUA_5_2
-+	bool "Lua 5.2.x version removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_LUA_5_3
-+	help
-+	  The Lua 5.2.x version was removed.
++define WATCHTOWER_RESOLVE_DEPS
++cd $(WATCHTOWER_SRC_PATH) && GOPATH="$(@D)/$(WATCHTOWER_WORKSPACE)"
+$(HOST_DIR)/usr/bin/glide install
++endef
 +
- comment "Legacy options removed in 2018.08"
- 
- config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
-diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
-index 530027f27..d682c4366 100644
---- a/package/domoticz/Config.in
-+++ b/package/domoticz/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_DOMOTICZ
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
--	depends on BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3
-+	depends on BR2_PACKAGE_LUA_5_3
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_BOOST_DATE_TIME
-@@ -33,7 +33,7 @@ comment "domoticz needs lua >= 5.2 and a toolchain w/ C++, NPTL, wchar, dynamic
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
- 		!BR2_USE_WCHAR || BR2_STATIC_LIBS || \
--		!(BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3)
-+		!BR2_PACKAGE_LUA_5_3
- 
- comment "domoticz needs exception_ptr"
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-diff --git a/package/lrandom/lrandom.mk b/package/lrandom/lrandom.mk
-index 09b62c94a..2fe5fdb5a 100644
---- a/package/lrandom/lrandom.mk
-+++ b/package/lrandom/lrandom.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ifeq ($(BR2_PACKAGE_LUA_5_2)$(BR2_PACKAGE_LUA_5_3),y)
-+ifeq ($(BR2_PACKAGE_LUA_5_3),y)
- LRANDOM_VERSION = 20120430.52-1
- else
- LRANDOM_VERSION = 20120430.51-1
-diff --git a/package/lua/5.2.4/0001-root-path.patch b/package/lua/5.2.4/0001-root-path.patch
-deleted file mode 100644
-index c6f242c20..000000000
---- a/package/lua/5.2.4/0001-root-path.patch
-+++ /dev/null
-@@ -1,17 +0,0 @@
--Adjust installation location to /usr.
--
--Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
--
--Index: b/src/luaconf.h
--===================================================================
----- a/src/luaconf.h
--+++ b/src/luaconf.h
--@@ -100,7 +100,7 @@
-- #else			/* }{ */
-- 
-- #define LUA_VDIR	LUA_VERSION_MAJOR "." LUA_VERSION_MINOR "/"
---#define LUA_ROOT	"/usr/local/"
--+#define LUA_ROOT	"/usr/"
-- #define LUA_LDIR	LUA_ROOT "share/lua/" LUA_VDIR
-- #define LUA_CDIR	LUA_ROOT "lib/lua/" LUA_VDIR
-- #define LUA_PATH_DEFAULT  \
-diff --git a/package/lua/5.2.4/0002-shared-libs-for-lua.patch b/package/lua/5.2.4/0002-shared-libs-for-lua.patch
-deleted file mode 100644
-index 3cf3b2484..000000000
---- a/package/lua/5.2.4/0002-shared-libs-for-lua.patch
-+++ /dev/null
-@@ -1,78 +0,0 @@
--Add the compilation of a shared library.
--Compile the lua binary with the shared library.
--And install the shared library.
--The variable BUILDMODE allows to switch between static and dynamic mode.
--
--Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
--
--Index: b/Makefile
--===================================================================
----- a/Makefile
--+++ b/Makefile
--@@ -42,6 +42,7 @@
-- TO_BIN= lua luac
-- TO_INC= lua.h luaconf.h lualib.h lauxlib.h lua.hpp
-- TO_LIB= liblua.a
--+TO_SOLIB = liblua.so.$(R)
-- TO_MAN= lua.1 luac.1
-- 
-- # Lua version and release.
--@@ -60,6 +61,8 @@
-- install: dummy
-- 	cd src && $(MKDIR) $(INSTALL_BIN) $(INSTALL_INC) $(INSTALL_LIB) $(INSTALL_MAN) $(INSTALL_LMOD) $(INSTALL_CMOD)
-- 	cd src && $(INSTALL_EXEC) $(TO_BIN) $(INSTALL_BIN)
--+	test -f src/$(TO_SOLIB) && cd src && $(INSTALL_EXEC) $(TO_SOLIB) $(INSTALL_LIB) || :
--+	test -f src/$(TO_SOLIB) && ln -sf $(TO_SOLIB) $(INSTALL_LIB)/liblua.so || :
-- 	cd src && $(INSTALL_DATA) $(TO_INC) $(INSTALL_INC)
-- 	cd src && $(INSTALL_DATA) $(TO_LIB) $(INSTALL_LIB)
-- 	cd doc && $(INSTALL_DATA) $(TO_MAN) $(INSTALL_MAN)
--Index: b/src/Makefile
--===================================================================
----- a/src/Makefile
--+++ b/src/Makefile
--@@ -29,6 +29,7 @@
-- PLATS= aix ansi bsd freebsd generic linux macosx mingw posix solaris
-- 
-- LUA_A=	liblua.a
--+LUA_SO=	liblua.so
-- CORE_O=	lapi.o lcode.o lctype.o ldebug.o ldo.o ldump.o lfunc.o lgc.o llex.o \
-- 	lmem.o lobject.o lopcodes.o lparser.o lstate.o lstring.o ltable.o \
-- 	ltm.o lundump.o lvm.o lzio.o
--@@ -43,8 +44,13 @@
-- LUAC_O=	luac.o
-- 
-- ALL_O= $(BASE_O) $(LUA_O) $(LUAC_O)
--+ifneq (dynamic,$(BUILDMODE))
-- ALL_T= $(LUA_A) $(LUA_T) $(LUAC_T)
--+else
--+ALL_T= $(LUA_A) $(LUA_SO) $(LUA_T) $(LUAC_T)
--+endif
-- ALL_A= $(LUA_A)
--+ALL_SO= $(LUA_SO)
-- 
-- # Targets start here.
-- default: $(PLAT)
--@@ -55,12 +61,23 @@
-- 
-- a:	$(ALL_A)
-- 
--+so:	$(ALL_SO)
--+
-- $(LUA_A): $(BASE_O)
-- 	$(AR) $@ $(BASE_O)
-- 	$(RANLIB) $@
-- 
--+$(LUA_SO): $(CORE_O) $(LIB_O)
--+	$(CC) -o $@.$(PKG_VERSION) -shared -Wl,-soname="$@.$(PKG_VERSION)" $?
--+	ln -fs $@.$(PKG_VERSION) $@
--+
--+ifneq (dynamic,$(BUILDMODE))
-- $(LUA_T): $(LUA_O) $(LUA_A)
-- 	$(CC) -o $@ $(LDFLAGS) $(LUA_O) $(LUA_A) $(LIBS)
--+else
--+$(LUA_T): $(LUA_O) $(LUA_SO)
--+	$(CC) -o $@ -L. $(LDFLAGS) $(LUA_O) -llua $(LIBS)
--+endif
-- 
-- $(LUAC_T): $(LUAC_O) $(LUA_A)
-- 	$(CC) -o $@ $(LDFLAGS) $(LUAC_O) $(LUA_A) $(LIBS)
-diff --git a/package/lua/5.2.4/0011-linenoise.patch b/package/lua/5.2.4/0011-linenoise.patch
-deleted file mode 100644
-index b1f228cd4..000000000
---- a/package/lua/5.2.4/0011-linenoise.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--Add support of linenoise (replace readline)
--
--see discussion, http://lua-users.org/lists/lua-l/2010-03/msg00879.html
--
--Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
--
--Index: b/src/lua.c
--===================================================================
----- a/src/lua.c
--+++ b/src/lua.c
--@@ -72,6 +72,15 @@
--           add_history(lua_tostring(L, idx));  /* add it to history */
-- #define lua_freeline(L,b)	((void)L, free(b))
-- 
--+#elif defined(LUA_USE_LINENOISE)
--+
--+#include <linenoise.h>
--+#define lua_readline(L,b,p)	((void)L, ((b)=linenoise(p)) != NULL)
--+#define lua_saveline(L,idx) \
--+	if (lua_rawlen(L,idx) > 0)  /* non-empty line? */ \
--+	  linenoiseHistoryAdd(lua_tostring(L, idx));  /* add it to history */
--+#define lua_freeline(L,b)	((void)L, free(b))
--+
-- #elif !defined(lua_readline)
-- 
-- #define lua_readline(L,b,p) \
-diff --git a/package/lua/Config.in b/package/lua/Config.in
-index 4d2f0e90f..ce2e439f6 100644
---- a/package/lua/Config.in
-+++ b/package/lua/Config.in
-@@ -21,9 +21,6 @@ choice
- config BR2_PACKAGE_LUA_5_1
- 	bool "Lua 5.1.x"
- 
--config BR2_PACKAGE_LUA_5_2
--	bool "Lua 5.2.x"
--
- config BR2_PACKAGE_LUA_5_3
- 	bool "Lua 5.3.x"
- 
-@@ -31,7 +28,6 @@ endchoice
- 
- config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION
- 	default "5.1"	if BR2_PACKAGE_LUA_5_1
--	default "5.2"	if BR2_PACKAGE_LUA_5_2
- 	default "5.3"	if BR2_PACKAGE_LUA_5_3
- 
- if BR2_PACKAGE_LUA_5_3
-diff --git a/package/lua/lua.hash b/package/lua/lua.hash
-index 43f5be275..ba57304d0 100644
---- a/package/lua/lua.hash
-+++ b/package/lua/lua.hash
-@@ -2,8 +2,5 @@
- md5 4f4b4f323fd3514a68e0ab3da8ce3455           lua-5.3.5.tar.gz
- sha1 112eb10ff04d1b4c9898e121d6bdf54a81482447  lua-5.3.5.tar.gz
- 
--md5 913fdb32207046b273fdb17aad70be13           lua-5.2.4.tar.gz
--sha1 ef15259421197e3d85b7d6e4871b8c26fd82c1cf  lua-5.2.4.tar.gz
--
- md5 2e115fe26e435e33b0d5c022e4490567           lua-5.1.5.tar.gz
- sha1 b3882111ad02ecc6b972f8c1241647905cb2e3fc  lua-5.1.5.tar.gz
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index 22643c4c8..8a5f9258a 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -7,16 +7,12 @@
- ifeq ($(BR2_PACKAGE_LUA_5_3),y)
- LUA_VERSION = 5.3.5
- else
--ifeq ($(BR2_PACKAGE_LUA_5_2),y)
--LUA_VERSION = 5.2.4
--else
- LUA_VERSION = 5.1.5
- endif
--endif
- LUA_SITE = http://www.lua.org/ftp
- LUA_INSTALL_STAGING = YES
- LUA_LICENSE = MIT
--ifeq ($(BR2_PACKAGE_LUA_5_2)$(BR2_PACKAGE_LUA_5_3),y)
-+ifeq ($(BR2_PACKAGE_LUA_5_3),y)
- LUA_LICENSE_FILES = doc/readme.html
- else
- LUA_LICENSE_FILES = COPYRIGHT
-@@ -26,10 +22,6 @@ LUA_PROVIDES = luainterpreter
- 
- LUA_CFLAGS = -Wall -fPIC -DLUA_USE_POSIX
- 
--ifeq ($(BR2_PACKAGE_LUA_5_2),y)
--LUA_CFLAGS += -DLUA_COMPAT_ALL
--endif
--
- ifeq ($(BR2_PACKAGE_LUA_5_3),y)
- LUA_CFLAGS += -DLUA_COMPAT_5_2
- endif
-diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
-index b8260213b..3ab267377 100644
---- a/package/mpv/mpv.mk
-+++ b/package/mpv/mpv.mk
-@@ -132,7 +132,7 @@ endif
- 
- # LUA support, only for lua51/lua52/luajit
- # This enables the controller (OSD) together with libass
--ifeq ($(BR2_PACKAGE_LUA_5_1)$(BR2_PACKAGE_LUA_5_2)$(BR2_PACKAGE_LUAJIT),y)
-+ifeq ($(BR2_PACKAGE_LUA_5_1)$(BR2_PACKAGE_LUAJIT),y)
- MPV_CONF_OPTS += --enable-lua
- MPV_DEPENDENCIES += luainterpreter
- else
++WATCHTOWER_POST_CONFIGURE_HOOKS = WATCHTOWER_RESOLVE_DEPS
++
++$(eval $(golang-package))
+
+This clearly mark watchtower as a tainting package, but it doesn't
+harm any other package that could use host-glide.
+
+
+>
+> Regards,
+> Yann E. MORIN.
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
 -- 
-2.17.1
+Profile: http://it.linkedin.com/in/compagnucciangelo
