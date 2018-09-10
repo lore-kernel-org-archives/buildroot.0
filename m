@@ -1,43 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 10 Sep 2018 22:55:18 +0200
-Subject: [Buildroot] [PATCH 4/5] core/download: add per-download timeout
-In-Reply-To: <ae42dac572665985954d708489bb5474ccae3edc.1534972250.git.yann.morin.1998@free.fr>
-References: <cover.1534972250.git.yann.morin.1998@free.fr>
- <ae42dac572665985954d708489bb5474ccae3edc.1534972250.git.yann.morin.1998@free.fr>
-Message-ID: <20180910225518.3ae7dfb3@windsurf>
+Date: Mon, 10 Sep 2018 22:55:55 +0200
+Subject: [Buildroot] [git commit] board/synopsys/hsdk: remove duplicate
+ console
+Message-ID: <20180910205521.2436183CAF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9c6ab08cc9f907dba9bad218dc921d4fd7141812
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 22 Aug 2018 23:10:57 +0200, Yann E. MORIN wrote:
-> In case an remote sitre is slow, or hangs for whatever reasons, of the
+This patch removes duplicate messages in Linux log on HSDK board.
+For HSDK board we setup bootargs via device tree,
+see https://elixir.bootlin.com/linux/latest/source/arch/arc/boot/dts/hsdk.dts#L25
+"console=ttyS3" was mistakenly placed in u-boot bootargs which are
+appended to Kernel bootargs in case of using buildin .dtb.
 
-an remote sitre -> a remote site
+Before patch log is like:
+------------------------8<-------------------------------------
+mmc_host mmc0: Bus speed (slot 0) = 50000000Hz (slot req 25000000Hz,...
+mmc_host mmc0: Bus speed (slot 0) = 50000000Hz (slot req 25000000Hz,...
+mmc0: new SDHC card at address 59b4
+mmc0: new SDHC card@address 59b4
+blk_queue_max_segment_size: set to minimum 8192
+blk_queue_max_segment_size: set to minimum 8192
+------------------------>8-------------------------------------
 
+After patch log is like:
+------------------------8<-------------------------------------
+mmc_host mmc0: Bus speed (slot 0) = 50000000Hz (slot req 25000000Hz,...
+mmc0: new SDHC card at address 59b4
+blk_queue_max_segment_size: set to minimum 8192
+------------------------8<-------------------------------------
 
-> +    if [ -n "${timeout}" ]; then
-> +        # Timeout after the specified delay; additionaly, leave
-> +        # 30 more seconds for the backend to properly terminate
-> +        # (e.g. to cleanup behind itself), after which forcibly
-> +        # kill the backend.
-> +        timeout_cmd="timeout --kill-after=30s ${timeout}"
+Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: arc-buildroot at synopsys.com
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ board/synopsys/hsdk/uboot.env.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-What happens if 30 seconds are not enough for the cleanup ? I suppose
-we already handle that (as we can already interrupt the build at any
-point), and the next build will already clean up whatever mess what left
-behind. If that's indeed the case, then the --kill-after=30s looks a
-bit useless, we should just abort the download and move on with the
-next step. Indeed, saying "30 seconds should be enough" sounds like
-saying "640 KB of memory should be enough" :-)
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/board/synopsys/hsdk/uboot.env.txt b/board/synopsys/hsdk/uboot.env.txt
+index 6bcfb56a77..216f0c9043 100644
+--- a/board/synopsys/hsdk/uboot.env.txt
++++ b/board/synopsys/hsdk/uboot.env.txt
+@@ -1,5 +1,5 @@
+ baudrate=115200
+-bootargs=console=ttyS3,115200n8 root=/dev/mmcblk0p2 rootwait
++bootargs=root=/dev/mmcblk0p2 rootwait
+ bootcmd=fatload mmc 0:1; bootm
+ bootdelay=2
+ bootfile=uImage
