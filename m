@@ -1,40 +1,161 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 11 Sep 2018 09:45:05 +0000
-Subject: [Buildroot] [Bug 11336] New: nfs-utils fails to build in latest GIT
- master
-Message-ID: <bug-11336-163@https.bugs.busybox.net/>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Tue, 11 Sep 2018 11:47:36 +0200
+Subject: [Buildroot] [PATCH v2] package/fail2ban: new package
+In-Reply-To: <20180911000522.1f1efdc3@windsurf>
+References: <1534945312-25275-1-git-send-email-angelo@amarulasolutions.com>
+ <20180911000522.1f1efdc3@windsurf>
+Message-ID: <CAGm1_kvvnnveBE1Ccpj7X6TmBW-coe7xgtCYLAXtjhEsPv4ikQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11336
+Hi Thomas, Angelo,
 
-            Bug ID: 11336
-           Summary: nfs-utils fails to build in latest GIT master
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: tpearson at raptorengineering.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+On Tue, Sep 11, 2018 at 12:05 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> +Yegor in Cc. Yegor: read all the way to the end, there is a question
+> about the python-package infrastructure.
+>
+> On Wed, 22 Aug 2018 15:41:52 +0200, Angelo Compagnucci wrote:
+> > Fail2ban scans log files (e.g. /var/log/apache/error_log)
+> > and bans IPs that show malicious behaviours.
+> >
+> > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+>
+> I was about to apply this patch (I even made a few minor fixes), but
+> there is one thing that made me change my mind, see below. I will also
+> list the minor issues.
+>
+> >  package/Config.in              |  1 +
+> >  package/fail2ban/Config.in     | 14 ++++++++++++++
+> >  package/fail2ban/S60fail2ban   | 23 +++++++++++++++++++++++
+> >  package/fail2ban/fail2ban.hash |  3 +++
+> >  package/fail2ban/fail2ban.mk   | 28 ++++++++++++++++++++++++++++
+>
+> Entry in DEVELOPERS file missing.
+>
+> > diff --git a/package/fail2ban/Config.in b/package/fail2ban/Config.in
+> > new file mode 100644
+> > index 0000000..cf82526
+> > --- /dev/null
+> > +++ b/package/fail2ban/Config.in
+> > @@ -0,0 +1,14 @@
+> > +config BR2_PACKAGE_FAIL2BAN
+> > +     bool "fail2ban"
+> > +     depends on BR2_PACKAGE_PYTHON
+>
+> Are you sure it doesn't work with Python 3.x ? The fail2ban
+> github page says it does.
+>
+> > +     help
+> > +       Fail2ban scans log files (e.g. /var/log/apache/error_log) and bans IPs
+> > +       that show the malicious signs -- too many password failures, seeking
+> > +       for exploits, etc. Out of the box Fail2Ban comes with filters for
+> > +       various services (apache, courier, ssh, etc).
+> > +
+> > +       Fail2Ban is able to reduce the rate of incorrect authentications
+> > +       attempts however it cannot eliminate the risk that weak authentication
+> > +       presents.
+>
+> Aren't some of those lines too long? Could you verify with check-package
+>
+> > +
+> > +       https://www.fail2ban.org
+>
+> Please add a Config.in comment about the Python dependency.
+>
+> > diff --git a/package/fail2ban/S60fail2ban b/package/fail2ban/S60fail2ban
+> > new file mode 100644
+> > index 0000000..92559e9
+> > --- /dev/null
+> > +++ b/package/fail2ban/S60fail2ban
+> > @@ -0,0 +1,23 @@
+> > +#!/bin/sh
+> > +
+> > +case "$1" in
+> > +     start)
+> > +             printf "Starting fail2ban: "
+> > +             start-stop-daemon -S -q -m -p /run/fail2ban.pid \
+>
+> Put the PID file in /var/run, to be consistent with most of our other
+> init scripts.
+>
+> > +                     -b -x fail2ban-server -- -xf start
+> > +             [ $? = 0 ] && echo "OK" || echo "FAIL"
+> > +             ;;
+> > +     stop)
+> > +             printf "Stopping fail2ban: "
+> > +             start-stop-daemon -K -q -p /run/fail2ban.pid
+>
+> Ditto.
+>
+>
+> > +FAIL2BAN_VERSION = 0.10.3.1
+> > +FAIL2BAN_SITE = $(call github,fail2ban,fail2ban,$(FAIL2BAN_VERSION))
+> > +FAIL2BAN_LICENSE = GPL-2.0+
+> > +FAIL2BAN_LICENSE_FILES = COPYING
+> > +FAIL2BAN_SETUP_TYPE = setuptools
+> > +FAIL2BAN_INSTALL_TARGET_OPTS = --root=$(TARGET_DIR) --prefix=/usr
+>
+> So here is the one thing that made me change my mind. I was wondering:
+> why do we need to pass those options in the fail2ban package? Why
+> aren't they passed by the python-package infrastructure?
+>
+> Turns out that the Python package infrastructure is doing this:
+>
+> PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS = \
+>         --prefix=$(TARGET_DIR)/usr \
+>         --executable=/usr/bin/python \
+>         --single-version-externally-managed \
+>         --root=/
+>
+> PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS = \
+>         --prefix=$(STAGING_DIR)/usr \
+>         --executable=/usr/bin/python \
+>         --single-version-externally-managed \
+>         --root=/
+>
+> This looks pretty wrong, and it seems like we should be using:
+>
+>         --prefix=/usr \
+>         --root=$(TARGET_DIR)
+>
+> and ditto for the staging installation, of course. Yegor, do you see
+> any drawback with doing this change in pkg-python.mk ? To me, it seems
+> like the right thing to do, and would avoid the need to have a special
+> case in fail2ban.mk.
 
-Created attachment 7771
-  --> https://bugs.busybox.net/attachment.cgi?id=7771&action=edit
-Add missing system macro includes
+I've applied this hack:
 
-nfs-utils is missing the required macro #include to build on newer glibc
-versions.
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index f57e486dad..fcb7309ef9 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -66,10 +66,10 @@ PKG_PYTHON_SETUPTOOLS_ENV = \
+        _python_exec_prefix=/usr
 
-Tested patch attached.
+ PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS = \
+-       --prefix=$(TARGET_DIR)/usr \
++       --prefix=/usr \
+        --executable=/usr/bin/python \
+        --single-version-externally-managed \
+-       --root=/
++       --root=$(TARGET_DIR)
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+ PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS = \
+        --prefix=$(STAGING_DIR)/usr \
+
+And performed some tests with following packages (both via python
+"console" and using packe own scripts like watchmedo or miniterm.py):
+
+python-serial, python-watchdog, python-cryptography, python-pytablewriter
+
+So far I haven't experienced any issues.
+
+Regards,
+Yegor
