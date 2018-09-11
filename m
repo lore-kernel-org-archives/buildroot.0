@@ -1,161 +1,68 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 11 Sep 2018 11:47:36 +0200
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 11 Sep 2018 11:52:22 +0200
 Subject: [Buildroot] [PATCH v2] package/fail2ban: new package
-In-Reply-To: <20180911000522.1f1efdc3@windsurf>
+In-Reply-To: <CAGm1_kvvnnveBE1Ccpj7X6TmBW-coe7xgtCYLAXtjhEsPv4ikQ@mail.gmail.com>
 References: <1534945312-25275-1-git-send-email-angelo@amarulasolutions.com>
  <20180911000522.1f1efdc3@windsurf>
-Message-ID: <CAGm1_kvvnnveBE1Ccpj7X6TmBW-coe7xgtCYLAXtjhEsPv4ikQ@mail.gmail.com>
+ <CAGm1_kvvnnveBE1Ccpj7X6TmBW-coe7xgtCYLAXtjhEsPv4ikQ@mail.gmail.com>
+Message-ID: <20180911115222.1d19d460@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Angelo,
+Hello,
 
-On Tue, Sep 11, 2018 at 12:05 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> +Yegor in Cc. Yegor: read all the way to the end, there is a question
-> about the python-package infrastructure.
->
-> On Wed, 22 Aug 2018 15:41:52 +0200, Angelo Compagnucci wrote:
-> > Fail2ban scans log files (e.g. /var/log/apache/error_log)
-> > and bans IPs that show malicious behaviours.
-> >
-> > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
->
-> I was about to apply this patch (I even made a few minor fixes), but
-> there is one thing that made me change my mind, see below. I will also
-> list the minor issues.
->
-> >  package/Config.in              |  1 +
-> >  package/fail2ban/Config.in     | 14 ++++++++++++++
-> >  package/fail2ban/S60fail2ban   | 23 +++++++++++++++++++++++
-> >  package/fail2ban/fail2ban.hash |  3 +++
-> >  package/fail2ban/fail2ban.mk   | 28 ++++++++++++++++++++++++++++
->
-> Entry in DEVELOPERS file missing.
->
-> > diff --git a/package/fail2ban/Config.in b/package/fail2ban/Config.in
-> > new file mode 100644
-> > index 0000000..cf82526
-> > --- /dev/null
-> > +++ b/package/fail2ban/Config.in
-> > @@ -0,0 +1,14 @@
-> > +config BR2_PACKAGE_FAIL2BAN
-> > +     bool "fail2ban"
-> > +     depends on BR2_PACKAGE_PYTHON
->
-> Are you sure it doesn't work with Python 3.x ? The fail2ban
-> github page says it does.
->
-> > +     help
-> > +       Fail2ban scans log files (e.g. /var/log/apache/error_log) and bans IPs
-> > +       that show the malicious signs -- too many password failures, seeking
-> > +       for exploits, etc. Out of the box Fail2Ban comes with filters for
-> > +       various services (apache, courier, ssh, etc).
-> > +
-> > +       Fail2Ban is able to reduce the rate of incorrect authentications
-> > +       attempts however it cannot eliminate the risk that weak authentication
-> > +       presents.
->
-> Aren't some of those lines too long? Could you verify with check-package
->
-> > +
-> > +       https://www.fail2ban.org
->
-> Please add a Config.in comment about the Python dependency.
->
-> > diff --git a/package/fail2ban/S60fail2ban b/package/fail2ban/S60fail2ban
-> > new file mode 100644
-> > index 0000000..92559e9
-> > --- /dev/null
-> > +++ b/package/fail2ban/S60fail2ban
-> > @@ -0,0 +1,23 @@
-> > +#!/bin/sh
-> > +
-> > +case "$1" in
-> > +     start)
-> > +             printf "Starting fail2ban: "
-> > +             start-stop-daemon -S -q -m -p /run/fail2ban.pid \
->
-> Put the PID file in /var/run, to be consistent with most of our other
-> init scripts.
->
-> > +                     -b -x fail2ban-server -- -xf start
-> > +             [ $? = 0 ] && echo "OK" || echo "FAIL"
-> > +             ;;
-> > +     stop)
-> > +             printf "Stopping fail2ban: "
-> > +             start-stop-daemon -K -q -p /run/fail2ban.pid
->
-> Ditto.
->
->
-> > +FAIL2BAN_VERSION = 0.10.3.1
-> > +FAIL2BAN_SITE = $(call github,fail2ban,fail2ban,$(FAIL2BAN_VERSION))
-> > +FAIL2BAN_LICENSE = GPL-2.0+
-> > +FAIL2BAN_LICENSE_FILES = COPYING
-> > +FAIL2BAN_SETUP_TYPE = setuptools
-> > +FAIL2BAN_INSTALL_TARGET_OPTS = --root=$(TARGET_DIR) --prefix=/usr
->
-> So here is the one thing that made me change my mind. I was wondering:
-> why do we need to pass those options in the fail2ban package? Why
-> aren't they passed by the python-package infrastructure?
->
-> Turns out that the Python package infrastructure is doing this:
->
-> PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS = \
->         --prefix=$(TARGET_DIR)/usr \
+On Tue, 11 Sep 2018 11:47:36 +0200, Yegor Yefremov wrote:
+> > and ditto for the staging installation, of course. Yegor, do you see
+> > any drawback with doing this change in pkg-python.mk ? To me, it seems
+> > like the right thing to do, and would avoid the need to have a special
+> > case in fail2ban.mk.  
+> 
+> I've applied this hack:
+
+Why do you say "hack" ? It should be the right thing, compared to what
+we're doing today.
+
+> diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+> index f57e486dad..fcb7309ef9 100644
+> --- a/package/pkg-python.mk
+> +++ b/package/pkg-python.mk
+> @@ -66,10 +66,10 @@ PKG_PYTHON_SETUPTOOLS_ENV = \
+>         _python_exec_prefix=/usr
+> 
+>  PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS = \
+> -       --prefix=$(TARGET_DIR)/usr \
+> +       --prefix=/usr \
 >         --executable=/usr/bin/python \
 >         --single-version-externally-managed \
->         --root=/
->
-> PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS = \
+> -       --root=/
+> +       --root=$(TARGET_DIR)
+> 
+>  PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS = \
 >         --prefix=$(STAGING_DIR)/usr \
->         --executable=/usr/bin/python \
->         --single-version-externally-managed \
->         --root=/
->
-> This looks pretty wrong, and it seems like we should be using:
->
->         --prefix=/usr \
->         --root=$(TARGET_DIR)
->
-> and ditto for the staging installation, of course. Yegor, do you see
-> any drawback with doing this change in pkg-python.mk ? To me, it seems
-> like the right thing to do, and would avoid the need to have a special
-> case in fail2ban.mk.
 
-I've applied this hack:
+It should also be fixed in the staging installation commands, which
+have the same problem.
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index f57e486dad..fcb7309ef9 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -66,10 +66,10 @@ PKG_PYTHON_SETUPTOOLS_ENV = \
-        _python_exec_prefix=/usr
+> And performed some tests with following packages (both via python
+> "console" and using packe own scripts like watchmedo or miniterm.py):
+> 
+> python-serial, python-watchdog, python-cryptography, python-pytablewriter
+> 
+> So far I haven't experienced any issues.
 
- PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS = \
--       --prefix=$(TARGET_DIR)/usr \
-+       --prefix=/usr \
-        --executable=/usr/bin/python \
-        --single-version-externally-managed \
--       --root=/
-+       --root=$(TARGET_DIR)
+Great, thanks for doing this test! I think it would be a nice thing to
+fix.
 
- PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS = \
-        --prefix=$(STAGING_DIR)/usr \
+Angelo: just curious, for fail2ban, what made you realize you had to
+override the --prefix and --root values ?
 
-And performed some tests with following packages (both via python
-"console" and using packe own scripts like watchmedo or miniterm.py):
+Best regards,
 
-python-serial, python-watchdog, python-cryptography, python-pytablewriter
-
-So far I haven't experienced any issues.
-
-Regards,
-Yegor
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
