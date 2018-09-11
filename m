@@ -1,99 +1,37 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Tue, 11 Sep 2018 20:54:10 +0200
-Subject: [Buildroot] [PATCH] configs/olimex_a20_olinuxino_lime*: bump Linux
- and U-Boot versions
-Message-ID: <20180911185410.7769-1-francois.perrad@gadz.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 11 Sep 2018 20:54:36 +0200
+Subject: [Buildroot] [PATCH 1/1] botan: fix build on uclibc
+Message-ID: <20180911185436.15777-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- configs/olimex_a20_olinuxino_lime2_defconfig     | 8 ++++----
- configs/olimex_a20_olinuxino_lime_defconfig      | 8 ++++----
- configs/olimex_a20_olinuxino_lime_mali_defconfig | 2 +-
- 3 files changed, 9 insertions(+), 9 deletions(-)
+uclibc does not have sys/auxv.h so disable getauxval
 
-diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
-index 64618c5e6..716995aa7 100644
---- a/configs/olimex_a20_olinuxino_lime2_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime2_defconfig
-@@ -3,8 +3,8 @@ BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_EABIHF=y
+Fixes:
+ - http://autobuild.buildroot.org/results/0000636025b843ab343dc45ccd29979325aff428
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/botan/botan.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index e352fab6c9..4788617d4a 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -40,6 +40,10 @@ else
+ BOTAN_CONF_OPTS += --without-stack-protector
+ endif
  
--# Linux headers same as kernel, a 4.14 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-+# Linux headers same as kernel, a 4.18 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
- 
- # System configuration
- BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
-@@ -18,7 +18,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.26"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.7"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -34,7 +34,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.03"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.09"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-index b124bd93c..ed8ea8623 100644
---- a/configs/olimex_a20_olinuxino_lime_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -3,8 +3,8 @@ BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_EABIHF=y
- 
--# Linux headers same as kernel, a 4.14 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-+# Linux headers same as kernel, a 4.18 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
- 
- # System configuration
- BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
-@@ -18,7 +18,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.26"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.7"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -34,7 +34,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.03"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.09"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-diff --git a/configs/olimex_a20_olinuxino_lime_mali_defconfig b/configs/olimex_a20_olinuxino_lime_mali_defconfig
-index de13b2e47..f04d578f1 100644
---- a/configs/olimex_a20_olinuxino_lime_mali_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_mali_defconfig
-@@ -39,7 +39,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.03"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
++BOTAN_CONF_OPTS += --without-os-feature=getauxval
++endif
++
+ ifeq ($(BR2_PACKAGE_BOOST),y)
+ BOTAN_DEPENDENCIES += boost
+ BOTAN_CONF_OPTS += --with-boost
 -- 
 2.17.1
