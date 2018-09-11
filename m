@@ -1,24 +1,54 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 11 Sep 2018 13:02:25 +0000
-Subject: [Buildroot] [Bug 11321] Latest master fails to build readline with
- RELRO FULL
-In-Reply-To: <bug-11321-163@https.bugs.busybox.net/>
-References: <bug-11321-163@https.bugs.busybox.net/>
-Message-ID: <bug-11321-163-dDFC402Vuc@https.bugs.busybox.net/>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Tue, 11 Sep 2018 15:27:15 +0200
+Subject: [Buildroot] [PATCH] motion: fix build failure due to missing
+ drmGetVersion() and drmFreeVersion()
+In-Reply-To: <20180910092122.188e26ed@windsurf.home>
+References: <20180909193343.117159-1-giulio.benetti@micronovasrl.com>
+ <20180910092122.188e26ed@windsurf.home>
+Message-ID: <c1dfbaa0-ca4a-4672-6f87-802920732531@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11321
+Hello,
 
---- Comment #1 from Matt Weber <matthew.weber@rockwellcollins.com> ---
-Would you mind providing an example defconfig that reproduces this?  I'm
-working on an update to the hardening approach, as there are link time issues
-with the way the current flags are included.  This maybe related to your issue
-and I'll give it a test.
+Il 10/09/2018 09:21, Thomas Petazzoni ha scritto:
+> Hello,
+> 
+> On Sun,  9 Sep 2018 21:33:43 +0200, Giulio Benetti wrote:
+>> During static linking -ldrm is listed too early respect -lavutil.
+>> This cause build failure.
+>>
+>> Append extra -ldrm at the tail of $(LIBS) list.
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/395/395be1a9cab824b82ef34c2ebd84d54243029b33//
+>>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> 
+> This fix should not be needed: the configure.ac script is using
+> pkg-config to detect ffmpeg libraries, and pkg-config should return the
+> right libraries.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Now I'm understanding pkg-config, the root cause is in ffmpeg where in 
+libavutil.pc there is not -ldrm appended.
+This way every package linking with -lavutil *statically* is going to fail.
+I've fixed something like this with this patch:
+https://github.com/buildroot/buildroot/commit/daf7dd87f4d93923df5e757fd43b3ad214a4a2ae
+
+But it was only a workaround.
+I'm going to send a patch to fix once for all this ffmpeg lack.
+Before I check if there's an upstream patch.
+
+> 
+> In addition, your patch will badly break the build: ffmpeg is only an
+> optional dependency of motion, and DRM support in ffmpeg itself is
+> optional, so the patch is clearly wrong.
+
+You're right.
+
+Thanks and
+Best regards
+Giulio Benetti
