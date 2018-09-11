@@ -1,74 +1,86 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 11 Sep 2018 08:52:03 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/python-cryptography: bump
- version to 2.3.1
-In-Reply-To: <ct4j6fxcf3.ln2@ID-313208.user.individual.net>
-References: <20180819184242.21134-1-bernd.kuhls@t-online.de>
- <CAGm1_kvHG2zGtw8U200teJtVnjAOf57t_5XCxRsb3TsBjLi69Q@mail.gmail.com>
- <9fro4fx8c7.ln2@ID-313208.user.individual.net>
- <CAGm1_ktoBnagq89z6WbQcTCB4Fkc5bY2YqEnpy3PeVZbMST_hA@mail.gmail.com>
- <ct4j6fxcf3.ln2@ID-313208.user.individual.net>
-Message-ID: <CAGm1_kst7j3hb0f4A0c-3ggAm0tMq-iM2_f7kERoWyQVicY_rQ@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 11 Sep 2018 07:23:49 +0000
+Subject: [Buildroot] [Bug 11321] New: Latest master fails to build readline
+ with RELRO FULL
+Message-ID: <bug-11321-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+https://bugs.busybox.net/show_bug.cgi?id=11321
 
-On Mon, Sep 10, 2018 at 11:40 PM Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
->
-> Am Mon, 20 Aug 2018 10:05:15 +0200 schrieb Yegor Yefremov:
->
-> > I've performed a runtime test and I still get:
-> [...]
-> > ImportError:
-> > /usr/lib/python3.6/site-packages/cryptography/hazmat/bindings/
-> _openssl.abi3.so:
-> > undefined symbol: pthread_atfork
->
-> Hi,
->
-> I did not find the time to do a run-time test yet, sorry, but it seems
-> you are not the only one hitting the problem:
->
-> https://www.mail-archive.com/yocto at yoctoproject.org/msg38512.html
->
-> https://forums.gentoo.org/viewtopic-p-8120220.html?
-> sid=b50fe8a26a38d18882c5f2915a030408
->
-> https://lists.yoctoproject.org/pipermail/yocto/2017-December/039398.html
->
-> The solution is to add "-pthread":
->
-> https://patchwork.openembedded.org/patch/146240/
->
-> https://bugs.gentoo.org/630578
->
-> https://gitweb.gentoo.org/repo/gentoo.git/commit/?
-> id=c824d1c44fcf4556de21d2c8b8ae3732b0fc0c5b
->
-> Could you please do another runtime test with this fix added?
+            Bug ID: 11321
+           Summary: Latest master fails to build readline with RELRO FULL
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: tpearson at raptorengineering.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Seems to be working. At least our runtime-test comes beyond f = Fernet(key).
+When RELRO is set to Full, readline fails to build.  RELRO Partial has no
+issues.
 
-I've tried this with a quick and dirty hack.
+/home/buildroot/project/buildroot# make
+>>> readline 7.0 Building
+PATH="/home/buildroot/project/buildroot/output/host/bin:/home/buildroot/project/buildroot/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+ /usr/bin/make -j16  -C
+/home/buildroot/project/buildroot/output/build/readline-7.0/
+make[1]: Entering directory
+'/home/buildroot/project/buildroot/output/build/readline-7.0'
+test -d shlib || mkdir shlib
+( cd shlib ; /usr/bin/make -w -j --jobserver-fds=3,4 all )
+make[2]: Entering directory
+'/home/buildroot/project/buildroot/output/build/readline-7.0/shlib'
+rm -f libreadline.so.7.0
+rm -f libhistory.so.7.0
+/home/buildroot/project/buildroot/output/host/bin/powerpc64le-buildroot-linux-gnu-gcc
+-shared -Wl,-soname,libreadline.so.7.0 -pie -Wl,-z,now -Wl,-z,relro
+-Wl,-rpath,/usr/lib -Wl,-soname,`basename libreadline.so.7.0 .0` -o
+libreadline.so.7.0 readline.so vi_mode.so funmap.so keymaps.so parens.so
+search.so rltty.so complete.so bind.so isearch.so display.so signals.so util.so
+kill.so undo.so macro.so input.so callback.so terminal.so text.so nls.so
+misc.so history.so histexpand.so histfile.so histsearch.so shell.so mbutil.so
+tilde.so colors.so parse-colors.so xmalloc.so xfree.so compat.so -lncurses
+/home/buildroot/project/buildroot/output/host/bin/powerpc64le-buildroot-linux-gnu-gcc
+-shared -Wl,-soname,libhistory.so.7.0 -pie -Wl,-z,now -Wl,-z,relro
+-Wl,-rpath,/usr/lib -Wl,-soname,`basename libhistory.so.7.0 .0` -o
+libhistory.so.7.0 history.so histexpand.so histfile.so histsearch.so shell.so
+mbutil.so xmalloc.so xfree.so -lncurses
+/home/buildroot/project/buildroot/output/host/lib/gcc/powerpc64le-buildroot-linux-gnu/8.2.0/../../../../powerpc64le-buildroot-linux-gnu/bin/ld:
+/home/buildroot/project/buildroot/output/host/powerpc64le-buildroot-linux-gnu/sysroot/usr/lib/../lib64/Scrt1.o:(.data.rel.ro.local+0x8):
+undefined reference to `main'
+collect2: error: ld returned 1 exit status
+Makefile:180: recipe for target 'libhistory.so.7.0' failed
+make[2]: *** [libhistory.so.7.0] Error 1
+make[2]: *** Waiting for unfinished jobs....
+/home/buildroot/project/buildroot/output/host/lib/gcc/powerpc64le-buildroot-linux-gnu/8.2.0/../../../../powerpc64le-buildroot-linux-gnu/bin/ld:
+/home/buildroot/project/buildroot/output/host/powerpc64le-buildroot-linux-gnu/sysroot/usr/lib/../lib64/Scrt1.o:(.data.rel.ro.local+0x8):
+undefined reference to `main'
+collect2: error: ld returned 1 exit status
+Makefile:176: recipe for target 'libreadline.so.7.0' failed
+make[2]: *** [libreadline.so.7.0] Error 1
+make[2]: Leaving directory
+'/home/buildroot/project/buildroot/output/build/readline-7.0/shlib'
+Makefile:209: recipe for target 'shared' failed
+make[1]: *** [shared] Error 2
+make[1]: Leaving directory
+'/home/buildroot/project/buildroot/output/build/readline-7.0'
+package/pkg-generic.mk:229: recipe for target
+'/home/buildroot/project/buildroot/output/build/readline-7.0/.stamp_built'
+failed
+make: ***
+[/home/buildroot/project/buildroot/output/build/readline-7.0/.stamp_built]
+Error 2
 
-diff --git a/package/python-cryptography/python-cryptography.mk
-b/package/python-cryptography/python-cryptography.mk
-index 3c97d0afee..4eac995152 100644
---- a/package/python-cryptography/python-cryptography.mk
-+++ b/package/python-cryptography/python-cryptography.mk
-@@ -11,5 +11,6 @@ PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
- PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
- PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
- PYTHON_CRYPTOGRAPHY_DEPENDENCIES = host-python-cffi openssl
-+PYTHON_CRYPTOGRAPHY_ENV = CFLAGS="-pthread"
-
- $(eval $(python-package))
-
-Please send v2 with properly embedded -pthread.
-
-Regards,
-Yegor
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
