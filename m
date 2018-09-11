@@ -1,267 +1,302 @@
 From: Philipp Richter <richterphilipp.pops@gmail.com>
-Date: Tue, 11 Sep 2018 10:50:24 +0200
-Subject: [Buildroot] [PATCH 2/2] package/qbittorrent: new package
-In-Reply-To: <20180911085024.14648-1-richterphilipp.pops@gmail.com>
-References: <20180911085024.14648-1-richterphilipp.pops@gmail.com>
-Message-ID: <20180911085024.14648-2-richterphilipp.pops@gmail.com>
+Date: Tue, 11 Sep 2018 10:50:23 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libtorrent-rasterbar: new package
+Message-ID: <20180911085024.14648-1-richterphilipp.pops@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The qBittorrent project aims to provide
-an open-source software alternative to ?Torrent.
+libtorrent is a feature complete C++ bittorrent implementation
+focusing on efficiency and scalability.
 
-https://www.qbittorrent.org/
+https://www.libtorrent.org/
 
 Signed-off-by: Philipp Richter <richterphilipp.pops@gmail.com>
 ---
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- .../0001-fix-webui-unreachable-issue.patch    | 36 +++++++
- package/qbittorrent/Config.in                 | 97 +++++++++++++++++++
- package/qbittorrent/qbittorrent.hash          |  6 ++
- package/qbittorrent/qbittorrent.mk            | 49 ++++++++++
- 6 files changed, 190 insertions(+)
- create mode 100644 package/qbittorrent/0001-fix-webui-unreachable-issue.patch
- create mode 100644 package/qbittorrent/Config.in
- create mode 100644 package/qbittorrent/qbittorrent.hash
- create mode 100644 package/qbittorrent/qbittorrent.mk
+ DEVELOPERS                                    |   3 +
+ package/Config.in                             |   1 +
+ package/libtorrent-rasterbar/Config.in        | 133 ++++++++++++++++++
+ .../libtorrent-rasterbar.hash                 |   3 +
+ .../libtorrent-rasterbar.mk                   |  95 +++++++++++++
+ 5 files changed, 235 insertions(+)
+ create mode 100644 package/libtorrent-rasterbar/Config.in
+ create mode 100644 package/libtorrent-rasterbar/libtorrent-rasterbar.hash
+ create mode 100644 package/libtorrent-rasterbar/libtorrent-rasterbar.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 5cf182e5fe..03dfa9bf8c 100644
+index b05564dd44..5cf182e5fe 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1670,6 +1670,7 @@ F:	package/zsh/
+@@ -1668,6 +1668,9 @@ F:	package/psplash/
+ F:	package/sispmctl/
+ F:	package/zsh/
  
- N:	Philipp Richter <richterphilipp.pops@gmail.com>
- F:	package/libtorrent-rasterbar/
-+F:	package/qbittorrent/
- 
++N:	Philipp Richter <richterphilipp.pops@gmail.com>
++F:	package/libtorrent-rasterbar/
++
  N:	Philippe Proulx <eeppeliteloop@gmail.com>
  F:	package/lttng-babeltrace/
+ F:	package/lttng-libust/
 diff --git a/package/Config.in b/package/Config.in
-index d1b4147833..cc7173cb4c 100644
+index fb4d328846..d1b4147833 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1891,6 +1891,7 @@ endif
- 	source "package/ptpd2/Config.in"
- 	source "package/pure-ftpd/Config.in"
- 	source "package/putty/Config.in"
-+	source "package/qbittorrent/Config.in"
- 	source "package/quagga/Config.in"
- 	source "package/rabbitmq-server/Config.in"
- 	source "package/radvd/Config.in"
-diff --git a/package/qbittorrent/0001-fix-webui-unreachable-issue.patch b/package/qbittorrent/0001-fix-webui-unreachable-issue.patch
+@@ -1497,6 +1497,7 @@ menu "Networking"
+ 	source "package/libstrophe/Config.in"
+ 	source "package/libtirpc/Config.in"
+ 	source "package/libtorrent/Config.in"
++	source "package/libtorrent-rasterbar/Config.in"
+ 	source "package/libupnp/Config.in"
+ 	source "package/libupnp18/Config.in"
+ 	source "package/libupnpp/Config.in"
+diff --git a/package/libtorrent-rasterbar/Config.in b/package/libtorrent-rasterbar/Config.in
 new file mode 100644
-index 0000000000..e7e955d813
+index 0000000000..0ce9496b70
 --- /dev/null
-+++ b/package/qbittorrent/0001-fix-webui-unreachable-issue.patch
-@@ -0,0 +1,36 @@
-+Backported from: 5f175e113ab0eaeaea560f58b6a255932b194892
-+
-+From 262c3a75bd3a99de16eea2327213bcd32b727d36 Mon Sep 17 00:00:00 2001
-+From: Chocobo1 <Chocobo1@users.noreply.github.com>
-+Date: Sun, 19 Aug 2018 03:28:41 +0800
-+Subject: [PATCH] Fix WebUI unreachable issue
-+
-+QVariant doesn't have constructor for plain char, by default it converts
-+a plain char into an integer, hence the WebUI issue.
-+Closes #9333.
-+---
-+ src/base/preferences.cpp | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/base/preferences.cpp b/src/base/preferences.cpp
-+index 61c6a3d327..e82db5cb03 100644
-+--- a/src/base/preferences.cpp
-++++ b/src/base/preferences.cpp
-+@@ -530,7 +530,7 @@ void Preferences::setWebUiAuthSubnetWhitelist(QStringList subnets)
-+ 
-+ QString Preferences::getServerDomains() const
-+ {
-+-    return value("Preferences/WebUI/ServerDomains", '*').toString();
-++    return value("Preferences/WebUI/ServerDomains", QChar('*')).toString();
-+ }
-+ 
-+ void Preferences::setServerDomains(const QString &str)
-+@@ -540,7 +540,7 @@ void Preferences::setServerDomains(const QString &str)
-+ 
-+ QString Preferences::getWebUiAddress() const
-+ {
-+-    return value("Preferences/WebUI/Address", '*').toString().trimmed();
-++    return value("Preferences/WebUI/Address", QChar('*')).toString().trimmed();
-+ }
-+ 
-+ void Preferences::setWebUiAddress(const QString &addr)
-diff --git a/package/qbittorrent/Config.in b/package/qbittorrent/Config.in
-new file mode 100644
-index 0000000000..fb33e49d02
---- /dev/null
-+++ b/package/qbittorrent/Config.in
-@@ -0,0 +1,97 @@
-+comment "qbittorrent needs a toolchain w/ C++"
++++ b/package/libtorrent-rasterbar/Config.in
+@@ -0,0 +1,133 @@
++comment "libtorrent-rasterbar needs a toolchain w/ C++"
 +	depends on !BR2_INSTALL_LIBSTDCPP
 +
-+config BR2_PACKAGE_QBITTORRENT
-+	bool "qbittorrent"
++config BR2_PACKAGE_LIBTORRENT_RASTERBAR
++	bool "libtorrent-rasterbar"
 +	depends on BR2_INSTALL_LIBSTDCPP
 +	select BR2_PACKAGE_HOST_PKGCONF
 +	select BR2_PACKAGE_BOOST
++	select BR2_PACKAGE_BOOST_CHRONO
 +	select BR2_PACKAGE_BOOST_SYSTEM
-+	select BR2_PACKAGE_BOOST_THREAD
-+	select BR2_PACKAGE_LIBTORRENT_RASTERBAR
-+	select BR2_PACKAGE_QT5
-+	select BR2_PACKAGE_QT5BASE
-+	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_BOOST_RANDOM
 +	help
-+	  The qBittorrent project aims to provide
-+	  an open-source software alternative to ?Torrent.
++	  libtorrent is a feature complete C++ bittorrent implementation
++	  focusing on efficiency and scalability.
 +
-+	  https://www.qbittorrent.org/
++	  https://www.libtorrent.org/
 +
-+if BR2_PACKAGE_QBITTORRENT
++if BR2_PACKAGE_LIBTORRENT_RASTERBAR
 +
-+config BR2_PACKAGE_QBITTORRENT_GUI
-+	bool "GUI"
-+	select BR2_PACKAGE_HICOLOR_ICON_THEME
-+	select BR2_PACKAGE_QT5BASE_WIDGETS
-+	select BR2_PACKAGE_QT5SVG
-+	help
-+	  Disable for headless running.
-+	  The target binary will be called qbittorrent-nox.
-+
-+if BR2_PACKAGE_QBITTORRENT_GUI
-+
-+config BR2_PACKAGE_QBITTORRENT_QTDBUS
-+	bool "QtDBUS"
++config BR2_PACKAGE_LIBTORRENT_RASTERBAR_LOGGING
++	bool "Logging alerts"
 +	default y
-+	select BR2_PACKAGE_QT5BASE_DBUS
 +	help
-+	  Enable QtDBUS support.
++	  Enable support for logging alerts,
++	  like log_alert, torrent_log_alert and peer_log_alert.
 +
 +	  Default: yes
 +
++config BR2_PACKAGE_LIBTORRENT_RASTERBAR_DEBUG
++	bool "Debug"
++	help
++	  Enable debug build.
++
++	  Default: no
++
++config BR2_PACKAGE_LIBTORRENT_RASTERBAR_DHT
++	bool "DHT"
++	default y
++	help
++	  Enable support for trackerless torrents.
++
++	  Default: yes
++
++config BR2_PACKAGE_LIBTORRENT_RASTERBAR_ENCRYPTION
++	bool "Encryption"
++	default y
++	select BR2_PACKAGE_OPENSSL
++	help
++	  Enable encryption support.
++	  Encryption support is the encrypted peer connection
++	  supported by clients such as uTorrent, Azureus and KTorrent.
++
++	  Default: yes
++
++config BR2_PACKAGE_LIBTORRENT_RASTERBAR_EXPORT_ALL_SYMBOLS
++	bool "Export all symbols"
++	help
++	  Export all symbols from libtorrent, including non-public ones.
++
++	  Default: no
++
++config BR2_PACKAGE_LIBTORRENT_RASTERBAR_POOL_ALLOCATORS
++	bool "Pool allocators"
++	default y
++	help
++	  Enable pool allocators for send buffers using boost::pool<>.
++
++	  Default: yes
++
++config BR2_PACKAGE_LIBTORRENT_RASTERBAR_INVARIANT_CHECKS
++	bool "Invariant checks"
++	default y
++	depends on BR2_PACKAGE_LIBTORRENT_RASTERBAR_DEBUG
++	help
++	  Enable invariant checks.
++
++	  Default: yes
++
++comment "Invariant checks need debug build"
++	depends on !BR2_PACKAGE_LIBTORRENT_RASTERBAR_DEBUG
++
++if BR2_PACKAGE_LIBTORRENT_RASTERBAR_INVARIANT_CHECKS
++
++choice
++	prompt "Invariant checks type"
++	default BR2_PACKAGE_LIBTORRENT_RASTERBAR_INVARIANT_CHECKS_YES
++	help
++	  Select the type of invariant checks to use.
++
++config BR2_PACKAGE_LIBTORRENT_RASTERBAR_INVARIANT_CHECKS_YES
++	bool "yes"
++	help
++	  Standard invariant checks.
++
++config BR2_PACKAGE_LIBTORRENT_RASTERBAR_INVARIANT_CHECKS_FULL
++	bool "full"
++	help
++	  Turn on extra expensive invariant checks.
++
++endchoice
++
 +endif
 +
-+if !BR2_PACKAGE_QBITTORRENT_GUI
-+
-+comment "Systemd service needs systemd enabled"
-+	depends on !BR2_PACKAGE_SYSTEMD
-+
-+config BR2_PACKAGE_QBITTORRENT_SYSTEMD
-+	bool "Systemd service"
-+	depends on BR2_PACKAGE_SYSTEMD
++config BR2_PACKAGE_LIBTORRENT_RASTERBAR_DEPRECATED_FUNCTIONS
++	bool "Deprecated functions"
++	default y
 +	help
-+	  Install systemd service file.
++	  Enable deprecated functions in the API.
++
++	  Default: yes
++
++config BR2_PACKAGE_LIBTORRENT_RASTERBAR_DISK_STATS
++	bool "Disk stats"
++	help
++	  Enable disk activity logging feature.
++
++	  Default: no
++
++config BR2_PACKAGE_LIBTORRENT_RASTERBAR_EXAMPLES
++	bool "Examples"
++	help
++	  Build example files.
++
++	  Default: no
++
++config BR2_PACKAGE_LIBTORRENT_RASTERBAR_TESTS
++	bool "Tests"
++	help
++	  Build test files.
 +
 +	  Default: no
 +
 +endif
-+
-+comment "Stacktrace feature needs a glibc toolchain"
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC
-+
-+choice
-+	prompt "Stacktrace"
-+	default BR2_PACKAGE_QBITTORRENT_STACKTRACE_AUTO
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	help
-+	  Stacktrace feature.
-+
-+	  Default: auto
-+
-+config BR2_PACKAGE_QBITTORRENT_STACKTRACE_AUTO
-+	bool "auto"
-+	help
-+	  Determine automatically.
-+
-+config BR2_PACKAGE_QBITTORRENT_STACKTRACE_ENABLE
-+	bool "enable"
-+	help
-+	  Enable stacktrace feature.
-+
-+config BR2_PACKAGE_QBITTORRENT_STACKTRACE_DISABLE
-+	bool "disable"
-+	help
-+	  Disable stacktrace feature.
-+
-+endchoice
-+
-+config BR2_PACKAGE_QBITTORRENT_WEBUI
-+	bool "WebUI"
-+	default y
-+	help
-+	  Enable the WebUI.
-+
-+	  Default: yes
-+
-+endif
-diff --git a/package/qbittorrent/qbittorrent.hash b/package/qbittorrent/qbittorrent.hash
+diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.hash b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
 new file mode 100644
-index 0000000000..f5cf78e7fc
+index 0000000000..01ac303bae
 --- /dev/null
-+++ b/package/qbittorrent/qbittorrent.hash
-@@ -0,0 +1,6 @@
-+# Locally checked with PGP signature from https://downloads.sourceforge.net/sourceforge/qbittorrent/qbittorrent-4.1.2.tar.xz.asc
-+sha256 e0165bd427820c64bce596ef952d80058ea8cd7294d3c84bc723d79cd9e2f9c7 qbittorrent-4.1.2.tar.xz
-+
++++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
+@@ -0,0 +1,3 @@
 +# Locally calculated
-+sha256 ed266afaf97e160adc8954a2ddc6d1aeb63bc537b9b8b65348581239052bee03 0001-fix-webui-unreachable-issue.patch
-+sha256 fc68233a17d308ee633aefedbd761c7582ec48557539aca310b4162e54212fe5 COPYING
-diff --git a/package/qbittorrent/qbittorrent.mk b/package/qbittorrent/qbittorrent.mk
++sha256 d57a0f5b159f58003c3031943463503f0d05ae3e428dd7c2383d1e35fb2c4e8c libtorrent-rasterbar-1.1.9.tar.gz
++sha256 f3a5dd1558cce616b12edad521427ec8976ce2bb0af33f7f359cfa648bf55ad8 COPYING
+diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
 new file mode 100644
-index 0000000000..b90dd9ac84
+index 0000000000..19f0a9304d
 --- /dev/null
-+++ b/package/qbittorrent/qbittorrent.mk
-@@ -0,0 +1,49 @@
++++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+@@ -0,0 +1,95 @@
 +################################################################################
 +#
-+# qbittorrent
++# libtorrent-rasterbar
 +#
 +################################################################################
 +
-+QBITTORRENT_VERSION = 4.1.2
-+QBITTORRENT_SOURCE = qbittorrent-$(QBITTORRENT_VERSION).tar.xz
-+QBITTORRENT_SITE = https://downloads.sourceforge.net/sourceforge/qbittorrent
-+QBITTORRENT_LICENSE = GPL-2.0
-+QBITTORRENT_LICENSE_FILES = COPYING
-+QBITTORRENT_DEPENDENCIES = host-pkgconf boost libtorrent-rasterbar qt5base zlib
-+QBITTORRENT_CONF_OPTS += --with-boost-libdir="$(STAGING_DIR)/usr/lib"
-+QBITTORRENT_INSTALL_TARGET_OPTS = INSTALL_ROOT="$(TARGET_DIR)" install
++LIBTORRENT_RASTERBAR_VERSION = 1.1.9
++LIBTORRENT_RASTERBAR_SITE = https://github.com/arvidn/libtorrent/releases/download/libtorrent-$(subst .,_,$(LIBTORRENT_RASTERBAR_VERSION))
++LIBTORRENT_RASTERBAR_LICENSE = BSD-2-Clause
++LIBTORRENT_RASTERBAR_LICENSE_FILES = COPYING
++LIBTORRENT_RASTERBAR_DEPENDENCIES = host-pkgconf boost $(if $(BR2_PACKAGE_LIBICONV),libiconv)
++LIBTORRENT_RASTERBAR_INSTALL_STAGING = YES
++LIBTORRENT_RASTERBAR_CONF_OPTS += --with-boost-libdir="$(STAGING_DIR)/usr/lib"
++LIBTORRENT_RASTERBAR_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
 +
-+ifeq ($(BR2_PACKAGE_QBITTORRENT_GUI),y)
-+QBITTORRENT_CONF_OPTS += --enable-gui
-+QBITTORRENT_DEPENDENCIES += hicolor-icon-theme qt5svg
++ifeq ($(BR2_ENABLE_LOCALE)$(BR2_PACKAGE_LIBICONV),y)
++LIBTORRENT_RASTERBAR_CONF_OPTS += --with-libiconv
 +else
-+QBITTORRENT_CONF_OPTS += --disable-gui
++LIBTORRENT_RASTERBAR_CONF_OPTS += --without-libiconv
 +endif
 +
-+ifeq ($(BR2_PACKAGE_QBITTORRENT_QTDBUS),y)
-+QBITTORRENT_CONF_OPTS += --enable-qt-dbus
++ifeq ($(BR2_PACKAGE_LIBTORRENT_RASTERBAR_LOGGING),y)
++LIBTORRENT_RASTERBAR_CONF_OPTS += --enable-logging
 +else
-+QBITTORRENT_CONF_OPTS += --disable-qt-dbus
++LIBTORRENT_RASTERBAR_CONF_OPTS += --disable-logging
 +endif
 +
-+ifeq ($(BR2_PACKAGE_QBITTORRENT_SYSTEMD),y)
-+QBITTORRENT_CONF_OPTS += --enable-systemd
++ifeq ($(BR2_PACKAGE_LIBTORRENT_RASTERBAR_DEBUG),y)
++LIBTORRENT_RASTERBAR_CONF_OPTS += --enable-debug
 +else
-+QBITTORRENT_CONF_OPTS += --disable-systemd
++LIBTORRENT_RASTERBAR_CONF_OPTS += --disable-debug
 +endif
 +
-+ifeq ($(BR2_PACKAGE_QBITTORRENT_STACKTRACE_ENABLE),y)
-+QBITTORRENT_CONF_OPTS += --enable-stacktrace
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QBITTORRENT_STACKTRACE_DISABLE),y)
-+QBITTORRENT_CONF_OPTS += --disable-stacktrace
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QBITTORRENT_WEBUI),y)
-+QBITTORRENT_CONF_OPTS += --enable-webui
++ifeq ($(BR2_PACKAGE_LIBTORRENT_RASTERBAR_DHT),y)
++LIBTORRENT_RASTERBAR_CONF_OPTS += --enable-dht
 +else
-+QBITTORRENT_CONF_OPTS += --disable-webui
++LIBTORRENT_RASTERBAR_CONF_OPTS += --disable-dht
++endif
++
++ifeq ($(BR2_PACKAGE_LIBTORRENT_RASTERBAR_ENCRYPTION),y)
++LIBTORRENT_RASTERBAR_CONF_OPTS += --enable-encryption
++LIBTORRENT_RASTERBAR_DEPENDENCIES += openssl
++else
++LIBTORRENT_RASTERBAR_CONF_OPTS += --disable-encryption
++endif
++
++ifeq ($(BR2_PACKAGE_LIBTORRENT_RASTERBAR_EXPORT_ALL_SYMBOLS),y)
++LIBTORRENT_RASTERBAR_CONF_OPTS += --enable-export-all
++else
++LIBTORRENT_RASTERBAR_CONF_OPTS += --disable-export-all
++endif
++
++ifeq ($(BR2_PACKAGE_LIBTORRENT_RASTERBAR_POOL_ALLOCATORS),y)
++LIBTORRENT_RASTERBAR_CONF_OPTS += --enable-pool-allocators
++else
++LIBTORRENT_RASTERBAR_CONF_OPTS += --disable-pool-allocators
++endif
++
++ifeq ($(BR2_PACKAGE_LIBTORRENT_RASTERBAR_INVARIANT_CHECKS),y)
++ifeq ($(BR2_PACKAGE_LIBTORRENT_RASTERBAR_INVARIANT_CHECKS_YES),y)
++LIBTORRENT_RASTERBAR_CONF_OPTS += --enable-invariant-checks=yes
++else
++ifeq ($(BR2_PACKAGE_LIBTORRENT_RASTERBAR_INVARIANT_CHECKS_FULL),y)
++LIBTORRENT_RASTERBAR_CONF_OPTS += --enable-invariant-checks=full
++endif
++endif
++else
++LIBTORRENT_RASTERBAR_CONF_OPTS += --disable-invariant-checks
++endif
++
++ifeq ($(BR2_PACKAGE_LIBTORRENT_RASTERBAR_DEPRECATED_FUNCTIONS),y)
++LIBTORRENT_RASTERBAR_CONF_OPTS += --enable-deprecated-functions
++else
++LIBTORRENT_RASTERBAR_CONF_OPTS += --disable-deprecated-functions
++endif
++
++ifeq ($(BR2_PACKAGE_LIBTORRENT_RASTERBAR_DISK_STATS),y)
++LIBTORRENT_RASTERBAR_CONF_OPTS += --enable-disk-stats
++else
++LIBTORRENT_RASTERBAR_CONF_OPTS += --disable-disk-stats
++endif
++
++ifeq ($(BR2_PACKAGE_LIBTORRENT_RASTERBAR_EXAMPLES),y)
++LIBTORRENT_RASTERBAR_CONF_OPTS += --enable-examples
++else
++LIBTORRENT_RASTERBAR_CONF_OPTS += --disable-examples
++endif
++
++ifeq ($(BR2_PACKAGE_LIBTORRENT_RASTERBAR_TESTS),y)
++LIBTORRENT_RASTERBAR_CONF_OPTS += --enable-tests
++else
++LIBTORRENT_RASTERBAR_CONF_OPTS += --disable-tests
 +endif
 +
 +$(eval $(autotools-package))
