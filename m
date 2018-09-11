@@ -1,158 +1,203 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Tue, 11 Sep 2018 00:27:44 +0200
-Subject: [Buildroot] [PATCH 2/2] python-numpy: fix make legal-info failure
-In-Reply-To: <20180910222744.82143-1-giulio.benetti@micronovasrl.com>
-References: <20180910222744.82143-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20180910222744.82143-3-giulio.benetti@micronovasrl.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 11 Sep 2018 08:00:19 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-09-10
+Message-ID: <20180911060019.C5771207A8@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release 1.15.1 tarball doesn't contain all sublibraries license files
-listed in the base LICENSE.txt file.
-This makes python-numpy-legal-info incomplete.
+Hello,
 
-Add patch to add missing sublibraries license files:
-- numpy/linalg/lapack_lite/LICENSE.txt
-- tools/npy_tempita/license.txt
-and therefore their sha256 into hash file.
-Update also PYTHON_NUMPY_LICENSE adding:
-BSD-2-Clause PSF Apache-2.0 MIT Zlib
+Build statistics for 2018-09-10
+===============================
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
----
- ...02-Add-sublibraries-missing-licenses.patch | 89 +++++++++++++++++++
- package/python-numpy/python-numpy.hash        |  4 +
- package/python-numpy/python-numpy.mk          |  7 +-
- 3 files changed, 98 insertions(+), 2 deletions(-)
- create mode 100644 package/python-numpy/0002-Add-sublibraries-missing-licenses.patch
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  21 |   2 |   0 |  23 |
+   2018.05.x |  27 |   3 |   0 |  30 |
+      master | 137 |  99 |   0 | 236 |
 
-diff --git a/package/python-numpy/0002-Add-sublibraries-missing-licenses.patch b/package/python-numpy/0002-Add-sublibraries-missing-licenses.patch
-new file mode 100644
-index 0000000000..457aaa945f
---- /dev/null
-+++ b/package/python-numpy/0002-Add-sublibraries-missing-licenses.patch
-@@ -0,0 +1,89 @@
-+Add sublibraries license files
-+
-+On Release 1.15.1 tarball two license files are missing:
-+- numpy/linalg/lapack_lite/LICENSE.txt
-+- tools/npy_tempita/license.txt
-+
-+Add them to sources to keep licensing information complete.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-+
-+diff -urpN numpy-1.15.1.orig/numpy/linalg/lapack_lite/LICENSE.txt numpy-1.15.1/numpy/linalg/lapack_lite/LICENSE.txt
-+--- numpy-1.15.1.orig/numpy/linalg/lapack_lite/LICENSE.txt	1970-01-01 01:00:00.000000000 +0100
-++++ numpy-1.15.1/numpy/linalg/lapack_lite/LICENSE.txt	2018-09-11 00:00:41.239919567 +0200
-+@@ -0,0 +1,48 @@
-++Copyright (c) 1992-2013 The University of Tennessee and The University
-++                        of Tennessee Research Foundation.  All rights
-++                        reserved.
-++Copyright (c) 2000-2013 The University of California Berkeley. All
-++                        rights reserved.
-++Copyright (c) 2006-2013 The University of Colorado Denver.  All rights
-++                        reserved.
-++
-++$COPYRIGHT$
-++
-++Additional copyrights may follow
-++
-++$HEADER$
-++
-++Redistribution and use in source and binary forms, with or without
-++modification, are permitted provided that the following conditions are
-++met:
-++
-++- Redistributions of source code must retain the above copyright
-++  notice, this list of conditions and the following disclaimer.
-++
-++- Redistributions in binary form must reproduce the above copyright
-++  notice, this list of conditions and the following disclaimer listed
-++  in this license in the documentation and/or other materials
-++  provided with the distribution.
-++
-++- Neither the name of the copyright holders nor the names of its
-++  contributors may be used to endorse or promote products derived from
-++  this software without specific prior written permission.
-++
-++The copyright holders provide no reassurances that the source code
-++provided does not infringe any patent, copyright, or any other
-++intellectual property rights of third parties.  The copyright holders
-++disclaim any liability to any recipient for claims brought against
-++recipient by any third party for infringement of that parties
-++intellectual property rights.
-++
-++THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-++"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-++LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-++A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-++OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-++SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-++LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-++DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-++THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-++(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-++OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-+diff -urpN numpy-1.15.1.orig/tools/npy_tempita/license.txt numpy-1.15.1/tools/npy_tempita/license.txt
-+--- numpy-1.15.1.orig/tools/npy_tempita/license.txt	1970-01-01 01:00:00.000000000 +0100
-++++ numpy-1.15.1/tools/npy_tempita/license.txt	2018-09-11 00:00:41.271919819 +0200
-+@@ -0,0 +1,23 @@
-++License
-++-------
-++
-++Copyright (c) 2008 Ian Bicking and Contributors
-++
-++Permission is hereby granted, free of charge, to any person obtaining
-++a copy of this software and associated documentation files (the
-++"Software"), to deal in the Software without restriction, including
-++without limitation the rights to use, copy, modify, merge, publish,
-++distribute, sublicense, and/or sell copies of the Software, and to
-++permit persons to whom the Software is furnished to do so, subject to
-++the following conditions:
-++
-++The above copyright notice and this permission notice shall be
-++included in all copies or substantial portions of the Software.
-++
-++THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-++EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-++MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-++NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-++LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-++OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-++WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-diff --git a/package/python-numpy/python-numpy.hash b/package/python-numpy/python-numpy.hash
-index 7c7f446118..9df9f63f06 100644
---- a/package/python-numpy/python-numpy.hash
-+++ b/package/python-numpy/python-numpy.hash
-@@ -2,3 +2,7 @@
- sha256	3c1ccce5d935ef8df16ae0595b459ef08a5cdb05aee195ebc04b9d89a72be7fa	numpy-1.15.1.tar.gz
- # License files, locally calculated
- sha256	9e85ee1c3f11444243c9b7667721592a01f1cd90cb28ad937ac99f6241d6b685	LICENSE.txt
-+sha256	426a5a484480f57a295db48c2c04f47bb3274752dd82a7fd6541dfa2cb90f641	doc/sphinxext/LICENSE.txt
-+sha256	a14cc25e10d40a3aa705b7de2fb764a6535d8ee9b2db4e1724900585457dfd55	numpy/linalg/lapack_lite/LICENSE.txt
-+sha256	badf51c7e3e7de9c7630bd069780f5c197b846ef7660b342a1e58d5553592d8e	tools/npy_tempita/license.txt
-+sha256	d37526b4a34c0aa859afe6f9b7e64ca7c306b7430df8113dd5ac6fcb246bd2d4	numpy/core/src/multiarray/dragon4.c
-diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
-index bd5fe7e6a9..c7c3ef1738 100644
---- a/package/python-numpy/python-numpy.mk
-+++ b/package/python-numpy/python-numpy.mk
-@@ -7,8 +7,11 @@
- PYTHON_NUMPY_VERSION = 1.15.1
- PYTHON_NUMPY_SOURCE = numpy-$(PYTHON_NUMPY_VERSION).tar.gz
- PYTHON_NUMPY_SITE = https://github.com/numpy/numpy/releases/download/v$(PYTHON_NUMPY_VERSION)
--PYTHON_NUMPY_LICENSE = BSD-3-Clause
--PYTHON_NUMPY_LICENSE_FILES = LICENSE.txt
-+PYTHON_NUMPY_LICENSE = BSD-3-Clause BSD-2-Clause PSF Apache-2.0 MIT Zlib
-+PYTHON_NUMPY_LICENSE_FILES = LICENSE.txt doc/sphinxext/LICENSE.txt \
-+                       numpy/linalg/lapack_lite/LICENSE.txt \
-+                       tools/npy_tempita/license.txt \
-+                       numpy/core/src/multiarray/dragon4.c
- PYTHON_NUMPY_SETUP_TYPE = setuptools
- 
- ifeq ($(BR2_PACKAGE_CLAPACK),y)
+Results for branch '2018.02.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+              host-bison-3.0.4 | 1 
+                 mplayer-1.3.0 | 1 
+
+
+Detail of failures
+------------------
+
+     powerpc |               host-bison-3.0.4 | NOK | http://autobuild.buildroot.net/results/92ae0cd1cf372dfe6ad1ff64b0711e7319d377c6 | ORPH
+    mips64el |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/29a7f2c2916a67c1ac78c30a44a5aa3034f7086e |     
+
+Results for branch '2018.05.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+              host-bison-3.0.4 | 1 
+                host-file-5.33 | 1 
+                qt5base-5.10.1 | 1 
+
+
+Detail of failures
+------------------
+
+      x86_64 |               host-bison-3.0.4 | NOK | http://autobuild.buildroot.net/results/023ac2fb4ba71ebc6a6960a8df76147e8fbc7493 | ORPH
+     powerpc |                 host-file-5.33 | NOK | http://autobuild.buildroot.net/results/f3e92e20cc6c58ca3d3af4ae820dede32156fb48 | ORPH
+        or1k |                 qt5base-5.10.1 | NOK | http://autobuild.buildroot.net/results/86facd1754afe605414543c67cf3400f4524c354 |     
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+               target-finalize | 18
+         host-e2fsprogs-1.44.4 | 13
+ Makefile:708: target-finalize | 9 
+              ptpd2-ptpd-2.3.1 | 8 
+                   botan-2.7.0 | 5 
+                     vlc-3.0.4 | 5 
+                blktrace-1.1.0 | 3 
+                 lvm2-2.02.180 | 3 
+                  boost-1.68.0 | 2 
+                   dante-1.4.1 | 2 
+              e2fsprogs-1.44.4 | 2 
+              glibc-legal-info | 2 
+               host-parted-3.2 | 2 
+                   netsnmp-5.8 | 2 
+package/python-numpy/python... | 2 
+perl-crypt-openssl-random-0.15 | 2 
+                beecrypt-4.2.1 | 1 
+                 dc3dd-7.2.641 | 1 
+                 gadgetfs-test | 1 
+                host-file-5.33 | 1 
+                  libssh-0.8.1 | 1 
+mjpg-streamer-bbf32fddfd02a... | 1 
+          motion-release-4.1.1 | 1 
+package/glibc/glibc.mk:134:... | 1 
+          perl-data-uuid-1.221 | 1 
+                perl-dbi-1.641 | 1 
+          perl-digest-md5-2.55 | 1 
+            perl-net-ssh2-0.69 | 1 
+       python-numpy-legal-info | 1 
+                qt5base-5.11.1 | 1 
+                 qt5base-5.6.3 | 1 
+                rtorrent-0.9.7 | 1 
+                     squid-4.2 | 1 
+             util-linux-2.32.1 | 1 
+              wireshark-2.2.16 | 1 
+
+
+Detail of failures
+------------------
+
+         arm |                 beecrypt-4.2.1 | NOK | http://autobuild.buildroot.net/results/b0175651b0b4e24e0745f577b52577edbfe109f1 | ORPH
+         arc |                 blktrace-1.1.0 | NOK | http://autobuild.buildroot.net/results/1617e5371423daef89f427756608a209dcc3a41f | ORPH
+         arc |                 blktrace-1.1.0 | NOK | http://autobuild.buildroot.net/results/be4a5588abeb3fd4c5b4b4197018fbafa15c6ec5 | ORPH
+         arc |                 blktrace-1.1.0 | NOK | http://autobuild.buildroot.net/results/3d703caa8608d94f0114a62f6cdeb78c4b94478d | ORPH
+        m68k |                   boost-1.68.0 | NOK | http://autobuild.buildroot.net/results/81023cda55b4a0504392132c245d3e530c3a907f |     
+      x86_64 |                   boost-1.68.0 | NOK | http://autobuild.buildroot.net/results/818608175d7439f06c74b7d1ed704d551ea4c393 |     
+     powerpc |                    botan-2.7.0 | NOK | http://autobuild.buildroot.net/results/a92ff371f742099b09f96a7f020ded85c01a75a5 |     
+        i586 |                    botan-2.7.0 | NOK | http://autobuild.buildroot.net/results/20d1a2a43b9303be0187692a93304b4bda9ccb86 |     
+     powerpc |                    botan-2.7.0 | NOK | http://autobuild.buildroot.net/results/51f534f12ef322f58544a23f8731fac704d717c3 |     
+     powerpc |                    botan-2.7.0 | NOK | http://autobuild.buildroot.net/results/76ef420fae5e5451ae62e16f6a0a28767a7957da |     
+     powerpc |                    botan-2.7.0 | NOK | http://autobuild.buildroot.net/results/608c364333ca2ff475ca3363f2bfd76db12fb15f |     
+    mips64el |                    dante-1.4.1 | NOK | http://autobuild.buildroot.net/results/52906401b6a87a050fcf3bd6b4dc36fc5f9084ab |     
+    mips64el |                    dante-1.4.1 | NOK | http://autobuild.buildroot.net/results/b264c7330a494e6edd9e5bafae13ba0d5b3a06f1 |     
+         arm |                  dc3dd-7.2.641 | NOK | http://autobuild.buildroot.net/results/7a8d08b9e82e1e0d71796f71933cc65f56848601 | ORPH
+         arm |               e2fsprogs-1.44.4 | NOK | http://autobuild.buildroot.net/results/5f44c8107b48c359c3673aea70a279550bb4a6cd | ORPH
+         arm |               e2fsprogs-1.44.4 | NOK | http://autobuild.buildroot.net/results/a889d1ae73d1d51302d444e9593d9eb85c81832b | ORPH
+         arc |                  gadgetfs-test | NOK | http://autobuild.buildroot.net/results/3962d4d44e5c0fdfa6a1136a5b7c02be3948b1a9 |     
+         arc |               glibc-legal-info | NOK | http://autobuild.buildroot.net/results/65a5ee599bcab903531dedfe752de3d31f70ddc6 | ORPH
+         arc |               glibc-legal-info | NOK | http://autobuild.buildroot.net/results/df85b7fbbc2b5c0bf5daa4a9a16460d3bcd5dab3 | ORPH
+     aarch64 |          host-e2fsprogs-1.44.4 | NOK | http://autobuild.buildroot.net/results/9f6bff33ece0b21531105d45bd33aacc707b0029 | ORPH
+         arm |          host-e2fsprogs-1.44.4 | NOK | http://autobuild.buildroot.net/results/1d816f9be6bad6e10d273dc2d0acb200233d8d4d | ORPH
+         arm |          host-e2fsprogs-1.44.4 | NOK | http://autobuild.buildroot.net/results/44a0487f65b299c4654313777338d335c2612b20 | ORPH
+    mips64el |          host-e2fsprogs-1.44.4 | NOK | http://autobuild.buildroot.net/results/13c056cf187b7a462f89ab415b8d193093f1efab | ORPH
+  aarch64_be |          host-e2fsprogs-1.44.4 | NOK | http://autobuild.buildroot.net/results/e8bd4b8263ca5f5108a024c13664c1987f511617 | ORPH
+        mips |          host-e2fsprogs-1.44.4 | NOK | http://autobuild.buildroot.net/results/6b424ba788ccd738c2afcd940075991581e860b6 | ORPH
+         arc |          host-e2fsprogs-1.44.4 | NOK | http://autobuild.buildroot.net/results/cdaabe5aa2bfcf08f1909c2b9a1681b6d66f13d8 | ORPH
+         arc |          host-e2fsprogs-1.44.4 | NOK | http://autobuild.buildroot.net/results/0fea50a059bd8ee027189840e818ca58b373caaf | ORPH
+microblazeel |          host-e2fsprogs-1.44.4 | NOK | http://autobuild.buildroot.net/results/66a2fe176a4a75f73785956d4dc629afb5e92657 | ORPH
+        mips |          host-e2fsprogs-1.44.4 | NOK | http://autobuild.buildroot.net/results/b7a0a01ec86b28112923d3856feecf609a2c87f0 | ORPH
+  aarch64_be |          host-e2fsprogs-1.44.4 | NOK | http://autobuild.buildroot.net/results/dbfce497335ee144fcad1d8dbd733260dc8183c0 | ORPH
+         arc |          host-e2fsprogs-1.44.4 | NOK | http://autobuild.buildroot.net/results/d6b0330f3105d18db8cc478f5fa52cb39559da24 | ORPH
+      x86_64 |          host-e2fsprogs-1.44.4 | NOK | http://autobuild.buildroot.net/results/deb50520ad881bc704a5aa0d484af3d37e3d1747 | ORPH
+     powerpc |                 host-file-5.33 | NOK | http://autobuild.buildroot.net/results/11a0423377ab7c5dd88fad6ccfeda976cd452b9e | ORPH
+     aarch64 |                host-parted-3.2 | NOK | http://autobuild.buildroot.net/results/14a10d1f95353cedaab96162bc67b962403e452f |     
+    mips64el |                host-parted-3.2 | NOK | http://autobuild.buildroot.net/results/3230abaf78b8df8d23310b37b4099050fdc76eb0 |     
+      x86_64 |                   libssh-0.8.1 | NOK | http://autobuild.buildroot.net/results/39a786da4a912a5d5cb9928403aa24558c6fa664 |     
+         arc |                  lvm2-2.02.180 | NOK | http://autobuild.buildroot.net/results/44bb5d9498f2ec707ae557cd30179b094fad9038 | ORPH
+         arc |                  lvm2-2.02.180 | NOK | http://autobuild.buildroot.net/results/69c2112d222ee2a8d5805a9e78a12543e2eaded3 | ORPH
+         arc |                  lvm2-2.02.180 | NOK | http://autobuild.buildroot.net/results/b8d70939b17994a612335340c5a08d2f4ceb3c1d | ORPH
+      mipsel |  Makefile:708: target-finalize | NOK | http://autobuild.buildroot.net/results/9e2f6ebae9b7fd773304746416a676ba52d2735c |     
+         arm |  Makefile:708: target-finalize | NOK | http://autobuild.buildroot.net/results/3d526c23ae17f03cbd771f6ad18390567c1c5d3a |     
+         arc |  Makefile:708: target-finalize | NOK | http://autobuild.buildroot.net/results/816a04e8c664f5ea1f526722c3cb3db98060fcdd |     
+microblazeel |  Makefile:708: target-finalize | NOK | http://autobuild.buildroot.net/results/4fadbf4df0ab1a6b1e0dac7e03357cdc0a5613fa |     
+      mipsel |  Makefile:708: target-finalize | NOK | http://autobuild.buildroot.net/results/a41ea2ba01453151eb9944339c92ac11ece26511 |     
+        i686 |  Makefile:708: target-finalize | NOK | http://autobuild.buildroot.net/results/d4dbe2438d829c3c53114203e60a283cca717f7a |     
+      xtensa |  Makefile:708: target-finalize | NOK | http://autobuild.buildroot.net/results/16c82c34e4e005d0c85f887ae6e06643ef72770f |     
+      xtensa |  Makefile:708: target-finalize | NOK | http://autobuild.buildroot.net/results/425001dc9b0b1a6d86efc79b2423a7f7ea6c4df4 |     
+      x86_64 |  Makefile:708: target-finalize | NOK | http://autobuild.buildroot.net/results/151b9f8d792d25f96be1f5c2208c6398030bcac5 |     
+         arm | mjpg-streamer-bbf32fddfd02a... | NOK | http://autobuild.buildroot.net/results/cf9d5cd5864333ce5da2b6029b91617a0865304e |     
+         arm |           motion-release-4.1.1 | NOK | http://autobuild.buildroot.net/results/5152dcca58944cf732d09fba6e6c9af8a9243c75 |     
+         arm |                    netsnmp-5.8 | NOK | http://autobuild.buildroot.net/results/4dc8b53ff9f504c0a3dfc2d72c2609ad4d34559b | ORPH
+         arm |                    netsnmp-5.8 | NOK | http://autobuild.buildroot.net/results/a1eb848079080ddf7cf2fc9e554cdd63ade0e9aa | ORPH
+         arc | package/glibc/glibc.mk:134:... | NOK | http://autobuild.buildroot.net/results/de902e34a9bd85eed70b53559960489268bf3db3 |     
+      mipsel | package/python-numpy/python... | NOK | http://autobuild.buildroot.net/results/9f18a4e62380252e53d42ef74b98b28a3fb0abe5 |     
+      x86_64 | package/python-numpy/python... | NOK | http://autobuild.buildroot.net/results/06133a1e0fd0776a44ef26bf2c345555818fbe88 |     
+   powerpc64 | perl-crypt-openssl-random-0.15 | NOK | http://autobuild.buildroot.net/results/8c7e632ef67c84bfc749397461b0054da9a70c73 |     
+microblazeel | perl-crypt-openssl-random-0.15 | NOK | http://autobuild.buildroot.net/results/64de26723444caedc6096ee11115d2f17d5ed03d |     
+    mips64el |           perl-data-uuid-1.221 | NOK | http://autobuild.buildroot.net/results/c1aeb89710c8be77523a32628c2001c20b7b980f |     
+     aarch64 |                 perl-dbi-1.641 | NOK | http://autobuild.buildroot.net/results/f7d886b4f5645e6c7a607d9d6b24d7e5ebb2b05d |     
+      mipsel |           perl-digest-md5-2.55 | NOK | http://autobuild.buildroot.net/results/a85f0efcc603bb35198b9f17907c725668dcf3d4 |     
+      x86_64 |             perl-net-ssh2-0.69 | NOK | http://autobuild.buildroot.net/results/7f4ff9d42f3be975084178134bac2c85bcf0bb75 |     
+         arm |               ptpd2-ptpd-2.3.1 | NOK | http://autobuild.buildroot.net/results/a660da9e969dc41fa9f83bdb8e707175d5a04aaa | ORPH
+         arc |               ptpd2-ptpd-2.3.1 | NOK | http://autobuild.buildroot.net/results/3a58c75df03442de5ea6e6ebc064290384cf9e59 | ORPH
+    mips64el |               ptpd2-ptpd-2.3.1 | NOK | http://autobuild.buildroot.net/results/14a19f5f0631d9bc71c50e6c94b412388561921c | ORPH
+         sh4 |               ptpd2-ptpd-2.3.1 | NOK | http://autobuild.buildroot.net/results/38a562273d5ffd296f630182b8f40431452b44d6 | ORPH
+       nios2 |               ptpd2-ptpd-2.3.1 | NOK | http://autobuild.buildroot.net/results/74fc692e008b63775f1b4f4e2513120795a0cfd2 | ORPH
+        or1k |               ptpd2-ptpd-2.3.1 | NOK | http://autobuild.buildroot.net/results/4eaa01678f8bda6d94de7dcdded598d9d681cfce | ORPH
+         arm |               ptpd2-ptpd-2.3.1 | NOK | http://autobuild.buildroot.net/results/40838f84bdf29f69d4ccbc6744f3e6cbba11973e | ORPH
+    mips64el |               ptpd2-ptpd-2.3.1 | NOK | http://autobuild.buildroot.net/results/509c7e173027ca553c3958811c3113c6d287ae51 | ORPH
+         sh4 |        python-numpy-legal-info | NOK | http://autobuild.buildroot.net/results/74be4c93631f9277c6c94ecd9a2c1a52afe95400 |     
+  aarch64_be |                 qt5base-5.11.1 | NOK | http://autobuild.buildroot.net/results/5d628b83e1183674ff1637f7b40c7050411a8a94 |     
+         arm |                  qt5base-5.6.3 | NOK | http://autobuild.buildroot.net/results/a7d19064056fa1ba30e5392ef514dcca4868bffc |     
+        i686 |                 rtorrent-0.9.7 | NOK | http://autobuild.buildroot.net/results/ad31a37798fdf8fbffbe7a4c540cf5f6d06b6d38 | ORPH
+     powerpc |                      squid-4.2 | NOK | http://autobuild.buildroot.net/results/1de48aee10fdefa402d9d5bcc9e8de39e97e2b68 | ORPH
+        mips |                target-finalize | NOK | http://autobuild.buildroot.net/results/a817e98ede8e74006adb901309b6e6a09a52264f |     
+ powerpc64le |                target-finalize | NOK | http://autobuild.buildroot.net/results/ccd40f78aed506f90a5ef074c36b87eabc50019c |     
+  aarch64_be |                target-finalize | NOK | http://autobuild.buildroot.net/results/5ec974954de4d0535ad3b8ad2d5a1945a1d40308 |     
+         arc |                target-finalize | NOK | http://autobuild.buildroot.net/results/d6a2e802c975f4e2ae93764071e71a5cc4a48ae0 |     
+         sh4 |                target-finalize | NOK | http://autobuild.buildroot.net/results/28ec16677ff4ef3fbd54ab44fba7e0a12b5e9450 |     
+    mips64el |                target-finalize | NOK | http://autobuild.buildroot.net/results/2a8e4da5ec8b6641773de23aa8d7ed16db372eb4 |     
+         arm |                target-finalize | NOK | http://autobuild.buildroot.net/results/24da1fa87aa5d8474be076003b37cdaa0cd6633e |     
+microblazeel |                target-finalize | NOK | http://autobuild.buildroot.net/results/40d3c7cb8f946a3af8f4a854a3f089893bd9fb89 |     
+         arm |                target-finalize | NOK | http://autobuild.buildroot.net/results/c064e3f3179b1a2f24a116a18e36cfd0942a5a54 |     
+     powerpc |                target-finalize | NOK | http://autobuild.buildroot.net/results/c4c93f1174835b1f5cd8b457e3e2f66ed192de39 |     
+        m68k |                target-finalize | NOK | http://autobuild.buildroot.net/results/0a55428a8fe5466a1c31aa4471e372362bb341b1 |     
+        m68k |                target-finalize | NOK | http://autobuild.buildroot.net/results/af411d9df8a3ba731dd0125192f7c8e455039e2f |     
+      xtensa |                target-finalize | NOK | http://autobuild.buildroot.net/results/c20d2c32084e42f0e8be0709aa64cb2d6f76e80c |     
+    mips64el |                target-finalize | NOK | http://autobuild.buildroot.net/results/d5bf9b3e413b39c9974974ea3e6bf4fece7083e3 |     
+     aarch64 |                target-finalize | NOK | http://autobuild.buildroot.net/results/9230df1e56e3586d7f0f8df6498eaf3dc441079d |     
+        m68k |                target-finalize | NOK | http://autobuild.buildroot.net/results/a1db6818cefbce3050b35af68a40f90a7a7bad2f |     
+     powerpc |                target-finalize | NOK | http://autobuild.buildroot.net/results/855b0a12210c0f87de58edc4dcf0285e56e01391 |     
+      mipsel |                target-finalize | NOK | http://autobuild.buildroot.net/results/c1c9ac3c338610b66365e67bab6c1d223f6fc841 |     
+         arm |              util-linux-2.32.1 | NOK | http://autobuild.buildroot.net/results/db5df6d8c7def3227ce65a21a5a9416fdb51734d |     
+         arc |                      vlc-3.0.4 | NOK | http://autobuild.buildroot.net/results/d6a3b43211eb740bdebbb339668b854d26e878b7 |     
+   powerpc64 |                      vlc-3.0.4 | NOK | http://autobuild.buildroot.net/results/371f4f017f4a5af0ac6d6a8b1b8276858ad47f75 |     
+        or1k |                      vlc-3.0.4 | NOK | http://autobuild.buildroot.net/results/771e88e7fb06714dd4b7246f82b95dffcedde343 |     
+        m68k |                      vlc-3.0.4 | NOK | http://autobuild.buildroot.net/results/a0576aeeb57a49958e5229d9ec08f2bd792d48b6 |     
+      xtensa |                      vlc-3.0.4 | NOK | http://autobuild.buildroot.net/results/c0b75860a3c2053800d632457f8c52b49e64e543 |     
+ powerpc64le |               wireshark-2.2.16 | NOK | http://autobuild.buildroot.net/results/8c2ebbb6bdb08abb3d640ed86a246c5937c2e2ad | ORPH
+
+
 -- 
-2.17.1
+http://autobuild.buildroot.net
