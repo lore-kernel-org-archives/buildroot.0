@@ -1,40 +1,33 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 11 Sep 2018 08:40:18 +0000
-Subject: [Buildroot] [Bug 11326] New: sysvinit fails to build in latest GIT
- master
-Message-ID: <bug-11326-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 11 Sep 2018 10:40:18 +0200
+Subject: [Buildroot] [git commit] docs/website: use https:// link for
+ patchwork
+Message-ID: <20180911083951.9754F83D85@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11326
+commit: https://git.buildroot.net/buildroot/commit/?id=26c28eb55a8693a1f0ef69ba7a83696875761a64
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-            Bug ID: 11326
-           Summary: sysvinit fails to build in latest GIT master
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: tpearson at raptorengineering.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Suggested-by: 'popsulfr' on IRC
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ docs/website/contribute.html | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Created attachment 7766
-  --> https://bugs.busybox.net/attachment.cgi?id=7766&action=edit
-Add missing system macro include
-
-sysvinit is missing the required macro #include to build on newer glibc
-versions.  OpenEmbedded has already patched this, buildroot should do the same.
-
-Tested patch attached.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/docs/website/contribute.html b/docs/website/contribute.html
+index 721729be3d..aa1cf93f1b 100644
+--- a/docs/website/contribute.html
++++ b/docs/website/contribute.html
+@@ -18,7 +18,7 @@
+ 	    autobuild failures</a></li>
+ 	<li>Reviewing and testing patches sent by other developers. See the
+ 	  <a href="http://lists.buildroot.org/mailman/listinfo/buildroot">mailing list
+-	  </a> or <a href="http://patchwork.ozlabs.org/project/buildroot/list/">
++	  </a> or <a href="https://patchwork.ozlabs.org/project/buildroot/list/">
+ 	    patchwork</a>.</li>
+ 	<li>Working on items from the
+ 	  <a href="http://www.elinux.org/Buildroot#Todo_list">TODO list</a></li>
