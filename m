@@ -1,282 +1,49 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 11 Sep 2018 14:10:55 +0000
-Subject: [Buildroot] [Bug 11341] New: Compiling qt5base-5.11.1 with libressl
- results in many 'was not declared in this scope' errors
-Message-ID: <bug-11341-163@https.bugs.busybox.net/>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Tue, 11 Sep 2018 17:58:21 +0300
+Subject: [Buildroot] [PATCH 1/1] python-pathlib2: bump to version 2.3.2
+Message-ID: <20180911145823.15032-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11341
+Also add license hash.
 
-            Bug ID: 11341
-           Summary: Compiling qt5base-5.11.1 with libressl results in many
-                    'was not declared in this scope' errors
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: richterphilipp.pops at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/python-pathlib2/python-pathlib2.hash | 8 +++++---
+ package/python-pathlib2/python-pathlib2.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-Created attachment 7776
-  --> https://bugs.busybox.net/attachment.cgi?id=7776&action=edit
-Config file enabling qt5base and libressl
-
-Hello,
-
-so qt5base-5.11.1 doesn't seem to like libressl.
-The compiler complains about missing symbols like:
-error: ?OPENSSL_STACK? was not declared in this scope
-
-As of commit 8062700e2d48f2914638755961bea6a56f1d5d8f
-
-To reproduce:
-
-1) Enable openssl and change the provider to libressl
-
-2) select qt5base
-
-3) make
-
-Attached is a config file to reproduce.
-
-Output:
-
-In file included from ssl/qsslsocket_openssl_symbols_p.h:220,
-                 from ssl/qsslcertificate.cpp:116:
-ssl/qsslsocket_openssl11_symbols_p.h:87:22: error: ?OPENSSL_STACK? was not
-declared in this scope
- int q_OPENSSL_sk_num(OPENSSL_STACK *a);
-                      ^~~~~~~~~~~~~
-ssl/qsslsocket_openssl11_symbols_p.h:87:22: note: suggested alternative:
-?OPENSSL_BLOCK?
- int q_OPENSSL_sk_num(OPENSSL_STACK *a);
-                      ^~~~~~~~~~~~~
-                      OPENSSL_BLOCK
-ssl/qsslsocket_openssl11_symbols_p.h:87:37: error: ?a? was not declared in this
-scope
- int q_OPENSSL_sk_num(OPENSSL_STACK *a);
-                                     ^
-ssl/qsslsocket_openssl11_symbols_p.h:88:28: error: variable or field
-?q_OPENSSL_sk_pop_free? declared void
- void q_OPENSSL_sk_pop_free(OPENSSL_STACK *a, void (*b)(void *));
-                            ^~~~~~~~~~~~~
-ssl/qsslsocket_openssl11_symbols_p.h:88:28: error: ?OPENSSL_STACK? was not
-declared in this scope
-ssl/qsslsocket_openssl11_symbols_p.h:88:28: note: suggested alternative:
-?OPENSSL_BLOCK?
- void q_OPENSSL_sk_pop_free(OPENSSL_STACK *a, void (*b)(void *));
-                            ^~~~~~~~~~~~~
-                            OPENSSL_BLOCK
-ssl/qsslsocket_openssl11_symbols_p.h:88:43: error: ?a? was not declared in this
-scope
- void q_OPENSSL_sk_pop_free(OPENSSL_STACK *a, void (*b)(void *));
-                                           ^
-ssl/qsslsocket_openssl11_symbols_p.h:88:53: error: ?b? was not declared in this
-scope
- void q_OPENSSL_sk_pop_free(OPENSSL_STACK *a, void (*b)(void *));
-                                                     ^
-ssl/qsslsocket_openssl11_symbols_p.h:88:56: error: expected primary-expression
-before ?void?
- void q_OPENSSL_sk_pop_free(OPENSSL_STACK *a, void (*b)(void *));
-                                                        ^~~~
-ssl/qsslsocket_openssl11_symbols_p.h:89:1: error: ?OPENSSL_STACK? does not name
-a type; did you mean ?OPENSSL_BLOCK??
- OPENSSL_STACK *q_OPENSSL_sk_new_null();
- ^~~~~~~~~~~~~
- OPENSSL_BLOCK
-ssl/qsslsocket_openssl11_symbols_p.h:90:24: error: variable or field
-?q_OPENSSL_sk_push? declared void
- void q_OPENSSL_sk_push(OPENSSL_STACK *st, void *data);
-                        ^~~~~~~~~~~~~
-ssl/qsslsocket_openssl11_symbols_p.h:90:24: error: ?OPENSSL_STACK? was not
-declared in this scope
-ssl/qsslsocket_openssl11_symbols_p.h:90:24: note: suggested alternative:
-?OPENSSL_BLOCK?
- void q_OPENSSL_sk_push(OPENSSL_STACK *st, void *data);
-                        ^~~~~~~~~~~~~
-                        OPENSSL_BLOCK
-ssl/qsslsocket_openssl11_symbols_p.h:90:39: error: ?st? was not declared in
-this scope
- void q_OPENSSL_sk_push(OPENSSL_STACK *st, void *data);
-                                       ^~
-ssl/qsslsocket_openssl11_symbols_p.h:90:39: note: suggested alternative: ?Qt?
- void q_OPENSSL_sk_push(OPENSSL_STACK *st, void *data);
-                                       ^~
-                                       Qt
-ssl/qsslsocket_openssl11_symbols_p.h:90:43: error: expected primary-expression
-before ?void?
- void q_OPENSSL_sk_push(OPENSSL_STACK *st, void *data);
-                                           ^~~~
-ssl/qsslsocket_openssl11_symbols_p.h:91:24: error: variable or field
-?q_OPENSSL_sk_free? declared void
- void q_OPENSSL_sk_free(OPENSSL_STACK *a);
-                        ^~~~~~~~~~~~~
-ssl/qsslsocket_openssl11_symbols_p.h:91:24: error: ?OPENSSL_STACK? was not
-declared in this scope
-ssl/qsslsocket_openssl11_symbols_p.h:91:24: note: suggested alternative:
-?OPENSSL_BLOCK?
- void q_OPENSSL_sk_free(OPENSSL_STACK *a);
-                        ^~~~~~~~~~~~~
-                        OPENSSL_BLOCK
-ssl/qsslsocket_openssl11_symbols_p.h:91:39: error: ?a? was not declared in this
-scope
- void q_OPENSSL_sk_free(OPENSSL_STACK *a);
-                                       ^
-ssl/qsslsocket_openssl11_symbols_p.h:92:27: error: ?OPENSSL_STACK? was not
-declared in this scope
- void * q_OPENSSL_sk_value(OPENSSL_STACK *a, int b);
-                           ^~~~~~~~~~~~~
-ssl/qsslsocket_openssl11_symbols_p.h:92:27: note: suggested alternative:
-?OPENSSL_BLOCK?
- void * q_OPENSSL_sk_value(OPENSSL_STACK *a, int b);
-                           ^~~~~~~~~~~~~
-                           OPENSSL_BLOCK
-ssl/qsslsocket_openssl11_symbols_p.h:92:42: error: ?a? was not declared in this
-scope
- void * q_OPENSSL_sk_value(OPENSSL_STACK *a, int b);
-                                          ^
-ssl/qsslsocket_openssl11_symbols_p.h:92:45: error: expected primary-expression
-before ?int?
- void * q_OPENSSL_sk_value(OPENSSL_STACK *a, int b);
-                                             ^~~
-ssl/qsslsocket_openssl11_symbols_p.h:92:50: error: expression list treated as
-compound expression in initializer [-fpermissive]
- void * q_OPENSSL_sk_value(OPENSSL_STACK *a, int b);
-                                                  ^
-ssl/qsslsocket_openssl11_symbols_p.h:95:45: error: ?OPENSSL_INIT_SETTINGS? does
-not name a type; did you mean ?OPENSSL_INIT_ATFORK??
- int q_OPENSSL_init_ssl(uint64_t opts, const OPENSSL_INIT_SETTINGS *settings);
-                                             ^~~~~~~~~~~~~~~~~~~~~
-                                             OPENSSL_INIT_ATFORK
-In file included from ssl/qsslsocket_openssl_symbols_p.h:220,
-                 from ssl/qsslcertificate.cpp:116:
-ssl/qsslsocket_openssl11_symbols_p.h:107:50: error: ?X509_STORE_CTX_verify_cb?
-has not been declared
- void q_X509_STORE_set_verify_cb(X509_STORE *ctx, X509_STORE_CTX_verify_cb
-verify_cb);
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~~
-ssl/qsslsocket_openssl11_symbols_p.h:124:48: error: ?OPENSSL_INIT_SETTINGS?
-does not name a type; did you mean ?OPENSSL_INIT_ATFORK??
- int q_OPENSSL_init_crypto(uint64_t opts, const OPENSSL_INIT_SETTINGS
-*settings);
-                                                ^~~~~~~~~~~~~~~~~~~~~
-                                                OPENSSL_INIT_ATFORK
-In file included from ssl/qsslcertificate.cpp:116:
-ssl/qsslsocket_openssl_symbols_p.h:360:1: error: ?SSL_CONF_CTX? does not name a
-type; did you mean ?SSL_AEAD_CTX??
- SSL_CONF_CTX *q_SSL_CONF_CTX_new();
- ^~~~~~~~~~~~
- SSL_AEAD_CTX
-ssl/qsslsocket_openssl_symbols_p.h:361:26: error: variable or field
-?q_SSL_CONF_CTX_free? declared void
- void q_SSL_CONF_CTX_free(SSL_CONF_CTX *a);
-                          ^~~~~~~~~~~~
-ssl/qsslsocket_openssl_symbols_p.h:361:26: error: ?SSL_CONF_CTX? was not
-declared in this scope
-ssl/qsslsocket_openssl_symbols_p.h:361:26: note: suggested alternative:
-?SSL_AEAD_CTX?
- void q_SSL_CONF_CTX_free(SSL_CONF_CTX *a);
-                          ^~~~~~~~~~~~
-                          SSL_AEAD_CTX
-ssl/qsslsocket_openssl_symbols_p.h:361:40: error: ?a? was not declared in this
-scope
- void q_SSL_CONF_CTX_free(SSL_CONF_CTX *a);
-                                        ^
-ssl/qsslsocket_openssl_symbols_p.h:362:33: error: variable or field
-?q_SSL_CONF_CTX_set_ssl_ctx? declared void
- void q_SSL_CONF_CTX_set_ssl_ctx(SSL_CONF_CTX *a, SSL_CTX *b);
-                                 ^~~~~~~~~~~~
-ssl/qsslsocket_openssl_symbols_p.h:362:33: error: ?SSL_CONF_CTX? was not
-declared in this scope
-ssl/qsslsocket_openssl_symbols_p.h:362:33: note: suggested alternative:
-?SSL_AEAD_CTX?
- void q_SSL_CONF_CTX_set_ssl_ctx(SSL_CONF_CTX *a, SSL_CTX *b);
-                                 ^~~~~~~~~~~~
-                                 SSL_AEAD_CTX
-ssl/qsslsocket_openssl_symbols_p.h:362:47: error: ?a? was not declared in this
-scope
- void q_SSL_CONF_CTX_set_ssl_ctx(SSL_CONF_CTX *a, SSL_CTX *b);
-                                               ^
-ssl/qsslsocket_openssl_symbols_p.h:362:58: error: expected primary-expression
-before ?*? token
- void q_SSL_CONF_CTX_set_ssl_ctx(SSL_CONF_CTX *a, SSL_CTX *b);
-                                                          ^
-ssl/qsslsocket_openssl_symbols_p.h:362:59: error: ?b? was not declared in this
-scope
- void q_SSL_CONF_CTX_set_ssl_ctx(SSL_CONF_CTX *a, SSL_CTX *b);
-                                                           ^
-ssl/qsslsocket_openssl_symbols_p.h:363:39: error: ?SSL_CONF_CTX? was not
-declared in this scope
- unsigned int q_SSL_CONF_CTX_set_flags(SSL_CONF_CTX *a, unsigned int b);
-                                       ^~~~~~~~~~~~
-ssl/qsslsocket_openssl_symbols_p.h:363:39: note: suggested alternative:
-?SSL_AEAD_CTX?
- unsigned int q_SSL_CONF_CTX_set_flags(SSL_CONF_CTX *a, unsigned int b);
-                                       ^~~~~~~~~~~~
-                                       SSL_AEAD_CTX
-ssl/qsslsocket_openssl_symbols_p.h:363:53: error: ?a? was not declared in this
-scope
- unsigned int q_SSL_CONF_CTX_set_flags(SSL_CONF_CTX *a, unsigned int b);
-                                                     ^
-ssl/qsslsocket_openssl_symbols_p.h:363:56: error: expected primary-expression
-before ?unsigned?
- unsigned int q_SSL_CONF_CTX_set_flags(SSL_CONF_CTX *a, unsigned int b);
-                                                        ^~~~~~~~
-ssl/qsslsocket_openssl_symbols_p.h:363:70: error: expression list treated as
-compound expression in initializer [-fpermissive]
- unsigned int q_SSL_CONF_CTX_set_flags(SSL_CONF_CTX *a, unsigned int b);
-                                                                      ^
-ssl/qsslsocket_openssl_symbols_p.h:364:27: error: ?SSL_CONF_CTX? was not
-declared in this scope
- int q_SSL_CONF_CTX_finish(SSL_CONF_CTX *a);
-                           ^~~~~~~~~~~~
-ssl/qsslsocket_openssl_symbols_p.h:364:27: note: suggested alternative:
-?SSL_AEAD_CTX?
- int q_SSL_CONF_CTX_finish(SSL_CONF_CTX *a);
-                           ^~~~~~~~~~~~
-                           SSL_AEAD_CTX
-ssl/qsslsocket_openssl_symbols_p.h:364:41: error: ?a? was not declared in this
-scope
- int q_SSL_CONF_CTX_finish(SSL_CONF_CTX *a);
-                                         ^
-ssl/qsslsocket_openssl_symbols_p.h:365:20: error: ?SSL_CONF_CTX? was not
-declared in this scope
- int q_SSL_CONF_cmd(SSL_CONF_CTX *a, const char *b, const char *c);
-                    ^~~~~~~~~~~~
-ssl/qsslsocket_openssl_symbols_p.h:365:20: note: suggested alternative:
-?SSL_AEAD_CTX?
- int q_SSL_CONF_cmd(SSL_CONF_CTX *a, const char *b, const char *c);
-                    ^~~~~~~~~~~~
-                    SSL_AEAD_CTX
-ssl/qsslsocket_openssl_symbols_p.h:365:34: error: ?a? was not declared in this
-scope
- int q_SSL_CONF_cmd(SSL_CONF_CTX *a, const char *b, const char *c);
-                                  ^
-ssl/qsslsocket_openssl_symbols_p.h:365:37: error: expected primary-expression
-before ?const?
- int q_SSL_CONF_cmd(SSL_CONF_CTX *a, const char *b, const char *c);
-                                     ^~~~~
-ssl/qsslsocket_openssl_symbols_p.h:365:52: error: expected primary-expression
-before ?const?
- int q_SSL_CONF_cmd(SSL_CONF_CTX *a, const char *b, const char *c);
-                                                    ^~~~~
-ssl/qsslsocket_openssl_symbols_p.h:365:65: error: expression list treated as
-compound expression in initializer [-fpermissive]
- int q_SSL_CONF_cmd(SSL_CONF_CTX *a, const char *b, const char *c);
-                                                                 ^
-make[4]: *** [Makefile:24347: .obj/qsslcertificate.o] Error 1
-make[4]: *** Waiting for unfinished jobs....
-
+diff --git a/package/python-pathlib2/python-pathlib2.hash b/package/python-pathlib2/python-pathlib2.hash
+index a9c294940a..4d2b02f8d4 100644
+--- a/package/python-pathlib2/python-pathlib2.hash
++++ b/package/python-pathlib2/python-pathlib2.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/pathlib2/json, sha256 locally computed
+-md5 6c75bfde898b6c88627621a48ee8de14 pathlib2-2.2.1.tar.gz
+-sha256 ce9007df617ef6b7bd8a31cd2089ed0c1fed1f7c23cf2bf1ba140b3dd563175d pathlib2-2.2.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/pathlib2/json
++md5	fd76fb5d0baa798bfe12fb7965da97f8  pathlib2-2.3.2.tar.gz
++sha256	8eb170f8d0d61825e09a95b38be068299ddeda82f35e96c3301a8a5e7604cb83  pathlib2-2.3.2.tar.gz
++# Locally computed sha256 checksums
++sha256	f8e02f1a07e4c6fc59a4bee831ddde26b97064105c423b9e24340f35aaa80262  LICENSE.rst
+diff --git a/package/python-pathlib2/python-pathlib2.mk b/package/python-pathlib2/python-pathlib2.mk
+index 0116420ef6..dadc97513b 100644
+--- a/package/python-pathlib2/python-pathlib2.mk
++++ b/package/python-pathlib2/python-pathlib2.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PATHLIB2_VERSION = 2.2.1
++PYTHON_PATHLIB2_VERSION = 2.3.2
+ PYTHON_PATHLIB2_SOURCE = pathlib2-$(PYTHON_PATHLIB2_VERSION).tar.gz
+-PYTHON_PATHLIB2_SITE = https://pypi.python.org/packages/ab/d8/ac7489d50146f29d0a14f65545698f4545d8a6b739b24b05859942048b56
++PYTHON_PATHLIB2_SITE = https://files.pythonhosted.org/packages/db/a8/7d6439c1aec525ed70810abee5b7d7f3aa35347f59bc28343e8f62019aa2
+ PYTHON_PATHLIB2_LICENSE = MIT
+ PYTHON_PATHLIB2_LICENSE_FILES = LICENSE.rst
+ PYTHON_PATHLIB2_SETUP_TYPE = setuptools
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.17.1
