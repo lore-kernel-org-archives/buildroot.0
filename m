@@ -1,69 +1,89 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 11 Sep 2018 10:23:32 -0500
-Subject: [Buildroot] hardening flags/args full RELRO & pie
-Message-ID: <CANQCQpZyseCf=sPbxJuOjNDb6skSO0unKvMx0Ki1DTkpGqLg+w@mail.gmail.com>
+From: Oscar Gomez Fuente <oscargomezf@gmail.com>
+Date: Tue, 11 Sep 2018 20:21:41 +0200
+Subject: [Buildroot] Problmes with eth0 on Raspberry Pi 3B+
+In-Reply-To: <CALtfCQYbuFj8HMLNpk4t=M4FeZF4_=wXjNw7YcQPcN=iGYsR7Q@mail.gmail.com>
+References: <CALtfCQYbuFj8HMLNpk4t=M4FeZF4_=wXjNw7YcQPcN=iGYsR7Q@mail.gmail.com>
+Message-ID: <CALtfCQb2AZWq4FAeDqyuQse6XVjs-Qp3zzEUNAPOBw13_k06rg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you Thomas for suggesting I write this up and draw out a clear
-definition of the problem and possible solution(s).
+Hi everyone,
 
-Note: The RELRO option can be enabled just using CFLAGS.  To completely
-enable the  PIE option, it requires the additional link time conditional
-use of -pie.
 
-++++++++++++++++++++++++++++++++++++++++++
-(For reference) Spec files Stefan proposed that do the required fix-ups
-#CC Spec file
-*cc1_options:
-+ %{!r:%{!fpie:%{!fPIE:%{!fpic:%{!fPIC:%{!fno-pic:-fPIE}}}}}}
+I've got problems with the buildroot email and I didn't receive any
+message, but I could see the answers in this link:
+http://lists.busybox.net/pipermail/buildroot/2018-September/229775.html
+so I'm going to try to answer again in order to get some support and
+check if the buildroot list emails works.
 
-#Linker Spec file
-*self_spec:
-+ %{!static:%{!shared:%{!r:-pie}}}
-++++++++++++++++++++++++++++++++++++++++++
+Hi Nicollas, it seems to be that pre-up before wait-delay it doesn't
+work, and it seems to be that wait-delay only works if you select inet
+dhcp, so I have to find an alternative method to wait-delay or create
+a new script for me. The way I'm using right now it is not too bad:
+...
+pre-up while [ ! -e /sys/class/net/eth0 ]; do sleep 0.1; done;
+...
+And according to :"ifconfig is a bid deprecated these days", yes you
+are right, I am going to use something like:
+...
+pre-up ip link set dev eth0 up
+...
 
-Problem
-- GCC is used to compile and link, which means mixed CFLAGS/LDFLAGS are
-possible
-- LD maybe used in some link scenarios and assumes LDFLAGS could be provided
-- *FLAGS may not be ordered or used as expected. I.e conditions of
-conflicting flag/args when hardening options are enabled
-- LDFLAGS handling is specifically needed to enable -pie during either way
-of linking, but it needs conflict resolution using spec/wrapper
+Hi Peter,  I am using this way because when I connect and disconnect
+the ethernet cable it doesn't work dhcp and the eth0 don't get the ip
+properly.
 
-Solution #1 (Originally proposed)
-- Use the spec files above as is without any wrapper modifications. (This
-is a working solution)
-- The spec files are both included when GCC is linking and resolves the
-link time flag conflicts
-- The spec file for Linker handles the sole link time case.
 
-Solution #2 (Version 2 in patchworks at the moment and has bugs)
-- GCC wrapper updated to perform same function as CC spec file above and
-keep consistency with other GCC flag fix-ups.
-- GCC wrapper updated to also perform the Linker Spec file functions per
-above (this requires us to put a string in the LDFLAGS so we can tell when
-they're being used)
-- New link wrapper to perform the Linker Spec file functions per above for
-when we're just linking.  This is a lot of code for a simple check.
-(On a Negative Note: This solution adds a lot of code to perform the linker
-side of the fix-up and requires us to complicate the GCC wrapper to also do
-a similar fix-up.  Example here: http://patchwork.ozlabs.org/patch/963665/)
+Best regards.
 
-Solution #3 (Would like to propose as Version 3)
-- GCC wrapper updated to perform same function as CC spec file above and
-keep consistency with other GCC flag fix-ups.
-- Linker spec file used instead of creating a wrapper.  This provides a
-much cleaner implementation as when the LDFLAG are used, the specfile is
-their when GCC/LD is linking.
 
-My preference after implementing it all 3 ways is #3.
 
-Matt
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180911/e263d7a3/attachment.html>
+
+
+Oscar Gomez Fuente
+
+On Tue, 4 Sep 2018 at 12:58, Oscar Gomez Fuente <oscargomezf@gmail.com> wrote:
+>
+> Hi everyone,
+>
+> I am using the last Buildroot version from GIT:
+> 2989e3c87a1123350728904fd789ad513e76b073 and I've noticed that
+> buildroot init as fast that it seems to be the eth0 device it isn't
+> ready yet. Afert it inits if I execute: ifup eth0, it works fine. The
+> same method with the raspberry Pi 3B works fine.
+>
+> I know you can configure the /etc/network/interfaces with a command to
+> wait, and I did:
+> ...
+> auto eth0
+> iface eth0 inet manual
+>        wait-delay 10
+>         pre-up ifconfig eth0 up
+>         pre-up /sbin/udhcpc -R -b -p /var/run/udhcpc.eth0.pid -i eth0
+>         pre-up /etc/network/nfs_check
+>         post-down kill -9 $(cat /var/run/udhcpc.eth0.pid)
+>         post-down ifconfig eth0 down
+> ..
+>
+> But it doesn't work. So I decided to place a sleep manually:
+> ...
+> auto eth0
+> iface eth0 inet manual
+>         pre-up while [ ! -e /sys/class/net/eth0 ]; do sleep 0.1; done;
+>         pre-up ifconfig eth0 up
+>         pre-up /sbin/udhcpc -R -b -p /var/run/udhcpc.eth0.pid -i eth0
+>         pre-up /etc/network/nfs_check
+>         post-down kill -9 $(cat /var/run/udhcpc.eth0.pid)
+>         post-down ifconfig eth0 down
+>
+> And this method works fine, but I think it isn't the proper way to do
+> it So my conclusion is the command wait-delay isn't work properly.
+>
+> Could there be a bug in the script /etc/network/if-pre-up.d/wait_iface?
+>
+> Best regards.
+>
+> Oscar Gomez Fuente.
