@@ -1,66 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 11 Sep 2018 15:42:42 +0200
-Subject: [Buildroot] [PATCH 02/18] perl-dbd-mysql: new package
-In-Reply-To: <20180820115519.24046-3-chrismcc@gmail.com>
-References: <20180820115519.24046-1-chrismcc@gmail.com>
- <20180820115519.24046-3-chrismcc@gmail.com>
-Message-ID: <20180911154242.6d46b475@windsurf>
+Date: Tue, 11 Sep 2018 15:47:06 +0200
+Subject: [Buildroot] [git commit] docs/website: add paragraph about the IRC
+ channel restrictions
+Message-ID: <20180911134626.1C64483DAF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8062700e2d48f2914638755961bea6a56f1d5d8f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 20 Aug 2018 04:55:03 -0700, Christopher McCrory wrote:
-> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
-> ---
->  DEVELOPERS                                 |  1 +
->  package/Config.in                          |  1 +
->  package/perl-dbd-mysql/Config.in           | 12 ++++++++++++
->  package/perl-dbd-mysql/perl-dbd-mysql.hash |  6 ++++++
->  package/perl-dbd-mysql/perl-dbd-mysql.mk   | 15 +++++++++++++++
->  5 files changed, 35 insertions(+)
->  create mode 100644 package/perl-dbd-mysql/Config.in
->  create mode 100644 package/perl-dbd-mysql/perl-dbd-mysql.hash
->  create mode 100644 package/perl-dbd-mysql/perl-dbd-mysql.mk
+Due to excessive spamming on Freenode, the IRC channel is currently
+restricted to registered users. Since this may not be obvious for
+people not familiar with IRC, let's mention it on our website, with a
+link to the relevant documentation.
 
-I've applied, but there was a mistake in the patch, see below.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ docs/website/support.html | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> diff --git a/package/perl-dbd-mysql/Config.in b/package/perl-dbd-mysql/Config.in
-> new file mode 100644
-> index 0000000000..49e7ff99d6
-> --- /dev/null
-> +++ b/package/perl-dbd-mysql/Config.in
-> @@ -0,0 +1,12 @@
-> +config BR2_PACKAGE_PERL_DBD_MYSQL
-> +	bool "perl-dbd-mysql"
-> +	depends on !BR2_STATIC_LIBS
-> +	select BR2_PACKAGE_PERL_DBI
-> +	select BR2_PACKAGE_MYSQL
-
-You select BR2_PACKAGE_MYSQL without replicating its dependencies:
-BR2_USE_MMU, BR2_TOOLCHAIN_HAS_THREADS and BR2_INSTALL_LIBSTDCPP. While
-BR2_USE_MMU is guaranteed to be true because perl itself cannot be
-enabled if !BR2_USE_MMU, there is nothing that guarantees
-BR2_INSTALL_LIBSTDCPP and BR2_TOOLCHAIN_HAS_THREADS are true.
-
-I fixed that by adding the appropriate dependencies, and adjusting the
-Config.in comment accordingly.
-
-> +PERL_DBD_MYSQL_VERSION = 4.046
-> +PERL_DBD_MYSQL_SOURCE = DBD-mysql-$(PERL_DBD_MYSQL_VERSION).tar.gz
-> +PERL_DBD_MYSQL_SITE = $(BR2_CPAN_MIRROR)/authors/id/C/CA/CAPTTOFU
-> +PERL_DBD_MYSQL_DEPENDENCIES = host-perl-dbi perl-dbi mysql
-> +PERL_DBD_MYSQL_CONF_OPTS += --mysql_config=$(STAGING_DIR)/usr/bin/mysql_config
-
-Minor nit: the += here isn't really needed, a = was sufficient.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/docs/website/support.html b/docs/website/support.html
+index 23a5db794f..1a5ce9e225 100644
+--- a/docs/website/support.html
++++ b/docs/website/support.html
+@@ -24,6 +24,12 @@
+ 		    use the <a href="http://webchat.freenode.net">Freenode web interface</a>.
+ 		    When asking for help on IRC, share relevant logs or pieces of code using a code
+ 		    sharing website.</p>
++
++		  <p>Note that due to excessive spamming on Freenode, the channel can only be
++		    joined if you are a registered user with
++		    <a href="https://freenode.net/kb/answer/registration">Freenode nickserv</a>
++		    service. Follow the instructions to register as a user with a password,
++		    and then join the <code>#buildroot</code> channel.</p>
+ 		</div>
+ 	      </div>
+ 	    </div>
