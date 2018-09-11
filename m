@@ -1,86 +1,46 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 11 Sep 2018 07:23:49 +0000
-Subject: [Buildroot] [Bug 11321] New: Latest master fails to build readline
- with RELRO FULL
-Message-ID: <bug-11321-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 11 Sep 2018 10:19:15 +0200
+Subject: [Buildroot] [git commit] python-numpy: correct LICENSE.txt hash
+ value
+Message-ID: <20180911081818.6DDF083D78@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11321
+commit: https://git.buildroot.net/buildroot/commit/?id=a73fca22bda82fc849ce8cfaf3f76288eefa47b8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-            Bug ID: 11321
-           Summary: Latest master fails to build readline with RELRO FULL
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: tpearson at raptorengineering.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+LICENSE.txt sha256 is wrong. After version bumping from 1.13.3 to 1.15.1
+LICENSE.txt sha256 has not be re-calculated.
 
-When RELRO is set to Full, readline fails to build.  RELRO Partial has no
-issues.
+New LICENSE.txt lists licenses for bundled libraries:
+- Numpydoc -> 2-clause BSD
+- scipy-sphinx-theme -> 3-clause BSD, PSF and Apache 2.0
+- lapack-lite -> 3-clause BSD
+- tempita -> BSD derived
+- dragon4 -> specific to library, need to refer to dragon4.c file
 
-/home/buildroot/project/buildroot# make
->>> readline 7.0 Building
-PATH="/home/buildroot/project/buildroot/output/host/bin:/home/buildroot/project/buildroot/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
- /usr/bin/make -j16  -C
-/home/buildroot/project/buildroot/output/build/readline-7.0/
-make[1]: Entering directory
-'/home/buildroot/project/buildroot/output/build/readline-7.0'
-test -d shlib || mkdir shlib
-( cd shlib ; /usr/bin/make -w -j --jobserver-fds=3,4 all )
-make[2]: Entering directory
-'/home/buildroot/project/buildroot/output/build/readline-7.0/shlib'
-rm -f libreadline.so.7.0
-rm -f libhistory.so.7.0
-/home/buildroot/project/buildroot/output/host/bin/powerpc64le-buildroot-linux-gnu-gcc
--shared -Wl,-soname,libreadline.so.7.0 -pie -Wl,-z,now -Wl,-z,relro
--Wl,-rpath,/usr/lib -Wl,-soname,`basename libreadline.so.7.0 .0` -o
-libreadline.so.7.0 readline.so vi_mode.so funmap.so keymaps.so parens.so
-search.so rltty.so complete.so bind.so isearch.so display.so signals.so util.so
-kill.so undo.so macro.so input.so callback.so terminal.so text.so nls.so
-misc.so history.so histexpand.so histfile.so histsearch.so shell.so mbutil.so
-tilde.so colors.so parse-colors.so xmalloc.so xfree.so compat.so -lncurses
-/home/buildroot/project/buildroot/output/host/bin/powerpc64le-buildroot-linux-gnu-gcc
--shared -Wl,-soname,libhistory.so.7.0 -pie -Wl,-z,now -Wl,-z,relro
--Wl,-rpath,/usr/lib -Wl,-soname,`basename libhistory.so.7.0 .0` -o
-libhistory.so.7.0 history.so histexpand.so histfile.so histsearch.so shell.so
-mbutil.so xmalloc.so xfree.so -lncurses
-/home/buildroot/project/buildroot/output/host/lib/gcc/powerpc64le-buildroot-linux-gnu/8.2.0/../../../../powerpc64le-buildroot-linux-gnu/bin/ld:
-/home/buildroot/project/buildroot/output/host/powerpc64le-buildroot-linux-gnu/sysroot/usr/lib/../lib64/Scrt1.o:(.data.rel.ro.local+0x8):
-undefined reference to `main'
-collect2: error: ld returned 1 exit status
-Makefile:180: recipe for target 'libhistory.so.7.0' failed
-make[2]: *** [libhistory.so.7.0] Error 1
-make[2]: *** Waiting for unfinished jobs....
-/home/buildroot/project/buildroot/output/host/lib/gcc/powerpc64le-buildroot-linux-gnu/8.2.0/../../../../powerpc64le-buildroot-linux-gnu/bin/ld:
-/home/buildroot/project/buildroot/output/host/powerpc64le-buildroot-linux-gnu/sysroot/usr/lib/../lib64/Scrt1.o:(.data.rel.ro.local+0x8):
-undefined reference to `main'
-collect2: error: ld returned 1 exit status
-Makefile:176: recipe for target 'libreadline.so.7.0' failed
-make[2]: *** [libreadline.so.7.0] Error 1
-make[2]: Leaving directory
-'/home/buildroot/project/buildroot/output/build/readline-7.0/shlib'
-Makefile:209: recipe for target 'shared' failed
-make[1]: *** [shared] Error 2
-make[1]: Leaving directory
-'/home/buildroot/project/buildroot/output/build/readline-7.0'
-package/pkg-generic.mk:229: recipe for target
-'/home/buildroot/project/buildroot/output/build/readline-7.0/.stamp_built'
-failed
-make: ***
-[/home/buildroot/project/buildroot/output/build/readline-7.0/.stamp_built]
-Error 2
+Update sha256 recalculating it locally.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Fixes:
+http://autobuild.buildroot.net/results/08e/08e1121af151c65b2333e06839256eb13f4ad800//
+http://autobuild.buildroot.net/results/9d0/9d0e557c5946b76aa4c8c87b7616433c16b61e20//
+
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-numpy/python-numpy.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/python-numpy/python-numpy.hash b/package/python-numpy/python-numpy.hash
+index 055eb29f6f..7c7f446118 100644
+--- a/package/python-numpy/python-numpy.hash
++++ b/package/python-numpy/python-numpy.hash
+@@ -1,4 +1,4 @@
+ # Copied from https://github.com/numpy/numpy/releases/tag/v1.15.1
+ sha256	3c1ccce5d935ef8df16ae0595b459ef08a5cdb05aee195ebc04b9d89a72be7fa	numpy-1.15.1.tar.gz
+ # License files, locally calculated
+-sha256	94eebc7c8f86a287c1e9146ed52ebcde88183806d848d8c66e0e52d1aebf3b13	LICENSE.txt
++sha256	9e85ee1c3f11444243c9b7667721592a01f1cd90cb28ad937ac99f6241d6b685	LICENSE.txt
