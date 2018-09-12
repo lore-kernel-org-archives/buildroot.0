@@ -1,37 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 12 Sep 2018 23:35:21 +0200
-Subject: [Buildroot] [PATCH 12/18] perl-soap-wsdl: new package
-In-Reply-To: <20180820115519.24046-13-chrismcc@gmail.com>
-References: <20180820115519.24046-1-chrismcc@gmail.com>
- <20180820115519.24046-13-chrismcc@gmail.com>
-Message-ID: <20180912233521.48674110@windsurf>
+Date: Wed, 12 Sep 2018 23:38:12 +0200
+Subject: [Buildroot] [PATCH 0/2] support for RISC-V architecture
+In-Reply-To: <ff182eac-12ea-7ad6-df8c-8ec9c257fece@aries-embedded.de>
+References: <ff182eac-12ea-7ad6-df8c-8ec9c257fece@aries-embedded.de>
+Message-ID: <20180912233812.6696430b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Anton,
 
-On Mon, 20 Aug 2018 04:55:13 -0700, Christopher McCrory wrote:
+On Sat, 14 Jul 2018 09:09:38 +0200, Anton Kuzmin wrote:
+> This patch set adds basic support for RISC-V ISA.
+> 
+> Only 64-bit glibc toolchain/sdk are built at the moment.
 
-> +PERL_SOAP_WSDL_VERSION = 3.003
-> +PERL_SOAP_WSDL_SOURCE = SOAP-WSDL-$(PERL_SOAP_WSDL_VERSION).tar.gz
-> +PERL_SOAP_WSDL_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SW/SWALTERS
-> +PERL_SOAP_WSDL_DEPENDENCIES = perl-class-load perl-class-std-fast perl-template-toolkit perl-timedate perl-uri perl-xml-parser perl-libwww-perl
-> +# perl-termreadkey needs license clarifications before adding to buildroot
-> +# PERL_SOAP_WSDL_DEPENDENCIES += perl-termreadkey
+Thanks for this patch series. I missed it back then, but in the mean
+time, Mark Corbin has proposed a more complete patch series adding
+RISC-V support:
 
-I don't understand, is perl-termreadkey a mandatory dependency, or an
-optional dependency ?
+  http://patchwork.ozlabs.org/project/buildroot/list/?series=65306
 
-If it's a mandatory dependency, then this PATCH 12/18 doesn't work,
-because it is absolutely needed for perl-soap-wsdl to build/work.
+I'll mark your series as Superseded in our patch tracking system. Could
+you look at Mark's proposal, and see if it works for you as well ?
 
-If it's an optional dependency, then PATCH 18/18 is wrong because it
-adds it as a mandatory dependency.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
