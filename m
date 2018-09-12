@@ -1,239 +1,278 @@
 From: Mark Corbin <mark.corbin@embecosm.com>
-Date: Wed, 12 Sep 2018 11:22:52 +0100
-Subject: [Buildroot] [PATCH v2 2/6] package/linux-headers: add support for
- custom headers
+Date: Wed, 12 Sep 2018 11:22:53 +0100
+Subject: [Buildroot] [PATCH v2 3/6] arch: allow GCC target options to be
+ optionally overwritten
 In-Reply-To: <20180912102256.3164-1-mark.corbin@embecosm.com>
 References: <20180912102256.3164-1-mark.corbin@embecosm.com>
-Message-ID: <20180912102256.3164-3-mark.corbin@embecosm.com>
+Message-ID: <20180912102256.3164-4-mark.corbin@embecosm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add support for building toolchains against custom headers. Allows
-the selection of a manual version, custom tarball or custom git
-repository for the kernel headers. This enables toolchains to be
-built against custom kernel headers without having to build a full
-kernel.
+The BR2_GCC_TARGET_* configuration variables are copied to
+corresponding GCC_TARGET_* variables which may then be optionally
+modified or overwritten by architecture specific makefiles.
 
-This is particularly useful for new architectures, such as RISC-V
-where updated kernel headers may not have made it into the mainline
-kernel yet.
+All makefiles must use the new GCC_TARGET_* variables instead
+of the BR2_GCC_TARGET_* versions.
 
 Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
 ---
- package/linux-headers/Config.in.host   | 40 ++++++++++-
- package/linux-headers/linux-headers.mk | 94 +++++++++++++++-----------
- 2 files changed, 93 insertions(+), 41 deletions(-)
+ Makefile                                      |  4 +--
+ arch/arch.mk                                  | 17 ++++++++++++
+ package/ffmpeg/ffmpeg.mk                      |  8 +++---
+ package/freerdp/freerdp.mk                    |  2 +-
+ package/gcc/gcc.mk                            | 27 +++++++++----------
+ package/kodi/kodi.mk                          |  2 +-
+ package/kvm-unit-tests/kvm-unit-tests.mk      |  2 +-
+ package/meson/meson.mk                        |  2 +-
+ package/nodejs/nodejs.mk                      |  2 +-
+ package/tvheadend/tvheadend.mk                |  2 +-
+ package/valgrind/valgrind.mk                  |  2 +-
+ .../pkg-toolchain-external.mk                 | 22 +++++++--------
+ 12 files changed, 53 insertions(+), 39 deletions(-)
+ create mode 100644 arch/arch.mk
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index e11f07f0b0..4f79ccc991 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -70,6 +70,23 @@ config BR2_KERNEL_HEADERS_VERSION
- 	  URL at kernel.org. Instead, select "Custom tarball" and
- 	  specify the right URL directly.
+diff --git a/Makefile b/Makefile
+index 2c6af12989..d636aaeaae 100644
+--- a/Makefile
++++ b/Makefile
+@@ -493,9 +493,9 @@ include Makefile.legacy
  
-+config BR2_KERNEL_HEADERS_CUSTOM_TARBALL
-+	bool "Custom tarball"
-+	help
-+	  This option allows you to specify a URL pointing to a kernel
-+	  source tarball. This URL can use any protocol recognized by
-+	  Buildroot, like http://, ftp://, file:// or scp://.
+ include system/system.mk
+ include package/Makefile.in
+-# arch/arch.mk.* must be after package/Makefile.in because it may need to
++# arch/arch.mk must be after package/Makefile.in because it may need to
+ # complement variables defined therein, like BR_NO_CHECK_HASH_FOR.
+--include $(sort $(wildcard arch/arch.mk.*))
++-include $(sort $(wildcard arch/arch.mk))
+ include support/dependencies/dependencies.mk
+ 
+ include $(sort $(wildcard toolchain/*.mk))
+diff --git a/arch/arch.mk b/arch/arch.mk
+new file mode 100644
+index 0000000000..2429567b24
+--- /dev/null
++++ b/arch/arch.mk
+@@ -0,0 +1,17 @@
++# Allow GCC target configuration settings to be optionally
++# overwritten by architecture specific makefiles.
 +
-+	  When pointing to a local tarball using file://, you may want
-+	  to use a make variable like $(TOPDIR) to reference the root of
-+	  the Buildroot tree.
++# Makefiles must use the GCC_TARGET_* variables below instead
++# of the BR2_GCC_TARGET_* versions.
++GCC_TARGET_ARCH := $(call qstrip,$(BR2_GCC_TARGET_ARCH))
++GCC_TARGET_ABI := $(call qstrip,$(BR2_GCC_TARGET_ABI))
++GCC_TARGET_NAN := $(call qstrip,$(BR2_GCC_TARGET_NAN))
++GCC_TARGET_FP32_MODE := $(call qstrip,$(BR2_GCC_TARGET_FP32_MODE))
++GCC_TARGET_CPU := $(call qstrip,$(BR2_GCC_TARGET_CPU))
++GCC_TARGET_CPU_REVISION := $(call qstrip,$(BR2_GCC_TARGET_CPU_REVISION))
++GCC_TARGET_FPU := $(call qstrip,$(BR2_GCC_TARGET_FPU))
++GCC_TARGET_FLOAT_ABI := $(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
++GCC_TARGET_MODE := $(call qstrip,$(BR2_GCC_TARGET_MODE))
 +
-+config BR2_KERNEL_HEADERS_CUSTOM_GIT
-+	bool "Custom Git repository"
-+	help
-+	  This option allows Buildroot to get the Linux kernel source
-+	  code from a Git repository.
-+
- endchoice
- 
- config BR2_DEFAULT_KERNEL_VERSION
-@@ -79,9 +96,27 @@ config BR2_DEFAULT_KERNEL_VERSION
- 	  Specify the version you want to use.
- 	  E.G.: 3.6.10
- 
-+config BR2_KERNEL_HEADERS_CUSTOM_TARBALL_LOCATION
-+	string "URL of custom kernel tarball"
-+	depends on BR2_KERNEL_HEADERS_CUSTOM_TARBALL
-+
-+if BR2_KERNEL_HEADERS_CUSTOM_GIT
-+
-+config BR2_KERNEL_HEADERS_CUSTOM_REPO_URL
-+	string "URL of custom repository"
-+
-+config BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION
-+	string "Custom repository version"
-+	help
-+	  Revision to use in the typical format used by
-+	  Git/Mercurial/Subversion E.G. a sha id, a tag, branch, ..
-+
-+endif
-+
- choice
- 	bool "Custom kernel headers series"
--	depends on BR2_KERNEL_HEADERS_VERSION || BR2_KERNEL_HEADERS_AS_KERNEL
-+	depends on BR2_KERNEL_HEADERS_VERSION || BR2_KERNEL_HEADERS_AS_KERNEL || \
-+		   BR2_KERNEL_HEADERS_CUSTOM_TARBALL || BR2_KERNEL_HEADERS_CUSTOM_GIT
- 	help
- 	  Specify the kernel headers series you manually selected,
- 	  above.
-@@ -260,3 +295,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
- 	default "4.18.7"	if BR2_KERNEL_HEADERS_4_18
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-+	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
-+	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
-+		if BR2_KERNEL_HEADERS_CUSTOM_GIT
-diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-index 954c6b7978..6bc60d8d74 100644
---- a/package/linux-headers/linux-headers.mk
-+++ b/package/linux-headers/linux-headers.mk
-@@ -7,27 +7,50 @@
- # This package is used to provide Linux kernel headers for the
- # internal toolchain backend.
- 
-+# Set variables depending on whether we are using headers from a kernel
-+# build or a standalone header package.
- ifeq ($(BR2_KERNEL_HEADERS_AS_KERNEL),y)
--
-+LINUX_HEADERS_CUSTOM_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL))
-+LINUX_HEADERS_CUSTOM_GIT = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_GIT))
-+LINUX_HEADERS_CUSTOM_HG = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_HG))
-+LINUX_HEADERS_CUSTOM_SVN = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_SVN))
- LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
-+LINUX_HEADERS_CUSTOM_TARBALL_LOCATION = \
-+$(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
-+LINUX_HEADERS_REPO_URL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
-+else # ! BR2_KERNEL_HEADERS_AS_KERNEL
-+LINUX_HEADERS_CUSTOM_TARBALL = $(call qstrip,$(BR2_KERNEL_HEADERS_CUSTOM_TARBALL))
-+LINUX_HEADERS_CUSTOM_GIT = $(call qstrip,$(BR2_KERNEL_HEADERS_CUSTOM_GIT))
-+LINUX_HEADERS_CUSTOM_HG =
-+LINUX_HEADERS_CUSTOM_SVN =
-+LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_DEFAULT_KERNEL_HEADERS))
-+LINUX_HEADERS_CUSTOM_TARBALL_LOCATION = \
-+$(call qstrip,$(BR2_KERNEL_HEADERS_CUSTOM_TARBALL_LOCATION))
-+LINUX_HEADERS_REPO_URL = $(call qstrip,$(BR2_KERNEL_HEADERS_CUSTOM_REPO_URL))
-+endif # BR2_KERNEL_HEADERS_AS_KERNEL
-+
-+# Configure tarball filenames.
-+ifeq ($(LINUX_HEADERS_CUSTOM_TARBALL),y)
-+LINUX_HEADERS_SOURCE = $(notdir $(LINUX_HEADERS_CUSTOM_TARBALL_LOCATION))
-+else ifeq ($(LINUX_HEADERS_CUSTOM_GIT)$(LINUX_HEADERS_CUSTOM_HG)$(LINUX_HEADERS_CUSTOM_SVN),y)
-+LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.gz
-+else
-+LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.xz
-+endif
- 
--# Compute LINUX_HEADERS_SOURCE and LINUX_HEADERS_SITE from the configuration
--ifeq ($(BR2_LINUX_KERNEL_CUSTOM_TARBALL),y)
--LINUX_HEADERS_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
--LINUX_HEADERS_SITE = $(patsubst %/,%,$(dir $(LINUX_HEADERS_TARBALL)))
--LINUX_HEADERS_SOURCE = $(notdir $(LINUX_HEADERS_TARBALL))
--else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
--LINUX_HEADERS_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
-+# Configure the various kernel source locations.
-+ifeq ($(LINUX_HEADERS_CUSTOM_TARBALL),y)
-+LINUX_HEADERS_SITE = $(patsubst %/,%,$(dir $(LINUX_HEADERS_CUSTOM_TARBALL_LOCATION)))
-+else ifeq ($(LINUX_HEADERS_CUSTOM_GIT),y)
-+LINUX_HEADERS_SITE = $(LINUX_HEADERS_REPO_URL)
- LINUX_HEADERS_SITE_METHOD = git
--# use same git tarball as linux kernel
--LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.gz
--else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_HG),y)
--LINUX_HEADERS_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
-+else ifeq ($(LINUX_HEADERS_CUSTOM_HG),y)
-+LINUX_HEADERS_SITE = $(LINUX_HEADERS_REPO_URL)
- LINUX_HEADERS_SITE_METHOD = hg
--# use same hg tarball as linux kernel
--LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.gz
-+else ifeq ($(LINUX_HEADERS_CUSTOM_SVN),y)
-+LINUX_HEADERS_SITE = $(LINUX_HEADERS_REPO_URL)
-+LINUX_HEADERS_SITE_METHOD = svn
- else
--LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.xz
- # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
- # to use the $(word) function. We support versions such as 4.0, 3.1,
- # 2.6.32, 2.6.32-rc1, 3.0-rc6, etc.
-@@ -37,13 +60,16 @@ else ifeq ($(findstring x3.,x$(LINUX_HEADERS_VERSION)),x3.)
- LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v3.x
- else ifeq ($(findstring x4.,x$(LINUX_HEADERS_VERSION)),x4.)
- LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v4.x
--endif
-+endif # x2.6
- # release candidates are in testing/ subdir
- ifneq ($(findstring -rc,$(LINUX_HEADERS_VERSION)),)
- LINUX_HEADERS_SITE := $(LINUX_HEADERS_SITE)/testing
- endif # -rc
--endif
-+endif # LINUX_HEADERS_CUSTOM_TARBALL
- 
-+# Apply any necessary patches if we are using the headers from a kernel
-+# build.
-+ifeq ($(BR2_KERNEL_HEADERS_AS_KERNEL),y)
- LINUX_HEADERS_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
- 
- # We rely on the generic package infrastructure to download and apply
-@@ -53,35 +79,23 @@ LINUX_HEADERS_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
- LINUX_HEADERS_PATCH = $(filter ftp://% http://% https://%,$(LINUX_HEADERS_PATCHES))
- 
- define LINUX_HEADERS_APPLY_LOCAL_PATCHES
--	for p in $(filter-out ftp://% http://% https://%,$(LINUX_HEADERS_PATCHES)) ; do \
--		if test -d $$p ; then \
--			$(APPLY_PATCHES) $(@D) $$p \*.patch || exit 1 ; \
--		else \
--			$(APPLY_PATCHES) $(@D) `dirname $$p` `basename $$p` || exit 1; \
--		fi \
--	done
-+        for p in $(filter-out ftp://% http://% https://%,$(LINUX_HEADERS_PATCHES)) ; do \
-+                if test -d $$p ; then \
-+                        $(APPLY_PATCHES) $(@D) $$p \*.patch || exit 1 ; \
-+                else \
-+                        $(APPLY_PATCHES) $(@D) `dirname $$p` `basename $$p` || exit 1; \
-+                fi \
-+        done
- endef
- 
- LINUX_HEADERS_POST_PATCH_HOOKS += LINUX_HEADERS_APPLY_LOCAL_PATCHES
-+endif # BR2_KERNEL_HEADERS_AS_KERNEL
- 
--else # ! BR2_KERNEL_HEADERS_AS_KERNEL
--
--LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_DEFAULT_KERNEL_HEADERS))
--ifeq ($(findstring x2.6.,x$(LINUX_HEADERS_VERSION)),x2.6.)
--LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6
--else ifeq ($(findstring x3.,x$(LINUX_HEADERS_VERSION)),x3.)
--LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v3.x
--else ifeq ($(findstring x4.,x$(LINUX_HEADERS_VERSION)),x4.)
--LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v4.x
--endif
--LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.xz
--
--ifeq ($(BR2_KERNEL_HEADERS_VERSION),y)
-+# Skip hash checking for custom kernel headers.
-+ifeq ($(BR2_KERNEL_HEADERS_VERSION)$(BR2_KERNEL_HEADERS_CUSTOM_TARBALL)$(BR2_KERNEL_HEADERS_CUSTOM_GIT),y)
- BR_NO_CHECK_HASH_FOR += $(LINUX_HEADERS_SOURCE)
++# Include any architecture specific makefiles.
++-include $(sort $(wildcard arch/arch.mk.*))
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index cf9abeb102..b8cc696f83 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -511,10 +511,10 @@ endif
+ # warning from ffmpeg's configure script.
+ ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
+ FFMPEG_CONF_OPTS += --cpu=generic
+-else ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
+-FFMPEG_CONF_OPTS += --cpu=$(BR2_GCC_TARGET_CPU)
+-else ifneq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),)
+-FFMPEG_CONF_OPTS += --cpu=$(BR2_GCC_TARGET_ARCH)
++else ifneq ($(GCC_TARGET_CPU),)
++FFMPEG_CONF_OPTS += --cpu="$(GCC_TARGET_CPU)"
++else ifneq ($(GCC_TARGET_ARCH),)
++FFMPEG_CONF_OPTS += --cpu="$(GCC_TARGET_ARCH)"
  endif
  
--endif # ! BR2_KERNEL_HEADERS_AS_KERNEL
--
- # linux-headers really is the same as the linux package
- LINUX_HEADERS_DL_SUBDIR = linux
+ FFMPEG_CONF_OPTS += $(call qstrip,$(BR2_PACKAGE_FFMPEG_EXTRACONF))
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index 48c407b6b5..91e4ae47ee 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -77,7 +77,7 @@ FREERDP_CONF_OPTS += -DWITH_SSE2=OFF
+ endif
  
-@@ -125,7 +139,7 @@ define LINUX_HEADERS_INSTALL_STAGING_CMDS
- 			headers_install)
- endef
+ ifeq ($(BR2_arm)$(BR2_armeb),y)
+-FREERDP_CONF_OPTS += -DARM_FP_ABI=$(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
++FREERDP_CONF_OPTS += -DARM_FP_ABI=$(GCC_TARGET_FLOAT_ABI)
+ endif
  
--ifeq ($(BR2_KERNEL_HEADERS_VERSION)$(BR2_KERNEL_HEADERS_AS_KERNEL),y)
-+ifeq ($(BR2_KERNEL_HEADERS_VERSION)$(BR2_KERNEL_HEADERS_AS_KERNEL)$(BR2_KERNEL_HEADERS_CUSTOM_TARBALL)$(BR2_KERNEL_HEADERS_CUSTOM_GIT),y)
- define LINUX_HEADERS_CHECK_VERSION
- 	$(call check_kernel_headers_version,\
- 		$(STAGING_DIR),\
+ #---------------------------------------
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 1ae9b7edd9..5f6d53f106 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -200,39 +200,36 @@ HOST_GCC_COMMON_CONF_OPTS += --disable-decimal-float
+ endif
+ 
+ # Determine arch/tune/abi/cpu options
+-ifneq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),)
+-HOST_GCC_COMMON_CONF_OPTS += --with-arch=$(BR2_GCC_TARGET_ARCH)
++ifneq ($(GCC_TARGET_ARCH),)
++HOST_GCC_COMMON_CONF_OPTS += --with-arch="$(GCC_TARGET_ARCH)"
+ endif
+-ifneq ($(call qstrip,$(BR2_GCC_TARGET_ABI)),)
+-HOST_GCC_COMMON_CONF_OPTS += --with-abi=$(BR2_GCC_TARGET_ABI)
++ifneq ($(GCC_TARGET_ABI),)
++HOST_GCC_COMMON_CONF_OPTS += --with-abi="$(GCC_TARGET_ABI)"
+ endif
+ ifeq ($(BR2_TOOLCHAIN_HAS_MNAN_OPTION),y)
+-ifneq ($(call qstrip,$(BR2_GCC_TARGET_NAN)),)
+-HOST_GCC_COMMON_CONF_OPTS += --with-nan=$(BR2_GCC_TARGET_NAN)
++ifneq ($(GCC_TARGET_NAN),)
++HOST_GCC_COMMON_CONF_OPTS += --with-nan="$(GCC_TARGET_NAN)"
+ endif
+ endif
+-ifneq ($(call qstrip,$(BR2_GCC_TARGET_FP32_MODE)),)
+-HOST_GCC_COMMON_CONF_OPTS += --with-fp-32=$(BR2_GCC_TARGET_FP32_MODE)
++ifneq ($(GCC_TARGET_FP32_MODE),)
++HOST_GCC_COMMON_CONF_OPTS += --with-fp-32="$(GCC_TARGET_FP32_MODE)"
+ endif
+-ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
+-ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU_REVISION)),)
+-HOST_GCC_COMMON_CONF_OPTS += --with-cpu=$(call qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION))
++ifneq ($(GCC_TARGET_CPU),)
++ifneq ($(GCC_TARGET_CPU_REVISION),)
++HOST_GCC_COMMON_CONF_OPTS += --with-cpu=$(GCC_TARGET_CPU)-$(GCC_TARGET_CPU_REVISION)
+ else
+-HOST_GCC_COMMON_CONF_OPTS += --with-cpu=$(call qstrip,$(BR2_GCC_TARGET_CPU))
++HOST_GCC_COMMON_CONF_OPTS += --with-cpu=$(GCC_TARGET_CPU)
+ endif
+ endif
+ 
+-GCC_TARGET_FPU = $(call qstrip,$(BR2_GCC_TARGET_FPU))
+ ifneq ($(GCC_TARGET_FPU),)
+ HOST_GCC_COMMON_CONF_OPTS += --with-fpu=$(GCC_TARGET_FPU)
+ endif
+ 
+-GCC_TARGET_FLOAT_ABI = $(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
+ ifneq ($(GCC_TARGET_FLOAT_ABI),)
+ HOST_GCC_COMMON_CONF_OPTS += --with-float=$(GCC_TARGET_FLOAT_ABI)
+ endif
+ 
+-GCC_TARGET_MODE = $(call qstrip,$(BR2_GCC_TARGET_MODE))
+ ifneq ($(GCC_TARGET_MODE),)
+ HOST_GCC_COMMON_CONF_OPTS += --with-mode=$(GCC_TARGET_MODE)
+ endif
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 8e8d53d6b0..8d2430ea55 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -88,7 +88,7 @@ KODI_DEPENDENCIES += rpi-userland
+ # These CPU-specific options are only used on rbpi:
+ # https://github.com/xbmc/xbmc/blob/Krypton/project/cmake/scripts/rbpi/ArchSetup.cmake#L13
+ ifeq ($(BR2_arm1176jzf_s)$(BR2_cortex_a7)$(BR2_cortex_a53),y)
+-KODI_CONF_OPTS += -DWITH_CPU=$(BR2_GCC_TARGET_CPU)
++KODI_CONF_OPTS += -DWITH_CPU="$(GCC_TARGET_CPU)"
+ endif
+ else
+ ifeq ($(BR2_arceb)$(BR2_arcle),y)
+diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
+index 54614e2643..92d67fb34b 100644
+--- a/package/kvm-unit-tests/kvm-unit-tests.mk
++++ b/package/kvm-unit-tests/kvm-unit-tests.mk
+@@ -28,7 +28,7 @@ endif
+ 
+ KVM_UNIT_TESTS_CONF_OPTS =\
+ 	--arch="$(KVM_UNIT_TESTS_ARCH)" \
+-	--processor="$(call qstrip,$(BR2_GCC_TARGET_CPU))" \
++	--processor="$(GCC_TARGET_CPU)" \
+ 	--endian="$(KVM_UNIT_TESTS_ENDIAN)"
+ 
+ # For all architectures but x86-64, we use the target
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index d110e594f5..08e5c505c9 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -14,7 +14,7 @@ HOST_MESON_DEPENDENCIES = host-ninja
+ HOST_MESON_NEEDS_HOST_PYTHON = python3
+ 
+ HOST_MESON_TARGET_ENDIAN = $(call LOWERCASE,$(BR2_ENDIAN))
+-HOST_MESON_TARGET_CPU = $(call qstrip,$(BR2_GCC_TARGET_CPU))
++HOST_MESON_TARGET_CPU = $(GCC_TARGET_CPU)
+ 
+ HOST_MESON_SED_CFLAGS = $(if $(TARGET_CFLAGS),`printf '"%s"$(comma) ' $(TARGET_CFLAGS)`)
+ HOST_MESON_SED_LDFLAGS = $(if $(TARGET_LDFLAGS),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 165f3f109a..4d57cf9010 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -96,7 +96,7 @@ NODEJS_CPU = arm
+ else ifeq ($(BR2_aarch64),y)
+ NODEJS_CPU = arm64
+ # V8 needs to know what floating point ABI the target is using.
+-NODEJS_ARM_FP = $(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
++NODEJS_ARM_FP = $(GCC_TARGET_FLOAT_ABI)
+ endif
+ 
+ # MIPS architecture specific options
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 4c9cda4d9a..5ebb98b941 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -114,7 +114,7 @@ define TVHEADEND_CONFIGURE_CMDS
+ 		./configure \
+ 			--prefix=/usr \
+ 			--arch="$(ARCH)" \
+-			--cpu="$(BR2_GCC_TARGET_CPU)" \
++			--cpu="$(GCC_TARGET_CPU)" \
+ 			--nowerror \
+ 			--python="$(HOST_DIR)/bin/python" \
+ 			--enable-dvbscan \
+diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+index 11dec607dd..b1ab7e72fc 100644
+--- a/package/valgrind/valgrind.mk
++++ b/package/valgrind/valgrind.mk
+@@ -31,7 +31,7 @@ VALGRIND_CFLAGS = \
+ # and pass the right -march option, so they take precedence over
+ # Valgrind's wrongfully detected value.
+ ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
+-VALGRIND_CFLAGS += -march=$(BR2_GCC_TARGET_ARCH)
++VALGRIND_CFLAGS += -march="$(GCC_TARGET_ARCH)"
+ endif
+ 
+ VALGRIND_CONF_ENV = CFLAGS="$(VALGRIND_CFLAGS)"
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 02d992531d..08e61af00b 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -151,18 +151,18 @@ TOOLCHAIN_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
+ # Definition of the CFLAGS to use with the external toolchain, as well as the
+ # common toolchain wrapper build arguments
+ #
+-ifeq ($(call qstrip,$(BR2_GCC_TARGET_CPU_REVISION)),)
+-CC_TARGET_CPU_ := $(call qstrip,$(BR2_GCC_TARGET_CPU))
++ifeq ($(GCC_TARGET_CPU_REVISION),)
++CC_TARGET_CPU_ := $(GCC_TARGET_CPU)
+ else
+-CC_TARGET_CPU_ := $(call qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION))
+-endif
+-CC_TARGET_ARCH_ := $(call qstrip,$(BR2_GCC_TARGET_ARCH))
+-CC_TARGET_ABI_ := $(call qstrip,$(BR2_GCC_TARGET_ABI))
+-CC_TARGET_NAN_ := $(call qstrip,$(BR2_GCC_TARGET_NAN))
+-CC_TARGET_FP32_MODE_ := $(call qstrip,$(BR2_GCC_TARGET_FP32_MODE))
+-CC_TARGET_FPU_ := $(call qstrip,$(BR2_GCC_TARGET_FPU))
+-CC_TARGET_FLOAT_ABI_ := $(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
+-CC_TARGET_MODE_ := $(call qstrip,$(BR2_GCC_TARGET_MODE))
++CC_TARGET_CPU_ := $(GCC_TARGET_CPU)-$(GCC_TARGET_CPU_REVISION)
++endif
++CC_TARGET_ARCH_ := $(GCC_TARGET_ARCH)
++CC_TARGET_ABI_ := $(GCC_TARGET_ABI)
++CC_TARGET_NAN_ := $(GCC_TARGET_NAN)
++CC_TARGET_FP32_MODE_ := $(GCC_TARGET_FP32_MODE)
++CC_TARGET_FPU_ := $(GCC_TARGET_FPU)
++CC_TARGET_FLOAT_ABI_ := $(GCC_TARGET_FLOAT_ABI)
++CC_TARGET_MODE_ := $(GCC_TARGET_MODE)
+ 
+ # march/mtune/floating point mode needs to be passed to the external toolchain
+ # to select the right multilib variant
 -- 
 2.17.1
