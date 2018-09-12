@@ -1,37 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 12 Sep 2018 21:19:27 +0200
-Subject: [Buildroot] [git commit] feh: fix typo in xlib_libXinerama
- dependency
-Message-ID: <20180912191909.059F4863C0@busybox.osuosl.org>
+Date: Wed, 12 Sep 2018 21:21:05 +0200
+Subject: [Buildroot] [PATCH 1/1] feh: Fix dependency name
+In-Reply-To: <20180912191433.16266-1-petr.vorel@gmail.com>
+References: <20180912191433.16266-1-petr.vorel@gmail.com>
+Message-ID: <20180912212105.41236163@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=04d7572a8533afa684a9ba8fbabcff7aaf85aa1e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-This typo was introduced by commit
-de2fe74e2ae9ed0ac0bfa6a32879c02ec8e1cb92, and was noticed by Petr
-Vorel.
+On Wed, 12 Sep 2018 21:14:33 +0200, Petr Vorel wrote:
+> Fixes: de2fe74e2a feh: xinemara is optional not mandatory
+> 
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 
-Reported-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/feh/feh.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Gaah, our e-mails keep crossing each other. I saw your v2, but too
+late, as I had already applied the v1 from Fabrice. When I saw your v2,
+I immediately fixed the dependency myself. And then I see this patch.
 
-diff --git a/package/feh/feh.mk b/package/feh/feh.mk
-index 6cfa73b242..ff611924d9 100644
---- a/package/feh/feh.mk
-+++ b/package/feh/feh.mk
-@@ -19,7 +19,7 @@ FEH_MAKE_OPTS += curl=0
- endif
- 
- ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
--FEH_DEPENDENCIES += xlib_libXinemara
-+FEH_DEPENDENCIES += xlib_libXinerama
- FEH_MAKE_OPTS += xinerama=1
- else
- FEH_MAKE_OPTS += xinerama=0
+Sorry, and thanks for noticing the problem :-/
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
