@@ -1,47 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 12 Sep 2018 18:11:09 +0200
-Subject: [Buildroot] [git commit] package/nodejs: bump version to 8.12.0
-Message-ID: <20180912161010.9F22D8444B@busybox.osuosl.org>
+From: Mark Corbin <mark.corbin@embecosm.com>
+Date: Wed, 12 Sep 2018 17:14:50 +0100
+Subject: [Buildroot] [PATCH v2 0/6] Add RISC-V 64-bit architecture
+ support
+In-Reply-To: <20180912171801.36045fb5@windsurf>
+References: <20180912102256.3164-1-mark.corbin@embecosm.com>
+ <20180912171801.36045fb5@windsurf>
+Message-ID: <76f5de73-64f9-370d-b0b3-91aadf495191@embecosm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e75d9c6bcf4349c75ee958150d0acf70e7da1df3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Thomas
 
-See https://nodejs.org/en/blog/release/v8.12.0/
+On 12/09/18 16:18, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Wed, 12 Sep 2018 11:22:50 +0100, Mark Corbin wrote:
+>
+>> Mark Corbin (6):
+>>   linux: add hash file
+>>   package/linux-headers: add support for custom headers
+>>   arch: allow GCC target options to be optionally overwritten
+>>   arch: add support for RISC-V 64-bit (riscv64) architecture
+>>   boot/riscv-pk: add bootloader for RISC-V architecture
+>>   configs/qemu: add qemu_riscv64_virt_defconfig
+> Thanks a lot for this new version! From a quick look it looks pretty
+> good! I'll comment on each patch separately.
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/nodejs/nodejs.hash | 4 ++--
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Just let me know which ones, if any, need re-spinning.
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 8285172215..70d67730b1 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
--# From http://nodejs.org/dist/v8.11.4/SHASUMS256.txt
--sha256 fbce7de6d96b0bcb0db0bf77f0e6ea999b6755e6930568aedaab06847552a609  node-v8.11.4.tar.xz
-+# From https://nodejs.org/dist/v8.12.0/SHASUMS256.txt
-+sha256 5a9dff58016c18fb4bf902d963b124ff058a550ebcd9840c677757387bce419a  node-v8.12.0.tar.xz
- 
- # Hash for license file
- sha256 b87be6c1479ed977481115869c2dd8b6d59e5ea55aa09939d6c898242121b2f5  LICENSE
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 165f3f109a..f9a604f747 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NODEJS_VERSION = 8.11.4
-+NODEJS_VERSION = 8.12.0
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+Thanks
+
+Mark
+
+>
+> Best regards,
+>
+> Thomas
+
+-- 
+Mark Corbin
+Embecosm Ltd.
+https://www.embecosm.com
