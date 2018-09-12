@@ -1,94 +1,46 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Wed, 12 Sep 2018 13:18:35 +0200
-Subject: [Buildroot] [PATCH] vboot-utils: fix major() build failure due to
- glibc 2.28
-Message-ID: <20180912111835.35443-1-giulio.benetti@micronovasrl.com>
+From: Florian La Roche <F.LaRoche@pilz.de>
+Date: Wed, 12 Sep 2018 14:40:15 +0200
+Subject: [Buildroot] Antwort: Re: [PATCH 1/1] package/mongodb: add patch to
+ compile with glibc >= 2.28
+In-Reply-To: <20180912105228.1c0ec200@windsurf>
+References: <20180912083447.5169-1-F.LaRoche@pilz.de>
+ <20180912105228.1c0ec200@windsurf>
+Message-ID: <OF8D5A4992.EF086515-ONC1258306.004559C1-C1258306.00459A8D@local-dmz.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-glibc 2.28 no longer includes <sys/sysmacros.h> from <sys/types.h>,
-and therefore <sys/sysmacros.h> must be included explicitly when
-major() are used.
+Hello Thomas,
 
-This commit adds an upstream patch to directly include
-<sys/sysmacros.h> into cgpt_wrapper.c and dump_kernel_config_lib.c files
-where major() macro is used.
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> schrieb am 12.09.2018 
+10:52:28:
+> Since mongodb upstream is maintained in Git, we like to have a Git
+> formatted patch. So could you instead clone
+> https://github.com/mongodb/mongo.git, checkout the 3.3.4 tag, make the
+> fix, do a commit, and then "git format-patch HEAD^", and use the
+> generated 0001 file ?
 
-The upstream patch has been taken from:
-https://chromium.googlesource.com/chromiumos/platform/vboot_reference/+/435fbcee218b37a87368e2b22fa33366875d458c
+The github repo only contains v3.4 and newer, but buildroot is currently 
+using 3.3.4.
 
-Fixes:
-http://autobuild.buildroot.net/results/4a2/4a21307984cb16d7879149dd9b9b062181b0388f/
-http://autobuild.buildroot.net/results/899/899569165112fe577cf191cd4f0c698cbedeb9b1/
-http://autobuild.buildroot.net/results/0e5/0e527d231fa791ec8e3375804f1a0043f92d73d0/
-http://autobuild.buildroot.net/results/184/1849be60dd13c1debfbcfb8fba5cec113e81af62/
-http://autobuild.buildroot.net/results/38f/38fcefe4feabfd95692cf6b3f7ecf84259fca4de/
+Can you commit my original patch or any other idea on how to submit this 
+change?
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
----
- ...05-include-sys-sysmacros.h-for-major.patch | 51 +++++++++++++++++++
- 1 file changed, 51 insertions(+)
- create mode 100644 package/vboot-utils/0005-include-sys-sysmacros.h-for-major.patch
+best regards,
 
-diff --git a/package/vboot-utils/0005-include-sys-sysmacros.h-for-major.patch b/package/vboot-utils/0005-include-sys-sysmacros.h-for-major.patch
-new file mode 100644
-index 0000000000..5d76428eb6
---- /dev/null
-+++ b/package/vboot-utils/0005-include-sys-sysmacros.h-for-major.patch
-@@ -0,0 +1,51 @@
-+From 435fbcee218b37a87368e2b22fa33366875d458c Mon Sep 17 00:00:00 2001
-+From: Mike Frysinger <vapier@chromium.org>
-+Date: Tue, 19 Apr 2016 13:58:49 -0400
-+Subject: [PATCH] include sys/sysmacros.h for major()
-+
-+The major() func is defined in the sys/sysmacros.h header, so include it
-+explicitly for the prototype.  Upstream C libs are moving away from having
-+sys/types.h include it all the time implicitly.
-+
-+BUG=None
-+TEST=precq passes
-+BRANCH=None
-+
-+Change-Id: I56b84138f08ded2376193403f9c9db22c5f24f71
-+Reviewed-on: https://chromium-review.googlesource.com/339680
-+Commit-Ready: Mike Frysinger <vapier@chromium.org>
-+Tested-by: Mike Frysinger <vapier@chromium.org>
-+Reviewed-by: Bill Richardson <wfrichar@google.com>
-+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-+---
-+ cgpt/cgpt_wrapper.c               | 1 +
-+ futility/dump_kernel_config_lib.c | 1 +
-+ 2 files changed, 2 insertions(+)
-+
-+diff --git a/cgpt/cgpt_wrapper.c b/cgpt/cgpt_wrapper.c
-+index dcfaab9c..1716cdde 100644
-+--- a/cgpt/cgpt_wrapper.c
-++++ b/cgpt/cgpt_wrapper.c
-+@@ -18,6 +18,7 @@
-+ #include <stdio.h>
-+ #include <string.h>
-+ #include <sys/stat.h>
-++#include <sys/sysmacros.h>
-+ #include <sys/types.h>
-+ #include <unistd.h>
-+ 
-+diff --git a/futility/dump_kernel_config_lib.c b/futility/dump_kernel_config_lib.c
-+index 4fe990c3..abf37ae1 100644
-+--- a/futility/dump_kernel_config_lib.c
-++++ b/futility/dump_kernel_config_lib.c
-+@@ -10,6 +10,7 @@
-+ #include <string.h>
-+ #include <sys/mman.h>
-+ #include <sys/stat.h>
-++#include <sys/sysmacros.h>
-+ #include <sys/types.h>
-+ #include <unistd.h>
-+ 
-+-- 
-+2.17.1
-+
--- 
-2.17.1
+Florian La Roche
+
+
+
+Gesch?ftsf?hrung: Susanne Kunschert, Thomas Pilz
+Pilz GmbH & Co. KG, Sitz: Ostfildern, HRA 210 893, Amtsgericht Stuttgart
+Kompl. Ges. Peter Pilz GmbH, Sitz: Ostfildern, HRB 210 612, Amtsgericht Stuttgart
+Umsatzsteuer: ID-Nr. DE 145 355 773, WEEE-Reg.-Nr. DE 71636849
+This email is intended solely for the use of the named address(es). Any unauthorised disclosure, copying or distribution of these confidential information contained therein, or the taking of any action based on it, is prohibited. The sender disclaims any liability for the integrity of this email. Legally binding declarations must be in written form.
+Umweltschutz liegt uns am Herzen! - Bitte denken Sie an unsere Umwelt, bevor Sie diese E-Mail drucken.
+We do care about the environment! - Please consider the environment before printing this e-mail.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180912/bb3c1f35/attachment.html>
