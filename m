@@ -1,47 +1,39 @@
-From: Florian La Roche <F.LaRoche@pilz.de>
-Date: Wed, 12 Sep 2018 10:34:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mongodb: add patch to compile with
- glibc >= 2.28
-Message-ID: <20180912083447.5169-1-F.LaRoche@pilz.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 12 Sep 2018 10:39:09 +0200
+Subject: [Buildroot] [git commit] botan: fix build on uclibc
+Message-ID: <20180912083809.CC59E84386@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-glibc 2.28 no longer includes <sys/sysmacros.h> from <sys/types.h>,
-and therefore <sys/sysmacros.h> must be included explicitly when
-major()/minor() are used.
+commit: https://git.buildroot.net/buildroot/commit/?id=bd9ad13bed514990c06d2be2c4f8aff243cb4229
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Florian La Roche <F.LaRoche@pilz.de>
+uclibc does not have sys/auxv.h so disable getauxval
+
+Fixes:
+ - http://autobuild.buildroot.org/results/0000636025b843ab343dc45ccd29979325aff428
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mongodb/mongodb.patch | 10 ++++++++++
- 1 file changed, 10 insertions(+)
- create mode 100644 package/mongodb/mongodb.patch
+ package/botan/botan.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/mongodb/mongodb.patch b/package/mongodb/mongodb.patch
-new file mode 100644
-index 0000000000..d429b4e891
---- /dev/null
-+++ b/package/mongodb/mongodb.patch
-@@ -0,0 +1,10 @@
-+--- ./src/mongo/db/storage/mmap_v1/mmap_v1_engine.cpp
-++++ ./src/mongo/db/storage/mmap_v1/mmap_v1_engine.cpp
-+@@ -32,6 +32,7 @@
-+ 
-+ #include "mongo/db/storage/mmap_v1/mmap_v1_engine.h"
-+ 
-++#include <sys/sysmacros.h>
-+ #include <boost/filesystem/path.hpp>
-+ #include <boost/filesystem/operations.hpp>
-+ #include <fstream>
--- 
-2.17.1
-
-Gesch?ftsf?hrung: Susanne Kunschert, Thomas Pilz
-Pilz GmbH & Co. KG, Sitz: Ostfildern, HRA 210 893, Amtsgericht Stuttgart
-Kompl. Ges. Peter Pilz GmbH, Sitz: Ostfildern, HRB 210 612, Amtsgericht Stuttgart
-Umsatzsteuer: ID-Nr. DE 145 355 773, WEEE-Reg.-Nr. DE 71636849
-This email is intended solely for the use of the named address(es). Any unauthorised disclosure, copying or distribution of these confidential information contained therein, or the taking of any action based on it, is prohibited. The sender disclaims any liability for the integrity of this email. Legally binding declarations must be in written form.
-Umweltschutz liegt uns am Herzen! - Bitte denken Sie an unsere Umwelt, bevor Sie diese E-Mail drucken.
-We do care about the environment! - Please consider the environment before printing this e-mail.
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index e352fab6c9..4788617d4a 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -40,6 +40,10 @@ else
+ BOTAN_CONF_OPTS += --without-stack-protector
+ endif
+ 
++ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
++BOTAN_CONF_OPTS += --without-os-feature=getauxval
++endif
++
+ ifeq ($(BR2_PACKAGE_BOOST),y)
+ BOTAN_DEPENDENCIES += boost
+ BOTAN_CONF_OPTS += --with-boost
