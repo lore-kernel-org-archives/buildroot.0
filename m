@@ -1,66 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 12 Sep 2018 10:32:51 +0200
-Subject: [Buildroot] [git commit] feh: libcurl is optional not mandatory
-Message-ID: <20180912083213.329EE84381@busybox.osuosl.org>
+Date: Wed, 12 Sep 2018 10:33:22 +0200
+Subject: [Buildroot] [PATCH 1/1] feh: libcurl is optional not mandatory
+In-Reply-To: <20180911203447.19297-1-fontaine.fabrice@gmail.com>
+References: <20180911203447.19297-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180912103322.53eba778@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c29e68f808c2a8fd88722f82c3b8dd6901bfe80b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Acked-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/feh/Config.in |  1 -
- package/feh/feh.mk    | 14 +++++++++++---
- 2 files changed, 11 insertions(+), 4 deletions(-)
+On Tue, 11 Sep 2018 22:34:47 +0200, Fabrice Fontaine wrote:
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/feh/Config.in |  1 -
+>  package/feh/feh.mk    | 14 +++++++++++---
+>  2 files changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/package/feh/Config.in b/package/feh/Config.in
-index 19b4abe0e3..277ec891b3 100644
---- a/package/feh/Config.in
-+++ b/package/feh/Config.in
-@@ -8,7 +8,6 @@ config BR2_PACKAGE_FEH
- 	select BR2_PACKAGE_IMLIB2_PNG
- 	select BR2_PACKAGE_IMLIB2_JPEG
- 	select BR2_PACKAGE_IMLIB2_X
--	select BR2_PACKAGE_LIBCURL
- 	help
- 	  feh is an X11 image viewer aimed mostly at console users.
- 
-diff --git a/package/feh/feh.mk b/package/feh/feh.mk
-index 403485c550..a192bfbdb0 100644
---- a/package/feh/feh.mk
-+++ b/package/feh/feh.mk
-@@ -7,17 +7,25 @@
- FEH_VERSION = 2.27.1
- FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
- FEH_SITE = http://feh.finalrewind.org
--FEH_DEPENDENCIES = libcurl imlib2 libpng xlib_libXinerama xlib_libXt
-+FEH_DEPENDENCIES = imlib2 libpng xlib_libXinerama xlib_libXt
- FEH_LICENSE = MIT
- FEH_LICENSE_FILES = COPYING
- 
-+ifeq ($(BR2_PACKAGE_LIBCURL),y)
-+FEH_DEPENDENCIES += libcurl
-+FEH_MAKE_OPTS += curl=1
-+else
-+FEH_MAKE_OPTS += curl=0
-+endif
-+
- define FEH_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) CFLAGS="$(TARGET_CFLAGS) -std=gnu99" \
--		$(MAKE) -C $(@D) all
-+		$(MAKE) $(FEH_MAKE_OPTS) -C $(@D) all
- endef
- 
- define FEH_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) PREFIX=/usr DESTDIR=$(TARGET_DIR) -C $(@D) install
-+	$(TARGET_MAKE_ENV) $(MAKE) $(FEH_MAKE_OPTS) PREFIX=/usr \
-+		DESTDIR=$(TARGET_DIR) -C $(@D) install
- endef
- 
- $(eval $(generic-package))
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
