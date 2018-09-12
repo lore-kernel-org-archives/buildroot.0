@@ -1,44 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 12 Sep 2018 17:23:00 +0200
-Subject: [Buildroot] [PATCH v2 2/6] package/linux-headers: add support
- for custom headers
-In-Reply-To: <20180912102256.3164-3-mark.corbin@embecosm.com>
-References: <20180912102256.3164-1-mark.corbin@embecosm.com>
- <20180912102256.3164-3-mark.corbin@embecosm.com>
-Message-ID: <20180912172300.06858ae2@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 12 Sep 2018 16:00:49 +0000
+Subject: [Buildroot] [Bug 11346] qt5base-5.11.1 Assertion failed: ret == 0
+ after getentropy() inside fillBuffer() on arm
+In-Reply-To: <bug-11346-163@https.bugs.busybox.net/>
+References: <bug-11346-163@https.bugs.busybox.net/>
+Message-ID: <bug-11346-163-7Z3ou8MgWC@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=11346
 
-On Wed, 12 Sep 2018 11:22:52 +0100, Mark Corbin wrote:
+--- Comment #1 from Peter Seiderer <ps.report@gmx.net> ---
+(In reply to Philipp Richter from comment #0)
 
->  define LINUX_HEADERS_APPLY_LOCAL_PATCHES
-> -	for p in $(filter-out ftp://% http://% https://%,$(LINUX_HEADERS_PATCHES)) ; do \
-> -		if test -d $$p ; then \
-> -			$(APPLY_PATCHES) $(@D) $$p \*.patch || exit 1 ; \
-> -		else \
-> -			$(APPLY_PATCHES) $(@D) `dirname $$p` `basename $$p` || exit 1; \
-> -		fi \
-> -	done
-> +        for p in $(filter-out ftp://% http://% https://%,$(LINUX_HEADERS_PATCHES)) ; do \
-> +                if test -d $$p ; then \
-> +                        $(APPLY_PATCHES) $(@D) $$p \*.patch || exit 1 ; \
-> +                else \
-> +                        $(APPLY_PATCHES) $(@D) `dirname $$p` `basename $$p` || exit 1; \
-> +                fi \
-> +        done
+From the getentropy() man page [1] I would suspect an errno 'ENOSYS - This
+kernel version does not implement the getrandom(2) system call required to
+implement this function.', your could verify this through additioanl debug
+statements or strace?
 
-This change is spurious: you just replaced the tab-based indentation by
-space-based indentation, which is not good.
+[1] http://man7.org/linux/man-pages/man3/getentropy.3.html
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
