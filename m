@@ -1,46 +1,45 @@
-From: Florian La Roche <F.LaRoche@pilz.de>
-Date: Wed, 12 Sep 2018 14:40:15 +0200
-Subject: [Buildroot] Antwort: Re: [PATCH 1/1] package/mongodb: add patch to
- compile with glibc >= 2.28
-In-Reply-To: <20180912105228.1c0ec200@windsurf>
-References: <20180912083447.5169-1-F.LaRoche@pilz.de>
- <20180912105228.1c0ec200@windsurf>
-Message-ID: <OF8D5A4992.EF086515-ONC1258306.004559C1-C1258306.00459A8D@local-dmz.de>
+From: Martin Bark <martin@barkynet.com>
+Date: Wed, 12 Sep 2018 13:48:39 +0100
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump version to 8.12.0
+Message-ID: <20180912124839.3774-1-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+See https://nodejs.org/en/blog/release/v8.12.0/
 
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> schrieb am 12.09.2018 
-10:52:28:
-> Since mongodb upstream is maintained in Git, we like to have a Git
-> formatted patch. So could you instead clone
-> https://github.com/mongodb/mongo.git, checkout the 3.3.4 tag, make the
-> fix, do a commit, and then "git format-patch HEAD^", and use the
-> generated 0001 file ?
+Signed-off-by: Martin Bark <martin@barkynet.com>
+---
+ package/nodejs/nodejs.hash | 4 ++--
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-The github repo only contains v3.4 and newer, but buildroot is currently 
-using 3.3.4.
-
-Can you commit my original patch or any other idea on how to submit this 
-change?
-
-best regards,
-
-Florian La Roche
-
-
-
-Gesch?ftsf?hrung: Susanne Kunschert, Thomas Pilz
-Pilz GmbH & Co. KG, Sitz: Ostfildern, HRA 210 893, Amtsgericht Stuttgart
-Kompl. Ges. Peter Pilz GmbH, Sitz: Ostfildern, HRB 210 612, Amtsgericht Stuttgart
-Umsatzsteuer: ID-Nr. DE 145 355 773, WEEE-Reg.-Nr. DE 71636849
-This email is intended solely for the use of the named address(es). Any unauthorised disclosure, copying or distribution of these confidential information contained therein, or the taking of any action based on it, is prohibited. The sender disclaims any liability for the integrity of this email. Legally binding declarations must be in written form.
-Umweltschutz liegt uns am Herzen! - Bitte denken Sie an unsere Umwelt, bevor Sie diese E-Mail drucken.
-We do care about the environment! - Please consider the environment before printing this e-mail.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180912/bb3c1f35/attachment.html>
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 8285172215..70d67730b1 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+-# From http://nodejs.org/dist/v8.11.4/SHASUMS256.txt
+-sha256 fbce7de6d96b0bcb0db0bf77f0e6ea999b6755e6930568aedaab06847552a609  node-v8.11.4.tar.xz
++# From https://nodejs.org/dist/v8.12.0/SHASUMS256.txt
++sha256 5a9dff58016c18fb4bf902d963b124ff058a550ebcd9840c677757387bce419a  node-v8.12.0.tar.xz
+ 
+ # Hash for license file
+ sha256 b87be6c1479ed977481115869c2dd8b6d59e5ea55aa09939d6c898242121b2f5  LICENSE
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 165f3f109a..f9a604f747 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NODEJS_VERSION = 8.11.4
++NODEJS_VERSION = 8.12.0
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+-- 
+2.19.0
