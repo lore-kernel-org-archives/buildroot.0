@@ -1,55 +1,56 @@
-From: quentin.aebischer at bodet-timesport.com <quentin.aebischer@bodet-timesport.com>
-Date: Wed, 12 Sep 2018 13:34:42 +0000
-Subject: [Buildroot] imx8m xorg-server compilation error
-Message-ID: <26608e8a84344967a3b99d53407947fe@bodet-timesport.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 12 Sep 2018 16:17:54 +0200
+Subject: [Buildroot] [PATCH] system: update Config.in comment about systemd
+ dependencies
+Message-ID: <20180912141754.19062-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everyone,
+In commit 879fa7f82a86ffdc6d1cf7c9bfbb5cf830583d69, the
+BR2_INIT_SYSTEMD option was changed to allow selecting with a uClibc
+toolchain. Unfortunately, the corresponding Config.in comment, which
+was already bogus, was not updated to take into account the numerous
+dependencies of BR2_INIT_SYSTEMD.
 
+Due to this, even if you have uClibc enabled, the BR2_INIT_SYSTEMD
+option may not be visible, and the Config.in comment may also not be
+visible, leaving the user in the dark.
 
-At my company, we are trying to integrate a Zulu embedded JVM with graphics support on the imx8m evk board.
+This commit fixes the dependencies of the Config.in comment so that
+they match the one of the BR2_INIT_SYSTEMD option.
 
-For graphics support, the JVM needs an X11 backend.
+Reported-by: Raphael Jacob <r.jacob2002@gmail.com>
+Cc: Raphael Jacob <r.jacob2002@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ system/Config.in | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-I hence tried to compile xorg-server package, but compilation with following error :
-
-
-make[3]: Entering directory '/home/quentin/SSD_1To_Kingston/imx8_Linux/rootfs/output/build/xserver_xorg-server-1.20.1/glamor'
-  CC       glamor.lo
-  CC       glamor_copy.lo
-  CC       glamor_core.lo
-  CC       glamor_font.lo
-  CC       glamor_composite_glyphs.lo
-  CC       glamor_image.lo
-  CC       glamor_lines.lo
-  CC       glamor_glx.lo
-  CC       glamor_dash.lo
-In file included from /home/quentin/SSD_1To_Kingston/imx8_Linux/rootfs/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/EGL/eglplatform.h:179:0,
-                 from /home/quentin/SSD_1To_Kingston/imx8_Linux/rootfs/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/epoxy/egl_generated.h:11,
-                 from /home/quentin/SSD_1To_Kingston/imx8_Linux/rootfs/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/epoxy/egl.h:46,
-                 from glamor_priv.h:43,
-                 from glamor.c:37:
-/home/quentin/SSD_1To_Kingston/imx8_Linux/rootfs/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/EGL/eglvivante.h:267:1: error: conflicting types for ?fbCreateWindow?
- fbCreateWindow(
-
-This happens when I select imx-gpuv-viv package, which from what I understand provides hardware GPU acceleration ?
-
-Is there something I am missing / doing horribly wrong ?
-
-
-Thanks,
-
-
-Quentin
-
-
-Ce message et toutes les pieces jointes (ci-apres le "message") sont etablis a l'intention exclusive de ses destinataires.
-Si vous recevez ce message par erreur, merci de le detruire et d'en avertir immediatement l'expediteur par e-mail.
-Toute utilisation de ce message non conforme a sa destination, toute diffusion ou toute publication, totale ou partielle, est interdite, sauf autorisation expresse. Les communications sur Internet n'etant pas securisees, l'expediteur informe qu'il ne peut accepter aucune responsabilite quant au contenu de ce message.
-This mail message and attachments (the "message") are solely intended for the addresses. It is confidential in nature.
-If you receive this message in error, please delete it and immediately notify the sender by e-mail.
-Any use other than its intended purpose, dissemination or disclosure, either whole or partial, is prohibited except if formal approval is granted. As communication on the Internet is not secure, the sender does not accept responsibility for the content of this message.
+diff --git a/system/Config.in b/system/Config.in
+index d14a864ca5..f63f27b126 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -137,9 +137,15 @@ config BR2_INIT_SYSTEMD
+ 	select BR2_ROOTFS_MERGED_USR
+ 	select BR2_PACKAGE_SYSTEMD
+ 
+-comment "systemd needs a glibc or uClibc toolchain, headers >= 3.10"
+-	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC \
+-		&& BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10)
++comment "systemd needs a glibc or uClibc toolchain w/ wchar, threads, SSP, dynamic library, headers >= 3.10"
++	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
++	depends on BR2_USE_MMU
++	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC) || \
++		!BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_HAS_SSP || \
++		BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+ 
+ config BR2_INIT_NONE
+ 	bool "None"
+-- 
+2.14.4
