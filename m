@@ -1,85 +1,92 @@
-From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date: Wed, 12 Sep 2018 22:15:37 +0200
-Subject: [Buildroot] [RFC PATCH] linux: let to work with xenomai in
- override mode
-In-Reply-To: <20180912220822.7c6beee4@windsurf>
-References: <1536782312-12240-1-git-send-email-michael@amarulasolutions.com>
- <20180912220822.7c6beee4@windsurf>
-Message-ID: <CAOf5uwnZPoBUF8nGA8tg3fa3VjFQ5JxHTn_vJehp7C9iu4ovJQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 12 Sep 2018 22:13:12 +0200
+Subject: [Buildroot] [git commit] perl-time-parsedate: new package
+Message-ID: <20180912202007.5A2C286ED8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas
+commit: https://git.buildroot.net/buildroot/commit/?id=1e90fc5f2ac9070fab3f8ea07b996b68421f2577
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, Sep 12, 2018 at 10:08 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Wed, 12 Sep 2018 21:58:32 +0200, Michael Trimarchi wrote:
-> > We would like to patch xenomai in override mode. Xenomai create
-> > symlink in order to build the kernel and those links are absolute
-> > one. The adeos patch is not applied if it is found so we
-> > can change the connect hook from PRE_PATCH to PRE_CONFIGURE.
-> > The xenomi dependence should be explicit set
-> >
-> > Change-Id: Idc5189047451bb9ac3019d3f35674d5332159918
-> > Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
->
-> As I explained in our previous e-mail discussion, when you use
-> <pkg>_OVERRIDE_SRCDIR, you should handle any needed patching yourself.
->
-> Doing what you suggest here means that all patches from Linux kernel
-> extensions will be applied in the configure step, which is:
->
->  (1) Contrary to common sense: why should patching happen outside of
->      the patching step ?
->
+Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+[Thomas: adjust license information.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                           |  1 +
+ package/Config.in                                    |  1 +
+ package/perl-time-parsedate/Config.in                |  6 ++++++
+ package/perl-time-parsedate/perl-time-parsedate.hash |  7 +++++++
+ package/perl-time-parsedate/perl-time-parsedate.mk   | 13 +++++++++++++
+ 5 files changed, 28 insertions(+)
 
-Xenomai create symlinks, and it's not only a patch by provide links to
-the package. Adeos
-patch xenomai but another part is connect to those symlinks. Now you
-can not let to have
-a complete developement project without move this is a patching step.
-Xenomai check if the
-patch applied correspond to the one that you are going to apply and if
-they are the same
-the symlink are created.
-
-Now suppose to have a manifest and repo describe your buildroot
-project and your override
-and you want to have the kernel already patched but with symlink not
-created. I don't going to
-git commit symlink but I want them created automatic.
-
-Is now more clear?
-
-Michael
-
-
-
->  (2) Completely inconsistent with what happens in all other packages
->      that use <pkg>_OVERRIDE_SRCDIR.
->
->  (3) Inconsistent with the initial principle of <pkg>_OVERRIDE_SRCDIR,
->      which is that the user *controls* the source code, and Buildroot
->      will not touch it all.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
-
-
--- 
-| Michael Nazzareno Trimarchi                     Amarula Solutions BV |
-| COO  -  Founder                                      Cruquiuskade 47 |
-| +31(0)851119172                                 Amsterdam 1018 AM NL |
-|                  [`as] http://www.amarulasolutions.com               |
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0b9a3e741b..5c9d7fa616 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -508,6 +508,7 @@ F:	package/perl-params-util/
+ F:	package/perl-sub-install/
+ F:	package/perl-sys-meminfo/
+ F:	package/perl-sys-mmap/
++F:	package/perl-time-parsedate/
+ 
+ N:	Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+ F:	package/audit/
+diff --git a/package/Config.in b/package/Config.in
+index b981df7879..f0a02d14a8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -732,6 +732,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-sys-meminfo/Config.in"
+ 	source "package/perl-sys-mmap/Config.in"
+ 	source "package/perl-time-hires/Config.in"
++	source "package/perl-time-parsedate/Config.in"
+ 	source "package/perl-timedate/Config.in"
+ 	source "package/perl-try-tiny/Config.in"
+ 	source "package/perl-uri/Config.in"
+diff --git a/package/perl-time-parsedate/Config.in b/package/perl-time-parsedate/Config.in
+new file mode 100644
+index 0000000000..cea5d2941e
+--- /dev/null
++++ b/package/perl-time-parsedate/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PERL_TIME_PARSEDATE
++	bool "perl-time-parsedate"
++	help
++	  Parse and format time values
++
++	  https://metacpan.org/release/Time-ParseDate
+diff --git a/package/perl-time-parsedate/perl-time-parsedate.hash b/package/perl-time-parsedate/perl-time-parsedate.hash
+new file mode 100644
+index 0000000000..39ce6b93f4
+--- /dev/null
++++ b/package/perl-time-parsedate/perl-time-parsedate.hash
+@@ -0,0 +1,7 @@
++# retrieved by scancpan from http://cpan.metacpan.org/
++md5    9143d075278857d21c77467d26f1603b Time-ParseDate-2015.103.tar.gz
++sha256 2c1a06235bf811813caac9eaa9daa71af758667cdf7b082cb59863220fcaeed1 Time-ParseDate-2015.103.tar.gz
++
++# locally calculated
++sha256 6d8de888d0662f75cfa3bf21b261741d5634ac9cdd8604d6173850546a3d40a9 lib/Time/JulianDay.pm
++sha256 9ae411fbaf87add414e7357417032dfedce652c393643bc5cb5b7698041a1dca lib/Time/Timezone.pm
+diff --git a/package/perl-time-parsedate/perl-time-parsedate.mk b/package/perl-time-parsedate/perl-time-parsedate.mk
+new file mode 100644
+index 0000000000..39f687d402
+--- /dev/null
++++ b/package/perl-time-parsedate/perl-time-parsedate.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# perl-time-parsedate
++#
++################################################################################
++
++PERL_TIME_PARSEDATE_VERSION = 2015.103
++PERL_TIME_PARSEDATE_SOURCE = Time-ParseDate-$(PERL_TIME_PARSEDATE_VERSION).tar.gz
++PERL_TIME_PARSEDATE_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MU/MUIR/modules
++PERL_TIME_PARSEDATE_LICENSE = Time Parse Date License, Public Domain
++PERL_TIME_PARSEDATE_LICENSE_FILES = lib/Time/JulianDay.pm lib/Time/Timezone.pm
++
++$(eval $(perl-package))
