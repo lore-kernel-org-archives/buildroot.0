@@ -1,99 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 12 Sep 2018 22:29:14 +0200
-Subject: [Buildroot] [git commit] perl-x10: new package
-Message-ID: <20180912204015.5650C870F4@busybox.osuosl.org>
+Date: Wed, 12 Sep 2018 22:44:48 +0200
+Subject: [Buildroot] [PATCH 05/18] perl-x10: new package
+In-Reply-To: <20180820115519.24046-6-chrismcc@gmail.com>
+References: <20180820115519.24046-1-chrismcc@gmail.com>
+ <20180820115519.24046-6-chrismcc@gmail.com>
+Message-ID: <20180912224448.6d7f28ab@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7eb3adf299cd4d4f19c3b344f59f41125d686313
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Christopher,
 
-Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
-Acked-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                     |  1 +
- package/Config.in              |  1 +
- package/perl-x10/Config.in     | 13 +++++++++++++
- package/perl-x10/perl-x10.hash |  6 ++++++
- package/perl-x10/perl-x10.mk   | 14 ++++++++++++++
- 5 files changed, 35 insertions(+)
+On Mon, 20 Aug 2018 04:55:06 -0700, Christopher McCrory wrote:
+> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+> ---
+>  DEVELOPERS                     |  1 +
+>  package/Config.in              |  1 +
+>  package/perl-x10/Config.in     | 13 +++++++++++++
+>  package/perl-x10/perl-x10.hash |  6 ++++++
+>  package/perl-x10/perl-x10.mk   | 14 ++++++++++++++
+>  5 files changed, 35 insertions(+)
+>  create mode 100644 package/perl-x10/Config.in
+>  create mode 100644 package/perl-x10/perl-x10.hash
+>  create mode 100644 package/perl-x10/perl-x10.mk
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 5c9d7fa616..6db07e1ada 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -509,6 +509,7 @@ F:	package/perl-sub-install/
- F:	package/perl-sys-meminfo/
- F:	package/perl-sys-mmap/
- F:	package/perl-time-parsedate/
-+F:	package/perl-x10/
- 
- N:	Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
- F:	package/audit/
-diff --git a/package/Config.in b/package/Config.in
-index f0a02d14a8..bae9ed02b3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -737,6 +737,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-try-tiny/Config.in"
- 	source "package/perl-uri/Config.in"
- 	source "package/perl-www-robotrules/Config.in"
-+	source "package/perl-x10/Config.in"
- 	source "package/perl-xml-libxml/Config.in"
- 	source "package/perl-xml-namespacesupport/Config.in"
- 	source "package/perl-xml-sax/Config.in"
-diff --git a/package/perl-x10/Config.in b/package/perl-x10/Config.in
-new file mode 100644
-index 0000000000..984a561b05
---- /dev/null
-+++ b/package/perl-x10/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_PERL_X10
-+	bool "perl-x10"
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_PERL_ASTRO_SUNTIME
-+	select BR2_PACKAGE_PERL_DEVICE_SERIALPORT
-+	select BR2_PACKAGE_PERL_TIME_PARSEDATE
-+	help
-+	  creates a server used to receive events from an x10 client
-+
-+	  https://metacpan.org/release/X10
-+
-+comment "perl-x10 needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/perl-x10/perl-x10.hash b/package/perl-x10/perl-x10.hash
-new file mode 100644
-index 0000000000..5411390e3e
---- /dev/null
-+++ b/package/perl-x10/perl-x10.hash
-@@ -0,0 +1,6 @@
-+# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    20dcca2dfb978bfed3043276aa3481e5 X10-0.04.tar.gz
-+sha256 3dcee9d95614b2db70de608e933d42817f93fccd5b1f2f782b0846af487d9134 X10-0.04.tar.gz
-+
-+# computed by scancpan
-+sha256 e6f320afa82517d663be348dd2515ecb1454a7c851ba5590f13aca01d219be80 README
-diff --git a/package/perl-x10/perl-x10.mk b/package/perl-x10/perl-x10.mk
-new file mode 100644
-index 0000000000..8f091b9509
---- /dev/null
-+++ b/package/perl-x10/perl-x10.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# perl-x10
-+#
-+################################################################################
-+
-+PERL_X10_VERSION = 0.04
-+PERL_X10_SOURCE = X10-$(PERL_X10_VERSION).tar.gz
-+PERL_X10_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RO/ROBF
-+PERL_X10_DEPENDENCIES = perl-astro-suntime perl-device-serialport perl-time-parsedate
-+PERL_X10_LICENSE = GPL-3.0
-+PERL_X10_LICENSE_FILES = README
-+
-+$(eval $(perl-package))
+I have applied your patch, but I have a few questions. I have also
+added Fran?ois in Cc, he can probably help.
+
+> diff --git a/package/perl-x10/Config.in b/package/perl-x10/Config.in
+> new file mode 100644
+> index 0000000000..984a561b05
+> --- /dev/null
+> +++ b/package/perl-x10/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_PERL_X10
+> +	bool "perl-x10"
+> +	depends on !BR2_STATIC_LIBS
+
+Why do we have this dependency ? It seems to be a pure Perl module,
+what makes it require dynamic library support ?
+
+> +PERL_X10_VERSION = 0.04
+> +PERL_X10_SOURCE = X10-$(PERL_X10_VERSION).tar.gz
+> +PERL_X10_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RO/ROBF
+> +PERL_X10_DEPENDENCIES = perl-astro-suntime perl-device-serialport perl-time-parsedate
+
+Are these really build-time dependencies ?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
