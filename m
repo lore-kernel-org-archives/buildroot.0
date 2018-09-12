@@ -1,68 +1,51 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Wed, 12 Sep 2018 21:10:18 +0200
-Subject: [Buildroot] [PATCH v2 1/1] feh: Make libxinerama optional
-Message-ID: <20180912191018.14961-1-petr.vorel@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 12 Sep 2018 21:10:33 +0200
+Subject: [Buildroot] [git commit] python-scandir: bump to version 1.9.0
+Message-ID: <20180912190952.060CF84AE3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=a044258e7d2f2b5240a9c1e660cd5b25494a7257
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Acked-by: Petr Vorel <petr.vorel@gmail.com>
+Also add license hash.
+
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-Hi,
+ package/python-scandir/python-scandir.hash | 8 +++++---
+ package/python-scandir/python-scandir.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-I sent v2 for Fabrice, so the committer doesn't have to fix it manually.
-Please keep Fabrice as the author.
-
-Kind regards,
-Petr
----
- package/feh/Config.in | 1 -
- package/feh/feh.mk    | 9 ++++++++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/package/feh/Config.in b/package/feh/Config.in
-index 277ec891b3..7a348a1507 100644
---- a/package/feh/Config.in
-+++ b/package/feh/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_FEH
- 	bool "feh"
- 	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_USE_MMU # fork()
--	select BR2_PACKAGE_XLIB_LIBXINERAMA
- 	select BR2_PACKAGE_XLIB_LIBXT
- 	select BR2_PACKAGE_IMLIB2
- 	select BR2_PACKAGE_IMLIB2_PNG
-diff --git a/package/feh/feh.mk b/package/feh/feh.mk
-index a192bfbdb0..ff611924d9 100644
---- a/package/feh/feh.mk
-+++ b/package/feh/feh.mk
-@@ -7,7 +7,7 @@
- FEH_VERSION = 2.27.1
- FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
- FEH_SITE = http://feh.finalrewind.org
--FEH_DEPENDENCIES = imlib2 libpng xlib_libXinerama xlib_libXt
-+FEH_DEPENDENCIES = imlib2 libpng xlib_libXt
- FEH_LICENSE = MIT
- FEH_LICENSE_FILES = COPYING
+diff --git a/package/python-scandir/python-scandir.hash b/package/python-scandir/python-scandir.hash
+index aecd9a58cc..5918291ba7 100644
+--- a/package/python-scandir/python-scandir.hash
++++ b/package/python-scandir/python-scandir.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/scandir/json, sha256 locally computed
+-md5 a2713043de681bba6b084be42e7a8a44 scandir-1.5.tar.gz
+-sha256 c2612d1a487d80fb4701b4a91ca1b8f8a695b1ae820570815e85e8c8b23f1283 scandir-1.5.tar.gz
++# md5, sha256 from https://pypi.org/pypi/scandir/json
++md5	506c4cc5f38c00b301642a9cb0433910  scandir-1.9.0.tar.gz
++sha256	44975e209c4827fc18a3486f257154d34ec6eaec0f90fef0cca1caa482db7064  scandir-1.9.0.tar.gz
++# Locally computed sha256 checksums
++sha256	a5e2fbdc239744419d29407cdbc92793c4d9c1d956c174f7cb7f96fa6d058c86  LICENSE.txt
+diff --git a/package/python-scandir/python-scandir.mk b/package/python-scandir/python-scandir.mk
+index 9b7ba70071..1008fcad03 100644
+--- a/package/python-scandir/python-scandir.mk
++++ b/package/python-scandir/python-scandir.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-@@ -18,6 +18,13 @@ else
- FEH_MAKE_OPTS += curl=0
- endif
- 
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
-+FEH_DEPENDENCIES += xlib_libXinerama
-+FEH_MAKE_OPTS += xinerama=1
-+else
-+FEH_MAKE_OPTS += xinerama=0
-+endif
-+
- define FEH_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) CFLAGS="$(TARGET_CFLAGS) -std=gnu99" \
- 		$(MAKE) $(FEH_MAKE_OPTS) -C $(@D) all
--- 
-2.19.0
+-PYTHON_SCANDIR_VERSION = 1.5
++PYTHON_SCANDIR_VERSION = 1.9.0
+ PYTHON_SCANDIR_SOURCE = scandir-$(PYTHON_SCANDIR_VERSION).tar.gz
+-PYTHON_SCANDIR_SITE = https://pypi.python.org/packages/bd/f4/3143e0289faf0883228017dbc6387a66d0b468df646645e29e1eb89ea10e
++PYTHON_SCANDIR_SITE = https://files.pythonhosted.org/packages/16/2a/557af1181e6b4e30254d5a6163b18f5053791ca66e251e77ab08887e8fe3
+ PYTHON_SCANDIR_LICENSE = BSD-3-Clause
+ PYTHON_SCANDIR_LICENSE_FILES = LICENSE.txt
+ PYTHON_SCANDIR_SETUP_TYPE = setuptools
