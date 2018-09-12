@@ -1,30 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 12 Sep 2018 21:21:05 +0200
-Subject: [Buildroot] [PATCH 1/1] feh: Fix dependency name
-In-Reply-To: <20180912191433.16266-1-petr.vorel@gmail.com>
-References: <20180912191433.16266-1-petr.vorel@gmail.com>
-Message-ID: <20180912212105.41236163@windsurf>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Wed, 12 Sep 2018 22:29:04 +0300
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add myself for python-pytz
+Message-ID: <20180912192904.26910-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-On Wed, 12 Sep 2018 21:14:33 +0200, Petr Vorel wrote:
-> Fixes: de2fe74e2a feh: xinemara is optional not mandatory
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-
-Gaah, our e-mails keep crossing each other. I saw your v2, but too
-late, as I had already applied the v1 from Fabrice. When I saw your v2,
-I immediately fixed the dependency myself. And then I see this patch.
-
-Sorry, and thanks for noticing the problem :-/
-
-Thomas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8c43ce1b17..d6a95177ad 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -202,6 +202,7 @@ F:	package/libuv/
+ F:	package/python-engineio/
+ F:	package/python-jsonmodels/
+ F:	package/python-pyroute2/
++F:	package/python-pytz/
+ F:	package/python-reentry/
+ F:	package/python-subprocess32/
+ F:	package/python-yieldfrom/
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
