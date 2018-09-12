@@ -1,56 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 12 Sep 2018 16:17:54 +0200
-Subject: [Buildroot] [PATCH] system: update Config.in comment about systemd
- dependencies
-Message-ID: <20180912141754.19062-1-thomas.petazzoni@bootlin.com>
+Date: Wed, 12 Sep 2018 16:33:44 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libssh2: bump version
+In-Reply-To: <20180911205613.24701-1-bernd.kuhls@t-online.de>
+References: <20180911205613.24701-1-bernd.kuhls@t-online.de>
+Message-ID: <20180912163344.532b37ab@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In commit 879fa7f82a86ffdc6d1cf7c9bfbb5cf830583d69, the
-BR2_INIT_SYSTEMD option was changed to allow selecting with a uClibc
-toolchain. Unfortunately, the corresponding Config.in comment, which
-was already bogus, was not updated to take into account the numerous
-dependencies of BR2_INIT_SYSTEMD.
+Hello,
 
-Due to this, even if you have uClibc enabled, the BR2_INIT_SYSTEMD
-option may not be visible, and the Config.in comment may also not be
-visible, leaving the user in the dark.
+On Tue, 11 Sep 2018 22:56:13 +0200, Bernd Kuhls wrote:
 
-This commit fixes the dependencies of the Config.in comment so that
-they match the one of the BR2_INIT_SYSTEMD option.
+> -LIBSSH2_VERSION = 616fd4d1b3e4a55de67c48819fefca83132126b5
+> +LIBSSH2_VERSION = 8b870ad771cbd9cd29edbb3dbb0878e950f868ab
 
-Reported-by: Raphael Jacob <r.jacob2002@gmail.com>
-Cc: Raphael Jacob <r.jacob2002@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- system/Config.in | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+Looks like this new version has issues:
 
-diff --git a/system/Config.in b/system/Config.in
-index d14a864ca5..f63f27b126 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -137,9 +137,15 @@ config BR2_INIT_SYSTEMD
- 	select BR2_ROOTFS_MERGED_USR
- 	select BR2_PACKAGE_SYSTEMD
- 
--comment "systemd needs a glibc or uClibc toolchain, headers >= 3.10"
--	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC \
--		&& BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10)
-+comment "systemd needs a glibc or uClibc toolchain w/ wchar, threads, SSP, dynamic library, headers >= 3.10"
-+	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
-+	depends on BR2_USE_MMU
-+	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC) || \
-+		!BR2_USE_WCHAR || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_HAS_SSP || \
-+		BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
- 
- config BR2_INIT_NONE
- 	bool "None"
+  http://autobuild.buildroot.net/?reason=libssh2-8b870ad771cbd9cd29edbb3dbb0878e950f868ab
+
+Thomas
 -- 
-2.14.4
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
