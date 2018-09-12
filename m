@@ -1,29 +1,57 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 12 Sep 2018 16:23:44 +0000
-Subject: [Buildroot] [Bug 11346] qt5base-5.11.1 Assertion failed: ret == 0
- after getentropy() inside fillBuffer() on arm
-In-Reply-To: <bug-11346-163@https.bugs.busybox.net/>
-References: <bug-11346-163@https.bugs.busybox.net/>
-Message-ID: <bug-11346-163-NLXAJg49Bt@https.bugs.busybox.net/>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 12 Sep 2018 19:33:42 +0200
+Subject: [Buildroot] [PATCH 1/1] feh: xinemara is optional not mandatory
+Message-ID: <20180912173342.14319-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11346
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/feh/Config.in | 1 -
+ package/feh/feh.mk    | 9 ++++++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
---- Comment #2 from Philipp Richter <richterphilipp.pops@gmail.com> ---
-(In reply to Peter Seiderer from comment #1)
-
-Ah yes that might well be the case, thanks. I'm stuck with 3.10.107 on my
-odroid-c1 unfortunately.
-I need to do some more testing but what I know right now is that with
-qt5base-5.6 LTS it starts correctly.
-I'll also try the config with only arch changes on my raspberry pi which has a
-much newer kernel.
-qt5 seems a bit frustrating on some archs haha
-
+diff --git a/package/feh/Config.in b/package/feh/Config.in
+index 277ec891b3..7a348a1507 100644
+--- a/package/feh/Config.in
++++ b/package/feh/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_FEH
+ 	bool "feh"
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_USE_MMU # fork()
+-	select BR2_PACKAGE_XLIB_LIBXINERAMA
+ 	select BR2_PACKAGE_XLIB_LIBXT
+ 	select BR2_PACKAGE_IMLIB2
+ 	select BR2_PACKAGE_IMLIB2_PNG
+diff --git a/package/feh/feh.mk b/package/feh/feh.mk
+index a192bfbdb0..6cfa73b242 100644
+--- a/package/feh/feh.mk
++++ b/package/feh/feh.mk
+@@ -7,7 +7,7 @@
+ FEH_VERSION = 2.27.1
+ FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
+ FEH_SITE = http://feh.finalrewind.org
+-FEH_DEPENDENCIES = imlib2 libpng xlib_libXinerama xlib_libXt
++FEH_DEPENDENCIES = imlib2 libpng xlib_libXt
+ FEH_LICENSE = MIT
+ FEH_LICENSE_FILES = COPYING
+ 
+@@ -18,6 +18,13 @@ else
+ FEH_MAKE_OPTS += curl=0
+ endif
+ 
++ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
++FEH_DEPENDENCIES += xlib_libXinemara
++FEH_MAKE_OPTS += xinerama=1
++else
++FEH_MAKE_OPTS += xinerama=0
++endif
++
+ define FEH_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) CFLAGS="$(TARGET_CFLAGS) -std=gnu99" \
+ 		$(MAKE) $(FEH_MAKE_OPTS) -C $(@D) all
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.17.1
