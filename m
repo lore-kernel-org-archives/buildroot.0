@@ -1,112 +1,91 @@
-From: Mirza Krak <mirza.krak@northern.tech>
-Date: Wed, 12 Sep 2018 21:26:32 +0200
-Subject: [Buildroot] [[PATCH v2 2/2] package/mender-artifact: initial
- support
-In-Reply-To: <20180902154734.4f5a7f40@windsurf>
-References: <20180827113728.20856-1-mirza.krak@northern.tech>
- <20180827113728.20856-3-mirza.krak@northern.tech>
- <20180902154734.4f5a7f40@windsurf>
-Message-ID: <CADHdJwDw=2qRkodAzZW+GGGGeyP_HtbDO1Kr5VA9e53_tuE1Zw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 12 Sep 2018 21:33:42 +0200
+Subject: [Buildroot] [git commit] perl-data-dump: new package
+Message-ID: <20180912194148.F0E2986EDA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Sep 2, 2018 at 3:47 PM, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Mirza,
->
-> Overall it looks good, except for one aspect, which will require a bit
-> of discussion.
->
-> On Mon, 27 Aug 2018 13:37:28 +0200, Mirza Krak wrote:
->
-> > diff --git a/package/mender-artifact/Config.in.host b/package/mender-artifact/Config.in.host
-> > new file mode 100644
-> > index 0000000000..d2deabc783
-> > --- /dev/null
-> > +++ b/package/mender-artifact/Config.in.host
-> > @@ -0,0 +1,20 @@
-> > +config BR2_PACKAGE_HOST_MENDER_ARTIFACT
-> > +     bool "host mender-artifact"
-> > +     depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-> > +     depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-> > +     depends on BR2_TOOLCHAIN_HAS_THREADS
->
-> I am not happy about those dependencies, because they are dependencies
-> meant to be used for *target* packages, not for *host* packages.
->
-> BR2_TOOLCHAIN_HAS_THREADS is easy: it's not needed for host packages,
-> as we assume the build machine has thread support.
->
-> For the other dependencies, it's a bit more complicated, but I believe
-> somewhat similar to the situation we have with the Rust support.
->
-> Right now, BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS indicates if the
-> currently selected target architecture is supported by Go. This is fine
-> for target packages.
->
-> But apparently, host-go provides really two things:
->
->  (1) A Go compiler capable of building code for the host machine.
->
->  (2) A Go compiler capable of building code for the target machine.
->
-> For Go target packages, We are currently using (2), and for packages
-> that rely on (2), using BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS make sense.
->
-> However, with your support for host packages, what we rely on is (1).
-> And for that BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS doesn't make a lot of
-> sense.
->
-> For example, BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS says that Go is not
-> available on the ARC architecture. But for building a host package, we
-> really don't care about this: what matters is that Go is capable of
-> building code for the x86 or x86-64 build machine.
->
-> Therefore, we should probably use the same strategy as Rust, which is
-> proposed in patch http://patchwork.ozlabs.org/patch/961158/:
->
->  - The BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS is changed to only indicate if
->    Go supports the host/build system architecture. In our case, it
->    should probably just be:
->
->         depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
->
->    All host Go packages should depend on this option.
->
->  - A new BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS that indicates if Go
->    supports the target system architecture. It should be:
->
->         depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
->         depends on (BR2_arm && BR2_TOOLCHAIN_SUPPORTS_PIE) || BR2_aarch64 \
->                 || BR2_i386 || BR2_x86_64 || BR2_powerpc64le \
->                 || BR2_mips64 || BR2_mips64el
->         depends on !BR2_ARM_CPU_ARMV4
->         # MIPS R6 support in Go has not yet been developed.
->         depends on !BR2_MIPS_CPU_MIPS64R6
->
-> Of course we can only do this if host-go builds correctly regardless of
-> whether the target architecture is supported or not. What Rust does is:
->
->  - If the target is architecture is supported by Rust, it installs
->    support for building code for both the host and the target
->    architectures.
->
->  - If the target is architecture is not supported by Rust, it only
->    installs support for building code for the host architecture.
->
-> Do you know how Go supports this ? I have no idea how Go is told to
-> support this or that architecture. Could you investigate this ?
+commit: https://git.buildroot.net/buildroot/commit/?id=11d72bdaef65e8959dc0382d22a63e0b790b8928
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-My priorities have shifted a bit but I plan on getting back on this
-one (need to investigate as I do not know the answers to above).
+Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+Acked-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                 |  1 +
+ package/Config.in                          |  1 +
+ package/perl-data-dump/Config.in           |  6 ++++++
+ package/perl-data-dump/perl-data-dump.hash |  6 ++++++
+ package/perl-data-dump/perl-data-dump.mk   | 13 +++++++++++++
+ 5 files changed, 27 insertions(+)
 
-If someone else holds the answers please feel free to jump in.
-
--- 
-Mirza Krak | Embedded Solutions Architect | https://mender.io
-
- Northern.tech AS | @northerntechHQ
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8c43ce1b17..0b9a3e741b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -489,6 +489,7 @@ F:	package/perl-appconfig/
+ F:	package/perl-astro-suntime/
+ F:	package/perl-class-std/
+ F:	package/perl-class-std-fast/
++F:	package/perl-data-dump/
+ F:	package/perl-data-optlist/
+ F:	package/perl-data-uuid/
+ F:	package/perl-date-manip/
+diff --git a/package/Config.in b/package/Config.in
+index 046ddd5310..b981df7879 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -674,6 +674,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-crypt-cbc/Config.in"
+ 	source "package/perl-crypt-openssl-random/Config.in"
+ 	source "package/perl-crypt-openssl-rsa/Config.in"
++	source "package/perl-data-dump/Config.in"
+ 	source "package/perl-data-optlist/Config.in"
+ 	source "package/perl-data-uuid/Config.in"
+ 	source "package/perl-date-manip/Config.in"
+diff --git a/package/perl-data-dump/Config.in b/package/perl-data-dump/Config.in
+new file mode 100644
+index 0000000000..a44291baae
+--- /dev/null
++++ b/package/perl-data-dump/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PERL_DATA_DUMP
++	bool "perl-data-dump"
++	help
++	  Pretty printing of data structures
++
++	  https://metacpan.org/release/Data-Dump
+diff --git a/package/perl-data-dump/perl-data-dump.hash b/package/perl-data-dump/perl-data-dump.hash
+new file mode 100644
+index 0000000000..87850326de
+--- /dev/null
++++ b/package/perl-data-dump/perl-data-dump.hash
+@@ -0,0 +1,6 @@
++# retrieved by scancpan from http://cpan.metacpan.org/
++md5    762c111e525c82ff23d62c90821b26e9 Data-Dump-1.23.tar.gz
++sha256 af53b05ef1387b4cab4427e6789179283e4f0da8cf036e8db516ddb344512b65 Data-Dump-1.23.tar.gz
++
++# computed by scancpan
++sha256 31d1b6482bcc3db87a38ad02065554f9d3bc13321d4ef8e96042464045e2abcf README
+diff --git a/package/perl-data-dump/perl-data-dump.mk b/package/perl-data-dump/perl-data-dump.mk
+new file mode 100644
+index 0000000000..7c5d46e08e
+--- /dev/null
++++ b/package/perl-data-dump/perl-data-dump.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# perl-data-dump
++#
++################################################################################
++
++PERL_DATA_DUMP_VERSION = 1.23
++PERL_DATA_DUMP_SOURCE = Data-Dump-$(PERL_DATA_DUMP_VERSION).tar.gz
++PERL_DATA_DUMP_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
++PERL_DATA_DUMP_LICENSE = Artistic or GPL-1.0+
++PERL_DATA_DUMP_LICENSE_FILES = README
++
++$(eval $(perl-package))
