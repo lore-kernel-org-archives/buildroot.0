@@ -1,41 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 12 Sep 2018 21:03:35 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/python-cryptography: bump
- version to 2.3.1
-In-Reply-To: <20180911201408.9453-1-bernd.kuhls@t-online.de>
-References: <20180911201408.9453-1-bernd.kuhls@t-online.de>
-Message-ID: <20180912210335.4228ca94@windsurf>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Wed, 12 Sep 2018 21:04:29 +0200
+Subject: [Buildroot] [PATCH 1/1] feh: xinemara is optional not mandatory
+In-Reply-To: <20180912173342.14319-1-fontaine.fabrice@gmail.com>
+References: <20180912173342.14319-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180912190428.GA13939@dell5510>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Fabrice,
 
-On Tue, 11 Sep 2018 22:14:08 +0200, Bernd Kuhls wrote:
-> Changelog: https://cryptography.io/en/latest/changelog/#v2-3-1
-> 
-> Please note that CVE-2018-10903, fixed in version 2.3, was introduced
-> in version 1.9.0, so it was not present in buildroot:
-> https://nvd.nist.gov/vuln/detail/CVE-2018-10903
-> 
-> Added license hashes and switched runtime dependency from pyasn1 to
-> asn1crypto: https://cryptography.io/en/latest/changelog/#v1-8
-> 
-> Fixed pthread problem by adding -pthread to CFLAGS, suggested by
-> https://patchwork.openembedded.org/patch/146240/
-> https://bugs.gentoo.org/630578#c6
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Petr Vorel <pvorel@suse.cz>
+> ---
+>  package/feh/Config.in | 1 -
+>  package/feh/feh.mk    | 9 ++++++++-
+>  2 files changed, 8 insertions(+), 2 deletions(-)
 
-Could you make sure that this problem is reported upstream ?
+> diff --git a/package/feh/Config.in b/package/feh/Config.in
+> index 277ec891b3..7a348a1507 100644
+> --- a/package/feh/Config.in
+> +++ b/package/feh/Config.in
+> @@ -2,7 +2,6 @@ config BR2_PACKAGE_FEH
+>  	bool "feh"
+>  	depends on BR2_PACKAGE_XORG7
+>  	depends on BR2_USE_MMU # fork()
+> -	select BR2_PACKAGE_XLIB_LIBXINERAMA
+>  	select BR2_PACKAGE_XLIB_LIBXT
+>  	select BR2_PACKAGE_IMLIB2
+>  	select BR2_PACKAGE_IMLIB2_PNG
+> diff --git a/package/feh/feh.mk b/package/feh/feh.mk
+> index a192bfbdb0..6cfa73b242 100644
+> --- a/package/feh/feh.mk
+> +++ b/package/feh/feh.mk
+> @@ -7,7 +7,7 @@
+>  FEH_VERSION = 2.27.1
+>  FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
+>  FEH_SITE = http://feh.finalrewind.org
+> -FEH_DEPENDENCIES = imlib2 libpng xlib_libXinerama xlib_libXt
+> +FEH_DEPENDENCIES = imlib2 libpng xlib_libXt
+>  FEH_LICENSE = MIT
+>  FEH_LICENSE_FILES = COPYING
 
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> @@ -18,6 +18,13 @@ else
+>  FEH_MAKE_OPTS += curl=0
+>  endif
 
-Applied to master, thanks!
+> +ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
+> +FEH_DEPENDENCIES += xlib_libXinemara
+								 ^ typo:
+this is correct:
+FEH_DEPENDENCIES += xlib_libXinemara
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+@Thomas (or whoever is merging this): can you please fix this before merging?
+
+BTW I created the same commit in the morning (without a typo :)), but forget to
+send it.
+
+
+Kind regards,
+Petr
