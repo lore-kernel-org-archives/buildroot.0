@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 12 Sep 2018 23:45:25 +0200
-Subject: [Buildroot] [PATCH v2] rust: Modify Rust to be usable as
- host-tool only
-In-Reply-To: <20180822223350.8735-1-sam.voss@gmail.com>
-References: <20180822223350.8735-1-sam.voss@gmail.com>
-Message-ID: <20180912234525.26ca301e@windsurf>
+Date: Wed, 12 Sep 2018 23:46:48 +0200
+Subject: [Buildroot] [PATCH 2/2] package/gdb: use stat() privided by the
+ system
+In-Reply-To: <20180909163750.14196-2-romain.naour@gmail.com>
+References: <20180909163750.14196-1-romain.naour@gmail.com>
+ <20180909163750.14196-2-romain.naour@gmail.com>
+Message-ID: <20180912234648.0e8f5e9f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +14,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 22 Aug 2018 17:33:50 -0500, sam.voss at gmail.com wrote:
-> From: Sam Voss <sam.voss@gmail.com>
+On Sun,  9 Sep 2018 18:37:50 +0200, Romain Naour wrote:
+> Use the same workaround [1] as gnulib use to get the original
+> definition of stat. Otherwise with musl toolchains, gnulib try to use
+> rpl_stat which is not defined.
 > 
-> Modify host-rust virtual package to default to host-rust-bin when no
-> other selection has been made, as long as the host supports rust. This
-> allows host only tools to still use rust when the target architecture
-> does not support it.
+> Fixes:
+> https://gitlab.com/free-electrons/toolchains-builder/-/jobs/95552308
 > 
-> Add target-specific variable which is used to differentiate host and
-> target arch requirements (BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS).
+> [1] http://git.savannah.gnu.org/cgit/gnulib.git/commit/lib/stat.c?id=c9d72f69bd201a1ab31464d91f234ea1817fe0e1
 > 
-> A target package shall depend on this variable where a host package will
-> use the previously defined BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS. The new
-> "target" version is selectable for the same set of architectures as
-> before, but now depends on the host variant.
-> 
-> Signed-off-by: Sam Voss <sam.voss@gmail.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/rust-bin/rust-bin.mk |  9 ++++++---
->  package/rustc/Config.in.host | 16 ++++++++++++----
->  package/rustc/rustc.mk       |  2 ++
->  3 files changed, 20 insertions(+), 7 deletions(-)
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Applied to master, thanks.
+Upstream has fixed the issue. Could you try to backport upstream
+commit 3c025cfe5efc44eb4dfb03b53dca28e75096dd1e instead, and see if it
+solves the problem ?
+
+Thanks!
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Thomas Petazzoni, CTO, Bootlin
 Embedded Linux and Kernel engineering
 https://bootlin.com
