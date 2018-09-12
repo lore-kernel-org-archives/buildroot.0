@@ -1,32 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 12 Sep 2018 23:38:12 +0200
-Subject: [Buildroot] [PATCH 0/2] support for RISC-V architecture
-In-Reply-To: <ff182eac-12ea-7ad6-df8c-8ec9c257fece@aries-embedded.de>
-References: <ff182eac-12ea-7ad6-df8c-8ec9c257fece@aries-embedded.de>
-Message-ID: <20180912233812.6696430b@windsurf>
+Date: Wed, 12 Sep 2018 23:42:05 +0200
+Subject: [Buildroot] [PATCH 00/13] perl modules again
+In-Reply-To: <20180820115519.24046-1-chrismcc@gmail.com>
+References: <20180820115519.24046-1-chrismcc@gmail.com>
+Message-ID: <20180912234205.3db0a5c8@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Anton,
+Hello Christopher,
 
-On Sat, 14 Jul 2018 09:09:38 +0200, Anton Kuzmin wrote:
-> This patch set adds basic support for RISC-V ISA.
-> 
-> Only 64-bit glibc toolchain/sdk are built at the moment.
+On Mon, 20 Aug 2018 04:55:01 -0700, Christopher McCrory wrote:
 
-Thanks for this patch series. I missed it back then, but in the mean
-time, Mark Corbin has proposed a more complete patch series adding
-RISC-V support:
+> Christopher McCrory (18):
+>   perl-dbi: add host package
+>   perl-dbd-mysql: new package
+>   perl-data-dump: new package
+>   perl-time-parsedate: new package
+>   perl-x10: new package
+>   perl-sys-cpu: new package
+>   perl-dist-checkconflicts: new package
+>   perl-package-stash: new package
+>   perl-class-load: new package
 
-  http://patchwork.ozlabs.org/project/buildroot/list/?series=65306
+So up to this point, I have applied the patches.
 
-I'll mark your series as Superseded in our patch tracking system. Could
-you look at Mark's proposal, and see if it works for you as well ?
+>   perl-template-toolkit: new package
+>   perl-xml-parser: new package
 
-Thanks!
+Those two patches are pending a resolution on the discussion on whether
+we really need to patch the Makefile in sub-directories, or if we can
+have them properly generated.
+
+If we need to patch them, I have suggested how to integrate this in the
+pkg-perl infrastructure, and I would like this to be done and then used
+by the packages.
+
+>   perl-soap-wsdl: new package
+
+On this one, there is the question of the dependency on
+perl-termreadkey.
+
+>   perl-time-parsedate: add license
+
+This one is no longer needed, I marked as Superseded.
+
+>   perl-termreadkey: new package
+
+This one you said yourself does not cross-compile.
+
+>   pkg-utils.mk: patch_sub_makefile
+>   perl-template-toolkit: use new patch_sub_makefile
+>   perl-xml-parser: use new patch_sub_makefile
+>   perl-soap-wsdl: add dependancy on perl-termreadkey
+
+So, I've marked all those remaining patches as Changes Requested.
+Could you work on fixing the above issues, and send an updated version
+of the patch series ? Or possibly separate patch series if there are
+separate sets of packages with no inter dependencies.
+
+Best regards,
 
 Thomas
 -- 
