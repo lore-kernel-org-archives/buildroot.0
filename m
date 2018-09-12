@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 12 Sep 2018 20:55:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump version to 8.12.0
-In-Reply-To: <20180912124839.3774-1-martin@barkynet.com>
-References: <20180912124839.3774-1-martin@barkynet.com>
-Message-ID: <20180912205532.3b59e7d8@windsurf>
+Date: Wed, 12 Sep 2018 20:55:42 +0200
+Subject: [Buildroot] [PATCH 1/1] feh: xinemara is optional not mandatory
+In-Reply-To: <20180912173342.14319-1-fontaine.fabrice@gmail.com>
+References: <20180912173342.14319-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180912205542.2d330674@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 12 Sep 2018 13:48:39 +0100, Martin Bark wrote:
-> See https://nodejs.org/en/blog/release/v8.12.0/
-> 
-> Signed-off-by: Martin Bark <martin@barkynet.com>
+On Wed, 12 Sep 2018 19:33:42 +0200, Fabrice Fontaine wrote:
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/nodejs/nodejs.hash | 4 ++--
->  package/nodejs/nodejs.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/feh/Config.in | 1 -
+>  package/feh/feh.mk    | 9 ++++++++-
+>  2 files changed, 8 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
