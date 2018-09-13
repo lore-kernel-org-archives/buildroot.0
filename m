@@ -1,46 +1,135 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 13 Sep 2018 20:51:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/php: security bump to version 7.2.10
-Message-ID: <20180913185129.461-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 13 Sep 2018 20:51:55 +0200
+Subject: [Buildroot] [git commit] libusbgx: fix build with glibc-2.28
+Message-ID: <20180913185314.27D7A880D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog: http://de2.php.net/ChangeLog-7.php#7.2.10
+commit: https://git.buildroot.net/buildroot/commit/?id=c5a7028d497d661525fff90dd77e4b62bdf5daa0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes https://bugs.php.net/bug.php?id=76582, CVE ID pending.
+Since https://sourceware.org/ml/libc-alpha/2015-11/msg00253.html sys/sysmacros.h
+must be explicitly included.
+Without sys/sysmacros.h and with glibc-2.28 build fails with error like:
+src/.libs/libusbgx.so: undefined reference to minor' src/.libs/libusbgx.so: undefined reference tomajor'
+src/.libs/libusbgx.so: undefined reference to `makedev'
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+backport pr #29 (https://github.com/libusbgx/libusbgx/pull/29) (now applied)
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/872e2ab084c0c9bf466265d2f66140fbba692ee6/
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0001-Add-include-of-sys-sysmacro.h.patch       | 98 ++++++++++++++++++++++
+ 1 file changed, 98 insertions(+)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 6e401dec00..2774c44d6d 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From http://php.net/downloads.php
--sha256 3585c1222e00494efee4f5a65a8e03a1e6eca3dfb834814236ee7f02c5248ae0  php-7.2.9.tar.xz
-+sha256 01c2154a3a8e3c0818acbdbc1a956832c828a0380ce6d1d14fea495ea21804f0  php-7.2.10.tar.xz
- 
- # License file
- sha256 00e567a8d50359d93ee1f9afdd9511277660c1e70a0cbf3229f84403aa9aebb1  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 04a32283c8..f92e9b6565 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 7.2.9
-+PHP_VERSION = 7.2.10
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
--- 
-2.18.0
+diff --git a/package/libusbgx/0001-Add-include-of-sys-sysmacro.h.patch b/package/libusbgx/0001-Add-include-of-sys-sysmacro.h.patch
+new file mode 100644
+index 0000000000..0f47454f7a
+--- /dev/null
++++ b/package/libusbgx/0001-Add-include-of-sys-sysmacro.h.patch
+@@ -0,0 +1,98 @@
++From 45c14ef4d5d7ced0fbf984208de44ced6d5ed898 Mon Sep 17 00:00:00 2001
++From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++Date: Mon, 10 Sep 2018 15:52:09 +0200
++Subject: [PATCH] libusbgx: fix build with glibc-2.28 since <sys/sysmacros.h>
++ is no more included by <sys/types.h>
++
++Since https://sourceware.org/ml/libc-alpha/2015-11/msg00253.html sys/sysmacros.h
++must be explicitly included.
++Without sys/sysmacros.h and with glibc-2.28 build fails with error like:
++src/.libs/libusbgx.so: undefined reference to minor' src/.libs/libusbgx.so: undefined reference tomajor'
++src/.libs/libusbgx.so: undefined reference to `makedev'
++
++Signed-off-by: Sid Spry <R030t1@gmail.com>
++Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++---
++ examples/gadget-acm-ecm.c              | 1 +
++ examples/gadget-import.c               | 1 +
++ examples/gadget-ms.c                   | 1 +
++ examples/show-gadgets.c                | 1 +
++ examples/show-udcs.c                   | 1 +
++ include/usbg/usbg_internal_libconfig.h | 1 +
++ 6 files changed, 6 insertions(+)
++
++diff --git a/examples/gadget-acm-ecm.c b/examples/gadget-acm-ecm.c
++index 1c5e2ca..29360da 100644
++--- a/examples/gadget-acm-ecm.c
+++++ b/examples/gadget-acm-ecm.c
++@@ -20,6 +20,7 @@
++ 
++ #include <errno.h>
++ #include <stdio.h>
+++#include <sys/sysmacros.h>
++ #include <linux/usb/ch9.h>
++ #include <usbg/usbg.h>
++ 
++diff --git a/examples/gadget-import.c b/examples/gadget-import.c
++index e684fdb..63df449 100644
++--- a/examples/gadget-import.c
+++++ b/examples/gadget-import.c
++@@ -25,6 +25,7 @@
++ #include <errno.h>
++ #include <string.h>
++ #include <stdio.h>
+++#include <sys/sysmacros.h>
++ #include <usbg/usbg.h>
++ 
++ int main(int argc, char **argv)
++diff --git a/examples/gadget-ms.c b/examples/gadget-ms.c
++index 478c370..a5c6681 100644
++--- a/examples/gadget-ms.c
+++++ b/examples/gadget-ms.c
++@@ -23,6 +23,7 @@
++ 
++ #include <errno.h>
++ #include <stdio.h>
+++#include <sys/sysmacros.h>
++ #include <linux/usb/ch9.h>
++ #include <usbg/usbg.h>
++ #include <usbg/function/ms.h>
++diff --git a/examples/show-gadgets.c b/examples/show-gadgets.c
++index 707d448..a2a21c8 100644
++--- a/examples/show-gadgets.c
+++++ b/examples/show-gadgets.c
++@@ -21,6 +21,7 @@
++ #include <errno.h>
++ #include <stdio.h>
++ #include <string.h>
+++#include <sys/sysmacros.h>
++ #include <netinet/ether.h>
++ #include <usbg/usbg.h>
++ #include <usbg/function/ms.h>
++diff --git a/examples/show-udcs.c b/examples/show-udcs.c
++index 66e950f..2f5cc45 100644
++--- a/examples/show-udcs.c
+++++ b/examples/show-udcs.c
++@@ -23,6 +23,7 @@
++ 
++ #include <errno.h>
++ #include <stdio.h>
+++#include <sys/sysmacros.h>
++ #include <usbg/usbg.h>
++ 
++ int main(void)
++diff --git a/include/usbg/usbg_internal_libconfig.h b/include/usbg/usbg_internal_libconfig.h
++index ac51758..3fa55c0 100644
++--- a/include/usbg/usbg_internal_libconfig.h
+++++ b/include/usbg/usbg_internal_libconfig.h
++@@ -12,6 +12,7 @@
++ #ifndef USBG_INTERNAL_LIBCONFIG_H
++ #define USBG_INTERNAL_LIBCONFIG_H
++ 
+++#include <sys/sysmacros.h>
++ #include <libconfig.h>
++ #ifdef __cplusplus
++ extern "C" {
++-- 
++2.16.4
++
