@@ -1,38 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 13 Sep 2018 17:34:47 +0200
+Date: Thu, 13 Sep 2018 17:36:06 +0200
 Subject: [Buildroot] [PATCH 1/3] ti-sgx-libgbm: new package
-In-Reply-To: <1530773875-19452-1-git-send-email-tolvupostur@gmail.com>
+In-Reply-To: <f2kc1fxkra.ln2@ID-313208.user.individual.net>
 References: <1530773875-19452-1-git-send-email-tolvupostur@gmail.com>
-Message-ID: <20180913173447.7edae0a2@windsurf>
+ <f2kc1fxkra.ln2@ID-313208.user.individual.net>
+Message-ID: <20180913173606.41ff9873@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Einar,
+Hello Bernd,
 
-On Thu,  5 Jul 2018 08:57:53 +0200, Einar Jon Gunnarsson wrote:
-> ti-sgx-libgbm is a required package for ti-sgx-um in SDK 4.00
+On Mon, 09 Jul 2018 19:53:51 +0200, Bernd Kuhls wrote:
+
+> Back then Thomas wrote:
+> "Is this libgbm a TI-specific implementation of the libgm available in
+>  Mesa ? If that's the case, then it's going to be complicated to
+>  package, as we would have two implementations of the same API."
 > 
-> Signed-off-by: Einar Jon Gunnarsson <tolvupostur@gmail.com>
+> Working on the next bump of Kodi to v18 I needed to build mesa3d with 
+> libgbm only, no x11, no wayland. To do so I created a virtual package for 
+> libgbm which could be used by your package as well to solve the problem 
+> Thomas noted:
 
-I tested this package, and it didn't build because it depends on libdrm
-and udev, and those dependencies are not taken into account.
+Did you made some progress with this libgbm work? We can't merge
+ti-sgx-libgbm without this, otherwise we would have two packages
+installing the same conflicting library.
 
-> diff --git a/package/ti-sgx-libgbm/Config.in b/package/ti-sgx-libgbm/Config.in
-> new file mode 100644
-> index 0000000..07536d9
-> --- /dev/null
-> +++ b/package/ti-sgx-libgbm/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_TI_SGX_LIBGBM
-> +	bool "ti-sgx-libgbm"
-> +	depends on BR2_PACKAGE_TI_SGX_KM
-
-Is there a reason for having this dependency ? It does not require
-having the kernel or the kernel modules built in order to build
-ti-sgx-libgbm.
+So perhaps it would be nice to have a simple patch series adding a
+libgbm virtual package, and adding mesa3d as a provider for it.
 
 Best regards,
 
