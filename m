@@ -1,56 +1,46 @@
-From: =?UTF-8?Q?Benjam=C3=ADn_Calder=C3=B3n?= <benj.calderon@gmail.com>
-Date: Thu, 13 Sep 2018 14:50:29 -0400
-Subject: [Buildroot] [PATCH 1/1] sysvinit: bump to version 2.90
-In-Reply-To: <20180913204845.0a8ec10b@windsurf>
-References: <20180913041800.7242-1-benj.calderon@gmail.com>
- <20180913204845.0a8ec10b@windsurf>
-Message-ID: <CAOt0XSdOjQ8WSSdC-6kyW2ExJ3nwLenGTyJPLd5joLPxLHN8ug@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 13 Sep 2018 20:51:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/php: security bump to version 7.2.10
+Message-ID: <20180913185129.461-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-You're welcome!
+Changelog: http://de2.php.net/ChangeLog-7.php#7.2.10
 
-That's my first patch ever, (after lurking for some time now...) and it's
-kind of addictive! :-) Working on nfs-utils 2.3.2(3) now.
-____
-*Benjam?n C. Calder?n*
+Fixes https://bugs.php.net/bug.php?id=76582, CVE ID pending.
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Thu, Sep 13, 2018 at 2:48 PM Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> wrote:
-
-> Hello,
->
-> On Thu, 13 Sep 2018 00:18:00 -0400, Benjamin Calderon wrote:
-> > This commit updates sysvinit package using the upstream tarball at
-> > http://download.savannah.nongnu.org/releases/sysvinit/ instead of the
-> > Debian tarball + patches currently in use
-> >
-> > Signed-off-by: Benjamin Calderon <benj.calderon@gmail.com>
-> > ---
-> >  package/sysvinit/0001-fix-libcrypt-test.patch | 20 ----------
-> >  .../0002-musl-fix-compilation-errors.patch    | 38 -------------------
-> >  package/sysvinit/sysvinit.hash                |  8 ++--
-> >  package/sysvinit/sysvinit.mk                  | 17 ++-------
-> >  4 files changed, 8 insertions(+), 75 deletions(-)
-> >  delete mode 100644 package/sysvinit/0001-fix-libcrypt-test.patch
-> >  delete mode 100644
-> package/sysvinit/0002-musl-fix-compilation-errors.patch
->
-> Applied to master, thanks! And thanks Carlos for taking the time to
-> test this patch.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180913/386c1dda/attachment.html>
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 6e401dec00..2774c44d6d 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From http://php.net/downloads.php
+-sha256 3585c1222e00494efee4f5a65a8e03a1e6eca3dfb834814236ee7f02c5248ae0  php-7.2.9.tar.xz
++sha256 01c2154a3a8e3c0818acbdbc1a956832c828a0380ce6d1d14fea495ea21804f0  php-7.2.10.tar.xz
+ 
+ # License file
+ sha256 00e567a8d50359d93ee1f9afdd9511277660c1e70a0cbf3229f84403aa9aebb1  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 04a32283c8..f92e9b6565 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.2.9
++PHP_VERSION = 7.2.10
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
+-- 
+2.18.0
