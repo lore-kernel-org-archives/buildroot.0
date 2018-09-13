@@ -1,72 +1,54 @@
-From: quentin.aebischer at bodet-timesport.com <quentin.aebischer@bodet-timesport.com>
-Date: Thu, 13 Sep 2018 12:26:53 +0000
-Subject: [Buildroot] imx8m xorg-server compilation error
-In-Reply-To: <20180913074816.GA9384@g751.home>
-References: <26608e8a84344967a3b99d53407947fe@bodet-timesport.com>
- <20180913074816.GA9384@g751.home>
-Message-ID: <5bb0cb64-aca4-a93b-f4d7-bb7da6a364f6@bodet-timesport.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Thu, 13 Sep 2018 14:47:00 +0200
+Subject: [Buildroot] [PATCH] bluez-alsa: correct LICENSE.txt hash
+In-Reply-To: <20180913054927.29317-1-giulio.benetti@micronovasrl.com>
+References: <20180913054927.29317-1-giulio.benetti@micronovasrl.com>
+Message-ID: <5d8fb888-294e-5fc7-83ac-11a5fa66e2e2@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gary,
+Il 13/09/2018 07:49, Giulio Benetti ha scritto:
+> After bumping from v1.3.0 to v1.3.1 hash has not been recalculated.
+> 2018 J?rg Krause has been added to LICENSE.txt
+> 
+> Recalculate correct LICENSE.txt hash and add it to bluez-alsa.hash file.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/40c/40c35c1c3470a5ece7e9f82525efaceabfaaf841/
+> http://autobuild.buildroot.net/results/a0b/a0bcd9c7a308cd09e8cfb7632970b52989d7bff7/
+> http://autobuild.buildroot.net/results/7de/7deb42c0b8325d211805a3211b5b475edc60ec57/
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+>   package/bluez-alsa/bluez-alsa.hash | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/bluez-alsa/bluez-alsa.hash b/package/bluez-alsa/bluez-alsa.hash
+> index 5036f82eaa..ba81eadf34 100644
+> --- a/package/bluez-alsa/bluez-alsa.hash
+> +++ b/package/bluez-alsa/bluez-alsa.hash
+> @@ -1,3 +1,3 @@
+>   # Locally calculated:
+> -sha256  20005c4a153346ea7941973e9b7bd0b228417351f2e8ce88d1c02cc62bca188e  bluez-alsa-v1.3.0.tar.gz
+> -sha256  4738489ada14818fe4c53ce86223d7b2f4c1f57cb1f93d62c973c94a89080e83  LICENSE.txt
+> +sha256  29dad23877d0cf46a16e2f8d3746219e89068c33d052059caf1caaacd8b40cac  bluez-alsa-v1.3.1.tar.gz
+> +sha256  9a18d8b11802d0cec100839a0676a6fc48a4179f8f70b8e12a7f3d6b7a8fd70a  LICENSE.txt
+> 
 
+Sorry, this patch is wrong, I've created it with previous version.
+Going to submit v2.
 
-On 13/09/2018 09:48, Gary Bisson wrote:
-> Hi Quentin,
->
-> On Wed, Sep 12, 2018 at 01:34:42PM +0000, quentin.aebischer at bodet-timesport.com wrote:
->> Hi everyone,
->>
->>
->> At my company, we are trying to integrate a Zulu embedded JVM with graphics support on the imx8m evk board.
->>
->> For graphics support, the JVM needs an X11 backend.
->>
->> I hence tried to compile xorg-server package, but compilation with following error :
->>
->>
->> make[3]: Entering directory '/home/quentin/SSD_1To_Kingston/imx8_Linux/rootfs/output/build/xserver_xorg-server-1.20.1/glamor'
->>   CC       glamor.lo
->>   CC       glamor_copy.lo
->>   CC       glamor_core.lo
->>   CC       glamor_font.lo
->>   CC       glamor_composite_glyphs.lo
->>   CC       glamor_image.lo
->>   CC       glamor_lines.lo
->>   CC       glamor_glx.lo
->>   CC       glamor_dash.lo
->> In file included from /home/quentin/SSD_1To_Kingston/imx8_Linux/rootfs/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/EGL/eglplatform.h:179:0,
->>                  from /home/quentin/SSD_1To_Kingston/imx8_Linux/rootfs/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/epoxy/egl_generated.h:11,
->>                  from /home/quentin/SSD_1To_Kingston/imx8_Linux/rootfs/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/epoxy/egl.h:46,
->>                  from glamor_priv.h:43,
->>                  from glamor.c:37:
->> /home/quentin/SSD_1To_Kingston/imx8_Linux/rootfs/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/EGL/eglvivante.h:267:1: error: conflicting types for ?fbCreateWindow?
->>  fbCreateWindow(
->>
->> This happens when I select imx-gpuv-viv package, which from what I understand provides hardware GPU acceleration ?
-> Yes but imx-gpu-viv doesn't provide any X11 backend for i.MX8 platforms,
-> only Wayland. So if you want X, you'll need to use XWayland.
->
-> This hasn't been tested yet in Buildroot, only pure Wayland with Weston
-> compositor is known to work at this point.
->
-> However the NXP Yocto BSP seems to have XWayland sorted out so it should
-> be possible, just need someone to take the time to test it.
->
-> I wouldn't be surprised if imx-gpu-viv needs some tweaking in case of
-> Wayland backend + X11 build.
->
-> Regards,
-> Gary
+-- 
+Giulio Benetti
+CTO
 
-OK thanks for the info.
-I tried the yocto BSP and can confirm XWayland works there.
-
-I don't think I have the time nor the skillset required to port XWayland to imx8 for buildroot, so I guess I'll just wait.
-
-Regards,
-
-Quentin
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
