@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 13 Sep 2018 20:59:23 +0200
-Subject: [Buildroot] [PATCH 1/1] zeromq: fix static build with libatomic
-In-Reply-To: <20180913182419.5720-1-fontaine.fabrice@gmail.com>
-References: <20180913182419.5720-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180913205923.3e9fc4d3@windsurf>
+Date: Thu, 13 Sep 2018 21:04:03 +0200
+Subject: [Buildroot] [PATCH 7/7 v4] boot/uboot: needs host-{flex,bison}
+In-Reply-To: <ed63f1c812145907ef83c6bf245ad5765c67aded.1534522005.git.yann.morin.1998@free.fr>
+References: <cover.1534522005.git.yann.morin.1998@free.fr>
+ <ed63f1c812145907ef83c6bf245ad5765c67aded.1534522005.git.yann.morin.1998@free.fr>
+Message-ID: <20180913210350.36ee310e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +13,61 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 13 Sep 2018 20:24:19 +0200, Fabrice Fontaine wrote:
-> Second patch added support to link with -latomic if needed however using
-> LDFLAGS doesn't work when statically linking because LDFLAGS is added
-> before LIBS
+On Fri, 17 Aug 2018 18:06:53 +0200, Yann E. MORIN wrote:
+> Recent U-Boot no longer ship the flex/bison generated kconfig parser, as
+> of commit e91610da7c8a9fe42f3e5a75f06c3d1a0cb5f815 (kconfig: re-sync
+> with Linux 4.17-rc4).
 > 
-> Detection of atomic fails with:
+> So, add the conditional kconfig dependencies, as we just did for the
+> kernel.
 > 
-> configure:23230: /accts/mlweber1/instance-2/output/host/bin/sparc-linux-g++ -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -static -static -pedantic -Werror -Wall -D_GNU_SOURCE -D_REENTRANT -D_THREAD_SAFE -Wno-long-long -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -static -latomic conftest.cpp -lrt -lpthread -lstdc++ >&5
-> /tmp/ccgrvVTg.o: In function `main':
-> conftest.cpp:(.text.startup+0x10): undefined reference to `__atomic_fetch_add_4'
-> collect2: error: ld returned 1 exit status
-> 
-> So use LIBS instead of LDFLAGS
-> 
-> As second patch was already merged upstream, a new PR was sent:
-> https://github.com/zeromq/libzmq/pull/3250
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/c471d6b1061a8516f7772735e471db68a32965aa
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
 > ---
->  ...cinclude.m4-check-if-latomic-is-needed.patch | 17 +++++++++--------
->  1 file changed, 9 insertions(+), 8 deletions(-)
+>  boot/uboot/uboot.mk | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> index 04c759be34..bddafe234d 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -449,5 +449,8 @@ endif # BR2_TARGET_UBOOT && BR_BUILDING
+>  ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY),y)
+>  $(eval $(generic-package))
+>  else ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
+> +UBOOT_KCONFIG_DEPENDENCIES = \
+> +	$(BR2_BISON_HOST_DEPENDENCY) \
+> +	$(BR2_FLEX_HOST_DEPENDENCY)
+>  $(eval $(kconfig-package))
+>  endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
 
-Applied to master, thanks.
+This commit doesn't work well, because even if you chose "legacy build
+system", kconfig is used, and it tries to use bison.
+
+Example configuration:
+
+BR2_TARGET_UBOOT=y
+BR2_TARGET_UBOOT_BOARDNAME="mvebu_mcbin-88f8040"
+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.09"
+
+fails with:
+
+>>> uboot 2018.09 Configuring
+[...]
+  HOSTCC  scripts/basic/fixdep
+  HOSTCC  scripts/kconfig/conf.o
+  YACC    scripts/kconfig/zconf.tab.c
+/bin/sh: 1: bison: not found
+make[3]: *** [scripts/kconfig/zconf.tab.c] Error 127
+make[3]: *** Waiting for unfinished jobs....
+  LEX     scripts/kconfig/zconf.lex.c
+/bin/sh: 1: flex: not found
+make[3]: *** [scripts/kconfig/zconf.lex.c] Error 127
+make[2]: *** [mvebu_mcbin-88f8040_config] Error 2
+make[1]: *** [/home/test/outputs/mainline/build/uboot-2018.09/.stamp_configured] Error 2
+make: *** [_all] Error 2
 
 Thomas
 -- 
