@@ -1,76 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 13 Sep 2018 21:04:03 +0200
-Subject: [Buildroot] [PATCH 7/7 v4] boot/uboot: needs host-{flex,bison}
-In-Reply-To: <ed63f1c812145907ef83c6bf245ad5765c67aded.1534522005.git.yann.morin.1998@free.fr>
-References: <cover.1534522005.git.yann.morin.1998@free.fr>
- <ed63f1c812145907ef83c6bf245ad5765c67aded.1534522005.git.yann.morin.1998@free.fr>
-Message-ID: <20180913210350.36ee310e@windsurf>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 13 Sep 2018 21:49:54 +0200
+Subject: [Buildroot] [PATCH 1/3] ti-sgx-libgbm: new package
+References: <1530773875-19452-1-git-send-email-tolvupostur@gmail.com>
+ <f2kc1fxkra.ln2@ID-313208.user.individual.net>
+ <20180913173606.41ff9873@windsurf>
+Message-ID: <2krq6fxmq9.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Am Thu, 13 Sep 2018 17:36:06 +0200 schrieb Thomas Petazzoni:
 
-On Fri, 17 Aug 2018 18:06:53 +0200, Yann E. MORIN wrote:
-> Recent U-Boot no longer ship the flex/bison generated kconfig parser, as
-> of commit e91610da7c8a9fe42f3e5a75f06c3d1a0cb5f815 (kconfig: re-sync
-> with Linux 4.17-rc4).
-> 
-> So, add the conditional kconfig dependencies, as we just did for the
-> kernel.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> ---
->  boot/uboot/uboot.mk | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index 04c759be34..bddafe234d 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -449,5 +449,8 @@ endif # BR2_TARGET_UBOOT && BR_BUILDING
->  ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY),y)
->  $(eval $(generic-package))
->  else ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
-> +UBOOT_KCONFIG_DEPENDENCIES = \
-> +	$(BR2_BISON_HOST_DEPENDENCY) \
-> +	$(BR2_FLEX_HOST_DEPENDENCY)
->  $(eval $(kconfig-package))
->  endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
+> So perhaps it would be nice to have a simple patch series adding a
+> libgbm virtual package, and adding mesa3d as a provider for it.
 
-This commit doesn't work well, because even if you chose "legacy build
-system", kconfig is used, and it tries to use bison.
+Hi Thomas,
 
-Example configuration:
+this should be enough:
+http://patchwork.ozlabs.org/project/buildroot/list/?series=65595
 
-BR2_TARGET_UBOOT=y
-BR2_TARGET_UBOOT_BOARDNAME="mvebu_mcbin-88f8040"
-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.09"
-
-fails with:
-
->>> uboot 2018.09 Configuring
-[...]
-  HOSTCC  scripts/basic/fixdep
-  HOSTCC  scripts/kconfig/conf.o
-  YACC    scripts/kconfig/zconf.tab.c
-/bin/sh: 1: bison: not found
-make[3]: *** [scripts/kconfig/zconf.tab.c] Error 127
-make[3]: *** Waiting for unfinished jobs....
-  LEX     scripts/kconfig/zconf.lex.c
-/bin/sh: 1: flex: not found
-make[3]: *** [scripts/kconfig/zconf.lex.c] Error 127
-make[2]: *** [mvebu_mcbin-88f8040_config] Error 2
-make[1]: *** [/home/test/outputs/mainline/build/uboot-2018.09/.stamp_configured] Error 2
-make: *** [_all] Error 2
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards, Bernd
