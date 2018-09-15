@@ -1,60 +1,67 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 15 Sep 2018 14:18:05 +0200
-Subject: [Buildroot] [PATCH 1/2] package/x11r7/xlib_libXfont: remove
- autoreconf
-Message-ID: <20180915121806.5264-1-bernd.kuhls@t-online.de>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Sat, 15 Sep 2018 14:58:56 +0200
+Subject: [Buildroot] [PATCH] gpm: fix major() build failure due to glibc 2.28
+Message-ID: <20180915125856.82310-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nine years ago we added autoreconf to fix libtool-related problems
-with the matchbox package:
+glibc 2.28 no longer includes <sys/sysmacros.h> from <sys/types.h>,
+and therefore <sys/sysmacros.h> must be included explicitly when major()
+is used.
 
-https://git.buildroot.net/buildroot/commit/?id=51ef5b81224c243aa7f937c4690b1a120c81ccbc
+This commit adds a patch to directly include <sys/sysmacros.h> into
+open_console.c file where major() macro is used.
 
-Autoreconf for this package needs the xutil_util-macros but after
-building this defconfig with autoreconf removed from this package
+Fixes:
+http://autobuild.buildroot.net/results/f53/f5373a567de619375746f1dcfe312971b85bb810/
+http://autobuild.buildroot.net/results/227/227a7edf9304d85645d3e7fa0f930fe2e9b6e752/
 
-BR2_x86_64=y
-BR2_x86_core_avx2=y
-BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_XLIB_LIBXFONT=y
-BR2_PACKAGE_MATCHBOX=y
-BR2_PACKAGE_MATCHBOX_SM=y
-BR2_PACKAGE_MATCHBOX_COMMON=y
-BR2_PACKAGE_MATCHBOX_COMMON_PDA=y
-BR2_PACKAGE_MATCHBOX_DESKTOP=y
-BR2_PACKAGE_MATCHBOX_KEYBOARD=y
-BR2_PACKAGE_MATCHBOX_PANEL=y
-BR2_PACKAGE_MATCHBOX_STARTUP_MONITOR=y
-
-it is obvious that the problem which existed nine years ago seems to be
-gone. So instead of fixing autoreconf we remove it from this package
-because there is no need for it anymore.
-
-Fixes
-http://autobuild.buildroot.net/results/30c/30cf5cc139f9f6a9dc070953270f74e18b9310d4/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- package/x11r7/xlib_libXfont/xlib_libXfont.mk | 1 -
- 1 file changed, 1 deletion(-)
+ ...ix-major-build-failure-due-to-glibc-.patch | 32 +++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 package/gpm/0005-open_console.c-fix-major-build-failure-due-to-glibc-.patch
 
-diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.mk b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-index 61b6f99785..a1acfba83b 100644
---- a/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-+++ b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-@@ -9,7 +9,6 @@ XLIB_LIBXFONT_SOURCE = libXfont-$(XLIB_LIBXFONT_VERSION).tar.bz2
- XLIB_LIBXFONT_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXFONT_LICENSE = MIT
- XLIB_LIBXFONT_LICENSE_FILES = COPYING
--XLIB_LIBXFONT_AUTORECONF = YES
- XLIB_LIBXFONT_INSTALL_STAGING = YES
- 
- XLIB_LIBXFONT_DEPENDENCIES = freetype xlib_libfontenc xlib_xtrans xorgproto
+diff --git a/package/gpm/0005-open_console.c-fix-major-build-failure-due-to-glibc-.patch b/package/gpm/0005-open_console.c-fix-major-build-failure-due-to-glibc-.patch
+new file mode 100644
+index 0000000000..310503e332
+--- /dev/null
++++ b/package/gpm/0005-open_console.c-fix-major-build-failure-due-to-glibc-.patch
+@@ -0,0 +1,32 @@
++From 6463cdec7e784c3c963fae867f50c2708e21e8f7 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@micronovasrl.com>
++Date: Sat, 15 Sep 2018 14:37:37 +0200
++Subject: [PATCH] open_console.c: fix major() build failure due to glibc 2.28
++
++glibc 2.28 no longer includes <sys/sysmacros.h> from <sys/types.h>,
++and therefore <sys/sysmacros.h> must be included explicitly when
++major() is used.
++
++This commit adds a patch to directly include <sys/sysmacros.h> into
++open_console.c file where major() macro is used.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
++---
++ src/daemon/open_console.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/daemon/open_console.c b/src/daemon/open_console.c
++index 98297c9..d7acd40 100644
++--- a/src/daemon/open_console.c
+++++ b/src/daemon/open_console.c
++@@ -22,6 +22,7 @@
++ #include <fcntl.h>                  /* open and co.      */
++ #include <sys/stat.h>               /* stat()            */
++ #include <sys/ioctl.h>              /* ioctl             */
+++#include <sys/sysmacros.h>
++ 
++ /* Linux specific (to be outsourced in gpm2 */
++ #include <linux/serial.h>           /* for serial console check */
++-- 
++2.17.1
++
 -- 
-2.18.0
+2.17.1
