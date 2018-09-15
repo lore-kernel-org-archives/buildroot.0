@@ -1,55 +1,133 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 15 Sep 2018 17:54:13 +0200
-Subject: [Buildroot] [PATCH] package/gcc: glibc >= 2.27 needs gcc >= 5 on
- aarch64
-Message-ID: <20180915155413.17663-1-romain.naour@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 15 Sep 2018 20:16:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.9.0
+Message-ID: <20180915181630.32105-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With the following defconfig:
-BR2_aarch64=y
-BR2_BINUTILS_VERSION_2_28_X=y
-BR2_GCC_VERSION_4_9_X=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
+Release notes: https://www.samba.org/samba/history/samba-4.9.0.html
 
-The build fail with this error:
-In file included from ../sysdeps/ieee754/flt-32/math_config.h:23:0,
-                 from ../sysdeps/ieee754/flt-32/e_expf.c:29:
-../sysdeps/aarch64/fpu/math_private.h: In function 'roundtoint':
-../sysdeps/aarch64/fpu/math_private.h:311:3: error: implicit declaration of function 'vrndn_f64' [-Werror=implicit-function-declaration]
-   return vget_lane_f64 (vrndn_f64 (vld1_f64 (&x)), 0);
-   ^
-cc1: all warnings being treated as errors
+Added optional dependency to libarchive to fix configure error:
 
-vrndn_f64 function has been introduced in glibc code since version 2.27 [1].
-So we can't build a glibc based toolchain with gcc 4.9 anymore.
+Checking for libarchive existence
+Checking for header archive.h        : no
+/home/buildroot/br5/output/build/samba4-4.9.0/source3/wscript:225:
+ error: libarchive support not found. Try installing libarchive-dev or
+ libarchive-devel. Otherwise, use --without-libarchive to build without
+ libarchive support. libarchive support is required for the smbclient
+ tar-file mode
 
-Add a new dependency in the toolchain infra to avoid selecting
-glibc toolchain using gcc 4.9.
+Disabled gpgme support to fix configure error:
 
-[1] https://sourceware.org/git/?p=glibc.git;a=commit;h=72aa623345ada1276ed89dbc00fdff9639cb8eaf
+Checking for program gpgme-config    : not found
+Checking for library gpgme           : not found
+Checking for gpgme_new               : not found
+/home/buildroot/br5/output/build/samba4-4.9.0/source4/dsdb/samdb/ldb_modules/wscript:40:
+ error: GPGME support not found. Try installing libgpgme11-dev or
+ gpgme-devel and python-gpgme. Otherwise, use --without-gpgme to build
+ without GPGME support or --without-ad-dc to build without the Samba AD
+ DC. GPGME support is required for the GPG encrypted password sync
+ feature
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Buildroot has no python-gpgme package atm so we disable this option
+for now.
+
+Disabled experimental LMDB LDB backend as well, this also needed an
+addition to samba4-cache.txt.
+
+AD DC support needs jansson, for details see release notes.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/gcc/Config.in.host | 2 ++
- 1 file changed, 2 insertions(+)
+ package/samba4/Config.in        |  1 +
+ package/samba4/samba4-cache.txt |  1 +
+ package/samba4/samba4.hash      |  4 ++--
+ package/samba4/samba4.mk        | 17 ++++++++++++++---
+ 4 files changed, 18 insertions(+), 5 deletions(-)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 01bf8fa561..5a8f684a4c 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -32,6 +32,8 @@ config BR2_GCC_VERSION_4_9_X
- 	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_mips64 || BR2_mips64el))
- 	# glibc >= 2.26 needs gcc >= 6.2
- 	depends on !(BR2_TOOLCHAIN_USES_GLIBC && BR2_powerpc64le)
-+	# glibc >= 2.27 needs gcc >= 5
-+	depends on !(BR2_TOOLCHAIN_USES_GLIBC && (BR2_aarch64 || BR2_aarch64_be))
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/samba4/Config.in b/package/samba4/Config.in
+index 298fdc6608..4ccd22aa2d 100644
+--- a/package/samba4/Config.in
++++ b/package/samba4/Config.in
+@@ -30,6 +30,7 @@ if BR2_PACKAGE_SAMBA4
+ config BR2_PACKAGE_SAMBA4_AD_DC
+ 	bool "AD DC"
+ 	select BR2_PACKAGE_GNUTLS
++	select BR2_PACKAGE_JANSSON
+ 	help
+ 	  Enable Active Directory Domain Controller functionality.
  
- config BR2_GCC_VERSION_5_X
+diff --git a/package/samba4/samba4-cache.txt b/package/samba4/samba4-cache.txt
+index 0485f0dbb1..e3a3720fc8 100644
+--- a/package/samba4/samba4-cache.txt
++++ b/package/samba4/samba4-cache.txt
+@@ -39,3 +39,4 @@ Checking value of SIGRTMAX: "64"
+ Checking value of SIGRTMIN: "34"
+ Checking errno of iconv for illegal multibyte sequence: "0"
+ checking for clnt_create(): OK
++Checking for a 64-bit host to support lmdb: NO
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 9594c7a932..b01ece7b67 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.8.5.tar.asc
+-sha256 e58ee6b1262d4128b8932ceee59d5f0b0a9bbe00547eb3cc4c41552de1a65155  samba-4.8.5.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.9.0.tar.asc
++sha256 d071e9e738e9583d0b9ce1c758d46808b76078405787c88a0c5b465bef8a9b15  samba-4.9.0.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 2db7a81df3..c7aaf6ba29 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.8.5
++SAMBA4_VERSION = 4.9.0
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
+@@ -69,6 +69,13 @@ else
+ SAMBA4_CONF_OPTS += --disable-gnutls
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBARCHIVE),y)
++SAMBA4_CONF_OPTS += --with-libarchive
++SAMBA4_DEPENDENCIES += libarchive
++else
++SAMBA4_CONF_OPTS += --without-libarchive
++endif
++
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+ SAMBA4_CONF_ENV += NCURSES_CONFIG="$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)"
+ SAMBA4_DEPENDENCIES += ncurses
+@@ -108,6 +115,8 @@ define SAMBA4_CONFIGURE_CMDS
+ 			--disable-iprint \
+ 			--without-pam \
+ 			--without-dmapi \
++			--without-gpgme \
++			--without-ldb-lmdb \
+ 			--disable-glusterfs \
+ 			--with-cluster-support \
+ 			--bundled-libraries='!asn1_compile,!compile_et' \
+@@ -127,8 +136,10 @@ define SAMBA4_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+ endef
+ 
+-ifeq ($(BR2_PACKAGE_SAMBA4_AD_DC),)
+-SAMBA4_CONF_OPTS += --without-ad-dc
++ifeq ($(BR2_PACKAGE_SAMBA4_AD_DC),y)
++SAMBA4_DEPENDENCIES += jansson
++else
++SAMBA4_CONF_OPTS += --without-ad-dc --without-json-audit
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SAMBA4_ADS),y)
 -- 
-2.14.4
+2.18.0
