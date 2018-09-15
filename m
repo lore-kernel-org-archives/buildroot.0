@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 15 Sep 2018 22:52:52 +0200
-Subject: [Buildroot] [PATCH 1/1] memcached: bump to version 1.5.10
-Message-ID: <20180915205252.11210-1-fontaine.fabrice@gmail.com>
+Date: Sat, 15 Sep 2018 23:08:03 +0200
+Subject: [Buildroot] [PATCH 1/2] exfat: bump to version 1.3.0
+Message-ID: <20180915210804.28722-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,36 +12,31 @@ Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/memcached/memcached.hash | 9 ++++++---
- package/memcached/memcached.mk   | 2 +-
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ package/exfat/exfat.hash | 3 ++-
+ package/exfat/exfat.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
-index 8278933827..c3cc11c3b4 100644
---- a/package/memcached/memcached.hash
-+++ b/package/memcached/memcached.hash
-@@ -1,3 +1,6 @@
--# From http://www.memcached.org/files/memcached-1.5.6.tar.gz.sha1
--sha1 ca35929e74b132c2495a6957cfdc80556337fb90  memcached-1.5.6.tar.gz
--sha256 9675ee859d7d81f7a950f190a6812720b26f08228d356044ec517d4d5af25f03  memcached-1.5.6.tar.gz
-+# From http://www.memcached.org/files/memcached-1.5.10.tar.gz.sha1
-+sha1 fff9351b360a09497cd805d3e4c1ffbe860d067d  memcached-1.5.10.tar.gz
-+
-+# Locally computed
-+sha256 494c060dbd96d546c74ab85a3cc3984d009b4423767ac33e05dd2340c01f1c4b  memcached-1.5.10.tar.gz
-+sha256 bc887c4ad8051fe690ace9528fe37a2e0bb362e6d963331d82e845ca9b585a0c  COPYING
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
-index c15abc79bf..f591fcf1c3 100644
---- a/package/memcached/memcached.mk
-+++ b/package/memcached/memcached.mk
+diff --git a/package/exfat/exfat.hash b/package/exfat/exfat.hash
+index 15b67f0094..4b8ce90190 100644
+--- a/package/exfat/exfat.hash
++++ b/package/exfat/exfat.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 e1105256d75860c0678f98bbae0b8fe465d4c96ed187b7035556097f152478e7  fuse-exfat-1.2.6.tar.gz
++sha256 07652136064da5e4d32df5555f88c138ffa4835a23b88a5bae2015f21006e0d3  fuse-exfat-1.3.0.tar.gz
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/exfat/exfat.mk b/package/exfat/exfat.mk
+index f5ed13e207..b52b197062 100644
+--- a/package/exfat/exfat.mk
++++ b/package/exfat/exfat.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MEMCACHED_VERSION = 1.5.6
-+MEMCACHED_VERSION = 1.5.10
- MEMCACHED_SITE = http://www.memcached.org/files
- MEMCACHED_DEPENDENCIES = libevent
- MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+-EXFAT_VERSION = 1.2.6
++EXFAT_VERSION = 1.3.0
+ EXFAT_SITE = https://github.com/relan/exfat/releases/download/v$(EXFAT_VERSION)
+ EXFAT_SOURCE = fuse-exfat-$(EXFAT_VERSION).tar.gz
+ EXFAT_DEPENDENCIES = libfuse host-pkgconf
 -- 
 2.17.1
