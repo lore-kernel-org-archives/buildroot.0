@@ -1,73 +1,57 @@
-From: =?UTF-8?Q?Einar_J=C3=B3n?= <tolvupostur@gmail.com>
-Date: Sat, 15 Sep 2018 13:14:41 +0200
-Subject: [Buildroot] [PATCH 1/3] ti-sgx-libgbm: new package
-In-Reply-To: <20180914091851.6a922cda@windsurf>
-References: <1530773875-19452-1-git-send-email-tolvupostur@gmail.com>
- <20180913173447.7edae0a2@windsurf>
- <CABhNV209XUpbEfLvyVbQsfVKGhTbOsvNNuX7YAQ_jakPRzpyJQ@mail.gmail.com>
- <20180914091851.6a922cda@windsurf>
-Message-ID: <CABhNV20EHsChQZV=BgxEWusvKch1wMUL4OOjxB5_B3wzPjHWdw@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 15 Sep 2018 14:18:06 +0200
+Subject: [Buildroot] [PATCH 2/2] package/x11r7/xlib_libXft: remove autoreconf
+In-Reply-To: <20180915121806.5264-1-bernd.kuhls@t-online.de>
+References: <20180915121806.5264-1-bernd.kuhls@t-online.de>
+Message-ID: <20180915121806.5264-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OK.
+Nine years ago we added autoreconf to fix libtool-related problems
+with the matchbox package:
 
-So I had time to look at this.
-I think the whole thing needs to be reworked. Let's park it for now.
-I'll wait for the virtual package to be merged and then add a new
-fully tested patch against a more recent master.
-If someone bumps beaglebone_defconfig to kernel 4.14.40 (current ti
-sdk 5.00), then I would bring beaglebone_qt_defconfig all the way up
-to that one.
+https://git.buildroot.net/buildroot/commit/?id=51ef5b81224c243aa7f937c4690b1a120c81ccbc
 
-On Fri, 14 Sep 2018 at 09:18, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> > > Is there a reason for having this dependency ? It does not require
-> > > having the kernel or the kernel modules built in order to build
-> > > ti-sgx-libgbm.
-> >
-> I wanted to quickly build test ti-sgx-libgbm, and not have to build a
-> kernel + kernel modules, so I dropped the "depends on" on TI SGX kernel
-> modules.
-> > Building the package is one thing, but what is the point of building
-> > it if you don't have anything
-> > that can use it? I think you need the ti-sgx kernel module for
-> > anything meaningful.
->
-> Build testing :-)
->
+After building this defconfig with autoreconf removed from this package
 
-But you don't need to build ti-sgx-km (and therefore kernel) to
-build this package. This is just to hide it in menuconfig.
-I added these:
-# make sure libdrm builds udev
-ti-sgx-um: depends on BR2_PACKAGE_HAS_UDEV
-# lazy way to add all the depends of ti-sgx-um
-ti-sgx-libgbm: depends on BR2_PACKAGE_TI_SGX_UM
-# make sure we have libdrm+udev for ti-sgx-libgbm
-TI_SGX_LIBGBM_DEPENDENCIES += libdrm
-Then 'make ti-sgx-libgbm' on an empty folder works fine, and doesn't build
-kernel or ti-sgx-km/ti-sgx-um.
+BR2_x86_64=y
+BR2_x86_core_avx2=y
+BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_XLIB_LIBXFONT=y
+BR2_PACKAGE_MATCHBOX=y
+BR2_PACKAGE_MATCHBOX_SM=y
+BR2_PACKAGE_MATCHBOX_COMMON=y
+BR2_PACKAGE_MATCHBOX_COMMON_PDA=y
+BR2_PACKAGE_MATCHBOX_DESKTOP=y
+BR2_PACKAGE_MATCHBOX_KEYBOARD=y
+BR2_PACKAGE_MATCHBOX_PANEL=y
+BR2_PACKAGE_MATCHBOX_STARTUP_MONITOR=y
 
-I just noticed that  ti-sgx-demos depends on ti-sgx-um, not ti-sgx-km.
-This one is the same, I doubt that anyone can use it without ti-sgx-um.
-So it might make more sense to just make this depend on ti-sgx-um.
-But since ti-sgx-um selects it, it can't be selected alone
-(always "-*-" in menuconfig or hidden/disabled).
-How do you guys like to handle that kind of dependency?
+it is obvious that the problem which existed nine years ago seems to be
+gone, therefore we remove autoreconf from this package because there is
+no need for it anymore.
 
-> As explained above, Mesa3D is available on ARM. While it indeed doesn't
-> have support for the PowerVR in TI platforms, you can still enable
-> Mesa3D using the softpipe or llvmpipe drivers on ARM TI platforms, so
-> it is possible to have a conflict.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xlib_libXft/xlib_libXft.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-You're right. I just always assumed Mesa was for Intel CPUs.
-Virtual package FTW.
-
---
-Regards
-Einar J?n
+diff --git a/package/x11r7/xlib_libXft/xlib_libXft.mk b/package/x11r7/xlib_libXft/xlib_libXft.mk
+index 64415cfd30..9c5757e657 100644
+--- a/package/x11r7/xlib_libXft/xlib_libXft.mk
++++ b/package/x11r7/xlib_libXft/xlib_libXft.mk
+@@ -9,7 +9,6 @@ XLIB_LIBXFT_SOURCE = libXft-$(XLIB_LIBXFT_VERSION).tar.bz2
+ XLIB_LIBXFT_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXFT_LICENSE = MIT
+ XLIB_LIBXFT_LICENSE_FILES = COPYING
+-XLIB_LIBXFT_AUTORECONF = YES
+ XLIB_LIBXFT_INSTALL_STAGING = YES
+ XLIB_LIBXFT_DEPENDENCIES = fontconfig freetype xlib_libX11 xlib_libXext xlib_libXrender xorgproto
+ 
+-- 
+2.18.0
