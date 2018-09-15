@@ -1,133 +1,198 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 15 Sep 2018 20:16:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.9.0
-Message-ID: <20180915181630.32105-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 15 Sep 2018 21:01:19 +0200
+Subject: [Buildroot] [PATCH 1/1] nfs-utils: bump to version 2.3.3
+Message-ID: <20180915190119.18189-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://www.samba.org/samba/history/samba-4.9.0.html
+- Remove fifth patch (already in version)
+- Add a new patch from gentoo to remove Werror
+- Add a new patch to fix internal rpcgen
+- Fix major/minor build failure with glibc 2.28, see
+  http://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commit;h=4ac4b4f74dcec30dcb23aab827eed152db08daea
+- Add hash for license file
 
-Added optional dependency to libarchive to fix configure error:
+Fixes:
+ - http://autobuild.buildroot.org/results/c559c4b7b23d1fa634a1b3ae05a6afdb672e4e79
 
-Checking for libarchive existence
-Checking for header archive.h        : no
-/home/buildroot/br5/output/build/samba4-4.9.0/source3/wscript:225:
- error: libarchive support not found. Try installing libarchive-dev or
- libarchive-devel. Otherwise, use --without-libarchive to build without
- libarchive support. libarchive support is required for the smbclient
- tar-file mode
-
-Disabled gpgme support to fix configure error:
-
-Checking for program gpgme-config    : not found
-Checking for library gpgme           : not found
-Checking for gpgme_new               : not found
-/home/buildroot/br5/output/build/samba4-4.9.0/source4/dsdb/samdb/ldb_modules/wscript:40:
- error: GPGME support not found. Try installing libgpgme11-dev or
- gpgme-devel and python-gpgme. Otherwise, use --without-gpgme to build
- without GPGME support or --without-ad-dc to build without the Samba AD
- DC. GPGME support is required for the GPG encrypted password sync
- feature
-
-Buildroot has no python-gpgme package atm so we disable this option
-for now.
-
-Disabled experimental LMDB LDB backend as well, this also needed an
-addition to samba4-cache.txt.
-
-AD DC support needs jansson, for details see release notes.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/samba4/Config.in        |  1 +
- package/samba4/samba4-cache.txt |  1 +
- package/samba4/samba4.hash      |  4 ++--
- package/samba4/samba4.mk        | 17 ++++++++++++++---
- 4 files changed, 18 insertions(+), 5 deletions(-)
+ .../0005-nfs-utils-2.3.2-no-werror.patch      | 56 +++++++++++++++++++
+ ...tils-add-missing-include-of-stdint.h.patch | 33 -----------
+ ...06-fix-usage-of-with-rpcgen-internal.patch | 34 +++++++++++
+ package/nfs-utils/nfs-utils.hash              |  5 +-
+ package/nfs-utils/nfs-utils.mk                |  2 +-
+ 5 files changed, 94 insertions(+), 36 deletions(-)
+ create mode 100644 package/nfs-utils/0005-nfs-utils-2.3.2-no-werror.patch
+ delete mode 100644 package/nfs-utils/0005-nfs-utils-add-missing-include-of-stdint.h.patch
+ create mode 100644 package/nfs-utils/0006-fix-usage-of-with-rpcgen-internal.patch
 
-diff --git a/package/samba4/Config.in b/package/samba4/Config.in
-index 298fdc6608..4ccd22aa2d 100644
---- a/package/samba4/Config.in
-+++ b/package/samba4/Config.in
-@@ -30,6 +30,7 @@ if BR2_PACKAGE_SAMBA4
- config BR2_PACKAGE_SAMBA4_AD_DC
- 	bool "AD DC"
- 	select BR2_PACKAGE_GNUTLS
-+	select BR2_PACKAGE_JANSSON
- 	help
- 	  Enable Active Directory Domain Controller functionality.
- 
-diff --git a/package/samba4/samba4-cache.txt b/package/samba4/samba4-cache.txt
-index 0485f0dbb1..e3a3720fc8 100644
---- a/package/samba4/samba4-cache.txt
-+++ b/package/samba4/samba4-cache.txt
-@@ -39,3 +39,4 @@ Checking value of SIGRTMAX: "64"
- Checking value of SIGRTMIN: "34"
- Checking errno of iconv for illegal multibyte sequence: "0"
- checking for clnt_create(): OK
-+Checking for a 64-bit host to support lmdb: NO
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 9594c7a932..b01ece7b67 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.8.5.tar.asc
--sha256 e58ee6b1262d4128b8932ceee59d5f0b0a9bbe00547eb3cc4c41552de1a65155  samba-4.8.5.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.9.0.tar.asc
-+sha256 d071e9e738e9583d0b9ce1c758d46808b76078405787c88a0c5b465bef8a9b15  samba-4.9.0.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 2db7a81df3..c7aaf6ba29 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
+diff --git a/package/nfs-utils/0005-nfs-utils-2.3.2-no-werror.patch b/package/nfs-utils/0005-nfs-utils-2.3.2-no-werror.patch
+new file mode 100644
+index 0000000000..60cf1d2d08
+--- /dev/null
++++ b/package/nfs-utils/0005-nfs-utils-2.3.2-no-werror.patch
+@@ -0,0 +1,56 @@
++https://bugs.gentoo.org/656984
++
++Don't build with -Werror flags.
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from: https://gitweb.gentoo.org/repo/gentoo.git/plain/net-fs/nfs-utils/files/nfs-utils-2.3.2-no-werror.patch]
++
++--- a/configure.ac
+++++ b/configure.ac
++@@ -544,45 +544,11 @@
++ AC_SUBST(LDFLAGS_FOR_BUILD)
++ 
++ my_am_cflags="\
++- -pipe \
++  -Wall \
++  -Wextra \
++- -Werror=strict-prototypes \
++- -Werror=missing-prototypes \
++- -Werror=missing-declarations \
++- -Werror=format=2 \
++- -Werror=undef \
++- -Werror=missing-include-dirs \
++- -Werror=strict-aliasing=2 \
++- -Werror=init-self \
++- -Werror=implicit-function-declaration \
++- -Werror=return-type \
++- -Werror=switch \
++- -Werror=overflow \
++- -Werror=parentheses \
++- -Werror=aggregate-return \
++- -Werror=unused-result \
++  -fno-strict-aliasing \
++ "
++-
++-AC_DEFUN([CHECK_CCSUPPORT], [
++-  my_save_cflags="$CFLAGS"
++-  CFLAGS=$1
++-  AC_MSG_CHECKING([whether CC supports $1])
++-  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])],
++-    [AC_MSG_RESULT([yes])]
++-    [$2+=$1],
++-    [AC_MSG_RESULT([no])]
++-  )
++-  CFLAGS="$my_save_cflags"
++-])
++-
++-CHECK_CCSUPPORT([-Werror=format-overflow=2], [flg1])
++-CHECK_CCSUPPORT([-Werror=int-conversion], [flg2])
++-CHECK_CCSUPPORT([-Werror=incompatible-pointer-types], [flg3])
++-CHECK_CCSUPPORT([-Werror=misleading-indentation], [flg4])
++-
++-AC_SUBST([AM_CFLAGS], ["$my_am_cflags $flg1 $flg2 $flg3 $flg4"])
+++AC_SUBST([AM_CFLAGS], ["$my_am_cflags"])
++ 
++ # Make sure that $ACLOCAL_FLAGS are used during a rebuild
++ AC_SUBST([ACLOCAL_AMFLAGS], ["-I $ac_macro_dir \$(ACLOCAL_FLAGS)"])
+diff --git a/package/nfs-utils/0005-nfs-utils-add-missing-include-of-stdint.h.patch b/package/nfs-utils/0005-nfs-utils-add-missing-include-of-stdint.h.patch
+deleted file mode 100644
+index a6214350ca..0000000000
+--- a/package/nfs-utils/0005-nfs-utils-add-missing-include-of-stdint.h.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From b3ff26fa182b34b6faa1317f18a9dac4c7963334 Mon Sep 17 00:00:00 2001
+-From: Matt Weber <matthew.weber@rockwellcollins.com>
+-Date: Mon, 2 Oct 2017 09:57:15 -0500
+-Subject: [PATCH] nfs-utils: add missing include of stdint.h
+-
+-Glibc bump to 2.26 exposed this missing header when building
+-with the following combination using an i386 internal toolchain.
+-gcc5.4.0
+-bin2.28.1
+-linux4.1.43
+-
+-Upstream: https://bugzilla.linux-nfs.org/show_bug.cgi?id=312
+-
+-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+----
+- support/nsm/rpc.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/support/nsm/rpc.c b/support/nsm/rpc.c
+-index 4e5f40e..d91c6ea 100644
+---- a/support/nsm/rpc.c
+-+++ b/support/nsm/rpc.c
+-@@ -40,6 +40,7 @@
+- 
+- #include <time.h>
+- #include <stdbool.h>
+-+#include <stdint.h>
+- #include <string.h>
+- #include <unistd.h>
+- #include <fcntl.h>
+--- 
+-1.9.1
+-
+diff --git a/package/nfs-utils/0006-fix-usage-of-with-rpcgen-internal.patch b/package/nfs-utils/0006-fix-usage-of-with-rpcgen-internal.patch
+new file mode 100644
+index 0000000000..7e733e0995
+--- /dev/null
++++ b/package/nfs-utils/0006-fix-usage-of-with-rpcgen-internal.patch
+@@ -0,0 +1,34 @@
++From cc9a9b1a724b8da7fb0834824bb0e69ff4611a3c Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 15 Sep 2018 20:55:12 +0200
++Subject: [PATCH] fix usage of --with-rpcgen=internal
++
++Since commit
++http://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commitdiff;h=fd5ccdc449a0ef79498191aecb3e44120e813618,
++internal rpcgen can't be used anymore since RPCGEN_PATH is set to empty
++and is not updated if rpcgen_path is equal to internal.
++
++To fix this, change the default value of RPCGEN_PATH from empty to
++internal
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index e82ff14..60f8431 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -149,7 +149,7 @@ AC_ARG_WITH(rpcgen,
++ 	[AC_HELP_STRING([--with-rpcgen=internal], [use internal rpcgen instead of system one])],
++ 	rpcgen_path=$withval,
++ 	rpcgen_path=yes )
++-	RPCGEN_PATH=
+++	RPCGEN_PATH="internal"
++ 	if test "$rpcgen_path" = "yes"; then
++ 	    for p in /usr/local/bin/rpcgen /usr/bin/rpcgen /bin/rpcgen
++ 	    do if test -f $p ; then RPCGEN_PATH=$p ; break; fi ; done
++-- 
++2.17.1
++
+diff --git a/package/nfs-utils/nfs-utils.hash b/package/nfs-utils/nfs-utils.hash
+index 2bd5121186..bde94ec9ed 100644
+--- a/package/nfs-utils/nfs-utils.hash
++++ b/package/nfs-utils/nfs-utils.hash
+@@ -1,2 +1,3 @@
+-# From https://www.kernel.org/pub/linux/utils/nfs-utils/1.3.3/sha256sums.asc
+-sha256 700d689c5622c87953c34102e5befafc4d3c811e676852238f0dd79c9c0c084d  nfs-utils-1.3.3.tar.xz
++# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.3.3/sha256sums.asc
++sha256 f68b34793831b05f1fd5760d6bdec92772c7684177586a99a61e7b444f336322  nfs-utils-2.3.3.tar.xz
++sha256 576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
+diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+index 9fa7ae200b..7c0fe08e7a 100644
+--- a/package/nfs-utils/nfs-utils.mk
++++ b/package/nfs-utils/nfs-utils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SAMBA4_VERSION = 4.8.5
-+SAMBA4_VERSION = 4.9.0
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
-@@ -69,6 +69,13 @@ else
- SAMBA4_CONF_OPTS += --disable-gnutls
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBARCHIVE),y)
-+SAMBA4_CONF_OPTS += --with-libarchive
-+SAMBA4_DEPENDENCIES += libarchive
-+else
-+SAMBA4_CONF_OPTS += --without-libarchive
-+endif
-+
- ifeq ($(BR2_PACKAGE_NCURSES),y)
- SAMBA4_CONF_ENV += NCURSES_CONFIG="$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)"
- SAMBA4_DEPENDENCIES += ncurses
-@@ -108,6 +115,8 @@ define SAMBA4_CONFIGURE_CMDS
- 			--disable-iprint \
- 			--without-pam \
- 			--without-dmapi \
-+			--without-gpgme \
-+			--without-ldb-lmdb \
- 			--disable-glusterfs \
- 			--with-cluster-support \
- 			--bundled-libraries='!asn1_compile,!compile_et' \
-@@ -127,8 +136,10 @@ define SAMBA4_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
- endef
- 
--ifeq ($(BR2_PACKAGE_SAMBA4_AD_DC),)
--SAMBA4_CONF_OPTS += --without-ad-dc
-+ifeq ($(BR2_PACKAGE_SAMBA4_AD_DC),y)
-+SAMBA4_DEPENDENCIES += jansson
-+else
-+SAMBA4_CONF_OPTS += --without-ad-dc --without-json-audit
- endif
- 
- ifeq ($(BR2_PACKAGE_SAMBA4_ADS),y)
+-NFS_UTILS_VERSION = 1.3.3
++NFS_UTILS_VERSION = 2.3.3
+ NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.xz
+ NFS_UTILS_SITE = https://www.kernel.org/pub/linux/utils/nfs-utils/$(NFS_UTILS_VERSION)
+ NFS_UTILS_LICENSE = GPL-2.0+
 -- 
-2.18.0
+2.17.1
