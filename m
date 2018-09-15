@@ -1,71 +1,51 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Sat, 15 Sep 2018 15:23:59 +0200
-Subject: [Buildroot] [PATCH v2] gpm: fix major() build failure due to glibc
- 2.28
-Message-ID: <20180915132359.85323-1-giulio.benetti@micronovasrl.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 15 Sep 2018 15:35:43 +0200
+Subject: [Buildroot] [arc-buildroot] blktrace fails to build on ARC
+In-Reply-To: <28CDE50B11B27541A655A517CC37BFF38DDDAA@de02wembxa.internal.synopsys.com>
+References: <20180913095013.5f9ae2da@windsurf>
+ <28CDE50B11B27541A655A517CC37BFF38DDDAA@de02wembxa.internal.synopsys.com>
+Message-ID: <20180915153543.7418ad90@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-glibc 2.28 no longer includes <sys/sysmacros.h> from <sys/types.h>,
-and therefore <sys/sysmacros.h> must be included explicitly when major()
-is used.
+Hello Evgeniy,
 
-This commit adds a patch to directly include <sys/sysmacros.h> into
-open_console.c file where major() macro is used.
+On Sat, 15 Sep 2018 13:23:42 +0000, Evgeniy Didin wrote:
 
-Patch has been taken from gpm upstream commit:
-https://github.com/telmich/gpm/commit/b350aee4ea5785a75cb6ad770f6b768c506ebb70
+> Recently due to a patch
+> https://git.busybox.net/buildroot/commit/?id=5a3f78c9191595f7ea9fab49360dfc18a743d28b
+> some packages were enabled for ARC. Four of them (blktrace, lvm2,
+> gadgetfs-test and libioo) are building with error, which points to
+> some issues with "millicode" optimizations in toolchain, which had
+> not occurred before. Currently we are studying this problem.
 
-Fixes:
-http://autobuild.buildroot.net/results/f53/f5373a567de619375746f1dcfe312971b85bb810/
-http://autobuild.buildroot.net/results/227/227a7edf9304d85645d3e7fa0f930fe2e9b6e752/
+OK, thanks!
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
----
- .../gpm/0005-fix-building-w-newer-glibc.patch | 32 +++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/gpm/0005-fix-building-w-newer-glibc.patch
+>  As a temporal solution until the issue is not resolved these
+> packages can be disabled for ARC or millicode optimizations can be
+> disabled for ARC by adding such lines in package/Makefile.in:
+>
+> --------------------------8<-------------------------------
+> ifeq ($(BR2_arc),y)
+> TARGET_ABI += -mno-millicode
+> endif
+> -------------------------->8----------------------------  
+> What  will be the best solution?
 
-diff --git a/package/gpm/0005-fix-building-w-newer-glibc.patch b/package/gpm/0005-fix-building-w-newer-glibc.patch
-new file mode 100644
-index 0000000000..b451d975e0
---- /dev/null
-+++ b/package/gpm/0005-fix-building-w-newer-glibc.patch
-@@ -0,0 +1,32 @@
-+From b350aee4ea5785a75cb6ad770f6b768c506ebb70 Mon Sep 17 00:00:00 2001
-+From: Mike Frysinger <vapier@gentoo.org>
-+Date: Mon, 14 Mar 2016 15:39:54 -0400
-+Subject: [PATCH] fix building w/newer glibc
-+
-+Linux C libraries are looking to disentangle sysmacros.h from the
-+sys/types.h include, so make sure we pull in the header when it is
-+found.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-+---
-+ src/daemon/open_console.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/src/daemon/open_console.c b/src/daemon/open_console.c
-+index 4d6c0af..6dd43e6 100644
-+--- a/src/daemon/open_console.c
-++++ b/src/daemon/open_console.c
-+@@ -24,6 +24,10 @@
-+ #include <sys/types.h>              /* major()           */
-+ #include <sys/ioctl.h>              /* ioctl             */
-+ 
-++#ifdef HAVE_SYS_SYSMACROS_H
-++#include <sys/sysmacros.h>          /* major() w/newer glibc */
-++#endif
-++
-+ /* Linux specific (to be outsourced in gpm2 */
-+ #include <linux/serial.h>           /* for serial console check */
-+ #include <asm/ioctls.h>            /* for serial console check */
-+-- 
-+2.17.1
-+
+Do we really want to pass -mno-millicode to all packages? If only four
+packages are affected, what about adding this workaround to just those
+four packages?
+
+Also, will you remember to remove this workaround in the future when the
+toolchain issue is fixed ? :-)
+
+Thanks!
+
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
