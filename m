@@ -1,49 +1,45 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 15 Sep 2018 12:35:44 +0200
-Subject: [Buildroot] [PATCH 1/1] owfs: bump to version 3.2p2
-Message-ID: <20180915103544.19912-1-fontaine.fabrice@gmail.com>
+Date: Sat, 15 Sep 2018 12:43:58 +0200
+Subject: [Buildroot] [PATCH v2,1/2] brltty: add license
+Message-ID: <20180915104359.24938-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash for license files
+brltty 5.5 is licensed under GPL-2.0+ with exceptions in LGPL-2.1+ as
+specified in README so add this information in BRLTTY_LICENSE, update
+BRLTTY_LICENSE_FILES and add hash for README
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/owfs/owfs.hash | 10 ++++++----
- package/owfs/owfs.mk   |  2 +-
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/brltty/brltty.hash | 1 +
+ package/brltty/brltty.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/owfs/owfs.hash b/package/owfs/owfs.hash
-index 1e57e29561..eeea64368c 100644
---- a/package/owfs/owfs.hash
-+++ b/package/owfs/owfs.hash
-@@ -1,5 +1,7 @@
--# From https://sourceforge.net/projects/owfs/files/owfs/3.2p1/
--md5 fb42ce3b8a49f0b62711d8e3f5f04880  owfs-3.2p1.tar.gz
--sha1 4ee76e686bec769acde5bfbda148a8693df244c6  owfs-3.2p1.tar.gz
-+# From https://sourceforge.net/projects/owfs/files/owfs/3.2p2/
-+md5  f85e81837fe9ec273499a17f2f7a9143 owfs-3.2p2.tar.gz
-+sha1 d04032696a3fba9f250a9a1d552361072a9f22ea  owfs-3.2p2.tar.gz
- # Locally calculated
--sha256 33220b25db36969a717cd27e750d73dee376795e13a5f3677f05111b745832ea  owfs-3.2p1.tar.gz
-+sha256 39535521a65a74bd36dc31726bcf04201f60f230a7944e9a63c393c318f5113c  owfs-3.2p2.tar.gz
-+sha256 e484a24fa5d177576e1672306165f495633bd5f0daaf628d1ff5ecfc85bdc637  COPYING
-+sha256 3879dcca586c08d1fe3325f3a0aec5b47d543100bc6b1dfb30bf24ec48675b10  COPYING.LIB
-diff --git a/package/owfs/owfs.mk b/package/owfs/owfs.mk
-index fa6810d01d..e120147151 100644
---- a/package/owfs/owfs.mk
-+++ b/package/owfs/owfs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/brltty/brltty.hash b/package/brltty/brltty.hash
+index 3bc2f9cf54..01b4c13fcc 100644
+--- a/package/brltty/brltty.hash
++++ b/package/brltty/brltty.hash
+@@ -1,3 +1,4 @@
+ sha256 4ebf1df5922df0efccac4795f5bd1c514fc850348c34d9ec0868e2798b565a36 brltty-5.5.tar.xz
+ sha256 91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad LICENSE-GPL
+ sha256 d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f LICENSE-LGPL
++sha256 6ba58188449642de8adefd7adabb436185792c5c51a4b5d04650423c2151dc50 README
+diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
+index df3e9c7888..729062d579 100644
+--- a/package/brltty/brltty.mk
++++ b/package/brltty/brltty.mk
+@@ -9,7 +9,8 @@ BRLTTY_SOURCE = brltty-$(BRLTTY_VERSION).tar.xz
+ BRLTTY_SITE = http://brltty.com/archive
+ BRLTTY_INSTALL_STAGING_OPTS = INSTALL_ROOT=$(STAGING_DIR) install
+ BRLTTY_INSTALL_TARGET_OPTS = INSTALL_ROOT=$(TARGET_DIR) install
+-BRLTTY_LICENSE_FILES = LICENSE-GPL LICENSE-LGPL
++BRLTTY_LICENSE = GPL-2.0+ with exceptions in LGPL-2.1+
++BRLTTY_LICENSE_FILES = LICENSE-GPL LICENSE-LGPL README
  
--OWFS_VERSION = 3.2p1
-+OWFS_VERSION = 3.2p2
- OWFS_SITE = http://downloads.sourceforge.net/project/owfs/owfs/$(OWFS_VERSION)
- OWFS_DEPENDENCIES = host-pkgconf
- OWFS_CONF_OPTS = --disable-owperl --without-perl5 --disable-owtcl --without-tcl
+ BRLTTY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-autoconf host-pkgconf \
+ 	$(if $(BR2_PACKAGE_AT_SPI2_CORE),at-spi2-core)
 -- 
 2.17.1
