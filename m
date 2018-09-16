@@ -1,233 +1,184 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 16 Sep 2018 16:55:11 +0200
-Subject: [Buildroot] [PATCH v3,2/2] brltty: bump to version 5.6
-In-Reply-To: <20180916145511.7304-1-fontaine.fabrice@gmail.com>
-References: <20180916145511.7304-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180916145511.7304-2-fontaine.fabrice@gmail.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Sun, 16 Sep 2018 18:09:05 +0200
+Subject: [Buildroot] [PATCH v2] python-numpy: add sublibraries licenses
+In-Reply-To: <20180911124632.72416-1-giulio.benetti@micronovasrl.com>
+References: <20180911124632.72416-1-giulio.benetti@micronovasrl.com>
+Message-ID: <4419822d-fcff-54bf-5a2e-92876e301f7d@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Remove first, second and third patch (already in version)
-- Fix major/minor build failure with glibc 2.28, see:
-  https://github.com/brltty/brltty/commit/cee581fac78d29bdf9acb6d1378cf4d005ff3afd
-- Update web site URL to brltty.app, see
-  https://github.com/brltty/brltty/commit/97efaecd6cfb665c0b5f0ac8ec69416618d45635
-- Update license to LPGL-2.1+, see:
-  https://github.com/brltty/brltty/commit/16ccb7d13f018e7557633a24fc02866b85871fa0
+Il 11/09/2018 14:46, Giulio Benetti ha scritto:
+> Release 1.15.1 tarball doesn't contain all sublibraries license files
+> listed in the base LICENSE.txt file.
+> This makes python-numpy-legal-info incomplete.
+> 
+> Add patch to add missing sublibraries license files:
+> - numpy/linalg/lapack_lite/LICENSE.txt
+> - tools/npy_tempita/license.txt
+> and therefore their sha256 into hash file.
+> Update also PYTHON_NUMPY_LICENSE adding:
+> BSD-2-Clause PSF Apache-2.0 MIT Zlib
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+> Changes V1->V2:
+> * fixed subject, it's not a fix, I'm adding licenses
+> * add commas to separate licenses
+> 
+>   ...02-Add-sublibraries-missing-licenses.patch | 89 +++++++++++++++++++
+>   package/python-numpy/python-numpy.hash        |  5 ++
+>   package/python-numpy/python-numpy.mk          |  8 +-
+>   3 files changed, 100 insertions(+), 2 deletions(-)
+>   create mode 100644 package/python-numpy/0002-Add-sublibraries-missing-licenses.patch
+> 
+> diff --git a/package/python-numpy/0002-Add-sublibraries-missing-licenses.patch b/package/python-numpy/0002-Add-sublibraries-missing-licenses.patch
+> new file mode 100644
+> index 0000000000..457aaa945f
+> --- /dev/null
+> +++ b/package/python-numpy/0002-Add-sublibraries-missing-licenses.patch
+> @@ -0,0 +1,89 @@
+> +Add sublibraries license files
+> +
+> +On Release 1.15.1 tarball two license files are missing:
+> +- numpy/linalg/lapack_lite/LICENSE.txt
+> +- tools/npy_tempita/license.txt
+> +
+> +Add them to sources to keep licensing information complete.
+> +
+> +Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> +
+> +diff -urpN numpy-1.15.1.orig/numpy/linalg/lapack_lite/LICENSE.txt numpy-1.15.1/numpy/linalg/lapack_lite/LICENSE.txt
+> +--- numpy-1.15.1.orig/numpy/linalg/lapack_lite/LICENSE.txt	1970-01-01 01:00:00.000000000 +0100
+> ++++ numpy-1.15.1/numpy/linalg/lapack_lite/LICENSE.txt	2018-09-11 00:00:41.239919567 +0200
+> +@@ -0,0 +1,48 @@
+> ++Copyright (c) 1992-2013 The University of Tennessee and The University
+> ++                        of Tennessee Research Foundation.  All rights
+> ++                        reserved.
+> ++Copyright (c) 2000-2013 The University of California Berkeley. All
+> ++                        rights reserved.
+> ++Copyright (c) 2006-2013 The University of Colorado Denver.  All rights
+> ++                        reserved.
+> ++
+> ++$COPYRIGHT$
+> ++
+> ++Additional copyrights may follow
+> ++
+> ++$HEADER$
+> ++
+> ++Redistribution and use in source and binary forms, with or without
+> ++modification, are permitted provided that the following conditions are
+> ++met:
+> ++
+> ++- Redistributions of source code must retain the above copyright
+> ++  notice, this list of conditions and the following disclaimer.
+> ++
+> ++- Redistributions in binary form must reproduce the above copyright
+> ++  notice, this list of conditions and the following disclaimer listed
+> ++  in this license in the documentation and/or other materials
+> ++  provided with the distribution.
+> ++
+> ++- Neither the name of the copyright holders nor the names of its
+> ++  contributors may be used to endorse or promote products derived from
+> ++  this software without specific prior written permission.
+> ++
+> ++The copyright holders provide no reassurances that the source code
+> ++provided does not infringe any patent, copyright, or any other
+> ++intellectual property rights of third parties.  The copyright holders
+> ++disclaim any liability to any recipient for claims brought against
+> ++recipient by any third party for infringement of that parties
+> ++intellectual property rights.
+> ++
+> ++THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+> ++"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+> ++LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+> ++A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+> ++OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+> ++SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+> ++LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+> ++DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+> ++THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+> ++(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+> ++OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+> +diff -urpN numpy-1.15.1.orig/tools/npy_tempita/license.txt numpy-1.15.1/tools/npy_tempita/license.txt
+> +--- numpy-1.15.1.orig/tools/npy_tempita/license.txt	1970-01-01 01:00:00.000000000 +0100
+> ++++ numpy-1.15.1/tools/npy_tempita/license.txt	2018-09-11 00:00:41.271919819 +0200
+> +@@ -0,0 +1,23 @@
+> ++License
+> ++-------
+> ++
+> ++Copyright (c) 2008 Ian Bicking and Contributors
+> ++
+> ++Permission is hereby granted, free of charge, to any person obtaining
+> ++a copy of this software and associated documentation files (the
+> ++"Software"), to deal in the Software without restriction, including
+> ++without limitation the rights to use, copy, modify, merge, publish,
+> ++distribute, sublicense, and/or sell copies of the Software, and to
+> ++permit persons to whom the Software is furnished to do so, subject to
+> ++the following conditions:
+> ++
+> ++The above copyright notice and this permission notice shall be
+> ++included in all copies or substantial portions of the Software.
+> ++
+> ++THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+> ++EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+> ++MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+> ++NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+> ++LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+> ++OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+> ++WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+> diff --git a/package/python-numpy/python-numpy.hash b/package/python-numpy/python-numpy.hash
+> index 7c7f446118..468d7de532 100644
+> --- a/package/python-numpy/python-numpy.hash
+> +++ b/package/python-numpy/python-numpy.hash
+> @@ -2,3 +2,8 @@
+>   sha256	3c1ccce5d935ef8df16ae0595b459ef08a5cdb05aee195ebc04b9d89a72be7fa	numpy-1.15.1.tar.gz
+>   # License files, locally calculated
+>   sha256	9e85ee1c3f11444243c9b7667721592a01f1cd90cb28ad937ac99f6241d6b685	LICENSE.txt
+> +sha256	426a5a484480f57a295db48c2c04f47bb3274752dd82a7fd6541dfa2cb90f641	doc/sphinxext/LICENSE.txt
+> +sha256	154a8706fa0fdeff1073bf6239c4ecf51f562ab107066eef839dade1a45c824c	doc/scipy-sphinx-theme/LICENSE.txt
+> +sha256	a14cc25e10d40a3aa705b7de2fb764a6535d8ee9b2db4e1724900585457dfd55	numpy/linalg/lapack_lite/LICENSE.txt
+> +sha256	badf51c7e3e7de9c7630bd069780f5c197b846ef7660b342a1e58d5553592d8e	tools/npy_tempita/license.txt
+> +sha256	d37526b4a34c0aa859afe6f9b7e64ca7c306b7430df8113dd5ac6fcb246bd2d4	numpy/core/src/multiarray/dragon4.c
+> diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
+> index bd5fe7e6a9..72a10cfaec 100644
+> --- a/package/python-numpy/python-numpy.mk
+> +++ b/package/python-numpy/python-numpy.mk
+> @@ -7,8 +7,12 @@
+>   PYTHON_NUMPY_VERSION = 1.15.1
+>   PYTHON_NUMPY_SOURCE = numpy-$(PYTHON_NUMPY_VERSION).tar.gz
+>   PYTHON_NUMPY_SITE = https://github.com/numpy/numpy/releases/download/v$(PYTHON_NUMPY_VERSION)
+> -PYTHON_NUMPY_LICENSE = BSD-3-Clause
+> -PYTHON_NUMPY_LICENSE_FILES = LICENSE.txt
+> +PYTHON_NUMPY_LICENSE = BSD-3-Clause, BSD-2-Clause, PSF, Apache-2.0, MIT, Zlib
+> +PYTHON_NUMPY_LICENSE_FILES = LICENSE.txt doc/sphinxext/LICENSE.txt \
+> +			doc/scipy-sphinx-theme/LICENSE.txt \
+> +			numpy/linalg/lapack_lite/LICENSE.txt \
+> +			tools/npy_tempita/license.txt \
+> +			numpy/core/src/multiarray/dragon4.c
+>   PYTHON_NUMPY_SETUP_TYPE = setuptools
+>   
+>   ifeq ($(BR2_PACKAGE_CLAPACK),y)
+> 
 
-Fixes:
- - http://autobuild.buildroot.org/results/0fb2c33f00990e471736c4180f23026fa9adb982
+In the meanwhile, signalled lack of:
+- numpy/linalg/lapack_lite/LICENSE.txt
+- tools/npy_tempita/license.txt
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2:
- - Remove LICENSE-GPL from BRLTTY_LICENSE_FILES and brltty.hash
+to upstream:
+https://github.com/numpy/numpy/issues/11927
 
- ...s-from-generating-spurious-log-messa.patch | 28 --------
- ...0001-buildsys-fix-cross-compilation.patch} |  0
- ...-to-make-sure-the-platform-supports-.patch | 31 ---------
- ...0003-Remove-MKOBJ-in-favour-of-MKMOD.patch | 64 -------------------
- package/brltty/Config.in                      |  2 +-
- package/brltty/brltty.hash                    |  5 +-
- package/brltty/brltty.mk                      |  6 +-
- 7 files changed, 6 insertions(+), 130 deletions(-)
- delete mode 100644 package/brltty/0001-Prevent-scancodes-from-generating-spurious-log-messa.patch
- rename package/brltty/{0004-buildsys-fix-cross-compilation.patch => 0001-buildsys-fix-cross-compilation.patch} (100%)
- delete mode 100644 package/brltty/0002-Check-for-ioperm-to-make-sure-the-platform-supports-.patch
- delete mode 100644 package/brltty/0003-Remove-MKOBJ-in-favour-of-MKMOD.patch
-
-diff --git a/package/brltty/0001-Prevent-scancodes-from-generating-spurious-log-messa.patch b/package/brltty/0001-Prevent-scancodes-from-generating-spurious-log-messa.patch
-deleted file mode 100644
-index e6a2005d59..0000000000
---- a/package/brltty/0001-Prevent-scancodes-from-generating-spurious-log-messa.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From 3ea213e47c6771b7e2481f64a98f30c02fcb4867 Mon Sep 17 00:00:00 2001
--From: Mario Lang <mlang@delysid.org>
--Date: Thu, 30 Nov 2017 13:14:47 +0100
--Subject: [PATCH] Prevent scancodes from generating spurious log messages. (ml)
--
--Signed-off-by: Mario Lang <mlang@blind.guru>
-----
--This patch was taken from upstream, and can be removed when 5.6 is out.
--
-- Drivers/Braille/HandyTech/braille.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/Drivers/Braille/HandyTech/braille.c b/Drivers/Braille/HandyTech/braille.c
--index ef95fd15b..f7e605c1a 100644
----- a/Drivers/Braille/HandyTech/braille.c
--+++ b/Drivers/Braille/HandyTech/braille.c
--@@ -1560,7 +1560,7 @@ brl_readCommand (BrailleDisplay *brl, KeyTableCommandContext context) {
--                   case HT_EXTPKT_Scancode: {
--                     while (length--)
--                       enqueueCommand(BRL_CMD_BLK(PASSAT) | BRL_ARG_PUT(*bytes++));
---                    break;
--+                    continue;
--                   }
-- 
--                   case HT_EXTPKT_GetRTC: {
---- 
--2.15.0
--
-diff --git a/package/brltty/0004-buildsys-fix-cross-compilation.patch b/package/brltty/0001-buildsys-fix-cross-compilation.patch
-similarity index 100%
-rename from package/brltty/0004-buildsys-fix-cross-compilation.patch
-rename to package/brltty/0001-buildsys-fix-cross-compilation.patch
-diff --git a/package/brltty/0002-Check-for-ioperm-to-make-sure-the-platform-supports-.patch b/package/brltty/0002-Check-for-ioperm-to-make-sure-the-platform-supports-.patch
-deleted file mode 100644
-index 3dbacb3b57..0000000000
---- a/package/brltty/0002-Check-for-ioperm-to-make-sure-the-platform-supports-.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From 28dde6749327fd15a1b8b7bcf5cc74a95598582a Mon Sep 17 00:00:00 2001
--From: Mario Lang <mlang@delysid.org>
--Date: Fri, 29 Dec 2017 10:35:05 +0100
--Subject: [PATCH] Check for ioperm to make sure the platform supports ports
-- I/O. (ml)
--
--Signed-off-by: Mario Lang <mlang@blind.guru>
-----
--This patch was taken from upstream, and can be removed when 5.6 is out.
--
-- configure.ac | 4 +++-
-- 1 file changed, 3 insertions(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index 5e94d33bd..07119dd9f 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -1446,7 +1446,9 @@ BRLTTY_ARG_PACKAGE([ports], [I/O ports], [], [dnl
--       ports_package="kfreebsd"
--       ;;
--    linux*)
---      ports_package="glibc"
--+      AC_CHECK_FUNC([ioperm], [
--+         ports_package="glibc"
--+      ])
--       ;;
--    mingw*)
--       ports_package="windows"
---- 
--2.15.0
--
-diff --git a/package/brltty/0003-Remove-MKOBJ-in-favour-of-MKMOD.patch b/package/brltty/0003-Remove-MKOBJ-in-favour-of-MKMOD.patch
-deleted file mode 100644
-index c1980417aa..0000000000
---- a/package/brltty/0003-Remove-MKOBJ-in-favour-of-MKMOD.patch
-+++ /dev/null
-@@ -1,64 +0,0 @@
--From b3b0e47015e9162f519730789976157c7cc38178 Mon Sep 17 00:00:00 2001
--From: Mario Lang <mlang@delysid.org>
--Date: Fri, 29 Dec 2017 14:52:37 +0100
--Subject: [PATCH] Remove MKOBJ in favour of MKMOD. (ml)
--
--Calling ld directly can lead to problems when cross-compiling.
--
--Upstream: https://github.com/brltty/brltty/commit/4c8aba42e246b96d10ffcbd57653682375499e46
--Signed-off-by: Mario Lang <mlang@blind.guru>
-----
-- Drivers/Braille/EuroBraille/Makefile.in |  2 +-
-- config.mk.in                            |  1 -
-- configure.ac                            | 10 ----------
-- 3 files changed, 1 insertion(+), 12 deletions(-)
--
--diff --git a/Drivers/Braille/EuroBraille/Makefile.in b/Drivers/Braille/EuroBraille/Makefile.in
--index 0500aa70e..ce8a3d1a4 100644
----- a/Drivers/Braille/EuroBraille/Makefile.in
--+++ b/Drivers/Braille/EuroBraille/Makefile.in
--@@ -28,7 +28,7 @@ SRC_FILES = eu_braille.c eu_clio.c eu_esysiris.c
-- OBJ_FILES = $(SRC_FILES:.c=.$O)
-- 
-- braille.$O: $(OBJ_FILES)
---	$(MKOBJ)  $@ $(OBJ_FILES)
--+	$(MKMOD)  $@ $(OBJ_FILES)
-- 
-- %.$O: $(SRC_DIR)/%.c
-- 	$(CC) $(BRL_CFLAGS) -o $@ -c $<
--diff --git a/config.mk.in b/config.mk.in
--index 686f547e6..8d1da79b4 100644
----- a/config.mk.in
--+++ b/config.mk.in
--@@ -250,7 +250,6 @@ LD = @LD@
-- LDFLAGS = @LDFLAGS@
-- LDLIBS = $(ICU_LIBS) $(POLKIT_LIBS) $(SYSTEM_LIBS) @LIBS@
-- 
---MKOBJ = @MKOBJ@
-- MKMOD = @MKMOD@
-- MKLIB = @MKLIB@
-- CONFLIBDIR = @CONFLIBDIR@
--diff --git a/configure.ac b/configure.ac
--index 07119dd9f..ad80b8d60 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -428,16 +428,6 @@ AC_SUBST([can_make_manual])
-- test "${DOXYGEN}" = "false" && can_make_BrlAPIref=no || can_make_BrlAPIref=yes
-- AC_SUBST([can_make_BrlAPIref])
-- 
---AC_CACHE_CHECK([for make relocatable object command], [brltty_cv_prog_mkobj], [dnl
---case "${host_os}"
---in
---   *)
---      brltty_cv_prog_mkobj="\$(LD) -r -o"
---      ;;
---esac])
---MKOBJ="${brltty_cv_prog_mkobj}"
---AC_SUBST([MKOBJ])
---
-- AC_CACHE_CHECK([for loadable module creation command], [brltty_cv_prog_mkmod], [dnl
-- case "${host_os}"
-- in
---- 
--2.15.0
--
-diff --git a/package/brltty/Config.in b/package/brltty/Config.in
-index 48ceb04c99..de11af3bbe 100644
---- a/package/brltty/Config.in
-+++ b/package/brltty/Config.in
-@@ -8,7 +8,7 @@ config BR2_PACKAGE_BRLTTY
- 	  A daemon providing access to the Linux console for a blind
- 	  person using a refreshable braille display.
- 
--	  http://brltty.com/
-+	  http://brltty.app/
- 
- if BR2_PACKAGE_BRLTTY
- 
-diff --git a/package/brltty/brltty.hash b/package/brltty/brltty.hash
-index 01b4c13fcc..6b9470c82e 100644
---- a/package/brltty/brltty.hash
-+++ b/package/brltty/brltty.hash
-@@ -1,4 +1,3 @@
--sha256 4ebf1df5922df0efccac4795f5bd1c514fc850348c34d9ec0868e2798b565a36 brltty-5.5.tar.xz
--sha256 91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad LICENSE-GPL
-+sha256 6171258aca833bb2012afd9c63928573a48c3daab7b149a3e90001ba53beb80f brltty-5.6.tar.xz
- sha256 d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f LICENSE-LGPL
--sha256 6ba58188449642de8adefd7adabb436185792c5c51a4b5d04650423c2151dc50 README
-+sha256 42685d8fa420f618e325d423be110c69abd976afdef183dfac385ccd44cb12e9 README
-diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
-index 0fcd4f4258..21f6877bb8 100644
---- a/package/brltty/brltty.mk
-+++ b/package/brltty/brltty.mk
-@@ -4,13 +4,13 @@
- #
- ################################################################################
- 
--BRLTTY_VERSION = 5.5
-+BRLTTY_VERSION = 5.6
- BRLTTY_SOURCE = brltty-$(BRLTTY_VERSION).tar.xz
- BRLTTY_SITE = http://brltty.com/archive
- BRLTTY_INSTALL_STAGING_OPTS = INSTALL_ROOT=$(STAGING_DIR) install
- BRLTTY_INSTALL_TARGET_OPTS = INSTALL_ROOT=$(TARGET_DIR) install
--BRLTTY_LICENSE = GPL-2.0+, LGPL-2.1+ (data, client side)
--BRLTTY_LICENSE_FILES = LICENSE-GPL LICENSE-LGPL README
-+BRLTTY_LICENSE = LGPL-2.1+
-+BRLTTY_LICENSE_FILES = LICENSE-LGPL README
- 
- BRLTTY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-autoconf host-pkgconf \
- 	$(if $(BR2_PACKAGE_AT_SPI2_CORE),at-spi2-core)
+Kind regards
 -- 
-2.17.1
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
