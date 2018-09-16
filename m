@@ -1,44 +1,68 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 15 Sep 2018 23:08:04 +0200
-Subject: [Buildroot] [PATCH 2/2] exfat-utils: bump to version 1.3.0
-In-Reply-To: <20180915210804.28722-1-fontaine.fabrice@gmail.com>
-References: <20180915210804.28722-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180915210804.28722-2-fontaine.fabrice@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 16 Sep 2018 07:21:41 +0300
+Subject: [Buildroot] [PATCH 5/5] configs/solidrun_macchiatobin_marvell:
+ bump component versions
+In-Reply-To: <20180914153326.19346-6-thomas.petazzoni@bootlin.com>
+References: <20180914153326.19346-1-thomas.petazzoni@bootlin.com>
+ <20180914153326.19346-6-thomas.petazzoni@bootlin.com>
+Message-ID: <20180916042141.4fsryjj54fig2mcc@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash for license file
+Hi Thomas,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/exfat-utils/exfat-utils.hash | 3 ++-
- package/exfat-utils/exfat-utils.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+On Fri, Sep 14, 2018 at 05:33:26PM +0200, Thomas Petazzoni wrote:
+> Bump Linux to armada-18.09, U-Boot to armada-18.09.1 and ATF to
+> armada-18.09.4.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  configs/solidrun_macchiatobin_marvell_defconfig | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/configs/solidrun_macchiatobin_marvell_defconfig b/configs/solidrun_macchiatobin_marvell_defconfig
+> index acc8d1589e..4b52e47945 100644
+> --- a/configs/solidrun_macchiatobin_marvell_defconfig
+> +++ b/configs/solidrun_macchiatobin_marvell_defconfig
+> @@ -7,7 +7,8 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for Marvell MacchiatoBin"
+>  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+>  BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+>  BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/MarvellEmbeddedProcessors/atf-marvell.git"
+> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="43965481990fd92e9666cf9371a8cf478055ec7c"
+> +# This commit corresponds to release armada-18.09.4
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="711ecd32afe465b38052b5ba374c825b158eea18"
+>  BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="a80x0_mcbin"
+>  BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
+>  BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
+> @@ -20,14 +21,15 @@ BR2_TARGET_MV_DDR_MARVELL=y
+>  BR2_TARGET_UBOOT=y
+>  BR2_TARGET_UBOOT_CUSTOM_GIT=y
+>  BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/MarvellEmbeddedProcessors/u-boot-marvell"
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="u-boot-2017.03-armada-17.10"
+> +# This commit corresponds to armada-18.09.1, based on u-boot 2018.03
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="8fe403172c58440bcfbb3724242301c0108eff5b"
+>  BR2_TARGET_UBOOT_BOARDNAME="mvebu_mcbin-88f8040"
+>  BR2_TARGET_UBOOT_NEEDS_DTC=y
+>  
+>  # Kernel
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,MarvellEmbeddedProcessors,linux-marvell,linux-4.4.52-armada-17.10)/linux-linux-4.4.52-armada-17.10.tar.gz"
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,MarvellEmbeddedProcessors,linux-marvell,linux-4.4.52-armada-17.10)/linux-linux-4.4.120-armada-18.09.tar.gz"
 
-diff --git a/package/exfat-utils/exfat-utils.hash b/package/exfat-utils/exfat-utils.hash
-index f0d6b64259..53155d41ba 100644
---- a/package/exfat-utils/exfat-utils.hash
-+++ b/package/exfat-utils/exfat-utils.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 b96b6692cf92a629c9eca0fe8c782646e20479524c7d2a99b7e9b43c3cf8ac43  exfat-utils-1.2.6.tar.gz
-+sha256 dfebd07a7b907e2d603d3a9626e6440bd43ec6c4e8c07ccfc57ce9502b724835  exfat-utils-1.3.0.tar.gz
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/exfat-utils/exfat-utils.mk b/package/exfat-utils/exfat-utils.mk
-index c1b5a93540..62cd47186f 100644
---- a/package/exfat-utils/exfat-utils.mk
-+++ b/package/exfat-utils/exfat-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EXFAT_UTILS_VERSION = 1.2.6
-+EXFAT_UTILS_VERSION = 1.3.0
- EXFAT_UTILS_SITE = https://github.com/relan/exfat/releases/download/v$(EXFAT_UTILS_VERSION)
- EXFAT_UTILS_LICENSE = GPL-3.0+
- EXFAT_UTILS_LICENSE_FILES = COPYING
+Why not bump to linux-4.14.22-armada-18.09? Is there any missing functionality 
+in that release?
+
+>  BR2_LINUX_KERNEL_DEFCONFIG="mvebu_v8_lsp"
+>  BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>  BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-8040-mcbin"
+
+baruch
+
 -- 
-2.17.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
