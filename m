@@ -1,52 +1,105 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 16 Sep 2018 21:38:51 +0200
-Subject: [Buildroot] [git commit] runc: bump to 69663f0b
-Message-ID: <20180916193908.67DB88841E@busybox.osuosl.org>
+Date: Sun, 16 Sep 2018 21:39:08 +0200
+Subject: [Buildroot] [git commit] docker-containerd: bump to v1.1.3
+Message-ID: <20180916193908.6DF9E88338@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2bcd3a28563abbc9c37136ca59c8426cb9c6060c
+commit: https://git.buildroot.net/buildroot/commit/?id=c5a33a11be080fe8385787fa652b58e448d6c256
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit bumps runc to the requisite version for Docker 2018.06.
+This commit bumps docker-containerd to v1.1.3.
 
-Added note about where runc version dependency is declared:
+This is a requisite bump for the upgrade of docker-engine to 2018.06.
 
-RUNC_VERSION = 69663f0bd4b60df09991c08812a60108003fa340
+The license file was renamed from LICENSE.code to LICENSE, so we take
+this opportunity to add the hash for the license file. The only change
+between LICENSE.code and LICENSE is:
 
-We take this opportunity to add the hash for the license file.
+-   Copyright 2013-2016 Docker, Inc.
++   Copyright The containerd Authors
 
 Signed-off-by: Christian Stewart <christian@paral.in>
-[Thomas: add hash for license file.]
+[Thomas: fix legal info, add hash for license file.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/runc/runc.hash | 3 ++-
- package/runc/runc.mk   | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/docker-containerd/Config.in              | 12 ++++++++++++
+ package/docker-containerd/docker-containerd.hash |  3 ++-
+ package/docker-containerd/docker-containerd.mk   | 19 +++++++++++++++----
+ 3 files changed, 29 insertions(+), 5 deletions(-)
 
-diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-index 3e188c5c79..853cbb1465 100644
---- a/package/runc/runc.hash
-+++ b/package/runc/runc.hash
+diff --git a/package/docker-containerd/Config.in b/package/docker-containerd/Config.in
+index 2f7bf71af1..851345f73e 100644
+--- a/package/docker-containerd/Config.in
++++ b/package/docker-containerd/Config.in
+@@ -15,6 +15,18 @@ config BR2_PACKAGE_DOCKER_CONTAINERD
+ 
+ 	  https://github.com/docker/containerd
+ 
++if BR2_PACKAGE_DOCKER_CONTAINERD
++
++config BR2_PACKAGE_DOCKER_CONTAINERD_DRIVER_BTRFS
++	bool "btrfs snapshot driver"
++	depends on BR2_USE_MMU # btrfs-progs
++	depends on BR2_TOOLCHAIN_HAS_THREADS # btrfs-progs
++	select BR2_PACKAGE_BTRFS_PROGS
++	help
++	  Build the btrfs snapshot driver for containerd.
++
++endif
++
+ comment "docker-containerd needs a toolchain w/ threads"
+ 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
+diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
+index 992eb5b01a..a530873974 100644
+--- a/package/docker-containerd/docker-containerd.hash
++++ b/package/docker-containerd/docker-containerd.hash
 @@ -1,2 +1,3 @@
- # Locally computed
--sha256	b5c50d7d9a5f610d5424f96196efa306ec708fd9299302dd919545099c16b7c1	runc-9c2d8d184e5da67c95d601382adf14862e4f2228.tar.gz
-+sha256	994a3a0447fcbf7e37614b02aa5604d2d6b9fdb41e6870d8d3ff1138ed6e61ef  runc-69663f0bd4b60df09991c08812a60108003fa340.tar.gz
-+sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index f1586f32b2..7f42c962f3 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
-@@ -4,7 +4,8 @@
+ # Computed locally
+-sha256	da89086a7c643702a2ddecec67a45d3d8e4b0d610dd19036be63e6bd54cc1a85	docker-containerd-9048e5e50717ea4497b757314bad98ea3763c145.tar.gz
++sha256	a946f4614d92d60361213ef18deab04ee73599e4567f1ff26f7a72841afe4fa2	docker-containerd-v1.1.3.tar.gz
++sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4	LICENSE
+diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
+index 09e89f1aba..121ef0939e 100644
+--- a/package/docker-containerd/docker-containerd.mk
++++ b/package/docker-containerd/docker-containerd.mk
+@@ -4,20 +4,31 @@
  #
  ################################################################################
  
--RUNC_VERSION = 9c2d8d184e5da67c95d601382adf14862e4f2228
-+# docker-engine/hack/dockerfile/install/runc.installer:4 RUNC_COMMIT=...
-+RUNC_VERSION = 69663f0bd4b60df09991c08812a60108003fa340
- RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0
- RUNC_LICENSE_FILES = LICENSE
+-DOCKER_CONTAINERD_VERSION = 9048e5e50717ea4497b757314bad98ea3763c145
+-DOCKER_CONTAINERD_SITE = $(call github,docker,containerd,$(DOCKER_CONTAINERD_VERSION))
++DOCKER_CONTAINERD_VERSION = v1.1.3
++DOCKER_CONTAINERD_SITE = $(call github,containerd,containerd,$(DOCKER_CONTAINERD_VERSION))
+ DOCKER_CONTAINERD_LICENSE = Apache-2.0
+-DOCKER_CONTAINERD_LICENSE_FILES = LICENSE.code
++DOCKER_CONTAINERD_LICENSE_FILES = LICENSE
+ 
+ DOCKER_CONTAINERD_WORKSPACE = vendor
+ 
+ DOCKER_CONTAINERD_LDFLAGS = \
+ 	-X github.com/docker/containerd.GitCommit=$(DOCKER_CONTAINERD_VERSION)
+ 
+-DOCKER_CONTAINERD_BUILD_TARGETS = ctr containerd containerd-shim
++DOCKER_CONTAINERD_BUILD_TARGETS = cmd/ctr cmd/containerd cmd/containerd-shim
+ 
+ DOCKER_CONTAINERD_INSTALL_BINS = containerd containerd-shim
+ 
++ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
++DOCKER_CONTAINERD_DEPENDENCIES += libseccomp
++DOCKER_CONTAINERD_TAGS += seccomp
++endif
++
++ifeq ($(BR2_PACKAGE_DOCKER_CONTAINERD_DRIVER_BTRFS),y)
++DOCKER_CONTAINERD_DEPENDENCIES += btrfs-progs
++else
++DOCKER_CONTAINERD_TAGS += no_btrfs
++endif
++
+ define DOCKER_CONTAINERD_INSTALL_SYMLINKS
+ 	ln -fs runc $(TARGET_DIR)/usr/bin/docker-runc
+ 	ln -fs containerd-shim $(TARGET_DIR)/usr/bin/docker-containerd-shim
