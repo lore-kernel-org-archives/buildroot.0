@@ -1,58 +1,125 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 16 Sep 2018 10:24:16 +0200
-Subject: [Buildroot] [PATCH 1/2] package/x11r7/xlib_libXfont: remove
- autoreconf
-In-Reply-To: <20180915121806.5264-1-bernd.kuhls@t-online.de>
-References: <20180915121806.5264-1-bernd.kuhls@t-online.de>
-Message-ID: <20180916102416.05476006@windsurf>
+From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date: Sun, 16 Sep 2018 10:42:29 +0200
+Subject: [Buildroot] custom kernel
+In-Reply-To: <20180916053647.awmnaxir2ogzakud@sapphire.tkos.co.il>
+References: <CAKZffXHDkoZJ+LN75Cp3WZfuE3rdhH2SJTzA__7YC6YGY=M7MA@mail.gmail.com>
+ <87efdw4otc.fsf@tkos.co.il>
+ <CAKZffXFaJKWdaWXw6Ff7-Ptq+QrE0NDnOJOefBG2u-ZBjwiYEw@mail.gmail.com>
+ <20180916053647.awmnaxir2ogzakud@sapphire.tkos.co.il>
+Message-ID: <CAOf5uwkwsQBHqC1F0ERSYtkiYr+ozr6xU5edb3KxNtp+8h=4Dg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi
 
-On Sat, 15 Sep 2018 14:18:05 +0200, Bernd Kuhls wrote:
-> Nine years ago we added autoreconf to fix libtool-related problems
-> with the matchbox package:
-> 
-> https://git.buildroot.net/buildroot/commit/?id=51ef5b81224c243aa7f937c4690b1a120c81ccbc
-> 
-> Autoreconf for this package needs the xutil_util-macros but after
-> building this defconfig with autoreconf removed from this package
-> 
-> BR2_x86_64=y
-> BR2_x86_core_avx2=y
-> BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_PACKAGE_XORG7=y
-> BR2_PACKAGE_XLIB_LIBXFONT=y
-> BR2_PACKAGE_MATCHBOX=y
-> BR2_PACKAGE_MATCHBOX_SM=y
-> BR2_PACKAGE_MATCHBOX_COMMON=y
-> BR2_PACKAGE_MATCHBOX_COMMON_PDA=y
-> BR2_PACKAGE_MATCHBOX_DESKTOP=y
-> BR2_PACKAGE_MATCHBOX_KEYBOARD=y
-> BR2_PACKAGE_MATCHBOX_PANEL=y
-> BR2_PACKAGE_MATCHBOX_STARTUP_MONITOR=y
-> 
-> it is obvious that the problem which existed nine years ago seems to be
-> gone. So instead of fixing autoreconf we remove it from this package
-> because there is no need for it anymore.
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/30c/30cf5cc139f9f6a9dc070953270f74e18b9310d4/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/x11r7/xlib_libXfont/xlib_libXfont.mk | 1 -
->  1 file changed, 1 deletion(-)
+On Sun, Sep 16, 2018 at 7:36 AM Baruch Siach <baruch@tkos.co.il> wrote:
+>
+> Hi Jose,
+>
+> On Fri, Sep 14, 2018 at 07:15:11PM +0200, Jose Luis Zabalza wrote:
+> > Thanks for the reply.
+> > But the override mechanism don't resolve my problem.
+> > First, I have to use a old Buildroot (2016.5) because has been tuned
+> > by a provider with scripts and other patches. Yes, I could change to a
+> > modern Buildroot version, but is a extra work. Second, the kernel has
+> > been tuned too, but the provider don't give me the patches or a git
+> > tree, only the source kernel tree tarball.
+>
+> This is unfortunate.
+>
+> > Now, I have to update the kernel with a patch , so, the solution is
+> > apply the patch to the provider kernel before using Buildroot..
+> >
+> > It is a small annoyance but, I don't understand why if I use a
+> > "standard" kernel, Buildroot allows patch the kernel with "project
+> > patches"
+> >  and if I use a "custom" kernel, the "project patches mechanism" don't
+> > work. Yes, it can be assumed that the kernel must come complety
+> > patched, but you could also guess that the kernel must be patched with
+> > "project patches".
+>
+> The source override feature is meant to be used during development. This does
+> not match your use case. I'd suggest you to use the
+> BR2_LINUX_KERNEL_CUSTOM_TARBALL option instead, with the file:// "protocol" to
+> refer to a local file where you put your vendor provided tarball. You can then
+> add patches on top of that.
+>
 
-Both applied to master. Thanks!
+I get similar problem only on xenomai patch that needed to be applied
+later. My idea was to
+move the patching path of the kernel on linux.mk in order to be
+possible using override
 
-Thomas
+Michael
+
+> baruch
+>
+> > El vie., 14 sept. 2018 a las 7:42, Baruch Siach (<baruch@tkos.co.il>)
+> >  escribi?:
+> > >
+> > > Hi Jose,
+> > >
+> > > Jose Luis Zabalza writes:
+> > > > Hello everybody.
+> > > >
+> > > > I have a buildroot config with custom linux kernel
+> > > >
+> > > > BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH="$(MYDIR)/linux"
+> > >
+> > > This symbol has been removed in version 2016.11. The new (old) way of
+> > > doing that is override srcdir:
+> > >
+> > >   https://git.busybox.net/buildroot/commit/?id=e782cd5b1bc231dda527d5d0a04e6a338669b92c
+> > >
+> > > See also
+> > >
+> > >   https://buildroot.org/downloads/manual/manual.html#_advanced_usage
+> > >
+> > > under "Using Buildroot during development".
+> > >
+> > > > BR2_LINUX_KERNEL_VERSION="custom"
+> > > > BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="$(MYDIR)/dts/mylinux_devtree.dts"
+> > > > BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> > > > BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="$(MYDIR)/config/mylinux_defconfig
+> > > > BR2_LINUX_KERNEL_PATCH="$(MYDIR)/patches"
+> > > >
+> > > > Everything works fine except the patches in $(MYDIR)/patches are not applied.
+> > > >
+> > > > I tried to with
+> > > >
+> > > > BR2_GLOBAL_PATCH_DIR="$(MYDIR)/buildroot/packages-patches"
+> > > >
+> > > > leaving patches in
+> > > >     $(MYDIR)/buildroot/packages-patches/linux
+> > > > or
+> > > >     $(MYDIR)/buildroot/packages-patches/linux-custom
+> > > >
+> > > > but not patches are applied.
+> > > >
+> > > > Some idea?
+> > >
+> > > This behavior is by design. When you provide your own source tree,
+> > > Buildroot assumes that you customize it yourself. This is also explained
+> > > in the manual section I linked to above.
+> > >
+> > > baruch
+>
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+| Michael Nazzareno Trimarchi                     Amarula Solutions BV |
+| COO  -  Founder                                      Cruquiuskade 47 |
+| +31(0)851119172                                 Amsterdam 1018 AM NL |
+|                  [`as] http://www.amarulasolutions.com               |
