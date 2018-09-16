@@ -1,30 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 16 Sep 2018 15:46:28 +0200
-Subject: [Buildroot] [PATCH 1/1] owfs: bump to version 3.2p2
-In-Reply-To: <20180915103544.19912-1-fontaine.fabrice@gmail.com>
-References: <20180915103544.19912-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180916154628.59d8f4aa@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 16 Sep 2018 15:46:56 +0200
+Subject: [Buildroot] [PATCH v2,1/2] brltty: add license
+In-Reply-To: <20180916150441.7d88dee9@windsurf>
+References: <20180915104359.24938-1-fontaine.fabrice@gmail.com>
+ <20180916150441.7d88dee9@windsurf>
+Message-ID: <CAPi7W81znFmc1fegMzBAh4+8yFmJjr-i3ApYtcGnf6hYGRBjEg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Thomas,
 
-On Sat, 15 Sep 2018 12:35:44 +0200, Fabrice Fontaine wrote:
-> Add hash for license files
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/owfs/owfs.hash | 10 ++++++----
->  package/owfs/owfs.mk   |  2 +-
->  2 files changed, 7 insertions(+), 5 deletions(-)
+Le dim. 16 sept. 2018 ? 15:04, Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> a ?crit :
 
-Applied to master, thanks.
+> Hello,
+>
+> On Sat, 15 Sep 2018 12:43:58 +0200, Fabrice Fontaine wrote:
+>
+> > +BRLTTY_LICENSE = GPL-2.0+ with exceptions in LGPL-2.1+
+>
+> I think it would be better as:
+>
+> BRLTTY_LICENSE = GPL-2.0+, LGPL-2.1+ (data, client side)
+>
+Yes, I agree with your proposal, it is indeed more precise.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>
+> Do you agree ? It doesn't matter a lot for master, because this is
+> anyway going to be changed to just LGPL-2.1+ by your second patch, but
+> this first patch adding the license details will probably be backported
+> to 2018.02.x by Peter.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+
+Best Regards,
+
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180916/d69adda3/attachment.html>
