@@ -1,44 +1,36 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 16 Sep 2018 12:31:55 +0300
-Subject: [Buildroot] [PATCH 5/5] configs/solidrun_macchiatobin_marvell:
- bump component versions
-In-Reply-To: <20180916101501.5448d307@windsurf>
-References: <20180914153326.19346-1-thomas.petazzoni@bootlin.com>
- <20180914153326.19346-6-thomas.petazzoni@bootlin.com>
- <20180916042141.4fsryjj54fig2mcc@sapphire.tkos.co.il>
- <20180916101501.5448d307@windsurf>
-Message-ID: <20180916093154.nyhxiqdaixcfhiet@sapphire.tkos.co.il>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 16 Sep 2018 11:49:55 +0200
+Subject: [Buildroot] [PATCH 1/1] botan: fix static build
+Message-ID: <20180916094955.1989-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Don't pass crs in AR as it is now done by botan, see:
+https://github.com/randombit/botan/commit/a9e4eede3942748234d705cc616ecc106e3767a6
 
-On Sun, Sep 16, 2018 at 10:15:01AM +0200, Thomas Petazzoni wrote:
-> On Sun, 16 Sep 2018 07:21:41 +0300, Baruch Siach wrote:
-> > >  # Kernel
-> > >  BR2_LINUX_KERNEL=y
-> > >  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> > > -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,MarvellEmbeddedProcessors,linux-marvell,linux-4.4.52-armada-17.10)/linux-linux-4.4.52-armada-17.10.tar.gz"
-> > > +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,MarvellEmbeddedProcessors,linux-marvell,linux-4.4.52-armada-17.10)/linux-linux-4.4.120-armada-18.09.tar.gz"  
-> > 
-> > Why not bump to linux-4.14.22-armada-18.09? Is there any missing functionality 
-> > in that release?
-> 
-> My understanding is that 4.4 is the BSP version that Marvell considers
-> complete and stable, which has received full QA testing. 4.14 is still
-> in development, and will be fully ready by the end of the year.
-> Therefore, in this defconfig using vendor-provided versions of the
-> components, it probably makes sense to stick to 4.4 for now ?
+Fixes:
+ - http://autobuild.buildroot.org/results/5c15fe739cb1b6079dacf234699ee048924b74fb
 
-Sounds reasonable to me. The commit log should probably include this 
-information.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/botan/botan.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-baruch
-
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index 4788617d4a..59aa1f0803 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -87,7 +87,7 @@ define BOTAN_CONFIGURE_CMDS
+ endef
+ 
+ define BOTAN_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) AR="$(TARGET_AR) crs"
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) AR="$(TARGET_AR)"
+ endef
+ 
+ define BOTAN_INSTALL_STAGING_CMDS
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.17.1
