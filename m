@@ -1,48 +1,57 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 16 Sep 2018 20:46:06 +0200
-Subject: [Buildroot] [PATCH 8/8] semodule-utils: bump to version 2.8
-In-Reply-To: <20180916184606.27835-1-fontaine.fabrice@gmail.com>
-References: <20180916184606.27835-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180916184606.27835-8-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 16 Sep 2018 21:16:01 +0200
+Subject: [Buildroot] [git commit] package/gcc: glibc >= 2.27 needs gcc >= 5
+ on aarch64
+Message-ID: <20180916192503.D5A57883D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash for license file
+commit: https://git.buildroot.net/buildroot/commit/?id=1380f4c9a67f44a2fc172a1b8845f0ecc10beb90
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+With the following defconfig:
+BR2_aarch64=y
+BR2_BINUTILS_VERSION_2_28_X=y
+BR2_GCC_VERSION_4_9_X=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+
+The build fail with this error:
+In file included from ../sysdeps/ieee754/flt-32/math_config.h:23:0,
+                 from ../sysdeps/ieee754/flt-32/e_expf.c:29:
+../sysdeps/aarch64/fpu/math_private.h: In function 'roundtoint':
+../sysdeps/aarch64/fpu/math_private.h:311:3: error: implicit declaration of function 'vrndn_f64' [-Werror=implicit-function-declaration]
+   return vget_lane_f64 (vrndn_f64 (vld1_f64 (&x)), 0);
+   ^
+cc1: all warnings being treated as errors
+
+vrndn_f64 function has been introduced in glibc code since version 2.27 [1].
+So we can't build a glibc based toolchain with gcc 4.9 anymore.
+
+Add a new dependency in the toolchain infra to avoid selecting
+glibc toolchain using gcc 4.9.
+
+[1] https://sourceware.org/git/?p=glibc.git;a=commit;h=72aa623345ada1276ed89dbc00fdff9639cb8eaf
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/semodule-utils/semodule-utils.hash | 5 ++++-
- package/semodule-utils/semodule-utils.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/gcc/Config.in.host | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/semodule-utils/semodule-utils.hash b/package/semodule-utils/semodule-utils.hash
-index 18c8217ca6..be40918de6 100644
---- a/package/semodule-utils/semodule-utils.hash
-+++ b/package/semodule-utils/semodule-utils.hash
-@@ -1,2 +1,5 @@
- # https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256 90c98b3362a43b4da2a51a9176820a56f3e615225e23e3395bc566c4490786ba semodule-utils-2.7.tar.gz
-+sha256 44f59c13070c637440b143ceab4dfe1efb9018b1e47828dd8789def74c1ccadf semodule-utils-2.8.tar.gz
-+
-+# Hash for license file
-+sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 COPYING
-diff --git a/package/semodule-utils/semodule-utils.mk b/package/semodule-utils/semodule-utils.mk
-index 8f07fa0a81..480e157c6d 100644
---- a/package/semodule-utils/semodule-utils.mk
-+++ b/package/semodule-utils/semodule-utils.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 01bf8fa561..5a8f684a4c 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -32,6 +32,8 @@ config BR2_GCC_VERSION_4_9_X
+ 	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_mips64 || BR2_mips64el))
+ 	# glibc >= 2.26 needs gcc >= 6.2
+ 	depends on !(BR2_TOOLCHAIN_USES_GLIBC && BR2_powerpc64le)
++	# glibc >= 2.27 needs gcc >= 5
++	depends on !(BR2_TOOLCHAIN_USES_GLIBC && (BR2_aarch64 || BR2_aarch64_be))
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
  
--SEMODULE_UTILS_VERSION = 2.7
--SEMODULE_UTILS_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20170804
-+SEMODULE_UTILS_VERSION = 2.8
-+SEMODULE_UTILS_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20180524
- SEMODULE_UTILS_LICENSE = GPL-2.0
- SEMODULE_UTILS_LICENSE_FILES = COPYING
- SEMODULE_UTILS_DEPENDENCIES = libsepol
--- 
-2.17.1
+ config BR2_GCC_VERSION_5_X
