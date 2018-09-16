@@ -1,32 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 16 Sep 2018 15:09:21 +0200
-Subject: [Buildroot] [git commit] linux: bump default to version 4.18.8
-Message-ID: <20180916131636.2DC7E88278@busybox.osuosl.org>
+Date: Sun, 16 Sep 2018 15:09:25 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 9, 14,
+ 18}.x series
+Message-ID: <20180916131636.42B8988255@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a086fc0b28bffabd53fa02e47274e84796229641
+commit: https://git.buildroot.net/buildroot/commit/?id=ebe0636db8119870f2cb6a48186bb14c5f20db0c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/linux-headers/Config.in.host | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 6a944b6731..ab22d822bb 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -120,7 +120,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index e11f07f0b0..9eea914784 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -254,9 +254,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
  	string
--	default "4.18.7" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.18.8" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.138-cip25" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.155"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.126"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.69"	if BR2_KERNEL_HEADERS_4_14
++	default "4.4.156"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.127"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.70"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
+-	default "4.18.7"	if BR2_KERNEL_HEADERS_4_18
++	default "4.18.8"	if BR2_KERNEL_HEADERS_4_18
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
