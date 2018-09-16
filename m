@@ -1,184 +1,80 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Sun, 16 Sep 2018 18:09:05 +0200
-Subject: [Buildroot] [PATCH v2] python-numpy: add sublibraries licenses
-In-Reply-To: <20180911124632.72416-1-giulio.benetti@micronovasrl.com>
-References: <20180911124632.72416-1-giulio.benetti@micronovasrl.com>
-Message-ID: <4419822d-fcff-54bf-5a2e-92876e301f7d@micronovasrl.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 16 Sep 2018 20:07:13 +0200
+Subject: [Buildroot] [PATCH 1/1] xfsprogs: bump to version 4.18.0
+Message-ID: <20180916180713.16504-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Il 11/09/2018 14:46, Giulio Benetti ha scritto:
-> Release 1.15.1 tarball doesn't contain all sublibraries license files
-> listed in the base LICENSE.txt file.
-> This makes python-numpy-legal-info incomplete.
-> 
-> Add patch to add missing sublibraries license files:
-> - numpy/linalg/lapack_lite/LICENSE.txt
-> - tools/npy_tempita/license.txt
-> and therefore their sha256 into hash file.
-> Update also PYTHON_NUMPY_LICENSE adding:
-> BSD-2-Clause PSF Apache-2.0 MIT Zlib
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
-> Changes V1->V2:
-> * fixed subject, it's not a fix, I'm adding licenses
-> * add commas to separate licenses
-> 
->   ...02-Add-sublibraries-missing-licenses.patch | 89 +++++++++++++++++++
->   package/python-numpy/python-numpy.hash        |  5 ++
->   package/python-numpy/python-numpy.mk          |  8 +-
->   3 files changed, 100 insertions(+), 2 deletions(-)
->   create mode 100644 package/python-numpy/0002-Add-sublibraries-missing-licenses.patch
-> 
-> diff --git a/package/python-numpy/0002-Add-sublibraries-missing-licenses.patch b/package/python-numpy/0002-Add-sublibraries-missing-licenses.patch
-> new file mode 100644
-> index 0000000000..457aaa945f
-> --- /dev/null
-> +++ b/package/python-numpy/0002-Add-sublibraries-missing-licenses.patch
-> @@ -0,0 +1,89 @@
-> +Add sublibraries license files
-> +
-> +On Release 1.15.1 tarball two license files are missing:
-> +- numpy/linalg/lapack_lite/LICENSE.txt
-> +- tools/npy_tempita/license.txt
-> +
-> +Add them to sources to keep licensing information complete.
-> +
-> +Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> +
-> +diff -urpN numpy-1.15.1.orig/numpy/linalg/lapack_lite/LICENSE.txt numpy-1.15.1/numpy/linalg/lapack_lite/LICENSE.txt
-> +--- numpy-1.15.1.orig/numpy/linalg/lapack_lite/LICENSE.txt	1970-01-01 01:00:00.000000000 +0100
-> ++++ numpy-1.15.1/numpy/linalg/lapack_lite/LICENSE.txt	2018-09-11 00:00:41.239919567 +0200
-> +@@ -0,0 +1,48 @@
-> ++Copyright (c) 1992-2013 The University of Tennessee and The University
-> ++                        of Tennessee Research Foundation.  All rights
-> ++                        reserved.
-> ++Copyright (c) 2000-2013 The University of California Berkeley. All
-> ++                        rights reserved.
-> ++Copyright (c) 2006-2013 The University of Colorado Denver.  All rights
-> ++                        reserved.
-> ++
-> ++$COPYRIGHT$
-> ++
-> ++Additional copyrights may follow
-> ++
-> ++$HEADER$
-> ++
-> ++Redistribution and use in source and binary forms, with or without
-> ++modification, are permitted provided that the following conditions are
-> ++met:
-> ++
-> ++- Redistributions of source code must retain the above copyright
-> ++  notice, this list of conditions and the following disclaimer.
-> ++
-> ++- Redistributions in binary form must reproduce the above copyright
-> ++  notice, this list of conditions and the following disclaimer listed
-> ++  in this license in the documentation and/or other materials
-> ++  provided with the distribution.
-> ++
-> ++- Neither the name of the copyright holders nor the names of its
-> ++  contributors may be used to endorse or promote products derived from
-> ++  this software without specific prior written permission.
-> ++
-> ++The copyright holders provide no reassurances that the source code
-> ++provided does not infringe any patent, copyright, or any other
-> ++intellectual property rights of third parties.  The copyright holders
-> ++disclaim any liability to any recipient for claims brought against
-> ++recipient by any third party for infringement of that parties
-> ++intellectual property rights.
-> ++
-> ++THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-> ++"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-> ++LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-> ++A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-> ++OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-> ++SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-> ++LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-> ++DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-> ++THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-> ++(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-> ++OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-> +diff -urpN numpy-1.15.1.orig/tools/npy_tempita/license.txt numpy-1.15.1/tools/npy_tempita/license.txt
-> +--- numpy-1.15.1.orig/tools/npy_tempita/license.txt	1970-01-01 01:00:00.000000000 +0100
-> ++++ numpy-1.15.1/tools/npy_tempita/license.txt	2018-09-11 00:00:41.271919819 +0200
-> +@@ -0,0 +1,23 @@
-> ++License
-> ++-------
-> ++
-> ++Copyright (c) 2008 Ian Bicking and Contributors
-> ++
-> ++Permission is hereby granted, free of charge, to any person obtaining
-> ++a copy of this software and associated documentation files (the
-> ++"Software"), to deal in the Software without restriction, including
-> ++without limitation the rights to use, copy, modify, merge, publish,
-> ++distribute, sublicense, and/or sell copies of the Software, and to
-> ++permit persons to whom the Software is furnished to do so, subject to
-> ++the following conditions:
-> ++
-> ++The above copyright notice and this permission notice shall be
-> ++included in all copies or substantial portions of the Software.
-> ++
-> ++THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-> ++EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-> ++MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-> ++NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-> ++LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-> ++OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-> ++WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-> diff --git a/package/python-numpy/python-numpy.hash b/package/python-numpy/python-numpy.hash
-> index 7c7f446118..468d7de532 100644
-> --- a/package/python-numpy/python-numpy.hash
-> +++ b/package/python-numpy/python-numpy.hash
-> @@ -2,3 +2,8 @@
->   sha256	3c1ccce5d935ef8df16ae0595b459ef08a5cdb05aee195ebc04b9d89a72be7fa	numpy-1.15.1.tar.gz
->   # License files, locally calculated
->   sha256	9e85ee1c3f11444243c9b7667721592a01f1cd90cb28ad937ac99f6241d6b685	LICENSE.txt
-> +sha256	426a5a484480f57a295db48c2c04f47bb3274752dd82a7fd6541dfa2cb90f641	doc/sphinxext/LICENSE.txt
-> +sha256	154a8706fa0fdeff1073bf6239c4ecf51f562ab107066eef839dade1a45c824c	doc/scipy-sphinx-theme/LICENSE.txt
-> +sha256	a14cc25e10d40a3aa705b7de2fb764a6535d8ee9b2db4e1724900585457dfd55	numpy/linalg/lapack_lite/LICENSE.txt
-> +sha256	badf51c7e3e7de9c7630bd069780f5c197b846ef7660b342a1e58d5553592d8e	tools/npy_tempita/license.txt
-> +sha256	d37526b4a34c0aa859afe6f9b7e64ca7c306b7430df8113dd5ac6fcb246bd2d4	numpy/core/src/multiarray/dragon4.c
-> diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
-> index bd5fe7e6a9..72a10cfaec 100644
-> --- a/package/python-numpy/python-numpy.mk
-> +++ b/package/python-numpy/python-numpy.mk
-> @@ -7,8 +7,12 @@
->   PYTHON_NUMPY_VERSION = 1.15.1
->   PYTHON_NUMPY_SOURCE = numpy-$(PYTHON_NUMPY_VERSION).tar.gz
->   PYTHON_NUMPY_SITE = https://github.com/numpy/numpy/releases/download/v$(PYTHON_NUMPY_VERSION)
-> -PYTHON_NUMPY_LICENSE = BSD-3-Clause
-> -PYTHON_NUMPY_LICENSE_FILES = LICENSE.txt
-> +PYTHON_NUMPY_LICENSE = BSD-3-Clause, BSD-2-Clause, PSF, Apache-2.0, MIT, Zlib
-> +PYTHON_NUMPY_LICENSE_FILES = LICENSE.txt doc/sphinxext/LICENSE.txt \
-> +			doc/scipy-sphinx-theme/LICENSE.txt \
-> +			numpy/linalg/lapack_lite/LICENSE.txt \
-> +			tools/npy_tempita/license.txt \
-> +			numpy/core/src/multiarray/dragon4.c
->   PYTHON_NUMPY_SETUP_TYPE = setuptools
->   
->   ifeq ($(BR2_PACKAGE_CLAPACK),y)
-> 
+- Update second patch because crc32 moved from libxfs to libfrog:
+  https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/commit/?id=973de649842b6f96db32e5060b62e8fbcc05f033
+- Update XFSPROGS_LICENSE_FILES because doc/COPYING has been replaced by
+  LICENSES/GPL-2.0 and LICENSES/LGPL-2.1, see:
+  https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/commit/?id=959ef98176005b1aa69619dd76b1d46cf112dfc4
 
-In the meanwhile, signalled lack of:
-- numpy/linalg/lapack_lite/LICENSE.txt
-- tools/npy_tempita/license.txt
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0002-libxfs-do-not-try-to-run-the-crc32selftest.patch | 8 +++++---
+ package/xfsprogs/xfsprogs.hash                            | 7 +++++--
+ package/xfsprogs/xfsprogs.mk                              | 4 ++--
+ 3 files changed, 12 insertions(+), 7 deletions(-)
 
-to upstream:
-https://github.com/numpy/numpy/issues/11927
-
-Kind regards
+diff --git a/package/xfsprogs/0002-libxfs-do-not-try-to-run-the-crc32selftest.patch b/package/xfsprogs/0002-libxfs-do-not-try-to-run-the-crc32selftest.patch
+index 372a5301bd..6778d069a1 100644
+--- a/package/xfsprogs/0002-libxfs-do-not-try-to-run-the-crc32selftest.patch
++++ b/package/xfsprogs/0002-libxfs-do-not-try-to-run-the-crc32selftest.patch
+@@ -17,14 +17,16 @@ Note that there's a remaining bug-in-hiding, because the crc32 table
+ generator is natively built, but with the target CFLAGS.
+ 
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Signed-off-by: "Fabrice Fontaine" <fontaine.fabrice@gmail.com>
++[Update for 4.18.0: crc32 has been moved from libxfs to libfrog]
+ ---
+  libxfs/Makefile | 4 ++--
+  1 file changed, 2 insertions(+), 2 deletions(-)
+ 
+-diff --git a/libxfs/Makefile b/libxfs/Makefile
++diff --git a/libfrog/Makefile b/libxfs/Makefile
+ index 62608bd..e021625 100644
+---- a/libxfs/Makefile
+-+++ b/libxfs/Makefile
++--- a/libfrog/Makefile
+++++ b/libfrog/Makefile
+ @@ -112,9 +112,9 @@ LTLIBS = $(LIBPTHREAD) $(LIBRT)
+  # don't try linking xfs_repair with a debug libxfs.
+  DEBUG = -DNDEBUG
+diff --git a/package/xfsprogs/xfsprogs.hash b/package/xfsprogs/xfsprogs.hash
+index 4df2e8d9e4..839f4add2d 100644
+--- a/package/xfsprogs/xfsprogs.hash
++++ b/package/xfsprogs/xfsprogs.hash
+@@ -1,3 +1,6 @@
+ # From https://www.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/sha256sums.asc
+-sha256 3d5c2da46112b86cbd967fee43cea731d38a1b2aaf601b57674ed34e808652df  xfsprogs-4.16.1.tar.xz
+-sha256 ee304b1b1da08b261f1d1f31d229fc70d2d0c552c7429e9e84c0fac878d94209  doc/COPYING
++sha256 397dc96f51aeeff73d021d3418d3172377b2685f2740ca60525096c070aa3df1  xfsprogs-4.18.0.tar.xz
++
++# Hash for license files
++sha256 7ae50a5344af14d6231aff6814632a220b3127da4099aea2c6070fd79c407c1a  LICENSES/GPL-2.0
++sha256 0b9a4febcdee6de55872501d5c1a8f5d8b0d1650cd4d5351995ceb22e889f8ca  LICENSES/LGPL-2.1
+diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
+index 814e0cf218..b5975d29e1 100644
+--- a/package/xfsprogs/xfsprogs.mk
++++ b/package/xfsprogs/xfsprogs.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-XFSPROGS_VERSION = 4.16.1
++XFSPROGS_VERSION = 4.18.0
+ XFSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/fs/xfs/xfsprogs
+ XFSPROGS_SOURCE = xfsprogs-$(XFSPROGS_VERSION).tar.xz
+ XFSPROGS_LICENSE = GPL-2.0, GPL-2.0+, LGPL-2.1 (libhandle, few headers)
+-XFSPROGS_LICENSE_FILES = doc/COPYING
++XFSPROGS_LICENSE_FILES = LICENSES/GPL-2.0 LICENSES/LGPL-2.1
+ 
+ XFSPROGS_DEPENDENCIES = util-linux
+ 
 -- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+2.17.1
