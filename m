@@ -1,66 +1,53 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 16 Sep 2018 07:21:41 +0300
-Subject: [Buildroot] [PATCH 5/5] configs/solidrun_macchiatobin_marvell:
- bump component versions
-In-Reply-To: <20180914153326.19346-6-thomas.petazzoni@bootlin.com>
-References: <20180914153326.19346-1-thomas.petazzoni@bootlin.com>
- <20180914153326.19346-6-thomas.petazzoni@bootlin.com>
-Message-ID: <20180916042141.4fsryjj54fig2mcc@sapphire.tkos.co.il>
+Date: Sun, 16 Sep 2018 08:05:22 +0300
+Subject: [Buildroot] [PATCH 1/1] linuxptp: needs NPTL
+In-Reply-To: <20180915192005.29373-1-fontaine.fabrice@gmail.com>
+References: <20180915192005.29373-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180916050522.bldd73xzol5nryte@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Fabrice,
 
-On Fri, Sep 14, 2018 at 05:33:26PM +0200, Thomas Petazzoni wrote:
-> Bump Linux to armada-18.09, U-Boot to armada-18.09.1 and ATF to
-> armada-18.09.4.
+On Sat, Sep 15, 2018 at 09:20:05PM +0200, Fabrice Fontaine wrote:
+> /home/buildroot/autobuild/run/instance-1/output/host/bin/or1k-linux-gcc   phc_ctl.o phc.o sk.o util.o clockadj.o sysoff.o print.o version.o  -lm -lrt  -o phc_ctl
+> phc2sys.o: In function `do_loop':
+> phc2sys.c:(.text+0x18bc): undefined reference to `clock_nanosleep'
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  configs/solidrun_macchiatobin_marvell_defconfig | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/configs/solidrun_macchiatobin_marvell_defconfig b/configs/solidrun_macchiatobin_marvell_defconfig
-> index acc8d1589e..4b52e47945 100644
-> --- a/configs/solidrun_macchiatobin_marvell_defconfig
-> +++ b/configs/solidrun_macchiatobin_marvell_defconfig
-> @@ -7,7 +7,8 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for Marvell MacchiatoBin"
->  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
->  BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
->  BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/MarvellEmbeddedProcessors/atf-marvell.git"
-> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="43965481990fd92e9666cf9371a8cf478055ec7c"
-> +# This commit corresponds to release armada-18.09.4
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="711ecd32afe465b38052b5ba374c825b158eea18"
->  BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="a80x0_mcbin"
->  BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
->  BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
-> @@ -20,14 +21,15 @@ BR2_TARGET_MV_DDR_MARVELL=y
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_CUSTOM_GIT=y
->  BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/MarvellEmbeddedProcessors/u-boot-marvell"
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="u-boot-2017.03-armada-17.10"
-> +# This commit corresponds to armada-18.09.1, based on u-boot 2018.03
-> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="8fe403172c58440bcfbb3724242301c0108eff5b"
->  BR2_TARGET_UBOOT_BOARDNAME="mvebu_mcbin-88f8040"
->  BR2_TARGET_UBOOT_NEEDS_DTC=y
->  
->  # Kernel
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,MarvellEmbeddedProcessors,linux-marvell,linux-4.4.52-armada-17.10)/linux-linux-4.4.52-armada-17.10.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,MarvellEmbeddedProcessors,linux-marvell,linux-4.4.52-armada-17.10)/linux-linux-4.4.120-armada-18.09.tar.gz"
+> Fixes:
+>  - http://autobuild.buildroot.org/results/a31e0a5ae15e1164115e4e5981ef5fb3c3284bcc
 
-Why not bump to linux-4.14.22-armada-18.09? Is there any missing functionality 
-in that release?
-
->  BR2_LINUX_KERNEL_DEFCONFIG="mvebu_v8_lsp"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-8040-mcbin"
+This should only affect 2018.02.x. The latest uClibc-ng version provides 
+clock_nanosleep() even for non NPTL configurations.
 
 baruch
+
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/linuxptp/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/linuxptp/Config.in b/package/linuxptp/Config.in
+> index 3e18a0cb13..a32dbde2e1 100644
+> --- a/package/linuxptp/Config.in
+> +++ b/package/linuxptp/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_LINUXPTP
+>  	bool "linuxptp"
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # clock_nanosleep()
+>  	help
+>  	  The Linux PTP Project is the Precision Time Protocol
+>  	  implementation according to IEEE standard 1588 for Linux.
+> @@ -11,3 +12,6 @@ config BR2_PACKAGE_LINUXPTP
+>  	  not a goal.
+>  
+>  	  http://linuxptp.sourceforge.net/
+> +
+> +comment "linuxptp needs a toolchain w/ NPTL"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
 
 -- 
      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
