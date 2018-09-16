@@ -1,28 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 16 Sep 2018 10:22:56 +0200
-Subject: [Buildroot] [PATCH] wine: Bump to version 3.0.3
-In-Reply-To: <20180915130859.8655-1-nerv@dawncrow.de>
-References: <20180915130859.8655-1-nerv@dawncrow.de>
-Message-ID: <20180916102256.3f33e73d@windsurf>
+Date: Sun, 16 Sep 2018 10:23:53 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libXft: remove
+ autoreconf
+Message-ID: <20180916082355.C647F88221@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=3ae61eac51459c4ec9ad3167567d164f25178791
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 15 Sep 2018 15:08:59 +0200, Andr? Hentschel wrote:
-> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
-> ---
->  package/wine/wine.hash | 2 +-
->  package/wine/wine.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Nine years ago we added autoreconf to fix libtool-related problems
+with the matchbox package:
 
-Applied to master, thanks.
+https://git.buildroot.net/buildroot/commit/?id=51ef5b81224c243aa7f937c4690b1a120c81ccbc
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+After building this defconfig with autoreconf removed from this package
+
+BR2_x86_64=y
+BR2_x86_core_avx2=y
+BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_XLIB_LIBXFONT=y
+BR2_PACKAGE_MATCHBOX=y
+BR2_PACKAGE_MATCHBOX_SM=y
+BR2_PACKAGE_MATCHBOX_COMMON=y
+BR2_PACKAGE_MATCHBOX_COMMON_PDA=y
+BR2_PACKAGE_MATCHBOX_DESKTOP=y
+BR2_PACKAGE_MATCHBOX_KEYBOARD=y
+BR2_PACKAGE_MATCHBOX_PANEL=y
+BR2_PACKAGE_MATCHBOX_STARTUP_MONITOR=y
+
+it is obvious that the problem which existed nine years ago seems to be
+gone, therefore we remove autoreconf from this package because there is
+no need for it anymore.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/x11r7/xlib_libXft/xlib_libXft.mk | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/package/x11r7/xlib_libXft/xlib_libXft.mk b/package/x11r7/xlib_libXft/xlib_libXft.mk
+index 64415cfd30..9c5757e657 100644
+--- a/package/x11r7/xlib_libXft/xlib_libXft.mk
++++ b/package/x11r7/xlib_libXft/xlib_libXft.mk
+@@ -9,7 +9,6 @@ XLIB_LIBXFT_SOURCE = libXft-$(XLIB_LIBXFT_VERSION).tar.bz2
+ XLIB_LIBXFT_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXFT_LICENSE = MIT
+ XLIB_LIBXFT_LICENSE_FILES = COPYING
+-XLIB_LIBXFT_AUTORECONF = YES
+ XLIB_LIBXFT_INSTALL_STAGING = YES
+ XLIB_LIBXFT_DEPENDENCIES = fontconfig freetype xlib_libX11 xlib_libXext xlib_libXrender xorgproto
+ 
