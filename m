@@ -1,84 +1,184 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 16 Sep 2018 22:22:24 +0200
-Subject: [Buildroot] [PATCH] ffmpeg: fix static linking build failure
- when using libavutil
-In-Reply-To: <20180911204230.15890-1-giulio.benetti@micronovasrl.com>
-References: <20180911204230.15890-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20180916222224.519fa1f8@windsurf>
+Date: Sun, 16 Sep 2018 23:30:58 +0200
+Subject: [Buildroot] [PATCH v2 2/3] package/waffle: new package
+In-Reply-To: <20180211162136.15605-2-romain.naour@gmail.com>
+References: <20180211162136.15605-1-romain.naour@gmail.com>
+ <20180211162136.15605-2-romain.naour@gmail.com>
+Message-ID: <20180916233058.53cc7eec@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Giulio,
+Hello Romain,
 
-On Tue, 11 Sep 2018 22:42:30 +0200, Giulio Benetti wrote:
-> When static linking programs using ffmpeg libraries, if linking against
-> libavutil, -ldrm is listed before -lavutil.
-
-I think this is not relevant in the explanation, the fact that motion
-links with libdrm directly is independent from the fact that ffmpeg may
-use libdrm internally.
-
-> This leads to linking failure
-> due to undefined reference of drmGetVersion() and drmFreeVersion().
-> This is why when pkg-config generates libavutil.pc doesn't append -ldrm
-
-pkg-config does not generate .pc files, it only reads them.
-
-> after -lavutil.
-> Subsequentely if a package uses pkg-config and ffmpeg it will load
-> library dependencies from libavutil.pc without placing -ldrm at the tail.
-
-Well, the fact that it's at the tail is a detail, but the main problem
-is that the libavutil.pc file does not list *at all* the dependency on
-libdrm.
-
-> Without this fix the only way is to workaround the problem directly in
-> the single package, like this:
-
-"the single package" is not very clear, I would say "in each package
-using ffmpeg".
-
-> https://github.com/buildroot/buildroot/commit/daf7dd87f4d93923df5e757fd43b3ad214a4a2ae
+On Sun, 11 Feb 2018 17:21:35 +0100, Romain Naour wrote:
+> Backport an upstream patch fixing a build issue with musl toolchains.
+> Add a new patch fixing build with Wayand without X11.
 > 
-> Add patch to assure -ldrm comes after -lavutil when static linking.
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
-No, that's not what the patch does. The patch ensures that libavutil.pc
-tells pkg-config that linking against libdrm is needed.
+I finally took some time to look at this package again, and I think the
+dependencies are not correctly handled.
 
+> +config BR2_PACKAGE_WAFFLE
+> +	bool "waffle"
+> +	depends on BR2_PACKAGE_XORG7 || BR2_PACKAGE_WAYLAND
 
-> ++enabled libdrm            && require_pkg_config libdrm libdrm xf86drm.h drmGetVersion && LIBDRM="-ldrm"
-> + enabled libfdk_aac        && { use_pkg_config libfdk_aac fdk-aac "fdk-aac/aacenc_lib.h" aacEncOpen ||
-> +                                { require libfdk_aac fdk-aac/aacenc_lib.h aacEncOpen -lfdk-aac &&
-> +                                  warn "using libfdk without pkg-config"; } }
-> +@@ -7096,7 +7096,7 @@ source_path=${source_path}
-> + LIBPREF=${LIBPREF}
-> + LIBSUF=${LIBSUF}
-> + 
-> +-extralibs_avutil="$LIBRT $LIBM"
-> ++extralibs_avutil="$LIBDRM $LIBRT $LIBM"
+Due to this dependency, you cannot do a build which has just mesa3d as
+a gbm/egl provider + udev, which is a valid configuration supported by
+waffle.
 
-This fix is in fact not the most correct one. Indeed, it does the
-following change to libavutil.pc:
+I.e, the following defconfig builds waffle properly:
 
--Libs: -L${libdir}  -lavutil -lm
-+Libs: -L${libdir}  -lavutil -ldrm -lm
+BR2_arm=y
+BR2_cortex_a8=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_INIT_NONE=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_WAFFLE=y
+# BR2_TARGET_ROOTFS_TAR is not set
 
-but the proper change would be:
+> +	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBEGL
+> +	# OpenGL ES (1,2,3) libraries are loaded at runtime when needed
+> +	# in addition to LIBGL or LIBEGL.
+> +	depends on BR2_PACKAGE_HAS_LIBGLES
 
- Libs: -L${libdir}  -lavutil -lm
--Libs.private:
-+Libs.private: -ldrm
+This dependency means that you cannot build waffle at all if there's no
+GLES support. Therefore a desktop configuration that provides GL will
+not allow building waffle. That's not good.
 
-Indeed, when we're dynamic linking, there is no need to link consumers
-of libavutil with libdrm. It is only when we're statically linking that
-it should be done. And that's exactly what Libs vs. Libs.private is for.
+Looking more closely into the Waffle build system, it has four
+"backends", each having their own dependencies. At least one "backend"
+must be enabled, otherwise Waffle will refuse to build. The "backends"
+are:
+
+ - glx, which needs full OpenGL + x11-xcb
+ - wayland, which needs wayland-client, wayland-egl and EGL
+ - x11-egl, which needs x11-xcb and EGL
+ - gbm, which needs gbm, libudev and EGL
+
+So the easiest is perhaps to map this to hidden Config.in options,
+maybe something like:
+
+config BR2_PACKAGE_WAFFLE_SUPPORTS_GLX
+	bool
+	default y if BR2_PACKAGE_HAS_LIBGL && BR2_PACKAGE_XORG7
+
+config BR2_PACKAGE_WAFFLE_SUPPORTS_WAYLAND
+	bool
+	default y if BR2_PACKAGE_WAYLAND && BR2_PACKAGE_HAS_LIBEGL_WAYLAND
+
+config BR2_PACKAGE_WAFFLE_SUPPORTS_X11_EGL
+	bool
+	default y if BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_XORG7
+
+config BR2_PACKAGE_WAFFLE_SUPPORTS_GBM
+	bool
+	# mesa3d is for now the only GBM provider, and it is enabled
+	# together with its EGL support
+	default y if BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_MESA3D_OPENGL_EGL && BR2_PACKAGE_HAS_UDEV
+
+config BR2_PACKAGE_WAFFLE
+	bool "waffle"
+	depends on BR2_PACKAGE_WAFFLE_SUPPORTS_GLX || \
+		BR2_PACKAGE_WAFFLE_SUPPORTS_WAYLAND || \
+		BR2_PACKAGE_WAFFLE_SUPPORTS_X11_EGL || \
+		BR2_PACKAGE_WAFFLE_SUPPORTS_GBM
+	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_WAFFLE_SUPPORTS_GLX || BR2_PACKAGE_WAFFLE_SUPPORTS_X11_EGL
+	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_WAFFLE_SUPPORTS_GLX || BR2_PACKAGE_WAFFLE_SUPPORTS_X11_EGL
+
+I don't think we need a Config.in comment to document those
+dependencies. They are anyway waaaay too complicated to be summarized
+in a Config.in comment.
+
+> diff --git a/package/waffle/waffle.hash b/package/waffle/waffle.hash
+> new file mode 100644
+> index 0000000000..5dfb976f2f
+> --- /dev/null
+> +++ b/package/waffle/waffle.hash
+> @@ -0,0 +1,3 @@
+> +# Locally calculated
+> +sha256 d662f6743f688dc5ea4b7d29f558eb54bd8f57350080f04a006693d22e5d1d5b  waffle-v1.5.2.tar.gz
+> +sha256 630844d1911c8a1b7b888a1de9097c4860b7e381362fd5aa64141d58ab7ecc9b  LICENSE.txt
+> diff --git a/package/waffle/waffle.mk b/package/waffle/waffle.mk
+> new file mode 100644
+> index 0000000000..741bc8e349
+> --- /dev/null
+> +++ b/package/waffle/waffle.mk
+> @@ -0,0 +1,48 @@
+> +################################################################################
+> +#
+> +# waffle
+> +#
+> +################################################################################
+> +
+> +WAFFLE_VERSION = v1.5.2
+> +WAFFLE_SITE = $(call github,waffle-gl,waffle,$(WAFFLE_VERSION))
+> +WAFFLE_INSTALL_STAGING = YES
+> +WAFFLE_LICENSE = BSD-2-Clause
+> +WAFFLE_LICENSE_FILES = LICENSE.txt
+> +
+> +WAFFLE_DEPENDENCIES = host-pkgconf
+> +
+> +WAFFLE_CONF_OPTS = -Dwaffle_build_tests=OFF \
+> +	-Dwaffle_build_examples=OFF \
+> +	-Dwaffle_build_manpages=OFF \
+> +	-Dwaffle_build_htmldocs=OFF
+> +
+> +ifeq ($(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_HAS_LIBEGL_WAYLAND),yy)
+
+You can replace this condition with BR2_PACKAGE_WAFFLE_SUPPORTS_WAYLAND.
+
+> +WAFFLE_DEPENDENCIES += libegl wayland
+> +WAFFLE_CONF_OPTS += -Dwaffle_has_wayland=ON
+> +else
+> +WAFFLE_CONF_OPTS += -Dwaffle_has_wayland=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_XLIB_LIBX11)$(BR2_PACKAGE_LIBXCB)$(BR2_PACKAGE_HAS_LIBEGL),yyy)
+
+This one by BR2_PACKAGE_WAFFLE_SUPPORTS_X11_EGL
+
+> +WAFFLE_DEPENDENCIES += libegl libxcb xlib_libX11
+> +WAFFLE_CONF_OPTS += -Dwaffle_has_x11_egl=ON
+> +else
+> +WAFFLE_CONF_OPTS += -Dwaffle_has_x11_egl=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_XLIB_LIBX11)$(BR2_PACKAGE_LIBXCB)$(BR2_PACKAGE_HAS_LIBGL),yyy)
+
+This one by BR2_PACKAGE_WAFFLE_SUPPORTS_GLX
+
+> +WAFFLE_DEPENDENCIES += libgl libxcb xlib_libX11
+> +WAFFLE_CONF_OPTS += -Dwaffle_has_glx=ON
+> +else
+> +WAFFLE_CONF_OPTS += -Dwaffle_has_glx=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL)$(BR2_PACKAGE_HAS_UDEV),yy)
+
+And this one by BR2_PACKAGE_WAFFLE_SUPPORTS_GBM
+
+> +WAFFLE_DEPENDENCIES += libegl mesa3d udev
+
+I would say adding mesa3d here in the dependencies is a bit useless,
+because libegl is provided by mesa3d anyway when
+BR2_PACKAGE_MESA3D_OPENGL_EGL.
+
+You had a "depends on BR2_PACKAGE_HAS_LIBGLES" because waffle can use
+OpenGLES. But it seems like a runtime dependency, not a build time
+dependency. Could you check this ?
 
 Best regards,
 
-Thomas Petazzoni
+Thomas
 -- 
 Thomas Petazzoni, CTO, Bootlin
 Embedded Linux and Kernel engineering
