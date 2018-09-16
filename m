@@ -1,50 +1,38 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 16 Sep 2018 15:46:56 +0200
-Subject: [Buildroot] [PATCH v2,1/2] brltty: add license
-In-Reply-To: <20180916150441.7d88dee9@windsurf>
-References: <20180915104359.24938-1-fontaine.fabrice@gmail.com>
- <20180916150441.7d88dee9@windsurf>
-Message-ID: <CAPi7W81znFmc1fegMzBAh4+8yFmJjr-i3ApYtcGnf6hYGRBjEg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 16 Sep 2018 15:53:54 +0200
+Subject: [Buildroot] [git commit] botan: fix static build
+Message-ID: <20180916135350.2646288301@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=f250324a28e839b5d2416f7b9aa2ba0457db3522
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le dim. 16 sept. 2018 ? 15:04, Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> a ?crit :
+Don't pass crs in AR as it is now done by botan, see:
+https://github.com/randombit/botan/commit/a9e4eede3942748234d705cc616ecc106e3767a6
 
-> Hello,
->
-> On Sat, 15 Sep 2018 12:43:58 +0200, Fabrice Fontaine wrote:
->
-> > +BRLTTY_LICENSE = GPL-2.0+ with exceptions in LGPL-2.1+
->
-> I think it would be better as:
->
-> BRLTTY_LICENSE = GPL-2.0+, LGPL-2.1+ (data, client side)
->
-Yes, I agree with your proposal, it is indeed more precise.
+Fixes:
+ - http://autobuild.buildroot.org/results/5c15fe739cb1b6079dacf234699ee048924b74fb
 
->
-> Do you agree ? It doesn't matter a lot for master, because this is
-> anyway going to be changed to just LGPL-2.1+ by your second patch, but
-> this first patch adding the license details will probably be backported
-> to 2018.02.x by Peter.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/botan/botan.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best Regards,
-
-Fabrice
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180916/d69adda3/attachment.html>
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index 4788617d4a..59aa1f0803 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -87,7 +87,7 @@ define BOTAN_CONFIGURE_CMDS
+ endef
+ 
+ define BOTAN_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) AR="$(TARGET_AR) crs"
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) AR="$(TARGET_AR)"
+ endef
+ 
+ define BOTAN_INSTALL_STAGING_CMDS
