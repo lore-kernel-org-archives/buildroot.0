@@ -1,43 +1,57 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 17 Sep 2018 18:55:47 +0200
-Subject: [Buildroot] [PATCH 1/1] domoticz: fix build with gcc <= 4.7
-Message-ID: <20180917165547.30222-1-fontaine.fabrice@gmail.com>
+From: Trent Piepho <tpiepho@impinj.com>
+Date: Mon, 17 Sep 2018 18:02:50 +0000
+Subject: [Buildroot] [PATCH] Fix issue with printvars executing giant
+ shell command
+In-Reply-To: <20180910181837.GG2674@scaer>
+References: <20180817231548.29867-1-tpiepho@impinj.com>
+ <20180829204929.GA2617@scaer> <1536601546.22056.12.camel@impinj.com>
+ <20180910181837.GG2674@scaer>
+Message-ID: <1537207369.7736.6.camel@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-sleep_for is not always defined with gcc <= 4.7, see
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=52680
+On Mon, 2018-09-10 at 20:18 +0200, Yann E. MORIN wrote:
+> On 2018-09-10 17:45 +0000, Trent Piepho spake thusly:
+> > On Wed, 2018-08-29 at 22:49 +0200, Yann E. MORIN wrote:
+> > > On 2018-08-17 16:15 -0700, Trent Piepho spake thusly:
+> > > > 
+> > > > The solution here is to use $(strip $(foreach ...)), so the command
+> > > > expands to "@:", which make is smart enough to not even execute and
+> > > > wouldn't exceed any limits if it did.
+> > > > 
+> So what about:
+> 
+> diff --git a/Makefile b/Makefile
+> index 2c6af12989..57e776056c 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -988,7 +988,8 @@ $(BUILD_DIR)/.br2-external.in: $(BUILD_DIR)
+>  # displayed.
+>  .PHONY: printvars
+>  printvars:
+> -	@:$(foreach V, \
+> +	@:
+> +	$(foreach V, \
+>  		$(sort $(if $(VARS),$(filter $(VARS),$(.VARIABLES)),$(.VARIABLES))), \
+>  		$(if $(filter-out environment% default automatic, \
+>  				$(origin $V)), \
+> 
+> In a recipe, a command line that contains only spaces will not be executed
+> by make.
+> 
+> So with the above, you get the silence from a rule, and no long-shell
+> commands that break.
+> 
+> > However, it is clearly defined that strip will convert a sequence of
+> > whitespace to an empty string, so I figured better to relay on that.
+> 
+> I'm just trying to keep it simple.
 
-To fix this issue, add -D_GLIBCXX_USE_NANOSLEEP if gcc version is lower
-than 4.8
-
-Fixes:
- - http://autobuild.buildroot.net/results/0dada8dd727f32a4500670f6620adb05943ed0b7
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/domoticz/domoticz.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
-index 7f094d0976..832774a147 100644
---- a/package/domoticz/domoticz.mk
-+++ b/package/domoticz/domoticz.mk
-@@ -18,6 +18,12 @@ DOMOTICZ_DEPENDENCIES = \
- 	sqlite \
- 	zlib
- 
-+# sleep_for, see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=52680
-+ifneq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_8),y)
-+DOMOTICZ_CONF_OPTS += \
-+	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -D_GLIBCXX_USE_NANOSLEEP"
-+endif
-+
- # Due to the dependency on mosquitto, domoticz depends on
- # !BR2_STATIC_LIBS so set USE_STATIC_BOOST and USE_OPENSSL_STATIC to OFF
- DOMOTICZ_CONF_OPTS += \
--- 
-2.17.1
+Ok, if you like that better.  My thought was "strip eats whitespace" is
+simple, but "a recipe line starting with a tab and containing only
+whitespace is skipped" is more obscure.  In fact, while it does appear
+to be true, I haven't found anything in the make docs clearly stating
+this.
