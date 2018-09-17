@@ -1,40 +1,81 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Mon, 17 Sep 2018 11:29:00 -0700
-Subject: [Buildroot] [PATCH] systemd: Allow building with no init system
-Message-ID: <20180917182900.15902-1-tpiepho@impinj.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 17 Sep 2018 14:06:37 -0500
+Subject: [Buildroot] [PATCH v6 0/4] Hardening Wrapper Updates and Test
+Message-ID: <1537211201-35917-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's possible to build systemd, and use the systemd libraries, on a
-target with no init system.
+This series looks to update the implementation and migration of
+hardening related options to the compiler wrapper.
 
-While installing systemd when trying to use SysV init will result in
-systemd clobbering the SysV system and vice versa, it may well work when
-no init system has been selected.  For instance, when building an SDK
-the sytemd headers and libraries might be necessary but there is no
-reason to have an init system selected.  Someone creating a custom init
-system might also want some of the systemd libraries.
+The series also provides runtime testing for RELRO/SSP/FORTIFY.
 
-Signed-off-by: Trent Piepho <tpiepho@impinj.com>
----
- package/systemd/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Overall test of features
+-------------------------------------
+support/testing/run-tests -k -o ~/runtime_test_tmp -d ~/dl_tmp \
+ tests.core.test_hardening.TestFortifyConserv \
+ tests.core.test_hardening.TestFortifyNone \
+ tests.core.test_hardening.TestRelro \
+ tests.core.test_hardening.TestRelroPartial \
+ tests.core.test_hardening.TestSspNone \
+ tests.core.test_hardening.TestSspStrong
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index c858d89c05..71d37f6a5a 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
- 
- menuconfig BR2_PACKAGE_SYSTEMD
- 	bool "systemd"
--	depends on BR2_INIT_SYSTEMD
-+	depends on BR2_INIT_SYSTEMD || BR2_INIT_NONE
- 	depends on !BR2_STATIC_LIBS # kmod
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
- 	depends on BR2_USE_MMU # dbus
+Changes
+--------------------------------------------------
+v5 -> v6
+ - Moved all RELRO/PIE handling to GCC frontend wrapper.
+ - Updated PIE disable conditions and added comments
+ - Updated comments in code and on patches to make design choices
+   clear
+
+v4 -> v5
+ - RELRO patch updated to handle link time -r represented also as
+   -wl,r
+
+v3 -> v4
+ - RELRO/PIE patch updated to solely use the wrapper.  I didn't
+   understand how the specfiles where used and thought I needed to
+   do something similar during the use of LD.  That is not the case.
+   GCC compile wrapper has been updated to handle CC and LD options
+   required for this feature.  Testing with verification using the
+   checksec tool confirms the intended behavior is close to identical
+   between the specfile approach and wrapper.  Wrapper actually is
+   just slightly better since the specfile relied on FLAGS being
+   correctly used.
+
+v2 -> v3
+ - Realized the complexity of having a link wrapper application vs
+   using a combo of link specfile and GCC wrapper.  This patchset
+   presents that hybrid approach and has updated comments on the
+   patches implementing this concept to support the discussion.
+ - Added additional detail to descriptions and test cases to this
+   cover letter
+
+v1 -> v2
+ - There were issues when I started regression testing where
+   packages where providing multiple pie/pic/shared args on
+   a single call of gcc/ld.
+
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+CC: Jan Kundr?t <jan.kundrat@cesnet.cz>
+CC: Stefan S?rensen <stefan.sorensen@spectralink.com>
+
+Matt Weber (4):
+  toolchain/toolchain-wrapper: add BR2_RELRO_
+  toolchain/toolchain-wrapper: add BR2_SSP_* support
+  BR2_FORTIFY*: toolchain wrapper limitation note
+  support/testing/tests/core: SSP & hardening flags
+
+ .gitlab-ci.yml                               |   6 ++
+ package/Makefile.in                          |  28 +++----
+ support/testing/tests/core/test_hardening.py | 110 +++++++++++++++++++++++++++
+ toolchain/toolchain-wrapper.c                |  78 ++++++++++++++++++-
+ toolchain/toolchain-wrapper.mk               |  14 ++++
+ 5 files changed, 215 insertions(+), 21 deletions(-)
+ create mode 100644 support/testing/tests/core/test_hardening.py
+
 -- 
-2.14.4
+1.9.1
