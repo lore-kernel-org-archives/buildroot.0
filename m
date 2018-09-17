@@ -1,13 +1,13 @@
 From: Pierret David <david.pierret@smile.fr>
-Date: Mon, 17 Sep 2018 12:09:01 +0200
-Subject: [Buildroot] [PATCH 2/2] monkey: add option for SSL/TLS plugin
- compilation
-Message-ID: <2120fe96-83cd-3d1e-0bfb-e085dafaad36@smile.fr>
+Date: Mon, 17 Sep 2018 12:21:32 +0200
+Subject: [Buildroot] [PATCH 1/2] monkey: bump to version 1.6.9
+Message-ID: <40fddeaf-962f-2179-0882-9339d11006c5@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
 
 This commit add an option to enable SSL/TLS plugin compilation who is 
 not build
@@ -21,21 +21,21 @@ Signed-off-by: David Pierret <david.pierret@gmail.com>
   2 files changed, 13 insertions(+)
 
 diff --git a/package/monkey/Config.in b/package/monkey/Config.in
-index 9054aa0..a2496aa 100644
+index 9054aa0..ab8bde1 100644
 --- a/package/monkey/Config.in
 +++ b/package/monkey/Config.in
-@@ -19,6 +19,11 @@ config BR2_PACKAGE_MONKEY_SHARED
-
-  endif
+@@ -17,6 +17,11 @@ config BR2_PACKAGE_MONKEY_SHARED
+  	  Build Monkey as a shared library in addition to stand-alone
+  	  server
 
 +config BR2_PACKAGE_MONKEY_SSL
 +        bool "enable SSL/TLS"
 +        help
 +          Enable build of the SSL/TLS plugin.
 +
+  endif
+
   comment "monkey needs an toolchain w/ threads, dynamic library"
-  	depends on BR2_USE_MMU
-  	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
 diff --git a/package/monkey/monkey.mk b/package/monkey/monkey.mk
 index 58bc26e..4fe5eb2 100644
 --- a/package/monkey/monkey.mk
