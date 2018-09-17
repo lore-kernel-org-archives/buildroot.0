@@ -1,60 +1,40 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Mon, 17 Sep 2018 23:43:29 +0300
-Subject: [Buildroot] [PATCH] libaio: Fix library creation for ARC with -Os
-Message-ID: <20180917204329.15787-1-abrodkin@synopsys.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 17 Sep 2018 22:51:55 +0200
+Subject: [Buildroot] [PATCH 1/1] tinycbor: bump to version 0.5.2
+Message-ID: <20180917205155.17965-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On ARC if "-Os" optimization is used compiler prefers to use so-called
-millicode (basically function prologue & epilogue) implemented once and for
-all in libgcc.a. And if we don't link with libgcc.a on DSO (read libaio.so)
-creation those millicode functions won't be included, instead their
-symbols will be referenced as they were in libgcc (HIDDEN).
-
-And then when LD is about to link a final application it sees HIDDEN
-symbol in libaio.so that is supposed to come from some static
-libgcc.a... wait.. what? Shared library has unresolved symbol
-implemented in static library? No, that's not right I guess :)
-
-So to resolve that wrong sequence we just make sure libaio.so has
-its own copy of used millicode functions implemented locally.
-
-BTW I guess something similar might happen for PowerPC,
-see https://git.buildroot.org/buildroot/commit/?id=ce6536ae500fc4ac0c201d5cb4edf39dd1b4d386
---------------------------->8------------------------
-hidden symbol `_rest32gpr_30_x' in libgcc.a(e500crtresx32gpr.o) is referenced by DSO
---------------------------->8------------------------
-
-Fixes: http://autobuild.buildroot.net/?reason=blktrace-1.2.0&arch=arc
-
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-Cc: arc-buildroot at synopsys.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libaio/libaio.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/tinycbor/tinycbor.hash | 2 +-
+ package/tinycbor/tinycbor.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libaio/libaio.mk b/package/libaio/libaio.mk
-index adb4d1c4b19e..2a452b0296c2 100644
---- a/package/libaio/libaio.mk
-+++ b/package/libaio/libaio.mk
-@@ -22,6 +22,13 @@ ifeq ($(BR2_powerpc),y)
- LIBAIO_CONFIGURE_OPTS += CFLAGS="$(subst -Os,-O2,$(TARGET_CFLAGS))"
- endif
+diff --git a/package/tinycbor/tinycbor.hash b/package/tinycbor/tinycbor.hash
+index db9c595733..6a7282dcba 100644
+--- a/package/tinycbor/tinycbor.hash
++++ b/package/tinycbor/tinycbor.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	f9d2ec366a38382c1b7bb989c45620dca168ad28107b4ef9a306ee93c3dbb832	tinycbor-v0.5.1.tar.gz
++sha256	dfa2a4550eb145a5f62ffff39e36accf2704987922c194e8e845124175c00441	tinycbor-v0.5.2.tar.gz
+ sha256	3c6ba0b5bfa7830505301ffb336a17b0748e0d61c4d34216e9dc98f10e40395e	LICENSE
+diff --git a/package/tinycbor/tinycbor.mk b/package/tinycbor/tinycbor.mk
+index 2aec68be77..40a828d545 100644
+--- a/package/tinycbor/tinycbor.mk
++++ b/package/tinycbor/tinycbor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# Make sure millicode functions get their implmentations in final DSO
-+# Otherwise later LD will righteously refuse to link an application saying:
-+#  "hidden symbol __xxx in libgcc.a is referenced by DSO".
-+ifeq ($(BR2_arc),y)
-+LIBAIO_CONFIGURE_OPTS += LDFLAGS=-lgcc
-+endif
-+
- define LIBAIO_BUILD_CMDS
- 	$(LIBAIO_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
- endef
+-TINYCBOR_VERSION = v0.5.1
++TINYCBOR_VERSION = v0.5.2
+ TINYCBOR_SITE = $(call github,intel,tinycbor,$(TINYCBOR_VERSION))
+ TINYCBOR_LICENSE = MIT
+ TINYCBOR_LICENSE_FILES = LICENSE
 -- 
 2.17.1
