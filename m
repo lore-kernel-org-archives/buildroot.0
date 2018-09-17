@@ -1,60 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 17 Sep 2018 15:55:54 +0200
-Subject: [Buildroot] [RFC] testing: add python-crossbar tests
-In-Reply-To: <5a8630f052ad0_2a8f13e76e012768@ultri3.mail>
-References: <CAGm1_ku_EsWrA-qCxkgg6xe-HkdVLB=x_10BN2fNYDAcKk7eng@mail.gmail.com>
- <5a8630f052ad0_2a8f13e76e012768@ultri3.mail>
-Message-ID: <20180917155554.05aa9b43@windsurf>
+From: Grzegorz Blach <grzegorz@blach.pl>
+Date: Mon, 17 Sep 2018 14:14:08 +0200
+Subject: [Buildroot] [PATCH 1/2] bluez5_utils-headers: new package
+In-Reply-To: <20180915000534.210ed343@windsurf>
+References: <20180913115656.11794-1-grzegorz@blach.pl>
+ <20180915000534.210ed343@windsurf>
+Message-ID: <d71612af-2ba8-1997-333b-eb56a7b28c98@blach.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Thu, 15 Feb 2018 23:16:32 -0200, Ricardo Martincoski wrote:
-
-> On Thu, Feb 15, 2018 at 11:41 AM, Yegor Yefremov wrote:
+On 9/15/18 12:05 AM, Thomas Petazzoni wrote:
+> Hello,
 > 
-> [snip]
-> > 
-> > I've tried this test locally, but it always timeouts. Even if I
-> > specify an hour as a timeout.  
+> On Thu, 13 Sep 2018 13:56:55 +0200, Grzegorz Blach wrote:
+>> Header files from bluez utils version 5.x.
+>>
+>> Separated headers are required to break circular dependencies
+>> when python3 is build with bluetooth support.
+>>
+>> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 > 
-> I confirm that here, both test cases fail by timeout, so it should not be
-> related to the host.
+> What are the changes compared to the previous iteration ?
 
-I applied Yegor's patch, and ran he test. It doesn't time out here.
-Here is what I have in the TestPythonPy2Crossbar-run.log:
+- bluez5_utils-headers/bluez5_utils_headers.hash now is a symlink to 
+bluez5_utils/bluez5_utils.hash. Previously it was a copy of this file.
 
-Welcome to Buildroot
-buildroot login: root
-# dmesg -n 1
-# echo $?
-0
-# python -m crossbar version
-Traceback (most recent call last):
-  File "usr/lib/python2.7/runpy.py", line 174, in _run_module_as_main
-  File "usr/lib/python2.7/runpy.py", line 72, in _run_code
-  File "usr/lib/python2.7/site-packages/crossbar/__main__.py", line 36, in <module>
-  File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 479, in load_entry_point
-  File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2703, in load_entry_point
-  File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2320, in load
-  File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2343, in require
-  File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 782, in resolve
-pkg_resources.ContextualVersionConflict: (txaio 2.8.2 (/usr/lib/python2.7/site-packages), Requirement.parse('txaio>=18.8.1'), set(['autobahn']))
-# echo $?
-1
+- In bluez5_utils_headers.mk I added 'BLUEZ5_UTILS_HEADERS_DL_SUBDIR = 
+bluez5_utils', because package bluez5_utils-headers and bluez5_utils 
+downloads exactly the same file.
 
-So it doesn't work due to some dependency issues. Is the timeout
-problem going to appear once those dependency issues are solved ? Or
-should I have already seen the timeout ?
+> It is customary to:
+> 
+>   - Add a patch title prefix which differs for each version. You can do
+>     this using 'git format-patch -v2' or 'git format-patch
+>     --prefix="PATCH v2"'
+> 
+>   - Add a changelog of what changed between each version, either in the
+>     cover letter (you can generate a template cover letter using git
+>     format-patch --cover) or in each patch, below the "---" sign.
 
-Best regards,
+Ok, I'll do that with future patches
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Thomas
+> 
