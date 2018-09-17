@@ -1,67 +1,118 @@
 From: Pierret David <david.pierret@smile.fr>
-Date: Mon, 17 Sep 2018 13:29:12 +0200
+Date: Mon, 17 Sep 2018 13:30:49 +0200
 Subject: [Buildroot] [PATCH 2/2] monkey: add option for SSL/TLS plugin
  compilation
-In-Reply-To: <20180917120155.617afb89@windsurf>
+In-Reply-To: <cec8070d-680a-c016-00a4-48b273f7b417@smile.fr>
 References: <2120fe96-83cd-3d1e-0bfb-e085dafaad36@smile.fr>
  <20180917120155.617afb89@windsurf>
-Message-ID: <cec8070d-680a-c016-00a4-48b273f7b417@smile.fr>
+ <cec8070d-680a-c016-00a4-48b273f7b417@smile.fr>
+Message-ID: <5395d263-a2c9-e04a-7acc-02ba8d21eb68@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
 
-Thank's for review
+This commit add an option to enable SSL/TLS plugin compilation who is 
+not build
+by default.
 
+Signed-off-by: David Pierret <david.pierret@gmail.com>
+---
+  package/monkey/Config.in | 6 ++++++
+  package/monkey/monkey.mk | 4 ++++
+  2 files changed, 10 insertions(+)
+
+diff --git a/package/monkey/Config.in b/package/monkey/Config.in
+index 9054aa0..fdfa148 100644
+--- a/package/monkey/Config.in
++++ b/package/monkey/Config.in
+@@ -17,6 +17,12 @@ config BR2_PACKAGE_MONKEY_SHARED
+  	  Build Monkey as a shared library in addition to stand-alone
+  	  server
+
++config BR2_PACKAGE_MONKEY_SSL
++	bool "enable SSL/TLS"
++	select BR2_PACKAGE_MBEDTLS
++	help
++	  Enable build of the SSL/TLS plugin.
++
+  endif
+
+  comment "monkey needs an toolchain w/ threads, dynamic library"
+diff --git a/package/monkey/monkey.mk b/package/monkey/monkey.mk
+index 58bc26e..427f359 100644
+--- a/package/monkey/monkey.mk
++++ b/package/monkey/monkey.mk
+@@ -48,6 +48,10 @@ ifeq ($(BR2_ENABLE_DEBUG),y)
+  MONKEY_CONF_OPTS += --debug
+  endif
+
++ifeq ($(BR2_PACKAGE_MONKEY_SSL),y)
++MONKEY_CONF_OPTS += --enable-plugins=tls --mbedtls-shared
++endif
++
+  define MONKEY_CONFIGURE_CMDS
+  	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(MONKEY_CONF_OPTS))
+  endef
+-- 
+2.7.4
+
+
+Le 17/09/2018 ? 13:29, Pierret David a ?crit?:
+> Hello Thomas,
+> 
+> Thank's for review
+> 
+>>> We always want to use external libraries instead of bundled libraries.
+> 
+> Ok, I define the mbedtls as a select.
+> I'm not yet comfortable with mailing list :/
+> 
+> Regards,
+> David
+> 
+> Le 17/09/2018 ? 12:01, Thomas Petazzoni a ?crit?:
+>> Hello David,
+>>
+>> Thanks for your contribution!
+>>
+>> On Mon, 17 Sep 2018 12:09:01 +0200, Pierret David wrote:
+>>> This commit add an option to enable SSL/TLS plugin compilation who is
+>>> not build
+>>> by default.
+>>> If mbedtls library is selected, she will be used instead of build-in 
+>>> one.
+>>
 >> We always want to use external libraries instead of bundled libraries.
-
-Ok, I define the mbedtls as a select.
-I'm not yet comfortable with mailing list :/
-
-Regards,
-David
-
-Le 17/09/2018 ? 12:01, Thomas Petazzoni a ?crit?:
-> Hello David,
-> 
-> Thanks for your contribution!
-> 
-> On Mon, 17 Sep 2018 12:09:01 +0200, Pierret David wrote:
->> This commit add an option to enable SSL/TLS plugin compilation who is
->> not build
->> by default.
->> If mbedtls library is selected, she will be used instead of build-in one.
-> 
-> We always want to use external libraries instead of bundled libraries.
-> 
->> +config BR2_PACKAGE_MONKEY_SSL
->> +        bool "enable SSL/TLS"
->> +        help
->> +          Enable build of the SSL/TLS plugin.
-> 
-> Please use one tab to indent bool and help, and one tab + two spaces to
-> indent the help text.
-> 
-> Make sure to run "make check-package" after your changes to verify that
-> you do not introduce coding style issues such as those ones.
-> 
->> +ifeq ($(BR2_PACKAGE_MONKEY_SSL), y)
-> 
-> No space before "y".
-> 
->> +MONKEY_CONF_OPTS += --enable-plugins=tls
->> +# If we already have TLS/SSL library, use it.
->> +ifeq ($(BR2_PACKAGE_MBEDTLS), y)
->> +MONKEY_CONF_OPTS += --mbedtls-shared
->> +endif
->> +endif
-> 
-> Thanks!
-> 
-> Thomas
+>>
+>>> +config BR2_PACKAGE_MONKEY_SSL
+>>> +??????? bool "enable SSL/TLS"
+>>> +??????? help
+>>> +????????? Enable build of the SSL/TLS plugin.
+>>
+>> Please use one tab to indent bool and help, and one tab + two spaces to
+>> indent the help text.
+>>
+>> Make sure to run "make check-package" after your changes to verify that
+>> you do not introduce coding style issues such as those ones.
+>>
+>>> +ifeq ($(BR2_PACKAGE_MONKEY_SSL), y)
+>>
+>> No space before "y".
+>>
+>>> +MONKEY_CONF_OPTS += --enable-plugins=tls
+>>> +# If we already have TLS/SSL library, use it.
+>>> +ifeq ($(BR2_PACKAGE_MBEDTLS), y)
+>>> +MONKEY_CONF_OPTS += --mbedtls-shared
+>>> +endif
+>>> +endif
+>>
+>> Thanks!
+>>
+>> Thomas
+>>
 > 
 
 -- 
