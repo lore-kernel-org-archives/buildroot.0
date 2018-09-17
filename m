@@ -1,129 +1,180 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 17 Sep 2018 14:33:03 -0500
-Subject: [Buildroot] [PATCH] package/proftpd: add mod_{sql, quotatab} support
-Message-ID: <1537212783-15263-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Mark Fine <mark.fine@gmail.com>
+Date: Mon, 17 Sep 2018 12:34:55 -0700
+Subject: [Buildroot] [PATCH 1/1] New package: gRPC,
+ Google's remote procedue calss protocol.
+Message-ID: <20180917193455.14329-1-mark.fine@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
+Introduces support for gRPC, Google's remote procedure call
+protocol. Includes a patch for supporting cross compilation.
+Also patches the c-ares package for host support.
 
- - Enables mod_sql which is required for quotatab
- - Adds options for enabling mod_quotatab and the sub-component
-   file/LDAP/RADIUS/SQL modules
- - Copies over ftpasswd and ftpquota scripts if perl is enabled
-   (These scripts aren't required and the feature works
-    without them installed)
-
-Signed-off-by: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Mark Fine <mark.fine@gmail.com>
 ---
- package/proftpd/Config.in  | 41 +++++++++++++++++++++++++++++++++++++++++
- package/proftpd/proftpd.mk | 33 +++++++++++++++++++++++++++++++++
- 2 files changed, 74 insertions(+)
+ package/c-ares/c-ares.mk                    |  1 +
+ package/grpc/0001-fixup-cross-compile.patch | 20 +++++++
+ package/grpc/Config.in                      | 19 +++++++
+ package/grpc/grpc.mk                        | 85 +++++++++++++++++++++++++++++
+ 4 files changed, 125 insertions(+)
+ create mode 100644 package/grpc/0001-fixup-cross-compile.patch
+ create mode 100644 package/grpc/Config.in
+ create mode 100644 package/grpc/grpc.mk
 
-diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
-index e7e3c13..7b742bf 100644
---- a/package/proftpd/Config.in
-+++ b/package/proftpd/Config.in
-@@ -26,4 +26,45 @@ config BR2_PACKAGE_PROFTPD_MOD_SFTP
- 	help
- 	  Compile ProFTPD with mod_sftp support
+diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
+index 67254244a1..76e9687b37 100644
+--- a/package/c-ares/c-ares.mk
++++ b/package/c-ares/c-ares.mk
+@@ -15,3 +15,4 @@ C_ARES_LICENSE = MIT
+ C_ARES_LICENSE_FILES = ares_mkquery.c
  
-+config BR2_PACKAGE_PROFTPD_MOD_SQL
-+	bool "mod_sql support"
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
+diff --git a/package/grpc/0001-fixup-cross-compile.patch b/package/grpc/0001-fixup-cross-compile.patch
+new file mode 100644
+index 0000000000..eaf262a95a
+--- /dev/null
++++ b/package/grpc/0001-fixup-cross-compile.patch
+@@ -0,0 +1,20 @@
++diff -ur grpc_custom-v1.12.0/Makefile grpc_custom-v1.12.0.new/Makefile
++--- grpc_custom-v1.12.0/Makefile        2018-05-15 17:10:37.000000000 +0000
+++++ grpc_custom-v1.12.0.new/Makefile    2018-08-30 20:28:31.357410038 +0000
++@@ -439,11 +439,11 @@
++ DEFINES += $(EXTRA_DEFINES)
++ LDLIBS += $(EXTRA_LDLIBS)
++
++-HOST_CPPFLAGS = $(CPPFLAGS)
++-HOST_CFLAGS = $(CFLAGS)
++-HOST_CXXFLAGS = $(CXXFLAGS)
++-HOST_LDFLAGS = $(LDFLAGS)
++-HOST_LDLIBS = $(LDLIBS)
+++HOST_CPPFLAGS += $(CPPFLAGS)
+++HOST_CFLAGS += $(CFLAGS)
+++HOST_CXXFLAGS += $(CXXFLAGS)
+++HOST_LDFLAGS += $(LDFLAGS)
+++HOST_LDLIBS += $(LDLIBS)
++
++ # These are automatically computed variables.
++ # There shouldn't be any need to change anything from now on.
+diff --git a/package/grpc/Config.in b/package/grpc/Config.in
+new file mode 100644
+index 0000000000..237a9d5a15
+--- /dev/null
++++ b/package/grpc/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_GRPC
++	bool "grpc"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_C_ARES
++	select BR2_PACKAGE_GFLAGS
++	select BR2_PACKAGE_GTEST
++	select BR2_PACKAGE_GTEST_GMOCK
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_PROTOBUF
++	select BR2_PACKAGE_ZLIB
 +	help
-+	  Compile ProFTPD with mode_sql support.
++	  gRPC is Google's protocol buffer based implementation of a
++	  remote procedure call protocol.
 +
-+config BR2_PACKAGE_PROFTPD_MOD_QUOTATAB
-+	bool "mod_quotatab support"
-+	help
-+	  Compile ProFTPD with mode_quotatab support. This module
-+	  is required in order to support quota tables:
-+	        1. mod_quotatab_file
-+	        2. mod_quotatab_ldap
-+	        3. mod_quotatab_radius
-+	        4. mod_quotatab_sql
++	  http://www.grpc.io
 +
-+if BR2_PACKAGE_PROFTPD_MOD_QUOTATAB
++comment "grpc needs a toolchain w/ C++, threads"
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
+\ No newline at end of file
+diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
+new file mode 100644
+index 0000000000..a74dece713
+--- /dev/null
++++ b/package/grpc/grpc.mk
+@@ -0,0 +1,85 @@
++################################################################################
++#
++# grpc
++#
++################################################################################
 +
-+config BR2_PACKAGE_PROFTPD_MOD_QUOTATAB_FILE
-+	bool "mod_quotatab_file table support"
-+	help
-+	  Compile mod_quotatab with mod_quotatab_file table.
++GRPC_VERSION = v1.14.0
++GRPC_SITE = https://github.com/grpc/grpc.git
++GRPC_SITE_METHOD = git
++GRPC_LICENSE = BSD-3-Clause
++GRPC_LICENSE_FILES = LICENSE
 +
-+config BR2_PACKAGE_PROFTPD_MOD_QUOTATAB_LDAP
-+	bool "mod_quotatab_ldap table support"
-+	help
-+	  Compile mod_quotatab with mod_quotatab_ldap table.
++GRPC_DEPENDENCIES = host-grpc gflags gtest c-ares openssl protobuf zlib
++HOST_GRPC_DEPENDENCIES = host-c-ares host-protobuf host-openssl
 +
-+config BR2_PACKAGE_PROFTPD_MOD_QUOTATAB_RADIUS
-+	bool "mod_quotatab_radius table support"
-+	help
-+	  Compile mod_quotatab with mod_quotatab_radius table.
++GRPC_INSTALL_STAGING = YES
 +
-+config BR2_PACKAGE_PROFTPD_MOD_QUOTATAB_SQL
-+	bool "mod_quotatab_sql table support"
-+	depends on BR2_PACKAGE_PROFTPD_MOD_SQL
-+	help
-+	  Compile mod_quotatab with mod_quotatab_sql table.
++GRPC_MAKE_ENV = \
++	CC="$(TARGET_CC)" \
++	CXX="$(TARGET_CXX)" \
++	LD="$(TARGET_CC)" \
++	LDXX="$(TARGET_CXX)" \
++	STRIP="$(TARGET_STRIP)" \
++	PROTOC="$(HOST_DIR)/bin/protoc" \
++	PATH="$(HOST_DIR)/bin:$(PATH)" \
++	GRPC_CROSS_COMPILE=true \
++	GRPC_CROSS_LDOPTS="$(TARGET_LDFLAGS)" \
++	GRPC_CROSS_AROPTS="$(LTO_PLUGIN)" \
++	HAS_PKG_CONFIG=false \
++	PROTOBUF_CONFIG_OPTS="--host=$(GNU_TARGET_NAME) --with-protoc=$(HOST_DIR)/bin/protoc" \
++	HOST_CC="$(HOSTCC)" \
++	HOST_CXX="$(HOSTCXX)" \
++	HOST_LD="$(HOSTCC)" \
++	HOST_LDXX="$(HOSTCXX)" \
++	HOST_CPPFLAGS="$(HOST_CPPFLAGS)" \
++	HOST_CFLAGS="$(HOST_CFLAGS)" \
++	HOST_CXXFLAGS="$(HOST_CXXFLAGS)" \
++	HOST_LDFLAGS="$(HOST_LDFLAGS)"
 +
-+comment "mod_quotatab_sql needs mod_sql"
-+	depends on !BR2_PACKAGE_PROFTPD_MOD_SQL
-+endif
- endif
-diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
-index b02320f..1ae874a 100644
---- a/package/proftpd/proftpd.mk
-+++ b/package/proftpd/proftpd.mk
-@@ -42,6 +42,30 @@ else
- PROFTPD_CONF_OPTS += --disable-openssl
- endif
- 
-+ifeq ($(BR2_PACKAGE_PROFTPD_MOD_SQL),y)
-+PROFTPD_MODULES += mod_sql
-+endif
++GRPC_MAKE_OPTS = \
++	LD_LIBRARY_PATH="$(STAGING_DIR)/usr/lib" \
++	PROTOC="$(HOST_DIR)/bin/protoc"
 +
-+ifeq ($(BR2_PACKAGE_PROFTPD_MOD_QUOTATAB),y)
-+PROFTPD_MODULES += mod_quotatab
-+endif
++GRPC_INSTALL_TARGET_OPTS = \
++	prefix="$(TARGET_DIR)/usr"
 +
-+ifeq ($(BR2_PACKAGE_PROFTPD_MOD_QUOTATAB_FILE),y)
-+PROFTPD_MODULES += mod_quotatab_file
-+endif
++GRPC_INSTALL_STAGING_OPTS = \
++	prefix="$(STAGING_DIR)/usr"
 +
-+ifeq ($(BR2_PACKAGE_PROFTPD_MOD_QUOTATAB_LDAP),y)
-+PROFTPD_MODULES += mod_quotatab_ldap
-+endif
-+
-+ifeq ($(BR2_PACKAGE_PROFTPD_MOD_QUOTATAB_RADIUS),y)
-+PROFTPD_MODULES += mod_quotatab_radius
-+endif
-+
-+ifeq ($(BR2_PACKAGE_PROFTPD_MOD_QUOTATAB_SQL),y)
-+PROFTPD_MODULES += mod_quotatab_sql
-+endif
-+
- PROFTPD_CONF_OPTS += --with-modules=$(subst $(space),:,$(PROFTPD_MODULES))
- 
- # configure script doesn't handle detection of %llu format string
-@@ -62,6 +86,15 @@ PROFTPD_POST_CONFIGURE_HOOKS = PROFTPD_MAKENAMES
- 
- PROFTPD_MAKE = $(MAKE1)
- 
-+#Install Perl based scripts in target
-+ifeq ($(BR2_PACKAGE_PERL),y)
-+define PROFTPD_INSTALL_PERL_BIN
-+	$(INSTALL) -D -m 0755 $(@D)/contrib/ftpquota $(TARGET_DIR)/usr/sbin/ftpquota
-+	$(INSTALL) -D -m 0755 $(@D)/contrib/ftpasswd $(TARGET_DIR)/usr/sbin/ftpasswd
++define GRPC_BUILD_CMDS
++	$(GRPC_MAKE_ENV) $(MAKE) $(GRPC_MAKE_OPTS) -C $(@D) \
++		shared
 +endef
-+PROFTPD_POST_INSTALL_TARGET_HOOKS = PROFTPD_INSTALL_PERL_BIN
-+endif
 +
- define PROFTPD_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/proftpd $(TARGET_DIR)/usr/sbin/proftpd
- 	$(INSTALL) -m 0644 -D $(@D)/sample-configurations/basic.conf $(TARGET_DIR)/etc/proftpd.conf
++define GRPC_INSTALL_STAGING_CMDS
++	$(GRPC_MAKE_ENV) $(MAKE) $(GRPC_INSTALL_STAGING_OPTS) -C $(@D) \
++		install-headers install-shared_c install-shared_cxx
++endef
++
++define GRPC_INSTALL_TARGET_CMDS
++	$(GRPC_MAKE_ENV) $(MAKE) $(GRPC_INSTALL_TARGET_OPTS) -C $(@D) \
++		install-shared_c install-shared_cxx
++endef
++
++HOST_GRPC_MAKE_ENV = \
++	$(HOST_MAKE_ENV) \
++	CFLAGS="$(HOST_CFLAGS)" \
++	LDFLAGS="$(HOST_LDFLAGS)"
++
++HOST_GRPC_MAKE_OPTS = \
++	LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib" \
++	prefix="$(HOST_DIR)/usr"
++
++define HOST_GRPC_BUILD_CMDS
++	$(HOST_GRPC_MAKE_ENV) $(MAKE) $(HOST_GRPC_MAKE_OPTS) -C $(@D) \
++		plugins
++endef
++
++define HOST_GRPC_INSTALL_CMDS
++	$(HOST_GRPC_MAKE_ENV) $(MAKE) $(HOST_GRPC_MAKE_OPTS) -C $(@D) \
++		install-plugins
++endef
++
++$(eval $(generic-package))
++$(eval $(host-generic-package))
 -- 
-1.9.1
+2.14.3 (Apple Git-98)
