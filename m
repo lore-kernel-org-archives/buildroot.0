@@ -1,10 +1,13 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 17 Sep 2018 21:42:55 +0200
-Subject: [Buildroot] [PATCH v2] Fix issue with printvars executing giant
+Date: Mon, 17 Sep 2018 21:54:37 +0200
+Subject: [Buildroot] [PATCH] Fix issue with printvars executing giant
  shell command
-In-Reply-To: <20180917181054.14616-1-tpiepho@impinj.com>
-References: <20180917181054.14616-1-tpiepho@impinj.com>
-Message-ID: <20180917194255.GA21035@scaer>
+In-Reply-To: <1537207369.7736.6.camel@impinj.com>
+References: <20180817231548.29867-1-tpiepho@impinj.com>
+ <20180829204929.GA2617@scaer>
+ <1536601546.22056.12.camel@impinj.com>
+ <20180910181837.GG2674@scaer> <1537207369.7736.6.camel@impinj.com>
+Message-ID: <20180917195437.GB21035@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,55 +16,34 @@ To: buildroot@busybox.net
 
 Trent, All,
 
-On 2018-09-17 11:10 -0700, Trent Piepho spake thusly:
-> The underlying problem is that $(foreach V,1 2 3,) does not evaluate to
-> an empty string.  It evaluates to "? ", three empty strings separated by
-> whitespace.
-> 
-> A construct of this format, with a giant list in the foreach, is part of
-> the printvars command.  This means that "@:$(foreach ....)", which is
-> intended to expand to a null command, in fact expands to "@:       "
-> with a great deal of whitespace.  Make chooses to execute this command
-> with:
->     execve("/bin/sh", ["/bin/sh", "-c", ":       "]
-> 
-> But with far more whitespace.  So much that it can exceed shell command
-> line length limits.
-> 
-> This solution is to move the foreach to another step in the recipe.  The
-> "@:" is retained as the first line so the recipe is not Empty, which
-> would cause a change in make behavior when make builds the target.  The
-> 2nd line, all whitespace, will be skipped by make.
-> 
-> Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+On 2018-09-17 18:02 +0000, Trent Piepho spake thusly:
+> On Mon, 2018-09-10 at 20:18 +0200, Yann E. MORIN wrote:
+> > In a recipe, a command line that contains only spaces will not be executed
+> > by make.
+[--SNIP--]
+> Ok, if you like that better.  My thought was "strip eats whitespace" is
+> simple, but "a recipe line starting with a tab and containing only
+> whitespace is skipped" is more obscure.  In fact, while it does appear
+> to be true, I haven't found anything in the make docs clearly stating
+> this.
 
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+From the make manual, chapter 5.1, "Recipe Syntax" [0], states:
+
+    * A blank line that begins with a tab is not blank: it?s an empty
+      recipe (see Empty Recipes).
+
+... where "Empty Recipes" is a link to chapter 5.9, titled "Using
+Empty Recipes" [1], which starts with:
+
+    It is sometimes useful to define recipes which do nothing. This
+    is done simply by giving a recipe that consists of nothing but
+    whitespace.
+
+[0] https://www.gnu.org/software/make/manual/make.html#Recipe-Syntax
+[1] https://www.gnu.org/software/make/manual/make.html#Empty-Recipes
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  Makefile | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 2c6af12989..57e776056c 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -988,7 +988,8 @@ $(BUILD_DIR)/.br2-external.in: $(BUILD_DIR)
->  # displayed.
->  .PHONY: printvars
->  printvars:
-> -	@:$(foreach V, \
-> +	@:
-> +	$(foreach V, \
->  		$(sort $(if $(VARS),$(filter $(VARS),$(.VARIABLES)),$(.VARIABLES))), \
->  		$(if $(filter-out environment% default automatic, \
->  				$(origin $V)), \
-> -- 
-> 2.14.4
-> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
