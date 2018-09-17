@@ -1,47 +1,43 @@
-From: Grzegorz Blach <grzegorz@blach.pl>
-Date: Mon, 17 Sep 2018 14:14:08 +0200
-Subject: [Buildroot] [PATCH 1/2] bluez5_utils-headers: new package
-In-Reply-To: <20180915000534.210ed343@windsurf>
-References: <20180913115656.11794-1-grzegorz@blach.pl>
- <20180915000534.210ed343@windsurf>
-Message-ID: <d71612af-2ba8-1997-333b-eb56a7b28c98@blach.pl>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 17 Sep 2018 18:55:47 +0200
+Subject: [Buildroot] [PATCH 1/1] domoticz: fix build with gcc <= 4.7
+Message-ID: <20180917165547.30222-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 9/15/18 12:05 AM, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Thu, 13 Sep 2018 13:56:55 +0200, Grzegorz Blach wrote:
->> Header files from bluez utils version 5.x.
->>
->> Separated headers are required to break circular dependencies
->> when python3 is build with bluetooth support.
->>
->> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-> 
-> What are the changes compared to the previous iteration ?
+sleep_for is not always defined with gcc <= 4.7, see
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=52680
 
-- bluez5_utils-headers/bluez5_utils_headers.hash now is a symlink to 
-bluez5_utils/bluez5_utils.hash. Previously it was a copy of this file.
+To fix this issue, add -D_GLIBCXX_USE_NANOSLEEP if gcc version is lower
+than 4.8
 
-- In bluez5_utils_headers.mk I added 'BLUEZ5_UTILS_HEADERS_DL_SUBDIR = 
-bluez5_utils', because package bluez5_utils-headers and bluez5_utils 
-downloads exactly the same file.
+Fixes:
+ - http://autobuild.buildroot.net/results/0dada8dd727f32a4500670f6620adb05943ed0b7
 
-> It is customary to:
-> 
->   - Add a patch title prefix which differs for each version. You can do
->     this using 'git format-patch -v2' or 'git format-patch
->     --prefix="PATCH v2"'
-> 
->   - Add a changelog of what changed between each version, either in the
->     cover letter (you can generate a template cover letter using git
->     format-patch --cover) or in each patch, below the "---" sign.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/domoticz/domoticz.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Ok, I'll do that with future patches
-
-> Thomas
-> 
+diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
+index 7f094d0976..832774a147 100644
+--- a/package/domoticz/domoticz.mk
++++ b/package/domoticz/domoticz.mk
+@@ -18,6 +18,12 @@ DOMOTICZ_DEPENDENCIES = \
+ 	sqlite \
+ 	zlib
+ 
++# sleep_for, see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=52680
++ifneq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_8),y)
++DOMOTICZ_CONF_OPTS += \
++	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -D_GLIBCXX_USE_NANOSLEEP"
++endif
++
+ # Due to the dependency on mosquitto, domoticz depends on
+ # !BR2_STATIC_LIBS so set USE_STATIC_BOOST and USE_OPENSSL_STATIC to OFF
+ DOMOTICZ_CONF_OPTS += \
+-- 
+2.17.1
