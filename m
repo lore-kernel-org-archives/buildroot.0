@@ -1,46 +1,55 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 18 Sep 2018 22:10:36 +0200
-Subject: [Buildroot] [PATCH 1/1] zsh: bump to version 5.6.2
-Message-ID: <20180918201036.8206-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 18 Sep 2018 22:03:23 +0200
+Subject: [Buildroot] [git commit] Makefile: fix issue with printvars
+ executing giant shell command
+Message-ID: <20180918201143.0BFCD88558@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/zsh/zsh.hash | 6 +++---
- package/zsh/zsh.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=b8d0aadc6d52733cfc914ba3cd6f506238bd19f7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/zsh/zsh.hash b/package/zsh/zsh.hash
-index 5931e4d465..4363e48afe 100644
---- a/package/zsh/zsh.hash
-+++ b/package/zsh/zsh.hash
-@@ -1,7 +1,7 @@
- # From http://www.zsh.org/pub/MD5SUM
--md5	5c3b294e63b6cc8da8bcc364c72d954b	zsh-5.5.tar.xz
-+md5	540673bf823d2e13806ac0395caa8345	zsh-5.6.2.tar.xz
- # Calculated based on the hash above and after checking signature
--# http://www.zsh.org/pub/zsh-5.5.tar.xz.asc
--sha256	a8359b81d090425d497c6f3c724a7c21a81c614b03e7662ed347705d86958e53	zsh-5.5.tar.xz
-+# http://www.zsh.org/pub/zsh-5.6.2.tar.xz.asc
-+sha256	a50bd66c0557e8eca3b8fa24e85d0de533e775d7a22df042da90488623752e9e	zsh-5.6.2.tar.xz
- # Locally calculated
- sha256	d06fdf3ef9b1ec69d6b9e170b0a9516fbad3523261ff1668bde3bfea6e0ef5f5  LICENCE
-diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
-index e798838922..31c9405007 100644
---- a/package/zsh/zsh.mk
-+++ b/package/zsh/zsh.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ZSH_VERSION = 5.5
-+ZSH_VERSION = 5.6.2
- ZSH_SITE = http://www.zsh.org/pub
- ZSH_SOURCE = zsh-$(ZSH_VERSION).tar.xz
- ZSH_DEPENDENCIES = ncurses
--- 
-2.17.1
+The underlying problem is that $(foreach V,1 2 3,) does not evaluate to
+an empty string.  It evaluates to "?? ", three empty strings separated by
+whitespace.
+
+A construct of this format, with a giant list in the foreach, is part of
+the printvars command.  This means that "@:$(foreach ....)", which is
+intended to expand to a null command, in fact expands to "@:       "
+with a great deal of whitespace.  Make chooses to execute this command
+with:
+    execve("/bin/sh", ["/bin/sh", "-c", ":       "]
+
+But with far more whitespace.  So much that it can exceed shell command
+line length limits.
+
+This solution is to move the foreach to another step in the recipe.  The
+"@:" is retained as the first line so the recipe is not Empty, which
+would cause a change in make behavior when make builds the target.  The
+2nd line, all whitespace, will be skipped by make.
+
+Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 2c6af12989..57e776056c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -988,7 +988,8 @@ $(BUILD_DIR)/.br2-external.in: $(BUILD_DIR)
+ # displayed.
+ .PHONY: printvars
+ printvars:
+-	@:$(foreach V, \
++	@:
++	$(foreach V, \
+ 		$(sort $(if $(VARS),$(filter $(VARS),$(.VARIABLES)),$(.VARIABLES))), \
+ 		$(if $(filter-out environment% default automatic, \
+ 				$(origin $V)), \
