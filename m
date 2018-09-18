@@ -1,28 +1,171 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Sep 2018 21:21:55 +0200
-Subject: [Buildroot] [PATCH 1/1] tinycbor: bump to version 0.5.2
-In-Reply-To: <20180917205155.17965-1-fontaine.fabrice@gmail.com>
-References: <20180917205155.17965-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180918212155.13e03d94@windsurf>
+Date: Tue, 18 Sep 2018 21:22:18 +0200
+Subject: [Buildroot] [git commit] dtc: Fix segfault reading powernv device
+ tree
+Message-ID: <20180918192210.E111F884F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=3729389a68f518bf069001783e70eee58dbe9924
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 17 Sep 2018 22:51:55 +0200, Fabrice Fontaine wrote:
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/tinycbor/tinycbor.hash | 2 +-
->  package/tinycbor/tinycbor.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+When running this command on a powernv machine, dtc crashes:
 
-Applied to master, thanks.
+ dtc -f -I fs -O dts /sys/firmware/devicetree
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Upstream has fixed the segfault but have not made a release yet so we
+add the patch for now.
+
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-Kill-bogus-TYPE_BLOB-marker-type.patch    | 138 +++++++++++++++++++++
+ 1 file changed, 138 insertions(+)
+
+diff --git a/package/dtc/0001-Kill-bogus-TYPE_BLOB-marker-type.patch b/package/dtc/0001-Kill-bogus-TYPE_BLOB-marker-type.patch
+new file mode 100644
+index 0000000000..d9c660ef51
+--- /dev/null
++++ b/package/dtc/0001-Kill-bogus-TYPE_BLOB-marker-type.patch
+@@ -0,0 +1,138 @@
++From 9619c8619c37b9aea98100bcc15c51a5642e877e Mon Sep 17 00:00:00 2001
++From: Greg Kurz <groug@kaod.org>
++Date: Thu, 30 Aug 2018 12:01:59 +0200
++Subject: [PATCH] Kill bogus TYPE_BLOB marker type
++
++Since commit 32b9c6130762 "Preserve datatype markers when emitting dts
++format", we no longer try to guess the value type. Instead, we reuse
++the type of the datatype markers when they are present, if the type
++is either TYPE_UINT* or TYPE_STRING.
++
++This causes 'dtc -I fs' to crash:
++
++Starting program: /root/dtc -q -f -O dts -I fs /proc/device-tree
++/dts-v1/;
++
++/ {
++
++Program received signal SIGSEGV, Segmentation fault.
++__strlen_power8 () at ../sysdeps/powerpc/powerpc64/power8/strlen.S:47
++47              ld      r12,0(r4)     /* Load doubleword from memory.  */
++(gdb) bt
++#0  __strlen_power8 () at ../sysdeps/powerpc/powerpc64/power8/strlen.S:47
++#1  0x00007ffff7de3d10 in __GI__IO_fputs (str=<optimized out>,
++    fp=<optimized out>) at iofputs.c:33
++#2  0x000000001000c7a0 in write_propval (prop=0x100525e0,
++    f=0x7ffff7f718a0 <_IO_2_1_stdout_>) at treesource.c:245
++
++The offending line is:
++
++                fprintf(f, "%s", delim_start[emit_type]);
++
++where emit_type is TYPE_BLOB and:
++
++static const char *delim_start[] = {
++        [TYPE_UINT8] = "[",
++        [TYPE_UINT16] = "/bits/ 16 <",
++        [TYPE_UINT32] = "<",
++        [TYPE_UINT64] = "/bits/ 64 <",
++        [TYPE_STRING] = "",
++};
++
++/* Data blobs */
++enum markertype {
++        TYPE_NONE,
++        REF_PHANDLE,
++        REF_PATH,
++        LABEL,
++        TYPE_UINT8,
++        TYPE_UINT16,
++        TYPE_UINT32,
++        TYPE_UINT64,
++        TYPE_BLOB,
++        TYPE_STRING,
++};
++
++Because TYPE_BLOB < TYPE_STRING and delim_start[] is a static array,
++delim_start[emit_type] is 0x0. The glibc usually prints out "(null)"
++when one passes 0x0 to %s, but it seems to call fputs() internally if
++the format is exactly "%s", hence the crash.
++
++TYPE_BLOB basically means the data comes from a file and we don't know
++its type. We don't care for the former, and the latter is TYPE_NONE.
++
++So let's drop TYPE_BLOB completely and use TYPE_NONE instead when reading
++the file. Then, try to guess the data type@emission time, like the
++code already does for refs and labels.
++
++Instead of adding yet another check for TYPE_NONE, an helper is introduced
++to check if the data marker has type information, ie, >= TYPE_UINT8.
++
++Fixes: 32b9c61307629ac76c6ac0bead6f926d579b3d2c
++Suggested-by: David Gibson <david@gibson.dropbear.id.au>
++Signed-off-by: Greg Kurz <groug@kaod.org>
++Signed-off-by: David Gibson <david@gibson.dropbear.id.au>
++Signed-off-by: Joel Stanley <joel@jms.id.au>
++---
++ data.c       | 2 +-
++ dtc.h        | 1 -
++ treesource.c | 9 +++++++--
++ 3 files changed, 8 insertions(+), 4 deletions(-)
++
++diff --git a/data.c b/data.c
++index accdfaef6668..4a204145cc7b 100644
++--- a/data.c
+++++ b/data.c
++@@ -95,7 +95,7 @@ struct data data_copy_file(FILE *f, size_t maxlen)
++ {
++ 	struct data d = empty_data;
++ 
++-	d = data_add_marker(d, TYPE_BLOB, NULL);
+++	d = data_add_marker(d, TYPE_NONE, NULL);
++ 	while (!feof(f) && (d.len < maxlen)) {
++ 		size_t chunksize, ret;
++ 
++diff --git a/dtc.h b/dtc.h
++index 303c2a6a73b7..51c03ef64dbe 100644
++--- a/dtc.h
+++++ b/dtc.h
++@@ -82,7 +82,6 @@ enum markertype {
++ 	TYPE_UINT16,
++ 	TYPE_UINT32,
++ 	TYPE_UINT64,
++-	TYPE_BLOB,
++ 	TYPE_STRING,
++ };
++ extern const char *markername(enum markertype markertype);
++diff --git a/treesource.c b/treesource.c
++index f99544d72344..53e62036ad0e 100644
++--- a/treesource.c
+++++ b/treesource.c
++@@ -133,9 +133,14 @@ static void write_propval_int(FILE *f, const char *p, size_t len, size_t width)
++ 	}
++ }
++ 
+++static bool has_data_type_information(struct marker *m)
+++{
+++	return m->type >= TYPE_UINT8;
+++}
+++
++ static struct marker *next_type_marker(struct marker *m)
++ {
++-	while (m && (m->type == LABEL || m->type == REF_PHANDLE || m->type == REF_PATH))
+++	while (m && !has_data_type_information(m))
++ 		m = m->next;
++ 	return m;
++ }
++@@ -225,7 +230,7 @@ static void write_propval(FILE *f, struct property *prop)
++ 		size_t chunk_len;
++ 		const char *p = &prop->val.val[m->offset];
++ 
++-		if (m->type < TYPE_UINT8)
+++		if (!has_data_type_information(m))
++ 			continue;
++ 
++ 		chunk_len = type_marker_length(m);
++-- 
++2.17.1
++
