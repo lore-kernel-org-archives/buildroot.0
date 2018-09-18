@@ -1,11 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Sep 2018 09:28:29 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2018-09-14
-In-Reply-To: <CALURroTZCjCkEw5-CjQDLju74tZqO2nkcPuT0KwG0UVq7YBEAA@mail.gmail.com>
-References: <20180915060039.36CDD207B0@mail.bootlin.com>
- <CALURroTZCjCkEw5-CjQDLju74tZqO2nkcPuT0KwG0UVq7YBEAA@mail.gmail.com>
-Message-ID: <20180918092829.721f3c54@windsurf>
+Date: Tue, 18 Sep 2018 09:31:10 +0200
+Subject: [Buildroot] [PATCH v2 2/3] package/waffle: new package
+In-Reply-To: <207cc677-6028-81a1-f338-22711d152bc1@smile.fr>
+References: <20180211162136.15605-1-romain.naour@gmail.com>
+ <20180211162136.15605-2-romain.naour@gmail.com>
+ <20180916233058.53cc7eec@windsurf>
+ <207cc677-6028-81a1-f338-22711d152bc1@smile.fr>
+Message-ID: <20180918093110.4dd932d1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,32 +15,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-Adding Buildroot mailing list in Cc.
+On Mon, 17 Sep 2018 21:59:46 +0200, Romain Naour wrote:
 
-On Mon, 17 Sep 2018 08:57:06 -0700, Christopher McCrory wrote:
-
-> >          arc |           perl-data-uuid-1.221 |
-> > http://autobuild.buildroot.net/results/c5ba7b0727131220b60a4dc78fc7491dd4f7af9e
-> >      aarch64 |           perl-data-uuid-1.221 |
-> > http://autobuild.buildroot.net/results/5dd93ef9f5146227b8233ada260d5945aa8632d0
-> >       x86_64 |  perl-io-socket-multicast-1.12 |
-> > http://autobuild.buildroot.net/results/824119c86a1ddcbad39d4d4e9fe61eba20a55f3f
->
-> I did a build with one of these configs and couldn't reproduce the error.
-> IIRC, There was a patch to perl to fix these.  yes?
+> > config BR2_PACKAGE_WAFFLE_SUPPORTS_GBM
+> > 	bool
+> > 	# mesa3d is for now the only GBM provider, and it is enabled
+> > 	# together with its EGL support
+> > 	default y if BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_MESA3D_OPENGL_EGL && BR2_PACKAGE_HAS_UDEV  
 > 
+> I believe this comment will be not correct as soon as the libgbm virtual package
+> will be merged.
 
-Yes, these issues were fixed by
+Indeed, but I wrote this example code for the current master, i.e
+without the libgbm virtual package merged. Once it is merged, it is not
+only the comment that will be wrong, but also the
+BR2_PACKAGE_MESA3D_OPENGL_EGL dependency that will have to be replaced
+by BR2_PACKAGE_HAS_LIBGBM.
 
-https://git.buildroot.org/buildroot/commit/package/pkg-perl.mk?id=45076af4930fda83c8898254de2d7c5fe3c15911
+Thanks,
 
-If you see any of those issues after commit
-45076af4930fda83c8898254de2d7c5fe3c15911, then we have a separate
-problem that needs to be investigated.
-
-Best regards, 
-
-Thomas Petazzoni
+Thomas
 -- 
 Thomas Petazzoni, CTO, Bootlin
 Embedded Linux and Kernel engineering
