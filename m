@@ -1,44 +1,109 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Sep 2018 22:12:07 +0200
-Subject: [Buildroot] [PATCH v2] Fix issue with printvars executing giant
- shell command
-In-Reply-To: <20180917181054.14616-1-tpiepho@impinj.com>
-References: <20180917181054.14616-1-tpiepho@impinj.com>
-Message-ID: <20180918221207.5775feb0@windsurf>
+Date: Tue, 18 Sep 2018 22:21:39 +0200
+Subject: [Buildroot] [PATCH] package/proftpd: add mod_{sql,
+ quotatab} support
+In-Reply-To: <1537212783-15263-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1537212783-15263-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20180918222139.4deeec42@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Matt,
 
-On Mon, 17 Sep 2018 11:10:54 -0700, Trent Piepho wrote:
-> The underlying problem is that $(foreach V,1 2 3,) does not evaluate to
-> an empty string.  It evaluates to "? ", three empty strings separated by
-> whitespace.
+On Mon, 17 Sep 2018 14:33:03 -0500, Matt Weber wrote:
+> From: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
 > 
-> A construct of this format, with a giant list in the foreach, is part of
-> the printvars command.  This means that "@:$(foreach ....)", which is
-> intended to expand to a null command, in fact expands to "@:       "
-> with a great deal of whitespace.  Make chooses to execute this command
-> with:
->     execve("/bin/sh", ["/bin/sh", "-c", ":       "]
-> 
-> But with far more whitespace.  So much that it can exceed shell command
-> line length limits.
-> 
-> This solution is to move the foreach to another step in the recipe.  The
-> "@:" is retained as the first line so the recipe is not Empty, which
-> would cause a change in make behavior when make builds the target.  The
-> 2nd line, all whitespace, will be skipped by make.
-> 
-> Signed-off-by: Trent Piepho <tpiepho@impinj.com>
-> ---
->  Makefile | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  - Enables mod_sql which is required for quotatab
 
-Applied to master, thanks.
+It's required for mod_quotatab_sql, not mod_quotatab.
+
+>  - Adds options for enabling mod_quotatab and the sub-component
+>    file/LDAP/RADIUS/SQL modules
+>  - Copies over ftpasswd and ftpquota scripts if perl is enabled
+>    (These scripts aren't required and the feature works
+>     without them installed)
+
+If they aren't required, are they related to mod_sql and mod_quotatab ?
+The question is: should this be done as part of the same patch, or as a
+separate patch ?
+
+> +config BR2_PACKAGE_PROFTPD_MOD_SQL
+> +	bool "mod_sql support"
+> +	help
+> +	  Compile ProFTPD with mode_sql support.
+> +
+> +config BR2_PACKAGE_PROFTPD_MOD_QUOTATAB
+> +	bool "mod_quotatab support"
+> +	help
+> +	  Compile ProFTPD with mode_quotatab support. This module
+> +	  is required in order to support quota tables:
+> +	        1. mod_quotatab_file
+> +	        2. mod_quotatab_ldap
+> +	        3. mod_quotatab_radius
+> +	        4. mod_quotatab_sql
+> +
+> +if BR2_PACKAGE_PROFTPD_MOD_QUOTATAB
+> +
+> +config BR2_PACKAGE_PROFTPD_MOD_QUOTATAB_FILE
+> +	bool "mod_quotatab_file table support"
+> +	help
+> +	  Compile mod_quotatab with mod_quotatab_file table.
+> +
+> +config BR2_PACKAGE_PROFTPD_MOD_QUOTATAB_LDAP
+> +	bool "mod_quotatab_ldap table support"
+> +	help
+> +	  Compile mod_quotatab with mod_quotatab_ldap table.
+> +
+> +config BR2_PACKAGE_PROFTPD_MOD_QUOTATAB_RADIUS
+> +	bool "mod_quotatab_radius table support"
+> +	help
+> +	  Compile mod_quotatab with mod_quotatab_radius table.
+> +
+> +config BR2_PACKAGE_PROFTPD_MOD_QUOTATAB_SQL
+> +	bool "mod_quotatab_sql table support"
+> +	depends on BR2_PACKAGE_PROFTPD_MOD_SQL
+
+Please use:
+
+	select BR2_PACKAGE_PROFTPD_MOD_SQL
+
+> +	help
+> +	  Compile mod_quotatab with mod_quotatab_sql table.
+> +
+> +comment "mod_quotatab_sql needs mod_sql"
+> +	depends on !BR2_PACKAGE_PROFTPD_MOD_SQL
+
+and drop this.
+
+>  # configure script doesn't handle detection of %llu format string
+> @@ -62,6 +86,15 @@ PROFTPD_POST_CONFIGURE_HOOKS = PROFTPD_MAKENAMES
+>  
+>  PROFTPD_MAKE = $(MAKE1)
+>  
+> +#Install Perl based scripts in target
+> +ifeq ($(BR2_PACKAGE_PERL),y)
+> +define PROFTPD_INSTALL_PERL_BIN
+> +	$(INSTALL) -D -m 0755 $(@D)/contrib/ftpquota $(TARGET_DIR)/usr/sbin/ftpquota
+> +	$(INSTALL) -D -m 0755 $(@D)/contrib/ftpasswd $(TARGET_DIR)/usr/sbin/ftpasswd
+> +endef
+> +PROFTPD_POST_INSTALL_TARGET_HOOKS = PROFTPD_INSTALL_PERL_BIN
+
+Drop this hook, and do:
+
+> +endif
+> +
+>  define PROFTPD_INSTALL_TARGET_CMDS
+>  	$(INSTALL) -D -m 0755 $(@D)/proftpd $(TARGET_DIR)/usr/sbin/proftpd
+>  	$(INSTALL) -m 0644 -D $(@D)/sample-configurations/basic.conf $(TARGET_DIR)/etc/proftpd.conf
+
+	$(PROFTPD_INSTALL_PERL_BIN)
+
+instead.
+
+Thanks!
 
 Thomas
 -- 
