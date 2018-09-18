@@ -1,48 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Sep 2018 15:58:00 +0200
-Subject: [Buildroot] [PATCH] libaio: Fix library creation for ARC with
- -Os
-In-Reply-To: <24f81ffc5c8606c74c9d478a29b245d7646b90f6.camel@synopsys.com>
-References: <20180917204329.15787-1-abrodkin@synopsys.com>
- <20180918093604.0b421d5c@windsurf>
- <c9ec03f9f05e251fd8e7b99c0ffb06593db32b1c.camel@synopsys.com>
- <20180918111506.0648d78c@windsurf>
- <aae1bc5da723d9dd98ddd4dcc7868e4dacb4b6f8.camel@synopsys.com>
- <20180918112657.7d1b9d28@windsurf>
- <99fcad6be0ba045a8d00274723ac511be2805aac.camel@synopsys.com>
- <098ECE41A0A6114BB2A07F1EC238DE89667FD144@de02wembxa.internal.synopsys.com>
- <24f81ffc5c8606c74c9d478a29b245d7646b90f6.camel@synopsys.com>
-Message-ID: <20180918155800.748eae34@windsurf>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue, 18 Sep 2018 18:35:23 +0200
+Subject: [Buildroot] [PATCH] olimex_a20_olinuxino_lime_legacy: mali renamed
+ legacy
+Message-ID: <20180918163523.11169-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+as mali is now also available with the kernel mainline
 
-On Tue, 18 Sep 2018 12:44:26 +0000, Alexey Brodkin wrote:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ .gitlab-ci.yml                                                | 2 +-
+ board/olimex/a20_olinuxino/{boot-mali.cmd => boot-legacy.cmd} | 0
+ board/olimex/a20_olinuxino/readme.txt                         | 4 ++--
+ ...i_defconfig => olimex_a20_olinuxino_lime_legacy_defconfig} | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+ rename board/olimex/a20_olinuxino/{boot-mali.cmd => boot-legacy.cmd} (100%)
+ rename configs/{olimex_a20_olinuxino_lime_mali_defconfig => olimex_a20_olinuxino_lime_legacy_defconfig} (99%)
 
-> Sure that's indeed an option. We'll just finally add "-mno-millicode"
-> in TARGET_ABI for ARC and forget about that class of problems. Also
-> maybe it worth having "-mno-millicode" set by default for Linux
-> toolchains so looking forward there will be no need to mess with
-> millicode manually.
-
-Yes, that's indeed one solution, though the problem also exists for
-PowerPC, so it would have been nice to understand it.
-
-What I find weird is that why it happens only with libaio ? I mean
-there are plenty of libraries built with -fpic, and libaio is the only
-one causing this problem. The fact that libaio is using -nostdlib
--nostartfiles was an initial hint to explain why libgcc isn't brought
-into the link, but as Alexey said, removing -nostdlib -nostartfiles
-doesn't solve the problem.
-
-Best regards,
-
-Thomas
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 9d4301076..b4b5f9785 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -172,7 +172,7 @@ olimex_a10_olinuxino_lime_defconfig: *defconfig
+ olimex_a13_olinuxino_defconfig: *defconfig
+ olimex_a20_olinuxino_lime2_defconfig: *defconfig
+ olimex_a20_olinuxino_lime_defconfig: *defconfig
+-olimex_a20_olinuxino_lime_mali_defconfig: *defconfig
++olimex_a20_olinuxino_lime_legacy_defconfig: *defconfig
+ olimex_a20_olinuxino_micro_defconfig: *defconfig
+ olimex_a64_olinuxino_defconfig: *defconfig
+ olimex_imx233_olinuxino_defconfig: *defconfig
+diff --git a/board/olimex/a20_olinuxino/boot-mali.cmd b/board/olimex/a20_olinuxino/boot-legacy.cmd
+similarity index 100%
+rename from board/olimex/a20_olinuxino/boot-mali.cmd
+rename to board/olimex/a20_olinuxino/boot-legacy.cmd
+diff --git a/board/olimex/a20_olinuxino/readme.txt b/board/olimex/a20_olinuxino/readme.txt
+index 070b7a5ec..57ee23d14 100644
+--- a/board/olimex/a20_olinuxino/readme.txt
++++ b/board/olimex/a20_olinuxino/readme.txt
+@@ -16,7 +16,7 @@ The following defconfigs are available:
+    for the A20-OLinuXino-MICRO board using mainline kernel
+  - olimex_a20_olinuxino_lime_defconfig
+    for the A20-OLinuXino-LIME board using mainline kernel
+- - olimex_a20_olinuxino_lime_mali_defconfig
++ - olimex_a20_olinuxino_lime_legacy_defconfig
+    for the A20-OLinuXino-LIME board using legacy linux-sunxi kernel
+  - olimex_a20_olinuxino_lime2_defconfig
+    for the A20-OLinuXino-LIME2 board using mainline kernel
+@@ -51,7 +51,7 @@ After building, you should get a tree like this:
+     output/images/
+     +-- rootfs.ext2
+     +-- rootfs.ext4 -> rootfs.ext2
+-    +-- script.bin (lime_mali)
++    +-- script.bin (lime_legacy)
+     +-- sdcard.img
+     +-- sun7i-a20-olinuxino-lime.dtb (lime, mainline)
+     +-- sun7i-a20-olinuxino-lime2.dtb (lime2, mainline)
+diff --git a/configs/olimex_a20_olinuxino_lime_mali_defconfig b/configs/olimex_a20_olinuxino_lime_legacy_defconfig
+similarity index 99%
+rename from configs/olimex_a20_olinuxino_lime_mali_defconfig
+rename to configs/olimex_a20_olinuxino_lime_legacy_defconfig
+index f04d578f1..c14c2ca99 100644
+--- a/configs/olimex_a20_olinuxino_lime_mali_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_legacy_defconfig
+@@ -47,7 +47,7 @@ BR2_TARGET_UBOOT_FORMAT_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+ BR2_TARGET_UBOOT_BOOT_SCRIPT=y
+-BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/olimex/a20_olinuxino/boot-mali.cmd"
++BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/olimex/a20_olinuxino/boot-legacy.cmd"
+ 
+ # Additional tools
+ BR2_PACKAGE_HOST_GENIMAGE=y
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
