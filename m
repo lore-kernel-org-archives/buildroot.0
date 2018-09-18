@@ -1,71 +1,169 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Mon, 17 Sep 2018 23:31:23 -0300
-Subject: [Buildroot] [RFC] testing: add python-crossbar tests
-References: <20180917155554.05aa9b43@windsurf>
-Message-ID: <5ba0637b42763_47f82b17fc7e25f429690@ultri5.mail>
+From: Joel Stanley <joel@jms.id.au>
+Date: Tue, 18 Sep 2018 13:27:50 +0930
+Subject: [Buildroot] [PATCH] dtc: Fix segfault reading powernv device tree
+Message-ID: <20180918035750.17651-1-joel@jms.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+When running this command on a powernv machine, dtc crashes:
 
-On Mon, Sep 17, 2018 at 10:55 AM, Thomas Petazzoni wrote:
+ dtc -f -I fs -O dts /sys/firmware/devicetree
 
-> On Thu, 15 Feb 2018 23:16:32 -0200, Ricardo Martincoski wrote:
-> 
->> On Thu, Feb 15, 2018 at 11:41 AM, Yegor Yefremov wrote:
->> 
->> [snip]
->> > 
->> > I've tried this test locally, but it always timeouts. Even if I
->> > specify an hour as a timeout.  
->> 
->> I confirm that here, both test cases fail by timeout, so it should not be
->> related to the host.
+Upstream has fixed the segfault but have not made a release yet so we
+add the patch for now.
 
-At the time I confirmed with the patch applied on aa77030b8f and also on
-(aa77030b8f +
- http://patchwork.ozlabs.org/patch/874421/ +
- http://patchwork.ozlabs.org/patch/874422/ )
-and I got the timeout in both cases.
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+---
+ ...001-Kill-bogus-TYPE_BLOB-marker-type.patch | 138 ++++++++++++++++++
+ 1 file changed, 138 insertions(+)
+ create mode 100644 package/dtc/0001-Kill-bogus-TYPE_BLOB-marker-type.patch
 
-> 
-> I applied Yegor's patch, and ran he test. It doesn't time out here.
-> Here is what I have in the TestPythonPy2Crossbar-run.log:
-> 
-> Welcome to Buildroot
-> buildroot login: root
-> # dmesg -n 1
-> # echo $?
-> 0
-> # python -m crossbar version
-> Traceback (most recent call last):
->   File "usr/lib/python2.7/runpy.py", line 174, in _run_module_as_main
->   File "usr/lib/python2.7/runpy.py", line 72, in _run_code
->   File "usr/lib/python2.7/site-packages/crossbar/__main__.py", line 36, in <module>
->   File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 479, in load_entry_point
->   File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2703, in load_entry_point
->   File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2320, in load
->   File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2343, in require
->   File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 782, in resolve
-> pkg_resources.ContextualVersionConflict: (txaio 2.8.2 (/usr/lib/python2.7/site-packages), Requirement.parse('txaio>=18.8.1'), set(['autobahn']))
-> # echo $?
-> 1
-> 
-> So it doesn't work due to some dependency issues. Is the timeout
-> problem going to appear once those dependency issues are solved ? Or
-> should I have already seen the timeout ?
-
-Sorry, I don't know.
-
-Yegor, any idea? Could you bisect this? I already started:
-2018.02-rc2-4-gaa77030b8f + patch = timeout
-2018.08-425-gc5a33a11be + patch = dependency issue
-2018.05-rc3-25-gd937f908f1 + patch = timeout
-2018.05-756-g3d34f36806 + patch = (still running:
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/98611581 )
-
-Regards,
-Ricardo
+diff --git a/package/dtc/0001-Kill-bogus-TYPE_BLOB-marker-type.patch b/package/dtc/0001-Kill-bogus-TYPE_BLOB-marker-type.patch
+new file mode 100644
+index 000000000000..d9c660ef51ad
+--- /dev/null
++++ b/package/dtc/0001-Kill-bogus-TYPE_BLOB-marker-type.patch
+@@ -0,0 +1,138 @@
++From 9619c8619c37b9aea98100bcc15c51a5642e877e Mon Sep 17 00:00:00 2001
++From: Greg Kurz <groug@kaod.org>
++Date: Thu, 30 Aug 2018 12:01:59 +0200
++Subject: [PATCH] Kill bogus TYPE_BLOB marker type
++
++Since commit 32b9c6130762 "Preserve datatype markers when emitting dts
++format", we no longer try to guess the value type. Instead, we reuse
++the type of the datatype markers when they are present, if the type
++is either TYPE_UINT* or TYPE_STRING.
++
++This causes 'dtc -I fs' to crash:
++
++Starting program: /root/dtc -q -f -O dts -I fs /proc/device-tree
++/dts-v1/;
++
++/ {
++
++Program received signal SIGSEGV, Segmentation fault.
++__strlen_power8 () at ../sysdeps/powerpc/powerpc64/power8/strlen.S:47
++47              ld      r12,0(r4)     /* Load doubleword from memory.  */
++(gdb) bt
++#0  __strlen_power8 () at ../sysdeps/powerpc/powerpc64/power8/strlen.S:47
++#1  0x00007ffff7de3d10 in __GI__IO_fputs (str=<optimized out>,
++    fp=<optimized out>) at iofputs.c:33
++#2  0x000000001000c7a0 in write_propval (prop=0x100525e0,
++    f=0x7ffff7f718a0 <_IO_2_1_stdout_>) at treesource.c:245
++
++The offending line is:
++
++                fprintf(f, "%s", delim_start[emit_type]);
++
++where emit_type is TYPE_BLOB and:
++
++static const char *delim_start[] = {
++        [TYPE_UINT8] = "[",
++        [TYPE_UINT16] = "/bits/ 16 <",
++        [TYPE_UINT32] = "<",
++        [TYPE_UINT64] = "/bits/ 64 <",
++        [TYPE_STRING] = "",
++};
++
++/* Data blobs */
++enum markertype {
++        TYPE_NONE,
++        REF_PHANDLE,
++        REF_PATH,
++        LABEL,
++        TYPE_UINT8,
++        TYPE_UINT16,
++        TYPE_UINT32,
++        TYPE_UINT64,
++        TYPE_BLOB,
++        TYPE_STRING,
++};
++
++Because TYPE_BLOB < TYPE_STRING and delim_start[] is a static array,
++delim_start[emit_type] is 0x0. The glibc usually prints out "(null)"
++when one passes 0x0 to %s, but it seems to call fputs() internally if
++the format is exactly "%s", hence the crash.
++
++TYPE_BLOB basically means the data comes from a file and we don't know
++its type. We don't care for the former, and the latter is TYPE_NONE.
++
++So let's drop TYPE_BLOB completely and use TYPE_NONE instead when reading
++the file. Then, try to guess the data type@emission time, like the
++code already does for refs and labels.
++
++Instead of adding yet another check for TYPE_NONE, an helper is introduced
++to check if the data marker has type information, ie, >= TYPE_UINT8.
++
++Fixes: 32b9c61307629ac76c6ac0bead6f926d579b3d2c
++Suggested-by: David Gibson <david@gibson.dropbear.id.au>
++Signed-off-by: Greg Kurz <groug@kaod.org>
++Signed-off-by: David Gibson <david@gibson.dropbear.id.au>
++Signed-off-by: Joel Stanley <joel@jms.id.au>
++---
++ data.c       | 2 +-
++ dtc.h        | 1 -
++ treesource.c | 9 +++++++--
++ 3 files changed, 8 insertions(+), 4 deletions(-)
++
++diff --git a/data.c b/data.c
++index accdfaef6668..4a204145cc7b 100644
++--- a/data.c
+++++ b/data.c
++@@ -95,7 +95,7 @@ struct data data_copy_file(FILE *f, size_t maxlen)
++ {
++ 	struct data d = empty_data;
++ 
++-	d = data_add_marker(d, TYPE_BLOB, NULL);
+++	d = data_add_marker(d, TYPE_NONE, NULL);
++ 	while (!feof(f) && (d.len < maxlen)) {
++ 		size_t chunksize, ret;
++ 
++diff --git a/dtc.h b/dtc.h
++index 303c2a6a73b7..51c03ef64dbe 100644
++--- a/dtc.h
+++++ b/dtc.h
++@@ -82,7 +82,6 @@ enum markertype {
++ 	TYPE_UINT16,
++ 	TYPE_UINT32,
++ 	TYPE_UINT64,
++-	TYPE_BLOB,
++ 	TYPE_STRING,
++ };
++ extern const char *markername(enum markertype markertype);
++diff --git a/treesource.c b/treesource.c
++index f99544d72344..53e62036ad0e 100644
++--- a/treesource.c
+++++ b/treesource.c
++@@ -133,9 +133,14 @@ static void write_propval_int(FILE *f, const char *p, size_t len, size_t width)
++ 	}
++ }
++ 
+++static bool has_data_type_information(struct marker *m)
+++{
+++	return m->type >= TYPE_UINT8;
+++}
+++
++ static struct marker *next_type_marker(struct marker *m)
++ {
++-	while (m && (m->type == LABEL || m->type == REF_PHANDLE || m->type == REF_PATH))
+++	while (m && !has_data_type_information(m))
++ 		m = m->next;
++ 	return m;
++ }
++@@ -225,7 +230,7 @@ static void write_propval(FILE *f, struct property *prop)
++ 		size_t chunk_len;
++ 		const char *p = &prop->val.val[m->offset];
++ 
++-		if (m->type < TYPE_UINT8)
+++		if (!has_data_type_information(m))
++ 			continue;
++ 
++ 		chunk_len = type_marker_length(m);
++-- 
++2.17.1
++
+-- 
+2.17.1
