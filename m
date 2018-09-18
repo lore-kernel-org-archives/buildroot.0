@@ -1,63 +1,87 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 18 Sep 2018 11:58:55 +0300
-Subject: [Buildroot] [PATCH v2] libaio: Make sure symbols from libgcc.a get
- defined in libaio.so for ARC & PPC
-Message-ID: <20180918085855.10148-1-abrodkin@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 18 Sep 2018 11:15:06 +0200
+Subject: [Buildroot] [PATCH] libaio: Fix library creation for ARC with
+ -Os
+In-Reply-To: <c9ec03f9f05e251fd8e7b99c0ffb06593db32b1c.camel@synopsys.com>
+References: <20180917204329.15787-1-abrodkin@synopsys.com>
+ <20180918093604.0b421d5c@windsurf>
+ <c9ec03f9f05e251fd8e7b99c0ffb06593db32b1c.camel@synopsys.com>
+Message-ID: <20180918111506.0648d78c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On ARC and PowerPC if "-Os" optimization is used compiler prefers to use so-called
-millicode (basically function prologue & epilogue) implemented once and for
-all in libgcc.a. And if we don't link with libgcc.a on DSO (read libaio.so)
-creation those millicode functions won't be included, instead their
-symbols will be referenced as they were in libgcc (HIDDEN).
+Hello,
 
-And then when LD is about to link a final application it sees HIDDEN
-symbol in libaio.so that is supposed to come from some static
-libgcc.a... wait.. what? Shared library has unresolved symbol
-implemented in static library? No, that's not right I guess :)
+On Tue, 18 Sep 2018 08:03:19 +0000, Alexey Brodkin wrote:
 
-So to resolve that wrong sequence we just make sure libaio.so has
-its own copy of used millicode functions implemented locally.
+> This is how libaio.so is linked now (before my patch) with
+> omitted some non-important options:
+> ----------------------->8-------------------  
+> arc-buildroot-linux-uclibc-gcc -shared -matomic -Os -nostdlib -nostartfiles -fPIC \
+>   -o libaio.so io_queue_init.os io_queue_release.os io_queue_wait.os io_queue_run.os \
+>   io_getevents.os io_submit.os io_cancel.os io_setup.os io_destroy.os raw_syscall.os compat-0_1.os
+> ----------------------->8-------------------  
+> 
+> And that's what happens with my patch:
+> ----------------------->8-------------------  
+> arc-buildroot-linux-uclibc-gcc -shared -matomic -Os -nostdlib -nostartfiles -fPIC \
+>   -o libaio.so io_queue_init.os io_queue_release.os io_queue_wait.os io_queue_run.os \
+>   io_getevents.os io_submit.os io_cancel.os io_setup.os io_destroy.os raw_syscall.os compat-0_1.os -lgcc
+> ----------------------->8-------------------  
+> 
+> Note "-lgcc" in the latter case.
 
-Fixes: http://autobuild.buildroot.net/?reason=blktrace-1.2.0&arch=arc
-Improves: https://git.buildroot.org/buildroot/commit/?id=ce6536ae500fc4ac0c201d5cb4edf39dd1b4d386
+Thank you, I do understand that passing LDFLAGS=-lgcc will add -lgcc to
+the link command line :-)
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-Cc: arc-buildroot at synopsys.com
----
+The question is: why does libaio needs to be told explicitly to link
+against libgcc, and not any other package.
 
-Changes v1 -> v2:
- * Apply the same fix for PowerPC
+And I believe the reason is because -nostdlib -nostartfiles are used.
+Why is libaio using those flags? Is there a good reason ?
 
- package/libaio/libaio.mk | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+> Now let's see what happens with millicode symbols in both cases.
+> Pre-patch case:
+> ----------------------->8-------------------  
+> # arc-linux-gnu-readelf -s libaio.so | grep __st_r13_to_r17
+>     3: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND __st_r13_to_r17
+>    41: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND __st_r13_to_r17
+> ----------------------->8-------------------  
+> 
+> Note millicode's "__st_r13_to_r17" is GLOBAL UNDEFINED symbol.
+> Thus during linkage of the final application that symbol will
+> need to be resolved and LD finds it in libgcc.a and essentially
+> refuses to proceed as there's no way for shared library to
+> use a function that is implemented in a different static library.
+> 
+> Post-patch case:
+> ----------------------->8-------------------  
+> # arc-linux-gnu-readelf -s libaio.so | grep __st_r13_to_r17
+>    38: 000006cc    18 FUNC    LOCAL  DEFAULT    9 __st_r13_to_r17
+> ----------------------->8-------------------  
+> 
+> Note "__st_r13_to_r17" is locally defined so shared library doesn't
+> need anything from libgcc.a.
 
-diff --git a/package/libaio/libaio.mk b/package/libaio/libaio.mk
-index adb4d1c4b1..bf5623ee15 100644
---- a/package/libaio/libaio.mk
-+++ b/package/libaio/libaio.mk
-@@ -16,10 +16,12 @@ ifeq ($(BR2_STATIC_LIBS),y)
- LIBAIO_CONFIGURE_OPTS += ENABLE_SHARED=0
- endif
- 
--# On PowerPC, a weird toolchain issue causes -Os builds to produce
--# references to hidden symbols, so we're forcing -O2
--ifeq ($(BR2_powerpc),y)
--LIBAIO_CONFIGURE_OPTS += CFLAGS="$(subst -Os,-O2,$(TARGET_CFLAGS))"
-+# ARC and PowerPC in case of compilation with "-Os"
-+# rely on some functions implemented in libgcc.a
-+# and we need to make sure all functions from libgcc.a
-+# get included in libaio.so
-+ifeq ($(BR2_arc)$(BR2_powerpc),y)
-+LIBAIO_CONFIGURE_OPTS += LDFLAGS=-lgcc
- endif
- 
- define LIBAIO_BUILD_CMDS
+Indeed.
+
+> > Why is this problem happening only with libaio, and not with other
+> > packages ?  
+> 
+> That's a good question :)
+> I may assume other shared libs gets linked with libgcc.a, i.e. all
+> symbols from libgcc including millicode get built into libXXX.so.
+
+See above: -nostdlib -nostartfiles are used in libaio. That's the
+difference. The question is why libaio is using those flags.
+
+Best regards,
+
+Thomas
 -- 
-2.16.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
