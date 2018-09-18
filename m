@@ -1,12 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Sep 2018 09:51:08 +0200
-Subject: [Buildroot] [PATCH v2 3/3] package/piglit: new package
-In-Reply-To: <84ded507-27f9-9e33-a116-becc8dda57f0@smile.fr>
-References: <20180211162136.15605-1-romain.naour@gmail.com>
- <20180211162136.15605-3-romain.naour@gmail.com>
- <20180916233840.79495eba@windsurf>
- <84ded507-27f9-9e33-a116-becc8dda57f0@smile.fr>
-Message-ID: <20180918095108.1a128bcf@windsurf>
+Date: Tue, 18 Sep 2018 09:57:26 +0200
+Subject: [Buildroot] [PATCH 1/2] at: change upstream site, bump version
+In-Reply-To: <20180917211219.17868-2-giulio.benetti@micronovasrl.com>
+References: <20180917211219.17868-1-giulio.benetti@micronovasrl.com>
+ <20180917211219.17868-2-giulio.benetti@micronovasrl.com>
+Message-ID: <20180918095726.50623f29@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,34 +13,36 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 17 Sep 2018 22:10:02 +0200, Romain Naour wrote:
+Thanks for working on this! This was definitely something that needed
+to be done for a long time!
 
-> > This is surprising, what does it do on the host during the build
-> > process that requires those tools ? Or is it that piglit generates a
-> > report on the target, and then provides a bunch of host tool to process
-> > such reports ?  
+On Mon, 17 Sep 2018 23:12:18 +0200, Giulio Benetti wrote:
+> Minicom is now available on a git repository at:
+
+Minicom ? :-)
+
+> https://salsa.debian.org/debian/at
+> Main changes 3.1.16 -> 3.1.23:
+> - add support for SELinux, multiple files
+> - improve atd.service, see bug report 892819
+> - fix various bugs and warnings
+> - finalized script to release software
 > 
-> Reports can be processed on the target directly.
-> I believe it's for the same reason that we need host-numpy.
-
-What "same reason" ?
-
-> I think the build system is checking the host-python instead of python for the
-> target.
+> So:
+> - change AT_SITE_METHOD to git pointing to release/3.1.23
+> - update tarball sha256 in hash file
 > 
-> I'm not sure how to fix this...
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+>  ...-Makefile-fix-parallel-build-failure.patch | 33 +++++++++++++++++++
 
-So you mean that all those Python packages are not needed on the host,
-but because the build system is bogus and checks their presence on the
-host, we have to have them as dependencies ?
+Is it really necessary to have a patch that fixes parallel build, if
+parallel build is not entirely fixed and you need $(MAKE1) anyway ?
 
-So indeed, there's a macro in cmake/Modules/PythonModule.cmake that is
-used to check for Mako, Numpy and Six, and it works by running the host
-Python. I imagine they are in fact not needed on the host, and this
-macro needs to be adjusted. However, I'm not sure what's the right way
-to test if a *target* Python module is available.
+I believe the patch is not necessary. Let's keep MAKE1 for now, and
+maybe report the parallel build issue upstream.
 
-Maybe Yegor can help on this ? :-)
+Thanks!
 
 Thomas
 -- 
