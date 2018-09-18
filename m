@@ -1,14 +1,8 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Mon, 17 Sep 2018 23:44:11 +0200
-Subject: [Buildroot] [PATCH 1/1] netsnmp: fix static build with openssl
-In-Reply-To: <20180917232217.456114cf@windsurf>
-References: <20180909085119.27976-1-fontaine.fabrice@gmail.com>
- <20180909141612.43915a59@windsurf.home>
- <CAPi7W81tAT9=LeVBT6gCR7a57S72ynpganrm4rSLq5viv4oUqw@mail.gmail.com>
- <20180909150919.546beda4@windsurf.home>
- <c7ee69a4-ece1-2161-f0a4-d0bbb5dc14ad@micronovasrl.com>
- <20180917232217.456114cf@windsurf>
-Message-ID: <46326894-d52f-5597-66aa-a3b4903967e3@micronovasrl.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Mon, 17 Sep 2018 23:31:23 -0300
+Subject: [Buildroot] [RFC] testing: add python-crossbar tests
+References: <20180917155554.05aa9b43@windsurf>
+Message-ID: <5ba0637b42763_47f82b17fc7e25f429690@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,46 +11,61 @@ To: buildroot@busybox.net
 
 Hello,
 
-Il 17/09/2018 23:22, Thomas Petazzoni ha scritto:
-> Hello,
+On Mon, Sep 17, 2018 at 10:55 AM, Thomas Petazzoni wrote:
+
+> On Thu, 15 Feb 2018 23:16:32 -0200, Ricardo Martincoski wrote:
 > 
-> On Mon, 17 Sep 2018 22:37:30 +0200, Giulio Benetti wrote:
+>> On Thu, Feb 15, 2018 at 11:41 AM, Yegor Yefremov wrote:
+>> 
+>> [snip]
+>> > 
+>> > I've tried this test locally, but it always timeouts. Even if I
+>> > specify an hour as a timeout.  
+>> 
+>> I confirm that here, both test cases fail by timeout, so it should not be
+>> related to the host.
+
+At the time I confirmed with the patch applied on aa77030b8f and also on
+(aa77030b8f +
+ http://patchwork.ozlabs.org/patch/874421/ +
+ http://patchwork.ozlabs.org/patch/874422/ )
+and I got the timeout in both cases.
+
 > 
->> During this day I've submit a patch to net-snmp upstream,
->> then they've corrected it.
->> After they committed another patch.
->> And now I'm waiting for Merge Request to be accepted to fix this bug.
->>
->> It was a mixture of problem:
->> - lack of -lssl in checking during configure(mainly DTLS support)
->> - lack of -lz in checking during configure for a bunch of functions
->>
->> I'm going to take over and send BR patch I've done in-reply-to this.
+> I applied Yegor's patch, and ran he test. It doesn't time out here.
+> Here is what I have in the TestPythonPy2Crossbar-run.log:
 > 
-> And they still don't want to use pkg-config instead of this mess of
-> checking transitive dependencies manually ?
+> Welcome to Buildroot
+> buildroot login: root
+> # dmesg -n 1
+> # echo $?
+> 0
+> # python -m crossbar version
+> Traceback (most recent call last):
+>   File "usr/lib/python2.7/runpy.py", line 174, in _run_module_as_main
+>   File "usr/lib/python2.7/runpy.py", line 72, in _run_code
+>   File "usr/lib/python2.7/site-packages/crossbar/__main__.py", line 36, in <module>
+>   File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 479, in load_entry_point
+>   File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2703, in load_entry_point
+>   File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2320, in load
+>   File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2343, in require
+>   File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 782, in resolve
+> pkg_resources.ContextualVersionConflict: (txaio 2.8.2 (/usr/lib/python2.7/site-packages), Requirement.parse('txaio>=18.8.1'), set(['autobahn']))
+> # echo $?
+> 1
+> 
+> So it doesn't work due to some dependency issues. Is the timeout
+> problem going to appear once those dependency issues are solved ? Or
+> should I have already seen the timeout ?
 
-Judging from their master branch and checking the other branches it 
-seems not.
+Sorry, I don't know.
 
-If they use pkg-config for libnl as Fabrice mentioned maybe they would 
-consider the idea.
-Maybe they only need some help from someone else(sure more experienced 
-than me).
+Yegor, any idea? Could you bisect this? I already started:
+2018.02-rc2-4-gaa77030b8f + patch = timeout
+2018.08-425-gc5a33a11be + patch = dependency issue
+2018.05-rc3-25-gd937f908f1 + patch = timeout
+2018.05-756-g3d34f36806 + patch = (still running:
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/98611581 )
 
-I could open a "Feature Request" on Source Forge after this bug
-is solved also for them and upstream my last patch.
-I've seen they are responsive today.
-What do you think?
-
--- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+Regards,
+Ricardo
