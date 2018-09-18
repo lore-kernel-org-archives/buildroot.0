@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Sep 2018 21:01:18 +0200
-Subject: [Buildroot] [PATCH] olimex_a20_olinuxino_lime_legacy: mali
- renamed legacy
-In-Reply-To: <20180918163523.11169-1-francois.perrad@gadz.org>
-References: <20180918163523.11169-1-francois.perrad@gadz.org>
-Message-ID: <20180918210118.10f3eeca@windsurf>
+Date: Tue, 18 Sep 2018 21:01:39 +0200
+Subject: [Buildroot] [PATCH] s6-linux-utils: fix build with glibc 2.28
+In-Reply-To: <131325e8288cf4027e581c26c978d7ce350ace8b.1537274175.git.baruch@tkos.co.il>
+References: <131325e8288cf4027e581c26c978d7ce350ace8b.1537274175.git.baruch@tkos.co.il>
+Message-ID: <20180918210139.6d0fdc80@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +12,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 18 Sep 2018 18:35:23 +0200, Francois Perrad wrote:
-> as mali is now also available with the kernel mainline
+On Tue, 18 Sep 2018 15:36:15 +0300, Baruch Siach wrote:
+> Add upstream patch that adds needed header for the major/minor macros.
 > 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> Fixes:
+> http://autobuild.buildroot.net/results/974/9742dfabd9b244e1381983dd05edd3e65504f0fe/
+> 
+> Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  .gitlab-ci.yml                                                | 2 +-
->  board/olimex/a20_olinuxino/{boot-mali.cmd => boot-legacy.cmd} | 0
->  board/olimex/a20_olinuxino/readme.txt                         | 4 ++--
->  ...i_defconfig => olimex_a20_olinuxino_lime_legacy_defconfig} | 2 +-
->  4 files changed, 4 insertions(+), 4 deletions(-)
->  rename board/olimex/a20_olinuxino/{boot-mali.cmd => boot-legacy.cmd} (100%)
->  rename configs/{olimex_a20_olinuxino_lime_mali_defconfig => olimex_a20_olinuxino_lime_legacy_defconfig} (99%)
+>  ...s-sysmacros.h-because-glibc-is-glibc.patch | 27 +++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+>  create mode 100644 package/s6-linux-utils/0001-Include-sys-sysmacros.h-because-glibc-is-glibc.patch
 
-Applied to master after improving the commit title/commit log.
-
-Thanks,
+Applied to master, thanks.
 
 Thomas
 -- 
