@@ -1,50 +1,90 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Tue, 18 Sep 2018 22:28:35 +0200
-Subject: [Buildroot] [PATCH 1/2] at: change upstream site, bump version
-In-Reply-To: <20180918111637.5274fe3f@windsurf>
-References: <20180917211219.17868-1-giulio.benetti@micronovasrl.com>
- <20180917211219.17868-2-giulio.benetti@micronovasrl.com>
- <20180918095726.50623f29@windsurf>
- <34001101-5184-40d5-6234-ff89929b6c58@micronovasrl.com>
- <20180918111637.5274fe3f@windsurf>
-Message-ID: <9b4bec27-11b6-9d46-65f4-d5b52f532f93@micronovasrl.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 18 Sep 2018 22:37:52 +0200
+Subject: [Buildroot] [PATCH 1/1] New package: gRPC,
+ Google's remote procedue calss protocol.
+In-Reply-To: <CANRZ_fnbcgmYd1iGv1EUNe_hbUhPtWF3ghJhHgwmNhsDHtO2RA@mail.gmail.com>
+References: <20180917193455.14329-1-mark.fine@gmail.com>
+ <20180918220046.32289eab@windsurf>
+ <CANRZ_fnbcgmYd1iGv1EUNe_hbUhPtWF3ghJhHgwmNhsDHtO2RA@mail.gmail.com>
+Message-ID: <20180918223752.6b4ccaee@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Mark,
 
-Il 18/09/2018 11:16, Thomas Petazzoni ha scritto:
-> Hello,
+On Tue, 18 Sep 2018 13:26:06 -0700, Mark Fine wrote:
+
+> > See
+> > https://buildroot.org/downloads/manual/manual.html#github-download-url
+> > for more details about this.
 > 
-> On Tue, 18 Sep 2018 10:01:40 +0200, Giulio Benetti wrote:
+> Initially, I tried to use tarballs off of git and a locally calculated hash
+> file, but had issues with BR finding and downloading the tarballs. Will try
+> again.
+
+OK, let me know if you run into specific issues.
+
+> > > +GRPC_LICENSE = BSD-3-Clause
+> > > +GRPC_LICENSE_FILES = LICENSE
+> > > +
+> > > +GRPC_DEPENDENCIES = host-grpc gflags gtest c-ares openssl protobuf zlib
+> > > +HOST_GRPC_DEPENDENCIES = host-c-ares host-protobuf host-openssl
+> > > +
+> > > +GRPC_INSTALL_STAGING = YES
+> > > +
+> > > +GRPC_MAKE_ENV = \
+> > > +     CC="$(TARGET_CC)" \
+> > > +     CXX="$(TARGET_CXX)" \
+> > > +     LD="$(TARGET_CC)" \
+> > > +     LDXX="$(TARGET_CXX)" \
+> > > +     STRIP="$(TARGET_STRIP)" \
+> > > +     PROTOC="$(HOST_DIR)/bin/protoc" \
+> > > +     PATH="$(HOST_DIR)/bin:$(PATH)" \  
+> >
+> > Use BR_PATH instead.
+> >  
+> > > +     GRPC_CROSS_COMPILE=true \
+> > > +     GRPC_CROSS_LDOPTS="$(TARGET_LDFLAGS)" \
+> > > +     GRPC_CROSS_AROPTS="$(LTO_PLUGIN)" \
+> > > +     HAS_PKG_CONFIG=false \  
+> >
+> > Why ?
+> >  
 > 
->> By the way, testing it on qemu and also a colleague found that on arm
->> board, atd needs .SEQ file before starting.
->> Do I have to add this to package?
+> I believe this was added per the Makefile:
 > 
-> What is this .SEQ file ?
+> # The steps for cross-compiling are as follows:
+> # First, clone and make install of grpc using the native compilers for the host.
+> # Also, install protoc (e.g., from a package like apt-get)
+> # Then clone a fresh grpc for the actual cross-compiled build
+> # Set the environment variable GRPC_CROSS_COMPILE to true
+> # Set CC, CXX, LD, LDXX, AR, and STRIP to the cross-compiling binaries
+> # Also set PROTOBUF_CONFIG_OPTS to indicate cross-compilation to protobuf (e.g.,
+> #  PROTOBUF_CONFIG_OPTS="--host=arm-linux --with-protoc=/usr/local/bin/protoc" )
+> # Set HAS_PKG_CONFIG=false
 
-/var/spool/cron/atjobs/.SEQ is a necessary file for atd which keeps
-status of scheduled jobs.
-If atd doesn't find that file fails to run instead of creating it 
-empty(this is the solution to make it work).
-So better add:
-touch /var/spool/cron/atjobs/.SEQ on target_dir
-to the package.
+Looks weird. Perhaps it's simply to make sure the system-provided
+pkg-config doesn't get used. But in Buildroot, we provide in
+$(HOST_DIR)/bin, a special pkg-config that returns results that are
+valid when cross-compiling.
 
-So I've answered myself :)
+> > > +     PROTOBUF_CONFIG_OPTS="--host=$(GNU_TARGET_NAME)  
+> > --with-protoc=$(HOST_DIR)/bin/protoc" \
+> >
+> > Seems weird, is grpc going to build its own protobuf ?  
+> 
+> I believe this uses the host built protobuf compiler picked up from
+> host-protobuf.
 
+But why --host=$(GNU_TARGET_NAME) is needed ?
+
+Thanks!
+
+Thomas
 -- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
