@@ -1,90 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Sep 2018 22:37:52 +0200
-Subject: [Buildroot] [PATCH 1/1] New package: gRPC,
- Google's remote procedue calss protocol.
-In-Reply-To: <CANRZ_fnbcgmYd1iGv1EUNe_hbUhPtWF3ghJhHgwmNhsDHtO2RA@mail.gmail.com>
-References: <20180917193455.14329-1-mark.fine@gmail.com>
- <20180918220046.32289eab@windsurf>
- <CANRZ_fnbcgmYd1iGv1EUNe_hbUhPtWF3ghJhHgwmNhsDHtO2RA@mail.gmail.com>
-Message-ID: <20180918223752.6b4ccaee@windsurf>
+Date: Tue, 18 Sep 2018 22:28:43 +0200
+Subject: [Buildroot] [git commit] brltty: add license
+Message-ID: <20180918205001.1A52088586@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Mark,
+commit: https://git.buildroot.net/buildroot/commit/?id=ecf832704bd360f40dc0c898d48c3ea2e8b7fb53
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 18 Sep 2018 13:26:06 -0700, Mark Fine wrote:
+brltty 5.5 is licensed under GPL-2.0+ with exceptions in LGPL-2.1+ for
+data and client side as specified in README so add this information in
+BRLTTY_LICENSE, update BRLTTY_LICENSE_FILES and add hash for README
 
-> > See
-> > https://buildroot.org/downloads/manual/manual.html#github-download-url
-> > for more details about this.
-> 
-> Initially, I tried to use tarballs off of git and a locally calculated hash
-> file, but had issues with BR finding and downloading the tarballs. Will try
-> again.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/brltty/brltty.hash | 1 +
+ package/brltty/brltty.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-OK, let me know if you run into specific issues.
-
-> > > +GRPC_LICENSE = BSD-3-Clause
-> > > +GRPC_LICENSE_FILES = LICENSE
-> > > +
-> > > +GRPC_DEPENDENCIES = host-grpc gflags gtest c-ares openssl protobuf zlib
-> > > +HOST_GRPC_DEPENDENCIES = host-c-ares host-protobuf host-openssl
-> > > +
-> > > +GRPC_INSTALL_STAGING = YES
-> > > +
-> > > +GRPC_MAKE_ENV = \
-> > > +     CC="$(TARGET_CC)" \
-> > > +     CXX="$(TARGET_CXX)" \
-> > > +     LD="$(TARGET_CC)" \
-> > > +     LDXX="$(TARGET_CXX)" \
-> > > +     STRIP="$(TARGET_STRIP)" \
-> > > +     PROTOC="$(HOST_DIR)/bin/protoc" \
-> > > +     PATH="$(HOST_DIR)/bin:$(PATH)" \  
-> >
-> > Use BR_PATH instead.
-> >  
-> > > +     GRPC_CROSS_COMPILE=true \
-> > > +     GRPC_CROSS_LDOPTS="$(TARGET_LDFLAGS)" \
-> > > +     GRPC_CROSS_AROPTS="$(LTO_PLUGIN)" \
-> > > +     HAS_PKG_CONFIG=false \  
-> >
-> > Why ?
-> >  
-> 
-> I believe this was added per the Makefile:
-> 
-> # The steps for cross-compiling are as follows:
-> # First, clone and make install of grpc using the native compilers for the host.
-> # Also, install protoc (e.g., from a package like apt-get)
-> # Then clone a fresh grpc for the actual cross-compiled build
-> # Set the environment variable GRPC_CROSS_COMPILE to true
-> # Set CC, CXX, LD, LDXX, AR, and STRIP to the cross-compiling binaries
-> # Also set PROTOBUF_CONFIG_OPTS to indicate cross-compilation to protobuf (e.g.,
-> #  PROTOBUF_CONFIG_OPTS="--host=arm-linux --with-protoc=/usr/local/bin/protoc" )
-> # Set HAS_PKG_CONFIG=false
-
-Looks weird. Perhaps it's simply to make sure the system-provided
-pkg-config doesn't get used. But in Buildroot, we provide in
-$(HOST_DIR)/bin, a special pkg-config that returns results that are
-valid when cross-compiling.
-
-> > > +     PROTOBUF_CONFIG_OPTS="--host=$(GNU_TARGET_NAME)  
-> > --with-protoc=$(HOST_DIR)/bin/protoc" \
-> >
-> > Seems weird, is grpc going to build its own protobuf ?  
-> 
-> I believe this uses the host built protobuf compiler picked up from
-> host-protobuf.
-
-But why --host=$(GNU_TARGET_NAME) is needed ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/brltty/brltty.hash b/package/brltty/brltty.hash
+index 3bc2f9cf54..01b4c13fcc 100644
+--- a/package/brltty/brltty.hash
++++ b/package/brltty/brltty.hash
+@@ -1,3 +1,4 @@
+ sha256 4ebf1df5922df0efccac4795f5bd1c514fc850348c34d9ec0868e2798b565a36 brltty-5.5.tar.xz
+ sha256 91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad LICENSE-GPL
+ sha256 d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f LICENSE-LGPL
++sha256 6ba58188449642de8adefd7adabb436185792c5c51a4b5d04650423c2151dc50 README
+diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
+index df3e9c7888..0fcd4f4258 100644
+--- a/package/brltty/brltty.mk
++++ b/package/brltty/brltty.mk
+@@ -9,7 +9,8 @@ BRLTTY_SOURCE = brltty-$(BRLTTY_VERSION).tar.xz
+ BRLTTY_SITE = http://brltty.com/archive
+ BRLTTY_INSTALL_STAGING_OPTS = INSTALL_ROOT=$(STAGING_DIR) install
+ BRLTTY_INSTALL_TARGET_OPTS = INSTALL_ROOT=$(TARGET_DIR) install
+-BRLTTY_LICENSE_FILES = LICENSE-GPL LICENSE-LGPL
++BRLTTY_LICENSE = GPL-2.0+, LGPL-2.1+ (data, client side)
++BRLTTY_LICENSE_FILES = LICENSE-GPL LICENSE-LGPL README
+ 
+ BRLTTY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-autoconf host-pkgconf \
+ 	$(if $(BR2_PACKAGE_AT_SPI2_CORE),at-spi2-core)
