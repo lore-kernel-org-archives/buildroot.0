@@ -1,12 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Sep 2018 09:31:10 +0200
-Subject: [Buildroot] [PATCH v2 2/3] package/waffle: new package
-In-Reply-To: <207cc677-6028-81a1-f338-22711d152bc1@smile.fr>
-References: <20180211162136.15605-1-romain.naour@gmail.com>
- <20180211162136.15605-2-romain.naour@gmail.com>
- <20180916233058.53cc7eec@windsurf>
- <207cc677-6028-81a1-f338-22711d152bc1@smile.fr>
-Message-ID: <20180918093110.4dd932d1@windsurf>
+Date: Tue, 18 Sep 2018 09:36:04 +0200
+Subject: [Buildroot] [PATCH] libaio: Fix library creation for ARC with
+ -Os
+In-Reply-To: <20180917204329.15787-1-abrodkin@synopsys.com>
+References: <20180917204329.15787-1-abrodkin@synopsys.com>
+Message-ID: <20180918093604.0b421d5c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,24 +13,46 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 17 Sep 2018 21:59:46 +0200, Romain Naour wrote:
+Thanks Alexey for working on this. I have a few questions below, to
+better understand the problem and its solution.
 
-> > config BR2_PACKAGE_WAFFLE_SUPPORTS_GBM
-> > 	bool
-> > 	# mesa3d is for now the only GBM provider, and it is enabled
-> > 	# together with its EGL support
-> > 	default y if BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_MESA3D_OPENGL_EGL && BR2_PACKAGE_HAS_UDEV  
+On Mon, 17 Sep 2018 23:43:29 +0300, Alexey Brodkin wrote:
+> On ARC if "-Os" optimization is used compiler prefers to use so-called
+> millicode (basically function prologue & epilogue) implemented once and for
+> all in libgcc.a.
+
+Until this point, I follow.
+
+> And if we don't link with libgcc.a on DSO (read libaio.so)
+
+I don't understand "link with libgcc.A on DSO" and therefore the rest
+of the explanation is a bit unclear to me.
+
+> creation those millicode functions won't be included, instead their
+> symbols will be referenced as they were in libgcc (HIDDEN).
 > 
-> I believe this comment will be not correct as soon as the libgbm virtual package
-> will be merged.
+> And then when LD is about to link a final application it sees HIDDEN
+> symbol in libaio.so that is supposed to come from some static
+> libgcc.a... wait.. what? Shared library has unresolved symbol
+> implemented in static library? No, that's not right I guess :)
+> 
+> So to resolve that wrong sequence we just make sure libaio.so has
+> its own copy of used millicode functions implemented locally.
 
-Indeed, but I wrote this example code for the current master, i.e
-without the libgbm virtual package merged. Once it is merged, it is not
-only the comment that will be wrong, but also the
-BR2_PACKAGE_MESA3D_OPENGL_EGL dependency that will have to be replaced
-by BR2_PACKAGE_HAS_LIBGBM.
+Why is this problem happening only with libaio, and not with other
+packages ? Is this the final fix, or is this a temporary workaround ?
 
-Thanks,
+> BTW I guess something similar might happen for PowerPC,
+> see https://git.buildroot.org/buildroot/commit/?id=ce6536ae500fc4ac0c201d5cb4edf39dd1b4d386
+> --------------------------->8------------------------  
+> hidden symbol `_rest32gpr_30_x' in libgcc.a(e500crtresx32gpr.o) is referenced by DSO
+> --------------------------->8------------------------  
+
+Ah, interesting. So there is really something special about libaio.so
+forgetting to link with libgcc ? Should this also be changed to cover
+PowerPC to remove the workaround ?
+
+Best regards,
 
 Thomas
 -- 
