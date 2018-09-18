@@ -1,48 +1,48 @@
-From: Marcel Patzlaff <m.patzlaff@pilz.de>
-Date: Tue, 18 Sep 2018 15:40:21 +0200
-Subject: [Buildroot] [PATCH 1/1] host-tzdump: bump to version
- e1a52ce12a701b8ea4163d6719713e38c0e53d35
-Message-ID: <20180918134021.7878-1-m.patzlaff@pilz.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 18 Sep 2018 15:58:00 +0200
+Subject: [Buildroot] [PATCH] libaio: Fix library creation for ARC with
+ -Os
+In-Reply-To: <24f81ffc5c8606c74c9d478a29b245d7646b90f6.camel@synopsys.com>
+References: <20180917204329.15787-1-abrodkin@synopsys.com>
+ <20180918093604.0b421d5c@windsurf>
+ <c9ec03f9f05e251fd8e7b99c0ffb06593db32b1c.camel@synopsys.com>
+ <20180918111506.0648d78c@windsurf>
+ <aae1bc5da723d9dd98ddd4dcc7868e4dacb4b6f8.camel@synopsys.com>
+ <20180918112657.7d1b9d28@windsurf>
+ <99fcad6be0ba045a8d00274723ac511be2805aac.camel@synopsys.com>
+ <098ECE41A0A6114BB2A07F1EC238DE89667FD144@de02wembxa.internal.synopsys.com>
+ <24f81ffc5c8606c74c9d478a29b245d7646b90f6.camel@synopsys.com>
+Message-ID: <20180918155800.748eae34@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
----
- package/tzdump/tzdump.hash | 2 +-
- package/tzdump/tzdump.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/package/tzdump/tzdump.hash b/package/tzdump/tzdump.hash
-index 71114e0bed..b0d58c62d3 100644
---- a/package/tzdump/tzdump.hash
-+++ b/package/tzdump/tzdump.hash
-@@ -1,2 +1,2 @@
- # locally computed
--sha256  403f22f9c3007a051f9dbccff48b396b8e04eb1afcc8d779e6b3d9b6d971e1fe  tzdump-65a10105564801094b18c3fcacf4dde4c44e4ab8.tar.gz
-+sha256  e078ba9bd90cb46368beb3cfef2288194e5edefd53ad9565961a97d1c7d6c59f  tzdump-e1a52ce12a701b8ea4163d6719713e38c0e53d35.tar.gz
-diff --git a/package/tzdump/tzdump.mk b/package/tzdump/tzdump.mk
-index baad978c4f..f6b6a1a729 100644
---- a/package/tzdump/tzdump.mk
-+++ b/package/tzdump/tzdump.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TZDUMP_VERSION = 65a10105564801094b18c3fcacf4dde4c44e4ab8
-+TZDUMP_VERSION = e1a52ce12a701b8ea4163d6719713e38c0e53d35
- TZDUMP_SITE = $(call github,alexandrebelloni,tzdump,$(TZDUMP_VERSION))
- HOST_TZDUMP_DEPENDENCIES = host-zic
- 
+On Tue, 18 Sep 2018 12:44:26 +0000, Alexey Brodkin wrote:
+
+> Sure that's indeed an option. We'll just finally add "-mno-millicode"
+> in TARGET_ABI for ARC and forget about that class of problems. Also
+> maybe it worth having "-mno-millicode" set by default for Linux
+> toolchains so looking forward there will be no need to mess with
+> millicode manually.
+
+Yes, that's indeed one solution, though the problem also exists for
+PowerPC, so it would have been nice to understand it.
+
+What I find weird is that why it happens only with libaio ? I mean
+there are plenty of libraries built with -fpic, and libaio is the only
+one causing this problem. The fact that libaio is using -nostdlib
+-nostartfiles was an initial hint to explain why libgcc isn't brought
+into the link, but as Alexey said, removing -nostdlib -nostartfiles
+doesn't solve the problem.
+
+Best regards,
+
+Thomas
 -- 
-2.17.1
-
-Gesch?ftsf?hrung: Susanne Kunschert, Thomas Pilz
-Pilz GmbH & Co. KG, Sitz: Ostfildern, HRA 210 893, Amtsgericht Stuttgart
-Kompl. Ges. Peter Pilz GmbH, Sitz: Ostfildern, HRB 210 612, Amtsgericht Stuttgart
-Umsatzsteuer: ID-Nr. DE 145 355 773, WEEE-Reg.-Nr. DE 71636849
-This email is intended solely for the use of the named address(es). Any unauthorised disclosure, copying or distribution of these confidential information contained therein, or the taking of any action based on it, is prohibited. The sender disclaims any liability for the integrity of this email. Legally binding declarations must be in written form.
-Umweltschutz liegt uns am Herzen! - Bitte denken Sie an unsere Umwelt, bevor Sie diese E-Mail drucken.
-We do care about the environment! - Please consider the environment before printing this e-mail.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
