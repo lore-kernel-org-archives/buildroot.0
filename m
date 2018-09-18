@@ -1,64 +1,63 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Tue, 18 Sep 2018 10:12:46 +0200
-Subject: [Buildroot] [PATCH v2] qt5location: fix build failure due to
- missing qt5base gui dependency
-In-Reply-To: <87lg8e75xm.fsf@dell.be.48ers.dk>
-References: <20180905090307.89484-1-giulio.benetti@micronovasrl.com>
- <87lg8e75xm.fsf@dell.be.48ers.dk>
-Message-ID: <724f4376-bc21-6900-805e-b6eca7975c5e@micronovasrl.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue, 18 Sep 2018 11:58:55 +0300
+Subject: [Buildroot] [PATCH v2] libaio: Make sure symbols from libgcc.a get
+ defined in libaio.so for ARC & PPC
+Message-ID: <20180918085855.10148-1-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On ARC and PowerPC if "-Os" optimization is used compiler prefers to use so-called
+millicode (basically function prologue & epilogue) implemented once and for
+all in libgcc.a. And if we don't link with libgcc.a on DSO (read libaio.so)
+creation those millicode functions won't be included, instead their
+symbols will be referenced as they were in libgcc (HIDDEN).
 
-Il 06/09/2018 21:59, Peter Korsgaard ha scritto:
->>>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
-> 
->   > qt5location fails to build due to missing Qt5 Gui module.
->   > In configure.json features.opengl is referred, but it is available only
->   > if qt5base gui submodule is built.
-> 
->   > Add BR2_PACKAGE_QT5BASE_GUI to qt5location Config.in to assure gui
->   > submodule is built before qt5location.
-> 
->   > Fixes:
->   > http://autobuild.buildroot.org/results/1e1/1e12a819750c677c9ef204a324c8bf06212e5135/
->   > http://autobuild.buildroot.org/results/223/223ec6565beba1ca73d4ff488296feec53656b40/
->   > http://autobuild.buildroot.org/results/84f/84fe1c84e3537167ee3791e83c9fe2cc2805ccb5/
->   > http://autobuild.buildroot.org/results/9c9/9c96d2106222e623a379f9995bd059725eb27769/
->   > http://autobuild.buildroot.org/results/fa0/fa01513d28d896ca8819966c5b1ed5c35283e92f/
->   > http://autobuild.buildroot.org/results/5d7/5d7333470c31b83c697218382dc77f74af86c666/
->   > http://autobuild.buildroot.org/results/db7/db7b4c61bb41d32e0f7960c194588cd1559ff3f7/
->   > http://autobuild.buildroot.org/results/2b7/2b71f186b8d67c4805393c9c016d641893d46220/
->   > http://autobuild.buildroot.org/results/1e1/1e12a819750c677c9ef204a324c8bf06212e5135/
-> 
->   > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
->   > ---
->   > Changes V1->V2:
->   > * add missing Fixes: list in commit log
-> 
-> Committed, thanks.
-> 
+And then when LD is about to link a final application it sees HIDDEN
+symbol in libaio.so that is supposed to come from some static
+libgcc.a... wait.. what? Shared library has unresolved symbol
+implemented in static library? No, that's not right I guess :)
 
-This patch fixes bug in 2018.05.x too:
-http://autobuild.buildroot.net/results/eb1c30086e749d74af6538306026b1c2a1b139e3/
+So to resolve that wrong sequence we just make sure libaio.so has
+its own copy of used millicode functions implemented locally.
 
-Do I need to resubmit it with commit log corrected under "Fixes:" ?
-Or is it enough I've pointed it out?
+Fixes: http://autobuild.buildroot.net/?reason=blktrace-1.2.0&arch=arc
+Improves: https://git.buildroot.org/buildroot/commit/?id=ce6536ae500fc4ac0c201d5cb4edf39dd1b4d386
 
-Thanks
-Kind regards
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Cc: arc-buildroot at synopsys.com
+---
+
+Changes v1 -> v2:
+ * Apply the same fix for PowerPC
+
+ package/libaio/libaio.mk | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/package/libaio/libaio.mk b/package/libaio/libaio.mk
+index adb4d1c4b1..bf5623ee15 100644
+--- a/package/libaio/libaio.mk
++++ b/package/libaio/libaio.mk
+@@ -16,10 +16,12 @@ ifeq ($(BR2_STATIC_LIBS),y)
+ LIBAIO_CONFIGURE_OPTS += ENABLE_SHARED=0
+ endif
+ 
+-# On PowerPC, a weird toolchain issue causes -Os builds to produce
+-# references to hidden symbols, so we're forcing -O2
+-ifeq ($(BR2_powerpc),y)
+-LIBAIO_CONFIGURE_OPTS += CFLAGS="$(subst -Os,-O2,$(TARGET_CFLAGS))"
++# ARC and PowerPC in case of compilation with "-Os"
++# rely on some functions implemented in libgcc.a
++# and we need to make sure all functions from libgcc.a
++# get included in libaio.so
++ifeq ($(BR2_arc)$(BR2_powerpc),y)
++LIBAIO_CONFIGURE_OPTS += LDFLAGS=-lgcc
+ endif
+ 
+ define LIBAIO_BUILD_CMDS
 -- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+2.16.2
