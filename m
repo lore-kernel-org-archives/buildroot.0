@@ -1,10 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Sep 2018 09:36:04 +0200
-Subject: [Buildroot] [PATCH] libaio: Fix library creation for ARC with
- -Os
-In-Reply-To: <20180917204329.15787-1-abrodkin@synopsys.com>
-References: <20180917204329.15787-1-abrodkin@synopsys.com>
-Message-ID: <20180918093604.0b421d5c@windsurf>
+Date: Tue, 18 Sep 2018 09:51:08 +0200
+Subject: [Buildroot] [PATCH v2 3/3] package/piglit: new package
+In-Reply-To: <84ded507-27f9-9e33-a116-becc8dda57f0@smile.fr>
+References: <20180211162136.15605-1-romain.naour@gmail.com>
+ <20180211162136.15605-3-romain.naour@gmail.com>
+ <20180916233840.79495eba@windsurf>
+ <84ded507-27f9-9e33-a116-becc8dda57f0@smile.fr>
+Message-ID: <20180918095108.1a128bcf@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,46 +15,34 @@ To: buildroot@busybox.net
 
 Hello,
 
-Thanks Alexey for working on this. I have a few questions below, to
-better understand the problem and its solution.
+On Mon, 17 Sep 2018 22:10:02 +0200, Romain Naour wrote:
 
-On Mon, 17 Sep 2018 23:43:29 +0300, Alexey Brodkin wrote:
-> On ARC if "-Os" optimization is used compiler prefers to use so-called
-> millicode (basically function prologue & epilogue) implemented once and for
-> all in libgcc.a.
-
-Until this point, I follow.
-
-> And if we don't link with libgcc.a on DSO (read libaio.so)
-
-I don't understand "link with libgcc.A on DSO" and therefore the rest
-of the explanation is a bit unclear to me.
-
-> creation those millicode functions won't be included, instead their
-> symbols will be referenced as they were in libgcc (HIDDEN).
+> > This is surprising, what does it do on the host during the build
+> > process that requires those tools ? Or is it that piglit generates a
+> > report on the target, and then provides a bunch of host tool to process
+> > such reports ?  
 > 
-> And then when LD is about to link a final application it sees HIDDEN
-> symbol in libaio.so that is supposed to come from some static
-> libgcc.a... wait.. what? Shared library has unresolved symbol
-> implemented in static library? No, that's not right I guess :)
+> Reports can be processed on the target directly.
+> I believe it's for the same reason that we need host-numpy.
+
+What "same reason" ?
+
+> I think the build system is checking the host-python instead of python for the
+> target.
 > 
-> So to resolve that wrong sequence we just make sure libaio.so has
-> its own copy of used millicode functions implemented locally.
+> I'm not sure how to fix this...
 
-Why is this problem happening only with libaio, and not with other
-packages ? Is this the final fix, or is this a temporary workaround ?
+So you mean that all those Python packages are not needed on the host,
+but because the build system is bogus and checks their presence on the
+host, we have to have them as dependencies ?
 
-> BTW I guess something similar might happen for PowerPC,
-> see https://git.buildroot.org/buildroot/commit/?id=ce6536ae500fc4ac0c201d5cb4edf39dd1b4d386
-> --------------------------->8------------------------  
-> hidden symbol `_rest32gpr_30_x' in libgcc.a(e500crtresx32gpr.o) is referenced by DSO
-> --------------------------->8------------------------  
+So indeed, there's a macro in cmake/Modules/PythonModule.cmake that is
+used to check for Mako, Numpy and Six, and it works by running the host
+Python. I imagine they are in fact not needed on the host, and this
+macro needs to be adjusted. However, I'm not sure what's the right way
+to test if a *target* Python module is available.
 
-Ah, interesting. So there is really something special about libaio.so
-forgetting to link with libgcc ? Should this also be changed to cover
-PowerPC to remove the workaround ?
-
-Best regards,
+Maybe Yegor can help on this ? :-)
 
 Thomas
 -- 
