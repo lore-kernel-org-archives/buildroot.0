@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Sep 2018 22:02:31 +0200
-Subject: [Buildroot] [PATCH v2 1/2] monkey: bump to version 1.6.9
-In-Reply-To: <1537189549-26857-1-git-send-email-david.pierret@smile.fr>
+Date: Tue, 18 Sep 2018 22:03:10 +0200
+Subject: [Buildroot] [PATCH v2 2/2] monkey: add option for SSL/TLS
+ plugin compilation
+In-Reply-To: <1537189549-26857-2-git-send-email-david.pierret@smile.fr>
 References: <1537189549-26857-1-git-send-email-david.pierret@smile.fr>
-Message-ID: <20180918220231.6fccba57@windsurf>
+ <1537189549-26857-2-git-send-email-david.pierret@smile.fr>
+Message-ID: <20180918220310.348f748a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,22 +14,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 17 Sep 2018 15:05:48 +0200, david.pierret at smile.fr wrote:
-> From: David Pierret <david.pierret@gmail.com>
-> 
-> This commit update monkey-server package to 1.6.9
-> 
-> The --datadir option have been moved to --webroot.
-> The --plugdir option does not exist anymore.
-> 
-> Signed-off-by: David Pierret <david.pierret@gmail.com>
+On Mon, 17 Sep 2018 15:05:49 +0200, david.pierret at smile.fr wrote:
 
-I've applied to master, thanks. It's a bit weird now, because monkey
-plugins are installed directly in /usr/lib, and no longer
-in /usr/lib/monkey. But after looking at the CMakeLists.txt logic, it
-indeed seems like it's upstream intention to install them in /usr/lib.
+> +ifeq ($(BR2_PACKAGE_MONKEY_SSL),y)
+> +MONKEY_CONF_OPTS += --enable-plugins=tls --mbedtls-shared
 
-Thanks!
+You forgot:
+
+MONKEY_DEPENDENCIES += mbedtls
+
+here. Without this, you don't have the guarantee that mbedtls will be
+built before monkey.
+
+I've fixed this and applied your patch to master. Thanks!
 
 Thomas
 -- 
