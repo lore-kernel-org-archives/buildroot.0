@@ -1,93 +1,65 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Wed, 19 Sep 2018 13:45:41 +0200
-Subject: [Buildroot] [PATCH buildroot-test] autobuild-run: add
- --flush-downloads argument to prevent false NOK due to not enough space on
- hard drive
-Message-ID: <20180919114541.17670-1-giulio.benetti@micronovasrl.com>
+From: philip.a.molloy at gmail.com <philip.a.molloy@gmail.com>
+Date: Wed, 19 Sep 2018 07:49:24 -0400
+Subject: [Buildroot] [PATCH 1/1] system/Config.in: specify root shell
+Message-ID: <20180919114924.8456-1-philip.a.molloy@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some server/pc can have little hard drive, but high speed internet
-connection. If disk is little, autobuild-run could generate some false
-NOK reporting:
-Fatal error: ...: No space left on device
+From: Philip Molloy <philip.a.molloy@gmail.com>
 
-Add --flush-downloads argument to autobuild-run to delete entire
-instance-*/dl/ folder everytime it creates a new instance.
-If active this will lead to re-download all files needed by an instance
-in its dl/ folder when created.
-As the other options, flush-downloads can be listed in .conf file like
-this:
-flush-downloads = yes
-
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Philip Molloy <philip.a.molloy@gmail.com>
 ---
- scripts/autobuild-run | 36 +++++++++++++++++++++++-------------
- 1 file changed, 23 insertions(+), 13 deletions(-)
+ package/skeleton-init-common/skeleton-init-common.mk |  6 ++++++
+ system/Config.in                                     | 10 ++++++++++
+ 2 files changed, 16 insertions(+)
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 3d2e99a..2682239 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -106,6 +106,7 @@ Options:
-   --toolchains-csv CSVFILE       Toolchain configuration file
-   -r, --repo URL                 URL of Buildroot repository to clone
-                                  Defaults to %(--repo)s
-+  --flush-downloads              Delete dl/ folder every time new instance starts
+diff --git a/package/skeleton-init-common/skeleton-init-common.mk b/package/skeleton-init-common/skeleton-init-common.mk
+index e8a0522052..bddb614127 100644
+--- a/package/skeleton-init-common/skeleton-init-common.mk
++++ b/package/skeleton-init-common/skeleton-init-common.mk
+@@ -38,6 +38,7 @@ SKELETON_INIT_COMMON_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
+ SKELETON_INIT_COMMON_ISSUE = $(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
+ SKELETON_INIT_COMMON_ROOT_PASSWD = $(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD))
+ SKELETON_INIT_COMMON_PASSWD_METHOD = $(call qstrip,$(BR2_TARGET_GENERIC_PASSWD_METHOD))
++SKELETON_INIT_COMMON_ROOT_SHELL = $(call qstrip,$(BR2_TARGET_GENERIC_ROOT_SHELL))
+ SKELETON_INIT_COMMON_BIN_SH = $(call qstrip,$(BR2_SYSTEM_BIN_SH))
  
- Format of the configuration file:
+ ifneq ($(SKELETON_INIT_COMMON_HOSTNAME),)
+@@ -74,6 +75,11 @@ define SKELETON_INIT_COMMON_SET_ROOT_PASSWD
+ endef
+ SKELETON_INIT_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_INIT_COMMON_SET_ROOT_PASSWD
  
-@@ -301,18 +302,26 @@ def prepare_build(**kwargs):
-             for i in f:
-                 yield os.path.join(r, i)
- 
--    # Remove 5 random files from the download directory. Removing
--    # random files from the download directory allows to ensure we
--    # regularly re-download files to check that their upstream
--    # location is still correct.
--    for i in range(0, 5):
--        flist = list(find_files(dldir))
--        if not flist:
--            break
--        f = flist[randint(0, len(flist) - 1)]
--        log_write(log, "INFO: removing %s from downloads" %
--                  os.path.relpath(f, dldir))
--        os.remove(f)
-+    flush_dl = kwargs['flush_dl']
++define SKELETON_INIT_COMMON_SET_ROOT_SHELL
++$(SED) 's,^\(root:.*:\).*,\1$(SKELETON_INIT_COMMON_ROOT_SHELL),' $(TARGET_DIR)/etc/passwd
++endef
++SKELETON_INIT_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_INIT_COMMON_SET_ROOT_SHELL
 +
-+    # Check if we need to flush dl/ folder or keep it
-+    if flush_dl:
-+        log_write(log, "INFO: flush dl/ folder")
-+        # Remove entire dl/ folder
-+        shutil.rmtree(dldir)
-+    else:
-+        # Remove 5 random files from the download directory. Removing
-+        # random files from the download directory allows to ensure we
-+        # regularly re-download files to check that their upstream
-+        # location is still correct.
-+        for i in range(0, 5):
-+            flist = list(find_files(dldir))
-+            if not flist:
-+                break
-+            f = flist[randint(0, len(flist) - 1)]
-+            log_write(log, "INFO: removing %s from downloads" %
-+                      os.path.relpath(f, dldir))
-+            os.remove(f)
+ ifeq ($(BR2_SYSTEM_BIN_SH_NONE),y)
+ define SKELETON_INIT_COMMON_SET_BIN_SH
+ 	rm -f $(TARGET_DIR)/bin/sh
+diff --git a/system/Config.in b/system/Config.in
+index f63f27b126..ec8fbe0251 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -407,6 +407,16 @@ config BR2_SYSTEM_DHCP
+ comment "automatic network configuration via DHCP needs ifupdown or busybox or networkd"
+ 	depends on !(BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_IFUPDOWN || BR2_PACKAGE_SYSTEMD_NETWORKD)
  
-     branch = get_branch()
-     log_write(log, "INFO: testing branch '%s'" % branch)
-@@ -766,7 +775,8 @@ def main():
-                 repo = args['--repo'],
-                 upload = upload,
-                 buildpid = buildpid,
--                debug = args['--debug']
-+                debug = args['--debug'],
-+                flush_dl = args['--flush-downloads']
-             ))
-         p.start()
-         processes.append(p)
++config BR2_TARGET_GENERIC_ROOT_SHELL
++	string "Root shell"
++	default "/bin/sh"
++	help
++	  Set the root login shell.
++
++	  Explicitly defining the root login shell in /etc/passwd may be required
++	  when symlinking /bin/sh to bash because invocating bash as sh causes bash
++	  to mimic sh (see INVOCATION in bash(1)).
++
+ endif # BR2_ROOTFS_SKELETON_DEFAULT
+ 
+ config BR2_ENABLE_LOCALE_PURGE
 -- 
 2.17.1
