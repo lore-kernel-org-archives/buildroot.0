@@ -1,92 +1,81 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 19 Sep 2018 08:44:24 +0200
-Subject: [Buildroot] [PATCH] musl: add upstream patch to fix race condition
- in file locking
-Message-ID: <20180919064424.12185-1-thomas.petazzoni@bootlin.com>
+From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
+Date: Wed, 19 Sep 2018 10:00:52 +0200
+Subject: [Buildroot] make printvars errors / empty variables
+Message-ID: <7a232c87-0b65-e04a-9cc0-590e15f6f38f@ginzinger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-According to [1]:
+hi,
 
-  musl 1.1.20 introduced a regression in stdio FILE locking that can
-  cause soft deadlocks with >2 threads contending for a
-  FILE. Users/dists should apply
-  https://git.musl-libc.org/cgit/musl/commit/?id=0db393d3a77bb9f300a356c6a5484fc2dddb161d.
+so during a printvars run there's stuff printed to stderr for me:
 
-[1] https://twitter.com/musllibc/status/1042292786568024070
+make printvars > printvars.txt
+/bin/bash: support/dependencies/check-host-.sh: No such file or directory
+/bin/bash: -c: line 0: syntax error near unexpected token `)'
+/bin/bash: -c: line 0: `set -e; TMP="$(mktemp)"; if () >/dev/null 2>&1; 
+then echo ""; else echo ""; fi; rm -f "$TMP"'
 
-This commit therefore adds the corresponding patch to the musl
-package.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0002-fix-race-condition-in-file-locking.patch  | 55 ++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
- create mode 100644 package/musl/0002-fix-race-condition-in-file-locking.patch
+These seem to be 2 issues. Here's some context for the first one where 
+some appended variable doesn't seem to be expanded:
 
-diff --git a/package/musl/0002-fix-race-condition-in-file-locking.patch b/package/musl/0002-fix-race-condition-in-file-locking.patch
-new file mode 100644
-index 0000000000..f3e85e6888
---- /dev/null
-+++ b/package/musl/0002-fix-race-condition-in-file-locking.patch
-@@ -0,0 +1,55 @@
-+From 0db393d3a77bb9f300a356c6a5484fc2dddb161d Mon Sep 17 00:00:00 2001
-+From: Kaarle Ritvanen <kaarle.ritvanen@datakunkku.fi>
-+Date: Tue, 18 Sep 2018 10:03:27 +0300
-+Subject: [PATCH] fix race condition in file locking
-+
-+The condition occurs when
-+- thread #1 is holding the lock
-+- thread #2 is waiting for it on __futexwait
-+- thread #1 is about to release the lock and performs a_swap
-+- thread #3 enters the __lockfile function and manages to grab the lock
-+  before thread #1 calls __wake, resetting the MAYBE_WAITERS flag
-+- thread #1 calls __wake
-+- thread #2 wakes up but goes again to __futexwait as the lock is
-+  held by thread #3
-+- thread #3 releases the lock but does not call __wake as the
-+  MAYBE_WAITERS flag is not set
-+
-+This condition results in thread #2 not being woken up. This patch fixes
-+the problem by making the woken up thread ensure that the flag is
-+properly set before going to sleep again.
-+
-+Mainainer's note: This fixes a regression introduced in commit
-+c21f750727515602a9e84f2a190ee8a0a2aeb2a1.
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ src/stdio/__lockfile.c | 12 ++++++------
-+ 1 file changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/src/stdio/__lockfile.c b/src/stdio/__lockfile.c
-+index 2ff75d8a..0dcb2a42 100644
-+--- a/src/stdio/__lockfile.c
-++++ b/src/stdio/__lockfile.c
-+@@ -8,13 +8,13 @@ int __lockfile(FILE *f)
-+ 	int owner = f->lock, tid = __pthread_self()->tid;
-+ 	if ((owner & ~MAYBE_WAITERS) == tid)
-+ 		return 0;
-+-	for (;;) {
-+-		owner = a_cas(&f->lock, 0, tid);
-+-		if (!owner) return 1;
-+-		if (a_cas(&f->lock, owner, owner|MAYBE_WAITERS)==owner) break;
-++	owner = a_cas(&f->lock, 0, tid);
-++	if (!owner) return 1;
-++	while ((owner = a_cas(&f->lock, 0, tid|MAYBE_WAITERS))) {
-++		if ((owner & MAYBE_WAITERS) ||
-++		    a_cas(&f->lock, owner, owner|MAYBE_WAITERS)==owner)
-++			__futexwait(&f->lock, owner|MAYBE_WAITERS, 1);
-+ 	}
-+-	while ((owner = a_cas(&f->lock, 0, tid|MAYBE_WAITERS)))
-+-		__futexwait(&f->lock, owner, 1);
-+ 	return 1;
-+ }
-+ 
-+-- 
-+2.14.4
-+
--- 
-2.14.4
+stripurischeme= 
+
+suitable-extractor= 
+
+/bin/bash: support/dependencies/check-host-.sh: No such file or 
+directory
+suitable-host-package= 
+
+toolchain-external-package= 
+
+MANUAL_INSTALL_STAGING = YES 
+
+MANUAL_ADD_TOOLCHAIN_DEPENDENCY = NO
+
+
+and some for the second one where an if Statement doesn't seem to be 
+expanded:
+
+toolchain_find_libc_a=$(readlink -f $(LANG=C  -print-file-name=libc.a)) 
+
+toolchain_find_libdir=$(printf $(readlink -f $(LANG=C 
+-print-file-name=libc.a)) | sed -r -e 
+'s:.*/(usr/)?(lib(32|64)?([^/]*)?(/[^/]*)?)/libc.a:\2:')
+toolchain_find_sysroot=$(printf $(readlink -f $(LANG=C 
+-print-file-name=libc.a)) | sed -r -e 
+'s:(usr/)?lib(32|64)?([^/]*)?/([^/]*/)?libc\.a::')
+/bin/bash: -c: line 0: syntax error near unexpected token `)' 
+
+/bin/bash: -c: line 0: `set -e; TMP="$(mktemp)"; if () >/dev/null 2>&1; 
+then echo ""; else echo ""; fi; rm -f "$TMP"'
+try-run= 
+
+virt-provides-single=ifneq ($(call qstrip,$(BR2_PACKAGE_PROVIDES_)),) 
+
+$(error Configuration error: both "" and $(BR2_PACKAGE_PROVIDES_) are 
+selected as providers for virtual package "". Only one provider can be 
+selected at a time. Please fix your configuration)
+endif 
+
+virtual-package= 
+
+# Ensure the virtual package has an implementation defined.
+
+
+I just drop this here without further digging into it. Let me know if I 
+can add anything more helpful,
+
+thanks
+
+                              martin
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: smime.p7s
+Type: application/x-pkcs7-signature
+Size: 3616 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180919/de14a110/attachment.bin>
