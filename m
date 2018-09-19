@@ -1,35 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 19 Sep 2018 15:28:48 +0200
-Subject: [Buildroot] [RFC PATCH v3 1/1] support/kconfig: Bump to kconfig
- from Linux 4.17-rc2
-In-Reply-To: <20180919113615.27036-1-petr.vorel@gmail.com>
-References: <20180919113615.27036-1-petr.vorel@gmail.com>
-Message-ID: <20180919152848.616fc616@windsurf>
+From: Lionel Orry <lionel.orry@gmail.com>
+Date: Wed, 19 Sep 2018 15:31:40 +0200
+Subject: [Buildroot] [PATCH 1/1] pkg-waf: add support for <pkg>_SUBDIR
+Message-ID: <CAKAx1cj8sSdbR6_NJu=tiHB=EPO_bjb571k4Yu5rVo_g5h66dw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Petr,
+In the Buildroot manual, it is specified that the Waf-based
+infrastructure supports the <pkg>_SUBDIR variable, which was not true.
 
-Thanks for working on this!
+This patch makes use of this variable by changing to the given
+sub-directory before executing waf commands.
 
-On Wed, 19 Sep 2018 13:36:15 +0200, Petr Vorel wrote:
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
-> Changes v2->v3:
-> * Fix issues with building more that we need (menuconfig require
-> unfortunately "make menuconfig" fails, because
-> it wants ? reported by Thomas in [1]).
+Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
+---
+ package/pkg-waf.mk | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-I don't understand this changelog. Could explain a bit more what you
-mean here?
+diff --git a/package/pkg-waf.mk b/package/pkg-waf.mk
+index e5b606f063..826b73291b 100644
+--- a/package/pkg-waf.mk
++++ b/package/pkg-waf.mk
+@@ -54,13 +54,15 @@ $(2)_INSTALL_STAGING_OPTS        ?=
+ $(2)_INSTALL_TARGET_OPTS        ?=
+ $(2)_WAF_OPTS                ?=
 
-Thanks!
-
-Thomas
++$(2)_SRCDIR            = $$($(2)_DIR)/$$($(2)_SUBDIR)
++
+ #
+ # Configure step. Only define it if not already defined by the package
+ # .mk file.
+ #
+ ifndef $(2)_CONFIGURE_CMDS
+ define $(2)_CONFIGURE_CMDS
+-    cd $$(@D) && \
++    cd $$($$(PKG)_SRCDIR) && \
+     $$(TARGET_CONFIGURE_OPTS) \
+     $$($(2)_CONF_ENV) \
+     $$(HOST_DIR)/bin/python2 $$($(2)_WAF) configure \
+@@ -77,7 +79,7 @@ endif
+ #
+ ifndef $(2)_BUILD_CMDS
+ define $(2)_BUILD_CMDS
+-    cd $$(@D) && \
++    cd $$($$(PKG)_SRCDIR) && \
+     $$(TARGET_MAKE_ENV) $$(HOST_DIR)/bin/python2 $$($(2)_WAF) \
+         build -j $$(PARALLEL_JOBS) $$($(2)_BUILD_OPTS) \
+         $$($(2)_WAF_OPTS)
+@@ -90,7 +92,7 @@ endif
+ #
+ ifndef $(2)_INSTALL_STAGING_CMDS
+ define $(2)_INSTALL_STAGING_CMDS
+-    cd $$(@D) && \
++    cd $$($$(PKG)_SRCDIR) && \
+     $$(TARGET_MAKE_ENV) $$(HOST_DIR)/bin/python2 $$($(2)_WAF) \
+         install --destdir=$$(STAGING_DIR) \
+         $$($(2)_INSTALL_STAGING_OPTS) \
+@@ -104,7 +106,7 @@ endif
+ #
+ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
+-    cd $$(@D) && \
++    cd $$($$(PKG)_SRCDIR) && \
+     $$(TARGET_MAKE_ENV) $$(HOST_DIR)/bin/python2 $$($(2)_WAF) \
+         install --destdir=$$(TARGET_DIR) \
+         $$($(2)_INSTALL_TARGET_OPTS) \
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.19.0
