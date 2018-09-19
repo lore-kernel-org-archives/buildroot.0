@@ -1,7 +1,7 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 19 Sep 2018 13:41:27 -0500
-Subject: [Buildroot] [PATCH] boot/gummiboot: updated url
-Message-ID: <1537382487-35071-1-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Wed, 19 Sep 2018 13:44:05 -0500
+Subject: [Buildroot] [PATCH] boot/vexpress-firmware: updated url
+Message-ID: <1537382645-36060-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,19 +11,18 @@ To: buildroot@busybox.net
 From: Matt Weber <matt@thewebers.ws>
 
 ---
- boot/gummiboot/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ boot/vexpress-firmware/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/boot/gummiboot/Config.in b/boot/gummiboot/Config.in
-index 11dbc4f..57d8d59 100644
---- a/boot/gummiboot/Config.in
-+++ b/boot/gummiboot/Config.in
-@@ -20,4 +20,5 @@ config BR2_TARGET_GUMMIBOOT
- 	  exactly the same, except that the Gummiboot configuration
- 	  files will be located in /loader/ inside the EFI partition.
- 
--	  http://freedesktop.org/wiki/Software/gummiboot/
-+          https://www.freedesktop.org/wiki/Software/systemd/systemd-boot/
+diff --git a/boot/vexpress-firmware/Config.in b/boot/vexpress-firmware/Config.in
+index 8479df3..265fb4b 100644
+--- a/boot/vexpress-firmware/Config.in
++++ b/boot/vexpress-firmware/Config.in
+@@ -4,3 +4,5 @@ config BR2_TARGET_VEXPRESS_FIRMWARE
+ 	help
+ 	  Versatile Express firmware from ARM, with Linaro mods last
+ 	  change.
 +
++	  https://git.linaro.org/arm/vexpress-firmware.git
 -- 
 1.9.1
