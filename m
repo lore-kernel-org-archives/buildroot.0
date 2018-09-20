@@ -1,50 +1,31 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 21 Sep 2018 00:01:18 +0200
-Subject: [Buildroot] [PATCH 1/1] domoticz: depends on gcc >= 4.8
-Message-ID: <20180920220118.3497-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 21 Sep 2018 00:02:11 +0200
+Subject: [Buildroot] [git commit] scancpan: skip Dist::Zilla
+Message-ID: <20180920220203.054B08881D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-sleep_for is not always defined with gcc <= 4.7, see
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=52680
+commit: https://git.buildroot.net/buildroot/commit/?id=e9963cd2b51f2f5d64c576ad2f2188a644627be3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-To fix this issue, add a dependency to gcc >= 4.8
-
-Fixes:
- - http://autobuild.buildroot.net/results/0dada8dd727f32a4500670f6620adb05943ed0b7
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/domoticz/Config.in | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ utils/scancpan | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
-index 530027f273..4c5338df0a 100644
---- a/package/domoticz/Config.in
-+++ b/package/domoticz/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_DOMOTICZ
- 	depends on BR2_USE_MMU # mosquitto
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # mosquitto
- 	depends on !BR2_STATIC_LIBS # mosquitto
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # sleep_for
- 	# pthread_condattr_setclock
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_INSTALL_LIBSTDCPP
-@@ -27,10 +28,11 @@ config BR2_PACKAGE_DOMOTICZ
- 
- 	  http://domoticz.com
- 
--comment "domoticz needs lua >= 5.2 and a toolchain w/ C++, NPTL, wchar, dynamic library"
-+comment "domoticz needs lua >= 5.2 and a toolchain w/ C++, gcc >= 4.8, NPTL, wchar, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
- 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
- 		!BR2_USE_WCHAR || BR2_STATIC_LIBS || \
- 		!(BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3)
--- 
-2.17.1
+diff --git a/utils/scancpan b/utils/scancpan
+index 3b77b21330..ee547c3e7b 100755
+--- a/utils/scancpan
++++ b/utils/scancpan
+@@ -601,6 +601,7 @@ sub fetch {
+             # we could use the host Module::CoreList data, because host perl and
+             # target perl have the same major version
+             next if ${$dep}{phase} eq q{develop};
++            next if ${$dep}{phase} eq q{x_Dist_Zilla};
+             next if !($test && $top) && ${$dep}{phase} eq q{test};
+             my $distname = $mcpan->module( $modname )->{distribution};
+             if (${$dep}{phase} eq q{runtime}) {
