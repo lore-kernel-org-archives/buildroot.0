@@ -1,39 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Sep 2018 22:20:55 +0200
-Subject: [Buildroot] [git commit] package/bandwidthd: put upstream URL on
- separate lines in Config.in help
-Message-ID: <20180920202053.4F1F3886CE@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 20 Sep 2018 22:21:26 +0200
+Subject: [Buildroot] [PATCH] package.bison: fix build on host with
+ glibc-2.28
+In-Reply-To: <20180819165931.23259-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Sun, 19 Aug 2018 18:59:31 +0200")
+References: <20180819165931.23259-1-yann.morin.1998@free.fr>
+Message-ID: <87bm8rq5rt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4bdb24c5d95ad1ec5f656ed135d34eabc9e90199
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Allows scripting of URL checking to be simplier
+ > Similarly to c48f8a6462 (package/m4: fix build on host with glibc-2.28),
+ > backport the two fixes fromn gnulib upstream, that allows building
+ > host-bison on systems using glibc 2.28.
 
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/bandwidthd/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Reported-by: c32 on IRC
 
-diff --git a/package/bandwidthd/Config.in b/package/bandwidthd/Config.in
-index a503da43ff..8a19733c2c 100644
---- a/package/bandwidthd/Config.in
-+++ b/package/bandwidthd/Config.in
-@@ -25,8 +25,10 @@ config BR2_PACKAGE_BANDWIDTHD
- 	  available on github that works on making BandwidthD's build
- 	  process more compatible with buildroot's.
- 
--	  Upstream: http://bandwidthd.sourceforge.net/
--	  Github fork: http://github.com/nroach44/bandwidthd
-+	  Upstream:
-+	  http://bandwidthd.sourceforge.net/
-+	  Github fork:
-+	  http://github.com/nroach44/bandwidthd
- 
- if BR2_PACKAGE_BANDWIDTHD
- 
+Committed to 2018.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
