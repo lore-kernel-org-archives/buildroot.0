@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Sep 2018 21:29:30 +0200
-Subject: [Buildroot] [PATCH 09/14] package/connman: URL move to newline
-In-Reply-To: <1537449899-9576-9-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Thu, 20 Sep 2018 21:30:28 +0200
+Subject: [Buildroot] [PATCH 10/14] package/glibc: URL update
+In-Reply-To: <1537449899-9576-10-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1537449899-9576-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1537449899-9576-9-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20180920212930.3e302d83@windsurf>
+ <1537449899-9576-10-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20180920213028.3f4efbfe@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +13,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 20 Sep 2018 08:24:54 -0500, Matt Weber wrote:
-> Allows scripting of URL checking to be simplier
-> 
+On Thu, 20 Sep 2018 08:24:55 -0500, Matt Weber wrote:
 > Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 > ---
->  package/connman/Config.in | 3 ++-
+>  package/glibc/Config.in | 3 ++-
 >  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/connman/Config.in b/package/connman/Config.in
-> index 253c604..0f93fee 100644
-> --- a/package/connman/Config.in
-> +++ b/package/connman/Config.in
-> @@ -14,7 +14,8 @@ config BR2_PACKAGE_CONNMAN
->  	  for managing internet connections within embedded devices
->  	  running the Linux operating system.
->  
-> -	  For more information, see https://01.org/connman
-> +	  For more information, see
-> +	  https://01.org/connman
+> diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+> index 57a2e83..63dd0f4 100644
+> --- a/package/glibc/Config.in
+> +++ b/package/glibc/Config.in
+> @@ -5,5 +5,6 @@ config BR2_PACKAGE_GLIBC
+>  	default y
+>  	select BR2_PACKAGE_LINUX_HEADERS
+>  	select BR2_TOOLCHAIN_HAS_SSP
+> -
+> +	help
+> +	  https://www.gnu.org/software/libc/
 
-Actually, the "For more information, see" is totally useless, so I've
-dropped that instead to solve the problem of "we want the URL at the
-beginning of a line".
-
-Applied with this change. Thanks!
+This option is a blind option, so having a help text is not very
+useful...
 
 Thomas
 -- 
