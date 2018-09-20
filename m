@@ -1,14 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Sep 2018 10:03:28 +0200
+From: Czybor Michael <m.czybor@baur.at>
+Date: Thu, 20 Sep 2018 09:04:01 +0000
 Subject: [Buildroot] STM32F767ZI Nucleo
-In-Reply-To: <f844ef8357b0480a9d8e8cf8e1414c44@baur.at>
+In-Reply-To: <20180920100328.3d5ff046@windsurf>
 References: <f844ef8357b0480a9d8e8cf8e1414c44@baur.at>
-Message-ID: <20180920100328.3d5ff046@windsurf>
+ <20180920100328.3d5ff046@windsurf>
+Message-ID: <bd252999392341cda6bec222f0e416dc@baur.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+Hello Thomas,
+
+thank you for your quick reply.
+
+1.) What is the minimum RAM-Size to run linux?
+
+2.) Output files:
+
+I read that document, before I wrote my question. I found a rootfs.cpio folder and I gues it is the rootfs.
+
+But what is a *.bin file?
+Why I have five *.bin file versions?
+And what is a xipImage-file?
+Finally, what is a *.dtb file?
+
+The documentation tells about one bootloader and one kernel file and a rootfs, as far as I understand it...
+
+Best Regards,
+Michael
+
+-----Urspr?ngliche Nachricht-----
+Von: buildroot [mailto:buildroot-bounces at busybox.net] Im Auftrag von Thomas Petazzoni
+Gesendet: Donnerstag, 20. September 2018 10:03
+An: Czybor Michael
+Cc: buildroot at busybox.net
+Betreff: Re: [Buildroot] STM32F767ZI Nucleo
 
 Hello,
 
@@ -59,3 +87,7 @@ Thomas
 Thomas Petazzoni, CTO, Bootlin
 Embedded Linux and Kernel engineering
 https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
