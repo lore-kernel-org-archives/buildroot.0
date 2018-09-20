@@ -1,53 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Sep 2018 22:04:04 +0200
-Subject: [Buildroot] [PATCH 13/14] package/alljoyn-base: URL update
-In-Reply-To: <1537449899-9576-13-git-send-email-matthew.weber@rockwellcollins.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 20 Sep 2018 15:05:46 -0500
+Subject: [Buildroot] [PATCH 10/14] package/glibc: URL update
+In-Reply-To: <20180920213028.3f4efbfe@windsurf>
 References: <1537449899-9576-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1537449899-9576-13-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20180920220404.77a13cdd@windsurf>
+ <1537449899-9576-10-git-send-email-matthew.weber@rockwellcollins.com>
+ <20180920213028.3f4efbfe@windsurf>
+Message-ID: <CANQCQpY0V7XxgUWH-PKPzsGUMN3DG1GOAEbvQYUJq+LHH17qNQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas,
+On Thu, Sep 20, 2018 at 2:30 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Thu, 20 Sep 2018 08:24:55 -0500, Matt Weber wrote:
+> > Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> > ---
+> >  package/glibc/Config.in | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+> > index 57a2e83..63dd0f4 100644
+> > --- a/package/glibc/Config.in
+> > +++ b/package/glibc/Config.in
+> > @@ -5,5 +5,6 @@ config BR2_PACKAGE_GLIBC
+> >       default y
+> >       select BR2_PACKAGE_LINUX_HEADERS
+> >       select BR2_TOOLCHAIN_HAS_SSP
+> > -
+> > +     help
+> > +       https://www.gnu.org/software/libc/
+>
+> This option is a blind option, so having a help text is not very
+> useful...
 
-On Thu, 20 Sep 2018 08:24:58 -0500, Matt Weber wrote:
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> ---
->  package/alljoyn-base/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/alljoyn-base/Config.in b/package/alljoyn-base/Config.in
-> index 8556d66..c89cb20 100644
-> --- a/package/alljoyn-base/Config.in
-> +++ b/package/alljoyn-base/Config.in
-> @@ -17,7 +17,7 @@ config BR2_PACKAGE_ALLJOYN_BASE
->  	  devices, providing a set of interfaces for different devices
->  	  to interact and interoperate with one another.
->  
-> -	  https://allseenalliance.org
-> +	  https://github.com/alljoyn/alljoyn.github.com/wiki
+I had been looking at verifying and updating all packages which could
+end-up with content on target to have a valid URL.  This allows
+auto-generation of CPE XML update requests which need product site
+urls.
 
-For PATCH 13/14 (this one) and PATCH 14/14, I'd like something a bit
-better:
-
- - The .mk files still use a mirror of allseenalliance at kernel.org,
-   it should be changed to use the Github location instead.
-
- - You changed alljoyn-base and alljoyn-tcl-base, but not alljoyn-tcl
-
- - The commit title should be "update upstream URL"
-
- - The commit log should contain some details, at least explaining that
-   allseenalliance.org is dead, and that the project was moved to
-   Github, etc.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Matt
