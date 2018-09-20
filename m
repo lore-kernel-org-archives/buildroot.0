@@ -1,12 +1,12 @@
 From: Neil Armstrong <narmstrong@baylibre.com>
-Date: Thu, 20 Sep 2018 11:28:36 +0200
+Date: Thu, 20 Sep 2018 11:28:42 +0200
 Subject: [Buildroot] [PATCH 2/2] board: Add Libre Computer AML-S905X-CC
  board support
 In-Reply-To: <20180809231424.21b2ae5c@windsurf>
 References: <1533545408-11248-1-git-send-email-narmstrong@baylibre.com>
  <1533545408-11248-3-git-send-email-narmstrong@baylibre.com>
  <20180809231424.21b2ae5c@windsurf>
-Message-ID: <cca9048f-50df-3635-381a-8fbf81df08ad@baylibre.com>
+Message-ID: <c8da76fa-b541-0d85-2e7f-e642931c8407@baylibre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
