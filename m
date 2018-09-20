@@ -1,52 +1,30 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Sep 2018 08:57:25 +0200
-Subject: [Buildroot] [PATCH 1/1] ipsec-tools: needs host-bison
-In-Reply-To: <20180920084522.1dea57e8@windsurf> (Thomas Petazzoni's message of
- "Thu, 20 Sep 2018 08:45:22 +0200")
-References: <20180915095906.11558-1-fontaine.fabrice@gmail.com>
- <87o9ctp5if.fsf@dell.be.48ers.dk> <20180920084522.1dea57e8@windsurf>
-Message-ID: <87fty4psfe.fsf@dell.be.48ers.dk>
+From: Czybor Michael <m.czybor@baur.at>
+Date: Thu, 20 Sep 2018 07:35:09 +0000
+Subject: [Buildroot] STM32F767ZI Nucleo
+Message-ID: <f844ef8357b0480a9d8e8cf8e1414c44@baur.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Hello,
 
-Hi,
+i'am new with Buildroot. I have some experiences with Petalinux from Xilinx. Now I will "create" a linux image for my STM32-Board.
 
- >> Hmm, shouldn't this use BR2_BISON_HOST_DEPENDENCY /
- >> BR2_FLEX_HOST_DEPENDENCY instead?
-
- > No, that's not what we have agreed so far. Our idea was that
- > BR2_BISON_HOST_DEPENDENCY and BR2_FLEX_HOST_DEPENDENCY would be used
- > only for the kconfig stuff in the kernel/u-boot and al, but that we
- > would keep using our own host-flex/host-bison for the rest, and
- > especially for target packages.
-
- > There are two reasons to that:
-
- >  (1) We can be pretty confident that the flex/bison stuff in kconfig
- >      will have been tested/exercised against a wide variety of
- >      flex/bison versions, so using whatever flex/bison version
- >      available on the host system is good enough. However, for the rest
- >      of the packages that use flex/bison, we can't be so sure, so
- >      having our own flex/bison version allows us to be sure that things
- >      "will work".
-
- >  (2) For target packages, using the system-provided flex/bison version
- >      means that the generated code can be subtly different between
- >      flex/bison versions, which makes the build non-reproducible. Hence,
- >      it is important to have our own fixed version of flex/bison. For
- >      host packages, that is probably less of a concern, but point (1)
- >      remains valid.
-
- > Do we still agree on this position, or do you have
- > counter-arguments ? :-)
-
-No, you convinced me ;) Thanks!
+I have a Windows 7 PC and a VMWare-Ubuntu-Machine.
 
 
--- 
-Bye, Peter Korsgaard
+1.)    Is there a Buildroot-Config for my Board?
+
+2.)    I made an example image with a STM32F4-Config, in the Output directory where several files. What is the meaning of that files?
+
+3.)    What is the right tool to "Flash" the output files to my board?
+
+4.)    How can I debug and develop an app on the running linux image made with Buildroot and can I use VisualGDB for that purpose?
+
+Thank you!
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180920/d723394e/attachment.html>
