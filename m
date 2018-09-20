@@ -1,40 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Sep 2018 22:17:04 +0200
-Subject: [Buildroot] [PATCH 10/14] package/glibc: URL update
-In-Reply-To: <CANQCQpY0V7XxgUWH-PKPzsGUMN3DG1GOAEbvQYUJq+LHH17qNQ@mail.gmail.com>
-References: <1537449899-9576-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1537449899-9576-10-git-send-email-matthew.weber@rockwellcollins.com>
- <20180920213028.3f4efbfe@windsurf>
- <CANQCQpY0V7XxgUWH-PKPzsGUMN3DG1GOAEbvQYUJq+LHH17qNQ@mail.gmail.com>
-Message-ID: <20180920221704.3dabb7c3@windsurf>
+Date: Thu, 20 Sep 2018 22:20:22 +0200
+Subject: [Buildroot] [git commit] package/android-tools: update upstream URL
+ in Config.in help
+Message-ID: <20180920202053.1789F886CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b7490dbd31bd995d29465cb2d47811d19088e891
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 20 Sep 2018 15:05:46 -0500, Matthew Weber wrote:
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/android-tools/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> > This option is a blind option, so having a help text is not very
-> > useful...  
-> 
-> I had been looking at verifying and updating all packages which could
-> end-up with content on target to have a valid URL.  This allows
-> auto-generation of CPE XML update requests which need product site
-> urls.
-
-Then perhaps this should be explained in the commit log, specifically
-for glibc.
-
-But are you sure your approach is the right one ? Today only target
-packages have a Config.in file. What are you going to do for host
-packages ? You don't care because they are host packages and supposedly
-not relevant for security issues on the target ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/android-tools/Config.in b/package/android-tools/Config.in
+index 96e36e6cd7..478f1392dc 100644
+--- a/package/android-tools/Config.in
++++ b/package/android-tools/Config.in
+@@ -15,6 +15,8 @@ config BR2_PACKAGE_ANDROID_TOOLS
+ 	  can be used to interact with target devices using of these
+ 	  protocols.
+ 
++	  https://wiki.debian.org/AndroidTools#Original_android-tools_package
++
+ if BR2_PACKAGE_ANDROID_TOOLS
+ 
+ # We need kernel headers that support the __SANE_USERSPACE_TYPES__
