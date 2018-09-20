@@ -1,54 +1,120 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 20 Sep 2018 23:52:48 +0200
-Subject: [Buildroot] [PATCH 1/1] domoticz: fix build with gcc <= 4.7
-In-Reply-To: <20180920235038.1cb70d40@windsurf>
-References: <20180917165547.30222-1-fontaine.fabrice@gmail.com>
- <20180920235038.1cb70d40@windsurf>
-Message-ID: <CAPi7W81qKeF0JmMK06e0QaHJycGbLT_LvPMdd61ykwq51eKSBA@mail.gmail.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 20 Sep 2018 16:54:24 -0500
+Subject: [Buildroot] [PATCH v2] boot/xloader: remove package
+Message-ID: <1537480464-50744-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+U-boot has provided SPL support as a viable replacement for the
+2nd stage bootloader on TI platforms.  The X-loader project
+hasn't had a commit in the log since 12-05-2011.
+(https://gitorious.org/x-loader/x-loader)
 
-Le jeu. 20 sept. 2018 ? 23:50, Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> a ?crit :
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+Changes
+v1 -> v2
+[Thomas
+ - added Config.in.legacy entry
+---
+ Config.in.legacy        |  7 +++++++
+ boot/Config.in          |  1 -
+ boot/xloader/Config.in  | 15 ---------------
+ boot/xloader/xloader.mk | 32 --------------------------------
+ 4 files changed, 7 insertions(+), 48 deletions(-)
+ delete mode 100644 boot/xloader/Config.in
+ delete mode 100644 boot/xloader/xloader.mk
 
-> Hello,
->
-> On Mon, 17 Sep 2018 18:55:47 +0200, Fabrice Fontaine wrote:
-> > sleep_for is not always defined with gcc <= 4.7, see
-> > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=52680
-> >
-> > To fix this issue, add -D_GLIBCXX_USE_NANOSLEEP if gcc version is lower
-> > than 4.8
->
-> First comment in the bug report says:
->
-> """
-> Don't define that manually,  you should configure gcc with
-> --enable-libstdccxx-time instead.
-> """
->
-> So I'm not sure enthusiastic with going in this direction. What about
-> making domoticz depend on gcc >= 4.8 ?
->
-OK, I will send a new patch with this dependency.
-
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
-Best Regards,
-
-Fabrice
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180920/3e9a99cb/attachment.html>
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 3b84e3d..4539b13 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2018.11"
+ 
++config BR2_TARGET_XLOADER
++	bool "xloader has been removed"
++	select BR2_LEGACY
++	help
++	  The package has been removed as u-boot SPL provides
++	  similar functionality
++
+ config BR2_PACKAGE_MESA3D_OPENGL_TEXTURE_FLOAT
+ 	bool "mesa3d opengl texture float option removed"
+ 	select BR2_LEGACY
+diff --git a/boot/Config.in b/boot/Config.in
+index 3687c41..5f524f9 100644
+--- a/boot/Config.in
++++ b/boot/Config.in
+@@ -18,6 +18,5 @@ source "boot/syslinux/Config.in"
+ source "boot/ts4800-mbrboot/Config.in"
+ source "boot/uboot/Config.in"
+ source "boot/vexpress-firmware/Config.in"
+-source "boot/xloader/Config.in"
+ 
+ endmenu
+diff --git a/boot/xloader/Config.in b/boot/xloader/Config.in
+deleted file mode 100644
+index c411be4..0000000
+--- a/boot/xloader/Config.in
++++ /dev/null
+@@ -1,15 +0,0 @@
+-config BR2_TARGET_XLOADER
+-	bool "X-loader"
+-	depends on BR2_cortex_a8 || BR2_cortex_a9
+-	help
+-	  The x-loader bootloader. It is mainly used on OMAP-based
+-	  platforms.
+-
+-if BR2_TARGET_XLOADER
+-config BR2_TARGET_XLOADER_BOARDNAME
+-	string "x-loader board name"
+-	help
+-	  One of x-loader supported boards to be built.
+-	  This will be suffixed with _config to meet x-loader
+-	  standard naming.
+-endif
+diff --git a/boot/xloader/xloader.mk b/boot/xloader/xloader.mk
+deleted file mode 100644
+index 7e0b286..0000000
+--- a/boot/xloader/xloader.mk
++++ /dev/null
+@@ -1,32 +0,0 @@
+-################################################################################
+-#
+-# x-loader
+-#
+-################################################################################
+-
+-XLOADER_VERSION = 6f3a26101303051e0f91b6213735b68ce804e94e
+-XLOADER_SITE = git://gitorious.org/x-loader/x-loader.git
+-XLOADER_BOARD_NAME = $(call qstrip,$(BR2_TARGET_XLOADER_BOARDNAME))
+-
+-XLOADER_LICENSE = GPL-2.0+
+-XLOADER_LICENSE_FILES = README
+-
+-XLOADER_INSTALL_IMAGES = YES
+-
+-define XLOADER_BUILD_CMDS
+-	$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D) $(XLOADER_BOARD_NAME)_config
+-	$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D) all
+-	$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D) ift
+-endef
+-
+-define XLOADER_INSTALL_IMAGES_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/MLO $(BINARIES_DIR)/
+-endef
+-
+-$(eval $(generic-package))
+-
+-ifeq ($(BR2_TARGET_XLOADER)$(BR_BUILDING),yy)
+-ifeq ($(XLOADER_BOARD_NAME),)
+-$(error NO x-loader board name set. Check your BR2_BOOT_XLOADER_BOARDNAME setting)
+-endif
+-endif
+-- 
+1.9.1
