@@ -1,30 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Sep 2018 22:20:39 +0200
-Subject: [Buildroot] [git commit] package/arp-scan: update upstream URL in
- Config.in help
-Message-ID: <20180920202053.33DD3886CE@busybox.osuosl.org>
+Date: Thu, 20 Sep 2018 22:20:55 +0200
+Subject: [Buildroot] [git commit] package/bandwidthd: put upstream URL on
+ separate lines in Config.in help
+Message-ID: <20180920202053.4F1F3886CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98350254765ff84c9e24828316eecf039778b72d
+commit: https://git.buildroot.net/buildroot/commit/?id=4bdb24c5d95ad1ec5f656ed135d34eabc9e90199
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Allows scripting of URL checking to be simplier
 
 Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/arp-scan/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/bandwidthd/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/arp-scan/Config.in b/package/arp-scan/Config.in
-index cc47a72b01..ed70b39586 100644
---- a/package/arp-scan/Config.in
-+++ b/package/arp-scan/Config.in
-@@ -7,4 +7,4 @@ config BR2_PACKAGE_ARP_SCAN
- 	  arp-scan is a command-line tool that uses the ARP protocol to
- 	  discover and fingerprint IP hosts on the local network.
+diff --git a/package/bandwidthd/Config.in b/package/bandwidthd/Config.in
+index a503da43ff..8a19733c2c 100644
+--- a/package/bandwidthd/Config.in
++++ b/package/bandwidthd/Config.in
+@@ -25,8 +25,10 @@ config BR2_PACKAGE_BANDWIDTHD
+ 	  available on github that works on making BandwidthD's build
+ 	  process more compatible with buildroot's.
  
--	  http://www.nta-monitor.com/wiki/index.php/Arp-scan_Documentation
-+	  https://github.com/royhills/arp-scan
+-	  Upstream: http://bandwidthd.sourceforge.net/
+-	  Github fork: http://github.com/nroach44/bandwidthd
++	  Upstream:
++	  http://bandwidthd.sourceforge.net/
++	  Github fork:
++	  http://github.com/nroach44/bandwidthd
+ 
+ if BR2_PACKAGE_BANDWIDTHD
+ 
