@@ -1,56 +1,33 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Thu, 20 Sep 2018 19:42:04 +0200
-Subject: [Buildroot] [PATCH v3 1/2] at: change upstream site,
- bump version
-In-Reply-To: <CANQCQpYjOEUxq0YNUNGv0czZVGORL7Em0pnDmyZPm+CVdw1stQ@mail.gmail.com>
-References: <20180918213949.36376-1-giulio.benetti@micronovasrl.com>
- <20180920165913.13488-1-giulio.benetti@micronovasrl.com>
- <20180920165913.13488-2-giulio.benetti@micronovasrl.com>
- <CANQCQpYjOEUxq0YNUNGv0czZVGORL7Em0pnDmyZPm+CVdw1stQ@mail.gmail.com>
-Message-ID: <d2f50d3b-6141-3366-205f-e96b28e60f39@micronovasrl.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 20 Sep 2018 21:01:09 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] brltty: use gcc instead of ld to link shared objects
+In-Reply-To: <20180920172809.19993-1-fontaine.fabrice@gmail.com>
+References: <20180920172809.19993-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180920210109.179978c4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Il 20/09/2018 19:40, Matthew Weber ha scritto:
-> Giulio,
-> 
-> On Thu, Sep 20, 2018 at 11:59 AM Giulio Benetti
-> <giulio.benetti@micronovasrl.com> wrote:
->>
->> At is now available on a git repository at:
->> https://salsa.debian.org/debian/at
->> Main changes 3.1.16 -> 3.1.23:
->> - add support for SELinux, multiple files
->> - improve atd.service, see bug report 892819
->> - fix various bugs and warnings
->> - finalized script to release software
->>
->> So:
->> - change AT_SITE_METHOD to git pointing to release/3.1.23
->> - update tarball sha256 in hash file
->> - improved S99at script:
->>    if /var/spool is linked to /tmp, .SEQ file will be lost and atd won't
->>    work neither for a live session. Create .SEQ file if not found, warning
->>    during start that after reboot atjobs could be lost.
->>
->> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> 
-> Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> 
+Hello,
 
-Thanks!
+On Thu, 20 Sep 2018 19:28:09 +0200, Fabrice Fontaine wrote:
+> Bump to version 5.6 has reintroduced the issue fixed by patch 854093 on
+> version 5.5.
+> 
+> Indeed, third patch was merged upstream but it was then reverted:
+> https://github.com/brltty/brltty/commit/9e7d62c869d3c1cbe12dda8b0291a4692c193416
+> 
+> Moreover, since commit 3a2e3f6fa5ef0a210ffeba5ed05c79965d0cc3c7, MKOBJ
+> was renamed into MKREL. So, instead of patching again brltty, overwrite
+> MKREL to use "gcc -shared -o" instead of "ld -r -o".
 
+Are you really sure gcc -shared -o does the same thing as ld -r -o ?
+
+Thomas
 -- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
