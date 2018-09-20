@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Sep 2018 21:09:11 +0200
-Subject: [Buildroot] [PATCH 1/2] package/strongswan: install dev headers
-In-Reply-To: <1537456588-17627-1-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Thu, 20 Sep 2018 21:10:42 +0200
+Subject: [Buildroot] [PATCH 2/2] package/strongswan: install libcharon
+ vici header
+In-Reply-To: <1537456588-17627-2-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1537456588-17627-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20180920210911.47c51755@windsurf>
+ <1537456588-17627-2-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20180920211042.29234e83@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,28 +14,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 20 Sep 2018 10:16:27 -0500, Matt Weber wrote:
-> Adds '--with-dev-headers' configure option to install
-> development headers into staging.  The package provides
-> these headers to enable linking against pluggins.
+On Thu, 20 Sep 2018 10:16:28 -0500, Matt Weber wrote:
+>  - Adds patch to install 'libvici.h' if
+>    --with-dev-headers is configured.
 > 
-> Signed-off-by: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
->  package/strongswan/strongswan.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> Strongswan  currently installs development headers if
+> '--with-dev-headers' is configured, except 'libvici.h'.
 > 
-> diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-> index 5c597d5..f2e70a3 100644
-> --- a/package/strongswan/strongswan.mk
-> +++ b/package/strongswan/strongswan.mk
-> @@ -10,6 +10,7 @@ STRONGSWAN_SITE = http://download.strongswan.org
->  STRONGSWAN_LICENSE = GPL-2.0+
->  STRONGSWAN_LICENSE_FILES = COPYING LICENSE
->  STRONGSWAN_DEPENDENCIES = host-pkgconf
-> +STRONGSWAN_INSTALL_STAGING=YES
+> Original discussion and commit:
+> https://wiki.strongswan.org/projects/strongswan/repository/revisions/01c2b62362df88a03c53b748bb4e88631410f326
 
-Spaces around the = sign. I've fixed this and applied. Thanks!
+I don't understand: if there is an upstream commit for this that dates
+back from 2 years ago, why do we need to have this patch ?
+
+Also you say "discussion", but I don't see any "discussion" at this URL.
+
+And you resubmitted the same patch at
+https://lists.strongswan.org/pipermail/dev/2018-September/001932.html.
+
+Best regards,
 
 Thomas
 -- 
