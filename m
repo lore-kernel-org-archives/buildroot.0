@@ -1,55 +1,70 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 20 Sep 2018 15:35:14 -0500
-Subject: [Buildroot] [PATCH 02/14] boot/at91bootstrap: URL update
-In-Reply-To: <20180920221259.72b5b016@windsurf>
+Date: Thu, 20 Sep 2018 15:44:54 -0500
+Subject: [Buildroot] [PATCH 13/14] package/alljoyn-base: URL update
+In-Reply-To: <20180920220404.77a13cdd@windsurf>
 References: <1537449899-9576-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1537449899-9576-2-git-send-email-matthew.weber@rockwellcollins.com>
- <20180920221259.72b5b016@windsurf>
-Message-ID: <CANQCQpa_4vmfdei0QacdPOiPXFVouWQcvjJZ1=94Jy3n0_+C4Q@mail.gmail.com>
+ <1537449899-9576-13-git-send-email-matthew.weber@rockwellcollins.com>
+ <20180920220404.77a13cdd@windsurf>
+Message-ID: <CANQCQpZcd3ZXHtTDaDY-OvabUXdM-42szeBA=ynX=hvxyL7ezg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Sep 20, 2018 at 3:13 PM Thomas Petazzoni
+Thomas/Fabrice,
+
+On Thu, Sep 20, 2018 at 3:05 PM Thomas Petazzoni
 <thomas.petazzoni@bootlin.com> wrote:
 >
 > Hello,
 >
-> On Thu, 20 Sep 2018 08:24:47 -0500, Matt Weber wrote:
+> On Thu, 20 Sep 2018 08:24:58 -0500, Matt Weber wrote:
 > > Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 > > ---
-> >  boot/at91bootstrap/Config.in | 2 ++
-> >  1 file changed, 2 insertions(+)
+> >  package/alljoyn-base/Config.in | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
 > >
-> > diff --git a/boot/at91bootstrap/Config.in b/boot/at91bootstrap/Config.in
-> > index 0f6430f..3d649b1 100644
-> > --- a/boot/at91bootstrap/Config.in
-> > +++ b/boot/at91bootstrap/Config.in
-> > @@ -10,6 +10,8 @@ config BR2_TARGET_AT91BOOTSTRAP
-> >         - Physical media algorithm such as DataFlash, NandFlash, NOR
-> >           Flash...
+> > diff --git a/package/alljoyn-base/Config.in b/package/alljoyn-base/Config.in
+> > index 8556d66..c89cb20 100644
+> > --- a/package/alljoyn-base/Config.in
+> > +++ b/package/alljoyn-base/Config.in
+> > @@ -17,7 +17,7 @@ config BR2_PACKAGE_ALLJOYN_BASE
+> >         devices, providing a set of interfaces for different devices
+> >         to interact and interoperate with one another.
 > >
-> > +       https://www.at91.com/linux4sam/bin/view/Linux4SAM/LegacyAT91Bootstrap
+> > -       https://allseenalliance.org
+> > +       https://github.com/alljoyn/alljoyn.github.com/wiki
 >
-> Actually, this one should use:
+> For PATCH 13/14 (this one) and PATCH 14/14, I'd like something a bit
+> better:
 >
->           https://www.at91.com/linux4sam/bin/view/Linux4SAM/LegacyAT91Bootstrap
+>  - The .mk files still use a mirror of allseenalliance at kernel.org,
+>    it should be changed to use the Github location instead.
+
+I don't have a good use case to runtime test making this change.  I
+can make it an verified the build is still good.
+
 >
+>  - You changed alljoyn-base and alljoyn-tcl-base, but not alljoyn-tcl
 
-Ok so this patch is ok then and for the at91dataflashboot I found it
-mentioned on the same legacy page but it definitely is a weak
-reference.
+I'll have to check, my script may have a bug.  My grep is coming back
+showing I missed the plain alljoyn too.
+alljoyn-base        https://github.com/alljoyn/alljoyn.github.com/wiki
+alljoyn                https://allseenalliance.org
+alljoyn-tcl-base    https://github.com/alljoyn/alljoyn.github.com/wiki
+alljoyn-tcl            https://allseenalliance.org
 
-
-> which you have used for at91dataflashboot, but at91dataflashboot is a
-> different thing, which no longer has any upstream location.
 >
-> Perhaps your script should support a way of specifying "yeah, there is
-> no upstream location" in an explicit way.
+>  - The commit title should be "update upstream URL"
 
-Is that maybe a string we put in the end of the help section?   "No
-Upstream URL"
+Noted.
+
+>
+>  - The commit log should contain some details, at least explaining that
+>    allseenalliance.org is dead, and that the project was moved to
+>    Github, etc.
+
+Sure, I'm not to familiar with this one but I can at least state that.
 
 Matt
