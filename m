@@ -1,33 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Sep 2018 22:26:39 +0200
-Subject: [Buildroot] [git commit] boot/xloader: add upstream URL in
- Config.in help
-Message-ID: <20180920202627.76F45886FC@busybox.osuosl.org>
+Date: Thu, 20 Sep 2018 22:28:28 +0200
+Subject: [Buildroot] [PATCH 05/14] boot/xloader: URL update
+In-Reply-To: <1537449899-9576-5-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1537449899-9576-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <1537449899-9576-5-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20180920222828.720c3126@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=78dd830f15b0c175cb8c9d2fef7f0641a8733b29
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- boot/xloader/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+On Thu, 20 Sep 2018 08:24:50 -0500, Matt Weber wrote:
+> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> ---
+>  boot/xloader/Config.in | 2 ++
+>  1 file changed, 2 insertions(+)
 
-diff --git a/boot/xloader/Config.in b/boot/xloader/Config.in
-index c411be478b..f687b897ea 100644
---- a/boot/xloader/Config.in
-+++ b/boot/xloader/Config.in
-@@ -5,6 +5,8 @@ config BR2_TARGET_XLOADER
- 	  The x-loader bootloader. It is mainly used on OMAP-based
- 	  platforms.
+I've fixed the commit title: you're adding an upstream URL, not
+updating it, and I've applied.
+
+However:
  
-+	  http://omappedia.org/wiki/Linux_OMAP_Kernel_Main
-+
- if BR2_TARGET_XLOADER
- config BR2_TARGET_XLOADER_BOARDNAME
- 	string "x-loader board name"
+ - The link isn't really a useful upstream URL. There in fact doesn't
+   seem to be any page that is really relevant for X-Loader.
+
+ - I am not sure having a package for xloader still makes sense. It's
+   completely deprecated now that U-Boot has SPL support for TI
+   platforms. Perhaps we should simply remove it ?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
