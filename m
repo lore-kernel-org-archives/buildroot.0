@@ -1,9 +1,9 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 20 Sep 2018 08:24:49 -0500
-Subject: [Buildroot] [PATCH 04/14] boot/at91dataflashboot: URL update
+Date: Thu, 20 Sep 2018 08:24:58 -0500
+Subject: [Buildroot] [PATCH 13/14] package/alljoyn-base: URL update
 In-Reply-To: <1537449899-9576-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1537449899-9576-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1537449899-9576-4-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1537449899-9576-13-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
- boot/at91dataflashboot/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/alljoyn-base/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/boot/at91dataflashboot/Config.in b/boot/at91dataflashboot/Config.in
-index 4055f96..1a95709 100644
---- a/boot/at91dataflashboot/Config.in
-+++ b/boot/at91dataflashboot/Config.in
-@@ -1,3 +1,5 @@
- config BR2_TARGET_AT91DATAFLASHBOOT
- 	bool "AT91 DataFlashBoot"
- 	depends on BR2_arm926t
-+	help
-+	  https://www.at91.com/linux4sam/bin/view/Linux4SAM/LegacyAT91Bootstrap
+diff --git a/package/alljoyn-base/Config.in b/package/alljoyn-base/Config.in
+index 8556d66..c89cb20 100644
+--- a/package/alljoyn-base/Config.in
++++ b/package/alljoyn-base/Config.in
+@@ -17,7 +17,7 @@ config BR2_PACKAGE_ALLJOYN_BASE
+ 	  devices, providing a set of interfaces for different devices
+ 	  to interact and interoperate with one another.
+ 
+-	  https://allseenalliance.org
++	  https://github.com/alljoyn/alljoyn.github.com/wiki
+ 
+ if BR2_PACKAGE_ALLJOYN_BASE
+ 
 -- 
 1.9.1
