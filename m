@@ -1,34 +1,48 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Thu, 20 Sep 2018 18:59:13 +0200
-Subject: [Buildroot] [PATCH v3 2/2] at: add sha256 for legal-info files
-In-Reply-To: <20180920165913.13488-1-giulio.benetti@micronovasrl.com>
-References: <20180918213949.36376-1-giulio.benetti@micronovasrl.com>
- <20180920165913.13488-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20180920165913.13488-3-giulio.benetti@micronovasrl.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 20 Sep 2018 19:28:09 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] brltty: use gcc instead of ld to link shared objects
+Message-ID: <20180920172809.19993-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Copyright and COPYING file sha256 are missing.
+Bump to version 5.6 has reintroduced the issue fixed by patch 854093 on
+version 5.5.
 
-Add them calculating locally.
+Indeed, third patch was merged upstream but it was then reverted:
+https://github.com/brltty/brltty/commit/9e7d62c869d3c1cbe12dda8b0291a4692c193416
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Moreover, since commit 3a2e3f6fa5ef0a210ffeba5ed05c79965d0cc3c7, MKOBJ
+was renamed into MKREL. So, instead of patching again brltty, overwrite
+MKREL to use "gcc -shared -o" instead of "ld -r -o".
+
+Fixes:
+ - http://autobuild.buildroot.org/results/31f682838b3d3b2c7103b5c51f2aba0b89d4f630
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/at/at.hash | 3 +++
+Changes v1 -> v2:
+ - Fix patch (missing -o)
+
+ package/brltty/brltty.mk | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/package/at/at.hash b/package/at/at.hash
-index e6eb26d818..530b1257c1 100644
---- a/package/at/at.hash
-+++ b/package/at/at.hash
-@@ -1,2 +1,5 @@
- # Locally calculated
- sha256 f5c7c8226fab0bc4e2d16a55e04d4026f3452db51fc5cbcc4bb5a3c79a79f7ef  at-release_3.1.23.tar.gz
+diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
+index 21f6877bb8..615950800d 100644
+--- a/package/brltty/brltty.mk
++++ b/package/brltty/brltty.mk
+@@ -15,6 +15,9 @@ BRLTTY_LICENSE_FILES = LICENSE-LGPL README
+ BRLTTY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-autoconf host-pkgconf \
+ 	$(if $(BR2_PACKAGE_AT_SPI2_CORE),at-spi2-core)
+ 
++BRLTTY_CONF_ENV = \
++	brltty_cv_prog_make_object_relocatable="$(TARGET_CC) -shared -o"
 +
-+sha256 01dccc0975aa9ba1a9f83e7c5e04f16077353d3c72a0a759b8846ee7a5b2b616  Copyright
-+sha256 c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42  COPYING
+ BRLTTY_CONF_OPTS = \
+ 	--disable-java-bindings \
+ 	--disable-lisp-bindings \
 -- 
 2.17.1
