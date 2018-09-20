@@ -1,45 +1,50 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 19 Sep 2018 23:45:15 +0200
-Subject: [Buildroot] [PATCH 1/1] brltty: use gcc instead of ld to link
- shared objects
-Message-ID: <20180919214515.25460-1-fontaine.fabrice@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 20 Sep 2018 07:19:56 +0300
+Subject: [Buildroot] [PATCH] boot/gummiboot: updated url
+In-Reply-To: <1537382487-35071-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1537382487-35071-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20180920041956.rnukojrawrxyxmlr@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump to version 5.6 has reintroduced the issue fixed by patch 854093 on
-version 5.5.
+Hi Matt
 
-Indeed, third patch was merged upstream but it was then reverted:
-https://github.com/brltty/brltty/commit/9e7d62c869d3c1cbe12dda8b0291a4692c193416
+On Wed, Sep 19, 2018 at 01:41:27PM -0500, Matt Weber wrote:
+> From: Matt Weber <matt@thewebers.ws>
+> 
 
-Moreover, since commit 3a2e3f6fa5ef0a210ffeba5ed05c79965d0cc3c7, MKOBJ
-was renamed into MKREL. So, instead of patching again brltty, overwrite
-MKREL to use "gcc -shrared -o" instead of "ld -r -o".
+Missing sign-off.
 
-Fixes:
- - http://autobuild.buildroot.org/results/31f682838b3d3b2c7103b5c51f2aba0b89d4f630
+> ---
+>  boot/gummiboot/Config.in | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/boot/gummiboot/Config.in b/boot/gummiboot/Config.in
+> index 11dbc4f..57d8d59 100644
+> --- a/boot/gummiboot/Config.in
+> +++ b/boot/gummiboot/Config.in
+> @@ -20,4 +20,5 @@ config BR2_TARGET_GUMMIBOOT
+>  	  exactly the same, except that the Gummiboot configuration
+>  	  files will be located in /loader/ inside the EFI partition.
+>  
+> -	  http://freedesktop.org/wiki/Software/gummiboot/
+> +          https://www.freedesktop.org/wiki/Software/systemd/systemd-boot/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/brltty/brltty.mk | 3 +++
- 1 file changed, 3 insertions(+)
+Indentation problem.
 
-diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
-index 21f6877bb8..7b8aff99b4 100644
---- a/package/brltty/brltty.mk
-+++ b/package/brltty/brltty.mk
-@@ -15,6 +15,9 @@ BRLTTY_LICENSE_FILES = LICENSE-LGPL README
- BRLTTY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-autoconf host-pkgconf \
- 	$(if $(BR2_PACKAGE_AT_SPI2_CORE),at-spi2-core)
- 
-+BRLTTY_CONF_ENV = \
-+	brltty_cv_prog_make_object_relocatable="$(TARGET_CC) -shared"
-+
- BRLTTY_CONF_OPTS = \
- 	--disable-java-bindings \
- 	--disable-lisp-bindings \
+There is no mention of Gummiboot in this URL. Maybe change the package name as 
+well?
+
+> +
+
+Redundant newline.
+
+baruch
+
 -- 
-2.17.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
