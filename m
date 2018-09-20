@@ -1,11 +1,13 @@
-From: Czybor Michael <m.czybor@baur.at>
-Date: Thu, 20 Sep 2018 09:33:48 +0000
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 20 Sep 2018 13:11:40 +0200
 Subject: [Buildroot] STM32F767ZI Nucleo
-In-Reply-To: <20180920110846.006e31ac@windsurf>
+In-Reply-To: <a78201d496ec473681000194f412b3da@baur.at>
 References: <f844ef8357b0480a9d8e8cf8e1414c44@baur.at>
- <20180920100328.3d5ff046@windsurf>	<bd252999392341cda6bec222f0e416dc@baur.at>
+ <20180920100328.3d5ff046@windsurf>
+ <bd252999392341cda6bec222f0e416dc@baur.at>
  <20180920110846.006e31ac@windsurf>
-Message-ID: <a78201d496ec473681000194f412b3da@baur.at>
+ <a78201d496ec473681000194f412b3da@baur.at>
+Message-ID: <20180920131140.3cba4968@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,69 +16,42 @@ To: buildroot@busybox.net
 
 Hello,
 
-you wrote: " I have no idea which .bin files you're talking about."
+Please don't top post.
 
-the "binary stuff" could be the bootloader, is this right?
+On Thu, 20 Sep 2018 09:33:48 +0000, Czybor Michael wrote:
 
-I found four versions (not five :-)):
-
-a.) stm32f429i-disco.bin
-b.) stm32f469i-disco.bin
-c.) stm32429i-eval.bin
-d.) stm32746g-eval.bin
-
-But I started the build process only with one configuration?
-
-One more question about the device-tree-file. If I like to use UIO-Devices, than I must edit the device-tree.
-
-1.) Can I use UIO-Device-Drivers?
-
-2.) How do I input a different device tree?
-
-Thank you for your help and I see what my next steps are!
-
-Best Regards,
-Michael
-
------Urspr?ngliche Nachricht-----
-Von: Thomas Petazzoni [mailto:thomas.petazzoni at bootlin.com] 
-Gesendet: Donnerstag, 20. September 2018 11:09
-An: Czybor Michael
-Cc: buildroot at busybox.net
-Betreff: Re: [Buildroot] STM32F767ZI Nucleo
-
-Hello,
-
-On Thu, 20 Sep 2018 09:04:01 +0000, Czybor Michael wrote:
-
-> thank you for your quick reply.
+> you wrote: " I have no idea which .bin files you're talking about."
 > 
-> 1.) What is the minimum RAM-Size to run linux?
-
-It depends on how much tuning you're ready to make. Without doing a lot
-of tuning, I would say 8 MB of RAM is really the minimum. And indeed
-the STM32F4/STM32F7 platforms that can run Linux have 8 or 16 MB of
-external RAM: https://elinux.org/STM32#STM32F4_based.
-
-> 2.) Output files:
+> the "binary stuff" could be the bootloader, is this right?
 > 
-> I read that document, before I wrote my question. I found a rootfs.cpio folder and I gues it is the rootfs.
+> I found four versions (not five :-)):
 > 
-> But what is a *.bin file?
+> a.) stm32f429i-disco.bin
+> b.) stm32f469i-disco.bin
+> c.) stm32429i-eval.bin
+> d.) stm32746g-eval.bin
 
-A file containing some binary stuff.
+These are built by the afboot-stm32 package, which indeed is the
+bootloader for STM32 platforms. See
+https://github.com/mcoquelin-stm32/afboot-stm32.
 
-> Why I have five *.bin file versions?
+> But I started the build process only with one configuration?
 
-I have no idea which .bin files you're talking about.
+afboot-stm32 builds a bootloader for all boards it supports, and we
+install all of them.
 
-> And what is a xipImage-file?
+> One more question about the device-tree-file. If I like to use UIO-Devices, than I must edit the device-tree.
+> 
+> 1.) Can I use UIO-Device-Drivers?
 
-A Linux kernel image.
+Yes, why wouldn't you be able to use them ?
 
-> Finally, what is a *.dtb file?
+> 2.) How do I input a different device tree?
 
-A Device Tree file.
+Either you patch the Device Tree in your kernel tree, or add a new one
+in your kernel tree. Or you can use the option
+BR2_LINUX_KERNEL_CUSTOM_DTS_PATH to point to an arbitrary Device Tree
+file.
 
 Best regards,
 
