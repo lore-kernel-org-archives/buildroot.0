@@ -1,60 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Sep 2018 23:31:46 +0200
-Subject: [Buildroot] [git commit] cppcms: bump to version 1.2.1
-Message-ID: <20180920213821.A1A778880A@busybox.osuosl.org>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 20 Sep 2018 16:38:32 -0500
+Subject: [Buildroot] [PATCH 11/14] package/tidsp-binaries: URL update
+In-Reply-To: <20180920213922.6f5fbfa7@windsurf>
+References: <1537449899-9576-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <1537449899-9576-11-git-send-email-matthew.weber@rockwellcollins.com>
+ <20180920213922.6f5fbfa7@windsurf>
+Message-ID: <CANQCQpYi0prZ1UUGBoqGXwTO11qXdL5Br1CGbBhQyACrMT4HAg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=697701d887f567631ed9c223ed8e94211ef0bed9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas,
 
-cppcms is now licensed under MIT so update license and add hash for
-MIT.TXT
+On Thu, Sep 20, 2018 at 2:39 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Thu, 20 Sep 2018 08:24:56 -0500, Matt Weber wrote:
+> > Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> > ---
+> >  package/tidsp-binaries/Config.in | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/package/tidsp-binaries/Config.in b/package/tidsp-binaries/Config.in
+> > index 48f85a5..24b2891 100644
+> > --- a/package/tidsp-binaries/Config.in
+> > +++ b/package/tidsp-binaries/Config.in
+> > @@ -4,4 +4,4 @@ config BR2_PACKAGE_TIDSP_BINARIES
+> >       help
+> >         TI OMAP3 DSP algorithms.
+> >
+> > -       https://gforge.ti.com/gf/project/openmax/
+> > +       http://omappedia.org/wiki/OpenMAX_Project
+>
+> Is that really the right URL ? It points to gforge.ti.com, which indeed
+> seems to be down. Should we simply drop this package perhaps ? The
+> upstream site is not available, I doubt anybody is using it: it was
+> introduced in 2011 and never touched again in any useful/meaningful way.
+>
+> So I would propose to drop this package.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/cppcms/cppcms.hash | 13 +++++++------
- package/cppcms/cppcms.mk   |  6 +++---
- 2 files changed, 10 insertions(+), 9 deletions(-)
+This package is used by dsp-tools and gstreamer/gst-dsp so I'd assume
+those should also be removed.
 
-diff --git a/package/cppcms/cppcms.hash b/package/cppcms/cppcms.hash
-index 6bfc680ac0..86f86d94af 100644
---- a/package/cppcms/cppcms.hash
-+++ b/package/cppcms/cppcms.hash
-@@ -1,7 +1,8 @@
--# From http://sourceforge.net/projects/cppcms/files/cppcms/1.0.5/
--sha1	15f21897c14acfd4b0c74622e49d95857f2fe939	cppcms-1.0.5.tar.bz2
--md5	d668c201dd31fff8090380ebdc0bcc2b	cppcms-1.0.5.tar.bz2
-+# From http://sourceforge.net/projects/cppcms/files/cppcms/1.2.1/
-+sha1	9cb25cc5d507d2f4235326ba3815eba252b4ac77	cppcms-1.2.1.tar.bz2
-+md5	2bb259fefb86532e404207c71c094a0c	cppcms-1.2.1.tar.bz2
- # Locally computed:
--sha256	84b685977bca97c3e997497f227bd5906adb80555066d811a7046b01c2f51865	cppcms-1.0.5.tar.bz2
--sha256	2ff22bab712c46dbadf9bae0f759bbc95d5d87614cacb7ebc3d5a50910603d6a	COPYING.TXT
--sha256	70fbf0194bee0f444c57ecd47e7d976a3e5a890e4421a21aab49f2d214267e69	THIRD_PARTY_SOFTWARE.TXT
-+sha256  10fec7710409c949a229b9019ea065e25ff5687103037551b6f05716bf6cac52	cppcms-1.2.1.tar.bz2
-+sha256  fb7c15ddf590037d4cd18ebd61148a2304b9243369d238a64f599182377e32db	COPYING.TXT
-+sha256	3e4012cc5950e05bedfdd2f00ceffe1ef71c46ac8c79f07e237ecb23c773f65f	MIT.TXT
-+sha256	d6ce062e5cf4f7e3c536d7d2fee84c882c45245f1848ed3162401f2b29fa2b4b	THIRD_PARTY_SOFTWARE.TXT
-diff --git a/package/cppcms/cppcms.mk b/package/cppcms/cppcms.mk
-index 5fb6375d80..b289617bbc 100644
---- a/package/cppcms/cppcms.mk
-+++ b/package/cppcms/cppcms.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--CPPCMS_VERSION = 1.0.5
-+CPPCMS_VERSION = 1.2.1
- CPPCMS_SOURCE = cppcms-$(CPPCMS_VERSION).tar.bz2
--CPPCMS_LICENSE = LGPL-3.0, BSL-1.0 (boost), MIT (base64.cpp), Public Domain (json2.js), Zlib (md5)
--CPPCMS_LICENSE_FILES = COPYING.TXT THIRD_PARTY_SOFTWARE.TXT
-+CPPCMS_LICENSE = MIT, BSL-1.0 (boost), Public Domain (json2.js), Zlib (md5)
-+CPPCMS_LICENSE_FILES = COPYING.TXT MIT.TXT THIRD_PARTY_SOFTWARE.TXT
- CPPCMS_SITE = http://downloads.sourceforge.net/project/cppcms/cppcms/$(CPPCMS_VERSION)
- CPPCMS_INSTALL_STAGING = YES
- CPPCMS_CXXFLAGS = $(TARGET_CXXFLAGS)
+This capability feels feature complete when looking at the Gstreamer
+stuff....  I guess we'll see if anyone notices the removal.  Should I
+have 3 seperate patches for the individual packages?
+
+Matt
