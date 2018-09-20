@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Sep 2018 23:38:52 +0200
-Subject: [Buildroot] [PATCH 1/2] cppcms: fix license
-In-Reply-To: <20180918213404.27239-1-fontaine.fabrice@gmail.com>
+Date: Thu, 20 Sep 2018 23:39:16 +0200
+Subject: [Buildroot] [PATCH 2/2] cppcms: bump to version 1.2.1
+In-Reply-To: <20180918213404.27239-2-fontaine.fabrice@gmail.com>
 References: <20180918213404.27239-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180920233852.561b5004@windsurf>
+ <20180918213404.27239-2-fontaine.fabrice@gmail.com>
+Message-ID: <20180920233916.753e4f83@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +13,40 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 18 Sep 2018 23:34:03 +0200, Fabrice Fontaine wrote:
-> cppcms contains embedded third party software so add
-> THIRD_PARTY_SOFTWARE.TXT to CPPCMS_LICENSE_FILES as well as the
-> additional licenses to CPPCMS_LICENSE.
-> Also add hash for COPYING.TXT and THIRD_PARTY_SOFTWARE.TXT
+On Tue, 18 Sep 2018 23:34:04 +0200, Fabrice Fontaine wrote:
+> cppcms is now licensed under MIT so update license and add hash for
+> MIT.TXT
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/cppcms/cppcms.hash | 2 ++
->  package/cppcms/cppcms.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 2 deletions(-)
+>  package/cppcms/cppcms.hash | 13 +++++++------
+>  package/cppcms/cppcms.mk   |  6 +++---
+>  2 files changed, 10 insertions(+), 9 deletions(-)
+> 
+> diff --git a/package/cppcms/cppcms.hash b/package/cppcms/cppcms.hash
+> index 6bfc680ac0..1d3c9179e7 100644
+> --- a/package/cppcms/cppcms.hash
+> +++ b/package/cppcms/cppcms.hash
+> @@ -1,7 +1,8 @@
+> -# From http://sourceforge.net/projects/cppcms/files/cppcms/1.0.5/
+> -sha1	15f21897c14acfd4b0c74622e49d95857f2fe939	cppcms-1.0.5.tar.bz2
+> -md5	d668c201dd31fff8090380ebdc0bcc2b	cppcms-1.0.5.tar.bz2
+> +# From http://sourceforge.net/projects/cppcms/files/cppcms/1.2.1/
+> +sha1	9cb25cc5d507d2f4235326ba3815eba252b4ac77	cppcms-1.2.1.tar.bz2
+> +md5	2bb259fefb86532e404207c71c094a0c	cppcms-1.2.1.tar.bz2
+>  # Locally computed:
+> -sha256	84b685977bca97c3e997497f227bd5906adb80555066d811a7046b01c2f51865	cppcms-1.0.5.tar.bz2
+> -sha256	2ff22bab712c46dbadf9bae0f759bbc95d5d87614cacb7ebc3d5a50910603d6a	COPYING.TXT
+> -sha256	70fbf0194bee0f444c57ecd47e7d976a3e5a890e4421a21aab49f2d214267e69	THIRD_PARTY_SOFTWARE.TXT
+> +sha256  10fec7710409c949a229b9019ea065e25ff5687103037551b6f05716bf6cac52        cppcms-1.2.1.tar.bz2
+> +sha256  fb7c15ddf590037d4cd18ebd61148a2304b9243369d238a64f599182377e32db        COPYING.TXT
+> +sha256	3e4012cc5950e05bedfdd2f00ceffe1ef71c46ac8c79f07e237ecb23c773f65f	MIT.TXT
+> +sha256	d6ce062e5cf4f7e3c536d7d2fee84c882c45245f1848ed3162401f2b29fa2b4b	THIRD_PARTY_SOFTWARE.TXT
 
-Applied to master, thanks.
+There was a mixup of tabs and spaces here, so I fixed that up and
+applied to master. Thanks!
+
+Best regards,
 
 Thomas
 -- 
