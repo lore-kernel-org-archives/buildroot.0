@@ -1,34 +1,32 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 20 Sep 2018 07:43:37 -0500
-Subject: [Buildroot] [PATCH v2 1/2] at: change upstream site,
- bump version
-In-Reply-To: <20180918213949.36376-2-giulio.benetti@micronovasrl.com>
-References: <20180918095726.50623f29@windsurf>
- <20180918213949.36376-1-giulio.benetti@micronovasrl.com>
- <20180918213949.36376-2-giulio.benetti@micronovasrl.com>
-Message-ID: <CANQCQpa8CyJcUobU20r7jrptqr=mZEXAA6U=ud3VAJYV_ni5yA@mail.gmail.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 20 Sep 2018 08:24:51 -0500
+Subject: [Buildroot] [PATCH 06/14] package/android-tools: URL update
+In-Reply-To: <1537449899-9576-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1537449899-9576-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1537449899-9576-6-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Giulio,
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+---
+ package/android-tools/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-
-On Tue, Sep 18, 2018 at 4:40 PM Giulio Benetti
-<giulio.benetti@micronovasrl.com> wrote:
->
-> At is now available on a git repository at:
-> https://salsa.debian.org/debian/at
-> Main changes 3.1.16 -> 3.1.23:
-> - add support for SELinux, multiple files
-> - improve atd.service, see bug report 892819
-> - fix various bugs and warnings
-> - finalized script to release software
-
-Please update the Config.in to list a valid url for this package.
-
-Maybe https://salsa.debian.org/debian/at  or https://tracker.debian.org/pkg/at ?
-
-Matt
+diff --git a/package/android-tools/Config.in b/package/android-tools/Config.in
+index 96e36e6..478f139 100644
+--- a/package/android-tools/Config.in
++++ b/package/android-tools/Config.in
+@@ -15,6 +15,8 @@ config BR2_PACKAGE_ANDROID_TOOLS
+ 	  can be used to interact with target devices using of these
+ 	  protocols.
+ 
++	  https://wiki.debian.org/AndroidTools#Original_android-tools_package
++
+ if BR2_PACKAGE_ANDROID_TOOLS
+ 
+ # We need kernel headers that support the __SANE_USERSPACE_TYPES__
+-- 
+1.9.1
