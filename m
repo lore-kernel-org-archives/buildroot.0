@@ -1,42 +1,48 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 20 Sep 2018 16:40:23 -0500
-Subject: [Buildroot] [PATCH] boot/xloader: remove package
-In-Reply-To: <20180920231318.7e30e40c@windsurf>
-References: <1537477502-30073-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20180920231318.7e30e40c@windsurf>
-Message-ID: <CANQCQpaYtHfOG5nKZq6o+u2vcCp_1k8vKe+sY8zVWzEYYG9Fxw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 20 Sep 2018 23:46:26 +0200
+Subject: [Buildroot] [PATCH 1/1] linuxptp: needs NPTL
+In-Reply-To: <20180916153942.56d7c7d1@windsurf> (Thomas Petazzoni's message of
+ "Sun, 16 Sep 2018 15:39:42 +0200")
+References: <20180915192005.29373-1-fontaine.fabrice@gmail.com>
+ <20180916050522.bldd73xzol5nryte@sapphire.tkos.co.il>
+ <20180916153942.56d7c7d1@windsurf>
+Message-ID: <877ejfq1u5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-On Thu, Sep 20, 2018 at 4:13 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Thu, 20 Sep 2018 16:05:02 -0500, Matt Weber wrote:
-> > U-boot has provided SPL support as a viable replacement for the
-> > 2nd stage bootloader on TI platforms.  The X-loader project
-> > hasn't had a commit in the log since 12-05-2011.
-> > (https://gitorious.org/x-loader/x-loader)
-> >
-> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> > ---
-> >  boot/Config.in          |  1 -
-> >  boot/xloader/Config.in  | 15 ---------------
-> >  boot/xloader/xloader.mk | 32 --------------------------------
-> >  3 files changed, 48 deletions(-)
-> >  delete mode 100644 boot/xloader/Config.in
-> >  delete mode 100644 boot/xloader/xloader.mk
->
-> This lacks Config.in.legacy handling.
->
+ > Hello,
+ > On Sun, 16 Sep 2018 08:05:22 +0300, Baruch Siach wrote:
 
-Sorry I took the new depreciating as not having an entry in legacy.
-I'll update.
+ >> On Sat, Sep 15, 2018 at 09:20:05PM +0200, Fabrice Fontaine wrote:
+ >> > /home/buildroot/autobuild/run/instance-1/output/host/bin/or1k-linux-gcc
+ >> > phc_ctl.o phc.o sk.o util.o clockadj.o sysoff.o print.o version.o
+ >> > -lm -lrt -o phc_ctl
+ >> > phc2sys.o: In function `do_loop':
+ >> > phc2sys.c:(.text+0x18bc): undefined reference to `clock_nanosleep'
+ >> > 
+ >> > Fixes:
+ >> >  - http://autobuild.buildroot.org/results/a31e0a5ae15e1164115e4e5981ef5fb3c3284bcc  
+ >> 
+ >> This should only affect 2018.02.x. The latest uClibc-ng version provides 
+ >> clock_nanosleep() even for non NPTL configurations.
 
-Matt
+ > Indeed. Due to this, perhaps there's a bunch of NPTL dependencies we
+ > could remove:
+
+ > package/blktrace/Config.in:     depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # clock_nanosleep()
+ > package/can-utils/Config.in:    depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # clock_nanosleep()
+ > package/dvblast/Config.in:      depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # clock_nanosleep()
+ > package/nilfs-utils/Config.in:  depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # clock_nanosleep()
+
+ > Anyway, for this linuxptp change, I have marked the patch as "Delegated
+ > to Peter" on patchwork, so that Peter takes care of it.
+
+Committed to 2018.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
