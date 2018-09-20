@@ -1,40 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Sep 2018 22:28:28 +0200
-Subject: [Buildroot] [PATCH 05/14] boot/xloader: URL update
-In-Reply-To: <1537449899-9576-5-git-send-email-matthew.weber@rockwellcollins.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 20 Sep 2018 15:31:14 -0500
+Subject: [Buildroot] [PATCH 10/14] package/glibc: URL update
+In-Reply-To: <20180920221704.3dabb7c3@windsurf>
 References: <1537449899-9576-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1537449899-9576-5-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20180920222828.720c3126@windsurf>
+ <1537449899-9576-10-git-send-email-matthew.weber@rockwellcollins.com>
+ <20180920213028.3f4efbfe@windsurf>
+ <CANQCQpY0V7XxgUWH-PKPzsGUMN3DG1GOAEbvQYUJq+LHH17qNQ@mail.gmail.com>
+ <20180920221704.3dabb7c3@windsurf>
+Message-ID: <CANQCQpbGm1TXXdGuPRv5c-4xgX7KRKJr2xK13Rfz0kvTb+S7fQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas,
 
-On Thu, 20 Sep 2018 08:24:50 -0500, Matt Weber wrote:
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> ---
->  boot/xloader/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
+On Thu, Sep 20, 2018 at 3:17 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Thu, 20 Sep 2018 15:05:46 -0500, Matthew Weber wrote:
+>
+> > > This option is a blind option, so having a help text is not very
+> > > useful...
+> >
+> > I had been looking at verifying and updating all packages which could
+> > end-up with content on target to have a valid URL.  This allows
+> > auto-generation of CPE XML update requests which need product site
+> > urls.
+>
+> Then perhaps this should be explained in the commit log, specifically
+> for glibc.
+>
+Yes, agree.
 
-I've fixed the commit title: you're adding an upstream URL, not
-updating it, and I've applied.
+> But are you sure your approach is the right one ? Today only target
+> packages have a Config.in file. What are you going to do for host
+> packages ?
+Currently the xml generation was a best effort and the cpe reporting
+was only done against target CPE so far.....  Glad to discuss
+suggestions for a better way vs hand updating the xml with this URL
+info.
 
-However:
- 
- - The link isn't really a useful upstream URL. There in fact doesn't
-   seem to be any page that is really relevant for X-Loader.
+> You don't care because they are host packages and supposedly
+> not relevant for security issues on the target ?
 
- - I am not sure having a package for xloader still makes sense. It's
-   completely deprecated now that U-Boot has SPL support for TI
-   platforms. Perhaps we should simply remove it ?
+I know better then to say that host packages don't matter :-)  We took
+the most accessible path first and that was to get good coverage on
+target packages.
 
-Best regards,
+Maybe a good topic for next month?  I should have an updated CPE
+patchset out in the next week.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Matt
