@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Sep 2018 22:21:52 +0200
-Subject: [Buildroot] [PATCH 07/14] package/arp-scan: URL update
-In-Reply-To: <1537449899-9576-7-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Thu, 20 Sep 2018 22:21:55 +0200
+Subject: [Buildroot] [PATCH 08/14] package/bandwidthd: URL move to
+ newline
+In-Reply-To: <1537449899-9576-8-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1537449899-9576-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1537449899-9576-7-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20180920222152.00afe76f@windsurf>
+ <1537449899-9576-8-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20180920222155.36822f8e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,11 +14,13 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 20 Sep 2018 08:24:52 -0500, Matt Weber wrote:
+On Thu, 20 Sep 2018 08:24:53 -0500, Matt Weber wrote:
+> Allows scripting of URL checking to be simplier
+> 
 > Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 > ---
->  package/arp-scan/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/bandwidthd/Config.in | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
