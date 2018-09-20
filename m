@@ -1,35 +1,32 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 20 Sep 2018 08:24:54 -0500
-Subject: [Buildroot] [PATCH 09/14] package/connman: URL move to newline
+Date: Thu, 20 Sep 2018 08:24:47 -0500
+Subject: [Buildroot] [PATCH 02/14] boot/at91bootstrap: URL update
 In-Reply-To: <1537449899-9576-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1537449899-9576-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1537449899-9576-9-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1537449899-9576-2-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Allows scripting of URL checking to be simplier
-
 Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
- package/connman/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ boot/at91bootstrap/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/connman/Config.in b/package/connman/Config.in
-index 253c604..0f93fee 100644
---- a/package/connman/Config.in
-+++ b/package/connman/Config.in
-@@ -14,7 +14,8 @@ config BR2_PACKAGE_CONNMAN
- 	  for managing internet connections within embedded devices
- 	  running the Linux operating system.
+diff --git a/boot/at91bootstrap/Config.in b/boot/at91bootstrap/Config.in
+index 0f6430f..3d649b1 100644
+--- a/boot/at91bootstrap/Config.in
++++ b/boot/at91bootstrap/Config.in
+@@ -10,6 +10,8 @@ config BR2_TARGET_AT91BOOTSTRAP
+ 	  - Physical media algorithm such as DataFlash, NandFlash, NOR
+ 	    Flash...
  
--	  For more information, see https://01.org/connman
-+	  For more information, see
-+	  https://01.org/connman
++	  https://www.at91.com/linux4sam/bin/view/Linux4SAM/LegacyAT91Bootstrap
++
+ if	BR2_TARGET_AT91BOOTSTRAP
  
- if BR2_PACKAGE_CONNMAN
- 
+ config BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR
 -- 
 1.9.1
