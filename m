@@ -1,9 +1,9 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 20 Sep 2018 08:24:48 -0500
-Subject: [Buildroot] [PATCH 03/14] boot/at91bootstrap3: URL update
+Date: Thu, 20 Sep 2018 08:24:59 -0500
+Subject: [Buildroot] [PATCH 14/14] package/alljoyn-tcl-base: URL update
 In-Reply-To: <1537449899-9576-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1537449899-9576-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1537449899-9576-3-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1537449899-9576-14-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,22 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
- boot/at91bootstrap3/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+ package/alljoyn-tcl-base/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
-index 614363c..4534b4e 100644
---- a/boot/at91bootstrap3/Config.in
-+++ b/boot/at91bootstrap3/Config.in
-@@ -10,6 +10,9 @@ config BR2_TARGET_AT91BOOTSTRAP3
- 	  - Physical media algorithm such as DataFlash, NandFlash, NOR
- 	    Flash...
+diff --git a/package/alljoyn-tcl-base/Config.in b/package/alljoyn-tcl-base/Config.in
+index ebc3370..404957a 100644
+--- a/package/alljoyn-tcl-base/Config.in
++++ b/package/alljoyn-tcl-base/Config.in
+@@ -12,7 +12,7 @@ config BR2_PACKAGE_ALLJOYN_TCL_BASE
+ 	  AllJoyn distributed programming environment to embedded
+ 	  systems.
  
-+
-+	  https://www.at91.com/linux4sam/bin/view/Linux4SAM/AT91Bootstrap
-+
- if BR2_TARGET_AT91BOOTSTRAP3
+-	  https://allseenalliance.org
++	  https://github.com/alljoyn/alljoyn.github.com/wiki
  
- choice
+ comment "alljoyn-tcl-base needs a toolchain w/ threads and dynamic library"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
 -- 
 1.9.1
