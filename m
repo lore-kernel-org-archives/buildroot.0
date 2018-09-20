@@ -1,109 +1,73 @@
-From: =?UTF-8?q?Gr=C3=A9goire=20Delattre?= <greg@quimbo.fr>
-Date: Thu, 20 Sep 2018 16:33:19 +0200
-Subject: [Buildroot] [PATCH 1/1] board/pc: improve image generation
-Message-ID: <20180920143318.21284-1-greg@quimbo.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 20 Sep 2018 16:56:38 +0200
+Subject: [Buildroot] [PATCH 1/1] ipsec-tools: needs host-bison
+In-Reply-To: <20180920084522.1dea57e8@windsurf>
+References: <20180915095906.11558-1-fontaine.fabrice@gmail.com>
+ <87o9ctp5if.fsf@dell.be.48ers.dk>
+ <20180920084522.1dea57e8@windsurf>
+Message-ID: <20180920145638.GA11717@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gr?goire Delattre <gregoire.delattre@gmail.com>
+Thomas, Peter, All,
 
-Copy the grub configuration files before creating the filesystem
-image.
+On 2018-09-20 08:45 +0200, Thomas Petazzoni spake thusly:
+> On Wed, 19 Sep 2018 23:00:08 +0200, Peter Korsgaard wrote:
+> 
+> >  > diff --git a/package/ipsec-tools/ipsec-tools.mk b/package/ipsec-tools/ipsec-tools.mk
+> >  > index ddae9a75f3..8672272538 100644
+> >  > --- a/package/ipsec-tools/ipsec-tools.mk
+> >  > +++ b/package/ipsec-tools/ipsec-tools.mk
+> >  > @@ -9,7 +9,7 @@ IPSEC_TOOLS_SOURCE = ipsec-tools-$(IPSEC_TOOLS_VERSION).tar.bz2
+> >  >  IPSEC_TOOLS_SITE = http://sourceforge.net/projects/ipsec-tools/files/ipsec-tools/$(IPSEC_TOOLS_VERSION)
+> >  >  IPSEC_TOOLS_INSTALL_STAGING = YES
+> >  >  IPSEC_TOOLS_MAKE = $(MAKE1)
+> >  > -IPSEC_TOOLS_DEPENDENCIES = openssl flex host-flex
+> >  > +IPSEC_TOOLS_DEPENDENCIES = openssl flex host-flex host-bison  
+> > 
+> > Hmm, shouldn't this use BR2_BISON_HOST_DEPENDENCY /
+> > BR2_FLEX_HOST_DEPENDENCY instead?
+> 
+> No, that's not what we have agreed so far. Our idea was that
+> BR2_BISON_HOST_DEPENDENCY and BR2_FLEX_HOST_DEPENDENCY would be used
+> only for the kconfig stuff in the kernel/u-boot and al, but that we
+> would keep using our own host-flex/host-bison for the rest, and
+> especially for target packages.
 
-Signed-off-by: Gr?goire Delattre <gregoire.delattre@gmail.com>
----
- board/pc/post-build.sh           | 12 ++++++++++++
- board/pc/post-image.sh           | 14 --------------
- board/pc/pre-genimage.sh         |  8 ++++++++
- configs/pc_x86_64_bios_defconfig |  3 ++-
- configs/pc_x86_64_efi_defconfig  |  3 ++-
- 5 files changed, 24 insertions(+), 16 deletions(-)
- create mode 100755 board/pc/post-build.sh
- delete mode 100755 board/pc/post-image.sh
- create mode 100755 board/pc/pre-genimage.sh
+Exactly, yes.
 
-diff --git a/board/pc/post-build.sh b/board/pc/post-build.sh
-new file mode 100755
-index 0000000000..55f4cf1a96
---- /dev/null
-+++ b/board/pc/post-build.sh
-@@ -0,0 +1,12 @@
-+#!/bin/sh
-+
-+set -e
-+
-+BOARD_DIR=$(dirname "$0")
-+
-+# Detect boot strategy, EFI or BIOS
-+if [ -f "$BINARIES_DIR/efi-part/startup.nsh" ]; then
-+  cp -f "$BOARD_DIR/grub-efi.cfg" "$BINARIES_DIR/efi-part/EFI/BOOT/grub.cfg"
-+else
-+  cp -f "$BOARD_DIR/grub-bios.cfg" "$TARGET_DIR/boot/grub/grub.cfg"
-+fi
-diff --git a/board/pc/post-image.sh b/board/pc/post-image.sh
-deleted file mode 100755
-index bdd0847ec5..0000000000
---- a/board/pc/post-image.sh
-+++ /dev/null
-@@ -1,14 +0,0 @@
--#!/bin/sh
--
--BOARD_DIR="$(dirname $0)"
--
--# Detect boot strategy, EFI or BIOS
--if [ -f ${BINARIES_DIR}/efi-part/startup.nsh ]; then
--  cp -f ${BOARD_DIR}/grub-efi.cfg ${BINARIES_DIR}/efi-part/EFI/BOOT/grub.cfg
--else
--  cp -f ${BOARD_DIR}/grub-bios.cfg ${TARGET_DIR}/boot/grub/grub.cfg
--  # Copy grub 1st stage to binaries, required for genimage
--  cp -f ${HOST_DIR}/lib/grub/i386-pc/boot.img ${BINARIES_DIR}
--fi
--
--exit $?
-diff --git a/board/pc/pre-genimage.sh b/board/pc/pre-genimage.sh
-new file mode 100755
-index 0000000000..21066c0296
---- /dev/null
-+++ b/board/pc/pre-genimage.sh
-@@ -0,0 +1,8 @@
-+#!/bin/sh
-+
-+set -e
-+
-+[ -f "$TARGET_DIR/boot/grub/grub.cfg" ] || exit 0
-+
-+# Copy grub 1st stage to binaries, required for genimage
-+cp -f "$HOST_DIR/lib/grub/i386-pc/boot.img" "$BINARIES_DIR"
-diff --git a/configs/pc_x86_64_bios_defconfig b/configs/pc_x86_64_bios_defconfig
-index 47787bc118..8c3e8994d9 100644
---- a/configs/pc_x86_64_bios_defconfig
-+++ b/configs/pc_x86_64_bios_defconfig
-@@ -19,7 +19,8 @@ BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # BR2_TARGET_ROOTFS_TAR is not set
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image.sh support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/pc/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/pre-genimage.sh support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pc/genimage-bios.cfg"
- 
- # Linux headers same as kernel, a 4.13 series
-diff --git a/configs/pc_x86_64_efi_defconfig b/configs/pc_x86_64_efi_defconfig
-index 67ba5bcf5b..6a93eacfa3 100644
---- a/configs/pc_x86_64_efi_defconfig
-+++ b/configs/pc_x86_64_efi_defconfig
-@@ -22,7 +22,8 @@ BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # BR2_TARGET_ROOTFS_TAR is not set
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image.sh support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/pc/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pc/genimage-efi.cfg"
- 
- # Linux headers same as kernel, a 4.13 series
+> There are two reasons to that:
+> 
+>  (1) We can be pretty confident that the flex/bison stuff in kconfig
+>      will have been tested/exercised against a wide variety of
+>      flex/bison versions, so using whatever flex/bison version
+>      available on the host system is good enough. However, for the rest
+>      of the packages that use flex/bison, we can't be so sure, so
+>      having our own flex/bison version allows us to be sure that things
+>      "will work".
+> 
+>  (2) For target packages, using the system-provided flex/bison version
+>      means that the generated code can be subtly different between
+>      flex/bison versions, which makes the build non-reproducible. Hence,
+>      it is important to have our own fixed version of flex/bison. For
+>      host packages, that is probably less of a concern, but point (1)
+>      remains valid.
+> 
+> Do we still agree on this position, or do you have
+> counter-arguments ? :-)
+
+That position is still mine, yes. :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.19.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
