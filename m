@@ -1,89 +1,39 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 20 Sep 2018 19:34:19 +0200
-Subject: [Buildroot] [PATCH 1/1] tinycbor: fix undefined encode_half in
- json2cbor
-Message-ID: <20180920173419.23691-1-fontaine.fabrice@gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 20 Sep 2018 12:40:05 -0500
+Subject: [Buildroot] [PATCH v3 1/2] at: change upstream site,
+ bump version
+In-Reply-To: <20180920165913.13488-2-giulio.benetti@micronovasrl.com>
+References: <20180918213949.36376-1-giulio.benetti@micronovasrl.com>
+ <20180920165913.13488-1-giulio.benetti@micronovasrl.com>
+ <20180920165913.13488-2-giulio.benetti@micronovasrl.com>
+Message-ID: <CANQCQpYjOEUxq0YNUNGv0czZVGORL7Em0pnDmyZPm+CVdw1stQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-encode_half has been moved from compilersupport_p.h to cborinternal_p.h
-in commit
-https://github.com/intel/tinycbor/commit/bfc40dcf909f1998d7760c2bc0e1409979d3c8cb
-so include this file in json2cbor to avoid the following build failure
-on tinycbor 0.5.2:
+Giulio,
 
-/home/buildroot/autobuild/run/instance-0/output/host/bin/microblazeel-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I./src -std=gnu99 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os    -c -o tools/json2cbor/json2cbor.o tools/json2cbor/json2cbor.c
-tools/json2cbor/json2cbor.c: In function 'decode_json_with_metadata':
-tools/json2cbor/json2cbor.c:295:50: warning: implicit declaration of function 'encode_half' [-Wimplicit-function-declaration]
-                                          (half = encode_half(v), cbor_encode_half_float(encoder, &half));
-                                                  ^~~~~~~~~~~
-/home/buildroot/autobuild/run/instance-0/output/host/bin/microblazeel-linux-gcc -o bin/json2cbor  tools/json2cbor/json2cbor.o lib/libtinycbor.so -lcjson -lm
-tools/json2cbor/json2cbor.o: In function `decode_json_with_metadata':
-(.text+0xe54): undefined reference to `encode_half'
-collect2: error: ld returned 1 exit status
-Makefile:151: recipe for target 'bin/json2cbor' failed
+On Thu, Sep 20, 2018 at 11:59 AM Giulio Benetti
+<giulio.benetti@micronovasrl.com> wrote:
+>
+> At is now available on a git repository at:
+> https://salsa.debian.org/debian/at
+> Main changes 3.1.16 -> 3.1.23:
+> - add support for SELinux, multiple files
+> - improve atd.service, see bug report 892819
+> - fix various bugs and warnings
+> - finalized script to release software
+>
+> So:
+> - change AT_SITE_METHOD to git pointing to release/3.1.23
+> - update tarball sha256 in hash file
+> - improved S99at script:
+>   if /var/spool is linked to /tmp, .SEQ file will be lost and atd won't
+>   work neither for a live session. Create .SEQ file if not found, warning
+>   during start that after reboot atjobs could be lost.
+>
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 
-Fixes:
- - http://autobuild.buildroot.net/results/afd8d24f2a4e501264abff618cf421d4bd088ebf
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...x-undefined-encode_half-in-json2cbor.patch | 44 +++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 package/tinycbor/0001-fix-undefined-encode_half-in-json2cbor.patch
-
-diff --git a/package/tinycbor/0001-fix-undefined-encode_half-in-json2cbor.patch b/package/tinycbor/0001-fix-undefined-encode_half-in-json2cbor.patch
-new file mode 100644
-index 0000000000..0547758bd5
---- /dev/null
-+++ b/package/tinycbor/0001-fix-undefined-encode_half-in-json2cbor.patch
-@@ -0,0 +1,44 @@
-+From 77325101e41c149507c071c64a8dc9a21bf469d6 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 20 Sep 2018 19:23:54 +0200
-+Subject: [PATCH] fix undefined encode_half in json2cbor
-+
-+encode_half has been moved from compilersupport_p.h to cborinternal_p.h
-+in commit bfc40dcf909f1998d7760c2bc0e1409979d3c8cb so include this file
-+in json2cbor to avoid the following build failure:
-+
-+/home/buildroot/autobuild/run/instance-0/output/host/bin/microblazeel-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I./src -std=gnu99 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os    -c -o tools/json2cbor/json2cbor.o tools/json2cbor/json2cbor.c
-+tools/json2cbor/json2cbor.c: In function 'decode_json_with_metadata':
-+tools/json2cbor/json2cbor.c:295:50: warning: implicit declaration of function 'encode_half' [-Wimplicit-function-declaration]
-+                                          (half = encode_half(v), cbor_encode_half_float(encoder, &half));
-+                                                  ^~~~~~~~~~~
-+/home/buildroot/autobuild/run/instance-0/output/host/bin/microblazeel-linux-gcc -o bin/json2cbor  tools/json2cbor/json2cbor.o lib/libtinycbor.so -lcjson -lm
-+tools/json2cbor/json2cbor.o: In function `decode_json_with_metadata':
-+(.text+0xe54): undefined reference to `encode_half'
-+collect2: error: ld returned 1 exit status
-+Makefile:151: recipe for target 'bin/json2cbor' failed
-+
-+Fixes:
-+ - http://autobuild.buildroot.net/results/afd8d24f2a4e501264abff618cf421d4bd088ebf
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/intel/tinycbor/pull/139]
-+---
-+ tools/json2cbor/json2cbor.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/tools/json2cbor/json2cbor.c b/tools/json2cbor/json2cbor.c
-+index 008a7de..c13a751 100644
-+--- a/tools/json2cbor/json2cbor.c
-++++ b/tools/json2cbor/json2cbor.c
-+@@ -25,6 +25,7 @@
-+ #define _POSIX_C_SOURCE 200809L
-+ #define _GNU_SOURCE
-+ #include "cbor.h"
-++#include "cborinternal_p.h"
-+ #include "compilersupport_p.h"
-+ 
-+ #include <cjson/cJSON.h>
-+-- 
-+2.17.1
-+
--- 
-2.17.1
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
