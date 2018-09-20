@@ -1,38 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Sep 2018 21:06:02 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 9, 14,
- 18}.x series
-Message-ID: <20180920190554.EC3577FDB7@busybox.osuosl.org>
+Date: Thu, 20 Sep 2018 21:05:58 +0200
+Subject: [Buildroot] [git commit] linux: bump default to version 4.18.9
+Message-ID: <20180920190554.6CC2988652@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aad44932660d6edf80016ea183e7d5b6e35dc1c9
+commit: https://git.buildroot.net/buildroot/commit/?id=8262c7675684a27aac1e258617a25e3bcbb6b86c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/linux-headers/Config.in.host | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 9eea914784..53f684b452 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -254,9 +254,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+diff --git a/linux/Config.in b/linux/Config.in
+index ab22d822bb..3a270c5fc5 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -120,7 +120,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
  	string
- 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.156"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.127"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.70"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.4.157"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.128"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.71"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
--	default "4.18.8"	if BR2_KERNEL_HEADERS_4_18
-+	default "4.18.9"	if BR2_KERNEL_HEADERS_4_18
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-	default "4.18.8" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.18.9" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.138-cip25" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
