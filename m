@@ -1,46 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 21 Sep 2018 00:06:11 +0200
-Subject: [Buildroot] [PATCH v2 1/1] check-package: detect the use of ${}
- in .mk files
-In-Reply-To: <20180709015647.6619-1-ricardo.martincoski@gmail.com>
-References: <20180708051701.3153-5-ricardo.martincoski@gmail.com>
- <20180709015647.6619-1-ricardo.martincoski@gmail.com>
-Message-ID: <20180921000611.055be497@windsurf>
+From: Benjamin Calderon <benj.calderon@gmail.com>
+Date: Thu, 20 Sep 2018 23:16:41 -0400
+Subject: [Buildroot] [PATCH 1/1] font-awesome compatible with fontconfig
+Message-ID: <20180921031640.2238-1-benj.calderon@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This commit installs font-awesome in the standard fonts directory
+making it available systemwide.
 
-On Sun,  8 Jul 2018 22:56:47 -0300, Ricardo Martincoski wrote:
-> And warn to use $() instead.
-> For examples see [1] and [2].
-> 
-> In the regexp, search for ${VARIABLE} but:
->  - ignore comments;
->  - ignore variables to be expanded by the shell "$${}".
-> 
-> [1] http://lists.busybox.net/pipermail/buildroot/2018-July/225211.html
-> [2] https://github.com/buildroot/buildroot/commit/36305380db1312442623128689fe5067d9058381
-> 
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> Changes v1 -> v2:
->   - use \w instead of [A-Z0-9_] because we do have lowercase make
->     variables and macros, and we want to catch them as well;  (suggested
->     by Arnout)
->   - collect review tag.
+Signed-off-by: Benjamin Calderon <benj.calderon@gmail.com>
+---
+ package/font-awesome/font-awesome.mk | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/font-awesome/font-awesome.mk b/package/font-awesome/font-awesome.mk
+index f39401041a..b1026b3c4d 100644
+--- a/package/font-awesome/font-awesome.mk
++++ b/package/font-awesome/font-awesome.mk
+@@ -7,12 +7,10 @@
+ FONT_AWESOME_VERSION = v4.7.0
+ FONT_AWESOME_SITE = $(call github,FortAwesome,Font-Awesome,$(FONT_AWESOME_VERSION))
+ FONT_AWESOME_LICENSE = OFL-1.1 (font), MIT (CSS, LESS and Sass files)
+-FONT_AWESOME_DIRECTORIES_LIST = css fonts less scss
+ 
+ define FONT_AWESOME_INSTALL_TARGET_CMDS
+-	mkdir -p $(TARGET_DIR)/usr/share/font-awesome/
+-	$(foreach d,$(FONT_AWESOME_DIRECTORIES_LIST),\
+-		cp -dpfr $(@D)/$(d) $(TARGET_DIR)/usr/share/font-awesome$(sep))
++	mkdir -p $(TARGET_DIR)/usr/share/fonts/font-awesome/
++	cp $(@D)/fonts/FontAwesome.otf $(TARGET_DIR)/usr/share/fonts/font-awesome
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.19.0
