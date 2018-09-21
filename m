@@ -1,150 +1,272 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 21 Sep 2018 22:50:11 +0200
-Subject: [Buildroot] [PATCH v2,6/8] policycoreutils: bump to version 2.8
-In-Reply-To: <20180921205013.21829-1-fontaine.fabrice@gmail.com>
-References: <20180921205013.21829-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180921205013.21829-6-fontaine.fabrice@gmail.com>
+Date: Fri, 21 Sep 2018 22:50:06 +0200
+Subject: [Buildroot] [PATCH v2,1/8] libselinux: bump to version 2.8
+Message-ID: <20180921205013.21829-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update first and second patch
+- Remove second patch (already in version), see
+  https://github.com/SELinuxProject/selinux/commit/b24980ec07af66c4b419f8053aa65e97b36e558d
+- Update third patch
+- Pass SHLIBDIR=/usr/lib because by default it is set to /lib and LIBDIR
+  is set to $(PREFIX)/lib (with PREFIX=/usr)
+- Use DESTDIR=$(HOST_DIR) instead of PREFIX=$(HOST_DIR) to install host
+  variant
+- Remove libselinux.so symbolic link for host variant (not needed)
+- Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
 Changes v1 -> v2 (after review of Matthew Weber and Marcus Folkesson):
- - fix build failure of host packages: use DESTDIR instead of 
-   PREFIX=$(HOST_DIR) to install host variant of libselinux, libsepol, 
+ - fix build failure of host packages: use DESTDIR instead of
+   PREFIX=$(HOST_DIR) to install host variant of libselinux, libsepol,
    libsemanage
  - Remove libselinux.so and libsepol.so symbolic link (not needed)
 
- ...-all-paths-that-use-an-absolute-path.patch |  8 +++--
- .../0002-Add-PREFIX-to-host-paths.patch       | 33 ++++++-------------
- package/policycoreutils/policycoreutils.hash  |  2 +-
- package/policycoreutils/policycoreutils.mk    |  4 +--
- 4 files changed, 18 insertions(+), 29 deletions(-)
+ ...-follow-standard-semantics-for-DESTD.patch | 137 ------------------
+ ...ve.patch => 0002-revert-ln-relative.patch} |  14 +-
+ ...break-around-__atomic_-with-GCC-4.7.patch} |   0
+ package/libselinux/libselinux.hash            |   5 +-
+ package/libselinux/libselinux.mk              |  10 +-
+ 5 files changed, 17 insertions(+), 149 deletions(-)
+ delete mode 100644 package/libselinux/0002-libselinux-build-follow-standard-semantics-for-DESTD.patch
+ rename package/libselinux/{0003-revert-ln-relative.patch => 0002-revert-ln-relative.patch} (55%)
+ rename package/libselinux/{0004-Fix-build-break-around-__atomic_-with-GCC-4.7.patch => 0003-Fix-build-break-around-__atomic_-with-GCC-4.7.patch} (100%)
 
-diff --git a/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch b/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch
-index 3c0ddcc54b..4cfe969a40 100644
---- a/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch
-+++ b/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch
-@@ -13,6 +13,8 @@ accomodate version 2.5
- Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
- Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
- Signed-off-by: Adam Duskett <AdamDuskett@outlook.com>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Update for 2.8]
- ---
-  setfiles/Makefile | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
-@@ -22,11 +24,11 @@ index c08e2dd..36c0638 100644
- --- a/setfiles/Makefile
- +++ b/setfiles/Makefile
- @@ -3,7 +3,7 @@ PREFIX ?= $(DESTDIR)/usr
-- SBINDIR ?= $(DESTDIR)/sbin
-+ PREFIX ?= /usr
-+ SBINDIR ?= /sbin
-  MANDIR = $(PREFIX)/share/man
-- LIBDIR ?= $(PREFIX)/lib
- -AUDITH ?= $(shell test -f /usr/include/libaudit.h && echo y)
--+AUDITH ?= $(shell test -f $(DESTDIR)/include/libaudit.h && echo y)
-++AUDITH ?= $(shell test -f $(DESTDIR)$(PREFIX)/include/libaudit.h && echo y)
-  
-  ABORT_ON_ERRORS=$(shell grep "^\#define ABORT_ON_ERRORS" setfiles.c | awk -S '{ print $$3 }')
-  
-diff --git a/package/policycoreutils/0002-Add-PREFIX-to-host-paths.patch b/package/policycoreutils/0002-Add-PREFIX-to-host-paths.patch
-index 32d2ae92e6..0b53044180 100644
---- a/package/policycoreutils/0002-Add-PREFIX-to-host-paths.patch
-+++ b/package/policycoreutils/0002-Add-PREFIX-to-host-paths.patch
-@@ -11,25 +11,14 @@ Updated to work with version 2.5
- Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
- Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
- Signed-off-by: Adam Duskett <AdamDuskett@outlook.com>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Update for 2.8]
- ---
-  load_policy/Makefile | 2 +-
-  newrole/Makefile     | 6 +++---
-  run_init/Makefile    | 6 +++---
-  3 files changed, 7 insertions(+), 7 deletions(-)
- 
--diff --git a/load_policy/Makefile b/load_policy/Makefile
--index b85833c..6a45f31 100644
----- a/load_policy/Makefile
--+++ b/load_policy/Makefile
--@@ -2,7 +2,7 @@
-- PREFIX ?= $(DESTDIR)/usr
-- SBINDIR ?= $(DESTDIR)/sbin
-- MANDIR ?= $(PREFIX)/share/man
---LOCALEDIR ?= /usr/share/locale
--+LOCALEDIR ?= $(PREFIX)/share/locale
+diff --git a/package/libselinux/0002-libselinux-build-follow-standard-semantics-for-DESTD.patch b/package/libselinux/0002-libselinux-build-follow-standard-semantics-for-DESTD.patch
+deleted file mode 100644
+index 089eef414e..0000000000
+--- a/package/libselinux/0002-libselinux-build-follow-standard-semantics-for-DESTD.patch
++++ /dev/null
+@@ -1,137 +0,0 @@
+-libselinux: build: follow standard semantics for DESTDIR and PREFIX
+-
+-This patch solves the following issues:
+-- The pkg-config files generates odd paths when using DESTDIR without PREFIX
+-- DESTDIR is needed during compile time to compute library and header paths which it should not.
+-- Installing with both DESTDIR and PREFIX set gives us odd paths
+-- Make usage of DESTDIR and PREFIX more standard
+-
+-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+-
+-diff -durN libselinux.orig/include/Makefile libselinux/include/Makefile
+---- libselinux.orig/include/Makefile	2018-01-12 12:42:30.898709792 +0100
+-+++ libselinux/include/Makefile	2018-01-12 10:02:57.745478435 +0100
+-@@ -1,6 +1,6 @@
+- # Installation directories.
+--PREFIX ?= $(DESTDIR)/usr
+--INCDIR ?= $(PREFIX)/include/selinux
+-+PREFIX ?= /usr
+-+INCDIR = $(DESTDIR)$(PREFIX)/include/selinux
 - 
-- CFLAGS ?= -Werror -Wall -W
-- override CFLAGS += $(LDFLAGS) -DUSE_NLS -DLOCALEDIR="\"$(LOCALEDIR)\"" -DPACKAGE="\"policycoreutils\""
- diff --git a/newrole/Makefile b/newrole/Makefile
- index 196af92..896708f 100644
- --- a/newrole/Makefile
-@@ -37,13 +26,12 @@ index 196af92..896708f 100644
- @@ -3,9 +3,9 @@ PREFIX ?= $(DESTDIR)/usr
-  BINDIR ?= $(PREFIX)/bin
-  MANDIR ?= $(PREFIX)/share/man
-- ETCDIR ?= $(DESTDIR)/etc
---LOCALEDIR = /usr/share/locale
-+ ETCDIR ?= /etc
-+ LOCALEDIR = $(DESTDIR)$(PREFIX)/share/locale
- -PAMH ?= $(shell test -f /usr/include/security/pam_appl.h && echo y)
- -AUDITH ?= $(shell test -f /usr/include/libaudit.h && echo y)
--+LOCALEDIR = $(PREFIX)/share/locale
--+PAMH ?= $(shell test -f $(PREFIX)/include/security/pam_appl.h && echo y)
--+AUDITH ?= $(shell test -f $(PREFIX)/include/libaudit.h && echo y)
-++PAMH ?= $(shell test -f $(DESTDIR)$(PREFIX)/include/security/pam_appl.h && echo y)
-++AUDITH ?= $(shell test -f $(DESTDIR)$(PREFIX)/include/libaudit.h && echo y)
-  # Enable capabilities to permit newrole to generate audit records.
-  # This will make newrole a setuid root program.
-  # The capabilities used are: CAP_AUDIT_WRITE.
-@@ -54,13 +42,12 @@ index 921f0b0..e1566fc 100644
- @@ -4,9 +4,9 @@ PREFIX ?= $(DESTDIR)/usr
-  SBINDIR ?= $(PREFIX)/sbin
-  MANDIR ?= $(PREFIX)/share/man
-- ETCDIR ?= $(DESTDIR)/etc
---LOCALEDIR ?= /usr/share/locale
-+ ETCDIR ?= /etc
-+ LOCALEDIR ?= $(DESTDIR)$(PREFIX)/share/locale
- -PAMH ?= $(shell test -f /usr/include/security/pam_appl.h && echo y)
- -AUDITH ?= $(shell test -f /usr/include/libaudit.h && echo y)
--+LOCALEDIR ?= $(PREFIX)/share/locale
--+PAMH ?= $(shell test -f $(PREFIX)/include/security/pam_appl.h && echo y)
--+AUDITH ?= $(shell test -f $(PREFIX)/include/libaudit.h && echo y)
-++PAMH ?= $(shell test -f $(DESTDIR)$(PREFIX)/include/security/pam_appl.h && echo y)
-++AUDITH ?= $(shell test -f $(DESTDIR)$(PREFIX)/include/libaudit.h && echo y)
+- all:
+- 
+-diff -durN libselinux.orig/man/Makefile libselinux/man/Makefile
+---- libselinux.orig/man/Makefile	2018-01-12 12:42:30.898709792 +0100
+-+++ libselinux/man/Makefile	2018-01-12 10:02:57.745478435 +0100
+-@@ -1,7 +1,8 @@
+- # Installation directories.
+--MAN8DIR ?= $(DESTDIR)/usr/share/man/man8
+--MAN5DIR ?= $(DESTDIR)/usr/share/man/man5
+--MAN3DIR ?= $(DESTDIR)/usr/share/man/man3
+-+PREFIX	?= /usr
+-+MAN8DIR ?= $(DESTDIR)$(PREFIX)/share/man/man8
+-+MAN5DIR ?= $(DESTDIR)$(PREFIX)/share/man/man5
+-+MAN3DIR ?= $(DESTDIR)$(PREFIX)/share/man/man3
+- 
+- all:
+- 
+-diff -durN libselinux.orig/src/libselinux.pc.in libselinux/src/libselinux.pc.in
+---- libselinux.orig/src/libselinux.pc.in	2018-01-12 12:42:30.905376458 +0100
+-+++ libselinux/src/libselinux.pc.in	2018-01-12 10:02:57.745478435 +0100
+-@@ -1,6 +1,6 @@
+- prefix=@prefix@
+- exec_prefix=${prefix}
+--libdir=${exec_prefix}/@libdir@
+-+libdir=@libdir@
+- includedir=@includedir@
+- 
+- Name: libselinux
+-diff -durN libselinux.orig/src/Makefile libselinux/src/Makefile
+---- libselinux.orig/src/Makefile	2018-01-12 12:42:30.902043126 +0100
+-+++ libselinux/src/Makefile	2018-01-12 10:02:57.745478435 +0100
+-@@ -8,10 +8,10 @@
+- PKG_CONFIG ?= pkg-config
+- 
+- # Installation directories.
+--PREFIX ?= $(DESTDIR)/usr
+-+PREFIX ?= /usr
+- LIBDIR ?= $(PREFIX)/lib
+--SHLIBDIR ?= $(DESTDIR)/lib
+- INCLUDEDIR ?= $(PREFIX)/include
+-+LIBINSTALL = $(DESTDIR)$(LIBDIR)
+- PYINC ?= $(shell $(PKG_CONFIG) --cflags $(PYPREFIX))
+- PYLIBS ?= $(shell $(PKG_CONFIG) --libs $(PYPREFIX))
+- PYSITEDIR ?= $(DESTDIR)$(shell $(PYTHON) -c 'import site; print(site.getsitepackages()[0])')
+-@@ -19,8 +19,6 @@
+- RUBYINC ?= $(shell $(RUBY) -e 'puts "-I" + RbConfig::CONFIG["rubyarchhdrdir"] + " -I" + RbConfig::CONFIG["rubyhdrdir"]')
+- RUBYLIBS ?= $(shell $(RUBY) -e 'puts "-L" + RbConfig::CONFIG["libdir"] + " -L" + RbConfig::CONFIG["archlibdir"] + " " + RbConfig::CONFIG["LIBRUBYARG_SHARED"]')
+- RUBYINSTALL ?= $(DESTDIR)$(shell $(RUBY) -e 'puts RbConfig::CONFIG["vendorarchdir"]')
+--LIBBASE ?= $(shell basename $(LIBDIR))
+--LIBSEPOLA ?= $(LIBDIR)/libsepol.a
+- 
+- VERSION = $(shell cat ../VERSION)
+- LIBVERSION = 1
+-@@ -148,7 +146,7 @@
+- 	ln -sf $@ $(TARGET)
+- 
+- $(LIBPC): $(LIBPC).in ../VERSION
+--	sed -e 's/@VERSION@/$(VERSION)/; s:@prefix@:$(PREFIX):; s:@libdir@:$(LIBBASE):; s:@includedir@:$(INCLUDEDIR):' < $< > $@
+-+	sed -e 's/@VERSION@/$(VERSION)/; s:@prefix@:$(PREFIX):; s:@libdir@:$(LIBDIR):; s:@includedir@:$(INCLUDEDIR):' < $< > $@
+- 
+- selinuxswig_python_exception.i: ../include/selinux/selinux.h
+- 	bash -e exception.sh > $@ || (rm -f $@ ; false)
+-@@ -156,8 +154,8 @@
+- $(AUDIT2WHYLOBJ): audit2why.c
+- 	$(CC) $(filter-out -Werror, $(CFLAGS)) $(PYINC) -fPIC -DSHARED -c -o $@ $<
+- 
+--$(AUDIT2WHYSO): $(AUDIT2WHYLOBJ) $(LIBSEPOLA)
+--	$(CC) $(CFLAGS) $(LDFLAGS) -L. -shared -o $@ $^ -lselinux $(PYLIBS)
+-+$(AUDIT2WHYSO): $(AUDIT2WHYLOBJ)
+-+	$(CC) $(CFLAGS) $(LDFLAGS) -L. -shared -o $@ $^ -lselinux $(PYLIBS) -l:libsepol.a
+- 
+- %.o:  %.c policy.h
+- 	$(CC) $(CFLAGS) $(TLSFLAGS) -c -o $@ $<
+-@@ -177,13 +175,13 @@
+- 	$(SWIG) $<
+- 
+- install: all 
+--	test -d $(LIBDIR) || install -m 755 -d $(LIBDIR)
+--	install -m 644 $(LIBA) $(LIBDIR)
+--	test -d $(SHLIBDIR) || install -m 755 -d $(SHLIBDIR)
+--	install -m 755 $(LIBSO) $(SHLIBDIR)
+--	test -d $(LIBDIR)/pkgconfig || install -m 755 -d $(LIBDIR)/pkgconfig
+--	install -m 644 $(LIBPC) $(LIBDIR)/pkgconfig
+--	ln -sf --relative $(SHLIBDIR)/$(LIBSO) $(LIBDIR)/$(TARGET)
+-+	test -d $(LIBINSTALL) || install -m 755 -d $(LIBINSTALL)
+-+	install -m 644 $(LIBA) $(LIBINSTALL)
+-+	test -d $(LIBINSTALL) || install -m 755 -d $(LIBINSTALL)
+-+	install -m 755 $(LIBSO) $(LIBINSTALL)
+-+	test -d $(LIBINSTALL)/pkgconfig || install -m 755 -d $(LIBINSTALL)/pkgconfig
+-+	install -m 644 $(LIBPC) $(LIBINSTALL)/pkgconfig
+-+	ln -sf --relative $(LIBINSTALL)/$(LIBSO) $(LIBINSTALL)/$(TARGET)
+- 
+- install-pywrap: pywrap
+- 	test -d $(PYSITEDIR)/selinux || install -m 755 -d $(PYSITEDIR)/selinux
+-@@ -196,7 +194,7 @@
+- 	install -m 755 $(SWIGRUBYSO) $(RUBYINSTALL)/selinux.so
+- 
+- relabel:
+--	/sbin/restorecon $(SHLIBDIR)/$(LIBSO)
+-+	/sbin/restorecon $(LIBINSTALL)/$(LIBSO)
+- 
+- clean-pywrap:
+- 	-rm -f $(SWIGLOBJ) $(SWIGSO) $(AUDIT2WHYLOBJ) $(AUDIT2WHYSO)
+-diff -durN libselinux.orig/utils/Makefile libselinux/utils/Makefile
+---- libselinux.orig/utils/Makefile	2018-01-12 12:42:30.905376458 +0100
+-+++ libselinux/utils/Makefile	2018-01-12 10:02:57.745478435 +0100
+-@@ -1,8 +1,6 @@
+- # Installation directories.
+--PREFIX ?= $(DESTDIR)/usr
+--LIBDIR ?= $(PREFIX)/lib
+--SBINDIR ?= $(PREFIX)/sbin
+--INCLUDEDIR ?= $(PREFIX)/include
+-+PREFIX ?= /usr
+-+SBINDIR ?= $(DESTDIR)$(PREFIX)/sbin
+- 
+- OS ?= $(shell uname)
+- 
+diff --git a/package/libselinux/0003-revert-ln-relative.patch b/package/libselinux/0002-revert-ln-relative.patch
+similarity index 55%
+rename from package/libselinux/0003-revert-ln-relative.patch
+rename to package/libselinux/0002-revert-ln-relative.patch
+index f72afa1b0a..f7beab2697 100644
+--- a/package/libselinux/0003-revert-ln-relative.patch
++++ b/package/libselinux/0002-revert-ln-relative.patch
+@@ -9,16 +9,18 @@ they are maintained (up to 10 years in some cases?).
+ For the sake of Buildroot, revert the upstream patch.
+ 
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Update for 2.8 (with assumption that SHLIBDIR=LIBDIR)]
+ 
+ diff -durNw libselinux-2.7.orig/src/Makefile libselinux-2.7/src/Makefile
+ --- libselinux-2.7.orig/src/Makefile	2018-01-15 20:53:50.168525700 +0100
+ +++ libselinux-2.7/src/Makefile	2018-01-15 20:55:27.061858005 +0100
+ @@ -181,7 +181,7 @@
+- 	install -m 755 $(LIBSO) $(LIBINSTALL)
+- 	test -d $(LIBINSTALL)/pkgconfig || install -m 755 -d $(LIBINSTALL)/pkgconfig
+- 	install -m 644 $(LIBPC) $(LIBINSTALL)/pkgconfig
+--	ln -sf --relative $(LIBINSTALL)/$(LIBSO) $(LIBINSTALL)/$(TARGET)
+-+	cd $(LIBINSTALL) && ln -sf $(LIBSO) $(TARGET)
++	install -m 755 $(LIBSO) $(DESTDIR)$(SHLIBDIR)
++	test -d $(DESTDIR)$(LIBDIR)/pkgconfig || install -m 755 -d $(DESTDIR)$(LIBDIR)/pkgconfig
++	install -m 644 $(LIBPC) $(DESTDIR)$(LIBDIR)/pkgconfig
++-	ln -sf --relative $(DESTDIR)$(SHLIBDIR)/$(LIBSO) $(DESTDIR)$(LIBDIR)/$(TARGET)
+++	cd $(DESTDIR)$(LIBDIR) && ln -sf $(LIBSO) $(TARGET)
   
-  CFLAGS ?= -Werror -Wall -W
-  override CFLAGS += -DUSE_NLS -DLOCALEDIR="\"$(LOCALEDIR)\"" -DPACKAGE="\"policycoreutils\""
-diff --git a/package/policycoreutils/policycoreutils.hash b/package/policycoreutils/policycoreutils.hash
-index 241905ca22..b6367b4bf4 100644
---- a/package/policycoreutils/policycoreutils.hash
-+++ b/package/policycoreutils/policycoreutils.hash
-@@ -1,3 +1,3 @@
- # https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256 0a1b8a4a323b854981c6755ff025fe98a0f1cff307f109abb260f0490f13e4f4 policycoreutils-2.7.tar.gz
-+sha256 986553a235f27bee7ad7c2b7c35ea51eb2ee68e2cf03b661b1585de101bc1099 policycoreutils-2.8.tar.gz
- sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 COPYING
-diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
-index 21c5470cec..abd70e16c8 100644
---- a/package/policycoreutils/policycoreutils.mk
-+++ b/package/policycoreutils/policycoreutils.mk
+  install-pywrap: pywrap
+- 	test -d $(PYSITEDIR)/selinux || install -m 755 -d $(PYSITEDIR)/selinux
++	test -d $(DESTDIR)$(PYTHONLIBDIR)/selinux || install -m 755 -d $(DESTDIR)$(PYTHONLIBDIR)/selinux
+diff --git a/package/libselinux/0004-Fix-build-break-around-__atomic_-with-GCC-4.7.patch b/package/libselinux/0003-Fix-build-break-around-__atomic_-with-GCC-4.7.patch
+similarity index 100%
+rename from package/libselinux/0004-Fix-build-break-around-__atomic_-with-GCC-4.7.patch
+rename to package/libselinux/0003-Fix-build-break-around-__atomic_-with-GCC-4.7.patch
+diff --git a/package/libselinux/libselinux.hash b/package/libselinux/libselinux.hash
+index 3c60d5111d..fb8e350434 100644
+--- a/package/libselinux/libselinux.hash
++++ b/package/libselinux/libselinux.hash
+@@ -1,2 +1,5 @@
+ # From: https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256 d0fec0769b3ad60aa7baf9b9a4b7a056827769dc2dadda0dc0eb59b3d1c18c57 libselinux-2.7.tar.gz
++sha256 31db96ec7643ce10912b3c3f98506a08a9116dcfe151855fd349c3fda96187e1 libselinux-2.8.tar.gz
++
++# Hash for license file
++sha256 86657b4c0fe868d7cbd977cb04c63b6c667e08fa51595a7bc846ad4bed8fc364 LICENSE
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index b3d48f7105..cc313817f8 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--POLICYCOREUTILS_VERSION = 2.7
--POLICYCOREUTILS_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20170804
-+POLICYCOREUTILS_VERSION = 2.8
-+POLICYCOREUTILS_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20180524
- POLICYCOREUTILS_LICENSE = GPL-2.0
- POLICYCOREUTILS_LICENSE_FILES = COPYING
+-LIBSELINUX_VERSION = 2.7
+-LIBSELINUX_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20170804
++LIBSELINUX_VERSION = 2.8
++LIBSELINUX_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20180524
+ LIBSELINUX_LICENSE = Public Domain
+ LIBSELINUX_LICENSE_FILES = LICENSE
  
+@@ -18,7 +18,8 @@ LIBSELINUX_MAKE_OPTS = \
+ 	$(TARGET_CONFIGURE_OPTS) \
+ 	CFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
+ 	LDFLAGS="$(TARGET_LDFLAGS) -lpcre -lpthread" \
+-	ARCH=$(KERNEL_ARCH)
++	ARCH=$(KERNEL_ARCH) \
++	SHLIBDIR=/usr/lib
+ 
+ LIBSELINUX_MAKE_INSTALL_TARGETS = install
+ 
+@@ -85,7 +86,7 @@ endif
+ 
+ HOST_LIBSELINUX_MAKE_OPTS = \
+ 	$(HOST_CONFIGURE_OPTS) \
+-	PREFIX=$(HOST_DIR) \
++	DESTDIR=$(HOST_DIR) \
+ 	LDFLAGS="$(HOST_LDFLAGS) -lpcre -lpthread" \
+ 	PYINC="$(HOST_LIBSELINUX_PYINC)" \
+ 	PYSITEDIR="$(HOST_DIR)/lib/$(HOST_LIBSELINUX_PYLIBVER)/site-packages" \
+@@ -102,7 +103,6 @@ endef
+ define HOST_LIBSELINUX_INSTALL_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
+ 		$(HOST_LIBSELINUX_MAKE_OPTS) install
+-	ln -sf libselinux.so.1 $(HOST_DIR)/lib/libselinux.so
+ 	# Install python interface wrapper
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
+ 		$(HOST_LIBSELINUX_MAKE_OPTS) install-pywrap
 -- 
 2.17.1
