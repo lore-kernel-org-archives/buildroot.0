@@ -1,102 +1,45 @@
-From: Philipp Richter <richterphilipp.pops@gmail.com>
-Date: Fri, 21 Sep 2018 11:31:54 +0200
-Subject: [Buildroot] [RFC v1] qt5base: fix libressl compile
-In-Reply-To: <20180920233833.7391f81a@windsurf>
-References: <20180911200505.20234-1-ps.report@gmx.net>
- <20180920233833.7391f81a@windsurf>
-Message-ID: <CA+Vb7hrD5m1upJivd2GmuVOzZiN-WciPBgDYwqyO59-foYviEg@mail.gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Fri, 21 Sep 2018 12:59:48 +0300
+Subject: [Buildroot] [PATCH 1/1] python-lxml: bump to version 4.2.5
+Message-ID: <20180921095948.964-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Also add hashes for license files.
 
-I left a comment on the qt bug report, I hope it is alright the way I put it.
-The discussion around the ssl library compatibility should at least be
-going on since so many packagers from different distros have the
-burden to keep qt functioning with libressl.
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/python-lxml/python-lxml.hash | 6 +++++-
+ package/python-lxml/python-lxml.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-Regards,
-Philipp Richter.
-
-On Thu, 20 Sep 2018 at 23:39, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Tue, 11 Sep 2018 22:05:05 +0200, Peter Seiderer wrote:
-> > Add freebsd provided patch to fix libressl compile (patch taken
-> > from [1]/[2], for upstream status see [3]), fixes bug #11341 ([4]).
-> >
-> > [1] https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=228344
-> > [2] https://bz-attachments.freebsd.org/attachment.cgi?id=196994
-> > [3] https://bugreports.qt.io/browse/QTBUG-68374
-> > [4] https://bugs.busybox.net/show_bug.cgi?id=11341
->
-> Upstream is not very helpful "We don't support LibreSSL". Could you
-> perhaps participate to the bug report to say Buildroot is also
-> interested in seeing LibreSSL supported by Qt ?
->
-> > diff --git a/package/qt5/qt5base/5.11.1/0005-qtbase-fix-libressl-compile.patch b/package/qt5/qt5base/5.11.1/0005-qtbase-fix-libressl-compile.patch
->
-> Why are you patching only the 5.11.1 version, and not also the LTS
-> version ?
->
-> > +-#if !defined(OPENSSL_VERSION_NUMBER) || OPENSSL_VERSION_NUMBER-0 < 0x10100000L
-> > ++#if !defined(OPENSSL_VERSION_NUMBER) || OPENSSL_VERSION_NUMBER-0 < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
-> > + #  error "OpenSSL >= 1.1 is required"
->
-> I don't have the full code context here, but isn't this going to #error
-> when using LibreSSL, because defined(LIBRESSL_VERSION_NUMBER) is true ?
->
-> > +-#if OPENSSL_VERSION_NUMBER >= 0x10002000L
-> > ++#if OPENSSL_VERSION_NUMBER >= 0x10002000L && !defined(LIBRESSL_VERSION_NUMBER)
-> > +     if (QSslSocket::sslLibraryVersionNumber() >= 0x10002000L) {
-> > +         QSharedPointer<SSL_CONF_CTX> cctx(q_SSL_CONF_CTX_new(), &q_SSL_CONF_CTX_free);
-> > +         if (cctx) {
-> > +diff --git a/src/network/ssl/qsslsocket_openssl_symbols.cpp b/src/network/ssl/qsslsocket_openssl_symbols.cpp
-> > +index 466eba0bd0..c7d89436ca 100644
-> > +--- a/src/network/ssl/qsslsocket_openssl_symbols.cpp
-> > ++++ b/src/network/ssl/qsslsocket_openssl_symbols.cpp
-> > +@@ -406,7 +406,7 @@ DEFINEFUNC2(int, SSL_CTX_use_PrivateKey, SSL_CTX *a, a, EVP_PKEY *b, b, return -
-> > + DEFINEFUNC2(int, SSL_CTX_use_RSAPrivateKey, SSL_CTX *a, a, RSA *b, b, return -1, return)
-> > + DEFINEFUNC3(int, SSL_CTX_use_PrivateKey_file, SSL_CTX *a, a, const char *b, b, int c, c, return -1, return)
-> > + DEFINEFUNC(X509_STORE *, SSL_CTX_get_cert_store, const SSL_CTX *a, a, return 0, return)
-> > +-#if OPENSSL_VERSION_NUMBER >= 0x10002000L
-> > ++#if OPENSSL_VERSION_NUMBER >= 0x10002000L && !defined(LIBRESSL_VERSION_NUMBER)
-> > + DEFINEFUNC(SSL_CONF_CTX *, SSL_CONF_CTX_new, DUMMYARG, DUMMYARG, return 0, return);
-> > + DEFINEFUNC(void, SSL_CONF_CTX_free, SSL_CONF_CTX *a, a, return ,return);
-> > + DEFINEFUNC2(void, SSL_CONF_CTX_set_ssl_ctx, SSL_CONF_CTX *a, a, SSL_CTX *b, b, return, return);
-> > +@@ -1123,12 +1123,14 @@ bool q_resolveOpenSslSymbols()
-> > +     RESOLVEFUNC(SSL_CTX_use_PrivateKey_file)
-> > +     RESOLVEFUNC(SSL_CTX_get_cert_store);
-> > + #if OPENSSL_VERSION_NUMBER >= 0x10002000L
-> > ++#if !defined(LIBRESSL_VERSION_NUMBER)
->
-> Why not && !defined(LIBRESSL_VERSION_NUMBER)
->
-> like is done in the previous chunk, and the next one ?
->
-> > +diff --git a/src/network/ssl/qsslsocket_openssl_symbols_p.h b/src/network/ssl/qsslsocket_openssl_symbols_p.h
-> > +index 68b519d74e..7f7f816803 100644
-> > +--- a/src/network/ssl/qsslsocket_openssl_symbols_p.h
-> > ++++ b/src/network/ssl/qsslsocket_openssl_symbols_p.h
-> > +@@ -356,7 +356,7 @@ int q_SSL_CTX_use_PrivateKey(SSL_CTX *a, EVP_PKEY *b);
-> > + int q_SSL_CTX_use_RSAPrivateKey(SSL_CTX *a, RSA *b);
-> > + int q_SSL_CTX_use_PrivateKey_file(SSL_CTX *a, const char *b, int c);
-> > + X509_STORE *q_SSL_CTX_get_cert_store(const SSL_CTX *a);
-> > +-#if OPENSSL_VERSION_NUMBER >= 0x10002000L
-> > ++#if OPENSSL_VERSION_NUMBER >= 0x10002000L && !defined(LIBRESSL_VERSION_NUMBER)
-> > + SSL_CONF_CTX *q_SSL_CONF_CTX_new();
-> > + void q_SSL_CONF_CTX_free(SSL_CONF_CTX *a);
-> > + void q_SSL_CONF_CTX_set_ssl_ctx(SSL_CONF_CTX *a, SSL_CTX *b);
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
+index 9b75a26280..610c0d6db4 100644
+--- a/package/python-lxml/python-lxml.hash
++++ b/package/python-lxml/python-lxml.hash
+@@ -1,2 +1,6 @@
+ # Locally computed
+-sha256  e2afbe403090f5893e254958d02875e0732975e73c4c0cdd33c1f009a61963ca  lxml-4.2.4.tgz
++sha256  36720698c29e7a9626a0dc802ef8885f8f0239bfd1689628ecd459a061f2807f  lxml-4.2.5.tgz
++sha256  41d49dd406aa0e1548a6d5f21a30d6bf638b3cd96eb7289dd348d83ed2e40392  LICENSES.txt
++sha256  69edb445c1335a8312d4c09271847e9956d84f0d9f724d125340cc3fad767b2a  doc/licenses/BSD.txt
++sha256  0497ae8138811ef4466ede653bab7a59feb3d3c14f9ed50fc33a00aeb5bec32e  doc/licenses/elementtree.txt
++sha256  705bdfece6dbb87879d9ec40a8c9530651aefb98ae387da9134584464742d539  src/lxml/isoschematron/resources/rng/iso-schematron.rng
+diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
+index 80c04c0055..61f81e6363 100644
+--- a/package/python-lxml/python-lxml.mk
++++ b/package/python-lxml/python-lxml.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_LXML_VERSION = 4.2.4
++PYTHON_LXML_VERSION = 4.2.5
+ PYTHON_LXML_SITE = http://lxml.de/files
+ PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tgz
+ 
+-- 
+2.17.1
