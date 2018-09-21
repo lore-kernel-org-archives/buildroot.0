@@ -1,59 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 21 Sep 2018 15:31:15 +0200
-Subject: [Buildroot] [PATCH 0/2] Support for generating a timeline graph
-Message-ID: <20180921133117.9300-1-thomas.petazzoni@bootlin.com>
+Date: Fri, 21 Sep 2018 15:31:16 +0200
+Subject: [Buildroot] [PATCH 1/2] package/pkg-generic.mk: increase precision
+ of timestamps
+In-Reply-To: <20180921133117.9300-1-thomas.petazzoni@bootlin.com>
+References: <20180921133117.9300-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20180921133117.9300-2-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Currently, the timestamps that we keep in build-time.log use a
+second-level precision. However, as we are going to introduce a new
+type of graph to draw the time line of a build, this precision is
+going to be insufficient, as a number of steps are so short that they
+are not even one second long, and generally the rounding to the second
+gives a not so great looking graph.
 
-As part of the work on top-level parallel build, I found that it would
-be interesting to be able to draw a timeline of the build, to see how
-packages are being built in parallel or not. Not only it generates
-nice graphs that are interesting to look at, but it also allows to
-visually see which package was built in parallel to what other
-packages, or before/after this or that other packages.
+Therefore, we add to the timestamps the nanoseconds using the %N date
+specifier. A milli-second precision would have been sufficient, but %N
+is all what date(1) provides at the sub-second level.
 
-You can see one timeline graph for a non-parallel build at:
+Since this is changing the format of the build-time.log file, this
+commit adjusts the support/scripts/graph-build-time script
+accordingly, to account for the floating point numbers that we have as
+timestamps.
 
-  https://bootlin.com/~thomas/timeline-no-parallel.png
-  https://bootlin.com/~thomas/timeline-no-parallel.pdf
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pkg-generic.mk           | 2 +-
+ support/scripts/graph-build-time | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-And you can see the timeline graph for the same build, with with
-parallel build enabled at:
-
-  https://bootlin.com/~thomas/timeline-parallel.png
-  https://bootlin.com/~thomas/timeline-parallel.pdf
-
-This patch series is pretty simple:
-
- - The first patch adds sub-second precision to the timestamps we keep
-   in build-time.log.
-
- - The second patch adds support in the graph-build-time script to
-   generate such a timeline. The whole thing is not perfect yet (the
-   layout of the graph could be improved, some hardcoded values could
-   be removed), but it's a good start, and follow-up patches can
-   improve the graph layout.
-
-To test this, just do a build, run "make graph-build", and enjoy the
-graph in output/graphs/build.timeline.pdf.
-
-Thanks,
-
-Thomas
-
-Thomas Petazzoni (2):
-  package/pkg-generic.mk: increase precision of timestamps
-  support/scripts/graph-build-time: add support for timeline graphing
-
- Makefile                         |  2 ++
- package/pkg-generic.mk           |  2 +-
- support/scripts/graph-build-time | 73 ++++++++++++++++++++++++++++++++++++++--
- 3 files changed, 74 insertions(+), 3 deletions(-)
-
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 91b61c6de0..daf24594de 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -50,7 +50,7 @@ endef
+ # Time steps
+ define step_time
+ 	printf "%s:%-5.5s:%-20.20s: %s\n"           \
+-	       "$$(date +%s)" "$(1)" "$(2)" "$(3)"  \
++	       "$$(date +%s.%N)" "$(1)" "$(2)" "$(3)"  \
+ 	       >>"$(BUILD_DIR)/build-time.log"
+ endef
+ GLOBAL_INSTRUMENTATION_HOOKS += step_time
+diff --git a/support/scripts/graph-build-time b/support/scripts/graph-build-time
+index 415d431f23..892e08bf07 100755
+--- a/support/scripts/graph-build-time
++++ b/support/scripts/graph-build-time
+@@ -260,7 +260,7 @@ def read_data(input_file):
+         return None
+ 
+     for row in reader:
+-        time = int(row[0].strip())
++        time = float(row[0].strip())
+         state = row[1].strip()
+         step = row[2].strip()
+         pkg = row[3].strip()
 -- 
 2.14.4
