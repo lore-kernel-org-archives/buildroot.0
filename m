@@ -1,92 +1,36 @@
 From: Marcel Patzlaff <m.patzlaff@pilz.de>
-Date: Fri, 21 Sep 2018 15:55:21 +0200
-Subject: [Buildroot] [PATCH 2/2] package/pkg-kconfig.mk: new
- <pkg>-diff-config target
-In-Reply-To: <20180921135521.32435-1-m.patzlaff@pilz.de>
-References: <20180921135521.32435-1-m.patzlaff@pilz.de>
-Message-ID: <20180921135521.32435-3-m.patzlaff@pilz.de>
+Date: Fri, 21 Sep 2018 15:55:19 +0200
+Subject: [Buildroot] [PATCH 0/2] package/pkg-kconfig.mk: Target to compare
+ configurations
+Message-ID: <20180921135521.32435-1-m.patzlaff@pilz.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch introduces the new target to compare the current
-configuration with the one derived from the defconfig + fragments (if
-any). It helps identifying settings not yet inserted to the defconfig
-or any fragment.
+"Inspired" by the discussion we had at [1], I propose this patch series
+to support developers who fragment their configurations. They will be
+able to compare the current configuration of any kconfig based package
+with the one derived from the defconfig + fragments (if any). The
+output of the new target would look like the following:
 
-Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
----
- package/pkg-kconfig.mk | 36 ++++++++++++++++++++++++++++++------
- 1 file changed, 30 insertions(+), 6 deletions(-)
+### start of linux-diff-config output ###
+ CONFIG_CPU_IDLE_GOV_MENU y -> n
+ CONFIG_MODULE_FORCE_UNLOAD n -> y
+### end of linux-diff-config output ###
 
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index 5952be5482..b746dc588c 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -49,6 +49,18 @@ define kconfig-package-regen-dot-config
- 			$(Q)(yes "" | $($(1)_KCONFIG_MAKE) oldconfig)))
- endef
- 
-+# Macro to create a .config file where all given fragments are merged into.
-+# $(1): the name of the package in upper-case letters
-+# $(2): name of the .config file
-+# $(3): fragment files to merge
-+define kconfig-package-merge-config
-+	$(Q)$(if $($(1)_KCONFIG_DEFCONFIG),\
-+		$($(1)_KCONFIG_MAKE) $($(1)_KCONFIG_DEFCONFIG),\
-+		$(INSTALL) -m 0644 -D $($(1)_KCONFIG_FILE) $(2))
-+	$(Q)support/kconfig/merge_config.sh -m -O $(@D) $(2) $(3)
-+	$(call kconfig-package-regen-dot-config,$(1))
-+endef
-+
- ################################################################################
- # inner-kconfig-package -- generates the make targets needed to support a
- # kconfig package
-@@ -121,12 +133,7 @@ $(2)_KCONFIG_RULES = \
- # Since the file could be a defconfig file it needs to be expanded to a
- # full .config first.
- $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG): $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
--	$$(Q)$$(if $$($(2)_KCONFIG_DEFCONFIG), \
--		$$($(2)_KCONFIG_MAKE) $$($(2)_KCONFIG_DEFCONFIG), \
--		$$(INSTALL) -m 0644 -D $$($(2)_KCONFIG_FILE) $$(@))
--	$$(Q)support/kconfig/merge_config.sh -m -O $$(@D) \
--		$$(@) $$($(2)_KCONFIG_FRAGMENT_FILES)
--	$$(call kconfig-package-regen-dot-config,$(2))
-+	$$(call kconfig-package-merge-config,$(2),$$(@),$$($(2)_KCONFIG_FRAGMENT_FILES))
- 
- # If _KCONFIG_FILE or _KCONFIG_FRAGMENT_FILES exists, this dependency is
- # already implied, but if we only have a _KCONFIG_DEFCONFIG we have to add
-@@ -248,11 +255,28 @@ $(1)-update-defconfig: PKG=$(2)
- $(1)-update-defconfig: $(1)-savedefconfig
- 	$$(call kconfig-package-update-config,defconfig)
- 
-+# Target to output differences between the configuration obtained via the
-+# defconfig + fragments (if any) and the current configuration.
-+# Note: it preserves the timestamp of the current configuration when moving it
-+# around.
-+$(1)-diff-config: $(1)-check-configuration-done
-+	$$(Q)cp -a $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG) $$($(2)_DIR)/.config.dc.bak
-+	$$(call kconfig-package-merge-config,$(2),$$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG),\
-+		$$($(2)_KCONFIG_FRAGMENT_FILES))
-+	@echo "### start of $$(@) output ###"
-+	@utils/diffconfig $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG) \
-+		 $$($(2)_DIR)/.config.dc.bak
-+	@echo "### end of $$(@) output ###"
-+	$$(Q)cp -a $$($(2)_DIR)/.config.dc.bak $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG)
-+	$$(Q)rm -f $$($(2)_DIR)/.config.dc.bak
-+
-+
- endif # package enabled
- 
- .PHONY: \
- 	$(1)-update-config \
- 	$(1)-update-defconfig \
-+	$(1)-diff-config \
- 	$(1)-savedefconfig \
- 	$(1)-check-configuration-done \
- 	$$($(2)_DIR)/.kconfig_editor_% \
+
+[1]: https://patchwork.ozlabs.org/patch/951068/
+
+
+Marcel Patzlaff (2):
+  package/pkg-kconfig.mk: Reusability improvements
+  package/pkg-kconfig.mk: new <pkg>-diff-config target
+
+ package/pkg-kconfig.mk | 77 +++++++++++++++++++++++++++++-------------
+ 1 file changed, 54 insertions(+), 23 deletions(-)
+
 -- 
 2.17.1
 
