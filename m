@@ -1,56 +1,78 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 21 Sep 2018 14:13:50 +0200
-Subject: [Buildroot] [PATCH] xlib_libXdmcp: add missing dependency on
- host-pkgconf
-Message-ID: <20180921121350.22638-1-thomas.petazzoni@bootlin.com>
+From: Ferdinand van Aartsen <ferdinand@ombud.nl>
+Date: Fri, 21 Sep 2018 14:53:52 +0200
+Subject: [Buildroot] [PATCH 1/1] Point libxslt to the correct location
+ of libxml2
+In-Reply-To: <20180921134318.78ba7545@windsurf>
+References: <20180921101913.4366-1-ferdinand@ombud.nl>
+ <20180921134318.78ba7545@windsurf>
+Message-ID: <5f3afc03d1b11ebb3d8d4ceff8ef2a65@ombud.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The libXdmcp configure script uses pkg-config, but the Buildroot
-package does not depend on host-pkgconf. This is not seen by the
-autobuilders most likely because another package that is always built
-before libXdmcp builds pkg-config.
+Thomas Petazzoni schreef op 2018-09-21 13:43:
 
-However, running:
+> Hello,
+> 
+> On Fri, 21 Sep 2018 12:19:14 +0200, Ferdinand van Aartsen wrote:
+> 
+>> Currently libxslt configure finds native /usr/bin/xml2-config.
+>> 
+>> Signed-off-by: Ferdinand van Aartsen <ferdinand@ombud.nl>
+> 
+> Thanks for this contribution! The commit title should always follow the
+> format:
+> 
+> <package>: <description>
+> 
+> so, something like:
+> 
+> libxslt: point to the correct location of xml2-config
+> 
 
-$ make xlib_libXdmcp
+Yes, got it right for my second patch, where I then proceeded to forget
+to add a deleted file to the commit. Ah, some days... But, I'll get 
+there.
 
-triggers the following build failure:
+>> diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
+>> index 972d5b80d5..fb5d03ab44 100644
+>> --- a/package/libxslt/libxslt.mk
+>> +++ b/package/libxslt/libxslt.mk
+>> @@ -13,7 +13,8 @@ LIBXSLT_LICENSE_FILES = COPYING
+>> LIBXSLT_CONF_OPTS = \
+>> --with-gnu-ld \
+>> --without-debug \
+>> -    --without-python
+>> +    --without-python \
+>> +    --with-libxml-prefix=$(STAGING_DIR)/usr
+>> LIBXSLT_CONFIG_SCRIPTS = xslt-config
+>> LIBXSLT_DEPENDENCIES = host-pkgconf libxml2
+>> 
+>> @@ -25,7 +26,11 @@ else
+>> LIBXSLT_CONF_OPTS += --without-crypto
+>> endif
+>> 
+>> -HOST_LIBXSLT_CONF_OPTS = --without-debug --without-python 
+>> --without-crypto
+>> +HOST_LIBXSLT_CONF_OPTS = \
+>> +    --without-debug \
+>> +    --without-python \
+>> +    --without-crypto \
+>> +    --with-libxml-prefix=$(HOST_DIR)/usr
+> 
+> This should be just $(HOST_DIR), and not $(HOST_DIR)/usr.
+> 
+> Those two minor comments can be fixed when applying the patch, no need
+> to resend just for that.
+> 
+> Thanks!
+> 
+> Thomas
 
-checking pkg-config is at least version 0.9.0... ./configure: line 12323: /home/thomas/projets/buildroot/output/host/bin/pkg-config: No such file or directory
-no
-[...]
-checking for XDMCP... configure: error: in `/home/thomas/projets/buildroot/output/build/xlib_libXdmcp-1.1.2':
-configure: error: The pkg-config script could not be found or is too old.  Make sure it
-is in your PATH or set the PKG_CONFIG environment variable to the full
-path to pkg-config.
+I copied behaviour I saw in other .mk files. But I double-checked and
+saw that host-libxslt configure detects the right xml2-config without
+--with-libxml-prefix anyway. So the host part can be left as it was.
 
-This was detected using per-package target/host folders, because with
-this, only the dependencies explicitly expressed by a package are
-available to the package.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
-index 179234e73f..44a6f00543 100644
---- a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
-+++ b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
-@@ -10,8 +10,8 @@ XLIB_LIBXDMCP_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXDMCP_LICENSE = MIT
- XLIB_LIBXDMCP_LICENSE_FILES = COPYING
- XLIB_LIBXDMCP_INSTALL_STAGING = YES
--XLIB_LIBXDMCP_DEPENDENCIES = xutil_util-macros xorgproto
--HOST_XLIB_LIBXDMCP_DEPENDENCIES = host-xutil_util-macros host-xorgproto
-+XLIB_LIBXDMCP_DEPENDENCIES = xutil_util-macros xorgproto host-pkgconf
-+HOST_XLIB_LIBXDMCP_DEPENDENCIES = host-xutil_util-macros host-xorgproto host-pkgconf
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
--- 
-2.14.4
+Ferdinand
