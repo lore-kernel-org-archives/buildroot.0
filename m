@@ -1,114 +1,103 @@
-From: Marcel Patzlaff <m.patzlaff@pilz.de>
-Date: Fri, 21 Sep 2018 15:55:20 +0200
-Subject: [Buildroot] [PATCH 1/2] package/pkg-kconfig.mk: Reusability
- improvements
-In-Reply-To: <20180921135521.32435-1-m.patzlaff@pilz.de>
-References: <20180921135521.32435-1-m.patzlaff@pilz.de>
-Message-ID: <20180921135521.32435-2-m.patzlaff@pilz.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 21 Sep 2018 17:46:30 +0300
+Subject: [Buildroot] [PATCH 1/1] font-awesome compatible with fontconfig
+In-Reply-To: <CAOt0XSc31keNicgWfc4jcn=-z43D8Vdb=0SCnVtL4POJz1QzoQ@mail.gmail.com>
+References: <20180921031640.2238-1-benj.calderon@gmail.com>
+ <87worfsdua.fsf@tkos.co.il>
+ <CAOt0XSfL9ossLTQ6Z7eBA92=XE9a1PKGbH5Pyrjcao3W3JhC_A@mail.gmail.com>
+ <87va6zsaqj.fsf@tkos.co.il>
+ <CAOt0XSc31keNicgWfc4jcn=-z43D8Vdb=0SCnVtL4POJz1QzoQ@mail.gmail.com>
+Message-ID: <87sh22sybd.fsf@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch refactors savedefconfig and the configuration re-generation
-to separate macros so that the functionality can be re-used in further
-rules.
+Hi Benjam?n,
 
-Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
----
- package/pkg-kconfig.mk | 43 ++++++++++++++++++++++++------------------
- 1 file changed, 25 insertions(+), 18 deletions(-)
+Please keep the list on Cc.
 
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index d6c95b897e..5952be5482 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -27,6 +27,28 @@ define kconfig-package-update-config
- 	$(Q)touch --reference $($(PKG)_DIR)/$($(PKG)_KCONFIG_DOTCONFIG) $($(PKG)_KCONFIG_FILE)
- endef
- 
-+# Macro to save the defconfig file
-+# $(1): the name of the package in upper-case letters
-+define kconfig-package-savedefconfig
-+	$($(1)_MAKE_ENV) $(MAKE) -C $($(1)_DIR) \
-+		$($(1)_KCONFIG_OPTS) savedefconfig
-+endef
-+
-+# The correct way to regenerate a .config file is to use 'make olddefconfig'.
-+# For historical reasons, the target name is 'oldnoconfig' between Linux kernel
-+# versions 2.6.36 and 3.6, and remains as an alias in later versions.
-+# In older versions, and in some other projects that use kconfig, the target is
-+# not supported at all, and we use 'yes "" | make oldconfig' as a fallback
-+# only, as this can fail in complex cases.
-+# $(1): the name of the package in upper-case letters
-+define kconfig-package-regen-dot-config
-+	$(if $(filter olddefconfig,$($(1)_KCONFIG_RULES)),
-+		$(Q)$($(1)_KCONFIG_MAKE) olddefconfig,
-+		$(if $(filter oldnoconfig,$($(1)_KCONFIG_RULES)),
-+			$(Q)$($(1)_KCONFIG_MAKE) oldnoconfig,
-+			$(Q)(yes "" | $($(1)_KCONFIG_MAKE) oldconfig)))
-+endef
-+
- ################################################################################
- # inner-kconfig-package -- generates the make targets needed to support a
- # kconfig package
-@@ -94,20 +116,6 @@ $(2)_KCONFIG_RULES = \
- 	$$(shell $$($(2)_KCONFIG_MAKE) -pn config 2>/dev/null | \
- 		sed 's/^\([_0-9a-zA-Z]*config\):.*/\1/ p; d')
- 
--# The correct way to regenerate a .config file is to use 'make olddefconfig'.
--# For historical reasons, the target name is 'oldnoconfig' between Linux kernel
--# versions 2.6.36 and 3.6, and remains as an alias in later versions.
--# In older versions, and in some other projects that use kconfig, the target is
--# not supported at all, and we use 'yes "" | make oldconfig' as a fallback
--# only, as this can fail in complex cases.
--define $(2)_REGEN_DOT_CONFIG
--	$$(if $$(filter olddefconfig,$$($(2)_KCONFIG_RULES)),
--		$$(Q)$$($(2)_KCONFIG_MAKE) olddefconfig,
--		$$(if $$(filter oldnoconfig,$$($(2)_KCONFIG_RULES)),
--			$$(Q)$$($(2)_KCONFIG_MAKE) oldnoconfig,
--			$$(Q)(yes "" | $$($(2)_KCONFIG_MAKE) oldconfig)))
--endef
--
- # The specified source configuration file and any additional configuration file
- # fragments are merged together to .config, after the package has been patched.
- # Since the file could be a defconfig file it needs to be expanded to a
-@@ -118,7 +126,7 @@ $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG): $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_F
- 		$$(INSTALL) -m 0644 -D $$($(2)_KCONFIG_FILE) $$(@))
- 	$$(Q)support/kconfig/merge_config.sh -m -O $$(@D) \
- 		$$(@) $$($(2)_KCONFIG_FRAGMENT_FILES)
--	$$($(2)_REGEN_DOT_CONFIG)
-+	$$(call kconfig-package-regen-dot-config,$(2))
- 
- # If _KCONFIG_FILE or _KCONFIG_FRAGMENT_FILES exists, this dependency is
- # already implied, but if we only have a _KCONFIG_DEFCONFIG we have to add
-@@ -134,7 +142,7 @@ $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG): | $$($(2)_KCONFIG_DEPENDENCIES)
- # The exact rules are specified by the package .mk file.
- define $(2)_FIXUP_DOT_CONFIG
- 	$$($(2)_KCONFIG_FIXUP_CMDS)
--	$$($(2)_REGEN_DOT_CONFIG)
-+	$$(call kconfig-package-regen-dot-config,$(2))
- 	$$(Q)touch $$($(2)_DIR)/.stamp_kconfig_fixup_done
- endef
- 
-@@ -223,8 +231,7 @@ $(1)-check-configuration-done:
- 	fi
- 
- $(1)-savedefconfig: $(1)-check-configuration-done
--	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
--		$$($(2)_KCONFIG_OPTS) savedefconfig
-+	$$(call kconfig-package-savedefconfig,$(2))
- 
- # Target to copy back the configuration to the source configuration file
- # Even though we could use 'cp --preserve-timestamps' here, the separate
--- 
-2.17.1
+Benjam?n Calder?n writes:
+> The directory font-awesome inside /usr/share/fonts is just for separation
+> of concerns. That's the practice of other font packages and if we where to
+> upgrade to font-awesome 5 which includes more than one file it would all be
+> contained in one folder.
 
-Gesch?ftsf?hrung: Susanne Kunschert, Thomas Pilz
-Pilz GmbH & Co. KG, Sitz: Ostfildern, HRA 210 893, Amtsgericht Stuttgart
-Kompl. Ges. Peter Pilz GmbH, Sitz: Ostfildern, HRB 210 612, Amtsgericht Stuttgart
-Umsatzsteuer: ID-Nr. DE 145 355 773, WEEE-Reg.-Nr. DE 71636849
-This email is intended solely for the use of the named address(es). Any unauthorised disclosure, copying or distribution of these confidential information contained therein, or the taking of any action based on it, is prohibited. The sender disclaims any liability for the integrity of this email. Legally binding declarations must be in written form.
-Umweltschutz liegt uns am Herzen! - Bitte denken Sie an unsere Umwelt, bevor Sie diese E-Mail drucken.
-We do care about the environment! - Please consider the environment before printing this e-mail.
+But this folder is empty after you commit. Why create it?
+
+> The other folders are not necessary because they are actually useless in
+> this context. CSS needs to be in a server root to be used together with
+> HTML pages. Less and scss would need processing and thus are more of
+> "source code" than anything else for web development, again, very unlikely
+> to be used on an embedded system.
+>
+> Will modify the path to fix the license.
+
+Please also mention the information about the other directories in the
+commit log.
+
+baruch
+
+> On Fri, Sep 21, 2018 at 1:03 AM Baruch Siach <baruch@tkos.co.il> wrote:
+>
+>> Hi Benjam?n,
+>>
+>> Benjam?n Calder?n writes:
+>> > the standard location for fonts is /usr/share/fonts/* and whatever is
+>> there
+>> > can be used by other programs that use fontconfig (Qt5 in my case)
+>> > This patch fixed the directory where font-awesome is installed from
+>> > /usr/share/font-awesome to /usr/share/fonts/fontawesome thus it can be
+>> > accessed by other applications and appears when running fc-list.
+>> >
+>> > I have tested it with Qt5 in rpi3 and with fc-list on qemu_x86_64
+>> >
+>> > On Thu, Sep 20, 2018 at 11:56 PM Baruch Siach <baruch@tkos.co.il> wrote:
+>> >> Benjamin Calderon writes:
+>> >> > This commit installs font-awesome in the standard fonts directory
+>> >> > making it available systemwide.
+>> >> >
+>> >> > Signed-off-by: Benjamin Calderon <benj.calderon@gmail.com>
+>> >> > ---
+>> >> >  package/font-awesome/font-awesome.mk | 6 ++----
+>> >> >  1 file changed, 2 insertions(+), 4 deletions(-)
+>> >> >
+>> >> > diff --git a/package/font-awesome/font-awesome.mk
+>> >> b/package/font-awesome/font-awesome.mk
+>> >> > index f39401041a..b1026b3c4d 100644
+>> >> > --- a/package/font-awesome/font-awesome.mk
+>> >> > +++ b/package/font-awesome/font-awesome.mk
+>> >> > @@ -7,12 +7,10 @@
+>> >> >  FONT_AWESOME_VERSION = v4.7.0
+>> >> >  FONT_AWESOME_SITE = $(call
+>> >> github,FortAwesome,Font-Awesome,$(FONT_AWESOME_VERSION))
+>> >> >  FONT_AWESOME_LICENSE = OFL-1.1 (font), MIT (CSS, LESS and Sass files)
+>> >> > -FONT_AWESOME_DIRECTORIES_LIST = css fonts less scss
+>> >> >
+>> >> >  define FONT_AWESOME_INSTALL_TARGET_CMDS
+>> >> > -     mkdir -p $(TARGET_DIR)/usr/share/font-awesome/
+>> >> > -     $(foreach d,$(FONT_AWESOME_DIRECTORIES_LIST),\
+>> >> > -             cp -dpfr $(@D)/$(d)
+>> >> $(TARGET_DIR)/usr/share/font-awesome$(sep))
+>> >> > +     mkdir -p $(TARGET_DIR)/usr/share/fonts/font-awesome/
+>>
+>> So why do we need this directory? And what about fonts in the
+>> directories listed in FONT_AWESOME_DIRECTORIES_LIST? Aren't they useful
+>> anymore? If so, please update the license.
+>>
+>> baruch
+>>
+>> >> > +     cp $(@D)/fonts/FontAwesome.otf
+>> >> $(TARGET_DIR)/usr/share/fonts/font-awesome
+>> >>
+>> >> What does this patch fix? What about the fonts in other directories?
+>> >>
+>> >> >  endef
+>> >> >
+>> >> >  $(eval $(generic-package))
+
+--
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
