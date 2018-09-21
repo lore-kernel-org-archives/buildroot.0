@@ -1,103 +1,154 @@
-From: Ferdinand van Aartsen <ferdinand@ombud.nl>
-Date: Fri, 21 Sep 2018 17:35:16 +0200
-Subject: [Buildroot] [PATCH v3 1/1] chrony: Update to 3.4
-Message-ID: <20180921153516.31459-1-ferdinand@ombud.nl>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 21 Sep 2018 10:35:56 -0500
+Subject: [Buildroot] [PATCH v2 1/2] support/scripts/pkg-stats: URL checking
+ support
+Message-ID: <1537544157-2992-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch 0002-util-fall-back-to-reading-dev-urandom-when-getrandom.patch
-was applied upstream in this version, so it can be deleted.
+ - Adds support to check if a package has a URL and if that URL
+   is valid by doing a header request.
+ - Reports this information as part of the generated html output
 
-Signed-off-by: Ferdinand van Aartsen <ferdinand@ombud.nl>
+The URL data is currently gathered from the URL string provided
+in the Kconfig help sections for each package.
+
+This check helps ensure the URLs are valid and can be used
+for other scripting purposes as the product's home site/URL.
+CPE XML generation is an example of a case that could use this
+product URL as part of an automated update generation script.
+
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
-Changes v2 -> v3:
-  - Fix commit style
+Changes
+v1 -> v2
+ - Dropped disabling of SSL cert verifing
 
-Changes v1 -> v2:
-  - Actually remove the patch
+[Thomas
+ - Moved URL report to new column
+ - Added color coding
+ - Better info on if a package doesn't have a Config.in to search
+   or the Config.in is missing the URL
 ---
- ...o-reading-dev-urandom-when-getrandom.patch | 42 -------------------
- package/chrony/chrony.hash                    |  6 +--
- package/chrony/chrony.mk                      |  2 +-
- 3 files changed, 4 insertions(+), 46 deletions(-)
- delete mode 100644 package/chrony/0002-util-fall-back-to-reading-dev-urandom-when-getrandom.patch
+ support/scripts/pkg-stats | 57 +++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
 
-diff --git a/package/chrony/0002-util-fall-back-to-reading-dev-urandom-when-getrandom.patch b/package/chrony/0002-util-fall-back-to-reading-dev-urandom-when-getrandom.patch
-deleted file mode 100644
-index d71685e5cd..0000000000
---- a/package/chrony/0002-util-fall-back-to-reading-dev-urandom-when-getrandom.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From 7c5bd948bb7e21fa0ee22f29e97748b2d0360319 Mon Sep 17 00:00:00 2001
--From: Miroslav Lichvar <mlichvar@redhat.com>
--Date: Thu, 17 May 2018 14:16:58 +0200
--Subject: [PATCH] util: fall back to reading /dev/urandom when getrandom()
-- blocks
--
--With recent changes in the Linux kernel, the getrandom() system call may
--block for a long time after boot on machines that don't have enough
--entropy. It blocks the chronyd's initialization before it can detach
--from the terminal and may cause a chronyd service to fail to start due
--to a timeout.
--
--At least for now, enable the GRND_NONBLOCK flag to make the system call
--non-blocking and let the code fall back to reading /dev/urandom (which
--never blocks) if the system call failed with EAGAIN or any other error.
--
--This makes the start of chronyd non-deterministic with respect to files
--that it needs to open and possibly also makes it slightly easier to
--guess the transmit/receive timestamp in client requests until the
--urandom source is fully initialized.
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- util.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/util.c b/util.c
--index 4b3e455..76417d5 100644
----- a/util.c
--+++ b/util.c
--@@ -1224,7 +1224,7 @@ get_random_bytes_getrandom(char *buf, unsigned int len)
--       if (disabled)
--         break;
-- 
---      if (getrandom(rand_buf, sizeof (rand_buf), 0) != sizeof (rand_buf)) {
--+      if (getrandom(rand_buf, sizeof (rand_buf), GRND_NONBLOCK) != sizeof (rand_buf)) {
--         disabled = 1;
--         break;
--       }
---- 
--2.11.0
--
-diff --git a/package/chrony/chrony.hash b/package/chrony/chrony.hash
-index 38f1534295..925240cf6a 100644
---- a/package/chrony/chrony.hash
-+++ b/package/chrony/chrony.hash
-@@ -1,5 +1,5 @@
--# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2017/09/msg00000.html
--md5 f4c4eb0dc92f35ee4bb7d3dcd8029ecb  chrony-3.2.tar.gz
--sha1 64db6c31e013222cc0a2b66322192b4cedf6e048  chrony-3.2.tar.gz
-+# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2018/09/msg00000.html
-+md5 7170e750469c198fc6784047d6f71144  chrony-3.4.tar.gz
-+sha1 fa41e595e7041a9deda76a69e970a023091474f6  chrony-3.4.tar.gz
- # Locally calculated
- sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
-index 8868e8481c..b5821b238d 100644
---- a/package/chrony/chrony.mk
-+++ b/package/chrony/chrony.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index b7b00e8..37f89ef 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -24,6 +24,7 @@ from collections import defaultdict
+ import re
+ import subprocess
+ import sys
++import requests  # URL checking
  
--CHRONY_VERSION = 3.2
-+CHRONY_VERSION = 3.4
- CHRONY_SITE = http://download.tuxfamily.org/chrony
- CHRONY_LICENSE = GPL-2.0
- CHRONY_LICENSE_FILES = COPYING
+ INFRA_RE = re.compile("\$\(eval \$\(([a-z-]*)-package\)\)")
+ 
+@@ -43,10 +44,32 @@ class Package:
+         self.patch_count = 0
+         self.warnings = 0
+         self.current_version = None
++        self.url = None
++        self.url_status = None
+ 
+     def pkgvar(self):
+         return self.name.upper().replace("-", "_")
+ 
++    def set_url(self):
++        """
++        Fills in the .url field
++        """
++        in_help_section = False
++        self.url_status = "No Config.in"
++        for filename in os.listdir(os.path.dirname(self.path)):
++            if fnmatch.fnmatch(filename, 'Config.*'):
++                fp = open(os.path.join(os.path.dirname(self.path), filename), "r")
++                for config_line in fp:
++                    if config_line.strip() == "help":
++                        in_help_section = True
++                    if in_help_section and re.match("(.*)https?://", config_line):
++                        self.url = ''.join(config_line.split())
++                        self.url_status = "Found"
++                        fp.close()
++                        return
++                self.url_status = "Missing"
++                fp.close()
++
+     def set_infra(self):
+         """
+         Fills in the .infras field
+@@ -254,6 +277,14 @@ def package_init_make_info():
+ 
+         Package.all_versions[pkgvar] = value
+ 
++def check_url_status(pkg):
++    if pkg.url_status != "Missing" and pkg.url_status != "No Config.in":
++        try:
++            url_status_code = requests.head(pkg.url, timeout=5).status_code
++            if url_status_code >= 400:
++                pkg.url_status = "Invalid(%s)" % str(url_status_code)
++        except requests.exceptions.RequestException as e:
++            return
+ 
+ def calculate_stats(packages):
+     stats = defaultdict(int)
+@@ -311,6 +342,15 @@ td.somepatches {
+ td.lotsofpatches {
+   background: #ff9a69;
+ }
++td.good_url {
++  background: #d2ffc4;
++}
++td.missing_url {
++  background: #ffd870;
++}
++td.invalid_url {
++  background: #ff9a69;
++}
+ </style>
+ <title>Statistics of Buildroot packages</title>
+ </head>
+@@ -422,6 +462,20 @@ def dump_html_pkg(f, pkg):
+     f.write("  <td class=\"%s\">%d</td>\n" %
+             (" ".join(td_class), pkg.warnings))
+ 
++    # URL status
++    td_class = ["centered"]
++    url_str = pkg.url_status
++    if pkg.url_status == "Missing" or pkg.url_status == "No Config.in":
++        td_class.append("missing_url")
++    elif pkg.url_status.startswith("Invalid"):
++        td_class.append("invalid_url")
++        url_str = "<a href=%s>%s</a>" % (pkg.url, pkg.url_status)
++    else:
++        td_class.append("good_url")
++        url_str = "<a href=%s>Link</a>" % pkg.url
++    f.write("  <td class=\"%s\">%s</td>\n" %
++            (" ".join(td_class), url_str))
++
+     f.write(" </tr>\n")
+ 
+ 
+@@ -437,6 +491,7 @@ def dump_html_all_pkgs(f, packages):
+ <td class=\"centered\">Hash file</td>
+ <td class=\"centered\">Current version</td>
+ <td class=\"centered\">Warnings</td>
++<td class=\"centered\">URL</td>
+ </tr>
+ """)
+     for pkg in sorted(packages):
+@@ -517,6 +572,8 @@ def __main__():
+         pkg.set_patch_count()
+         pkg.set_check_package_warnings()
+         pkg.set_current_version()
++        pkg.set_url()
++        check_url_status(pkg)
+     print("Calculate stats")
+     stats = calculate_stats(packages)
+     print("Write HTML")
 -- 
-2.19.0
+1.9.1
