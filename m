@@ -1,45 +1,44 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 21 Sep 2018 12:59:48 +0300
-Subject: [Buildroot] [PATCH 1/1] python-lxml: bump to version 4.2.5
-Message-ID: <20180921095948.964-1-asafka7@gmail.com>
+Date: Fri, 21 Sep 2018 13:05:02 +0300
+Subject: [Buildroot] [PATCH 1/1] ccache: bump to version 3.4.3
+Message-ID: <20180921100502.8813-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hashes for license files.
+Update LICENSE.adoc: change was zlib and year bump.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-lxml/python-lxml.hash | 6 +++++-
- package/python-lxml/python-lxml.mk   | 2 +-
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ package/ccache/ccache.hash | 4 ++--
+ package/ccache/ccache.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
-index 9b75a26280..610c0d6db4 100644
---- a/package/python-lxml/python-lxml.hash
-+++ b/package/python-lxml/python-lxml.hash
-@@ -1,2 +1,6 @@
- # Locally computed
--sha256  e2afbe403090f5893e254958d02875e0732975e73c4c0cdd33c1f009a61963ca  lxml-4.2.4.tgz
-+sha256  36720698c29e7a9626a0dc802ef8885f8f0239bfd1689628ecd459a061f2807f  lxml-4.2.5.tgz
-+sha256  41d49dd406aa0e1548a6d5f21a30d6bf638b3cd96eb7289dd348d83ed2e40392  LICENSES.txt
-+sha256  69edb445c1335a8312d4c09271847e9956d84f0d9f724d125340cc3fad767b2a  doc/licenses/BSD.txt
-+sha256  0497ae8138811ef4466ede653bab7a59feb3d3c14f9ed50fc33a00aeb5bec32e  doc/licenses/elementtree.txt
-+sha256  705bdfece6dbb87879d9ec40a8c9530651aefb98ae387da9134584464742d539  src/lxml/isoschematron/resources/rng/iso-schematron.rng
-diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
-index 80c04c0055..61f81e6363 100644
---- a/package/python-lxml/python-lxml.mk
-+++ b/package/python-lxml/python-lxml.mk
+diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
+index 5ed5037ed0..e97797fd14 100644
+--- a/package/ccache/ccache.hash
++++ b/package/ccache/ccache.hash
+@@ -1,4 +1,4 @@
+ # sha256 computed locally
+-sha256  18a8b14367d63d3d37fb6c33cba60e1b7fcd7a63d608df97c9771ae0d234fee2  ccache-3.4.2.tar.xz
++sha256  297e55a7622578395c1d5cfa163cc61e345ed69c52aaf94a9583634046c15f4a  ccache-3.4.3.tar.xz
+ sha256  ec6b1a326ff93b2cc21df88a697ae470ff6927a55b8929e7e491b315e1563361  GPL-3.0.txt
+-sha256  853e071acb730ca933860a0acf4e44e5dc4bffed6b09503bbcf878e343addcc5  LICENSE.adoc
++sha256  449995742c9358c55b40cefbea5d2c7f05280454d562b6e17a75f46d2c2f6e85  LICENSE.adoc
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index 851939ebda..3e2283e586 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_LXML_VERSION = 4.2.4
-+PYTHON_LXML_VERSION = 4.2.5
- PYTHON_LXML_SITE = http://lxml.de/files
- PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tgz
- 
+-CCACHE_VERSION = 3.4.2
++CCACHE_VERSION = 3.4.3
+ CCACHE_SITE = https://www.samba.org/ftp/ccache
+ CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
+ CCACHE_LICENSE = GPL-3.0+, others
 -- 
 2.17.1
