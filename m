@@ -1,44 +1,47 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 21 Sep 2018 13:05:02 +0300
-Subject: [Buildroot] [PATCH 1/1] ccache: bump to version 3.4.3
-Message-ID: <20180921100502.8813-1-asafka7@gmail.com>
+From: Ferdinand van Aartsen <ferdinand@ombud.nl>
+Date: Fri, 21 Sep 2018 12:19:14 +0200
+Subject: [Buildroot] [PATCH 1/1] Point libxslt to the correct location of
+ libxml2
+Message-ID: <20180921101913.4366-1-ferdinand@ombud.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update LICENSE.adoc: change was zlib and year bump.
+Currently libxslt configure finds native /usr/bin/xml2-config.
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Ferdinand van Aartsen <ferdinand@ombud.nl>
 ---
- package/ccache/ccache.hash | 4 ++--
- package/ccache/ccache.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libxslt/libxslt.mk | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
-index 5ed5037ed0..e97797fd14 100644
---- a/package/ccache/ccache.hash
-+++ b/package/ccache/ccache.hash
-@@ -1,4 +1,4 @@
- # sha256 computed locally
--sha256  18a8b14367d63d3d37fb6c33cba60e1b7fcd7a63d608df97c9771ae0d234fee2  ccache-3.4.2.tar.xz
-+sha256  297e55a7622578395c1d5cfa163cc61e345ed69c52aaf94a9583634046c15f4a  ccache-3.4.3.tar.xz
- sha256  ec6b1a326ff93b2cc21df88a697ae470ff6927a55b8929e7e491b315e1563361  GPL-3.0.txt
--sha256  853e071acb730ca933860a0acf4e44e5dc4bffed6b09503bbcf878e343addcc5  LICENSE.adoc
-+sha256  449995742c9358c55b40cefbea5d2c7f05280454d562b6e17a75f46d2c2f6e85  LICENSE.adoc
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index 851939ebda..3e2283e586 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
+index 972d5b80d5..fb5d03ab44 100644
+--- a/package/libxslt/libxslt.mk
++++ b/package/libxslt/libxslt.mk
+@@ -13,7 +13,8 @@ LIBXSLT_LICENSE_FILES = COPYING
+ LIBXSLT_CONF_OPTS = \
+ 	--with-gnu-ld \
+ 	--without-debug \
+-	--without-python
++	--without-python \
++	--with-libxml-prefix=$(STAGING_DIR)/usr
+ LIBXSLT_CONFIG_SCRIPTS = xslt-config
+ LIBXSLT_DEPENDENCIES = host-pkgconf libxml2
  
--CCACHE_VERSION = 3.4.2
-+CCACHE_VERSION = 3.4.3
- CCACHE_SITE = https://www.samba.org/ftp/ccache
- CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
- CCACHE_LICENSE = GPL-3.0+, others
+@@ -25,7 +26,11 @@ else
+ LIBXSLT_CONF_OPTS += --without-crypto
+ endif
+ 
+-HOST_LIBXSLT_CONF_OPTS = --without-debug --without-python --without-crypto
++HOST_LIBXSLT_CONF_OPTS = \
++	--without-debug \
++	--without-python \
++	--without-crypto \
++	--with-libxml-prefix=$(HOST_DIR)/usr
+ 
+ HOST_LIBXSLT_DEPENDENCIES = host-pkgconf host-libxml2
+ 
 -- 
-2.17.1
+2.19.0
