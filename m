@@ -1,72 +1,102 @@
-From: Mario Lang <mlang@blind.guru>
-Date: Fri, 21 Sep 2018 08:34:53 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] brltty: use gcc instead of ld to link shared objects
-In-Reply-To: <CAPi7W81sP0HvhtrJs4m+RMsJ1o_P1HMvZ8hg4hkqL94xqe5a+w@mail.gmail.com>
- (Fabrice Fontaine's message of "Thu, 20 Sep 2018 23:48:59 +0200")
-References: <20180920172809.19993-1-fontaine.fabrice@gmail.com>
- <20180920210109.179978c4@windsurf>
- <CAPi7W81sP0HvhtrJs4m+RMsJ1o_P1HMvZ8hg4hkqL94xqe5a+w@mail.gmail.com>
-Message-ID: <87musbqrxu.fsf@home.blind.guru>
+From: Philipp Richter <richterphilipp.pops@gmail.com>
+Date: Fri, 21 Sep 2018 11:31:54 +0200
+Subject: [Buildroot] [RFC v1] qt5base: fix libressl compile
+In-Reply-To: <20180920233833.7391f81a@windsurf>
+References: <20180911200505.20234-1-ps.report@gmx.net>
+ <20180920233833.7391f81a@windsurf>
+Message-ID: <CA+Vb7hrD5m1upJivd2GmuVOzZiN-WciPBgDYwqyO59-foYviEg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Hi,
 
-> Dear Thomas,
+I left a comment on the qt bug report, I hope it is alright the way I put it.
+The discussion around the ssl library compatibility should at least be
+going on since so many packagers from different distros have the
+burden to keep qt functioning with libressl.
+
+Regards,
+Philipp Richter.
+
+On Thu, 20 Sep 2018 at 23:39, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 >
-> Le jeu. 20 sept. 2018 ? 21:01, Thomas Petazzoni <
-> thomas.petazzoni at bootlin.com> a ?crit :
+> Hello,
 >
->> Hello,
->>
->> On Thu, 20 Sep 2018 19:28:09 +0200, Fabrice Fontaine wrote:
->> > Bump to version 5.6 has reintroduced the issue fixed by patch 854093 on
->> > version 5.5.
->> >
->> > Indeed, third patch was merged upstream but it was then reverted:
->> >
->> https://github.com/brltty/brltty/commit/9e7d62c869d3c1cbe12dda8b0291a4692c193416
->> >
->> > Moreover, since commit 3a2e3f6fa5ef0a210ffeba5ed05c79965d0cc3c7, MKOBJ
->> > was renamed into MKREL. So, instead of patching again brltty, overwrite
->> > MKREL to use "gcc -shared -o" instead of "ld -r -o".
->>
->> Are you really sure gcc -shared -o does the same thing as ld -r -o ?
-
-ld fails to link on mipsel at least.  What else should we do?
-"ABI is incompatible with that of the selected emulation"
-"Attempt to do relocatable link with elf64-tradlittlemips input and
-elf32-ntradlittlemips output"
-
-Hmm, maybe this is a HOST/TARGET mixup?  But how?
-
-> I didn't think about it, I basically backported the behavior of third patch
-> (upstream commit 4c8aba42e246b96d10ffcbd57653682375499e46). The third patch
-> applied to brltty 5.5 (https://patchwork.ozlabs.org/patch/854093/) was
-> replacing MKOBJ ($(LD) -r -o) by MKMOD defined as (CC)
-> ${brltty_mkmod_gcc_make=-shared}
-> BRLTTY_OPTIONS_LD2CC([${brltty_mkmod_ld_options}]) -o" with
-> brltty_mkmod_ld_make="-shared" on linux (see
-> https://github.com/brltty/brltty/blob/4c8aba42e246b96d10ffcbd57653682375499e46/configure.ac
-> ).
-> More information can be found here:
-> https://github.com/brltty/brltty/pull/113
-> However, I don't know why this commit was reverted one week later.
-> Mario, you told us in the review of the first patch that the upstream
-> author decided to "fix" the issue in a different way but actually the issue
-> is not fixed. Do you know why this commit was reverted? If needed, I can
-> create an issue to get more info.
-
-It was reverted because it failed to build on Mac OS X, and Mac OS X was
-deemed more important then cross-compiling on Linux.
-
-Upstream (dave at mielke.cc) is very responsive, maybe you have more luck
-trying to work this one out with him?
-
--- 
-CYa,
-  ?????
+> On Tue, 11 Sep 2018 22:05:05 +0200, Peter Seiderer wrote:
+> > Add freebsd provided patch to fix libressl compile (patch taken
+> > from [1]/[2], for upstream status see [3]), fixes bug #11341 ([4]).
+> >
+> > [1] https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=228344
+> > [2] https://bz-attachments.freebsd.org/attachment.cgi?id=196994
+> > [3] https://bugreports.qt.io/browse/QTBUG-68374
+> > [4] https://bugs.busybox.net/show_bug.cgi?id=11341
+>
+> Upstream is not very helpful "We don't support LibreSSL". Could you
+> perhaps participate to the bug report to say Buildroot is also
+> interested in seeing LibreSSL supported by Qt ?
+>
+> > diff --git a/package/qt5/qt5base/5.11.1/0005-qtbase-fix-libressl-compile.patch b/package/qt5/qt5base/5.11.1/0005-qtbase-fix-libressl-compile.patch
+>
+> Why are you patching only the 5.11.1 version, and not also the LTS
+> version ?
+>
+> > +-#if !defined(OPENSSL_VERSION_NUMBER) || OPENSSL_VERSION_NUMBER-0 < 0x10100000L
+> > ++#if !defined(OPENSSL_VERSION_NUMBER) || OPENSSL_VERSION_NUMBER-0 < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+> > + #  error "OpenSSL >= 1.1 is required"
+>
+> I don't have the full code context here, but isn't this going to #error
+> when using LibreSSL, because defined(LIBRESSL_VERSION_NUMBER) is true ?
+>
+> > +-#if OPENSSL_VERSION_NUMBER >= 0x10002000L
+> > ++#if OPENSSL_VERSION_NUMBER >= 0x10002000L && !defined(LIBRESSL_VERSION_NUMBER)
+> > +     if (QSslSocket::sslLibraryVersionNumber() >= 0x10002000L) {
+> > +         QSharedPointer<SSL_CONF_CTX> cctx(q_SSL_CONF_CTX_new(), &q_SSL_CONF_CTX_free);
+> > +         if (cctx) {
+> > +diff --git a/src/network/ssl/qsslsocket_openssl_symbols.cpp b/src/network/ssl/qsslsocket_openssl_symbols.cpp
+> > +index 466eba0bd0..c7d89436ca 100644
+> > +--- a/src/network/ssl/qsslsocket_openssl_symbols.cpp
+> > ++++ b/src/network/ssl/qsslsocket_openssl_symbols.cpp
+> > +@@ -406,7 +406,7 @@ DEFINEFUNC2(int, SSL_CTX_use_PrivateKey, SSL_CTX *a, a, EVP_PKEY *b, b, return -
+> > + DEFINEFUNC2(int, SSL_CTX_use_RSAPrivateKey, SSL_CTX *a, a, RSA *b, b, return -1, return)
+> > + DEFINEFUNC3(int, SSL_CTX_use_PrivateKey_file, SSL_CTX *a, a, const char *b, b, int c, c, return -1, return)
+> > + DEFINEFUNC(X509_STORE *, SSL_CTX_get_cert_store, const SSL_CTX *a, a, return 0, return)
+> > +-#if OPENSSL_VERSION_NUMBER >= 0x10002000L
+> > ++#if OPENSSL_VERSION_NUMBER >= 0x10002000L && !defined(LIBRESSL_VERSION_NUMBER)
+> > + DEFINEFUNC(SSL_CONF_CTX *, SSL_CONF_CTX_new, DUMMYARG, DUMMYARG, return 0, return);
+> > + DEFINEFUNC(void, SSL_CONF_CTX_free, SSL_CONF_CTX *a, a, return ,return);
+> > + DEFINEFUNC2(void, SSL_CONF_CTX_set_ssl_ctx, SSL_CONF_CTX *a, a, SSL_CTX *b, b, return, return);
+> > +@@ -1123,12 +1123,14 @@ bool q_resolveOpenSslSymbols()
+> > +     RESOLVEFUNC(SSL_CTX_use_PrivateKey_file)
+> > +     RESOLVEFUNC(SSL_CTX_get_cert_store);
+> > + #if OPENSSL_VERSION_NUMBER >= 0x10002000L
+> > ++#if !defined(LIBRESSL_VERSION_NUMBER)
+>
+> Why not && !defined(LIBRESSL_VERSION_NUMBER)
+>
+> like is done in the previous chunk, and the next one ?
+>
+> > +diff --git a/src/network/ssl/qsslsocket_openssl_symbols_p.h b/src/network/ssl/qsslsocket_openssl_symbols_p.h
+> > +index 68b519d74e..7f7f816803 100644
+> > +--- a/src/network/ssl/qsslsocket_openssl_symbols_p.h
+> > ++++ b/src/network/ssl/qsslsocket_openssl_symbols_p.h
+> > +@@ -356,7 +356,7 @@ int q_SSL_CTX_use_PrivateKey(SSL_CTX *a, EVP_PKEY *b);
+> > + int q_SSL_CTX_use_RSAPrivateKey(SSL_CTX *a, RSA *b);
+> > + int q_SSL_CTX_use_PrivateKey_file(SSL_CTX *a, const char *b, int c);
+> > + X509_STORE *q_SSL_CTX_get_cert_store(const SSL_CTX *a);
+> > +-#if OPENSSL_VERSION_NUMBER >= 0x10002000L
+> > ++#if OPENSSL_VERSION_NUMBER >= 0x10002000L && !defined(LIBRESSL_VERSION_NUMBER)
+> > + SSL_CONF_CTX *q_SSL_CONF_CTX_new();
+> > + void q_SSL_CONF_CTX_free(SSL_CONF_CTX *a);
+> > + void q_SSL_CONF_CTX_set_ssl_ctx(SSL_CONF_CTX *a, SSL_CTX *b);
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
