@@ -1,17 +1,19 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 21 Sep 2018 22:50:12 +0200
-Subject: [Buildroot] [PATCH v2,7/8] selinux-python: bump to version 2.8
+Date: Fri, 21 Sep 2018 22:50:08 +0200
+Subject: [Buildroot] [PATCH v2,3/8] libsemanage: bump to version 2.8
 In-Reply-To: <20180921205013.21829-1-fontaine.fabrice@gmail.com>
 References: <20180921205013.21829-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180921205013.21829-7-fontaine.fabrice@gmail.com>
+Message-ID: <20180921205013.21829-3-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Remove first patch (alread in version), see:
-  https://github.com/SELinuxProject/selinux/commit/11aaf180ef128551d9f8d65dbd32961e99670914
+- Remove patch (already in version), see:
+  https://github.com/SELinuxProject/selinux/commit/e15f61e5d2fe74c6e7c0a5f81083a93b508c35f7
+- Use DESTDIR=$(HOST_DIR) instead of PREFIX=$(HOST_DIR) to install host
+  variant
 - Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
@@ -22,160 +24,170 @@ Changes v1 -> v2 (after review of Matthew Weber and Marcus Folkesson):
    libsemanage
  - Remove libselinux.so and libsepol.so symbolic link (not needed)
 
- ...-follow-standard-semantics-for-DESTD.patch | 117 ------------------
- package/selinux-python/selinux-python.hash    |   5 +-
- package/selinux-python/selinux-python.mk      |   4 +-
- 3 files changed, 6 insertions(+), 120 deletions(-)
- delete mode 100644 package/selinux-python/0001-python-build-follow-standard-semantics-for-DESTD.patch
+ ...-follow-standard-semantics-for-DESTD.patch | 118 ------------------
+ package/libsemanage/libsemanage.hash          |   5 +-
+ package/libsemanage/libsemanage.mk            |   6 +-
+ 3 files changed, 7 insertions(+), 122 deletions(-)
+ delete mode 100644 package/libsemanage/0001-libsemanage-build-follow-standard-semantics-for-DESTD.patch
 
-diff --git a/package/selinux-python/0001-python-build-follow-standard-semantics-for-DESTD.patch b/package/selinux-python/0001-python-build-follow-standard-semantics-for-DESTD.patch
+diff --git a/package/libsemanage/0001-libsemanage-build-follow-standard-semantics-for-DESTD.patch b/package/libsemanage/0001-libsemanage-build-follow-standard-semantics-for-DESTD.patch
 deleted file mode 100644
-index 156701a818..0000000000
---- a/package/selinux-python/0001-python-build-follow-standard-semantics-for-DESTD.patch
+index 47ac6bded5..0000000000
+--- a/package/libsemanage/0001-libsemanage-build-follow-standard-semantics-for-DESTD.patch
 +++ /dev/null
-@@ -1,117 +0,0 @@
--python: build: follow standard semantics for DESTDIR and PREFIX
+@@ -1,118 +0,0 @@
+-libsemanage: build: follow standard semantics for DESTDIR and PREFIX
+-
+-This patch solves the following issues:
+-- DESTDIR is needed during compile time to compute library and header paths which it should not.
+-- Installing with both DESTDIR and PREFIX set gives us odd paths
+-- Make usage of DESTDIR and PREFIX more standard
 -
 -Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 -
--diff -durN python.orig/audit2allow/Makefile python/audit2allow/Makefile
----- python.orig/audit2allow/Makefile	2017-08-04 15:31:00.000000000 +0200
--+++ python/audit2allow/Makefile	2018-01-17 09:44:35.659573123 +0100
--@@ -1,19 +1,17 @@
-- PYTHON ?= python
-- 
+-diff -durN libsemanage.orig/include/Makefile libsemanage/include/Makefile
+---- libsemanage.orig/include/Makefile	2018-01-12 12:42:30.915376458 +0100
+-+++ libsemanage/include/Makefile	2018-01-12 10:04:18.632144240 +0100
+-@@ -1,6 +1,6 @@
 - # Installation directories.
 --PREFIX ?= $(DESTDIR)/usr
---BINDIR ?= $(PREFIX)/bin
---LIBDIR ?= $(PREFIX)/lib
---MANDIR ?= $(PREFIX)/share/man
---LOCALEDIR ?= /usr/share/locale
---INCLUDEDIR ?= $(PREFIX)/include
---LIBSEPOLA ?= $(LIBDIR)/libsepol.a
+--INCDIR ?= $(PREFIX)/include/semanage
 -+PREFIX ?= /usr
--+BINDIR ?= $(DESTDIR)$(PREFIX)/bin
--+LIBDIR ?= $(DESTDIR)$(PREFIX)/lib
--+MANDIR ?= $(DESTDIR)$(PREFIX)/share/man
-- 
-- CFLAGS ?= -Werror -Wall -W
-- 
-- all: audit2why sepolgen-ifgen-attr-helper
-- 
---sepolgen-ifgen-attr-helper: sepolgen-ifgen-attr-helper.o $(LIBSEPOLA)
--+sepolgen-ifgen-attr-helper: sepolgen-ifgen-attr-helper.o
--+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ -l:libsepol.a
-- 
-- audit2why:
-- 	ln -sf audit2allow audit2why
--diff -durN python.orig/chcat/Makefile python/chcat/Makefile
----- python.orig/chcat/Makefile	2017-08-04 15:31:00.000000000 +0200
--+++ python/chcat/Makefile	2018-01-17 09:44:35.659573123 +0100
--@@ -1,8 +1,8 @@
-- # Installation directories.
---PREFIX ?= $(DESTDIR)/usr
---BINDIR ?= $(PREFIX)/bin
---MANDIR ?= $(PREFIX)/share/man
---LOCALEDIR ?= $(PREFIX)/share/locale
--+PREFIX ?= /usr
--+BINDIR ?= $(DESTDIR)$(PREFIX)/bin
--+MANDIR ?= $(DESTDIR)$(PREFIX)/share/man
--+LOCALEDIR ?= $(DESTDIR)$(PREFIX)/share/locale
-- 
-- .PHONY: all
-- all: chcat
--diff -durN python.orig/semanage/Makefile python/semanage/Makefile
----- python.orig/semanage/Makefile	2017-08-04 15:31:00.000000000 +0200
--+++ python/semanage/Makefile	2018-01-17 09:44:43.676239705 +0100
--@@ -1,13 +1,12 @@
-- PYTHON ?= python
-- 
-- # Installation directories.
---PREFIX ?= $(DESTDIR)/usr
---LIBDIR ?= $(PREFIX)/lib
---SBINDIR ?= $(PREFIX)/sbin
---MANDIR = $(PREFIX)/share/man
---PYTHONLIBDIR ?= $(shell $(PYTHON) -c "from distutils.sysconfig import *; print(get_python_lib(1))")
--+PREFIX ?= /usr
--+SBINDIR ?= $(DESTDIR)$(PREFIX)/sbin
--+MANDIR = $(DESTDIR)$(PREFIX)/share/man
--+PYTHONLIBDIR ?= $(shell $(PYTHON) -c "from distutils.sysconfig import *; print(get_python_lib(prefix='$(PREFIX)'))")
-- PACKAGEDIR ?= $(DESTDIR)/$(PYTHONLIBDIR)
---BASHCOMPLETIONDIR ?= $(DESTDIR)/usr/share/bash-completion/completions
--+BASHCOMPLETIONDIR ?= $(DESTDIR)$(PREFIX)/share/bash-completion/completions
-- 
-- TARGETS=semanage
-- 
--diff -durN python.orig/sepolgen/src/sepolgen/Makefile python/sepolgen/src/sepolgen/Makefile
----- python.orig/sepolgen/src/sepolgen/Makefile	2017-08-04 15:31:00.000000000 +0200
--+++ python/sepolgen/src/sepolgen/Makefile	2018-01-17 09:44:35.659573123 +0100
--@@ -1,5 +1,6 @@
--+PREFIX ?= /usr
-- PYTHON ?= python
---PYTHONLIBDIR ?= $(shell $(PYTHON) -c "from distutils.sysconfig import *; print(get_python_lib(1))")
--+PYTHONLIBDIR ?= $(shell $(PYTHON) -c "from distutils.sysconfig import *; print(get_python_lib(prefix='$(PREFIX)'))")
-- PACKAGEDIR ?= $(DESTDIR)/$(PYTHONLIBDIR)/sepolgen
+-+INCDIR ?= $(DESTDIR)$(PREFIX)/include/semanage
 - 
 - all:
--diff -durN python.orig/sepolicy/Makefile python/sepolicy/Makefile
----- python.orig/sepolicy/Makefile	2017-08-04 15:31:00.000000000 +0200
--+++ python/sepolicy/Makefile	2018-01-17 09:44:35.659573123 +0100
--@@ -1,14 +1,14 @@
-- PYTHON ?= python
+- 
+-diff -durN libsemanage.orig/man/Makefile libsemanage/man/Makefile
+---- libsemanage.orig/man/Makefile	2018-01-12 12:42:30.915376458 +0100
+-+++ libsemanage/man/Makefile	2018-01-12 10:04:18.632144240 +0100
+-@@ -1,6 +1,7 @@
+- # Installation directories.
+--MAN3DIR ?= $(DESTDIR)/usr/share/man/man3
+--MAN5DIR ?= $(DESTDIR)/usr/share/man/man5
+-+PREFIX ?= /usr
+-+MAN3DIR ?= $(DESTDIR)$(PREFIX)/share/man/man3
+-+MAN5DIR ?= $(DESTDIR)$(PREFIX)/share/man/man5
+- 
+- all:
+- 
+-diff -durN libsemanage.orig/src/libsemanage.pc.in libsemanage/src/libsemanage.pc.in
+---- libsemanage.orig/src/libsemanage.pc.in	2018-01-12 12:42:30.918709792 +0100
+-+++ libsemanage/src/libsemanage.pc.in	2018-01-12 10:04:18.632144240 +0100
+-@@ -1,6 +1,6 @@
+- prefix=@prefix@
+- exec_prefix=${prefix}
+--libdir=${exec_prefix}/@libdir@
+-+libdir=@libdir@
+- includedir=@includedir@
+- 
+- Name: libsemanage
+-diff -durN libsemanage.orig/src/Makefile libsemanage/src/Makefile
+---- libsemanage.orig/src/Makefile	2018-01-12 12:42:30.918709792 +0100
+-+++ libsemanage/src/Makefile	2018-01-12 10:04:18.632144240 +0100
+-@@ -8,10 +8,10 @@
+- PKG_CONFIG ?= pkg-config
 - 
 - # Installation directories.
 --PREFIX ?= $(DESTDIR)/usr
---LIBDIR ?= $(PREFIX)/lib
---BINDIR ?= $(PREFIX)/bin
---DATADIR ?= $(PREFIX)/share
---MANDIR ?= $(PREFIX)/share/man
---LOCALEDIR ?= /usr/share/locale
---BASHCOMPLETIONDIR ?= $(DESTDIR)/usr/share/bash-completion/completions
---SHAREDIR ?= $(PREFIX)/share/sandbox
 -+PREFIX ?= /usr
--+LIBDIR ?= $(DESTDIR)$(PREFIX)/lib
--+BINDIR ?= $(DESTDIR)$(PREFIX)/bin
--+DATADIR ?= $(DESTDIR)$(PREFIX)/share
--+MANDIR ?= $(DESTDIR)$(PREFIX)/share/man
--+LOCALEDIR ?= $(DESTDIR)$(PREFIX)/share/locale
--+BASHCOMPLETIONDIR ?= $(DESTDIR)$(PREFIX)/share/bash-completion/completions
--+SHAREDIR ?= $(DESTDIR)$(PREFIX)/share/sandbox
-- CFLAGS ?= -Wall -Werror -Wextra -W
-- override CFLAGS += -DPACKAGE="policycoreutils" -DSHARED -shared
+- LIBDIR ?= $(PREFIX)/lib
+--SHLIBDIR ?= $(DESTDIR)/lib
+- INCLUDEDIR ?= $(PREFIX)/include
+-+LIBINSTALL = $(DESTDIR)$(LIBDIR)
+- PYINC ?= $(shell $(PKG_CONFIG) --cflags $(PYPREFIX))
+- PYLIBS ?= $(shell $(PKG_CONFIG) --libs $(PYPREFIX))
+- PYSITEDIR ?= $(DESTDIR)$(shell $(PYTHON) -c 'import site; print(site.getsitepackages()[0])')
+-@@ -20,8 +20,6 @@
+- RUBYLIBS ?= $(shell $(RUBY) -e 'puts "-L" + RbConfig::CONFIG["libdir"] + " -L" + RbConfig::CONFIG["archlibdir"] + " " + RbConfig::CONFIG["LIBRUBYARG_SHARED"]')
+- RUBYINSTALL ?= $(DESTDIR)$(shell $(RUBY) -e 'puts RbConfig::CONFIG["vendorarchdir"]')
 - 
--@@ -30,7 +30,7 @@
-- 	@$(PYTHON) test_sepolicy.py -v
+--LIBBASE=$(shell basename $(LIBDIR))
+--
+- DEFAULT_SEMANAGE_CONF_LOCATION=$(DESTDIR)/etc/selinux/semanage.conf
 - 
-- install:
---	$(PYTHON) setup.py install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
--+	$(PYTHON) setup.py install --prefix=$(PREFIX) `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
-- 	[ -d $(BINDIR) ] || mkdir -p $(BINDIR)
-- 	install -m 755 sepolicy.py $(BINDIR)/sepolicy
-- 	(cd $(BINDIR); ln -sf sepolicy sepolgen)
-diff --git a/package/selinux-python/selinux-python.hash b/package/selinux-python/selinux-python.hash
-index 42fe575e7b..99965004fc 100644
---- a/package/selinux-python/selinux-python.hash
-+++ b/package/selinux-python/selinux-python.hash
+- ifeq ($(DEBUG),1)
+-@@ -95,7 +93,7 @@
+- 	ln -sf $@ $(TARGET)
+- 
+- $(LIBPC): $(LIBPC).in ../VERSION
+--	sed -e 's/@VERSION@/$(VERSION)/; s:@prefix@:$(PREFIX):; s:@libdir@:$(LIBBASE):; s:@includedir@:$(INCLUDEDIR):' < $< > $@
+-+	sed -e 's/@VERSION@/$(VERSION)/; s:@prefix@:$(PREFIX):; s:@libdir@:$(LIBDIR):; s:@includedir@:$(INCLUDEDIR):' < $< > $@
+- 
+- semanageswig_python_exception.i: ../include/semanage/semanage.h
+- 	bash -e exception.sh > $@ || (rm -f $@ ; false)
+-@@ -136,13 +134,13 @@
+- 	$(SWIG) $<
+- 
+- install: all 
+--	test -d $(LIBDIR) || install -m 755 -d $(LIBDIR)
+--	install -m 644 $(LIBA) $(LIBDIR)
+--	install -m 755 $(LIBSO) $(LIBDIR)
+--	test -d $(LIBDIR)/pkgconfig || install -m 755 -d $(LIBDIR)/pkgconfig
+--	install -m 644 $(LIBPC) $(LIBDIR)/pkgconfig
+-+	test -d $(LIBINSTALL) || install -m 755 -d $(LIBINSTALL)
+-+	install -m 644 $(LIBA) $(LIBINSTALL)
+-+	install -m 755 $(LIBSO) $(LIBINSTALL)
+-+	test -d $(LIBINSTALL)/pkgconfig || install -m 755 -d $(LIBINSTALL)/pkgconfig
+-+	install -m 644 $(LIBPC) $(LIBINSTALL)/pkgconfig
+- 	test -f $(DEFAULT_SEMANAGE_CONF_LOCATION) || install -m 644 -D semanage.conf $(DEFAULT_SEMANAGE_CONF_LOCATION)
+--	cd $(LIBDIR) && ln -sf $(LIBSO) $(TARGET)
+-+	cd $(LIBINSTALL) && ln -sf $(LIBSO) $(TARGET)
+- 
+- install-pywrap: pywrap 
+- 	test -d $(PYSITEDIR) || install -m 755 -d $(PYSITEDIR)
+-@@ -155,7 +153,7 @@
+- 	install -m 755 $(SWIGRUBYSO) $(RUBYINSTALL)/semanage.so
+- 
+- relabel:
+--	/sbin/restorecon $(LIBDIR)/$(LIBSO)
+-+	/sbin/restorecon $(LIBINSTALL)/$(LIBSO)
+- 
+- clean: 
+- 	-rm -f $(LIBPC) $(OBJS) $(LOBJS) $(LIBA) $(LIBSO) $(SWIGLOBJ) $(SWIGSO) $(SWIGRUBYSO) $(TARGET) conf-parse.c conf-parse.h conf-scan.c *.o *.lo *~
+-diff -durN libsemanage.orig/tests/Makefile libsemanage/tests/Makefile
+---- libsemanage.orig/tests/Makefile	2018-01-12 12:42:30.922043125 +0100
+-+++ libsemanage/tests/Makefile	2018-01-12 10:04:18.632144240 +0100
+-@@ -1,6 +1,3 @@
+--PREFIX ?= $(DESTDIR)/usr
+--LIBDIR ?= $(PREFIX)/lib
+--
+- # Add your test source files here:
+- SOURCES = $(sort $(wildcard *.c))
+- 
+diff --git a/package/libsemanage/libsemanage.hash b/package/libsemanage/libsemanage.hash
+index c386571591..5315514003 100644
+--- a/package/libsemanage/libsemanage.hash
++++ b/package/libsemanage/libsemanage.hash
 @@ -1,2 +1,5 @@
- # https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256 4217cb965ecda96c91e15ffcc2e7ddd13ecc2bf5631100f3cd072a7616f140ed selinux-python-2.7.tar.gz
-+sha256 e69f5e24820cb247a3d881a9c90efba1e64d76af863c82fb81bc3b87ed71e238 selinux-python-2.8.tar.gz
+ # From: https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256 07e9477714ce6a4557a1fe924ea4cb06501b62d0fa0e3c0dc32a2cf47cb8d476 libsemanage-2.7.tar.gz
++sha256 1c0de8d2c51e5460926c21e371105c84a39087dfd8f8e9f0cc1d017e4cbea8e2 libsemanage-2.8.tar.gz
 +
 +# Hash for license file
-+sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 COPYING
-diff --git a/package/selinux-python/selinux-python.mk b/package/selinux-python/selinux-python.mk
-index 25a2d04105..2de55f33cb 100644
---- a/package/selinux-python/selinux-python.mk
-+++ b/package/selinux-python/selinux-python.mk
++sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 COPYING
+diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
+index b6e50e2848..9d9f956476 100644
+--- a/package/libsemanage/libsemanage.mk
++++ b/package/libsemanage/libsemanage.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--SELINUX_PYTHON_VERSION = 2.7
--SELINUX_PYTHON_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20170804
-+SELINUX_PYTHON_VERSION = 2.8
-+SELINUX_PYTHON_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20180524
- SELINUX_PYTHON_LICENSE = GPL-2.0
- SELINUX_PYTHON_LICENSE_FILES = COPYING
+-LIBSEMANAGE_VERSION = 2.7
+-LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20170804
++LIBSEMANAGE_VERSION = 2.8
++LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20180524
+ LIBSEMANAGE_LICENSE = LGPL-2.1+
+ LIBSEMANAGE_LICENSE_FILES = COPYING
+ LIBSEMANAGE_DEPENDENCIES = host-bison host-flex audit libselinux ustr bzip2
+@@ -30,7 +30,7 @@ HOST_LIBSEMANAGE_DEPENDENCIES = host-bison host-audit host-libsepol host-libseli
  
+ HOST_LIBSEMANAGE_MAKE_OPTS += \
+ 	$(HOST_CONFIGURE_OPTS) \
+-	PREFIX=$(HOST_DIR) \
++	DESTDIR=$(HOST_DIR) \
+ 	SWIG_LIB="$(HOST_DIR)/share/swig/$(SWIG_VERSION)/"
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON3),y)
 -- 
 2.17.1
