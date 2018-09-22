@@ -1,51 +1,40 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 22 Sep 2018 21:44:42 +0200
-Subject: [Buildroot] [PATCH 1/1] libnfs: fix license
-Message-ID: <20180922194442.28806-1-fontaine.fabrice@gmail.com>
+Date: Sat, 22 Sep 2018 22:00:45 +0200
+Subject: [Buildroot] [PATCH 1/1] dvblast: drop NPTL dependency
+Message-ID: <20180922200045.6608-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As specified in COPYING, examples is licensed under GPL-3.0+ and .x
-files are licensed under BSD-2-Clause
-So update LIBNFS_LICENSE, add COPYING, LICENCE-BSD.txt and
-LICENCE-GPL-3.txt to LIBNFS_LICENSE_FILES and add hash for all
-license files
+The latest uClibc-ng version (1.0.30) provides clock_nanosleep() even
+for non NPTL configurations.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libnfs/libnfs.hash | 4 ++++
- package/libnfs/libnfs.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ package/dvblast/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libnfs/libnfs.hash b/package/libnfs/libnfs.hash
-index cfe6678842..93b5572026 100644
---- a/package/libnfs/libnfs.hash
-+++ b/package/libnfs/libnfs.hash
-@@ -1,3 +1,7 @@
- # Locally calculated
- sha256 7ea6cd8fa6c461d01091e584d424d28e137d23ff4b65b95d01a3fd0ef95d120e  libnfs-libnfs-2.0.0.tar.gz
-+sha256 2d152e3a2f31ef0fe14d4908377277f8215fb5c82ec9329d1eed081c845fc85f  COPYING
-+sha256 d9406ced95457941032aa11d04623b8ab71f2827a3395ebef137aec475be35b1  LICENCE-BSD.txt
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENCE-LGPL-2.1.txt
-+sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENCE-GPL-3.txt
-+
-diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
-index d961fd1d4e..0cf07d2143 100644
---- a/package/libnfs/libnfs.mk
-+++ b/package/libnfs/libnfs.mk
-@@ -8,8 +8,8 @@ LIBNFS_VERSION = libnfs-2.0.0
- LIBNFS_SITE = $(call github,sahlberg,libnfs,$(LIBNFS_VERSION))
- LIBNFS_INSTALL_STAGING = YES
- LIBNFS_AUTORECONF = YES
--LIBNFS_LICENSE = LGPL-2.1+
--LIBNFS_LICENSE_FILES = LICENCE-LGPL-2.1.txt
-+LIBNFS_LICENSE = LGPL-2.1+ (library), BSD-2-Clause (protocol, .x files), GPL-3.0+ (examples)
-+LIBNFS_LICENSE_FILES = COPYING LICENCE-BSD.txt LICENCE-LGPL-2.1.txt LICENCE-GPL-3.txt
- LIBNFS_DEPENDENCIES = host-pkgconf
+diff --git a/package/dvblast/Config.in b/package/dvblast/Config.in
+index 5597faea4f..973eee88c6 100644
+--- a/package/dvblast/Config.in
++++ b/package/dvblast/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_DVBLAST
+ 	bool "dvblast"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # clock_nanosleep()
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_BITSTREAM
+ 	select BR2_PACKAGE_LIBEV
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+@@ -10,5 +10,5 @@ config BR2_PACKAGE_DVBLAST
  
- ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+ 	  http://www.videolan.org/projects/dvblast.html
+ 
+-comment "dvblast needs a toolchain w/ NPTL"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
++comment "dvblast needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
 -- 
 2.17.1
