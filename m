@@ -1,12 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 22 Sep 2018 18:38:02 +0200
-Subject: [Buildroot] [PATCH 2/2] support/scripts/graph-build-time: add
- support for timeline graphing
-In-Reply-To: <CANQCQpZxecBwrMd_o9-v8XtUxGZrYj6egngCA0V0Qw3WgrPD9w@mail.gmail.com>
-References: <20180921133117.9300-1-thomas.petazzoni@bootlin.com>
- <20180921133117.9300-3-thomas.petazzoni@bootlin.com>
- <CANQCQpZxecBwrMd_o9-v8XtUxGZrYj6egngCA0V0Qw3WgrPD9w@mail.gmail.com>
-Message-ID: <20180922183802.00bc2ed4@windsurf>
+Date: Sat, 22 Sep 2018 18:42:15 +0200
+Subject: [Buildroot] [PATCH 1/1] busybox: bump version to 1.29.3
+In-Reply-To: <20180922140641.9937-1-ferdinand@ombud.nl>
+References: <20180922140641.9937-1-ferdinand@ombud.nl>
+Message-ID: <20180922184215.6ebaf7fa@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,19 +12,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 22 Sep 2018 08:47:54 -0500, Matthew Weber wrote:
+On Sat, 22 Sep 2018 16:06:41 +0200, Ferdinand van Aartsen wrote:
+> Remove 0003-Revert-libbb-remove-unnecessary-variable-in-xmalloc_.patch
+> It caused a segfault which was fixed in this release.
 
-> > The graph-build make target is extended to also generate this new
-> > timeline graph.  
-> 
-> Is there a way to remove the page boundary or split the data so larger
-> builds are readable?  I'm not sure of the readablility point but my
-> build test of ~80-100pkg target was overlapping.
+This doesn't make sense: the *only* commit between 1.29.2 and 1.29.3 is
+exactly the patch we have in Buildroot for Busybox 1.29.2. So
+basically, before and after your commit, the Busybox source code is
+exactly the same.
 
-There should be no page boundary, but I indeed haven't tested yet
-larger builds, and the script may need additional tweaks.
+See:
 
-I'll try with some larger build and see if I can improve the script.
+$ git slog 1_29_2..1_29_3 | cat
+b84194b133212aca64605d1cd0cf771720bc0d94 Bump version to 1.29.3
+2993551efcb09ace35b40db608ab08159834692b Revert "libbb: remove unnecessary variable in xmalloc_fgets"
+
+Could you clarify which problem you have encountered ?
 
 Best regards,
 
