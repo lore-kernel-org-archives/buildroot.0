@@ -1,84 +1,79 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 22 Sep 2018 22:36:31 +0300
-Subject: [Buildroot] [PATCH 4/4] python-pysnmp: bump to version 4.4.6
-In-Reply-To: <20180922193631.14369-1-asafka7@gmail.com>
-References: <20180922193631.14369-1-asafka7@gmail.com>
-Message-ID: <20180922193631.14369-4-asafka7@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 22 Sep 2018 21:43:05 +0200
+Subject: [Buildroot] [PATCH 1/1] libnfs: fix build of applications like mpd
+ on musl
+Message-ID: <20180922194305.27608-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update dependencies.
-License was renamed to LICENSE.rst (no content changed).
-Add hash for license.
+Include sys/time.h if __linux__ is defined otherwise applications
+including libnfs.h (such as mpd) will fail to build on musl:
+
+/home/rclinux/rc-buildroot-test/scripts/instance-1/output/host/bin/x86_64-linux-g++ -DHAVE_CONFIG_H -I.  -DNDEBUG -I./src  -DSYSTEM_CONFIG_FILE_LOCATION='"/etc/mpd.conf"'  -I/home/rclinux/rc-buildroot-test/scripts/instance-1/output/host/bin/../x86_64-buildroot-linux-musl/sysroot/usr/include   -I/home/rclinux/rc-buildroot-test/scripts/instance-1/output/host/bin/../x86_64-buildroot-linux-musl/sysroot/usr/include    -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -fvisibility=hidden -fno-threadsafe-statics -fmerge-all-constants -ffast-math -ftree-vectorize -ffunction-sections -fdata-sections -Wall -Wextra -Wmissing-declarations -Wshadow -Wpointer-arith -Wcast-qual -Wwrite-strings -Wsign-compare -Wno-noexcept-type -c -o src/lib/nfs/libstorage_a-Error.o `test -f 'src/lib/nfs/Error.cxx' || echo './'`src/lib/nfs/Error.cxx
+In file included from src/lib/nfs/Error.cxx:37:0:
+/home/rclinux/rc-buildroot-test/scripts/instance-1/output/host/x86_64-buildroot-linux-musl/sysroot/usr/include/nfsc/libnfs.h:965:23: error: field 'atime' has incomplete type 'timeval'
+        struct timeval atime;
+                       ^~~~~
+/home/rclinux/rc-buildroot-test/scripts/instance-1/output/host/x86_64-buildroot-linux-musl/sysroot/usr/include/nfsc/libnfs.h:965:15: note: forward declaration of 'struct timeval'
+        struct timeval atime;
 
 Fixes:
-http://autobuild.buildroot.org/results/9b3/9b3bcd761aa35d9fdf4acc05258cc87e8c36fb14/
+ - http://autobuild.buildroot.org/results/892469e34cb2f7e8fac4a79f8c51ca8e7235aef3
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-pysnmp/Config.in          | 9 +++------
- package/python-pysnmp/python-pysnmp.hash | 8 +++++---
- package/python-pysnmp/python-pysnmp.mk   | 8 +++-----
- 3 files changed, 11 insertions(+), 14 deletions(-)
+ ...nally-include-sys-time.h-in-libnfs.h.patch | 40 +++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 package/libnfs/0001-conditionally-include-sys-time.h-in-libnfs.h.patch
 
-diff --git a/package/python-pysnmp/Config.in b/package/python-pysnmp/Config.in
-index c7cdf3892d..a034b16852 100644
---- a/package/python-pysnmp/Config.in
-+++ b/package/python-pysnmp/Config.in
-@@ -1,13 +1,10 @@
- config BR2_PACKAGE_PYTHON_PYSNMP
- 	bool "python-pysnmp"
--	depends on BR2_INSTALL_LIBSTDCPP # pyasn
--	select BR2_PACKAGE_PYTHON_PYASN
--	select BR2_PACKAGE_PYTHON_PYCRYPTO
-+	select BR2_PACKAGE_PYTHON_PYSMI # runtime
-+	select BR2_PACKAGE_PYTHON_PYCRYPTODOMEX # runtime
-+	select BR2_PACKAGE_PYTHON_PYASN1 # runtime
- 	help
- 	  PySNMP is a cross-platform, pure-Python SNMP engine
- 	  implementation.
- 
- 	  http://pysnmp.sf.net
--
--comment "python-pysnmp needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/python-pysnmp/python-pysnmp.hash b/package/python-pysnmp/python-pysnmp.hash
-index 7ecbf4c480..bb5fc24834 100644
---- a/package/python-pysnmp/python-pysnmp.hash
-+++ b/package/python-pysnmp/python-pysnmp.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/pysnmp/json, sha256 locally computed
--md5 cc0838cdf3f2d34539f478942f648384 pysnmp-4.3.3.tar.gz
--sha256 c837d35cbb2c1e067b7b8ed752d962481ef8d7ff11e4cdd8bfb0840c4a786318 pysnmp-4.3.3.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/pysnmp/json
-+md5	9eaed18907d9b15828f138471b187e8f  pysnmp-4.4.6.tar.gz
-+sha256	e34ffa0dce5f69adabd478ff76c3e1b08e32ebb0767df8b178d0704f4a1ac406  pysnmp-4.4.6.tar.gz
-+# Locally computed sha256 checksums
-+sha256	4781cdf5b05a40b8c36f2e71e248dac621762bc8e8482fa5fddab5053e2cdace  LICENSE.rst
-diff --git a/package/python-pysnmp/python-pysnmp.mk b/package/python-pysnmp/python-pysnmp.mk
-index 2721ba8a7b..0a916119df 100644
---- a/package/python-pysnmp/python-pysnmp.mk
-+++ b/package/python-pysnmp/python-pysnmp.mk
-@@ -4,14 +4,12 @@
- #
- ################################################################################
- 
--PYTHON_PYSNMP_VERSION = 4.3.3
-+PYTHON_PYSNMP_VERSION = 4.4.6
- PYTHON_PYSNMP_SOURCE = pysnmp-$(PYTHON_PYSNMP_VERSION).tar.gz
--PYTHON_PYSNMP_SITE = https://pypi.python.org/packages/47/b5/c65b9b6fcc36d3f4caca30d3314920f1ca75f5ceecc1f6ae2538ede24511
-+PYTHON_PYSNMP_SITE = https://files.pythonhosted.org/packages/8b/66/96a49bf1d64ad1e005a8455644523b7e09663a405eb20a4599fb219e4c95
- PYTHON_PYSNMP_SETUP_TYPE = setuptools
- 
- PYTHON_PYSNMP_LICENSE = BSD-3-Clause
--PYTHON_PYSNMP_LICENSE_FILES = LICENSE.txt
--
--PYTHON_PYSNMP_DEPENDENCIES = python-pyasn python-pycrypto
-+PYTHON_PYSNMP_LICENSE_FILES = LICENSE.rst
- 
- $(eval $(python-package))
+diff --git a/package/libnfs/0001-conditionally-include-sys-time.h-in-libnfs.h.patch b/package/libnfs/0001-conditionally-include-sys-time.h-in-libnfs.h.patch
+new file mode 100644
+index 0000000000..80b4fdca70
+--- /dev/null
++++ b/package/libnfs/0001-conditionally-include-sys-time.h-in-libnfs.h.patch
+@@ -0,0 +1,40 @@
++From e2b7bcfbc38336d12dfdd4e36af87be4352a16a9 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 22 Sep 2018 13:27:18 +0200
++Subject: [PATCH] conditionally include sys/time.h in libnfs.h
++
++Include sys/time.h if __linux__ is defined otherwise applications
++including libnfs.h (such as mpd) will fail to build on musl:
++
++/home/rclinux/rc-buildroot-test/scripts/instance-1/output/host/bin/x86_64-linux-g++ -DHAVE_CONFIG_H -I.  -DNDEBUG -I./src  -DSYSTEM_CONFIG_FILE_LOCATION='"/etc/mpd.conf"'  -I/home/rclinux/rc-buildroot-test/scripts/instance-1/output/host/bin/../x86_64-buildroot-linux-musl/sysroot/usr/include   -I/home/rclinux/rc-buildroot-test/scripts/instance-1/output/host/bin/../x86_64-buildroot-linux-musl/sysroot/usr/include    -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -fvisibility=hidden -fno-threadsafe-statics -fmerge-all-constants -ffast-math -ftree-vectorize -ffunction-sections -fdata-sections -Wall -Wextra -Wmissing-declarations -Wshadow -Wpointer-arith -Wcast-qual -Wwrite-strings -Wsign-compare -Wno-noexcept-type -c -o src/lib/nfs/libstorage_a-Error.o `test -f 'src/lib/nfs/Error.cxx' || echo './'`src/lib/nfs/Error.cxx
++In file included from src/lib/nfs/Error.cxx:37:0:
++/home/rclinux/rc-buildroot-test/scripts/instance-1/output/host/x86_64-buildroot-linux-musl/sysroot/usr/include/nfsc/libnfs.h:965:23: error: field 'atime' has incomplete type 'timeval'
++        struct timeval atime;
++                       ^~~~~
++/home/rclinux/rc-buildroot-test/scripts/instance-1/output/host/x86_64-buildroot-linux-musl/sysroot/usr/include/nfsc/libnfs.h:965:15: note: forward declaration of 'struct timeval'
++        struct timeval atime;
++
++Fixes:
++ - http://autobuild.buildroot.org/results/892469e34cb2f7e8fac4a79f8c51ca8e7235aef3
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ include/nfsc/libnfs.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/include/nfsc/libnfs.h b/include/nfsc/libnfs.h
++index 09dcf1c..23dcc98 100755
++--- a/include/nfsc/libnfs.h
+++++ b/include/nfsc/libnfs.h
++@@ -24,7 +24,7 @@
++ #define _LIBNFS_H_
++ 
++ #include <stdint.h>
++-#if defined(__ANDROID__) || defined(AROS) \
+++#if defined(__ANDROID__) || defined(AROS) || defined(__linux__) \
++  || ( defined(__APPLE__) && defined(__MACH__) )
++ #include <sys/time.h>
++ #else
++-- 
++2.17.1
++
 -- 
 2.17.1
