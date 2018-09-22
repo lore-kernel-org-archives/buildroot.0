@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 22 Sep 2018 18:51:31 +0200
-Subject: [Buildroot] [PATCH 1/1] python-setuptools: use pypi package
-In-Reply-To: <20180921150150.32095-1-aduskett@gmail.com>
-References: <20180921150150.32095-1-aduskett@gmail.com>
-Message-ID: <20180922185131.26604242@windsurf>
+Date: Sat, 22 Sep 2018 18:53:19 +0200
+Subject: [Buildroot] [PATCH 1/1] python-django: bump version to 2.1.1
+In-Reply-To: <CALFsTFW2-B2wjeJ6Fmv=wUWPNOUGQgPhHE8ZV-zSA+FojgznDw@mail.gmail.com>
+References: <20180921150825.1986-1-aduskett@gmail.com>
+ <CALFsTFW2-B2wjeJ6Fmv=wUWPNOUGQgPhHE8ZV-zSA+FojgznDw@mail.gmail.com>
+Message-ID: <20180922185319.6b7538b5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +13,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 21 Sep 2018 11:01:50 -0400, Adam Duskett wrote:
-> The releases on Github produces a setuptools version that isn't PEP518
-> compliant because a .post number is attached to the .egg file
-> (IE: 40.0.0.post20180820) which can cause a python package using setuptools
-> to fail if looking for a setuptools version.
-> 
-> Instead, using the official release from pypi is recommended as it does not
-> produce a  .post version on the egg file.
-> 
-> Another benefit is not having to run bootstrap.py either.
-> 
-> See https://github.com/pypa/setuptools/issues/1462 for more details about
-> the issue
-> 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> ---
->  .../python-setuptools/python-setuptools.hash  |  5 +++--
->  .../python-setuptools/python-setuptools.mk    | 20 +++++++++++--------
->  2 files changed, 15 insertions(+), 10 deletions(-)
+On Fri, 21 Sep 2018 18:32:51 +0300, Asaf Kahlon wrote:
 
-Applied to master, thanks.
+> I don't use django regularly, but it seems django needs pytz (
+> https://github.com/django/django/blob/2.1.1/setup.py).
+> Moreover, django has dropped support in python2 since 2.0 (
+> https://docs.djangoproject.com/en/dev/faq/install/#what-python-version-can-i-use-with-django),
+> so I guess the definition in Config.in should be changed to depend
+> on BR2_PACKAGE_PYTHON3.
+
+Thanks Asaf for this review, much appreciated.
+
+Adam: I have marked your patch as Changes Requested in patchwork. Could
+you send an updated version that takes into account the comments made
+by Asaf ?
+
+Thanks!
 
 Thomas
 -- 
