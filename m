@@ -1,40 +1,44 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 22 Sep 2018 22:00:45 +0200
-Subject: [Buildroot] [PATCH 1/1] dvblast: drop NPTL dependency
-Message-ID: <20180922200045.6608-1-fontaine.fabrice@gmail.com>
+Date: Sat, 22 Sep 2018 22:01:05 +0200
+Subject: [Buildroot] [PATCH 1/1] dvblast: bump to version 3.3
+Message-ID: <20180922200105.6737-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The latest uClibc-ng version (1.0.30) provides clock_nanosleep() even
-for non NPTL configurations.
+Add hash for license files
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/dvblast/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/dvblast/dvblast.hash | 6 ++++--
+ package/dvblast/dvblast.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/dvblast/Config.in b/package/dvblast/Config.in
-index 5597faea4f..973eee88c6 100644
---- a/package/dvblast/Config.in
-+++ b/package/dvblast/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_DVBLAST
- 	bool "dvblast"
--	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # clock_nanosleep()
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_BITSTREAM
- 	select BR2_PACKAGE_LIBEV
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-@@ -10,5 +10,5 @@ config BR2_PACKAGE_DVBLAST
+diff --git a/package/dvblast/dvblast.hash b/package/dvblast/dvblast.hash
+index d6ec4cb036..3111c96fff 100644
+--- a/package/dvblast/dvblast.hash
++++ b/package/dvblast/dvblast.hash
+@@ -1,2 +1,4 @@
+-# From https://get.videolan.org/dvblast/3.1/dvblast-3.1.tar.bz2
+-sha256 3159e8666a3b1822aeccd01684bdcad712a0da88d758bef6b7e2c396f27fd3e0  dvblast-3.1.tar.bz2
++# From https://get.videolan.org/dvblast/3.3/dvblast-3.3.tar.bz2
++sha256 3d75d0785bc147d5c3f2360637cf869eec405d83742ae8a211adaf645b963387  dvblast-3.3.tar.bz2
++sha256 94f68aec169fb6c9937eade757251714d38a56812be5dbfc3973914a71ad8d2d  COPYING
++sha256 2c1bea2f338d46ee6f2712f2c2bf05b874327ca0bec5eb0b7b4fbe208a23677f  COPYING.WTFPL 
+diff --git a/package/dvblast/dvblast.mk b/package/dvblast/dvblast.mk
+index 3cf24df248..bae6367bef 100644
+--- a/package/dvblast/dvblast.mk
++++ b/package/dvblast/dvblast.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  http://www.videolan.org/projects/dvblast.html
- 
--comment "dvblast needs a toolchain w/ NPTL"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+comment "dvblast needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+-DVBLAST_VERSION = 3.1
++DVBLAST_VERSION = 3.3
+ DVBLAST_SOURCE = dvblast-$(DVBLAST_VERSION).tar.bz2
+ DVBLAST_SITE = https://get.videolan.org/dvblast/$(DVBLAST_VERSION)
+ DVBLAST_LICENSE = GPL-2.0+, WTFPL
 -- 
 2.17.1
