@@ -1,37 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 22 Sep 2018 18:53:19 +0200
-Subject: [Buildroot] [PATCH 1/1] python-django: bump version to 2.1.1
-In-Reply-To: <CALFsTFW2-B2wjeJ6Fmv=wUWPNOUGQgPhHE8ZV-zSA+FojgznDw@mail.gmail.com>
-References: <20180921150825.1986-1-aduskett@gmail.com>
- <CALFsTFW2-B2wjeJ6Fmv=wUWPNOUGQgPhHE8ZV-zSA+FojgznDw@mail.gmail.com>
-Message-ID: <20180922185319.6b7538b5@windsurf>
+Date: Sat, 22 Sep 2018 18:56:13 +0200
+Subject: [Buildroot] [git commit] libxslt: point to the correct xml2-config
+ location
+Message-ID: <20180922165711.90EE288872@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f8f8ff33472641f9192a5e1ca65ebc614821665a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 21 Sep 2018 18:32:51 +0300, Asaf Kahlon wrote:
+Currently libxslt configure finds native /usr/bin/xml2-config.
 
-> I don't use django regularly, but it seems django needs pytz (
-> https://github.com/django/django/blob/2.1.1/setup.py).
-> Moreover, django has dropped support in python2 since 2.0 (
-> https://docs.djangoproject.com/en/dev/faq/install/#what-python-version-can-i-use-with-django),
-> so I guess the definition in Config.in should be changed to depend
-> on BR2_PACKAGE_PYTHON3.
+Signed-off-by: Ferdinand van Aartsen <ferdinand@ombud.nl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libxslt/libxslt.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Thanks Asaf for this review, much appreciated.
-
-Adam: I have marked your patch as Changes Requested in patchwork. Could
-you send an updated version that takes into account the comments made
-by Asaf ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
+index 972d5b80d5..5b1c0ae268 100644
+--- a/package/libxslt/libxslt.mk
++++ b/package/libxslt/libxslt.mk
+@@ -13,7 +13,8 @@ LIBXSLT_LICENSE_FILES = COPYING
+ LIBXSLT_CONF_OPTS = \
+ 	--with-gnu-ld \
+ 	--without-debug \
+-	--without-python
++	--without-python \
++	--with-libxml-prefix=$(STAGING_DIR)/usr
+ LIBXSLT_CONFIG_SCRIPTS = xslt-config
+ LIBXSLT_DEPENDENCIES = host-pkgconf libxml2
+ 
