@@ -1,52 +1,41 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Sun, 23 Sep 2018 02:53:31 +0300
-Subject: [Buildroot] [PATCH 3/5] webkitgtk: enable package for aarch64
+Date: Sun, 23 Sep 2018 02:53:33 +0300
+Subject: [Buildroot] [PATCH 5/5] webkitgtk: explicitly set USE_GSTREAMER_GL
+ build option
 In-Reply-To: <20180922235333.85642-1-aperez@igalia.com>
 References: <20180922235333.85642-1-aperez@igalia.com>
-Message-ID: <20180922235333.85642-4-aperez@igalia.com>
+Message-ID: <20180922235333.85642-6-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-64-bit ARM is well supported, particularly in little-endian
-configurations, where JIT can be enabled as well.
+Make the USE_GSTREAMER_GL CMake build option depend on
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL being enabled. This
+allows building WebKitGTK+ for targets where GL/GLES is
+available but either GStreamer-GL is disabled or cannot be
+built.
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- package/webkitgtk/Config.in    | 1 +
- package/webkitgtk/webkitgtk.mk | 5 +++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/webkitgtk/webkitgtk.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index 96a7ab0c94..ac6f57e2ad 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	bool
- 	# ARM needs BLX, so v5t+, BE completely untested so disabled
- 	default y if BR2_arm && !BR2_ARM_CPU_ARMV4
-+	default y if BR2_aarch64 || BR2_aarch64_be
- 	default y if BR2_i386 || BR2_x86_64
- 	# Disabled on MIPS big endian due to sigbus
- 	default y if BR2_mipsel || BR2_mips64el
 diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index f28417ac73..f0293fc225 100644
+index 028208cb62..dac57ca501 100644
 --- a/package/webkitgtk/webkitgtk.mk
 +++ b/package/webkitgtk/webkitgtk.mk
-@@ -27,9 +27,10 @@ WEBKITGTK_CONF_OPTS = \
- 	-DUSE_LIBNOTIFY=OFF \
- 	-DUSE_LIBHYPHEN=OFF
+@@ -98,4 +98,10 @@ WEBKITGTK_CONF_OPTS += -DENABLE_WAYLAND_TARGET=ON
+ endif
+ endif
  
--# ARM needs NEON for JIT
-+# 32-bit ARM needs NEON for JIT, AArch64 is supported but not well tested
-+# on big endian hence the missing $(BR2_aarch64_be).
- # i386 & x86_64 don't seem to have any special requirements
--ifeq ($(BR2_ARM_CPU_HAS_NEON)$(BR2_i386)$(BR2_x86_64),y)
-+ifeq ($(BR2_ARM_CPU_HAS_NEON)$(BR2_i386)$(BR2_x86_64)$(BR2_aarch64),y)
- WEBKITGTK_CONF_OPTS += -DENABLE_JIT=ON
- else
- WEBKITGTK_CONF_OPTS += -DENABLE_JIT=OFF
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL),y)
++WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER_GL=ON
++else
++WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER_GL=OFF
++endif
++
+ $(eval $(cmake-package))
 -- 
 2.19.0
