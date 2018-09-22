@@ -1,170 +1,91 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Sat, 22 Sep 2018 08:47:54 -0500
-Subject: [Buildroot] [PATCH 2/2] support/scripts/graph-build-time: add
- support for timeline graphing
-In-Reply-To: <20180921133117.9300-3-thomas.petazzoni@bootlin.com>
-References: <20180921133117.9300-1-thomas.petazzoni@bootlin.com>
- <20180921133117.9300-3-thomas.petazzoni@bootlin.com>
-Message-ID: <CANQCQpZxecBwrMd_o9-v8XtUxGZrYj6egngCA0V0Qw3WgrPD9w@mail.gmail.com>
+From: Ferdinand van Aartsen <ferdinand@ombud.nl>
+Date: Sat, 22 Sep 2018 16:06:41 +0200
+Subject: [Buildroot] [PATCH 1/1] busybox: bump version to 1.29.3
+Message-ID: <20180922140641.9937-1-ferdinand@ombud.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Remove 0003-Revert-libbb-remove-unnecessary-variable-in-xmalloc_.patch
+It caused a segfault which was fixed in this release.
 
-On Fri, Sep 21, 2018 at 8:31 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> This commit adds support for a new type of graph, showing the timeline
-> of a build. It shows, with one line per package, when each of this
-> package steps started/ended, and therefore allows to see the
-> sequencing of the package builds.
->
-> For a fully serialized build like we have today, this is not super
-> useful (except to show that everything is serialized), but it becomes
-> much more useful in the context of top-level parallel build.
->
-> The graph-build make target is extended to also generate this new
-> timeline graph.
+Signed-off-by: Ferdinand van Aartsen <ferdinand@ombud.nl>
+---
+ ...ove-unnecessary-variable-in-xmalloc_.patch | 39 -------------------
+ package/busybox/busybox.hash                  |  4 +-
+ package/busybox/busybox.mk                    |  2 +-
+ 3 files changed, 3 insertions(+), 42 deletions(-)
+ delete mode 100644 package/busybox/0003-Revert-libbb-remove-unnecessary-variable-in-xmalloc_.patch
 
-Is there a way to remove the page boundary or split the data so larger
-builds are readable?  I'm not sure of the readablility point but my
-build test of ~80-100pkg target was overlapping.
-
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  Makefile                         |  2 ++
->  support/scripts/graph-build-time | 71 +++++++++++++++++++++++++++++++++++++++-
->  2 files changed, 72 insertions(+), 1 deletion(-)
->
-> diff --git a/Makefile b/Makefile
-> index 18afa36b28..49f1106213 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -831,6 +831,8 @@ graph-build: $(O)/build/build-time.log
->                                    --type=pie-$(t) --input=$(<) \
->                                    --output=$(GRAPHS_DIR)/build.pie-$(t).$(BR_GRAPH_OUT) \
->                                    $(if $(BR2_GRAPH_ALT),--alternate-colors)$(sep))
-> +       ./support/scripts/graph-build-time --type=timeline --input=$(<) \
-> +               --output=$(GRAPHS_DIR)/build.timeline.$(BR_GRAPH_OUT)
->
->  .PHONY: graph-depends-requirements
->  graph-depends-requirements:
-> diff --git a/support/scripts/graph-build-time b/support/scripts/graph-build-time
-> index 892e08bf07..c4aa066050 100755
-> --- a/support/scripts/graph-build-time
-> +++ b/support/scripts/graph-build-time
-> @@ -240,6 +240,73 @@ def pkg_pie_time_per_step(data, output):
->      plt.title('Build time per step')
->      plt.savefig(output)
->
-> +step_colors = {
-> +    'download': 'blue',
-> +    'extract': 'red',
-> +    'patch': 'green',
-> +    'configure': 'black',
-> +    'build': 'cyan',
-> +    'install-target': 'orange',
-> +    'install-staging': 'yellow',
-> +    'install-images': 'purple',
-> +    'install-host': 'grey'
-> +}
-> +
-> +def pkg_timeline(data, output):
-> +    start = 0
-> +    end = 0
-> +
-> +    # Find the first timestamp and the last timestamp
-> +    for p in data:
-> +        for k, v in p.steps_start.iteritems():
-> +            if start == 0 or v < start:
-> +                start = v
-> +            if end < v:
-> +                end = v
-> +
-> +    # Readjust all timestamps so that 0 is the start of the build
-> +    # instead of being Epoch
-> +    for p in data:
-> +        for k, v in p.steps_start.iteritems():
-> +            p.steps_start[k] = v - start
-> +        for k, v in p.steps_end.iteritems():
-> +            p.steps_end[k] = v - start
-> +
-> +    plt.figure()
-> +
-> +    i = 0
-> +    labels_names = []
-> +    labels_coords = []
-> +    # reversing the list, because the packages build first appear last in the list
-> +    for p in reversed(data):
-> +        durations = []
-> +        colors = []
-> +        for step in steps:
-> +            if not step in p.steps_start or not step in p.steps_end:
-> +                continue
-> +            durations.append((p.steps_start[step],
-> +                              p.steps_end[step] - p.steps_start[step]))
-> +            colors.append(step_colors[step])
-> +        plt.broken_barh(durations, (i, 6), facecolors=colors)
-> +        labels_coords.append(i + 3)
-> +        labels_names.append(p.name)
-> +        i += 10
-> +
-> +    axes = plt.gcf().gca()
-> +
-> +    axes.set_ylim(0, i + 10)
-> +    axes.set_xlim(0, end - start)
-> +    axes.set_xlabel('seconds since start')
-> +    axes.set_yticks(labels_coords)
-> +    axes.set_yticklabels(labels_names)
-> +    axes.set_axisbelow(True)
-> +    axes.grid(True, linewidth=0.2, zorder=-1)
-> +
-> +    plt.gcf().subplots_adjust(left=0.2)
-> +
-> +    plt.tick_params(axis='y', which='both', labelsize=6)
-> +    plt.title('Timeline')
-> +    plt.savefig(output, dpi=300)
->
->  # Parses the csv file passed on standard input and returns a list of
->  # Package objects, filed with the duration of each step and the total
-> @@ -277,7 +344,7 @@ def read_data(input_file):
->
->  parser = argparse.ArgumentParser(description='Draw build time graphs')
->  parser.add_argument("--type", '-t', metavar="GRAPH_TYPE",
-> -                    help="Type of graph (histogram, pie-packages, pie-steps)")
-> +                    help="Type of graph (histogram, pie-packages, pie-steps, timeline)")
->  parser.add_argument("--order", '-O', metavar="GRAPH_ORDER",
->                      help="Ordering of packages: build or duration (for histogram only)")
->  parser.add_argument("--alternate-colors", '-c', action="store_true",
-> @@ -307,6 +374,8 @@ elif args.type == "pie-packages":
->      pkg_pie_time_per_package(d, args.output)
->  elif args.type == "pie-steps":
->      pkg_pie_time_per_step(d, args.output)
-> +elif args.type == "timeline":
-> +    pkg_timeline(d, args.output)
->  else:
->      sys.stderr.write("Unknown type: %s\n" % args.type)
->      exit(1)
-> --
-> 2.14.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-
+diff --git a/package/busybox/0003-Revert-libbb-remove-unnecessary-variable-in-xmalloc_.patch b/package/busybox/0003-Revert-libbb-remove-unnecessary-variable-in-xmalloc_.patch
+deleted file mode 100644
+index ba2d214c29..0000000000
+--- a/package/busybox/0003-Revert-libbb-remove-unnecessary-variable-in-xmalloc_.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 0d598ab9f03dbf320f7b81c05e4a94cb303dfbc7 Mon Sep 17 00:00:00 2001
+-From: Denys Vlasenko <vda.linux@googlemail.com>
+-Date: Sun, 2 Sep 2018 18:35:29 +0200
+-Subject: [PATCH] Revert "libbb: remove unnecessary variable in xmalloc_fgets"
+-
+-The variable is in fact necessary.
+-
+-    commit 2da9724b56169f00bd7fb6b9a11c9409a7620981
+-    Author: Quentin Rameau <quinq@fifth.space>
+-    Date:   Sun Apr 1 17:05:35 2018 +0200
+-        libbb: remove unnecessary variable in xmalloc_fgets
+-
+-Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
+-[Thomas De Schampheleire: added to unbreak 'head -n -1',
+-see http://lists.busybox.net/pipermail/busybox/2018-August/086617.html ]
+-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+-
+----
+- libbb/get_line_from_file.c | 4 +++-
+- 1 file changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/libbb/get_line_from_file.c b/libbb/get_line_from_file.c
+-index f3d6c6203..49ef093c2 100644
+---- a/libbb/get_line_from_file.c
+-+++ b/libbb/get_line_from_file.c
+-@@ -47,7 +47,9 @@ char* FAST_FUNC bb_get_chunk_from_file(FILE *file, size_t *end)
+- /* Get line, including trailing \n if any */
+- char* FAST_FUNC xmalloc_fgets(FILE *file)
+- {
+--	return bb_get_chunk_from_file(file, NULL);
+-+	int i;
+-+
+-+	return bb_get_chunk_from_file(file, &i);
+- }
+- /* Get line.  Remove trailing \n */
+- char* FAST_FUNC xmalloc_fgetline(FILE *file)
+--- 
+-2.16.4
+-
+diff --git a/package/busybox/busybox.hash b/package/busybox/busybox.hash
+index dc7c5613f8..b12bc21293 100644
+--- a/package/busybox/busybox.hash
++++ b/package/busybox/busybox.hash
+@@ -1,3 +1,3 @@
+-# From https://busybox.net/downloads/busybox-1.29.2.tar.bz2.sha256
+-sha256 67d2fa6e147a45875fe972de62d907ef866fe784c495c363bf34756c444a5d61  busybox-1.29.2.tar.bz2
++# From https://busybox.net/downloads/busybox-1.29.3.tar.bz2.sha256
++sha256 97648636e579462296478e0218e65e4bc1e9cd69089a3b1aeb810bff7621efb7  busybox-1.29.3.tar.bz2
+ sha256 bbfc9843646d483c334664f651c208b9839626891d8f17604db2146962f43548  LICENSE
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index ab0930a7fc..757086592f 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BUSYBOX_VERSION = 1.29.2
++BUSYBOX_VERSION = 1.29.3
+ BUSYBOX_SITE = http://www.busybox.net/downloads
+ BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
+ BUSYBOX_LICENSE = GPL-2.0
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / RC Linux Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+2.19.0
