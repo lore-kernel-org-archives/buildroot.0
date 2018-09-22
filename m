@@ -1,36 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 22 Sep 2018 18:56:13 +0200
-Subject: [Buildroot] [git commit] libxslt: point to the correct xml2-config
- location
-Message-ID: <20180922165711.90EE288872@busybox.osuosl.org>
+Date: Sat, 22 Sep 2018 18:58:00 +0200
+Subject: [Buildroot] [PATCH v2 1/1] libxslt: point to the correct
+ xml2-config location
+In-Reply-To: <20180921145836.30424-1-ferdinand@ombud.nl>
+References: <20180921145836.30424-1-ferdinand@ombud.nl>
+Message-ID: <20180922185800.042ad08c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f8f8ff33472641f9192a5e1ca65ebc614821665a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Currently libxslt configure finds native /usr/bin/xml2-config.
+On Fri, 21 Sep 2018 16:58:36 +0200, Ferdinand van Aartsen wrote:
+> Currently libxslt configure finds native /usr/bin/xml2-config.
+> 
+> Signed-off-by: Ferdinand van Aartsen <ferdinand@ombud.nl>
+> ---
+> Changes v1 -> v2:
+>   - Title format change (requested by Thomas).
+>   - Drop the unneeded host changes.
+> ---
+>  package/libxslt/libxslt.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-Signed-off-by: Ferdinand van Aartsen <ferdinand@ombud.nl>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libxslt/libxslt.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Applied to master, thanks.
 
-diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
-index 972d5b80d5..5b1c0ae268 100644
---- a/package/libxslt/libxslt.mk
-+++ b/package/libxslt/libxslt.mk
-@@ -13,7 +13,8 @@ LIBXSLT_LICENSE_FILES = COPYING
- LIBXSLT_CONF_OPTS = \
- 	--with-gnu-ld \
- 	--without-debug \
--	--without-python
-+	--without-python \
-+	--with-libxml-prefix=$(STAGING_DIR)/usr
- LIBXSLT_CONFIG_SCRIPTS = xslt-config
- LIBXSLT_DEPENDENCIES = host-pkgconf libxml2
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
