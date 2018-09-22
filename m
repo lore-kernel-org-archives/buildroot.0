@@ -1,91 +1,48 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 22 Sep 2018 22:58:24 +0200
-Subject: [Buildroot] [PATCH 1/1] minizip: bump to version 2.5.3
-Message-ID: <20180922205824.3917-1-fontaine.fabrice@gmail.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Sun, 23 Sep 2018 02:53:28 +0300
+Subject: [Buildroot] [PATCH 0/5] webkitgtk: update to the latest stable and
+ add a number of fixes
+Message-ID: <20180922235333.85642-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Move to cmake infrastructure
-- Do not enforce zlib dependency
-- Add optional bzip2 dependency
-- Add mandatory host-pkgconf and libbsd dependency
-- Add hash for license file
+Hello everybody,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/minizip/Config.in    |  8 ++++++++
- package/minizip/minizip.hash |  3 ++-
- package/minizip/minizip.mk   | 21 +++++++++++++++++----
- 3 files changed, 27 insertions(+), 5 deletions(-)
+After skipping on the 2.20.x releases due to the JIT support in JavaScriptCore
+being broken for many 32-bit ARM and MIPS targets, I am submitting an update
+to the current stable 2.22.2 release.
 
-diff --git a/package/minizip/Config.in b/package/minizip/Config.in
-index 7205e0007e..440f2e170c 100644
---- a/package/minizip/Config.in
-+++ b/package/minizip/Config.in
-@@ -1,5 +1,9 @@
- config BR2_PACKAGE_MINIZIP
- 	bool "minizip"
-+	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libbsd
-+	depends on BR2_USE_WCHAR # libbsd
-+	select BR2_PACKAGE_LIBBSD
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  Enables to extract files from a .zip archive file.
-@@ -13,3 +17,7 @@ config BR2_PACKAGE_MINIZIP_DEMOS
- 	depends on BR2_PACKAGE_MINIZIP
- 	help
- 	  Enable miniunzip/minizip binary tools.
-+
-+comment "minizip needs a toolchain w/ threads, wchar"
-+	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-diff --git a/package/minizip/minizip.hash b/package/minizip/minizip.hash
-index 718026c1f6..f77d40a02c 100644
---- a/package/minizip/minizip.hash
-+++ b/package/minizip/minizip.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256 5666b5ee3e85dfd2dd119970613c12e6267d31813f07d3ffa5d359fe272cb6d1  minizip-1.1.tar.gz
-+sha256 0afe6528f530cc9c1440053a7bbff53087e86f849e145d233464052c730431e9  minizip-2.5.3.tar.gz
-+sha256 87642305968765a4030fd202ff7006afa67274da7f9bde84506e51ae58ecc2b4  LICENSE
-diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
-index bcd6cc928f..20563cfabe 100644
---- a/package/minizip/minizip.mk
-+++ b/package/minizip/minizip.mk
-@@ -4,13 +4,26 @@
- #
- ################################################################################
- 
--MINIZIP_VERSION = 1.1
-+MINIZIP_VERSION = 2.5.3
- MINIZIP_SITE = $(call github,nmoinvaz,minizip,$(MINIZIP_VERSION))
--MINIZIP_DEPENDENCIES = zlib
--MINIZIP_AUTORECONF = YES
-+MINIZIP_DEPENDENCIES = host-pkgconf libbsd
- MINIZIP_INSTALL_STAGING = YES
- MINIZIP_CONF_OPTS = $(if $(BR2_PACKAGE_MINIZIP_DEMOS),--enable-demos)
- MINIZIP_LICENSE = Zlib
- MINIZIP_LICENSE_FILES = LICENSE
- 
--$(eval $(autotools-package))
-+ifeq ($(BR2_PACKAGE_BZIP2),y)
-+MINIZIP_DEPENDENCIES += bzip2
-+MINIZIP_CONF_OPTS += -DUSE_BZIP2=ON
-+else
-+MINIZIP_CONF_OPTS += -DUSE_BZIP2=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+MINIZIP_DEPENDENCIES += zlib
-+MINIZIP_CONF_OPTS += -DUSE_ZLIB=ON
-+else
-+MINIZIP_CONF_OPTS += -DUSE_ZLIB=OFF
-+endif
-+
-+$(eval $(cmake-package))
+On top of the version bump, I am submitting a few related changes as well
+which enable features (like WOFF2 Web fonts support), making the package
+available on AArch64, and enabling the JavaScriptCore JIT on MIPS (both of
+which have gotten a good amount of testing at Igalia).
+
+Last but not least, the last patch in the series fixes the compilation
+failure caught by the the autobuilders a couple of times when GStreamer-GL
+is disabled.
+
+Best regards,
+
+-Adri?n
+
+
+Adrian Perez de Castro (5):
+  webkitgtk: bump to version 2.22.2
+  webkitgtk: add dependency on the woff2 package
+  webkitgtk: enable package for aarch64
+  webkitgtk: enable JIT support on 32-bit MIPS
+  webkitgtk: explicitly set USE_GSTREAMER_GL build option
+
+ package/midori/Config.in                      |  6 +--
+ ...ightingNEON.cpp-fails-due-to-missing.patch | 41 +++++++++++++++++++
+ package/webkitgtk/Config.in                   | 20 +++++++--
+ package/webkitgtk/webkitgtk.hash              |  8 ++--
+ package/webkitgtk/webkitgtk.mk                | 16 ++++++--
+ 5 files changed, 77 insertions(+), 14 deletions(-)
+ create mode 100644 package/webkitgtk/0001-ARM-Building-FELightingNEON.cpp-fails-due-to-missing.patch
+
 -- 
-2.17.1
+2.19.0
