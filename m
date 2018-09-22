@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 22 Sep 2018 18:45:43 +0200
-Subject: [Buildroot] [PATCH v2,1/1] blktrace: drop NPTL dependency
-In-Reply-To: <20180921215441.2764-1-fontaine.fabrice@gmail.com>
-References: <20180921215441.2764-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180922184543.42896a68@windsurf>
+Date: Sat, 22 Sep 2018 18:45:51 +0200
+Subject: [Buildroot] [PATCH 1/1] xfsprogs: bump to version 4.18.0
+In-Reply-To: <20180916180713.16504-1-fontaine.fabrice@gmail.com>
+References: <20180916180713.16504-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180922184551.297846cb@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 21 Sep 2018 23:54:41 +0200, Fabrice Fontaine wrote:
-> The latest uClibc-ng version (1.0.30) provides clock_nanosleep() even
-> for non NPTL configurations.
+On Sun, 16 Sep 2018 20:07:13 +0200, Fabrice Fontaine wrote:
+> - Update second patch because crc32 moved from libxfs to libfrog:
+>   https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/commit/?id=973de649842b6f96db32e5060b62e8fbcc05f033
+> - Update XFSPROGS_LICENSE_FILES because doc/COPYING has been replaced by
+>   LICENSES/GPL-2.0 and LICENSES/LGPL-2.1, see:
+>   https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/commit/?id=959ef98176005b1aa69619dd76b1d46cf112dfc4
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
-> Changes v1 -> v2:
->  - Keep a dependency on threads
+>  .../0002-libxfs-do-not-try-to-run-the-crc32selftest.patch | 8 +++++---
+>  package/xfsprogs/xfsprogs.hash                            | 7 +++++--
+>  package/xfsprogs/xfsprogs.mk                              | 4 ++--
+>  3 files changed, 12 insertions(+), 7 deletions(-)
 
 Applied to master, thanks.
 
