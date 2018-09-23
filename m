@@ -1,31 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Sep 2018 17:09:13 +0200
-Subject: [Buildroot] [PATCH 1/2] igmpproxy: fix license
-In-Reply-To: <20180921212907.17677-1-fontaine.fabrice@gmail.com>
-References: <20180921212907.17677-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180923170913.7c3a8294@windsurf>
+Date: Sun, 23 Sep 2018 17:09:33 +0200
+Subject: [Buildroot] [git commit] libuv: bump to version 1.23.1
+Message-ID: <20180923150907.ED18D88933@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4a39eb3b11bfec51862a4fad1bd8147e7e6dcaa5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 21 Sep 2018 23:29:06 +0200, Fabrice Fontaine wrote:
-> mrouted part of igmpproxy is licensed under BSD-3-Clause so add this in
-> IGMPPROXY_LICENSE and add hash for license files
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/igmpproxy/igmpproxy.hash | 3 +++
->  package/igmpproxy/igmpproxy.mk   | 4 ++--
->  2 files changed, 5 insertions(+), 2 deletions(-)
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libuv/libuv.hash | 2 +-
+ package/libuv/libuv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Both applied to master. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
+index e687450d53..407ffb5932 100644
+--- a/package/libuv/libuv.hash
++++ b/package/libuv/libuv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  8c8eff0bec85306aae508392b395e8bb0e1e34daad2a4e3bec308ced0c92bfaa  libuv-v1.23.0.tar.gz
++sha256  c3386003522502d712010b852008b22b37f827e207e184e3d53f0431389299c3  libuv-v1.23.1.tar.gz
+ sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index 90818ad789..f0a9668df0 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUV_VERSION = v1.23.0
++LIBUV_VERSION = v1.23.1
+ LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
