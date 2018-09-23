@@ -1,69 +1,53 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Sep 2018 15:45:58 +0200
-Subject: [Buildroot] [PATCH] package/pkg-waf: properly escape HOST_DIR
- when defining <pkg>_WAF
-In-Reply-To: <20180923133817.30704-1-thomas.petazzoni@bootlin.com>
-References: <20180923133817.30704-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180923134558.GA9502@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 23 Sep 2018 15:50:07 +0200
+Subject: [Buildroot] [PATCH] package/x11r7/xutil_makedepend: add missing
+ dependency on host-pkgconf
+Message-ID: <20180923135007.5926-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+The configure script of xutil_makedepend uses PKG_CHECK_MODULES(), so
+it should depend on host-pkgconf. Otherwise, a "make
+host-xutil_makedepend" fails with:
 
-On 2018-09-23 15:38 +0200, Thomas Petazzoni spake thusly:
-> When <pkg>_NEEDS_EXTERNAL_WAF is set to YES, <pkg>_WAF is set to
-> $(HOST_DIR)/bin/waf within the inner-waf-package macro. This reference
-> to $(HOST_DIR) should use $$(HOST_DIR) so that it is properly expanded
-> at the time of use, and not at the time of the macro expansion.
-> 
-> In the current Buildroot, this doesn't cause any visible problem
-> because $(HOST_DIR) points to the same directory for all
-> packages. However, with per-package host/target directories, this is
-> no longer the case. It causes a build issue because it tries to use
-> "waf" from the global host directory, which doesn't exist during the
-> build.
-> 
-> This commit fixes the following build issue with per package
-> host/target directories:
-> 
-> /home/test/autobuild/run/instance-2/output/per-package/mpv/host/bin/python2: can't open file '/home/test/autobuild/run/instance-2/output/host/bin/waf': [Errno 2] No such file or directory
-> make: *** [/home/test/autobuild/run/instance-2/output/build/mpv-0.27.2/.stamp_configured] Error 2
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+"""
+checking for X... configure: error: in `/home/thomas/projets/buildroot/output/build/host-xutil_makedepend-1.0.5':
+configure: error: The pkg-config script could not be found or is too old.  Make sure it
+is in your PATH or set the PKG_CONFIG environment variable to the full
+path to pkg-config.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Alternatively, you may set the environment variables X_CFLAGS
+and X_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
 
-Regards,
-Yann E. MORIN.
+To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+"""
 
-> ---
->  package/pkg-waf.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/pkg-waf.mk b/package/pkg-waf.mk
-> index e5b606f063..3288dd63a0 100644
-> --- a/package/pkg-waf.mk
-> +++ b/package/pkg-waf.mk
-> @@ -44,7 +44,7 @@ $(2)_NEEDS_EXTERNAL_WAF ?= NO
->  # If the package does not have its own waf, use our own.
->  ifeq ($$($(2)_NEEDS_EXTERNAL_WAF),YES)
->  $(2)_DEPENDENCIES += host-waf
-> -$(2)_WAF = $(HOST_DIR)/bin/waf
-> +$(2)_WAF = $$(HOST_DIR)/bin/waf
->  else
->  $(2)_WAF = ./waf
->  endif
-> -- 
-> 2.14.4
-> 
+This was detected using per-package host/target directories, but can
+be reproduced without it.
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/x11r7/xutil_makedepend/xutil_makedepend.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/x11r7/xutil_makedepend/xutil_makedepend.mk b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
+index 8a058efcec..a50320ba93 100644
+--- a/package/x11r7/xutil_makedepend/xutil_makedepend.mk
++++ b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
+@@ -10,8 +10,8 @@ XUTIL_MAKEDEPEND_SITE = http://xorg.freedesktop.org/releases/individual/util
+ XUTIL_MAKEDEPEND_LICENSE = MIT
+ XUTIL_MAKEDEPEND_LICENSE_FILES = COPYING
+ 
+-XUTIL_MAKEDEPEND_DEPENDENCIES = xorgproto
+-HOST_XUTIL_MAKEDEPEND_DEPENDENCIES = host-xorgproto
++XUTIL_MAKEDEPEND_DEPENDENCIES = xorgproto host-pkgconf
++HOST_XUTIL_MAKEDEPEND_DEPENDENCIES = host-xorgproto host-pkgconf
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.4
