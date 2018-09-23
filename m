@@ -1,47 +1,35 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 23 Sep 2018 18:30:15 +0200
-Subject: [Buildroot] [PATCH 1/1] numactl: bump to version 2.0.12
-Message-ID: <20180923163015.25345-1-fontaine.fabrice@gmail.com>
+Date: Sun, 23 Sep 2018 18:32:38 +0200
+Subject: [Buildroot] [PATCH 1/4] irqbalance: add optional numactl dependency
+Message-ID: <20180923163241.26588-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- README has been renamed into README.md so update NUMACTL_LICENSE_FILES
-- Add hash for license file
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/numactl/numactl.hash | 3 ++-
- package/numactl/numactl.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/irqbalance/irqbalance.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/numactl/numactl.hash b/package/numactl/numactl.hash
-index 8a395417f1..d93af1a7bb 100644
---- a/package/numactl/numactl.hash
-+++ b/package/numactl/numactl.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 3e099a59b2c527bcdbddd34e1952ca87462d2cef4c93da9b0bc03f02903f7089        numactl-v2.0.11.tar.gz
-+sha256 7c3e819c2bdeb883de68bafe88776a01356f7ef565e75ba866c4b49a087c6bdf        numactl-v2.0.12.tar.gz
-+sha256 e2b738b1303c088421b09933a78c1326fe43692e2c05a7c510a2eb7e7a8eb575        README.md
-diff --git a/package/numactl/numactl.mk b/package/numactl/numactl.mk
-index d3ce4f43c0..9efbcb5f67 100644
---- a/package/numactl/numactl.mk
-+++ b/package/numactl/numactl.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
+diff --git a/package/irqbalance/irqbalance.mk b/package/irqbalance/irqbalance.mk
+index e4e6078bf3..95230ed1f5 100644
+--- a/package/irqbalance/irqbalance.mk
++++ b/package/irqbalance/irqbalance.mk
+@@ -12,6 +12,13 @@ IRQBALANCE_DEPENDENCIES = host-pkgconf
+ # Autoreconf needed because package is distributed without a configure script
+ IRQBALANCE_AUTORECONF = YES
  
--NUMACTL_VERSION = v2.0.11
-+NUMACTL_VERSION = v2.0.12
- NUMACTL_SITE = $(call github,numactl,numactl,$(NUMACTL_VERSION))
- NUMACTL_LICENSE = LGPL-2.1 (libnuma), GPL-2.0 (programs)
--NUMACTL_LICENSE_FILES = README
-+NUMACTL_LICENSE_FILES = README.md
- NUMACTL_INSTALL_STAGING = YES
- NUMACTL_AUTORECONF = YES
- 
++ifeq ($(BR2_PACKAGE_NUMACTL),y)
++IRQBALANCE_DEPENDENCIES += numactl
++IRQBALANCE_CONF_OPTS += --enable-numa
++else
++IRQBALANCE_CONF_OPTS += --disable-numa
++endif
++
+ # This would be done by the package's autogen.sh script
+ define IRQBALANCE_PRECONFIGURE
+ 	mkdir -p $(@D)/m4
 -- 
 2.17.1
