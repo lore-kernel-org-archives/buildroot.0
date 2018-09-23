@@ -1,88 +1,113 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Sep 2018 22:38:49 +0200
-Subject: [Buildroot] [PATCH 1/2] arch: drop BR2_GCC_TARGET_CPU_REVISION
- option
+Date: Sun, 23 Sep 2018 22:38:50 +0200
+Subject: [Buildroot] [PATCH 2/2] toolchain-external: drop no longer needed
+ CC_TARGET_<foo>_ variables
 In-Reply-To: <20180923203850.19447-1-thomas.petazzoni@bootlin.com>
 References: <20180923203850.19447-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180923203850.19447-2-thomas.petazzoni@bootlin.com>
+Message-ID: <20180923203850.19447-3-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In commit 325bb37942f8d3826dab9dc6e88b25234e67a2cf, support for the
-Blackfin architecture was removed. This was our only use of
-BR2_GCC_TARGET_CPU_REVISION, and since this config option somewhat
-complicates the calculation of the --with-cpu/-mcpu option values,
-let's drop it.
+Since the introduction of the GCC_TARGET_<foo> variables in
+arch/arch.mk in commit bd0640a2139119e2fdb4b384ebf32d1edcb0fdaa
+("arch: allow GCC target options to be optionally overwritten") and
+the removal of the BR2_GCC_TARGET_CPU_REVISION, the CC_TARGET_<foo>_
+variables in pkg-toolchain-external.mk map 1:1 with the corresponding
+GCC_TARGET_<foo> variables.
+
+So let's drop the CC_TARGET_<foo>_ variables, and use directly the
+GCC_TARGET_<foo> ones.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- arch/Config.in                                         | 3 ---
- arch/arch.mk                                           | 1 -
- package/gcc/gcc.mk                                     | 4 ----
- toolchain/toolchain-external/pkg-toolchain-external.mk | 4 ----
- 4 files changed, 12 deletions(-)
+ .../toolchain-external/pkg-toolchain-external.mk   | 56 ++++++++++------------
+ 1 file changed, 24 insertions(+), 32 deletions(-)
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 7d1aeb2174..bf94beb289 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -306,9 +306,6 @@ config BR2_GCC_TARGET_FP32_MODE
- config BR2_GCC_TARGET_CPU
- 	string
- 
--config BR2_GCC_TARGET_CPU_REVISION
--	string
--
- # The value of this option will be passed as --with-fpu=<value> when
- # building gcc (internal backend) or -mfpu=<value> in the toolchain
- # wrapper (external toolchain)
-diff --git a/arch/arch.mk b/arch/arch.mk
-index 2429567b24..dcd583a01e 100644
---- a/arch/arch.mk
-+++ b/arch/arch.mk
-@@ -8,7 +8,6 @@ GCC_TARGET_ABI := $(call qstrip,$(BR2_GCC_TARGET_ABI))
- GCC_TARGET_NAN := $(call qstrip,$(BR2_GCC_TARGET_NAN))
- GCC_TARGET_FP32_MODE := $(call qstrip,$(BR2_GCC_TARGET_FP32_MODE))
- GCC_TARGET_CPU := $(call qstrip,$(BR2_GCC_TARGET_CPU))
--GCC_TARGET_CPU_REVISION := $(call qstrip,$(BR2_GCC_TARGET_CPU_REVISION))
- GCC_TARGET_FPU := $(call qstrip,$(BR2_GCC_TARGET_FPU))
- GCC_TARGET_FLOAT_ABI := $(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
- GCC_TARGET_MODE := $(call qstrip,$(BR2_GCC_TARGET_MODE))
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 5f6d53f106..9e9069ce0e 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -215,12 +215,8 @@ ifneq ($(GCC_TARGET_FP32_MODE),)
- HOST_GCC_COMMON_CONF_OPTS += --with-fp-32="$(GCC_TARGET_FP32_MODE)"
- endif
- ifneq ($(GCC_TARGET_CPU),)
--ifneq ($(GCC_TARGET_CPU_REVISION),)
--HOST_GCC_COMMON_CONF_OPTS += --with-cpu=$(GCC_TARGET_CPU)-$(GCC_TARGET_CPU_REVISION)
--else
- HOST_GCC_COMMON_CONF_OPTS += --with-cpu=$(GCC_TARGET_CPU)
- endif
--endif
- 
- ifneq ($(GCC_TARGET_FPU),)
- HOST_GCC_COMMON_CONF_OPTS += --with-fpu=$(GCC_TARGET_FPU)
 diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index 08e61af00b..241a39a5ee 100644
+index 241a39a5ee..b1c41b0d97 100644
 --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
 +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -151,11 +151,7 @@ TOOLCHAIN_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
+@@ -151,14 +151,6 @@ TOOLCHAIN_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
  # Definition of the CFLAGS to use with the external toolchain, as well as the
  # common toolchain wrapper build arguments
  #
--ifeq ($(GCC_TARGET_CPU_REVISION),)
- CC_TARGET_CPU_ := $(GCC_TARGET_CPU)
--else
--CC_TARGET_CPU_ := $(GCC_TARGET_CPU)-$(GCC_TARGET_CPU_REVISION)
--endif
- CC_TARGET_ARCH_ := $(GCC_TARGET_ARCH)
- CC_TARGET_ABI_ := $(GCC_TARGET_ABI)
- CC_TARGET_NAN_ := $(GCC_TARGET_NAN)
+-CC_TARGET_CPU_ := $(GCC_TARGET_CPU)
+-CC_TARGET_ARCH_ := $(GCC_TARGET_ARCH)
+-CC_TARGET_ABI_ := $(GCC_TARGET_ABI)
+-CC_TARGET_NAN_ := $(GCC_TARGET_NAN)
+-CC_TARGET_FP32_MODE_ := $(GCC_TARGET_FP32_MODE)
+-CC_TARGET_FPU_ := $(GCC_TARGET_FPU)
+-CC_TARGET_FLOAT_ABI_ := $(GCC_TARGET_FLOAT_ABI)
+-CC_TARGET_MODE_ := $(GCC_TARGET_MODE)
+ 
+ # march/mtune/floating point mode needs to be passed to the external toolchain
+ # to select the right multilib variant
+@@ -166,39 +158,39 @@ ifeq ($(BR2_x86_64),y)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -m64
+ TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_64
+ endif
+-ifneq ($(CC_TARGET_ARCH_),)
+-TOOLCHAIN_EXTERNAL_CFLAGS += -march=$(CC_TARGET_ARCH_)
+-TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_ARCH='"$(CC_TARGET_ARCH_)"'
++ifneq ($(GCC_TARGET_ARCH),)
++TOOLCHAIN_EXTERNAL_CFLAGS += -march=$(CC_TARGET_ARCH)
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_ARCH='"$(GCC_TARGET_ARCH)"'
+ endif
+-ifneq ($(CC_TARGET_CPU_),)
+-TOOLCHAIN_EXTERNAL_CFLAGS += -mcpu=$(CC_TARGET_CPU_)
+-TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_CPU='"$(CC_TARGET_CPU_)"'
++ifneq ($(GCC_TARGET_CPU),)
++TOOLCHAIN_EXTERNAL_CFLAGS += -mcpu=$(GCC_TARGET_CPU)
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_CPU='"$(GCC_TARGET_CPU)"'
+ endif
+-ifneq ($(CC_TARGET_ABI_),)
+-TOOLCHAIN_EXTERNAL_CFLAGS += -mabi=$(CC_TARGET_ABI_)
+-TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_ABI='"$(CC_TARGET_ABI_)"'
++ifneq ($(GCC_TARGET_ABI),)
++TOOLCHAIN_EXTERNAL_CFLAGS += -mabi=$(GCC_TARGET_ABI)
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_ABI='"$(GCC_TARGET_ABI)"'
+ endif
+ ifeq ($(BR2_TOOLCHAIN_HAS_MNAN_OPTION),y)
+-ifneq ($(CC_TARGET_NAN_),)
+-TOOLCHAIN_EXTERNAL_CFLAGS += -mnan=$(CC_TARGET_NAN_)
+-TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_NAN='"$(CC_TARGET_NAN_)"'
++ifneq ($(GCC_TARGET_NAN),)
++TOOLCHAIN_EXTERNAL_CFLAGS += -mnan=$(GCC_TARGET_NAN)
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_NAN='"$(GCC_TARGET_NAN)"'
+ endif
+ endif
+-ifneq ($(CC_TARGET_FP32_MODE_),)
+-TOOLCHAIN_EXTERNAL_CFLAGS += -mfp$(CC_TARGET_FP32_MODE_)
+-TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_FP32_MODE='"$(CC_TARGET_FP32_MODE_)"'
++ifneq ($(GCC_TARGET_FP32_MODE),)
++TOOLCHAIN_EXTERNAL_CFLAGS += -mfp$(GCC_TARGET_FP32_MODE)
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_FP32_MODE='"$(GCC_TARGET_FP32_MODE)"'
+ endif
+-ifneq ($(CC_TARGET_FPU_),)
+-TOOLCHAIN_EXTERNAL_CFLAGS += -mfpu=$(CC_TARGET_FPU_)
+-TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_FPU='"$(CC_TARGET_FPU_)"'
++ifneq ($(GCC_TARGET_FPU),)
++TOOLCHAIN_EXTERNAL_CFLAGS += -mfpu=$(GCC_TARGET_FPU)
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_FPU='"$(GCC_TARGET_FPU)"'
+ endif
+-ifneq ($(CC_TARGET_FLOAT_ABI_),)
+-TOOLCHAIN_EXTERNAL_CFLAGS += -mfloat-abi=$(CC_TARGET_FLOAT_ABI_)
+-TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_FLOAT_ABI='"$(CC_TARGET_FLOAT_ABI_)"'
++ifneq ($(GCC_TARGET_FLOAT_ABI),)
++TOOLCHAIN_EXTERNAL_CFLAGS += -mfloat-abi=$(GCC_TARGET_FLOAT_ABI)
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_FLOAT_ABI='"$(GCC_TARGET_FLOAT_ABI)"'
+ endif
+-ifneq ($(CC_TARGET_MODE_),)
+-TOOLCHAIN_EXTERNAL_CFLAGS += -m$(CC_TARGET_MODE_)
+-TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_MODE='"$(CC_TARGET_MODE_)"'
++ifneq ($(GCC_TARGET_MODE),)
++TOOLCHAIN_EXTERNAL_CFLAGS += -m$(GCC_TARGET_MODE)
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_MODE='"$(GCC_TARGET_MODE)"'
+ endif
+ ifeq ($(BR2_BINFMT_FLAT),y)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -Wl,-elf2flt
 -- 
 2.14.4
