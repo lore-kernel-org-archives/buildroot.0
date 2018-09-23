@@ -1,29 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Sep 2018 16:23:08 +0200
-Subject: [Buildroot] [git commit] monkey: add license file hash
-Message-ID: <20180923142259.3A5148886E@busybox.osuosl.org>
+Date: Sun, 23 Sep 2018 16:23:38 +0200
+Subject: [Buildroot] [PATCH 1/2] monkey: switch to cmake package
+In-Reply-To: <f0cb06bc463b44e6fdfcbde7049e41c4814839ef.1537676555.git.baruch@tkos.co.il>
+References: <f0cb06bc463b44e6fdfcbde7049e41c4814839ef.1537676555.git.baruch@tkos.co.il>
+Message-ID: <20180923162338.2863bb85@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9502902d1ebb630f22cfe4ab312b379b62b3bbe2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Cc: Morgan Delestre <m.delestre@sinters.fr>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/monkey/monkey.hash | 1 +
- 1 file changed, 1 insertion(+)
+On Sun, 23 Sep 2018 07:22:34 +0300, Baruch Siach wrote:
+> Since version 1.6.x the configure script is a wrapper around cmake. Use
+> cmake directly since we want to make sure that cmake is available.
+> 
+> monkey no longer provides the libmonkey.so shared library. Remove the
+> BR2_PACKAGE_MONKEY_SHARED option.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/b07/b077720c16857b752f4f38b73619a6a62862f35f/
+> http://autobuild.buildroot.net/results/799/799bcbd332f254fbf3d3547e5e52ac9463d58bcc/
+> http://autobuild.buildroot.net/results/3b0/3b095ca77a900af724fbc79d9cc20cbb9931fe15/
+> 
+> Cc: Morgan Delestre <m.delestre@sinters.fr>
+> Cc: David Pierret <david.pierret@gmail.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/monkey/Config.in |  6 -----
+>  package/monkey/monkey.mk | 49 +++++++---------------------------------
+>  2 files changed, 8 insertions(+), 47 deletions(-)
 
-diff --git a/package/monkey/monkey.hash b/package/monkey/monkey.hash
-index 47e0e0db00..83fc0def60 100644
---- a/package/monkey/monkey.hash
-+++ b/package/monkey/monkey.hash
-@@ -1,3 +1,4 @@
- # md5 from http://monkey-project.com/releases/1.6/monkey-1.6.9.tar.gz.md5, sha256 locally computed:
- md5    c401734985a936ee07dbff5eca7d176a 				monkey-1.6.9.tar.gz
- sha256 f1122e89cda627123286542b0a18fcaa131cbe9d4f5dd897d9455157289148fb	monkey-1.6.9.tar.gz
-+sha256 0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594	LICENSE
+Both applied. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
