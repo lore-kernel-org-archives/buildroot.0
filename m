@@ -1,44 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Sep 2018 15:37:59 +0200
-Subject: [Buildroot] [PATCH] xlib_libxshmfence: drop AUTORECONF
-Message-ID: <20180923133759.30626-1-thomas.petazzoni@bootlin.com>
+Date: Sun, 23 Sep 2018 15:38:17 +0200
+Subject: [Buildroot] [PATCH] package/pkg-waf: properly escape HOST_DIR when
+ defining <pkg>_WAF
+Message-ID: <20180923133817.30704-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In commit 2524acd4179fccc627a72ff188bf51c95fed9876
-("package/x11r7/xlib_libxshmfence: bump version to 1.3"), the patch
-0001-configure.ac-call-AC_USE_SYSTEM_EXTENSIONS.patch was dropped, but
-the corresponding AUTORECONF = YES was not dropped.
+When <pkg>_NEEDS_EXTERNAL_WAF is set to YES, <pkg>_WAF is set to
+$(HOST_DIR)/bin/waf within the inner-waf-package macro. This reference
+to $(HOST_DIR) should use $$(HOST_DIR) so that it is properly expanded
+at the time of use, and not at the time of the macro expansion.
 
-This causes a build issue if just xlib_libxshmfence is built (using
-"make xlib_libxshmfence" or using per-package host/target directories):
+In the current Buildroot, this doesn't cause any visible problem
+because $(HOST_DIR) points to the same directory for all
+packages. However, with per-package host/target directories, this is
+no longer the case. It causes a build issue because it tries to use
+"waf" from the global host directory, which doesn't exist during the
+build.
 
-  >>> xlib_libxshmfence 1.3 Autoreconfiguring
-  configure.ac:40: error: must install xorg-macros 1.3 or later before running autoconf/autogen
-  configure.ac:40: the top level
+This commit fixes the following build issue with per package
+host/target directories:
 
-This commit fixes that by dropping the no longer needed
-AUTORECONF = YES.
+/home/test/autobuild/run/instance-2/output/per-package/mpv/host/bin/python2: can't open file '/home/test/autobuild/run/instance-2/output/host/bin/waf': [Errno 2] No such file or directory
+make: *** [/home/test/autobuild/run/instance-2/output/build/mpv-0.27.2/.stamp_configured] Error 2
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk | 3 ---
- 1 file changed, 3 deletions(-)
+ package/pkg-waf.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
-index f395ebe172..605408fff7 100644
---- a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
-+++ b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
-@@ -12,7 +12,4 @@ XLIB_LIBXSHMFENCE_LICENSE_FILES = COPYING
- XLIB_LIBXSHMFENCE_INSTALL_STAGING = YES
- XLIB_LIBXSHMFENCE_DEPENDENCIES = host-pkgconf xorgproto
- 
--# 0001-configure.ac-call-AC_USE_SYSTEM_EXTENSIONS.patch
--XLIB_LIBXSHMFENCE_AUTORECONF = YES
--
- $(eval $(autotools-package))
+diff --git a/package/pkg-waf.mk b/package/pkg-waf.mk
+index e5b606f063..3288dd63a0 100644
+--- a/package/pkg-waf.mk
++++ b/package/pkg-waf.mk
+@@ -44,7 +44,7 @@ $(2)_NEEDS_EXTERNAL_WAF ?= NO
+ # If the package does not have its own waf, use our own.
+ ifeq ($$($(2)_NEEDS_EXTERNAL_WAF),YES)
+ $(2)_DEPENDENCIES += host-waf
+-$(2)_WAF = $(HOST_DIR)/bin/waf
++$(2)_WAF = $$(HOST_DIR)/bin/waf
+ else
+ $(2)_WAF = ./waf
+ endif
 -- 
 2.14.4
