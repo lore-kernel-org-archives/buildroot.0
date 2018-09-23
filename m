@@ -1,41 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Sep 2018 16:23:38 +0200
-Subject: [Buildroot] [PATCH 1/2] monkey: switch to cmake package
-In-Reply-To: <f0cb06bc463b44e6fdfcbde7049e41c4814839ef.1537676555.git.baruch@tkos.co.il>
-References: <f0cb06bc463b44e6fdfcbde7049e41c4814839ef.1537676555.git.baruch@tkos.co.il>
-Message-ID: <20180923162338.2863bb85@windsurf>
+Date: Sun, 23 Sep 2018 16:24:17 +0200
+Subject: [Buildroot] [git commit] can-utils: drop NPTL dependency
+Message-ID: <20180923142403.72750888DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=5956476adc14790cade7263e585a0ebc9b23182c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 23 Sep 2018 07:22:34 +0300, Baruch Siach wrote:
-> Since version 1.6.x the configure script is a wrapper around cmake. Use
-> cmake directly since we want to make sure that cmake is available.
-> 
-> monkey no longer provides the libmonkey.so shared library. Remove the
-> BR2_PACKAGE_MONKEY_SHARED option.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/b07/b077720c16857b752f4f38b73619a6a62862f35f/
-> http://autobuild.buildroot.net/results/799/799bcbd332f254fbf3d3547e5e52ac9463d58bcc/
-> http://autobuild.buildroot.net/results/3b0/3b095ca77a900af724fbc79d9cc20cbb9931fe15/
-> 
-> Cc: Morgan Delestre <m.delestre@sinters.fr>
-> Cc: David Pierret <david.pierret@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/monkey/Config.in |  6 -----
->  package/monkey/monkey.mk | 49 +++++++---------------------------------
->  2 files changed, 8 insertions(+), 47 deletions(-)
+The latest uClibc-ng version (1.0.30) provides clock_nanosleep() even
+for non NPTL configurations.
 
-Both applied. Thanks!
+Don't keep a dependency on threads as can-utils doesn't need it
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/can-utils/Config.in | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/package/can-utils/Config.in b/package/can-utils/Config.in
+index 1800eca042..da56378866 100644
+--- a/package/can-utils/Config.in
++++ b/package/can-utils/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_CAN_UTILS
+ 	bool "can-utils"
+ 	depends on BR2_USE_MMU # fork()
+-	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # clock_nanosleep()
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL # error()
+ 	help
+ 	  SocketCAN is a set of open source CAN drivers and a
+@@ -10,6 +9,6 @@ config BR2_PACKAGE_CAN_UTILS
+ 
+ 	  https://github.com/linux-can/can-utils
+ 
+-comment "can-utils needs a glibc or uClibc toolchain w/ NPTL"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_TOOLCHAIN_USES_MUSL
++comment "can-utils needs a glibc or uClibc toolchain"
++	depends on BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_USE_MMU
