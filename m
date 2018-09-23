@@ -1,49 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Sep 2018 22:12:35 +0200
-Subject: [Buildroot] [PATCH v2 2/6] package/linux-headers: add support
- for custom headers
-In-Reply-To: <20180912102256.3164-3-mark.corbin@embecosm.com>
-References: <20180912102256.3164-1-mark.corbin@embecosm.com>
- <20180912102256.3164-3-mark.corbin@embecosm.com>
-Message-ID: <20180923221235.6950a2e9@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 23 Sep 2018 20:33:25 +0000
+Subject: [Buildroot] [Bug 11366] New: [2018.08] SysV IPC not available for
+ fakeroot on WSL
+Message-ID: <bug-11366-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=11366
 
-On Wed, 12 Sep 2018 11:22:52 +0100, Mark Corbin wrote:
-> Add support for building toolchains against custom headers. Allows
-> the selection of a manual version, custom tarball or custom git
-> repository for the kernel headers. This enables toolchains to be
-> built against custom kernel headers without having to build a full
-> kernel.
-> 
-> This is particularly useful for new architectures, such as RISC-V
-> where updated kernel headers may not have made it into the mainline
-> kernel yet.
-> 
-> Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
-> ---
->  package/linux-headers/Config.in.host   | 40 ++++++++++-
->  package/linux-headers/linux-headers.mk | 94 +++++++++++++++-----------
->  2 files changed, 93 insertions(+), 41 deletions(-)
+            Bug ID: 11366
+           Summary: [2018.08] SysV IPC not available for fakeroot on WSL
+           Product: buildroot
+           Version: unspecified
+          Hardware: PC
+                OS: Windows
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: jfdoyon at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-I have applied, but after doing two changes:
+When using Ubuntu on Windows Susbsystem for Linux (WSL) as your host build
+environment, the process fails on the execution of "fakeroot", with an error
+message to the effect that "fakeroot has failed due to SysV IPC not being
+available".
 
- - Dropping the spurious change of indentation in the
-   LINUX_HEADERS_APPLY_LOCAL_PATCHES hook.
+This is indeed correct, as the WSL system doesn't have the functionality.
 
- - Splitting this commit into two. A first commit does just the
-   reorganization of linux-headers.mk, another adds support for custom
-   tarball/git in linux-headers.
+A WSL bug has been filed: https://github.com/Microsoft/WSL/issues/2465
 
-Thanks a lot!
+The workaround is to copy/link the host /usr/bin/fakeroot-tcp into the builroot
+host output, and re-run, it then succeeds no problem.
 
-Thomas
+Suggestion: detect availability of SysV IPC and/or TCP, and build/use the
+appropriate fakeroot. If the host doesn't have either facility available, warn
+early (instead of finding out at the very end of a possibly long compilation
+run).
+
+Thanks,
+J.F.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
