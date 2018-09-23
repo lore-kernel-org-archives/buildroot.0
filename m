@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Sep 2018 16:24:34 +0200
-Subject: [Buildroot] [PATCH 1/1] can-utils: drop NPTL dependency
-In-Reply-To: <20180923122058.9529-1-fontaine.fabrice@gmail.com>
-References: <20180923122058.9529-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180923162434.7eb14348@windsurf>
+Date: Sun, 23 Sep 2018 16:40:23 +0200
+Subject: [Buildroot] [PATCH 1/1] ncmpc: depends on gcc >= 6
+In-Reply-To: <20180923134355.25827-1-fontaine.fabrice@gmail.com>
+References: <20180923134355.25827-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180923164023.6fb3a4ba@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,29 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 23 Sep 2018 14:20:58 +0200, Fabrice Fontaine wrote:
-> The latest uClibc-ng version (1.0.30) provides clock_nanosleep() even
-> for non NPTL configurations.
-> 
-> Don't keep a dependency on threads as can-utils doesn't need it
+On Sun, 23 Sep 2018 15:43:55 +0200, Fabrice Fontaine wrote:
+> Following upstream feedback on unique_ptr issue and the suggested fix
+> (https://github.com/MusicPlayerDaemon/ncmpc/pull/29), add a dependency
+> on gcc >= 6 and remove patch
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/can-utils/Config.in | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
+If I'm correct, unique_ptr was supported before gcc 6.x, right ?
+
+So if that's the case, the issue here is not the unavailability of
+unique_ptr before gcc 6, but rather a gcc bug that prevents the
+automatic cast from Page* to unique_ptr<Page> from happening.
+
+So the proper course of action would be:
+
+ - Report a bug to gcc upstream about this
+ - Create a BR2_TOOLCHAIN_GCC_HAS_BUG_xyz
+ - Use that in ncmpc
+
+Indeed, there is a big difference between "the feature does not exist
+in gcc" and the "feature existed but was buggy".
+
+Best regards,
 
 Thomas
 -- 
