@@ -1,121 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Sep 2018 16:07:50 +0200
-Subject: [Buildroot] [git commit] monkey: switch to cmake package
-Message-ID: <20180923142259.29F7B888D8@busybox.osuosl.org>
+Date: Sun, 23 Sep 2018 16:23:08 +0200
+Subject: [Buildroot] [git commit] monkey: add license file hash
+Message-ID: <20180923142259.3A5148886E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5fea6e2a2fa816c0c551bca184fb64fc96d76a08
+commit: https://git.buildroot.net/buildroot/commit/?id=9502902d1ebb630f22cfe4ab312b379b62b3bbe2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since version 1.6.x the configure script is a wrapper around cmake. Use
-cmake directly since we want to make sure that cmake is available.
-
-monkey no longer provides the libmonkey.so shared library. Remove the
-BR2_PACKAGE_MONKEY_SHARED option.
-
-Fixes:
-http://autobuild.buildroot.net/results/b07/b077720c16857b752f4f38b73619a6a62862f35f/
-http://autobuild.buildroot.net/results/799/799bcbd332f254fbf3d3547e5e52ac9463d58bcc/
-http://autobuild.buildroot.net/results/3b0/3b095ca77a900af724fbc79d9cc20cbb9931fe15/
-
 Cc: Morgan Delestre <m.delestre@sinters.fr>
-Cc: David Pierret <david.pierret@gmail.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/monkey/Config.in |  6 ------
- package/monkey/monkey.mk | 49 ++++++++----------------------------------------
- 2 files changed, 8 insertions(+), 47 deletions(-)
+ package/monkey/monkey.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/monkey/Config.in b/package/monkey/Config.in
-index fdfa1481e4..32a95ee623 100644
---- a/package/monkey/Config.in
-+++ b/package/monkey/Config.in
-@@ -11,12 +11,6 @@ config BR2_PACKAGE_MONKEY
- 
- if BR2_PACKAGE_MONKEY
- 
--config BR2_PACKAGE_MONKEY_SHARED
--	bool "install shared library"
--	help
--	  Build Monkey as a shared library in addition to stand-alone
--	  server
--
- config BR2_PACKAGE_MONKEY_SSL
- 	bool "enable SSL/TLS"
- 	select BR2_PACKAGE_MBEDTLS
-diff --git a/package/monkey/monkey.mk b/package/monkey/monkey.mk
-index b75765553b..6159f5522e 100644
---- a/package/monkey/monkey.mk
-+++ b/package/monkey/monkey.mk
-@@ -15,58 +15,25 @@ MONKEY_LICENSE_FILES = LICENSE
- # infrastructure.
- 
- MONKEY_CONF_OPTS = \
--	--prefix=/usr \
--	--sysconfdir=/etc/monkey \
--	--webroot=/var/www \
--	--mandir=/usr/share/man \
--	--logdir=/var/log \
--	--pidfile=/var/run \
--	--malloc-libc
-+	-DINSTALL_SYSCONFDIR=/etc/monkey \
-+	-DINSTALL_WEBROOTDIR=/var/www \
-+	-DWITH_SYSTEM_MALLOC=1
- 
--# --uclib-mode is not a typo
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
--MONKEY_CONF_OPTS += --uclib-mode --no-backtrace
-+MONKEY_CONF_OPTS += -DWITH_UCLIB=1 -DWITH_BACKTRACE=0
- endif
- 
- ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
--MONKEY_CONF_OPTS += --musl-mode --no-backtrace
--endif
--
--ifeq ($(BR2_PACKAGE_MONKEY_SHARED),y)
--MONKEY_CONF_OPTS += --enable-shared
--MONKEY_INSTALL_STAGING = YES
--else
--# Even without --enable-shared, the monkey build system leaves a
--# broken libmonkey.so symbolic link.
--define MONKEY_REMOVE_DANGLING_SYMLINK
--	$(RM) -f $(TARGET_DIR)/usr/lib/libmonkey.so
--endef
--MONKEY_POST_INSTALL_TARGET_HOOKS += MONKEY_REMOVE_DANGLING_SYMLINK
-+MONKEY_CONF_OPTS += -DWITH_MUSL=1 -DWITH_BACKTRACE=0
- endif
- 
- ifeq ($(BR2_ENABLE_DEBUG),y)
--MONKEY_CONF_OPTS += --debug
-+MONKEY_CONF_OPTS += -DWITH_DEBUG=1
- endif
- 
- ifeq ($(BR2_PACKAGE_MONKEY_SSL),y)
--MONKEY_CONF_OPTS += --enable-plugins=tls --mbedtls-shared
-+MONKEY_CONF_OPTS += -DWITH_PLUGINS=tls -DWITH_MBEDTLS_SHARED=1
- MONKEY_DEPENDENCIES += mbedtls
- endif
- 
--define MONKEY_CONFIGURE_CMDS
--	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(MONKEY_CONF_OPTS))
--endef
--
--define MONKEY_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
--endef
--
--define MONKEY_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
--endef
--
--define MONKEY_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
--endef
--
--$(eval $(generic-package))
-+$(eval $(cmake-package))
+diff --git a/package/monkey/monkey.hash b/package/monkey/monkey.hash
+index 47e0e0db00..83fc0def60 100644
+--- a/package/monkey/monkey.hash
++++ b/package/monkey/monkey.hash
+@@ -1,3 +1,4 @@
+ # md5 from http://monkey-project.com/releases/1.6/monkey-1.6.9.tar.gz.md5, sha256 locally computed:
+ md5    c401734985a936ee07dbff5eca7d176a 				monkey-1.6.9.tar.gz
+ sha256 f1122e89cda627123286542b0a18fcaa131cbe9d4f5dd897d9455157289148fb	monkey-1.6.9.tar.gz
++sha256 0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594	LICENSE
