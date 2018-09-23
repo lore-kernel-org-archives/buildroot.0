@@ -1,113 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Sep 2018 22:38:50 +0200
-Subject: [Buildroot] [PATCH 2/2] toolchain-external: drop no longer needed
- CC_TARGET_<foo>_ variables
-In-Reply-To: <20180923203850.19447-1-thomas.petazzoni@bootlin.com>
-References: <20180923203850.19447-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180923203850.19447-3-thomas.petazzoni@bootlin.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 23 Sep 2018 20:46:08 +0000
+Subject: [Buildroot] [Bug 11366] [2018.08] SysV IPC not available for
+ fakeroot on WSL
+In-Reply-To: <bug-11366-163@https.bugs.busybox.net/>
+References: <bug-11366-163@https.bugs.busybox.net/>
+Message-ID: <bug-11366-163-goNY3ifrNJ@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the introduction of the GCC_TARGET_<foo> variables in
-arch/arch.mk in commit bd0640a2139119e2fdb4b384ebf32d1edcb0fdaa
-("arch: allow GCC target options to be optionally overwritten") and
-the removal of the BR2_GCC_TARGET_CPU_REVISION, the CC_TARGET_<foo>_
-variables in pkg-toolchain-external.mk map 1:1 with the corresponding
-GCC_TARGET_<foo> variables.
+https://bugs.busybox.net/show_bug.cgi?id=11366
 
-So let's drop the CC_TARGET_<foo>_ variables, and use directly the
-GCC_TARGET_<foo> ones.
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Thanks for the bug report. I'd say this is something that should be improved in
+fakeroot configure script itself: it should detect if SysV IPC is available or
+not, and fallback to TCP if not.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../toolchain-external/pkg-toolchain-external.mk   | 56 ++++++++++------------
- 1 file changed, 24 insertions(+), 32 deletions(-)
+Is this something you could have a look at ?
 
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index 241a39a5ee..b1c41b0d97 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -151,14 +151,6 @@ TOOLCHAIN_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
- # Definition of the CFLAGS to use with the external toolchain, as well as the
- # common toolchain wrapper build arguments
- #
--CC_TARGET_CPU_ := $(GCC_TARGET_CPU)
--CC_TARGET_ARCH_ := $(GCC_TARGET_ARCH)
--CC_TARGET_ABI_ := $(GCC_TARGET_ABI)
--CC_TARGET_NAN_ := $(GCC_TARGET_NAN)
--CC_TARGET_FP32_MODE_ := $(GCC_TARGET_FP32_MODE)
--CC_TARGET_FPU_ := $(GCC_TARGET_FPU)
--CC_TARGET_FLOAT_ABI_ := $(GCC_TARGET_FLOAT_ABI)
--CC_TARGET_MODE_ := $(GCC_TARGET_MODE)
- 
- # march/mtune/floating point mode needs to be passed to the external toolchain
- # to select the right multilib variant
-@@ -166,39 +158,39 @@ ifeq ($(BR2_x86_64),y)
- TOOLCHAIN_EXTERNAL_CFLAGS += -m64
- TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_64
- endif
--ifneq ($(CC_TARGET_ARCH_),)
--TOOLCHAIN_EXTERNAL_CFLAGS += -march=$(CC_TARGET_ARCH_)
--TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_ARCH='"$(CC_TARGET_ARCH_)"'
-+ifneq ($(GCC_TARGET_ARCH),)
-+TOOLCHAIN_EXTERNAL_CFLAGS += -march=$(CC_TARGET_ARCH)
-+TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_ARCH='"$(GCC_TARGET_ARCH)"'
- endif
--ifneq ($(CC_TARGET_CPU_),)
--TOOLCHAIN_EXTERNAL_CFLAGS += -mcpu=$(CC_TARGET_CPU_)
--TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_CPU='"$(CC_TARGET_CPU_)"'
-+ifneq ($(GCC_TARGET_CPU),)
-+TOOLCHAIN_EXTERNAL_CFLAGS += -mcpu=$(GCC_TARGET_CPU)
-+TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_CPU='"$(GCC_TARGET_CPU)"'
- endif
--ifneq ($(CC_TARGET_ABI_),)
--TOOLCHAIN_EXTERNAL_CFLAGS += -mabi=$(CC_TARGET_ABI_)
--TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_ABI='"$(CC_TARGET_ABI_)"'
-+ifneq ($(GCC_TARGET_ABI),)
-+TOOLCHAIN_EXTERNAL_CFLAGS += -mabi=$(GCC_TARGET_ABI)
-+TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_ABI='"$(GCC_TARGET_ABI)"'
- endif
- ifeq ($(BR2_TOOLCHAIN_HAS_MNAN_OPTION),y)
--ifneq ($(CC_TARGET_NAN_),)
--TOOLCHAIN_EXTERNAL_CFLAGS += -mnan=$(CC_TARGET_NAN_)
--TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_NAN='"$(CC_TARGET_NAN_)"'
-+ifneq ($(GCC_TARGET_NAN),)
-+TOOLCHAIN_EXTERNAL_CFLAGS += -mnan=$(GCC_TARGET_NAN)
-+TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_NAN='"$(GCC_TARGET_NAN)"'
- endif
- endif
--ifneq ($(CC_TARGET_FP32_MODE_),)
--TOOLCHAIN_EXTERNAL_CFLAGS += -mfp$(CC_TARGET_FP32_MODE_)
--TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_FP32_MODE='"$(CC_TARGET_FP32_MODE_)"'
-+ifneq ($(GCC_TARGET_FP32_MODE),)
-+TOOLCHAIN_EXTERNAL_CFLAGS += -mfp$(GCC_TARGET_FP32_MODE)
-+TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_FP32_MODE='"$(GCC_TARGET_FP32_MODE)"'
- endif
--ifneq ($(CC_TARGET_FPU_),)
--TOOLCHAIN_EXTERNAL_CFLAGS += -mfpu=$(CC_TARGET_FPU_)
--TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_FPU='"$(CC_TARGET_FPU_)"'
-+ifneq ($(GCC_TARGET_FPU),)
-+TOOLCHAIN_EXTERNAL_CFLAGS += -mfpu=$(GCC_TARGET_FPU)
-+TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_FPU='"$(GCC_TARGET_FPU)"'
- endif
--ifneq ($(CC_TARGET_FLOAT_ABI_),)
--TOOLCHAIN_EXTERNAL_CFLAGS += -mfloat-abi=$(CC_TARGET_FLOAT_ABI_)
--TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_FLOAT_ABI='"$(CC_TARGET_FLOAT_ABI_)"'
-+ifneq ($(GCC_TARGET_FLOAT_ABI),)
-+TOOLCHAIN_EXTERNAL_CFLAGS += -mfloat-abi=$(GCC_TARGET_FLOAT_ABI)
-+TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_FLOAT_ABI='"$(GCC_TARGET_FLOAT_ABI)"'
- endif
--ifneq ($(CC_TARGET_MODE_),)
--TOOLCHAIN_EXTERNAL_CFLAGS += -m$(CC_TARGET_MODE_)
--TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_MODE='"$(CC_TARGET_MODE_)"'
-+ifneq ($(GCC_TARGET_MODE),)
-+TOOLCHAIN_EXTERNAL_CFLAGS += -m$(GCC_TARGET_MODE)
-+TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_MODE='"$(GCC_TARGET_MODE)"'
- endif
- ifeq ($(BR2_BINFMT_FLAT),y)
- TOOLCHAIN_EXTERNAL_CFLAGS += -Wl,-elf2flt
 -- 
-2.14.4
+You are receiving this mail because:
+You are on the CC list for the bug.
