@@ -1,56 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Sep 2018 16:52:22 +0200
-Subject: [Buildroot] [PATCH 1/1] libnfs: fix build of applications like
- mpd on musl
-In-Reply-To: <20180922194305.27608-1-fontaine.fabrice@gmail.com>
-References: <20180922194305.27608-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180923165222.74cb11bb@windsurf>
+Date: Sun, 23 Sep 2018 16:58:04 +0200
+Subject: [Buildroot] [git commit] libnfs: fix license and add hashes for
+ license files
+Message-ID: <20180923145749.15664888FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1b486d4fa32a698ca9b454d7cfb874473009d20f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 22 Sep 2018 21:43:05 +0200, Fabrice Fontaine wrote:
+As specified in COPYING, examples are licensed under GPL-3.0+ and .x
+files are licensed under BSD-2-Clause.
 
-> + #include <stdint.h>
-> +-#if defined(__ANDROID__) || defined(AROS) \
-> ++#if defined(__ANDROID__) || defined(AROS) || defined(__linux__) \
-> +  || ( defined(__APPLE__) && defined(__MACH__) )
-> + #include <sys/time.h>
-> + #else
+So update LIBNFS_LICENSE, add COPYING, LICENCE-BSD.txt and
+LICENCE-GPL-3.txt to LIBNFS_LICENSE_FILES and add hash for all license
+files
 
-I think the proper fix would be to use the AC_HEADER_TIME macro
-(https://www.gnu.org/software/autoconf/manual/autoconf.html#Particular-Headers).
-First need to add:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libnfs/libnfs.hash | 3 +++
+ package/libnfs/libnfs.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-AC_HEADER_TIME
-AC_CHECK_HEADERS([sys/time.h])
-
-And then in the code, do:
-
-          #ifdef TIME_WITH_SYS_TIME
-          # include <sys/time.h>
-          # include <time.h>
-          #else
-          # ifdef HAVE_SYS_TIME_H
-          #  include <sys/time.h>
-          # else
-          #  include <time.h>
-          # endif
-          #endif
-
-Instead of the mess that is currently done based on the system on which
-the stuff is being compiled.
-
-Could you try to do this, and upstream the corresponding patch ?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libnfs/libnfs.hash b/package/libnfs/libnfs.hash
+index cfe6678842..2bd8caf255 100644
+--- a/package/libnfs/libnfs.hash
++++ b/package/libnfs/libnfs.hash
+@@ -1,3 +1,6 @@
+ # Locally calculated
+ sha256 7ea6cd8fa6c461d01091e584d424d28e137d23ff4b65b95d01a3fd0ef95d120e  libnfs-libnfs-2.0.0.tar.gz
++sha256 2d152e3a2f31ef0fe14d4908377277f8215fb5c82ec9329d1eed081c845fc85f  COPYING
++sha256 d9406ced95457941032aa11d04623b8ab71f2827a3395ebef137aec475be35b1  LICENCE-BSD.txt
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENCE-LGPL-2.1.txt
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENCE-GPL-3.txt
+diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
+index d961fd1d4e..0cf07d2143 100644
+--- a/package/libnfs/libnfs.mk
++++ b/package/libnfs/libnfs.mk
+@@ -8,8 +8,8 @@ LIBNFS_VERSION = libnfs-2.0.0
+ LIBNFS_SITE = $(call github,sahlberg,libnfs,$(LIBNFS_VERSION))
+ LIBNFS_INSTALL_STAGING = YES
+ LIBNFS_AUTORECONF = YES
+-LIBNFS_LICENSE = LGPL-2.1+
+-LIBNFS_LICENSE_FILES = LICENCE-LGPL-2.1.txt
++LIBNFS_LICENSE = LGPL-2.1+ (library), BSD-2-Clause (protocol, .x files), GPL-3.0+ (examples)
++LIBNFS_LICENSE_FILES = COPYING LICENCE-BSD.txt LICENCE-LGPL-2.1.txt LICENCE-GPL-3.txt
+ LIBNFS_DEPENDENCIES = host-pkgconf
+ 
+ ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
