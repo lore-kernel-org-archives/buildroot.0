@@ -1,34 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Sep 2018 23:33:27 +0200
-Subject: [Buildroot] [PATCH v3 0/2] at: bump version
-In-Reply-To: <20180920165913.13488-1-giulio.benetti@micronovasrl.com>
-References: <20180918213949.36376-1-giulio.benetti@micronovasrl.com>
- <20180920165913.13488-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20180923233327.293dbb7e@windsurf>
+Date: Sun, 23 Sep 2018 23:41:19 +0200
+Subject: [Buildroot] [git commit] arch/arch.mk: fix check-package warnings
+Message-ID: <20180923214141.95C4788CAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e2b07057436fd6e8e7a0c9e2a45cfea193728985
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 20 Sep 2018 18:59:11 +0200, Giulio Benetti wrote:
+"make check-package" is not happy with the formatting of the recently
+introduced arch.mk:
 
-> Giulio Benetti (2):
->   at: change upstream site, bump version
->   at: add sha256 for legal-info files
+arch/arch.mk:1: should be 80 hashes (http://nightly.buildroot.org/#writing-rules-mk)
+arch/arch.mk:2: should be 1 hash (http://nightly.buildroot.org/#writing-rules-mk)
+arch/arch.mk:4: should be 1 hash (http://nightly.buildroot.org/#writing-rules-mk)
+arch/arch.mk:5: should be 80 hashes (http://nightly.buildroot.org/#writing-rules-mk)
+arch/arch.mk:6: should be a blank line (http://nightly.buildroot.org/#writing-rules-mk)
 
-I have applied both patches, thanks for working on this.
+Let's fix this by adding a comment header that makes check-package
+happy.
 
-However, as written on the Wiki "And also, submit the remaining of our
-patches to the new maintainers.". So could you try to get our patches
-on the "at" package submitted and accepted upstream ?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ arch/arch.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Thanks a lot,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/arch/arch.mk b/arch/arch.mk
+index 2429567b24..6c15270903 100644
+--- a/arch/arch.mk
++++ b/arch/arch.mk
+@@ -1,3 +1,9 @@
++################################################################################
++#
++# Architecture-specific definitions
++#
++################################################################################
++
+ # Allow GCC target configuration settings to be optionally
+ # overwritten by architecture specific makefiles.
+ 
