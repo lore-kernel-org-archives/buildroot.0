@@ -1,50 +1,101 @@
-From: Ferdinand van Aartsen <ferdinand@ombud.nl>
-Date: Mon, 24 Sep 2018 11:42:45 +0200
-Subject: [Buildroot] [PATCH 1/1] sqlite: bump to version 3.25.1
-Message-ID: <20180924094245.26736-1-ferdinand@ombud.nl>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Mon, 24 Sep 2018 12:26:05 +0200
+Subject: [Buildroot] [PATCH] ffmpeg: fix static linking build failure
+ when using libavutil
+In-Reply-To: <20180916222224.519fa1f8@windsurf>
+References: <20180911204230.15890-1-giulio.benetti@micronovasrl.com>
+ <20180916222224.519fa1f8@windsurf>
+Message-ID: <63ee101c-ee45-57cc-4aeb-7f3b49753ccb@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Make use of https for sqlite.org.
+Hello Thomas,
 
-Signed-off-by: Ferdinand van Aartsen <ferdinand@ombud.nl>
----
- package/sqlite/sqlite.hash | 6 +++---
- package/sqlite/sqlite.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Il 16/09/2018 22:22, Thomas Petazzoni ha scritto:
+> Hello Giulio,
+> 
+> On Tue, 11 Sep 2018 22:42:30 +0200, Giulio Benetti wrote:
+>> When static linking programs using ffmpeg libraries, if linking against
+>> libavutil, -ldrm is listed before -lavutil.
+> 
+> I think this is not relevant in the explanation, the fact that motion
+> links with libdrm directly is independent from the fact that ffmpeg may
+> use libdrm internally.
+> 
+>> This leads to linking failure
+>> due to undefined reference of drmGetVersion() and drmFreeVersion().
+>> This is why when pkg-config generates libavutil.pc doesn't append -ldrm
+> 
+> pkg-config does not generate .pc files, it only reads them.
+> 
+>> after -lavutil.
+>> Subsequentely if a package uses pkg-config and ffmpeg it will load
+>> library dependencies from libavutil.pc without placing -ldrm at the tail.
+> 
+> Well, the fact that it's at the tail is a detail, but the main problem
+> is that the libavutil.pc file does not list *at all* the dependency on
+> libdrm.
+> 
+>> Without this fix the only way is to workaround the problem directly in
+>> the single package, like this:
+> 
+> "the single package" is not very clear, I would say "in each package
+> using ffmpeg".
+> 
+>> https://github.com/buildroot/buildroot/commit/daf7dd87f4d93923df5e757fd43b3ad214a4a2ae
+>>
+>> Add patch to assure -ldrm comes after -lavutil when static linking.
+> 
+> No, that's not what the patch does. The patch ensures that libavutil.pc
+> tells pkg-config that linking against libdrm is needed.
+> 
+> 
+>> ++enabled libdrm            && require_pkg_config libdrm libdrm xf86drm.h drmGetVersion && LIBDRM="-ldrm"
+>> + enabled libfdk_aac        && { use_pkg_config libfdk_aac fdk-aac "fdk-aac/aacenc_lib.h" aacEncOpen ||
+>> +                                { require libfdk_aac fdk-aac/aacenc_lib.h aacEncOpen -lfdk-aac &&
+>> +                                  warn "using libfdk without pkg-config"; } }
+>> +@@ -7096,7 +7096,7 @@ source_path=${source_path}
+>> + LIBPREF=${LIBPREF}
+>> + LIBSUF=${LIBSUF}
+>> +
+>> +-extralibs_avutil="$LIBRT $LIBM"
+>> ++extralibs_avutil="$LIBDRM $LIBRT $LIBM"
+> 
+> This fix is in fact not the most correct one. Indeed, it does the
+> following change to libavutil.pc:
+> 
+> -Libs: -L${libdir}  -lavutil -lm
+> +Libs: -L${libdir}  -lavutil -ldrm -lm
+> 
+> but the proper change would be:
+> 
+>   Libs: -L${libdir}  -lavutil -lm
+> -Libs.private:
+> +Libs.private: -ldrm
+> 
+> Indeed, when we're dynamic linking, there is no need to link consumers
+> of libavutil with libdrm. It is only when we're statically linking that
+> it should be done. And that's exactly what Libs vs. Libs.private is for.
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 73a7ae6f11..4c67e9a00c 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,6 +1,6 @@
--# From http://www.sqlite.org/download.html
--sha1 da68915e3563b5244cbcdb6c7e20fb35559bcfc6  sqlite-autoconf-3240000.tar.gz
-+# From https://www.sqlite.org/download.html
-+sha1 1d494ca2355ffe8ddbeea7cf615ef61122fe421e  sqlite-autoconf-3250100.tar.gz
- # Calculated based on the hash above
--sha256 d9d14e88c6fb6d68de9ca0d1f9797477d82fc3aed613558f87ffbdbbc5ceb74a  sqlite-autoconf-3240000.tar.gz
-+sha256 96ed46bd87f093073ca8afd613020def847009b611c89f397bc24bd932ec6fd1  sqlite-autoconf-3250100.tar.gz
- # Locally calculated
- sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 15cfea48a0..a9b309718a 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--SQLITE_VERSION = 3240000
-+SQLITE_VERSION = 3250100
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
--SQLITE_SITE = http://www.sqlite.org/2018
-+SQLITE_SITE = https://www.sqlite.org/2018
- SQLITE_LICENSE = Public domain
- SQLITE_LICENSE_FILES = tea/license.terms
- SQLITE_INSTALL_STAGING = YES
+You've explained me it very well, but by now FFmpeg upstreamed my patch:
+https://git.ffmpeg.org/gitweb/ffmpeg.git/commit/c50dc77ac708e98d02da7c422a6b9cbf9f565aa5
+
+So, do I rework and resubmit to them or can I re-create a patch for BR
+with what you've pointed me above?
+
+Thanks
+Kind regards
 -- 
-2.19.0
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
