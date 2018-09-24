@@ -1,26 +1,50 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 24 Sep 2018 06:48:48 +0000
-Subject: [Buildroot] [Bug 11366] [2018.08] SysV IPC not available for
- fakeroot on WSL
-In-Reply-To: <bug-11366-163@https.bugs.busybox.net/>
-References: <bug-11366-163@https.bugs.busybox.net/>
-Message-ID: <bug-11366-163-uuHONRznSd@https.bugs.busybox.net/>
+From: Ferdinand van Aartsen <ferdinand@ombud.nl>
+Date: Mon, 24 Sep 2018 11:42:45 +0200
+Subject: [Buildroot] [PATCH 1/1] sqlite: bump to version 3.25.1
+Message-ID: <20180924094245.26736-1-ferdinand@ombud.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11366
+Make use of https for sqlite.org.
 
---- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Please don't use ipcmk, as requiring to build host-util-linux is clearly not
-nice.
+Signed-off-by: Ferdinand van Aartsen <ferdinand@ombud.nl>
+---
+ package/sqlite/sqlite.hash | 6 +++---
+ package/sqlite/sqlite.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Instead, we want a simple test program in C, that will be compiled/executed by
-fakeroot configure.ac script, to decide whether SysV message queues or TCP
-should be used. You can use autoconf AC_TRY_RUN() to achieve this.
-
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 73a7ae6f11..4c67e9a00c 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,6 +1,6 @@
+-# From http://www.sqlite.org/download.html
+-sha1 da68915e3563b5244cbcdb6c7e20fb35559bcfc6  sqlite-autoconf-3240000.tar.gz
++# From https://www.sqlite.org/download.html
++sha1 1d494ca2355ffe8ddbeea7cf615ef61122fe421e  sqlite-autoconf-3250100.tar.gz
+ # Calculated based on the hash above
+-sha256 d9d14e88c6fb6d68de9ca0d1f9797477d82fc3aed613558f87ffbdbbc5ceb74a  sqlite-autoconf-3240000.tar.gz
++sha256 96ed46bd87f093073ca8afd613020def847009b611c89f397bc24bd932ec6fd1  sqlite-autoconf-3250100.tar.gz
+ # Locally calculated
+ sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 15cfea48a0..a9b309718a 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-SQLITE_VERSION = 3240000
++SQLITE_VERSION = 3250100
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+-SQLITE_SITE = http://www.sqlite.org/2018
++SQLITE_SITE = https://www.sqlite.org/2018
+ SQLITE_LICENSE = Public domain
+ SQLITE_LICENSE_FILES = tea/license.terms
+ SQLITE_INSTALL_STAGING = YES
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.19.0
