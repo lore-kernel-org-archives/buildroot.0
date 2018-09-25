@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 25 Sep 2018 22:15:19 +0200
-Subject: [Buildroot] [PATCH v2 1/1] libesmtp: update/fix site URL
-In-Reply-To: <20180925144848.5965-1-m.patzlaff@pilz.de>
-References: <20180925144848.5965-1-m.patzlaff@pilz.de>
-Message-ID: <20180925221519.348071f8@windsurf>
+Date: Tue, 25 Sep 2018 22:16:33 +0200
+Subject: [Buildroot] [PATCH 1/1] sqlite: bump to version 3.25.1
+In-Reply-To: <20180924094245.26736-1-ferdinand@ombud.nl>
+References: <20180924094245.26736-1-ferdinand@ombud.nl>
+Message-ID: <20180925221633.4c0233a5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 25 Sep 2018 16:48:48 +0200, Marcel Patzlaff wrote:
-> The old URL was not working for quite some time.
+On Mon, 24 Sep 2018 11:42:45 +0200, Ferdinand van Aartsen wrote:
+> Make use of https for sqlite.org.
 > 
-> Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
-> 
+> Signed-off-by: Ferdinand van Aartsen <ferdinand@ombud.nl>
 > ---
-> Changes v1 -> v2:
->   - also changed URL in Config.in
-> ---
->  package/libesmtp/Config.in   | 2 +-
->  package/libesmtp/libesmtp.mk | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/sqlite/sqlite.hash | 6 +++---
+>  package/sqlite/sqlite.mk   | 4 ++--
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 
 Applied to master, thanks.
 
