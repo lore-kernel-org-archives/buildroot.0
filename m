@@ -1,57 +1,48 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Tue, 25 Sep 2018 23:12:53 +0300
-Subject: [Buildroot] [PATCH 1/1] python3: Downgrade to 3.6.6
-In-Reply-To: <20180925215643.6d5c08b6@windsurf>
-References: <20180925180319.24576-1-aduskett@gmail.com>
- <CALFsTFWZYhJtMqb+ksXtJ=1FPOOm-_ynP-vD_i71ttjBEdC=oA@mail.gmail.com>
- <20180925215643.6d5c08b6@windsurf>
-Message-ID: <CALFsTFXK+2NB0tAJEkkyGi_QgErj18fGPg5rFN0bmfvjRLtFzg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 25 Sep 2018 22:14:54 +0200
+Subject: [Buildroot] [git commit] libesmtp: update/fix site URL
+Message-ID: <20180925201435.8E68788D2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yes, I will try to fix at least on of them (hopefully) tomorrow.
-Asaf.
+commit: https://git.buildroot.net/buildroot/commit/?id=43e7667fc82d55d0a9fdfad91375a0621efb7576
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, Sep 25, 2018 at 10:56 PM Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> wrote:
+The old URL was not working for quite some time.
 
-> Hello,
->
-> On Tue, 25 Sep 2018 22:28:11 +0300, Asaf Kahlon wrote:
-> > I disagree with downgrading... Are we really sure the downgrade is
-> needed?
-> > Some patches I sent for python 3.7 packages have already applied
-> (gunicorn,
-> > paramiko etc), I sent a series of patches for pysnmp (
-> > http://patchwork.ozlabs.org/project/buildroot/list/?series=67049), and I
-> > saw you sent a first patch for django (
-> > http://patchwork.ozlabs.org/patch/973261/). So I think we've made a nice
-> > progress until now.
-> > What would be left after that? I think the main packages are crossbar and
-> > twisted. Both have a newer version to upgrade and both seem to have
-> active
-> > repository on github. Maybe it won't be so hard to fix those packages. I
-> > think you should give it a shot before downgrading, but i'm willing to
-> hear
-> > other opinions too.
->
-> For now, I also dislike the idea of downgrading, because it doesn't
-> seem that the number of affected packages is that important.
->
-> Asaf, do you think you could help in that effort, perhaps by looking at
-> crossbar and twisted ?
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180925/4eadaaaa/attachment.html>
+Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libesmtp/Config.in   | 2 +-
+ package/libesmtp/libesmtp.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libesmtp/Config.in b/package/libesmtp/Config.in
+index ba9d52751c..f3ed521d22 100644
+--- a/package/libesmtp/Config.in
++++ b/package/libesmtp/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_LIBESMTP
+ 	help
+ 	  Library for sending emails through SMTP.
+ 
+-	  http://www.stafford.uklinux.net/libesmtp
++	  http://brianstafford.info/libesmtp
+ 
+ comment "libesmtp needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
+diff --git a/package/libesmtp/libesmtp.mk b/package/libesmtp/libesmtp.mk
+index b0f88c7a3b..9c336793a4 100644
+--- a/package/libesmtp/libesmtp.mk
++++ b/package/libesmtp/libesmtp.mk
+@@ -6,7 +6,7 @@
+ 
+ LIBESMTP_VERSION = 1.0.6
+ LIBESMTP_SOURCE = libesmtp-$(LIBESMTP_VERSION).tar.bz2
+-LIBESMTP_SITE = http://www.stafford.uklinux.net/libesmtp
++LIBESMTP_SITE = http://brianstafford.info/libesmtp
+ LIBESMTP_INSTALL_STAGING = YES
+ LIBESMTP_CONFIG_SCRIPTS = libesmtp-config
+ LIBESMTP_DEPENDENCIES = $(if $(BR2_PACKAGE_OPENSSL),openssl)
