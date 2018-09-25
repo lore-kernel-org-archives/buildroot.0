@@ -1,58 +1,71 @@
-From: Marcel Patzlaff <m.patzlaff@pilz.de>
-Date: Tue, 25 Sep 2018 16:48:48 +0200
-Subject: [Buildroot] [PATCH v2 1/1] libesmtp: update/fix site URL
-Message-ID: <20180925144848.5965-1-m.patzlaff@pilz.de>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Tue, 25 Sep 2018 14:02:19 -0400
+Subject: [Buildroot] [PATCH 1/1] Add Greenlots glue
+Message-ID: <20180925180221.24323-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The old URL was not working for quite some time.
-
-Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
-
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
-Changes v1 -> v2:
-  - also changed URL in Config.in
----
- package/libesmtp/Config.in   | 2 +-
- package/libesmtp/libesmtp.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Config.in                      | 2 ++
+ package/Config.in              | 4 ++++
+ package/greenlots/Config.in    | 8 ++++++++
+ package/greenlots/greenlots.mk | 1 +
+ 4 files changed, 15 insertions(+)
+ create mode 100644 package/greenlots/Config.in
+ create mode 100644 package/greenlots/greenlots.mk
 
-diff --git a/package/libesmtp/Config.in b/package/libesmtp/Config.in
-index ba9d52751c..f3ed521d22 100644
---- a/package/libesmtp/Config.in
-+++ b/package/libesmtp/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_LIBESMTP
- 	help
- 	  Library for sending emails through SMTP.
+diff --git a/Config.in b/Config.in
+index 6b5b2b043c..6da0024688 100644
+--- a/Config.in
++++ b/Config.in
+@@ -840,6 +840,8 @@ source "fs/Config.in"
  
--	  http://www.stafford.uklinux.net/libesmtp
-+	  http://brianstafford.info/libesmtp
+ source "boot/Config.in"
  
- comment "libesmtp needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-diff --git a/package/libesmtp/libesmtp.mk b/package/libesmtp/libesmtp.mk
-index b0f88c7a3b..9c336793a4 100644
---- a/package/libesmtp/libesmtp.mk
-+++ b/package/libesmtp/libesmtp.mk
-@@ -6,7 +6,7 @@
++source "greenlots/menu/Config.in"
++
+ source "package/Config.in.host"
  
- LIBESMTP_VERSION = 1.0.6
- LIBESMTP_SOURCE = libesmtp-$(LIBESMTP_VERSION).tar.bz2
--LIBESMTP_SITE = http://www.stafford.uklinux.net/libesmtp
-+LIBESMTP_SITE = http://brianstafford.info/libesmtp
- LIBESMTP_INSTALL_STAGING = YES
- LIBESMTP_CONFIG_SCRIPTS = libesmtp-config
- LIBESMTP_DEPENDENCIES = $(if $(BR2_PACKAGE_OPENSSL),openssl)
+ source "Config.in.legacy"
+diff --git a/package/Config.in b/package/Config.in
+index f5a17492c7..50f794694a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -8,6 +8,10 @@ menu "Target packages"
+ 	source "package/skeleton-init-systemd/Config.in"
+ 	source "package/skeleton-init-sysv/Config.in"
+ 
++menu "GreenLots"
++	source "package/greenlots/Config.in"
++endmenu
++
+ menu "Audio and video applications"
+ 	source "package/alsa-utils/Config.in"
+ 	source "package/atest/Config.in"
+diff --git a/package/greenlots/Config.in b/package/greenlots/Config.in
+new file mode 100644
+index 0000000000..7394878657
+--- /dev/null
++++ b/package/greenlots/Config.in
+@@ -0,0 +1,8 @@
++source "greenlots/package/atlantis/Config.in"
++source "greenlots/package/eguana-simulator/Config.in"
++source "greenlots/package/gl-util/Config.in"
++source "greenlots/package/mongodb-tools/Config.in"
++source "greenlots/package/ocpp-node/Config.in"
++source "greenlots/package/skywave-node/Config.in"
++source "greenlots/package/wattnode-simulator/Config.in"
++source "greenlots/package/site-controller/Config.in"
+diff --git a/package/greenlots/greenlots.mk b/package/greenlots/greenlots.mk
+new file mode 100644
+index 0000000000..0aec8a8276
+--- /dev/null
++++ b/package/greenlots/greenlots.mk
+@@ -0,0 +1 @@
++include greenlots/package/*/*.mk
 -- 
 2.17.1
-
-Gesch?ftsf?hrung: Susanne Kunschert, Thomas Pilz
-Pilz GmbH & Co. KG, Sitz: Ostfildern, HRA 210 893, Amtsgericht Stuttgart
-Kompl. Ges. Peter Pilz GmbH, Sitz: Ostfildern, HRB 210 612, Amtsgericht Stuttgart
-Umsatzsteuer: ID-Nr. DE 145 355 773, WEEE-Reg.-Nr. DE 71636849
-This email is intended solely for the use of the named address(es). Any unauthorised disclosure, copying or distribution of these confidential information contained therein, or the taking of any action based on it, is prohibited. The sender disclaims any liability for the integrity of this email. Legally binding declarations must be in written form.
-Umweltschutz liegt uns am Herzen! - Bitte denken Sie an unsere Umwelt, bevor Sie diese E-Mail drucken.
-We do care about the environment! - Please consider the environment before printing this e-mail.
