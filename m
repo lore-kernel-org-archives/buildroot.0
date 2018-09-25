@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 25 Sep 2018 23:18:36 +0200
-Subject: [Buildroot] [PATCH] xlib_libXdmcp: add missing dependency on
- host-pkgconf
-In-Reply-To: <20180921121350.22638-1-thomas.petazzoni@bootlin.com>
-References: <20180921121350.22638-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180925231836.7c855cb2@windsurf>
+Date: Tue, 25 Sep 2018 23:19:03 +0200
+Subject: [Buildroot] [PATCH v2 01/14] gstreamer1: bump version to 1.14.3
+In-Reply-To: <20180925203618.23192-1-ps.report@gmx.net>
+References: <20180925203618.23192-1-ps.report@gmx.net>
+Message-ID: <20180925231903.2d96afa2@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +12,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 21 Sep 2018 14:13:50 +0200, Thomas Petazzoni wrote:
-> The libXdmcp configure script uses pkg-config, but the Buildroot
-> package does not depend on host-pkgconf. This is not seen by the
-> autobuilders most likely because another package that is always built
-> before libXdmcp builds pkg-config.
-> 
-> However, running:
-> 
-> $ make xlib_libXdmcp
-> 
-> triggers the following build failure:
-> 
-> checking pkg-config is at least version 0.9.0... ./configure: line 12323: /home/thomas/projets/buildroot/output/host/bin/pkg-config: No such file or directory
-> no
-> [...]
-> checking for XDMCP... configure: error: in `/home/thomas/projets/buildroot/output/build/xlib_libXdmcp-1.1.2':
-> configure: error: The pkg-config script could not be found or is too old.  Make sure it
-> is in your PATH or set the PKG_CONFIG environment variable to the full
-> path to pkg-config.
-> 
-> This was detected using per-package target/host folders, because with
-> this, only the dependencies explicitly expressed by a package are
-> available to the package.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+On Tue, 25 Sep 2018 22:36:05 +0200, Peter Seiderer wrote:
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> Changes v1 -> v2:
+>   - add Signed-off-by
+> ---
+>  package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
+>  package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
+Entire series applied to master, with the tweak to PATCH 12/14 that I
+described as a reply to that patch.
+
+Thanks!
 
 Thomas
 -- 
