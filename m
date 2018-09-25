@@ -1,29 +1,53 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 25 Sep 2018 22:09:05 +0200
-Subject: [Buildroot] [PATCH v1 12/14] gst1-plugins-base: add missing license
- file hash
-In-Reply-To: <20180925200907.19217-1-ps.report@gmx.net>
-References: <20180925200907.19217-1-ps.report@gmx.net>
-Message-ID: <20180925200907.19217-12-ps.report@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 25 Sep 2018 22:10:07 +0200
+Subject: [Buildroot] [PATCH v2 6/6] configs/qemu: add
+ qemu_riscv64_virt_defconfig
+In-Reply-To: <20180912102256.3164-7-mark.corbin@embecosm.com>
+References: <20180912102256.3164-1-mark.corbin@embecosm.com>
+ <20180912102256.3164-7-mark.corbin@embecosm.com>
+Message-ID: <20180925221007.096fb183@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hello,
 
-diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-index a98abdf38b..6ef34594a0 100644
---- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-+++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-@@ -1,3 +1,3 @@
- # From https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.14.3.tar.xz.sha256sum
- sha256 f0b319c36be0ffc2a00380c77ba269cdf04e2b39bbc49d30b641fc35aa0b7952 gst-plugins-base-1.14.3.tar.xz
--sha256 78fb5977f177ab71cba77a4a127d29b93cb1ca5c25962204b31f183a20cf5c7a COPYING
-+sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING.LIB
+On Wed, 12 Sep 2018 11:22:56 +0100, Mark Corbin wrote:
+> Add RISC-V 64-bit defconfig for QEMU virt machine.
+> 
+> Tested with QEMU 2.12.1
+> 
+> Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
+> ---
+> Changes v1 -> v2:
+>   - updated DEVELOPERS file (Thomas P)
+>   - removed typo from readme.txt and updated text to remove BBL
+>     instructions now that it has been integrated as a package
+>     (Thomas P)
+>   - selected a specific kernel commit rather than a branch
+>     (Thomas P)
+>   - removed explicit selection of BR2_BINUTILS_VERSION_2_30_X
+>     (Thomas P)
+>   - added selection of riscv-pk package
+> ---
+>  DEVELOPERS                           |  2 ++
+>  board/qemu/riscv64-virt/linux.config | 23 +++++++++++++++++++++++
+>  board/qemu/riscv64-virt/readme.txt   |  7 +++++++
+>  configs/qemu_riscv64_virt_defconfig  | 24 ++++++++++++++++++++++++
+>  4 files changed, 56 insertions(+)
+>  create mode 100644 board/qemu/riscv64-virt/linux.config
+>  create mode 100644 board/qemu/riscv64-virt/readme.txt
+>  create mode 100644 configs/qemu_riscv64_virt_defconfig
+
+I've applied to master, thanks! The only thing I did is
+regenerate .gitlab-ci.yml to include this new defconfig.
+
+Thanks!
+
+Thomas
 -- 
-2.19.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
