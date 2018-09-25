@@ -1,47 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 25 Sep 2018 23:14:34 +0200
-Subject: [Buildroot] [PATCH v2 12/14] gst1-plugins-base: add missing
- license file hash
-In-Reply-To: <20180925203618.23192-12-ps.report@gmx.net>
-References: <20180925203618.23192-1-ps.report@gmx.net>
- <20180925203618.23192-12-ps.report@gmx.net>
-Message-ID: <20180925231434.5e016ac4@windsurf>
+Date: Tue, 25 Sep 2018 23:06:02 +0200
+Subject: [Buildroot] [git commit] gst-omx: bump version to 1.14.3
+Message-ID: <20180925211615.9920982A21@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=53037671cd167357f0d94f3f7624d6c8c688c44a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 25 Sep 2018 22:36:16 +0200, Peter Seiderer wrote:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v1 -> v2:
->   - no changes
-> ---
->  package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-> index a98abdf38b..6ef34594a0 100644
-> --- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-> +++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-> @@ -1,3 +1,3 @@
->  # From https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.14.3.tar.xz.sha256sum
->  sha256 f0b319c36be0ffc2a00380c77ba269cdf04e2b39bbc49d30b641fc35aa0b7952 gst-plugins-base-1.14.3.tar.xz
-> -sha256 78fb5977f177ab71cba77a4a127d29b93cb1ca5c25962204b31f183a20cf5c7a COPYING
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gstreamer1/gst-omx/gst-omx.hash | 4 ++--
+ package/gstreamer1/gst-omx/gst-omx.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I'm not sure why you're dropping this hash. The COPYING file still
-exists, it still has the same hash, and you didn't mention it in your
-commit log. So I've reverted this part of the change when applying.
-
-> +sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING.LIB
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/gstreamer1/gst-omx/gst-omx.hash b/package/gstreamer1/gst-omx/gst-omx.hash
+index 3e94d4eee0..6d4361e6ed 100644
+--- a/package/gstreamer1/gst-omx/gst-omx.hash
++++ b/package/gstreamer1/gst-omx/gst-omx.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.14.2.tar.xz.sha256sum
+-sha256 316dbb13693795383cad6ec4dbebd94a869cd1f9d59a393686cad0b77bf9b5a9 gst-omx-1.14.2.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.14.3.tar.xz.sha256sum
++sha256 6ba7dc5caabce092ea645b5c6de1a82d12ee086d18f692a8f31cbc359b708cb1 gst-omx-1.14.3.tar.xz
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING
+diff --git a/package/gstreamer1/gst-omx/gst-omx.mk b/package/gstreamer1/gst-omx/gst-omx.mk
+index f70477823e..2c0aec4f1f 100644
+--- a/package/gstreamer1/gst-omx/gst-omx.mk
++++ b/package/gstreamer1/gst-omx/gst-omx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GST_OMX_VERSION = 1.14.2
++GST_OMX_VERSION = 1.14.3
+ GST_OMX_SOURCE = gst-omx-$(GST_OMX_VERSION).tar.xz
+ GST_OMX_SITE = https://gstreamer.freedesktop.org/src/gst-omx
+ 
