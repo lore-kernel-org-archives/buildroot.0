@@ -1,40 +1,116 @@
-From: Tobias Klauser <tklauser@distanz.ch>
-Date: Tue, 25 Sep 2018 11:11:52 +0200
-Subject: [Buildroot] [PATCH] netsniff-ng: bump to version 0.6.5
-Message-ID: <1537866712-28813-1-git-send-email-tklauser@distanz.ch>
+From: Tony Fuller <goldstar611@hotmail.com>
+Date: Tue, 25 Sep 2018 10:29:35 +0000
+Subject: [Buildroot] [git commit] package/wipe: fix musl build
+In-Reply-To: <20160207140049.D9B227FEE6@busybox.osuosl.org>
+References: <20160207140049.D9B227FEE6@busybox.osuosl.org>
+Message-ID: <BL2PR15MB1057981B9884F25A08130568ED160@BL2PR15MB1057.namprd15.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cc: Joris Lijssens <joris.lijssens@gmail.com>
-Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
----
- package/netsniff-ng/netsniff-ng.hash | 2 +-
- package/netsniff-ng/netsniff-ng.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Thomas,
 
-diff --git a/package/netsniff-ng/netsniff-ng.hash b/package/netsniff-ng/netsniff-ng.hash
-index 576e000878bb..706c9461cf66 100644
---- a/package/netsniff-ng/netsniff-ng.hash
-+++ b/package/netsniff-ng/netsniff-ng.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking signature
--sha256 fd67150e0954b7079b6d0c72fb0ef1f34091357ad559b45c68e8752376bdc307 netsniff-ng-0.6.4.tar.xz
-+sha256 4966821510079bb13722b9fbb4b7567e44b1b4c3e1b1e7ad95f417a89be5d795 netsniff-ng-0.6.5.tar.xz
-diff --git a/package/netsniff-ng/netsniff-ng.mk b/package/netsniff-ng/netsniff-ng.mk
-index fb1c2c7a4eae..77d89214257d 100644
---- a/package/netsniff-ng/netsniff-ng.mk
-+++ b/package/netsniff-ng/netsniff-ng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NETSNIFF_NG_VERSION = 0.6.4
-+NETSNIFF_NG_VERSION = 0.6.5
- NETSNIFF_NG_SITE = http://pub.netsniff-ng.org/netsniff-ng
- NETSNIFF_NG_SOURCE = netsniff-ng-$(NETSNIFF_NG_VERSION).tar.xz
- NETSNIFF_NG_LICENSE = GPL-2.0
--- 
-2.18.0.130.g98da2f6b3e4a
+I am using Buildroot 2018.08 to build the "wipe" package for 32-bit
+PowerPC
+464 architecture (For the Western Digital MyBookLive). Also I am using
+glibc
+not muslc. This change seems to be highly correlated to the error I am
+seeing: 
+http://buildroot-busybox.2317881.n4.nabble.com/git-commit-package-wipe-fix-musl-build-td125204.html
+
+I'm not sure how to modify the patch from this thread to my advantage.
+Any ideas how to move forward aside from not compiling wipe :)?
+
+Please forgive me for adding in the full error details below:
+
+user at hostname:/media/user/4665efb0-0b1b-4c63-8392-
+d695e8e1cd6e/user/buildroot-2018.08$
+make
+> > > wipe 2.3.1 Building
+
+PATH="/media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
+2018.08/output/host/bin:/media/user/4665efb0-0b1b-4c63-8392-
+d695e8e1cd6e/user/buildroot-
+2018.08/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/
+bin:/sbin:/bin:/usr/games:/usr/local/games" 
+/usr/bin/make -j5  -C
+/media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
+2018.08/output/build/wipe-2.3.1/
+make[1]: Entering directory
+'/media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
+2018.08/output/build/wipe-2.3.1'
+/media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
+2018.08/output/host/bin/powerpc-buildroot-linux-gnu-gcc
+-pipe -O2   -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -I. -DLINUX    -
+c -o
+main.o main.c
+/media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
+2018.08/output/host/bin/powerpc-buildroot-linux-gnu-gcc
+-pipe -O2   -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -I. -DLINUX    -
+c -o
+wipe.o wipe.c
+/media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
+2018.08/output/host/bin/powerpc-buildroot-linux-gnu-gcc
+-pipe -O2   -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -I. -DLINUX    -
+c -o
+rand.o rand.c
+/media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
+2018.08/output/host/bin/powerpc-buildroot-linux-gnu-gcc
+-pipe -O2   -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -I. -DLINUX    -
+c -o
+file.o file.c
+/media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
+2018.08/output/host/bin/powerpc-buildroot-linux-gnu-gcc
+-pipe -O2   -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -I. -DLINUX    -
+c -o
+blkdev.o blkdev.c
+In file included from wipe.c:56:0:
+rand.h:27:21: error: unknown type name ?uint32_t?
+ #  define u_int32_t uint32_t
+                     ^
+rand.h:30:9: note: in expansion of macro ?u_int32_t?
+ typedef u_int32_t u_rand_t;
+         ^~~~~~~~~
+In file included from main.c:46:0:
+rand.h:27:21: error: unknown type name ?uint32_t?
+ #  define u_int32_t uint32_t
+                     ^
+rand.h:30:9: note: in expansion of macro ?u_int32_t?
+ typedef u_int32_t u_rand_t;
+         ^~~~~~~~~
+<builtin>: recipe for target 'wipe.o' failed
+make[1]: *** [wipe.o] Error 1
+make[1]: *** Waiting for unfinished jobs....
+<builtin>: recipe for target 'main.o' failed
+make[1]: *** [main.o] Error 1
+In file included from file.c:42:0:
+rand.h:27:21: error: unknown type name ?uint32_t?
+ #  define u_int32_t uint32_t
+                     ^
+rand.h:30:9: note: in expansion of macro ?u_int32_t?
+ typedef u_int32_t u_rand_t;
+         ^~~~~~~~~
+<builtin>: recipe for target 'file.o' failed
+make[1]: *** [file.o] Error 1
+In file included from rand.c:36:0:
+rand.h:27:21: error: unknown type name ?uint32_t?
+ #  define u_int32_t uint32_t
+                     ^
+rand.h:30:9: note: in expansion of macro ?u_int32_t?
+ typedef u_int32_t u_rand_t;
+         ^~~~~~~~~
+<builtin>: recipe for target 'rand.o' failed
+make[1]: *** [rand.o] Error 1
+make[1]: Leaving directory
+'/media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
+2018.08/output/build/wipe-2.3.1'
+package/pkg-generic.mk:229: recipe for target
+'/media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
+2018.08/output/build/wipe-2.3.1/.stamp_built'
+failed
+make: ***
+[/media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
+2018.08/output/build/wipe-2.3.1/.stamp_built]
+Error 2
