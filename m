@@ -1,116 +1,39 @@
-From: Tony Fuller <goldstar611@hotmail.com>
-Date: Tue, 25 Sep 2018 10:29:35 +0000
-Subject: [Buildroot] [git commit] package/wipe: fix musl build
-In-Reply-To: <20160207140049.D9B227FEE6@busybox.osuosl.org>
-References: <20160207140049.D9B227FEE6@busybox.osuosl.org>
-Message-ID: <BL2PR15MB1057981B9884F25A08130568ED160@BL2PR15MB1057.namprd15.prod.outlook.com>
+From: Alvaro G. M. <alvaro.gamez@hazent.com>
+Date: Tue, 25 Sep 2018 14:56:39 +0200
+Subject: [Buildroot] Kernel module insertion fails with unknown rela
+ relocation: 4
+Message-ID: <20180925125637.GA17649@salem.gmr.ssr.upm.es>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi!
 
-I am using Buildroot 2018.08 to build the "wipe" package for 32-bit
-PowerPC
-464 architecture (For the Western Digital MyBookLive). Also I am using
-glibc
-not muslc. This change seems to be highly correlated to the error I am
-seeing: 
-http://buildroot-busybox.2317881.n4.nabble.com/git-commit-package-wipe-fix-musl-build-td125204.html
+I'm trying to build a buildroot system which shall include a kernel module I
+was provided by a vendor. This module uses Jungo Connectivity WinDriver, and
+it includes a binary blob that is supposed to be linked against an open
+source module provided by the vendor. A headache in itself, and the fact
+that there's a binary blob, may be related to this particular error.
 
-I'm not sure how to modify the patch from this thread to my advantage.
-Any ideas how to move forward aside from not compiling wipe :)?
+I have been able to compile and use this module on Debian with kernel 3.16,
+so that's my starting point for buildroot. I'm using latest buildroot
+master, with kernel 3.16.57 and binutils 2.29.1 (although I've tried the
+same with 2.28.1 and 2.31.1). In order to be as similar as possible to the
+debian version on which the module works fine, I chose GCC 4.9.x
 
-Please forgive me for adding in the full error details below:
+So, what happens is that on module insertion, insmod fails with error 
+"Unknown rela relocation: 4". I've searched lot about this and it seems to
+be related to this https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b21ebf2fb4cd
 
-user at hostname:/media/user/4665efb0-0b1b-4c63-8392-
-d695e8e1cd6e/user/buildroot-2018.08$
-make
-> > > wipe 2.3.1 Building
+Now, I could easily apply that small patch to my 3.16.57 kernel version but,
+how come that binutils 2.28.1 is using R_X86_64_PLT32 if that's supposedly
+not on binutils until after binutils 2.31? Is there anything else that I'm
+missing, some option on the toolchain definition on buildroot or something
+like that?
 
-PATH="/media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
-2018.08/output/host/bin:/media/user/4665efb0-0b1b-4c63-8392-
-d695e8e1cd6e/user/buildroot-
-2018.08/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/
-bin:/sbin:/bin:/usr/games:/usr/local/games" 
-/usr/bin/make -j5  -C
-/media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
-2018.08/output/build/wipe-2.3.1/
-make[1]: Entering directory
-'/media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
-2018.08/output/build/wipe-2.3.1'
-/media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
-2018.08/output/host/bin/powerpc-buildroot-linux-gnu-gcc
--pipe -O2   -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -I. -DLINUX    -
-c -o
-main.o main.c
-/media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
-2018.08/output/host/bin/powerpc-buildroot-linux-gnu-gcc
--pipe -O2   -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -I. -DLINUX    -
-c -o
-wipe.o wipe.c
-/media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
-2018.08/output/host/bin/powerpc-buildroot-linux-gnu-gcc
--pipe -O2   -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -I. -DLINUX    -
-c -o
-rand.o rand.c
-/media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
-2018.08/output/host/bin/powerpc-buildroot-linux-gnu-gcc
--pipe -O2   -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -I. -DLINUX    -
-c -o
-file.o file.c
-/media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
-2018.08/output/host/bin/powerpc-buildroot-linux-gnu-gcc
--pipe -O2   -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -I. -DLINUX    -
-c -o
-blkdev.o blkdev.c
-In file included from wipe.c:56:0:
-rand.h:27:21: error: unknown type name ?uint32_t?
- #  define u_int32_t uint32_t
-                     ^
-rand.h:30:9: note: in expansion of macro ?u_int32_t?
- typedef u_int32_t u_rand_t;
-         ^~~~~~~~~
-In file included from main.c:46:0:
-rand.h:27:21: error: unknown type name ?uint32_t?
- #  define u_int32_t uint32_t
-                     ^
-rand.h:30:9: note: in expansion of macro ?u_int32_t?
- typedef u_int32_t u_rand_t;
-         ^~~~~~~~~
-<builtin>: recipe for target 'wipe.o' failed
-make[1]: *** [wipe.o] Error 1
-make[1]: *** Waiting for unfinished jobs....
-<builtin>: recipe for target 'main.o' failed
-make[1]: *** [main.o] Error 1
-In file included from file.c:42:0:
-rand.h:27:21: error: unknown type name ?uint32_t?
- #  define u_int32_t uint32_t
-                     ^
-rand.h:30:9: note: in expansion of macro ?u_int32_t?
- typedef u_int32_t u_rand_t;
-         ^~~~~~~~~
-<builtin>: recipe for target 'file.o' failed
-make[1]: *** [file.o] Error 1
-In file included from rand.c:36:0:
-rand.h:27:21: error: unknown type name ?uint32_t?
- #  define u_int32_t uint32_t
-                     ^
-rand.h:30:9: note: in expansion of macro ?u_int32_t?
- typedef u_int32_t u_rand_t;
-         ^~~~~~~~~
-<builtin>: recipe for target 'rand.o' failed
-make[1]: *** [rand.o] Error 1
-make[1]: Leaving directory
-'/media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
-2018.08/output/build/wipe-2.3.1'
-package/pkg-generic.mk:229: recipe for target
-'/media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
-2018.08/output/build/wipe-2.3.1/.stamp_built'
-failed
-make: ***
-[/media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
-2018.08/output/build/wipe-2.3.1/.stamp_built]
-Error 2
+Thank you!
+
+-- 
+Alvaro G. M.
