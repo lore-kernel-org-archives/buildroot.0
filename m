@@ -1,52 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 25 Sep 2018 22:15:27 +0200
-Subject: [Buildroot] [git commit] sqlite: bump to version 3.25.1
-Message-ID: <20180925201632.52F9388D39@busybox.osuosl.org>
+Date: Tue, 25 Sep 2018 22:16:42 +0200
+Subject: [Buildroot] [git commit] netsniff-ng: bump to version 0.6.5
+Message-ID: <20180925201632.59E6188D25@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=acd7fec2c859438a17b37ab3de0c8f54bd444df6
+commit: https://git.buildroot.net/buildroot/commit/?id=ba48daad8b9af7fdbc2418a5480ddd8803d6cfa5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Make use of https for sqlite.org.
-
-Signed-off-by: Ferdinand van Aartsen <ferdinand@ombud.nl>
+Cc: Joris Lijssens <joris.lijssens@gmail.com>
+Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/sqlite/sqlite.hash | 6 +++---
- package/sqlite/sqlite.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/netsniff-ng/netsniff-ng.hash | 2 +-
+ package/netsniff-ng/netsniff-ng.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 73a7ae6f11..4c67e9a00c 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,6 +1,6 @@
--# From http://www.sqlite.org/download.html
--sha1 da68915e3563b5244cbcdb6c7e20fb35559bcfc6  sqlite-autoconf-3240000.tar.gz
-+# From https://www.sqlite.org/download.html
-+sha1 1d494ca2355ffe8ddbeea7cf615ef61122fe421e  sqlite-autoconf-3250100.tar.gz
- # Calculated based on the hash above
--sha256 d9d14e88c6fb6d68de9ca0d1f9797477d82fc3aed613558f87ffbdbbc5ceb74a  sqlite-autoconf-3240000.tar.gz
-+sha256 96ed46bd87f093073ca8afd613020def847009b611c89f397bc24bd932ec6fd1  sqlite-autoconf-3250100.tar.gz
- # Locally calculated
- sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 15cfea48a0..a9b309718a 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/netsniff-ng/netsniff-ng.hash b/package/netsniff-ng/netsniff-ng.hash
+index 576e000878..706c9461cf 100644
+--- a/package/netsniff-ng/netsniff-ng.hash
++++ b/package/netsniff-ng/netsniff-ng.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking signature
+-sha256 fd67150e0954b7079b6d0c72fb0ef1f34091357ad559b45c68e8752376bdc307 netsniff-ng-0.6.4.tar.xz
++sha256 4966821510079bb13722b9fbb4b7567e44b1b4c3e1b1e7ad95f417a89be5d795 netsniff-ng-0.6.5.tar.xz
+diff --git a/package/netsniff-ng/netsniff-ng.mk b/package/netsniff-ng/netsniff-ng.mk
+index fb1c2c7a4e..77d8921425 100644
+--- a/package/netsniff-ng/netsniff-ng.mk
++++ b/package/netsniff-ng/netsniff-ng.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SQLITE_VERSION = 3240000
-+SQLITE_VERSION = 3250100
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
--SQLITE_SITE = http://www.sqlite.org/2018
-+SQLITE_SITE = https://www.sqlite.org/2018
- SQLITE_LICENSE = Public domain
- SQLITE_LICENSE_FILES = tea/license.terms
- SQLITE_INSTALL_STAGING = YES
+-NETSNIFF_NG_VERSION = 0.6.4
++NETSNIFF_NG_VERSION = 0.6.5
+ NETSNIFF_NG_SITE = http://pub.netsniff-ng.org/netsniff-ng
+ NETSNIFF_NG_SOURCE = netsniff-ng-$(NETSNIFF_NG_VERSION).tar.xz
+ NETSNIFF_NG_LICENSE = GPL-2.0
