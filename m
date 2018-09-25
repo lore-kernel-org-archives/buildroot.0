@@ -1,9 +1,10 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 25 Sep 2018 22:08:59 +0200
-Subject: [Buildroot] [PATCH v1 06/14] gst1-validate: bump version to 1.14.3
+Date: Tue, 25 Sep 2018 22:09:02 +0200
+Subject: [Buildroot] [PATCH v1 09/14] gst1-rtsp-server: bump version to
+ 1.14.3
 In-Reply-To: <20180925200907.19217-1-ps.report@gmx.net>
 References: <20180925200907.19217-1-ps.report@gmx.net>
-Message-ID: <20180925200907.19217-6-ps.report@gmx.net>
+Message-ID: <20180925200907.19217-9-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,32 +12,32 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 ---
- package/gstreamer1/gst1-validate/gst1-validate.hash | 4 ++--
- package/gstreamer1/gst1-validate/gst1-validate.mk   | 2 +-
+ package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash | 4 ++--
+ package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-validate/gst1-validate.hash b/package/gstreamer1/gst1-validate/gst1-validate.hash
-index 07aa036a21..f0bdba5d23 100644
---- a/package/gstreamer1/gst1-validate/gst1-validate.hash
-+++ b/package/gstreamer1/gst1-validate/gst1-validate.hash
+diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
+index dfb0849478..dd65219c20 100644
+--- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
++++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
 @@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-validate/gst-validate-1.14.2.tar.xz.sha256sum
--sha256 ea9e423e5470ef85ef8a0aea1714e7abfc49deb2ed282057367484cdeba6f19f gst-validate-1.14.2.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-validate/gst-validate-1.14.3.tar.xz.sha256sum
-+sha256 0910f75de9028edb9f1ba0571470482365ff0c9e5373506780ea38ba0cc9f703 gst-validate-1.14.3.tar.xz
- sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 COPYING
-diff --git a/package/gstreamer1/gst1-validate/gst1-validate.mk b/package/gstreamer1/gst1-validate/gst1-validate.mk
-index cca3417894..74ed663998 100644
---- a/package/gstreamer1/gst1-validate/gst1-validate.mk
-+++ b/package/gstreamer1/gst1-validate/gst1-validate.mk
+-# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.14.2.tar.xz.sha256sum
+-sha256 f7387755cf6ac5f334d4610f1f5aa7da4ff396a487dd5b789bb707f160222c98 gst-rtsp-server-1.14.2.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.14.3.tar.xz.sha256sum
++sha256 1f654c7617af15d13b67bf833f4c81d086ecbfd8cce7f2bf65fe5c1c3519f4e6 gst-rtsp-server-1.14.3.tar.xz
+ sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING
+diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
+index 0dc2917685..721b8b7313 100644
+--- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
++++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_VALIDATE_VERSION = 1.14.2
-+GST1_VALIDATE_VERSION = 1.14.3
- GST1_VALIDATE_SOURCE = gst-validate-$(GST1_VALIDATE_VERSION).tar.xz
- GST1_VALIDATE_SITE = https://gstreamer.freedesktop.org/src/gst-validate
- GST1_VALIDATE_LICENSE = LGPL-2.1+
+-GST1_RTSP_SERVER_VERSION = 1.14.2
++GST1_RTSP_SERVER_VERSION = 1.14.3
+ GST1_RTSP_SERVER_SOURCE = gst-rtsp-server-$(GST1_RTSP_SERVER_VERSION).tar.xz
+ GST1_RTSP_SERVER_SITE = http://gstreamer.freedesktop.org/src/gst-rtsp-server
+ GST1_RTSP_SERVER_LICENSE = LGPL-2.0+
 -- 
 2.19.0
