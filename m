@@ -1,43 +1,38 @@
-From: Christopher McCrory <chrismcc@gmail.com>
-Date: Tue, 25 Sep 2018 13:38:58 -0700
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2018-09-22
-In-Reply-To: <20180923060009.EC1C22097B@mail.bootlin.com>
-References: <20180923060009.EC1C22097B@mail.bootlin.com>
-Message-ID: <CALURroQwcnsh+QXBUUbnqUZgpaw8w789eJJJg2xAGQYKjgB4Og@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 25 Sep 2018 22:31:05 +0200
+Subject: [Buildroot] [git commit] irqbalance: add optional libcap-ng
+ dependency
+Message-ID: <20180925204029.61B9688DC9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On phone, sorry for top posting
+commit: https://git.buildroot.net/buildroot/commit/?id=1811f17c6586cd0c70a5a63e0717a4e2b17c82b1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I have a fix for this and the other build failure.  Need to write it up and
-send.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/irqbalance/irqbalance.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-On Sat, Sep 22, 2018, 11:00 PM Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> wrote:
-
-> Hello,
->
-> This is the list of Buildroot build failures that occured on
-> 2018-09-22, and for which you are a registered architecture developer
-> or package developer. Please help us improving the quality of
-> Buildroot by investigating those build failures and sending patches to
-> fix them. Thanks!
->
-> Results for the 'master' branch
-> ===============================
->
-> Build failures related to your packages:
->
->          arm |              perl-sys-cpu-0.52 |
-> http://autobuild.buildroot.net/results/26142a10fbe8c658199d68fd4fc15127c15ede61
->
-> --
-> http://autobuild.buildroot.net
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180925/495bb527/attachment.html>
+diff --git a/package/irqbalance/irqbalance.mk b/package/irqbalance/irqbalance.mk
+index 309fc22ee2..410e40a131 100644
+--- a/package/irqbalance/irqbalance.mk
++++ b/package/irqbalance/irqbalance.mk
+@@ -15,6 +15,13 @@ IRQBALANCE_AUTORECONF = YES
+ # Local implementation of glib2 will be used if --without-glib2 is set
+ IRQBALANCE_CONF_OPTS = --with-glib2
+ 
++ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
++IRQBALANCE_DEPENDENCIES += libcap-ng
++IRQBALANCE_CONF_OPTS += --with-libcap-ng
++else
++IRQBALANCE_CONF_OPTS += --without-libcap-ng
++endif
++
+ ifeq ($(BR2_PACKAGE_NUMACTL),y)
+ IRQBALANCE_DEPENDENCIES += numactl
+ IRQBALANCE_CONF_OPTS += --enable-numa
