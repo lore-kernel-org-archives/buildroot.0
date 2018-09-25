@@ -1,23 +1,53 @@
-From: Marcel Patzlaff <M.Patzlaff@pilz.de>
-Date: Tue, 25 Sep 2018 16:42:31 +0200
-Subject: [Buildroot] Antwort: Re: [PATCH 1/1] libesmtp: update/fix site URL
-In-Reply-To: <20180925161743.190dc487@windsurf>
-References: <20180925133521.2934-1-m.patzlaff@pilz.de>
- <20180925161743.190dc487@windsurf>
-Message-ID: <OF30C5B21B.03853432-ONC1258313.0050A717-C1258313.0050CC16@local-dmz.de>
+From: Marcel Patzlaff <m.patzlaff@pilz.de>
+Date: Tue, 25 Sep 2018 16:48:48 +0200
+Subject: [Buildroot] [PATCH v2 1/1] libesmtp: update/fix site URL
+Message-ID: <20180925144848.5965-1-m.patzlaff@pilz.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+The old URL was not working for quite some time.
 
-> Probably the Config.in file should be updated as well.
+Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
 
-You are right. I will update the patch accordingly.
+---
+Changes v1 -> v2:
+  - also changed URL in Config.in
+---
+ package/libesmtp/Config.in   | 2 +-
+ package/libesmtp/libesmtp.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Marcel
+diff --git a/package/libesmtp/Config.in b/package/libesmtp/Config.in
+index ba9d52751c..f3ed521d22 100644
+--- a/package/libesmtp/Config.in
++++ b/package/libesmtp/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_LIBESMTP
+ 	help
+ 	  Library for sending emails through SMTP.
+ 
+-	  http://www.stafford.uklinux.net/libesmtp
++	  http://brianstafford.info/libesmtp
+ 
+ comment "libesmtp needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
+diff --git a/package/libesmtp/libesmtp.mk b/package/libesmtp/libesmtp.mk
+index b0f88c7a3b..9c336793a4 100644
+--- a/package/libesmtp/libesmtp.mk
++++ b/package/libesmtp/libesmtp.mk
+@@ -6,7 +6,7 @@
+ 
+ LIBESMTP_VERSION = 1.0.6
+ LIBESMTP_SOURCE = libesmtp-$(LIBESMTP_VERSION).tar.bz2
+-LIBESMTP_SITE = http://www.stafford.uklinux.net/libesmtp
++LIBESMTP_SITE = http://brianstafford.info/libesmtp
+ LIBESMTP_INSTALL_STAGING = YES
+ LIBESMTP_CONFIG_SCRIPTS = libesmtp-config
+ LIBESMTP_DEPENDENCIES = $(if $(BR2_PACKAGE_OPENSSL),openssl)
+-- 
+2.17.1
 
 Gesch?ftsf?hrung: Susanne Kunschert, Thomas Pilz
 Pilz GmbH & Co. KG, Sitz: Ostfildern, HRA 210 893, Amtsgericht Stuttgart
