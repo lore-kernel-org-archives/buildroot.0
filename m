@@ -1,37 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 25 Sep 2018 22:31:05 +0200
-Subject: [Buildroot] [git commit] irqbalance: add optional libcap-ng
+Date: Tue, 25 Sep 2018 22:31:00 +0200
+Subject: [Buildroot] [git commit] irqbalance: add mandatory libglib2
  dependency
-Message-ID: <20180925204029.61B9688DC9@busybox.osuosl.org>
+Message-ID: <20180925204029.62D0388DE8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1811f17c6586cd0c70a5a63e0717a4e2b17c82b1
+commit: https://git.buildroot.net/buildroot/commit/?id=86d5b0e2e5434946493035450764ac78eee7615f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+If libglib2 is not found or disable through --without-glib2, irqbalance
+will use its own implementation of glib2 so add a mandatory libglib2
+dependency especially as upstream now enforce it:
+https://github.com/Irqbalance/irqbalance/commit/1d2f6a9b6c6ef3b195f28af5f0271cf83ed02818
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/irqbalance/irqbalance.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/irqbalance/Config.in     | 8 ++++++++
+ package/irqbalance/irqbalance.mk | 5 ++++-
+ 2 files changed, 12 insertions(+), 1 deletion(-)
 
+diff --git a/package/irqbalance/Config.in b/package/irqbalance/Config.in
+index 6c21497834..02d146f4d3 100644
+--- a/package/irqbalance/Config.in
++++ b/package/irqbalance/Config.in
+@@ -1,5 +1,9 @@
+ config BR2_PACKAGE_IRQBALANCE
+ 	bool "irqbalance"
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2
++	select BR2_PACKAGE_LIBGLIB2
+ 	help
+ 	  Irqbalance is a daemon to help balance the cpu load generated
+ 	  by interrupts across all of a systems cpus.
+@@ -9,3 +13,7 @@ config BR2_PACKAGE_IRQBALANCE
+ 	  minimizing cache hit rates for irq handlers.
+ 
+ 	  https://github.com/Irqbalance/irqbalance
++
++comment "irqbalance needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
 diff --git a/package/irqbalance/irqbalance.mk b/package/irqbalance/irqbalance.mk
-index 309fc22ee2..410e40a131 100644
+index 95230ed1f5..309fc22ee2 100644
 --- a/package/irqbalance/irqbalance.mk
 +++ b/package/irqbalance/irqbalance.mk
-@@ -15,6 +15,13 @@ IRQBALANCE_AUTORECONF = YES
- # Local implementation of glib2 will be used if --without-glib2 is set
- IRQBALANCE_CONF_OPTS = --with-glib2
+@@ -8,10 +8,13 @@ IRQBALANCE_VERSION = v1.0.9
+ IRQBALANCE_SITE = $(call github,irqbalance,irqbalance,$(IRQBALANCE_VERSION))
+ IRQBALANCE_LICENSE = GPL-2.0
+ IRQBALANCE_LICENSE_FILES = COPYING
+-IRQBALANCE_DEPENDENCIES = host-pkgconf
++IRQBALANCE_DEPENDENCIES = host-pkgconf libglib2
+ # Autoreconf needed because package is distributed without a configure script
+ IRQBALANCE_AUTORECONF = YES
  
-+ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
-+IRQBALANCE_DEPENDENCIES += libcap-ng
-+IRQBALANCE_CONF_OPTS += --with-libcap-ng
-+else
-+IRQBALANCE_CONF_OPTS += --without-libcap-ng
-+endif
++# Local implementation of glib2 will be used if --without-glib2 is set
++IRQBALANCE_CONF_OPTS = --with-glib2
 +
  ifeq ($(BR2_PACKAGE_NUMACTL),y)
  IRQBALANCE_DEPENDENCIES += numactl
