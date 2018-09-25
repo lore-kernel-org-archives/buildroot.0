@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 25 Sep 2018 22:26:32 +0200
-Subject: [Buildroot] [PATCH] xlib_libxshmfence: drop AUTORECONF
-In-Reply-To: <20180923133759.30626-1-thomas.petazzoni@bootlin.com>
-References: <20180923133759.30626-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180925222632.198d4101@windsurf>
+Date: Tue, 25 Sep 2018 22:26:58 +0200
+Subject: [Buildroot] [PATCH] package/x11r7/xutil_makedepend: add missing
+ dependency on host-pkgconf
+In-Reply-To: <20180923135007.5926-1-thomas.petazzoni@bootlin.com>
+References: <20180923135007.5926-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20180925222658.7afd5d92@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,29 +13,33 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 23 Sep 2018 15:37:59 +0200, Thomas Petazzoni wrote:
-> In commit 2524acd4179fccc627a72ff188bf51c95fed9876
-> ("package/x11r7/xlib_libxshmfence: bump version to 1.3"), the patch
-> 0001-configure.ac-call-AC_USE_SYSTEM_EXTENSIONS.patch was dropped, but
-> the corresponding AUTORECONF = YES was not dropped.
+On Sun, 23 Sep 2018 15:50:07 +0200, Thomas Petazzoni wrote:
+> The configure script of xutil_makedepend uses PKG_CHECK_MODULES(), so
+> it should depend on host-pkgconf. Otherwise, a "make
+> host-xutil_makedepend" fails with:
 > 
-> This causes a build issue if just xlib_libxshmfence is built (using
-> "make xlib_libxshmfence" or using per-package host/target directories):
+> """
+> checking for X... configure: error: in `/home/thomas/projets/buildroot/output/build/host-xutil_makedepend-1.0.5':
+> configure: error: The pkg-config script could not be found or is too old.  Make sure it
+> is in your PATH or set the PKG_CONFIG environment variable to the full
+> path to pkg-config.
 > 
->   >>> xlib_libxshmfence 1.3 Autoreconfiguring  
->   configure.ac:40: error: must install xorg-macros 1.3 or later before running autoconf/autogen
->   configure.ac:40: the top level
+> Alternatively, you may set the environment variables X_CFLAGS
+> and X_LIBS to avoid the need to call pkg-config.
+> See the pkg-config man page for more details.
 > 
-> This commit fixes that by dropping the no longer needed
-> AUTORECONF = YES.
+> To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+> """
+> 
+> This was detected using per-package host/target directories, but can
+> be reproduced without it.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk | 3 ---
->  1 file changed, 3 deletions(-)
+>  package/x11r7/xutil_makedepend/xutil_makedepend.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master after fixing the reference to the commit, as noticed
-by Yann.
+Applied to master, thanks.
 
 Thomas
 -- 
