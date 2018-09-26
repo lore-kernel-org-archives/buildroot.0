@@ -1,52 +1,53 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Wed, 26 Sep 2018 18:34:57 +0300
-Subject: [Buildroot] [PATCH 15/23] python-txtorcon: bump to version 18.0.2
+Date: Wed, 26 Sep 2018 18:34:59 +0300
+Subject: [Buildroot] [PATCH 17/23] python-zope-interface: bump to version
+ 4.5.0
 In-Reply-To: <20180926153505.3411-1-asafka7@gmail.com>
 References: <20180926153505.3411-1-asafka7@gmail.com>
-Message-ID: <20180926153505.3411-16-asafka7@gmail.com>
+Message-ID: <20180926153505.3411-18-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add license hash.
+Fix indentation for license hash.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-txtorcon/python-txtorcon.hash | 9 +++++----
- package/python-txtorcon/python-txtorcon.mk   | 4 ++--
+ package/python-zope-interface/python-zope-interface.hash | 9 +++++----
+ package/python-zope-interface/python-zope-interface.mk   | 4 ++--
  2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-txtorcon/python-txtorcon.hash b/package/python-txtorcon/python-txtorcon.hash
-index 71a2ec508f..ca43be5e7f 100644
---- a/package/python-txtorcon/python-txtorcon.hash
-+++ b/package/python-txtorcon/python-txtorcon.hash
+diff --git a/package/python-zope-interface/python-zope-interface.hash b/package/python-zope-interface/python-zope-interface.hash
+index 2aa07335a4..94493e127f 100644
+--- a/package/python-zope-interface/python-zope-interface.hash
++++ b/package/python-zope-interface/python-zope-interface.hash
 @@ -1,4 +1,5 @@
--# md5 from https://pypi.python.org/pypi/txtorcon/json, sha256 locally computed
--md5	4d7380fa7e721c77cac103d971882374  txtorcon-0.19.3.tar.gz
--sha256	f73396667909a3c7a98f4dd865edf4ed6a2518ee5a935d92e18b8a479ec244fd  txtorcon-0.19.3.tar.gz
--sha256	3ada1c32ef38c23d96d7f4e8f4a226c527f51e0202883c7543b06f9cc5228a2b  LICENSE
-+# md5, sha256 from https://pypi.org/pypi/txtorcon/json
-+md5    76ca73a069947726216477c8da75f798  txtorcon-18.0.2.tar.gz
-+sha256 ce50fdd00abb8b490b72809a2c664684f67f3c9467f392642d36f58309395a87  txtorcon-18.0.2.tar.gz
+-# md5 from https://pypi.python.org/pypi/zope.interface/json, sha256 locally computed
+-md5	8700a4f527c1203b34b10c2b4e7a6912  zope.interface-4.4.3.tar.gz
+-sha256	d6d26d5dfbfd60c65152938fcb82f949e8dada37c041f72916fef6621ba5c5ce  zope.interface-4.4.3.tar.gz
+-sha256  3e671db11df687516cc1db5b3d65e4aa383eaca3c20cea3faf53a0f7335d0a3c  LICENSE.txt
++# md5, sha256 from https://pypi.org/pypi/zope-interface/json
++md5	7b669cd692d817772c61d2e3ad0f1e71  zope.interface-4.5.0.tar.gz
++sha256	57c38470d9f57e37afb460c399eb254e7193ac7fb8042bd09bdc001981a9c74c  zope.interface-4.5.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256 3ada1c32ef38c23d96d7f4e8f4a226c527f51e0202883c7543b06f9cc5228a2b  LICENSE
-diff --git a/package/python-txtorcon/python-txtorcon.mk b/package/python-txtorcon/python-txtorcon.mk
-index f75f50438e..596a2da063 100644
---- a/package/python-txtorcon/python-txtorcon.mk
-+++ b/package/python-txtorcon/python-txtorcon.mk
++sha256	3e671db11df687516cc1db5b3d65e4aa383eaca3c20cea3faf53a0f7335d0a3c  LICENSE.txt
+diff --git a/package/python-zope-interface/python-zope-interface.mk b/package/python-zope-interface/python-zope-interface.mk
+index 7dd6812976..10bb70fa53 100644
+--- a/package/python-zope-interface/python-zope-interface.mk
++++ b/package/python-zope-interface/python-zope-interface.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TXTORCON_VERSION = 0.19.3
-+PYTHON_TXTORCON_VERSION = 18.0.2
- PYTHON_TXTORCON_SOURCE = txtorcon-$(PYTHON_TXTORCON_VERSION).tar.gz
--PYTHON_TXTORCON_SITE = https://pypi.python.org/packages/05/4b/d2fbfdc08ab83c299f2ad22ba38ea35f71f1c966684f5754e079108a1f64
-+PYTHON_TXTORCON_SITE = https://files.pythonhosted.org/packages/0d/cf/d60e12055c2930aa5a347043423e59e29241d03fd1f2316d1dea08db383a
- PYTHON_TXTORCON_SETUP_TYPE = setuptools
- PYTHON_TXTORCON_LICENSE = MIT
- PYTHON_TXTORCON_LICENSE_FILES = LICENSE
+-PYTHON_ZOPE_INTERFACE_VERSION = 4.4.3
++PYTHON_ZOPE_INTERFACE_VERSION = 4.5.0
+ PYTHON_ZOPE_INTERFACE_SOURCE = zope.interface-$(PYTHON_ZOPE_INTERFACE_VERSION).tar.gz
+-PYTHON_ZOPE_INTERFACE_SITE = https://pypi.python.org/packages/bd/d2/25349ed41f9dcff7b3baf87bd88a4c82396cf6e02f1f42bb68657a3132af
++PYTHON_ZOPE_INTERFACE_SITE = https://files.pythonhosted.org/packages/ac/8a/657532df378c2cd2a1fe6b12be3b4097521570769d4852ec02c24bd3594e
+ PYTHON_ZOPE_INTERFACE_SETUP_TYPE = setuptools
+ PYTHON_ZOPE_INTERFACE_LICENSE = ZPL-2.1
+ PYTHON_ZOPE_INTERFACE_LICENSE_FILES = LICENSE.txt
 -- 
 2.17.1
