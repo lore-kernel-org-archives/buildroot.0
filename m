@@ -1,246 +1,42 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 26 Sep 2018 19:15:54 +0200
-Subject: [Buildroot] [PATCH 1/1] ncmpc: fix build with gcc 4.9
-Message-ID: <20180926171554.6856-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 26 Sep 2018 19:47:40 +0200
+Subject: [Buildroot] [PATCH] wireguard: bump version to 0.0.20180925
+Message-ID: <20180926174740.23491-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add upstream patch to fix build on gcc 4.9
-
-Fixes:
- - http://autobuild.buildroot.org/results/e3b1b1bdad841c151b70294d517dc75c5305b0fe
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...constructor-to-simplify-initializers.patch | 217 ++++++++++++++++++
- 1 file changed, 217 insertions(+)
- create mode 100644 package/ncmpc/0002-Global-Bindings-add-KeyBindings-constructor-to-simplify-initializers.patch
+ package/wireguard/wireguard.hash | 4 ++--
+ package/wireguard/wireguard.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ncmpc/0002-Global-Bindings-add-KeyBindings-constructor-to-simplify-initializers.patch b/package/ncmpc/0002-Global-Bindings-add-KeyBindings-constructor-to-simplify-initializers.patch
-new file mode 100644
-index 0000000000..217fa9b55b
---- /dev/null
-+++ b/package/ncmpc/0002-Global-Bindings-add-KeyBindings-constructor-to-simplify-initializers.patch
-@@ -0,0 +1,217 @@
-+From da27fcc39e187671b5e4373848f701a3d910446c Mon Sep 17 00:00:00 2001
-+From: Max Kellermann <max@musicpd.org>
-+Date: Wed, 26 Sep 2018 09:51:09 +0200
-+Subject: [PATCH] {Global,}Bindings: add KeyBindings constructor to simplify
-+ initializers
-+
-+As a side effect, this works around a build failure with GCC 4.9.
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from 
-+https://github.com/MusicPlayerDaemon/ncmpc/commit/da27fcc39e187671b5e4373848f701a3d910446c
-+and updated for 0.31 (remove NEWS update)]
-+---
-+ src/Bindings.hxx       |   3 +
-+ src/GlobalBindings.cxx | 142 ++++++++++++++++++++---------------------
-+ 3 files changed, 75 insertions(+), 71 deletions(-)
-+
-+diff --git a/src/Bindings.hxx b/src/Bindings.hxx
-+index 342d951..0c630dc 100644
-+--- a/src/Bindings.hxx
-++++ b/src/Bindings.hxx
-+@@ -42,6 +42,9 @@ struct KeyBinding {
-+ 	bool modified = false;
-+ #endif
-+ 
-++	constexpr KeyBinding(int a, int b=0, int c=0) noexcept
-++		:keys{{a, b, c}} {}
-++
-+ 	gcc_pure
-+ 	bool HasKey(int key) const {
-+ 		return std::find(keys.begin(), keys.end(), key) != keys.end();
-+diff --git a/src/GlobalBindings.cxx b/src/GlobalBindings.cxx
-+index b565848..8049ed2 100644
-+--- a/src/GlobalBindings.cxx
-++++ b/src/GlobalBindings.cxx
-+@@ -51,110 +51,110 @@
-+ 
-+ static KeyBindings global_key_bindings{{{
-+ #ifdef ENABLE_KEYDEF_SCREEN
-+-	{ {'K', 0, 0 } },
-++	{'K'},
-+ #endif
-+-	{ { 'q', 'Q', C('C') } },
-++	{'q', 'Q', C('C')},
-+ 
-+ 	/* movement */
-+-	{ { UP, 'k', 0 } },
-+-	{ { DWN, 'j', 0 } },
-+-	{ { 'H', 0, 0 } },
-+-	{ { 'M', 0, 0 } },
-+-	{ { 'L', 0, 0 } },
-+-	{ { HOME, C('A'), 0 } },
-+-	{ { END, C('E'), 0 } },
-+-	{ { PGUP, 0, 0 } },
-+-	{ { PGDN, 0, 0 } },
-+-	{ { 'v',  0, 0 } },
-+-	{ { C('N'),  0, 0 } },
-+-	{ { C('B'),  0, 0 } },
-+-	{ { 'N',  0, 0 } },
-+-	{ { 'B',  0, 0 } },
-+-	{ { 'l', 0, 0 } },
-++	{UP, 'k'},
-++	{DWN, 'j'},
-++	{'H'},
-++	{'M'},
-++	{'L'},
-++	{HOME, C('A')},
-++	{END, C('E')},
-++	{PGUP},
-++	{PGDN},
-++	{'v',  0},
-++	{C('N'),  0},
-++	{C('B'),  0},
-++	{'N',  0},
-++	{'B',  0},
-++	{'l'},
-+ 
-+ 	/* basic screens */
-+-	{ { '1', F1, 'h' } },
-+-	{ { '2', F2, 0 } },
-+-	{ { '3', F3, 0 } },
-++	{'1', F1, 'h'},
-++	{'2', F2},
-++	{'3', F3},
-+ 
-+ 	/* player commands */
-+-	{ { RET, 0, 0 } },
-+-	{ { 'P', 0, 0 } },
-+-	{ { 's', BS, 0 } },
-+-	{ { 'o', 0, 0 } },
-+-	{ { '>', 0, 0 } },
-+-	{ { '<', 0, 0 } },
-+-	{ { 'f', 0, 0 } },
-+-	{ { 'b', 0, 0 } },
-+-	{ { '+', RGHT, 0 } },
-+-	{ { '-', LEFT, 0 } },
-+-	{ { ' ', 0, 0 } },
-+-	{ { 't', 0, 0 } },
-+-	{ { DEL, 'd', 0 } },
-+-	{ { 'Z', 0, 0 } },
-+-	{ { 'c', 0, 0 } },
-+-	{ { 'r', 0, 0 } },
-+-	{ { 'z', 0, 0 } },
-+-	{ { 'y', 0, 0 } },
-+-	{ { 'C', 0, 0 } },
-+-	{ { 'x', 0, 0 } },
-+-	{ { C('U'), 0, 0 } },
-+-	{ { 'S', 0, 0 } },
-+-	{ { 'a', 0, 0 } },
-+-
-+-	{ { '!', 0, 0 } },
-+-	{ { '"', 0, 0 } },
-+-
-+-	{ { 'G', 0, 0 } },
-++	{RET},
-++	{'P'},
-++	{'s', BS},
-++	{'o'},
-++	{'>'},
-++	{'<'},
-++	{'f'},
-++	{'b'},
-++	{'+', RGHT},
-++	{'-', LEFT},
-++	{' '},
-++	{'t'},
-++	{DEL, 'd'},
-++	{'Z'},
-++	{'c'},
-++	{'r'},
-++	{'z'},
-++	{'y'},
-++	{'C'},
-++	{'x'},
-++	{C('U')},
-++	{'S'},
-++	{'a'},
-++
-++	{'!'},
-++	{'"'},
-++
-++	{'G'},
-+ 
-+ 	/* lists */
-+-	{ { C('K'), 0, 0 } },
-+-	{ { C('J'), 0, 0 } },
-+-	{ { C('L'), 0, 0 } },
-++	{C('K')},
-++	{C('J')},
-++	{C('L')},
-+ 
-+ 
-+ 	/* ncmpc options */
-+-	{ { 'w', 0, 0 } },
-+-	{ { 'U', 0, 0 } },
-++	{'w'},
-++	{'U'},
-+ 
-+ 	/* change screen */
-+-	{ { TAB, 0, 0 } },
-+-	{ { STAB, 0, 0 } },
-+-	{ { '`', 0, 0 } },
-++	{TAB},
-++	{STAB},
-++	{'`'},
-+ 
-+ 
-+ 	/* find */
-+-	{ { '/', 0, 0 } },
-+-	{ { 'n', 0, 0 } },
-+-	{ { '?', 0, 0 } },
-+-	{ { 'p', 0, 0 } },
-+-	{ { '.', 0, 0 } },
-++	{'/'},
-++	{'n'},
-++	{'?'},
-++	{'p'},
-++	{'.'},
-+ 
-+ 
-+ 	/* extra screens */
-+ #ifdef ENABLE_ARTIST_SCREEN
-+-	{ {'4', F4, 0 } },
-++	{'4', F4},
-+ #endif
-+ #ifdef ENABLE_SEARCH_SCREEN
-+-	{ {'5', F5, 0 } },
-+-	{ {'m', 0, 0 } },
-++	{'5', F5},
-++	{'m'},
-+ #endif
-+ #ifdef ENABLE_SONG_SCREEN
-+-	{ { 'i', 0, 0 } },
-++	{'i'},
-+ #endif
-+ #ifdef ENABLE_LYRICS_SCREEN
-+-	{ {'7', F7, 0 } },
-+-	{ {ESC, 0, 0 } },
-+-	{ {'u', 0, 0 } },
-+-	{ {'e', 0, 0 } },
-++	{'7', F7},
-++	{ESC},
-++	{'u'},
-++	{'e'},
-+ #endif
-+ 
-+ #ifdef ENABLE_OUTPUTS_SCREEN
-+-	{ {'8', F8, 0 } },
-++	{'8', F8},
-+ #endif
-+ 
-+ #ifdef ENABLE_CHAT_SCREEN
-+-	{ {'9', F9, 0} },
-++	{'9', F9},
-+ #endif
-+ }}};
-+ 
+diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
+index d0cd65ad4f..fe6439fbc2 100644
+--- a/package/wireguard/wireguard.hash
++++ b/package/wireguard/wireguard.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.zx2c4.com/pipermail/wireguard/2018-July/003112.html
+-sha256 5e38d554f7d1e3a64e3a5319ca1a3b790c84ed89c896586c490a93ac1f953a91  WireGuard-0.0.20180708.tar.xz
++# From https://lists.zx2c4.com/pipermail/wireguard/2018-September/003395.html
++sha256 4a0488a07e40ec17e798f3e40a85cedf55f0560b1c3a8fd95806c7d4266cb0e8  WireGuard-0.0.20180925.tar.xz
+ # Locally calculated
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
+index cc8ad7c4cc..faddbf93ad 100644
+--- a/package/wireguard/wireguard.mk
++++ b/package/wireguard/wireguard.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIREGUARD_VERSION = 0.0.20180708
++WIREGUARD_VERSION = 0.0.20180925
+ WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
+ WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
+ WIREGUARD_LICENSE = GPL-2.0
 -- 
-2.17.1
+2.11.0
