@@ -1,51 +1,51 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Wed, 26 Sep 2018 18:34:52 +0300
-Subject: [Buildroot] [PATCH 10/23] python-pynacl: bump to version 1.2.1
+Date: Wed, 26 Sep 2018 18:34:53 +0300
+Subject: [Buildroot] [PATCH 11/23] python-pyopenssl: bump to version 18.0.0
 In-Reply-To: <20180926153505.3411-1-asafka7@gmail.com>
 References: <20180926153505.3411-1-asafka7@gmail.com>
-Message-ID: <20180926153505.3411-11-asafka7@gmail.com>
+Message-ID: <20180926153505.3411-12-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add license hash.
+Also add license hash
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-pynacl/python-pynacl.hash | 8 +++++---
- package/python-pynacl/python-pynacl.mk   | 4 ++--
+ package/python-pyopenssl/python-pyopenssl.hash | 8 +++++---
+ package/python-pyopenssl/python-pyopenssl.mk   | 4 ++--
  2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pynacl/python-pynacl.hash b/package/python-pynacl/python-pynacl.hash
-index 7035ac7637..84d8674bf4 100644
---- a/package/python-pynacl/python-pynacl.hash
-+++ b/package/python-pynacl/python-pynacl.hash
+diff --git a/package/python-pyopenssl/python-pyopenssl.hash b/package/python-pyopenssl/python-pyopenssl.hash
+index 74fa4e56bf..ebd16cf28b 100644
+--- a/package/python-pyopenssl/python-pyopenssl.hash
++++ b/package/python-pyopenssl/python-pyopenssl.hash
 @@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=12fd03d8ce64e0318cb1c69272f17704, sha256 locally computed.
--md5	12fd03d8ce64e0318cb1c69272f17704  PyNaCl-1.0.1.tar.gz
--sha256	d21d7a7358a85fb9b9ddadfbd1176c40fe199334fe2202881255e77f6d3773f4  PyNaCl-1.0.1.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/pynacl/json
-+md5	1db3e111775fbe6b66772ff30af7a956  PyNaCl-1.2.1.tar.gz
-+sha256	e0d38fa0a75f65f556fb912f2c6790d1fa29b7dd27a1d9cc5591b281321eaaa9  PyNaCl-1.2.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256	d3174ad63e721d4c9dccb8ad4320848992d314369bc46319720b5802c9153fe9  LICENSE
-diff --git a/package/python-pynacl/python-pynacl.mk b/package/python-pynacl/python-pynacl.mk
-index 469ddda474..1203a6e112 100644
---- a/package/python-pynacl/python-pynacl.mk
-+++ b/package/python-pynacl/python-pynacl.mk
+-# md5 from https://pypi.python.org/pypi/pyopenssl/json, sha256 locally computed
+-md5 0704ca95106960375cfe78259453094a  pyOpenSSL-17.0.0.tar.gz
+-sha256 48abfe9d2bb8eb8d8947c8452b0223b7b1be2383b332f3b4f248fe59ef0bafdd  pyOpenSSL-17.0.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/pyopenssl/json
++md5 c92e9c85b520b7e153fef0f7f3c5dda7  pyOpenSSL-18.0.0.tar.gz
++sha256 6488f1423b00f73b7ad5167885312bb0ce410d3312eb212393795b53c8caa580  pyOpenSSL-18.0.0.tar.gz
++# Locally computed sha256
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-pyopenssl/python-pyopenssl.mk b/package/python-pyopenssl/python-pyopenssl.mk
+index 3fbaf8d16e..afdd06500f 100644
+--- a/package/python-pyopenssl/python-pyopenssl.mk
++++ b/package/python-pyopenssl/python-pyopenssl.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYNACL_VERSION = 1.0.1
-+PYTHON_PYNACL_VERSION = 1.2.1
- PYTHON_PYNACL_SOURCE = PyNaCl-$(PYTHON_PYNACL_VERSION).tar.gz
--PYTHON_PYNACL_SITE = https://pypi.python.org/packages/source/P/PyNaCl
-+PYTHON_PYNACL_SITE = https://files.pythonhosted.org/packages/08/19/cf56e60efd122fa6d2228118a9b345455b13ffe16a14be81d025b03b261f
- PYTHON_PYNACL_LICENSE = Apache-2.0
- PYTHON_PYNACL_LICENSE_FILES = LICENSE
- PYTHON_PYNACL_SETUP_TYPE = setuptools
+-PYTHON_PYOPENSSL_VERSION = 17.0.0
++PYTHON_PYOPENSSL_VERSION = 18.0.0
+ PYTHON_PYOPENSSL_SOURCE = pyOpenSSL-$(PYTHON_PYOPENSSL_VERSION).tar.gz
+-PYTHON_PYOPENSSL_SITE = https://pypi.python.org/packages/9f/32/80fe4fddeb731b7766cd09fe0b2032a91b43dae655e216792af2a6ae3190
++PYTHON_PYOPENSSL_SITE = https://files.pythonhosted.org/packages/9b/7c/ee600b2a9304d260d96044ab5c5e57aa489755b92bbeb4c0803f9504f480
+ PYTHON_PYOPENSSL_LICENSE = Apache-2.0
+ PYTHON_PYOPENSSL_LICENSE_FILES = LICENSE
+ PYTHON_PYOPENSSL_SETUP_TYPE = setuptools
 -- 
 2.17.1
