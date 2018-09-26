@@ -1,110 +1,29 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Tue, 25 Sep 2018 23:55:14 -0300
-Subject: [Buildroot] [PATCH 5/5] support/testing: add python-twisted tests
-In-Reply-To: <20180926025514.2092-1-ricardo.martincoski@gmail.com>
-References: <20180926025514.2092-1-ricardo.martincoski@gmail.com>
-Message-ID: <20180926025514.2092-6-ricardo.martincoski@gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Wed, 26 Sep 2018 07:22:56 +0300
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add myself for python-lxml
+Message-ID: <20180926042256.6200-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use a minimal script to listen to a port and check using netstat.
-
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Asaf Kahlon <asafka7@gmail.com>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
-NOTICE that TestPythonPy3Twisted currently fails on master branch like this:
-Cannot compile usr/lib/python3.7/site-packages/twisted/conch/manhole.py
-Traceback (most recent call last):
-  File "/builds/RicardoMartincoski/buildroot/test-output/TestPythonPy3Twisted/host/lib/python3.7/py_compile.py", line 136, in compile
-    _optimize=optimize)
-  File "<frozen importlib._bootstrap_external>", line 763, in source_to_code
-  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
-  File "usr/lib/python3.7/site-packages/twisted/conch/manhole.py", line 154
-    def write(self, data, async=False):
-                              ^
-SyntaxError: invalid syntax
----
- .gitlab-ci.yml                                |  2 +
- .../tests/package/test_python_twisted.py      | 54 +++++++++++++++++++
- 2 files changed, 56 insertions(+)
- create mode 100644 support/testing/tests/package/test_python_twisted.py
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index ab3493686d..4b8fee5f23 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -305,6 +305,8 @@ tests.package.test_python_cryptography.TestPythonPy2Cryptography: *runtime_test
- tests.package.test_python_cryptography.TestPythonPy3Cryptography: *runtime_test
- tests.package.test_python_incremental.TestPythonPy2Incremental: *runtime_test
- tests.package.test_python_incremental.TestPythonPy3Incremental: *runtime_test
-+tests.package.test_python_twisted.TestPythonPy2Twisted: *runtime_test
-+tests.package.test_python_twisted.TestPythonPy3Twisted: *runtime_test
- tests.package.test_python_txaio.TestPythonPy2Txaio: *runtime_test
- tests.package.test_python_txaio.TestPythonPy3Txaio: *runtime_test
- tests.package.test_python_txtorcon.TestPythonPy2Txtorcon: *runtime_test
-diff --git a/support/testing/tests/package/test_python_twisted.py b/support/testing/tests/package/test_python_twisted.py
-new file mode 100644
-index 0000000000..88de30edee
---- /dev/null
-+++ b/support/testing/tests/package/test_python_twisted.py
-@@ -0,0 +1,54 @@
-+from tests.package.test_python import TestPythonBase
-+
-+TEST_SCRIPT = """
-+from twisted.internet import protocol, reactor, endpoints
-+class F(protocol.Factory):
-+    pass
-+endpoints.serverFromString(reactor, "tcp:1234").listen(F())
-+reactor.run()
-+"""
-+
-+
-+class TestPythonTwisted(TestPythonBase):
-+    def import_test(self):
-+        cmd = "printf '{}' > test.py".format(TEST_SCRIPT)
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+
-+        cmd = "netstat -ltn 2>/dev/null | grep 0.0.0.0:1234"
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 1)
-+
-+        cmd = self.interpreter + " test.py &"
-+        # give some time to setup the server
-+        cmd += "sleep 5"
-+        _, exit_code = self.emulator.run(cmd, timeout=10)
-+        self.assertEqual(exit_code, 0)
-+
-+        cmd = "netstat -ltn 2>/dev/null | grep 0.0.0.0:1234"
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+
-+
-+class TestPythonPy2Twisted(TestPythonTwisted):
-+    config = TestPythonBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON=y
-+        BR2_PACKAGE_PYTHON_TWISTED=y
-+        """
-+
-+    def test_run(self):
-+        self.login()
-+        self.import_test()
-+
-+
-+class TestPythonPy3Twisted(TestPythonTwisted):
-+    config = TestPythonBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_TWISTED=y
-+        """
-+
-+    def test_run(self):
-+        self.login()
-+        self.import_test()
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e5cd83af0d..c5d9b8bb57 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -203,6 +203,7 @@ F:	package/python-bcrypt/
+ F:	package/python-engineio/
+ F:	package/python-fire/
+ F:	package/python-jsonmodels/
++F:	package/python-lxml/
+ F:	package/python-paramiko/
+ F:	package/python-pyasn1/
+ F:	package/python-pyroute2/
 -- 
 2.17.1
