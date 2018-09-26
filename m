@@ -1,9 +1,9 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Wed, 26 Sep 2018 18:34:50 +0300
-Subject: [Buildroot] [PATCH 08/23] python-psutil: bump to version 5.4.7
+Date: Wed, 26 Sep 2018 18:34:49 +0300
+Subject: [Buildroot] [PATCH 07/23] python-lmdb: bump to version 0.94
 In-Reply-To: <20180926153505.3411-1-asafka7@gmail.com>
 References: <20180926153505.3411-1-asafka7@gmail.com>
-Message-ID: <20180926153505.3411-9-asafka7@gmail.com>
+Message-ID: <20180926153505.3411-8-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,38 +14,37 @@ Also add license hash.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-psutil/python-psutil.hash | 8 +++++---
- package/python-psutil/python-psutil.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/python-lmdb/python-lmdb.hash | 7 +++++--
+ package/python-lmdb/python-lmdb.mk   | 5 +++--
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
-index 19fb8a4fdb..9629d81ed7 100644
---- a/package/python-psutil/python-psutil.hash
-+++ b/package/python-psutil/python-psutil.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/psutil/json, sha256 locally computed
--md5	c9aa2599dcd9e5b59d71b6660d396062  psutil-5.2.0.tar.gz
--sha256  2fc91d068faa5613c093335f0e758673ef8c722ad4bfa4aded64c13ae69089eb  psutil-5.2.0.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/psutil/json
-+md5	434cd8f9a1fdc93ce7903fdc9b5e3906  psutil-5.4.7.tar.gz
-+sha256	5b6322b167a5ba0c5463b4d30dfd379cd4ce245a1162ebf8fc7ab5c5ffae4f3b  psutil-5.4.7.tar.gz
+diff --git a/package/python-lmdb/python-lmdb.hash b/package/python-lmdb/python-lmdb.hash
+index 7c2946044d..ed96d69545 100644
+--- a/package/python-lmdb/python-lmdb.hash
++++ b/package/python-lmdb/python-lmdb.hash
+@@ -1,2 +1,5 @@
+-# Locally calculated
+-sha256	abd2b2ae9ecf2fd1e1bc55ef4e8463b5910722fcd70a1bbf34a3e669a74a41a4 python-lmdb-py-lmdb_0.89.tar.gz
++# md5, sha256 from https://pypi.org/pypi/lmdb/json
++md5	57216cb8fba7aed91ceba5a69d359939  lmdb-0.94.tar.gz
++sha256	9c2b7f05c26b2c95d6f3a566314feefe2dc64ecec6c50242a932703cf74303fe  lmdb-0.94.tar.gz
 +# Locally computed sha256 checksums
-+sha256	bb073826b0dfb43b631c38ad5d9844cda74cc631d2a5569ad8798be4274a3e17  LICENSE
-diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
-index 2b41df743a..61a303f84a 100644
---- a/package/python-psutil/python-psutil.mk
-+++ b/package/python-psutil/python-psutil.mk
-@@ -4,9 +4,9 @@
++sha256	310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/python-lmdb/python-lmdb.mk b/package/python-lmdb/python-lmdb.mk
+index 62fb0465b1..039656e2c1 100644
+--- a/package/python-lmdb/python-lmdb.mk
++++ b/package/python-lmdb/python-lmdb.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PSUTIL_VERSION = 5.2.0
-+PYTHON_PSUTIL_VERSION = 5.4.7
- PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
--PYTHON_PSUTIL_SITE = https://pypi.python.org/packages/3c/2f/f3ab91349c666f009077157b12057e613a3152a46a6c3be883777546b6de
-+PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/7d/9a/1e93d41708f8ed2b564395edfa3389f0fd6d567597401c2e5e2775118d8b
- PYTHON_PSUTIL_SETUP_TYPE = setuptools
- PYTHON_PSUTIL_LICENSE = BSD-3-Clause
- PYTHON_PSUTIL_LICENSE_FILES = LICENSE
+-PYTHON_LMDB_VERSION = py-lmdb_0.89
+-PYTHON_LMDB_SITE = $(call github,dw,py-lmdb,$(PYTHON_LMDB_VERSION))
++PYTHON_LMDB_VERSION = 0.94
++PYTHON_LMDB_SOURCE = lmdb-$(PYTHON_LMDB_VERSION).tar.gz
++PYTHON_LMDB_SITE = https://files.pythonhosted.org/packages/cb/31/5be8f436b56733d9e69c721c358502f4d77b627489a459978686be7db65f
+ PYTHON_LMDB_LICENSE = OLDAP-2.8
+ PYTHON_LMDB_LICENSE_FILES = LICENSE
+ PYTHON_LMDB_SETUP_TYPE = setuptools
 -- 
 2.17.1
