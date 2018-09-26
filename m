@@ -1,10 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Sep 2018 19:51:30 +0200
-Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.18.10
-In-Reply-To: <1537965899-8253-1-git-send-email-festevam@gmail.com> (Fabio
- Estevam's message of "Wed, 26 Sep 2018 09:44:58 -0300")
+Date: Wed, 26 Sep 2018 19:51:34 +0200
+Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{4, 9, 14,
+ 18}.x series
+In-Reply-To: <1537965899-8253-2-git-send-email-festevam@gmail.com> (Fabio
+ Estevam's message of "Wed, 26 Sep 2018 09:44:59 -0300")
 References: <1537965899-8253-1-git-send-email-festevam@gmail.com>
-Message-ID: <87zhw46tb1.fsf@dell.be.48ers.dk>
+ <1537965899-8253-2-git-send-email-festevam@gmail.com>
+Message-ID: <87va6s6tax.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
