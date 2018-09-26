@@ -1,58 +1,114 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 26 Sep 2018 09:44:59 -0300
-Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{4, 9, 14,
- 18}.x series
-In-Reply-To: <1537965899-8253-1-git-send-email-festevam@gmail.com>
-References: <1537965899-8253-1-git-send-email-festevam@gmail.com>
-Message-ID: <1537965899-8253-2-git-send-email-festevam@gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Wed, 26 Sep 2018 18:34:42 +0300
+Subject: [Buildroot] [PATCH 00/23] Fix python-crossbar to work with python
+ 3.7
+Message-ID: <20180926153505.3411-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- linux/linux.hash                     | 6 +++---
- package/linux-headers/Config.in.host | 8 ++++----
- 2 files changed, 7 insertions(+), 7 deletions(-)
+The following series of patches contains version bumps and new
+packages that are needed for bumping python-crossbar to 18.9.2
+and make it work with Python 3.7.
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 9e37af4..0a913de 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,9 +1,9 @@
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
- sha256 10604f7f8ccab5e7ce71f2e87d1410be679cd11c29c6c608ce35df1db40991de  linux-4.18.10.tar.xz
- sha256 41026d713ba4f7a5e9d514b876ce4ed28a1d993c0c58b42b2a2597d6a0e83021  linux-4.16.18.tar.xz
--sha256 76a4473dbcbd922c23a16130414829a36eb7e2f4e5859bd1b742fffdff907489  linux-4.14.71.tar.xz
--sha256 bdb76f48491a6aadc89c0f0f7fdc240d77cee54da5aac59da0b5d98e226b6f12  linux-4.9.128.tar.xz
--sha256 0010bc0aa64bc9cf55aaebd662dd0971f18284e925c74562ced31e0cf01d624d  linux-4.4.157.tar.xz
-+sha256 df925906250bbc40fcf0137d7ad0fb8edc528d926832634f1233b7540564557f  linux-4.14.72.tar.xz
-+sha256 6f5510d3fcfec1bf1e2d9c8e2fdcd7628c1886c6bdb29092adc5ccdf75e39318  linux-4.9.129.tar.xz
-+sha256 571c8f6e8cabcc4e8c813869b87527f6e8e427b1c8fef96330c99743700f22a9  linux-4.4.158.tar.xz
- sha256 6ad9389e55e0ea57768eae173747058a4487fa3630e10a7999cfec9f945e559c  linux-4.1.52.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v3.x/sha256sums.asc
- sha256 ad96d797571496c969aa71bf5d08e9d2a8c84458090d29a120f1b2981185a99e  linux-3.2.102.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 68b9ef1..99f2954 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -294,11 +294,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.157"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.128"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.71"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.4.158"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.129"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.72"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
--	default "4.18.9"	if BR2_KERNEL_HEADERS_4_18
-+	default "4.18.10"	if BR2_KERNEL_HEADERS_4_18
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+Asaf Kahlon (23):
+  python-attrs: bump to version 18.2.0
+  python-autobahn: bump to version 18.9.2
+  python-automat: bump to version 0.7.0
+  python-hyperlink: bump to version 18.0.0
+  python-incremental: bump to version 17.5.0
+  python-jinja2: bump to version 2.10
+  python-lmdb: bump to version 0.94
+  python-psutil: bump to version 5.4.7
+  python-pycparser: bump to version 2.19
+  python-pynacl: bump to version 1.2.1
+  python-pyopenssl: bump to version 18.0.0
+  python-sdnotify: bump to version 0.3.2
+  python-sortedcontainers: bump to version 2.0.5
+  python-txaio: bump to version 18.8.1
+  python-txtorcon: bump to version 18.0.2
+  python-u-msgpack: bump to version 2.5.0
+  python-zope-interface: bump to version 4.5.0
+  python-pytrie: bump to version 0.3.1
+  python-passlib: new package
+  python-pyasn1-modules: new package
+  python-pyhamcrest: new package
+  python-twisted: bump to version 18.7.0
+  python-crossbar: bump to version 18.9.2
+
+ DEVELOPERS                                    |   3 +
+ package/Config.in                             |   3 +
+ package/python-attrs/python-attrs.hash        |   8 +-
+ package/python-attrs/python-attrs.mk          |   4 +-
+ package/python-autobahn/python-autobahn.hash  |   8 +-
+ package/python-autobahn/python-autobahn.mk    |   4 +-
+ package/python-automat/python-automat.hash    |   8 +-
+ package/python-automat/python-automat.mk      |   4 +-
+ .../0002-Remove-idna-requirement.patch        |  26 +++
+ .../0002-Rework-runtime-dependencies.patch    |  37 ----
+ package/python-crossbar/Config.in             |  19 +--
+ package/python-crossbar/python-crossbar.hash  |   7 +-
+ package/python-crossbar/python-crossbar.mk    |   4 +-
+ package/python-hyperlink/Config.in            |   1 +
+ .../python-hyperlink/python-hyperlink.hash    |   8 +-
+ package/python-hyperlink/python-hyperlink.mk  |   4 +-
+ .../python-incremental.hash                   |   8 +-
+ .../python-incremental/python-incremental.mk  |   4 +-
+ package/python-jinja2/python-jinja2.hash      |   8 +-
+ package/python-jinja2/python-jinja2.mk        |   4 +-
+ package/python-lmdb/python-lmdb.hash          |   7 +-
+ package/python-lmdb/python-lmdb.mk            |   5 +-
+ package/python-passlib/Config.in              |   7 +
+ package/python-passlib/python-passlib.hash    |   5 +
+ package/python-passlib/python-passlib.mk      |  14 ++
+ package/python-psutil/python-psutil.hash      |   8 +-
+ package/python-psutil/python-psutil.mk        |   4 +-
+ package/python-pyasn1-modules/Config.in       |   7 +
+ .../python-pyasn1-modules.hash                |   5 +
+ .../python-pyasn1-modules.mk                  |  14 ++
+ .../python-pycparser/python-pycparser.hash    |   8 +-
+ package/python-pycparser/python-pycparser.mk  |   4 +-
+ package/python-pyhamcrest/Config.in           |   8 +
+ .../python-pyhamcrest/python-pyhamcrest.hash  |   5 +
+ .../python-pyhamcrest/python-pyhamcrest.mk    |  14 ++
+ package/python-pynacl/python-pynacl.hash      |   8 +-
+ package/python-pynacl/python-pynacl.mk        |   4 +-
+ .../python-pyopenssl/python-pyopenssl.hash    |   8 +-
+ package/python-pyopenssl/python-pyopenssl.mk  |   4 +-
+ package/python-pytrie/Config.in               |   1 +
+ package/python-pytrie/python-pytrie.hash      |   8 +-
+ package/python-pytrie/python-pytrie.mk        |   8 +-
+ package/python-sdnotify/python-sdnotify.hash  |   9 +-
+ package/python-sdnotify/python-sdnotify.mk    |   4 +-
+ .../python-sortedcontainers.hash              |   8 +-
+ .../python-sortedcontainers.mk                |   4 +-
+ .../0001-Fix-syntax-for-python3.7.patch       | 160 ++++++++++++++++++
+ package/python-twisted/Config.in              |   2 +
+ package/python-twisted/python-twisted.hash    |   8 +-
+ package/python-twisted/python-twisted.mk      |   4 +-
+ package/python-txaio/python-txaio.hash        |   9 +-
+ package/python-txaio/python-txaio.mk          |   4 +-
+ package/python-txtorcon/python-txtorcon.hash  |   9 +-
+ package/python-txtorcon/python-txtorcon.mk    |   4 +-
+ .../python-u-msgpack/python-u-msgpack.hash    |   8 +-
+ package/python-u-msgpack/python-u-msgpack.mk  |   4 +-
+ .../python-zope-interface.hash                |   9 +-
+ .../python-zope-interface.mk                  |   4 +-
+ 58 files changed, 425 insertions(+), 153 deletions(-)
+ create mode 100644 package/python-crossbar/0002-Remove-idna-requirement.patch
+ delete mode 100644 package/python-crossbar/0002-Rework-runtime-dependencies.patch
+ create mode 100644 package/python-passlib/Config.in
+ create mode 100644 package/python-passlib/python-passlib.hash
+ create mode 100644 package/python-passlib/python-passlib.mk
+ create mode 100644 package/python-pyasn1-modules/Config.in
+ create mode 100644 package/python-pyasn1-modules/python-pyasn1-modules.hash
+ create mode 100644 package/python-pyasn1-modules/python-pyasn1-modules.mk
+ create mode 100644 package/python-pyhamcrest/Config.in
+ create mode 100644 package/python-pyhamcrest/python-pyhamcrest.hash
+ create mode 100644 package/python-pyhamcrest/python-pyhamcrest.mk
+ create mode 100644 package/python-twisted/0001-Fix-syntax-for-python3.7.patch
+
 -- 
-2.7.4
+2.17.1
