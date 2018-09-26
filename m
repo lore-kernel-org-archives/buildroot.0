@@ -1,42 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Sep 2018 19:47:40 +0200
-Subject: [Buildroot] [PATCH] wireguard: bump version to 0.0.20180925
-Message-ID: <20180926174740.23491-1-peter@korsgaard.com>
+Date: Wed, 26 Sep 2018 19:51:30 +0200
+Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.18.10
+In-Reply-To: <1537965899-8253-1-git-send-email-festevam@gmail.com> (Fabio
+ Estevam's message of "Wed, 26 Sep 2018 09:44:58 -0300")
+References: <1537965899-8253-1-git-send-email-festevam@gmail.com>
+Message-ID: <87zhw46tb1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireguard/wireguard.hash | 4 ++--
- package/wireguard/wireguard.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+>>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
 
-diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
-index d0cd65ad4f..fe6439fbc2 100644
---- a/package/wireguard/wireguard.hash
-+++ b/package/wireguard/wireguard.hash
-@@ -1,4 +1,4 @@
--# From https://lists.zx2c4.com/pipermail/wireguard/2018-July/003112.html
--sha256 5e38d554f7d1e3a64e3a5319ca1a3b790c84ed89c896586c490a93ac1f953a91  WireGuard-0.0.20180708.tar.xz
-+# From https://lists.zx2c4.com/pipermail/wireguard/2018-September/003395.html
-+sha256 4a0488a07e40ec17e798f3e40a85cedf55f0560b1c3a8fd95806c7d4266cb0e8  WireGuard-0.0.20180925.tar.xz
- # Locally calculated
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
-index cc8ad7c4cc..faddbf93ad 100644
---- a/package/wireguard/wireguard.mk
-+++ b/package/wireguard/wireguard.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_VERSION = 0.0.20180708
-+WIREGUARD_VERSION = 0.0.20180925
- WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
- WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
- WIREGUARD_LICENSE = GPL-2.0
+ > Signed-off-by: Fabio Estevam <festevam@gmail.com>
+
+Committed, thanks.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
