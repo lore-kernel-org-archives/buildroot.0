@@ -1,195 +1,69 @@
 From: Erico Nunes <nunes.erico@gmail.com>
-Date: Thu, 27 Sep 2018 00:37:19 +0200
-Subject: [Buildroot] [PATCH v3 5/5] grub2: add usage notes for grub2 arm and
- aarch64
-In-Reply-To: <20180926223719.12604-1-nunes.erico@gmail.com>
-References: <20180926223719.12604-1-nunes.erico@gmail.com>
-Message-ID: <20180926223719.12604-6-nunes.erico@gmail.com>
+Date: Thu, 27 Sep 2018 00:38:06 +0200
+Subject: [Buildroot] [PATCH 1/1] linux-firmware: bump version and fix hash
+Message-ID: <20180926223806.12704-1-nunes.erico@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add notes to test grub2 running on ARM using qemu. The arm section
-describes how to run it using u-boot and aarch64 shows how to do it
-using efi, which is similar to what has to be done for x86_64.
+Bump the package to the most up to date version and fix the sha256 hash.
+linux-firmware was failing due to an incorrect sha256 hash, as follows:
 
-The source for OVMF builds is also changed to
-https://www.kraxel.org/repos/jenkins/edk2/ which is the source for
-nightly builds (as rpms but which can be extracted in any distribution),
-as the sourceforge link provided only very old builds.
+Fetching all references
+warning: redirecting to https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/
+remote: Counting objects: 6972, done.
+remote: Total 6972 (delta 0), reused 0 (delta 0)
+Receiving objects: 100% (6972/6972), 196.63 MiB | 4.22 MiB/s, done.
+Resolving deltas: 100% (4516/4516), done.
+From http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware
+ * [new branch]      master     -> origin/master
+warning: redirecting to https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/
+warning: refname '8d69bab7a3da1913113ea98cefb73d5fa6988286' is ambiguous.
+Git normally never creates a ref that ends with 40 hex characters
+because it will be ignored when you just specify 40-hex. These refs
+may be created by mistake. For example,
+
+  git checkout -b $br $(git rev-parse ...)
+
+where "$br" is somehow empty and a 40-hex ref is created. Please
+examine these refs and maybe delete them. Turn this message off by
+running "git config advice.objectNameWarning false"
+ERROR: linux-firmware-8d69bab7a3da1913113ea98cefb73d5fa6988286.tar.gz has wrong sha256 hash:
+ERROR: expected: 905be20e4e2d7628dea4e2e99195520fc0cce8b247faabdc52fc44a3ff2ceb04
+ERROR: got     : b9fce72a7b0b55eb311701dfd47914bc9e037134fa401d33e6e73ab9ebc9d116
+ERROR: Incomplete download, or man-in-the-middle (MITM) attack
 
 Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
 ---
- boot/grub2/readme.txt | 140 ++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 136 insertions(+), 4 deletions(-)
+ package/linux-firmware/linux-firmware.hash | 2 +-
+ package/linux-firmware/linux-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/grub2/readme.txt b/boot/grub2/readme.txt
-index f6fd4566fe..9d8448f866 100644
---- a/boot/grub2/readme.txt
-+++ b/boot/grub2/readme.txt
-@@ -53,8 +53,8 @@ To test your BIOS image in Qemu
+diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
+index b1f46b97e9..d8fdf77016 100644
+--- a/package/linux-firmware/linux-firmware.hash
++++ b/package/linux-firmware/linux-firmware.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256 905be20e4e2d7628dea4e2e99195520fc0cce8b247faabdc52fc44a3ff2ceb04 linux-firmware-8d69bab7a3da1913113ea98cefb73d5fa6988286.tar.gz
++sha256 8f419b5d0c65d0f861a2cfc634f30e7952135de71a3ebe6b7afbda091f5a94ba linux-firmware-44d4fca9922a252a0bd81f6307bcc072a78da54a.tar.gz
+ sha256 8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9 LICENCE.Abilis
+ sha256 4b3ea5d5a03c0db81bee0bcb14b30d75b30ef568597bb5be7d4dee57f434265f LICENSE.amdgpu
+ sha256 38f2037aa14631b4b29826d7a99379613c41a97064d1defdee30a7a022138b20 LICENCE.Marvell
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index c9866fd1bb..4eba57434b 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- qemu-system-{i386,x86-64} -hda disk.img
+-LINUX_FIRMWARE_VERSION = 8d69bab7a3da1913113ea98cefb73d5fa6988286
++LINUX_FIRMWARE_VERSION = 44d4fca9922a252a0bd81f6307bcc072a78da54a
+ LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
+ LINUX_FIRMWARE_SITE_METHOD = git
  
--Notes on using Grub2 for EFI-based platforms
--============================================
-+Notes on using Grub2 for x86/x86_64 EFI-based platforms
-+=======================================================
- 
- 1. Create a disk image
-    dd if=/dev/zero of=disk.img bs=1M count=32
-@@ -83,16 +83,148 @@ Notes on using Grub2 for EFI-based platforms
-    sudo losetup -d /dev/loop0
- 7. Your disk.img is ready!
- 
--To test your EFI image in Qemu
-+To test your i386/x86-64 EFI image in Qemu
- ------------------------------
- 
- 1. Download the EFI BIOS for Qemu
-    Version IA32 or X64 depending on the chosen Grub2
-    platform (i386-efi vs. x86-64-efi)
--   http://sourceforge.net/projects/edk2/files/OVMF/
-+   https://www.kraxel.org/repos/jenkins/edk2/
-+   (or use one provided by your distribution as OVMF)
- 2. Extract, and rename OVMF.fd to bios.bin and
-    CirrusLogic5446.rom to vgabios-cirrus.bin.
- 3. qemu-system-{i386,x86-64} -L ovmf-dir/ -hda disk.img
- 4. Make sure to pass pci=nocrs to the kernel command line,
-    to workaround a bug in the EFI BIOS regarding the
-    EFI framebuffer.
-+
-+Notes on using Grub2 for ARM u-boot-based platforms
-+===================================================
-+
-+The following steps are used to exemplify the arm-uboot platform working in the
-+simplest way possible and with a single buildroot-generated filesystem. The
-+steps can of course be adapted to have a more common setup (i.e. with a
-+separate boot partition).
-+
-+ 1. Load qemu_arm_vexpress_defconfig
-+ 2. Enable u-boot with the vexpress_ca9x4 board name and with u-boot.elf image
-+    format.
-+ 3. Enable grub2 for the arm-uboot platform.
-+ 4. Enable "Install kernel image to /boot in target" in the kernel menu to
-+    populate a /boot directory with zImage in it.
-+ 5. The upstream u-boot vexpress_ca9x4 doesn't have CONFIG_API enabled by
-+    default, which is required.
-+    Before building, patch u-boot (for example, make u-boot-extract to edit the
-+    source before buildling) file include/configs/vexpress_common.h to define:
-+
-+    #define CONFIG_API
-+    #define CONFIG_SYS_MMC_MAX_DEVICE   1
-+
-+ 6. Create a custom grub2 menu entries config file with the following contents
-+    and set its path in BR2_TARGET_GRUB2_CFG:
-+
-+    set default="0"
-+    set timeout="5"
-+
-+    menuentry "Buildroot" {
-+        set root='(hd0)'
-+        linux /boot/zImage root=/dev/mmcblk0 console=ttyAMA0
-+        devicetree /boot/vexpress-v2p-ca9.dtb
-+    }
-+
-+ 7. Create a custom builtin config file with the following contents and set its
-+    path in BR2_TARGET_GRUB2_BUILTIN_CONFIG:
-+
-+    set root=(hd0)
-+    set prefix=/boot/grub
-+
-+ 8. Create a custom post-build script which copies files from
-+    ${BINARIES_DIR}/boot-part to $(TARGET_DIR)/boot (set its path in
-+    BR2_ROOTFS_POST_BUILD_SCRIPT):
-+
-+    #!/bin/sh
-+    cp -r ${BINARIES_DIR}/boot-part/* ${TARGET_DIR}/boot/
-+
-+ 9. make
-+10. Run qemu with:
-+
-+    qemu-system-arm -M vexpress-a9 -kernel output/images/u-boot -m 1024 \
-+    -nographic -sd output/images/rootfs.ext2
-+
-+11. In u-boot, stop at the prompt and run grub2 with:
-+
-+  => ext2load mmc 0:0 ${loadaddr} /boot/grub/grub.img
-+  => bootm
-+
-+12. This should bring the grub2 menu, upon which selecting the "Buildroot"
-+    entry should boot Linux.
-+
-+
-+Notes on using Grub2 for Aarch64 EFI-based platforms
-+====================================================
-+
-+The following steps are used to exemplify the arm64-efi platform with the use
-+of qemu and EFI firmware built for qemu.
-+
-+ 1. Load qemu_aarch64_virt_defconfig
-+ 2. Enable grub2 for the arm64-efi platform.
-+ 3. Create a custom grub2 menu entries config file with the following contents
-+    and set its path in BR2_TARGET_GRUB2_CFG:
-+
-+    set default="0"
-+    set timeout="5"
-+    menuentry "Buildroot" {
-+        linux /Image console=ttyAMA0
-+    }
-+
-+ 4. Enable host genimage and create a genimage.cfg script which creates the
-+    disk image containing a EFI system partition:
-+
-+    image efi-part.vfat {
-+      vfat {
-+        file startup.nsh {
-+          image = "efi-part/startup.nsh"
-+        }
-+        file EFI {
-+          image = "efi-part/EFI"
-+        }
-+        file Image {
-+          image = "Image"
-+        }
-+      }
-+      size = 16M
-+    }
-+    image disk.img {
-+      hdimage {
-+      }
-+      partition boot {
-+        partition-type = 0xEF
-+        image = "efi-part.vfat"
-+      }
-+    }
-+
-+ 5. Create a custom post-image script  (set its path in BR2_ROOTFS_POST_IMAGE_SCRIPT):
-+
-+    BOARD_DIR="$(dirname $0)"
-+    GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-+    GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-+    rm -rf "${GENIMAGE_TMP}"
-+    genimage                              \
-+           --rootpath "${TARGET_DIR}"     \
-+           --tmppath "${GENIMAGE_TMP}"    \
-+           --inputpath "${BINARIES_DIR}"  \
-+           --outputpath "${BINARIES_DIR}" \
-+           --config "${GENIMAGE_CFG}"
-+
-+ 6. Download the EFI firmware for qemu aarch64
-+    https://www.kraxel.org/repos/jenkins/edk2/
-+    (or use one provided by your distribution as OVMF-aarch64 or AAVMF)
-+
-+ 7. Run qemu with:
-+
-+    qemu-system-aarch64 -M virt -cpu cortex-a57 -m 512 -nographic \
-+    -bios <path/to/EDK2>/QEMU_EFI.fd -hda output/images/disk.img \
-+    -netdev user,id=eth0 -device virtio-net-device,netdev=eth0
-+
-+ 8. This should bring the grub2 menu, upon which selecting the "Buildroot"
-+    entry should boot Linux.
 -- 
 2.17.1
