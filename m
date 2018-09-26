@@ -1,61 +1,105 @@
-From: Alexey Brodkin <alexey.brodkin@synopsys.com>
-Date: Wed, 26 Sep 2018 08:45:51 +0000
-Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] Your
- build results for 2018-09-25
-In-Reply-To: <20180926060016.AC795208A1@mail.bootlin.com>
-References: <20180926060016.AC795208A1@mail.bootlin.com>
-Message-ID: <7a3cab5670dacc1c6582623249e3cb284f9e4456.camel@synopsys.com>
+From: Oscar Gomez Fuente <oscargomezf@gmail.com>
+Date: Wed, 26 Sep 2018 12:53:52 +0200
+Subject: [Buildroot] Problems with the package wget version 1.19.5
+In-Reply-To: <20180919211429.3fe184ef@gmx.net>
+References: <CALtfCQbUb2Fg+ofRkupgPKmgcs3DLmna2W9NSR-H5tpVgLKQ1A@mail.gmail.com>
+ <20180919211429.3fe184ef@gmx.net>
+Message-ID: <CALtfCQayoGL14UFvd6g+X4A0bxJwYn9s5oN-hScxBrtYgbvNvw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Fabrice, all
+Hi Peter,
 
-On Wed, 2018-09-26 at 08:00 +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> This is the list of Buildroot build failures that occured on
-> 2018-09-25, and for which you are a registered architecture developer
-> or package developer. Please help us improving the quality of
-> Buildroot by investigating those build failures and sending patches to
-> fix them. Thanks!
-> 
-> Results for the 'master' branch
-> ===============================
-> 
-> Build failures related to your architectures:
+Thank you in advanced for your help.
 
-[snip]
+> Please post your .config/defconfig file (with the bare raspberrypi3_defconfig
+> wget is disabled because of the BR2_USE_WCHAR dependency (and BR2_PACKAGE_BUSYBOX_SHOW_OTHERS))?
 
->          arc | package/glibc/glibc.mk:134:... | 
-> https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_c02ca1b3dd40d4f6913d8018d7dee92d63ff24c8&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=Z74rKOsEpOUneCxYxwKcXHwrAmW8mJhNZjcWnDDJI2U&m=_10wrzVQHZ12Nbsw-A2EpVFHkZ_3yKI3PTC9Vj5P--k&s=ur517K8d54WBW2VvYY-CZM15C8p_fiSRoLj9OnE-SVI&e=
+BR2_arm=y
+BR2_cortex_a53=y
+BR2_ARM_FPU_NEON_VFPV4=y
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_TARGET_GENERIC_HOSTNAME="tstpi"
+BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot 2018.02.5 by TST"
+BR2_TARGET_GENERIC_PASSWD_SHA512=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_TARGET_GENERIC_ROOT_PASSWD="tstpi"
+BR2_SYSTEM_BIN_SH_BASH=y
+BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
+BR2_SYSTEM_DHCP="eth0"
+# BR2_ENABLE_LOCALE_PURGE is not set
+BR2_ROOTFS_POST_BUILD_SCRIPT="$(TOPDIR)/board/tst/tstpi/post-build-tstpi-3b.sh"
+BR2_ROOTFS_POST_IMAGE_SCRIPT="$(TOPDIR)/board/tst/tstpi/post-image.sh"
+BR2_ROOTFS_POST_SCRIPT_ARGS="tstpi-3p-pc --serial --ext-mon-wifi --bt"
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_GIT=y
+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="865ddc1393f558198e7e7ce70928ff2e49c4f7f6"
+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="$(TOPDIR)/board/tst/tstpi/linux-config/linux-tstpi-3b-pc.config"
+BR2_LINUX_KERNEL_DTS_SUPPORT=y
+BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-3-b bcm2710-rpi-3-b-plus
+bcm2710-rpi-cm3"
+BR2_PACKAGE_LINUX_TOOLS_CPUPOWER=y
+BR2_PACKAGE_LINUX_TOOLS_GPIO=y
+BR2_PACKAGE_LINUX_TOOLS_TMON=y
+BR2_PACKAGE_BUSYBOX_CONFIG="$(TOPDIR)/board/tst/tstpi/busybox-config/busybox-tstpi-pc.config"
+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+BR2_PACKAGE_BUSYBOX_WATCHDOG=y
+BR2_PACKAGE_CHECK=y
+BR2_PACKAGE_RPI_BT_FIRMWARE=y
+BR2_PACKAGE_RPI_FIRMWARE=y
+BR2_PACKAGE_RPI_WIFI_FIRMWARE=y
+BR2_PACKAGE_I2C_TOOLS=y
+BR2_PACKAGE_SPI_TOOLS=y
+BR2_PACKAGE_PYTHON3=y
+BR2_PACKAGE_PYTHON3_CURSES=y
+BR2_PACKAGE_PYTHON_SMBUS_CFFI=y
+BR2_PACKAGE_LIBSNDFILE=y
+BR2_PACKAGE_LIBUSB=y
+BR2_PACKAGE_WIRINGPI=y
+BR2_PACKAGE_BC=y
+BR2_PACKAGE_AIRCRACK_NG=y
+BR2_PACKAGE_BLUEZ_TOOLS=y
+BR2_PACKAGE_BLUEZ5_UTILS=y
+BR2_PACKAGE_BLUEZ5_UTILS_OBEX=y
+BR2_PACKAGE_BLUEZ5_UTILS_CLIENT=y
+BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL=y
+BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HEALTH=y
+BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MIDI=y
+BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_NFC=y
+BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_SAP=y
+BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_SIXAXIS=y
+BR2_PACKAGE_BLUEZ5_UTILS_TEST=y
+BR2_PACKAGE_BLUEZ5_TOOLS_BDADDR=y
+BR2_PACKAGE_DROPBEAR=y
+BR2_PACKAGE_ETHTOOL=y
+BR2_PACKAGE_IW=y
+BR2_PACKAGE_NETCAT=y
+BR2_PACKAGE_NTP=y
+BR2_PACKAGE_NTP_NTPDATE=y
+BR2_PACKAGE_PPPD=y
+BR2_PACKAGE_WGET=y
+BR2_PACKAGE_WPA_SUPPLICANT=y
+BR2_PACKAGE_NANO=y
+BR2_TARGET_ROOTFS_EXT2=y
+BR2_TARGET_ROOTFS_EXT2_4=y
+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+BR2_PACKAGE_HOST_DOSFSTOOLS=y
+BR2_PACKAGE_HOST_GENIMAGE=y
+BR2_PACKAGE_HOST_MTOOLS=y
 
-That happens because of https://git.buildroot.org/buildroot/commit/package/glibc/glibc.hash?id=37492e8b2d89b8e992a89f1ef6bda6afeb14433b
-which accommodates LICENSES file change in glibc 2.28.
+> Did you try a complete rebuild after changing your configuration (see [1])?
+YES
 
-I mean glibc was bumped to 2.28 in Buildroot but since for ARC glibc comes
-from not-yet accepted fork on GitHub from a tag that was not changed
-essentially LICENSES file remains the same.
+Best regards.
 
-What we may do about that:
- 1. Use patch with ARC port of glibc instead of full tarball.
-    This is nice because:
-      a) Whenever glibc version is updated within 2.28 stable series
-         ARC's toolchain gets all the upstream fixes
-      b) No ARC peculiarities in package/glibc/glibc.mk
-    Downsides are:
-      a) At some point patch might not apply if upstream change clashes with
-         contents of the patch. This IMHO is not very likely but still possible
-         as our port touches some generic glibc code as well.
-      b) Maintenance of ARC bits will be a bit more complicated but that's
-         my pain so nobody should care :)
-
- 2. Create new tag with rebased glibc on our GitHub and update GLIBC_VERSION in Buildroot
-
- 3. Somehow accommodate 2 possible LICENSES files in package/glibc/glibc.hash
-
-Any thoughts?
-
--Alexey
+Oscar Gomez Fuente
+TST Sistemas
+www.tst-sistemas.es
