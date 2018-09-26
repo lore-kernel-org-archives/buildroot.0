@@ -1,96 +1,95 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Wed, 26 Sep 2018 18:35:01 +0300
-Subject: [Buildroot] [PATCH 19/23] python-passlib: new package
+Date: Wed, 26 Sep 2018 18:35:02 +0300
+Subject: [Buildroot] [PATCH 20/23] python-pyasn1-modules: new package
 In-Reply-To: <20180926153505.3411-1-asafka7@gmail.com>
 References: <20180926153505.3411-1-asafka7@gmail.com>
-Message-ID: <20180926153505.3411-20-asafka7@gmail.com>
+Message-ID: <20180926153505.3411-21-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-comprehensive password hashing framework supporting over 30
-schemes.
+A collection of ASN.1-based protocols modules.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- DEVELOPERS                                 |  1 +
- package/Config.in                          |  1 +
- package/python-passlib/Config.in           |  7 +++++++
- package/python-passlib/python-passlib.hash |  5 +++++
- package/python-passlib/python-passlib.mk   | 14 ++++++++++++++
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ package/python-pyasn1-modules/Config.in            |  7 +++++++
+ .../python-pyasn1-modules.hash                     |  5 +++++
+ .../python-pyasn1-modules/python-pyasn1-modules.mk | 14 ++++++++++++++
  5 files changed, 28 insertions(+)
- create mode 100644 package/python-passlib/Config.in
- create mode 100644 package/python-passlib/python-passlib.hash
- create mode 100644 package/python-passlib/python-passlib.mk
+ create mode 100644 package/python-pyasn1-modules/Config.in
+ create mode 100644 package/python-pyasn1-modules/python-pyasn1-modules.hash
+ create mode 100644 package/python-pyasn1-modules/python-pyasn1-modules.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index e5cd83af0d..c2f32dd041 100644
+index c2f32dd041..986423e9a7 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -204,6 +204,7 @@ F:	package/python-engineio/
- F:	package/python-fire/
- F:	package/python-jsonmodels/
+@@ -206,6 +206,7 @@ F:	package/python-jsonmodels/
  F:	package/python-paramiko/
-+F:	package/python-passlib/
+ F:	package/python-passlib/
  F:	package/python-pyasn1/
++F:	package/python-pyasn1-modules/
  F:	package/python-pyroute2/
  F:	package/python-pytz/
+ F:	package/python-reentry/
 diff --git a/package/Config.in b/package/Config.in
-index c04645a30b..f18f32aa08 100644
+index f18f32aa08..38b4196f67 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -899,6 +899,7 @@ menu "External python modules"
- 	source "package/python-paho-mqtt/Config.in"
- 	source "package/python-pam/Config.in"
- 	source "package/python-paramiko/Config.in"
-+	source "package/python-passlib/Config.in"
- 	source "package/python-pathlib2/Config.in"
- 	source "package/python-pathpy/Config.in"
- 	source "package/python-pathtools/Config.in"
-diff --git a/package/python-passlib/Config.in b/package/python-passlib/Config.in
+@@ -920,6 +920,7 @@ menu "External python modules"
+ 	source "package/python-pyasn/Config.in"
+ 	source "package/python-pyasn-modules/Config.in"
+ 	source "package/python-pyasn1/Config.in"
++	source "package/python-pyasn1-modules/Config.in"
+ 	source "package/python-pycli/Config.in"
+ 	source "package/python-pycparser/Config.in"
+ 	source "package/python-pycrypto/Config.in"
+diff --git a/package/python-pyasn1-modules/Config.in b/package/python-pyasn1-modules/Config.in
 new file mode 100644
-index 0000000000..23546a18a5
+index 0000000000..6aff4d935b
 --- /dev/null
-+++ b/package/python-passlib/Config.in
++++ b/package/python-pyasn1-modules/Config.in
 @@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_PASSLIB
-+	bool "python-passlib"
++config BR2_PACKAGE_PYTHON_PYASN1_MODULES
++	bool "python-pyasn1-modules"
++	select BR2_PACKAGE_PYTHON_PYASN1 # runtime
 +	help
-+	  comprehensive password hashing framework supporting over 30
-+	  schemes.
++	  A collection of ASN.1-based protocols modules.
 +
-+	  https://bitbucket.org/ecollins/passlib
-diff --git a/package/python-passlib/python-passlib.hash b/package/python-passlib/python-passlib.hash
++	  https://github.com/etingof/pyasn1-modules
+diff --git a/package/python-pyasn1-modules/python-pyasn1-modules.hash b/package/python-pyasn1-modules/python-pyasn1-modules.hash
 new file mode 100644
-index 0000000000..8e7f790af0
+index 0000000000..7c7f02461f
 --- /dev/null
-+++ b/package/python-passlib/python-passlib.hash
++++ b/package/python-pyasn1-modules/python-pyasn1-modules.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/passlib/json
-+md5	254869dae3fd9f09f0746a3cb29a0b15  passlib-1.7.1.tar.gz
-+sha256	3d948f64138c25633613f303bcc471126eae67c04d5e3f6b7b8ce6242f8653e0  passlib-1.7.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/pyasn1-modules/json
++md5	65ce1ea1021679bffe96065baab232de  pyasn1-modules-0.2.2.tar.gz
++sha256	a0cf3e1842e7c60fde97cb22d275eb6f9524f5c5250489e292529de841417547  pyasn1-modules-0.2.2.tar.gz
 +# Locally computed sha256 checksums
-+sha256	ae8cd74bd5be7be586c52def8bcddfe817872cf2e0782b159d37f88bf0ff11fc  LICENSE
-diff --git a/package/python-passlib/python-passlib.mk b/package/python-passlib/python-passlib.mk
++sha256	f82128f64d567c333936a12b99a21d0e8cd66ce628d51ce0a7770cc38dc7fe43  LICENSE.txt
+diff --git a/package/python-pyasn1-modules/python-pyasn1-modules.mk b/package/python-pyasn1-modules/python-pyasn1-modules.mk
 new file mode 100644
-index 0000000000..fe8c302467
+index 0000000000..dbdf82e6ee
 --- /dev/null
-+++ b/package/python-passlib/python-passlib.mk
++++ b/package/python-pyasn1-modules/python-pyasn1-modules.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-passlib
++# python-pyasn1-modules
 +#
 +################################################################################
 +
-+PYTHON_PASSLIB_VERSION = 1.7.1
-+PYTHON_PASSLIB_SOURCE = passlib-$(PYTHON_PASSLIB_VERSION).tar.gz
-+PYTHON_PASSLIB_SITE = https://files.pythonhosted.org/packages/25/4b/6fbfc66aabb3017cd8c3bd97b37f769d7503ead2899bf76e570eb91270de
-+PYTHON_PASSLIB_SETUP_TYPE = setuptools
-+PYTHON_PASSLIB_LICENSE = BSD
-+PYTHON_PASSLIB_LICENSE_FILES = LICENSE
++PYTHON_PYASN1_MODULES_VERSION = 0.2.2
++PYTHON_PYASN1_MODULES_SOURCE = pyasn1-modules-$(PYTHON_PYASN1_MODULES_VERSION).tar.gz
++PYTHON_PYASN1_MODULES_SITE = https://files.pythonhosted.org/packages/37/33/74ebdc52be534e683dc91faf263931bc00ae05c6073909fde53999088541
++PYTHON_PYASN1_MODULES_SETUP_TYPE = setuptools
++PYTHON_PYASN1_MODULES_LICENSE = BSD-2-Clause
++PYTHON_PYASN1_MODULES_LICENSE_FILES = LICENSE.txt
 +
 +$(eval $(python-package))
 -- 
