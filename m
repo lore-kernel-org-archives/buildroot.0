@@ -1,53 +1,70 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Wed, 26 Sep 2018 18:34:59 +0300
-Subject: [Buildroot] [PATCH 17/23] python-zope-interface: bump to version
- 4.5.0
+Date: Wed, 26 Sep 2018 18:35:00 +0300
+Subject: [Buildroot] [PATCH 18/23] python-pytrie: bump to version 0.3.1
 In-Reply-To: <20180926153505.3411-1-asafka7@gmail.com>
 References: <20180926153505.3411-1-asafka7@gmail.com>
-Message-ID: <20180926153505.3411-18-asafka7@gmail.com>
+Message-ID: <20180926153505.3411-19-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix indentation for license hash.
+For some reason (probably not on purpose) the license file was
+removed from MANIFEST.in, and it's not available after package extraction.
+I replaced it with PKG-INFO for now, and opened a PR on github:
+https://github.com/gsakkis/pytrie/pull/3
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-zope-interface/python-zope-interface.hash | 9 +++++----
- package/python-zope-interface/python-zope-interface.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/python-pytrie/Config.in          | 1 +
+ package/python-pytrie/python-pytrie.hash | 8 +++++---
+ package/python-pytrie/python-pytrie.mk   | 8 ++++----
+ 3 files changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-zope-interface/python-zope-interface.hash b/package/python-zope-interface/python-zope-interface.hash
-index 2aa07335a4..94493e127f 100644
---- a/package/python-zope-interface/python-zope-interface.hash
-+++ b/package/python-zope-interface/python-zope-interface.hash
-@@ -1,4 +1,5 @@
--# md5 from https://pypi.python.org/pypi/zope.interface/json, sha256 locally computed
--md5	8700a4f527c1203b34b10c2b4e7a6912  zope.interface-4.4.3.tar.gz
--sha256	d6d26d5dfbfd60c65152938fcb82f949e8dada37c041f72916fef6621ba5c5ce  zope.interface-4.4.3.tar.gz
--sha256  3e671db11df687516cc1db5b3d65e4aa383eaca3c20cea3faf53a0f7335d0a3c  LICENSE.txt
-+# md5, sha256 from https://pypi.org/pypi/zope-interface/json
-+md5	7b669cd692d817772c61d2e3ad0f1e71  zope.interface-4.5.0.tar.gz
-+sha256	57c38470d9f57e37afb460c399eb254e7193ac7fb8042bd09bdc001981a9c74c  zope.interface-4.5.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	3e671db11df687516cc1db5b3d65e4aa383eaca3c20cea3faf53a0f7335d0a3c  LICENSE.txt
-diff --git a/package/python-zope-interface/python-zope-interface.mk b/package/python-zope-interface/python-zope-interface.mk
-index 7dd6812976..10bb70fa53 100644
---- a/package/python-zope-interface/python-zope-interface.mk
-+++ b/package/python-zope-interface/python-zope-interface.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-pytrie/Config.in b/package/python-pytrie/Config.in
+index fb1df41d0a..156638476c 100644
+--- a/package/python-pytrie/Config.in
++++ b/package/python-pytrie/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_PYTRIE
+ 	bool "python-pytrie"
++	select BR2_PACKAGE_PYTHON_SORTEDCONTAINERS # runtime
+ 	help
+ 	  A pure Python implementation of the trie data structure.
+ 
+diff --git a/package/python-pytrie/python-pytrie.hash b/package/python-pytrie/python-pytrie.hash
+index 88d2542a8d..3bc1f6e9a7 100644
+--- a/package/python-pytrie/python-pytrie.hash
++++ b/package/python-pytrie/python-pytrie.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=5997b46c854a68bc588f4527c987663a, sha256 locally computed.
+-md5	5997b46c854a68bc588f4527c987663a  PyTrie-0.2.tar.gz
+-sha256	b272021351efadc6757591aac03ed4794bdfd091122204a4673e94bfb66cc500  PyTrie-0.2.tar.gz
++# md5, sha256 from https://pypi.org/pypi/pytrie/json
++md5	f7c7184124013abcc18a3e3b638d32ae  PyTrie-0.3.1.tar.gz
++sha256	3bb7d122a549d8006c9cba2feecac20bceda9f8c0e2a3fa99a5584cfe0dec523  PyTrie-0.3.1.tar.gz
++# Locally computed sha256
++sha256	153931d44112319a1e1653752c881fb7ef092f636db31f4c36b252666e95efbd  PKG-INFO
+diff --git a/package/python-pytrie/python-pytrie.mk b/package/python-pytrie/python-pytrie.mk
+index 0fe78fdb17..b8264fa2be 100644
+--- a/package/python-pytrie/python-pytrie.mk
++++ b/package/python-pytrie/python-pytrie.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PYTHON_ZOPE_INTERFACE_VERSION = 4.4.3
-+PYTHON_ZOPE_INTERFACE_VERSION = 4.5.0
- PYTHON_ZOPE_INTERFACE_SOURCE = zope.interface-$(PYTHON_ZOPE_INTERFACE_VERSION).tar.gz
--PYTHON_ZOPE_INTERFACE_SITE = https://pypi.python.org/packages/bd/d2/25349ed41f9dcff7b3baf87bd88a4c82396cf6e02f1f42bb68657a3132af
-+PYTHON_ZOPE_INTERFACE_SITE = https://files.pythonhosted.org/packages/ac/8a/657532df378c2cd2a1fe6b12be3b4097521570769d4852ec02c24bd3594e
- PYTHON_ZOPE_INTERFACE_SETUP_TYPE = setuptools
- PYTHON_ZOPE_INTERFACE_LICENSE = ZPL-2.1
- PYTHON_ZOPE_INTERFACE_LICENSE_FILES = LICENSE.txt
+-PYTHON_PYTRIE_VERSION = 0.2
+-PYTHON_PYTRIE_SITE = https://pypi.python.org/packages/source/P/PyTrie
++PYTHON_PYTRIE_VERSION = 0.3.1
+ PYTHON_PYTRIE_SOURCE = PyTrie-$(PYTHON_PYTRIE_VERSION).tar.gz
+ PYTHON_PYTRIE_LICENSE = BSD-3-Clause
+-PYTHON_PYTRIE_LICENSE_FILES = LICENSE
+-PYTHON_PYTRIE_SETUP_TYPE = distutils
++PYTHON_PYTRIE_LICENSE_FILES = PKG-INFO
++PYTHON_PYTRIE_SITE = https://files.pythonhosted.org/packages/e1/eb/ae1f098969c9e9b81e821fb8e916cbf720b900ec1c0f3359e47a427395ec
++PYTHON_PYTRIE_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
 -- 
 2.17.1
