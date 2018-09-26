@@ -1,105 +1,42 @@
-From: Oscar Gomez Fuente <oscargomezf@gmail.com>
-Date: Wed, 26 Sep 2018 12:53:52 +0200
-Subject: [Buildroot] Problems with the package wget version 1.19.5
-In-Reply-To: <20180919211429.3fe184ef@gmx.net>
-References: <CALtfCQbUb2Fg+ofRkupgPKmgcs3DLmna2W9NSR-H5tpVgLKQ1A@mail.gmail.com>
- <20180919211429.3fe184ef@gmx.net>
-Message-ID: <CALtfCQayoGL14UFvd6g+X4A0bxJwYn9s5oN-hScxBrtYgbvNvw@mail.gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed, 26 Sep 2018 09:44:58 -0300
+Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.18.10
+Message-ID: <1537965899-8253-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ linux/Config.in  | 2 +-
+ linux/linux.hash | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thank you in advanced for your help.
-
-> Please post your .config/defconfig file (with the bare raspberrypi3_defconfig
-> wget is disabled because of the BR2_USE_WCHAR dependency (and BR2_PACKAGE_BUSYBOX_SHOW_OTHERS))?
-
-BR2_arm=y
-BR2_cortex_a53=y
-BR2_ARM_FPU_NEON_VFPV4=y
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_TARGET_GENERIC_HOSTNAME="tstpi"
-BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot 2018.02.5 by TST"
-BR2_TARGET_GENERIC_PASSWD_SHA512=y
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-BR2_TARGET_GENERIC_ROOT_PASSWD="tstpi"
-BR2_SYSTEM_BIN_SH_BASH=y
-BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
-BR2_SYSTEM_DHCP="eth0"
-# BR2_ENABLE_LOCALE_PURGE is not set
-BR2_ROOTFS_POST_BUILD_SCRIPT="$(TOPDIR)/board/tst/tstpi/post-build-tstpi-3b.sh"
-BR2_ROOTFS_POST_IMAGE_SCRIPT="$(TOPDIR)/board/tst/tstpi/post-image.sh"
-BR2_ROOTFS_POST_SCRIPT_ARGS="tstpi-3p-pc --serial --ext-mon-wifi --bt"
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_GIT=y
-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="865ddc1393f558198e7e7ce70928ff2e49c4f7f6"
-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="$(TOPDIR)/board/tst/tstpi/linux-config/linux-tstpi-3b-pc.config"
-BR2_LINUX_KERNEL_DTS_SUPPORT=y
-BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-3-b bcm2710-rpi-3-b-plus
-bcm2710-rpi-cm3"
-BR2_PACKAGE_LINUX_TOOLS_CPUPOWER=y
-BR2_PACKAGE_LINUX_TOOLS_GPIO=y
-BR2_PACKAGE_LINUX_TOOLS_TMON=y
-BR2_PACKAGE_BUSYBOX_CONFIG="$(TOPDIR)/board/tst/tstpi/busybox-config/busybox-tstpi-pc.config"
-BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-BR2_PACKAGE_BUSYBOX_WATCHDOG=y
-BR2_PACKAGE_CHECK=y
-BR2_PACKAGE_RPI_BT_FIRMWARE=y
-BR2_PACKAGE_RPI_FIRMWARE=y
-BR2_PACKAGE_RPI_WIFI_FIRMWARE=y
-BR2_PACKAGE_I2C_TOOLS=y
-BR2_PACKAGE_SPI_TOOLS=y
-BR2_PACKAGE_PYTHON3=y
-BR2_PACKAGE_PYTHON3_CURSES=y
-BR2_PACKAGE_PYTHON_SMBUS_CFFI=y
-BR2_PACKAGE_LIBSNDFILE=y
-BR2_PACKAGE_LIBUSB=y
-BR2_PACKAGE_WIRINGPI=y
-BR2_PACKAGE_BC=y
-BR2_PACKAGE_AIRCRACK_NG=y
-BR2_PACKAGE_BLUEZ_TOOLS=y
-BR2_PACKAGE_BLUEZ5_UTILS=y
-BR2_PACKAGE_BLUEZ5_UTILS_OBEX=y
-BR2_PACKAGE_BLUEZ5_UTILS_CLIENT=y
-BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL=y
-BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HEALTH=y
-BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MIDI=y
-BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_NFC=y
-BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_SAP=y
-BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_SIXAXIS=y
-BR2_PACKAGE_BLUEZ5_UTILS_TEST=y
-BR2_PACKAGE_BLUEZ5_TOOLS_BDADDR=y
-BR2_PACKAGE_DROPBEAR=y
-BR2_PACKAGE_ETHTOOL=y
-BR2_PACKAGE_IW=y
-BR2_PACKAGE_NETCAT=y
-BR2_PACKAGE_NTP=y
-BR2_PACKAGE_NTP_NTPDATE=y
-BR2_PACKAGE_PPPD=y
-BR2_PACKAGE_WGET=y
-BR2_PACKAGE_WPA_SUPPLICANT=y
-BR2_PACKAGE_NANO=y
-BR2_TARGET_ROOTFS_EXT2=y
-BR2_TARGET_ROOTFS_EXT2_4=y
-BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-BR2_PACKAGE_HOST_DOSFSTOOLS=y
-BR2_PACKAGE_HOST_GENIMAGE=y
-BR2_PACKAGE_HOST_MTOOLS=y
-
-> Did you try a complete rebuild after changing your configuration (see [1])?
-YES
-
-Best regards.
-
-Oscar Gomez Fuente
-TST Sistemas
-www.tst-sistemas.es
+diff --git a/linux/Config.in b/linux/Config.in
+index 3a270c5..235018c 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -120,7 +120,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.18.9" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.18.10" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.138-cip25" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 589e5f8..9e37af4 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256 4c995351e57902a04a94e43796407b4ba295c8eae070c27e99f8f99c321e917a  linux-4.18.9.tar.xz
++sha256 10604f7f8ccab5e7ce71f2e87d1410be679cd11c29c6c608ce35df1db40991de  linux-4.18.10.tar.xz
+ sha256 41026d713ba4f7a5e9d514b876ce4ed28a1d993c0c58b42b2a2597d6a0e83021  linux-4.16.18.tar.xz
+ sha256 76a4473dbcbd922c23a16130414829a36eb7e2f4e5859bd1b742fffdff907489  linux-4.14.71.tar.xz
+ sha256 bdb76f48491a6aadc89c0f0f7fdc240d77cee54da5aac59da0b5d98e226b6f12  linux-4.9.128.tar.xz
+-- 
+2.7.4
