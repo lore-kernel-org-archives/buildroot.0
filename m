@@ -1,157 +1,195 @@
 From: Erico Nunes <nunes.erico@gmail.com>
-Date: Thu, 27 Sep 2018 00:37:18 +0200
-Subject: [Buildroot] [PATCH v3 4/5] configs/aarch64_efi_defconfig: new
- defconfig
+Date: Thu, 27 Sep 2018 00:37:19 +0200
+Subject: [Buildroot] [PATCH v3 5/5] grub2: add usage notes for grub2 arm and
+ aarch64
 In-Reply-To: <20180926223719.12604-1-nunes.erico@gmail.com>
 References: <20180926223719.12604-1-nunes.erico@gmail.com>
-Message-ID: <20180926223719.12604-5-nunes.erico@gmail.com>
+Message-ID: <20180926223719.12604-6-nunes.erico@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-New generic defconfig for aarch64, to run on aarch64 servers compliant
-with EFI firmware and ACPI.
-This can also be tested with qemu, and is useful so that we have an arm
-defconfig with grub enabled.
-Tested with qemu 2.11.2 and AAVMF, the aarch64 virtual machine UEFI
-firmware.
+Add notes to test grub2 running on ARM using qemu. The arm section
+describes how to run it using u-boot and aarch64 shows how to do it
+using efi, which is similar to what has to be done for x86_64.
+
+The source for OVMF builds is also changed to
+https://www.kraxel.org/repos/jenkins/edk2/ which is the source for
+nightly builds (as rpms but which can be extracted in any distribution),
+as the sourceforge link provided only very old builds.
 
 Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
 ---
- board/aarch64-efi/genimage-efi.cfg | 30 +++++++++++++++++++++++++++
- board/aarch64-efi/grub.cfg         |  6 ++++++
- board/aarch64-efi/post-image.sh    |  5 +++++
- board/aarch64-efi/readme.txt       | 17 +++++++++++++++
- configs/aarch64_efi_defconfig      | 33 ++++++++++++++++++++++++++++++
- 5 files changed, 91 insertions(+)
- create mode 100644 board/aarch64-efi/genimage-efi.cfg
- create mode 100644 board/aarch64-efi/grub.cfg
- create mode 100755 board/aarch64-efi/post-image.sh
- create mode 100644 board/aarch64-efi/readme.txt
- create mode 100644 configs/aarch64_efi_defconfig
+ boot/grub2/readme.txt | 140 ++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 136 insertions(+), 4 deletions(-)
 
-diff --git a/board/aarch64-efi/genimage-efi.cfg b/board/aarch64-efi/genimage-efi.cfg
-new file mode 100644
-index 0000000000..f93ab9d64f
---- /dev/null
-+++ b/board/aarch64-efi/genimage-efi.cfg
-@@ -0,0 +1,30 @@
-+image efi-part.vfat {
-+  vfat {
-+    file startup.nsh {
-+      image = "efi-part/startup.nsh"
+diff --git a/boot/grub2/readme.txt b/boot/grub2/readme.txt
+index f6fd4566fe..9d8448f866 100644
+--- a/boot/grub2/readme.txt
++++ b/boot/grub2/readme.txt
+@@ -53,8 +53,8 @@ To test your BIOS image in Qemu
+ 
+ qemu-system-{i386,x86-64} -hda disk.img
+ 
+-Notes on using Grub2 for EFI-based platforms
+-============================================
++Notes on using Grub2 for x86/x86_64 EFI-based platforms
++=======================================================
+ 
+ 1. Create a disk image
+    dd if=/dev/zero of=disk.img bs=1M count=32
+@@ -83,16 +83,148 @@ Notes on using Grub2 for EFI-based platforms
+    sudo losetup -d /dev/loop0
+ 7. Your disk.img is ready!
+ 
+-To test your EFI image in Qemu
++To test your i386/x86-64 EFI image in Qemu
+ ------------------------------
+ 
+ 1. Download the EFI BIOS for Qemu
+    Version IA32 or X64 depending on the chosen Grub2
+    platform (i386-efi vs. x86-64-efi)
+-   http://sourceforge.net/projects/edk2/files/OVMF/
++   https://www.kraxel.org/repos/jenkins/edk2/
++   (or use one provided by your distribution as OVMF)
+ 2. Extract, and rename OVMF.fd to bios.bin and
+    CirrusLogic5446.rom to vgabios-cirrus.bin.
+ 3. qemu-system-{i386,x86-64} -L ovmf-dir/ -hda disk.img
+ 4. Make sure to pass pci=nocrs to the kernel command line,
+    to workaround a bug in the EFI BIOS regarding the
+    EFI framebuffer.
++
++Notes on using Grub2 for ARM u-boot-based platforms
++===================================================
++
++The following steps are used to exemplify the arm-uboot platform working in the
++simplest way possible and with a single buildroot-generated filesystem. The
++steps can of course be adapted to have a more common setup (i.e. with a
++separate boot partition).
++
++ 1. Load qemu_arm_vexpress_defconfig
++ 2. Enable u-boot with the vexpress_ca9x4 board name and with u-boot.elf image
++    format.
++ 3. Enable grub2 for the arm-uboot platform.
++ 4. Enable "Install kernel image to /boot in target" in the kernel menu to
++    populate a /boot directory with zImage in it.
++ 5. The upstream u-boot vexpress_ca9x4 doesn't have CONFIG_API enabled by
++    default, which is required.
++    Before building, patch u-boot (for example, make u-boot-extract to edit the
++    source before buildling) file include/configs/vexpress_common.h to define:
++
++    #define CONFIG_API
++    #define CONFIG_SYS_MMC_MAX_DEVICE   1
++
++ 6. Create a custom grub2 menu entries config file with the following contents
++    and set its path in BR2_TARGET_GRUB2_CFG:
++
++    set default="0"
++    set timeout="5"
++
++    menuentry "Buildroot" {
++        set root='(hd0)'
++        linux /boot/zImage root=/dev/mmcblk0 console=ttyAMA0
++        devicetree /boot/vexpress-v2p-ca9.dtb
 +    }
-+    file EFI {
-+      image = "efi-part/EFI"
++
++ 7. Create a custom builtin config file with the following contents and set its
++    path in BR2_TARGET_GRUB2_BUILTIN_CONFIG:
++
++    set root=(hd0)
++    set prefix=/boot/grub
++
++ 8. Create a custom post-build script which copies files from
++    ${BINARIES_DIR}/boot-part to $(TARGET_DIR)/boot (set its path in
++    BR2_ROOTFS_POST_BUILD_SCRIPT):
++
++    #!/bin/sh
++    cp -r ${BINARIES_DIR}/boot-part/* ${TARGET_DIR}/boot/
++
++ 9. make
++10. Run qemu with:
++
++    qemu-system-arm -M vexpress-a9 -kernel output/images/u-boot -m 1024 \
++    -nographic -sd output/images/rootfs.ext2
++
++11. In u-boot, stop at the prompt and run grub2 with:
++
++  => ext2load mmc 0:0 ${loadaddr} /boot/grub/grub.img
++  => bootm
++
++12. This should bring the grub2 menu, upon which selecting the "Buildroot"
++    entry should boot Linux.
++
++
++Notes on using Grub2 for Aarch64 EFI-based platforms
++====================================================
++
++The following steps are used to exemplify the arm64-efi platform with the use
++of qemu and EFI firmware built for qemu.
++
++ 1. Load qemu_aarch64_virt_defconfig
++ 2. Enable grub2 for the arm64-efi platform.
++ 3. Create a custom grub2 menu entries config file with the following contents
++    and set its path in BR2_TARGET_GRUB2_CFG:
++
++    set default="0"
++    set timeout="5"
++    menuentry "Buildroot" {
++        linux /Image console=ttyAMA0
 +    }
-+    file Image {
-+      image = "Image"
++
++ 4. Enable host genimage and create a genimage.cfg script which creates the
++    disk image containing a EFI system partition:
++
++    image efi-part.vfat {
++      vfat {
++        file startup.nsh {
++          image = "efi-part/startup.nsh"
++        }
++        file EFI {
++          image = "efi-part/EFI"
++        }
++        file Image {
++          image = "Image"
++        }
++      }
++      size = 16M
 +    }
-+  }
-+  size = 32M
-+}
++    image disk.img {
++      hdimage {
++      }
++      partition boot {
++        partition-type = 0xEF
++        image = "efi-part.vfat"
++      }
++    }
 +
-+image disk.img {
++ 5. Create a custom post-image script  (set its path in BR2_ROOTFS_POST_IMAGE_SCRIPT):
 +
-+  hdimage {
-+  }
++    BOARD_DIR="$(dirname $0)"
++    GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
++    GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++    rm -rf "${GENIMAGE_TMP}"
++    genimage                              \
++           --rootpath "${TARGET_DIR}"     \
++           --tmppath "${GENIMAGE_TMP}"    \
++           --inputpath "${BINARIES_DIR}"  \
++           --outputpath "${BINARIES_DIR}" \
++           --config "${GENIMAGE_CFG}"
 +
-+  partition boot {
-+    partition-type = 0xEF
-+    image = "efi-part.vfat"
-+  }
++ 6. Download the EFI firmware for qemu aarch64
++    https://www.kraxel.org/repos/jenkins/edk2/
++    (or use one provided by your distribution as OVMF-aarch64 or AAVMF)
 +
-+  partition root {
-+    partition-type = 0x83
-+    image = "rootfs.ext2"
-+  }
-+}
-diff --git a/board/aarch64-efi/grub.cfg b/board/aarch64-efi/grub.cfg
-new file mode 100644
-index 0000000000..ab88da91b9
---- /dev/null
-+++ b/board/aarch64-efi/grub.cfg
-@@ -0,0 +1,6 @@
-+set default="0"
-+set timeout="5"
++ 7. Run qemu with:
 +
-+menuentry "Buildroot" {
-+	linux /Image root=/dev/vda2 rootwait console=ttyAMA0
-+}
-diff --git a/board/aarch64-efi/post-image.sh b/board/aarch64-efi/post-image.sh
-new file mode 100755
-index 0000000000..f0214dc866
---- /dev/null
-+++ b/board/aarch64-efi/post-image.sh
-@@ -0,0 +1,5 @@
-+#!/bin/sh
++    qemu-system-aarch64 -M virt -cpu cortex-a57 -m 512 -nographic \
++    -bios <path/to/EDK2>/QEMU_EFI.fd -hda output/images/disk.img \
++    -netdev user,id=eth0 -device virtio-net-device,netdev=eth0
 +
-+BOARD_DIR="$(dirname $0)"
-+
-+cp -f ${BOARD_DIR}/grub.cfg ${BINARIES_DIR}/efi-part/EFI/BOOT/grub.cfg
-diff --git a/board/aarch64-efi/readme.txt b/board/aarch64-efi/readme.txt
-new file mode 100644
-index 0000000000..e62278f6d2
---- /dev/null
-+++ b/board/aarch64-efi/readme.txt
-@@ -0,0 +1,17 @@
-+Run the emulation with:
-+
-+qemu-system-aarch64 \
-+	-M virt \
-+	-cpu cortex-a57 \
-+	-m 512 \
-+	-nographic \
-+	-bios </path/to/QEMU_EFI.fd> \
-+	-drive file=output/images/disk.img,if=none,format=raw,id=hd0 \
-+	-device virtio-blk-device,drive=hd0 \
-+	-netdev user,id=eth0 \
-+	-device virtio-net-device,netdev=eth0
-+
-+Note that </path/to/QEMU_EFI.fd> needs to point to a valid aarch64 UEFI
-+firmware image for qemu.
-+It may be provided by your distribution as a edk2-aarch64 or AAVMF
-+package, in path such as /usr/share/edk2/aarch64/QEMU_EFI.fd .
-diff --git a/configs/aarch64_efi_defconfig b/configs/aarch64_efi_defconfig
-new file mode 100644
-index 0000000000..e4e20b09ba
---- /dev/null
-+++ b/configs/aarch64_efi_defconfig
-@@ -0,0 +1,33 @@
-+# Architecture
-+BR2_aarch64=y
-+
-+# Toolchain, required for eudev and grub
-+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-+
-+# System
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+
-+## Required tools to create bootable media
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+
-+# Bootloader
-+BR2_TARGET_GRUB2=y
-+BR2_TARGET_GRUB2_AARCH64_EFI=y
-+
-+# Filesystem / image
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="200M"
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/aarch64-efi/post-image.sh support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/aarch64-efi/genimage-efi.cfg"
-+
-+# Linux headers same as kernel, a 4.18 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.10"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++ 8. This should bring the grub2 menu, upon which selecting the "Buildroot"
++    entry should boot Linux.
 -- 
 2.17.1
