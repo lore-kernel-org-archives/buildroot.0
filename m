@@ -1,78 +1,171 @@
 From: Erico Nunes <nunes.erico@gmail.com>
-Date: Thu, 27 Sep 2018 00:37:16 +0200
-Subject: [Buildroot] [PATCH v3 2/5] grub2: add option to install tools
+Date: Thu, 27 Sep 2018 00:37:17 +0200
+Subject: [Buildroot] [PATCH v3 3/5] grub2: enable support for arm and
+ aarch64 targets
 In-Reply-To: <20180926223719.12604-1-nunes.erico@gmail.com>
 References: <20180926223719.12604-1-nunes.erico@gmail.com>
-Message-ID: <20180926223719.12604-3-nunes.erico@gmail.com>
+Message-ID: <20180926223719.12604-4-nunes.erico@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add an option to install grub2 support tools to the target.
+This commit enables the arm-uboot, arm-efi and aarch64-efi grub2
+platforms in Buildroot.
 
-In the context of Buildroot, some useful target tools provided are
-grub2-editenv, grub2-reboot, which provide means to manage the grub2,
-environment, boot order, and others.
+With the uboot platform, the grub2 image gets built as a u-boot image
+and is loaded from u-boot through a regular "bootm". The only
+requirement from the u-boot side in order to allow this is that u-boot
+is built with CONFIG_API enabled. CONFIG_API seems to not be enabled by
+default in most in-tree configurations, however, it seems to be
+available for quite some time now. So it might be possible to use this
+even on older u-boot versions. This is available only for arm (32-bit).
+
+With the efi platform, grub2 gets built as an EFI executable. This
+allows EFI firmware to find and load it similarly as it can be done for
+x86_64. Also, since u-boot v2016.05, u-boot is able to load and boot an
+EFI executable, so the uboot efi platform can also be used from u-boot
+in recent versions. This has been enabled (mostly) by default for ARM
+u-boot. efi platform is available for both arm and aarch64.
 
 Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
 ---
- boot/grub2/Config.in           | 8 ++++++++
- boot/grub2/grub2.mk            | 5 +++++
- support/scripts/check-bin-arch | 4 ++++
- 3 files changed, 17 insertions(+)
+ boot/grub2/Config.in | 42 ++++++++++++++++++++++++++++++++++++++----
+ boot/grub2/grub2.mk  | 21 +++++++++++++++++++++
+ 2 files changed, 59 insertions(+), 4 deletions(-)
 
 diff --git a/boot/grub2/Config.in b/boot/grub2/Config.in
-index 9a61b3b633..f760f95e84 100644
+index f760f95e84..5e0e47a5bb 100644
 --- a/boot/grub2/Config.in
 +++ b/boot/grub2/Config.in
-@@ -76,6 +76,14 @@ config BR2_TARGET_GRUB2_BUILTIN_CONFIG
- 	  device and other configuration parameters, but however menu
- 	  entries cannot be described in this embedded configuration.
+@@ -2,10 +2,13 @@ config BR2_TARGET_GRUB2_ARCH_SUPPORTS
+ 	bool
+ 	default y if BR2_i386
+ 	default y if BR2_x86_64
++	default y if BR2_arm
++	default y if BR2_aarch64
  
-+config BR2_TARGET_GRUB2_INSTALL_TOOLS
-+	bool "install grub2 tools"
+ config BR2_TARGET_GRUB2
+ 	bool "grub2"
+ 	depends on BR2_TARGET_GRUB2_ARCH_SUPPORTS
++	depends on BR2_USE_MMU
+ 	depends on BR2_USE_WCHAR
+ 	help
+ 	  GNU GRUB is a Multiboot boot loader. It was derived from
+@@ -29,12 +32,14 @@ choice
+ 
+ config BR2_TARGET_GRUB2_I386_PC
+ 	bool "i386-pc"
++	depends on BR2_i386 || BR2_x86_64
+ 	help
+ 	  Select this option if the platform you're targetting is a
+ 	  x86 or x86-64 legacy BIOS based platform.
+ 
+ config BR2_TARGET_GRUB2_I386_EFI
+ 	bool "i386-efi"
++	depends on BR2_i386 || BR2_x86_64
+ 	help
+ 	  Select this option if the platform you're targetting has a
+ 	  32 bits EFI BIOS. Note that some x86-64 platforms use a 32
+@@ -42,14 +47,38 @@ config BR2_TARGET_GRUB2_I386_EFI
+ 
+ config BR2_TARGET_GRUB2_X86_64_EFI
+ 	bool "x86-64-efi"
+-	depends on BR2_ARCH_IS_64
++	depends on BR2_x86_64
+ 	help
+ 	  Select this option if the platform you're targetting has a
+ 	  64 bits EFI BIOS.
+ 
++config BR2_TARGET_GRUB2_ARM_UBOOT
++	bool "arm-uboot"
++	depends on BR2_arm
 +	help
-+	  Install support tools to interact with GNU GRUB Multiboot boot
-+	  loader.
-+	  This will also install the Grub 2 loadable modules to the
-+	  target.
++	  Select this option if the platform you're targetting is an
++	  ARM u-boot platform, and you want to boot Grub 2 as an u-boot
++	  compatible image.
 +
- endif # BR2_TARGET_GRUB2
++config BR2_TARGET_GRUB2_ARM_EFI
++	bool "arm-efi"
++	depends on BR2_arm
++	help
++	  Select this option if the platform you're targetting is an
++	  ARM platform and you want to boot Grub 2 as an EFI
++	  application.
++
++config BR2_TARGET_GRUB2_ARM64_EFI
++	bool "arm64-efi"
++	depends on BR2_aarch64
++	help
++	  Select this option if the platform you're targetting is an
++	  Aarch64 platform and you want to boot Grub 2 as an EFI
++	  application.
++
+ endchoice
+ 
+-if BR2_TARGET_GRUB2_I386_PC
++if BR2_TARGET_GRUB2_I386_PC || BR2_TARGET_GRUB2_ARM_UBOOT
+ 
+ config BR2_TARGET_GRUB2_BOOT_PARTITION
+ 	string "boot partition"
+@@ -60,13 +89,17 @@ config BR2_TARGET_GRUB2_BOOT_PARTITION
+ 	  first disk if using a legacy partition table, or 'hd0,gpt1'
+ 	  if using GPT partition table.
+ 
+-endif # BR2_TARGET_GRUB2_I386_PC
++endif # BR2_TARGET_GRUB2_I386_PC || BR2_TARGET_GRUB2_ARM_UBOOT
+ 
+ config BR2_TARGET_GRUB2_BUILTIN_MODULES
+ 	string "builtin modules"
+ 	default "boot linux ext2 fat squash4 part_msdos part_gpt normal biosdisk" if BR2_TARGET_GRUB2_I386_PC
+ 	default "boot linux ext2 fat squash4 part_msdos part_gpt normal efi_gop" \
+-		if BR2_TARGET_GRUB2_I386_EFI || BR2_TARGET_GRUB2_X86_64_EFI
++		if BR2_TARGET_GRUB2_I386_EFI || \
++		BR2_TARGET_GRUB2_X86_64_EFI || \
++		BR2_TARGET_GRUB2_ARM_EFI || \\
++		BR2_TARGET_GRUB2_ARM64_EFI
++	default "linux ext2 fat part_msdos normal" if BR2_TARGET_GRUB2_ARM_UBOOT
+ 
+ config BR2_TARGET_GRUB2_BUILTIN_CONFIG
+ 	string "builtin config"
+@@ -88,4 +121,5 @@ endif # BR2_TARGET_GRUB2
  
  comment "grub2 needs a toolchain w/ wchar"
+ 	depends on BR2_TARGET_GRUB2_ARCH_SUPPORTS
++	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR
 diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
-index 1b366d0407..bb678ef5de 100644
+index bb678ef5de..65371f0170 100644
 --- a/boot/grub2/grub2.mk
 +++ b/boot/grub2/grub2.mk
-@@ -12,7 +12,12 @@ GRUB2_LICENSE_FILES = COPYING
- GRUB2_DEPENDENCIES = host-bison host-flex host-grub2
- HOST_GRUB2_DEPENDENCIES = host-bison host-flex
- GRUB2_INSTALL_IMAGES = YES
-+
-+ifeq ($(BR2_TARGET_GRUB2_INSTALL_TOOLS),y)
-+GRUB2_INSTALL_TARGET = YES
-+else
- GRUB2_INSTALL_TARGET = NO
-+endif
+@@ -44,6 +44,27 @@ GRUB2_PREFIX = /EFI/BOOT
+ GRUB2_TUPLE = x86_64-efi
+ GRUB2_TARGET = x86_64
+ GRUB2_PLATFORM = efi
++else ifeq ($(BR2_TARGET_GRUB2_ARM_UBOOT),y)
++GRUB2_IMAGE = $(BINARIES_DIR)/boot-part/grub/grub.img
++GRUB2_CFG = $(BINARIES_DIR)/boot-part/grub/grub.cfg
++GRUB2_PREFIX = ($(GRUB2_BOOT_PARTITION))/boot/grub
++GRUB2_TUPLE = arm-uboot
++GRUB2_TARGET = arm
++GRUB2_PLATFORM = uboot
++else ifeq ($(BR2_TARGET_GRUB2_ARM_EFI),y)
++GRUB2_IMAGE = $(BINARIES_DIR)/efi-part/EFI/BOOT/bootarm.efi
++GRUB2_CFG = $(BINARIES_DIR)/efi-part/EFI/BOOT/grub.cfg
++GRUB2_PREFIX = /EFI/BOOT
++GRUB2_TUPLE = arm-efi
++GRUB2_TARGET = arm
++GRUB2_PLATFORM = efi
++else ifeq ($(BR2_TARGET_GRUB2_ARM64_EFI),y)
++GRUB2_IMAGE = $(BINARIES_DIR)/efi-part/EFI/BOOT/bootaa64.efi
++GRUB2_CFG = $(BINARIES_DIR)/efi-part/EFI/BOOT/grub.cfg
++GRUB2_PREFIX = /EFI/BOOT
++GRUB2_TUPLE = arm64-efi
++GRUB2_TARGET = aarch64
++GRUB2_PLATFORM = efi
+ endif
  
- GRUB2_BUILTIN_MODULES = $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES))
- GRUB2_BUILTIN_CONFIG = $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_CONFIG))
-diff --git a/support/scripts/check-bin-arch b/support/scripts/check-bin-arch
-index 7f97696735..66b8d89932 100755
---- a/support/scripts/check-bin-arch
-+++ b/support/scripts/check-bin-arch
-@@ -20,6 +20,10 @@ declare -a IGNORES=(
- 	# pru-software-support) legitimately install ELF binaries that
- 	# are not for the target architecture
- 	"/usr/share"
-+
-+	# Skip files in /lib/grub, since it is possible to have it
-+	# for a different architecture (e.g. i386 grub on x86_64).
-+	"/lib/grub"
- )
- 
- while getopts p:l:r:a:i: OPT ; do
+ # Grub2 is kind of special: it considers CC, LD and so on to be the
 -- 
 2.17.1
