@@ -1,127 +1,246 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 26 Sep 2018 17:54:46 +0200
-Subject: [Buildroot] [PATCH 00/23] Fix python-crossbar to work with
- python 3.7
-In-Reply-To: <20180926153505.3411-1-asafka7@gmail.com>
-References: <20180926153505.3411-1-asafka7@gmail.com>
-Message-ID: <CAGm1_kvq9ofGdDxD9LQJWnUmWpMSZgt0tEruv7o7C=7u7sCCHA@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 26 Sep 2018 19:15:54 +0200
+Subject: [Buildroot] [PATCH 1/1] ncmpc: fix build with gcc 4.9
+Message-ID: <20180926171554.6856-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Asaf,
+Add upstream patch to fix build on gcc 4.9
 
-On Wed, Sep 26, 2018 at 5:35 PM Asaf Kahlon <asafka7@gmail.com> wrote:
->
-> The following series of patches contains version bumps and new
-> packages that are needed for bumping python-crossbar to 18.9.2
-> and make it work with Python 3.7.
+Fixes:
+ - http://autobuild.buildroot.org/results/e3b1b1bdad841c151b70294d517dc75c5305b0fe
 
-Great series. Thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...constructor-to-simplify-initializers.patch | 217 ++++++++++++++++++
+ 1 file changed, 217 insertions(+)
+ create mode 100644 package/ncmpc/0002-Global-Bindings-add-KeyBindings-constructor-to-simplify-initializers.patch
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com> for the whole series.
-
-Yegor
-
-> Asaf Kahlon (23):
->   python-attrs: bump to version 18.2.0
->   python-autobahn: bump to version 18.9.2
->   python-automat: bump to version 0.7.0
->   python-hyperlink: bump to version 18.0.0
->   python-incremental: bump to version 17.5.0
->   python-jinja2: bump to version 2.10
->   python-lmdb: bump to version 0.94
->   python-psutil: bump to version 5.4.7
->   python-pycparser: bump to version 2.19
->   python-pynacl: bump to version 1.2.1
->   python-pyopenssl: bump to version 18.0.0
->   python-sdnotify: bump to version 0.3.2
->   python-sortedcontainers: bump to version 2.0.5
->   python-txaio: bump to version 18.8.1
->   python-txtorcon: bump to version 18.0.2
->   python-u-msgpack: bump to version 2.5.0
->   python-zope-interface: bump to version 4.5.0
->   python-pytrie: bump to version 0.3.1
->   python-passlib: new package
->   python-pyasn1-modules: new package
->   python-pyhamcrest: new package
->   python-twisted: bump to version 18.7.0
->   python-crossbar: bump to version 18.9.2
->
->  DEVELOPERS                                    |   3 +
->  package/Config.in                             |   3 +
->  package/python-attrs/python-attrs.hash        |   8 +-
->  package/python-attrs/python-attrs.mk          |   4 +-
->  package/python-autobahn/python-autobahn.hash  |   8 +-
->  package/python-autobahn/python-autobahn.mk    |   4 +-
->  package/python-automat/python-automat.hash    |   8 +-
->  package/python-automat/python-automat.mk      |   4 +-
->  .../0002-Remove-idna-requirement.patch        |  26 +++
->  .../0002-Rework-runtime-dependencies.patch    |  37 ----
->  package/python-crossbar/Config.in             |  19 +--
->  package/python-crossbar/python-crossbar.hash  |   7 +-
->  package/python-crossbar/python-crossbar.mk    |   4 +-
->  package/python-hyperlink/Config.in            |   1 +
->  .../python-hyperlink/python-hyperlink.hash    |   8 +-
->  package/python-hyperlink/python-hyperlink.mk  |   4 +-
->  .../python-incremental.hash                   |   8 +-
->  .../python-incremental/python-incremental.mk  |   4 +-
->  package/python-jinja2/python-jinja2.hash      |   8 +-
->  package/python-jinja2/python-jinja2.mk        |   4 +-
->  package/python-lmdb/python-lmdb.hash          |   7 +-
->  package/python-lmdb/python-lmdb.mk            |   5 +-
->  package/python-passlib/Config.in              |   7 +
->  package/python-passlib/python-passlib.hash    |   5 +
->  package/python-passlib/python-passlib.mk      |  14 ++
->  package/python-psutil/python-psutil.hash      |   8 +-
->  package/python-psutil/python-psutil.mk        |   4 +-
->  package/python-pyasn1-modules/Config.in       |   7 +
->  .../python-pyasn1-modules.hash                |   5 +
->  .../python-pyasn1-modules.mk                  |  14 ++
->  .../python-pycparser/python-pycparser.hash    |   8 +-
->  package/python-pycparser/python-pycparser.mk  |   4 +-
->  package/python-pyhamcrest/Config.in           |   8 +
->  .../python-pyhamcrest/python-pyhamcrest.hash  |   5 +
->  .../python-pyhamcrest/python-pyhamcrest.mk    |  14 ++
->  package/python-pynacl/python-pynacl.hash      |   8 +-
->  package/python-pynacl/python-pynacl.mk        |   4 +-
->  .../python-pyopenssl/python-pyopenssl.hash    |   8 +-
->  package/python-pyopenssl/python-pyopenssl.mk  |   4 +-
->  package/python-pytrie/Config.in               |   1 +
->  package/python-pytrie/python-pytrie.hash      |   8 +-
->  package/python-pytrie/python-pytrie.mk        |   8 +-
->  package/python-sdnotify/python-sdnotify.hash  |   9 +-
->  package/python-sdnotify/python-sdnotify.mk    |   4 +-
->  .../python-sortedcontainers.hash              |   8 +-
->  .../python-sortedcontainers.mk                |   4 +-
->  .../0001-Fix-syntax-for-python3.7.patch       | 160 ++++++++++++++++++
->  package/python-twisted/Config.in              |   2 +
->  package/python-twisted/python-twisted.hash    |   8 +-
->  package/python-twisted/python-twisted.mk      |   4 +-
->  package/python-txaio/python-txaio.hash        |   9 +-
->  package/python-txaio/python-txaio.mk          |   4 +-
->  package/python-txtorcon/python-txtorcon.hash  |   9 +-
->  package/python-txtorcon/python-txtorcon.mk    |   4 +-
->  .../python-u-msgpack/python-u-msgpack.hash    |   8 +-
->  package/python-u-msgpack/python-u-msgpack.mk  |   4 +-
->  .../python-zope-interface.hash                |   9 +-
->  .../python-zope-interface.mk                  |   4 +-
->  58 files changed, 425 insertions(+), 153 deletions(-)
->  create mode 100644 package/python-crossbar/0002-Remove-idna-requirement.patch
->  delete mode 100644 package/python-crossbar/0002-Rework-runtime-dependencies.patch
->  create mode 100644 package/python-passlib/Config.in
->  create mode 100644 package/python-passlib/python-passlib.hash
->  create mode 100644 package/python-passlib/python-passlib.mk
->  create mode 100644 package/python-pyasn1-modules/Config.in
->  create mode 100644 package/python-pyasn1-modules/python-pyasn1-modules.hash
->  create mode 100644 package/python-pyasn1-modules/python-pyasn1-modules.mk
->  create mode 100644 package/python-pyhamcrest/Config.in
->  create mode 100644 package/python-pyhamcrest/python-pyhamcrest.hash
->  create mode 100644 package/python-pyhamcrest/python-pyhamcrest.mk
->  create mode 100644 package/python-twisted/0001-Fix-syntax-for-python3.7.patch
->
-> --
-> 2.17.1
->
+diff --git a/package/ncmpc/0002-Global-Bindings-add-KeyBindings-constructor-to-simplify-initializers.patch b/package/ncmpc/0002-Global-Bindings-add-KeyBindings-constructor-to-simplify-initializers.patch
+new file mode 100644
+index 0000000000..217fa9b55b
+--- /dev/null
++++ b/package/ncmpc/0002-Global-Bindings-add-KeyBindings-constructor-to-simplify-initializers.patch
+@@ -0,0 +1,217 @@
++From da27fcc39e187671b5e4373848f701a3d910446c Mon Sep 17 00:00:00 2001
++From: Max Kellermann <max@musicpd.org>
++Date: Wed, 26 Sep 2018 09:51:09 +0200
++Subject: [PATCH] {Global,}Bindings: add KeyBindings constructor to simplify
++ initializers
++
++As a side effect, this works around a build failure with GCC 4.9.
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from 
++https://github.com/MusicPlayerDaemon/ncmpc/commit/da27fcc39e187671b5e4373848f701a3d910446c
++and updated for 0.31 (remove NEWS update)]
++---
++ src/Bindings.hxx       |   3 +
++ src/GlobalBindings.cxx | 142 ++++++++++++++++++++---------------------
++ 3 files changed, 75 insertions(+), 71 deletions(-)
++
++diff --git a/src/Bindings.hxx b/src/Bindings.hxx
++index 342d951..0c630dc 100644
++--- a/src/Bindings.hxx
+++++ b/src/Bindings.hxx
++@@ -42,6 +42,9 @@ struct KeyBinding {
++ 	bool modified = false;
++ #endif
++ 
+++	constexpr KeyBinding(int a, int b=0, int c=0) noexcept
+++		:keys{{a, b, c}} {}
+++
++ 	gcc_pure
++ 	bool HasKey(int key) const {
++ 		return std::find(keys.begin(), keys.end(), key) != keys.end();
++diff --git a/src/GlobalBindings.cxx b/src/GlobalBindings.cxx
++index b565848..8049ed2 100644
++--- a/src/GlobalBindings.cxx
+++++ b/src/GlobalBindings.cxx
++@@ -51,110 +51,110 @@
++ 
++ static KeyBindings global_key_bindings{{{
++ #ifdef ENABLE_KEYDEF_SCREEN
++-	{ {'K', 0, 0 } },
+++	{'K'},
++ #endif
++-	{ { 'q', 'Q', C('C') } },
+++	{'q', 'Q', C('C')},
++ 
++ 	/* movement */
++-	{ { UP, 'k', 0 } },
++-	{ { DWN, 'j', 0 } },
++-	{ { 'H', 0, 0 } },
++-	{ { 'M', 0, 0 } },
++-	{ { 'L', 0, 0 } },
++-	{ { HOME, C('A'), 0 } },
++-	{ { END, C('E'), 0 } },
++-	{ { PGUP, 0, 0 } },
++-	{ { PGDN, 0, 0 } },
++-	{ { 'v',  0, 0 } },
++-	{ { C('N'),  0, 0 } },
++-	{ { C('B'),  0, 0 } },
++-	{ { 'N',  0, 0 } },
++-	{ { 'B',  0, 0 } },
++-	{ { 'l', 0, 0 } },
+++	{UP, 'k'},
+++	{DWN, 'j'},
+++	{'H'},
+++	{'M'},
+++	{'L'},
+++	{HOME, C('A')},
+++	{END, C('E')},
+++	{PGUP},
+++	{PGDN},
+++	{'v',  0},
+++	{C('N'),  0},
+++	{C('B'),  0},
+++	{'N',  0},
+++	{'B',  0},
+++	{'l'},
++ 
++ 	/* basic screens */
++-	{ { '1', F1, 'h' } },
++-	{ { '2', F2, 0 } },
++-	{ { '3', F3, 0 } },
+++	{'1', F1, 'h'},
+++	{'2', F2},
+++	{'3', F3},
++ 
++ 	/* player commands */
++-	{ { RET, 0, 0 } },
++-	{ { 'P', 0, 0 } },
++-	{ { 's', BS, 0 } },
++-	{ { 'o', 0, 0 } },
++-	{ { '>', 0, 0 } },
++-	{ { '<', 0, 0 } },
++-	{ { 'f', 0, 0 } },
++-	{ { 'b', 0, 0 } },
++-	{ { '+', RGHT, 0 } },
++-	{ { '-', LEFT, 0 } },
++-	{ { ' ', 0, 0 } },
++-	{ { 't', 0, 0 } },
++-	{ { DEL, 'd', 0 } },
++-	{ { 'Z', 0, 0 } },
++-	{ { 'c', 0, 0 } },
++-	{ { 'r', 0, 0 } },
++-	{ { 'z', 0, 0 } },
++-	{ { 'y', 0, 0 } },
++-	{ { 'C', 0, 0 } },
++-	{ { 'x', 0, 0 } },
++-	{ { C('U'), 0, 0 } },
++-	{ { 'S', 0, 0 } },
++-	{ { 'a', 0, 0 } },
++-
++-	{ { '!', 0, 0 } },
++-	{ { '"', 0, 0 } },
++-
++-	{ { 'G', 0, 0 } },
+++	{RET},
+++	{'P'},
+++	{'s', BS},
+++	{'o'},
+++	{'>'},
+++	{'<'},
+++	{'f'},
+++	{'b'},
+++	{'+', RGHT},
+++	{'-', LEFT},
+++	{' '},
+++	{'t'},
+++	{DEL, 'd'},
+++	{'Z'},
+++	{'c'},
+++	{'r'},
+++	{'z'},
+++	{'y'},
+++	{'C'},
+++	{'x'},
+++	{C('U')},
+++	{'S'},
+++	{'a'},
+++
+++	{'!'},
+++	{'"'},
+++
+++	{'G'},
++ 
++ 	/* lists */
++-	{ { C('K'), 0, 0 } },
++-	{ { C('J'), 0, 0 } },
++-	{ { C('L'), 0, 0 } },
+++	{C('K')},
+++	{C('J')},
+++	{C('L')},
++ 
++ 
++ 	/* ncmpc options */
++-	{ { 'w', 0, 0 } },
++-	{ { 'U', 0, 0 } },
+++	{'w'},
+++	{'U'},
++ 
++ 	/* change screen */
++-	{ { TAB, 0, 0 } },
++-	{ { STAB, 0, 0 } },
++-	{ { '`', 0, 0 } },
+++	{TAB},
+++	{STAB},
+++	{'`'},
++ 
++ 
++ 	/* find */
++-	{ { '/', 0, 0 } },
++-	{ { 'n', 0, 0 } },
++-	{ { '?', 0, 0 } },
++-	{ { 'p', 0, 0 } },
++-	{ { '.', 0, 0 } },
+++	{'/'},
+++	{'n'},
+++	{'?'},
+++	{'p'},
+++	{'.'},
++ 
++ 
++ 	/* extra screens */
++ #ifdef ENABLE_ARTIST_SCREEN
++-	{ {'4', F4, 0 } },
+++	{'4', F4},
++ #endif
++ #ifdef ENABLE_SEARCH_SCREEN
++-	{ {'5', F5, 0 } },
++-	{ {'m', 0, 0 } },
+++	{'5', F5},
+++	{'m'},
++ #endif
++ #ifdef ENABLE_SONG_SCREEN
++-	{ { 'i', 0, 0 } },
+++	{'i'},
++ #endif
++ #ifdef ENABLE_LYRICS_SCREEN
++-	{ {'7', F7, 0 } },
++-	{ {ESC, 0, 0 } },
++-	{ {'u', 0, 0 } },
++-	{ {'e', 0, 0 } },
+++	{'7', F7},
+++	{ESC},
+++	{'u'},
+++	{'e'},
++ #endif
++ 
++ #ifdef ENABLE_OUTPUTS_SCREEN
++-	{ {'8', F8, 0 } },
+++	{'8', F8},
++ #endif
++ 
++ #ifdef ENABLE_CHAT_SCREEN
++-	{ {'9', F9, 0} },
+++	{'9', F9},
++ #endif
++ }}};
++ 
+-- 
+2.17.1
