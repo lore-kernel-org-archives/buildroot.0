@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Sep 2018 23:18:23 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] qt: fix build on
+Date: Thu, 27 Sep 2018 23:18:35 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] qt: fix build on
  powerpc_e500mc
-Message-ID: <20180927211751.7A74B890C4@busybox.osuosl.org>
+Message-ID: <20180927211802.C8748890CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c70b6f77d60178ae06c22b3699e8a559794b3a87
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b015095c5a40e8edb2a865d6f2a7ff345cbea825
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 gcc bug internal compiler error: in validate_condition_mode, at
 config/rs6000/rs6000.c:180744. Bug is fixed since gcc 7.
