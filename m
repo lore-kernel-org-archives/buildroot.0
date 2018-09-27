@@ -1,81 +1,100 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Sep 2018 23:23:50 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] package/squashfs: fix
- build on hosts with glibc >= 2.28
-Message-ID: <20180927212400.C2504890E5@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 27 Sep 2018 23:55:50 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] brltty: use gcc instead of ld to link shared objects
+In-Reply-To: <87musbqrxu.fsf@home.blind.guru>
+References: <20180920172809.19993-1-fontaine.fabrice@gmail.com>
+ <20180920210109.179978c4@windsurf>
+ <CAPi7W81sP0HvhtrJs4m+RMsJ1o_P1HMvZ8hg4hkqL94xqe5a+w@mail.gmail.com>
+ <87musbqrxu.fsf@home.blind.guru>
+Message-ID: <CAPi7W83NmGRMjHPmBcayMTuGJM5c2qY_5UkPKBhybAcckfTQPQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5da7b452eaf24813859ff81cd5c7742fabbc3c1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+Dear Mario, Thomas,
 
-Since glibc 2.28, sys/sysmacros.h is no longer included from sys/types.h
-This patch fixes the resulting build error by explicitly including
-sys/sysmacros.h
+Le ven. 21 sept. 2018 ? 08:34, Mario Lang <mlang@blind.guru> a ?crit :
 
-See also https://github.com/plougher/squashfs-tools/pull/52
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>
+> > Dear Thomas,
+> >
+> > Le jeu. 20 sept. 2018 ? 21:01, Thomas Petazzoni <
+> > thomas.petazzoni at bootlin.com> a ?crit :
+> >
+> >> Hello,
+> >>
+> >> On Thu, 20 Sep 2018 19:28:09 +0200, Fabrice Fontaine wrote:
+> >> > Bump to version 5.6 has reintroduced the issue fixed by patch 854093
+> on
+> >> > version 5.5.
+> >> >
+> >> > Indeed, third patch was merged upstream but it was then reverted:
+> >> >
+> >>
+> https://github.com/brltty/brltty/commit/9e7d62c869d3c1cbe12dda8b0291a4692c193416
+> >> >
+> >> > Moreover, since commit 3a2e3f6fa5ef0a210ffeba5ed05c79965d0cc3c7, MKOBJ
+> >> > was renamed into MKREL. So, instead of patching again brltty,
+> overwrite
+> >> > MKREL to use "gcc -shared -o" instead of "ld -r -o".
+> >>
+> >> Are you really sure gcc -shared -o does the same thing as ld -r -o ?
+>
+> ld fails to link on mipsel at least.  What else should we do?
+> "ABI is incompatible with that of the selected emulation"
+> "Attempt to do relocatable link with elf64-tradlittlemips input and
+> elf32-ntradlittlemips output"
+>
+After more investigations, it seems that this issue is raised only on
+mips64el (at least on autobuilders:
+http://autobuild.buildroot.org/?reason=brltty-5.6).
+On this target, by default, ld wants to link a 32 bits binary (I don't know
+why).
+This issue can be fixed by setting LD="$(TARGET_LD) -melf64ltsmip".
+However, I don't know if this a better solution, it seems like a workaround
+to a toolchain issue.
 
-Signed-off-by: Richard Kunze <richard.kunze@web.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ed0e55675eaf91e61d8004128169cb195a4fb72a)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/squashfs/0001-include-sysmacros.patch | 47 +++++++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
+>
+> Hmm, maybe this is a HOST/TARGET mixup?  But how?
+>
+> > I didn't think about it, I basically backported the behavior of third
+> patch
+> > (upstream commit 4c8aba42e246b96d10ffcbd57653682375499e46). The third
+> patch
+> > applied to brltty 5.5 (https://patchwork.ozlabs.org/patch/854093/) was
+> > replacing MKOBJ ($(LD) -r -o) by MKMOD defined as (CC)
+> > ${brltty_mkmod_gcc_make=-shared}
+> > BRLTTY_OPTIONS_LD2CC([${brltty_mkmod_ld_options}]) -o" with
+> > brltty_mkmod_ld_make="-shared" on linux (see
+> >
+> https://github.com/brltty/brltty/blob/4c8aba42e246b96d10ffcbd57653682375499e46/configure.ac
+> > ).
+> > More information can be found here:
+> > https://github.com/brltty/brltty/pull/113
+> > However, I don't know why this commit was reverted one week later.
+> > Mario, you told us in the review of the first patch that the upstream
+> > author decided to "fix" the issue in a different way but actually the
+> issue
+> > is not fixed. Do you know why this commit was reverted? If needed, I can
+> > create an issue to get more info.
+>
+> It was reverted because it failed to build on Mac OS X, and Mac OS X was
+> deemed more important then cross-compiling on Linux.
+>
+> Upstream (dave at mielke.cc) is very responsive, maybe you have more luck
+> trying to work this one out with him?
+>
+> --
+> CYa,
+>   ?????
+>
+Best Regards,
 
-diff --git a/package/squashfs/0001-include-sysmacros.patch b/package/squashfs/0001-include-sysmacros.patch
-new file mode 100644
-index 0000000000..d794836c04
---- /dev/null
-+++ b/package/squashfs/0001-include-sysmacros.patch
-@@ -0,0 +1,47 @@
-+From 968aa53dd6d2c0831a9af01873441767c06b88d0 Mon Sep 17 00:00:00 2001
-+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-+Date: Wed, 1 Aug 2018 12:17:10 +0200
-+Subject: [PATCH] mksquashfs/unsquashfs: fix compilation with glibc 2.25+
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+From glibc 2.25 release notes:
-+https://sourceware.org/ml/libc-alpha/2017-02/msg00079.html
-+"* The inclusion of <sys/sysmacros.h> by <sys/types.h> is deprecated.
-+  This means that in a future release, the macros ???major???, ???minor???, and
-+  ???makedev??? will only be available from <sys/sysmacros.h>."
-+
-+See glibc bug https://sourceware.org/bugzilla/show_bug.cgi?id=19239 .
-+
-+Fetch from: https://github.com/plougher/squashfs-tools/pull/52.patch
-+Signed-off-by: Richard Kunze <richard.kunze@web.de>
-+---
-+ squashfs-tools/mksquashfs.c | 1 +
-+ squashfs-tools/unsquashfs.c | 1 +
-+ 2 files changed, 2 insertions(+)
-+
-+diff --git a/squashfs-tools/mksquashfs.c b/squashfs-tools/mksquashfs.c
-+index d696a51..8d57c3e 100644
-+--- a/squashfs-tools/mksquashfs.c
-++++ b/squashfs-tools/mksquashfs.c
-+@@ -35,6 +35,7 @@
-+ #include <stddef.h>
-+ #include <sys/types.h>
-+ #include <sys/stat.h>
-++#include <sys/sysmacros.h>
-+ #include <fcntl.h>
-+ #include <errno.h>
-+ #include <dirent.h>
-+diff --git a/squashfs-tools/unsquashfs.c b/squashfs-tools/unsquashfs.c
-+index a57f85c..a492b27 100644
-+--- a/squashfs-tools/unsquashfs.c
-++++ b/squashfs-tools/unsquashfs.c
-+@@ -33,6 +33,7 @@
-+ #include "fnmatch_compat.h"
-+ 
-+ #include <sys/sysinfo.h>
-++#include <sys/sysmacros.h>
-+ #include <sys/types.h>
-+ #include <sys/time.h>
-+ #include <sys/resource.h>
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180927/2d68f9a5/attachment.html>
