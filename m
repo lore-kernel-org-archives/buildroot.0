@@ -1,26 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Sep 2018 22:25:34 +0200
-Subject: [Buildroot] [git commit] qt5quickcontrols: update license file
- names for Qt 5.6 version
-In-Reply-To: <20180829204411.8294881DE8@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Wed, 29 Aug 2018 22:37:47 +0200")
-References: <20180829204411.8294881DE8@busybox.osuosl.org>
-Message-ID: <877ej6ads1.fsf@dell.be.48ers.dk>
+Date: Thu, 27 Sep 2018 22:26:54 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] minicom: add COPYING
+ sha256 to hash
+Message-ID: <20180927202643.C759189055@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=9ce048ae16c673bcecd798759ba4dcc093df27d1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=83d33f76f6bb94e0a91285ae4c3f8aa072c1dd8f
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+In minicom package hash file lacks sha256 entry for COPYING file even if
+it is added to MINICOM_LICENSE_FILES.
 
- > Signed-off-by: Laurent Hartanerot <laurent.hartanerot@atos.net>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Add COPYING sha256 entry to minicom.hash file.
 
-Committed to 2018.05.x, thanks.
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 6edfa41a0a472401a87f7f2ef354b041a7c2c797)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/minicom/minicom.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/minicom/minicom.hash b/package/minicom/minicom.hash
+index ca3087160b..f49e430c67 100644
+--- a/package/minicom/minicom.hash
++++ b/package/minicom/minicom.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256 532f836b7a677eb0cb1dca8d70302b73729c3d30df26d58368d712e5cca041f1  minicom-2.7.1.tar.gz
++sha256 cf80a758014eefbf068afffe3d462fc34ff4f528527524d8e100329c42094e15  COPYING
