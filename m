@@ -1,22 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Sep 2018 14:12:35 +0200
-Subject: [Buildroot] [PATCH 1/1] configs/pc: bump kernel version
-In-Reply-To: <20180926223839.12791-1-nunes.erico@gmail.com> (Erico Nunes's
- message of "Thu, 27 Sep 2018 00:38:39 +0200")
-References: <20180926223839.12791-1-nunes.erico@gmail.com>
-Message-ID: <87va6ruojw.fsf@dell.be.48ers.dk>
+Date: Thu, 27 Sep 2018 14:13:00 +0200
+Subject: [Buildroot] [PATCH] quazip: upgrade to 0.7.6
+In-Reply-To: <20180926210855.8746-1-zgyarmati@zgyarmati.de> (Zoltan Gyarmati's
+ message of "Wed, 26 Sep 2018 23:08:55 +0200")
+References: <20180926210855.8746-1-zgyarmati@zgyarmati.de>
+Message-ID: <87r2hfuoj7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Erico" == Erico Nunes <nunes.erico@gmail.com> writes:
+>>>>> "Zoltan" == Zoltan Gyarmati <zgyarmati@zgyarmati.de> writes:
 
- > Bump the kernel version to 4.18.10.
- > Tested with qemu 2.11.2 on bios and UEFI virtual machines.
-
- > Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+ > Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
 
 Committed, thanks.
 
