@@ -1,161 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Sep 2018 13:59:09 +0200
-Subject: [Buildroot] [git commit] sedutil: new package
-Message-ID: <20180927121255.CA85681E02@busybox.osuosl.org>
+Date: Thu, 27 Sep 2018 14:12:16 +0200
+Subject: [Buildroot] [git commit] configs/pc: bump kernel version
+Message-ID: <20180927121256.4E70E88F59@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=97c4b80a0fe055dcdeedb380f5cf85507e49f572
+commit: https://git.buildroot.net/buildroot/commit/?id=88f3618de1359548e15bccdc3809b96479f15ab5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Utilities to configure self encrypting drives that comply with the TCG OPAL
-2.00 standard.
+Bump the kernel version to 4.18.10.
+Tested with qemu 2.11.2 on bios and UEFI virtual machines.
 
+Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- .../0001-Common-log.h-time-2-needs-time.h.patch    | 37 ++++++++++++++++++++++
- package/sedutil/Config.in                          | 27 ++++++++++++++++
- package/sedutil/sedutil.hash                       |  3 ++
- package/sedutil/sedutil.mk                         | 20 ++++++++++++
- 6 files changed, 89 insertions(+)
+ configs/pc_x86_64_bios_defconfig | 6 +++---
+ configs/pc_x86_64_efi_defconfig  | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c5d9b8bb57..0335aef3b1 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1636,6 +1636,7 @@ F:	package/python-texttable/
- F:	package/python-validators/
- F:	package/python-webob/
- F:	package/python-websocket-client/
-+F:	package/sedutil/
- F:	package/triggerhappy/
+diff --git a/configs/pc_x86_64_bios_defconfig b/configs/pc_x86_64_bios_defconfig
+index 47787bc118..1cfc0e424f 100644
+--- a/configs/pc_x86_64_bios_defconfig
++++ b/configs/pc_x86_64_bios_defconfig
+@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image.sh support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pc/genimage-bios.cfg"
  
- N:	Peter Seiderer <ps.report@gmx.net>
-diff --git a/package/Config.in b/package/Config.in
-index c04645a30b..52f11c407a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -503,6 +503,7 @@ endmenu
- 	source "package/rtl8821au/Config.in"
- 	source "package/sane-backends/Config.in"
- 	source "package/sdparm/Config.in"
-+	source "package/sedutil/Config.in"
- 	source "package/setserial/Config.in"
- 	source "package/sg3_utils/Config.in"
- 	source "package/sigrok-cli/Config.in"
-diff --git a/package/sedutil/0001-Common-log.h-time-2-needs-time.h.patch b/package/sedutil/0001-Common-log.h-time-2-needs-time.h.patch
-new file mode 100644
-index 0000000000..9cf74b6760
---- /dev/null
-+++ b/package/sedutil/0001-Common-log.h-time-2-needs-time.h.patch
-@@ -0,0 +1,37 @@
-+From a7a48e1cda997afbfcdd985c594c3ec0516b6279 Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Tue, 25 Sep 2018 22:49:58 +0200
-+Subject: [PATCH] Common/log.h: time(2) needs <time.h>
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Otherwise the build fails with:
-+
-+In file included from ./linux/os.h:28:0,
-+                 from Common/DtaOptions.cpp:20:
-+./Common/log.h: In function ???std::__cxx11::string NowTime()???:
-+./Common/log.h:349:12: error: ???time??? was not declared in this scope
-+     time(&t);
-+
-+Upstream-status: https://github.com/Drive-Trust-Alliance/sedutil/pull/250
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ Common/log.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/Common/log.h b/Common/log.h
-+index 8c08c40..2b718ad 100644
-+--- a/Common/log.h
-++++ b/Common/log.h
-+@@ -341,6 +341,7 @@ inline std::string NowTime() {
-+ 
-+ #else
-+ 
-++#include <time.h>
-+ #include <sys/time.h>
-+ 
-+ inline std::string NowTime() {
-+-- 
-+2.11.0
-+
-diff --git a/package/sedutil/Config.in b/package/sedutil/Config.in
-new file mode 100644
-index 0000000000..fbfcf0dd54
---- /dev/null
-+++ b/package/sedutil/Config.in
-@@ -0,0 +1,27 @@
-+config BR2_PACKAGE_SEDUTIL_ARCH_SUPPORTS
-+	bool
-+	# no big endian support
-+	default y if BR2_arcle || BR2_arm || BR2_aarch64 || BR2_csky \
-+	       || BR2_i386 || BR2_microblazeel || BR2_mipsel \
-+	       || BR2_mips64el || BR2_nios2 || BR2_powerpc64le \
-+	       || BR2_sh4 || BR2_sh4a || BR2_x86_64 \
-+	       || BR2_XTENSA_LITTLE_ENDIAN
-+
-+config BR2_PACKAGE_SEDUTIL
-+	bool "sedutil"
-+	depends on BR2_PACKAGE_SEDUTIL_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # linux/nvme.h
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  The Drive Trust Alliance Self Encrypting Drive Utility,
-+	  allowing configuration the SEDs that comply with the
-+	  TCG OPAL 2.00 standard.
-+
-+          https://github.com/Drive-Trust-Alliance/sedutil
-+
-+comment "sedutil needs a toolchain w/ C++, gcc >= 4.8, headers >= 3.12"
-+	depends on BR2_PACKAGE_SEDUTIL_ARCH_SUPPORTS
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-diff --git a/package/sedutil/sedutil.hash b/package/sedutil/sedutil.hash
-new file mode 100644
-index 0000000000..9db1011379
---- /dev/null
-+++ b/package/sedutil/sedutil.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 9259466b4f73af276153c5245834a56f48f8721ea7263611b5d5e8326bc43d9e  sedutil-1.15.1.tar.gz
-+sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  Common/LICENSE.txt
-diff --git a/package/sedutil/sedutil.mk b/package/sedutil/sedutil.mk
-new file mode 100644
-index 0000000000..c80e43448d
---- /dev/null
-+++ b/package/sedutil/sedutil.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# sedutil
-+#
-+################################################################################
-+
-+SEDUTIL_VERSION = 1.15.1
-+SEDUTIL_SITE = $(call github,Drive-Trust-Alliance,sedutil,$(SEDUTIL_VERSION))
-+SEDUTIL_LICENSE = GPL-3.0+
-+SEDUTIL_LICENSE_FILES = Common/LICENSE.txt
-+# Fetched from Github with no configure script
-+SEDUTIL_AUTORECONF = YES
-+
-+# Calls git to figure out version info
-+define SEDUTIL_SET_VERSION
-+	echo '#define GIT_VERSION "$(SEDUTIL_VERSION)"' > $(@D)/linux/Version.h
-+endef
-+SEDUTIL_POST_CONFIGURE_HOOKS += SEDUTIL_SET_VERSION
-+
-+$(eval $(autotools-package))
+-# Linux headers same as kernel, a 4.13 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
++# Linux headers same as kernel, a 4.18 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.8"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.10"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+diff --git a/configs/pc_x86_64_efi_defconfig b/configs/pc_x86_64_efi_defconfig
+index 67ba5bcf5b..bc99ca755b 100644
+--- a/configs/pc_x86_64_efi_defconfig
++++ b/configs/pc_x86_64_efi_defconfig
+@@ -25,13 +25,13 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image.sh support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pc/genimage-efi.cfg"
+ 
+-# Linux headers same as kernel, a 4.13 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
++# Linux headers same as kernel, a 4.18 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.8"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.10"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
