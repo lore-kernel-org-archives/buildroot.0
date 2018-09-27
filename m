@@ -1,21 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Sep 2018 14:13:00 +0200
-Subject: [Buildroot] [PATCH] quazip: upgrade to 0.7.6
-In-Reply-To: <20180926210855.8746-1-zgyarmati@zgyarmati.de> (Zoltan Gyarmati's
- message of "Wed, 26 Sep 2018 23:08:55 +0200")
-References: <20180926210855.8746-1-zgyarmati@zgyarmati.de>
-Message-ID: <87r2hfuoj7.fsf@dell.be.48ers.dk>
+Date: Thu, 27 Sep 2018 13:58:50 +0200
+Subject: [Buildroot] [git commit] wireguard: bump version to 0.0.20180925
+Message-ID: <20180927121254.542BE88EBD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Zoltan" == Zoltan Gyarmati <zgyarmati@zgyarmati.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=0a656bc0658e79f7ddc4c9734ad9c52a5df46296
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wireguard/wireguard.hash | 4 ++--
+ package/wireguard/wireguard.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
+index d0cd65ad4f..fe6439fbc2 100644
+--- a/package/wireguard/wireguard.hash
++++ b/package/wireguard/wireguard.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.zx2c4.com/pipermail/wireguard/2018-July/003112.html
+-sha256 5e38d554f7d1e3a64e3a5319ca1a3b790c84ed89c896586c490a93ac1f953a91  WireGuard-0.0.20180708.tar.xz
++# From https://lists.zx2c4.com/pipermail/wireguard/2018-September/003395.html
++sha256 4a0488a07e40ec17e798f3e40a85cedf55f0560b1c3a8fd95806c7d4266cb0e8  WireGuard-0.0.20180925.tar.xz
+ # Locally calculated
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
+index cc8ad7c4cc..faddbf93ad 100644
+--- a/package/wireguard/wireguard.mk
++++ b/package/wireguard/wireguard.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIREGUARD_VERSION = 0.0.20180708
++WIREGUARD_VERSION = 0.0.20180925
+ WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
+ WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
+ WIREGUARD_LICENSE = GPL-2.0
