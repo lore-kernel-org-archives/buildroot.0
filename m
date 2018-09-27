@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Sep 2018 23:21:09 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] sdl2: add upstream patch
+Date: Thu, 27 Sep 2018 23:21:45 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] sdl2: add upstream patch
  to fix DirectFB renderer handling
-Message-ID: <20180927212035.A2348890D0@busybox.osuosl.org>
+Message-ID: <20180927212110.3DEE7890D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a24cc1cce7ecdac39cdbab650495494f133e56ac
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=284d2f0f5d1bab8bcf13e722feeba46709345703
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 The configure script enables the DirectFB video driver, but forgets to
 enable the renderer driver, causing SDL_CreateRenderer() to fail. Add an upstream patch to fix this.
