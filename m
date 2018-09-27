@@ -1,40 +1,39 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Thu, 27 Sep 2018 16:28:27 +0200
-Subject: [Buildroot] [PATCH 1/1] ltp-testsuite: Bump to version 20180926
-Message-ID: <20180927142827.10431-1-petr.vorel@gmail.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 27 Sep 2018 09:36:47 -0500
+Subject: [Buildroot] [PATCH] fs/common: ROOTFS_USERS_TABLES has priority
+Message-ID: <1538059007-36692-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- package/ltp-testsuite/ltp-testsuite.hash | 4 ++--
- package/ltp-testsuite/ltp-testsuite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+This patch moves the PACKAGES_USERS to be appended to the USERS_TABLES
+before ROOTFS_USERS_TABLES.  This allows the ROOTFS_USERS_TABLES to
+update the existing users created by packages with different settings
+like home directory, pid, gid, etc.
 
-diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
-index 93ab41d3b7..1f04aee482 100644
---- a/package/ltp-testsuite/ltp-testsuite.hash
-+++ b/package/ltp-testsuite/ltp-testsuite.hash
-@@ -1,2 +1,2 @@
--# From: https://github.com/linux-test-project/ltp/releases/download/20180515/ltp-full-20180515.tar.xz.sha1
--sha1 db424d391987ff62664662210ef98cd42c7cc6b5  ltp-full-20180515.tar.xz
-+# From: https://github.com/linux-test-project/ltp/releases/download/20180926/ltp-full-20180926.tar.xz.sha1
-+sha1 da5c8e847ed909dbd0b859c6918bc526cf6c2695  ltp-full-20180926.tar.xz
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index b536dbd369..da039bddae 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LTP_TESTSUITE_VERSION = 20180515
-+LTP_TESTSUITE_VERSION = 20180926
- LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
- LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
- LTP_TESTSUITE_LICENSE = GPL-2.0, GPL-2.0+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ fs/common.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/fs/common.mk b/fs/common.mk
+index abf3541..453da60 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -75,10 +75,11 @@ $(ROOTFS_COMMON_TAR): $(ROOTFS_COMMON_DEPENDENCIES) target-finalize
+ 	echo '#!/bin/sh' > $(FAKEROOT_SCRIPT)
+ 	echo "set -e" >> $(FAKEROOT_SCRIPT)
+ 	echo "chown -h -R 0:0 $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
++
++	$(call PRINTF,$(PACKAGES_USERS)) >> $(USERS_TABLE)
+ ifneq ($(ROOTFS_USERS_TABLES),)
+ 	cat $(ROOTFS_USERS_TABLES) >> $(USERS_TABLE)
+ endif
+-	$(call PRINTF,$(PACKAGES_USERS)) >> $(USERS_TABLE)
+ 	PATH=$(BR_PATH) $(TOPDIR)/support/scripts/mkusers $(USERS_TABLE) $(TARGET_DIR) >> $(FAKEROOT_SCRIPT)
+ ifneq ($(ROOTFS_DEVICE_TABLES),)
+ 	cat $(ROOTFS_DEVICE_TABLES) > $(FULL_DEVICE_TABLE)
 -- 
-2.19.0
+1.9.1
