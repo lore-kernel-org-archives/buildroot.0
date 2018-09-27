@@ -1,36 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Sep 2018 13:37:48 +0200
-Subject: [Buildroot] [PATCH 2/5] webkitgtk: add dependency on the woff2
- package
-In-Reply-To: <20180927124148.GB16720@momiji> (Adrian Perez de Castro's message
- of "Thu, 27 Sep 2018 12:41:48 +0300")
-References: <20180922235333.85642-1-aperez@igalia.com>
- <20180922235333.85642-3-aperez@igalia.com>
- <20180925225255.3fe01107@windsurf> <20180927124148.GB16720@momiji>
-Message-ID: <87tvmbw4qb.fsf@dell.be.48ers.dk>
+Date: Thu, 27 Sep 2018 13:57:35 +0200
+Subject: [Buildroot] [PATCH] chrony: fix build failure due to missing
+ inclusion of util.h
+In-Reply-To: <20180927101544.9495-1-giulio.benetti@micronovasrl.com> (Giulio
+ Benetti's message of "Thu, 27 Sep 2018 12:15:44 +0200")
+References: <20180927101544.9495-1-giulio.benetti@micronovasrl.com>
+Message-ID: <87pnwzw3tc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
 
-Hi,
+ > During build package stops with linker error:
+ > hash_intmd5.o: In function `HSH_Hash':
+ > hash_intmd5.c:(.text+0x963): undefined reference to `MIN'
 
- >> However, since woff2 has very few dependencies, and
- >> woff2+brotli+host-pkgconf build in 19 seconds, it's nothing compared to
- >> webkitgtk, so I applied your patch.
+ > This is due to missing util.h inclusion.
+ > util.h contains MIN() macro definition.
 
- > I will make a follow-up patch to make WOFF2 optional. I think it should be
- > fine to enable it by default if BR2_PACKAGE_WOFF2 is enabled, and add a line
- > in the help description telling that it is recommended to enable it.
+ > Add upstream patch:
+ > https://git.tuxfamily.org/chrony/chrony.git/commit/?id=948ecf84314f78da82e0e2b07b6570ca9cff86c8
+ > to add #include "util.h" in hash_intmd5.c
 
-Correct. Now that we have updated kconfig we could even consider using
-the imply keyword to enable woff2 by default if it is really an option
-that most people should enable:
+ > Fixes:
+ > http://autobuild.buildroot.net/results/8f0/8f0d53b1d5a899e56540c859b908cbc1eaa223d5/
+ > http://autobuild.buildroot.net/results/3c6/3c609f94aff182c9ab47ef8ec4b9de03a4d20ffb/
+ > http://autobuild.buildroot.net/results/f1f/f1fcae399fb640c19cf88c9333a92cbfab547932/
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=237e3ad0f195d8fd34f1299e45f04793832a16fc
+ > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
