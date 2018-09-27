@@ -1,44 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Sep 2018 14:11:43 +0200
-Subject: [Buildroot] [git commit] nilfs-utils: drop NPTL dependency
-Message-ID: <20180927121256.A358388F57@busybox.osuosl.org>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Thu, 27 Sep 2018 15:40:26 +0300
+Subject: [Buildroot] [PATCH 5/5] webkitgtk: explicitly set
+ USE_GSTREAMER_GL build option
+In-Reply-To: <20180925225702.1b1ff215@windsurf>
+References: <20180922235333.85642-1-aperez@igalia.com>
+ <20180922235333.85642-6-aperez@igalia.com>	<20180925225702.1b1ff215@windsurf>
+Message-ID: <20180927154026.GF16720@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64673d4cfb7fd33f99e94eec3c7d4118278b2cb5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-The latest uClibc-ng version (1.0.30) provides clock_nanosleep() even
-for non NPTL configurations.
+On Tue, 25 Sep 2018 22:57:02 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> Hello,
+> 
+> On Sun, 23 Sep 2018 02:53:33 +0300, Adrian Perez de Castro wrote:
+> > Make the USE_GSTREAMER_GL CMake build option depend on
+> > BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL being enabled. This
+> > allows building WebKitGTK+ for targets where GL/GLES is
+> > available but either GStreamer-GL is disabled or cannot be
+> > built.
+> 
+> What is GStreamer-GL? How is it possible to have GStreamer-GL
+> disabled, but BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL enabled?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/nilfs-utils/Config.in | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+GStreamer-GL contains components which can be plugged into GStreamer media
+pipelines. For example, one of the elements provided will render video to
+GL/GLES textures; and WebKitGTK+ can optionally use them to composite the
+textures with video frames coming from GStreamer directly using the GPU
+There are also fall-back code paths in WebKit which do not require the
+GStreamer-GL components ? and that's why is possible to build WebKitGTK+
+anyway even if they are not available.
 
-diff --git a/package/nilfs-utils/Config.in b/package/nilfs-utils/Config.in
-index e245dc4656..7b239b1af5 100644
---- a/package/nilfs-utils/Config.in
-+++ b/package/nilfs-utils/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_NILFS_UTILS
- 	bool "nilfs-utils"
- 	depends on BR2_USE_MMU # util-linux libmount, libblkid
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # sem_open()
--	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # clock_nanosleep()
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
-@@ -12,7 +11,6 @@ config BR2_PACKAGE_NILFS_UTILS
- 
- 	  https://github.com/nilfs-dev/nilfs-utils
- 
--comment "nilfs-utils needs a toolchain w/ threads, NPTL"
-+comment "nilfs-utils needs a toolchain w/ threads"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+This tries to cover cases in which GL/GLES is available, but GStreamer-GL
+is not available. While it's rare, this can happen in cases where a GL/GLES
+driver does not support window surfaces: this is needed by GStreamer-GL,
+but WebKit can be coerced into painting offscreen or using FBOs.
+
+I hope this has not gone too much into details, and helps to understand
+why GStreamer-GL is not selected unconditionally by WebKitGTK+.
+
+Cheers,
+
+
+-Adri?n
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180927/66ce1db0/attachment.asc>
