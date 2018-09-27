@@ -1,39 +1,76 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Sep 2018 23:19:22 +0200
-Subject: [Buildroot] [PATCH v2,1/1] qt: fix build on powerpc_e500mc
-In-Reply-To: <20180830163146.4952-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 30 Aug 2018 18:31:46 +0200")
-References: <20180830163146.4952-1-fontaine.fabrice@gmail.com>
-Message-ID: <87r2he8wpx.fsf@dell.be.48ers.dk>
+Date: Thu, 27 Sep 2018 23:21:09 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] sdl2: add upstream patch
+ to fix DirectFB renderer handling
+Message-ID: <20180927212035.A2348890D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a24cc1cce7ecdac39cdbab650495494f133e56ac
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
- > gcc bug internal compiler error: in validate_condition_mode, at
- > config/rs6000/rs6000.c:180744. Bug is fixed since gcc 7.
- > Workaround is to set -mno-isel, see
- > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60818 and
- > https://gcc.gnu.org/ml/gcc-patches/2016-02/msg01036.html
+The configure script enables the DirectFB video driver, but forgets to
+enable the renderer driver, causing SDL_CreateRenderer() to fail. Add an upstream patch to fix this.
 
- > This bug is also raised on BR2_powerpc_8540, BR2_powerpc_8548 and
- > BR2_powerpc_e5500.
+[Peter: reword/extend commit text,
+	add git formatted patch from https://github.com/spurious/SDL-mirror]
+Signed-off-by: Peter Thompson <peter.macleod.thompson@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
- > Fixes:
- >  - http://autobuild.buildroot.net/results/9b9d11b3281a72c8f54fc675408acb96d24d8e7e
+(cherry picked from commit d1144944565f0a852cddbb1dd6f8f012c304dc0a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...irectFB-renderer-not-being-enabled-in-aut.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v1 -> v2 (after review of Thomas Petazzoni):
- >  - apply workaround for BR2_powerpc_8540, BR2_powerpc_8548 and
- >    BR2_powerpc_e5500
- >  - There is no build failure with gcc 7.x toolchain so replace
- >    BR2_TOOLCHAIN_GCC_AT_LEAST_8 by BR2_TOOLCHAIN_GCC_AT_LEAST_7
-
-Committed to 2018.02.x and 2018.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/sdl2/0001-Fixed-the-DirectFB-renderer-not-being-enabled-in-aut.patch b/package/sdl2/0001-Fixed-the-DirectFB-renderer-not-being-enabled-in-aut.patch
+new file mode 100644
+index 0000000000..53926c03b5
+--- /dev/null
++++ b/package/sdl2/0001-Fixed-the-DirectFB-renderer-not-being-enabled-in-aut.patch
+@@ -0,0 +1,42 @@
++From a0acea5bcce3f47badbfeeab7bc2e36eba08fd84 Mon Sep 17 00:00:00 2001
++From: Sam Lantinga <slouken@libsdl.org>
++Date: Mon, 27 Aug 2018 11:51:05 -0700
++Subject: [PATCH] Fixed the DirectFB renderer not being enabled in autoconf
++ builds
++
++Upstream-url: https://hg.libsdl.org/SDL/raw-rev/751cdc74d55c
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ configure    | 3 +++
++ configure.in | 1 +
++ 2 files changed, 4 insertions(+)
++
++diff --git a/configure b/configure
++index e88b38001..40ac14d21 100755
++--- a/configure
+++++ b/configure
++@@ -21501,6 +21501,9 @@ fi
++ 
++ $as_echo "#define SDL_VIDEO_DRIVER_DIRECTFB 1" >>confdefs.h
++ 
+++
+++$as_echo "#define SDL_VIDEO_RENDER_DIRECTFB 1" >>confdefs.h
+++
++             SOURCES="$SOURCES $srcdir/src/video/directfb/*.c"
++             EXTRA_CFLAGS="$EXTRA_CFLAGS $DIRECTFB_CFLAGS"
++ 
++diff --git a/configure.in b/configure.in
++index 5bf5d717b..ce1d57ea1 100644
++--- a/configure.in
+++++ b/configure.in
++@@ -2163,6 +2163,7 @@ AC_HELP_STRING([--enable-directfb-shared], [dynamically load directfb support [[
++                               , enable_directfb_shared=yes)
++ 
++             AC_DEFINE(SDL_VIDEO_DRIVER_DIRECTFB, 1, [ ])
+++            AC_DEFINE(SDL_VIDEO_RENDER_DIRECTFB, 1, [ ])
++             SOURCES="$SOURCES $srcdir/src/video/directfb/*.c"
++             EXTRA_CFLAGS="$EXTRA_CFLAGS $DIRECTFB_CFLAGS"
++ 
++-- 
++2.11.0
++
