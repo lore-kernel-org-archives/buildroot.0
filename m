@@ -1,100 +1,95 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 27 Sep 2018 23:55:50 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] brltty: use gcc instead of ld to link shared objects
-In-Reply-To: <87musbqrxu.fsf@home.blind.guru>
-References: <20180920172809.19993-1-fontaine.fabrice@gmail.com>
- <20180920210109.179978c4@windsurf>
- <CAPi7W81sP0HvhtrJs4m+RMsJ1o_P1HMvZ8hg4hkqL94xqe5a+w@mail.gmail.com>
- <87musbqrxu.fsf@home.blind.guru>
-Message-ID: <CAPi7W83NmGRMjHPmBcayMTuGJM5c2qY_5UkPKBhybAcckfTQPQ@mail.gmail.com>
+From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
+Date: Thu, 27 Sep 2018 22:21:01 +0000
+Subject: [Buildroot] [PATCH v2 1/1] bird: new package
+In-Reply-To: <20180927204116.29484-1-adrien@gallouet.fr>
+References: <20180927204116.29484-1-adrien@gallouet.fr>
+Message-ID: <20180927222100.6564-1-adrien@gallouet.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mario, Thomas,
+The BIRD project aims to develop a dynamic IP routing daemon with full support
+of all modern routing protocols, easy to use configuration interface and
+powerful route filtering language
 
-Le ven. 21 sept. 2018 ? 08:34, Mario Lang <mlang@blind.guru> a ?crit :
+Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
+---
+Changes v1 -> v2 (after Baruch Siach review)
+- Add a comment for the use of autoreconf
+- Use github helper
 
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
->
-> > Dear Thomas,
-> >
-> > Le jeu. 20 sept. 2018 ? 21:01, Thomas Petazzoni <
-> > thomas.petazzoni at bootlin.com> a ?crit :
-> >
-> >> Hello,
-> >>
-> >> On Thu, 20 Sep 2018 19:28:09 +0200, Fabrice Fontaine wrote:
-> >> > Bump to version 5.6 has reintroduced the issue fixed by patch 854093
-> on
-> >> > version 5.5.
-> >> >
-> >> > Indeed, third patch was merged upstream but it was then reverted:
-> >> >
-> >>
-> https://github.com/brltty/brltty/commit/9e7d62c869d3c1cbe12dda8b0291a4692c193416
-> >> >
-> >> > Moreover, since commit 3a2e3f6fa5ef0a210ffeba5ed05c79965d0cc3c7, MKOBJ
-> >> > was renamed into MKREL. So, instead of patching again brltty,
-> overwrite
-> >> > MKREL to use "gcc -shared -o" instead of "ld -r -o".
-> >>
-> >> Are you really sure gcc -shared -o does the same thing as ld -r -o ?
->
-> ld fails to link on mipsel at least.  What else should we do?
-> "ABI is incompatible with that of the selected emulation"
-> "Attempt to do relocatable link with elf64-tradlittlemips input and
-> elf32-ntradlittlemips output"
->
-After more investigations, it seems that this issue is raised only on
-mips64el (at least on autobuilders:
-http://autobuild.buildroot.org/?reason=brltty-5.6).
-On this target, by default, ld wants to link a 32 bits binary (I don't know
-why).
-This issue can be fixed by setting LD="$(TARGET_LD) -melf64ltsmip".
-However, I don't know if this a better solution, it seems like a workaround
-to a toolchain issue.
-
->
-> Hmm, maybe this is a HOST/TARGET mixup?  But how?
->
-> > I didn't think about it, I basically backported the behavior of third
-> patch
-> > (upstream commit 4c8aba42e246b96d10ffcbd57653682375499e46). The third
-> patch
-> > applied to brltty 5.5 (https://patchwork.ozlabs.org/patch/854093/) was
-> > replacing MKOBJ ($(LD) -r -o) by MKMOD defined as (CC)
-> > ${brltty_mkmod_gcc_make=-shared}
-> > BRLTTY_OPTIONS_LD2CC([${brltty_mkmod_ld_options}]) -o" with
-> > brltty_mkmod_ld_make="-shared" on linux (see
-> >
-> https://github.com/brltty/brltty/blob/4c8aba42e246b96d10ffcbd57653682375499e46/configure.ac
-> > ).
-> > More information can be found here:
-> > https://github.com/brltty/brltty/pull/113
-> > However, I don't know why this commit was reverted one week later.
-> > Mario, you told us in the review of the first patch that the upstream
-> > author decided to "fix" the issue in a different way but actually the
-> issue
-> > is not fixed. Do you know why this commit was reverted? If needed, I can
-> > create an issue to get more info.
->
-> It was reverted because it failed to build on Mac OS X, and Mac OS X was
-> deemed more important then cross-compiling on Linux.
->
-> Upstream (dave at mielke.cc) is very responsive, maybe you have more luck
-> trying to work this one out with him?
->
-> --
-> CYa,
->   ?????
->
-Best Regards,
-
-Fabrice
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180927/2d68f9a5/attachment.html>
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0335aef3b1..a256067004 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -72,6 +72,7 @@ F:	package/woff2/
+ 
+ N:	Adrien Gallou?t <adrien@gallouet.fr>
+ F:	package/glorytun/
++F:	package/bird/
+ 
+ N:	Aleksander Morgado <aleksander@aleksander.es>
+ F:	package/libmbim/
+diff --git a/package/Config.in b/package/Config.in
+index 52f11c407a..73bb209c66 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1743,6 +1743,7 @@ menu "Networking applications"
+ 	source "package/batctl/Config.in"
+ 	source "package/bcusdk/Config.in"
+ 	source "package/bind/Config.in"
++	source "package/bird/Config.in"
+ 	source "package/bluez-tools/Config.in"
+ 	source "package/bluez_utils/Config.in"
+ 	source "package/bluez5_utils/Config.in"
+diff --git a/package/bird/Config.in b/package/bird/Config.in
+new file mode 100644
+index 0000000000..6e4e43505a
+--- /dev/null
++++ b/package/bird/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_BIRD
++	bool "bird"
++	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_READLINE
++	help
++	  BIRD Internet Routing Daemon
++
++	  The BIRD project aims to develop a dynamic IP routing daemon with full support
++	  of all modern routing protocols, easy to use configuration interface and
++	  powerful route filtering language
++
++	  http://bird.network.cz/
+diff --git a/package/bird/bird.hash b/package/bird/bird.hash
+new file mode 100644
+index 0000000000..449e8afd8d
+--- /dev/null
++++ b/package/bird/bird.hash
+@@ -0,0 +1,2 @@
++sha256 bd42d48fbcc2c0046d544f1183cd98193ff15b792d332ff45f386b0180b09335  bird-v2.0.2.tar.gz
++sha256 f018596a97af0108efc446320631e2fddc0c1d1f3ffab3129327ccdb4f0c29ed  README
+diff --git a/package/bird/bird.mk b/package/bird/bird.mk
+new file mode 100644
+index 0000000000..f45baadab2
+--- /dev/null
++++ b/package/bird/bird.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# bird
++#
++################################################################################
++
++BIRD_VERSION = v2.0.2
++BIRD_SITE = $(call github,BIRD,bird,$(BIRD_VERSION))
++BIRD_LICENSE = GPL-2.0+
++BIRD_LICENSE_FILES = README
++
++# autoreconf is needed since the package is fetched from github
++BIRD_AUTORECONF = YES
++
++$(eval $(autotools-package))
+-- 
+2.19.0
