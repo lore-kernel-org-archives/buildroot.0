@@ -1,144 +1,81 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Sep 2018 23:22:58 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] squashfs: bump version to
- e38956b92f738518c29734399629e7cdb33072d3
-Message-ID: <20180927212258.5E23F890E2@busybox.osuosl.org>
+Date: Thu, 27 Sep 2018 23:23:16 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/squashfs: fix
+ build on hosts with glibc >= 2.28
+Message-ID: <20180927212258.6EDAB890E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9080a475fd2c13d1585bf601585eaf5e50c1b046
+commit: https://git.buildroot.net/buildroot/commit/?id=26fe491b8b7bf0d8dcabf2e4a3fdc09dde7f0933
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-- delete patch 0001-musl.patch (superseeded by upstream commit [1])
-- disable new zstd support for host/target
+Since glibc 2.28, sys/sysmacros.h is no longer included from sys/types.h
+This patch fixes the resulting build error by explicitly including
+sys/sysmacros.h
 
-[1] https://git.kernel.org/pub/scm/fs/squashfs/squashfs-tools.git/commit/?id=a81678d6a698b8a016f9abac9f3d981281cc52eb
+See also https://github.com/plougher/squashfs-tools/pull/52
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 50b1a05fb6f96bff45e68799b4ac7d97d283b661)
+Signed-off-by: Richard Kunze <richard.kunze@web.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit ed0e55675eaf91e61d8004128169cb195a4fb72a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/squashfs/0001-musl.patch | 71 ----------------------------------------
- package/squashfs/squashfs.hash   |  2 +-
- package/squashfs/squashfs.mk     |  7 ++--
- 3 files changed, 5 insertions(+), 75 deletions(-)
+ package/squashfs/0001-include-sysmacros.patch | 47 +++++++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
-diff --git a/package/squashfs/0001-musl.patch b/package/squashfs/0001-musl.patch
-deleted file mode 100644
-index 891b1717a2..0000000000
---- a/package/squashfs/0001-musl.patch
-+++ /dev/null
-@@ -1,71 +0,0 @@
--Fix musl build
--
--Downloaded from
--http://cgit.openembedded.org/openembedded-core/tree/meta/recipes-devtools/squashfs-tools/squashfs-tools/fix-compat.patch
--and adjusted paths.
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--Define FNM_EXTMATCH if not defined its glibc specific define
--include missing sys/stat.h for stat* function declarations
--
--Upstream-Status: Pending
--Signed-off-by: Khem Raj <raj.khem@gmail.com>
--
--Index: squashfs-tools/action.c
--===================================================================
----- a/squashfs-tools.orig/action.c
--+++ b/squashfs-tools/action.c
--@@ -44,6 +44,10 @@
-- #include "action.h"
-- #include "error.h"
-- 
--+#if !defined(FNM_EXTMATCH)
--+#define FNM_EXTMATCH 0
--+#endif
--+
-- /*
--  * code to parse actions
--  */
--Index: squashfs-tools/mksquashfs.c
--===================================================================
----- a/squashfs-tools.orig/mksquashfs.c
--+++ b/squashfs-tools/mksquashfs.c
--@@ -1286,6 +1286,10 @@ void write_dir(squashfs_inode *inode, st
-- 		dir_size + 3, directory_block, directory_offset, NULL, NULL,
-- 		dir, 0);
-- 
--+#if !defined(FNM_EXTMATCH)
--+#define FNM_EXTMATCH 0
--+#endif
--+
-- #ifdef SQUASHFS_TRACE
-- 	{
-- 		unsigned char *dirp;
--Index: squashfs-tools/pseudo.c
--===================================================================
----- a/squashfs-tools.orig/pseudo.c
--+++ b/squashfs-tools/pseudo.c
--@@ -32,6 +32,7 @@
-- #include <stdlib.h>
-- #include <sys/types.h>
-- #include <sys/wait.h>
--+#include <sys/stat.h>
-- #include <ctype.h>
-- 
-- #include "pseudo.h"
--Index: squashfs-tools/unsquashfs.c
--===================================================================
----- a/squashfs-tools.orig/unsquashfs.c
--+++ b/squashfs-tools/unsquashfs.c
--@@ -38,6 +38,10 @@
-- #include <limits.h>
-- #include <ctype.h>
-- 
--+#ifndef FNM_EXTMATCH
--+#define FNM_EXTMATCH 0
--+#endif
--+
-- struct cache *fragment_cache, *data_cache;
-- struct queue *to_reader, *to_inflate, *to_writer, *from_writer;
-- pthread_t *thread, *inflator_thread;
-diff --git a/package/squashfs/squashfs.hash b/package/squashfs/squashfs.hash
-index 74fdb44354..82a650022c 100644
---- a/package/squashfs/squashfs.hash
-+++ b/package/squashfs/squashfs.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	2c49392816615b73bf5d6cdce9776cb66a01f5a1494b1d9af580667e32bab001  squashfs-3de1687d7432ea9b302c2db9521996f506c140a3.tar.gz
-+sha256 bd0aa3011320b8ebee68aa406060de277bef16daf81bad5b9f70cbea6db1a779 squashfs-e38956b92f738518c29734399629e7cdb33072d3.tar.gz
-diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
-index 9599d892b2..e656218f97 100644
---- a/package/squashfs/squashfs.mk
-+++ b/package/squashfs/squashfs.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
- 
--SQUASHFS_VERSION = 3de1687d7432ea9b302c2db9521996f506c140a3
-+SQUASHFS_VERSION = e38956b92f738518c29734399629e7cdb33072d3
- SQUASHFS_SITE = https://git.kernel.org/pub/scm/fs/squashfs/squashfs-tools.git
- SQUASHFS_SITE_METHOD = git
- SQUASHFS_LICENSE = GPL-2.0+
- SQUASHFS_LICENSE_FILES = COPYING
--SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=1
-+SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=1 ZSTD_SUPPORT=0
- 
- ifeq ($(BR2_PACKAGE_SQUASHFS_LZ4),y)
- SQUASHFS_DEPENDENCIES += lz4
-@@ -54,7 +54,8 @@ HOST_SQUASHFS_MAKE_ARGS = \
- 	GZIP_SUPPORT=1 \
- 	LZ4_SUPPORT=1 \
- 	LZO_SUPPORT=1 \
--	LZMA_XZ_SUPPORT=1
-+	LZMA_XZ_SUPPORT=1 \
-+	ZSTD_SUPPORT=0
- 
- define SQUASHFS_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) \
+diff --git a/package/squashfs/0001-include-sysmacros.patch b/package/squashfs/0001-include-sysmacros.patch
+new file mode 100644
+index 0000000000..d794836c04
+--- /dev/null
++++ b/package/squashfs/0001-include-sysmacros.patch
+@@ -0,0 +1,47 @@
++From 968aa53dd6d2c0831a9af01873441767c06b88d0 Mon Sep 17 00:00:00 2001
++From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
++Date: Wed, 1 Aug 2018 12:17:10 +0200
++Subject: [PATCH] mksquashfs/unsquashfs: fix compilation with glibc 2.25+
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++From glibc 2.25 release notes:
++https://sourceware.org/ml/libc-alpha/2017-02/msg00079.html
++"* The inclusion of <sys/sysmacros.h> by <sys/types.h> is deprecated.
++  This means that in a future release, the macros ???major???, ???minor???, and
++  ???makedev??? will only be available from <sys/sysmacros.h>."
++
++See glibc bug https://sourceware.org/bugzilla/show_bug.cgi?id=19239 .
++
++Fetch from: https://github.com/plougher/squashfs-tools/pull/52.patch
++Signed-off-by: Richard Kunze <richard.kunze@web.de>
++---
++ squashfs-tools/mksquashfs.c | 1 +
++ squashfs-tools/unsquashfs.c | 1 +
++ 2 files changed, 2 insertions(+)
++
++diff --git a/squashfs-tools/mksquashfs.c b/squashfs-tools/mksquashfs.c
++index d696a51..8d57c3e 100644
++--- a/squashfs-tools/mksquashfs.c
+++++ b/squashfs-tools/mksquashfs.c
++@@ -35,6 +35,7 @@
++ #include <stddef.h>
++ #include <sys/types.h>
++ #include <sys/stat.h>
+++#include <sys/sysmacros.h>
++ #include <fcntl.h>
++ #include <errno.h>
++ #include <dirent.h>
++diff --git a/squashfs-tools/unsquashfs.c b/squashfs-tools/unsquashfs.c
++index a57f85c..a492b27 100644
++--- a/squashfs-tools/unsquashfs.c
+++++ b/squashfs-tools/unsquashfs.c
++@@ -33,6 +33,7 @@
++ #include "fnmatch_compat.h"
++ 
++ #include <sys/sysinfo.h>
+++#include <sys/sysmacros.h>
++ #include <sys/types.h>
++ #include <sys/time.h>
++ #include <sys/resource.h>
