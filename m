@@ -1,41 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Sep 2018 14:12:55 +0200
-Subject: [Buildroot] [git commit] quazip: upgrade to 0.7.6
-Message-ID: <20180927121257.11E6988F59@busybox.osuosl.org>
+Date: Thu, 27 Sep 2018 14:11:43 +0200
+Subject: [Buildroot] [git commit] nilfs-utils: drop NPTL dependency
+Message-ID: <20180927121256.A358388F57@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6fa6a45e196665d6607b522f290b1451b949c2c
+commit: https://git.buildroot.net/buildroot/commit/?id=64673d4cfb7fd33f99e94eec3c7d4118278b2cb5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+The latest uClibc-ng version (1.0.30) provides clock_nanosleep() even
+for non NPTL configurations.
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/quazip/quazip.hash | 2 +-
- package/quazip/quazip.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nilfs-utils/Config.in | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/quazip/quazip.hash b/package/quazip/quazip.hash
-index 4e9af16a1a..9f43643d6b 100644
---- a/package/quazip/quazip.hash
-+++ b/package/quazip/quazip.hash
-@@ -1,2 +1,2 @@
- # From github release page
--sha256 f3a56647d4706c9daef411e40e3884702e2bd770e980145c3899321788ba8bb2 quazip-0.7.5.tar.gz
-+sha256 4118a830a375a81211956611cc34b1b5b4ddc108c126287b91b40c2493046b70 quazip-0.7.6.tar.gz
-diff --git a/package/quazip/quazip.mk b/package/quazip/quazip.mk
-index 7bef2fe7d9..872340ab40 100644
---- a/package/quazip/quazip.mk
-+++ b/package/quazip/quazip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/nilfs-utils/Config.in b/package/nilfs-utils/Config.in
+index e245dc4656..7b239b1af5 100644
+--- a/package/nilfs-utils/Config.in
++++ b/package/nilfs-utils/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_NILFS_UTILS
+ 	bool "nilfs-utils"
+ 	depends on BR2_USE_MMU # util-linux libmount, libblkid
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # sem_open()
+-	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # clock_nanosleep()
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+@@ -12,7 +11,6 @@ config BR2_PACKAGE_NILFS_UTILS
  
--QUAZIP_VERSION = 0.7.5
-+QUAZIP_VERSION = 0.7.6
- QUAZIP_SITE = $(call github,stachenov,quazip,$(QUAZIP_VERSION))
- QUAZIP_INSTALL_STAGING = YES
- QUAZIP_DEPENDENCIES = \
+ 	  https://github.com/nilfs-dev/nilfs-utils
+ 
+-comment "nilfs-utils needs a toolchain w/ threads, NPTL"
++comment "nilfs-utils needs a toolchain w/ threads"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
