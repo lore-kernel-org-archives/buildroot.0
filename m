@@ -1,80 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Sep 2018 15:07:13 +0200
-Subject: [Buildroot] [PATCH] glibc: bump version for post-2.28 fixes
-Message-ID: <20180927130713.15364-1-peter@korsgaard.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 27 Sep 2018 09:00:31 -0500
+Subject: [Buildroot] [PATCH v2,1/8] libselinux: bump to version 2.8
+In-Reply-To: <20180921205013.21829-1-fontaine.fabrice@gmail.com>
+References: <20180921205013.21829-1-fontaine.fabrice@gmail.com>
+Message-ID: <CANQCQpYEg6yHKexL9Y7WJRDqiD3Bm080x7j7G56__DYKoU=aGQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Carlos O'Donell (1):
-      Fix tst-setcontext9 for optimized small stacks.
+Fabrice,
 
-DJ Delorie (3):
-      RISC-V: Fix rounding save/restore bug.
-      Regen RISC-V rvd ULPs
-      Improve ChangeLog message.
+On Fri, Sep 21, 2018 at 3:50 PM Fabrice Fontaine
+<fontaine.fabrice@gmail.com> wrote:
+>
+> - Remove second patch (already in version), see
+>   https://github.com/SELinuxProject/selinux/commit/b24980ec07af66c4b419f8053aa65e97b36e558d
+> - Update third patch
+> - Pass SHLIBDIR=/usr/lib because by default it is set to /lib and LIBDIR
+>   is set to $(PREFIX)/lib (with PREFIX=/usr)
+> - Use DESTDIR=$(HOST_DIR) instead of PREFIX=$(HOST_DIR) to install host
+>   variant
+> - Remove libselinux.so symbolic link for host variant (not needed)
+> - Add hash for license file
+>
 
-Florian Weimer (6):
-      Linux: Rewrite __old_getdents64 [BZ #23497]
-      error, error_at_line: Add missing va_end calls
-      nscd: Deallocate existing user names in file parser
-      nss_files: Fix file stream leak in aliases lookup [BZ #23521]
-      regex: Add test tst-regcomp-truncated [BZ #23578]
-      misc: New test misc/tst-gethostid
+I've reviewed and build tested this 2.8 series and it looks good.
+I've handed off images for runtime testing and will reply back with my
+tested by once those pass.
 
-H.J. Lu (1):
-      i386: Use ENTRY and END in start.S [BZ #23606]
-
-Martin Kuchta (1):
-      pthread_cond_broadcast: Fix waiters-after-spinning case [BZ #23538]
-
-Mingli Yu (1):
-      Linux gethostid: Check for NULL value from gethostbyname_r [BZ #23679]
-
-Paul Eggert (1):
-      regex: fix uninitialized memory access
-
-Samuel Thibault (2):
-      hurd: Add missing symbols for proper libc_get/setspecific
-      hurd: Avoid PLTs for __pthread_get/setspecific
-
-Stefan Liebler (1):
-      Fix segfault in maybe_script_execute.
-
-Wilco Dijkstra (1):
-      Fix strstr bug with huge needles (bug 23637)
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/glibc/glibc.hash | 2 +-
- package/glibc/glibc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-index 096393ff9b..9fff30e1ef 100644
---- a/package/glibc/glibc.hash
-+++ b/package/glibc/glibc.hash
-@@ -1,5 +1,5 @@
- # Locally calculated (fetched from Github)
--sha256  877c7b4741501d1762af8ef1a2518bdf2d722947d2e8d48b203e2d83cc600bca     glibc-glibc-2.28.tar.gz
-+sha256  6e88cea4002efa7f78d86ea5e98eb92ed423d5a35068751517c4f00f56b8666c     glibc-glibc-2.28-18-g2339d6a55eb7a7e040ae888e906adc49eeb59eab.tar.gz
- # Locally calculated (fetched from Github)
- sha256  e08ab67b2db2d0f0e8f3311d23c54fb8f6d4c1ef6fa0b4047fd5da400e3ce9de     glibc-arc-2018.03-release.tar.gz
- 
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index c8ade7c28b..708c22f723 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -10,7 +10,7 @@ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VE
- else
- # Generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
--GLIBC_VERSION = glibc-2.28
-+GLIBC_VERSION = glibc-2.28-18-g2339d6a55eb7a7e040ae888e906adc49eeb59eab
- # Upstream doesn't officially provide an https download link.
- # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
- # sometimes the connection times out. So use an unofficial github mirror.
--- 
-2.11.0
+Thanks,
+Matt
