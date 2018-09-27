@@ -1,55 +1,84 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Sep 2018 18:00:23 +0200
-Subject: [Buildroot] [PATCH] ghostscript: security bump to version 9.25
-Message-ID: <20180927160023.24230-1-peter@korsgaard.com>
+From: Hollis Blanchard <hollis_blanchard@mentor.com>
+Date: Thu, 27 Sep 2018 10:18:01 -0700
+Subject: [Buildroot] Autobnuilders timeouts [was: Re: autobuilder flock
+ hangs]
+In-Reply-To: <20180825130512.GB2419@scaer>
+References: <20180812060015.A385B207E5@mail.bootlin.com>
+ <20180812223629.2bac8ebe@windsurf>
+ <1a4b53ec-1ed3-7770-3a65-8d4f4f596918@mentor.com>
+ <20180816111059.3a7f1b59@windsurf> <20180824070203.GK9365@scaer>
+ <821f032d-836a-41c2-d50c-eaa4687c5b22@mentor.com>
+ <20180825130512.GB2419@scaer>
+Message-ID: <61c38cb3-134e-388a-8c31-1c0b664d16cd@mentor.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+On 08/25/2018 06:05 AM, Yann E. MORIN wrote:
+> On 2018-08-24 16:45 -0700, Hollis Blanchard spake thusly:
+>> I suspect a) something goes wrong with the buildroot job, b) it's killed in
+>> a way that leaves a dangling flock, c) future buildroot jobs run headlong
+>> into the lingering flock and triggers a timeout.
+> So I had a look at the autobuilder code, and we kill the build process
+> with SIGKILL (-9)., so it has no chance of propagating it down to its
+> children.
+>
+> I wonder if, should we were to use SIGTERM instead, there would be an
+> improvement. Could you try to leave your autobuilder running with this
+> patch, please?
+>
+> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+> index 3d2e99a..ba86d3d 100755
+> --- a/scripts/autobuild-run
+> +++ b/scripts/autobuild-run
+> @@ -390,7 +390,7 @@ def stop_on_build_hang(monitor_thread_hung_build_flag,
+>                   if sub_proc.poll() is None:
+>                       monitor_thread_hung_build_flag.set() # Used by do_build() to determine build hang
+>                       log_write(log, "INFO: build hung")
+> -                    sub_proc.kill()
+> +                    sub_proc.terminate()
+>                   break
+>           monitor_thread_stop_flag.wait(30)
+By the way, I tried this, came back weeks later, and found my 
+autobuilder hung like so:
 
-- CVE-2018-16543: In Artifex Ghostscript before 9.24, gssetresolution and
-  gsgetresolution allow attackers to have an unspecified impact
+    [Fri, 07 Sep 2018 18:40:22] INFO: generate the configuration
+    KCONFIG_SEED=0xEB4D3CE
+    [Fri, 07 Sep 2018 18:40:40] INFO: build started
+    [Fri, 07 Sep 2018 22:39:10] INFO: build hung
 
-- CVE-2018-17183: Artifex Ghostscript before 9.25 allowed a user-writable
-  error exception table, which could be used by remote attackers able to
-  supply crafted PostScript to potentially overwrite or replace error
-  handlers to inject code.
+output/logfile says:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ghostscript/ghostscript.hash | 4 ++--
- package/ghostscript/ghostscript.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+     >>> solarus v1.5.3 Building
 
-diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
-index bb41841012..f8ca6c8d4e 100644
---- a/package/ghostscript/ghostscript.hash
-+++ b/package/ghostscript/ghostscript.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs923/SHA512SUMS
--sha512 0c1f59b743f92f9cf7000b06f6209010e583ef4d6899c20ed245721dea3c08fd58b9e2d1513fe83765ab6be233bc7ab250cf18054e4d09de4073b1111e38035f  ghostscript-9.23.tar.xz
-+# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs925/SHA512SUMS
-+sha512 7a1c0b7546ed523f50c1452d4a1c13fcf043d6060fc9708bbc4b543f66ecb1b619b6e71998094ac702ef44a2fd159b6523271de19b1cae352981ef51fb637651  ghostscript-9.25.tar.xz
- 
- # Hash for license file:
- sha256 6f852249f975287b3efd43a5883875e47fa9f3125e2f1b18b5c09517ac30ecf2  LICENSE
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index 8ea6610be5..9b5e144888 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--GHOSTSCRIPT_VERSION = 9.23
--GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs923
-+GHOSTSCRIPT_VERSION = 9.25
-+GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs925
- GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
- GHOSTSCRIPT_LICENSE = AGPL-3.0
- GHOSTSCRIPT_LICENSE_FILES = LICENSE
--- 
-2.11.0
+    <snip>
+
+    [ 88%] Building CXX object
+    CMakeFiles/solarus.dir/src/third_party/snes_spc/SNES_SPC_state.cpp.o
+    [ 88%] Building CXX object
+    CMakeFiles/solarus.dir/src/third_party/snes_spc/spc.cpp.o
+    [ 89%] Building CXX object
+    CMakeFiles/solarus.dir/src/third_party/snes_spc/SPC_DSP.cpp.o
+    [ 89%] Building CXX object
+    CMakeFiles/solarus.dir/src/third_party/snes_spc/SPC_Filter.cpp.o
+    [ 90%] Linking CXX shared library libsolarus.so
+
+
+So it seems like solarus exceeded the build timeout (simple host 
+performance issue?), and .terminate() was not enough. However, I bet 
+.kill() would have left those subprocesses we saw earlier. (Also, in 
+hindsight, I suspect they were all flocks for the same directory or two, 
+so they all disappeared when the lock owner died.)
+
+I have not tried your other patch series that changes download timeouts, 
+but I don't think it would have affected the particular case above, 
+since it's not stuck downloading.
+
+Hollis Blanchard
+Mentor Graphics Emulation Division
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180927/444ee999/attachment.html>
