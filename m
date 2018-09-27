@@ -1,93 +1,69 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Thu, 27 Sep 2018 12:44:00 +0300
-Subject: [Buildroot] [PATCH 3/5] webkitgtk: enable package for aarch64
-In-Reply-To: <20180925225615.509026b3@windsurf>
-References: <20180922235333.85642-1-aperez@igalia.com>
- <20180922235333.85642-4-aperez@igalia.com>	<20180925225615.509026b3@windsurf>
-Message-ID: <20180927124400.GD16720@momiji>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Thu, 27 Sep 2018 12:15:44 +0200
+Subject: [Buildroot] [PATCH] chrony: fix build failure due to missing
+ inclusion of util.h
+Message-ID: <20180927101544.9495-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+During build package stops with linker error:
+hash_intmd5.o: In function `HSH_Hash':
+hash_intmd5.c:(.text+0x963): undefined reference to `MIN'
 
-On Tue, 25 Sep 2018 22:56:15 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> Hello Adrian,
-> 
-> On Sun, 23 Sep 2018 02:53:31 +0300, Adrian Perez de Castro wrote:
-> > 64-bit ARM is well supported, particularly in little-endian
-> > configurations, where JIT can be enabled as well.
-> > 
-> > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-> > ---
-> >  package/webkitgtk/Config.in    | 1 +
-> >  package/webkitgtk/webkitgtk.mk | 5 +++--
-> >  2 files changed, 4 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-> > index 96a7ab0c94..ac6f57e2ad 100644
-> > --- a/package/webkitgtk/Config.in
-> > +++ b/package/webkitgtk/Config.in
-> > @@ -2,6 +2,7 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
-> >  	bool
-> >  	# ARM needs BLX, so v5t+, BE completely untested so disabled
-> >  	default y if BR2_arm && !BR2_ARM_CPU_ARMV4
-> > +	default y if BR2_aarch64 || BR2_aarch64_be
-> >  	default y if BR2_i386 || BR2_x86_64
-> >  	# Disabled on MIPS big endian due to sigbus
-> >  	default y if BR2_mipsel || BR2_mips64el
-> > diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-> > index f28417ac73..f0293fc225 100644
-> > --- a/package/webkitgtk/webkitgtk.mk
-> > +++ b/package/webkitgtk/webkitgtk.mk
-> > @@ -27,9 +27,10 @@ WEBKITGTK_CONF_OPTS = \
-> >  	-DUSE_LIBNOTIFY=OFF \
-> >  	-DUSE_LIBHYPHEN=OFF
-> >  
-> > -# ARM needs NEON for JIT
-> > +# 32-bit ARM needs NEON for JIT, AArch64 is supported but not well tested
-> > +# on big endian hence the missing $(BR2_aarch64_be).
-> >  # i386 & x86_64 don't seem to have any special requirements
-> > -ifeq ($(BR2_ARM_CPU_HAS_NEON)$(BR2_i386)$(BR2_x86_64),y)
-> > +ifeq ($(BR2_ARM_CPU_HAS_NEON)$(BR2_i386)$(BR2_x86_64)$(BR2_aarch64),y)
-> 
-> For the JIT enabling, I think it would be better, for this patch and
-> the next PATCH 4/5 to do the following things:
-> 
->  - A first patch that introduces BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS_JIT
-> 
-> config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS_JIT
-> 	bool
-> 	default y if BR2_ARM_CPU_HAS_NEON
-> 	default y if BR2_i386
-> 	default y if BR2_x86_64
-> 
->    and change webkitgtk.mk to use
->    BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS_JIT to decide whether JIT should
->    be enabled or not.
-> 
->  - A second patch that adds AArch64 support, and adds a "default y if
->    BR2_aarch64" to BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS_JIT
-> 
->  - A third patch that enables JIT support on MIPS, extending again the
->    BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS_JIT option.
-> 
-> Could you rework PATCH 3/5 and 4/5 accordingly ?
+This is due to missing util.h inclusion.
+util.h contains MIN() macro definition.
 
-Doing something like that crossed my mind, but I opted for keeping the diff
-as small as possible. I do agree that having this logic in the Kconfig file
-is nicer, so I will find some time in the next days to rework it.
+Add upstream patch:
+https://git.tuxfamily.org/chrony/chrony.git/commit/?id=948ecf84314f78da82e0e2b07b6570ca9cff86c8
+to add #include "util.h" in hash_intmd5.c
 
-Regards,
+Fixes:
+http://autobuild.buildroot.net/results/8f0/8f0d53b1d5a899e56540c859b908cbc1eaa223d5/
+http://autobuild.buildroot.net/results/3c6/3c609f94aff182c9ab47ef8ec4b9de03a4d20ffb/
+http://autobuild.buildroot.net/results/f1f/f1fcae399fb640c19cf88c9333a92cbfab547932/
 
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+ ...02-hash-include-util.h-for-MIN-macro.patch | 28 +++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/chrony/0002-hash-include-util.h-for-MIN-macro.patch
 
--Adri?n
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180927/a4606a14/attachment.asc>
+diff --git a/package/chrony/0002-hash-include-util.h-for-MIN-macro.patch b/package/chrony/0002-hash-include-util.h-for-MIN-macro.patch
+new file mode 100644
+index 0000000000..1fd5bd9984
+--- /dev/null
++++ b/package/chrony/0002-hash-include-util.h-for-MIN-macro.patch
+@@ -0,0 +1,28 @@
++From 948ecf84314f78da82e0e2b07b6570ca9cff86c8 Mon Sep 17 00:00:00 2001
++From: Miroslav Lichvar <mlichvar@redhat.com>
++Date: Thu, 20 Sep 2018 15:01:16 +0200
++Subject: [PATCH] hash: include util.h for MIN macro
++
++The hash_intmd5.c file inadvertently relied on the system headers to
++provide the MIN macro, but it is missing with some libc implementations.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
++---
++ hash_intmd5.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/hash_intmd5.c b/hash_intmd5.c
++index 0b60f9b..49da1cf 100644
++--- a/hash_intmd5.c
+++++ b/hash_intmd5.c
++@@ -29,6 +29,7 @@
++ #include "sysincl.h"
++ #include "hash.h"
++ #include "memory.h"
+++#include "util.h"
++ 
++ #include "md5.c"
++ 
++-- 
++2.17.1
++
+-- 
+2.17.1
