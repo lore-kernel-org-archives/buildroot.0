@@ -1,70 +1,247 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Sep 2018 13:57:34 +0200
-Subject: [Buildroot] [git commit] chrony: fix build failure due to missing
- inclusion of util.h
-Message-ID: <20180927121254.0BFDB88F59@busybox.osuosl.org>
+Date: Thu, 27 Sep 2018 13:57:58 +0200
+Subject: [Buildroot] [git commit] ncmpc: fix build with gcc 4.9
+Message-ID: <20180927121254.CEB6C88F5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=67f3d9bdfaef6acc0faaba015a7d7cbe62b09589
+commit: https://git.buildroot.net/buildroot/commit/?id=1f5bec6fac04276c5ef84f4def70fd2302d8b4c3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-During build package stops with linker error:
-hash_intmd5.o: In function `HSH_Hash':
-hash_intmd5.c:(.text+0x963): undefined reference to `MIN'
-
-This is due to missing util.h inclusion.
-util.h contains MIN() macro definition.
-
-Add upstream patch:
-https://git.tuxfamily.org/chrony/chrony.git/commit/?id=948ecf84314f78da82e0e2b07b6570ca9cff86c8
-to add #include "util.h" in hash_intmd5.c
+Add upstream patch to fix build on gcc 4.9
 
 Fixes:
-http://autobuild.buildroot.net/results/8f0/8f0d53b1d5a899e56540c859b908cbc1eaa223d5/
-http://autobuild.buildroot.net/results/3c6/3c609f94aff182c9ab47ef8ec4b9de03a4d20ffb/
-http://autobuild.buildroot.net/results/f1f/f1fcae399fb640c19cf88c9333a92cbfab547932/
+ - http://autobuild.buildroot.org/results/e3b1b1bdad841c151b70294d517dc75c5305b0fe
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0002-hash-include-util.h-for-MIN-macro.patch   | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ ...ings-constructor-to-simplify-initializers.patch | 217 +++++++++++++++++++++
+ 1 file changed, 217 insertions(+)
 
-diff --git a/package/chrony/0002-hash-include-util.h-for-MIN-macro.patch b/package/chrony/0002-hash-include-util.h-for-MIN-macro.patch
+diff --git a/package/ncmpc/0002-Global-Bindings-add-KeyBindings-constructor-to-simplify-initializers.patch b/package/ncmpc/0002-Global-Bindings-add-KeyBindings-constructor-to-simplify-initializers.patch
 new file mode 100644
-index 0000000000..1fd5bd9984
+index 0000000000..217fa9b55b
 --- /dev/null
-+++ b/package/chrony/0002-hash-include-util.h-for-MIN-macro.patch
-@@ -0,0 +1,28 @@
-+From 948ecf84314f78da82e0e2b07b6570ca9cff86c8 Mon Sep 17 00:00:00 2001
-+From: Miroslav Lichvar <mlichvar@redhat.com>
-+Date: Thu, 20 Sep 2018 15:01:16 +0200
-+Subject: [PATCH] hash: include util.h for MIN macro
++++ b/package/ncmpc/0002-Global-Bindings-add-KeyBindings-constructor-to-simplify-initializers.patch
+@@ -0,0 +1,217 @@
++From da27fcc39e187671b5e4373848f701a3d910446c Mon Sep 17 00:00:00 2001
++From: Max Kellermann <max@musicpd.org>
++Date: Wed, 26 Sep 2018 09:51:09 +0200
++Subject: [PATCH] {Global,}Bindings: add KeyBindings constructor to simplify
++ initializers
 +
-+The hash_intmd5.c file inadvertently relied on the system headers to
-+provide the MIN macro, but it is missing with some libc implementations.
++As a side effect, this works around a build failure with GCC 4.9.
 +
-+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from 
++https://github.com/MusicPlayerDaemon/ncmpc/commit/da27fcc39e187671b5e4373848f701a3d910446c
++and updated for 0.31 (remove NEWS update)]
 +---
-+ hash_intmd5.c | 1 +
-+ 1 file changed, 1 insertion(+)
++ src/Bindings.hxx       |   3 +
++ src/GlobalBindings.cxx | 142 ++++++++++++++++++++---------------------
++ 3 files changed, 75 insertions(+), 71 deletions(-)
 +
-+diff --git a/hash_intmd5.c b/hash_intmd5.c
-+index 0b60f9b..49da1cf 100644
-+--- a/hash_intmd5.c
-++++ b/hash_intmd5.c
-+@@ -29,6 +29,7 @@
-+ #include "sysincl.h"
-+ #include "hash.h"
-+ #include "memory.h"
-++#include "util.h"
++diff --git a/src/Bindings.hxx b/src/Bindings.hxx
++index 342d951..0c630dc 100644
++--- a/src/Bindings.hxx
+++++ b/src/Bindings.hxx
++@@ -42,6 +42,9 @@ struct KeyBinding {
++ 	bool modified = false;
++ #endif
 + 
-+ #include "md5.c"
+++	constexpr KeyBinding(int a, int b=0, int c=0) noexcept
+++		:keys{{a, b, c}} {}
+++
++ 	gcc_pure
++ 	bool HasKey(int key) const {
++ 		return std::find(keys.begin(), keys.end(), key) != keys.end();
++diff --git a/src/GlobalBindings.cxx b/src/GlobalBindings.cxx
++index b565848..8049ed2 100644
++--- a/src/GlobalBindings.cxx
+++++ b/src/GlobalBindings.cxx
++@@ -51,110 +51,110 @@
 + 
-+-- 
-+2.17.1
-+
++ static KeyBindings global_key_bindings{{{
++ #ifdef ENABLE_KEYDEF_SCREEN
++-	{ {'K', 0, 0 } },
+++	{'K'},
++ #endif
++-	{ { 'q', 'Q', C('C') } },
+++	{'q', 'Q', C('C')},
++ 
++ 	/* movement */
++-	{ { UP, 'k', 0 } },
++-	{ { DWN, 'j', 0 } },
++-	{ { 'H', 0, 0 } },
++-	{ { 'M', 0, 0 } },
++-	{ { 'L', 0, 0 } },
++-	{ { HOME, C('A'), 0 } },
++-	{ { END, C('E'), 0 } },
++-	{ { PGUP, 0, 0 } },
++-	{ { PGDN, 0, 0 } },
++-	{ { 'v',  0, 0 } },
++-	{ { C('N'),  0, 0 } },
++-	{ { C('B'),  0, 0 } },
++-	{ { 'N',  0, 0 } },
++-	{ { 'B',  0, 0 } },
++-	{ { 'l', 0, 0 } },
+++	{UP, 'k'},
+++	{DWN, 'j'},
+++	{'H'},
+++	{'M'},
+++	{'L'},
+++	{HOME, C('A')},
+++	{END, C('E')},
+++	{PGUP},
+++	{PGDN},
+++	{'v',  0},
+++	{C('N'),  0},
+++	{C('B'),  0},
+++	{'N',  0},
+++	{'B',  0},
+++	{'l'},
++ 
++ 	/* basic screens */
++-	{ { '1', F1, 'h' } },
++-	{ { '2', F2, 0 } },
++-	{ { '3', F3, 0 } },
+++	{'1', F1, 'h'},
+++	{'2', F2},
+++	{'3', F3},
++ 
++ 	/* player commands */
++-	{ { RET, 0, 0 } },
++-	{ { 'P', 0, 0 } },
++-	{ { 's', BS, 0 } },
++-	{ { 'o', 0, 0 } },
++-	{ { '>', 0, 0 } },
++-	{ { '<', 0, 0 } },
++-	{ { 'f', 0, 0 } },
++-	{ { 'b', 0, 0 } },
++-	{ { '+', RGHT, 0 } },
++-	{ { '-', LEFT, 0 } },
++-	{ { ' ', 0, 0 } },
++-	{ { 't', 0, 0 } },
++-	{ { DEL, 'd', 0 } },
++-	{ { 'Z', 0, 0 } },
++-	{ { 'c', 0, 0 } },
++-	{ { 'r', 0, 0 } },
++-	{ { 'z', 0, 0 } },
++-	{ { 'y', 0, 0 } },
++-	{ { 'C', 0, 0 } },
++-	{ { 'x', 0, 0 } },
++-	{ { C('U'), 0, 0 } },
++-	{ { 'S', 0, 0 } },
++-	{ { 'a', 0, 0 } },
++-
++-	{ { '!', 0, 0 } },
++-	{ { '"', 0, 0 } },
++-
++-	{ { 'G', 0, 0 } },
+++	{RET},
+++	{'P'},
+++	{'s', BS},
+++	{'o'},
+++	{'>'},
+++	{'<'},
+++	{'f'},
+++	{'b'},
+++	{'+', RGHT},
+++	{'-', LEFT},
+++	{' '},
+++	{'t'},
+++	{DEL, 'd'},
+++	{'Z'},
+++	{'c'},
+++	{'r'},
+++	{'z'},
+++	{'y'},
+++	{'C'},
+++	{'x'},
+++	{C('U')},
+++	{'S'},
+++	{'a'},
+++
+++	{'!'},
+++	{'"'},
+++
+++	{'G'},
++ 
++ 	/* lists */
++-	{ { C('K'), 0, 0 } },
++-	{ { C('J'), 0, 0 } },
++-	{ { C('L'), 0, 0 } },
+++	{C('K')},
+++	{C('J')},
+++	{C('L')},
++ 
++ 
++ 	/* ncmpc options */
++-	{ { 'w', 0, 0 } },
++-	{ { 'U', 0, 0 } },
+++	{'w'},
+++	{'U'},
++ 
++ 	/* change screen */
++-	{ { TAB, 0, 0 } },
++-	{ { STAB, 0, 0 } },
++-	{ { '`', 0, 0 } },
+++	{TAB},
+++	{STAB},
+++	{'`'},
++ 
++ 
++ 	/* find */
++-	{ { '/', 0, 0 } },
++-	{ { 'n', 0, 0 } },
++-	{ { '?', 0, 0 } },
++-	{ { 'p', 0, 0 } },
++-	{ { '.', 0, 0 } },
+++	{'/'},
+++	{'n'},
+++	{'?'},
+++	{'p'},
+++	{'.'},
++ 
++ 
++ 	/* extra screens */
++ #ifdef ENABLE_ARTIST_SCREEN
++-	{ {'4', F4, 0 } },
+++	{'4', F4},
++ #endif
++ #ifdef ENABLE_SEARCH_SCREEN
++-	{ {'5', F5, 0 } },
++-	{ {'m', 0, 0 } },
+++	{'5', F5},
+++	{'m'},
++ #endif
++ #ifdef ENABLE_SONG_SCREEN
++-	{ { 'i', 0, 0 } },
+++	{'i'},
++ #endif
++ #ifdef ENABLE_LYRICS_SCREEN
++-	{ {'7', F7, 0 } },
++-	{ {ESC, 0, 0 } },
++-	{ {'u', 0, 0 } },
++-	{ {'e', 0, 0 } },
+++	{'7', F7},
+++	{ESC},
+++	{'u'},
+++	{'e'},
++ #endif
++ 
++ #ifdef ENABLE_OUTPUTS_SCREEN
++-	{ {'8', F8, 0 } },
+++	{'8', F8},
++ #endif
++ 
++ #ifdef ENABLE_CHAT_SCREEN
++-	{ {'9', F9, 0} },
+++	{'9', F9},
++ #endif
++ }}};
++ 
