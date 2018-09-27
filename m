@@ -1,43 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Sep 2018 22:15:22 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] linux-headers: bump 4.{4,
- 9, 14}.x series
-Message-ID: <20180927201731.82E198904B@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 27 Sep 2018 22:18:33 +0200
+Subject: [Buildroot] [PATCH v2 12/14] gst1-plugins-base: add missing
+ license file hash
+In-Reply-To: <20180925231434.5e016ac4@windsurf>
+References: <20180925203618.23192-1-ps.report@gmx.net>
+ <20180925203618.23192-12-ps.report@gmx.net>
+ <20180925231434.5e016ac4@windsurf>
+Message-ID: <20180927221833.5604b006@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92dceb9f4c723528da04affabbd645847885b376
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+Hello Thomas,
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 2809b6e98f4d852357da9406edd987569e7a96a5)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On Tue, 25 Sep 2018 23:14:34 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 81f7c923dd..6cd07cecfd 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -258,13 +258,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.153"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.124"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.154"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.125"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.67"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.14.68"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
- 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+> Hello,
+> 
+> On Tue, 25 Sep 2018 22:36:16 +0200, Peter Seiderer wrote:
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> > Changes v1 -> v2:
+> >   - no changes
+> > ---
+> >  package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
+> > index a98abdf38b..6ef34594a0 100644
+> > --- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
+> > +++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
+> > @@ -1,3 +1,3 @@
+> >  # From https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.14.3.tar.xz.sha256sum
+> >  sha256 f0b319c36be0ffc2a00380c77ba269cdf04e2b39bbc49d30b641fc35aa0b7952 gst-plugins-base-1.14.3.tar.xz
+> > -sha256 78fb5977f177ab71cba77a4a127d29b93cb1ca5c25962204b31f183a20cf5c7a COPYING  
+> 
+> I'm not sure why you're dropping this hash. The COPYING file still
+> exists, it still has the same hash, and you didn't mention it in your
+> commit log. So I've reverted this part of the change when applying.
+
+Sorry for not mentioning in the commit log, the reasoning was that COPYING is
+never reverenced in the gst1-plugins-base.mk file...
+
+Regards,
+Peter
+
+> 
+> > +sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING.LIB  
+> 
+> Thanks,
+> 
+> Thomas
