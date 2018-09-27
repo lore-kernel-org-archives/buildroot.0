@@ -1,24 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Sep 2018 23:22:08 +0200
-Subject: [Buildroot] [PATCH 1/1] SDL fixed the DirectFB renderer not
- being enabled in autoconf builds fixes "SDL2+DirectFB does not work as
- built for Beaglebone Black" Fetched From:
- <https://hg.libsdl.org/SDL/raw-rev/751cdc74d55c>
-In-Reply-To: <1535683886-4552-1-git-send-email-peter.macleod.thompson@gmail.com>
- (Peter Thompson's message of "Thu, 30 Aug 2018 20:51:26 -0600")
-References: <1535683886-4552-1-git-send-email-peter.macleod.thompson@gmail.com>
-Message-ID: <87mus28wlb.fsf@dell.be.48ers.dk>
+Date: Thu, 27 Sep 2018 23:23:07 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] squashfs: add license hash
+Message-ID: <20180927212258.65F5B890E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Thompson <peter.macleod.thompson@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=262002e88d471164ac6b2519b36157f8f3ffd1f5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > Signed-off-by: Peter Thompson <peter.macleod.thompson@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 10d4c1222ae99abf409a471b4649fdb1861bcf80)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/squashfs/squashfs.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Committed to 2018.02.x and 2018.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/squashfs/squashfs.hash b/package/squashfs/squashfs.hash
+index 82a650022c..4464e62c02 100644
+--- a/package/squashfs/squashfs.hash
++++ b/package/squashfs/squashfs.hash
+@@ -1,2 +1,5 @@
+ # Locally computed
+ sha256 bd0aa3011320b8ebee68aa406060de277bef16daf81bad5b9f70cbea6db1a779 squashfs-e38956b92f738518c29734399629e7cdb33072d3.tar.gz
++
++# License files
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
