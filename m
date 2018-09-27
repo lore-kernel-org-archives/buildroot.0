@@ -1,43 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Sep 2018 13:58:50 +0200
-Subject: [Buildroot] [git commit] wireguard: bump version to 0.0.20180925
-Message-ID: <20180927121254.542BE88EBD@busybox.osuosl.org>
+Date: Thu, 27 Sep 2018 13:57:34 +0200
+Subject: [Buildroot] [git commit] chrony: fix build failure due to missing
+ inclusion of util.h
+Message-ID: <20180927121254.0BFDB88F59@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a656bc0658e79f7ddc4c9734ad9c52a5df46296
+commit: https://git.buildroot.net/buildroot/commit/?id=67f3d9bdfaef6acc0faaba015a7d7cbe62b09589
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+During build package stops with linker error:
+hash_intmd5.o: In function `HSH_Hash':
+hash_intmd5.c:(.text+0x963): undefined reference to `MIN'
+
+This is due to missing util.h inclusion.
+util.h contains MIN() macro definition.
+
+Add upstream patch:
+https://git.tuxfamily.org/chrony/chrony.git/commit/?id=948ecf84314f78da82e0e2b07b6570ca9cff86c8
+to add #include "util.h" in hash_intmd5.c
+
+Fixes:
+http://autobuild.buildroot.net/results/8f0/8f0d53b1d5a899e56540c859b908cbc1eaa223d5/
+http://autobuild.buildroot.net/results/3c6/3c609f94aff182c9ab47ef8ec4b9de03a4d20ffb/
+http://autobuild.buildroot.net/results/f1f/f1fcae399fb640c19cf88c9333a92cbfab547932/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireguard/wireguard.hash | 4 ++--
- package/wireguard/wireguard.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0002-hash-include-util.h-for-MIN-macro.patch   | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
-index d0cd65ad4f..fe6439fbc2 100644
---- a/package/wireguard/wireguard.hash
-+++ b/package/wireguard/wireguard.hash
-@@ -1,4 +1,4 @@
--# From https://lists.zx2c4.com/pipermail/wireguard/2018-July/003112.html
--sha256 5e38d554f7d1e3a64e3a5319ca1a3b790c84ed89c896586c490a93ac1f953a91  WireGuard-0.0.20180708.tar.xz
-+# From https://lists.zx2c4.com/pipermail/wireguard/2018-September/003395.html
-+sha256 4a0488a07e40ec17e798f3e40a85cedf55f0560b1c3a8fd95806c7d4266cb0e8  WireGuard-0.0.20180925.tar.xz
- # Locally calculated
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
-index cc8ad7c4cc..faddbf93ad 100644
---- a/package/wireguard/wireguard.mk
-+++ b/package/wireguard/wireguard.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_VERSION = 0.0.20180708
-+WIREGUARD_VERSION = 0.0.20180925
- WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
- WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
- WIREGUARD_LICENSE = GPL-2.0
+diff --git a/package/chrony/0002-hash-include-util.h-for-MIN-macro.patch b/package/chrony/0002-hash-include-util.h-for-MIN-macro.patch
+new file mode 100644
+index 0000000000..1fd5bd9984
+--- /dev/null
++++ b/package/chrony/0002-hash-include-util.h-for-MIN-macro.patch
+@@ -0,0 +1,28 @@
++From 948ecf84314f78da82e0e2b07b6570ca9cff86c8 Mon Sep 17 00:00:00 2001
++From: Miroslav Lichvar <mlichvar@redhat.com>
++Date: Thu, 20 Sep 2018 15:01:16 +0200
++Subject: [PATCH] hash: include util.h for MIN macro
++
++The hash_intmd5.c file inadvertently relied on the system headers to
++provide the MIN macro, but it is missing with some libc implementations.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
++---
++ hash_intmd5.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/hash_intmd5.c b/hash_intmd5.c
++index 0b60f9b..49da1cf 100644
++--- a/hash_intmd5.c
+++++ b/hash_intmd5.c
++@@ -29,6 +29,7 @@
++ #include "sysincl.h"
++ #include "hash.h"
++ #include "memory.h"
+++#include "util.h"
++ 
++ #include "md5.c"
++ 
++-- 
++2.17.1
++
