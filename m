@@ -1,69 +1,71 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Thu, 27 Sep 2018 12:15:44 +0200
-Subject: [Buildroot] [PATCH] chrony: fix build failure due to missing
- inclusion of util.h
-Message-ID: <20180927101544.9495-1-giulio.benetti@micronovasrl.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 27 Sep 2018 13:35:42 +0200
+Subject: [Buildroot] [PATCH-2018.02.x] glibc: bump to latest on 2.26.x
+ branch for additional fixes
+Message-ID: <20180927113542.21230-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-During build package stops with linker error:
-hash_intmd5.o: In function `HSH_Hash':
-hash_intmd5.c:(.text+0x963): undefined reference to `MIN'
+Daniel Alvarez (1):
+      getifaddrs: Don't return ifa entries with NULL names [BZ #21812]
 
-This is due to missing util.h inclusion.
-util.h contains MIN() macro definition.
+Florian Weimer (8):
+      libio: Avoid _allocate_buffer, _free_buffer function pointers [BZ #23236]
+      Use _STRUCT_TIMESPEC as guard in <bits/types/struct_timespec.h> [BZ #23349]
+      libio: Disable vtable validation in case of interposition [BZ #23313]
+      NEWS: Reorder out-of-order bugs
+      Synchronize support/ infrastructure with master
+      libio: Add tst-vtables, tst-vtables-interposed
+      stdio-common/tst-printf.c: Remove part under a non-free license [BZ #23363]
+      conform/conformtest.pl: Escape literal braces in regular expressions
 
-Add upstream patch:
-https://git.tuxfamily.org/chrony/chrony.git/commit/?id=948ecf84314f78da82e0e2b07b6570ca9cff86c8
-to add #include "util.h" in hash_intmd5.c
+Gabriel F. T. Gomes (1):
+      Fix parameter type in C++ version of iseqsig (bug 23171)
 
-Fixes:
-http://autobuild.buildroot.net/results/8f0/8f0d53b1d5a899e56540c859b908cbc1eaa223d5/
-http://autobuild.buildroot.net/results/3c6/3c609f94aff182c9ab47ef8ec4b9de03a4d20ffb/
-http://autobuild.buildroot.net/results/f1f/f1fcae399fb640c19cf88c9333a92cbfab547932/
+H.J. Lu (2):
+      x86: Correct index_cpu_LZCNT [BZ #23456]
+      x86: Populate COMMON_CPUID_INDEX_80000001 for Intel CPUs [BZ #23459]
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Martin Kuchta (1):
+      pthread_cond_broadcast: Fix waiters-after-spinning case [BZ #23538]
+
+Stefan Liebler (1):
+      Fix segfault in maybe_script_execute.
+
+Steve Ellcey (1):
+      Check length of ifname before copying it into to ifreq structure.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...02-hash-include-util.h-for-MIN-macro.patch | 28 +++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 package/chrony/0002-hash-include-util.h-for-MIN-macro.patch
+ package/glibc/glibc.hash | 2 +-
+ package/glibc/glibc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/chrony/0002-hash-include-util.h-for-MIN-macro.patch b/package/chrony/0002-hash-include-util.h-for-MIN-macro.patch
-new file mode 100644
-index 0000000000..1fd5bd9984
---- /dev/null
-+++ b/package/chrony/0002-hash-include-util.h-for-MIN-macro.patch
-@@ -0,0 +1,28 @@
-+From 948ecf84314f78da82e0e2b07b6570ca9cff86c8 Mon Sep 17 00:00:00 2001
-+From: Miroslav Lichvar <mlichvar@redhat.com>
-+Date: Thu, 20 Sep 2018 15:01:16 +0200
-+Subject: [PATCH] hash: include util.h for MIN macro
-+
-+The hash_intmd5.c file inadvertently relied on the system headers to
-+provide the MIN macro, but it is missing with some libc implementations.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-+---
-+ hash_intmd5.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/hash_intmd5.c b/hash_intmd5.c
-+index 0b60f9b..49da1cf 100644
-+--- a/hash_intmd5.c
-++++ b/hash_intmd5.c
-+@@ -29,6 +29,7 @@
-+ #include "sysincl.h"
-+ #include "hash.h"
-+ #include "memory.h"
-++#include "util.h"
-+ 
-+ #include "md5.c"
-+ 
-+-- 
-+2.17.1
-+
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+index 890f523fd9..bfe40f1f96 100644
+--- a/package/glibc/glibc.hash
++++ b/package/glibc/glibc.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated (fetched from Github)
+-sha256  1e18aee61dc51a5aaf7bfcb65ed01894aa82c3d3f7b9a01f20d59cd9db2f082b     glibc-glibc-2.26-160-g4df8479e6b3baf365bd4eedbba922b73471e5d73.tar.gz
++sha256   acbec224e69f29c9c59c34f15f0fbb19eecf3fce347eba8bb928fac507ae86c6    glibc-glibc-2.26-175-gc5c90b480e4f21ed1d28e0e6d942b06b8d9e8bd7.tar.gz
+ # Locally calculated (fetched from Github)
+ sha256  5aa9adeac09727db0b8a52794186563771e74d70410e9fd86431e339953fd4bb     glibc-arc-2017.09-release.tar.gz
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 562f0258d5..2e93593b0d 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -10,7 +10,7 @@ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VE
+ else
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
+-GLIBC_VERSION = glibc-2.26-160-g4df8479e6b3baf365bd4eedbba922b73471e5d73
++GLIBC_VERSION = glibc-2.26-175-gc5c90b480e4f21ed1d28e0e6d942b06b8d9e8bd7
+ # Upstream doesn't officially provide an https download link.
+ # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+ # sometimes the connection times out. So use an unofficial github mirror.
 -- 
-2.17.1
+2.11.0
