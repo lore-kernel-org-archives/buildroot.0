@@ -1,69 +1,55 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Thu, 27 Sep 2018 17:09:10 +0200
-Subject: [Buildroot] [PATCH-2018.02.x] cramfs: fix minor()/major() build
- failure due to glibc 2.28
-Message-ID: <20180927150910.17401-1-giulio.benetti@micronovasrl.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 27 Sep 2018 18:00:23 +0200
+Subject: [Buildroot] [PATCH] ghostscript: security bump to version 9.25
+Message-ID: <20180927160023.24230-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-glibc 2.28 no longer includes <sys/sysmacros.h> from <sys/types.h>,
-and therefore <sys/sysmacros.h> must be included explicitly when
-major()/minor() are used.
+Fixes the following security issues:
 
-This commit adds a patch to directly include <sys/sysmacros.h> into
-cramfsck.c and mkcramfs.c where minor() and major() macros are used.
+- CVE-2018-16543: In Artifex Ghostscript before 9.24, gssetresolution and
+  gsgetresolution allow attackers to have an unspecified impact
 
-Fixes:
-http://autobuild.buildroot.net/results/8c5/8c5997017568f8be1d2f664998fb2fdc433a51d3/
-http://autobuild.buildroot.net/results/fad/fad1553d45a8c35ba84c5c340410e99322e21c44/
+- CVE-2018-17183: Artifex Ghostscript before 9.25 allowed a user-writable
+  error exception table, which could be used by remote attackers able to
+  supply crafted PostScript to potentially overwrite or replace error
+  handlers to inject code.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...smacros.h-to-compile-with-glibc-2.28.patch | 33 +++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/cramfs/0004-Include-sysmacros.h-to-compile-with-glibc-2.28.patch
+ package/ghostscript/ghostscript.hash | 4 ++--
+ package/ghostscript/ghostscript.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/cramfs/0004-Include-sysmacros.h-to-compile-with-glibc-2.28.patch b/package/cramfs/0004-Include-sysmacros.h-to-compile-with-glibc-2.28.patch
-new file mode 100644
-index 0000000000..6096cf3625
---- /dev/null
-+++ b/package/cramfs/0004-Include-sysmacros.h-to-compile-with-glibc-2.28.patch
-@@ -0,0 +1,33 @@
-+Fix minor()/major() build failure due to glibc 2.28
-+
-+glibc 2.28 no longer includes <sys/sysmacros.h> from <sys/types.h>,
-+and therefore <sys/sysmacros.h> must be included explicitly when
-+major()/minor() are used.
-+
-+This commit directly includes <sys/sysmacros.h> into cramfsck.c and
-+mkcramfs.c files where minor() and major() macros are used.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-+---
-+diff -urpN host-cramfs-1.1.orig/cramfsck.c host-cramfs-1.1/cramfsck.c
-+--- host-cramfs-1.1.orig/cramfsck.c	2018-09-27 16:48:09.704782201 +0200
-++++ host-cramfs-1.1/cramfsck.c	2018-09-27 16:49:12.841138657 +0200
-+@@ -38,6 +38,7 @@
-+ 
-+ #define _GNU_SOURCE
-+ #include <sys/types.h>
-++#include <sys/sysmacros.h>
-+ #include <stdio.h>
-+ #include <stdarg.h>
-+ #include <sys/stat.h>
-+diff -urpN host-cramfs-1.1.orig/mkcramfs.c host-cramfs-1.1/mkcramfs.c
-+--- host-cramfs-1.1.orig/mkcramfs.c	2018-09-27 16:48:09.712782246 +0200
-++++ host-cramfs-1.1/mkcramfs.c	2018-09-27 16:48:59.777064921 +0200
-+@@ -24,6 +24,7 @@
-+ 
-+ #define _GNU_SOURCE
-+ #include <sys/types.h>
-++#include <sys/sysmacros.h>
-+ #include <stdio.h>
-+ #include <sys/stat.h>
-+ #include <unistd.h>
+diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
+index bb41841012..f8ca6c8d4e 100644
+--- a/package/ghostscript/ghostscript.hash
++++ b/package/ghostscript/ghostscript.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs923/SHA512SUMS
+-sha512 0c1f59b743f92f9cf7000b06f6209010e583ef4d6899c20ed245721dea3c08fd58b9e2d1513fe83765ab6be233bc7ab250cf18054e4d09de4073b1111e38035f  ghostscript-9.23.tar.xz
++# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs925/SHA512SUMS
++sha512 7a1c0b7546ed523f50c1452d4a1c13fcf043d6060fc9708bbc4b543f66ecb1b619b6e71998094ac702ef44a2fd159b6523271de19b1cae352981ef51fb637651  ghostscript-9.25.tar.xz
+ 
+ # Hash for license file:
+ sha256 6f852249f975287b3efd43a5883875e47fa9f3125e2f1b18b5c09517ac30ecf2  LICENSE
+diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+index 8ea6610be5..9b5e144888 100644
+--- a/package/ghostscript/ghostscript.mk
++++ b/package/ghostscript/ghostscript.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-GHOSTSCRIPT_VERSION = 9.23
+-GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs923
++GHOSTSCRIPT_VERSION = 9.25
++GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs925
+ GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
+ GHOSTSCRIPT_LICENSE = AGPL-3.0
+ GHOSTSCRIPT_LICENSE_FILES = LICENSE
 -- 
-2.17.1
+2.11.0
