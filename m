@@ -1,352 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Sep 2018 21:16:30 +0200
-Subject: [Buildroot] [git commit] e2fsprogs: fix musl compile (__GNUC_PREREQ
- related)
-Message-ID: <20180927191952.CFAA188F55@busybox.osuosl.org>
+Date: Thu, 27 Sep 2018 21:18:02 +0200
+Subject: [Buildroot] [git commit] ltp-testsuite: Bump to version 20180926
+Message-ID: <20180927191952.DB47B88FA3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb86b6f51e3f599e7affed0c961dcaf7525a358b
+commit: https://git.buildroot.net/buildroot/commit/?id=061784404faaffb7b72fdbe2c28346fc4498d23f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add void-linux provided patch to use __GNUC_PREREQ macro only
-in case it is defined (patch taken from [1]).
-
-Fixes [2]:
-
-  In file included from ../../lib/ext2fs/ext2fs.h:97:0,
-                   from feature.c:20:
-  ../../lib/ext2fs/hashmap.h:20:19: error: missing binary operator before token "("
-   #if __GNUC_PREREQ (4, 8)
-                     ^
-  ../../lib/ext2fs/hashmap.h:25:19: error: missing binary operator before token "("
-   #if __GNUC_PREREQ (4, 8)
-                     ^
-
-Problem already upstream reported by Baruch Siach (see [3]).
-
-[1] https://raw.githubusercontent.com/void-linux/void-packages/1f3b51493031cc0309009804475e3db572fc89ad/srcpkgs/e2fsprogs/patches/fix-glibcism.patch
-[2] http://autobuild.buildroot.net/results/e49d9333086ed714fa193b79b49c53e9cc511fec
-[3] https://www.spinics.net/lists/linux-ext4/msg62290.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...01-Fix-musl-compile-__GNUC_PREREQ-related.patch | 306 +++++++++++++++++++++
- 1 file changed, 306 insertions(+)
+ package/ltp-testsuite/ltp-testsuite.hash | 4 ++--
+ package/ltp-testsuite/ltp-testsuite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/e2fsprogs/0001-Fix-musl-compile-__GNUC_PREREQ-related.patch b/package/e2fsprogs/0001-Fix-musl-compile-__GNUC_PREREQ-related.patch
-new file mode 100644
-index 0000000000..7027347bc6
---- /dev/null
-+++ b/package/e2fsprogs/0001-Fix-musl-compile-__GNUC_PREREQ-related.patch
-@@ -0,0 +1,306 @@
-+From 2b826d09c0c0033f52d47c477ae43655f3ae0fa9 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Tue, 25 Sep 2018 21:31:16 +0200
-+Subject: [PATCH] Fix musl compile (__GNUC_PREREQ related)
-+
-+Use __GNUC_PREREQ only if defined, patch taken frrom [1].
-+
-+[1] https://raw.githubusercontent.com/void-linux/void-packages/1f3b51493031cc0309009804475e3db572fc89ad/srcpkgs/e2fsprogs/patches/fix-glibcism.patch
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ debugfs/set_fields.c  | 5 ++++-
-+ e2fsck/problem.c      | 4 ++++
-+ lib/ext2fs/ext4_acl.h | 4 ++++
-+ lib/ext2fs/fiemap.h   | 4 ++++
-+ lib/ext2fs/hashmap.h  | 4 ++++
-+ lib/ext2fs/mmp.c      | 4 ++++
-+ lib/ext2fs/unix_io.c  | 4 ++++
-+ lib/uuid/gen_uuid.c   | 4 ++++
-+ misc/e2undo.c         | 4 ++++
-+ misc/filefrag.c       | 4 ++++
-+ misc/fuse2fs.c        | 4 ++++
-+ 11 files changed, 44 insertions(+), 1 deletion(-)
-+
-+diff --git a/debugfs/set_fields.c b/debugfs/set_fields.c
-+index e1e23a5..834a19b 100644
-+--- a/debugfs/set_fields.c
-++++ b/debugfs/set_fields.c
-+@@ -74,11 +74,12 @@ static errcode_t parse_bmap(struct field_set_info *info, char *field, char *arg)
-+ static errcode_t parse_gd_csum(struct field_set_info *info, char *field, char *arg);
-+ static errcode_t parse_mmp_clear(struct field_set_info *info, char *field,
-+ 				 char *arg);
-+-
-++#ifdef __GNUC_PREREQ
-+ #if __GNUC_PREREQ (4, 6)
-+ #pragma GCC diagnostic push
-+ #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
-+ #endif
-++#endif
-+ 
-+ static struct field_set_info super_fields[] = {
-+ 	{ "inodes_count", &set_sb.s_inodes_count, NULL, 4, parse_uint },
-+@@ -291,9 +292,11 @@ static struct field_set_info mmp_fields[] = {
-+ 	{ "checksum", &set_mmp.mmp_checksum, NULL, 4, parse_uint },
-+ 	{ 0, 0, 0, 0 }
-+ };
-++#ifdef __GNUC_PREREQ
-+ #if __GNUC_PREREQ (4, 6)
-+ #pragma GCC diagnostic pop
-+ #endif
-++#endif
-+ 
-+ #ifdef UNITTEST
-+ 
-+diff --git a/e2fsck/problem.c b/e2fsck/problem.c
-+index 0f60396..68eb79f 100644
-+--- a/e2fsck/problem.c
-++++ b/e2fsck/problem.c
-+@@ -99,10 +99,12 @@ static const char *preen_msg[] = {
-+ 	"",			/* 20 */
-+ };
-+ 
-++#ifdef __GNUC_PREREQ
-+ #if __GNUC_PREREQ (4, 6)
-+ #pragma GCC diagnostic push
-+ #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
-+ #endif
-++#endif
-+ 
-+ static struct e2fsck_problem problem_table[] = {
-+ 
-+@@ -2094,9 +2096,11 @@ static struct latch_descr pr_latch_info[] = {
-+ 	{ PR_LATCH_OPTIMIZE_EXT, PR_1E_OPTIMIZE_EXT_HEADER, PR_1E_OPTIMIZE_EXT_END },
-+ 	{ -1, 0, 0 },
-+ };
-++#ifdef __GNUC_PREREQ
-+ #if __GNUC_PREREQ (4, 6)
-+ #pragma GCC diagnostic pop
-+ #endif
-++#endif
-+ 
-+ static struct e2fsck_problem *find_problem(problem_t code)
-+ {
-+diff --git a/lib/ext2fs/ext4_acl.h b/lib/ext2fs/ext4_acl.h
-+index 8d4d974..c1a2801 100644
-+--- a/lib/ext2fs/ext4_acl.h
-++++ b/lib/ext2fs/ext4_acl.h
-+@@ -50,13 +50,17 @@ typedef struct {
-+ 
-+ typedef struct {
-+         __le32                  a_version;
-++#ifdef __GNUC_PREREQ
-+ #if __GNUC_PREREQ (4, 8)
-+ #pragma GCC diagnostic push
-+ #pragma GCC diagnostic ignored "-Wpedantic"
-++#endif
-+ #endif
-+         posix_acl_xattr_entry   a_entries[0];
-++#ifdef __GNUC_PREREQ
-+ #if __GNUC_PREREQ (4, 8)
-+ #pragma GCC diagnostic pop
-+ #endif
-++#endif
-+ } posix_acl_xattr_header;
-+ 
-+diff --git a/lib/ext2fs/fiemap.h b/lib/ext2fs/fiemap.h
-+index 0d1072a..76860ac 100644
-+--- a/lib/ext2fs/fiemap.h
-++++ b/lib/ext2fs/fiemap.h
-+@@ -31,14 +31,18 @@ struct fiemap {
-+ 	__u32 fm_mapped_extents;/* number of extents that were mapped (out) */
-+ 	__u32 fm_extent_count;  /* size of fm_extents array (in) */
-+ 	__u32 fm_reserved;
-++#ifdef __GNUC_PREREQ
-+ #if __GNUC_PREREQ (4, 8)
-+ #pragma GCC diagnostic push
-+ #pragma GCC diagnostic ignored "-Wpedantic"
-++#endif
-+ #endif
-+ 	struct fiemap_extent fm_extents[0]; /* array of mapped extents (out) */
-++#ifdef __GNUC_PREREQ
-+ #if __GNUC_PREREQ (4, 8)
-+ #pragma GCC diagnostic pop
-+ #endif
-++#endif
-+ };
-+ 
-+ #if defined(__linux__) && !defined(FS_IOC_FIEMAP)
-+diff --git a/lib/ext2fs/hashmap.h b/lib/ext2fs/hashmap.h
-+index 228f439..a6ba686 100644
-+--- a/lib/ext2fs/hashmap.h
-++++ b/lib/ext2fs/hashmap.h
-+@@ -17,14 +17,18 @@ struct ext2fs_hashmap {
-+ 		struct ext2fs_hashmap_entry *next;
-+ 		struct ext2fs_hashmap_entry *list_next;
-+ 		struct ext2fs_hashmap_entry *list_prev;
-++#ifdef __GNUC_PREREQ
-+ #if __GNUC_PREREQ (4, 8)
-+ #pragma GCC diagnostic push
-+ #pragma GCC diagnostic ignored "-Wpedantic"
-++#endif
-+ #endif
-+ 	} *entries[0];
-++#ifdef __GNUC_PREREQ
-+ #if __GNUC_PREREQ (4, 8)
-+ #pragma GCC diagnostic pop
-+ #endif
-++#endif
-+ };
-+ 
-+ struct ext2fs_hashmap *ext2fs_hashmap_create(
-+diff --git a/lib/ext2fs/mmp.c b/lib/ext2fs/mmp.c
-+index 2da935e..f4069c2 100644
-+--- a/lib/ext2fs/mmp.c
-++++ b/lib/ext2fs/mmp.c
-+@@ -34,8 +34,10 @@
-+ #define O_DIRECT 0
-+ #endif
-+ 
-++#ifdef __GNUC_PREREQ
-+ #if __GNUC_PREREQ (4, 6)
-+ #pragma GCC diagnostic push
-++#endif
-+ #ifndef CONFIG_MMP
-+ #pragma GCC diagnostic ignored "-Wunused-parameter"
-+ #endif
-+@@ -467,6 +469,8 @@ mmp_error:
-+ 	return EXT2_ET_OP_NOT_SUPPORTED;
-+ #endif
-+ }
-++#ifdef __GNUC_PREREQ
-+ #if __GNUC_PREREQ (4, 6)
-+ #pragma GCC diagnostic pop
-+ #endif
-++#endif
-+diff --git a/lib/ext2fs/unix_io.c b/lib/ext2fs/unix_io.c
-+index 7a4c9bf..9e863a5 100644
-+--- a/lib/ext2fs/unix_io.c
-++++ b/lib/ext2fs/unix_io.c
-+@@ -1127,10 +1127,12 @@ unimplemented:
-+ }
-+ 
-+ /* parameters might not be used if OS doesn't support zeroout */
-++#ifdef __GNUC_PREREQ
-+ #if __GNUC_PREREQ (4, 6)
-+ #pragma GCC diagnostic push
-+ #pragma GCC diagnostic ignored "-Wunused-parameter"
-+ #endif
-++#endif
-+ static errcode_t unix_zeroout(io_channel channel, unsigned long long block,
-+ 			      unsigned long long count)
-+ {
-+@@ -1197,9 +1199,11 @@ err:
-+ unimplemented:
-+ 	return EXT2_ET_UNIMPLEMENTED;
-+ }
-++#ifdef __GNUC_PREREQ
-+ #if __GNUC_PREREQ (4, 6)
-+ #pragma GCC diagnostic pop
-+ #endif
-++#endif
-+ 
-+ static struct struct_io_manager struct_unix_manager = {
-+ 	.magic		= EXT2_ET_MAGIC_IO_MANAGER,
-+diff --git a/lib/uuid/gen_uuid.c b/lib/uuid/gen_uuid.c
-+index 0198363..cc26ddc 100644
-+--- a/lib/uuid/gen_uuid.c
-++++ b/lib/uuid/gen_uuid.c
-+@@ -484,7 +484,9 @@ static void close_all_fds(void)
-+ }
-+ #endif /* defined(USE_UUIDD) && defined(HAVE_SYS_UN_H) */
-+ 
-++#ifdef __GNUC_PREREQ
-+ #if __GNUC_PREREQ (4, 6)
-++#endif
-+ #pragma GCC diagnostic push
-+ #if !defined(USE_UUIDD) || !defined(HAVE_SYS_UN_H)
-+ #pragma GCC diagnostic ignored "-Wunused-parameter"
-+@@ -572,9 +574,11 @@ fail:
-+ #endif
-+ 	return -1;
-+ }
-++#ifdef __GNUC_PREREQ
-+ #if __GNUC_PREREQ (4, 6)
-+ #pragma GCC diagnostic pop
-+ #endif
-++#endif
-+ 
-+ void uuid__generate_time(uuid_t out, int *num)
-+ {
-+diff --git a/misc/e2undo.c b/misc/e2undo.c
-+index 71991e0..4f5dd9f 100644
-+--- a/misc/e2undo.c
-++++ b/misc/e2undo.c
-+@@ -81,14 +81,18 @@ struct undo_key_block {
-+ 	__le32 magic;		/* KEYBLOCK_MAGIC number */
-+ 	__le32 crc;		/* block checksum */
-+ 	__le64 reserved;	/* zero */
-++#ifdef __GNUC_PREREQ
-+ #if __GNUC_PREREQ (4, 8)
-+ #pragma GCC diagnostic push
-+ #pragma GCC diagnostic ignored "-Wpedantic"
-++#endif
-+ #endif
-+ 	struct undo_key keys[0];	/* keys, which come immediately after */
-++#ifdef __GNUC_PREREQ
-+ #if __GNUC_PREREQ (4, 8)
-+ #pragma GCC diagnostic pop
-+ #endif
-++#endif
-+ };
-+ 
-+ struct undo_key_info {
-+diff --git a/misc/filefrag.c b/misc/filefrag.c
-+index 56f84ed..4d63ef3 100644
-+--- a/misc/filefrag.c
-++++ b/misc/filefrag.c
-+@@ -535,9 +535,11 @@ int main(int argc, char**argv)
-+ 				char *end;
-+ 				blocksize = strtoul(optarg, &end, 0);
-+ 				if (end) {
-++#ifdef __GNUC_PREREQ
-+ #if __GNUC_PREREQ (7, 0)
-+ #pragma GCC diagnostic push
-+ #pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
-++#endif
-+ #endif
-+ 					switch (end[0]) {
-+ 					case 'g':
-+@@ -555,8 +557,10 @@ int main(int argc, char**argv)
-+ 					default:
-+ 						break;
-+ 					}
-++#ifdef __GNUC_PREREQ
-+ #if __GNUC_PREREQ (7, 0)
-+ #pragma GCC diagnostic pop
-++#endif
-+ #endif
-+ 				}
-+ 			} else { /* Allow -b without argument for compat. Remove
-+diff --git a/misc/fuse2fs.c b/misc/fuse2fs.c
-+index 5c73895..bf09b55 100644
-+--- a/misc/fuse2fs.c
-++++ b/misc/fuse2fs.c
-+@@ -118,14 +118,18 @@ typedef struct {
-+ 
-+ typedef struct {
-+ 	u_int32_t	a_version;
-++#ifdef __GNUC_PREREQ
-+ #if __GNUC_PREREQ (4, 8)
-+ #pragma GCC diagnostic push
-+ #pragma GCC diagnostic ignored "-Wpedantic"
-++#endif
-+ #endif
-+ 	acl_ea_entry	a_entries[0];
-++#ifdef __GNUC_PREREQ
-+ #if __GNUC_PREREQ (4, 8)
-+ #pragma GCC diagnostic pop
-+ #endif
-++#endif
-+ } acl_ea_header;
-+ 
-+ static inline size_t acl_ea_size(int count)
-+-- 
-+2.19.0
-+
+diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
+index 93ab41d3b7..1f04aee482 100644
+--- a/package/ltp-testsuite/ltp-testsuite.hash
++++ b/package/ltp-testsuite/ltp-testsuite.hash
+@@ -1,2 +1,2 @@
+-# From: https://github.com/linux-test-project/ltp/releases/download/20180515/ltp-full-20180515.tar.xz.sha1
+-sha1 db424d391987ff62664662210ef98cd42c7cc6b5  ltp-full-20180515.tar.xz
++# From: https://github.com/linux-test-project/ltp/releases/download/20180926/ltp-full-20180926.tar.xz.sha1
++sha1 da5c8e847ed909dbd0b859c6918bc526cf6c2695  ltp-full-20180926.tar.xz
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index b536dbd369..da039bddae 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LTP_TESTSUITE_VERSION = 20180515
++LTP_TESTSUITE_VERSION = 20180926
+ LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
+ LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
+ LTP_TESTSUITE_LICENSE = GPL-2.0, GPL-2.0+
