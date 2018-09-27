@@ -1,30 +1,53 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Thu, 27 Sep 2018 22:45:36 +0200
-Subject: [Buildroot] Toolchain bugs how to correct them
-Message-ID: <11cbd73b-101a-5d22-70a6-a3dcf4f69b54@micronovasrl.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 28 Sep 2018 00:01:17 +0300
+Subject: [Buildroot] [PATCH 1/1] bird: new package
+In-Reply-To: <20180927204116.29484-1-adrien@gallouet.fr>
+References: <20180927204116.29484-1-adrien@gallouet.fr>
+Message-ID: <874lea4puq.fsf@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello everybody,
+Hi Adrien,
 
-if an external toolchain has a bug, i.e. "toolchain-external-synopsys-arc"
-and need a patch I've found, how does it work?
-Can someone point me somewhere to understand?
+Adrien Gallou?t writes:
+> diff --git a/package/bird/bird.mk b/package/bird/bird.mk
+> new file mode 100644
+> index 0000000000..959021f94f
+> --- /dev/null
+> +++ b/package/bird/bird.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# bird
+> +#
+> +################################################################################
+> +
+> +BIRD_VERSION = 2.0.2
+> +BIRD_SOURCE = v$(BIRD_VERSION).tar.gz
+> +BIRD_SITE = https://github.com/BIRD/bird/archive
 
-Many thanks.
+Please use the github helper:
 
-Best regards
--- 
-Giulio Benetti
-CTO
+  BIRD_SITE = $(call github,BIRD,bird,$(BIRD_VERSION))
 
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+BIRD_SOURCE should not be needed.
+
+> +BIRD_LICENSE = GPL-2.0+
+> +BIRD_LICENSE_FILES = README
+> +BIRD_AUTORECONF = YES
+
+Please mention in a comment that autoreconf is needed since the package
+is fetched from github so there is no configure script.
+
+> +
+> +$(eval $(autotools-package))
+
+baruch
+
+--
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
