@@ -1,29 +1,36 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Thu, 27 Sep 2018 07:46:44 -0700
-Subject: [Buildroot] [PATCH 0/2] perl-sys-cpu fixes
-Message-ID: <20180927144646.20954-1-chrismcc@gmail.com>
+Date: Thu, 27 Sep 2018 07:46:45 -0700
+Subject: [Buildroot] [PATCH 1/2] perl-sys-cpu: disable static builds
+In-Reply-To: <20180927144646.20954-1-chrismcc@gmail.com>
+References: <20180927144646.20954-1-chrismcc@gmail.com>
+Message-ID: <20180927144646.20954-2-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Disable static builds like other perl modules
+fixes autobuild failures
 
-The second patch has 
-- #include <sys/unistd.h>
-because it is redundant with glibc, and doesn't exist with musl and
-uclib.  Does anyone know if it is needed on other platforms?
+Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+---
+ package/perl-sys-cpu/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-
-
-Christopher McCrory (2):
-  perl-sys-cpu: disable static builds
-  perl-sys-cpu: remove extraneous include
-
- package/perl-sys-cpu/0001-remove-extraneous-include.patch | 10 ++++++++++
- package/perl-sys-cpu/Config.in                            |  4 ++++
- 2 files changed, 14 insertions(+)
- create mode 100644 package/perl-sys-cpu/0001-remove-extraneous-include.patch
-
+diff --git a/package/perl-sys-cpu/Config.in b/package/perl-sys-cpu/Config.in
+index a604945740..8306b371dc 100644
+--- a/package/perl-sys-cpu/Config.in
++++ b/package/perl-sys-cpu/Config.in
+@@ -1,5 +1,9 @@
+ config BR2_PACKAGE_PERL_SYS_CPU
+ 	bool "perl-sys-cpu"
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  Perl module for getting information about the system CPU
+ 	  (Sys::CPU).
++
++comment "perl-sys-cpu needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
 -- 
 2.14.4
