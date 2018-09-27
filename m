@@ -1,34 +1,40 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 27 Sep 2018 09:00:31 -0500
-Subject: [Buildroot] [PATCH v2,1/8] libselinux: bump to version 2.8
-In-Reply-To: <20180921205013.21829-1-fontaine.fabrice@gmail.com>
-References: <20180921205013.21829-1-fontaine.fabrice@gmail.com>
-Message-ID: <CANQCQpYEg6yHKexL9Y7WJRDqiD3Bm080x7j7G56__DYKoU=aGQ@mail.gmail.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Thu, 27 Sep 2018 16:28:27 +0200
+Subject: [Buildroot] [PATCH 1/1] ltp-testsuite: Bump to version 20180926
+Message-ID: <20180927142827.10431-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice,
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+ package/ltp-testsuite/ltp-testsuite.hash | 4 ++--
+ package/ltp-testsuite/ltp-testsuite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Fri, Sep 21, 2018 at 3:50 PM Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
->
-> - Remove second patch (already in version), see
->   https://github.com/SELinuxProject/selinux/commit/b24980ec07af66c4b419f8053aa65e97b36e558d
-> - Update third patch
-> - Pass SHLIBDIR=/usr/lib because by default it is set to /lib and LIBDIR
->   is set to $(PREFIX)/lib (with PREFIX=/usr)
-> - Use DESTDIR=$(HOST_DIR) instead of PREFIX=$(HOST_DIR) to install host
->   variant
-> - Remove libselinux.so symbolic link for host variant (not needed)
-> - Add hash for license file
->
-
-I've reviewed and build tested this 2.8 series and it looks good.
-I've handed off images for runtime testing and will reply back with my
-tested by once those pass.
-
-Thanks,
-Matt
+diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
+index 93ab41d3b7..1f04aee482 100644
+--- a/package/ltp-testsuite/ltp-testsuite.hash
++++ b/package/ltp-testsuite/ltp-testsuite.hash
+@@ -1,2 +1,2 @@
+-# From: https://github.com/linux-test-project/ltp/releases/download/20180515/ltp-full-20180515.tar.xz.sha1
+-sha1 db424d391987ff62664662210ef98cd42c7cc6b5  ltp-full-20180515.tar.xz
++# From: https://github.com/linux-test-project/ltp/releases/download/20180926/ltp-full-20180926.tar.xz.sha1
++sha1 da5c8e847ed909dbd0b859c6918bc526cf6c2695  ltp-full-20180926.tar.xz
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index b536dbd369..da039bddae 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LTP_TESTSUITE_VERSION = 20180515
++LTP_TESTSUITE_VERSION = 20180926
+ LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
+ LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
+ LTP_TESTSUITE_LICENSE = GPL-2.0, GPL-2.0+
+-- 
+2.19.0
