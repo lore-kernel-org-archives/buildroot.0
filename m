@@ -1,28 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Sep 2018 15:08:59 +0200
-Subject: [Buildroot] [PATCH] ghostscript: security bump to version 9.25
-In-Reply-To: <20180927160023.24230-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 27 Sep 2018 18:00:23 +0200")
-References: <20180927160023.24230-1-peter@korsgaard.com>
-Message-ID: <871s9d7or8.fsf@dell.be.48ers.dk>
+Date: Fri, 28 Sep 2018 15:09:08 +0200
+Subject: [Buildroot] [PATCH 1/1] xl2tp: bump to version 1.3.12
+In-Reply-To: <20180927181907.2150-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 27 Sep 2018 20:19:07 +0200")
+References: <20180927181907.2150-1-fontaine.fabrice@gmail.com>
+Message-ID: <87wor56a6j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fixes the following security issues:
- > - CVE-2018-16543: In Artifex Ghostscript before 9.24, gssetresolution and
- >   gsgetresolution allow attackers to have an unspecified impact
-
- > - CVE-2018-17183: Artifex Ghostscript before 9.25 allowed a user-writable
- >   error exception table, which could be used by remote attackers able to
- >   supply crafted PostScript to potentially overwrite or replace error
- >   handlers to inject code.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Add hash for license file
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
