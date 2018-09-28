@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Sep 2018 14:44:12 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] screen: fix rare build
+Date: Fri, 28 Sep 2018 14:44:26 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] screen: fix rare build
  failure on T_N undeclared
-Message-ID: <20180928124341.BECDF807C6@busybox.osuosl.org>
+Message-ID: <20180928124350.624248A37D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c062b76255e8f7565d2dd4787d5545d2889e6ad
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=517c70cc6dee5ed1e5c38c154b0427893a0e5e77
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 /usr/lfs/v0/rc-buildroot-test/scripts/instance-2/output/host/bin/arm-none-linux-gnueabi-gcc -c -I. -I.  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DETCSCREENRC='"/usr/etc/screenrc"' -DSCREENENCODINGS='"/usr/share/screen/utf8encodings"' -DHAVE_CONFIG_H -DGIT_REV=\"\" \
      -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -D_GNU_SOURCE list_display.c
