@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Sep 2018 14:42:36 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/xen: disable
+Date: Fri, 28 Sep 2018 14:42:45 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] package/xen: disable
  tools/qemu-xen/ opengl
-Message-ID: <20180928124200.ECD5E8A374@busybox.osuosl.org>
+Message-ID: <20180928124209.124B78A376@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8712899fa66b05eabe380e4e44ae1e83246c18bd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e8b28d503922cbaaf4369a1dd59330241b2d718b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 Resolves:
 http://autobuild.buildroot.net/results/a7f2bf387458c2f0db6a4b555c51004f321f9320
