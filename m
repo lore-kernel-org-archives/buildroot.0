@@ -1,107 +1,85 @@
 From: Fabio Urquiza <fabiorush@gmail.com>
-Date: Fri, 28 Sep 2018 10:59:21 -0300
-Subject: [Buildroot] [PATCH 2/4] bitcoin: new package
+Date: Fri, 28 Sep 2018 10:59:22 -0300
+Subject: [Buildroot] [PATCH 3/4] btcd: new package
 In-Reply-To: <1538143163-20596-1-git-send-email-fabiorush@gmail.com>
 References: <1538143163-20596-1-git-send-email-fabiorush@gmail.com>
-Message-ID: <1538143163-20596-3-git-send-email-fabiorush@gmail.com>
+Message-ID: <1538143163-20596-4-git-send-email-fabiorush@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bitcoin Core is an open source project which maintains and releases Bitcoin
-client software called ?Bitcoin Core?.
+An alternative full node bitcoin implementation written in Go (golang).
 
 Signed-off-by: Fabio Urquiza <fabiorush@gmail.com>
 ---
- package/Config.in            |  4 ++++
- package/bitcoin/Config.in    | 26 ++++++++++++++++++++++++++
- package/bitcoin/bitcoin.hash |  3 +++
- package/bitcoin/bitcoin.mk   | 17 +++++++++++++++++
- 4 files changed, 50 insertions(+)
- create mode 100644 package/bitcoin/Config.in
- create mode 100644 package/bitcoin/bitcoin.hash
- create mode 100644 package/bitcoin/bitcoin.mk
+ package/Config.in      |  1 +
+ package/btcd/Config.in | 10 ++++++++++
+ package/btcd/btcd.hash |  3 +++
+ package/btcd/btcd.mk   | 15 +++++++++++++++
+ 4 files changed, 29 insertions(+)
+ create mode 100644 package/btcd/Config.in
+ create mode 100644 package/btcd/btcd.hash
+ create mode 100644 package/btcd/btcd.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 2810d04..796383a 100644
+index 796383a..6a74a80 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1971,6 +1971,10 @@ endif
- 	source "package/xtables-addons/Config.in"
- 	source "package/znc/Config.in"
+@@ -1973,6 +1973,7 @@ endif
  
-+menu "Blockchain Applications"
-+	source "package/bitcoin/Config.in"
-+endmenu
-+
+ menu "Blockchain Applications"
+ 	source "package/bitcoin/Config.in"
++	source "package/btcd/Config.in"
  endmenu
  
- menu "Package managers"
-diff --git a/package/bitcoin/Config.in b/package/bitcoin/Config.in
+ endmenu
+diff --git a/package/btcd/Config.in b/package/btcd/Config.in
 new file mode 100644
-index 0000000..cef0e73
+index 0000000..566e8dd
 --- /dev/null
-+++ b/package/bitcoin/Config.in
-@@ -0,0 +1,26 @@
-+config BR2_PACKAGE_BITCOIN
-+	bool "bitcoin"
-+	select BR2_TOOLCHAIN_BUILDROOT_USE_SSP
-+	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_BOOST_SYSTEM
-+	select BR2_PACKAGE_BOOST_FILESYSTEM
-+	select BR2_PACKAGE_BOOST_THREAD
-+	select BR2_PACKAGE_BOOST_CHRONO
-+	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_LIBEVENT
++++ b/package/btcd/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_BTCD
++	bool "btcd"
++	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
++	select BR2_PACKAGE_HOST_GO_GLIDE
 +	help
-+	  Bitcoin Core is an open source project which maintains and
-+	  releases Bitcoin client software called ?Bitcoin Core?.
++	  btcd is an alternative full node bitcoin implementation
++	  written in Go (golang).
 +
-+	  It is a direct descendant of the original Bitcoin software
-+	  client released by Satoshi Nakamoto after he published the
-+	  famous Bitcoin whitepaper.
++	  https://github.com/btcsuite/btcd
 +
-+	  Bitcoin Core consists of both ?full-node? software for fully
-+	  validating the blockchain as well as a bitcoin wallet. The
-+	  project also currently maintains related software such as the
-+	  cryptography library libsecp256k1 and others located at GitHub.
-+
-+	  https://bitcoincore.org
-diff --git a/package/bitcoin/bitcoin.hash b/package/bitcoin/bitcoin.hash
+diff --git a/package/btcd/btcd.hash b/package/btcd/btcd.hash
 new file mode 100644
-index 0000000..96edd22
+index 0000000..d0b76c5
 --- /dev/null
-+++ b/package/bitcoin/bitcoin.hash
++++ b/package/btcd/btcd.hash
 @@ -0,0 +1,3 @@
 +# Locally calculated
-+sha256 c8557b6df5f5cdf67b3ddf6fe501cfc6e0be698f175f16927dd08d6040df7d9f  bitcoin-v0.16.3.tar.gz
-+sha256 70223369f70e8cb550e75aa74eb86bfa5220fb09c0ba0549d91c36587d15d1a0  COPYING
-diff --git a/package/bitcoin/bitcoin.mk b/package/bitcoin/bitcoin.mk
++sha256 4afd800125ecd9ff22c63dfc00c512ae5892f98b0415ecc1a19cd64afdf86bbb  btcd-2a560b2036bee5e3679ec2133eb6520b2f195213.tar.gz
++sha256 46021938caf87eeb92c841fd48777a3a7bf218341386611c4d080aa45812d1d2  LICENSE
+diff --git a/package/btcd/btcd.mk b/package/btcd/btcd.mk
 new file mode 100644
-index 0000000..58ed17b
+index 0000000..4a296a7
 --- /dev/null
-+++ b/package/bitcoin/bitcoin.mk
-@@ -0,0 +1,17 @@
++++ b/package/btcd/btcd.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# bitcoin
++# btcd
 +#
 +################################################################################
 +
-+BITCOIN_VERSION = v0.16.3
-+BITCOIN_SITE = $(call github,bitcoin,bitcoin,$(BITCOIN_VERSION))
-+BITCOIN_AUTORECONF = YES
-+BITCOIN_LICENSE = MIT
-+BITCOIN_LICENSE_FILES = COPYING
-+BITCOIN_CONF_OPTS = --disable-wallet --disable-tests
-+BITCOIN_CONF_OPTS += --with-sysroot=$(STAGING_DIR)
-+BITCOIN_CONF_OPTS += --with-boost-libdir=$(STAGING_DIR)/usr/lib/
-+BITCOIN_DEPENDENCIES = boost openssl libevent
++BTCD_VERSION = 2a560b2036bee5e3679ec2133eb6520b2f195213
++BTCD_SITE = $(call github,btcsuite,btcd,$(BTCD_VERSION))
++BTCD_LICENSE = ISC
++BTCD_LICENSE_FILES = LICENSE
++BTCD_GO_GLIDE = YES
++BTCD_GO_GET = YES
 +
-+$(eval $(autotools-package))
++$(eval $(golang-package))
++
 -- 
 2.7.4
