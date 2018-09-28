@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Sep 2018 14:57:20 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] libcurl: security bump to
+Date: Fri, 28 Sep 2018 14:57:29 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] libcurl: security bump to
  version 7.61.1
-Message-ID: <20180928125644.5319C8A3BD@busybox.osuosl.org>
+Message-ID: <20180928125653.277078A3C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2222b6c02d7780cfafaa0e9e100339087eb027d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0e27b54659247b17c854d8c26471b08d874231e4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 Fixes CVE-2018-14618: NTLM password overflow via integer overflow
 
@@ -38,7 +38,7 @@ index 9a57153d2b..395307653d 100644
 +sha256 3d5913d6a39bd22e68e34dff697fd6e4c3c81563f580c76fca2009315cd81891  curl-7.61.1.tar.xz
  sha256 5f3849ec38ddb927e79f514bf948890c41b8d1407286a49609b8fb1585931095  COPYING
 diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index f07a53757c..92c1a1fb7a 100644
+index 3f6733e6cb..7993062c6e 100644
 --- a/package/libcurl/libcurl.mk
 +++ b/package/libcurl/libcurl.mk
 @@ -4,7 +4,7 @@
