@@ -1,44 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Sep 2018 15:07:55 +0200
-Subject: [Buildroot] [git commit] xl2tp: bump to version 1.3.12
-Message-ID: <20180928130935.5E53B80046@busybox.osuosl.org>
+Date: Fri, 28 Sep 2018 15:07:45 +0200
+Subject: [Buildroot] [git commit] ghostscript: security bump to version 9.25
+Message-ID: <20180928130935.5731380046@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=751837c84fe30a9db9fc3a021dd4bd3629a3532e
+commit: https://git.buildroot.net/buildroot/commit/?id=b054797ecafec2b4b8945ad654242133749bf653
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add hash for license file
+Fixes the following security issues:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+- CVE-2018-16543: In Artifex Ghostscript before 9.24, gssetresolution and
+  gsgetresolution allow attackers to have an unspecified impact
+
+- CVE-2018-17183: Artifex Ghostscript before 9.25 allowed a user-writable
+  error exception table, which could be used by remote attackers able to
+  supply crafted PostScript to potentially overwrite or replace error
+  handlers to inject code.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xl2tp/xl2tp.hash | 3 ++-
- package/xl2tp/xl2tp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/ghostscript/ghostscript.hash | 4 ++--
+ package/ghostscript/ghostscript.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/xl2tp/xl2tp.hash b/package/xl2tp/xl2tp.hash
-index 152d615a2e..9cc76e9d25 100644
---- a/package/xl2tp/xl2tp.hash
-+++ b/package/xl2tp/xl2tp.hash
-@@ -1,2 +1,3 @@
- # locally computed
--sha256  1164b574e93a44c2a2e76c0c68d8d60437bd884a6c964d9c68be1556278e3d2d  xl2tp-v1.3.8.tar.gz
-+sha256  6f0ac50a76500d5cc56a67451b61e5f561b3309357176b39deabb1705e8745fd  xl2tp-v1.3.12.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/xl2tp/xl2tp.mk b/package/xl2tp/xl2tp.mk
-index eee5c04de8..63c798d886 100644
---- a/package/xl2tp/xl2tp.mk
-+++ b/package/xl2tp/xl2tp.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
+index bb41841012..f8ca6c8d4e 100644
+--- a/package/ghostscript/ghostscript.hash
++++ b/package/ghostscript/ghostscript.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs923/SHA512SUMS
+-sha512 0c1f59b743f92f9cf7000b06f6209010e583ef4d6899c20ed245721dea3c08fd58b9e2d1513fe83765ab6be233bc7ab250cf18054e4d09de4073b1111e38035f  ghostscript-9.23.tar.xz
++# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs925/SHA512SUMS
++sha512 7a1c0b7546ed523f50c1452d4a1c13fcf043d6060fc9708bbc4b543f66ecb1b619b6e71998094ac702ef44a2fd159b6523271de19b1cae352981ef51fb637651  ghostscript-9.25.tar.xz
+ 
+ # Hash for license file:
+ sha256 6f852249f975287b3efd43a5883875e47fa9f3125e2f1b18b5c09517ac30ecf2  LICENSE
+diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+index 8ea6610be5..9b5e144888 100644
+--- a/package/ghostscript/ghostscript.mk
++++ b/package/ghostscript/ghostscript.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--XL2TP_VERSION = v1.3.8
-+XL2TP_VERSION = v1.3.12
- XL2TP_SITE = $(call github,xelerance,xl2tpd,$(XL2TP_VERSION))
- XL2TP_DEPENDENCIES = libpcap
- XL2TP_LICENSE = GPL-2.0
+-GHOSTSCRIPT_VERSION = 9.23
+-GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs923
++GHOSTSCRIPT_VERSION = 9.25
++GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs925
+ GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
+ GHOSTSCRIPT_LICENSE = AGPL-3.0
+ GHOSTSCRIPT_LICENSE_FILES = LICENSE
