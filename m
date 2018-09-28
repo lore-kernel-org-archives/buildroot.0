@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 28 Sep 2018 13:12:06 +0200
-Subject: [Buildroot] [git commit] python-jinja2: bump to version 2.10
-Message-ID: <20180928111200.230A88A290@busybox.osuosl.org>
+Date: Fri, 28 Sep 2018 13:16:25 +0200
+Subject: [Buildroot] [git commit] python-lmdb: bump to version 0.94
+Message-ID: <20180928111555.CB5ED8A298@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f7cdf7e4d9c07984ea363d14c3506c406dc5b05
+commit: https://git.buildroot.net/buildroot/commit/?id=6a161eff24fb07f053be9d180b62eaa13b015335
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Also add license hash.
@@ -17,36 +17,35 @@ Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-jinja2/python-jinja2.hash | 8 +++++---
- package/python-jinja2/python-jinja2.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/python-lmdb/python-lmdb.hash | 7 +++++--
+ package/python-lmdb/python-lmdb.mk   | 5 +++--
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-jinja2/python-jinja2.hash b/package/python-jinja2/python-jinja2.hash
-index f5a09729c0..fe34f73965 100644
---- a/package/python-jinja2/python-jinja2.hash
-+++ b/package/python-jinja2/python-jinja2.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/jinja2/json, sha256 locally computed
--md5 9e55f0db6620dd99a1b366183a94270d Jinja2-2.9.5.tar.gz
--sha256 702a24d992f856fa8d5a7a36db6128198d0c21e1da34448ca236c42e92384825 Jinja2-2.9.5.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/jinja2/json
-+md5 61ef1117f945486472850819b8d1eb3d Jinja2-2.10.tar.gz
-+sha256 f84be1bb0040caca4cea721fcbbbbd61f9be9464ca236387158b0feea01914a4 Jinja2-2.10.tar.gz
-+# Locally computed sha256
-+sha256 26fcd436fdc8a39d44896ac03e6f1dfd25e38499c48f20d8bc1dd3bf0aaa8a5b LICENSE
-diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
-index c7dd4902b0..9ff36972d6 100644
---- a/package/python-jinja2/python-jinja2.mk
-+++ b/package/python-jinja2/python-jinja2.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-lmdb/python-lmdb.hash b/package/python-lmdb/python-lmdb.hash
+index 7c2946044d..ed96d69545 100644
+--- a/package/python-lmdb/python-lmdb.hash
++++ b/package/python-lmdb/python-lmdb.hash
+@@ -1,2 +1,5 @@
+-# Locally calculated
+-sha256	abd2b2ae9ecf2fd1e1bc55ef4e8463b5910722fcd70a1bbf34a3e669a74a41a4 python-lmdb-py-lmdb_0.89.tar.gz
++# md5, sha256 from https://pypi.org/pypi/lmdb/json
++md5	57216cb8fba7aed91ceba5a69d359939  lmdb-0.94.tar.gz
++sha256	9c2b7f05c26b2c95d6f3a566314feefe2dc64ecec6c50242a932703cf74303fe  lmdb-0.94.tar.gz
++# Locally computed sha256 checksums
++sha256	310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/python-lmdb/python-lmdb.mk b/package/python-lmdb/python-lmdb.mk
+index 62fb0465b1..039656e2c1 100644
+--- a/package/python-lmdb/python-lmdb.mk
++++ b/package/python-lmdb/python-lmdb.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--PYTHON_JINJA2_VERSION = 2.9.5
-+PYTHON_JINJA2_VERSION = 2.10
- PYTHON_JINJA2_SOURCE = Jinja2-$(PYTHON_JINJA2_VERSION).tar.gz
--PYTHON_JINJA2_SITE = https://pypi.python.org/packages/71/59/d7423bd5e7ddaf3a1ce299ab4490e9044e8dfd195420fc83a24de9e60726
-+PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/56/e6/332789f295cf22308386cf5bbd1f4e00ed11484299c5d7383378cf48ba47
- PYTHON_JINJA2_SETUP_TYPE = setuptools
- PYTHON_JINJA2_LICENSE = BSD-3-Clause
- PYTHON_JINJA2_LICENSE_FILES = LICENSE
+-PYTHON_LMDB_VERSION = py-lmdb_0.89
+-PYTHON_LMDB_SITE = $(call github,dw,py-lmdb,$(PYTHON_LMDB_VERSION))
++PYTHON_LMDB_VERSION = 0.94
++PYTHON_LMDB_SOURCE = lmdb-$(PYTHON_LMDB_VERSION).tar.gz
++PYTHON_LMDB_SITE = https://files.pythonhosted.org/packages/cb/31/5be8f436b56733d9e69c721c358502f4d77b627489a459978686be7db65f
+ PYTHON_LMDB_LICENSE = OLDAP-2.8
+ PYTHON_LMDB_LICENSE_FILES = LICENSE
+ PYTHON_LMDB_SETUP_TYPE = setuptools
