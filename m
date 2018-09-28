@@ -1,31 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Sep 2018 14:37:33 +0200
-Subject: [Buildroot] [PATCH] imagemagick: security bump to version
- 7.0.7-39
-In-Reply-To: <20180902083321.29329-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 2 Sep 2018 10:33:21 +0200")
-References: <20180902083321.29329-1-peter@korsgaard.com>
-Message-ID: <87efdd94s2.fsf@dell.be.48ers.dk>
+Date: Fri, 28 Sep 2018 14:39:16 +0200
+Subject: [Buildroot] [PATCH 1/1] chipmunk: fix build on musl
+In-Reply-To: <20180902162340.24253-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 2 Sep 2018 18:23:40 +0200")
+References: <20180902162340.24253-1-fontaine.fabrice@gmail.com>
+Message-ID: <87a7o194p7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > From the release notes:
- > 2018-06-06  7.0.7-39  <quetzlzacatenango@image...>
- >   * Fixed numerous use of uninitialized values, integer overflow, memory
- >     exceeded, and timeouts (credit to OSS Fuzz).
+ > Build fails on:
+ > /home/test/autobuild/run/instance-0/output/build/chipmunk-7.0.2/src/cpHastySpace.c:11:24:
+ > fatal error: sys/sysctl.h: No such file or directory
 
- > The most critical of these are:
- > https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=8772
- > https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=8782
+ > Indeed, sys/sysctl.h is not available on musl so include this header
+ > only if __APPLE__ is defined as sysctlbyname is only used in this case.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/e5be2f8eb9315a9054e1c8d854dec37cbb28eed7
 
-Committed to 2018.02.x and 2018.05.x, thanks.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2018.05.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
