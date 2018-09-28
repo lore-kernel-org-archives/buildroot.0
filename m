@@ -1,74 +1,84 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Sep 2018 14:39:01 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] chipmunk: fix build on
- musl
-Message-ID: <20180928123842.1E89B8A357@busybox.osuosl.org>
+Date: Fri, 28 Sep 2018 14:41:09 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] mediastreamer: fix
+ avcodec functions conflict
+Message-ID: <20180928124038.B85EA7F8D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d1d52ef207f1b70b7d95586e8fd7952e137ce46
+commit: https://git.buildroot.net/buildroot/commit/?id=6c45e9c0b856e3fc1c4b82df673f4e8baf631ab1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-Build fails on:
-/home/test/autobuild/run/instance-0/output/build/chipmunk-7.0.2/src/cpHastySpace.c:11:24: fatal error: sys/sysctl.h: No such file or directory
+Autotools miss avcodec function check when linking statically, leading to
+conflicts between local functions and avcodec functions.
 
-Indeed, sys/sysctl.h is not available on musl so include this header
-only if __APPLE__ is defined as sysctlbyname is only used in this case.
+Add patch to swap $FFMPEG_LIBS and -lavutil which are checked when
+AC_CHECK_LIB on avcodec_* functions. $FFMPEG_LIBS contain -ldrm that must
+be listed after -lavutil.
 
 Fixes:
- - http://autobuild.buildroot.org/results/e5be2f8eb9315a9054e1c8d854dec37cbb28eed7
+http://autobuild.buildroot.net/results/394/3945e06ea0dd1e16013184fbab5b67b3561c87ce/
+http://autobuild.buildroot.net/results/576/576c7d71313c45753848462717200b2b8ff5bb0e/
+http://autobuild.buildroot.net/results/f33/f339ac6ea30815eeb8ecb144c971f56c06a9f995
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[Peter: adjust commit message to clarify that this is for static linking]
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 2989e3c87a1123350728904fd789ad513e76b073)
+
+(cherry picked from commit daf7dd87f4d93923df5e757fd43b3ad214a4a2ae)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../chipmunk/0001-Fix-build-failure-on-musl.patch  | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ ...ocal-ffmpeg-and-avcodec-function-conflict.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/package/chipmunk/0001-Fix-build-failure-on-musl.patch b/package/chipmunk/0001-Fix-build-failure-on-musl.patch
+diff --git a/package/mediastreamer/0002-m4-fix-local-ffmpeg-and-avcodec-function-conflict.patch b/package/mediastreamer/0002-m4-fix-local-ffmpeg-and-avcodec-function-conflict.patch
 new file mode 100644
-index 0000000000..4485e937ca
+index 0000000000..cdaa0fab24
 --- /dev/null
-+++ b/package/chipmunk/0001-Fix-build-failure-on-musl.patch
-@@ -0,0 +1,37 @@
-+From 231c1fb97785290aaac89ed74d7cb24eaa74b363 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 2 Sep 2018 12:05:22 +0200
-+Subject: [PATCH] Fix build failure on musl
++++ b/package/mediastreamer/0002-m4-fix-local-ffmpeg-and-avcodec-function-conflict.patch
+@@ -0,0 +1,42 @@
++From d12e74a559602b3dff9a6bf38fcbb139535c9c9c Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@micronovasrl.com>
++Date: Mon, 3 Sep 2018 20:27:00 +0200
++Subject: [PATCH] m4: fix local ffmpeg and avcodec function conflict
 +
-+Build fails on:
-+/home/test/autobuild/run/instance-0/output/build/chipmunk-7.0.2/src/cpHastySpace.c:11:24: fatal error: sys/sysctl.h: No such file or directory
++Autotools miss avcodec function check.
++This is due to linker library list order, -ldrm is appended too early
++respect to -lavutil. This results in missing drm library functions for
++avcodec functions:
++- drmGetVersion()
++- drmFreeVersion()
++So these functions:
++- avcodec_get_context_defaults3
++- avcodec_open2
++- avcodec_encode_video2
++can't link correctly during check and they seem not to be present.
++Then macros HAVE_FUN_avcodec_* are not defined in mediastreamer-config.h
++So local avcodec functions conflict with real avcodec library functions.
 +
-+Indeed, sys/sysctl.h is not available on musl so include this header
-+only if __APPLE__ is defined as sysctlbyname is only used in this case.
++In acinclude.m4 file, swap $FFMPEG_LIBS and -lavutil if avcodec is found.
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/e5be2f8eb9315a9054e1c8d854dec37cbb28eed7
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/slembcke/Chipmunk2D/pull/171]
++Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 +---
-+ src/cpHastySpace.c | 2 ++
-+ 1 file changed, 2 insertions(+)
++ acinclude.m4 | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/src/cpHastySpace.c b/src/cpHastySpace.c
-+index 8dca425..e087df8 100644
-+--- a/src/cpHastySpace.c
-++++ b/src/cpHastySpace.c
-+@@ -8,7 +8,9 @@
-+ 
-+ //#include <sys/param.h >
-+ #ifndef _WIN32
-++#ifdef __APPLE__
-+ #include <sys/sysctl.h>
-++#endif
-+ #include <pthread.h>
-+ #else
-+ #ifndef WIN32_LEAN_AND_MEAN
++diff --git a/acinclude.m4 b/acinclude.m4
++index 6c31ed82..89ff6643 100644
++--- a/acinclude.m4
+++++ b/acinclude.m4
++@@ -110,7 +110,7 @@ AC_DEFUN([MS_CHECK_VIDEO],[
++ 			if test x$avcodec_found = xno ; then
++ 			   AC_MSG_WARN([Could not find libavcodec (from ffmpeg) headers and library.])
++ 			else
++-			   FFMPEG_LIBS="$FFMPEG_LIBS -lavutil"
+++			   FFMPEG_LIBS="-lavutil $FFMPEG_LIBS"
++ 			fi
++ 			
++ 			
 +-- 
 +2.17.1
 +
