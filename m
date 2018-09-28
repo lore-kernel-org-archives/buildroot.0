@@ -1,118 +1,213 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Sep 2018 14:54:35 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] lcms2: bump to version 2.9
-Message-ID: <20180928125556.63D3D8A3B7@busybox.osuosl.org>
+Date: Fri, 28 Sep 2018 14:54:46 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] lcms2: add upstream
+ security fix for CVE-2018-16435
+Message-ID: <20180928125556.6C59B8A3B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bb34fb0663a4c5acc66f4d56d469f1df3c7f6087
+commit: https://git.buildroot.net/buildroot/commit/?id=ed820226c729bf5135531cf7e75d4408a17e62de
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-- Remove two patches (already in version)
-- Add hash for license file
+Little CMS (aka Little Color Management System) 2.9 has an integer overflow
+in the AllocateDataSet function in cmscgats.c, leading to a heap-based
+buffer overflow in the SetData function via a crafted file in the second
+argument to cmsIT8LoadFromFile.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+For more details, see:
+https://github.com/mm2/Little-CMS/issues/171
+https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-16435
+
+The upstream fix unfortunately includes a number of unrelated changes, but
+thse files are not used when building for Linux.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b2561d0844b8caca1c12ec3b23e0accadd394e83)
+(cherry picked from commit 9f81f578eb0af218752db0d69f7adf94584ada31)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...Fix-lcms2.pc.in-thread-library-dependency.patch | 26 ---------------------
- .../0002-Added-an-extra-check-to-MLU-bounds.patch  | 27 ----------------------
- package/lcms2/lcms2.hash                           |  7 +++---
- package/lcms2/lcms2.mk                             |  2 +-
- 4 files changed, 5 insertions(+), 57 deletions(-)
+ .../0001-Upgrade-Visual-studio-2017-15.8.patch     | 174 +++++++++++++++++++++
+ 1 file changed, 174 insertions(+)
 
-diff --git a/package/lcms2/0001-Fix-lcms2.pc.in-thread-library-dependency.patch b/package/lcms2/0001-Fix-lcms2.pc.in-thread-library-dependency.patch
-deleted file mode 100644
-index f8c0d00d30..0000000000
---- a/package/lcms2/0001-Fix-lcms2.pc.in-thread-library-dependency.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From 0b55fd4e0935a0231ca258fde631a95215df2f72 Mon Sep 17 00:00:00 2001
--From: Peter Seiderer <ps.report@gmx.net>
--Date: Fri, 11 Nov 2016 23:29:56 +0100
--Subject: [PATCH] Fix lcms2.pc.in thread library dependency.
--
--Needed (sometimes) for static linking.
--
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- lcms2.pc.in | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/lcms2.pc.in b/lcms2.pc.in
--index b715f59..5b4213c 100644
----- a/lcms2.pc.in
--+++ b/lcms2.pc.in
--@@ -7,5 +7,5 @@ Name: @PACKAGE@
-- Description: LCMS Color Management Library
-- Version: @VERSION@
-- Libs: -L${libdir} -llcms2
---Libs.private: @LIB_MATH@ 
--+Libs.private: @LIB_MATH@ @LIB_THREAD@
-- Cflags: -I${includedir}
---- 
--2.8.1
--
-diff --git a/package/lcms2/0002-Added-an-extra-check-to-MLU-bounds.patch b/package/lcms2/0002-Added-an-extra-check-to-MLU-bounds.patch
-deleted file mode 100644
-index 9a5d9dd4e9..0000000000
---- a/package/lcms2/0002-Added-an-extra-check-to-MLU-bounds.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--From 5ca71a7bc18b6897ab21d815d15e218e204581e2 Mon Sep 17 00:00:00 2001
--From: Marti <marti.maria@tktbrainpower.com>
--Date: Mon, 15 Aug 2016 23:31:39 +0200
--Subject: [PATCH] Added an extra check to MLU bounds
--
--Thanks to Ibrahim el-sayed for spotting the bug
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- src/cmstypes.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/cmstypes.c b/src/cmstypes.c
--index cb61860..c7328b9 100644
----- a/src/cmstypes.c
--+++ b/src/cmstypes.c
--@@ -1460,6 +1460,7 @@ void *Type_MLU_Read(struct _cms_typehandler_struct* self, cmsIOHANDLER* io, cmsU
-- 
--         // Check for overflow
--         if (Offset < (SizeOfHeader + 8)) goto Error;
--+        if ((Offset + Len) > SizeOfTag + 8) goto Error;
-- 
--         // True begin of the string
--         BeginOfThisString = Offset - SizeOfHeader - 8;
---- 
--2.11.0
--
-diff --git a/package/lcms2/lcms2.hash b/package/lcms2/lcms2.hash
-index 1cf1017c54..248a08cf87 100644
---- a/package/lcms2/lcms2.hash
-+++ b/package/lcms2/lcms2.hash
-@@ -1,4 +1,5 @@
--# From https://sourceforge.net/projects/lcms/files/lcms/2.8
--sha1 e9535ec4a572b8fc7a1c405c35e6f4dc97714197 lcms2-2.8.tar.gz
-+# From https://sourceforge.net/projects/lcms/files/lcms/2.9
-+sha1 60bea9875e017dd1c466e988c2ad98f8766e4e55 lcms2-2.9.tar.gz
- # Locally computed:
--sha256 66d02b229d2ea9474e62c2b6cd6720fde946155cd1d0d2bffdab829790a0fb22 lcms2-2.8.tar.gz
-+sha256 48c6fdf98396fa245ed86e622028caf49b96fa22f3e5734f853f806fbc8e7d20 lcms2-2.9.tar.gz
-+sha256 c725daac91a9259ce5e195683c0eeb797d345035c36ac5ba114c9fa80e11639a COPYING
-diff --git a/package/lcms2/lcms2.mk b/package/lcms2/lcms2.mk
-index 29f8ac8dee..a19f807d86 100644
---- a/package/lcms2/lcms2.mk
-+++ b/package/lcms2/lcms2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LCMS2_VERSION = 2.8
-+LCMS2_VERSION = 2.9
- LCMS2_SITE = http://downloads.sourceforge.net/project/lcms/lcms/$(LCMS2_VERSION)
- LCMS2_LICENSE = MIT
- LCMS2_LICENSE_FILES = COPYING
+diff --git a/package/lcms2/0001-Upgrade-Visual-studio-2017-15.8.patch b/package/lcms2/0001-Upgrade-Visual-studio-2017-15.8.patch
+new file mode 100644
+index 0000000000..c43d934342
+--- /dev/null
++++ b/package/lcms2/0001-Upgrade-Visual-studio-2017-15.8.patch
+@@ -0,0 +1,174 @@
++From 768f70ca405cd3159d990e962d54456773bb8cf8 Mon Sep 17 00:00:00 2001
++From: Marti Maria <info@littlecms.com>
++Date: Wed, 15 Aug 2018 20:07:56 +0200
++Subject: [PATCH] Upgrade Visual studio 2017 15.8
++
++- Upgrade to 15.8
++- Add check on CGATS memory allocation (thanks to Quang Nguyen for
++pointing out this)
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ Projects/VC2017/jpegicc/jpegicc.vcxproj           |  1 +
++ Projects/VC2017/lcms2_DLL/lcms2_DLL.vcxproj       |  2 +-
++ Projects/VC2017/lcms2_static/lcms2_static.vcxproj |  2 +-
++ Projects/VC2017/linkicc/linkicc.vcxproj           |  2 +-
++ Projects/VC2017/psicc/psicc.vcxproj               |  2 +-
++ Projects/VC2017/testbed/testbed.vcxproj           |  2 +-
++ Projects/VC2017/tiffdiff/tiffdiff.vcxproj         |  2 +-
++ Projects/VC2017/tifficc/tifficc.vcxproj           |  2 +-
++ Projects/VC2017/transicc/transicc.vcxproj         |  1 +
++ src/cmscgats.c                                    | 14 ++++++++++----
++ 10 files changed, 19 insertions(+), 11 deletions(-)
++
++diff --git a/Projects/VC2017/jpegicc/jpegicc.vcxproj b/Projects/VC2017/jpegicc/jpegicc.vcxproj
++index ab26a53..39cfd00 100644
++--- a/Projects/VC2017/jpegicc/jpegicc.vcxproj
+++++ b/Projects/VC2017/jpegicc/jpegicc.vcxproj
++@@ -22,6 +22,7 @@
++     <ProjectGuid>{62812507-F926-4968-96A9-17678460AD90}</ProjectGuid>
++     <RootNamespace>jpegicc</RootNamespace>
++     <Keyword>Win32Proj</Keyword>
+++    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
++   </PropertyGroup>
++   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
++   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
++diff --git a/Projects/VC2017/lcms2_DLL/lcms2_DLL.vcxproj b/Projects/VC2017/lcms2_DLL/lcms2_DLL.vcxproj
++index 4c8aa3f..d1bf3eb 100644
++--- a/Projects/VC2017/lcms2_DLL/lcms2_DLL.vcxproj
+++++ b/Projects/VC2017/lcms2_DLL/lcms2_DLL.vcxproj
++@@ -22,7 +22,7 @@
++     <ProjectGuid>{8C51BE48-ADB8-4089-A9EC-F6BF993A0548}</ProjectGuid>
++     <RootNamespace>lcms2_DLL</RootNamespace>
++     <Keyword>Win32Proj</Keyword>
++-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+++    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
++   </PropertyGroup>
++   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
++   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
++diff --git a/Projects/VC2017/lcms2_static/lcms2_static.vcxproj b/Projects/VC2017/lcms2_static/lcms2_static.vcxproj
++index 2a9988a..9fc05ce 100644
++--- a/Projects/VC2017/lcms2_static/lcms2_static.vcxproj
+++++ b/Projects/VC2017/lcms2_static/lcms2_static.vcxproj
++@@ -22,7 +22,7 @@
++     <ProjectGuid>{71DEDE59-3F1E-486B-A899-4283000F76B5}</ProjectGuid>
++     <RootNamespace>lcms2_static</RootNamespace>
++     <Keyword>Win32Proj</Keyword>
++-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+++    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
++   </PropertyGroup>
++   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
++   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
++diff --git a/Projects/VC2017/linkicc/linkicc.vcxproj b/Projects/VC2017/linkicc/linkicc.vcxproj
++index 30c2b4e..51586dd 100644
++--- a/Projects/VC2017/linkicc/linkicc.vcxproj
+++++ b/Projects/VC2017/linkicc/linkicc.vcxproj
++@@ -22,7 +22,7 @@
++     <ProjectGuid>{FBFBE1DC-DB84-4BA1-9552-B4780F457849}</ProjectGuid>
++     <RootNamespace>linkicc</RootNamespace>
++     <Keyword>Win32Proj</Keyword>
++-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+++    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
++   </PropertyGroup>
++   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
++   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
++diff --git a/Projects/VC2017/psicc/psicc.vcxproj b/Projects/VC2017/psicc/psicc.vcxproj
++index 9dcf89a..8f26e12 100644
++--- a/Projects/VC2017/psicc/psicc.vcxproj
+++++ b/Projects/VC2017/psicc/psicc.vcxproj
++@@ -22,7 +22,7 @@
++     <ProjectGuid>{EF6A8851-65FE-46F5-B9EF-14F0B671F693}</ProjectGuid>
++     <RootNamespace>psicc</RootNamespace>
++     <Keyword>Win32Proj</Keyword>
++-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+++    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
++   </PropertyGroup>
++   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
++   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
++diff --git a/Projects/VC2017/testbed/testbed.vcxproj b/Projects/VC2017/testbed/testbed.vcxproj
++index 0af3762..3f6aea3 100644
++--- a/Projects/VC2017/testbed/testbed.vcxproj
+++++ b/Projects/VC2017/testbed/testbed.vcxproj
++@@ -22,7 +22,7 @@
++     <ProjectGuid>{928A3A2B-46EF-4279-959C-513B3652FF0E}</ProjectGuid>
++     <RootNamespace>testbed</RootNamespace>
++     <Keyword>Win32Proj</Keyword>
++-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+++    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
++   </PropertyGroup>
++   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
++   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
++diff --git a/Projects/VC2017/tiffdiff/tiffdiff.vcxproj b/Projects/VC2017/tiffdiff/tiffdiff.vcxproj
++index 7edfe28..3a6d837 100644
++--- a/Projects/VC2017/tiffdiff/tiffdiff.vcxproj
+++++ b/Projects/VC2017/tiffdiff/tiffdiff.vcxproj
++@@ -22,7 +22,7 @@
++     <ProjectGuid>{75B91835-CCD7-48BE-A606-A9C997D5DBEE}</ProjectGuid>
++     <RootNamespace>tiffdiff</RootNamespace>
++     <Keyword>Win32Proj</Keyword>
++-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+++    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
++   </PropertyGroup>
++   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
++   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
++diff --git a/Projects/VC2017/tifficc/tifficc.vcxproj b/Projects/VC2017/tifficc/tifficc.vcxproj
++index cd9f04c..5ef954f 100644
++--- a/Projects/VC2017/tifficc/tifficc.vcxproj
+++++ b/Projects/VC2017/tifficc/tifficc.vcxproj
++@@ -22,7 +22,7 @@
++     <ProjectGuid>{2256DE16-ED92-4A6F-9C54-F65BB61E64A2}</ProjectGuid>
++     <RootNamespace>tifficc</RootNamespace>
++     <Keyword>Win32Proj</Keyword>
++-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+++    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
++   </PropertyGroup>
++   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
++   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
++diff --git a/Projects/VC2017/transicc/transicc.vcxproj b/Projects/VC2017/transicc/transicc.vcxproj
++index d9b77c6..b3173d8 100644
++--- a/Projects/VC2017/transicc/transicc.vcxproj
+++++ b/Projects/VC2017/transicc/transicc.vcxproj
++@@ -22,6 +22,7 @@
++     <ProjectGuid>{9EE22D66-C849-474C-9ED5-C3E141DAB160}</ProjectGuid>
++     <RootNamespace>transicc</RootNamespace>
++     <Keyword>Win32Proj</Keyword>
+++    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
++   </PropertyGroup>
++   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
++   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
++diff --git a/src/cmscgats.c b/src/cmscgats.c
++index 1a87613..8c3e96d 100644
++--- a/src/cmscgats.c
+++++ b/src/cmscgats.c
++@@ -1,7 +1,7 @@
++ //---------------------------------------------------------------------------------
++ //
++ //  Little Color Management System
++-//  Copyright (c) 1998-2017 Marti Maria Saguer
+++//  Copyright (c) 1998-2018 Marti Maria Saguer
++ //
++ // Permission is hereby granted, free of charge, to any person obtaining
++ // a copy of this software and associated documentation files (the "Software"),
++@@ -1506,10 +1506,16 @@ void AllocateDataSet(cmsIT8* it8)
++     t-> nSamples   = atoi(cmsIT8GetProperty(it8, "NUMBER_OF_FIELDS"));
++     t-> nPatches   = atoi(cmsIT8GetProperty(it8, "NUMBER_OF_SETS"));
++ 
++-    t-> Data = (char**)AllocChunk (it8, ((cmsUInt32Number) t->nSamples + 1) * ((cmsUInt32Number) t->nPatches + 1) *sizeof (char*));
++-    if (t->Data == NULL) {
+++    if (t -> nSamples < 0 || t->nSamples > 0x7ffe || t->nPatches < 0 || t->nPatches > 0x7ffe)
+++    {
+++        SynError(it8, "AllocateDataSet: too much data");
+++    }
+++    else {
+++        t->Data = (char**)AllocChunk(it8, ((cmsUInt32Number)t->nSamples + 1) * ((cmsUInt32Number)t->nPatches + 1) * sizeof(char*));
+++        if (t->Data == NULL) {
++ 
++-        SynError(it8, "AllocateDataSet: Unable to allocate data array");
+++            SynError(it8, "AllocateDataSet: Unable to allocate data array");
+++        }
++     }
++ 
++ }
++-- 
++2.11.0
++
