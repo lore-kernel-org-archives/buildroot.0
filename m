@@ -1,87 +1,48 @@
-From: Fabio Urquiza <fabiorush@gmail.com>
-Date: Fri, 28 Sep 2018 10:59:23 -0300
-Subject: [Buildroot] [PATCH 4/4] neutrino: new package
-In-Reply-To: <1538143163-20596-1-git-send-email-fabiorush@gmail.com>
-References: <1538143163-20596-1-git-send-email-fabiorush@gmail.com>
-Message-ID: <1538143163-20596-5-git-send-email-fabiorush@gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Fri, 28 Sep 2018 17:16:30 +0300
+Subject: [Buildroot] [PATCH 1/1] python-subprocess32: bump to version 3.5.2
+Message-ID: <20180928141630.14817-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A privacy-preserving Bitcoin light client
-
-Signed-off-by: Fabio Urquiza <fabiorush@gmail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/Config.in              |  1 +
- package/neutrino/Config.in     | 13 +++++++++++++
- package/neutrino/neutrino.hash |  3 +++
- package/neutrino/neutrino.mk   | 14 ++++++++++++++
- 4 files changed, 31 insertions(+)
- create mode 100644 package/neutrino/Config.in
- create mode 100644 package/neutrino/neutrino.hash
- create mode 100644 package/neutrino/neutrino.mk
+ package/python-subprocess32/python-subprocess32.hash | 5 +++--
+ package/python-subprocess32/python-subprocess32.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 6a74a80..4e40d43 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1974,6 +1974,7 @@ endif
- menu "Blockchain Applications"
- 	source "package/bitcoin/Config.in"
- 	source "package/btcd/Config.in"
-+	source "package/neutrino/Config.in"
- endmenu
+diff --git a/package/python-subprocess32/python-subprocess32.hash b/package/python-subprocess32/python-subprocess32.hash
+index 17a54b0034..76b63d4a87 100644
+--- a/package/python-subprocess32/python-subprocess32.hash
++++ b/package/python-subprocess32/python-subprocess32.hash
+@@ -1,4 +1,5 @@
+-# sha256 from https://pypi.org/pypi/subprocess32/json
+-sha256	1e450a4a4c53bf197ad6402c564b9f7a53539385918ef8f12bdf430a61036590  subprocess32-3.2.7.tar.gz
++# md5, sha256 from https://pypi.org/pypi/subprocess32/json
++md5	4bd55a9fe9504a683255c4f51b1679ae  subprocess32-3.5.2.tar.gz
++sha256	eb2b989cf03ffc7166339eb34f1aa26c5ace255243337b1e22dab7caa1166687  subprocess32-3.5.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256	826b43437249d39422642f695154d064da64de92eb1476048a615f50bc1beb4a  LICENSE
+diff --git a/package/python-subprocess32/python-subprocess32.mk b/package/python-subprocess32/python-subprocess32.mk
+index 483bf5333f..1441420f29 100644
+--- a/package/python-subprocess32/python-subprocess32.mk
++++ b/package/python-subprocess32/python-subprocess32.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
  
- endmenu
-diff --git a/package/neutrino/Config.in b/package/neutrino/Config.in
-new file mode 100644
-index 0000000..e09f53a
---- /dev/null
-+++ b/package/neutrino/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_NEUTRINO
-+	bool "neutrino"
-+	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_GO_GLIDE
-+	help
-+	  Neutrino is an experimental Bitcoin light client written in Go
-+	  and designed with mobile Lightning Network clients in mind. It
-+	  uses a new proposal for compact block filters to minimize
-+	  bandwidth and storage use on the client side, while attempting
-+	  to preserve privacy and minimize processor load on full nodes
-+	  serving light clients.
-+
-+	  https://github.com/lightninglabs/neutrino
-diff --git a/package/neutrino/neutrino.hash b/package/neutrino/neutrino.hash
-new file mode 100644
-index 0000000..4e88053
---- /dev/null
-+++ b/package/neutrino/neutrino.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 581bb625173252d006d6a1cb7962578829f0d7d26605cdcb2ac4e6191a294d8f  neutrino-bee0ed11601a4ad0c3b23d462cd71089fc11f2cd.tar.gz
-+sha256 86d02f0ba9cb90c5da357c931eec3d3d69667ea1cf83804f07cc1ed69494cf46  LICENSE
-diff --git a/package/neutrino/neutrino.mk b/package/neutrino/neutrino.mk
-new file mode 100644
-index 0000000..4187936
---- /dev/null
-+++ b/package/neutrino/neutrino.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# neutrino
-+#
-+################################################################################
-+
-+NEUTRINO_VERSION = bee0ed11601a4ad0c3b23d462cd71089fc11f2cd
-+NEUTRINO_SITE = $(call github,lightninglabs,neutrino,$(NEUTRINO_VERSION))
-+NEUTRINO_LICENSE = MIT
-+NEUTRINO_LICENSE_FILES = LICENSE
-+NEUTRINO_GO_GLIDE = YES
-+
-+$(eval $(golang-package))
-+
+-PYTHON_SUBPROCESS32_VERSION = 3.2.7
++PYTHON_SUBPROCESS32_VERSION = 3.5.2
+ PYTHON_SUBPROCESS32_SOURCE = subprocess32-$(PYTHON_SUBPROCESS32_VERSION).tar.gz
+-PYTHON_SUBPROCESS32_SITE = https://files.pythonhosted.org/packages/b8/2f/49e53b0d0e94611a2dc624a1ad24d41b6d94d0f1b0a078443407ea2214c2
+-PYTHON_SUBPROCESS32_SETUP_TYPE = distutils
++PYTHON_SUBPROCESS32_SITE = https://files.pythonhosted.org/packages/c3/5f/7117737fc7114061837a4f51670d863dd7f7f9c762a6546fa8a0dcfe61c8
++PYTHON_SUBPROCESS32_SETUP_TYPE = setuptools
+ PYTHON_SUBPROCESS32_LICENSE = Python-2.0
+ PYTHON_SUBPROCESS32_LICENSE_FILES = LICENSE
+ 
 -- 
-2.7.4
+2.17.1
