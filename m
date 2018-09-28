@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Sep 2018 14:34:26 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] imagemagick: security
+Date: Fri, 28 Sep 2018 14:36:07 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] imagemagick: security
  bump to version 7.0.7-39
-Message-ID: <20180928123352.D1E7C8A34D@busybox.osuosl.org>
+Message-ID: <20180928123634.36F1A8108B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec7fb33eea5098d96321e98adbf01031d62c780d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=29c70a4005d0d1252f1cdbdd12a4d2a0855fa30a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 From the release notes:
 
