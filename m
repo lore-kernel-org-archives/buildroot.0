@@ -1,7 +1,7 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 28 Sep 2018 17:16:30 +0300
-Subject: [Buildroot] [PATCH 1/1] python-subprocess32: bump to version 3.5.2
-Message-ID: <20180928141630.14817-1-asafka7@gmail.com>
+Date: Fri, 28 Sep 2018 17:37:45 +0300
+Subject: [Buildroot] [PATCH 1/1] python-engineio: bump to version 2.3.0
+Message-ID: <20180928143745.30085-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,39 +10,36 @@ To: buildroot@busybox.net
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-subprocess32/python-subprocess32.hash | 5 +++--
- package/python-subprocess32/python-subprocess32.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/python-engineio/python-engineio.hash | 4 ++--
+ package/python-engineio/python-engineio.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-subprocess32/python-subprocess32.hash b/package/python-subprocess32/python-subprocess32.hash
-index 17a54b0034..76b63d4a87 100644
---- a/package/python-subprocess32/python-subprocess32.hash
-+++ b/package/python-subprocess32/python-subprocess32.hash
-@@ -1,4 +1,5 @@
--# sha256 from https://pypi.org/pypi/subprocess32/json
--sha256	1e450a4a4c53bf197ad6402c564b9f7a53539385918ef8f12bdf430a61036590  subprocess32-3.2.7.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/subprocess32/json
-+md5	4bd55a9fe9504a683255c4f51b1679ae  subprocess32-3.5.2.tar.gz
-+sha256	eb2b989cf03ffc7166339eb34f1aa26c5ace255243337b1e22dab7caa1166687  subprocess32-3.5.2.tar.gz
+diff --git a/package/python-engineio/python-engineio.hash b/package/python-engineio/python-engineio.hash
+index 484f6aaac3..37c34dff16 100644
+--- a/package/python-engineio/python-engineio.hash
++++ b/package/python-engineio/python-engineio.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/python-engineio/json
+-md5	cf8868acedc242b30ad3d24060a8d8e1  python-engineio-2.2.0.tar.gz
+-sha256	d35c50db73bf372f82975dc87f18f1cbfab7d5bed2dfc2553ae784579502a461  python-engineio-2.2.0.tar.gz
++md5	d281583ae81bcaa4acc4bd6fd4faab86  python-engineio-2.3.0.tar.gz
++sha256	eb4d28b7c6ae053f7ed50e688011b228ce8354dfdbf032220b76b3fc20d5f943  python-engineio-2.3.0.tar.gz
  # Locally computed sha256 checksums
- sha256	826b43437249d39422642f695154d064da64de92eb1476048a615f50bc1beb4a  LICENSE
-diff --git a/package/python-subprocess32/python-subprocess32.mk b/package/python-subprocess32/python-subprocess32.mk
-index 483bf5333f..1441420f29 100644
---- a/package/python-subprocess32/python-subprocess32.mk
-+++ b/package/python-subprocess32/python-subprocess32.mk
-@@ -4,10 +4,10 @@
+ sha256	c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
+diff --git a/package/python-engineio/python-engineio.mk b/package/python-engineio/python-engineio.mk
+index b222da38e9..bf674d767b 100644
+--- a/package/python-engineio/python-engineio.mk
++++ b/package/python-engineio/python-engineio.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_SUBPROCESS32_VERSION = 3.2.7
-+PYTHON_SUBPROCESS32_VERSION = 3.5.2
- PYTHON_SUBPROCESS32_SOURCE = subprocess32-$(PYTHON_SUBPROCESS32_VERSION).tar.gz
--PYTHON_SUBPROCESS32_SITE = https://files.pythonhosted.org/packages/b8/2f/49e53b0d0e94611a2dc624a1ad24d41b6d94d0f1b0a078443407ea2214c2
--PYTHON_SUBPROCESS32_SETUP_TYPE = distutils
-+PYTHON_SUBPROCESS32_SITE = https://files.pythonhosted.org/packages/c3/5f/7117737fc7114061837a4f51670d863dd7f7f9c762a6546fa8a0dcfe61c8
-+PYTHON_SUBPROCESS32_SETUP_TYPE = setuptools
- PYTHON_SUBPROCESS32_LICENSE = Python-2.0
- PYTHON_SUBPROCESS32_LICENSE_FILES = LICENSE
- 
+-PYTHON_ENGINEIO_VERSION = 2.2.0
+-PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/07/09/682c70c33e727aac028fca7216bb0b6efcd276e67118d1df417f778a3af1
++PYTHON_ENGINEIO_VERSION = 2.3.0
++PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/f1/6f/3b872dce14b381b2724d33cf9133c6d3e599f1e85e1f8ab75b01d243bf9e
+ PYTHON_ENGINEIO_SETUP_TYPE = setuptools
+ PYTHON_ENGINEIO_LICENSE = MIT
+ PYTHON_ENGINEIO_LICENSE_FILES = LICENSE
 -- 
 2.17.1
