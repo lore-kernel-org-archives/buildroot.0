@@ -1,52 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 28 Sep 2018 13:20:03 +0200
-Subject: [Buildroot] [git commit] python-psutil: bump to version 5.4.7
-Message-ID: <20180928111932.5129E8A29E@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 28 Sep 2018 14:34:26 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] imagemagick: security
+ bump to version 7.0.7-39
+Message-ID: <20180928123352.D1E7C8A34D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1cf5da192d69084532946e523f38b595e09250f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=ec7fb33eea5098d96321e98adbf01031d62c780d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-Also add license hash.
+From the release notes:
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+2018-06-06  7.0.7-39  <quetzlzacatenango@image...>
+  * Fixed numerous use of uninitialized values, integer overflow, memory
+    exceeded, and timeouts (credit to OSS Fuzz).
+
+The most critical of these are:
+https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=8772
+https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=8782
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 811734ef9044bbdfc067da76358153061fae2031)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-psutil/python-psutil.hash | 8 +++++---
- package/python-psutil/python-psutil.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
-index 19fb8a4fdb..9629d81ed7 100644
---- a/package/python-psutil/python-psutil.hash
-+++ b/package/python-psutil/python-psutil.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/psutil/json, sha256 locally computed
--md5	c9aa2599dcd9e5b59d71b6660d396062  psutil-5.2.0.tar.gz
--sha256  2fc91d068faa5613c093335f0e758673ef8c722ad4bfa4aded64c13ae69089eb  psutil-5.2.0.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/psutil/json
-+md5	434cd8f9a1fdc93ce7903fdc9b5e3906  psutil-5.4.7.tar.gz
-+sha256	5b6322b167a5ba0c5463b4d30dfd379cd4ce245a1162ebf8fc7ab5c5ffae4f3b  psutil-5.4.7.tar.gz
-+# Locally computed sha256 checksums
-+sha256	bb073826b0dfb43b631c38ad5d9844cda74cc631d2a5569ad8798be4274a3e17  LICENSE
-diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
-index 2b41df743a..61a303f84a 100644
---- a/package/python-psutil/python-psutil.mk
-+++ b/package/python-psutil/python-psutil.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index cf529b597c..9d5a39567e 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 ac957ef303fb870cb92331947ebcdcef5b553e80c7897c0aec866889f35e1a23  7.0.7-38.tar.gz
++sha256 e7c1b19923bb97ed456c78b63b3259b809ebc8e3967c6d086450370c67eedf06  7.0.7-39.tar.gz
+ sha256 2318cc05bbd2c25c1b2d13af1aadccc45b9cf6f94757421ae59a3c8ea9064f1c  LICENSE
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 4aa9d56db2..b75d65375b 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PSUTIL_VERSION = 5.2.0
-+PYTHON_PSUTIL_VERSION = 5.4.7
- PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
--PYTHON_PSUTIL_SITE = https://pypi.python.org/packages/3c/2f/f3ab91349c666f009077157b12057e613a3152a46a6c3be883777546b6de
-+PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/7d/9a/1e93d41708f8ed2b564395edfa3389f0fd6d567597401c2e5e2775118d8b
- PYTHON_PSUTIL_SETUP_TYPE = setuptools
- PYTHON_PSUTIL_LICENSE = BSD-3-Clause
- PYTHON_PSUTIL_LICENSE_FILES = LICENSE
+-IMAGEMAGICK_VERSION = 7.0.7-38
++IMAGEMAGICK_VERSION = 7.0.7-39
+ IMAGEMAGICK_SOURCE = $(IMAGEMAGICK_VERSION).tar.gz
+ IMAGEMAGICK_SITE = https://github.com/ImageMagick/ImageMagick/archive
+ IMAGEMAGICK_LICENSE = Apache-2.0
