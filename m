@@ -1,40 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Sep 2018 14:41:51 +0200
-Subject: [Buildroot] [PATCH v3] mediastreamer: fix avcodec functions
- conflict
-In-Reply-To: <20180904131251.30724-1-giulio.benetti@micronovasrl.com> (Giulio
- Benetti's message of "Tue, 4 Sep 2018 15:12:51 +0200")
-References: <20180904131251.30724-1-giulio.benetti@micronovasrl.com>
-Message-ID: <875zyp94kw.fsf@dell.be.48ers.dk>
+Date: Fri, 28 Sep 2018 14:42:36 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/xen: disable
+ tools/qemu-xen/ opengl
+Message-ID: <20180928124200.ECD5E8A374@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=8712899fa66b05eabe380e4e44ae1e83246c18bd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > Autotools miss avcodec function check leading to conflicts between local
- > functions and avcodec functions.
+Resolves:
+http://autobuild.buildroot.net/results/a7f2bf387458c2f0db6a4b555c51004f321f9320
 
- > Add patch to swap $FFMPEG_LIBS and -lavutil which are checked when
- > AC_CHECK_LIB on avcodec_* functions. $FFMPEG_LIBS contain -ldrm that must
- > be listed after -lavutil.
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 13c6754f3c1d2a14516f641490e9dd6f4c183d7c)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/xen/xen.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Fixes:
- > http://autobuild.buildroot.net/results/394/3945e06ea0dd1e16013184fbab5b67b3561c87ce/
- > http://autobuild.buildroot.net/results/576/576c7d71313c45753848462717200b2b8ff5bb0e/
- > http://autobuild.buildroot.net/results/f33/f339ac6ea30815eeb8ecb144c971f56c06a9f995
-
- > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
- > ---
- > Changes V2->V3:
- > * don't append -ldrm, swap $FFMPEG_LIBS with -lavutil
-
- > Changes V1->V2:
- > * merge -ldrm into FFMPEG_LIBS instead of repeating it thrice.
-
-Committed to 2018.02.x and 2018.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+index 29699cf0f9..a1685d371d 100644
+--- a/package/xen/xen.mk
++++ b/package/xen/xen.mk
+@@ -45,7 +45,7 @@ XEN_DEPENDENCIES += argp-standalone
+ endif
+ XEN_INSTALL_TARGET_OPTS += DESTDIR=$(TARGET_DIR) install-tools
+ XEN_MAKE_OPTS += dist-tools
+-XEN_CONF_OPTS += --with-extra-qemuu-configure-args="--disable-sdl"
++XEN_CONF_OPTS += --with-extra-qemuu-configure-args="--disable-sdl --disable-opengl"
+ 
+ define XEN_INSTALL_INIT_SYSV
+ 	mv $(TARGET_DIR)/etc/init.d/xencommons $(TARGET_DIR)/etc/init.d/S50xencommons
