@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Sep 2018 14:48:09 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] moarvm: fix build on
+Date: Fri, 28 Sep 2018 14:49:09 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] moarvm: fix build on
  powerpc64 / powerpc64le
-Message-ID: <20180928124823.6BE078A3A3@busybox.osuosl.org>
+Message-ID: <20180928124840.66FDA8A3A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c7ecf30239b7c035723a2bcb0855dad0d0dba9f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=fd37f6065e200da654081b7adbe5c591fded3143
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Build fails with:
  In file included from dyncall_callback.c:35:0:
