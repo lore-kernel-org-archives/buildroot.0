@@ -1,114 +1,61 @@
-From: Alexey Brodkin <alexey.brodkin@synopsys.com>
-Date: Fri, 28 Sep 2018 16:37:34 +0300
-Subject: [Buildroot] [PATCH] libaio: Link against libgcc and libc to avoid
- unresolved symbols
-Message-ID: <20180928133734.2352-1-abrodkin@synopsys.com>
+From: Fabio Urquiza <fabiorush@gmail.com>
+Date: Fri, 28 Sep 2018 10:59:19 -0300
+Subject: [Buildroot] [PATCH 0/4] Initial support to blockchain clients
+Message-ID: <1538143163-20596-1-git-send-email-fabiorush@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix proposed by Debian developers that makes sure all libgcc.a
-sybols used in libaio.so are built-in.
+This set of patches is the first one of a serie that will provide buildroot
+with several blockchain clients. The first ones that will be added are three
+bitcoin clients:
 
-Fixes build failures of blktrace, lvm2 and the like users of libaio.
+ - Bitcoin Core (C++ based client)
+ - BTCD (Goland based client)
+ - Neutrino (Goland based lightweight client)
 
-A couple of examples below:
-blktrace: http://autobuild.buildroot.net/results/5528ab59f1939a7eff7e85318f3b36283019cc50/
-lvm2:     http://autobuild.buildroot.net/results/a5dfc87f94b97135e5cc84f6a876114891ed9dd9/
+In order to build the Golang clients, a dependency resolving tool needed to
+be added (Glide), and Go host building support needed to be implemented.
 
-And since we solve the problem in libaio sources there's no need to
-mess with compilation flags in Buildroot, thus partially revert
-commit ce6536ae500f ("libaio: work-around for PowerPC issue").
+Next patches of the serie shall add suport to lighting network and Etherium
+clients.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
----
- ...gainst-libgcc-to-avoid-unresolved-symbols.patch | 57 ++++++++++++++++++++++
- package/libaio/libaio.mk                           |  6 ---
- 2 files changed, 57 insertions(+), 6 deletions(-)
- create mode 100644 package/libaio/0003-Link-against-libgcc-to-avoid-unresolved-symbols.patch
+Fabio Urquiza (4):
+  host-go-glide: new package
+  bitcoin: new package
+  btcd: new package
+  neutrino: new package
 
-diff --git a/package/libaio/0003-Link-against-libgcc-to-avoid-unresolved-symbols.patch b/package/libaio/0003-Link-against-libgcc-to-avoid-unresolved-symbols.patch
-new file mode 100644
-index 0000000000..17204be75b
---- /dev/null
-+++ b/package/libaio/0003-Link-against-libgcc-to-avoid-unresolved-symbols.patch
-@@ -0,0 +1,57 @@
-+From 672eaebd131c789a528e3a9cd089b4b69a82012b Mon Sep 17 00:00:00 2001
-+From: Guillem Jover <guillem@debian.org>
-+Date: Fri, 28 Sep 2018 13:15:54 +0300
-+Subject: [PATCH] Link against libgcc to avoid unresolved symbols
-+
-+We need to link agaisnt -lgcc, on at least hppa, PPC and ARC.
-+That's because in some corner-cases like compilation with -Os
-+on ARC and PPC so-called millicode (basically function prologue and
-+epilogue) implemented in libgcc.a is used. So we end up with
-+GLOBAL UNDEFINED symbol in libaio.so and then on linkage of the final
-+applicaiton LD fails to proceed saying:
-+--------------------------->8----------------------
-+hidden symbol '__ld_r13_to_r15_ret' in .../libgcc.a(_millicodethunk_ret.o) is referenced by DSO
-+--------------------------->8----------------------
-+
-+Also it looks like in general it is not the best idea to use either
-+"-nostartfiles" or "-nostdlib" when linking shared libs because
-+default construtor/destructor functions won't be executed, see
-+"5.2. Library constructor and destructor functions" in [1]
-+
-+So let's stop passing "-nostdlib" and "-nostartfiles" and get required
-+stuff built-in libaio.
-+
-+Initial patch taken from Debian [2].
-+
-+Fixes build failures in Buildroot like blktrace [3], lvm2 [4].
-+
-+Was submitted upstream via pull-request [5].
-+
-+[1] http://tldp.org/HOWTO/Program-Library-HOWTO/miscellaneous.html
-+[2] https://sources.debian.org/patches/libaio/0.3.111-1/01_link_libs.patch/
-+[3] http://autobuild.buildroot.net/results/17461209755038a30118d76acb4f43469a22a139/
-+[4] http://autobuild.buildroot.net/results/a5dfc87f94b97135e5cc84f6a876114891ed9dd9/
-+[5] https://pagure.io/libaio/pull-request/7
-+
-+Signed-off-by: Guillem Jover <guillem@debian.org>
-+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-+---
-+ src/Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/Makefile b/src/Makefile
-+index eadb336b47e3..5911c810c766 100644
-+--- a/src/Makefile
-++++ b/src/Makefile
-+@@ -3,7 +3,7 @@ includedir=$(prefix)/include
-+ libdir=$(prefix)/lib
-+ 
-+ CFLAGS ?= -g -fomit-frame-pointer -O2
-+-CFLAGS += -nostdlib -nostartfiles -Wall -I. -fPIC
-++CFLAGS += -Wall -I. -fPIC
-+ SO_CFLAGS=-shared $(CFLAGS)
-+ L_CFLAGS=$(CFLAGS)
-+ LINK_FLAGS=
-+-- 
-+2.17.1
-+
-diff --git a/package/libaio/libaio.mk b/package/libaio/libaio.mk
-index adb4d1c4b1..a215ca6533 100644
---- a/package/libaio/libaio.mk
-+++ b/package/libaio/libaio.mk
-@@ -16,12 +16,6 @@ ifeq ($(BR2_STATIC_LIBS),y)
- LIBAIO_CONFIGURE_OPTS += ENABLE_SHARED=0
- endif
- 
--# On PowerPC, a weird toolchain issue causes -Os builds to produce
--# references to hidden symbols, so we're forcing -O2
--ifeq ($(BR2_powerpc),y)
--LIBAIO_CONFIGURE_OPTS += CFLAGS="$(subst -Os,-O2,$(TARGET_CFLAGS))"
--endif
--
- define LIBAIO_BUILD_CMDS
- 	$(LIBAIO_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
- endef
+ package/Config.in               |  6 ++++++
+ package/Config.in.host          |  1 +
+ package/bitcoin/Config.in       | 26 ++++++++++++++++++++++++++
+ package/bitcoin/bitcoin.hash    |  3 +++
+ package/bitcoin/bitcoin.mk      | 17 +++++++++++++++++
+ package/btcd/Config.in          | 10 ++++++++++
+ package/btcd/btcd.hash          |  3 +++
+ package/btcd/btcd.mk            | 15 +++++++++++++++
+ package/go-glide/Config.in.host | 12 ++++++++++++
+ package/go-glide/go-glide.hash  |  3 +++
+ package/go-glide/go-glide.mk    | 14 ++++++++++++++
+ package/neutrino/Config.in      | 13 +++++++++++++
+ package/neutrino/neutrino.hash  |  3 +++
+ package/neutrino/neutrino.mk    | 14 ++++++++++++++
+ package/pkg-golang.mk           | 36 ++++++++++++++++++++++++++++++++----
+ 15 files changed, 172 insertions(+), 4 deletions(-)
+ create mode 100644 package/bitcoin/Config.in
+ create mode 100644 package/bitcoin/bitcoin.hash
+ create mode 100644 package/bitcoin/bitcoin.mk
+ create mode 100644 package/btcd/Config.in
+ create mode 100644 package/btcd/btcd.hash
+ create mode 100644 package/btcd/btcd.mk
+ create mode 100644 package/go-glide/Config.in.host
+ create mode 100644 package/go-glide/go-glide.hash
+ create mode 100644 package/go-glide/go-glide.mk
+ create mode 100644 package/neutrino/Config.in
+ create mode 100644 package/neutrino/neutrino.hash
+ create mode 100644 package/neutrino/neutrino.mk
+
 -- 
-2.16.2
+2.7.4
