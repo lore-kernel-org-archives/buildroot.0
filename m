@@ -1,50 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 28 Sep 2018 11:51:29 +0200
-Subject: [Buildroot] [git commit] python-autobahn: bump to version 18.9.2
-Message-ID: <20180928095058.8AB4088FC6@busybox.osuosl.org>
+Date: Fri, 28 Sep 2018 10:35:29 +0200
+Subject: [Buildroot] [git commit] python-attrs: bump to version 18.2.0
+Message-ID: <20180928095058.7E30089143@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29afd40b4bebce4e1ae1ca1b6683270a49f3e232
+commit: https://git.buildroot.net/buildroot/commit/?id=cabaf8c5d17b3501b82bdb0a3237b01d6ffff033
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Also add license hash.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-autobahn/python-autobahn.hash | 8 ++++----
- package/python-autobahn/python-autobahn.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-attrs/python-attrs.hash | 8 +++++---
+ package/python-attrs/python-attrs.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
-index f2d4993ddf..a59ee2df5d 100644
---- a/package/python-autobahn/python-autobahn.hash
-+++ b/package/python-autobahn/python-autobahn.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/autobahn/json
--md5    efddc3394c4e11f85bfa108c12a9346c  autobahn-18.9.1.tar.gz
--sha256 829fbeb08b7e0f7e8cd14d9d169043a861075c3f6e5e2739d564dc985b5e7015  autobahn-18.9.1.tar.gz
--# Locally computed
--sha256  0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
-+md5	e8192e3a4bb7dc59db2a82234b13b080  autobahn-18.9.2.tar.gz
-+sha256	d98b924f06865700116ee616027e4a6d678004a7b44e0d01cb262eab333112d6  autobahn-18.9.2.tar.gz
-+# Locally computed sha256 checksums
-+sha256	0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
-diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
-index 31bd99e783..1668b241b0 100644
---- a/package/python-autobahn/python-autobahn.mk
-+++ b/package/python-autobahn/python-autobahn.mk
+diff --git a/package/python-attrs/python-attrs.hash b/package/python-attrs/python-attrs.hash
+index 4434fa1928..23a5efd584 100644
+--- a/package/python-attrs/python-attrs.hash
++++ b/package/python-attrs/python-attrs.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/attrs/json, sha256 locally computed
+-md5	3b7136a570f3ff8a4ff42e7360073f9f  attrs-17.2.0.tar.gz
+-sha256	5d4d1b99f94d69338f485984127e4473b3ab9e20f43821b0e546cc3b2302fd11  attrs-17.2.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/attrs/json
++md5	44700294787c8018858777fc150e5d40  attrs-18.2.0.tar.gz
++sha256	10cbf6e27dbce8c30807caf056c8eb50917e0eaafe86347671b57254006c3e69  attrs-18.2.0.tar.gz
++# Locally computer sha256
++sha256	bf659a28b49240602f56bbdf490cbe2ec509b15b98f99d7b19a52c740e327863  LICENSE
+diff --git a/package/python-attrs/python-attrs.mk b/package/python-attrs/python-attrs.mk
+index c9633711c8..9fbee2d349 100644
+--- a/package/python-attrs/python-attrs.mk
++++ b/package/python-attrs/python-attrs.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AUTOBAHN_VERSION = 18.9.1
-+PYTHON_AUTOBAHN_VERSION = 18.9.2
- PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
--PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/3e/21/2074cfca5addf4f0c7e422798c50c85255ee5963889ee8b32edb06e47221
-+PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/68/f8/43ef6e614f27a97a88a6e91768d3917adff630936ec71665fcc3bec48e53
- PYTHON_AUTOBAHN_LICENSE = MIT
- PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
- PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
+-PYTHON_ATTRS_VERSION = 17.2.0
++PYTHON_ATTRS_VERSION = 18.2.0
+ PYTHON_ATTRS_SOURCE = attrs-$(PYTHON_ATTRS_VERSION).tar.gz
+-PYTHON_ATTRS_SITE = https://pypi.python.org/packages/be/41/e909cb6d901e9689da947419505cc7fb7d242a08a62ee221fce6a009a523
++PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/0f/9e/26b1d194aab960063b266170e53c39f73ea0d0d3f5ce23313e0ec8ee9bdf
+ PYTHON_ATTRS_SETUP_TYPE = setuptools
+ PYTHON_ATTRS_LICENSE = MIT
+ PYTHON_ATTRS_LICENSE_FILES = LICENSE
