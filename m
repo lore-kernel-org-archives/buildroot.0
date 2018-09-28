@@ -1,46 +1,44 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 28 Sep 2018 23:22:07 +0200
-Subject: [Buildroot] [PATCH 1/1] mosquitto: security bump to version 1.5.3
-Message-ID: <20180928212207.21878-1-fontaine.fabrice@gmail.com>
+From: Ferdinand van Aartsen <ferdinand@ombud.nl>
+Date: Sat, 29 Sep 2018 00:04:31 +0200
+Subject: [Buildroot] [PATCH 1/1] sqlite: bump to version 3.25.2
+Message-ID: <20180928220431.21959-1-ferdinand@ombud.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix CVE-2018-12543. If a message is sent to Mosquitto with a topic that
-begins with $, but is not $SYS, then an assert that should be unreachable is
-triggered and Mosquitto will exit.
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Ferdinand van Aartsen <ferdinand@ombud.nl>
 ---
- package/mosquitto/mosquitto.hash | 2 +-
- package/mosquitto/mosquitto.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/sqlite/sqlite.hash | 4 ++--
+ package/sqlite/sqlite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index 96817d464d..b38830b8b5 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking gpg signature
--sha256 8557bc7ae34dfaf32a0fb56d2491b7a7f731269c88337227233013502df4d5b0  mosquitto-1.5.1.tar.gz
-+sha256 3081a998d303a883b1cd064009beabc88aa9159e26f5258a4ae6007160491d10  mosquitto-1.5.3.tar.gz
- 
- # License files
- sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 7ac6487488..1d72f9b16e 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 4c67e9a00c..eefa31ffb7 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,6 +1,6 @@
+ # From https://www.sqlite.org/download.html
+-sha1 1d494ca2355ffe8ddbeea7cf615ef61122fe421e  sqlite-autoconf-3250100.tar.gz
++sha1 aedfbdc14eb700099434d6a743135743cff47393  sqlite-autoconf-3250200.tar.gz
+ # Calculated based on the hash above
+-sha256 96ed46bd87f093073ca8afd613020def847009b611c89f397bc24bd932ec6fd1  sqlite-autoconf-3250100.tar.gz
++sha256 da9a1484423d524d3ac793af518cdf870c8255d209e369bd6a193e9f9d0e3181  sqlite-autoconf-3250200.tar.gz
+ # Locally calculated
+ sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index a9b309718a..cb4bd58c47 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MOSQUITTO_VERSION = 1.5.1
-+MOSQUITTO_VERSION = 1.5.3
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
+-SQLITE_VERSION = 3250100
++SQLITE_VERSION = 3250200
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = https://www.sqlite.org/2018
+ SQLITE_LICENSE = Public domain
 -- 
-2.17.1
+2.19.0
