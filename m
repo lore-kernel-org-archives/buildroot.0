@@ -1,47 +1,99 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Sep 2018 15:08:05 +0200
-Subject: [Buildroot] [git commit] haproxy: security bump to 1.8.14
-Message-ID: <20180928130935.6796A80046@busybox.osuosl.org>
+From: Alexey Brodkin <alexey.brodkin@synopsys.com>
+Date: Fri, 28 Sep 2018 13:36:41 +0000
+Subject: [Buildroot] [PATCH] libaio: Fix library creation for ARC with
+ -Os
+In-Reply-To: <20180918155800.748eae34@windsurf>
+References: <20180917204329.15787-1-abrodkin@synopsys.com>
+ <20180918093604.0b421d5c@windsurf>
+ <c9ec03f9f05e251fd8e7b99c0ffb06593db32b1c.camel@synopsys.com>
+ <20180918111506.0648d78c@windsurf>
+ <aae1bc5da723d9dd98ddd4dcc7868e4dacb4b6f8.camel@synopsys.com>
+ <20180918112657.7d1b9d28@windsurf>
+ <99fcad6be0ba045a8d00274723ac511be2805aac.camel@synopsys.com>
+ <098ECE41A0A6114BB2A07F1EC238DE89667FD144@de02wembxa.internal.synopsys.com>
+ <24f81ffc5c8606c74c9d478a29b245d7646b90f6.camel@synopsys.com>
+ <20180918155800.748eae34@windsurf>
+Message-ID: <a754fe5132d69d9b9b6d78d9d9e47f7245a2ebcd.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e4f6b2fc5a6b3d52b86f614ba83de065b72b1b1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-Fix CVE-2018-14645 (see
-https://www.mail-archive.com/haproxy at formilux.org/msg31253.html)
+On Tue, 2018-09-18 at 15:58 +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Tue, 18 Sep 2018 12:44:26 +0000, Alexey Brodkin wrote:
+> 
+> > Sure that's indeed an option. We'll just finally add "-mno-millicode"
+> > in TARGET_ABI for ARC and forget about that class of problems. Also
+> > maybe it worth having "-mno-millicode" set by default for Linux
+> > toolchains so looking forward there will be no need to mess with
+> > millicode manually.
+> 
+> Yes, that's indeed one solution, though the problem also exists for
+> PowerPC, so it would have been nice to understand it.
+> 
+> What I find weird is that why it happens only with libaio ? I mean
+> there are plenty of libraries built with -fpic, and libaio is the only
+> one causing this problem. The fact that libaio is using -nostdlib
+> -nostartfiles was an initial hint to explain why libgcc isn't brought
+> into the link, but as Alexey said, removing -nostdlib -nostartfiles
+> doesn't solve the problem.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/haproxy/haproxy.hash | 2 +-
- package/haproxy/haproxy.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Not sure what kind of pot I was smoking to make a conclusion that
+removal of both "-nostdlib" and "nostartfiles" makes no difference.
+Maybe my 
 
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index e6fcb3b65c..f62c340948 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256	2bf5dafbb5f1530c0e67ab63666565de948591f8e0ee2a1d3c84c45e738220f1	haproxy-1.8.13.tar.gz
-+sha256	b17e402578be85e58af7a3eac99b1f675953bea9f67af2e964cf8bdbd1bd3fdf	haproxy-1.8.14.tar.gz
- sha256	0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28	LICENSE
- sha256	5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a	doc/lgpl.txt
- sha256	ddb9db7630752f8fdc6898f7c99a99eaeeac5213627ecb093df9c82f56175dc7	doc/gpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index ea8a3c7c5c..5fc7a945b5 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- HAPROXY_VERSION_MAJOR = 1.8
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).13
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).14
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+I returned back to this topic and decided to give it another shot based on
+Debian fix you pointed me to [1]. And I do see it works for both PPC and ARC:
+-------------------------------->8---------------------------------
+# arc-linux-gcc -shared -Os -Wall -I. -fPIC -Wl,--version-script=libaio.map \
+  -Wl,-soname=libaio.so.1 -o libaio.so.1.0.1 io_queue_init.os io_queue_release.os \
+  io_queue_wait.os io_queue_run.os io_getevents.os io_submit.os io_cancel.os \
+  io_setup.os io_destroy.os raw_syscall.os compat-0_1.os
+
+# arc-linux-readelf -s libaio.so.1.0.1 | grep __ld
+    59: 00000ab4    50 FUNC    LOCAL  DEFAULT   11 __ld_r13_to_r23_ret
+    62: 00000ad0    22 FUNC    LOCAL  DEFAULT   11 __ld_r13_to_r16_ret
+    63: 00000abc    42 FUNC    LOCAL  DEFAULT   11 __ld_r13_to_r21_ret
+    65: 00000ac4    34 FUNC    LOCAL  DEFAULT   11 __ld_r13_to_r19_ret
+    66: 00000ab8    46 FUNC    LOCAL  DEFAULT   11 __ld_r13_to_r22_ret
+    77: 00000acc    26 FUNC    LOCAL  DEFAULT   11 __ld_r13_to_r17_ret
+    83: 00000ab0    54 FUNC    LOCAL  DEFAULT   11 __ld_r13_to_r24_ret
+    84: 00000ac8    30 FUNC    LOCAL  DEFAULT   11 __ld_r13_to_r18_ret
+    86: 00000aac    58 FUNC    LOCAL  DEFAULT   11 __ld_r13_to_r25_ret
+    88: 00000ac0    38 FUNC    LOCAL  DEFAULT   11 __ld_r13_to_r20_ret
+    89: 00000ad4    18 FUNC    LOCAL  DEFAULT   11 __ld_r13_to_r15_ret
+    94: 00000ad8    14 FUNC    LOCAL  DEFAULT   11 __ld_r13_to_r14_ret
+
+# arc-linux-gcc -shared -Os -nostdlib -nostartfiles -Wall -I. -fPIC \
+  -Wl,--version-script=libaio.map -Wl,-soname=libaio.so.1 -o libaio.so.1.0.1 \
+  io_queue_init.os io_queue_release.os io_queue_wait.os io_queue_run.os \
+  io_getevents.os io_submit.os io_cancel.os io_setup.os io_destroy.os \
+  raw_syscall.os compat-0_1.os
+
+#  arc-linux-readelf -s libaio.so.1.0.1 | grep __ld
+     4: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND __ld_r13_to_r16_ret
+     6: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND __ld_r13_to_r19_ret
+     9: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND __ld_r13_to_r17_ret
+    11: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND __ld_r13_to_r15_ret
+    42: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND __ld_r13_to_r16_ret
+    44: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND __ld_r13_to_r19_ret
+    51: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND __ld_r13_to_r17_ret
+    55: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND __ld_r13_to_r15_ret
+-------------------------------->8---------------------------------
+
+You see in case of "-nostdlib" and "nostartfiles" absence symbol
+__ld_rX_to_rY_ret is LOCAL while in presence of them 
+__ld_rX_to_rY_ret is GLOBAL - and that's what you expected :)
+
+That said I created a pull-request with corresponding fix for libaio [2]
+and will shortly send a patch for Buildroot with it.
+
+[1] https://sources.debian.org/patches/libaio/0.3.111-1/01_link_libs.patch/
+[2] https://pagure.io/libaio/pull-request/7
+
+-Alexey
