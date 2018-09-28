@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Sep 2018 14:45:50 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/gcc: xtensa: fix
+Date: Fri, 28 Sep 2018 14:46:26 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] package/gcc: xtensa: fix
  atomic NAND code generation
-Message-ID: <20180928124524.E1E858A384@busybox.osuosl.org>
+Message-ID: <20180928124557.C2C468A390@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66e996581868d66b9bae42bca2da70a7b71018dd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2ac543676f69e7b08a7a70cc194af536adc7d03b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 xtensa gcc incorrectly generates code for atomic NAND operation as
 ~a1 & a2 instead of ~(a1 & a2). Fix that.
