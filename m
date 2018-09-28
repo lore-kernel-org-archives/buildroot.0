@@ -1,57 +1,79 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Fri, 28 Sep 2018 09:07:22 +0200
-Subject: [Buildroot] [PATCH] android-tools: fix minor()/major() build
- failure due to glibc 2.28
-In-Reply-To: <20180909151918.0d640d18@windsurf.home>
-References: <20180909095939.17089-1-giulio.benetti@micronovasrl.com>
- <20180909151918.0d640d18@windsurf.home>
-Message-ID: <6983ec9a-9530-5966-d256-64ee31c8d11e@micronovasrl.com>
+From: Lionel Orry <lionel.orry@gmail.com>
+Date: Fri, 28 Sep 2018 10:32:54 +0200
+Subject: [Buildroot] [PATCH 1/1] pkg-waf: add support for <pkg>_SUBDIR
+In-Reply-To: <CAKAx1cj8sSdbR6_NJu=tiHB=EPO_bjb571k4Yu5rVo_g5h66dw@mail.gmail.com>
+References: <CAKAx1cj8sSdbR6_NJu=tiHB=EPO_bjb571k4Yu5rVo_g5h66dw@mail.gmail.com>
+Message-ID: <CAKAx1chy22G0Tuf-zAvWLbgze3ay0Ncc2Dr5xGu=68LeW7YT5w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello, does anyone have the time to look at this small patch ? Thanks a lot!
 
-Il 09/09/2018 15:19, Thomas Petazzoni ha scritto:
-> Hello,
-> 
-> On Sun,  9 Sep 2018 11:59:39 +0200, Giulio Benetti wrote:
->> glibc 2.28 no longer includes <sys/sysmacros.h> from <sys/types.h>,
->> and therefore <sys/sysmacros.h> must be included explicitly when
->> major()/minor() are used.
->>
->> This commit adds a patch to directly include <sys/sysmacros.h> into
->> all usb_linux.c files where minor() and major() macros are used.
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/901/9011c6af71fb81988c2a05f2acee913a2bae2eff//
->> http://autobuild.buildroot.net/results/142/142c5672fdc44f2d68f18df3509e5051b3295df5//
->> http://autobuild.buildroot.net/results/b55/b55aa69654e758af5232ae69618ba1ea5c245074//
->>
->> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
->> ---
->>   ...smacros.h-to-compile-with-glibc-2.28.patch | 42 +++++++++++++++++++
->>   1 file changed, 42 insertions(+)
->>   create mode 100644 package/android-tools/0008-Include-sysmacros.h-to-compile-with-glibc-2.28.patch
-> 
-> Applied to master, thanks.
-> 
-> Thomas
-> 
-
-This can be applied to 2018.02.x too and fixes:
-http://autobuild.buildroot.net/results/84da49002f16c9b294ac8c896f53718b90543100/
-
--- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+Best regards,
+Lionel
+On Wed, Sep 19, 2018 at 3:31 PM Lionel Orry <lionel.orry@gmail.com> wrote:
+>
+> In the Buildroot manual, it is specified that the Waf-based
+> infrastructure supports the <pkg>_SUBDIR variable, which was not true.
+>
+> This patch makes use of this variable by changing to the given
+> sub-directory before executing waf commands.
+>
+> Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
+> ---
+>  package/pkg-waf.mk | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+>
+> diff --git a/package/pkg-waf.mk b/package/pkg-waf.mk
+> index e5b606f063..826b73291b 100644
+> --- a/package/pkg-waf.mk
+> +++ b/package/pkg-waf.mk
+> @@ -54,13 +54,15 @@ $(2)_INSTALL_STAGING_OPTS        ?=
+>  $(2)_INSTALL_TARGET_OPTS        ?=
+>  $(2)_WAF_OPTS                ?=
+>
+> +$(2)_SRCDIR            = $$($(2)_DIR)/$$($(2)_SUBDIR)
+> +
+>  #
+>  # Configure step. Only define it if not already defined by the package
+>  # .mk file.
+>  #
+>  ifndef $(2)_CONFIGURE_CMDS
+>  define $(2)_CONFIGURE_CMDS
+> -    cd $$(@D) && \
+> +    cd $$($$(PKG)_SRCDIR) && \
+>      $$(TARGET_CONFIGURE_OPTS) \
+>      $$($(2)_CONF_ENV) \
+>      $$(HOST_DIR)/bin/python2 $$($(2)_WAF) configure \
+> @@ -77,7 +79,7 @@ endif
+>  #
+>  ifndef $(2)_BUILD_CMDS
+>  define $(2)_BUILD_CMDS
+> -    cd $$(@D) && \
+> +    cd $$($$(PKG)_SRCDIR) && \
+>      $$(TARGET_MAKE_ENV) $$(HOST_DIR)/bin/python2 $$($(2)_WAF) \
+>          build -j $$(PARALLEL_JOBS) $$($(2)_BUILD_OPTS) \
+>          $$($(2)_WAF_OPTS)
+> @@ -90,7 +92,7 @@ endif
+>  #
+>  ifndef $(2)_INSTALL_STAGING_CMDS
+>  define $(2)_INSTALL_STAGING_CMDS
+> -    cd $$(@D) && \
+> +    cd $$($$(PKG)_SRCDIR) && \
+>      $$(TARGET_MAKE_ENV) $$(HOST_DIR)/bin/python2 $$($(2)_WAF) \
+>          install --destdir=$$(STAGING_DIR) \
+>          $$($(2)_INSTALL_STAGING_OPTS) \
+> @@ -104,7 +106,7 @@ endif
+>  #
+>  ifndef $(2)_INSTALL_TARGET_CMDS
+>  define $(2)_INSTALL_TARGET_CMDS
+> -    cd $$(@D) && \
+> +    cd $$($$(PKG)_SRCDIR) && \
+>      $$(TARGET_MAKE_ENV) $$(HOST_DIR)/bin/python2 $$($(2)_WAF) \
+>          install --destdir=$$(TARGET_DIR) \
+>          $$($(2)_INSTALL_TARGET_OPTS) \
+> --
+> 2.19.0
