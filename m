@@ -1,83 +1,85 @@
 From: Fabio Urquiza <fabiorush@gmail.com>
-Date: Fri, 28 Sep 2018 10:59:22 -0300
-Subject: [Buildroot] [PATCH 3/4] btcd: new package
+Date: Fri, 28 Sep 2018 10:59:23 -0300
+Subject: [Buildroot] [PATCH 4/4] neutrino: new package
 In-Reply-To: <1538143163-20596-1-git-send-email-fabiorush@gmail.com>
 References: <1538143163-20596-1-git-send-email-fabiorush@gmail.com>
-Message-ID: <1538143163-20596-4-git-send-email-fabiorush@gmail.com>
+Message-ID: <1538143163-20596-5-git-send-email-fabiorush@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-An alternative full node bitcoin implementation written in Go (golang).
+A privacy-preserving Bitcoin light client
 
 Signed-off-by: Fabio Urquiza <fabiorush@gmail.com>
 ---
- package/Config.in      |  1 +
- package/btcd/Config.in | 10 ++++++++++
- package/btcd/btcd.hash |  3 +++
- package/btcd/btcd.mk   | 15 +++++++++++++++
- 4 files changed, 29 insertions(+)
- create mode 100644 package/btcd/Config.in
- create mode 100644 package/btcd/btcd.hash
- create mode 100644 package/btcd/btcd.mk
+ package/Config.in              |  1 +
+ package/neutrino/Config.in     | 13 +++++++++++++
+ package/neutrino/neutrino.hash |  3 +++
+ package/neutrino/neutrino.mk   | 14 ++++++++++++++
+ 4 files changed, 31 insertions(+)
+ create mode 100644 package/neutrino/Config.in
+ create mode 100644 package/neutrino/neutrino.hash
+ create mode 100644 package/neutrino/neutrino.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 796383a..6a74a80 100644
+index 6a74a80..4e40d43 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1973,6 +1973,7 @@ endif
- 
+@@ -1974,6 +1974,7 @@ endif
  menu "Blockchain Applications"
  	source "package/bitcoin/Config.in"
-+	source "package/btcd/Config.in"
+ 	source "package/btcd/Config.in"
++	source "package/neutrino/Config.in"
  endmenu
  
  endmenu
-diff --git a/package/btcd/Config.in b/package/btcd/Config.in
+diff --git a/package/neutrino/Config.in b/package/neutrino/Config.in
 new file mode 100644
-index 0000000..566e8dd
+index 0000000..e09f53a
 --- /dev/null
-+++ b/package/btcd/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_BTCD
-+	bool "btcd"
++++ b/package/neutrino/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_NEUTRINO
++	bool "neutrino"
 +	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
 +	select BR2_PACKAGE_HOST_GO_GLIDE
 +	help
-+	  btcd is an alternative full node bitcoin implementation
-+	  written in Go (golang).
++	  Neutrino is an experimental Bitcoin light client written in Go
++	  and designed with mobile Lightning Network clients in mind. It
++	  uses a new proposal for compact block filters to minimize
++	  bandwidth and storage use on the client side, while attempting
++	  to preserve privacy and minimize processor load on full nodes
++	  serving light clients.
 +
-+	  https://github.com/btcsuite/btcd
-+
-diff --git a/package/btcd/btcd.hash b/package/btcd/btcd.hash
++	  https://github.com/lightninglabs/neutrino
+diff --git a/package/neutrino/neutrino.hash b/package/neutrino/neutrino.hash
 new file mode 100644
-index 0000000..d0b76c5
+index 0000000..4e88053
 --- /dev/null
-+++ b/package/btcd/btcd.hash
++++ b/package/neutrino/neutrino.hash
 @@ -0,0 +1,3 @@
 +# Locally calculated
-+sha256 4afd800125ecd9ff22c63dfc00c512ae5892f98b0415ecc1a19cd64afdf86bbb  btcd-2a560b2036bee5e3679ec2133eb6520b2f195213.tar.gz
-+sha256 46021938caf87eeb92c841fd48777a3a7bf218341386611c4d080aa45812d1d2  LICENSE
-diff --git a/package/btcd/btcd.mk b/package/btcd/btcd.mk
++sha256 581bb625173252d006d6a1cb7962578829f0d7d26605cdcb2ac4e6191a294d8f  neutrino-bee0ed11601a4ad0c3b23d462cd71089fc11f2cd.tar.gz
++sha256 86d02f0ba9cb90c5da357c931eec3d3d69667ea1cf83804f07cc1ed69494cf46  LICENSE
+diff --git a/package/neutrino/neutrino.mk b/package/neutrino/neutrino.mk
 new file mode 100644
-index 0000000..4a296a7
+index 0000000..4187936
 --- /dev/null
-+++ b/package/btcd/btcd.mk
-@@ -0,0 +1,15 @@
++++ b/package/neutrino/neutrino.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# btcd
++# neutrino
 +#
 +################################################################################
 +
-+BTCD_VERSION = 2a560b2036bee5e3679ec2133eb6520b2f195213
-+BTCD_SITE = $(call github,btcsuite,btcd,$(BTCD_VERSION))
-+BTCD_LICENSE = ISC
-+BTCD_LICENSE_FILES = LICENSE
-+BTCD_GO_GLIDE = YES
-+BTCD_GO_GET = YES
++NEUTRINO_VERSION = bee0ed11601a4ad0c3b23d462cd71089fc11f2cd
++NEUTRINO_SITE = $(call github,lightninglabs,neutrino,$(NEUTRINO_VERSION))
++NEUTRINO_LICENSE = MIT
++NEUTRINO_LICENSE_FILES = LICENSE
++NEUTRINO_GO_GLIDE = YES
 +
 +$(eval $(golang-package))
 +
