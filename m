@@ -1,56 +1,81 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Sep 2018 15:07:45 +0200
-Subject: [Buildroot] [git commit] ghostscript: security bump to version 9.25
-Message-ID: <20180928130935.5731380046@busybox.osuosl.org>
+Date: Fri, 28 Sep 2018 15:07:30 +0200
+Subject: [Buildroot] [git commit] glibc: bump version for post-2.28 fixes
+Message-ID: <20180928130935.4D08B8A3DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b054797ecafec2b4b8945ad654242133749bf653
+commit: https://git.buildroot.net/buildroot/commit/?id=2936442098293fe29232e2e20110f27dfba51809
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
+Carlos O'Donell (1):
+      Fix tst-setcontext9 for optimized small stacks.
 
-- CVE-2018-16543: In Artifex Ghostscript before 9.24, gssetresolution and
-  gsgetresolution allow attackers to have an unspecified impact
+DJ Delorie (3):
+      RISC-V: Fix rounding save/restore bug.
+      Regen RISC-V rvd ULPs
+      Improve ChangeLog message.
 
-- CVE-2018-17183: Artifex Ghostscript before 9.25 allowed a user-writable
-  error exception table, which could be used by remote attackers able to
-  supply crafted PostScript to potentially overwrite or replace error
-  handlers to inject code.
+Florian Weimer (6):
+      Linux: Rewrite __old_getdents64 [BZ #23497]
+      error, error_at_line: Add missing va_end calls
+      nscd: Deallocate existing user names in file parser
+      nss_files: Fix file stream leak in aliases lookup [BZ #23521]
+      regex: Add test tst-regcomp-truncated [BZ #23578]
+      misc: New test misc/tst-gethostid
+
+H.J. Lu (1):
+      i386: Use ENTRY and END in start.S [BZ #23606]
+
+Martin Kuchta (1):
+      pthread_cond_broadcast: Fix waiters-after-spinning case [BZ #23538]
+
+Mingli Yu (1):
+      Linux gethostid: Check for NULL value from gethostbyname_r [BZ #23679]
+
+Paul Eggert (1):
+      regex: fix uninitialized memory access
+
+Samuel Thibault (2):
+      hurd: Add missing symbols for proper libc_get/setspecific
+      hurd: Avoid PLTs for __pthread_get/setspecific
+
+Stefan Liebler (1):
+      Fix segfault in maybe_script_execute.
+
+Wilco Dijkstra (1):
+      Fix strstr bug with huge needles (bug 23637)
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ghostscript/ghostscript.hash | 4 ++--
- package/ghostscript/ghostscript.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/glibc/glibc.hash | 2 +-
+ package/glibc/glibc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
-index bb41841012..f8ca6c8d4e 100644
---- a/package/ghostscript/ghostscript.hash
-+++ b/package/ghostscript/ghostscript.hash
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+index 096393ff9b..9fff30e1ef 100644
+--- a/package/glibc/glibc.hash
++++ b/package/glibc/glibc.hash
 @@ -1,5 +1,5 @@
--# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs923/SHA512SUMS
--sha512 0c1f59b743f92f9cf7000b06f6209010e583ef4d6899c20ed245721dea3c08fd58b9e2d1513fe83765ab6be233bc7ab250cf18054e4d09de4073b1111e38035f  ghostscript-9.23.tar.xz
-+# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs925/SHA512SUMS
-+sha512 7a1c0b7546ed523f50c1452d4a1c13fcf043d6060fc9708bbc4b543f66ecb1b619b6e71998094ac702ef44a2fd159b6523271de19b1cae352981ef51fb637651  ghostscript-9.25.tar.xz
+ # Locally calculated (fetched from Github)
+-sha256  877c7b4741501d1762af8ef1a2518bdf2d722947d2e8d48b203e2d83cc600bca     glibc-glibc-2.28.tar.gz
++sha256  6e88cea4002efa7f78d86ea5e98eb92ed423d5a35068751517c4f00f56b8666c     glibc-glibc-2.28-18-g2339d6a55eb7a7e040ae888e906adc49eeb59eab.tar.gz
+ # Locally calculated (fetched from Github)
+ sha256  e08ab67b2db2d0f0e8f3311d23c54fb8f6d4c1ef6fa0b4047fd5da400e3ce9de     glibc-arc-2018.03-release.tar.gz
  
- # Hash for license file:
- sha256 6f852249f975287b3efd43a5883875e47fa9f3125e2f1b18b5c09517ac30ecf2  LICENSE
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index 8ea6610be5..9b5e144888 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--GHOSTSCRIPT_VERSION = 9.23
--GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs923
-+GHOSTSCRIPT_VERSION = 9.25
-+GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs925
- GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
- GHOSTSCRIPT_LICENSE = AGPL-3.0
- GHOSTSCRIPT_LICENSE_FILES = LICENSE
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index c8ade7c28b..708c22f723 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -10,7 +10,7 @@ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VE
+ else
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
+-GLIBC_VERSION = glibc-2.28
++GLIBC_VERSION = glibc-2.28-18-g2339d6a55eb7a7e040ae888e906adc49eeb59eab
+ # Upstream doesn't officially provide an https download link.
+ # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+ # sometimes the connection times out. So use an unofficial github mirror.
