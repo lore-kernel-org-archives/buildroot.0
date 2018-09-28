@@ -1,44 +1,72 @@
-From: Ferdinand van Aartsen <ferdinand@ombud.nl>
-Date: Sat, 29 Sep 2018 00:04:31 +0200
-Subject: [Buildroot] [PATCH 1/1] sqlite: bump to version 3.25.2
-Message-ID: <20180928220431.21959-1-ferdinand@ombud.nl>
+From: Trent Piepho <tpiepho@impinj.com>
+Date: Fri, 28 Sep 2018 23:18:40 +0000
+Subject: [Buildroot] [PATCH] gnupg: Package only needs ncurses with readline
+Message-ID: <20180928231709.13395-1-tpiepho@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ferdinand van Aartsen <ferdinand@ombud.nl>
----
- package/sqlite/sqlite.hash | 4 ++--
- package/sqlite/sqlite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+This package only needs ncurses when readline support is enabled, as
+it's the autoconf macro file for readline that checks for and pulls in
+ncurses.
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 4c67e9a00c..eefa31ffb7 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,6 +1,6 @@
- # From https://www.sqlite.org/download.html
--sha1 1d494ca2355ffe8ddbeea7cf615ef61122fe421e  sqlite-autoconf-3250100.tar.gz
-+sha1 aedfbdc14eb700099434d6a743135743cff47393  sqlite-autoconf-3250200.tar.gz
- # Calculated based on the hash above
--sha256 96ed46bd87f093073ca8afd613020def847009b611c89f397bc24bd932ec6fd1  sqlite-autoconf-3250100.tar.gz
-+sha256 da9a1484423d524d3ac793af518cdf870c8255d209e369bd6a193e9f9d0e3181  sqlite-autoconf-3250200.tar.gz
- # Locally calculated
- sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index a9b309718a..cb4bd58c47 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+For the target package, only depend on ncurses when readline support is
+enabled.
+
+The host package always forces readline support off, so the host-ncurses
+dependency can be removed entirely.
+
+Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+---
+ package/gnupg/Config.in | 2 +-
+ package/gnupg/gnupg.mk  | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/gnupg/Config.in b/package/gnupg/Config.in
+index 7c31612298..b13d4d6935 100644
+--- a/package/gnupg/Config.in
++++ b/package/gnupg/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_GNUPG
+ 	bool "gnupg"
+ 	depends on !BR2_PACKAGE_GNUPG2
+ 	select BR2_PACKAGE_ZLIB
+-	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_NCURSES if BR2_PACKAGE_READLINE
+ 	help
+ 	  GnuPG is the GNU project's complete and free implementation
+ 	  of the OpenPGP standard as defined by RFC4880. GnuPG allows
+diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
+index ac9047894d..8af68fd589 100644
+--- a/package/gnupg/gnupg.mk
++++ b/package/gnupg/gnupg.mk
+@@ -9,7 +9,7 @@ GNUPG_SOURCE = gnupg-$(GNUPG_VERSION).tar.bz2
+ GNUPG_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG_LICENSE = GPL-3.0+
+ GNUPG_LICENSE_FILES = COPYING
+-GNUPG_DEPENDENCIES = zlib ncurses $(if $(BR2_PACKAGE_LIBICONV),libiconv)
++GNUPG_DEPENDENCIES = zlib $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ GNUPG_CONF_ENV = ac_cv_sys_symbol_underscore=no
+ GNUPG_CONF_OPTS = \
+ 	--disable-rpath \
+@@ -18,7 +18,7 @@ GNUPG_CONF_OPTS = \
+ 	--enable-sha256 \
+ 	--enable-sha512
  
--SQLITE_VERSION = 3250100
-+SQLITE_VERSION = 3250200
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = https://www.sqlite.org/2018
- SQLITE_LICENSE = Public domain
+-HOST_GNUPG_DEPENDENCIES = host-zlib host-ncurses
++HOST_GNUPG_DEPENDENCIES = host-zlib
+ HOST_GNUPG_CONF_OPTS = \
+ 	--disable-rpath \
+ 	--enable-minimal \
+@@ -48,7 +48,7 @@ GNUPG_CONF_OPTS += --without-libcurl
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_READLINE),y)
+-GNUPG_DEPENDENCIES += readline
++GNUPG_DEPENDENCIES += readline ncurses
+ else
+ GNUPG_CONF_OPTS += --without-readline
+ endif
 -- 
-2.19.0
+2.14.4
