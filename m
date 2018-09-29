@@ -1,72 +1,67 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Fri, 28 Sep 2018 23:18:40 +0000
-Subject: [Buildroot] [PATCH] gnupg: Package only needs ncurses with readline
-Message-ID: <20180928231709.13395-1-tpiepho@impinj.com>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Fri, 28 Sep 2018 23:50:02 -0300
+Subject: [Buildroot] [PATCH v2 4/8] rsyslog: add logging configuration file
+In-Reply-To: <20180929025006.8296-1-casantos@datacom.com.br>
+References: <20180929025006.8296-1-casantos@datacom.com.br>
+Message-ID: <20180929025006.8296-4-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package only needs ncurses when readline support is enabled, as
-it's the autoconf macro file for readline that checks for and pulls in
-ncurses.
+Provide a template to help users to customize rsyslog without editting
+the startup script. Also warn about options that must not be used.
 
-For the target package, only depend on ncurses when readline support is
-enabled.
+Add instructions on how to configure debugging, since it a bit tricky
+when rsyslogd runs in background, requiring a separete log file.
 
-The host package always forces readline support off, so the host-ncurses
-dependency can be removed entirely.
+This file is also useful as an example for init script authors.
 
-Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 ---
- package/gnupg/Config.in | 2 +-
- package/gnupg/gnupg.mk  | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Changes v1->v2
+- Document that "-n" command line option must not be used.
+- Small improvements in comments.
+---
+ package/rsyslog/etc.default.logging | 15 +++++++++++++++
+ package/rsyslog/rsyslog.mk          |  2 ++
+ 2 files changed, 17 insertions(+)
+ create mode 100644 package/rsyslog/etc.default.logging
 
-diff --git a/package/gnupg/Config.in b/package/gnupg/Config.in
-index 7c31612298..b13d4d6935 100644
---- a/package/gnupg/Config.in
-+++ b/package/gnupg/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_GNUPG
- 	bool "gnupg"
- 	depends on !BR2_PACKAGE_GNUPG2
- 	select BR2_PACKAGE_ZLIB
--	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_NCURSES if BR2_PACKAGE_READLINE
- 	help
- 	  GnuPG is the GNU project's complete and free implementation
- 	  of the OpenPGP standard as defined by RFC4880. GnuPG allows
-diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
-index ac9047894d..8af68fd589 100644
---- a/package/gnupg/gnupg.mk
-+++ b/package/gnupg/gnupg.mk
-@@ -9,7 +9,7 @@ GNUPG_SOURCE = gnupg-$(GNUPG_VERSION).tar.bz2
- GNUPG_SITE = https://gnupg.org/ftp/gcrypt/gnupg
- GNUPG_LICENSE = GPL-3.0+
- GNUPG_LICENSE_FILES = COPYING
--GNUPG_DEPENDENCIES = zlib ncurses $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-+GNUPG_DEPENDENCIES = zlib $(if $(BR2_PACKAGE_LIBICONV),libiconv)
- GNUPG_CONF_ENV = ac_cv_sys_symbol_underscore=no
- GNUPG_CONF_OPTS = \
- 	--disable-rpath \
-@@ -18,7 +18,7 @@ GNUPG_CONF_OPTS = \
- 	--enable-sha256 \
- 	--enable-sha512
+diff --git a/package/rsyslog/etc.default.logging b/package/rsyslog/etc.default.logging
+new file mode 100644
+index 0000000000..5b80a853a5
+--- /dev/null
++++ b/package/rsyslog/etc.default.logging
+@@ -0,0 +1,15 @@
++#
++# /etc/default/logging (rsyslog version)
++#
++
++# Use RSYSLOGD_ARGS to pass additional arguments to rsyslogd.
++# - Do NOT use "-i pid_file", "-n", nor "-v", since they will break the
++#   startup script.
++# - Use "-d" to enable debug (see below). Warning: log files may be HUGE!
++# RSYSLOGD_ARGS="" # (default value)
++
++# You will need this along with "-d".
++# RSYSLOG_DEBUGLOG="/var/log/rsyslogd"; export RSYSLOG_DEBUGLOG
++
++# Uncomment the line below to disable this service
++# ENABLED="no"
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index 61e08ba765..c80d0696e2 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -74,6 +74,8 @@ endif
+ define RSYSLOG_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/rsyslog/S01logging \
+ 		$(TARGET_DIR)/etc/init.d/S01logging
++	$(INSTALL) -m 0644 -D package/rsyslog/etc.default.logging \
++		$(TARGET_DIR)/etc/default/logging
+ endef
  
--HOST_GNUPG_DEPENDENCIES = host-zlib host-ncurses
-+HOST_GNUPG_DEPENDENCIES = host-zlib
- HOST_GNUPG_CONF_OPTS = \
- 	--disable-rpath \
- 	--enable-minimal \
-@@ -48,7 +48,7 @@ GNUPG_CONF_OPTS += --without-libcurl
- endif
- 
- ifeq ($(BR2_PACKAGE_READLINE),y)
--GNUPG_DEPENDENCIES += readline
-+GNUPG_DEPENDENCIES += readline ncurses
- else
- GNUPG_CONF_OPTS += --without-readline
- endif
+ # The rsyslog.service is installed by rsyslog, but the link is not created
 -- 
-2.14.4
+2.17.1
