@@ -1,89 +1,49 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sat, 29 Sep 2018 09:39:05 +0200
-Subject: [Buildroot] [PATCH 1/2] lua: fix dynamic library install
-In-Reply-To: <20180928173519.9731-1-fontaine.fabrice@gmail.com>
-References: <20180928173519.9731-1-fontaine.fabrice@gmail.com>
-Message-ID: <CAB0FRsu4My55Udwq9NnQJ+zAcQi9MS+qYVi7Z3f3e16aeAk58Q@mail.gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sat, 29 Sep 2018 11:14:52 +0300
+Subject: [Buildroot] [PATCH 1/1] python-msgpack: bump to version 0.5.6
+Message-ID: <20180929081452.25464-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le ven. 28 sept. 2018 ? 19:35, Fabrice Fontaine <fontaine.fabrice@gmail.com>
-a ?crit :
+Also add license hash.
 
-> In 0002-shared-libs-for-lua.patch, revision number is used to set
-> library name:
-> TO_SOLIB = liblua.so.$(R)
->
-> However, library is built using PKG_VERSION which is passed only during
-> build step:
-> $(CC) -o $@.$(PKG_VERSION) -shared -Wl,-soname="$@.$(PKG_VERSION)" $?
->
-> As a result, dynamic library is not installed in staging or target paths
-> since bump to lua 5.3.5
->
-> So, instead of replacing R by PKG_VERSION and passing this variable in
-> all steps, simply update R to 5
->
-> Fixes:
->  -
-> http://autobuild.buildroot.net/results/28b6672188bb0082ac1467d3b45904880e3634f3
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/python-msgpack/python-msgpack.hash | 8 +++++---
+ package/python-msgpack/python-msgpack.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-Acked-by: Francois Perrad <francois.perrad@gadz.org>
-
-
-> ---
->  .../lua/5.3.5/0003-fix-revision-number.patch  | 31 +++++++++++++++++++
->  1 file changed, 31 insertions(+)
->  create mode 100644 package/lua/5.3.5/0003-fix-revision-number.patch
->
-> diff --git a/package/lua/5.3.5/0003-fix-revision-number.patch
-> b/package/lua/5.3.5/0003-fix-revision-number.patch
-> new file mode 100644
-> index 0000000000..ed2e0460eb
-> --- /dev/null
-> +++ b/package/lua/5.3.5/0003-fix-revision-number.patch
-> @@ -0,0 +1,31 @@
-> +Fix revision number
-> +
-> +In 0002-shared-libs-for-lua.patch, revision number is used to set
-> +library name:
-> +TO_SOLIB = liblua.so.$(R)
-> +
-> +However, library is built using PKG_VERSION which is passed only during
-> +build step:
-> +$(CC) -o $@.$(PKG_VERSION) -shared -Wl,-soname="$@.$(PKG_VERSION)" $?
-> +
-> +As a result, dynamic library is not installed in staging or target paths
-> +since bump to lua 5.3.5
-> +
-> +So, instead of replacing R by PKG_VERSION and passing this variable in
-> +all steps, simply update R to 5
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +
-> +Index: b/Makefile
-> +===================================================================
-> +--- a/Makefile
-> ++++ b/Makefile
-> +@@ -47,6 +47,6 @@
-> +
-> + # Lua version and release.
-> + V= 5.3
-> +-R= $V.4
-> ++R= $V.5
-> +
-> + # Targets start here.
-> + all:    $(PLAT)
-> --
-> 2.17.1
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180929/9ebe3a88/attachment.html>
+diff --git a/package/python-msgpack/python-msgpack.hash b/package/python-msgpack/python-msgpack.hash
+index 48313ff547..74785837d8 100644
+--- a/package/python-msgpack/python-msgpack.hash
++++ b/package/python-msgpack/python-msgpack.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/msgpack-python/json, sha256 locally computed.
+-md5	dcd854fb41ee7584ebbf35e049e6be98  msgpack-python-0.4.8.tar.gz
+-sha256	1a2b19df0f03519ec7f19f826afb935b202d8979b0856c6fb3dc28955799f886  msgpack-python-0.4.8.tar.gz
++# md5, sha256 from https://pypi.org/pypi/msgpack-python/json
++md5	6d644c06a87a5a111bbbf5b34b4be440  msgpack-python-0.5.6.tar.gz
++sha256	378cc8a6d3545b532dfd149da715abae4fda2a3adb6d74e525d0d5e51f46909b  msgpack-python-0.5.6.tar.gz
++# Locally computed sha256
++sha256  492dedba85da5872f78e6091bcd1fea474d660d35acb4dee964b8aab3f007427  COPYING
+diff --git a/package/python-msgpack/python-msgpack.mk b/package/python-msgpack/python-msgpack.mk
+index 5be2b14bdf..e0544f5d33 100644
+--- a/package/python-msgpack/python-msgpack.mk
++++ b/package/python-msgpack/python-msgpack.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_MSGPACK_VERSION = 0.4.8
++PYTHON_MSGPACK_VERSION = 0.5.6
+ PYTHON_MSGPACK_SOURCE = msgpack-python-$(PYTHON_MSGPACK_VERSION).tar.gz
+-PYTHON_MSGPACK_SITE = https://pypi.python.org/packages/21/27/8a1d82041c7a2a51fcc73675875a5f9ea06c2663e02fcfeb708be1d081a0
++PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/8a/20/6eca772d1a5830336f84aca1d8198e5a3f4715cd1c7fc36d3cc7f7185091
+ PYTHON_MSGPACK_LICENSE = Apache-2.0
+ PYTHON_MSGPACK_LICENSE_FILES = COPYING
+ PYTHON_MSGPACK_SETUP_TYPE = setuptools
+-- 
+2.17.1
