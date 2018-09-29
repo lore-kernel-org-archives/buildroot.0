@@ -1,31 +1,45 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 29 Sep 2018 18:26:26 +0200
-Subject: [Buildroot] [PATCH 1/1] bootutils: fix build with glibc 2.28
-In-Reply-To: <20180929111537.22500-1-fontaine.fabrice@gmail.com>
-References: <20180929111537.22500-1-fontaine.fabrice@gmail.com>
-Message-ID: <169683a6-c4e0-8f28-e14f-dd98a610b63d@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 29 Sep 2018 19:34:53 +0200
+Subject: [Buildroot] [PATCH v2 12/14] gst1-plugins-base: add missing
+ license file hash
+In-Reply-To: <20180928084333.38479bd9@windsurf>
+References: <20180925203618.23192-1-ps.report@gmx.net>
+ <20180925203618.23192-12-ps.report@gmx.net>
+ <20180925231434.5e016ac4@windsurf>
+ <20180927221833.5604b006@gmx.net>
+ <20180928084333.38479bd9@windsurf>
+Message-ID: <20180929193453.741b1787@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+Hello Thomas,
 
-Le 29/09/2018 ? 13:15, Fabrice Fontaine a ?crit?:
-> Replace first patch which was adding sys/types.h to fix musl issue by a
-> patch adding sys/sysmacros to fix build with glibc 2.28
+On Fri, 28 Sep 2018 08:43:33 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+
+> Hello,
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/c26761663a764a2eb7af54316a6dc78bd01490fb
+> On Thu, 27 Sep 2018 22:18:33 +0200, Peter Seiderer wrote:
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > > I'm not sure why you're dropping this hash. The COPYING file still
+> > > exists, it still has the same hash, and you didn't mention it in your
+> > > commit log. So I've reverted this part of the change when applying.    
+> > 
+> > Sorry for not mentioning in the commit log, the reasoning was that COPYING is
+> > never reverenced in the gst1-plugins-base.mk file...  
+> 
+> Ah, OK. Is this a bug of our .mk file, or nothing is really licensed
+> under the license described in COPYING ?
 
-Why we want to keep Bootutils in Buildroot?
-Upstream is dead since 2009 and "BootUtils is a collection of utilities to
-facilitate booting of modern Kernel 2.6 based systems"
+All (.c/.h files) in gst1-plugins-base is licensed under LGPL (COPYING.LIB file),
+COPYING contains the GPL license (for the libtool/build system/etc.)...
 
-Maybe it's time to remove this package?
+Regards,
+Peter
 
-Best regards,
-Romain
+> 
+> Best regards,
+> 
+> Thomas
