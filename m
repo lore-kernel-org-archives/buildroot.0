@@ -1,49 +1,50 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 29 Sep 2018 08:28:35 +0300
-Subject: [Buildroot] [PATCH 1/1] python-ipython: bump to version 5.8.0
-Message-ID: <20180929052835.25717-1-asafka7@gmail.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sat, 29 Sep 2018 02:35:14 -0300
+Subject: [Buildroot] [PATCH 5/5] support/testing: add python-twisted
+ tests
+References: <20180926025514.2092-6-ricardo.martincoski@gmail.com>
+Message-ID: <5baf0f128f758_62ce2b1ab2c1648c317bc@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add license hash.
+Hello,
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-ipython/python-ipython.hash | 8 +++++---
- package/python-ipython/python-ipython.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+On Tue, Sep 25, 2018 at 11:55 PM, Ricardo Martincoski wrote:
 
-diff --git a/package/python-ipython/python-ipython.hash b/package/python-ipython/python-ipython.hash
-index af1ed94b7a..41bdd70feb 100644
---- a/package/python-ipython/python-ipython.hash
-+++ b/package/python-ipython/python-ipython.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/ipython/json, sha256 locally computed
--md5 d8cc938f46801060239184a35ec9c5a6 ipython-5.4.0.tar.gz
--sha256 6907826c427c917bf0cdab71ee728288b1f1975c4b94b3ed608b67db3183c974 ipython-5.4.0.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/ipython/json
-+md5 7014b8824981eef2cb893ea5398d6b8d ipython-5.8.0.tar.gz
-+sha256 4bac649857611baaaf76bc82c173aa542f7486446c335fe1a6c05d0d491c8906 ipython-5.8.0.tar.gz
-+# Locally computed sha256
-+sha256 a5d87689342ec47cebdf623af06cec734c607666c696fe48271f2ff91752443d COPYING.rst
-diff --git a/package/python-ipython/python-ipython.mk b/package/python-ipython/python-ipython.mk
-index 5d92546fe0..79a48bf43d 100644
---- a/package/python-ipython/python-ipython.mk
-+++ b/package/python-ipython/python-ipython.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_IPYTHON_VERSION = 5.4.0
-+PYTHON_IPYTHON_VERSION = 5.8.0
- PYTHON_IPYTHON_SOURCE = ipython-$(PYTHON_IPYTHON_VERSION).tar.gz
--PYTHON_IPYTHON_SITE = https://pypi.python.org/packages/36/cd/765f53135bbbbcd691858aba3af124453a230fe0c752f009f69012fce5d5
-+PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/41/a6/2d25314b1f9375639d8f8e0f8052e8cec5df511d3449f22c4f1c2d8cb3c6
- PYTHON_IPYTHON_LICENSE = BSD-3-Clause
- PYTHON_IPYTHON_LICENSE_FILES = COPYING.rst
- PYTHON_IPYTHON_SETUP_TYPE = distutils
--- 
-2.17.1
+[snip]
+> +        cmd = self.interpreter + " test.py &"
+> +        # give some time to setup the server
+> +        cmd += "sleep 5"
+> +        _, exit_code = self.emulator.run(cmd, timeout=10)
+
+NOTE: results below include the entire series:
+http://patchwork.ozlabs.org/project/buildroot/list/?series=67693
+
+Turns out that 5 seconds is enough to setup the server when running in Python 2,
+but not in Python 3.
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/102456734 FAIL
+
+So I will need to change the sleep time (and the timeout passed to .run()) to
+something like this:
+        cmd += "sleep 30"
+        _, exit_code = self.emulator.run(cmd, timeout=35)
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/102483479 PASS
+
+> +        self.assertEqual(exit_code, 0)
+> +
+> +        cmd = "netstat -ltn 2>/dev/null | grep 0.0.0.0:1234"
+> +        _, exit_code = self.emulator.run(cmd)
+> +        self.assertEqual(exit_code, 0)
+[snip]
+
+Can I remove only this patch from the series (it is the last) and move it to my
+next series adding more test cases for python packages? Or should I resend this
+series (5 patches) right now?
+It could also be fixed while applying.
+
+
+Regards,
+Ricardo
