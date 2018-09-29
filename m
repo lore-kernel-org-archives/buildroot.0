@@ -1,9 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sat, 29 Sep 2018 02:35:14 -0300
-Subject: [Buildroot] [PATCH 5/5] support/testing: add python-twisted
- tests
-References: <20180926025514.2092-6-ricardo.martincoski@gmail.com>
-Message-ID: <5baf0f128f758_62ce2b1ab2c1648c317bc@ultri5.mail>
+Date: Sat, 29 Sep 2018 02:37:28 -0300
+Subject: [Buildroot] [PATCH 15/23] python-txtorcon: bump to version
+ 18.0.2
+References: <20180926153505.3411-16-asafka7@gmail.com>
+Message-ID: <5baf0f9879876_62ce3fdd0e0b1e2431918@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,38 +12,44 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, Sep 25, 2018 at 11:55 PM, Ricardo Martincoski wrote:
++ Thomas
+
+On Wed, Sep 26, 2018 at 12:34 PM, Asaf Kahlon wrote:
 
 [snip]
-> +        cmd = self.interpreter + " test.py &"
-> +        # give some time to setup the server
-> +        cmd += "sleep 5"
-> +        _, exit_code = self.emulator.run(cmd, timeout=10)
+> -PYTHON_TXTORCON_VERSION = 0.19.3
+> +PYTHON_TXTORCON_VERSION = 18.0.2
 
-NOTE: results below include the entire series:
-http://patchwork.ozlabs.org/project/buildroot/list/?series=67693
+In the upstream code there is an issue with Python 2:
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/102483482
+|# python -c 'import txtorcon'
+|Traceback (most recent call last):
+|  File "<string>", line 1, in <module>
+|  File "usr/lib/python2.7/site-packages/txtorcon/__init__.py", line 16, in <module>
+|  File "usr/lib/python2.7/site-packages/txtorcon/controller.py", line 43, in <module>
+|ImportError: No module named controller_py3
+|# echo $?
+|1
 
-Turns out that 5 seconds is enough to setup the server when running in Python 2,
-but not in Python 3.
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/102456734 FAIL
+Here is the relevant code:
+|try:
+|    from .controller_py3 import _AsyncOnionAuthContext
+|    HAVE_ASYNC = True
+|except SyntaxError:
+|    HAVE_ASYNC = False
 
-So I will need to change the sleep time (and the timeout passed to .run()) to
-something like this:
-        cmd += "sleep 30"
-        _, exit_code = self.emulator.run(cmd, timeout=35)
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/102483479 PASS
+The upstream has a patch related to this (I did not tested it):
+https://github.com/meejah/txtorcon/commit/c160531e885a3695ec1627070b6f48dfc443f3c8
+and also there is a new release 18.1.0 containing it.
 
-> +        self.assertEqual(exit_code, 0)
-> +
-> +        cmd = "netstat -ltn 2>/dev/null | grep 0.0.0.0:1234"
-> +        _, exit_code = self.emulator.run(cmd)
-> +        self.assertEqual(exit_code, 0)
-[snip]
-
-Can I remove only this patch from the series (it is the last) and move it to my
-next series adding more test cases for python packages? Or should I resend this
-series (5 patches) right now?
-It could also be fixed while applying.
+Assuming the patch solves the issue, what would be the best approach in this
+case?
+- resend the remaining patches of the series, bumping directly to 18.1.0;
+- resend the remaining patches of the series, adding the upstream patch to the
+  bump to 18.0.2;
+- apply the remaining patches of the series, and later add a followup patch
+  to solve the runtime issue either by adding the patch file or by bumping to
+  18.1.0.
 
 
 Regards,
