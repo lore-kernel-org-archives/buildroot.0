@@ -1,110 +1,51 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 29 Sep 2018 13:15:37 +0200
-Subject: [Buildroot] [PATCH 1/1] bootutils: fix build with glibc 2.28
-Message-ID: <20180929111537.22500-1-fontaine.fabrice@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 29 Sep 2018 15:28:17 +0200
+Subject: [Buildroot] [PATCH 2/2] package/expedite: bump to the latest version
+In-Reply-To: <20180929132817.30011-1-romain.naour@gmail.com>
+References: <20180929132817.30011-1-romain.naour@gmail.com>
+Message-ID: <20180929132817.30011-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Replace first patch which was adding sys/types.h to fix musl issue by a
-patch adding sys/sysmacros to fix build with glibc 2.28
+While at it add license file hash.
 
-Fixes:
- - http://autobuild.buildroot.org/results/c26761663a764a2eb7af54316a6dc78bd01490fb
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- .../0001-fix-build-with-glibc-2.28.patch      | 41 +++++++++++++++++++
- .../0001-fix-musl-compilation-issue.patch     | 31 --------------
- 2 files changed, 41 insertions(+), 31 deletions(-)
- create mode 100644 package/bootutils/0001-fix-build-with-glibc-2.28.patch
- delete mode 100644 package/bootutils/0001-fix-musl-compilation-issue.patch
 
-diff --git a/package/bootutils/0001-fix-build-with-glibc-2.28.patch b/package/bootutils/0001-fix-build-with-glibc-2.28.patch
-new file mode 100644
-index 0000000000..fced93d4a6
---- /dev/null
-+++ b/package/bootutils/0001-fix-build-with-glibc-2.28.patch
-@@ -0,0 +1,41 @@
-+From 00773e89893e4aaed721269eee0dbf844edd291c Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 29 Sep 2018 12:56:14 +0200
-+Subject: [PATCH] fix build with glibc 2.28
-+
-+Include to sys/sysmacros.h is needed to use makedev since glibc 2.28 so
-+add this include to devname.c and raidscan.c
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ libblkid/devname.c | 1 +
-+ raidscan.c         | 1 +
-+ 2 files changed, 2 insertions(+)
-+
-+diff --git a/libblkid/devname.c b/libblkid/devname.c
-+index d11bddd..12b63db 100644
-+--- a/libblkid/devname.c
-++++ b/libblkid/devname.c
-+@@ -37,6 +37,7 @@
-+ #if HAVE_SYS_MKDEV_H
-+ #include <sys/mkdev.h>
-+ #endif
-++#include <sys/sysmacros.h>
-+ #include <time.h>
-+ 
-+ #include "blkidP.h"
-+diff --git a/raidscan.c b/raidscan.c
-+index fab3b02..6e07b3d 100644
-+--- a/raidscan.c
-++++ b/raidscan.c
-+@@ -22,6 +22,7 @@
-+ #include "config.h"
-+ 
-+ #include <sys/stat.h>
-++#include <sys/sysmacros.h>
-+ #include <fcntl.h>
-+ #include <sys/ioctl.h>
-+ #include <linux/major.h>
-+-- 
-+2.17.1
-+
-diff --git a/package/bootutils/0001-fix-musl-compilation-issue.patch b/package/bootutils/0001-fix-musl-compilation-issue.patch
-deleted file mode 100644
-index ccb6ef61ec..0000000000
---- a/package/bootutils/0001-fix-musl-compilation-issue.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From e4c2c18b9d1d7a6dc17d8f7705b26fc2e2efc5a9 Mon Sep 17 00:00:00 2001
--From: Brendan Heading <brendanheading@gmail.com>
--Date: Sun, 30 Aug 2015 20:12:40 +0100
--Subject: [PATCH 1/1] fix musl compilation issue
--
--makedev(3) requires sys/types.h to be included.
--
--Note upstream has not issued releases since 2009. No mailing list activity
--since January 2010, and even before then it seems to be mostly spam.
--
--Upstream-Status: dormant
--Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-----
-- raidscan.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/raidscan.c b/raidscan.c
--index fab3b02..3cb1a0d 100644
----- a/raidscan.c
--+++ b/raidscan.c
--@@ -22,6 +22,7 @@
-- #include "config.h"
-- 
-- #include <sys/stat.h>
--+#include <sys/types.h>
-- #include <fcntl.h>
-- #include <sys/ioctl.h>
-- #include <linux/major.h>
---- 
--2.4.3
--
+From the latest commit [1] "this is a dead project".
+This does not encourage to keep expedite in Buildroot, should I remove it?
+This question was asked on the efl mailing list. I'm waiting for a reply.
+
+[1] https://git.enlightenment.org/tools/expedite.git/commit/?id=27e5e02370799b4e9246fe6dde893207d1ac3f3b
+---
+ package/expedite/expedite.hash | 3 ++-
+ package/expedite/expedite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/expedite/expedite.hash b/package/expedite/expedite.hash
+index 828ee0553b..d813cb38c3 100644
+--- a/package/expedite/expedite.hash
++++ b/package/expedite/expedite.hash
+@@ -1,2 +1,3 @@
+ # locally computed
+-sha256 56e1dbd9826d932f0ef72a10dfdf32b6e0f680ab6830f8a8cfc60644ac69dbf1 expedite-e7b11dd328d9db82b49cde795944a721beaf0112.tar.gz
++sha256 5f621a3cb70fae943893e256722cc7f7b0c4357035da7cc3cbbbb83e4ec1eb9a expedite-6a69955e71a00a720e1b0a9bc7b64dd3dd5673db.tar.gz
++sha256 0f024d9d9ddd18f94a4800d72e72d2ca198e9479c02b21afb9cacc2923ef2f2b COPYING
+diff --git a/package/expedite/expedite.mk b/package/expedite/expedite.mk
+index 6bd4b007ba..fbcc4b5675 100644
+--- a/package/expedite/expedite.mk
++++ b/package/expedite/expedite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EXPEDITE_VERSION = e7b11dd328d9db82b49cde795944a721beaf0112
++EXPEDITE_VERSION = 6a69955e71a00a720e1b0a9bc7b64dd3dd5673db
+ EXPEDITE_SITE = http://git.enlightenment.org/tools/expedite.git
+ EXPEDITE_SITE_METHOD = git
+ EXPEDITE_LICENSE = BSD-2-Clause
 -- 
-2.17.1
+2.14.4
