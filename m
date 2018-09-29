@@ -1,67 +1,62 @@
 From: Carlos Santos <casantos@datacom.com.br>
-Date: Fri, 28 Sep 2018 23:50:02 -0300
-Subject: [Buildroot] [PATCH v2 4/8] rsyslog: add logging configuration file
+Date: Fri, 28 Sep 2018 23:50:06 -0300
+Subject: [Buildroot] [PATCH v2 8/8] syslog-ng: add logging configuration file
 In-Reply-To: <20180929025006.8296-1-casantos@datacom.com.br>
 References: <20180929025006.8296-1-casantos@datacom.com.br>
-Message-ID: <20180929025006.8296-4-casantos@datacom.com.br>
+Message-ID: <20180929025006.8296-8-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Provide a template to help users to customize rsyslog without editting
-the startup script. Also warn about options that must not be used.
-
-Add instructions on how to configure debugging, since it a bit tricky
-when rsyslogd runs in background, requiring a separete log file.
+Provide a template to help users to customize syslog-ng without editting
+the startup script. Mostly warn about options that must not be used.
 
 This file is also useful as an example for init script authors.
 
 Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 ---
 Changes v1->v2
-- Document that "-n" command line option must not be used.
-- Small improvements in comments.
+- Document that -F/--foreground must not be used
 ---
- package/rsyslog/etc.default.logging | 15 +++++++++++++++
- package/rsyslog/rsyslog.mk          |  2 ++
- 2 files changed, 17 insertions(+)
- create mode 100644 package/rsyslog/etc.default.logging
+ package/syslog-ng/etc.default.logging | 14 ++++++++++++++
+ package/syslog-ng/syslog-ng.mk        |  2 ++
+ 2 files changed, 16 insertions(+)
+ create mode 100644 package/syslog-ng/etc.default.logging
 
-diff --git a/package/rsyslog/etc.default.logging b/package/rsyslog/etc.default.logging
+diff --git a/package/syslog-ng/etc.default.logging b/package/syslog-ng/etc.default.logging
 new file mode 100644
-index 0000000000..5b80a853a5
+index 0000000000..eda594aaef
 --- /dev/null
-+++ b/package/rsyslog/etc.default.logging
-@@ -0,0 +1,15 @@
++++ b/package/syslog-ng/etc.default.logging
+@@ -0,0 +1,14 @@
 +#
-+# /etc/default/logging (rsyslog version)
++# /etc/default/logging (syslog-ng version)
 +#
 +
-+# Use RSYSLOGD_ARGS to pass additional arguments to rsyslogd.
-+# - Do NOT use "-i pid_file", "-n", nor "-v", since they will break the
-+#   startup script.
-+# - Use "-d" to enable debug (see below). Warning: log files may be HUGE!
-+# RSYSLOGD_ARGS="" # (default value)
-+
-+# You will need this along with "-d".
-+# RSYSLOG_DEBUGLOG="/var/log/rsyslogd"; export RSYSLOG_DEBUGLOG
++# Use SYSLOG_NG_ARGS to pass additional arguments to rsyslogd.
++# - Do NOT use "-F/--foreground", "--help"/"-h", "--version"/"-V", "--stderr"/"-e",
++#   "--syntax-only"/"-s", or "--process-mode=<background|safe-background>", since
++#   they will break the startup script.
++# - Do NOT use "--debug"/"-d", since debugging does not work when running in
++#   background.
++# SYSLOG_NG_ARGS="" # (default value)
 +
 +# Uncomment the line below to disable this service
 +# ENABLED="no"
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index 61e08ba765..c80d0696e2 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
-@@ -74,6 +74,8 @@ endif
- define RSYSLOG_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/rsyslog/S01logging \
+diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+index 793fea0972..a837dad841 100644
+--- a/package/syslog-ng/syslog-ng.mk
++++ b/package/syslog-ng/syslog-ng.mk
+@@ -95,6 +95,8 @@ endif
+ define SYSLOG_NG_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/syslog-ng/S01logging \
  		$(TARGET_DIR)/etc/init.d/S01logging
-+	$(INSTALL) -m 0644 -D package/rsyslog/etc.default.logging \
++	$(INSTALL) -m 0644 -D package/syslog-ng/etc.default.logging \
 +		$(TARGET_DIR)/etc/default/logging
  endef
  
- # The rsyslog.service is installed by rsyslog, but the link is not created
+ # By default syslog-ng installs a number of sample configuration
 -- 
 2.17.1
