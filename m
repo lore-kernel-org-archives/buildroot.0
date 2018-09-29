@@ -1,10 +1,11 @@
 From: Chris Packham <judge.packham@gmail.com>
-Date: Sat, 29 Sep 2018 15:11:51 +1200
-Subject: [Buildroot] [PATCH v2 7/8] syslog-ng: update S01logging
-In-Reply-To: <20180929025006.8296-7-casantos@datacom.com.br>
+Date: Sat, 29 Sep 2018 15:14:37 +1200
+Subject: [Buildroot] [PATCH v2 8/8] syslog-ng: add logging configuration
+ file
+In-Reply-To: <20180929025006.8296-8-casantos@datacom.com.br>
 References: <20180929025006.8296-1-casantos@datacom.com.br>
- <20180929025006.8296-7-casantos@datacom.com.br>
-Message-ID: <CAFOYHZCV0NGOJ3byc__+-_6pJHaupCEbB5e+zkWdC5m5Pesjsg@mail.gmail.com>
+ <20180929025006.8296-8-casantos@datacom.com.br>
+Message-ID: <CAFOYHZD85y9qzQNMPan6wCCncE4O3N7J==H5WwnaMdTXtWw1uQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,127 +14,67 @@ To: buildroot@busybox.net
 
 On Sat, 29 Sep 2018, 2:50 PM Carlos Santos, <casantos@datacom.com.br> wrote:
 
-> Reformat and fix syslog-ng startup script for better quality and code
-> style:
+> Provide a template to help users to customize syslog-ng without editting
+> the startup script. Mostly warn about options that must not be used.
 >
-> - Indent with tabs, not spaces.
-> - Do not kill syslog-ng in "reload". Send a SIGHUP signal, instructing
->   it to perform a re-initialization.
-> - Support a configuration file at /etc/default (an example file will be
->   added in forthcomming patch).
-> - Support a configuration variable that completely disables the service
->   and issues a warning message on any invocation.
+> This file is also useful as an example for init script authors.
 >
 > Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 > ---
-> Changes v1->v2:
-> - Implement changes suggested by Arnout Vandecappelle.
+> Changes v1->v2
+> - Document that -F/--foreground must not be used
 > ---
->  package/syslog-ng/S01logging | 73 +++++++++++++++++++++++++-----------
->  1 file changed, 51 insertions(+), 22 deletions(-)
+>  package/syslog-ng/etc.default.logging | 14 ++++++++++++++
+>  package/syslog-ng/syslog-ng.mk        |  2 ++
+>  2 files changed, 16 insertions(+)
+>  create mode 100644 package/syslog-ng/etc.default.logging
 >
-> diff --git a/package/syslog-ng/S01logging b/package/syslog-ng/S01logging
-> index d7c899a1e3..58e120e5f3 100644
-> --- a/package/syslog-ng/S01logging
-> +++ b/package/syslog-ng/S01logging
-> @@ -1,17 +1,42 @@
->  #!/bin/sh
->
-> +DAEMON="syslog-ng"
-> +PIDFILE="/var/run/$DAEMON.pid"
+> diff --git a/package/syslog-ng/etc.default.logging
+> b/package/syslog-ng/etc.default.logging
+> new file mode 100644
+> index 0000000000..eda594aaef
+> --- /dev/null
+> +++ b/package/syslog-ng/etc.default.logging
+> @@ -0,0 +1,14 @@
+> +#
+> +# /etc/default/logging (syslog-ng version)
+> +#
 > +
-> +SYSLOG_NG_ARGS=""
-> +ENABLED="yes"
-> +
-> +# shellcheck source=/dev/null
-> +[ -r "/etc/default/$DAEMON"g ] && . "/etc/default/$DAEMON"
+> +# Use SYSLOG_NG_ARGS to pass additional arguments to rsyslogd.
 >
 
-Stray 'g'.
+s/rsyslog/syslog-ng/
 
-+
-> +if [ "$ENABLED" != "yes" ]; then
-> +       printf '%s is disabled\n' "$DAEMON"
-> +       exit 0
-> +fi
++# - Do NOT use "-F/--foreground", "--help"/"-h", "--version"/"-V",
+> "--stderr"/"-e",
+> +#   "--syntax-only"/"-s", or
+> "--process-mode=<background|safe-background>", since
+> +#   they will break the startup script.
+> +# - Do NOT use "--debug"/"-d", since debugging does not work when running
+> in
+> +#   background.
+> +# SYSLOG_NG_ARGS="" # (default value)
 > +
->  start() {
-> -       printf "Starting syslog-ng daemon: "
-> -       start-stop-daemon -S -q -p /var/run/syslog-ng.pid \
-> -               -x /usr/sbin/syslog-ng -- --pidfile /var/run/syslog-ng.pid
-> -       [ $? = 0 ] && echo "OK" || echo "FAIL"
-> +       printf 'Starting %s: ' "$DAEMON"
-> +       # shellcheck disable=SC2086 # we need the word splitting
-> +       start-stop-daemon -S -q -p "$PIDFILE" -x /usr/sbin/syslog-ng --
-> $SYSLOG_NG_ARGS
-> +       status=$?
-> +       if [ "$status" -eq 0 ]; then
-> +               echo "OK"
-> +       else
-> +               echo "FAIL"
-> +       fi
-> +       return "$status"
->  }
+> +# Uncomment the line below to disable this service
+> +# ENABLED="no"
+> diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/
+> syslog-ng.mk
+> index 793fea0972..a837dad841 100644
+> --- a/package/syslog-ng/syslog-ng.mk
+> +++ b/package/syslog-ng/syslog-ng.mk
+> @@ -95,6 +95,8 @@ endif
+>  define SYSLOG_NG_INSTALL_INIT_SYSV
+>         $(INSTALL) -m 0755 -D package/syslog-ng/S01logging \
+>                 $(TARGET_DIR)/etc/init.d/S01logging
+> +       $(INSTALL) -m 0644 -D package/syslog-ng/etc.default.logging \
+> +               $(TARGET_DIR)/etc/default/logging
+>  endef
 >
->  stop() {
-> -       printf "Stopping syslog-ng daemon: "
-> -       start-stop-daemon -K -q -p /var/run/syslog-ng.pid \
-> -               -x /usr/sbin/syslog-ng
-> -       [ $? = 0 ] && echo "OK" || echo "FAIL"
-> +       printf 'Stopping %s: ' "$DAEMON"
-> +       start-stop-daemon -K -q -p "$PIDFILE"
-> +       status=$?
-> +       if [ "$status" -eq 0 ]; then
-> +               echo "OK"
-> +       else
-> +               echo "FAIL"
-> +       fi
-> +       return "$status"
->  }
->
->  restart() {
-> @@ -20,19 +45,23 @@ restart() {
->         start
->  }
->
-> +# SIGHUP makes syslog-ng reload its configuration
-> +reload() {
-> +       printf 'Stopping %s: ' "$DAEMON"
-> +       start-stop-daemon -K -s HUP -q -p "$PIDFILE"
-> +       status=$?
-> +       if [ "$status" -eq 0 ]; then
-> +               echo "OK"
-> +       else
-> +               echo "FAIL"
-> +       fi
-> +       return "$status"
-> +}
-> +
->  case "$1" in
-> -       start)
-> -               start
-> -               ;;
-> -       stop)
-> -               stop
-> -               ;;
-> -       restart|reload)
-> -               restart
-> -               ;;
-> -       *)
-> -               echo "Usage: $0 {start|stop|restart}"
-> -               exit 1
-> +        start|stop|restart|reload)
-> +                "$1";;
-> +        *)
-> +                echo "Usage: $0 {start|stop|restart|reload}"
-> +                exit 1
->  esac
-> -
-> -exit $?
+>  # By default syslog-ng installs a number of sample configuration
 > --
 > 2.17.1
 >
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180929/cf397922/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180929/25dc29e2/attachment.html>
