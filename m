@@ -1,129 +1,85 @@
 From: Carlos Santos <casantos@datacom.com.br>
-Date: Fri, 28 Sep 2018 23:49:59 -0300
-Subject: [Buildroot] [PATCH v2 1/8] busybox: update S01logging
-Message-ID: <20180929025006.8296-1-casantos@datacom.com.br>
+Date: Fri, 28 Sep 2018 23:50:04 -0300
+Subject: [Buildroot] [PATCH v2 6/8] sysklogd: add logging configuration file
+In-Reply-To: <20180929025006.8296-1-casantos@datacom.com.br>
+References: <20180929025006.8296-1-casantos@datacom.com.br>
+Message-ID: <20180929025006.8296-6-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reformat and fix syslogd/klogd startup script for better quality and
-code style:
+Provide a template to help users to customize syslogd and klogd without
+editting the startup script. Also warn about options that must not be
+used.
 
-- Detect and report start/stop errors (previous version ignored them and
-  always reported OK).
-- Use a separate function for restart.
-- Implement reload as restart.
-- Support a configuration variable that completely disables the service
-  and issues a warning message on any invocation.
+syslogd options worth to configure are mark interval (-m), remote log
+support (-r) and domain list (-s).
+
+Give example of how to configure klogd re-initialization signal.
 
 Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 ---
-Changes v1->v2
-- Implement suggestions made by Nicolas Cavallari and Arnout Vandecappelle
+Changes v1->v2:
+- Document that the "-n" command line option must not be used.
+- Going against the request from Arnout Vandecappelle, keep the klogd reload
+  configuration. Add a comment explainig why it is still useful. BTW, I work
+  on a project which requires dynamic installation of kernel modules.
 ---
- package/busybox/S01logging | 82 +++++++++++++++++++++++++-------------
- 1 file changed, 54 insertions(+), 28 deletions(-)
+ package/sysklogd/etc.default.logging | 30 ++++++++++++++++++++++++++++
+ package/sysklogd/sysklogd.mk         |  2 ++
+ 2 files changed, 32 insertions(+)
+ create mode 100644 package/sysklogd/etc.default.logging
 
-diff --git a/package/busybox/S01logging b/package/busybox/S01logging
-index fcb3e7d236..ddd27bba9a 100644
---- a/package/busybox/S01logging
-+++ b/package/busybox/S01logging
-@@ -1,40 +1,66 @@
- #!/bin/sh
--#
--# Start logging
--#
- 
--SYSLOGD_ARGS=-n
--KLOGD_ARGS=-n
--[ -r /etc/default/logging ] && . /etc/default/logging
-+DAEMON="logging"
-+SPIDFILE="/var/run/syslogd.pid"
-+KPIDFILE="/var/run/klogd.pid"
- 
-+SYSLOGD_ARGS=""
-+KLOGD_ARGS=""
-+ENABLED="yes"
+diff --git a/package/sysklogd/etc.default.logging b/package/sysklogd/etc.default.logging
+new file mode 100644
+index 0000000000..9bf468679a
+--- /dev/null
++++ b/package/sysklogd/etc.default.logging
+@@ -0,0 +1,30 @@
++#
++# /etc/default/logging (sysklog version)
++#
 +
-+# shellcheck source=/dev/null
-+[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
++# Use SYSLOGD_ARGS to pass additional arguments to syslogd.
++# - Do NOT use "-n", "-v", since they will break the startup script.
++# - Do NOT use "-d", since debugging does not work when running in background.
++# SYSLOGD_ARGS="-m 0" # (default value)
 +
-+if [ "$ENABLED" != "yes" ]; then
-+	printf '%s is disabled\n' "$DAEMON"
-+	exit 0
-+fi
++# Use KLOGD_ARGS to pass additional arguments to klogd.
++# - Do NOT use "-n", "-o" nor "-v", since they will break the startup script.
++# - Do NOT use "-d", since debugging does not work when running in background.
++# KLOGD_ARGS="-m 0" # (default value)
 +
-+# BusyBox' syslogd and klogd do not create pidfiles, so use "-m" to instruct
-+# start-stop-daemon to create them. This also means that we must pass "-n" to
-+# sylogd and klogd in the command line.
- start() {
--	printf "Starting logging: "
--	start-stop-daemon -b -S -q -m -p /var/run/syslogd.pid --exec /sbin/syslogd -- $SYSLOGD_ARGS
--	start-stop-daemon -b -S -q -m -p /var/run/klogd.pid --exec /sbin/klogd -- $KLOGD_ARGS
--	echo "OK"
-+	printf 'Starting %s: ' "$DAEMON"
-+	status=0
-+	# shellcheck disable=SC2086 # we need the word splitting
-+	start-stop-daemon -b -S -q -m -p "$SPIDFILE" -x /sbin/syslogd -- -n $SYSLOGD_ARGS || status=$?
-+	start-stop-daemon -b -S -q -m -p "$KPIDFILE" -x /sbin/klogd -- -n $KLOGD_ARGS || status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
- }
++# KLOGD_RELOAD selects the "S01logging reload" behavior.
++# - "USR1" will cause the kernel module symbols to be reloaded.
++# - "USR2" will cause both the static kernel symbols and the kernel module
++#   symbols to be reloaded.
++# - "0" will do nothing.
++# - Do not use any other value here. Use kill(1) for fine-grained control of
++#   klogd, as documented in its manual page.
++#
++# Most users will never need to reload klogd in buildroot context because they
++# are not going to dynamically install kernel modules. In the rare cases that
++# this does happen, the user should be smart enough to send a SIGUSR1/2 but
++# let's keep this configurable for documentation purposes.
++# KLOGD_RELOAD="0" # (default value)
++
++# Uncomment the line below to disable this service
++# ENABLED="no"
+diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+index c4f064c10b..b7e67ffee3 100644
+--- a/package/sysklogd/sysklogd.mk
++++ b/package/sysklogd/sysklogd.mk
+@@ -25,6 +25,8 @@ endef
+ define SYSKLOGD_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 755 -D package/sysklogd/S01logging \
+ 		$(TARGET_DIR)/etc/init.d/S01logging
++	$(INSTALL) -m 0644 -D package/sysklogd/etc.default.logging \
++		$(TARGET_DIR)/etc/default/logging
+ endef
  
- stop() {
--	printf "Stopping logging: "
--	start-stop-daemon -K -q -p /var/run/syslogd.pid
--	start-stop-daemon -K -q -p /var/run/klogd.pid
--	echo "OK"
-+	printf 'Stopping %s: ' "$DAEMON"
-+	status=0
-+	start-stop-daemon -K -q -p "$SPIDFILE" || status=$?
-+	[ "$status" -eq 0 ] && rm -f "$SPIDFILE"
-+	start-stop-daemon -K -q -p "$KPIDFILE" || status=$?
-+	[ "$status" -eq 0 ] && rm -f "$KPIDFILE"
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
- }
- 
--case "$1" in
--  start)
--	start
--	;;
--  stop)
--	stop
--	;;
--  restart|reload)
-+restart() {
- 	stop
-+	sleep 1
- 	start
--	;;
--  *)
--	echo "Usage: $0 {start|stop|restart|reload}"
--	exit 1
--esac
-+}
- 
--exit $?
-+case "$1" in
-+        start|stop|restart)
-+		"$1";;
-+	reload)
-+		# Restart, since there is no true "reload" feature.
-+		restart;;
-+        *)
-+                echo "Usage: $0 {start|stop|restart|reload}"
-+                exit 1
-+esac
+ define SYSKLOGD_INSTALL_INIT_SYSTEMD
 -- 
 2.17.1
