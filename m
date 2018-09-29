@@ -1,49 +1,110 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 29 Sep 2018 11:14:52 +0300
-Subject: [Buildroot] [PATCH 1/1] python-msgpack: bump to version 0.5.6
-Message-ID: <20180929081452.25464-1-asafka7@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 29 Sep 2018 13:15:37 +0200
+Subject: [Buildroot] [PATCH 1/1] bootutils: fix build with glibc 2.28
+Message-ID: <20180929111537.22500-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add license hash.
+Replace first patch which was adding sys/types.h to fix musl issue by a
+patch adding sys/sysmacros to fix build with glibc 2.28
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/c26761663a764a2eb7af54316a6dc78bd01490fb
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-msgpack/python-msgpack.hash | 8 +++++---
- package/python-msgpack/python-msgpack.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ .../0001-fix-build-with-glibc-2.28.patch      | 41 +++++++++++++++++++
+ .../0001-fix-musl-compilation-issue.patch     | 31 --------------
+ 2 files changed, 41 insertions(+), 31 deletions(-)
+ create mode 100644 package/bootutils/0001-fix-build-with-glibc-2.28.patch
+ delete mode 100644 package/bootutils/0001-fix-musl-compilation-issue.patch
 
-diff --git a/package/python-msgpack/python-msgpack.hash b/package/python-msgpack/python-msgpack.hash
-index 48313ff547..74785837d8 100644
---- a/package/python-msgpack/python-msgpack.hash
-+++ b/package/python-msgpack/python-msgpack.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/msgpack-python/json, sha256 locally computed.
--md5	dcd854fb41ee7584ebbf35e049e6be98  msgpack-python-0.4.8.tar.gz
--sha256	1a2b19df0f03519ec7f19f826afb935b202d8979b0856c6fb3dc28955799f886  msgpack-python-0.4.8.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/msgpack-python/json
-+md5	6d644c06a87a5a111bbbf5b34b4be440  msgpack-python-0.5.6.tar.gz
-+sha256	378cc8a6d3545b532dfd149da715abae4fda2a3adb6d74e525d0d5e51f46909b  msgpack-python-0.5.6.tar.gz
-+# Locally computed sha256
-+sha256  492dedba85da5872f78e6091bcd1fea474d660d35acb4dee964b8aab3f007427  COPYING
-diff --git a/package/python-msgpack/python-msgpack.mk b/package/python-msgpack/python-msgpack.mk
-index 5be2b14bdf..e0544f5d33 100644
---- a/package/python-msgpack/python-msgpack.mk
-+++ b/package/python-msgpack/python-msgpack.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_MSGPACK_VERSION = 0.4.8
-+PYTHON_MSGPACK_VERSION = 0.5.6
- PYTHON_MSGPACK_SOURCE = msgpack-python-$(PYTHON_MSGPACK_VERSION).tar.gz
--PYTHON_MSGPACK_SITE = https://pypi.python.org/packages/21/27/8a1d82041c7a2a51fcc73675875a5f9ea06c2663e02fcfeb708be1d081a0
-+PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/8a/20/6eca772d1a5830336f84aca1d8198e5a3f4715cd1c7fc36d3cc7f7185091
- PYTHON_MSGPACK_LICENSE = Apache-2.0
- PYTHON_MSGPACK_LICENSE_FILES = COPYING
- PYTHON_MSGPACK_SETUP_TYPE = setuptools
+diff --git a/package/bootutils/0001-fix-build-with-glibc-2.28.patch b/package/bootutils/0001-fix-build-with-glibc-2.28.patch
+new file mode 100644
+index 0000000000..fced93d4a6
+--- /dev/null
++++ b/package/bootutils/0001-fix-build-with-glibc-2.28.patch
+@@ -0,0 +1,41 @@
++From 00773e89893e4aaed721269eee0dbf844edd291c Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 29 Sep 2018 12:56:14 +0200
++Subject: [PATCH] fix build with glibc 2.28
++
++Include to sys/sysmacros.h is needed to use makedev since glibc 2.28 so
++add this include to devname.c and raidscan.c
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ libblkid/devname.c | 1 +
++ raidscan.c         | 1 +
++ 2 files changed, 2 insertions(+)
++
++diff --git a/libblkid/devname.c b/libblkid/devname.c
++index d11bddd..12b63db 100644
++--- a/libblkid/devname.c
+++++ b/libblkid/devname.c
++@@ -37,6 +37,7 @@
++ #if HAVE_SYS_MKDEV_H
++ #include <sys/mkdev.h>
++ #endif
+++#include <sys/sysmacros.h>
++ #include <time.h>
++ 
++ #include "blkidP.h"
++diff --git a/raidscan.c b/raidscan.c
++index fab3b02..6e07b3d 100644
++--- a/raidscan.c
+++++ b/raidscan.c
++@@ -22,6 +22,7 @@
++ #include "config.h"
++ 
++ #include <sys/stat.h>
+++#include <sys/sysmacros.h>
++ #include <fcntl.h>
++ #include <sys/ioctl.h>
++ #include <linux/major.h>
++-- 
++2.17.1
++
+diff --git a/package/bootutils/0001-fix-musl-compilation-issue.patch b/package/bootutils/0001-fix-musl-compilation-issue.patch
+deleted file mode 100644
+index ccb6ef61ec..0000000000
+--- a/package/bootutils/0001-fix-musl-compilation-issue.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-From e4c2c18b9d1d7a6dc17d8f7705b26fc2e2efc5a9 Mon Sep 17 00:00:00 2001
+-From: Brendan Heading <brendanheading@gmail.com>
+-Date: Sun, 30 Aug 2015 20:12:40 +0100
+-Subject: [PATCH 1/1] fix musl compilation issue
+-
+-makedev(3) requires sys/types.h to be included.
+-
+-Note upstream has not issued releases since 2009. No mailing list activity
+-since January 2010, and even before then it seems to be mostly spam.
+-
+-Upstream-Status: dormant
+-Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+----
+- raidscan.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/raidscan.c b/raidscan.c
+-index fab3b02..3cb1a0d 100644
+---- a/raidscan.c
+-+++ b/raidscan.c
+-@@ -22,6 +22,7 @@
+- #include "config.h"
+- 
+- #include <sys/stat.h>
+-+#include <sys/types.h>
+- #include <fcntl.h>
+- #include <sys/ioctl.h>
+- #include <linux/major.h>
+--- 
+-2.4.3
+-
 -- 
 2.17.1
