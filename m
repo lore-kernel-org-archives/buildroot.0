@@ -1,67 +1,139 @@
 From: Carlos Santos <casantos@datacom.com.br>
-Date: Fri, 28 Sep 2018 23:50:00 -0300
-Subject: [Buildroot] [PATCH v2 2/8] busybox: add logging configuration file
+Date: Fri, 28 Sep 2018 23:50:03 -0300
+Subject: [Buildroot] [PATCH v2 5/8] sysklogd: update S01logging
 In-Reply-To: <20180929025006.8296-1-casantos@datacom.com.br>
 References: <20180929025006.8296-1-casantos@datacom.com.br>
-Message-ID: <20180929025006.8296-2-casantos@datacom.com.br>
+Message-ID: <20180929025006.8296-5-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Provide a template to help users to customize syslogd and klogd without
-editting the startup script.
+Reformat and fix syslogd/klogd startup script for better quality and
+code style:
 
-syslogd options worth to configure are remote logging (-R), rotation
-(-s, -b) and minimal priority level (-l).
-
-klogd minimal priority level (-c) can be configured too, preventing
-non-critical kernel messages from appearing on the console.
-
-This file is also useful as an example for init script authors.
+- Implement start, stop, restart and reload as functions, like in other
+  S01logging scripts, using start-stop-daemon.
+- Indent with tabs, not spaces.
+- Detect and report start/stop errors (previous version ignored them and
+  always reported OK).
+- Support a configuration file at /etc/default (an example file will be
+  added in forthcomming patch).
+- Support a configuration variable that completely disables the service
+  and issues a warning message on any invocation.
+- Do not kill syslogd in "reload". Send a SIGHUP signal, instructing it
+  to perform a re-initialization. Also do not kill klogd. Send a signal
+  (default 0, which does nothing). Users can configure this signal in
+  /etc/default/logging to either SIGUSR1 or SIGUSR2.
 
 Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 ---
 Changes v1->v2
-- Implement suggestions made by Nicolas Cavallari and Arnout Vandecappelle
+- Implement suggestions made by Arnout Vandecappelle
 ---
- package/busybox/busybox.mk          |  2 ++
- package/busybox/etc.default.logging | 13 +++++++++++++
- 2 files changed, 15 insertions(+)
- create mode 100644 package/busybox/etc.default.logging
+ package/sysklogd/S01logging | 90 ++++++++++++++++++++++++++++---------
+ 1 file changed, 70 insertions(+), 20 deletions(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 757086592f..91131c0012 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -252,6 +252,8 @@ define BUSYBOX_INSTALL_LOGGING_SCRIPT
- 	then \
- 		$(INSTALL) -m 0755 -D package/busybox/S01logging \
- 			$(TARGET_DIR)/etc/init.d/S01logging; \
-+		$(INSTALL) -m 0644 -D package/busybox/etc.default.logging \
-+			$(TARGET_DIR)/etc/default/logging; \
- 	fi
- endef
+diff --git a/package/sysklogd/S01logging b/package/sysklogd/S01logging
+index 1cbfe869fa..44af1f9f41 100644
+--- a/package/sysklogd/S01logging
++++ b/package/sysklogd/S01logging
+@@ -1,25 +1,75 @@
+ #!/bin/sh
  
-diff --git a/package/busybox/etc.default.logging b/package/busybox/etc.default.logging
-new file mode 100644
-index 0000000000..6775622779
---- /dev/null
-+++ b/package/busybox/etc.default.logging
-@@ -0,0 +1,13 @@
-+#
-+# /etc/default/logging (busybox version)
-+#
+-case "$1" in
+-	start)
+-		printf "Starting logging: "
+-		/sbin/syslogd -m 0
+-		/sbin/klogd
++DAEMON="sysklogd"
++SPIDFILE="/var/run/syslogd.pid"
++KPIDFILE="/var/run/klogd.pid"
 +
-+# Use SYSLOGD_ARGS to pass additional arguments to syslogd (e.g. for log
-+# rotation).
-+# SYSLOGD_ARGS="" # (default value)
++SYSLOGD_ARGS="-m 0"
++KLOGD_ARGS=""
++KLOGD_RELOAD="0"
++ENABLED="yes"
 +
-+# Use KLOGD_ARGS to pass additional arguments to klogd.
-+# KLOGD_ARGS="" # (default value)
++# shellcheck source=/dev/null
++[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
 +
-+# Uncomment the line below to disable this service
-+# ENABLED="no"
++if [ "$ENABLED" != "yes" ]; then
++	printf '%s is disabled\n' "$DAEMON"
++	exit 0
++fi
++
++start() {
++	printf 'Starting %s: ' "$DAEMON"
++	status=0
++	# shellcheck disable=SC2086 # we need the word splitting
++	start-stop-daemon -S -q -p "$SPIDFILE" -x /sbin/syslogd -- $SYSLOGD_ARGS || status=$?
++	start-stop-daemon -S -q -p "$KPIDFILE" -x /sbin/klogd -- $KLOGD_ARGS || status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++stop() {
++	printf 'Stopping %s: ' "$DAEMON"
++	status=0
++	start-stop-daemon -K -q -p "$SPIDFILE" || status=$?
++	start-stop-daemon -K -q -p "$KPIDFILE" || status=$?
++	if [ "$status" -eq 0 ]; then
+ 		echo "OK"
+-		;;
+-	stop)
+-		printf "Stopping logging: "
+-		[ -f /var/run/klogd.pid ] && kill `cat /var/run/klogd.pid`
+-		[ -f /var/run/syslogd.pid ] && kill `cat /var/run/syslogd.pid`
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++restart() {
++	stop
++	sleep 1
++	start
++}
++
++# SIGHUP makes syslogd reload its configuration
++# SIGUSR1 makes klogd reload kernel module symbols
++# SIGUSR2 makes klogd reload static kernel symbols and kernel module symbols
++reload() {
++	printf 'Reloading %s: ' "$DAEMON"
++	status=0
++	start-stop-daemon -K -s HUP -q -p "$SPIDFILE" || status=$?
++	start-stop-daemon -K -s "$KLOGD_RELOAD" -q -p "$KPIDFILE" || status=$?
++	if [ "$status" -eq 0 ]; then
+ 		echo "OK"
+-		;;
+-	restart|reload)
+-		$0 stop
+-		$0 start
+-		;;
+-	*)
+-		echo "Usage: $0 {start|stop|restart}"
+-		exit 1
+-esac
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
+ 
+-exit $?
++case "$1" in
++        start|stop|restart|reload)
++                "$1";;
++        *)
++                echo "Usage: $0 {start|stop|restart|reload}"
++                exit 1
++esac
 -- 
 2.17.1
