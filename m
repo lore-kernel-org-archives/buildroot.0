@@ -1,93 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 30 Sep 2018 10:44:17 +0200
-Subject: [Buildroot] [git commit] package/efl: bump to version 1.21.1
-Message-ID: <20180930084531.3D82088E82@busybox.osuosl.org>
+Date: Sun, 30 Sep 2018 10:37:36 +0200
+Subject: [Buildroot] [git commit] package/{mesa3d,
+ mesa3d-headers}: bump version to 18.2.1
+Message-ID: <20180930084531.13A6588E82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3fddf14061df3d5a2b983eb5321d27ebe43a6e6e
+commit: https://git.buildroot.net/buildroot/commit/?id=0b3b106b8e4047197a34386fa0b18f98c360cd80
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove the --enable-i-really-know-what-i-am-doing[...] option removed by
-upstream [1]. But keep BR2_PACKAGE_EFL_HAS_RECOMMENDED_CONFIG at Kconfig
-level for Buildroot users since "warnings for disabling features have
-been left intact".
-
-Update license file hash since dates was removed from the license text.
-
-[1] https://git.enlightenment.org/core/efl.git/commit/?id=1cda9fe749636484b1328e694a8dbbe4f9d0c31d
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/efl/efl.hash | 11 ++++++-----
- package/efl/efl.mk   | 11 ++---------
- 2 files changed, 8 insertions(+), 14 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk |  2 +-
+ package/mesa3d/mesa3d.hash               | 10 +++++-----
+ package/mesa3d/mesa3d.mk                 |  2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/efl/efl.hash b/package/efl/efl.hash
-index 1391d1f707..bbefdeec66 100644
---- a/package/efl/efl.hash
-+++ b/package/efl/efl.hash
-@@ -1,10 +1,11 @@
--# From https://download.enlightenment.org/rel/libs/efl/efl-1.20.7.tar.xz.sha256
--sha256 b0a9b765bcd7b012f1072da1d491fc8671aa089473f746901d93f5807a2c76fe  efl-1.20.7.tar.xz
-+# From https://download.enlightenment.org/rel/libs/efl/efl-1.21.1.tar.xz.sha256
-+sha256 44774b42b3dbbbe4d124c8fddcd169c6ffab9d602d1a757abcfb9a84e001a928 efl-1.21.1.tar.xz
-+
- sha256 d949e42ca8fd48d275c397c5fc2ac34c9b63ada715dcaf1a670e17bb62964341  COMPLIANCE
- sha256 1f0597d326e2fdb54aa2f0caec6d8bb0afb9941ef32475f017ed02ca214fcf37  COPYING
--sha256 781ee841d15835b393bfe7d4c6497dc1b05217479abd40daceaf7aa102a758e1  licenses/COPYING.BSD
-+sha256 af4ffe7ed1795a6e9cd3b3ce8747fdc45da449ff58cf35b8027c0699a66fd5cf  licenses/COPYING.BSD
- sha256 e60d07dfb2c5264f9f405fa52bf0d4f85429dd9ae1bc2ffcff8af1924ef720d1  licenses/COPYING.FTL
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  licenses/COPYING.GPL
--sha256 89f79ccd2c35ba220ddeba70ee36ca867226c41fc210bc5e7f1e9032c5b16d5f  licenses/COPYING.LGPL
-+sha256 ae2d99bf2a8e8310281bdbe5e8b78cbe5e89bfead8c01e67a8c68b530efcf25a  licenses/COPYING.LGPL
- sha256 2996a1c43ee757f9c997a829d82bdd584052323e73cf02ff8126c6fbd95c2d87  licenses/COPYING.NGINX-MIT
--sha256 48f124212f8fc024392a2d1d011fbb96c7ab8f89c0b72c671c33e9e1cb1d0790  licenses/COPYING.SMALL
-+sha256 d847c749aa38b8d864665fc4e5c80e2f2a505e414fafe9712e85b5154e908218  licenses/COPYING.SMALL
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index 6ef7d53385..c4fd676be1 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 775466d970..c4217be5c7 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 18.2.0
++MESA3D_HEADERS_VERSION = 18.2.1
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 7e2b7438b1..3f8130fc7d 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2018-September/000460.html
+-md5  88e1a7f31f259cec69bb76b3cb10c956  mesa-18.2.0.tar.xz
+-sha1 73723d9f3815487f474d84eb91a5cd17edfb63d4  mesa-18.2.0.tar.xz
+-sha256 22452bdffff8e11bf4284278155a9f77cb28d6d73a12c507f1490732d0d9ddce  mesa-18.2.0.tar.xz
+-sha512 e6e997e166845009f6b97da204384758c797c870b56332652c0a2636734638f9180b7e4dbad144495645308ae4d77981a2493a22d57973723338b658e0655557  mesa-18.2.0.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2018-September/000463.html
++md5 66afbc1dddcaa4c7dabf5c5ee187c73b  mesa-18.2.1.tar.xz
++sha1 cfcaf550ab0915033bd27cc7a5968764510dbfc1  mesa-18.2.1.tar.xz
++sha256 9636dc6f3d188abdcca02da97cedd73640d9035224efd5db724187d062c81056  mesa-18.2.1.tar.xz
++sha512 d249bdf79aad36db9a8d291b3a1a100d283893ac741f58f85ae7e5c90ca25c37f80a5fa6fc57945ffeb0b67b788e7ea146543ec790b22f144578fc4c1525b84d  mesa-18.2.1.tar.xz
+ # License
+ sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 3835390574..4de36eae46 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--EFL_VERSION = 1.20.7
-+EFL_VERSION = 1.21.1
- EFL_SOURCE = efl-$(EFL_VERSION).tar.xz
- EFL_SITE = http://download.enlightenment.org/rel/libs/efl
- EFL_LICENSE = BSD-2-Clause, LGPL-2.1+, GPL-2.0+, FTL, MIT
-@@ -50,11 +50,6 @@ EFL_CONF_OPTS = \
- 	--enable-liblz4 \
- 	--with-doxygen=no
- 
--# Disable untested configuration warning.
--ifeq ($(BR2_PACKAGE_EFL_HAS_RECOMMENDED_CONFIG),)
--EFL_CONF_OPTS += --enable-i-really-know-what-i-am-doing-and-that-this-will-probably-break-things-and-i-will-fix-them-myself-and-send-patches-abb
--endif
--
- ifeq ($(BR2_PACKAGE_EFL_EOLIAN_CPP),y)
- EFL_CONF_OPTS += --enable-cxx-bindings \
- 	--with-eolian-cxx=$(HOST_DIR)/bin/eolian_cxx
-@@ -345,7 +340,6 @@ HOST_EFL_DEPENDENCIES = \
- # --with-doxygen: disable doxygen documentation
- # --with-net-control=none: disable connman networkmanager.
- # --with-x11=none: remove dependency on X.org.
--#   Yes I really know what I am doing.
- HOST_EFL_CONF_OPTS += \
- 	--disable-audio \
- 	--disable-fontconfig \
-@@ -372,8 +366,7 @@ HOST_EFL_CONF_OPTS += \
- 	--with-glib=yes \
- 	--with-net-control=none \
- 	--with-opengl=none \
--	--with-x11=none \
--	--enable-i-really-know-what-i-am-doing-and-that-this-will-probably-break-things-and-i-will-fix-them-myself-and-send-patches-abb
-+	--with-x11=none
- 
- # Enable Eolian language bindings to provide eolian_cxx tool for the
- # host which is required to build Eolian language bindings for the
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 18.2.0
++MESA3D_VERSION = 18.2.1
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
