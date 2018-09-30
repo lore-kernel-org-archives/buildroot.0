@@ -1,63 +1,44 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 30 Sep 2018 10:00:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 18.2.1
-Message-ID: <20180930080033.6154-1-bernd.kuhls@t-online.de>
+Date: Sun, 30 Sep 2018 10:01:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.9.1
+Message-ID: <20180930080139.6699-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Release notes: https://www.samba.org/samba/history/samba-4.9.1.html
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mesa3d-headers/mesa3d-headers.mk |  2 +-
- package/mesa3d/mesa3d.hash               | 10 +++++-----
- package/mesa3d/mesa3d.mk                 |  2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 775466d970..c4217be5c7 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 18.2.0
-+MESA3D_HEADERS_VERSION = 18.2.1
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 7e2b7438b1..3f8130fc7d 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,7 +1,7 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2018-September/000460.html
--md5  88e1a7f31f259cec69bb76b3cb10c956  mesa-18.2.0.tar.xz
--sha1 73723d9f3815487f474d84eb91a5cd17edfb63d4  mesa-18.2.0.tar.xz
--sha256 22452bdffff8e11bf4284278155a9f77cb28d6d73a12c507f1490732d0d9ddce  mesa-18.2.0.tar.xz
--sha512 e6e997e166845009f6b97da204384758c797c870b56332652c0a2636734638f9180b7e4dbad144495645308ae4d77981a2493a22d57973723338b658e0655557  mesa-18.2.0.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2018-September/000463.html
-+md5 66afbc1dddcaa4c7dabf5c5ee187c73b  mesa-18.2.1.tar.xz
-+sha1 cfcaf550ab0915033bd27cc7a5968764510dbfc1  mesa-18.2.1.tar.xz
-+sha256 9636dc6f3d188abdcca02da97cedd73640d9035224efd5db724187d062c81056  mesa-18.2.1.tar.xz
-+sha512 d249bdf79aad36db9a8d291b3a1a100d283893ac741f58f85ae7e5c90ca25c37f80a5fa6fc57945ffeb0b67b788e7ea146543ec790b22f144578fc4c1525b84d  mesa-18.2.1.tar.xz
- # License
- sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 3835390574..4de36eae46 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index b01ece7b67..ff2e21bc77 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.9.0.tar.asc
+-sha256 d071e9e738e9583d0b9ce1c758d46808b76078405787c88a0c5b465bef8a9b15  samba-4.9.0.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.9.1.tar.asc
++sha256 33118cbe83a87be085eba1aae6e597878b02d6ac9b2da67454ed33cf3e9853f2  samba-4.9.1.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index c7aaf6ba29..1cafe5b623 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 18.2.0
-+MESA3D_VERSION = 18.2.1
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
+-SAMBA4_VERSION = 4.9.0
++SAMBA4_VERSION = 4.9.1
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 -- 
 2.19.0
