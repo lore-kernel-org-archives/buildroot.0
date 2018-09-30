@@ -1,21 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 30 Sep 2018 23:49:08 +0200
-Subject: [Buildroot] [PATCH 1/1] python-dateutil: bump to version 2.7.3
-In-Reply-To: <20180930185024.16784-1-asafka7@gmail.com> (Asaf Kahlon's message
- of "Sun, 30 Sep 2018 21:50:24 +0300")
-References: <20180930185024.16784-1-asafka7@gmail.com>
-Message-ID: <875zym1wrv.fsf@dell.be.48ers.dk>
+Date: Sun, 30 Sep 2018 23:49:56 +0200
+Subject: [Buildroot] [PATCH 1/1] sqlite: fix build without threads
+In-Reply-To: <20180930193514.23846-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 30 Sep 2018 21:35:14 +0200")
+References: <20180930193514.23846-1-fontaine.fabrice@gmail.com>
+Message-ID: <871s9a1wqj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Asaf" == Asaf Kahlon <asafka7@gmail.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Upadte site address in Config.in
+ > If threads are not available, set SQLITE_THREADSAFE to 0.
+ > Indeed, since version 3.25.0, the following line:
+ > THREADSAFE_FLAGS=-DSQLITE_THREADSAFE=0
+ > has been removed from configure.ac
+ > As a result, SQLITE_THREADSAFE will be set to a default value of 1 even
+ > if --disable-threadsafe is set
 
-Committed after fixing the s/Upadte/Update/ typo, thanks.
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/70b1582edcb787746e4483e80b27f86ac781f0fa
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
+Can you please report the issue upstream?
 
 -- 
 Bye, Peter Korsgaard
