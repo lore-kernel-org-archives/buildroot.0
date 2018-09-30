@@ -1,27 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 30 Sep 2018 10:35:02 +0200
-Subject: [Buildroot] [git commit] httping: add license hash
-Message-ID: <20180930084530.D90DC88E82@busybox.osuosl.org>
+Date: Sun, 30 Sep 2018 10:37:25 +0200
+Subject: [Buildroot] [git commit] package/samba4: bump version to 4.9.1
+Message-ID: <20180930084531.0B70488E82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e2ca0455e6fddb86b75d2b1422f228aedb5533c
+commit: https://git.buildroot.net/buildroot/commit/?id=cecabf597cce2fe53f87f9d7b336756025af510e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Release notes: https://www.samba.org/samba/history/samba-4.9.1.html
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/httping/httping.hash | 1 +
- 1 file changed, 1 insertion(+)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/httping/httping.hash b/package/httping/httping.hash
-index a50eedb744..c396157646 100644
---- a/package/httping/httping.hash
-+++ b/package/httping/httping.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256	3e895a0a6d7bd79de25a255a1376d4da88eb09c34efdd0476ab5a907e75bfaf8	httping-2.5.tgz
-+sha256  c5db2e5b9a692fcdf2bd370f1533529063fbcf8947a8f5ee9d4b050a14e0566d	license.txt
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index b01ece7b67..ff2e21bc77 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.9.0.tar.asc
+-sha256 d071e9e738e9583d0b9ce1c758d46808b76078405787c88a0c5b465bef8a9b15  samba-4.9.0.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.9.1.tar.asc
++sha256 33118cbe83a87be085eba1aae6e597878b02d6ac9b2da67454ed33cf3e9853f2  samba-4.9.1.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index c7aaf6ba29..1cafe5b623 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.9.0
++SAMBA4_VERSION = 4.9.1
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
