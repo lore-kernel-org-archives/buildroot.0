@@ -1,51 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 30 Sep 2018 10:38:08 +0200
-Subject: [Buildroot] [git commit] python-msgpack: bump to version 0.5.6
-Message-ID: <20180930084531.1B78980FF1@busybox.osuosl.org>
+Date: Sun, 30 Sep 2018 10:37:08 +0200
+Subject: [Buildroot] [git commit] package/apache: security bump to version
+ 2.4.35
+Message-ID: <20180930084531.037E488E82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0b0929e4bc4b8ac71088c551cd3868ee3a3009b
+commit: https://git.buildroot.net/buildroot/commit/?id=ac22fafdc83e285d305a618ba9655671eadf42cf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add license hash.
+Fixes: CVE-2018-11763: mod_http2, DoS via continuous SETTINGS frames
+https://lists.apache.org/thread.html/d435b0267a76501b9e06c552b20c887171064cde38e46d678da4d3dd@%3Cannounce.httpd.apache.org%3E
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Release notes:
+https://lists.apache.org/thread.html/5d604774652fc073b1b161584d0d1efbdba7898c40ae2e2334725e5f@%3Cannounce.httpd.apache.org%3E
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-msgpack/python-msgpack.hash | 8 +++++---
- package/python-msgpack/python-msgpack.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/apache/apache.hash | 4 ++--
+ package/apache/apache.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-msgpack/python-msgpack.hash b/package/python-msgpack/python-msgpack.hash
-index 48313ff547..74785837d8 100644
---- a/package/python-msgpack/python-msgpack.hash
-+++ b/package/python-msgpack/python-msgpack.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/msgpack-python/json, sha256 locally computed.
--md5	dcd854fb41ee7584ebbf35e049e6be98  msgpack-python-0.4.8.tar.gz
--sha256	1a2b19df0f03519ec7f19f826afb935b202d8979b0856c6fb3dc28955799f886  msgpack-python-0.4.8.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/msgpack-python/json
-+md5	6d644c06a87a5a111bbbf5b34b4be440  msgpack-python-0.5.6.tar.gz
-+sha256	378cc8a6d3545b532dfd149da715abae4fda2a3adb6d74e525d0d5e51f46909b  msgpack-python-0.5.6.tar.gz
-+# Locally computed sha256
-+sha256  492dedba85da5872f78e6091bcd1fea474d660d35acb4dee964b8aab3f007427  COPYING
-diff --git a/package/python-msgpack/python-msgpack.mk b/package/python-msgpack/python-msgpack.mk
-index 5be2b14bdf..e0544f5d33 100644
---- a/package/python-msgpack/python-msgpack.mk
-+++ b/package/python-msgpack/python-msgpack.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index 74a48ae914..32743656fd 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
+@@ -1,4 +1,4 @@
+-# From http://archive.apache.org/dist/httpd/httpd-2.4.34.tar.bz2.sha256
+-sha256 fa53c95631febb08a9de41fd2864cfff815cf62d9306723ab0d4b8d7aa1638f0 httpd-2.4.34.tar.bz2
++# From http://archive.apache.org/dist/httpd/httpd-2.4.35.tar.bz2.sha256
++sha256 2607c6fdd4d12ac3f583127629291e9432b247b782396a563bec5678aae69b56 httpd-2.4.35.tar.bz2
+ # Locally computed
+ sha256 c49c0819a726b70142621715dae3159c47b0349c2bc9db079070f28dadac0229 LICENSE
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index d50e3774ff..3ac317216d 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_MSGPACK_VERSION = 0.4.8
-+PYTHON_MSGPACK_VERSION = 0.5.6
- PYTHON_MSGPACK_SOURCE = msgpack-python-$(PYTHON_MSGPACK_VERSION).tar.gz
--PYTHON_MSGPACK_SITE = https://pypi.python.org/packages/21/27/8a1d82041c7a2a51fcc73675875a5f9ea06c2663e02fcfeb708be1d081a0
-+PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/8a/20/6eca772d1a5830336f84aca1d8198e5a3f4715cd1c7fc36d3cc7f7185091
- PYTHON_MSGPACK_LICENSE = Apache-2.0
- PYTHON_MSGPACK_LICENSE_FILES = COPYING
- PYTHON_MSGPACK_SETUP_TYPE = setuptools
+-APACHE_VERSION = 2.4.34
++APACHE_VERSION = 2.4.35
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = http://archive.apache.org/dist/httpd
+ APACHE_LICENSE = Apache-2.0
