@@ -1,148 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 30 Sep 2018 10:35:14 +0200
-Subject: [Buildroot] [git commit] iozone: bump to version 3_482
-Message-ID: <20180930084530.E142988E82@busybox.osuosl.org>
+Date: Sun, 30 Sep 2018 10:36:14 +0200
+Subject: [Buildroot] [git commit] python-cython: bump to version 0.28.5
+Message-ID: <20180930084530.E858580FF1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb2478086b9135ef9e4c001f5df9d788e762bbc3
+commit: https://git.buildroot.net/buildroot/commit/?id=496e9aa80c6299089d7a9f48bb16902b777aa5a3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Reworked patch from Gustavo Zacharias to make it apply to this version
-
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...patch => 0001-Add-new-targets-for-iozone.patch} | 47 +++++++++++++---------
- package/iozone/iozone.hash                         |  2 +-
- package/iozone/iozone.mk                           |  2 +-
- 3 files changed, 31 insertions(+), 20 deletions(-)
+ package/python-cython/python-cython.hash | 8 ++++----
+ package/python-cython/python-cython.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/iozone/0001-targets.patch b/package/iozone/0001-Add-new-targets-for-iozone.patch
-similarity index 63%
-rename from package/iozone/0001-targets.patch
-rename to package/iozone/0001-Add-new-targets-for-iozone.patch
-index 258b960928..e6bfc18de6 100644
---- a/package/iozone/0001-targets.patch
-+++ b/package/iozone/0001-Add-new-targets-for-iozone.patch
-@@ -1,4 +1,7 @@
--Add new targets for iozone:
-+From 1584ffbfda3277b82997b9f1e0ef31a7061560e0 Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Sun, 26 Aug 2018 18:39:06 +0200
-+Subject: [PATCH] Add new targets for iozone:
- 
- linux-noaio is for linux targets without AIO (use case: uClibc)
- linux-noth is for linux target without threads or AIO
-@@ -6,11 +9,16 @@ linux-noth is for linux target without threads or AIO
- And make largefile support optional via CFLAGS.
- 
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-+---
-+ src/current/makefile | 56 +++++++++++++++++++++++++++++++++++++++++++---------
-+ 1 file changed, 47 insertions(+), 9 deletions(-)
- 
--diff -Nura iozone3_414.orig/src/current/makefile iozone3_414/src/current/makefile
----- iozone3_414.orig/src/current/makefile	2013-06-11 09:48:18.257837091 -0300
--+++ iozone3_414/src/current/makefile	2013-06-11 13:05:56.338162144 -0300
--@@ -166,10 +166,28 @@
-+diff --git a/src/current/makefile b/src/current/makefile
-+index cfef879..7925e62 100644
-+--- a/src/current/makefile
-++++ b/src/current/makefile
-+@@ -168,10 +168,28 @@ hpux_no_ansi:	iozone_hpux_no.o  libbif.o
-  # GNU 'C' compiler Linux build with threads, largefiles, async I/O 
-  #
-  linux:	iozone_linux.o libasync.o libbif.o fileop_linux.o pit_server.o
-@@ -42,46 +50,46 @@ diff -Nura iozone3_414.orig/src/current/makefile iozone3_414/src/current/makefil
-  
-  #
-  # GNU 'C' compiler Linux build for powerpc chip with threads, largefiles, async I/O 
--@@ -795,13 +813,33 @@
-+@@ -814,13 +832,33 @@ iozone_linux.o:	iozone.c libbif.c libasync.c
-  	@echo ""
-  	@echo "Building iozone for Linux"
-  	@echo ""
---	$(CC) -Wall -c -O3 -Dunix -DHAVE_ANSIC_C -DASYNC_IO -DHAVE_PREAD \
-+-	$(CC) -Wmissing-prototypes -Wall -c -O3 -Dunix -DHAVE_ANSIC_C -DASYNC_IO -DHAVE_PREAD \
- -		-DSHARED_MEM -Dlinux -D_LARGEFILE64_SOURCE $(CFLAGS) iozone.c \
--+	$(CC) -Wall -c -Dunix -DHAVE_ANSIC_C -DASYNC_IO -DHAVE_PREAD \
-++	$(CC) -Wmissing-prototypes -Wall -c -Dunix -DHAVE_ANSIC_C -DASYNC_IO -DHAVE_PREAD \
- +		-DSHARED_MEM -Dlinux $(CFLAGS) iozone.c \
-  		-DNAME='"linux"' -o iozone_linux.o
---	$(CC) -Wall -c -O3 -Dunix -DHAVE_ANSIC_C -DASYNC_IO -D_LARGEFILE64_SOURCE \
--+	$(CC) -Wall -c -Dunix -DHAVE_ANSIC_C -DASYNC_IO \
-+-	$(CC) -Wmissing-prototypes -Wall -c -O3 -Dunix -DHAVE_ANSIC_C -DASYNC_IO -D_LARGEFILE64_SOURCE \
-++	$(CC) -Wmissing-prototypes -Wall -c -Dunix -DHAVE_ANSIC_C -DASYNC_IO \
- +		-DSHARED_MEM -Dlinux $(CFLAGS) libbif.c -o libbif.o
--+	$(CC) -Wall -c -Dunix -Dlinux -DHAVE_ANSIC_C -DASYNC_IO \
--+		$(CFLAGS) libasync.c  -o libasync.o 
-++	$(CC) -Wmissing-prototypes -Wall -c -Dunix -Dlinux -DHAVE_ANSIC_C -DASYNC_IO \
-++		$(CFLAGS) libasync.c  -o libasync.o
- +
- +iozone_linux-noaio.o: iozone.c libbif.c
- +	@echo ""
- +	@echo "Building iozone for Linux no AIO"
- +	@echo ""
--+	$(CC) -Wall -c -Dunix -DHAVE_ANSIC_C -DHAVE_PREAD \
-++	$(CC) -Wmissing-prototypes -Wall -c -Dunix -DHAVE_ANSIC_C -DHAVE_PREAD \
- +		-DSHARED_MEM -Dlinux $(CFLAGS) iozone.c \
- +		-DNAME='"linux"' -o iozone_linux-noaio.o
--+	$(CC) -Wall -c -Dunix -DHAVE_ANSIC_C \
-++	$(CC) -Wmissing-prototypes -Wall -c -Dunix -DHAVE_ANSIC_C \
- +		-DSHARED_MEM -Dlinux $(CFLAGS) libbif.c -o libbif.o
- +
- +iozone_linux-noth.o: iozone.c libbif.c
- +	@echo ""
- +	@echo "Building iozone for Linux with no threads"
- +	@echo ""
--+	$(CC) -Wall -c -Dunix -DHAVE_ANSIC_C -DNO_THREADS -DHAVE_PREAD \
-++	$(CC) -Wmissing-prototypes -Wall -c -Dunix -DHAVE_ANSIC_C -DNO_THREADS -DHAVE_PREAD \
- +		-DSHARED_MEM -Dlinux $(CFLAGS) iozone.c \
- +		-DNAME='"linux"' -o iozone_linux-noth.o
--+	$(CC) -Wall -c -Dunix -DHAVE_ANSIC_C -DNO_THREADS \
-++	$(CC) -Wmissing-prototypes -Wall -c -Dunix -DHAVE_ANSIC_C -DNO_THREADS \
-  		-DSHARED_MEM -Dlinux $(CFLAGS) libbif.c -o libbif.o
---	$(CC) -Wall -c -O3 -Dunix -Dlinux -DHAVE_ANSIC_C -DASYNC_IO \
-+-	$(CC) -Wmissing-prototypes -Wall -c -O3 -Dunix -Dlinux -DHAVE_ANSIC_C -DASYNC_IO \
- -		-D_LARGEFILE64_SOURCE $(CFLAGS) libasync.c  -o libasync.o 
-  
-  fileop_AIX.o:	fileop.c
-  	@echo ""
--@@ -893,7 +931,7 @@
-+@@ -924,7 +962,7 @@ fileop_linux.o:	fileop.c
-  	@echo ""
-  	@echo "Building fileop for Linux"
-  	@echo ""
-@@ -90,3 +98,6 @@ diff -Nura iozone3_414.orig/src/current/makefile iozone3_414/src/current/makefil
-  
-  fileop_openbsd.o:	fileop.c
-  	@echo ""
-+-- 
-+2.7.4
-+
-diff --git a/package/iozone/iozone.hash b/package/iozone/iozone.hash
-index b387588fd6..8f552ba3f3 100644
---- a/package/iozone/iozone.hash
-+++ b/package/iozone/iozone.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	bbbda98d7c052d8654ea23fb2187d831107ab4ac89842fa21509276d9a6915f0	iozone3_446.tar
-+sha256	2733feb63c96f77177c68f3d938f2294d5394d8554b2767c45cbe138b2f3ae30	iozone3_482.tar
-diff --git a/package/iozone/iozone.mk b/package/iozone/iozone.mk
-index 477a60a3bb..05b3973fa0 100644
---- a/package/iozone/iozone.mk
-+++ b/package/iozone/iozone.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
+index 3b918dc704..666ef4b292 100644
+--- a/package/python-cython/python-cython.hash
++++ b/package/python-cython/python-cython.hash
+@@ -1,6 +1,6 @@
+-# md5 from https://pypi.python.org/pypi/Cython/json, sha256 locally computed
+-md5    6149238287d662bd5d5e572482252493  Cython-0.27.3.tar.gz
+-sha256 6a00512de1f2e3ce66ba35c5420babaef1fe2d9c43a8faab4080b0dbcc26bc64  Cython-0.27.3.tar.gz
+-# License files, locally calculated
++# md5, sha256 from https://pypi.org/pypi/cython/json
++md5	0cb620e1259818e4ecc1a056e8c3a8be  Cython-0.28.5.tar.gz
++sha256	b64575241f64f6ec005a4d4137339fb0ba5e156e826db2fdb5f458060d9979e0  Cython-0.28.5.tar.gz
++# Locally computed sha256 checksums
+ sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
+ sha256 e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
+diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
+index 88eab83416..4bd300470f 100644
+--- a/package/python-cython/python-cython.mk
++++ b/package/python-cython/python-cython.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--IOZONE_VERSION = 3_446
-+IOZONE_VERSION = 3_482
- IOZONE_SOURCE = iozone$(IOZONE_VERSION).tar
- IOZONE_SITE = http://www.iozone.org/src/current
- IOZONE_LICENSE = IOzone license (NO DERIVED WORKS ALLOWED)
+-PYTHON_CYTHON_VERSION = 0.27.3
++PYTHON_CYTHON_VERSION = 0.28.5
+ PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
+-PYTHON_CYTHON_SITE = https://pypi.python.org/packages/ee/2a/c4d2cdd19c84c32d978d18e9355d1ba9982a383de87d0fcb5928553d37f4
++PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/21/89/ca320e5b45d381ae0df74c4b5694f1471c1b2453c5eb4bac3449f5970481
+ PYTHON_CYTHON_SETUP_TYPE = setuptools
+ PYTHON_CYTHON_LICENSE = Apache-2.0
+ PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
