@@ -1,46 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 30 Sep 2018 10:38:45 +0200
-Subject: [Buildroot] [git commit] sqlite: bump to version 3.25.2
-Message-ID: <20180930084531.2C10688E82@busybox.osuosl.org>
+Date: Sun, 30 Sep 2018 10:47:00 +0200
+Subject: [Buildroot] [PATCH-2018.02.x] cramfs: fix minor()/major() build
+ failure due to glibc 2.28
+In-Reply-To: <20180927150910.17401-1-giulio.benetti@micronovasrl.com> (Giulio
+ Benetti's message of "Thu, 27 Sep 2018 17:09:10 +0200")
+References: <20180927150910.17401-1-giulio.benetti@micronovasrl.com>
+Message-ID: <87tvm72wzf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a5102c428d98d79e2b4eeba5226a7c824a1fb66
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
 
-Signed-off-by: Ferdinand van Aartsen <ferdinand@ombud.nl>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/sqlite/sqlite.hash | 4 ++--
- package/sqlite/sqlite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > glibc 2.28 no longer includes <sys/sysmacros.h> from <sys/types.h>,
+ > and therefore <sys/sysmacros.h> must be included explicitly when
+ > major()/minor() are used.
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 4c67e9a00c..eefa31ffb7 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,6 +1,6 @@
- # From https://www.sqlite.org/download.html
--sha1 1d494ca2355ffe8ddbeea7cf615ef61122fe421e  sqlite-autoconf-3250100.tar.gz
-+sha1 aedfbdc14eb700099434d6a743135743cff47393  sqlite-autoconf-3250200.tar.gz
- # Calculated based on the hash above
--sha256 96ed46bd87f093073ca8afd613020def847009b611c89f397bc24bd932ec6fd1  sqlite-autoconf-3250100.tar.gz
-+sha256 da9a1484423d524d3ac793af518cdf870c8255d209e369bd6a193e9f9d0e3181  sqlite-autoconf-3250200.tar.gz
- # Locally calculated
- sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index a9b309718a..cb4bd58c47 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SQLITE_VERSION = 3250100
-+SQLITE_VERSION = 3250200
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = https://www.sqlite.org/2018
- SQLITE_LICENSE = Public domain
+ > This commit adds a patch to directly include <sys/sysmacros.h> into
+ > cramfsck.c and mkcramfs.c where minor() and major() macros are used.
+
+ > Fixes:
+ > http://autobuild.buildroot.net/results/8c5/8c5997017568f8be1d2f664998fb2fdc433a51d3/
+ > http://autobuild.buildroot.net/results/fad/fad1553d45a8c35ba84c5c340410e99322e21c44/
+
+ > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+
+Committed to 2018.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
