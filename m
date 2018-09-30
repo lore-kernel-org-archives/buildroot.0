@@ -1,49 +1,60 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 30 Sep 2018 16:15:54 +0200
-Subject: [Buildroot] [PATCH 1/1] sg3_utils: bump to version 1.44
-Message-ID: <20180930141554.28369-1-fontaine.fabrice@gmail.com>
+From: Tony Fuller <goldstar611@hotmail.com>
+Date: Sun, 30 Sep 2018 15:15:38 +0000
+Subject: [Buildroot] PHP7.0-FPM Session
+Message-ID: <BL2PR15MB1057C3B66260ECCD5DF119A0EDEE0@BL2PR15MB1057.namprd15.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Fix minor/major undefined error with glibc 2.28
-- Add hash for license files
+Hello All,
 
-Fixes:
- - http://autobuild.buildroot.org/results/1d396e85d35f40478b4b09b4ff80eee395a2e3c2
+I am having a strange problem with php7.0-fpm and session management.
+After several failed iterations of trying to install NextCloud server
+on a busybox rootfs I finally narrowed down the problem to PHP session
+management.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/sg3_utils/sg3_utils.hash | 6 +++++-
- package/sg3_utils/sg3_utils.mk   | 2 +-
- 2 files changed, 6 insertions(+), 2 deletions(-)
+I've tried to eliminate my web server as the problem and so I generated
+a small php snippet that checks php's session_status() return value and
+I have the same behavior on Apache + php module (which doesn't directly
+interface with /var/run/php-fpm.sock) and (Nginx which does communicate
+using /var/run/php-fpm.sock). In both webservers, session_status()
+*always* returns PHP_SESSION_NONE.
 
-diff --git a/package/sg3_utils/sg3_utils.hash b/package/sg3_utils/sg3_utils.hash
-index a884063f4f..14b94947d4 100644
---- a/package/sg3_utils/sg3_utils.hash
-+++ b/package/sg3_utils/sg3_utils.hash
-@@ -1,2 +1,6 @@
- # Locally calculated from download (no sig, hash)
--sha256	97aeed65894feb2add896b4adfa4cf343966c8a61c7d206795ed0507640ee7b9	sg3_utils-1.42.tar.xz
-+sha256	ca94ac106510742cd8ff5ead4a7e5c89d410653291401daf4632d2bef2a35b05	sg3_utils-1.44.tar.xz
-+
-+# Hash for license files
-+sha256	d516b8b337a77e3d4c65dffe708ca7fb25b1cb4ec77ec362cf11ed659b9250bc	COPYING
-+sha256	31f6d59679e0fb21c9358f22484e6e3c53e20ef08c0950fd38a4a867cb55edc9	BSD_LICENSE
-diff --git a/package/sg3_utils/sg3_utils.mk b/package/sg3_utils/sg3_utils.mk
-index 88827f33b4..0c17b30cde 100644
---- a/package/sg3_utils/sg3_utils.mk
-+++ b/package/sg3_utils/sg3_utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SG3_UTILS_VERSION = 1.42
-+SG3_UTILS_VERSION = 1.44
- SG3_UTILS_SOURCE = sg3_utils-$(SG3_UTILS_VERSION).tar.xz
- SG3_UTILS_SITE = http://sg.danny.cz/sg/p
- SG3_UTILS_LICENSE = BSD-3-Clause (library)
--- 
-2.17.1
+I can see sess_* files created in /tmp. I've changed the location to
+/var/lib/php/session (emulating debian style configuration). I've
+changed the php-fpm daemon to run as www-data (as well as Apache and
+Nginx). I've even gone so far as to chmod -R 777 / (and fixing up
+/root/.ssh and /etc/ssh folders). 
+
+Pulling the Debian Stretch rootfs that docker uses and installing all
+above requirements yields a fully working NextCloud server instance
+(under chroot) so I'm at a total loss. I'm working on a raspberry pi
+currently but the actual target is a PowerPC 32bit processor which
+Debian dropped support which is what brought me to buildroot in the
+first place.
+
+Any thoughts are welcome and appreciated.
+
+Here's the simple testing script:
+# cat sessiontest.php 
+<?php
+echo(session_status());
+if (session_status() == PHP_SESSION_NONE) {
+    echo("session_status is NONE");
+    #$previous_name = session_name("WebsiteID");
+    #echo "The previous session name was $previous_name<br />";
+    session_start();
+    echo("Now session_status is" . session_status());
+}
+else
+{
+    echo("There is some type of session");
+    setcookie(session_name(),session_id(),time()+$lifetime);
+}
+
+$_SESSION["secretword"] = "ABC123" ;
+$_SESSION["theme"] = "purple" ; 
+
+?>
