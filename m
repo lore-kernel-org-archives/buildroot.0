@@ -1,48 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 30 Sep 2018 10:38:34 +0200
-Subject: [Buildroot] [git commit] mosquitto: security bump to version 1.5.3
-Message-ID: <20180930084531.23ACE80FF1@busybox.osuosl.org>
+Date: Sun, 30 Sep 2018 10:36:45 +0200
+Subject: [Buildroot] [git commit] python-engineio: bump to version 2.3.1
+Message-ID: <20180930084530.EFE9188E82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e62304359d150b6befa4bab4030ead09bcfdfdf
+commit: https://git.buildroot.net/buildroot/commit/?id=61a1e02a89d0c68bec9a41300c0d1a9d5bd325a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix CVE-2018-12543. If a message is sent to Mosquitto with a topic that
-begins with $, but is not $SYS, then an assert that should be unreachable is
-triggered and Mosquitto will exit.
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mosquitto/mosquitto.hash | 2 +-
- package/mosquitto/mosquitto.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-engineio/python-engineio.hash | 4 ++--
+ package/python-engineio/python-engineio.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index 96817d464d..b38830b8b5 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
+diff --git a/package/python-engineio/python-engineio.hash b/package/python-engineio/python-engineio.hash
+index 37c34dff16..35db7e443a 100644
+--- a/package/python-engineio/python-engineio.hash
++++ b/package/python-engineio/python-engineio.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after checking gpg signature
--sha256 8557bc7ae34dfaf32a0fb56d2491b7a7f731269c88337227233013502df4d5b0  mosquitto-1.5.1.tar.gz
-+sha256 3081a998d303a883b1cd064009beabc88aa9159e26f5258a4ae6007160491d10  mosquitto-1.5.3.tar.gz
- 
- # License files
- sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 7ac6487488..1d72f9b16e 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,7 +4,7 @@
+ # md5, sha256 from https://pypi.org/pypi/python-engineio/json
+-md5	d281583ae81bcaa4acc4bd6fd4faab86  python-engineio-2.3.0.tar.gz
+-sha256	eb4d28b7c6ae053f7ed50e688011b228ce8354dfdbf032220b76b3fc20d5f943  python-engineio-2.3.0.tar.gz
++md5	c39f7460f3a3cfaf37933415223d088a  python-engineio-2.3.1.tar.gz
++sha256	f0fb8bbf8fde2da123258d08e0cc404f65a517b31685411ff933e58b8aec3141  python-engineio-2.3.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256	c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
+diff --git a/package/python-engineio/python-engineio.mk b/package/python-engineio/python-engineio.mk
+index bf674d767b..06c558d199 100644
+--- a/package/python-engineio/python-engineio.mk
++++ b/package/python-engineio/python-engineio.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--MOSQUITTO_VERSION = 1.5.1
-+MOSQUITTO_VERSION = 1.5.3
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
+-PYTHON_ENGINEIO_VERSION = 2.3.0
+-PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/f1/6f/3b872dce14b381b2724d33cf9133c6d3e599f1e85e1f8ab75b01d243bf9e
++PYTHON_ENGINEIO_VERSION = 2.3.1
++PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/f7/20/984649ea01e6aaf5256a6f7280d12c1c00d421d08c4f5660986a7aca7604
+ PYTHON_ENGINEIO_SETUP_TYPE = setuptools
+ PYTHON_ENGINEIO_LICENSE = MIT
+ PYTHON_ENGINEIO_LICENSE_FILES = LICENSE
