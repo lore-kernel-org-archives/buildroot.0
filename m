@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 30 Sep 2018 10:43:21 +0200
-Subject: [Buildroot] [PATCH 1/1] bootutils: fix build with glibc 2.28
-In-Reply-To: <169683a6-c4e0-8f28-e14f-dd98a610b63d@gmail.com> (Romain Naour's
- message of "Sat, 29 Sep 2018 18:26:26 +0200")
-References: <20180929111537.22500-1-fontaine.fabrice@gmail.com>
- <169683a6-c4e0-8f28-e14f-dd98a610b63d@gmail.com>
-Message-ID: <877ej34bpy.fsf@dell.be.48ers.dk>
+Date: Sun, 30 Sep 2018 10:44:38 +0200
+Subject: [Buildroot] [PATCH 1/2] package/efl: bump to version 1.21.1
+In-Reply-To: <20180929132817.30011-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Sat, 29 Sep 2018 15:28:16 +0200")
+References: <20180929132817.30011-1-romain.naour@gmail.com>
+Message-ID: <8736tr4bnt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,24 +13,18 @@ To: buildroot@busybox.net
 
 >>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > Hi Fabrice,
- > Le 29/09/2018 ? 13:15, Fabrice Fontaine a ?crit?:
- >> Replace first patch which was adding sys/types.h to fix musl issue by a
- >> patch adding sys/sysmacros to fix build with glibc 2.28
- >> 
- >> Fixes:
- >> - http://autobuild.buildroot.org/results/c26761663a764a2eb7af54316a6dc78bd01490fb
- >> 
- >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Remove the --enable-i-really-know-what-i-am-doing[...] option removed by
+ > upstream [1]. But keep BR2_PACKAGE_EFL_HAS_RECOMMENDED_CONFIG at Kconfig
+ > level for Buildroot users since "warnings for disabling features have
+ > been left intact".
 
- > Why we want to keep Bootutils in Buildroot?
- > Upstream is dead since 2009 and "BootUtils is a collection of utilities to
- > facilitate booting of modern Kernel 2.6 based systems"
+ > Update license file hash since dates was removed from the license text.
 
- > Maybe it's time to remove this package?
+ > [1] https://git.enlightenment.org/core/efl.git/commit/?id=1cda9fe749636484b1328e694a8dbbe4f9d0c31d
 
-Fine by me. It is not listed in DEVELOPERS and the original contributor
-has not been active in Buildroot for close to 10 years.
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
