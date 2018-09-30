@@ -1,23 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 30 Sep 2018 20:10:03 +0200
-Subject: [Buildroot] [PATCH 2/2] package/clang: bump to version 7.0.0
-In-Reply-To: <1538312797-1685-2-git-send-email-valentinkorenblit@gmail.com>
- (Valentin Korenblit's message of "Sun, 30 Sep 2018 15:06:37 +0200")
-References: <1538312797-1685-1-git-send-email-valentinkorenblit@gmail.com>
- <1538312797-1685-2-git-send-email-valentinkorenblit@gmail.com>
-Message-ID: <87va6m26x0.fsf@dell.be.48ers.dk>
+Date: Sun, 30 Sep 2018 20:17:31 +0200
+Subject: [Buildroot] [PATCH v2,1/1] bootutils: drop package
+In-Reply-To: <20180930140206.13590-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 30 Sep 2018 16:02:06 +0200")
+References: <20180930140206.13590-1-fontaine.fabrice@gmail.com>
+Message-ID: <87r2ha26kk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Valentin" == Valentin Korenblit <valentinkorenblit@gmail.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Signed-off-by: Valentin Korenblit <valentinkorenblit@gmail.com>
+ > As suggested by Romain Naour during review of patch 976582
+ > (https://patchwork.ozlabs.org/patch/976582), drop bootutils as "upstream
+ > is dead since 2009" and "BootUtils is a collection of utilities to
+ > facilitate booting of modern Kernel 2.6 based systems"
 
-Committed after adding a comment about the LICENSE.TXT hash change as
-suggested by Romain, thanks.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ > Changes v1 -> v2 (after review of Romain Naour):
+ >  - Add an entry in Config.in.legacy
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
