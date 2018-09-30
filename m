@@ -1,66 +1,51 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 30 Sep 2018 20:34:08 +0200
-Subject: [Buildroot] [PATCH 1/1] brltty: fix build on mips64el
-Message-ID: <20180930183408.4248-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 30 Sep 2018 20:41:13 +0200
+Subject: [Buildroot] [PATCH-2018.02.x] glibc: bump to latest on 2.26.x
+ branch for additional fixes
+In-Reply-To: <20180927113542.21230-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 27 Sep 2018 13:35:42 +0200")
+References: <20180927113542.21230-1-peter@korsgaard.com>
+Message-ID: <87efda25h2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump to version 5.6 has reintroduced the issue fixed by patch 854093 on
-version 5.5.
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Indeed, third patch was merged upstream but it was then reverted:
-https://github.com/brltty/brltty/commit/9e7d62c869d3c1cbe12dda8b0291a4692c193416
+ > Daniel Alvarez (1):
+ >       getifaddrs: Don't return ifa entries with NULL names [BZ #21812]
 
-Moreover, since commit 3a2e3f6fa5ef0a210ffeba5ed05c79965d0cc3c7, MKOBJ
-was renamed into MKREL. So, instead of patching again brltty, overwrite
-LD to set the correct emulation depending on MIPS architecture as
-already done in linux-tool-perf.mk.in.
-Indeed, it seems that by default ld wants to link a 32 bits binary on
-mips64el:
-mips64el-linux-ld: Attempt to do relocatable link with elf64-tradlittlemips input and elf32-ntradlittlemips output
+ > Florian Weimer (8):
+ >       libio: Avoid _allocate_buffer, _free_buffer function pointers [BZ #23236]
+ >       Use _STRUCT_TIMESPEC as guard in <bits/types/struct_timespec.h> [BZ #23349]
+ >       libio: Disable vtable validation in case of interposition [BZ #23313]
+ >       NEWS: Reorder out-of-order bugs
+ >       Synchronize support/ infrastructure with master
+ >       libio: Add tst-vtables, tst-vtables-interposed
+ >       stdio-common/tst-printf.c: Remove part under a non-free license [BZ #23363]
+ >       conform/conformtest.pl: Escape literal braces in regular expressions
 
-Fixes:
- - http://autobuild.buildroot.org/results/31f682838b3d3b2c7103b5c51f2aba0b89d4f630
+ > Gabriel F. T. Gomes (1):
+ >       Fix parameter type in C++ version of iseqsig (bug 23171)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/brltty/brltty.mk | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ > H.J. Lu (2):
+ >       x86: Correct index_cpu_LZCNT [BZ #23456]
+ >       x86: Populate COMMON_CPUID_INDEX_80000001 for Intel CPUs [BZ #23459]
 
-diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
-index 21f6877bb8..8e1d934899 100644
---- a/package/brltty/brltty.mk
-+++ b/package/brltty/brltty.mk
-@@ -15,6 +15,27 @@ BRLTTY_LICENSE_FILES = LICENSE-LGPL README
- BRLTTY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-autoconf host-pkgconf \
- 	$(if $(BR2_PACKAGE_AT_SPI2_CORE),at-spi2-core)
- 
-+# We need to pass an argument to ld for setting the emulation when
-+# building for MIPS architecture, otherwise the default one will always
-+# be used and the compilation for most variants will fail.
-+ifeq ($(BR2_mips),y)
-+BRLTTY_CONF_ENV += LD="$(TARGET_LD) -m elf32btsmip"
-+else ifeq ($(BR2_mipsel),y)
-+BRLTTY_CONF_ENV += LD="$(TARGET_LD) -m elf32ltsmip"
-+else ifeq ($(BR2_mips64),y)
-+ifeq ($(BR2_MIPS_NABI32),y)
-+BRLTTY_CONF_ENV += LD="$(TARGET_LD) -m elf32btsmipn32"
-+else
-+BRLTTY_CONF_ENV += LD="$(TARGET_LD) -m elf64btsmip"
-+endif
-+else ifeq ($(BR2_mips64el),y)
-+ifeq ($(BR2_MIPS_NABI32),y)
-+BRLTTY_CONF_ENV += LD="$(TARGET_LD) -m elf32ltsmipn32"
-+else
-+BRLTTY_CONF_ENV += LD="$(TARGET_LD) -m elf64ltsmip"
-+endif
-+endif
-+
- BRLTTY_CONF_OPTS = \
- 	--disable-java-bindings \
- 	--disable-lisp-bindings \
+ > Martin Kuchta (1):
+ >       pthread_cond_broadcast: Fix waiters-after-spinning case [BZ #23538]
+
+ > Stefan Liebler (1):
+ >       Fix segfault in maybe_script_execute.
+
+ > Steve Ellcey (1):
+ >       Check length of ifname before copying it into to ifreq structure.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2018.02.x, thanks.
+
 -- 
-2.17.1
+Bye, Peter Korsgaard
