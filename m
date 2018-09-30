@@ -1,26 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 30 Sep 2018 20:03:25 +0200
-Subject: [Buildroot] [PATCH v1] qt5: bump latest version to 5.11.2
-In-Reply-To: <20180929201702.21305-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Sat, 29 Sep 2018 22:17:02 +0200")
-References: <20180929201702.21305-1-ps.report@gmx.net>
-Message-ID: <878t3i3lsi.fsf@dell.be.48ers.dk>
+Date: Sun, 30 Sep 2018 20:05:25 +0200
+Subject: [Buildroot] [PATCH] package/expedite: remove package
+In-Reply-To: <20180930125546.6307-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Sun, 30 Sep 2018 14:55:46 +0200")
+References: <20180930125546.6307-1-romain.naour@gmail.com>
+Message-ID: <874le63lp6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > - qt5canvas3d: update license info
- > - qt5serialbus: update license hash (LICENSE.FDL editorial change, see [1])
- > - qt5serialport: update license hash (LICENSE.FDL editorial change, see [2])
+ > As noticed with the last version bump [1], expedite
+ > is not actively maintained by upstream [2].
 
- > [1] https://code.qt.io/cgit/qt/qtserialbus.git/commit/?id=226bd2f84c807b5401a82832dafa48d34966052a
- > [2] https://code.qt.io/cgit/qt/qtserialport.git/commit/?id=e0bd3949c30ce9c1988a6d6a3c0850d16a1fb33a
+ > [1] http://lists.busybox.net/pipermail/buildroot/2018-September/231763.html
+ > [2] https://sourceforge.net/p/enlightenment/mailman/message/36428571
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
 Committed, thanks.
 
