@@ -1,130 +1,55 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 30 Sep 2018 14:55:46 +0200
-Subject: [Buildroot] [PATCH] package/expedite: remove package
-Message-ID: <20180930125546.6307-1-romain.naour@gmail.com>
+From: Valentin Korenblit <valentinkorenblit@gmail.com>
+Date: Sun, 30 Sep 2018 15:06:36 +0200
+Subject: [Buildroot] [PATCH 1/2] package/llvm: bump to version 7.0.0
+Message-ID: <1538312797-1685-1-git-send-email-valentinkorenblit@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As noticed with the last version bump [1], expedite
-is not actively maintained by upstream [2].
+LLVM_BUILD_GLOBAL_ISEL does no longer exist
 
-[1] http://lists.busybox.net/pipermail/buildroot/2018-September/231763.html
-[2] https://sourceforge.net/p/enlightenment/mailman/message/36428571
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Valentin Korenblit <valentinkorenblit@gmail.com>
 ---
- Config.in.legacy               |  7 +++++++
- DEVELOPERS                     |  1 -
- package/Config.in              |  1 -
- package/expedite/Config.in     | 12 ------------
- package/expedite/expedite.hash |  3 ---
- package/expedite/expedite.mk   | 24 ------------------------
- 6 files changed, 7 insertions(+), 41 deletions(-)
- delete mode 100644 package/expedite/Config.in
- delete mode 100644 package/expedite/expedite.hash
- delete mode 100644 package/expedite/expedite.mk
+ package/llvm/llvm.hash | 4 ++--
+ package/llvm/llvm.mk   | 7 +------
+ 2 files changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 3b84e3da91..e1a0276b7d 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,13 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2018.11"
+diff --git a/package/llvm/llvm.hash b/package/llvm/llvm.hash
+index 6a09e58..200907f 100644
+--- a/package/llvm/llvm.hash
++++ b/package/llvm/llvm.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256 b6d6c324f9c71494c0ccaf3dac1f16236d970002b42bb24a6c9e1634f7d0f4e2  llvm-6.0.1.src.tar.xz
+-sha256 abd4d8794808bacb1eb6924d49efafd9ab6eef88faaaeb5d3cfa13ee3670d672 LICENSE.TXT
++sha256 8bc1f844e6cbde1b652c19c1edebc1864456fd9c78b8c1bea038e51b363fe222 llvm-7.0.0.src.tar.xz
++sha256 0303dfeaac87b80d2d1e543aa38d5be77b0eac93c3d04fe7e3c8eaa71a778667 LICENSE.TXT
+diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+index 756b46a..1f9bd44 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm/llvm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_EXPEDITE
-+	bool "expedite package has been removed"
-+	select BR2_LEGACY
-+	help
-+	  expedite is not actively maintained anymore.
-+	  https://sourceforge.net/p/enlightenment/mailman/message/36428571
-+
- config BR2_PACKAGE_MESA3D_OPENGL_TEXTURE_FLOAT
- 	bool "mesa3d opengl texture float option removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c036fa30c4..d11713de57 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1771,7 +1771,6 @@ F:	package/aubio/
- F:	package/bullet/
- F:	package/efl/
- F:	package/enlightenment/
--F:	package/expedite/
- F:	package/flare-engine/
- F:	package/flare-game/
- F:	package/irrlicht/
-diff --git a/package/Config.in b/package/Config.in
-index 8fd60cdec2..125e8ca7dc 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -260,7 +260,6 @@ endmenu
- menu "Graphic libraries and applications (graphic/text)"
+-LLVM_VERSION = 6.0.1
++LLVM_VERSION = 7.0.0
+ LLVM_SITE = http://llvm.org/releases/$(LLVM_VERSION)
+ LLVM_SOURCE = llvm-$(LLVM_VERSION).src.tar.xz
+ LLVM_LICENSE = NCSA
+@@ -30,11 +30,6 @@ LLVM_CONF_OPTS += -DLLVM_CCACHE_BUILD=$(if $(BR2_CCACHE),ON,OFF)
+ # will try to use target's libc.
+ HOST_LLVM_CONF_OPTS += -DCMAKE_INSTALL_RPATH="$(HOST_DIR)/lib"
  
- comment "Graphic applications"
--	source "package/expedite/Config.in"
- 	source "package/fswebcam/Config.in"
- 	source "package/ghostscript/Config.in"
- 	source "package/glmark2/Config.in"
-diff --git a/package/expedite/Config.in b/package/expedite/Config.in
-deleted file mode 100644
-index fdfc671907..0000000000
---- a/package/expedite/Config.in
-+++ /dev/null
-@@ -1,12 +0,0 @@
--config BR2_PACKAGE_EXPEDITE
--	bool "expedite"
--	depends on BR2_PACKAGE_EFL
--	depends on BR2_INSTALL_LIBSTDCPP
--	help
--	  Expedite is the official Evas benchmark tool. It can test
--	  different engines, such as X11, XRender, OpenGL (also ES
--	  variant), SDL, DirectFB and so on. Its tests are quite
--	  extensive, trying to reproduce real world usage cases.
+-# Disable experimental Global Instruction Selection support.
+-# https://llvm.org/docs/GlobalISel.html
+-HOST_LLVM_CONF_OPTS += -DLLVM_BUILD_GLOBAL_ISEL=OFF
+-LLVM_CONF_OPTS += -DLLVM_BUILD_GLOBAL_ISEL=OFF
 -
--comment "expedite needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/expedite/expedite.hash b/package/expedite/expedite.hash
-deleted file mode 100644
-index d813cb38c3..0000000000
---- a/package/expedite/expedite.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# locally computed
--sha256 5f621a3cb70fae943893e256722cc7f7b0c4357035da7cc3cbbbb83e4ec1eb9a expedite-6a69955e71a00a720e1b0a9bc7b64dd3dd5673db.tar.gz
--sha256 0f024d9d9ddd18f94a4800d72e72d2ca198e9479c02b21afb9cacc2923ef2f2b COPYING
-diff --git a/package/expedite/expedite.mk b/package/expedite/expedite.mk
-deleted file mode 100644
-index fbcc4b5675..0000000000
---- a/package/expedite/expedite.mk
-+++ /dev/null
-@@ -1,24 +0,0 @@
--################################################################################
--#
--# expedite
--#
--################################################################################
--
--EXPEDITE_VERSION = 6a69955e71a00a720e1b0a9bc7b64dd3dd5673db
--EXPEDITE_SITE = http://git.enlightenment.org/tools/expedite.git
--EXPEDITE_SITE_METHOD = git
--EXPEDITE_LICENSE = BSD-2-Clause
--EXPEDITE_LICENSE_FILES = COPYING
--
--EXPEDITE_DEPENDENCIES = host-efl host-pkgconf efl
--
--# There is no configure script in the git tree.
--EXPEDITE_AUTORECONF = YES
--
--ifeq ($(BR2_PACKAGE_EFL_X_XLIB),y)
--EXPEDITE_CONF_OPTS += --with-x=$(STAGING_DIR) \
--	--x-includes=$(STAGING_DIR)/usr/include \
--	--x-libraries=$(STAGING_DIR)/usr/lib
--endif
--
--$(eval $(autotools-package))
+ # Get target architecture
+ LLVM_TARGET_ARCH = $(call qstrip,$(BR2_PACKAGE_LLVM_TARGET_ARCH))
+ 
 -- 
-2.14.4
+2.7.4
