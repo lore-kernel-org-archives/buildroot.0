@@ -1,136 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 30 Sep 2018 09:52:36 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] package/bison: fix build
- on host with glibc-2.28
-Message-ID: <20180930075241.AFDD78918F@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 30 Sep 2018 09:59:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/apache: security bump to version
+ 2.4.35
+Message-ID: <20180930075917.6025-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f17af98890500479f740f14e1dc403e675f6a65a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+Fixes: CVE-2018-11763: mod_http2, DoS via continuous SETTINGS frames
+https://lists.apache.org/thread.html/d435b0267a76501b9e06c552b20c887171064cde38e46d678da4d3dd@%3Cannounce.httpd.apache.org%3E
 
-Similarly to c48f8a6462 (package/m4: fix build on host with glibc-2.28),
-backport the two fixes fromn gnulib upstream, that allows building
-host-bison on systems using glibc 2.28.
+Release notes:
+https://lists.apache.org/thread.html/5d604774652fc073b1b161584d0d1efbdba7898c40ae2e2334725e5f@%3Cannounce.httpd.apache.org%3E
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reported-by: c32 on IRC
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 373ac58b82d2430b745e90c7c8b39e319949882a)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...lush-adjust-to-glibc-2.28-libio.h-removal.patch | 50 ++++++++++++++++++++++
- ...ush-be-more-paranoid-about-libio.h-change.patch | 46 ++++++++++++++++++++
- 2 files changed, 96 insertions(+)
+ package/apache/apache.hash | 4 ++--
+ package/apache/apache.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/bison/0001-fflush-adjust-to-glibc-2.28-libio.h-removal.patch b/package/bison/0001-fflush-adjust-to-glibc-2.28-libio.h-removal.patch
-new file mode 100644
-index 0000000000..e9dee48af9
---- /dev/null
-+++ b/package/bison/0001-fflush-adjust-to-glibc-2.28-libio.h-removal.patch
-@@ -0,0 +1,50 @@
-+From 4af4a4a71827c0bc5e0ec67af23edef4f15cee8e Mon Sep 17 00:00:00 2001
-+From: Paul Eggert <eggert@cs.ucla.edu>
-+Date: Mon, 5 Mar 2018 10:56:29 -0800
-+Subject: [PATCH 1/1] fflush: adjust to glibc 2.28 libio.h removal
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Problem reported by Daniel P. Berrang?? in:
-+https://lists.gnu.org/r/bug-gnulib/2018-03/msg00000.html
-+* lib/fbufmode.c (fbufmode):
-+* lib/fflush.c (clear_ungetc_buffer_preserving_position)
-+(disable_seek_optimization, rpl_fflush):
-+* lib/fpending.c (__fpending):
-+* lib/fpurge.c (fpurge):
-+* lib/freadable.c (freadable):
-+* lib/freadahead.c (freadahead):
-+* lib/freading.c (freading):
-+* lib/freadptr.c (freadptr):
-+* lib/freadseek.c (freadptrinc):
-+* lib/fseeko.c (fseeko):
-+* lib/fseterr.c (fseterr):
-+* lib/fwritable.c (fwritable):
-+* lib/fwriting.c (fwriting):
-+Check _IO_EOF_SEEN instead of _IO_ftrylockfile.
-+* lib/stdio-impl.h (_IO_IN_BACKUP) [_IO_EOF_SEEN]:
-+Define if not already defined.
-+---
-+ lib/fseterr.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+[yann.morin.1998 at free.fr: partially backport from upstream gnulib]
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff --git a/lib/fseterr.c b/lib/fseterr.c
-+index 82649c3ac..adb637256 100644
-+--- a/lib/fseterr.c
-++++ b/lib/fseterr.c
-+@@ -29,7 +29,7 @@ fseterr (FILE *fp)
-+   /* Most systems provide FILE as a struct and the necessary bitmask in
-+      <stdio.h>, because they need it for implementing getc() and putc() as
-+      fast macros.  */
-+-#if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
-++#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
-+   fp->_flags |= _IO_ERR_SEEN;
-+ #elif defined __sferror || defined __DragonFly__ || defined __ANDROID__
-+   /* FreeBSD, NetBSD, OpenBSD, DragonFly, Mac OS X, Cygwin, Minix 3, Android */
-+-- 
-+2.14.1
-+
-diff --git a/package/bison/0002-fflush-be-more-paranoid-about-libio.h-change.patch b/package/bison/0002-fflush-be-more-paranoid-about-libio.h-change.patch
-new file mode 100644
-index 0000000000..035f8282c1
---- /dev/null
-+++ b/package/bison/0002-fflush-be-more-paranoid-about-libio.h-change.patch
-@@ -0,0 +1,46 @@
-+From 74d9d6a293d7462dea8f83e7fc5ac792e956a0ad Mon Sep 17 00:00:00 2001
-+From: Paul Eggert <eggert@cs.ucla.edu>
-+Date: Thu, 8 Mar 2018 16:42:45 -0800
-+Subject: [PATCH 2/2] fflush: be more paranoid about libio.h change
-+
-+Suggested by Eli Zaretskii in:
-+https://lists.gnu.org/r/emacs-devel/2018-03/msg00270.html
-+* lib/fbufmode.c (fbufmode):
-+* lib/fflush.c (clear_ungetc_buffer_preserving_position)
-+(disable_seek_optimization, rpl_fflush):
-+* lib/fpending.c (__fpending):
-+* lib/fpurge.c (fpurge):
-+* lib/freadable.c (freadable):
-+* lib/freadahead.c (freadahead):
-+* lib/freading.c (freading):
-+* lib/freadptr.c (freadptr):
-+* lib/freadseek.c (freadptrinc):
-+* lib/fseeko.c (fseeko):
-+* lib/fseterr.c (fseterr):
-+* lib/fwritable.c (fwritable):
-+* lib/fwriting.c (fwriting):
-+Look at _IO_ftrylockfile as well as at _IO_EOF_SEEN.
-+---
-+ lib/fseterr.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+[yann.morin.1998 at free.fr: partially backport from upstream gnulib]
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff --git a/lib/fseterr.c b/lib/fseterr.c
-+index adb637256..fd9da6338 100644
-+--- a/lib/fseterr.c
-++++ b/lib/fseterr.c
-+@@ -29,7 +29,8 @@ fseterr (FILE *fp)
-+   /* Most systems provide FILE as a struct and the necessary bitmask in
-+      <stdio.h>, because they need it for implementing getc() and putc() as
-+      fast macros.  */
-+-#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
-++#if defined _IO_EOF_SEEN || defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1
-++  /* GNU libc, BeOS, Haiku, Linux libc5 */
-+   fp->_flags |= _IO_ERR_SEEN;
-+ #elif defined __sferror || defined __DragonFly__ || defined __ANDROID__
-+   /* FreeBSD, NetBSD, OpenBSD, DragonFly, Mac OS X, Cygwin, Minix 3, Android */
-+-- 
-+2.14.1
-+
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index 74a48ae914..32743656fd 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
+@@ -1,4 +1,4 @@
+-# From http://archive.apache.org/dist/httpd/httpd-2.4.34.tar.bz2.sha256
+-sha256 fa53c95631febb08a9de41fd2864cfff815cf62d9306723ab0d4b8d7aa1638f0 httpd-2.4.34.tar.bz2
++# From http://archive.apache.org/dist/httpd/httpd-2.4.35.tar.bz2.sha256
++sha256 2607c6fdd4d12ac3f583127629291e9432b247b782396a563bec5678aae69b56 httpd-2.4.35.tar.bz2
+ # Locally computed
+ sha256 c49c0819a726b70142621715dae3159c47b0349c2bc9db079070f28dadac0229 LICENSE
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index d50e3774ff..3ac317216d 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-APACHE_VERSION = 2.4.34
++APACHE_VERSION = 2.4.35
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = http://archive.apache.org/dist/httpd
+ APACHE_LICENSE = Apache-2.0
+-- 
+2.19.0
