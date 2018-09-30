@@ -1,121 +1,131 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 30 Sep 2018 11:36:03 +0200
-Subject: [Buildroot] [git commit] haproxy: fix build with pcre2
-Message-ID: <20180930093703.A48C9838EB@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 30 Sep 2018 12:10:06 +0200
+Subject: [Buildroot] [PATCH 1/1] package/freeswitch: bump version to 1.8.2
+Message-ID: <20180930101006.23164-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ee1be2d498d667f56c88e30b9eb6979915d9237
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Rebased patch 0002 after upstream commit:
+https://freeswitch.org/stash/projects/FS/repos/freeswitch/commits/c2b2f49c1d0dcbfa77d5d861155a301fead93071
 
-Add a patch to customize path to pcre-config or pcre2-config instead of
-messing with PCREDIR, PCRE2DIR and PCRE2_LDFLAGS variables
-
-Fixes:
- - http://autobuild.buildroot.net/results/490bc87b43074623d2338cfd2acb77d5de0abaa6
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...1-Allow-configuration-of-pcre-config-path.patch | 56 ++++++++++++++++++++++
- package/haproxy/haproxy.mk                         | 15 +-----
- 2 files changed, 58 insertions(+), 13 deletions(-)
+ .../0002-mod_av-unbreak-with-ffmpeg-4.0.patch | 33 +++++--------------
+ package/freeswitch/freeswitch.hash            | 12 +++----
+ package/freeswitch/freeswitch.mk              |  2 +-
+ 3 files changed, 16 insertions(+), 31 deletions(-)
 
-diff --git a/package/haproxy/0001-Allow-configuration-of-pcre-config-path.patch b/package/haproxy/0001-Allow-configuration-of-pcre-config-path.patch
-new file mode 100644
-index 0000000000..21f36520df
---- /dev/null
-+++ b/package/haproxy/0001-Allow-configuration-of-pcre-config-path.patch
-@@ -0,0 +1,56 @@
-+From f3dcdf6c9ffea4d9b89dca9706a48c44bd76c470 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 28 Sep 2018 19:21:26 +0200
-+Subject: [PATCH] Allow configuration of pcre-config path
-+
-+Add PCRE_CONFIGDIR variable to allow the user to configure path of
-+pcre-config or pcre-config2 instead of using the one in his path.
-+This is particular useful when cross-compiling.
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ Makefile | 7 ++++---
-+ 1 file changed, 4 insertions(+), 3 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 382f944f..7c31f1ba 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -78,6 +78,7 @@
-+ # Other variables :
-+ #   DLMALLOC_SRC   : build with dlmalloc, indicate the location of dlmalloc.c.
-+ #   DLMALLOC_THRES : should match PAGE_SIZE on every platform (default: 4096).
-++#   PCRE_CONFIGDIR : force the path to pcre-config or pcre-config2
-+ #   PCREDIR        : force the path to libpcre.
-+ #   PCRE_LIB       : force the lib path to libpcre (defaults to $PCREDIR/lib).
-+ #   PCRE_INC       : force the include path to libpcre ($PCREDIR/inc)
-+@@ -734,7 +735,7 @@ endif
-+ # Forcing PCREDIR to an empty string will let the compiler use the default
-+ # locations.
-+ 
-+-PCREDIR	        := $(shell pcre-config --prefix 2>/dev/null || echo /usr/local)
-++PCREDIR	        := $(shell $(PCRE_CONFIGDIR)pcre-config --prefix 2>/dev/null || echo /usr/local)
-+ ifneq ($(PCREDIR),)
-+ PCRE_INC        := $(PCREDIR)/include
-+ PCRE_LIB        := $(PCREDIR)/lib
-+@@ -759,7 +760,7 @@ endif
-+ endif
-+ 
-+ ifneq ($(USE_PCRE2)$(USE_STATIC_PCRE2)$(USE_PCRE2_JIT),)
-+-PCRE2DIR	:= $(shell pcre2-config --prefix 2>/dev/null || echo /usr/local)
-++PCRE2DIR	:= $(shell $(PCRE_CONFIGDIR)pcre2-config --prefix 2>/dev/null || echo /usr/local)
-+ ifneq ($(PCRE2DIR),)
-+ PCRE2_INC       := $(PCRE2DIR)/include
-+ PCRE2_LIB       := $(PCRE2DIR)/lib
-+@@ -777,7 +778,7 @@ endif
-+ endif
-+ 
-+ 
-+-PCRE2_LDFLAGS	:= $(shell pcre2-config --libs$(PCRE2_WIDTH) 2>/dev/null || echo -L/usr/local/lib -lpcre2-$(PCRE2_WIDTH))
-++PCRE2_LDFLAGS	:= $(shell $(PCRE_CONFIGDIR)pcre2-config --libs$(PCRE2_WIDTH) 2>/dev/null || echo -L/usr/local/lib -lpcre2-$(PCRE2_WIDTH))
-+ 
-+ ifeq ($(PCRE2_LDFLAGS),)
-+ $(error libpcre2-$(PCRE2_WIDTH) not found)
-+-- 
-+2.17.1
-+
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index 5fc7a945b5..a799e69651 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -37,26 +37,15 @@ endif
- endif
+diff --git a/package/freeswitch/0002-mod_av-unbreak-with-ffmpeg-4.0.patch b/package/freeswitch/0002-mod_av-unbreak-with-ffmpeg-4.0.patch
+index 01eb3d86c0..a4693971c1 100644
+--- a/package/freeswitch/0002-mod_av-unbreak-with-ffmpeg-4.0.patch
++++ b/package/freeswitch/0002-mod_av-unbreak-with-ffmpeg-4.0.patch
+@@ -3,9 +3,6 @@ From: jbeich <jbeich@FreeBSD.org>
+ Date: Thu, 16 Aug 2018 22:14:20 +0200
+ Subject: [PATCH] mod_av: unbreak with ffmpeg 4.0
  
- # pcre and pcre2 can't be enabled at the same time so prefer pcre2
--# Set PCRE2_DIR as haproxy will otherwise try to use pcre2-config and
--# will default to /usr/local
- ifeq ($(BR2_PACKAGE_PCRE2),y)
- HAPROXY_DEPENDENCIES += pcre2
- HAPROXY_MAKE_OPTS += \
--	PCRE2DIR=$(STAGING_DIR)/usr \
-+	PCRE_CONFIGDIR=$(STAGING_DIR)/usr/bin/ \
- 	USE_PCRE2=1
--
--# Again, set manually PCRE2_LDFLAGS or default will contain -L/usr/local
--ifeq ($(BR2_PACKAGE_PCRE2_32),y)
--HAPROXY_MAKE_OPTS += PCRE2_LDFLAGS=-lpcre2-32
--else ifeq ($(BR2_PACKAGE_PCRE2_16),y)
--HAPROXY_MAKE_OPTS += PCRE2_LDFLAGS=-lpcre2-16
--else
--HAPROXY_MAKE_OPTS += PCRE2_LDFLAGS=-lpcre2-8
--endif
- else ifeq ($(BR2_PACKAGE_PCRE),y)
- HAPROXY_DEPENDENCIES += pcre
- HAPROXY_MAKE_OPTS += \
--	PCREDIR=$(STAGING_DIR)/usr \
-+	PCRE_CONFIGDIR=$(STAGING_DIR)/usr/bin/ \
- 	USE_PCRE=1
- endif
+-avcodec.c:194:40: error: use of undeclared identifier 'FF_INPUT_BUFFER_PADDING_SIZE'
+-static uint8_t ff_input_buffer_padding[FF_INPUT_BUFFER_PADDING_SIZE] = { 0 };
+-                                       ^
+ avformat.c:471:14: error: use of undeclared identifier 'CODEC_FLAG_LOOP_FILTER'
+                         c->flags|=CODEC_FLAG_LOOP_FILTER;   // flags=+loop
+                                   ^
+@@ -28,30 +25,17 @@ https://github.com/freebsd/freebsd-ports/commit/da104360ea7d7861aa9fe6dc04b776a1
+ Original file
+ https://svnweb.freebsd.org/ports/head/net/freeswitch/files/patch-ffmpeg4?view=markup
  
++[Bernd: Rebased for freeswitch 1.8.2]
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+- src/mod/applications/mod_av/avcodec.c  | 2 +-
+  src/mod/applications/mod_av/avformat.c | 8 ++++----
+- 2 files changed, 5 insertions(+), 5 deletions(-)
++ 1 file changed, 4 insertions(+), 4 deletions(-)
+ 
+-diff --git a/src/mod/applications/mod_av/avcodec.c b/src/mod/applications/mod_av/avcodec.c
+-index f987a47466..54a61c878c 100644
+---- a/src/mod/applications/mod_av/avcodec.c
+-+++ b/src/mod/applications/mod_av/avcodec.c
+-@@ -191,7 +191,7 @@ typedef struct h264_codec_context_s {
+- 	int hw_encoder;
+- } h264_codec_context_t;
+- 
+--static uint8_t ff_input_buffer_padding[FF_INPUT_BUFFER_PADDING_SIZE] = { 0 };
+-+static uint8_t ff_input_buffer_padding[AV_INPUT_BUFFER_PADDING_SIZE] = { 0 };
+- 
+- static switch_status_t buffer_h264_nalu(h264_codec_context_t *context, switch_frame_t *frame)
+- {
+ diff --git a/src/mod/applications/mod_av/avformat.c b/src/mod/applications/mod_av/avformat.c
+-index b9f6f99ef5..f5329c9106 100644
++index 84900b601c..2f5c0e8d20 100644
+ --- a/src/mod/applications/mod_av/avformat.c
+ +++ b/src/mod/applications/mod_av/avformat.c
+-@@ -468,13 +468,13 @@ GCC_DIAG_ON(deprecated-declarations)
++@@ -479,13 +479,13 @@ GCC_DIAG_ON(deprecated-declarations)
+  			c->ticks_per_frame = 2;
+  
+  
+@@ -67,7 +51,7 @@ index b9f6f99ef5..f5329c9106 100644
+  			av_opt_set_int(c->priv_data, "coder", 1, 0);
+  
+  			switch (mm->vprofile) {
+-@@ -550,7 +550,7 @@ GCC_DIAG_ON(deprecated-declarations)
++@@ -568,7 +568,7 @@ GCC_DIAG_ON(deprecated-declarations)
+  
+  	/* Some formats want stream headers to be separate. */
+  	if (fc->oformat->flags & AVFMT_GLOBALHEADER) {
+@@ -75,8 +59,8 @@ index b9f6f99ef5..f5329c9106 100644
+ +		c->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
+  	}
+  
+- 	return SWITCH_STATUS_SUCCESS;
+-@@ -639,7 +639,7 @@ GCC_DIAG_ON(deprecated-declarations)
++ 	mst->active = 1;
++@@ -660,7 +660,7 @@ GCC_DIAG_ON(deprecated-declarations)
+  	mst->frame->format         = AV_SAMPLE_FMT_S16;
+  	mst->frame->channel_layout = c->channel_layout;
+  
+@@ -86,4 +70,5 @@ index b9f6f99ef5..f5329c9106 100644
+  		mst->frame->nb_samples = (mst->frame->sample_rate / 50) * c->channels;
+  	} else {
+ -- 
+-2.18.0
++2.19.0
++
+diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
+index 24c86e6295..dab2fb237b 100644
+--- a/package/freeswitch/freeswitch.hash
++++ b/package/freeswitch/freeswitch.hash
+@@ -1,9 +1,9 @@
+-# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.8.1.tar.xz.md5
+-md5 71b5df2c2fb369f6a7172b2cd9c9e594 freeswitch-1.8.1.tar.xz
+-# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.8.1.tar.xz.sha1
+-sha1 26ffa89faa8c83e2c6da6eda1f31fa7f9304346c freeswitch-1.8.1.tar.xz
+-# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.8.1.tar.xz.sha256
+-sha256 f606de858e2df09a752f890e8f0fc41dae8dd888e3fe952e17a90e9ff9ed270e freeswitch-1.8.1.tar.xz
++# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.8.2.tar.xz.md5
++md5 61de81cd70afb056dde7b1dcb91ad967 freeswitch-1.8.2.tar.xz
++# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.8.2.tar.xz.sha1
++sha1 f2c077db40b05c5fdf66cbe77bd879f41132f79a freeswitch-1.8.2.tar.xz
++# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.8.2.tar.xz.sha256
++sha256 ebcf3db970ea9bb534c0983a1c9eef88395deb6e0902d8d6407bf217b2f27b9a freeswitch-1.8.2.tar.xz
+ # Locally computed
+ sha256 10299420c1e8602c0daf5a59d022621cd72a9148d1f0f33501edb3db3445c7fe  COPYING
+ sha256 e8e26b16da14aa3e6ed5c22c705fdc1f45d6225fca461ea9f7314bcdfdc414c4  libs/apr/LICENSE
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index 2657a39040..577d6c9450 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FREESWITCH_VERSION = 1.8.1
++FREESWITCH_VERSION = 1.8.2
+ FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
+ FREESWITCH_SITE = http://files.freeswitch.org/freeswitch-releases
+ # External modules need headers/libs from staging
+-- 
+2.19.0
