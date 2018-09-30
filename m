@@ -1,131 +1,132 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 30 Sep 2018 12:10:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/freeswitch: bump version to 1.8.2
-Message-ID: <20180930101006.23164-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 30 Sep 2018 12:18:41 +0200
+Subject: [Buildroot] [PATCH 1/1] bootutils: drop package
+Message-ID: <20180930101841.4232-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rebased patch 0002 after upstream commit:
-https://freeswitch.org/stash/projects/FS/repos/freeswitch/commits/c2b2f49c1d0dcbfa77d5d861155a301fead93071
+As suggested by Romain Naour during review of patch 976582
+(https://patchwork.ozlabs.org/patch/976582), drop bootutils as "upstream
+is dead since 2009" and "BootUtils is a collection of utilities to
+facilitate booting of modern Kernel 2.6 based systems"
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0002-mod_av-unbreak-with-ffmpeg-4.0.patch | 33 +++++--------------
- package/freeswitch/freeswitch.hash            | 12 +++----
- package/freeswitch/freeswitch.mk              |  2 +-
- 3 files changed, 16 insertions(+), 31 deletions(-)
+ package/Config.in                             |  1 -
+ .../0001-fix-build-with-glibc-2.28.patch      | 41 -------------------
+ package/bootutils/Config.in                   | 10 -----
+ package/bootutils/bootutils.hash              |  2 -
+ package/bootutils/bootutils.mk                | 13 ------
+ 5 files changed, 67 deletions(-)
+ delete mode 100644 package/bootutils/0001-fix-build-with-glibc-2.28.patch
+ delete mode 100644 package/bootutils/Config.in
+ delete mode 100644 package/bootutils/bootutils.hash
+ delete mode 100644 package/bootutils/bootutils.mk
 
-diff --git a/package/freeswitch/0002-mod_av-unbreak-with-ffmpeg-4.0.patch b/package/freeswitch/0002-mod_av-unbreak-with-ffmpeg-4.0.patch
-index 01eb3d86c0..a4693971c1 100644
---- a/package/freeswitch/0002-mod_av-unbreak-with-ffmpeg-4.0.patch
-+++ b/package/freeswitch/0002-mod_av-unbreak-with-ffmpeg-4.0.patch
-@@ -3,9 +3,6 @@ From: jbeich <jbeich@FreeBSD.org>
- Date: Thu, 16 Aug 2018 22:14:20 +0200
- Subject: [PATCH] mod_av: unbreak with ffmpeg 4.0
- 
--avcodec.c:194:40: error: use of undeclared identifier 'FF_INPUT_BUFFER_PADDING_SIZE'
--static uint8_t ff_input_buffer_padding[FF_INPUT_BUFFER_PADDING_SIZE] = { 0 };
--                                       ^
- avformat.c:471:14: error: use of undeclared identifier 'CODEC_FLAG_LOOP_FILTER'
-                         c->flags|=CODEC_FLAG_LOOP_FILTER;   // flags=+loop
-                                   ^
-@@ -28,30 +25,17 @@ https://github.com/freebsd/freebsd-ports/commit/da104360ea7d7861aa9fe6dc04b776a1
- Original file
- https://svnweb.freebsd.org/ports/head/net/freeswitch/files/patch-ffmpeg4?view=markup
- 
-+[Bernd: Rebased for freeswitch 1.8.2]
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-- src/mod/applications/mod_av/avcodec.c  | 2 +-
-  src/mod/applications/mod_av/avformat.c | 8 ++++----
-- 2 files changed, 5 insertions(+), 5 deletions(-)
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
- 
--diff --git a/src/mod/applications/mod_av/avcodec.c b/src/mod/applications/mod_av/avcodec.c
--index f987a47466..54a61c878c 100644
----- a/src/mod/applications/mod_av/avcodec.c
--+++ b/src/mod/applications/mod_av/avcodec.c
--@@ -191,7 +191,7 @@ typedef struct h264_codec_context_s {
-- 	int hw_encoder;
-- } h264_codec_context_t;
+diff --git a/package/Config.in b/package/Config.in
+index 61f4120e9c..5644a80ae2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2050,7 +2050,6 @@ menu "System tools"
+ 	source "package/atop/Config.in"
+ 	source "package/attr/Config.in"
+ 	source "package/audit/Config.in"
+-	source "package/bootutils/Config.in"
+ 	source "package/cgroupfs-mount/Config.in"
+ 	source "package/circus/Config.in"
+ 	source "package/coreutils/Config.in"
+diff --git a/package/bootutils/0001-fix-build-with-glibc-2.28.patch b/package/bootutils/0001-fix-build-with-glibc-2.28.patch
+deleted file mode 100644
+index fced93d4a6..0000000000
+--- a/package/bootutils/0001-fix-build-with-glibc-2.28.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From 00773e89893e4aaed721269eee0dbf844edd291c Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 29 Sep 2018 12:56:14 +0200
+-Subject: [PATCH] fix build with glibc 2.28
+-
+-Include to sys/sysmacros.h is needed to use makedev since glibc 2.28 so
+-add this include to devname.c and raidscan.c
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- libblkid/devname.c | 1 +
+- raidscan.c         | 1 +
+- 2 files changed, 2 insertions(+)
+-
+-diff --git a/libblkid/devname.c b/libblkid/devname.c
+-index d11bddd..12b63db 100644
+---- a/libblkid/devname.c
+-+++ b/libblkid/devname.c
+-@@ -37,6 +37,7 @@
+- #if HAVE_SYS_MKDEV_H
+- #include <sys/mkdev.h>
+- #endif
+-+#include <sys/sysmacros.h>
+- #include <time.h>
 - 
---static uint8_t ff_input_buffer_padding[FF_INPUT_BUFFER_PADDING_SIZE] = { 0 };
--+static uint8_t ff_input_buffer_padding[AV_INPUT_BUFFER_PADDING_SIZE] = { 0 };
+- #include "blkidP.h"
+-diff --git a/raidscan.c b/raidscan.c
+-index fab3b02..6e07b3d 100644
+---- a/raidscan.c
+-+++ b/raidscan.c
+-@@ -22,6 +22,7 @@
+- #include "config.h"
 - 
-- static switch_status_t buffer_h264_nalu(h264_codec_context_t *context, switch_frame_t *frame)
-- {
- diff --git a/src/mod/applications/mod_av/avformat.c b/src/mod/applications/mod_av/avformat.c
--index b9f6f99ef5..f5329c9106 100644
-+index 84900b601c..2f5c0e8d20 100644
- --- a/src/mod/applications/mod_av/avformat.c
- +++ b/src/mod/applications/mod_av/avformat.c
--@@ -468,13 +468,13 @@ GCC_DIAG_ON(deprecated-declarations)
-+@@ -479,13 +479,13 @@ GCC_DIAG_ON(deprecated-declarations)
-  			c->ticks_per_frame = 2;
-  
-  
-@@ -67,7 +51,7 @@ index b9f6f99ef5..f5329c9106 100644
-  			av_opt_set_int(c->priv_data, "coder", 1, 0);
-  
-  			switch (mm->vprofile) {
--@@ -550,7 +550,7 @@ GCC_DIAG_ON(deprecated-declarations)
-+@@ -568,7 +568,7 @@ GCC_DIAG_ON(deprecated-declarations)
-  
-  	/* Some formats want stream headers to be separate. */
-  	if (fc->oformat->flags & AVFMT_GLOBALHEADER) {
-@@ -75,8 +59,8 @@ index b9f6f99ef5..f5329c9106 100644
- +		c->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
-  	}
-  
-- 	return SWITCH_STATUS_SUCCESS;
--@@ -639,7 +639,7 @@ GCC_DIAG_ON(deprecated-declarations)
-+ 	mst->active = 1;
-+@@ -660,7 +660,7 @@ GCC_DIAG_ON(deprecated-declarations)
-  	mst->frame->format         = AV_SAMPLE_FMT_S16;
-  	mst->frame->channel_layout = c->channel_layout;
-  
-@@ -86,4 +70,5 @@ index b9f6f99ef5..f5329c9106 100644
-  		mst->frame->nb_samples = (mst->frame->sample_rate / 50) * c->channels;
-  	} else {
- -- 
--2.18.0
-+2.19.0
-+
-diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
-index 24c86e6295..dab2fb237b 100644
---- a/package/freeswitch/freeswitch.hash
-+++ b/package/freeswitch/freeswitch.hash
-@@ -1,9 +1,9 @@
--# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.8.1.tar.xz.md5
--md5 71b5df2c2fb369f6a7172b2cd9c9e594 freeswitch-1.8.1.tar.xz
--# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.8.1.tar.xz.sha1
--sha1 26ffa89faa8c83e2c6da6eda1f31fa7f9304346c freeswitch-1.8.1.tar.xz
--# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.8.1.tar.xz.sha256
--sha256 f606de858e2df09a752f890e8f0fc41dae8dd888e3fe952e17a90e9ff9ed270e freeswitch-1.8.1.tar.xz
-+# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.8.2.tar.xz.md5
-+md5 61de81cd70afb056dde7b1dcb91ad967 freeswitch-1.8.2.tar.xz
-+# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.8.2.tar.xz.sha1
-+sha1 f2c077db40b05c5fdf66cbe77bd879f41132f79a freeswitch-1.8.2.tar.xz
-+# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.8.2.tar.xz.sha256
-+sha256 ebcf3db970ea9bb534c0983a1c9eef88395deb6e0902d8d6407bf217b2f27b9a freeswitch-1.8.2.tar.xz
- # Locally computed
- sha256 10299420c1e8602c0daf5a59d022621cd72a9148d1f0f33501edb3db3445c7fe  COPYING
- sha256 e8e26b16da14aa3e6ed5c22c705fdc1f45d6225fca461ea9f7314bcdfdc414c4  libs/apr/LICENSE
-diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 2657a39040..577d6c9450 100644
---- a/package/freeswitch/freeswitch.mk
-+++ b/package/freeswitch/freeswitch.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FREESWITCH_VERSION = 1.8.1
-+FREESWITCH_VERSION = 1.8.2
- FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
- FREESWITCH_SITE = http://files.freeswitch.org/freeswitch-releases
- # External modules need headers/libs from staging
+- #include <sys/stat.h>
+-+#include <sys/sysmacros.h>
+- #include <fcntl.h>
+- #include <sys/ioctl.h>
+- #include <linux/major.h>
+--- 
+-2.17.1
+-
+diff --git a/package/bootutils/Config.in b/package/bootutils/Config.in
+deleted file mode 100644
+index 30d647ab11..0000000000
+--- a/package/bootutils/Config.in
++++ /dev/null
+@@ -1,10 +0,0 @@
+-config BR2_PACKAGE_BOOTUTILS
+-	bool "bootutils"
+-	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+-	help
+-	  BootUtils is a collection of utilities to facilitate booting
+-	  of Linux 2.6-based systems. The process of finding the root
+-	  volume either by label or explicit label= on the kernel
+-	  command line, mounting it, and 'switchroot'ing is automated.
+-
+-	  http://bootutils.sourceforge.net/
+diff --git a/package/bootutils/bootutils.hash b/package/bootutils/bootutils.hash
+deleted file mode 100644
+index 576c324c0f..0000000000
+--- a/package/bootutils/bootutils.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally computed:
+-sha256  78549714e7c7fa246a4019c245f4da044aee6cfe48ad6887c4013ac4c749c7b9  bootutils-1.0.0.tar.gz
+diff --git a/package/bootutils/bootutils.mk b/package/bootutils/bootutils.mk
+deleted file mode 100644
+index bc4b3e8438..0000000000
+--- a/package/bootutils/bootutils.mk
++++ /dev/null
+@@ -1,13 +0,0 @@
+-################################################################################
+-#
+-# bootutils
+-#
+-################################################################################
+-
+-BOOTUTILS_VERSION = 1.0.0
+-BOOTUTILS_SITE = http://downloads.sourceforge.net/project/bootutils/Stable/v$(BOOTUTILS_VERSION)
+-BOOTUTILS_CONF_OPTS = --prefix=/ --exec-prefix=/
+-BOOTUTILS_LICENSE = GPL-2.0+
+-BOOTUTILS_LICENSE_FILES = COPYING
+-
+-$(eval $(autotools-package))
 -- 
-2.19.0
+2.17.1
