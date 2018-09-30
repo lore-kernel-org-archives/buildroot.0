@@ -1,44 +1,34 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 30 Sep 2018 10:01:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.9.1
-Message-ID: <20180930080139.6699-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 30 Sep 2018 10:36:01 +0200
+Subject: [Buildroot] [PATCH 0/6] Upgrade some of the packages I maintain
+In-Reply-To: <1538233744-7607-1-git-send-email-gilles.talis@gmail.com> (Gilles
+ Talis's message of "Sat, 29 Sep 2018 17:08:58 +0200")
+References: <1538233744-7607-1-git-send-email-gilles.talis@gmail.com>
+Message-ID: <87efdb5qmm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://www.samba.org/samba/history/samba-4.9.1.html
+>>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Hello,
+ > This set of patches upgrades some of the packages I maintain.
+ > It also adds missing licenses hashes
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index b01ece7b67..ff2e21bc77 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.9.0.tar.asc
--sha256 d071e9e738e9583d0b9ce1c758d46808b76078405787c88a0c5b465bef8a9b15  samba-4.9.0.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.9.1.tar.asc
-+sha256 33118cbe83a87be085eba1aae6e597878b02d6ac9b2da67454ed33cf3e9853f2  samba-4.9.1.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index c7aaf6ba29..1cafe5b623 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.9.0
-+SAMBA4_VERSION = 4.9.1
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+ > Cheers
+ > Gilles.
+
+ > Gilles Talis (6):
+ >   webp: bump to version 1.0.0
+ >   leptonica: bump to version 1.76.0
+ >   tesseract-ocr: bump to version 3.05.02
+ >   ocrad: add license hash
+ >   httping: add license hash
+ >   iozone: bump to version 3_482
+
+Committed series, thanks.
+
 -- 
-2.19.0
+Bye, Peter Korsgaard
