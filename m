@@ -1,72 +1,64 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 30 Sep 2018 20:42:24 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] glibc: bump to latest on
- 2.26.x branch for additional fixes
-Message-ID: <20180930184147.381768A481@busybox.osuosl.org>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sun, 30 Sep 2018 21:50:24 +0300
+Subject: [Buildroot] [PATCH 1/1] python-dateutil: bump to version 2.7.3
+Message-ID: <20180930185024.16784-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61547602fa34c542fb89479050f6da48984fd5c9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+Upadte site address in Config.in
+Add license hash.
+host-python-setuptools-scm is now needed for setup.py
 
-Daniel Alvarez (1):
-      getifaddrs: Don't return ifa entries with NULL names [BZ #21812]
-
-Florian Weimer (8):
-      libio: Avoid _allocate_buffer, _free_buffer function pointers [BZ #23236]
-      Use _STRUCT_TIMESPEC as guard in <bits/types/struct_timespec.h> [BZ #23349]
-      libio: Disable vtable validation in case of interposition [BZ #23313]
-      NEWS: Reorder out-of-order bugs
-      Synchronize support/ infrastructure with master
-      libio: Add tst-vtables, tst-vtables-interposed
-      stdio-common/tst-printf.c: Remove part under a non-free license [BZ #23363]
-      conform/conformtest.pl: Escape literal braces in regular expressions
-
-Gabriel F. T. Gomes (1):
-      Fix parameter type in C++ version of iseqsig (bug 23171)
-
-H.J. Lu (2):
-      x86: Correct index_cpu_LZCNT [BZ #23456]
-      x86: Populate COMMON_CPUID_INDEX_80000001 for Intel CPUs [BZ #23459]
-
-Martin Kuchta (1):
-      pthread_cond_broadcast: Fix waiters-after-spinning case [BZ #23538]
-
-Stefan Liebler (1):
-      Fix segfault in maybe_script_execute.
-
-Steve Ellcey (1):
-      Check length of ifname before copying it into to ifreq structure.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/glibc/glibc.hash | 2 +-
- package/glibc/glibc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-dateutil/Config.in            | 2 +-
+ package/python-dateutil/python-dateutil.hash | 8 +++++---
+ package/python-dateutil/python-dateutil.mk   | 5 +++--
+ 3 files changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-index 890f523fd9..bfe40f1f96 100644
---- a/package/glibc/glibc.hash
-+++ b/package/glibc/glibc.hash
-@@ -1,4 +1,4 @@
- # Locally calculated (fetched from Github)
--sha256  1e18aee61dc51a5aaf7bfcb65ed01894aa82c3d3f7b9a01f20d59cd9db2f082b     glibc-glibc-2.26-160-g4df8479e6b3baf365bd4eedbba922b73471e5d73.tar.gz
-+sha256   acbec224e69f29c9c59c34f15f0fbb19eecf3fce347eba8bb928fac507ae86c6    glibc-glibc-2.26-175-gc5c90b480e4f21ed1d28e0e6d942b06b8d9e8bd7.tar.gz
- # Locally calculated (fetched from Github)
- sha256  5aa9adeac09727db0b8a52794186563771e74d70410e9fd86431e339953fd4bb     glibc-arc-2017.09-release.tar.gz
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 562f0258d5..2e93593b0d 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -10,7 +10,7 @@ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VE
- else
- # Generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
--GLIBC_VERSION = glibc-2.26-160-g4df8479e6b3baf365bd4eedbba922b73471e5d73
-+GLIBC_VERSION = glibc-2.26-175-gc5c90b480e4f21ed1d28e0e6d942b06b8d9e8bd7
- # Upstream doesn't officially provide an https download link.
- # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
- # sometimes the connection times out. So use an unofficial github mirror.
+diff --git a/package/python-dateutil/Config.in b/package/python-dateutil/Config.in
+index 56a1d838f7..1a36a150b1 100644
+--- a/package/python-dateutil/Config.in
++++ b/package/python-dateutil/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_PYTHON_DATEUTIL
+ 	help
+ 	  Extensions to the standard Python datetime module.
+ 
+-	  https://dateutil.readthedocs.org
++	  https://dateutil.readthedocs.io
+diff --git a/package/python-dateutil/python-dateutil.hash b/package/python-dateutil/python-dateutil.hash
+index adc24bdd16..c55128f507 100644
+--- a/package/python-dateutil/python-dateutil.hash
++++ b/package/python-dateutil/python-dateutil.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/python-dateutil/json, sha256 locally computed
+-md5	6e38f91e8c94c15a79ce22768dfeca87  python-dateutil-2.6.0.tar.gz
+-sha256	62a2f8df3d66f878373fd0072eacf4ee52194ba302e00082828e0d263b0418d2  python-dateutil-2.6.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/python-dateutil/json
++md5	175b7c1a3cc0cb01151eced07c61c0b8  python-dateutil-2.7.3.tar.gz
++sha256	e27001de32f627c22380a688bcc43ce83504a7bc5da472209b4c70f02829f0b8  python-dateutil-2.7.3.tar.gz
++# Locally computed sha256 checksums
++sha256	ba00f51a0d92823b5a1cde27d8b5b9d2321e67ed8da9bc163eff96d5e17e577e  LICENSE
+diff --git a/package/python-dateutil/python-dateutil.mk b/package/python-dateutil/python-dateutil.mk
+index 41dee2d1cd..73c3c35aaf 100644
+--- a/package/python-dateutil/python-dateutil.mk
++++ b/package/python-dateutil/python-dateutil.mk
+@@ -4,10 +4,11 @@
+ #
+ ################################################################################
+ 
+-PYTHON_DATEUTIL_VERSION = 2.6.0
+-PYTHON_DATEUTIL_SITE = https://pypi.python.org/packages/51/fc/39a3fbde6864942e8bb24c93663734b74e281b984d1b8c4f95d64b0c21f6
++PYTHON_DATEUTIL_VERSION = 2.7.3
++PYTHON_DATEUTIL_SITE = https://files.pythonhosted.org/packages/a0/b0/a4e3241d2dee665fea11baec21389aec6886655cd4db7647ddf96c3fad15
+ PYTHON_DATEUTIL_SETUP_TYPE = setuptools
+ PYTHON_DATEUTIL_LICENSE = BSD-3-Clause
+ PYTHON_DATEUTIL_LICENSE_FILES = LICENSE
++PYTHON_DATEUTIL_DEPENDENCIES = host-python-setuptools-scm
+ 
+ $(eval $(python-package))
+-- 
+2.17.1
