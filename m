@@ -1,49 +1,63 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 30 Sep 2018 09:59:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/apache: security bump to version
- 2.4.35
-Message-ID: <20180930075917.6025-1-bernd.kuhls@t-online.de>
+Date: Sun, 30 Sep 2018 10:00:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 18.2.1
+Message-ID: <20180930080033.6154-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes: CVE-2018-11763: mod_http2, DoS via continuous SETTINGS frames
-https://lists.apache.org/thread.html/d435b0267a76501b9e06c552b20c887171064cde38e46d678da4d3dd@%3Cannounce.httpd.apache.org%3E
-
-Release notes:
-https://lists.apache.org/thread.html/5d604774652fc073b1b161584d0d1efbdba7898c40ae2e2334725e5f@%3Cannounce.httpd.apache.org%3E
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/apache/apache.hash | 4 ++--
- package/apache/apache.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk |  2 +-
+ package/mesa3d/mesa3d.hash               | 10 +++++-----
+ package/mesa3d/mesa3d.mk                 |  2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index 74a48ae914..32743656fd 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,4 +1,4 @@
--# From http://archive.apache.org/dist/httpd/httpd-2.4.34.tar.bz2.sha256
--sha256 fa53c95631febb08a9de41fd2864cfff815cf62d9306723ab0d4b8d7aa1638f0 httpd-2.4.34.tar.bz2
-+# From http://archive.apache.org/dist/httpd/httpd-2.4.35.tar.bz2.sha256
-+sha256 2607c6fdd4d12ac3f583127629291e9432b247b782396a563bec5678aae69b56 httpd-2.4.35.tar.bz2
- # Locally computed
- sha256 c49c0819a726b70142621715dae3159c47b0349c2bc9db079070f28dadac0229 LICENSE
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index d50e3774ff..3ac317216d 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 775466d970..c4217be5c7 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 18.2.0
++MESA3D_HEADERS_VERSION = 18.2.1
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 7e2b7438b1..3f8130fc7d 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2018-September/000460.html
+-md5  88e1a7f31f259cec69bb76b3cb10c956  mesa-18.2.0.tar.xz
+-sha1 73723d9f3815487f474d84eb91a5cd17edfb63d4  mesa-18.2.0.tar.xz
+-sha256 22452bdffff8e11bf4284278155a9f77cb28d6d73a12c507f1490732d0d9ddce  mesa-18.2.0.tar.xz
+-sha512 e6e997e166845009f6b97da204384758c797c870b56332652c0a2636734638f9180b7e4dbad144495645308ae4d77981a2493a22d57973723338b658e0655557  mesa-18.2.0.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2018-September/000463.html
++md5 66afbc1dddcaa4c7dabf5c5ee187c73b  mesa-18.2.1.tar.xz
++sha1 cfcaf550ab0915033bd27cc7a5968764510dbfc1  mesa-18.2.1.tar.xz
++sha256 9636dc6f3d188abdcca02da97cedd73640d9035224efd5db724187d062c81056  mesa-18.2.1.tar.xz
++sha512 d249bdf79aad36db9a8d291b3a1a100d283893ac741f58f85ae7e5c90ca25c37f80a5fa6fc57945ffeb0b67b788e7ea146543ec790b22f144578fc4c1525b84d  mesa-18.2.1.tar.xz
+ # License
+ sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 3835390574..4de36eae46 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--APACHE_VERSION = 2.4.34
-+APACHE_VERSION = 2.4.35
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = http://archive.apache.org/dist/httpd
- APACHE_LICENSE = Apache-2.0
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 18.2.0
++MESA3D_VERSION = 18.2.1
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
 2.19.0
