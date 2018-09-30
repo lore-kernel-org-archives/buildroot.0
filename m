@@ -1,129 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 30 Sep 2018 20:04:23 +0200
-Subject: [Buildroot] [git commit] package/expedite: remove package
-Message-ID: <20180930181808.A7EE38A47C@busybox.osuosl.org>
+Date: Sun, 30 Sep 2018 20:18:15 +0200
+Subject: [Buildroot] [git commit] sg3_utils: bump to version 1.44
+Message-ID: <20180930181808.D07AE8A47C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=addcc3932cf5a5ea64e7bb1d65d0ecedf363d0f8
+commit: https://git.buildroot.net/buildroot/commit/?id=f2474d96bbfaaa884eed21340de943e9414aa10b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As noticed with the last version bump [1], expedite
-is not actively maintained by upstream [2].
+- Fix minor/major undefined error with glibc 2.28
+- Add hash for license files
 
-[1] http://lists.busybox.net/pipermail/buildroot/2018-September/231763.html
-[2] https://sourceforge.net/p/enlightenment/mailman/message/36428571
+Fixes:
+ - http://autobuild.buildroot.org/results/1d396e85d35f40478b4b09b4ff80eee395a2e3c2
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy               |  7 +++++++
- DEVELOPERS                     |  1 -
- package/Config.in              |  1 -
- package/expedite/Config.in     | 12 ------------
- package/expedite/expedite.hash |  3 ---
- package/expedite/expedite.mk   | 24 ------------------------
- 6 files changed, 7 insertions(+), 41 deletions(-)
+ package/sg3_utils/sg3_utils.hash | 6 +++++-
+ package/sg3_utils/sg3_utils.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 3b84e3da91..e1a0276b7d 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,13 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2018.11"
- 
-+config BR2_PACKAGE_EXPEDITE
-+	bool "expedite package has been removed"
-+	select BR2_LEGACY
-+	help
-+	  expedite is not actively maintained anymore.
-+	  https://sourceforge.net/p/enlightenment/mailman/message/36428571
+diff --git a/package/sg3_utils/sg3_utils.hash b/package/sg3_utils/sg3_utils.hash
+index a884063f4f..14b94947d4 100644
+--- a/package/sg3_utils/sg3_utils.hash
++++ b/package/sg3_utils/sg3_utils.hash
+@@ -1,2 +1,6 @@
+ # Locally calculated from download (no sig, hash)
+-sha256	97aeed65894feb2add896b4adfa4cf343966c8a61c7d206795ed0507640ee7b9	sg3_utils-1.42.tar.xz
++sha256	ca94ac106510742cd8ff5ead4a7e5c89d410653291401daf4632d2bef2a35b05	sg3_utils-1.44.tar.xz
 +
- config BR2_PACKAGE_MESA3D_OPENGL_TEXTURE_FLOAT
- 	bool "mesa3d opengl texture float option removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c036fa30c4..d11713de57 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1771,7 +1771,6 @@ F:	package/aubio/
- F:	package/bullet/
- F:	package/efl/
- F:	package/enlightenment/
--F:	package/expedite/
- F:	package/flare-engine/
- F:	package/flare-game/
- F:	package/irrlicht/
-diff --git a/package/Config.in b/package/Config.in
-index 8fd60cdec2..125e8ca7dc 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -260,7 +260,6 @@ endmenu
- menu "Graphic libraries and applications (graphic/text)"
++# Hash for license files
++sha256	d516b8b337a77e3d4c65dffe708ca7fb25b1cb4ec77ec362cf11ed659b9250bc	COPYING
++sha256	31f6d59679e0fb21c9358f22484e6e3c53e20ef08c0950fd38a4a867cb55edc9	BSD_LICENSE
+diff --git a/package/sg3_utils/sg3_utils.mk b/package/sg3_utils/sg3_utils.mk
+index 88827f33b4..0c17b30cde 100644
+--- a/package/sg3_utils/sg3_utils.mk
++++ b/package/sg3_utils/sg3_utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "Graphic applications"
--	source "package/expedite/Config.in"
- 	source "package/fswebcam/Config.in"
- 	source "package/ghostscript/Config.in"
- 	source "package/glmark2/Config.in"
-diff --git a/package/expedite/Config.in b/package/expedite/Config.in
-deleted file mode 100644
-index fdfc671907..0000000000
---- a/package/expedite/Config.in
-+++ /dev/null
-@@ -1,12 +0,0 @@
--config BR2_PACKAGE_EXPEDITE
--	bool "expedite"
--	depends on BR2_PACKAGE_EFL
--	depends on BR2_INSTALL_LIBSTDCPP
--	help
--	  Expedite is the official Evas benchmark tool. It can test
--	  different engines, such as X11, XRender, OpenGL (also ES
--	  variant), SDL, DirectFB and so on. Its tests are quite
--	  extensive, trying to reproduce real world usage cases.
--
--comment "expedite needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/expedite/expedite.hash b/package/expedite/expedite.hash
-deleted file mode 100644
-index d813cb38c3..0000000000
---- a/package/expedite/expedite.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# locally computed
--sha256 5f621a3cb70fae943893e256722cc7f7b0c4357035da7cc3cbbbb83e4ec1eb9a expedite-6a69955e71a00a720e1b0a9bc7b64dd3dd5673db.tar.gz
--sha256 0f024d9d9ddd18f94a4800d72e72d2ca198e9479c02b21afb9cacc2923ef2f2b COPYING
-diff --git a/package/expedite/expedite.mk b/package/expedite/expedite.mk
-deleted file mode 100644
-index fbcc4b5675..0000000000
---- a/package/expedite/expedite.mk
-+++ /dev/null
-@@ -1,24 +0,0 @@
--################################################################################
--#
--# expedite
--#
--################################################################################
--
--EXPEDITE_VERSION = 6a69955e71a00a720e1b0a9bc7b64dd3dd5673db
--EXPEDITE_SITE = http://git.enlightenment.org/tools/expedite.git
--EXPEDITE_SITE_METHOD = git
--EXPEDITE_LICENSE = BSD-2-Clause
--EXPEDITE_LICENSE_FILES = COPYING
--
--EXPEDITE_DEPENDENCIES = host-efl host-pkgconf efl
--
--# There is no configure script in the git tree.
--EXPEDITE_AUTORECONF = YES
--
--ifeq ($(BR2_PACKAGE_EFL_X_XLIB),y)
--EXPEDITE_CONF_OPTS += --with-x=$(STAGING_DIR) \
--	--x-includes=$(STAGING_DIR)/usr/include \
--	--x-libraries=$(STAGING_DIR)/usr/lib
--endif
--
--$(eval $(autotools-package))
+-SG3_UTILS_VERSION = 1.42
++SG3_UTILS_VERSION = 1.44
+ SG3_UTILS_SOURCE = sg3_utils-$(SG3_UTILS_VERSION).tar.xz
+ SG3_UTILS_SITE = http://sg.danny.cz/sg/p
+ SG3_UTILS_LICENSE = BSD-3-Clause (library)
