@@ -1,45 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 30 Sep 2018 10:44:28 +0200
-Subject: [Buildroot] [git commit] package/expedite: bump to the latest
- version
-Message-ID: <20180930084531.4874F88E82@busybox.osuosl.org>
+Date: Sun, 30 Sep 2018 10:38:08 +0200
+Subject: [Buildroot] [git commit] python-msgpack: bump to version 0.5.6
+Message-ID: <20180930084531.1B78980FF1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d39d1df19bb05d2cc655229390bf6efdfb5daac
+commit: https://git.buildroot.net/buildroot/commit/?id=d0b0929e4bc4b8ac71088c551cd3868ee3a3009b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-While at it add license file hash.
+Also add license hash.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/expedite/expedite.hash | 3 ++-
- package/expedite/expedite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/python-msgpack/python-msgpack.hash | 8 +++++---
+ package/python-msgpack/python-msgpack.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/expedite/expedite.hash b/package/expedite/expedite.hash
-index 828ee0553b..d813cb38c3 100644
---- a/package/expedite/expedite.hash
-+++ b/package/expedite/expedite.hash
-@@ -1,2 +1,3 @@
- # locally computed
--sha256 56e1dbd9826d932f0ef72a10dfdf32b6e0f680ab6830f8a8cfc60644ac69dbf1 expedite-e7b11dd328d9db82b49cde795944a721beaf0112.tar.gz
-+sha256 5f621a3cb70fae943893e256722cc7f7b0c4357035da7cc3cbbbb83e4ec1eb9a expedite-6a69955e71a00a720e1b0a9bc7b64dd3dd5673db.tar.gz
-+sha256 0f024d9d9ddd18f94a4800d72e72d2ca198e9479c02b21afb9cacc2923ef2f2b COPYING
-diff --git a/package/expedite/expedite.mk b/package/expedite/expedite.mk
-index 6bd4b007ba..fbcc4b5675 100644
---- a/package/expedite/expedite.mk
-+++ b/package/expedite/expedite.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-msgpack/python-msgpack.hash b/package/python-msgpack/python-msgpack.hash
+index 48313ff547..74785837d8 100644
+--- a/package/python-msgpack/python-msgpack.hash
++++ b/package/python-msgpack/python-msgpack.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/msgpack-python/json, sha256 locally computed.
+-md5	dcd854fb41ee7584ebbf35e049e6be98  msgpack-python-0.4.8.tar.gz
+-sha256	1a2b19df0f03519ec7f19f826afb935b202d8979b0856c6fb3dc28955799f886  msgpack-python-0.4.8.tar.gz
++# md5, sha256 from https://pypi.org/pypi/msgpack-python/json
++md5	6d644c06a87a5a111bbbf5b34b4be440  msgpack-python-0.5.6.tar.gz
++sha256	378cc8a6d3545b532dfd149da715abae4fda2a3adb6d74e525d0d5e51f46909b  msgpack-python-0.5.6.tar.gz
++# Locally computed sha256
++sha256  492dedba85da5872f78e6091bcd1fea474d660d35acb4dee964b8aab3f007427  COPYING
+diff --git a/package/python-msgpack/python-msgpack.mk b/package/python-msgpack/python-msgpack.mk
+index 5be2b14bdf..e0544f5d33 100644
+--- a/package/python-msgpack/python-msgpack.mk
++++ b/package/python-msgpack/python-msgpack.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--EXPEDITE_VERSION = e7b11dd328d9db82b49cde795944a721beaf0112
-+EXPEDITE_VERSION = 6a69955e71a00a720e1b0a9bc7b64dd3dd5673db
- EXPEDITE_SITE = http://git.enlightenment.org/tools/expedite.git
- EXPEDITE_SITE_METHOD = git
- EXPEDITE_LICENSE = BSD-2-Clause
+-PYTHON_MSGPACK_VERSION = 0.4.8
++PYTHON_MSGPACK_VERSION = 0.5.6
+ PYTHON_MSGPACK_SOURCE = msgpack-python-$(PYTHON_MSGPACK_VERSION).tar.gz
+-PYTHON_MSGPACK_SITE = https://pypi.python.org/packages/21/27/8a1d82041c7a2a51fcc73675875a5f9ea06c2663e02fcfeb708be1d081a0
++PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/8a/20/6eca772d1a5830336f84aca1d8198e5a3f4715cd1c7fc36d3cc7f7185091
+ PYTHON_MSGPACK_LICENSE = Apache-2.0
+ PYTHON_MSGPACK_LICENSE_FILES = COPYING
+ PYTHON_MSGPACK_SETUP_TYPE = setuptools
