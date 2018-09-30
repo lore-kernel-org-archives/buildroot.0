@@ -1,23 +1,24 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 30 Sep 2018 09:36:35 +0200
-Subject: [Buildroot] problem compiling kodi 17.6 ...
-References: <CAG-SZaJPgXvNRMSWBb156NWzmGg4kHa99cOzxd4zTFHkaDjgGw@mail.gmail.com>
-Message-ID: <31b68fxonm.ln2@ID-313208.user.individual.net>
+Date: Sun, 30 Sep 2018 09:43:22 +0200
+Subject: [Buildroot] [PATCH] xlib_libXdmcp: add missing dependency on
+ host-pkgconf
+References: <20180921121350.22638-1-thomas.petazzoni@bootlin.com>
+Message-ID: <qdb68fxonm.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Tue, 18 Sep 2018 16:55:09 -0400 schrieb Roberto Alejandro Esp? Mu?oz:
+Am Fri, 21 Sep 2018 14:13:50 +0200 schrieb Thomas Petazzoni:
 
-> Any ideas on what the problem is here? I'm using buildroot-2018-08 and
-> the default recipe with some extra packages:
-> 
-> raspberrypi3_64_defconfig
+> This was detected using per-package target/host folders, because with
+> this, only the dependencies explicitly expressed by a package are
+> available to the package.
 
-Hi,
+Hi Thomas,
 
-please send your complete defconfig.
+is the current patch series for per-package target/host folders publicly 
+available?
 
 Regards, Bernd
