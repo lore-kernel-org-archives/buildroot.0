@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Oct 2018 23:28:55 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x]
+Date: Mon, 1 Oct 2018 23:29:05 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x]
  package/x11r7/xlib_libXft: remove autoreconf
-Message-ID: <20181001212810.48B568B4C0@busybox.osuosl.org>
+Message-ID: <20181001212821.8D2588B4C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=756c59acb2d53ca2a40e691fe1695040b0de334d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=567cebbff41054161ff8c9c26968403390d53ff2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 Nine years ago we added autoreconf to fix libtool-related problems
 with the matchbox package:
@@ -47,7 +47,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 deletion(-)
 
 diff --git a/package/x11r7/xlib_libXft/xlib_libXft.mk b/package/x11r7/xlib_libXft/xlib_libXft.mk
-index de9b47093b..73fe6bb606 100644
+index 64415cfd30..9c5757e657 100644
 --- a/package/x11r7/xlib_libXft/xlib_libXft.mk
 +++ b/package/x11r7/xlib_libXft/xlib_libXft.mk
 @@ -9,7 +9,6 @@ XLIB_LIBXFT_SOURCE = libXft-$(XLIB_LIBXFT_VERSION).tar.bz2
@@ -56,5 +56,5 @@ index de9b47093b..73fe6bb606 100644
  XLIB_LIBXFT_LICENSE_FILES = COPYING
 -XLIB_LIBXFT_AUTORECONF = YES
  XLIB_LIBXFT_INSTALL_STAGING = YES
- XLIB_LIBXFT_DEPENDENCIES = fontconfig freetype xlib_libX11 xlib_libXext xlib_libXrender xproto_xproto
+ XLIB_LIBXFT_DEPENDENCIES = fontconfig freetype xlib_libX11 xlib_libXext xlib_libXrender xorgproto
  
