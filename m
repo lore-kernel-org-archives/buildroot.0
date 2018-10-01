@@ -1,51 +1,31 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Oct 2018 21:43:57 +0200
-Subject: [Buildroot] [git commit] libssh: fix download location
-In-Reply-To: <20180907111539.4516E81151@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Mon, 20 Aug 2018 23:56:14 +0200")
-References: <20180907111539.4516E81151@busybox.osuosl.org>
-Message-ID: <87y3bh1mgy.fsf@dell.be.48ers.dk>
+From: Nikolay Dimitrov <nikolay.dimitrov@retrohub.org>
+Date: Mon,  1 Oct 2018 23:23:25 +0300
+Subject: [Buildroot] [PATCH 1/1] configs/riotboard: bump kernel to version
+ 4.18.10
+Message-ID: <20181001202325.1847-1-nikolay.dimitrov@retrohub.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Signed-off-by: Nikolay Dimitrov <nikolay.dimitrov@retrohub.org>
+---
+ configs/riotboard_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=38c29b54380e68e8fb237c6132c014a5721d4e06
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
- > The current download location fails, and Buildroot falls back to
- > sources.b.o:
-
- > --2018-08-20 23:41:39--  https://red.libssh.org/attachments/download/218/libssh-0.7.5.tar.xz
- > Resolving red.libssh.org (red.libssh.org)... 78.46.80.163
- > Connecting to red.libssh.org (red.libssh.org)|78.46.80.163|:443... connected.
- > The certificate's owner does not match hostname ??red.libssh.org??
- > --2018-08-20 23:41:39--  http://sources.buildroot.net/libssh/libssh-0.7.5.tar.xz
- > Resolving sources.buildroot.net
- > (sources.buildroot.net)... 104.25.211.19, 104.25.210.19,
- > 2400:cb00:2048:1::6819:d313, ...
- > Connecting to sources.buildroot.net (sources.buildroot.net)|104.25.211.19|:80... connected.
- > HTTP request sent, awaiting response... 200 OK
- > Length: 351632 (343K) [application/x-xz]
-
- > This commit fixes the download location:
-
- > --2018-08-20 23:43:04--  https://www.libssh.org/files/0.7/libssh-0.7.5.tar.xz
- > Resolving www.libssh.org (www.libssh.org)... 87.98.168.187, 2001:41d0:2:f80c::4
- > Connecting to www.libssh.org (www.libssh.org)|87.98.168.187|:443... connected.
- > HTTP request sent, awaiting response... 200 OK
- > Length: 351632 (343K) [application/x-tar]
-
- > This patch is extracted from a contribution from Bernd Kuhls who was
- > also bumping the package at the same time
- > (http://patchwork.ozlabs.org/patch/959192/).
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2018.02.x and 2018.05.x, thanks.
-
+diff --git a/configs/riotboard_defconfig b/configs/riotboard_defconfig
+index 6a37e64f8c..04d52eb4fa 100644
+--- a/configs/riotboard_defconfig
++++ b/configs/riotboard_defconfig
+@@ -22,7 +22,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.10"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-riotboard"
 -- 
-Bye, Peter Korsgaard
+2.11.0
