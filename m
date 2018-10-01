@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Oct 2018 21:19:05 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] support/scripts/mkusers:
+Date: Mon, 1 Oct 2018 21:19:16 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] support/scripts/mkusers:
  preserve group members
-Message-ID: <20181001191820.2B3258B388@busybox.osuosl.org>
+Message-ID: <20181001191831.B50028B38E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0554dd1b68a5888f1035712865d246181b24432f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4e39c0fb5371b17c0e3216d658d6cbbd2c501760
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 When the function add_one_group is called on an existing group,
 make sure the members of this group are not removed in the process of
