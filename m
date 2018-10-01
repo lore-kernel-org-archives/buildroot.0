@@ -1,40 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Oct 2018 21:15:23 +0200
-Subject: [Buildroot] [PATCH] vboot-utils: fix major() build failure due
- to glibc 2.28
-In-Reply-To: <20180912111835.35443-1-giulio.benetti@micronovasrl.com> (Giulio
- Benetti's message of "Wed, 12 Sep 2018 13:18:35 +0200")
-References: <20180912111835.35443-1-giulio.benetti@micronovasrl.com>
-Message-ID: <87k1n132d0.fsf@dell.be.48ers.dk>
+Date: Mon, 1 Oct 2018 21:18:56 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] support/scripts/mkusers:
+ preserve group members
+Message-ID: <20181001191812.88F228B37F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d8c4b16166a68c629b4683a1d3383cb77d3db20e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > glibc 2.28 no longer includes <sys/sysmacros.h> from <sys/types.h>,
- > and therefore <sys/sysmacros.h> must be included explicitly when
- > major() are used.
+When the function add_one_group is called on an existing group,
+make sure the members of this group are not removed in the process of
+deleting then re-adding the group.
 
- > This commit adds an upstream patch to directly include
- > <sys/sysmacros.h> into cgpt_wrapper.c and dump_kernel_config_lib.c files
- > where major() macro is used.
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[Thomas: add curly braces when referencing ${members}, as suggested by
+Yann.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
- > The upstream patch has been taken from:
- > https://chromium.googlesource.com/chromiumos/platform/vboot_reference/+/435fbcee218b37a87368e2b22fa33366875d458c
+(cherry picked from commit 497f7134fca4b111499b2fd23501d7e048303e7c)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/scripts/mkusers | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
- > Fixes:
- > http://autobuild.buildroot.net/results/4a2/4a21307984cb16d7879149dd9b9b062181b0388f/
- > http://autobuild.buildroot.net/results/899/899569165112fe577cf191cd4f0c698cbedeb9b1/
- > http://autobuild.buildroot.net/results/0e5/0e527d231fa791ec8e3375804f1a0043f92d73d0/
- > http://autobuild.buildroot.net/results/184/1849be60dd13c1debfbcfb8fba5cec113e81af62/
- > http://autobuild.buildroot.net/results/38f/38fcefe4feabfd95692cf6b3f7ecf84259fca4de/
-
- > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-
-Committed to 2018.02.x, 2018.05.x and 2018.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/support/scripts/mkusers b/support/scripts/mkusers
+index 5bbec3e10f..d00ba33823 100755
+--- a/support/scripts/mkusers
++++ b/support/scripts/mkusers
+@@ -75,6 +75,14 @@ get_gid() {
+         '$1 == group { printf( "%d\n", $3 ); }' "${GROUP}"
+ }
+ 
++#----------------------------------------------------------------------------
++get_members() {
++    local group="${1}"
++
++    awk -F: -v group="${group}"                             \
++        '$1 == group { printf( "%s\n", $4 ); }' "${GROUP}"
++}
++
+ #----------------------------------------------------------------------------
+ get_username() {
+     local uid="${1}"
+@@ -211,16 +219,17 @@ generate_gid() {
+ add_one_group() {
+     local group="${1}"
+     local gid="${2}"
+-    local _f
++    local members
+ 
+     # Generate a new GID if needed
+     if [ ${gid} -eq -1 ]; then
+         gid="$( generate_gid "${group}" )"
+     fi
+ 
++    members=$(get_members "$group")
+     # Remove any previous instance of this group, and re-add the new one
+     sed -i --follow-symlinks -e '/^'"${group}"':.*/d;' "${GROUP}"
+-    printf "%s:x:%d:\n" "${group}" "${gid}" >>"${GROUP}"
++    printf "%s:x:%d:%s\n" "${group}" "${gid}" "${members}" >>"${GROUP}"
+ 
+     # Ditto for /etc/gshadow if it exists
+     if [ -f "${GSHADOW}" ]; then
