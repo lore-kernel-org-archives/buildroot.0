@@ -1,59 +1,51 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 1 Oct 2018 09:20:50 -0500
-Subject: [Buildroot] [PATCH v2 2/2] support/scripts/pkg-stats: URL check
- using threads
-In-Reply-To: <CANQCQpaGuW6BNFdxR=btL+YnufQke9PzUOojX63PAFZ9OZEqxw@mail.gmail.com>
-References: <1537544157-2992-2-git-send-email-matthew.weber@rockwellcollins.com>
- <5baf10d51c63b_62ce3fdd0e04334832349@ultri5.mail>
- <CANQCQpaGuW6BNFdxR=btL+YnufQke9PzUOojX63PAFZ9OZEqxw@mail.gmail.com>
-Message-ID: <CANQCQpbkqmPX3x3q9Ff1ZnqjHBL1X3oOiEOQDwNYimyixtWy9w@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  1 Oct 2018 16:42:38 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mesa3d: dri i965 driver needs
+ headers >= 3.18
+Message-ID: <20181001144238.9459-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ricardo,
+Since
+https://cgit.freedesktop.org/mesa/mesa/commit/src/intel/tools/aubinator.c?h=18.2&id=3228335b55c300cd07c4aa69329e58e70afae6a8
+the dri i965 driver needs linux/memfd.h which is not available in kernel
+headers older than 3.18:
+https://git.kernel.org/cgit/linux/kernel/git/stable/linux-stable.git/log/include/uapi/linux/memfd.h?id=refs/tags/v3.18.36
 
-On Mon, Oct 1, 2018 at 9:05 AM Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
->
-> Ricardo,
->
-> On Sat, Sep 29, 2018 at 12:42 AM Ricardo Martincoski
-> <ricardo.martincoski@gmail.com> wrote:
-> >
-> > Hello,
-> >
-> > On Fri, Sep 21, 2018 at 12:35 PM, Matt Weber wrote:
-> >
-> > [snip]
-> > > +def check_url_status_worker(url, url_status):
-> > > +    if url_status != "Missing" and url_status != "No Config.in":
-> > >          try:
-> > > -            url_status_code = requests.head(pkg.url, timeout=5).status_code
-> > > +            url_status_code = requests.head(url, timeout=5).status_code
-> >
-> > In order to avoid false timeouts for slow hosts, or hosts with a high load, or
-> > limited internet connection, or slow servers ... I think 30 seconds is a better
-> > timeout here.
->
-> Sure.
->
-> >
-> > >              if url_status_code >= 400:
-> > > -                pkg.url_status = "Invalid(%s)" % str(url_status_code)
-> > > +                return "Invalid(%s)" % str(url_status_code)
-> > >          except requests.exceptions.RequestException as e:
-> >
-> > There is a warning from flake8 for this line. Please fix it in previous patch.
->
-> I'm not seeing any output from flake8.  To be sure the tool is
-> working, I changed something syntax wise in the script and I get a
-> flake8 err/warning.  Are there options you're calling it with?
->
+Fixes
+http://autobuild.buildroot.net/results/5aa/5aac9e9cad789da11b05cbf5d2a5e3f3cf8f1614/
 
-Got it.  My flake8 install was messed up and after switching machines
-I see the unused warning.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+Although the autobuilders only detected the build error with mesa3d
+18.2.0 I could reproduce the problem with version 18.2.1 as well.
 
-Matt
+ package/mesa3d/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index aea579d4e3..a516332d46 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -187,11 +187,16 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_I915
+ config BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
+ 	bool "DRI i965 driver"
+ 	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18 # memfd.h
+ 	select BR2_PACKAGE_MESA3D_DRI_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_INTEL
+ 	help
+ 	  Support for i965-based Intel GPUs.
+ 
++comment "DRI i965 driver needs a toolchain w/ headers >= 3.18"
++	depends on BR2_i386 || BR2_x86_64
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
++
+ config BR2_PACKAGE_MESA3D_DRI_DRIVER_NOUVEAU
+ 	bool "DRI nouveau driver"
+ 	select BR2_PACKAGE_MESA3D_DRI_DRIVER
+-- 
+2.19.0
