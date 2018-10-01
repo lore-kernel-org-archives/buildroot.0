@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Oct 2018 21:28:10 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] package/php: security
+Date: Mon, 1 Oct 2018 21:28:34 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] package/php: security
  bump to version 7.2.10
-Message-ID: <20181001192736.26A4581185@busybox.osuosl.org>
+Message-ID: <20181001192750.45F748B390@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=74e73e9830c0c6be330962dfc2913a633c808740
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d70b2632d8f82d69b95db69d52f04cce9d31c095
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 Changelog: http://de2.php.net/ChangeLog-7.php#7.2.10
 
