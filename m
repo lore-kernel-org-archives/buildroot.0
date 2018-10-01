@@ -1,42 +1,38 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  1 Oct 2018 18:34:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ghostscript: fix removal of
- included lcms2
-Message-ID: <20181001163419.17125-1-bernd.kuhls@t-online.de>
+Date: Mon,  1 Oct 2018 19:31:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/vlc: fix linking with tremor
+Message-ID: <20181001173118.26686-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ghostscript 9.24 changed the internal lcms2 version:
-https://www.ghostscript.com/doc/9.24/News.htm
-
-With this change the directory name was also changed which broke our
-code to force the usage of the buildroot lcms2 package.
+Patch 0004 is not enough anymore to fix linking with tremor (provides
+libvorbisidec) so we provide the proper content for VORBIS_LIBS.
 
 Fixes
-http://autobuild.buildroot.net/results/d04/d04ad017bf06a442a7397f935959994ba72824e1/
+http://autobuild.buildroot.net/results/15a/15a3c5b90de6c67db9887e3db67b3568f6d18e3a/
+http://autobuild.buildroot.net/results/946/946f397bb81ce2c69384fa1e378c40600fd405b6/
+http://autobuild.buildroot.net/results/f5d/f5d9f3df78626178274c1be878a2ae0b90394885/
+http://autobuild.buildroot.net/results/2e5/2e5dc746a59798a56d3127aadc88593fc584c010/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/ghostscript/ghostscript.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/vlc/vlc.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index 9b5e144888..b1f5e1edb1 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
-@@ -27,8 +27,8 @@ GHOSTSCRIPT_DEPENDENCIES = \
- # Inspired by linuxfromscratch:
- # http://www.linuxfromscratch.org/blfs/view/svn/pst/gs.html
- define GHOSTSCRIPT_REMOVE_LIBS
--	rm -rf $(@D)/freetype $(@D)/ijs $(@D)/jpeg $(@D)/lcms2 \
--		$(@D)/lcms2art $(@D)/libpng $(@D)/tiff $(@D)/zlib
-+	rm -rf $(@D)/freetype $(@D)/ijs $(@D)/jpeg $(@D)/lcms2mt \
-+		$(@D)/libpng $(@D)/tiff $(@D)/zlib
- endef
- GHOSTSCRIPT_POST_PATCH_HOOKS += GHOSTSCRIPT_REMOVE_LIBS
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 73f84d5eb2..4d2e5f26c2 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -512,6 +512,7 @@ VLC_CONF_OPTS += --disable-taglib
+ endif
  
+ ifeq ($(BR2_PACKAGE_TREMOR),y)
++VLC_CONF_ENV += VORBIS_LIBS="-lvorbisidec"
+ VLC_CONF_OPTS += --enable-tremor
+ VLC_DEPENDENCIES += tremor
+ else
 -- 
 2.19.0
