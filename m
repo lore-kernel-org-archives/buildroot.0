@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Oct 2018 23:42:47 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] ipsec-tools: needs
+Date: Mon, 1 Oct 2018 23:43:12 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] ipsec-tools: needs
  host-bison
-Message-ID: <20181001214216.7A68C8B563@busybox.osuosl.org>
+Message-ID: <20181001214227.B4D948B567@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64720455f6dde471536deedc6c6d55d28e917f08
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=dced8b0983dbab6a5289ebdb06934224e6c096e1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 Making all in racoon
 /bin/sh ../../ylwrap cfparse.y y.tab.c cfparse.c y.tab.h `echo cfparse.c | sed -e s/cc$/hh/ -e s/cpp$/hpp/ -e s/cxx$/hxx/ -e s/c++$/h++/ -e s/c$/h/` y.output cfparse.output -- yacc -d
@@ -29,7 +29,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/ipsec-tools/ipsec-tools.mk b/package/ipsec-tools/ipsec-tools.mk
-index c0b180de55..20c7ab4f77 100644
+index ddae9a75f3..8672272538 100644
 --- a/package/ipsec-tools/ipsec-tools.mk
 +++ b/package/ipsec-tools/ipsec-tools.mk
 @@ -9,7 +9,7 @@ IPSEC_TOOLS_SOURCE = ipsec-tools-$(IPSEC_TOOLS_VERSION).tar.bz2
