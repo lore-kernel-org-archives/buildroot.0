@@ -1,9 +1,11 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 1 Oct 2018 08:00:42 -0500
-Subject: [Buildroot] [PATCH v2 1/8] busybox: update S01logging
-In-Reply-To: <20180929025006.8296-1-casantos@datacom.com.br>
+Date: Mon, 1 Oct 2018 08:12:05 -0500
+Subject: [Buildroot] [PATCH v2 2/8] busybox: add logging configuration
+ file
+In-Reply-To: <20180929025006.8296-2-casantos@datacom.com.br>
 References: <20180929025006.8296-1-casantos@datacom.com.br>
-Message-ID: <CANQCQpZcvd=+1Q4m-fNJsp1bwHqUPMLp07-K+KH943UHVpBMBA@mail.gmail.com>
+ <20180929025006.8296-2-casantos@datacom.com.br>
+Message-ID: <CANQCQpYbohi1QatqF7BnSPbe50y-0yercNsN+TkNu3q1azmriA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,16 +16,66 @@ Carlos,
 
 On Fri, Sep 28, 2018 at 9:50 PM Carlos Santos <casantos@datacom.com.br> wrote:
 >
-> Reformat and fix syslogd/klogd startup script for better quality and
-> code style:
+> Provide a template to help users to customize syslogd and klogd without
+> editting the startup script.
 >
-> - Detect and report start/stop errors (previous version ignored them and
->   always reported OK).
-> - Use a separate function for restart.
-> - Implement reload as restart.
-> - Support a configuration variable that completely disables the service
->   and issues a warning message on any invocation.
+> syslogd options worth to configure are remote logging (-R), rotation
+> (-s, -b) and minimal priority level (-l).
+>
+> klogd minimal priority level (-c) can be configured too, preventing
+> non-critical kernel messages from appearing on the console.
+>
+> This file is also useful as an example for init script authors.
 >
 > Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+> ---
+> Changes v1->v2
+> - Implement suggestions made by Nicolas Cavallari and Arnout Vandecappelle
+> ---
+>  package/busybox/busybox.mk          |  2 ++
+>  package/busybox/etc.default.logging | 13 +++++++++++++
+>  2 files changed, 15 insertions(+)
+>  create mode 100644 package/busybox/etc.default.logging
+>
+> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+> index 757086592f..91131c0012 100644
+> --- a/package/busybox/busybox.mk
+> +++ b/package/busybox/busybox.mk
+> @@ -252,6 +252,8 @@ define BUSYBOX_INSTALL_LOGGING_SCRIPT
+>         then \
+>                 $(INSTALL) -m 0755 -D package/busybox/S01logging \
+>                         $(TARGET_DIR)/etc/init.d/S01logging; \
+> +               $(INSTALL) -m 0644 -D package/busybox/etc.default.logging \
+> +                       $(TARGET_DIR)/etc/default/logging; \
+>         fi
+>  endef
+>
+> diff --git a/package/busybox/etc.default.logging b/package/busybox/etc.default.logging
+> new file mode 100644
+> index 0000000000..6775622779
+> --- /dev/null
+> +++ b/package/busybox/etc.default.logging
+> @@ -0,0 +1,13 @@
+> +#
+> +# /etc/default/logging (busybox version)
+> +#
+> +
 
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Would it possibly help the user when determining settings to include
+man page links in these example configs or link to the docs in the
+source tree?
+
+> +# Use SYSLOGD_ARGS to pass additional arguments to syslogd (e.g. for log
+> +# rotation).
+> +# SYSLOGD_ARGS="" # (default value)
+> +
+> +# Use KLOGD_ARGS to pass additional arguments to klogd.
+> +# KLOGD_ARGS="" # (default value)
+> +
+> +# Uncomment the line below to disable this service
+> +# ENABLED="no"
+> --
+> 2.17.1
+>
+
+Matt
