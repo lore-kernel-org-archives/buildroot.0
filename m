@@ -1,81 +1,38 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 1 Oct 2018 08:12:05 -0500
-Subject: [Buildroot] [PATCH v2 2/8] busybox: add logging configuration
- file
-In-Reply-To: <20180929025006.8296-2-casantos@datacom.com.br>
-References: <20180929025006.8296-1-casantos@datacom.com.br>
- <20180929025006.8296-2-casantos@datacom.com.br>
-Message-ID: <CANQCQpYbohi1QatqF7BnSPbe50y-0yercNsN+TkNu3q1azmriA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 01 Oct 2018 15:17:25 +0200
+Subject: [Buildroot] [PATCH 1/2] lua: fix dynamic library install
+In-Reply-To: <20180928173519.9731-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 28 Sep 2018 19:35:18 +0200")
+References: <20180928173519.9731-1-fontaine.fabrice@gmail.com>
+Message-ID: <87o9cdrel6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Carlos,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-On Fri, Sep 28, 2018 at 9:50 PM Carlos Santos <casantos@datacom.com.br> wrote:
->
-> Provide a template to help users to customize syslogd and klogd without
-> editting the startup script.
->
-> syslogd options worth to configure are remote logging (-R), rotation
-> (-s, -b) and minimal priority level (-l).
->
-> klogd minimal priority level (-c) can be configured too, preventing
-> non-critical kernel messages from appearing on the console.
->
-> This file is also useful as an example for init script authors.
->
-> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-> ---
-> Changes v1->v2
-> - Implement suggestions made by Nicolas Cavallari and Arnout Vandecappelle
-> ---
->  package/busybox/busybox.mk          |  2 ++
->  package/busybox/etc.default.logging | 13 +++++++++++++
->  2 files changed, 15 insertions(+)
->  create mode 100644 package/busybox/etc.default.logging
->
-> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-> index 757086592f..91131c0012 100644
-> --- a/package/busybox/busybox.mk
-> +++ b/package/busybox/busybox.mk
-> @@ -252,6 +252,8 @@ define BUSYBOX_INSTALL_LOGGING_SCRIPT
->         then \
->                 $(INSTALL) -m 0755 -D package/busybox/S01logging \
->                         $(TARGET_DIR)/etc/init.d/S01logging; \
-> +               $(INSTALL) -m 0644 -D package/busybox/etc.default.logging \
-> +                       $(TARGET_DIR)/etc/default/logging; \
->         fi
->  endef
->
-> diff --git a/package/busybox/etc.default.logging b/package/busybox/etc.default.logging
-> new file mode 100644
-> index 0000000000..6775622779
-> --- /dev/null
-> +++ b/package/busybox/etc.default.logging
-> @@ -0,0 +1,13 @@
-> +#
-> +# /etc/default/logging (busybox version)
-> +#
-> +
+ > In 0002-shared-libs-for-lua.patch, revision number is used to set
+ > library name:
+ > TO_SOLIB = liblua.so.$(R)
 
-Would it possibly help the user when determining settings to include
-man page links in these example configs or link to the docs in the
-source tree?
+ > However, library is built using PKG_VERSION which is passed only during
+ > build step:
+ > $(CC) -o $@.$(PKG_VERSION) -shared -Wl,-soname="$@.$(PKG_VERSION)" $?
 
-> +# Use SYSLOGD_ARGS to pass additional arguments to syslogd (e.g. for log
-> +# rotation).
-> +# SYSLOGD_ARGS="" # (default value)
-> +
-> +# Use KLOGD_ARGS to pass additional arguments to klogd.
-> +# KLOGD_ARGS="" # (default value)
-> +
-> +# Uncomment the line below to disable this service
-> +# ENABLED="no"
-> --
-> 2.17.1
->
+ > As a result, dynamic library is not installed in staging or target paths
+ > since bump to lua 5.3.5
 
-Matt
+ > So, instead of replacing R by PKG_VERSION and passing this variable in
+ > all steps, simply update R to 5
+
+ > Fixes:
+ >  - http://autobuild.buildroot.net/results/28b6672188bb0082ac1467d3b45904880e3634f3
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
