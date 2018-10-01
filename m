@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Oct 2018 21:31:46 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] zeromq: fix static build
+Date: Mon, 1 Oct 2018 21:30:05 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] zeromq: fix static build
  with libatomic
-Message-ID: <20181001193108.1075F8B44F@busybox.osuosl.org>
+Message-ID: <20181001193126.D72D88B452@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3e4cbf5ea75456591bb9215ca7dae3c22425647
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a858fa6ed4ea09c6dc0cbbf2603a71bb8d25de47
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 Second patch added support to link with -latomic if needed however using
 LDFLAGS doesn't work when statically linking because LDFLAGS is added
