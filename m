@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Oct 2018 22:54:46 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] system: update Config.in
+Date: Mon, 1 Oct 2018 22:54:55 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] system: update Config.in
  comment about systemd dependencies
-Message-ID: <20181001205402.4D4B68B4A3@busybox.osuosl.org>
+Message-ID: <20181001205412.842D18B4A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ff5c35df7607b1b31c4b39a82de13a417418f2b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=bf5d9ceb5c4ef4b8dfd7176af03aab9cc7a5f479
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 In commit 879fa7f82a86ffdc6d1cf7c9bfbb5cf830583d69, the
 BR2_INIT_SYSTEMD option was changed to allow selecting with a uClibc
