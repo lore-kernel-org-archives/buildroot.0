@@ -1,137 +1,59 @@
-From: Mark Corbin <mark.corbin@embecosm.com>
-Date: Mon, 1 Oct 2018 15:12:35 +0100
-Subject: [Buildroot] [git commit] toolchain-external: drop no longer
- needed CC_TARGET_<foo>_ variables
-In-Reply-To: <20181001125331.C5E498A5DE@busybox.osuosl.org>
-References: <20181001125331.C5E498A5DE@busybox.osuosl.org>
-Message-ID: <cfa54f82-a1bb-9416-e9c9-2adb096b281a@embecosm.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 1 Oct 2018 09:20:50 -0500
+Subject: [Buildroot] [PATCH v2 2/2] support/scripts/pkg-stats: URL check
+ using threads
+In-Reply-To: <CANQCQpaGuW6BNFdxR=btL+YnufQke9PzUOojX63PAFZ9OZEqxw@mail.gmail.com>
+References: <1537544157-2992-2-git-send-email-matthew.weber@rockwellcollins.com>
+ <5baf10d51c63b_62ce3fdd0e04334832349@ultri5.mail>
+ <CANQCQpaGuW6BNFdxR=btL+YnufQke9PzUOojX63PAFZ9OZEqxw@mail.gmail.com>
+Message-ID: <CANQCQpbkqmPX3x3q9Ff1ZnqjHBL1X3oOiEOQDwNYimyixtWy9w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter
+Ricardo,
 
-I've just noticed something with this patch - see below...
-
-On 01/10/18 13:52, Peter Korsgaard wrote:
-> commit: https://git.buildroot.net/buildroot/commit/?id=e0d14fb21bc1bd3468e3b4ddc6bf20cce13dcdec
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, Oct 1, 2018 at 9:05 AM Matthew Weber
+<matthew.weber@rockwellcollins.com> wrote:
 >
-> Since the introduction of the GCC_TARGET_<foo> variables in
-> arch/arch.mk in commit bd0640a2139119e2fdb4b384ebf32d1edcb0fdaa
-> ("arch: allow GCC target options to be optionally overwritten") and
-> the removal of the BR2_GCC_TARGET_CPU_REVISION, the CC_TARGET_<foo>_
-> variables in pkg-toolchain-external.mk map 1:1 with the corresponding
-> GCC_TARGET_<foo> variables.
+> Ricardo,
 >
-> So let's drop the CC_TARGET_<foo>_ variables, and use directly the
-> GCC_TARGET_<foo> ones.
+> On Sat, Sep 29, 2018 at 12:42 AM Ricardo Martincoski
+> <ricardo.martincoski@gmail.com> wrote:
+> >
+> > Hello,
+> >
+> > On Fri, Sep 21, 2018 at 12:35 PM, Matt Weber wrote:
+> >
+> > [snip]
+> > > +def check_url_status_worker(url, url_status):
+> > > +    if url_status != "Missing" and url_status != "No Config.in":
+> > >          try:
+> > > -            url_status_code = requests.head(pkg.url, timeout=5).status_code
+> > > +            url_status_code = requests.head(url, timeout=5).status_code
+> >
+> > In order to avoid false timeouts for slow hosts, or hosts with a high load, or
+> > limited internet connection, or slow servers ... I think 30 seconds is a better
+> > timeout here.
 >
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  .../toolchain-external/pkg-toolchain-external.mk   | 56 ++++++++++------------
->  1 file changed, 24 insertions(+), 32 deletions(-)
+> Sure.
 >
-> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> index 241a39a5ee..b1c41b0d97 100644
-> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> @@ -151,14 +151,6 @@ TOOLCHAIN_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
->  # Definition of the CFLAGS to use with the external toolchain, as well as the
->  # common toolchain wrapper build arguments
->  #
-> -CC_TARGET_CPU_ := $(GCC_TARGET_CPU)
-> -CC_TARGET_ARCH_ := $(GCC_TARGET_ARCH)
-> -CC_TARGET_ABI_ := $(GCC_TARGET_ABI)
-> -CC_TARGET_NAN_ := $(GCC_TARGET_NAN)
-> -CC_TARGET_FP32_MODE_ := $(GCC_TARGET_FP32_MODE)
-> -CC_TARGET_FPU_ := $(GCC_TARGET_FPU)
-> -CC_TARGET_FLOAT_ABI_ := $(GCC_TARGET_FLOAT_ABI)
-> -CC_TARGET_MODE_ := $(GCC_TARGET_MODE)
->  
->  # march/mtune/floating point mode needs to be passed to the external toolchain
->  # to select the right multilib variant
-> @@ -166,39 +158,39 @@ ifeq ($(BR2_x86_64),y)
->  TOOLCHAIN_EXTERNAL_CFLAGS += -m64
->  TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_64
->  endif
-> -ifneq ($(CC_TARGET_ARCH_),)
-> -TOOLCHAIN_EXTERNAL_CFLAGS += -march=$(CC_TARGET_ARCH_)
-> -TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_ARCH='"$(CC_TARGET_ARCH_)"'
-> +ifneq ($(GCC_TARGET_ARCH),)
-> +TOOLCHAIN_EXTERNAL_CFLAGS += -march=$(CC_TARGET_ARCH)
-> +TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_ARCH='"$(GCC_TARGET_ARCH)"'
+> >
+> > >              if url_status_code >= 400:
+> > > -                pkg.url_status = "Invalid(%s)" % str(url_status_code)
+> > > +                return "Invalid(%s)" % str(url_status_code)
+> > >          except requests.exceptions.RequestException as e:
+> >
+> > There is a warning from flake8 for this line. Please fix it in previous patch.
+>
+> I'm not seeing any output from flake8.  To be sure the tool is
+> working, I changed something syntax wise in the script and I get a
+> flake8 err/warning.  Are there options you're calling it with?
+>
 
-...isn't there a 'G' missing in front of the 'CC_TARGET_ARCH' in the
-inserted TOOLCHAIN_EXTERNAL_CFLAGS line above?
+Got it.  My flake8 install was messed up and after switching machines
+I see the unused warning.
 
-Regards
-
-Mark
-
->  endif
-> -ifneq ($(CC_TARGET_CPU_),)
-> -TOOLCHAIN_EXTERNAL_CFLAGS += -mcpu=$(CC_TARGET_CPU_)
-> -TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_CPU='"$(CC_TARGET_CPU_)"'
-> +ifneq ($(GCC_TARGET_CPU),)
-> +TOOLCHAIN_EXTERNAL_CFLAGS += -mcpu=$(GCC_TARGET_CPU)
-> +TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_CPU='"$(GCC_TARGET_CPU)"'
->  endif
-> -ifneq ($(CC_TARGET_ABI_),)
-> -TOOLCHAIN_EXTERNAL_CFLAGS += -mabi=$(CC_TARGET_ABI_)
-> -TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_ABI='"$(CC_TARGET_ABI_)"'
-> +ifneq ($(GCC_TARGET_ABI),)
-> +TOOLCHAIN_EXTERNAL_CFLAGS += -mabi=$(GCC_TARGET_ABI)
-> +TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_ABI='"$(GCC_TARGET_ABI)"'
->  endif
->  ifeq ($(BR2_TOOLCHAIN_HAS_MNAN_OPTION),y)
-> -ifneq ($(CC_TARGET_NAN_),)
-> -TOOLCHAIN_EXTERNAL_CFLAGS += -mnan=$(CC_TARGET_NAN_)
-> -TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_NAN='"$(CC_TARGET_NAN_)"'
-> +ifneq ($(GCC_TARGET_NAN),)
-> +TOOLCHAIN_EXTERNAL_CFLAGS += -mnan=$(GCC_TARGET_NAN)
-> +TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_NAN='"$(GCC_TARGET_NAN)"'
->  endif
->  endif
-> -ifneq ($(CC_TARGET_FP32_MODE_),)
-> -TOOLCHAIN_EXTERNAL_CFLAGS += -mfp$(CC_TARGET_FP32_MODE_)
-> -TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_FP32_MODE='"$(CC_TARGET_FP32_MODE_)"'
-> +ifneq ($(GCC_TARGET_FP32_MODE),)
-> +TOOLCHAIN_EXTERNAL_CFLAGS += -mfp$(GCC_TARGET_FP32_MODE)
-> +TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_FP32_MODE='"$(GCC_TARGET_FP32_MODE)"'
->  endif
-> -ifneq ($(CC_TARGET_FPU_),)
-> -TOOLCHAIN_EXTERNAL_CFLAGS += -mfpu=$(CC_TARGET_FPU_)
-> -TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_FPU='"$(CC_TARGET_FPU_)"'
-> +ifneq ($(GCC_TARGET_FPU),)
-> +TOOLCHAIN_EXTERNAL_CFLAGS += -mfpu=$(GCC_TARGET_FPU)
-> +TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_FPU='"$(GCC_TARGET_FPU)"'
->  endif
-> -ifneq ($(CC_TARGET_FLOAT_ABI_),)
-> -TOOLCHAIN_EXTERNAL_CFLAGS += -mfloat-abi=$(CC_TARGET_FLOAT_ABI_)
-> -TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_FLOAT_ABI='"$(CC_TARGET_FLOAT_ABI_)"'
-> +ifneq ($(GCC_TARGET_FLOAT_ABI),)
-> +TOOLCHAIN_EXTERNAL_CFLAGS += -mfloat-abi=$(GCC_TARGET_FLOAT_ABI)
-> +TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_FLOAT_ABI='"$(GCC_TARGET_FLOAT_ABI)"'
->  endif
-> -ifneq ($(CC_TARGET_MODE_),)
-> -TOOLCHAIN_EXTERNAL_CFLAGS += -m$(CC_TARGET_MODE_)
-> -TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_MODE='"$(CC_TARGET_MODE_)"'
-> +ifneq ($(GCC_TARGET_MODE),)
-> +TOOLCHAIN_EXTERNAL_CFLAGS += -m$(GCC_TARGET_MODE)
-> +TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_MODE='"$(GCC_TARGET_MODE)"'
->  endif
->  ifeq ($(BR2_BINFMT_FLAT),y)
->  TOOLCHAIN_EXTERNAL_CFLAGS += -Wl,-elf2flt
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-Mark Corbin
-Embecosm Ltd.
-https://www.embecosm.com
+Matt
