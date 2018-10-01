@@ -1,41 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Oct 2018 21:35:58 +0200
-Subject: [Buildroot] [PATCH] boot/uboot: needs bison/flex even for the
- legacy buildsystem
-In-Reply-To: <20180913201233.8127-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Thu, 13 Sep 2018 22:12:33 +0200")
-References: <20180913201233.8127-1-yann.morin.1998@free.fr>
-Message-ID: <8736tp31ep.fsf@dell.be.48ers.dk>
+Date: Mon, 1 Oct 2018 21:42:25 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] libssh: fix download
+ location
+Message-ID: <20181001194148.7B2128B46E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=546c3535e1af4754baa788d1426b1bdd7afc8efc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
- > When using the legacy buildsystem, the kconfig parser may still be used,
- > as reported by Thomas:
+The current download location fails, and Buildroot falls back to
+sources.b.o:
 
- >>>> uboot 2018.09 Configuring
- >     ...]
- >      HOSTCC  scripts/basic/fixdep
- >      HOSTCC  scripts/kconfig/conf.o
- >      YACC    scripts/kconfig/zconf.tab.c
- >     bin/sh: 1: bison: not found
- >     ake[3]: *** [scripts/kconfig/zconf.tab.c] Error 127
- >     ake[3]: *** Waiting for unfinished jobs....
- >      LEX     scripts/kconfig/zconf.lex.c
- >     bin/sh: 1: flex: not found
+--2018-08-20 23:41:39--  https://red.libssh.org/attachments/download/218/libssh-0.7.5.tar.xz
+Resolving red.libssh.org (red.libssh.org)... 78.46.80.163
+Connecting to red.libssh.org (red.libssh.org)|78.46.80.163|:443... connected.
+The certificate's owner does not match hostname ???red.libssh.org???
+--2018-08-20 23:41:39--  http://sources.buildroot.net/libssh/libssh-0.7.5.tar.xz
+Resolving sources.buildroot.net (sources.buildroot.net)... 104.25.211.19, 104.25.210.19, 2400:cb00:2048:1::6819:d313, ...
+Connecting to sources.buildroot.net (sources.buildroot.net)|104.25.211.19|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 351632 (343K) [application/x-xz]
 
- > However, in that case, the kconfig parser is only generated during the
- > 'configure' step, so we can add bison/flex as standard dependencies.
+This commit fixes the download location:
 
- > Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+--2018-08-20 23:43:04--  https://www.libssh.org/files/0.7/libssh-0.7.5.tar.xz
+Resolving www.libssh.org (www.libssh.org)... 87.98.168.187, 2001:41d0:2:f80c::4
+Connecting to www.libssh.org (www.libssh.org)|87.98.168.187|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 351632 (343K) [application/x-tar]
 
-Committed to 2018.08.x, thanks.
+This patch is extracted from a contribution from Bernd Kuhls who was
+also bumping the package at the same time
+(http://patchwork.ozlabs.org/patch/959192/).
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit ac26da5275af39e723547e0945de03752051e1ae)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libssh/libssh.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
+index 34716c502a..902865d73b 100644
+--- a/package/libssh/libssh.mk
++++ b/package/libssh/libssh.mk
+@@ -4,9 +4,10 @@
+ #
+ ################################################################################
+ 
+-LIBSSH_VERSION = 0.7.5
++LIBSSH_VERSION_MAJOR = 0.7
++LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).5
+ LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
+-LIBSSH_SITE = https://red.libssh.org/attachments/download/218
++LIBSSH_SITE = https://www.libssh.org/files/$(LIBSSH_VERSION_MAJOR)
+ LIBSSH_LICENSE = LGPL-2.1
+ LIBSSH_LICENSE_FILES = COPYING
+ LIBSSH_INSTALL_STAGING = YES
