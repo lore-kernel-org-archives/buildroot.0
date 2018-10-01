@@ -1,37 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Oct 2018 22:55:53 +0200
-Subject: [Buildroot] [PATCH] system: update Config.in comment about
- systemd dependencies
-In-Reply-To: <20180912141754.19062-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Wed, 12 Sep 2018 16:17:54 +0200")
-References: <20180912141754.19062-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87murx1j52.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  1 Oct 2018 22:57:39 +0200
+Subject: [Buildroot] [PATCH 1/1] x265: disable parallel build
+Message-ID: <20181001205739.27140-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+It seems package has a parallel build issue on ARM cortex A8 or A9 since
+at least version 2.5:
 
- > In commit 879fa7f82a86ffdc6d1cf7c9bfbb5cf830583d69, the
- > BR2_INIT_SYSTEMD option was changed to allow selecting with a uClibc
- > toolchain. Unfortunately, the corresponding Config.in comment, which
- > was already bogus, was not updated to take into account the numerous
- > dependencies of BR2_INIT_SYSTEMD.
+[ 94%] Linking CXX shared library libx265.so
+ipfilter8.S.o: file not recognized: File truncated
+collect2: error: ld returned 1 exit status
+CMakeFiles/x265-shared.dir/build.make:221: recipe for target 'libx265.so.160' failed
 
- > Due to this, even if you have uClibc enabled, the BR2_INIT_SYSTEMD
- > option may not be visible, and the Config.in comment may also not be
- > visible, leaving the user in the dark.
+Fixes:
+ - http://autobuild.buildroot.org/results/f6ea88324a8f9ac8ee780ddd71ec61f922e20210
+ - http://autobuild.buildroot.org/results/3bd91a5694936650ce936a408ddd50338f65f8b0
 
- > This commit fixes the dependencies of the Config.in comment so that
- > they match the one of the BR2_INIT_SYSTEMD option.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/x265/x265.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
- > Reported-by: Raphael Jacob <r.jacob2002@gmail.com>
- > Cc: Raphael Jacob <r.jacob2002@gmail.com>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2018.05.x and 2018.08.x, thanks.
-
+diff --git a/package/x265/x265.mk b/package/x265/x265.mk
+index 0ad27ee006..fe317d09d0 100644
+--- a/package/x265/x265.mk
++++ b/package/x265/x265.mk
+@@ -11,6 +11,7 @@ X265_LICENSE = GPL-2.0+
+ X265_LICENSE_FILES = COPYING
+ X265_SUBDIR = source
+ X265_INSTALL_STAGING = YES
++X265_MAKE = $(MAKE1)
+ 
+ ifeq ($(BR2_i386)$(BR2_x86_64),y)
+ X265_DEPENDENCIES += host-nasm
 -- 
-Bye, Peter Korsgaard
+2.17.1
