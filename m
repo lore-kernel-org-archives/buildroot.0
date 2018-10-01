@@ -1,31 +1,33 @@
-From: Nikolay Dimitrov <nikolay.dimitrov@retrohub.org>
-Date: Mon,  1 Oct 2018 23:23:25 +0300
-Subject: [Buildroot] [PATCH 1/1] configs/riotboard: bump kernel to version
- 4.18.10
-Message-ID: <20181001202325.1847-1-nikolay.dimitrov@retrohub.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 01 Oct 2018 22:53:06 +0200
+Subject: [Buildroot] [PATCH] package/gdb: Move 'is_regular_file' from
+ common-utils.c to filestuff.c
+In-Reply-To: <20180914212329.30144-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Fri, 14 Sep 2018 23:23:29 +0200")
+References: <20180914212329.30144-1-romain.naour@gmail.com>
+Message-ID: <87r2h91j9p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Nikolay Dimitrov <nikolay.dimitrov@retrohub.org>
----
- configs/riotboard_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-diff --git a/configs/riotboard_defconfig b/configs/riotboard_defconfig
-index 6a37e64f8c..04d52eb4fa 100644
---- a/configs/riotboard_defconfig
-+++ b/configs/riotboard_defconfig
-@@ -22,7 +22,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.10"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-riotboard"
+ > Backport the upstream patch fixing the gdb build with musl toolchains.
+ > Only gdb 8.1.1 [1] and 8.2 [2] release are affected.
+
+ > Fixes:
+ > https://gitlab.com/free-electrons/toolchains-builder/-/jobs/95552308
+
+ > [1]
+ > https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=2441702a72f324e41a1624dc042b334f375e2d81
+ > [2]
+ > https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=25e3c82c0e927398e759e2d5e35623012b8683f7
+
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+
+Committed to 2018.08.x, thanks.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
