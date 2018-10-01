@@ -1,210 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Oct 2018 22:51:50 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] package/gdb: add patch
- fixing gnulib related issue with musl toolchains
-Message-ID: <20181001205225.1CAAF8118D@busybox.osuosl.org>
+Date: Mon, 1 Oct 2018 22:54:46 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] system: update Config.in
+ comment about systemd dependencies
+Message-ID: <20181001205402.4D4B68B4A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be477fe37ecb5750545f05933d523ad5cf720549
+commit: https://git.buildroot.net/buildroot/commit/?id=1ff5c35df7607b1b31c4b39a82de13a417418f2b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-Backport the upstream patch fixing the gdb build with musl toolchains.
+In commit 879fa7f82a86ffdc6d1cf7c9bfbb5cf830583d69, the
+BR2_INIT_SYSTEMD option was changed to allow selecting with a uClibc
+toolchain. Unfortunately, the corresponding Config.in comment, which
+was already bogus, was not updated to take into account the numerous
+dependencies of BR2_INIT_SYSTEMD.
 
-Only gdb 8.1.1 [1] and 8.2 [2] release are affected.
+Due to this, even if you have uClibc enabled, the BR2_INIT_SYSTEMD
+option may not be visible, and the Config.in comment may also not be
+visible, leaving the user in the dark.
 
-Fixes:
-https://gitlab.com/free-electrons/toolchains-builder/-/jobs/95552308
+This commit fixes the dependencies of the Config.in comment so that
+they match the one of the BR2_INIT_SYSTEMD option.
 
-[1] https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=2441702a72f324e41a1624dc042b334f375e2d81
-[2] https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=25e3c82c0e927398e759e2d5e35623012b8683f7
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Reported-by: Raphael Jacob <r.jacob2002@gmail.com>
+Cc: Raphael Jacob <r.jacob2002@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8688ff6caf837ae4ee89b9d373233020022e7c10)
+(cherry picked from commit 3c631c741c35f4afd9c7b6a41bcbcae40ecf8d49)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ular_file-from-common-utils.c-to-filestuf.patch | 172 +++++++++++++++++++++
- 1 file changed, 172 insertions(+)
+ system/Config.in | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/package/gdb/8.1.1/0006-Move-is_regular_file-from-common-utils.c-to-filestuf.patch b/package/gdb/8.1.1/0006-Move-is_regular_file-from-common-utils.c-to-filestuf.patch
-new file mode 100644
-index 0000000000..fa1647495f
---- /dev/null
-+++ b/package/gdb/8.1.1/0006-Move-is_regular_file-from-common-utils.c-to-filestuf.patch
-@@ -0,0 +1,172 @@
-+From 083849deeeec2854b2657b46380273ee13f4fa1b Mon Sep 17 00:00:00 2001
-+From: Sergio Durigan Junior <sergiodj@redhat.com>
-+Date: Wed, 12 Sep 2018 13:16:02 -0400
-+Subject: [PATCH] Move 'is_regular_file' from common-utils.c to filestuff.c
-+
-+There is no reason for 'is_regular_file' to be in common-utils.c; it
-+belongs to 'filestuff.c'.  This commit moves the function definition
-+and its prototype to the appropriate files.
-+
-+The motivation behind this move is a failure that happens on certain
-+cross-compilation environments when compiling the IPA library, due to
-+the way gnulib probes the need for a 'stat' call replacement.  Because
-+configure checks when cross-compiling are more limited, gnulib decides
-+that it needs to substitute the 'stat' calls its own 'rpl_stat';
-+however, the IPA library doesn't link with gnulib, which leads to an
-+error when compiling 'common-utils.c':
-+
-+  ...
-+  /opt/x86-core2--musl--bleeding-edge-2018.09-1/bin/i686-buildroot-linux-musl-g++  -shared -fPIC -Wl,--soname=libinproctrace.so -Wl,--no-undefined -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os      -I. -I. -I./../common -I./../regformats -I./.. -I./../../include -I./../gnulib/import -Ibuild-gnulib-gdbserver/import -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Wall -Wpointer-arith -Wno-unused -Wunused-value -Wunused-function -Wno-switch -Wno-char-subscripts -Wempty-body -Wunused-but-set-parameter -Wunused-but-set-variable -Wno-sign-compare -Wno-narrowing -Wno-error=maybe-uninitialized  -DGDBSERVER \
-+   -Wl,--dynamic-list=./proc-service.list -o libinproctrace.so ax-ipa.o common-utils-ipa.o errors-ipa.o format-ipa.o print-utils-ipa.o regcache-ipa.o remote-utils-ipa.o rsp-low-ipa.o tdesc-ipa.o tracepoint-ipa.o utils-ipa.o vec-ipa.o linux-i386-ipa.o linux-x86-tdesc-ipa.o arch/i386-ipa.o -ldl -pthread
-+  /opt/x86-core2--musl--bleeding-edge-2018.09-1/lib/gcc/i686-buildroot-linux-musl/8.2.0/../../../../i686-buildroot-linux-musl/bin/ld: common-utils-ipa.o: in function `is_regular_file(char const*, int*)':
-+  common-utils.c:(.text+0x695): undefined reference to `rpl_stat'
-+  collect2: error: ld returned 1 exit status
-+  Makefile:413: recipe for target 'libinproctrace.so' failed
-+  make[1]: *** [libinproctrace.so] Error 1
-+  ...
-+
-+More details can also be found at:
-+
-+  https://sourceware.org/ml/gdb-patches/2018-09/msg00304.html
-+
-+The most simple fix for this problem is to move 'is_regular_file' to
-+'filestuff.c', which is not used by IPA.  This ends up making the
-+files more logically organized as well, since 'is_regular_file' is a
-+file operation.
-+
-+No regressions found.
-+
-+gdb/ChangeLog:
-+2018-09-12  Sergio Durigan Junior  <sergiodj@redhat.com>
-+
-+	* common/common-utils.c: Don't include '<sys/stat.h>'.
-+	(is_regular_file): Move to...
-+	* common/filestuff.c (is_regular_file): ... here.
-+	* common/common-utils.h (is_regular_file): Move to...
-+	* common/filestuff.h (is_regular_file): ... here.
-+
-+(cherry picked from commit 3c025cfe5efc44eb4dfb03b53dca28e75096dd1e)
-+[Romain: backport to gdb 8.1 and remove ChangeLog enty]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ gdb/common/common-utils.c | 30 ------------------------------
-+ gdb/common/common-utils.h |  5 -----
-+ gdb/common/filestuff.c    | 31 +++++++++++++++++++++++++++++++
-+ gdb/common/filestuff.h    |  5 +++++
-+ 4 files changed, 36 insertions(+), 35 deletions(-)
-+
-+diff --git a/gdb/common/common-utils.c b/gdb/common/common-utils.c
-+index 80de826ba78..90a06390141 100644
-+--- a/gdb/common/common-utils.c
-++++ b/gdb/common/common-utils.c
-+@@ -20,7 +20,6 @@
-+ #include "common-defs.h"
-+ #include "common-utils.h"
-+ #include "host-defs.h"
-+-#include <sys/stat.h>
-+ #include <ctype.h>
-+ 
-+ /* The xmalloc() (libiberty.h) family of memory management routines.
-+@@ -411,32 +410,3 @@ stringify_argv (const std::vector<char *> &args)
-+ }
-+ 
-+ /* See common/common-utils.h.  */
-+-
-+-bool
-+-is_regular_file (const char *name, int *errno_ptr)
-+-{
-+-  struct stat st;
-+-  const int status = stat (name, &st);
-+-
-+-  /* Stat should never fail except when the file does not exist.
-+-     If stat fails, analyze the source of error and return true
-+-     unless the file does not exist, to avoid returning false results
-+-     on obscure systems where stat does not work as expected.  */
-+-
-+-  if (status != 0)
-+-    {
-+-      if (errno != ENOENT)
-+-	return true;
-+-      *errno_ptr = ENOENT;
-+-      return false;
-+-    }
-+-
-+-  if (S_ISREG (st.st_mode))
-+-    return true;
-+-
-+-  if (S_ISDIR (st.st_mode))
-+-    *errno_ptr = EISDIR;
-+-  else
-+-    *errno_ptr = EINVAL;
-+-  return false;
-+-}
-+diff --git a/gdb/common/common-utils.h b/gdb/common/common-utils.h
-+index 5408c354693..2320318de74 100644
-+--- a/gdb/common/common-utils.h
-++++ b/gdb/common/common-utils.h
-+@@ -146,9 +146,4 @@ in_inclusive_range (T value, T low, T high)
-+   return value >= low && value <= high;
-+ }
-+ 
-+-/* Return true if the file NAME exists and is a regular file.
-+-   If the result is false then *ERRNO_PTR is set to a useful value assuming
-+-   we're expecting a regular file.  */
-+-extern bool is_regular_file (const char *name, int *errno_ptr);
-+-
-+ #endif
-+diff --git a/gdb/common/filestuff.c b/gdb/common/filestuff.c
-+index f5a754ffa66..fa10165a7ca 100644
-+--- a/gdb/common/filestuff.c
-++++ b/gdb/common/filestuff.c
-+@@ -417,3 +417,34 @@ make_cleanup_close (int fd)
-+   *saved_fd = fd;
-+   return make_cleanup_dtor (do_close_cleanup, saved_fd, xfree);
-+ }
-++
-++/* See common/filestuff.h.  */
-++
-++bool
-++is_regular_file (const char *name, int *errno_ptr)
-++{
-++  struct stat st;
-++  const int status = stat (name, &st);
-++
-++  /* Stat should never fail except when the file does not exist.
-++     If stat fails, analyze the source of error and return true
-++     unless the file does not exist, to avoid returning false results
-++     on obscure systems where stat does not work as expected.  */
-++
-++  if (status != 0)
-++    {
-++      if (errno != ENOENT)
-++	return true;
-++      *errno_ptr = ENOENT;
-++      return false;
-++    }
-++
-++  if (S_ISREG (st.st_mode))
-++    return true;
-++
-++  if (S_ISDIR (st.st_mode))
-++    *errno_ptr = EISDIR;
-++  else
-++    *errno_ptr = EINVAL;
-++  return false;
-++}
-+diff --git a/gdb/common/filestuff.h b/gdb/common/filestuff.h
-+index 92a2a5f4c70..cc6dd861379 100644
-+--- a/gdb/common/filestuff.h
-++++ b/gdb/common/filestuff.h
-+@@ -84,4 +84,9 @@ extern int gdb_pipe_cloexec (int filedes[2]);
-+ 
-+ extern struct cleanup *make_cleanup_close (int fd);
-+ 
-++/* Return true if the file NAME exists and is a regular file.
-++   If the result is false then *ERRNO_PTR is set to a useful value assuming
-++   we're expecting a regular file.  */
-++extern bool is_regular_file (const char *name, int *errno_ptr);
-++
-+ #endif /* FILESTUFF_H */
-+-- 
-+2.14.4
-+
+diff --git a/system/Config.in b/system/Config.in
+index d14a864ca5..f63f27b126 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -137,9 +137,15 @@ config BR2_INIT_SYSTEMD
+ 	select BR2_ROOTFS_MERGED_USR
+ 	select BR2_PACKAGE_SYSTEMD
+ 
+-comment "systemd needs a glibc or uClibc toolchain, headers >= 3.10"
+-	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC \
+-		&& BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10)
++comment "systemd needs a glibc or uClibc toolchain w/ wchar, threads, SSP, dynamic library, headers >= 3.10"
++	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
++	depends on BR2_USE_MMU
++	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC) || \
++		!BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_HAS_SSP || \
++		BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+ 
+ config BR2_INIT_NONE
+ 	bool "None"
