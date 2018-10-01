@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Oct 2018 23:28:43 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x]
+Date: Mon, 1 Oct 2018 23:28:55 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x]
  package/x11r7/xlib_libXft: remove autoreconf
-Message-ID: <20181001212800.739518B4BD@busybox.osuosl.org>
+Message-ID: <20181001212810.48B568B4C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89e7af9a54528c287944ecb978a61061e7749b39
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=756c59acb2d53ca2a40e691fe1695040b0de334d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 Nine years ago we added autoreconf to fix libtool-related problems
 with the matchbox package:
