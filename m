@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Oct 2018 16:53:12 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] fio: fix license
-Message-ID: <20181001145448.585C48A691@busybox.osuosl.org>
+Date: Mon, 1 Oct 2018 16:53:06 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] fio: fix license
+Message-ID: <20181001145453.B4BE48A698@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03dce7cef0ef901d6cf8dc25235703fb3a16cd17
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ce1e6f2671b4e813064235194993994556bb493b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 fio does not have any special conditions since version 2.2.6 indeed
 MORAL-LICENSE has been updated to replace "promising" by "encouraged"
