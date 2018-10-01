@@ -1,40 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Oct 2018 21:32:44 +0200
-Subject: [Buildroot] [PATCH 1/1] zeromq: fix static build with libatomic
-In-Reply-To: <20180913182419.5720-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 13 Sep 2018 20:24:19 +0200")
-References: <20180913182419.5720-1-fontaine.fabrice@gmail.com>
-Message-ID: <877ej131k3.fsf@dell.be.48ers.dk>
+Date: Mon, 1 Oct 2018 21:34:56 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] boot/uboot: needs
+ bison/flex even for the legacy buildsystem
+Message-ID: <20181001193433.705EA8B468@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e211503c8cc15bdf57984a0fb38cb9c9a4531773
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
- > Second patch added support to link with -latomic if needed however using
- > LDFLAGS doesn't work when statically linking because LDFLAGS is added
- > before LIBS
+When using the legacy buildsystem, the kconfig parser may still be used,
+as reported by Thomas:
 
- > Detection of atomic fails with:
+    >>> uboot 2018.09 Configuring
+    ...]
+     HOSTCC  scripts/basic/fixdep
+     HOSTCC  scripts/kconfig/conf.o
+     YACC    scripts/kconfig/zconf.tab.c
+    bin/sh: 1: bison: not found
+    ake[3]: *** [scripts/kconfig/zconf.tab.c] Error 127
+    ake[3]: *** Waiting for unfinished jobs....
+     LEX     scripts/kconfig/zconf.lex.c
+    bin/sh: 1: flex: not found
 
- > configure:23230: /accts/mlweber1/instance-2/output/host/bin/sparc-linux-g++ -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -static -static -pedantic -Werror -Wall -D_GNU_SOURCE -D_REENTRANT -D_THREAD_SAFE -Wno-long-long -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -static -latomic conftest.cpp -lrt -lpthread -lstdc++ >&5
- > /tmp/ccgrvVTg.o: In function `main':
- > conftest.cpp:(.text.startup+0x10): undefined reference to `__atomic_fetch_add_4'
- > collect2: error: ld returned 1 exit status
+However, in that case, the kconfig parser is only generated during the
+'configure' step, so we can add bison/flex as standard dependencies.
 
- > So use LIBS instead of LDFLAGS
+Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit e7b2a7dfffa0d22208b67b9c09018617a67c1d80)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ boot/uboot/uboot.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
- > As second patch was already merged upstream, a new PR was sent:
- > https://github.com/zeromq/libzmq/pull/3250
-
- > Fixes:
- >  - http://autobuild.buildroot.net/results/c471d6b1061a8516f7772735e471db68a32965aa
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2018.05.x and 2018.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index a19cb72458..451f8c5d72 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -447,6 +447,9 @@ endif # BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
+ endif # BR2_TARGET_UBOOT && BR_BUILDING
+ 
+ ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY),y)
++UBOOT_DEPENDENCIES += \
++	$(BR2_BISON_HOST_DEPENDENCY) \
++	$(BR2_FLEX_HOST_DEPENDENCY)
+ $(eval $(generic-package))
+ else ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
+ UBOOT_MAKE_ENV = $(TARGET_MAKE_ENV)
