@@ -1,34 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Oct 2018 20:56:07 +0200
-Subject: [Buildroot] [PATCH/next] acpid: use shutdown for poweroff,
- if available, not /sbin/poweroff
-In-Reply-To: <20180910211539.1763d962@windsurf> (Thomas Petazzoni's message of
- "Mon, 10 Sep 2018 21:15:39 +0200")
-References: <20180830132120.10889-1-casantos@datacom.com.br>
- <20180910211539.1763d962@windsurf>
-Message-ID: <87sh1p3394.fsf@dell.be.48ers.dk>
+Date: Mon, 1 Oct 2018 21:03:34 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] linux-headers: bump 4.{4,
+ 9, 14}.x series
+Message-ID: <20181001190318.CB463805F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=f31867ac0e22d5ebd64a7e1fda6e7292c554dd61
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > Hello,
- > On Thu, 30 Aug 2018 10:21:20 -0300, Carlos Santos wrote:
- >> It's preferable to use "shutdown -hP now" to ensure that the runlevel is
- >> known, preventing this message on the system console and log:
- >> 
- >> WARNING: could not determine runlevel - doing soft poweroff
- >> (it's better to use shutdown instead of poweroff from the command line)
- >> 
- >> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
- >> ---
- >> package/acpid/acpid.mk | 8 +++++++-
- >> 1 file changed, 7 insertions(+), 1 deletion(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 57022f5160311332e234dc03b6f4f7db681d0ef0)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Committed to 2018.02.x, 2018.05.x and 2018.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 121d5a62f1..2b09e83b8c 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -250,12 +250,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.154"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.125"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.155"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.126"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+ 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
+-	default "4.14.68"	if BR2_KERNEL_HEADERS_4_14
++	default "4.14.69"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
