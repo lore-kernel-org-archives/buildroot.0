@@ -1,38 +1,75 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  1 Oct 2018 19:31:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vlc: fix linking with tremor
-Message-ID: <20181001173118.26686-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 1 Oct 2018 20:30:16 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] shairport-sync: add
+ upstream patch to fix soxr configure issue
+Message-ID: <20181001182941.9E1B48A6C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch 0004 is not enough anymore to fix linking with tremor (provides
-libvorbisidec) so we provide the proper content for VORBIS_LIBS.
+commit: https://git.buildroot.net/buildroot/commit/?id=0dedba776b619a6c6d27db018ed6b1c56313aad2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-Fixes
-http://autobuild.buildroot.net/results/15a/15a3c5b90de6c67db9887e3db67b3568f6d18e3a/
-http://autobuild.buildroot.net/results/946/946f397bb81ce2c69384fa1e378c40600fd405b6/
-http://autobuild.buildroot.net/results/f5d/f5d9f3df78626178274c1be878a2ae0b90394885/
-http://autobuild.buildroot.net/results/2e5/2e5dc746a59798a56d3127aadc88593fc584c010/
+Commit e047dee241fe0660d92311a124757065c6c4c93d adds an upstream patch
+to fix a build issue with soxr.  The patch also adds detecting soxr
+using pkg-config. Upstream detected an config issue [1], where the
+resulting binary lacks soxr support, although libsoxr was correctly
+detected.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+This patch adds a define for `HAVE_LIBSOXR` when using pkg-config.
+
+Backported from: cd6a99a7cfde1c5e1c1cc74ee6a77041bb4012d9
+
+[1] https://github.com/mikebrady/shairport-sync/issues/740
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit ac4bca24adf2a50d1d9ac858cec26fdcd39578ef)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vlc/vlc.mk | 1 +
- 1 file changed, 1 insertion(+)
+ ...ion-of-HAVE_LIBSOXR-with-using-pkg_config.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 73f84d5eb2..4d2e5f26c2 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -512,6 +512,7 @@ VLC_CONF_OPTS += --disable-taglib
- endif
- 
- ifeq ($(BR2_PACKAGE_TREMOR),y)
-+VLC_CONF_ENV += VORBIS_LIBS="-lvorbisidec"
- VLC_CONF_OPTS += --enable-tremor
- VLC_DEPENDENCIES += tremor
- else
--- 
-2.19.0
+diff --git a/package/shairport-sync/0002-Include-a-definition-of-HAVE_LIBSOXR-with-using-pkg_config.patch b/package/shairport-sync/0002-Include-a-definition-of-HAVE_LIBSOXR-with-using-pkg_config.patch
+new file mode 100644
+index 0000000000..66ce961ab1
+--- /dev/null
++++ b/package/shairport-sync/0002-Include-a-definition-of-HAVE_LIBSOXR-with-using-pkg_config.patch
+@@ -0,0 +1,35 @@
++From cd6a99a7cfde1c5e1c1cc74ee6a77041bb4012d9 Mon Sep 17 00:00:00 2001
++From: Mike Brady <mikebrady@eircom.net>
++Date: Sat, 8 Sep 2018 15:06:18 +0100
++Subject: [PATCH] Include a definition of HAVE_LIBSOXR with using pkg_config
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Commit e047dee241fe0660d92311a124757065c6c4c93d adds an upstream patch
++to fix a build issue with soxr.  The patch also adds detecting soxr
++using pkg-config. Upstream detected a config issue [1], where the
++resulting binary lacks soxr support, although libsoxr was correctly
++detected.
++
++Backported from: cd6a99a7cfde1c5e1c1cc74ee6a77041bb4012d9
++
++Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
++---
++ configure.ac | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/configure.ac b/configure.ac
++index ceec4af..690a774 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -180,6 +180,7 @@ AC_ARG_WITH(soxr, [  --with-soxr = choose libsoxr for high-quality interpolation
++     PKG_CHECK_MODULES(
++         [SOXR], [soxr],
++         [LIBS="${SOXR_LIBS} ${LIBS}"])
+++    AC_DEFINE([HAVE_LIBSOXR],[1],[Define to 1 if you are including support for soxr interpolation])
++   else
++     AC_CHECK_LIB([avutil],[av_get_cpu_flags])
++     if  test "x${ac_cv_lib_avutil_av_get_cpu_flags}" = xyes ; then
++-- 
++2.18.0
