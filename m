@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Oct 2018 21:14:52 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] vboot-utils: fix major()
+Date: Mon, 1 Oct 2018 21:15:00 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] vboot-utils: fix major()
  build failure due to glibc 2.28
-Message-ID: <20181001191407.BE3E98B34F@busybox.osuosl.org>
+Message-ID: <20181001191414.B6A648B353@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5aae2627f03b840ed993942a6e713fe8fd2ab5fb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=dbff294954c308aa8d811ec32a7b34ab51df3a18
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 glibc 2.28 no longer includes <sys/sysmacros.h> from <sys/types.h>,
 and therefore <sys/sysmacros.h> must be included explicitly when
