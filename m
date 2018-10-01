@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Oct 2018 20:30:16 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] shairport-sync: add
+Date: Mon, 1 Oct 2018 20:30:35 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] shairport-sync: add
  upstream patch to fix soxr configure issue
-Message-ID: <20181001182941.9E1B48A6C4@busybox.osuosl.org>
+Message-ID: <20181001183000.621AF8285F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0dedba776b619a6c6d27db018ed6b1c56313aad2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=da231b68c5f9a7920e285fcce2f88411bbe659f8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 Commit e047dee241fe0660d92311a124757065c6c4c93d adds an upstream patch
 to fix a build issue with soxr.  The patch also adds detecting soxr
