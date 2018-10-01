@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Oct 2018 21:42:25 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] libssh: fix download
+Date: Mon, 1 Oct 2018 21:42:46 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] libssh: fix download
  location
-Message-ID: <20181001194148.7B2128B46E@busybox.osuosl.org>
+Message-ID: <20181001194204.1DEF18B471@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=546c3535e1af4754baa788d1426b1bdd7afc8efc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3e73f13c717958e3ca8930c95a0411d6021d5a5c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 The current download location fails, and Buildroot falls back to
 sources.b.o:
