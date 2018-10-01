@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 1 Oct 2018 08:43:30 +0200
-Subject: [Buildroot] [PATCH] xlib_libXdmcp: add missing dependency on
- host-pkgconf
-In-Reply-To: <qdb68fxonm.ln2@ID-313208.user.individual.net>
-References: <20180921121350.22638-1-thomas.petazzoni@bootlin.com>
- <qdb68fxonm.ln2@ID-313208.user.individual.net>
-Message-ID: <20181001084330.6c027dc1@windsurf>
+Date: Mon, 1 Oct 2018 08:44:44 +0200
+Subject: [Buildroot] [PATCH 15/23] python-txtorcon: bump to version
+ 18.0.2
+In-Reply-To: <5baf0f9879876_62ce3fdd0e0b1e2431918@ultri5.mail>
+References: <20180926153505.3411-16-asafka7@gmail.com>
+ <5baf0f9879876_62ce3fdd0e0b1e2431918@ultri5.mail>
+Message-ID: <20181001084444.355723f2@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,15 +14,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 30 Sep 2018 09:43:22 +0200, Bernd Kuhls wrote:
+On Sat, 29 Sep 2018 02:37:28 -0300, Ricardo Martincoski wrote:
 
-> is the current patch series for per-package target/host folders publicly 
-> available?
+> The upstream has a patch related to this (I did not tested it):
+> https://github.com/meejah/txtorcon/commit/c160531e885a3695ec1627070b6f48dfc443f3c8
+> and also there is a new release 18.1.0 containing it.
+> 
+> Assuming the patch solves the issue, what would be the best approach in this
+> case?
+> - resend the remaining patches of the series, bumping directly to 18.1.0;
+> - resend the remaining patches of the series, adding the upstream patch to the
+>   bump to 18.0.2;
+> - apply the remaining patches of the series, and later add a followup patch
+>   to solve the runtime issue either by adding the patch file or by bumping to
+>   18.1.0.
 
-No, I am in the process of cleaning it up and I'll post it when it's
-ready. I started a private autobuilder instance that tests the
-per-package target/host folders, and that's how I found all these
-issues (and I have more coming).
+This last option looks good to me.
 
 Best regards,
 
