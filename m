@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Oct 2018 23:49:10 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] package/gcc: glibc >=
+Date: Mon, 1 Oct 2018 23:49:57 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] package/gcc: glibc >=
  2.27 needs gcc >= 5 on aarch64
-Message-ID: <20181001214856.8FF388B572@busybox.osuosl.org>
+Message-ID: <20181001214914.AA1E58B579@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c890f7418864c35e215b8cfcef06cae67a2c659
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5daeca2d5379a1c4a3d87d7f20bea743ad8388f9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 With the following defconfig:
 BR2_aarch64=y
@@ -45,7 +45,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 2 insertions(+)
 
 diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 01bf8fa561..5a8f684a4c 100644
+index b092448ac7..a34f684c86 100644
 --- a/package/gcc/Config.in.host
 +++ b/package/gcc/Config.in.host
 @@ -32,6 +32,8 @@ config BR2_GCC_VERSION_4_9_X
