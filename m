@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Oct 2018 16:45:02 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] android-tools: fix
+Date: Mon, 1 Oct 2018 16:45:13 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] android-tools: fix
  minor()/major() build failure due to glibc 2.28
-Message-ID: <20181001144419.9354D8A65C@busybox.osuosl.org>
+Message-ID: <20181001144430.6FCA5887E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=822ae9cbccea848aa6469ccf7744eb03939ebfa2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=694b65e8bc86f14cf032d9adf24b3b9c18be3c41
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 glibc 2.28 no longer includes <sys/sysmacros.h> from <sys/types.h>,
 and therefore <sys/sysmacros.h> must be included explicitly when
