@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Oct 2018 20:55:35 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] acpid: use shutdown for
+Date: Mon, 1 Oct 2018 20:55:42 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] acpid: use shutdown for
  poweroff, if available, not /sbin/poweroff
-Message-ID: <20181001185449.B66728B2C2@busybox.osuosl.org>
+Message-ID: <20181001185458.4CC4A8B2C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ebec570387410bf478643a0e2c143db12d368b1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=704ed153347aed6031bc1d8bd3bf325cc6579646
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 It's preferable to use "shutdown -hP now" to ensure that the runlevel is
 known, preventing this message on the system console and log:
