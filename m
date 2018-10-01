@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Oct 2018 20:33:37 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] parted: fix
+Date: Mon, 1 Oct 2018 20:33:48 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] parted: fix
  minor()/major() build failure due to glibc 2.28
-Message-ID: <20181001183254.9EDE98A8A1@busybox.osuosl.org>
+Message-ID: <20181001183303.F34858A8C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb09c44764659e27de6c8c04c892a9eb0c85a972
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=091f9de77bb344cdee8d92b4177662bd899e2656
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 glibc 2.28 no longer includes <sys/sysmacros.h> from <sys/types.h>,
 and therefore <sys/sysmacros.h> must be included explicitly when
