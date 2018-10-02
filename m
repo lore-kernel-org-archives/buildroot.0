@@ -1,93 +1,90 @@
-From: Denis OSTERLAND <denis.osterland@diehl.com>
-Date: Tue, 2 Oct 2018 05:38:19 +0000
-Subject: [Buildroot] [PATCH] u-boot: add option to generate env image from
- default env
-Message-ID: <20181002053526.11374-1-Denis.Osterland@diehl.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 2 Oct 2018 08:38:51 +0300
+Subject: [Buildroot] [PATCH] gnupg: Package only needs ncurses with
+ readline
+In-Reply-To: <20180928231709.13395-1-tpiepho@impinj.com>
+References: <20180928231709.13395-1-tpiepho@impinj.com>
+Message-ID: <20181002053850.uguwwwry2wx37hp6@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Denis Osterland <Denis.Osterland@diehl.com>
+Hi Trent,
 
-This patch adds support to extract compiled in default env
-via u-boots get_default_envs script and generate env image from it.
+On Fri, Sep 28, 2018 at 11:18:40PM +0000, Trent Piepho wrote:
+> This package only needs ncurses when readline support is enabled, as
+> it's the autoconf macro file for readline that checks for and pulls in
+> ncurses.
+> 
+> For the target package, only depend on ncurses when readline support is
+> enabled.
+> 
+> The host package always forces readline support off, so the host-ncurses
+> dependency can be removed entirely.
+> 
+> Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+> ---
+>  package/gnupg/Config.in | 2 +-
+>  package/gnupg/gnupg.mk  | 6 +++---
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/gnupg/Config.in b/package/gnupg/Config.in
+> index 7c31612298..b13d4d6935 100644
+> --- a/package/gnupg/Config.in
+> +++ b/package/gnupg/Config.in
+> @@ -2,7 +2,7 @@ config BR2_PACKAGE_GNUPG
+>  	bool "gnupg"
+>  	depends on !BR2_PACKAGE_GNUPG2
+>  	select BR2_PACKAGE_ZLIB
+> -	select BR2_PACKAGE_NCURSES
+> +	select BR2_PACKAGE_NCURSES if BR2_PACKAGE_READLINE
 
-Signed-off-by: Denis Osterland <Denis.Osterland@diehl.com>
----
- boot/uboot/Config.in | 15 +++++++++++++++
- boot/uboot/uboot.mk  |  6 +++++-
- 2 files changed, 20 insertions(+), 1 deletion(-)
+BR2_PACKAGE_READLINE selects BR2_PACKAGE_NCURSES already, so this is not 
+needed.
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 9e40c11fa1..a2e9c3866a 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -468,8 +468,23 @@ menuconfig BR2_TARGET_UBOOT_ENVIMAGE
- 
- if BR2_TARGET_UBOOT_ENVIMAGE
- 
-+choice
-+	prompt "source"
-+
-+config BR2_TARGET_UBOOT_ENVIMAGE_TEXTFILE
-+	bool "text file"
-+
-+config BR2_TARGET_UBOOT_ENVIMAGE_BUIILTIN
-+	bool "compiled in"
-+	help
-+	  Use the default env from u-boot image.
-+	  requires >= v2018.03
-+
-+endchoice # source
-+
- config BR2_TARGET_UBOOT_ENVIMAGE_SOURCE
- 	string "Source files for environment"
-+	depends on BR2_TARGET_UBOOT_ENVIMAGE_TEXTFILE
- 	help
- 	  Text files describing the environment. Files should have
- 	  lines of the form var=value, one per line. Blank lines and
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index c5abc125f3..ae9e38c8c2 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -263,7 +263,9 @@ endef
- 
- ifneq ($(BR2_TARGET_UBOOT_ENVIMAGE),)
- define UBOOT_GENERATE_ENV_IMAGE
--	cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) \
-+	$(if $(BR2_TARGET_UBOOT_ENVIMAGE_BUIILTIN), \
-+	CROSS_COMPILE="$(TARGET_CROSS)" $(@D)/scripts/get_default_envs.sh $(@D), \
-+	cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE))) \
- 		>$(@D)/buildroot-env.txt
- 	$(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
- 		$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
-@@ -376,9 +378,11 @@ endef
- 
- ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE),y)
- ifeq ($(BR_BUILDING),y)
-+ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE_TEXTFILE),y)
- ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)),)
- $(error Please define a source file for Uboot environment (BR2_TARGET_UBOOT_ENVIMAGE_SOURCE setting))
- endif
-+endif
- ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SIZE)),)
- $(error Please provide Uboot environment size (BR2_TARGET_UBOOT_ENVIMAGE_SIZE setting))
- endif
+>  	help
+>  	  GnuPG is the GNU project's complete and free implementation
+>  	  of the OpenPGP standard as defined by RFC4880. GnuPG allows
+> diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
+> index ac9047894d..8af68fd589 100644
+> --- a/package/gnupg/gnupg.mk
+> +++ b/package/gnupg/gnupg.mk
+> @@ -9,7 +9,7 @@ GNUPG_SOURCE = gnupg-$(GNUPG_VERSION).tar.bz2
+>  GNUPG_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+>  GNUPG_LICENSE = GPL-3.0+
+>  GNUPG_LICENSE_FILES = COPYING
+> -GNUPG_DEPENDENCIES = zlib ncurses $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+> +GNUPG_DEPENDENCIES = zlib $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+>  GNUPG_CONF_ENV = ac_cv_sys_symbol_underscore=no
+>  GNUPG_CONF_OPTS = \
+>  	--disable-rpath \
+> @@ -18,7 +18,7 @@ GNUPG_CONF_OPTS = \
+>  	--enable-sha256 \
+>  	--enable-sha512
+>  
+> -HOST_GNUPG_DEPENDENCIES = host-zlib host-ncurses
+> +HOST_GNUPG_DEPENDENCIES = host-zlib
+>  HOST_GNUPG_CONF_OPTS = \
+>  	--disable-rpath \
+>  	--enable-minimal \
+> @@ -48,7 +48,7 @@ GNUPG_CONF_OPTS += --without-libcurl
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_READLINE),y)
+> -GNUPG_DEPENDENCIES += readline
+> +GNUPG_DEPENDENCIES += readline ncurses
+
+Here again, readline depends on ncurses already.
+
+>  else
+>  GNUPG_CONF_OPTS += --without-readline
+>  endif
+
+baruch
+
 -- 
-2.19.0
-
-
-
-Diehl Connectivity Solutions GmbH
-Gesch?ftsf?hrung: Horst Leonberger
-Sitz der Gesellschaft: N?rnberg - Registergericht: Amtsgericht
-N?rnberg: HRB 32315
-___________________________________________________________________________________________________
-
-Der Inhalt der vorstehenden E-Mail ist nicht rechtlich bindend. Diese E-Mail enthaelt vertrauliche und/oder rechtlich geschuetzte Informationen.
-Informieren Sie uns bitte, wenn Sie diese E-Mail faelschlicherweise erhalten haben. Bitte loeschen Sie in diesem Fall die Nachricht.
-Jede unerlaubte Form der Reproduktion, Bekanntgabe, Aenderung, Verteilung und/oder Publikation dieser E-Mail ist strengstens untersagt.
-The contents of the above mentioned e-mail is not legally binding. This e-mail contains confidential and/or legally protected information. Please inform us if you have received this e-mail by
-mistake and delete it in such a case. Each unauthorized reproduction, disclosure, alteration, distribution and/or publication of this e-mail is strictly prohibited. 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
