@@ -1,47 +1,50 @@
-From: =?UTF-8?q?William=20Wennerstr=C3=B6m?= <william@willeponken.me>
-Date: Tue,  2 Oct 2018 17:45:36 +0200
-Subject: [Buildroot] [PATCH 1/1] rtl8188eu: bump to latest commit
-Message-ID: <20181002154536.32623-1-william@willeponken.me>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  2 Oct 2018 21:16:32 +0200
+Subject: [Buildroot] [PATCH 1/1] minizip: needs __register_atfork
+Message-ID: <20181002191632.9615-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The rtl8188eu driver wouldn't build due to Linux kernel API changes.
+The following error is raised:
 
-Several fixes for API changes to Linux kernel >=4.11 has been commited
-to the repository.
+[100%] Linking C executable minizip
+/home/peko/autobuild/instance-0/output/host/m68k-buildroot-uclinux-uclibc/sysroot/usr/lib/libbsd.a(arc4random.o): In function `_rs_init.part.1':
+arc4random.c:(.text+0xaa): undefined reference to `__register_atfork'
+collect2: error: ld returned 1 exit status
 
-I have bumped to the latest commit and verified that it builds on master
-(also successfully built on the 2018.08 branch).
+As specified in openssl/Config.in, uClibc on noMMU doesn't provide
+__register_atfork() so add this dependency on minizip
 
-Signed-off-by: William Wennerstr?m <william@willeponken.me>
+It should be noted that technically, this dependency comes from libbsd.
+Indeed _ARC4_ATFORK is defined to be __register_atfork if __GLIBC__ is
+defined and to pthread_atfork otherwise (see src/arc4random_linux.h)
+
+So perhaps this dependency should be added to libbsd and to hcitop from
+bluez-alsa (netcat-openbsd depends on glibc)
+
+Fixes:
+ - http://autobuild.buildroot.org/results/df2dcbdceaa01a2ae37bf09140e4dbef0a5b9489
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/rtl8188eu/rtl8188eu.hash | 2 +-
- package/rtl8188eu/rtl8188eu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/minizip/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/rtl8188eu/rtl8188eu.hash b/package/rtl8188eu/rtl8188eu.hash
-index 6f68f44259..9ec2ffee89 100644
---- a/package/rtl8188eu/rtl8188eu.hash
-+++ b/package/rtl8188eu/rtl8188eu.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 9f16fab009bd7bc9e377cf7dcdf82be1b60e7f88e27f2833eea5b422d104e3fe rtl8188eu-ced2b64a1139dcaf86947e3a9f7617dffbd64239.tar.gz
-+sha256 cc872aa0991c044d35abfcc81543bad950c6aae487e37d5a09d1cbf8c4cb3058 rtl8188eu-4b0ecca485b9f11f58670b69aa9f90ecad7da02f.tar.gz
-diff --git a/package/rtl8188eu/rtl8188eu.mk b/package/rtl8188eu/rtl8188eu.mk
-index 5c1cc73da4..f292bba134 100644
---- a/package/rtl8188eu/rtl8188eu.mk
-+++ b/package/rtl8188eu/rtl8188eu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
-
--RTL8188EU_VERSION = ced2b64a1139dcaf86947e3a9f7617dffbd64239
-+RTL8188EU_VERSION = 4b0ecca485b9f11f58670b69aa9f90ecad7da02f
- RTL8188EU_SITE = $(call github,lwfinger,rtl8188eu,$(RTL8188EU_VERSION))
- RTL8188EU_LICENSE = GPL-2.0, proprietary (rtl8188eufw.bin firmware blob)
- RTL8188EU_LICENSE_FILES = COPYING
---
-2.16.4
+diff --git a/package/minizip/Config.in b/package/minizip/Config.in
+index 68fa1d7118..ed54e3b651 100644
+--- a/package/minizip/Config.in
++++ b/package/minizip/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_MINIZIP
+ 	bool "minizip"
+ 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
++	# uClibc on noMMU doesn't provide __register_atfork()
++	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU)
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libbsd
+ 	depends on BR2_USE_WCHAR # libbsd
+ 	select BR2_PACKAGE_LIBBSD
+-- 
+2.17.1
