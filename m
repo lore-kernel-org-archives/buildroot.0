@@ -1,45 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue,  2 Oct 2018 11:30:15 +0200
-Subject: [Buildroot] [PATCH] links: fix X11 library/includes detection
-Message-ID: <20181002093015.17431-1-peter@korsgaard.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue,  2 Oct 2018 12:18:23 +0200
+Subject: [Buildroot] [PATCH 2/2] package/dovecot-pigeonhole: bump version to
+ 0.5.3
+In-Reply-To: <20181002101823.9985-1-bernd.kuhls@t-online.de>
+References: <20181002101823.9985-1-bernd.kuhls@t-online.de>
+Message-ID: <20181002101823.9985-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/4b0/4b02713ed5c10b58f390f96ea25f2a45c9a47af4/
-http://autobuild.buildroot.net/results/ac6/ac668f867b9de7a2c61d263a894480afc181dd9b/
-http://autobuild.buildroot.net/results/f02/f0248b3bf4a73210f210f422c8df067a6ea28aa1/
-
-The configure script uses AC_PATH_X, which searches the host for the X11
-libraries/headers, causing build failures.
-
-https://www.gnu.org/software/autoconf/manual/autoconf-2.65/html_node/System-Services.html
-
-Fix it by using --x-includes / --x-libraries like we do elsewhere.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/links/links.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 2 +-
+ package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/links/links.mk b/package/links/links.mk
-index dd6adb29b1..651a089fda 100644
---- a/package/links/links.mk
-+++ b/package/links/links.mk
-@@ -15,7 +15,10 @@ ifeq ($(BR2_PACKAGE_LINKS_GRAPHICS),y)
- LINKS_CONF_OPTS += --enable-graphics
- LINKS_DEPENDENCIES += libpng
- ifeq ($(BR2_PACKAGE_XLIB_LIBXT),y)
--LINKS_CONF_OPTS += --with-x
-+LINKS_CONF_OPTS += \
-+	--with-x \
-+	--x-includes=$(STAGING_DIR)/usr/include \
-+	--x-libraries=$(STAGING_DIR)/usr/lib
- LINKS_DEPENDENCIES += xlib_libXt
- else
- LINKS_CONF_OPTS += --without-x
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+index 8d34ee2d48..b20ab0dcf4 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+@@ -1,3 +1,3 @@
+ # Locally computed after checking signature
+-sha256 950e8e15c58e539761255e140dd3678dd2477fa432a5f2b804e53821bdc02535  dovecot-2.3-pigeonhole-0.5.2.tar.gz
++sha256 e02f2741c05f9e2af1c5f46da35efb74997f9d4b941ba68936206d310ddf2622  dovecot-2.3-pigeonhole-0.5.3.tar.gz
+ sha256 fc9e9522216f2a9a28b31300e3c73c1df56acc27dfae951bf516e7995366b51a  COPYING
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+index f78b1acccc..2647426e36 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOVECOT_PIGEONHOLE_VERSION = 0.5.2
++DOVECOT_PIGEONHOLE_VERSION = 0.5.3
+ DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.3-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
+ DOVECOT_PIGEONHOLE_SITE = https://pigeonhole.dovecot.org/releases/2.3
+ DOVECOT_PIGEONHOLE_LICENSE = LGPL-2.1
 -- 
-2.11.0
+2.19.0
