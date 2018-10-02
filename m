@@ -1,113 +1,67 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue,  2 Oct 2018 22:02:23 +0200
-Subject: [Buildroot] [PATCH v1] crda: bump version to 4.14
-Message-ID: <20181002200223.17592-1-ps.report@gmx.net>
+Date: Tue,  2 Oct 2018 22:05:02 +0200
+Subject: [Buildroot] [PATCH v1 2/2] wireless-regdb: install crda files only
+ if used
+In-Reply-To: <20181002200502.19372-1-ps.report@gmx.net>
+References: <20181002200502.19372-1-ps.report@gmx.net>
+Message-ID: <20181002200502.19372-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- changed download location
-- rebased 0001-crda-support-python-3-in-utils-key2pub.py.patch
-
-Changes since 3.18:
-- 2018-01-05	Update gitignore
-- 2018-01-05	crda: Fix error: `keys? defined but not used
+Since linux-4.15 the kernel supports loading the files
+regulatory.db/regulatory.db.p7s directly from the /lib/firmware
+directory, for earlier versions the crda helper application
+is needed.
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- ...-support-python-3-in-utils-key2pub.py.patch | 18 ++++++++++--------
- package/crda/crda.hash                         |  4 ++--
- package/crda/crda.mk                           |  6 +++---
- 3 files changed, 15 insertions(+), 13 deletions(-)
+ package/wireless-regdb/Config.in         | 7 ++++++-
+ package/wireless-regdb/wireless-regdb.mk | 8 +++++++-
+ 2 files changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/package/crda/0001-crda-support-python-3-in-utils-key2pub.py.patch b/package/crda/0001-crda-support-python-3-in-utils-key2pub.py.patch
-index 99eb11cba7..fb46d58ed2 100644
---- a/package/crda/0001-crda-support-python-3-in-utils-key2pub.py.patch
-+++ b/package/crda/0001-crda-support-python-3-in-utils-key2pub.py.patch
-@@ -1,7 +1,7 @@
--From 797f2836c48f9ba2446629ae4b6867ca1a5ea512 Mon Sep 17 00:00:00 2001
-+From 4c346aa9e816bddfedc8ac99809fd1ed91bfc8ee Mon Sep 17 00:00:00 2001
- From: Taahir Ahmed <ahmed.taahir@gmail.com>
- Date: Wed, 30 Mar 2016 11:23:54 -0300
--Subject: [PATCH 1/2] crda: support python 3 in utils/key2pub.py
-+Subject: [PATCH] crda: support python 3 in utils/key2pub.py
+diff --git a/package/wireless-regdb/Config.in b/package/wireless-regdb/Config.in
+index 0c9896deb9..ff40495029 100644
+--- a/package/wireless-regdb/Config.in
++++ b/package/wireless-regdb/Config.in
+@@ -3,7 +3,12 @@ config BR2_PACKAGE_WIRELESS_REGDB
+ 	help
+ 	  Wireless regulatory database.
  
- utils/key2pub.py can now be run under either python 2.7 or python 3.x.
- This required some minor syntactical changes as well as switching from
-@@ -18,16 +18,18 @@ fixed:
- [Gustavo: don't call /utils/key2pub.py since that doesn't compute]
+-	  Wireless regulatory database for CRDA. The database lists the
++	  Wireless regulatory database. The database lists the
+ 	  allowed radio frequencies for each local jurisdiction.
  
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+[Rebased against crda-4.14]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- ---
- Status: submitted upstream by author but not (yet) accepted
- URL: http://www.spinics.net/lists/linux-wireless/msg138936.html
--
-+---
-  Makefile         |   2 +-
-- utils/key2pub.py | 146 ++++++++++++++++++++++++++++---------------------------
-+ utils/key2pub.py | 146 ++++++++++++++++++++++++-----------------------
-  2 files changed, 75 insertions(+), 73 deletions(-)
++	  Since linux-4.15 the kernel supports loading the files
++	  regulatory.db/regulatory.db.p7s directly from the /lib/firmware
++	  directory, for earlier versions the crda helper application
++	  is needed.
++
+ 	  https://wireless.wiki.kernel.org/en/developers/regulatory/wireless-regdb
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+index fcbba055ac..9c899f973b 100644
+--- a/package/wireless-regdb/wireless-regdb.mk
++++ b/package/wireless-regdb/wireless-regdb.mk
+@@ -10,11 +10,17 @@ WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
+ WIRELESS_REGDB_LICENSE = ISC
+ WIRELESS_REGDB_LICENSE_FILES = LICENSE
  
- diff --git a/Makefile b/Makefile
--index 1f25509..523a96e 100644
-+index a3ead30..8da38d0 100644
- --- a/Makefile
- +++ b/Makefile
- @@ -112,7 +112,7 @@ $(REG_BIN):
-@@ -40,7 +42,7 @@ index 1f25509..523a96e 100644
-  $(LIBREG): regdb.h reglib.h reglib.c
-  	$(NQ) '  CC  ' $@
- diff --git a/utils/key2pub.py b/utils/key2pub.py
--index 3e84cd2..c76cbbb 100755
-+index 9bb04cd..9f92ebd 100755
- --- a/utils/key2pub.py
- +++ b/utils/key2pub.py
- @@ -1,126 +1,128 @@
-@@ -223,7 +225,7 @@ index 3e84cd2..c76cbbb 100755
- +	.n = _n, .len_n = sizeof(_n), \\
-  }
-  
-- static const struct key_params keys[] = {
-+ static const struct key_params __attribute__ ((unused)) keys[] = {
-  ''')
- -    for n in xrange(n + 1):
- -        output.write('	KEYS(e_%d, n_%d),\n' % (n, n))
-@@ -267,5 +269,5 @@ index 3e84cd2..c76cbbb 100755
-  
-  modes[mode][1](output, idx - 1)
- -- 
--2.7.3
-+2.18.0
- 
-diff --git a/package/crda/crda.hash b/package/crda/crda.hash
-index 45b9d20407..edec55a019 100644
---- a/package/crda/crda.hash
-+++ b/package/crda/crda.hash
-@@ -1,2 +1,2 @@
--# From https://www.kernel.org/pub/software/network/crda/sha256sums.asc
--sha256	43fcb9679f8b75ed87ad10944a506292def13e4afb194afa7aa921b01e8ecdbf	crda-3.18.tar.xz
-+# Locally computed
-+sha256 5a8f35bb8b27474f466b0e75d451ba917433d8aab1889678a64d9c4e72a8b8c2 crda-4.14.tar.gz
-diff --git a/package/crda/crda.mk b/package/crda/crda.mk
-index df879f68bb..ab50030126 100644
---- a/package/crda/crda.mk
-+++ b/package/crda/crda.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--CRDA_VERSION = 3.18
--CRDA_SOURCE = crda-$(CRDA_VERSION).tar.xz
--CRDA_SITE = $(BR2_KERNEL_MIRROR)/software/network/crda
-+CRDA_VERSION = 4.14
-+CRDA_SOURCE = crda-$(CRDA_VERSION).tar.gz
-+CRDA_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/crda.git/snapshot
- CRDA_DEPENDENCIES = host-pkgconf host-python-pycrypto libnl libgcrypt
- CRDA_LICENSE = ISC
- CRDA_LICENSE_FILES = LICENSE
+-define WIRELESS_REGDB_INSTALL_TARGET_CMDS
++ifeq ($(BR2_PACKAGE_CRDA),y)
++define  WIRELESS_REGDB_INSTALL_CRDA_TARGET_CMDS
+ 	$(INSTALL) -m 644 -D -T $(@D)/regulatory.bin \
+ 		$(TARGET_DIR)/usr/lib/crda/regulatory.bin
+ 	$(INSTALL) -m 644 -D -T $(@D)/sforshee.key.pub.pem \
+ 		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/sforshee.key.pub.pem
++endef
++endif
++
++define WIRELESS_REGDB_INSTALL_TARGET_CMDS
++	$(WIRELESS_REGDB_INSTALL_CRDA_TARGET_CMDS)
+ 	$(INSTALL) -m 644 -D -T $(@D)/regulatory.db \
+ 		$(TARGET_DIR)/lib/firmware/regulatory.db
+ 	$(INSTALL) -m 644 -D -T $(@D)/regulatory.db.p7s \
 -- 
 2.19.0
