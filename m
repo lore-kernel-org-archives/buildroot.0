@@ -1,95 +1,36 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 2 Oct 2018 23:14:11 +0200
-Subject: [Buildroot] PHP7.0-FPM Session
-In-Reply-To: <BL2PR15MB1057C3B66260ECCD5DF119A0EDEE0@BL2PR15MB1057.namprd15.prod.outlook.com>
-References: <BL2PR15MB1057C3B66260ECCD5DF119A0EDEE0@BL2PR15MB1057.namprd15.prod.outlook.com>
-Message-ID: <e84a0671-3d8d-f834-78bc-415d1dd0a0ac@mind.be>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue,  2 Oct 2018 23:16:35 +0200
+Subject: [Buildroot] [PATCH v1 1/3] qt5connectivity: add license files hashes
+Message-ID: <20181002211637.2356-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/qt5/qt5connectivity/qt5connectivity.hash | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-
-On 30/09/2018 17:15, Tony Fuller wrote:
-> Hello All,
-> 
-> I am having a strange problem with php7.0-fpm and session management.
-> After several failed iterations of trying to install NextCloud server
-> on a busybox rootfs I finally narrowed down the problem to PHP session
-> management.
-> 
-> I've tried to eliminate my web server as the problem and so I generated
-> a small php snippet that checks php's session_status() return value and
-> I have the same behavior on Apache + php module (which doesn't directly
-> interface with /var/run/php-fpm.sock) and (Nginx which does communicate
-> using /var/run/php-fpm.sock). In both webservers, session_status()
-> *always* returns PHP_SESSION_NONE.
-
- At a risk of stating the obvious: you *do* have BR2_PACKAGE_PHP_EXT_SESSION
-enabled?
-
- If you do, it is possible that there is some hidden runtime dependency on
-something else. It would be nice to find that. So if you could just enable all
-PHP options and then disable/rebuild/test until you find the one that is needed,
-that would be nice.
-
- If you *do* have all PHP options enabled, then it's something else and it will
-need more debugging... You might try your luck on the php mailing list, perhaps
-someone there has an idea that allows you to shortcut to the culprit.
-
- Regards,
- Arnout
-
-> 
-> I can see sess_* files created in /tmp. I've changed the location to
-> /var/lib/php/session (emulating debian style configuration). I've
-> changed the php-fpm daemon to run as www-data (as well as Apache and
-> Nginx). I've even gone so far as to chmod -R 777 / (and fixing up
-> /root/.ssh and /etc/ssh folders). 
-> 
-> Pulling the Debian Stretch rootfs that docker uses and installing all
-> above requirements yields a fully working NextCloud server instance
-> (under chroot) so I'm at a total loss. I'm working on a raspberry pi
-> currently but the actual target is a PowerPC 32bit processor which
-> Debian dropped support which is what brought me to buildroot in the
-> first place.
-> 
-> Any thoughts are welcome and appreciated.
-> 
-> Here's the simple testing script:
-> # cat sessiontest.php 
-> <?php
-> echo(session_status());
-> if (session_status() == PHP_SESSION_NONE) {
->     echo("session_status is NONE");
->     #$previous_name = session_name("WebsiteID");
->     #echo "The previous session name was $previous_name<br />";
->     session_start();
->     echo("Now session_status is" . session_status());
-> }
-> else
-> {
->     echo("There is some type of session");
->     setcookie(session_name(),session_id(),time()+$lifetime);
-> }
-> 
-> $_SESSION["secretword"] = "ABC123" ;
-> $_SESSION["theme"] = "purple" ; 
-> 
-> ?>
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
+diff --git a/package/qt5/qt5connectivity/qt5connectivity.hash b/package/qt5/qt5connectivity/qt5connectivity.hash
+index 96f22db60a..e789ce0b4f 100644
+--- a/package/qt5/qt5connectivity/qt5connectivity.hash
++++ b/package/qt5/qt5connectivity/qt5connectivity.hash
+@@ -3,3 +3,14 @@ sha256 fa406e3d63fa4a2acc8ecae6d110f20c766f19a21c7061a12f3c167deb07ccde qtconnec
+ 
+ # Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.2/submodules/qtconnectivity-everywhere-src-5.11.2.tar.xz.mirrorlist
+ sha256 58901bbd14d3bc472f27fe305fd8dc33cffbd10da83616e9691c04c3290d42c5 qtconnectivity-everywhere-src-5.11.2.tar.xz
++
++# Hashes for license files:
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
++sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
++sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
++sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
++sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPLv2
++sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
++sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8 LICENSE.LGPLv21
++sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.19.0
