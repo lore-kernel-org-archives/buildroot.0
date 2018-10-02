@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 2 Oct 2018 23:08:07 +0200
-Subject: [Buildroot] [PATCH 1/1] minizip: needs __register_atfork
-In-Reply-To: <20181002191632.9615-1-fontaine.fabrice@gmail.com>
-References: <20181002191632.9615-1-fontaine.fabrice@gmail.com>
-Message-ID: <84533871-7402-7370-665c-17f9fe60a227@mind.be>
+Date: Tue, 2 Oct 2018 23:14:11 +0200
+Subject: [Buildroot] PHP7.0-FPM Session
+In-Reply-To: <BL2PR15MB1057C3B66260ECCD5DF119A0EDEE0@BL2PR15MB1057.namprd15.prod.outlook.com>
+References: <BL2PR15MB1057C3B66260ECCD5DF119A0EDEE0@BL2PR15MB1057.namprd15.prod.outlook.com>
+Message-ID: <e84a0671-3d8d-f834-78bc-415d1dd0a0ac@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,58 +12,78 @@ To: buildroot@busybox.net
 
 
 
-On 02/10/2018 21:16, Fabrice Fontaine wrote:
-> The following error is raised:
+On 30/09/2018 17:15, Tony Fuller wrote:
+> Hello All,
 > 
-> [100%] Linking C executable minizip
-> /home/peko/autobuild/instance-0/output/host/m68k-buildroot-uclinux-uclibc/sysroot/usr/lib/libbsd.a(arc4random.o): In function `_rs_init.part.1':
-> arc4random.c:(.text+0xaa): undefined reference to `__register_atfork'
-> collect2: error: ld returned 1 exit status
+> I am having a strange problem with php7.0-fpm and session management.
+> After several failed iterations of trying to install NextCloud server
+> on a busybox rootfs I finally narrowed down the problem to PHP session
+> management.
 > 
-> As specified in openssl/Config.in, uClibc on noMMU doesn't provide
-> __register_atfork() so add this dependency on minizip
-> 
-> It should be noted that technically, this dependency comes from libbsd.
-> Indeed _ARC4_ATFORK is defined to be __register_atfork if __GLIBC__ is
-> defined and to pthread_atfork otherwise (see src/arc4random_linux.h)
-> 
-> So perhaps this dependency should be added to libbsd and to hcitop from
-> bluez-alsa (netcat-openbsd depends on glibc)
+> I've tried to eliminate my web server as the problem and so I generated
+> a small php snippet that checks php's session_status() return value and
+> I have the same behavior on Apache + php module (which doesn't directly
+> interface with /var/run/php-fpm.sock) and (Nginx which does communicate
+> using /var/run/php-fpm.sock). In both webservers, session_status()
+> *always* returns PHP_SESSION_NONE.
 
- Indeed, this dependency should be added to libbsd (and thus propagated to minizip).
+ At a risk of stating the obvious: you *do* have BR2_PACKAGE_PHP_EXT_SESSION
+enabled?
 
- However, perhaps it's better to just fix libbsd. Calling an internal function
-of glibc is never a good idea. Using the standard pthread_atfork unconditionally
-is a lot safer, and pthread_atfork *is* supported by uClibc on noMMU targets.
+ If you do, it is possible that there is some hidden runtime dependency on
+something else. It would be nice to find that. So if you could just enable all
+PHP options and then disable/rebuild/test until you find the one that is needed,
+that would be nice.
 
- Note BTW that hcitop depends on MMU, and netcat-openbsd depends on glibc, so
-the dependency wouldn't have to be propagated to those two.
+ If you *do* have all PHP options enabled, then it's something else and it will
+need more debugging... You might try your luck on the php mailing list, perhaps
+someone there has an idea that allows you to shortcut to the culprit.
 
  Regards,
  Arnout
 
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/df2dcbdceaa01a2ae37bf09140e4dbef0a5b9489
+> I can see sess_* files created in /tmp. I've changed the location to
+> /var/lib/php/session (emulating debian style configuration). I've
+> changed the php-fpm daemon to run as www-data (as well as Apache and
+> Nginx). I've even gone so far as to chmod -R 777 / (and fixing up
+> /root/.ssh and /etc/ssh folders). 
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/minizip/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
+> Pulling the Debian Stretch rootfs that docker uses and installing all
+> above requirements yields a fully working NextCloud server instance
+> (under chroot) so I'm at a total loss. I'm working on a raspberry pi
+> currently but the actual target is a PowerPC 32bit processor which
+> Debian dropped support which is what brought me to buildroot in the
+> first place.
 > 
-> diff --git a/package/minizip/Config.in b/package/minizip/Config.in
-> index 68fa1d7118..ed54e3b651 100644
-> --- a/package/minizip/Config.in
-> +++ b/package/minizip/Config.in
-> @@ -1,6 +1,8 @@
->  config BR2_PACKAGE_MINIZIP
->  	bool "minizip"
->  	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
-> +	# uClibc on noMMU doesn't provide __register_atfork()
-> +	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU)
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # libbsd
->  	depends on BR2_USE_WCHAR # libbsd
->  	select BR2_PACKAGE_LIBBSD
+> Any thoughts are welcome and appreciated.
+> 
+> Here's the simple testing script:
+> # cat sessiontest.php 
+> <?php
+> echo(session_status());
+> if (session_status() == PHP_SESSION_NONE) {
+>     echo("session_status is NONE");
+>     #$previous_name = session_name("WebsiteID");
+>     #echo "The previous session name was $previous_name<br />";
+>     session_start();
+>     echo("Now session_status is" . session_status());
+> }
+> else
+> {
+>     echo("There is some type of session");
+>     setcookie(session_name(),session_id(),time()+$lifetime);
+> }
+> 
+> $_SESSION["secretword"] = "ABC123" ;
+> $_SESSION["theme"] = "purple" ; 
+> 
+> ?>
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
 
 -- 
