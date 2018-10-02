@@ -1,40 +1,55 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue,  2 Oct 2018 23:16:36 +0200
-Subject: [Buildroot] [PATCH v1 2/3] qt5serialbus: fix 5.6.3 license file
- hashes
-In-Reply-To: <20181002211637.2356-1-ps.report@gmx.net>
-References: <20181002211637.2356-1-ps.report@gmx.net>
-Message-ID: <20181002211637.2356-2-ps.report@gmx.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 2 Oct 2018 23:17:12 +0200
+Subject: [Buildroot] [PATCH 1/2] nilfs-utils: no comment if BR2_USE_MMU
+ is true
+In-Reply-To: <878t3nw3mu.fsf@dell.be.48ers.dk>
+References: <20180926182045.28484-1-fontaine.fabrice@gmail.com>
+ <878t3nw3mu.fsf@dell.be.48ers.dk>
+Message-ID: <8c904ae4-62eb-4006-a71e-9724fa91207e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes [1]:
 
-  ERROR: LICENSE.FDL has wrong sha256 hash:
-  ERROR: expected: ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d
-  ERROR: got     : f827ad079686ba92cc94811e35492d0e8966f704008b6da9eeda0b659fb58a8d
 
-[1] http://autobuild.buildroot.net/results/f8dba48bc1e71332f3983e78c40989e5f864abf3
+On 27/09/2018 14:01, Peter Korsgaard wrote:
+>>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+> 
+>  > Don't display comment if BR2_USE_MMU is true
+>  > Moreover, move BR2_USE_MMU dependency at the top of dependency list
+> 
+> I'm not sure if that is really any better. I don't think we have any
+> strong rules about this, but in lack of other rules I would say sort
+> alphabetically.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/qt5/qt5serialbus/5.6.3/qt5serialbus.hash | 5 +++++
- 1 file changed, 5 insertions(+)
- create mode 100644 package/qt5/qt5serialbus/5.6.3/qt5serialbus.hash
+ I thought we had a weak rule of:
 
-diff --git a/package/qt5/qt5serialbus/5.6.3/qt5serialbus.hash b/package/qt5/qt5serialbus/5.6.3/qt5serialbus.hash
-new file mode 100644
-index 0000000000..574fcc5294
---- /dev/null
-+++ b/package/qt5/qt5serialbus/5.6.3/qt5serialbus.hash
-@@ -0,0 +1,5 @@
-+# Hashes for license files:
-+sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPLv2
-+sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
-+sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
-+sha256 f827ad079686ba92cc94811e35492d0e8966f704008b6da9eeda0b659fb58a8d LICENSE.FDL
+ - first arch dependencies (i.e. where you have no choice);
+
+ - then toolchain dependencies (i.e. where you can enable them, and which need a
+comment);
+
+ - then package dependencies;
+
+ - then select.
+
+And alphabetical within each category.
+
+ Regards,
+ Arnout
+
+> 
+> But ok, I don't feel strongly about it.
+> 
+> Committed, thanks.
+> 
+
 -- 
-2.19.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
