@@ -1,46 +1,272 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Oct 2018 23:51:55 +0200
-Subject: [Buildroot] [PATCH] package/gcc: glibc >= 2.27 needs gcc >= 5
- on aarch64
-In-Reply-To: <20180915155413.17663-1-romain.naour@gmail.com> (Romain Naour's
- message of "Sat, 15 Sep 2018 17:54:13 +0200")
-References: <20180915155413.17663-1-romain.naour@gmail.com>
-Message-ID: <871s991gjo.fsf@dell.be.48ers.dk>
+From: Christian Stewart <christian@paral.in>
+Date: Mon,  1 Oct 2018 18:14:43 -0700
+Subject: [Buildroot] [PATCH v6 1/1] docker-engine: split docker-{cli, engine},
+ bump to v18.06.1-ce
+Message-ID: <20181002011443.2289-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+Docker upstream has split the Docker daemon and CLI into separate codebases:
 
- > With the following defconfig:
- > BR2_aarch64=y
- > BR2_BINUTILS_VERSION_2_28_X=y
- > BR2_GCC_VERSION_4_9_X=y
- > BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ - github.com/docker/engine: daemon, "dockerd" binary
+ - github.com/docker/cli: "docker" command line interface
 
- > The build fail with this error:
- > In file included from ../sysdeps/ieee754/flt-32/math_config.h:23:0,
- >                  from ../sysdeps/ieee754/flt-32/e_expf.c:29:
- > ../sysdeps/aarch64/fpu/math_private.h: In function 'roundtoint':
- > ../sysdeps/aarch64/fpu/math_private.h:311:3: error: implicit declaration of function 'vrndn_f64' [-Werror=implicit-function-declaration]
- >    return vget_lane_f64 (vrndn_f64 (vld1_f64 (&x)), 0);
- >    ^
- > cc1: all warnings being treated as errors
+This commit splits the docker-engine package into docker-engine and docker-cli.
+Conveniently, the Docker project has begun maintaining two separate
+release-tagged repositories for the CLI and daemon as of v18.06-ce-rc1. Previous
+versions were tagged in a common "docker-ce" repository which makes compilation
+awkward for Buildroot, especially due to some limitations in the new Go package
+infrastructure.
 
- > vrndn_f64 function has been introduced in glibc code since version 2.27 [1].
- > So we can't build a glibc based toolchain with gcc 4.9 anymore.
+Legacy flag is added to cover the static client use case:
 
- > Add a new dependency in the toolchain infra to avoid selecting
- > glibc toolchain using gcc 4.9.
+ - BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT=y -> BR2_PACKAGE_DOCKER_CLI_STATIC
 
- > [1] https://sourceware.org/git/?p=glibc.git;a=commit;h=72aa623345ada1276ed89dbc00fdff9639cb8eaf
+Docker repositories "engine" and "cli" recently started tagging releases as
+recent as v18.06.1, so we pull the latest stable tagged release v18.06.1.
 
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
- > Cc: Arnout Vandecappelle <arnout@mind.be>
+The CLI is no longer automatically included with the engine. Users will need to
+select BR2_PACKAGE_DOCKER_CLI to produce a both docker and dockerd target
+binaries.
 
-Committed to 2018.05.x and 2018.08.x, thanks.
+Signed-off-by: Christian Stewart <christian@paral.in>
 
+---
+
+Changes since v4:
+
+ - Use latest stable release v18.06.1
+
+Changes since v5:
+
+ - Clarify commit message
+ - Move legacy option to 2018.11 segment and clarify helptext
+ - Daemon no longer automatically selects CLI
+ - Remove duplicate journald build tag merge artifact in docker-engine
+ - Remove unnecessary IAMSTATIC declaration
+ - Remove unnecessary containerd -> docker-containerd link
+---
+ Config.in.legacy                         |  9 +++++++++
+ package/Config.in                        |  1 +
+ package/docker-cli/Config.in             | 25 +++++++++++++++++++++++++
+ package/docker-cli/docker-cli.hash       |  2 ++
+ package/docker-cli/docker-cli.mk         | 29 +++++++++++++++++++++++++++++
+ package/docker-engine/Config.in          |  6 ------
+ package/docker-engine/docker-engine.hash |  2 +-
+ package/docker-engine/docker-engine.mk   | 25 +++++--------------------
+ 8 files changed, 72 insertions(+), 27 deletions(-)
+ create mode 100644 package/docker-cli/Config.in
+ create mode 100644 package/docker-cli/docker-cli.hash
+ create mode 100644 package/docker-cli/docker-cli.mk
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 20e2d5c8c6..0ac257d43f 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -151,6 +151,15 @@ config BR2_PACKAGE_BOOTUTILS
+ 	help
+ 	  The bootutils package was removed.
+ 
++config BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT
++	bool "docker-engine static client option renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_DOCKER_CLI_STATIC
++	help
++	  BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT has been renamed to
++	  BR2_PACKAGE_DOCKER_CLI_STATIC, following the package split of
++	  docker-engine and docker-cli.
++
+ config BR2_PACKAGE_EXPEDITE
+ 	bool "expedite package has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index 2e163f1852..721992a16e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2057,6 +2057,7 @@ menu "System tools"
+ 	source "package/dcron/Config.in"
+ 	source "package/ddrescue/Config.in"
+ 	source "package/debianutils/Config.in"
++	source "package/docker-cli/Config.in"
+ 	source "package/docker-compose/Config.in"
+ 	source "package/docker-containerd/Config.in"
+ 	source "package/docker-engine/Config.in"
+diff --git a/package/docker-cli/Config.in b/package/docker-cli/Config.in
+new file mode 100644
+index 0000000000..82c35c453d
+--- /dev/null
++++ b/package/docker-cli/Config.in
+@@ -0,0 +1,25 @@
++config BR2_PACKAGE_DOCKER_CLI
++	bool "docker-cli"
++	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  Docker is a platform to build, ship,
++	  and run applications as lightweight containers.
++
++	  https://github.com/docker/cli
++
++if BR2_PACKAGE_DOCKER_CLI
++
++config BR2_PACKAGE_DOCKER_CLI_STATIC
++	bool "build static client"
++	depends on !BR2_STATIC_LIBS
++	help
++	  Build a static docker client.
++
++endif
++
++comment "docker-cli needs a toolchain w/ threads"
++	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
+new file mode 100644
+index 0000000000..50a81792d0
+--- /dev/null
++++ b/package/docker-cli/docker-cli.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	47eda354afc199693aa338f5b2bb87e4511354c02561ddc6520a06d169921bdf	docker-cli-v18.06.1-ce.tar.gz
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+new file mode 100644
+index 0000000000..cb02c9a7b3
+--- /dev/null
++++ b/package/docker-cli/docker-cli.mk
+@@ -0,0 +1,29 @@
++###############################################################################
++#
++# docker-cli
++#
++################################################################################
++
++DOCKER_CLI_VERSION = v18.06.1-ce
++DOCKER_CLI_SITE = $(call github,docker,cli,$(DOCKER_CLI_VERSION))
++DOCKER_CLI_WORKSPACE = gopath
++
++DOCKER_CLI_LICENSE = Apache-2.0
++DOCKER_CLI_LICENSE_FILES = LICENSE
++
++DOCKER_CLI_DEPENDENCIES = host-go host-pkgconf
++
++DOCKER_CLI_LDFLAGS = \
++	-X github.com/docker/cli/cli.GitCommit=$(DOCKER_CLI_VERSION) \
++	-X github.com/docker/cli/cli.Version=$(DOCKER_CLI_VERSION)
++
++ifeq ($(BR2_PACKAGE_DOCKER_CLI_STATIC),y)
++DOCKER_CLI_LDFLAGS += -extldflags '-static'
++endif
++
++DOCKER_CLI_TAGS = cgo autogen
++DOCKER_CLI_BUILD_TARGETS = cmd/docker
++
++DOCKER_CLI_INSTALL_BINS = $(notdir $(DOCKER_CLI_BUILD_TARGETS))
++
++$(eval $(golang-package))
+diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
+index 8feb11b48c..11f17820a7 100644
+--- a/package/docker-engine/Config.in
++++ b/package/docker-engine/Config.in
+@@ -26,12 +26,6 @@ config BR2_PACKAGE_DOCKER_ENGINE_DAEMON
+ config BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL
+ 	bool "build experimental features"
+ 
+-config BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT
+-	bool "build static client"
+-	depends on !BR2_STATIC_LIBS
+-	help
+-	  Build a static docker client.
+-
+ if BR2_PACKAGE_DOCKER_ENGINE_DAEMON
+ 
+ config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index 6c0ed338a5..d5167a41a0 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	4716df117d867b82ddab2e82395cd40aa3d0925a689eedcec8919729e4c9f121	docker-engine-v17.05.0-ce.tar.gz
++sha256	df4a3d2100d9b55c36288e721277dc61e4ceded5738423b09fe0d5ed42369f54	docker-engine-v18.06.1-ce.tar.gz
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index ba84b4cf0a..7023d40f58 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -4,25 +4,21 @@
+ #
+ ################################################################################
+ 
+-DOCKER_ENGINE_VERSION = v17.05.0-ce
+-DOCKER_ENGINE_COMMIT = 89658bed64c2a8fe05a978e5b87dbec409d57a0f
+-DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
++DOCKER_ENGINE_VERSION = v18.06.1-ce
++DOCKER_ENGINE_SITE = $(call github,docker,engine,$(DOCKER_ENGINE_VERSION))
+ 
+ DOCKER_ENGINE_LICENSE = Apache-2.0
+ DOCKER_ENGINE_LICENSE_FILES = LICENSE
+ 
+ DOCKER_ENGINE_DEPENDENCIES = host-go host-pkgconf
++DOCKER_ENGINE_SRC_SUBDIR = github.com/docker/docker
+ 
+ DOCKER_ENGINE_LDFLAGS = \
+ 	-X main.GitCommit=$(DOCKER_ENGINE_VERSION) \
+ 	-X main.Version=$(DOCKER_ENGINE_VERSION)
+ 
+-ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT),y)
+-DOCKER_ENGINE_LDFLAGS += -extldflags '-static'
+-endif
+-
+ DOCKER_ENGINE_TAGS = cgo exclude_graphdriver_zfs autogen
+-DOCKER_ENGINE_BUILD_TARGETS = cmd/docker
++DOCKER_ENGINE_BUILD_TARGETS = cmd/dockerd
+ 
+ ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+ DOCKER_ENGINE_TAGS += seccomp
+@@ -30,15 +26,9 @@ DOCKER_ENGINE_DEPENDENCIES += libseccomp
+ endif
+ 
+ ifeq ($(BR2_INIT_SYSTEMD),y)
+-DOCKER_ENGINE_TAGS += journald
+ DOCKER_ENGINE_DEPENDENCIES += systemd
++DOCKER_ENGINE_TAGS += systemd journald
+ endif
+-
+-ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
+-DOCKER_ENGINE_TAGS += daemon
+-DOCKER_ENGINE_BUILD_TARGETS += cmd/dockerd
+-endif
+-
+ ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL),y)
+ DOCKER_ENGINE_TAGS += experimental
+ endif
+@@ -65,7 +55,6 @@ DOCKER_ENGINE_INSTALL_BINS = $(notdir $(DOCKER_ENGINE_BUILD_TARGETS))
+ 
+ define DOCKER_ENGINE_RUN_AUTOGEN
+ 	cd $(@D) && \
+-		GITCOMMIT="$$(echo $(DOCKER_ENGINE_COMMIT) | head -c7)" \
+ 		BUILDTIME="$$(date)" \
+ 		VERSION="$(patsubst v%,%,$(DOCKER_ENGINE_VERSION))" \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" $(TARGET_MAKE_ENV) \
+@@ -74,8 +63,6 @@ endef
+ 
+ DOCKER_ENGINE_POST_CONFIGURE_HOOKS += DOCKER_ENGINE_RUN_AUTOGEN
+ 
+-ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
+-
+ define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/docker.service
+@@ -90,6 +77,4 @@ define DOCKER_ENGINE_USERS
+ 	- - docker -1 * - - - Docker Application Container Framework
+ endef
+ 
+-endif
+-
+ $(eval $(golang-package))
 -- 
-Bye, Peter Korsgaard
+2.16.4
