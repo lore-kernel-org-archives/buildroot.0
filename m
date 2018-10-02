@@ -1,11 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 2 Oct 2018 23:17:12 +0200
-Subject: [Buildroot] [PATCH 1/2] nilfs-utils: no comment if BR2_USE_MMU
- is true
-In-Reply-To: <878t3nw3mu.fsf@dell.be.48ers.dk>
-References: <20180926182045.28484-1-fontaine.fabrice@gmail.com>
- <878t3nw3mu.fsf@dell.be.48ers.dk>
-Message-ID: <8c904ae4-62eb-4006-a71e-9724fa91207e@mind.be>
+Date: Tue, 2 Oct 2018 23:28:08 +0200
+Subject: [Buildroot] [PATCH 5/5] webkitgtk: explicitly set
+ USE_GSTREAMER_GL build option
+In-Reply-To: <20180927154026.GF16720@momiji>
+References: <20180922235333.85642-1-aperez@igalia.com>
+ <20180922235333.85642-6-aperez@igalia.com> <20180925225702.1b1ff215@windsurf>
+ <20180927154026.GF16720@momiji>
+Message-ID: <b8ac5974-c4b3-56e4-7059-a86ca13f7999@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,36 +15,66 @@ To: buildroot@busybox.net
 
 
 
-On 27/09/2018 14:01, Peter Korsgaard wrote:
->>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+On 27/09/2018 14:40, Adrian Perez de Castro wrote:
+> Hi Thomas,
 > 
->  > Don't display comment if BR2_USE_MMU is true
->  > Moreover, move BR2_USE_MMU dependency at the top of dependency list
+> On Tue, 25 Sep 2018 22:57:02 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+>> Hello,
+>>
+>> On Sun, 23 Sep 2018 02:53:33 +0300, Adrian Perez de Castro wrote:
+>>> Make the USE_GSTREAMER_GL CMake build option depend on
+>>> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL being enabled. This
+>>> allows building WebKitGTK+ for targets where GL/GLES is
+>>> available but either GStreamer-GL is disabled or cannot be
+>>> built.
+>>
+>> What is GStreamer-GL? How is it possible to have GStreamer-GL
+>> disabled, but BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL enabled?
 > 
-> I'm not sure if that is really any better. I don't think we have any
-> strong rules about this, but in lack of other rules I would say sort
-> alphabetically.
+> GStreamer-GL contains components which can be plugged into GStreamer media
+> pipelines. For example, one of the elements provided will render video to
+> GL/GLES textures; and WebKitGTK+ can optionally use them to composite the
+> textures with video frames coming from GStreamer directly using the GPU
+> There are also fall-back code paths in WebKit which do not require the
+> GStreamer-GL components ? and that's why is possible to build WebKitGTK+
+> anyway even if they are not available.
+> 
+> This tries to cover cases in which GL/GLES is available, but GStreamer-GL
+> is not available. While it's rare, this can happen in cases where a GL/GLES
+> driver does not support window surfaces: this is needed by GStreamer-GL,
+> but WebKit can be coerced into painting offscreen or using FBOs.
 
- I thought we had a weak rule of:
+ Don't you simply mean: this covers the case where GL/GLES is available (so
+-DENABLE_OPENGL=ON gets passed), which makes the webkitgtk build system assume
+Gstreamer-GL is available, while actually it is not?
 
- - first arch dependencies (i.e. where you have no choice);
+ Don't you actually need to add gst1-plugins-bad to the _DEPENDENCIES then?
 
- - then toolchain dependencies (i.e. where you can enable them, and which need a
-comment);
+ Do you have some autobuild failure or a minimal defconfig that shows the problem?
 
- - then package dependencies;
+ Just to be sure: does it really need to depend on
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL and not just
+BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL?
 
- - then select.
-
-And alphabetical within each category.
 
  Regards,
  Arnout
 
+
 > 
-> But ok, I don't feel strongly about it.
+> I hope this has not gone too much into details, and helps to understand
+> why GStreamer-GL is not selected unconditionally by WebKitGTK+.
 > 
-> Committed, thanks.
+> Cheers,
+> 
+> 
+> -Adri?n
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
 
 -- 
