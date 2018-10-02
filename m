@@ -1,296 +1,93 @@
-From: Matthew Weber <matt@thewebers.ws>
-Date: Mon, 1 Oct 2018 21:42:59 -0500
-Subject: [Buildroot] [PATCH v6 1/1] docker-engine: split docker-{cli,
- engine}, bump to v18.06.1-ce
-In-Reply-To: <20181002011443.2289-1-christian@paral.in>
-References: <20181002011443.2289-1-christian@paral.in>
-Message-ID: <CAFt09wM7tjLiayhvuisp16LHsX97di5b8weBh3MuWpCGt90R6w@mail.gmail.com>
+From: Denis OSTERLAND <denis.osterland@diehl.com>
+Date: Tue, 2 Oct 2018 05:38:19 +0000
+Subject: [Buildroot] [PATCH] u-boot: add option to generate env image from
+ default env
+Message-ID: <20181002053526.11374-1-Denis.Osterland@diehl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Christian,
+From: Denis Osterland <Denis.Osterland@diehl.com>
 
+This patch adds support to extract compiled in default env
+via u-boots get_default_envs script and generate env image from it.
 
-On Mon, Oct 1, 2018 at 8:20 PM Christian Stewart <christian@paral.in> wrote:
->
-> Docker upstream has split the Docker daemon and CLI into separate codebases:
->
->  - github.com/docker/engine: daemon, "dockerd" binary
->  - github.com/docker/cli: "docker" command line interface
->
-> This commit splits the docker-engine package into docker-engine and docker-cli.
-> Conveniently, the Docker project has begun maintaining two separate
-> release-tagged repositories for the CLI and daemon as of v18.06-ce-rc1. Previous
-> versions were tagged in a common "docker-ce" repository which makes compilation
-> awkward for Buildroot, especially due to some limitations in the new Go package
-> infrastructure.
->
-> Legacy flag is added to cover the static client use case:
->
->  - BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT=y -> BR2_PACKAGE_DOCKER_CLI_STATIC
->
-> Docker repositories "engine" and "cli" recently started tagging releases as
-> recent as v18.06.1, so we pull the latest stable tagged release v18.06.1.
->
-> The CLI is no longer automatically included with the engine. Users will need to
-> select BR2_PACKAGE_DOCKER_CLI to produce a both docker and dockerd target
-> binaries.
+Signed-off-by: Denis Osterland <Denis.Osterland@diehl.com>
+---
+ boot/uboot/Config.in | 15 +++++++++++++++
+ boot/uboot/uboot.mk  |  6 +++++-
+ 2 files changed, 20 insertions(+), 1 deletion(-)
 
-Is this mature enough that a runtime test case for buildroot would make sense?
-
->
-> Signed-off-by: Christian Stewart <christian@paral.in>
->
-> ---
->
-> Changes since v4:
->
->  - Use latest stable release v18.06.1
->
-> Changes since v5:
->
->  - Clarify commit message
->  - Move legacy option to 2018.11 segment and clarify helptext
->  - Daemon no longer automatically selects CLI
->  - Remove duplicate journald build tag merge artifact in docker-engine
->  - Remove unnecessary IAMSTATIC declaration
->  - Remove unnecessary containerd -> docker-containerd link
-> ---
->  Config.in.legacy                         |  9 +++++++++
->  package/Config.in                        |  1 +
->  package/docker-cli/Config.in             | 25 +++++++++++++++++++++++++
->  package/docker-cli/docker-cli.hash       |  2 ++
->  package/docker-cli/docker-cli.mk         | 29 +++++++++++++++++++++++++++++
->  package/docker-engine/Config.in          |  6 ------
->  package/docker-engine/docker-engine.hash |  2 +-
->  package/docker-engine/docker-engine.mk   | 25 +++++--------------------
->  8 files changed, 72 insertions(+), 27 deletions(-)
->  create mode 100644 package/docker-cli/Config.in
->  create mode 100644 package/docker-cli/docker-cli.hash
->  create mode 100644 package/docker-cli/docker-cli.mk
->
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 20e2d5c8c6..0ac257d43f 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -151,6 +151,15 @@ config BR2_PACKAGE_BOOTUTILS
->         help
->           The bootutils package was removed.
->
-> +config BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT
-> +       bool "docker-engine static client option renamed"
-> +       select BR2_LEGACY
-> +       select BR2_PACKAGE_DOCKER_CLI_STATIC
-> +       help
-> +         BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT has been renamed to
-> +         BR2_PACKAGE_DOCKER_CLI_STATIC, following the package split of
-> +         docker-engine and docker-cli.
-> +
->  config BR2_PACKAGE_EXPEDITE
->         bool "expedite package has been removed"
->         select BR2_LEGACY
-> diff --git a/package/Config.in b/package/Config.in
-> index 2e163f1852..721992a16e 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -2057,6 +2057,7 @@ menu "System tools"
->         source "package/dcron/Config.in"
->         source "package/ddrescue/Config.in"
->         source "package/debianutils/Config.in"
-> +       source "package/docker-cli/Config.in"
->         source "package/docker-compose/Config.in"
->         source "package/docker-containerd/Config.in"
->         source "package/docker-engine/Config.in"
-> diff --git a/package/docker-cli/Config.in b/package/docker-cli/Config.in
-> new file mode 100644
-> index 0000000000..82c35c453d
-> --- /dev/null
-> +++ b/package/docker-cli/Config.in
-> @@ -0,0 +1,25 @@
-> +config BR2_PACKAGE_DOCKER_CLI
-> +       bool "docker-cli"
-> +       depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-> +       depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS
-> +       help
-> +         Docker is a platform to build, ship,
-> +         and run applications as lightweight containers.
-> +
-> +         https://github.com/docker/cli
-> +
-> +if BR2_PACKAGE_DOCKER_CLI
-> +
-> +config BR2_PACKAGE_DOCKER_CLI_STATIC
-> +       bool "build static client"
-> +       depends on !BR2_STATIC_LIBS
-> +       help
-> +         Build a static docker client.
-> +
-> +endif
-> +
-> +comment "docker-cli needs a toolchain w/ threads"
-> +       depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-> +       depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-> +       depends on !BR2_TOOLCHAIN_HAS_THREADS
-> diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
-> new file mode 100644
-> index 0000000000..50a81792d0
-> --- /dev/null
-> +++ b/package/docker-cli/docker-cli.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-> +sha256 47eda354afc199693aa338f5b2bb87e4511354c02561ddc6520a06d169921bdf        docker-cli-v18.06.1-ce.tar.gz
-
-License hash?
-
-> diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-> new file mode 100644
-> index 0000000000..cb02c9a7b3
-> --- /dev/null
-> +++ b/package/docker-cli/docker-cli.mk
-> @@ -0,0 +1,29 @@
-> +###############################################################################
-> +#
-> +# docker-cli
-> +#
-> +################################################################################
-> +
-> +DOCKER_CLI_VERSION = v18.06.1-ce
-> +DOCKER_CLI_SITE = $(call github,docker,cli,$(DOCKER_CLI_VERSION))
-> +DOCKER_CLI_WORKSPACE = gopath
-> +
-> +DOCKER_CLI_LICENSE = Apache-2.0
-> +DOCKER_CLI_LICENSE_FILES = LICENSE
-> +
-> +DOCKER_CLI_DEPENDENCIES = host-go host-pkgconf
-> +
-> +DOCKER_CLI_LDFLAGS = \
-> +       -X github.com/docker/cli/cli.GitCommit=$(DOCKER_CLI_VERSION) \
-> +       -X github.com/docker/cli/cli.Version=$(DOCKER_CLI_VERSION)
-> +
-> +ifeq ($(BR2_PACKAGE_DOCKER_CLI_STATIC),y)
-> +DOCKER_CLI_LDFLAGS += -extldflags '-static'
-> +endif
-> +
-> +DOCKER_CLI_TAGS = cgo autogen
-> +DOCKER_CLI_BUILD_TARGETS = cmd/docker
-> +
-> +DOCKER_CLI_INSTALL_BINS = $(notdir $(DOCKER_CLI_BUILD_TARGETS))
-> +
-> +$(eval $(golang-package))
-> diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-> index 8feb11b48c..11f17820a7 100644
-> --- a/package/docker-engine/Config.in
-> +++ b/package/docker-engine/Config.in
-> @@ -26,12 +26,6 @@ config BR2_PACKAGE_DOCKER_ENGINE_DAEMON
->  config BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL
->         bool "build experimental features"
->
-> -config BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT
-> -       bool "build static client"
-> -       depends on !BR2_STATIC_LIBS
-> -       help
-> -         Build a static docker client.
-> -
->  if BR2_PACKAGE_DOCKER_ENGINE_DAEMON
->
->  config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS
-> diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-> index 6c0ed338a5..d5167a41a0 100644
-> --- a/package/docker-engine/docker-engine.hash
-> +++ b/package/docker-engine/docker-engine.hash
-> @@ -1,2 +1,2 @@
->  # Locally calculated
-> -sha256 4716df117d867b82ddab2e82395cd40aa3d0925a689eedcec8919729e4c9f121        docker-engine-v17.05.0-ce.tar.gz
-> +sha256 df4a3d2100d9b55c36288e721277dc61e4ceded5738423b09fe0d5ed42369f54        docker-engine-v18.06.1-ce.tar.gz
-> diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-> index ba84b4cf0a..7023d40f58 100644
-> --- a/package/docker-engine/docker-engine.mk
-> +++ b/package/docker-engine/docker-engine.mk
-> @@ -4,25 +4,21 @@
->  #
->  ################################################################################
->
-> -DOCKER_ENGINE_VERSION = v17.05.0-ce
-> -DOCKER_ENGINE_COMMIT = 89658bed64c2a8fe05a978e5b87dbec409d57a0f
-> -DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
-> +DOCKER_ENGINE_VERSION = v18.06.1-ce
-> +DOCKER_ENGINE_SITE = $(call github,docker,engine,$(DOCKER_ENGINE_VERSION))
->
->  DOCKER_ENGINE_LICENSE = Apache-2.0
->  DOCKER_ENGINE_LICENSE_FILES = LICENSE
->
->  DOCKER_ENGINE_DEPENDENCIES = host-go host-pkgconf
-> +DOCKER_ENGINE_SRC_SUBDIR = github.com/docker/docker
->
->  DOCKER_ENGINE_LDFLAGS = \
->         -X main.GitCommit=$(DOCKER_ENGINE_VERSION) \
->         -X main.Version=$(DOCKER_ENGINE_VERSION)
->
-> -ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT),y)
-> -DOCKER_ENGINE_LDFLAGS += -extldflags '-static'
-> -endif
-> -
->  DOCKER_ENGINE_TAGS = cgo exclude_graphdriver_zfs autogen
-> -DOCKER_ENGINE_BUILD_TARGETS = cmd/docker
-> +DOCKER_ENGINE_BUILD_TARGETS = cmd/dockerd
->
->  ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
->  DOCKER_ENGINE_TAGS += seccomp
-> @@ -30,15 +26,9 @@ DOCKER_ENGINE_DEPENDENCIES += libseccomp
->  endif
->
->  ifeq ($(BR2_INIT_SYSTEMD),y)
-> -DOCKER_ENGINE_TAGS += journald
->  DOCKER_ENGINE_DEPENDENCIES += systemd
-> +DOCKER_ENGINE_TAGS += systemd journald
->  endif
-> -
-> -ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
-> -DOCKER_ENGINE_TAGS += daemon
-> -DOCKER_ENGINE_BUILD_TARGETS += cmd/dockerd
-> -endif
-> -
->  ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL),y)
->  DOCKER_ENGINE_TAGS += experimental
->  endif
-> @@ -65,7 +55,6 @@ DOCKER_ENGINE_INSTALL_BINS = $(notdir $(DOCKER_ENGINE_BUILD_TARGETS))
->
->  define DOCKER_ENGINE_RUN_AUTOGEN
->         cd $(@D) && \
-> -               GITCOMMIT="$$(echo $(DOCKER_ENGINE_COMMIT) | head -c7)" \
->                 BUILDTIME="$$(date)" \
->                 VERSION="$(patsubst v%,%,$(DOCKER_ENGINE_VERSION))" \
->                 PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" $(TARGET_MAKE_ENV) \
-> @@ -74,8 +63,6 @@ endef
->
->  DOCKER_ENGINE_POST_CONFIGURE_HOOKS += DOCKER_ENGINE_RUN_AUTOGEN
->
-> -ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
-> -
->  define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
->         $(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.service \
->                 $(TARGET_DIR)/usr/lib/systemd/system/docker.service
-> @@ -90,6 +77,4 @@ define DOCKER_ENGINE_USERS
->         - - docker -1 * - - - Docker Application Container Framework
->  endef
->
-> -endif
-> -
->  $(eval $(golang-package))
-> --
-> 2.16.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 9e40c11fa1..a2e9c3866a 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -468,8 +468,23 @@ menuconfig BR2_TARGET_UBOOT_ENVIMAGE
+ 
+ if BR2_TARGET_UBOOT_ENVIMAGE
+ 
++choice
++	prompt "source"
++
++config BR2_TARGET_UBOOT_ENVIMAGE_TEXTFILE
++	bool "text file"
++
++config BR2_TARGET_UBOOT_ENVIMAGE_BUIILTIN
++	bool "compiled in"
++	help
++	  Use the default env from u-boot image.
++	  requires >= v2018.03
++
++endchoice # source
++
+ config BR2_TARGET_UBOOT_ENVIMAGE_SOURCE
+ 	string "Source files for environment"
++	depends on BR2_TARGET_UBOOT_ENVIMAGE_TEXTFILE
+ 	help
+ 	  Text files describing the environment. Files should have
+ 	  lines of the form var=value, one per line. Blank lines and
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index c5abc125f3..ae9e38c8c2 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -263,7 +263,9 @@ endef
+ 
+ ifneq ($(BR2_TARGET_UBOOT_ENVIMAGE),)
+ define UBOOT_GENERATE_ENV_IMAGE
+-	cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) \
++	$(if $(BR2_TARGET_UBOOT_ENVIMAGE_BUIILTIN), \
++	CROSS_COMPILE="$(TARGET_CROSS)" $(@D)/scripts/get_default_envs.sh $(@D), \
++	cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE))) \
+ 		>$(@D)/buildroot-env.txt
+ 	$(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
+ 		$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
+@@ -376,9 +378,11 @@ endef
+ 
+ ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE),y)
+ ifeq ($(BR_BUILDING),y)
++ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE_TEXTFILE),y)
+ ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)),)
+ $(error Please define a source file for Uboot environment (BR2_TARGET_UBOOT_ENVIMAGE_SOURCE setting))
+ endif
++endif
+ ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SIZE)),)
+ $(error Please provide Uboot environment size (BR2_TARGET_UBOOT_ENVIMAGE_SIZE setting))
+ endif
 -- 
-Thanks,
-Matt
+2.19.0
+
+
+
+Diehl Connectivity Solutions GmbH
+Gesch?ftsf?hrung: Horst Leonberger
+Sitz der Gesellschaft: N?rnberg - Registergericht: Amtsgericht
+N?rnberg: HRB 32315
+___________________________________________________________________________________________________
+
+Der Inhalt der vorstehenden E-Mail ist nicht rechtlich bindend. Diese E-Mail enthaelt vertrauliche und/oder rechtlich geschuetzte Informationen.
+Informieren Sie uns bitte, wenn Sie diese E-Mail faelschlicherweise erhalten haben. Bitte loeschen Sie in diesem Fall die Nachricht.
+Jede unerlaubte Form der Reproduktion, Bekanntgabe, Aenderung, Verteilung und/oder Publikation dieser E-Mail ist strengstens untersagt.
+The contents of the above mentioned e-mail is not legally binding. This e-mail contains confidential and/or legally protected information. Please inform us if you have received this e-mail by
+mistake and delete it in such a case. Each unauthorized reproduction, disclosure, alteration, distribution and/or publication of this e-mail is strictly prohibited. 
