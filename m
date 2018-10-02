@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 2 Oct 2018 22:53:59 +0200
-Subject: [Buildroot] [PATCH 1/1] haproxy: tweak thread activation
-In-Reply-To: <20181002192858.986-1-fontaine.fabrice@gmail.com>
-References: <20181002192858.986-1-fontaine.fabrice@gmail.com>
-Message-ID: <c1c5fb66-863b-5101-3ba0-a0e61c1fbcfe@mind.be>
+Date: Tue, 2 Oct 2018 23:08:07 +0200
+Subject: [Buildroot] [PATCH 1/1] minizip: needs __register_atfork
+In-Reply-To: <20181002191632.9615-1-fontaine.fabrice@gmail.com>
+References: <20181002191632.9615-1-fontaine.fabrice@gmail.com>
+Message-ID: <84533871-7402-7370-665c-17f9fe60a227@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,66 +12,58 @@ To: buildroot@busybox.net
 
 
 
-On 02/10/2018 21:28, Fabrice Fontaine wrote:
-> If threads are enabled, as described in include/common/hathreads.h,
-> haproxy uses __sync_*_4 intrisics if gcc < 4.7. Otherwise, haproxy
-> uses __atomic_ intrinsics.
+On 02/10/2018 21:16, Fabrice Fontaine wrote:
+> The following error is raised:
+> 
+> [100%] Linking C executable minizip
+> /home/peko/autobuild/instance-0/output/host/m68k-buildroot-uclinux-uclibc/sysroot/usr/lib/libbsd.a(arc4random.o): In function `_rs_init.part.1':
+> arc4random.c:(.text+0xaa): undefined reference to `__register_atfork'
+> collect2: error: ld returned 1 exit status
+> 
+> As specified in openssl/Config.in, uClibc on noMMU doesn't provide
+> __register_atfork() so add this dependency on minizip
+> 
+> It should be noted that technically, this dependency comes from libbsd.
+> Indeed _ARC4_ATFORK is defined to be __register_atfork if __GLIBC__ is
+> defined and to pthread_atfork otherwise (see src/arc4random_linux.h)
+> 
+> So perhaps this dependency should be added to libbsd and to hcitop from
+> bluez-alsa (netcat-openbsd depends on glibc)
 
- So the problem really is that haproxy is to stupid to realize that it should
-fall back on __sync if __atomic is not available...
+ Indeed, this dependency should be added to libbsd (and thus propagated to minizip).
 
- But trying to encode that in a hand-rolled Makefile is insane. So this approach
-looks good to me.
+ However, perhaps it's better to just fix libbsd. Calling an internal function
+of glibc is never a good idea. Using the standard pthread_atfork unconditionally
+is a lot safer, and pthread_atfork *is* supported by uClibc on noMMU targets.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Note BTW that hcitop depends on MMU, and netcat-openbsd depends on glibc, so
+the dependency wouldn't have to be propagated to those two.
 
  Regards,
  Arnout
 
 > 
-> As a result, instead of adding a dependency on BR2_TOOLCHAIN_HAS_SYNC_4
-> and BR2_TOOLCHAIN_HAS_ATOMIC in Config.in, enable threads only if the
-> dependencies are fulfilled in haproxy.mk
-> 
 > Fixes:
->  - http://autobuild.buildroot.org/results/7f24873ecdd9246c95c03bb8d2fcd4c16c488c6c
+>  - http://autobuild.buildroot.org/results/df2dcbdceaa01a2ae37bf09140e4dbef0a5b9489
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/haproxy/Config.in  | 1 -
->  package/haproxy/haproxy.mk | 6 ++++++
->  2 files changed, 6 insertions(+), 1 deletion(-)
+>  package/minizip/Config.in | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/package/haproxy/Config.in b/package/haproxy/Config.in
-> index cbcbc0c388..fbe5941b55 100644
-> --- a/package/haproxy/Config.in
-> +++ b/package/haproxy/Config.in
-> @@ -1,7 +1,6 @@
->  config BR2_PACKAGE_HAPROXY
->  	bool "haproxy"
->  	depends on BR2_USE_MMU # fork()
-> -	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # __sync_*_4 intrisics
->  	help
->  	  HAProxy is a free, very fast and reliable solution offering
->  	  high availability, load balancing, and proxying for TCP and
-> diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-> index 363fc4447f..061a8cbbaf 100644
-> --- a/package/haproxy/haproxy.mk
-> +++ b/package/haproxy/haproxy.mk
-> @@ -20,7 +20,13 @@ HAPROXY_LIBS += -latomic
->  endif
->  
->  ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-> +# threads uses atomics on gcc >= 4.7 and sync otherwise (see
-> +# include/common/hathreads.h)
-> +ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_7):$(BR2_TOOLCHAIN_HAS_ATOMIC),y:y)
->  HAPROXY_MAKE_OPTS += USE_THREAD=1
-> +else ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_7):$(BR2_TOOLCHAIN_HAS_SYNC_4),:y)
-> +HAPROXY_MAKE_OPTS += USE_THREAD=1
-> +endif
->  endif
->  
->  ifeq ($(BR2_PACKAGE_LUA_5_3),y)
+> diff --git a/package/minizip/Config.in b/package/minizip/Config.in
+> index 68fa1d7118..ed54e3b651 100644
+> --- a/package/minizip/Config.in
+> +++ b/package/minizip/Config.in
+> @@ -1,6 +1,8 @@
+>  config BR2_PACKAGE_MINIZIP
+>  	bool "minizip"
+>  	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+> +	# uClibc on noMMU doesn't provide __register_atfork()
+> +	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU)
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # libbsd
+>  	depends on BR2_USE_WCHAR # libbsd
+>  	select BR2_PACKAGE_LIBBSD
 > 
 
 -- 
