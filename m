@@ -1,120 +1,41 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  3 Oct 2018 10:16:42 +0200
-Subject: [Buildroot] [PATCH 3/3] package/multicat: bump version to 2.3
-In-Reply-To: <20181003081642.21943-1-bernd.kuhls@t-online.de>
-References: <20181003081642.21943-1-bernd.kuhls@t-online.de>
-Message-ID: <20181003081642.21943-3-bernd.kuhls@t-online.de>
+Date: Wed,  3 Oct 2018 10:23:32 +0200
+Subject: [Buildroot] [PATCH 1/4] package/dtv-scan-tables: bump version
+Message-ID: <20181003082335.25840-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed patch 0001, applied upstream.
-Added sha256 hash provided by upstream.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../0001-Fix-build-with-musl-libc.patch       | 62 -------------------
- package/multicat/multicat.hash                |  7 ++-
- package/multicat/multicat.mk                  |  2 +-
- 3 files changed, 5 insertions(+), 66 deletions(-)
- delete mode 100644 package/multicat/0001-Fix-build-with-musl-libc.patch
+ package/dtv-scan-tables/dtv-scan-tables.hash | 2 +-
+ package/dtv-scan-tables/dtv-scan-tables.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/multicat/0001-Fix-build-with-musl-libc.patch b/package/multicat/0001-Fix-build-with-musl-libc.patch
-deleted file mode 100644
-index d68b861a1d..0000000000
---- a/package/multicat/0001-Fix-build-with-musl-libc.patch
-+++ /dev/null
-@@ -1,62 +0,0 @@
--From 19c37f8d02cfe3a0490981cd9c3370fe544b76ac Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Cl=C3=A9ment=20Vasseur?= <clement.vasseur@gmail.com>
--Date: Thu, 30 Nov 2017 16:05:49 +0000
--Subject: [PATCH] Fix build with musl libc
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: commit 19c37f8d02cf
--
-- multicat.c | 7 ++-----
-- util.h     | 3 ++-
-- 2 files changed, 4 insertions(+), 6 deletions(-)
--
--diff --git a/multicat.c b/multicat.c
--index eeab930fc1db..e8b6874d6f4c 100644
----- a/multicat.c
--+++ b/multicat.c
--@@ -1,7 +1,7 @@
-- /*****************************************************************************
--  * multicat.c: netcat-equivalent for multicast
--  *****************************************************************************
--- * Copyright (C) 2009, 2011-2012, 2015-2016 VideoLAN
--+ * Copyright (C) 2009, 2011-2012, 2015-2017 VideoLAN
--  * $Id$
--  *
--  * Authors: Christophe Massiot <massiot@via.ecp.fr>
--@@ -43,10 +43,7 @@
-- #include <poll.h>
-- #include <sys/ioctl.h>
-- #include <syslog.h>
---
---#ifdef __FreeBSD__
---#   include <sys/uio.h>
---#endif
--+#include <sys/uio.h>
-- 
-- #ifdef SIOCGSTAMPNS
-- #   define HAVE_TIMESTAMPS
--diff --git a/util.h b/util.h
--index 1959a2edb155..724e7d843d22 100644
----- a/util.h
--+++ b/util.h
--@@ -1,7 +1,7 @@
-- /*****************************************************************************
--  * util.h: Utils for the multicat suite
--  *****************************************************************************
--- * Copyright (C) 2009, 2011, 2014-2016 VideoLAN
--+ * Copyright (C) 2009, 2011, 2014-2017 VideoLAN
--  * $Id$
--  *
--  * Authors: Christophe Massiot <massiot@via.ecp.fr>
--@@ -23,6 +23,7 @@
-- 
-- #include <netinet/udp.h>
-- #include <netinet/ip.h>
--+#include <sys/types.h>
-- 
-- #if defined(__APPLE__) || defined(__FreeBSD__)
-- #define POLLRDHUP 0
---- 
--2.17.0
--
-diff --git a/package/multicat/multicat.hash b/package/multicat/multicat.hash
-index 0f718d0e0e..9cf84bc50f 100644
---- a/package/multicat/multicat.hash
-+++ b/package/multicat/multicat.hash
-@@ -1,5 +1,6 @@
--# from https://get.videolan.org/multicat/2.2/multicat-2.2.tar.bz2.md5
--md5 91bd35aa5aa94c370664276bd5af6f48 multicat-2.2.tar.bz2
-+# From https://get.videolan.org/multicat/2.3/multicat-2.3.tar.bz2.md5
-+md5 cf4e4bc07d72eda110050d755db14620  multicat-2.3.tar.bz2
-+# From https://get.videolan.org/multicat/2.3/multicat-2.3.tar.bz2.sha256
-+sha256 2be162e9e8b2e6f6aa7686431f102db6c72c8288bd82dbc67ffed631f4a3361e  multicat-2.3.tar.bz2
- # locally calculated
--sha256 fa4e48b38665658df7719293f9358df08f59f3eb7f7b77df510b35951e316b40 multicat-2.2.tar.bz2
- sha256 94f68aec169fb6c9937eade757251714d38a56812be5dbfc3973914a71ad8d2d COPYING
-diff --git a/package/multicat/multicat.mk b/package/multicat/multicat.mk
-index 67cebec26a..1d31ec869d 100644
---- a/package/multicat/multicat.mk
-+++ b/package/multicat/multicat.mk
+diff --git a/package/dtv-scan-tables/dtv-scan-tables.hash b/package/dtv-scan-tables/dtv-scan-tables.hash
+index 29d0c4cc54..a4606bbe00 100644
+--- a/package/dtv-scan-tables/dtv-scan-tables.hash
++++ b/package/dtv-scan-tables/dtv-scan-tables.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256 7860092725f07ac6f974415e9f06a2763710d308b0817f7c3641aaf4b902ccc5  dtv-scan-tables-c2b6af67f7d8620acbf052fc754ec831ed2188ba.tar.gz
++sha256 a9c9375a3d3087cf9ee47086c19fffe8e3bf52397928288d88cd7fa4d7f8944e  dtv-scan-tables-59f4a9b1dfbd573bafe33d238a08da95e4f0263a.tar.gz
+ sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+ sha256 4fd46f32582c29007657e2daad8d0a6d954cf4e9d2e47bae8f8d8c32765fc987  COPYING.LGPL
+diff --git a/package/dtv-scan-tables/dtv-scan-tables.mk b/package/dtv-scan-tables/dtv-scan-tables.mk
+index fe0a310817..6477985881 100644
+--- a/package/dtv-scan-tables/dtv-scan-tables.mk
++++ b/package/dtv-scan-tables/dtv-scan-tables.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MULTICAT_VERSION = 2.2
-+MULTICAT_VERSION = 2.3
- MULTICAT_SOURCE = multicat-$(MULTICAT_VERSION).tar.bz2
- MULTICAT_SITE = https://get.videolan.org/multicat/$(MULTICAT_VERSION)
- MULTICAT_LICENSE = GPL-2.0+
+-DTV_SCAN_TABLES_VERSION = c2b6af67f7d8620acbf052fc754ec831ed2188ba
++DTV_SCAN_TABLES_VERSION = 59f4a9b1dfbd573bafe33d238a08da95e4f0263a
+ DTV_SCAN_TABLES_SITE = http://git.linuxtv.org/cgit.cgi/dtv-scan-tables.git
+ DTV_SCAN_TABLES_SITE_METHOD = git
+ 
 -- 
 2.19.0
