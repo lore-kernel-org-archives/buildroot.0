@@ -1,68 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed,  3 Oct 2018 15:40:01 +0200
-Subject: [Buildroot] [PATCH] freetype: drop calling autogen, no longer needed
-Message-ID: <20181003134001.23537-1-thomas.petazzoni@bootlin.com>
+Date: Wed, 3 Oct 2018 15:58:21 +0200
+Subject: [Buildroot] [git commit] python-u-msgpack: bump to version 2.5.0
+Message-ID: <20181003135822.4246888061@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In commit a31a66802a7a1af76a629b0ba7120424ed547646 ("freetype:
-security bump to version 2.5.3"), the freetype package was changed to
-call ./autogen.sh to regenerate the autotools stuff, because the
-ltmain.sh provided by upstream freetype was not compatible with
-Buildroot libtool-patching logic.
+commit: https://git.buildroot.net/buildroot/commit/?id=05faf89cdf0949c006d78863d9c0f27014277339
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since then, freetype has been bumped several times, and the current
-version packaged in Buildroot has an ltmain.sh that is compatible with
-our libtool-patching logic.
+Also add license hash.
 
-Therefore, this commit drops the no longer needed autogen stuff.
-
-This autogen stuff was badly breaking per-package host/target
-directory, because the autogen happened at the post-patch hook step,
-at which point the host-automake/host-autoconf/host-libtool
-dependencies have not yet been copied into this package host
-directory.
-
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/freetype/freetype.mk | 18 ------------------
- 1 file changed, 18 deletions(-)
+ package/python-u-msgpack/python-u-msgpack.hash | 8 +++++---
+ package/python-u-msgpack/python-u-msgpack.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index 05e9498c69..1b3a9d1755 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -17,19 +17,6 @@ FREETYPE_CONFIG_SCRIPTS = freetype-config
- HOST_FREETYPE_DEPENDENCIES = host-pkgconf
- HOST_FREETYPE_CONF_OPTS = --without-zlib --without-bzip2 --without-png
+diff --git a/package/python-u-msgpack/python-u-msgpack.hash b/package/python-u-msgpack/python-u-msgpack.hash
+index 12f2be37af..e24c9f3f90 100644
+--- a/package/python-u-msgpack/python-u-msgpack.hash
++++ b/package/python-u-msgpack/python-u-msgpack.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/u-msgpack-python/json, sha256 locally computed
+-md5	f5adfb3e19910d8a41e331d3b03aa7c6  u-msgpack-python-2.2.tar.gz
+-sha256	cdd5a88f2313856a6a9f481f652dab9edd5731059badbb0111280f27249930d7  u-msgpack-python-2.2.tar.gz
++# md5, sha256 from https://pypi.org/pypi/u-msgpack-python/json
++md5	ba0ec9036933edbbf33a344a5c72dd14  u-msgpack-python-2.5.0.tar.gz
++sha256	7ff18ae3721fa75571f9329c08f7c0120416a6ae36194bd8674f65b3b78d0702  u-msgpack-python-2.5.0.tar.gz
++# Locally computed sha256
++sha256	0603a3e697a80b13640e3023bb534727f683ada5c4b0b0149d001ec5272d64f4  LICENSE
+diff --git a/package/python-u-msgpack/python-u-msgpack.mk b/package/python-u-msgpack/python-u-msgpack.mk
+index 89240c3fb2..bcb12b2037 100644
+--- a/package/python-u-msgpack/python-u-msgpack.mk
++++ b/package/python-u-msgpack/python-u-msgpack.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
--# Regen required because the tarball ships with an experimental ltmain.sh
--# that can't be patched by our infra.
--# autogen.sh is because autotools stuff lives in other directories and
--# even AUTORECONF with _OPTS doesn't do it properly.
--# POST_PATCH is because we still need to patch libtool after the regen.
--define FREETYPE_RUN_AUTOGEN
--	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
--endef
--FREETYPE_POST_PATCH_HOOKS += FREETYPE_RUN_AUTOGEN
--HOST_FREETYPE_POST_PATCH_HOOKS += FREETYPE_RUN_AUTOGEN
--FREETYPE_DEPENDENCIES += host-automake host-autoconf host-libtool
--HOST_FREETYPE_DEPENDENCIES += host-automake host-autoconf host-libtool
--
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- FREETYPE_DEPENDENCIES += zlib
- FREETYPE_CONF_OPTS += --with-zlib
-@@ -72,8 +59,3 @@ FREETYPE_POST_INSTALL_STAGING_HOOKS += FREETYPE_FIX_CONFIG_FILE_LIBS
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
--
--# freetype-patch and host-freetype-patch use autogen.sh so add
--# host-automake as a order-only-prerequisite because it is a phony
--# target.
--$(FREETYPE_TARGET_PATCH) $(HOST_FREETYPE_TARGET_PATCH): | host-automake
--- 
-2.14.4
+-PYTHON_U_MSGPACK_VERSION = 2.2
++PYTHON_U_MSGPACK_VERSION = 2.5.0
+ PYTHON_U_MSGPACK_SOURCE = u-msgpack-python-$(PYTHON_U_MSGPACK_VERSION).tar.gz
+-PYTHON_U_MSGPACK_SITE = https://pypi.python.org/packages/66/5b/36fe0fcf290bd39f6ef6c1f5924cf0a9a76b0dc94575975ad7d318619cf9
++PYTHON_U_MSGPACK_SITE = https://files.pythonhosted.org/packages/f5/97/36d5ac7d71451e282051e48219cc825637f617a8f620a2edf90ab61b7f97
+ PYTHON_U_MSGPACK_SETUP_TYPE = setuptools
+ PYTHON_U_MSGPACK_LICENSE = MIT
+ PYTHON_U_MSGPACK_LICENSE_FILES = LICENSE
