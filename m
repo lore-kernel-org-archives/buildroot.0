@@ -1,22 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 03 Oct 2018 09:36:21 +0200
-Subject: [Buildroot] [PATCH 1/1] aircrack-ng: bump to version 1.4
-In-Reply-To: <20181002195301.19546-1-laurent.cans@gmail.com> (Laurent Cans's
- message of "Tue, 2 Oct 2018 21:53:01 +0200")
-References: <20181002195301.19546-1-laurent.cans@gmail.com>
-Message-ID: <87o9cbzdl6.fsf@dell.be.48ers.dk>
+Date: Wed, 03 Oct 2018 09:36:41 +0200
+Subject: [Buildroot] [PATCH v1] crda: bump version to 4.14
+In-Reply-To: <20181002200223.17592-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Tue, 2 Oct 2018 22:02:23 +0200")
+References: <20181002200223.17592-1-ps.report@gmx.net>
+Message-ID: <87k1mzzdkm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Laurent" == Laurent Cans <laurent.cans@gmail.com> writes:
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
- > - Remove patch (already in version)
- > - align LICENSE hash to minor modifications in file
+ > - changed download location
+ > - rebased 0001-crda-support-python-3-in-utils-key2pub.py.patch
 
- > Signed-off-by: Laurent Cans <laurent.cans@gmail.com>
+ > Changes since 3.18:
+ > - 2018-01-05	Update gitignore
+ > - 2018-01-05	crda: Fix error: `keys? defined but not used
+
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
 Committed, thanks.
 
