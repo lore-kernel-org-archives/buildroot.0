@@ -1,32 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 3 Oct 2018 14:54:43 +0200
-Subject: [Buildroot] [PATCH 1/1] x265: disable parallel build
-In-Reply-To: <20181001205739.27140-1-fontaine.fabrice@gmail.com>
-References: <20181001205739.27140-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181003145443.69bae932@windsurf>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Wed, 3 Oct 2018 14:57:48 +0200
+Subject: [Buildroot] [PATCH] linux-firmware: fix build failure on
+ legal-info
+In-Reply-To: <20181003044542.hrqjjfbxoic56hpb@sapphire.tkos.co.il>
+References: <20181002214318.85312-1-giulio.benetti@micronovasrl.com>
+ <20181003044542.hrqjjfbxoic56hpb@sapphire.tkos.co.il>
+Message-ID: <1581a80e-7753-b756-46c7-fd8c5d37cbb4@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Baruch,
 
-On Mon,  1 Oct 2018 22:57:39 +0200, Fabrice Fontaine wrote:
-> It seems package has a parallel build issue on ARM cortex A8 or A9 since
-> at least version 2.5:
+Il 03/10/2018 06:45, Baruch Siach ha scritto:
+> Hi Giulio,
 > 
-> [ 94%] Linking CXX shared library libx265.so
-> ipfilter8.S.o: file not recognized: File truncated
-> collect2: error: ld returned 1 exit status
-> CMakeFiles/x265-shared.dir/build.make:221: recipe for target 'libx265.so.160' failed
+> On Tue, Oct 02, 2018 at 11:43:18PM +0200, Giulio Benetti wrote:
+>> In linux-firmware.hash WHENCE sha256 is wrong causing make legal-info to
+>> fail.
+> 
+> Do WHENCE file changes affect the license of any firmware file? Please mention
+> in the commit log.
 
-Could you submit a bug report upstream for this issue ?
+And this is the third time I've forgotten about it in commit log.
 
-Thanks,
+Thank you for reviewing.
+Going to send V2
 
-Thomas
+Best regards
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
