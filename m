@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 3 Oct 2018 14:44:22 +0200
-Subject: [Buildroot] Custom C Libraries for RISC-V 32-bit Support
-In-Reply-To: <20181003114145.bla23tjlwaqc5glu@sapphire.tkos.co.il>
-References: <37c3dc75-0145-ce92-05c0-6c9559b86022@embecosm.com>
- <20181003104024.ijzjzu6t4sp7cee3@sapphire.tkos.co.il>
- <a20fc000-76ef-da38-b7d7-2fb185fe88d5@embecosm.com>
- <20181003114145.bla23tjlwaqc5glu@sapphire.tkos.co.il>
-Message-ID: <20181003144422.2f2dc17b@windsurf>
+Date: Wed, 3 Oct 2018 14:49:44 +0200
+Subject: [Buildroot] [PATCH v1 2/3] qt5serialbus: fix 5.6.3 license file
+ hashes
+In-Reply-To: <20181003045224.wlrhhkgyv2tj3pqg@sapphire.tkos.co.il>
+References: <20181002211637.2356-1-ps.report@gmx.net>
+ <20181002211637.2356-2-ps.report@gmx.net>
+ <20181003045224.wlrhhkgyv2tj3pqg@sapphire.tkos.co.il>
+Message-ID: <20181003144944.2a26cf25@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,18 +15,53 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 3 Oct 2018 14:41:45 +0300, Baruch Siach wrote:
+On Wed, 3 Oct 2018 07:52:24 +0300, Baruch Siach wrote:
 
-> The kernel way is definitely not the way to go. The kernel and U-Boot are 
-> special because people tend to use per target source trees. I think that 
-> something like what ARC is doing would be easier. A patch set might be 
-> problematic because we'll need to forward port the patches whenever we bump 
-> glibc version.
+> Shouldn't the tarball hash move also here? Having the 5.6.x tarball hash in 
+> the default .hash file is confusing.
 
-I agree with Baruch, I'd prefer to see something similar to what we do
-for glibc on ARC, i.e the musl/glibc package automatically chose a
-different repo/version when building for RISC-V 32 (glibc) or RISC-V
-32/64 (musl).
+This doesn't work, because the download wrapper only uses the main hash
+file:
+
+define DOWNLOAD
+        $(Q)mkdir -p $($(PKG)_DL_DIR)
+        $(Q)$(EXTRA_ENV) $(FLOCK) $(DL_WRAPPER) \
+                -c '$($(PKG)_DL_VERSION)' \
+                -d '$($(PKG)_DL_DIR)' \
+                -D '$(DL_DIR)' \
+                -f '$(notdir $(1))' \
+                -H '$(PKGDIR)/$($(PKG)_RAWNAME).hash' \
+                -n '$($(PKG)_BASENAME_RAW)' \
+                -N '$($(PKG)_RAWNAME)' \
+                -o '$($(PKG)_DL_DIR)/$(notdir $(1))' \
+                $(if $($(PKG)_GIT_SUBMODULES),-r) \
+                $(DOWNLOAD_URIS) \
+                $(QUIET) \
+                -- \
+                $($(PKG)_DL_OPTS)
+endef
+
+See the value passed to the -H option. It works for license files
+because:
+
+define legal-license-file # pkgname, pkgname-pkgver, pkgdir, filename, file-fullpath, {HOST|TARGET}
+	mkdir -p $(LICENSE_FILES_DIR_$(6))/$(2)/$(dir $(4)) && \
+	{ \
+		if [ -f $(3)/$($(PKG)_VERSION)/$(1).hash ]; then \
+			support/download/check-hash $(3)/$($(PKG)_VERSION)/$(1).hash $(5) $(4); \
+		else \
+			support/download/check-hash $(3)/$(1).hash $(5) $(4); \
+		fi; \
+		case $${?} in (0|3) ;; (*) exit 1;; esac; \
+	} && \
+	cp $(5) $(LICENSE_FILES_DIR_$(6))/$(2)/$(4)
+endef
+
+I discussed this topic on the mailing list a few weeks ago with Yann.
+See
+http://lists.busybox.net/pipermail/buildroot/2018-September/229892.html
+and
+http://lists.busybox.net/pipermail/buildroot/2018-September/230404.html.
 
 Best regards,
 
