@@ -1,26 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 03 Oct 2018 09:36:41 +0200
-Subject: [Buildroot] [PATCH v1] crda: bump version to 4.14
-In-Reply-To: <20181002200223.17592-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Tue, 2 Oct 2018 22:02:23 +0200")
-References: <20181002200223.17592-1-ps.report@gmx.net>
-Message-ID: <87k1mzzdkm.fsf@dell.be.48ers.dk>
+Date: Wed, 03 Oct 2018 09:37:35 +0200
+Subject: [Buildroot] [PATCH] python-django: bump version to 1.11.16
+In-Reply-To: <20181001113255.2526-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 1 Oct 2018 13:32:55 +0200")
+References: <20181001113255.2526-1-peter@korsgaard.com>
+Message-ID: <87ftxnzdj4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > - changed download location
- > - rebased 0001-crda-support-python-3-in-utils-key2pub.py.patch
+ > Fixes a race condition in QuerySet.update_or_create() that could result in
+ > data loss:
 
- > Changes since 3.18:
- > - 2018-01-05	Update gitignore
- > - 2018-01-05	crda: Fix error: `keys? defined but not used
+ > https://code.djangoproject.com/ticket/29499
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
