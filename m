@@ -1,78 +1,45 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  3 Oct 2018 19:54:09 +0200
-Subject: [Buildroot] [PATCH 1/1] libbsd: remove usage of __register_atfork
-Message-ID: <20181003175409.26025-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed,  3 Oct 2018 20:16:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/clamav: security bump to 0.100.2
+Message-ID: <20181003181652.10925-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following error is raised by minizip:
+Fixes CVE-2018-15378, CVE-2018-14680, CVE-2018-14681 & CVE-2018-14682:
+http://lists.clamav.net/pipermail/clamav-announce/2018/000033.html
 
-[100%] Linking C executable minizip
-/home/peko/autobuild/instance-0/output/host/m68k-buildroot-uclinux-uclibc/sysroot/usr/lib/libbsd.a(arc4random.o): In function `_rs_init.part.1':
-arc4random.c:(.text+0xaa): undefined reference to `__register_atfork'
-collect2: error: ld returned 1 exit status
-
-As specified in openssl/Config.in, uClibc on noMMU doesn't provide
-__register_atfork() so, as suggested by Arnout during review of minizip
-patch (https://patchwork.ozlabs.org/patch/978000), remove usage of this
-function from libbsd to always use pthread_atfork
-
-Fixes:
- - http://autobuild.buildroot.org/results/df2dcbdceaa01a2ae37bf09140e4dbef0a5b9489
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...02-Remove-usage-of-__register_atfork.patch | 39 +++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/libbsd/0002-Remove-usage-of-__register_atfork.patch
+ package/clamav/clamav.hash | 2 +-
+ package/clamav/clamav.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libbsd/0002-Remove-usage-of-__register_atfork.patch b/package/libbsd/0002-Remove-usage-of-__register_atfork.patch
-new file mode 100644
-index 0000000000..366594bbe8
---- /dev/null
-+++ b/package/libbsd/0002-Remove-usage-of-__register_atfork.patch
-@@ -0,0 +1,39 @@
-+From 1220b3b758030f1717558980d60ade9a33628383 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 3 Oct 2018 19:14:34 +0200
-+Subject: [PATCH] Remove usage of __register_atfork
-+
-+Calling an internal function of glibc is never a good idea.
-+This is especially true for __register_atfork which is not defined on
-+uClibc with noMMU.
-+So remove call to __register_atfork and so always use pthread_atfork
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://gitlab.freedesktop.org/libbsd/libbsd/merge_requests/2]
-+---
-+ src/arc4random_linux.h | 7 -------
-+ 1 file changed, 7 deletions(-)
-+
-+diff --git a/src/arc4random_linux.h b/src/arc4random_linux.h
-+index 7a2ca1e..7287b07 100644
-+--- a/src/arc4random_linux.h
-++++ b/src/arc4random_linux.h
-+@@ -31,14 +31,7 @@
-+ static pthread_mutex_t arc4random_mtx = PTHREAD_MUTEX_INITIALIZER;
-+ #define _ARC4_LOCK()   pthread_mutex_lock(&arc4random_mtx)
-+ #define _ARC4_UNLOCK() pthread_mutex_unlock(&arc4random_mtx)
-+-
-+-#ifdef __GLIBC__
-+-extern void *__dso_handle;
-+-extern int __register_atfork(void (*)(void), void(*)(void), void (*)(void), void *);
-+-#define _ARC4_ATFORK(f) __register_atfork(NULL, NULL, (f), __dso_handle)
-+-#else
-+ #define _ARC4_ATFORK(f) pthread_atfork(NULL, NULL, (f))
-+-#endif
-+ 
-+ static inline void
-+ _getentropy_fail(void)
-+-- 
-+2.17.1
-+
+diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
+index 0cb8f51d87..390251fc24 100644
+--- a/package/clamav/clamav.hash
++++ b/package/clamav/clamav.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256 84e026655152247de7237184ee13003701c40be030dd68e0316111049f58a59f  clamav-0.100.1.tar.gz
++sha256 4a2e4f0cd41e62adb5a713b4a1857c49145cd09a69957e6d946ecad575206dd6  clamav-0.100.2.tar.gz
+ sha256 0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
+ sha256 d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
+ sha256 dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index 9db90bddea..50990abad6 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CLAMAV_VERSION = 0.100.1
++CLAMAV_VERSION = 0.100.2
+ CLAMAV_SITE = https://www.clamav.net/downloads/production
+ CLAMAV_LICENSE = GPL-2.0
+ CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
 -- 
-2.17.1
+2.19.0
