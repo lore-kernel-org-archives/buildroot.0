@@ -1,50 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 3 Oct 2018 09:33:13 +0200
-Subject: [Buildroot] [git commit] strongswan: add upstream security fix for
- CVE-2018-17540
-Message-ID: <20181003074356.CF9AF8B662@busybox.osuosl.org>
+Date: Wed, 3 Oct 2018 09:33:32 +0200
+Subject: [Buildroot] [git commit] rtl8188eu: bump to latest commit
+Message-ID: <20181003074356.D78748B662@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=040cf15a8760c91f82b61a3e2cadf1b91b7c45af
+commit: https://git.buildroot.net/buildroot/commit/?id=3eedc447b82204bf3e1fc76fd90ac33347b5e1bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The fix for CVE-2018-16151 / 16152 contained an exploitable bug.
-For details, see:
+The rtl8188eu driver wouldn't build due to Linux kernel API changes.
 
-https://www.strongswan.org/blog/2018/10/01/strongswan-vulnerability-(cve-2018-17540).html
+Several fixes for API changes to Linux kernel >=4.11 has been commited
+to the repository.
 
+I have bumped to the latest commit and verified that it builds on master
+(also successfully built on the 2018.08 branch).
+
+Signed-off-by: William Wennerstr??m <william@willeponken.me>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/strongswan/strongswan.hash | 1 +
- package/strongswan/strongswan.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ package/rtl8188eu/rtl8188eu.hash | 2 +-
+ package/rtl8188eu/rtl8188eu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
-index abbdbc2bf1..4d1a593a5c 100644
---- a/package/strongswan/strongswan.hash
-+++ b/package/strongswan/strongswan.hash
-@@ -4,5 +4,6 @@ md5	a6a28eeb22aa58080a7581771a5b63f9	strongswan-5.6.3.tar.bz2
- sha256	c3c7dc8201f40625bba92ffd32eb602a8909210d8b3fac4d214c737ce079bf24	strongswan-5.6.3.tar.bz2
- # Locally calculated
- sha256	e66c243593ee0713f5fd13bcd7f624bc50eebc54bf87f790ced429ff698077e7  strongswan-5.6.1-5.6.3_gmp-pkcs1-verify.patch
-+sha256	415d104717cb0781770e9077d00b3df310b11e65e4b9c1d35b62fbba04549263  strongswan-4.4.0-5.7.0_gmp-pkcs1-overflow.patch
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256	2292e21797754548dccdef9eef6aee7584e552fbd890fa914e1de8d3577d23f0  LICENSE
-diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-index cdbbd552a7..021a59cecc 100644
---- a/package/strongswan/strongswan.mk
-+++ b/package/strongswan/strongswan.mk
-@@ -8,7 +8,8 @@ STRONGSWAN_VERSION = 5.6.3
- STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
- STRONGSWAN_SITE = http://download.strongswan.org
- STRONGSWAN_PATCH = \
--	$(STRONGSWAN_SITE)/patches/27_gmp_pkcs1_verify_patch/strongswan-5.6.1-5.6.3_gmp-pkcs1-verify.patch
-+	$(STRONGSWAN_SITE)/patches/27_gmp_pkcs1_verify_patch/strongswan-5.6.1-5.6.3_gmp-pkcs1-verify.patch \
-+	$(STRONGSWAN_SITE)/patches/28_gmp_pkcs1_overflow_patch/strongswan-4.4.0-5.7.0_gmp-pkcs1-overflow.patch
- STRONGSWAN_LICENSE = GPL-2.0+
- STRONGSWAN_LICENSE_FILES = COPYING LICENSE
- STRONGSWAN_DEPENDENCIES = host-pkgconf
+diff --git a/package/rtl8188eu/rtl8188eu.hash b/package/rtl8188eu/rtl8188eu.hash
+index 6f68f44259..9ec2ffee89 100644
+--- a/package/rtl8188eu/rtl8188eu.hash
++++ b/package/rtl8188eu/rtl8188eu.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 9f16fab009bd7bc9e377cf7dcdf82be1b60e7f88e27f2833eea5b422d104e3fe rtl8188eu-ced2b64a1139dcaf86947e3a9f7617dffbd64239.tar.gz
++sha256 cc872aa0991c044d35abfcc81543bad950c6aae487e37d5a09d1cbf8c4cb3058 rtl8188eu-4b0ecca485b9f11f58670b69aa9f90ecad7da02f.tar.gz
+diff --git a/package/rtl8188eu/rtl8188eu.mk b/package/rtl8188eu/rtl8188eu.mk
+index 5c1cc73da4..f292bba134 100644
+--- a/package/rtl8188eu/rtl8188eu.mk
++++ b/package/rtl8188eu/rtl8188eu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RTL8188EU_VERSION = ced2b64a1139dcaf86947e3a9f7617dffbd64239
++RTL8188EU_VERSION = 4b0ecca485b9f11f58670b69aa9f90ecad7da02f
+ RTL8188EU_SITE = $(call github,lwfinger,rtl8188eu,$(RTL8188EU_VERSION))
+ RTL8188EU_LICENSE = GPL-2.0, proprietary (rtl8188eufw.bin firmware blob)
+ RTL8188EU_LICENSE_FILES = COPYING
