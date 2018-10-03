@@ -1,37 +1,66 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 03 Oct 2018 22:08:59 +0200
-Subject: [Buildroot] [PATCH 1/1] linux-firmware: bump version and fix
- hash
-References: <20180926223806.12704-1-nunes.erico@gmail.com>
- <87mus2vkos.fsf@dell.be.48ers.dk>
- <CAK4VdL0mu+5Od73gU4T7dRLVRHior7gYg6NQ3+bNKms9P5R=EQ@mail.gmail.com>
- <20181003194023.GA2383@scaer>
-Message-ID: <r7kf8fx1pp.ln2@ID-313208.user.individual.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed,  3 Oct 2018 23:06:24 +0200
+Subject: [Buildroot] [PATCH 1/1] screen: fix parallel build
+Message-ID: <20181003210624.3085-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Wed, 03 Oct 2018 21:40:23 +0200 schrieb Yann E. MORIN:
+comm.h is needed to build list_display.o and list_generic.o otherwise
+parallel builds will sometimes fail
 
-> Weird; I do get the correct hash:
->     linux-firmware-44d4fca9922a252a0bd81f6307bcc072a78da54a.tar.gz: OK
->     (sha256:
->     b279ca4d086887c2efab13e28a7ca36e409410d3df38a62d7c7b5799ee3de916)
+Fixes:
+ - http://autobuild.buildroot.org/results/43105f14857dbe72d8878fc7b3db67f7bdca93cc
+ - http://autobuild.buildroot.org/results/47f4ecbec1355285633df287fc9c4e7cccde9378
 
-Hi,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...-needed-for-list_-display-generic-.o.patch | 35 +++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/screen/0011-comm.h-needed-for-list_-display-generic-.o.patch
 
-same here on Debian buster:
-
-linux-firmware-44d4fca9922a252a0bd81f6307bcc072a78da54a.tar.gz: OK 
-(sha256: b279ca4d086887c2efab13e28a7ca36e409410d3df38a62d7c7b5799ee3de916)
-
-with a private tar 1.29 binary to avoid building host-tar
-
-$ which tar
-/home/bernd/bin/tar
-$ /home/bernd/bin/tar --version
-tar (GNU tar) 1.29
-
-Regards, Bernd
+diff --git a/package/screen/0011-comm.h-needed-for-list_-display-generic-.o.patch b/package/screen/0011-comm.h-needed-for-list_-display-generic-.o.patch
+new file mode 100644
+index 0000000000..f406a1afac
+--- /dev/null
++++ b/package/screen/0011-comm.h-needed-for-list_-display-generic-.o.patch
+@@ -0,0 +1,35 @@
++From b719314d201a3e9e1e57c65746a468c47bfc847f Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 3 Oct 2018 22:29:32 +0200
++Subject: [PATCH] comm.h needed for list_{display,generic}.o
++
++comm.h is needed to build list_display.o and list_generic.o otherwise
++parallel builds will sometimes fail
++
++Fixes:
++ - http://autobuild.buildroot.org/results/43105f14857dbe72d8878fc7b3db67f7bdca93cc
++ - http://autobuild.buildroot.org/results/47f4ecbec1355285633df287fc9c4e7cccde9378
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://savannah.gnu.org/bugs/index.php?54776]
++---
++ Makefile.in | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/Makefile.in b/Makefile.in
++index af5938b..e6d5247 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -265,7 +265,7 @@  braille.h
++ viewport.o: layout.h viewport.h canvas.h viewport.c config.h screen.h os.h osdef.h ansi.h acls.h \
++  comm.h layer.h term.h image.h display.h window.h extern.h \
++  braille.h
++-list_generic.o: list_generic.h list_generic.c layer.h screen.h osdef.h
++-list_display.o: list_generic.h list_display.c layer.h screen.h osdef.h
+++list_generic.o: list_generic.h list_generic.c layer.h screen.h osdef.h comm.h
+++list_display.o: list_generic.h list_display.c layer.h screen.h osdef.h comm.h
++ list_window.o: list_generic.h list_window.c window.h layer.h screen.h osdef.h comm.h
++ 
++-- 
++2.17.1
++
+-- 
+2.17.1
