@@ -1,49 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 3 Oct 2018 09:33:32 +0200
-Subject: [Buildroot] [git commit] rtl8188eu: bump to latest commit
-Message-ID: <20181003074356.D78748B662@busybox.osuosl.org>
+Date: Wed, 3 Oct 2018 09:32:43 +0200
+Subject: [Buildroot] [git commit] package/dovecot: bump version to 2.3.3
+Message-ID: <20181003074356.BE97A8B662@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3eedc447b82204bf3e1fc76fd90ac33347b5e1bf
+commit: https://git.buildroot.net/buildroot/commit/?id=082e149e1c81dc655b7c080ac4d5f22777599c11
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The rtl8188eu driver wouldn't build due to Linux kernel API changes.
-
-Several fixes for API changes to Linux kernel >=4.11 has been commited
-to the repository.
-
-I have bumped to the latest commit and verified that it builds on master
-(also successfully built on the 2018.08 branch).
-
-Signed-off-by: William Wennerstr??m <william@willeponken.me>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rtl8188eu/rtl8188eu.hash | 2 +-
- package/rtl8188eu/rtl8188eu.mk   | 2 +-
+ package/dovecot/dovecot.hash | 2 +-
+ package/dovecot/dovecot.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rtl8188eu/rtl8188eu.hash b/package/rtl8188eu/rtl8188eu.hash
-index 6f68f44259..9ec2ffee89 100644
---- a/package/rtl8188eu/rtl8188eu.hash
-+++ b/package/rtl8188eu/rtl8188eu.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 9f16fab009bd7bc9e377cf7dcdf82be1b60e7f88e27f2833eea5b422d104e3fe rtl8188eu-ced2b64a1139dcaf86947e3a9f7617dffbd64239.tar.gz
-+sha256 cc872aa0991c044d35abfcc81543bad950c6aae487e37d5a09d1cbf8c4cb3058 rtl8188eu-4b0ecca485b9f11f58670b69aa9f90ecad7da02f.tar.gz
-diff --git a/package/rtl8188eu/rtl8188eu.mk b/package/rtl8188eu/rtl8188eu.mk
-index 5c1cc73da4..f292bba134 100644
---- a/package/rtl8188eu/rtl8188eu.mk
-+++ b/package/rtl8188eu/rtl8188eu.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index 857c976a8f..5f982a7943 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
+@@ -1,5 +1,5 @@
+ # Locally computed after checking signature
+-sha256 4a65118508dc7a562e5f90dd7c3f56219fff22367c496f17d77cd0c7e2724e34  dovecot-2.3.2.1.tar.gz
++sha256 15af27ee25258afb4ad9581f8df681be998b763597086bbae54ca7d77a066d8e  dovecot-2.3.3.tar.gz
+ sha256 a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+ sha256 52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index c93d4ff4a3..17cdc22e53 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--RTL8188EU_VERSION = ced2b64a1139dcaf86947e3a9f7617dffbd64239
-+RTL8188EU_VERSION = 4b0ecca485b9f11f58670b69aa9f90ecad7da02f
- RTL8188EU_SITE = $(call github,lwfinger,rtl8188eu,$(RTL8188EU_VERSION))
- RTL8188EU_LICENSE = GPL-2.0, proprietary (rtl8188eufw.bin firmware blob)
- RTL8188EU_LICENSE_FILES = COPYING
+ DOVECOT_VERSION_MAJOR = 2.3
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).2.1
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).3
+ DOVECOT_SITE = https://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
