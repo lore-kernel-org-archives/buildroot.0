@@ -1,20 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 03 Oct 2018 09:31:54 +0200
-Subject: [Buildroot] [PATCH 1/1] configs/riotboard: bump kernel to
- version 4.18.10
-In-Reply-To: <20181001202325.1847-1-nikolay.dimitrov@retrohub.org> (Nikolay
- Dimitrov's message of "Mon, 1 Oct 2018 23:23:25 +0300")
-References: <20181001202325.1847-1-nikolay.dimitrov@retrohub.org>
-Message-ID: <87in2j1o5x.fsf@dell.be.48ers.dk>
+Date: Wed, 03 Oct 2018 09:32:15 +0200
+Subject: [Buildroot] [PATCH 1/1] x265: disable parallel build
+In-Reply-To: <20181001205739.27140-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 1 Oct 2018 22:57:39 +0200")
+References: <20181001205739.27140-1-fontaine.fabrice@gmail.com>
+Message-ID: <87efd71o5c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Nikolay" == Nikolay Dimitrov <nikolay.dimitrov@retrohub.org> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Signed-off-by: Nikolay Dimitrov <nikolay.dimitrov@retrohub.org>
+ > It seems package has a parallel build issue on ARM cortex A8 or A9 since
+ > at least version 2.5:
+
+ > [ 94%] Linking CXX shared library libx265.so
+ > ipfilter8.S.o: file not recognized: File truncated
+ > collect2: error: ld returned 1 exit status
+ > CMakeFiles/x265-shared.dir/build.make:221: recipe for target 'libx265.so.160' failed
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/f6ea88324a8f9ac8ee780ddd71ec61f922e20210
+ >  - http://autobuild.buildroot.org/results/3bd91a5694936650ce936a408ddd50338f65f8b0
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
