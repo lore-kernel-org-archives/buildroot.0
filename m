@@ -1,33 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 3 Oct 2018 15:39:17 +0200
-Subject: [Buildroot] [PATCH 15/23] python-txtorcon: bump to version
- 18.0.2
-In-Reply-To: <20180926153505.3411-16-asafka7@gmail.com>
-References: <20180926153505.3411-1-asafka7@gmail.com>
- <20180926153505.3411-16-asafka7@gmail.com>
-Message-ID: <20181003153917.39a2d19e@windsurf>
+Date: Wed,  3 Oct 2018 15:40:01 +0200
+Subject: [Buildroot] [PATCH] freetype: drop calling autogen, no longer needed
+Message-ID: <20181003134001.23537-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+In commit a31a66802a7a1af76a629b0ba7120424ed547646 ("freetype:
+security bump to version 2.5.3"), the freetype package was changed to
+call ./autogen.sh to regenerate the autotools stuff, because the
+ltmain.sh provided by upstream freetype was not compatible with
+Buildroot libtool-patching logic.
 
-On Wed, 26 Sep 2018 18:34:57 +0300, Asaf Kahlon wrote:
-> Also add license hash.
-> 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-> ---
->  package/python-txtorcon/python-txtorcon.hash | 9 +++++----
->  package/python-txtorcon/python-txtorcon.mk   | 4 ++--
->  2 files changed, 7 insertions(+), 6 deletions(-)
+Since then, freetype has been bumped several times, and the current
+version packaged in Buildroot has an ltmain.sh that is compatible with
+our libtool-patching logic.
 
-As suggested by Ricardo, I have bumped to 18.1.0 instead of
-1.8.0.2. I've added Yegor Reviewed-by and applied. Thanks!
+Therefore, this commit drops the no longer needed autogen stuff.
 
-Thomas
+This autogen stuff was badly breaking per-package host/target
+directory, because the autogen happened at the post-patch hook step,
+at which point the host-automake/host-autoconf/host-libtool
+dependencies have not yet been copied into this package host
+directory.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/freetype/freetype.mk | 18 ------------------
+ 1 file changed, 18 deletions(-)
+
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index 05e9498c69..1b3a9d1755 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -17,19 +17,6 @@ FREETYPE_CONFIG_SCRIPTS = freetype-config
+ HOST_FREETYPE_DEPENDENCIES = host-pkgconf
+ HOST_FREETYPE_CONF_OPTS = --without-zlib --without-bzip2 --without-png
+ 
+-# Regen required because the tarball ships with an experimental ltmain.sh
+-# that can't be patched by our infra.
+-# autogen.sh is because autotools stuff lives in other directories and
+-# even AUTORECONF with _OPTS doesn't do it properly.
+-# POST_PATCH is because we still need to patch libtool after the regen.
+-define FREETYPE_RUN_AUTOGEN
+-	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
+-endef
+-FREETYPE_POST_PATCH_HOOKS += FREETYPE_RUN_AUTOGEN
+-HOST_FREETYPE_POST_PATCH_HOOKS += FREETYPE_RUN_AUTOGEN
+-FREETYPE_DEPENDENCIES += host-automake host-autoconf host-libtool
+-HOST_FREETYPE_DEPENDENCIES += host-automake host-autoconf host-libtool
+-
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ FREETYPE_DEPENDENCIES += zlib
+ FREETYPE_CONF_OPTS += --with-zlib
+@@ -72,8 +59,3 @@ FREETYPE_POST_INSTALL_STAGING_HOOKS += FREETYPE_FIX_CONFIG_FILE_LIBS
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+-
+-# freetype-patch and host-freetype-patch use autogen.sh so add
+-# host-automake as a order-only-prerequisite because it is a phony
+-# target.
+-$(FREETYPE_TARGET_PATCH) $(HOST_FREETYPE_TARGET_PATCH): | host-automake
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.4
