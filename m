@@ -1,51 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 3 Oct 2018 09:43:18 +0200
-Subject: [Buildroot] [git commit] package/mesa3d: dri i965 driver needs
- headers >= 3.17
-Message-ID: <20181003074357.179608A460@busybox.osuosl.org>
+Date: Wed, 3 Oct 2018 09:47:13 +0200
+Subject: [Buildroot] [git commit] haproxy: tweak thread activation
+Message-ID: <20181003074639.B73A28B74A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7a9f919c02358964b88d43daa456230b11f5588
+commit: https://git.buildroot.net/buildroot/commit/?id=f22fca4bf27f884950dd7804020e5d5193b570b9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since
-https://cgit.freedesktop.org/mesa/mesa/commit/src/intel/tools/aubinator.c?h=18.2&id=3228335b55c300cd07c4aa69329e58e70afae6a8
-the dri i965 driver needs linux/memfd.h which is not available in kernel
-headers older than 3.17:
-https://git.kernel.org/cgit/linux/kernel/git/stable/linux-stable.git/log/include/uapi/linux/memfd.h?id=refs/tags/v3.18.36
+If threads are enabled, as described in include/common/hathreads.h,
+haproxy uses __sync_*_4 intrisics if gcc < 4.7. Otherwise, haproxy
+uses __atomic_ intrinsics.
 
-Fixes
-http://autobuild.buildroot.net/results/5aa/5aac9e9cad789da11b05cbf5d2a5e3f3cf8f1614/
+As a result, instead of adding a dependency on BR2_TOOLCHAIN_HAS_SYNC_4
+and BR2_TOOLCHAIN_HAS_ATOMIC in Config.in, enable threads only if the
+dependencies are fulfilled in haproxy.mk
 
-[Peter: memfd.h added in 3.17]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes:
+ - http://autobuild.buildroot.org/results/7f24873ecdd9246c95c03bb8d2fcd4c16c488c6c
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mesa3d/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/haproxy/Config.in  | 1 -
+ package/haproxy/haproxy.mk | 6 ++++++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index aea579d4e3..8b171b0d7f 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -187,11 +187,16 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_I915
- config BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
- 	bool "DRI i965 driver"
- 	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # memfd.h
- 	select BR2_PACKAGE_MESA3D_DRI_DRIVER
- 	select BR2_PACKAGE_LIBDRM_INTEL
+diff --git a/package/haproxy/Config.in b/package/haproxy/Config.in
+index cbcbc0c388..fbe5941b55 100644
+--- a/package/haproxy/Config.in
++++ b/package/haproxy/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_HAPROXY
+ 	bool "haproxy"
+ 	depends on BR2_USE_MMU # fork()
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # __sync_*_4 intrisics
  	help
- 	  Support for i965-based Intel GPUs.
+ 	  HAProxy is a free, very fast and reliable solution offering
+ 	  high availability, load balancing, and proxying for TCP and
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index 363fc4447f..061a8cbbaf 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -20,7 +20,13 @@ HAPROXY_LIBS += -latomic
+ endif
  
-+comment "DRI i965 driver needs a toolchain w/ headers >= 3.17"
-+	depends on BR2_i386 || BR2_x86_64
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
-+
- config BR2_PACKAGE_MESA3D_DRI_DRIVER_NOUVEAU
- 	bool "DRI nouveau driver"
- 	select BR2_PACKAGE_MESA3D_DRI_DRIVER
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++# threads uses atomics on gcc >= 4.7 and sync otherwise (see
++# include/common/hathreads.h)
++ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_7):$(BR2_TOOLCHAIN_HAS_ATOMIC),y:y)
+ HAPROXY_MAKE_OPTS += USE_THREAD=1
++else ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_7):$(BR2_TOOLCHAIN_HAS_SYNC_4),:y)
++HAPROXY_MAKE_OPTS += USE_THREAD=1
++endif
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LUA_5_3),y)
