@@ -1,67 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 3 Oct 2018 14:49:44 +0200
-Subject: [Buildroot] [PATCH v1 2/3] qt5serialbus: fix 5.6.3 license file
- hashes
-In-Reply-To: <20181003045224.wlrhhkgyv2tj3pqg@sapphire.tkos.co.il>
-References: <20181002211637.2356-1-ps.report@gmx.net>
- <20181002211637.2356-2-ps.report@gmx.net>
- <20181003045224.wlrhhkgyv2tj3pqg@sapphire.tkos.co.il>
-Message-ID: <20181003144944.2a26cf25@windsurf>
+Date: Wed, 3 Oct 2018 14:54:19 +0200
+Subject: [Buildroot] [PATCH v3 2/2] support/scripts/pkg-stats: URL check
+ using threads
+In-Reply-To: <5bb4123cbed5b_6f723fa9ec08e7bc6558f@ultri5.mail>
+References: <1538447849-46511-2-git-send-email-matthew.weber@rockwellcollins.com>
+ <5bb4123cbed5b_6f723fa9ec08e7bc6558f@ultri5.mail>
+Message-ID: <20181003145419.2f76fe63@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Ricardo,
 
-On Wed, 3 Oct 2018 07:52:24 +0300, Baruch Siach wrote:
+On Tue, 02 Oct 2018 21:50:04 -0300, Ricardo Martincoski wrote:
 
-> Shouldn't the tarball hash move also here? Having the 5.6.x tarball hash in 
-> the default .hash file is confusing.
+> On Mon, Oct 01, 2018 at 11:37 PM, Matt Weber wrote:
+> 
+> > Adds a pool of worker threads to accelerate connection testing.
+> > 
+> > ~7.5MB and 2% CPU per thread on a Intel i5-3230M CPU @ 2.60GHz.
+> > 
+> > Runtime is ~3min in parallel vs ~15min.
+> > 
+> > CC: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>  
+> 
+> Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 
-This doesn't work, because the download wrapper only uses the main hash
-file:
-
-define DOWNLOAD
-        $(Q)mkdir -p $($(PKG)_DL_DIR)
-        $(Q)$(EXTRA_ENV) $(FLOCK) $(DL_WRAPPER) \
-                -c '$($(PKG)_DL_VERSION)' \
-                -d '$($(PKG)_DL_DIR)' \
-                -D '$(DL_DIR)' \
-                -f '$(notdir $(1))' \
-                -H '$(PKGDIR)/$($(PKG)_RAWNAME).hash' \
-                -n '$($(PKG)_BASENAME_RAW)' \
-                -N '$($(PKG)_RAWNAME)' \
-                -o '$($(PKG)_DL_DIR)/$(notdir $(1))' \
-                $(if $($(PKG)_GIT_SUBMODULES),-r) \
-                $(DOWNLOAD_URIS) \
-                $(QUIET) \
-                -- \
-                $($(PKG)_DL_OPTS)
-endef
-
-See the value passed to the -H option. It works for license files
-because:
-
-define legal-license-file # pkgname, pkgname-pkgver, pkgdir, filename, file-fullpath, {HOST|TARGET}
-	mkdir -p $(LICENSE_FILES_DIR_$(6))/$(2)/$(dir $(4)) && \
-	{ \
-		if [ -f $(3)/$($(PKG)_VERSION)/$(1).hash ]; then \
-			support/download/check-hash $(3)/$($(PKG)_VERSION)/$(1).hash $(5) $(4); \
-		else \
-			support/download/check-hash $(3)/$(1).hash $(5) $(4); \
-		fi; \
-		case $${?} in (0|3) ;; (*) exit 1;; esac; \
-	} && \
-	cp $(5) $(LICENSE_FILES_DIR_$(6))/$(2)/$(4)
-endef
-
-I discussed this topic on the mailing list a few weeks ago with Yann.
-See
-http://lists.busybox.net/pipermail/buildroot/2018-September/229892.html
-and
-http://lists.busybox.net/pipermail/buildroot/2018-September/230404.html.
+So this threading works for you? I think it is modeled after what I
+initially did to retrieve the upstream version of the packages, and you
+said it wasn't working well for you.
 
 Best regards,
 
