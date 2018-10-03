@@ -1,70 +1,63 @@
-From: Matthew Weber <matt@thewebers.ws>
-Date: Tue, 2 Oct 2018 18:03:42 -0500
-Subject: [Buildroot] [PATCH] fs/common: ROOTFS_USERS_TABLES has priority
-In-Reply-To: <20181002192624.GB2189@scaer>
-References: <1538059007-36692-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20181002192624.GB2189@scaer>
-Message-ID: <CAFt09wNf3omb9iynTEC-hjFo1Q=Lwks9ZCfWDHKDk9hBbC6msw@mail.gmail.com>
+From: Trent Piepho <tpiepho@impinj.com>
+Date: Wed, 3 Oct 2018 00:25:48 +0000
+Subject: [Buildroot] [PATCH v2] gnupg: Package only needs ncurses with
+ readline
+Message-ID: <20181003002517.27064-1-tpiepho@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
+This package only needs ncurses when readline support is enabled, as it's the
+autoconf macro file for readline (used by autoconf to create the gnupg configure
+script) that checks for and pulls in ncurses.
 
-On Tue, Oct 2, 2018 at 2:26 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Matt, All,
->
-> On 2018-09-27 09:36 -0500, Matt Weber spake thusly:
-> > This patch moves the PACKAGES_USERS to be appended to the USERS_TABLES
-> > before ROOTFS_USERS_TABLES.  This allows the ROOTFS_USERS_TABLES to
-> > update the existing users created by packages with different settings
-> > like home directory, pid, gid, etc.
->
-> So, I do understand the rationale behind this, and I was almost ready to
-> ack the patch, when I thought of a potential trap this could open under
-> the unsuspectign user's feet.
->
-> So, let's consider a hypotetical package that:
->
->   - defines a user, say 'foo', with home set to e.g. /run/foo
->
->   - installs a daemon to run under user 'foo'
->
->   - installs a config file that contains (e.g.) chroot_dir=/run/foo
->
-> Then your custom users table overrides the home dir to (e.g.) /home/foo.
->
-> You better be prepared to also override the config file with your own,
-> and so on (e.g. maybe the startup script too...)
->
-> I don't think it is too bad, though, so I'm OK with the change.
->
-> I would however suggest a rephrasing of the commit log, something along
-> the lines of:
->
->     fs/common: allow custom user table to override package-defined users
->
->     Currently, when a custom user table and a package define the same user,
->     the settings from the package takes precedence over the ones from the
->     custom user table.
->
->     Hwever, it makes sense to allow the settings from the custom user table
->     take precedence. For example, it woould allow redirecting the user's
->     home directory to an alternate location (e.g. away from tmp and into a
->     partition that is persistent).
->
->     The support/scripts/mkusers script will only retain settings from the
->     latest definition it finds.
->
->     Thus, by passing the custom user table after the package defined users,
->     it is possible to override the packageprovided user definitions.
->
-> With that commit log updated:
->
+Since readline already depends on ncurses, gnupg need only depend on
+readline (when enabled).
 
-v2 - https://patchwork.ozlabs.org/patch/978067/
+The host package always forces readline support off, so the host-ncurses
+dependency can be removed entirely.
 
-Matt
+Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+---
+ package/gnupg/Config.in | 1 -
+ package/gnupg/gnupg.mk  | 4 ++--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/package/gnupg/Config.in b/package/gnupg/Config.in
+index 7c31612298..2db46318f1 100644
+--- a/package/gnupg/Config.in
++++ b/package/gnupg/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_GNUPG
+ 	bool "gnupg"
+ 	depends on !BR2_PACKAGE_GNUPG2
+ 	select BR2_PACKAGE_ZLIB
+-	select BR2_PACKAGE_NCURSES
+ 	help
+ 	  GnuPG is the GNU project's complete and free implementation
+ 	  of the OpenPGP standard as defined by RFC4880. GnuPG allows
+diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
+index ac9047894d..bedcf6c985 100644
+--- a/package/gnupg/gnupg.mk
++++ b/package/gnupg/gnupg.mk
+@@ -9,7 +9,7 @@ GNUPG_SOURCE = gnupg-$(GNUPG_VERSION).tar.bz2
+ GNUPG_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG_LICENSE = GPL-3.0+
+ GNUPG_LICENSE_FILES = COPYING
+-GNUPG_DEPENDENCIES = zlib ncurses $(if $(BR2_PACKAGE_LIBICONV),libiconv)
++GNUPG_DEPENDENCIES = zlib $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ GNUPG_CONF_ENV = ac_cv_sys_symbol_underscore=no
+ GNUPG_CONF_OPTS = \
+ 	--disable-rpath \
+@@ -18,7 +18,7 @@ GNUPG_CONF_OPTS = \
+ 	--enable-sha256 \
+ 	--enable-sha512
+ 
+-HOST_GNUPG_DEPENDENCIES = host-zlib host-ncurses
++HOST_GNUPG_DEPENDENCIES = host-zlib
+ HOST_GNUPG_CONF_OPTS = \
+ 	--disable-rpath \
+ 	--enable-minimal \
+-- 
+2.14.4
