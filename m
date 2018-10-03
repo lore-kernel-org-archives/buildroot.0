@@ -1,11 +1,10 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 3 Oct 2018 07:52:24 +0300
-Subject: [Buildroot] [PATCH v1 2/3] qt5serialbus: fix 5.6.3 license file
- hashes
-In-Reply-To: <20181002211637.2356-2-ps.report@gmx.net>
-References: <20181002211637.2356-1-ps.report@gmx.net>
- <20181002211637.2356-2-ps.report@gmx.net>
-Message-ID: <20181003045224.wlrhhkgyv2tj3pqg@sapphire.tkos.co.il>
+Date: Wed, 3 Oct 2018 08:00:16 +0300
+Subject: [Buildroot] [PATCH v1 1/2] wireless-regdb: bump version to
+ 2018.09.07
+In-Reply-To: <20181002200502.19372-1-ps.report@gmx.net>
+References: <20181002200502.19372-1-ps.report@gmx.net>
+Message-ID: <20181003050016.lpn6hzmbh62afbeh@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,35 +13,41 @@ To: buildroot@busybox.net
 
 Hi Peter,
 
-On Tue, Oct 02, 2018 at 11:16:36PM +0200, Peter Seiderer wrote:
-> Fixes [1]:
-> 
->   ERROR: LICENSE.FDL has wrong sha256 hash:
->   ERROR: expected: ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d
->   ERROR: got     : f827ad079686ba92cc94811e35492d0e8966f704008b6da9eeda0b659fb58a8d
-> 
-> [1] http://autobuild.buildroot.net/results/f8dba48bc1e71332f3983e78c40989e5f864abf3
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/qt5/qt5serialbus/5.6.3/qt5serialbus.hash | 5 +++++
->  1 file changed, 5 insertions(+)
->  create mode 100644 package/qt5/qt5serialbus/5.6.3/qt5serialbus.hash
-> 
-> diff --git a/package/qt5/qt5serialbus/5.6.3/qt5serialbus.hash b/package/qt5/qt5serialbus/5.6.3/qt5serialbus.hash
-> new file mode 100644
-> index 0000000000..574fcc5294
-> --- /dev/null
-> +++ b/package/qt5/qt5serialbus/5.6.3/qt5serialbus.hash
-> @@ -0,0 +1,5 @@
-> +# Hashes for license files:
-> +sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPLv2
-> +sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
-> +sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
-> +sha256 f827ad079686ba92cc94811e35492d0e8966f704008b6da9eeda0b659fb58a8d LICENSE.FDL
+On Tue, Oct 02, 2018 at 10:05:01PM +0200, Peter Seiderer wrote:
 
-Shouldn't the tarball hash move also here? Having the 5.6.x tarball hash in 
-the default .hash file is confusing.
+Missing sign-off.
+
+> ---
+>  package/wireless-regdb/wireless-regdb.hash | 2 +-
+>  package/wireless-regdb/wireless-regdb.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
+> index 65ae735cb5..aa035d0ef5 100644
+> --- a/package/wireless-regdb/wireless-regdb.hash
+> +++ b/package/wireless-regdb/wireless-regdb.hash
+> @@ -1,4 +1,4 @@
+>  # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
+> -sha256 e1dfbc3b97771373077f430c3c05082fae883145b37db5b2cfd12c56676fbe7b  wireless-regdb-2018.05.31.tar.xz
+> +sha256 a36b8147f1a3e98e1fd44321a4b8d7ad2f03cac98cdf527ccb1693342f08d65a  wireless-regdb-2018.09.07.tar.xz
+>  # Locally computed
+>  sha256 678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
+> diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+> index 829374edcf..fcbba055ac 100644
+> --- a/package/wireless-regdb/wireless-regdb.mk
+> +++ b/package/wireless-regdb/wireless-regdb.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -WIRELESS_REGDB_VERSION = 2018.05.31
+> +WIRELESS_REGDB_VERSION = 2018.09.07
+>  WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
+>  WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
+
+Unrelated to this patch, shouldn't we use BR2_KERNEL_MIRROR?
+
+>  WIRELESS_REGDB_LICENSE = ISC
 
 baruch
 
