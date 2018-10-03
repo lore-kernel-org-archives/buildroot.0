@@ -1,115 +1,136 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 3 Oct 2018 09:36:35 +0200
-Subject: [Buildroot] [git commit] crda: bump version to 4.14
-Message-ID: <20181003074356.E6C548A460@busybox.osuosl.org>
+Date: Wed, 3 Oct 2018 09:37:59 +0200
+Subject: [Buildroot] [git commit] package/samba4: Fix uClibc build on 64bit
+ platforms by including stdint.h, updated for 4.9.1
+Message-ID: <20181003074357.05CA18A460@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e79bd3f456cef12886ac6b086c8bc78e3e520f8
+commit: https://git.buildroot.net/buildroot/commit/?id=7b0ec4460eaa008638fd26f7786961b16959a4e7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- changed download location
-- rebased 0001-crda-support-python-3-in-utils-key2pub.py.patch
+Fixes
+http://autobuild.buildroot.net/results/68f/68f3fb75ba8a2f138e9c3f37b2681b81441e2cd9/
 
-Changes since 3.18:
-- 2018-01-05	Update gitignore
-- 2018-01-05	crda: Fix error: `keys??? defined but not used
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...001-crda-support-python-3-in-utils-key2pub.py.patch | 18 ++++++++++--------
- package/crda/crda.hash                                 |  4 ++--
- package/crda/crda.mk                                   |  6 +++---
- 3 files changed, 15 insertions(+), 13 deletions(-)
+ ...build-on-64bit-platforms-by-including-std.patch | 76 ++++++++++++++++++++--
+ 1 file changed, 71 insertions(+), 5 deletions(-)
 
-diff --git a/package/crda/0001-crda-support-python-3-in-utils-key2pub.py.patch b/package/crda/0001-crda-support-python-3-in-utils-key2pub.py.patch
-index 99eb11cba7..fb46d58ed2 100644
---- a/package/crda/0001-crda-support-python-3-in-utils-key2pub.py.patch
-+++ b/package/crda/0001-crda-support-python-3-in-utils-key2pub.py.patch
-@@ -1,7 +1,7 @@
--From 797f2836c48f9ba2446629ae4b6867ca1a5ea512 Mon Sep 17 00:00:00 2001
-+From 4c346aa9e816bddfedc8ac99809fd1ed91bfc8ee Mon Sep 17 00:00:00 2001
- From: Taahir Ahmed <ahmed.taahir@gmail.com>
- Date: Wed, 30 Mar 2016 11:23:54 -0300
--Subject: [PATCH 1/2] crda: support python 3 in utils/key2pub.py
-+Subject: [PATCH] crda: support python 3 in utils/key2pub.py
+diff --git a/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch b/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
+index 0f174d5369..c1418bd885 100644
+--- a/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
++++ b/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
+@@ -1,4 +1,4 @@
+-From 3d91847322eba55e97adc76c5c95570382af7059 Mon Sep 17 00:00:00 2001
++From 5627ea3826a00c149ff3d49c40706217043a014d Mon Sep 17 00:00:00 2001
+ From: Bernd Kuhls <bernd.kuhls@t-online.de>
+ Date: Sun, 28 Jan 2018 11:57:11 +0100
+ Subject: [PATCH] Fix uClibc build on 64bit platforms by including stdint.h
+@@ -21,18 +21,36 @@ Patch sent upstream:
+ https://lists.samba.org/archive/samba-technical/2018-January/125306.html
  
- utils/key2pub.py can now be run under either python 2.7 or python 3.x.
- This required some minor syntactical changes as well as switching from
-@@ -18,16 +18,18 @@ fixed:
- [Gustavo: don't call /utils/key2pub.py since that doesn't compute]
+ [updated for samba-4.8.4, v2 sent upstream
+- https://lists.samba.org/archive/samba-technical/2018-August/129732.html]
++ https://lists.samba.org/archive/samba-technical/2018-August/129732.html,
++ updated for samba-4.9.1]
  
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+[Rebased against crda-4.14]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  ---
- Status: submitted upstream by author but not (yet) accepted
- URL: http://www.spinics.net/lists/linux-wireless/msg138936.html
--
-+---
-  Makefile         |   2 +-
-- utils/key2pub.py | 146 ++++++++++++++++++++++++++++---------------------------
-+ utils/key2pub.py | 146 ++++++++++++++++++++++++-----------------------
-  2 files changed, 75 insertions(+), 73 deletions(-)
++ lib/ldb/tests/ldb_kv_ops_test.c   | 1 +
+  lib/ldb/tests/ldb_mod_op_test.c   | 1 +
+  lib/ldb/tests/ldb_msg.c           | 1 +
++ lib/ldb/tests/ldb_tdb_test.c      | 1 +
++ lib/ldb/tests/test_ldb_qsort.c    | 1 +
++ lib/util/tests/test_ms_fnmatch.c  | 1 +
+  libcli/auth/tests/ntlm_check.c    | 1 +
+  libcli/smb/test_smb1cli_session.c | 1 +
+- 4 files changed, 4 insertions(+)
++ source3/lib/test_tldap.c          | 1 +
++ 9 files changed, 9 insertions(+)
  
- diff --git a/Makefile b/Makefile
--index 1f25509..523a96e 100644
-+index a3ead30..8da38d0 100644
- --- a/Makefile
- +++ b/Makefile
- @@ -112,7 +112,7 @@ $(REG_BIN):
-@@ -40,7 +42,7 @@ index 1f25509..523a96e 100644
-  $(LIBREG): regdb.h reglib.h reglib.c
-  	$(NQ) '  CC  ' $@
- diff --git a/utils/key2pub.py b/utils/key2pub.py
--index 3e84cd2..c76cbbb 100755
-+index 9bb04cd..9f92ebd 100755
- --- a/utils/key2pub.py
- +++ b/utils/key2pub.py
- @@ -1,126 +1,128 @@
-@@ -223,7 +225,7 @@ index 3e84cd2..c76cbbb 100755
- +	.n = _n, .len_n = sizeof(_n), \\
-  }
++diff --git a/lib/ldb/tests/ldb_kv_ops_test.c b/lib/ldb/tests/ldb_kv_ops_test.c
++index 30ce019fac8..3ac7763b307 100644
++--- a/lib/ldb/tests/ldb_kv_ops_test.c
+++++ b/lib/ldb/tests/ldb_kv_ops_test.c
++@@ -46,6 +46,7 @@
++  */
++ #include <stdarg.h>
++ #include <stddef.h>
+++#include <stdint.h>
++ #include <setjmp.h>
++ #include <cmocka.h>
++ 
+ diff --git a/lib/ldb/tests/ldb_mod_op_test.c b/lib/ldb/tests/ldb_mod_op_test.c
+-index c8b9c1aa9ff..4893dc3b38b 100644
++index 01667af3865..a1a20d38f28 100644
+ --- a/lib/ldb/tests/ldb_mod_op_test.c
+ +++ b/lib/ldb/tests/ldb_mod_op_test.c
+ @@ -13,6 +13,7 @@
+@@ -55,6 +73,42 @@ index f8de418e0dc..31786a9a318 100644
+  #include <setjmp.h>
+  #include <cmocka.h>
   
-- static const struct key_params keys[] = {
-+ static const struct key_params __attribute__ ((unused)) keys[] = {
-  ''')
- -    for n in xrange(n + 1):
- -        output.write('	KEYS(e_%d, n_%d),\n' % (n, n))
-@@ -267,5 +269,5 @@ index 3e84cd2..c76cbbb 100755
++diff --git a/lib/ldb/tests/ldb_tdb_test.c b/lib/ldb/tests/ldb_tdb_test.c
++index 686a35104ea..2e312e60a3c 100644
++--- a/lib/ldb/tests/ldb_tdb_test.c
+++++ b/lib/ldb/tests/ldb_tdb_test.c
++@@ -40,6 +40,7 @@
++  */
++ #include <stdarg.h>
++ #include <stddef.h>
+++#include <stdint.h>
++ #include <setjmp.h>
++ #include <cmocka.h>
++ 
++diff --git a/lib/ldb/tests/test_ldb_qsort.c b/lib/ldb/tests/test_ldb_qsort.c
++index 06e80d94379..663cf0e7564 100644
++--- a/lib/ldb/tests/test_ldb_qsort.c
+++++ b/lib/ldb/tests/test_ldb_qsort.c
++@@ -19,6 +19,7 @@
++ 
++ #include <stdarg.h>
++ #include <stddef.h>
+++#include <stdint.h>
++ #include <setjmp.h>
++ #include <cmocka.h>
++ 
++diff --git a/lib/util/tests/test_ms_fnmatch.c b/lib/util/tests/test_ms_fnmatch.c
++index 7fe8ed05e28..d11c7bed4be 100644
++--- a/lib/util/tests/test_ms_fnmatch.c
+++++ b/lib/util/tests/test_ms_fnmatch.c
++@@ -19,6 +19,7 @@
++ 
++ #include <stdarg.h>
++ #include <stddef.h>
+++#include <stdint.h>
++ #include <setjmp.h>
++ #include <cmocka.h>
++ 
+ diff --git a/libcli/auth/tests/ntlm_check.c b/libcli/auth/tests/ntlm_check.c
+ index e87a0a276d4..65c7b086008 100644
+ --- a/libcli/auth/tests/ntlm_check.c
+@@ -78,6 +132,18 @@ index d1e21d5431e..6a526c96b61 100644
+  #include <setjmp.h>
+  #include <cmocka.h>
   
-  modes[mode][1](output, idx - 1)
++diff --git a/source3/lib/test_tldap.c b/source3/lib/test_tldap.c
++index a6c2f2117cb..659c5a7371a 100644
++--- a/source3/lib/test_tldap.c
+++++ b/source3/lib/test_tldap.c
++@@ -20,6 +20,7 @@
++ 
++ #include <stdarg.h>
++ #include <stddef.h>
+++#include <stdint.h>
++ #include <setjmp.h>
++ #include <cmocka.h>
++ 
  -- 
--2.7.3
-+2.18.0
+-2.18.0
++2.19.0
  
-diff --git a/package/crda/crda.hash b/package/crda/crda.hash
-index 45b9d20407..edec55a019 100644
---- a/package/crda/crda.hash
-+++ b/package/crda/crda.hash
-@@ -1,2 +1,2 @@
--# From https://www.kernel.org/pub/software/network/crda/sha256sums.asc
--sha256	43fcb9679f8b75ed87ad10944a506292def13e4afb194afa7aa921b01e8ecdbf	crda-3.18.tar.xz
-+# Locally computed
-+sha256 5a8f35bb8b27474f466b0e75d451ba917433d8aab1889678a64d9c4e72a8b8c2 crda-4.14.tar.gz
-diff --git a/package/crda/crda.mk b/package/crda/crda.mk
-index df879f68bb..ab50030126 100644
---- a/package/crda/crda.mk
-+++ b/package/crda/crda.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--CRDA_VERSION = 3.18
--CRDA_SOURCE = crda-$(CRDA_VERSION).tar.xz
--CRDA_SITE = $(BR2_KERNEL_MIRROR)/software/network/crda
-+CRDA_VERSION = 4.14
-+CRDA_SOURCE = crda-$(CRDA_VERSION).tar.gz
-+CRDA_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/crda.git/snapshot
- CRDA_DEPENDENCIES = host-pkgconf host-python-pycrypto libnl libgcrypt
- CRDA_LICENSE = ISC
- CRDA_LICENSE_FILES = LICENSE
