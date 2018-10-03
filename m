@@ -1,60 +1,51 @@
-From: Erico Nunes <nunes.erico@gmail.com>
-Date: Wed, 3 Oct 2018 21:11:35 +0200
-Subject: [Buildroot] [PATCH 1/1] linux-firmware: bump version and fix
- hash
-In-Reply-To: <87mus2vkos.fsf@dell.be.48ers.dk>
-References: <20180926223806.12704-1-nunes.erico@gmail.com>
- <87mus2vkos.fsf@dell.be.48ers.dk>
-Message-ID: <CAK4VdL0mu+5Od73gU4T7dRLVRHior7gYg6NQ3+bNKms9P5R=EQ@mail.gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Wed,  3 Oct 2018 22:24:47 +0300
+Subject: [Buildroot] [PATCH 1/1] python-logbook: bump to version 1.4.0
+Message-ID: <20181003192447.21240-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Sep 27, 2018 at 8:50 PM Peter Korsgaard <peter@korsgaard.com> wrote:
->  > ERROR: linux-firmware-8d69bab7a3da1913113ea98cefb73d5fa6988286.tar.gz has wrong sha256 hash:
->  > ERROR: expected: 905be20e4e2d7628dea4e2e99195520fc0cce8b247faabdc52fc44a3ff2ceb04
->  > ERROR: got     : b9fce72a7b0b55eb311701dfd47914bc9e037134fa401d33e6e73ab9ebc9d116
->  > ERROR: Incomplete download, or man-in-the-middle (MITM) attack
->
-> Hmm, odd?
->
->  > -LINUX_FIRMWARE_VERSION = 8d69bab7a3da1913113ea98cefb73d5fa6988286
->  > +LINUX_FIRMWARE_VERSION = 44d4fca9922a252a0bd81f6307bcc072a78da54a
->
-> Did you verify if we need to adjust any of sub options logic? There are
-> quite some changes, but from a quick look I didn't see any new files
-> that need to be explicitly handled.
+Also add license file (plus hash)
 
-I see that the hash got updated again after this commit, and now it's
-broken again for me.
-I re-tested on more machines running Fedora 28 or Centos 7, including
-one where I had never used Buildroot before, and apparently I even get
-different hashes on each for linux-firmware:
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/python-logbook/python-logbook.hash | 8 +++++---
+ package/python-logbook/python-logbook.mk   | 5 +++--
+ 2 files changed, 8 insertions(+), 5 deletions(-)
 
-ERROR: linux-firmware-44d4fca9922a252a0bd81f6307bcc072a78da54a.tar.gz
-has wrong sha256 hash:
-ERROR: expected:
-b279ca4d086887c2efab13e28a7ca36e409410d3df38a62d7c7b5799ee3de916
-ERROR: got     :
-12d025328deab2bd2bec489c5f51181db6530cc9eb91d10ef66a55c18c2da8bf
-
-ERROR: linux-firmware-44d4fca9922a252a0bd81f6307bcc072a78da54a.tar.gz
-has wrong sha256 hash:
-ERROR: expected:
-b279ca4d086887c2efab13e28a7ca36e409410d3df38a62d7c7b5799ee3de916
-ERROR: got     :
-a20e4d92274bceb400f85cae873f05fa24575f69bcee5741c56affdb426b017a
-
-ERROR: linux-firmware-44d4fca9922a252a0bd81f6307bcc072a78da54a.tar.gz
-has wrong sha256 hash:
-ERROR: expected:
-b279ca4d086887c2efab13e28a7ca36e409410d3df38a62d7c7b5799ee3de916
-ERROR: got     :
-f8047ad77dd71fe05569bdaf29cb9ea7b23ce216f0d8df21b364ba68398de29e
-
-
-Is there some known cause for this?
-
-Erico
+diff --git a/package/python-logbook/python-logbook.hash b/package/python-logbook/python-logbook.hash
+index 1a79046c3d..b15f8b9959 100644
+--- a/package/python-logbook/python-logbook.hash
++++ b/package/python-logbook/python-logbook.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/logbook/json, sha256 locally computed
+-md5	22fea705e067c118925898f0c30b0508  Logbook-1.0.0.tar.gz
+-sha256	87da2515a6b3db866283cb9d4e5a6ec44e52a1d556ebb2ea3b6e7e704b5f1872  Logbook-1.0.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/logbook/json
++md5	926d40a90cfe8eceade449fca2314b16  Logbook-1.4.0.tar.gz
++sha256	3c0a3ebd48e89fcdd725fe393eb9226c789dca5a4e7842d65e2f256645fd1cd9  Logbook-1.4.0.tar.gz
++# Locally computed sha256 checksums
++sha256	2ca266337cc6947578654ab0dd6438de4d01fa78b2e6eb554b09757df1178f98  LICENSE
+diff --git a/package/python-logbook/python-logbook.mk b/package/python-logbook/python-logbook.mk
+index 5fcf301ba4..25a520dc83 100644
+--- a/package/python-logbook/python-logbook.mk
++++ b/package/python-logbook/python-logbook.mk
+@@ -4,10 +4,11 @@
+ #
+ ################################################################################
+ 
+-PYTHON_LOGBOOK_VERSION = 1.0.0
++PYTHON_LOGBOOK_VERSION = 1.4.0
+ PYTHON_LOGBOOK_SOURCE = Logbook-$(PYTHON_LOGBOOK_VERSION).tar.gz
+-PYTHON_LOGBOOK_SITE = https://pypi.python.org/packages/34/e8/6419c217bbf464fe8a902418120cccaf476201bd03b50958db24d6e90f65
++PYTHON_LOGBOOK_SITE = https://files.pythonhosted.org/packages/36/4b/b610bee18d5cfc4cec7dde056639994e9b34991e4c57816bfff0f3d0ac33
+ PYTHON_LOGBOOK_SETUP_TYPE = setuptools
+ PYTHON_LOGBOOK_LICENSE = BSD-3-Clause
++PYTHON_LOGBOOK_LICENSE_FILES = LICENSE
+ 
+ $(eval $(python-package))
+-- 
+2.17.1
