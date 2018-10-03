@@ -1,39 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 3 Oct 2018 14:54:19 +0200
-Subject: [Buildroot] [PATCH v3 2/2] support/scripts/pkg-stats: URL check
- using threads
-In-Reply-To: <5bb4123cbed5b_6f723fa9ec08e7bc6558f@ultri5.mail>
-References: <1538447849-46511-2-git-send-email-matthew.weber@rockwellcollins.com>
- <5bb4123cbed5b_6f723fa9ec08e7bc6558f@ultri5.mail>
-Message-ID: <20181003145419.2f76fe63@windsurf>
+Date: Wed, 3 Oct 2018 14:54:43 +0200
+Subject: [Buildroot] [PATCH 1/1] x265: disable parallel build
+In-Reply-To: <20181001205739.27140-1-fontaine.fabrice@gmail.com>
+References: <20181001205739.27140-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181003145443.69bae932@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ricardo,
+Hello,
 
-On Tue, 02 Oct 2018 21:50:04 -0300, Ricardo Martincoski wrote:
-
-> On Mon, Oct 01, 2018 at 11:37 PM, Matt Weber wrote:
+On Mon,  1 Oct 2018 22:57:39 +0200, Fabrice Fontaine wrote:
+> It seems package has a parallel build issue on ARM cortex A8 or A9 since
+> at least version 2.5:
 > 
-> > Adds a pool of worker threads to accelerate connection testing.
-> > 
-> > ~7.5MB and 2% CPU per thread on a Intel i5-3230M CPU @ 2.60GHz.
-> > 
-> > Runtime is ~3min in parallel vs ~15min.
-> > 
-> > CC: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>  
-> 
-> Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> [ 94%] Linking CXX shared library libx265.so
+> ipfilter8.S.o: file not recognized: File truncated
+> collect2: error: ld returned 1 exit status
+> CMakeFiles/x265-shared.dir/build.make:221: recipe for target 'libx265.so.160' failed
 
-So this threading works for you? I think it is modeled after what I
-initially did to retrieve the upstream version of the packages, and you
-said it wasn't working well for you.
+Could you submit a bug report upstream for this issue ?
 
-Best regards,
+Thanks,
 
 Thomas
 -- 
