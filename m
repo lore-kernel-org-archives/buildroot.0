@@ -1,43 +1,42 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Wed, 3 Oct 2018 14:57:48 +0200
-Subject: [Buildroot] [PATCH] linux-firmware: fix build failure on
- legal-info
-In-Reply-To: <20181003044542.hrqjjfbxoic56hpb@sapphire.tkos.co.il>
-References: <20181002214318.85312-1-giulio.benetti@micronovasrl.com>
- <20181003044542.hrqjjfbxoic56hpb@sapphire.tkos.co.il>
-Message-ID: <1581a80e-7753-b756-46c7-fd8c5d37cbb4@micronovasrl.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed,  3 Oct 2018 15:13:55 +0200
+Subject: [Buildroot] [PATCH 1/4] package/asterisk: bump version to 14.7.8
+Message-ID: <20181003131358.28002-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/asterisk/asterisk.hash | 2 +-
+ package/asterisk/asterisk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Il 03/10/2018 06:45, Baruch Siach ha scritto:
-> Hi Giulio,
-> 
-> On Tue, Oct 02, 2018 at 11:43:18PM +0200, Giulio Benetti wrote:
->> In linux-firmware.hash WHENCE sha256 is wrong causing make legal-info to
->> fail.
-> 
-> Do WHENCE file changes affect the license of any firmware file? Please mention
-> in the commit log.
-
-And this is the third time I've forgotten about it in commit log.
-
-Thank you for reviewing.
-Going to send V2
-
-Best regards
+diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
+index a3e9d10aff..2449aeb4d1 100644
+--- a/package/asterisk/asterisk.hash
++++ b/package/asterisk/asterisk.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  249cf223ef4dd7aea01f0d250a6b9cad661ebd78910c73adb7f59c1c46f9fed8  asterisk-14.7.6.tar.gz
++sha256  41c99bd2236af95d056e15f9d044c28b69e00935e67791b18fa70b0614402012  asterisk-14.7.8.tar.gz
+ 
+ # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
+ # sha256 locally computed
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index f31e2394f7..ea779cc8f6 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ASTERISK_VERSION = 14.7.6
++ASTERISK_VERSION = 14.7.8
+ # Use the github mirror: it's an official mirror maintained by Digium, and
+ # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
+ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
 -- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+2.19.0
