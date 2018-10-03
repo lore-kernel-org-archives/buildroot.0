@@ -1,32 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 3 Oct 2018 21:02:52 +0200
-Subject: [Buildroot] [PATCH 17/23] python-zope-interface: bump to
- version 4.5.0
-In-Reply-To: <20180926153505.3411-18-asafka7@gmail.com>
-References: <20180926153505.3411-1-asafka7@gmail.com>
- <20180926153505.3411-18-asafka7@gmail.com>
-Message-ID: <20181003210252.0f528daf@windsurf>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed,  3 Oct 2018 21:08:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/asterisk: libsrtp needs openssl
+Message-ID: <20181003190829.28477-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes configure error
 
-On Wed, 26 Sep 2018 18:34:59 +0300, Asaf Kahlon wrote:
-> Fix indentation for license hash.
-> 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-> ---
->  package/python-zope-interface/python-zope-interface.hash | 9 +++++----
->  package/python-zope-interface/python-zope-interface.mk   | 4 ++--
->  2 files changed, 7 insertions(+), 6 deletions(-)
+checking for the ability of -lsrtp2 to be linked in a shared object... yes
+checking for srtp_crypto_policy_set_aes_cm_256_hmac_sha1_80 in -lsrtp2... yes
+checking for srtp_crypto_policy_set_aes_cm_192_hmac_sha1_80 in -lsrtp2... no
+checking for srtp_crypto_policy_set_aes_gcm_128_8_auth in -lsrtp2... no
+checking for srtp_shutdown in -lsrtp2... yes
+checking for srtp2/srtp.h... (cached) yes
+configure: WARNING: ***
+configure: WARNING: *** OpenSSL required when using libsrtp2, checking for libsrtp instead.
+configure: WARNING: ***
 
-Applied to master with Yegor Reviewed-by, thanks.
+using this defconfig:
 
-Thomas
+BR2_PACKAGE_LIBSRTP=y
+BR2_PACKAGE_ASTERISK=y
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/asterisk/asterisk.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index 9480d6ba82..c3f1136068 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -245,7 +245,8 @@ else
+ ASTERISK_CONF_OPTS += --without-speex  --without-speexdsp
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBSRTP),y)
++# asterisk needs an openssl-enabled libsrtp
++ifeq ($(BR2_PACKAGE_LIBSRTP)$(BR2_PACKAGE_OPENSSL)x$(BR2_STATIC_LIBS),yyx)
+ ASTERISK_DEPENDENCIES += libsrtp
+ ASTERISK_CONF_OPTS += --with-srtp
+ else
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.19.0
