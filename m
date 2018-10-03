@@ -1,42 +1,70 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  3 Oct 2018 15:13:55 +0200
-Subject: [Buildroot] [PATCH 1/4] package/asterisk: bump version to 14.7.8
-Message-ID: <20181003131358.28002-1-bernd.kuhls@t-online.de>
+Date: Wed,  3 Oct 2018 15:13:56 +0200
+Subject: [Buildroot] [PATCH 2/4] package/asterisk: enable for non-glibc
+ toolchains
+In-Reply-To: <20181003131358.28002-1-bernd.kuhls@t-online.de>
+References: <20181003131358.28002-1-bernd.kuhls@t-online.de>
+Message-ID: <20181003131358.28002-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Quoting Yann:
+http://lists.busybox.net/pipermail/buildroot/2017-September/203004.html
+
+"As a final stroke of genius, asterisk checks for the re-entrant variant
+of res_ninit(), and concludes that all such functions are available,
+including res_nsearch(). Uclibc-ng has the former but not the latter, so
+the build fails. Since there is no cache variable for that check, we
+can't pre-feed that result to configure, and fixing it is a bigger
+endeavour.  So we make asterisk depend on glibc for now, until someone
+is brave enough to fix it."
+
+This hack was copied from Optware:
+https://github.com/Optware/Optware-ng/blob/master/make/asterisk13.mk#L331
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/asterisk/asterisk.hash | 2 +-
- package/asterisk/asterisk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/asterisk/Config.in   | 6 ++----
+ package/asterisk/asterisk.mk | 4 ++++
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index a3e9d10aff..2449aeb4d1 100644
---- a/package/asterisk/asterisk.hash
-+++ b/package/asterisk/asterisk.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  249cf223ef4dd7aea01f0d250a6b9cad661ebd78910c73adb7f59c1c46f9fed8  asterisk-14.7.6.tar.gz
-+sha256  41c99bd2236af95d056e15f9d044c28b69e00935e67791b18fa70b0614402012  asterisk-14.7.8.tar.gz
+diff --git a/package/asterisk/Config.in b/package/asterisk/Config.in
+index 17ac22bfd4..2cf2369749 100644
+--- a/package/asterisk/Config.in
++++ b/package/asterisk/Config.in
+@@ -1,7 +1,5 @@
+ config BR2_PACKAGE_ASTERISK
+ 	bool "asterisk"
+-	# Uses glibc resolver function res_nsearch()
+-	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_JANSSON
+ 	select BR2_PACKAGE_LIBCURL
+@@ -22,5 +20,5 @@ config BR2_PACKAGE_ASTERISK
  
- # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
- # sha256 locally computed
+ 	  http://www.asterisk.org/
+ 
+-comment "asterisk needs a glibc toolchain w/ C++"
+-	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP
++comment "asterisk needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
 diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index f31e2394f7..ea779cc8f6 100644
+index ea779cc8f6..46fe4de947 100644
 --- a/package/asterisk/asterisk.mk
 +++ b/package/asterisk/asterisk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -117,6 +117,10 @@ ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
+ ASTERISK_CONF_OPTS += --with-execinfo
+ else
+ ASTERISK_CONF_OPTS += --without-execinfo
++define ASTERISK_NO_RESINIT
++	sed -i -e '/AC_DEFINE(\[HAVE_RES_NINIT\]/d' $(@D)/configure.ac
++endef
++ASTERISK_POST_PATCH_HOOKS += ASTERISK_NO_RESINIT
+ endif
  
--ASTERISK_VERSION = 14.7.6
-+ASTERISK_VERSION = 14.7.8
- # Use the github mirror: it's an official mirror maintained by Digium, and
- # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
- ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+ ifeq ($(BR2_PACKAGE_LIBGSM),y)
 -- 
 2.19.0
