@@ -1,51 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 3 Oct 2018 09:37:23 +0200
-Subject: [Buildroot] [git commit] python-django: bump version to 1.11.16
-Message-ID: <20181003074356.EFB8D8A460@busybox.osuosl.org>
+Date: Wed, 3 Oct 2018 09:38:34 +0200
+Subject: [Buildroot] [git commit] package/ghostscript: fix removal of
+ included lcms2
+Message-ID: <20181003074357.0ECBA8A460@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=feb811f56756bdbbbdd5a2230545462d46b2ea61
+commit: https://git.buildroot.net/buildroot/commit/?id=d5f83cfc885c4a9ea6d35d38b7d5a8eaf725aee2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes a race condition in QuerySet.update_or_create() that could result in
-data loss:
+Ghostscript 9.24 changed the internal lcms2 version:
+https://www.ghostscript.com/doc/9.24/News.htm
 
-https://code.djangoproject.com/ticket/29499
+With this change the directory name was also changed which broke our
+code to force the usage of the buildroot lcms2 package.
 
+Fixes
+http://autobuild.buildroot.net/results/d04/d04ad017bf06a442a7397f935959994ba72824e1/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/ghostscript/ghostscript.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index bc7aed9479..6e6e7708db 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,3 +1,3 @@
--# From https://www.djangoproject.com/m/pgp/Django-1.11.15.checksum.txt
--sha256	b18235d82426f09733d2de9910cee975cf52ff05e5f836681eb957d105a05a40  Django-1.11.15.tar.gz
-+# From https://www.djangoproject.com/m/pgp/Django-1.11.16.checksum.txt
-+sha256	29268cc47816a44f27308e60f71da635f549c47d8a1d003b28de55141df75791  Django-1.11.16.tar.gz
- sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index ae604dbc97..9f43ffab85 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
+diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+index 9b5e144888..b1f5e1edb1 100644
+--- a/package/ghostscript/ghostscript.mk
++++ b/package/ghostscript/ghostscript.mk
+@@ -27,8 +27,8 @@ GHOSTSCRIPT_DEPENDENCIES = \
+ # Inspired by linuxfromscratch:
+ # http://www.linuxfromscratch.org/blfs/view/svn/pst/gs.html
+ define GHOSTSCRIPT_REMOVE_LIBS
+-	rm -rf $(@D)/freetype $(@D)/ijs $(@D)/jpeg $(@D)/lcms2 \
+-		$(@D)/lcms2art $(@D)/libpng $(@D)/tiff $(@D)/zlib
++	rm -rf $(@D)/freetype $(@D)/ijs $(@D)/jpeg $(@D)/lcms2mt \
++		$(@D)/libpng $(@D)/tiff $(@D)/zlib
+ endef
+ GHOSTSCRIPT_POST_PATCH_HOOKS += GHOSTSCRIPT_REMOVE_LIBS
  
--PYTHON_DJANGO_VERSION = 1.11.15
-+PYTHON_DJANGO_VERSION = 1.11.16
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/43/b5/b44286e56a5211d37b4058dcd5e62835afa5ce5aa6a38b56bd04c0d01cbc
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/35/1d/59836bce4c9cfded261e21c0abd6a4629de6d289522d0fd928117d8eb985
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_SETUP_TYPE = setuptools
