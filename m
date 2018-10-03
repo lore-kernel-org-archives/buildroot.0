@@ -1,33 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 3 Oct 2018 09:31:37 +0200
-Subject: [Buildroot] [git commit] configs/riotboard: bump kernel to version
- 4.18.10
-Message-ID: <20181003074356.9DC9A8B745@busybox.osuosl.org>
+Date: Wed, 3 Oct 2018 09:32:28 +0200
+Subject: [Buildroot] [git commit] links: fix X11 library/includes detection
+Message-ID: <20181003074356.B581A8B746@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b8f9ff06fe7c765fb6deb212b93300bab957a36
+commit: https://git.buildroot.net/buildroot/commit/?id=49a04acca3d4b8a570b7c1468d236e65111efb69
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Nikolay Dimitrov <nikolay.dimitrov@retrohub.org>
+Fixes:
+http://autobuild.buildroot.net/results/4b0/4b02713ed5c10b58f390f96ea25f2a45c9a47af4/
+http://autobuild.buildroot.net/results/ac6/ac668f867b9de7a2c61d263a894480afc181dd9b/
+http://autobuild.buildroot.net/results/f02/f0248b3bf4a73210f210f422c8df067a6ea28aa1/
+
+The configure script uses AC_PATH_X, which searches the host for the X11
+libraries/headers, causing build failures.
+
+https://www.gnu.org/software/autoconf/manual/autoconf-2.65/html_node/System-Services.html
+
+Fix it by using --x-includes / --x-libraries like we do elsewhere.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/riotboard_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/links/links.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/configs/riotboard_defconfig b/configs/riotboard_defconfig
-index 6a37e64f8c..04d52eb4fa 100644
---- a/configs/riotboard_defconfig
-+++ b/configs/riotboard_defconfig
-@@ -22,7 +22,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.10"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-riotboard"
+diff --git a/package/links/links.mk b/package/links/links.mk
+index dd6adb29b1..651a089fda 100644
+--- a/package/links/links.mk
++++ b/package/links/links.mk
+@@ -15,7 +15,10 @@ ifeq ($(BR2_PACKAGE_LINKS_GRAPHICS),y)
+ LINKS_CONF_OPTS += --enable-graphics
+ LINKS_DEPENDENCIES += libpng
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXT),y)
+-LINKS_CONF_OPTS += --with-x
++LINKS_CONF_OPTS += \
++	--with-x \
++	--x-includes=$(STAGING_DIR)/usr/include \
++	--x-libraries=$(STAGING_DIR)/usr/lib
+ LINKS_DEPENDENCIES += xlib_libXt
+ else
+ LINKS_CONF_OPTS += --without-x
