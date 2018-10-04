@@ -1,69 +1,64 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Thu, 4 Oct 2018 22:30:38 +0300
-Subject: [Buildroot] [PATCH 21/23] python-pyhamcrest: new package
-In-Reply-To: <20181004140218.3f5cd4bc@windsurf>
-References: <20180926153505.3411-1-asafka7@gmail.com>
- <20180926153505.3411-22-asafka7@gmail.com>
- <20181004140218.3f5cd4bc@windsurf>
-Message-ID: <CALFsTFXnJTAm8A7cbDzHS_FsTfQ4dv6UQjj30n61ZLuZFPmL4g@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 4 Oct 2018 21:45:12 +0200
+Subject: [Buildroot] [PATCH/next 3/3] linux-headers: drop old
+ unsupported 4.x versions
+In-Reply-To: <20180824230233.7a7e0a24@windsurf>
+References: <20180824184133.8508-1-bernd.kuhls@t-online.de>
+ <20180824184133.8508-3-bernd.kuhls@t-online.de>
+ <20180824230233.7a7e0a24@windsurf>
+Message-ID: <20181004194512.GA2869@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Yegor,
+Thomas, Bernd, All,
 
-On Thu, Oct 4, 2018 at 3:02 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
+On 2018-08-24 23:02 +0200, Thomas Petazzoni spake thusly:
 > Hello,
->
-> On Wed, 26 Sep 2018 18:35:03 +0300, Asaf Kahlon wrote:
-> > Hamcrest framework for matcher objects.
-> >
-> > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> 
+> On Fri, 24 Aug 2018 20:41:33 +0200, Bernd Kuhls wrote:
+> > These versions received their last updated more than three months ago
+> > and are no longer supported according to
+> > https://www.kernel.org/category/releases.html, so drop them and add
+> > legacy entries.
+> > 
+> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > > ---
-> >  DEVELOPERS                                       |  1 +
-> >  package/Config.in                                |  1 +
-> >  package/python-pyhamcrest/Config.in              |  8 ++++++++
-> >  package/python-pyhamcrest/python-pyhamcrest.hash |  5 +++++
-> >  package/python-pyhamcrest/python-pyhamcrest.mk   | 14 ++++++++++++++
-> >  5 files changed, 29 insertions(+)
-> >  create mode 100644 package/python-pyhamcrest/Config.in
-> >  create mode 100644 package/python-pyhamcrest/python-pyhamcrest.hash
-> >  create mode 100644 package/python-pyhamcrest/python-pyhamcrest.mk
->
-> I've applied to master with Yegor Reviewed-by. However, I have a
-> question, see below.
->
-> > +config BR2_PACKAGE_PYTHON_PYHAMCREST
-> > +     bool "python-pyhamcrest"
-> > +     select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
->
-> How do you know, or how does scanpypi knows when setuptools is needed
-> on the target vs. when it's only needed at build time on the build
-> machine ?
+> >  Config.in.legacy                     | 53 ++++++++++++++++++++++++++++
+> >  package/linux-headers/Config.in.host | 25 -------------
+> >  2 files changed, 53 insertions(+), 25 deletions(-)
+> > 
+> > diff --git a/Config.in.legacy b/Config.in.legacy
+> > index 29d5b6adcc..8c61d803da 100644
+> > --- a/Config.in.legacy
+> > +++ b/Config.in.legacy
+> > @@ -142,6 +142,59 @@ comment "unpredictable ways.                                 "
+> >  comment "----------------------------------------------------"
+> >  endif
+> >  
+> > +###############################################################################
+> > +comment "Legacy options removed in 2018.11"
+> > +
+> > +config BR2_KERNEL_HEADERS_4_10
+> > +	bool "kernel headers version 4.10.x are no longer supported"
+> > +	select BR2_KERNEL_HEADERS_4_14
+> 
+> I think it makes more sense to automatically select some *older* kernel
+> headers.
 
-As far as I know, there's no special treatment for setuptools in
-scanpypi. For pyhamcrest, setuptools was added since it was explicitly
-mentioned under install_requires.
-Generally, not adding setuptools to install_requires is much like not
-adding any other package and scanpypi won't catch this. (Yegor,
-correct me if I am wrong).
-Most of the times, I try to run python and import the package for
-sanity check, but (at least from a first glance) I don't think there's
-a way to know exactly if setuptools is needed on target although not
-specified in install_requires.
+Except it is not allowed to select a choice entry anyway.
 
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+I'll send a patch removing the selects, since they do not work...
 
 Regards,
-Asaf.
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
