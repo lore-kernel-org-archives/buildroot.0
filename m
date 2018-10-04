@@ -1,35 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 4 Oct 2018 14:36:03 +0200
-Subject: [Buildroot] [PATCH 1/1] screen: fix parallel build
-In-Reply-To: <20181003210624.3085-1-fontaine.fabrice@gmail.com>
-References: <20181003210624.3085-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181004143603.22844c1d@windsurf>
+Date: Thu, 4 Oct 2018 14:36:24 +0200
+Subject: [Buildroot] [git commit] configs/imx6ulevk: Bump u-boot to 2018.07
+Message-ID: <20181004123536.8043D8CA1E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2d0d422417b440f228f5055e7a4dc6b79f0337d0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  3 Oct 2018 23:06:24 +0200, Fabrice Fontaine wrote:
-> comm.h is needed to build list_display.o and list_generic.o otherwise
-> parallel builds will sometimes fail
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/43105f14857dbe72d8878fc7b3db67f7bdca93cc
->  - http://autobuild.buildroot.org/results/47f4ecbec1355285633df287fc9c4e7cccde9378
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...-needed-for-list_-display-generic-.o.patch | 35 +++++++++++++++++++
->  1 file changed, 35 insertions(+)
->  create mode 100644 package/screen/0011-comm.h-needed-for-list_-display-generic-.o.patch
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/imx6ulevk_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/imx6ulevk_defconfig b/configs/imx6ulevk_defconfig
+index d0cf8a6751..9e30d2c3c4 100644
+--- a/configs/imx6ulevk_defconfig
++++ b/configs/imx6ulevk_defconfig
+@@ -22,7 +22,7 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6ul_14x14_evk"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.07"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
