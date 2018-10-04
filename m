@@ -1,70 +1,45 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu,  4 Oct 2018 22:48:23 +0200
-Subject: [Buildroot] [PATCH v2 2/3] wireless-regdb: install crda files only
- if used
-In-Reply-To: <20181004204824.17274-1-ps.report@gmx.net>
-References: <20181004204824.17274-1-ps.report@gmx.net>
-Message-ID: <20181004204824.17274-2-ps.report@gmx.net>
+Date: Thu,  4 Oct 2018 23:09:23 +0200
+Subject: [Buildroot] [PATCH v1 09/11] gst1-rtsp-server: bump version to
+ 1.14.4
+In-Reply-To: <20181004210925.25597-1-ps.report@gmx.net>
+References: <20181004210925.25597-1-ps.report@gmx.net>
+Message-ID: <20181004210925.25597-9-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since linux-4.15 the kernel supports loading the files
-regulatory.db/regulatory.db.p7s directly from the /lib/firmware
-directory, for earlier versions the crda helper application
-is needed.
-
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
-Changes v1 -> v2:
-  - fix check-package warning (help text line length)
----
- package/wireless-regdb/Config.in         | 7 ++++++-
- package/wireless-regdb/wireless-regdb.mk | 8 +++++++-
- 2 files changed, 13 insertions(+), 2 deletions(-)
+ package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash | 4 ++--
+ package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wireless-regdb/Config.in b/package/wireless-regdb/Config.in
-index 0c9896deb9..17350a41d8 100644
---- a/package/wireless-regdb/Config.in
-+++ b/package/wireless-regdb/Config.in
-@@ -3,7 +3,12 @@ config BR2_PACKAGE_WIRELESS_REGDB
- 	help
- 	  Wireless regulatory database.
+diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
+index ad18f360a0..fa6e71f49a 100644
+--- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
++++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
+@@ -1,4 +1,4 @@
+-# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.14.3.tar.xz.sha256sum
+-sha256 1f654c7617af15d13b67bf833f4c81d086ecbfd8cce7f2bf65fe5c1c3519f4e6 gst-rtsp-server-1.14.3.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.14.4.tar.xz.sha256sum
++sha256 3d0ece2afdcd601c175ece24e32a30bc19247b454f4eafd3deeec2533c6884f1 gst-rtsp-server-1.14.4.tar.xz
+ sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING
+ sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING.LIB
+diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
+index 721b8b7313..a86b137ce2 100644
+--- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
++++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--	  Wireless regulatory database for CRDA. The database lists the
-+	  Wireless regulatory database. The database lists the
- 	  allowed radio frequencies for each local jurisdiction.
- 
-+	  Since linux-4.15 the kernel supports loading the files
-+	  regulatory.db/regulatory.db.p7s directly from the
-+	  /lib/firmware directory, for earlier versions the crda helper
-+	  application is needed.
-+
- 	  https://wireless.wiki.kernel.org/en/developers/regulatory/wireless-regdb
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index fcbba055ac..9c899f973b 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
-@@ -10,11 +10,17 @@ WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
- WIRELESS_REGDB_LICENSE_FILES = LICENSE
- 
--define WIRELESS_REGDB_INSTALL_TARGET_CMDS
-+ifeq ($(BR2_PACKAGE_CRDA),y)
-+define  WIRELESS_REGDB_INSTALL_CRDA_TARGET_CMDS
- 	$(INSTALL) -m 644 -D -T $(@D)/regulatory.bin \
- 		$(TARGET_DIR)/usr/lib/crda/regulatory.bin
- 	$(INSTALL) -m 644 -D -T $(@D)/sforshee.key.pub.pem \
- 		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/sforshee.key.pub.pem
-+endef
-+endif
-+
-+define WIRELESS_REGDB_INSTALL_TARGET_CMDS
-+	$(WIRELESS_REGDB_INSTALL_CRDA_TARGET_CMDS)
- 	$(INSTALL) -m 644 -D -T $(@D)/regulatory.db \
- 		$(TARGET_DIR)/lib/firmware/regulatory.db
- 	$(INSTALL) -m 644 -D -T $(@D)/regulatory.db.p7s \
+-GST1_RTSP_SERVER_VERSION = 1.14.3
++GST1_RTSP_SERVER_VERSION = 1.14.4
+ GST1_RTSP_SERVER_SOURCE = gst-rtsp-server-$(GST1_RTSP_SERVER_VERSION).tar.xz
+ GST1_RTSP_SERVER_SITE = http://gstreamer.freedesktop.org/src/gst-rtsp-server
+ GST1_RTSP_SERVER_LICENSE = LGPL-2.0+
 -- 
 2.19.0
