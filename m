@@ -1,51 +1,71 @@
-From: Oscar Gomez Fuente <oscargomezf@gmail.com>
-Date: Thu, 4 Oct 2018 08:12:06 +0200
-Subject: [Buildroot] Plug/unplug ethernet connector does not detected on
- Raspberry PI3 B+
-In-Reply-To: <fae7198d-e632-b1eb-c4d4-d38a15220618@mind.be>
-References: <CALtfCQbvKXAHjw60eazZ1LzRpuUQH5EuPaDypuUCd3sO=zoYaw@mail.gmail.com>
- <fae7198d-e632-b1eb-c4d4-d38a15220618@mind.be>
-Message-ID: <CALtfCQZzF97R1Jy-62acGwoVLg0umWNTPRRBaxUOvNJVYfQMWA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 4 Oct 2018 13:24:30 +0200
+Subject: [Buildroot] [git commit] python-pytrie: bump to version 0.3.1
+Message-ID: <20181004112422.530178B908@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+commit: https://git.buildroot.net/buildroot/commit/?id=6c43732a18ee5d1c8bf23936e8c79ed3a87355a0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->  You probably want ifplugd.
+For some reason (probably not on purpose) the license file was
+removed from MANIFEST.in, and it's not available after package extraction.
+I replaced it with PKG-INFO for now, and opened a PR on github:
+https://github.com/gsakkis/pytrie/pull/3
 
-Yes, I was checking this one, but it didn't work properly (Sometimes works
-and sometimes not).
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-pytrie/Config.in          | 1 +
+ package/python-pytrie/python-pytrie.hash | 8 +++++---
+ package/python-pytrie/python-pytrie.mk   | 8 ++++----
+ 3 files changed, 10 insertions(+), 7 deletions(-)
 
-I don't understand because If I am using the same defconfig file than in
-the Raspberry Pi 3B (changing the config.txt file and changing the device
-tree bcm2710-rpi-3-b-plus.dtb for bcm2710-rpi-3-b.dtb) everything works
-fine without installing the ifplugd.
-
-So, this is the reason I think there is something wrong with the driver
-LAN9515 (Raspberry Pi 3B+).
-
-It is not normal that with the same image, in the raspberry pi 3B, I can
-see kernel messages of the plug/unplug events:
-
-[   81.006823] smsc95xx 1-1.1:1.0 eth0: link down
-[   83.455586] smsc95xx 1-1.1:1.0 eth0: link up, 100Mbps, full-duplex, lpa
-0xC5E1
-[   84.454778] smsc95xx 1-1.1:1.0 eth0: link down
-[   87.080069] smsc95xx 1-1.1:1.0 eth0: link up, 100Mbps, full-duplex, lpa
-0xC5E1
-
-And with the Raspberry Pi 3B+, I cannot see this messages, so I think the
-driver is not detecting these events and then the Raspberrypi is not able
-to execute ifup/ifdown automatically.
-
-Does anyone have any suggestion? I am stuck.
-
-Oscar Gomez Fuente
-TST Sistemas
-www.tst-sistemas.es
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181004/f26c3ee3/attachment.html>
+diff --git a/package/python-pytrie/Config.in b/package/python-pytrie/Config.in
+index fb1df41d0a..156638476c 100644
+--- a/package/python-pytrie/Config.in
++++ b/package/python-pytrie/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_PYTRIE
+ 	bool "python-pytrie"
++	select BR2_PACKAGE_PYTHON_SORTEDCONTAINERS # runtime
+ 	help
+ 	  A pure Python implementation of the trie data structure.
+ 
+diff --git a/package/python-pytrie/python-pytrie.hash b/package/python-pytrie/python-pytrie.hash
+index 88d2542a8d..3bc1f6e9a7 100644
+--- a/package/python-pytrie/python-pytrie.hash
++++ b/package/python-pytrie/python-pytrie.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=5997b46c854a68bc588f4527c987663a, sha256 locally computed.
+-md5	5997b46c854a68bc588f4527c987663a  PyTrie-0.2.tar.gz
+-sha256	b272021351efadc6757591aac03ed4794bdfd091122204a4673e94bfb66cc500  PyTrie-0.2.tar.gz
++# md5, sha256 from https://pypi.org/pypi/pytrie/json
++md5	f7c7184124013abcc18a3e3b638d32ae  PyTrie-0.3.1.tar.gz
++sha256	3bb7d122a549d8006c9cba2feecac20bceda9f8c0e2a3fa99a5584cfe0dec523  PyTrie-0.3.1.tar.gz
++# Locally computed sha256
++sha256	153931d44112319a1e1653752c881fb7ef092f636db31f4c36b252666e95efbd  PKG-INFO
+diff --git a/package/python-pytrie/python-pytrie.mk b/package/python-pytrie/python-pytrie.mk
+index 0fe78fdb17..b8264fa2be 100644
+--- a/package/python-pytrie/python-pytrie.mk
++++ b/package/python-pytrie/python-pytrie.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PYTRIE_VERSION = 0.2
+-PYTHON_PYTRIE_SITE = https://pypi.python.org/packages/source/P/PyTrie
++PYTHON_PYTRIE_VERSION = 0.3.1
+ PYTHON_PYTRIE_SOURCE = PyTrie-$(PYTHON_PYTRIE_VERSION).tar.gz
+ PYTHON_PYTRIE_LICENSE = BSD-3-Clause
+-PYTHON_PYTRIE_LICENSE_FILES = LICENSE
+-PYTHON_PYTRIE_SETUP_TYPE = distutils
++PYTHON_PYTRIE_LICENSE_FILES = PKG-INFO
++PYTHON_PYTRIE_SITE = https://files.pythonhosted.org/packages/e1/eb/ae1f098969c9e9b81e821fb8e916cbf720b900ec1c0f3359e47a427395ec
++PYTHON_PYTRIE_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
