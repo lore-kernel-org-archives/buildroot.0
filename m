@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 4 Oct 2018 14:17:59 +0200
-Subject: [Buildroot] [PATCH 23/23] python-crossbar: bump to version
- 18.9.2
-In-Reply-To: <20180926153505.3411-24-asafka7@gmail.com>
-References: <20180926153505.3411-1-asafka7@gmail.com>
- <20180926153505.3411-24-asafka7@gmail.com>
-Message-ID: <20181004141759.300264c0@windsurf>
+Date: Thu, 4 Oct 2018 14:18:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/asterisk: libsrtp needs openssl
+In-Reply-To: <20181003190829.28477-1-bernd.kuhls@t-online.de>
+References: <20181003190829.28477-1-bernd.kuhls@t-online.de>
+Message-ID: <20181004141856.3e7a32b6@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,26 +12,45 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 26 Sep 2018 18:35:05 +0300, Asaf Kahlon wrote:
-> Update dependencies (and fix alphabetical order).
-> Add patch to remove idna direct dependency (was sent to upstream too:
-> https://github.com/crossbario/crossbar/pull/1406).
+On Wed,  3 Oct 2018 21:08:29 +0200, Bernd Kuhls wrote:
+> Fixes configure error
 > 
-> Fixes:
-> http://autobuild.buildroot.org/results/31d/31db5fd90514906a8c77f921c9650a386ec80101/
+> checking for the ability of -lsrtp2 to be linked in a shared object... yes
+> checking for srtp_crypto_policy_set_aes_cm_256_hmac_sha1_80 in -lsrtp2... yes
+> checking for srtp_crypto_policy_set_aes_cm_192_hmac_sha1_80 in -lsrtp2... no
+> checking for srtp_crypto_policy_set_aes_gcm_128_8_auth in -lsrtp2... no
+> checking for srtp_shutdown in -lsrtp2... yes
+> checking for srtp2/srtp.h... (cached) yes
+> configure: WARNING: ***
+> configure: WARNING: *** OpenSSL required when using libsrtp2, checking for libsrtp instead.
+> configure: WARNING: ***
 > 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> using this defconfig:
+> 
+> BR2_PACKAGE_LIBSRTP=y
+> BR2_PACKAGE_ASTERISK=y
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  .../0002-Remove-idna-requirement.patch        | 26 +++++++++++++
->  .../0002-Rework-runtime-dependencies.patch    | 37 -------------------
->  package/python-crossbar/Config.in             | 19 +++++-----
->  package/python-crossbar/python-crossbar.hash  |  7 ++--
->  package/python-crossbar/python-crossbar.mk    |  4 +-
->  5 files changed, 41 insertions(+), 52 deletions(-)
->  create mode 100644 package/python-crossbar/0002-Remove-idna-requirement.patch
->  delete mode 100644 package/python-crossbar/0002-Rework-runtime-dependencies.patch
+>  package/asterisk/asterisk.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+> index 9480d6ba82..c3f1136068 100644
+> --- a/package/asterisk/asterisk.mk
+> +++ b/package/asterisk/asterisk.mk
+> @@ -245,7 +245,8 @@ else
+>  ASTERISK_CONF_OPTS += --without-speex  --without-speexdsp
+>  endif
+>  
+> -ifeq ($(BR2_PACKAGE_LIBSRTP),y)
+> +# asterisk needs an openssl-enabled libsrtp
+> +ifeq ($(BR2_PACKAGE_LIBSRTP)$(BR2_PACKAGE_OPENSSL)x$(BR2_STATIC_LIBS),yyx)
 
-Applied to master, thanks.
+Any reason to exclude static linking configurations here? This is not
+explained in the commit log.
+
+Best regards,
 
 Thomas
 -- 
