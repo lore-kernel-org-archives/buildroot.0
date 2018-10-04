@@ -1,61 +1,69 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Thu,  4 Oct 2018 21:32:04 +0300
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add myself for some python
- packages
-Message-ID: <20181004183204.5380-1-asafka7@gmail.com>
+Date: Thu, 4 Oct 2018 22:30:38 +0300
+Subject: [Buildroot] [PATCH 21/23] python-pyhamcrest: new package
+In-Reply-To: <20181004140218.3f5cd4bc@windsurf>
+References: <20180926153505.3411-1-asafka7@gmail.com>
+ <20180926153505.3411-22-asafka7@gmail.com>
+ <20181004140218.3f5cd4bc@windsurf>
+Message-ID: <CALFsTFXnJTAm8A7cbDzHS_FsTfQ4dv6UQjj30n61ZLuZFPmL4g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- DEVELOPERS | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+Thomas, Yegor,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 74bc703a6b..ab741d4ef5 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -199,21 +199,38 @@ F:	package/stress/
- 
- N:	Asaf Kahlon <asafka7@gmail.com>
- F:	package/libuv/
-+F:	package/python-attrs/
- F:	package/python-bcrypt/
-+F:	package/python-bitstring/
-+F:	package/python-constantly/
- F:	package/python-engineio/
- F:	package/python-fire/
-+F:	package/python-h2/
-+F:	package/python-idna/
-+F:	package/python-incremental/
-+F:	package/python-jinja2/
- F:	package/python-jsonmodels/
-+F:	package/python-logbook/
- F:	package/python-lxml/
- F:	package/python-paramiko/
- F:	package/python-passlib/
-+F:	package/python-priority/
- F:	package/python-pyasn1/
- F:	package/python-pyasn1-modules/
- F:	package/python-pyhamcrest/
-+F:	package/python-pyopenssl/
-+F:	package/python-pyqrcode/
- F:	package/python-pyroute2/
- F:	package/python-pytz/
- F:	package/python-reentry/
-+F:	package/python-sdnotify/
- F:	package/python-subprocess32/
-+F:	package/python-txtorcon/
-+F:	package/python-twisted/
-+F:	package/python-u-msgpack/
-+F:	package/python-ubjson/
- F:	package/python-yieldfrom/
-+F:	package/python-zope-interface/
- F:	package/zeromq/
- 
- N:	Ash Charles <ash.charles@savoirfairelinux.com>
--- 
-2.17.1
+On Thu, Oct 4, 2018 at 3:02 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Wed, 26 Sep 2018 18:35:03 +0300, Asaf Kahlon wrote:
+> > Hamcrest framework for matcher objects.
+> >
+> > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> > ---
+> >  DEVELOPERS                                       |  1 +
+> >  package/Config.in                                |  1 +
+> >  package/python-pyhamcrest/Config.in              |  8 ++++++++
+> >  package/python-pyhamcrest/python-pyhamcrest.hash |  5 +++++
+> >  package/python-pyhamcrest/python-pyhamcrest.mk   | 14 ++++++++++++++
+> >  5 files changed, 29 insertions(+)
+> >  create mode 100644 package/python-pyhamcrest/Config.in
+> >  create mode 100644 package/python-pyhamcrest/python-pyhamcrest.hash
+> >  create mode 100644 package/python-pyhamcrest/python-pyhamcrest.mk
+>
+> I've applied to master with Yegor Reviewed-by. However, I have a
+> question, see below.
+>
+> > +config BR2_PACKAGE_PYTHON_PYHAMCREST
+> > +     bool "python-pyhamcrest"
+> > +     select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+>
+> How do you know, or how does scanpypi knows when setuptools is needed
+> on the target vs. when it's only needed at build time on the build
+> machine ?
+
+As far as I know, there's no special treatment for setuptools in
+scanpypi. For pyhamcrest, setuptools was added since it was explicitly
+mentioned under install_requires.
+Generally, not adding setuptools to install_requires is much like not
+adding any other package and scanpypi won't catch this. (Yegor,
+correct me if I am wrong).
+Most of the times, I try to run python and import the package for
+sanity check, but (at least from a first glance) I don't think there's
+a way to know exactly if setuptools is needed on target although not
+specified in install_requires.
+
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+
+Regards,
+Asaf.
