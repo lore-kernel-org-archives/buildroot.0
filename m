@@ -1,39 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 4 Oct 2018 15:36:16 +0200
-Subject: [Buildroot] [PATCH v2] gnupg: Package only needs ncurses with
- readline
-In-Reply-To: <20181003002517.27064-1-tpiepho@impinj.com>
-References: <20181003002517.27064-1-tpiepho@impinj.com>
-Message-ID: <20181004153616.7ed8d046@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu,  4 Oct 2018 19:27:30 +0200
+Subject: [Buildroot] [PATCH 1/1] nmap: update license
+Message-ID: <20181004172730.12889-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+nmap is licensed under GPL-2.0 but with exceptions or a commercial
+license (see COPYING, especially the "IMPORTANT NMAP LICENSE TERMS"
+part)
 
-On Wed, 3 Oct 2018 00:25:48 +0000, Trent Piepho wrote:
-> This package only needs ncurses when readline support is enabled, as it's the
-> autoconf macro file for readline (used by autoconf to create the gnupg configure
-> script) that checks for and pulls in ncurses.
-> 
-> Since readline already depends on ncurses, gnupg need only depend on
-> readline (when enabled).
-> 
-> The host package always forces readline support off, so the host-ncurses
-> dependency can be removed entirely.
-> 
-> Signed-off-by: Trent Piepho <tpiepho@impinj.com>
-> ---
->  package/gnupg/Config.in | 1 -
->  package/gnupg/gnupg.mk  | 4 ++--
->  2 files changed, 2 insertions(+), 3 deletions(-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/nmap/nmap.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+index 420aec82d7..6b7502b02b 100644
+--- a/package/nmap/nmap.mk
++++ b/package/nmap/nmap.mk
+@@ -10,7 +10,7 @@ NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
+ NMAP_DEPENDENCIES = libpcap
+ NMAP_CONF_OPTS = --without-liblua --without-zenmap \
+ 	--with-libdnet=included --with-liblinear=included
+-NMAP_LICENSE = GPL-2.0
++NMAP_LICENSE = GPL-2.0 with exceptions or commercial
+ NMAP_LICENSE_FILES = COPYING
+ 
+ # needed by libpcap
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
