@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 4 Oct 2018 14:17:51 +0200
-Subject: [Buildroot] [PATCH 22/23] python-twisted: bump to version 18.7.0
-In-Reply-To: <20180926153505.3411-23-asafka7@gmail.com>
+Date: Thu, 4 Oct 2018 14:17:59 +0200
+Subject: [Buildroot] [PATCH 23/23] python-crossbar: bump to version
+ 18.9.2
+In-Reply-To: <20180926153505.3411-24-asafka7@gmail.com>
 References: <20180926153505.3411-1-asafka7@gmail.com>
- <20180926153505.3411-23-asafka7@gmail.com>
-Message-ID: <20181004141751.77e6303b@windsurf>
+ <20180926153505.3411-24-asafka7@gmail.com>
+Message-ID: <20181004141759.300264c0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +14,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 26 Sep 2018 18:35:04 +0300, Asaf Kahlon wrote:
-> Add license hash.
-> 
-> Add a patch to fit python3.7 syntax ("async" is now a keyword).
-> The patch was already applied on upstream, but only after the last tag
-> was created.
+On Wed, 26 Sep 2018 18:35:05 +0300, Asaf Kahlon wrote:
+> Update dependencies (and fix alphabetical order).
+> Add patch to remove idna direct dependency (was sent to upstream too:
+> https://github.com/crossbario/crossbar/pull/1406).
 > 
 > Fixes:
-> http://autobuild.buildroot.org/results/704/7043ccfac86439406480649b3ead4882112d36e2/
+> http://autobuild.buildroot.org/results/31d/31db5fd90514906a8c77f921c9650a386ec80101/
 > 
 > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 > ---
->  .../0001-Fix-syntax-for-python3.7.patch       | 160 ++++++++++++++++++
->  package/python-twisted/Config.in              |   2 +
->  package/python-twisted/python-twisted.hash    |   8 +-
->  package/python-twisted/python-twisted.mk      |   4 +-
->  4 files changed, 169 insertions(+), 5 deletions(-)
->  create mode 100644 package/python-twisted/0001-Fix-syntax-for-python3.7.patch
+>  .../0002-Remove-idna-requirement.patch        | 26 +++++++++++++
+>  .../0002-Rework-runtime-dependencies.patch    | 37 -------------------
+>  package/python-crossbar/Config.in             | 19 +++++-----
+>  package/python-crossbar/python-crossbar.hash  |  7 ++--
+>  package/python-crossbar/python-crossbar.mk    |  4 +-
+>  5 files changed, 41 insertions(+), 52 deletions(-)
+>  create mode 100644 package/python-crossbar/0002-Remove-idna-requirement.patch
+>  delete mode 100644 package/python-crossbar/0002-Rework-runtime-dependencies.patch
 
 Applied to master, thanks.
 
