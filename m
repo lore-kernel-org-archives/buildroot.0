@@ -1,59 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 4 Oct 2018 14:18:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/asterisk: libsrtp needs openssl
-In-Reply-To: <20181003190829.28477-1-bernd.kuhls@t-online.de>
-References: <20181003190829.28477-1-bernd.kuhls@t-online.de>
-Message-ID: <20181004141856.3e7a32b6@windsurf>
+Date: Thu, 4 Oct 2018 14:20:31 +0200
+Subject: [Buildroot] [git commit] crda: fix check-package warning
+Message-ID: <20181004122051.E6D1D8C636@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=255a8090054d39705109efbc0075234715c740cd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  3 Oct 2018 21:08:29 +0200, Bernd Kuhls wrote:
-> Fixes configure error
-> 
-> checking for the ability of -lsrtp2 to be linked in a shared object... yes
-> checking for srtp_crypto_policy_set_aes_cm_256_hmac_sha1_80 in -lsrtp2... yes
-> checking for srtp_crypto_policy_set_aes_cm_192_hmac_sha1_80 in -lsrtp2... no
-> checking for srtp_crypto_policy_set_aes_gcm_128_8_auth in -lsrtp2... no
-> checking for srtp_shutdown in -lsrtp2... yes
-> checking for srtp2/srtp.h... (cached) yes
-> configure: WARNING: ***
-> configure: WARNING: *** OpenSSL required when using libsrtp2, checking for libsrtp instead.
-> configure: WARNING: ***
-> 
-> using this defconfig:
-> 
-> BR2_PACKAGE_LIBSRTP=y
-> BR2_PACKAGE_ASTERISK=y
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/asterisk/asterisk.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-> index 9480d6ba82..c3f1136068 100644
-> --- a/package/asterisk/asterisk.mk
-> +++ b/package/asterisk/asterisk.mk
-> @@ -245,7 +245,8 @@ else
->  ASTERISK_CONF_OPTS += --without-speex  --without-speexdsp
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_LIBSRTP),y)
-> +# asterisk needs an openssl-enabled libsrtp
-> +ifeq ($(BR2_PACKAGE_LIBSRTP)$(BR2_PACKAGE_OPENSSL)x$(BR2_STATIC_LIBS),yyx)
+In commit 3e79bd3f456cef12886ac6b086c8bc78e3e520f8 ("crda: bump
+version to 4.14"), the value of CRDA_SOURCE was changed to use what is
+the default value for <pkg>_SOURCE, triggering a warning from
+check-package:
 
-Any reason to exclude static linking configurations here? This is not
-explained in the commit log.
+package/crda/crda.mk:8: remove default value of _SOURCE variable (http://nightly.buildroot.org/#generic-package-reference)
 
-Best regards,
+This commit fixes that by dropping CRDA_SOURCE entirely.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/crda/crda.mk | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/package/crda/crda.mk b/package/crda/crda.mk
+index ab50030126..eb43a7d772 100644
+--- a/package/crda/crda.mk
++++ b/package/crda/crda.mk
+@@ -5,7 +5,6 @@
+ ################################################################################
+ 
+ CRDA_VERSION = 4.14
+-CRDA_SOURCE = crda-$(CRDA_VERSION).tar.gz
+ CRDA_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/crda.git/snapshot
+ CRDA_DEPENDENCIES = host-pkgconf host-python-pycrypto libnl libgcrypt
+ CRDA_LICENSE = ISC
