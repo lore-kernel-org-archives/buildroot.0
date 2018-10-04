@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 4 Oct 2018 15:30:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d: Fix header version
- dependency for Vulkan Intel driver
-In-Reply-To: <20181003083426.25992-1-bernd.kuhls@t-online.de>
-References: <20181003083426.25992-1-bernd.kuhls@t-online.de>
-Message-ID: <20181004153016.5e2de79f@windsurf>
+Date: Thu, 4 Oct 2018 15:34:32 +0200
+Subject: [Buildroot] [PATCH v1 1/2] wireless-regdb: bump version to
+ 2018.09.07
+In-Reply-To: <20181002200502.19372-1-ps.report@gmx.net>
+References: <20181002200502.19372-1-ps.report@gmx.net>
+Message-ID: <20181004153432.472c1eca@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +13,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  3 Oct 2018 10:34:26 +0200, Bernd Kuhls wrote:
-> memfd.h was included in kernel 3.17, not 3.18.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Tue,  2 Oct 2018 22:05:01 +0200, Peter Seiderer wrote:
 > ---
->  package/mesa3d/Config.in | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  package/wireless-regdb/wireless-regdb.hash | 2 +-
+>  package/wireless-regdb/wireless-regdb.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
+Peter, could you resend this patch with your SoB ?
+
+Thanks,
 
 Thomas
 -- 
