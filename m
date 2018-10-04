@@ -1,29 +1,61 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 04 Oct 2018 19:56:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/asterisk: libsrtp needs openssl
-References: <20181003190829.28477-1-bernd.kuhls@t-online.de>
- <20181004141856.3e7a32b6@windsurf>
-Message-ID: <1s0i8fxbeu.ln2@ID-313208.user.individual.net>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Thu,  4 Oct 2018 21:32:04 +0300
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add myself for some python
+ packages
+Message-ID: <20181004183204.5380-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Thu, 04 Oct 2018 14:18:56 +0200 schrieb Thomas Petazzoni:
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ DEVELOPERS | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
->> -ifeq ($(BR2_PACKAGE_LIBSRTP),y)
->> +# asterisk needs an openssl-enabled libsrtp
->> +ifeq ($(BR2_PACKAGE_LIBSRTP)$(BR2_PACKAGE_OPENSSL)x$(BR2_STATIC_LIBS),yyx)
-> 
-> Any reason to exclude static linking configurations here? This is not
-> explained in the commit log.
-
-Hi Thomas,
-
-openssl support in libsrtp depends on libdl:
-https://git.buildroot.net/buildroot/tree/package/libsrtp/libsrtp.mk#n27
-
-Shall I sent v2?
-
-Regards, Bernd
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 74bc703a6b..ab741d4ef5 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -199,21 +199,38 @@ F:	package/stress/
+ 
+ N:	Asaf Kahlon <asafka7@gmail.com>
+ F:	package/libuv/
++F:	package/python-attrs/
+ F:	package/python-bcrypt/
++F:	package/python-bitstring/
++F:	package/python-constantly/
+ F:	package/python-engineio/
+ F:	package/python-fire/
++F:	package/python-h2/
++F:	package/python-idna/
++F:	package/python-incremental/
++F:	package/python-jinja2/
+ F:	package/python-jsonmodels/
++F:	package/python-logbook/
+ F:	package/python-lxml/
+ F:	package/python-paramiko/
+ F:	package/python-passlib/
++F:	package/python-priority/
+ F:	package/python-pyasn1/
+ F:	package/python-pyasn1-modules/
+ F:	package/python-pyhamcrest/
++F:	package/python-pyopenssl/
++F:	package/python-pyqrcode/
+ F:	package/python-pyroute2/
+ F:	package/python-pytz/
+ F:	package/python-reentry/
++F:	package/python-sdnotify/
+ F:	package/python-subprocess32/
++F:	package/python-txtorcon/
++F:	package/python-twisted/
++F:	package/python-u-msgpack/
++F:	package/python-ubjson/
+ F:	package/python-yieldfrom/
++F:	package/python-zope-interface/
+ F:	package/zeromq/
+ 
+ N:	Ash Charles <ash.charles@savoirfairelinux.com>
+-- 
+2.17.1
