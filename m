@@ -1,121 +1,236 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 5 Oct 2018 23:15:04 +0200
-Subject: [Buildroot] [PATCH] package/qt5base: drop remnants patches from
- previous version
-In-Reply-To: <20181005200502.16899-1-yann.morin.1998@free.fr>
-References: <20181005200502.16899-1-yann.morin.1998@free.fr>
-Message-ID: <20181005231504.62c1e674@gmx.net>
+From: John Faith <jfaith@impinj.com>
+Date: Fri, 5 Oct 2018 20:03:58 +0000
+Subject: [Buildroot] Fw: [PATCH 1/1] civetweb: bump version to 1.11
+In-Reply-To: <CAGRuNt-hpxBDF2+mhaFL5fYkgDpyT37LNLXLhO3voMdchfNYmA@mail.gmail.com>
+References: <20180925232917.24591-1-jfaith@impinj.com>
+ <CAGRuNt_bnAZsF1CUDNwCsmAKCm+kE+j6kWG=us7MbJCZWEXHQw@mail.gmail.com>
+ <CY1PR0601MB1228EA74FE9568F596359F0EB4EB0@CY1PR0601MB1228.namprd06.prod.outlook.com>,
+ <CAGRuNt-hpxBDF2+mhaFL5fYkgDpyT37LNLXLhO3voMdchfNYmA@mail.gmail.com>
+Message-ID: <CY1PR0601MB122830215E942ACD065B9653B4EB0@CY1PR0601MB1228.namprd06.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Forwarding for Thomas who is having mailing list trouble.
 
-On Fri,  5 Oct 2018 22:05:02 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+,
+John F.
 
-> When the bump to 5.11.2 was applied, master gained a new patch for 5.11.1
-> in-between the bump submission and the moment it was applied. That patch
-> still lingers around now.
-> 
-> Since that patch has been applied upstream (it is detected as a revert
-> when applied to 5.11.2), we simply drop it.
+________________________________
+From: Thomas <nofacepress@gmail.com>
+Sent: Friday, October 5, 2018 12:36 PM
+To: John Faith
+Subject: Re: [PATCH 1/1] civetweb: bump version to 1.11
 
-Thanks for taking care of it...
+I'm having permission issues talking to the list.  Can you please send it forward?
 
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+On Fri, Oct 5, 2018, 12:28 PM John Faith <jfaith at impinj.com<mailto:jfaith@impinj.com>> wrote:
 
-Regards,
-Peter
+Hi Thomas,
+
+Thanks for having a look.
 
 
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Peter Seiderer <ps.report@gmx.net>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  .../0003-Fix-qmake-build-with-glibc-2.28.patch     | 74 ----------------------
->  1 file changed, 74 deletions(-)
->  delete mode 100644 package/qt5/qt5base/5.11.1/0003-Fix-qmake-build-with-glibc-2.28.patch
-> 
-> diff --git a/package/qt5/qt5base/5.11.1/0003-Fix-qmake-build-with-glibc-2.28.patch b/package/qt5/qt5base/5.11.1/0003-Fix-qmake-build-with-glibc-2.28.patch
-> deleted file mode 100644
-> index 6d8bb28992..0000000000
-> --- a/package/qt5/qt5base/5.11.1/0003-Fix-qmake-build-with-glibc-2.28.patch
-> +++ /dev/null
-> @@ -1,74 +0,0 @@
-> -From 25feee4e061b99edab79503d81f5bd045c6c8e3d Mon Sep 17 00:00:00 2001
-> -From: Thiago Macieira <thiago.macieira@intel.com>
-> -Date: Tue, 7 Aug 2018 09:38:42 -0700
-> -Subject: [PATCH] Fix qmake build with glibc 2.28
-> -MIME-Version: 1.0
-> -Content-Type: text/plain; charset=UTF-8
-> -Content-Transfer-Encoding: 8bit
-> -
-> -We haven't yet run the configure checks to see if statx and renameat2
-> -are present in glibc, so this fails when we redefine the structures and
-> -functions.
-> -
-> -linux/stat.h:56:8: error: redefinition of 'struct statx_timestamp'
-> -bits/statx.h:25:8: note: previous definition of 'struct statx_timestamp'
-> -qfilesystemengine_unix.cpp:110:12: error: 'int renameat2(int, const char*, int, const char*, unsigned int)' was declared 'extern' and later 'static' [-fpermissive]
-> -
-> -Change-Id: Ia741b559c24d46c78fb2fffd1548a792d22e3368
-> -Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@qt.io>
-> -Reviewed-by: J?ri Valdmann <juri.valdmann@qt.io>
-> -
-> -Downloaded from upstream commit
-> -http://code.qt.io/cgit/qt/qtbase.git/commit/?id=25feee4e061b99edab79503d81f5bd045c6c8e3d
-> -
-> -Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ----
-> - src/corelib/global/qconfig-bootstrapped.h | 12 ++++++++++--
-> - src/corelib/io/qfilesystemengine_unix.cpp |  2 +-
-> - 2 files changed, 11 insertions(+), 3 deletions(-)
-> -
-> -diff --git a/src/corelib/global/qconfig-bootstrapped.h b/src/corelib/global/qconfig-bootstrapped.h
-> -index 3469ebe5e6..c5585ea32a 100644
-> ---- a/src/corelib/global/qconfig-bootstrapped.h
-> -+++ b/src/corelib/global/qconfig-bootstrapped.h
-> -@@ -98,10 +98,18 @@
-> - #define QT_NO_QOBJECT
-> - #define QT_FEATURE_process -1
-> - #define QT_FEATURE_regularexpression -1
-> --#define QT_FEATURE_renameat2 -1
-> -+#ifdef __GLIBC_PREREQ
-> -+# define QT_FEATURE_renameat2 (__GLIBC_PREREQ(2, 28) ? 1 : -1)
-> -+#else
-> -+# define QT_FEATURE_renameat2 -1
-> -+#endif
-> - #define QT_FEATURE_sharedmemory -1
-> - #define QT_FEATURE_slog2 -1
-> --#define QT_FEATURE_statx -1
-> -+#ifdef __GLIBC_PREREQ
-> -+# define QT_FEATURE_statx (__GLIBC_PREREQ(2, 28) ? 1 : -1)
-> -+#else
-> -+# define QT_FEATURE_statx -1
-> -+#endif
-> - #define QT_FEATURE_syslog -1
-> - #define QT_NO_SYSTEMLOCALE
-> - #define QT_FEATURE_systemsemaphore -1
-> -diff --git a/src/corelib/io/qfilesystemengine_unix.cpp b/src/corelib/io/qfilesystemengine_unix.cpp
-> -index 0c9cdb8667..deb4a9f220 100644
-> ---- a/src/corelib/io/qfilesystemengine_unix.cpp
-> -+++ b/src/corelib/io/qfilesystemengine_unix.cpp
-> -@@ -91,7 +91,6 @@ extern "C" NSString *NSTemporaryDirectory();
-> - #  include <sys/syscall.h>
-> - #  include <sys/sendfile.h>
-> - #  include <linux/fs.h>
-> --#  include <linux/stat.h>
-> - 
-> - // in case linux/fs.h is too old and doesn't define it:
-> - #ifndef FICLONE
-> -@@ -112,6 +111,7 @@ static int renameat2(int oldfd, const char *oldpath, int newfd, const char *newp
-> - #    endif
-> - 
-> - #    if !QT_CONFIG(statx) && defined(SYS_statx)
-> -+#      include <linux/stat.h>
-> - static int statx(int dirfd, const char *pathname, int flag, unsigned mask, struct statx *statxbuf)
-> - { return syscall(SYS_statx, dirfd, pathname, flag, mask, statxbuf); }
-> - #    elif !QT_CONFIG(statx) && !defined(SYS_statx)
+I didn't see your response or a "Reviewed-by" etc. to the buildroot mailing list.  Did your CC to the list bounce?
+
+
+Thanks!,
+John F.
+
+
+________________________________
+From: Thomas <nofacepress at gmail.com<mailto:nofacepress@gmail.com>>
+Sent: Wednesday, October 3, 2018 7:17 PM
+To: John Faith
+Cc: buildroot at buildroot.org<mailto:buildroot@buildroot.org>; Thomas Davis
+Subject: Re: [PATCH 1/1] civetweb: bump version to 1.11
+
+Looks great, thank you!
+
+On Tue, Sep 25, 2018, 7:29 PM John Faith <jfaith at impinj.com<mailto:jfaith@impinj.com>> wrote:
+v1.11 now has library and header install targets for use by apps
+that serve pages.  The config changes allow enabling the civetweb
+webserver app binary and/or libs and headers.
+
+If the civetweb lib is enabled, the static lib will always be built
+and if BR2_STATIC_LIBS is not on, also build the shared object.
+The C++ interface option is automatic based on available C++ support.
+If both the library and server options are disabled, don't do a
+target install.
+
+The civetweb Makefile sets -fPIC in CFLAGS when linking shared
+objects, but not when compiling the objects used in the library
+resulting in a link failure, so add -fPIC to COPT which is added
+to CFLAGS in its Makefile.
+
+The typo patch has already been incorporated upstream, so it was
+removed.
+
+Signed-off-by: John Faith <jfaith at impinj.com<mailto:jfaith@impinj.com>>
+---
+ ...ua-fix-a-typo-changing-LFS_DIR-to-LFS_DIR.patch | 27 -----------------
+ package/civetweb/Config.in                         | 25 +++++++++++++++-
+ package/civetweb/civetweb.hash                     |  2 +-
+ package/civetweb/civetweb.mk<https://na01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fcivetweb.mk&data=02%7C01%7Cjfaith%40impinj.com%7C4d3b03ed7ec54202187208d62af9ee18%7C6de70f0f73574529a415d8cbb7e93e5e%7C0%7C0%7C636743650281716754&sdata=03Wqts6qPEa3RDAiJwiKkz5ME03kRWEHiEYTdReqdAQ%3D&reserved=0>                       | 34 +++++++++++++++++++---
+ 4 files changed, 55 insertions(+), 33 deletions(-)
+ delete mode 100644 package/civetweb/0001-Lua-fix-a-typo-changing-LFS_DIR-to-LFS_DIR.patch
+
+diff --git a/package/civetweb/0001-Lua-fix-a-typo-changing-LFS_DIR-to-LFS_DIR.patch b/package/civetweb/0001-Lua-fix-a-typo-changing-LFS_DIR-to-LFS_DIR.patch
+deleted file mode 100644
+index aee3cfcbff..0000000000
+--- a/package/civetweb/0001-Lua-fix-a-typo-changing-LFS_DIR-to-LFS_DIR.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-From 0821066f9adf8410891cd07684ecac50a9bc36a4 Mon Sep 17 00:00:00 2001
+-From: Fabio Porcedda <fabio.porcedda@gmail>
+-Date: Wed, 25 Feb 2015 18:40:24 +0100
+-Subject: [PATCH] Lua: fix a typo changing %(LFS_DIR) to $(LFS_DIR)
+-
+-Also this fix a error on GNU Make v4.0:
+-  Makefile:203: *** mixed implicit and normal rules.  Stop.
+-
+-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail>
+----
+- resources/Makefile.in-lua | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/resources/Makefile.in-lua b/resources/Makefile.in-lua
+-index 0902f11..f3d95fd 100644
+---- a/resources/Makefile.in-lua
+-+++ b/resources/Makefile.in-lua
+-@@ -57,5 +57,5 @@ LFS_CFLAGS = -I$(LFS_DIR)
+-
+- OBJECTS += $(LUA_OBJECTS) $(SQLITE_OBJECTS) $(LFS_OBJECTS)
+- CFLAGS += $(LUA_CFLAGS) $(SQLITE_CFLAGS) $(LFS_CFLAGS) -DUSE_LUA -DUSE_LUA_SQLITE3 -DUSE_LUA_FILE_SYSTEM
+--SOURCE_DIRS = $(LUA_DIR) $(SQLITE_DIR) %(LFS_DIR)
+-+SOURCE_DIRS = $(LUA_DIR) $(SQLITE_DIR) $(LFS_DIR)
+-
+---
+-2.3.0
+-
+diff --git a/package/civetweb/Config.in b/package/civetweb/Config.in
+index d68a1ffd53..a1343caeb9 100644
+--- a/package/civetweb/Config.in
++++ b/package/civetweb/Config.in
+@@ -1,4 +1,4 @@
+-config BR2_PACKAGE_CIVETWEB
++menuconfig BR2_PACKAGE_CIVETWEB
+        bool "civetweb"
+        depends on BR2_TOOLCHAIN_HAS_THREADS
+        depends on BR2_USE_MMU # fork()
+@@ -9,6 +9,11 @@ config BR2_PACKAGE_CIVETWEB
+
+ if BR2_PACKAGE_CIVETWEB
+
++config BR2_PACKAGE_CIVETWEB_SERVER
++       bool "enable the web server application"
++       help
++         Include the web server and its config files.
++
+ config BR2_PACKAGE_CIVETWEB_WITH_LUA
+        bool "enable Lua support"
+        # required by the bundled Sqlite3 and Lua code
+@@ -19,7 +24,25 @@ config BR2_PACKAGE_CIVETWEB_WITH_LUA
+          sources, and not the packages from Buildroot.
+
+ comment "lua support needs a toolchain w/ dynamic library"
++       depends on BR2_PACKAGE_CIVETWEB_WITH_LUA
++       depends on BR2_STATIC_LIBS
++
++config BR2_PACKAGE_CIVETWEB_LIB
++       bool "enable library for embedding"
++
++       select BR2_PACKAGE_CIVETWEB_SHARED_LIB if !BR2_STATIC_LIBS
++
++if BR2_PACKAGE_CIVETWEB_LIB
++config BR2_PACKAGE_CIVETWEB_SHARED_LIB
++       bool
++       depends on !BR2_STATIC_LIBS
++       help
++         Enable the shared library for embedding civetweb in
++         applications
++
++comment "shared library support unavailble"
+        depends on BR2_STATIC_LIBS
++endif
+
+ endif
+
+diff --git a/package/civetweb/civetweb.hash b/package/civetweb/civetweb.hash
+index 745f4a8ce6..b3cbaad71d 100644
+--- a/package/civetweb/civetweb.hash
++++ b/package/civetweb/civetweb.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 79a852a26068eb6d2f8de5ee72e021f0d2c8bd176eb81f41909a876b736815d9  civetweb-v1.5.tar.gz
++sha256 de7d5e7a2d9551d325898c71e41d437d5f7b51e754b242af897f7be96e713a42  civetweb-v1.11.tar.gz
+diff --git a/package/civetweb/civetweb.mk<https://na01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fcivetweb.mk&data=02%7C01%7Cjfaith%40impinj.com%7C4d3b03ed7ec54202187208d62af9ee18%7C6de70f0f73574529a415d8cbb7e93e5e%7C0%7C0%7C636743650281726762&sdata=tSk7x229xd1voShWLWwRtEg0TYlGM01x1uB4mGnAgls%3D&reserved=0> b/package/civetweb/civetweb.mk<https://na01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fcivetweb.mk&data=02%7C01%7Cjfaith%40impinj.com%7C4d3b03ed7ec54202187208d62af9ee18%7C6de70f0f73574529a415d8cbb7e93e5e%7C0%7C0%7C636743650281736764&sdata=wkPlFndVvFUCgIOt%2BhSBFBurKIa7QniVuD9Zv%2FEr5Go%3D&reserved=0>
+index d29765b87d..742a0ad8e3 100644
+--- a/package/civetweb/civetweb.mk<https://na01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fcivetweb.mk&data=02%7C01%7Cjfaith%40impinj.com%7C4d3b03ed7ec54202187208d62af9ee18%7C6de70f0f73574529a415d8cbb7e93e5e%7C0%7C0%7C636743650281756785&sdata=zRfnH9T0v7DYu5I7NMzdjTE%2F5yqYt%2F0yyEpdgoX0Mps%3D&reserved=0>
++++ b/package/civetweb/civetweb.mk<https://na01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fcivetweb.mk&data=02%7C01%7Cjfaith%40impinj.com%7C4d3b03ed7ec54202187208d62af9ee18%7C6de70f0f73574529a415d8cbb7e93e5e%7C0%7C0%7C636743650281766781&sdata=wD%2B5MT%2FRb1DZNl7aYLHi6xjFddroiLjB1CoNQvqIzag%3D&reserved=0>
+@@ -4,12 +4,13 @@
+ #
+ ################################################################################
+
+-CIVETWEB_VERSION = v1.5
+-CIVETWEB_SITE = $(call github,sunsetbrew,civetweb,$(CIVETWEB_VERSION))
++CIVETWEB_VERSION = v1.11
++CIVETWEB_SITE = $(call github,civetweb,civetweb,$(CIVETWEB_VERSION))
+ CIVETWEB_LICENSE = MIT
+ CIVETWEB_LICENSE_FILES = LICENSE.md
+
+-CIVETWEB_CONF_OPTS = TARGET_OS=LINUX WITH_IPV6=1
++CIVETWEB_CONF_OPTS = TARGET_OS=LINUX WITH_IPV6=1 \
++       $(if $(BR2_INSTALL_LIBSTDCPP),WITH_CPP=1)
+ CIVETWEB_COPT = -DHAVE_POSIX_FALLOCATE=0
+ CIVETWEB_LIBS = -lpthread -lm
+ CIVETWEB_SYSCONFDIR = /etc
+@@ -34,8 +35,32 @@ define CIVETWEB_BUILD_CMDS
+                COPT="$(CIVETWEB_COPT)" LIBS="$(CIVETWEB_LIBS)"
+ endef
+
++ifeq ($(BR2_PACKAGE_CIVETWEB_LIB),y)
++CIVETWEB_INSTALL_STAGING = YES
++CIVETWEB_STAGING_INSTALL_TARGETS = install-headers install-lib
++ifeq ($(BR2_PACKAGE_CIVETWEB_SHARED_LIB),y)
++CIVETWEB_STAGING_INSTALL_TARGETS += install-slib
++CIVETWEB_COPT += -fPIC
++endif
++define CIVETWEB_INSTALL_STAGING_CMDS
++       $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(CIVETWEB_STAGING_INSTALL_TARGETS) \
++               DESTDIR=$(STAGING_DIR) \
++               PREFIX="/usr" \
++               $(CIVETWEB_CONF_OPTS) \
++               COPT='$(CIVETWEB_COPT)'
++endef
++endif
++
++ifeq ($(BR2_PACKAGE_CIVETWEB_SERVER),y)
++CIVETWEB_INSTALL_TARGETS = install
++endif
++ifeq ($(BR2_PACKAGE_CIVETWEB_SHARED_LIB),y)
++CIVETWEB_INSTALL_TARGETS += install-slib
++endif
++
++ifneq ($(CIVETWEB_INSTALL_TARGETS),)
+ define CIVETWEB_INSTALL_TARGET_CMDS
+-       $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) install \
++       $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(CIVETWEB_INSTALL_TARGETS) \
+                DOCUMENT_ROOT="$(CIVETWEB_HTMLDIR)" \
+                CONFIG_FILE2="$(CIVETWEB_SYSCONFDIR)/civetweb.conf" \
+                HTMLDIR="$(TARGET_DIR)$(CIVETWEB_HTMLDIR)" \
+@@ -44,5 +69,6 @@ define CIVETWEB_INSTALL_TARGET_CMDS
+                $(CIVETWEB_CONF_OPTS) \
+                COPT='$(CIVETWEB_COPT)'
+ endef
++endif
+
+ $(eval $(generic-package))
+--
+2.14.1
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181005/e440582c/attachment-0001.html>
