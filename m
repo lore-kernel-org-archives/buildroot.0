@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 13:33:17 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] brltty: add license
-Message-ID: <20181005113255.555F08D209@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 13:33:58 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] brltty: add license
+Message-ID: <20181005113303.AEADC8D213@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a3a2e13e7bf9528b658392e5764b22f1556dfd5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=84031f9fd314a6ad28350c99944ac2d2fb725f2a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 brltty 5.5 is licensed under GPL-2.0+ with exceptions in LGPL-2.1+ for
 data and client side as specified in README so add this information in
@@ -34,7 +34,7 @@ index 3bc2f9cf54..01b4c13fcc 100644
  sha256 d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f LICENSE-LGPL
 +sha256 6ba58188449642de8adefd7adabb436185792c5c51a4b5d04650423c2151dc50 README
 diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
-index df3e9c7888..0fcd4f4258 100644
+index eb91ef8ff7..a1df343694 100644
 --- a/package/brltty/brltty.mk
 +++ b/package/brltty/brltty.mk
 @@ -9,7 +9,8 @@ BRLTTY_SOURCE = brltty-$(BRLTTY_VERSION).tar.xz
@@ -45,5 +45,5 @@ index df3e9c7888..0fcd4f4258 100644
 +BRLTTY_LICENSE = GPL-2.0+, LGPL-2.1+ (data, client side)
 +BRLTTY_LICENSE_FILES = LICENSE-GPL LICENSE-LGPL README
  
- BRLTTY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-autoconf host-pkgconf \
- 	$(if $(BR2_PACKAGE_AT_SPI2_CORE),at-spi2-core)
+ BRLTTY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-autoconf host-pkgconf
+ 
