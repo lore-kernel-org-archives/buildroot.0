@@ -1,46 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 20:33:52 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] wireguard: bump version
- to 0.0.20180925
-Message-ID: <20181005183258.30B898D494@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 20:34:52 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] nilfs-utils: no comment
+ if BR2_USE_MMU is true
+Message-ID: <20181005183355.BC36F8D4A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4556bd42c3ebae956256af508c2dd327bfeaca30
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1d3478ba796b2d88dfb1a72cc12b0ab1844ab0f2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
+Don't display comment if BR2_USE_MMU is true
+Moreover, move BR2_USE_MMU dependency at the top of dependency list
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Acked-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0a656bc0658e79f7ddc4c9734ad9c52a5df46296)
+(cherry picked from commit 0dbab1bb45d0eb1bf37e693b0ad9ca95831d5180)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireguard/wireguard.hash | 4 ++--
- package/wireguard/wireguard.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/nilfs-utils/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
-index d0cd65ad4f..fe6439fbc2 100644
---- a/package/wireguard/wireguard.hash
-+++ b/package/wireguard/wireguard.hash
-@@ -1,4 +1,4 @@
--# From https://lists.zx2c4.com/pipermail/wireguard/2018-July/003112.html
--sha256 5e38d554f7d1e3a64e3a5319ca1a3b790c84ed89c896586c490a93ac1f953a91  WireGuard-0.0.20180708.tar.xz
-+# From https://lists.zx2c4.com/pipermail/wireguard/2018-September/003395.html
-+sha256 4a0488a07e40ec17e798f3e40a85cedf55f0560b1c3a8fd95806c7d4266cb0e8  WireGuard-0.0.20180925.tar.xz
- # Locally calculated
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
-index cc8ad7c4cc..faddbf93ad 100644
---- a/package/wireguard/wireguard.mk
-+++ b/package/wireguard/wireguard.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/nilfs-utils/Config.in b/package/nilfs-utils/Config.in
+index e49cab369b..e245dc4656 100644
+--- a/package/nilfs-utils/Config.in
++++ b/package/nilfs-utils/Config.in
+@@ -1,8 +1,8 @@
+ config BR2_PACKAGE_NILFS_UTILS
+ 	bool "nilfs-utils"
++	depends on BR2_USE_MMU # util-linux libmount, libblkid
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # sem_open()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # clock_nanosleep()
+-	depends on BR2_USE_MMU # util-linux libmount, libblkid
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+@@ -13,5 +13,6 @@ config BR2_PACKAGE_NILFS_UTILS
+ 	  https://github.com/nilfs-dev/nilfs-utils
  
--WIREGUARD_VERSION = 0.0.20180708
-+WIREGUARD_VERSION = 0.0.20180925
- WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
- WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
- WIREGUARD_LICENSE = GPL-2.0
+ comment "nilfs-utils needs a toolchain w/ threads, NPTL"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL
