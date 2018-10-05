@@ -1,46 +1,131 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 20:41:31 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] package/ghostscript: fix
- removal of included lcms2
-Message-ID: <20181005184405.96367800F0@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 15:17:08 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] woff2: fix static builds
+Message-ID: <20181005174039.293848D2A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92ab97aa282072a96d54bf3030fbaab63bbf7a02
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b66cc0c7b2099ce208b7800252cf6732619d3c69
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Ghostscript 9.24 changed the internal lcms2 version:
-https://www.ghostscript.com/doc/9.24/News.htm
+Include a patch to make CMake correctly find the Brotli libraries when
+they have been built as static libraries.
 
-With this change the directory name was also changed which broke our
-code to force the usage of the buildroot lcms2 package.
+Fixes:
+- http://autobuild.buildroot.net/results/f1c4b5aeb12af7b7a3e8ae01c219004ecd9befd6/
+- http://autobuild.buildroot.net/results/74d20ff38766466623cc4a9eb18afcda831bc20b/
 
-Fixes
-http://autobuild.buildroot.net/results/d04/d04ad017bf06a442a7397f935959994ba72824e1/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d5f83cfc885c4a9ea6d35d38b7d5a8eaf725aee2)
+(cherry picked from commit 0ceb847af5955eac911935a1f1f2f444523eece6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ghostscript/ghostscript.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ ...e-multiple-libraries-being-returned-for-B.patch | 80 ++++++++++++++++++++++
+ package/woff2/woff2.mk                             |  7 ++
+ 2 files changed, 87 insertions(+)
 
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index 9b5e144888..b1f5e1edb1 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
-@@ -27,8 +27,8 @@ GHOSTSCRIPT_DEPENDENCIES = \
- # Inspired by linuxfromscratch:
- # http://www.linuxfromscratch.org/blfs/view/svn/pst/gs.html
- define GHOSTSCRIPT_REMOVE_LIBS
--	rm -rf $(@D)/freetype $(@D)/ijs $(@D)/jpeg $(@D)/lcms2 \
--		$(@D)/lcms2art $(@D)/libpng $(@D)/tiff $(@D)/zlib
-+	rm -rf $(@D)/freetype $(@D)/ijs $(@D)/jpeg $(@D)/lcms2mt \
-+		$(@D)/libpng $(@D)/tiff $(@D)/zlib
- endef
- GHOSTSCRIPT_POST_PATCH_HOOKS += GHOSTSCRIPT_REMOVE_LIBS
+diff --git a/package/woff2/0001-CMake-Handle-multiple-libraries-being-returned-for-B.patch b/package/woff2/0001-CMake-Handle-multiple-libraries-being-returned-for-B.patch
+new file mode 100644
+index 0000000000..142eab2718
+--- /dev/null
++++ b/package/woff2/0001-CMake-Handle-multiple-libraries-being-returned-for-B.patch
+@@ -0,0 +1,80 @@
++From 9a6d50b3f355c1e4d72a235aa0bac4856dff1785 Mon Sep 17 00:00:00 2001
++From: Adrian Perez de Castro <aperez@igalia.com>
++Date: Tue, 27 Mar 2018 19:59:23 +0100
++Subject: [PATCH] CMake: Handle multiple libraries being returned for Brotli
++
++Brotli is built as three libraries: libbrotlienc, libbrotlidec, and
++libbrotlicommon. When requesting the linker flags using pkg-config for
++e.g. libbrotlidec, it will return both libbrotlidec and libbrotlicommon.
++The FindBrotli*.cmake files ignore the names of the libraries returned
++by pkg-config, and hardcode only the libbrotli{enc,dec} names. While
++this is fine when using shared libraries (they contain an entry for
++libbrotlicommon as required library in their headers), it will cause
++linker errors when Brotli has been built as static libraries, due to
++the missing symbols from libbrotlicommon being unknown to the linker.
++
++This fixes FindBrotli*.cmake files by using the library names reported
++by pkg-config (instead of hardcoding them), and applying find_library()
++to each of the libraries to find their absolute paths. If any of the
++libraries is missing, the corresponding BROTLI{ENC,DEC}_LIBRARIES is
++unset to let find_package_handle_standard_args() report an error.
++---
++ cmake/FindBrotliDec.cmake | 13 +++++++++----
++ cmake/FindBrotliEnc.cmake | 14 ++++++++++----
++ 2 files changed, 19 insertions(+), 8 deletions(-)
++
++Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
++Upstream-Status: Submitted [https://github.com/google/woff2/pull/112]
++
++diff --git a/cmake/FindBrotliDec.cmake b/cmake/FindBrotliDec.cmake
++index abb06f4..9cbb415 100644
++--- a/cmake/FindBrotliDec.cmake
+++++ b/cmake/FindBrotliDec.cmake
++@@ -18,10 +18,15 @@ find_path(BROTLIDEC_INCLUDE_DIRS
++     HINTS ${PC_BROTLIDEC_INCLUDEDIR}
++ )
++ 
++-find_library(BROTLIDEC_LIBRARIES
++-    NAMES brotlidec
++-    HINTS ${PC_BROTLIDEC_LIBDIR}
++-)
+++set(BROTLIDEC_LIBRARIES "")
+++foreach(_lib ${PC_BROTLIDEC_LIBRARIES})
+++	find_library(PC_BROTLIDEC_PATH_${_lib} ${_lib} HINTS ${PC_BROTLIDEC_LIBRARY_DIRS})
+++	if(NOT PC_BROTLIDEC_PATH_${_lib})
+++		unset(BROTLIDEC_LIBRARIES)
+++		break()
+++	endif()
+++	list(APPEND BROTLIDEC_LIBRARIES "${PC_BROTLIDEC_PATH_${_lib}}")
+++endforeach()
++ 
++ include(FindPackageHandleStandardArgs)
++ find_package_handle_standard_args(BrotliDec
++diff --git a/cmake/FindBrotliEnc.cmake b/cmake/FindBrotliEnc.cmake
++index 4be347d..55f3932 100644
++--- a/cmake/FindBrotliEnc.cmake
+++++ b/cmake/FindBrotliEnc.cmake
++@@ -18,10 +18,16 @@ find_path(BROTLIENC_INCLUDE_DIRS
++     HINTS ${PC_BROTLIENC_INCLUDEDIR}
++ )
++ 
++-find_library(BROTLIENC_LIBRARIES
++-    NAMES brotlienc
++-    HINTS ${PC_BROTLIENC_LIBDIR}
++-)
+++set(BROTLIENC_LIBRARIES "")
+++foreach(_lib ${PC_BROTLIENC_LIBRARIES})
+++	find_library(PC_BROTLIENC_PATH_${_lib} ${_lib}
+++		HINTS ${PC_BROTLIENC_LIBRARY_DIRS})
+++	if(NOT PC_BROTLIENC_PATH_${_lib})
+++		unset(BROTLIENC_LIBRARIES)
+++		break()
+++	endif()
+++	list(APPEND BROTLIENC_LIBRARIES "${PC_BROTLIENC_PATH_${_lib}}")
+++endforeach()
++ 
++ include(FindPackageHandleStandardArgs)
++ find_package_handle_standard_args(BrotliEnc
++-- 
++2.16.3
++
+diff --git a/package/woff2/woff2.mk b/package/woff2/woff2.mk
+index 23b88a5e9a..b2ff33fe98 100644
+--- a/package/woff2/woff2.mk
++++ b/package/woff2/woff2.mk
+@@ -14,4 +14,11 @@ WOFF2_DEPENDENCIES = brotli
+ WOFF2_CONF_OPTS = \
+ 	-DNOISY_LOGGING=OFF
  
++# The CMake build files for woff2 manually set some RPATH handling options
++# which make the installation steps fail with static builds, so pass this
++# to prevent any attempt of mangling RPATH that CMake would do.
++ifneq ($(BR2_SHARED_LIBS),y)
++WOFF2_CONF_OPTS += -DCMAKE_SKIP_RPATH=ON
++endif
++
+ $(eval $(cmake-package))
