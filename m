@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 05 Oct 2018 22:00:32 +0200
-Subject: [Buildroot] [PATCH] strongswan: add upstream security fix for
- CVE-2018-17540
-In-Reply-To: <20181002153552.4539-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 2 Oct 2018 17:35:52 +0200")
-References: <20181002153552.4539-1-peter@korsgaard.com>
-Message-ID: <87efd417vj.fsf@dell.be.48ers.dk>
+Date: Fri, 05 Oct 2018 22:30:21 +0200
+Subject: [Buildroot] [PATCH] python-django: bump version to 1.11.16
+In-Reply-To: <20181001113255.2526-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 1 Oct 2018 13:32:55 +0200")
+References: <20181001113255.2526-1-peter@korsgaard.com>
+Message-ID: <87sh1kyw4i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,10 +13,10 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > The fix for CVE-2018-16151 / 16152 contained an exploitable bug.
- > For details, see:
+ > Fixes a race condition in QuerySet.update_or_create() that could result in
+ > data loss:
 
- > https://www.strongswan.org/blog/2018/10/01/strongswan-vulnerability-(cve-2018-17540).html
+ > https://code.djangoproject.com/ticket/29499
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
