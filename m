@@ -1,153 +1,173 @@
-From: Florian La Roche <F.LaRoche@pilz.de>
-Date: Fri, 5 Oct 2018 08:45:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: add upstream patches
-Message-ID: <20181005064525.28631-1-F.LaRoche@pilz.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 5 Oct 2018 13:25:26 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] dtc: Fix segfault reading
+ powernv device tree
+Message-ID: <20181005112434.822088D1D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add patches from the upstream ltp-testsuite github
-repository to compile correctly.
+commit: https://git.buildroot.net/buildroot/commit/?id=48a445bdc4e535bc564c34eb803472322f93b221
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-Signed-off-by: Florian La Roche <F.LaRoche@pilz.de>
+When running this command on a powernv machine, dtc crashes:
+
+ dtc -f -I fs -O dts /sys/firmware/devicetree
+
+Upstream has fixed the segfault but have not made a release yet so we
+add the patch for now.
+
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 3729389a68f518bf069001783e70eee58dbe9924)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ltp-testsuite/0002-execve05.patch | 44 +++++++++++++++++++++++
- package/ltp-testsuite/0003-statx.patch    | 32 +++++++++++++++++
- package/ltp-testsuite/0004-statx.patch    | 26 ++++++++++++++
- 3 files changed, 102 insertions(+)
- create mode 100644 package/ltp-testsuite/0002-execve05.patch
- create mode 100644 package/ltp-testsuite/0003-statx.patch
- create mode 100644 package/ltp-testsuite/0004-statx.patch
+ .../0001-Kill-bogus-TYPE_BLOB-marker-type.patch    | 138 +++++++++++++++++++++
+ 1 file changed, 138 insertions(+)
 
-diff --git a/package/ltp-testsuite/0002-execve05.patch b/package/ltp-testsuite/0002-execve05.patch
+diff --git a/package/dtc/0001-Kill-bogus-TYPE_BLOB-marker-type.patch b/package/dtc/0001-Kill-bogus-TYPE_BLOB-marker-type.patch
 new file mode 100644
-index 0000000000..06e40c54e1
+index 0000000000..d9c660ef51
 --- /dev/null
-+++ b/package/ltp-testsuite/0002-execve05.patch
-@@ -0,0 +1,44 @@
-+From 6f61cad559df8791add50aa8d053ca77cd97c594 Mon Sep 17 00:00:00 2001
-+From: "Allen, John" <John.Allen@amd.com>
-+Date: Wed, 26 Sep 2018 14:31:37 +0000
-+Subject: [PATCH] runtest/{ltplite, stress.part3}: Update execve05 calling
-+ convention
++++ b/package/dtc/0001-Kill-bogus-TYPE_BLOB-marker-type.patch
+@@ -0,0 +1,138 @@
++From 9619c8619c37b9aea98100bcc15c51a5642e877e Mon Sep 17 00:00:00 2001
++From: Greg Kurz <groug@kaod.org>
++Date: Thu, 30 Aug 2018 12:01:59 +0200
++Subject: [PATCH] Kill bogus TYPE_BLOB marker type
 +
-+The calling convention for execve05 was recently changed and was updated
-+in runtest/syscalls when the change was introduced, but not for other
-+runtest files where execve05 is called. Update all calls to execve05 to
-+use the new calling convention.
++Since commit 32b9c6130762 "Preserve datatype markers when emitting dts
++format", we no longer try to guess the value type. Instead, we reuse
++the type of the datatype markers when they are present, if the type
++is either TYPE_UINT* or TYPE_STRING.
 +
-+Signed-off-by: John Allen <john.allen@amd.com>
-+Acked-by: Cyril Hrubis <chrubis@suse.cz>
++This causes 'dtc -I fs' to crash:
++
++Starting program: /root/dtc -q -f -O dts -I fs /proc/device-tree
++/dts-v1/;
++
++/ {
++
++Program received signal SIGSEGV, Segmentation fault.
++__strlen_power8 () at ../sysdeps/powerpc/powerpc64/power8/strlen.S:47
++47              ld      r12,0(r4)     /* Load doubleword from memory.  */
++(gdb) bt
++#0  __strlen_power8 () at ../sysdeps/powerpc/powerpc64/power8/strlen.S:47
++#1  0x00007ffff7de3d10 in __GI__IO_fputs (str=<optimized out>,
++    fp=<optimized out>) at iofputs.c:33
++#2  0x000000001000c7a0 in write_propval (prop=0x100525e0,
++    f=0x7ffff7f718a0 <_IO_2_1_stdout_>) at treesource.c:245
++
++The offending line is:
++
++                fprintf(f, "%s", delim_start[emit_type]);
++
++where emit_type is TYPE_BLOB and:
++
++static const char *delim_start[] = {
++        [TYPE_UINT8] = "[",
++        [TYPE_UINT16] = "/bits/ 16 <",
++        [TYPE_UINT32] = "<",
++        [TYPE_UINT64] = "/bits/ 64 <",
++        [TYPE_STRING] = "",
++};
++
++/* Data blobs */
++enum markertype {
++        TYPE_NONE,
++        REF_PHANDLE,
++        REF_PATH,
++        LABEL,
++        TYPE_UINT8,
++        TYPE_UINT16,
++        TYPE_UINT32,
++        TYPE_UINT64,
++        TYPE_BLOB,
++        TYPE_STRING,
++};
++
++Because TYPE_BLOB < TYPE_STRING and delim_start[] is a static array,
++delim_start[emit_type] is 0x0. The glibc usually prints out "(null)"
++when one passes 0x0 to %s, but it seems to call fputs() internally if
++the format is exactly "%s", hence the crash.
++
++TYPE_BLOB basically means the data comes from a file and we don't know
++its type. We don't care for the former, and the latter is TYPE_NONE.
++
++So let's drop TYPE_BLOB completely and use TYPE_NONE instead when reading
++the file. Then, try to guess the data type@emission time, like the
++code already does for refs and labels.
++
++Instead of adding yet another check for TYPE_NONE, an helper is introduced
++to check if the data marker has type information, ie, >= TYPE_UINT8.
++
++Fixes: 32b9c61307629ac76c6ac0bead6f926d579b3d2c
++Suggested-by: David Gibson <david@gibson.dropbear.id.au>
++Signed-off-by: Greg Kurz <groug@kaod.org>
++Signed-off-by: David Gibson <david@gibson.dropbear.id.au>
++Signed-off-by: Joel Stanley <joel@jms.id.au>
 +---
-+ runtest/ltplite      | 2 +-
-+ runtest/stress.part3 | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
++ data.c       | 2 +-
++ dtc.h        | 1 -
++ treesource.c | 9 +++++++--
++ 3 files changed, 8 insertions(+), 4 deletions(-)
 +
-+diff --git a/runtest/ltplite b/runtest/ltplite
-+index 61ab275d8e..f0102e7e63 100644
-+--- a/runtest/ltplite
-++++ b/runtest/ltplite
-+@@ -174,7 +174,7 @@ execve01 execve01
-+ execve02 execve02
-+ execve03 execve03
-+ execve04 execve04
-+-execve05 execve05 20 $LTPROOT/testcases/bin/execve05 $LTPROOT/testcases/bin/execve05 4
-++execve05 execve05 -i 5 -n 32
-+ execvp01 execvp01
++diff --git a/data.c b/data.c
++index accdfaef6668..4a204145cc7b 100644
++--- a/data.c
+++++ b/data.c
++@@ -95,7 +95,7 @@ struct data data_copy_file(FILE *f, size_t maxlen)
++ {
++ 	struct data d = empty_data;
 + 
-+ exit01 exit01
-+diff --git a/runtest/stress.part3 b/runtest/stress.part3
-+index 332daa9ece..513d2ea39d 100644
-+--- a/runtest/stress.part3
-++++ b/runtest/stress.part3
-+@@ -115,7 +115,7 @@ execve01 execve01
-+ execve02 execve02
-+ execve03 execve03
-+ execve04 execve04
-+-execve05 execve05 20 $LTPROOT/testcases/bin/execve05 $LTPROOT/testcases/bin/execve05 4
-++execve05 execve05 -i 5 -n 32
-+ execvp01 execvp01
++-	d = data_add_marker(d, TYPE_BLOB, NULL);
+++	d = data_add_marker(d, TYPE_NONE, NULL);
++ 	while (!feof(f) && (d.len < maxlen)) {
++ 		size_t chunksize, ret;
 + 
-+ exit01 exit01
-diff --git a/package/ltp-testsuite/0003-statx.patch b/package/ltp-testsuite/0003-statx.patch
-new file mode 100644
-index 0000000000..fedb8784c0
---- /dev/null
-+++ b/package/ltp-testsuite/0003-statx.patch
-@@ -0,0 +1,32 @@
-+From a945304b6a2286d0665c70250cc5475eb07fd21e Mon Sep 17 00:00:00 2001
-+From: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-+Date: Wed, 26 Sep 2018 11:15:45 -0300
-+Subject: [PATCH] statx: fix compile errors
++diff --git a/dtc.h b/dtc.h
++index 303c2a6a73b7..51c03ef64dbe 100644
++--- a/dtc.h
+++++ b/dtc.h
++@@ -82,7 +82,6 @@ enum markertype {
++ 	TYPE_UINT16,
++ 	TYPE_UINT32,
++ 	TYPE_UINT64,
++-	TYPE_BLOB,
++ 	TYPE_STRING,
++ };
++ extern const char *markername(enum markertype markertype);
++diff --git a/treesource.c b/treesource.c
++index f99544d72344..53e62036ad0e 100644
++--- a/treesource.c
+++++ b/treesource.c
++@@ -133,9 +133,14 @@ static void write_propval_int(FILE *f, const char *p, size_t len, size_t width)
++ 	}
++ }
++ 
+++static bool has_data_type_information(struct marker *m)
+++{
+++	return m->type >= TYPE_UINT8;
+++}
+++
++ static struct marker *next_type_marker(struct marker *m)
++ {
++-	while (m && (m->type == LABEL || m->type == REF_PHANDLE || m->type == REF_PATH))
+++	while (m && !has_data_type_information(m))
++ 		m = m->next;
++ 	return m;
++ }
++@@ -225,7 +230,7 @@ static void write_propval(FILE *f, struct property *prop)
++ 		size_t chunk_len;
++ 		const char *p = &prop->val.val[m->offset];
++ 
++-		if (m->type < TYPE_UINT8)
+++		if (!has_data_type_information(m))
++ 			continue;
++ 
++ 		chunk_len = type_marker_length(m);
++-- 
++2.17.1
 +
-+struct statx is only defined in sys/stat.h when _GNU_SOURCE is defined.
-+The testcases do define _GNU_SOURCE, but not the m4 struct check.
-+
-+Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-+Acked-by: Cyril Hrubis <chrubis@suse.cz>
-+---
-+ m4/ltp-statx.m4 | 9 +++++++--
-+ 1 file changed, 7 insertions(+), 2 deletions(-)
-+
-+diff --git a/m4/ltp-statx.m4 b/m4/ltp-statx.m4
-+index 44303d30c2..5f79a94cdf 100644
-+--- a/m4/ltp-statx.m4
-++++ b/m4/ltp-statx.m4
-+@@ -23,6 +23,11 @@ dnl
-+ AC_DEFUN([LTP_CHECK_STATX],[
-+ AC_CHECK_FUNCS(statx,,,[[#include <sys/stat.h>]])
-+ AC_CHECK_HEADER(linux/fs.h,,,)
-+-AC_CHECK_TYPES([struct statx],,,[[#include <sys/stat.h>]])
-+-AC_CHECK_TYPES([struct statx_timestamp],,,[[#include <sys/stat.h>]])
-++AC_CHECK_TYPES([struct statx],,,[[
-++	#define _GNU_SOURCE
-++	#include <sys/stat.h>
-++]])
-++AC_CHECK_TYPES([struct statx_timestamp],,,[[
-++	#define _GNU_SOURCE
-++	#include <sys/stat.h>]])
-+ ])
-diff --git a/package/ltp-testsuite/0004-statx.patch b/package/ltp-testsuite/0004-statx.patch
-new file mode 100644
-index 0000000000..7b9002d708
---- /dev/null
-+++ b/package/ltp-testsuite/0004-statx.patch
-@@ -0,0 +1,26 @@
-+This is based on 0003-statx.patch so that autoconf does not have to run again.
-+
-+--- ltp-testsuite-20180926/configure
-++++ ltp-testsuite-20180926/configure
-+@@ -6502,7 +6502,9 @@
-+ fi
-+ 
-+ 
-+-ac_fn_c_check_type "$LINENO" "struct statx" "ac_cv_type_struct_statx" "#include <sys/stat.h>
-++ac_fn_c_check_type "$LINENO" "struct statx" "ac_cv_type_struct_statx" "
-++#define _GNU_SOURCE
-++#include <sys/stat.h>
-+ "
-+ if test "x$ac_cv_type_struct_statx" = xyes; then :
-+ 
-+@@ -6513,7 +6515,9 @@
-+ 
-+ fi
-+ 
-+-ac_fn_c_check_type "$LINENO" "struct statx_timestamp" "ac_cv_type_struct_statx_timestamp" "#include <sys/stat.h>
-++ac_fn_c_check_type "$LINENO" "struct statx_timestamp" "ac_cv_type_struct_statx_timestamp" "
-++#define _GNU_SOURCE
-++#include <sys/stat.h>
-+ "
-+ if test "x$ac_cv_type_struct_statx_timestamp" = xyes; then :
-+ 
--- 
-2.17.1
-
-Gesch?ftsf?hrung: Susanne Kunschert, Thomas Pilz
-Pilz GmbH & Co. KG, Sitz: Ostfildern, HRA 210 893, Amtsgericht Stuttgart
-Kompl. Ges. Peter Pilz GmbH, Sitz: Ostfildern, HRB 210 612, Amtsgericht Stuttgart
-Umsatzsteuer: ID-Nr. DE 145 355 773, WEEE-Reg.-Nr. DE 71636849
-This email is intended solely for the use of the named address(es). Any unauthorised disclosure, copying or distribution of these confidential information contained therein, or the taking of any action based on it, is prohibited. The sender disclaims any liability for the integrity of this email. Legally binding declarations must be in written form.
-Umweltschutz liegt uns am Herzen! - Bitte denken Sie an unsere Umwelt, bevor Sie diese E-Mail drucken.
-We do care about the environment! - Please consider the environment before printing this e-mail.
