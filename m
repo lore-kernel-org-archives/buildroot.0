@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 21:59:09 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] strongswan: add upstream
+Date: Fri, 5 Oct 2018 21:54:29 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] strongswan: add upstream
  security patch
-Message-ID: <20181005200007.DCBA58D670@busybox.osuosl.org>
+Message-ID: <20181005195343.77B508D5EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1807dafc01f8196ee85b7e48e414c55c5c4e5731
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=28a341501dfb9553bbdf177c7ff00457d85712a7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 Fixes the following security issues:
 
