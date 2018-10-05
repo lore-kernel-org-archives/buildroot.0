@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 13:42:25 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] package/android-tools:
+Date: Fri, 5 Oct 2018 13:42:31 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] package/android-tools:
  update upstream URL in Config.in help
-Message-ID: <20181005114129.A86558D252@busybox.osuosl.org>
+Message-ID: <20181005114137.972DF8D255@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=928d1bb48b18171ee425cc595bcd7a2d280f2004
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1ed276fbccef1b9dd954f18ec01575b038d01830
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
