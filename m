@@ -1,52 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 21:56:16 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] strongswan: add upstream
- security fix for CVE-2018-17540
-Message-ID: <20181005195611.C57738D5F9@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 21:22:46 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] ghostscript: don't use
+ lcms2art
+Message-ID: <20181005192304.307988D4CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6928f07721ba0e52d5ef6e5e73f0edc38111edd2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8f8142b0e282bc89b7e209fb7a7a2049ca7e6921
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-The fix for CVE-2018-16151 / 16152 contained an exploitable bug.
-For details, see:
+Delete lcsm2art directory to use the buildroot lcms2 library
 
-https://www.strongswan.org/blog/2018/10/01/strongswan-vulnerability-(cve-2018-17540).html
+Fixes:
+ - http://autobuild.buildroot.net/results/cda9c22bf29278cc24ab852094df19b773d0f151
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 040cf15a8760c91f82b61a3e2cadf1b91b7c45af)
+(cherry picked from commit b0bf1f5888eac726368c264c588ad5be33421efd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/strongswan/strongswan.hash | 1 +
- package/strongswan/strongswan.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ package/ghostscript/ghostscript.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
-index abbdbc2bf1..4d1a593a5c 100644
---- a/package/strongswan/strongswan.hash
-+++ b/package/strongswan/strongswan.hash
-@@ -4,5 +4,6 @@ md5	a6a28eeb22aa58080a7581771a5b63f9	strongswan-5.6.3.tar.bz2
- sha256	c3c7dc8201f40625bba92ffd32eb602a8909210d8b3fac4d214c737ce079bf24	strongswan-5.6.3.tar.bz2
- # Locally calculated
- sha256	e66c243593ee0713f5fd13bcd7f624bc50eebc54bf87f790ced429ff698077e7  strongswan-5.6.1-5.6.3_gmp-pkcs1-verify.patch
-+sha256	415d104717cb0781770e9077d00b3df310b11e65e4b9c1d35b62fbba04549263  strongswan-4.4.0-5.7.0_gmp-pkcs1-overflow.patch
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256	2292e21797754548dccdef9eef6aee7584e552fbd890fa914e1de8d3577d23f0  LICENSE
-diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-index 9ef4e183e2..30693de7cb 100644
---- a/package/strongswan/strongswan.mk
-+++ b/package/strongswan/strongswan.mk
-@@ -8,7 +8,8 @@ STRONGSWAN_VERSION = 5.6.3
- STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
- STRONGSWAN_SITE = http://download.strongswan.org
- STRONGSWAN_PATCH = \
--	$(STRONGSWAN_SITE)/patches/27_gmp_pkcs1_verify_patch/strongswan-5.6.1-5.6.3_gmp-pkcs1-verify.patch
-+	$(STRONGSWAN_SITE)/patches/27_gmp_pkcs1_verify_patch/strongswan-5.6.1-5.6.3_gmp-pkcs1-verify.patch \
-+	$(STRONGSWAN_SITE)/patches/28_gmp_pkcs1_overflow_patch/strongswan-4.4.0-5.7.0_gmp-pkcs1-overflow.patch
- STRONGSWAN_LICENSE = GPL-2.0+
- STRONGSWAN_LICENSE_FILES = COPYING LICENSE
- STRONGSWAN_DEPENDENCIES = host-pkgconf
+diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+index 6ac8dc6a43..8ea6610be5 100644
+--- a/package/ghostscript/ghostscript.mk
++++ b/package/ghostscript/ghostscript.mk
+@@ -27,7 +27,8 @@ GHOSTSCRIPT_DEPENDENCIES = \
+ # Inspired by linuxfromscratch:
+ # http://www.linuxfromscratch.org/blfs/view/svn/pst/gs.html
+ define GHOSTSCRIPT_REMOVE_LIBS
+-	rm -rf $(@D)/freetype $(@D)/ijs $(@D)/jpeg $(@D)/lcms2 $(@D)/libpng $(@D)/tiff $(@D)/zlib
++	rm -rf $(@D)/freetype $(@D)/ijs $(@D)/jpeg $(@D)/lcms2 \
++		$(@D)/lcms2art $(@D)/libpng $(@D)/tiff $(@D)/zlib
+ endef
+ GHOSTSCRIPT_POST_PATCH_HOOKS += GHOSTSCRIPT_REMOVE_LIBS
+ 
