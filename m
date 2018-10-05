@@ -1,43 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 05 Oct 2018 14:09:55 +0200
-Subject: [Buildroot] [PATCH] package/x11r7/xutil_makedepend: add missing
- dependency on host-pkgconf
-In-Reply-To: <20180923135007.5926-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Sun, 23 Sep 2018 15:50:07 +0200")
-References: <20180923135007.5926-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87ftxk4mss.fsf@dell.be.48ers.dk>
+Date: Fri, 05 Oct 2018 19:34:14 +0200
+Subject: [Buildroot] [PATCH 1/5] webkitgtk: bump to version 2.22.2
+In-Reply-To: <20180922235333.85642-2-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Sun, 23 Sep 2018 02:53:29 +0300")
+References: <20180922235333.85642-1-aperez@igalia.com>
+ <20180922235333.85642-2-aperez@igalia.com>
+Message-ID: <87bm8847s9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
- > The configure script of xutil_makedepend uses PKG_CHECK_MODULES(), so
- > it should depend on host-pkgconf. Otherwise, a "make
- > host-xutil_makedepend" fails with:
+ > Release notes:
+ >     https://webkitgtk.org/2018/09/03/webkitgtk2.22.0-released.html
+ >     https://webkitgtk.org/2018/09/20/webkitgtk2.22.1-released.html
+ >     https://webkitgtk.org/2018/09/21/webkitgtk2.22.2-released.html
 
- > """
- > checking for X... configure: error: in
- > `/home/thomas/projets/buildroot/output/build/host-xutil_makedepend-1.0.5':
- > configure: error: The pkg-config script could not be found or is too old.  Make sure it
- > is in your PATH or set the PKG_CONFIG environment variable to the full
- > path to pkg-config.
+ > No corresponding security advisories for 2.22.x have been published.
+ > Nevertheless, due to skipping over versions in the 2.20.x series,
+ > the following 2.20.x advisories apply:
 
- > Alternatively, you may set the environment variables X_CFLAGS
- > and X_LIBS to avoid the need to call pkg-config.
- > See the pkg-config man page for more details.
+ >     https://webkitgtk.org/security/WSA-2018-0003.html
+ >     https://webkitgtk.org/security/WSA-2018-0004.html
+ >     https://webkitgtk.org/security/WSA-2018-0005.html
+ >     https://webkitgtk.org/security/WSA-2018-0006.html
 
- > To get pkg-config, see <http://pkg-config.freedesktop.org/>.
- > """
+ > This also bumps the required GCC version, due to the WebKit code
+ > now using more modern C++ features which were introduced in version
+ > 6.x of the compiler. The dependency is propagated to the midori
+ > package as well. Last but not least, BR2_PACKAGE_WEBP_DEMUX and
+ > BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEGTSDEMUX are selected as
+ > they are unconditionally needed by the newer WebKitGTK+ releases
+ > when multimedia support is enabled.
 
- > This was detected using per-package host/target directories, but can
- > be reproduced without it.
+ > An upstream patch for 32-bit ARM which did not make it to be included
+ > in this new version is included as well, and can be removed once it
+ > gets picked in a new release.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
-Committed to 2018.08.x, thanks.
+Committed to 2018.02.x, 2018.05.x and 2018.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
