@@ -1,62 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 21:38:24 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] bind: security bump to
- version 9.11.4-P2
-Message-ID: <20181005193728.2E0508D553@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 20:41:01 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] ghostscript: security
+ bump to version 9.25
+Message-ID: <20181005184405.7A0D38D4B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0fb04f8d31cbd0e4446fee3e015a1cf119e1f4a4
+commit: https://git.buildroot.net/buildroot/commit/?id=71b2ba946254056f4fec9bd0aa38af1c86fc8e5e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-From the release notes
-(http://ftp.isc.org/isc/bind9/9.11.4-P2/RELEASE-NOTES-bind-9.11.4-P2.txt):
+Fixes the following security issues:
 
- * There was a long-existing flaw in the documentation for ms-self,
-   krb5-self, ms-subdomain, and krb5-subdomain rules in update-policy
-   statements.  Though the policies worked as intended, operators who
-   configured their servers according to the misleading documentation may
-   have thought zone updates were more restricted than they were; users of
-   these rule types are advised to review the documentation and correct
-   their configurations if necessary.  New rule types matching the
-   previously documented behavior will be introduced in a future maintenance
-   release.  [GL !708]
+- CVE-2018-16543: In Artifex Ghostscript before 9.24, gssetresolution and
+  gsgetresolution allow attackers to have an unspecified impact
 
- * named could crash during recursive processing of DNAME records when
-   deny-answer-aliases was in use.  This flaw is disclosed in CVE-2018-5740.
-   [GL #387]
+- CVE-2018-17183: Artifex Ghostscript before 9.25 allowed a user-writable
+  error exception table, which could be used by remote attackers able to
+  supply crafted PostScript to potentially overwrite or replace error
+  handlers to inject code.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 63eb34fa121c4e7448dd5ec25491ed742a7ca262)
+(cherry picked from commit b054797ecafec2b4b8945ad654242133749bf653)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/bind.hash | 2 +-
- package/bind/bind.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ghostscript/ghostscript.hash | 4 ++--
+ package/ghostscript/ghostscript.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 34d9891805..19d5f61f6d 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
- # Verified from https://ftp.isc.org/isc/bind9/9.11.4-P1/bind-9.11.4-P1.tar.gz.asc
- # with key BE0E9748B718253A28BB89FFF1B11BF05CF02E57
--sha256 b0e0dc3c8bf26989b1cad53f90d44a48e39404afc68f65c45bae79b446f0fe23 bind-9.11.4-P1.tar.gz
-+sha256 a85af7b629109d41285c7adeae1515daac638bbe4d5dc30d1f4b343dff09d811 bind-9.11.4-P2.tar.gz
- sha256 336f3c40e37a1a13690efb4c63e20908faa4c40498cc02f3579fb67d3a1933a5 COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 0140041218..95f615bf81 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
+index bb41841012..f8ca6c8d4e 100644
+--- a/package/ghostscript/ghostscript.hash
++++ b/package/ghostscript/ghostscript.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs923/SHA512SUMS
+-sha512 0c1f59b743f92f9cf7000b06f6209010e583ef4d6899c20ed245721dea3c08fd58b9e2d1513fe83765ab6be233bc7ab250cf18054e4d09de4073b1111e38035f  ghostscript-9.23.tar.xz
++# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs925/SHA512SUMS
++sha512 7a1c0b7546ed523f50c1452d4a1c13fcf043d6060fc9708bbc4b543f66ecb1b619b6e71998094ac702ef44a2fd159b6523271de19b1cae352981ef51fb637651  ghostscript-9.25.tar.xz
+ 
+ # Hash for license file:
+ sha256 6f852249f975287b3efd43a5883875e47fa9f3125e2f1b18b5c09517ac30ecf2  LICENSE
+diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+index 8ea6610be5..9b5e144888 100644
+--- a/package/ghostscript/ghostscript.mk
++++ b/package/ghostscript/ghostscript.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--BIND_VERSION = 9.11.4-P1
-+BIND_VERSION = 9.11.4-P2
- BIND_SITE = http://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
+-GHOSTSCRIPT_VERSION = 9.23
+-GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs923
++GHOSTSCRIPT_VERSION = 9.25
++GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs925
+ GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
+ GHOSTSCRIPT_LICENSE = AGPL-3.0
+ GHOSTSCRIPT_LICENSE_FILES = LICENSE
