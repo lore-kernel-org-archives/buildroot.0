@@ -1,123 +1,42 @@
 From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Fri,  5 Oct 2018 15:30:19 +0200
-Subject: [Buildroot] [PATCH 2/2] package/cups-filters: Add patch to fix
- build when using poppler 0.69.0
-In-Reply-To: <20181005133019.1061-1-olivier.schonken@gmail.com>
-References: <20181005133019.1061-1-olivier.schonken@gmail.com>
-Message-ID: <20181005133019.1061-2-olivier.schonken@gmail.com>
+Date: Fri,  5 Oct 2018 15:30:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qpdf: bump to version 8.2.1
+Message-ID: <20181005133047.1127-1-olivier.schonken@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch lets cups-filters only use gMemReport and memCheck functions
-if poppler version less than 0.69.0
-
-The poppler project removed the memCheck and gMemReport functions in
-commits c362ab1b97f20c5b73b3bad8d52015f679178748 - Remove DEBUG_MEM
-from Object since this uses RAII now and hence cannot leak.
-(The existing tracking also is not thread-safe and hence unreliable.)
-
-and
-
-f89446f6917a869b0f1a80fcc8ce81a7213dade4 - Remove generic heap debugging
-from gmem since external tools and compiler instrumentation achieve the
-same effect.
-
-A pull-request for the patch has also been created upstream at
-https://github.com/OpenPrinting/cups-filters/pull/66
-
 Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
 ---
- ...ed-memCheck-and-gMemReport-functions.patch | 79 +++++++++++++++++++
- 1 file changed, 79 insertions(+)
- create mode 100644 package/cups-filters/0002-Poppler-removed-memCheck-and-gMemReport-functions.patch
+ package/qpdf/qpdf.hash | 6 ++++--
+ package/qpdf/qpdf.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/cups-filters/0002-Poppler-removed-memCheck-and-gMemReport-functions.patch b/package/cups-filters/0002-Poppler-removed-memCheck-and-gMemReport-functions.patch
-new file mode 100644
-index 0000000000..3eb2d35c3e
---- /dev/null
-+++ b/package/cups-filters/0002-Poppler-removed-memCheck-and-gMemReport-functions.patch
-@@ -0,0 +1,79 @@
-+From 6b0747c1630dd973acd138f927dbded4ea45e360 Mon Sep 17 00:00:00 2001
-+From: Olivier Schonken <olivier.schonken@gmail.com>
-+Date: Fri, 5 Oct 2018 12:05:31 +0200
-+Subject: [PATCH] Poppler removed memCheck and gMemReport functions
-+
-+Only use gMemReport and memCheck functions if poppler version less
-+than 0.69.0
-+
-+The poppler project removed the memCheck and gMemReport functions in
-+commits c362ab1b97f20c5b73b3bad8d52015f679178748 - Remove DEBUG_MEM
-+from Object since this uses RAII now and hence cannot leak.
-+(The existing tracking also is not thread-safe and hence unreliable.)
-+
-+and
-+
-+f89446f6917a869b0f1a80fcc8ce81a7213dade4 - Remove generic heap debugging
-+from gmem since external tools and compiler instrumentation achieve the
-+same effect.
-+
-+This commit solves https://github.com/OpenPrinting/cups-filters/issues/62
-+
-+Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
-+---
-+ filter/pdftoijs.cxx            | 2 ++
-+ filter/pdftoopvp/pdftoopvp.cxx | 2 ++
-+ filter/pdftoraster.cxx         | 2 ++
-+ 3 files changed, 6 insertions(+)
-+
-+diff --git a/filter/pdftoijs.cxx b/filter/pdftoijs.cxx
-+index 22bc33f4..dd6b6fa0 100644
-+--- a/filter/pdftoijs.cxx
-++++ b/filter/pdftoijs.cxx
-+@@ -503,9 +503,11 @@ err1:
-+   ppdClose(ppd);
-+   free(outputfile);
-+ 
-++#if POPPLER_VERSION_MAJOR == 0 && POPPLER_VERSION_MINOR < 69
-+   // Check for memory leaks
-+   Object::memCheck(stderr);
-+   gMemReport(stderr);
-++#endif
-+ 
-+   return exitCode;
-+ }
-+diff --git a/filter/pdftoopvp/pdftoopvp.cxx b/filter/pdftoopvp/pdftoopvp.cxx
-+index 024941ab..bf25983b 100644
-+--- a/filter/pdftoopvp/pdftoopvp.cxx
-++++ b/filter/pdftoopvp/pdftoopvp.cxx
-+@@ -763,9 +763,11 @@ err2:
-+  err0:
-+   delete globalParams;
-+ 
-++#if POPPLER_VERSION_MAJOR == 0 && POPPLER_VERSION_MINOR < 69
-+   // check for memory leaks
-+   Object::memCheck(stderr);
-+   gMemReport(stderr);
-++#endif
-+ 
-+ }
-+ /* muntrace(); */
-+diff --git a/filter/pdftoraster.cxx b/filter/pdftoraster.cxx
-+index 0c63ab8d..4ebf02b0 100644
-+--- a/filter/pdftoraster.cxx
-++++ b/filter/pdftoraster.cxx
-+@@ -2162,9 +2162,11 @@ err1:
-+     cmsDeleteTransform(colorTransform);
-+   }
-+ 
-++#if POPPLER_VERSION_MAJOR == 0 && POPPLER_VERSION_MINOR < 69
-+   // Check for memory leaks
-+   Object::memCheck(stderr);
-+   gMemReport(stderr);
-++#endif
-+ 
-+   return exitCode;
-+ }
-+-- 
-+2.17.1
-+
+diff --git a/package/qpdf/qpdf.hash b/package/qpdf/qpdf.hash
+index d27c9834b9..0beaeb2d7b 100644
+--- a/package/qpdf/qpdf.hash
++++ b/package/qpdf/qpdf.hash
+@@ -1,2 +1,4 @@
+-# From https://sourceforge.net/projects/qpdf/files/qpdf/8.1.0/qpdf-8.1.0.sha512/download
+-sha512	1831bcaaed87dae268db5d61805d1483ec5c101f6ce594be660664c119597ae67cf011c2b50092964d785a814d5f6c780935127a89401fe37a1026ae4d3af15c  qpdf-8.1.0.tar.gz
++# From https://sourceforge.net/projects/qpdf/files/qpdf/8.1.0/qpdf-8.1.0.sha512/download:
++sha512	ef3aeb4a7ca3ec48ab62341533eedcb2a6d0985767317ab72c22f0c0ecfef6849bfdc34b1bcec6427c7bde166143adb409c895ff40d8be6628e6323e27697a8c  qpdf-8.2.1.tar.gz
++# Locally computed:
++sha256  fb929ac30decb4dc3a2eea2bec6c43296a797c5d2d602deb3784ee39430583d5  Artistic-2.0
+diff --git a/package/qpdf/qpdf.mk b/package/qpdf/qpdf.mk
+index 4776d22b16..2f6efdd73e 100644
+--- a/package/qpdf/qpdf.mk
++++ b/package/qpdf/qpdf.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QPDF_VERSION = 8.1.0
++QPDF_VERSION = 8.2.1
+ QPDF_SITE = http://downloads.sourceforge.net/project/qpdf/qpdf/$(QPDF_VERSION)
+ QPDF_INSTALL_STAGING = YES
+ QPDF_LICENSE = Artistic-2.0
 -- 
 2.17.1
