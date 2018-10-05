@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 20:32:15 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] wireguard: bump version
+Date: Fri, 5 Oct 2018 20:33:37 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] wireguard: bump version
  to 0.0.20180925
-Message-ID: <20181005183205.EA6ED8D483@busybox.osuosl.org>
+Message-ID: <20181005183246.762E68D48A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ac80e454382a760258cd906f622c0996b0699e2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2ca24c5ec99ee01fb066e47d122f8de6b7c00559
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 (cherry picked from commit 0a656bc0658e79f7ddc4c9734ad9c52a5df46296)
