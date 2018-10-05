@@ -1,32 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 13:41:34 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] boot/vexpress-firmware:
- add upstream URL in Config.in help text
-Message-ID: <20181005114038.DE7098D23D@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 13:41:42 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] boot/at91bootstrap3: add
+ upstream URL in Config.in help text
+Message-ID: <20181005114046.D91858D240@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=570e400b030503c54c317c38c679207fb57a47d7
+commit: https://git.buildroot.net/buildroot/commit/?id=268bbc59769b5b1dc57f662064295861005ef64f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 49fff788d6ce84f01fc4c89019204d2436e7d5a7)
+(cherry picked from commit 8084c33b39a64c6d2906296d042263a348fc0c99)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/vexpress-firmware/Config.in | 2 ++
+ boot/at91bootstrap3/Config.in | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/boot/vexpress-firmware/Config.in b/boot/vexpress-firmware/Config.in
-index 8479df3d57..265fb4be1d 100644
---- a/boot/vexpress-firmware/Config.in
-+++ b/boot/vexpress-firmware/Config.in
-@@ -4,3 +4,5 @@ config BR2_TARGET_VEXPRESS_FIRMWARE
- 	help
- 	  Versatile Express firmware from ARM, with Linaro mods last
- 	  change.
+diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
+index 614363c9a6..f6c310af23 100644
+--- a/boot/at91bootstrap3/Config.in
++++ b/boot/at91bootstrap3/Config.in
+@@ -10,6 +10,8 @@ config BR2_TARGET_AT91BOOTSTRAP3
+ 	  - Physical media algorithm such as DataFlash, NandFlash, NOR
+ 	    Flash...
+ 
++	  https://www.at91.com/linux4sam/bin/view/Linux4SAM/AT91Bootstrap
 +
-+	  https://git.linaro.org/arm/vexpress-firmware.git
+ if BR2_TARGET_AT91BOOTSTRAP3
+ 
+ choice
