@@ -1,24 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 05 Oct 2018 14:03:05 +0200
-Subject: [Buildroot] [PATCH v2 1/1] libesmtp: update/fix site URL
-In-Reply-To: <20180925144848.5965-1-m.patzlaff@pilz.de> (Marcel Patzlaff's
- message of "Tue, 25 Sep 2018 16:48:48 +0200")
-References: <20180925144848.5965-1-m.patzlaff@pilz.de>
-Message-ID: <87sh1k4n46.fsf@dell.be.48ers.dk>
+Date: Fri, 05 Oct 2018 14:04:26 +0200
+Subject: [Buildroot] [PATCH 1/2] imlib2: update license
+In-Reply-To: <20180923201150.10497-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 23 Sep 2018 22:11:49 +0200")
+References: <20180923201150.10497-1-fontaine.fabrice@gmail.com>
+Message-ID: <87o9c84n1x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Marcel" == Marcel Patzlaff <m.patzlaff@pilz.de> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > The old URL was not working for quite some time.
- > Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
+ > - Use SPDX short identifier (Imlib2) instead of full name
+ > - Add COPYING-PLAIN to license files
+ > - Add hash for license files
 
- > ---
- > Changes v1 -> v2:
- >   - also changed URL in Config.in
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2018.02.x, 2018.05.x and 2018.08.x, thanks.
 
