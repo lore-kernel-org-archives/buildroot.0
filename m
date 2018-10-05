@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 22:29:29 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] python-django: bump
+Date: Fri, 5 Oct 2018 22:29:35 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] python-django: bump
  version to 1.11.16
-Message-ID: <20181005202832.D8AED8D698@busybox.osuosl.org>
+Message-ID: <20181005202839.3C6518D68B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=44fb6ff6795b22da3c81fcb0d9b4c3c53aafc8fc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e82e94688cbfbe3c7958bb7de5329ad010d7323e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Fixes a race condition in QuerySet.update_or_create() that could result in
 data loss:
