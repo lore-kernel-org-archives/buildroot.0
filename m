@@ -1,62 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 15:17:09 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] webkitgtk: add dependency
- on the woff2 package
-Message-ID: <20181005174039.562768D2A1@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  5 Oct 2018 21:45:27 +0200
+Subject: [Buildroot] [PATCH 1/1] haproxy: put back dependency on __sync_*_4
+Message-ID: <20181005194527.12140-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b0cffca8e8e5f9f327111bbf2ba498a240453d72
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+__sync_*_4 intrinsics is used by common/hathreads.h when gcc < 4.7 but
+also by contrib/tcploop.c or include/proto/shctx.h so put back a
+mandatory dependency on BR2_TOOLCHAIN_HAS_SYNC_4 which has been wrongly
+removed by patch 978001
 
-The woff2 dependency is used to support Web fonts in WOFF2 format.
-This is a Web-facing feature that Web sites expect WebKit to support,
-and it is recommended to be unconditionally enabled. While it is
-possible to disable the feature at build time, upstream only recommends
-doing so if the target system cannot provide a woff2 package.
+Fixes:
+ - http://autobuild.buildroot.net/results/52c88f2f27e1a3c42cf71554cf680da86d933ef6
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 51b3fe094a2fdcfcab649d6ddb2f23d0833e6e95)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/webkitgtk/Config.in    | 1 +
- package/webkitgtk/webkitgtk.mk | 3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ package/haproxy/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index df2aeef3d9..96a7ab0c94 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -42,6 +42,7 @@ config BR2_PACKAGE_WEBKITGTK
- 	select BR2_PACKAGE_SQLITE
- 	select BR2_PACKAGE_WEBP
- 	select BR2_PACKAGE_WEBP_DEMUX
-+	select BR2_PACKAGE_WOFF2
- 	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE if BR2_PACKAGE_LIBGTK3_X11
- 	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_LIBGTK3_X11
- 	select BR2_PACKAGE_XLIB_LIBXRENDER if BR2_PACKAGE_LIBGTK3_X11
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index eccd9bbae5..f28417ac73 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -14,7 +14,7 @@ WEBKITGTK_LICENSE_FILES = \
- 	Source/WebCore/LICENSE-LGPL-2.1
- WEBKITGTK_DEPENDENCIES = host-ruby host-flex host-bison host-gperf \
- 	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
--	libtasn1 libxml2 libxslt sqlite webp
-+	libtasn1 libxml2 libxslt sqlite webp woff2
- WEBKITGTK_CONF_OPTS = \
- 	-DENABLE_API_TESTS=OFF \
- 	-DENABLE_GEOLOCATION=OFF \
-@@ -22,6 +22,7 @@ WEBKITGTK_CONF_OPTS = \
- 	-DENABLE_INTROSPECTION=OFF \
- 	-DENABLE_MINIBROWSER=ON \
- 	-DENABLE_SPELLCHECK=ON \
-+	-DENABLE_WOFF2=ON \
- 	-DPORT=GTK \
- 	-DUSE_LIBNOTIFY=OFF \
- 	-DUSE_LIBHYPHEN=OFF
+diff --git a/package/haproxy/Config.in b/package/haproxy/Config.in
+index fbe5941b55..cbcbc0c388 100644
+--- a/package/haproxy/Config.in
++++ b/package/haproxy/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_HAPROXY
+ 	bool "haproxy"
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # __sync_*_4 intrisics
+ 	help
+ 	  HAProxy is a free, very fast and reliable solution offering
+ 	  high availability, load balancing, and proxying for TCP and
+-- 
+2.17.1
