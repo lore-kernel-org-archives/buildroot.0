@@ -1,173 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 13:25:26 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] dtc: Fix segfault reading
- powernv device tree
-Message-ID: <20181005112434.822088D1D3@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 13:31:06 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] Makefile: fix issue with
+ printvars executing giant shell command
+Message-ID: <20181005113014.8437A8D1F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48a445bdc4e535bc564c34eb803472322f93b221
+commit: https://git.buildroot.net/buildroot/commit/?id=ab84d0a6c835ad8960363be7c99697c1797b9487
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-When running this command on a powernv machine, dtc crashes:
+The underlying problem is that $(foreach V,1 2 3,) does not evaluate to
+an empty string.  It evaluates to "?? ", three empty strings separated by
+whitespace.
 
- dtc -f -I fs -O dts /sys/firmware/devicetree
+A construct of this format, with a giant list in the foreach, is part of
+the printvars command.  This means that "@:$(foreach ....)", which is
+intended to expand to a null command, in fact expands to "@:       "
+with a great deal of whitespace.  Make chooses to execute this command
+with:
+    execve("/bin/sh", ["/bin/sh", "-c", ":       "]
 
-Upstream has fixed the segfault but have not made a release yet so we
-add the patch for now.
+But with far more whitespace.  So much that it can exceed shell command
+line length limits.
 
-Signed-off-by: Joel Stanley <joel@jms.id.au>
+This solution is to move the foreach to another step in the recipe.  The
+"@:" is retained as the first line so the recipe is not Empty, which
+would cause a change in make behavior when make builds the target.  The
+2nd line, all whitespace, will be skipped by make.
+
+Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3729389a68f518bf069001783e70eee58dbe9924)
+(cherry picked from commit b8d0aadc6d52733cfc914ba3cd6f506238bd19f7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Kill-bogus-TYPE_BLOB-marker-type.patch    | 138 +++++++++++++++++++++
- 1 file changed, 138 insertions(+)
+ Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/dtc/0001-Kill-bogus-TYPE_BLOB-marker-type.patch b/package/dtc/0001-Kill-bogus-TYPE_BLOB-marker-type.patch
-new file mode 100644
-index 0000000000..d9c660ef51
---- /dev/null
-+++ b/package/dtc/0001-Kill-bogus-TYPE_BLOB-marker-type.patch
-@@ -0,0 +1,138 @@
-+From 9619c8619c37b9aea98100bcc15c51a5642e877e Mon Sep 17 00:00:00 2001
-+From: Greg Kurz <groug@kaod.org>
-+Date: Thu, 30 Aug 2018 12:01:59 +0200
-+Subject: [PATCH] Kill bogus TYPE_BLOB marker type
-+
-+Since commit 32b9c6130762 "Preserve datatype markers when emitting dts
-+format", we no longer try to guess the value type. Instead, we reuse
-+the type of the datatype markers when they are present, if the type
-+is either TYPE_UINT* or TYPE_STRING.
-+
-+This causes 'dtc -I fs' to crash:
-+
-+Starting program: /root/dtc -q -f -O dts -I fs /proc/device-tree
-+/dts-v1/;
-+
-+/ {
-+
-+Program received signal SIGSEGV, Segmentation fault.
-+__strlen_power8 () at ../sysdeps/powerpc/powerpc64/power8/strlen.S:47
-+47              ld      r12,0(r4)     /* Load doubleword from memory.  */
-+(gdb) bt
-+#0  __strlen_power8 () at ../sysdeps/powerpc/powerpc64/power8/strlen.S:47
-+#1  0x00007ffff7de3d10 in __GI__IO_fputs (str=<optimized out>,
-+    fp=<optimized out>) at iofputs.c:33
-+#2  0x000000001000c7a0 in write_propval (prop=0x100525e0,
-+    f=0x7ffff7f718a0 <_IO_2_1_stdout_>) at treesource.c:245
-+
-+The offending line is:
-+
-+                fprintf(f, "%s", delim_start[emit_type]);
-+
-+where emit_type is TYPE_BLOB and:
-+
-+static const char *delim_start[] = {
-+        [TYPE_UINT8] = "[",
-+        [TYPE_UINT16] = "/bits/ 16 <",
-+        [TYPE_UINT32] = "<",
-+        [TYPE_UINT64] = "/bits/ 64 <",
-+        [TYPE_STRING] = "",
-+};
-+
-+/* Data blobs */
-+enum markertype {
-+        TYPE_NONE,
-+        REF_PHANDLE,
-+        REF_PATH,
-+        LABEL,
-+        TYPE_UINT8,
-+        TYPE_UINT16,
-+        TYPE_UINT32,
-+        TYPE_UINT64,
-+        TYPE_BLOB,
-+        TYPE_STRING,
-+};
-+
-+Because TYPE_BLOB < TYPE_STRING and delim_start[] is a static array,
-+delim_start[emit_type] is 0x0. The glibc usually prints out "(null)"
-+when one passes 0x0 to %s, but it seems to call fputs() internally if
-+the format is exactly "%s", hence the crash.
-+
-+TYPE_BLOB basically means the data comes from a file and we don't know
-+its type. We don't care for the former, and the latter is TYPE_NONE.
-+
-+So let's drop TYPE_BLOB completely and use TYPE_NONE instead when reading
-+the file. Then, try to guess the data type@emission time, like the
-+code already does for refs and labels.
-+
-+Instead of adding yet another check for TYPE_NONE, an helper is introduced
-+to check if the data marker has type information, ie, >= TYPE_UINT8.
-+
-+Fixes: 32b9c61307629ac76c6ac0bead6f926d579b3d2c
-+Suggested-by: David Gibson <david@gibson.dropbear.id.au>
-+Signed-off-by: Greg Kurz <groug@kaod.org>
-+Signed-off-by: David Gibson <david@gibson.dropbear.id.au>
-+Signed-off-by: Joel Stanley <joel@jms.id.au>
-+---
-+ data.c       | 2 +-
-+ dtc.h        | 1 -
-+ treesource.c | 9 +++++++--
-+ 3 files changed, 8 insertions(+), 4 deletions(-)
-+
-+diff --git a/data.c b/data.c
-+index accdfaef6668..4a204145cc7b 100644
-+--- a/data.c
-++++ b/data.c
-+@@ -95,7 +95,7 @@ struct data data_copy_file(FILE *f, size_t maxlen)
-+ {
-+ 	struct data d = empty_data;
-+ 
-+-	d = data_add_marker(d, TYPE_BLOB, NULL);
-++	d = data_add_marker(d, TYPE_NONE, NULL);
-+ 	while (!feof(f) && (d.len < maxlen)) {
-+ 		size_t chunksize, ret;
-+ 
-+diff --git a/dtc.h b/dtc.h
-+index 303c2a6a73b7..51c03ef64dbe 100644
-+--- a/dtc.h
-++++ b/dtc.h
-+@@ -82,7 +82,6 @@ enum markertype {
-+ 	TYPE_UINT16,
-+ 	TYPE_UINT32,
-+ 	TYPE_UINT64,
-+-	TYPE_BLOB,
-+ 	TYPE_STRING,
-+ };
-+ extern const char *markername(enum markertype markertype);
-+diff --git a/treesource.c b/treesource.c
-+index f99544d72344..53e62036ad0e 100644
-+--- a/treesource.c
-++++ b/treesource.c
-+@@ -133,9 +133,14 @@ static void write_propval_int(FILE *f, const char *p, size_t len, size_t width)
-+ 	}
-+ }
-+ 
-++static bool has_data_type_information(struct marker *m)
-++{
-++	return m->type >= TYPE_UINT8;
-++}
-++
-+ static struct marker *next_type_marker(struct marker *m)
-+ {
-+-	while (m && (m->type == LABEL || m->type == REF_PHANDLE || m->type == REF_PATH))
-++	while (m && !has_data_type_information(m))
-+ 		m = m->next;
-+ 	return m;
-+ }
-+@@ -225,7 +230,7 @@ static void write_propval(FILE *f, struct property *prop)
-+ 		size_t chunk_len;
-+ 		const char *p = &prop->val.val[m->offset];
-+ 
-+-		if (m->type < TYPE_UINT8)
-++		if (!has_data_type_information(m))
-+ 			continue;
-+ 
-+ 		chunk_len = type_marker_length(m);
-+-- 
-+2.17.1
-+
+diff --git a/Makefile b/Makefile
+index 3e1319c1ea..f7636e669d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -977,7 +977,8 @@ $(BUILD_DIR)/.br2-external.in: $(BUILD_DIR)
+ # displayed.
+ .PHONY: printvars
+ printvars:
+-	@:$(foreach V, \
++	@:
++	$(foreach V, \
+ 		$(sort $(if $(VARS),$(filter $(VARS),$(.VARIABLES)),$(.VARIABLES))), \
+ 		$(if $(filter-out environment% default automatic, \
+ 				$(origin $V)), \
