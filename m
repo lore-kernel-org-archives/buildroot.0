@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 13:44:20 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] package/arp-scan: update
+Date: Fri, 5 Oct 2018 13:44:30 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] package/arp-scan: update
  upstream URL in Config.in help
-Message-ID: <20181005114328.735928D258@busybox.osuosl.org>
+Message-ID: <20181005114336.08B478D25C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2edaa70b13f4943e46b6af1e86c3dbda25b2819
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=fe34d651a1f723202b6f4be8d30c9bde047c3c08
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
