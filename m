@@ -1,108 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri,  5 Oct 2018 22:05:02 +0200
-Subject: [Buildroot] [PATCH] package/qt5base: drop remnants patches from
- previous version
-Message-ID: <20181005200502.16899-1-yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 5 Oct 2018 20:34:35 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] nilfs-utils: no comment
+ if BR2_USE_MMU is true
+Message-ID: <20181005183341.834BF8D498@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When the bump to 5.11.2 was applied, master gained a new patch for 5.11.1
-in-between the bump submission and the moment it was applied. That patch
-still lingers around now.
+commit: https://git.buildroot.net/buildroot/commit/?id=fac91ebe092bf1cd909533be265466c33f1d3e40
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-Since that patch has been applied upstream (it is detected as a revert
-when applied to 5.11.2), we simply drop it.
+Don't display comment if BR2_USE_MMU is true
+Moreover, move BR2_USE_MMU dependency at the top of dependency list
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Seiderer <ps.report@gmx.net>
-Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Acked-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 0dbab1bb45d0eb1bf37e693b0ad9ca95831d5180)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0003-Fix-qmake-build-with-glibc-2.28.patch     | 74 ----------------------
- 1 file changed, 74 deletions(-)
- delete mode 100644 package/qt5/qt5base/5.11.1/0003-Fix-qmake-build-with-glibc-2.28.patch
+ package/nilfs-utils/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/qt5/qt5base/5.11.1/0003-Fix-qmake-build-with-glibc-2.28.patch b/package/qt5/qt5base/5.11.1/0003-Fix-qmake-build-with-glibc-2.28.patch
-deleted file mode 100644
-index 6d8bb28992..0000000000
---- a/package/qt5/qt5base/5.11.1/0003-Fix-qmake-build-with-glibc-2.28.patch
-+++ /dev/null
-@@ -1,74 +0,0 @@
--From 25feee4e061b99edab79503d81f5bd045c6c8e3d Mon Sep 17 00:00:00 2001
--From: Thiago Macieira <thiago.macieira@intel.com>
--Date: Tue, 7 Aug 2018 09:38:42 -0700
--Subject: [PATCH] Fix qmake build with glibc 2.28
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--We haven't yet run the configure checks to see if statx and renameat2
--are present in glibc, so this fails when we redefine the structures and
--functions.
--
--linux/stat.h:56:8: error: redefinition of 'struct statx_timestamp'
--bits/statx.h:25:8: note: previous definition of 'struct statx_timestamp'
--qfilesystemengine_unix.cpp:110:12: error: 'int renameat2(int, const char*, int, const char*, unsigned int)' was declared 'extern' and later 'static' [-fpermissive]
--
--Change-Id: Ia741b559c24d46c78fb2fffd1548a792d22e3368
--Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@qt.io>
--Reviewed-by: J?ri Valdmann <juri.valdmann@qt.io>
--
--Downloaded from upstream commit
--http://code.qt.io/cgit/qt/qtbase.git/commit/?id=25feee4e061b99edab79503d81f5bd045c6c8e3d
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- src/corelib/global/qconfig-bootstrapped.h | 12 ++++++++++--
-- src/corelib/io/qfilesystemengine_unix.cpp |  2 +-
-- 2 files changed, 11 insertions(+), 3 deletions(-)
--
--diff --git a/src/corelib/global/qconfig-bootstrapped.h b/src/corelib/global/qconfig-bootstrapped.h
--index 3469ebe5e6..c5585ea32a 100644
----- a/src/corelib/global/qconfig-bootstrapped.h
--+++ b/src/corelib/global/qconfig-bootstrapped.h
--@@ -98,10 +98,18 @@
-- #define QT_NO_QOBJECT
-- #define QT_FEATURE_process -1
-- #define QT_FEATURE_regularexpression -1
---#define QT_FEATURE_renameat2 -1
--+#ifdef __GLIBC_PREREQ
--+# define QT_FEATURE_renameat2 (__GLIBC_PREREQ(2, 28) ? 1 : -1)
--+#else
--+# define QT_FEATURE_renameat2 -1
--+#endif
-- #define QT_FEATURE_sharedmemory -1
-- #define QT_FEATURE_slog2 -1
---#define QT_FEATURE_statx -1
--+#ifdef __GLIBC_PREREQ
--+# define QT_FEATURE_statx (__GLIBC_PREREQ(2, 28) ? 1 : -1)
--+#else
--+# define QT_FEATURE_statx -1
--+#endif
-- #define QT_FEATURE_syslog -1
-- #define QT_NO_SYSTEMLOCALE
-- #define QT_FEATURE_systemsemaphore -1
--diff --git a/src/corelib/io/qfilesystemengine_unix.cpp b/src/corelib/io/qfilesystemengine_unix.cpp
--index 0c9cdb8667..deb4a9f220 100644
----- a/src/corelib/io/qfilesystemengine_unix.cpp
--+++ b/src/corelib/io/qfilesystemengine_unix.cpp
--@@ -91,7 +91,6 @@ extern "C" NSString *NSTemporaryDirectory();
-- #  include <sys/syscall.h>
-- #  include <sys/sendfile.h>
-- #  include <linux/fs.h>
---#  include <linux/stat.h>
-- 
-- // in case linux/fs.h is too old and doesn't define it:
-- #ifndef FICLONE
--@@ -112,6 +111,7 @@ static int renameat2(int oldfd, const char *oldpath, int newfd, const char *newp
-- #    endif
-- 
-- #    if !QT_CONFIG(statx) && defined(SYS_statx)
--+#      include <linux/stat.h>
-- static int statx(int dirfd, const char *pathname, int flag, unsigned mask, struct statx *statxbuf)
-- { return syscall(SYS_statx, dirfd, pathname, flag, mask, statxbuf); }
-- #    elif !QT_CONFIG(statx) && !defined(SYS_statx)
--- 
-2.14.1
+diff --git a/package/nilfs-utils/Config.in b/package/nilfs-utils/Config.in
+index e49cab369b..e245dc4656 100644
+--- a/package/nilfs-utils/Config.in
++++ b/package/nilfs-utils/Config.in
+@@ -1,8 +1,8 @@
+ config BR2_PACKAGE_NILFS_UTILS
+ 	bool "nilfs-utils"
++	depends on BR2_USE_MMU # util-linux libmount, libblkid
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # sem_open()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # clock_nanosleep()
+-	depends on BR2_USE_MMU # util-linux libmount, libblkid
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+@@ -13,5 +13,6 @@ config BR2_PACKAGE_NILFS_UTILS
+ 	  https://github.com/nilfs-dev/nilfs-utils
+ 
+ comment "nilfs-utils needs a toolchain w/ threads, NPTL"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL
