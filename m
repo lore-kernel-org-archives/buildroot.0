@@ -1,41 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 13:46:07 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/bandwidthd: put
- upstream URL on separate lines in Config.in help
-Message-ID: <20181005114512.60A80885C5@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 13:46:21 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] boot/xloader: add
+ upstream URL in Config.in help
+Message-ID: <20181005114526.758E68040D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00438938ba6d51711d53dfd1133ddb3f3dcf07a6
+commit: https://git.buildroot.net/buildroot/commit/?id=da7e17d2292e49513373ecfe66b4abcc968c2f54
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
-
-Allows scripting of URL checking to be simplier
 
 Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4bdb24c5d95ad1ec5f656ed135d34eabc9e90199)
+(cherry picked from commit 78dd830f15b0c175cb8c9d2fef7f0641a8733b29)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bandwidthd/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ boot/xloader/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/bandwidthd/Config.in b/package/bandwidthd/Config.in
-index a503da43ff..8a19733c2c 100644
---- a/package/bandwidthd/Config.in
-+++ b/package/bandwidthd/Config.in
-@@ -25,8 +25,10 @@ config BR2_PACKAGE_BANDWIDTHD
- 	  available on github that works on making BandwidthD's build
- 	  process more compatible with buildroot's.
+diff --git a/boot/xloader/Config.in b/boot/xloader/Config.in
+index c411be478b..f687b897ea 100644
+--- a/boot/xloader/Config.in
++++ b/boot/xloader/Config.in
+@@ -5,6 +5,8 @@ config BR2_TARGET_XLOADER
+ 	  The x-loader bootloader. It is mainly used on OMAP-based
+ 	  platforms.
  
--	  Upstream: http://bandwidthd.sourceforge.net/
--	  Github fork: http://github.com/nroach44/bandwidthd
-+	  Upstream:
-+	  http://bandwidthd.sourceforge.net/
-+	  Github fork:
-+	  http://github.com/nroach44/bandwidthd
- 
- if BR2_PACKAGE_BANDWIDTHD
- 
++	  http://omappedia.org/wiki/Linux_OMAP_Kernel_Main
++
+ if BR2_TARGET_XLOADER
+ config BR2_TARGET_XLOADER_BOARDNAME
+ 	string "x-loader board name"
