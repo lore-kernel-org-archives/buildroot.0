@@ -1,50 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 22:33:07 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/clamav: security
- bump to 0.100.2
-Message-ID: <20181005203211.972F78D6C9@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 22:33:56 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] screen: fix parallel build
+Message-ID: <20181005203301.4972C8D6CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e28da8cd645771111136bc258f227577e8e9ebc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ff6f868270f102c8c8e672b0c7135908269c8f98
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-Fixes CVE-2018-15378, CVE-2018-14680, CVE-2018-14681 & CVE-2018-14682:
-http://lists.clamav.net/pipermail/clamav-announce/2018/000033.html
+comm.h is needed to build list_display.o and list_generic.o otherwise
+parallel builds will sometimes fail
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes:
+ - http://autobuild.buildroot.org/results/43105f14857dbe72d8878fc7b3db67f7bdca93cc
+ - http://autobuild.buildroot.org/results/47f4ecbec1355285633df287fc9c4e7cccde9378
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit bbd6fb9c2d9dd64e3e655ab9fac7be87bbd64ff3)
+(cherry picked from commit 72e6c208094376d668f836d2b6255ab6414025bd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/clamav/clamav.hash | 2 +-
- package/clamav/clamav.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...omm.h-needed-for-list_-display-generic-.o.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-index 0cb8f51d87..390251fc24 100644
---- a/package/clamav/clamav.hash
-+++ b/package/clamav/clamav.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256 84e026655152247de7237184ee13003701c40be030dd68e0316111049f58a59f  clamav-0.100.1.tar.gz
-+sha256 4a2e4f0cd41e62adb5a713b4a1857c49145cd09a69957e6d946ecad575206dd6  clamav-0.100.2.tar.gz
- sha256 0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
- sha256 d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
- sha256 dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index 9db90bddea..50990abad6 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CLAMAV_VERSION = 0.100.1
-+CLAMAV_VERSION = 0.100.2
- CLAMAV_SITE = https://www.clamav.net/downloads/production
- CLAMAV_LICENSE = GPL-2.0
- CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
+diff --git a/package/screen/0011-comm.h-needed-for-list_-display-generic-.o.patch b/package/screen/0011-comm.h-needed-for-list_-display-generic-.o.patch
+new file mode 100644
+index 0000000000..f406a1afac
+--- /dev/null
++++ b/package/screen/0011-comm.h-needed-for-list_-display-generic-.o.patch
+@@ -0,0 +1,35 @@
++From b719314d201a3e9e1e57c65746a468c47bfc847f Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 3 Oct 2018 22:29:32 +0200
++Subject: [PATCH] comm.h needed for list_{display,generic}.o
++
++comm.h is needed to build list_display.o and list_generic.o otherwise
++parallel builds will sometimes fail
++
++Fixes:
++ - http://autobuild.buildroot.org/results/43105f14857dbe72d8878fc7b3db67f7bdca93cc
++ - http://autobuild.buildroot.org/results/47f4ecbec1355285633df287fc9c4e7cccde9378
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://savannah.gnu.org/bugs/index.php?54776]
++---
++ Makefile.in | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/Makefile.in b/Makefile.in
++index af5938b..e6d5247 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -265,7 +265,7 @@  braille.h
++ viewport.o: layout.h viewport.h canvas.h viewport.c config.h screen.h os.h osdef.h ansi.h acls.h \
++  comm.h layer.h term.h image.h display.h window.h extern.h \
++  braille.h
++-list_generic.o: list_generic.h list_generic.c layer.h screen.h osdef.h
++-list_display.o: list_generic.h list_display.c layer.h screen.h osdef.h
+++list_generic.o: list_generic.h list_generic.c layer.h screen.h osdef.h comm.h
+++list_display.o: list_generic.h list_display.c layer.h screen.h osdef.h comm.h
++ list_window.o: list_generic.h list_window.c window.h layer.h screen.h osdef.h comm.h
++ 
++-- 
++2.17.1
++
