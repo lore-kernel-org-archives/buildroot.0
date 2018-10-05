@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 13:56:42 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] libxslt: point to the
+Date: Fri, 5 Oct 2018 13:56:55 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] libxslt: point to the
  correct xml2-config location
-Message-ID: <20181005115549.E3F058D29F@busybox.osuosl.org>
+Message-ID: <20181005115559.B3CF48D2A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a89f2b1f5f2bd2a46b461cd5f0b49af23deaffac
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=442392830b7681aae57defed3d658692e28c60a8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 Currently libxslt configure finds native /usr/bin/xml2-config.
 
