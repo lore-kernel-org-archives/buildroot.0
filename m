@@ -1,56 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 13:59:12 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] libnfs: fix license and
- add hashes for license files
-Message-ID: <20181005115817.EDC6E8D2B1@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 14:00:29 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] igmpproxy: fix license
+Message-ID: <20181005115938.01C328D2B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7912e6f872815f068fd0e2bb972e3124b23a258
+commit: https://git.buildroot.net/buildroot/commit/?id=5fdabdb1dec2324415ce4d84b9817cfa6a7aa9df
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-As specified in COPYING, examples are licensed under GPL-3.0+ and .x
-files are licensed under BSD-2-Clause.
-
-So update LIBNFS_LICENSE, add COPYING, LICENCE-BSD.txt and
-LICENCE-GPL-3.txt to LIBNFS_LICENSE_FILES and add hash for all license
-files
+mrouted part of igmpproxy is licensed under BSD-3-Clause so add this in
+IGMPPROXY_LICENSE and add hash for license files
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1b486d4fa32a698ca9b454d7cfb874473009d20f)
+(cherry picked from commit c60c92861408d73e83fc819ac861f9fde962121c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnfs/libnfs.hash | 3 +++
- package/libnfs/libnfs.mk   | 4 ++--
+ package/igmpproxy/igmpproxy.hash | 3 +++
+ package/igmpproxy/igmpproxy.mk   | 4 ++--
  2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/libnfs/libnfs.hash b/package/libnfs/libnfs.hash
-index cfe6678842..2bd8caf255 100644
---- a/package/libnfs/libnfs.hash
-+++ b/package/libnfs/libnfs.hash
-@@ -1,3 +1,6 @@
- # Locally calculated
- sha256 7ea6cd8fa6c461d01091e584d424d28e137d23ff4b65b95d01a3fd0ef95d120e  libnfs-libnfs-2.0.0.tar.gz
-+sha256 2d152e3a2f31ef0fe14d4908377277f8215fb5c82ec9329d1eed081c845fc85f  COPYING
-+sha256 d9406ced95457941032aa11d04623b8ab71f2827a3395ebef137aec475be35b1  LICENCE-BSD.txt
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENCE-LGPL-2.1.txt
-+sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENCE-GPL-3.txt
-diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
-index d961fd1d4e..0cf07d2143 100644
---- a/package/libnfs/libnfs.mk
-+++ b/package/libnfs/libnfs.mk
-@@ -8,8 +8,8 @@ LIBNFS_VERSION = libnfs-2.0.0
- LIBNFS_SITE = $(call github,sahlberg,libnfs,$(LIBNFS_VERSION))
- LIBNFS_INSTALL_STAGING = YES
- LIBNFS_AUTORECONF = YES
--LIBNFS_LICENSE = LGPL-2.1+
--LIBNFS_LICENSE_FILES = LICENCE-LGPL-2.1.txt
-+LIBNFS_LICENSE = LGPL-2.1+ (library), BSD-2-Clause (protocol, .x files), GPL-3.0+ (examples)
-+LIBNFS_LICENSE_FILES = COPYING LICENCE-BSD.txt LICENCE-LGPL-2.1.txt LICENCE-GPL-3.txt
- LIBNFS_DEPENDENCIES = host-pkgconf
+diff --git a/package/igmpproxy/igmpproxy.hash b/package/igmpproxy/igmpproxy.hash
+index 2e3a374618..313af52fbe 100644
+--- a/package/igmpproxy/igmpproxy.hash
++++ b/package/igmpproxy/igmpproxy.hash
+@@ -1,2 +1,5 @@
+ # Locally computed:
+ sha256 e60331031f85d1fb834c5272a134f32d32e7834718da19ba3f787dff68389a31  igmpproxy-f47644d8fa7266a784f3ec7b251e7d318bc2f0a9.tar.gz
++sha256 be3d05af93dbbc4650f8d641d8e1bec220af4a729e07ba71e949c25b93a1b4f6  COPYING
++sha256 c4f65d5d396ad518a37d30b83fe33897661858dc174ff64a15d0461630ce64e4  GPL.txt
++sha256 4328a21f0822caa9976356623118bcdcc9970c7a0f9a3deeba23c779b7cfb5d1  Stanford.txt
+diff --git a/package/igmpproxy/igmpproxy.mk b/package/igmpproxy/igmpproxy.mk
+index 8989c74de0..9c19f76f0c 100644
+--- a/package/igmpproxy/igmpproxy.mk
++++ b/package/igmpproxy/igmpproxy.mk
+@@ -7,7 +7,7 @@
+ IGMPPROXY_VERSION = f47644d8fa7266a784f3ec7b251e7d318bc2f0a9
+ IGMPPROXY_SITE = $(call github,pali,igmpproxy,$(IGMPPROXY_VERSION))
+ IGMPPROXY_AUTORECONF = YES
+-IGMPPROXY_LICENSE = GPL-2.0+
+-IGMPPROXY_LICENSE_FILES = COPYING
++IGMPPROXY_LICENSE = GPL-2.0+, BSD-3-Clause (mrouted)
++IGMPPROXY_LICENSE_FILES = COPYING GPL.txt Stanford.txt
  
- ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+ $(eval $(autotools-package))
