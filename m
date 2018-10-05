@@ -1,73 +1,46 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri,  5 Oct 2018 07:46:36 +0300
-Subject: [Buildroot] [PATCH v2 1/1] python-django: bump to version 2.1.2
-Message-ID: <20181005044636.13421-1-asafka7@gmail.com>
+Date: Fri,  5 Oct 2018 08:27:25 +0300
+Subject: [Buildroot] [PATCH 1/1] python-txtorcon: bump to version 18.2.0
+Message-ID: <20181005052725.10006-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Django has dropped support for Python 2.x
-
-Fixes:
-http://autobuild.buildroot.org/results/423/423d480271b8bfdd9319a11cd97f9229681478e4
-
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
-v1->v2: add autobuild link
----
- package/python-django/Config.in          | 8 ++++----
- package/python-django/python-django.hash | 6 ++++--
- package/python-django/python-django.mk   | 4 ++--
- 3 files changed, 10 insertions(+), 8 deletions(-)
+ package/python-txtorcon/python-txtorcon.hash | 4 ++--
+ package/python-txtorcon/python-txtorcon.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-django/Config.in b/package/python-django/Config.in
-index 75322d1bb2..89dec8e17a 100644
---- a/package/python-django/Config.in
-+++ b/package/python-django/Config.in
-@@ -1,9 +1,9 @@
- config BR2_PACKAGE_PYTHON_DJANGO
- 	bool "python-django"
--	select BR2_PACKAGE_PYTHON_UNICODEDATA if BR2_PACKAGE_PYTHON
--	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON
--	select BR2_PACKAGE_PYTHON3_UNICODEDATA if BR2_PACKAGE_PYTHON3
--	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3
-+	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON3_UNICODEDATA
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT
-+	select BR2_PACKAGE_PYTHON_PYTZ # runtime
- 	help
- 	  Django is a high-level Python Web framework that encourages
- 	  rapid development and clean, pragmatic design. It takes your
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 6e6e7708db..9a9889ab1c 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,3 +1,5 @@
--# From https://www.djangoproject.com/m/pgp/Django-1.11.16.checksum.txt
--sha256	29268cc47816a44f27308e60f71da635f549c47d8a1d003b28de55141df75791  Django-1.11.16.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/django/json
-+md5	383ca4e98ad5d0aa9d71378fe743bdef  Django-2.1.2.tar.gz
-+sha256	efbcad7ebb47daafbcead109b38a5bd519a3c3cd92c6ed0f691ff97fcdd16b45  Django-2.1.2.tar.gz
-+# Locally computed sha256 checksums
- sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 9f43ffab85..e3f20fd1cb 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/python-txtorcon/python-txtorcon.hash b/package/python-txtorcon/python-txtorcon.hash
+index ecb9726b7a..9a4eafc0a1 100644
+--- a/package/python-txtorcon/python-txtorcon.hash
++++ b/package/python-txtorcon/python-txtorcon.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/txtorcon/json
+-md5    2b39f371ae08cd7cac34caed7d6aaa56  txtorcon-18.1.0.tar.gz
+-sha256 b61cf175a5f1d4092609caf05d178fcdcabf513928eec98d38125c501afea43c  txtorcon-18.1.0.tar.gz
++md5    a7df623f400668daf588a6f028864c52  txtorcon-18.2.0.tar.gz
++sha256 b1714dfa633cb4097c9ea649c8c49657d9d22a990cc465bb904620428c5e684e  txtorcon-18.2.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256 3ada1c32ef38c23d96d7f4e8f4a226c527f51e0202883c7543b06f9cc5228a2b  LICENSE
+diff --git a/package/python-txtorcon/python-txtorcon.mk b/package/python-txtorcon/python-txtorcon.mk
+index 7f12e62f4f..a02ec3626e 100644
+--- a/package/python-txtorcon/python-txtorcon.mk
++++ b/package/python-txtorcon/python-txtorcon.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DJANGO_VERSION = 1.11.16
-+PYTHON_DJANGO_VERSION = 2.1.2
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/35/1d/59836bce4c9cfded261e21c0abd6a4629de6d289522d0fd928117d8eb985
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/8b/03/4c74d3712919613f2c611e6689522df507a2753a92049009661a81b4b72f
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_SETUP_TYPE = setuptools
+-PYTHON_TXTORCON_VERSION = 18.1.0
++PYTHON_TXTORCON_VERSION = 18.2.0
+ PYTHON_TXTORCON_SOURCE = txtorcon-$(PYTHON_TXTORCON_VERSION).tar.gz
+-PYTHON_TXTORCON_SITE = https://files.pythonhosted.org/packages/d5/e1/577e28231013fffdc97c3078bbd37d9001e6cbea757b0b10da34d765dc32
++PYTHON_TXTORCON_SITE = https://files.pythonhosted.org/packages/08/02/5a38afe0c96bd8da466716f51c72b3b52d3a76399e62b37494b97489f74a
+ PYTHON_TXTORCON_SETUP_TYPE = setuptools
+ PYTHON_TXTORCON_LICENSE = MIT
+ PYTHON_TXTORCON_LICENSE_FILES = LICENSE
 -- 
 2.17.1
