@@ -1,38 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 13:45:14 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] package/connman: simplify
- upstream URL
-Message-ID: <20181005114418.844B58D280@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 13:45:46 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] package/bandwidthd: put
+ upstream URL on separate lines in Config.in help
+Message-ID: <20181005114451.316188D281@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d23a7b2775d4bf820411d5ad0d782b972e4a974
+commit: https://git.buildroot.net/buildroot/commit/?id=dc43b89656a96fe358ada5b6a44f7f4461ae0257
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-The "For more information, see" is a bit useless, and not having the
-URL alone on its own line prevents scripted URL checking.
+Allows scripting of URL checking to be simplier
 
 Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b7de9139e99e1957fb0bdf8540840087fd60d640)
+(cherry picked from commit 4bdb24c5d95ad1ec5f656ed135d34eabc9e90199)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/connman/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/bandwidthd/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/connman/Config.in b/package/connman/Config.in
-index 253c604e88..5177c939a4 100644
---- a/package/connman/Config.in
-+++ b/package/connman/Config.in
-@@ -14,7 +14,7 @@ config BR2_PACKAGE_CONNMAN
- 	  for managing internet connections within embedded devices
- 	  running the Linux operating system.
+diff --git a/package/bandwidthd/Config.in b/package/bandwidthd/Config.in
+index a503da43ff..8a19733c2c 100644
+--- a/package/bandwidthd/Config.in
++++ b/package/bandwidthd/Config.in
+@@ -25,8 +25,10 @@ config BR2_PACKAGE_BANDWIDTHD
+ 	  available on github that works on making BandwidthD's build
+ 	  process more compatible with buildroot's.
  
--	  For more information, see https://01.org/connman
-+	  https://01.org/connman
+-	  Upstream: http://bandwidthd.sourceforge.net/
+-	  Github fork: http://github.com/nroach44/bandwidthd
++	  Upstream:
++	  http://bandwidthd.sourceforge.net/
++	  Github fork:
++	  http://github.com/nroach44/bandwidthd
  
- if BR2_PACKAGE_CONNMAN
+ if BR2_PACKAGE_BANDWIDTHD
  
