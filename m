@@ -1,63 +1,62 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  5 Oct 2018 20:13:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 18.2.2
-Message-ID: <20181005181333.25070-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 5 Oct 2018 21:38:24 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] bind: security bump to
+ version 9.11.4-P2
+Message-ID: <20181005193728.2E0508D553@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mesa3d-headers/mesa3d-headers.mk |  2 +-
- package/mesa3d/mesa3d.hash               | 10 +++++-----
- package/mesa3d/mesa3d.mk                 |  2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=0fb04f8d31cbd0e4446fee3e015a1cf119e1f4a4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index c4217be5c7..aa25891f9e 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 18.2.1
-+MESA3D_HEADERS_VERSION = 18.2.2
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 3f8130fc7d..b440162f0b 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,7 +1,7 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2018-September/000463.html
--md5 66afbc1dddcaa4c7dabf5c5ee187c73b  mesa-18.2.1.tar.xz
--sha1 cfcaf550ab0915033bd27cc7a5968764510dbfc1  mesa-18.2.1.tar.xz
--sha256 9636dc6f3d188abdcca02da97cedd73640d9035224efd5db724187d062c81056  mesa-18.2.1.tar.xz
--sha512 d249bdf79aad36db9a8d291b3a1a100d283893ac741f58f85ae7e5c90ca25c37f80a5fa6fc57945ffeb0b67b788e7ea146543ec790b22f144578fc4c1525b84d  mesa-18.2.1.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2018-October/000466.html
-+md5 5931dd76a7533c7c5e702a4e5c00d3bb  mesa-18.2.2.tar.xz
-+sha1 4abcb04c7fa261c60775a826a39ae0b28ab3856b  mesa-18.2.2.tar.xz
-+sha256 c3ba82b12a89d3d9fed2bdd96b4702dbb7ab675034650a8b1b718320daf073c4  mesa-18.2.2.tar.xz
-+sha512 35c27f0673abd35d0581db34b6ad646058523dd826ff751df718e1f9d6a996409a0c5b313fbbf177058d9610a53d646f858fb86537e3ea1000df5edbddcf043a  mesa-18.2.2.tar.xz
- # License
- sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 4de36eae46..23de2eb592 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
+From the release notes
+(http://ftp.isc.org/isc/bind9/9.11.4-P2/RELEASE-NOTES-bind-9.11.4-P2.txt):
+
+ * There was a long-existing flaw in the documentation for ms-self,
+   krb5-self, ms-subdomain, and krb5-subdomain rules in update-policy
+   statements.  Though the policies worked as intended, operators who
+   configured their servers according to the misleading documentation may
+   have thought zone updates were more restricted than they were; users of
+   these rule types are advised to review the documentation and correct
+   their configurations if necessary.  New rule types matching the
+   previously documented behavior will be introduced in a future maintenance
+   release.  [GL !708]
+
+ * named could crash during recursive processing of DNAME records when
+   deny-answer-aliases was in use.  This flaw is disclosed in CVE-2018-5740.
+   [GL #387]
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 63eb34fa121c4e7448dd5ec25491ed742a7ca262)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/bind/bind.hash | 2 +-
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 34d9891805..19d5f61f6d 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+ # Verified from https://ftp.isc.org/isc/bind9/9.11.4-P1/bind-9.11.4-P1.tar.gz.asc
+ # with key BE0E9748B718253A28BB89FFF1B11BF05CF02E57
+-sha256 b0e0dc3c8bf26989b1cad53f90d44a48e39404afc68f65c45bae79b446f0fe23 bind-9.11.4-P1.tar.gz
++sha256 a85af7b629109d41285c7adeae1515daac638bbe4d5dc30d1f4b343dff09d811 bind-9.11.4-P2.tar.gz
+ sha256 336f3c40e37a1a13690efb4c63e20908faa4c40498cc02f3579fb67d3a1933a5 COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 0140041218..95f615bf81 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 18.2.1
-+MESA3D_VERSION = 18.2.2
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
--- 
-2.19.0
+-BIND_VERSION = 9.11.4-P1
++BIND_VERSION = 9.11.4-P2
+ BIND_SITE = http://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+ BIND_MAKE = $(MAKE1)
