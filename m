@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 14:00:29 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] igmpproxy: fix license
-Message-ID: <20181005115938.01C328D2B2@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 14:00:40 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] igmpproxy: fix license
+Message-ID: <20181005115945.73AB580F82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5fdabdb1dec2324415ce4d84b9817cfa6a7aa9df
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b34c9dee84b67d382d08755cfb320b25aad23268
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 mrouted part of igmpproxy is licensed under BSD-3-Clause so add this in
 IGMPPROXY_LICENSE and add hash for license files
