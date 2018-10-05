@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 22:36:08 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] gnupg: drop mandatory
+Date: Fri, 5 Oct 2018 22:36:25 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] gnupg: drop mandatory
  dependency on ncurses
-Message-ID: <20181005203512.D6BCD8D6DA@busybox.osuosl.org>
+Message-ID: <20181005203529.9DB548D6DD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a228a83cd83f98e67809a346d77619ec0510d3d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=34c8e78cdb75c11079761762895801d90572ee99
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 This package only needs ncurses when readline support is enabled, as
 it's the autoconf macro file for readline (used by autoconf to create
