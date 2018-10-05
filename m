@@ -1,68 +1,52 @@
-From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Fri,  5 Oct 2018 15:31:42 +0200
-Subject: [Buildroot] [PATCH 2/2] package/poppler: Remove patch which is not
- needed for poppler 0.69.0
-In-Reply-To: <20181005133142.1205-1-olivier.schonken@gmail.com>
-References: <20181005133142.1205-1-olivier.schonken@gmail.com>
-Message-ID: <20181005133142.1205-2-olivier.schonken@gmail.com>
+From: Alexey Brodkin <alexey.brodkin@synopsys.com>
+Date: Fri, 5 Oct 2018 13:40:43 +0000
+Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] Your
+ build results for 2018-10-04
+In-Reply-To: <20181005060013.AB6F8208F4@mail.bootlin.com>
+References: <20181005060013.AB6F8208F4@mail.bootlin.com>
+Message-ID: <672b4aebc97687da7302dbfd3b8d571b1845d05c.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The patch has been applied to the upstream project,
-https://github.com/freedesktop/poppler/commit/d3f12611b30e6421f05603a9838ed9131b1aa61e
-and is thus not needed anymore.
+Hi Thomas, Peter, Arnout,
 
-Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
----
- ...c-include-ctype.h-to-fix-build-error.patch | 37 -------------------
- 1 file changed, 37 deletions(-)
- delete mode 100644 package/poppler/0001-Form.cc-include-ctype.h-to-fix-build-error.patch
+On Fri, 2018-10-05 at 08:00 +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> This is the list of Buildroot build failures that occured on
+> 2018-10-04, and for which you are a registered architecture developer
+> or package developer. Please help us improving the quality of
+> Buildroot by investigating those build failures and sending patches to
+> fix them. Thanks!
+> 
+> Results for the 'master' branch
+> ===============================
+> 
+> Build failures related to your architectures:
+> 
+>          arc |                 blktrace-1.2.0 | 
+> https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_c039b85668e5b82b52a6dbffc90b863ddeef5cc7&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=Z74rKOsEpOUneCxYxwKcXHwrAmW8mJhNZjcWnDDJI2U&m=NFdcJH937qZp427JPZQ9YmUOpajFsrcULr2fkxnWJMI&s=j8jhQ7y0j__Px7TUngVu_UI2PsSeGgZrReTysGi9Lhs&e=
+>          arc |                 blktrace-1.2.0 | 
+> https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_5eecab649d9c619ddf466f78591d8b8933b6fd47&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=Z74rKOsEpOUneCxYxwKcXHwrAmW8mJhNZjcWnDDJI2U&m=NFdcJH937qZp427JPZQ9YmUOpajFsrcULr2fkxnWJMI&s=ZdtPr7qoj5tpiIHxvZ3_wP04wfxOnVNoDHp83MOXIYU&e=
+>          arc |                 blktrace-1.2.0 | 
+> https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_2a799563a8f10eba9a4d52c1d12066e642affbef&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=Z74rKOsEpOUneCxYxwKcXHwrAmW8mJhNZjcWnDDJI2U&m=NFdcJH937qZp427JPZQ9YmUOpajFsrcULr2fkxnWJMI&s=IlZyj2bq04B2EqY8gWMzd4fQZ9hz6ZA4YlPZ2BKKdIY&e=
+>          arc |                 blktrace-1.2.0 | 
+> https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_e2e9023a02d9785310e35fa7ca8aa1323e0b4133&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=Z74rKOsEpOUneCxYxwKcXHwrAmW8mJhNZjcWnDDJI2U&m=NFdcJH937qZp427JPZQ9YmUOpajFsrcULr2fkxnWJMI&s=2hg79ET_3fQK7enRXtE6Yughb5Bl2Xkl6oQR0zr8HuY&e=
+>          arc |                 blktrace-1.2.0 | 
+> https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_5bda5bcf576440037d830997f9fa7f6046aa8444&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=Z74rKOsEpOUneCxYxwKcXHwrAmW8mJhNZjcWnDDJI2U&m=NFdcJH937qZp427JPZQ9YmUOpajFsrcULr2fkxnWJMI&s=Rj5CthID3ZkFLARmMrLCmC50rBALe2aG7oRmn-i_8tE&e=
+>          arc |                 blktrace-1.2.0 | 
+> https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_df52f8b1e2a405e223a6bc1c3b805d1e76dbd69c&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=Z74rKOsEpOUneCxYxwKcXHwrAmW8mJhNZjcWnDDJI2U&m=NFdcJH937qZp427JPZQ9YmUOpajFsrcULr2fkxnWJMI&s=83hhdUf5-jAeUOKS1Ed262t7bbQva2rQF8vZDMUv_kg&e=
+>          arc |                 blktrace-1.2.0 | 
+> https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_1a39e67b1aac9d28c4bdd86a8af4963e8cd43ab6&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=Z74rKOsEpOUneCxYxwKcXHwrAmW8mJhNZjcWnDDJI2U&m=NFdcJH937qZp427JPZQ9YmUOpajFsrcULr2fkxnWJMI&s=TFB-mkgW_4uNJgIbkCtRC4RViqP1qkmzn6i9D-QCMkk&e=
+>          arc |                 blktrace-1.2.0 | 
+> https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_dddc6f855a472610d97734290f260ae0c7e829e4&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=Z74rKOsEpOUneCxYxwKcXHwrAmW8mJhNZjcWnDDJI2U&m=NFdcJH937qZp427JPZQ9YmUOpajFsrcULr2fkxnWJMI&s=cxLlKg4r55CVFOiNQ_y6lR0_hQCFQj2ZThyCUXmh630&e=
+>          arc |                  lvm2-2.02.180 | 
+> https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_e7c83329601bba4c5e12160f67d287624dad6766&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=Z74rKOsEpOUneCxYxwKcXHwrAmW8mJhNZjcWnDDJI2U&m=NFdcJH937qZp427JPZQ9YmUOpajFsrcULr2fkxnWJMI&s=VgXHnQhH3bRR80BF0yG3_pDqN1sW2YM5IhZErQYkQRQ&e=
 
-diff --git a/package/poppler/0001-Form.cc-include-ctype.h-to-fix-build-error.patch b/package/poppler/0001-Form.cc-include-ctype.h-to-fix-build-error.patch
-deleted file mode 100644
-index 8d210dab99..0000000000
---- a/package/poppler/0001-Form.cc-include-ctype.h-to-fix-build-error.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From f40143f7acca81b7d39d774ed4c349aec8d9310b Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Sat, 23 Sep 2017 11:37:23 +0200
--Subject: [PATCH] Form.cc: include ctype.h to fix build error
--
--Fixes
--Form.cc:546:28: error: 'isdigit' was not declared in this scope
--Form.cc:548:34: error: 'isxdigit' was not declared in this scope
--Form.cc:575:40: error: 'isxdigit' was not declared in this scope
--
--detected by buildroot autobuilders:
--http://autobuild.buildroot.net/results/a6a/a6a336f8b6a0136b204a34091e33dc4598178125/
--when cross-compiling with
--gcc version 4.7.3 (crosstool-NG hg+-c65fcf8a34b7)
--
--Patch sent upstream: https://bugs.freedesktop.org/show_bug.cgi?id=102951
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- poppler/Form.cc | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/poppler/Form.cc b/poppler/Form.cc
--index 83bceb20..e7efae95 100644
----- a/poppler/Form.cc
--+++ b/poppler/Form.cc
--@@ -32,6 +32,7 @@
-- #include <stddef.h>
-- #include <stdlib.h>
-- #include <string.h>
--+#include <ctype.h>
-- #include "goo/gmem.h"
-- #include "goo/GooString.h"
-- #include "Error.h"
---- 
--2.11.0
--
--- 
-2.17.1
+
+I guess these failures should be fixed by https://patchwork.ozlabs.org/patch/976301/
+
+-Alexey
