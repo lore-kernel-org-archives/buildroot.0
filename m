@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 13:31:17 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] Makefile: fix issue with
+Date: Fri, 5 Oct 2018 13:31:25 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] Makefile: fix issue with
  printvars executing giant shell command
-Message-ID: <20181005113022.AEE0B8D203@busybox.osuosl.org>
+Message-ID: <20181005113029.7BF9F8D208@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98cc263f1bcfa7fc811f08345ec1379a6aae92a6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=afdf97ca768933b8deb5cc30e3b2fa61e55da9b5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 The underlying problem is that $(foreach V,1 2 3,) does not evaluate to
 an empty string.  It evaluates to "?? ", three empty strings separated by
@@ -42,10 +42,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/Makefile b/Makefile
-index 32b848c189..401bc7e8bc 100644
+index 5fb26c9733..dc26099fd4 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -977,7 +977,8 @@ $(BUILD_DIR)/.br2-external.in: $(BUILD_DIR)
+@@ -976,7 +976,8 @@ $(BUILD_DIR)/.br2-external.in: $(BUILD_DIR)
  # displayed.
  .PHONY: printvars
  printvars:
