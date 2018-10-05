@@ -1,37 +1,58 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  5 Oct 2018 21:45:27 +0200
-Subject: [Buildroot] [PATCH 1/1] haproxy: put back dependency on __sync_*_4
-Message-ID: <20181005194527.12140-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 5 Oct 2018 21:59:09 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] strongswan: add upstream
+ security patch
+Message-ID: <20181005200007.DCBA58D670@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-__sync_*_4 intrinsics is used by common/hathreads.h when gcc < 4.7 but
-also by contrib/tcploop.c or include/proto/shctx.h so put back a
-mandatory dependency on BR2_TOOLCHAIN_HAS_SYNC_4 which has been wrongly
-removed by patch 978001
+commit: https://git.buildroot.net/buildroot/commit/?id=1807dafc01f8196ee85b7e48e414c55c5c4e5731
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Fixes:
- - http://autobuild.buildroot.net/results/52c88f2f27e1a3c42cf71554cf680da86d933ef6
+Fixes the following security issues:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+CVE-2018-16151: The OID parser in the ASN.1 code in gmp allows any number of
+random bytes after a valid OID.
+
+CVE-2018-16152: The algorithmIdentifier parser in the ASN.1 code in gmp
+doesn't enforce a NULL value for the optional parameter which is not used
+with any PKCS#1 algorithm.
+
+For more details, see the advisory:
+https://www.strongswan.org/blog/2018/09/24/strongswan-vulnerability-(cve-2018-16151,-cve-2018-16152).html
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 5e04cdde197f17472a85423f4063b8f6ee19a82c)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/haproxy/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/strongswan/strongswan.hash | 1 +
+ package/strongswan/strongswan.mk   | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/package/haproxy/Config.in b/package/haproxy/Config.in
-index fbe5941b55..cbcbc0c388 100644
---- a/package/haproxy/Config.in
-+++ b/package/haproxy/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_HAPROXY
- 	bool "haproxy"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # __sync_*_4 intrisics
- 	help
- 	  HAProxy is a free, very fast and reliable solution offering
- 	  high availability, load balancing, and proxying for TCP and
--- 
-2.17.1
+diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
+index 9a800572d7..abbdbc2bf1 100644
+--- a/package/strongswan/strongswan.hash
++++ b/package/strongswan/strongswan.hash
+@@ -3,5 +3,6 @@ md5	a6a28eeb22aa58080a7581771a5b63f9	strongswan-5.6.3.tar.bz2
+ # Calculated based on the hash above
+ sha256	c3c7dc8201f40625bba92ffd32eb602a8909210d8b3fac4d214c737ce079bf24	strongswan-5.6.3.tar.bz2
+ # Locally calculated
++sha256	e66c243593ee0713f5fd13bcd7f624bc50eebc54bf87f790ced429ff698077e7  strongswan-5.6.1-5.6.3_gmp-pkcs1-verify.patch
+ sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256	2292e21797754548dccdef9eef6aee7584e552fbd890fa914e1de8d3577d23f0  LICENSE
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index 5c597d572a..9ef4e183e2 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
+@@ -7,6 +7,8 @@
+ STRONGSWAN_VERSION = 5.6.3
+ STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
+ STRONGSWAN_SITE = http://download.strongswan.org
++STRONGSWAN_PATCH = \
++	$(STRONGSWAN_SITE)/patches/27_gmp_pkcs1_verify_patch/strongswan-5.6.1-5.6.3_gmp-pkcs1-verify.patch
+ STRONGSWAN_LICENSE = GPL-2.0+
+ STRONGSWAN_LICENSE_FILES = COPYING LICENSE
+ STRONGSWAN_DEPENDENCIES = host-pkgconf
