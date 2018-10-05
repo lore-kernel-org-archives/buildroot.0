@@ -1,59 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 19:42:13 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] xlib_libXdmcp: add
- missing dependency on host-pkgconf
-Message-ID: <20181005174122.3ABF58D3EE@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 21:46:51 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] mosquitto: security bump
+ to version 1.5.3
+Message-ID: <20181005194601.3195C8D5E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f7e9f92b3011ea13b54daebf0a722115679e37c
+commit: https://git.buildroot.net/buildroot/commit/?id=31ad690c56ff0f32dc425e1e18231648280a4457
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-The libXdmcp configure script uses pkg-config, but the Buildroot
-package does not depend on host-pkgconf. This is not seen by the
-autobuilders most likely because another package that is always built
-before libXdmcp builds pkg-config.
+Fix CVE-2018-12543. If a message is sent to Mosquitto with a topic that
+begins with $, but is not $SYS, then an assert that should be unreachable is
+triggered and Mosquitto will exit.
 
-However, running:
-
-$ make xlib_libXdmcp
-
-triggers the following build failure:
-
-checking pkg-config is at least version 0.9.0... ./configure: line 12323: /home/thomas/projets/buildroot/output/host/bin/pkg-config: No such file or directory
-no
-[...]
-checking for XDMCP... configure: error: in `/home/thomas/projets/buildroot/output/build/xlib_libXdmcp-1.1.2':
-configure: error: The pkg-config script could not be found or is too old.  Make sure it
-is in your PATH or set the PKG_CONFIG environment variable to the full
-path to pkg-config.
-
-This was detected using per-package target/host folders, because with
-this, only the dependencies explicitly expressed by a package are
-available to the package.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a517df56d641e1b3d4ce5988eb5d1747cd78a69a)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 5e62304359d150b6befa4bab4030ead09bcfdfdf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/mosquitto/mosquitto.hash | 2 +-
+ package/mosquitto/mosquitto.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
-index 179234e73f..44a6f00543 100644
---- a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
-+++ b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
-@@ -10,8 +10,8 @@ XLIB_LIBXDMCP_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXDMCP_LICENSE = MIT
- XLIB_LIBXDMCP_LICENSE_FILES = COPYING
- XLIB_LIBXDMCP_INSTALL_STAGING = YES
--XLIB_LIBXDMCP_DEPENDENCIES = xutil_util-macros xorgproto
--HOST_XLIB_LIBXDMCP_DEPENDENCIES = host-xutil_util-macros host-xorgproto
-+XLIB_LIBXDMCP_DEPENDENCIES = xutil_util-macros xorgproto host-pkgconf
-+HOST_XLIB_LIBXDMCP_DEPENDENCIES = host-xutil_util-macros host-xorgproto host-pkgconf
+diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+index 96817d464d..b38830b8b5 100644
+--- a/package/mosquitto/mosquitto.hash
++++ b/package/mosquitto/mosquitto.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking gpg signature
+-sha256 8557bc7ae34dfaf32a0fb56d2491b7a7f731269c88337227233013502df4d5b0  mosquitto-1.5.1.tar.gz
++sha256 3081a998d303a883b1cd064009beabc88aa9159e26f5258a4ae6007160491d10  mosquitto-1.5.3.tar.gz
  
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ # License files
+ sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index 7ac6487488..1d72f9b16e 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MOSQUITTO_VERSION = 1.5.1
++MOSQUITTO_VERSION = 1.5.3
+ MOSQUITTO_SITE = https://mosquitto.org/files/source
+ MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
+ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
