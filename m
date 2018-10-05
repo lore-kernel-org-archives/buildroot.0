@@ -1,51 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 14:02:43 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] libesmtp: update/fix site
- URL
-Message-ID: <20181005120149.C0ED980030@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 14:03:43 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] imlib2: update license
+Message-ID: <20181005120253.1EA5B812B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad3df4780c1f48030055923f7906d7db6fe516d2
+commit: https://git.buildroot.net/buildroot/commit/?id=2d484d8c94c1a8537ff286fcc9c89f902a764cf8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-The old URL was not working for quite some time.
+- Use SPDX short identifier (Imlib2) instead of full name
+- Add COPYING-PLAIN to license files
+- Add hash for license files
 
-Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Acked-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 43e7667fc82d55d0a9fdfad91375a0621efb7576)
+(cherry picked from commit e29fcc14809dcd34f2bccc0fb949ee2cd46489ef)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libesmtp/Config.in   | 2 +-
- package/libesmtp/libesmtp.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/imlib2/imlib2.hash | 4 ++++
+ package/imlib2/imlib2.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/libesmtp/Config.in b/package/libesmtp/Config.in
-index ba9d52751c..f3ed521d22 100644
---- a/package/libesmtp/Config.in
-+++ b/package/libesmtp/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_LIBESMTP
- 	help
- 	  Library for sending emails through SMTP.
+diff --git a/package/imlib2/imlib2.hash b/package/imlib2/imlib2.hash
+index 0c234c8c23..62ebac32ea 100644
+--- a/package/imlib2/imlib2.hash
++++ b/package/imlib2/imlib2.hash
+@@ -1,3 +1,7 @@
+ # From https://sourceforge.net/projects/enlightenment/files/imlib2-src/1.4.10/
+ md5 a0de8524592bbd9f24fcc6cb8352137c  imlib2-1.4.10.tar.bz2
+ sha1 664df65c6265a2825d685d2f3a4f0d072eb626ac  imlib2-1.4.10.tar.bz2
++
++# Locally computed
++sha256 fb70339dd33a77b6213c7ae067fccf93d04af44ff3f937c61f8863f7970e73f6  COPYING
++sha256 8c9a2e92ed4937e2d30c2ea95439c36ed3002fc47e34efee43455a460fee8ef5  COPYING-PLAIN
+diff --git a/package/imlib2/imlib2.mk b/package/imlib2/imlib2.mk
+index b5012a69a8..21a96cb1ca 100644
+--- a/package/imlib2/imlib2.mk
++++ b/package/imlib2/imlib2.mk
+@@ -7,8 +7,8 @@
+ IMLIB2_VERSION = 1.4.10
+ IMLIB2_SOURCE = imlib2-$(IMLIB2_VERSION).tar.bz2
+ IMLIB2_SITE = http://downloads.sourceforge.net/project/enlightenment/imlib2-src/$(IMLIB2_VERSION)
+-IMLIB2_LICENSE = imlib2 license
+-IMLIB2_LICENSE_FILES = COPYING
++IMLIB2_LICENSE = Imlib2
++IMLIB2_LICENSE_FILES = COPYING COPYING-PLAIN
  
--	  http://www.stafford.uklinux.net/libesmtp
-+	  http://brianstafford.info/libesmtp
- 
- comment "libesmtp needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-diff --git a/package/libesmtp/libesmtp.mk b/package/libesmtp/libesmtp.mk
-index b0f88c7a3b..9c336793a4 100644
---- a/package/libesmtp/libesmtp.mk
-+++ b/package/libesmtp/libesmtp.mk
-@@ -6,7 +6,7 @@
- 
- LIBESMTP_VERSION = 1.0.6
- LIBESMTP_SOURCE = libesmtp-$(LIBESMTP_VERSION).tar.bz2
--LIBESMTP_SITE = http://www.stafford.uklinux.net/libesmtp
-+LIBESMTP_SITE = http://brianstafford.info/libesmtp
- LIBESMTP_INSTALL_STAGING = YES
- LIBESMTP_CONFIG_SCRIPTS = libesmtp-config
- LIBESMTP_DEPENDENCIES = $(if $(BR2_PACKAGE_OPENSSL),openssl)
+ IMLIB2_INSTALL_STAGING = YES
+ IMLIB2_DEPENDENCIES = host-pkgconf freetype
