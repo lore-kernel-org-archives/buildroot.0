@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 14:02:00 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] libesmtp: update/fix site
+Date: Fri, 5 Oct 2018 14:02:35 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] libesmtp: update/fix site
  URL
-Message-ID: <20181005120131.DE7148D2BE@busybox.osuosl.org>
+Message-ID: <20181005120142.24AF38D2C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61df494a4d9c7164b06da4f8c1851160ce227df2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6242d6787085febea0b6165b9fecbdab895c55a5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 The old URL was not working for quite some time.
 
