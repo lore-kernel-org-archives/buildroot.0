@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 13:45:46 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] package/bandwidthd: put
+Date: Fri, 5 Oct 2018 13:46:00 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] package/bandwidthd: put
  upstream URL on separate lines in Config.in help
-Message-ID: <20181005114451.316188D281@busybox.osuosl.org>
+Message-ID: <20181005114504.8F57A8D284@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc43b89656a96fe358ada5b6a44f7f4461ae0257
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8aad5a8d0b4fe3ffed5ce2e6f6383a7a088e4475
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 Allows scripting of URL checking to be simplier
 
