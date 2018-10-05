@@ -1,51 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 21:46:51 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] mosquitto: security bump
- to version 1.5.3
-Message-ID: <20181005194601.3195C8D5E2@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 21:38:16 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] bind: security bump to
+ version 9.11.4-P2
+Message-ID: <20181005193721.45C9B8D550@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31ad690c56ff0f32dc425e1e18231648280a4457
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=479e15d57f96903fb67f2ae9d1d75bb4b918ba33
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Fix CVE-2018-12543. If a message is sent to Mosquitto with a topic that
-begins with $, but is not $SYS, then an assert that should be unreachable is
-triggered and Mosquitto will exit.
+From the release notes
+(http://ftp.isc.org/isc/bind9/9.11.4-P2/RELEASE-NOTES-bind-9.11.4-P2.txt):
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ * There was a long-existing flaw in the documentation for ms-self,
+   krb5-self, ms-subdomain, and krb5-subdomain rules in update-policy
+   statements.  Though the policies worked as intended, operators who
+   configured their servers according to the misleading documentation may
+   have thought zone updates were more restricted than they were; users of
+   these rule types are advised to review the documentation and correct
+   their configurations if necessary.  New rule types matching the
+   previously documented behavior will be introduced in a future maintenance
+   release.  [GL !708]
+
+ * named could crash during recursive processing of DNAME records when
+   deny-answer-aliases was in use.  This flaw is disclosed in CVE-2018-5740.
+   [GL #387]
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5e62304359d150b6befa4bab4030ead09bcfdfdf)
+(cherry picked from commit 63eb34fa121c4e7448dd5ec25491ed742a7ca262)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mosquitto/mosquitto.hash | 2 +-
- package/mosquitto/mosquitto.mk   | 2 +-
+ package/bind/bind.hash | 2 +-
+ package/bind/bind.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index 96817d464d..b38830b8b5 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking gpg signature
--sha256 8557bc7ae34dfaf32a0fb56d2491b7a7f731269c88337227233013502df4d5b0  mosquitto-1.5.1.tar.gz
-+sha256 3081a998d303a883b1cd064009beabc88aa9159e26f5258a4ae6007160491d10  mosquitto-1.5.3.tar.gz
- 
- # License files
- sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 7ac6487488..1d72f9b16e 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 34d9891805..19d5f61f6d 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+ # Verified from https://ftp.isc.org/isc/bind9/9.11.4-P1/bind-9.11.4-P1.tar.gz.asc
+ # with key BE0E9748B718253A28BB89FFF1B11BF05CF02E57
+-sha256 b0e0dc3c8bf26989b1cad53f90d44a48e39404afc68f65c45bae79b446f0fe23 bind-9.11.4-P1.tar.gz
++sha256 a85af7b629109d41285c7adeae1515daac638bbe4d5dc30d1f4b343dff09d811 bind-9.11.4-P2.tar.gz
+ sha256 336f3c40e37a1a13690efb4c63e20908faa4c40498cc02f3579fb67d3a1933a5 COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 5cefa5b804..4b80eaf04f 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MOSQUITTO_VERSION = 1.5.1
-+MOSQUITTO_VERSION = 1.5.3
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
+-BIND_VERSION = 9.11.4-P1
++BIND_VERSION = 9.11.4-P2
+ BIND_SITE = http://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+ BIND_MAKE = $(MAKE1)
