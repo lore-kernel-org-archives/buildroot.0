@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 22:32:56 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] package/clamav: security
+Date: Fri, 5 Oct 2018 22:33:07 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/clamav: security
  bump to 0.100.2
-Message-ID: <20181005203200.57B648D6C4@busybox.osuosl.org>
+Message-ID: <20181005203211.972F78D6C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61ccbf499bd592629b46969fb740e390ddd67cc2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5e28da8cd645771111136bc258f227577e8e9ebc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Fixes CVE-2018-15378, CVE-2018-14680, CVE-2018-14681 & CVE-2018-14682:
 http://lists.clamav.net/pipermail/clamav-announce/2018/000033.html
