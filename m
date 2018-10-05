@@ -1,62 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 21:38:33 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] bind: security bump to
- version 9.11.4-P2
-Message-ID: <20181005193737.B5C6D82DE1@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 14:09:43 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x]
+ package/x11r7/xutil_makedepend: add missing dependency on host-pkgconf
+Message-ID: <20181005174023.681038D390@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=999270122881d624e345fad67fc436f42e0bc5d7
+commit: https://git.buildroot.net/buildroot/commit/?id=ab2042940d5f0652ee59c1ea289e368120d14d4c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-From the release notes
-(http://ftp.isc.org/isc/bind9/9.11.4-P2/RELEASE-NOTES-bind-9.11.4-P2.txt):
+The configure script of xutil_makedepend uses PKG_CHECK_MODULES(), so
+it should depend on host-pkgconf. Otherwise, a "make
+host-xutil_makedepend" fails with:
 
- * There was a long-existing flaw in the documentation for ms-self,
-   krb5-self, ms-subdomain, and krb5-subdomain rules in update-policy
-   statements.  Though the policies worked as intended, operators who
-   configured their servers according to the misleading documentation may
-   have thought zone updates were more restricted than they were; users of
-   these rule types are advised to review the documentation and correct
-   their configurations if necessary.  New rule types matching the
-   previously documented behavior will be introduced in a future maintenance
-   release.  [GL !708]
+"""
+checking for X... configure: error: in `/home/thomas/projets/buildroot/output/build/host-xutil_makedepend-1.0.5':
+configure: error: The pkg-config script could not be found or is too old.  Make sure it
+is in your PATH or set the PKG_CONFIG environment variable to the full
+path to pkg-config.
 
- * named could crash during recursive processing of DNAME records when
-   deny-answer-aliases was in use.  This flaw is disclosed in CVE-2018-5740.
-   [GL #387]
+Alternatively, you may set the environment variables X_CFLAGS
+and X_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 63eb34fa121c4e7448dd5ec25491ed742a7ca262)
+To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+"""
+
+This was detected using per-package host/target directories, but can
+be reproduced without it.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 73185f1270b6f86f7d02eefa8c70e568b30dd4cf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/bind.hash | 2 +-
- package/bind/bind.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xutil_makedepend/xutil_makedepend.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 34d9891805..19d5f61f6d 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
- # Verified from https://ftp.isc.org/isc/bind9/9.11.4-P1/bind-9.11.4-P1.tar.gz.asc
- # with key BE0E9748B718253A28BB89FFF1B11BF05CF02E57
--sha256 b0e0dc3c8bf26989b1cad53f90d44a48e39404afc68f65c45bae79b446f0fe23 bind-9.11.4-P1.tar.gz
-+sha256 a85af7b629109d41285c7adeae1515daac638bbe4d5dc30d1f4b343dff09d811 bind-9.11.4-P2.tar.gz
- sha256 336f3c40e37a1a13690efb4c63e20908faa4c40498cc02f3579fb67d3a1933a5 COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 0140041218..95f615bf81 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/x11r7/xutil_makedepend/xutil_makedepend.mk b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
+index 8a058efcec..a50320ba93 100644
+--- a/package/x11r7/xutil_makedepend/xutil_makedepend.mk
++++ b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
+@@ -10,8 +10,8 @@ XUTIL_MAKEDEPEND_SITE = http://xorg.freedesktop.org/releases/individual/util
+ XUTIL_MAKEDEPEND_LICENSE = MIT
+ XUTIL_MAKEDEPEND_LICENSE_FILES = COPYING
  
--BIND_VERSION = 9.11.4-P1
-+BIND_VERSION = 9.11.4-P2
- BIND_SITE = http://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
+-XUTIL_MAKEDEPEND_DEPENDENCIES = xorgproto
+-HOST_XUTIL_MAKEDEPEND_DEPENDENCIES = host-xorgproto
++XUTIL_MAKEDEPEND_DEPENDENCIES = xorgproto host-pkgconf
++HOST_XUTIL_MAKEDEPEND_DEPENDENCIES = host-xorgproto host-pkgconf
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
