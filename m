@@ -1,53 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 21:45:15 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] package/apache: security
- bump to version 2.4.35
-Message-ID: <20181005194419.2E5CB8D5A2@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 15:17:09 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] webkitgtk: add dependency
+ on the woff2 package
+Message-ID: <20181005174039.562768D2A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83326c1cbd26b7338d221572e0cd817bd19aae52
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b0cffca8e8e5f9f327111bbf2ba498a240453d72
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Fixes: CVE-2018-11763: mod_http2, DoS via continuous SETTINGS frames
-https://lists.apache.org/thread.html/d435b0267a76501b9e06c552b20c887171064cde38e46d678da4d3dd@%3Cannounce.httpd.apache.org%3E
+The woff2 dependency is used to support Web fonts in WOFF2 format.
+This is a Web-facing feature that Web sites expect WebKit to support,
+and it is recommended to be unconditionally enabled. While it is
+possible to disable the feature at build time, upstream only recommends
+doing so if the target system cannot provide a woff2 package.
 
-Release notes:
-https://lists.apache.org/thread.html/5d604774652fc073b1b161584d0d1efbdba7898c40ae2e2334725e5f@%3Cannounce.httpd.apache.org%3E
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ac22fafdc83e285d305a618ba9655671eadf42cf)
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 51b3fe094a2fdcfcab649d6ddb2f23d0833e6e95)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apache/apache.hash | 4 ++--
- package/apache/apache.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/webkitgtk/Config.in    | 1 +
+ package/webkitgtk/webkitgtk.mk | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index 74a48ae914..32743656fd 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,4 +1,4 @@
--# From http://archive.apache.org/dist/httpd/httpd-2.4.34.tar.bz2.sha256
--sha256 fa53c95631febb08a9de41fd2864cfff815cf62d9306723ab0d4b8d7aa1638f0 httpd-2.4.34.tar.bz2
-+# From http://archive.apache.org/dist/httpd/httpd-2.4.35.tar.bz2.sha256
-+sha256 2607c6fdd4d12ac3f583127629291e9432b247b782396a563bec5678aae69b56 httpd-2.4.35.tar.bz2
- # Locally computed
- sha256 c49c0819a726b70142621715dae3159c47b0349c2bc9db079070f28dadac0229 LICENSE
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 446e58c43a..28d8bde205 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--APACHE_VERSION = 2.4.34
-+APACHE_VERSION = 2.4.35
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = http://archive.apache.org/dist/httpd
- APACHE_LICENSE = Apache-2.0
+diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+index df2aeef3d9..96a7ab0c94 100644
+--- a/package/webkitgtk/Config.in
++++ b/package/webkitgtk/Config.in
+@@ -42,6 +42,7 @@ config BR2_PACKAGE_WEBKITGTK
+ 	select BR2_PACKAGE_SQLITE
+ 	select BR2_PACKAGE_WEBP
+ 	select BR2_PACKAGE_WEBP_DEMUX
++	select BR2_PACKAGE_WOFF2
+ 	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE if BR2_PACKAGE_LIBGTK3_X11
+ 	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_LIBGTK3_X11
+ 	select BR2_PACKAGE_XLIB_LIBXRENDER if BR2_PACKAGE_LIBGTK3_X11
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index eccd9bbae5..f28417ac73 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -14,7 +14,7 @@ WEBKITGTK_LICENSE_FILES = \
+ 	Source/WebCore/LICENSE-LGPL-2.1
+ WEBKITGTK_DEPENDENCIES = host-ruby host-flex host-bison host-gperf \
+ 	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
+-	libtasn1 libxml2 libxslt sqlite webp
++	libtasn1 libxml2 libxslt sqlite webp woff2
+ WEBKITGTK_CONF_OPTS = \
+ 	-DENABLE_API_TESTS=OFF \
+ 	-DENABLE_GEOLOCATION=OFF \
+@@ -22,6 +22,7 @@ WEBKITGTK_CONF_OPTS = \
+ 	-DENABLE_INTROSPECTION=OFF \
+ 	-DENABLE_MINIBROWSER=ON \
+ 	-DENABLE_SPELLCHECK=ON \
++	-DENABLE_WOFF2=ON \
+ 	-DPORT=GTK \
+ 	-DUSE_LIBNOTIFY=OFF \
+ 	-DUSE_LIBHYPHEN=OFF
