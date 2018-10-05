@@ -1,35 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 13:42:15 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/android-tools:
- update upstream URL in Config.in help
-Message-ID: <20181005114121.664688D250@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 13:41:56 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] boot/at91bootstrap3: add
+ upstream URL in Config.in help text
+Message-ID: <20181005114121.5BBD68D250@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02a4f31b47e983f937703151d16aad9d66fb9988
+commit: https://git.buildroot.net/buildroot/commit/?id=2cab577b4811c78c26fab21e43f068953a2967de
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b7490dbd31bd995d29465cb2d47811d19088e891)
+(cherry picked from commit 8084c33b39a64c6d2906296d042263a348fc0c99)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/android-tools/Config.in | 2 ++
+ boot/at91bootstrap3/Config.in | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/android-tools/Config.in b/package/android-tools/Config.in
-index 96e36e6cd7..478f1392dc 100644
---- a/package/android-tools/Config.in
-+++ b/package/android-tools/Config.in
-@@ -15,6 +15,8 @@ config BR2_PACKAGE_ANDROID_TOOLS
- 	  can be used to interact with target devices using of these
- 	  protocols.
+diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
+index 237deb929c..f82a0e5edc 100644
+--- a/boot/at91bootstrap3/Config.in
++++ b/boot/at91bootstrap3/Config.in
+@@ -8,6 +8,8 @@ config BR2_TARGET_AT91BOOTSTRAP3
+ 	  - Peripheral drivers such as PIO, PMC or SDRAMC...
+ 	  - Physical media algorithm such as DataFlash, NandFlash, NOR Flash...
  
-+	  https://wiki.debian.org/AndroidTools#Original_android-tools_package
++	  https://www.at91.com/linux4sam/bin/view/Linux4SAM/AT91Bootstrap
 +
- if BR2_PACKAGE_ANDROID_TOOLS
+ if BR2_TARGET_AT91BOOTSTRAP3
  
- # We need kernel headers that support the __SANE_USERSPACE_TYPES__
+ choice
