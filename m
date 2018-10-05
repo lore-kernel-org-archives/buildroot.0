@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 22:12:22 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] x265: disable parallel
+Date: Fri, 5 Oct 2018 22:12:36 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] x265: disable parallel
  build
-Message-ID: <20181005201125.42E4D8D683@busybox.osuosl.org>
+Message-ID: <20181005201140.B6EDE802D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02c434304cfc3c6f5cc68d2871832cbb2a9dbb4c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=40c7b5c08794c20369d72d3310989645cc2d084d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 It seems package has a parallel build issue on ARM cortex A8 or A9 since
 at least version 2.5:
@@ -33,7 +33,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/package/x265/x265.mk b/package/x265/x265.mk
-index 243025c08b..45c9669e0d 100644
+index ae570e6e4c..86709e62b8 100644
 --- a/package/x265/x265.mk
 +++ b/package/x265/x265.mk
 @@ -11,6 +11,7 @@ X265_LICENSE = GPL-2.0+
@@ -43,4 +43,4 @@ index 243025c08b..45c9669e0d 100644
 +X265_MAKE = $(MAKE1)
  
  ifeq ($(BR2_i386)$(BR2_x86_64),y)
- X265_DEPENDENCIES += host-nasm
+ X265_DEPENDENCIES += host-yasm
