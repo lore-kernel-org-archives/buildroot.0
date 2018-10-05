@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 13:59:05 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] libnfs: fix license and
+Date: Fri, 5 Oct 2018 13:59:12 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] libnfs: fix license and
  add hashes for license files
-Message-ID: <20181005115810.C2F598D2AD@busybox.osuosl.org>
+Message-ID: <20181005115817.EDC6E8D2B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=196a978c91b3a0a2ba4db973e6ac803d7bbad62e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e7912e6f872815f068fd0e2bb972e3124b23a258
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 As specified in COPYING, examples are licensed under GPL-3.0+ and .x
 files are licensed under BSD-2-Clause.
