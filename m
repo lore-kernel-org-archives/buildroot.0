@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 22:13:35 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] links: fix X11
+Date: Fri, 5 Oct 2018 22:13:42 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] links: fix X11
  library/includes detection
-Message-ID: <20181005201239.2E0F28D68F@busybox.osuosl.org>
+Message-ID: <20181005201246.8542F8D692@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2dbbeb48d6bf083f465674d59351eca794cc1ac
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8696365a76f38c93971fea211a8640eddad7f14d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 Fixes:
 http://autobuild.buildroot.net/results/4b0/4b02713ed5c10b58f390f96ea25f2a45c9a47af4/
