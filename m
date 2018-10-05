@@ -1,52 +1,108 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 21:59:24 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] strongswan: add upstream
- security fix for CVE-2018-17540
-Message-ID: <20181005200007.E6A328D671@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri,  5 Oct 2018 22:05:02 +0200
+Subject: [Buildroot] [PATCH] package/qt5base: drop remnants patches from
+ previous version
+Message-ID: <20181005200502.16899-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2e886ffdf953276d0a1b1466cf6e12be6902a12d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+When the bump to 5.11.2 was applied, master gained a new patch for 5.11.1
+in-between the bump submission and the moment it was applied. That patch
+still lingers around now.
 
-The fix for CVE-2018-16151 / 16152 contained an exploitable bug.
-For details, see:
+Since that patch has been applied upstream (it is detected as a revert
+when applied to 5.11.2), we simply drop it.
 
-https://www.strongswan.org/blog/2018/10/01/strongswan-vulnerability-(cve-2018-17540).html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 040cf15a8760c91f82b61a3e2cadf1b91b7c45af)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Seiderer <ps.report@gmx.net>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/strongswan/strongswan.hash | 1 +
- package/strongswan/strongswan.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ .../0003-Fix-qmake-build-with-glibc-2.28.patch     | 74 ----------------------
+ 1 file changed, 74 deletions(-)
+ delete mode 100644 package/qt5/qt5base/5.11.1/0003-Fix-qmake-build-with-glibc-2.28.patch
 
-diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
-index abbdbc2bf1..4d1a593a5c 100644
---- a/package/strongswan/strongswan.hash
-+++ b/package/strongswan/strongswan.hash
-@@ -4,5 +4,6 @@ md5	a6a28eeb22aa58080a7581771a5b63f9	strongswan-5.6.3.tar.bz2
- sha256	c3c7dc8201f40625bba92ffd32eb602a8909210d8b3fac4d214c737ce079bf24	strongswan-5.6.3.tar.bz2
- # Locally calculated
- sha256	e66c243593ee0713f5fd13bcd7f624bc50eebc54bf87f790ced429ff698077e7  strongswan-5.6.1-5.6.3_gmp-pkcs1-verify.patch
-+sha256	415d104717cb0781770e9077d00b3df310b11e65e4b9c1d35b62fbba04549263  strongswan-4.4.0-5.7.0_gmp-pkcs1-overflow.patch
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256	2292e21797754548dccdef9eef6aee7584e552fbd890fa914e1de8d3577d23f0  LICENSE
-diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-index 9ef4e183e2..30693de7cb 100644
---- a/package/strongswan/strongswan.mk
-+++ b/package/strongswan/strongswan.mk
-@@ -8,7 +8,8 @@ STRONGSWAN_VERSION = 5.6.3
- STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
- STRONGSWAN_SITE = http://download.strongswan.org
- STRONGSWAN_PATCH = \
--	$(STRONGSWAN_SITE)/patches/27_gmp_pkcs1_verify_patch/strongswan-5.6.1-5.6.3_gmp-pkcs1-verify.patch
-+	$(STRONGSWAN_SITE)/patches/27_gmp_pkcs1_verify_patch/strongswan-5.6.1-5.6.3_gmp-pkcs1-verify.patch \
-+	$(STRONGSWAN_SITE)/patches/28_gmp_pkcs1_overflow_patch/strongswan-4.4.0-5.7.0_gmp-pkcs1-overflow.patch
- STRONGSWAN_LICENSE = GPL-2.0+
- STRONGSWAN_LICENSE_FILES = COPYING LICENSE
- STRONGSWAN_DEPENDENCIES = host-pkgconf
+diff --git a/package/qt5/qt5base/5.11.1/0003-Fix-qmake-build-with-glibc-2.28.patch b/package/qt5/qt5base/5.11.1/0003-Fix-qmake-build-with-glibc-2.28.patch
+deleted file mode 100644
+index 6d8bb28992..0000000000
+--- a/package/qt5/qt5base/5.11.1/0003-Fix-qmake-build-with-glibc-2.28.patch
++++ /dev/null
+@@ -1,74 +0,0 @@
+-From 25feee4e061b99edab79503d81f5bd045c6c8e3d Mon Sep 17 00:00:00 2001
+-From: Thiago Macieira <thiago.macieira@intel.com>
+-Date: Tue, 7 Aug 2018 09:38:42 -0700
+-Subject: [PATCH] Fix qmake build with glibc 2.28
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-We haven't yet run the configure checks to see if statx and renameat2
+-are present in glibc, so this fails when we redefine the structures and
+-functions.
+-
+-linux/stat.h:56:8: error: redefinition of 'struct statx_timestamp'
+-bits/statx.h:25:8: note: previous definition of 'struct statx_timestamp'
+-qfilesystemengine_unix.cpp:110:12: error: 'int renameat2(int, const char*, int, const char*, unsigned int)' was declared 'extern' and later 'static' [-fpermissive]
+-
+-Change-Id: Ia741b559c24d46c78fb2fffd1548a792d22e3368
+-Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@qt.io>
+-Reviewed-by: J?ri Valdmann <juri.valdmann@qt.io>
+-
+-Downloaded from upstream commit
+-http://code.qt.io/cgit/qt/qtbase.git/commit/?id=25feee4e061b99edab79503d81f5bd045c6c8e3d
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- src/corelib/global/qconfig-bootstrapped.h | 12 ++++++++++--
+- src/corelib/io/qfilesystemengine_unix.cpp |  2 +-
+- 2 files changed, 11 insertions(+), 3 deletions(-)
+-
+-diff --git a/src/corelib/global/qconfig-bootstrapped.h b/src/corelib/global/qconfig-bootstrapped.h
+-index 3469ebe5e6..c5585ea32a 100644
+---- a/src/corelib/global/qconfig-bootstrapped.h
+-+++ b/src/corelib/global/qconfig-bootstrapped.h
+-@@ -98,10 +98,18 @@
+- #define QT_NO_QOBJECT
+- #define QT_FEATURE_process -1
+- #define QT_FEATURE_regularexpression -1
+--#define QT_FEATURE_renameat2 -1
+-+#ifdef __GLIBC_PREREQ
+-+# define QT_FEATURE_renameat2 (__GLIBC_PREREQ(2, 28) ? 1 : -1)
+-+#else
+-+# define QT_FEATURE_renameat2 -1
+-+#endif
+- #define QT_FEATURE_sharedmemory -1
+- #define QT_FEATURE_slog2 -1
+--#define QT_FEATURE_statx -1
+-+#ifdef __GLIBC_PREREQ
+-+# define QT_FEATURE_statx (__GLIBC_PREREQ(2, 28) ? 1 : -1)
+-+#else
+-+# define QT_FEATURE_statx -1
+-+#endif
+- #define QT_FEATURE_syslog -1
+- #define QT_NO_SYSTEMLOCALE
+- #define QT_FEATURE_systemsemaphore -1
+-diff --git a/src/corelib/io/qfilesystemengine_unix.cpp b/src/corelib/io/qfilesystemengine_unix.cpp
+-index 0c9cdb8667..deb4a9f220 100644
+---- a/src/corelib/io/qfilesystemengine_unix.cpp
+-+++ b/src/corelib/io/qfilesystemengine_unix.cpp
+-@@ -91,7 +91,6 @@ extern "C" NSString *NSTemporaryDirectory();
+- #  include <sys/syscall.h>
+- #  include <sys/sendfile.h>
+- #  include <linux/fs.h>
+--#  include <linux/stat.h>
+- 
+- // in case linux/fs.h is too old and doesn't define it:
+- #ifndef FICLONE
+-@@ -112,6 +111,7 @@ static int renameat2(int oldfd, const char *oldpath, int newfd, const char *newp
+- #    endif
+- 
+- #    if !QT_CONFIG(statx) && defined(SYS_statx)
+-+#      include <linux/stat.h>
+- static int statx(int dirfd, const char *pathname, int flag, unsigned mask, struct statx *statxbuf)
+- { return syscall(SYS_statx, dirfd, pathname, flag, mask, statxbuf); }
+- #    elif !QT_CONFIG(statx) && !defined(SYS_statx)
+-- 
+2.14.1
