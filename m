@@ -1,53 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 21:45:24 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/apache: security
- bump to version 2.4.35
-Message-ID: <20181005194428.221DC8D5DB@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 22:12:14 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] x265: disable parallel
+ build
+Message-ID: <20181005201118.DF1E48D67C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a7062f437516e7618e36d8a83e776052cbf8740
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a624b5d2a413faec78eca82925e6d81ddc65564a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-Fixes: CVE-2018-11763: mod_http2, DoS via continuous SETTINGS frames
-https://lists.apache.org/thread.html/d435b0267a76501b9e06c552b20c887171064cde38e46d678da4d3dd@%3Cannounce.httpd.apache.org%3E
+It seems package has a parallel build issue on ARM cortex A8 or A9 since
+at least version 2.5:
 
-Release notes:
-https://lists.apache.org/thread.html/5d604774652fc073b1b161584d0d1efbdba7898c40ae2e2334725e5f@%3Cannounce.httpd.apache.org%3E
+[ 94%] Linking CXX shared library libx265.so
+ipfilter8.S.o: file not recognized: File truncated
+collect2: error: ld returned 1 exit status
+CMakeFiles/x265-shared.dir/build.make:221: recipe for target 'libx265.so.160' failed
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes:
+ - http://autobuild.buildroot.org/results/f6ea88324a8f9ac8ee780ddd71ec61f922e20210
+ - http://autobuild.buildroot.org/results/3bd91a5694936650ce936a408ddd50338f65f8b0
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ac22fafdc83e285d305a618ba9655671eadf42cf)
+(cherry picked from commit 03bfbc5ab26c9aed0c0cfce55341a1d1f05deca3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apache/apache.hash | 4 ++--
- package/apache/apache.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/x265/x265.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index 74a48ae914..32743656fd 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,4 +1,4 @@
--# From http://archive.apache.org/dist/httpd/httpd-2.4.34.tar.bz2.sha256
--sha256 fa53c95631febb08a9de41fd2864cfff815cf62d9306723ab0d4b8d7aa1638f0 httpd-2.4.34.tar.bz2
-+# From http://archive.apache.org/dist/httpd/httpd-2.4.35.tar.bz2.sha256
-+sha256 2607c6fdd4d12ac3f583127629291e9432b247b782396a563bec5678aae69b56 httpd-2.4.35.tar.bz2
- # Locally computed
- sha256 c49c0819a726b70142621715dae3159c47b0349c2bc9db079070f28dadac0229 LICENSE
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 14891adbe7..982c6de793 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/x265/x265.mk b/package/x265/x265.mk
+index 0ad27ee006..fe317d09d0 100644
+--- a/package/x265/x265.mk
++++ b/package/x265/x265.mk
+@@ -11,6 +11,7 @@ X265_LICENSE = GPL-2.0+
+ X265_LICENSE_FILES = COPYING
+ X265_SUBDIR = source
+ X265_INSTALL_STAGING = YES
++X265_MAKE = $(MAKE1)
  
--APACHE_VERSION = 2.4.34
-+APACHE_VERSION = 2.4.35
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = http://archive.apache.org/dist/httpd
- APACHE_LICENSE = Apache-2.0
+ ifeq ($(BR2_i386)$(BR2_x86_64),y)
+ X265_DEPENDENCIES += host-nasm
