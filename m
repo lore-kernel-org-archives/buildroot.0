@@ -1,49 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 13:33:58 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] brltty: add license
-Message-ID: <20181005113303.AEADC8D213@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 13:38:31 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] linux-headers: bump 4.{4,
+ 9, 14, 18}.x series
+Message-ID: <20181005113744.AB83C8D218@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84031f9fd314a6ad28350c99944ac2d2fb725f2a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=17eff6f3cbc3bbde568df9602de3060031ad6113
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-brltty 5.5 is licensed under GPL-2.0+ with exceptions in LGPL-2.1+ for
-data and client side as specified in README so add this information in
-BRLTTY_LICENSE, update BRLTTY_LICENSE_FILES and add hash for README
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[Peter: drop 4.18.x change]
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ecf832704bd360f40dc0c898d48c3ea2e8b7fb53)
+(cherry picked from commit aad44932660d6edf80016ea183e7d5b6e35dc1c9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/brltty/brltty.hash | 1 +
- package/brltty/brltty.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/brltty/brltty.hash b/package/brltty/brltty.hash
-index 3bc2f9cf54..01b4c13fcc 100644
---- a/package/brltty/brltty.hash
-+++ b/package/brltty/brltty.hash
-@@ -1,3 +1,4 @@
- sha256 4ebf1df5922df0efccac4795f5bd1c514fc850348c34d9ec0868e2798b565a36 brltty-5.5.tar.xz
- sha256 91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad LICENSE-GPL
- sha256 d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f LICENSE-LGPL
-+sha256 6ba58188449642de8adefd7adabb436185792c5c51a4b5d04650423c2151dc50 README
-diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
-index eb91ef8ff7..a1df343694 100644
---- a/package/brltty/brltty.mk
-+++ b/package/brltty/brltty.mk
-@@ -9,7 +9,8 @@ BRLTTY_SOURCE = brltty-$(BRLTTY_VERSION).tar.xz
- BRLTTY_SITE = http://brltty.com/archive
- BRLTTY_INSTALL_STAGING_OPTS = INSTALL_ROOT=$(STAGING_DIR) install
- BRLTTY_INSTALL_TARGET_OPTS = INSTALL_ROOT=$(TARGET_DIR) install
--BRLTTY_LICENSE_FILES = LICENSE-GPL LICENSE-LGPL
-+BRLTTY_LICENSE = GPL-2.0+, LGPL-2.1+ (data, client side)
-+BRLTTY_LICENSE_FILES = LICENSE-GPL LICENSE-LGPL README
- 
- BRLTTY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-autoconf host-pkgconf
- 
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 1b83c48563..e1b80eefc9 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -266,13 +266,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.156"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.127"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.157"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.128"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+ 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
+-	default "4.14.70"	if BR2_KERNEL_HEADERS_4_14
++	default "4.14.71"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
+ 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
+ 	default "4.17.19"	if BR2_KERNEL_HEADERS_4_17
