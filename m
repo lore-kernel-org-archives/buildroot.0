@@ -1,69 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 22:34:39 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] screen: fix parallel build
-Message-ID: <20181005203343.74C9D8D6D8@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 22:36:08 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] gnupg: drop mandatory
+ dependency on ncurses
+Message-ID: <20181005203512.D6BCD8D6DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd9eb4fd91b259c98f75ab7fa59cac9b599be10f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2a228a83cd83f98e67809a346d77619ec0510d3d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-comm.h is needed to build list_display.o and list_generic.o otherwise
-parallel builds will sometimes fail
+This package only needs ncurses when readline support is enabled, as
+it's the autoconf macro file for readline (used by autoconf to create
+the gnupg configure script) that checks for and pulls in ncurses.
 
-Fixes:
- - http://autobuild.buildroot.org/results/43105f14857dbe72d8878fc7b3db67f7bdca93cc
- - http://autobuild.buildroot.org/results/47f4ecbec1355285633df287fc9c4e7cccde9378
+Since readline already depends on ncurses, gnupg need only depend on
+readline (when enabled).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+The host package always forces readline support off, so the
+host-ncurses dependency can be removed entirely.
+
+Signed-off-by: Trent Piepho <tpiepho@impinj.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 72e6c208094376d668f836d2b6255ab6414025bd)
+(cherry picked from commit 51e17496cc403c49bc20d3a81f9c71a8a20edd0f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...omm.h-needed-for-list_-display-generic-.o.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ package/gnupg/Config.in | 1 -
+ package/gnupg/gnupg.mk  | 4 ++--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/screen/0011-comm.h-needed-for-list_-display-generic-.o.patch b/package/screen/0011-comm.h-needed-for-list_-display-generic-.o.patch
-new file mode 100644
-index 0000000000..f406a1afac
---- /dev/null
-+++ b/package/screen/0011-comm.h-needed-for-list_-display-generic-.o.patch
-@@ -0,0 +1,35 @@
-+From b719314d201a3e9e1e57c65746a468c47bfc847f Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 3 Oct 2018 22:29:32 +0200
-+Subject: [PATCH] comm.h needed for list_{display,generic}.o
-+
-+comm.h is needed to build list_display.o and list_generic.o otherwise
-+parallel builds will sometimes fail
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/43105f14857dbe72d8878fc7b3db67f7bdca93cc
-+ - http://autobuild.buildroot.org/results/47f4ecbec1355285633df287fc9c4e7cccde9378
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://savannah.gnu.org/bugs/index.php?54776]
-+---
-+ Makefile.in | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile.in b/Makefile.in
-+index af5938b..e6d5247 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -265,7 +265,7 @@  braille.h
-+ viewport.o: layout.h viewport.h canvas.h viewport.c config.h screen.h os.h osdef.h ansi.h acls.h \
-+  comm.h layer.h term.h image.h display.h window.h extern.h \
-+  braille.h
-+-list_generic.o: list_generic.h list_generic.c layer.h screen.h osdef.h
-+-list_display.o: list_generic.h list_display.c layer.h screen.h osdef.h
-++list_generic.o: list_generic.h list_generic.c layer.h screen.h osdef.h comm.h
-++list_display.o: list_generic.h list_display.c layer.h screen.h osdef.h comm.h
-+ list_window.o: list_generic.h list_window.c window.h layer.h screen.h osdef.h comm.h
-+ 
-+-- 
-+2.17.1
-+
+diff --git a/package/gnupg/Config.in b/package/gnupg/Config.in
+index 7c31612298..2db46318f1 100644
+--- a/package/gnupg/Config.in
++++ b/package/gnupg/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_GNUPG
+ 	bool "gnupg"
+ 	depends on !BR2_PACKAGE_GNUPG2
+ 	select BR2_PACKAGE_ZLIB
+-	select BR2_PACKAGE_NCURSES
+ 	help
+ 	  GnuPG is the GNU project's complete and free implementation
+ 	  of the OpenPGP standard as defined by RFC4880. GnuPG allows
+diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
+index ac9047894d..bedcf6c985 100644
+--- a/package/gnupg/gnupg.mk
++++ b/package/gnupg/gnupg.mk
+@@ -9,7 +9,7 @@ GNUPG_SOURCE = gnupg-$(GNUPG_VERSION).tar.bz2
+ GNUPG_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG_LICENSE = GPL-3.0+
+ GNUPG_LICENSE_FILES = COPYING
+-GNUPG_DEPENDENCIES = zlib ncurses $(if $(BR2_PACKAGE_LIBICONV),libiconv)
++GNUPG_DEPENDENCIES = zlib $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ GNUPG_CONF_ENV = ac_cv_sys_symbol_underscore=no
+ GNUPG_CONF_OPTS = \
+ 	--disable-rpath \
+@@ -18,7 +18,7 @@ GNUPG_CONF_OPTS = \
+ 	--enable-sha256 \
+ 	--enable-sha512
+ 
+-HOST_GNUPG_DEPENDENCIES = host-zlib host-ncurses
++HOST_GNUPG_DEPENDENCIES = host-zlib
+ HOST_GNUPG_CONF_OPTS = \
+ 	--disable-rpath \
+ 	--enable-minimal \
