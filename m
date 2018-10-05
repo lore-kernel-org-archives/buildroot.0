@@ -1,57 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 13:31:25 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] Makefile: fix issue with
- printvars executing giant shell command
-Message-ID: <20181005113029.7BF9F8D208@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 13:33:17 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] brltty: add license
+Message-ID: <20181005113255.555F08D209@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=afdf97ca768933b8deb5cc30e3b2fa61e55da9b5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6a3a2e13e7bf9528b658392e5764b22f1556dfd5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-The underlying problem is that $(foreach V,1 2 3,) does not evaluate to
-an empty string.  It evaluates to "?? ", three empty strings separated by
-whitespace.
+brltty 5.5 is licensed under GPL-2.0+ with exceptions in LGPL-2.1+ for
+data and client side as specified in README so add this information in
+BRLTTY_LICENSE, update BRLTTY_LICENSE_FILES and add hash for README
 
-A construct of this format, with a giant list in the foreach, is part of
-the printvars command.  This means that "@:$(foreach ....)", which is
-intended to expand to a null command, in fact expands to "@:       "
-with a great deal of whitespace.  Make chooses to execute this command
-with:
-    execve("/bin/sh", ["/bin/sh", "-c", ":       "]
-
-But with far more whitespace.  So much that it can exceed shell command
-line length limits.
-
-This solution is to move the foreach to another step in the recipe.  The
-"@:" is retained as the first line so the recipe is not Empty, which
-would cause a change in make behavior when make builds the target.  The
-2nd line, all whitespace, will be skipped by make.
-
-Signed-off-by: Trent Piepho <tpiepho@impinj.com>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b8d0aadc6d52733cfc914ba3cd6f506238bd19f7)
+(cherry picked from commit ecf832704bd360f40dc0c898d48c3ea2e8b7fb53)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/brltty/brltty.hash | 1 +
+ package/brltty/brltty.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index 5fb26c9733..dc26099fd4 100644
---- a/Makefile
-+++ b/Makefile
-@@ -976,7 +976,8 @@ $(BUILD_DIR)/.br2-external.in: $(BUILD_DIR)
- # displayed.
- .PHONY: printvars
- printvars:
--	@:$(foreach V, \
-+	@:
-+	$(foreach V, \
- 		$(sort $(if $(VARS),$(filter $(VARS),$(.VARIABLES)),$(.VARIABLES))), \
- 		$(if $(filter-out environment% default automatic, \
- 				$(origin $V)), \
+diff --git a/package/brltty/brltty.hash b/package/brltty/brltty.hash
+index 3bc2f9cf54..01b4c13fcc 100644
+--- a/package/brltty/brltty.hash
++++ b/package/brltty/brltty.hash
+@@ -1,3 +1,4 @@
+ sha256 4ebf1df5922df0efccac4795f5bd1c514fc850348c34d9ec0868e2798b565a36 brltty-5.5.tar.xz
+ sha256 91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad LICENSE-GPL
+ sha256 d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f LICENSE-LGPL
++sha256 6ba58188449642de8adefd7adabb436185792c5c51a4b5d04650423c2151dc50 README
+diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
+index df3e9c7888..0fcd4f4258 100644
+--- a/package/brltty/brltty.mk
++++ b/package/brltty/brltty.mk
+@@ -9,7 +9,8 @@ BRLTTY_SOURCE = brltty-$(BRLTTY_VERSION).tar.xz
+ BRLTTY_SITE = http://brltty.com/archive
+ BRLTTY_INSTALL_STAGING_OPTS = INSTALL_ROOT=$(STAGING_DIR) install
+ BRLTTY_INSTALL_TARGET_OPTS = INSTALL_ROOT=$(TARGET_DIR) install
+-BRLTTY_LICENSE_FILES = LICENSE-GPL LICENSE-LGPL
++BRLTTY_LICENSE = GPL-2.0+, LGPL-2.1+ (data, client side)
++BRLTTY_LICENSE_FILES = LICENSE-GPL LICENSE-LGPL README
+ 
+ BRLTTY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-autoconf host-pkgconf \
+ 	$(if $(BR2_PACKAGE_AT_SPI2_CORE),at-spi2-core)
