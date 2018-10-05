@@ -1,53 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 21:44:01 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] package/apache: security
- bump to version 2.4.35
-Message-ID: <20181005194305.EC9DF83832@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 21:42:59 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] ocrad: add license hash
+Message-ID: <20181005194208.C0CE88D5BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f3608c4106fe947dd8b6d3fda93380f4d851d71
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f378d95021984a16a0e5350a01ed7f5eac6a48b2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-Fixes: CVE-2018-11763: mod_http2, DoS via continuous SETTINGS frames
-https://lists.apache.org/thread.html/d435b0267a76501b9e06c552b20c887171064cde38e46d678da4d3dd@%3Cannounce.httpd.apache.org%3E
-
-Release notes:
-https://lists.apache.org/thread.html/5d604774652fc073b1b161584d0d1efbdba7898c40ae2e2334725e5f@%3Cannounce.httpd.apache.org%3E
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ac22fafdc83e285d305a618ba9655671eadf42cf)
+(cherry picked from commit 31e1768150e773b0dcda1096e625b30898e309d2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apache/apache.hash | 4 ++--
- package/apache/apache.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ocrad/ocrad.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index 74a48ae914..32743656fd 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,4 +1,4 @@
--# From http://archive.apache.org/dist/httpd/httpd-2.4.34.tar.bz2.sha256
--sha256 fa53c95631febb08a9de41fd2864cfff815cf62d9306723ab0d4b8d7aa1638f0 httpd-2.4.34.tar.bz2
-+# From http://archive.apache.org/dist/httpd/httpd-2.4.35.tar.bz2.sha256
-+sha256 2607c6fdd4d12ac3f583127629291e9432b247b782396a563bec5678aae69b56 httpd-2.4.35.tar.bz2
- # Locally computed
- sha256 c49c0819a726b70142621715dae3159c47b0349c2bc9db079070f28dadac0229 LICENSE
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index d50e3774ff..3ac317216d 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--APACHE_VERSION = 2.4.34
-+APACHE_VERSION = 2.4.35
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = http://archive.apache.org/dist/httpd
- APACHE_LICENSE = Apache-2.0
+diff --git a/package/ocrad/ocrad.hash b/package/ocrad/ocrad.hash
+index 5f093d241e..5cde4d3ac4 100644
+--- a/package/ocrad/ocrad.hash
++++ b/package/ocrad/ocrad.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated after checking pgp signature
+ sha256 c383d37869baa0990d38d38836d4d567e9e2862aa0cd704868b62dafeac18e3c  ocrad-0.26.tar.lz
++sha256 3d77c1a58fbde5ddba612d1fe09965e20a3804953eca12e8c1892298bb8a5eef  COPYING
