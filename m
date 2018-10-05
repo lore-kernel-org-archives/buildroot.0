@@ -1,45 +1,123 @@
 From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Fri,  5 Oct 2018 15:30:18 +0200
-Subject: [Buildroot] [PATCH 1/2] package/cups-filters: bump to version 1.21.3
-Message-ID: <20181005133019.1061-1-olivier.schonken@gmail.com>
+Date: Fri,  5 Oct 2018 15:30:19 +0200
+Subject: [Buildroot] [PATCH 2/2] package/cups-filters: Add patch to fix
+ build when using poppler 0.69.0
+In-Reply-To: <20181005133019.1061-1-olivier.schonken@gmail.com>
+References: <20181005133019.1061-1-olivier.schonken@gmail.com>
+Message-ID: <20181005133019.1061-2-olivier.schonken@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This patch lets cups-filters only use gMemReport and memCheck functions
+if poppler version less than 0.69.0
+
+The poppler project removed the memCheck and gMemReport functions in
+commits c362ab1b97f20c5b73b3bad8d52015f679178748 - Remove DEBUG_MEM
+from Object since this uses RAII now and hence cannot leak.
+(The existing tracking also is not thread-safe and hence unreliable.)
+
+and
+
+f89446f6917a869b0f1a80fcc8ce81a7213dade4 - Remove generic heap debugging
+from gmem since external tools and compiler instrumentation achieve the
+same effect.
+
+A pull-request for the patch has also been created upstream at
+https://github.com/OpenPrinting/cups-filters/pull/66
+
 Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
 ---
- package/cups-filters/cups-filters.hash | 4 ++--
- package/cups-filters/cups-filters.mk   | 3 ++-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ ...ed-memCheck-and-gMemReport-functions.patch | 79 +++++++++++++++++++
+ 1 file changed, 79 insertions(+)
+ create mode 100644 package/cups-filters/0002-Poppler-removed-memCheck-and-gMemReport-functions.patch
 
-diff --git a/package/cups-filters/cups-filters.hash b/package/cups-filters/cups-filters.hash
-index 7bb00818df..e426ad8b86 100644
---- a/package/cups-filters/cups-filters.hash
-+++ b/package/cups-filters/cups-filters.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 aad95e35033154f54639923b439e0657fc9f616b9eac7490df89514362551f98  cups-filters-1.20.3.tar.gz
--sha256 24cc91478ca68d6d982dfd86181210ad5f0931ec431bdb740793e3d6555fdcd8  COPYING
-+sha256 981b280bc5275a21c6f436aff6207e03cab36dc304c119bbac507db940e7421c  cups-filters-1.21.3.tar.gz
-+sha256 8e697cf4681ebbca716bf8cc30dde51c264e32ceee41fa63ceb5213334204b83  COPYING
-diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
-index 131e58246e..b7f002f418 100644
---- a/package/cups-filters/cups-filters.mk
-+++ b/package/cups-filters/cups-filters.mk
-@@ -4,10 +4,11 @@
- #
- ################################################################################
- 
--CUPS_FILTERS_VERSION = 1.20.3
-+CUPS_FILTERS_VERSION = 1.21.3
- CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
- CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
- CUPS_FILTERS_LICENSE_FILES = COPYING
-+CUPS_FILTERS_AUTORECONF = YES
- 
- CUPS_FILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf fontconfig freetype jpeg
- 
+diff --git a/package/cups-filters/0002-Poppler-removed-memCheck-and-gMemReport-functions.patch b/package/cups-filters/0002-Poppler-removed-memCheck-and-gMemReport-functions.patch
+new file mode 100644
+index 0000000000..3eb2d35c3e
+--- /dev/null
++++ b/package/cups-filters/0002-Poppler-removed-memCheck-and-gMemReport-functions.patch
+@@ -0,0 +1,79 @@
++From 6b0747c1630dd973acd138f927dbded4ea45e360 Mon Sep 17 00:00:00 2001
++From: Olivier Schonken <olivier.schonken@gmail.com>
++Date: Fri, 5 Oct 2018 12:05:31 +0200
++Subject: [PATCH] Poppler removed memCheck and gMemReport functions
++
++Only use gMemReport and memCheck functions if poppler version less
++than 0.69.0
++
++The poppler project removed the memCheck and gMemReport functions in
++commits c362ab1b97f20c5b73b3bad8d52015f679178748 - Remove DEBUG_MEM
++from Object since this uses RAII now and hence cannot leak.
++(The existing tracking also is not thread-safe and hence unreliable.)
++
++and
++
++f89446f6917a869b0f1a80fcc8ce81a7213dade4 - Remove generic heap debugging
++from gmem since external tools and compiler instrumentation achieve the
++same effect.
++
++This commit solves https://github.com/OpenPrinting/cups-filters/issues/62
++
++Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
++---
++ filter/pdftoijs.cxx            | 2 ++
++ filter/pdftoopvp/pdftoopvp.cxx | 2 ++
++ filter/pdftoraster.cxx         | 2 ++
++ 3 files changed, 6 insertions(+)
++
++diff --git a/filter/pdftoijs.cxx b/filter/pdftoijs.cxx
++index 22bc33f4..dd6b6fa0 100644
++--- a/filter/pdftoijs.cxx
+++++ b/filter/pdftoijs.cxx
++@@ -503,9 +503,11 @@ err1:
++   ppdClose(ppd);
++   free(outputfile);
++ 
+++#if POPPLER_VERSION_MAJOR == 0 && POPPLER_VERSION_MINOR < 69
++   // Check for memory leaks
++   Object::memCheck(stderr);
++   gMemReport(stderr);
+++#endif
++ 
++   return exitCode;
++ }
++diff --git a/filter/pdftoopvp/pdftoopvp.cxx b/filter/pdftoopvp/pdftoopvp.cxx
++index 024941ab..bf25983b 100644
++--- a/filter/pdftoopvp/pdftoopvp.cxx
+++++ b/filter/pdftoopvp/pdftoopvp.cxx
++@@ -763,9 +763,11 @@ err2:
++  err0:
++   delete globalParams;
++ 
+++#if POPPLER_VERSION_MAJOR == 0 && POPPLER_VERSION_MINOR < 69
++   // check for memory leaks
++   Object::memCheck(stderr);
++   gMemReport(stderr);
+++#endif
++ 
++ }
++ /* muntrace(); */
++diff --git a/filter/pdftoraster.cxx b/filter/pdftoraster.cxx
++index 0c63ab8d..4ebf02b0 100644
++--- a/filter/pdftoraster.cxx
+++++ b/filter/pdftoraster.cxx
++@@ -2162,9 +2162,11 @@ err1:
++     cmsDeleteTransform(colorTransform);
++   }
++ 
+++#if POPPLER_VERSION_MAJOR == 0 && POPPLER_VERSION_MINOR < 69
++   // Check for memory leaks
++   Object::memCheck(stderr);
++   gMemReport(stderr);
+++#endif
++ 
++   return exitCode;
++ }
++-- 
++2.17.1
++
 -- 
 2.17.1
