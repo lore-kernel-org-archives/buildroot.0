@@ -1,29 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 21:43:14 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] ocrad: add license hash
-Message-ID: <20181005194223.0F3D78D558@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 20:25:26 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] domoticz: depends on gcc
+ >= 4.8
+Message-ID: <20181005182431.F41218D3F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e9ddee511fc249e77deffe74c12d9f4bcaddcf8
+commit: https://git.buildroot.net/buildroot/commit/?id=3b3074ca268e18893cfb60681a84c04b556076be
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 31e1768150e773b0dcda1096e625b30898e309d2)
+sleep_for is not always defined with gcc <= 4.7, see
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=52680
+
+To fix this issue, add a dependency to gcc >= 4.8
+
+Fixes:
+ - http://autobuild.buildroot.net/results/0dada8dd727f32a4500670f6620adb05943ed0b7
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 5208e9507f5fa33e7f584815d53dac551e449a63)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ocrad/ocrad.hash | 1 +
- 1 file changed, 1 insertion(+)
+ package/domoticz/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/ocrad/ocrad.hash b/package/ocrad/ocrad.hash
-index 5f093d241e..5cde4d3ac4 100644
---- a/package/ocrad/ocrad.hash
-+++ b/package/ocrad/ocrad.hash
-@@ -1,2 +1,3 @@
- # Locally calculated after checking pgp signature
- sha256 c383d37869baa0990d38d38836d4d567e9e2862aa0cd704868b62dafeac18e3c  ocrad-0.26.tar.lz
-+sha256 3d77c1a58fbde5ddba612d1fe09965e20a3804953eca12e8c1892298bb8a5eef  COPYING
+diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
+index 530027f273..4c5338df0a 100644
+--- a/package/domoticz/Config.in
++++ b/package/domoticz/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_DOMOTICZ
+ 	depends on BR2_USE_MMU # mosquitto
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # mosquitto
+ 	depends on !BR2_STATIC_LIBS # mosquitto
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # sleep_for
+ 	# pthread_condattr_setclock
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_INSTALL_LIBSTDCPP
+@@ -27,10 +28,11 @@ config BR2_PACKAGE_DOMOTICZ
+ 
+ 	  http://domoticz.com
+ 
+-comment "domoticz needs lua >= 5.2 and a toolchain w/ C++, NPTL, wchar, dynamic library"
++comment "domoticz needs lua >= 5.2 and a toolchain w/ C++, gcc >= 4.8, NPTL, wchar, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+ 		!BR2_USE_WCHAR || BR2_STATIC_LIBS || \
+ 		!(BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3)
