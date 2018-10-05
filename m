@@ -1,108 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 15:17:08 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] brotli: new package
-Message-ID: <20181005174039.02D1E8D3E4@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 21:44:01 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] package/apache: security
+ bump to version 2.4.35
+Message-ID: <20181005194305.EC9DF83832@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=796344c283975bf23290bbd0119d37e3788252d7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0f3608c4106fe947dd8b6d3fda93380f4d851d71
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-Add the brotli package to Buildroot. This is needed by woff2, which in
-turn is needed by webkitgtk from version 2.20.0 onwards. WebKitGTK+ used
-to bundle a copy of the library, but it stopped doing so now that the
-upstream has started making releases.
+Fixes: CVE-2018-11763: mod_http2, DoS via continuous SETTINGS frames
+https://lists.apache.org/thread.html/d435b0267a76501b9e06c552b20c887171064cde38e46d678da4d3dd@%3Cannounce.httpd.apache.org%3E
 
-[Peter: fix license hash]
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Release notes:
+https://lists.apache.org/thread.html/5d604774652fc073b1b161584d0d1efbdba7898c40ae2e2334725e5f@%3Cannounce.httpd.apache.org%3E
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-(cherry picked from commit 4f634160b2a106f7e34b4bb018b34e77c8dda2a9)
+(cherry picked from commit ac22fafdc83e285d305a618ba9655671eadf42cf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/brotli/Config.in   | 12 ++++++++++++
- package/brotli/brotli.hash |  5 +++++
- package/brotli/brotli.mk   | 17 +++++++++++++++++
- 5 files changed, 36 insertions(+)
+ package/apache/apache.hash | 4 ++--
+ package/apache/apache.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 909b4cedfe..6ab8097b43 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -60,6 +60,7 @@ F:	package/setools/
- F:	package/sngrep/
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index 74a48ae914..32743656fd 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
+@@ -1,4 +1,4 @@
+-# From http://archive.apache.org/dist/httpd/httpd-2.4.34.tar.bz2.sha256
+-sha256 fa53c95631febb08a9de41fd2864cfff815cf62d9306723ab0d4b8d7aa1638f0 httpd-2.4.34.tar.bz2
++# From http://archive.apache.org/dist/httpd/httpd-2.4.35.tar.bz2.sha256
++sha256 2607c6fdd4d12ac3f583127629291e9432b247b782396a563bec5678aae69b56 httpd-2.4.35.tar.bz2
+ # Locally computed
+ sha256 c49c0819a726b70142621715dae3159c47b0349c2bc9db079070f28dadac0229 LICENSE
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index d50e3774ff..3ac317216d 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Adrian Perez de Castro <aperez@igalia.com>
-+F:	package/brotli/
- F:	package/libepoxy/
- F:	package/webkitgtk/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 189909dbdf..6f619e72b1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -63,6 +63,7 @@ menu "Audio and video applications"
- endmenu
- 
- menu "Compressors and decompressors"
-+	source "package/brotli/Config.in"
- 	source "package/bzip2/Config.in"
- 	source "package/gzip/Config.in"
- 	source "package/lz4/Config.in"
-diff --git a/package/brotli/Config.in b/package/brotli/Config.in
-new file mode 100644
-index 0000000000..e40f5b6b9f
---- /dev/null
-+++ b/package/brotli/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_BROTLI
-+	bool "brotli"
-+	help
-+	  Generic-purpose lossless compression library. The algorithm
-+	  compresses data using a combination of a modern variant of
-+	  the LZ77 algorithm, Huffman coding and 2nd order context
-+	  modeling, with a compression ratio comparable to the best
-+	  currently available general-purpose compression methods. It
-+	  is similar in speed with deflate but offers more dense
-+	  compression.
-+
-+	  https://github.com/google/brotli
-diff --git a/package/brotli/brotli.hash b/package/brotli/brotli.hash
-new file mode 100644
-index 0000000000..954d44eb70
---- /dev/null
-+++ b/package/brotli/brotli.hash
-@@ -0,0 +1,5 @@
-+# Locally generated:
-+sha512  93adcf437d730ac403e444285ac8aefbb2c8a6b5e1b064e8ee33684c067287a8159e0ee73d2217c167881e87da73fa494792d963a15508fd42b2ac4a5b52823c  v1.0.3.tar.gz
-+
-+# Hash for license files:
-+sha512  bae78184c2f50f86d8c727826d3982c469454c42b9af81f4ef007e39036434fa894cf5be3bf5fc65b7de2301f0a72d067a8186e303327db8a96bd14867e0a3a8  LICENSE
-diff --git a/package/brotli/brotli.mk b/package/brotli/brotli.mk
-new file mode 100644
-index 0000000000..cf1e811543
---- /dev/null
-+++ b/package/brotli/brotli.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# brotli
-+#
-+################################################################################
-+
-+BROTLI_VERSION = 1.0.3
-+BROTLI_SOURCE = v$(BROTLI_VERSION).tar.gz
-+BROTLI_SITE = https://github.com/google/brotli/archive
-+BROTLI_LICENSE = MIT
-+BROTLI_LICENSE_FILES = LICENSE
-+BROTLI_INSTALL_STAGING = YES
-+BROTLI_CONF_OPTS = \
-+	-DBROTLI_DISABLE_TESTS=ON \
-+	-DBROTLI_BUNDLED_MODE=OFF
-+
-+$(eval $(cmake-package))
+-APACHE_VERSION = 2.4.34
++APACHE_VERSION = 2.4.35
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = http://archive.apache.org/dist/httpd
+ APACHE_LICENSE = Apache-2.0
