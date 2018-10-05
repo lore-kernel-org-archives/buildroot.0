@@ -1,47 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 20:34:44 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] nilfs-utils: no comment
- if BR2_USE_MMU is true
-Message-ID: <20181005183348.1846E8D49B@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 21:59:24 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] strongswan: add upstream
+ security fix for CVE-2018-17540
+Message-ID: <20181005200007.E6A328D671@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=182d084c56331ecb03030b79243880db8f50ebc8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2e886ffdf953276d0a1b1466cf6e12be6902a12d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Don't display comment if BR2_USE_MMU is true
-Moreover, move BR2_USE_MMU dependency at the top of dependency list
+The fix for CVE-2018-16151 / 16152 contained an exploitable bug.
+For details, see:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Acked-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+https://www.strongswan.org/blog/2018/10/01/strongswan-vulnerability-(cve-2018-17540).html
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0dbab1bb45d0eb1bf37e693b0ad9ca95831d5180)
+(cherry picked from commit 040cf15a8760c91f82b61a3e2cadf1b91b7c45af)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nilfs-utils/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/strongswan/strongswan.hash | 1 +
+ package/strongswan/strongswan.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/nilfs-utils/Config.in b/package/nilfs-utils/Config.in
-index e49cab369b..e245dc4656 100644
---- a/package/nilfs-utils/Config.in
-+++ b/package/nilfs-utils/Config.in
-@@ -1,8 +1,8 @@
- config BR2_PACKAGE_NILFS_UTILS
- 	bool "nilfs-utils"
-+	depends on BR2_USE_MMU # util-linux libmount, libblkid
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # sem_open()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # clock_nanosleep()
--	depends on BR2_USE_MMU # util-linux libmount, libblkid
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
-@@ -13,5 +13,6 @@ config BR2_PACKAGE_NILFS_UTILS
- 	  https://github.com/nilfs-dev/nilfs-utils
- 
- comment "nilfs-utils needs a toolchain w/ threads, NPTL"
-+	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL
+diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
+index abbdbc2bf1..4d1a593a5c 100644
+--- a/package/strongswan/strongswan.hash
++++ b/package/strongswan/strongswan.hash
+@@ -4,5 +4,6 @@ md5	a6a28eeb22aa58080a7581771a5b63f9	strongswan-5.6.3.tar.bz2
+ sha256	c3c7dc8201f40625bba92ffd32eb602a8909210d8b3fac4d214c737ce079bf24	strongswan-5.6.3.tar.bz2
+ # Locally calculated
+ sha256	e66c243593ee0713f5fd13bcd7f624bc50eebc54bf87f790ced429ff698077e7  strongswan-5.6.1-5.6.3_gmp-pkcs1-verify.patch
++sha256	415d104717cb0781770e9077d00b3df310b11e65e4b9c1d35b62fbba04549263  strongswan-4.4.0-5.7.0_gmp-pkcs1-overflow.patch
+ sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256	2292e21797754548dccdef9eef6aee7584e552fbd890fa914e1de8d3577d23f0  LICENSE
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index 9ef4e183e2..30693de7cb 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
+@@ -8,7 +8,8 @@ STRONGSWAN_VERSION = 5.6.3
+ STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
+ STRONGSWAN_SITE = http://download.strongswan.org
+ STRONGSWAN_PATCH = \
+-	$(STRONGSWAN_SITE)/patches/27_gmp_pkcs1_verify_patch/strongswan-5.6.1-5.6.3_gmp-pkcs1-verify.patch
++	$(STRONGSWAN_SITE)/patches/27_gmp_pkcs1_verify_patch/strongswan-5.6.1-5.6.3_gmp-pkcs1-verify.patch \
++	$(STRONGSWAN_SITE)/patches/28_gmp_pkcs1_overflow_patch/strongswan-4.4.0-5.7.0_gmp-pkcs1-overflow.patch
+ STRONGSWAN_LICENSE = GPL-2.0+
+ STRONGSWAN_LICENSE_FILES = COPYING LICENSE
+ STRONGSWAN_DEPENDENCIES = host-pkgconf
