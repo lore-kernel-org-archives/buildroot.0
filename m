@@ -1,77 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 22:02:50 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] lua: fix dynamic library
- install
-Message-ID: <20181005200315.47DD78D67B@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 20:40:05 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] package/ghostscript: fix
+ removal of included lcms2
+Message-ID: <20181005183911.F0AFA8D4B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cea60ba7feb6044375bc1ce62a849a05bce17795
+commit: https://git.buildroot.net/buildroot/commit/?id=e926a221ddc373eaafead82119e2cca8c99233af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-In 0002-shared-libs-for-lua.patch, revision number is used to set
-library name:
-TO_SOLIB = liblua.so.$(R)
+Ghostscript 9.24 changed the internal lcms2 version:
+https://www.ghostscript.com/doc/9.24/News.htm
 
-However, library is built using PKG_VERSION which is passed only during
-build step:
-$(CC) -o $@.$(PKG_VERSION) -shared -Wl,-soname="$@.$(PKG_VERSION)" $?
+With this change the directory name was also changed which broke our
+code to force the usage of the buildroot lcms2 package.
 
-As a result, dynamic library is not installed in staging or target paths
-since bump to lua 5.3.5
+Fixes
+http://autobuild.buildroot.net/results/d04/d04ad017bf06a442a7397f935959994ba72824e1/
 
-So, instead of replacing R by PKG_VERSION and passing this variable in
-all steps, simply update R to 5
-
-Fixes:
- - http://autobuild.buildroot.net/results/28b6672188bb0082ac1467d3b45904880e3634f3
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Acked-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ca287f204426446fd782544131429030c4825f0e)
+(cherry picked from commit d5f83cfc885c4a9ea6d35d38b7d5a8eaf725aee2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lua/5.3.5/0003-fix-revision-number.patch | 31 ++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ package/ghostscript/ghostscript.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lua/5.3.5/0003-fix-revision-number.patch b/package/lua/5.3.5/0003-fix-revision-number.patch
-new file mode 100644
-index 0000000000..ed2e0460eb
---- /dev/null
-+++ b/package/lua/5.3.5/0003-fix-revision-number.patch
-@@ -0,0 +1,31 @@
-+Fix revision number
-+
-+In 0002-shared-libs-for-lua.patch, revision number is used to set 
-+library name:
-+TO_SOLIB = liblua.so.$(R)
-+
-+However, library is built using PKG_VERSION which is passed only during
-+build step:
-+$(CC) -o $@.$(PKG_VERSION) -shared -Wl,-soname="$@.$(PKG_VERSION)" $?
-+
-+As a result, dynamic library is not installed in staging or target paths
-+since bump to lua 5.3.5
-+
-+So, instead of replacing R by PKG_VERSION and passing this variable in
-+all steps, simply update R to 5
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+
-+Index: b/Makefile
-+===================================================================
-+--- a/Makefile
-++++ b/Makefile
-+@@ -47,6 +47,6 @@
-+
-+ # Lua version and release.
-+ V= 5.3
-+-R= $V.4
-++R= $V.5
-+
-+ # Targets start here.
-+ all:    $(PLAT)
+diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+index 9b5e144888..b1f5e1edb1 100644
+--- a/package/ghostscript/ghostscript.mk
++++ b/package/ghostscript/ghostscript.mk
+@@ -27,8 +27,8 @@ GHOSTSCRIPT_DEPENDENCIES = \
+ # Inspired by linuxfromscratch:
+ # http://www.linuxfromscratch.org/blfs/view/svn/pst/gs.html
+ define GHOSTSCRIPT_REMOVE_LIBS
+-	rm -rf $(@D)/freetype $(@D)/ijs $(@D)/jpeg $(@D)/lcms2 \
+-		$(@D)/lcms2art $(@D)/libpng $(@D)/tiff $(@D)/zlib
++	rm -rf $(@D)/freetype $(@D)/ijs $(@D)/jpeg $(@D)/lcms2mt \
++		$(@D)/libpng $(@D)/tiff $(@D)/zlib
+ endef
+ GHOSTSCRIPT_POST_PATCH_HOOKS += GHOSTSCRIPT_REMOVE_LIBS
+ 
