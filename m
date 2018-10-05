@@ -1,26 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 05 Oct 2018 21:49:48 +0200
-Subject: [Buildroot] [PATCH 1/1] mosquitto: security bump to version
- 1.5.3
-In-Reply-To: <20180928212207.21878-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 28 Sep 2018 23:22:07 +0200")
-References: <20180928212207.21878-1-fontaine.fabrice@gmail.com>
-Message-ID: <87murs18df.fsf@dell.be.48ers.dk>
+Date: Fri, 05 Oct 2018 22:33:27 +0200
+Subject: [Buildroot] [PATCH 1/1] package/clamav: security bump to 0.100.2
+In-Reply-To: <20181003181652.10925-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Wed, 3 Oct 2018 20:16:52 +0200")
+References: <20181003181652.10925-1-bernd.kuhls@t-online.de>
+Message-ID: <87o9c8yvzc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Fix CVE-2018-12543. If a message is sent to Mosquitto with a topic that
- > begins with $, but is not $SYS, then an assert that should be unreachable is
- > triggered and Mosquitto will exit.
+ > Fixes CVE-2018-15378, CVE-2018-14680, CVE-2018-14681 & CVE-2018-14682:
+ > http://lists.clamav.net/pipermail/clamav-announce/2018/000033.html
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Committed to 2018.08.x, thanks.
+Committed to 2018.02.x, 2018.05.x and 2018.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
