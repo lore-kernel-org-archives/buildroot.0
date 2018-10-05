@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 14:03:55 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] imlib2: update license
-Message-ID: <20181005120259.881C28D312@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 14:04:01 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] imlib2: update license
+Message-ID: <20181005120305.C666E8D317@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e807ae6a9e35eb4d69ba506f6d38ac93f630bd2e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=bae8e78df8944cff19866a65938c61724cfde3ba
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 - Use SPDX short identifier (Imlib2) instead of full name
 - Add COPYING-PLAIN to license files
