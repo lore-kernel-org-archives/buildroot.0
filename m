@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 22:34:25 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] screen: fix parallel build
-Message-ID: <20181005203330.2564F8D6D0@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 22:34:39 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] screen: fix parallel build
+Message-ID: <20181005203343.74C9D8D6D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=458db0ea426fcf7391a10b58ba6b79997f170a29
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=cd9eb4fd91b259c98f75ab7fa59cac9b599be10f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 comm.h is needed to build list_display.o and list_generic.o otherwise
 parallel builds will sometimes fail
