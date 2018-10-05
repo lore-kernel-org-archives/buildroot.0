@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 13:41:42 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] boot/at91bootstrap3: add
+Date: Fri, 5 Oct 2018 13:41:49 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] boot/at91bootstrap3: add
  upstream URL in Config.in help text
-Message-ID: <20181005114046.D91858D240@busybox.osuosl.org>
+Message-ID: <20181005114053.B62018D245@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=268bbc59769b5b1dc57f662064295861005ef64f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=05297575a068abb890f6f80a2ff7bdf0e7d97058
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
