@@ -1,26 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 05 Oct 2018 22:34:55 +0200
-Subject: [Buildroot] [PATCH 1/1] screen: fix parallel build
-In-Reply-To: <20181003210624.3085-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 3 Oct 2018 23:06:24 +0200")
-References: <20181003210624.3085-1-fontaine.fabrice@gmail.com>
-Message-ID: <87k1mwyvww.fsf@dell.be.48ers.dk>
+Date: Fri, 05 Oct 2018 22:37:04 +0200
+Subject: [Buildroot] [PATCH v2] gnupg: Package only needs ncurses with
+ readline
+In-Reply-To: <20181003002517.27064-1-tpiepho@impinj.com> (Trent Piepho's
+ message of "Wed, 3 Oct 2018 00:25:48 +0000")
+References: <20181003002517.27064-1-tpiepho@impinj.com>
+Message-ID: <87ftxkyvtb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Trent" == Trent Piepho <tpiepho@impinj.com> writes:
 
- > comm.h is needed to build list_display.o and list_generic.o otherwise
- > parallel builds will sometimes fail
+ > This package only needs ncurses when readline support is enabled, as it's the
+ > autoconf macro file for readline (used by autoconf to create the gnupg configure
+ > script) that checks for and pulls in ncurses.
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/43105f14857dbe72d8878fc7b3db67f7bdca93cc
- >  - http://autobuild.buildroot.org/results/47f4ecbec1355285633df287fc9c4e7cccde9378
+ > Since readline already depends on ncurses, gnupg need only depend on
+ > readline (when enabled).
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > The host package always forces readline support off, so the host-ncurses
+ > dependency can be removed entirely.
+
+ > Signed-off-by: Trent Piepho <tpiepho@impinj.com>
 
 Committed to 2018.02.x, 2018.05.x and 2018.08.x, thanks.
 
