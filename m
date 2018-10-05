@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 13:54:00 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] cppcms: fix license
-Message-ID: <20181005115307.3181D8D298@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 13:54:09 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] cppcms: fix license
+Message-ID: <20181005115315.4C1DC7FF75@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=388752d1a2fa4becf1ee2089ec8fbd1d871b7932
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=949184518d61ebe1dfec510885778784c1341009
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 cppcms contains embedded third party software so add
 THIRD_PARTY_SOFTWARE.TXT to CPPCMS_LICENSE_FILES as well as the
