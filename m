@@ -1,24 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 05 Oct 2018 13:54:35 +0200
-Subject: [Buildroot] [PATCH 1/2] cppcms: fix license
-In-Reply-To: <20180918213404.27239-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 18 Sep 2018 23:34:03 +0200")
-References: <20180918213404.27239-1-fontaine.fabrice@gmail.com>
-Message-ID: <87a7ns622s.fsf@dell.be.48ers.dk>
+Date: Fri, 05 Oct 2018 13:58:00 +0200
+Subject: [Buildroot] [PATCH v2 1/1] libxslt: point to the correct
+ xml2-config location
+In-Reply-To: <20180921145836.30424-1-ferdinand@ombud.nl> (Ferdinand van
+ Aartsen's message of "Fri, 21 Sep 2018 16:58:36 +0200")
+References: <20180921145836.30424-1-ferdinand@ombud.nl>
+Message-ID: <875zyg61x3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Ferdinand" == Ferdinand van Aartsen <ferdinand@ombud.nl> writes:
 
- > cppcms contains embedded third party software so add
- > THIRD_PARTY_SOFTWARE.TXT to CPPCMS_LICENSE_FILES as well as the
- > additional licenses to CPPCMS_LICENSE.
- > Also add hash for COPYING.TXT and THIRD_PARTY_SOFTWARE.TXT
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Currently libxslt configure finds native /usr/bin/xml2-config.
+ > Signed-off-by: Ferdinand van Aartsen <ferdinand@ombud.nl>
+ > ---
+ > Changes v1 -> v2:
+ >   - Title format change (requested by Thomas).
+ >   - Drop the unneeded host changes.
 
 Committed to 2018.02.x, 2018.05.x and 2018.08.x, thanks.
 
