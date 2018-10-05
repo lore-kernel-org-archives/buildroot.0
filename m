@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 13:56:55 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] libxslt: point to the
+Date: Fri, 5 Oct 2018 13:57:14 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] libxslt: point to the
  correct xml2-config location
-Message-ID: <20181005115559.B3CF48D2A1@busybox.osuosl.org>
+Message-ID: <20181005115635.8D5FF8D2A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=442392830b7681aae57defed3d658692e28c60a8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c44cc1c649811e5070a62f8579d6928ec153376f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Currently libxslt configure finds native /usr/bin/xml2-config.
 
@@ -23,7 +23,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
-index 972d5b80d5..5b1c0ae268 100644
+index f05bc5a70a..ae58e14a0e 100644
 --- a/package/libxslt/libxslt.mk
 +++ b/package/libxslt/libxslt.mk
 @@ -13,7 +13,8 @@ LIBXSLT_LICENSE_FILES = COPYING
