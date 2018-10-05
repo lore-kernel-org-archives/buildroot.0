@@ -1,22 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 05 Oct 2018 14:01:09 +0200
-Subject: [Buildroot] [PATCH 1/2] igmpproxy: fix license
-In-Reply-To: <20180921212907.17677-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 21 Sep 2018 23:29:06 +0200")
-References: <20180921212907.17677-1-fontaine.fabrice@gmail.com>
-Message-ID: <87woqw4n7e.fsf@dell.be.48ers.dk>
+Date: Fri, 05 Oct 2018 14:03:05 +0200
+Subject: [Buildroot] [PATCH v2 1/1] libesmtp: update/fix site URL
+In-Reply-To: <20180925144848.5965-1-m.patzlaff@pilz.de> (Marcel Patzlaff's
+ message of "Tue, 25 Sep 2018 16:48:48 +0200")
+References: <20180925144848.5965-1-m.patzlaff@pilz.de>
+Message-ID: <87sh1k4n46.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Marcel" == Marcel Patzlaff <m.patzlaff@pilz.de> writes:
 
- > mrouted part of igmpproxy is licensed under BSD-3-Clause so add this in
- > IGMPPROXY_LICENSE and add hash for license files
+ > The old URL was not working for quite some time.
+ > Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ > Changes v1 -> v2:
+ >   - also changed URL in Config.in
 
 Committed to 2018.02.x, 2018.05.x and 2018.08.x, thanks.
 
