@@ -1,28 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 05 Oct 2018 13:27:39 +0200
-Subject: [Buildroot] [PATCH] dtc: Fix segfault reading powernv device
- tree
-In-Reply-To: <20180918035750.17651-1-joel@jms.id.au> (Joel Stanley's message
- of "Tue, 18 Sep 2018 13:27:50 +0930")
-References: <20180918035750.17651-1-joel@jms.id.au>
-Message-ID: <87h8i07hw4.fsf@dell.be.48ers.dk>
+Date: Fri, 05 Oct 2018 13:31:57 +0200
+Subject: [Buildroot] [PATCH v2] Fix issue with printvars executing giant
+ shell command
+In-Reply-To: <20180917181054.14616-1-tpiepho@impinj.com> (Trent Piepho's
+ message of "Mon, 17 Sep 2018 11:10:54 -0700")
+References: <20180917181054.14616-1-tpiepho@impinj.com>
+Message-ID: <87d0so7hoy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Joel" == Joel Stanley <joel@jms.id.au> writes:
+>>>>> "Trent" == Trent Piepho <tpiepho@impinj.com> writes:
 
- > When running this command on a powernv machine, dtc crashes:
- >  dtc -f -I fs -O dts /sys/firmware/devicetree
+ > The underlying problem is that $(foreach V,1 2 3,) does not evaluate to
+ > an empty string.  It evaluates to "? ", three empty strings separated by
+ > whitespace.
 
- > Upstream has fixed the segfault but have not made a release yet so we
- > add the patch for now.
+ > A construct of this format, with a giant list in the foreach, is part of
+ > the printvars command.  This means that "@:$(foreach ....)", which is
+ > intended to expand to a null command, in fact expands to "@:       "
+ > with a great deal of whitespace.  Make chooses to execute this command
+ > with:
+ >     execve("/bin/sh", ["/bin/sh", "-c", ":       "]
 
- > Signed-off-by: Joel Stanley <joel@jms.id.au>
+ > But with far more whitespace.  So much that it can exceed shell command
+ > line length limits.
 
-Committed to 2018.08.x, thanks.
+ > This solution is to move the foreach to another step in the recipe.  The
+ > "@:" is retained as the first line so the recipe is not Empty, which
+ > would cause a change in make behavior when make builds the target.  The
+ > 2nd line, all whitespace, will be skipped by make.
+
+ > Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+
+Committed to 2018.02.x, 2018.05.x and 2018.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
