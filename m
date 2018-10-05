@@ -1,62 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 21:38:16 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] bind: security bump to
- version 9.11.4-P2
-Message-ID: <20181005193721.45C9B8D550@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 21:43:04 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] httping: add license hash
+Message-ID: <20181005194208.C883F8D5BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=479e15d57f96903fb67f2ae9d1d75bb4b918ba33
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8baa3b8ff8d24e7a04a9aeea3dd2291b8ad2cc89
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-From the release notes
-(http://ftp.isc.org/isc/bind9/9.11.4-P2/RELEASE-NOTES-bind-9.11.4-P2.txt):
-
- * There was a long-existing flaw in the documentation for ms-self,
-   krb5-self, ms-subdomain, and krb5-subdomain rules in update-policy
-   statements.  Though the policies worked as intended, operators who
-   configured their servers according to the misleading documentation may
-   have thought zone updates were more restricted than they were; users of
-   these rule types are advised to review the documentation and correct
-   their configurations if necessary.  New rule types matching the
-   previously documented behavior will be introduced in a future maintenance
-   release.  [GL !708]
-
- * named could crash during recursive processing of DNAME records when
-   deny-answer-aliases was in use.  This flaw is disclosed in CVE-2018-5740.
-   [GL #387]
-
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 63eb34fa121c4e7448dd5ec25491ed742a7ca262)
+(cherry picked from commit 1e2ca0455e6fddb86b75d2b1422f228aedb5533c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/bind.hash | 2 +-
- package/bind/bind.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/httping/httping.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 34d9891805..19d5f61f6d 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
- # Verified from https://ftp.isc.org/isc/bind9/9.11.4-P1/bind-9.11.4-P1.tar.gz.asc
- # with key BE0E9748B718253A28BB89FFF1B11BF05CF02E57
--sha256 b0e0dc3c8bf26989b1cad53f90d44a48e39404afc68f65c45bae79b446f0fe23 bind-9.11.4-P1.tar.gz
-+sha256 a85af7b629109d41285c7adeae1515daac638bbe4d5dc30d1f4b343dff09d811 bind-9.11.4-P2.tar.gz
- sha256 336f3c40e37a1a13690efb4c63e20908faa4c40498cc02f3579fb67d3a1933a5 COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 5cefa5b804..4b80eaf04f 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BIND_VERSION = 9.11.4-P1
-+BIND_VERSION = 9.11.4-P2
- BIND_SITE = http://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
+diff --git a/package/httping/httping.hash b/package/httping/httping.hash
+index a50eedb744..c396157646 100644
+--- a/package/httping/httping.hash
++++ b/package/httping/httping.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256	3e895a0a6d7bd79de25a255a1376d4da88eb09c34efdd0476ab5a907e75bfaf8	httping-2.5.tgz
++sha256  c5db2e5b9a692fcdf2bd370f1533529063fbcf8947a8f5ee9d4b050a14e0566d	license.txt
