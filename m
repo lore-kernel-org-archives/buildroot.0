@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 13:45:07 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] package/connman: simplify
+Date: Fri, 5 Oct 2018 13:45:14 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] package/connman: simplify
  upstream URL
-Message-ID: <20181005114412.A15DF8D27B@busybox.osuosl.org>
+Message-ID: <20181005114418.844B58D280@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=56ec7ee4b6b6c2231e1deba0f6a8131232d08f3f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9d23a7b2775d4bf820411d5ad0d782b972e4a974
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 The "For more information, see" is a bit useless, and not having the
 URL alone on its own line prevents scripted URL checking.
