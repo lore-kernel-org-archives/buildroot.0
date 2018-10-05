@@ -1,46 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 20:33:37 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] wireguard: bump version
- to 0.0.20180925
-Message-ID: <20181005183246.762E68D48A@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 21:43:17 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] httping: add license hash
+Message-ID: <20181005194223.167228D558@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ca24c5ec99ee01fb066e47d122f8de6b7c00559
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f05926ac4b32fe7d3c35bb63e1dd4b2be758db31
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0a656bc0658e79f7ddc4c9734ad9c52a5df46296)
+(cherry picked from commit 1e2ca0455e6fddb86b75d2b1422f228aedb5533c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireguard/wireguard.hash | 4 ++--
- package/wireguard/wireguard.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/httping/httping.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
-index d0cd65ad4f..fe6439fbc2 100644
---- a/package/wireguard/wireguard.hash
-+++ b/package/wireguard/wireguard.hash
-@@ -1,4 +1,4 @@
--# From https://lists.zx2c4.com/pipermail/wireguard/2018-July/003112.html
--sha256 5e38d554f7d1e3a64e3a5319ca1a3b790c84ed89c896586c490a93ac1f953a91  WireGuard-0.0.20180708.tar.xz
-+# From https://lists.zx2c4.com/pipermail/wireguard/2018-September/003395.html
-+sha256 4a0488a07e40ec17e798f3e40a85cedf55f0560b1c3a8fd95806c7d4266cb0e8  WireGuard-0.0.20180925.tar.xz
+diff --git a/package/httping/httping.hash b/package/httping/httping.hash
+index a50eedb744..c396157646 100644
+--- a/package/httping/httping.hash
++++ b/package/httping/httping.hash
+@@ -1,2 +1,3 @@
  # Locally calculated
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
-index cc8ad7c4cc..faddbf93ad 100644
---- a/package/wireguard/wireguard.mk
-+++ b/package/wireguard/wireguard.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_VERSION = 0.0.20180708
-+WIREGUARD_VERSION = 0.0.20180925
- WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
- WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
- WIREGUARD_LICENSE = GPL-2.0
+ sha256	3e895a0a6d7bd79de25a255a1376d4da88eb09c34efdd0476ab5a907e75bfaf8	httping-2.5.tgz
++sha256  c5db2e5b9a692fcdf2bd370f1533529063fbcf8947a8f5ee9d4b050a14e0566d	license.txt
