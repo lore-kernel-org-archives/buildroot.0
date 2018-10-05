@@ -1,55 +1,105 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 20:25:26 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] domoticz: depends on gcc
- >= 4.8
-Message-ID: <20181005182431.F41218D3F1@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 15:17:08 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] woff2: new package
+Message-ID: <20181005174039.1C80981322@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b3074ca268e18893cfb60681a84c04b556076be
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=366f20c5a7d93b2864c17ebc7de4084aaee289e0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-sleep_for is not always defined with gcc <= 4.7, see
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=52680
+Add the woff2 package to Builroot. This is needed by webkitgtk from
+version 2.20.0 onwards. WebKitGTK+ used to bundle a copy of the library,
+but it stopped doing so now that the upstream is has been making
+releases.
 
-To fix this issue, add a dependency to gcc >= 4.8
+[Peter: fix license hash]
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Fixes:
- - http://autobuild.buildroot.net/results/0dada8dd727f32a4500670f6620adb05943ed0b7
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5208e9507f5fa33e7f584815d53dac551e449a63)
+(cherry picked from commit 70afd4afa765183032fd0c335b6855fd02e30745)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/domoticz/Config.in | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ DEVELOPERS               |  1 +
+ package/Config.in        |  1 +
+ package/woff2/Config.in  |  9 +++++++++
+ package/woff2/woff2.hash |  5 +++++
+ package/woff2/woff2.mk   | 17 +++++++++++++++++
+ 5 files changed, 33 insertions(+)
 
-diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
-index 530027f273..4c5338df0a 100644
---- a/package/domoticz/Config.in
-+++ b/package/domoticz/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_DOMOTICZ
- 	depends on BR2_USE_MMU # mosquitto
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # mosquitto
- 	depends on !BR2_STATIC_LIBS # mosquitto
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # sleep_for
- 	# pthread_condattr_setclock
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_INSTALL_LIBSTDCPP
-@@ -27,10 +28,11 @@ config BR2_PACKAGE_DOMOTICZ
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 6ab8097b43..ba16b4667a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -63,6 +63,7 @@ N:	Adrian Perez de Castro <aperez@igalia.com>
+ F:	package/brotli/
+ F:	package/libepoxy/
+ F:	package/webkitgtk/
++F:	package/woff2/
  
- 	  http://domoticz.com
- 
--comment "domoticz needs lua >= 5.2 and a toolchain w/ C++, NPTL, wchar, dynamic library"
-+comment "domoticz needs lua >= 5.2 and a toolchain w/ C++, gcc >= 4.8, NPTL, wchar, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
- 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
- 		!BR2_USE_WCHAR || BR2_STATIC_LIBS || \
- 		!(BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3)
+ N:	Adrien Gallou??t <adrien@gallouet.fr>
+ F:	package/glorytun/
+diff --git a/package/Config.in b/package/Config.in
+index 6f619e72b1..456d5443c4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1171,6 +1171,7 @@ menu "Graphics"
+ 	source "package/waylandpp/Config.in"
+ 	source "package/webkitgtk/Config.in"
+ 	source "package/webp/Config.in"
++	source "package/woff2/Config.in"
+ 	source "package/zbar/Config.in"
+ 	source "package/zxing-cpp/Config.in"
+ endmenu
+diff --git a/package/woff2/Config.in b/package/woff2/Config.in
+new file mode 100644
+index 0000000000..48672570dd
+--- /dev/null
++++ b/package/woff2/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_WOFF2
++	bool "woff2"
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_BROTLI
++	help
++	  Reference implementation for the WOFF2 font file format,
++	  typically used for Web fonts
++
++	  https://github.com/google/woff2
+diff --git a/package/woff2/woff2.hash b/package/woff2/woff2.hash
+new file mode 100644
+index 0000000000..469071e3c2
+--- /dev/null
++++ b/package/woff2/woff2.hash
+@@ -0,0 +1,5 @@
++# Locally generated:
++sha512  c788bba1530aec463e755e901f9342f4b599e3a07f54645fef1dc388ab5d5c30625535e5dd38e9e792e04a640574baa50eeefb6b7338ab403755f4a4e0c3044d  v1.0.2.tar.gz
++
++# Hash for license files:
++sha512  8ee924da3fb5d16135adcf6a8fbe9e2e8f3d2d80468617e72ca4fa059a60f8455c9a5f68a8dc381b1297c8bf39c887a912d0f69246d2604ada74d3da9e8e490b  LICENSE
+diff --git a/package/woff2/woff2.mk b/package/woff2/woff2.mk
+new file mode 100644
+index 0000000000..23b88a5e9a
+--- /dev/null
++++ b/package/woff2/woff2.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# woff2
++#
++################################################################################
++
++WOFF2_VERSION = 1.0.2
++WOFF2_SOURCE = v$(WOFF2_VERSION).tar.gz
++WOFF2_SITE = https://github.com/google/woff2/archive
++WOFF2_LICENSE = MIT
++WOFF2_LICENSE_FILES = LICENSE
++WOFF2_INSTALL_STAGING = YES
++WOFF2_DEPENDENCIES = brotli
++WOFF2_CONF_OPTS = \
++	-DNOISY_LOGGING=OFF
++
++$(eval $(cmake-package))
