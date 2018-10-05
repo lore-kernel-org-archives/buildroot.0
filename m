@@ -1,46 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 21:23:31 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/ghostscript: fix
- removal of included lcms2
-Message-ID: <20181005192304.3F9C08D4CD@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 21:40:38 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] ocrad: add license hash
+Message-ID: <20181005194153.F05138D571@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=430c0ea2cc0e68b85e3110abf1825eaea2234f46
+commit: https://git.buildroot.net/buildroot/commit/?id=e846fa1715d9ad01c247a26634a547a713385c48
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Ghostscript 9.24 changed the internal lcms2 version:
-https://www.ghostscript.com/doc/9.24/News.htm
-
-With this change the directory name was also changed which broke our
-code to force the usage of the buildroot lcms2 package.
-
-Fixes
-http://autobuild.buildroot.net/results/d04/d04ad017bf06a442a7397f935959994ba72824e1/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d5f83cfc885c4a9ea6d35d38b7d5a8eaf725aee2)
+(cherry picked from commit 31e1768150e773b0dcda1096e625b30898e309d2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ghostscript/ghostscript.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/ocrad/ocrad.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index 9b5e144888..b1f5e1edb1 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
-@@ -27,8 +27,8 @@ GHOSTSCRIPT_DEPENDENCIES = \
- # Inspired by linuxfromscratch:
- # http://www.linuxfromscratch.org/blfs/view/svn/pst/gs.html
- define GHOSTSCRIPT_REMOVE_LIBS
--	rm -rf $(@D)/freetype $(@D)/ijs $(@D)/jpeg $(@D)/lcms2 \
--		$(@D)/lcms2art $(@D)/libpng $(@D)/tiff $(@D)/zlib
-+	rm -rf $(@D)/freetype $(@D)/ijs $(@D)/jpeg $(@D)/lcms2mt \
-+		$(@D)/libpng $(@D)/tiff $(@D)/zlib
- endef
- GHOSTSCRIPT_POST_PATCH_HOOKS += GHOSTSCRIPT_REMOVE_LIBS
- 
+diff --git a/package/ocrad/ocrad.hash b/package/ocrad/ocrad.hash
+index 5f093d241e..5cde4d3ac4 100644
+--- a/package/ocrad/ocrad.hash
++++ b/package/ocrad/ocrad.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated after checking pgp signature
+ sha256 c383d37869baa0990d38d38836d4d567e9e2862aa0cd704868b62dafeac18e3c  ocrad-0.26.tar.lz
++sha256 3d77c1a58fbde5ddba612d1fe09965e20a3804953eca12e8c1892298bb8a5eef  COPYING
