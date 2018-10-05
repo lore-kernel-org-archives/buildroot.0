@@ -1,52 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 13:54:09 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] cppcms: fix license
-Message-ID: <20181005115315.4C1DC7FF75@busybox.osuosl.org>
+Date: Fri, 5 Oct 2018 13:56:42 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] libxslt: point to the
+ correct xml2-config location
+Message-ID: <20181005115549.E3F058D29F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=949184518d61ebe1dfec510885778784c1341009
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a89f2b1f5f2bd2a46b461cd5f0b49af23deaffac
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-cppcms contains embedded third party software so add
-THIRD_PARTY_SOFTWARE.TXT to CPPCMS_LICENSE_FILES as well as the
-additional licenses to CPPCMS_LICENSE.
-Also add hash for COPYING.TXT and THIRD_PARTY_SOFTWARE.TXT
+Currently libxslt configure finds native /usr/bin/xml2-config.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Ferdinand van Aartsen <ferdinand@ombud.nl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c17310450b5e720e7ad2294f79a4655e607b22b1)
+(cherry picked from commit f8f8ff33472641f9192a5e1ca65ebc614821665a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cppcms/cppcms.hash | 2 ++
- package/cppcms/cppcms.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/libxslt/libxslt.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/cppcms/cppcms.hash b/package/cppcms/cppcms.hash
-index 28e998c6c1..6bfc680ac0 100644
---- a/package/cppcms/cppcms.hash
-+++ b/package/cppcms/cppcms.hash
-@@ -3,3 +3,5 @@ sha1	15f21897c14acfd4b0c74622e49d95857f2fe939	cppcms-1.0.5.tar.bz2
- md5	d668c201dd31fff8090380ebdc0bcc2b	cppcms-1.0.5.tar.bz2
- # Locally computed:
- sha256	84b685977bca97c3e997497f227bd5906adb80555066d811a7046b01c2f51865	cppcms-1.0.5.tar.bz2
-+sha256	2ff22bab712c46dbadf9bae0f759bbc95d5d87614cacb7ebc3d5a50910603d6a	COPYING.TXT
-+sha256	70fbf0194bee0f444c57ecd47e7d976a3e5a890e4421a21aab49f2d214267e69	THIRD_PARTY_SOFTWARE.TXT
-diff --git a/package/cppcms/cppcms.mk b/package/cppcms/cppcms.mk
-index f3ea2628ea..5fb6375d80 100644
---- a/package/cppcms/cppcms.mk
-+++ b/package/cppcms/cppcms.mk
-@@ -6,8 +6,8 @@
+diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
+index 972d5b80d5..5b1c0ae268 100644
+--- a/package/libxslt/libxslt.mk
++++ b/package/libxslt/libxslt.mk
+@@ -13,7 +13,8 @@ LIBXSLT_LICENSE_FILES = COPYING
+ LIBXSLT_CONF_OPTS = \
+ 	--with-gnu-ld \
+ 	--without-debug \
+-	--without-python
++	--without-python \
++	--with-libxml-prefix=$(STAGING_DIR)/usr
+ LIBXSLT_CONFIG_SCRIPTS = xslt-config
+ LIBXSLT_DEPENDENCIES = host-pkgconf libxml2
  
- CPPCMS_VERSION = 1.0.5
- CPPCMS_SOURCE = cppcms-$(CPPCMS_VERSION).tar.bz2
--CPPCMS_LICENSE = LGPL-3.0
--CPPCMS_LICENSE_FILES = COPYING.TXT
-+CPPCMS_LICENSE = LGPL-3.0, BSL-1.0 (boost), MIT (base64.cpp), Public Domain (json2.js), Zlib (md5)
-+CPPCMS_LICENSE_FILES = COPYING.TXT THIRD_PARTY_SOFTWARE.TXT
- CPPCMS_SITE = http://downloads.sourceforge.net/project/cppcms/cppcms/$(CPPCMS_VERSION)
- CPPCMS_INSTALL_STAGING = YES
- CPPCMS_CXXFLAGS = $(TARGET_CXXFLAGS)
