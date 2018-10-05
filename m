@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Oct 2018 13:41:26 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] boot/vexpress-firmware:
+Date: Fri, 5 Oct 2018 13:41:34 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] boot/vexpress-firmware:
  add upstream URL in Config.in help text
-Message-ID: <20181005114031.346DF8D23B@busybox.osuosl.org>
+Message-ID: <20181005114038.DE7098D23D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b4d05fe75c79aea17f93c05495a5db4977e0f1d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=570e400b030503c54c317c38c679207fb57a47d7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
