@@ -1,34 +1,43 @@
-From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Sat,  6 Oct 2018 22:02:45 +0200
-Subject: [Buildroot] [PATCH 1/1] cups-filters: add autoreconf
-Message-ID: <20181006200245.8380-1-olivier.schonken@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  6 Oct 2018 22:13:08 +0200
+Subject: [Buildroot] [PATCH 1/1] xerces: enable threads if available
+Message-ID: <20181006201308.20461-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Because we are patching Makefile.am, Makefile.am is newer than Makefile.in
-
-Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- This fix is for the 2018.08.x and 2018.05.x branches
- package/cups-filters/cups-filters.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/xerces/xerces.mk | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
-index 131e58246e..3c5e13da89 100644
---- a/package/cups-filters/cups-filters.mk
-+++ b/package/cups-filters/cups-filters.mk
-@@ -8,7 +8,8 @@ CUPS_FILTERS_VERSION = 1.20.3
- CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
- CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
- CUPS_FILTERS_LICENSE_FILES = COPYING
--
-+# 0001-Replace-relative-linking-with-absolute-linking.patch
-+CUPS_FILTERS_AUTORECONF = YES
- CUPS_FILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf fontconfig freetype jpeg
+diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
+index a25641fb45..da088d8e1c 100644
+--- a/package/xerces/xerces.mk
++++ b/package/xerces/xerces.mk
+@@ -10,9 +10,7 @@ XERCES_SITE = http://archive.apache.org/dist/xerces/c/3/sources
+ XERCES_LICENSE = Apache-2.0
+ XERCES_LICENSE_FILES = LICENSE
+ XERCES_INSTALL_STAGING = YES
+-XERCES_CONF_OPTS = \
+-	--disable-threads \
+-	--with-gnu-ld
++XERCES_CONF_OPTS = --with-gnu-ld
  
- CUPS_FILTERS_CONF_OPTS = --disable-imagefilters \
+ define XERCES_DISABLE_SAMPLES
+ 	$(SED) 's/ samples//' $(@D)/Makefile.in
+@@ -39,4 +37,10 @@ else
+ XERCES_CONF_OPTS += --disable-network
+ endif
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++XERCES_CONF_OPTS += --enable-threads
++else
++XERCES_CONF_OPTS += --disable-threads
++endif
++
+ $(eval $(autotools-package))
 -- 
 2.17.1
