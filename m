@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat,  6 Oct 2018 18:55:09 +0200
-Subject: [Buildroot] [PATCH 05/20] perl-hash-multivalue: new package
+Date: Sat,  6 Oct 2018 18:55:10 +0200
+Subject: [Buildroot] [PATCH 06/20] perl-http-multiparser: new package
 In-Reply-To: <20181006165524.23778-1-francois.perrad@gadz.org>
 References: <20181006165524.23778-1-francois.perrad@gadz.org>
-Message-ID: <20181006165524.23778-6-francois.perrad@gadz.org>
+Message-ID: <20181006165524.23778-7-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,67 +13,67 @@ To: buildroot@busybox.net
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
  package/Config.in                                   |  1 +
- package/perl-hash-multivalue/Config.in              |  6 ++++++
- .../perl-hash-multivalue/perl-hash-multivalue.hash  |  6 ++++++
- .../perl-hash-multivalue/perl-hash-multivalue.mk    | 13 +++++++++++++
+ package/perl-http-multipartparser/Config.in         |  6 ++++++
+ .../perl-http-multipartparser.hash                  |  6 ++++++
+ .../perl-http-multipartparser.mk                    | 13 +++++++++++++
  4 files changed, 26 insertions(+)
- create mode 100644 package/perl-hash-multivalue/Config.in
- create mode 100644 package/perl-hash-multivalue/perl-hash-multivalue.hash
- create mode 100644 package/perl-hash-multivalue/perl-hash-multivalue.mk
+ create mode 100644 package/perl-http-multipartparser/Config.in
+ create mode 100644 package/perl-http-multipartparser/perl-http-multipartparser.hash
+ create mode 100644 package/perl-http-multipartparser/perl-http-multipartparser.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index fc3d8fadf..3e585cdd0 100644
+index 3e585cdd0..8853fb795 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -699,6 +699,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-gd/Config.in"
- 	source "package/perl-gdgraph/Config.in"
- 	source "package/perl-gdtextutil/Config.in"
-+	source "package/perl-hash-multivalue/Config.in"
- 	source "package/perl-html-parser/Config.in"
- 	source "package/perl-html-tagset/Config.in"
- 	source "package/perl-http-cookies/Config.in"
-diff --git a/package/perl-hash-multivalue/Config.in b/package/perl-hash-multivalue/Config.in
+@@ -706,6 +706,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-http-daemon/Config.in"
+ 	source "package/perl-http-date/Config.in"
+ 	source "package/perl-http-message/Config.in"
++	source "package/perl-http-multipartparser/Config.in"
+ 	source "package/perl-http-negotiate/Config.in"
+ 	source "package/perl-io-html/Config.in"
+ 	source "package/perl-io-interface/Config.in"
+diff --git a/package/perl-http-multipartparser/Config.in b/package/perl-http-multipartparser/Config.in
 new file mode 100644
-index 000000000..0883c95d8
+index 000000000..70b89a387
 --- /dev/null
-+++ b/package/perl-hash-multivalue/Config.in
++++ b/package/perl-http-multipartparser/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PERL_HASH_MULTIVALUE
-+	bool "perl-hash-multivalue"
++config BR2_PACKAGE_PERL_HTTP_MULTIPARTPARSER
++	bool "perl-http-multipartparser"
 +	help
-+	  Store multiple values per key
++	  HTTP MultiPart Parser
 +
-+	  https://github.com/miyagawa/Hash-MultiValue
-diff --git a/package/perl-hash-multivalue/perl-hash-multivalue.hash b/package/perl-hash-multivalue/perl-hash-multivalue.hash
++	  https://metacpan.org/release/HTTP-MultiPartParser
+diff --git a/package/perl-http-multipartparser/perl-http-multipartparser.hash b/package/perl-http-multipartparser/perl-http-multipartparser.hash
 new file mode 100644
-index 000000000..3a6865069
+index 000000000..079c02f60
 --- /dev/null
-+++ b/package/perl-hash-multivalue/perl-hash-multivalue.hash
++++ b/package/perl-http-multipartparser/perl-http-multipartparser.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    508015312eb08cd2bcea987c4efbb93d Hash-MultiValue-0.16.tar.gz
-+sha256 66181df7aa68e2786faf6895c88b18b95c800a8e4e6fb4c07fd176410a3c73f4 Hash-MultiValue-0.16.tar.gz
++md5    1b07ebac54ce3288c044a23ba60196d2 HTTP-MultiPartParser-0.02.tar.gz
++sha256 5eddda159f54d16f868e032440ac2b024e55aac48931871b62627f1a16d00b12 HTTP-MultiPartParser-0.02.tar.gz
 +
 +# computed by scancpan
-+sha256 af32512e13f6722dab770b989c57556a5e3d29a49b22b8ad5668064db8592401 LICENSE
-diff --git a/package/perl-hash-multivalue/perl-hash-multivalue.mk b/package/perl-hash-multivalue/perl-hash-multivalue.mk
++sha256 a339d6cf9253720ba69b311423556cc02c94d5a6f76cf5cdf11af2112e14a074 README
+diff --git a/package/perl-http-multipartparser/perl-http-multipartparser.mk b/package/perl-http-multipartparser/perl-http-multipartparser.mk
 new file mode 100644
-index 000000000..f42bc6092
+index 000000000..aa8b69ad0
 --- /dev/null
-+++ b/package/perl-hash-multivalue/perl-hash-multivalue.mk
++++ b/package/perl-http-multipartparser/perl-http-multipartparser.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# perl-hash-multivalue
++# perl-http-multipartparser
 +#
 +################################################################################
 +
-+PERL_HASH_MULTIVALUE_VERSION = 0.16
-+PERL_HASH_MULTIVALUE_SOURCE = Hash-MultiValue-$(PERL_HASH_MULTIVALUE_VERSION).tar.gz
-+PERL_HASH_MULTIVALUE_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AR/ARISTOTLE
-+PERL_HASH_MULTIVALUE_LICENSE = Artistic or GPL-1.0+
-+PERL_HASH_MULTIVALUE_LICENSE_FILES = LICENSE
++PERL_HTTP_MULTIPARTPARSER_VERSION = 0.02
++PERL_HTTP_MULTIPARTPARSER_SOURCE = HTTP-MultiPartParser-$(PERL_HTTP_MULTIPARTPARSER_VERSION).tar.gz
++PERL_HTTP_MULTIPARTPARSER_SITE = $(BR2_CPAN_MIRROR)/authors/id/C/CH/CHANSEN
++PERL_HTTP_MULTIPARTPARSER_LICENSE = Artistic or GPL-1.0+
++PERL_HTTP_MULTIPARTPARSER_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
 -- 
