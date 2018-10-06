@@ -1,54 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Oct 2018 15:41:43 +0200
-Subject: [Buildroot] [PATCH 1/1] nmap: update license
-In-Reply-To: <20181004172730.12889-1-fontaine.fabrice@gmail.com>
-References: <20181004172730.12889-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181006154143.44ec552a@windsurf>
+Date: Sat, 6 Oct 2018 15:49:26 +0200
+Subject: [Buildroot] [git commit] package/cups-filters: bump to version
+ 1.21.3
+Message-ID: <20181006134858.871C98DEF6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4e770101e55b4cd67e007536fcaf2b1a5e58f0df
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Adding Yann in Cc, licensing question below.
+Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+[Thomas: add explanation for AUTORECONF.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/cups-filters/cups-filters.hash | 4 ++--
+ package/cups-filters/cups-filters.mk   | 4 +++-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-On Thu,  4 Oct 2018 19:27:30 +0200, Fabrice Fontaine wrote:
-> nmap is licensed under GPL-2.0 but with exceptions or a commercial
-> license (see COPYING, especially the "IMPORTANT NMAP LICENSE TERMS"
-> part)
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/nmap/nmap.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-> index 420aec82d7..6b7502b02b 100644
-> --- a/package/nmap/nmap.mk
-> +++ b/package/nmap/nmap.mk
-> @@ -10,7 +10,7 @@ NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
->  NMAP_DEPENDENCIES = libpcap
->  NMAP_CONF_OPTS = --without-liblua --without-zenmap \
->  	--with-libdnet=included --with-liblinear=included
-> -NMAP_LICENSE = GPL-2.0
-> +NMAP_LICENSE = GPL-2.0 with exceptions or commercial
-
-I agree with the GPL-2.0 with exceptions, Debian also calls the license
-nmap-GPL-2
-(https://metadata.ftp-master.debian.org/changelogs/main/n/nmap/nmap_7.70+dfsg1-3_copyright).
-
-However, I'm not sure about the "or commercial". We used to have that
-for Qt, but dropped it, I'm not sure to remember why. Yann ?
-
->  NMAP_LICENSE_FILES = COPYING
->  
->  # needed by libpcap
-
-
-
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/cups-filters/cups-filters.hash b/package/cups-filters/cups-filters.hash
+index 7bb00818df..e426ad8b86 100644
+--- a/package/cups-filters/cups-filters.hash
++++ b/package/cups-filters/cups-filters.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 aad95e35033154f54639923b439e0657fc9f616b9eac7490df89514362551f98  cups-filters-1.20.3.tar.gz
+-sha256 24cc91478ca68d6d982dfd86181210ad5f0931ec431bdb740793e3d6555fdcd8  COPYING
++sha256 981b280bc5275a21c6f436aff6207e03cab36dc304c119bbac507db940e7421c  cups-filters-1.21.3.tar.gz
++sha256 8e697cf4681ebbca716bf8cc30dde51c264e32ceee41fa63ceb5213334204b83  COPYING
+diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
+index 131e58246e..838c0d7c2f 100644
+--- a/package/cups-filters/cups-filters.mk
++++ b/package/cups-filters/cups-filters.mk
+@@ -4,10 +4,12 @@
+ #
+ ################################################################################
+ 
+-CUPS_FILTERS_VERSION = 1.20.3
++CUPS_FILTERS_VERSION = 1.21.3
+ CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
+ CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
+ CUPS_FILTERS_LICENSE_FILES = COPYING
++# release tarball is broken, Makefile.am is newer than Makefile.in
++CUPS_FILTERS_AUTORECONF = YES
+ 
+ CUPS_FILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf fontconfig freetype jpeg
+ 
