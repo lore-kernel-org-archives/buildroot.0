@@ -1,44 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 6 Oct 2018 15:14:56 +0200
-Subject: [Buildroot] [git commit] gst1-rtsp-server: bump version to 1.14.4
-Message-ID: <20181006131815.2A7218D9B3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] gstreamer1: bump version to 1.14.4
+Message-ID: <20181006131814.E211E8D9B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe3d4dea11f4e1f344e4987df59d5504b2243a52
+commit: https://git.buildroot.net/buildroot/commit/?id=a6bf1368bab665f35406c4a99202797424fb23e2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash | 4 ++--
- package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk   | 2 +-
+ package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
+ package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-index ad18f360a0..fa6e71f49a 100644
---- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-@@ -1,4 +1,4 @@
--# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.14.3.tar.xz.sha256sum
--sha256 1f654c7617af15d13b67bf833f4c81d086ecbfd8cce7f2bf65fe5c1c3519f4e6 gst-rtsp-server-1.14.3.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.14.4.tar.xz.sha256sum
-+sha256 3d0ece2afdcd601c175ece24e32a30bc19247b454f4eafd3deeec2533c6884f1 gst-rtsp-server-1.14.4.tar.xz
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
+index 5c8c701e0f..204bb74fd3 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.hash
++++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.14.3.tar.xz.sha256sum
+-sha256 13ae530eb1d4566c3aa0cff1bbb8e64c643065bb12e2e7c707f311ab4a390456 gstreamer-1.14.3.tar.xz
++# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.14.4.tar.xz.sha256sum
++sha256 f94f6696c5f05a3b3a9183e39c5f5c0b779f75a04c0efa497e7920afa985ffc7 gstreamer-1.14.4.tar.xz
  sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING
- sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING.LIB
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-index 721b8b7313..a86b137ce2 100644
---- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+index a92daf7e7d..76a74a0806 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_RTSP_SERVER_VERSION = 1.14.3
-+GST1_RTSP_SERVER_VERSION = 1.14.4
- GST1_RTSP_SERVER_SOURCE = gst-rtsp-server-$(GST1_RTSP_SERVER_VERSION).tar.xz
- GST1_RTSP_SERVER_SITE = http://gstreamer.freedesktop.org/src/gst-rtsp-server
- GST1_RTSP_SERVER_LICENSE = LGPL-2.0+
+-GSTREAMER1_VERSION = 1.14.3
++GSTREAMER1_VERSION = 1.14.4
+ GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
+ GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
+ GSTREAMER1_INSTALL_STAGING = YES
