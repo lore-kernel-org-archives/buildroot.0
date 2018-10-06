@@ -1,28 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Oct 2018 15:20:53 +0200
-Subject: [Buildroot] [PATCH v1 01/11] gstreamer1: bump version to 1.14.4
-In-Reply-To: <20181004210925.25597-1-ps.report@gmx.net>
-References: <20181004210925.25597-1-ps.report@gmx.net>
-Message-ID: <20181006152053.0007ef60@windsurf>
+Date: Sat, 6 Oct 2018 15:21:28 +0200
+Subject: [Buildroot] [git commit] package/ccrypt: fix download location
+Message-ID: <20181006132046.E0DDC8D9BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4230d159201abcfba713974001553c58fc621feb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  4 Oct 2018 23:09:15 +0200, Peter Seiderer wrote:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
->  package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: David Bachelart <david.bachelart@bbright.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ccrypt/ccrypt.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Entire series applied, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/ccrypt/ccrypt.mk b/package/ccrypt/ccrypt.mk
+index d27e34618a..541a0e776d 100644
+--- a/package/ccrypt/ccrypt.mk
++++ b/package/ccrypt/ccrypt.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ CCRYPT_VERSION = 1.10
+-CCRYPT_SITE = http://ccrypt.sourceforge.net/download
++CCRYPT_SITE = http://ccrypt.sourceforge.net/download/$(CCRYPT_VERSION)
+ 
+ CCRYPT_LICENSE = GPL-2.0+
+ CCRYPT_LICENSE_FILES = COPYING
