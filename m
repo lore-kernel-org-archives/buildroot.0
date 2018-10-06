@@ -1,43 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 6 Oct 2018 15:14:56 +0200
-Subject: [Buildroot] [git commit] gst1-libav: bump version to 1.14.4
-Message-ID: <20181006131815.1BED58D1CA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] gst1-vaapi: bump version to 1.14.4
+Message-ID: <20181006131815.2302D8D9B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7bfb663caaa34f6b685d89019fd04564100cc48c
+commit: https://git.buildroot.net/buildroot/commit/?id=d681868f7222b28ad4dd4e4c9987db1367407672
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gstreamer1/gst1-libav/gst1-libav.hash | 4 ++--
- package/gstreamer1/gst1-libav/gst1-libav.mk   | 2 +-
+ package/gstreamer1/gst1-vaapi/gst1-vaapi.hash | 4 ++--
+ package/gstreamer1/gst1-vaapi/gst1-vaapi.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.hash b/package/gstreamer1/gst1-libav/gst1-libav.hash
-index 005856969e..741c582319 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.hash
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.hash
+diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
+index d9c3c68ed2..f00cdc0ff4 100644
+--- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
++++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
 @@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.14.3.tar.xz.sha256sum
--sha256 9b03529bb45785ad1b6b1f4856c52a832ad5fc472285ce49174439e8015ab677 gst-libav-1.14.3.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.14.4.tar.xz.sha256sum
-+sha256 dfd78591901df7853eab7e56a86c34a1b03635da0d3d56b89aa577f1897865da gst-libav-1.14.4.tar.xz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
-index 2f323b938d..7ed90a9416 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.mk
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
+-# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.14.3.tar.xz.sha256sum
+-sha256 8f5e65cb96aa6e44ff80926366d4a6fef9b8da68a04bab4bf2cbed93941c74f0 gstreamer-vaapi-1.14.3.tar.xz
++# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.14.4.tar.xz.sha256sum
++sha256 ce18dbfe961c6a8d31270231686075586bf7a7df62b778c8e7f5ec148251d0a3 gstreamer-vaapi-1.14.4.tar.xz
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING.LIB
+diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
+index 9f59caa8a5..4f2ac598e3 100644
+--- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
++++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_LIBAV_VERSION = 1.14.3
-+GST1_LIBAV_VERSION = 1.14.4
- GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
- GST1_LIBAV_SITE = https://gstreamer.freedesktop.org/src/gst-libav
- GST1_LIBAV_CONF_OPTS = --with-system-libav
+-GST1_VAAPI_VERSION = 1.14.3
++GST1_VAAPI_VERSION = 1.14.4
+ GST1_VAAPI_SITE = https://gstreamer.freedesktop.org/src/gstreamer-vaapi
+ GST1_VAAPI_SOURCE = gstreamer-vaapi-$(GST1_VAAPI_VERSION).tar.xz
+ GST1_VAAPI_LICENSE = LGPL-2.1+
