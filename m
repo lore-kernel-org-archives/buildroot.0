@@ -1,33 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Oct 2018 15:55:56 +0200
-Subject: [Buildroot] [git commit] cups-filters: fix autoreconf justification
-Message-ID: <20181006135528.DA2B88DF08@busybox.osuosl.org>
+Date: Sat, 6 Oct 2018 15:59:53 +0200
+Subject: [Buildroot] [PATCH 1/2] package/cups-filters: bump to version
+ 1.21.3
+In-Reply-To: <20181005133019.1061-1-olivier.schonken@gmail.com>
+References: <20181005133019.1061-1-olivier.schonken@gmail.com>
+Message-ID: <20181006155953.43a637c1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=95e92e9b1a2c7b199acffa638dba7bb1e7aa9018
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The tarball is not broken at all: we are patching the Makefile.am.
+On Fri,  5 Oct 2018 15:30:18 +0200, Olivier Schonken wrote:
+> Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+> ---
+>  package/cups-filters/cups-filters.hash | 4 ++--
+>  package/cups-filters/cups-filters.mk   | 3 ++-
+>  2 files changed, 4 insertions(+), 3 deletions(-)
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/cups-filters/cups-filters.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I've applied, but I have one comment, see below.
 
-diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
-index 838c0d7c2f..81d9195652 100644
---- a/package/cups-filters/cups-filters.mk
-+++ b/package/cups-filters/cups-filters.mk
-@@ -8,7 +8,7 @@ CUPS_FILTERS_VERSION = 1.21.3
- CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
- CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
- CUPS_FILTERS_LICENSE_FILES = COPYING
--# release tarball is broken, Makefile.am is newer than Makefile.in
-+# 0001-Replace-relative-linking-with-absolute-linking.patch
- CUPS_FILTERS_AUTORECONF = YES
- 
- CUPS_FILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf fontconfig freetype jpeg
+> -CUPS_FILTERS_VERSION = 1.20.3
+> +CUPS_FILTERS_VERSION = 1.21.3
+>  CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
+>  CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
+>  CUPS_FILTERS_LICENSE_FILES = COPYING
+> +CUPS_FILTERS_AUTORECONF = YES
+
+You didn't explain why this autoreconf was needed.
+
+I initially thought it was because the release tarball was broken, with
+Makefile.am having a date newer than Makefile.in, and so I added such a
+comment in the .mk file when applying your patch.
+
+But of course right after pushing, I realized the existing patch 0001
+modifies the Makefile.am, so the AUTORECONF was needed independently of
+the package bump.
+
+So, it would have been nice to:
+
+ - Do the AUTORECONF = YES addition in a separate patch. This would
+   have easily allowed to backport this fix to our stable branches:
+   this problem affects Buildroot 2018.05 and 2018.08.
+
+ - Do the bump in a separate patch.
+
+Could you send a patch based on the 2018.08.x branch that just adds the
+AUTORECONF = YES, with the comment I added on top of it ? This will
+allow Peter to fix it in 2018.08.x.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
