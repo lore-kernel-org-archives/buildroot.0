@@ -1,49 +1,65 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat,  6 Oct 2018 17:33:31 +0300
-Subject: [Buildroot] [PATCH 1/1] python-ubjson: bump to version 0.12.0
-Message-ID: <20181006143331.31278-1-asafka7@gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sat, 6 Oct 2018 17:03:32 +0200
+Subject: [Buildroot] [PATCH 21/23] python-pyhamcrest: new package
+In-Reply-To: <CALFsTFXnJTAm8A7cbDzHS_FsTfQ4dv6UQjj30n61ZLuZFPmL4g@mail.gmail.com>
+References: <20180926153505.3411-1-asafka7@gmail.com>
+ <20180926153505.3411-22-asafka7@gmail.com>
+ <20181004140218.3f5cd4bc@windsurf>
+ <CALFsTFXnJTAm8A7cbDzHS_FsTfQ4dv6UQjj30n61ZLuZFPmL4g@mail.gmail.com>
+Message-ID: <CAGm1_ksF2wuJAbFXKM9d+iMz5nebtmehHJRjb3NU4Ci+72LmpA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add license hash.
+On Thu, Oct 4, 2018 at 9:30 PM Asaf Kahlon <asafka7@gmail.com> wrote:
+>
+> Thomas, Yegor,
+>
+> On Thu, Oct 4, 2018 at 3:02 PM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> >
+> > Hello,
+> >
+> > On Wed, 26 Sep 2018 18:35:03 +0300, Asaf Kahlon wrote:
+> > > Hamcrest framework for matcher objects.
+> > >
+> > > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> > > ---
+> > >  DEVELOPERS                                       |  1 +
+> > >  package/Config.in                                |  1 +
+> > >  package/python-pyhamcrest/Config.in              |  8 ++++++++
+> > >  package/python-pyhamcrest/python-pyhamcrest.hash |  5 +++++
+> > >  package/python-pyhamcrest/python-pyhamcrest.mk   | 14 ++++++++++++++
+> > >  5 files changed, 29 insertions(+)
+> > >  create mode 100644 package/python-pyhamcrest/Config.in
+> > >  create mode 100644 package/python-pyhamcrest/python-pyhamcrest.hash
+> > >  create mode 100644 package/python-pyhamcrest/python-pyhamcrest.mk
+> >
+> > I've applied to master with Yegor Reviewed-by. However, I have a
+> > question, see below.
+> >
+> > > +config BR2_PACKAGE_PYTHON_PYHAMCREST
+> > > +     bool "python-pyhamcrest"
+> > > +     select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+> >
+> > How do you know, or how does scanpypi knows when setuptools is needed
+> > on the target vs. when it's only needed at build time on the build
+> > machine ?
+>
+> As far as I know, there's no special treatment for setuptools in
+> scanpypi. For pyhamcrest, setuptools was added since it was explicitly
+> mentioned under install_requires.
+> Generally, not adding setuptools to install_requires is much like not
+> adding any other package and scanpypi won't catch this. (Yegor,
+> correct me if I am wrong).
+> Most of the times, I try to run python and import the package for
+> sanity check, but (at least from a first glance) I don't think there's
+> a way to know exactly if setuptools is needed on target although not
+> specified in install_requires.
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-ubjson/python-ubjson.hash | 8 +++++---
- package/python-ubjson/python-ubjson.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+This is my point of view too. In most cases setuotools is not needed
+for the module itself, but for the installed scripts.
 
-diff --git a/package/python-ubjson/python-ubjson.hash b/package/python-ubjson/python-ubjson.hash
-index 30f65fe6bb..f93ae1acde 100644
---- a/package/python-ubjson/python-ubjson.hash
-+++ b/package/python-ubjson/python-ubjson.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/py-ubjson/json, sha256 locally computed
--md5 c78bbe899eeba9604302ad746094e8d1  py-ubjson-0.9.0.tar.gz
--sha256 b405daaa82acdf5989207e1e5ff6865ef7d23bf450513a6d90a1ab64c75bdcf8  py-ubjson-0.9.0.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/py-ubjson/json
-+md5	5dbbecd3dbecd744e45f27f14e2da5e1  py-ubjson-0.12.0.tar.gz
-+sha256	b796cb5077a06c932f0d148f4eef4ce0f045a05cb14393177a6d034be9f8e364  py-ubjson-0.12.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	ca182abcb84ad9984c9af2e30cb70c4fe0e1772674355207e8fcdb85e8c5e75f  LICENSE
-diff --git a/package/python-ubjson/python-ubjson.mk b/package/python-ubjson/python-ubjson.mk
-index a192cfb656..477cc400c8 100644
---- a/package/python-ubjson/python-ubjson.mk
-+++ b/package/python-ubjson/python-ubjson.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_UBJSON_VERSION = 0.9.0
-+PYTHON_UBJSON_VERSION = 0.12.0
- PYTHON_UBJSON_SOURCE = py-ubjson-$(PYTHON_UBJSON_VERSION).tar.gz
--PYTHON_UBJSON_SITE = https://pypi.python.org/packages/d4/40/a80006884ec03a54a5c6c53ae76df9978536862f0683b6e6280e3808d289
-+PYTHON_UBJSON_SITE = https://files.pythonhosted.org/packages/68/9c/a6c34e565351f0b04bcf6835e38bc4bd0647269dc48670e12eb99a3f5ef5
- PYTHON_UBJSON_LICENSE = Apache-2.0
- PYTHON_UBJSON_LICENSE_FILES = LICENSE
- PYTHON_UBJSON_SETUP_TYPE = setuptools
--- 
-2.17.1
+Yegor
