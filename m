@@ -1,125 +1,49 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Sat, 6 Oct 2018 09:14:14 -0500
-Subject: [Buildroot] [PATCH] xapian: new package
-In-Reply-To: <1538818604-4576-1-git-send-email-gilles.talis@gmail.com>
-References: <1538818604-4576-1-git-send-email-gilles.talis@gmail.com>
-Message-ID: <CANQCQpbJmQ7Vk6-265viJksFRuBe+y_EsFPk9dDA-6Jwn9xqyw@mail.gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sat,  6 Oct 2018 17:33:31 +0300
+Subject: [Buildroot] [PATCH 1/1] python-ubjson: bump to version 0.12.0
+Message-ID: <20181006143331.31278-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gilles,
+Also add license hash.
 
-On Sat, Oct 6, 2018 at 4:37 AM Gilles Talis <gilles.talis@gmail.com> wrote:
->
-> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-> ---
->  DEVELOPERS                 |  1 +
->  package/Config.in          |  1 +
->  package/xapian/Config.in   | 13 +++++++++++++
->  package/xapian/xapian.hash |  3 +++
->  package/xapian/xapian.mk   | 14 ++++++++++++++
->  5 files changed, 32 insertions(+)
->  create mode 100644 package/xapian/Config.in
->  create mode 100644 package/xapian/xapian.hash
->  create mode 100644 package/xapian/xapian.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 74bc703..dbb55c8 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -886,6 +886,7 @@ F:  package/leptonica/
->  F:     package/ocrad/
->  F:     package/tesseract-ocr/
->  F:     package/webp/
-> +F:     package/xapian/
->
->  N:     Giulio Benetti <giulio.benetti@micronovasrl.com>
->  F:     package/sunxi-mali-mainline/
-> diff --git a/package/Config.in b/package/Config.in
-> index 17627ad..80823e3 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1657,6 +1657,7 @@ endif
->         source "package/tinycbor/Config.in"
->         source "package/tz/Config.in"
->         source "package/tzdata/Config.in"
-> +       source "package/xapian/Config.in"
->  endmenu
->
->  menu "Security"
-> diff --git a/package/xapian/Config.in b/package/xapian/Config.in
-> new file mode 100644
-> index 0000000..c1d952d
-> --- /dev/null
-> +++ b/package/xapian/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_XAPIAN
-> +       bool "xapian"
-> +       depends on BR2_INSTALL_LIBSTDCPP
-> +       depends on BR2_USE_MMU # fork()
-> +       select BR2_PACKAGE_ZLIB
-> +       help
-> +         Xapian is an open Source search engine Library
-> +         It is a highly adaptable toolkit which allows developers to easily add
-> +         advanced indexing and search facilities to their own applications.
-> +         It has built-in support for several families of weighting models and also
-> +         supports a rich set of boolean query operators.
-> +
-> +         https://xapian.org/
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/python-ubjson/python-ubjson.hash | 8 +++++---
+ package/python-ubjson/python-ubjson.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-Please run the following and fix the warnings (space/tabs)
-./utils/check-package package/xapian/*
-
-> diff --git a/package/xapian/xapian.hash b/package/xapian/xapian.hash
-> new file mode 100644
-> index 0000000..4fd0dd1
-> --- /dev/null
-> +++ b/package/xapian/xapian.hash
-> @@ -0,0 +1,3 @@
-> +# locally computed
-> +sha256 13f08a0b649c7afa804fa0e85678d693fd6069dd394c9b9e7d41973d74a3b5d3 xapian-core-1.4.7.tar.xz
-> +sha256 c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42 COPYING
-> diff --git a/package/xapian/xapian.mk b/package/xapian/xapian.mk
-> new file mode 100644
-> index 0000000..63f9119
-> --- /dev/null
-> +++ b/package/xapian/xapian.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# xapian
-> +#
-> +################################################################################
-> +
-> +XAPIAN_VERSION = 1.4.7
-> +XAPIAN_SOURCE = xapian-core-$(XAPIAN_VERSION).tar.xz
-> +XAPIAN_SITE = https://oligarchy.co.uk/xapian/$(XAPIAN_VERSION)
-> +XAPIAN_LICENSE = GPL-2.0+
-> +XAPIAN_LICENSE_FILES = COPYING
-> +XAPIAN_INSTALL_STAGING = YES
-
-XAPIAN_DEPENDENCIES = zlib
-
-Looking at the vagrant file for building this, it looks like there
-maybe a few different language bindings and configurations.  Are there
-any configuration opts you'd want to disable before building?
-(examples or test files?) Any additional dependencies to list out?
-https://git.xapian.org/?p=xapian;a=blob;f=Vagrantfile;h=8a7b7bcd4b04d180fff8c40bb0e064160300685b;hb=HEAD#l12
-
-I ran a test-pkg build and didn't see anything in the initial few
-tests.  I'll let it go and see if there is anything that pops up.
-./utils/test-pkg -c xapian.cfg -d xapian_wip -a
-#   xapian.cfg would just contain your  BR2_PACKAGE_XAPIAN=y
-
-Output:
-                armv5-ctng-linux-gnueabi [ 1/47]: OK
-              armv7-ctng-linux-gnueabihf [ 2/47]: OK
-                        br-aarch64-glibc [ 3/47]: OK
-                           br-arcle-hs38 [ 4/47]: OK
-                            br-arm-basic [ 5/47]: SKIPPED
-                  br-arm-cortex-a9-glibc [ 6/47]: OK
-
-Matt
+diff --git a/package/python-ubjson/python-ubjson.hash b/package/python-ubjson/python-ubjson.hash
+index 30f65fe6bb..f93ae1acde 100644
+--- a/package/python-ubjson/python-ubjson.hash
++++ b/package/python-ubjson/python-ubjson.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/py-ubjson/json, sha256 locally computed
+-md5 c78bbe899eeba9604302ad746094e8d1  py-ubjson-0.9.0.tar.gz
+-sha256 b405daaa82acdf5989207e1e5ff6865ef7d23bf450513a6d90a1ab64c75bdcf8  py-ubjson-0.9.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/py-ubjson/json
++md5	5dbbecd3dbecd744e45f27f14e2da5e1  py-ubjson-0.12.0.tar.gz
++sha256	b796cb5077a06c932f0d148f4eef4ce0f045a05cb14393177a6d034be9f8e364  py-ubjson-0.12.0.tar.gz
++# Locally computed sha256 checksums
++sha256	ca182abcb84ad9984c9af2e30cb70c4fe0e1772674355207e8fcdb85e8c5e75f  LICENSE
+diff --git a/package/python-ubjson/python-ubjson.mk b/package/python-ubjson/python-ubjson.mk
+index a192cfb656..477cc400c8 100644
+--- a/package/python-ubjson/python-ubjson.mk
++++ b/package/python-ubjson/python-ubjson.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_UBJSON_VERSION = 0.9.0
++PYTHON_UBJSON_VERSION = 0.12.0
+ PYTHON_UBJSON_SOURCE = py-ubjson-$(PYTHON_UBJSON_VERSION).tar.gz
+-PYTHON_UBJSON_SITE = https://pypi.python.org/packages/d4/40/a80006884ec03a54a5c6c53ae76df9978536862f0683b6e6280e3808d289
++PYTHON_UBJSON_SITE = https://files.pythonhosted.org/packages/68/9c/a6c34e565351f0b04bcf6835e38bc4bd0647269dc48670e12eb99a3f5ef5
+ PYTHON_UBJSON_LICENSE = Apache-2.0
+ PYTHON_UBJSON_LICENSE_FILES = LICENSE
+ PYTHON_UBJSON_SETUP_TYPE = setuptools
+-- 
+2.17.1
