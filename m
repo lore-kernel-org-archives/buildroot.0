@@ -1,53 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Oct 2018 09:39:18 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2018-09-14
-In-Reply-To: <CAGrGpJDdVmD6PkhrZJgpTJut7vdvbxhS0m5Tg2DXPJZS90Vv6g@mail.gmail.com>
-References: <20180915060039.533E3207D4@mail.bootlin.com>
- <CAGrGpJDdVmD6PkhrZJgpTJut7vdvbxhS0m5Tg2DXPJZS90Vv6g@mail.gmail.com>
-Message-ID: <20181006093918.750d4197@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 6 Oct 2018 09:52:12 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] Update for 2018.05.3
+Message-ID: <20181006075452.4226F8D493@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=717309783755a883974896ea822675a7bf46da3a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-On Fri, 5 Oct 2018 14:59:36 -0600, Peter Thompson wrote:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES  | 24 ++++++++++++++++++++++++
+ Makefile |  4 ++--
+ 2 files changed, 26 insertions(+), 2 deletions(-)
 
-> Sorry I am so slow getting back.   I was on holidays most of Sept.
-
-No problem.
-
-> This problem (AFAIK) is the Buildroot configure which is failing is trying
-> to build both SDL and SDL2 which are two incompatible versions of the same
-> thing.
-> 881 BR2_PACKAGE_SDL=y
-> 904 BR2_PACKAGE_SDL2=y
-> 
-> What is being attempted to be configured and built here would never work
-> (in my opinion).
-> 
-> We could try to automate buildroot so only one or the other is selectable.
->   It would mean adding "depends on !BR2_PACKAGE_SDL2"  and "depends on
-> !BR2_PACKAGE_SDL"  to each of the packages Config.in.
-
-I don't see any actual error in the autobuild report at
-http://autobuild.buildroot.net/results/552817141d7eb0c5037114a4bc7d2d76de871285
-that you're replying to.
-
-Also, I believe SDL and SDL2 libraries have different names, so they
-can co-exist in the same system. Hence, it doesn't seem like there is a
-good reason to make them mutually exclusive.
-
-Could you explain what in the autobuild report above makes you think it
-is a SDL/SDL2 conflict ?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/CHANGES b/CHANGES
+index 548b49ca7f..aef2f9555d 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,27 @@
++2018.05.3, Released October 6th, 2018
++
++	Important / security related fixes.
++
++	Add a number of patches to fix build errors for host utilities
++	on modern distributions using glibc-2.28.
++
++	mkusers: Ensure existing group members are preserved when a
++	group is reprocessed.
++
++	printvars: Fix issue with exceeding shell command line length
++	limits for certain setups.
++
++	Updated/fixed packages: acpid, android-tools, apache,
++	arp-scan, bandwidthd, bind, bison, brltty, chipmunk, connman,
++	cppcms, fio, gcc, ghostscript, gnupg, httping, igmpproxy,
++	imagemagick, imlib2, ipsec-tools, lcm2, libcurl, libesmtp,
++	libnfs, libssh, libxslt, links, mediastreamer, minicom,
++	moarvm, nilfs-utils, ocrad, parted, php, postgresql, pv,
++	python-django, qt, qt5quickcontrols, qt5webengine, screen,
++	sdl2, shairport-sync, squashfs, strongswan, vboot-utils,
++	webkitgtk, wireguard, x265, xen, xlib_libXfont, xlib_libXft,
++	xlib_libxshmfence, zeromq
++
+ 2018.05.2, Released August 28th, 2018
+ 
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index 401bc7e8bc..83c68957c4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -87,9 +87,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2018.05.2
++export BR2_VERSION := 2018.05.3
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1535466000
++BR2_VERSION_EPOCH = 1538812000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
