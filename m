@@ -1,48 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Oct 2018 08:40:57 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2018.05.3
-Message-ID: <20181007064022.A3CE38DF07@busybox.osuosl.org>
+Date: Sat, 6 Oct 2018 18:02:26 +0200
+Subject: [Buildroot] [git commit] Update for 2018.05.3
+Message-ID: <20181007064022.8E6B38DF39@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e6deea6bdc9bc3c89bad30fec14ccf478eb010e
+commit: https://git.buildroot.net/buildroot/commit/?id=1b5694bbde038392f32e1b6776f6d9e38f0b010f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+[Peter: drop Makefile changes]
+(cherry picked from commit 717309783755a883974896ea822675a7bf46da3a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/news.html | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ CHANGES | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index b272353cfb..f99b140018 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
+diff --git a/CHANGES b/CHANGES
+index a505d7ec69..41f4ff6de1 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -159,6 +159,30 @@
+ 	#11121: statfs call corrupts memory struct statfs  too small
+ 	#11181: Switching toolchain does not work
  
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2018.05.3 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>6 October 2018</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2018.05.3 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2018.05.2 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.05.3">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2018-October/232379.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2018.05.3.tar.bz2">2018.05.3 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
++2018.05.3, Released October 6th, 2018
 +
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++	Important / security related fixes.
++
++	Add a number of patches to fix build errors for host utilities
++	on modern distributions using glibc-2.28.
++
++	mkusers: Ensure existing group members are preserved when a
++	group is reprocessed.
++
++	printvars: Fix issue with exceeding shell command line length
++	limits for certain setups.
++
++	Updated/fixed packages: acpid, android-tools, apache,
++	arp-scan, bandwidthd, bind, bison, brltty, chipmunk, connman,
++	cppcms, fio, gcc, ghostscript, gnupg, httping, igmpproxy,
++	imagemagick, imlib2, ipsec-tools, lcm2, libcurl, libesmtp,
++	libnfs, libssh, libxslt, links, mediastreamer, minicom,
++	moarvm, nilfs-utils, ocrad, parted, php, postgresql, pv,
++	python-django, qt, qt5quickcontrols, qt5webengine, screen,
++	sdl2, shairport-sync, squashfs, strongswan, vboot-utils,
++	webkitgtk, wireguard, x265, xen, xlib_libXfont, xlib_libXft,
++	xlib_libxshmfence, zeromq
++
+ 2018.05.2, Released August 28th, 2018
+ 
+ 	Important / security related fixes.
