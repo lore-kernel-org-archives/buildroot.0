@@ -1,33 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Oct 2018 15:21:28 +0200
-Subject: [Buildroot] [git commit] package/ccrypt: fix download location
-Message-ID: <20181006132046.E0DDC8D9BB@busybox.osuosl.org>
+Date: Sat, 6 Oct 2018 15:22:17 +0200
+Subject: [Buildroot] [PATCH] package/ccrypt: fix download loacation
+In-Reply-To: <20181006122217.25588-1-yann.morin.1998@free.fr>
+References: <20181006122217.25588-1-yann.morin.1998@free.fr>
+Message-ID: <20181006152217.5467c46e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4230d159201abcfba713974001553c58fc621feb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: David Bachelart <david.bachelart@bbright.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/ccrypt/ccrypt.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sat,  6 Oct 2018 14:22:17 +0200, Yann E. MORIN wrote:
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: David Bachelart <david.bachelart@bbright.com>
+> 
+> ---
+> Note: there is a newer release, 1.11, but I have no way to test it.
+> ---
+>  package/ccrypt/ccrypt.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ccrypt/ccrypt.mk b/package/ccrypt/ccrypt.mk
-index d27e34618a..541a0e776d 100644
---- a/package/ccrypt/ccrypt.mk
-+++ b/package/ccrypt/ccrypt.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- CCRYPT_VERSION = 1.10
--CCRYPT_SITE = http://ccrypt.sourceforge.net/download
-+CCRYPT_SITE = http://ccrypt.sourceforge.net/download/$(CCRYPT_VERSION)
- 
- CCRYPT_LICENSE = GPL-2.0+
- CCRYPT_LICENSE_FILES = COPYING
+Applied to master after fixing the typo in the commit log, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
