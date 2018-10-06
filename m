@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat,  6 Oct 2018 18:55:06 +0200
-Subject: [Buildroot] [PATCH 02/20] perl-devel-stacktrace: new package
+Date: Sat,  6 Oct 2018 18:55:08 +0200
+Subject: [Buildroot] [PATCH 04/20] perl-filesys-notify-simple: new package
 In-Reply-To: <20181006165524.23778-1-francois.perrad@gadz.org>
 References: <20181006165524.23778-1-francois.perrad@gadz.org>
-Message-ID: <20181006165524.23778-3-francois.perrad@gadz.org>
+Message-ID: <20181006165524.23778-5-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,67 +13,67 @@ To: buildroot@busybox.net
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
  package/Config.in                                   |  1 +
- package/perl-devel-stacktrace/Config.in             |  6 ++++++
- .../perl-devel-stacktrace.hash                      |  6 ++++++
- .../perl-devel-stacktrace/perl-devel-stacktrace.mk  | 13 +++++++++++++
+ package/perl-filesys-notify-simple/Config.in        |  6 ++++++
+ .../perl-filesys-notify-simple.hash                 |  6 ++++++
+ .../perl-filesys-notify-simple.mk                   | 13 +++++++++++++
  4 files changed, 26 insertions(+)
- create mode 100644 package/perl-devel-stacktrace/Config.in
- create mode 100644 package/perl-devel-stacktrace/perl-devel-stacktrace.hash
- create mode 100644 package/perl-devel-stacktrace/perl-devel-stacktrace.mk
+ create mode 100644 package/perl-filesys-notify-simple/Config.in
+ create mode 100644 package/perl-filesys-notify-simple/perl-filesys-notify-simple.hash
+ create mode 100644 package/perl-filesys-notify-simple/perl-filesys-notify-simple.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index cc5578f5d..022b7cd38 100644
+index c009ee2ea..fc3d8fadf 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -683,6 +683,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-datetime-tiny/Config.in"
- 	source "package/perl-dbd-mysql/Config.in"
- 	source "package/perl-dbi/Config.in"
-+	source "package/perl-devel-stacktrace/Config.in"
- 	source "package/perl-device-serialport/Config.in"
- 	source "package/perl-digest-hmac/Config.in"
- 	source "package/perl-digest-md5/Config.in"
-diff --git a/package/perl-devel-stacktrace/Config.in b/package/perl-devel-stacktrace/Config.in
+@@ -695,6 +695,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-file-listing/Config.in"
+ 	source "package/perl-file-slurp/Config.in"
+ 	source "package/perl-file-util/Config.in"
++	source "package/perl-filesys-notify-simple/Config.in"
+ 	source "package/perl-gd/Config.in"
+ 	source "package/perl-gdgraph/Config.in"
+ 	source "package/perl-gdtextutil/Config.in"
+diff --git a/package/perl-filesys-notify-simple/Config.in b/package/perl-filesys-notify-simple/Config.in
 new file mode 100644
-index 000000000..fe6e3e5d7
+index 000000000..69469d7a6
 --- /dev/null
-+++ b/package/perl-devel-stacktrace/Config.in
++++ b/package/perl-filesys-notify-simple/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PERL_DEVEL_STACKTRACE
-+	bool "perl-devel-stacktrace"
++config BR2_PACKAGE_PERL_FILESYS_NOTIFY_SIMPLE
++	bool "perl-filesys-notify-simple"
 +	help
-+	  An object representing a stack trace
++	  Simple and dumb file system watcher
 +
-+	  http://metacpan.org/release/Devel-StackTrace
-diff --git a/package/perl-devel-stacktrace/perl-devel-stacktrace.hash b/package/perl-devel-stacktrace/perl-devel-stacktrace.hash
++	  https://github.com/miyagawa/Filesys-Notify-Simple
+diff --git a/package/perl-filesys-notify-simple/perl-filesys-notify-simple.hash b/package/perl-filesys-notify-simple/perl-filesys-notify-simple.hash
 new file mode 100644
-index 000000000..1fcfb6438
+index 000000000..a48394504
 --- /dev/null
-+++ b/package/perl-devel-stacktrace/perl-devel-stacktrace.hash
++++ b/package/perl-filesys-notify-simple/perl-filesys-notify-simple.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    1eb6874d834f3d5d15fa626dd726df77 Devel-StackTrace-2.03.tar.gz
-+sha256 7618cd4ebe24e254c17085f4b418784ab503cb4cb3baf8f48a7be894e59ba848 Devel-StackTrace-2.03.tar.gz
++md5    6042cd96abcc7bf69f959142d00b8143 Filesys-Notify-Simple-0.13.tar.gz
++sha256 ade3d3db882ce2137e527201893d4b8c12b2dbd15009bb89c31cb91ba6495ba2 Filesys-Notify-Simple-0.13.tar.gz
 +
 +# computed by scancpan
-+sha256 e16dd93533bb65e25fad00d06e88840d9b5fd6bb80d551d8866126c52d89e1de LICENSE
-diff --git a/package/perl-devel-stacktrace/perl-devel-stacktrace.mk b/package/perl-devel-stacktrace/perl-devel-stacktrace.mk
++sha256 bd61ca40272d971750f0a2bd0122629865355c5f4a2aa9e70c0d325e75d0da3a LICENSE
+diff --git a/package/perl-filesys-notify-simple/perl-filesys-notify-simple.mk b/package/perl-filesys-notify-simple/perl-filesys-notify-simple.mk
 new file mode 100644
-index 000000000..da51fb6c1
+index 000000000..fff4c0ab5
 --- /dev/null
-+++ b/package/perl-devel-stacktrace/perl-devel-stacktrace.mk
++++ b/package/perl-filesys-notify-simple/perl-filesys-notify-simple.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# perl-devel-stacktrace
++# perl-filesys-notify-simple
 +#
 +################################################################################
 +
-+PERL_DEVEL_STACKTRACE_VERSION = 2.03
-+PERL_DEVEL_STACKTRACE_SOURCE = Devel-StackTrace-$(PERL_DEVEL_STACKTRACE_VERSION).tar.gz
-+PERL_DEVEL_STACKTRACE_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DR/DROLSKY
-+PERL_DEVEL_STACKTRACE_LICENSE = Artistic-2.0
-+PERL_DEVEL_STACKTRACE_LICENSE_FILES = LICENSE
++PERL_FILESYS_NOTIFY_SIMPLE_VERSION = 0.13
++PERL_FILESYS_NOTIFY_SIMPLE_SOURCE = Filesys-Notify-Simple-$(PERL_FILESYS_NOTIFY_SIMPLE_VERSION).tar.gz
++PERL_FILESYS_NOTIFY_SIMPLE_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MI/MIYAGAWA
++PERL_FILESYS_NOTIFY_SIMPLE_LICENSE = Artistic or GPL-1.0+
++PERL_FILESYS_NOTIFY_SIMPLE_LICENSE_FILES = LICENSE
 +
 +$(eval $(perl-package))
 -- 
