@@ -1,73 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Oct 2018 21:18:48 +0200
-Subject: [Buildroot] [git commit] python-django: bump to version 2.1.2
-Message-ID: <20181007191921.916828DFBB@busybox.osuosl.org>
+Date: Sun, 7 Oct 2018 21:07:56 +0200
+Subject: [Buildroot] [git commit] package/libdrm: bump version to 2.4.95
+Message-ID: <20181007191921.8A1608DFE3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f4972e2e8c7c251a263568158d3c9b9f4a04d042
+commit: https://git.buildroot.net/buildroot/commit/?id=2ae0a7f0288b656d88bd4995a81069177be8a281
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Django has dropped support for Python 2.x
-
-Fixes:
-http://autobuild.buildroot.org/results/423/423d480271b8bfdd9319a11cd97f9229681478e4
-
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-django/Config.in          | 8 ++++----
- package/python-django/python-django.hash | 6 ++++--
- package/python-django/python-django.mk   | 4 ++--
- 3 files changed, 10 insertions(+), 8 deletions(-)
+ package/libdrm/libdrm.hash | 10 +++++-----
+ package/libdrm/libdrm.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-django/Config.in b/package/python-django/Config.in
-index 75322d1bb2..89dec8e17a 100644
---- a/package/python-django/Config.in
-+++ b/package/python-django/Config.in
-@@ -1,9 +1,9 @@
- config BR2_PACKAGE_PYTHON_DJANGO
- 	bool "python-django"
--	select BR2_PACKAGE_PYTHON_UNICODEDATA if BR2_PACKAGE_PYTHON
--	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON
--	select BR2_PACKAGE_PYTHON3_UNICODEDATA if BR2_PACKAGE_PYTHON3
--	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3
-+	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON3_UNICODEDATA
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT
-+	select BR2_PACKAGE_PYTHON_PYTZ # runtime
- 	help
- 	  Django is a high-level Python Web framework that encourages
- 	  rapid development and clean, pragmatic design. It takes your
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 6e6e7708db..9a9889ab1c 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,3 +1,5 @@
--# From https://www.djangoproject.com/m/pgp/Django-1.11.16.checksum.txt
--sha256	29268cc47816a44f27308e60f71da635f549c47d8a1d003b28de55141df75791  Django-1.11.16.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/django/json
-+md5	383ca4e98ad5d0aa9d71378fe743bdef  Django-2.1.2.tar.gz
-+sha256	efbcad7ebb47daafbcead109b38a5bd519a3c3cd92c6ed0f691ff97fcdd16b45  Django-2.1.2.tar.gz
-+# Locally computed sha256 checksums
- sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 9f43ffab85..e3f20fd1cb 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index 2043ee780e..ac59dac4f5 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/dri-devel/2018-August/185041.html
+-md5 0ba45ad1551b2c1b6df0797a3e65f827  libdrm-2.4.93.tar.bz2
+-sha1 550ba4bb50236fc2e9138cbeadcb4942ce09410e  libdrm-2.4.93.tar.bz2
+-sha256 6e84d1dc9548a76f20b59a85cf80a0b230cd8196084f5243469d9e65354fcd3c  libdrm-2.4.93.tar.bz2
+-sha512 ba4221e8d6a3a9872fb6d30a0ea391e30ea0e17f249c66f067bed9c2161ed1ad8083959cb2c212834c6566c3e025f4daae31e9533d77aae19bbbbb9de6c2ab3d  libdrm-2.4.93.tar.bz2
++# From https://lists.freedesktop.org/archives/dri-devel/2018-October/191989.html
++md5 41b9ed196a27f5dc7fb88412b704e9fd  libdrm-2.4.95.tar.bz2
++sha1 fd7c1002001ef1aa1b6094eb2b78f1031e233bb3  libdrm-2.4.95.tar.bz2
++sha256 ef772a51b4bed97a2c243194d9a98da97319e0dbdf800d07773b025aacc895c6  libdrm-2.4.95.tar.bz2
++sha512 9bf8178a871bb059471f58f236c8362245e08877b732b2c8366d402e8066c9a74707e4ec3bf680fca12303f1319875edc98ae8e31bc9826f172798f47197e631  libdrm-2.4.95.tar.bz2
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 1871488284..e5b693cb11 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_DJANGO_VERSION = 1.11.16
-+PYTHON_DJANGO_VERSION = 2.1.2
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/35/1d/59836bce4c9cfded261e21c0abd6a4629de6d289522d0fd928117d8eb985
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/8b/03/4c74d3712919613f2c611e6689522df507a2753a92049009661a81b4b72f
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_SETUP_TYPE = setuptools
+-LIBDRM_VERSION = 2.4.93
++LIBDRM_VERSION = 2.4.95
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = https://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
