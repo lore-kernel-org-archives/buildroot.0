@@ -1,69 +1,88 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Oct 2018 09:19:35 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] Update for 2018.02.6
-Message-ID: <20181007071842.B860C8DF43@busybox.osuosl.org>
+Date: Sun, 07 Oct 2018 09:37:51 +0200
+Subject: [Buildroot] Buildroot 2018.02.6 released
+Message-ID: <87murqqka8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=67d61cbef5ff190b803745b332d0f7d7177210fc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+Hi,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES  | 26 ++++++++++++++++++++++++++
- Makefile |  4 ++--
- 2 files changed, 28 insertions(+), 2 deletions(-)
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
 
-diff --git a/CHANGES b/CHANGES
-index 0c50243c60..cdf682164f 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,29 @@
-+2018.02.6, Released October 7th, 2018
-+
-+	Important / security related fixes.
-+
-+	Add a number of patches to fix build errors for host utilities
-+	on modern distributions using glibc-2.28.
-+
-+	mkusers: Ensure existing group members are preserved when a
-+	group is reprocessed.
-+
-+	printvars: Fix issue with exceeding shell command line length
-+	limits for certain setups.
-+
-+	Updated/fixes packages: acpid, android-tools, apache,
-+	arp-scan, bandwidthd, bind, bison, clamav, connman, cppcms,
-+	cramfs, fio, gcc, ghostscript, glibc, gnupg, httping,
-+	igmpproxy, imagemagick, imlib2, ipsec-tools, lcms2, libcurl,
-+	libesmtp, libnfs, libssh, libxslt, links, linuxptp,
-+	mediastreamer, minicom, moarvm, nilfs-utils, ocrad, parted,
-+	php, pv, python-django, qt, qt5quickcontrols, qt5webengine,
-+	screen, sdl2, shairport-sync, squashfs, strongswan,
-+	vboot-utils, webkitgtk, wireguard, x265, xen, xlib_libXfont,
-+	xlib_libXft
-+
-+	New packages: brotli, woff2
-+
- 2018.02.5, Released August 29th, 2018
- 
- 	Important / security related fixes.
-diff --git a/Makefile b/Makefile
-index dc26099fd4..36614a8c35 100644
---- a/Makefile
-+++ b/Makefile
-@@ -87,9 +87,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2018.02.5
-+export BR2_VERSION := 2018.02.6
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1535550000
-+BR2_VERSION_EPOCH = 1538896000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+Buildroot 2018.02.6 is released - Go download it at:
+
+http://buildroot.org/downloads/buildroot-2018.02.6.tar.gz
+
+or
+
+http://buildroot.org/downloads/buildroot-2018.02.6.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.org/buildroot
+
+Buildroot 2018.02.6 is a bugfix release on the current long term
+release, fixing a number of important / security related issues
+discovered since the 2018.02.5 release.
+
+- Add a number of patches to fix build errors for host utilities on
+  modern distributions using glibc-2.28.
+
+- mkusers: Ensure existing group members are preserved when a group is
+  reprocessed.
+
+- printvars: Fix issue with exceeding shell command line length limits
+  for certain setups.
+
+- Security fixes for apache, bind, clamav, ghostscript, imagemagick,
+  lcms2, libcurl, php, strongswan, webkitgtk, xen
+
+- Fixes for download/compilation/runtime issues in acpid, android-tools,
+  bison, cppcms, cramfs, fio, gcc, glibc, gnupg, igmpproxy, imlib2,
+  ipsec-tools, libesmtp, libnfs, libssh, libxslt, links, linuxptp,
+  mediastreamer, moarvm, parted, php, pv, python-django, qt,
+  qt5quickcontrols, qt5webengine, screen, sdl2, shairport-sync,
+  squashfs, vboot-utils, x265, xlib_libXfont, xlib_libXft
+
+- New packages (dependencies of webkitgtk): brotli, woff2
+
+For more details, see the CHANGES file:
+
+https://git.buildroot.net/buildroot/plain/CHANGES?id=2018.02.6
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2018.02.5..
+
+    17  Fabrice Fontaine
+    16  Peter Korsgaard
+     9  Bernd Kuhls
+     8  Matt Weber
+     7  Adrian Perez de Castro
+     6  Giulio Benetti
+     5  Fabio Estevam
+     2  Gilles Talis
+     2  Laurent Hartanerot
+     2  Peter Seiderer
+     2  Trent Piepho
+     1  Carlos Santos
+     1  Ferdinand van Aartsen
+     1  Johan Oudinet
+     1  J?rg Krause
+     1  Marcel Patzlaff
+     1  Mark Corbin
+     1  Max Filippov
+     1  Paresh Chaudhary
+     1  Peter Thompson
+     1  Richard Kunze
+     1  Thomas Petazzoni
+     1  Yann E. MORIN
+
+-- 
+Bye, Peter Korsgaard
