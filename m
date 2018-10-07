@@ -1,32 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 6 Oct 2018 18:02:26 +0200
-Subject: [Buildroot] [git commit] Update for 2018.05.3
-Message-ID: <20181007064022.8E6B38DF39@busybox.osuosl.org>
+Date: Sun, 7 Oct 2018 09:19:35 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] Update for 2018.02.6
+Message-ID: <20181007071842.B860C8DF43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b5694bbde038392f32e1b6776f6d9e38f0b010f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=67d61cbef5ff190b803745b332d0f7d7177210fc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-[Peter: drop Makefile changes]
-(cherry picked from commit 717309783755a883974896ea822675a7bf46da3a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ CHANGES  | 26 ++++++++++++++++++++++++++
+ Makefile |  4 ++--
+ 2 files changed, 28 insertions(+), 2 deletions(-)
 
 diff --git a/CHANGES b/CHANGES
-index a505d7ec69..41f4ff6de1 100644
+index 0c50243c60..cdf682164f 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -159,6 +159,30 @@
- 	#11121: statfs call corrupts memory struct statfs  too small
- 	#11181: Switching toolchain does not work
- 
-+2018.05.3, Released October 6th, 2018
+@@ -1,3 +1,29 @@
++2018.02.6, Released October 7th, 2018
 +
 +	Important / security related fixes.
 +
@@ -39,17 +35,35 @@ index a505d7ec69..41f4ff6de1 100644
 +	printvars: Fix issue with exceeding shell command line length
 +	limits for certain setups.
 +
-+	Updated/fixed packages: acpid, android-tools, apache,
-+	arp-scan, bandwidthd, bind, bison, brltty, chipmunk, connman,
-+	cppcms, fio, gcc, ghostscript, gnupg, httping, igmpproxy,
-+	imagemagick, imlib2, ipsec-tools, lcm2, libcurl, libesmtp,
-+	libnfs, libssh, libxslt, links, mediastreamer, minicom,
-+	moarvm, nilfs-utils, ocrad, parted, php, postgresql, pv,
-+	python-django, qt, qt5quickcontrols, qt5webengine, screen,
-+	sdl2, shairport-sync, squashfs, strongswan, vboot-utils,
-+	webkitgtk, wireguard, x265, xen, xlib_libXfont, xlib_libXft,
-+	xlib_libxshmfence, zeromq
++	Updated/fixes packages: acpid, android-tools, apache,
++	arp-scan, bandwidthd, bind, bison, clamav, connman, cppcms,
++	cramfs, fio, gcc, ghostscript, glibc, gnupg, httping,
++	igmpproxy, imagemagick, imlib2, ipsec-tools, lcms2, libcurl,
++	libesmtp, libnfs, libssh, libxslt, links, linuxptp,
++	mediastreamer, minicom, moarvm, nilfs-utils, ocrad, parted,
++	php, pv, python-django, qt, qt5quickcontrols, qt5webengine,
++	screen, sdl2, shairport-sync, squashfs, strongswan,
++	vboot-utils, webkitgtk, wireguard, x265, xen, xlib_libXfont,
++	xlib_libXft
 +
- 2018.05.2, Released August 28th, 2018
++	New packages: brotli, woff2
++
+ 2018.02.5, Released August 29th, 2018
  
  	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index dc26099fd4..36614a8c35 100644
+--- a/Makefile
++++ b/Makefile
+@@ -87,9 +87,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2018.02.5
++export BR2_VERSION := 2018.02.6
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1535550000
++BR2_VERSION_EPOCH = 1538896000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
