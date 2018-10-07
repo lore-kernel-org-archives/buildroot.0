@@ -1,132 +1,78 @@
 From: Carlos Santos <casantos@datacom.com.br>
-Date: Sun,  7 Oct 2018 08:45:58 -0300
-Subject: [Buildroot] [PATCH v3 1/8] busybox: update S01logging
+Date: Sun,  7 Oct 2018 08:46:01 -0300
+Subject: [Buildroot] [PATCH v3 4/8] rsyslog: add logging configuration file
 In-Reply-To: <20181007114605.18153-1-casantos@datacom.com.br>
 References: <20181007114605.18153-1-casantos@datacom.com.br>
-Message-ID: <20181007114605.18153-2-casantos@datacom.com.br>
+Message-ID: <20181007114605.18153-5-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reformat and fix syslogd/klogd startup script for better quality and
-code style:
+Provide a template to help users to customize rsyslog without editting
+the startup script. Also warn about options that must not be used.
 
-- Detect and report start/stop errors (previous version ignored them and
-  always reported OK).
-- Use a separate function for restart.
-- Implement reload as restart.
-- Support a configuration variable that completely disables the service
-  and issues a warning message on any invocation.
+Add instructions on how to configure debugging, since it a bit tricky
+when rsyslogd runs in background, requiring a separete log file.
+
+This file is also useful as an example for init script authors.
 
 Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
 Changes v1->v2
-- Implement suggestions made by Nicolas Cavallari and Arnout Vandecappelle
+- Document that "-n" command line option must not be used.
+- Small improvements in comments.
+Changes v2->v3
+- Add reference to documentation, as suggested by Matt Weber.
 ---
- package/busybox/S01logging | 82 +++++++++++++++++++++++++-------------
- 1 file changed, 54 insertions(+), 28 deletions(-)
+ package/rsyslog/etc.default.logging | 24 ++++++++++++++++++++++++
+ package/rsyslog/rsyslog.mk          |  2 ++
+ 2 files changed, 26 insertions(+)
+ create mode 100644 package/rsyslog/etc.default.logging
 
-diff --git a/package/busybox/S01logging b/package/busybox/S01logging
-index fcb3e7d236..ddd27bba9a 100644
---- a/package/busybox/S01logging
-+++ b/package/busybox/S01logging
-@@ -1,40 +1,66 @@
- #!/bin/sh
--#
--# Start logging
--#
- 
--SYSLOGD_ARGS=-n
--KLOGD_ARGS=-n
--[ -r /etc/default/logging ] && . /etc/default/logging
-+DAEMON="logging"
-+SPIDFILE="/var/run/syslogd.pid"
-+KPIDFILE="/var/run/klogd.pid"
- 
-+SYSLOGD_ARGS=""
-+KLOGD_ARGS=""
-+ENABLED="yes"
+diff --git a/package/rsyslog/etc.default.logging b/package/rsyslog/etc.default.logging
+new file mode 100644
+index 0000000000..12223eba21
+--- /dev/null
++++ b/package/rsyslog/etc.default.logging
+@@ -0,0 +1,24 @@
++#
++# /etc/default/logging (rsyslog version)
++#
++# Online documentation of rsyslog is available at
++#
++#    https://www.rsyslog.com/doc/
++#
++# Command line options are mostly undocumented in recent rsyslog versions, so
++# avoid using them. Only "-n" and "-d" are briefly described when rsyslogd is
++# invoked with the "-h" option. Other options are described on old versions of
++# the rsyslogd(8) manual page but they are certainly outdated.
++#
 +
-+# shellcheck source=/dev/null
-+[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
++# Use RSYSLOGD_ARGS to pass additional arguments to rsyslogd.
++# - Do NOT use "-i pid_file", "-n", nor "-v", since they will break the
++#   startup script.
++# - Use "-d" to enable debug (see below). Warning: log files may be HUGE!
++# RSYSLOGD_ARGS="" # (default value)
 +
-+if [ "$ENABLED" != "yes" ]; then
-+	printf '%s is disabled\n' "$DAEMON"
-+	exit 0
-+fi
++# You will need this along with "-d".
++# RSYSLOG_DEBUGLOG="/var/log/rsyslogd"; export RSYSLOG_DEBUGLOG
 +
-+# BusyBox' syslogd and klogd do not create pidfiles, so use "-m" to instruct
-+# start-stop-daemon to create them. This also means that we must pass "-n" to
-+# sylogd and klogd in the command line.
- start() {
--	printf "Starting logging: "
--	start-stop-daemon -b -S -q -m -p /var/run/syslogd.pid --exec /sbin/syslogd -- $SYSLOGD_ARGS
--	start-stop-daemon -b -S -q -m -p /var/run/klogd.pid --exec /sbin/klogd -- $KLOGD_ARGS
--	echo "OK"
-+	printf 'Starting %s: ' "$DAEMON"
-+	status=0
-+	# shellcheck disable=SC2086 # we need the word splitting
-+	start-stop-daemon -b -S -q -m -p "$SPIDFILE" -x /sbin/syslogd -- -n $SYSLOGD_ARGS || status=$?
-+	start-stop-daemon -b -S -q -m -p "$KPIDFILE" -x /sbin/klogd -- -n $KLOGD_ARGS || status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
- }
++# Uncomment the line below to disable this service
++# ENABLED="no"
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index 61e08ba765..c80d0696e2 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -74,6 +74,8 @@ endif
+ define RSYSLOG_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/rsyslog/S01logging \
+ 		$(TARGET_DIR)/etc/init.d/S01logging
++	$(INSTALL) -m 0644 -D package/rsyslog/etc.default.logging \
++		$(TARGET_DIR)/etc/default/logging
+ endef
  
- stop() {
--	printf "Stopping logging: "
--	start-stop-daemon -K -q -p /var/run/syslogd.pid
--	start-stop-daemon -K -q -p /var/run/klogd.pid
--	echo "OK"
-+	printf 'Stopping %s: ' "$DAEMON"
-+	status=0
-+	start-stop-daemon -K -q -p "$SPIDFILE" || status=$?
-+	[ "$status" -eq 0 ] && rm -f "$SPIDFILE"
-+	start-stop-daemon -K -q -p "$KPIDFILE" || status=$?
-+	[ "$status" -eq 0 ] && rm -f "$KPIDFILE"
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
- }
- 
--case "$1" in
--  start)
--	start
--	;;
--  stop)
--	stop
--	;;
--  restart|reload)
-+restart() {
- 	stop
-+	sleep 1
- 	start
--	;;
--  *)
--	echo "Usage: $0 {start|stop|restart|reload}"
--	exit 1
--esac
-+}
- 
--exit $?
-+case "$1" in
-+        start|stop|restart)
-+		"$1";;
-+	reload)
-+		# Restart, since there is no true "reload" feature.
-+		restart;;
-+        *)
-+                echo "Usage: $0 {start|stop|restart|reload}"
-+                exit 1
-+esac
+ # The rsyslog.service is installed by rsyslog, but the link is not created
 -- 
 2.17.1
