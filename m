@@ -1,58 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Oct 2018 09:54:57 +0200
-Subject: [Buildroot] [git commit] Update for 2018.02.6
-Message-ID: <20181007075634.4DF677FD90@busybox.osuosl.org>
+Date: Sun, 7 Oct 2018 09:57:11 +0200
+Subject: [Buildroot] [git commit] docs/website: update for 2018.02.6
+Message-ID: <20181007075634.7B6BF8DF36@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=efdb7771a823aaedcf6992db7a0ceaafb0ca9e8f
+commit: https://git.buildroot.net/buildroot/commit/?id=5cb35287389af475a6389cefbb5193ee0580430e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: drop Makefile changes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 67d61cbef5ff190b803745b332d0f7d7177210fc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 41f4ff6de1..8efdd67fe8 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -437,6 +437,32 @@
- 	#10961: Grub2 fails to build for x86_64 when BR2_SSP_ALL is
- 		enabled
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 626b67a531..e355ae403d 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -8,37 +8,37 @@
+     <div class="panel-heading">Download</div>
+     <div class="panel-body">
  
-+2018.02.6, Released October 7th, 2018
-+
-+	Important / security related fixes.
-+
-+	Add a number of patches to fix build errors for host utilities
-+	on modern distributions using glibc-2.28.
-+
-+	mkusers: Ensure existing group members are preserved when a
-+	group is reprocessed.
-+
-+	printvars: Fix issue with exceeding shell command line length
-+	limits for certain setups.
-+
-+	Updated/fixes packages: acpid, android-tools, apache,
-+	arp-scan, bandwidthd, bind, bison, clamav, connman, cppcms,
-+	cramfs, fio, gcc, ghostscript, glibc, gnupg, httping,
-+	igmpproxy, imagemagick, imlib2, ipsec-tools, lcms2, libcurl,
-+	libesmtp, libnfs, libssh, libxslt, links, linuxptp,
-+	mediastreamer, minicom, moarvm, nilfs-utils, ocrad, parted,
-+	php, pv, python-django, qt, qt5quickcontrols, qt5webengine,
-+	screen, sdl2, shairport-sync, squashfs, strongswan,
-+	vboot-utils, webkitgtk, wireguard, x265, xen, xlib_libXfont,
-+	xlib_libXft
-+
-+	New packages: brotli, woff2
-+
- 2018.02.5, Released August 29th, 2018
+-      <h3 style="text-align: center;">Latest long term support release: <b>2018.02.5</b></h3>
++      <h3 style="text-align: center;">Latest long term support release: <b>2018.02.6</b></h3>
  
- 	Important / security related fixes.
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2018.02.5.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.02.6.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2018.02.5.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.02.6.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2018.02.5.tar.gz">buildroot-2018.02.5.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2018.02.5.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2018.02.6.tar.gz">buildroot-2018.02.6.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2018.02.6.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2018.02.5.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.02.6.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2018.02.5.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.02.6.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2018.02.5.tar.bz2">buildroot-2018.02.5.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2018.02.5.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2018.02.6.tar.bz2">buildroot-2018.02.6.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2018.02.6.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index f99b140018..d919cd9405 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2018.02.6 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>7 October 2018</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2018.02.6 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2018.02.5 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.02.6">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2018-October/232428.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2018.02.6.tar.bz2">2018.02.6 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
