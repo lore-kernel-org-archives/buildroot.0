@@ -1,93 +1,129 @@
 From: Carlos Santos <casantos@datacom.com.br>
-Date: Sun,  7 Oct 2018 08:45:57 -0300
-Subject: [Buildroot] [PATCH v3 0/8] init scripts: rewrite S01logging
-Message-ID: <20181007114605.18153-1-casantos@datacom.com.br>
+Date: Sun,  7 Oct 2018 08:46:04 -0300
+Subject: [Buildroot] [PATCH v3 7/8] syslog-ng: update S01logging
+In-Reply-To: <20181007114605.18153-1-casantos@datacom.com.br>
+References: <20181007114605.18153-1-casantos@datacom.com.br>
+Message-ID: <20181007114605.18153-8-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Continuing our effort to improve daemon startup scripts, this series
-focuses on S01logging, which starts the logging daemon. Common features
-are:
+Reformat and fix syslog-ng startup script for better quality and code
+style:
 
 - Indent with tabs, not spaces.
-- Implement start, stop, restart and reload as functions.
-- Use start-stop-daemon.
-- Correctly detect and report start/stop/restart/reload errors.
-- Support a configuration file at /etc/default (example files for each
-  package are provided in individual patches).
+- Do not kill syslog-ng in "reload". Send a SIGHUP signal, instructing
+  it to perform a re-initialization.
+- Support a configuration file at /etc/default (an example file will be
+  added in forthcomming patch).
 - Support a configuration variable that completely disables the service
   and issues a warning message on any invocation.
 
-The configuration files are provided mostly as examples for init script
-authors but they also contain information about options that cannot be
-used when running in background. 
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+---
+Changes v1->v2:
+- Implement changes suggested by Arnout Vandecappelle.
+Changes v2->v3:
+- Include /etc/default/logging, not /etc/default/$DAEMON.
+- Remove stray 'g' spotted by Chris Packham.
+---
+ package/syslog-ng/S01logging | 73 +++++++++++++++++++++++++-----------
+ 1 file changed, 51 insertions(+), 22 deletions(-)
 
-All files implement the following FSM:
-
-                                                  +---------+
-             +-------stop--------+   +----(1s)----| stopped |
-             |                   |   |            |   (*)   |
-             |                   |   |            +---------+
-             v                   |   v                 ^
-      +---------+             +---------+              |
-      |         |             |         |----restart---+
-      | STOPPED |----start--->| STARTED |
-      |         |             |         |----reload----+
-      +---------+             +---------+              |
-                                     ^                 |
-                                     |                 |
-                                     +-----------------+
-
-* "stopped" is an intermediary state that transitions to STARTED after
-  one second.
-
-Attempts to do invalid transitions (e.g. start from STARTED state) will
-fail. That's why we don't pass -o (--oknodo) to start-stop-daemon. This
-changes the script behavior, in some cases, while in other cases just
-reports errors that were ignored previously.
-
-The "restart" transition is implemented as "stop, sleep 1, start", so
-restarting from STOPPED state is possible, although an error message is
-shown because "stop" fails.
-
-The "reload" transition semantics is "reload the configuration and keep
-running", when possible, otherwise it is the same as "restart" (in this
-series, only syslog-ng supports a true "reload" operation).
-
-The scripts and configuration files checked with shellcheck v0.5.0:
-
-  $ shellcheck -s sh package/*/{S01logging,etc.default.logging}
-
-Carlos Santos (8):
-  busybox: update S01logging
-  busybox: add logging configuration file
-  rsyslog: update S01logging
-  rsyslog: add logging configuration file
-  sysklogd: update S01logging
-  sysklogd: add logging configuration file
-  syslog-ng: update S01logging
-  syslog-ng: add logging configuration file
-
- package/busybox/S01logging            | 82 +++++++++++++++---------
- package/busybox/busybox.mk            |  2 +
- package/busybox/etc.default.logging   | 17 +++++
- package/rsyslog/S01logging            | 68 +++++++++++++-------
- package/rsyslog/etc.default.logging   | 24 +++++++
- package/rsyslog/rsyslog.mk            |  2 +
- package/sysklogd/S01logging           | 90 +++++++++++++++++++++------
- package/sysklogd/etc.default.logging  | 33 ++++++++++
- package/sysklogd/sysklogd.mk          |  2 +
- package/syslog-ng/S01logging          | 73 +++++++++++++++-------
- package/syslog-ng/etc.default.logging | 21 +++++++
- package/syslog-ng/syslog-ng.mk        |  2 +
- 12 files changed, 323 insertions(+), 93 deletions(-)
- create mode 100644 package/busybox/etc.default.logging
- create mode 100644 package/rsyslog/etc.default.logging
- create mode 100644 package/sysklogd/etc.default.logging
- create mode 100644 package/syslog-ng/etc.default.logging
-
+diff --git a/package/syslog-ng/S01logging b/package/syslog-ng/S01logging
+index d7c899a1e3..255ca16660 100644
+--- a/package/syslog-ng/S01logging
++++ b/package/syslog-ng/S01logging
+@@ -1,17 +1,42 @@
+ #!/bin/sh
+ 
++DAEMON="syslog-ng"
++PIDFILE="/var/run/$DAEMON.pid"
++
++SYSLOG_NG_ARGS=""
++ENABLED="yes"
++
++# shellcheck source=/dev/null
++[ -r "/etc/default/logging" ] && . "/etc/default/logging"
++
++if [ "$ENABLED" != "yes" ]; then
++	printf '%s is disabled\n' "$DAEMON"
++	exit 0
++fi
++
+ start() {
+-	printf "Starting syslog-ng daemon: "
+-	start-stop-daemon -S -q -p /var/run/syslog-ng.pid \
+-		-x /usr/sbin/syslog-ng -- --pidfile /var/run/syslog-ng.pid
+-	[ $? = 0 ] && echo "OK" || echo "FAIL"
++	printf 'Starting %s: ' "$DAEMON"
++	# shellcheck disable=SC2086 # we need the word splitting
++	start-stop-daemon -S -q -p "$PIDFILE" -x /usr/sbin/syslog-ng -- $SYSLOG_NG_ARGS
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
+ }
+ 
+ stop() {
+-	printf "Stopping syslog-ng daemon: "
+-	start-stop-daemon -K -q -p /var/run/syslog-ng.pid \
+-		-x /usr/sbin/syslog-ng
+-	[ $? = 0 ] && echo "OK" || echo "FAIL"
++	printf 'Stopping %s: ' "$DAEMON"
++	start-stop-daemon -K -q -p "$PIDFILE"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
+ }
+ 
+ restart() {
+@@ -20,19 +45,23 @@ restart() {
+ 	start
+ }
+ 
++# SIGHUP makes syslog-ng reload its configuration
++reload() {
++	printf 'Stopping %s: ' "$DAEMON"
++	start-stop-daemon -K -s HUP -q -p "$PIDFILE"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
+ case "$1" in
+-	start)
+-		start
+-		;;
+-	stop)
+-		stop
+-		;;
+-	restart|reload)
+-		restart
+-		;;
+-	*)
+-		echo "Usage: $0 {start|stop|restart}"
+-		exit 1
++        start|stop|restart|reload)
++                "$1";;
++        *)
++                echo "Usage: $0 {start|stop|restart|reload}"
++                exit 1
+ esac
+-
+-exit $?
 -- 
 2.17.1
