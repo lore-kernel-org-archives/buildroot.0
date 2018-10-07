@@ -1,100 +1,100 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Oct 2018 09:57:11 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2018.02.6
-Message-ID: <20181007075634.7B6BF8DF36@busybox.osuosl.org>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Sun,  7 Oct 2018 11:17:01 +0200
+Subject: [Buildroot] [PATCH v2] xapian: new package
+Message-ID: <1538903821-5952-1-git-send-email-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5cb35287389af475a6389cefbb5193ee0580430e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+Change v1 -> v2
+- Fixed warnings reported by check-package script.
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 626b67a531..e355ae403d 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/xapian/Config.in   | 14 ++++++++++++++
+ package/xapian/xapian.hash |  3 +++
+ package/xapian/xapian.mk   | 14 ++++++++++++++
+ 5 files changed, 33 insertions(+)
+ create mode 100644 package/xapian/Config.in
+ create mode 100644 package/xapian/xapian.hash
+ create mode 100644 package/xapian/xapian.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 74bc703..dbb55c8 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -886,6 +886,7 @@ F:	package/leptonica/
+ F:	package/ocrad/
+ F:	package/tesseract-ocr/
+ F:	package/webp/
++F:	package/xapian/
  
--      <h3 style="text-align: center;">Latest long term support release: <b>2018.02.5</b></h3>
-+      <h3 style="text-align: center;">Latest long term support release: <b>2018.02.6</b></h3>
+ N:	Giulio Benetti <giulio.benetti@micronovasrl.com>
+ F:	package/sunxi-mali-mainline/
+diff --git a/package/Config.in b/package/Config.in
+index 17627ad..80823e3 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1657,6 +1657,7 @@ endif
+ 	source "package/tinycbor/Config.in"
+ 	source "package/tz/Config.in"
+ 	source "package/tzdata/Config.in"
++	source "package/xapian/Config.in"
+ endmenu
  
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2018.02.5.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.02.6.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2018.02.5.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.02.6.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2018.02.5.tar.gz">buildroot-2018.02.5.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2018.02.5.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2018.02.6.tar.gz">buildroot-2018.02.6.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2018.02.6.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2018.02.5.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.02.6.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2018.02.5.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.02.6.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2018.02.5.tar.bz2">buildroot-2018.02.5.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2018.02.5.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2018.02.6.tar.bz2">buildroot-2018.02.6.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2018.02.6.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index f99b140018..d919cd9405 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2018.02.6 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>7 October 2018</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2018.02.6 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2018.02.5 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.02.6">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2018-October/232428.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2018.02.6.tar.bz2">2018.02.6 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
+ menu "Security"
+diff --git a/package/xapian/Config.in b/package/xapian/Config.in
+new file mode 100644
+index 0000000..6d5551d
+--- /dev/null
++++ b/package/xapian/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_XAPIAN
++	bool "xapian"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_ZLIB
++	help
++	  Xapian is an open Source search engine Library
++	  It is a highly adaptable toolkit which allows developers
++	  to easily add advanced indexing and search facilities to
++	  their own applications.
++	  It has built-in support for several families of weighting
++	  models and supports a rich set of boolean query operators.
 +
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++	  https://xapian.org/
+diff --git a/package/xapian/xapian.hash b/package/xapian/xapian.hash
+new file mode 100644
+index 0000000..4fd0dd1
+--- /dev/null
++++ b/package/xapian/xapian.hash
+@@ -0,0 +1,3 @@
++# locally computed
++sha256 13f08a0b649c7afa804fa0e85678d693fd6069dd394c9b9e7d41973d74a3b5d3 xapian-core-1.4.7.tar.xz
++sha256 c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42 COPYING
+diff --git a/package/xapian/xapian.mk b/package/xapian/xapian.mk
+new file mode 100644
+index 0000000..63f9119
+--- /dev/null
++++ b/package/xapian/xapian.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# xapian
++#
++################################################################################
++
++XAPIAN_VERSION = 1.4.7
++XAPIAN_SOURCE = xapian-core-$(XAPIAN_VERSION).tar.xz
++XAPIAN_SITE = https://oligarchy.co.uk/xapian/$(XAPIAN_VERSION)
++XAPIAN_LICENSE = GPL-2.0+
++XAPIAN_LICENSE_FILES = COPYING
++XAPIAN_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
+-- 
+2.7.4
