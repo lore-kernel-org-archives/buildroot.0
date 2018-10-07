@@ -1,90 +1,93 @@
 From: Carlos Santos <casantos@datacom.com.br>
-Date: Sun,  7 Oct 2018 08:46:03 -0300
-Subject: [Buildroot] [PATCH v3 6/8] sysklogd: add logging configuration file
-In-Reply-To: <20181007114605.18153-1-casantos@datacom.com.br>
-References: <20181007114605.18153-1-casantos@datacom.com.br>
-Message-ID: <20181007114605.18153-7-casantos@datacom.com.br>
+Date: Sun,  7 Oct 2018 08:45:57 -0300
+Subject: [Buildroot] [PATCH v3 0/8] init scripts: rewrite S01logging
+Message-ID: <20181007114605.18153-1-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Provide a template to help users to customize syslogd and klogd without
-editting the startup script. Also warn about options that must not be
-used.
+Continuing our effort to improve daemon startup scripts, this series
+focuses on S01logging, which starts the logging daemon. Common features
+are:
 
-syslogd options worth to configure are mark interval (-m), remote log
-support (-r) and domain list (-s).
+- Indent with tabs, not spaces.
+- Implement start, stop, restart and reload as functions.
+- Use start-stop-daemon.
+- Correctly detect and report start/stop/restart/reload errors.
+- Support a configuration file at /etc/default (example files for each
+  package are provided in individual patches).
+- Support a configuration variable that completely disables the service
+  and issues a warning message on any invocation.
 
-Give example of how to configure klogd re-initialization signal.
+The configuration files are provided mostly as examples for init script
+authors but they also contain information about options that cannot be
+used when running in background. 
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
----
-Changes v1->v2:
-- Document that the "-n" command line option must not be used.
-- Going against the request from Arnout Vandecappelle, keep the klogd reload
-  configuration. Add a comment explainig why it is still useful. BTW, I work
-  on a project which requires dynamic installation of kernel modules.
-Changes v2->v3
-- Add reference to documentation, as suggested by Matt Weber.
----
- package/sysklogd/etc.default.logging | 33 ++++++++++++++++++++++++++++
- package/sysklogd/sysklogd.mk         |  2 ++
- 2 files changed, 35 insertions(+)
+All files implement the following FSM:
+
+                                                  +---------+
+             +-------stop--------+   +----(1s)----| stopped |
+             |                   |   |            |   (*)   |
+             |                   |   |            +---------+
+             v                   |   v                 ^
+      +---------+             +---------+              |
+      |         |             |         |----restart---+
+      | STOPPED |----start--->| STARTED |
+      |         |             |         |----reload----+
+      +---------+             +---------+              |
+                                     ^                 |
+                                     |                 |
+                                     +-----------------+
+
+* "stopped" is an intermediary state that transitions to STARTED after
+  one second.
+
+Attempts to do invalid transitions (e.g. start from STARTED state) will
+fail. That's why we don't pass -o (--oknodo) to start-stop-daemon. This
+changes the script behavior, in some cases, while in other cases just
+reports errors that were ignored previously.
+
+The "restart" transition is implemented as "stop, sleep 1, start", so
+restarting from STOPPED state is possible, although an error message is
+shown because "stop" fails.
+
+The "reload" transition semantics is "reload the configuration and keep
+running", when possible, otherwise it is the same as "restart" (in this
+series, only syslog-ng supports a true "reload" operation).
+
+The scripts and configuration files checked with shellcheck v0.5.0:
+
+  $ shellcheck -s sh package/*/{S01logging,etc.default.logging}
+
+Carlos Santos (8):
+  busybox: update S01logging
+  busybox: add logging configuration file
+  rsyslog: update S01logging
+  rsyslog: add logging configuration file
+  sysklogd: update S01logging
+  sysklogd: add logging configuration file
+  syslog-ng: update S01logging
+  syslog-ng: add logging configuration file
+
+ package/busybox/S01logging            | 82 +++++++++++++++---------
+ package/busybox/busybox.mk            |  2 +
+ package/busybox/etc.default.logging   | 17 +++++
+ package/rsyslog/S01logging            | 68 +++++++++++++-------
+ package/rsyslog/etc.default.logging   | 24 +++++++
+ package/rsyslog/rsyslog.mk            |  2 +
+ package/sysklogd/S01logging           | 90 +++++++++++++++++++++------
+ package/sysklogd/etc.default.logging  | 33 ++++++++++
+ package/sysklogd/sysklogd.mk          |  2 +
+ package/syslog-ng/S01logging          | 73 +++++++++++++++-------
+ package/syslog-ng/etc.default.logging | 21 +++++++
+ package/syslog-ng/syslog-ng.mk        |  2 +
+ 12 files changed, 323 insertions(+), 93 deletions(-)
+ create mode 100644 package/busybox/etc.default.logging
+ create mode 100644 package/rsyslog/etc.default.logging
  create mode 100644 package/sysklogd/etc.default.logging
+ create mode 100644 package/syslog-ng/etc.default.logging
 
-diff --git a/package/sysklogd/etc.default.logging b/package/sysklogd/etc.default.logging
-new file mode 100644
-index 0000000000..a655e7ad42
---- /dev/null
-+++ b/package/sysklogd/etc.default.logging
-@@ -0,0 +1,33 @@
-+#
-+# /etc/default/logging (sysklogd version)
-+#
-+# Documentation is available in the klogd.8 and sysklogd.8 manual pages
-+# distributed along with the source code.
-+#
-+
-+# Use SYSLOGD_ARGS to pass additional arguments to syslogd.
-+# - Do NOT use "-n", "-v", since they will break the startup script.
-+# - Do NOT use "-d", since debugging does not work when running in background.
-+# SYSLOGD_ARGS="-m 0" # (default value)
-+
-+# Use KLOGD_ARGS to pass additional arguments to klogd.
-+# - Do NOT use "-n", "-o" nor "-v", since they will break the startup script.
-+# - Do NOT use "-d", since debugging does not work when running in background.
-+# KLOGD_ARGS="-m 0" # (default value)
-+
-+# KLOGD_RELOAD selects the "S01logging reload" behavior.
-+# - "USR1" will cause the kernel module symbols to be reloaded.
-+# - "USR2" will cause both the static kernel symbols and the kernel module
-+#   symbols to be reloaded.
-+# - "0" will do nothing.
-+# - Do not use any other value here. Use kill(1) for fine-grained control of
-+#   klogd, as documented in its manual page.
-+#
-+# Most users will never need to reload klogd in buildroot context because they
-+# are not going to dynamically install kernel modules. In the rare cases that
-+# this does happen, the user should be smart enough to send a SIGUSR1/2 but
-+# let's keep this configurable for documentation purposes.
-+# KLOGD_RELOAD="0" # (default value)
-+
-+# Uncomment the line below to disable this service
-+# ENABLED="no"
-diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
-index c4f064c10b..b7e67ffee3 100644
---- a/package/sysklogd/sysklogd.mk
-+++ b/package/sysklogd/sysklogd.mk
-@@ -25,6 +25,8 @@ endef
- define SYSKLOGD_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 755 -D package/sysklogd/S01logging \
- 		$(TARGET_DIR)/etc/init.d/S01logging
-+	$(INSTALL) -m 0644 -D package/sysklogd/etc.default.logging \
-+		$(TARGET_DIR)/etc/default/logging
- endef
- 
- define SYSKLOGD_INSTALL_INIT_SYSTEMD
 -- 
 2.17.1
