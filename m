@@ -1,52 +1,52 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 7 Oct 2018 21:40:18 +0200
-Subject: [Buildroot] [PATCH 1/1] nmap: update license
-In-Reply-To: <20181006173750.GF2869@scaer>
-References: <20181004172730.12889-1-fontaine.fabrice@gmail.com>
- <20181006154143.44ec552a@windsurf> <20181006173750.GF2869@scaer>
-Message-ID: <c7dcb459-f7fe-9ad6-14cc-f65679ff1ffb@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 7 Oct 2018 21:40:00 +0200
+Subject: [Buildroot] [git commit] sunxi-mali-mainline-driver: bump version
+Message-ID: <20181007193946.121D88E01C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=de2ce5399291830b9dea0e285a450302f8e3f512
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+For adding license information.
 
-On 6/10/18 19:37, Yann E. MORIN wrote:
-> So, now, about this specific nmap case... After reviwing the COPYING
-> file, I would just state:
-> 
->     NMAP_LICENSE = GPL-2.0 w/ exception
-> 
-> But given how specific the nmap project states that they are really
-> *not* compatible with the GPL-2.0, and as such that exception should
-> rather be seen as a restriction to the GPL-2.0. So, this is a totally
-> different license, based on the GPL-2.0, but incompatible with it.
-> 
-> So, in the end, I would just state:
-> 
->     NMAP_LICENSE = nmap license
-> 
-> and let the user sort the mess on their own, because we can't do much
-> better... :-/
+git shortlog --invert-grep --grep travis --no-merges 8e6b7d25b13089d53dbfc1ebd9e8737b0dc809cb..
+Giulio Benetti (1):
+      LICENSE: add license file according to ARM base code
 
- I double-checked the nmap license file and I agree with Yann. "nmap license" is
-the best we can do.
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash | 3 ++-
+ package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk   | 4 +++-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
- To clarify: the license really is GPL-2.0 with OpenSSL exception. The
-"additional restriction" is that they add an interpretation of what "derived
-work" means exactly. It's not really a restriction, but it *does* change the
-meaning of the license, so calling it GPL-2.0 is not accurate.
-
-
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
+index bcc794743d..8a89d80d84 100644
+--- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
++++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 9f479f8ac5e013e33568901b942baf6797464ea9b7f340ee38cd469b4fd2b038  sunxi-mali-mainline-driver-8e6b7d25b13089d53dbfc1ebd9e8737b0dc809cb.tar.gz
++sha256 5e3bf2007c9b5201207f436f37c96f1386b81798288b8fef0ee35c71a1cadb5b  sunxi-mali-mainline-driver-143ff2b17de63ce931c4f758771969e75c09a4c7.tar.gz
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+index f69765ebb2..c7f294cbf4 100644
+--- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
++++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+@@ -4,9 +4,11 @@
+ #
+ ################################################################################
+ 
+-SUNXI_MALI_MAINLINE_DRIVER_VERSION = 8e6b7d25b13089d53dbfc1ebd9e8737b0dc809cb
++SUNXI_MALI_MAINLINE_DRIVER_VERSION = 143ff2b17de63ce931c4f758771969e75c09a4c7
+ SUNXI_MALI_MAINLINE_DRIVER_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_MAINLINE_DRIVER_VERSION))
+ SUNXI_MALI_MAINLINE_DRIVER_DEPENDENCIES = linux
++SUNXI_MALI_MAINLINE_DRIVER_LICENSE = GPL-2.0
++SUNXI_MALI_MAINLINE_DRIVER_LICENSE_FILES = LICENSE
+ 
+ SUNXI_MALI_MAINLINE_DRIVER_MAKE_OPTS = \
+ 	$(LINUX_MAKE_FLAGS) \
