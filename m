@@ -1,114 +1,38 @@
-From: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
-Date: Sun,  7 Oct 2018 21:29:45 +0200
-Subject: [Buildroot] [PATCH] gpsd: upgrade to 3.18
-Message-ID: <20181007192945.19874-1-zgyarmati@zgyarmati.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 07 Oct 2018 21:32:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qpdf: bump to version 8.2.1
+In-Reply-To: <20181005133047.1127-1-olivier.schonken@gmail.com> (Olivier
+ Schonken's message of "Fri, 5 Oct 2018 15:30:47 +0200")
+References: <20181005133047.1127-1-olivier.schonken@gmail.com>
+Message-ID: <871s91r1sd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removing previously upstreamed build fix patch and add config
-option for the newly introduced Greis driver
+>>>>> "Olivier" == Olivier Schonken <olivier.schonken@gmail.com> writes:
 
-Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
----
- ...nc-build-when-ublox-not-selected-too.patch | 36 -------------------
- package/gpsd/Config.in                        |  5 +++
- package/gpsd/gpsd.hash                        |  2 +-
- package/gpsd/gpsd.mk                          |  5 ++-
- 4 files changed, 10 insertions(+), 38 deletions(-)
- delete mode 100644 package/gpsd/0002-Fix-isync-build-when-ublox-not-selected-too.patch
+ > Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+> ---
+ >  package/qpdf/qpdf.hash | 6 ++++--
+ >  package/qpdf/qpdf.mk   | 2 +-
+ >  2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/gpsd/0002-Fix-isync-build-when-ublox-not-selected-too.patch b/package/gpsd/0002-Fix-isync-build-when-ublox-not-selected-too.patch
-deleted file mode 100644
-index 1dfa9607e3..0000000000
---- a/package/gpsd/0002-Fix-isync-build-when-ublox-not-selected-too.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 98c8f5f4429ac3bfc09eee235fee08b9aaff8c52 Mon Sep 17 00:00:00 2001
--From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
--Date: Tue, 30 Jan 2018 19:58:54 -0800
--Subject: [PATCH] Fix isync build when ublox not selected too.
--
--The isync support uses the ublox driver, but if the ublox support is
--disabled while isync is enabled, the build will fail.
--
--
--Upstream commit:
--http://git.savannah.gnu.org/cgit/gpsd.git/commit/?id=98c8f5f4429ac3bfc09eee235fee08b9aaff8c52
--
--Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-----
-- SConstruct | 5 +++++
-- 1 file changed, 5 insertions(+)
--
--diff --git a/SConstruct b/SConstruct
--index 1c1a215..c6a309e 100644
----- a/SConstruct
--+++ b/SConstruct
--@@ -334,6 +334,11 @@ for driver in ('ashtech',
--         env['nmea0183'] = True
--         break
-- 
--+
--+# iSync uses ublox underneath, so we force to enable it
--+if env['isync']:
--+    env['ublox'] = True
--+
-- opts.Save('.scons-option-cache', env)
-- env.SConsignFile(".sconsign.dblite")
-- 
---- 
--2.7.4
--
-diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
-index 849d22ffa7..e951c0154e 100644
---- a/package/gpsd/Config.in
-+++ b/package/gpsd/Config.in
-@@ -154,6 +154,11 @@ config BR2_PACKAGE_GPSD_GPSCLOCK
- 	help
- 	  GPSClock support
- 
-+config BR2_PACKAGE_GPSD_GREIS
-+	bool "Greis"
-+	help
-+	  Greis support
-+
- config BR2_PACKAGE_GPSD_ISYNC
- 	bool "iSync"
- 	help
-diff --git a/package/gpsd/gpsd.hash b/package/gpsd/gpsd.hash
-index 805c298bca..fe594ea28b 100644
---- a/package/gpsd/gpsd.hash
-+++ b/package/gpsd/gpsd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	68e0dbecfb5831997f8b3d6ba48aed812eb465d8c0089420ab68f9ce4d85e77a	gpsd-3.17.tar.gz
-+sha256	48521f5158f5fda4c88a6f75e8bfc1ee67e999e3fc095e4a06cb8c2af56712f4	gpsd-3.18.tar.gz
- sha256	71ff85d18bf063954cfc4251678d0e772223e21f80febbd99d5524c90f73f832	COPYING
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index 8c8023e818..b8eea8bf24 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GPSD_VERSION = 3.17
-+GPSD_VERSION = 3.18
- GPSD_SITE = http://download-mirror.savannah.gnu.org/releases/gpsd
- GPSD_LICENSE = BSD-3-Clause
- GPSD_LICENSE_FILES = COPYING
-@@ -111,6 +111,9 @@ endif
- ifneq ($(BR2_PACKAGE_GPSD_GPSCLOCK),y)
- GPSD_SCONS_OPTS += gpsclock=no
- endif
-+ifneq ($(BR2_PACKAGE_GPSD_GREIS),y)
-+GPSD_SCONS_OPTS += greis=no
-+endif
- ifneq ($(BR2_PACKAGE_GPSD_ISYNC),y)
- GPSD_SCONS_OPTS += isync=no
- endif
+ > diff --git a/package/qpdf/qpdf.hash b/package/qpdf/qpdf.hash
+ > index d27c9834b9..0beaeb2d7b 100644
+ > --- a/package/qpdf/qpdf.hash
+ > +++ b/package/qpdf/qpdf.hash
+ > @@ -1,2 +1,4 @@
+ > -# From https://sourceforge.net/projects/qpdf/files/qpdf/8.1.0/qpdf-8.1.0.sha512/download
+ > -sha512
+ > 1831bcaaed87dae268db5d61805d1483ec5c101f6ce594be660664c119597ae67cf011c2b50092964d785a814d5f6c780935127a89401fe37a1026ae4d3af15c
+ > qpdf-8.1.0.tar.gz
+ > +# From https://sourceforge.net/projects/qpdf/files/qpdf/8.1.0/qpdf-8.1.0.sha512/download:
+
+You forgot to adjust the version number in the URL.
+
+Committed with that fixed, thanks.
+
 -- 
-2.17.1
+Bye, Peter Korsgaard
