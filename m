@@ -1,12 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 8 Oct 2018 18:15:07 +0200
-Subject: [Buildroot] [PATCH 1/1] nmap: update license
-In-Reply-To: <20181008084354.67f19f1e@windsurf>
-References: <20181004172730.12889-1-fontaine.fabrice@gmail.com>
- <20181006154143.44ec552a@windsurf> <20181006173750.GF2869@scaer>
- <c7dcb459-f7fe-9ad6-14cc-f65679ff1ffb@mind.be>
- <20181008084354.67f19f1e@windsurf>
-Message-ID: <b30432d9-e475-e526-398b-f7ca1b364cbe@mind.be>
+Date: Mon, 8 Oct 2018 19:19:09 +0200
+Subject: [Buildroot] [PATCH 2/4] package/asterisk: enable for non-glibc
+ toolchains
+In-Reply-To: <20181003131358.28002-2-bernd.kuhls@t-online.de>
+References: <20181003131358.28002-1-bernd.kuhls@t-online.de>
+ <20181003131358.28002-2-bernd.kuhls@t-online.de>
+Message-ID: <651cc680-f4ea-7ce5-a774-21602cb083e7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,46 +14,73 @@ To: buildroot@busybox.net
 
 
 
-On 8/10/18 08:43, Thomas Petazzoni wrote:
-> Hello,
+On 3/10/18 15:13, Bernd Kuhls wrote:
+> Quoting Yann:
+> http://lists.busybox.net/pipermail/buildroot/2017-September/203004.html
 > 
-> On Sun, 7 Oct 2018 21:40:18 +0200, Arnout Vandecappelle wrote:
->> On 6/10/18 19:37, Yann E. MORIN wrote:
->>> So, now, about this specific nmap case... After reviwing the COPYING
->>> file, I would just state:
->>>
->>>     NMAP_LICENSE = GPL-2.0 w/ exception
->>>
->>> But given how specific the nmap project states that they are really
->>> *not* compatible with the GPL-2.0, and as such that exception should
->>> rather be seen as a restriction to the GPL-2.0. So, this is a totally
->>> different license, based on the GPL-2.0, but incompatible with it.
->>>
->>> So, in the end, I would just state:
->>>
->>>     NMAP_LICENSE = nmap license
->>>
->>> and let the user sort the mess on their own, because we can't do much
->>> better... :-/  
->>
->>  I double-checked the nmap license file and I agree with Yann. "nmap license" is
->> the best we can do.
->>
->>  To clarify: the license really is GPL-2.0 with OpenSSL exception. The
->> "additional restriction" is that they add an interpretation of what "derived
->> work" means exactly. It's not really a restriction, but it *does* change the
->> meaning of the license, so calling it GPL-2.0 is not accurate.
+> "As a final stroke of genius, asterisk checks for the re-entrant variant
+> of res_ninit(), and concludes that all such functions are available,
+> including res_nsearch(). Uclibc-ng has the former but not the latter, so
+> the build fails. Since there is no cache variable for that check, we
+> can't pre-feed that result to configure, and fixing it is a bigger
+> endeavour.  So we make asterisk depend on glibc for now, until someone
+> is brave enough to fix it."
 > 
-> I don't know if that matters, but Debian calls it nmap-GPL-2.
+> This hack was copied from Optware:
+> https://github.com/Optware/Optware-ng/blob/master/make/asterisk13.mk#L331
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/asterisk/Config.in   | 6 ++----
+>  package/asterisk/asterisk.mk | 4 ++++
+>  2 files changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/asterisk/Config.in b/package/asterisk/Config.in
+> index 17ac22bfd4..2cf2369749 100644
+> --- a/package/asterisk/Config.in
+> +++ b/package/asterisk/Config.in
+> @@ -1,7 +1,5 @@
+>  config BR2_PACKAGE_ASTERISK
+>  	bool "asterisk"
+> -	# Uses glibc resolver function res_nsearch()
+> -	depends on BR2_TOOLCHAIN_USES_GLIBC
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	select BR2_PACKAGE_JANSSON
+>  	select BR2_PACKAGE_LIBCURL
+> @@ -22,5 +20,5 @@ config BR2_PACKAGE_ASTERISK
+>  
+>  	  http://www.asterisk.org/
+>  
+> -comment "asterisk needs a glibc toolchain w/ C++"
+> -	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP
+> +comment "asterisk needs a toolchain w/ C++"
+> +	depends on !BR2_INSTALL_LIBSTDCPP
+> diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+> index ea779cc8f6..46fe4de947 100644
+> --- a/package/asterisk/asterisk.mk
+> +++ b/package/asterisk/asterisk.mk
+> @@ -117,6 +117,10 @@ ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
+>  ASTERISK_CONF_OPTS += --with-execinfo
+>  else
+>  ASTERISK_CONF_OPTS += --without-execinfo
+> +define ASTERISK_NO_RESINIT
+> +	sed -i -e '/AC_DEFINE(\[HAVE_RES_NINIT\]/d' $(@D)/configure.ac
+> +endef
 
- I think our convention is to use the SPDX term, and if it doesn't exist in SPDX
-use "package license".
+ Meh, I'm dead against such sed-patching, and I'm also against conditional
+"patching" of a package.
 
- I haven't checked though if nmap license exists in SPDX. They do have license
-tags for some of the package-specific constructs.
+ Is it htat much of a problem to extend the autoconf test with a call to
+res_nsearch?
 
  Regards,
  Arnout
+
+> +ASTERISK_POST_PATCH_HOOKS += ASTERISK_NO_RESINIT
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_LIBGSM),y)
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
