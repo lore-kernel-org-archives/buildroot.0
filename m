@@ -1,107 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 8 Oct 2018 16:45:15 +0200
-Subject: [Buildroot] [git commit] perl-plack: new package
-Message-ID: <20181008145331.576088E37B@busybox.osuosl.org>
+Date: Mon, 8 Oct 2018 16:41:29 +0200
+Subject: [Buildroot] [git commit] perl-file-sharedir: new package
+Message-ID: <20181008145331.4D16A8E37B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96143601de72fa5efb20a898370dac8280060e6a
+commit: https://git.buildroot.net/buildroot/commit/?id=99a00a3da850480efc418898b4cb2919cb4a8df6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-[Thomas: split too long DEPENDENCIES line.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/Config.in                  |  1 +
- package/perl-plack/Config.in       | 20 ++++++++++++++++++++
- package/perl-plack/perl-plack.hash |  6 ++++++
- package/perl-plack/perl-plack.mk   | 28 ++++++++++++++++++++++++++++
- 4 files changed, 55 insertions(+)
+ package/Config.in                                  |  1 +
+ package/perl-file-sharedir/Config.in               |  7 +++++++
+ package/perl-file-sharedir/perl-file-sharedir.hash |  6 ++++++
+ package/perl-file-sharedir/perl-file-sharedir.mk   | 14 ++++++++++++++
+ 4 files changed, 28 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index b2c24c2116..19ee391b3b 100644
+index 8007928c91..b2c24c2116 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -742,6 +742,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-package-stash/Config.in"
- 	source "package/perl-params-util/Config.in"
- 	source "package/perl-path-tiny/Config.in"
-+	source "package/perl-plack/Config.in"
- 	source "package/perl-posix-strftime-compiler/Config.in"
- 	source "package/perl-stream-buffered/Config.in"
- 	source "package/perl-sub-install/Config.in"
-diff --git a/package/perl-plack/Config.in b/package/perl-plack/Config.in
+@@ -695,6 +695,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-encode-detect/Config.in"
+ 	source "package/perl-encode-locale/Config.in"
+ 	source "package/perl-file-listing/Config.in"
++	source "package/perl-file-sharedir/Config.in"
+ 	source "package/perl-file-slurp/Config.in"
+ 	source "package/perl-file-util/Config.in"
+ 	source "package/perl-filesys-notify-simple/Config.in"
+diff --git a/package/perl-file-sharedir/Config.in b/package/perl-file-sharedir/Config.in
 new file mode 100644
-index 0000000000..b7f5ecf1c6
+index 0000000000..592dc8f43e
 --- /dev/null
-+++ b/package/perl-plack/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_PERL_PLACK
-+	bool "perl-plack"
-+	select BR2_PACKAGE_PERL_APACHE_LOGFORMAT_COMPILER
-+	select BR2_PACKAGE_PERL_COOKIE_BAKER
-+	select BR2_PACKAGE_PERL_DEVEL_STACKTRACE
-+	select BR2_PACKAGE_PERL_DEVEL_STACKTRACE_ASHTML
-+	select BR2_PACKAGE_PERL_FILE_SHAREDIR
-+	select BR2_PACKAGE_PERL_FILESYS_NOTIFY_SIMPLE
-+	select BR2_PACKAGE_PERL_HTTP_ENTITY_PARSER
-+	select BR2_PACKAGE_PERL_HTTP_HEADERS_FAST
-+	select BR2_PACKAGE_PERL_HTTP_MESSAGE
-+	select BR2_PACKAGE_PERL_HASH_MULTIVALUE
-+	select BR2_PACKAGE_PERL_STREAM_BUFFERED
-+	select BR2_PACKAGE_PERL_TRY_TINY
-+	select BR2_PACKAGE_PERL_URI
-+	select BR2_PACKAGE_PERL_WWW_FORM_URLENCODED
++++ b/package/perl-file-sharedir/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PERL_FILE_SHAREDIR
++	bool "perl-file-sharedir"
++	select BR2_PACKAGE_PERL_CLASS_INSPECTOR
 +	help
-+	  Perl Superglue for Web frameworks and Web Servers (PSGI toolkit)
++	  Locate per-dist and per-module shared files
 +
-+	  https://github.com/plack/Plack
-diff --git a/package/perl-plack/perl-plack.hash b/package/perl-plack/perl-plack.hash
++	  https://metacpan.org/release/File-ShareDir
+diff --git a/package/perl-file-sharedir/perl-file-sharedir.hash b/package/perl-file-sharedir/perl-file-sharedir.hash
 new file mode 100644
-index 0000000000..7324b726ae
+index 0000000000..e0a4966553
 --- /dev/null
-+++ b/package/perl-plack/perl-plack.hash
++++ b/package/perl-file-sharedir/perl-file-sharedir.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    9d37086aec1b29bab52a9575687e3557 Plack-1.0047.tar.gz
-+sha256 322c93f5acc0a0f0e11fd4a76188f978bdc14338a9f1df3ae535227017046561 Plack-1.0047.tar.gz
++md5    f2a0eee9f04c93753dd56437175e5bda File-ShareDir-1.116.tar.gz
++sha256 59d90bfdf98c4656ff4173e62954ea8cf0de66565e35d108ecd7050596cb8328 File-ShareDir-1.116.tar.gz
 +
 +# computed by scancpan
-+sha256 fb67655b5d1adedef83aed2c79bf4f89c68d8595a7060815520173f663a3631d LICENSE
-diff --git a/package/perl-plack/perl-plack.mk b/package/perl-plack/perl-plack.mk
++sha256 db57983ce0a3bce54900b5a3a3a69e9a593e7b07d0f58dd9f87ac9b016ff4a6b LICENSE
+diff --git a/package/perl-file-sharedir/perl-file-sharedir.mk b/package/perl-file-sharedir/perl-file-sharedir.mk
 new file mode 100644
-index 0000000000..380848dc83
+index 0000000000..e34379757d
 --- /dev/null
-+++ b/package/perl-plack/perl-plack.mk
-@@ -0,0 +1,28 @@
++++ b/package/perl-file-sharedir/perl-file-sharedir.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-plack
++# perl-file-sharedir
 +#
 +################################################################################
 +
-+PERL_PLACK_VERSION = 1.0047
-+PERL_PLACK_SOURCE = Plack-$(PERL_PLACK_VERSION).tar.gz
-+PERL_PLACK_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MI/MIYAGAWA
-+PERL_PLACK_DEPENDENCIES = \
-+	host-perl-file-sharedir-install \
-+	perl-apache-logformat-compiler \
-+	perl-cookie-baker \
-+	perl-devel-stacktrace \
-+	perl-devel-stacktrace-ashtml \
-+	perl-file-sharedir \
-+	perl-filesys-notify-simple \
-+	perl-http-entity-parser \
-+	perl-http-headers-fast \
-+	perl-http-message \
-+	perl-hash-multivalue \
-+	perl-stream-buffered \
-+	perl-try-tiny perl-uri \
-+	perl-www-form-urlencoded
-+PERL_PLACK_LICENSE = Artistic or GPL-1.0+
-+PERL_PLACK_LICENSE_FILES = LICENSE
++PERL_FILE_SHAREDIR_VERSION = 1.116
++PERL_FILE_SHAREDIR_SOURCE = File-ShareDir-$(PERL_FILE_SHAREDIR_VERSION).tar.gz
++PERL_FILE_SHAREDIR_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RE/REHSACK
++PERL_FILE_SHAREDIR_DEPENDENCIES = host-perl-file-sharedir-install perl-class-inspector
++PERL_FILE_SHAREDIR_LICENSE = Artistic or GPL-1.0+
++PERL_FILE_SHAREDIR_LICENSE_FILES = LICENSE
 +
 +$(eval $(perl-package))
