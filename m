@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon,  8 Oct 2018 21:36:43 +0200
-Subject: [Buildroot] [PATCH 5/8] perl-devel-globaldestruction: new package
+Date: Mon,  8 Oct 2018 21:36:44 +0200
+Subject: [Buildroot] [PATCH 6/8] perl-moo: new package
 In-Reply-To: <20181008193646.13046-1-francois.perrad@gadz.org>
 References: <20181008193646.13046-1-francois.perrad@gadz.org>
-Message-ID: <20181008193646.13046-6-francois.perrad@gadz.org>
+Message-ID: <20181008193646.13046-7-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,71 +12,79 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/Config.in                                  |  1 +
- package/perl-devel-globaldestruction/Config.in     |  8 ++++++++
- .../perl-devel-globaldestruction.hash              |  6 ++++++
- .../perl-devel-globaldestruction.mk                | 14 ++++++++++++++
- 4 files changed, 29 insertions(+)
- create mode 100644 package/perl-devel-globaldestruction/Config.in
- create mode 100644 package/perl-devel-globaldestruction/perl-devel-globaldestruction.hash
- create mode 100644 package/perl-devel-globaldestruction/perl-devel-globaldestruction.mk
+ package/Config.in              |  1 +
+ package/perl-moo/Config.in     | 11 +++++++++++
+ package/perl-moo/perl-moo.hash |  6 ++++++
+ package/perl-moo/perl-moo.mk   | 19 +++++++++++++++++++
+ 4 files changed, 37 insertions(+)
+ create mode 100644 package/perl-moo/Config.in
+ create mode 100644 package/perl-moo/perl-moo.hash
+ create mode 100644 package/perl-moo/perl-moo.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index ad7ef2488..fce8929f9 100644
+index fce8929f9..3e4bc2882 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -686,6 +686,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-datetime-tiny/Config.in"
- 	source "package/perl-dbd-mysql/Config.in"
- 	source "package/perl-dbi/Config.in"
-+	source "package/perl-devel-globaldestruction/Config.in"
- 	source "package/perl-devel-stacktrace/Config.in"
- 	source "package/perl-devel-stacktrace-ashtml/Config.in"
- 	source "package/perl-device-serialport/Config.in"
-diff --git a/package/perl-devel-globaldestruction/Config.in b/package/perl-devel-globaldestruction/Config.in
+@@ -732,6 +732,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-module-runtime/Config.in"
+ 	source "package/perl-mojolicious-plugin-authentication/Config.in"
+ 	source "package/perl-mojolicious/Config.in"
++	source "package/perl-moo/Config.in"
+ 	source "package/perl-net-dns/Config.in"
+ 	source "package/perl-net-http/Config.in"
+ 	source "package/perl-net-ping/Config.in"
+diff --git a/package/perl-moo/Config.in b/package/perl-moo/Config.in
 new file mode 100644
-index 000000000..2ab54ea7f
+index 000000000..613467e2f
 --- /dev/null
-+++ b/package/perl-devel-globaldestruction/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PERL_DEVEL_GLOBALDESTRUCTION
-+	bool "perl-devel-globaldestruction"
-+	select BR2_PACKAGE_PERL_SUB_EXPORTER_PROGRESSIVE
++++ b/package/perl-moo/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PERL_MOO
++	bool "perl-moo"
++	select BR2_PACKAGE_PERL_CLASS_METHOD_MODIFIERS
++	select BR2_PACKAGE_PERL_DEVEL_GLOBALDESTRUCTION
++	select BR2_PACKAGE_PERL_MODULE_RUNTIME
++	select BR2_PACKAGE_PERL_ROLE_TINY
++	select BR2_PACKAGE_PERL_SUB_QUOTE
 +	help
-+	  Provides function returning the equivalent of
-+	  ${^GLOBAL_PHASE} eq 'DESTRUCT' for older perls.
++	  Minimalist Object Orientation (with Moose compatibility)
 +
-+	  https://metacpan.org/release/Devel-GlobalDestruction
-diff --git a/package/perl-devel-globaldestruction/perl-devel-globaldestruction.hash b/package/perl-devel-globaldestruction/perl-devel-globaldestruction.hash
++	  https://metacpan.org/release/Moo
+diff --git a/package/perl-moo/perl-moo.hash b/package/perl-moo/perl-moo.hash
 new file mode 100644
-index 000000000..b3cd6e32f
+index 000000000..509a9ea4e
 --- /dev/null
-+++ b/package/perl-devel-globaldestruction/perl-devel-globaldestruction.hash
++++ b/package/perl-moo/perl-moo.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    24221ba322cf2dc46a1fc99b53e2380b Devel-GlobalDestruction-0.14.tar.gz
-+sha256 34b8a5f29991311468fe6913cadaba75fd5d2b0b3ee3bb41fe5b53efab9154ab Devel-GlobalDestruction-0.14.tar.gz
++md5    d4fcd0f240033198571fcc81ce7c5f15 Moo-2.003004.tar.gz
++sha256 f8bbb625f8e963eabe05cff9048fdd72bdd26777404ff2c40bc690f558be91e1 Moo-2.003004.tar.gz
 +
 +# computed by scancpan
-+sha256 f7adbd1db623233e220f9157521a620dbae4918ae7088845aa61e87b7f62bb23 README
-diff --git a/package/perl-devel-globaldestruction/perl-devel-globaldestruction.mk b/package/perl-devel-globaldestruction/perl-devel-globaldestruction.mk
++sha256 3fe29ec1d93827ee69825ed4bf916cc5ce4e7bf0b940ec6dd2d4ed30f4755dc3 README
+diff --git a/package/perl-moo/perl-moo.mk b/package/perl-moo/perl-moo.mk
 new file mode 100644
-index 000000000..f214c04d0
+index 000000000..e3e4e9aa8
 --- /dev/null
-+++ b/package/perl-devel-globaldestruction/perl-devel-globaldestruction.mk
-@@ -0,0 +1,14 @@
++++ b/package/perl-moo/perl-moo.mk
+@@ -0,0 +1,19 @@
 +################################################################################
 +#
-+# perl-devel-globaldestruction
++# perl-moo
 +#
 +################################################################################
 +
-+PERL_DEVEL_GLOBALDESTRUCTION_VERSION = 0.14
-+PERL_DEVEL_GLOBALDESTRUCTION_SOURCE = Devel-GlobalDestruction-$(PERL_DEVEL_GLOBALDESTRUCTION_VERSION).tar.gz
-+PERL_DEVEL_GLOBALDESTRUCTION_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
-+PERL_DEVEL_GLOBALDESTRUCTION_DEPENDENCIES = perl-sub-exporter-progressive
-+PERL_DEVEL_GLOBALDESTRUCTION_LICENSE = Artistic or GPL-1.0+
-+PERL_DEVEL_GLOBALDESTRUCTION_LICENSE_FILES = README
++PERL_MOO_VERSION = 2.003004
++PERL_MOO_SOURCE = Moo-$(PERL_MOO_VERSION).tar.gz
++PERL_MOO_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
++PERL_MOO_DEPENDENCIES = \
++	perl-class-method-modifiers \
++	perl-devel-globaldestruction \
++	perl-module-runtime \
++	perl-role-tiny \
++	perl-sub-quote
++PERL_MOO_LICENSE = Artistic or GPL-1.0+
++PERL_MOO_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
 -- 
