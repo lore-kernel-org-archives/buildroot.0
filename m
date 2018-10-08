@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 8 Oct 2018 10:24:27 +0200
-Subject: [Buildroot] [PATCH 02/20] perl-devel-stacktrace: new package
-In-Reply-To: <20181006165524.23778-3-francois.perrad@gadz.org>
+Date: Mon, 8 Oct 2018 10:25:29 +0200
+Subject: [Buildroot] [PATCH 03/20] perl-devel-stacktrace-ashtml: new
+ package
+In-Reply-To: <20181006165524.23778-4-francois.perrad@gadz.org>
 References: <20181006165524.23778-1-francois.perrad@gadz.org>
- <20181006165524.23778-3-francois.perrad@gadz.org>
-Message-ID: <20181008102427.14ebe15f@windsurf>
+ <20181006165524.23778-4-francois.perrad@gadz.org>
+Message-ID: <20181008102529.0f68c401@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +14,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat,  6 Oct 2018 18:55:06 +0200, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/Config.in                                   |  1 +
->  package/perl-devel-stacktrace/Config.in             |  6 ++++++
->  .../perl-devel-stacktrace.hash                      |  6 ++++++
->  .../perl-devel-stacktrace/perl-devel-stacktrace.mk  | 13 +++++++++++++
->  4 files changed, 26 insertions(+)
->  create mode 100644 package/perl-devel-stacktrace/Config.in
->  create mode 100644 package/perl-devel-stacktrace/perl-devel-stacktrace.hash
->  create mode 100644 package/perl-devel-stacktrace/perl-devel-stacktrace.mk
+On Sat,  6 Oct 2018 18:55:07 +0200, Francois Perrad wrote:
 
-Applied to master, thanks.
+> +PERL_DEVEL_STACKTRACE_ASHTML_VERSION = 0.15
+> +PERL_DEVEL_STACKTRACE_ASHTML_SOURCE = Devel-StackTrace-AsHTML-$(PERL_DEVEL_STACKTRACE_ASHTML_VERSION).tar.gz
+> +PERL_DEVEL_STACKTRACE_ASHTML_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MI/MIYAGAWA
+> +PERL_DEVEL_STACKTRACE_ASHTML_DEPENDENCIES = perl-devel-stacktrace
+
+Is perl-devel-stacktrace really a build dependency ? Or just a runtime
+dependency ?
+
+I've applied as-is, but if it's only a runtime dependency, it would be
+good to drop this line in a follow-up. Thanks!
+
+In general, is there a way to easily check if a Perl dependency is
+built time or run time ?
+
+Best regards,
 
 Thomas
 -- 
