@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 8 Oct 2018 17:47:45 +0200
-Subject: [Buildroot] [PATCH] package/qt5base: drop remnants patches from
- previous version
-In-Reply-To: <20181005200502.16899-1-yann.morin.1998@free.fr>
-References: <20181005200502.16899-1-yann.morin.1998@free.fr>
-Message-ID: <20181008174745.6a2646b1@windsurf>
+Date: Mon, 8 Oct 2018 17:52:51 +0200
+Subject: [Buildroot] [PATCH 1/1] Add patches from the upstream
+ ltp-testsuite github repository to compile correctly.
+In-Reply-To: <20181005064311.28557-1-F.LaRoche@pilz.de>
+References: <20181005064311.28557-1-F.LaRoche@pilz.de>
+Message-ID: <20181008175251.1f61a310@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +13,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  5 Oct 2018 22:05:02 +0200, Yann E. MORIN wrote:
-> When the bump to 5.11.2 was applied, master gained a new patch for 5.11.1
-> in-between the bump submission and the moment it was applied. That patch
-> still lingers around now.
-> 
-> Since that patch has been applied upstream (it is detected as a revert
-> when applied to 5.11.2), we simply drop it.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Peter Seiderer <ps.report@gmx.net>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
+On Fri, 5 Oct 2018 08:43:11 +0200, Florian La Roche wrote:
+> Signed-off-by: Florian La Roche <F.LaRoche@pilz.de>
 > ---
->  .../0003-Fix-qmake-build-with-glibc-2.28.patch     | 74 ----------------------
->  1 file changed, 74 deletions(-)
->  delete mode 100644 package/qt5/qt5base/5.11.1/0003-Fix-qmake-build-with-glibc-2.28.patch
+>  package/ltp-testsuite/0002-execve05.patch | 44 +++++++++++++++++++++++
+>  package/ltp-testsuite/0003-statx.patch    | 32 +++++++++++++++++
+>  package/ltp-testsuite/0004-statx.patch    | 26 ++++++++++++++
+>  3 files changed, 102 insertions(+)
+>  create mode 100644 package/ltp-testsuite/0002-execve05.patch
+>  create mode 100644 package/ltp-testsuite/0003-statx.patch
+>  create mode 100644 package/ltp-testsuite/0004-statx.patch
 
-Applied to master, thanks.
+I marked this one as Superseded in Patchwork, since you have sent a
+different version of it.
+
+Thanks,
 
 Thomas
 -- 
