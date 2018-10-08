@@ -1,32 +1,34 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 8 Oct 2018 10:31:58 -0500
-Subject: [Buildroot] [PATCH v3 4/8] rsyslog: add logging configuration
- file
-In-Reply-To: <20181007114605.18153-5-casantos@datacom.com.br>
-References: <20181007114605.18153-1-casantos@datacom.com.br>
- <20181007114605.18153-5-casantos@datacom.com.br>
-Message-ID: <CANQCQpaTaDF+_fVidm+u6r=ksK-fJ__jrDNO84MDBEzRGoW+0Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 8 Oct 2018 17:42:59 +0200
+Subject: [Buildroot] [PATCH] gpsd: upgrade to 3.18
+In-Reply-To: <20181007192945.19874-1-zgyarmati@zgyarmati.de>
+References: <20181007192945.19874-1-zgyarmati@zgyarmati.de>
+Message-ID: <20181008174259.61808a63@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Carlos,
+Hello,
 
-On Sun, Oct 7, 2018 at 6:46 AM Carlos Santos <casantos@datacom.com.br> wrote:
->
-> Provide a template to help users to customize rsyslog without editting
-> the startup script. Also warn about options that must not be used.
->
-> Add instructions on how to configure debugging, since it a bit tricky
-> when rsyslogd runs in background, requiring a separete log file.
->
-> This file is also useful as an example for init script authors.
->
-> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+On Sun,  7 Oct 2018 21:29:45 +0200, Zoltan Gyarmati wrote:
+> Removing previously upstreamed build fix patch and add config
+> option for the newly introduced Greis driver
+> 
+> Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+> ---
+>  ...nc-build-when-ublox-not-selected-too.patch | 36 -------------------
+>  package/gpsd/Config.in                        |  5 +++
+>  package/gpsd/gpsd.hash                        |  2 +-
+>  package/gpsd/gpsd.mk                          |  5 ++-
+>  4 files changed, 10 insertions(+), 38 deletions(-)
+>  delete mode 100644 package/gpsd/0002-Fix-isync-build-when-ublox-not-selected-too.patch
 
-Similar to the busybox config, I disabled the logger and the init
-script reflected the change.
+Applied to master, thanks.
 
-Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
