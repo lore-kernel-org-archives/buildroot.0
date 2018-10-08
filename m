@@ -1,40 +1,44 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon,  8 Oct 2018 21:31:38 +0300
-Subject: [Buildroot] [PATCH 1/1] libuv: bump to version 1.23.2
-Message-ID: <20181008183138.22435-1-asafka7@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 8 Oct 2018 20:39:26 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-10-07
+In-Reply-To: <20181008060013.65E12207CC@mail.bootlin.com>
+References: <20181008060013.65E12207CC@mail.bootlin.com>
+Message-ID: <20181008203926.5aa43bde@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/libuv/libuv.hash | 2 +-
- package/libuv/libuv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Mon,  8 Oct 2018 08:00:13 +0200 (CEST), Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index 407ffb5932..0a039480ad 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  c3386003522502d712010b852008b22b37f827e207e184e3d53f0431389299c3  libuv-v1.23.1.tar.gz
-+sha256  30af979c4f4b8d1b895ae6d115f7400c751542ccb9e656350fc89fda08d4eabd  libuv-v1.23.2.tar.gz
- sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index f0a9668df0..ff3903b568 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUV_VERSION = v1.23.1
-+LIBUV_VERSION = v1.23.2
- LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
--- 
-2.17.1
+> Hello,
+> 
+> Build statistics for 2018-10-07
+> ===============================
+> 
+
+[...]
+
+> Results for branch 'master'
+> ===========================
+
+>         i686 |                 qt5base-5.11.2 | NOK | http://autobuild.buildroot.net/results/66f55a311dcf9d54ca6148b232287973ba226999 |     
+>         i686 |                 qt5base-5.11.2 | NOK | http://autobuild.buildroot.net/results/a4759e8cea09a597dbeb82f6c673ddc531d419e8 |     
+
+Both fail with:
+
+.obj/qlinuxfbscreen.o: In function `QLinuxFbScreen::initialize()':
+qlinuxfbscreen.cpp:(.text+0xa6c): undefined reference to `qt_open64(char const*, int, unsigned int)'
+qlinuxfbscreen.cpp:(.text+0x1042): undefined reference to `qt_open64(char const*, int, unsigned int)'
+qlinuxfbscreen.cpp:(.text+0x10aa): undefined reference to `qt_open64(char const*, int, unsigned int)'
+qlinuxfbscreen.cpp:(.text+0x1746): undefined reference to `qt_open64(char const*, int, unsigned int)'
+
+I suspect this qt  commit 'Linux: Bypass glibc's broken open() implementation' ([1]), which introduced
+the qt_open64() function, but did not see immediately why it fails here (uclibc?)...
+
+Regards,
+Peter
+
+[1] http://code.qt.io/cgit/qt/qtbase.git/commit/?id=1d33493989eae774bafc124f9d3ee68d7a017a10
