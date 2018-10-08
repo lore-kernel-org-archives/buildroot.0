@@ -1,33 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 8 Oct 2018 18:13:50 +0200
-Subject: [Buildroot] [git commit] wireless-regdb: use BR2_KERNEL_MIRROR for
- download site
-Message-ID: <20181008191216.6EC6C8E4C5@busybox.osuosl.org>
+Date: Mon, 8 Oct 2018 21:13:48 +0200
+Subject: [Buildroot] [PATCH v2 1/3] wireless-regdb: bump version to
+ 2018.09.07
+In-Reply-To: <20181004204824.17274-1-ps.report@gmx.net>
+References: <20181004204824.17274-1-ps.report@gmx.net>
+Message-ID: <20181008211348.4dd34ec8@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e8751f6dd4eadc220a9459b74570baf67075d6e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/wireless-regdb/wireless-regdb.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Thu,  4 Oct 2018 22:48:22 +0200, Peter Seiderer wrote:
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+> Changes v1 -> v2:
+>   - add SoB line (suggested by Baruch Siach)
+> ---
+>  package/wireless-regdb/wireless-regdb.hash | 2 +-
+>  package/wireless-regdb/wireless-regdb.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 9c899f973b..c509c7c7f8 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
-@@ -6,7 +6,7 @@
- 
- WIRELESS_REGDB_VERSION = 2018.09.07
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
--WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
-+WIRELESS_REGDB_SITE = $(BR2_KERNEL_MIRROR)/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
- WIRELESS_REGDB_LICENSE_FILES = LICENSE
- 
+All three patches applied. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
