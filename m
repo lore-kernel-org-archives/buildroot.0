@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 8 Oct 2018 21:28:07 +0200
+Date: Mon, 8 Oct 2018 21:28:15 +0200
 Subject: [Buildroot] [git commit] package/mjpg-streamer: add optional
- dependency to sdl
-Message-ID: <20181008192711.DC0548E4DB@busybox.osuosl.org>
+ dependency to libgphoto2
+Message-ID: <20181008192711.E2E588E4DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=87817c6a6820d1d1b9f915beb3a639b3a6a15867
+commit: https://git.buildroot.net/buildroot/commit/?id=89ef4c4e48ef3c4fb22fc139e7816a516eaa3212
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
@@ -19,18 +19,20 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
  1 file changed, 7 insertions(+)
 
 diff --git a/package/mjpg-streamer/mjpg-streamer.mk b/package/mjpg-streamer/mjpg-streamer.mk
-index 50ed980b7a..a4f96e1c56 100644
+index a4f96e1c56..6ea8c47030 100644
 --- a/package/mjpg-streamer/mjpg-streamer.mk
 +++ b/package/mjpg-streamer/mjpg-streamer.mk
-@@ -22,4 +22,11 @@ else
- MJPG_STREAMER_CONF_OPTS += -DPLUGIN_INPUT_OPENCV=OFF
- endif
+@@ -11,6 +11,13 @@ MJPG_STREAMER_LICENSE = GPL-2.0+
+ MJPG_STREAMER_LICENSE_FILES = $(MJPG_STREAMER_SUBDIR)/LICENSE
+ MJPG_STREAMER_DEPENDENCIES = jpeg
  
-+ifeq ($(BR2_PACKAGE_SDL),y)
-+MJPG_STREAMER_CONF_OPTS += -DPLUGIN_OUTPUT_VIEWER=ON
-+MJPG_STREAMER_DEPENDENCIES += host-pkgconf sdl
++ifeq ($(BR2_PACKAGE_LIBGPHOTO2),y)
++MJPG_STREAMER_CONF_OPTS += -DPLUGIN_INPUT_PTP2=ON
++MJPG_STREAMER_DEPENDENCIES += host-pkgconf libgphoto2
 +else
-+MJPG_STREAMER_CONF_OPTS += -DPLUGIN_OUTPUT_VIEWER=OFF
++MJPG_STREAMER_CONF_OPTS += -DPLUGIN_INPUT_PTP2=OFF
 +endif
 +
- $(eval $(cmake-package))
+ ifeq ($(BR2_PACKAGE_LIBV4L),y)
+ MJPG_STREAMER_DEPENDENCIES += libv4l
+ endif
