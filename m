@@ -1,44 +1,84 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 8 Oct 2018 21:35:43 +0200
-Subject: [Buildroot] [PATCH] libaio: Link against libgcc and libc to
- avoid unresolved symbols
-In-Reply-To: <20180928133734.2352-1-abrodkin@synopsys.com>
-References: <20180928133734.2352-1-abrodkin@synopsys.com>
-Message-ID: <20181008213543.24480f1f@windsurf>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Mon, 8 Oct 2018 21:35:31 +0200
+Subject: [Buildroot] [PATCH 16/20] perl-http-entity-parser: new package
+In-Reply-To: <20181008163901.3933d098@windsurf>
+References: <20181006165524.23778-1-francois.perrad@gadz.org>
+ <20181006165524.23778-17-francois.perrad@gadz.org>
+ <20181008163901.3933d098@windsurf>
+Message-ID: <CAB0FRss=pJyhxu8CsmcUkozPZkmHDnScRL2u++fMPiBehPeW=g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Le lun. 8 oct. 2018 ? 16:39, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+a ?crit :
 
-On Fri, 28 Sep 2018 16:37:34 +0300, Alexey Brodkin wrote:
-> Fix proposed by Debian developers that makes sure all libgcc.a
-> sybols used in libaio.so are built-in.
-> 
-> Fixes build failures of blktrace, lvm2 and the like users of libaio.
-> 
-> A couple of examples below:
-> blktrace: http://autobuild.buildroot.net/results/5528ab59f1939a7eff7e85318f3b36283019cc50/
-> lvm2:     http://autobuild.buildroot.net/results/a5dfc87f94b97135e5cc84f6a876114891ed9dd9/
-> 
-> And since we solve the problem in libaio sources there's no need to
-> mess with compilation flags in Buildroot, thus partially revert
-> commit ce6536ae500f ("libaio: work-around for PowerPC issue").
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> ---
->  ...gainst-libgcc-to-avoid-unresolved-symbols.patch | 57 ++++++++++++++++++++++
->  package/libaio/libaio.mk                           |  6 ---
->  2 files changed, 57 insertions(+), 6 deletions(-)
->  create mode 100644 package/libaio/0003-Link-against-libgcc-to-avoid-unresolved-symbols.patch
+> Hello,
+>
+> On Sat,  6 Oct 2018 18:55:20 +0200, Francois Perrad wrote:
+>
+> > diff --git a/package/perl-http-entity-parser/perl-http-entity-parser.mk
+> b/package/perl-http-entity-parser/perl-http-entity-parser.mk
+> > new file mode 100644
+> > index 000000000..1cba1eb8e
+> > --- /dev/null
+> > +++ b/package/perl-http-entity-parser/perl-http-entity-parser.mk
+> > @@ -0,0 +1,14 @@
+> >
+> +################################################################################
+> > +#
+> > +# perl-http-entity-parser
+> > +#
+> >
+> +################################################################################
+> > +
+> > +PERL_HTTP_ENTITY_PARSER_VERSION = 0.21
+> > +PERL_HTTP_ENTITY_PARSER_SOURCE =
+> HTTP-Entity-Parser-$(PERL_HTTP_ENTITY_PARSER_VERSION).tar.gz
+> > +PERL_HTTP_ENTITY_PARSER_SITE =
+> $(BR2_CPAN_MIRROR)/authors/id/K/KA/KAZEBURO
+> > +PERL_HTTP_ENTITY_PARSER_DEPENDENCIES = host-perl-module-build-tiny
+> perl-http-multipartparser perl-hash-multivalue perl-json-maybexs
+> perl-stream-buffered perl-www-form-urlencoded
+>
+> This line should be split with backslashes. Perhaps scancpan could be
+> improved to do that automatically ?
+>
+>
+Good idea, I'll do this easy improvement.
 
-Applied to master with a slightly tweaked commit log. Thanks!
+Also, I'm interested in understanding why all those packages need to be
+> build time dependencies. Is Perl checking at build time that those
+> modules are available ?
+>
+>
+Currently, scancpan uses the same list of dependency for Config.in and
+perl-foo.mk.
+So, yes, many dependencies are just run time dependency.
+Real build time dependencies are :
+  - host(-perl-foo) dependencies
+  - native libraries dependencies which cannot be handled by scancpan
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+A fix for that requires rethinking of the logic of scancpan and serious
+testing.
+
+Fran?ois
+
+Anyway, I've wrapped the too long line of dependencies, and applied.
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181008/0c69cb69/attachment.html>
