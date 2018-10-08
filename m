@@ -1,77 +1,48 @@
-From: Lothar Felten <lothar.felten@gmail.com>
-Date: Mon,  8 Oct 2018 14:51:18 +0200
-Subject: [Buildroot] [PATCH 1/1] configs: bananapi_m1: bump kernel and uboot
- version
-Message-ID: <20181008125118.31837-1-lothar.felten@gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 8 Oct 2018 08:10:03 -0500
+Subject: [Buildroot] [PATCH 1/1] package/dtc: fix include guards for
+ older kernel/u-boot
+In-Reply-To: <20181008115146.17797-1-lothar.felten@gmail.com>
+References: <20181008115146.17797-1-lothar.felten@gmail.com>
+Message-ID: <CANQCQpYouTTsJGm6VjpCgdZ54agG0jktaNPwB9my88g_dL_Bsw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-New Linux kernel version 4.18
-New u-boot version 2018.07
-Config options were reordered by savedefconfig
+Lothar,
 
-Tested on Bananapi M1 (Allwinner A20 SoC)
 
-Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
----
- configs/bananapi_m1_defconfig | 33 ++++++++++-----------------------
- 1 file changed, 10 insertions(+), 23 deletions(-)
+On Mon, Oct 8, 2018 at 6:52 AM Lothar Felten <lothar.felten@gmail.com> wrote:
+>
+> Patch dtc to accept libfdt include guards with and without leading underscore.
+> A compiler warning is added to notify the user.
+>
+> Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
+> ---
+>  ...de-guards-for-older-kernel-u-boot-sources.patch | 42 ++++++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+>  create mode 100644 package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch
+>
+> diff --git a/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch b/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch
+> new file mode 100644
+> index 0000000000..40cb0bdb2a
+> --- /dev/null
+> +++ b/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch
+> @@ -0,0 +1,42 @@
+> +From b1f8b84489c96465b63485b884238b61d31ca84d Mon Sep 17 00:00:00 2001
+> +From: Lothar Felten <lothar.felten@gmail.com>
+> +Date: Mon, 8 Oct 2018 13:29:44 +0200
+> +Subject: [PATCH 1/1] Fix include guards for older kernel/u-boot sources
+> +
+> +Linux kernels before 4.17 and U-Boot versions before 2018.07 use libfdt include guards with leading underscores.
+> +Those have been removed in dtc-1.4.7.
 
-diff --git a/configs/bananapi_m1_defconfig b/configs/bananapi_m1_defconfig
-index f8c66a3334..00690db922 100644
---- a/configs/bananapi_m1_defconfig
-+++ b/configs/bananapi_m1_defconfig
-@@ -1,38 +1,25 @@
- BR2_arm=y
- BR2_cortex_a7=y
--BR2_ARM_EABIHF=y
--
--# Linux headers same as kernel, a 4.13 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
--
--# Bootloader
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M1"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/bananapi/bananapi-m1/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-bananapi"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Bananapi"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
--BR2_TARGET_UBOOT_FORMAT_BIN=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
- BR2_TARGET_UBOOT_BOOT_SCRIPT=y
- BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/bananapi/bananapi-m1/boot.cmd"
--
--# Kernel
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.7"
--BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-bananapi"
--
--# Filesystem
--BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M1"
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
--BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/bananapi/bananapi-m1/genimage.cfg"
--- 
-2.11.0
+Is there an reference that could be listed to either
+1) A upstream mailinglist/patchwork link that proposes adding this patch
+2) If the patch below can't be upstreamed, a reference to the commit
+that is reverting this support you're adding back in and maybe a
+summary of why the backwards compatibility isn't' accepted.
+
+Matt
