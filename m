@@ -1,131 +1,74 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 8 Oct 2018 19:33:17 +0200
-Subject: [Buildroot] [PATCH] u-boot: add option to generate env image
- from default env
-In-Reply-To: <20181002053526.11374-1-Denis.Osterland@diehl.com>
-References: <20181002053526.11374-1-Denis.Osterland@diehl.com>
-Message-ID: <16db145d-edf3-787d-bb3c-3a50c340eb1c@mind.be>
+Date: Mon, 8 Oct 2018 19:37:20 +0200
+Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] Your
+ build results for 2018-09-25
+In-Reply-To: <7a3cab5670dacc1c6582623249e3cb284f9e4456.camel@synopsys.com>
+References: <20180926060016.AC795208A1@mail.bootlin.com>
+ <7a3cab5670dacc1c6582623249e3cb284f9e4456.camel@synopsys.com>
+Message-ID: <f6078c37-be18-f3fb-f2b8-c48a829e56f9@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Denis,
 
- I have a few very small comments about this patch.
 
-On 2/10/18 07:38, Denis OSTERLAND wrote:
-> From: Denis Osterland <Denis.Osterland@diehl.com>
+On 26/09/18 10:45, Alexey Brodkin wrote:
+> Hi Thomas, Fabrice, all
 > 
-> This patch adds support to extract compiled in default env
-> via u-boots get_default_envs script and generate env image from it.
+> On Wed, 2018-09-26 at 08:00 +0200, Thomas Petazzoni wrote:
+>> Hello,
+>>
+>> This is the list of Buildroot build failures that occured on
+>> 2018-09-25, and for which you are a registered architecture developer
+>> or package developer. Please help us improving the quality of
+>> Buildroot by investigating those build failures and sending patches to
+>> fix them. Thanks!
+>>
+>> Results for the 'master' branch
+>> ===============================
+>>
+>> Build failures related to your architectures:
 > 
-> Signed-off-by: Denis Osterland <Denis.Osterland@diehl.com>
-> ---
->  boot/uboot/Config.in | 15 +++++++++++++++
->  boot/uboot/uboot.mk  |  6 +++++-
->  2 files changed, 20 insertions(+), 1 deletion(-)
+> [snip]
 > 
-> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> index 9e40c11fa1..a2e9c3866a 100644
-> --- a/boot/uboot/Config.in
-> +++ b/boot/uboot/Config.in
-> @@ -468,8 +468,23 @@ menuconfig BR2_TARGET_UBOOT_ENVIMAGE
->  
->  if BR2_TARGET_UBOOT_ENVIMAGE
->  
-> +choice
-> +	prompt "source"
+>>          arc | package/glibc/glibc.mk:134:... | 
+>> https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_c02ca1b3dd40d4f6913d8018d7dee92d63ff24c8&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=Z74rKOsEpOUneCxYxwKcXHwrAmW8mJhNZjcWnDDJI2U&m=_10wrzVQHZ12Nbsw-A2EpVFHkZ_3yKI3PTC9Vj5P--k&s=ur517K8d54WBW2VvYY-CZM15C8p_fiSRoLj9OnE-SVI&e=
+> 
+> That happens because of https://git.buildroot.org/buildroot/commit/package/glibc/glibc.hash?id=37492e8b2d89b8e992a89f1ef6bda6afeb14433b
+> which accommodates LICENSES file change in glibc 2.28.
+> 
+> I mean glibc was bumped to 2.28 in Buildroot but since for ARC glibc comes
+> from not-yet accepted fork on GitHub from a tag that was not changed
+> essentially LICENSES file remains the same.
+> 
+> What we may do about that:
+>  1. Use patch with ARC port of glibc instead of full tarball.
+>     This is nice because:
+>       a) Whenever glibc version is updated within 2.28 stable series
+>          ARC's toolchain gets all the upstream fixes
+>       b) No ARC peculiarities in package/glibc/glibc.mk
+>     Downsides are:
+>       a) At some point patch might not apply if upstream change clashes with
+>          contents of the patch. This IMHO is not very likely but still possible
+>          as our port touches some generic glibc code as well.
+>       b) Maintenance of ARC bits will be a bit more complicated but that's
+>          my pain so nobody should care :)
+> 
+>  2. Create new tag with rebased glibc on our GitHub and update GLIBC_VERSION in Buildroot
+> 
+>  3. Somehow accommodate 2 possible LICENSES files in package/glibc/glibc.hash
 
- It's not immediately obvious that this is the source of the envimage, so better
-"Source for environment".
-
-> +
-> +config BR2_TARGET_UBOOT_ENVIMAGE_TEXTFILE
-
- I would call this BR2_TARGET_UBOOT_ENVIMAGE_CUSTOM to be consistent with the
-other uses of custom config files. However, see below.
-
-> +	bool "text file"
-
- Here as well: "custom".
-
-> +
-> +config BR2_TARGET_UBOOT_ENVIMAGE_BUIILTIN
-
- and here _DEFAULT
-
-> +	bool "compiled in"
-
- and "default".
-
-> +	help
-> +	  Use the default env from u-boot image.
-> +	  requires >= v2018.03
-> +
-> +endchoice # source
-> +
->  config BR2_TARGET_UBOOT_ENVIMAGE_SOURCE
->  	string "Source files for environment"
-> +	depends on BR2_TARGET_UBOOT_ENVIMAGE_TEXTFILE
-
- However, I think it would be simpler to just allow this option to be empty. In
-other words, remove the choice, and add something like the following at the end
-of the help text:
-
-	  For U-Boot >= v2018.03, it is possible to leave this empty. In that
-	  case, the default environment for the target configuration will be
-	  used.
-
- This is just an idea, if you don't like it, feel free to keep the current solution.
-
-
->  	help
->  	  Text files describing the environment. Files should have
->  	  lines of the form var=value, one per line. Blank lines and
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index c5abc125f3..ae9e38c8c2 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -263,7 +263,9 @@ endef
->  
->  ifneq ($(BR2_TARGET_UBOOT_ENVIMAGE),)
->  define UBOOT_GENERATE_ENV_IMAGE
-> -	cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) \
-> +	$(if $(BR2_TARGET_UBOOT_ENVIMAGE_BUIILTIN), \
-
- With the choice removed, this test could be:
-
-	$(if $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)),
-
-but then it is better to factor it out in a separate variable, e.g.
-UBOOT_GENERATE_ENV_FILE, that is protected by an ifdef.
-
-> +	CROSS_COMPILE="$(TARGET_CROSS)" $(@D)/scripts/get_default_envs.sh $(@D), \
-> +	cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE))) \
->  		>$(@D)/buildroot-env.txt
->  	$(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
->  		$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
-> @@ -376,9 +378,11 @@ endef
->  
->  ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE),y)
->  ifeq ($(BR_BUILDING),y)
-> +ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE_TEXTFILE),y)
->  ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)),)
->  $(error Please define a source file for Uboot environment (BR2_TARGET_UBOOT_ENVIMAGE_SOURCE setting))
->  endif
-> +endif
-
- With the choice removed, this entire condition+error would just be removed.
+ In the mean time, Yann has posted a patch series that accommodates for option
+3. Still, I'd like to apply option 2 as well (or rather: next time you bump
+glibc-arc, it would be nice to also update the license to match upstream). Even
+then, however, I think it would be better to have two separate hash files for
+the two versions. I think that after Yann's series has been applied, we should
+always take that approach when a package has multiple versions.
 
  Regards,
  Arnout
-
->  ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SIZE)),)
->  $(error Please provide Uboot environment size (BR2_TARGET_UBOOT_ENVIMAGE_SIZE setting))
->  endif
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
