@@ -1,81 +1,99 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 8 Oct 2018 17:54:25 +0200
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 8 Oct 2018 17:58:32 +0200
 Subject: [Buildroot] [PATCH 1/1] package/dtc: fix include guards for
  older kernel/u-boot
-In-Reply-To: <CANQCQpYouTTsJGm6VjpCgdZ54agG0jktaNPwB9my88g_dL_Bsw@mail.gmail.com>
+In-Reply-To: <20181008115146.17797-1-lothar.felten@gmail.com>
 References: <20181008115146.17797-1-lothar.felten@gmail.com>
- <CANQCQpYouTTsJGm6VjpCgdZ54agG0jktaNPwB9my88g_dL_Bsw@mail.gmail.com>
-Message-ID: <0e0b709b-024a-9e77-a9d4-4bd58289edf0@mind.be>
+Message-ID: <20181008155832.GG2869@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Lothar, All,
 
+On 2018-10-08 13:51 +0200, Lothar Felten spake thusly:
+> Patch dtc to accept libfdt include guards with and without leading underscore.
+> A compiler warning is added to notify the user.
 
-On 8/10/18 15:10, Matthew Weber wrote:
-> Lothar,
+Please, do not add the warning. We should be as transparent as possible
+when we add such workarounds.
+
+It is not unseen that a configure script parses the output of gcc to
+detect stuff, and expect the output to be either empty or a specific
+regexp; adding this warning would break that.
+
+Otherwise, the patch is simple enough, and looks OKish as a workaround.
+
+Maybe we could suggest upstream to carry such a patch? And then, it
+would be their call to add the warning or not.
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
+> ---
+>  ...de-guards-for-older-kernel-u-boot-sources.patch | 42 ++++++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+>  create mode 100644 package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch
 > 
+> diff --git a/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch b/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch
+> new file mode 100644
+> index 0000000000..40cb0bdb2a
+> --- /dev/null
+> +++ b/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch
+> @@ -0,0 +1,42 @@
+> +From b1f8b84489c96465b63485b884238b61d31ca84d Mon Sep 17 00:00:00 2001
+> +From: Lothar Felten <lothar.felten@gmail.com>
+> +Date: Mon, 8 Oct 2018 13:29:44 +0200
+> +Subject: [PATCH 1/1] Fix include guards for older kernel/u-boot sources
+> +
+> +Linux kernels before 4.17 and U-Boot versions before 2018.07 use libfdt include guards with leading underscores.
+> +Those have been removed in dtc-1.4.7.
+> +This patch handles both include guard types and allows the compilation of older Linux kernel and u-boot sources.
+> +
+> +Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
+> +---
+> + libfdt/libfdt.h     | 4 ++++
+> + libfdt/libfdt_env.h | 4 ++++
+> + 2 files changed, 8 insertions(+)
+> +
+> +diff --git a/libfdt/libfdt.h b/libfdt/libfdt.h
+> +index 830b77e..bef4566 100644
+> +--- a/libfdt/libfdt.h
+> ++++ b/libfdt/libfdt.h
+> +@@ -1,3 +1,7 @@
+> ++#ifdef _LIBFDT_H
+> ++#warning "Please consider updating your kernel and/or u-boot version"
+> ++#define LIBFDT_H
+> ++#endif
+> + #ifndef LIBFDT_H
+> + #define LIBFDT_H
+> + /*
+> +diff --git a/libfdt/libfdt_env.h b/libfdt/libfdt_env.h
+> +index eb20538..6a61e6a 100644
+> +--- a/libfdt/libfdt_env.h
+> ++++ b/libfdt/libfdt_env.h
+> +@@ -1,3 +1,7 @@
+> ++#ifdef _LIBFDT_ENV_H
+> ++#warning "Please consider updating your kernel and/or u-boot version"
+> ++#define LIBFDT_ENV_H
+> ++#endif
+> + #ifndef LIBFDT_ENV_H
+> + #define LIBFDT_ENV_H
+> + /*
+> +-- 
+> +2.11.0
+> +
+> -- 
+> 2.11.0
 > 
-> On Mon, Oct 8, 2018 at 6:52 AM Lothar Felten <lothar.felten@gmail.com> wrote:
->>
->> Patch dtc to accept libfdt include guards with and without leading underscore.
->> A compiler warning is added to notify the user.
->>
->> Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
->> ---
->>  ...de-guards-for-older-kernel-u-boot-sources.patch | 42 ++++++++++++++++++++++
->>  1 file changed, 42 insertions(+)
->>  create mode 100644 package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch
->>
->> diff --git a/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch b/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch
->> new file mode 100644
->> index 0000000000..40cb0bdb2a
->> --- /dev/null
->> +++ b/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch
->> @@ -0,0 +1,42 @@
->> +From b1f8b84489c96465b63485b884238b61d31ca84d Mon Sep 17 00:00:00 2001
->> +From: Lothar Felten <lothar.felten@gmail.com>
->> +Date: Mon, 8 Oct 2018 13:29:44 +0200
->> +Subject: [PATCH 1/1] Fix include guards for older kernel/u-boot sources
->> +
->> +Linux kernels before 4.17 and U-Boot versions before 2018.07 use libfdt include guards with leading underscores.
->> +Those have been removed in dtc-1.4.7.
-> 
-> Is there an reference that could be listed to either
-> 1) A upstream mailinglist/patchwork link that proposes adding this patch
-> 2) If the patch below can't be upstreamed, a reference to the commit
-> that is reverting this support you're adding back in and maybe a
-> summary of why the backwards compatibility isn't' accepted.
-
- I expect that it is not acceptable for upstream because this is only needed
-when you include *both* libfdt.h from dtc and the one from the local copy, which
-is clearly completely bogus. It happens due to bugs in the build system of
-u-boot and of the beaglebone fork of the kernel (AFAIK it doesn't happen with
-any upstream kernel version).
-
- So "fixing" it like this is really a workaround for broken u-boot/kernel that
-is only applicable to Buildroot, because we have no easy way to generically
-apply patches to u-boot/kernel while we can easily do it for dtc.
-
- Lothar, if you agree with the above analysis, could you include that in the
-commit message of 0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch ?
-
- Also:
-
-- please wrap the commit message of the patch itself at 72 columns as well;
-
-- please number it properly, i.e. it should have number 2 instead of 1. Patch 1
-was committed almost a month ago...
-
- Regards,
- Arnout
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
