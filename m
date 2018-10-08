@@ -1,85 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 8 Oct 2018 21:45:38 +0200
-Subject: [Buildroot] [PATCH 2/4] package/asterisk: enable for non-glibc
- toolchains
-In-Reply-To: <651cc680-f4ea-7ce5-a774-21602cb083e7@mind.be>
-References: <20181003131358.28002-1-bernd.kuhls@t-online.de>
- <20181003131358.28002-2-bernd.kuhls@t-online.de>
- <651cc680-f4ea-7ce5-a774-21602cb083e7@mind.be>
-Message-ID: <20181008194538.GJ2869@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 8 Oct 2018 21:51:29 +0200
+Subject: [Buildroot] [PATCH 6/8] perl-moo: new package
+In-Reply-To: <20181008193646.13046-7-francois.perrad@gadz.org>
+References: <20181008193646.13046-1-francois.perrad@gadz.org>
+ <20181008193646.13046-7-francois.perrad@gadz.org>
+Message-ID: <20181008215129.6ff9da6f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Bernd, All,
+Hello,
 
-On 2018-10-08 19:19 +0200, Arnout Vandecappelle spake thusly:
-> On 3/10/18 15:13, Bernd Kuhls wrote:
-[--SNIP--]
-> > diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-> > index ea779cc8f6..46fe4de947 100644
-> > --- a/package/asterisk/asterisk.mk
-> > +++ b/package/asterisk/asterisk.mk
-> > @@ -117,6 +117,10 @@ ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
-> >  ASTERISK_CONF_OPTS += --with-execinfo
-> >  else
-> >  ASTERISK_CONF_OPTS += --without-execinfo
-> > +define ASTERISK_NO_RESINIT
-> > +	sed -i -e '/AC_DEFINE(\[HAVE_RES_NINIT\]/d' $(@D)/configure.ac
-> > +endef
-> 
->  Meh, I'm dead against such sed-patching, and I'm also against conditional
-> "patching" of a package.
+On Mon,  8 Oct 2018 21:36:44 +0200, Francois Perrad wrote:
 
-Agreed.
+> +PERL_MOO_VERSION = 2.003004
+> +PERL_MOO_SOURCE = Moo-$(PERL_MOO_VERSION).tar.gz
+> +PERL_MOO_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
+> +PERL_MOO_DEPENDENCIES = \
+> +	perl-class-method-modifiers \
+> +	perl-devel-globaldestruction \
+> +	perl-module-runtime \
+> +	perl-role-tiny \
+> +	perl-sub-quote
 
->  Is it htat much of a problem to extend the autoconf test with a call to
-> res_nsearch?
+Please remove all those build-time dependencies, and try to build
+without them. I.e do a build with BR2_PACKAGE_PERL_MOO enabled, but run
+just "make perl-moo". If it works, then those dependencies are only
+runtime dependencies, not build time ones.
 
-It should not, no. It should be possible to change (in master), configure.ac
-line 1391, from:
+It is much easier to detect missing build dependencies (thanks to build
+testing, either on your side or in the autobuilders) than to detect
+extraneous build dependencies and remove them.
 
-    [int foo = res_ninit(NULL);]
+So I think scancpan should only add dependencies on host packages
+(which are obviously needed at build time) and not add any dependency
+on target packages. And then build testing is needed to manually add
+the build-time dependencies that are needed, if any.
 
-... to something like:
+Best regards,
 
-    [
-        int foo;
-        foo = res_ninit(NULL);
-        foo = res_nsearch(NULL, NULL, 0, 0, NULL, 0);
-    ]
-
-... and potentially adding all such functions.
-
-Since this is an AC_LINK_IFELSE(), we don't care what values we pas to
-the the functions, as long as they have the proper types.
-
-Regards,
-Yann E. MORIN.
-
->  Regards,
->  Arnout
-> 
-> > +ASTERISK_POST_PATCH_HOOKS += ASTERISK_NO_RESINIT
-> >  endif
-> >  
-> >  ifeq ($(BR2_PACKAGE_LIBGSM),y)
-> > 
-> 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
