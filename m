@@ -1,47 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 8 Oct 2018 21:29:19 +0200
-Subject: [Buildroot] [PATCH 1/4] package/mjpg-streamer: bump version
-In-Reply-To: <20180930190323.3369-1-bernd.kuhls@t-online.de>
-References: <20180930190323.3369-1-bernd.kuhls@t-online.de>
-Message-ID: <20181008212919.10afab6c@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 8 Oct 2018 21:31:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dtc: fix include guards for
+ older kernel/u-boot
+In-Reply-To: <9062fe55-2457-66bf-48cc-74e787d95129@mind.be>
+References: <20181008115146.17797-1-lothar.felten@gmail.com>
+ <20181008180230.53ab7972@windsurf> <20181008163233.GH2869@scaer>
+ <9062fe55-2457-66bf-48cc-74e787d95129@mind.be>
+Message-ID: <20181008193115.GI2869@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Arnout, All,
 
-On Sun, 30 Sep 2018 21:03:20 +0200, Bernd Kuhls wrote:
-> The currently used github repo from oliv3r does not exist anymore.
-> https://sourceforge.net/projects/mjpg-streamer/ shows that the status of
-> the original project site is "Inactive" and points to
-> https://github.com/jacksonliam/mjpg-streamer as the new site.
-> 
-> The new maintainer is active so we bump the package to HEAD of its
-> master branch which fixes a glibc-related build error:
-> http://autobuild.buildroot.net/results/4c8/4c8aac898d4580ed0b8b52cef7779d0f6f6a631f/
-> 
-> Further changes due to this bump:
-> - removed patch 0001, fix was applied upstream:
->   https://github.com/jacksonliam/mjpg-streamer/commit/eb4dafd802b366d9b0310e91e7bb93a1082e7657#diff-511ff6908e8db4543e5a59d0ea4a2f1f
-> - switched to CMake
-> 
-> Added license hash.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/mjpg-streamer/0001-musl-pthread.patch | 18 ---------------
->  package/mjpg-streamer/Config.in               |  2 +-
->  package/mjpg-streamer/mjpg-streamer.hash      |  3 ++-
->  package/mjpg-streamer/mjpg-streamer.mk        | 22 +++++--------------
->  4 files changed, 8 insertions(+), 37 deletions(-)
->  delete mode 100644 package/mjpg-streamer/0001-musl-pthread.patch
+On 2018-10-08 21:21 +0200, Arnout Vandecappelle spake thusly:
+> On 8/10/18 18:32, Yann E. MORIN wrote:
+> > On 2018-10-08 18:02 +0200, Thomas Petazzoni spake thusly:
+> >> However, I suppose it doesn't fix the problem when you have a
+> >> recent version of libfdt installed on your system (through your
+> >> distribution), that doesn't play well with those older Linux/U-Boot
+> >> versions. Correct ?
+> > Probably not, indeed, but that is still better (IMHO) than the few hacks
+> > we already tried with -isystem or the likes, which do not really work
+> > either...
+>  As far as we tested it, [1] *does* really work.
+> [1] http://patchwork.ozlabs.org/patch/964474/
 
-All four patches applied. Thanks!
+No it does not. Please see commit 6f8162cf8c1abef7e0a4771fe0d6b26a28f5c2b6
+which got reverted by 255b6f80d395ef048f46cfcf75dba690c56af657, and which
+was supposed to fix a very similar issue...
 
-Thomas
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
