@@ -1,68 +1,32 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  8 Oct 2018 23:13:51 +0200
-Subject: [Buildroot] [PATCH 1/1] leveldb: fix parallel build
-Message-ID: <20181008211351.18806-1-fontaine.fabrice@gmail.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Mon, 8 Oct 2018 23:56:38 +0200
+Subject: [Buildroot] [PATCH v2] linux-firmware: fix build failure on
+ legal-info
+In-Reply-To: <20181008181248.07497798@windsurf>
+References: <20181003044542.hrqjjfbxoic56hpb@sapphire.tkos.co.il>
+ <20181003141120.31516-1-giulio.benetti@micronovasrl.com>
+ <20181008181248.07497798@windsurf>
+Message-ID: <8c4f6897-c158-b762-dfc3-5f5eb79d9ce4@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build of leveldb sometimes fails on:
-Fatal error: can't create out-shared/db/db_bench.o: No such file or directory
+Il 08/10/2018 18:12, Thomas Petazzoni ha scritto:
+> Applied to master with a tweaked commit title/log, thanks.
 
-Patch is not upstreamable as upstream switched to cmake
+Ok, thank you, I was very near this time for commit log :)
 
-Fixes:
- - http://autobuild.buildroot.net/results/945bb8096c1f98f307161a6def5a9f7f25b2454a
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/leveldb/0003-fix-parallel-build.patch | 36 +++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 package/leveldb/0003-fix-parallel-build.patch
-
-diff --git a/package/leveldb/0003-fix-parallel-build.patch b/package/leveldb/0003-fix-parallel-build.patch
-new file mode 100644
-index 0000000000..8aafbc2e02
---- /dev/null
-+++ b/package/leveldb/0003-fix-parallel-build.patch
-@@ -0,0 +1,36 @@
-+From 293e1b08317567b2e479d24530986676ae4d2221 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 8 Oct 2018 23:08:19 +0200
-+Subject: [PATCH] fix parallel build
-+
-+Build of leveldb sometimes fails on:
-+Fatal error: can't create out-shared/db/db_bench.o: No such file or directory
-+
-+Fix this, by creating $(SHARED_OUTDIR) before building
-+(SHARED_OUTDIR)/db/db_bench.o
-+
-+Fixes:
-+ - http://autobuild.buildroot.net/results/945bb8096c1f98f307161a6def5a9f7f25b2454a
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: not upstreamable as upstream switched to cmake]
-+---
-+ Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index f7cc7d7..edb56a5 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -386,7 +386,7 @@ $(STATIC_OUTDIR)/write_batch_test:db/write_batch_test.cc $(STATIC_LIBOBJECTS) $(
-+ $(STATIC_OUTDIR)/memenv_test:$(STATIC_OUTDIR)/helpers/memenv/memenv_test.o $(STATIC_OUTDIR)/libmemenv.a $(STATIC_OUTDIR)/libleveldb.a $(TESTHARNESS)
-+ 	$(XCRUN) $(CXX) $(LDFLAGS) $(STATIC_OUTDIR)/helpers/memenv/memenv_test.o $(STATIC_OUTDIR)/libmemenv.a $(STATIC_OUTDIR)/libleveldb.a $(TESTHARNESS) -o $@ $(LIBS)
-+ 
-+-$(SHARED_OUTDIR)/db_bench:$(SHARED_OUTDIR)/db/db_bench.o $(SHARED_LIBS) $(TESTUTIL)
-++$(SHARED_OUTDIR)/db_bench:$(SHARED_OUTDIR) $(SHARED_OUTDIR)/db/db_bench.o $(SHARED_LIBS) $(TESTUTIL)
-+ 	$(XCRUN) $(CXX) $(LDFLAGS) $(CXXFLAGS) $(PLATFORM_SHARED_CFLAGS) $(SHARED_OUTDIR)/db/db_bench.o $(TESTUTIL) $(SHARED_OUTDIR)/$(SHARED_LIB3) -o $@ $(LIBS)
-+ 
-+ .PHONY: run-shared
-+-- 
-+2.17.1
-+
+Kind regards
 -- 
-2.17.1
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
