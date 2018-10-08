@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 8 Oct 2018 21:17:39 +0200
-Subject: [Buildroot] [PATCH 1/1] python-ipython: bump to version 5.8.0
-In-Reply-To: <20180929052835.25717-1-asafka7@gmail.com>
-References: <20180929052835.25717-1-asafka7@gmail.com>
-Message-ID: <20181008211739.4a09215f@windsurf>
+Date: Mon, 8 Oct 2018 21:17:45 +0200
+Subject: [Buildroot] [PATCH 1/1] python-pyroute2: bump to version 0.5.3
+In-Reply-To: <20180930182934.10415-1-asafka7@gmail.com>
+References: <20180930182934.10415-1-asafka7@gmail.com>
+Message-ID: <20181008211745.6aaf9025@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 29 Sep 2018 08:28:35 +0300, Asaf Kahlon wrote:
-> Also add license hash.
+On Sun, 30 Sep 2018 21:29:34 +0300, Asaf Kahlon wrote:
+> The python sqlite module is also needed.
 > 
 > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 > ---
->  package/python-ipython/python-ipython.hash | 8 +++++---
->  package/python-ipython/python-ipython.mk   | 4 ++--
->  2 files changed, 7 insertions(+), 5 deletions(-)
+>  package/python-pyroute2/Config.in            | 2 ++
+>  package/python-pyroute2/python-pyroute2.hash | 4 ++--
+>  package/python-pyroute2/python-pyroute2.mk   | 4 ++--
+>  3 files changed, 6 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
