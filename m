@@ -1,52 +1,36 @@
-From: Mario Lang <mlang@blind.guru>
-Date: Mon, 08 Oct 2018 12:09:56 +0200
-Subject: [Buildroot] [PATCH 1/1] brltty: fix build on mips64el
-In-Reply-To: <CAPi7W82H5K4nsu5A6wPwwuGdnTXAJJ3Jh5wUrkGRj93==6cBhw@mail.gmail.com>
- (Fabrice Fontaine's message of "Mon, 8 Oct 2018 10:29:58 +0200")
-References: <20180930183408.4248-1-fontaine.fabrice@gmail.com>
- <87bm84g8cf.fsf@home.blind.guru>
- <CAPi7W82H5K4nsu5A6wPwwuGdnTXAJJ3Jh5wUrkGRj93==6cBhw@mail.gmail.com>
-Message-ID: <87bm84eoln.fsf@home.blind.guru>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 8 Oct 2018 12:10:57 +0200
+Subject: [Buildroot] [PATCH 10/20] host-perl-extutils-config: new package
+In-Reply-To: <20181006165524.23778-11-francois.perrad@gadz.org>
+References: <20181006165524.23778-1-francois.perrad@gadz.org>
+ <20181006165524.23778-11-francois.perrad@gadz.org>
+Message-ID: <20181008121057.653504ad@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Hello,
 
-> Dear Mario,
-> Le lun. 8 oct. 2018 ? 10:18, Mario Lang <mlang@blind.guru> a ?crit :
->
->> Hi.
->>
->> Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
->>
->> > Bump to version 5.6 has reintroduced the issue fixed by patch 854093 on
->> > version 5.5.
->> >
->> > Indeed, third patch was merged upstream but it was then reverted:
->> >
->> https://github.com/brltty/brltty/commit/9e7d62c869d3c1cbe12dda8b0291a4692c193416
->> >
->> > Moreover, since commit 3a2e3f6fa5ef0a210ffeba5ed05c79965d0cc3c7, MKOBJ
->> > was renamed into MKREL. So, instead of patching again brltty, overwrite
->> > LD to set the correct emulation depending on MIPS architecture as
->> > already done in linux-tool-perf.mk.in.
->>
->> Thanks Fabrice.  ack and +1.
->>
-> Thanks for your review, however after the feedback from Arnout on first
-> patch iteration (https://patchwork.ozlabs.org/patch/972614/), I've also
-> sent a PR to brltty: https://github.com/brltty/brltty/pull/149.
-> Both solutions seems good to me.
+On Sat,  6 Oct 2018 18:55:14 +0200, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  .../perl-extutils-config/perl-extutils-config.hash  |  6 ++++++
+>  .../perl-extutils-config/perl-extutils-config.mk    | 13 +++++++++++++
+>  utils/scancpan                                      |  1 +
+>  3 files changed, 20 insertions(+)
+>  create mode 100644 package/perl-extutils-config/perl-extutils-config.hash
+>  create mode 100644 package/perl-extutils-config/perl-extutils-config.mk
 
-As I have mentioned previously in this thread, switching to GCC
-unconditionally break compilation on OS X.
-So PR 149 is likely not to be accepted.
-IMO, the right way forward is to commit your patch to buildroot, as it
-fixes a problem specific to mips.
+The commit title doesn't need to have the "host-" prefix. Also, when
+adding host packages, it's genrally nice to explain in the commit log
+why they are needed.
 
+Applied with a reworked commit title and commit log. Thanks!
+
+Thomas
 -- 
-CYa,
-  ?????
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
