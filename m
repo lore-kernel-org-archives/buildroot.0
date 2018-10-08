@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon,  8 Oct 2018 21:36:45 +0200
-Subject: [Buildroot] [PATCH 7/8] perl-exporter-tiny: new package
+Date: Mon,  8 Oct 2018 21:36:46 +0200
+Subject: [Buildroot] [PATCH 8/8] perl-type-tiny: new package
 In-Reply-To: <20181008193646.13046-1-francois.perrad@gadz.org>
 References: <20181008193646.13046-1-francois.perrad@gadz.org>
-Message-ID: <20181008193646.13046-8-francois.perrad@gadz.org>
+Message-ID: <20181008193646.13046-9-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,70 +12,71 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/Config.in                                  |  1 +
- package/perl-exporter-tiny/Config.in               |  7 +++++++
- package/perl-exporter-tiny/perl-exporter-tiny.hash |  7 +++++++
- package/perl-exporter-tiny/perl-exporter-tiny.mk   | 13 +++++++++++++
- 4 files changed, 28 insertions(+)
- create mode 100644 package/perl-exporter-tiny/Config.in
- create mode 100644 package/perl-exporter-tiny/perl-exporter-tiny.hash
- create mode 100644 package/perl-exporter-tiny/perl-exporter-tiny.mk
+ package/Config.in                          |  1 +
+ package/perl-type-tiny/Config.in           |  7 +++++++
+ package/perl-type-tiny/perl-type-tiny.hash |  7 +++++++
+ package/perl-type-tiny/perl-type-tiny.mk   | 14 ++++++++++++++
+ 4 files changed, 29 insertions(+)
+ create mode 100644 package/perl-type-tiny/Config.in
+ create mode 100644 package/perl-type-tiny/perl-type-tiny.hash
+ create mode 100644 package/perl-type-tiny/perl-type-tiny.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 3e4bc2882..500266433 100644
+index 500266433..9fb6fe02b 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -696,6 +696,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-dist-checkconflicts/Config.in"
- 	source "package/perl-encode-detect/Config.in"
- 	source "package/perl-encode-locale/Config.in"
-+	source "package/perl-exporter-tiny/Config.in"
- 	source "package/perl-file-listing/Config.in"
- 	source "package/perl-file-sharedir/Config.in"
- 	source "package/perl-file-slurp/Config.in"
-diff --git a/package/perl-exporter-tiny/Config.in b/package/perl-exporter-tiny/Config.in
+@@ -760,6 +760,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-time-parsedate/Config.in"
+ 	source "package/perl-timedate/Config.in"
+ 	source "package/perl-try-tiny/Config.in"
++	source "package/perl-type-tiny/Config.in"
+ 	source "package/perl-uri/Config.in"
+ 	source "package/perl-www-form-urlencoded/Config.in"
+ 	source "package/perl-www-robotrules/Config.in"
+diff --git a/package/perl-type-tiny/Config.in b/package/perl-type-tiny/Config.in
 new file mode 100644
-index 000000000..1ee001ef1
+index 000000000..ae853efba
 --- /dev/null
-+++ b/package/perl-exporter-tiny/Config.in
++++ b/package/perl-type-tiny/Config.in
 @@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PERL_EXPORTER_TINY
-+	bool "perl-exporter-tiny"
++config BR2_PACKAGE_PERL_TYPE_TINY
++	bool "perl-type-tiny"
++	select BR2_PACKAGE_PERL_EXPORTER_TINY
 +	help
-+	  an exporter with the features of Sub::Exporter but only core
-+	  dependencies
++	  tiny, yet Moo(se)-compatible type constraint
 +
-+	  https://metacpan.org/release/Exporter-Tiny
-diff --git a/package/perl-exporter-tiny/perl-exporter-tiny.hash b/package/perl-exporter-tiny/perl-exporter-tiny.hash
++	  https://metacpan.org/release/Type-Tiny
+diff --git a/package/perl-type-tiny/perl-type-tiny.hash b/package/perl-type-tiny/perl-type-tiny.hash
 new file mode 100644
-index 000000000..1d36c63a1
+index 000000000..a9e028f87
 --- /dev/null
-+++ b/package/perl-exporter-tiny/perl-exporter-tiny.hash
++++ b/package/perl-type-tiny/perl-type-tiny.hash
 @@ -0,0 +1,7 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    e33f25f7556f5f5264a92cb9870d0eac Exporter-Tiny-1.002001.tar.gz
-+sha256 a82c334c02ce4b0f9ea77c67bf77738f76a9b8aa4bae5c7209d1c76453d3c48d Exporter-Tiny-1.002001.tar.gz
++md5    fad12549fe5b904173e18a05e82e5166 Type-Tiny-1.004002.tar.gz
++sha256 e52c7e9593052aed157a15d473b5c25a1dbb3454bf3cd6913df94cc9bb2be707 Type-Tiny-1.004002.tar.gz
 +
 +# computed by scancpan
-+sha256 a109768ea1493cc7555d4381d6178d3cfc1fe52adc5d63d3831a2697d9fc90e6 COPYRIGHT
++sha256 0caa5aef37fdb3eddc52419d193df594550c621b84f5990830482f9f8226adde COPYRIGHT
 +sha256 c614dadb36b02257ab492e3d4341e52f3f03fe8147cafd2b7da03b3b5c0361e9 LICENSE
-diff --git a/package/perl-exporter-tiny/perl-exporter-tiny.mk b/package/perl-exporter-tiny/perl-exporter-tiny.mk
+diff --git a/package/perl-type-tiny/perl-type-tiny.mk b/package/perl-type-tiny/perl-type-tiny.mk
 new file mode 100644
-index 000000000..374abd6f1
+index 000000000..05259fed7
 --- /dev/null
-+++ b/package/perl-exporter-tiny/perl-exporter-tiny.mk
-@@ -0,0 +1,13 @@
++++ b/package/perl-type-tiny/perl-type-tiny.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-exporter-tiny
++# perl-type-tiny
 +#
 +################################################################################
 +
-+PERL_EXPORTER_TINY_VERSION = 1.002001
-+PERL_EXPORTER_TINY_SOURCE = Exporter-Tiny-$(PERL_EXPORTER_TINY_VERSION).tar.gz
-+PERL_EXPORTER_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TOBYINK
-+PERL_EXPORTER_TINY_LICENSE = Artistic or GPL-1.0+
-+PERL_EXPORTER_TINY_LICENSE_FILES = COPYRIGHT LICENSE
++PERL_TYPE_TINY_VERSION = 1.004002
++PERL_TYPE_TINY_SOURCE = Type-Tiny-$(PERL_TYPE_TINY_VERSION).tar.gz
++PERL_TYPE_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TOBYINK
++PERL_TYPE_TINY_DEPENDENCIES = perl-exporter-tiny
++PERL_TYPE_TINY_LICENSE = Artistic or GPL-1.0+
++PERL_TYPE_TINY_LICENSE_FILES = COPYRIGHT LICENSE
 +
 +$(eval $(perl-package))
 -- 
