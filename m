@@ -1,50 +1,97 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon,  8 Oct 2018 09:08:42 +0200
-Subject: [Buildroot] [PATCH] qemu: security bump to 2.12.1
-Message-ID: <20181008070842.25883-1-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon,  8 Oct 2018 09:22:23 +0200
+Subject: [Buildroot] [PATCH 1/3] docs/website/sponsors: remove "current
+ sponsors", update "past sponsors"
+Message-ID: <20181008072225.20924-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From the release notes:
+This commit removes Google and Mind as "Current sponsors" and credits
+them as "Past sponsors" for the FOSDEM 2018 Buildroot Developers
+Meeting.
 
-This update contains new mitigation functionality for CVE-2018-3639
-(Speculative Store Bypass) in x86. There are also bug fixes for
-migration, Intel IOMMU emulation, block layer/image handling, ARM
-emulation, and various other areas.
-
-https://www.mail-archive.com/qemu-devel at nongnu.org/msg553574.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qemu/qemu.hash | 2 +-
- package/qemu/qemu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ docs/website/sponsors.html | 50 +++-------------------------------------------
+ 1 file changed, 3 insertions(+), 47 deletions(-)
 
-diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
-index fc0b4e87bf..2b27008b73 100644
---- a/package/qemu/qemu.hash
-+++ b/package/qemu/qemu.hash
-@@ -1,4 +1,4 @@
- # Locally computed, tarball verified with GPG signature
--sha256 e69301f361ff65bf5dabd8a19196aeaa5613c1b5ae1678f0823bdf50e7d5c6fc  qemu-2.12.0.tar.xz
-+sha256 33583800e0006cd00b78226b85be5a27c8e3b156bed2e60e83ecbeb7b9b8364f  qemu-2.12.1.tar.xz
- sha256 6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
- sha256 48ffe9fc7f1d5462dbd19340bc4dd1d8a9e37c61ed535813e614cbe4a5f0d4df  COPYING.LIB
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index afb2aa92f6..968c8073e4 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/docs/website/sponsors.html b/docs/website/sponsors.html
+index 13ff6cc575..adde47231f 100644
+--- a/docs/website/sponsors.html
++++ b/docs/website/sponsors.html
+@@ -4,50 +4,6 @@
+ <div class="row nh"><!-- current sponsor row -->
+ <div class="col-lg-10 col-lg-offset-1 col-md-12 col-sm-12 col-xs-12">
  
--QEMU_VERSION = 2.12.0
-+QEMU_VERSION = 2.12.1
- QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
- QEMU_SITE = http://download.qemu.org
- QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
+-  <div class="panel panel-primary">
+-    <div class="panel-heading">Current sponsors</div>
+-    <div class="panel-body">
+-
+-      <div class="row">
+-
+-	<div class="col-sm-12">
+-	  <div class="panel panel-default">
+-	    <div class="panel-body">
+-	      <div class="col-sm-4">
+-		<a href="http://www.google.com">
+-		  <img class="img-responsive center-block" src="images/google-logo.png"/>
+-		</a>
+-	      </div>
+-	      <div class="col-sm-8">
+-		<a href="http://www.google.com">Google</a> is
+-		sponsoring
+-		the <a href="http://elinux.org/Buildroot:DeveloperDaysFOSDEM2018">Buildroot
+-		  Developers Meeting at FOSDEM 2018</a> in Brussels, by
+-		providing logistics for the meeting: a free meeting
+-		room and lunch for the participants.
+-	      </div>
+-	    </div>
+-	  </div>
+-
+-	  <div class="col-sm-12">
+-	    <div class="panel panel-default">
+-	      <div class="panel-body">
+-		<div class="col-sm-4">
+-		  <a href="http://www.mind.be">
+-		    <img class="img-responsive center-block" src="images/mind-logo.png"/>
+-		  </a>
+-		</div>
+-		<div class="col-sm-8">
+-		  As it did in previous years, <a href="http://www.mind.be">Mind</a>
+-		  is sponsoring the Monday night dinner at the <a href="http://elinux.org/Buildroot:DeveloperDaysFOSDEM2018">Buildroot
+-		    Developers Meeting at FOSDEM 2018</a> in Brussels.
+-		</div>
+-	      </div>
+-	    </div>
+-	  </div>
+-    </div>
+-  </div>
+-
+   <div class="panel panel-primary">
+     <div class="panel-heading">Past sponsors</div>
+     <div class="panel-body">
+@@ -82,7 +38,7 @@
+ 	      </div>
+ 	      <div class="col-sm-12">
+ 		<a href="http://www.mind.be">Mind</a> sponsored the
+-		dinner of the FOSDEM 2014, 2015, 2016 and 2017
++		dinner of the FOSDEM 2014, 2015, 2016, 2017 and 2018
+ 		Developers Meeting (Brussels) and ELCE 2016 (Berlin)
+                 and 2017 (Prague), and the meeting room and the dinner for
+                 the ELCE 2014 Developers Meeting (D?sseldorf).
+@@ -101,8 +57,8 @@
+ 	      <div class="col-sm-12">
+ 		<p><a href="http://www.google.com">Google</a> provided
+ 		  the logistics for the FOSDEM 2013, FOSDEM 2014,
+-		  FOSDEM 2015, FOSDEM 2016 and FOSDEM 2017 Developer Days
+-		  in Brussels, Belgium.</p>
++		  FOSDEM 2015, FOSDEM 2016, FOSDEM 2017 and FOSDEM
++		  2018 Developer Days in Brussels, Belgium.</p>
+ 	      </div>
+ 	    </div>
+ 	  </div>
 -- 
-2.11.0
+2.14.4
