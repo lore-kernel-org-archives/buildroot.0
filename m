@@ -1,77 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 8 Oct 2018 10:26:33 +0200
-Subject: [Buildroot] [git commit] perl-hash-multivalue: new package
-Message-ID: <20181008083554.111EC8E12C@busybox.osuosl.org>
+Date: Mon, 8 Oct 2018 10:26:02 +0200
+Subject: [Buildroot] [git commit] perl-filesys-notify-simple: new package
+Message-ID: <20181008083554.083728E1E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc3cdcd3ec78a77cb395f21872bc59dd54f0af3d
+commit: https://git.buildroot.net/buildroot/commit/?id=d361c389681f859f2eae87bbf600a2b37eafdd0e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/Config.in                                      |  1 +
- package/perl-hash-multivalue/Config.in                 |  6 ++++++
- package/perl-hash-multivalue/perl-hash-multivalue.hash |  6 ++++++
- package/perl-hash-multivalue/perl-hash-multivalue.mk   | 13 +++++++++++++
+ package/Config.in                                           |  1 +
+ package/perl-filesys-notify-simple/Config.in                |  6 ++++++
+ .../perl-filesys-notify-simple.hash                         |  6 ++++++
+ .../perl-filesys-notify-simple.mk                           | 13 +++++++++++++
  4 files changed, 26 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index 52e554e72b..0b9a0cb96d 100644
+index e89899b83e..52e554e72b 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -699,6 +699,7 @@ menu "Perl libraries/modules"
+@@ -695,6 +695,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-file-listing/Config.in"
+ 	source "package/perl-file-slurp/Config.in"
+ 	source "package/perl-file-util/Config.in"
++	source "package/perl-filesys-notify-simple/Config.in"
  	source "package/perl-gd/Config.in"
  	source "package/perl-gdgraph/Config.in"
  	source "package/perl-gdtextutil/Config.in"
-+	source "package/perl-hash-multivalue/Config.in"
- 	source "package/perl-html-parser/Config.in"
- 	source "package/perl-html-tagset/Config.in"
- 	source "package/perl-http-cookies/Config.in"
-diff --git a/package/perl-hash-multivalue/Config.in b/package/perl-hash-multivalue/Config.in
+diff --git a/package/perl-filesys-notify-simple/Config.in b/package/perl-filesys-notify-simple/Config.in
 new file mode 100644
-index 0000000000..0883c95d86
+index 0000000000..69469d7a6d
 --- /dev/null
-+++ b/package/perl-hash-multivalue/Config.in
++++ b/package/perl-filesys-notify-simple/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PERL_HASH_MULTIVALUE
-+	bool "perl-hash-multivalue"
++config BR2_PACKAGE_PERL_FILESYS_NOTIFY_SIMPLE
++	bool "perl-filesys-notify-simple"
 +	help
-+	  Store multiple values per key
++	  Simple and dumb file system watcher
 +
-+	  https://github.com/miyagawa/Hash-MultiValue
-diff --git a/package/perl-hash-multivalue/perl-hash-multivalue.hash b/package/perl-hash-multivalue/perl-hash-multivalue.hash
++	  https://github.com/miyagawa/Filesys-Notify-Simple
+diff --git a/package/perl-filesys-notify-simple/perl-filesys-notify-simple.hash b/package/perl-filesys-notify-simple/perl-filesys-notify-simple.hash
 new file mode 100644
-index 0000000000..3a68650697
+index 0000000000..a48394504a
 --- /dev/null
-+++ b/package/perl-hash-multivalue/perl-hash-multivalue.hash
++++ b/package/perl-filesys-notify-simple/perl-filesys-notify-simple.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    508015312eb08cd2bcea987c4efbb93d Hash-MultiValue-0.16.tar.gz
-+sha256 66181df7aa68e2786faf6895c88b18b95c800a8e4e6fb4c07fd176410a3c73f4 Hash-MultiValue-0.16.tar.gz
++md5    6042cd96abcc7bf69f959142d00b8143 Filesys-Notify-Simple-0.13.tar.gz
++sha256 ade3d3db882ce2137e527201893d4b8c12b2dbd15009bb89c31cb91ba6495ba2 Filesys-Notify-Simple-0.13.tar.gz
 +
 +# computed by scancpan
-+sha256 af32512e13f6722dab770b989c57556a5e3d29a49b22b8ad5668064db8592401 LICENSE
-diff --git a/package/perl-hash-multivalue/perl-hash-multivalue.mk b/package/perl-hash-multivalue/perl-hash-multivalue.mk
++sha256 bd61ca40272d971750f0a2bd0122629865355c5f4a2aa9e70c0d325e75d0da3a LICENSE
+diff --git a/package/perl-filesys-notify-simple/perl-filesys-notify-simple.mk b/package/perl-filesys-notify-simple/perl-filesys-notify-simple.mk
 new file mode 100644
-index 0000000000..f42bc6092c
+index 0000000000..fff4c0ab57
 --- /dev/null
-+++ b/package/perl-hash-multivalue/perl-hash-multivalue.mk
++++ b/package/perl-filesys-notify-simple/perl-filesys-notify-simple.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# perl-hash-multivalue
++# perl-filesys-notify-simple
 +#
 +################################################################################
 +
-+PERL_HASH_MULTIVALUE_VERSION = 0.16
-+PERL_HASH_MULTIVALUE_SOURCE = Hash-MultiValue-$(PERL_HASH_MULTIVALUE_VERSION).tar.gz
-+PERL_HASH_MULTIVALUE_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AR/ARISTOTLE
-+PERL_HASH_MULTIVALUE_LICENSE = Artistic or GPL-1.0+
-+PERL_HASH_MULTIVALUE_LICENSE_FILES = LICENSE
++PERL_FILESYS_NOTIFY_SIMPLE_VERSION = 0.13
++PERL_FILESYS_NOTIFY_SIMPLE_SOURCE = Filesys-Notify-Simple-$(PERL_FILESYS_NOTIFY_SIMPLE_VERSION).tar.gz
++PERL_FILESYS_NOTIFY_SIMPLE_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MI/MIYAGAWA
++PERL_FILESYS_NOTIFY_SIMPLE_LICENSE = Artistic or GPL-1.0+
++PERL_FILESYS_NOTIFY_SIMPLE_LICENSE_FILES = LICENSE
 +
 +$(eval $(perl-package))
