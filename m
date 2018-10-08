@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 8 Oct 2018 16:41:14 +0200
-Subject: [Buildroot] [PATCH 18/20] host-perl-file-sharedir-install: new
- package
-In-Reply-To: <20181006165524.23778-19-francois.perrad@gadz.org>
+Date: Mon, 8 Oct 2018 16:43:43 +0200
+Subject: [Buildroot] [PATCH 19/20] perl-file-sharedir: new package
+In-Reply-To: <20181006165524.23778-20-francois.perrad@gadz.org>
 References: <20181006165524.23778-1-francois.perrad@gadz.org>
- <20181006165524.23778-19-francois.perrad@gadz.org>
-Message-ID: <20181008164114.5dc1744b@windsurf>
+ <20181006165524.23778-20-francois.perrad@gadz.org>
+Message-ID: <20181008164343.62886757@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,20 +13,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat,  6 Oct 2018 18:55:22 +0200, Francois Perrad wrote:
+On Sat,  6 Oct 2018 18:55:23 +0200, Francois Perrad wrote:
 > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  .../perl-file-sharedir-install.hash                 |  6 ++++++
->  .../perl-file-sharedir-install.mk                   | 13 +++++++++++++
->  utils/scancpan                                      |  1 +
->  3 files changed, 20 insertions(+)
->  create mode 100644 package/perl-file-sharedir-install/perl-file-sharedir-install.hash
->  create mode 100644 package/perl-file-sharedir-install/perl-file-sharedir-install.mk
+>  package/Config.in                                  |  1 +
+>  package/perl-file-sharedir/Config.in               |  7 +++++++
+>  package/perl-file-sharedir/perl-file-sharedir.hash |  6 ++++++
+>  package/perl-file-sharedir/perl-file-sharedir.mk   | 14 ++++++++++++++
+>  4 files changed, 28 insertions(+)
+>  create mode 100644 package/perl-file-sharedir/Config.in
+>  create mode 100644 package/perl-file-sharedir/perl-file-sharedir.hash
+>  create mode 100644 package/perl-file-sharedir/perl-file-sharedir.mk
 
-Applied to master after fixing the commit title, and adding a small
-commit log to explain why this host package is needed.
-
-Thanks,
+Applied to master, thanks.
 
 Thomas
 -- 
