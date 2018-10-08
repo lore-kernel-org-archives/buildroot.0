@@ -1,84 +1,75 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Mon, 8 Oct 2018 21:35:31 +0200
-Subject: [Buildroot] [PATCH 16/20] perl-http-entity-parser: new package
-In-Reply-To: <20181008163901.3933d098@windsurf>
-References: <20181006165524.23778-1-francois.perrad@gadz.org>
- <20181006165524.23778-17-francois.perrad@gadz.org>
- <20181008163901.3933d098@windsurf>
-Message-ID: <CAB0FRss=pJyhxu8CsmcUkozPZkmHDnScRL2u++fMPiBehPeW=g@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Mon,  8 Oct 2018 21:36:38 +0200
+Subject: [Buildroot] [PATCH 0/8] Moo & friends
+Message-ID: <20181008193646.13046-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le lun. 8 oct. 2018 ? 16:39, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-a ?crit :
+Add perl-moo and their friends and/or dependencies
 
-> Hello,
->
-> On Sat,  6 Oct 2018 18:55:20 +0200, Francois Perrad wrote:
->
-> > diff --git a/package/perl-http-entity-parser/perl-http-entity-parser.mk
-> b/package/perl-http-entity-parser/perl-http-entity-parser.mk
-> > new file mode 100644
-> > index 000000000..1cba1eb8e
-> > --- /dev/null
-> > +++ b/package/perl-http-entity-parser/perl-http-entity-parser.mk
-> > @@ -0,0 +1,14 @@
-> >
-> +################################################################################
-> > +#
-> > +# perl-http-entity-parser
-> > +#
-> >
-> +################################################################################
-> > +
-> > +PERL_HTTP_ENTITY_PARSER_VERSION = 0.21
-> > +PERL_HTTP_ENTITY_PARSER_SOURCE =
-> HTTP-Entity-Parser-$(PERL_HTTP_ENTITY_PARSER_VERSION).tar.gz
-> > +PERL_HTTP_ENTITY_PARSER_SITE =
-> $(BR2_CPAN_MIRROR)/authors/id/K/KA/KAZEBURO
-> > +PERL_HTTP_ENTITY_PARSER_DEPENDENCIES = host-perl-module-build-tiny
-> perl-http-multipartparser perl-hash-multivalue perl-json-maybexs
-> perl-stream-buffered perl-www-form-urlencoded
->
-> This line should be split with backslashes. Perhaps scancpan could be
-> improved to do that automatically ?
->
->
-Good idea, I'll do this easy improvement.
+Francois Perrad (8):
+  perl-class-method-modifiers: new package
+  perl-role-tiny: new package
+  perl-sub-exporter-progressive: new package
+  perl-sub-quote: new package
+  perl-devel-globaldestruction: new package
+  perl-moo: new package
+  perl-exporter-tiny: new package
+  perl-type-tiny: new package
 
-Also, I'm interested in understanding why all those packages need to be
-> build time dependencies. Is Perl checking at build time that those
-> modules are available ?
->
->
-Currently, scancpan uses the same list of dependency for Config.in and
-perl-foo.mk.
-So, yes, many dependencies are just run time dependency.
-Real build time dependencies are :
-  - host(-perl-foo) dependencies
-  - native libraries dependencies which cannot be handled by scancpan
+ package/Config.in                             |  8 ++++++++
+ package/perl-class-method-modifiers/Config.in |  6 ++++++
+ .../perl-class-method-modifiers.hash          |  6 ++++++
+ .../perl-class-method-modifiers.mk            | 13 +++++++++++++
+ .../perl-devel-globaldestruction/Config.in    |  8 ++++++++
+ .../perl-devel-globaldestruction.hash         |  6 ++++++
+ .../perl-devel-globaldestruction.mk           | 14 ++++++++++++++
+ package/perl-exporter-tiny/Config.in          |  7 +++++++
+ .../perl-exporter-tiny.hash                   |  7 +++++++
+ .../perl-exporter-tiny/perl-exporter-tiny.mk  | 13 +++++++++++++
+ package/perl-moo/Config.in                    | 11 +++++++++++
+ package/perl-moo/perl-moo.hash                |  6 ++++++
+ package/perl-moo/perl-moo.mk                  | 19 +++++++++++++++++++
+ package/perl-role-tiny/Config.in              |  6 ++++++
+ package/perl-role-tiny/perl-role-tiny.hash    |  6 ++++++
+ package/perl-role-tiny/perl-role-tiny.mk      | 13 +++++++++++++
+ .../perl-sub-exporter-progressive/Config.in   |  6 ++++++
+ .../perl-sub-exporter-progressive.hash        |  6 ++++++
+ .../perl-sub-exporter-progressive.mk          | 13 +++++++++++++
+ package/perl-sub-quote/Config.in              |  6 ++++++
+ package/perl-sub-quote/perl-sub-quote.hash    |  6 ++++++
+ package/perl-sub-quote/perl-sub-quote.mk      | 13 +++++++++++++
+ package/perl-type-tiny/Config.in              |  7 +++++++
+ package/perl-type-tiny/perl-type-tiny.hash    |  7 +++++++
+ package/perl-type-tiny/perl-type-tiny.mk      | 14 ++++++++++++++
+ 25 files changed, 227 insertions(+)
+ create mode 100644 package/perl-class-method-modifiers/Config.in
+ create mode 100644 package/perl-class-method-modifiers/perl-class-method-modifiers.hash
+ create mode 100644 package/perl-class-method-modifiers/perl-class-method-modifiers.mk
+ create mode 100644 package/perl-devel-globaldestruction/Config.in
+ create mode 100644 package/perl-devel-globaldestruction/perl-devel-globaldestruction.hash
+ create mode 100644 package/perl-devel-globaldestruction/perl-devel-globaldestruction.mk
+ create mode 100644 package/perl-exporter-tiny/Config.in
+ create mode 100644 package/perl-exporter-tiny/perl-exporter-tiny.hash
+ create mode 100644 package/perl-exporter-tiny/perl-exporter-tiny.mk
+ create mode 100644 package/perl-moo/Config.in
+ create mode 100644 package/perl-moo/perl-moo.hash
+ create mode 100644 package/perl-moo/perl-moo.mk
+ create mode 100644 package/perl-role-tiny/Config.in
+ create mode 100644 package/perl-role-tiny/perl-role-tiny.hash
+ create mode 100644 package/perl-role-tiny/perl-role-tiny.mk
+ create mode 100644 package/perl-sub-exporter-progressive/Config.in
+ create mode 100644 package/perl-sub-exporter-progressive/perl-sub-exporter-progressive.hash
+ create mode 100644 package/perl-sub-exporter-progressive/perl-sub-exporter-progressive.mk
+ create mode 100644 package/perl-sub-quote/Config.in
+ create mode 100644 package/perl-sub-quote/perl-sub-quote.hash
+ create mode 100644 package/perl-sub-quote/perl-sub-quote.mk
+ create mode 100644 package/perl-type-tiny/Config.in
+ create mode 100644 package/perl-type-tiny/perl-type-tiny.hash
+ create mode 100644 package/perl-type-tiny/perl-type-tiny.mk
 
-A fix for that requires rethinking of the logic of scancpan and serious
-testing.
-
-Fran?ois
-
-Anyway, I've wrapped the too long line of dependencies, and applied.
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181008/0c69cb69/attachment.html>
+-- 
+2.17.1
