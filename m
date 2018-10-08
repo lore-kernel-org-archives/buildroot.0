@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 8 Oct 2018 17:43:28 +0200
-Subject: [Buildroot] [PATCH] manual: add expected order of 'depends on'
-In-Reply-To: <20181007200428.30319-1-arnout@mind.be>
-References: <20181007200428.30319-1-arnout@mind.be>
-Message-ID: <20181008174328.5e10819c@windsurf>
+Date: Mon, 8 Oct 2018 17:46:33 +0200
+Subject: [Buildroot] [PATCH] qemu: security bump to 2.12.1
+In-Reply-To: <20181008070842.25883-1-peter@korsgaard.com>
+References: <20181008070842.25883-1-peter@korsgaard.com>
+Message-ID: <20181008174633.289720b4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  7 Oct 2018 22:04:28 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> As discussed in [1], our guideline for the ordering of 'depends on'
-> lines is not written down. Fix that.
+On Mon,  8 Oct 2018 09:08:42 +0200, Peter Korsgaard wrote:
+> From the release notes:
 > 
-> [1] http://lists.busybox.net/pipermail/buildroot/2018-October/232413.html
+> This update contains new mitigation functionality for CVE-2018-3639
+> (Speculative Store Bypass) in x86. There are also bug fixes for
+> migration, Intel IOMMU emulation, block layer/image handling, ARM
+> emulation, and various other areas.
 > 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> https://www.mail-archive.com/qemu-devel at nongnu.org/msg553574.html
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 > ---
->  docs/manual/adding-packages-directory.txt | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
+>  package/qemu/qemu.hash | 2 +-
+>  package/qemu/qemu.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
