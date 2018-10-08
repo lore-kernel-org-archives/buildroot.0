@@ -1,51 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 8 Oct 2018 21:14:32 +0200
-Subject: [Buildroot] [git commit] python-ipython: bump to version 5.8.0
-Message-ID: <20181008191611.354288E4DC@busybox.osuosl.org>
+Date: Mon, 8 Oct 2018 21:17:15 +0200
+Subject: [Buildroot] [git commit] python-pyroute2: bump to version 0.5.3
+Message-ID: <20181008191611.3D2C78E4DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3642ff48407187d443e579d7b4524551004b2f40
+commit: https://git.buildroot.net/buildroot/commit/?id=5daedaf5be92f22f3af30f5c74c4d3b90709ed98
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add license hash.
+The python sqlite module is also needed.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-ipython/python-ipython.hash | 8 +++++---
- package/python-ipython/python-ipython.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/python-pyroute2/Config.in            | 2 ++
+ package/python-pyroute2/python-pyroute2.hash | 4 ++--
+ package/python-pyroute2/python-pyroute2.mk   | 4 ++--
+ 3 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-ipython/python-ipython.hash b/package/python-ipython/python-ipython.hash
-index af1ed94b7a..41bdd70feb 100644
---- a/package/python-ipython/python-ipython.hash
-+++ b/package/python-ipython/python-ipython.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/ipython/json, sha256 locally computed
--md5 d8cc938f46801060239184a35ec9c5a6 ipython-5.4.0.tar.gz
--sha256 6907826c427c917bf0cdab71ee728288b1f1975c4b94b3ed608b67db3183c974 ipython-5.4.0.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/ipython/json
-+md5 7014b8824981eef2cb893ea5398d6b8d ipython-5.8.0.tar.gz
-+sha256 4bac649857611baaaf76bc82c173aa542f7486446c335fe1a6c05d0d491c8906 ipython-5.8.0.tar.gz
-+# Locally computed sha256
-+sha256 a5d87689342ec47cebdf623af06cec734c607666c696fe48271f2ff91752443d COPYING.rst
-diff --git a/package/python-ipython/python-ipython.mk b/package/python-ipython/python-ipython.mk
-index 5d92546fe0..79a48bf43d 100644
---- a/package/python-ipython/python-ipython.mk
-+++ b/package/python-ipython/python-ipython.mk
+diff --git a/package/python-pyroute2/Config.in b/package/python-pyroute2/Config.in
+index 4f13ab2c7b..5df0a63d4b 100644
+--- a/package/python-pyroute2/Config.in
++++ b/package/python-pyroute2/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_PYTHON_PYROUTE2
+ 	bool "python-pyroute2"
++	select BR2_PACKAGE_PYTHON_SQLITE if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON3_SQLITE if BR2_PACKAGE_PYTHON3
+ 	help
+ 	  Python netlink library - Linux network / netns / wireless /
+ 	  ipset configuration.
+diff --git a/package/python-pyroute2/python-pyroute2.hash b/package/python-pyroute2/python-pyroute2.hash
+index 941157fdb3..9078004d5a 100644
+--- a/package/python-pyroute2/python-pyroute2.hash
++++ b/package/python-pyroute2/python-pyroute2.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/pyroute2/json
+-md5    2f6f951e94356ae9d224f417dc6ebed2  pyroute2-0.5.2.tar.gz
+-sha256 42bf74495d95a0196a74dd171357f660175aba2bfc23f9b5f63e3830ccbef9ac  pyroute2-0.5.2.tar.gz
++md5    62b24242940b5d73c6ec9c53169b8ef8  pyroute2-0.5.3.tar.gz
++sha256 79f7b4286be773c46914df0201dabaf92717a9c06e341e0c420603b2dd31c6bf  pyroute2-0.5.3.tar.gz
+ # Locally computed sha256
+ sha256 4739b32a2478e9c204bf010bad5d565d188e59ff905e3c8f71fe3398098b7093  LICENSE.Apache.v2
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL.v2
+diff --git a/package/python-pyroute2/python-pyroute2.mk b/package/python-pyroute2/python-pyroute2.mk
+index 204ff33e7f..7937bd2362 100644
+--- a/package/python-pyroute2/python-pyroute2.mk
++++ b/package/python-pyroute2/python-pyroute2.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_IPYTHON_VERSION = 5.4.0
-+PYTHON_IPYTHON_VERSION = 5.8.0
- PYTHON_IPYTHON_SOURCE = ipython-$(PYTHON_IPYTHON_VERSION).tar.gz
--PYTHON_IPYTHON_SITE = https://pypi.python.org/packages/36/cd/765f53135bbbbcd691858aba3af124453a230fe0c752f009f69012fce5d5
-+PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/41/a6/2d25314b1f9375639d8f8e0f8052e8cec5df511d3449f22c4f1c2d8cb3c6
- PYTHON_IPYTHON_LICENSE = BSD-3-Clause
- PYTHON_IPYTHON_LICENSE_FILES = COPYING.rst
- PYTHON_IPYTHON_SETUP_TYPE = distutils
+-PYTHON_PYROUTE2_VERSION = 0.5.2
++PYTHON_PYROUTE2_VERSION = 0.5.3
+ PYTHON_PYROUTE2_SOURCE = pyroute2-$(PYTHON_PYROUTE2_VERSION).tar.gz
+-PYTHON_PYROUTE2_SITE = https://files.pythonhosted.org/packages/18/64/33858f79b0f2b44a0af7bb42eda3d477253de5311dae1eb12b966085909f
++PYTHON_PYROUTE2_SITE =  https://files.pythonhosted.org/packages/19/1c/fc2efd9dfa5c1f7f713dbfee621365ad01f7b7ec0a6908e444f08bfd5873
+ PYTHON_PYROUTE2_LICENSE = Apache-2.0 or GPL-2.0+
+ PYTHON_PYROUTE2_LICENSE_FILES = LICENSE.Apache.v2 LICENSE.GPL.v2 README.license.md
+ PYTHON_PYROUTE2_SETUP_TYPE = distutils
