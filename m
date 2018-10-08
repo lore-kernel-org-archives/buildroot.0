@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 8 Oct 2018 21:21:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dtc: fix include guards for
- older kernel/u-boot
-In-Reply-To: <20181008163233.GH2869@scaer>
-References: <20181008115146.17797-1-lothar.felten@gmail.com>
- <20181008180230.53ab7972@windsurf> <20181008163233.GH2869@scaer>
-Message-ID: <9062fe55-2457-66bf-48cc-74e787d95129@mind.be>
+Date: Mon, 8 Oct 2018 21:26:44 +0200
+Subject: [Buildroot] Build failure building image for Beaglebone Black
+ with QT5 on Ubuntu 18 host
+In-Reply-To: <a893afee-de9d-c469-b713-05b029ce16a5@rhtech.co.nz>
+References: <a893afee-de9d-c469-b713-05b029ce16a5@rhtech.co.nz>
+Message-ID: <7aeab332-7fd7-5e22-80d7-870452204377@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,49 +13,105 @@ To: buildroot@busybox.net
 
 
 
-On 8/10/18 18:32, Yann E. MORIN wrote:
-> Thomas, All,
+On 8/10/18 21:03, Jeremy Cole-Baker wrote:
+> Hello,
 > 
-> On 2018-10-08 18:02 +0200, Thomas Petazzoni spake thusly:
->> On Mon,  8 Oct 2018 13:51:46 +0200, Lothar Felten wrote:
->>> Patch dtc to accept libfdt include guards with and without leading underscore.
->>> A compiler warning is added to notify the user.
->>>
->>> Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
->>
->> So I guess this would fix the problem when host-dtc is built before
->> some old Linux/U-Boot version.
->>
->> However, I suppose it doesn't fix the problem when you have a
->> recent version of libfdt installed on your system (through your
->> distribution), that doesn't play well with those older Linux/U-Boot
->> versions. Correct ?
+> I am trying to build an image for a Beaglebone Black with QT5 support, but I
+> have run into a build error.
 > 
-> Probably not, indeed, but that is still better (IMHO) than the few hacks
-> we already tried with -isystem or the likes, which do not really work
-> either...
+> Host system: Intel i5 PC / Ubuntu 18
+> 
+> Build process:
+> 
+> * Installed various build tools, e.g:
+> sudo apt-get install minicom git ncurses-dev gedit flex bison python
+> sudo apt-get install texinfo g++ gettext u-boot-tools autoconf make
+> 
+> * Cloned Buildroot (2018.08):
+> git clone git://git.buildroot.net/buildroot
+> cd buildroot
+> git checkout 2018.08.x
+> 
+> * Default Beaglebone build (no QT5):
+> 
+> make beaglebone_defconfig
+> make
+> 
+> Worked OK! (image generated in output/images)
+> 
+> * Beaglebone WITH QT5:
+> 
+> make clean
+> make beaglebone_qt5_defconfig
+> make
 
- As far as we tested it, [1] *does* really work.
-
- However, it doesn't fix the issue for U-Boot because there the build system is
-really broken: it misses the necessary -I to include the internal libfdt.h, so
-only the fdt_host.h that explicitly includes ../include/libfdt.h uses the
-internal one; other includes use <libfdt.h> so the host-provided one. So U-Boot
-before v2018.03 is just broken beyond repair.
-
- Note that this patch will solve the problem for the time being. However, as
-soon as dtc's libfdt.h contains some declaration that is incompatible with the
-one in U-Boot pre-2018.03, U-Boot will break again.
-
- A possibly more fundamental workaround for U-Boot could be to pass
--I$(UBOOT_SRCDIR)/include in HOSTCC, but that has the potential to introduce
-additional breakage...
+ This is a known issue. beaglebone_qt5_defconfig uses U-Boot 2016.09.1 which is
+broken with recent dtc. beaglebone_defconfig uses U-Boot 2018.07 which has been
+fixed. See https://git.buildroot.org/buildroot/tree/CHANGES?h=2018.08#n12
 
  Regards,
  Arnout
 
-
-[1] http://patchwork.ozlabs.org/patch/964474/
+> 
+> Result:
+> 
+> In file included from tools/../include/libfdt.h:54:0,
+> ???????????????? from tools/fdt_host.h:11,
+> ???????????????? from tools/imagetool.h:24,
+> ???????????????? from tools/atmelimage.c:8:
+> /home/jeremy/buildroot/output/host/include/libfdt_env.h:71:30: error:
+> conflicting types for ?fdt64_t?
+> ?typedef uint64_t FDT_BITWISE fdt64_t;
+> ????????????????????????????? ^~~~~~~
+> In file included from <command-line>:0:0:
+> ././include/libfdt_env.h:19:16: note: previous declaration of ?fdt64_t? was here
+> ?typedef __be64 fdt64_t;
+> ??????????????? ^~~~~~~
+> In file included from ././include/libfdt_env.h:12:0,
+> ???????????????? from <command-line>:0:
+> /home/jeremy/buildroot/output/host/include/libfdt_env.h:91:24: error: expected
+> ?)? before ?x?
+> ?static inline uint32_t fdt32_to_cpu(fdt32_t x)
+> 
+>>>> Omitted - many similar errors <<<
+> 
+> In file included from tools/fdt_host.h:11:0,
+> ???????????????? from tools/imagetool.h:24,
+> ???????????????? from tools/aisimage.c:8:
+> tools/../include/libfdt.h:1602:19: note: previous definition of
+> ?fdt_appendprop_u64? was here
+> ?static inline int fdt_appendprop_u64(void *fdt, int nodeoffset,
+> ?????????????????? ^~~~~~~~~~~~~~~~~~
+> In file included from include/image.h:53:0,
+> ???????????????? from tools/aisimage.c:10:
+> /home/jeremy/buildroot/output/host/include/libfdt.h:1790:19: error: redefinition
+> of ?fdt_appendprop_cell?
+> ?static inline int fdt_appendprop_cell(void *fdt, int nodeoffset,
+> ?????????????????? ^~~~~~~~~~~~~~~~~~~
+> In file included from tools/fdt_host.h:11:0,
+> ???????????????? from tools/imagetool.h:24,
+> ???????????????? from tools/aisimage.c:8:
+> tools/../include/libfdt.h:1614:19: note: previous definition of
+> ?fdt_appendprop_cell? was here
+> ?static inline int fdt_appendprop_cell(void *fdt, int nodeoffset,
+> ?????????????????? ^~~~~~~~~~~~~~~~~~~
+> scripts/Makefile.host:116: recipe for target 'tools/aisimage.o' failed
+> make[3]: *** [tools/aisimage.o] Error 1
+> Makefile:1221: recipe for target 'tools' failed
+> make[2]: *** [tools] Error 2
+> package/pkg-generic.mk:229: recipe for target
+> '/home/jeremy/buildroot/output/build/uboot-2016.09.01/.stamp_built' failed
+> make[1]: *** [/home/jeremy/buildroot/output/build/uboot-2016.09.01/.stamp_built]
+> Error 2
+> Makefile:79: recipe for target '_all' failed
+> make: *** [_all] Error 2
+> 
+> I guess this is failing to build uboot? Maybe incorrect headers somewhere?
+> 
+> I also tried this with several different toolchain options on a Windows 10
+> machine with Ubuntu 18 under the Windows Linux subsystem, and got the same build
+> error with beaglebone_qt5_defconfig.
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
