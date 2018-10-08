@@ -1,42 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 8 Oct 2018 18:13:19 +0200
-Subject: [Buildroot] [PATCH] cmocka: bump to version 1.1.3
-In-Reply-To: <20181003165853.23771-1-JoelsonCarl@gmail.com>
-References: <20181003165853.23771-1-JoelsonCarl@gmail.com>
-Message-ID: <20181008181319.26098fe7@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 8 Oct 2018 18:32:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dtc: fix include guards for
+ older kernel/u-boot
+In-Reply-To: <20181008180230.53ab7972@windsurf>
+References: <20181008115146.17797-1-lothar.felten@gmail.com>
+ <20181008180230.53ab7972@windsurf>
+Message-ID: <20181008163233.GH2869@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, All,
 
-On Wed,  3 Oct 2018 10:58:53 -0600, Joel Carlson wrote:
-> Removes patch for upstream commit
-> d677b564c2193a5cd381925c2eeaad6b23c6af2f
+On 2018-10-08 18:02 +0200, Thomas Petazzoni spake thusly:
+> On Mon,  8 Oct 2018 13:51:46 +0200, Lothar Felten wrote:
+> > Patch dtc to accept libfdt include guards with and without leading underscore.
+> > A compiler warning is added to notify the user.
+> > 
+> > Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
 > 
-> Adds hash for license file.
+> So I guess this would fix the problem when host-dtc is built before
+> some old Linux/U-Boot version.
 > 
-> Adds patch to fix a build error encountered by br-mips64-n64-full
-> toolchain about uintptr_t being declared twice.
-> 
-> Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
-> ---
-> Compile tested with utils/test-pkg -a
-> ---
->  ...cmocka-cmake-fix-stack-protect-check.patch | 34 ------------------
->  ...ime-include-stdint.h-before-cmocka.h.patch | 35 +++++++++++++++++++
->  package/cmocka/cmocka.hash                    |  3 +-
->  package/cmocka/cmocka.mk                      |  2 +-
->  4 files changed, 38 insertions(+), 36 deletions(-)
->  delete mode 100644 package/cmocka/0001-cmocka-cmake-fix-stack-protect-check.patch
->  create mode 100644 package/cmocka/0001-examples-uptime-include-stdint.h-before-cmocka.h.patch
+> However, I suppose it doesn't fix the problem when you have a
+> recent version of libfdt installed on your system (through your
+> distribution), that doesn't play well with those older Linux/U-Boot
+> versions. Correct ?
 
-Applied to master, thanks.
+Probably not, indeed, but that is still better (IMHO) than the few hacks
+we already tried with -isystem or the likes, which do not really work
+either...
 
-Thomas
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
