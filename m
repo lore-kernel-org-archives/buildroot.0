@@ -1,44 +1,145 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 8 Oct 2018 21:31:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dtc: fix include guards for
- older kernel/u-boot
-In-Reply-To: <9062fe55-2457-66bf-48cc-74e787d95129@mind.be>
-References: <20181008115146.17797-1-lothar.felten@gmail.com>
- <20181008180230.53ab7972@windsurf> <20181008163233.GH2869@scaer>
- <9062fe55-2457-66bf-48cc-74e787d95129@mind.be>
-Message-ID: <20181008193115.GI2869@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 8 Oct 2018 21:32:39 +0200
+Subject: [Buildroot] [git commit] package/wipe: fix musl build
+In-Reply-To: <BL2PR15MB1057981B9884F25A08130568ED160@BL2PR15MB1057.namprd15.prod.outlook.com>
+References: <20160207140049.D9B227FEE6@busybox.osuosl.org>
+ <BL2PR15MB1057981B9884F25A08130568ED160@BL2PR15MB1057.namprd15.prod.outlook.com>
+Message-ID: <5f0dd89e-ffd6-f010-bc37-7a9958cfc023@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
 
-On 2018-10-08 21:21 +0200, Arnout Vandecappelle spake thusly:
-> On 8/10/18 18:32, Yann E. MORIN wrote:
-> > On 2018-10-08 18:02 +0200, Thomas Petazzoni spake thusly:
-> >> However, I suppose it doesn't fix the problem when you have a
-> >> recent version of libfdt installed on your system (through your
-> >> distribution), that doesn't play well with those older Linux/U-Boot
-> >> versions. Correct ?
-> > Probably not, indeed, but that is still better (IMHO) than the few hacks
-> > we already tried with -isystem or the likes, which do not really work
-> > either...
->  As far as we tested it, [1] *does* really work.
-> [1] http://patchwork.ozlabs.org/patch/964474/
 
-No it does not. Please see commit 6f8162cf8c1abef7e0a4771fe0d6b26a28f5c2b6
-which got reverted by 255b6f80d395ef048f46cfcf75dba690c56af657, and which
-was supposed to fix a very similar issue...
+On 25/09/18 12:29, Tony Fuller wrote:
+> Hi Thomas,
+> 
+> I am using Buildroot 2018.08 to build the "wipe" package for 32-bit
+> PowerPC
+> 464 architecture (For the Western Digital MyBookLive). Also I am using
+> glibc
+> not muslc. This change seems to be highly correlated to the error I am
+> seeing: 
+> http://buildroot-busybox.2317881.n4.nabble.com/git-commit-package-wipe-fix-musl-build-td125204.html
+> 
+> I'm not sure how to modify the patch from this thread to my advantage.
 
-Regards,
-Yann E. MORIN.
+ I don't think the patch is really related.
+
+ I can successfully compile wipe with a glibc toolchain. Can you share your
+arch/toolchain config (make savedefconfig and post the first part of the
+generated defconfig file).
+
+ Regards,
+ Arnout
+
+> Any ideas how to move forward aside from not compiling wipe :)?
+> 
+> Please forgive me for adding in the full error details below:
+> 
+> user at hostname:/media/user/4665efb0-0b1b-4c63-8392-
+> d695e8e1cd6e/user/buildroot-2018.08$
+> make
+>>>> wipe 2.3.1 Building
+> 
+> PATH="/media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
+> 2018.08/output/host/bin:/media/user/4665efb0-0b1b-4c63-8392-
+> d695e8e1cd6e/user/buildroot-
+> 2018.08/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/
+> bin:/sbin:/bin:/usr/games:/usr/local/games" 
+> /usr/bin/make -j5  -C
+> /media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
+> 2018.08/output/build/wipe-2.3.1/
+> make[1]: Entering directory
+> '/media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
+> 2018.08/output/build/wipe-2.3.1'
+> /media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
+> 2018.08/output/host/bin/powerpc-buildroot-linux-gnu-gcc
+> -pipe -O2   -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -I. -DLINUX    -
+> c -o
+> main.o main.c
+> /media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
+> 2018.08/output/host/bin/powerpc-buildroot-linux-gnu-gcc
+> -pipe -O2   -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -I. -DLINUX    -
+> c -o
+> wipe.o wipe.c
+> /media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
+> 2018.08/output/host/bin/powerpc-buildroot-linux-gnu-gcc
+> -pipe -O2   -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -I. -DLINUX    -
+> c -o
+> rand.o rand.c
+> /media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
+> 2018.08/output/host/bin/powerpc-buildroot-linux-gnu-gcc
+> -pipe -O2   -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -I. -DLINUX    -
+> c -o
+> file.o file.c
+> /media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
+> 2018.08/output/host/bin/powerpc-buildroot-linux-gnu-gcc
+> -pipe -O2   -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -I. -DLINUX    -
+> c -o
+> blkdev.o blkdev.c
+> In file included from wipe.c:56:0:
+> rand.h:27:21: error: unknown type name ?uint32_t?
+>  #  define u_int32_t uint32_t
+>                      ^
+> rand.h:30:9: note: in expansion of macro ?u_int32_t?
+>  typedef u_int32_t u_rand_t;
+>          ^~~~~~~~~
+> In file included from main.c:46:0:
+> rand.h:27:21: error: unknown type name ?uint32_t?
+>  #  define u_int32_t uint32_t
+>                      ^
+> rand.h:30:9: note: in expansion of macro ?u_int32_t?
+>  typedef u_int32_t u_rand_t;
+>          ^~~~~~~~~
+> <builtin>: recipe for target 'wipe.o' failed
+> make[1]: *** [wipe.o] Error 1
+> make[1]: *** Waiting for unfinished jobs....
+> <builtin>: recipe for target 'main.o' failed
+> make[1]: *** [main.o] Error 1
+> In file included from file.c:42:0:
+> rand.h:27:21: error: unknown type name ?uint32_t?
+>  #  define u_int32_t uint32_t
+>                      ^
+> rand.h:30:9: note: in expansion of macro ?u_int32_t?
+>  typedef u_int32_t u_rand_t;
+>          ^~~~~~~~~
+> <builtin>: recipe for target 'file.o' failed
+> make[1]: *** [file.o] Error 1
+> In file included from rand.c:36:0:
+> rand.h:27:21: error: unknown type name ?uint32_t?
+>  #  define u_int32_t uint32_t
+>                      ^
+> rand.h:30:9: note: in expansion of macro ?u_int32_t?
+>  typedef u_int32_t u_rand_t;
+>          ^~~~~~~~~
+> <builtin>: recipe for target 'rand.o' failed
+> make[1]: *** [rand.o] Error 1
+> make[1]: Leaving directory
+> '/media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
+> 2018.08/output/build/wipe-2.3.1'
+> package/pkg-generic.mk:229: recipe for target
+> '/media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
+> 2018.08/output/build/wipe-2.3.1/.stamp_built'
+> failed
+> make: ***
+> [/media/user/4665efb0-0b1b-4c63-8392-d695e8e1cd6e/user/buildroot-
+> 2018.08/output/build/wipe-2.3.1/.stamp_built]
+> Error 2
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
