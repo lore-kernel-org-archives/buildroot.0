@@ -1,48 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon,  8 Oct 2018 22:28:34 +0200
-Subject: [Buildroot] [PATCH] file: explicitly disable libseccomp support for
- host
-Message-ID: <20181008202834.13821-1-peter@korsgaard.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  8 Oct 2018 22:52:22 +0200
+Subject: [Buildroot] [PATCH v2,1/1] nmap: update license
+Message-ID: <20181008205222.4922-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/8a2/8a2ea2e4426416447705492237f526fc84b595d7/
-http://autobuild.buildroot.net/results/a1f/a1f2369d31c2387efdec908877e0bcaa728b5aeb/
+nmap is licensed under GPL-2.0 but with additional restrictions (see
+COPYING, especially the "IMPORTANT NMAP LICENSE TERMS" part).
 
-file-5.33 added optional seccomp support, but the filters did not cover all
-needed syscalls, leading to errors when the freshly built host-file is
-executed as part of the build on distributions with seccomp support (E.G.
-Arch Linux):
+So, following advices of Yann and Arnout (see
+https://patchwork.ozlabs.org/patch/979081), set license to nmap license
 
-checking for seccomp_init in -lseccomp... yes
-..
-../src/file -C -m magic
-make[3]: *** [Makefile:764: magic.mgc] Bad system call
-
-This has been fixed in file-5.34, but it anyway makes sense to explicitly
-disable libseccomp support for consistency as we do not need it for the host
-build.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/file/file.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/nmap/nmap.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/file/file.mk b/package/file/file.mk
-index 42131c4888..b5b12978bc 100644
---- a/package/file/file.mk
-+++ b/package/file/file.mk
-@@ -12,6 +12,7 @@ FILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- FILE_INSTALL_STAGING = YES
- FILE_LICENSE = BSD-2-Clause, BSD-4-Clause (one file), BSD-3-Clause (one file)
- FILE_LICENSE_FILES = COPYING src/mygetopt.h src/vasprintf.c
-+HOST_FILE_CONF_OPTS = --disable-libseccomp
+diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+index 420aec82d7..8809d4c037 100644
+--- a/package/nmap/nmap.mk
++++ b/package/nmap/nmap.mk
+@@ -10,7 +10,7 @@ NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
+ NMAP_DEPENDENCIES = libpcap
+ NMAP_CONF_OPTS = --without-liblua --without-zenmap \
+ 	--with-libdnet=included --with-liblinear=included
+-NMAP_LICENSE = GPL-2.0
++NMAP_LICENSE = nmap license
+ NMAP_LICENSE_FILES = COPYING
  
- ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
- FILE_CONF_OPTS += --enable-libseccomp
+ # needed by libpcap
 -- 
-2.11.0
+2.17.1
