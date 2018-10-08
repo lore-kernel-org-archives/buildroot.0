@@ -1,13 +1,8 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 8 Oct 2018 21:06:24 +0200
-Subject: [Buildroot] [PATCH 1/1] nmap: update license
-In-Reply-To: <b30432d9-e475-e526-398b-f7ca1b364cbe@mind.be>
-References: <20181004172730.12889-1-fontaine.fabrice@gmail.com>
- <20181006154143.44ec552a@windsurf> <20181006173750.GF2869@scaer>
- <c7dcb459-f7fe-9ad6-14cc-f65679ff1ffb@mind.be>
- <20181008084354.67f19f1e@windsurf>
- <b30432d9-e475-e526-398b-f7ca1b364cbe@mind.be>
-Message-ID: <20181008210624.509fafb0@windsurf>
+From: Jeremy Cole-Baker <jeremy@rhtech.co.nz>
+Date: Tue, 9 Oct 2018 08:03:25 +1300
+Subject: [Buildroot] Build failure building image for Beaglebone Black with
+ QT5 on Ubuntu 18 host
+Message-ID: <a893afee-de9d-c469-b713-05b029ce16a5@rhtech.co.nz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,23 +11,95 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 8 Oct 2018 18:15:07 +0200, Arnout Vandecappelle wrote:
+I am trying to build an image for a Beaglebone Black with QT5 support, 
+but I have run into a build error.
 
-> > I don't know if that matters, but Debian calls it nmap-GPL-2.  
-> 
->  I think our convention is to use the SPDX term, and if it doesn't exist in SPDX
-> use "package license".
+Host system: Intel i5 PC / Ubuntu 18
 
-ACK. I just wanted to mention that Debian still considers somewhat
-similar to GPL 2.0.
+Build process:
 
->  I haven't checked though if nmap license exists in SPDX. They do have license
-> tags for some of the package-specific constructs.
+* Installed various build tools, e.g:
+sudo apt-get install minicom git ncurses-dev gedit flex bison python
+sudo apt-get install texinfo g++ gettext u-boot-tools autoconf make
 
-I did, and there is no "nmap" license in the list of SPDX tags.
+* Cloned Buildroot (2018.08):
+git clone git://git.buildroot.net/buildroot
+cd buildroot
+git checkout 2018.08.x
 
-Thomas
+* Default Beaglebone build (no QT5):
+
+make beaglebone_defconfig
+make
+
+Worked OK! (image generated in output/images)
+
+* Beaglebone WITH QT5:
+
+make clean
+make beaglebone_qt5_defconfig
+make
+
+Result:
+
+In file included from tools/../include/libfdt.h:54:0,
+ ???????????????? from tools/fdt_host.h:11,
+ ???????????????? from tools/imagetool.h:24,
+ ???????????????? from tools/atmelimage.c:8:
+/home/jeremy/buildroot/output/host/include/libfdt_env.h:71:30: error: 
+conflicting types for ?fdt64_t?
+ ?typedef uint64_t FDT_BITWISE fdt64_t;
+ ????????????????????????????? ^~~~~~~
+In file included from <command-line>:0:0:
+././include/libfdt_env.h:19:16: note: previous declaration of ?fdt64_t? 
+was here
+ ?typedef __be64 fdt64_t;
+ ??????????????? ^~~~~~~
+In file included from ././include/libfdt_env.h:12:0,
+ ???????????????? from <command-line>:0:
+/home/jeremy/buildroot/output/host/include/libfdt_env.h:91:24: error: 
+expected ?)? before ?x?
+ ?static inline uint32_t fdt32_to_cpu(fdt32_t x)
+
+ >>> Omitted - many similar errors <<<
+
+In file included from tools/fdt_host.h:11:0,
+ ???????????????? from tools/imagetool.h:24,
+ ???????????????? from tools/aisimage.c:8:
+tools/../include/libfdt.h:1602:19: note: previous definition of 
+?fdt_appendprop_u64? was here
+ ?static inline int fdt_appendprop_u64(void *fdt, int nodeoffset,
+ ?????????????????? ^~~~~~~~~~~~~~~~~~
+In file included from include/image.h:53:0,
+ ???????????????? from tools/aisimage.c:10:
+/home/jeremy/buildroot/output/host/include/libfdt.h:1790:19: error: 
+redefinition of ?fdt_appendprop_cell?
+ ?static inline int fdt_appendprop_cell(void *fdt, int nodeoffset,
+ ?????????????????? ^~~~~~~~~~~~~~~~~~~
+In file included from tools/fdt_host.h:11:0,
+ ???????????????? from tools/imagetool.h:24,
+ ???????????????? from tools/aisimage.c:8:
+tools/../include/libfdt.h:1614:19: note: previous definition of 
+?fdt_appendprop_cell? was here
+ ?static inline int fdt_appendprop_cell(void *fdt, int nodeoffset,
+ ?????????????????? ^~~~~~~~~~~~~~~~~~~
+scripts/Makefile.host:116: recipe for target 'tools/aisimage.o' failed
+make[3]: *** [tools/aisimage.o] Error 1
+Makefile:1221: recipe for target 'tools' failed
+make[2]: *** [tools] Error 2
+package/pkg-generic.mk:229: recipe for target 
+'/home/jeremy/buildroot/output/build/uboot-2016.09.01/.stamp_built' failed
+make[1]: *** 
+[/home/jeremy/buildroot/output/build/uboot-2016.09.01/.stamp_built] Error 2
+Makefile:79: recipe for target '_all' failed
+make: *** [_all] Error 2
+
+I guess this is failing to build uboot? Maybe incorrect headers somewhere?
+
+I also tried this with several different toolchain options on a Windows 
+10 machine with Ubuntu 18 under the Windows Linux subsystem, and got the 
+same build error with beaglebone_qt5_defconfig.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Riverhead Technology
+Jeremy Cole-Baker
