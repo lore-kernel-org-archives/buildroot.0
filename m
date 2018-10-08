@@ -1,55 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 8 Oct 2018 12:11:41 +0200
-Subject: [Buildroot] [git commit] perl-module-build-tiny: new package
-Message-ID: <20181008101250.546AD8E2C8@busybox.osuosl.org>
+Date: Mon, 8 Oct 2018 12:09:43 +0200
+Subject: [Buildroot] [git commit] perl-extutils-installpaths: new package
+Message-ID: <20181008101250.4D4308E200@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49258af1e2cb88330a8e4c337f112b38d35fe17c
+commit: https://git.buildroot.net/buildroot/commit/?id=c8136d8fb24835b00096a3200e30ccc70a1fd13f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Only the host variant is added, which is needed as a build dependency
-of perl-apache-logformat-compiler.
+Only the host variant is added, which is needed as a dependency of
+perl-module-build-tiny (host), itself needed for
+perl-apache-logformat-compiler (target).
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-module-build-tiny/perl-module-build-tiny.hash |  6 ++++++
- package/perl-module-build-tiny/perl-module-build-tiny.mk   | 14 ++++++++++++++
- 2 files changed, 20 insertions(+)
+ .../perl-extutils-installpaths.hash                        |  6 ++++++
+ .../perl-extutils-installpaths.mk                          | 14 ++++++++++++++
+ utils/scancpan                                             |  1 +
+ 3 files changed, 21 insertions(+)
 
-diff --git a/package/perl-module-build-tiny/perl-module-build-tiny.hash b/package/perl-module-build-tiny/perl-module-build-tiny.hash
+diff --git a/package/perl-extutils-installpaths/perl-extutils-installpaths.hash b/package/perl-extutils-installpaths/perl-extutils-installpaths.hash
 new file mode 100644
-index 0000000000..357c238dd3
+index 0000000000..2627a27d50
 --- /dev/null
-+++ b/package/perl-module-build-tiny/perl-module-build-tiny.hash
++++ b/package/perl-extutils-installpaths/perl-extutils-installpaths.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    2332c90c17454107fea3f2614e11a3a9 Module-Build-Tiny-0.039.tar.gz
-+sha256 7d580ff6ace0cbe555bf36b86dc8ea232581530cbeaaea09bccb57b55797f11c Module-Build-Tiny-0.039.tar.gz
++md5    9a8d66aab1ffec98ea260faf03ac612b ExtUtils-InstallPaths-0.012.tar.gz
++sha256 84735e3037bab1fdffa3c2508567ad412a785c91599db3c12593a50a1dd434ed ExtUtils-InstallPaths-0.012.tar.gz
 +
 +# computed by scancpan
-+sha256 09fd2bc0428920c455f10c5a6c52e2bb4615114e88966c75ce27a07af028c36b LICENSE
-diff --git a/package/perl-module-build-tiny/perl-module-build-tiny.mk b/package/perl-module-build-tiny/perl-module-build-tiny.mk
++sha256 b95d38ac031587625625d92fbd2ee1d5df0d02606057d680e7dcf3598fe629f9 LICENSE
+diff --git a/package/perl-extutils-installpaths/perl-extutils-installpaths.mk b/package/perl-extutils-installpaths/perl-extutils-installpaths.mk
 new file mode 100644
-index 0000000000..890fdc7355
+index 0000000000..75b4c5f235
 --- /dev/null
-+++ b/package/perl-module-build-tiny/perl-module-build-tiny.mk
++++ b/package/perl-extutils-installpaths/perl-extutils-installpaths.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-module-build-tiny
++# perl-extutils-installpaths
 +#
 +################################################################################
 +
-+PERL_MODULE_BUILD_TINY_VERSION = 0.039
-+PERL_MODULE_BUILD_TINY_SOURCE = Module-Build-Tiny-$(PERL_MODULE_BUILD_TINY_VERSION).tar.gz
-+PERL_MODULE_BUILD_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LE/LEONT
-+HOST_PERL_MODULE_BUILD_TINY_DEPENDENCIES = host-perl-extutils-config host-perl-extutils-helpers host-perl-extutils-installpaths
-+PERL_MODULE_BUILD_TINY_LICENSE = Artistic or GPL-1.0+
-+PERL_MODULE_BUILD_TINY_LICENSE_FILES = LICENSE
++PERL_EXTUTILS_INSTALLPATHS_VERSION = 0.012
++PERL_EXTUTILS_INSTALLPATHS_SOURCE = ExtUtils-InstallPaths-$(PERL_EXTUTILS_INSTALLPATHS_VERSION).tar.gz
++PERL_EXTUTILS_INSTALLPATHS_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LE/LEONT
++HOST_PERL_EXTUTILS_INSTALLPATHS_DEPENDENCIES = host-perl-extutils-config
++PERL_EXTUTILS_INSTALLPATHS_LICENSE = Artistic or GPL-1.0+
++PERL_EXTUTILS_INSTALLPATHS_LICENSE_FILES = LICENSE
 +
 +$(eval $(host-perl-package))
+diff --git a/utils/scancpan b/utils/scancpan
+index 35bbeab1bb..21c391fac5 100755
+--- a/utils/scancpan
++++ b/utils/scancpan
+@@ -528,6 +528,7 @@ my $ua = HTTP::Tiny->new();
+ 
+ my %white_list = (
+     'ExtUtils-Config' => 1,
++    'ExtUtils-InstallPaths' => 1,
+     'ExtUtils-Helpers' => 1,
+     'Module-Build' => 1,
+     'Module-Build-Tiny' => 1,
