@@ -1,38 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 8 Oct 2018 12:27:43 +0200
-Subject: [Buildroot] [git commit] bitstream: fix hash file
-Message-ID: <20181008102747.44F058E2DC@busybox.osuosl.org>
+From: Lothar Felten <lothar.felten@gmail.com>
+Date: Mon,  8 Oct 2018 13:51:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dtc: fix include guards for older
+ kernel/u-boot
+Message-ID: <20181008115146.17797-1-lothar.felten@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e73bbef07f0f42cc2b0ad38acaf0231755a230cc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Patch dtc to accept libfdt include guards with and without leading underscore.
+A compiler warning is added to notify the user.
 
-In commit d52e17701d73749fe81495b7c956268362ca0bbd
-("package/bitstream: bump version to 1.4"), the hash file of the
-bitstream package was not properly updated, with the md5 line being
-wrong. This commit fixes this problem, which was noticed by
-check-package:
-
-package/bitstream/bitstream.hash:2: expected three fields (http://nightly.buildroot.org/#adding-packages-hash)
-package/bitstream/bitstream.hash:2: hash size does not match type (http://nightly.buildroot.org/#adding-packages-hash)
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
 ---
- package/bitstream/bitstream.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...de-guards-for-older-kernel-u-boot-sources.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch
 
-diff --git a/package/bitstream/bitstream.hash b/package/bitstream/bitstream.hash
-index 6a384e302d..89da7c6fd0 100644
---- a/package/bitstream/bitstream.hash
-+++ b/package/bitstream/bitstream.hash
-@@ -1,5 +1,5 @@
- # From https://get.videolan.org/bitstream/1.4/bitstream-1.4.tar.bz2.md5
--md5 https://get.videolan.org/bitstream/1.4/bitstream-1.4.tar.bz2.md5
-+md5 dfb1449194250b2d364d54b5bbac858d  bitstream-1.4.tar.bz2
- # From https://get.videolan.org/bitstream/1.4/bitstream-1.4.tar.bz2.sha256
- sha256 b2484940d3b8733bec9dd1ec1731de428261dff31c9f95874264be9dc9ce786b  bitstream-1.4.tar.bz2
- # Locally computed
+diff --git a/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch b/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch
+new file mode 100644
+index 0000000000..40cb0bdb2a
+--- /dev/null
++++ b/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch
+@@ -0,0 +1,42 @@
++From b1f8b84489c96465b63485b884238b61d31ca84d Mon Sep 17 00:00:00 2001
++From: Lothar Felten <lothar.felten@gmail.com>
++Date: Mon, 8 Oct 2018 13:29:44 +0200
++Subject: [PATCH 1/1] Fix include guards for older kernel/u-boot sources
++
++Linux kernels before 4.17 and U-Boot versions before 2018.07 use libfdt include guards with leading underscores.
++Those have been removed in dtc-1.4.7.
++This patch handles both include guard types and allows the compilation of older Linux kernel and u-boot sources.
++
++Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
++---
++ libfdt/libfdt.h     | 4 ++++
++ libfdt/libfdt_env.h | 4 ++++
++ 2 files changed, 8 insertions(+)
++
++diff --git a/libfdt/libfdt.h b/libfdt/libfdt.h
++index 830b77e..bef4566 100644
++--- a/libfdt/libfdt.h
+++++ b/libfdt/libfdt.h
++@@ -1,3 +1,7 @@
+++#ifdef _LIBFDT_H
+++#warning "Please consider updating your kernel and/or u-boot version"
+++#define LIBFDT_H
+++#endif
++ #ifndef LIBFDT_H
++ #define LIBFDT_H
++ /*
++diff --git a/libfdt/libfdt_env.h b/libfdt/libfdt_env.h
++index eb20538..6a61e6a 100644
++--- a/libfdt/libfdt_env.h
+++++ b/libfdt/libfdt_env.h
++@@ -1,3 +1,7 @@
+++#ifdef _LIBFDT_ENV_H
+++#warning "Please consider updating your kernel and/or u-boot version"
+++#define LIBFDT_ENV_H
+++#endif
++ #ifndef LIBFDT_ENV_H
++ #define LIBFDT_ENV_H
++ /*
++-- 
++2.11.0
++
+-- 
+2.11.0
