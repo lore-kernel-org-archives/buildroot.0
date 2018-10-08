@@ -1,48 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 8 Oct 2018 21:51:29 +0200
-Subject: [Buildroot] [PATCH 6/8] perl-moo: new package
-In-Reply-To: <20181008193646.13046-7-francois.perrad@gadz.org>
-References: <20181008193646.13046-1-francois.perrad@gadz.org>
- <20181008193646.13046-7-francois.perrad@gadz.org>
-Message-ID: <20181008215129.6ff9da6f@windsurf>
+Date: Mon, 8 Oct 2018 21:55:27 +0200
+Subject: [Buildroot] [git commit] perl-sys-cpu: fix build failures due to
+ <sys/unistd.h>
+Message-ID: <20181008195432.819C18E53F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2cd5d6eea13e2a4fcfcf864e2cb0b92ac196a3fe
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  8 Oct 2018 21:36:44 +0200, Francois Perrad wrote:
+This commit adds a patch that drops an unneeded <sys/unistd.h>
+include, as it causes build failures on uClibc/musl.
 
-> +PERL_MOO_VERSION = 2.003004
-> +PERL_MOO_SOURCE = Moo-$(PERL_MOO_VERSION).tar.gz
-> +PERL_MOO_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
-> +PERL_MOO_DEPENDENCIES = \
-> +	perl-class-method-modifiers \
-> +	perl-devel-globaldestruction \
-> +	perl-module-runtime \
-> +	perl-role-tiny \
-> +	perl-sub-quote
+Fixes:
 
-Please remove all those build-time dependencies, and try to build
-without them. I.e do a build with BR2_PACKAGE_PERL_MOO enabled, but run
-just "make perl-moo". If it works, then those dependencies are only
-runtime dependencies, not build time ones.
+  http://autobuild.buildroot.net/results/a87116b34ee0c660537430638e38f7ebbf052024/
 
-It is much easier to detect missing build dependencies (thanks to build
-testing, either on your side or in the autobuilders) than to detect
-extraneous build dependencies and remove them.
+Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-remove-extraneous-include.patch             | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-So I think scancpan should only add dependencies on host packages
-(which are obviously needed at build time) and not add any dependency
-on target packages. And then build testing is needed to manually add
-the build-time dependencies that are needed, if any.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/perl-sys-cpu/0001-remove-extraneous-include.patch b/package/perl-sys-cpu/0001-remove-extraneous-include.patch
+new file mode 100644
+index 0000000000..eb7d8f76a8
+--- /dev/null
++++ b/package/perl-sys-cpu/0001-remove-extraneous-include.patch
+@@ -0,0 +1,20 @@
++Drop <sys/unistd.h> include
++
++<sys/unistd.h> does not exist in musl or uClibc, so including it
++causes a build failure. In glibc, it simply redirects to <unistd.h>,
++so we can safely drop the inclusion of <sys/unistd.h>
++
++Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
++
++Index: b/CPU.xs
++===================================================================
++--- a/CPU.xs
+++++ b/CPU.xs
++@@ -24,7 +24,6 @@
++  #include <winreg.h>
++ #else                /* other (try unix) */
++  #include <unistd.h>
++- #include <sys/unistd.h>
++ #endif
++ #if defined(__sun) || defined(__sun__) 
++  #include <sys/processor.h>
