@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 8 Oct 2018 10:32:00 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] cups-filters: add
+Date: Mon, 8 Oct 2018 10:34:06 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] cups-filters: add
  autoreconf
-Message-ID: <20181008083248.B7FF98E1BF@busybox.osuosl.org>
+Message-ID: <20181008083322.80FB88E1C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=542da6ccff77b6cffea42584586b3f5d0dfa7935
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=45e5d2ce68650b075468c02f5c9c43b40c1ab81d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Because we are patching Makefile.am, Makefile.am is newer than Makefile.in
 
