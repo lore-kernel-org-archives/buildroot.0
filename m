@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 9 Oct 2018 08:59:03 +0200
-Subject: [Buildroot] [PATCH v3,
- 1/1] brltty: use gcc instead of ld to link shared objects
-In-Reply-To: <20181008210507.13811-1-fontaine.fabrice@gmail.com>
-References: <20181008210507.13811-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181009085903.55979758@windsurf>
+Date: Tue, 9 Oct 2018 08:59:06 +0200
+Subject: [Buildroot] [PATCH 1/1] leveldb: fix parallel build
+In-Reply-To: <20181008211351.18806-1-fontaine.fabrice@gmail.com>
+References: <20181008211351.18806-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181009085906.4138ef76@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +12,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  8 Oct 2018 23:05:07 +0200, Fabrice Fontaine wrote:
-> Bump to version 5.6 has reintroduced the issue fixed by patch 854093 on
-> version 5.5.
+On Mon,  8 Oct 2018 23:13:51 +0200, Fabrice Fontaine wrote:
+> Build of leveldb sometimes fails on:
+> Fatal error: can't create out-shared/db/db_bench.o: No such file or directory
 > 
-> Indeed, third patch was merged upstream but it was then reverted:
-> https://github.com/brltty/brltty/commit/9e7d62c869d3c1cbe12dda8b0291a4692c193416
-> 
-> Moreover, since commit 3a2e3f6fa5ef0a210ffeba5ed05c79965d0cc3c7, MKOBJ
-> was renamed into MKREL. So, patch again brltty, overwrite
-> MKREL to use "gcc -shared -o" instead of "ld -r -o" if gcc is available
-> (as suggested by Arnout: https://patchwork.ozlabs.org/patch/972614).
+> Patch is not upstreamable as upstream switched to cmake
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/31f682838b3d3b2c7103b5c51f2aba0b89d4f630
+>  - http://autobuild.buildroot.net/results/945bb8096c1f98f307161a6def5a9f7f25b2454a
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
-> Changes v2 -> v3 (following review of Arnout Vandecappelle):
->  - Add an upstreamable patch that checks if gcc is available before
->    using it
+>  package/leveldb/0003-fix-parallel-build.patch | 36 +++++++++++++++++++
+>  1 file changed, 36 insertions(+)
+>  create mode 100644 package/leveldb/0003-fix-parallel-build.patch
 
 Applied to master, thanks.
 
