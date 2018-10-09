@@ -1,39 +1,38 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 09 Oct 2018 09:13:00 +0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-10-08
-In-Reply-To: <20181009060047.754D6207C3@mail.bootlin.com>
-References: <20181009060047.754D6207C3@mail.bootlin.com>
-Message-ID: <875zybmyvn.fsf@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 9 Oct 2018 08:53:16 +0200
+Subject: [Buildroot] [git commit] nmap: update license
+Message-ID: <20181009065213.382618E56E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+commit: https://git.buildroot.net/buildroot/commit/?id=f6199d3654d0a78d8ac5557679086e8618132854
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thomas Petazzoni writes:
-> Results for branch '2018.02.x'
-> ==============================
->
-> Classification of failures by reason
-> ------------------------------------
->
->                 libcurl-7.61.1 | 1 
->
->
-> Detail of failures
-> ------------------
->
->          arm |                 libcurl-7.61.1 | NOK | http://autobuild.buildroot.net/results/f98ad90a77295d73c3ef2fc704f5ec187a31832e |     
+nmap is licensed under GPL-2.0 but with additional restrictions (see
+COPYING, especially the "IMPORTANT NMAP LICENSE TERMS" part).
 
-Commit e7d658e029 (libcurl: add brotli optional dependency) should fix
-this build issue in 2018.02.x.
+So, following advices of Yann and Arnout (see
+https://patchwork.ozlabs.org/patch/979081), set license to nmap license
 
-baruch
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/nmap/nmap.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+index 420aec82d7..8809d4c037 100644
+--- a/package/nmap/nmap.mk
++++ b/package/nmap/nmap.mk
+@@ -10,7 +10,7 @@ NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
+ NMAP_DEPENDENCIES = libpcap
+ NMAP_CONF_OPTS = --without-liblua --without-zenmap \
+ 	--with-libdnet=included --with-liblinear=included
+-NMAP_LICENSE = GPL-2.0
++NMAP_LICENSE = nmap license
+ NMAP_LICENSE_FILES = COPYING
+ 
+ # needed by libpcap
