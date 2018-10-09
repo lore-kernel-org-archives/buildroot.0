@@ -1,9 +1,11 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 9 Oct 2018 21:49:12 +0200
-Subject: [Buildroot] [PATCH] systemd: Build with LTO
-In-Reply-To: <20181009193340.26242-1-abrodkin@synopsys.com>
-References: <20181009193340.26242-1-abrodkin@synopsys.com>
-Message-ID: <20181009214912.72b43194@windsurf>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Tue, 9 Oct 2018 22:54:06 +0300
+Subject: [Buildroot] [PATCH 4/4] python-pysnmp: bump to version 4.4.6
+In-Reply-To: <20181009213706.6e49f620@windsurf>
+References: <20180922193631.14369-1-asafka7@gmail.com>
+ <20180922193631.14369-4-asafka7@gmail.com>
+ <20181009213706.6e49f620@windsurf>
+Message-ID: <CALFsTFUy=ZS5vNEA-m7gPizmq6yn6kcN-EUi7gfNpsEUYiesYQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,41 +14,49 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  9 Oct 2018 22:33:40 +0300, Alexey Brodkin wrote:
+On Tue, Oct 9, 2018 at 10:37 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Sat, 22 Sep 2018 22:36:31 +0300, Asaf Kahlon wrote:
+> > Update dependencies.
+> > License was renamed to LICENSE.rst (no content changed).
+> > Add hash for license.
+> >
+> > Fixes:
+> > http://autobuild.buildroot.org/results/9b3/9b3bcd761aa35d9fdf4acc05258cc87e8c36fb14/
+> >
+> > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+>
+> This looks good, but we need to solve the python-cryptodomex licensing
+> question before this patch can be applied.
+>
+>
+> > -PYTHON_PYSNMP_VERSION = 4.3.3
+> > +PYTHON_PYSNMP_VERSION = 4.4.6
+> >  PYTHON_PYSNMP_SOURCE = pysnmp-$(PYTHON_PYSNMP_VERSION).tar.gz
+> > -PYTHON_PYSNMP_SITE = https://pypi.python.org/packages/47/b5/c65b9b6fcc36d3f4caca30d3314920f1ca75f5ceecc1f6ae2538ede24511
+> > +PYTHON_PYSNMP_SITE = https://files.pythonhosted.org/packages/8b/66/96a49bf1d64ad1e005a8455644523b7e09663a405eb20a4599fb219e4c95
+> >  PYTHON_PYSNMP_SETUP_TYPE = setuptools
+> >
+> >  PYTHON_PYSNMP_LICENSE = BSD-3-Clause
+> > -PYTHON_PYSNMP_LICENSE_FILES = LICENSE.txt
+> > -
+> > -PYTHON_PYSNMP_DEPENDENCIES = python-pyasn python-pycrypto
+>
+> So these were build time dependencies, and now there are no build time
+> dependencies anymore ? Or was it a bug to list them as build time
+> dependencies ?
+>
+These packages were not needed as runtime dependencies at all.
+When updating the package dependencies, I also validated that
+python-pysnmp can be built without them.
 
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 4813496670..ebd29c89b0 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -38,7 +38,8 @@ SYSTEMD_CONF_OPTS += \
->  	-Dsulogin-path=/usr/sbin/sulogin \
->  	-Dmount-path=/usr/bin/mount \
->  	-Dumount-path=/usr/bin/umount \
-> -	-Dnobody-group=nogroup
-> +	-Dnobody-group=nogroup \
-> +	-Db_lto=true
-
-I don't think we can do this unconditionally. We have a bunch of
-options such as BR2_BINUTILS_ENABLE_LTO and BR2_GCC_ENABLE_LTO to
-enable LTO support in the internal toolchain, and we don't today have a
-way to know if the external toolchain provided supports LTO or not.
-
-So this needs a much more generic solution:
-
- - A global Config.in option to enable/disable usage of LTO. It will
-   have to interact with the toolchain LTO support.
-
- - An option that tells whether the toolchain supports LTO. For
-   internal toolchains, it's simply selected by BR2_GCC_ENABLE_LTO. For
-   external toolchains, we need a check to verify that the toolchain is
-   LTO + a visible option for custom external toolchains.
-
-So: yes for using LTO, but we need something more generic.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
