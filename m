@@ -1,57 +1,73 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue,  9 Oct 2018 10:39:59 +0200
-Subject: [Buildroot] [PATCH] tinc: security bump to version 1.0.35
-Message-ID: <20181009083959.17108-1-peter@korsgaard.com>
+From: Denis OSTERLAND <denis.osterland@diehl.com>
+Date: Tue, 9 Oct 2018 09:20:09 +0000
+Subject: [Buildroot] [PATCH] u-boot: add option to generate env image
+ from default env
+In-Reply-To: <cd9141ed-23e0-34ec-2cd2-dc926fe7497c@mind.be>
+References: <20181002053526.11374-1-Denis.Osterland@diehl.com>
+ <16db145d-edf3-787d-bb3c-3a50c340eb1c@mind.be>
+ <1539068855.6269.16.camel@diehl.com>
+ <cd9141ed-23e0-34ec-2cd2-dc926fe7497c@mind.be>
+Message-ID: <1539076809.6269.30.camel@diehl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+Hi Arnout,
 
-CVE-2018-16758: Michael Yonli discovered that tinc 1.0.34 and earlier allow
-a man-in-the-middle attack that, even if the MITM cannot decrypt the traffic
-sent between the two endpoints, when the MITM can correctly predict when an
-ephemeral key exchange message is sent in a TCP connection between two
-nodes, allows the MITM to force one node to send UDP packets in plaintext.
-The tinc 1.1pre versions are not affected by this.
+Am Dienstag, den 09.10.2018, 10:01 +0200 schrieb Arnout Vandecappelle:
+> 
+> On 9/10/18 09:07, Denis OSTERLAND wrote:
+> > 
+> > pro:
+> > ?- clear on first look (not required to read help first)
+> ?This is a valid point.
+> 
+> > 
+> > ?- easier to extend (add other sources in future)
+> ?Hm, there is something to be said for this point as well. It might be possible
+> that U-Boot will start shipping internal environment fragments.
+> 
+> ?However, in that case, I think we would really want to add an additional list
+> of internal sources, again without an option to control enabling it.
+> 
+> > 
+> > ?- keeps current behavior (failed to build, if only BR2_TARGET_UBOOT_ENVIMAGE is selected)
+> ?This is really not important.
+> 
+> 
+> > 
+> > I think it is not very likely that other sources were implemented.
+> > Maybe it would be nice to just tick BR2_TARGET_UBOOT_ENVIMAGE and
+> > empty default of SOURCE will lead to default env.
+> > 
+> > What do you think?
+> ?That is indeed what I meant.
+so... you vote for empty list?
 
-CVE-2018-16738: Michael Yonli discoverd that tinc versions 1.0.30 to 1.0.34
-allow an oracle attack, similar to CVE-2018-16737, but due to the
-mitigations put in place for the Sweet32 attack in tinc 1.0.30, it now
-requires a timing attack that has only a limited time to complete.  Tinc
-1.1pre16 and earlier are also affected if there are nodes on the same VPN
-that still use the legacy protocol from tinc version 1.0.x.
+What about this?
+? ? ? ? $(if $(BR2_TARGET_UBOOT_ENVIMAGE_DEFAULT), \
+????????CROSS_COMPILE="$(TARGET_CROSS)" $(@D)/scripts/get_default_envs.sh $(@D), \
+????????echo "") | cat - $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) \
+????????????????>$(@D)/buildroot-env.txt
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/tinc/tinc.hash | 2 +-
- package/tinc/tinc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Introduce a bool DEFAULT to enable read of compiled in env
+and concatenate it with the files from SOURCES list.
+> 
+> ?Regards,
+> ?Arnout
+> 
+Regards Denis
 
-diff --git a/package/tinc/tinc.hash b/package/tinc/tinc.hash
-index 09d2867b16..0daeb324e9 100644
---- a/package/tinc/tinc.hash
-+++ b/package/tinc/tinc.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256  c03a9b61dedd452116dd9a8db231545ba08a7c96bce011e0cbd3cfd2c56dcfda tinc-1.0.34.tar.gz
-+sha256  18c83b147cc3e2133a7ac2543eeb014d52070de01c7474287d3ccecc9b16895e tinc-1.0.35.tar.gz
- sha256  3a112fd37b47d624e89b130d0e158bb8d14ec5bc9ecf5f18b448d2c07626e43d COPYING
- sha256  9bf76a8aa304d807df20bf3d221c21d259764be63e39b58f299b80ba3ac14b5b COPYING.README
-diff --git a/package/tinc/tinc.mk b/package/tinc/tinc.mk
-index 85dccdc34e..ae7ce97bfa 100644
---- a/package/tinc/tinc.mk
-+++ b/package/tinc/tinc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TINC_VERSION = 1.0.34
-+TINC_VERSION = 1.0.35
- TINC_SITE = http://www.tinc-vpn.org/packages
- TINC_DEPENDENCIES = lzo openssl zlib
- TINC_LICENSE = GPL-2.0+ with OpenSSL exception
--- 
-2.11.0
+Diehl Connectivity Solutions GmbH
+Gesch?ftsf?hrung: Horst Leonberger
+Sitz der Gesellschaft: N?rnberg - Registergericht: Amtsgericht
+N?rnberg: HRB 32315
+___________________________________________________________________________________________________
+
+Der Inhalt der vorstehenden E-Mail ist nicht rechtlich bindend. Diese E-Mail enthaelt vertrauliche und/oder rechtlich geschuetzte Informationen.
+Informieren Sie uns bitte, wenn Sie diese E-Mail faelschlicherweise erhalten haben. Bitte loeschen Sie in diesem Fall die Nachricht.
+Jede unerlaubte Form der Reproduktion, Bekanntgabe, Aenderung, Verteilung und/oder Publikation dieser E-Mail ist strengstens untersagt.
+The contents of the above mentioned e-mail is not legally binding. This e-mail contains confidential and/or legally protected information. Please inform us if you have received this e-mail by
+mistake and delete it in such a case. Each unauthorized reproduction, disclosure, alteration, distribution and/or publication of this e-mail is strictly prohibited. 
