@@ -1,43 +1,39 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Wed, 10 Oct 2018 01:08:50 +0300
-Subject: [Buildroot] [PATCH 2/4] webkitgtk: enable package for aarch64
+Date: Wed, 10 Oct 2018 01:08:51 +0300
+Subject: [Buildroot] [PATCH 3/4] webkitgtk: enable JIT support on 32-bit MIPS
 In-Reply-To: <20181009220852.4309-1-aperez@igalia.com>
 References: <20181009220852.4309-1-aperez@igalia.com>
-Message-ID: <20181009220852.4309-3-aperez@igalia.com>
+Message-ID: <20181009220852.4309-4-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-64-bit ARM is well supported, particularly in little-endian
-configurations, where JavaScriptCore JIT can be enabled as well.
+WebKitGTK+ is known to work on all 32-bit MIPS R2 processors
+or newer, in little-endian mode.
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- package/webkitgtk/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+ package/webkitgtk/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index 6933248bd6..85a3af81bf 100644
+index 85a3af81bf..bf0a150251 100644
 --- a/package/webkitgtk/Config.in
 +++ b/package/webkitgtk/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	bool
- 	# ARM needs BLX, so v5t+, BE completely untested so disabled
- 	default y if BR2_arm && !BR2_ARM_CPU_ARMV4
-+	default y if BR2_aarch64 || BR2_aarch64_be
- 	default y if BR2_i386 || BR2_x86_64
- 	# Disabled on MIPS big endian due to sigbus
- 	default y if BR2_mipsel || BR2_mips64el
-@@ -15,6 +16,8 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS_JIT
- 	bool
- 	# ARM needs NEON for JIT.
- 	default y if BR2_ARM_CPU_HAS_NEON
-+	# AArch64 is supported upstream but not well tested on big-endian mode.
-+	default y if BR2_aarch64
+@@ -21,6 +21,12 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS_JIT
  	# i386 & x86_64 don't have any special requirements.
  	default y if BR2_i386
  	default y if BR2_x86_64
++	# JIT is known not to work on MIPS64.
++	# Plain MIPS32 (pre R2) is not well tested and likely broken.
++	# The MIPS support is completely untested in big-endian mode.
++	default y if BR2_mipsel && BR2_MIPS_CPU_MIPS32R2
++	default y if BR2_mipsel && BR2_MIPS_CPU_MIPS32R5
++	default y if BR2_mipsel && BR2_MIPS_CPU_MIPS32R6
+ 
+ comment "webkitgtk needs libgtk3 and a glibc toolchain w/ C++, gcc >= 6, host gcc >= 4.8"
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
 -- 
 2.19.1
