@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 9 Oct 2018 10:15:25 +0200
-Subject: [Buildroot] [PATCH v3 1/2] support/scripts/pkg-stats: URL
- checking support
-In-Reply-To: <1538447849-46511-1-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Tue, 9 Oct 2018 10:15:28 +0200
+Subject: [Buildroot] [PATCH v3 2/2] support/scripts/pkg-stats: URL check
+ using threads
+In-Reply-To: <1538447849-46511-2-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1538447849-46511-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20181009101525.4e39bd35@windsurf>
+ <1538447849-46511-2-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20181009101528.2d7532c6@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,33 +14,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  1 Oct 2018 21:37:28 -0500, Matt Weber wrote:
->  - Adds support to check if a package has a URL and if that URL
->    is valid by doing a header request.
->  - Reports this information as part of the generated html output
+On Mon,  1 Oct 2018 21:37:29 -0500, Matt Weber wrote:
+> Adds a pool of worker threads to accelerate connection testing.
 > 
-> The URL data is currently gathered from the URL string provided
-> in the Kconfig help sections for each package.
+> ~7.5MB and 2% CPU per thread on a Intel i5-3230M CPU @ 2.60GHz.
 > 
-> This check helps ensure the URLs are valid and can be used
-> for other scripting purposes as the product's home site/URL.
-> CPE XML generation is an example of a case that could use this
-> product URL as part of an automated update generation script.
+> Runtime is ~3min in parallel vs ~15min.
 > 
 > CC: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> 
 > ---
 > Changes
 > v2 -> v3
 > [Ricardo
->  - Fixed flake8 warnings of extra lines and unused variable
->  - Adjusted regex to be compiled once and used example to
->    simplify finding the url and cleaning up the string
->  - Removed checking for help section and instead used the suggested
->    improved regex to find the URL.
+>  - Updated the timeout for header request testing to 30sec as there
+>    maybe corner cases with a smaller value when running requests in
+>    parallel on a busy machine
 
-Applied to master, thanks. I have just changed the header of the column
-from "URL" to "Upstream URL".
+Applied to master, thanks.
 
 Thomas
 -- 
