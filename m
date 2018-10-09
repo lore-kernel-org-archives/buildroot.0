@@ -1,58 +1,56 @@
-From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Tue, 9 Oct 2018 18:32:56 +0530
-Subject: [Buildroot] Qt5 build issues with glibc arm64 buildroot compiler
-In-Reply-To: <e62aebb9-3850-4251-1094-f3e79f68ff26@mind.be>
-References: <CAMty3ZCAaycY2gazxhYwi1DU_E9tyYP71_ewzstFoba02wTqcw@mail.gmail.com>
- <20181008090308.3c5daa83@windsurf>
- <CAMty3ZDdKsxbRFaPo3JSTH_81O4MvDO5cki6PciN0FGgq+zT4Q@mail.gmail.com>
- <20181008210426.320c927d@gmx.net>
- <e62aebb9-3850-4251-1094-f3e79f68ff26@mind.be>
-Message-ID: <CAMty3ZBPzoPpHjuLOBW_U8=2BX46a0rarWA2F+Pez9UftiLtiw@mail.gmail.com>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Tue, 9 Oct 2018 16:12:11 +0300
+Subject: [Buildroot] [PATCH 1/1] package/gettext-tiny: Add new package
+In-Reply-To: <20181009144504.0ba21729@windsurf>
+References: <20180821142226.2309-1-vadim4j@gmail.com>
+ <20181009144504.0ba21729@windsurf>
+Message-ID: <CAMw6YJJNq3Ge46zrCA6faPbFrV=xvOkeiNv-EjAnh65orWoT+g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Oct 9, 2018 at 12:57 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+On Tue, Oct 9, 2018 at 3:45 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 >
+> Hello Vadim,
 >
->
-> On 8/10/18 21:04, Peter Seiderer wrote:
-> > Hello Jagan,
+> On Tue, 21 Aug 2018 17:22:26 +0300, Vadim Kochan wrote:
+> > From: Vadim Kochan <vadim.kochan@petcube.com>
 > >
-> > On Mon, 8 Oct 2018 13:03:05 +0530, Jagan Teki <jagan@amarulasolutions.com> wrote:
+> > Add gettext-tiny package from the sabotage-linux project:
 > >
-> >> On Mon, Oct 8, 2018 at 12:33 PM Thomas Petazzoni
-> >> <thomas.petazzoni@bootlin.com> wrote:
-> >>>
-> >>> Hello Jagan,
-> >>>
-> >>> On Mon, 8 Oct 2018 11:51:35 +0530, Jagan Teki wrote:
-> >>>> Hello,
-> >>>>
-> >>>> Any one tried of building Qt5 on arm64 with glibc buildroot native
-> >>>> compiler. I'm observing build issues as below, let me know If I missed
-> >>>> something?
-> >>>>
-> >>>> BR2_TOOLCHAIN_BUILDROOT_GLIBC
-> >>>> BR2_TOOLCHAIN_BUILDROOT_CXX
-> >>>> BR2_PACKAGE_QT5
-> >>>> BR2_PACKAGE_QT5BASE_EXAMPLES
-> >>>> BR2_PACKAGE_QT5BASE_GUI
-> >>>> BR2_PACKAGE_QT5BASE_EGLFS
-> >>>
-> >>> Could you provide an actual Buildroot .config file ? Indeed the above
-> >>> config snippet is impossible: BR2_PACKAGE_QT5BASE_EGLFS requires an
-> >>> OpenGL implementation, and your list of config options has none
-> >>> selected.
-> >>
-> >> Yes, OpenGL is selected. please see below .config
+> > gettext-tiny provides lightweight replacements for tools typically used
+> > from the GNU gettext suite, which is incredibly bloated and takes a lot
+> > of time to build (in the order of an hour on slow devices). the most
+> > notable component is msgfmt which is used to create binary translation
+> > files in the .mo format out of textual input files in .po format. this
+> > is the most important tool for building software from source, because it
+> > is used from the build processes of many software packages.
 > >
-> > Your given defconfig compiles qt5base without problems here (using
-> > buildroot git master)...
+> > Signed-off-by: Vadim Kochan <vadim.kochan@petcube.com>
 >
->  Same here. Looks like a changed config without make clean.
+> Have you been able to make further progress on packaging gettext-tiny
+> as an alternative to the full gettext ? This is definitely something
+> I'd like to see integrated in Buildroot, so let us know if you are
+> still working or not, or if someone else needs to step up/help.
+>
+> Thanks a lot,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
-rebase to master build work for me, sorry for missing that. thanks for
-all who participate this thread.
+Hi Thomas!
+
+I did turn gettext package into virtual one and renamed  gettext as
+gettext-gnu and added gettext-tiny (so they became
+as virtual providers). While gettext-gnu works ok, I am still trying
+to resolve some issues with gettext-tiny. I will let you know
+in few days if I have some progress.
+
+Regards,
+Vadim Kochan
