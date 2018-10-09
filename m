@@ -1,47 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 9 Oct 2018 14:47:55 +0200
-Subject: [Buildroot] [PATCH v2 1/1] bird: new package
-In-Reply-To: <20180927222100.6564-1-adrien@gallouet.fr>
-References: <20180927204116.29484-1-adrien@gallouet.fr>
- <20180927222100.6564-1-adrien@gallouet.fr>
-Message-ID: <20181009144755.72bbd60c@windsurf>
+Date: Tue, 9 Oct 2018 14:48:07 +0200
+Subject: [Buildroot] [git commit] docs/manual: document the new
+ get-developers -e option
+Message-ID: <20181009130112.2A8D18E60D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adrien,
+commit: https://git.buildroot.net/buildroot/commit/?id=507d56a6be67b7b4e5c40b55c2e56ffbb4ff0386
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 27 Sep 2018 22:21:01 +0000, Adrien Gallou?t wrote:
-> The BIRD project aims to develop a dynamic IP routing daemon with full support
-> of all modern routing protocols, easy to use configuration interface and
-> powerful route filtering language
-> 
-> Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
-> ---
-> Changes v1 -> v2 (after Baruch Siach review)
-> - Add a comment for the use of autoreconf
-> - Use github helper
+Explain how this can be used with git send-email, and how git can be
+configured to use it automatically.
 
-I've applied your patch, after doing a number of changes:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ docs/manual/contribute.txt | 22 ++++++++++++++++++++++
+ docs/manual/developers.txt |  3 ++-
+ 2 files changed, 24 insertions(+), 1 deletion(-)
 
-    [Thomas:
-     - Do not make ncurses/readline mandatory dependencies, since they are
-       not. They are only needed when building the BIRD client. Added a
-       Config.in sub-option to enable/disable the client. As part of this,
-       added ncurses/readline to <pkg>_DEPENDENCIES.
-     - Add a patch to fix the installation when the BIRD client is
-       disabled, the patch has been submitted upstream.
-     - Added host-flex and host-bison to <pkg>_DEPENDENCIES since
-       flex/bison are used during the build process.
-     - Add BR2_USE_MMU dependency, the code uses fork()
-     - Fix alphabetic ordering in DEVELOPERS file.]
-
-Thanks for this contribution!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+index b531ea987e..60bfb961f0 100644
+--- a/docs/manual/contribute.txt
++++ b/docs/manual/contribute.txt
+@@ -308,6 +308,28 @@ Use the output of +get-developers+ to send your patches:
+ $ git send-email --to buildroot at buildroot.org --cc bob --cc alice outgoing/*
+ ---------------------
+ 
++Alternatively, +get-developers -e+ can be used directly with the
+++--cc-cmd+ argument to +git send-email+ to automatically CC the
++affected developers:
++
++---------------------
++$ git send-email --to buildroot at buildroot.org \
++      --cc-cmd './utils/get-developers -e' origin/master
++---------------------
++
+++git+ can be configured to automatically do this out of the box with:
++
++---------------------
++$ git config sendemail.to buildroot at buildroot.org
++$ git config sendemail.ccCmd "$(pwd)/utils/get-developers -e"
++---------------------
++
++And then just do:
++
++---------------------
++$ git send-email origin/master
++---------------------
++
+ Note that +git+ should be configured to use your mail account.
+ To configure +git+, see +man git-send-email+ or google it.
+ 
+diff --git a/docs/manual/developers.txt b/docs/manual/developers.txt
+index a0a3668dbc..0da499e100 100644
+--- a/docs/manual/developers.txt
++++ b/docs/manual/developers.txt
+@@ -31,7 +31,8 @@ the +DEVELOPERS+ file for various tasks:
+ 
+ - When passing one or several patches as command line argument,
+   +get-developer+ will return the appropriate +git send-email+
+-  command.
++  command. If the +-e+ option is passed, only the email addresses are
++  printed in a format suitable for +git send-email --cc-cmd+.
+ 
+ - When using the +-a <arch>+ command line option, +get-developer+ will
+   return the list of developers in charge of the given architecture.
