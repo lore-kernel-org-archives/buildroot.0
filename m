@@ -1,82 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 9 Oct 2018 22:19:23 +0200
-Subject: [Buildroot] [PATCH 1/4] python-pycryptodomex: new package
-In-Reply-To: <20181009155633.2ad54938@windsurf>
-References: <20180922193631.14369-1-asafka7@gmail.com>
- <20181009155633.2ad54938@windsurf>
-Message-ID: <20181009201923.GL2869@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 9 Oct 2018 22:20:06 +0200
+Subject: [Buildroot] [PATCH] gpsd: fix greis driver build with
+ reconfigure disabled
+In-Reply-To: <20181009213802.7ef3e645@windsurf>
+References: <cb456daa92d4ccbb27a8fcef504f86a77a3a0e74.1539101799.git.baruch@tkos.co.il>
+ <20181009213802.7ef3e645@windsurf>
+Message-ID: <c5402e83-dac6-d154-8ee9-113f853d9e7f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Asaf, All,
 
-On 2018-10-09 15:56 +0200, Thomas Petazzoni spake thusly:
-> On Sat, 22 Sep 2018 22:36:28 +0300, Asaf Kahlon wrote:
-> > Cryptographic library for Python
-> > +PYTHON_PYCRYPTODOMEX_LICENSE = Apache-2.0
+
+On 9/10/18 21:38, Thomas Petazzoni wrote:
+> Hello,
 > 
-> I am not sure this is an accurate description of the license terms.
-> Reading https://pycryptodome.readthedocs.io/en/latest/src/license.html
-> (which is the same as the LICENSE.rst you use as a license file), it
-> says:
+> On Tue,  9 Oct 2018 19:16:39 +0300, Baruch Siach wrote:
+>> Add a patch fixing undefined function build failure when reconfigure
+>> support is disabled.
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/a13/a13a5d852c83cd1fc9f2d1fc2b7302db515278b8/
+>> http://autobuild.buildroot.net/results/185/18599ea12a35b9715a67c1f4e5c4e56906235c94/
+>> http://autobuild.buildroot.net/results/c00/c00d22a6dcadb82a19afab6eacea654d3c41b4c5/
+>>
+>> Cc: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+>> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+>> ---
+>>  ...-fix-build-with-reconfigure-disabled.patch | 49 +++++++++++++++++++
+>>  1 file changed, 49 insertions(+)
+>>  create mode 100644 package/gpsd/0002-driver_greis-fix-build-with-reconfigure-disabled.patch
 > 
-> """
-> The source code in PyCryptodome is partially in the public domain and
-> partially released under the BSD 2-Clause license.
-> """
-> 
-> There is also the text of the Apache 2.0 license, but it doesn't say to
-> which part of the code it applies.
+> Applied to master, thanks. Seems like we're better than upstream at
+> testing the different configuration combinations. It's not the first
+> time we detect this kind of issues in gpsd.
 
-It states:   Apache 2.0 license (Wycheproof)
-And by grepping the source tree, it seems that 'Wycheproof' is the
-slef-test test harness, as we can only find it in lib/Crypto/SelfTest/
-and in setup.py, supposedly to ignore warnign from said test harness, and
-to list it as the data to package.
+ Yeah, we should probably ask an upstream developer to be added to the
+DEVELOPERS file so they see these issues...
 
-So, I think we can ignore the Apache-2.0 license, as it does not cover
-stuff that goes on the target.
-
-> And there is a special constraint for the OCB cipher, that it cannot be
-> used for military purposes. I am not sure how Debian accepts that, but
-> they do accept it:
-> https://metadata.ftp-master.debian.org/changelogs/main/p/pycryptodome/pycryptodome_3.6.1-2_copyright.
-
-In fact, there are 3 licenses under which OCB is made available;
-    http://web.cs.ucdavis.edu/~rogaway/ocb/license.htm
-
-  * License 1 ? License for Open-Source Software Implementations of OCB
-    (Jan 9, 2013)
-
-  * License 2 ? General License for Non-Military Software Implementations
-    OCB (Jan 10, 2013).
-
-  * License 3 ? Patent License for OpenSSL (Nov 13, 2013).
-
-As far as I understand the licensing terms, OCB is available udner any
-license to the choosing of the user of OCB. The pycryptodome developpers
-have not choosen a license, and instead decided to propagate that choice
-down to the user of pycryptodome.
-
-> Yann, Arnout, I'm interested by your opinion on this package.
-
-So, I would state something like:
-
-    PYTHON_PYCRYPTODOMEX_LICENSE = \
-        BSD-2c, \
-        Public Domain (pycrypto original code), \
-        OCB license (OCB cypher)
-
-Regards,
-Yann E. MORIN.
+ Regards,
+ Arnout
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
