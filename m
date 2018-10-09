@@ -1,48 +1,136 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue,  9 Oct 2018 13:45:52 +0200
-Subject: [Buildroot] [PATCH] glibc: bump version for more post-2.28 fixes
-Message-ID: <20181009114552.27794-1-yegorslists@googlemail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue,  9 Oct 2018 14:49:34 +0300
+Subject: [Buildroot] [PATCH] squid: bump to version 4.3
+Message-ID: <b7072a8700f563656a067e4bca681327032ba31c.1539085774.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Drop get_certificate test avoidance patch; upstream made the test cross
+compile friendly in commit 958ae827cabf (Fix cross-compile issues with
+SSL_get_certificate())
 
-This version bump fixes following issue:
+Drop the patch adding <time.h>; the code does not call time() anymore.
 
-sysdeps/ieee754/soft-fp: ignore maybe-uninitialized with -O [BZ #19444]
+Restore netfilter support under musl libc. Squid build fine with current
+musl version.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/glibc/glibc.hash | 2 +-
- package/glibc/glibc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0001-assume-get-certificate-ok.patch      | 21 --------------
+ .../squid/0002-missing-include-time_h.patch   | 28 -------------------
+ package/squid/squid.hash                      |  8 +++---
+ package/squid/squid.mk                        |  6 ++--
+ 4 files changed, 6 insertions(+), 57 deletions(-)
+ delete mode 100644 package/squid/0001-assume-get-certificate-ok.patch
+ delete mode 100644 package/squid/0002-missing-include-time_h.patch
 
-diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-index 9fff30e1ef..c0447fc4d2 100644
---- a/package/glibc/glibc.hash
-+++ b/package/glibc/glibc.hash
-@@ -1,5 +1,5 @@
- # Locally calculated (fetched from Github)
--sha256  6e88cea4002efa7f78d86ea5e98eb92ed423d5a35068751517c4f00f56b8666c     glibc-glibc-2.28-18-g2339d6a55eb7a7e040ae888e906adc49eeb59eab.tar.gz
-+sha256  7fc691e1aa6526ca8e92db831c040af373934712fb78979275d9d65cf9cc6530     glibc-5a580643111ef6081be7b4c7bd1997a5447c903f.tar.gz
- # Locally calculated (fetched from Github)
- sha256  e08ab67b2db2d0f0e8f3311d23c54fb8f6d4c1ef6fa0b4047fd5da400e3ce9de     glibc-arc-2018.03-release.tar.gz
+diff --git a/package/squid/0001-assume-get-certificate-ok.patch b/package/squid/0001-assume-get-certificate-ok.patch
+deleted file mode 100644
+index d3c075a59a7e..000000000000
+--- a/package/squid/0001-assume-get-certificate-ok.patch
++++ /dev/null
+@@ -1,21 +0,0 @@
+-The openssl get_certificate working test isn't cross compile friendly.
+-Just assume it works ok since we're using a modern OpenSSL version.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-[Bernd: Rebased for 4.2]
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-diff -Nura squid-3.5.1.orig/configure.ac squid-3.5.1/configure.ac
+---- squid-3.5.1.orig/configure.ac	2015-01-27 11:09:15.035711981 -0300
+-+++ squid-3.5.1/configure.ac	2015-01-27 11:09:25.829084482 -0300
+-@@ -1377,10 +1377,6 @@
+-       ])
+-     SQUID_STATE_ROLLBACK(check_SSL_CTX_get0_certificate)
+- 
+--    # check for other specific broken implementations
+--    if test "x$missing_SSL_CTX_get0_certificate" = "xyes"; then
+--      SQUID_CHECK_OPENSSL_GETCERTIFICATE_WORKS
+--    fi
+-     SQUID_CHECK_OPENSSL_CONST_SSL_METHOD
+-     SQUID_CHECK_OPENSSL_CONST_CRYPTO_EX_DATA
+-     SQUID_CHECK_OPENSSL_CONST_SSL_SESSION_CB_ARG
+diff --git a/package/squid/0002-missing-include-time_h.patch b/package/squid/0002-missing-include-time_h.patch
+deleted file mode 100644
+index 18b3ab3b555f..000000000000
+--- a/package/squid/0002-missing-include-time_h.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-ipc/Kid.cc: add missing include of time.h
+-
+-Function time() comes from <time.h>, so add the necessary include.
+-This fixes compilation on some configurations, for example
+-http://autobuild.buildroot.net/results/b33/b33e1f41e50b6e7ac3e30806b9a617d451bc27b4/
+-
+-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+-Upstream-status: submitted (http://bugs.squid-cache.org/show_bug.cgi?id=3967)
+-
+----
+- src/ipc/Kid.cc |  4 ++++
+- 1 files changed, 4 insertions(+), 0 deletions(-)
+-
+-
+-diff --git a/src/ipc/Kid.cc b/src/ipc/Kid.cc
+---- a/src/ipc/Kid.cc
+-+++ b/src/ipc/Kid.cc
+-@@ -11,6 +11,10 @@
+- #include <sys/wait.h>
+- #endif
+- 
+-+#if HAVE_TIME_H
+-+#include <time.h>
+-+#endif
+-+
+- int TheProcessKind = pkOther;
+- 
+- Kid::Kid():
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index 47c7e1bb2146..195477359a4b 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,6 +1,6 @@
+-# From http://www.squid-cache.org/Versions/v4/squid-4.2.tar.xz.asc
+-md5 2cf3f5f183d04322d798f98ea5ead43f squid-4.2.tar.xz
+-sha1 77fd6f06e6028780faf85ba7e7e9aef0922e9dc0 squid-4.2.tar.xz
++# From http://www.squid-cache.org/Versions/v4/squid-4.3.tar.xz.asc
++md5 ebb67abaec4db9d298c0edd8e1ffaca4 squid-4.3.tar.xz
++sha1 690540e7d0904e3959557f8beca45dbac1c94578 squid-4.3.tar.xz
+ # Locally calculated
+-sha256 994807762c59991b32449caf29418fd0ec9d2329746b18eb19bd930b6806d208 squid-4.2.tar.xz
++sha256 322612ef0544828f6c673a25124b32364fb41ef5e2847e21c89480b5546a4c7c squid-4.3.tar.xz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 6675cab79007..9335615559eb 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -4,13 +4,11 @@
+ #
+ ################################################################################
  
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 708c22f723..526bca8146 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -10,7 +10,7 @@ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VE
- else
- # Generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
--GLIBC_VERSION = glibc-2.28-18-g2339d6a55eb7a7e040ae888e906adc49eeb59eab
-+GLIBC_VERSION = 5a580643111ef6081be7b4c7bd1997a5447c903f
- # Upstream doesn't officially provide an https download link.
- # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
- # sometimes the connection times out. So use an unofficial github mirror.
+-SQUID_VERSION = 4.2
++SQUID_VERSION = 4.3
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v4
+ SQUID_LICENSE = GPL-2.0+
+ SQUID_LICENSE_FILES = COPYING
+-# For 0001-assume-get-certificate-ok.patch
+-SQUID_AUTORECONF = YES
+ SQUID_DEPENDENCIES = libcap host-libcap libxml2 host-pkgconf \
+ 	$(if $(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),libnetfilter_conntrack)
+ SQUID_CONF_ENV = \
+@@ -25,7 +23,7 @@ SQUID_CONF_ENV = \
+ 	BUILDCXXFLAGS="$(HOST_CXXFLAGS)"
+ SQUID_CONF_OPTS = \
+ 	--enable-async-io=8 \
+-	$(if $(BR2_TOOLCHAIN_USES_MUSL),--disable-linux-netfilter,--enable-linux-netfilter) \
++	--enable-linux-netfilter \
+ 	--enable-removal-policies="lru,heap" \
+ 	--with-filedescriptors=1024 \
+ 	--disable-ident-lookups \
 -- 
-2.17.0
+2.19.1
