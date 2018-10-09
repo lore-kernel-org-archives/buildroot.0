@@ -1,50 +1,83 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 9 Oct 2018 15:56:33 +0200
-Subject: [Buildroot] [PATCH 1/4] python-pycryptodomex: new package
-In-Reply-To: <20180922193631.14369-1-asafka7@gmail.com>
-References: <20180922193631.14369-1-asafka7@gmail.com>
-Message-ID: <20181009155633.2ad54938@windsurf>
+From: Lothar Felten <lothar.felten@gmail.com>
+Date: Tue,  9 Oct 2018 16:33:28 +0200
+Subject: [Buildroot] [PATCH v2] configs: bananapi_m1: bump kernel and uboot
+ version
+Message-ID: <20181009143328.19624-1-lothar.felten@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+New Linux kernel version 4.18
+New u-boot version 2018.07
+Config options were reordered by savedefconfig
 
-On Sat, 22 Sep 2018 22:36:28 +0300, Asaf Kahlon wrote:
-> Cryptographic library for Python
-> 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Tested on Bananapi M1 (Allwinner A20 SoC)
 
-Let's add some license experts in the loop.
+Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
+---
+Changes v1->v2:
+ - set a fixed kernel version for toolchain headers and kernel
+---
+ configs/bananapi_m1_defconfig | 36 +++++++++++++-----------------------
+ 1 file changed, 13 insertions(+), 23 deletions(-)
 
-> +PYTHON_PYCRYPTODOMEX_LICENSE = Apache-2.0
-
-I am not sure this is an accurate description of the license terms.
-Reading https://pycryptodome.readthedocs.io/en/latest/src/license.html
-(which is the same as the LICENSE.rst you use as a license file), it
-says:
-
-"""
-The source code in PyCryptodome is partially in the public domain and
-partially released under the BSD 2-Clause license.
-"""
-
-There is also the text of the Apache 2.0 license, but it doesn't say to
-which part of the code it applies.
-
-And there is a special constraint for the OCB cipher, that it cannot be
-used for military purposes. I am not sure how Debian accepts that, but
-they do accept it:
-https://metadata.ftp-master.debian.org/changelogs/main/p/pycryptodome/pycryptodome_3.6.1-2_copyright.
-
-Yann, Arnout, I'm interested by your opinion on this package.
-
-Best regards,
-
-Thomas
+diff --git a/configs/bananapi_m1_defconfig b/configs/bananapi_m1_defconfig
+index f8c66a3334..1cab320b6f 100644
+--- a/configs/bananapi_m1_defconfig
++++ b/configs/bananapi_m1_defconfig
+@@ -1,38 +1,28 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+-BR2_ARM_EABIHF=y
+-
+-# Linux headers same as kernel, a 4.13 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
+-
+-# Bootloader
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
++BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M1"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/bananapi/bananapi-m1/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.12"
++BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-bananapi"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Bananapi"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+-BR2_TARGET_UBOOT_FORMAT_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+ BR2_TARGET_UBOOT_BOOT_SCRIPT=y
+ BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/bananapi/bananapi-m1/boot.cmd"
+-
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.7"
+-BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-bananapi"
+-
+-# Filesystem
+-BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M1"
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/bananapi/bananapi-m1/genimage.cfg"
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.11.0
