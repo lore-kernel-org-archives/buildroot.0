@@ -1,46 +1,82 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue,  9 Oct 2018 22:16:52 +0200
-Subject: [Buildroot] [PATCH v2,2/2] jasper: bump to version 2.0.14
-In-Reply-To: <20181009201652.17189-1-fontaine.fabrice@gmail.com>
-References: <20181009201652.17189-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181009201652.17189-2-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 9 Oct 2018 22:19:23 +0200
+Subject: [Buildroot] [PATCH 1/4] python-pycryptodomex: new package
+In-Reply-To: <20181009155633.2ad54938@windsurf>
+References: <20180922193631.14369-1-asafka7@gmail.com>
+ <20181009155633.2ad54938@windsurf>
+Message-ID: <20181009201923.GL2869@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Split patch in two: one for the license, the other one for bumping
-   the version
+Thomas, Asaf, All,
 
- package/jasper/jasper.hash | 2 +-
- package/jasper/jasper.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 2018-10-09 15:56 +0200, Thomas Petazzoni spake thusly:
+> On Sat, 22 Sep 2018 22:36:28 +0300, Asaf Kahlon wrote:
+> > Cryptographic library for Python
+> > +PYTHON_PYCRYPTODOMEX_LICENSE = Apache-2.0
+> 
+> I am not sure this is an accurate description of the license terms.
+> Reading https://pycryptodome.readthedocs.io/en/latest/src/license.html
+> (which is the same as the LICENSE.rst you use as a license file), it
+> says:
+> 
+> """
+> The source code in PyCryptodome is partially in the public domain and
+> partially released under the BSD 2-Clause license.
+> """
+> 
+> There is also the text of the Apache 2.0 license, but it doesn't say to
+> which part of the code it applies.
 
-diff --git a/package/jasper/jasper.hash b/package/jasper/jasper.hash
-index 8c4f2453ad..4fea367ebc 100644
---- a/package/jasper/jasper.hash
-+++ b/package/jasper/jasper.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 b50413b41bfc82ae419298b41eadcde1aa31f362fb9dc2ac089e5cbc19f60c24  jasper-version-2.0.13.tar.gz
-+sha256 85266eea728f8b14365db9eaf1edc7be4c348704e562bb05095b9a077cf1a97b  jasper-version-2.0.14.tar.gz
- sha256 4ad1bb42aff888c4403d792e6e2c5f1716d6c279fea70b296333c9d577d30b81  LICENSE
-diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
-index 9dc46b18d6..b544a7c1c6 100644
---- a/package/jasper/jasper.mk
-+++ b/package/jasper/jasper.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JASPER_VERSION = version-2.0.13
-+JASPER_VERSION = version-2.0.14
- JASPER_SITE = $(call github,mdadams,jasper,$(JASPER_VERSION))
- JASPER_INSTALL_STAGING = YES
- JASPER_LICENSE = JasPer-2.0
+It states:   Apache 2.0 license (Wycheproof)
+And by grepping the source tree, it seems that 'Wycheproof' is the
+slef-test test harness, as we can only find it in lib/Crypto/SelfTest/
+and in setup.py, supposedly to ignore warnign from said test harness, and
+to list it as the data to package.
+
+So, I think we can ignore the Apache-2.0 license, as it does not cover
+stuff that goes on the target.
+
+> And there is a special constraint for the OCB cipher, that it cannot be
+> used for military purposes. I am not sure how Debian accepts that, but
+> they do accept it:
+> https://metadata.ftp-master.debian.org/changelogs/main/p/pycryptodome/pycryptodome_3.6.1-2_copyright.
+
+In fact, there are 3 licenses under which OCB is made available;
+    http://web.cs.ucdavis.edu/~rogaway/ocb/license.htm
+
+  * License 1 ? License for Open-Source Software Implementations of OCB
+    (Jan 9, 2013)
+
+  * License 2 ? General License for Non-Military Software Implementations
+    OCB (Jan 10, 2013).
+
+  * License 3 ? Patent License for OpenSSL (Nov 13, 2013).
+
+As far as I understand the licensing terms, OCB is available udner any
+license to the choosing of the user of OCB. The pycryptodome developpers
+have not choosen a license, and instead decided to propagate that choice
+down to the user of pycryptodome.
+
+> Yann, Arnout, I'm interested by your opinion on this package.
+
+So, I would state something like:
+
+    PYTHON_PYCRYPTODOMEX_LICENSE = \
+        BSD-2c, \
+        Public Domain (pycrypto original code), \
+        OCB license (OCB cypher)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.17.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
