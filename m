@@ -1,69 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue,  9 Oct 2018 10:28:31 +0200
-Subject: [Buildroot] [PATCH] docs/manual: document the new get-developers -e
- option
-Message-ID: <20181009082831.31918-1-peter@korsgaard.com>
+Date: Tue, 09 Oct 2018 10:29:35 +0200
+Subject: [Buildroot] [PATCH] utils/get-developers: add -e flag to only
+ list email addresses for git send-email
+In-Reply-To: <ee5ec68a-e6df-0bb2-662e-81c7d8c7ac7e@mind.be> (Arnout
+ Vandecappelle's message of "Mon, 8 Oct 2018 18:11:31 +0200")
+References: <20181008074333.1582-1-peter@korsgaard.com>
+ <ee5ec68a-e6df-0bb2-662e-81c7d8c7ac7e@mind.be>
+Message-ID: <87y3b7o74g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Explain how this can be used with git send-email, and how git can be
-configured to use it automatically.
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/manual/contribute.txt | 22 ++++++++++++++++++++++
- docs/manual/developers.txt |  3 ++-
- 2 files changed, 24 insertions(+), 1 deletion(-)
+Hi,
 
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index b531ea987e..60bfb961f0 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -308,6 +308,28 @@ Use the output of +get-developers+ to send your patches:
- $ git send-email --to buildroot at buildroot.org --cc bob --cc alice outgoing/*
- ---------------------
- 
-+Alternatively, +get-developers -e+ can be used directly with the
-++--cc-cmd+ argument to +git send-email+ to automatically CC the
-+affected developers:
-+
-+---------------------
-+$ git send-email --to buildroot at buildroot.org \
-+      --cc-cmd './utils/get-developers -e' origin/master
-+---------------------
-+
-++git+ can be configured to automatically do this out of the box with:
-+
-+---------------------
-+$ git config sendemail.to buildroot at buildroot.org
-+$ git config sendemail.ccCmd "$(pwd)/utils/get-developers -e"
-+---------------------
-+
-+And then just do:
-+
-+---------------------
-+$ git send-email origin/master
-+---------------------
-+
- Note that +git+ should be configured to use your mail account.
- To configure +git+, see +man git-send-email+ or google it.
- 
-diff --git a/docs/manual/developers.txt b/docs/manual/developers.txt
-index a0a3668dbc..0da499e100 100644
---- a/docs/manual/developers.txt
-+++ b/docs/manual/developers.txt
-@@ -31,7 +31,8 @@ the +DEVELOPERS+ file for various tasks:
- 
- - When passing one or several patches as command line argument,
-   +get-developer+ will return the appropriate +git send-email+
--  command.
-+  command. If the +-e+ option is passed, only the email addresses are
-+  printed in a format suitable for +git send-email --cc-cmd+.
- 
- - When using the +-a <arch>+ command line option, +get-developer+ will
-   return the list of developers in charge of the given architecture.
+ >> To automatically mail the buildroot list and CC affected developers on
+ >> patches.
+
+ >  Could you add this fragment to docs/manual/contribute.txt as well?
+
+Sure:
+
+https://patchwork.ozlabs.org/patch/981092/
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
