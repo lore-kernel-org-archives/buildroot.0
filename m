@@ -1,30 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 09 Oct 2018 10:29:35 +0200
-Subject: [Buildroot] [PATCH] utils/get-developers: add -e flag to only
- list email addresses for git send-email
-In-Reply-To: <ee5ec68a-e6df-0bb2-662e-81c7d8c7ac7e@mind.be> (Arnout
- Vandecappelle's message of "Mon, 8 Oct 2018 18:11:31 +0200")
-References: <20181008074333.1582-1-peter@korsgaard.com>
- <ee5ec68a-e6df-0bb2-662e-81c7d8c7ac7e@mind.be>
-Message-ID: <87y3b7o74g.fsf@dell.be.48ers.dk>
+Date: Tue,  9 Oct 2018 10:39:59 +0200
+Subject: [Buildroot] [PATCH] tinc: security bump to version 1.0.35
+Message-ID: <20181009083959.17108-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Fixes the following security issues:
 
-Hi,
+CVE-2018-16758: Michael Yonli discovered that tinc 1.0.34 and earlier allow
+a man-in-the-middle attack that, even if the MITM cannot decrypt the traffic
+sent between the two endpoints, when the MITM can correctly predict when an
+ephemeral key exchange message is sent in a TCP connection between two
+nodes, allows the MITM to force one node to send UDP packets in plaintext.
+The tinc 1.1pre versions are not affected by this.
 
- >> To automatically mail the buildroot list and CC affected developers on
- >> patches.
+CVE-2018-16738: Michael Yonli discoverd that tinc versions 1.0.30 to 1.0.34
+allow an oracle attack, similar to CVE-2018-16737, but due to the
+mitigations put in place for the Sweet32 attack in tinc 1.0.30, it now
+requires a timing attack that has only a limited time to complete.  Tinc
+1.1pre16 and earlier are also affected if there are nodes on the same VPN
+that still use the legacy protocol from tinc version 1.0.x.
 
- >  Could you add this fragment to docs/manual/contribute.txt as well?
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/tinc/tinc.hash | 2 +-
+ package/tinc/tinc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Sure:
-
-https://patchwork.ozlabs.org/patch/981092/
-
+diff --git a/package/tinc/tinc.hash b/package/tinc/tinc.hash
+index 09d2867b16..0daeb324e9 100644
+--- a/package/tinc/tinc.hash
++++ b/package/tinc/tinc.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256  c03a9b61dedd452116dd9a8db231545ba08a7c96bce011e0cbd3cfd2c56dcfda tinc-1.0.34.tar.gz
++sha256  18c83b147cc3e2133a7ac2543eeb014d52070de01c7474287d3ccecc9b16895e tinc-1.0.35.tar.gz
+ sha256  3a112fd37b47d624e89b130d0e158bb8d14ec5bc9ecf5f18b448d2c07626e43d COPYING
+ sha256  9bf76a8aa304d807df20bf3d221c21d259764be63e39b58f299b80ba3ac14b5b COPYING.README
+diff --git a/package/tinc/tinc.mk b/package/tinc/tinc.mk
+index 85dccdc34e..ae7ce97bfa 100644
+--- a/package/tinc/tinc.mk
++++ b/package/tinc/tinc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TINC_VERSION = 1.0.34
++TINC_VERSION = 1.0.35
+ TINC_SITE = http://www.tinc-vpn.org/packages
+ TINC_DEPENDENCIES = lzo openssl zlib
+ TINC_LICENSE = GPL-2.0+ with OpenSSL exception
 -- 
-Bye, Peter Korsgaard
+2.11.0
