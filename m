@@ -1,32 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 9 Oct 2018 15:14:23 +0200
-Subject: [Buildroot] [PATCH 4/4] package/asterisk: add optional spandsp
- support
-In-Reply-To: <20181003131358.28002-4-bernd.kuhls@t-online.de>
-References: <20181003131358.28002-1-bernd.kuhls@t-online.de>
- <20181003131358.28002-4-bernd.kuhls@t-online.de>
-Message-ID: <20181009151423.63cdd061@windsurf>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Tue,  9 Oct 2018 15:21:52 +0200
+Subject: [Buildroot] [PATCH v2] poco: disable fpenvironment for MIPS without
+ FPU
+Message-ID: <20181009132152.24383-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On Wed,  3 Oct 2018 15:13:58 +0200, Bernd Kuhls wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/asterisk/asterisk.mk | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
+glibc fixed a bug, that defined FPU capabilities not
+available for MIPS without FPU. So add --no-fpenvironment
+to the configuration options for this case.
 
-Applied to master, thanks.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+Changes v1 -> v2:
+   - put all conditions in one ifeq statement (Thomas Petazzoni)
+	
+ package/poco/poco.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Thomas
+diff --git a/package/poco/poco.mk b/package/poco/poco.mk
+index 018344d5c7..af41d36ff7 100644
+--- a/package/poco/poco.mk
++++ b/package/poco/poco.mk
+@@ -42,6 +42,11 @@ ifeq ($(BR2_sh4a)$(BR2_nios2),y)
+ POCO_CONF_OPTS += --no-fpenvironment
+ endif
+ 
++# MIPS without FPU
++ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el):$(BR2_MIPS_SOFT_FLOAT),y:y)
++POCO_CONF_OPTS += --no-fpenvironment
++endif
++
+ ifeq ($(BR2_STATIC_LIBS),y)
+ POCO_MAKE_TARGET = static_release
+ else ifeq ($(BR2_SHARED_LIBS),y)
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.0
