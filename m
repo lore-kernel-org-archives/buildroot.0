@@ -1,27 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 9 Oct 2018 21:23:23 +0200
-Subject: [Buildroot] [PATCH v2] configs: bananapi_m1: bump kernel and
- uboot version
-In-Reply-To: <20181009143328.19624-1-lothar.felten@gmail.com>
-References: <20181009143328.19624-1-lothar.felten@gmail.com>
-Message-ID: <20181009212323.201dd8f2@windsurf>
+From: Alexey Brodkin <alexey.brodkin@synopsys.com>
+Date: Tue,  9 Oct 2018 22:24:22 +0300
+Subject: [Buildroot] [PATCH] meson: Use AR via wrapper
+Message-ID: <20181009192422.20809-1-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+If building with LTO enabled we need to use GCC wrapper for AR otherwise
+archives get created improperly and we see a lot of unresolved symbols
+on finla linkage.
 
-On Tue,  9 Oct 2018 16:33:28 +0200, Lothar Felten wrote:
+In particular this allows to build SystemD with LTO.
 
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.12"
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Cc: Mark Corbin <mark.corbin@embecosm.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Peter Seiderer <ps.report@gmx.net>
+---
+ package/meson/cross-compilation.conf.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-4.8 kernel ?
-
-Thomas
+diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
+index 0eec74087b..de4600cc58 100644
+--- a/package/meson/cross-compilation.conf.in
++++ b/package/meson/cross-compilation.conf.in
+@@ -6,7 +6,7 @@
+ [binaries]
+ c = '@TARGET_CROSS at gcc'
+ cpp = '@TARGET_CROSS at g++'
+-ar = '@TARGET_CROSS at ar'
++ar = '@TARGET_CROSS at gcc-ar'
+ strip = '@TARGET_CROSS at strip'
+ pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.16.2
