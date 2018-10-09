@@ -1,56 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 9 Oct 2018 09:19:05 +0200
-Subject: [Buildroot] [PATCH v1 1/3] qt5connectivity: add license files
- hashes
-In-Reply-To: <20181002211637.2356-1-ps.report@gmx.net>
-References: <20181002211637.2356-1-ps.report@gmx.net>
-Message-ID: <20181009091905.1251cc90@windsurf>
+Date: Tue, 9 Oct 2018 09:19:17 +0200
+Subject: [Buildroot] [git commit] qt5serialbus: fix 5.6.3 license file hashes
+Message-ID: <20181009074430.A39828E56F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6b2dbd384c0b68f6fb6b479e5bb9d88459ddebfa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  2 Oct 2018 23:16:35 +0200, Peter Seiderer wrote:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/qt5/qt5connectivity/qt5connectivity.hash | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/package/qt5/qt5connectivity/qt5connectivity.hash b/package/qt5/qt5connectivity/qt5connectivity.hash
-> index 96f22db60a..e789ce0b4f 100644
-> --- a/package/qt5/qt5connectivity/qt5connectivity.hash
-> +++ b/package/qt5/qt5connectivity/qt5connectivity.hash
-> @@ -3,3 +3,14 @@ sha256 fa406e3d63fa4a2acc8ecae6d110f20c766f19a21c7061a12f3c167deb07ccde qtconnec
->  
->  # Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.2/submodules/qtconnectivity-everywhere-src-5.11.2.tar.xz.mirrorlist
->  sha256 58901bbd14d3bc472f27fe305fd8dc33cffbd10da83616e9691c04c3290d42c5 qtconnectivity-everywhere-src-5.11.2.tar.xz
-> +
-> +# Hashes for license files:
-> +sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
-> +sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
-> +sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
-> +sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
-> +sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
-> +sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPLv2
-> +sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
-> +sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8 LICENSE.LGPLv21
-> +sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
+Fixes [1]:
 
-Actually, I think per-version hash files are better, and that's the
-direction we are taking, so I've split this into two hash files, one
-per version. Of course for the tarballs, I kept the common hash file
-for now, as this is the only thing we support.
+  ERROR: LICENSE.FDL has wrong sha256 hash:
+  ERROR: expected: ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d
+  ERROR: got     : f827ad079686ba92cc94811e35492d0e8966f704008b6da9eeda0b659fb58a8d
 
-Also, the hash for LGPL_EXCEPTION.txt was missing for the 5.6.3
-version, so I've added that.
+[1] http://autobuild.buildroot.net/results/f8dba48bc1e71332f3983e78c40989e5f864abf3
 
-Applied with those changes. Thanks!
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qt5/qt5serialbus/5.6.3/qt5serialbus.hash | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/qt5/qt5serialbus/5.6.3/qt5serialbus.hash b/package/qt5/qt5serialbus/5.6.3/qt5serialbus.hash
+new file mode 100644
+index 0000000000..574fcc5294
+--- /dev/null
++++ b/package/qt5/qt5serialbus/5.6.3/qt5serialbus.hash
+@@ -0,0 +1,5 @@
++# Hashes for license files:
++sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPLv2
++sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
++sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
++sha256 f827ad079686ba92cc94811e35492d0e8966f704008b6da9eeda0b659fb58a8d LICENSE.FDL
