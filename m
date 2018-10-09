@@ -1,118 +1,96 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 9 Oct 2018 15:26:31 +0200
-Subject: [Buildroot] [git commit] pigpio: new package
-Message-ID: <20181009133505.5F783814CA@busybox.osuosl.org>
+Date: Tue, 9 Oct 2018 15:35:42 +0200
+Subject: [Buildroot] [git commit] python-pigpio: new package
+Message-ID: <20181009133505.6B6E8814CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3fb16a0ffead163aa2cfec7e561431a346f30c8
+commit: https://git.buildroot.net/buildroot/commit/?id=f99a1f95c9323b3216ed12d080e800476f3ff91a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Pigpio is a library for the Raspberry Pi which allows
-control of the General Purpose Input Outputs (GPIO).
+Pigpio is a Python module for the Raspberry Pi
+which talks to the pigpio daemon to allow control
+of the general purpose input outputs (GPIO).
 
-http://abyz.me.uk/rpi/pigpio/
+http://abyz.co.uk/rpi/pigpio/python.html
 
 Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-[Thomas:
- - Use proper SPDX tag for The Unlicense
- - Add missing dependency on !BR2_STATIC_LIBS, since the Makefile is
-   unconditionally building a shared library
- - Use BR2_arm instead of BR2_ARM_EABIHF, there's nothing that makes
-   it EABIHF specific.
- - Use -D and full destination paths during the installation.]
+[Thomas: use proper SPDX license tag]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/pigpio/Config.in   | 13 +++++++++++++
- package/pigpio/pigpio.hash |  3 +++
- package/pigpio/pigpio.mk   | 25 +++++++++++++++++++++++++
- 5 files changed, 43 insertions(+)
+ DEVELOPERS                               |  1 +
+ package/Config.in                        |  1 +
+ package/python-pigpio/Config.in          |  8 ++++++++
+ package/python-pigpio/python-pigpio.hash |  3 +++
+ package/python-pigpio/python-pigpio.mk   | 13 +++++++++++++
+ 5 files changed, 26 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 54bc1b8616..09d7138827 100644
+index 09d7138827..824f3a3c58 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -921,6 +921,7 @@ F:	package/libwebsock/
- F:	package/sofia-sip/
- 
- N:	Grzegorz Blach <grzegorz@blach.pl>
-+F:	package/pigpio/
+@@ -924,6 +924,7 @@ N:	Grzegorz Blach <grzegorz@blach.pl>
+ F:	package/pigpio/
  F:	package/python-falcon/
  F:	package/python-mimeparse/
++F:	package/python-pigpio/
  
+ N:	Guillaume Gardet <guillaume.gardet@oliseo.fr>
+ F:	package/c-icap/
 diff --git a/package/Config.in b/package/Config.in
-index 1f1158a79c..09e281eb39 100644
+index 09e281eb39..77e5f4cc39 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -487,6 +487,7 @@ endmenu
- 	source "package/pdbg/Config.in"
- 	source "package/picocom/Config.in"
- 	source "package/pifmrds/Config.in"
-+	source "package/pigpio/Config.in"
- 	source "package/powertop/Config.in"
- 	source "package/pps-tools/Config.in"
- 	source "package/pru-software-support/Config.in"
-diff --git a/package/pigpio/Config.in b/package/pigpio/Config.in
+@@ -922,6 +922,7 @@ menu "External python modules"
+ 	source "package/python-pathvalidate/Config.in"
+ 	source "package/python-pexpect/Config.in"
+ 	source "package/python-pickleshare/Config.in"
++	source "package/python-pigpio/Config.in"
+ 	source "package/python-pillow/Config.in"
+ 	source "package/python-pip/Config.in"
+ 	source "package/python-portend/Config.in"
+diff --git a/package/python-pigpio/Config.in b/package/python-pigpio/Config.in
 new file mode 100644
-index 0000000000..fee496b2ef
+index 0000000000..08c37cb9b2
 --- /dev/null
-+++ b/package/pigpio/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_PIGPIO
-+	bool "pigpio"
-+	depends on BR2_aarch64 || BR2_arm
-+	depends on !BR2_STATIC_LIBS
++++ b/package/python-pigpio/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_PIGPIO
++	bool "python-pigpio"
 +	help
-+	  Pigpio is a library for the Raspberry Pi which allows
-+	  control of the General Purpose Input Outputs (GPIO).
++	  Pigpio is a Python module for the Raspberry Pi
++	  which talks to the pigpio daemon to allow control
++	  of the general purpose input outputs (GPIO).
 +
-+	  http://abyz.me.uk/rpi/pigpio/
-+
-+comment "pigpio needs a toolchain w/ dynamic library"
-+	depends on BR2_aarch64 || BR2_arm
-+	depends on !BR2_STATIC_LIBS
-diff --git a/package/pigpio/pigpio.hash b/package/pigpio/pigpio.hash
++	  http://abyz.co.uk/rpi/pigpio/python.html
+diff --git a/package/python-pigpio/python-pigpio.hash b/package/python-pigpio/python-pigpio.hash
 new file mode 100644
-index 0000000000..db43901483
+index 0000000000..a0ef093ec5
 --- /dev/null
-+++ b/package/pigpio/pigpio.hash
++++ b/package/python-pigpio/python-pigpio.hash
 @@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256	4255310dd11ed81035b60711becad081a1eaad2905f704e3eb84e692ca7e4c3d  pigpio-V67.tar.gz
-+sha256	6a90b88421a0d9b090e121daa11b3c6d55eed5eeb3281a2fcc454d6a28b5547c  UNLICENCE
-diff --git a/package/pigpio/pigpio.mk b/package/pigpio/pigpio.mk
++# md5, sha256 from https://pypi.org/pypi/pigpio/json
++md5	32d7d5e2e042fb4f503b93858712e7ad  pigpio-1.40.post1.tar.gz
++sha256	38bdc1b4d58898e7b4a69de3b0d90e8e8ccd851ac7d03e30791769475ffd941f  pigpio-1.40.post1.tar.gz
+diff --git a/package/python-pigpio/python-pigpio.mk b/package/python-pigpio/python-pigpio.mk
 new file mode 100644
-index 0000000000..48628a9539
+index 0000000000..7c4527ad94
 --- /dev/null
-+++ b/package/pigpio/pigpio.mk
-@@ -0,0 +1,25 @@
++++ b/package/python-pigpio/python-pigpio.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# pigpio
++# python-pigpio
 +#
 +################################################################################
 +
-+PIGPIO_VERSION = V67
-+PIGPIO_SITE = $(call github,joan2937,pigpio,$(PIGPIO_VERSION))
-+PIGPIO_LICENSE = Unlicense
-+PIGPIO_LICENSE_FILES = UNLICENCE
++PYTHON_PIGPIO_VERSION = 1.40.post1
++PYTHON_PIGPIO_SOURCE = pigpio-$(PYTHON_PIGPIO_VERSION).tar.gz
++PYTHON_PIGPIO_SITE = https://files.pythonhosted.org/packages/da/91/80c893c398bc6805592f44267bbf4bf88323de3db0f5e8f94b0fa8e28426
++PYTHON_PIGPIO_SETUP_TYPE = setuptools
++PYTHON_PIGPIO_LICENSE = Unlicense
 +
-+define PIGPIO_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+endef
-+
-+define PIGPIO_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/pig2vcd $(TARGET_DIR)/usr/bin/pig2vcd
-+	$(INSTALL) -D -m 0755 $(@D)/pigpiod $(TARGET_DIR)/usr/bin/pigpiod
-+	$(INSTALL) -D -m 0755 $(@D)/pigs $(TARGET_DIR)/usr/bin/pigs
-+	$(INSTALL) -D -m 0755 $(@D)/libpigpio.so $(TARGET_DIR)/usr/lib/libpigpio.so
-+	$(INSTALL) -D -m 0755 $(@D)/libpigpiod_if.so $(TARGET_DIR)/usr/lib/libpigpiod_if.so
-+	$(INSTALL) -D -m 0755 $(@D)/libpigpiod_if2.so $(TARGET_DIR)/usr/lib/libpigpiod_if2.so
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(python-package))
