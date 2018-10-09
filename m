@@ -1,28 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 9 Oct 2018 21:38:31 +0200
-Subject: [Buildroot] [PATCH 1/1] python-engineio: bump to version 2.3.2
-In-Reply-To: <20181009162226.7432-1-asafka7@gmail.com>
-References: <20181009162226.7432-1-asafka7@gmail.com>
-Message-ID: <20181009213831.1ed13e74@windsurf>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Tue, 9 Oct 2018 21:39:46 +0200
+Subject: [Buildroot] [PATCH 2/4] python-ply: new package
+In-Reply-To: <20181009212722.4ab34b54@windsurf>
+References: <20180922193631.14369-1-asafka7@gmail.com>
+ <20180922193631.14369-2-asafka7@gmail.com>
+ <20181009212722.4ab34b54@windsurf>
+Message-ID: <CAGm1_kuNbJzj+EWwEGcoUG5PRwoJ+4=k2vo0ri1g091v-6r4Eg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Tue, Oct 9, 2018 at 9:27 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> Thanks for this patch. I've applied to master, with one change, see
+> below.
+>
+> On Sat, 22 Sep 2018 22:36:29 +0300, Asaf Kahlon wrote:
+>
+> > +PYTHON_PLY_LICENSE = BSD
+>
+> "BSD" as a value for license is always wrong, because it's not specific
+> enough. We need to know the variant of BSD license being used.
+>
+> Yegor: the scanpypi script needs to be updated to not put "BSD", but
+> something that includes a warning that ensures that the user of
+> scanpypi will know he will have to do additional research to find what
+> is the exact license. I think we discussed this already, but we had
+> some similar discussion on scancpan with Fran?ois, so I'm not sure to
+> remember :)
 
-On Tue,  9 Oct 2018 19:22:26 +0300, Asaf Kahlon wrote:
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-> ---
->  package/python-engineio/python-engineio.hash | 4 ++--
->  package/python-engineio/python-engineio.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+Yes, we have discussed the issue :-)
 
-Applied to master, thanks.
+@Asaf have you installed spdx_lookup [1] package?
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+[1] https://pypi.org/project/spdx-lookup/
+
+Yegor
+
+> In this case, the license was BSD-3-Clause. Applied with this fixed.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
