@@ -1,56 +1,59 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Tue, 9 Oct 2018 16:12:11 +0300
-Subject: [Buildroot] [PATCH 1/1] package/gettext-tiny: Add new package
-In-Reply-To: <20181009144504.0ba21729@windsurf>
-References: <20180821142226.2309-1-vadim4j@gmail.com>
- <20181009144504.0ba21729@windsurf>
-Message-ID: <CAMw6YJJNq3Ge46zrCA6faPbFrV=xvOkeiNv-EjAnh65orWoT+g@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 9 Oct 2018 15:05:38 +0200
+Subject: [Buildroot] [PATCH] poco: disable fpenvironment for MIPS
+ without FPU
+In-Reply-To: <20181009122326.12174-1-yegorslists@googlemail.com>
+References: <20181009122326.12174-1-yegorslists@googlemail.com>
+Message-ID: <20181009150538.09658891@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Oct 9, 2018 at 3:45 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Vadim,
->
-> On Tue, 21 Aug 2018 17:22:26 +0300, Vadim Kochan wrote:
-> > From: Vadim Kochan <vadim.kochan@petcube.com>
-> >
-> > Add gettext-tiny package from the sabotage-linux project:
-> >
-> > gettext-tiny provides lightweight replacements for tools typically used
-> > from the GNU gettext suite, which is incredibly bloated and takes a lot
-> > of time to build (in the order of an hour on slow devices). the most
-> > notable component is msgfmt which is used to create binary translation
-> > files in the .mo format out of textual input files in .po format. this
-> > is the most important tool for building software from source, because it
-> > is used from the build processes of many software packages.
-> >
-> > Signed-off-by: Vadim Kochan <vadim.kochan@petcube.com>
->
-> Have you been able to make further progress on packaging gettext-tiny
-> as an alternative to the full gettext ? This is definitely something
-> I'd like to see integrated in Buildroot, so let us know if you are
-> still working or not, or if someone else needs to step up/help.
->
-> Thanks a lot,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Hello,
 
-Hi Thomas!
+On Tue,  9 Oct 2018 14:23:26 +0200, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> glibc fixed a bug, that defined FPU capabilities not
 
-I did turn gettext package into virtual one and renamed  gettext as
-gettext-gnu and added gettext-tiny (so they became
-as virtual providers). While gettext-gnu works ok, I am still trying
-to resolve some issues with gettext-tiny. I will let you know
-in few days if I have some progress.
+This is a bit vague. Which bug? Which commit? Do you have some more
+details ?
 
-Regards,
-Vadim Kochan
+> available for MIPS without FPU. So add --no-fpenvironment
+> to the configuration options for this case.
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  package/poco/poco.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/package/poco/poco.mk b/package/poco/poco.mk
+> index 018344d5c7..1f3eabd009 100644
+> --- a/package/poco/poco.mk
+> +++ b/package/poco/poco.mk
+> @@ -42,6 +42,13 @@ ifeq ($(BR2_sh4a)$(BR2_nios2),y)
+>  POCO_CONF_OPTS += --no-fpenvironment
+>  endif
+>  
+> +# MIPS without FPU
+> +ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
+> +ifeq ($(BR2_MIPS_SOFT_FLOAT),y)
+
+Perhaps:
+
+ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el):$(BR2_MIPS_SOFT_FLOAT),y:y)
+
+I'm wondering if we shouldn't introduce some global BR2_ARCH_IS_MIPS
+option, or something like that, because we have a lot of places where
+we repeat those mips/mipsel/mips64/mips64el conditions. But that is of
+course a completely separate discussion.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
