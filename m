@@ -1,76 +1,45 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 9 Oct 2018 22:13:10 +0200
-Subject: [Buildroot] [PATCH v2] poco: disable fpenvironment for MIPS
- without FPU
-In-Reply-To: <20181009132152.24383-1-yegorslists@googlemail.com>
-References: <20181009132152.24383-1-yegorslists@googlemail.com>
-Message-ID: <51cdb909-89fd-6832-0988-f29ab95dbf74@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  9 Oct 2018 22:16:51 +0200
+Subject: [Buildroot] [PATCH v2,1/2] jasper: update license
+Message-ID: <20181009201652.17189-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add hash for license file and use SPDX short term identifier
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Split patch in two: one for the license, the other one for bumping
+   the version
 
-On 9/10/18 15:21, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> glibc fixed a bug, that defined FPU capabilities not
-> available for MIPS without FPU. So add --no-fpenvironment
-> to the configuration options for this case.
+ package/jasper/jasper.hash | 1 +
+ package/jasper/jasper.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
- The commit message is still very vague. I think I understand it though,
-something like:
-
-On MIPS soft-float, glibc defines some FPU capabilities in fpenv that don't
-actually exist. This is a bug that has been fixed in glibc but not yet released.
-Therefore, pass --no-fpenvironment to disable floating-point operations entirely.
-
- It would also be nice to point to the glibc bug.
-
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
-> Changes v1 -> v2:
->    - put all conditions in one ifeq statement (Thomas Petazzoni)
-> 	
->  package/poco/poco.mk | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-> index 018344d5c7..af41d36ff7 100644
-> --- a/package/poco/poco.mk
-> +++ b/package/poco/poco.mk
-> @@ -42,6 +42,11 @@ ifeq ($(BR2_sh4a)$(BR2_nios2),y)
->  POCO_CONF_OPTS += --no-fpenvironment
->  endif
->  
-> +# MIPS without FPU
-> +ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el):$(BR2_MIPS_SOFT_FLOAT),y:y)
-
- BR2_MIPS_SOFT_FLOAT is only defined on MIPS, so it is sufficient to do
-
-ifeq ($(BR2_MIPS_SOFT_FLOAT),y)
-
- However, since this is about a glibc bug, shouldn't it check for a glibc
-toolchain as well?
-
- Regards,
- Arnout
-
-> +POCO_CONF_OPTS += --no-fpenvironment
-> +endif
-> +
->  ifeq ($(BR2_STATIC_LIBS),y)
->  POCO_MAKE_TARGET = static_release
->  else ifeq ($(BR2_SHARED_LIBS),y)
-> 
-
+diff --git a/package/jasper/jasper.hash b/package/jasper/jasper.hash
+index b2b82178eb..8c4f2453ad 100644
+--- a/package/jasper/jasper.hash
++++ b/package/jasper/jasper.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256 b50413b41bfc82ae419298b41eadcde1aa31f362fb9dc2ac089e5cbc19f60c24  jasper-version-2.0.13.tar.gz
++sha256 4ad1bb42aff888c4403d792e6e2c5f1716d6c279fea70b296333c9d577d30b81  LICENSE
+diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
+index 2aa3f9d554..9dc46b18d6 100644
+--- a/package/jasper/jasper.mk
++++ b/package/jasper/jasper.mk
+@@ -7,7 +7,7 @@
+ JASPER_VERSION = version-2.0.13
+ JASPER_SITE = $(call github,mdadams,jasper,$(JASPER_VERSION))
+ JASPER_INSTALL_STAGING = YES
+-JASPER_LICENSE = JasPer License Version 2.0
++JASPER_LICENSE = JasPer-2.0
+ JASPER_LICENSE_FILES = LICENSE
+ JASPER_SUPPORTS_IN_SOURCE_BUILD = NO
+ JASPER_CONF_OPTS = \
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.17.1
