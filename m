@@ -1,41 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 9 Oct 2018 21:27:22 +0200
-Subject: [Buildroot] [PATCH 2/4] python-ply: new package
-In-Reply-To: <20180922193631.14369-2-asafka7@gmail.com>
-References: <20180922193631.14369-1-asafka7@gmail.com>
- <20180922193631.14369-2-asafka7@gmail.com>
-Message-ID: <20181009212722.4ab34b54@windsurf>
+From: Alexey Brodkin <alexey.brodkin@synopsys.com>
+Date: Tue,  9 Oct 2018 22:33:40 +0300
+Subject: [Buildroot] [PATCH] systemd: Build with LTO
+Message-ID: <20181009193340.26242-1-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Usage of LTO allows to shave off some size of the binaries.
+For example libsystemd for Aarch64:
+  libsystemd.so.0.23.0-LTO	- 467K
+  libsystemd.so.0.23.0-no-LTO	- 523K
 
-Thanks for this patch. I've applied to master, with one change, see
-below.
+Build-tetsed for ARC and ARM, run-tested on ARC.
 
-On Sat, 22 Sep 2018 22:36:29 +0300, Asaf Kahlon wrote:
+Prerequisite is fix for Meson:
+https://patchwork.ozlabs.org/patch/981496/
 
-> +PYTHON_PLY_LICENSE = BSD
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Jeremy Rosen <jeremy.rosen@smile.fr>
 
-"BSD" as a value for license is always wrong, because it's not specific
-enough. We need to know the variant of BSD license being used.
+---
+ package/systemd/systemd.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Yegor: the scanpypi script needs to be updated to not put "BSD", but
-something that includes a warning that ensures that the user of
-scanpypi will know he will have to do additional research to find what
-is the exact license. I think we discussed this already, but we had
-some similar discussion on scancpan with Fran?ois, so I'm not sure to
-remember :)
-
-In this case, the license was BSD-3-Clause. Applied with this fixed.
-
-Thanks!
-
-Thomas
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 4813496670..ebd29c89b0 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -38,7 +38,8 @@ SYSTEMD_CONF_OPTS += \
+ 	-Dsulogin-path=/usr/sbin/sulogin \
+ 	-Dmount-path=/usr/bin/mount \
+ 	-Dumount-path=/usr/bin/umount \
+-	-Dnobody-group=nogroup
++	-Dnobody-group=nogroup \
++	-Db_lto=true
+ 
+ # disable unsupported features for non-glibc toolchains
+ ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.16.2
