@@ -1,69 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 9 Oct 2018 08:53:04 +0200
-Subject: [Buildroot] [git commit] leveldb: fix parallel build
-Message-ID: <20181009065213.245268E56F@busybox.osuosl.org>
+Date: Tue, 9 Oct 2018 08:53:00 +0200
+Subject: [Buildroot] [git commit] file: explicitly disable libseccomp
+ support for host
+Message-ID: <20181009065213.1DD5E8E56E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=abba4e701246f69bc22ca9045e9932abfe9228e9
+commit: https://git.buildroot.net/buildroot/commit/?id=a609f83296a27f7677ba53ba40d60c9da21237a9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Build of leveldb sometimes fails on:
-Fatal error: can't create out-shared/db/db_bench.o: No such file or directory
-
-Patch is not upstreamable as upstream switched to cmake
-
 Fixes:
- - http://autobuild.buildroot.net/results/945bb8096c1f98f307161a6def5a9f7f25b2454a
+http://autobuild.buildroot.net/results/8a2/8a2ea2e4426416447705492237f526fc84b595d7/
+http://autobuild.buildroot.net/results/a1f/a1f2369d31c2387efdec908877e0bcaa728b5aeb/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+file-5.33 added optional seccomp support, but the filters did not cover all
+needed syscalls, leading to errors when the freshly built host-file is
+executed as part of the build on distributions with seccomp support (E.G.
+Arch Linux):
+
+checking for seccomp_init in -lseccomp... yes
+..
+../src/file -C -m magic
+make[3]: *** [Makefile:764: magic.mgc] Bad system call
+
+This has been fixed in file-5.34, but it anyway makes sense to explicitly
+disable libseccomp support for consistency as we do not need it for the host
+build.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/leveldb/0003-fix-parallel-build.patch | 36 +++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ package/file/file.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/leveldb/0003-fix-parallel-build.patch b/package/leveldb/0003-fix-parallel-build.patch
-new file mode 100644
-index 0000000000..8aafbc2e02
---- /dev/null
-+++ b/package/leveldb/0003-fix-parallel-build.patch
-@@ -0,0 +1,36 @@
-+From 293e1b08317567b2e479d24530986676ae4d2221 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 8 Oct 2018 23:08:19 +0200
-+Subject: [PATCH] fix parallel build
-+
-+Build of leveldb sometimes fails on:
-+Fatal error: can't create out-shared/db/db_bench.o: No such file or directory
-+
-+Fix this, by creating $(SHARED_OUTDIR) before building
-+(SHARED_OUTDIR)/db/db_bench.o
-+
-+Fixes:
-+ - http://autobuild.buildroot.net/results/945bb8096c1f98f307161a6def5a9f7f25b2454a
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: not upstreamable as upstream switched to cmake]
-+---
-+ Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index f7cc7d7..edb56a5 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -386,7 +386,7 @@ $(STATIC_OUTDIR)/write_batch_test:db/write_batch_test.cc $(STATIC_LIBOBJECTS) $(
-+ $(STATIC_OUTDIR)/memenv_test:$(STATIC_OUTDIR)/helpers/memenv/memenv_test.o $(STATIC_OUTDIR)/libmemenv.a $(STATIC_OUTDIR)/libleveldb.a $(TESTHARNESS)
-+ 	$(XCRUN) $(CXX) $(LDFLAGS) $(STATIC_OUTDIR)/helpers/memenv/memenv_test.o $(STATIC_OUTDIR)/libmemenv.a $(STATIC_OUTDIR)/libleveldb.a $(TESTHARNESS) -o $@ $(LIBS)
-+ 
-+-$(SHARED_OUTDIR)/db_bench:$(SHARED_OUTDIR)/db/db_bench.o $(SHARED_LIBS) $(TESTUTIL)
-++$(SHARED_OUTDIR)/db_bench:$(SHARED_OUTDIR) $(SHARED_OUTDIR)/db/db_bench.o $(SHARED_LIBS) $(TESTUTIL)
-+ 	$(XCRUN) $(CXX) $(LDFLAGS) $(CXXFLAGS) $(PLATFORM_SHARED_CFLAGS) $(SHARED_OUTDIR)/db/db_bench.o $(TESTUTIL) $(SHARED_OUTDIR)/$(SHARED_LIB3) -o $@ $(LIBS)
-+ 
-+ .PHONY: run-shared
-+-- 
-+2.17.1
-+
+diff --git a/package/file/file.mk b/package/file/file.mk
+index 42131c4888..b5b12978bc 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
+@@ -12,6 +12,7 @@ FILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ FILE_INSTALL_STAGING = YES
+ FILE_LICENSE = BSD-2-Clause, BSD-4-Clause (one file), BSD-3-Clause (one file)
+ FILE_LICENSE_FILES = COPYING src/mygetopt.h src/vasprintf.c
++HOST_FILE_CONF_OPTS = --disable-libseccomp
+ 
+ ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+ FILE_CONF_OPTS += --enable-libseccomp
