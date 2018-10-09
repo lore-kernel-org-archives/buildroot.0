@@ -1,45 +1,62 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Tue,  9 Oct 2018 19:22:26 +0300
-Subject: [Buildroot] [PATCH 1/1] python-engineio: bump to version 2.3.2
-Message-ID: <20181009162226.7432-1-asafka7@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  9 Oct 2018 19:14:36 +0200
+Subject: [Buildroot] [PATCH 1/1] collectd: fix build with gpsd 3.18
+Message-ID: <20181009171436.4333-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-engineio/python-engineio.hash | 4 ++--
- package/python-engineio/python-engineio.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Add patch to fix call to gps_read
 
-diff --git a/package/python-engineio/python-engineio.hash b/package/python-engineio/python-engineio.hash
-index 35db7e443a..7bf1a49410 100644
---- a/package/python-engineio/python-engineio.hash
-+++ b/package/python-engineio/python-engineio.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/python-engineio/json
--md5	c39f7460f3a3cfaf37933415223d088a  python-engineio-2.3.1.tar.gz
--sha256	f0fb8bbf8fde2da123258d08e0cc404f65a517b31685411ff933e58b8aec3141  python-engineio-2.3.1.tar.gz
-+md5	92d2e1b62083ce8f0dcd8fd905b0dd9d  python-engineio-2.3.2.tar.gz
-+sha256	871f4d022eb9171e380281266ba2aef0759b264ba862350bc94e7a597a98a443  python-engineio-2.3.2.tar.gz
- # Locally computed sha256 checksums
- sha256	c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
-diff --git a/package/python-engineio/python-engineio.mk b/package/python-engineio/python-engineio.mk
-index 06c558d199..e730c39cd2 100644
---- a/package/python-engineio/python-engineio.mk
-+++ b/package/python-engineio/python-engineio.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--PYTHON_ENGINEIO_VERSION = 2.3.1
--PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/f7/20/984649ea01e6aaf5256a6f7280d12c1c00d421d08c4f5660986a7aca7604
-+PYTHON_ENGINEIO_VERSION = 2.3.2
-+PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/66/18/09516793c68e0f7fb759d54c109a09a86e31c3e685eb77884613a1c1a7b3
- PYTHON_ENGINEIO_SETUP_TYPE = setuptools
- PYTHON_ENGINEIO_LICENSE = MIT
- PYTHON_ENGINEIO_LICENSE_FILES = LICENSE
+Fixes:
+ - http://autobuild.buildroot.net/results/63a4f980d7cdb4b0823840f747589803fcd0d69f
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/collectd/0002-gps-fix-gps_read.patch | 33 ++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/collectd/0002-gps-fix-gps_read.patch
+
+diff --git a/package/collectd/0002-gps-fix-gps_read.patch b/package/collectd/0002-gps-fix-gps_read.patch
+new file mode 100644
+index 0000000000..6e1dd839cd
+--- /dev/null
++++ b/package/collectd/0002-gps-fix-gps_read.patch
+@@ -0,0 +1,33 @@
++From 3e369c98213d248fb5821fc29033877e83bf7fe1 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 9 Oct 2018 18:55:00 +0200
++Subject: [PATCH] gps: fix gps_read
++
++gps_read now takes three arguments since version 3.18 of gpsd: see
++http://git.savannah.gnu.org/cgit/gpsd.git/commit/?id=6bba8b329fc7687b15863d30471d5af402467802
++
++Fixes:
++ - http://autobuild.buildroot.net/results/63a4f980d7cdb4b0823840f747589803fcd0d69f
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/collectd/collectd/pull/2946]
++---
++ src/gps.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/gps.c b/src/gps.c
++index 1d32d049..ae3889c9 100644
++--- a/src/gps.c
+++++ b/src/gps.c
++@@ -141,7 +141,7 @@ static void *cgps_thread(void *pData) {
++         continue;
++       }
++ 
++-      if (gps_read(&gpsd_conn) == -1) {
+++      if (gps_read(&gpsd_conn, NULL, 0) == -1) {
++         WARNING("gps plugin: incorrect data! (err_count: %d)", err_count);
++         err_count++;
++ 
++-- 
++2.17.1
++
 -- 
 2.17.1
