@@ -1,75 +1,33 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Wed, 10 Oct 2018 00:46:02 +0300
-Subject: [Buildroot] [PATCH 1/1] libepoxy: update to version 1.5.3,
- convert to Meson
-Message-ID: <20181009214602.121775-1-aperez@igalia.com>
+Date: Wed, 10 Oct 2018 01:08:48 +0300
+Subject: [Buildroot] [PATCH 0/4] webkitgtk: assorted fixes and improvements
+Message-ID: <20181009220852.4309-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This release fixes building with uClibc and symbol lookups for
-drivers which have GLES 3.x support.
+Hi all,
 
-Tarballs do not include a generated "configure" script any more,
-so use Meson to configure the build instead.
+This patch set takes some of the changes proposed along with the update to
+WebKitGTK+ 2.22.x, and improves them to address the review comments. In
+particular, moving the logic to determine whether to enable the JavaScriptCore
+JIT support is much nicer to have in the Kconfig files.
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- package/libepoxy/libepoxy.hash |  4 ++--
- package/libepoxy/libepoxy.mk   | 13 +++++++------
- 2 files changed, 9 insertions(+), 8 deletions(-)
+Best regards,
 
-diff --git a/package/libepoxy/libepoxy.hash b/package/libepoxy/libepoxy.hash
-index dd1b13487b..d574a04455 100644
---- a/package/libepoxy/libepoxy.hash
-+++ b/package/libepoxy/libepoxy.hash
-@@ -1,5 +1,5 @@
--# From http://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.2.sha256sum
--sha256 a9562386519eb3fd7f03209f279f697a8cba520d3c155d6e253c3e138beca7d8  libepoxy-1.5.2.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.3.sha256sum
-+sha256 002958c5528321edd53440235d3c44e71b5b1e09b9177e8daf677450b6c4433d  libepoxy-1.5.3.tar.xz
- 
- # Hashes for license files:
- sha256 8d5144666f9c4df9bbd69b8900086d5979259152a1060421cdcc0fb9061a1c12  COPYING
-diff --git a/package/libepoxy/libepoxy.mk b/package/libepoxy/libepoxy.mk
-index b1731a22c5..deb3c1ecbb 100644
---- a/package/libepoxy/libepoxy.mk
-+++ b/package/libepoxy/libepoxy.mk
-@@ -5,26 +5,27 @@
- ################################################################################
- 
- LIBEPOXY_VERSION_MAJOR = 1.5
--LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).2
-+LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).3
- LIBEPOXY_SITE = http://ftp.gnome.org/pub/gnome/sources/libepoxy/$(LIBEPOXY_VERSION_MAJOR)
- LIBEPOXY_SOURCE = libepoxy-$(LIBEPOXY_VERSION).tar.xz
- LIBEPOXY_INSTALL_STAGING = YES
- LIBEPOXY_DEPENDENCIES = host-pkgconf xutil_util-macros
- LIBEPOXY_LICENSE = MIT
- LIBEPOXY_LICENSE_FILES = COPYING
-+LIBEPOXY_CONF_OPTS += -Ddocs=false -Dtests=false
- 
- ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
--LIBEPOXY_CONF_OPTS += --enable-egl
-+LIBEPOXY_CONF_OPTS += -Degl=yes
- LIBEPOXY_DEPENDENCIES += libegl
- else
--LIBEPOXY_CONF_OPTS += --disable-egl
-+LIBEPOXY_CONF_OPTS += -Degl=no
- endif
- 
- ifeq ($(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_XLIB_LIBX11),yy)
--LIBEPOXY_CONF_OPTS += --enable-glx
-+LIBEPOXY_CONF_OPTS += -Dglx=yes -Dx11=true
- LIBEPOXY_DEPENDENCIES += libgl xlib_libX11
- else
--LIBEPOXY_CONF_OPTS += --disable-glx
-+LIBEPOXY_CONF_OPTS += -Dglx=no -Dx11=false
- endif
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
+
+
+Adrian Perez de Castro (4):
+  webkitgtk: move JSC JIT selection logic to kconfig
+  webkitgtk: enable package for aarch64
+  webkitgtk: enable JIT support on 32-bit MIPS
+  webkitgtk: explicitly set USE_GSTREAMER_GL build option
+
+ package/webkitgtk/Config.in    | 18 ++++++++++++++++++
+ package/webkitgtk/webkitgtk.mk | 11 ++++++++---
+ 2 files changed, 26 insertions(+), 3 deletions(-)
+
 -- 
 2.19.1
