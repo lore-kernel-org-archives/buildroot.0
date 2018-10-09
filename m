@@ -1,82 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 9 Oct 2018 08:53:09 +0200
-Subject: [Buildroot] [git commit] brltty: use gcc instead of ld to link
- shared objects
-Message-ID: <20181009065213.2E8738E56E@busybox.osuosl.org>
+Date: Tue, 9 Oct 2018 08:59:01 +0200
+Subject: [Buildroot] [PATCH v2,1/1] nmap: update license
+In-Reply-To: <20181008205222.4922-1-fontaine.fabrice@gmail.com>
+References: <20181008205222.4922-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181009085901.77e9727b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9143c217213542574586c0e6a9f003e822633917
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Bump to version 5.6 has reintroduced the issue fixed by patch 854093 on
-version 5.5.
+On Mon,  8 Oct 2018 22:52:22 +0200, Fabrice Fontaine wrote:
+> nmap is licensed under GPL-2.0 but with additional restrictions (see
+> COPYING, especially the "IMPORTANT NMAP LICENSE TERMS" part).
+> 
+> So, following advices of Yann and Arnout (see
+> https://patchwork.ozlabs.org/patch/979081), set license to nmap license
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/nmap/nmap.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Indeed, third patch was merged upstream but it was then reverted:
-https://github.com/brltty/brltty/commit/9e7d62c869d3c1cbe12dda8b0291a4692c193416
+Applied to master, thanks.
 
-Moreover, since commit 3a2e3f6fa5ef0a210ffeba5ed05c79965d0cc3c7, MKOBJ
-was renamed into MKREL. So, patch again brltty, overwrite
-MKREL to use "gcc -shared -o" instead of "ld -r -o" if gcc is available
-(as suggested by Arnout: https://patchwork.ozlabs.org/patch/972614).
-
-Fixes:
- - http://autobuild.buildroot.org/results/31f682838b3d3b2c7103b5c51f2aba0b89d4f630
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0002-Fix-linking-error-on-mips64el.patch       | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
-
-diff --git a/package/brltty/0002-Fix-linking-error-on-mips64el.patch b/package/brltty/0002-Fix-linking-error-on-mips64el.patch
-new file mode 100644
-index 0000000000..4882a22608
---- /dev/null
-+++ b/package/brltty/0002-Fix-linking-error-on-mips64el.patch
-@@ -0,0 +1,42 @@
-+From ddb06335935ef1458fe98f99cdc5d5fe6757fd02 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 3 Oct 2018 19:06:40 +0200
-+Subject: [PATCH] Fix linking error on mips64el
-+
-+Patch that was fixing build on mips64el was reverted:
-+https://github.com/brltty/brltty/commit/9e7d62c869d3c1cbe12dda8b0291a4692c193416
-+
-+So fix the issue again, this time by checking if $(GCC) is available as
-+suggested by Arnout during review of buildroot patch:
-+https://patchwork.ozlabs.org/patch/972614
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/31f682838b3d3b2c7103b5c51f2aba0b89d4f630
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/brltty/brltty/pull/149]
-+---
-+ configure.ac | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 1e2774abf..a488d3d52 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -481,7 +481,12 @@ AC_CACHE_CHECK([for make relocatable object command], [brltty_cv_prog_make_objec
-+ case "${host_os}"
-+ in
-+    *)
-+-      brltty_cv_prog_make_object_relocatable="\$(LD) -r -o"
-++      if test "${GCC}" = "yes"
-++      then
-++         brltty_cv_prog_make_object_relocatable="\$(CC) -shared -o"
-++      else
-++         brltty_cv_prog_make_object_relocatable="\$(LD) -r -o"
-++      fi
-+       ;;
-+ esac])
-+ MKREL="${brltty_cv_prog_make_object_relocatable}"
-+-- 
-+2.17.1
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
