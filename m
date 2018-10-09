@@ -1,47 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 9 Oct 2018 15:13:29 +0200
-Subject: [Buildroot] [git commit] package/asterisk: add optional spandsp
- support
-Message-ID: <20181009131225.1D5738E62F@busybox.osuosl.org>
+Date: Tue, 9 Oct 2018 15:14:21 +0200
+Subject: [Buildroot] [PATCH 3/4] package/spandsp: new package
+In-Reply-To: <20181003131358.28002-3-bernd.kuhls@t-online.de>
+References: <20181003131358.28002-1-bernd.kuhls@t-online.de>
+ <20181003131358.28002-3-bernd.kuhls@t-online.de>
+Message-ID: <20181009151421.396cb25a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f0b5c2b8e3e7c5bc4f27d6d6ca43def085a55b00
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/asterisk/asterisk.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+On Wed,  3 Oct 2018 15:13:57 +0200, Bernd Kuhls wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> [Bernd:
+>  - bumped version to 20180108
+>  - removed 0001-fix-msse4.x.patch, applied upstream
+>  - removed autoreconf after patch removal
+>  - added license hash (Arnout)
+>  - added SPDX license codes (Arnout)]
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/Config.in            |  1 +
+>  package/spandsp/Config.in    |  9 +++++++++
+>  package/spandsp/spandsp.hash |  3 +++
+>  package/spandsp/spandsp.mk   | 27 +++++++++++++++++++++++++++
+>  4 files changed, 40 insertions(+)
+>  create mode 100644 package/spandsp/Config.in
+>  create mode 100644 package/spandsp/spandsp.hash
+>  create mode 100644 package/spandsp/spandsp.mk
 
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index ea779cc8f6..4ed85743b0 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -84,7 +84,6 @@ ASTERISK_CONF_OPTS = \
- 	--without-resample \
- 	--without-sdl \
- 	--without-SDL_image \
--	--without-spandsp \
- 	--without-sqlite \
- 	--without-suppserv \
- 	--without-tds \
-@@ -229,6 +228,13 @@ else
- ASTERISK_CONF_OPTS += --without-ssl
- endif
- 
-+ifeq ($(BR2_PACKAGE_SPANDSP),y)
-+ASTERISK_DEPENDENCIES += spandsp
-+ASTERISK_CONF_OPTS += --with-spandsp
-+else
-+ASTERISK_CONF_OPTS += --without-spandsp
-+endif
-+
- ifeq ($(BR2_PACKAGE_SPEEX)$(BR2_PACKAGE_SPEEXDSP),yy)
- ASTERISK_DEPENDENCIES += speex
- ASTERISK_CONF_OPTS += --with-speex --with-speexdsp
+I am wondering why a signal processing library for telephony needs the
+TIFF library, but OK, it seems to be the case. I've applied, after
+adding the missing entry to the DEVELOPERS file.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
