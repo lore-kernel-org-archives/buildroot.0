@@ -1,41 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 9 Oct 2018 14:45:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gettext-tiny: Add new package
-In-Reply-To: <20180821142226.2309-1-vadim4j@gmail.com>
-References: <20180821142226.2309-1-vadim4j@gmail.com>
-Message-ID: <20181009144504.0ba21729@windsurf>
+Date: Tue, 9 Oct 2018 14:46:57 +0200
+Subject: [Buildroot] [git commit] perl-plack: re-indent Config.in help text
+Message-ID: <20181009124615.5951E8E5FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Vadim,
+commit: https://git.buildroot.net/buildroot/commit/?id=335b4ee2ce96220bcc3e047b033316c650c7d9d3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 21 Aug 2018 17:22:26 +0300, Vadim Kochan wrote:
-> From: Vadim Kochan <vadim.kochan@petcube.com>
-> 
-> Add gettext-tiny package from the sabotage-linux project:
-> 
-> gettext-tiny provides lightweight replacements for tools typically used
-> from the GNU gettext suite, which is incredibly bloated and takes a lot
-> of time to build (in the order of an hour on slow devices). the most
-> notable component is msgfmt which is used to create binary translation
-> files in the .mo format out of textual input files in .po format. this
-> is the most important tool for building software from source, because it
-> is used from the build processes of many software packages.
-> 
-> Signed-off-by: Vadim Kochan <vadim.kochan@petcube.com>
+Fixes the following check-package warning:
 
-Have you been able to make further progress on packaging gettext-tiny
-as an alternative to the full gettext ? This is definitely something
-I'd like to see integrated in Buildroot, so let us know if you are
-still working or not, or if someone else needs to step up/help.
+package/perl-plack/Config.in:18: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
 
-Thanks a lot,
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/perl-plack/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/perl-plack/Config.in b/package/perl-plack/Config.in
+index b7f5ecf1c6..50d56e439c 100644
+--- a/package/perl-plack/Config.in
++++ b/package/perl-plack/Config.in
+@@ -15,6 +15,7 @@ config BR2_PACKAGE_PERL_PLACK
+ 	select BR2_PACKAGE_PERL_URI
+ 	select BR2_PACKAGE_PERL_WWW_FORM_URLENCODED
+ 	help
+-	  Perl Superglue for Web frameworks and Web Servers (PSGI toolkit)
++	  Perl Superglue for Web frameworks and Web Servers (PSGI
++	  toolkit)
+ 
+ 	  https://github.com/plack/Plack
