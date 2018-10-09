@@ -1,54 +1,41 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 09 Oct 2018 15:07:15 +0300
-Subject: [Buildroot] [PATCH] glibc: bump version for more post-2.28 fixes
-In-Reply-To: <20181009114552.27794-1-yegorslists@googlemail.com>
-References: <20181009114552.27794-1-yegorslists@googlemail.com>
-Message-ID: <8736tfmih8.fsf@tkos.co.il>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Tue,  9 Oct 2018 14:23:26 +0200
+Subject: [Buildroot] [PATCH] poco: disable fpenvironment for MIPS without FPU
+Message-ID: <20181009122326.12174-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yegor,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-yegorslists at googlemail.com writes:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
->
-> This version bump fixes following issue:
->
-> sysdeps/ieee754/soft-fp: ignore maybe-uninitialized with -O [BZ
-> #19444]
+glibc fixed a bug, that defined FPU capabilities not
+available for MIPS without FPU. So add --no-fpenvironment
+to the configuration options for this case.
 
-Are you sure? Upstream commit 4a06ceea33ec is not included in the
-release/2.28/master branch as of 5473739a7b44, which is the version you
-bump to.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/poco/poco.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-
-[snip]
-
-> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-> index 708c22f723..526bca8146 100644
-> --- a/package/glibc/glibc.mk
-> +++ b/package/glibc/glibc.mk
-> @@ -10,7 +10,7 @@ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VE
->  else
->  # Generate version string using:
->  #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
-> -GLIBC_VERSION = glibc-2.28-18-g2339d6a55eb7a7e040ae888e906adc49eeb59eab
-> +GLIBC_VERSION = 5a580643111ef6081be7b4c7bd1997a5447c903f
-
-The hash prefix is useful, please keep it. Should be 'glibc-2.28-21-g'
-for this commit. This is taken from the output of 'git describe'.
-
->  # Upstream doesn't officially provide an https download link.
->  # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
->  # sometimes the connection times out. So use an unofficial github mirror.
-
-baruch
-
---
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/package/poco/poco.mk b/package/poco/poco.mk
+index 018344d5c7..1f3eabd009 100644
+--- a/package/poco/poco.mk
++++ b/package/poco/poco.mk
+@@ -42,6 +42,13 @@ ifeq ($(BR2_sh4a)$(BR2_nios2),y)
+ POCO_CONF_OPTS += --no-fpenvironment
+ endif
+ 
++# MIPS without FPU
++ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
++ifeq ($(BR2_MIPS_SOFT_FLOAT),y)
++POCO_CONF_OPTS += --no-fpenvironment
++endif
++endif
++
+ ifeq ($(BR2_STATIC_LIBS),y)
+ POCO_MAKE_TARGET = static_release
+ else ifeq ($(BR2_SHARED_LIBS),y)
+-- 
+2.17.0
