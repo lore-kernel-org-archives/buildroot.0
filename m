@@ -1,83 +1,45 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  9 Oct 2018 19:16:39 +0300
-Subject: [Buildroot] [PATCH] gpsd: fix greis driver build with reconfigure
- disabled
-Message-ID: <cb456daa92d4ccbb27a8fcef504f86a77a3a0e74.1539101799.git.baruch@tkos.co.il>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Tue,  9 Oct 2018 19:22:26 +0300
+Subject: [Buildroot] [PATCH 1/1] python-engineio: bump to version 2.3.2
+Message-ID: <20181009162226.7432-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch fixing undefined function build failure when reconfigure
-support is disabled.
-
-Fixes:
-http://autobuild.buildroot.net/results/a13/a13a5d852c83cd1fc9f2d1fc2b7302db515278b8/
-http://autobuild.buildroot.net/results/185/18599ea12a35b9715a67c1f4e5c4e56906235c94/
-http://autobuild.buildroot.net/results/c00/c00d22a6dcadb82a19afab6eacea654d3c41b4c5/
-
-Cc: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- ...-fix-build-with-reconfigure-disabled.patch | 49 +++++++++++++++++++
- 1 file changed, 49 insertions(+)
- create mode 100644 package/gpsd/0002-driver_greis-fix-build-with-reconfigure-disabled.patch
+ package/python-engineio/python-engineio.hash | 4 ++--
+ package/python-engineio/python-engineio.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gpsd/0002-driver_greis-fix-build-with-reconfigure-disabled.patch b/package/gpsd/0002-driver_greis-fix-build-with-reconfigure-disabled.patch
-new file mode 100644
-index 000000000000..77badb31cf03
---- /dev/null
-+++ b/package/gpsd/0002-driver_greis-fix-build-with-reconfigure-disabled.patch
-@@ -0,0 +1,49 @@
-+From 21a752e827bc9e14de4b4c26aef4d0db7403a5b7 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Tue, 9 Oct 2018 15:22:46 +0300
-+Subject: [PATCH] driver_greis: fix build with reconfigure disabled
-+
-+Unhide the definition of greis_parse_input and greis_event_hook since
-+they are used unconditionally.
-+
-+Fixes the following build failure:
-+
-+driver_greis.c:969:25: error: 'greis_parse_input' undeclared here (not in a function); did you mean 'generic_parse_input'?
-+     .parse_packet     = greis_parse_input,
-+                         ^~~~~~~~~~~~~~~~~
-+                         generic_parse_input
-+driver_greis.c:973:25: error: 'greis_event_hook' undeclared here (not in a function)
-+     .event_hook       = greis_event_hook,
-+                         ^~~~~~~~~~~~~~~~
-+
-+Cc: Gregory Fong <gregory.fong@virginorbit.com>
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: http://lists.nongnu.org/archive/html/gpsd-dev/2018-10/msg00012.html
-+
-+ driver_greis.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/driver_greis.c b/driver_greis.c
-+index 9eb148fc76cd..222bd9daf020 100644
-+--- a/driver_greis.c
-++++ b/driver_greis.c
-+@@ -797,7 +797,6 @@ static ssize_t greis_control_send(struct gps_device_t *session,
-+ }
-+ #endif /* CONTROLSEND_ENABLE */
-+ 
-+-#ifdef RECONFIGURE_ENABLE
-+ static void greis_event_hook(struct gps_device_t *session, event_t event)
-+ {
-+     if (session->context->readonly)
-+@@ -870,6 +869,7 @@ static gps_mask_t greis_parse_input(struct gps_device_t *session)
-+ 	return 0;
-+ }
-+ 
-++#ifdef RECONFIGURE_ENABLE
-+ /**
-+  * Set port operating mode, speed, parity, stopbits etc. here.
-+  * Note: parity is passed as 'N'/'E'/'O', but you should program
-+-- 
-+2.19.1
-+
+diff --git a/package/python-engineio/python-engineio.hash b/package/python-engineio/python-engineio.hash
+index 35db7e443a..7bf1a49410 100644
+--- a/package/python-engineio/python-engineio.hash
++++ b/package/python-engineio/python-engineio.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/python-engineio/json
+-md5	c39f7460f3a3cfaf37933415223d088a  python-engineio-2.3.1.tar.gz
+-sha256	f0fb8bbf8fde2da123258d08e0cc404f65a517b31685411ff933e58b8aec3141  python-engineio-2.3.1.tar.gz
++md5	92d2e1b62083ce8f0dcd8fd905b0dd9d  python-engineio-2.3.2.tar.gz
++sha256	871f4d022eb9171e380281266ba2aef0759b264ba862350bc94e7a597a98a443  python-engineio-2.3.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256	c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
+diff --git a/package/python-engineio/python-engineio.mk b/package/python-engineio/python-engineio.mk
+index 06c558d199..e730c39cd2 100644
+--- a/package/python-engineio/python-engineio.mk
++++ b/package/python-engineio/python-engineio.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-PYTHON_ENGINEIO_VERSION = 2.3.1
+-PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/f7/20/984649ea01e6aaf5256a6f7280d12c1c00d421d08c4f5660986a7aca7604
++PYTHON_ENGINEIO_VERSION = 2.3.2
++PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/66/18/09516793c68e0f7fb759d54c109a09a86e31c3e685eb77884613a1c1a7b3
+ PYTHON_ENGINEIO_SETUP_TYPE = setuptools
+ PYTHON_ENGINEIO_LICENSE = MIT
+ PYTHON_ENGINEIO_LICENSE_FILES = LICENSE
 -- 
-2.19.1
+2.17.1
