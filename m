@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 9 Oct 2018 22:01:23 +0200
-Subject: [Buildroot] [PATCH v3 2/3] package/waffle: new package
-In-Reply-To: <20180922105626.22626-2-romain.naour@gmail.com>
-References: <20180922105626.22626-1-romain.naour@gmail.com>
- <20180922105626.22626-2-romain.naour@gmail.com>
-Message-ID: <20181009220123.09e53085@windsurf>
+Date: Tue, 9 Oct 2018 22:03:28 +0200
+Subject: [Buildroot] [PATCH 1/1] jasper: bump to version 2.0.14
+In-Reply-To: <20181009191308.22634-1-fontaine.fabrice@gmail.com>
+References: <20181009191308.22634-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181009220328.66696cd9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,39 +12,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 22 Sep 2018 12:56:25 +0200, Romain Naour wrote:
-> waffle has four "backends", each having their own dependencies.
-> At least one "backend" must be enabled, otherwise Waffle will refuse to
-> build. The "backends" are:
+On Tue,  9 Oct 2018 21:13:08 +0200, Fabrice Fontaine wrote:
+> - Update license to use SPDX short identifier
+> - Add hash for license file
 > 
->  - glx, which needs full OpenGL + x11-xcb
->  - wayland, which needs wayland-client, wayland-egl and EGL
->  - x11-egl, which needs x11-xcb and EGL
->  - gbm, which needs gbm, libudev and EGL
-> 
-> Backport an upstream patch fixing a build issue with musl toolchains.
-> Add a new patch fixing build with Wayand without X11.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
-> v3: rework waffle backends dependencies (ThomasP)
-> ---
->  DEVELOPERS                                         |  1 +
->  package/Config.in                                  |  1 +
->  ...-threads-Use-PTHREAD_MUTEX_RECURSIVE-by-d.patch | 54 ++++++++++++++++++++++
->  ...rd-cflags-from-.pc-files-to-waffle-cflags.patch | 40 ++++++++++++++++
->  package/waffle/Config.in                           | 48 +++++++++++++++++++
->  package/waffle/waffle.hash                         |  3 ++
->  package/waffle/waffle.mk                           | 48 +++++++++++++++++++
->  7 files changed, 195 insertions(+)
->  create mode 100644 package/waffle/0001-third_party-threads-Use-PTHREAD_MUTEX_RECURSIVE-by-d.patch
->  create mode 100644 package/waffle/0002-cmake-forward-cflags-from-.pc-files-to-waffle-cflags.patch
->  create mode 100644 package/waffle/Config.in
->  create mode 100644 package/waffle/waffle.hash
->  create mode 100644 package/waffle/waffle.mk
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-I dropped the dependency on libgles, since there is no such build
-requirement in waffle. And then applied to master, thanks!
+Could you do this in two separate commits?
+
+Fixing the SPDX tag (and possibly adding the license file hash) should
+be one commit, that we can then backport to 2018.02.x.
+
+Bumping should come as a separate patch, that will only be applied to
+master.
+
+Thanks!
 
 Thomas
 -- 
