@@ -1,136 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 9 Oct 2018 14:48:18 +0200
-Subject: [Buildroot] [git commit] squid: bump to version 4.3
-Message-ID: <20181009130112.3B8258E60D@busybox.osuosl.org>
+From: Jagan Teki <jagan@amarulasolutions.com>
+Date: Tue, 9 Oct 2018 18:32:56 +0530
+Subject: [Buildroot] Qt5 build issues with glibc arm64 buildroot compiler
+In-Reply-To: <e62aebb9-3850-4251-1094-f3e79f68ff26@mind.be>
+References: <CAMty3ZCAaycY2gazxhYwi1DU_E9tyYP71_ewzstFoba02wTqcw@mail.gmail.com>
+ <20181008090308.3c5daa83@windsurf>
+ <CAMty3ZDdKsxbRFaPo3JSTH_81O4MvDO5cki6PciN0FGgq+zT4Q@mail.gmail.com>
+ <20181008210426.320c927d@gmx.net>
+ <e62aebb9-3850-4251-1094-f3e79f68ff26@mind.be>
+Message-ID: <CAMty3ZBPzoPpHjuLOBW_U8=2BX46a0rarWA2F+Pez9UftiLtiw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=419c47a2135d6a72d18efef921c08b72f8f080f1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, Oct 9, 2018 at 12:57 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 8/10/18 21:04, Peter Seiderer wrote:
+> > Hello Jagan,
+> >
+> > On Mon, 8 Oct 2018 13:03:05 +0530, Jagan Teki <jagan@amarulasolutions.com> wrote:
+> >
+> >> On Mon, Oct 8, 2018 at 12:33 PM Thomas Petazzoni
+> >> <thomas.petazzoni@bootlin.com> wrote:
+> >>>
+> >>> Hello Jagan,
+> >>>
+> >>> On Mon, 8 Oct 2018 11:51:35 +0530, Jagan Teki wrote:
+> >>>> Hello,
+> >>>>
+> >>>> Any one tried of building Qt5 on arm64 with glibc buildroot native
+> >>>> compiler. I'm observing build issues as below, let me know If I missed
+> >>>> something?
+> >>>>
+> >>>> BR2_TOOLCHAIN_BUILDROOT_GLIBC
+> >>>> BR2_TOOLCHAIN_BUILDROOT_CXX
+> >>>> BR2_PACKAGE_QT5
+> >>>> BR2_PACKAGE_QT5BASE_EXAMPLES
+> >>>> BR2_PACKAGE_QT5BASE_GUI
+> >>>> BR2_PACKAGE_QT5BASE_EGLFS
+> >>>
+> >>> Could you provide an actual Buildroot .config file ? Indeed the above
+> >>> config snippet is impossible: BR2_PACKAGE_QT5BASE_EGLFS requires an
+> >>> OpenGL implementation, and your list of config options has none
+> >>> selected.
+> >>
+> >> Yes, OpenGL is selected. please see below .config
+> >
+> > Your given defconfig compiles qt5base without problems here (using
+> > buildroot git master)...
+>
+>  Same here. Looks like a changed config without make clean.
 
-Drop get_certificate test avoidance patch; upstream made the test cross
-compile friendly in commit 958ae827cabf (Fix cross-compile issues with
-SSL_get_certificate())
-
-Drop the patch adding <time.h>; the code does not call time() anymore.
-
-Restore netfilter support under musl libc. Squid build fine with current
-musl version.
-
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/squid/0001-assume-get-certificate-ok.patch | 21 ----------------
- package/squid/0002-missing-include-time_h.patch    | 28 ----------------------
- package/squid/squid.hash                           |  8 +++----
- package/squid/squid.mk                             |  6 ++---
- 4 files changed, 6 insertions(+), 57 deletions(-)
-
-diff --git a/package/squid/0001-assume-get-certificate-ok.patch b/package/squid/0001-assume-get-certificate-ok.patch
-deleted file mode 100644
-index d3c075a59a..0000000000
---- a/package/squid/0001-assume-get-certificate-ok.patch
-+++ /dev/null
-@@ -1,21 +0,0 @@
--The openssl get_certificate working test isn't cross compile friendly.
--Just assume it works ok since we're using a modern OpenSSL version.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--[Bernd: Rebased for 4.2]
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--diff -Nura squid-3.5.1.orig/configure.ac squid-3.5.1/configure.ac
----- squid-3.5.1.orig/configure.ac	2015-01-27 11:09:15.035711981 -0300
--+++ squid-3.5.1/configure.ac	2015-01-27 11:09:25.829084482 -0300
--@@ -1377,10 +1377,6 @@
--       ])
--     SQUID_STATE_ROLLBACK(check_SSL_CTX_get0_certificate)
-- 
---    # check for other specific broken implementations
---    if test "x$missing_SSL_CTX_get0_certificate" = "xyes"; then
---      SQUID_CHECK_OPENSSL_GETCERTIFICATE_WORKS
---    fi
--     SQUID_CHECK_OPENSSL_CONST_SSL_METHOD
--     SQUID_CHECK_OPENSSL_CONST_CRYPTO_EX_DATA
--     SQUID_CHECK_OPENSSL_CONST_SSL_SESSION_CB_ARG
-diff --git a/package/squid/0002-missing-include-time_h.patch b/package/squid/0002-missing-include-time_h.patch
-deleted file mode 100644
-index 18b3ab3b55..0000000000
---- a/package/squid/0002-missing-include-time_h.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--ipc/Kid.cc: add missing include of time.h
--
--Function time() comes from <time.h>, so add the necessary include.
--This fixes compilation on some configurations, for example
--http://autobuild.buildroot.net/results/b33/b33e1f41e50b6e7ac3e30806b9a617d451bc27b4/
--
--Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
--Upstream-status: submitted (http://bugs.squid-cache.org/show_bug.cgi?id=3967)
--
-----
-- src/ipc/Kid.cc |  4 ++++
-- 1 files changed, 4 insertions(+), 0 deletions(-)
--
--
--diff --git a/src/ipc/Kid.cc b/src/ipc/Kid.cc
----- a/src/ipc/Kid.cc
--+++ b/src/ipc/Kid.cc
--@@ -11,6 +11,10 @@
-- #include <sys/wait.h>
-- #endif
-- 
--+#if HAVE_TIME_H
--+#include <time.h>
--+#endif
--+
-- int TheProcessKind = pkOther;
-- 
-- Kid::Kid():
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index 47c7e1bb21..195477359a 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,6 +1,6 @@
--# From http://www.squid-cache.org/Versions/v4/squid-4.2.tar.xz.asc
--md5 2cf3f5f183d04322d798f98ea5ead43f squid-4.2.tar.xz
--sha1 77fd6f06e6028780faf85ba7e7e9aef0922e9dc0 squid-4.2.tar.xz
-+# From http://www.squid-cache.org/Versions/v4/squid-4.3.tar.xz.asc
-+md5 ebb67abaec4db9d298c0edd8e1ffaca4 squid-4.3.tar.xz
-+sha1 690540e7d0904e3959557f8beca45dbac1c94578 squid-4.3.tar.xz
- # Locally calculated
--sha256 994807762c59991b32449caf29418fd0ec9d2329746b18eb19bd930b6806d208 squid-4.2.tar.xz
-+sha256 322612ef0544828f6c673a25124b32364fb41ef5e2847e21c89480b5546a4c7c squid-4.3.tar.xz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 6675cab790..9335615559 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -4,13 +4,11 @@
- #
- ################################################################################
- 
--SQUID_VERSION = 4.2
-+SQUID_VERSION = 4.3
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v4
- SQUID_LICENSE = GPL-2.0+
- SQUID_LICENSE_FILES = COPYING
--# For 0001-assume-get-certificate-ok.patch
--SQUID_AUTORECONF = YES
- SQUID_DEPENDENCIES = libcap host-libcap libxml2 host-pkgconf \
- 	$(if $(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),libnetfilter_conntrack)
- SQUID_CONF_ENV = \
-@@ -25,7 +23,7 @@ SQUID_CONF_ENV = \
- 	BUILDCXXFLAGS="$(HOST_CXXFLAGS)"
- SQUID_CONF_OPTS = \
- 	--enable-async-io=8 \
--	$(if $(BR2_TOOLCHAIN_USES_MUSL),--disable-linux-netfilter,--enable-linux-netfilter) \
-+	--enable-linux-netfilter \
- 	--enable-removal-policies="lru,heap" \
- 	--with-filedescriptors=1024 \
- 	--disable-ident-lookups \
+rebase to master build work for me, sorry for missing that. thanks for
+all who participate this thread.
