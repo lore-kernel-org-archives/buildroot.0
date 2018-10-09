@@ -1,46 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 9 Oct 2018 15:40:53 +0200
-Subject: [Buildroot] [PATCH 2/2] python-pigpio: new package
-In-Reply-To: <20180928180034.6543-2-grzegorz@blach.pl>
-References: <20180928180034.6543-1-grzegorz@blach.pl>
- <20180928180034.6543-2-grzegorz@blach.pl>
-Message-ID: <20181009154053.2f01b0a1@windsurf>
+Date: Tue, 9 Oct 2018 15:41:01 +0200
+Subject: [Buildroot] [git commit] package/python-enum34: enable host build
+Message-ID: <20181009134143.BCD77815B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=3ec98f0564dfa68d55b52b2815f8017455993ea9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 28 Sep 2018 20:00:34 +0200, Grzegorz Blach wrote:
-> Pigpio is a Python module for the Raspberry Pi
-> which talks to the pigpio daemon to allow control
-> of the general purpose input outputs (GPIO).
-> 
-> http://abyz.co.uk/rpi/pigpio/python.html
-> 
-> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-> ---
->  DEVELOPERS                               |  1 +
->  package/Config.in                        |  1 +
->  package/python-pigpio/Config.in          |  8 ++++++++
->  package/python-pigpio/python-pigpio.hash |  3 +++
->  package/python-pigpio/python-pigpio.mk   | 13 +++++++++++++
->  5 files changed, 26 insertions(+)
->  create mode 100644 package/python-pigpio/Config.in
->  create mode 100644 package/python-pigpio/python-pigpio.hash
->  create mode 100644 package/python-pigpio/python-pigpio.mk
+This is initially used by the setools package to do offline
+policy analysis using host tools.
 
-I've applied, with just a fix to use the proper SPDX license tag.
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-enum34/python-enum34.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Could you ask the upstream project to add a license file to the
-tarball ? It would be a nice addition.
-
-Thanks a lot,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-enum34/python-enum34.mk b/package/python-enum34/python-enum34.mk
+index c612cb65e2..09d1143ab9 100644
+--- a/package/python-enum34/python-enum34.mk
++++ b/package/python-enum34/python-enum34.mk
+@@ -12,3 +12,4 @@ PYTHON_ENUM34_LICENSE = BSD-3-Clause
+ PYTHON_ENUM34_LICENSE_FILES = enum/LICENSE
+ 
+ $(eval $(python-package))
++$(eval $(host-python-package))
