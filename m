@@ -1,79 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Oct 2018 14:22:59 +0200
-Subject: [Buildroot] [git commit] perl-exporter-tiny: new package
-Message-ID: <20181010122218.A6A5D82285@busybox.osuosl.org>
+Date: Wed, 10 Oct 2018 14:22:27 +0200
+Subject: [Buildroot] [git commit] perl-moo: new package
+Message-ID: <20181010122218.9D0B082285@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc2b892dfe8312511c2a49904b1a9f6588c5385a
+commit: https://git.buildroot.net/buildroot/commit/?id=b10bdca05eaccc5bd3aa70ed80cfe0c8b108218f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/Config.in                                  |  1 +
- package/perl-exporter-tiny/Config.in               |  7 +++++++
- package/perl-exporter-tiny/perl-exporter-tiny.hash |  7 +++++++
- package/perl-exporter-tiny/perl-exporter-tiny.mk   | 13 +++++++++++++
- 4 files changed, 28 insertions(+)
+ package/Config.in              |  1 +
+ package/perl-moo/Config.in     | 11 +++++++++++
+ package/perl-moo/perl-moo.hash |  6 ++++++
+ package/perl-moo/perl-moo.mk   | 13 +++++++++++++
+ 4 files changed, 31 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index fd556f3ad7..7788c1cf3b 100644
+index edea04b0dd..fd556f3ad7 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -697,6 +697,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-dist-checkconflicts/Config.in"
- 	source "package/perl-encode-detect/Config.in"
- 	source "package/perl-encode-locale/Config.in"
-+	source "package/perl-exporter-tiny/Config.in"
- 	source "package/perl-file-listing/Config.in"
- 	source "package/perl-file-sharedir/Config.in"
- 	source "package/perl-file-slurp/Config.in"
-diff --git a/package/perl-exporter-tiny/Config.in b/package/perl-exporter-tiny/Config.in
+@@ -733,6 +733,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-module-runtime/Config.in"
+ 	source "package/perl-mojolicious-plugin-authentication/Config.in"
+ 	source "package/perl-mojolicious/Config.in"
++	source "package/perl-moo/Config.in"
+ 	source "package/perl-net-dns/Config.in"
+ 	source "package/perl-net-http/Config.in"
+ 	source "package/perl-net-ping/Config.in"
+diff --git a/package/perl-moo/Config.in b/package/perl-moo/Config.in
 new file mode 100644
-index 0000000000..1ee001ef14
+index 0000000000..4d88e1a796
 --- /dev/null
-+++ b/package/perl-exporter-tiny/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PERL_EXPORTER_TINY
-+	bool "perl-exporter-tiny"
++++ b/package/perl-moo/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PERL_MOO
++	bool "perl-moo"
++	select BR2_PACKAGE_PERL_CLASS_METHOD_MODIFIERS # runtime
++	select BR2_PACKAGE_PERL_DEVEL_GLOBALDESTRUCTION # runtime
++	select BR2_PACKAGE_PERL_MODULE_RUNTIME # runtime
++	select BR2_PACKAGE_PERL_ROLE_TINY # runtime
++	select BR2_PACKAGE_PERL_SUB_QUOTE # runtime
 +	help
-+	  an exporter with the features of Sub::Exporter but only core
-+	  dependencies
++	  Minimalist Object Orientation (with Moose compatibility)
 +
-+	  https://metacpan.org/release/Exporter-Tiny
-diff --git a/package/perl-exporter-tiny/perl-exporter-tiny.hash b/package/perl-exporter-tiny/perl-exporter-tiny.hash
++	  https://metacpan.org/release/Moo
+diff --git a/package/perl-moo/perl-moo.hash b/package/perl-moo/perl-moo.hash
 new file mode 100644
-index 0000000000..1d36c63a10
+index 0000000000..509a9ea4ed
 --- /dev/null
-+++ b/package/perl-exporter-tiny/perl-exporter-tiny.hash
-@@ -0,0 +1,7 @@
++++ b/package/perl-moo/perl-moo.hash
+@@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    e33f25f7556f5f5264a92cb9870d0eac Exporter-Tiny-1.002001.tar.gz
-+sha256 a82c334c02ce4b0f9ea77c67bf77738f76a9b8aa4bae5c7209d1c76453d3c48d Exporter-Tiny-1.002001.tar.gz
++md5    d4fcd0f240033198571fcc81ce7c5f15 Moo-2.003004.tar.gz
++sha256 f8bbb625f8e963eabe05cff9048fdd72bdd26777404ff2c40bc690f558be91e1 Moo-2.003004.tar.gz
 +
 +# computed by scancpan
-+sha256 a109768ea1493cc7555d4381d6178d3cfc1fe52adc5d63d3831a2697d9fc90e6 COPYRIGHT
-+sha256 c614dadb36b02257ab492e3d4341e52f3f03fe8147cafd2b7da03b3b5c0361e9 LICENSE
-diff --git a/package/perl-exporter-tiny/perl-exporter-tiny.mk b/package/perl-exporter-tiny/perl-exporter-tiny.mk
++sha256 3fe29ec1d93827ee69825ed4bf916cc5ce4e7bf0b940ec6dd2d4ed30f4755dc3 README
+diff --git a/package/perl-moo/perl-moo.mk b/package/perl-moo/perl-moo.mk
 new file mode 100644
-index 0000000000..374abd6f1b
+index 0000000000..babb3841b7
 --- /dev/null
-+++ b/package/perl-exporter-tiny/perl-exporter-tiny.mk
++++ b/package/perl-moo/perl-moo.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# perl-exporter-tiny
++# perl-moo
 +#
 +################################################################################
 +
-+PERL_EXPORTER_TINY_VERSION = 1.002001
-+PERL_EXPORTER_TINY_SOURCE = Exporter-Tiny-$(PERL_EXPORTER_TINY_VERSION).tar.gz
-+PERL_EXPORTER_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TOBYINK
-+PERL_EXPORTER_TINY_LICENSE = Artistic or GPL-1.0+
-+PERL_EXPORTER_TINY_LICENSE_FILES = COPYRIGHT LICENSE
++PERL_MOO_VERSION = 2.003004
++PERL_MOO_SOURCE = Moo-$(PERL_MOO_VERSION).tar.gz
++PERL_MOO_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
++PERL_MOO_LICENSE = Artistic or GPL-1.0+
++PERL_MOO_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
