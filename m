@@ -1,140 +1,62 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 10 Oct 2018 07:49:34 -0500
-Subject: [Buildroot] [PATCH v3] manual: add QEMU demo to quick start
-In-Reply-To: <CAFXrp_chYzRChQEA=ZaYD=nQ2k_g6+UtV--52f78DDkxPbY3wg@mail.gmail.com>
-References: <20181010091812.26552-1-ciro.santilli@gmail.com>
- <20181010141433.1e9d2b15@windsurf>
- <CAFXrp_chYzRChQEA=ZaYD=nQ2k_g6+UtV--52f78DDkxPbY3wg@mail.gmail.com>
-Message-ID: <CANQCQpbdmimBHQ55Y1AZDSQCgb9tfhj3VQBCTEcCmvDft=PyPg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 10 Oct 2018 15:24:03 +0200
+Subject: [Buildroot] [git commit] glibc: split hash files for licenses,
+ fixes ARC
+Message-ID: <20181010132409.D359F8257F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ciro,
+commit: https://git.buildroot.net/buildroot/commit/?id=b14ad0bd697038e4cf48ecf48830fb3369f1f25e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Configuration that build a glibc toolchain on ARC currently fail to
+run "make legal-info", because the hash for the LICENSES file is
+different between the ARC glibc version, and glibc 2.28.
 
+To fix this, this commit moves the hashes for the glibc license files
+to per-version hash files.
 
-On Wed, Oct 10, 2018 at 7:26 AM Ciro Santilli <ciro.santilli@gmail.com> wrote:
->
-> On Wed, Oct 10, 2018 at 1:14 PM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> >
-> > Hello,
-> >
-> > On Wed, 10 Oct 2018 10:18:12 +0100, Ciro Santilli wrote:
-> > > Signed-off-by: Ciro Santilli <ciro.santilli@gmail.com>
-> > > ---
-> > > OK, I think this is the best way to structure the more general intro to
-> > > configs and their docs.
-> >
-> > It seems like you haven't taken into account my previous comment.
-> >
->
-> Sorry, which one did I miss?
->
-> In any case, if you think kind of intro might be useful, can you make
-> the adjustment that you have in mind and it yourself? I think it would
-> be easier in this case. No need to credit me or anything.
->
-> I just highly recommend keeping:
->
-> +make qemu_x86_64_defconfig
-> +make BR2_JLEVEL="$(nproc)"
-> +qemu-system-x86_64 \
-> +  -M pc \
-> +  -kernel output/images/bzImage \
-> +  -drive file=output/images/rootfs.ext2,if=virtio,format=raw \
-> +  -append "root=/dev/vda" \
-> +  -net nic,model=virtio \
-> +  -net user
->
-> as close as possible to the top of the getting started ;-)
+Fixes:
 
-I'm with Thomas on this one, the readme.txt for each qemu board are
-not the same to invoke QEMU for the different architectures.   If
-anything note that the Buildroot provided qemu configurations target a
-number of architectures and that for each of those there is an example
-qemu launch command found in board/qemu/<arch>/readme.txt
+  http://autobuild.buildroot.net/results/5a98a801dccaaeb4b5cbc26d9a017726d0953157/
 
-By referencing the existing readme.txt we keep the manual easier to
-maintain if there for some reason becomes a reason to update the qemu
-launch command.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/glibc/arc-2018.03-release/glibc.hash                          | 3 +++
+ .../glibc.hash                                                        | 3 +++
+ package/glibc/glibc.hash                                              | 4 ----
+ 3 files changed, 6 insertions(+), 4 deletions(-)
 
->
-> > > +=== Try it out with QEMU
-> > >
-> > > -From the buildroot directory, run
-> > > +If you just want to emulate a simple generic QEMU system to see
-> > > +Buildroot in action immediately, run from the buildroot directory:
-> > > +
-> > > +--------------------
-> > > +make qemu_x86_64_defconfig
-> > > +make BR2_JLEVEL="$(nproc)"
-> > > +qemu-system-x86_64 \
-> > > +  -M pc \
-> > > +  -kernel output/images/bzImage \
-> > > +  -drive file=output/images/rootfs.ext2,if=virtio,format=raw \
-> > > +  -append "root=/dev/vda" \
-> > > +  -net nic,model=virtio \
-> > > +  -net user
-> > > +--------------------
-> >
-> > Please point the user to board/qemu/x86-64/readme.txt instead,
-> > don't duplicate the information. And I believe the section should be
-> > made more general, and talk about all defconfigs. Maybe a section:
-> >
-> > "Quick start on HW platforms or Qemu"
-> >
-> > and then describe that we have defconfigs, how to use them, that we
-> > have readme files to explain how to use the result of the defconfigs,
-> > etc.
-> >
-> >
-> > > +=== Day-to-day workflow
-> > > +
-> > > +In your day-to-day workflow, the first step when using Buildroot is to
-> > > +create a custom configuration.
-> > > +
-> > > +If you wish to use an existing configuration as your starting point,
-> > > +first find the available configs with:
-> > > +
-> > > +--------------------
-> > > + $ ls configs/
-> > > +--------------------
-> > > +
-> > > +If you want to build for the Raspberry Pi 3 for example, run:
-> > > +
-> > > +--------------------
-> > > + $ make raspberrypi3_64_defconfig
-> > > +--------------------
-> > > +
-> > > +This command generates a +.config+ file in the root directory.
-> > > +
-> > > +Each defconfig is documented under:
-> > > +
-> > > +--------------------
-> > > + $ board/<config-hyphenated>/readme.txt
-> > > +--------------------
-> > > +
-> > > +for example:
-> > > +
-> > > +--------------------
-> > > + $ less board/raspberrypi3-64/readme.txt
-> > > +--------------------
-> > > +
-> > > +Next, to customize the +.config+, Buildroot has a nice configuration tool
-> > > +similar to the one you can find in the http://www.kernel.org/[Linux kernel]
-> > > +or in http://www.busybox.net/[BusyBox]. Run it either with
-> >
-> > I am not sure this section "Day-to-day workflow" is very useful/makes a
-> > lot of sense in the context of the Buildroot manual.
-> >
-
-Ciro, maybe there is a good blog or forum where an example use case
-could be posted (or improved) capturing the day to day targeting of a
-Raspberrypi using buildroot?  Looks like there are a few out there.
-https://www.google.com/search?q=buildroot+raspberry+pi&oq=buildroot+ras&aqs=chrome.0.0j69i57j69i61j0l3.2031j1j7&sourceid=chrome&ie=UTF-8
-
-Matt
+diff --git a/package/glibc/arc-2018.03-release/glibc.hash b/package/glibc/arc-2018.03-release/glibc.hash
+new file mode 100644
+index 0000000000..4c9830e6f6
+--- /dev/null
++++ b/package/glibc/arc-2018.03-release/glibc.hash
+@@ -0,0 +1,3 @@
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
++sha256  61abdd6930c9c599062d89e916b3e7968783879b6be0ee1c6229dd6169def431  LICENSES
+diff --git a/package/glibc/glibc-2.28-18-g2339d6a55eb7a7e040ae888e906adc49eeb59eab/glibc.hash b/package/glibc/glibc-2.28-18-g2339d6a55eb7a7e040ae888e906adc49eeb59eab/glibc.hash
+new file mode 100644
+index 0000000000..03abf1e96a
+--- /dev/null
++++ b/package/glibc/glibc-2.28-18-g2339d6a55eb7a7e040ae888e906adc49eeb59eab/glibc.hash
+@@ -0,0 +1,3 @@
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
++sha256  35bdb41dc0bcb10702ddacbd51ec4c0fe6fb3129f734e8c85fc02e4d3eb0ce3f  LICENSES
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+index 9fff30e1ef..093392371a 100644
+--- a/package/glibc/glibc.hash
++++ b/package/glibc/glibc.hash
+@@ -2,7 +2,3 @@
+ sha256  6e88cea4002efa7f78d86ea5e98eb92ed423d5a35068751517c4f00f56b8666c     glibc-glibc-2.28-18-g2339d6a55eb7a7e040ae888e906adc49eeb59eab.tar.gz
+ # Locally calculated (fetched from Github)
+ sha256  e08ab67b2db2d0f0e8f3311d23c54fb8f6d4c1ef6fa0b4047fd5da400e3ce9de     glibc-arc-2018.03-release.tar.gz
+-
+-sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+-sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+-sha256  35bdb41dc0bcb10702ddacbd51ec4c0fe6fb3129f734e8c85fc02e4d3eb0ce3f  LICENSES
