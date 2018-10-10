@@ -1,72 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Oct 2018 09:06:21 +0200
-Subject: [Buildroot] [git commit] perl-*: regeneration of hash files
-Message-ID: <20181010070555.D6A0D81E44@busybox.osuosl.org>
+Date: Wed, 10 Oct 2018 09:09:32 +0200
+Subject: [Buildroot] [PATCH 00/13] scancpan
+In-Reply-To: <20181010064621.19253-1-francois.perrad@gadz.org>
+References: <20181010064621.19253-1-francois.perrad@gadz.org>
+Message-ID: <20181010090932.78ff793a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=991a9c6d93ce1120d6ac612f40e7c181e1296e53
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Fran?ois,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/perl-mailtools/perl-mailtools.hash | 5 +++--
- package/perl-net-http/perl-net-http.hash   | 5 +++--
- package/perl-sys-mmap/perl-sys-mmap.hash   | 2 +-
- package/perl-uri/perl-uri.hash             | 5 +++--
- 4 files changed, 10 insertions(+), 7 deletions(-)
+On Wed, 10 Oct 2018 08:46:08 +0200, Francois Perrad wrote:
 
-diff --git a/package/perl-mailtools/perl-mailtools.hash b/package/perl-mailtools/perl-mailtools.hash
-index 9fb91cbd26..1db4772f56 100644
---- a/package/perl-mailtools/perl-mailtools.hash
-+++ b/package/perl-mailtools/perl-mailtools.hash
-@@ -1,5 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
- md5    53e9d35256c3fd7cef0e4a24b15e9512 MailTools-2.20.tar.gz
- sha256 f55606f7a9cc342ee9d5f996e2b6a4c0047e2ee47cd88c3250ecf0d0c5fb3196 MailTools-2.20.tar.gz
--# Locally computed
--sha256 734d5b1bd212de832aea99e94c98d56217ea9519d900a29c0547538f596a9b26  README
-+
-+# computed by scancpan
-+sha256 734d5b1bd212de832aea99e94c98d56217ea9519d900a29c0547538f596a9b26 README
-diff --git a/package/perl-net-http/perl-net-http.hash b/package/perl-net-http/perl-net-http.hash
-index 21cd6308f2..0dd9964953 100644
---- a/package/perl-net-http/perl-net-http.hash
-+++ b/package/perl-net-http/perl-net-http.hash
-@@ -1,5 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
- md5    6da11a7db0e933b7684148e1fb32006a Net-HTTP-6.18.tar.gz
- sha256 7e42df2db7adce3e0eb4f78b88c450f453f5380f120fd5411232e03374ba951c Net-HTTP-6.18.tar.gz
--# Locally computed
--sha256 49fbcc80e17295888b909176a0029f275a8c17b6cbfaf8867fe571ebe9a9ca79  LICENSE
-+
-+# computed by scancpan
-+sha256 49fbcc80e17295888b909176a0029f275a8c17b6cbfaf8867fe571ebe9a9ca79 LICENSE
-diff --git a/package/perl-sys-mmap/perl-sys-mmap.hash b/package/perl-sys-mmap/perl-sys-mmap.hash
-index caeea3d965..d50fb717d1 100644
---- a/package/perl-sys-mmap/perl-sys-mmap.hash
-+++ b/package/perl-sys-mmap/perl-sys-mmap.hash
-@@ -3,5 +3,5 @@ md5    990c9106a88dc843035f7bcb109e6c0e Sys-Mmap-0.19.tar.gz
- sha256 09295e25cc9b0599d9009d19b2be89fcecaecc62ce594f873d7f70d7c10900fa Sys-Mmap-0.19.tar.gz
- 
- # computed by scancpan
--sha256 51c144e9a67644fa8eea0ea63dedb4e837587305b22f073eb5e279e39e7325a8 Copying
- sha256 4ac2afe465736476a06e52edcc78c72cfa0fa4d625916e58ab4f2af6c598709c Artistic
-+sha256 51c144e9a67644fa8eea0ea63dedb4e837587305b22f073eb5e279e39e7325a8 Copying
-diff --git a/package/perl-uri/perl-uri.hash b/package/perl-uri/perl-uri.hash
-index c8bf47d437..4ef17ece64 100644
---- a/package/perl-uri/perl-uri.hash
-+++ b/package/perl-uri/perl-uri.hash
-@@ -1,5 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
- md5    892f7183b178af40f205ba37128225db URI-1.74.tar.gz
- sha256 a9c254f45f89cb1dd946b689dfe433095404532a4543bdaab0b71ce0fdcdd53d URI-1.74.tar.gz
--# Locally computed
--sha256 65cd6f88516a30f56fd4e0080fb78ea69424fc89067470dc994e4abfba08664e  LICENSE
-+
-+# computed by scancpan
-+sha256 65cd6f88516a30f56fd4e0080fb78ea69424fc89067470dc994e4abfba08664e LICENSE
+> Without runtime dependencies, the build time is speed up (in parallel mode).
+> And now, I can upgrade easily all perl modules.
+
+Thanks a lot for this patch series!
+
+> Francois Perrad (13):
+>   scancpan: wrap abstract if too long
+>   scancpan: trim the abstract
+>   scancpan: sort license files
+>   scancpan: sort license in hash file
+>   scancpan: split multiple dependencies on multiple lines
+>   scancpan: remove run-time dependencies
+>   perl-*: regeneration of hash files
+>   perl-*: regeneration of Config.in files
+>   perl-*: regeneration of *.mk files
+
+I have applied all patches up to this point.
+
+One thing that would be nice is to adjust the Config.in generation
+logic to add a "# runtime" comment after the runtime dependencies. In
+practice it will be all target dependencies, but it is a convention we
+have in other packages, so it would be good to comply with it as well,
+and it's easy to do thanks to those packages being auto-generated.
+
+>   scancpan: add PERL_FOO_DISTNAME in perl-foo.mk
+>   perl-*: regeneration with _DISTNAME
+>   pkg-perl: add a target which upgrades all packages from metacpan
+>   [RFC] pkg-perl: add per package upgrade target
+
+For this one, I'll leave a bit more time, so that other Buildroot
+developers can say what they think about it. In general, I like the
+idea. I'm not sure how applicable a per-package <pkg>-upgrade target is
+going to be to non-Perl packages, but let's see what other people think.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
