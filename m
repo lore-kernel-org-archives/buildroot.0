@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 10 Oct 2018 23:35:55 +0200
+Date: Wed, 10 Oct 2018 23:54:51 +0200
 Subject: [Buildroot] Analysis results for 2018-10-09
 In-Reply-To: <20181010174814.5ac114f1@windsurf>
 References: <20181010060010.4E3C920736@mail.bootlin.com>
  <20181010174814.5ac114f1@windsurf>
-Message-ID: <c7c0d90d-a25e-7832-67c4-4aa3598691fd@mind.be>
+Message-ID: <8d35a3cc-c12e-be36-130a-7cdbf5e93a61@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,12 +14,12 @@ To: buildroot@busybox.net
 
 
 On 10/10/18 17:48, Thomas Petazzoni wrote:
->>          arm |                    luvi-v2.8.0 | NOK | http://autobuild.buildroot.net/results/2bdbb93e6404943e59791773106d8b2680211886 |     
-> luvi 2.8.0 fails to build. Bernd, you bumped this package, and J?rg
-> suggested to revert the bump. Could you discuss this, and provide a fix?
+>>          arm |                     php-7.2.10 | NOK | http://autobuild.buildroot.net/results/7b7e25bfd269f7c252d15ab4e9f1b68348823478 | ORPH
+> multiple definition of `icu_60::MessageFormatAdapter::getArgTypeList(icu_60::MessageFormat const&, int&)'
 > 
+> Long standing issue. Anyone brave enough to investigate ?
 
- I think luv is missing a dependency on lua-compat53.
+ Maybe just make php !STATIC?
 
  Regards,
  Arnout
