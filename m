@@ -1,40 +1,72 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 10 Oct 2018 08:46:12 +0200
-Subject: [Buildroot] [PATCH 04/13] scancpan: sort license in hash file
+Date: Wed, 10 Oct 2018 08:46:15 +0200
+Subject: [Buildroot] [PATCH 07/13] perl-*: regeneration of hash files
 In-Reply-To: <20181010064621.19253-1-francois.perrad@gadz.org>
 References: <20181010064621.19253-1-francois.perrad@gadz.org>
-Message-ID: <20181010064621.19253-5-francois.perrad@gadz.org>
+Message-ID: <20181010064621.19253-8-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-now, the output is reproductible
-
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- utils/scancpan | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/perl-mailtools/perl-mailtools.hash | 5 +++--
+ package/perl-net-http/perl-net-http.hash   | 5 +++--
+ package/perl-sys-mmap/perl-sys-mmap.hash   | 2 +-
+ package/perl-uri/perl-uri.hash             | 5 +++--
+ 4 files changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/utils/scancpan b/utils/scancpan
-index f7b707676..64599f430 100755
---- a/utils/scancpan
-+++ b/utils/scancpan
-@@ -767,10 +767,12 @@ while (my ($distname, $dist) = each %dist) {
-         say {$fh} qq{# retrieved by scancpan from ${mirror}/};
-         say {$fh} qq{md5    ${md5} ${filename}};
-         say {$fh} qq{sha256 ${sha256} ${filename}};
--        if (scalar keys %{$license_files{$distname}}) {
-+        my %license_files =  %{$license_files{$distname}};
-+        if (scalar keys %license_files) {
-             say {$fh} q{};
-             say {$fh} qq{# computed by scancpan};
--            while (my ($license, $digest) = each %{$license_files{$distname}}) {
-+            foreach my $license (sort keys %license_files) {
-+                my $digest = $license_files{$license};
-                 say {$fh} qq{sha256 ${digest} ${license}};
-             }
-         }
+diff --git a/package/perl-mailtools/perl-mailtools.hash b/package/perl-mailtools/perl-mailtools.hash
+index 9fb91cbd2..1db4772f5 100644
+--- a/package/perl-mailtools/perl-mailtools.hash
++++ b/package/perl-mailtools/perl-mailtools.hash
+@@ -1,5 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+ md5    53e9d35256c3fd7cef0e4a24b15e9512 MailTools-2.20.tar.gz
+ sha256 f55606f7a9cc342ee9d5f996e2b6a4c0047e2ee47cd88c3250ecf0d0c5fb3196 MailTools-2.20.tar.gz
+-# Locally computed
+-sha256 734d5b1bd212de832aea99e94c98d56217ea9519d900a29c0547538f596a9b26  README
++
++# computed by scancpan
++sha256 734d5b1bd212de832aea99e94c98d56217ea9519d900a29c0547538f596a9b26 README
+diff --git a/package/perl-net-http/perl-net-http.hash b/package/perl-net-http/perl-net-http.hash
+index 21cd6308f..0dd996495 100644
+--- a/package/perl-net-http/perl-net-http.hash
++++ b/package/perl-net-http/perl-net-http.hash
+@@ -1,5 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+ md5    6da11a7db0e933b7684148e1fb32006a Net-HTTP-6.18.tar.gz
+ sha256 7e42df2db7adce3e0eb4f78b88c450f453f5380f120fd5411232e03374ba951c Net-HTTP-6.18.tar.gz
+-# Locally computed
+-sha256 49fbcc80e17295888b909176a0029f275a8c17b6cbfaf8867fe571ebe9a9ca79  LICENSE
++
++# computed by scancpan
++sha256 49fbcc80e17295888b909176a0029f275a8c17b6cbfaf8867fe571ebe9a9ca79 LICENSE
+diff --git a/package/perl-sys-mmap/perl-sys-mmap.hash b/package/perl-sys-mmap/perl-sys-mmap.hash
+index caeea3d96..d50fb717d 100644
+--- a/package/perl-sys-mmap/perl-sys-mmap.hash
++++ b/package/perl-sys-mmap/perl-sys-mmap.hash
+@@ -3,5 +3,5 @@ md5    990c9106a88dc843035f7bcb109e6c0e Sys-Mmap-0.19.tar.gz
+ sha256 09295e25cc9b0599d9009d19b2be89fcecaecc62ce594f873d7f70d7c10900fa Sys-Mmap-0.19.tar.gz
+ 
+ # computed by scancpan
+-sha256 51c144e9a67644fa8eea0ea63dedb4e837587305b22f073eb5e279e39e7325a8 Copying
+ sha256 4ac2afe465736476a06e52edcc78c72cfa0fa4d625916e58ab4f2af6c598709c Artistic
++sha256 51c144e9a67644fa8eea0ea63dedb4e837587305b22f073eb5e279e39e7325a8 Copying
+diff --git a/package/perl-uri/perl-uri.hash b/package/perl-uri/perl-uri.hash
+index c8bf47d43..4ef17ece6 100644
+--- a/package/perl-uri/perl-uri.hash
++++ b/package/perl-uri/perl-uri.hash
+@@ -1,5 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+ md5    892f7183b178af40f205ba37128225db URI-1.74.tar.gz
+ sha256 a9c254f45f89cb1dd946b689dfe433095404532a4543bdaab0b71ce0fdcdd53d URI-1.74.tar.gz
+-# Locally computed
+-sha256 65cd6f88516a30f56fd4e0080fb78ea69424fc89067470dc994e4abfba08664e  LICENSE
++
++# computed by scancpan
++sha256 65cd6f88516a30f56fd4e0080fb78ea69424fc89067470dc994e4abfba08664e LICENSE
 -- 
 2.17.1
