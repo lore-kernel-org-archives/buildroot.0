@@ -1,33 +1,58 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 10 Oct 2018 23:30:39 +0200
-Subject: [Buildroot] Analysis results for 2018-10-09
-In-Reply-To: <20181010174814.5ac114f1@windsurf>
-References: <20181010060010.4E3C920736@mail.bootlin.com>
- <20181010174814.5ac114f1@windsurf>
-Message-ID: <5c66f02e-d2f1-55a6-c75f-6a924e6b70bd@mind.be>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 10 Oct 2018 16:33:08 -0500
+Subject: [Buildroot] [PATCH 1/2] libselinux: remove library host symlink
+In-Reply-To: <20181010212417.23047-1-fontaine.fabrice@gmail.com>
+References: <20181010212417.23047-1-fontaine.fabrice@gmail.com>
+Message-ID: <CANQCQpaAukgHG=z6pC3X9_YMO0Odjr8q2K=Ph2N-eRKJCgC98w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fabrice,
 
+On Wed, Oct 10, 2018 at 4:24 PM Fabrice Fontaine
+<fontaine.fabrice@gmail.com> wrote:
+>
+> Since bump to version 2.7 and addition of
+> 0003-revert-ln-relative.patch, the creation of a symlink through
+> ln -sf libselinux.so.1 $(HOST_DIR)/lib/libselinux.so
+> is not needed anymore so remove it
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-On 10/10/18 17:48, Thomas Petazzoni wrote:
->>     mips64el |        gst-plugins-bad-0.10.23 | NOK | http://autobuild.buildroot.net/results/ab39280ceaf967e08abfd1f51efa4613495237f5 | ORPH
-> 
-> gstspanplc.c:223:21: error: dereferencing pointer to incomplete type 'plc_state_t {aka struct plc_state_s}'
->    if (plc->plc_state->missing_samples != 0)
+Good catch
 
- Perhaps it's time to retire gstreamer-0.10? Is anybody still using it?
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 
- Regards,
- Arnout
+> ---
+>  package/libselinux/libselinux.mk | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+> index b3d48f7105..97b4f03062 100644
+> --- a/package/libselinux/libselinux.mk
+> +++ b/package/libselinux/libselinux.mk
+> @@ -102,7 +102,6 @@ endef
+>  define HOST_LIBSELINUX_INSTALL_CMDS
+>         $(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
+>                 $(HOST_LIBSELINUX_MAKE_OPTS) install
+> -       ln -sf libselinux.so.1 $(HOST_DIR)/lib/libselinux.so
+>         # Install python interface wrapper
+>         $(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
+>                 $(HOST_LIBSELINUX_MAKE_OPTS) install-pywrap
+> --
+> 2.17.1
+>
+
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / RC Linux Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
