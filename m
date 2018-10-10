@@ -1,63 +1,33 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 10 Oct 2018 09:05:11 +0200
-Subject: [Buildroot] [PATCH v2] poco: disable fpenvironment for MIPS
- without FPU
-In-Reply-To: <CAGm1_kuA7Pp7gKP+1O_K0enyAf=OTFdcK-rhvTOrJYqiUMeWFQ@mail.gmail.com>
-References: <20181009132152.24383-1-yegorslists@googlemail.com>
- <51cdb909-89fd-6832-0988-f29ab95dbf74@mind.be>
- <20181010084502.04f1cf7e@windsurf>
- <CAGm1_kuA7Pp7gKP+1O_K0enyAf=OTFdcK-rhvTOrJYqiUMeWFQ@mail.gmail.com>
-Message-ID: <CAGm1_ku-fnPuMW2NgL7DEiTa-=u2VnR8wyc41wPMhQJkRbEWhg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 10 Oct 2018 09:05:23 +0200
+Subject: [Buildroot] [PATCH] lua-*: fix upstream URL in Config.in
+In-Reply-To: <20181010065610.19680-1-francois.perrad@gadz.org>
+References: <20181010065610.19680-1-francois.perrad@gadz.org>
+Message-ID: <20181010090523.78dc0183@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Oct 10, 2018 at 9:02 AM Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
->
-> On Wed, Oct 10, 2018 at 8:45 AM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> >
-> > Hello,
-> >
-> > On Tue, 9 Oct 2018 22:13:10 +0200, Arnout Vandecappelle wrote:
-> >
-> > >  The commit message is still very vague. I think I understand it though,
-> > > something like:
-> >
-> > Yes, I agree the commit log was still too vague.
-> >
-> > > > +# MIPS without FPU
-> > > > +ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el):$(BR2_MIPS_SOFT_FLOAT),y:y)
-> > >
-> > >  BR2_MIPS_SOFT_FLOAT is only defined on MIPS, so it is sufficient to do
-> > >
-> > > ifeq ($(BR2_MIPS_SOFT_FLOAT),y)
-> > >
-> > >  However, since this is about a glibc bug, shouldn't it check for a glibc
-> > > toolchain as well?
-> >
-> > Isn't the glibc bug that it allowed to use fpenv in situations where it
-> > shouldn't have allowed it ? If that's the case, perhaps the other
-> > libcs didn't had this bug, and fpenv really shouldn't be used with MIPS
-> > soft-float, regardless of the C library in use ?
->
-> I've made a compile test with musl and it fails too. So I'll just
-> disable fpenv if BR2_MIPS_SOFT_FLOAT is selected. So ne need to
-> mention glibc.
->
-> Strange, that it didn't show up in the build tests ...
+Hello,
 
-For now we disable fpenv for two archs:
+On Wed, 10 Oct 2018 08:56:10 +0200, Francois Perrad wrote:
+> like in https://git.busybox.net/buildroot/commit/?id=05200ad01434ce297a166c6e1bebc8196c18f7dc
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/lua-coat/Config.in           | 2 +-
+>  package/lua-coatpersistent/Config.in | 2 +-
+>  package/lua-csnappy/Config.in        | 2 +-
+>  package/lua-messagepack/Config.in    | 2 +-
+>  package/lua-testmore/Config.in       | 2 +-
+>  5 files changed, 5 insertions(+), 5 deletions(-)
 
-# architectures missing some FE_* in their fenv.h
-ifeq ($(BR2_sh4a)$(BR2_nios2),y)
-POCO_CONF_OPTS += --no-fpenvironment
-endif
+Applied to master, thanks.
 
-Should I just add $(BR2_MIPS_SOFT_FLOAT) to this statement even
-without changing the comment?
-
-Yegor
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
