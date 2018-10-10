@@ -1,103 +1,58 @@
-From: Joel Carlson <joelsoncarl@gmail.com>
-Date: Tue,  9 Oct 2018 17:46:49 -0600
-Subject: [Buildroot] [PATCH 1/1] libcorrect: add package
-Message-ID: <20181009234649.19784-1-JoelsonCarl@gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Wed, 10 Oct 2018 06:37:07 +0300
+Subject: [Buildroot] [PATCH 4/4] python-pysnmp: bump to version 4.4.6
+In-Reply-To: <20181009220019.6d275c05@windsurf>
+References: <20180922193631.14369-1-asafka7@gmail.com>
+ <20180922193631.14369-4-asafka7@gmail.com>
+ <20181009213706.6e49f620@windsurf>
+ <CALFsTFUy=ZS5vNEA-m7gPizmq6yn6kcN-EUi7gfNpsEUYiesYQ@mail.gmail.com>
+ <20181009220019.6d275c05@windsurf>
+Message-ID: <CALFsTFWYY8QcokECo+dfq=4KH5+w4-6Ve5R0_eNbOaL-BPN9NA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adds the libcorrect package. Libcorrect by default builds a shared
-library, so require shared libraries. It also sets the -Wpedantic flag
-in its Debug build, which first exists starting in gcc 4.8.
+On Tue, Oct 9, 2018, 23:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+wrote:
 
-Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
----
+> Hello,
+>
+> On Tue, 9 Oct 2018 22:54:06 +0300, Asaf Kahlon wrote:
+>
+> > > > -PYTHON_PYSNMP_VERSION = 4.3.3
+> > > > +PYTHON_PYSNMP_VERSION = 4.4.6
+> > > >  PYTHON_PYSNMP_SOURCE = pysnmp-$(PYTHON_PYSNMP_VERSION).tar.gz
+> > > > -PYTHON_PYSNMP_SITE =
+> https://pypi.python.org/packages/47/b5/c65b9b6fcc36d3f4caca30d3314920f1ca75f5ceecc1f6ae2538ede24511
+> > > > +PYTHON_PYSNMP_SITE =
+> https://files.pythonhosted.org/packages/8b/66/96a49bf1d64ad1e005a8455644523b7e09663a405eb20a4599fb219e4c95
+> > > >  PYTHON_PYSNMP_SETUP_TYPE = setuptools
+> > > >
+> > > >  PYTHON_PYSNMP_LICENSE = BSD-3-Clause
+> > > > -PYTHON_PYSNMP_LICENSE_FILES = LICENSE.txt
+> > > > -
+> > > > -PYTHON_PYSNMP_DEPENDENCIES = python-pyasn python-pycrypto
+> > >
+> > > So these were build time dependencies, and now there are no build time
+> > > dependencies anymore ? Or was it a bug to list them as build time
+> > > dependencies ?
+> > >
+> > These packages were not needed as runtime dependencies at all.
+>
+> As *runtime* dependencies, or *build time* dependencies?
+>
 
-Compile-tested using utils/test-pkg -a
+Oh sorry, they are not needed as build time dependencies, of course.
 
----
- DEVELOPERS                         |  1 +
- package/Config.in                  |  1 +
- package/libcorrect/Config.in       | 13 +++++++++++++
- package/libcorrect/libcorrect.hash |  3 +++
- package/libcorrect/libcorrect.mk   | 13 +++++++++++++
- 5 files changed, 31 insertions(+)
- create mode 100644 package/libcorrect/Config.in
- create mode 100644 package/libcorrect/libcorrect.hash
- create mode 100644 package/libcorrect/libcorrect.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0fb3738e9a..0757ebfcf2 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1073,6 +1073,7 @@ N:	Joel Carlson <JoelsonCarl@gmail.com>
- F:	package/capnproto/
- F:	package/cmocka/
- F:	package/flatcc/
-+F:	package/libcorrect/
- 
- N:	Joel Stanley <joel@jms.id.au>
- F:	package/pdbg/
-diff --git a/package/Config.in b/package/Config.in
-index 29e11441f9..aae7855ec3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1609,6 +1609,7 @@ menu "Other"
- 	source "package/libcap-ng/Config.in"
- 	source "package/libcgroup/Config.in"
- 	source "package/libcofi/Config.in"
-+	source "package/libcorrect/Config.in"
- 	source "package/libcroco/Config.in"
- 	source "package/libcrossguid/Config.in"
- 	source "package/libcsv/Config.in"
-diff --git a/package/libcorrect/Config.in b/package/libcorrect/Config.in
-new file mode 100644
-index 0000000000..e29b39caa0
---- /dev/null
-+++ b/package/libcorrect/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_LIBCORRECT
-+	bool "libcorrect"
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # -Wpedantic first appears
-+	depends on !BR2_STATIC_LIBS
-+	help
-+	  A C library for Forward Error Correction, providing
-+	  convolutional codes and Reed-Solomon codes. It is part
-+	  of the Quiet Modem Project.
-+
-+	  https://github.com/quiet/libcorrect
-+
-+comment "libcorrect needs a toolchain w/ gcc >= 4.8, dynamic library"
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || BR2_STATIC_LIBS
-diff --git a/package/libcorrect/libcorrect.hash b/package/libcorrect/libcorrect.hash
-new file mode 100644
-index 0000000000..20df38c158
---- /dev/null
-+++ b/package/libcorrect/libcorrect.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256	79861750540fb3a1cc501ee217cb4d1febc4855f3fb82e5eb60906eec5379890  libcorrect-ce6c17f1f988765ae3695315d7cce1f2a2e6cf0d.tar.gz
-+sha256	135138cd4304aa637836758dc5edfb5f21b7d09ecc637d25288d206b151a5768  LICENSE
-diff --git a/package/libcorrect/libcorrect.mk b/package/libcorrect/libcorrect.mk
-new file mode 100644
-index 0000000000..0a84aa5c26
---- /dev/null
-+++ b/package/libcorrect/libcorrect.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# libcorrect
-+#
-+################################################################################
-+
-+LIBCORRECT_VERSION = ce6c17f1f988765ae3695315d7cce1f2a2e6cf0d
-+LIBCORRECT_SITE = $(call github,quiet,libcorrect,$(LIBCORRECT_VERSION))
-+LIBCORRECT_LICENSE = BSD-3-Clause
-+LIBCORRECT_LICENSE_FILES = LICENSE
-+LIBCORRECT_INSTALL_STAGING = YES
-+
-+$(eval $(cmake-package))
--- 
-2.17.1
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181010/a552ad20/attachment.html>
