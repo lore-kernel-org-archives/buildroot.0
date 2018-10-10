@@ -1,79 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Oct 2018 14:20:00 +0200
-Subject: [Buildroot] [git commit] perl-devel-globaldestruction: new package
-Message-ID: <20181010122047.7CE0082262@busybox.osuosl.org>
+Date: Wed, 10 Oct 2018 14:22:59 +0200
+Subject: [Buildroot] [git commit] perl-exporter-tiny: new package
+Message-ID: <20181010122218.A6A5D82285@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc1d5fe199190a1c4dea822a3994d9bbdf7c6902
+commit: https://git.buildroot.net/buildroot/commit/?id=dc2b892dfe8312511c2a49904b1a9f6588c5385a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/Config.in                                           |  1 +
- package/perl-devel-globaldestruction/Config.in              |  8 ++++++++
- .../perl-devel-globaldestruction.hash                       |  6 ++++++
- .../perl-devel-globaldestruction.mk                         | 13 +++++++++++++
+ package/Config.in                                  |  1 +
+ package/perl-exporter-tiny/Config.in               |  7 +++++++
+ package/perl-exporter-tiny/perl-exporter-tiny.hash |  7 +++++++
+ package/perl-exporter-tiny/perl-exporter-tiny.mk   | 13 +++++++++++++
  4 files changed, 28 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index 5939ad92e1..edea04b0dd 100644
+index fd556f3ad7..7788c1cf3b 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -687,6 +687,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-datetime-tiny/Config.in"
- 	source "package/perl-dbd-mysql/Config.in"
- 	source "package/perl-dbi/Config.in"
-+	source "package/perl-devel-globaldestruction/Config.in"
- 	source "package/perl-devel-stacktrace/Config.in"
- 	source "package/perl-devel-stacktrace-ashtml/Config.in"
- 	source "package/perl-device-serialport/Config.in"
-diff --git a/package/perl-devel-globaldestruction/Config.in b/package/perl-devel-globaldestruction/Config.in
+@@ -697,6 +697,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-dist-checkconflicts/Config.in"
+ 	source "package/perl-encode-detect/Config.in"
+ 	source "package/perl-encode-locale/Config.in"
++	source "package/perl-exporter-tiny/Config.in"
+ 	source "package/perl-file-listing/Config.in"
+ 	source "package/perl-file-sharedir/Config.in"
+ 	source "package/perl-file-slurp/Config.in"
+diff --git a/package/perl-exporter-tiny/Config.in b/package/perl-exporter-tiny/Config.in
 new file mode 100644
-index 0000000000..a951e20d9f
+index 0000000000..1ee001ef14
 --- /dev/null
-+++ b/package/perl-devel-globaldestruction/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PERL_DEVEL_GLOBALDESTRUCTION
-+	bool "perl-devel-globaldestruction"
-+	select BR2_PACKAGE_PERL_SUB_EXPORTER_PROGRESSIVE # runtime
++++ b/package/perl-exporter-tiny/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PERL_EXPORTER_TINY
++	bool "perl-exporter-tiny"
 +	help
-+	  Provides function returning the equivalent of
-+	  ${^GLOBAL_PHASE} eq 'DESTRUCT' for older perls.
++	  an exporter with the features of Sub::Exporter but only core
++	  dependencies
 +
-+	  https://metacpan.org/release/Devel-GlobalDestruction
-diff --git a/package/perl-devel-globaldestruction/perl-devel-globaldestruction.hash b/package/perl-devel-globaldestruction/perl-devel-globaldestruction.hash
++	  https://metacpan.org/release/Exporter-Tiny
+diff --git a/package/perl-exporter-tiny/perl-exporter-tiny.hash b/package/perl-exporter-tiny/perl-exporter-tiny.hash
 new file mode 100644
-index 0000000000..b3cd6e32f1
+index 0000000000..1d36c63a10
 --- /dev/null
-+++ b/package/perl-devel-globaldestruction/perl-devel-globaldestruction.hash
-@@ -0,0 +1,6 @@
++++ b/package/perl-exporter-tiny/perl-exporter-tiny.hash
+@@ -0,0 +1,7 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    24221ba322cf2dc46a1fc99b53e2380b Devel-GlobalDestruction-0.14.tar.gz
-+sha256 34b8a5f29991311468fe6913cadaba75fd5d2b0b3ee3bb41fe5b53efab9154ab Devel-GlobalDestruction-0.14.tar.gz
++md5    e33f25f7556f5f5264a92cb9870d0eac Exporter-Tiny-1.002001.tar.gz
++sha256 a82c334c02ce4b0f9ea77c67bf77738f76a9b8aa4bae5c7209d1c76453d3c48d Exporter-Tiny-1.002001.tar.gz
 +
 +# computed by scancpan
-+sha256 f7adbd1db623233e220f9157521a620dbae4918ae7088845aa61e87b7f62bb23 README
-diff --git a/package/perl-devel-globaldestruction/perl-devel-globaldestruction.mk b/package/perl-devel-globaldestruction/perl-devel-globaldestruction.mk
++sha256 a109768ea1493cc7555d4381d6178d3cfc1fe52adc5d63d3831a2697d9fc90e6 COPYRIGHT
++sha256 c614dadb36b02257ab492e3d4341e52f3f03fe8147cafd2b7da03b3b5c0361e9 LICENSE
+diff --git a/package/perl-exporter-tiny/perl-exporter-tiny.mk b/package/perl-exporter-tiny/perl-exporter-tiny.mk
 new file mode 100644
-index 0000000000..95155b6766
+index 0000000000..374abd6f1b
 --- /dev/null
-+++ b/package/perl-devel-globaldestruction/perl-devel-globaldestruction.mk
++++ b/package/perl-exporter-tiny/perl-exporter-tiny.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# perl-devel-globaldestruction
++# perl-exporter-tiny
 +#
 +################################################################################
 +
-+PERL_DEVEL_GLOBALDESTRUCTION_VERSION = 0.14
-+PERL_DEVEL_GLOBALDESTRUCTION_SOURCE = Devel-GlobalDestruction-$(PERL_DEVEL_GLOBALDESTRUCTION_VERSION).tar.gz
-+PERL_DEVEL_GLOBALDESTRUCTION_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
-+PERL_DEVEL_GLOBALDESTRUCTION_LICENSE = Artistic or GPL-1.0+
-+PERL_DEVEL_GLOBALDESTRUCTION_LICENSE_FILES = README
++PERL_EXPORTER_TINY_VERSION = 1.002001
++PERL_EXPORTER_TINY_SOURCE = Exporter-Tiny-$(PERL_EXPORTER_TINY_VERSION).tar.gz
++PERL_EXPORTER_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TOBYINK
++PERL_EXPORTER_TINY_LICENSE = Artistic or GPL-1.0+
++PERL_EXPORTER_TINY_LICENSE_FILES = COPYRIGHT LICENSE
 +
 +$(eval $(perl-package))
