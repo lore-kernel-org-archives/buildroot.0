@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 10 Oct 2018 10:18:24 +0200
-Subject: [Buildroot] [V2 1/8] perl-class-method-modifiers: new package
+Date: Wed, 10 Oct 2018 10:18:25 +0200
+Subject: [Buildroot] [V2 2/8] perl-role-tiny: new package
 In-Reply-To: <20181010081831.25014-1-francois.perrad@gadz.org>
 References: <20181010081831.25014-1-francois.perrad@gadz.org>
-Message-ID: <20181010081831.25014-2-francois.perrad@gadz.org>
+Message-ID: <20181010081831.25014-3-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,68 +12,68 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/Config.in                                   |  1 +
- package/perl-class-method-modifiers/Config.in       |  6 ++++++
- .../perl-class-method-modifiers.hash                |  6 ++++++
- .../perl-class-method-modifiers.mk                  | 13 +++++++++++++
+ package/Config.in                          |  1 +
+ package/perl-role-tiny/Config.in           |  6 ++++++
+ package/perl-role-tiny/perl-role-tiny.hash |  6 ++++++
+ package/perl-role-tiny/perl-role-tiny.mk   | 13 +++++++++++++
  4 files changed, 26 insertions(+)
- create mode 100644 package/perl-class-method-modifiers/Config.in
- create mode 100644 package/perl-class-method-modifiers/perl-class-method-modifiers.hash
- create mode 100644 package/perl-class-method-modifiers/perl-class-method-modifiers.mk
+ create mode 100644 package/perl-role-tiny/Config.in
+ create mode 100644 package/perl-role-tiny/perl-role-tiny.hash
+ create mode 100644 package/perl-role-tiny/perl-role-tiny.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index a49a0d2c7..39eabd80a 100644
+index 39eabd80a..a612f5045 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -670,6 +670,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-astro-suntime/Config.in"
- 	source "package/perl-class-inspector/Config.in"
- 	source "package/perl-class-load/Config.in"
-+	source "package/perl-class-method-modifiers/Config.in"
- 	source "package/perl-class-std/Config.in"
- 	source "package/perl-class-std-fast/Config.in"
- 	source "package/perl-convert-asn1/Config.in"
-diff --git a/package/perl-class-method-modifiers/Config.in b/package/perl-class-method-modifiers/Config.in
+@@ -745,6 +745,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-path-tiny/Config.in"
+ 	source "package/perl-plack/Config.in"
+ 	source "package/perl-posix-strftime-compiler/Config.in"
++	source "package/perl-role-tiny/Config.in"
+ 	source "package/perl-stream-buffered/Config.in"
+ 	source "package/perl-sub-install/Config.in"
+ 	source "package/perl-sys-meminfo/Config.in"
+diff --git a/package/perl-role-tiny/Config.in b/package/perl-role-tiny/Config.in
 new file mode 100644
-index 000000000..4d4694643
+index 000000000..ebbe72020
 --- /dev/null
-+++ b/package/perl-class-method-modifiers/Config.in
++++ b/package/perl-role-tiny/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PERL_CLASS_METHOD_MODIFIERS
-+	bool "perl-class-method-modifiers"
++config BR2_PACKAGE_PERL_ROLE_TINY
++	bool "perl-role-tiny"
 +	help
-+	  Provides Moose-like method modifiers
++	  Roles. Like a nouvelle cuisine portion size slice of Moose.
 +
-+	  https://github.com/moose/Class-Method-Modifiers
-diff --git a/package/perl-class-method-modifiers/perl-class-method-modifiers.hash b/package/perl-class-method-modifiers/perl-class-method-modifiers.hash
++	  https://metacpan.org/release/Role-Tiny
+diff --git a/package/perl-role-tiny/perl-role-tiny.hash b/package/perl-role-tiny/perl-role-tiny.hash
 new file mode 100644
-index 000000000..540f357b6
+index 000000000..33601bb6b
 --- /dev/null
-+++ b/package/perl-class-method-modifiers/perl-class-method-modifiers.hash
++++ b/package/perl-role-tiny/perl-role-tiny.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    f55400c7a8134acf3657f8af89bdd7af Class-Method-Modifiers-2.12.tar.gz
-+sha256 e44c1073020bf55b8c97975ed77235fd7e2a6a56f29b5c702301721184e27ac8 Class-Method-Modifiers-2.12.tar.gz
++md5    7c277728a7e090f64b495857cadfed08 Role-Tiny-2.000006.tar.gz
++sha256 cc73418c904a0286ecd8915eac11f5be2a8d1e17ea9cb54c9116b0340cd3e382 Role-Tiny-2.000006.tar.gz
 +
 +# computed by scancpan
-+sha256 d17e5cba8d4039f6973d5873f73b0c8949c1cffb338fafe7a57e972767546561 LICENSE
-diff --git a/package/perl-class-method-modifiers/perl-class-method-modifiers.mk b/package/perl-class-method-modifiers/perl-class-method-modifiers.mk
++sha256 08292f0e1797371bce0a1b5bd80e0657b3aabf9c0ecc2ce87ad7a448a7adacce README
+diff --git a/package/perl-role-tiny/perl-role-tiny.mk b/package/perl-role-tiny/perl-role-tiny.mk
 new file mode 100644
-index 000000000..725b70a74
+index 000000000..ccc82abc8
 --- /dev/null
-+++ b/package/perl-class-method-modifiers/perl-class-method-modifiers.mk
++++ b/package/perl-role-tiny/perl-role-tiny.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# perl-class-method-modifiers
++# perl-role-tiny
 +#
 +################################################################################
 +
-+PERL_CLASS_METHOD_MODIFIERS_VERSION = 2.12
-+PERL_CLASS_METHOD_MODIFIERS_SOURCE = Class-Method-Modifiers-$(PERL_CLASS_METHOD_MODIFIERS_VERSION).tar.gz
-+PERL_CLASS_METHOD_MODIFIERS_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
-+PERL_CLASS_METHOD_MODIFIERS_LICENSE = Artistic or GPL-1.0+
-+PERL_CLASS_METHOD_MODIFIERS_LICENSE_FILES = LICENSE
++PERL_ROLE_TINY_VERSION = 2.000006
++PERL_ROLE_TINY_SOURCE = Role-Tiny-$(PERL_ROLE_TINY_VERSION).tar.gz
++PERL_ROLE_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
++PERL_ROLE_TINY_LICENSE = Artistic or GPL-1.0+
++PERL_ROLE_TINY_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
 -- 
