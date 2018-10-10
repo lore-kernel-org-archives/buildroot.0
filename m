@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Oct 2018 10:46:50 +0200
-Subject: [Buildroot] [PATCH 1/1] libcorrect: add package
-In-Reply-To: <20181009234649.19784-1-JoelsonCarl@gmail.com>
-References: <20181009234649.19784-1-JoelsonCarl@gmail.com>
-Message-ID: <20181010104650.39d03535@windsurf>
+Date: Wed, 10 Oct 2018 10:46:54 +0200
+Subject: [Buildroot] [PATCH 1/1] botan: bump to version 2.8.0
+In-Reply-To: <20181010050325.2049-1-fontaine.fabrice@gmail.com>
+References: <20181010050325.2049-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181010104654.6b48afc0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +12,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  9 Oct 2018 17:46:49 -0600, Joel Carlson wrote:
-> Adds the libcorrect package. Libcorrect by default builds a shared
-> library, so require shared libraries. It also sets the -Wpedantic flag
-> in its Debug build, which first exists starting in gcc 4.8.
+On Wed, 10 Oct 2018 07:03:25 +0200, Fabrice Fontaine wrote:
+> Fix build on i586, https://patchwork.ozlabs.org/patch/970313 has been
+> merged upstream
 > 
-> Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/aaa2ea8c3fb5fe954c0af0061f83ad70e0a862f9
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
+>  package/botan/botan.hash | 2 +-
+>  package/botan/botan.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-After looking quickly at it, I decided to add a patch that uses
--Wpedantic only if available, which allows to drop the dependency on
-the gcc version. The patch was submitted upstream.
-
-Applied with this change. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
