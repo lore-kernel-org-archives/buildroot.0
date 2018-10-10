@@ -1,55 +1,64 @@
-From: Christian Stewart <christian@paral.in>
-Date: Wed, 10 Oct 2018 14:52:50 -0700
-Subject: [Buildroot] Analysis results for 2018-10-09
-In-Reply-To: <20181010174814.5ac114f1@windsurf>
-References: <20181010060010.4E3C920736@mail.bootlin.com>
- <20181010174814.5ac114f1@windsurf>
-Message-ID: <CA+h8R2pNNN7uS4h5avjoR=qMewPWu8e4zfDiSWzqCueULiQFug@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 11 Oct 2018 00:04:31 +0200
+Subject: [Buildroot] [PATCH 4/4] webkitgtk: explicitly set
+ USE_GSTREAMER_GL build option
+In-Reply-To: <20181010212630.7f47270e@windsurf>
+References: <20181009220852.4309-1-aperez@igalia.com>
+ <20181009220852.4309-5-aperez@igalia.com> <20181010212630.7f47270e@windsurf>
+Message-ID: <973ec254-aef1-854f-c1ad-dfbe846c6fb1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
 
-On Wed, Oct 10, 2018 at 8:48 AM Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> wrote:
 
-> >       x86_64 |       docker-containerd-v1.1.3 | NOK |
-> http://autobuild.buildroot.net/results/6c26ac3a8aa39abcb5eb390109891790610a759b
-> |
-> >       x86_64 |       docker-containerd-v1.1.3 | NOK |
-> http://autobuild.buildroot.net/results/10654bccc3d20ec6d29d371c48dd90cbddb8c4da
-> |
-> >       x86_64 |       docker-containerd-v1.1.3 | NOK |
-> http://autobuild.buildroot.net/results/56b564a27a06792c4854fe983da92d40c0c4708c
-> |
->
-> /home/naourr/work/instance-3/output/host/lib/go/pkg/tool/linux_amd64/link:
-> running
-> /home/naourr/work/instance-3/output/host/bin/x86_64-amd-linux-gnu-gcc
-> failed: exit status 1
-> /tmp/go-build283204336/b001/exe/a.out: final close failed: Invalid
-> operation
->
-> Christian, what is happening here? Could you have a look?
->
+On 10/10/18 21:26, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Wed, 10 Oct 2018 01:08:52 +0300, Adrian Perez de Castro wrote:
+>> This covers the case where GL/GLES is available (so -DENABLE_OPENGL=ON
+>> gets passed), which makes the webkitgtk build system assume GStreamer-GL
+>> is available, while actually it is not.
+>>
+>> Also, use "imply" to select the needed GStreamer-GL component, because
+>> in general it is preferred due to better performance.
+>>
+>> This fixes some autobuilder failures like the following:
+>>
+>>   http://autobuild.buildroot.net/results/187796535af53ece426641ff7d88aabada281674
+> 
+> What is fixing the autobuilder issue exactly? Explicitly disabling
+> -DUSE_GSTREAMER_GL=OFF when the plugin is not available ? Or having it
+> enabled by the "imply" ?
 
-Geoff Levand and I started having a look at this breakage some time ago but
-did not find an immediate fix. It's a very obscure error, but I did manage
-to find some non-go references:
+ imply doesn't really enable it, it just changes the default. It is the
+equivalent of adding 'default y if BR2_PACKAGE_WEBKITGTK_MULTIMEDIA' to
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL. So imply can never fix the issue.
 
- - https://lists.gnu.org/archive/html/bug-binutils/2016-04/msg00221.html
- - https://sourceware.org/bugzilla/show_bug.cgi?id=20006
- - http://lists.busybox.net/pipermail/buildroot/2017-August/200570.html
+> 
+> In the former case, then I believe we need two patches: one fixing the
+> autobuilder issue (i.e just the part in the .mk file) that we can
+> backport to older Buildroot versions as needed, and another one adding
+> the imply.
 
-Buildroot Ruby bug # 20006 seems similar.
+ Indeed, it should be split.
 
-This is what we have so far on fixing this.
+> 
+> This usage of "imply" would be the first in Buildroot. Peter, Arnout,
+> Yann, anything against it ?
 
-Best,
-~ Christian
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181010/8857cfc6/attachment-0001.html>
+ Absolute not, this is a great way to use imply.
+
+ Regards,
+ Arnout
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
