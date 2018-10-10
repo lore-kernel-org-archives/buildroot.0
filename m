@@ -1,58 +1,47 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Wed, 10 Oct 2018 06:37:07 +0300
-Subject: [Buildroot] [PATCH 4/4] python-pysnmp: bump to version 4.4.6
-In-Reply-To: <20181009220019.6d275c05@windsurf>
-References: <20180922193631.14369-1-asafka7@gmail.com>
- <20180922193631.14369-4-asafka7@gmail.com>
- <20181009213706.6e49f620@windsurf>
- <CALFsTFUy=ZS5vNEA-m7gPizmq6yn6kcN-EUi7gfNpsEUYiesYQ@mail.gmail.com>
- <20181009220019.6d275c05@windsurf>
-Message-ID: <CALFsTFWYY8QcokECo+dfq=4KH5+w4-6Ve5R0_eNbOaL-BPN9NA@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 10 Oct 2018 07:03:25 +0200
+Subject: [Buildroot] [PATCH 1/1] botan: bump to version 2.8.0
+Message-ID: <20181010050325.2049-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Oct 9, 2018, 23:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-wrote:
+Fix build on i586, https://patchwork.ozlabs.org/patch/970313 has been
+merged upstream
 
-> Hello,
->
-> On Tue, 9 Oct 2018 22:54:06 +0300, Asaf Kahlon wrote:
->
-> > > > -PYTHON_PYSNMP_VERSION = 4.3.3
-> > > > +PYTHON_PYSNMP_VERSION = 4.4.6
-> > > >  PYTHON_PYSNMP_SOURCE = pysnmp-$(PYTHON_PYSNMP_VERSION).tar.gz
-> > > > -PYTHON_PYSNMP_SITE =
-> https://pypi.python.org/packages/47/b5/c65b9b6fcc36d3f4caca30d3314920f1ca75f5ceecc1f6ae2538ede24511
-> > > > +PYTHON_PYSNMP_SITE =
-> https://files.pythonhosted.org/packages/8b/66/96a49bf1d64ad1e005a8455644523b7e09663a405eb20a4599fb219e4c95
-> > > >  PYTHON_PYSNMP_SETUP_TYPE = setuptools
-> > > >
-> > > >  PYTHON_PYSNMP_LICENSE = BSD-3-Clause
-> > > > -PYTHON_PYSNMP_LICENSE_FILES = LICENSE.txt
-> > > > -
-> > > > -PYTHON_PYSNMP_DEPENDENCIES = python-pyasn python-pycrypto
-> > >
-> > > So these were build time dependencies, and now there are no build time
-> > > dependencies anymore ? Or was it a bug to list them as build time
-> > > dependencies ?
-> > >
-> > These packages were not needed as runtime dependencies at all.
->
-> As *runtime* dependencies, or *build time* dependencies?
->
+Fixes:
+ - http://autobuild.buildroot.org/results/aaa2ea8c3fb5fe954c0af0061f83ad70e0a862f9
 
-Oh sorry, they are not needed as build time dependencies, of course.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/botan/botan.hash | 2 +-
+ package/botan/botan.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181010/a552ad20/attachment.html>
+diff --git a/package/botan/botan.hash b/package/botan/botan.hash
+index eeb94145b9..faa467ec25 100644
+--- a/package/botan/botan.hash
++++ b/package/botan/botan.hash
+@@ -1,4 +1,4 @@
+ # From https://botan.randombit.net/releases/sha256sums.txt
+-sha256 e42df91556317588c6ca0e41bf796f9bd5ec5c70e0668e6c97c608c697c24a90  Botan-2.7.0.tgz
++sha256 e7159b127e91e0c158245d61c638c50d443ec7b440b6b0161328c47b3aba3960  Botan-2.8.0.tgz
+ # Locally computed
+ sha256 40cfd35a9e34d18463806f57553c968fdbaf254a2e2a636d1d8e32ff6b698495  license.txt
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index 59aa1f0803..3de54aa3e1 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BOTAN_VERSION = 2.7.0
++BOTAN_VERSION = 2.8.0
+ BOTAN_SOURCE = Botan-$(BOTAN_VERSION).tgz
+ BOTAN_SITE = http://botan.randombit.net/releases
+ BOTAN_LICENSE = BSD-2-Clause
+-- 
+2.17.1
