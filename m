@@ -1,34 +1,67 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 10 Oct 2018 08:46:18 +0200
-Subject: [Buildroot] [PATCH 10/13] scancpan: add PERL_FOO_DISTNAME in
- perl-foo.mk
+Date: Wed, 10 Oct 2018 08:46:21 +0200
+Subject: [Buildroot] [PATCH 13/13] [RFC] pkg-perl: add per package upgrade
+ target
 In-Reply-To: <20181010064621.19253-1-francois.perrad@gadz.org>
 References: <20181010064621.19253-1-francois.perrad@gadz.org>
-Message-ID: <20181010064621.19253-11-francois.perrad@gadz.org>
+Message-ID: <20181010064621.19253-14-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-this variable is needed for upgrading package with scancpan
-
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- utils/scancpan | 1 +
- 1 file changed, 1 insertion(+)
+ package/pkg-generic.mk |  6 +++++-
+ package/pkg-perl.mk    | 11 +++++++++++
+ 2 files changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/utils/scancpan b/utils/scancpan
-index 066882c08..e16a18303 100755
---- a/utils/scancpan
-+++ b/utils/scancpan
-@@ -747,6 +747,7 @@ while (my ($distname, $dist) = each %dist) {
-         say {$fh} qq{HOST_${brname}_DEPENDENCIES = ${host_dependencies}} if $need_host{$distname} && $host_dependencies;
-         say {$fh} qq{${brname}_LICENSE = ${license}} if $license;
-         say {$fh} qq{${brname}_LICENSE_FILES = ${license_files}} if $license_files;
-+        say {$fh} qq{${brname}_DISTNAME = ${distname}};
-         say {$fh} qq{};
-         foreach (sort @{$deps_optional{$distname}}) {
-             next if grep { $_ eq $distname; } @{$deps_runtime{$_}};     # avoid cyclic dependencies
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 91b61c6de..f349c6c1f 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -779,6 +779,9 @@ $(1)-external-deps:
+ 	@echo "file://$$($(2)_OVERRIDE_SRCDIR)"
+ endif
+ 
++$(1)-upgrade:
++			+$$($(2)_UPGRADE_CMDS)
++
+ $(1)-show-version:
+ 			@echo $$($(2)_VERSION)
+ 
+@@ -1030,7 +1033,8 @@ DL_TOOLS_DEPENDENCIES += $$(call extractor-dependency,$$($(2)_SOURCE))
+ 	$(1)-rsync \
+ 	$(1)-show-depends \
+ 	$(1)-show-version \
+-	$(1)-source
++	$(1)-source \
++	$(1)-upgrade
+ 
+ ifneq ($$($(2)_SOURCE),)
+ ifeq ($$($(2)_SITE),)
+diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
+index 74a116075..53413b3eb 100644
+--- a/package/pkg-perl.mk
++++ b/package/pkg-perl.mk
+@@ -61,6 +61,17 @@ ifeq ($(4),target)
+ SCANCPAN_ALL_DISTRIB += $$($(2)_DISTNAME)
+ endif
+ 
++# Upgrade helper
++ifeq ($(4),target)
++define $(2)_UPGRADE_CMDS
++	utils/scancpan -force -target $$($(3)_DISTNAME)
++endef
++else
++define $(2)_UPGRADE_CMDS
++	utils/scancpan -force -host $$($(3)_DISTNAME)
++endef
++endif
++
+ #
+ # Configure step. Only define it if not already defined by the package
+ # .mk file. And take care of the differences between host and target
 -- 
 2.17.1
