@@ -1,79 +1,130 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Oct 2018 21:14:19 +0200
-Subject: [Buildroot] Analysis results for 2018-10-09
-In-Reply-To: <CAPi7W80_9pcSwfX53xDC8TzgmGLuJ+rwK_T0MyKCOaunMUQNJw@mail.gmail.com>
-References: <20181010060010.4E3C920736@mail.bootlin.com>
- <20181010174814.5ac114f1@windsurf>
- <CANQCQpbtrG=C9T9FuznXONdqF9OTq3oqmDdDWKX5PHUhJV_=hg@mail.gmail.com>
- <CAPi7W80_9pcSwfX53xDC8TzgmGLuJ+rwK_T0MyKCOaunMUQNJw@mail.gmail.com>
-Message-ID: <20181010211419.22632881@windsurf>
+Date: Wed, 10 Oct 2018 21:02:45 +0200
+Subject: [Buildroot] [git commit] ptpd2: fix build failures due to
+ EVP_MD_CTX conflict and U64 missing
+Message-ID: <20181010191349.CAFE3825F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=5b7bc560a5859d4b9f0c2a14c10e83c18fbd6bca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 10 Oct 2018 19:57:58 +0200, Fabrice Fontaine wrote:
+In src/dep/ntpengine/ntp_isc_md5.*, the typedef of EVP_MD_CTX
+conflicts with a definition of the same type done by OpenSSL. This
+issue is referenced at https://github.com/ptpd/ptpd/issues/54, and has
+been fixed upstream in commit
+https://github.com/ptpd/ptpd/commit/838b985510c360e651d18134e64f258f2f4c6e7c.
 
-> > > libboost_chrono shouldn't have been installed: missing select in  
-> > boost/Config.in
-> >  
-> Can be fixed by https://patchwork.ozlabs.org/patch/960723.
+In src/dep/snmp.c, U64 can be missing or conflicts with new perl as
+reported at https://github.com/ptpd/ptpd/issues/25. This issue has
+been fixed upstream in commit
+https://github.com/ptpd/ptpd/commit/1886522b50fe44e5c0dedd01d13ac456b941f744. This
+commit is adapted to apply on the current version of ptpd2 we have in
+Buildroot.
 
-OK.
+Fixes:
+http://autobuild.buildroot.net/results/47b99a6de256bfc0f5a8ae1484bb34e93b407237/
+http://autobuild.buildroot.net/results/08365fc559dda74640b9750358c82e84600a68ea/
+http://autobuild.buildroot.net/results/9b41c513500c63a9890973a0f17ffdb84d44d580/
+http://autobuild.buildroot.net/results/2ed79d01635c9a5e1018229dc6f4b7240a995b87/
+http://autobuild.buildroot.net/results/6d1b7e191f573334115684b85165f2bc27d75d8f/
+http://autobuild.buildroot.net/results/f54c6fd841b3ea77dc12048c81f3f2991b679252/
+http://autobuild.buildroot.net/results/332bc77bcde0bef1b2fd7b9993409dd051c27cd6/
+http://autobuild.buildroot.net/results/4b416edaec9528d75a82c9570b8f8297718ca62d/
 
-> > > >          arm |                   boost-1.68.0 | NOK |  
-> > http://autobuild.buildroot.net/results/41054f876975214741dccd08eda999a425281b7f
-> > |  
-> > >
-> > > libboost_atomic shouldn't have been installed: missing select in  
-> > boost/Config.in
-> >  
-> Can be fixed by https://patchwork.ozlabs.org/patch/966309.
-> It should be noted that this patch has been merged upstream:
-> https://github.com/boostorg/thread/commit/f7581a366294c6f5381e0371c242af327c6da655
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...d5-rename-EVP_MD_CTX-into-PTPD_EVP_MD_CTX.patch | 46 ++++++++++++++++++++++
+ ...-25-Removing-type-U64-from-net-snmp-relat.patch | 28 +++++++++++++
+ 2 files changed, 74 insertions(+)
 
-OK, I was still not entirely convinced by this one, but if it has been
-merged upstream, so be it :-)
-
-
-> > > checking for SELINUX... no
-> > > configure: error: SELinux selected but libselinux not found or too old
-> > >
-> > > We've been having this one for a while. Could some SELinux person
-> > > (Matt ? Adam ?) debug this ?  
-> >
-> > I can take a look.  
-> 
-> I worked on this one without finding how to fix it.
-> Here is my finding so I hope it could help you.
-> It seems that the issue is that libselinux is really not built before
-> util-linux. Indeed, we can see in
-> http://autobuild.buildroot.net/results/7b79a5fa265e2387cab421e42b3c946562e4781b/build-time.log,
-> that only libsepol is built.
-
-Aah, thanks for this hint. Then it becomes clear what the problem is:
-we're facing the util-linux -> python3 -> util-linux circular
-dependency. If you look at all the failures at
-http://autobuild.buildroot.net/?reason=util-linux-2.32.1, all of them
-have BR2_PACKAGE_PYTHON3_UUID=y, and this creates a python3 ->
-util-linux dependency. When there is a circular dependency, make
-automatically drops a dependency to avoid the circular loop.
-
-We need to resolve this util-linux -> python3 -> util-linux circular
-dependency. Arnout suggested that python3 can provide uuid
-functionality without libuuid, and I did some tests about this, which I
-reported on the mailing list at
-http://lists.busybox.net/pipermail/buildroot/2018-September/231060.html.
-See the whole thread that starts at
-http://lists.busybox.net/pipermail/buildroot/2018-September/229746.html.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/ptpd2/0002-ntp_isc_md5-rename-EVP_MD_CTX-into-PTPD_EVP_MD_CTX.patch b/package/ptpd2/0002-ntp_isc_md5-rename-EVP_MD_CTX-into-PTPD_EVP_MD_CTX.patch
+new file mode 100644
+index 0000000000..9a9beacf90
+--- /dev/null
++++ b/package/ptpd2/0002-ntp_isc_md5-rename-EVP_MD_CTX-into-PTPD_EVP_MD_CTX.patch
+@@ -0,0 +1,46 @@
++From 838b985510c360e651d18134e64f258f2f4c6e7c Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@micronovasrl.com>
++Date: Fri, 31 Aug 2018 18:46:56 +0200
++Subject: [PATCH] ntp_isc_md5: rename EVP_MD_CTX into PTPD_EVP_MD_CTX
++
++EVP_MD_CTX can conflict with openssl that defines a completely different
++typedef with same name.
++
++Since this typedef is used only twice in the entire ptpd,
++substitute EVP_MD_CTX with PTPD_EVP_MD_CTX.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
++---
++ src/dep/ntpengine/ntp_isc_md5.c | 2 +-
++ src/dep/ntpengine/ntp_isc_md5.h | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/dep/ntpengine/ntp_isc_md5.c b/src/dep/ntpengine/ntp_isc_md5.c
++index 7d04467..e4e34ac 100644
++--- a/src/dep/ntpengine/ntp_isc_md5.c
+++++ b/src/dep/ntpengine/ntp_isc_md5.c
++@@ -262,7 +262,7 @@ MD5authencrypt(
++ {
++ 	u_char	digest[64];
++ 	u_int	len;
++-	EVP_MD_CTX ctx;
+++	PTPD_EVP_MD_CTX ctx;
++         pkt[length / 4] = htonl(keyid);
++ 	EVP_DigestInit(&ctx);
++ 	EVP_DigestUpdate(&ctx, (u_char *)key, (u_int)strlen(key));
++diff --git a/src/dep/ntpengine/ntp_isc_md5.h b/src/dep/ntpengine/ntp_isc_md5.h
++index fa6e2ee..236c0e4 100644
++--- a/src/dep/ntpengine/ntp_isc_md5.h
+++++ b/src/dep/ntpengine/ntp_isc_md5.h
++@@ -80,7 +80,7 @@ isc_md5_final(isc_md5_t *ctx, unsigned char *digest);
++ # define MD5Init(c)             isc_md5_init(c)
++ # define MD5Update(c, p, s)     isc_md5_update(c, p, s)
++ # define MD5Final(d, c)         isc_md5_final((c), (d)) /* swapped */
++-  typedef MD5_CTX                       EVP_MD_CTX;
+++  typedef MD5_CTX                       PTPD_EVP_MD_CTX;
++ # define EVP_DigestInit(c)              MD5Init(c)
++ # define EVP_DigestUpdate(c, p, s)      MD5Update(c, p, s)
++ # define EVP_DigestFinal(c, d, pdl)     \
++-- 
++2.17.1
++
+diff --git a/package/ptpd2/0003-Solve-issue-25-Removing-type-U64-from-net-snmp-relat.patch b/package/ptpd2/0003-Solve-issue-25-Removing-type-U64-from-net-snmp-relat.patch
+new file mode 100644
+index 0000000000..f952755d36
+--- /dev/null
++++ b/package/ptpd2/0003-Solve-issue-25-Removing-type-U64-from-net-snmp-relat.patch
+@@ -0,0 +1,28 @@
++From 84157b11e8f27318f7291823c657f6313c3b60af Mon Sep 17 00:00:00 2001
++From: Jan Breuer <jan.breuer@jaybee.cz>
++Date: Tue, 12 Jul 2016 18:07:08 +0200
++Subject: [PATCH] Solve issue #25 - Removing type U64 from net-snmp related
++ code
++
++[Thomas: Backport to 2.3.1.]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ src/dep/snmp.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/dep/snmp.c b/src/dep/snmp.c
++index 5c08aaa..3086c86 100644
++--- a/src/dep/snmp.c
+++++ b/src/dep/snmp.c
++@@ -221,7 +221,7 @@ snmpHeaderIndexBest(struct snmpHeaderIndex *idx)
++ 
++ #define SNMP_LOCAL_VARIABLES			\
++ 	static unsigned long long_ret;		\
++-	static U64 counter64_ret;		\
+++	static struct counter64 counter64_ret;	\
++ 	static uint32_t ipaddr;			\
++ 	Integer64 bigint;			\
++ 	struct snmpHeaderIndex idx;		\
++-- 
++2.14.4
++
