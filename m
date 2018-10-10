@@ -1,83 +1,40 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 10 Oct 2018 10:18:31 +0200
-Subject: [Buildroot] [V2 8/8] perl-type-tiny: new package
-In-Reply-To: <20181010081831.25014-1-francois.perrad@gadz.org>
-References: <20181010081831.25014-1-francois.perrad@gadz.org>
-Message-ID: <20181010081831.25014-9-francois.perrad@gadz.org>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Wed, 10 Oct 2018 10:22:14 +0200
+Subject: [Buildroot] [PATCH] poco: disable fpenvironment for soft floating
+ point configuration
+Message-ID: <20181010082214.1815-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/Config.in                          |  1 +
- package/perl-type-tiny/Config.in           |  8 ++++++++
- package/perl-type-tiny/perl-type-tiny.hash |  7 +++++++
- package/perl-type-tiny/perl-type-tiny.mk   | 13 +++++++++++++
- 4 files changed, 29 insertions(+)
- create mode 100644 package/perl-type-tiny/Config.in
- create mode 100644 package/perl-type-tiny/perl-type-tiny.hash
- create mode 100644 package/perl-type-tiny/perl-type-tiny.mk
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-diff --git a/package/Config.in b/package/Config.in
-index def5304ef..a5d5b37de 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -759,6 +759,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-time-parsedate/Config.in"
- 	source "package/perl-timedate/Config.in"
- 	source "package/perl-try-tiny/Config.in"
-+	source "package/perl-type-tiny/Config.in"
- 	source "package/perl-uri/Config.in"
- 	source "package/perl-www-form-urlencoded/Config.in"
- 	source "package/perl-www-robotrules/Config.in"
-diff --git a/package/perl-type-tiny/Config.in b/package/perl-type-tiny/Config.in
-new file mode 100644
-index 000000000..d4f3d5c80
---- /dev/null
-+++ b/package/perl-type-tiny/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PERL_TYPE_TINY
-+	bool "perl-type-tiny"
-+	# runtime
-+	select BR2_PACKAGE_PERL_EXPORTER_TINY
-+	help
-+	  tiny, yet Moo(se)-compatible type constraint
+Many platforms don't provide all FPU features needed by Poco when
+configured for soft floating point in their fenv.h header. So
+disable fpenvironment for this configuration to avoid build breakage.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/poco/poco.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/poco/poco.mk b/package/poco/poco.mk
+index 018344d5c7..aa96d5127b 100644
+--- a/package/poco/poco.mk
++++ b/package/poco/poco.mk
+@@ -42,6 +42,11 @@ ifeq ($(BR2_sh4a)$(BR2_nios2),y)
+ POCO_CONF_OPTS += --no-fpenvironment
+ endif
+ 
++# disable fpenvironment for soft floating point configuration
++ifeq ($(BR2_SOFT_FLOAT),y)
++POCO_CONF_OPTS += --no-fpenvironment
++endif
 +
-+	  https://metacpan.org/release/Type-Tiny
-diff --git a/package/perl-type-tiny/perl-type-tiny.hash b/package/perl-type-tiny/perl-type-tiny.hash
-new file mode 100644
-index 000000000..a9e028f87
---- /dev/null
-+++ b/package/perl-type-tiny/perl-type-tiny.hash
-@@ -0,0 +1,7 @@
-+# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    fad12549fe5b904173e18a05e82e5166 Type-Tiny-1.004002.tar.gz
-+sha256 e52c7e9593052aed157a15d473b5c25a1dbb3454bf3cd6913df94cc9bb2be707 Type-Tiny-1.004002.tar.gz
-+
-+# computed by scancpan
-+sha256 0caa5aef37fdb3eddc52419d193df594550c621b84f5990830482f9f8226adde COPYRIGHT
-+sha256 c614dadb36b02257ab492e3d4341e52f3f03fe8147cafd2b7da03b3b5c0361e9 LICENSE
-diff --git a/package/perl-type-tiny/perl-type-tiny.mk b/package/perl-type-tiny/perl-type-tiny.mk
-new file mode 100644
-index 000000000..7a433d647
---- /dev/null
-+++ b/package/perl-type-tiny/perl-type-tiny.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# perl-type-tiny
-+#
-+################################################################################
-+
-+PERL_TYPE_TINY_VERSION = 1.004002
-+PERL_TYPE_TINY_SOURCE = Type-Tiny-$(PERL_TYPE_TINY_VERSION).tar.gz
-+PERL_TYPE_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TOBYINK
-+PERL_TYPE_TINY_LICENSE = Artistic or GPL-1.0+
-+PERL_TYPE_TINY_LICENSE_FILES = COPYRIGHT LICENSE
-+
-+$(eval $(perl-package))
+ ifeq ($(BR2_STATIC_LIBS),y)
+ POCO_MAKE_TARGET = static_release
+ else ifeq ($(BR2_SHARED_LIBS),y)
 -- 
-2.17.1
+2.17.0
