@@ -1,588 +1,290 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 10 Oct 2018 17:56:36 +0200
-Subject: [Buildroot] [V2 2/2] perl-*: regeneration of Config.in files
-In-Reply-To: <20181010155636.6401-1-francois.perrad@gadz.org>
-References: <20181010155636.6401-1-francois.perrad@gadz.org>
-Message-ID: <20181010155636.6401-2-francois.perrad@gadz.org>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 10 Oct 2018 11:28:39 -0500
+Subject: [Buildroot] Analysis results for 2018-10-09
+In-Reply-To: <20181010174814.5ac114f1@windsurf>
+References: <20181010060010.4E3C920736@mail.bootlin.com>
+ <20181010174814.5ac114f1@windsurf>
+Message-ID: <CANQCQpbtrG=C9T9FuznXONdqF9OTq3oqmDdDWKX5PHUhJV_=hg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- .../perl-apache-logformat-compiler/Config.in  |  2 +-
- package/perl-class-load/Config.in             | 10 +++----
- package/perl-class-std-fast/Config.in         |  2 +-
- package/perl-cookie-baker/Config.in           |  2 +-
- package/perl-crypt-openssl-rsa/Config.in      |  2 +-
- package/perl-data-optlist/Config.in           |  4 +--
- package/perl-dbd-mysql/Config.in              |  2 +-
- .../perl-devel-stacktrace-ashtml/Config.in    |  2 +-
- package/perl-dist-checkconflicts/Config.in    |  2 +-
- package/perl-file-listing/Config.in           |  2 +-
- package/perl-file-sharedir/Config.in          |  2 +-
- package/perl-gdgraph/Config.in                |  4 +--
- package/perl-html-parser/Config.in            |  2 +-
- package/perl-http-cookies/Config.in           |  4 +--
- package/perl-http-daemon/Config.in            |  6 ++--
- package/perl-http-entity-parser/Config.in     | 10 +++----
- package/perl-http-headers-fast/Config.in      |  2 +-
- package/perl-http-message/Config.in           | 10 +++----
- package/perl-http-negotiate/Config.in         |  2 +-
- package/perl-io-socket-multicast/Config.in    |  2 +-
- package/perl-io-socket-ssl/Config.in          |  2 +-
- package/perl-libwww-perl/Config.in            | 26 ++++++++---------
- package/perl-mail-dkim/Config.in              |  6 ++--
- package/perl-mailtools/Config.in              |  2 +-
- package/perl-mime-tools/Config.in             |  2 +-
- package/perl-module-implementation/Config.in  |  4 +--
- .../Config.in                                 |  2 +-
- package/perl-net-dns/Config.in                |  2 +-
- package/perl-net-http/Config.in               |  2 +-
- package/perl-package-stash/Config.in          |  4 +--
- package/perl-plack/Config.in                  | 28 +++++++++----------
- package/perl-www-robotrules/Config.in         |  2 +-
- package/perl-x10/Config.in                    |  6 ++--
- package/perl-xml-libxml/Config.in             |  6 ++--
- package/perl-xml-sax/Config.in                |  4 +--
- 35 files changed, 86 insertions(+), 86 deletions(-)
+Thomas,
 
-diff --git a/package/perl-apache-logformat-compiler/Config.in b/package/perl-apache-logformat-compiler/Config.in
-index 81d621082..8506837dd 100644
---- a/package/perl-apache-logformat-compiler/Config.in
-+++ b/package/perl-apache-logformat-compiler/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PERL_APACHE_LOGFORMAT_COMPILER
- 	bool "perl-apache-logformat-compiler"
--	select BR2_PACKAGE_PERL_POSIX_STRFTIME_COMPILER
-+	select BR2_PACKAGE_PERL_POSIX_STRFTIME_COMPILER # runtime
- 	help
- 	  Compile a log format string to perl-code
- 
-diff --git a/package/perl-class-load/Config.in b/package/perl-class-load/Config.in
-index fef9431e4..eb0bd366a 100644
---- a/package/perl-class-load/Config.in
-+++ b/package/perl-class-load/Config.in
-@@ -1,11 +1,11 @@
- config BR2_PACKAGE_PERL_CLASS_LOAD
- 	bool "perl-class-load"
- 	depends on !BR2_STATIC_LIBS
--	select BR2_PACKAGE_PERL_DATA_OPTLIST
--	select BR2_PACKAGE_PERL_MODULE_IMPLEMENTATION
--	select BR2_PACKAGE_PERL_MODULE_RUNTIME
--	select BR2_PACKAGE_PERL_PACKAGE_STASH
--	select BR2_PACKAGE_PERL_TRY_TINY
-+	select BR2_PACKAGE_PERL_DATA_OPTLIST # runtime
-+	select BR2_PACKAGE_PERL_MODULE_IMPLEMENTATION # runtime
-+	select BR2_PACKAGE_PERL_MODULE_RUNTIME # runtime
-+	select BR2_PACKAGE_PERL_PACKAGE_STASH # runtime
-+	select BR2_PACKAGE_PERL_TRY_TINY # runtime
- 	help
- 	  A working (require "Class::Name") and more
- 
-diff --git a/package/perl-class-std-fast/Config.in b/package/perl-class-std-fast/Config.in
-index 10b1e0d78..6f5994ef5 100644
---- a/package/perl-class-std-fast/Config.in
-+++ b/package/perl-class-std-fast/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PERL_CLASS_STD_FAST
- 	bool "perl-class-std-fast"
--	select BR2_PACKAGE_PERL_CLASS_STD
-+	select BR2_PACKAGE_PERL_CLASS_STD # runtime
- 	help
- 	  faster but less secure than Class::Std
- 
-diff --git a/package/perl-cookie-baker/Config.in b/package/perl-cookie-baker/Config.in
-index e6846a21e..9e746237a 100644
---- a/package/perl-cookie-baker/Config.in
-+++ b/package/perl-cookie-baker/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PERL_COOKIE_BAKER
- 	bool "perl-cookie-baker"
--	select BR2_PACKAGE_PERL_URI
-+	select BR2_PACKAGE_PERL_URI # runtime
- 	help
- 	  Cookie string generator / parser
- 
-diff --git a/package/perl-crypt-openssl-rsa/Config.in b/package/perl-crypt-openssl-rsa/Config.in
-index fe2e0cf59..155ec03ec 100644
---- a/package/perl-crypt-openssl-rsa/Config.in
-+++ b/package/perl-crypt-openssl-rsa/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_PERL_CRYPT_OPENSSL_RSA
- 	bool "perl-crypt-openssl-rsa"
- 	depends on !BR2_STATIC_LIBS
--	select BR2_PACKAGE_PERL_CRYPT_OPENSSL_RANDOM
-+	select BR2_PACKAGE_PERL_CRYPT_OPENSSL_RANDOM # runtime
- 	help
- 	  RSA encoding and decoding, using the openSSL libraries
- 
-diff --git a/package/perl-data-optlist/Config.in b/package/perl-data-optlist/Config.in
-index 0393e6564..a95ca05f5 100644
---- a/package/perl-data-optlist/Config.in
-+++ b/package/perl-data-optlist/Config.in
-@@ -1,8 +1,8 @@
- config BR2_PACKAGE_PERL_DATA_OPTLIST
- 	bool "perl-data-optlist"
- 	depends on !BR2_STATIC_LIBS
--	select BR2_PACKAGE_PERL_PARAMS_UTIL
--	select BR2_PACKAGE_PERL_SUB_INSTALL
-+	select BR2_PACKAGE_PERL_PARAMS_UTIL # runtime
-+	select BR2_PACKAGE_PERL_SUB_INSTALL # runtime
- 	help
- 	  parse and validate simple name/value option pairs
- 
-diff --git a/package/perl-dbd-mysql/Config.in b/package/perl-dbd-mysql/Config.in
-index f6cc3f99e..c00d64be6 100644
---- a/package/perl-dbd-mysql/Config.in
-+++ b/package/perl-dbd-mysql/Config.in
-@@ -4,8 +4,8 @@ config BR2_PACKAGE_PERL_DBD_MYSQL
- 	depends on BR2_INSTALL_LIBSTDCPP # mysql
- 	depends on BR2_USE_MMU # mysql
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # mysql
--	select BR2_PACKAGE_PERL_DBI
- 	select BR2_PACKAGE_MYSQL
-+	select BR2_PACKAGE_PERL_DBI # runtime
- 	help
- 	  A MySQL driver for the Perl5 Database Interface (DBI)
- 
-diff --git a/package/perl-devel-stacktrace-ashtml/Config.in b/package/perl-devel-stacktrace-ashtml/Config.in
-index 001709a6a..ce6f750bd 100644
---- a/package/perl-devel-stacktrace-ashtml/Config.in
-+++ b/package/perl-devel-stacktrace-ashtml/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PERL_DEVEL_STACKTRACE_ASHTML
- 	bool "perl-devel-stacktrace-ashtml"
--	select BR2_PACKAGE_PERL_DEVEL_STACKTRACE
-+	select BR2_PACKAGE_PERL_DEVEL_STACKTRACE # runtime
- 	help
- 	  Displays stack trace in HTML
- 
-diff --git a/package/perl-dist-checkconflicts/Config.in b/package/perl-dist-checkconflicts/Config.in
-index 10f0944aa..e834d0113 100644
---- a/package/perl-dist-checkconflicts/Config.in
-+++ b/package/perl-dist-checkconflicts/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PERL_DIST_CHECKCONFLICTS
- 	bool "perl-dist-checkconflicts"
--	select BR2_PACKAGE_PERL_MODULE_RUNTIME
-+	select BR2_PACKAGE_PERL_MODULE_RUNTIME # runtime
- 	help
- 	  declare version conflicts for your dist
- 
-diff --git a/package/perl-file-listing/Config.in b/package/perl-file-listing/Config.in
-index 3cb199677..e1fbb05b7 100644
---- a/package/perl-file-listing/Config.in
-+++ b/package/perl-file-listing/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PERL_FILE_LISTING
- 	bool "perl-file-listing"
--	select BR2_PACKAGE_PERL_HTTP_DATE
-+	select BR2_PACKAGE_PERL_HTTP_DATE # runtime
- 	help
- 	  parse directory listing
- 
-diff --git a/package/perl-file-sharedir/Config.in b/package/perl-file-sharedir/Config.in
-index 592dc8f43..b8dee5acd 100644
---- a/package/perl-file-sharedir/Config.in
-+++ b/package/perl-file-sharedir/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PERL_FILE_SHAREDIR
- 	bool "perl-file-sharedir"
--	select BR2_PACKAGE_PERL_CLASS_INSPECTOR
-+	select BR2_PACKAGE_PERL_CLASS_INSPECTOR # runtime
- 	help
- 	  Locate per-dist and per-module shared files
- 
-diff --git a/package/perl-gdgraph/Config.in b/package/perl-gdgraph/Config.in
-index 10b3cd032..e0b6a25a4 100644
---- a/package/perl-gdgraph/Config.in
-+++ b/package/perl-gdgraph/Config.in
-@@ -1,8 +1,8 @@
- config BR2_PACKAGE_PERL_GDGRAPH
- 	bool "perl-gdgraph"
- 	depends on !BR2_STATIC_LIBS
--	select BR2_PACKAGE_PERL_GD
--	select BR2_PACKAGE_PERL_GDTEXTUTIL
-+	select BR2_PACKAGE_PERL_GD # runtime
-+	select BR2_PACKAGE_PERL_GDTEXTUTIL # runtime
- 	help
- 	  Produces charts with GD
- 
-diff --git a/package/perl-html-parser/Config.in b/package/perl-html-parser/Config.in
-index 22a16d646..bc1c9a59e 100644
---- a/package/perl-html-parser/Config.in
-+++ b/package/perl-html-parser/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_PERL_HTML_PARSER
- 	bool "perl-html-parser"
- 	depends on !BR2_STATIC_LIBS
--	select BR2_PACKAGE_PERL_HTML_TAGSET
-+	select BR2_PACKAGE_PERL_HTML_TAGSET # runtime
- 	help
- 	  HTML parser class
- 
-diff --git a/package/perl-http-cookies/Config.in b/package/perl-http-cookies/Config.in
-index 4095fee82..117e11a84 100644
---- a/package/perl-http-cookies/Config.in
-+++ b/package/perl-http-cookies/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_PERL_HTTP_COOKIES
- 	bool "perl-http-cookies"
--	select BR2_PACKAGE_PERL_HTTP_DATE
--	select BR2_PACKAGE_PERL_HTTP_MESSAGE
-+	select BR2_PACKAGE_PERL_HTTP_DATE # runtime
-+	select BR2_PACKAGE_PERL_HTTP_MESSAGE # runtime
- 	help
- 	  HTTP cookie jars
- 
-diff --git a/package/perl-http-daemon/Config.in b/package/perl-http-daemon/Config.in
-index b5ed5a418..ff302c12b 100644
---- a/package/perl-http-daemon/Config.in
-+++ b/package/perl-http-daemon/Config.in
-@@ -1,8 +1,8 @@
- config BR2_PACKAGE_PERL_HTTP_DAEMON
- 	bool "perl-http-daemon"
--	select BR2_PACKAGE_PERL_HTTP_DATE
--	select BR2_PACKAGE_PERL_HTTP_MESSAGE
--	select BR2_PACKAGE_PERL_LWP_MEDIATYPES
-+	select BR2_PACKAGE_PERL_HTTP_DATE # runtime
-+	select BR2_PACKAGE_PERL_HTTP_MESSAGE # runtime
-+	select BR2_PACKAGE_PERL_LWP_MEDIATYPES # runtime
- 	help
- 	  a simple http server class
- 
-diff --git a/package/perl-http-entity-parser/Config.in b/package/perl-http-entity-parser/Config.in
-index 41883ac01..998182aac 100644
---- a/package/perl-http-entity-parser/Config.in
-+++ b/package/perl-http-entity-parser/Config.in
-@@ -1,10 +1,10 @@
- config BR2_PACKAGE_PERL_HTTP_ENTITY_PARSER
- 	bool "perl-http-entity-parser"
--	select BR2_PACKAGE_PERL_HTTP_MULTIPARTPARSER
--	select BR2_PACKAGE_PERL_HASH_MULTIVALUE
--	select BR2_PACKAGE_PERL_JSON_MAYBEXS
--	select BR2_PACKAGE_PERL_STREAM_BUFFERED
--	select BR2_PACKAGE_PERL_WWW_FORM_URLENCODED
-+	select BR2_PACKAGE_PERL_HTTP_MULTIPARTPARSER # runtime
-+	select BR2_PACKAGE_PERL_HASH_MULTIVALUE # runtime
-+	select BR2_PACKAGE_PERL_JSON_MAYBEXS # runtime
-+	select BR2_PACKAGE_PERL_STREAM_BUFFERED # runtime
-+	select BR2_PACKAGE_PERL_WWW_FORM_URLENCODED # runtime
- 	help
- 	  PSGI compliant HTTP Entity Parser
- 
-diff --git a/package/perl-http-headers-fast/Config.in b/package/perl-http-headers-fast/Config.in
-index 7272aaad4..fe022ae30 100644
---- a/package/perl-http-headers-fast/Config.in
-+++ b/package/perl-http-headers-fast/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PERL_HTTP_HEADERS_FAST
- 	bool "perl-http-headers-fast"
--	select BR2_PACKAGE_PERL_HTTP_DATE
-+	select BR2_PACKAGE_PERL_HTTP_DATE # runtime
- 	help
- 	  faster implementation of HTTP::Headers
- 
-diff --git a/package/perl-http-message/Config.in b/package/perl-http-message/Config.in
-index 682a4b01f..c8162cae3 100644
---- a/package/perl-http-message/Config.in
-+++ b/package/perl-http-message/Config.in
-@@ -1,10 +1,10 @@
- config BR2_PACKAGE_PERL_HTTP_MESSAGE
- 	bool "perl-http-message"
--	select BR2_PACKAGE_PERL_ENCODE_LOCALE
--	select BR2_PACKAGE_PERL_HTTP_DATE
--	select BR2_PACKAGE_PERL_IO_HTML
--	select BR2_PACKAGE_PERL_LWP_MEDIATYPES
--	select BR2_PACKAGE_PERL_URI
-+	select BR2_PACKAGE_PERL_ENCODE_LOCALE # runtime
-+	select BR2_PACKAGE_PERL_HTTP_DATE # runtime
-+	select BR2_PACKAGE_PERL_IO_HTML # runtime
-+	select BR2_PACKAGE_PERL_LWP_MEDIATYPES # runtime
-+	select BR2_PACKAGE_PERL_URI # runtime
- 	help
- 	  HTTP style message (base class)
- 
-diff --git a/package/perl-http-negotiate/Config.in b/package/perl-http-negotiate/Config.in
-index 449b0861a..20838d9cd 100644
---- a/package/perl-http-negotiate/Config.in
-+++ b/package/perl-http-negotiate/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PERL_HTTP_NEGOTIATE
- 	bool "perl-http-negotiate"
--	select BR2_PACKAGE_PERL_HTTP_MESSAGE
-+	select BR2_PACKAGE_PERL_HTTP_MESSAGE # runtime
- 	help
- 	  choose a variant to serve
- 
-diff --git a/package/perl-io-socket-multicast/Config.in b/package/perl-io-socket-multicast/Config.in
-index f63a4e1bf..87865eedf 100644
---- a/package/perl-io-socket-multicast/Config.in
-+++ b/package/perl-io-socket-multicast/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_PERL_IO_SOCKET_MULTICAST
- 	bool "perl-io-socket-multicast"
- 	depends on !BR2_STATIC_LIBS
--	select BR2_PACKAGE_PERL_IO_INTERFACE
-+	select BR2_PACKAGE_PERL_IO_INTERFACE # runtime
- 	help
- 	  Send and receive multicast messages
- 
-diff --git a/package/perl-io-socket-ssl/Config.in b/package/perl-io-socket-ssl/Config.in
-index d24e568bc..a7b94a392 100644
---- a/package/perl-io-socket-ssl/Config.in
-+++ b/package/perl-io-socket-ssl/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_PERL_IO_SOCKET_SSL
- 	bool "perl-io-socket-ssl"
- 	depends on !BR2_STATIC_LIBS
--	select BR2_PACKAGE_PERL_NET_SSLEAY
-+	select BR2_PACKAGE_PERL_NET_SSLEAY # runtime
- 	help
- 	  Nearly transparent SSL encapsulation for IO::Socket::INET.
- 
-diff --git a/package/perl-libwww-perl/Config.in b/package/perl-libwww-perl/Config.in
-index 09fc00543..b53e36a68 100644
---- a/package/perl-libwww-perl/Config.in
-+++ b/package/perl-libwww-perl/Config.in
-@@ -1,19 +1,19 @@
- config BR2_PACKAGE_PERL_LIBWWW_PERL
- 	bool "perl-libwww-perl"
- 	depends on !BR2_STATIC_LIBS
--	select BR2_PACKAGE_PERL_ENCODE_LOCALE
--	select BR2_PACKAGE_PERL_FILE_LISTING
--	select BR2_PACKAGE_PERL_HTML_PARSER
--	select BR2_PACKAGE_PERL_HTTP_COOKIES
--	select BR2_PACKAGE_PERL_HTTP_DAEMON
--	select BR2_PACKAGE_PERL_HTTP_DATE
--	select BR2_PACKAGE_PERL_HTTP_MESSAGE
--	select BR2_PACKAGE_PERL_HTTP_NEGOTIATE
--	select BR2_PACKAGE_PERL_LWP_MEDIATYPES
--	select BR2_PACKAGE_PERL_NET_HTTP
--	select BR2_PACKAGE_PERL_TRY_TINY
--	select BR2_PACKAGE_PERL_URI
--	select BR2_PACKAGE_PERL_WWW_ROBOTRULES
-+	select BR2_PACKAGE_PERL_ENCODE_LOCALE # runtime
-+	select BR2_PACKAGE_PERL_FILE_LISTING # runtime
-+	select BR2_PACKAGE_PERL_HTML_PARSER # runtime
-+	select BR2_PACKAGE_PERL_HTTP_COOKIES # runtime
-+	select BR2_PACKAGE_PERL_HTTP_DAEMON # runtime
-+	select BR2_PACKAGE_PERL_HTTP_DATE # runtime
-+	select BR2_PACKAGE_PERL_HTTP_MESSAGE # runtime
-+	select BR2_PACKAGE_PERL_HTTP_NEGOTIATE # runtime
-+	select BR2_PACKAGE_PERL_LWP_MEDIATYPES # runtime
-+	select BR2_PACKAGE_PERL_NET_HTTP # runtime
-+	select BR2_PACKAGE_PERL_TRY_TINY # runtime
-+	select BR2_PACKAGE_PERL_URI # runtime
-+	select BR2_PACKAGE_PERL_WWW_ROBOTRULES # runtime
- 	help
- 	  The World-Wide Web library for Perl
- 
-diff --git a/package/perl-mail-dkim/Config.in b/package/perl-mail-dkim/Config.in
-index 3db54f3c3..f13ef0a4b 100644
---- a/package/perl-mail-dkim/Config.in
-+++ b/package/perl-mail-dkim/Config.in
-@@ -1,9 +1,9 @@
- config BR2_PACKAGE_PERL_MAIL_DKIM
- 	bool "perl-mail-dkim"
- 	depends on !BR2_STATIC_LIBS
--	select BR2_PACKAGE_PERL_CRYPT_OPENSSL_RSA
--	select BR2_PACKAGE_PERL_MAILTOOLS
--	select BR2_PACKAGE_PERL_NET_DNS
-+	select BR2_PACKAGE_PERL_CRYPT_OPENSSL_RSA # runtime
-+	select BR2_PACKAGE_PERL_MAILTOOLS # runtime
-+	select BR2_PACKAGE_PERL_NET_DNS # runtime
- 	help
- 	  Signs/verifies Internet mail with DKIM/DomainKey signatures
- 
-diff --git a/package/perl-mailtools/Config.in b/package/perl-mailtools/Config.in
-index 2123c61ea..adbccd34f 100644
---- a/package/perl-mailtools/Config.in
-+++ b/package/perl-mailtools/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PERL_MAILTOOLS
- 	bool "perl-mailtools"
--	select BR2_PACKAGE_PERL_TIMEDATE
-+	select BR2_PACKAGE_PERL_TIMEDATE # runtime
- 	help
- 	  Various ancient e-mail related modules
- 
-diff --git a/package/perl-mime-tools/Config.in b/package/perl-mime-tools/Config.in
-index 740651d1d..d07d76f37 100644
---- a/package/perl-mime-tools/Config.in
-+++ b/package/perl-mime-tools/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PERL_MIME_TOOLS
- 	bool "perl-mime-tools"
--	select BR2_PACKAGE_PERL_MAILTOOLS
-+	select BR2_PACKAGE_PERL_MAILTOOLS # runtime
- 	help
- 	  Tools to manipulate MIME messages
- 
-diff --git a/package/perl-module-implementation/Config.in b/package/perl-module-implementation/Config.in
-index d7c526cec..713cd2a53 100644
---- a/package/perl-module-implementation/Config.in
-+++ b/package/perl-module-implementation/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_PERL_MODULE_IMPLEMENTATION
- 	bool "perl-module-implementation"
--	select BR2_PACKAGE_PERL_MODULE_RUNTIME
--	select BR2_PACKAGE_PERL_TRY_TINY
-+	select BR2_PACKAGE_PERL_MODULE_RUNTIME # runtime
-+	select BR2_PACKAGE_PERL_TRY_TINY # runtime
- 	help
- 	  Loads one of several alternate underlying implementations for
- 	  a module
-diff --git a/package/perl-mojolicious-plugin-authentication/Config.in b/package/perl-mojolicious-plugin-authentication/Config.in
-index 26c3cde5d..0a7a3d62e 100644
---- a/package/perl-mojolicious-plugin-authentication/Config.in
-+++ b/package/perl-mojolicious-plugin-authentication/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PERL_MOJOLICIOUS_PLUGIN_AUTHENTICATION
- 	bool "perl-mojolicious-plugin-authentication"
--	select BR2_PACKAGE_PERL_MOJOLICIOUS
-+	select BR2_PACKAGE_PERL_MOJOLICIOUS # runtime
- 	help
- 	  A plugin to make authentication a bit easier
- 
-diff --git a/package/perl-net-dns/Config.in b/package/perl-net-dns/Config.in
-index c156505c7..bc90b55cd 100644
---- a/package/perl-net-dns/Config.in
-+++ b/package/perl-net-dns/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PERL_NET_DNS
- 	bool "perl-net-dns"
--	select BR2_PACKAGE_PERL_DIGEST_HMAC
-+	select BR2_PACKAGE_PERL_DIGEST_HMAC # runtime
- 	help
- 	  Perl Interface to the Domain Name System
- 
-diff --git a/package/perl-net-http/Config.in b/package/perl-net-http/Config.in
-index 63215772a..522711f54 100644
---- a/package/perl-net-http/Config.in
-+++ b/package/perl-net-http/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PERL_NET_HTTP
- 	bool "perl-net-http"
--	select BR2_PACKAGE_PERL_URI
-+	select BR2_PACKAGE_PERL_URI # runtime
- 	help
- 	  Low-level HTTP connection (client)
- 
-diff --git a/package/perl-package-stash/Config.in b/package/perl-package-stash/Config.in
-index 755850f7b..d7778e50c 100644
---- a/package/perl-package-stash/Config.in
-+++ b/package/perl-package-stash/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_PERL_PACKAGE_STASH
- 	bool "perl-package-stash"
--	select BR2_PACKAGE_PERL_DIST_CHECKCONFLICTS
--	select BR2_PACKAGE_PERL_MODULE_IMPLEMENTATION
-+	select BR2_PACKAGE_PERL_DIST_CHECKCONFLICTS # runtime
-+	select BR2_PACKAGE_PERL_MODULE_IMPLEMENTATION # runtime
- 	help
- 	  routines for manipulating stashes
- 
-diff --git a/package/perl-plack/Config.in b/package/perl-plack/Config.in
-index 50d56e439..0401fa3e0 100644
---- a/package/perl-plack/Config.in
-+++ b/package/perl-plack/Config.in
-@@ -1,19 +1,19 @@
- config BR2_PACKAGE_PERL_PLACK
- 	bool "perl-plack"
--	select BR2_PACKAGE_PERL_APACHE_LOGFORMAT_COMPILER
--	select BR2_PACKAGE_PERL_COOKIE_BAKER
--	select BR2_PACKAGE_PERL_DEVEL_STACKTRACE
--	select BR2_PACKAGE_PERL_DEVEL_STACKTRACE_ASHTML
--	select BR2_PACKAGE_PERL_FILE_SHAREDIR
--	select BR2_PACKAGE_PERL_FILESYS_NOTIFY_SIMPLE
--	select BR2_PACKAGE_PERL_HTTP_ENTITY_PARSER
--	select BR2_PACKAGE_PERL_HTTP_HEADERS_FAST
--	select BR2_PACKAGE_PERL_HTTP_MESSAGE
--	select BR2_PACKAGE_PERL_HASH_MULTIVALUE
--	select BR2_PACKAGE_PERL_STREAM_BUFFERED
--	select BR2_PACKAGE_PERL_TRY_TINY
--	select BR2_PACKAGE_PERL_URI
--	select BR2_PACKAGE_PERL_WWW_FORM_URLENCODED
-+	select BR2_PACKAGE_PERL_APACHE_LOGFORMAT_COMPILER # runtime
-+	select BR2_PACKAGE_PERL_COOKIE_BAKER # runtime
-+	select BR2_PACKAGE_PERL_DEVEL_STACKTRACE # runtime
-+	select BR2_PACKAGE_PERL_DEVEL_STACKTRACE_ASHTML # runtime
-+	select BR2_PACKAGE_PERL_FILE_SHAREDIR # runtime
-+	select BR2_PACKAGE_PERL_FILESYS_NOTIFY_SIMPLE # runtime
-+	select BR2_PACKAGE_PERL_HTTP_ENTITY_PARSER # runtime
-+	select BR2_PACKAGE_PERL_HTTP_HEADERS_FAST # runtime
-+	select BR2_PACKAGE_PERL_HTTP_MESSAGE # runtime
-+	select BR2_PACKAGE_PERL_HASH_MULTIVALUE # runtime
-+	select BR2_PACKAGE_PERL_STREAM_BUFFERED # runtime
-+	select BR2_PACKAGE_PERL_TRY_TINY # runtime
-+	select BR2_PACKAGE_PERL_URI # runtime
-+	select BR2_PACKAGE_PERL_WWW_FORM_URLENCODED # runtime
- 	help
- 	  Perl Superglue for Web frameworks and Web Servers (PSGI
- 	  toolkit)
-diff --git a/package/perl-www-robotrules/Config.in b/package/perl-www-robotrules/Config.in
-index f43d2904d..80db06f0c 100644
---- a/package/perl-www-robotrules/Config.in
-+++ b/package/perl-www-robotrules/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PERL_WWW_ROBOTRULES
- 	bool "perl-www-robotrules"
--	select BR2_PACKAGE_PERL_URI
-+	select BR2_PACKAGE_PERL_URI # runtime
- 	help
- 	  database of robots.txt-derived permissions
- 
-diff --git a/package/perl-x10/Config.in b/package/perl-x10/Config.in
-index 984a561b0..884dbb82d 100644
---- a/package/perl-x10/Config.in
-+++ b/package/perl-x10/Config.in
-@@ -1,9 +1,9 @@
- config BR2_PACKAGE_PERL_X10
- 	bool "perl-x10"
- 	depends on !BR2_STATIC_LIBS
--	select BR2_PACKAGE_PERL_ASTRO_SUNTIME
--	select BR2_PACKAGE_PERL_DEVICE_SERIALPORT
--	select BR2_PACKAGE_PERL_TIME_PARSEDATE
-+	select BR2_PACKAGE_PERL_ASTRO_SUNTIME # runtime
-+	select BR2_PACKAGE_PERL_DEVICE_SERIALPORT # runtime
-+	select BR2_PACKAGE_PERL_TIME_PARSEDATE # runtime
- 	help
- 	  creates a server used to receive events from an x10 client
- 
-diff --git a/package/perl-xml-libxml/Config.in b/package/perl-xml-libxml/Config.in
-index fb15e1011..0e4169867 100644
---- a/package/perl-xml-libxml/Config.in
-+++ b/package/perl-xml-libxml/Config.in
-@@ -3,9 +3,9 @@ config BR2_PACKAGE_PERL_XML_LIBXML
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_LIBXML2
- 	select BR2_PACKAGE_ZLIB
--	select BR2_PACKAGE_PERL_XML_NAMESPACESUPPORT
--	select BR2_PACKAGE_PERL_XML_SAX
--	select BR2_PACKAGE_PERL_XML_SAX_BASE
-+	select BR2_PACKAGE_PERL_XML_NAMESPACESUPPORT # runtime
-+	select BR2_PACKAGE_PERL_XML_SAX # runtime
-+	select BR2_PACKAGE_PERL_XML_SAX_BASE # runtime
- 	help
- 	  Interface to Gnome libxml2 xml parsing and DOM library
- 
-diff --git a/package/perl-xml-sax/Config.in b/package/perl-xml-sax/Config.in
-index 4f5567e25..cf89c21be 100644
---- a/package/perl-xml-sax/Config.in
-+++ b/package/perl-xml-sax/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_PERL_XML_SAX
- 	bool "perl-xml-sax"
--	select BR2_PACKAGE_PERL_XML_NAMESPACESUPPORT
--	select BR2_PACKAGE_PERL_XML_SAX_BASE
-+	select BR2_PACKAGE_PERL_XML_NAMESPACESUPPORT # runtime
-+	select BR2_PACKAGE_PERL_XML_SAX_BASE # runtime
- 	help
- 	  Simple API for XML
- 
--- 
-2.17.1
+
+On Wed, Oct 10, 2018 at 10:48 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> Here is an analysis of yesterday build results. Johan, Frank,
+> Christian, Fabrice, Peter, Matt, Bernd, Giulio, Baruch, you are in Cc
+> because there are questions/issues for you below. Thanks! :-)
+>
+> On Wed, 10 Oct 2018 08:00:10 +0200 (CEST), Thomas Petazzoni wrote:
+>
+> >       master | 187 |  68 |   0 | 255 |
+>
+> These results are not very good, let's have a look at what's going on,
+> and try to get everyone to help fixing those issues.
+>
+> >          arm |                boa-0.94.14rc21 | NOK | http://autobuild.buildroot.net/results/e5ff4589243ce1f11248b5f9fab3cca614a48b11 | ORPH
+>
+> (cd src && make - --no-print-directory - --jobserver-fds=6,7 -j)
+> make: unrecognized option '--jobserver-fds=6,7'
+>
+> This suddenly started happening on September 9, 2018. We have not
+> bumped boa. I'm not sure what caused this. It fails on different
+> autobuilder machines. Boa is calling submake with $(MFLAGS), which is
+> probably the issue, but why did this suddenly started to happen ?
+>
+> With a minimal configuration with just Boa, I cannot reproduce on my
+> machine here, neither on my autobuilder where the problem is reported
+> to occur.
+>
+> >         i686 |                   boost-1.68.0 | NOK | http://autobuild.buildroot.net/results/1ceed7d91627711c12c4866fa6672a02fc6ddc8c |
+>
+> libboost_chrono shouldn't have been installed: missing select in boost/Config.in
+>
+> >          arm |                   boost-1.68.0 | NOK | http://autobuild.buildroot.net/results/41054f876975214741dccd08eda999a425281b7f |
+>
+> libboost_atomic shouldn't have been installed: missing select in boost/Config.in
+>
+> Fabrice, these two are for you :)
+>
+> >     mips64el |                     brltty-5.6 | NOK | http://autobuild.buildroot.net/results/7187e560e66f2bd6073b5510e2782ebdaccfb4a9 |
+> >     mips64el |                     brltty-5.6 | NOK | http://autobuild.buildroot.net/results/5f8e8b8517fda50a2e98a456933260f08054356d |
+>
+> Those should be fixed by
+> https://git.buildroot.org/buildroot/commit/?id=9143c217213542574586c0e6a9f003e822633917.
+>
+> >      aarch64 |                 collectd-5.7.1 | NOK | http://autobuild.buildroot.net/results/24a280d6233b3284edd44c4528d8799c6894c11a | ORPH
+> >          sh4 |                 collectd-5.7.1 | NOK | http://autobuild.buildroot.net/results/63a4f980d7cdb4b0823840f747589803fcd0d69f | ORPH
+> >          arc |                 collectd-5.7.1 | NOK | http://autobuild.buildroot.net/results/1a6f2fcf1a88ecc5b598dd11c5914dcacf0e1e6b | ORPH
+> >          arm |                 collectd-5.7.1 | NOK | http://autobuild.buildroot.net/results/b0829bc3343d6dc3065078e94896725b1c808bc1 | ORPH
+>
+> Fixed by
+> https://git.buildroot.org/buildroot/commit/package/collectd?id=d65ea85fddaf64a7762f958d1ce9fb33997648d3
+>
+> >       x86_64 |       docker-containerd-v1.1.3 | NOK | http://autobuild.buildroot.net/results/6c26ac3a8aa39abcb5eb390109891790610a759b |
+> >       x86_64 |       docker-containerd-v1.1.3 | NOK | http://autobuild.buildroot.net/results/10654bccc3d20ec6d29d371c48dd90cbddb8c4da |
+> >       x86_64 |       docker-containerd-v1.1.3 | NOK | http://autobuild.buildroot.net/results/56b564a27a06792c4854fe983da92d40c0c4708c |
+>
+> /home/naourr/work/instance-3/output/host/lib/go/pkg/tool/linux_amd64/link: running /home/naourr/work/instance-3/output/host/bin/x86_64-amd-linux-gnu-gcc failed: exit status 1
+> /tmp/go-build283204336/b001/exe/a.out: final close failed: Invalid operation
+>
+> Christian, what is happening here? Could you have a look?
+>
+> >       x86_64 |                    erlang-21.0 | NOK | http://autobuild.buildroot.net/results/fc633f80c7c36a90e641487f5a888fbb767c2a54 |
+>
+> In file included from zlib/adler32.c:11:0:
+> zlib/zutil.h:172:39: error: "_LFS64_LARGEFILE" is not defined [-Werror=undef]
+>      (!defined(_LARGEFILE64_SOURCE) || _LFS64_LARGEFILE-0 == 0)
+>
+> Seems like a musl/erlang issue. Johan, Frank, could you have a look ?
+>
+> >          arc |               glibc-legal-info | NOK | http://autobuild.buildroot.net/results/64c70d82c857c272df171ae6783629c1ba92d812 | ORPH
+>
+> Fixed by
+> https://git.buildroot.org/buildroot/commit/?id=b14ad0bd697038e4cf48ecf48830fb3369f1f25e.
+>
+> >     mips64el |                      gpsd-3.18 | NOK | http://autobuild.buildroot.net/results/c00d22a6dcadb82a19afab6eacea654d3c41b4c5 | ORPH
+> >      powerpc |                      gpsd-3.18 | NOK | http://autobuild.buildroot.net/results/18599ea12a35b9715a67c1f4e5c4e56906235c94 | ORPH
+> >          arm |                      gpsd-3.18 | NOK | http://autobuild.buildroot.net/results/a13a5d852c83cd1fc9f2d1fc2b7302db515278b8 | ORPH
+>
+> Fixed by https://git.buildroot.org/buildroot/commit/package/gpsd?id=ae2a91322aeaa72d6f5354312056d16dc275470d
+>
+> >     mips64el |        gst-plugins-bad-0.10.23 | NOK | http://autobuild.buildroot.net/results/ab39280ceaf967e08abfd1f51efa4613495237f5 | ORPH
+>
+>
+> gstspanplc.c:223:21: error: dereferencing pointer to incomplete type 'plc_state_t {aka struct plc_state_s}'
+>    if (plc->plc_state->missing_samples != 0)
+>
+> Peter (Seiderer) ?
+>
+> >          arm |                   host-go-1.11 | NOK | http://autobuild.buildroot.net/results/8d3af6f00bf34737faabc21bdccf7d025462fec7 |
+>
+> fatal error: unexpected signal during runtime execution
+> [signal SIGBUS: bus error code=0x2 addr=0xc000800010 pc=0x42098d]
+>
+> This particular issue seems to happen only on Matt autobuilder. Matt,
+> can you check if you can reproduce it reliably ?
+
+I'll take a look.
+
+>
+> >      powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/69f52854b222b5be1a981b96a804098fec5a849b | ORPH
+> >      powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/eb8dc1e67eae123a823fadc17ca7611c2cc7f621 | ORPH
+>
+> motion_comp_altivec.c:48:12: internal compiler error: Segmentation fault
+>      return vec_ld (A, (uint8_t *)B);
+>
+> Bernd, could you have a look at this PowerPC/Altivec issue ?
+>
+> >          arm |                    luvi-v2.8.0 | NOK | http://autobuild.buildroot.net/results/2bdbb93e6404943e59791773106d8b2680211886 |
+>
+> luvi 2.8.0 fails to build. Bernd, you bumped this package, and J?rg
+> suggested to revert the bump. Could you discuss this, and provide a fix?
+>
+> >      aarch64 |  Makefile:709: target-finalize | NOK | http://autobuild.buildroot.net/results/dcbbae0180bc597c58fc694c3006b623633aab7f |
+> >      aarch64 |  Makefile:709: target-finalize | NOK | http://autobuild.buildroot.net/results/cef7e38fbd4de65d1830f681a497bc007a897502 |
+> >          arm |  Makefile:709: target-finalize | NOK | http://autobuild.buildroot.net/results/62143510a7ede7d92f55e908306bc367586c2748 |
+> >      sparc64 |  Makefile:709: target-finalize | NOK | http://autobuild.buildroot.net/results/d0c1aa394745ba48d832cc77c23721ca6b453d23 |
+>
+> See below "target-finalize"
+>
+> >         m68k |                  minizip-2.5.3 | NOK | http://autobuild.buildroot.net/results/78b8eb0f9f7f2963f0056834054f16e764bc3106 |
+>
+> /home/buildroot/build/instance-0/output/host/m68k-buildroot-linux-uclibc/sysroot/usr/lib/libbsd.so: undefined reference to `__register_atfork'
+> collect2: error: ld returned 1 exit status
+>
+> I guess it would be fixed by http://patchwork.ozlabs.org/patch/978465/.
+> Someone needs to review this.
+>
+> >      powerpc |           motion-release-4.1.1 | NOK | http://autobuild.buildroot.net/results/78061b61cfe3f42554a475c048d54dacacfe11d5 |
+>
+>
+> /home/rclinux/rc-buildroot-test/scripts/instance-0/output/host/powerpc-buildroot-linux-uclibc/sysroot/usr/lib/libavutil.a(hwcontext_drm.o): In function `drm_device_create':
+> /home/rclinux/rc-buildroot-test/scripts/instance-0/output/build/ffmpeg-3.4.4/libavutil/hwcontext_drm.c:50: undefined reference to `drmGetVersion'
+> /home/rclinux/rc-buildroot-test/scripts/instance-0/output/build/ffmpeg-3.4.4/libavutil/hwcontext_drm.c:63: undefined reference to `drmFreeVersion'
+>
+> Giulio, I believe you worked on this static linking problem between
+> ffmpeg and libdrm. What is the status of this ?
+>
+> >          arm |                    netsnmp-5.8 | NOK | http://autobuild.buildroot.net/results/9f02e0f09ae2d2a66a8d33d73f1bdd45ea8b0f16 | ORPH
+>
+> configure: error: The DTLS based transports require the libssl library from OpenSSL to be available and support DTLS
+>
+> Bernd, you did the last version bump of netsnmp, could you have a look ?
+>
+> >          arm | open-plc-utils-1be781d1ea81... | NOK | http://autobuild.buildroot.net/results/67bc5e7ac8ae1c49c035b022a394d2f746705cf2 |
+>
+> I assume this would be fixed by
+> http://patchwork.ozlabs.org/patch/981495/.
+>
+> >          arc | package/glibc/glibc.mk:143:... | NOK | http://autobuild.buildroot.net/results/4a1ddb5c0afb1e80ac769d36cb720372f7bb5457 |
+>
+> Fixed by
+> https://git.buildroot.org/buildroot/commit/package/glibc?id=b14ad0bd697038e4cf48ecf48830fb3369f1f25e.
+>
+> >          arm |                     php-7.2.10 | NOK | http://autobuild.buildroot.net/results/7b7e25bfd269f7c252d15ab4e9f1b68348823478 | ORPH
+>
+> multiple definition of `icu_60::MessageFormatAdapter::getArgTypeList(icu_60::MessageFormat const&, int&)'
+>
+> Long standing issue. Anyone brave enough to investigate ?
+>
+> > microblazeel |               ptpd2-ptpd-2.3.1 | NOK | http://autobuild.buildroot.net/results/1c00bfa77c38f0aad7643344b16d8f401c9b927a | ORPH
+> >          arm |               ptpd2-ptpd-2.3.1 | NOK | http://autobuild.buildroot.net/results/298fda61ab5a192c235027e1b4c57aba4e6b8b37 | ORPH
+> >     mips64el |               ptpd2-ptpd-2.3.1 | NOK | http://autobuild.buildroot.net/results/8fe8061cb27cbab8f02e6dfb0a870d76be3f7f3e | ORPH
+> >       xtensa |               ptpd2-ptpd-2.3.1 | NOK | http://autobuild.buildroot.net/results/80b014e965b088e6767af671d39657b415f82453 | ORPH
+> >       mipsel |               ptpd2-ptpd-2.3.1 | NOK | http://autobuild.buildroot.net/results/40f1090a0eb720d4cce2715bca51823213efb9f9 | ORPH
+> >          arm |               ptpd2-ptpd-2.3.1 | NOK | http://autobuild.buildroot.net/results/55933c2c4ecf8a84b283c93adf0c2ed8a4f03301 | ORPH
+> >     mips64el |               ptpd2-ptpd-2.3.1 | NOK | http://autobuild.buildroot.net/results/08d40b95945ed0e61805b07446b5eb5731f23198 | ORPH
+>
+> Should be fixed by http://patchwork.ozlabs.org/patch/964746/. I haven't
+> had the chance to review it.
+>
+> >   aarch64_be |                 qt5base-5.11.2 | NOK | http://autobuild.buildroot.net/results/aeddb85c0262cdc23019c72e1c390d3885cb4ae4 |
+> >   aarch64_be |                 qt5base-5.11.2 | NOK | http://autobuild.buildroot.net/results/5bec7d7f14befa3a03f902ef90cc2c6589943ec2 |
+>
+> /home/buildroot/build/instance-0/output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64_be-linux-gnu/7.3.1/../../../../aarch64_be-linux-gnu/bin/ld.gold: internal error in update_erratum_insn, at /home/tcwg-buildslave/workspace/tcwg-make-release/builder_arch/amd64/label/tcwg-x86_64-build/target/aarch64_be-linux-gnu/snapshots/binutils-gdb.git~users~linaro~binutils-2_28-branch/gold/aarch64.cc:998
+>
+> Compiler bug it seems. Anyone to have a look ?
+>
+> >       mipsel |                qt5webkit-5.9.1 | NOK | http://autobuild.buildroot.net/results/7aca204c7fd486def6306412b0a6e0bfb8234786 |
+>
+> {standard input}: Assembler messages:
+> {standard input}:708: Error: opcode not supported on this processor: mips32r6 (mips32r6) `movz $v0,$t8,$t7'
+> {standard input}:759: Error: opcode not supported on this processor: mips32r6 (mips32r6) `movz $v1,$t8,$t7'
+> {standard input}:765: Error: opcode not supported on this processor: mips32r6 (mips32r6) `movz $t2,$t8,$t7'
+>
+> We should disable qt5webkit on mips32r6. Peter ?
+>
+> >          arm |                qt5webkit-5.9.1 | NOK | http://autobuild.buildroot.net/results/b8ae1b94891206746815fa85fafabfbd6bed8c74 |
+>
+> /home/naourr/work/instance-3/output/build/qt5webkit-5.9.1/Source/WebCore//.obj/platform/leveldb/LevelDBDatabase.o: In function `WebCore::LevelDBDatabase::openInMemory(WebCore::LevelDBComparator const*)':
+> LevelDBDatabase.cpp:(.text._ZN7WebCore15LevelDBDatabase12openInMemoryEPKNS_17LevelDBComparatorE+0x22): undefined reference to `leveldb::NewMemEnv(leveldb::Env*)'
+>
+> Ah, yes, we have a patch fixing that in patchwork. I don't like it a
+> lot, but I guess that's the only option.
+>
+> >          arm |               spandsp-20180108 | NOK | http://autobuild.buildroot.net/results/05885325ec274cb9860d423c57eed5e7063aedc0 |
+>
+> checking for TIFFOpen in -ltiff... no
+> configure: error: "Cannot build without libtiff (does your system require a libtiff-devel package?)"
+>
+> Bernd, you added spandsp recently, could you have a look ?
+>
+> >      powerpc |                      squid-4.2 | NOK | http://autobuild.buildroot.net/results/e679ef90219c5e8f9c94ddcd7d3f9582f79ef751 | ORPH
+>
+> ../../src/StatHist.h:112:30: error: invalid pure specifier (only '= 0' is allowed) before ';' token
+> ../../src/StatHist.h:113:31: error: invalid pure specifier (only '= 0' is allowed) before ';' token
+>
+> Not sure. Baruch, you recently bumped the squid package, could you have
+> a look ?
+>
+> > microblazeel |                target-finalize | NOK | http://autobuild.buildroot.net/results/068fa36a0be7a2207144cfcc9d595d6099bd9e39 |
+> >       xtensa |                target-finalize | NOK | http://autobuild.buildroot.net/results/3b17b82658842849cf72d01b6f6a4f735e13a642 |
+> >       xtensa |                target-finalize | NOK | http://autobuild.buildroot.net/results/c76bf4a1902da001de673c2160e7f68f83072feb |
+> >         mips |                target-finalize | NOK | http://autobuild.buildroot.net/results/a0f68aba5c02cbf053c0a425667f1393ef71a0e5 |
+> >          arc |                target-finalize | NOK | http://autobuild.buildroot.net/results/21adc28431f328526d88158e98e84b2fab2e4275 |
+> >       mipsel |                target-finalize | NOK | http://autobuild.buildroot.net/results/0bf569d8d0ae380bdd1c8b6ddfa111e85670e981 |
+> >      powerpc |                target-finalize | NOK | http://autobuild.buildroot.net/results/f92fd883386a547d42e0c699f7db859f2918e3f2 |
+> >      powerpc |                target-finalize | NOK | http://autobuild.buildroot.net/results/ca096daed97a11b9be1618bd284b626527414e88 |
+> >          arm |                target-finalize | NOK | http://autobuild.buildroot.net/results/8b4ce48f1b612710b8f2bb1b4ca3b203e1ed6293 |
+> >      aarch64 |                target-finalize | NOK | http://autobuild.buildroot.net/results/797e736dc81d84e63a9293a7b1b62d7d4ae29194 |
+> >          arc |                target-finalize | NOK | http://autobuild.buildroot.net/results/dd94cc60c4eb5a102b04db52b0ee2c7417c0c2f5 |
+> >       x86_64 |                target-finalize | NOK | http://autobuild.buildroot.net/results/8329204dc3737635b92c2fdef224992f3c302f0c |
+> >          arm |                target-finalize | NOK | http://autobuild.buildroot.net/results/5ab016529d2ec177f2865ac184d4a91149a649db |
+> >   aarch64_be |                target-finalize | NOK | http://autobuild.buildroot.net/results/b8e27bd74c40cbc6f6ed9c5df4f0021af4fda050 |
+> >     mips64el |                target-finalize | NOK | http://autobuild.buildroot.net/results/a5f6626116e8e721d5f6eb1d0aebf4656b9452f0 |
+> >          arm |                target-finalize | NOK | http://autobuild.buildroot.net/results/89b5cc38f7b45046417fa20bbd8078646e9c39ef |
+> >      aarch64 |                target-finalize | NOK | http://autobuild.buildroot.net/results/a28d07fd7999f1505a346598ea62ac3c212db7a2 |
+> >          arc |                target-finalize | NOK | http://autobuild.buildroot.net/results/c905171b7a2beb768e23c7b834c50df0764500e1 |
+>
+> I had a look at those 22 (18+4) failures, and all of them are caused either by
+> pysnmp or psycopg2 issues with Python 3.7.0. pysnmp was fixed today
+> (https://git.buildroot.org/buildroot/commit/?id=8122a1d85b6cc9f2adcb1243521c04ba4cae0510).
+> So the only package remaining package to fix is psycopg2.
+>
+> Asaf, Yegor, Adam, could one of you take care of fixing psycopg2 soon ?
+>
+> Related to this, I find it a bit annoying that all those issues are
+> detected at the target-finalize step, since package maintainers are not
+> properly notified. Should we move the byte-compile step as the end of
+> each Python package installation, so that if it fails, it fails
+> earlier, and within the context of that package ? Is the
+> byte-compilation process smart enough to skip compiling when a .pyc
+> file already exists and is newer than the matching .py file ? It would
+> be interesting to do a time comparison between doing per-package
+> byte-compilation and one global byte-compilation at the end.
+>
+>
+> >          arc |               traceroute-2.1.0 | NOK | http://autobuild.buildroot.net/results/22855418dcb5bca4b6499991bc810b368a0cfcd5 |
+>
+> make[3]: *** No rule to make target '-lm', needed by 'traceroute'.  Stop.
+> make[3]: *** Waiting for unfinished jobs....
+>
+> Meh ?
+>
+> >  powerpc64le |              util-linux-2.32.1 | NOK | http://autobuild.buildroot.net/results/7b79a5fa265e2387cab421e42b3c946562e4781b |
+>
+>
+> checking for SELINUX... no
+> configure: error: SELinux selected but libselinux not found or too old
+>
+> We've been having this one for a while. Could some SELinux person
+> (Matt ? Adam ?) debug this ?
+
+I can take a look.  Before I dig to deep, I'd suggest applying the 2.8
+bump (http://patchwork.ozlabs.org/project/buildroot/list/?series=66983).
+I've finished runtime testing and it would be good to fix this and
+perform my testing on the latest.
+
+Note, this report doesn't have it, but there has been a standing
+host-libsemanage 2.7 failure I've been ignoring until the 2.8 is
+applied. (http://autobuild.buildroot.net/?reason=host-libsemanage-2.7)
+
+Matt
