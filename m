@@ -1,40 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Oct 2018 21:05:03 +0200
+Date: Wed, 10 Oct 2018 21:14:19 +0200
 Subject: [Buildroot] Analysis results for 2018-10-09
-In-Reply-To: <CANQCQpbtrG=C9T9FuznXONdqF9OTq3oqmDdDWKX5PHUhJV_=hg@mail.gmail.com>
+In-Reply-To: <CAPi7W80_9pcSwfX53xDC8TzgmGLuJ+rwK_T0MyKCOaunMUQNJw@mail.gmail.com>
 References: <20181010060010.4E3C920736@mail.bootlin.com>
  <20181010174814.5ac114f1@windsurf>
  <CANQCQpbtrG=C9T9FuznXONdqF9OTq3oqmDdDWKX5PHUhJV_=hg@mail.gmail.com>
-Message-ID: <20181010210503.6cd7a257@windsurf>
+ <CAPi7W80_9pcSwfX53xDC8TzgmGLuJ+rwK_T0MyKCOaunMUQNJw@mail.gmail.com>
+Message-ID: <20181010211419.22632881@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Fabrice,
 
-On Wed, 10 Oct 2018 11:28:39 -0500, Matthew Weber wrote:
+On Wed, 10 Oct 2018 19:57:58 +0200, Fabrice Fontaine wrote:
 
-> > >  powerpc64le |              util-linux-2.32.1 | NOK | http://autobuild.buildroot.net/results/7b79a5fa265e2387cab421e42b3c946562e4781b |  
+> > > libboost_chrono shouldn't have been installed: missing select in  
+> > boost/Config.in
+> >  
+> Can be fixed by https://patchwork.ozlabs.org/patch/960723.
+
+OK.
+
+> > > >          arm |                   boost-1.68.0 | NOK |  
+> > http://autobuild.buildroot.net/results/41054f876975214741dccd08eda999a425281b7f
+> > |  
+> > >
+> > > libboost_atomic shouldn't have been installed: missing select in  
+> > boost/Config.in
+> >  
+> Can be fixed by https://patchwork.ozlabs.org/patch/966309.
+> It should be noted that this patch has been merged upstream:
+> https://github.com/boostorg/thread/commit/f7581a366294c6f5381e0371c242af327c6da655
+
+OK, I was still not entirely convinced by this one, but if it has been
+merged upstream, so be it :-)
+
+
+> > > checking for SELINUX... no
+> > > configure: error: SELinux selected but libselinux not found or too old
+> > >
+> > > We've been having this one for a while. Could some SELinux person
+> > > (Matt ? Adam ?) debug this ?  
 > >
-> >
-> > checking for SELINUX... no
-> > configure: error: SELinux selected but libselinux not found or too old
-> >
-> > We've been having this one for a while. Could some SELinux person
-> > (Matt ? Adam ?) debug this ?  
+> > I can take a look.  
 > 
-> I can take a look.  Before I dig to deep, I'd suggest applying the 2.8
-> bump (http://patchwork.ozlabs.org/project/buildroot/list/?series=66983).
-> I've finished runtime testing and it would be good to fix this and
-> perform my testing on the latest.
+> I worked on this one without finding how to fix it.
+> Here is my finding so I hope it could help you.
+> It seems that the issue is that libselinux is really not built before
+> util-linux. Indeed, we can see in
+> http://autobuild.buildroot.net/results/7b79a5fa265e2387cab421e42b3c946562e4781b/build-time.log,
+> that only libsepol is built.
 
-I will have a look at this series and merge it. I was waiting for you
-to test it, but it's indeed done since September 28, so it's time to
-merge the series.
+Aah, thanks for this hint. Then it becomes clear what the problem is:
+we're facing the util-linux -> python3 -> util-linux circular
+dependency. If you look at all the failures at
+http://autobuild.buildroot.net/?reason=util-linux-2.32.1, all of them
+have BR2_PACKAGE_PYTHON3_UUID=y, and this creates a python3 ->
+util-linux dependency. When there is a circular dependency, make
+automatically drops a dependency to avoid the circular loop.
 
-Thanks,
+We need to resolve this util-linux -> python3 -> util-linux circular
+dependency. Arnout suggested that python3 can provide uuid
+functionality without libuuid, and I did some tests about this, which I
+reported on the mailing list at
+http://lists.busybox.net/pipermail/buildroot/2018-September/231060.html.
+See the whole thread that starts at
+http://lists.busybox.net/pipermail/buildroot/2018-September/229746.html.
+
+Best regards,
 
 Thomas
 -- 
