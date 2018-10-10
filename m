@@ -1,70 +1,78 @@
-From: Ciro Santilli <ciro.santilli@gmail.com>
-Date: Wed, 10 Oct 2018 08:50:21 +0100
-Subject: [Buildroot] [PATCH v2] manual: add QEMU demo to quick start
-Message-ID: <20181010075021.749-1-ciro.santilli@gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed, 10 Oct 2018 10:18:23 +0200
+Subject: [Buildroot] [V2 0/8] Moo & friends
+Message-ID: <20181010081831.25014-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
-OK, me learning to ues crappy mailing lists now >:-), will this appear v2
-on the same thread?
+Add perl-moo and their friends and/or dependencies
 
-Your software is awesome, and many more people would see that if the
-quickstart actually told them how to quickstart and see something happen ;-)
+V1 -> V2:
+  - remove runtime dependencies
 
- docs/manual/quickstart.txt | 36 +++++++++++++++++++++++++++++++-----
- 1 file changed, 31 insertions(+), 5 deletions(-)
+Francois Perrad (8):
+  perl-class-method-modifiers: new package
+  perl-role-tiny: new package
+  perl-sub-exporter-progressive: new package
+  perl-sub-quote: new package
+  perl-devel-globaldestruction: new package
+  perl-moo: new package
+  perl-exporter-tiny: new package
+  perl-type-tiny: new package
 
-diff --git a/docs/manual/quickstart.txt b/docs/manual/quickstart.txt
-index 74158ae249..00afe09e6b 100644
---- a/docs/manual/quickstart.txt
-+++ b/docs/manual/quickstart.txt
-@@ -8,12 +8,38 @@ is no need to be root to configure and use Buildroot. By running all
- commands as a regular user, you protect your system against packages
- behaving badly during compilation and installation.
- 
--The first step when using Buildroot is to create a configuration.
--Buildroot has a nice configuration tool similar to the one you can
--find in the http://www.kernel.org/[Linux kernel] or in
--http://www.busybox.net/[BusyBox].
-+=== Try it out with QEMU
- 
--From the buildroot directory, run
-+If you just want to emulate a simple generic QEMU system to see
-+Buildroot at work immediately, run from the buildroot directory:
-+
-+--------------------
-+make qemu_x86_64_defconfig
-+make BR2_JLEVEL="$(nproc)"
-+qemu-system-x86_64 \
-+  -M pc \
-+  -kernel output/images/bzImage \
-+  -drive file=output/images/rootfs.ext2,if=virtio,format=raw \
-+  -append "root=/dev/vda" \
-+  -net nic,model=virtio \
-+  -net user
-+--------------------
-+
-+Once QEMU boots, login with +root+, and you are now left inside a minimal
-+BusyBox based Linux distribution.
-+
-+The initial build can take several minutes to a few hours since we download
-+and compile GCC, the Linux kernel and other basic system components from
-+source.
-+
-+The QEMU command to use is also documented at: +board/qemu/x86/readme.txt+
-+
-+=== Day-to-day workflow
-+
-+In your day-to-day workflow, the first step when using Buildroot is to
-+create a custom configuration. Buildroot has a nice configuration tool
-+similar to the one you can find in the http://www.kernel.org/[Linux kernel]
-+or in http://www.busybox.net/[BusyBox]:
- 
- --------------------
-  $ make menuconfig
+ package/Config.in                                   |  8 ++++++++
+ package/perl-class-method-modifiers/Config.in       |  6 ++++++
+ .../perl-class-method-modifiers.hash                |  6 ++++++
+ .../perl-class-method-modifiers.mk                  | 13 +++++++++++++
+ package/perl-devel-globaldestruction/Config.in      |  9 +++++++++
+ .../perl-devel-globaldestruction.hash               |  6 ++++++
+ .../perl-devel-globaldestruction.mk                 | 13 +++++++++++++
+ package/perl-exporter-tiny/Config.in                |  7 +++++++
+ package/perl-exporter-tiny/perl-exporter-tiny.hash  |  7 +++++++
+ package/perl-exporter-tiny/perl-exporter-tiny.mk    | 13 +++++++++++++
+ package/perl-moo/Config.in                          | 12 ++++++++++++
+ package/perl-moo/perl-moo.hash                      |  6 ++++++
+ package/perl-moo/perl-moo.mk                        | 13 +++++++++++++
+ package/perl-role-tiny/Config.in                    |  6 ++++++
+ package/perl-role-tiny/perl-role-tiny.hash          |  6 ++++++
+ package/perl-role-tiny/perl-role-tiny.mk            | 13 +++++++++++++
+ package/perl-sub-exporter-progressive/Config.in     |  6 ++++++
+ .../perl-sub-exporter-progressive.hash              |  6 ++++++
+ .../perl-sub-exporter-progressive.mk                | 13 +++++++++++++
+ package/perl-sub-quote/Config.in                    |  6 ++++++
+ package/perl-sub-quote/perl-sub-quote.hash          |  6 ++++++
+ package/perl-sub-quote/perl-sub-quote.mk            | 13 +++++++++++++
+ package/perl-type-tiny/Config.in                    |  8 ++++++++
+ package/perl-type-tiny/perl-type-tiny.hash          |  7 +++++++
+ package/perl-type-tiny/perl-type-tiny.mk            | 13 +++++++++++++
+ 25 files changed, 222 insertions(+)
+ create mode 100644 package/perl-class-method-modifiers/Config.in
+ create mode 100644 package/perl-class-method-modifiers/perl-class-method-modifiers.hash
+ create mode 100644 package/perl-class-method-modifiers/perl-class-method-modifiers.mk
+ create mode 100644 package/perl-devel-globaldestruction/Config.in
+ create mode 100644 package/perl-devel-globaldestruction/perl-devel-globaldestruction.hash
+ create mode 100644 package/perl-devel-globaldestruction/perl-devel-globaldestruction.mk
+ create mode 100644 package/perl-exporter-tiny/Config.in
+ create mode 100644 package/perl-exporter-tiny/perl-exporter-tiny.hash
+ create mode 100644 package/perl-exporter-tiny/perl-exporter-tiny.mk
+ create mode 100644 package/perl-moo/Config.in
+ create mode 100644 package/perl-moo/perl-moo.hash
+ create mode 100644 package/perl-moo/perl-moo.mk
+ create mode 100644 package/perl-role-tiny/Config.in
+ create mode 100644 package/perl-role-tiny/perl-role-tiny.hash
+ create mode 100644 package/perl-role-tiny/perl-role-tiny.mk
+ create mode 100644 package/perl-sub-exporter-progressive/Config.in
+ create mode 100644 package/perl-sub-exporter-progressive/perl-sub-exporter-progressive.hash
+ create mode 100644 package/perl-sub-exporter-progressive/perl-sub-exporter-progressive.mk
+ create mode 100644 package/perl-sub-quote/Config.in
+ create mode 100644 package/perl-sub-quote/perl-sub-quote.hash
+ create mode 100644 package/perl-sub-quote/perl-sub-quote.mk
+ create mode 100644 package/perl-type-tiny/Config.in
+ create mode 100644 package/perl-type-tiny/perl-type-tiny.hash
+ create mode 100644 package/perl-type-tiny/perl-type-tiny.mk
+
 -- 
-2.19.0
+2.17.1
