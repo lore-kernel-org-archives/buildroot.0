@@ -1,9 +1,10 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 10 Oct 2018 16:33:08 -0500
-Subject: [Buildroot] [PATCH 1/2] libselinux: remove library host symlink
-In-Reply-To: <20181010212417.23047-1-fontaine.fabrice@gmail.com>
+Date: Wed, 10 Oct 2018 16:33:39 -0500
+Subject: [Buildroot] [PATCH 2/2] libsepol: remove library host symlink
+In-Reply-To: <20181010212417.23047-2-fontaine.fabrice@gmail.com>
 References: <20181010212417.23047-1-fontaine.fabrice@gmail.com>
-Message-ID: <CANQCQpaAukgHG=z6pC3X9_YMO0Odjr8q2K=Ph2N-eRKJCgC98w@mail.gmail.com>
+ <20181010212417.23047-2-fontaine.fabrice@gmail.com>
+Message-ID: <CANQCQpag+Zw+ojxoY4PnsYiELQ4TZ0SHyJ3DyM99MbKVr+UQoQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,31 +18,29 @@ On Wed, Oct 10, 2018 at 4:24 PM Fabrice Fontaine
 >
 > Since bump to version 2.7 and addition of
 > 0003-revert-ln-relative.patch, the creation of a symlink through
-> ln -sf libselinux.so.1 $(HOST_DIR)/lib/libselinux.so
+> ln -sf libsepol.so.1 $(HOST_DIR)/lib/libsepol.so
 > is not needed anymore so remove it
 >
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Good catch
-
 Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 
 > ---
->  package/libselinux/libselinux.mk | 1 -
+>  package/libsepol/libsepol.mk | 1 -
 >  1 file changed, 1 deletion(-)
 >
-> diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-> index b3d48f7105..97b4f03062 100644
-> --- a/package/libselinux/libselinux.mk
-> +++ b/package/libselinux/libselinux.mk
-> @@ -102,7 +102,6 @@ endef
->  define HOST_LIBSELINUX_INSTALL_CMDS
->         $(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
->                 $(HOST_LIBSELINUX_MAKE_OPTS) install
-> -       ln -sf libselinux.so.1 $(HOST_DIR)/lib/libselinux.so
->         # Install python interface wrapper
->         $(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
->                 $(HOST_LIBSELINUX_MAKE_OPTS) install-pywrap
+> diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
+> index 5932ca1464..a9a9c652ea 100644
+> --- a/package/libsepol/libsepol.mk
+> +++ b/package/libsepol/libsepol.mk
+> @@ -41,7 +41,6 @@ endef
+>
+>  define HOST_LIBSEPOL_INSTALL_CMDS
+>         $(HOST_LIBSEPOL_MAKE_ENV) $(MAKE) -C $(@D) install $(HOST_CONFIGURE_OPTS)
+> -       ln -sf libsepol.so.1 $(HOST_DIR)/lib/libsepol.so
+>  endef
+>
+>  $(eval $(generic-package))
 > --
 > 2.17.1
 >
