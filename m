@@ -1,77 +1,84 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Oct 2018 10:56:56 +0200
-Subject: [Buildroot] [git commit] perl-sub-exporter-progressive: new package
-Message-ID: <20181010085606.941AB82167@busybox.osuosl.org>
+From: Lothar Felten <lothar.felten@gmail.com>
+Date: Wed, 10 Oct 2018 11:10:31 +0200
+Subject: [Buildroot] [PATCH v3] configs: bananapi_m1: bump kernel and uboot
+ version
+Message-ID: <20181010091031.25220-1-lothar.felten@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b776591ce84aa0ff06ef1baf4bd8df8af1d8dff1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+New Linux kernel version 4.18.12
+New u-boot version 2018.07
+Config options were reordered by savedefconfig
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
 ---
- package/Config.in                                           |  1 +
- package/perl-sub-exporter-progressive/Config.in             |  6 ++++++
- .../perl-sub-exporter-progressive.hash                      |  6 ++++++
- .../perl-sub-exporter-progressive.mk                        | 13 +++++++++++++
- 4 files changed, 26 insertions(+)
+Changes v1->v2:
+ - set a fixed kernel version for toolchain headers and kernel
+Changes v2->v3:
+ - fix kernel header version typo
+ - build/test with correct image
+---
+ configs/bananapi_m1_defconfig | 36 +++++++++++++-----------------------
+ 1 file changed, 13 insertions(+), 23 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index f2c25dfb87..c25aaae3e8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -748,6 +748,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-posix-strftime-compiler/Config.in"
- 	source "package/perl-role-tiny/Config.in"
- 	source "package/perl-stream-buffered/Config.in"
-+	source "package/perl-sub-exporter-progressive/Config.in"
- 	source "package/perl-sub-install/Config.in"
- 	source "package/perl-sys-cpu/Config.in"
- 	source "package/perl-sys-meminfo/Config.in"
-diff --git a/package/perl-sub-exporter-progressive/Config.in b/package/perl-sub-exporter-progressive/Config.in
-new file mode 100644
-index 0000000000..7e2911ea3d
---- /dev/null
-+++ b/package/perl-sub-exporter-progressive/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PERL_SUB_EXPORTER_PROGRESSIVE
-+	bool "perl-sub-exporter-progressive"
-+	help
-+	  Only use Sub::Exporter if you need it
-+
-+	  https://github.com/frioux/Sub-Exporter-Progressive
-diff --git a/package/perl-sub-exporter-progressive/perl-sub-exporter-progressive.hash b/package/perl-sub-exporter-progressive/perl-sub-exporter-progressive.hash
-new file mode 100644
-index 0000000000..6bd2441641
---- /dev/null
-+++ b/package/perl-sub-exporter-progressive/perl-sub-exporter-progressive.hash
-@@ -0,0 +1,6 @@
-+# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    72cf6acdd2a0a8b105821a4db98e4ebe Sub-Exporter-Progressive-0.001013.tar.gz
-+sha256 d535b7954d64da1ac1305b1fadf98202769e3599376854b2ced90c382beac056 Sub-Exporter-Progressive-0.001013.tar.gz
-+
-+# computed by scancpan
-+sha256 24c38cba4218e6be62e511bffe21e63aa57335d8929034aa58e8a85eed001e99 LICENSE
-diff --git a/package/perl-sub-exporter-progressive/perl-sub-exporter-progressive.mk b/package/perl-sub-exporter-progressive/perl-sub-exporter-progressive.mk
-new file mode 100644
-index 0000000000..a8a46dd11e
---- /dev/null
-+++ b/package/perl-sub-exporter-progressive/perl-sub-exporter-progressive.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# perl-sub-exporter-progressive
-+#
-+################################################################################
-+
-+PERL_SUB_EXPORTER_PROGRESSIVE_VERSION = 0.001013
-+PERL_SUB_EXPORTER_PROGRESSIVE_SOURCE = Sub-Exporter-Progressive-$(PERL_SUB_EXPORTER_PROGRESSIVE_VERSION).tar.gz
-+PERL_SUB_EXPORTER_PROGRESSIVE_SITE = $(BR2_CPAN_MIRROR)/authors/id/F/FR/FREW
-+PERL_SUB_EXPORTER_PROGRESSIVE_LICENSE = Artistic or GPL-1.0+
-+PERL_SUB_EXPORTER_PROGRESSIVE_LICENSE_FILES = LICENSE
-+
-+$(eval $(perl-package))
+diff --git a/configs/bananapi_m1_defconfig b/configs/bananapi_m1_defconfig
+index f8c66a33..558ef3d4 100644
+--- a/configs/bananapi_m1_defconfig
++++ b/configs/bananapi_m1_defconfig
+@@ -1,38 +1,28 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+-BR2_ARM_EABIHF=y
+-
+-# Linux headers same as kernel, a 4.13 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
+-
+-# Bootloader
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
++BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M1"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/bananapi/bananapi-m1/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.12"
++BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-bananapi"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Bananapi"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+-BR2_TARGET_UBOOT_FORMAT_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+ BR2_TARGET_UBOOT_BOOT_SCRIPT=y
+ BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/bananapi/bananapi-m1/boot.cmd"
+-
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.7"
+-BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-bananapi"
+-
+-# Filesystem
+-BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M1"
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/bananapi/bananapi-m1/genimage.cfg"
+-- 
+2.14.1
