@@ -1,10 +1,10 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 10 Oct 2018 16:33:39 -0500
+Date: Wed, 10 Oct 2018 16:34:32 -0500
 Subject: [Buildroot] [PATCH 2/2] libsepol: remove library host symlink
 In-Reply-To: <20181010212417.23047-2-fontaine.fabrice@gmail.com>
 References: <20181010212417.23047-1-fontaine.fabrice@gmail.com>
  <20181010212417.23047-2-fontaine.fabrice@gmail.com>
-Message-ID: <CANQCQpag+Zw+ojxoY4PnsYiELQ4TZ0SHyJ3DyM99MbKVr+UQoQ@mail.gmail.com>
+Message-ID: <CANQCQpasYma9jZ5BjvwYUZwKRm9ZBKo++GO6_JCOZFAstrMNyw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -23,7 +23,9 @@ On Wed, Oct 10, 2018 at 4:24 PM Fabrice Fontaine
 >
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Sorry long day, shouldn't have sent that signed off.
+
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
 
 > ---
 >  package/libsepol/libsepol.mk | 1 -
