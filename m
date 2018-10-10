@@ -1,77 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Oct 2018 10:49:50 +0200
-Subject: [Buildroot] [git commit] perl-role-tiny: new package
-Message-ID: <20181010085606.8969F82167@busybox.osuosl.org>
+Date: Wed, 10 Oct 2018 10:56:56 +0200
+Subject: [Buildroot] [git commit] perl-sub-exporter-progressive: new package
+Message-ID: <20181010085606.941AB82167@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=322459c9431ff2dabd411ce53b36505b68216579
+commit: https://git.buildroot.net/buildroot/commit/?id=b776591ce84aa0ff06ef1baf4bd8df8af1d8dff1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/Config.in                          |  1 +
- package/perl-role-tiny/Config.in           |  6 ++++++
- package/perl-role-tiny/perl-role-tiny.hash |  6 ++++++
- package/perl-role-tiny/perl-role-tiny.mk   | 13 +++++++++++++
+ package/Config.in                                           |  1 +
+ package/perl-sub-exporter-progressive/Config.in             |  6 ++++++
+ .../perl-sub-exporter-progressive.hash                      |  6 ++++++
+ .../perl-sub-exporter-progressive.mk                        | 13 +++++++++++++
  4 files changed, 26 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index 9c41fccfc7..f2c25dfb87 100644
+index f2c25dfb87..c25aaae3e8 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -746,6 +746,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-path-tiny/Config.in"
- 	source "package/perl-plack/Config.in"
+@@ -748,6 +748,7 @@ menu "Perl libraries/modules"
  	source "package/perl-posix-strftime-compiler/Config.in"
-+	source "package/perl-role-tiny/Config.in"
+ 	source "package/perl-role-tiny/Config.in"
  	source "package/perl-stream-buffered/Config.in"
++	source "package/perl-sub-exporter-progressive/Config.in"
  	source "package/perl-sub-install/Config.in"
  	source "package/perl-sys-cpu/Config.in"
-diff --git a/package/perl-role-tiny/Config.in b/package/perl-role-tiny/Config.in
+ 	source "package/perl-sys-meminfo/Config.in"
+diff --git a/package/perl-sub-exporter-progressive/Config.in b/package/perl-sub-exporter-progressive/Config.in
 new file mode 100644
-index 0000000000..ebbe720203
+index 0000000000..7e2911ea3d
 --- /dev/null
-+++ b/package/perl-role-tiny/Config.in
++++ b/package/perl-sub-exporter-progressive/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PERL_ROLE_TINY
-+	bool "perl-role-tiny"
++config BR2_PACKAGE_PERL_SUB_EXPORTER_PROGRESSIVE
++	bool "perl-sub-exporter-progressive"
 +	help
-+	  Roles. Like a nouvelle cuisine portion size slice of Moose.
++	  Only use Sub::Exporter if you need it
 +
-+	  https://metacpan.org/release/Role-Tiny
-diff --git a/package/perl-role-tiny/perl-role-tiny.hash b/package/perl-role-tiny/perl-role-tiny.hash
++	  https://github.com/frioux/Sub-Exporter-Progressive
+diff --git a/package/perl-sub-exporter-progressive/perl-sub-exporter-progressive.hash b/package/perl-sub-exporter-progressive/perl-sub-exporter-progressive.hash
 new file mode 100644
-index 0000000000..33601bb6b2
+index 0000000000..6bd2441641
 --- /dev/null
-+++ b/package/perl-role-tiny/perl-role-tiny.hash
++++ b/package/perl-sub-exporter-progressive/perl-sub-exporter-progressive.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    7c277728a7e090f64b495857cadfed08 Role-Tiny-2.000006.tar.gz
-+sha256 cc73418c904a0286ecd8915eac11f5be2a8d1e17ea9cb54c9116b0340cd3e382 Role-Tiny-2.000006.tar.gz
++md5    72cf6acdd2a0a8b105821a4db98e4ebe Sub-Exporter-Progressive-0.001013.tar.gz
++sha256 d535b7954d64da1ac1305b1fadf98202769e3599376854b2ced90c382beac056 Sub-Exporter-Progressive-0.001013.tar.gz
 +
 +# computed by scancpan
-+sha256 08292f0e1797371bce0a1b5bd80e0657b3aabf9c0ecc2ce87ad7a448a7adacce README
-diff --git a/package/perl-role-tiny/perl-role-tiny.mk b/package/perl-role-tiny/perl-role-tiny.mk
++sha256 24c38cba4218e6be62e511bffe21e63aa57335d8929034aa58e8a85eed001e99 LICENSE
+diff --git a/package/perl-sub-exporter-progressive/perl-sub-exporter-progressive.mk b/package/perl-sub-exporter-progressive/perl-sub-exporter-progressive.mk
 new file mode 100644
-index 0000000000..ccc82abc83
+index 0000000000..a8a46dd11e
 --- /dev/null
-+++ b/package/perl-role-tiny/perl-role-tiny.mk
++++ b/package/perl-sub-exporter-progressive/perl-sub-exporter-progressive.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# perl-role-tiny
++# perl-sub-exporter-progressive
 +#
 +################################################################################
 +
-+PERL_ROLE_TINY_VERSION = 2.000006
-+PERL_ROLE_TINY_SOURCE = Role-Tiny-$(PERL_ROLE_TINY_VERSION).tar.gz
-+PERL_ROLE_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
-+PERL_ROLE_TINY_LICENSE = Artistic or GPL-1.0+
-+PERL_ROLE_TINY_LICENSE_FILES = README
++PERL_SUB_EXPORTER_PROGRESSIVE_VERSION = 0.001013
++PERL_SUB_EXPORTER_PROGRESSIVE_SOURCE = Sub-Exporter-Progressive-$(PERL_SUB_EXPORTER_PROGRESSIVE_VERSION).tar.gz
++PERL_SUB_EXPORTER_PROGRESSIVE_SITE = $(BR2_CPAN_MIRROR)/authors/id/F/FR/FREW
++PERL_SUB_EXPORTER_PROGRESSIVE_LICENSE = Artistic or GPL-1.0+
++PERL_SUB_EXPORTER_PROGRESSIVE_LICENSE_FILES = LICENSE
 +
 +$(eval $(perl-package))
