@@ -1,73 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Oct 2018 21:49:29 +0200
-Subject: [Buildroot] [PATCH v3,
- 1/1] boost: fix static detection of lock-free atomic ints
-In-Reply-To: <20180905105127.31591-1-fontaine.fabrice@gmail.com>
-References: <20180905105127.31591-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181010214929.5af0c4df@windsurf>
+Date: Wed, 10 Oct 2018 21:50:09 +0200
+Subject: [Buildroot] [git commit] boost: context needs C++11
+Message-ID: <20181010194859.BA15E82804@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f3a483a81be43b0ff674400e11900605969f8f1c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  5 Sep 2018 12:51:27 +0200, Fabrice Fontaine wrote:
-> When build statically, boost is unable to detect lock-free atomics ints
-> because it tries to link dynamically, see
-> output/build/boost-1.67.0/bin.v2/config.log (with -d5 option):
-> 
-> Using shell: /bin/sh -c
->     argv[0] = '/bin/sh'
->     argv[1] = '-c'
->     argv[2] = '
->     "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -Wl,-elf2flt -static  -Wl,-elf2flt -static -fPIC -pthread -O0 -fno-inline -Wall -pedantic -g -Wextra -Wno-long-long -Wno-unused-parameter -Wunused-function -pedantic -DBOOST_ALL_NO_LIB=1 -DBOOST_SYSTEM_DYN_LINK=1 -DBOOST_THREAD_BUILD_DLL=1  -I"." -c -o "bin.v2/libs/thread/build/gcc-6.4.0/debug/threading-multi/has_atomic_flag_lockfree_test.o" "libs/thread/src/../build/has_atomic_flag_lockfree_test.cpp"
-> '
-> gcc.compile.c++ bin.v2/libs/thread/build/gcc-6.4.0/debug/threading-multi/has_atomic_flag_lockfree_test.o
-> 
->     "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -Wl,-elf2flt -static  -Wl,-elf2flt -static -fPIC -pthread -O0 -fno-inline -Wall -pedantic -g -Wextra -Wno-long-long -Wno-unused-parameter -Wunused-function -pedantic -DBOOST_ALL_NO_LIB=1 -DBOOST_SYSTEM_DYN_LINK=1 -DBOOST_THREAD_BUILD_DLL=1  -I"." -c -o "bin.v2/libs/thread/build/gcc-6.4.0/debug/threading-multi/has_atomic_flag_lockfree_test.o" "libs/thread/src/../build/has_atomic_flag_lockfree_test.cpp"
-> 
-> 0.033561 sec system; 0.126314 sec user; 288.682473 sec clock
-> gcc.compile.c++ bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/error_code.o
-> 
->     "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -Wl,-elf2flt -static  -Wl,-elf2flt -static -fPIC -pthread -O0 -fno-inline -Wall -pedantic -g  -DBOOST_ALL_NO_LIB=1 -DBOOST_SYSTEM_DYN_LINK=1  -I"." -c -o "bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/error_code.o" "libs/system/src/error_code.cpp"
-> 
-> 0.084060 sec system; 0.644133 sec user; 8.858824 sec clock
-> SEM: <s>gcc-link-semaphore now used by <pbin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi>libboost_system.so.1.67.0
-> Using shell: /bin/sh -c
->     argv[0] = '/bin/sh'
->     argv[1] = '-c'
->     argv[2] = '
->     "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"    -o "bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/libboost_system.so.1.67.0" -Wl,-h -Wl,libboost_system.so.1.67.0 -shared -Wl,--start-group "bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/error_code.o"  -Wl,-Bstatic  -Wl,-Bdynamic -lrt -Wl,--end-group -fPIC -pthread -g  -Wl,-elf2flt -static
-> '
-> gcc.link.dll bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/libboost_system.so.1.67.0
-> 
->     "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"    -o "bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/libboost_system.so.1.67.0" -Wl,-h -Wl,libboost_system.so.1.67.0 -shared -Wl,--start-group "bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/error_code.o"  -Wl,-Bstatic  -Wl,-Bdynamic -lrt -Wl,--end-group -fPIC -pthread -g  -Wl,-elf2flt -static
-> 
-> ld (ld-elf2flt): -shared used without passing a shared library ID
-> collect2: error: ld a retourn? le statut de sortie 1
-> 0.003123 sec system; 0.004732 sec user; 15.646509 sec clock
-> ...failed gcc.link.dll bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/libboost_system.so.1.67.0...
-> 
-> Due to this wrong detection, boost_atomic is wrongly selected by
-> boost_thread which cause a build failure on missing select
-> 
-> To fix this, move the exe statement before the boost/thread project
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/f46d38991385cbc2a4fa14eb31074e770cd79803
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v2 -> v3 (after review of Thomas Petazzoni):
->  - Replace hack by a patch movin exe statement in the beginning of 
->    libs/thread/build/Jamfile.v2
+Without std=c++11, mutex is not always correctly detected with gcc 4.7,
+4.8 or even 5.x. As a result, boost_thread is wrongly selected by
+boost_context.
 
-Applied to master, thanks.
+mutex is available on gcc 4.7.x, the issue is that boost does not
+correctly detect it because -std=c++11 was missing.
+Keep thread select for gcc version lower or equal to 4.6. mutex is
+available since gcc 4.4 (with std=c++0x) but common buildroot practice
+for C++11 packages is to have a dependency on gcc 4.7, 4.8 or 4.9
+depending on the requested C++11 features.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+ - http://autobuild.buildroot.net/results/fb046c04fe18bec973d120e4ab33971f32ba5769
+ - http://autobuild.buildroot.net/results/99f1a255b78a973faeb8bf3b94d78efc54426a8b
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/boost/Config.in | 2 +-
+ package/boost/boost.mk  | 5 +++++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 389592fd32..e0bff17f75 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -83,7 +83,7 @@ config BR2_PACKAGE_BOOST_CONTEXT
+ 	bool "boost-context"
+ 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+-	select BR2_PACKAGE_BOOST_THREAD if !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	select BR2_PACKAGE_BOOST_THREAD if !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 	help
+ 	  C++11 context switching library.
+ 
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 0adad89297..2ce6bbb75f 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -61,6 +61,11 @@ else
+ BOOST_FLAGS += --without-icu
+ endif
+ 
++# boost-context needs C++11
++ifeq ($(BR2_PACKAGE_BOOST_CONTEXT)$(BR2_TOOLCHAIN_GCC_AT_LEAST_4_7),yy)
++BOOST_TARGET_CXXFLAGS += -std=c++11
++endif
++
+ ifeq ($(BR2_PACKAGE_BOOST_IOSTREAMS),y)
+ BOOST_DEPENDENCIES += bzip2 zlib
+ endif
