@@ -1,88 +1,113 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 10 Oct 2018 23:05:02 +0200
-Subject: [Buildroot] [PATCH v2,1/8] libselinux: bump to version 2.8
-In-Reply-To: <20181010213528.4805f9e6@windsurf>
-References: <20180921205013.21829-1-fontaine.fabrice@gmail.com>
- <20181010213528.4805f9e6@windsurf>
-Message-ID: <CAPi7W80jBdoLui_B0UxRO1gB8mqoEi8pBbd78drTXk_8sn1EXg@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 10 Oct 2018 23:13:40 +0200
+Subject: [Buildroot] [PATCH 1/4] python-pycryptodomex: new package
+In-Reply-To: <20181009201923.GL2869@scaer>
+References: <20180922193631.14369-1-asafka7@gmail.com>
+ <20181009155633.2ad54938@windsurf> <20181009201923.GL2869@scaer>
+Message-ID: <3c49d9fc-33b4-b6a3-22ee-e9285c1733bf@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
 
-Le mer. 10 oct. 2018 ? 21:35, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-a ?crit :
 
-> Hello Fabrice,
->
-> On Fri, 21 Sep 2018 22:50:06 +0200, Fabrice Fontaine wrote:
->
-> > - Use DESTDIR=$(HOST_DIR) instead of PREFIX=$(HOST_DIR) to install host
-> >   variant
->
-> Why do you do this ?
+On 9/10/18 22:19, Yann E. MORIN wrote:
+> Thomas, Asaf, All,
+> 
+> On 2018-10-09 15:56 +0200, Thomas Petazzoni spake thusly:
+>> On Sat, 22 Sep 2018 22:36:28 +0300, Asaf Kahlon wrote:
+>>> Cryptographic library for Python
+>>> +PYTHON_PYCRYPTODOMEX_LICENSE = Apache-2.0
+>>
+>> I am not sure this is an accurate description of the license terms.
+>> Reading https://pycryptodome.readthedocs.io/en/latest/src/license.html
+>> (which is the same as the LICENSE.rst you use as a license file), it
+>> says:
+>>
+>> """
+>> The source code in PyCryptodome is partially in the public domain and
+>> partially released under the BSD 2-Clause license.
+>> """
+>>
+>> There is also the text of the Apache 2.0 license, but it doesn't say to
+>> which part of the code it applies.
+> 
+> It states:   Apache 2.0 license (Wycheproof)
+> And by grepping the source tree, it seems that 'Wycheproof' is the
+> slef-test test harness, as we can only find it in lib/Crypto/SelfTest/
+> and in setup.py, supposedly to ignore warnign from said test harness, and
+> to list it as the data to package.
+> 
+> So, I think we can ignore the Apache-2.0 license, as it does not cover
+> stuff that goes on the target.
 
-I will take the example of host-libsepol (this is the same for
-host-libselinux)
-Without this update, build of host-libsepol fails on:
-install -m 755 libsepol.so.1 /lib
-install: cannot create regular file '/lib/libsepol.so.1': Permission denied
+ Ack that. Si Apache-2.0 is definitely wrong.
 
-It seems that 0001-libsepol-build-follow-standard-semantics-for-DESTD.patch
-and
-https://github.com/SELinuxProject/selinux/commit/f8532f17731c82df9956aa1c92f7fb08bd65bf05
-are not exactly the same.
-Especially, it seems that LIBINSTALL = $(DESTDIR)$(LIBDIR) has not been
-added in upstream.
-upstream directly uses DESTDIR which is why I got a failure: install -m 755
-$(LIBSO) $(DESTDIR)$(SHLIBDIR)
-I don't know why there is such a difference but perhaps Marcus knows?
-If Marcus confirms that this is a mistake, I can always add a patch to fix
-this and send it upstream.
 
-> Setting prefix to $(HOST_DIR) is the right thing
-> to do for host packages, at least in the normal semantic of prefix and
-> destdir, as defined by the autotools. I think Marcus patched the
-> SELinux build system to restore a semantic of PREFIX and DESTDIR that
-> matched the one of the autotools, but you're now going backward with
-> doing DESTDIR=$(HOST_DIR).
->
-> If the semantic of DESTDIR and PREFIX is standard, then:
->
->  - Target packages should use PREFIX=/usr DESTDIR=$(TARGET_DIR)
->
->  - Host packages should use PREFIX=$(HOST_DIR) and no DESTDIR at all
->
-> Of course, this question applies to all SELinux packages in this series.
->
-> > - Remove libselinux.so symbolic link for host variant (not needed)
->
-> Is this removal really related to the bump ? Why is it unneeded ?
-> Because the new 2.8 version creates this symlink properly at
-> installation time ?
->
-Indeed, I should remove this modification from this patch's serie.
-This symlink was added by commit
-https://git.buildroot.net/buildroot/commit/package/libsepol/libsepol.mk?id=12a9fb947c7b642b418c2615530207883a246ac3
-on version 2.6.
-However, the symlink is correctly done since version 2.7 (as
-0002-revert-ln-relative.patch is already patching it).
+>> And there is a special constraint for the OCB cipher, that it cannot be
+>> used for military purposes. I am not sure how Debian accepts that, but
+>> they do accept it:
+>> https://metadata.ftp-master.debian.org/changelogs/main/p/pycryptodome/pycryptodome_3.6.1-2_copyright.
+> 
+> In fact, there are 3 licenses under which OCB is made available;
+>     http://web.cs.ucdavis.edu/~rogaway/ocb/license.htm
+> 
+>   * License 1 ? License for Open-Source Software Implementations of OCB
+>     (Jan 9, 2013)
+> 
+>   * License 2 ? General License for Non-Military Software Implementations
+>     OCB (Jan 10, 2013).
+> 
+>   * License 3 ? Patent License for OpenSSL (Nov 13, 2013).
 
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+ Note that all three of them are *patent* licenses. That's why Debian doesn't
+make a problem of it. Debian only uses license 1.
 
-Best Regards,
+ The OCB *code* is all under BSD-2-Clause, as far as I can see. There are
+actually 2 implementations: one in python that does not come from pycrypto
+AFAICS, and one from libtom.
 
-Fabrice
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181010/76641c80/attachment.html>
+> 
+> As far as I understand the licensing terms, OCB is available udner any
+> license to the choosing of the user of OCB. The pycryptodome developpers
+> have not choosen a license, and instead decided to propagate that choice
+> down to the user of pycryptodome.
+
+ Ack.
+
+> 
+>> Yann, Arnout, I'm interested by your opinion on this package.
+> 
+> So, I would state something like:
+> 
+>     PYTHON_PYCRYPTODOMEX_LICENSE = \
+>         BSD-2c, \
+
+ BSD-2-Clause
+
+>         Public Domain (pycrypto original code), \
+>         OCB license (OCB cypher)
+
+ I would clarify this as "OCB patent license". The (OCB cypher) is not really
+useful IMO. Anyway OCB is not a cipher, it's a mode.
+
+ In terms of license files, in addition to LICENSE.rst, I think we also need
+Doc/LEGAL/COPYRIGHT.pycrypto
+
+ Regards,
+ Arnout
+
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
