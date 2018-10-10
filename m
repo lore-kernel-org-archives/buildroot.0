@@ -1,61 +1,68 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Wed, 10 Oct 2018 09:33:49 +0200
-Subject: [Buildroot] [PATCH 12/13] pkg-perl: add a target which upgrades
- all packages from metacpan
-In-Reply-To: <20181010091049.241adca4@windsurf>
-References: <20181010064621.19253-1-francois.perrad@gadz.org>
- <20181010064621.19253-13-francois.perrad@gadz.org>
- <20181010091049.241adca4@windsurf>
-Message-ID: <CAB0FRsu56_UpK0EHAhVrMr5Z1Pc=Oeqr9YhU+vMHQog_bc2wtA@mail.gmail.com>
+From: Ciro Santilli <ciro.santilli@gmail.com>
+Date: Wed, 10 Oct 2018 08:38:04 +0100
+Subject: [Buildroot] [PATCH] manual: add QEMU demo to quick start
+Message-ID: <20181010073804.21049-1-ciro.santilli@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le mer. 10 oct. 2018 ? 09:11, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-a ?crit :
+---
+Your software is awesome, and many more people would see that if the
+quickstart actually told them how to quickstart and see something happen ;-)
 
-> Hello,
->
-> On Wed, 10 Oct 2018 08:46:20 +0200, Francois Perrad wrote:
-> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> > ---
-> >  package/pkg-perl.mk | 9 +++++++++
-> >  1 file changed, 9 insertions(+)
-> >
-> > diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
-> > index 07348bd5d..74a116075 100644
-> > --- a/package/pkg-perl.mk
-> > +++ b/package/pkg-perl.mk
-> > @@ -57,6 +57,10 @@ endif
-> >  #       used no matter the setting
-> >  $(2)_PREFER_INSTALLER ?= MB
-> >
-> > +ifeq ($(4),target)
-> > +SCANCPAN_ALL_DISTRIB += $$($(2)_DISTNAME)
-> > +endif
->
-> I'm curious to understand why you're adding only target Perl packages.
->
+ docs/manual/quickstart.txt | 37 ++++++++++++++++++++++++++++++++-----
+ 1 file changed, 32 insertions(+), 5 deletions(-)
 
- `scancpan` fetch recursively all dependencies of a package.
-
-
-> We don't want to update also host Perl packages ?
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181010/ee0af0e4/attachment.html>
+diff --git a/docs/manual/quickstart.txt b/docs/manual/quickstart.txt
+index 74158ae249..d966278778 100644
+--- a/docs/manual/quickstart.txt
++++ b/docs/manual/quickstart.txt
+@@ -8,12 +8,39 @@ is no need to be root to configure and use Buildroot. By running all
+ commands as a regular user, you protect your system against packages
+ behaving badly during compilation and installation.
+ 
+-The first step when using Buildroot is to create a configuration.
+-Buildroot has a nice configuration tool similar to the one you can
+-find in the http://www.kernel.org/[Linux kernel] or in
+-http://www.busybox.net/[BusyBox].
++=== Try it out with QEMU
+ 
+-From the buildroot directory, run
++If you just want to try to emulate a simple generic QEMU system to see
++Buildroot at work immediately, run from the buildroot directory:
++
++--------------------
++make qemu_x86_64_defconfig
++make BR2_JLEVEL="$(nproc)"
++qemu-system-x86_64 \
++  -M pc \
++  -kernel output/images/bzImage \
++  -drive file=output/images/rootfs.ext2,if=virtio,format=raw \
++  -append "root=/dev/vda" \
++  -net nic,model=virtio \
++  -net user
++--------------------
++
++Once QEMU boots, login with +root+, and you are now left inside a minimal
++BusyBox based Linux distribution.
++
++The initial build can several minutes to a few hours since we download and
++compile GCC, the Linux kernel and other basic system components from
++source.
++
++The QEMU command to use is also documented at: +board/qemu/x86/readme.txt+
++
++=== Day-to-day workflow
++
++More commonly, in your day-to-day workflow, the first step when using
++Buildroot is to create a custom configuration. Buildroot has a nice
++configuration tool similar to the one you can find in the
++http://www.kernel.org/[Linux kernel] or in
++http://www.busybox.net/[BusyBox]:
+ 
+ --------------------
+  $ make menuconfig
+-- 
+2.19.0
