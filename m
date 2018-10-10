@@ -1,63 +1,70 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 10 Oct 2018 09:45:40 +0200
-Subject: [Buildroot] [PATCH v2] poco: disable fpenvironment for MIPS
- without FPU
-In-Reply-To: <CAGm1_ks1S0VkEFOJEyXW+k1B3VMeWNTmQXJG4-K33UE2+dkVoQ@mail.gmail.com>
-References: <20181009132152.24383-1-yegorslists@googlemail.com>
- <51cdb909-89fd-6832-0988-f29ab95dbf74@mind.be>
- <20181010084502.04f1cf7e@windsurf>
- <CAGm1_kuA7Pp7gKP+1O_K0enyAf=OTFdcK-rhvTOrJYqiUMeWFQ@mail.gmail.com>
- <20181010091240.30e7e37f@windsurf>
- <CAGm1_ks1S0VkEFOJEyXW+k1B3VMeWNTmQXJG4-K33UE2+dkVoQ@mail.gmail.com>
-Message-ID: <1f08c072-e2d2-2b35-9030-30c27d05fa5e@mind.be>
+From: Ciro Santilli <ciro.santilli@gmail.com>
+Date: Wed, 10 Oct 2018 08:50:21 +0100
+Subject: [Buildroot] [PATCH v2] manual: add QEMU demo to quick start
+Message-ID: <20181010075021.749-1-ciro.santilli@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+---
+OK, me learning to ues crappy mailing lists now >:-), will this appear v2
+on the same thread?
 
+Your software is awesome, and many more people would see that if the
+quickstart actually told them how to quickstart and see something happen ;-)
 
-On 10/10/18 09:14, Yegor Yefremov wrote:
-> On Wed, Oct 10, 2018 at 9:12 AM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
->>
->> Hello,
->>
->> On Wed, 10 Oct 2018 09:02:02 +0200, Yegor Yefremov wrote:
->>
->>>> Isn't the glibc bug that it allowed to use fpenv in situations where it
->>>> shouldn't have allowed it ? If that's the case, perhaps the other
->>>> libcs didn't had this bug, and fpenv really shouldn't be used with MIPS
->>>> soft-float, regardless of the C library in use ?
->>>
->>> I've made a compile test with musl and it fails too. So I'll just
->>> disable fpenv if BR2_MIPS_SOFT_FLOAT is selected. So ne need to
->>> mention glibc.
->>>
->>> Strange, that it didn't show up in the build tests ...
->>
->> We don't test mips/musl in the autobuilders. However, we do test
->> mips/uclibc, but maybe not in soft-float mode.
-> 
-> uclibc has special handling: both fpenv and wstring will be disabled.
+ docs/manual/quickstart.txt | 36 +++++++++++++++++++++++++++++++-----
+ 1 file changed, 31 insertions(+), 5 deletions(-)
 
- So, to be fully correct, poco should be build-tested and preferably
-runtime-tested on all these softfloat architectures.
-
- Wouldn't it be a lot simpler to just disable the whole fpenv stuff on soft
-float unconditionally? Yes, this is not perfect, because there are a few cases
-where it actually *does* work. But if someone needs those cases, let them please
-write a proper configure script that detects them. Until then, disable the
-entire feature on soft float.
-
- Regards,
- Arnout
-
+diff --git a/docs/manual/quickstart.txt b/docs/manual/quickstart.txt
+index 74158ae249..00afe09e6b 100644
+--- a/docs/manual/quickstart.txt
++++ b/docs/manual/quickstart.txt
+@@ -8,12 +8,38 @@ is no need to be root to configure and use Buildroot. By running all
+ commands as a regular user, you protect your system against packages
+ behaving badly during compilation and installation.
+ 
+-The first step when using Buildroot is to create a configuration.
+-Buildroot has a nice configuration tool similar to the one you can
+-find in the http://www.kernel.org/[Linux kernel] or in
+-http://www.busybox.net/[BusyBox].
++=== Try it out with QEMU
+ 
+-From the buildroot directory, run
++If you just want to emulate a simple generic QEMU system to see
++Buildroot at work immediately, run from the buildroot directory:
++
++--------------------
++make qemu_x86_64_defconfig
++make BR2_JLEVEL="$(nproc)"
++qemu-system-x86_64 \
++  -M pc \
++  -kernel output/images/bzImage \
++  -drive file=output/images/rootfs.ext2,if=virtio,format=raw \
++  -append "root=/dev/vda" \
++  -net nic,model=virtio \
++  -net user
++--------------------
++
++Once QEMU boots, login with +root+, and you are now left inside a minimal
++BusyBox based Linux distribution.
++
++The initial build can take several minutes to a few hours since we download
++and compile GCC, the Linux kernel and other basic system components from
++source.
++
++The QEMU command to use is also documented at: +board/qemu/x86/readme.txt+
++
++=== Day-to-day workflow
++
++In your day-to-day workflow, the first step when using Buildroot is to
++create a custom configuration. Buildroot has a nice configuration tool
++similar to the one you can find in the http://www.kernel.org/[Linux kernel]
++or in http://www.busybox.net/[BusyBox]:
+ 
+ --------------------
+  $ make menuconfig
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.19.0
