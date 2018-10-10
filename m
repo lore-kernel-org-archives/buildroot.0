@@ -1,54 +1,140 @@
-From: Artyom Panfilov <apanfilov@spectracom.com>
-Date: Wed, 10 Oct 2018 09:03:05 +0000
-Subject: [Buildroot] [PATCH 1/1] package/ntp: security bump to version
- 4.2.8p12
-Message-ID: <20181010090257.15011-1-apanfilov@spectracom.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 10 Oct 2018 07:49:34 -0500
+Subject: [Buildroot] [PATCH v3] manual: add QEMU demo to quick start
+In-Reply-To: <CAFXrp_chYzRChQEA=ZaYD=nQ2k_g6+UtV--52f78DDkxPbY3wg@mail.gmail.com>
+References: <20181010091812.26552-1-ciro.santilli@gmail.com>
+ <20181010141433.1e9d2b15@windsurf>
+ <CAFXrp_chYzRChQEA=ZaYD=nQ2k_g6+UtV--52f78DDkxPbY3wg@mail.gmail.com>
+Message-ID: <CANQCQpbdmimBHQ55Y1AZDSQCgb9tfhj3VQBCTEcCmvDft=PyPg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://www.nwtime.org/network-time-foundation-publishes-ntp-4-2-8p12
+Ciro,
 
-Fixed security issues:
 
-  CVE-2016-1549 / CVE-2018-7170: Sybil vulnerability: ephemeral association
-  attack
 
-  CVE-2018-12327: The openhost() function used during command-line hostname
-  processing by ntpq and ntpdc can write beyond its buffer limit
+On Wed, Oct 10, 2018 at 7:26 AM Ciro Santilli <ciro.santilli@gmail.com> wrote:
+>
+> On Wed, Oct 10, 2018 at 1:14 PM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> >
+> > Hello,
+> >
+> > On Wed, 10 Oct 2018 10:18:12 +0100, Ciro Santilli wrote:
+> > > Signed-off-by: Ciro Santilli <ciro.santilli@gmail.com>
+> > > ---
+> > > OK, I think this is the best way to structure the more general intro to
+> > > configs and their docs.
+> >
+> > It seems like you haven't taken into account my previous comment.
+> >
+>
+> Sorry, which one did I miss?
+>
+> In any case, if you think kind of intro might be useful, can you make
+> the adjustment that you have in mind and it yourself? I think it would
+> be easier in this case. No need to credit me or anything.
+>
+> I just highly recommend keeping:
+>
+> +make qemu_x86_64_defconfig
+> +make BR2_JLEVEL="$(nproc)"
+> +qemu-system-x86_64 \
+> +  -M pc \
+> +  -kernel output/images/bzImage \
+> +  -drive file=output/images/rootfs.ext2,if=virtio,format=raw \
+> +  -append "root=/dev/vda" \
+> +  -net nic,model=virtio \
+> +  -net user
+>
+> as close as possible to the top of the getting started ;-)
 
-Signed-off-by: Artem Panfilov <apanfilov@spectracom.com>
----
- package/ntp/ntp.hash | 2 +-
- package/ntp/ntp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I'm with Thomas on this one, the readme.txt for each qemu board are
+not the same to invoke QEMU for the different architectures.   If
+anything note that the Buildroot provided qemu configurations target a
+number of architectures and that for each of those there is an example
+qemu launch command found in board/qemu/<arch>/readme.txt
 
-diff --git a/package/ntp/ntp.hash b/package/ntp/ntp.hash
-index ea86c1586f..02dbaffcba 100644
---- a/package/ntp/ntp.hash
-+++ b/package/ntp/ntp.hash
-@@ -1,5 +1,5 @@
- # From https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p11.tar.gz.md5
- md5 00950ca2855579541896513e78295361  ntp-4.2.8p11.tar.gz
- # Calculated based on the hash above
--sha256 f14a39f753688252d683ff907035ffff106ba8d3db21309b742e09b5c3cd278e  ntp-4.2.8p11.tar.gz
-+sha256 709b222b5013d77d26bfff532b5ea470a8039497ef29d09363931c036cb30454  ntp-4.2.8p12.tar.gz
- sha256 62c87b269365b38b55359b16dfde7ec28c683c722ef489db90afd0f2e478e4a1  COPYRIGHT
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index 674c368395..af3c1aad9f 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- NTP_VERSION_MAJOR = 4.2
--NTP_VERSION = $(NTP_VERSION_MAJOR).8p11
-+NTP_VERSION = $(NTP_VERSION_MAJOR).8p12
- NTP_SITE = https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
- NTP_DEPENDENCIES = host-pkgconf libevent
- NTP_LICENSE = NTP
--- 
-2.17.1
+By referencing the existing readme.txt we keep the manual easier to
+maintain if there for some reason becomes a reason to update the qemu
+launch command.
+
+>
+> > > +=== Try it out with QEMU
+> > >
+> > > -From the buildroot directory, run
+> > > +If you just want to emulate a simple generic QEMU system to see
+> > > +Buildroot in action immediately, run from the buildroot directory:
+> > > +
+> > > +--------------------
+> > > +make qemu_x86_64_defconfig
+> > > +make BR2_JLEVEL="$(nproc)"
+> > > +qemu-system-x86_64 \
+> > > +  -M pc \
+> > > +  -kernel output/images/bzImage \
+> > > +  -drive file=output/images/rootfs.ext2,if=virtio,format=raw \
+> > > +  -append "root=/dev/vda" \
+> > > +  -net nic,model=virtio \
+> > > +  -net user
+> > > +--------------------
+> >
+> > Please point the user to board/qemu/x86-64/readme.txt instead,
+> > don't duplicate the information. And I believe the section should be
+> > made more general, and talk about all defconfigs. Maybe a section:
+> >
+> > "Quick start on HW platforms or Qemu"
+> >
+> > and then describe that we have defconfigs, how to use them, that we
+> > have readme files to explain how to use the result of the defconfigs,
+> > etc.
+> >
+> >
+> > > +=== Day-to-day workflow
+> > > +
+> > > +In your day-to-day workflow, the first step when using Buildroot is to
+> > > +create a custom configuration.
+> > > +
+> > > +If you wish to use an existing configuration as your starting point,
+> > > +first find the available configs with:
+> > > +
+> > > +--------------------
+> > > + $ ls configs/
+> > > +--------------------
+> > > +
+> > > +If you want to build for the Raspberry Pi 3 for example, run:
+> > > +
+> > > +--------------------
+> > > + $ make raspberrypi3_64_defconfig
+> > > +--------------------
+> > > +
+> > > +This command generates a +.config+ file in the root directory.
+> > > +
+> > > +Each defconfig is documented under:
+> > > +
+> > > +--------------------
+> > > + $ board/<config-hyphenated>/readme.txt
+> > > +--------------------
+> > > +
+> > > +for example:
+> > > +
+> > > +--------------------
+> > > + $ less board/raspberrypi3-64/readme.txt
+> > > +--------------------
+> > > +
+> > > +Next, to customize the +.config+, Buildroot has a nice configuration tool
+> > > +similar to the one you can find in the http://www.kernel.org/[Linux kernel]
+> > > +or in http://www.busybox.net/[BusyBox]. Run it either with
+> >
+> > I am not sure this section "Day-to-day workflow" is very useful/makes a
+> > lot of sense in the context of the Buildroot manual.
+> >
+
+Ciro, maybe there is a good blog or forum where an example use case
+could be posted (or improved) capturing the day to day targeting of a
+Raspberrypi using buildroot?  Looks like there are a few out there.
+https://www.google.com/search?q=buildroot+raspberry+pi&oq=buildroot+ras&aqs=chrome.0.0j69i57j69i61j0l3.2031j1j7&sourceid=chrome&ie=UTF-8
+
+Matt
