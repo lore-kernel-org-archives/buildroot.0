@@ -1,13 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Oct 2018 10:25:23 +0200
-Subject: [Buildroot] [PATCH 12/13] pkg-perl: add a target which upgrades
- all packages from metacpan
-In-Reply-To: <CAB0FRsu56_UpK0EHAhVrMr5Z1Pc=Oeqr9YhU+vMHQog_bc2wtA@mail.gmail.com>
-References: <20181010064621.19253-1-francois.perrad@gadz.org>
- <20181010064621.19253-13-francois.perrad@gadz.org>
- <20181010091049.241adca4@windsurf>
- <CAB0FRsu56_UpK0EHAhVrMr5Z1Pc=Oeqr9YhU+vMHQog_bc2wtA@mail.gmail.com>
-Message-ID: <20181010102523.1eecb42d@windsurf>
+Date: Wed, 10 Oct 2018 10:33:08 +0200
+Subject: [Buildroot] [PATCH v2] manual: add QEMU demo to quick start
+In-Reply-To: <20181010075021.749-1-ciro.santilli@gmail.com>
+References: <20181010075021.749-1-ciro.santilli@gmail.com>
+Message-ID: <20181010103308.0f204999@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,19 +12,33 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 10 Oct 2018 09:33:49 +0200, Fran?ois Perrad wrote:
+On Wed, 10 Oct 2018 08:50:21 +0100, Ciro Santilli wrote:
+> ---
 
-> > I'm curious to understand why you're adding only target Perl packages.
-> >  
-> 
->  `scancpan` fetch recursively all dependencies of a package.
+We need patches to have a Signed-off-by.
 
-OK, thanks for the explanation.
+> +=== Try it out with QEMU
+>  
+> -From the buildroot directory, run
+> +If you just want to emulate a simple generic QEMU system to see
+> +Buildroot at work immediately, run from the buildroot directory:
+> +
+> +--------------------
+> +make qemu_x86_64_defconfig
+> +make BR2_JLEVEL="$(nproc)"
+> +qemu-system-x86_64 \
+> +  -M pc \
+> +  -kernel output/images/bzImage \
+> +  -drive file=output/images/rootfs.ext2,if=virtio,format=raw \
+> +  -append "root=/dev/vda" \
+> +  -net nic,model=virtio \
+> +  -net user
+> +--------------------
 
-In the Python case, we have a few Python host packages that are listed
-in package/Config.in.host, i.e they may exist or be built, without
-being a dependency of a target Python package. But that's not the case
-with Perl today, so OK.
+We should point the user to board/qemu/x86-64/readme.txt instead.
+
+Perhaps, we could make this a bit more generic, and point to all
+defconfigs and the associated readme.txt files ?
 
 Best regards,
 
