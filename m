@@ -1,41 +1,61 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 10 Oct 2018 09:14:35 +0200
-Subject: [Buildroot] [PATCH v2] poco: disable fpenvironment for MIPS
- without FPU
-In-Reply-To: <20181010091240.30e7e37f@windsurf>
-References: <20181009132152.24383-1-yegorslists@googlemail.com>
- <51cdb909-89fd-6832-0988-f29ab95dbf74@mind.be>
- <20181010084502.04f1cf7e@windsurf>
- <CAGm1_kuA7Pp7gKP+1O_K0enyAf=OTFdcK-rhvTOrJYqiUMeWFQ@mail.gmail.com>
- <20181010091240.30e7e37f@windsurf>
-Message-ID: <CAGm1_ks1S0VkEFOJEyXW+k1B3VMeWNTmQXJG4-K33UE2+dkVoQ@mail.gmail.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Wed, 10 Oct 2018 09:33:49 +0200
+Subject: [Buildroot] [PATCH 12/13] pkg-perl: add a target which upgrades
+ all packages from metacpan
+In-Reply-To: <20181010091049.241adca4@windsurf>
+References: <20181010064621.19253-1-francois.perrad@gadz.org>
+ <20181010064621.19253-13-francois.perrad@gadz.org>
+ <20181010091049.241adca4@windsurf>
+Message-ID: <CAB0FRsu56_UpK0EHAhVrMr5Z1Pc=Oeqr9YhU+vMHQog_bc2wtA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Oct 10, 2018 at 9:12 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
+Le mer. 10 oct. 2018 ? 09:11, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+a ?crit :
+
 > Hello,
 >
-> On Wed, 10 Oct 2018 09:02:02 +0200, Yegor Yefremov wrote:
->
-> > > Isn't the glibc bug that it allowed to use fpenv in situations where it
-> > > shouldn't have allowed it ? If that's the case, perhaps the other
-> > > libcs didn't had this bug, and fpenv really shouldn't be used with MIPS
-> > > soft-float, regardless of the C library in use ?
+> On Wed, 10 Oct 2018 08:46:20 +0200, Francois Perrad wrote:
+> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> > ---
+> >  package/pkg-perl.mk | 9 +++++++++
+> >  1 file changed, 9 insertions(+)
 > >
-> > I've made a compile test with musl and it fails too. So I'll just
-> > disable fpenv if BR2_MIPS_SOFT_FLOAT is selected. So ne need to
-> > mention glibc.
+> > diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
+> > index 07348bd5d..74a116075 100644
+> > --- a/package/pkg-perl.mk
+> > +++ b/package/pkg-perl.mk
+> > @@ -57,6 +57,10 @@ endif
+> >  #       used no matter the setting
+> >  $(2)_PREFER_INSTALLER ?= MB
 > >
-> > Strange, that it didn't show up in the build tests ...
+> > +ifeq ($(4),target)
+> > +SCANCPAN_ALL_DISTRIB += $$($(2)_DISTNAME)
+> > +endif
 >
-> We don't test mips/musl in the autobuilders. However, we do test
-> mips/uclibc, but maybe not in soft-float mode.
+> I'm curious to understand why you're adding only target Perl packages.
+>
 
-uclibc has special handling: both fpenv and wstring will be disabled.
+ `scancpan` fetch recursively all dependencies of a package.
 
-Yegor
+
+> We don't want to update also host Perl packages ?
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181010/ee0af0e4/attachment.html>
