@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Oct 2018 21:23:06 +0200
-Subject: [Buildroot] [PATCH 0/4] webkitgtk: assorted fixes and
- improvements
-In-Reply-To: <20181009220852.4309-1-aperez@igalia.com>
+Date: Wed, 10 Oct 2018 21:26:30 +0200
+Subject: [Buildroot] [PATCH 4/4] webkitgtk: explicitly set
+ USE_GSTREAMER_GL build option
+In-Reply-To: <20181009220852.4309-5-aperez@igalia.com>
 References: <20181009220852.4309-1-aperez@igalia.com>
-Message-ID: <20181010212306.4ed63bd1@windsurf>
+ <20181009220852.4309-5-aperez@igalia.com>
+Message-ID: <20181010212630.7f47270e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +14,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 10 Oct 2018 01:08:48 +0300, Adrian Perez de Castro wrote:
+On Wed, 10 Oct 2018 01:08:52 +0300, Adrian Perez de Castro wrote:
+> This covers the case where GL/GLES is available (so -DENABLE_OPENGL=ON
+> gets passed), which makes the webkitgtk build system assume GStreamer-GL
+> is available, while actually it is not.
+> 
+> Also, use "imply" to select the needed GStreamer-GL component, because
+> in general it is preferred due to better performance.
+> 
+> This fixes some autobuilder failures like the following:
+> 
+>   http://autobuild.buildroot.net/results/187796535af53ece426641ff7d88aabada281674
 
-> Adrian Perez de Castro (4):
->   webkitgtk: move JSC JIT selection logic to kconfig
->   webkitgtk: enable package for aarch64
->   webkitgtk: enable JIT support on 32-bit MIPS
+What is fixing the autobuilder issue exactly? Explicitly disabling
+-DUSE_GSTREAMER_GL=OFF when the plugin is not available ? Or having it
+enabled by the "imply" ?
 
-I've applied those first three patches. Thanks!
+In the former case, then I believe we need two patches: one fixing the
+autobuilder issue (i.e just the part in the .mk file) that we can
+backport to older Buildroot versions as needed, and another one adding
+the imply.
 
->   webkitgtk: explicitly set USE_GSTREAMER_GL build option
+This usage of "imply" would be the first in Buildroot. Peter, Arnout,
+Yann, anything against it ?
 
-I'll comment on this one.
-
-Thanks!
+Best regards,
 
 Thomas
 -- 
