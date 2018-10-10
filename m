@@ -1,47 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Oct 2018 21:26:30 +0200
-Subject: [Buildroot] [PATCH 4/4] webkitgtk: explicitly set
- USE_GSTREAMER_GL build option
-In-Reply-To: <20181009220852.4309-5-aperez@igalia.com>
-References: <20181009220852.4309-1-aperez@igalia.com>
- <20181009220852.4309-5-aperez@igalia.com>
-Message-ID: <20181010212630.7f47270e@windsurf>
+Date: Wed, 10 Oct 2018 21:27:23 +0200
+Subject: [Buildroot] [git commit] package/ntp: security bump to version
+ 4.2.8p12
+Message-ID: <20181010192816.E182282749@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=cf9344c45e85ed274cf783271344f4c03138971d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 10 Oct 2018 01:08:52 +0300, Adrian Perez de Castro wrote:
-> This covers the case where GL/GLES is available (so -DENABLE_OPENGL=ON
-> gets passed), which makes the webkitgtk build system assume GStreamer-GL
-> is available, while actually it is not.
-> 
-> Also, use "imply" to select the needed GStreamer-GL component, because
-> in general it is preferred due to better performance.
-> 
-> This fixes some autobuilder failures like the following:
-> 
->   http://autobuild.buildroot.net/results/187796535af53ece426641ff7d88aabada281674
+Release notes:
+https://www.nwtime.org/network-time-foundation-publishes-ntp-4-2-8p12
 
-What is fixing the autobuilder issue exactly? Explicitly disabling
--DUSE_GSTREAMER_GL=OFF when the plugin is not available ? Or having it
-enabled by the "imply" ?
+Fixed security issues:
 
-In the former case, then I believe we need two patches: one fixing the
-autobuilder issue (i.e just the part in the .mk file) that we can
-backport to older Buildroot versions as needed, and another one adding
-the imply.
+  CVE-2016-1549 / CVE-2018-7170: Sybil vulnerability: ephemeral association
+  attack
 
-This usage of "imply" would be the first in Buildroot. Peter, Arnout,
-Yann, anything against it ?
+  CVE-2018-12327: The openhost() function used during command-line hostname
+  processing by ntpq and ntpdc can write beyond its buffer limit
 
-Best regards,
+Signed-off-by: Artem Panfilov <apanfilov@spectracom.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ntp/ntp.hash | 2 +-
+ package/ntp/ntp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/ntp/ntp.hash b/package/ntp/ntp.hash
+index ea86c1586f..02dbaffcba 100644
+--- a/package/ntp/ntp.hash
++++ b/package/ntp/ntp.hash
+@@ -1,5 +1,5 @@
+ # From https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p11.tar.gz.md5
+ md5 00950ca2855579541896513e78295361  ntp-4.2.8p11.tar.gz
+ # Calculated based on the hash above
+-sha256 f14a39f753688252d683ff907035ffff106ba8d3db21309b742e09b5c3cd278e  ntp-4.2.8p11.tar.gz
++sha256 709b222b5013d77d26bfff532b5ea470a8039497ef29d09363931c036cb30454  ntp-4.2.8p12.tar.gz
+ sha256 62c87b269365b38b55359b16dfde7ec28c683c722ef489db90afd0f2e478e4a1  COPYRIGHT
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index 674c368395..af3c1aad9f 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ NTP_VERSION_MAJOR = 4.2
+-NTP_VERSION = $(NTP_VERSION_MAJOR).8p11
++NTP_VERSION = $(NTP_VERSION_MAJOR).8p12
+ NTP_SITE = https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
+ NTP_DEPENDENCIES = host-pkgconf libevent
+ NTP_LICENSE = NTP
