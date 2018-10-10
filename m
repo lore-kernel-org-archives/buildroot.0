@@ -1,59 +1,33 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 10 Oct 2018 16:35:22 -0500
-Subject: [Buildroot] [PATCH 1/2] libselinux: remove library host symlink
-In-Reply-To: <20181010212417.23047-1-fontaine.fabrice@gmail.com>
-References: <20181010212417.23047-1-fontaine.fabrice@gmail.com>
-Message-ID: <CANQCQpascayUZmqJ8=gWH2-EA5OEp6KqRQ_nA2d-BCe5N93+xg@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 10 Oct 2018 23:35:55 +0200
+Subject: [Buildroot] Analysis results for 2018-10-09
+In-Reply-To: <20181010174814.5ac114f1@windsurf>
+References: <20181010060010.4E3C920736@mail.bootlin.com>
+ <20181010174814.5ac114f1@windsurf>
+Message-ID: <c7c0d90d-a25e-7832-67c4-4aa3598691fd@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice,
-
-On Wed, Oct 10, 2018 at 4:24 PM Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
->
-> Since bump to version 2.7 and addition of
-> 0003-revert-ln-relative.patch, the creation of a symlink through
-> ln -sf libselinux.so.1 $(HOST_DIR)/lib/libselinux.so
-> is not needed anymore so remove it
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 
-Sorry long day, shouldn't have sent that signed off.
+On 10/10/18 17:48, Thomas Petazzoni wrote:
+>>          arm |                    luvi-v2.8.0 | NOK | http://autobuild.buildroot.net/results/2bdbb93e6404943e59791773106d8b2680211886 |     
+> luvi 2.8.0 fails to build. Bernd, you bumped this package, and J?rg
+> suggested to revert the bump. Could you discuss this, and provide a fix?
+> 
 
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+ I think luv is missing a dependency on lua-compat53.
 
-> ---
->  package/libselinux/libselinux.mk | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-> index b3d48f7105..97b4f03062 100644
-> --- a/package/libselinux/libselinux.mk
-> +++ b/package/libselinux/libselinux.mk
-> @@ -102,7 +102,6 @@ endef
->  define HOST_LIBSELINUX_INSTALL_CMDS
->         $(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
->                 $(HOST_LIBSELINUX_MAKE_OPTS) install
-> -       ln -sf libselinux.so.1 $(HOST_DIR)/lib/libselinux.so
->         # Install python interface wrapper
->         $(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
->                 $(HOST_LIBSELINUX_MAKE_OPTS) install-pywrap
-> --
-> 2.17.1
->
-
+ Regards,
+ Arnout
 
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / RC Linux Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
