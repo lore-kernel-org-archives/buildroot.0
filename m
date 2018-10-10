@@ -1,111 +1,88 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 10 Oct 2018 22:36:49 +0200
-Subject: [Buildroot] [PATCH] manual: give QEMU quick demo on quick start
-In-Reply-To: <20181010074228.26541-1-ciro.santilli@gmail.com>
-References: <20181010074228.26541-1-ciro.santilli@gmail.com>
-Message-ID: <19fd5963-bda2-0321-6ea3-2eee0ea708f0@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 10 Oct 2018 23:05:02 +0200
+Subject: [Buildroot] [PATCH v2,1/8] libselinux: bump to version 2.8
+In-Reply-To: <20181010213528.4805f9e6@windsurf>
+References: <20180921205013.21829-1-fontaine.fabrice@gmail.com>
+ <20181010213528.4805f9e6@windsurf>
+Message-ID: <CAPi7W80jBdoLui_B0UxRO1gB8mqoEi8pBbd78drTXk_8sn1EXg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Ciro,
+Dear Thomas,
 
- Nice addition...
+Le mer. 10 oct. 2018 ? 21:35, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+a ?crit :
 
-On 10/10/18 09:42, Ciro Santilli wrote:
-> ---
->  docs/manual/quickstart.txt | 36 +++++++++++++++++++++++++++++++-----
->  1 file changed, 31 insertions(+), 5 deletions(-)
-> 
-> diff --git a/docs/manual/quickstart.txt b/docs/manual/quickstart.txt
-> index 74158ae249..00afe09e6b 100644
-> --- a/docs/manual/quickstart.txt
-> +++ b/docs/manual/quickstart.txt
-> @@ -8,12 +8,38 @@ is no need to be root to configure and use Buildroot. By running all
->  commands as a regular user, you protect your system against packages
->  behaving badly during compilation and installation.
->  
-> -The first step when using Buildroot is to create a configuration.
-> -Buildroot has a nice configuration tool similar to the one you can
-> -find in the http://www.kernel.org/[Linux kernel] or in
-> -http://www.busybox.net/[BusyBox].
-> +=== Try it out with QEMU
->  
-> -From the buildroot directory, run
-> +If you just want to emulate a simple generic QEMU system to see
-> +Buildroot at work immediately, run from the buildroot directory:
+> Hello Fabrice,
+>
+> On Fri, 21 Sep 2018 22:50:06 +0200, Fabrice Fontaine wrote:
+>
+> > - Use DESTDIR=$(HOST_DIR) instead of PREFIX=$(HOST_DIR) to install host
+> >   variant
+>
+> Why do you do this ?
 
- I see where you're going with this, but still I think this section might fit
-better at the end of this file instead of at the beginning. Yes, the idea is to
-see something running immediately, but on the other hand, just running the
-defconfig under qemu doesn't bring that much joy either...
+I will take the example of host-libsepol (this is the same for
+host-libselinux)
+Without this update, build of host-libsepol fails on:
+install -m 755 libsepol.so.1 /lib
+install: cannot create regular file '/lib/libsepol.so.1': Permission denied
 
-> +
-> +--------------------
-> +make qemu_x86_64_defconfig
-> +make BR2_JLEVEL="$(nproc)"
+It seems that 0001-libsepol-build-follow-standard-semantics-for-DESTD.patch
+and
+https://github.com/SELinuxProject/selinux/commit/f8532f17731c82df9956aa1c92f7fb08bd65bf05
+are not exactly the same.
+Especially, it seems that LIBINSTALL = $(DESTDIR)$(LIBDIR) has not been
+added in upstream.
+upstream directly uses DESTDIR which is why I got a failure: install -m 755
+$(LIBSO) $(DESTDIR)$(SHLIBDIR)
+I don't know why there is such a difference but perhaps Marcus knows?
+If Marcus confirms that this is a mistake, I can always add a patch to fix
+this and send it upstream.
 
- The BR2_JLEVEL defaults to nproc + 1, I don't see a reason to use one less here...
+> Setting prefix to $(HOST_DIR) is the right thing
+> to do for host packages, at least in the normal semantic of prefix and
+> destdir, as defined by the autotools. I think Marcus patched the
+> SELinux build system to restore a semantic of PREFIX and DESTDIR that
+> matched the one of the autotools, but you're now going backward with
+> doing DESTDIR=$(HOST_DIR).
+>
+> If the semantic of DESTDIR and PREFIX is standard, then:
+>
+>  - Target packages should use PREFIX=/usr DESTDIR=$(TARGET_DIR)
+>
+>  - Host packages should use PREFIX=$(HOST_DIR) and no DESTDIR at all
+>
+> Of course, this question applies to all SELinux packages in this series.
+>
+> > - Remove libselinux.so symbolic link for host variant (not needed)
+>
+> Is this removal really related to the bump ? Why is it unneeded ?
+> Because the new 2.8 version creates this symlink properly at
+> installation time ?
+>
+Indeed, I should remove this modification from this patch's serie.
+This symlink was added by commit
+https://git.buildroot.net/buildroot/commit/package/libsepol/libsepol.mk?id=12a9fb947c7b642b418c2615530207883a246ac3
+on version 2.6.
+However, the symlink is correctly done since version 2.7 (as
+0002-revert-ln-relative.patch is already patching it).
 
-> +qemu-system-x86_64 \
-> +  -M pc \
-> +  -kernel output/images/bzImage \
-> +  -drive file=output/images/rootfs.ext2,if=virtio,format=raw \
-> +  -append "root=/dev/vda" \
-> +  -net nic,model=virtio \
-> +  -net user
-> +--------------------
-> +
-> +Once QEMU boots, login with +root+, and you are now left inside a minimal
-> +BusyBox based Linux distribution.
-> +
-> +The initial build can take several minutes to a few hours since we download
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
- Several minutes? What kind of beast of a machine do you have that can build
-even just the toolchain in a couple of minutes?
+Best Regards,
 
- A few hours is also exaggerated...
-
- But OK, the message is clear...
-
-> +and compile GCC, the Linux kernel and other basic system components from
-> +source.
-> +
-> +The QEMU command to use is also documented at: +board/qemu/x86/readme.txt+
-
- This last sentence could be extended a bit to refer to all architectures.
-
-QEMU configurations exist and are tested for various architectures. The QEMU
-command to use is documentated in the +readme.txt+ file in the architecture's
-subdirectory in +board/qemu+.
-
-
- All in all, just nitpicking, so if you respin you can add my
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-
- Regards,
- Arnout
-
-> +
-> +=== Day-to-day workflow
-> +
-> +In your day-to-day workflow, the first step when using Buildroot is to
-> +create a custom configuration. Buildroot has a nice configuration tool
-> +similar to the one you can find in the http://www.kernel.org/[Linux kernel]
-> +or in http://www.busybox.net/[BusyBox]:
->  
->  --------------------
->   $ make menuconfig
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181010/76641c80/attachment.html>
