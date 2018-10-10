@@ -1,182 +1,38 @@
-From: Joel Carlson <joelsoncarl@gmail.com>
-Date: Wed, 10 Oct 2018 11:04:46 -0600
-Subject: [Buildroot] [PATCH 1/1] c-capnproto: add package
-Message-ID: <20181010170446.31982-1-JoelsonCarl@gmail.com>
+From: Joel Carlson <JoelsonCarl@gmail.com>
+Date: Wed, 10 Oct 2018 11:08:35 -0600
+Subject: [Buildroot] [PATCH 1/1] libcorrect: add package
+In-Reply-To: <20181010104650.39d03535@windsurf>
+References: <20181009234649.19784-1-JoelsonCarl@gmail.com>
+ <20181010104650.39d03535@windsurf>
+Message-ID: <CA+1k=2bzfU_1G8COh0yYqe8zjhm1Hq7KLfxKN7rQ5xGGpB45XQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adds the c-capnproto package. This creates a C plugin for the regular
-capnproto capnpc compiler. It supports only serialization (no RPC).
+On Wed, Oct 10, 2018 at 2:46 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Tue,  9 Oct 2018 17:46:49 -0600, Joel Carlson wrote:
+> > Adds the libcorrect package. Libcorrect by default builds a shared
+> > library, so require shared libraries. It also sets the -Wpedantic flag
+> > in its Debug build, which first exists starting in gcc 4.8.
+> >
+> > Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
+> > ---
+>
+> After looking quickly at it, I decided to add a patch that uses
+> -Wpedantic only if available, which allows to drop the dependency on
+> the gcc version. The patch was submitted upstream.
+>
+> Applied with this change. Thanks!
+>
+> Thomas
 
-Since it depends on capnproto, the package selects capnproto and has the
-same requirements as capnproto.
-
-Includes a patch submitted upstream to fix a compilation error hit by
-some toolchains.
-
-Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
----
-
-compile tested via utils/test-pkg -a
-
----
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- ...r-str.h-include-stdarg.h-for-va_list.patch | 48 +++++++++++++++++++
- package/c-capnproto/Config.in                 | 21 ++++++++
- package/c-capnproto/c-capnproto.hash          |  3 ++
- package/c-capnproto/c-capnproto.mk            | 23 +++++++++
- 6 files changed, 97 insertions(+)
- create mode 100644 package/c-capnproto/0001-compiler-str.h-include-stdarg.h-for-va_list.patch
- create mode 100644 package/c-capnproto/Config.in
- create mode 100644 package/c-capnproto/c-capnproto.hash
- create mode 100644 package/c-capnproto/c-capnproto.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 990621fb11..0ce872667f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1071,6 +1071,7 @@ F:	package/x11r7/xdriver_xf86-video-imx/
- F:	package/x11r7/xdriver_xf86-video-imx-viv/
- 
- N:	Joel Carlson <JoelsonCarl@gmail.com>
-+F:	package/c-capnproto/
- F:	package/capnproto/
- F:	package/cmocka/
- F:	package/flatcc/
-diff --git a/package/Config.in b/package/Config.in
-index 8d995f82e6..b9fe4b6bd5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1586,6 +1586,7 @@ menu "Other"
- 	source "package/bctoolbox/Config.in"
- 	source "package/bdwgc/Config.in"
- 	source "package/boost/Config.in"
-+	source "package/c-capnproto/Config.in"
- 	source "package/capnproto/Config.in"
- 	source "package/clang/Config.in"
- 	source "package/clapack/Config.in"
-diff --git a/package/c-capnproto/0001-compiler-str.h-include-stdarg.h-for-va_list.patch b/package/c-capnproto/0001-compiler-str.h-include-stdarg.h-for-va_list.patch
-new file mode 100644
-index 0000000000..f6d65ade38
---- /dev/null
-+++ b/package/c-capnproto/0001-compiler-str.h-include-stdarg.h-for-va_list.patch
-@@ -0,0 +1,48 @@
-+From c9d899c7fbf6e445b44372ba4814dc7c1b8e702d Mon Sep 17 00:00:00 2001
-+From: Joel Carlson <JoelsonCarl@gmail.com>
-+Date: Tue, 9 Oct 2018 15:40:46 -0600
-+Subject: [PATCH] compiler/str.h: include stdarg.h for va_list
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+With some toolchains, compilation of str.c produced the following error:
-+
-+compiler/str.h:56:50: error: unknown type name ?va_list?
-+ int str_vaddf(struct str *v, const char *format, va_list ap) ATTR(2,0);
-+                                                  ^~~~~~~
-+
-+One toolchain had the following in its stdarg.h:
-+"We deliberately do not define va_list when called from
-+stdio.h, because ANSI C says that stdio.h is not supposed to
-+define va_list."
-+
-+str.c includes stdio.h, but none of the prior includes result in the
-+inclusion of stdarg.h. Therefore, explicitly include it in str.h to fix
-+the issue on toolchains following this ANSI C rule.
-+
-+Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
-+---
-+
-+Submitted upstream:
-+https://github.com/opensourcerouting/c-capnproto/pull/28
-+
-+---
-+ compiler/str.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/compiler/str.h b/compiler/str.h
-+index 37a95a8..f2763c2 100644
-+--- a/compiler/str.h
-++++ b/compiler/str.h
-+@@ -9,6 +9,7 @@
-+ 
-+ #include <capnp_c.h>
-+ #include <stdlib.h>
-++#include <stdarg.h>
-+ 
-+ struct str {
-+ 	char *str;
-+-- 
-+2.17.1
-+
-diff --git a/package/c-capnproto/Config.in b/package/c-capnproto/Config.in
-new file mode 100644
-index 0000000000..3dd1d13762
---- /dev/null
-+++ b/package/c-capnproto/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_C_CAPNPROTO
-+	bool "c-capnproto"
-+	depends on BR2_USE_MMU
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8 # C++11
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
-+	select BR2_PACKAGE_CAPNPROTO
-+	help
-+	  A C plugin for Cap'n Proto. Generates the code generator
-+	  plugin for C. Requires regular Cap'n Proto and only
-+	  provides serialization (no RPC).
-+
-+comment "c-capnproto needs host and target gcc >= 4.8 w/ C++, threads, atomic"
-+	depends on BR2_USE_MMU
-+	depends on!BR2_HOST_GCC_AT_LEAST_4_8 || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
-+		!BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_HAS_ATOMIC
-diff --git a/package/c-capnproto/c-capnproto.hash b/package/c-capnproto/c-capnproto.hash
-new file mode 100644
-index 0000000000..b1980004af
---- /dev/null
-+++ b/package/c-capnproto/c-capnproto.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256	7be5e56facb8c74ba7961fcbed600be2069001a5c4714087e5e640f8e33047c9  c-capnproto-c-capnproto-0.3.tar.gz
-+sha256	27797e6c7dce96675d79ed250584d157b7a86405db6eb6fba9644e6d96d42c57  COPYING
-diff --git a/package/c-capnproto/c-capnproto.mk b/package/c-capnproto/c-capnproto.mk
-new file mode 100644
-index 0000000000..537a4ebbc8
---- /dev/null
-+++ b/package/c-capnproto/c-capnproto.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# c-capnproto
-+#
-+################################################################################
-+
-+C_CAPNPROTO_SHORT_VERSION = 0.3
-+C_CAPNPROTO_VERSION = c-capnproto-$(C_CAPNPROTO_SHORT_VERSION)
-+C_CAPNPROTO_SITE = $(call github,opensourcerouting,c-capnproto,$(C_CAPNPROTO_VERSION))
-+C_CAPNPROTO_SITE_METHOD = git
-+C_CAPNPROTO_GIT_SUBMODULES = YES
-+C_CAPNPROTO_LICENSE = MIT
-+C_CAPNPROTO_LICENSE_FILES = COPYING
-+C_CAPNPROTO_INSTALL_STAGING = YES
-+# Fetched from Github with no configure script
-+C_CAPNPROTO_AUTORECONF = YES
-+# As a plugin for capnproto's capnpc, requires capnproto. Needs to be on the
-+# host to generate C code from message definitions.
-+C_CAPNPROTO_DEPENDENCIES = host-c-capnproto capnproto
-+HOST_C_CAPNPROTO_DEPENDENCIES = host-capnproto
-+
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
--- 
-2.17.1
+Thank you for adding that patch/submitting it upstream.  I had already
+made some other changes and took the lazy route of just excluding the
+older toolchains instead of trying to fix that as well.
+-Joel
