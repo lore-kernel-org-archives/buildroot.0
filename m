@@ -1,33 +1,55 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 10 Oct 2018 23:54:51 +0200
+From: Christian Stewart <christian@paral.in>
+Date: Wed, 10 Oct 2018 14:52:50 -0700
 Subject: [Buildroot] Analysis results for 2018-10-09
 In-Reply-To: <20181010174814.5ac114f1@windsurf>
 References: <20181010060010.4E3C920736@mail.bootlin.com>
  <20181010174814.5ac114f1@windsurf>
-Message-ID: <8d35a3cc-c12e-be36-130a-7cdbf5e93a61@mind.be>
+Message-ID: <CA+h8R2pNNN7uS4h5avjoR=qMewPWu8e4zfDiSWzqCueULiQFug@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Thomas,
 
+On Wed, Oct 10, 2018 at 8:48 AM Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
 
-On 10/10/18 17:48, Thomas Petazzoni wrote:
->>          arm |                     php-7.2.10 | NOK | http://autobuild.buildroot.net/results/7b7e25bfd269f7c252d15ab4e9f1b68348823478 | ORPH
-> multiple definition of `icu_60::MessageFormatAdapter::getArgTypeList(icu_60::MessageFormat const&, int&)'
-> 
-> Long standing issue. Anyone brave enough to investigate ?
+> >       x86_64 |       docker-containerd-v1.1.3 | NOK |
+> http://autobuild.buildroot.net/results/6c26ac3a8aa39abcb5eb390109891790610a759b
+> |
+> >       x86_64 |       docker-containerd-v1.1.3 | NOK |
+> http://autobuild.buildroot.net/results/10654bccc3d20ec6d29d371c48dd90cbddb8c4da
+> |
+> >       x86_64 |       docker-containerd-v1.1.3 | NOK |
+> http://autobuild.buildroot.net/results/56b564a27a06792c4854fe983da92d40c0c4708c
+> |
+>
+> /home/naourr/work/instance-3/output/host/lib/go/pkg/tool/linux_amd64/link:
+> running
+> /home/naourr/work/instance-3/output/host/bin/x86_64-amd-linux-gnu-gcc
+> failed: exit status 1
+> /tmp/go-build283204336/b001/exe/a.out: final close failed: Invalid
+> operation
+>
+> Christian, what is happening here? Could you have a look?
+>
 
- Maybe just make php !STATIC?
+Geoff Levand and I started having a look at this breakage some time ago but
+did not find an immediate fix. It's a very obscure error, but I did manage
+to find some non-go references:
 
- Regards,
- Arnout
+ - https://lists.gnu.org/archive/html/bug-binutils/2016-04/msg00221.html
+ - https://sourceware.org/bugzilla/show_bug.cgi?id=20006
+ - http://lists.busybox.net/pipermail/buildroot/2017-August/200570.html
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Buildroot Ruby bug # 20006 seems similar.
+
+This is what we have so far on fixing this.
+
+Best,
+~ Christian
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181010/8857cfc6/attachment-0001.html>
