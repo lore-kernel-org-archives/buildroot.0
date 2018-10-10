@@ -1,60 +1,39 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 10 Oct 2018 10:23:57 +0200
-Subject: [Buildroot] [PATCH v2] poco: disable fpenvironment for MIPS
- without FPU
-In-Reply-To: <1f08c072-e2d2-2b35-9030-30c27d05fa5e@mind.be>
-References: <20181009132152.24383-1-yegorslists@googlemail.com>
- <51cdb909-89fd-6832-0988-f29ab95dbf74@mind.be>
- <20181010084502.04f1cf7e@windsurf>
- <CAGm1_kuA7Pp7gKP+1O_K0enyAf=OTFdcK-rhvTOrJYqiUMeWFQ@mail.gmail.com>
- <20181010091240.30e7e37f@windsurf>
- <CAGm1_ks1S0VkEFOJEyXW+k1B3VMeWNTmQXJG4-K33UE2+dkVoQ@mail.gmail.com>
- <1f08c072-e2d2-2b35-9030-30c27d05fa5e@mind.be>
-Message-ID: <CAGm1_ktmfgTJn9yz=1kUa9X0+CM3NjbWQjf2bwX=qmGDhAY01Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 10 Oct 2018 10:25:23 +0200
+Subject: [Buildroot] [PATCH 12/13] pkg-perl: add a target which upgrades
+ all packages from metacpan
+In-Reply-To: <CAB0FRsu56_UpK0EHAhVrMr5Z1Pc=Oeqr9YhU+vMHQog_bc2wtA@mail.gmail.com>
+References: <20181010064621.19253-1-francois.perrad@gadz.org>
+ <20181010064621.19253-13-francois.perrad@gadz.org>
+ <20181010091049.241adca4@windsurf>
+ <CAB0FRsu56_UpK0EHAhVrMr5Z1Pc=Oeqr9YhU+vMHQog_bc2wtA@mail.gmail.com>
+Message-ID: <20181010102523.1eecb42d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Oct 10, 2018 at 9:45 AM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 10/10/18 09:14, Yegor Yefremov wrote:
-> > On Wed, Oct 10, 2018 at 9:12 AM Thomas Petazzoni
-> > <thomas.petazzoni@bootlin.com> wrote:
-> >>
-> >> Hello,
-> >>
-> >> On Wed, 10 Oct 2018 09:02:02 +0200, Yegor Yefremov wrote:
-> >>
-> >>>> Isn't the glibc bug that it allowed to use fpenv in situations where it
-> >>>> shouldn't have allowed it ? If that's the case, perhaps the other
-> >>>> libcs didn't had this bug, and fpenv really shouldn't be used with MIPS
-> >>>> soft-float, regardless of the C library in use ?
-> >>>
-> >>> I've made a compile test with musl and it fails too. So I'll just
-> >>> disable fpenv if BR2_MIPS_SOFT_FLOAT is selected. So ne need to
-> >>> mention glibc.
-> >>>
-> >>> Strange, that it didn't show up in the build tests ...
-> >>
-> >> We don't test mips/musl in the autobuilders. However, we do test
-> >> mips/uclibc, but maybe not in soft-float mode.
-> >
-> > uclibc has special handling: both fpenv and wstring will be disabled.
->
->  So, to be fully correct, poco should be build-tested and preferably
-> runtime-tested on all these softfloat architectures.
->
->  Wouldn't it be a lot simpler to just disable the whole fpenv stuff on soft
-> float unconditionally? Yes, this is not perfect, because there are a few cases
-> where it actually *does* work. But if someone needs those cases, let them please
-> write a proper configure script that detects them. Until then, disable the
-> entire feature on soft float.
+Hello,
 
-Patch already sent. I've tried ARM with soft floating point and it
-also fails with enabled fpenvironment.
+On Wed, 10 Oct 2018 09:33:49 +0200, Fran?ois Perrad wrote:
 
-Yegor
+> > I'm curious to understand why you're adding only target Perl packages.
+> >  
+> 
+>  `scancpan` fetch recursively all dependencies of a package.
+
+OK, thanks for the explanation.
+
+In the Python case, we have a few Python host packages that are listed
+in package/Config.in.host, i.e they may exist or be built, without
+being a dependency of a target Python package. But that's not the case
+with Perl today, so OK.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
