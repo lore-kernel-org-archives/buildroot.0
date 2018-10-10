@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Oct 2018 08:43:46 +0200
-Subject: [Buildroot] [PATCH] meson: Use AR via wrapper
-In-Reply-To: <20181009203406.GM2869@scaer>
-References: <20181009192422.20809-1-abrodkin@synopsys.com>
- <20181009203406.GM2869@scaer>
-Message-ID: <20181010084346.1a394876@windsurf>
+Date: Wed, 10 Oct 2018 08:45:02 +0200
+Subject: [Buildroot] [PATCH v2] poco: disable fpenvironment for MIPS
+ without FPU
+In-Reply-To: <51cdb909-89fd-6832-0988-f29ab95dbf74@mind.be>
+References: <20181009132152.24383-1-yegorslists@googlemail.com>
+ <51cdb909-89fd-6832-0988-f29ab95dbf74@mind.be>
+Message-ID: <20181010084502.04f1cf7e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +14,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 9 Oct 2018 22:34:06 +0200, Yann E. MORIN wrote:
-> > -ar = '@TARGET_CROSS at ar'
-> > +ar = '@TARGET_CROSS at gcc-ar'  
+On Tue, 9 Oct 2018 22:13:10 +0200, Arnout Vandecappelle wrote:
+
+>  The commit message is still very vague. I think I understand it though,
+> something like:
+
+Yes, I agree the commit log was still too vague.
+
+> > +# MIPS without FPU
+> > +ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el):$(BR2_MIPS_SOFT_FLOAT),y:y)  
 > 
-> I was curioous as to see for how long gcc provided that wrapper. It
-> turns out that at least 4.9 did.
+>  BR2_MIPS_SOFT_FLOAT is only defined on MIPS, so it is sufficient to do
+> 
+> ifeq ($(BR2_MIPS_SOFT_FLOAT),y)
+> 
+>  However, since this is about a glibc bug, shouldn't it check for a glibc
+> toolchain as well?
 
-Actually, we support external toolchains older than gcc 4.9. So no, it
-is not good to use gcc-ar unconditionally.
-
-So, it's like I replied on the LTO-enabling patch for systemd, we need
-a global Config.in option that tells us if the toolchain supports LTO
-or not, and another if the user wants to use LTO.
+Isn't the glibc bug that it allowed to use fpenv in situations where it
+shouldn't have allowed it ? If that's the case, perhaps the other
+libcs didn't had this bug, and fpenv really shouldn't be used with MIPS
+soft-float, regardless of the C library in use ?
 
 Best regards,
 
