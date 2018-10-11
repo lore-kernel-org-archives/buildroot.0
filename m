@@ -1,87 +1,44 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 11 Oct 2018 16:33:49 +0200
-Subject: [Buildroot] [PATCH v2,1/8] libselinux: bump to version 2.8
-In-Reply-To: <20181011095758.7beb2566@windsurf>
-References: <20180921205013.21829-1-fontaine.fabrice@gmail.com>
- <20181010213528.4805f9e6@windsurf>
- <CAPi7W80jBdoLui_B0UxRO1gB8mqoEi8pBbd78drTXk_8sn1EXg@mail.gmail.com>
- <20181011095758.7beb2566@windsurf>
-Message-ID: <CAPi7W80x4B9KVOBZnfw93XZVvzebaU2-fWb29vQ8D0e=h+=JGQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 11 Oct 2018 16:33:59 +0200
+Subject: [Buildroot] [git commit] pigpio: needs thread support
+Message-ID: <20181011143308.736C782A4D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
-Le jeu. 11 oct. 2018 ? 09:58, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> Hello Fabrice,
->
-> On Wed, 10 Oct 2018 23:05:02 +0200, Fabrice Fontaine wrote:
->
-> > I will take the example of host-libsepol (this is the same for
-> > host-libselinux)
-> > Without this update, build of host-libsepol fails on:
-> > install -m 755 libsepol.so.1 /lib
-> > install: cannot create regular file '/lib/libsepol.so.1': Permission denied
-> >
-> > It seems that 0001-libsepol-build-follow-standard-semantics-for-DESTD.patch
-> > and
-> > https://github.com/SELinuxProject/selinux/commit/f8532f17731c82df9956aa1c92f7fb08bd65bf05
-> > are not exactly the same.
-> > Especially, it seems that LIBINSTALL = $(DESTDIR)$(LIBDIR) has not been
-> > added in upstream.
-> > upstream directly uses DESTDIR which is why I got a failure: install -m 755
-> > $(LIBSO) $(DESTDIR)$(SHLIBDIR)
-> > I don't know why there is such a difference but perhaps Marcus knows?
-> > If Marcus confirms that this is a mistake, I can always add a patch to fix
-> > this and send it upstream.
->
-> OK, I see. They want to install the libraries to /lib and not /usr/lib,
-> which is why they don't prefix SHLIBDIR with $(PREFIX).
->
-> So, for the host installation, I would recommend to do this:
->
->         PREFIX=$(HOST_DIR) SHLIBDIR=$(HOST_DIR)/lib
->
-> It is I believe semantically more correct than passing DESTDIR, even if
-> in practice it does exactly the same thing.
->
-> Also, for the target installation, why are you overriding SHLIBDIR to
-> be /usr/lib ? Any issue with keeping the libraries in /lib, like
-> upstream wants ?
-If I don't override SHLIBDIR, the shared library will be installed in
-SHLIBDIR (lib), headers in usr/include (INCDIR), man pages in
-usr/share/man/man3 (MAN3DIR) and static library in usr/lib (LIBDIR).
+commit: https://git.buildroot.net/buildroot/commit/?id=43693328b6409fe9cf06c5db5f7a44bcb6a2c9aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Then, the issue is how to remove --relative from the symbolic link
-creation in 0002-revert-ln-relative.patch:
-$(LN) -sf --relative $(DESTDIR)$(SHLIBDIR)/$(LIBSO)
-$(DESTDIR)$(LIBDIR)/$(TARGET)
+Fixes:
 
-I can use a relative path but this seems a terrible solution:
-cd $(DESTDIR)$(LIBDIR) && ln -sf ../../lib/$(LIBSO) $(TARGET)
+  http://autobuild.buildroot.net/results/2f64c993db402decf92a5f8010033acdbc6b884f/
 
-Removing this link is not an option as pkgconfig file publishes that
-libdir is equal to LIBDIR, not SHLIBDIR.
-So, it seems better to me to set SHLIBDIR to /usr/lib and take the
-assumption that LIBDIR=SHLIBDIR.
-But if you prefer to have relative paths, I can update the patch.
-As a side note, I do not understand why upstream want to have a
-different installation path for shared and static libraries, is it a
-common practice?
->
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pigpio/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Best Regards,
-
-Fabrice
+diff --git a/package/pigpio/Config.in b/package/pigpio/Config.in
+index fee496b2ef..2180ab0de6 100644
+--- a/package/pigpio/Config.in
++++ b/package/pigpio/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_PIGPIO
+ 	bool "pigpio"
+ 	depends on BR2_aarch64 || BR2_arm
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  Pigpio is a library for the Raspberry Pi which allows
+@@ -8,6 +9,6 @@ config BR2_PACKAGE_PIGPIO
+ 
+ 	  http://abyz.me.uk/rpi/pigpio/
+ 
+-comment "pigpio needs a toolchain w/ dynamic library"
++comment "pigpio needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_aarch64 || BR2_arm
+-	depends on !BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
