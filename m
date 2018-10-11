@@ -1,67 +1,46 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 11 Oct 2018 07:48:43 -0500
-Subject: [Buildroot] Problem with Raspberry Pi 3B+and BT
-In-Reply-To: <CALtfCQa87Q5w-mOL4sKbW8M7wh4qAH3rBRm6A6H41SEaci=3QQ@mail.gmail.com>
-References: <CALtfCQa87Q5w-mOL4sKbW8M7wh4qAH3rBRm6A6H41SEaci=3QQ@mail.gmail.com>
-Message-ID: <CANQCQpbD_fdXrqYGdW74d4EVyCm4eAs6pxiyasg8wTumYZ+XWA@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 11 Oct 2018 14:49:21 +0200
+Subject: [Buildroot] [PATCH v2 1/4] pkg-waf: add support for <pkg>_SUBDIR
+In-Reply-To: <20181011095755.9188-1-lionel.orry@gmail.com>
+References: <20181011095755.9188-1-lionel.orry@gmail.com>
+Message-ID: <f973c76c-84a7-117e-e5a8-e287b1d6c440@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Oscar,
 
-On Thu, Oct 11, 2018 at 3:46 AM Oscar Gomez Fuente
-<oscargomezf@gmail.com> wrote:
->
-> Hi everyone,
->
-> I have a problem with the Bluetooth on my raspberry pi 3B+, I have
-> installed the following packages:
->
-> [*] bluez-tools
-> [*] bluez-utils 5.x
-> [*]   build OBEX support
-> [*]   build CLI client
-> [*]   build experimental obexd plugin
-> [*]   build health plugin
-> [*]   build midi profile
-> [*]   build nfc plugin
-> [*]   build sap plugin
-> [*]   build sixaxis plugin
-> [*]   build tests
-> [*]   install bdaddr tool
->
-> I'm using the raspberry pi for scanning BT devices continuously, using
-> this command:
->
-> # bt-adapter -a hci0 -d
->
-> And everything works fines, but occasionally this command fails and Ii
-> doesn't work anymore and I have to reboot my HW. I was taking a look
-> at the kernel messages:
->
-> [25124.029835] Bluetooth: hci0: Frame reassembly failed (-84)
-> [25124.031902] Bluetooth: hci0: Frame reassembly failed (-90)
-> [25124.033665] Bluetooth: hci0: Frame reassembly failed (-84)
-> [28601.218856] Bluetooth: hci0 advertising data length corrected
-> [29425.140974] Bluetooth: hci0: Frame reassembly failed (-84)
-> [29427.218670] Bluetooth: Failed to disable LE scan: status 0x1f
-> [29427.220413] Bluetooth: hci0 command 0x200c tx timeout
-> [29561.841776] Bluetooth: hci0 command 0x200c tx timeout
->
 
-That looks kernel related.  I believe the PI has some GPU firmware
-loaded that applies to bluetooth.  I've never tried updating it,
-however there are tools out there to update the firmware that's stored
-in some non-volatile space on the board.
-https://github.com/Hexxeh/rpi-update   # notes here:
-https://raspberrypi.stackexchange.com/questions/164/how-do-i-update-software-and-firmware
+On 11/10/18 11:57, Lionel Orry wrote:
+> diff --git a/package/pkg-waf.mk b/package/pkg-waf.mk
+> index 3288dd63a0..a32d5dab33 100644
+> --- a/package/pkg-waf.mk
+> +++ b/package/pkg-waf.mk
+> @@ -60,7 +60,7 @@ $(2)_WAF_OPTS				?=
+>  #
+>  ifndef $(2)_CONFIGURE_CMDS
+>  define $(2)_CONFIGURE_CMDS
+> -	cd $$(@D) && \
+> +	cd $$($$(PKG)_SRCDIR) && \
 
-Another idea would be verifying your power supply is large enough to
-accommodate bluetooth.  To check this, If you have other USB devices
-attached, unplug a few usb devices, startup and see if bluetooth is
-more stable.
+ A little mistake on Thomas's part: this should be $$($$(PKG)_BUILDDIR), not
+$$($$(PKG)_SRCDIR). They are currently the same, but the idea is to introduce
+the possibility to do out-of-tree builds and to reuse the same source directory
+for host and target, and also for packages that share their source trees.
 
-Matt
+
+ Regards,
+ Arnout
+
+>  	$$(TARGET_CONFIGURE_OPTS) \
+>  	$$($(2)_CONF_ENV) \
+>  	$$(HOST_DIR)/bin/python2 $$($(2)_WAF) configure \
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
