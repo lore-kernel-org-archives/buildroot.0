@@ -1,31 +1,35 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Thu, 11 Oct 2018 18:28:09 +0200
-Subject: [Buildroot] [PATCH] perl-class-std-fast: add missing host dependency
-Message-ID: <20181011162809.14049-1-francois.perrad@gadz.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 11 Oct 2018 20:16:59 +0200
+Subject: [Buildroot] [PATCH 4/4] webkitgtk: explicitly set
+ USE_GSTREAMER_GL build option
+In-Reply-To: <40fb0474-283f-4b73-78e6-45ea99a1bb65@mind.be> (Arnout
+ Vandecappelle's message of "Thu, 11 Oct 2018 14:39:15 +0200")
+References: <20181009220852.4309-1-aperez@igalia.com>
+ <20181009220852.4309-5-aperez@igalia.com>
+ <20181010212630.7f47270e@windsurf> <20181010202425.GN2869@scaer>
+ <40fb0474-283f-4b73-78e6-45ea99a1bb65@mind.be>
+Message-ID: <87in281h7o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-see http://autobuild.buildroot.net/results/6ca5d163cbf98dff7569aeecdd8a5b5095a2ccd5/
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/perl-class-std-fast/perl-class-std-fast.mk | 1 +
- 1 file changed, 1 insertion(+)
+Hi,
 
-diff --git a/package/perl-class-std-fast/perl-class-std-fast.mk b/package/perl-class-std-fast/perl-class-std-fast.mk
-index 06f154815..57e57b195 100644
---- a/package/perl-class-std-fast/perl-class-std-fast.mk
-+++ b/package/perl-class-std-fast/perl-class-std-fast.mk
-@@ -7,6 +7,7 @@
- PERL_CLASS_STD_FAST_VERSION = v0.0.8
- PERL_CLASS_STD_FAST_SOURCE = Class-Std-Fast-$(PERL_CLASS_STD_FAST_VERSION).tar.gz
- PERL_CLASS_STD_FAST_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AC/ACID
-+PERL_CLASS_STD_FAST_DEPENDENCIES = host-perl-module-build
- PERL_CLASS_STD_FAST_LICENSE = Artistic or GPL-1.0+
- PERL_CLASS_STD_FAST_LICENSE_FILES = README
- PERL_CLASS_STD_FAST_DISTNAME = Class-Std-Fast
+ >  'imply' is syntactic sugar for 'default y if ...'. The *only* thing it changes
+ > is the place where you put the imply. (To be exact, it is the same as 'default
+ > ...' because it propagates the m/y/n state to the default, not just y/n. But
+ > since we don't use m, it doesn't matter.)
+
+ >  For this specific case, it is pretty obvious that putting a 'default y if
+ > BR2_PACKAGE_WEBKITGTK_MULTIMEDIA' on BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL
+ > would be crazy. On the other hand, adding the imply in webkitgtk looks nice,
+ > concise and clear.
+
+Exactly, which is why I suggested it to Adrian.
+
 -- 
-2.17.1
+Bye, Peter Korsgaard
