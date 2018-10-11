@@ -1,65 +1,222 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 11 Oct 2018 16:25:54 +0200
-Subject: [Buildroot] pppd - fails to build on current git.
-In-Reply-To: <414f8bfe86f14594b5433f40b56bde6d@WETSRVEX02.loepfe.com>
-References: <414f8bfe86f14594b5433f40b56bde6d@WETSRVEX02.loepfe.com>
-Message-ID: <20181011162554.7e5f92a4@windsurf>
+Date: Thu, 11 Oct 2018 16:29:08 +0200
+Subject: [Buildroot] [git commit] gzip: fix build with glibc 2.28
+Message-ID: <20181011142809.0D88482A31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9c82c934a587063d9252a0387f08f52ad439c728
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 11 Oct 2018 12:25:17 +0000, Vellemans, Noel wrote:
+Apply the patch taken from OpenEmbedded:
+https://patches.openembedded.org/patch/153323/
 
-> pppd fails to build on current git-snapshot.
+The patch handles glibc 2.28 libio.h removal.
 
-Indeed:
+Fixes:
+http://autobuild.buildroot.net/results/69c5c5a3ec7fb320959f1788f1b6d5a99cfc50b1
 
-  http://autobuild.buildroot.net/?reason=pppd%
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...lush-adjust-to-glibc-2.28-libio.h-removal.patch | 189 +++++++++++++++++++++
+ 1 file changed, 189 insertions(+)
 
-> pppcrypt.c: In function 'DesSetkey':
-> pppcrypt.c:122:2: warning: implicit declaration of function 'setkey'; did you mean 'DesSetkey'? [-Wimplicit-function-declaration]
->   setkey((const char *)crypt_key);
->   ^~~~~~
->   DesSetkey
-> pppcrypt.c: In function 'DesEncrypt':
-> pppcrypt.c:137:2: warning: implicit declaration of function 'encrypt'; did you mean 'crypt'? [-Wimplicit-function-declaration]
->   encrypt((char *)des_input, 0);
->   ^~~~~~~
->   crypt
-> ...
-> pppcrypt.o: In function `DesSetkey':
-> pppcrypt.c:(.text+0x140): undefined reference to `setkey'
-> pppcrypt.o: In function `DesEncrypt':
-> pppcrypt.c:(.text+0x184): undefined reference to `encrypt'
-> pppcrypt.o: In function `DesDecrypt':
-> pppcrypt.c:(.text+0x1dc): undefined reference to `encrypt'
-> collect2: error: ld returned 1 exit status
-> Makefile:217: recipe for target 'pppd' failed
-> make[3]: *** [pppd] Error 1
-> Makefile:13: recipe for target 'all' failed
-> 
-> ==============================================================
-> 
-> 
-> Probably based on ongoing work as stated here : https://sourceware.org/ml/libc-alpha/2017-08/msg01257.html
-> "The function prototypes for crypt and encrypt are removed from unistd.h, and the function prototype for setkey is removed from
-> stdlib.h"
-
-glibc 2.28 removed libcrypt, and there are patches floating around that
-make pppd use openssl instead:
-
-  https://github.com/paulusmack/ppp/issues/93
-
-Perhaps you could re-use this to fix the issue ?
-
-Thanks,
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/gzip/0001-fflush-adjust-to-glibc-2.28-libio.h-removal.patch b/package/gzip/0001-fflush-adjust-to-glibc-2.28-libio.h-removal.patch
+new file mode 100644
+index 0000000000..11d2af6d47
+--- /dev/null
++++ b/package/gzip/0001-fflush-adjust-to-glibc-2.28-libio.h-removal.patch
+@@ -0,0 +1,189 @@
++From 1831628c0630ae96a43586b2a25ca51cbdba3e53 Mon Sep 17 00:00:00 2001
++From: Paul Eggert <address@hidden>
++Date: Mon, 5 Mar 2018 10:56:29 -0800
++Subject: [PATCH] fflush: adjust to glibc 2.28 libio.h removal
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Problem reported by Daniel P. Berrange in:
++https://lists.gnu.org/r/bug-gnulib/2018-03/msg00000.html
++* lib/fbufmode.c (fbufmode):
++* lib/fflush.c (clear_ungetc_buffer_preserving_position)
++(disable_seek_optimization, rpl_fflush):
++* lib/fpending.c (__fpending):
++* lib/fpurge.c (fpurge):
++* lib/freadable.c (freadable):
++* lib/freadahead.c (freadahead):
++* lib/freading.c (freading):
++* lib/freadptr.c (freadptr):
++* lib/freadseek.c (freadptrinc):
++* lib/fseeko.c (fseeko):
++* lib/fseterr.c (fseterr):
++* lib/fwritable.c (fwritable):
++* lib/fwriting.c (fwriting):
++Check _IO_EOF_SEEN instead of _IO_ftrylockfile.
++* lib/stdio-impl.h (_IO_IN_BACKUP) [_IO_EOF_SEEN]:
++Define if not already defined.
++---
++
++Upstream-Status: Pending
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++
++ ChangeLog        | 23 +++++++++++++++++++++++
++ lib/fbufmode.c   |  2 +-
++ lib/fflush.c     |  6 +++---
++ lib/fpending.c   |  2 +-
++ lib/fpurge.c     |  2 +-
++ lib/freadable.c  |  2 +-
++ lib/freadahead.c |  2 +-
++ lib/freading.c   |  2 +-
++ lib/freadptr.c   |  2 +-
++ lib/freadseek.c  |  2 +-
++ lib/fseeko.c     |  4 ++--
++ lib/fseterr.c    |  2 +-
++ lib/fwritable.c  |  2 +-
++ lib/fwriting.c   |  2 +-
++ lib/stdio-impl.h |  6 ++++++
++ 15 files changed, 45 insertions(+), 16 deletions(-)
++
++Index: gzip-1.9/ChangeLog
++===================================================================
++--- gzip-1.9.orig/ChangeLog
+++++ gzip-1.9/ChangeLog
++@@ -1,3 +1,26 @@
+++2018-03-05  Paul Eggert  <address@hidden>
+++
+++	fflush: adjust to glibc 2.28 libio.h removal
+++	Problem reported by Daniel P. Berrange in:
+++	https://lists.gnu.org/r/bug-gnulib/2018-03/msg00000.html
+++	* lib/fbufmode.c (fbufmode):
+++	* lib/fflush.c (clear_ungetc_buffer_preserving_position)
+++	(disable_seek_optimization, rpl_fflush):
+++	* lib/fpending.c (__fpending):
+++	* lib/fpurge.c (fpurge):
+++	* lib/freadable.c (freadable):
+++	* lib/freadahead.c (freadahead):
+++	* lib/freading.c (freading):
+++	* lib/freadptr.c (freadptr):
+++	* lib/freadseek.c (freadptrinc):
+++	* lib/fseeko.c (fseeko):
+++	* lib/fseterr.c (fseterr):
+++	* lib/fwritable.c (fwritable):
+++	* lib/fwriting.c (fwriting):
+++	Check _IO_EOF_SEEN instead of _IO_ftrylockfile.
+++	* lib/stdio-impl.h (_IO_IN_BACKUP) [_IO_EOF_SEEN]:
+++	Define if not already defined.
+++
++ 2018-01-07  Jim Meyering  <meyering@fb.com>
++
++	version 1.9
++Index: gzip-1.9/lib/fflush.c
++===================================================================
++--- gzip-1.9.orig/lib/fflush.c
+++++ gzip-1.9/lib/fflush.c
++@@ -33,7 +33,7 @@
++ #undef fflush
++
++
++-#if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+++#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
++
++ /* Clear the stream's ungetc buffer, preserving the value of ftello (fp).  */
++ static void
++@@ -72,7 +72,7 @@ clear_ungetc_buffer (FILE *fp)
++
++ #endif
++
++-#if ! (defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */)
+++#if ! (defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */)
++
++ # if (defined __sferror || defined __DragonFly__ || defined __ANDROID__) && defined __SNPT
++ /* FreeBSD, NetBSD, OpenBSD, DragonFly, Mac OS X, Cygwin, Minix 3, Android */
++@@ -148,7 +148,7 @@ rpl_fflush (FILE *stream)
++   if (stream == NULL || ! freading (stream))
++     return fflush (stream);
++
++-#if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+++#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
++
++   clear_ungetc_buffer_preserving_position (stream);
++
++Index: gzip-1.9/lib/fpurge.c
++===================================================================
++--- gzip-1.9.orig/lib/fpurge.c
+++++ gzip-1.9/lib/fpurge.c
++@@ -62,7 +62,7 @@ fpurge (FILE *fp)
++   /* Most systems provide FILE as a struct and the necessary bitmask in
++      <stdio.h>, because they need it for implementing getc() and putc() as
++      fast macros.  */
++-# if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+++# if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
++   fp->_IO_read_end = fp->_IO_read_ptr;
++   fp->_IO_write_ptr = fp->_IO_write_base;
++   /* Avoid memory leak when there is an active ungetc buffer.  */
++Index: gzip-1.9/lib/freading.c
++===================================================================
++--- gzip-1.9.orig/lib/freading.c
+++++ gzip-1.9/lib/freading.c
++@@ -31,7 +31,7 @@ freading (FILE *fp)
++   /* Most systems provide FILE as a struct and the necessary bitmask in
++      <stdio.h>, because they need it for implementing getc() and putc() as
++      fast macros.  */
++-# if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+++# if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
++   return ((fp->_flags & _IO_NO_WRITES) != 0
++           || ((fp->_flags & (_IO_NO_READS | _IO_CURRENTLY_PUTTING)) == 0
++               && fp->_IO_read_base != NULL));
++Index: gzip-1.9/lib/fseeko.c
++===================================================================
++--- gzip-1.9.orig/lib/fseeko.c
+++++ gzip-1.9/lib/fseeko.c
++@@ -47,7 +47,7 @@ fseeko (FILE *fp, off_t offset, int when
++ #endif
++
++   /* These tests are based on fpurge.c.  */
++-#if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+++#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
++   if (fp->_IO_read_end == fp->_IO_read_ptr
++       && fp->_IO_write_ptr == fp->_IO_write_base
++       && fp->_IO_save_base == NULL)
++@@ -123,7 +123,7 @@ fseeko (FILE *fp, off_t offset, int when
++           return -1;
++         }
++
++-#if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+++#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
++       fp->_flags &= ~_IO_EOF_SEEN;
++       fp->_offset = pos;
++ #elif defined __sferror || defined __DragonFly__ || defined __ANDROID__
++Index: gzip-1.9/lib/fseterr.c
++===================================================================
++--- gzip-1.9.orig/lib/fseterr.c
+++++ gzip-1.9/lib/fseterr.c
++@@ -29,7 +29,7 @@ fseterr (FILE *fp)
++   /* Most systems provide FILE as a struct and the necessary bitmask in
++      <stdio.h>, because they need it for implementing getc() and putc() as
++      fast macros.  */
++-#if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+++#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
++   fp->_flags |= _IO_ERR_SEEN;
++ #elif defined __sferror || defined __DragonFly__ || defined __ANDROID__
++   /* FreeBSD, NetBSD, OpenBSD, DragonFly, Mac OS X, Cygwin, Minix 3, Android */
++Index: gzip-1.9/lib/stdio-impl.h
++===================================================================
++--- gzip-1.9.orig/lib/stdio-impl.h
+++++ gzip-1.9/lib/stdio-impl.h
++@@ -18,6 +18,12 @@
++    the same implementation of stdio extension API, except that some fields
++    have different naming conventions, or their access requires some casts.  */
++
+++/* Glibc 2.28 made _IO_IN_BACKUP private.  For now, work around this
+++   problem by defining it ourselves.  FIXME: Do not rely on glibc
+++   internals.  */
+++#if !defined _IO_IN_BACKUP && defined _IO_EOF_SEEN
+++# define _IO_IN_BACKUP 0x100
+++#endif
++
++ /* BSD stdio derived implementations.  */
