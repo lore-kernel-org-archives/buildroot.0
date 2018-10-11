@@ -1,40 +1,43 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 11 Oct 2018 22:01:12 +0200
-Subject: [Buildroot] [PATCH 1/1] botan: disable documentation
-Message-ID: <20181011200112.21385-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 11 Oct 2018 22:04:13 +0200
+Subject: [Buildroot] [PATCH v3,1/8] libselinux: bump to version 2.8
+In-Reply-To: <20181011193707.20510-1-fontaine.fabrice@gmail.com>
+References: <20181011193707.20510-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181011220413.06d47ca1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix following error if sphinx is found but its version is too low:
-Sphinx version error:
-This project needs at least Sphinx v1.2 and therefore cannot be built with this version.
-Ignoring ImportError and using old theme
-  ERROR: Error running sphinx-build -q -c ./src/configs/sphinx -b html ./doc/manual build/docs/manual
+Hello,
 
-Fixes:
- - http://autobuild.buildroot.net/results/c15715a05a41035954f32510483314060ea31260
+On Thu, 11 Oct 2018 21:37:00 +0200, Fabrice Fontaine wrote:
+> - Remove second patch (already in version), see
+>   https://github.com/SELinuxProject/selinux/commit/b24980ec07af66c4b419f8053aa65e97b36e558d
+> - Update third patch
+> - For target variant, set SHLIBDIR=/usr/lib because by default it is set
+>   to /lib and LIBDIR is set to $(PREFIX)/lib (with PREFIX=/usr)
+> - For host variant, set SHLIBDIR=$(HOST_DIR)/lib otherwise shared
+>   library will be installed in /lib (PREFIX is not used to install
+>   shared library)
+> - Add hash for license file
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> Changes v2 -> v3 (after review of Thomas Petazzoni):
+>  - move removal of symlink in libselinux.mk and libsepol.mk in a
+>    dedicated patch
+>  - Set back usage of DESTDIR and use SHLIBDIR instead for host variant
+>  - Add a comment for usage of SHLIBDIR in target variant
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/botan/botan.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+I have applied the entire series, but I had to fix some issues on the
+libsemanage patch. I will reply to it directly.
 
-diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-index 3de54aa3e1..7f0bbb66c9 100644
---- a/package/botan/botan.mk
-+++ b/package/botan/botan.mk
-@@ -17,7 +17,8 @@ BOTAN_CONF_OPTS = \
- 	--os=linux \
- 	--cc=gcc \
- 	--cc-bin="$(TARGET_CXX)" \
--	--prefix=/usr
-+	--prefix=/usr \
-+	--without-documentation
- 
- ifeq ($(BR2_SHARED_LIBS),y)
- BOTAN_CONF_OPTS += \
+Thanks!
+
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
