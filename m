@@ -1,50 +1,44 @@
-From: Daniel Palmer <daniel@0x0f.com>
-Date: Fri, 12 Oct 2018 00:18:07 +0900
-Subject: [Buildroot] meson for host package with executables doesn't
- work.
-In-Reply-To: <20181011163113.57ef1244@windsurf>
-References: <CAFr9PXm1Y=HHy4znDBVdxpd2ndHKdu+_unfgSGHkJFotSZ9HKA@mail.gmail.com>
- <20181011120126.4bb50328@windsurf>
- <CAFr9PXkRORYwg4JF=moZp-e2bhrXLQAamhy-ygzi0ahq8dtgDg@mail.gmail.com>
- <20181011163113.57ef1244@windsurf>
-Message-ID: <CAFr9PXmf0tCQ1u3EstbtRyyJhLxk5Vc1sSOZMXW5qGfNehvLig@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 11 Oct 2018 17:21:40 +0200
+Subject: [Buildroot] [git commit] package/proftpd: add ftpasswd
+Message-ID: <20181011152038.883EB82AB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=4aaf61c4c1e8e20b4ab810e66a27e4f22f14010b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I forward ported the patch to the version of meson that is in buildroot now
-and the problem is resolved. I'll submit a patch when I have some time
-over the weekend.
+- Copies over ftpasswd if perl is enabled
 
-Thanks,
+Signed-off-by: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/proftpd/proftpd.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Daniel
-On Thu, 11 Oct 2018 at 23:31, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Thu, 11 Oct 2018 20:42:30 +0900, Daniel Palmer wrote:
->
-> > Looking through the history in git it looks like this was broken by
-> > commit a03f46ca6e9f43028003aedc92f1a1204ae7480f that bumped the
-> > version of meson and removed a patch that stops meson from stripping
-> > the RPATH on host executables. I guess because there are no packages
-> > in-tree that used it (I couldn't find host-meson-package in any
-> > packages) no one noticed.
->
-> Indeed, it could very well be due to this. Could you check if re-adding
-> this patch makes things work again ? If it does, please submit a patch
-> re-adding the patch :-)
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index 93ee687fab..8f3ff5088e 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -93,12 +93,16 @@ define PROFTPD_INSTALL_FTPQUOTA
+ 	$(INSTALL) -D -m 0755 $(@D)/contrib/ftpquota $(TARGET_DIR)/usr/sbin/ftpquota
+ endef
+ endif
++define PROFTPD_INSTALL_FTPASSWD
++	$(INSTALL) -D -m 0755 $(@D)/contrib/ftpasswd $(TARGET_DIR)/usr/sbin/ftpasswd
++endef
+ endif
+ 
+ define PROFTPD_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/proftpd $(TARGET_DIR)/usr/sbin/proftpd
+ 	$(INSTALL) -m 0644 -D $(@D)/sample-configurations/basic.conf $(TARGET_DIR)/etc/proftpd.conf
+ 	$(PROFTPD_INSTALL_FTPQUOTA)
++	$(PROFTPD_INSTALL_FTPASSWD)
+ endef
+ 
+ define PROFTPD_USERS
