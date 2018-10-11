@@ -1,29 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Oct 2018 11:21:40 +0200
-Subject: [Buildroot] Analysis results for 2018-10-09
-In-Reply-To: <5c66f02e-d2f1-55a6-c75f-6a924e6b70bd@mind.be> (Arnout
- Vandecappelle's message of "Wed, 10 Oct 2018 23:30:39 +0200")
-References: <20181010060010.4E3C920736@mail.bootlin.com>
- <20181010174814.5ac114f1@windsurf>
- <5c66f02e-d2f1-55a6-c75f-6a924e6b70bd@mind.be>
-Message-ID: <87in28susb.fsf@dell.be.48ers.dk>
+From: Daniel Palmer <daniel@0x0f.com>
+Date: Thu, 11 Oct 2018 18:25:39 +0900
+Subject: [Buildroot] meson for host package with executables doesn't work.
+Message-ID: <CAFr9PXm1Y=HHy4znDBVdxpd2ndHKdu+_unfgSGHkJFotSZ9HKA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Hi all,
 
- > On 10/10/18 17:48, Thomas Petazzoni wrote:
- >>> mips64el |        gst-plugins-bad-0.10.23 | NOK | http://autobuild.buildroot.net/results/ab39280ceaf967e08abfd1f51efa4613495237f5 | ORPH
- >> 
- >> gstspanplc.c:223:21: error: dereferencing pointer to incomplete type 'plc_state_t {aka struct plc_state_s}'
- >> if (plc->plc_state->missing_samples != 0)
+There don't seem to be any in-tree packages that use meson for host
+packages so maybe this hasn't come up before but as far as I can tell
+it doesn't work.
+In my case I have an out of tree package that requires json-glib to be
+installed for the host as well as the target so I've changed the
+makefile to do that as follows:
 
- >  Perhaps it's time to retire gstreamer-0.10? Is anybody still using it?
+diff --git a/package/json-glib/json-glib.mk b/package/json-glib/json-glib.mk
+index 77c0c4532374..4cd754a3a6c5 100644
+--- a/package/json-glib/json-glib.mk
++++ b/package/json-glib/json-glib.mk
+@@ -17,4 +17,9 @@ JSON_GLIB_DEPENDENCIES = \
+       host-pkgconf \
+       libglib2
 
-Agreed, 1.0 is from 2012 and 0.10.x is no longer maintained upstream.
++HOST_JSON_GLIB_DEPENDENCIES = \
++        host-pkgconf \
++        host-libglib2
++
+$(eval $(meson-package))
++$(eval $(host-meson-package))
 
--- 
-Bye, Peter Korsgaard
+That was working fine a few months ago but now I get this:
+
+***
+*** ERROR: package host-json-glib installs executables without proper RPATH:
+***   <snip>/buildroot-firmware/output/host/bin/json-glib-validate
+***   <snip>/buildroot-firmware/output/host/bin/json-glib-format
+
+As far as I know meson strips RPATH on install and there is no way to
+stop it doing that outside of adjusting the build file.
+
+Does anyone have any ideas about how this should be fixed?
+
+Cheers,
+
+Daniel
