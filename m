@@ -1,70 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 11 Oct 2018 10:06:10 +0200
-Subject: [Buildroot] [PATCH v5 1/2] board: amarula: Add A64-Relic support
-In-Reply-To: <20181010053511.4093-1-jagan@amarulasolutions.com>
-References: <20181010053511.4093-1-jagan@amarulasolutions.com>
-Message-ID: <20181011100610.6b4c78fe@windsurf>
+Date: Thu, 11 Oct 2018 10:06:51 +0200
+Subject: [Buildroot] [git commit] nmap: use system liblinear
+Message-ID: <20181011080546.37DCD82980@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c0d9ba562c5522096d4ed70827c599c9a0e9aa7c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 10 Oct 2018 11:05:10 +0530, Jagan Teki wrote:
-> Add initial support for Amarula A64-Relic board
-> with below features:
-> - U-Boot 2018.07-rc1
-> - Linux 4.17.0-rc6
-> - Default packages from buildroot
-> 
-> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+Use system liblinear instead of using included liblinear.
+liblinear in buildroot is at version 2.20 released on December 2017
+whereas liblinear in nmap has not been updated since 7 years (except for
+liblinear.vcxproj which has been updated 2 years ago)
 
-Thanks, this looks good, except two aspects. One could have been fixed
-using a follow-up patch, but not the other one.
+Do not use --with-liblinear option as otherwise nmap will forget to add
+-llinear to LIBS due to the following line in configure.ac:
 
-> diff --git a/configs/amarula_a64_relic_defconfig b/configs/amarula_a64_relic_defconfig
-> new file mode 100644
-> index 0000000000..846275eadb
-> --- /dev/null
-> +++ b/configs/amarula_a64_relic_defconfig
-> @@ -0,0 +1,47 @@
-> +BR2_aarch64=y
-> +BR2_cortex_a53=y
-> +BR2_ARM_FPU_VFPV4=y
-> +
-> +# Linux headers same as kernel, a 4.17 series
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
-> +
-> +# Firmware
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-> +
-> +# Bootloader
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.07-rc1"
+if test $have_liblinear != yes; then
+  AC_CHECK_HEADERS([linear.h],
+    AC_CHECK_LIB(linear, predict, [have_liblinear=yes; LIBLINEAR_LIBS="-llinear"; break],, [-lm])
+)
 
-I guess the final 2018.07 is released now, so you could useit.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/nmap/Config.in | 1 +
+ package/nmap/nmap.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,amarula,linux-amarula,a64-relic)/linux-amarula_a64-relic.tar.gz"
-
-"a64-relic" is a branch name, which makes the build non reproducible.
-We want either a tag, or a full SHA1, to ensure that we always build
-the same kernel version.
-
-Could you fix that up and resend the patch?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/nmap/Config.in b/package/nmap/Config.in
+index c1aafeceb9..51dd3423ea 100644
+--- a/package/nmap/Config.in
++++ b/package/nmap/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_NMAP
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_LIBLINEAR
+ 	select BR2_PACKAGE_LIBPCAP
+ 	select BR2_PACKAGE_NMAP_NMAP \
+ 	       if !BR2_PACKAGE_NMAP_NCAT && !BR2_PACKAGE_NMAP_NPING && !BR2_PACKAGE_NMAP_NDIFF
+diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+index 8809d4c037..761df3ffa8 100644
+--- a/package/nmap/nmap.mk
++++ b/package/nmap/nmap.mk
+@@ -7,9 +7,9 @@
+ NMAP_VERSION = 7.70
+ NMAP_SITE = https://nmap.org/dist
+ NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
+-NMAP_DEPENDENCIES = libpcap
++NMAP_DEPENDENCIES = liblinear libpcap
+ NMAP_CONF_OPTS = --without-liblua --without-zenmap \
+-	--with-libdnet=included --with-liblinear=included
++	--with-libdnet=included
+ NMAP_LICENSE = nmap license
+ NMAP_LICENSE_FILES = COPYING
+ 
