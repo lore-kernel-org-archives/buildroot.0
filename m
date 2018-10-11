@@ -1,16 +1,16 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 11 Oct 2018 21:37:04 +0200
-Subject: [Buildroot] [PATCH v3,5/8] restorecond: bump to version 2.8
+Date: Thu, 11 Oct 2018 21:37:05 +0200
+Subject: [Buildroot] [PATCH v3,6/8] policycoreutils: bump to version 2.8
 In-Reply-To: <20181011193707.20510-1-fontaine.fabrice@gmail.com>
 References: <20181011193707.20510-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181011193707.20510-5-fontaine.fabrice@gmail.com>
+Message-ID: <20181011193707.20510-6-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash for license file
+Update first and second patch
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
@@ -26,35 +26,131 @@ Changes v1 -> v2 (after review of Matthew Weber and Marcus Folkesson):
    libsemanage
  - Remove libselinux.so and libsepol.so symbolic link (not needed)
 
- package/restorecond/restorecond.hash | 5 ++++-
- package/restorecond/restorecond.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ ...-all-paths-that-use-an-absolute-path.patch |  8 +++--
+ .../0002-Add-PREFIX-to-host-paths.patch       | 33 ++++++-------------
+ package/policycoreutils/policycoreutils.hash  |  2 +-
+ package/policycoreutils/policycoreutils.mk    |  4 +--
+ 4 files changed, 18 insertions(+), 29 deletions(-)
 
-diff --git a/package/restorecond/restorecond.hash b/package/restorecond/restorecond.hash
-index f52bbd2161..d171c50524 100644
---- a/package/restorecond/restorecond.hash
-+++ b/package/restorecond/restorecond.hash
-@@ -1,2 +1,5 @@
+diff --git a/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch b/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch
+index 3c0ddcc54b..4cfe969a40 100644
+--- a/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch
++++ b/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch
+@@ -13,6 +13,8 @@ accomodate version 2.5
+ Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+ Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
+ Signed-off-by: Adam Duskett <AdamDuskett@outlook.com>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Update for 2.8]
+ ---
+  setfiles/Makefile | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+@@ -22,11 +24,11 @@ index c08e2dd..36c0638 100644
+ --- a/setfiles/Makefile
+ +++ b/setfiles/Makefile
+ @@ -3,7 +3,7 @@ PREFIX ?= $(DESTDIR)/usr
+- SBINDIR ?= $(DESTDIR)/sbin
++ PREFIX ?= /usr
++ SBINDIR ?= /sbin
+  MANDIR = $(PREFIX)/share/man
+- LIBDIR ?= $(PREFIX)/lib
+ -AUDITH ?= $(shell test -f /usr/include/libaudit.h && echo y)
+-+AUDITH ?= $(shell test -f $(DESTDIR)/include/libaudit.h && echo y)
+++AUDITH ?= $(shell test -f $(DESTDIR)$(PREFIX)/include/libaudit.h && echo y)
+  
+  ABORT_ON_ERRORS=$(shell grep "^\#define ABORT_ON_ERRORS" setfiles.c | awk -S '{ print $$3 }')
+  
+diff --git a/package/policycoreutils/0002-Add-PREFIX-to-host-paths.patch b/package/policycoreutils/0002-Add-PREFIX-to-host-paths.patch
+index 32d2ae92e6..0b53044180 100644
+--- a/package/policycoreutils/0002-Add-PREFIX-to-host-paths.patch
++++ b/package/policycoreutils/0002-Add-PREFIX-to-host-paths.patch
+@@ -11,25 +11,14 @@ Updated to work with version 2.5
+ Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+ Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
+ Signed-off-by: Adam Duskett <AdamDuskett@outlook.com>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Update for 2.8]
+ ---
+  load_policy/Makefile | 2 +-
+  newrole/Makefile     | 6 +++---
+  run_init/Makefile    | 6 +++---
+  3 files changed, 7 insertions(+), 7 deletions(-)
+ 
+-diff --git a/load_policy/Makefile b/load_policy/Makefile
+-index b85833c..6a45f31 100644
+---- a/load_policy/Makefile
+-+++ b/load_policy/Makefile
+-@@ -2,7 +2,7 @@
+- PREFIX ?= $(DESTDIR)/usr
+- SBINDIR ?= $(DESTDIR)/sbin
+- MANDIR ?= $(PREFIX)/share/man
+--LOCALEDIR ?= /usr/share/locale
+-+LOCALEDIR ?= $(PREFIX)/share/locale
+- 
+- CFLAGS ?= -Werror -Wall -W
+- override CFLAGS += $(LDFLAGS) -DUSE_NLS -DLOCALEDIR="\"$(LOCALEDIR)\"" -DPACKAGE="\"policycoreutils\""
+ diff --git a/newrole/Makefile b/newrole/Makefile
+ index 196af92..896708f 100644
+ --- a/newrole/Makefile
+@@ -37,13 +26,12 @@ index 196af92..896708f 100644
+ @@ -3,9 +3,9 @@ PREFIX ?= $(DESTDIR)/usr
+  BINDIR ?= $(PREFIX)/bin
+  MANDIR ?= $(PREFIX)/share/man
+- ETCDIR ?= $(DESTDIR)/etc
+--LOCALEDIR = /usr/share/locale
++ ETCDIR ?= /etc
++ LOCALEDIR = $(DESTDIR)$(PREFIX)/share/locale
+ -PAMH ?= $(shell test -f /usr/include/security/pam_appl.h && echo y)
+ -AUDITH ?= $(shell test -f /usr/include/libaudit.h && echo y)
+-+LOCALEDIR = $(PREFIX)/share/locale
+-+PAMH ?= $(shell test -f $(PREFIX)/include/security/pam_appl.h && echo y)
+-+AUDITH ?= $(shell test -f $(PREFIX)/include/libaudit.h && echo y)
+++PAMH ?= $(shell test -f $(DESTDIR)$(PREFIX)/include/security/pam_appl.h && echo y)
+++AUDITH ?= $(shell test -f $(DESTDIR)$(PREFIX)/include/libaudit.h && echo y)
+  # Enable capabilities to permit newrole to generate audit records.
+  # This will make newrole a setuid root program.
+  # The capabilities used are: CAP_AUDIT_WRITE.
+@@ -54,13 +42,12 @@ index 921f0b0..e1566fc 100644
+ @@ -4,9 +4,9 @@ PREFIX ?= $(DESTDIR)/usr
+  SBINDIR ?= $(PREFIX)/sbin
+  MANDIR ?= $(PREFIX)/share/man
+- ETCDIR ?= $(DESTDIR)/etc
+--LOCALEDIR ?= /usr/share/locale
++ ETCDIR ?= /etc
++ LOCALEDIR ?= $(DESTDIR)$(PREFIX)/share/locale
+ -PAMH ?= $(shell test -f /usr/include/security/pam_appl.h && echo y)
+ -AUDITH ?= $(shell test -f /usr/include/libaudit.h && echo y)
+-+LOCALEDIR ?= $(PREFIX)/share/locale
+-+PAMH ?= $(shell test -f $(PREFIX)/include/security/pam_appl.h && echo y)
+-+AUDITH ?= $(shell test -f $(PREFIX)/include/libaudit.h && echo y)
+++PAMH ?= $(shell test -f $(DESTDIR)$(PREFIX)/include/security/pam_appl.h && echo y)
+++AUDITH ?= $(shell test -f $(DESTDIR)$(PREFIX)/include/libaudit.h && echo y)
+  
+  CFLAGS ?= -Werror -Wall -W
+  override CFLAGS += -DUSE_NLS -DLOCALEDIR="\"$(LOCALEDIR)\"" -DPACKAGE="\"policycoreutils\""
+diff --git a/package/policycoreutils/policycoreutils.hash b/package/policycoreutils/policycoreutils.hash
+index 241905ca22..b6367b4bf4 100644
+--- a/package/policycoreutils/policycoreutils.hash
++++ b/package/policycoreutils/policycoreutils.hash
+@@ -1,3 +1,3 @@
  # https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256 cb8e0a8d706cb2c1f105125f3514dffffefcbcfb49199183a7f91ab0bdf1f24d restorecond-2.7.tar.gz
-+sha256 323cab1128e5308cd85fea0e5c98e3c8973e1ada0b659f2fce76187e192271bf restorecond-2.8.tar.gz
-+
-+# Hash for license file
-+sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 COPYING
-diff --git a/package/restorecond/restorecond.mk b/package/restorecond/restorecond.mk
-index aaa59b3351..7e43d9c8df 100644
---- a/package/restorecond/restorecond.mk
-+++ b/package/restorecond/restorecond.mk
+-sha256 0a1b8a4a323b854981c6755ff025fe98a0f1cff307f109abb260f0490f13e4f4 policycoreutils-2.7.tar.gz
++sha256 986553a235f27bee7ad7c2b7c35ea51eb2ee68e2cf03b661b1585de101bc1099 policycoreutils-2.8.tar.gz
+ sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 COPYING
+diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
+index 21c5470cec..abd70e16c8 100644
+--- a/package/policycoreutils/policycoreutils.mk
++++ b/package/policycoreutils/policycoreutils.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--RESTORECOND_VERSION = 2.7
--RESTORECOND_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20170804
-+RESTORECOND_VERSION = 2.8
-+RESTORECOND_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20180524
- RESTORECOND_LICENSE = GPL-2.0
- RESTORECOND_LICENSE_FILES = COPYING
+-POLICYCOREUTILS_VERSION = 2.7
+-POLICYCOREUTILS_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20170804
++POLICYCOREUTILS_VERSION = 2.8
++POLICYCOREUTILS_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20180524
+ POLICYCOREUTILS_LICENSE = GPL-2.0
+ POLICYCOREUTILS_LICENSE_FILES = COPYING
  
 -- 
 2.17.1
