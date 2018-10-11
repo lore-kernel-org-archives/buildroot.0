@@ -1,80 +1,62 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 11 Oct 2018 22:27:10 +0200
-Subject: [Buildroot] [PATCH 1/1] xerces: fix build without pthread
-Message-ID: <20181011202710.9575-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 11 Oct 2018 22:46:12 +0200
+Subject: [Buildroot] [PATCH] netsnmp: fix static build failure due to
+ missing -lssl and -lz
+In-Reply-To: <20180917203912.75481-1-giulio.benetti@micronovasrl.com> (Giulio
+ Benetti's message of "Mon, 17 Sep 2018 22:39:12 +0200")
+References: <c7ee69a4-ece1-2161-f0a4-d0bbb5dc14ad@micronovasrl.com>
+ <20180917203912.75481-1-giulio.benetti@micronovasrl.com>
+Message-ID: <871s8w1aaz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If threads is set to OFF, do not fail when pthreads is not available
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/63cc4d3d69db19d0c639437d6996f881888a926b
+ > During configure some checking needing -lssl and -lz don't have them
+ > appended to linker tail. Since we are building static this leads to
+ > configure failure because of mandatory functions lack produces:
+ > "configure: error: The DTLS based transports require the libssl library
+ > from OpenSSL to be available and support DTLS"
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0001-fix-build-without-pthread.patch      | 51 +++++++++++++++++++
- 1 file changed, 51 insertions(+)
- create mode 100644 package/xerces/0001-fix-build-without-pthread.patch
+ > - Add 1 patch to fix -lssl lack in configure and .ac modules:
+ > upstreamed: https://sourceforge.net/p/net-snmp/code/ci/bd59be8e4e339870a1400f6866a7b73ca11f6460/
+ > - Add 2 patches to fix -lz lack in configure and .ac modules:
+ > 1 upstreamed: https://sourceforge.net/p/net-snmp/code/ci/13da2bcde8e22dd0127a668374fdf79bed04d353/
+ > 1 in Merge Request: https://sourceforge.net/p/net-snmp/code/merge-requests/19/
+ > - Add NETSNMP_AUTORECONF = YES
 
-diff --git a/package/xerces/0001-fix-build-without-pthread.patch b/package/xerces/0001-fix-build-without-pthread.patch
-new file mode 100644
-index 0000000000..f84049c357
---- /dev/null
-+++ b/package/xerces/0001-fix-build-without-pthread.patch
-@@ -0,0 +1,51 @@
-+From d6a1e80b4dd36c138f5ee9163ff69a90b743ee49 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 11 Oct 2018 22:11:54 +0200
-+Subject: [PATCH] fix build without pthread
-+
-+If threads is set to OFF, do not fail when pthreads is not available
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://issues.apache.org/jira/browse/XERCESC-2155]
-+---
-+ cmake/XercesMutexMgrSelection.cmake | 14 +++++++-------
-+ 1 file changed, 7 insertions(+), 7 deletions(-)
-+
-+diff --git a/cmake/XercesMutexMgrSelection.cmake b/cmake/XercesMutexMgrSelection.cmake
-+index 2f1d71c50..7502c3719 100644
-+--- a/cmake/XercesMutexMgrSelection.cmake
-++++ b/cmake/XercesMutexMgrSelection.cmake
-+@@ -23,12 +23,13 @@ option(threads "Threading support" ON)
-+ 
-+ include(CheckCXXSourceCompiles)
-+ 
-+-find_package(Threads REQUIRED)
-++if(threads)
-++  find_package(Threads REQUIRED)
-+ 
-+-function(thread_test outvar)
-+-  set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
-++  function(thread_test outvar)
-++    set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
-+ 
-+-  check_cxx_source_compiles(
-++    check_cxx_source_compiles(
-+ "#include <thread>
-+ #include <mutex>
-+ #include <iostream>
-+@@ -57,10 +58,9 @@ int main() {
-+ }"
-+ ${outvar})
-+ 
-+-  set(${outvar} ${${outvar}} PARENT_SCOPE)
-+-endfunction(thread_test)
-++    set(${outvar} ${${outvar}} PARENT_SCOPE)
-++  endfunction(thread_test)
-+ 
-+-if(threads)
-+   set(THREADS_PREFER_PTHREAD_FLAG ON)
-+   add_definitions(-D_THREAD_SAFE=1)
-+   find_package(Threads)
-+-- 
-+2.17.1
-+
+ > Fixes:
+ > http://autobuild.buildroot.net/results/ece/ece7af756c910f65f618c1d04a5de70cc574b5f4/
+ > http://autobuild.buildroot.net/results/2a7/2a7020de6a4095cf9991d09fbe8f6e364783f63b/
+ > http://autobuild.buildroot.net/results/e27/e2787d15f72949cbb347e8a1d344f5f80b4d7697/
+ > http://autobuild.buildroot.net/results/439/4393ce8ddee294f91bdc3e6fb53e08d56fe52184/
+ > http://autobuild.buildroot.net/results/da6/da6bbbbb3a8d8193ec1389b9d976164181e88ae2/
+ > http://autobuild.buildroot.net/results/cf5/cf57686e7620cc0ec361631a9ff906aa0123fdb4/
+ > http://autobuild.buildroot.net/results/104/1043a958314529240627005d1bf21a76f4e6fcf5/
+ > http://autobuild.buildroot.net/results/885/8855545bd09388e0da451a3cb53b312e13b29c2c/
+ > http://autobuild.buildroot.net/results/a3d/a3dab9618a7ed88f94597418a5892c87adc23c66/
+ > http://autobuild.buildroot.net/results/18e/18e70b88c9bcb3b8ede7308e54bba9417d1fd3fb/
+ > http://autobuild.buildroot.net/results/ee3/ee34f65f26da20c0f2fdb9e86bcbddd389f59a29/
+ > http://autobuild.buildroot.net/results/a1e/a1eb848079080ddf7cf2fc9e554cdd63ade0e9aa/
+ > http://autobuild.buildroot.net/results/4dc/4dc8b53ff9f504c0a3dfc2d72c2609ad4d34559b/
+ > http://autobuild.buildroot.net/results/9cc/9cc19e481de20ea0b4b5163e45c5aee525b81229/
+ > http://autobuild.buildroot.net/results/f15/f15c22e0257d7498456049d8aae195ed6a265d2e/
+ > http://autobuild.buildroot.net/results/1b3/1b30f9813a4605056963bfe4532374f725830fda/
+ > http://autobuild.buildroot.net/results/d02/d02afc174ac4c9888f0a2cf725820cc1f05fc4bf/
+ > http://autobuild.buildroot.net/results/57b/57b3f4663058d728987ef848e4b346656cae21d4/
+ > http://autobuild.buildroot.net/results/ed4/ed4c27bdffccc4374ab7f951c30baba8171d30e1/
+
+ > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+ > ---
+ >  ...figure-static-linking-Fix-SSL-checks.patch | 142 ++++++++++++++++++
+
+Having the configure part AND doing a autoreconf is a bit stupid, but I
+guess you just wanted to include the upstream commit as is.
+
+Committed, thanks!
+
 -- 
-2.17.1
+Bye, Peter Korsgaard
