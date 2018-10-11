@@ -1,38 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 11 Oct 2018 20:58:01 +0200
-Subject: [Buildroot] [PATCH] libssh: bump to version 0.8.3
-In-Reply-To: <8eb7618e47431841480d1d3aea2fd653cad2956e.1539283600.git.baruch@tkos.co.il>
-References: <8eb7618e47431841480d1d3aea2fd653cad2956e.1539283600.git.baruch@tkos.co.il>
-Message-ID: <20181011205801.007173dc@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 11 Oct 2018 21:04:29 +0200
+Subject: [Buildroot] [PATCH 1/1] xerces: fix buid with older cmake
+Message-ID: <20181011190429.22484-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Old version of cmake break cross-compilation when FindThreads is used
+because of a try_run call. Add a workaround that avoids try_run.
 
-On Thu, 11 Oct 2018 21:46:40 +0300, Baruch Siach wrote:
-> Drop GNU glob detection patch; issue fixed upstream.
-> 
-> Add upstream patch that completes the build fix when GNU glob is not
-> present.
-> 
-> Cc: Scott Fan <fancp2007@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  ...heck-for-GNU-compatible-glob-support.patch | 44 -------------------
->  ...ix-building-without-globbing-support.patch | 30 +++++++++++++
->  package/libssh/libssh.hash                    |  4 +-
->  package/libssh/libssh.mk                      |  2 +-
->  4 files changed, 34 insertions(+), 46 deletions(-)
->  delete mode 100644 package/libssh/0001-cmake-check-for-GNU-compatible-glob-support.patch
->  create mode 100644 package/libssh/0001-config-Fix-building-without-globbing-support.patch
+cmake bug report: https://gitlab.kitware.com/cmake/cmake/issues/16920
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/784918c58310474e8b4a0b42850a55ba35a1a19e
 
-Thomas
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/xerces/xerces.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
+index 906e4b663c..c75a8b0d35 100644
+--- a/package/xerces/xerces.mk
++++ b/package/xerces/xerces.mk
+@@ -17,6 +17,11 @@ endef
+ 
+ XERCES_POST_PATCH_HOOKS += XERCES_DISABLE_SAMPLES
+ 
++# Before CMake 3.10, passing THREADS_PTHREAD_ARG=OFF was needed to
++# disable a try_run() call in the FindThreads tests, which caused a
++# build failure when cross-compiling.
++XERCES_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
++
+ ifeq ($(BR2_PACKAGE_ICU),y)
+ XERCES_DEPENDENCIES += icu
+ endif
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
