@@ -1,52 +1,70 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 11 Oct 2018 23:27:10 +0200
-Subject: [Buildroot] [PATCH 5/5] support/testing: add python-twisted
- tests
-In-Reply-To: <20181011204808.1aff4cd1@windsurf>
-References: <20180926025514.2092-1-ricardo.martincoski@gmail.com>
- <20180926025514.2092-6-ricardo.martincoski@gmail.com>
- <20181011204808.1aff4cd1@windsurf>
-Message-ID: <1adacc2a-25dc-eee5-8688-47ce66aa080b@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 11 Oct 2018 23:27:11 +0200
+Subject: [Buildroot] [PATCH 1/1] xerces: fix static linking with curl
+Message-ID: <20181011212711.22694-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+When curl is statically built with openssl support, xerces needs to
+link with openssl libraries so use pkg_check_modules to get any
+needed dependencies
 
+Fixes:
+ - http://autobuild.buildroot.org/results/29ca90fff2c8e38f2edf7240eca3aa3fe7397c45
 
-On 11/10/18 20:48, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Tue, 25 Sep 2018 23:55:14 -0300, Ricardo Martincoski wrote:
-> 
->> +TEST_SCRIPT = """
->> +from twisted.internet import protocol, reactor, endpoints
->> +class F(protocol.Factory):
->> +    pass
->> +endpoints.serverFromString(reactor, "tcp:1234").listen(F())
->> +reactor.run()
->> +"""
-> 
-> At some point, we will have to find a solution to store such
-> "artefacts" somewhere, instead of having them inline in their test
-> cases. I don't have a good idea about this.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0002-fix-static-linking-with-curl.patch   | 39 +++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/xerces/0002-fix-static-linking-with-curl.patch
 
- I think it would be nice if we could add in the package directory a
-subdirectory with files to be copied to the target for the runtime test, and a
-python script for the test itself.
-
- As an in-between step, we can put the files-to-be-copied inside the
-support/testing directory and explicitly enumerate the files-to-be-copied in the
-test fixture.
-
- Regards,
- Arnout
-
+diff --git a/package/xerces/0002-fix-static-linking-with-curl.patch b/package/xerces/0002-fix-static-linking-with-curl.patch
+new file mode 100644
+index 0000000000..db38de79fc
+--- /dev/null
++++ b/package/xerces/0002-fix-static-linking-with-curl.patch
+@@ -0,0 +1,39 @@
++From 26e3f1440bbc75c704fc93ff43a2abbfbe4c0203 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 11 Oct 2018 22:56:50 +0200
++Subject: [PATCH] fix static linking with curl
++
++When curl is statically built with openssl support, xerces needs to
++link with openssl libraries so use pkg_check_modules to get any
++needed dependencies
++
++Fixes:
++ - http://autobuild.buildroot.org/results/29ca90fff2c8e38f2edf7240eca3aa3fe7397c45
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ cmake/XercesNetAccessorSelection.cmake | 8 +++++++-
++ 1 file changed, 7 insertions(+), 1 deletion(-)
++
++diff --git a/cmake/XercesNetAccessorSelection.cmake b/cmake/XercesNetAccessorSelection.cmake
++index 7a63f1f6b..e90fcf034 100644
++--- a/cmake/XercesNetAccessorSelection.cmake
+++++ b/cmake/XercesNetAccessorSelection.cmake
++@@ -31,7 +31,13 @@ if(network)
++ 
++   # Requires select() which is UNIX only
++   if(UNIX)
++-    find_package(CURL)
+++    find_package(PkgConfig)
+++    if (PkgConfig_FOUND)
+++      pkg_check_modules(CURL libcurl)
+++      if (NOT CURL_FOUND)
+++        find_package(CURL)
+++      endif()
+++    endif()
++     if(CURL_FOUND)
++       list(APPEND netaccessors curl)
++     endif()
++-- 
++2.17.1
++
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.17.1
