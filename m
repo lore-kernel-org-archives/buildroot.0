@@ -1,74 +1,70 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 10 Oct 2018 21:09:08 -0500
-Subject: [Buildroot] [RFC] pkg-download: support providing dest filename
-Message-ID: <20181011020908.15717-1-matthew.weber@rockwellcollins.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 11 Oct 2018 07:43:32 +0300
+Subject: [Buildroot] Analysis results for 2018-10-09
+In-Reply-To: <20181010174814.5ac114f1@windsurf>
+References: <20181010060010.4E3C920736@mail.bootlin.com>
+ <20181010174814.5ac114f1@windsurf>
+Message-ID: <87y3b5ks97.fsf@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Similar to the old DOWNLOAD_INNER hook, provide a way for a package
-to specify a URI, src file and dest filename to retrieve additional
-files. While maintaining the existing practice of hash checking each
-archive and storing with the primary source archive in the package's
-dl sub-folder.
 
-The use case for this new DOWNLOAD_DIRECT hook is for a package to call
-the hook as part of the _POST_DOWNLOAD_HOOKS provided in that specific
-package.
+Thomas Petazzoni writes:
+>>          arm |                boa-0.94.14rc21 | NOK | http://autobuild.buildroot.net/results/e5ff4589243ce1f11248b5f9fab3cca614a48b11 | ORPH
+>
+> (cd src && make - --no-print-directory - --jobserver-fds=6,7 -j)
+> make: unrecognized option '--jobserver-fds=6,7'
+>
+> This suddenly started happening on September 9, 2018. We have not
+> bumped boa. I'm not sure what caused this. It fails on different
+> autobuilder machines. Boa is calling submake with $(MFLAGS), which is
+> probably the issue, but why did this suddenly started to happen ?
+>
+> With a minimal configuration with just Boa, I cannot reproduce on my
+> machine here, neither on my autobuilder where the problem is reported
+> to occur.
 
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
----
+I guess it is related to commit 05167a9ffa (package/make: add host
+variant) which was applied on September 8, 23:36. Build seems to fail
+only on hosts with make older than 4.0, so the host-make build is
+triggered.
 
-Unsure of the desired approach for this, so I went basic for an example
-implementation.  I reviewed the DOWNLOAD_EXTRAS but the place where it
-fell short is being able to set the destination filename....
+>>      powerpc |                      squid-4.2 | NOK | http://autobuild.buildroot.net/results/e679ef90219c5e8f9c94ddcd7d3f9582f79ef751 | ORPH
+>
+> ../../src/StatHist.h:112:30: error: invalid pure specifier (only '= 0' is allowed) before ';' token
+> ../../src/StatHist.h:113:31: error: invalid pure specifier (only '= 0' is allowed) before ';' token
+>
+> Not sure. Baruch, you recently bumped the squid package, could you have
+> a look ?
 
-The initial use case for this hook is the OpenJDK package.  In the
-original patchset the DOWNLOAD_INNER was used to retrieve a series
-of subpackages, each with the same src file but different directory
-structure.  The solution was to download each and adjust the destination
-filename.
-http://buildroot-busybox.2317881.n4.nabble.com/PATCH-0-4-openjdk-td186297.html
----
- package/pkg-download.mk | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+This failure is from before my patch bumping squid to 4.3 (commit
+419c47a2135). But I believe we'll see the same failure with 4.3.
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index bf93b9a08e..ac46866ef2 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -107,3 +107,30 @@ define DOWNLOAD
- 		-- \
- 		$($(PKG)_DL_OPTS)
- endef
-+
-+################################################################################
-+# DOWNLOAD_DIRECT -- Download helper. Will call DL_WRAPPER which will try to
-+# download source from the provided URI and store the file to a specific name.
-+#
-+# Argument 1 is the source site
-+# Argument 2 is the archive name
-+# Argument 3 is the destination file name
-+#
-+################################################################################
-+
-+define DOWNLOAD_DIRECT
-+	$(Q)mkdir -p $($(PKG)_DL_DIR)
-+	$(Q)$(EXTRA_ENV) $(FLOCK) $(DL_WRAPPER) \
-+		-c '$($(PKG)_DL_VERSION)' \
-+		-d '$($(PKG)_DL_DIR)' \
-+		-D '$(DL_DIR)' \
-+		-f '$(2)' \
-+		-H '$(PKGDIR)/$($(PKG)_RAWNAME).hash' \
-+		-n '$($(PKG)_BASENAME_RAW)' \
-+		-N '$($(PKG)_RAWNAME)' \
-+		-o '$($(PKG)_DL_DIR)/$(3)' \
-+		-u $(call getschemeplusuri,$(call qstrip,$(1)),urlencode) \
-+		$(QUIET) \
-+		-- \
-+		$($(PKG)_DL_OPTS)
-+endef
--- 
-2.18.0
+The build only fails with the CT-NG PowerPC e500 toolchain. Is that the
+only gcc 4.7 toolchain?
+
+This is the failing code:
+
+typedef double hbase_f(double);
+
+class StatHist
+{
+    ...
+    hbase_f *val_in = nullptr;        /* e.g., log() for log-based histogram */
+    hbase_f *val_out = nullptr;       /* e.g., exp() for log based histogram */
+}
+
+For some reason this version of gcc considers val_in/val_out as
+methods. But "fixing" the problem by changing the assignment to '= 0'
+makes gcc segfault, not even ICE. So I think this is a compiler
+bug. Should squid depend on gcc >= 4.8?
+
+baruch
+
+--
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
