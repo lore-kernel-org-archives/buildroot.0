@@ -1,14 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 11 Oct 2018 23:11:37 +0200
-Subject: [Buildroot] meson for host package with executables doesn't
- work.
-In-Reply-To: <CAFr9PXmf0tCQ1u3EstbtRyyJhLxk5Vc1sSOZMXW5qGfNehvLig@mail.gmail.com>
-References: <CAFr9PXm1Y=HHy4znDBVdxpd2ndHKdu+_unfgSGHkJFotSZ9HKA@mail.gmail.com>
- <20181011120126.4bb50328@windsurf>
- <CAFr9PXkRORYwg4JF=moZp-e2bhrXLQAamhy-ygzi0ahq8dtgDg@mail.gmail.com>
- <20181011163113.57ef1244@windsurf>
- <CAFr9PXmf0tCQ1u3EstbtRyyJhLxk5Vc1sSOZMXW5qGfNehvLig@mail.gmail.com>
-Message-ID: <72e1c646-b6f1-5f1d-e3e3-9ea609fcc5d4@mind.be>
+Date: Thu, 11 Oct 2018 23:27:10 +0200
+Subject: [Buildroot] [PATCH 5/5] support/testing: add python-twisted
+ tests
+In-Reply-To: <20181011204808.1aff4cd1@windsurf>
+References: <20180926025514.2092-1-ricardo.martincoski@gmail.com>
+ <20180926025514.2092-6-ricardo.martincoski@gmail.com>
+ <20181011204808.1aff4cd1@windsurf>
+Message-ID: <1adacc2a-25dc-eee5-8688-47ce66aa080b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,61 +15,33 @@ To: buildroot@busybox.net
 
 
 
-On 11/10/18 17:18, Daniel Palmer wrote:
-> Hi,
+On 11/10/18 20:48, Thomas Petazzoni wrote:
+> Hello,
 > 
-> I forward ported the patch to the version of meson that is in buildroot now
-> and the problem is resolved. I'll submit a patch when I have some time
-> over the weekend.
+> On Tue, 25 Sep 2018 23:55:14 -0300, Ricardo Martincoski wrote:
+> 
+>> +TEST_SCRIPT = """
+>> +from twisted.internet import protocol, reactor, endpoints
+>> +class F(protocol.Factory):
+>> +    pass
+>> +endpoints.serverFromString(reactor, "tcp:1234").listen(F())
+>> +reactor.run()
+>> +"""
+> 
+> At some point, we will have to find a solution to store such
+> "artefacts" somewhere, instead of having them inline in their test
+> cases. I don't have a good idea about this.
 
- Upstream claims that the issue is fixed [1][2], so I would prefer to work with
-upstream to actually fix the issue upstream. I've commented on the issue (github
-doesn't allow reopening).
+ I think it would be nice if we could add in the package directory a
+subdirectory with files to be copied to the target for the runtime test, and a
+python script for the test itself.
 
+ As an in-between step, we can put the files-to-be-copied inside the
+support/testing directory and explicitly enumerate the files-to-be-copied in the
+test fixture.
 
  Regards,
  Arnout
-
-[1] https://github.com/mesonbuild/meson/issues/314
-[2]
-https://github.com/mesonbuild/meson/commit/e3757e3d3cf24327c89dd3fc40f6cc933510f676
-
-
-
-> 
-> Thanks,
-> 
-> Daniel
-> On Thu, 11 Oct 2018 at 23:31, Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
->>
->> Hello,
->>
->> On Thu, 11 Oct 2018 20:42:30 +0900, Daniel Palmer wrote:
->>
->>> Looking through the history in git it looks like this was broken by
->>> commit a03f46ca6e9f43028003aedc92f1a1204ae7480f that bumped the
->>> version of meson and removed a patch that stops meson from stripping
->>> the RPATH on host executables. I guess because there are no packages
->>> in-tree that used it (I couldn't find host-meson-package in any
->>> packages) no one noticed.
->>
->> Indeed, it could very well be due to this. Could you check if re-adding
->> this patch makes things work again ? If it does, please submit a patch
->> re-adding the patch :-)
->>
->> Thanks,
->>
->> Thomas
->> --
->> Thomas Petazzoni, CTO, Bootlin
->> Embedded Linux and Kernel engineering
->> https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
