@@ -1,53 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Oct 2018 20:19:28 +0200
-Subject: [Buildroot] [PATCH 2/5] webkitgtk: add dependency on the woff2
- package
-In-Reply-To: <20181010001714.GD10287@momiji> (Adrian Perez de Castro's message
- of "Wed, 10 Oct 2018 00:17:14 +0200")
-References: <20180922235333.85642-1-aperez@igalia.com>
- <20180922235333.85642-3-aperez@igalia.com>
- <20180925225255.3fe01107@windsurf> <20180927124148.GB16720@momiji>
- <87tvmbw4qb.fsf@dell.be.48ers.dk> <20181010001714.GD10287@momiji>
-Message-ID: <87efcw1h3j.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 11 Oct 2018 20:20:13 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] open-plc-utils: fix build with static musl
+Message-ID: <20181011182013.16467-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+Pass TARGET_LDFLAGS to EXTRA_LDFLAGS to fix following issue:
+/home/buildroot/autobuild/run/instance-3/output/build/host-gcc-final-7.3.0/build/arm-buildroot-linux-musleabihf/libgcc/../../../libgcc/config/arm/lib1funcs.S:1545: undefined reference to `raise'
 
-Hi,
+Also pass TARGET_CFLAGS to EXTRA_CFLAGS and TARGET_CXXFLAGS to
+EXTRA_CXXFLAGS and move all these variables to
+OPEN_PLC_UTILS_MAKE_OPTS for readability
 
- >> Correct. Now that we have updated kconfig we could even consider using
- >> the imply keyword to enable woff2 by default if it is really an option
- >> that most people should enable:
- >> 
- >> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=237e3ad0f195d8fd34f1299e45f04793832a16fc
+Fixes:
+ - http://autobuild.buildroot.org/results/67bc5e7ac8ae1c49c035b022a394d2f746705cf2
 
- > There's a small doubt I have here... How exactly would we prefer to have this?
- > I can think of two options. One would be the following, and would allow to
- > disable WOFF2 support in WebKitGTK+ even if the woff2 package is built:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Instead of passing -static to EXTRA_LDFLAGS, use TARGET_LDFLAGS
+ - pass TARGET_CFLAGS to EXTRA_CFLAGS
+ - pass TARGET_CXXFLAGS to EXTRA_CXXFLAGS
 
- >   config BR2_PACKAGE_WEBKITGTK
- >       # ...
- > 	  imply BR2_PACKAGE_WEBKITGTK_WOFF2
+ package/open-plc-utils/open-plc-utils.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
- >   config BR2_PACKAGE_WEBKITGTK_WOFF2
- >       bool "woff2 support"
- > 	  depends on BR2_PACKAGE_WOFF2
- > 	  imply BR2_PACKAGE_WOFF2
-
- > The other, simpler option, always enables WOFF2 support in WebKitGTK+ if the
- > woff2 package can be built:
-
- >   config BR2_PACKAGE_WEBKITGTK
- >       # ...
- > 	  imply BR2_PACKAGE_WOFF2
-
-I would go for the 2nd option. I cannot think of any sensible use cases
-where we would want woff2 enabled but not use it in webkitgtk, and this
-matches what we do elsewhere for E.G. openssl.
-
+diff --git a/package/open-plc-utils/open-plc-utils.mk b/package/open-plc-utils/open-plc-utils.mk
+index d45bb9d4f5..e1e66bf7e0 100644
+--- a/package/open-plc-utils/open-plc-utils.mk
++++ b/package/open-plc-utils/open-plc-utils.mk
+@@ -15,8 +15,14 @@ OPEN_PLC_UTILS_LICENSE_FILES = LICENSE
+ # Yes, we're passing __UCLIBC__ in EXTRA_CFLAGS, as it fixes a build
+ # issue for non-uClibc toolchains. It is the very crappy solution
+ # suggested at https://github.com/qca/open-plc-utils/issues/36.
++OPEN_PLC_UTILS_MAKE_OPTS = \
++	EXTRA_CFLAGS="$(TARGET_CFLAGS) -D__UCLIBC__" \
++	EXTRA_CXXFLAGS="$(TARGET_CXXFLAGS)" \
++	EXTRA_LDFLAGS="$(TARGET_LDFLAGS)"
++
+ define OPEN_PLC_UTILS_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) CROSS=$(TARGET_CROSS) EXTRA_CFLAGS="-D__UCLIBC__" -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) CROSS=$(TARGET_CROSS) \
++		$(OPEN_PLC_UTILS_MAKE_OPTS) -C $(@D)
+ endef
+ 
+ define OPEN_PLC_UTILS_INSTALL_TARGET_CMDS
 -- 
-Bye, Peter Korsgaard
+2.17.1
