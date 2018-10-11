@@ -1,51 +1,54 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 11 Oct 2018 14:45:16 +0300
-Subject: [Buildroot] Analysis results for 2018-10-09
-In-Reply-To: <875zy8spe0.fsf@dell.be.48ers.dk>
-References: <20181010060010.4E3C920736@mail.bootlin.com>
- <20181010174814.5ac114f1@windsurf> <87y3b5ks97.fsf@tkos.co.il>
- <87a7nksr18.fsf@dell.be.48ers.dk> <87o9c0lozx.fsf@tkos.co.il>
- <875zy8spe0.fsf@dell.be.48ers.dk>
-Message-ID: <87k1molnar.fsf@tkos.co.il>
+From: Daniel Palmer <daniel@0x0f.com>
+Date: Thu, 11 Oct 2018 20:42:30 +0900
+Subject: [Buildroot] meson for host package with executables doesn't
+ work.
+In-Reply-To: <20181011120126.4bb50328@windsurf>
+References: <CAFr9PXm1Y=HHy4znDBVdxpd2ndHKdu+_unfgSGHkJFotSZ9HKA@mail.gmail.com>
+ <20181011120126.4bb50328@windsurf>
+Message-ID: <CAFr9PXkRORYwg4JF=moZp-e2bhrXLQAamhy-ygzi0ahq8dtgDg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hi Thomas,
 
-Peter Korsgaard writes:
->>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
->  >> -typedef double hbase_f(double);
->  >> +typedef double (*hbase_f)(double);
+Looking through the history in git it looks like this was broken by
+commit a03f46ca6e9f43028003aedc92f1a1204ae7480f that bumped the
+version of meson and removed a patch that stops meson from stripping
+the RPATH on host executables. I guess because there are no packages
+in-tree that used it (I couldn't find host-meson-package in any
+packages) no one noticed.
+
+Cheers,
+
+Daniel
+On Thu, 11 Oct 2018 at 19:01, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 >
->  > Wouldn't that make the definition 'hbase_f *val_in' a pointer to
->  > function pointer?
+> Hello Daniel,
 >
-> Not in C at least. The syntax is:
+> On Thu, 11 Oct 2018 18:25:39 +0900, Daniel Palmer wrote:
 >
-> typedef <returntype> (*name)(<arguments>)
+> > That was working fine a few months ago but now I get this:
+> >
+> > ***
+> > *** ERROR: package host-json-glib installs executables without proper RPATH:
+> > ***   <snip>/buildroot-firmware/output/host/bin/json-glib-validate
+> > ***   <snip>/buildroot-firmware/output/host/bin/json-glib-format
+> >
+> > As far as I know meson strips RPATH on install and there is no way to
+> > stop it doing that outside of adjusting the build file.
+> >
+> > Does anyone have any ideas about how this should be fixed?
 >
-> https://stackoverflow.com/questions/1591361/understanding-typedefs-for-function-pointers-in-c
-
-Correct. But consider the SO example code:
-
-  typedef void (*SignalHandler)(int signum);
-
-  extern SignalHandler signal(int signum, SignalHandler handler);
-
-The 'handler' parameter of the signal() function is a pointer to a
-function. However the definition
-
-  SignalHandler *handler;
-
-would create a pointer to a pointer. As I understand, this is not the
-intention of the 'hbase_f *val_in' definition in the original code.
-
-baruch
-
---
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+> We really need the host tools to have an rpath pointing to
+> $(HOST_DIR)/lib, otherwise they won't pick up the libraries that we
+> have installed in $(HOST_DIR)/lib.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
