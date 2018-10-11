@@ -1,42 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 11 Oct 2018 23:32:34 +0200
-Subject: [Buildroot] Analysis results for 2018-10-09
-In-Reply-To: <87in28susb.fsf@dell.be.48ers.dk>
-References: <20181010060010.4E3C920736@mail.bootlin.com>
- <20181010174814.5ac114f1@windsurf>
- <5c66f02e-d2f1-55a6-c75f-6a924e6b70bd@mind.be>
- <87in28susb.fsf@dell.be.48ers.dk>
-Message-ID: <526b24f3-6941-2050-641a-c1c053778fb9@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 11 Oct 2018 21:35:41 +0000
+Subject: [Buildroot] [Bug 11396] New: uboot environment image checksum
+ invalid if target is big endian
+Message-ID: <bug-11396-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=11396
 
+            Bug ID: 11396
+           Summary: uboot environment image checksum invalid if target is
+                    big endian
+           Product: buildroot
+           Version: 2018.05.2
+          Hardware: All
+                OS: All
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: jwittrock at faultrecorder.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-On 11/10/18 11:21, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
-> 
->  > On 10/10/18 17:48, Thomas Petazzoni wrote:
->  >>> mips64el |        gst-plugins-bad-0.10.23 | NOK | http://autobuild.buildroot.net/results/ab39280ceaf967e08abfd1f51efa4613495237f5 | ORPH
->  >> 
->  >> gstspanplc.c:223:21: error: dereferencing pointer to incomplete type 'plc_state_t {aka struct plc_state_s}'
->  >> if (plc->plc_state->missing_samples != 0)
-> 
->  >  Perhaps it's time to retire gstreamer-0.10? Is anybody still using it?
-> 
-> Agreed, 1.0 is from 2012 and 0.10.x is no longer maintained upstream.
+Created attachment 7811
+  --> https://bugs.busybox.net/attachment.cgi?id=7811&action=edit
+patch to fix
 
- Note that qt4, nvidia-tegra23 and classpath only support GST 0.10. Those were
-the only ones I could find. Of these, only qt4 is still a bit relevant I think.
+If the target architecture is Big endian, building a u-boot environment image
+is creating an image with an invalid checksum.
 
- Regards,
- Arnout
+The problem is caused by buildroot/boot/uboot/uboot.mk testing $(BR2_ENDIAN)
+for a value of BIG instead of quoted "BIG".
+
+patch to fix is attached.
+
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+You are receiving this mail because:
+You are on the CC list for the bug.
