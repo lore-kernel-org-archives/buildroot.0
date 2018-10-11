@@ -1,16 +1,18 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 11 Oct 2018 21:37:05 +0200
-Subject: [Buildroot] [PATCH v3,6/8] policycoreutils: bump to version 2.8
+Date: Thu, 11 Oct 2018 21:37:06 +0200
+Subject: [Buildroot] [PATCH v3,7/8] selinux-python: bump to version 2.8
 In-Reply-To: <20181011193707.20510-1-fontaine.fabrice@gmail.com>
 References: <20181011193707.20510-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181011193707.20510-6-fontaine.fabrice@gmail.com>
+Message-ID: <20181011193707.20510-7-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update first and second patch
+- Remove first patch (alread in version), see:
+  https://github.com/SELinuxProject/selinux/commit/11aaf180ef128551d9f8d65dbd32961e99670914
+- Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
@@ -26,131 +28,160 @@ Changes v1 -> v2 (after review of Matthew Weber and Marcus Folkesson):
    libsemanage
  - Remove libselinux.so and libsepol.so symbolic link (not needed)
 
- ...-all-paths-that-use-an-absolute-path.patch |  8 +++--
- .../0002-Add-PREFIX-to-host-paths.patch       | 33 ++++++-------------
- package/policycoreutils/policycoreutils.hash  |  2 +-
- package/policycoreutils/policycoreutils.mk    |  4 +--
- 4 files changed, 18 insertions(+), 29 deletions(-)
+ ...-follow-standard-semantics-for-DESTD.patch | 117 ------------------
+ package/selinux-python/selinux-python.hash    |   5 +-
+ package/selinux-python/selinux-python.mk      |   4 +-
+ 3 files changed, 6 insertions(+), 120 deletions(-)
+ delete mode 100644 package/selinux-python/0001-python-build-follow-standard-semantics-for-DESTD.patch
 
-diff --git a/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch b/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch
-index 3c0ddcc54b..4cfe969a40 100644
---- a/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch
-+++ b/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch
-@@ -13,6 +13,8 @@ accomodate version 2.5
- Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
- Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
- Signed-off-by: Adam Duskett <AdamDuskett@outlook.com>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Update for 2.8]
- ---
-  setfiles/Makefile | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
-@@ -22,11 +24,11 @@ index c08e2dd..36c0638 100644
- --- a/setfiles/Makefile
- +++ b/setfiles/Makefile
- @@ -3,7 +3,7 @@ PREFIX ?= $(DESTDIR)/usr
-- SBINDIR ?= $(DESTDIR)/sbin
-+ PREFIX ?= /usr
-+ SBINDIR ?= /sbin
-  MANDIR = $(PREFIX)/share/man
-- LIBDIR ?= $(PREFIX)/lib
- -AUDITH ?= $(shell test -f /usr/include/libaudit.h && echo y)
--+AUDITH ?= $(shell test -f $(DESTDIR)/include/libaudit.h && echo y)
-++AUDITH ?= $(shell test -f $(DESTDIR)$(PREFIX)/include/libaudit.h && echo y)
-  
-  ABORT_ON_ERRORS=$(shell grep "^\#define ABORT_ON_ERRORS" setfiles.c | awk -S '{ print $$3 }')
-  
-diff --git a/package/policycoreutils/0002-Add-PREFIX-to-host-paths.patch b/package/policycoreutils/0002-Add-PREFIX-to-host-paths.patch
-index 32d2ae92e6..0b53044180 100644
---- a/package/policycoreutils/0002-Add-PREFIX-to-host-paths.patch
-+++ b/package/policycoreutils/0002-Add-PREFIX-to-host-paths.patch
-@@ -11,25 +11,14 @@ Updated to work with version 2.5
- Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
- Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
- Signed-off-by: Adam Duskett <AdamDuskett@outlook.com>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Update for 2.8]
- ---
-  load_policy/Makefile | 2 +-
-  newrole/Makefile     | 6 +++---
-  run_init/Makefile    | 6 +++---
-  3 files changed, 7 insertions(+), 7 deletions(-)
- 
--diff --git a/load_policy/Makefile b/load_policy/Makefile
--index b85833c..6a45f31 100644
----- a/load_policy/Makefile
--+++ b/load_policy/Makefile
--@@ -2,7 +2,7 @@
-- PREFIX ?= $(DESTDIR)/usr
-- SBINDIR ?= $(DESTDIR)/sbin
-- MANDIR ?= $(PREFIX)/share/man
+diff --git a/package/selinux-python/0001-python-build-follow-standard-semantics-for-DESTD.patch b/package/selinux-python/0001-python-build-follow-standard-semantics-for-DESTD.patch
+deleted file mode 100644
+index 156701a818..0000000000
+--- a/package/selinux-python/0001-python-build-follow-standard-semantics-for-DESTD.patch
++++ /dev/null
+@@ -1,117 +0,0 @@
+-python: build: follow standard semantics for DESTDIR and PREFIX
+-
+-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+-
+-diff -durN python.orig/audit2allow/Makefile python/audit2allow/Makefile
+---- python.orig/audit2allow/Makefile	2017-08-04 15:31:00.000000000 +0200
+-+++ python/audit2allow/Makefile	2018-01-17 09:44:35.659573123 +0100
+-@@ -1,19 +1,17 @@
+- PYTHON ?= python
+- 
+- # Installation directories.
+--PREFIX ?= $(DESTDIR)/usr
+--BINDIR ?= $(PREFIX)/bin
+--LIBDIR ?= $(PREFIX)/lib
+--MANDIR ?= $(PREFIX)/share/man
 --LOCALEDIR ?= /usr/share/locale
--+LOCALEDIR ?= $(PREFIX)/share/locale
+--INCLUDEDIR ?= $(PREFIX)/include
+--LIBSEPOLA ?= $(LIBDIR)/libsepol.a
+-+PREFIX ?= /usr
+-+BINDIR ?= $(DESTDIR)$(PREFIX)/bin
+-+LIBDIR ?= $(DESTDIR)$(PREFIX)/lib
+-+MANDIR ?= $(DESTDIR)$(PREFIX)/share/man
 - 
 - CFLAGS ?= -Werror -Wall -W
-- override CFLAGS += $(LDFLAGS) -DUSE_NLS -DLOCALEDIR="\"$(LOCALEDIR)\"" -DPACKAGE="\"policycoreutils\""
- diff --git a/newrole/Makefile b/newrole/Makefile
- index 196af92..896708f 100644
- --- a/newrole/Makefile
-@@ -37,13 +26,12 @@ index 196af92..896708f 100644
- @@ -3,9 +3,9 @@ PREFIX ?= $(DESTDIR)/usr
-  BINDIR ?= $(PREFIX)/bin
-  MANDIR ?= $(PREFIX)/share/man
-- ETCDIR ?= $(DESTDIR)/etc
---LOCALEDIR = /usr/share/locale
-+ ETCDIR ?= /etc
-+ LOCALEDIR = $(DESTDIR)$(PREFIX)/share/locale
- -PAMH ?= $(shell test -f /usr/include/security/pam_appl.h && echo y)
- -AUDITH ?= $(shell test -f /usr/include/libaudit.h && echo y)
--+LOCALEDIR = $(PREFIX)/share/locale
--+PAMH ?= $(shell test -f $(PREFIX)/include/security/pam_appl.h && echo y)
--+AUDITH ?= $(shell test -f $(PREFIX)/include/libaudit.h && echo y)
-++PAMH ?= $(shell test -f $(DESTDIR)$(PREFIX)/include/security/pam_appl.h && echo y)
-++AUDITH ?= $(shell test -f $(DESTDIR)$(PREFIX)/include/libaudit.h && echo y)
-  # Enable capabilities to permit newrole to generate audit records.
-  # This will make newrole a setuid root program.
-  # The capabilities used are: CAP_AUDIT_WRITE.
-@@ -54,13 +42,12 @@ index 921f0b0..e1566fc 100644
- @@ -4,9 +4,9 @@ PREFIX ?= $(DESTDIR)/usr
-  SBINDIR ?= $(PREFIX)/sbin
-  MANDIR ?= $(PREFIX)/share/man
-- ETCDIR ?= $(DESTDIR)/etc
+- 
+- all: audit2why sepolgen-ifgen-attr-helper
+- 
+--sepolgen-ifgen-attr-helper: sepolgen-ifgen-attr-helper.o $(LIBSEPOLA)
+-+sepolgen-ifgen-attr-helper: sepolgen-ifgen-attr-helper.o
+-+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ -l:libsepol.a
+- 
+- audit2why:
+- 	ln -sf audit2allow audit2why
+-diff -durN python.orig/chcat/Makefile python/chcat/Makefile
+---- python.orig/chcat/Makefile	2017-08-04 15:31:00.000000000 +0200
+-+++ python/chcat/Makefile	2018-01-17 09:44:35.659573123 +0100
+-@@ -1,8 +1,8 @@
+- # Installation directories.
+--PREFIX ?= $(DESTDIR)/usr
+--BINDIR ?= $(PREFIX)/bin
+--MANDIR ?= $(PREFIX)/share/man
+--LOCALEDIR ?= $(PREFIX)/share/locale
+-+PREFIX ?= /usr
+-+BINDIR ?= $(DESTDIR)$(PREFIX)/bin
+-+MANDIR ?= $(DESTDIR)$(PREFIX)/share/man
+-+LOCALEDIR ?= $(DESTDIR)$(PREFIX)/share/locale
+- 
+- .PHONY: all
+- all: chcat
+-diff -durN python.orig/semanage/Makefile python/semanage/Makefile
+---- python.orig/semanage/Makefile	2017-08-04 15:31:00.000000000 +0200
+-+++ python/semanage/Makefile	2018-01-17 09:44:43.676239705 +0100
+-@@ -1,13 +1,12 @@
+- PYTHON ?= python
+- 
+- # Installation directories.
+--PREFIX ?= $(DESTDIR)/usr
+--LIBDIR ?= $(PREFIX)/lib
+--SBINDIR ?= $(PREFIX)/sbin
+--MANDIR = $(PREFIX)/share/man
+--PYTHONLIBDIR ?= $(shell $(PYTHON) -c "from distutils.sysconfig import *; print(get_python_lib(1))")
+-+PREFIX ?= /usr
+-+SBINDIR ?= $(DESTDIR)$(PREFIX)/sbin
+-+MANDIR = $(DESTDIR)$(PREFIX)/share/man
+-+PYTHONLIBDIR ?= $(shell $(PYTHON) -c "from distutils.sysconfig import *; print(get_python_lib(prefix='$(PREFIX)'))")
+- PACKAGEDIR ?= $(DESTDIR)/$(PYTHONLIBDIR)
+--BASHCOMPLETIONDIR ?= $(DESTDIR)/usr/share/bash-completion/completions
+-+BASHCOMPLETIONDIR ?= $(DESTDIR)$(PREFIX)/share/bash-completion/completions
+- 
+- TARGETS=semanage
+- 
+-diff -durN python.orig/sepolgen/src/sepolgen/Makefile python/sepolgen/src/sepolgen/Makefile
+---- python.orig/sepolgen/src/sepolgen/Makefile	2017-08-04 15:31:00.000000000 +0200
+-+++ python/sepolgen/src/sepolgen/Makefile	2018-01-17 09:44:35.659573123 +0100
+-@@ -1,5 +1,6 @@
+-+PREFIX ?= /usr
+- PYTHON ?= python
+--PYTHONLIBDIR ?= $(shell $(PYTHON) -c "from distutils.sysconfig import *; print(get_python_lib(1))")
+-+PYTHONLIBDIR ?= $(shell $(PYTHON) -c "from distutils.sysconfig import *; print(get_python_lib(prefix='$(PREFIX)'))")
+- PACKAGEDIR ?= $(DESTDIR)/$(PYTHONLIBDIR)/sepolgen
+- 
+- all:
+-diff -durN python.orig/sepolicy/Makefile python/sepolicy/Makefile
+---- python.orig/sepolicy/Makefile	2017-08-04 15:31:00.000000000 +0200
+-+++ python/sepolicy/Makefile	2018-01-17 09:44:35.659573123 +0100
+-@@ -1,14 +1,14 @@
+- PYTHON ?= python
+- 
+- # Installation directories.
+--PREFIX ?= $(DESTDIR)/usr
+--LIBDIR ?= $(PREFIX)/lib
+--BINDIR ?= $(PREFIX)/bin
+--DATADIR ?= $(PREFIX)/share
+--MANDIR ?= $(PREFIX)/share/man
 --LOCALEDIR ?= /usr/share/locale
-+ ETCDIR ?= /etc
-+ LOCALEDIR ?= $(DESTDIR)$(PREFIX)/share/locale
- -PAMH ?= $(shell test -f /usr/include/security/pam_appl.h && echo y)
- -AUDITH ?= $(shell test -f /usr/include/libaudit.h && echo y)
--+LOCALEDIR ?= $(PREFIX)/share/locale
--+PAMH ?= $(shell test -f $(PREFIX)/include/security/pam_appl.h && echo y)
--+AUDITH ?= $(shell test -f $(PREFIX)/include/libaudit.h && echo y)
-++PAMH ?= $(shell test -f $(DESTDIR)$(PREFIX)/include/security/pam_appl.h && echo y)
-++AUDITH ?= $(shell test -f $(DESTDIR)$(PREFIX)/include/libaudit.h && echo y)
-  
-  CFLAGS ?= -Werror -Wall -W
-  override CFLAGS += -DUSE_NLS -DLOCALEDIR="\"$(LOCALEDIR)\"" -DPACKAGE="\"policycoreutils\""
-diff --git a/package/policycoreutils/policycoreutils.hash b/package/policycoreutils/policycoreutils.hash
-index 241905ca22..b6367b4bf4 100644
---- a/package/policycoreutils/policycoreutils.hash
-+++ b/package/policycoreutils/policycoreutils.hash
-@@ -1,3 +1,3 @@
+--BASHCOMPLETIONDIR ?= $(DESTDIR)/usr/share/bash-completion/completions
+--SHAREDIR ?= $(PREFIX)/share/sandbox
+-+PREFIX ?= /usr
+-+LIBDIR ?= $(DESTDIR)$(PREFIX)/lib
+-+BINDIR ?= $(DESTDIR)$(PREFIX)/bin
+-+DATADIR ?= $(DESTDIR)$(PREFIX)/share
+-+MANDIR ?= $(DESTDIR)$(PREFIX)/share/man
+-+LOCALEDIR ?= $(DESTDIR)$(PREFIX)/share/locale
+-+BASHCOMPLETIONDIR ?= $(DESTDIR)$(PREFIX)/share/bash-completion/completions
+-+SHAREDIR ?= $(DESTDIR)$(PREFIX)/share/sandbox
+- CFLAGS ?= -Wall -Werror -Wextra -W
+- override CFLAGS += -DPACKAGE="policycoreutils" -DSHARED -shared
+- 
+-@@ -30,7 +30,7 @@
+- 	@$(PYTHON) test_sepolicy.py -v
+- 
+- install:
+--	$(PYTHON) setup.py install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
+-+	$(PYTHON) setup.py install --prefix=$(PREFIX) `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
+- 	[ -d $(BINDIR) ] || mkdir -p $(BINDIR)
+- 	install -m 755 sepolicy.py $(BINDIR)/sepolicy
+- 	(cd $(BINDIR); ln -sf sepolicy sepolgen)
+diff --git a/package/selinux-python/selinux-python.hash b/package/selinux-python/selinux-python.hash
+index 42fe575e7b..99965004fc 100644
+--- a/package/selinux-python/selinux-python.hash
++++ b/package/selinux-python/selinux-python.hash
+@@ -1,2 +1,5 @@
  # https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256 0a1b8a4a323b854981c6755ff025fe98a0f1cff307f109abb260f0490f13e4f4 policycoreutils-2.7.tar.gz
-+sha256 986553a235f27bee7ad7c2b7c35ea51eb2ee68e2cf03b661b1585de101bc1099 policycoreutils-2.8.tar.gz
- sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 COPYING
-diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
-index 21c5470cec..abd70e16c8 100644
---- a/package/policycoreutils/policycoreutils.mk
-+++ b/package/policycoreutils/policycoreutils.mk
+-sha256 4217cb965ecda96c91e15ffcc2e7ddd13ecc2bf5631100f3cd072a7616f140ed selinux-python-2.7.tar.gz
++sha256 e69f5e24820cb247a3d881a9c90efba1e64d76af863c82fb81bc3b87ed71e238 selinux-python-2.8.tar.gz
++
++# Hash for license file
++sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 COPYING
+diff --git a/package/selinux-python/selinux-python.mk b/package/selinux-python/selinux-python.mk
+index 25a2d04105..2de55f33cb 100644
+--- a/package/selinux-python/selinux-python.mk
++++ b/package/selinux-python/selinux-python.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--POLICYCOREUTILS_VERSION = 2.7
--POLICYCOREUTILS_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20170804
-+POLICYCOREUTILS_VERSION = 2.8
-+POLICYCOREUTILS_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20180524
- POLICYCOREUTILS_LICENSE = GPL-2.0
- POLICYCOREUTILS_LICENSE_FILES = COPYING
+-SELINUX_PYTHON_VERSION = 2.7
+-SELINUX_PYTHON_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20170804
++SELINUX_PYTHON_VERSION = 2.8
++SELINUX_PYTHON_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20180524
+ SELINUX_PYTHON_LICENSE = GPL-2.0
+ SELINUX_PYTHON_LICENSE_FILES = COPYING
  
 -- 
 2.17.1
