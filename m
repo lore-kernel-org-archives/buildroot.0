@@ -1,33 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Oct 2018 13:18:15 +0200
-Subject: [Buildroot] Analysis results for 2018-10-09
-In-Reply-To: <87o9c0lozx.fsf@tkos.co.il> (Baruch Siach's message of "Thu, 11
- Oct 2018 14:08:34 +0300")
-References: <20181010060010.4E3C920736@mail.bootlin.com>
- <20181010174814.5ac114f1@windsurf> <87y3b5ks97.fsf@tkos.co.il>
- <87a7nksr18.fsf@dell.be.48ers.dk> <87o9c0lozx.fsf@tkos.co.il>
-Message-ID: <875zy8spe0.fsf@dell.be.48ers.dk>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu, 11 Oct 2018 13:22:43 +0200
+Subject: [Buildroot] [PATCH] glibc: fix build breakage
+In-Reply-To: <20181011093401.2f9d4af6@windsurf>
+References: <20181011062348.22396-1-yegorslists@googlemail.com>
+ <20181011093401.2f9d4af6@windsurf>
+Message-ID: <CAGm1_ku8FtJOLFFPe2jRNWFKYq6fXFEB6+ysGp-fbb_-ste6Qg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+On Thu, Oct 11, 2018 at 9:34 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Thu, 11 Oct 2018 08:23:48 +0200, yegorslists at googlemail.com wrote:
+> > From: Yegor Yefremov <yegorslists@googlemail.com>
+> >
+> > On platforms with soft floating point glibc produces a compile time
+> > warning (maybe-uninitialized) that will be regarded as an error.
+> >
+> > Add upstream patch fixing this issue.
+> >
+> > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> > ---
+> >  ...soft-fp-ignore-maybe-uninitialized-w.patch | 88 +++++++++++++++++++
+> >  1 file changed, 88 insertions(+)
+> >  create mode 100644 package/glibc/glibc-2.28-18-g2339d6a55eb7a7e040ae888e906adc49eeb59eab/0001-sysdeps-ieee754-soft-fp-ignore-maybe-uninitialized-w.patch
+>
+> I've applied, but after tweaking the commit title to make it a bit more
+> specific. "fix build breakage" is indeed very fuzzy.
 
-Hi,
+You're right. Thanks.
 
- >> -typedef double hbase_f(double);
- >> +typedef double (*hbase_f)(double);
+What about the patch for gzip? Is it coming anytime soon?
 
- > Wouldn't that make the definition 'hbase_f *val_in' a pointer to
- > function pointer?
-
-Not in C at least. The syntax is:
-
-typedef <returntype> (*name)(<arguments>)
-
-https://stackoverflow.com/questions/1591361/understanding-typedefs-for-function-pointers-in-c
-
--- 
-Bye, Peter Korsgaard
+Yegor
