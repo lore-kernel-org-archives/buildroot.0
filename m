@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 11 Oct 2018 10:19:33 +0200
-Subject: [Buildroot] [PATCH 0/6] core: look for package's hashes in
- versioned sub-directory
-In-Reply-To: <cover.1538913431.git.yann.morin.1998@free.fr>
-References: <cover.1538913431.git.yann.morin.1998@free.fr>
-Message-ID: <20181011101933.29018f49@windsurf>
+Date: Thu, 11 Oct 2018 10:39:15 +0200
+Subject: [Buildroot] Analysis results for 2018-10-09
+In-Reply-To: <87y3b5ks97.fsf@tkos.co.il>
+References: <20181010060010.4E3C920736@mail.bootlin.com>
+ <20181010174814.5ac114f1@windsurf> <87y3b5ks97.fsf@tkos.co.il>
+Message-ID: <20181011103915.69e80d88@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,40 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  7 Oct 2018 13:57:19 +0200, Yann E. MORIN wrote:
+On Thu, 11 Oct 2018 07:43:32 +0300, Baruch Siach wrote:
 
-> Yann E. MORIN (6):
->       core: add a variable that points to the package's hash file
->       legal-info: use the per-package variable to get the hash file
->       package/qt5: prepare for per-version hash files
->       core/download: do not hard-code the path to hte package hash file
->       package/qt5: drop unversioned hash files
->       docs/manual: document location of hash files for multi-versions packages
+> The build only fails with the CT-NG PowerPC e500 toolchain. Is that the
+> only gcc 4.7 toolchain?
+> 
+> This is the failing code:
+> 
+> typedef double hbase_f(double);
+> 
+> class StatHist
+> {
+>     ...
+>     hbase_f *val_in = nullptr;        /* e.g., log() for log-based histogram */
+>     hbase_f *val_out = nullptr;       /* e.g., exp() for log based histogram */
+> }
+> 
+> For some reason this version of gcc considers val_in/val_out as
+> methods.
 
-This looks good to me. When applying, we will have to adjust the glibc
-package as well, which now uses per-version hash files as well, but
-no need to resend for that.
+They are function pointers, since hbase_f is a typedef of a function
+that takes a double as argument and returns a double.
 
-If nobody complains by tomorrow, I'll apply this patch series.
+Indeed, the following minimal program:
+
+typedef double hbase_f(double);
+
+class StatHist
+{
+	hbase_f *val_in = nullptr;
+};
+
+fails to build with gcc 4.7, but builds fine with a more recent gcc. It
+would be good to find another gcc 4.7 toolchain to see if the same
+problem occurs.
 
 Best regards,
 
