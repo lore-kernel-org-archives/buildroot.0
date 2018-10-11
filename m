@@ -1,13 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 11 Oct 2018 16:57:22 +0200
-Subject: [Buildroot] [PATCH v2,1/8] libselinux: bump to version 2.8
-In-Reply-To: <CAPi7W80x4B9KVOBZnfw93XZVvzebaU2-fWb29vQ8D0e=h+=JGQ@mail.gmail.com>
-References: <20180921205013.21829-1-fontaine.fabrice@gmail.com>
- <20181010213528.4805f9e6@windsurf>
- <CAPi7W80jBdoLui_B0UxRO1gB8mqoEi8pBbd78drTXk_8sn1EXg@mail.gmail.com>
- <20181011095758.7beb2566@windsurf>
- <CAPi7W80x4B9KVOBZnfw93XZVvzebaU2-fWb29vQ8D0e=h+=JGQ@mail.gmail.com>
-Message-ID: <20181011165722.0423fcff@windsurf>
+Date: Thu, 11 Oct 2018 17:09:48 +0200
+Subject: [Buildroot] [PATCH v3 0/8] init scripts: rewrite S01logging
+In-Reply-To: <20181007114605.18153-1-casantos@datacom.com.br>
+References: <20181007114605.18153-1-casantos@datacom.com.br>
+Message-ID: <20181011170948.3594d391@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,49 +12,51 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 11 Oct 2018 16:33:49 +0200, Fabrice Fontaine wrote:
-
-> If I don't override SHLIBDIR, the shared library will be installed in
-> SHLIBDIR (lib), headers in usr/include (INCDIR), man pages in
-> usr/share/man/man3 (MAN3DIR) and static library in usr/lib (LIBDIR).
+On Sun,  7 Oct 2018 08:45:57 -0300, Carlos Santos wrote:
+> Continuing our effort to improve daemon startup scripts, this series
+> focuses on S01logging, which starts the logging daemon. Common features
+> are:
 > 
-> Then, the issue is how to remove --relative from the symbolic link
-> creation in 0002-revert-ln-relative.patch:
-> $(LN) -sf --relative $(DESTDIR)$(SHLIBDIR)/$(LIBSO)
-> $(DESTDIR)$(LIBDIR)/$(TARGET)
-> 
-> I can use a relative path but this seems a terrible solution:
-> cd $(DESTDIR)$(LIBDIR) && ln -sf ../../lib/$(LIBSO) $(TARGET)
+> - Indent with tabs, not spaces.
+> - Implement start, stop, restart and reload as functions.
+> - Use start-stop-daemon.
+> - Correctly detect and report start/stop/restart/reload errors.
+> - Support a configuration file at /etc/default (example files for each
+>   package are provided in individual patches).
+> - Support a configuration variable that completely disables the service
+>   and issues a warning message on any invocation.
 
-It's not too terrible. But it's also not horrible to have the libraries
-in /usr/lib.
+Thanks a lot for working on this, much appreciated. Overall, I am happy
+with the proposal you're making and the consistency between init
+scripts that your proposal is bringing.
 
-So, OK, let's settle for SHLIBDIR=/usr/lib, with a comment that
-explains why.
+The only thing that I'm not entirely sure about is specific to these
+logging init scripts:
 
-> Removing this link is not an option as pkgconfig file publishes that
-> libdir is equal to LIBDIR, not SHLIBDIR.
-> So, it seems better to me to set SHLIBDIR to /usr/lib and take the
-> assumption that LIBDIR=SHLIBDIR.
+ (1) Do we really want that Busybox, syslog-ng, rsyslog, sysklogd all
+     install a file of the same name, S01logging ? Isn't this
+     contradicting our goal of not having one package overwrite files
+     installed by another package ?
 
-Yeah, OK, let's do this.
+     Wouldn't it make more sense to install S01syslog-ng, S01rsyslog,
+     S01sysklogd ? This way, we also have a mapping between the init
+     script name and the daemon/package being started ?
 
-> But if you prefer to have relative paths, I can update the patch.
-> As a side note, I do not understand why upstream want to have a
-> different installation path for shared and static libraries, is it a
-> common practice?
+ (2) For the Busybox case, do we want to keep a single init script that
+     starts both klogd and syslogd ? Or should we have one init script
+     per daemon, so that again the init script name matches the daemon
+     being started ? So S01klogd, S01syslogd ?
 
-Yes, I think it is fairly common. The reason why they install the
-SELinux libraries in /lib is because those libraries are typically used
-by "core" programs installed in /bin and /sbin. Normally, programs
-installed in /bin and /sbin should only use libraries in /lib, and /usr
-may not (yet?) be available. This is for libraries needed at runtime,
-i.e shared libraries.
+Note: the above points are really proposals/discussion items. Do not
+rework your series according to those comments until there has been
+some discussion/agreement with other developers.
 
-However, static libraries are only needed during development, and
-there's no need to have them in /lib.
+Another point, but which can definitely be handled separately, is
+documenting in the manual what the init scripts should look like, by at
+least pointing to the "good" init scripts, so that people know which
+ones are good to use as a template.
 
-Best regards,
+Thanks a lot!
 
 Thomas
 -- 
