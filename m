@@ -1,48 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 11 Oct 2018 08:54:49 +0200
-Subject: [Buildroot] [PATCH 1/4] python-pycryptodomex: new package
-In-Reply-To: <3c49d9fc-33b4-b6a3-22ee-e9285c1733bf@mind.be>
-References: <20180922193631.14369-1-asafka7@gmail.com>
- <20181009155633.2ad54938@windsurf> <20181009201923.GL2869@scaer>
- <3c49d9fc-33b4-b6a3-22ee-e9285c1733bf@mind.be>
-Message-ID: <20181011085449.09bb8b19@windsurf>
+Date: Thu, 11 Oct 2018 09:28:31 +0200
+Subject: [Buildroot] [git commit] boot/mv-ddr-marvell: bump version to
+ armada-18.09.2
+Message-ID: <20181011072918.A72CC813F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a5a39424e5626f6cd8d9dd9c81df72fd4559fdf1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 10 Oct 2018 23:13:40 +0200, Arnout Vandecappelle wrote:
+This is necessary to be able to bump the ARM Trusted Firmware version
+used on Marvell platforms.
 
-> >> Yann, Arnout, I'm interested by your opinion on this package.  
-> > 
-> > So, I would state something like:
-> > 
-> >     PYTHON_PYCRYPTODOMEX_LICENSE = \
-> >         BSD-2c, \  
-> 
->  BSD-2-Clause
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ boot/mv-ddr-marvell/mv-ddr-marvell.hash | 2 +-
+ boot/mv-ddr-marvell/mv-ddr-marvell.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-I fixed that when applying.
-
-> >         Public Domain (pycrypto original code), \
-> >         OCB license (OCB cypher)  
-> 
->  I would clarify this as "OCB patent license". The (OCB cypher) is not really
-> useful IMO. Anyway OCB is not a cipher, it's a mode.
-> 
->  In terms of license files, in addition to LICENSE.rst, I think we also need
-> Doc/LEGAL/COPYRIGHT.pycrypto
-
-Asaf, could you send a follow-up patch fixing this, according to Arnout
-comments ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/boot/mv-ddr-marvell/mv-ddr-marvell.hash b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
+index b96d4d2bc8..90fab71d60 100644
+--- a/boot/mv-ddr-marvell/mv-ddr-marvell.hash
++++ b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 d413546367ffa3b5f4373a777b9efeb32dcc74d6106897c248935ecb79afc454 mv-ddr-marvell-656440a9690f3d07be9e3d2c39d7cf56fd96eb7b.tar.gz
++sha256 9aaea1f5e8bf3c9d7e735f569d130b5c2ec773c43e0cfabc9b8dee32adbf7e4e mv-ddr-marvell-99d772547314f84921268d57e53d8769197d3e21.tar.gz
+diff --git a/boot/mv-ddr-marvell/mv-ddr-marvell.mk b/boot/mv-ddr-marvell/mv-ddr-marvell.mk
+index 0f98fc2cef..8d508215f8 100644
+--- a/boot/mv-ddr-marvell/mv-ddr-marvell.mk
++++ b/boot/mv-ddr-marvell/mv-ddr-marvell.mk
+@@ -4,7 +4,8 @@
+ #
+ ################################################################################
+ 
+-MV_DDR_MARVELL_VERSION = 656440a9690f3d07be9e3d2c39d7cf56fd96eb7b
++# This is the commit for mv_ddr-armada-18.09.2
++MV_DDR_MARVELL_VERSION = 99d772547314f84921268d57e53d8769197d3e21
+ MV_DDR_MARVELL_SITE = $(call github,MarvellEmbeddedProcessors,mv-ddr-marvell,$(MV_DDR_MARVELL_VERSION))
+ MV_DDR_MARVELL_LICENSE = GPL-2.0+ or LGPL-2.1 with freertos-exception-2.0, BSD-3-Clause, Marvell Commercial
+ MV_DDR_MARVELL_LICENSE_FILES = ddr3_init.c
