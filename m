@@ -1,65 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 11 Oct 2018 22:07:06 +0200
-Subject: [Buildroot] [PATCH v3,3/8] libsemanage: bump to version 2.8
-In-Reply-To: <20181011193707.20510-3-fontaine.fabrice@gmail.com>
-References: <20181011193707.20510-1-fontaine.fabrice@gmail.com>
- <20181011193707.20510-3-fontaine.fabrice@gmail.com>
-Message-ID: <20181011220706.01ff455d@windsurf>
+Date: Thu, 11 Oct 2018 22:02:33 +0200
+Subject: [Buildroot] [git commit] checkpolicy: bump to version 2.8
+Message-ID: <20181011200602.332A783461@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=9e412462887cbb4195f7f0b86aa28654a4919235
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 11 Oct 2018 21:37:02 +0200, Fabrice Fontaine wrote:
+Add hash for license file
 
-> -LIBSEMANAGE_VERSION = 2.7
-> -LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20170804
-> +LIBSEMANAGE_VERSION = 2.8
-> +LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20180524
->  LIBSEMANAGE_LICENSE = LGPL-2.1+
->  LIBSEMANAGE_LICENSE_FILES = COPYING
->  LIBSEMANAGE_DEPENDENCIES = host-bison host-flex audit libselinux ustr bzip2
-> @@ -31,6 +31,7 @@ HOST_LIBSEMANAGE_DEPENDENCIES = host-bison host-audit host-libsepol host-libseli
->  HOST_LIBSEMANAGE_MAKE_OPTS += \
->  	$(HOST_CONFIGURE_OPTS) \
->  	PREFIX=$(HOST_DIR) \
-> +	SHLIBDIR=$(HOST_DIR)/lib \
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/checkpolicy/checkpolicy.hash | 5 ++++-
+ package/checkpolicy/checkpolicy.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-So, I was surprised you had to do this for the host variant... but not
-for the target variant. So I checked, and SHLIBDIR is not used at all
-by libsemanage, so this change is totally unneeded.
-
-Also, when building host-libsemanage, I got the following build failure:
-
-test -d -L/home/thomas/projets/buildroot/output/host/lib/python2.7/ || install -m 755 -d -L/home/thomas/projets/buildroot/output/host/lib/python2.7/
-install: invalid option -- 'L'
-
-This was due to us passing:
-
-  PYTHONLIBDIR="-L/home/thomas/projets/buildroot/output/host/lib/python2.7/"
-
-It turns out that libsemanage 2.7 was totally ignoring PYTHONLIBDIR,
-I'm not even sure why we were passing it. However, libsemanage 2.8 now
-uses it (since commit
-https://github.com/SELinuxProject/selinux/commit/07629c0a9f26e6e9ebb0b2847e09a461512990c9#diff-5680af432ff62be3f5227c99d8d9b7e7),
-and needs it to be a path, not a linker flag.
-
-So I've dropped the -L to make it work.
-
-Applied after fixing those two issues.
-
-We *really* need one (or several?) test cases in support/testing/ to
-test at least the build of the SELinux stack. Perhaps one with Python
-2, one with Python 3, one minimal SELinux (just what is needed on the
-target) and one full (with all the host tools).
-
-Best regards,
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/checkpolicy/checkpolicy.hash b/package/checkpolicy/checkpolicy.hash
+index 7397393a76..cf38d6e2f4 100644
+--- a/package/checkpolicy/checkpolicy.hash
++++ b/package/checkpolicy/checkpolicy.hash
+@@ -1,2 +1,5 @@
+ # https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256 5413479f1dcde866c19896b4dbfec315d822aa431606e1d03c944408984c3201  checkpolicy-2.7.tar.gz
++sha256 9dec811c24b88e58c3bf741365eacf1dbb945531a2fcb8f284aacf68098194c8  checkpolicy-2.8.tar.gz
++
++# Hash for license file
++sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
+diff --git a/package/checkpolicy/checkpolicy.mk b/package/checkpolicy/checkpolicy.mk
+index 52f816098d..7143b2d7d2 100644
+--- a/package/checkpolicy/checkpolicy.mk
++++ b/package/checkpolicy/checkpolicy.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-CHECKPOLICY_VERSION = 2.7
+-CHECKPOLICY_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20170804
++CHECKPOLICY_VERSION = 2.8
++CHECKPOLICY_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20180524
+ CHECKPOLICY_LICENSE = GPL-2.0
+ CHECKPOLICY_LICENSE_FILES = COPYING
+ 
