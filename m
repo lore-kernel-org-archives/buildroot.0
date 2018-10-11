@@ -1,57 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 11 Oct 2018 09:29:00 +0200
-Subject: [Buildroot] [git commit] configs/solidrun_macchiatobin_mainline:
- bump component versions
-Message-ID: <20181011072918.C17247FBC7@busybox.osuosl.org>
+Date: Thu, 11 Oct 2018 09:28:44 +0200
+Subject: [Buildroot] [git commit] boot/binaries-marvell: bump version to
+ marvell-armada-18.06
+Message-ID: <20181011072918.AF09782803@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=97e439c6fd97fc8586cbd7d35524ba29f05fbcb7
+commit: https://git.buildroot.net/buildroot/commit/?id=58e9d24952253a12dbb2b25e7470b3397b0eface
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump Linux to 4.18, U-Boot to 2018.09, and ATF to armada-18.09.4.
+Note that the license file has been entirely rewritten (hence the
+change in the hash), but it is still GPL-2.0 with FreeRTOS exception.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/solidrun_macchiatobin_mainline_defconfig | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ boot/binaries-marvell/Config.in             | 4 ++--
+ boot/binaries-marvell/binaries-marvell.hash | 4 ++--
+ boot/binaries-marvell/binaries-marvell.mk   | 3 ++-
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/configs/solidrun_macchiatobin_mainline_defconfig b/configs/solidrun_macchiatobin_mainline_defconfig
-index 17fb9d02a2..d303b2f75e 100644
---- a/configs/solidrun_macchiatobin_mainline_defconfig
-+++ b/configs/solidrun_macchiatobin_mainline_defconfig
-@@ -1,5 +1,5 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
- BR2_TARGET_GENERIC_HOSTNAME="mcbin"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for Marvell MacchiatoBin"
+diff --git a/boot/binaries-marvell/Config.in b/boot/binaries-marvell/Config.in
+index d565e4dbfd..63052070bd 100644
+--- a/boot/binaries-marvell/Config.in
++++ b/boot/binaries-marvell/Config.in
+@@ -26,7 +26,7 @@ endchoice
  
-@@ -7,7 +7,8 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for Marvell MacchiatoBin"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/MarvellEmbeddedProcessors/atf-marvell.git"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="43965481990fd92e9666cf9371a8cf478055ec7c"
-+# This commit corresponds to release armada-18.09.4
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="711ecd32afe465b38052b5ba374c825b158eea18"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="a80x0_mcbin"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
-@@ -20,12 +21,12 @@ BR2_TARGET_MV_DDR_MARVELL=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mvebu_mcbin-88f8040"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.09"
+ config BR2_TARGET_BINARIES_MARVELL_IMAGE
+ 	string
+-	default "mrvl_scp_bl2_8040.img" if BR2_TARGET_BINARIES_MARVELL_8040
+-	default "mrvl_scp_bl2_7040.img" if BR2_TARGET_BINARIES_MARVELL_7040
++	default "mrvl_scp_bl2_mss_ap_cp1_a8040.img" if BR2_TARGET_BINARIES_MARVELL_8040
++	default "mrvl_scp_bl2_mss_ap_cp1_a7040.img" if BR2_TARGET_BINARIES_MARVELL_7040
  
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-8040-mcbin"
+ endif
+diff --git a/boot/binaries-marvell/binaries-marvell.hash b/boot/binaries-marvell/binaries-marvell.hash
+index 94c66039c9..0d214502a7 100644
+--- a/boot/binaries-marvell/binaries-marvell.hash
++++ b/boot/binaries-marvell/binaries-marvell.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 7c41cddc2ce46038b630b59d2e9e50e903d27032bcfbf38019eaed14fcfdbe40 binaries-marvell-a8ac27b7884ed2c1efcf9f3326de3e0ed7b94e91.tar.gz
+-sha256 d8560ab4ea4042a55eee6857ded1d7e4bca2d9120b8c7a86d2a7fdc4ba4994e0	README.md
++sha256 45c348d7a62fd147e7c6a59211a77876ce5dd26de690bd45ab79c8ff891acedf binaries-marvell-14481806e699dcc6f7025dbe3e46cf26bb787791.tar.gz
++sha256 509a36bb6faa106bbc9730c23038a361ee0c860e53a4cdf9e8605c0174fe45f7	README.md
+diff --git a/boot/binaries-marvell/binaries-marvell.mk b/boot/binaries-marvell/binaries-marvell.mk
+index 152c9cd97a..6c70148540 100644
+--- a/boot/binaries-marvell/binaries-marvell.mk
++++ b/boot/binaries-marvell/binaries-marvell.mk
+@@ -4,7 +4,8 @@
+ #
+ ################################################################################
+ 
+-BINARIES_MARVELL_VERSION = a8ac27b7884ed2c1efcf9f3326de3e0ed7b94e91
++# This is version binaries-marvell-armada-18.06
++BINARIES_MARVELL_VERSION = 14481806e699dcc6f7025dbe3e46cf26bb787791
+ BINARIES_MARVELL_SITE = $(call github,MarvellEmbeddedProcessors,binaries-marvell,$(BINARIES_MARVELL_VERSION))
+ 
+ BINARIES_MARVELL_LICENSE = GPL-2.0 with freertos-exception-2.0
