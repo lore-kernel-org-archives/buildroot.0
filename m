@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 11 Oct 2018 22:07:59 +0200
-Subject: [Buildroot] [PATCH 1/1] botan: disable documentation
-In-Reply-To: <20181011200112.21385-1-fontaine.fabrice@gmail.com>
-References: <20181011200112.21385-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181011220759.5cda3f65@windsurf>
+Date: Thu, 11 Oct 2018 22:08:04 +0200
+Subject: [Buildroot] [PATCH 1/1] xerces: fix buid with older cmake
+In-Reply-To: <20181011190429.22484-1-fontaine.fabrice@gmail.com>
+References: <20181011190429.22484-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181011220804.32dc4805@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +12,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 11 Oct 2018 22:01:12 +0200, Fabrice Fontaine wrote:
-> Fix following error if sphinx is found but its version is too low:
-> Sphinx version error:
-> This project needs at least Sphinx v1.2 and therefore cannot be built with this version.
-> Ignoring ImportError and using old theme
->   ERROR: Error running sphinx-build -q -c ./src/configs/sphinx -b html ./doc/manual build/docs/manual
+On Thu, 11 Oct 2018 21:04:29 +0200, Fabrice Fontaine wrote:
+> Old version of cmake break cross-compilation when FindThreads is used
+> because of a try_run call. Add a workaround that avoids try_run.
+> 
+> cmake bug report: https://gitlab.kitware.com/cmake/cmake/issues/16920
 > 
 > Fixes:
->  - http://autobuild.buildroot.net/results/c15715a05a41035954f32510483314060ea31260
+>  - http://autobuild.buildroot.org/results/784918c58310474e8b4a0b42850a55ba35a1a19e
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/botan/botan.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  package/xerces/xerces.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
 
 Applied to master, thanks.
 
