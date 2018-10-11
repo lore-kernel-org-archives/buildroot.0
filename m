@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 11 Oct 2018 20:57:58 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] open-plc-utils: fix build with static musl
-In-Reply-To: <20181011182013.16467-1-fontaine.fabrice@gmail.com>
-References: <20181011182013.16467-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181011205758.72baa707@windsurf>
+Date: Thu, 11 Oct 2018 20:58:01 +0200
+Subject: [Buildroot] [PATCH] libssh: bump to version 0.8.3
+In-Reply-To: <8eb7618e47431841480d1d3aea2fd653cad2956e.1539283600.git.baruch@tkos.co.il>
+References: <8eb7618e47431841480d1d3aea2fd653cad2956e.1539283600.git.baruch@tkos.co.il>
+Message-ID: <20181011205801.007173dc@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +12,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 11 Oct 2018 20:20:13 +0200, Fabrice Fontaine wrote:
-> Pass TARGET_LDFLAGS to EXTRA_LDFLAGS to fix following issue:
-> /home/buildroot/autobuild/run/instance-3/output/build/host-gcc-final-7.3.0/build/arm-buildroot-linux-musleabihf/libgcc/../../../libgcc/config/arm/lib1funcs.S:1545: undefined reference to `raise'
+On Thu, 11 Oct 2018 21:46:40 +0300, Baruch Siach wrote:
+> Drop GNU glob detection patch; issue fixed upstream.
 > 
-> Also pass TARGET_CFLAGS to EXTRA_CFLAGS and TARGET_CXXFLAGS to
-> EXTRA_CXXFLAGS and move all these variables to
-> OPEN_PLC_UTILS_MAKE_OPTS for readability
+> Add upstream patch that completes the build fix when GNU glob is not
+> present.
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/67bc5e7ac8ae1c49c035b022a394d2f746705cf2
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Cc: Scott Fan <fancp2007@gmail.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
-> Changes v1 -> v2 (after review of Thomas Petazzoni):
->  - Instead of passing -static to EXTRA_LDFLAGS, use TARGET_LDFLAGS
->  - pass TARGET_CFLAGS to EXTRA_CFLAGS
->  - pass TARGET_CXXFLAGS to EXTRA_CXXFLAGS
+>  ...heck-for-GNU-compatible-glob-support.patch | 44 -------------------
+>  ...ix-building-without-globbing-support.patch | 30 +++++++++++++
+>  package/libssh/libssh.hash                    |  4 +-
+>  package/libssh/libssh.mk                      |  2 +-
+>  4 files changed, 34 insertions(+), 46 deletions(-)
+>  delete mode 100644 package/libssh/0001-cmake-check-for-GNU-compatible-glob-support.patch
+>  create mode 100644 package/libssh/0001-config-Fix-building-without-globbing-support.patch
 
 Applied to master, thanks.
 
