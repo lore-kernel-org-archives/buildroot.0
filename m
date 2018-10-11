@@ -1,23 +1,20 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 11 Oct 2018 21:37:01 +0200
-Subject: [Buildroot] [PATCH v3,2/8] libsepol: bump to version 2.8
+Date: Thu, 11 Oct 2018 21:37:02 +0200
+Subject: [Buildroot] [PATCH v3,3/8] libsemanage: bump to version 2.8
 In-Reply-To: <20181011193707.20510-1-fontaine.fabrice@gmail.com>
 References: <20181011193707.20510-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181011193707.20510-2-fontaine.fabrice@gmail.com>
+Message-ID: <20181011193707.20510-3-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Remove first patch (already in version):
-  https://github.com/SELinuxProject/selinux/commit/f8532f17731c82df9956aa1c92f7fb08bd65bf05
-- Update second and third patch
-- For target variant, set SHLIBDIR=/usr/lib because by default it is set
-  to /lib and LIBDIR is set to $(PREFIX)/lib (with PREFIX=/usr)
+- Remove patch (already in version), see:
+  https://github.com/SELinuxProject/selinux/commit/e15f61e5d2fe74c6e7c0a5f81083a93b508c35f7
 - For host variant, set SHLIBDIR=$(HOST_DIR)/lib otherwise shared
-  library will be installed in /lib (PREFIX is not used to install
-  shared library)
+  library will be install in /lib (PREFIX is not used to install shared
+  library)
 - Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
@@ -34,60 +31,55 @@ Changes v1 -> v2 (after review of Matthew Weber and Marcus Folkesson):
    libsemanage
  - Remove libselinux.so and libsepol.so symbolic link (not needed)
 
- ...-follow-standard-semantics-for-DESTD.patch | 109 ------------------
- ...y.patch => 0001-support-static-only.patch} |  16 +--
- ...ve.patch => 0002-revert-ln-relative.patch} |  10 +-
- package/libsepol/libsepol.hash                |   5 +-
- package/libsepol/libsepol.mk                  |  15 ++-
- 5 files changed, 29 insertions(+), 126 deletions(-)
- delete mode 100644 package/libsepol/0001-libsepol-build-follow-standard-semantics-for-DESTD.patch
- rename package/libsepol/{0002-support-static-only.patch => 0001-support-static-only.patch} (68%)
- rename package/libsepol/{0003-revert-ln-relative.patch => 0002-revert-ln-relative.patch} (68%)
+ ...-follow-standard-semantics-for-DESTD.patch | 118 ------------------
+ package/libsemanage/libsemanage.hash          |   5 +-
+ package/libsemanage/libsemanage.mk            |   5 +-
+ 3 files changed, 7 insertions(+), 121 deletions(-)
+ delete mode 100644 package/libsemanage/0001-libsemanage-build-follow-standard-semantics-for-DESTD.patch
 
-diff --git a/package/libsepol/0001-libsepol-build-follow-standard-semantics-for-DESTD.patch b/package/libsepol/0001-libsepol-build-follow-standard-semantics-for-DESTD.patch
+diff --git a/package/libsemanage/0001-libsemanage-build-follow-standard-semantics-for-DESTD.patch b/package/libsemanage/0001-libsemanage-build-follow-standard-semantics-for-DESTD.patch
 deleted file mode 100644
-index 1daf7206d3..0000000000
---- a/package/libsepol/0001-libsepol-build-follow-standard-semantics-for-DESTD.patch
+index 47ac6bded5..0000000000
+--- a/package/libsemanage/0001-libsemanage-build-follow-standard-semantics-for-DESTD.patch
 +++ /dev/null
-@@ -1,109 +0,0 @@
--libsepol: build: follow standard semantics for DESTDIR and PREFIX
+@@ -1,118 +0,0 @@
+-libsemanage: build: follow standard semantics for DESTDIR and PREFIX
 -
 -This patch solves the following issues:
--- The pkg-config files generates odd paths when using DESTDIR without PREFIX
 -- DESTDIR is needed during compile time to compute library and header paths which it should not.
 -- Installing with both DESTDIR and PREFIX set gives us odd paths
 -- Make usage of DESTDIR and PREFIX more standard
 -
 -Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 -
--diff -durN libsepol.orig/include/Makefile libsepol/include/Makefile
----- libsepol.orig/include/Makefile	2018-01-12 12:42:30.908709792 +0100
--+++ libsepol/include/Makefile	2018-01-12 09:58:04.322148228 +0100
+-diff -durN libsemanage.orig/include/Makefile libsemanage/include/Makefile
+---- libsemanage.orig/include/Makefile	2018-01-12 12:42:30.915376458 +0100
+-+++ libsemanage/include/Makefile	2018-01-12 10:04:18.632144240 +0100
 -@@ -1,6 +1,6 @@
 - # Installation directories.
 --PREFIX ?= $(DESTDIR)/usr
---INCDIR ?= $(PREFIX)/include/sepol
+--INCDIR ?= $(PREFIX)/include/semanage
 -+PREFIX ?= /usr
--+INCDIR = $(DESTDIR)$(PREFIX)/include/sepol
-- CILDIR ?= ../cil
+-+INCDIR ?= $(DESTDIR)$(PREFIX)/include/semanage
 - 
 - all:
--diff -durN libsepol.orig/man/Makefile libsepol/man/Makefile
----- libsepol.orig/man/Makefile	2018-01-12 12:42:30.912043126 +0100
--+++ libsepol/man/Makefile	2018-01-12 09:58:04.322148228 +0100
+- 
+-diff -durN libsemanage.orig/man/Makefile libsemanage/man/Makefile
+---- libsemanage.orig/man/Makefile	2018-01-12 12:42:30.915376458 +0100
+-+++ libsemanage/man/Makefile	2018-01-12 10:04:18.632144240 +0100
 -@@ -1,6 +1,7 @@
 - # Installation directories.
---MAN8DIR ?= $(DESTDIR)/usr/share/man/man8
 --MAN3DIR ?= $(DESTDIR)/usr/share/man/man3
+--MAN5DIR ?= $(DESTDIR)/usr/share/man/man5
 -+PREFIX ?= /usr
--+MAN8DIR ?= $(DESTDIR)$(PREFIX)/share/man/man8
 -+MAN3DIR ?= $(DESTDIR)$(PREFIX)/share/man/man3
+-+MAN5DIR ?= $(DESTDIR)$(PREFIX)/share/man/man5
 - 
 - all:
 - 
--diff -durN libsepol.orig/src/libsepol.pc.in libsepol/src/libsepol.pc.in
----- libsepol.orig/src/libsepol.pc.in	2018-01-12 12:42:30.912043126 +0100
--+++ libsepol/src/libsepol.pc.in	2018-01-12 09:58:04.322148228 +0100
+-diff -durN libsemanage.orig/src/libsemanage.pc.in libsemanage/src/libsemanage.pc.in
+---- libsemanage.orig/src/libsemanage.pc.in	2018-01-12 12:42:30.918709792 +0100
+-+++ libsemanage/src/libsemanage.pc.in	2018-01-12 10:04:18.632144240 +0100
 -@@ -1,6 +1,6 @@
 - prefix=@prefix@
 - exec_prefix=${prefix}
@@ -95,187 +87,113 @@ index 1daf7206d3..0000000000
 -+libdir=@libdir@
 - includedir=@includedir@
 - 
-- Name: libsepol
--diff -durN libsepol.orig/src/Makefile libsepol/src/Makefile
----- libsepol.orig/src/Makefile	2018-01-12 12:42:30.912043126 +0100
--+++ libsepol/src/Makefile	2018-01-12 09:58:04.322148228 +0100
--@@ -1,11 +1,10 @@
+- Name: libsemanage
+-diff -durN libsemanage.orig/src/Makefile libsemanage/src/Makefile
+---- libsemanage.orig/src/Makefile	2018-01-12 12:42:30.918709792 +0100
+-+++ libsemanage/src/Makefile	2018-01-12 10:04:18.632144240 +0100
+-@@ -8,10 +8,10 @@
+- PKG_CONFIG ?= pkg-config
+- 
 - # Installation directories.
 --PREFIX ?= $(DESTDIR)/usr
 -+PREFIX ?= /usr
-- INCLUDEDIR ?= $(PREFIX)/include
 - LIBDIR ?= $(PREFIX)/lib
 --SHLIBDIR ?= $(DESTDIR)/lib
-- RANLIB ?= ranlib
---LIBBASE ?= $(shell basename $(LIBDIR))
-- CILDIR ?= ../cil
+- INCLUDEDIR ?= $(PREFIX)/include
 -+LIBINSTALL = $(DESTDIR)$(LIBDIR)
+- PYINC ?= $(shell $(PKG_CONFIG) --cflags $(PYPREFIX))
+- PYLIBS ?= $(shell $(PKG_CONFIG) --libs $(PYPREFIX))
+- PYSITEDIR ?= $(DESTDIR)$(shell $(PYTHON) -c 'import site; print(site.getsitepackages()[0])')
+-@@ -20,8 +20,6 @@
+- RUBYLIBS ?= $(shell $(RUBY) -e 'puts "-L" + RbConfig::CONFIG["libdir"] + " -L" + RbConfig::CONFIG["archlibdir"] + " " + RbConfig::CONFIG["LIBRUBYARG_SHARED"]')
+- RUBYINSTALL ?= $(DESTDIR)$(shell $(RUBY) -e 'puts RbConfig::CONFIG["vendorarchdir"]')
 - 
-- VERSION = $(shell cat ../VERSION)
-- LIBVERSION = 1
--@@ -52,7 +51,7 @@
-- 	ln -sf $@ $(TARGET) 
+--LIBBASE=$(shell basename $(LIBDIR))
+--
+- DEFAULT_SEMANAGE_CONF_LOCATION=$(DESTDIR)/etc/selinux/semanage.conf
+- 
+- ifeq ($(DEBUG),1)
+-@@ -95,7 +93,7 @@
+- 	ln -sf $@ $(TARGET)
 - 
 - $(LIBPC): $(LIBPC).in ../VERSION
 --	sed -e 's/@VERSION@/$(VERSION)/; s:@prefix@:$(PREFIX):; s:@libdir@:$(LIBBASE):; s:@includedir@:$(INCLUDEDIR):' < $< > $@
 -+	sed -e 's/@VERSION@/$(VERSION)/; s:@prefix@:$(PREFIX):; s:@libdir@:$(LIBDIR):; s:@includedir@:$(INCLUDEDIR):' < $< > $@
 - 
-- $(LIBMAP): $(LIBMAP).in
-- ifneq ($(DISABLE_CIL),y)
--@@ -80,16 +79,16 @@
-- 	$(CC) $(CFLAGS) -fPIC -DSHARED -c -o $@ $<
+- semanageswig_python_exception.i: ../include/semanage/semanage.h
+- 	bash -e exception.sh > $@ || (rm -f $@ ; false)
+-@@ -136,13 +134,13 @@
+- 	$(SWIG) $<
 - 
-- install: all
+- install: all 
 --	test -d $(LIBDIR) || install -m 755 -d $(LIBDIR)
 --	install -m 644 $(LIBA) $(LIBDIR)
---	test -d $(SHLIBDIR) || install -m 755 -d $(SHLIBDIR)
---	install -m 755 $(LIBSO) $(SHLIBDIR)
+--	install -m 755 $(LIBSO) $(LIBDIR)
 --	test -d $(LIBDIR)/pkgconfig || install -m 755 -d $(LIBDIR)/pkgconfig
 --	install -m 644 $(LIBPC) $(LIBDIR)/pkgconfig
---	$(LN) -sf --relative $(SHLIBDIR)/$(LIBSO) $(LIBDIR)/$(TARGET)
 -+	test -d $(LIBINSTALL) || install -m 755 -d $(LIBINSTALL)
 -+	install -m 644 $(LIBA) $(LIBINSTALL)
--+	test -d $(LIBINSTALL) || install -m 755 -d $(LIBINSTALL)
 -+	install -m 755 $(LIBSO) $(LIBINSTALL)
 -+	test -d $(LIBINSTALL)/pkgconfig || install -m 755 -d $(LIBINSTALL)/pkgconfig
 -+	install -m 644 $(LIBPC) $(LIBINSTALL)/pkgconfig
--+	$(LN) -sf --relative $(LIBINSTALL)/$(LIBSO) $(LIBINSTALL)/$(TARGET)
+- 	test -f $(DEFAULT_SEMANAGE_CONF_LOCATION) || install -m 644 -D semanage.conf $(DEFAULT_SEMANAGE_CONF_LOCATION)
+--	cd $(LIBDIR) && ln -sf $(LIBSO) $(TARGET)
+-+	cd $(LIBINSTALL) && ln -sf $(LIBSO) $(TARGET)
+- 
+- install-pywrap: pywrap 
+- 	test -d $(PYSITEDIR) || install -m 755 -d $(PYSITEDIR)
+-@@ -155,7 +153,7 @@
+- 	install -m 755 $(SWIGRUBYSO) $(RUBYINSTALL)/semanage.so
 - 
 - relabel:
---	/sbin/restorecon $(SHLIBDIR)/$(LIBSO)
+--	/sbin/restorecon $(LIBDIR)/$(LIBSO)
 -+	/sbin/restorecon $(LIBINSTALL)/$(LIBSO)
 - 
 - clean: 
-- 	-rm -f $(LIBPC) $(LIBMAP) $(OBJS) $(LOBJS) $(LIBA) $(LIBSO) $(TARGET) $(CIL_GENERATED)
--diff -durN libsepol.orig/utils/Makefile libsepol/utils/Makefile
----- libsepol.orig/utils/Makefile	2018-01-12 12:42:30.915376458 +0100
--+++ libsepol/utils/Makefile	2018-01-12 09:58:04.322148228 +0100
--@@ -1,6 +1,6 @@
-- # Installation directories.
+- 	-rm -f $(LIBPC) $(OBJS) $(LOBJS) $(LIBA) $(LIBSO) $(SWIGLOBJ) $(SWIGSO) $(SWIGRUBYSO) $(TARGET) conf-parse.c conf-parse.h conf-scan.c *.o *.lo *~
+-diff -durN libsemanage.orig/tests/Makefile libsemanage/tests/Makefile
+---- libsemanage.orig/tests/Makefile	2018-01-12 12:42:30.922043125 +0100
+-+++ libsemanage/tests/Makefile	2018-01-12 10:04:18.632144240 +0100
+-@@ -1,6 +1,3 @@
 --PREFIX ?= $(DESTDIR)/usr
---BINDIR ?= $(PREFIX)/bin
--+PREFIX ?= /usr
--+BINDIR ?= $(DESTDIR)$(PREFIX)/bin
+--LIBDIR ?= $(PREFIX)/lib
+--
+- # Add your test source files here:
+- SOURCES = $(sort $(wildcard *.c))
 - 
-- CFLAGS ?= -Wall -Werror
-- override CFLAGS += -I../include
-diff --git a/package/libsepol/0002-support-static-only.patch b/package/libsepol/0001-support-static-only.patch
-similarity index 68%
-rename from package/libsepol/0002-support-static-only.patch
-rename to package/libsepol/0001-support-static-only.patch
-index 8cf9a180ff..f475dcad18 100644
---- a/package/libsepol/0002-support-static-only.patch
-+++ b/package/libsepol/0001-support-static-only.patch
-@@ -11,6 +11,8 @@ does not have support for shared libraries.
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Update for 2.8]
- ---
-  src/Makefile | 13 ++++++++++---
-  1 file changed, 10 insertions(+), 3 deletions(-)
-@@ -34,12 +36,12 @@ diff -durNw libsepol-2.7.orig/src/Makefile libsepol-2.7/src/Makefile
-  $(LIBA):  $(OBJS)
- @@ -81,8 +86,10 @@
-  install: all
-- 	test -d $(LIBINSTALL) || install -m 755 -d $(LIBINSTALL)
-- 	install -m 644 $(LIBA) $(LIBINSTALL)
-+	test -d $(DESTDIR)$(LIBDIR) || install -m 755 -d $(DESTDIR)$(LIBDIR)
-+	install -m 644 $(LIBA) $(DESTDIR)$(LIBDIR)
- +ifeq ($(STATIC),)
-- 	test -d $(LIBINSTALL) || install -m 755 -d $(LIBINSTALL)
-- 	install -m 755 $(LIBSO) $(LIBINSTALL)
-+	test -d $(DESTDIR)$(SHLIBDIR) || install -m 755 -d $(DESTDIR)$(SHLIBDIR)
-+	install -m 755 $(LIBSO) $(DESTDIR)$(SHLIBDIR)
- +endif
-- 	test -d $(LIBINSTALL)/pkgconfig || install -m 755 -d $(LIBINSTALL)/pkgconfig
-- 	install -m 644 $(LIBPC) $(LIBINSTALL)/pkgconfig
-- 	$(LN) -sf --relative $(LIBINSTALL)/$(LIBSO) $(LIBINSTALL)/$(TARGET)
-+	test -d $(DESTDIR)$(LIBDIR)/pkgconfig || install -m 755 -d $(DESTDIR)$(LIBDIR)/pkgconfig
-+	install -m 644 $(LIBPC) $(DESTDIR)$(LIBDIR)/pkgconfig
-+	$(LN) -sf --relative $(DESTDIR)$(SHLIBDIR)/$(LIBSO) $(DESTDIR)$(LIBDIR)/$(TARGET)
-diff --git a/package/libsepol/0003-revert-ln-relative.patch b/package/libsepol/0002-revert-ln-relative.patch
-similarity index 68%
-rename from package/libsepol/0003-revert-ln-relative.patch
-rename to package/libsepol/0002-revert-ln-relative.patch
-index 9d1553ed97..acac908be0 100644
---- a/package/libsepol/0003-revert-ln-relative.patch
-+++ b/package/libsepol/0002-revert-ln-relative.patch
-@@ -12,16 +12,18 @@ they are maintained (up to 10 years in some cases?).
- For the sake of Buildroot, revert the upstream patch.
- 
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Update for 2.8 (with assumption that SHLIBDIR=LIBDIR)]
- 
- diff -durNw libsepol-2.7.orig/src/Makefile libsepol-2.7/src/Makefile
- --- libsepol-2.7.orig/src/Makefile	2018-01-15 21:37:12.821831315 +0100
- +++ libsepol-2.7/src/Makefile	2018-01-15 21:38:03.838497434 +0100
- @@ -92,7 +92,7 @@
-  endif
-- 	test -d $(LIBINSTALL)/pkgconfig || install -m 755 -d $(LIBINSTALL)/pkgconfig
-- 	install -m 644 $(LIBPC) $(LIBINSTALL)/pkgconfig
---	$(LN) -sf --relative $(LIBINSTALL)/$(LIBSO) $(LIBINSTALL)/$(TARGET)
--+	cd $(LIBINSTALL) && ln -sf $(LIBSO) $(TARGET)
-+	test -d $(DESTDIR)$(LIBDIR)/pkgconfig || install -m 755 -d $(DESTDIR)$(LIBDIR)/pkgconfig
-+	install -m 644 $(LIBPC) $(DESTDIR)$(LIBDIR)/pkgconfig
-+-	$(LN) -sf --relative $(DESTDIR)$(SHLIBDIR)/$(LIBSO) $(DESTDIR)$(LIBDIR)/$(TARGET)
-++	cd $(DESTDIR)$(LIBDIR) && ln -sf $(LIBSO) $(TARGET)
-  
-  relabel:
-  	/sbin/restorecon $(LIBINSTALL)/$(LIBSO)
-diff --git a/package/libsepol/libsepol.hash b/package/libsepol/libsepol.hash
-index 08e2bf97a4..599133c116 100644
---- a/package/libsepol/libsepol.hash
-+++ b/package/libsepol/libsepol.hash
+diff --git a/package/libsemanage/libsemanage.hash b/package/libsemanage/libsemanage.hash
+index c386571591..5315514003 100644
+--- a/package/libsemanage/libsemanage.hash
++++ b/package/libsemanage/libsemanage.hash
 @@ -1,2 +1,5 @@
  # From: https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256 d69d3bd8ec901a3bd5adf2be2fb47fb1a685ed73066ab482e7e505371a48f9e7  libsepol-2.7.tar.gz
-+sha256 3ad6916a8352bef0bad49acc8037a5f5b48c56f94e4cb4e1959ca475fa9d24d6  libsepol-2.8.tar.gz
+-sha256 07e9477714ce6a4557a1fe924ea4cb06501b62d0fa0e3c0dc32a2cf47cb8d476 libsemanage-2.7.tar.gz
++sha256 1c0de8d2c51e5460926c21e371105c84a39087dfd8f8e9f0cc1d017e4cbea8e2 libsemanage-2.8.tar.gz
 +
 +# Hash for license file
-+sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
-diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
-index a9a9c652ea..a1e3836851 100644
---- a/package/libsepol/libsepol.mk
-+++ b/package/libsepol/libsepol.mk
++sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 COPYING
+diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
+index b6e50e2848..a50cae81e4 100644
+--- a/package/libsemanage/libsemanage.mk
++++ b/package/libsemanage/libsemanage.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBSEPOL_VERSION = 2.7
--LIBSEPOL_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20170804
-+LIBSEPOL_VERSION = 2.8
-+LIBSEPOL_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20180524
- LIBSEPOL_LICENSE = LGPL-2.1+
- LIBSEPOL_LICENSE_FILES = COPYING
+-LIBSEMANAGE_VERSION = 2.7
+-LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20170804
++LIBSEMANAGE_VERSION = 2.8
++LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20180524
+ LIBSEMANAGE_LICENSE = LGPL-2.1+
+ LIBSEMANAGE_LICENSE_FILES = COPYING
+ LIBSEMANAGE_DEPENDENCIES = host-bison host-flex audit libselinux ustr bzip2
+@@ -31,6 +31,7 @@ HOST_LIBSEMANAGE_DEPENDENCIES = host-bison host-audit host-libsepol host-libseli
+ HOST_LIBSEMANAGE_MAKE_OPTS += \
+ 	$(HOST_CONFIGURE_OPTS) \
+ 	PREFIX=$(HOST_DIR) \
++	SHLIBDIR=$(HOST_DIR)/lib \
+ 	SWIG_LIB="$(HOST_DIR)/share/swig/$(SWIG_VERSION)/"
  
-@@ -23,17 +23,22 @@ define LIBSEPOL_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(LIBSEPOL_MAKE_FLAGS)
- endef
- 
-+# Set SHLIBDIR to /usr/lib so it has the same value than LIBDIR, as a result
-+# we won't have to use a relative path in 0002-revert-ln-relative.patch
- define LIBSEPOL_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install $(LIBSEPOL_MAKE_FLAGS) DESTDIR=$(STAGING_DIR)
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install $(LIBSEPOL_MAKE_FLAGS) \
-+		DESTDIR=$(STAGING_DIR) SHLIBDIR=/usr/lib
- endef
- 
- define LIBSEPOL_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install $(LIBSEPOL_MAKE_FLAGS) DESTDIR=$(TARGET_DIR)
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install $(LIBSEPOL_MAKE_FLAGS) \
-+		DESTDIR=$(TARGET_DIR) SHLIBDIR=/usr/lib
- endef
- 
- HOST_LIBSEPOL_MAKE_ENV = \
- 	$(HOST_MAKE_ENV) \
--	PREFIX=$(HOST_DIR)
-+	PREFIX=$(HOST_DIR) \
-+	SHLIBDIR=$(HOST_DIR)/lib
- 
- define HOST_LIBSEPOL_BUILD_CMDS
- 	$(HOST_LIBSEPOL_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS)
+ ifeq ($(BR2_PACKAGE_PYTHON3),y)
 -- 
 2.17.1
