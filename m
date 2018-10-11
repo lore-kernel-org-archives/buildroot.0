@@ -1,70 +1,42 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 11 Oct 2018 23:27:11 +0200
-Subject: [Buildroot] [PATCH 1/1] xerces: fix static linking with curl
-Message-ID: <20181011212711.22694-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 11 Oct 2018 23:32:34 +0200
+Subject: [Buildroot] Analysis results for 2018-10-09
+In-Reply-To: <87in28susb.fsf@dell.be.48ers.dk>
+References: <20181010060010.4E3C920736@mail.bootlin.com>
+ <20181010174814.5ac114f1@windsurf>
+ <5c66f02e-d2f1-55a6-c75f-6a924e6b70bd@mind.be>
+ <87in28susb.fsf@dell.be.48ers.dk>
+Message-ID: <526b24f3-6941-2050-641a-c1c053778fb9@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When curl is statically built with openssl support, xerces needs to
-link with openssl libraries so use pkg_check_modules to get any
-needed dependencies
 
-Fixes:
- - http://autobuild.buildroot.org/results/29ca90fff2c8e38f2edf7240eca3aa3fe7397c45
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0002-fix-static-linking-with-curl.patch   | 39 +++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/xerces/0002-fix-static-linking-with-curl.patch
+On 11/10/18 11:21, Peter Korsgaard wrote:
+>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+> 
+>  > On 10/10/18 17:48, Thomas Petazzoni wrote:
+>  >>> mips64el |        gst-plugins-bad-0.10.23 | NOK | http://autobuild.buildroot.net/results/ab39280ceaf967e08abfd1f51efa4613495237f5 | ORPH
+>  >> 
+>  >> gstspanplc.c:223:21: error: dereferencing pointer to incomplete type 'plc_state_t {aka struct plc_state_s}'
+>  >> if (plc->plc_state->missing_samples != 0)
+> 
+>  >  Perhaps it's time to retire gstreamer-0.10? Is anybody still using it?
+> 
+> Agreed, 1.0 is from 2012 and 0.10.x is no longer maintained upstream.
 
-diff --git a/package/xerces/0002-fix-static-linking-with-curl.patch b/package/xerces/0002-fix-static-linking-with-curl.patch
-new file mode 100644
-index 0000000000..db38de79fc
---- /dev/null
-+++ b/package/xerces/0002-fix-static-linking-with-curl.patch
-@@ -0,0 +1,39 @@
-+From 26e3f1440bbc75c704fc93ff43a2abbfbe4c0203 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 11 Oct 2018 22:56:50 +0200
-+Subject: [PATCH] fix static linking with curl
-+
-+When curl is statically built with openssl support, xerces needs to
-+link with openssl libraries so use pkg_check_modules to get any
-+needed dependencies
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/29ca90fff2c8e38f2edf7240eca3aa3fe7397c45
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ cmake/XercesNetAccessorSelection.cmake | 8 +++++++-
-+ 1 file changed, 7 insertions(+), 1 deletion(-)
-+
-+diff --git a/cmake/XercesNetAccessorSelection.cmake b/cmake/XercesNetAccessorSelection.cmake
-+index 7a63f1f6b..e90fcf034 100644
-+--- a/cmake/XercesNetAccessorSelection.cmake
-++++ b/cmake/XercesNetAccessorSelection.cmake
-+@@ -31,7 +31,13 @@ if(network)
-+ 
-+   # Requires select() which is UNIX only
-+   if(UNIX)
-+-    find_package(CURL)
-++    find_package(PkgConfig)
-++    if (PkgConfig_FOUND)
-++      pkg_check_modules(CURL libcurl)
-++      if (NOT CURL_FOUND)
-++        find_package(CURL)
-++      endif()
-++    endif()
-+     if(CURL_FOUND)
-+       list(APPEND netaccessors curl)
-+     endif()
-+-- 
-+2.17.1
-+
+ Note that qt4, nvidia-tegra23 and classpath only support GST 0.10. Those were
+the only ones I could find. Of these, only qt4 is still a bit relevant I think.
+
+ Regards,
+ Arnout
 -- 
-2.17.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
