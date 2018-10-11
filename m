@@ -1,52 +1,67 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Oct 2018 14:46:53 +0200
-Subject: [Buildroot] Analysis results for 2018-10-09
-In-Reply-To: <87k1molnar.fsf@tkos.co.il> (Baruch Siach's message of "Thu, 11
- Oct 2018 14:45:16 +0300")
-References: <20181010060010.4E3C920736@mail.bootlin.com>
- <20181010174814.5ac114f1@windsurf> <87y3b5ks97.fsf@tkos.co.il>
- <87a7nksr18.fsf@dell.be.48ers.dk> <87o9c0lozx.fsf@tkos.co.il>
- <875zy8spe0.fsf@dell.be.48ers.dk> <87k1molnar.fsf@tkos.co.il>
-Message-ID: <87r2gw1whu.fsf@dell.be.48ers.dk>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 11 Oct 2018 07:48:43 -0500
+Subject: [Buildroot] Problem with Raspberry Pi 3B+and BT
+In-Reply-To: <CALtfCQa87Q5w-mOL4sKbW8M7wh4qAH3rBRm6A6H41SEaci=3QQ@mail.gmail.com>
+References: <CALtfCQa87Q5w-mOL4sKbW8M7wh4qAH3rBRm6A6H41SEaci=3QQ@mail.gmail.com>
+Message-ID: <CANQCQpbD_fdXrqYGdW74d4EVyCm4eAs6pxiyasg8wTumYZ+XWA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Oscar,
 
- > Hi Peter,
- > Peter Korsgaard writes:
- >>>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
- >> >> -typedef double hbase_f(double);
- >> >> +typedef double (*hbase_f)(double);
- >> 
- >> > Wouldn't that make the definition 'hbase_f *val_in' a pointer to
- >> > function pointer?
- >> 
- >> Not in C at least. The syntax is:
- >> 
- >> typedef <returntype> (*name)(<arguments>)
- >> 
- >> https://stackoverflow.com/questions/1591361/understanding-typedefs-for-function-pointers-in-c
+On Thu, Oct 11, 2018 at 3:46 AM Oscar Gomez Fuente
+<oscargomezf@gmail.com> wrote:
+>
+> Hi everyone,
+>
+> I have a problem with the Bluetooth on my raspberry pi 3B+, I have
+> installed the following packages:
+>
+> [*] bluez-tools
+> [*] bluez-utils 5.x
+> [*]   build OBEX support
+> [*]   build CLI client
+> [*]   build experimental obexd plugin
+> [*]   build health plugin
+> [*]   build midi profile
+> [*]   build nfc plugin
+> [*]   build sap plugin
+> [*]   build sixaxis plugin
+> [*]   build tests
+> [*]   install bdaddr tool
+>
+> I'm using the raspberry pi for scanning BT devices continuously, using
+> this command:
+>
+> # bt-adapter -a hci0 -d
+>
+> And everything works fines, but occasionally this command fails and Ii
+> doesn't work anymore and I have to reboot my HW. I was taking a look
+> at the kernel messages:
+>
+> [25124.029835] Bluetooth: hci0: Frame reassembly failed (-84)
+> [25124.031902] Bluetooth: hci0: Frame reassembly failed (-90)
+> [25124.033665] Bluetooth: hci0: Frame reassembly failed (-84)
+> [28601.218856] Bluetooth: hci0 advertising data length corrected
+> [29425.140974] Bluetooth: hci0: Frame reassembly failed (-84)
+> [29427.218670] Bluetooth: Failed to disable LE scan: status 0x1f
+> [29427.220413] Bluetooth: hci0 command 0x200c tx timeout
+> [29561.841776] Bluetooth: hci0 command 0x200c tx timeout
+>
 
- > Correct. But consider the SO example code:
+That looks kernel related.  I believe the PI has some GPU firmware
+loaded that applies to bluetooth.  I've never tried updating it,
+however there are tools out there to update the firmware that's stored
+in some non-volatile space on the board.
+https://github.com/Hexxeh/rpi-update   # notes here:
+https://raspberrypi.stackexchange.com/questions/164/how-do-i-update-software-and-firmware
 
- >   typedef void (*SignalHandler)(int signum);
+Another idea would be verifying your power supply is large enough to
+accommodate bluetooth.  To check this, If you have other USB devices
+attached, unplug a few usb devices, startup and see if bluetooth is
+more stable.
 
- >   extern SignalHandler signal(int signum, SignalHandler handler);
-
- > The 'handler' parameter of the signal() function is a pointer to a
- > function. However the definition
-
- >   SignalHandler *handler;
-
- > would create a pointer to a pointer. As I understand, this is not the
- > intention of the 'hbase_f *val_in' definition in the original code.
-
-Ehh, yes - But I was talking about the typedef line (as quoted
-above). The * is needed for typedef but not for the val_in definition.
-
--- 
-Bye, Peter Korsgaard
+Matt
