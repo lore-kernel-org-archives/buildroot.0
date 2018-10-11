@@ -1,12 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Oct 2018 20:33:24 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-10-08
-In-Reply-To: <875zybmyvn.fsf@tkos.co.il> (Baruch Siach's message of "Tue, 09
- Oct 2018 09:13:00 +0300")
-References: <20181009060047.754D6207C3@mail.bootlin.com>
- <875zybmyvn.fsf@tkos.co.il>
-Message-ID: <87a7nk1ggb.fsf@dell.be.48ers.dk>
+Date: Thu, 11 Oct 2018 20:38:52 +0200
+Subject: [Buildroot] [PATCH] libcurl: add brotli optional dependency
+In-Reply-To: <13524327ea113de73f2201143641c0dfcaa50d30.1522705304.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 3 Apr 2018 00:41:44 +0300")
+References: <13524327ea113de73f2201143641c0dfcaa50d30.1522705304.git.baruch@tkos.co.il>
+Message-ID: <875zy81g77.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,26 +13,23 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Hi Peter,
- > Thomas Petazzoni writes:
- >> Results for branch '2018.02.x'
- >> ==============================
- >> 
- >> Classification of failures by reason
- >> ------------------------------------
- >> 
- >> libcurl-7.61.1 | 1 
- >> 
- >> 
- >> Detail of failures
- >> ------------------
- >> 
- >> arm |                 libcurl-7.61.1 | NOK | http://autobuild.buildroot.net/results/f98ad90a77295d73c3ef2fc704f5ec187a31832e |     
+ > The brotli package has recently been added to Buildroot. Add brotli an
+ > an optional dependency to libcurl to make the build consistent.
 
- > Commit e7d658e029 (libcurl: add brotli optional dependency) should fix
- > this build issue in 2018.02.x.
+ > It turns out that libcurl configure script users pkg-config to figure
+ > out link libraries only when --with-brotli is explicitly set. So this
+ > also fixes static build failure.
 
-Ahh, thanks for the heads up - Will cherry-pick it.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/64b/64bc0dfe284206390ae0680b94c0876863a3c0f3/
+ > http://autobuild.buildroot.net/results/233/23376d8653dea6361e42b0f17b6aaab3c14d99cf/
+ > http://autobuild.buildroot.net/results/b19/b198db4b69e18e6d01ec95aae9c6096c1912dd9c/
+
+ > Cc: Adrian Perez de Castro <aperez@igalia.com>
+ > Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Committed to 2018.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
