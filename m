@@ -1,52 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 11 Oct 2018 09:57:58 +0200
-Subject: [Buildroot] [PATCH v2,1/8] libselinux: bump to version 2.8
-In-Reply-To: <CAPi7W80jBdoLui_B0UxRO1gB8mqoEi8pBbd78drTXk_8sn1EXg@mail.gmail.com>
-References: <20180921205013.21829-1-fontaine.fabrice@gmail.com>
- <20181010213528.4805f9e6@windsurf>
- <CAPi7W80jBdoLui_B0UxRO1gB8mqoEi8pBbd78drTXk_8sn1EXg@mail.gmail.com>
-Message-ID: <20181011095758.7beb2566@windsurf>
+Date: Thu, 11 Oct 2018 10:06:10 +0200
+Subject: [Buildroot] [PATCH v5 1/2] board: amarula: Add A64-Relic support
+In-Reply-To: <20181010053511.4093-1-jagan@amarulasolutions.com>
+References: <20181010053511.4093-1-jagan@amarulasolutions.com>
+Message-ID: <20181011100610.6b4c78fe@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+Hello,
 
-On Wed, 10 Oct 2018 23:05:02 +0200, Fabrice Fontaine wrote:
-
-> I will take the example of host-libsepol (this is the same for
-> host-libselinux)
-> Without this update, build of host-libsepol fails on:
-> install -m 755 libsepol.so.1 /lib
-> install: cannot create regular file '/lib/libsepol.so.1': Permission denied
+On Wed, 10 Oct 2018 11:05:10 +0530, Jagan Teki wrote:
+> Add initial support for Amarula A64-Relic board
+> with below features:
+> - U-Boot 2018.07-rc1
+> - Linux 4.17.0-rc6
+> - Default packages from buildroot
 > 
-> It seems that 0001-libsepol-build-follow-standard-semantics-for-DESTD.patch
-> and
-> https://github.com/SELinuxProject/selinux/commit/f8532f17731c82df9956aa1c92f7fb08bd65bf05
-> are not exactly the same.
-> Especially, it seems that LIBINSTALL = $(DESTDIR)$(LIBDIR) has not been
-> added in upstream.
-> upstream directly uses DESTDIR which is why I got a failure: install -m 755
-> $(LIBSO) $(DESTDIR)$(SHLIBDIR)
-> I don't know why there is such a difference but perhaps Marcus knows?
-> If Marcus confirms that this is a mistake, I can always add a patch to fix
-> this and send it upstream.
+> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 
-OK, I see. They want to install the libraries to /lib and not /usr/lib,
-which is why they don't prefix SHLIBDIR with $(PREFIX).
+Thanks, this looks good, except two aspects. One could have been fixed
+using a follow-up patch, but not the other one.
 
-So, for the host installation, I would recommend to do this:
+> diff --git a/configs/amarula_a64_relic_defconfig b/configs/amarula_a64_relic_defconfig
+> new file mode 100644
+> index 0000000000..846275eadb
+> --- /dev/null
+> +++ b/configs/amarula_a64_relic_defconfig
+> @@ -0,0 +1,47 @@
+> +BR2_aarch64=y
+> +BR2_cortex_a53=y
+> +BR2_ARM_FPU_VFPV4=y
+> +
+> +# Linux headers same as kernel, a 4.17 series
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
+> +
+> +# Firmware
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+> +
+> +# Bootloader
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.07-rc1"
 
-	PREFIX=$(HOST_DIR) SHLIBDIR=$(HOST_DIR)/lib
+I guess the final 2018.07 is released now, so you could useit.
 
-It is I believe semantically more correct than passing DESTDIR, even if
-in practice it does exactly the same thing.
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,amarula,linux-amarula,a64-relic)/linux-amarula_a64-relic.tar.gz"
 
-Also, for the target installation, why are you overriding SHLIBDIR to
-be /usr/lib ? Any issue with keeping the libraries in /lib, like
-upstream wants ?
+"a64-relic" is a branch name, which makes the build non reproducible.
+We want either a tag, or a full SHA1, to ensure that we always build
+the same kernel version.
+
+Could you fix that up and resend the patch?
 
 Best regards,
 
