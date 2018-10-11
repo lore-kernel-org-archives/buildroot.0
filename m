@@ -1,57 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 11 Oct 2018 10:39:15 +0200
-Subject: [Buildroot] Analysis results for 2018-10-09
-In-Reply-To: <87y3b5ks97.fsf@tkos.co.il>
-References: <20181010060010.4E3C920736@mail.bootlin.com>
- <20181010174814.5ac114f1@windsurf> <87y3b5ks97.fsf@tkos.co.il>
-Message-ID: <20181011103915.69e80d88@windsurf>
+From: Oscar Gomez Fuente <oscargomezf@gmail.com>
+Date: Thu, 11 Oct 2018 10:45:39 +0200
+Subject: [Buildroot] Problem with Raspberry Pi 3B+and BT
+Message-ID: <CALtfCQa87Q5w-mOL4sKbW8M7wh4qAH3rBRm6A6H41SEaci=3QQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi everyone,
 
-On Thu, 11 Oct 2018 07:43:32 +0300, Baruch Siach wrote:
+I have a problem with the Bluetooth on my raspberry pi 3B+, I have
+installed the following packages:
 
-> The build only fails with the CT-NG PowerPC e500 toolchain. Is that the
-> only gcc 4.7 toolchain?
-> 
-> This is the failing code:
-> 
-> typedef double hbase_f(double);
-> 
-> class StatHist
-> {
->     ...
->     hbase_f *val_in = nullptr;        /* e.g., log() for log-based histogram */
->     hbase_f *val_out = nullptr;       /* e.g., exp() for log based histogram */
-> }
-> 
-> For some reason this version of gcc considers val_in/val_out as
-> methods.
+[*] bluez-tools
+[*] bluez-utils 5.x
+[*]   build OBEX support
+[*]   build CLI client
+[*]   build experimental obexd plugin
+[*]   build health plugin
+[*]   build midi profile
+[*]   build nfc plugin
+[*]   build sap plugin
+[*]   build sixaxis plugin
+[*]   build tests
+[*]   install bdaddr tool
 
-They are function pointers, since hbase_f is a typedef of a function
-that takes a double as argument and returns a double.
+I'm using the raspberry pi for scanning BT devices continuously, using
+this command:
 
-Indeed, the following minimal program:
+# bt-adapter -a hci0 -d
 
-typedef double hbase_f(double);
+And everything works fines, but occasionally this command fails and Ii
+doesn't work anymore and I have to reboot my HW. I was taking a look
+at the kernel messages:
 
-class StatHist
-{
-	hbase_f *val_in = nullptr;
-};
+[25124.029835] Bluetooth: hci0: Frame reassembly failed (-84)
+[25124.031902] Bluetooth: hci0: Frame reassembly failed (-90)
+[25124.033665] Bluetooth: hci0: Frame reassembly failed (-84)
+[28601.218856] Bluetooth: hci0 advertising data length corrected
+[29425.140974] Bluetooth: hci0: Frame reassembly failed (-84)
+[29427.218670] Bluetooth: Failed to disable LE scan: status 0x1f
+[29427.220413] Bluetooth: hci0 command 0x200c tx timeout
+[29561.841776] Bluetooth: hci0 command 0x200c tx timeout
 
-fails to build with gcc 4.7, but builds fine with a more recent gcc. It
-would be good to find another gcc 4.7 toolchain to see if the same
-problem occurs.
+Does anyone if it is a problem related to the driver (kernel level) or
+something related to the package  bluez-utils 5.x?
 
-Best regards,
+Best regards.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Oscar Gomez Fuente
+TST Sistemas
+www.tst.sistemas.es
