@@ -1,43 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 11 Oct 2018 22:07:41 +0200
-Subject: [Buildroot] [git commit] xerces: fix buid with older cmake
-Message-ID: <20181011200632.EB15E8346E@busybox.osuosl.org>
+Date: Thu, 11 Oct 2018 22:07:59 +0200
+Subject: [Buildroot] [PATCH 1/1] botan: disable documentation
+In-Reply-To: <20181011200112.21385-1-fontaine.fabrice@gmail.com>
+References: <20181011200112.21385-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181011220759.5cda3f65@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b449ba80077d94e503521a53bc7e2613901dd1c7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Old version of cmake break cross-compilation when FindThreads is used
-because of a try_run call. Add a workaround that avoids try_run.
+On Thu, 11 Oct 2018 22:01:12 +0200, Fabrice Fontaine wrote:
+> Fix following error if sphinx is found but its version is too low:
+> Sphinx version error:
+> This project needs at least Sphinx v1.2 and therefore cannot be built with this version.
+> Ignoring ImportError and using old theme
+>   ERROR: Error running sphinx-build -q -c ./src/configs/sphinx -b html ./doc/manual build/docs/manual
+> 
+> Fixes:
+>  - http://autobuild.buildroot.net/results/c15715a05a41035954f32510483314060ea31260
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/botan/botan.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-cmake bug report: https://gitlab.kitware.com/cmake/cmake/issues/16920
+Applied to master, thanks.
 
-Fixes:
- - http://autobuild.buildroot.org/results/784918c58310474e8b4a0b42850a55ba35a1a19e
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/xerces/xerces.mk | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
-index 906e4b663c..c75a8b0d35 100644
---- a/package/xerces/xerces.mk
-+++ b/package/xerces/xerces.mk
-@@ -17,6 +17,11 @@ endef
- 
- XERCES_POST_PATCH_HOOKS += XERCES_DISABLE_SAMPLES
- 
-+# Before CMake 3.10, passing THREADS_PTHREAD_ARG=OFF was needed to
-+# disable a try_run() call in the FindThreads tests, which caused a
-+# build failure when cross-compiling.
-+XERCES_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
-+
- ifeq ($(BR2_PACKAGE_ICU),y)
- XERCES_DEPENDENCIES += icu
- endif
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
