@@ -1,12 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 11 Oct 2018 16:31:13 +0200
-Subject: [Buildroot] meson for host package with executables doesn't
- work.
-In-Reply-To: <CAFr9PXkRORYwg4JF=moZp-e2bhrXLQAamhy-ygzi0ahq8dtgDg@mail.gmail.com>
-References: <CAFr9PXm1Y=HHy4znDBVdxpd2ndHKdu+_unfgSGHkJFotSZ9HKA@mail.gmail.com>
- <20181011120126.4bb50328@windsurf>
- <CAFr9PXkRORYwg4JF=moZp-e2bhrXLQAamhy-ygzi0ahq8dtgDg@mail.gmail.com>
-Message-ID: <20181011163113.57ef1244@windsurf>
+Date: Thu, 11 Oct 2018 16:32:53 +0200
+Subject: [Buildroot] Analysis results for 2018-10-09
+In-Reply-To: <CA+-urNQGnEyUXdWEtz-Sx2QRSUULsqahN5MYQK-_ZaKRmvT2jg@mail.gmail.com>
+References: <20181010060010.4E3C920736@mail.bootlin.com>
+ <20181010174814.5ac114f1@windsurf>
+ <CA+-urNQGnEyUXdWEtz-Sx2QRSUULsqahN5MYQK-_ZaKRmvT2jg@mail.gmail.com>
+Message-ID: <20181011163253.04519da8@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,20 +14,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 11 Oct 2018 20:42:30 +0900, Daniel Palmer wrote:
+On Thu, 11 Oct 2018 10:31:06 -0400, Frank Hunleth wrote:
 
-> Looking through the history in git it looks like this was broken by
-> commit a03f46ca6e9f43028003aedc92f1a1204ae7480f that bumped the
-> version of meson and removed a patch that stops meson from stripping
-> the RPATH on host executables. I guess because there are no packages
-> in-tree that used it (I couldn't find host-meson-package in any
-> packages) no one noticed.
+> > Seems like a musl/erlang issue. Johan, Frank, could you have a look ?
+> 
+> I sent the following patch for this upstream:
+> 
+> https://github.com/erlang/otp/pull/1981
+> 
+> I'll send a patch here next chance that I get.
 
-Indeed, it could very well be due to this. Could you check if re-adding
-this patch makes things work again ? If it does, please submit a patch
-re-adding the patch :-)
-
-Thanks,
+Excellent, thanks!
 
 Thomas
 -- 
