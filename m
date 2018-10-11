@@ -1,45 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 11 Oct 2018 09:28:31 +0200
-Subject: [Buildroot] [git commit] boot/mv-ddr-marvell: bump version to
- armada-18.09.2
-Message-ID: <20181011072918.A72CC813F7@busybox.osuosl.org>
+Date: Thu, 11 Oct 2018 09:29:00 +0200
+Subject: [Buildroot] [git commit] configs/solidrun_macchiatobin_mainline:
+ bump component versions
+Message-ID: <20181011072918.C17247FBC7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a5a39424e5626f6cd8d9dd9c81df72fd4559fdf1
+commit: https://git.buildroot.net/buildroot/commit/?id=97e439c6fd97fc8586cbd7d35524ba29f05fbcb7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is necessary to be able to bump the ARM Trusted Firmware version
-used on Marvell platforms.
+Bump Linux to 4.18, U-Boot to 2018.09, and ATF to armada-18.09.4.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- boot/mv-ddr-marvell/mv-ddr-marvell.hash | 2 +-
- boot/mv-ddr-marvell/mv-ddr-marvell.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ configs/solidrun_macchiatobin_mainline_defconfig | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/boot/mv-ddr-marvell/mv-ddr-marvell.hash b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
-index b96d4d2bc8..90fab71d60 100644
---- a/boot/mv-ddr-marvell/mv-ddr-marvell.hash
-+++ b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 d413546367ffa3b5f4373a777b9efeb32dcc74d6106897c248935ecb79afc454 mv-ddr-marvell-656440a9690f3d07be9e3d2c39d7cf56fd96eb7b.tar.gz
-+sha256 9aaea1f5e8bf3c9d7e735f569d130b5c2ec773c43e0cfabc9b8dee32adbf7e4e mv-ddr-marvell-99d772547314f84921268d57e53d8769197d3e21.tar.gz
-diff --git a/boot/mv-ddr-marvell/mv-ddr-marvell.mk b/boot/mv-ddr-marvell/mv-ddr-marvell.mk
-index 0f98fc2cef..8d508215f8 100644
---- a/boot/mv-ddr-marvell/mv-ddr-marvell.mk
-+++ b/boot/mv-ddr-marvell/mv-ddr-marvell.mk
-@@ -4,7 +4,8 @@
- #
- ################################################################################
+diff --git a/configs/solidrun_macchiatobin_mainline_defconfig b/configs/solidrun_macchiatobin_mainline_defconfig
+index 17fb9d02a2..d303b2f75e 100644
+--- a/configs/solidrun_macchiatobin_mainline_defconfig
++++ b/configs/solidrun_macchiatobin_mainline_defconfig
+@@ -1,5 +1,5 @@
+ BR2_aarch64=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
+ BR2_TARGET_GENERIC_HOSTNAME="mcbin"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for Marvell MacchiatoBin"
  
--MV_DDR_MARVELL_VERSION = 656440a9690f3d07be9e3d2c39d7cf56fd96eb7b
-+# This is the commit for mv_ddr-armada-18.09.2
-+MV_DDR_MARVELL_VERSION = 99d772547314f84921268d57e53d8769197d3e21
- MV_DDR_MARVELL_SITE = $(call github,MarvellEmbeddedProcessors,mv-ddr-marvell,$(MV_DDR_MARVELL_VERSION))
- MV_DDR_MARVELL_LICENSE = GPL-2.0+ or LGPL-2.1 with freertos-exception-2.0, BSD-3-Clause, Marvell Commercial
- MV_DDR_MARVELL_LICENSE_FILES = ddr3_init.c
+@@ -7,7 +7,8 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for Marvell MacchiatoBin"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/MarvellEmbeddedProcessors/atf-marvell.git"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="43965481990fd92e9666cf9371a8cf478055ec7c"
++# This commit corresponds to release armada-18.09.4
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="711ecd32afe465b38052b5ba374c825b158eea18"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="a80x0_mcbin"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
+@@ -20,12 +21,12 @@ BR2_TARGET_MV_DDR_MARVELL=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mvebu_mcbin-88f8040"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.09"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-8040-mcbin"
