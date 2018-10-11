@@ -1,48 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 11 Oct 2018 09:32:33 +0200
-Subject: [Buildroot] [git commit] scanpypi: improve BSD licence handling
-Message-ID: <20181011073216.00CF58296B@busybox.osuosl.org>
+Date: Thu, 11 Oct 2018 09:33:02 +0200
+Subject: [Buildroot] [git commit] package/ntp: fix md5sum.
+Message-ID: <20181011073216.196C281898@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d05e41eb1a934b2358799588bb305073d6df8e52
+commit: https://git.buildroot.net/buildroot/commit/?id=f3c6452729e89e546d58adfc3b288ddfae5876e2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When used without spdx_lookup the BSD licence cannot be
-detected correctly because many Python packages just specify
-BSD without the exact version in their metadata. So add a
-special message warning the user instead of the licence id.
-
-Bonus: fix typo.
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Artem Panfilov <apanfilov@spectracom.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- utils/scanpypi | 4 ++--
+ package/ntp/ntp.hash | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/utils/scanpypi b/utils/scanpypi
-index 31e242e3db..3983be1ad1 100755
---- a/utils/scanpypi
-+++ b/utils/scanpypi
-@@ -395,7 +395,7 @@ class BuildrootPackage():
-         """
-         Try to determine the related license name.
- 
--        There are two possibilities. Either the scripts tries to
-+        There are two possibilities. Either the script tries to
-         get license name from package's metadata or, if spdx_lookup
-         package is available, the script compares license files with
-         SPDX database.
-@@ -404,7 +404,7 @@ class BuildrootPackage():
-         if liclookup is None:
-             license_dict = {
-                 'Apache Software License': 'Apache-2.0',
--                'BSD License': 'BSD',
-+                'BSD License': 'FIXME: please specify the exact BSD version',
-                 'European Union Public Licence 1.0': 'EUPL-1.0',
-                 'European Union Public Licence 1.1': 'EUPL-1.1',
-                 "GNU General Public License": "GPL",
+diff --git a/package/ntp/ntp.hash b/package/ntp/ntp.hash
+index 02dbaffcba..2fd8a8322b 100644
+--- a/package/ntp/ntp.hash
++++ b/package/ntp/ntp.hash
+@@ -1,5 +1,5 @@
+-# From https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p11.tar.gz.md5
+-md5 00950ca2855579541896513e78295361  ntp-4.2.8p11.tar.gz
++# From https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p12.tar.gz.md5
++md5 1522d66574bae14abb2622746dad2bdc  ntp-4.2.8p12.tar.gz
+ # Calculated based on the hash above
+ sha256 709b222b5013d77d26bfff532b5ea470a8039497ef29d09363931c036cb30454  ntp-4.2.8p12.tar.gz
+ sha256 62c87b269365b38b55359b16dfde7ec28c683c722ef489db90afd0f2e478e4a1  COPYRIGHT
