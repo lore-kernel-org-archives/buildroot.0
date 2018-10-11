@@ -1,29 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 11 Oct 2018 09:34:41 +0200
-Subject: [Buildroot] [PATCH 1/2] libselinux: remove library host symlink
-In-Reply-To: <20181010212417.23047-1-fontaine.fabrice@gmail.com>
-References: <20181010212417.23047-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181011093441.69d21632@windsurf>
+Date: Thu, 11 Oct 2018 09:57:58 +0200
+Subject: [Buildroot] [PATCH v2,1/8] libselinux: bump to version 2.8
+In-Reply-To: <CAPi7W80jBdoLui_B0UxRO1gB8mqoEi8pBbd78drTXk_8sn1EXg@mail.gmail.com>
+References: <20180921205013.21829-1-fontaine.fabrice@gmail.com>
+ <20181010213528.4805f9e6@windsurf>
+ <CAPi7W80jBdoLui_B0UxRO1gB8mqoEi8pBbd78drTXk_8sn1EXg@mail.gmail.com>
+Message-ID: <20181011095758.7beb2566@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Fabrice,
 
-On Wed, 10 Oct 2018 23:24:16 +0200, Fabrice Fontaine wrote:
-> Since bump to version 2.7 and addition of
-> 0003-revert-ln-relative.patch, the creation of a symlink through
-> ln -sf libselinux.so.1 $(HOST_DIR)/lib/libselinux.so
-> is not needed anymore so remove it
+On Wed, 10 Oct 2018 23:05:02 +0200, Fabrice Fontaine wrote:
+
+> I will take the example of host-libsepol (this is the same for
+> host-libselinux)
+> Without this update, build of host-libsepol fails on:
+> install -m 755 libsepol.so.1 /lib
+> install: cannot create regular file '/lib/libsepol.so.1': Permission denied
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libselinux/libselinux.mk | 1 -
->  1 file changed, 1 deletion(-)
+> It seems that 0001-libsepol-build-follow-standard-semantics-for-DESTD.patch
+> and
+> https://github.com/SELinuxProject/selinux/commit/f8532f17731c82df9956aa1c92f7fb08bd65bf05
+> are not exactly the same.
+> Especially, it seems that LIBINSTALL = $(DESTDIR)$(LIBDIR) has not been
+> added in upstream.
+> upstream directly uses DESTDIR which is why I got a failure: install -m 755
+> $(LIBSO) $(DESTDIR)$(SHLIBDIR)
+> I don't know why there is such a difference but perhaps Marcus knows?
+> If Marcus confirms that this is a mistake, I can always add a patch to fix
+> this and send it upstream.
 
-Both applied, thanks!
+OK, I see. They want to install the libraries to /lib and not /usr/lib,
+which is why they don't prefix SHLIBDIR with $(PREFIX).
+
+So, for the host installation, I would recommend to do this:
+
+	PREFIX=$(HOST_DIR) SHLIBDIR=$(HOST_DIR)/lib
+
+It is I believe semantically more correct than passing DESTDIR, even if
+in practice it does exactly the same thing.
+
+Also, for the target installation, why are you overriding SHLIBDIR to
+be /usr/lib ? Any issue with keeping the libraries in /lib, like
+upstream wants ?
+
+Best regards,
 
 Thomas
 -- 
