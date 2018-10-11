@@ -1,48 +1,58 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 11 Oct 2018 08:35:05 -0500
-Subject: [Buildroot] Analysis results for 2018-10-09
-In-Reply-To: <20181011085017.7025cf45@windsurf>
-References: <20181010060010.4E3C920736@mail.bootlin.com>
- <20181010174814.5ac114f1@windsurf>
- <CANQCQpbtrG=C9T9FuznXONdqF9OTq3oqmDdDWKX5PHUhJV_=hg@mail.gmail.com>
- <CAPi7W80_9pcSwfX53xDC8TzgmGLuJ+rwK_T0MyKCOaunMUQNJw@mail.gmail.com>
- <20181010211419.22632881@windsurf>
- <CANQCQpbvQX1JcX0823ZFhrhN=XoPb5opPNbGBRZDko1BzviDFw@mail.gmail.com>
- <20181011085017.7025cf45@windsurf>
-Message-ID: <CANQCQpag_cM2wpvir-dc81JKe+--vHQRyaKKzyH3dtqsiLvfBw@mail.gmail.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Thu, 11 Oct 2018 15:48:14 +0200
+Subject: [Buildroot] [PATCH 4/4] webkitgtk: explicitly set
+ USE_GSTREAMER_GL build option
+In-Reply-To: <20181011084358.43c357ea@windsurf>
+References: <20181009220852.4309-1-aperez@igalia.com>
+ <20181009220852.4309-5-aperez@igalia.com>	<20181010212630.7f47270e@windsurf>
+ <973ec254-aef1-854f-c1ad-dfbe846c6fb1@mind.be>
+ <20181011084358.43c357ea@windsurf>
+Message-ID: <20181011154814.GB16261@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hi,
 
-On Thu, Oct 11, 2018 at 1:50 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Wed, 10 Oct 2018 16:25:41 -0500, Matthew Weber wrote:
->
-> > Adam, did you have something in the works for this one?  I seem to
-> > remember some discussion on the one "whole" thread above related to
-> > breaking the dependency.  I'd make the change but I don't have a valid
-> > test case.
->
-> Well, Arnout statement was that the build dependency is not necessary
-> because python3 can dlopen() at runtime the libuuid.so library. Indeed
-> the code in Python3 is here to do that, but as I explained in
-> http://lists.busybox.net/pipermail/buildroot/2018-September/231060.html,
-> it doesn't seem to work, at least in the Buildroot context.
->
+On Thu, 11 Oct 2018 08:43:58 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+ 
+> On Thu, 11 Oct 2018 00:04:31 +0200, Arnout Vandecappelle wrote:
+> 
+> > > What is fixing the autobuilder issue exactly? Explicitly disabling
+> > > -DUSE_GSTREAMER_GL=OFF when the plugin is not available ? Or having it
+> > > enabled by the "imply" ?  
+> > 
+> >  imply doesn't really enable it, it just changes the default. It is the
+> > equivalent of adding 'default y if BR2_PACKAGE_WEBKITGTK_MULTIMEDIA' to
+> > BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL. So imply can never fix the issue.
+> 
+> Yes, of course, I also don't think imply can fix the issue, but that
+> was not clear in the commit log, and the fact that the use of imply is
+> mixed with the actual bug fix made it even more confusing.
 
-I reached out to Adam, this dependency on uuid was added as part of
-the python upgrade and not for a specific product need.  I'll see if I
-can reproduce the python pkg build failure for its uuid support (Adam
-mentioned this is why he added the buildroot dependency on util-linux)
-.  Then depending on that, submit a patch to disable uuid support in
-python and remove the dependency we currently have on the util linux
-uuid lib.
+Indeed. What fixes the autobuilder issue is the changes to the .mk file; the
+?imply? is not really needed. I'll re-submit the patch with only that change.
 
-Matt
+> > > This usage of "imply" would be the first in Buildroot. Peter, Arnout,
+> > > Yann, anything against it ?  
+> > 
+> >  Absolute not, this is a great way to use imply.
+> 
+> Seems like you and Yann disagree :-)
+
+...and once some agreement about whether to start using ?imply? or not in
+Buildroot is done, we can always add that bit later :)
+
+Cheers,
+
+
+-Adri?n
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181011/e2b06612/attachment.asc>
