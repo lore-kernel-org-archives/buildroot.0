@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 11 Oct 2018 20:48:08 +0200
-Subject: [Buildroot] [PATCH 5/5] support/testing: add python-twisted
- tests
-In-Reply-To: <20180926025514.2092-6-ricardo.martincoski@gmail.com>
+Date: Thu, 11 Oct 2018 20:53:34 +0200
+Subject: [Buildroot] [PATCH 0/5] a few more runtime test cases for
+ python packages - series 1/n
+In-Reply-To: <20181011204244.2392f065@windsurf>
 References: <20180926025514.2092-1-ricardo.martincoski@gmail.com>
- <20180926025514.2092-6-ricardo.martincoski@gmail.com>
-Message-ID: <20181011204808.1aff4cd1@windsurf>
+ <20181011204244.2392f065@windsurf>
+Message-ID: <20181011205334.0ee9b50d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +14,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 25 Sep 2018 23:55:14 -0300, Ricardo Martincoski wrote:
+On Thu, 11 Oct 2018 20:42:44 +0200, Thomas Petazzoni wrote:
 
-> +TEST_SCRIPT = """
-> +from twisted.internet import protocol, reactor, endpoints
-> +class F(protocol.Factory):
-> +    pass
-> +endpoints.serverFromString(reactor, "tcp:1234").listen(F())
-> +reactor.run()
-> +"""
+> > Ricardo Martincoski (5):
+> >   support/testing: add python-autobahn tests
+> >   support/testing: add python-txaio tests
+> >   support/testing: add python-txtorcon tests
+> >   support/testing: add python-incremental tests
+> >   support/testing: add python-twisted tests  
+> 
+> I have applied the entire series. I however have a few
+> comments/suggestions, I'll reply to the individual patches.
 
-At some point, we will have to find a solution to store such
-"artefacts" somewhere, instead of having them inline in their test
-cases. I don't have a good idea about this.
-
-Best regards,
+I forgot to say that on the python-twisted tests, I did adjust the
+sleep + timeout as you suggested before applying the patch.
 
 Thomas
 -- 
