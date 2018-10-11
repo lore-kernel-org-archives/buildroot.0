@@ -1,49 +1,66 @@
-From: Daniel Palmer <daniel@0x0f.com>
-Date: Thu, 11 Oct 2018 18:25:39 +0900
-Subject: [Buildroot] meson for host package with executables doesn't work.
-Message-ID: <CAFr9PXm1Y=HHy4znDBVdxpd2ndHKdu+_unfgSGHkJFotSZ9HKA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 11 Oct 2018 11:48:22 +0200
+Subject: [Buildroot] Analysis results for 2018-10-09
+In-Reply-To: <20181011085357.191cfccb@windsurf> (Thomas Petazzoni's message of
+ "Thu, 11 Oct 2018 08:53:57 +0200")
+References: <20181010060010.4E3C920736@mail.bootlin.com>
+ <20181010174814.5ac114f1@windsurf> <87y3b5ks97.fsf@tkos.co.il>
+ <20181011085357.191cfccb@windsurf>
+Message-ID: <87efcwstjt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-There don't seem to be any in-tree packages that use meson for host
-packages so maybe this hasn't come up before but as far as I can tell
-it doesn't work.
-In my case I have an out of tree package that requires json-glib to be
-installed for the host as well as the target so I've changed the
-makefile to do that as follows:
+ > Hello,
+ > On Thu, 11 Oct 2018 07:43:32 +0300, Baruch Siach wrote:
+ >> Thomas Petazzoni writes:
+ >> >> arm | boa-0.94.14rc21 | NOK |
+ >> > http://autobuild.buildroot.net/results/e5ff4589243ce1f11248b5f9fab3cca614a48b11
+ >> > | ORPH
+ >> >
+ >> > (cd src && make - --no-print-directory - --jobserver-fds=6,7 -j)
+ >> > make: unrecognized option '--jobserver-fds=6,7'
+ >> >
+ >> > This suddenly started happening on September 9, 2018. We have not
+ >> > bumped boa. I'm not sure what caused this. It fails on different
+ >> > autobuilder machines. Boa is calling submake with $(MFLAGS), which is
+ >> > probably the issue, but why did this suddenly started to happen ?
+ >> >
+ >> > With a minimal configuration with just Boa, I cannot reproduce on my
+ >> > machine here, neither on my autobuilder where the problem is reported
+ >> > to occur.  
+ >> 
+ >> I guess it is related to commit 05167a9ffa (package/make: add host
+ >> variant) which was applied on September 8, 23:36. Build seems to fail
+ >> only on hosts with make older than 4.0, so the host-make build is
+ >> triggered.
 
-diff --git a/package/json-glib/json-glib.mk b/package/json-glib/json-glib.mk
-index 77c0c4532374..4cd754a3a6c5 100644
---- a/package/json-glib/json-glib.mk
-+++ b/package/json-glib/json-glib.mk
-@@ -17,4 +17,9 @@ JSON_GLIB_DEPENDENCIES = \
-       host-pkgconf \
-       libglib2
+ > Yes, I figured that out after sending my summary. I reproduced the
+ > issue on my build server, which has an old make installed system-wide,
+ > and this issue seems to appear only when host-make is built prior to
+ > boa. There's a mixup of make being used, with a new "make" used at the
+ > top-level, passing options unknown to the old "make" used at the
+ > lower-level.
 
-+HOST_JSON_GLIB_DEPENDENCIES = \
-+        host-pkgconf \
-+        host-libglib2
-+
-$(eval $(meson-package))
-+$(eval $(host-meson-package))
+Ahh, yes. It looks to be the other way around though:
 
-That was working fine a few months ago but now I get this:
+usr/bin/make -j6  -C /home/peko/autobuild/instance-0/output/build/boa-0.94.14rc21/
+make[1]: Entering directory `/home/peko/autobuild/instance-0/output/build/boa-0.94.14rc21'
+(cd src && make -w --jobserver-fds=5,6 -j)
+make: unrecognized option '--jobserver-fds=5,6'
 
-***
-*** ERROR: package host-json-glib installs executables without proper RPATH:
-***   <snip>/buildroot-firmware/output/host/bin/json-glib-validate
-***   <snip>/buildroot-firmware/output/host/bin/json-glib-format
+So the issue is that we expand the path to make on the host in
+package/Makefile.in:HOSTMAKE but then host-make installs make into the
+path and build systems just calling make instead of looking at the MAKE
+variable (which boa does because of its gnumake check) ends up with
+host-make rather than the system one.
 
-As far as I know meson strips RPATH on install and there is no way to
-stop it doing that outside of adjusting the build file.
+A quick fix would be to set BOA_MAKE to $(BR2_MAKE), but that is a bit
+of a hack.
 
-Does anyone have any ideas about how this should be fixed?
-
-Cheers,
-
-Daniel
+-- 
+Bye, Peter Korsgaard
