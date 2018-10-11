@@ -1,61 +1,82 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Oct 2018 23:09:30 +0200
-Subject: [Buildroot] [git commit] ustr: remove source code from target
-Message-ID: <20181011210927.BA4C7835D9@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 11 Oct 2018 23:11:37 +0200
+Subject: [Buildroot] meson for host package with executables doesn't
+ work.
+In-Reply-To: <CAFr9PXmf0tCQ1u3EstbtRyyJhLxk5Vc1sSOZMXW5qGfNehvLig@mail.gmail.com>
+References: <CAFr9PXm1Y=HHy4znDBVdxpd2ndHKdu+_unfgSGHkJFotSZ9HKA@mail.gmail.com>
+ <20181011120126.4bb50328@windsurf>
+ <CAFr9PXkRORYwg4JF=moZp-e2bhrXLQAamhy-ygzi0ahq8dtgDg@mail.gmail.com>
+ <20181011163113.57ef1244@windsurf>
+ <CAFr9PXmf0tCQ1u3EstbtRyyJhLxk5Vc1sSOZMXW5qGfNehvLig@mail.gmail.com>
+Message-ID: <72e1c646-b6f1-5f1d-e3e3-9ea609fcc5d4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c27484b2efe0b1df57549f48f39e4d08e26c8200
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For some reason, ustr installs its own source code, which means we end
-up with 448 KB of source code in /usr/share in the target filesystem:
 
-$ tree output/target/usr/share/
-output/target/usr/share/
-????????? ustr-1.0.4
-    ????????? malloc-check.h
-    ????????? ustr-b-code.h
-    ????????? ustr-b-dbg-code.c
-    ????????? ustr-b-opt-code.c
-    ????????? ustr-cmp-code.h
-    ????????? ustr-cmp-dbg-code.c
-    ????????? ustr-cmp-internal.h
-    ????????? ustr-cmp-opt-code.c
-    ????????? ustr-cntl-code.h
-    ????????? ustr-fmt-code.h
-    ????????? ustr-fmt-dbg-code.c
-    ????????? ustr-fmt-internal.h
-    [...]
+On 11/10/18 17:18, Daniel Palmer wrote:
+> Hi,
+> 
+> I forward ported the patch to the version of meson that is in buildroot now
+> and the problem is resolved. I'll submit a patch when I have some time
+> over the weekend.
 
-$ du -sh output/target/usr/share/ustr-1.0.4/
-448K	output/target/usr/share/ustr-1.0.4/
+ Upstream claims that the issue is fixed [1][2], so I would prefer to work with
+upstream to actually fix the issue upstream. I've commented on the issue (github
+doesn't allow reopening).
 
-So let's drop this source code in a post-install target hook.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ustr/ustr.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ Regards,
+ Arnout
 
-diff --git a/package/ustr/ustr.mk b/package/ustr/ustr.mk
-index 8346adbcf2..c99ada5276 100644
---- a/package/ustr/ustr.mk
-+++ b/package/ustr/ustr.mk
-@@ -28,5 +28,12 @@ USTR_MAKE_OPTS = all all-shared
- USTR_CONF_OPTS += LDCONFIG=/bin/true
- HOST_USTR_CONF_OPTS += LDCONFIG=/bin/true
- 
-+# for some reason, ustr finds it useful to install its source code in
-+# /usr/share, which is totally useless on the target
-+define USTR_REMOVE_SOURCE_CODE
-+	$(RM) -rf $(TARGET_DIR)/usr/share/ustr-$(USTR_VERSION)
-+endef
-+USTR_POST_INSTALL_TARGET_HOOKS += USTR_REMOVE_SOURCE_CODE
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+[1] https://github.com/mesonbuild/meson/issues/314
+[2]
+https://github.com/mesonbuild/meson/commit/e3757e3d3cf24327c89dd3fc40f6cc933510f676
+
+
+
+> 
+> Thanks,
+> 
+> Daniel
+> On Thu, 11 Oct 2018 at 23:31, Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+>>
+>> Hello,
+>>
+>> On Thu, 11 Oct 2018 20:42:30 +0900, Daniel Palmer wrote:
+>>
+>>> Looking through the history in git it looks like this was broken by
+>>> commit a03f46ca6e9f43028003aedc92f1a1204ae7480f that bumped the
+>>> version of meson and removed a patch that stops meson from stripping
+>>> the RPATH on host executables. I guess because there are no packages
+>>> in-tree that used it (I couldn't find host-meson-package in any
+>>> packages) no one noticed.
+>>
+>> Indeed, it could very well be due to this. Could you check if re-adding
+>> this patch makes things work again ? If it does, please submit a patch
+>> re-adding the patch :-)
+>>
+>> Thanks,
+>>
+>> Thomas
+>> --
+>> Thomas Petazzoni, CTO, Bootlin
+>> Embedded Linux and Kernel engineering
+>> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
