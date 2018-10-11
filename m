@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 11 Oct 2018 09:34:33 +0200
-Subject: [Buildroot] [PATCH 1/1] python-subprocess32: bump to version
- 3.5.3
-In-Reply-To: <20181010195434.14618-1-asafka7@gmail.com>
-References: <20181010195434.14618-1-asafka7@gmail.com>
-Message-ID: <20181011093433.08dae572@windsurf>
+Date: Thu, 11 Oct 2018 09:34:41 +0200
+Subject: [Buildroot] [PATCH 1/2] libselinux: remove library host symlink
+In-Reply-To: <20181010212417.23047-1-fontaine.fabrice@gmail.com>
+References: <20181010212417.23047-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181011093441.69d21632@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +12,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 10 Oct 2018 22:54:34 +0300, Asaf Kahlon wrote:
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+On Wed, 10 Oct 2018 23:24:16 +0200, Fabrice Fontaine wrote:
+> Since bump to version 2.7 and addition of
+> 0003-revert-ln-relative.patch, the creation of a symlink through
+> ln -sf libselinux.so.1 $(HOST_DIR)/lib/libselinux.so
+> is not needed anymore so remove it
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/python-subprocess32/python-subprocess32.hash | 4 ++--
->  package/python-subprocess32/python-subprocess32.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/libselinux/libselinux.mk | 1 -
+>  1 file changed, 1 deletion(-)
 
-Applied to master, thanks.
+Both applied, thanks!
 
 Thomas
 -- 
