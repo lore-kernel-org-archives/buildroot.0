@@ -1,144 +1,193 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 11 Oct 2018 22:02:33 +0200
-Subject: [Buildroot] [git commit] policycoreutils: bump to version 2.8
-Message-ID: <20181011200602.43AF583460@busybox.osuosl.org>
+Date: Thu, 11 Oct 2018 22:02:00 +0200
+Subject: [Buildroot] [git commit] libsemanage: bump to version 2.8
+Message-ID: <20181011200602.2BEA882DD5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=78023992784727e5fa86f2dc84bbaf9d02f78286
+commit: https://git.buildroot.net/buildroot/commit/?id=af79f3b3b73c22024ca8f0008335ac881a9da1b0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update first and second patch
+- Remove patch (already in version), see:
+  https://github.com/SELinuxProject/selinux/commit/e15f61e5d2fe74c6e7c0a5f81083a93b508c35f7
+- Add hash for license file
+- Drop -L from PYTHONLIBDIR, which is now really used as a path, and
+  not as flags.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...IR-to-all-paths-that-use-an-absolute-path.patch |  8 ++++--
- .../0002-Add-PREFIX-to-host-paths.patch            | 33 +++++++---------------
- package/policycoreutils/policycoreutils.hash       |  2 +-
- package/policycoreutils/policycoreutils.mk         |  4 +--
- 4 files changed, 18 insertions(+), 29 deletions(-)
+ ...build-follow-standard-semantics-for-DESTD.patch | 118 ---------------------
+ package/libsemanage/libsemanage.hash               |   5 +-
+ package/libsemanage/libsemanage.mk                 |   8 +-
+ 3 files changed, 8 insertions(+), 123 deletions(-)
 
-diff --git a/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch b/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch
-index 3c0ddcc54b..4cfe969a40 100644
---- a/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch
-+++ b/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch
-@@ -13,6 +13,8 @@ accomodate version 2.5
- Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
- Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
- Signed-off-by: Adam Duskett <AdamDuskett@outlook.com>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Update for 2.8]
- ---
-  setfiles/Makefile | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
-@@ -22,11 +24,11 @@ index c08e2dd..36c0638 100644
- --- a/setfiles/Makefile
- +++ b/setfiles/Makefile
- @@ -3,7 +3,7 @@ PREFIX ?= $(DESTDIR)/usr
-- SBINDIR ?= $(DESTDIR)/sbin
-+ PREFIX ?= /usr
-+ SBINDIR ?= /sbin
-  MANDIR = $(PREFIX)/share/man
-- LIBDIR ?= $(PREFIX)/lib
- -AUDITH ?= $(shell test -f /usr/include/libaudit.h && echo y)
--+AUDITH ?= $(shell test -f $(DESTDIR)/include/libaudit.h && echo y)
-++AUDITH ?= $(shell test -f $(DESTDIR)$(PREFIX)/include/libaudit.h && echo y)
-  
-  ABORT_ON_ERRORS=$(shell grep "^\#define ABORT_ON_ERRORS" setfiles.c | awk -S '{ print $$3 }')
-  
-diff --git a/package/policycoreutils/0002-Add-PREFIX-to-host-paths.patch b/package/policycoreutils/0002-Add-PREFIX-to-host-paths.patch
-index 32d2ae92e6..0b53044180 100644
---- a/package/policycoreutils/0002-Add-PREFIX-to-host-paths.patch
-+++ b/package/policycoreutils/0002-Add-PREFIX-to-host-paths.patch
-@@ -11,25 +11,14 @@ Updated to work with version 2.5
- Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
- Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
- Signed-off-by: Adam Duskett <AdamDuskett@outlook.com>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Update for 2.8]
- ---
-  load_policy/Makefile | 2 +-
-  newrole/Makefile     | 6 +++---
-  run_init/Makefile    | 6 +++---
-  3 files changed, 7 insertions(+), 7 deletions(-)
- 
--diff --git a/load_policy/Makefile b/load_policy/Makefile
--index b85833c..6a45f31 100644
----- a/load_policy/Makefile
--+++ b/load_policy/Makefile
--@@ -2,7 +2,7 @@
-- PREFIX ?= $(DESTDIR)/usr
-- SBINDIR ?= $(DESTDIR)/sbin
-- MANDIR ?= $(PREFIX)/share/man
---LOCALEDIR ?= /usr/share/locale
--+LOCALEDIR ?= $(PREFIX)/share/locale
+diff --git a/package/libsemanage/0001-libsemanage-build-follow-standard-semantics-for-DESTD.patch b/package/libsemanage/0001-libsemanage-build-follow-standard-semantics-for-DESTD.patch
+deleted file mode 100644
+index 47ac6bded5..0000000000
+--- a/package/libsemanage/0001-libsemanage-build-follow-standard-semantics-for-DESTD.patch
++++ /dev/null
+@@ -1,118 +0,0 @@
+-libsemanage: build: follow standard semantics for DESTDIR and PREFIX
+-
+-This patch solves the following issues:
+-- DESTDIR is needed during compile time to compute library and header paths which it should not.
+-- Installing with both DESTDIR and PREFIX set gives us odd paths
+-- Make usage of DESTDIR and PREFIX more standard
+-
+-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+-
+-diff -durN libsemanage.orig/include/Makefile libsemanage/include/Makefile
+---- libsemanage.orig/include/Makefile	2018-01-12 12:42:30.915376458 +0100
+-+++ libsemanage/include/Makefile	2018-01-12 10:04:18.632144240 +0100
+-@@ -1,6 +1,6 @@
+- # Installation directories.
+--PREFIX ?= $(DESTDIR)/usr
+--INCDIR ?= $(PREFIX)/include/semanage
+-+PREFIX ?= /usr
+-+INCDIR ?= $(DESTDIR)$(PREFIX)/include/semanage
 - 
-- CFLAGS ?= -Werror -Wall -W
-- override CFLAGS += $(LDFLAGS) -DUSE_NLS -DLOCALEDIR="\"$(LOCALEDIR)\"" -DPACKAGE="\"policycoreutils\""
- diff --git a/newrole/Makefile b/newrole/Makefile
- index 196af92..896708f 100644
- --- a/newrole/Makefile
-@@ -37,13 +26,12 @@ index 196af92..896708f 100644
- @@ -3,9 +3,9 @@ PREFIX ?= $(DESTDIR)/usr
-  BINDIR ?= $(PREFIX)/bin
-  MANDIR ?= $(PREFIX)/share/man
-- ETCDIR ?= $(DESTDIR)/etc
---LOCALEDIR = /usr/share/locale
-+ ETCDIR ?= /etc
-+ LOCALEDIR = $(DESTDIR)$(PREFIX)/share/locale
- -PAMH ?= $(shell test -f /usr/include/security/pam_appl.h && echo y)
- -AUDITH ?= $(shell test -f /usr/include/libaudit.h && echo y)
--+LOCALEDIR = $(PREFIX)/share/locale
--+PAMH ?= $(shell test -f $(PREFIX)/include/security/pam_appl.h && echo y)
--+AUDITH ?= $(shell test -f $(PREFIX)/include/libaudit.h && echo y)
-++PAMH ?= $(shell test -f $(DESTDIR)$(PREFIX)/include/security/pam_appl.h && echo y)
-++AUDITH ?= $(shell test -f $(DESTDIR)$(PREFIX)/include/libaudit.h && echo y)
-  # Enable capabilities to permit newrole to generate audit records.
-  # This will make newrole a setuid root program.
-  # The capabilities used are: CAP_AUDIT_WRITE.
-@@ -54,13 +42,12 @@ index 921f0b0..e1566fc 100644
- @@ -4,9 +4,9 @@ PREFIX ?= $(DESTDIR)/usr
-  SBINDIR ?= $(PREFIX)/sbin
-  MANDIR ?= $(PREFIX)/share/man
-- ETCDIR ?= $(DESTDIR)/etc
---LOCALEDIR ?= /usr/share/locale
-+ ETCDIR ?= /etc
-+ LOCALEDIR ?= $(DESTDIR)$(PREFIX)/share/locale
- -PAMH ?= $(shell test -f /usr/include/security/pam_appl.h && echo y)
- -AUDITH ?= $(shell test -f /usr/include/libaudit.h && echo y)
--+LOCALEDIR ?= $(PREFIX)/share/locale
--+PAMH ?= $(shell test -f $(PREFIX)/include/security/pam_appl.h && echo y)
--+AUDITH ?= $(shell test -f $(PREFIX)/include/libaudit.h && echo y)
-++PAMH ?= $(shell test -f $(DESTDIR)$(PREFIX)/include/security/pam_appl.h && echo y)
-++AUDITH ?= $(shell test -f $(DESTDIR)$(PREFIX)/include/libaudit.h && echo y)
-  
-  CFLAGS ?= -Werror -Wall -W
-  override CFLAGS += -DUSE_NLS -DLOCALEDIR="\"$(LOCALEDIR)\"" -DPACKAGE="\"policycoreutils\""
-diff --git a/package/policycoreutils/policycoreutils.hash b/package/policycoreutils/policycoreutils.hash
-index 241905ca22..b6367b4bf4 100644
---- a/package/policycoreutils/policycoreutils.hash
-+++ b/package/policycoreutils/policycoreutils.hash
-@@ -1,3 +1,3 @@
- # https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256 0a1b8a4a323b854981c6755ff025fe98a0f1cff307f109abb260f0490f13e4f4 policycoreutils-2.7.tar.gz
-+sha256 986553a235f27bee7ad7c2b7c35ea51eb2ee68e2cf03b661b1585de101bc1099 policycoreutils-2.8.tar.gz
- sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 COPYING
-diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
-index 21c5470cec..abd70e16c8 100644
---- a/package/policycoreutils/policycoreutils.mk
-+++ b/package/policycoreutils/policycoreutils.mk
+- all:
+- 
+-diff -durN libsemanage.orig/man/Makefile libsemanage/man/Makefile
+---- libsemanage.orig/man/Makefile	2018-01-12 12:42:30.915376458 +0100
+-+++ libsemanage/man/Makefile	2018-01-12 10:04:18.632144240 +0100
+-@@ -1,6 +1,7 @@
+- # Installation directories.
+--MAN3DIR ?= $(DESTDIR)/usr/share/man/man3
+--MAN5DIR ?= $(DESTDIR)/usr/share/man/man5
+-+PREFIX ?= /usr
+-+MAN3DIR ?= $(DESTDIR)$(PREFIX)/share/man/man3
+-+MAN5DIR ?= $(DESTDIR)$(PREFIX)/share/man/man5
+- 
+- all:
+- 
+-diff -durN libsemanage.orig/src/libsemanage.pc.in libsemanage/src/libsemanage.pc.in
+---- libsemanage.orig/src/libsemanage.pc.in	2018-01-12 12:42:30.918709792 +0100
+-+++ libsemanage/src/libsemanage.pc.in	2018-01-12 10:04:18.632144240 +0100
+-@@ -1,6 +1,6 @@
+- prefix=@prefix@
+- exec_prefix=${prefix}
+--libdir=${exec_prefix}/@libdir@
+-+libdir=@libdir@
+- includedir=@includedir@
+- 
+- Name: libsemanage
+-diff -durN libsemanage.orig/src/Makefile libsemanage/src/Makefile
+---- libsemanage.orig/src/Makefile	2018-01-12 12:42:30.918709792 +0100
+-+++ libsemanage/src/Makefile	2018-01-12 10:04:18.632144240 +0100
+-@@ -8,10 +8,10 @@
+- PKG_CONFIG ?= pkg-config
+- 
+- # Installation directories.
+--PREFIX ?= $(DESTDIR)/usr
+-+PREFIX ?= /usr
+- LIBDIR ?= $(PREFIX)/lib
+--SHLIBDIR ?= $(DESTDIR)/lib
+- INCLUDEDIR ?= $(PREFIX)/include
+-+LIBINSTALL = $(DESTDIR)$(LIBDIR)
+- PYINC ?= $(shell $(PKG_CONFIG) --cflags $(PYPREFIX))
+- PYLIBS ?= $(shell $(PKG_CONFIG) --libs $(PYPREFIX))
+- PYSITEDIR ?= $(DESTDIR)$(shell $(PYTHON) -c 'import site; print(site.getsitepackages()[0])')
+-@@ -20,8 +20,6 @@
+- RUBYLIBS ?= $(shell $(RUBY) -e 'puts "-L" + RbConfig::CONFIG["libdir"] + " -L" + RbConfig::CONFIG["archlibdir"] + " " + RbConfig::CONFIG["LIBRUBYARG_SHARED"]')
+- RUBYINSTALL ?= $(DESTDIR)$(shell $(RUBY) -e 'puts RbConfig::CONFIG["vendorarchdir"]')
+- 
+--LIBBASE=$(shell basename $(LIBDIR))
+--
+- DEFAULT_SEMANAGE_CONF_LOCATION=$(DESTDIR)/etc/selinux/semanage.conf
+- 
+- ifeq ($(DEBUG),1)
+-@@ -95,7 +93,7 @@
+- 	ln -sf $@ $(TARGET)
+- 
+- $(LIBPC): $(LIBPC).in ../VERSION
+--	sed -e 's/@VERSION@/$(VERSION)/; s:@prefix@:$(PREFIX):; s:@libdir@:$(LIBBASE):; s:@includedir@:$(INCLUDEDIR):' < $< > $@
+-+	sed -e 's/@VERSION@/$(VERSION)/; s:@prefix@:$(PREFIX):; s:@libdir@:$(LIBDIR):; s:@includedir@:$(INCLUDEDIR):' < $< > $@
+- 
+- semanageswig_python_exception.i: ../include/semanage/semanage.h
+- 	bash -e exception.sh > $@ || (rm -f $@ ; false)
+-@@ -136,13 +134,13 @@
+- 	$(SWIG) $<
+- 
+- install: all 
+--	test -d $(LIBDIR) || install -m 755 -d $(LIBDIR)
+--	install -m 644 $(LIBA) $(LIBDIR)
+--	install -m 755 $(LIBSO) $(LIBDIR)
+--	test -d $(LIBDIR)/pkgconfig || install -m 755 -d $(LIBDIR)/pkgconfig
+--	install -m 644 $(LIBPC) $(LIBDIR)/pkgconfig
+-+	test -d $(LIBINSTALL) || install -m 755 -d $(LIBINSTALL)
+-+	install -m 644 $(LIBA) $(LIBINSTALL)
+-+	install -m 755 $(LIBSO) $(LIBINSTALL)
+-+	test -d $(LIBINSTALL)/pkgconfig || install -m 755 -d $(LIBINSTALL)/pkgconfig
+-+	install -m 644 $(LIBPC) $(LIBINSTALL)/pkgconfig
+- 	test -f $(DEFAULT_SEMANAGE_CONF_LOCATION) || install -m 644 -D semanage.conf $(DEFAULT_SEMANAGE_CONF_LOCATION)
+--	cd $(LIBDIR) && ln -sf $(LIBSO) $(TARGET)
+-+	cd $(LIBINSTALL) && ln -sf $(LIBSO) $(TARGET)
+- 
+- install-pywrap: pywrap 
+- 	test -d $(PYSITEDIR) || install -m 755 -d $(PYSITEDIR)
+-@@ -155,7 +153,7 @@
+- 	install -m 755 $(SWIGRUBYSO) $(RUBYINSTALL)/semanage.so
+- 
+- relabel:
+--	/sbin/restorecon $(LIBDIR)/$(LIBSO)
+-+	/sbin/restorecon $(LIBINSTALL)/$(LIBSO)
+- 
+- clean: 
+- 	-rm -f $(LIBPC) $(OBJS) $(LOBJS) $(LIBA) $(LIBSO) $(SWIGLOBJ) $(SWIGSO) $(SWIGRUBYSO) $(TARGET) conf-parse.c conf-parse.h conf-scan.c *.o *.lo *~
+-diff -durN libsemanage.orig/tests/Makefile libsemanage/tests/Makefile
+---- libsemanage.orig/tests/Makefile	2018-01-12 12:42:30.922043125 +0100
+-+++ libsemanage/tests/Makefile	2018-01-12 10:04:18.632144240 +0100
+-@@ -1,6 +1,3 @@
+--PREFIX ?= $(DESTDIR)/usr
+--LIBDIR ?= $(PREFIX)/lib
+--
+- # Add your test source files here:
+- SOURCES = $(sort $(wildcard *.c))
+- 
+diff --git a/package/libsemanage/libsemanage.hash b/package/libsemanage/libsemanage.hash
+index c386571591..5315514003 100644
+--- a/package/libsemanage/libsemanage.hash
++++ b/package/libsemanage/libsemanage.hash
+@@ -1,2 +1,5 @@
+ # From: https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256 07e9477714ce6a4557a1fe924ea4cb06501b62d0fa0e3c0dc32a2cf47cb8d476 libsemanage-2.7.tar.gz
++sha256 1c0de8d2c51e5460926c21e371105c84a39087dfd8f8e9f0cc1d017e4cbea8e2 libsemanage-2.8.tar.gz
++
++# Hash for license file
++sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 COPYING
+diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
+index b6e50e2848..d554a33356 100644
+--- a/package/libsemanage/libsemanage.mk
++++ b/package/libsemanage/libsemanage.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--POLICYCOREUTILS_VERSION = 2.7
--POLICYCOREUTILS_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20170804
-+POLICYCOREUTILS_VERSION = 2.8
-+POLICYCOREUTILS_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20180524
- POLICYCOREUTILS_LICENSE = GPL-2.0
- POLICYCOREUTILS_LICENSE_FILES = COPYING
+-LIBSEMANAGE_VERSION = 2.7
+-LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20170804
++LIBSEMANAGE_VERSION = 2.8
++LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20180524
+ LIBSEMANAGE_LICENSE = LGPL-2.1+
+ LIBSEMANAGE_LICENSE_FILES = COPYING
+ LIBSEMANAGE_DEPENDENCIES = host-bison host-flex audit libselinux ustr bzip2
+@@ -37,13 +37,13 @@ ifeq ($(BR2_PACKAGE_PYTHON3),y)
+ HOST_LIBSEMANAGE_DEPENDENCIES += host-python3
+ HOST_LIBSEMANAGE_MAKE_OPTS += \
+ 	PYINC="-I$(HOST_DIR)/include/python$(PYTHON3_VERSION_MAJOR)m/" \
+-	PYTHONLIBDIR="-L$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/" \
++	PYTHONLIBDIR="$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/" \
+ 	PYLIBVER="python$(PYTHON3_VERSION_MAJOR)"
+ else
+ HOST_LIBSEMANAGE_DEPENDENCIES += host-python
+ HOST_LIBSEMANAGE_MAKE_OPTS += \
+ 	PYINC="-I$(HOST_DIR)/include/python$(PYTHON_VERSION_MAJOR)/" \
+-	PYTHONLIBDIR="-L$(HOST_DIR)/lib/python$(PYTHON_VERSION_MAJOR)/" \
++	PYTHONLIBDIR="$(HOST_DIR)/lib/python$(PYTHON_VERSION_MAJOR)/" \
+ 	PYLIBVER="python$(PYTHON_VERSION_MAJOR)"
+ endif
  
