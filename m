@@ -1,59 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Oct 2018 08:39:00 +0200
-Subject: [Buildroot] [git commit] glibc: split hash files for licenses,
- fixes ARC
-In-Reply-To: <20181010132409.D359F8257F@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Wed, 10 Oct 2018 15:24:03 +0200")
-References: <20181010132409.D359F8257F@busybox.osuosl.org>
-Message-ID: <87murlrnqz.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 11 Oct 2018 08:43:58 +0200
+Subject: [Buildroot] [PATCH 4/4] webkitgtk: explicitly set
+ USE_GSTREAMER_GL build option
+In-Reply-To: <973ec254-aef1-854f-c1ad-dfbe846c6fb1@mind.be>
+References: <20181009220852.4309-1-aperez@igalia.com>
+ <20181009220852.4309-5-aperez@igalia.com>
+ <20181010212630.7f47270e@windsurf>
+ <973ec254-aef1-854f-c1ad-dfbe846c6fb1@mind.be>
+Message-ID: <20181011084358.43c357ea@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Hello,
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=b14ad0bd697038e4cf48ecf48830fb3369f1f25e
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 11 Oct 2018 00:04:31 +0200, Arnout Vandecappelle wrote:
 
- > Configuration that build a glibc toolchain on ARC currently fail to
- > run "make legal-info", because the hash for the LICENSES file is
- > different between the ARC glibc version, and glibc 2.28.
+> > What is fixing the autobuilder issue exactly? Explicitly disabling
+> > -DUSE_GSTREAMER_GL=OFF when the plugin is not available ? Or having it
+> > enabled by the "imply" ?  
+> 
+>  imply doesn't really enable it, it just changes the default. It is the
+> equivalent of adding 'default y if BR2_PACKAGE_WEBKITGTK_MULTIMEDIA' to
+> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL. So imply can never fix the issue.
 
- > To fix this, this commit moves the hashes for the glibc license files
- > to per-version hash files.
+Yes, of course, I also don't think imply can fix the issue, but that
+was not clear in the commit log, and the fact that the use of imply is
+mixed with the actual bug fix made it even more confusing.
 
- > Fixes:
+> > This usage of "imply" would be the first in Buildroot. Peter, Arnout,
+> > Yann, anything against it ?  
+> 
+>  Absolute not, this is a great way to use imply.
 
- >   http://autobuild.buildroot.net/results/5a98a801dccaaeb4b5cbc26d9a017726d0953157/
+Seems like you and Yann disagree :-)
 
-Thanks for fixing this!
-
-I actually also created a patch for it last week, but it apparently
-never made it to the list because of the mail issues I had:
-
-commit 8df01cc7fcf527853c6cc598d56bf42d192695bf
-Author: Peter Korsgaard <peter@korsgaard.com>
-Date:   Fri Oct 5 12:36:57 2018 +0200
-
-    glibc: fix LICENSE hash for arc variant
-
-    Fixes:
-    http://autobuild.buildroot.net/results/0d4/0d40c4e33830dc9949169aacf039e06bc166a201/
-    http://autobuild.buildroot.net/results/28a/28abbbdc7984a5d9cd27490950d65a752873a0d0/
-    ..
-
-    Commit 37492e8b2d8 (glibc: fix hash for LICENSE) updated the hash for the
-    LICENSE file to match the 2.28 release, but this breaks legal info for the
-    arc variant which contains the old content of the LICENSE file.
-
-    Fix it by adding .hash files for each version separately, similary to how we
-    E.G. do it for qt5.
-
-    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-But no problem, the important thing is that it is fixed now ;)
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
