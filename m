@@ -1,53 +1,40 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 11 Oct 2018 20:20:13 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] open-plc-utils: fix build with static musl
-Message-ID: <20181011182013.16467-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 11 Oct 2018 20:33:24 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-10-08
+In-Reply-To: <875zybmyvn.fsf@tkos.co.il> (Baruch Siach's message of "Tue, 09
+ Oct 2018 09:13:00 +0300")
+References: <20181009060047.754D6207C3@mail.bootlin.com>
+ <875zybmyvn.fsf@tkos.co.il>
+Message-ID: <87a7nk1ggb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pass TARGET_LDFLAGS to EXTRA_LDFLAGS to fix following issue:
-/home/buildroot/autobuild/run/instance-3/output/build/host-gcc-final-7.3.0/build/arm-buildroot-linux-musleabihf/libgcc/../../../libgcc/config/arm/lib1funcs.S:1545: undefined reference to `raise'
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Also pass TARGET_CFLAGS to EXTRA_CFLAGS and TARGET_CXXFLAGS to
-EXTRA_CXXFLAGS and move all these variables to
-OPEN_PLC_UTILS_MAKE_OPTS for readability
+ > Hi Peter,
+ > Thomas Petazzoni writes:
+ >> Results for branch '2018.02.x'
+ >> ==============================
+ >> 
+ >> Classification of failures by reason
+ >> ------------------------------------
+ >> 
+ >> libcurl-7.61.1 | 1 
+ >> 
+ >> 
+ >> Detail of failures
+ >> ------------------
+ >> 
+ >> arm |                 libcurl-7.61.1 | NOK | http://autobuild.buildroot.net/results/f98ad90a77295d73c3ef2fc704f5ec187a31832e |     
 
-Fixes:
- - http://autobuild.buildroot.org/results/67bc5e7ac8ae1c49c035b022a394d2f746705cf2
+ > Commit e7d658e029 (libcurl: add brotli optional dependency) should fix
+ > this build issue in 2018.02.x.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Instead of passing -static to EXTRA_LDFLAGS, use TARGET_LDFLAGS
- - pass TARGET_CFLAGS to EXTRA_CFLAGS
- - pass TARGET_CXXFLAGS to EXTRA_CXXFLAGS
+Ahh, thanks for the heads up - Will cherry-pick it.
 
- package/open-plc-utils/open-plc-utils.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/package/open-plc-utils/open-plc-utils.mk b/package/open-plc-utils/open-plc-utils.mk
-index d45bb9d4f5..e1e66bf7e0 100644
---- a/package/open-plc-utils/open-plc-utils.mk
-+++ b/package/open-plc-utils/open-plc-utils.mk
-@@ -15,8 +15,14 @@ OPEN_PLC_UTILS_LICENSE_FILES = LICENSE
- # Yes, we're passing __UCLIBC__ in EXTRA_CFLAGS, as it fixes a build
- # issue for non-uClibc toolchains. It is the very crappy solution
- # suggested at https://github.com/qca/open-plc-utils/issues/36.
-+OPEN_PLC_UTILS_MAKE_OPTS = \
-+	EXTRA_CFLAGS="$(TARGET_CFLAGS) -D__UCLIBC__" \
-+	EXTRA_CXXFLAGS="$(TARGET_CXXFLAGS)" \
-+	EXTRA_LDFLAGS="$(TARGET_LDFLAGS)"
-+
- define OPEN_PLC_UTILS_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) CROSS=$(TARGET_CROSS) EXTRA_CFLAGS="-D__UCLIBC__" -C $(@D)
-+	$(TARGET_MAKE_ENV) $(MAKE) CROSS=$(TARGET_CROSS) \
-+		$(OPEN_PLC_UTILS_MAKE_OPTS) -C $(@D)
- endef
- 
- define OPEN_PLC_UTILS_INSTALL_TARGET_CMDS
 -- 
-2.17.1
+Bye, Peter Korsgaard
