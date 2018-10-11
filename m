@@ -1,58 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 11 Oct 2018 10:12:21 +0200
-Subject: [Buildroot] [PATCH 1/1] open-plc-utils: fix build with static
- musl
-In-Reply-To: <20181009192102.13223-1-fontaine.fabrice@gmail.com>
-References: <20181009192102.13223-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181011101221.47d280d7@windsurf>
+Date: Thu, 11 Oct 2018 10:19:33 +0200
+Subject: [Buildroot] [PATCH 0/6] core: look for package's hashes in
+ versioned sub-directory
+In-Reply-To: <cover.1538913431.git.yann.morin.1998@free.fr>
+References: <cover.1538913431.git.yann.morin.1998@free.fr>
+Message-ID: <20181011101933.29018f49@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+Hello,
 
-On Tue,  9 Oct 2018 21:21:02 +0200, Fabrice Fontaine wrote:
-> Pass -static to EXTRA_LDFLAGS to fix following issue:
-> /home/buildroot/autobuild/run/instance-3/output/build/host-gcc-final-7.3.0/build/arm-buildroot-linux-musleabihf/libgcc/../../../libgcc/config/arm/lib1funcs.S:1545: undefined reference to `raise'
-> 
-> Move EXTRA_CFLAGS and this new variable to OPEN_PLC_UTILS_MAKE_OPTS for
-> readability
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/67bc5e7ac8ae1c49c035b022a394d2f746705cf2
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On Sun,  7 Oct 2018 13:57:19 +0200, Yann E. MORIN wrote:
 
-Thanks for investigating this, however, I believe we need a better fix.
+> Yann E. MORIN (6):
+>       core: add a variable that points to the package's hash file
+>       legal-info: use the per-package variable to get the hash file
+>       package/qt5: prepare for per-version hash files
+>       core/download: do not hard-code the path to hte package hash file
+>       package/qt5: drop unversioned hash files
+>       docs/manual: document location of hash files for multi-versions packages
 
-> +OPEN_PLC_UTILS_MAKE_OPTS = EXTRA_CFLAGS="-D__UCLIBC__"
-> +
-> +ifeq ($(BR2_STATIC_LIBS),y)
-> +OPEN_PLC_UTILS_MAKE_OPTS += EXTRA_LDFLAGS=-static
-> +endif
+This looks good to me. When applying, we will have to adjust the glibc
+package as well, which now uses per-version hash files as well, but
+no need to resend for that.
 
-The crux of the matter is that open-plc-utils defines its own
-CFLAGS/LDFLAGS/CXXFLAGS, without obeying to the ones passed in the
-environment. -static is already in TARGET_LDFLAGS when
-BR2_STATIC_LIBS=y, so there's no need to repeat this condition.
+If nobody complains by tomorrow, I'll apply this patch series.
 
-So, I would suggest to do this instead:
-
-# blabla keep comment about __UCLIBC__
-OPEN_PLC_UTILS_MAKE_OPTS = \
-	EXTRA_CFLAGS="$(TARGET_CFLAGS) -D__UCLIBC__" \
-	EXTRA_CXXFLAGS="$(TARGET_CXXFLAGS)" \
-	EXTRA_LDFLAGS="$(TARGET_LDFLAGS)"
-
-This should fix the static linking issue, but also more generally
-ensure that our flags are taken into account during the build.
-
-Could you check if this works better, and if it does, send an updated
-version of the patch?
-
-Thanks!
+Best regards,
 
 Thomas
 -- 
