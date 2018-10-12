@@ -1,109 +1,55 @@
-From: lpdev at cordier.org <lpdev@cordier.org>
-Date: Fri, 12 Oct 2018 10:45:13 +0200 (CEST)
-Subject: [Buildroot] UEFI and systemD
-Message-ID: <ea-mime-5bc05f19-57c-2be43419@www-5.netcourrier.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 12 Oct 2018 12:17:58 +0300
+Subject: [Buildroot] [PATCH] ntp: fix build for no-MMU
+Message-ID: <86942174a35cf04e0a51577788542fe32ebfe291.1539335878.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everybody,
+Code rearrange in the latest ntp version exposed code that used to be
+hidden behind HAVE_WORKING_FORK. Put this code back where it belongs.
 
-I finally succeed to compile and start a linux kernel using EFI. My kernel is booting, but it seems that systemd is not starting. (I only get output from the kernel, and when I plugin/plugoff devices). I have no tty for interacting with the operating system.
+Fixes:
+http://autobuild.buildroot.net/results/9f4/9f4710b451df1a60f95ab6503cfb7788ad998a65/
+http://autobuild.buildroot.net/results/d0b/d0b20a6c0f37a8b06841afc2764c8aab6ffd27d2/
+http://autobuild.buildroot.net/results/85c/85c89f5e9d36915567b8d14b9c99e3720c866577/
 
-After digging in systemd.mk, I noticed that in SYSTEMD_CONF_OPTS, 2 options are disabled:
+Cc: Artem Panfilov <apanfilov@spectracom.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/ntp/0003-fix-nommu.patch | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+ create mode 100644 package/ntp/0003-fix-nommu.patch
 
-??? -Defi=false \
-??? -Dgnu-efi=false \
-
-Is it normal? Any clue to how to make systemd boot while using Uefi?
-
-Following is my defconfig. Thank you very much for your time.
-
-BR2_x86_64=y
-BR2_CCACHE=y
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-BR2_GCC_VERSION_5_X=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_GCC_ENABLE_OPENMP=y
-BR2_TARGET_GENERIC_HOSTNAME="cstick"
-BR2_TARGET_GENERIC_ISSUE="Welcome to Cstick!"
-BR2_INIT_SYSTEMD=y
-BR2_TARGET_GENERIC_GETTY_PORT="tty1"
-BR2_ROOTFS_OVERLAY="$(BR2_EXTERNAL_D_PATH)/board/cstick/rootfs-overlay"
-BR2_ROOTFS_POST_BUILD_SCRIPT="$(BR2_EXTERNAL_D_PATH)/board/cstick/post_build.sh"
-BR2_ROOTFS_POST_IMAGE_SCRIPT="$(BR2_EXTERNAL_D_PATH)/board/cstick/gen_uefi_image.sh"
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.16"
-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="$(BR2_EXTERNAL_D_PATH)/board/cstick/linux-4.4.config"
-BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
-BR2_PACKAGE_BZIP2=y
-BR2_PACKAGE_CHECK=y
-BR2_PACKAGE_MAKE=y
-BR2_PACKAGE_SED=y
-BR2_PACKAGE_TREE=y
-BR2_PACKAGE_EXFAT=y
-BR2_PACKAGE_EXFAT_UTILS=y
-BR2_PACKAGE_LIBVA_UTILS=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_I915=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
-BR2_PACKAGE_XKEYBOARD_CONFIG=y
-BR2_PACKAGE_LINUX_FIRMWARE=y
-BR2_PACKAGE_LINUX_FIRMWARE_I915=y
-BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_8000C=y
-BR2_PACKAGE_ACPID=y
-BR2_PACKAGE_ACPITOOL=y
-BR2_PACKAGE_DBUS_GLIB=y
-BR2_PACKAGE_KBD=y
-BR2_PACKAGE_LSHW=y
-BR2_PACKAGE_PCIUTILS=y
-BR2_PACKAGE_PORTAUDIO=y
-BR2_PACKAGE_LIBSHA1=y
-BR2_PACKAGE_FONTCONFIG=y
-BR2_PACKAGE_JASPER=y
-BR2_PACKAGE_LIBPNG=y
-BR2_PACKAGE_PIXMAN=y
-BR2_PACKAGE_TIFF=y
-BR2_PACKAGE_GNU_EFI=y
-BR2_PACKAGE_LIBXKBCOMMON=y
-BR2_PACKAGE_MTDEV=y
-BR2_PACKAGE_LIBNL=y
-BR2_PACKAGE_LIBEVDEV=y
-BR2_PACKAGE_NCURSES_TARGET_PROGS=y
-BR2_PACKAGE_PCRE2=y
-BR2_PACKAGE_PCRE2_16=y
-BR2_PACKAGE_XUTIL_UTIL_MACROS=y
-BR2_PACKAGE_DHCPCD=y
-BR2_PACKAGE_IPTABLES=y
-BR2_PACKAGE_WIRELESS_TOOLS=y
-BR2_PACKAGE_BASH=y
-BR2_PACKAGE_FILE=y
-BR2_PACKAGE_TIME=y
-BR2_PACKAGE_WHICH=y
-BR2_PACKAGE_EFIBOOTMGR=y
-BR2_PACKAGE_HTOP=y
-BR2_PACKAGE_PROCPS_NG=y
-BR2_PACKAGE_SYSTEMD_HIBERNATE=y
-BR2_PACKAGE_SYSTEMD_VCONSOLE=y
-BR2_PACKAGE_TAR=y
-BR2_PACKAGE_VIM=y
-BR2_TARGET_ROOTFS_CPIO=y
-BR2_TARGET_ROOTFS_EXT2=y
-BR2_TARGET_ROOTFS_EXT2_4=y
-BR2_TARGET_ROOTFS_EXT2_LABEL="obr"
-BR2_TARGET_ROOTFS_EXT2_SIZE="600M"
-BR2_TARGET_GRUB2=y
-BR2_TARGET_GRUB2_X86_64_EFI=y
-BR2_PACKAGE_HOST_CMAKE=y
-BR2_PACKAGE_HOST_DOSFSTOOLS=y
-BR2_PACKAGE_HOST_MTOOLS=y
-BR2_PACKAGE_HOST_PKGCONF=y
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181012/df75754c/attachment.html>
+diff --git a/package/ntp/0003-fix-nommu.patch b/package/ntp/0003-fix-nommu.patch
+new file mode 100644
+index 000000000000..53bf4dfcf38b
+--- /dev/null
++++ b/package/ntp/0003-fix-nommu.patch
+@@ -0,0 +1,22 @@
++Fix no-MMU build
++
++The detach_from_terminal() is unused for no-MMU, but it depends on symbols
++that are not defined for no-MMU. Don't define detach_from_terminal() when
++HAVE_WORKING_FORK is not defined.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: http://bugs.ntp.org/show_bug.cgi?id=3538
++
++diff -Nuar ntp-4.2.8p12.orig/ntpd/ntpd.c ntp-4.2.8p12/ntpd/ntpd.c
++--- ntp-4.2.8p12.orig/ntpd/ntpd.c	2018-08-14 14:51:30.000000000 +0300
+++++ ntp-4.2.8p12/ntpd/ntpd.c	2018-10-12 08:19:01.291781773 +0300
++@@ -529,7 +529,7 @@
++ }
++ #endif	/* !SIM */
++ 
++-#if !defined(SIM) && !defined(SYS_WINNT)
+++#if !defined(SIM) && !defined(SYS_WINNT) && defined(HAVE_WORKING_FORK)
++ /*
++  * Detach from terminal (much like daemon())
++  * Nothe that this function calls exit()
+-- 
+2.19.1
