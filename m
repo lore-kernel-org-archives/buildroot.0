@@ -1,84 +1,95 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Fri, 12 Oct 2018 08:50:49 -0300 (BRT)
-Subject: [Buildroot] [PATCH v3 0/8] init scripts: rewrite S01logging
-In-Reply-To: <20181011170948.3594d391@windsurf>
-References: <20181007114605.18153-1-casantos@datacom.com.br>
- <20181011170948.3594d391@windsurf>
-Message-ID: <1677556181.2913340.1539345049511.JavaMail.zimbra@datacom.com.br>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Fri, 12 Oct 2018 15:34:41 +0300
+Subject: [Buildroot] [PATCH 1/1] python-py: new package
+Message-ID: <20181012123441.5406-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
-> To: "DATACOM" <casantos@datacom.com.br>
-> Cc: "buildroot" <buildroot@buildroot.org>, "ratbert90" <aduskett@gmail.com>, "Arnout Vandecappelle" <arnout@mind.be>,
-> "Peter Korsgaard" <peter@korsgaard.com>, "Yann Morin" <yann.morin.1998@free.fr>
-> Sent: Thursday, October 11, 2018 12:09:48 PM
-> Subject: Re: [Buildroot] [PATCH v3 0/8] init scripts: rewrite S01logging
+library with cross-python path, ini-parsing, io, code, log
+facilities.
 
-> Hello,
-> 
-> On Sun,  7 Oct 2018 08:45:57 -0300, Carlos Santos wrote:
->> Continuing our effort to improve daemon startup scripts, this series
->> focuses on S01logging, which starts the logging daemon. Common features
->> are:
->> 
->> - Indent with tabs, not spaces.
->> - Implement start, stop, restart and reload as functions.
->> - Use start-stop-daemon.
->> - Correctly detect and report start/stop/restart/reload errors.
->> - Support a configuration file at /etc/default (example files for each
->>   package are provided in individual patches).
->> - Support a configuration variable that completely disables the service
->>   and issues a warning message on any invocation.
-> 
-> Thanks a lot for working on this, much appreciated. Overall, I am happy
-> with the proposal you're making and the consistency between init
-> scripts that your proposal is bringing.
-> 
-> The only thing that I'm not entirely sure about is specific to these
-> logging init scripts:
-> 
-> (1) Do we really want that Busybox, syslog-ng, rsyslog, sysklogd all
->     install a file of the same name, S01logging ? Isn't this
->     contradicting our goal of not having one package overwrite files
->     installed by another package ?
-> 
->     Wouldn't it make more sense to install S01syslog-ng, S01rsyslog,
->     S01sysklogd ? This way, we also have a mapping between the init
->     script name and the daemon/package being started ?
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ DEVELOPERS                       |  1 +
+ package/Config.in                |  1 +
+ package/python-py/Config.in      |  7 +++++++
+ package/python-py/python-py.hash |  5 +++++
+ package/python-py/python-py.mk   | 14 ++++++++++++++
+ 5 files changed, 28 insertions(+)
+ create mode 100644 package/python-py/Config.in
+ create mode 100644 package/python-py/python-py.hash
+ create mode 100644 package/python-py/python-py.mk
 
-I don't know why it was decided to use the same name for all packages.
-Looks like the original intention was to prevent multiple logging damons
-from running at the same time.
-
-Perhaps we should add an item to the "System configuration" menu allowing
-the user to choose a logging provider, just like the "Init system" item,
-and convert rsyslog/sysklogd/syslog-ng to virtual packages.
-
-> (2) For the Busybox case, do we want to keep a single init script that
->     starts both klogd and syslogd ? Or should we have one init script
->     per daemon, so that again the init script name matches the daemon
->     being started ? So S01klogd, S01syslogd ?
-
-There is also sysklogd, from which Busyox borrowed the code (or at least
-the idea) a long time ago. I think we should keep klogd and syslogd tied
-to each other, since klogd does not make much sense without syslogd.
-
-> Note: the above points are really proposals/discussion items. Do not
-> rework your series according to those comments until there has been
-> some discussion/agreement with other developers.
-> 
-> Another point, but which can definitely be handled separately, is
-> documenting in the manual what the init scripts should look like, by at
-> least pointing to the "good" init scripts, so that people know which
-> ones are good to use as a template.
-
-It's already in my endless to-do list. :-)
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 990621fb11..341bf7de3b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -217,6 +217,7 @@ F:	package/python-paramiko/
+ F:	package/python-passlib/
+ F:	package/python-ply/
+ F:	package/python-priority/
++F:	package/python-py/
+ F:	package/python-pyasn1/
+ F:	package/python-pyasn1-modules/
+ F:	package/python-pycryptodomex/
+diff --git a/package/Config.in b/package/Config.in
+index 8d995f82e6..fd86e37a52 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -943,6 +943,7 @@ menu "External python modules"
+ 	source "package/python-psycopg2/Config.in"
+ 	source "package/python-ptyprocess/Config.in"
+ 	source "package/python-pudb/Config.in"
++	source "package/python-py/Config.in"
+ 	source "package/python-pyasn/Config.in"
+ 	source "package/python-pyasn-modules/Config.in"
+ 	source "package/python-pyasn1/Config.in"
+diff --git a/package/python-py/Config.in b/package/python-py/Config.in
+new file mode 100644
+index 0000000000..354372f5b4
+--- /dev/null
++++ b/package/python-py/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_PY
++	bool "python-py"
++	help
++	  library with cross-python path, ini-parsing, io, code, log
++	  facilities.
++
++	  http://py.readthedocs.io/
+diff --git a/package/python-py/python-py.hash b/package/python-py/python-py.hash
+new file mode 100644
+index 0000000000..67926527cd
+--- /dev/null
++++ b/package/python-py/python-py.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/py/json
++md5	e53ac12db4286737837ef3ccb4158301  py-1.7.0.tar.gz
++sha256	bf92637198836372b520efcba9e020c330123be8ce527e535d185ed4b6f45694  py-1.7.0.tar.gz
++# Locally computed sha256 checksums
++sha256	2af680c39ef493fb82830356d1d3df1acb5a06033cba2dec7a19e21caa77a866  LICENSE
+diff --git a/package/python-py/python-py.mk b/package/python-py/python-py.mk
+new file mode 100644
+index 0000000000..e9c4d0a3b5
+--- /dev/null
++++ b/package/python-py/python-py.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-py
++#
++################################################################################
++
++PYTHON_PY_VERSION = 1.7.0
++PYTHON_PY_SOURCE = py-$(PYTHON_PY_VERSION).tar.gz
++PYTHON_PY_SITE = https://files.pythonhosted.org/packages/c7/fa/eb6dd513d9eb13436e110aaeef9a1703437a8efa466ce6bb2ff1d9217ac7
++PYTHON_PY_SETUP_TYPE = setuptools
++PYTHON_PY_LICENSE = MIT
++PYTHON_PY_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?Marched towards the enemy, spear upright, armed with the certainty
-that only the ignorant can have.? ? Epitaph of a volunteer
+2.17.1
