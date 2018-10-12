@@ -1,34 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 12 Oct 2018 21:58:38 +0200
-Subject: [Buildroot] [git commit] spandsp: remove redundant --disable-doc
-Message-ID: <20181012195931.720378360B@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 12 Oct 2018 22:04:13 +0200
+Subject: [Buildroot] [PATCH 1/2] spandsp: fix static build with jpeg
+ enabled
+In-Reply-To: <461481fbc34bd2142d4b7e7265f953c2fbf84056.1539319191.git.baruch@tkos.co.il>
+References: <461481fbc34bd2142d4b7e7265f953c2fbf84056.1539319191.git.baruch@tkos.co.il>
+Message-ID: <20181012220413.3cbd3d90@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d1a6f152f3185e128fd122f05b81f8d0fb9e6fe
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-We pass --disable-doc by default to all autotools packages.
+On Fri, 12 Oct 2018 07:39:50 +0300, Baruch Siach wrote:
 
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/spandsp/spandsp.mk | 1 -
- 1 file changed, 1 deletion(-)
+> -SPANDSP_DEPENDENCIES = tiff
+> +SPANDSP_DEPENDENCIES = tiff host-pkgconf
+>  SPANDSP_INSTALL_STAGING = YES
+> +SPANDSP_CONF_ENV = LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libtiff-4`"
 
-diff --git a/package/spandsp/spandsp.mk b/package/spandsp/spandsp.mk
-index fc9db34bfc..e02c15a776 100644
---- a/package/spandsp/spandsp.mk
-+++ b/package/spandsp/spandsp.mk
-@@ -15,7 +15,6 @@ SPANDSP_INSTALL_STAGING = YES
- SPANDSP_CONF_ENV = LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libtiff-4`"
- 
- SPANDSP_CONF_OPTS = \
--	--disable-doc \
- 	--disable-builtin-tiff \
- 	$(if $(BR2_X86_CPU_HAS_MMX),--enable-mmx,--disable-mmx) \
- 	$(if $(BR2_X86_CPU_HAS_SSE),--enable-sse,--disable-sse) \
+I have to say I continue to dislike such hacks, and would very much
+prefer a change to the package configure.ac script to use pkg-config
+directly.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
