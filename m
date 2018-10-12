@@ -1,70 +1,60 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 12 Oct 2018 18:54:33 +0200
-Subject: [Buildroot] [PATCH v2,1/1] xerces: fix build without pthread
-Message-ID: <20181012165433.7403-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 12 Oct 2018 18:56:02 +0200
+Subject: [Buildroot] [PATCH 3/4] package/spandsp: new package
+In-Reply-To: <20181009151421.396cb25a@windsurf>
+References: <20181003131358.28002-1-bernd.kuhls@t-online.de>
+ <20181003131358.28002-3-bernd.kuhls@t-online.de>
+ <20181009151421.396cb25a@windsurf>
+Message-ID: <20181012165602.GC31509@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Don't fail when pthreads is not available
+Thomas, All,
 
-Fixes:
- - http://autobuild.buildroot.org/results/63cc4d3d69db19d0c639437d6996f881888a926b
+On 2018-10-09 15:14 +0200, Thomas Petazzoni spake thusly:
+> On Wed,  3 Oct 2018 15:13:57 +0200, Bernd Kuhls wrote:
+> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > 
+> > [Bernd:
+> >  - bumped version to 20180108
+> >  - removed 0001-fix-msse4.x.patch, applied upstream
+> >  - removed autoreconf after patch removal
+> >  - added license hash (Arnout)
+> >  - added SPDX license codes (Arnout)]
+> > 
+> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> > ---
+> >  package/Config.in            |  1 +
+> >  package/spandsp/Config.in    |  9 +++++++++
+> >  package/spandsp/spandsp.hash |  3 +++
+> >  package/spandsp/spandsp.mk   | 27 +++++++++++++++++++++++++++
+> >  4 files changed, 40 insertions(+)
+> >  create mode 100644 package/spandsp/Config.in
+> >  create mode 100644 package/spandsp/spandsp.hash
+> >  create mode 100644 package/spandsp/spandsp.mk
+> 
+> I am wondering why a signal processing library for telephony needs the
+> TIFF library, but OK, it seems to be the case.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2:
- - Use the patch merged upstream
+Because it is more than a simple 'DSP' library: it specialises in
+telephony DSP, including FAX generation/recognition.
 
- ...s-to-fail-and-fall-back-to-nothreads.patch | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/xerces/0001-cmake-Allow-thread-checks-to-fail-and-fall-back-to-nothreads.patch
+So, you give it a tiff file, and it generates the sounds to send on the
+line. Conversely, when receiving a FAX, you feed it the sound from the
+line, and it generates a tiff file. More or less... ;-)
 
-diff --git a/package/xerces/0001-cmake-Allow-thread-checks-to-fail-and-fall-back-to-nothreads.patch b/package/xerces/0001-cmake-Allow-thread-checks-to-fail-and-fall-back-to-nothreads.patch
-new file mode 100644
-index 0000000000..8bed7711c4
---- /dev/null
-+++ b/package/xerces/0001-cmake-Allow-thread-checks-to-fail-and-fall-back-to-nothreads.patch
-@@ -0,0 +1,38 @@
-+From c9bfe786331647237b90f5f9e35b4d2cad7aaa69 Mon Sep 17 00:00:00 2001
-+From: Roger Leigh <rleigh@apache.org>
-+Date: Fri, 12 Oct 2018 12:02:58 +0000
-+Subject: [PATCH] cmake: Allow thread checks to fail and fall back to nothreads
-+
-+Closes: #2155
-+
-+
-+git-svn-id: https://svn.apache.org/repos/asf/xerces/c/trunk at 1843653 13f79535-47bb-0310-9956-ffa450edef68
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from: https://github.com/apache/xerces-c/commit/c9bfe786331647237b90f5f9e35b4d2cad7aaa69]
-+---
-+ cmake/XercesMutexMgrSelection.cmake | 10 +++++++---
-+ 1 file changed, 7 insertions(+), 3 deletions(-)
-+
-+diff --git a/cmake/XercesMutexMgrSelection.cmake b/cmake/XercesMutexMgrSelection.cmake
-+index 2f1d71c50..ad698840d 100644
-+--- a/cmake/XercesMutexMgrSelection.cmake
-++++ b/cmake/XercesMutexMgrSelection.cmake
-+@@ -19,11 +19,15 @@
-+ 
-+ # mutexmgr selection
-+ 
-+-option(threads "Threading support" ON)
-++set(xerces_thread_default ON)
-++find_package(Threads)
-++if(NOT TARGET Threads::Threads)
-++  set(xerces_thread_default ON)
-++endif()
-+ 
-+-include(CheckCXXSourceCompiles)
-++option(threads "Threading support" ${xerces_thread_default})
-+ 
-+-find_package(Threads REQUIRED)
-++include(CheckCXXSourceCompiles)
-+ 
-+ function(thread_test outvar)
-+   set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+Regards,
+Yann E. MORIN.
+
 -- 
-2.17.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
