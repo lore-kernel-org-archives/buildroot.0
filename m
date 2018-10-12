@@ -1,87 +1,46 @@
-From: Vellemans, Noel <Noel.Vellemans@visionBMS.com>
-Date: Fri, 12 Oct 2018 06:11:51 +0000
-Subject: [Buildroot] pppd - fails to build on current git.
-In-Reply-To: <20181011162554.7e5f92a4@windsurf>
-References: <414f8bfe86f14594b5433f40b56bde6d@WETSRVEX02.loepfe.com>
- <20181011162554.7e5f92a4@windsurf>
-Message-ID: <056de4ffae5046e29f42c0c45f8e2de4@WETSRVEX02.loepfe.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Fri, 12 Oct 2018 09:36:44 +0300
+Subject: [Buildroot] [PATCH 1/1] python-txtorcon: bump to version 18.3.0
+Message-ID: <20181012063644.10173-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/python-txtorcon/python-txtorcon.hash | 4 ++--
+ package/python-txtorcon/python-txtorcon.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-pppd, at this time I quickly hacked together a patch based on the "host-ruby-patch" ... it builds, but... not tested yet.
-
-If I find some time I might try to use the " https://github.com/paulusmack/ppp/issues/93" solution , which clearly seems to be 'cleaner'
-
-
-Regards Noel
-
-
-
-_______________________
-Noel Vellemans
-BMSvision
------Original Message-----
-From: Thomas Petazzoni [mailto:thomas.petazzoni at bootlin.com] 
-Sent: Thursday, October 11, 2018 4:26 PM
-To: Vellemans, Noel
-Cc: buildroot at buildroot.org
-Subject: Re: [Buildroot] pppd - fails to build on current git.
-
-Hello,
-
-On Thu, 11 Oct 2018 12:25:17 +0000, Vellemans, Noel wrote:
-
-> pppd fails to build on current git-snapshot.
-
-Indeed:
-
-  http://autobuild.buildroot.net/?reason=pppd%
-
-> pppcrypt.c: In function 'DesSetkey':
-> pppcrypt.c:122:2: warning: implicit declaration of function 'setkey'; did you mean 'DesSetkey'? [-Wimplicit-function-declaration]
->   setkey((const char *)crypt_key);
->   ^~~~~~
->   DesSetkey
-> pppcrypt.c: In function 'DesEncrypt':
-> pppcrypt.c:137:2: warning: implicit declaration of function 'encrypt'; did you mean 'crypt'? [-Wimplicit-function-declaration]
->   encrypt((char *)des_input, 0);
->   ^~~~~~~
->   crypt
-> ...
-> pppcrypt.o: In function `DesSetkey':
-> pppcrypt.c:(.text+0x140): undefined reference to `setkey'
-> pppcrypt.o: In function `DesEncrypt':
-> pppcrypt.c:(.text+0x184): undefined reference to `encrypt'
-> pppcrypt.o: In function `DesDecrypt':
-> pppcrypt.c:(.text+0x1dc): undefined reference to `encrypt'
-> collect2: error: ld returned 1 exit status
-> Makefile:217: recipe for target 'pppd' failed
-> make[3]: *** [pppd] Error 1
-> Makefile:13: recipe for target 'all' failed
-> 
-> ==============================================================
-> 
-> 
-> Probably based on ongoing work as stated here : 
-> https://sourceware.org/ml/libc-alpha/2017-08/msg01257.html
-> "The function prototypes for crypt and encrypt are removed from 
-> unistd.h, and the function prototype for setkey is removed from stdlib.h"
-
-glibc 2.28 removed libcrypt, and there are patches floating around that make pppd use openssl instead:
-
-  https://github.com/paulusmack/ppp/issues/93
-
-Perhaps you could re-use this to fix the issue ?
-
-Thanks,
-
-Thomas Petazzoni
---
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-txtorcon/python-txtorcon.hash b/package/python-txtorcon/python-txtorcon.hash
+index 9a4eafc0a1..d46a7769dc 100644
+--- a/package/python-txtorcon/python-txtorcon.hash
++++ b/package/python-txtorcon/python-txtorcon.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/txtorcon/json
+-md5    a7df623f400668daf588a6f028864c52  txtorcon-18.2.0.tar.gz
+-sha256 b1714dfa633cb4097c9ea649c8c49657d9d22a990cc465bb904620428c5e684e  txtorcon-18.2.0.tar.gz
++md5    31492e847973710f6533e9979a134ffa  txtorcon-18.3.0.tar.gz
++sha256 5601956b3a2452526cd1ea31662696a51ddbf8ed6452633ee464fc1ff275f8b0  txtorcon-18.3.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256 3ada1c32ef38c23d96d7f4e8f4a226c527f51e0202883c7543b06f9cc5228a2b  LICENSE
+diff --git a/package/python-txtorcon/python-txtorcon.mk b/package/python-txtorcon/python-txtorcon.mk
+index a02ec3626e..6ebcdb4f90 100644
+--- a/package/python-txtorcon/python-txtorcon.mk
++++ b/package/python-txtorcon/python-txtorcon.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_TXTORCON_VERSION = 18.2.0
++PYTHON_TXTORCON_VERSION = 18.3.0
+ PYTHON_TXTORCON_SOURCE = txtorcon-$(PYTHON_TXTORCON_VERSION).tar.gz
+-PYTHON_TXTORCON_SITE = https://files.pythonhosted.org/packages/08/02/5a38afe0c96bd8da466716f51c72b3b52d3a76399e62b37494b97489f74a
++PYTHON_TXTORCON_SITE = https://files.pythonhosted.org/packages/a2/71/2fe0c7d9350ff95cd22128f375dbf2b49438ca1a5d8ca0795311a964586b
+ PYTHON_TXTORCON_SETUP_TYPE = setuptools
+ PYTHON_TXTORCON_LICENSE = MIT
+ PYTHON_TXTORCON_LICENSE_FILES = LICENSE
+-- 
+2.17.1
