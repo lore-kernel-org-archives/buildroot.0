@@ -1,91 +1,63 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 12 Oct 2018 23:41:33 +0200
-Subject: [Buildroot] Problem with Raspberry Pi 3B+and BT
-In-Reply-To: <CANQCQpbD_fdXrqYGdW74d4EVyCm4eAs6pxiyasg8wTumYZ+XWA@mail.gmail.com>
-References: <CALtfCQa87Q5w-mOL4sKbW8M7wh4qAH3rBRm6A6H41SEaci=3QQ@mail.gmail.com>
- <CANQCQpbD_fdXrqYGdW74d4EVyCm4eAs6pxiyasg8wTumYZ+XWA@mail.gmail.com>
-Message-ID: <20181012234133.539d0a0b@gmx.net>
+Date: Fri, 12 Oct 2018 23:52:28 +0200
+Subject: [Buildroot] Plug/unplug ethernet connector does not detected on
+ Raspberry PI3 B+
+In-Reply-To: <CALtfCQZzF97R1Jy-62acGwoVLg0umWNTPRRBaxUOvNJVYfQMWA@mail.gmail.com>
+References: <CALtfCQbvKXAHjw60eazZ1LzRpuUQH5EuPaDypuUCd3sO=zoYaw@mail.gmail.com>
+ <fae7198d-e632-b1eb-c4d4-d38a15220618@mind.be>
+ <CALtfCQZzF97R1Jy-62acGwoVLg0umWNTPRRBaxUOvNJVYfQMWA@mail.gmail.com>
+Message-ID: <20181012235228.2be9f7d8@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Oscar, Matt,
+Hello Oscar,
 
-On Thu, 11 Oct 2018 07:48:43 -0500, Matthew Weber <matthew.weber@rockwellcollins.com> wrote:
+On Thu, 4 Oct 2018 08:12:06 +0200, Oscar Gomez Fuente <oscargomezf@gmail.com> wrote:
 
-> Oscar,
+> Hi Arnout,
 > 
-> On Thu, Oct 11, 2018 at 3:46 AM Oscar Gomez Fuente
-> <oscargomezf@gmail.com> wrote:
-> >
-> > Hi everyone,
-> >
-> > I have a problem with the Bluetooth on my raspberry pi 3B+, I have
-> > installed the following packages:
-> >
-> > [*] bluez-tools
-> > [*] bluez-utils 5.x
-> > [*]   build OBEX support
-> > [*]   build CLI client
-> > [*]   build experimental obexd plugin
-> > [*]   build health plugin
-> > [*]   build midi profile
-> > [*]   build nfc plugin
-> > [*]   build sap plugin
-> > [*]   build sixaxis plugin
-> > [*]   build tests
-> > [*]   install bdaddr tool
-> >
-> > I'm using the raspberry pi for scanning BT devices continuously, using
-> > this command:
-> >
-> > # bt-adapter -a hci0 -d
-> >
-> > And everything works fines, but occasionally this command fails and Ii
-> > doesn't work anymore and I have to reboot my HW. I was taking a look
-> > at the kernel messages:
-> >
-> > [25124.029835] Bluetooth: hci0: Frame reassembly failed (-84)
-> > [25124.031902] Bluetooth: hci0: Frame reassembly failed (-90)
-> > [25124.033665] Bluetooth: hci0: Frame reassembly failed (-84)
-> > [28601.218856] Bluetooth: hci0 advertising data length corrected
-> > [29425.140974] Bluetooth: hci0: Frame reassembly failed (-84)
-> > [29427.218670] Bluetooth: Failed to disable LE scan: status 0x1f
-> > [29427.220413] Bluetooth: hci0 command 0x200c tx timeout
-> > [29561.841776] Bluetooth: hci0 command 0x200c tx timeout
-> >
+> >  You probably want ifplugd.
 > 
-> That looks kernel related.  I believe the PI has some GPU firmware
-> loaded that applies to bluetooth.  I've never tried updating it,
-> however there are tools out there to update the firmware that's stored
-> in some non-volatile space on the board.
-> https://github.com/Hexxeh/rpi-update   # notes here:
-> https://raspberrypi.stackexchange.com/questions/164/how-do-i-update-software-and-firmware
-
-The GPU Firmware is stored on the SD card image, the given links are about updating
-the firmware when using a Raspbian SD card image, for the buildroot way to update
-to latest versions see [1]...
-
+> Yes, I was checking this one, but it didn't work properly (Sometimes works
+> and sometimes not).
 > 
-> Another idea would be verifying your power supply is large enough to
-> accommodate bluetooth.  To check this, If you have other USB devices
-> attached, unplug a few usb devices, startup and see if bluetooth is
-> more stable.
+> I don't understand because If I am using the same defconfig file than in
+> the Raspberry Pi 3B (changing the config.txt file and changing the device
+> tree bcm2710-rpi-3-b-plus.dtb for bcm2710-rpi-3-b.dtb) everything works
+> fine without installing the ifplugd.
+> 
+> So, this is the reason I think there is something wrong with the driver
+> LAN9515 (Raspberry Pi 3B+).
+> 
+> It is not normal that with the same image, in the raspberry pi 3B, I can
+> see kernel messages of the plug/unplug events:
+> 
+> [   81.006823] smsc95xx 1-1.1:1.0 eth0: link down
+> [   83.455586] smsc95xx 1-1.1:1.0 eth0: link up, 100Mbps, full-duplex, lpa
+> 0xC5E1
+> [   84.454778] smsc95xx 1-1.1:1.0 eth0: link down
+> [   87.080069] smsc95xx 1-1.1:1.0 eth0: link up, 100Mbps, full-duplex, lpa
+> 0xC5E1
+> 
+> And with the Raspberry Pi 3B+, I cannot see this messages, so I think the
+> driver is not detecting these events and then the Raspberrypi is not able
+> to execute ifup/ifdown automatically.
+> 
+> Does anyone have any suggestion? I am stuck.
 
-Or try out a latest original Raspbian image and check if your errors
-occur there too (sorry no B+ at hand to try out myself, only a legacy
-B one)...
+Same suggestions as for thee BT Problem ([1]), try out original Raspbian, try out
+with buildroot bumped rpi packages to latest versions ([2])....
 
 Regards,
 Peter
 
-[1] http://lists.busybox.net/pipermail/buildroot/2018-October/233136.html
+[1] http://lists.busybox.net/pipermail/buildroot/2018-October/233141.html
+[2] http://lists.busybox.net/pipermail/buildroot/2018-October/233136.html
 
 > 
-> Matt
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Oscar Gomez Fuente
+> TST Sistemas
+> www.tst-sistemas.es
