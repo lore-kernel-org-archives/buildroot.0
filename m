@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 12 Oct 2018 22:04:13 +0200
-Subject: [Buildroot] [PATCH 1/2] spandsp: fix static build with jpeg
- enabled
-In-Reply-To: <461481fbc34bd2142d4b7e7265f953c2fbf84056.1539319191.git.baruch@tkos.co.il>
-References: <461481fbc34bd2142d4b7e7265f953c2fbf84056.1539319191.git.baruch@tkos.co.il>
-Message-ID: <20181012220413.3cbd3d90@windsurf>
+Date: Fri, 12 Oct 2018 22:08:45 +0200
+Subject: [Buildroot] [git commit] netsnmp: fix static build failure due
+ to missing -lssl and -lz
+In-Reply-To: <20181011204516.D4311835D7@busybox.osuosl.org>
+References: <20181011204516.D4311835D7@busybox.osuosl.org>
+Message-ID: <20181012220845.07b266ea@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +13,76 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 12 Oct 2018 07:39:50 +0300, Baruch Siach wrote:
+On Thu, 11 Oct 2018 22:26:42 +0200, Peter Korsgaard wrote:
+> diff --git a/package/netsnmp/0003-configure-Invert-AC_CHECK_LIB-EVP_md5-.-without-lz-w.patch b/package/netsnmp/0003-configure-Invert-AC_CHECK_LIB-EVP_md5-.-without-lz-w.patch
+> new file mode 100644
+> index 0000000000..5cbc35600f
+> --- /dev/null
+> +++ b/package/netsnmp/0003-configure-Invert-AC_CHECK_LIB-EVP_md5-.-without-lz-w.patch
+> @@ -0,0 +1,41 @@
+> +From 77062d4a76f5dbd8aee03a25e9eb514b7d924bcc Mon Sep 17 00:00:00 2001
+> +From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> +Date: Mon, 17 Sep 2018 21:44:20 +0200
+> +Subject: [PATCH 3/3] configure: Invert AC_CHECK_LIB(EVP_md5,..) without -lz
+> + with -lz
+> +
+> +First AC_CHECK_LIB(EVP_md5,...) is going to succeed due to
+> +[other-libraries] fields, but in that case it won't add -lz to LIBCRYPTO
+> +resulting in failing AC_CHECH_FUNCS() with LIBS=LIBCRYPTO.
+> +
+> +Try AC_CHECK_LIB(EVP_md5,..) where LIBS can miss -lz
+> +and in action-if-not-found try AC_CHECK_LIB(EVP_md5,...) without -lz.
+> +In the first case append -lz to LIBCRYPTO, in the second don't.
+> +This is done to check if -lz is present and used in -lcrypto.
+> +
+> +Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> +---
+> + configure.d/config_os_libs2 | 5 ++---
+> + 1 file changed, 2 insertions(+), 3 deletions(-)
+> +
+> +diff --git a/configure.d/config_os_libs2 b/configure.d/config_os_libs2
+> +index 81788a209..bfd14c191 100644
+> +--- a/configure.d/config_os_libs2
+> ++++ b/configure.d/config_os_libs2
+> +@@ -307,11 +307,10 @@ if test "x$tryopenssl" != "xno" -a "x$tryopenssl" != "xinternal"; then
+> + 
+> +         if test x$CRYPTO = x; then
+> +             AC_CHECK_LIB([crypto], [EVP_md5],
+> +-			 [CRYPTO="crypto"; LIBCRYPTO="-lcrypto"], [
+> ++			 [CRYPTO="crypto"; LIBCRYPTO="-lcrypto -lz"], [
+> + 		unset ac_cv_lib_crypto_EVP_md5
+> + 		AC_CHECK_LIB([crypto], [EVP_md5],
+> +-			     [CRYPTO="crypto"; LIBCRYPTO="-lcrypto -lz"], [],
+> +-			     [-lz])
+> ++			     [CRYPTO="crypto"; LIBCRYPTO="-lcrypto"], [])
+> + 	    ])
 
-> -SPANDSP_DEPENDENCIES = tiff
-> +SPANDSP_DEPENDENCIES = tiff host-pkgconf
->  SPANDSP_INSTALL_STAGING = YES
-> +SPANDSP_CONF_ENV = LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libtiff-4`"
+This patch is really not great, because it means that in a
+dynamically-linked scenario, we will be linked against both libcrypto
+and libz, while linking against libcrypto is sufficient.
 
-I have to say I continue to dislike such hacks, and would very much
-prefer a change to the package configure.ac script to use pkg-config
-directly.
+Once again, when you have the situation of an application A that uses
+OpenSSL, you have two cases:
+
+ - When dynamic linking, application A only needs to link against
+   libssl/libcrypto. The fact that OpenSSL indirectly uses libz is
+   totally transparent, and the application A does not need to link
+   against libz, and in fact ideally should *not* link against libz.
+
+ - When static linking, application A needs to link against both
+   libssl/libcrypto *and* libz, because static linking doesn't take
+   care of transitive dependencies.
+
+With your fix, the application A will always be linked against openssl
+*and* libz, regardless of whether dynamic linking and static linking is
+used.
+
+I don't understand why you had to invert the test. It should have
+worked the way it was: first try with -lcrypto (should work in dynamic
+linking case), and if it doesn't try with -lcrypto -lz (should work in
+static linking case). Inverting the two cases not good, and in fact
+makes no sense: if -lcrypto -lz fails, there is no reason for -lcrypto
+to work, so the second test becomes entirely useless.
 
 Best regards,
 
