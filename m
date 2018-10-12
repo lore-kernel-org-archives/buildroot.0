@@ -1,77 +1,297 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri, 12 Oct 2018 10:06:50 +0200
-Subject: [Buildroot] [PATCH 3/3] python-can: bump to version 3.0.0
-In-Reply-To: <20181012080650.2793-1-yegorslists@googlemail.com>
-References: <20181012080650.2793-1-yegorslists@googlemail.com>
-Message-ID: <20181012080650.2793-3-yegorslists@googlemail.com>
+From: Philipp Richter <richterphilipp.pops@gmail.com>
+Date: Fri, 12 Oct 2018 10:25:34 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libtorrent-rasterbar: new
+ package
+In-Reply-To: <CA+Vb7hrYyCfVAq=nk8a9GfGW10Fatw3WXZ5=wsJuVqba6MPnYg@mail.gmail.com>
+References: <20180911085024.14648-1-richterphilipp.pops@gmail.com>
+ <20181011211929.22af5bfc@windsurf>
+ <CA+Vb7hrYyCfVAq=nk8a9GfGW10Fatw3WXZ5=wsJuVqba6MPnYg@mail.gmail.com>
+Message-ID: <CA+Vb7hoNNWVaOMvjXtUnkVOZGENuZsjCHWQOz8Ck_gY9fC-jkg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+CC to buildroot mailing list which somehow didn't go through.
 
-Add new dependencies and change download location.
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/python-can/Config.in       | 7 ++++++-
- package/python-can/python-can.hash | 9 +++++----
- package/python-can/python-can.mk   | 6 +++---
- 3 files changed, 14 insertions(+), 8 deletions(-)
-
-diff --git a/package/python-can/Config.in b/package/python-can/Config.in
-index 94b16ab335..f3ed1b77e3 100644
---- a/package/python-can/Config.in
-+++ b/package/python-can/Config.in
-@@ -1,9 +1,14 @@
- config BR2_PACKAGE_PYTHON_CAN
- 	bool "python-can"
-+	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
- 	select BR2_PACKAGE_PYTHON_SQLITE if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON3_SQLITE if BR2_PACKAGE_PYTHON3 # runtime
-+	select BR2_PACKAGE_PYTHON_TYPING if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON_WRAPT # runtime
-+	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
- 	help
- 	  This module provides controller area network support for
- 	  Python.
- 
--	  https://bitbucket.org/hardbyte/python-can
-+	  https://github.com/hardbyte/python-can
-diff --git a/package/python-can/python-can.hash b/package/python-can/python-can.hash
-index 234f138562..b2dc1a33c3 100644
---- a/package/python-can/python-can.hash
-+++ b/package/python-can/python-can.hash
-@@ -1,4 +1,5 @@
--# sha256 for python-can from https://pypi.org/project/python-can/#files
--# sha256 for LICENSE.txt locally computed
--sha256  b5e93b2ee32bdd597d9d908afe5171c402a04c9678ba47b60f33506738b1375b  python-can-2.2.1.tar.gz
--sha256  ea7d049c7705dc13afc202dd18e1827f3484f8212fd3fa7b82fc4a0c363432c9  LICENSE.txt
-+# md5, sha256 from https://pypi.org/pypi/python-can/json
-+md5	d906a220d8bd173c4f8de2bfe7217cc2  python-can-3.0.0.tar.gz
-+sha256	0d2ddb3b663af51b11a4c7fb7a577c63302a831986239f82bb6af65efc065b07  python-can-3.0.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.txt
-diff --git a/package/python-can/python-can.mk b/package/python-can/python-can.mk
-index 01a335f5c8..ca023ee895 100644
---- a/package/python-can/python-can.mk
-+++ b/package/python-can/python-can.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--PYTHON_CAN_VERSION = 2.2.1
--PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/e6/49/7a25ca6f38421009621b9958a725a0bd57dc0caa656ee508324f26ea5363
-+PYTHON_CAN_VERSION = 3.0.0
-+PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/29/47/59d07bb02d6b244fb631487ae5424a10658c316defeeb90c923b48043792
-+PYTHON_CAN_SETUP_TYPE = setuptools
- PYTHON_CAN_LICENSE = LGPL-3.0
- PYTHON_CAN_LICENSE_FILES = LICENSE.txt
--PYTHON_CAN_SETUP_TYPE = setuptools
- 
- $(eval $(python-package))
--- 
-2.17.0
+On Fri, 12 Oct 2018 at 10:20, Philipp Richter
+<richterphilipp.pops@gmail.com> wrote:
+>
+> On Thu, 11 Oct 2018 at 21:19, Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> >
+> > Hello Philipp,
+> >
+> > Thanks for your submission, and sorry for the slow response. I have to
+> > say that for a first contribution, it looks very good. Still, I have a
+> > number of comments, see below.
+> >
+>
+> Ah it's no problem, I know how busy things get. Thank you for the kind words.
+>
+> > On Tue, 11 Sep 2018 10:50:23 +0200, Philipp Richter wrote:
+> >
+> > > diff --git a/package/libtorrent-rasterbar/Config.in b/package/libtorrent-rasterbar/Config.in
+> > > new file mode 100644
+> > > index 0000000000..0ce9496b70
+> > > --- /dev/null
+> > > +++ b/package/libtorrent-rasterbar/Config.in
+> > > @@ -0,0 +1,133 @@
+> > > +comment "libtorrent-rasterbar needs a toolchain w/ C++"
+> > > +     depends on !BR2_INSTALL_LIBSTDCPP
+> > > +
+> > > +config BR2_PACKAGE_LIBTORRENT_RASTERBAR
+> > > +     bool "libtorrent-rasterbar"
+> > > +     depends on BR2_INSTALL_LIBSTDCPP
+> > > +     select BR2_PACKAGE_HOST_PKGCONF
+> >
+> > You don't need to select this option. Currently, we don't care about
+> > selecting Config.in options for host packages, so for consistency, we
+> > also shouldn't do it here.
+> >
+> > In the future, we might add Config.in options for all host packages,
+> > and if/when we do this, we'll add the necessary selects. But for the
+> > time being, I'd rather not have any of them.
+> >
+>
+> Ok I see.
+>
+> > > +     select BR2_PACKAGE_BOOST
+> > > +     select BR2_PACKAGE_BOOST_CHRONO
+> > > +     select BR2_PACKAGE_BOOST_SYSTEM
+> > > +     select BR2_PACKAGE_BOOST_RANDOM
+> >
+> > Since you select boost, you must inherit all its dependencies, i.e:
+> >
+> >         depends on BR2_INSTALL_LIBSTDCPP
+> >         depends on BR2_TOOLCHAIN_HAS_THREADS
+> >         depends on BR2_USE_WCHAR
+> >
+> > > +if BR2_PACKAGE_LIBTORRENT_RASTERBAR
+> > > +
+> > > +config BR2_PACKAGE_LIBTORRENT_RASTERBAR_LOGGING
+> > > +     bool "Logging alerts"
+> > > +     default y
+> > > +     help
+> > > +       Enable support for logging alerts,
+> > > +       like log_alert, torrent_log_alert and peer_log_alert.
+> > > +
+> > > +       Default: yes
+> >
+> > Drop those "Default: XYZ" from the help text, we don't have them
+> > anywhere, and it's already pretty explicit from the Config.in text.
+> >
+> > > +config BR2_PACKAGE_LIBTORRENT_RASTERBAR_DEBUG
+> > > +     bool "Debug"
+> > > +     help
+> > > +       Enable debug build.
+> > > +
+> > > +       Default: no
+> >
+> > What does --enable-debug/--disable-debug does? We have a global
+> > BR2_ENABLE_DEBUG boolean that enables building with debugging symbols.
+> >
+>
+> Absolutely, it was for the invariant checks which depend on debug
+> being enabled. I was confused as to how to properly add the option and
+> make it explicit to the user.
+>
+> > > +config BR2_PACKAGE_LIBTORRENT_RASTERBAR_DHT
+> > > +     bool "DHT"
+> > > +     default y
+> > > +     help
+> > > +       Enable support for trackerless torrents.
+> > > +
+> > > +       Default: yes
+> > > +
+> > > +config BR2_PACKAGE_LIBTORRENT_RASTERBAR_ENCRYPTION
+> > > +     bool "Encryption"
+> > > +     default y
+> > > +     select BR2_PACKAGE_OPENSSL
+> > > +     help
+> > > +       Enable encryption support.
+> > > +       Encryption support is the encrypted peer connection
+> > > +       supported by clients such as uTorrent, Azureus and KTorrent.
+> > > +
+> > > +       Default: yes
+> > > +
+> > > +config BR2_PACKAGE_LIBTORRENT_RASTERBAR_EXPORT_ALL_SYMBOLS
+> > > +     bool "Export all symbols"
+> > > +     help
+> > > +       Export all symbols from libtorrent, including non-public ones.
+> > > +
+> > > +       Default: no
+> >
+> > Do we really need an option for this ?
+> >
+>
+> I guess it could be useful if another package that depends on those
+> internal symbols being exposed arrives. But for now I haven't seen
+> anything like that.
+>
+> > > +config BR2_PACKAGE_LIBTORRENT_RASTERBAR_POOL_ALLOCATORS
+> > > +     bool "Pool allocators"
+> > > +     default y
+> > > +     help
+> > > +       Enable pool allocators for send buffers using boost::pool<>.
+> > > +
+> > > +       Default: yes
+> >
+> > And this ?
+> >
+>
+> I guess we can use package default of them being on ?
+>
+> > > +config BR2_PACKAGE_LIBTORRENT_RASTERBAR_INVARIANT_CHECKS
+> > > +     bool "Invariant checks"
+> > > +     default y
+> > > +     depends on BR2_PACKAGE_LIBTORRENT_RASTERBAR_DEBUG
+> > > +     help
+> > > +       Enable invariant checks.
+> > > +
+> > > +       Default: yes
+> >
+> > This clearly seems like a developer-oriented option, I don't think we
+> > should support it in Buildroot.
+> >
+>
+> That's is true, here's the thing though : if debug is enabled they
+> will be switched on automatically and make the library much slower.
+> They can be forced off to have the library with debugging information
+> without expensive checks.
+> I guess we can go with the default behaviour, the other side of the
+> coin is that he/she might be left scratching their head about the
+> slowness.
+>
+> > > +
+> > > +comment "Invariant checks need debug build"
+> > > +     depends on !BR2_PACKAGE_LIBTORRENT_RASTERBAR_DEBUG
+> > > +
+> > > +if BR2_PACKAGE_LIBTORRENT_RASTERBAR_INVARIANT_CHECKS
+> > > +
+> > > +choice
+> > > +     prompt "Invariant checks type"
+> > > +     default BR2_PACKAGE_LIBTORRENT_RASTERBAR_INVARIANT_CHECKS_YES
+> > > +     help
+> > > +       Select the type of invariant checks to use.
+> > > +
+> > > +config BR2_PACKAGE_LIBTORRENT_RASTERBAR_INVARIANT_CHECKS_YES
+> > > +     bool "yes"
+> > > +     help
+> > > +       Standard invariant checks.
+> > > +
+> > > +config BR2_PACKAGE_LIBTORRENT_RASTERBAR_INVARIANT_CHECKS_FULL
+> > > +     bool "full"
+> > > +     help
+> > > +       Turn on extra expensive invariant checks.
+> > > +
+> > > +endchoice
+> >
+> > ... and therefore we can remove all of this.
+> >
+> > > +
+> > > +endif
+> > > +
+> > > +config BR2_PACKAGE_LIBTORRENT_RASTERBAR_DEPRECATED_FUNCTIONS
+> > > +     bool "Deprecated functions"
+> > > +     default y
+> > > +     help
+> > > +       Enable deprecated functions in the API.
+> > > +
+> > > +       Default: yes
+> >
+> > Ditto, why would we want this option ?
+> >
+> > In general, it feels like you have taken every --enable/--disable of
+> > the configure script, and added a Buildroot Config.in option for each
+> > of them. I don't think we necessarily want to support each and every
+> > configuration option of the upstream package.
+> >
+>
+> Yes, that makes sense. Like the internal symbols option it was also
+> with the idea of "Maybe an application depends on those symbols?"
+> But then the developer would override the makefile themselves anyway I guess.
+>
+> > > +
+> > > +config BR2_PACKAGE_LIBTORRENT_RASTERBAR_DISK_STATS
+> > > +     bool "Disk stats"
+> > > +     help
+> > > +       Enable disk activity logging feature.
+> > > +
+> > > +       Default: no
+> > > +
+> > > +config BR2_PACKAGE_LIBTORRENT_RASTERBAR_EXAMPLES
+> > > +     bool "Examples"
+> > > +     help
+> > > +       Build example files.
+> > > +
+> > > +       Default: no
+> > > +
+> > > +config BR2_PACKAGE_LIBTORRENT_RASTERBAR_TESTS
+> > > +     bool "Tests"
+> > > +     help
+> > > +       Build test files.
+> > > +
+> > > +       Default: no
+> >
+> > We generally don't build tests in the context of Buildroot, so just
+> > disable them unconditionally.
+> >
+>
+> Right understood.
+>
+> > > diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+> > > new file mode 100644
+> > > index 0000000000..19f0a9304d
+> > > --- /dev/null
+> > > +++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+> > > @@ -0,0 +1,95 @@
+> > > +################################################################################
+> > > +#
+> > > +# libtorrent-rasterbar
+> > > +#
+> > > +################################################################################
+> > > +
+> > > +LIBTORRENT_RASTERBAR_VERSION = 1.1.9
+> > > +LIBTORRENT_RASTERBAR_SITE = https://github.com/arvidn/libtorrent/releases/download/libtorrent-$(subst .,_,$(LIBTORRENT_RASTERBAR_VERSION))
+> > > +LIBTORRENT_RASTERBAR_LICENSE = BSD-2-Clause
+> > > +LIBTORRENT_RASTERBAR_LICENSE_FILES = COPYING
+> > > +LIBTORRENT_RASTERBAR_DEPENDENCIES = host-pkgconf boost $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+> >
+> > I would move the $(if $(BR2_PACKAGE_LIBICONV),libiconv) part inside the
+> > iconv condition.
+> >
+> > > +LIBTORRENT_RASTERBAR_INSTALL_STAGING = YES
+> > > +LIBTORRENT_RASTERBAR_CONF_OPTS += --with-boost-libdir="$(STAGING_DIR)/usr/lib"
+> >
+> > You can drop the double quotes here.
+> >
+> > > +LIBTORRENT_RASTERBAR_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
+> >
+> > So, you need C++11, so your package should have a dependency on gcc >=
+> > 4.8.
+> >
+> > > +ifeq ($(BR2_ENABLE_LOCALE)$(BR2_PACKAGE_LIBICONV),y)
+> > > +LIBTORRENT_RASTERBAR_CONF_OPTS += --with-libiconv
+> >
+> > This is where I'd prefer to see:
+> >
+> > LIBTORRENT_RASTERBAR_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+> >
+> > Could you rework the package according to those comments?
+>
+> Right, thank you for all these hints and comments. I'll rework this,
+> leave more to the package's defaults.
+>
+> Best Regards,
+> Philipp Richter
+>
+> >
+> > Best regards,
+> >
+> > Thomas
+> > --
+> > Thomas Petazzoni, CTO, Bootlin
+> > Embedded Linux and Kernel engineering
+> > https://bootlin.com
