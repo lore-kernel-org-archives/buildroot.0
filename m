@@ -1,36 +1,39 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Fri, 12 Oct 2018 08:54:18 +0200
-Subject: [Buildroot] Analysis results for 2018-10-09
-In-Reply-To: <c7c0d90d-a25e-7832-67c4-4aa3598691fd@mind.be>
-References: <20181010060010.4E3C920736@mail.bootlin.com>
- <20181010174814.5ac114f1@windsurf>
- <c7c0d90d-a25e-7832-67c4-4aa3598691fd@mind.be>
-Message-ID: <7c64c3162d310b9aabc3a5305b7484d38628fa39.camel@embedded.rocks>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 12 Oct 2018 09:05:46 +0200
+Subject: [Buildroot] [PATCH 1/1] utils/get-developers: fix syntax error
+In-Reply-To: <20181011230050.28593-1-greg@quimbo.fr> (=?utf-8?Q?=22Gr?=
+ =?utf-8?Q?=C3=A9goire?= Delattre"'s
+ message of "Fri, 12 Oct 2018 01:00:50 +0200")
+References: <20181011230050.28593-1-greg@quimbo.fr>
+Message-ID: <87sh1bzlth.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Gr?goire" == Gr?goire Delattre <greg@quimbo.fr> writes:
 
-On Wed, 2018-10-10 at 23:35 +0200, Arnout Vandecappelle wrote:
-> 
-> On 10/10/18 17:48, Thomas Petazzoni wrote:
-> > >          arm |                    luvi-v2.8.0 | NOK | http://autobuild.buildroot.net/results/2bdbb93e6404943e59791773106d8b2680211886 |     
-> > luvi 2.8.0 fails to build. Bernd, you bumped this package, and J?rg
-> > suggested to revert the bump. Could you discuss this, and provide a fix?
-> > 
-> 
->  I think luv is missing a dependency on lua-compat53.
+ > From: Gr?goire Delattre <gregoire.delattre@gmail.com>
+ > This fixes a syntax error introduced in bcf2ed5cc3.
 
-That's right! Unfortunately, it does not fix the build issue for luvi
-as lua-compat53 does not install the required header file c-api/compat-
-5.3.h at all.
+ > Output before the patch:
+ >     $ ./utils/get-developers outgoing/*
+ >         File "./utils/get-developers", line 97
+ >             print dev
+ >                     ^
+ >         SyntaxError: Missing parentheses in call to 'print'. Did you mean
+ >         print(dev)?
 
-So, lua-compat53 needs to be fixed first to install the header file and
-luv needs an optional dependency on lua-compat53 if
-!BR2_PACKAGE_LUA_5_3.
+ > Output after the patch:
+ >     $ ./utils/get-developers outgoing/*
+ >     git send-email --to buildroot at buildroot.org
 
-Best regards,
-J?rg Krause
+Ahh, indeed - We need print(foo) instead of print foo for python 3.x
+compatibility.
+
+Committed with the commit message extended to explain that this is for
+python 3.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
