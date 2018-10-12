@@ -1,58 +1,114 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Fri, 12 Oct 2018 22:54:32 +0200
-Subject: [Buildroot] [PATCH] ffmpeg: fix static linking build failure
- when using libavutil
-In-Reply-To: <20181012215008.0eab3a2c@windsurf>
-References: <20180911204230.15890-1-giulio.benetti@micronovasrl.com>
- <20180916222224.519fa1f8@windsurf>
- <63ee101c-ee45-57cc-4aeb-7f3b49753ccb@micronovasrl.com>
- <20180924130929.4b345624@windsurf>
- <1b5dece6-8730-89d4-53dc-44f3492c49d9@micronovasrl.com>
- <8fb396bf-456c-2385-8fd0-84cbd4142e56@micronovasrl.com>
- <20181012215008.0eab3a2c@windsurf>
-Message-ID: <fc5ea699-9f27-f626-f5fa-a477cbf7af0c@micronovasrl.com>
+Date: Fri, 12 Oct 2018 23:00:47 +0200
+Subject: [Buildroot] [git commit] netsnmp: fix static build failure due
+ to missing -lssl and -lz
+In-Reply-To: <20181012220845.07b266ea@windsurf>
+References: <20181011204516.D4311835D7@busybox.osuosl.org>
+ <20181012220845.07b266ea@windsurf>
+Message-ID: <8ede0cd9-9c76-7796-a5e3-22d217ae4f6c@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Thomas,
 
-Il 12/10/2018 21:50, Thomas Petazzoni ha scritto:
+Il 12/10/2018 22:08, Thomas Petazzoni ha scritto:
 > Hello,
 > 
-> On Fri, 12 Oct 2018 19:38:14 +0200, Giulio Benetti wrote:
+> On Thu, 11 Oct 2018 22:26:42 +0200, Peter Korsgaard wrote:
+>> diff --git a/package/netsnmp/0003-configure-Invert-AC_CHECK_LIB-EVP_md5-.-without-lz-w.patch b/package/netsnmp/0003-configure-Invert-AC_CHECK_LIB-EVP_md5-.-without-lz-w.patch
+>> new file mode 100644
+>> index 0000000000..5cbc35600f
+>> --- /dev/null
+>> +++ b/package/netsnmp/0003-configure-Invert-AC_CHECK_LIB-EVP_md5-.-without-lz-w.patch
+>> @@ -0,0 +1,41 @@
+>> +From 77062d4a76f5dbd8aee03a25e9eb514b7d924bcc Mon Sep 17 00:00:00 2001
+>> +From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+>> +Date: Mon, 17 Sep 2018 21:44:20 +0200
+>> +Subject: [PATCH 3/3] configure: Invert AC_CHECK_LIB(EVP_md5,..) without -lz
+>> + with -lz
+>> +
+>> +First AC_CHECK_LIB(EVP_md5,...) is going to succeed due to
+>> +[other-libraries] fields, but in that case it won't add -lz to LIBCRYPTO
+>> +resulting in failing AC_CHECH_FUNCS() with LIBS=LIBCRYPTO.
+>> +
+>> +Try AC_CHECK_LIB(EVP_md5,..) where LIBS can miss -lz
+>> +and in action-if-not-found try AC_CHECK_LIB(EVP_md5,...) without -lz.
+>> +In the first case append -lz to LIBCRYPTO, in the second don't.
+>> +This is done to check if -lz is present and used in -lcrypto.
+>> +
+>> +Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+>> +---
+>> + configure.d/config_os_libs2 | 5 ++---
+>> + 1 file changed, 2 insertions(+), 3 deletions(-)
+>> +
+>> +diff --git a/configure.d/config_os_libs2 b/configure.d/config_os_libs2
+>> +index 81788a209..bfd14c191 100644
+>> +--- a/configure.d/config_os_libs2
+>> ++++ b/configure.d/config_os_libs2
+>> +@@ -307,11 +307,10 @@ if test "x$tryopenssl" != "xno" -a "x$tryopenssl" != "xinternal"; then
+>> +
+>> +         if test x$CRYPTO = x; then
+>> +             AC_CHECK_LIB([crypto], [EVP_md5],
+>> +-			 [CRYPTO="crypto"; LIBCRYPTO="-lcrypto"], [
+>> ++			 [CRYPTO="crypto"; LIBCRYPTO="-lcrypto -lz"], [
+>> + 		unset ac_cv_lib_crypto_EVP_md5
+>> + 		AC_CHECK_LIB([crypto], [EVP_md5],
+>> +-			     [CRYPTO="crypto"; LIBCRYPTO="-lcrypto -lz"], [],
+>> +-			     [-lz])
+>> ++			     [CRYPTO="crypto"; LIBCRYPTO="-lcrypto"], [])
+>> + 	    ])
 > 
->>>>>> Indeed, when we're dynamic linking, there is no need to link consumers
->>>>>> of libavutil with libdrm. It is only when we're statically linking that
->>>>>> it should be done. And that's exactly what Libs vs. Libs.private is for.
->>>>>
->>>>> You've explained me it very well, but by now FFmpeg upstreamed my patch:
->>>>> https://git.ffmpeg.org/gitweb/ffmpeg.git/commit/c50dc77ac708e98d02da7c422a6b9cbf9f565aa5
->>>>>
->>>>> So, do I rework and resubmit to them or can I re-create a patch for BR
->>>>> with what you've pointed me above?
->> I've missed one thing to ask you about ffmpeg:
->> Can I still use this hack:
->> https://git.ffmpeg.org/gitweb/ffmpeg.git/blobdiff/bc2301429e9c779237e43acf913331af018211f2..c50dc77ac708e98d02da7c422a6b9cbf9f565aa5:/configure
->>
->> to obtain if -ldrm is used and then add it to Libs.private like this:
->> Libs.private: -ldrm
->>
->> as you've pointed me.
->>
->> Or there is something that makes it simpler and better?
-> 
-> I'm not sure what "hack" you're talking about here. My only point it is
-> only needed to link "indirect" libraries when static linking, and
-> therefore such "indirect" libraries should be listed in Libs.private
-> and not Libs in pkg-config files.
+> This patch is really not great, because it means that in a
+> dynamically-linked scenario, we will be linked against both libcrypto
+> and libz, while linking against libcrypto is sufficient.
 
-Ok, sorry but I don't have much experience with Autotools and 
-dynamic/static linking, I'm learning here "on the field".
-I will try to submit a patch producing what you've described in the best 
-way I can.
+Yes, you're right.
+
+> Once again, when you have the situation of an application A that uses
+> OpenSSL, you have two cases:
+> 
+>   - When dynamic linking, application A only needs to link against
+>     libssl/libcrypto. The fact that OpenSSL indirectly uses libz is
+>     totally transparent, and the application A does not need to link
+>     against libz, and in fact ideally should *not* link against libz.
+
+Ok
+
+>   - When static linking, application A needs to link against both
+>     libssl/libcrypto *and* libz, because static linking doesn't take
+>     care of transitive dependencies.
+
+Ok
+
+> With your fix, the application A will always be linked against openssl
+> *and* libz, regardless of whether dynamic linking and static linking is
+> used.
+
+And that doesn't make sense.
+
+> I don't understand why you had to invert the test. 
+
+It's been a mistake watching it again now.
+
+> It should have
+> worked the way it was: first try with -lcrypto (should work in dynamic
+> linking case), and if it doesn't try with -lcrypto -lz (should work in
+> static linking case).
+
+Yes, you're right.
+
+> Inverting the two cases not good, and in fact
+> makes no sense: if -lcrypto -lz fails, there is no reason for -lcrypto
+> to work, so the second test becomes entirely useless.
+
+This is right too.
+
+Need to improve this.
+
+Thanks for the perfect explanation.
 
 Best regards
 -- 
