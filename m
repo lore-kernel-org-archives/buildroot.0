@@ -1,56 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 12 Oct 2018 11:24:58 +0200
-Subject: [Buildroot] [git commit] ntp: fix build for no-MMU
-Message-ID: <20181012092820.DA0A68360C@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 12 Oct 2018 13:04:50 +0200
+Subject: [Buildroot] [PATCH 1/1] board/pc: improve image generation
+In-Reply-To: <20181011223946.cqtbipkwm2gyviiu@lois>
+References: <20180920143318.21284-1-greg@quimbo.fr>
+ <20181011214932.350ef220@windsurf>
+ <20181011223946.cqtbipkwm2gyviiu@lois>
+Message-ID: <20181012130450.64ed4b36@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=87d759ced52cb461a4460f4c513f2f6993292bc2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Code rearrange in the latest ntp version exposed code that used to be
-hidden behind HAVE_WORKING_FORK. Put this code back where it belongs.
+(Please keep the mailing list in Cc, thanks!)
 
-Fixes:
-http://autobuild.buildroot.net/results/9f4/9f4710b451df1a60f95ab6503cfb7788ad998a65/
-http://autobuild.buildroot.net/results/d0b/d0b20a6c0f37a8b06841afc2764c8aab6ffd27d2/
-http://autobuild.buildroot.net/results/85c/85c89f5e9d36915567b8d14b9c99e3720c866577/
+On Fri, 12 Oct 2018 00:39:46 +0200, Gr?goire Delattre wrote:
 
-Cc: Artem Panfilov <apanfilov@spectracom.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ntp/0003-fix-nommu.patch | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+> > and then in the commit log, explain that the grub.cfg file was copied
+> > to TARGET_DIR in a post-image hook, i.e after the filesystem image has
+> > been generated, and that in practice it worked because the
+> > board/pc/grub-bios.cfg file is the same as boot/grub2/grub.cfg, which
+> > *is* copied to TARGET_DIR as part of the grub2 build process.  
+> 
+> I fixed the comment in the v2 patch.
 
-diff --git a/package/ntp/0003-fix-nommu.patch b/package/ntp/0003-fix-nommu.patch
-new file mode 100644
-index 0000000000..53bf4dfcf3
---- /dev/null
-+++ b/package/ntp/0003-fix-nommu.patch
-@@ -0,0 +1,22 @@
-+Fix no-MMU build
-+
-+The detach_from_terminal() is unused for no-MMU, but it depends on symbols
-+that are not defined for no-MMU. Don't define detach_from_terminal() when
-+HAVE_WORKING_FORK is not defined.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: http://bugs.ntp.org/show_bug.cgi?id=3538
-+
-+diff -Nuar ntp-4.2.8p12.orig/ntpd/ntpd.c ntp-4.2.8p12/ntpd/ntpd.c
-+--- ntp-4.2.8p12.orig/ntpd/ntpd.c	2018-08-14 14:51:30.000000000 +0300
-++++ ntp-4.2.8p12/ntpd/ntpd.c	2018-10-12 08:19:01.291781773 +0300
-+@@ -529,7 +529,7 @@
-+ }
-+ #endif	/* !SIM */
-+ 
-+-#if !defined(SIM) && !defined(SYS_WINNT)
-++#if !defined(SIM) && !defined(SYS_WINNT) && defined(HAVE_WORKING_FORK)
-+ /*
-+  * Detach from terminal (much like daemon())
-+  * Nothe that this function calls exit()
+Thanks, I had a quick look at your v2, and it looks good to me. If no
+other maintainer beats me at it, I'll try to merge it tonight.
+
+> I've changed that too.
+> 
+> I have two questions regarding the coding style of shell scripts in buildroot in
+> general:
+> 1) Should we use 2/4 spaces, tab ?
+
+Good question, we have not standardized very well our shell scripts in
+general right now. Carlos Santos has started an effort to standardize
+our init scripts (see series at
+http://patchwork.ozlabs.org/project/buildroot/list/?series=69419), I
+think we should use the same indentation.
+
+> 2) ${MY_VAR} vs "$MY_VAR" ?
+
+Here as well, we don't have a very strict rule. My own personal rule is
+that I use $i for simple variable names, and I switch to ${foo_bar}
+when the variable name becomes more complex. But again, that's just my
+own personal taste. I believe Yann uses ${foo} all the time for example.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
