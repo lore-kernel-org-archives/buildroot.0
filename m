@@ -1,95 +1,88 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 12 Oct 2018 15:34:41 +0300
-Subject: [Buildroot] [PATCH 1/1] python-py: new package
-Message-ID: <20181012123441.5406-1-asafka7@gmail.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Fri, 12 Oct 2018 14:41:04 +0200
+Subject: [Buildroot] [git commit] ptpd2: fix patch 0002 so that it
+ applies properly
+In-Reply-To: <3e13deb8-d0b0-b7fd-57a5-2ebaacf4b328@micronovasrl.com>
+References: <20181011202228.F01F483476@busybox.osuosl.org>
+ <3e13deb8-d0b0-b7fd-57a5-2ebaacf4b328@micronovasrl.com>
+Message-ID: <3bf1ed8e-fc53-c04a-415f-92df4d0f8fb2@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-library with cross-python path, ini-parsing, io, code, log
-facilities.
+Il 11/10/2018 23:06, Giulio Benetti ha scritto:
+> Hello Thomas,
+> 
+> Il 11/10/2018 22:22, Thomas Petazzoni ha scritto:
+>> commit: https://git.buildroot.net/buildroot/commit/?id=d60973af00c5ad7dc15049597cf03bd1ad538041
+>> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>
+>> The patch
+>> 0002-ntp_isc_md5-rename-EVP_MD_CTX-into-PTPD_EVP_MD_CTX.patch added in
+>> commit 5b7bc560a5859d4b9f0c2a14c10e83c18fbd6bca ("ptpd2: fix build
+>> failures due to EVP_MD_CTX conflict and U64 missing") was broken and
+>> did not apply correctly.
+>>
+>> This commit fixes the patch so that it applies properly.
+>>
+>> Fixes:
+>>
+>>     http://autobuild.buildroot.net/results/ffa28ee2cecc77d66d934fdb03e1f2014189e45b/
+>>
+>> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>> ---
+>>    .../0002-ntp_isc_md5-rename-EVP_MD_CTX-into-PTPD_EVP_MD_CTX.patch | 8 ++++----
+>>    1 file changed, 4 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/package/ptpd2/0002-ntp_isc_md5-rename-EVP_MD_CTX-into-PTPD_EVP_MD_CTX.patch b/package/ptpd2/0002-ntp_isc_md5-rename-EVP_MD_CTX-into-PTPD_EVP_MD_CTX.patch
+>> index 9a9beacf90..e655ff3354 100644
+>> --- a/package/ptpd2/0002-ntp_isc_md5-rename-EVP_MD_CTX-into-PTPD_EVP_MD_CTX.patch
+>> +++ b/package/ptpd2/0002-ntp_isc_md5-rename-EVP_MD_CTX-into-PTPD_EVP_MD_CTX.patch
+>> @@ -1,4 +1,4 @@
+>> -From 838b985510c360e651d18134e64f258f2f4c6e7c Mon Sep 17 00:00:00 2001
+>> +From af1d16d90ff273413a57cd02689f4fb005403609 Mon Sep 17 00:00:00 2001
+>>    From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+>>    Date: Fri, 31 Aug 2018 18:46:56 +0200
+>>    Subject: [PATCH] ntp_isc_md5: rename EVP_MD_CTX into PTPD_EVP_MD_CTX
+>> @@ -16,7 +16,7 @@ Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+>>     2 files changed, 2 insertions(+), 2 deletions(-)
+>>    
+>>    diff --git a/src/dep/ntpengine/ntp_isc_md5.c b/src/dep/ntpengine/ntp_isc_md5.c
+>> -index 7d04467..e4e34ac 100644
+>> +index 850d004..3216de8 100644
+>>    --- a/src/dep/ntpengine/ntp_isc_md5.c
+>>    +++ b/src/dep/ntpengine/ntp_isc_md5.c
+>>    @@ -262,7 +262,7 @@ MD5authencrypt(
+>> @@ -25,7 +25,7 @@ index 7d04467..e4e34ac 100644
+>>     	u_int	len;
+>>    -	EVP_MD_CTX ctx;
+>>    +	PTPD_EVP_MD_CTX ctx;
+>> -         pkt[length / 4] = htonl(keyid);
+>> +         pkt[length / 4] = htonl(keyid);
+> 
+> I've tried to diff your BR patch, but the only diff I find is a new
+> trailing whitespace after:
+> "+         pkt[length / 4] = htonl(keyid);"
+> 
+> To understand, is that the change for patch to apply or something else?
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- DEVELOPERS                       |  1 +
- package/Config.in                |  1 +
- package/python-py/Config.in      |  7 +++++++
- package/python-py/python-py.hash |  5 +++++
- package/python-py/python-py.mk   | 14 ++++++++++++++
- 5 files changed, 28 insertions(+)
- create mode 100644 package/python-py/Config.in
- create mode 100644 package/python-py/python-py.hash
- create mode 100644 package/python-py/python-py.mk
+I'm reproducing the problem by myself to understand, using latest 
+autobuild failure.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 990621fb11..341bf7de3b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -217,6 +217,7 @@ F:	package/python-paramiko/
- F:	package/python-passlib/
- F:	package/python-ply/
- F:	package/python-priority/
-+F:	package/python-py/
- F:	package/python-pyasn1/
- F:	package/python-pyasn1-modules/
- F:	package/python-pycryptodomex/
-diff --git a/package/Config.in b/package/Config.in
-index 8d995f82e6..fd86e37a52 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -943,6 +943,7 @@ menu "External python modules"
- 	source "package/python-psycopg2/Config.in"
- 	source "package/python-ptyprocess/Config.in"
- 	source "package/python-pudb/Config.in"
-+	source "package/python-py/Config.in"
- 	source "package/python-pyasn/Config.in"
- 	source "package/python-pyasn-modules/Config.in"
- 	source "package/python-pyasn1/Config.in"
-diff --git a/package/python-py/Config.in b/package/python-py/Config.in
-new file mode 100644
-index 0000000000..354372f5b4
---- /dev/null
-+++ b/package/python-py/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_PY
-+	bool "python-py"
-+	help
-+	  library with cross-python path, ini-parsing, io, code, log
-+	  facilities.
-+
-+	  http://py.readthedocs.io/
-diff --git a/package/python-py/python-py.hash b/package/python-py/python-py.hash
-new file mode 100644
-index 0000000000..67926527cd
---- /dev/null
-+++ b/package/python-py/python-py.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/py/json
-+md5	e53ac12db4286737837ef3ccb4158301  py-1.7.0.tar.gz
-+sha256	bf92637198836372b520efcba9e020c330123be8ce527e535d185ed4b6f45694  py-1.7.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	2af680c39ef493fb82830356d1d3df1acb5a06033cba2dec7a19e21caa77a866  LICENSE
-diff --git a/package/python-py/python-py.mk b/package/python-py/python-py.mk
-new file mode 100644
-index 0000000000..e9c4d0a3b5
---- /dev/null
-+++ b/package/python-py/python-py.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-py
-+#
-+################################################################################
-+
-+PYTHON_PY_VERSION = 1.7.0
-+PYTHON_PY_SOURCE = py-$(PYTHON_PY_VERSION).tar.gz
-+PYTHON_PY_SITE = https://files.pythonhosted.org/packages/c7/fa/eb6dd513d9eb13436e110aaeef9a1703437a8efa466ce6bb2ff1d9217ac7
-+PYTHON_PY_SETUP_TYPE = setuptools
-+PYTHON_PY_LICENSE = MIT
-+PYTHON_PY_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+No need to explain me.
+
+Sorry but *high temperature* makes me feel strange :)
+
 -- 
-2.17.1
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
