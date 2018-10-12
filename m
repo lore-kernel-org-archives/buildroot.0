@@ -1,297 +1,109 @@
-From: Philipp Richter <richterphilipp.pops@gmail.com>
-Date: Fri, 12 Oct 2018 10:25:34 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libtorrent-rasterbar: new
- package
-In-Reply-To: <CA+Vb7hrYyCfVAq=nk8a9GfGW10Fatw3WXZ5=wsJuVqba6MPnYg@mail.gmail.com>
-References: <20180911085024.14648-1-richterphilipp.pops@gmail.com>
- <20181011211929.22af5bfc@windsurf>
- <CA+Vb7hrYyCfVAq=nk8a9GfGW10Fatw3WXZ5=wsJuVqba6MPnYg@mail.gmail.com>
-Message-ID: <CA+Vb7hoNNWVaOMvjXtUnkVOZGENuZsjCHWQOz8Ck_gY9fC-jkg@mail.gmail.com>
+From: lpdev at cordier.org <lpdev@cordier.org>
+Date: Fri, 12 Oct 2018 10:45:13 +0200 (CEST)
+Subject: [Buildroot] UEFI and systemD
+Message-ID: <ea-mime-5bc05f19-57c-2be43419@www-5.netcourrier.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CC to buildroot mailing list which somehow didn't go through.
+Hi everybody,
 
-On Fri, 12 Oct 2018 at 10:20, Philipp Richter
-<richterphilipp.pops@gmail.com> wrote:
->
-> On Thu, 11 Oct 2018 at 21:19, Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> >
-> > Hello Philipp,
-> >
-> > Thanks for your submission, and sorry for the slow response. I have to
-> > say that for a first contribution, it looks very good. Still, I have a
-> > number of comments, see below.
-> >
->
-> Ah it's no problem, I know how busy things get. Thank you for the kind words.
->
-> > On Tue, 11 Sep 2018 10:50:23 +0200, Philipp Richter wrote:
-> >
-> > > diff --git a/package/libtorrent-rasterbar/Config.in b/package/libtorrent-rasterbar/Config.in
-> > > new file mode 100644
-> > > index 0000000000..0ce9496b70
-> > > --- /dev/null
-> > > +++ b/package/libtorrent-rasterbar/Config.in
-> > > @@ -0,0 +1,133 @@
-> > > +comment "libtorrent-rasterbar needs a toolchain w/ C++"
-> > > +     depends on !BR2_INSTALL_LIBSTDCPP
-> > > +
-> > > +config BR2_PACKAGE_LIBTORRENT_RASTERBAR
-> > > +     bool "libtorrent-rasterbar"
-> > > +     depends on BR2_INSTALL_LIBSTDCPP
-> > > +     select BR2_PACKAGE_HOST_PKGCONF
-> >
-> > You don't need to select this option. Currently, we don't care about
-> > selecting Config.in options for host packages, so for consistency, we
-> > also shouldn't do it here.
-> >
-> > In the future, we might add Config.in options for all host packages,
-> > and if/when we do this, we'll add the necessary selects. But for the
-> > time being, I'd rather not have any of them.
-> >
->
-> Ok I see.
->
-> > > +     select BR2_PACKAGE_BOOST
-> > > +     select BR2_PACKAGE_BOOST_CHRONO
-> > > +     select BR2_PACKAGE_BOOST_SYSTEM
-> > > +     select BR2_PACKAGE_BOOST_RANDOM
-> >
-> > Since you select boost, you must inherit all its dependencies, i.e:
-> >
-> >         depends on BR2_INSTALL_LIBSTDCPP
-> >         depends on BR2_TOOLCHAIN_HAS_THREADS
-> >         depends on BR2_USE_WCHAR
-> >
-> > > +if BR2_PACKAGE_LIBTORRENT_RASTERBAR
-> > > +
-> > > +config BR2_PACKAGE_LIBTORRENT_RASTERBAR_LOGGING
-> > > +     bool "Logging alerts"
-> > > +     default y
-> > > +     help
-> > > +       Enable support for logging alerts,
-> > > +       like log_alert, torrent_log_alert and peer_log_alert.
-> > > +
-> > > +       Default: yes
-> >
-> > Drop those "Default: XYZ" from the help text, we don't have them
-> > anywhere, and it's already pretty explicit from the Config.in text.
-> >
-> > > +config BR2_PACKAGE_LIBTORRENT_RASTERBAR_DEBUG
-> > > +     bool "Debug"
-> > > +     help
-> > > +       Enable debug build.
-> > > +
-> > > +       Default: no
-> >
-> > What does --enable-debug/--disable-debug does? We have a global
-> > BR2_ENABLE_DEBUG boolean that enables building with debugging symbols.
-> >
->
-> Absolutely, it was for the invariant checks which depend on debug
-> being enabled. I was confused as to how to properly add the option and
-> make it explicit to the user.
->
-> > > +config BR2_PACKAGE_LIBTORRENT_RASTERBAR_DHT
-> > > +     bool "DHT"
-> > > +     default y
-> > > +     help
-> > > +       Enable support for trackerless torrents.
-> > > +
-> > > +       Default: yes
-> > > +
-> > > +config BR2_PACKAGE_LIBTORRENT_RASTERBAR_ENCRYPTION
-> > > +     bool "Encryption"
-> > > +     default y
-> > > +     select BR2_PACKAGE_OPENSSL
-> > > +     help
-> > > +       Enable encryption support.
-> > > +       Encryption support is the encrypted peer connection
-> > > +       supported by clients such as uTorrent, Azureus and KTorrent.
-> > > +
-> > > +       Default: yes
-> > > +
-> > > +config BR2_PACKAGE_LIBTORRENT_RASTERBAR_EXPORT_ALL_SYMBOLS
-> > > +     bool "Export all symbols"
-> > > +     help
-> > > +       Export all symbols from libtorrent, including non-public ones.
-> > > +
-> > > +       Default: no
-> >
-> > Do we really need an option for this ?
-> >
->
-> I guess it could be useful if another package that depends on those
-> internal symbols being exposed arrives. But for now I haven't seen
-> anything like that.
->
-> > > +config BR2_PACKAGE_LIBTORRENT_RASTERBAR_POOL_ALLOCATORS
-> > > +     bool "Pool allocators"
-> > > +     default y
-> > > +     help
-> > > +       Enable pool allocators for send buffers using boost::pool<>.
-> > > +
-> > > +       Default: yes
-> >
-> > And this ?
-> >
->
-> I guess we can use package default of them being on ?
->
-> > > +config BR2_PACKAGE_LIBTORRENT_RASTERBAR_INVARIANT_CHECKS
-> > > +     bool "Invariant checks"
-> > > +     default y
-> > > +     depends on BR2_PACKAGE_LIBTORRENT_RASTERBAR_DEBUG
-> > > +     help
-> > > +       Enable invariant checks.
-> > > +
-> > > +       Default: yes
-> >
-> > This clearly seems like a developer-oriented option, I don't think we
-> > should support it in Buildroot.
-> >
->
-> That's is true, here's the thing though : if debug is enabled they
-> will be switched on automatically and make the library much slower.
-> They can be forced off to have the library with debugging information
-> without expensive checks.
-> I guess we can go with the default behaviour, the other side of the
-> coin is that he/she might be left scratching their head about the
-> slowness.
->
-> > > +
-> > > +comment "Invariant checks need debug build"
-> > > +     depends on !BR2_PACKAGE_LIBTORRENT_RASTERBAR_DEBUG
-> > > +
-> > > +if BR2_PACKAGE_LIBTORRENT_RASTERBAR_INVARIANT_CHECKS
-> > > +
-> > > +choice
-> > > +     prompt "Invariant checks type"
-> > > +     default BR2_PACKAGE_LIBTORRENT_RASTERBAR_INVARIANT_CHECKS_YES
-> > > +     help
-> > > +       Select the type of invariant checks to use.
-> > > +
-> > > +config BR2_PACKAGE_LIBTORRENT_RASTERBAR_INVARIANT_CHECKS_YES
-> > > +     bool "yes"
-> > > +     help
-> > > +       Standard invariant checks.
-> > > +
-> > > +config BR2_PACKAGE_LIBTORRENT_RASTERBAR_INVARIANT_CHECKS_FULL
-> > > +     bool "full"
-> > > +     help
-> > > +       Turn on extra expensive invariant checks.
-> > > +
-> > > +endchoice
-> >
-> > ... and therefore we can remove all of this.
-> >
-> > > +
-> > > +endif
-> > > +
-> > > +config BR2_PACKAGE_LIBTORRENT_RASTERBAR_DEPRECATED_FUNCTIONS
-> > > +     bool "Deprecated functions"
-> > > +     default y
-> > > +     help
-> > > +       Enable deprecated functions in the API.
-> > > +
-> > > +       Default: yes
-> >
-> > Ditto, why would we want this option ?
-> >
-> > In general, it feels like you have taken every --enable/--disable of
-> > the configure script, and added a Buildroot Config.in option for each
-> > of them. I don't think we necessarily want to support each and every
-> > configuration option of the upstream package.
-> >
->
-> Yes, that makes sense. Like the internal symbols option it was also
-> with the idea of "Maybe an application depends on those symbols?"
-> But then the developer would override the makefile themselves anyway I guess.
->
-> > > +
-> > > +config BR2_PACKAGE_LIBTORRENT_RASTERBAR_DISK_STATS
-> > > +     bool "Disk stats"
-> > > +     help
-> > > +       Enable disk activity logging feature.
-> > > +
-> > > +       Default: no
-> > > +
-> > > +config BR2_PACKAGE_LIBTORRENT_RASTERBAR_EXAMPLES
-> > > +     bool "Examples"
-> > > +     help
-> > > +       Build example files.
-> > > +
-> > > +       Default: no
-> > > +
-> > > +config BR2_PACKAGE_LIBTORRENT_RASTERBAR_TESTS
-> > > +     bool "Tests"
-> > > +     help
-> > > +       Build test files.
-> > > +
-> > > +       Default: no
-> >
-> > We generally don't build tests in the context of Buildroot, so just
-> > disable them unconditionally.
-> >
->
-> Right understood.
->
-> > > diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-> > > new file mode 100644
-> > > index 0000000000..19f0a9304d
-> > > --- /dev/null
-> > > +++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-> > > @@ -0,0 +1,95 @@
-> > > +################################################################################
-> > > +#
-> > > +# libtorrent-rasterbar
-> > > +#
-> > > +################################################################################
-> > > +
-> > > +LIBTORRENT_RASTERBAR_VERSION = 1.1.9
-> > > +LIBTORRENT_RASTERBAR_SITE = https://github.com/arvidn/libtorrent/releases/download/libtorrent-$(subst .,_,$(LIBTORRENT_RASTERBAR_VERSION))
-> > > +LIBTORRENT_RASTERBAR_LICENSE = BSD-2-Clause
-> > > +LIBTORRENT_RASTERBAR_LICENSE_FILES = COPYING
-> > > +LIBTORRENT_RASTERBAR_DEPENDENCIES = host-pkgconf boost $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-> >
-> > I would move the $(if $(BR2_PACKAGE_LIBICONV),libiconv) part inside the
-> > iconv condition.
-> >
-> > > +LIBTORRENT_RASTERBAR_INSTALL_STAGING = YES
-> > > +LIBTORRENT_RASTERBAR_CONF_OPTS += --with-boost-libdir="$(STAGING_DIR)/usr/lib"
-> >
-> > You can drop the double quotes here.
-> >
-> > > +LIBTORRENT_RASTERBAR_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
-> >
-> > So, you need C++11, so your package should have a dependency on gcc >=
-> > 4.8.
-> >
-> > > +ifeq ($(BR2_ENABLE_LOCALE)$(BR2_PACKAGE_LIBICONV),y)
-> > > +LIBTORRENT_RASTERBAR_CONF_OPTS += --with-libiconv
-> >
-> > This is where I'd prefer to see:
-> >
-> > LIBTORRENT_RASTERBAR_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-> >
-> > Could you rework the package according to those comments?
->
-> Right, thank you for all these hints and comments. I'll rework this,
-> leave more to the package's defaults.
->
-> Best Regards,
-> Philipp Richter
->
-> >
-> > Best regards,
-> >
-> > Thomas
-> > --
-> > Thomas Petazzoni, CTO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
+I finally succeed to compile and start a linux kernel using EFI. My kernel is booting, but it seems that systemd is not starting. (I only get output from the kernel, and when I plugin/plugoff devices). I have no tty for interacting with the operating system.
+
+After digging in systemd.mk, I noticed that in SYSTEMD_CONF_OPTS, 2 options are disabled:
+
+??? -Defi=false \
+??? -Dgnu-efi=false \
+
+Is it normal? Any clue to how to make systemd boot while using Uefi?
+
+Following is my defconfig. Thank you very much for your time.
+
+BR2_x86_64=y
+BR2_CCACHE=y
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+BR2_GCC_VERSION_5_X=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_GCC_ENABLE_OPENMP=y
+BR2_TARGET_GENERIC_HOSTNAME="cstick"
+BR2_TARGET_GENERIC_ISSUE="Welcome to Cstick!"
+BR2_INIT_SYSTEMD=y
+BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+BR2_ROOTFS_OVERLAY="$(BR2_EXTERNAL_D_PATH)/board/cstick/rootfs-overlay"
+BR2_ROOTFS_POST_BUILD_SCRIPT="$(BR2_EXTERNAL_D_PATH)/board/cstick/post_build.sh"
+BR2_ROOTFS_POST_IMAGE_SCRIPT="$(BR2_EXTERNAL_D_PATH)/board/cstick/gen_uefi_image.sh"
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.16"
+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="$(BR2_EXTERNAL_D_PATH)/board/cstick/linux-4.4.config"
+BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
+BR2_PACKAGE_BZIP2=y
+BR2_PACKAGE_CHECK=y
+BR2_PACKAGE_MAKE=y
+BR2_PACKAGE_SED=y
+BR2_PACKAGE_TREE=y
+BR2_PACKAGE_EXFAT=y
+BR2_PACKAGE_EXFAT_UTILS=y
+BR2_PACKAGE_LIBVA_UTILS=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_I915=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
+BR2_PACKAGE_XKEYBOARD_CONFIG=y
+BR2_PACKAGE_LINUX_FIRMWARE=y
+BR2_PACKAGE_LINUX_FIRMWARE_I915=y
+BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_8000C=y
+BR2_PACKAGE_ACPID=y
+BR2_PACKAGE_ACPITOOL=y
+BR2_PACKAGE_DBUS_GLIB=y
+BR2_PACKAGE_KBD=y
+BR2_PACKAGE_LSHW=y
+BR2_PACKAGE_PCIUTILS=y
+BR2_PACKAGE_PORTAUDIO=y
+BR2_PACKAGE_LIBSHA1=y
+BR2_PACKAGE_FONTCONFIG=y
+BR2_PACKAGE_JASPER=y
+BR2_PACKAGE_LIBPNG=y
+BR2_PACKAGE_PIXMAN=y
+BR2_PACKAGE_TIFF=y
+BR2_PACKAGE_GNU_EFI=y
+BR2_PACKAGE_LIBXKBCOMMON=y
+BR2_PACKAGE_MTDEV=y
+BR2_PACKAGE_LIBNL=y
+BR2_PACKAGE_LIBEVDEV=y
+BR2_PACKAGE_NCURSES_TARGET_PROGS=y
+BR2_PACKAGE_PCRE2=y
+BR2_PACKAGE_PCRE2_16=y
+BR2_PACKAGE_XUTIL_UTIL_MACROS=y
+BR2_PACKAGE_DHCPCD=y
+BR2_PACKAGE_IPTABLES=y
+BR2_PACKAGE_WIRELESS_TOOLS=y
+BR2_PACKAGE_BASH=y
+BR2_PACKAGE_FILE=y
+BR2_PACKAGE_TIME=y
+BR2_PACKAGE_WHICH=y
+BR2_PACKAGE_EFIBOOTMGR=y
+BR2_PACKAGE_HTOP=y
+BR2_PACKAGE_PROCPS_NG=y
+BR2_PACKAGE_SYSTEMD_HIBERNATE=y
+BR2_PACKAGE_SYSTEMD_VCONSOLE=y
+BR2_PACKAGE_TAR=y
+BR2_PACKAGE_VIM=y
+BR2_TARGET_ROOTFS_CPIO=y
+BR2_TARGET_ROOTFS_EXT2=y
+BR2_TARGET_ROOTFS_EXT2_4=y
+BR2_TARGET_ROOTFS_EXT2_LABEL="obr"
+BR2_TARGET_ROOTFS_EXT2_SIZE="600M"
+BR2_TARGET_GRUB2=y
+BR2_TARGET_GRUB2_X86_64_EFI=y
+BR2_PACKAGE_HOST_CMAKE=y
+BR2_PACKAGE_HOST_DOSFSTOOLS=y
+BR2_PACKAGE_HOST_MTOOLS=y
+BR2_PACKAGE_HOST_PKGCONF=y
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181012/df75754c/attachment.html>
