@@ -1,100 +1,70 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Fri, 12 Oct 2018 12:09:46 -0400
-Subject: [Buildroot] [PATCH 3/4] btcd: new package
-In-Reply-To: <1538143163-20596-4-git-send-email-fabiorush@gmail.com>
-References: <1538143163-20596-1-git-send-email-fabiorush@gmail.com>
- <1538143163-20596-4-git-send-email-fabiorush@gmail.com>
-Message-ID: <CAFSsvmqNOWUR6JdBypZ=cJfkOavN+4x0845sqfU5N+YZdFaqEQ@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 12 Oct 2018 18:54:33 +0200
+Subject: [Buildroot] [PATCH v2,1/1] xerces: fix build without pthread
+Message-ID: <20181012165433.7403-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi;
-On Fri, Sep 28, 2018 at 10:03 AM Fabio Urquiza <fabiorush@gmail.com> wrote:
->
-> An alternative full node bitcoin implementation written in Go (golang).
->
-> Signed-off-by: Fabio Urquiza <fabiorush@gmail.com>
-> ---
->  package/Config.in      |  1 +
->  package/btcd/Config.in | 10 ++++++++++
->  package/btcd/btcd.hash |  3 +++
->  package/btcd/btcd.mk   | 15 +++++++++++++++
->  4 files changed, 29 insertions(+)
->  create mode 100644 package/btcd/Config.in
->  create mode 100644 package/btcd/btcd.hash
->  create mode 100644 package/btcd/btcd.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 796383a..6a74a80 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1973,6 +1973,7 @@ endif
->
->  menu "Blockchain Applications"
->         source "package/bitcoin/Config.in"
-> +       source "package/btcd/Config.in"
->  endmenu
->
->  endmenu
-> diff --git a/package/btcd/Config.in b/package/btcd/Config.in
-> new file mode 100644
-> index 0000000..566e8dd
-> --- /dev/null
-> +++ b/package/btcd/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_BTCD
-> +       bool "btcd"
-> +       depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-> +       select BR2_PACKAGE_HOST_GO_GLIDE
-> +       help
-> +         btcd is an alternative full node bitcoin implementation
-> +         written in Go (golang).
-> +
-> +         https://github.com/btcsuite/btcd
-> +
-> diff --git a/package/btcd/btcd.hash b/package/btcd/btcd.hash
-> new file mode 100644
-> index 0000000..d0b76c5
-> --- /dev/null
-> +++ b/package/btcd/btcd.hash
-> @@ -0,0 +1,3 @@
-> +# Locally calculated
-> +sha256 4afd800125ecd9ff22c63dfc00c512ae5892f98b0415ecc1a19cd64afdf86bbb  btcd-2a560b2036bee5e3679ec2133eb6520b2f195213.tar.gz
-> +sha256 46021938caf87eeb92c841fd48777a3a7bf218341386611c4d080aa45812d1d2  LICENSE
-> diff --git a/package/btcd/btcd.mk b/package/btcd/btcd.mk
-> new file mode 100644
-> index 0000000..4a296a7
-> --- /dev/null
-> +++ b/package/btcd/btcd.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# btcd
-> +#
-> +################################################################################
-> +
-> +BTCD_VERSION = 2a560b2036bee5e3679ec2133eb6520b2f195213
-Is there a reason v0.12.0-beta isn't being used? Normally I wouldn't
-suggest a beta release,
-but every release is marked with "beta."
-> +BTCD_SITE = $(call github,btcsuite,btcd,$(BTCD_VERSION))
-> +BTCD_LICENSE = ISC
-> +BTCD_LICENSE_FILES = LICENSE
-> +BTCD_GO_GLIDE = YES
-> +BTCD_GO_GET = YES
-> +
-> +$(eval $(golang-package))
-> +
-> --
-> 2.7.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-Thanks!
+Don't fail when pthreads is not available
 
-Adam
+Fixes:
+ - http://autobuild.buildroot.org/results/63cc4d3d69db19d0c639437d6996f881888a926b
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2:
+ - Use the patch merged upstream
+
+ ...s-to-fail-and-fall-back-to-nothreads.patch | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/xerces/0001-cmake-Allow-thread-checks-to-fail-and-fall-back-to-nothreads.patch
+
+diff --git a/package/xerces/0001-cmake-Allow-thread-checks-to-fail-and-fall-back-to-nothreads.patch b/package/xerces/0001-cmake-Allow-thread-checks-to-fail-and-fall-back-to-nothreads.patch
+new file mode 100644
+index 0000000000..8bed7711c4
+--- /dev/null
++++ b/package/xerces/0001-cmake-Allow-thread-checks-to-fail-and-fall-back-to-nothreads.patch
+@@ -0,0 +1,38 @@
++From c9bfe786331647237b90f5f9e35b4d2cad7aaa69 Mon Sep 17 00:00:00 2001
++From: Roger Leigh <rleigh@apache.org>
++Date: Fri, 12 Oct 2018 12:02:58 +0000
++Subject: [PATCH] cmake: Allow thread checks to fail and fall back to nothreads
++
++Closes: #2155
++
++
++git-svn-id: https://svn.apache.org/repos/asf/xerces/c/trunk at 1843653 13f79535-47bb-0310-9956-ffa450edef68
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from: https://github.com/apache/xerces-c/commit/c9bfe786331647237b90f5f9e35b4d2cad7aaa69]
++---
++ cmake/XercesMutexMgrSelection.cmake | 10 +++++++---
++ 1 file changed, 7 insertions(+), 3 deletions(-)
++
++diff --git a/cmake/XercesMutexMgrSelection.cmake b/cmake/XercesMutexMgrSelection.cmake
++index 2f1d71c50..ad698840d 100644
++--- a/cmake/XercesMutexMgrSelection.cmake
+++++ b/cmake/XercesMutexMgrSelection.cmake
++@@ -19,11 +19,15 @@
++ 
++ # mutexmgr selection
++ 
++-option(threads "Threading support" ON)
+++set(xerces_thread_default ON)
+++find_package(Threads)
+++if(NOT TARGET Threads::Threads)
+++  set(xerces_thread_default ON)
+++endif()
++ 
++-include(CheckCXXSourceCompiles)
+++option(threads "Threading support" ${xerces_thread_default})
++ 
++-find_package(Threads REQUIRED)
+++include(CheckCXXSourceCompiles)
++ 
++ function(thread_test outvar)
++   set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+-- 
+2.17.1
