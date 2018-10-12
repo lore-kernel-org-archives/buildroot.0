@@ -1,61 +1,61 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 12 Oct 2018 09:16:05 -0500
-Subject: [Buildroot] Analysis results for 2018-10-09
-In-Reply-To: <CANQCQpYGujfVH426cGYixee6YedMscbuoi8z5b0_FOc7rKTAxw@mail.gmail.com>
-References: <20181010060010.4E3C920736@mail.bootlin.com>
- <20181010174814.5ac114f1@windsurf>
- <CANQCQpbtrG=C9T9FuznXONdqF9OTq3oqmDdDWKX5PHUhJV_=hg@mail.gmail.com>
- <CAPi7W80_9pcSwfX53xDC8TzgmGLuJ+rwK_T0MyKCOaunMUQNJw@mail.gmail.com>
- <20181010211419.22632881@windsurf>
- <CANQCQpbvQX1JcX0823ZFhrhN=XoPb5opPNbGBRZDko1BzviDFw@mail.gmail.com>
- <20181011085017.7025cf45@windsurf>
- <CANQCQpYGujfVH426cGYixee6YedMscbuoi8z5b0_FOc7rKTAxw@mail.gmail.com>
-Message-ID: <CANQCQpZSu-hqEA4bxYbM04TziFgEu65QmGihubP5vM8zzfiL3g@mail.gmail.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Fri, 12 Oct 2018 10:11:49 -0400
+Subject: [Buildroot] [PATCH 1/1] erlang: always use Buildroot's zlib
+Message-ID: <20181012141149.72489-1-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+While Erlang includes a version of zlib, it's intended for Windows and
+there's an expectation that non-Windows platforms provide it. It's also
+not as regularly updated as the one in Buildroot. This change makes
+Erlang always use a Buildroot-provided zlib.
 
-On Thu, Oct 11, 2018 at 10:57 PM Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
->
-> Thomas,
->
->
-> On Thu, Oct 11, 2018 at 1:50 AM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> >
-> > Hello,
-> >
-> > On Wed, 10 Oct 2018 16:25:41 -0500, Matthew Weber wrote:
-> >
-> > > Adam, did you have something in the works for this one?  I seem to
-> > > remember some discussion on the one "whole" thread above related to
-> > > breaking the dependency.  I'd make the change but I don't have a valid
-> > > test case.
-> >
-> > Well, Arnout statement was that the build dependency is not necessary
-> > because python3 can dlopen() at runtime the libuuid.so library. Indeed
-> > the code in Python3 is here to do that, but as I explained in
-> > http://lists.busybox.net/pipermail/buildroot/2018-September/231060.html,
-> > it doesn't seem to work, at least in the Buildroot context.
-> >
->
-> I dug through this a bit more and found that the c library is
-> providing the implementation for uuid.uuid1() when uuid_generate_time*
-> is probed for in libraries using ctypes.  I believe that the
-> util-linux libuuid would come into play if the extension module
-> approach worked (all the configure tests currently fail which disable
-> use of python3-3.7.0/Modules/_uuidmodule.c).
->
-> I believe the right fix for now is cleaning up the current approach
-> (removing the ability to enable/disable uuid and the util-linux
-> dependency) as it looks like python can support uuid by default with
-> the current glibc.  My guess is we'll see build failures with the
-> other std libraries....
->
+Fixes this compile error:
 
-http://patchwork.ozlabs.org/patch/983070/
+ CC	/home/buildroot/autobuild/run/instance-0/output/build/erlang-21.0/erts/emulator/zlib/obj/x86_64-buildroot-linux-musl/opt/adler32.o
+In file included from zlib/adler32.c:11:0:
+zlib/zutil.h:172:39: error: "_LFS64_LARGEFILE" is not defined [-Werror=undef]
+     (!defined(_LARGEFILE64_SOURCE) || _LFS64_LARGEFILE-0 == 0)
+                                       ^~~~~~~~~~~~~~~~
+
+See http://autobuild.buildroot.net/results/fc633f80c7c36a90e641487f5a888fbb767c2a54/.
+
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+---
+ package/erlang/Config.in | 1 +
+ package/erlang/erlang.mk | 3 +--
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/erlang/Config.in b/package/erlang/Config.in
+index 75ba17086a..ab87eab6ff 100644
+--- a/package/erlang/Config.in
++++ b/package/erlang/Config.in
+@@ -23,6 +23,7 @@ config BR2_PACKAGE_ERLANG
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_ERLANG_ARCH_SUPPORTS
++	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Erlang is a programming language used to build massively
+ 	  scalable soft real-time systems with requirements on high
+diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
+index 2ac903ffea..ca0aa0b770 100644
+--- a/package/erlang/erlang.mk
++++ b/package/erlang/erlang.mk
+@@ -64,10 +64,9 @@ else
+ ERLANG_CONF_OPTS += --without-odbc
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_ZLIB),y)
++# Always use Buildroot's zlib
+ ERLANG_CONF_OPTS += --enable-shared-zlib
+ ERLANG_DEPENDENCIES += zlib
+-endif
+ 
+ # Remove source, example, gs and wx files from staging and target.
+ ERLANG_REMOVE_PACKAGES = gs wx
+-- 
+2.17.1
