@@ -1,107 +1,55 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 12 Oct 2018 14:59:49 +0200
-Subject: [Buildroot] [PATCH v2 1/1] python-py: new package
-In-Reply-To: <20181012125828.7059-1-asafka7@gmail.com>
-References: <20181012125828.7059-1-asafka7@gmail.com>
-Message-ID: <CAGm1_ksuU03YuBDLmR4+=OX7GtEFRWPHkMfnWDfVQgXCRMo_4w@mail.gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Fri, 12 Oct 2018 16:32:01 +0300
+Subject: [Buildroot] [PATCH 1/1] python-click: bump to version 7.0
+Message-ID: <20181012133201.16196-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Oct 12, 2018 at 2:58 PM Asaf Kahlon <asafka7@gmail.com> wrote:
->
-> Library with cross-python path, ini-parsing, io, code, log
-> facilities.
->
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Add license hash.
+License change: LICENSE renamed to LICENSE.rst, and one parahraph
+has moved down (no actual content was added/deleted/modified)
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/python-click/python-click.hash | 8 +++++---
+ package/python-click/python-click.mk   | 8 ++++----
+ 2 files changed, 9 insertions(+), 7 deletions(-)
 
-Yegor
-
-> ---
-> v1->v2: use capital 'L'
-> ---
->  DEVELOPERS                       |  1 +
->  package/Config.in                |  1 +
->  package/python-py/Config.in      |  7 +++++++
->  package/python-py/python-py.hash |  5 +++++
->  package/python-py/python-py.mk   | 14 ++++++++++++++
->  5 files changed, 28 insertions(+)
->  create mode 100644 package/python-py/Config.in
->  create mode 100644 package/python-py/python-py.hash
->  create mode 100644 package/python-py/python-py.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 990621fb11..341bf7de3b 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -217,6 +217,7 @@ F:  package/python-paramiko/
->  F:     package/python-passlib/
->  F:     package/python-ply/
->  F:     package/python-priority/
-> +F:     package/python-py/
->  F:     package/python-pyasn1/
->  F:     package/python-pyasn1-modules/
->  F:     package/python-pycryptodomex/
-> diff --git a/package/Config.in b/package/Config.in
-> index 8d995f82e6..fd86e37a52 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -943,6 +943,7 @@ menu "External python modules"
->         source "package/python-psycopg2/Config.in"
->         source "package/python-ptyprocess/Config.in"
->         source "package/python-pudb/Config.in"
-> +       source "package/python-py/Config.in"
->         source "package/python-pyasn/Config.in"
->         source "package/python-pyasn-modules/Config.in"
->         source "package/python-pyasn1/Config.in"
-> diff --git a/package/python-py/Config.in b/package/python-py/Config.in
-> new file mode 100644
-> index 0000000000..262ded1538
-> --- /dev/null
-> +++ b/package/python-py/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_PY
-> +       bool "python-py"
-> +       help
-> +         Library with cross-python path, ini-parsing, io, code, log
-> +         facilities.
-> +
-> +         http://py.readthedocs.io/
-> diff --git a/package/python-py/python-py.hash b/package/python-py/python-py.hash
-> new file mode 100644
-> index 0000000000..67926527cd
-> --- /dev/null
-> +++ b/package/python-py/python-py.hash
-> @@ -0,0 +1,5 @@
-> +# md5, sha256 from https://pypi.org/pypi/py/json
-> +md5    e53ac12db4286737837ef3ccb4158301  py-1.7.0.tar.gz
-> +sha256 bf92637198836372b520efcba9e020c330123be8ce527e535d185ed4b6f45694  py-1.7.0.tar.gz
-> +# Locally computed sha256 checksums
-> +sha256 2af680c39ef493fb82830356d1d3df1acb5a06033cba2dec7a19e21caa77a866  LICENSE
-> diff --git a/package/python-py/python-py.mk b/package/python-py/python-py.mk
-> new file mode 100644
-> index 0000000000..e9c4d0a3b5
-> --- /dev/null
-> +++ b/package/python-py/python-py.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-py
-> +#
-> +################################################################################
-> +
-> +PYTHON_PY_VERSION = 1.7.0
-> +PYTHON_PY_SOURCE = py-$(PYTHON_PY_VERSION).tar.gz
-> +PYTHON_PY_SITE = https://files.pythonhosted.org/packages/c7/fa/eb6dd513d9eb13436e110aaeef9a1703437a8efa466ce6bb2ff1d9217ac7
-> +PYTHON_PY_SETUP_TYPE = setuptools
-> +PYTHON_PY_LICENSE = MIT
-> +PYTHON_PY_LICENSE_FILES = LICENSE
-> +
-> +$(eval $(python-package))
-> --
-> 2.17.1
->
+diff --git a/package/python-click/python-click.hash b/package/python-click/python-click.hash
+index cae03c72e2..911f13dfa3 100644
+--- a/package/python-click/python-click.hash
++++ b/package/python-click/python-click.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/click/json, sha256 locally computed
+-md5 fc4cc00c4863833230d3af92af48abd4 click-6.7.tar.gz
+-sha256 f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b click-6.7.tar.gz
++# md5, sha256 from https://pypi.org/pypi/click/json
++md5 7f53d50f7b7373ebc7963f9ff697450a Click-7.0.tar.gz
++sha256 5b94b49521f6456670fdb30cd82a4eca9412788a93fa6dd6df72c94d5a8ff2d7 Click-7.0.tar.gz
++# Locally computed sha256
++sha256 e212319faefa4f459c8ac937fdc8557040a3cab8af29366ca2a48d239025225c LICENSE.rst
+diff --git a/package/python-click/python-click.mk b/package/python-click/python-click.mk
+index e6df636167..12539f557b 100644
+--- a/package/python-click/python-click.mk
++++ b/package/python-click/python-click.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CLICK_VERSION = 6.7
+-PYTHON_CLICK_SOURCE = click-$(PYTHON_CLICK_VERSION).tar.gz
+-PYTHON_CLICK_SITE = https://pypi.python.org/packages/95/d9/c3336b6b5711c3ab9d1d3a80f1a3e2afeb9d8c02a7166462f6cc96570897
++PYTHON_CLICK_VERSION = 7.0
++PYTHON_CLICK_SOURCE = Click-$(PYTHON_CLICK_VERSION).tar.gz
++PYTHON_CLICK_SITE = https://files.pythonhosted.org/packages/f8/5c/f60e9d8a1e77005f664b76ff8aeaee5bc05d0a91798afd7f53fc998dbc47
+ PYTHON_CLICK_LICENSE = BSD-3-Clause
+-PYTHON_CLICK_LICENSE_FILES = LICENSE
++PYTHON_CLICK_LICENSE_FILES = LICENSE.rst
+ PYTHON_CLICK_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
+-- 
+2.17.1
