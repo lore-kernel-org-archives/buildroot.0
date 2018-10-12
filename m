@@ -1,61 +1,44 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Fri, 12 Oct 2018 10:11:49 -0400
-Subject: [Buildroot] [PATCH 1/1] erlang: always use Buildroot's zlib
-Message-ID: <20181012141149.72489-1-fhunleth@troodon-software.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Fri, 12 Oct 2018 16:49:22 +0200
+Subject: [Buildroot] [git commit] ptpd2: fix patch 0002 so that it
+ applies properly
+In-Reply-To: <3bf1ed8e-fc53-c04a-415f-92df4d0f8fb2@micronovasrl.com>
+References: <20181011202228.F01F483476@busybox.osuosl.org>
+ <3e13deb8-d0b0-b7fd-57a5-2ebaacf4b328@micronovasrl.com>
+ <3bf1ed8e-fc53-c04a-415f-92df4d0f8fb2@micronovasrl.com>
+Message-ID: <006c7a65-a159-1466-4868-0efa878609e1@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-While Erlang includes a version of zlib, it's intended for Windows and
-there's an expectation that non-Windows platforms provide it. It's also
-not as regularly updated as the one in Buildroot. This change makes
-Erlang always use a Buildroot-provided zlib.
+Il 12/10/2018 14:41, Giulio Benetti ha scritto:
+> I'm reproducing the problem by myself to understand, using latest
+> autobuild failure.
+> 
+> No need to explain me.
+> 
+> Sorry but *high temperature* makes me feel strange :)
+> 
 
-Fixes this compile error:
+Here it is(malformed patch):
 
- CC	/home/buildroot/autobuild/run/instance-0/output/build/erlang-21.0/erts/emulator/zlib/obj/x86_64-buildroot-linux-musl/opt/adler32.o
-In file included from zlib/adler32.c:11:0:
-zlib/zutil.h:172:39: error: "_LFS64_LARGEFILE" is not defined [-Werror=undef]
-     (!defined(_LARGEFILE64_SOURCE) || _LFS64_LARGEFILE-0 == 0)
-                                       ^~~~~~~~~~~~~~~~
+.git/rebase-apply/patch:30: space before tab in indent.
 
-See http://autobuild.buildroot.net/results/fc633f80c7c36a90e641487f5a888fbb767c2a54/.
+I don't even know how it happened, and this also means I didn't test it 
+enough before sending.
+Sorry.
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
----
- package/erlang/Config.in | 1 +
- package/erlang/erlang.mk | 3 +--
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/erlang/Config.in b/package/erlang/Config.in
-index 75ba17086a..ab87eab6ff 100644
---- a/package/erlang/Config.in
-+++ b/package/erlang/Config.in
-@@ -23,6 +23,7 @@ config BR2_PACKAGE_ERLANG
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_PACKAGE_ERLANG_ARCH_SUPPORTS
-+	select BR2_PACKAGE_ZLIB
- 	help
- 	  Erlang is a programming language used to build massively
- 	  scalable soft real-time systems with requirements on high
-diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
-index 2ac903ffea..ca0aa0b770 100644
---- a/package/erlang/erlang.mk
-+++ b/package/erlang/erlang.mk
-@@ -64,10 +64,9 @@ else
- ERLANG_CONF_OPTS += --without-odbc
- endif
- 
--ifeq ($(BR2_PACKAGE_ZLIB),y)
-+# Always use Buildroot's zlib
- ERLANG_CONF_OPTS += --enable-shared-zlib
- ERLANG_DEPENDENCIES += zlib
--endif
- 
- # Remove source, example, gs and wx files from staging and target.
- ERLANG_REMOVE_PACKAGES = gs wx
+Best regards
 -- 
-2.17.1
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
