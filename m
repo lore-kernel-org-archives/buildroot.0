@@ -1,85 +1,67 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 13 Oct 2018 16:43:17 +0200
-Subject: [Buildroot] [PATCH 5/5] support/testing: add python-twisted
- tests
-In-Reply-To: <1adacc2a-25dc-eee5-8688-47ce66aa080b@mind.be>
-References: <20180926025514.2092-1-ricardo.martincoski@gmail.com>
- <20180926025514.2092-6-ricardo.martincoski@gmail.com>
- <20181011204808.1aff4cd1@windsurf>
- <1adacc2a-25dc-eee5-8688-47ce66aa080b@mind.be>
-Message-ID: <20181013144317.GF31509@scaer>
+Date: Sat, 13 Oct 2018 17:05:58 +0200
+Subject: [Buildroot] [PATCH] package/nodejs: use per-build cache directories
+Message-ID: <20181013150558.31065-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+When two Buildroot builds run in parallel, and they both happen to call
+npm at roughly the same time, the two npm instances may conflict when
+accessing the npm cache, which is by default ~/.npm
 
-On 2018-10-11 23:27 +0200, Arnout Vandecappelle spake thusly:
-> On 11/10/18 20:48, Thomas Petazzoni wrote:
-> > Hello,
-> > 
-> > On Tue, 25 Sep 2018 23:55:14 -0300, Ricardo Martincoski wrote:
-> > 
-> >> +TEST_SCRIPT = """
-> >> +from twisted.internet import protocol, reactor, endpoints
-> >> +class F(protocol.Factory):
-> >> +    pass
-> >> +endpoints.serverFromString(reactor, "tcp:1234").listen(F())
-> >> +reactor.run()
-> >> +"""
-> > 
-> > At some point, we will have to find a solution to store such
-> > "artefacts" somewhere, instead of having them inline in their test
-> > cases. I don't have a good idea about this.
-> 
->  I think it would be nice if we could add in the package directory a
-> subdirectory with files to be copied to the target for the runtime test, and a
-> python script for the test itself.
+Although npm is supposed to lock access to the cache, it seems it does
+sometimes fail to do so properly, bailling out in error, when it would
+never ever crash at all when not running in parallel. We suspect that
+the sequence leading to such failures are something like:
 
-I'm not sure that would answer the question, but I already worked on
-moving the packages' tests files inside the packages directories:
-    https://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/package-tests
+    npm-1                           npm-2
+      lock(retry=few, sleep=short)    .
+      does-stuff()                    .
+      .                               lock(retry=few, sleep=short)
+      .                               # can't lock local cache
+      .                               download-module()
+      .                                 # can't download
+      .                                 exit(1)
+      unlock()
 
-(Note that this branch is not entirely up-to-date, as I haven't updated
-it since we added new package tests.)
+As per the docs [0], few = 10, short = 10. So if the first npm (npm-1)
+takes more than 100s (which can happen behind slow links and/or big
+modules that contain native code that is compiled), then the second npm
+(npm-2) will bail out (the download would fail if there is no network
+access, for example, and only local modules are used).
 
-Contrary to Thomas, I don't really mind that we have tests in two
-locations. Per-paclages tests are, in y opinion, better to be
-side-by-side with the package they test.
+Point npm to use a per-build cache directory, so they no longer compete
+across builds.
 
-As for the test on the infra, they go where they make more sense: in the
-test infra.
+That would still need some care when we do top-level parallel builds,
+though.
 
-My 2cts.
+Note also that the conflicts are not totally eliminated: two or more npm
+instances may still compete for some other resource that has not yet
+been identified.
 
-Regards,
-Yann E. MORIN.
+But, at least, the conflict window has been drastically shortened now,
+to the point where it now seldom occurs.
 
->  As an in-between step, we can put the files-to-be-copied inside the
-> support/testing directory and explicitly enumerate the files-to-be-copied in the
-> test fixture.
-> 
->  Regards,
->  Arnout
-> 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/nodejs/nodejs.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 29462cb979..429642b795 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -153,6 +153,7 @@ NPM = $(TARGET_CONFIGURE_OPTS) \
+ 	npm_config_build_from_source=true \
+ 	npm_config_nodedir=$(BUILD_DIR)/nodejs-$(NODEJS_VERSION) \
+ 	npm_config_prefix=$(TARGET_DIR)/usr \
++	npm_config_cache=$(BUILD_DIR)/.npm-cache \
+ 	$(HOST_DIR)/bin/npm
+ 
+ #
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
