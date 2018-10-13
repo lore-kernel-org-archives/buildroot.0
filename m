@@ -1,80 +1,45 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 13 Oct 2018 15:28:43 +0200
-Subject: [Buildroot] [PATCH 2/2] gvfs: bump to version 1.31.4
-In-Reply-To: <20181013132843.21702-1-fontaine.fabrice@gmail.com>
-References: <20181013132843.21702-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181013132843.21702-2-fontaine.fabrice@gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sat, 13 Oct 2018 16:12:00 +0200
+Subject: [Buildroot] [PATCH 1/2] pkg-perl: add patch_subdir_makefile function
+Message-ID: <20181013141201.4234-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump to version 1.31.4 which is the first version including the fix for
-glibc 2.28 issue with major/minor:
-https://gitlab.gnome.org/GNOME/gvfs/commit/3424bef7ef71dc3a8c2c71310671cd6d39e7b3e7
+based on an initial work of Christopher McCrory <chrismcc@gmail.com>
 
-Do not bump to latest version of gvfs as:
-- this is a major rework: autotools has been dropped in favor of meson
-- it requires libglib in version 2.57.1 and we have currently 2.56.1
-
-Also:
-- add hash for license file
-- Remove --disable-bash-completion, no more option since 1.31.1:
-  https://gitlab.gnome.org/GNOME/gvfs/commit/2f28fa49cfeb1c82927a1c7c0021b15e2742149f
-- Remove --disable-hal, dropped since 1.31.1:
-  https://gitlab.gnome.org/GNOME/gvfs/commit/ec9c45d7c7671266193a93500c7477990e390fc7
-
-Fixes:
- - http://autobuild.buildroot.net/results/07fa7b0ad9ae0fa9c2e59d54e4d4c76ae4f26166
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/gvfs/gvfs.hash | 7 +++++--
- package/gvfs/gvfs.mk   | 6 ++----
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/pkg-perl.mk | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/package/gvfs/gvfs.hash b/package/gvfs/gvfs.hash
-index 63ad77de83..6b7403ffa4 100644
---- a/package/gvfs/gvfs.hash
-+++ b/package/gvfs/gvfs.hash
-@@ -1,2 +1,5 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.30/gvfs-1.30.3.sha256sum
--sha256	b824a29489cae7f39e1a0fc0d154ac7b7bf43d8edd98ba83ffcad2f766d0f175	gvfs-1.30.3.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.31/gvfs-1.31.4.sha256sum
-+sha256	55244d447d040884dfb335fde638274cb6f2794285ada7fa84bcbbd34f06be04	gvfs-1.31.4.tar.xz
-+
-+# Hash for license file
-+sha256	45cf336e2e48176993babc5aabf44437390f40e6a86a472c6abfc7ce9c035db4	COPYING
-diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-index 6b20fd9b9a..bb9b9d0f77 100644
---- a/package/gvfs/gvfs.mk
-+++ b/package/gvfs/gvfs.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
+index 07348bd5d..a78c1cd95 100644
+--- a/package/pkg-perl.mk
++++ b/package/pkg-perl.mk
+@@ -22,6 +22,21 @@
+ PERL_ARCHNAME = $(ARCH)-linux
+ PERL_RUN = PERL5LIB= PERL_USE_UNSAFE_INC=1 $(HOST_DIR)/bin/perl
  
--GVFS_VERSION_MAJOR = 1.30
--GVFS_VERSION = $(GVFS_VERSION_MAJOR).3
-+GVFS_VERSION_MAJOR = 1.31
-+GVFS_VERSION = $(GVFS_VERSION_MAJOR).4
- GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.xz
- GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
- GVFS_INSTALL_STAGING = YES
-@@ -21,14 +21,12 @@ GVFS_CONF_ENV = ac_cv_path_LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-con
- GVFS_CONF_OPTS = \
- 	--disable-afc \
- 	--disable-admin \
--	--disable-bash-completion \
- 	--disable-cdda \
- 	--disable-gcr \
- 	--disable-gdu \
- 	--disable-goa \
- 	--disable-google \
- 	--disable-gphoto2 \
--	--disable-hal \
- 	--disable-keyring \
- 	--disable-libmtp \
- 	--disable-udisks2
++# Some arguments to Makefile.PL do not get propagated to subdirectories
++# similar to:
++# https://rt.cpan.org/Public/Bug/Display.html?id=28632
++define patch_subdir_makefile
++	$(SED) "s:^AR = .*:AR = $(TARGET_AR):g" $(1)
++	$(SED) "s:^FULL_AR = .*:FULL_AR = $(TARGET_AR):g" $(1)
++	$(SED) "s:^CC = .*:CC = $(TARGET_CC):g" $(1)
++	$(SED) "s:^CCFLAGS = .*:CCFLAGS = $(TARGET_CFLAGS):g" $(1)
++	$(SED) "s:^LD = .*:LD = $(TARGET_CC):g" $(1)
++	$(SED) "s:^LDDLFLAGS = .*:LDDLFLAGS = -shared $(TARGET_LDFLAGS):g" $(1)
++	$(SED) "s:^LDLFLAGS = .*:LDLFLAGS = $(TARGET_LDFLAGS):g" $(1)
++	$(SED) "s:^DESTDIR = .*:DESTDIR = $(TARGET_DIR):g" $(1)
++	$(SED) "s:^PERL_INC = .*:PERL_INC = $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE:g" $(1)
++endef
++
+ ################################################################################
+ # inner-perl-package -- defines how the configuration, compilation and
+ # installation of a perl package should be done, implements a
 -- 
 2.17.1
