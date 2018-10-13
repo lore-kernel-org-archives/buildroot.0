@@ -1,27 +1,28 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 13 Oct 2018 10:01:03 +0200
-Subject: [Buildroot] [PATCH 2/2] package/luvi: add license hash
-In-Reply-To: <20181013080103.29974-1-bernd.kuhls@t-online.de>
-References: <20181013080103.29974-1-bernd.kuhls@t-online.de>
-Message-ID: <20181013080103.29974-2-bernd.kuhls@t-online.de>
+From: Oscar Gomez Fuente <oscargomezf@gmail.com>
+Date: Sat, 13 Oct 2018 11:13:35 +0200
+Subject: [Buildroot] Problem with Raspberry Pi 3B+and BT
+In-Reply-To: <20181012234133.539d0a0b@gmx.net>
+References: <CALtfCQa87Q5w-mOL4sKbW8M7wh4qAH3rBRm6A6H41SEaci=3QQ@mail.gmail.com>
+ <CANQCQpbD_fdXrqYGdW74d4EVyCm4eAs6pxiyasg8wTumYZ+XWA@mail.gmail.com>
+ <20181012234133.539d0a0b@gmx.net>
+Message-ID: <CALtfCQYKA=MrVGPYY8a7koPLu5SczJ1GxNDOhnfXWsixBEQ_AQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/luvi/luvi.hash | 1 +
- 1 file changed, 1 insertion(+)
+Hi Peter,
 
-diff --git a/package/luvi/luvi.hash b/package/luvi/luvi.hash
-index e2239b6171..22e5cfa7bf 100644
---- a/package/luvi/luvi.hash
-+++ b/package/luvi/luvi.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256  ce9a1fb762e61267618ddea9ea129170fd543bb918c382b71cb35985d0024c42  luvi-src-v2.7.6.tar.gz
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
--- 
-2.19.1
+
+Thank you very much for your help. I will try on Monday I will report it to you.
+
+Do you know if there is any plan to add WiFi monitor support on the
+kernel driver for the WiFi /BT chip: CYW43455 on Raspberry Pi 3B+?
+
+
+Best regards.
+
+Oscar Gomez Fuente
+TST Sistemas
+www.tst-sistemas.es
