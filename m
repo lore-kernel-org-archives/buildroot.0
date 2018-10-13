@@ -1,72 +1,159 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 13 Oct 2018 17:41:22 +0200
-Subject: [Buildroot] UEFI and systemD
-In-Reply-To: <ea-mime-5bc05f19-57c-2be43419@www-5.netcourrier.com>
-References: <ea-mime-5bc05f19-57c-2be43419@www-5.netcourrier.com>
-Message-ID: <b6f1c151-f6ce-1436-01e1-757ac2e6aa7f@mind.be>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 13 Oct 2018 19:59:08 +0200
+Subject: [Buildroot] [PATCH v1] gstreamer1-editing-services: fix libgtk3
+ compile
+Message-ID: <20181013175908.19693-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add two upstream patches converting examples/c/ges-ui.c from libgtk2
+to libgtk3 and limiting examples compile to libgkt3 only, fixes [1]:
 
+  ges-ui.c:109:34: error: unknown type name 'GtkObject'; did you mean 'AtkObject'?
+   gboolean window_delete_event_cb (GtkObject * window, GdkEvent * event,
+                                    ^~~~~~~~~
+                                    AtkObject
 
-On 12/10/18 10:45, lpdev at cordier.org wrote:
-> Hi everybody,
-> 
-> I finally succeed to compile and start a linux kernel using EFI. My kernel is
-> booting, but it seems that systemd is not starting. (I only get output from the
-> kernel, and when I plugin/plugoff devices). I have no tty for interacting with
-> the operating system.
-> 
-> After digging in systemd.mk, I noticed that in SYSTEMD_CONF_OPTS, 2 options are
-> disabled:
-> 
-> ??? -Defi=false \
-> ??? -Dgnu-efi=false \
-> 
-> Is it normal? Any clue to how to make systemd boot while using Uefi?
+[1] http://autobuild.buildroot.net/results/92010fb84fb7eda3881fa54c6b55e27c8913bb2f
 
- Try setting those options to true and see if it helps...
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ ...01-examples-ges-ui-fix-some-gtk2-ism.patch | 66 +++++++++++++++++++
+ ...2-examples-always-build-against-gtk3.patch | 50 ++++++++++++++
+ 2 files changed, 116 insertions(+)
+ create mode 100644 package/gstreamer1/gstreamer1-editing-services/0001-examples-ges-ui-fix-some-gtk2-ism.patch
+ create mode 100644 package/gstreamer1/gstreamer1-editing-services/0002-examples-always-build-against-gtk3.patch
 
- The -Defi=false option has been there since the option was introduced in the
-bump from 44 to 207. Probably just not something considered relevant at the time.
-
- The -Dgnu-efi=false was introduced in ac0a31090ad44531fd14a3e3b1bb7e23c1577f68
-with the following explanation:
-
-    - Add --disable-gnuefi to configure options to avoid a failure like this
-      one:
-
-      checking for /usr/lib/gnuefi/elf_ia32_efi.lds... configure: error:
-      cannot check for file existence when cross compiling
-
- With the switch to meson, that's probably not relevant anymore and it should
-instead become something like this:
-
-ifeq ($(BR2_PACKAGE_GNU_EFI),y)
-SYSTEMD_DEPENDENCIES += gnu-efi
-SYSTEMD_CONF_OPTS += -Dgnu-efi=true
-else
-SYSTEMD_CONF_OPTS += -Dgnu-efi=false
-endif
-
-
- If you do get success with these changes, could you send two patches to
-Buildroot? The first one to enable the optional gnu-efi dependency, the second
-one to enable efi when appropriate. For the latter, of course, you should first
-find out when it is appropriate to enable efi.
-
-
- Regards,
- Arnout
-
-[snip]
+diff --git a/package/gstreamer1/gstreamer1-editing-services/0001-examples-ges-ui-fix-some-gtk2-ism.patch b/package/gstreamer1/gstreamer1-editing-services/0001-examples-ges-ui-fix-some-gtk2-ism.patch
+new file mode 100644
+index 0000000000..5a074941fd
+--- /dev/null
++++ b/package/gstreamer1/gstreamer1-editing-services/0001-examples-ges-ui-fix-some-gtk2-ism.patch
+@@ -0,0 +1,66 @@
++From 76f3dcb8f11a240fc7147ab556c57f10abc9e957 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Tim-Philipp=20M=C3=BCller?= <tim@centricular.com>
++Date: Sun, 20 May 2018 23:46:42 +0100
++Subject: [PATCH] examples: ges-ui: fix some gtk2-ism
++
++Still lots of deprecated API to update.
++
++https://bugzilla.gnome.org/show_bug.cgi?id=796243
++
++Upstream: https://cgit.freedesktop.org/gstreamer/gst-editing-services/commit/?id=76f3dcb8f11a240fc7147ab556c57f10abc9e957
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ examples/c/ges-ui.c | 10 +++++-----
++ 1 file changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/examples/c/ges-ui.c b/examples/c/ges-ui.c
++index 4acd1ee9..45694a6b 100644
++--- a/examples/c/ges-ui.c
+++++ b/examples/c/ges-ui.c
++@@ -106,7 +106,7 @@ static int n_instances = 0;
++  * These are declared non-static for signal auto-connection
++  */
++ 
++-gboolean window_delete_event_cb (GtkObject * window, GdkEvent * event,
+++gboolean window_delete_event_cb (GtkWidget * window, GdkEvent * event,
++     App * app);
++ void new_activate_cb (GtkMenuItem * item, App * app);
++ void open_activate_cb (GtkMenuItem * item, App * app);
++@@ -1076,14 +1076,14 @@ gboolean
++ add_effect_dlg_delete_event_cb (GtkWidget * widget, GdkEvent * event,
++     gpointer * app)
++ {
++-  gtk_widget_hide_all (((App *) app)->add_effect_dlg);
+++  gtk_widget_hide (((App *) app)->add_effect_dlg);
++   return TRUE;
++ }
++ 
++ void
++ on_cancel_add_effect_cb (GtkButton * button, App * app)
++ {
++-  gtk_widget_hide_all (app->add_effect_dlg);
+++  gtk_widget_hide (app->add_effect_dlg);
++ }
++ 
++ void
++@@ -1103,7 +1103,7 @@ on_apply_effect_cb (GtkButton * button, App * app)
++ 
++   gtk_entry_set_text (GTK_ENTRY (app->audio_effect_entry), "");
++ 
++-  gtk_widget_hide_all (app->add_effect_dlg);
+++  gtk_widget_hide (app->add_effect_dlg);
++ }
++ 
++ static void
++@@ -1347,7 +1347,7 @@ app_new_from_uri (gchar * uri)
++ /* UI callbacks  ************************************************************/
++ 
++ gboolean
++-window_delete_event_cb (GtkObject * window, GdkEvent * event, App * app)
+++window_delete_event_cb (GtkWidget * window, GdkEvent * event, App * app)
++ {
++   app_dispose (app);
++   return FALSE;
++-- 
++2.19.0
++
+diff --git a/package/gstreamer1/gstreamer1-editing-services/0002-examples-always-build-against-gtk3.patch b/package/gstreamer1/gstreamer1-editing-services/0002-examples-always-build-against-gtk3.patch
+new file mode 100644
+index 0000000000..fb5202aa5d
+--- /dev/null
++++ b/package/gstreamer1/gstreamer1-editing-services/0002-examples-always-build-against-gtk3.patch
+@@ -0,0 +1,50 @@
++From 6c26b44f465fe2fd74d68910d1f3c3727f36fb4c Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Tim-Philipp=20M=C3=BCller?= <tim@centricular.com>
++Date: Sun, 20 May 2018 23:47:14 +0100
++Subject: [PATCH] examples: always build against gtk3
++
++Drop gtk2 option.
++
++https://bugzilla.gnome.org/show_bug.cgi?id=796243
++
++Upstream: https://cgit.freedesktop.org/gstreamer/gst-editing-services/commit/?id=6c26b44f465fe2fd74d68910d1f3c3727f36fb4c
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ configure.ac | 19 +++----------------
++ 1 file changed, 3 insertions(+), 16 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 6c6b33ac..3ed2a9e5 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -278,24 +278,11 @@ AC_SUBST(XML_CFLAGS)
++ dnl GTK is optional and only used in examples
++ HAVE_GTK=no
++ HAVE_GTK_X11=no
++-GTK2_REQ=2.14.0
++-GTK3_REQ=2.91.3
+++GTK_REQ=3.0.0
++ if test "x$BUILD_EXAMPLES" = "xyes"; then
++-  AC_MSG_CHECKING([which gtk+ version to compile examples against (optional)])
++-  AC_ARG_WITH([gtk],
++-    AC_HELP_STRING([--with-gtk=3.0|2.0],
++-                   [which gtk+ version to compile against (default: 2.0)]),
++-    [case "$with_gtk" in
++-        2.0) GTK_REQ=$GTK2_REQ ;;
++-        3.0) GTK_REQ=$GTK3_REQ ;;
++-        *) AC_MSG_ERROR([invalid gtk+ version specified]);;
++-    esac],
++-    [with_gtk=2.0
++-     GTK_REQ=$GTK2_REQ])
++-  AC_MSG_RESULT([$with_gtk (>= $GTK_REQ)])
++-  PKG_CHECK_MODULES(GTK, gtk+-$with_gtk >= $GTK_REQ, HAVE_GTK=yes, HAVE_GTK=no)
+++  PKG_CHECK_MODULES(GTK, gtk+-3.0 >= $GTK_REQ, HAVE_GTK=yes, HAVE_GTK=no)
++   dnl some examples need gtk+-x11
++-  PKG_CHECK_MODULES(GTK_X11, gtk+-x11-$with_gtk >= $GTK_REQ, HAVE_GTK_X11=yes, HAVE_GTK_X11=no)
+++  PKG_CHECK_MODULES(GTK_X11, gtk+-x11-3.0 >= $GTK_REQ, HAVE_GTK_X11=yes, HAVE_GTK_X11=no)
++   AC_SUBST(GTK_LIBS)
++   AC_SUBST(GTK_CFLAGS)
++ fi
++-- 
++2.19.0
++
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.19.0
