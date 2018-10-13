@@ -1,67 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 13 Oct 2018 17:05:58 +0200
-Subject: [Buildroot] [PATCH] package/nodejs: use per-build cache directories
-Message-ID: <20181013150558.31065-1-yann.morin.1998@free.fr>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 13 Oct 2018 17:06:06 +0200
+Subject: [Buildroot] [PATCH 1/1] gvfs: fix activation of http/dav backend
+Message-ID: <20181013150606.11876-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When two Buildroot builds run in parallel, and they both happen to call
-npm at roughly the same time, the two npm instances may conflict when
-accessing the npm cache, which is by default ~/.npm
+Since gvfs version 1.2.3, http/dav backend needs libxml2:
+https://gitlab.gnome.org/GNOME/gvfs/commit/2ef5b4192f95f9205204215aec33787641608e58
 
-Although npm is supposed to lock access to the cache, it seems it does
-sometimes fail to do so properly, bailling out in error, when it would
-never ever crash at all when not running in parallel. We suspect that
-the sequence leading to such failures are something like:
-
-    npm-1                           npm-2
-      lock(retry=few, sleep=short)    .
-      does-stuff()                    .
-      .                               lock(retry=few, sleep=short)
-      .                               # can't lock local cache
-      .                               download-module()
-      .                                 # can't download
-      .                                 exit(1)
-      unlock()
-
-As per the docs [0], few = 10, short = 10. So if the first npm (npm-1)
-takes more than 100s (which can happen behind slow links and/or big
-modules that contain native code that is compiled), then the second npm
-(npm-2) will bail out (the download would fail if there is no network
-access, for example, and only local modules are used).
-
-Point npm to use a per-build cache directory, so they no longer compete
-across builds.
-
-That would still need some care when we do top-level parallel builds,
-though.
-
-Note also that the conflicts are not totally eliminated: two or more npm
-instances may still compete for some other resource that has not yet
-been identified.
-
-But, at least, the conflict window has been drastically shortened now,
-to the point where it now seldom occurs.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/nodejs/nodejs.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/gvfs/gvfs.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 29462cb979..429642b795 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -153,6 +153,7 @@ NPM = $(TARGET_CONFIGURE_OPTS) \
- 	npm_config_build_from_source=true \
- 	npm_config_nodedir=$(BUILD_DIR)/nodejs-$(NODEJS_VERSION) \
- 	npm_config_prefix=$(TARGET_DIR)/usr \
-+	npm_config_cache=$(BUILD_DIR)/.npm-cache \
- 	$(HOST_DIR)/bin/npm
+diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
+index 6b20fd9b9a..d5f3682e2c 100644
+--- a/package/gvfs/gvfs.mk
++++ b/package/gvfs/gvfs.mk
+@@ -94,8 +94,8 @@ else
+ GVFS_CONF_OPTS += --disable-nfs
+ endif
  
- #
+-ifeq ($(BR2_PACKAGE_LIBSOUP),y)
+-GVFS_DEPENDENCIES += libsoup
++ifeq ($(BR2_PACKAGE_LIBSOUP)$(BR2_PACKAGE_LIBXML2),yy)
++GVFS_DEPENDENCIES += libsoup libxml2
+ GVFS_CONF_OPTS += --enable-http
+ else
+ GVFS_CONF_OPTS += --disable-http
 -- 
-2.14.1
+2.17.1
