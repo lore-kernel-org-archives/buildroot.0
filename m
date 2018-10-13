@@ -1,106 +1,62 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 13 Oct 2018 20:48:19 +0200
-Subject: [Buildroot] [PATCH v2] gstreamer1-editing-services: fix libgtk3
- compile
-Message-ID: <20181013184819.21759-1-ps.report@gmx.net>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sat, 13 Oct 2018 21:51:00 +0300
+Subject: [Buildroot] [PATCH] ntp: fix build for no-MMU with libcap
+Message-ID: <42864d6afc883db05099a7d75a31de7e09e7ce96.1539456660.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add upstream patches fixing examples/c/ges-ui.c for libgtk3.
+Commit 87d759ced5 (ntp: fix build for no-MMU) added a patch to make MMU
+dependent code hidden behind HAVE_WORKING_FORK. It turns out that the
+patch covers too much code. When libcap is enabled we pass
+--enable-linuxcaps, which in turn enables HAVE_DROPROOT. This adds calls
+to code that is covered by HAVE_WORKING_FORK.
 
-Fixes [1]:
+Update the no-MMU fix so that HAVE_WORKING_FORK only covers the no-MMU
+incompatible routine.
 
-  ges-ui.c:109:34: error: unknown type name 'GtkObject'; did you mean 'AtkObject'?
-   gboolean window_delete_event_cb (GtkObject * window, GdkEvent * event,
-                                    ^~~~~~~~~
-                                    AtkObject
+Fixes:
+http://autobuild.buildroot.net/results/c5c/c5cf28bb969fec7c07864cdd094dedfa4d5439d2/
 
-[1] http://autobuild.buildroot.net/results/92010fb84fb7eda3881fa54c6b55e27c8913bb2f
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Cc: Artem Panfilov <apanfilov@spectracom.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
-Changes v1 -> v2:
-  - drop limit to libgkt3 patch (touches configure.ac, would need autoreconf
-    and examples still compile with libtk2)
----
- ...01-examples-ges-ui-fix-some-gtk2-ism.patch | 66 +++++++++++++++++++
- 1 file changed, 66 insertions(+)
- create mode 100644 package/gstreamer1/gstreamer1-editing-services/0001-examples-ges-ui-fix-some-gtk2-ism.patch
+ package/ntp/0003-fix-nommu.patch | 21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
 
-diff --git a/package/gstreamer1/gstreamer1-editing-services/0001-examples-ges-ui-fix-some-gtk2-ism.patch b/package/gstreamer1/gstreamer1-editing-services/0001-examples-ges-ui-fix-some-gtk2-ism.patch
-new file mode 100644
-index 0000000000..5a074941fd
---- /dev/null
-+++ b/package/gstreamer1/gstreamer1-editing-services/0001-examples-ges-ui-fix-some-gtk2-ism.patch
-@@ -0,0 +1,66 @@
-+From 76f3dcb8f11a240fc7147ab556c57f10abc9e957 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Tim-Philipp=20M=C3=BCller?= <tim@centricular.com>
-+Date: Sun, 20 May 2018 23:46:42 +0100
-+Subject: [PATCH] examples: ges-ui: fix some gtk2-ism
-+
-+Still lots of deprecated API to update.
-+
-+https://bugzilla.gnome.org/show_bug.cgi?id=796243
-+
-+Upstream: https://cgit.freedesktop.org/gstreamer/gst-editing-services/commit/?id=76f3dcb8f11a240fc7147ab556c57f10abc9e957
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ examples/c/ges-ui.c | 10 +++++-----
-+ 1 file changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/examples/c/ges-ui.c b/examples/c/ges-ui.c
-+index 4acd1ee9..45694a6b 100644
-+--- a/examples/c/ges-ui.c
-++++ b/examples/c/ges-ui.c
-+@@ -106,7 +106,7 @@ static int n_instances = 0;
-+  * These are declared non-static for signal auto-connection
+diff --git a/package/ntp/0003-fix-nommu.patch b/package/ntp/0003-fix-nommu.patch
+index 53bf4dfcf38b..0959fa0ba522 100644
+--- a/package/ntp/0003-fix-nommu.patch
++++ b/package/ntp/0003-fix-nommu.patch
+@@ -10,13 +10,20 @@ Upstream status: http://bugs.ntp.org/show_bug.cgi?id=3538
+ 
+ diff -Nuar ntp-4.2.8p12.orig/ntpd/ntpd.c ntp-4.2.8p12/ntpd/ntpd.c
+ --- ntp-4.2.8p12.orig/ntpd/ntpd.c	2018-08-14 14:51:30.000000000 +0300
+-+++ ntp-4.2.8p12/ntpd/ntpd.c	2018-10-12 08:19:01.291781773 +0300
+-@@ -529,7 +529,7 @@
+++++ ntp-4.2.8p12/ntpd/ntpd.c	2018-10-13 21:25:25.858261249 +0300
++@@ -534,6 +534,7 @@
++  * Detach from terminal (much like daemon())
++  * Nothe that this function calls exit()
 +  */
-+ 
-+-gboolean window_delete_event_cb (GtkObject * window, GdkEvent * event,
-++gboolean window_delete_event_cb (GtkWidget * window, GdkEvent * event,
-+     App * app);
-+ void new_activate_cb (GtkMenuItem * item, App * app);
-+ void open_activate_cb (GtkMenuItem * item, App * app);
-+@@ -1076,14 +1076,14 @@ gboolean
-+ add_effect_dlg_delete_event_cb (GtkWidget * widget, GdkEvent * event,
-+     gpointer * app)
-+ {
-+-  gtk_widget_hide_all (((App *) app)->add_effect_dlg);
-++  gtk_widget_hide (((App *) app)->add_effect_dlg);
-+   return TRUE;
-+ }
-+ 
-+ void
-+ on_cancel_add_effect_cb (GtkButton * button, App * app)
-+ {
-+-  gtk_widget_hide_all (app->add_effect_dlg);
-++  gtk_widget_hide (app->add_effect_dlg);
-+ }
-+ 
-+ void
-+@@ -1103,7 +1103,7 @@ on_apply_effect_cb (GtkButton * button, App * app)
-+ 
-+   gtk_entry_set_text (GTK_ENTRY (app->audio_effect_entry), "");
-+ 
-+-  gtk_widget_hide_all (app->add_effect_dlg);
-++  gtk_widget_hide (app->add_effect_dlg);
-+ }
-+ 
+++# ifdef HAVE_WORKING_FORK
 + static void
-+@@ -1347,7 +1347,7 @@ app_new_from_uri (gchar * uri)
-+ /* UI callbacks  ************************************************************/
++ detach_from_terminal(
++ 	int pipe_fds[2],
++@@ -617,6 +618,7 @@
 + 
-+ gboolean
-+-window_delete_event_cb (GtkObject * window, GdkEvent * event, App * app)
-++window_delete_event_cb (GtkWidget * window, GdkEvent * event, App * app)
-+ {
-+   app_dispose (app);
-+   return FALSE;
-+-- 
-+2.19.0
-+
++ 	return;
+  }
+- #endif	/* !SIM */
+++# endif /* HAVE_WORKING_FORK */
+  
+--#if !defined(SIM) && !defined(SYS_WINNT)
+-+#if !defined(SIM) && !defined(SYS_WINNT) && defined(HAVE_WORKING_FORK)
++ #ifdef HAVE_DROPROOT
+  /*
+-  * Detach from terminal (much like daemon())
+-  * Nothe that this function calls exit()
 -- 
-2.19.0
+2.19.1
