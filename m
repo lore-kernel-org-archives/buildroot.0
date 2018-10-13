@@ -1,62 +1,124 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat, 13 Oct 2018 21:51:00 +0300
-Subject: [Buildroot] [PATCH] ntp: fix build for no-MMU with libcap
-Message-ID: <42864d6afc883db05099a7d75a31de7e09e7ce96.1539456660.git.baruch@tkos.co.il>
+Date: Sat, 13 Oct 2018 22:08:01 +0300
+Subject: [Buildroot] [PATCH v1] gstreamer1-editing-services: fix libgtk3
+ compile
+In-Reply-To: <20181013175908.19693-1-ps.report@gmx.net>
+References: <20181013175908.19693-1-ps.report@gmx.net>
+Message-ID: <87a7nhd5ri.fsf@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 87d759ced5 (ntp: fix build for no-MMU) added a patch to make MMU
-dependent code hidden behind HAVE_WORKING_FORK. It turns out that the
-patch covers too much code. When libcap is enabled we pass
---enable-linuxcaps, which in turn enables HAVE_DROPROOT. This adds calls
-to code that is covered by HAVE_WORKING_FORK.
+Hi Peter,
 
-Update the no-MMU fix so that HAVE_WORKING_FORK only covers the no-MMU
-incompatible routine.
+Peter Seiderer writes:
+> Add two upstream patches converting examples/c/ges-ui.c from libgtk2
+> to libgtk3 and limiting examples compile to libgkt3 only, fixes [1]:
+>
+>   ges-ui.c:109:34: error: unknown type name 'GtkObject'; did you mean 'AtkObject'?
+>    gboolean window_delete_event_cb (GtkObject * window, GdkEvent * event,
+>                                     ^~~~~~~~~
+>                                     AtkObject
+>
+> [1] http://autobuild.buildroot.net/results/92010fb84fb7eda3881fa54c6b55e27c8913bb2f
+>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
 
-Fixes:
-http://autobuild.buildroot.net/results/c5c/c5cf28bb969fec7c07864cdd094dedfa4d5439d2/
+[snip]
 
-Cc: Artem Panfilov <apanfilov@spectracom.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/ntp/0003-fix-nommu.patch | 21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
+> diff --git a/package/gstreamer1/gstreamer1-editing-services/0001-examples-ges-ui-fix-some-gtk2-ism.patch b/package/gstreamer1/gstreamer1-editing-services/0001-examples-ges-ui-fix-some-gtk2-ism.patch
+> new file mode 100644
+> index 0000000000..5a074941fd
+> --- /dev/null
+> +++ b/package/gstreamer1/gstreamer1-editing-services/0001-examples-ges-ui-fix-some-gtk2-ism.patch
+> @@ -0,0 +1,66 @@
+> +From 76f3dcb8f11a240fc7147ab556c57f10abc9e957 Mon Sep 17 00:00:00 2001
+> +From: =?UTF-8?q?Tim-Philipp=20M=C3=BCller?= <tim@centricular.com>
+> +Date: Sun, 20 May 2018 23:46:42 +0100
+> +Subject: [PATCH] examples: ges-ui: fix some gtk2-ism
+> +
+> +Still lots of deprecated API to update.
+> +
+> +https://bugzilla.gnome.org/show_bug.cgi?id=796243
+> +
+> +Upstream: https://cgit.freedesktop.org/gstreamer/gst-editing-services/commit/?id=76f3dcb8f11a240fc7147ab556c57f10abc9e957
+> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> +---
+> + examples/c/ges-ui.c | 10 +++++-----
+> + 1 file changed, 5 insertions(+), 5 deletions(-)
+> +
+> +diff --git a/examples/c/ges-ui.c b/examples/c/ges-ui.c
+> +index 4acd1ee9..45694a6b 100644
+> +--- a/examples/c/ges-ui.c
+> ++++ b/examples/c/ges-ui.c
+> +@@ -106,7 +106,7 @@ static int n_instances = 0;
+> +  * These are declared non-static for signal auto-connection
+> +  */
+> diff --git a/package/gstreamer1/gstreamer1-editing-services/0002-examples-always-build-against-gtk3.patch b/package/gstreamer1/gstreamer1-editing-services/0002-examples-always-build-against-gtk3.patch
+> new file mode 100644
+> index 0000000000..fb5202aa5d
+> --- /dev/null
+> +++ b/package/gstreamer1/gstreamer1-editing-services/0002-examples-always-build-against-gtk3.patch
+> @@ -0,0 +1,50 @@
+> +From 6c26b44f465fe2fd74d68910d1f3c3727f36fb4c Mon Sep 17 00:00:00 2001
+> +From: =?UTF-8?q?Tim-Philipp=20M=C3=BCller?= <tim@centricular.com>
+> +Date: Sun, 20 May 2018 23:47:14 +0100
+> +Subject: [PATCH] examples: always build against gtk3
+> +
+> +Drop gtk2 option.
+> +
+> +https://bugzilla.gnome.org/show_bug.cgi?id=796243
+> +
+> +Upstream: https://cgit.freedesktop.org/gstreamer/gst-editing-services/commit/?id=6c26b44f465fe2fd74d68910d1f3c3727f36fb4c
+> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> +---
+> + configure.ac | 19 +++----------------
 
-diff --git a/package/ntp/0003-fix-nommu.patch b/package/ntp/0003-fix-nommu.patch
-index 53bf4dfcf38b..0959fa0ba522 100644
---- a/package/ntp/0003-fix-nommu.patch
-+++ b/package/ntp/0003-fix-nommu.patch
-@@ -10,13 +10,20 @@ Upstream status: http://bugs.ntp.org/show_bug.cgi?id=3538
- 
- diff -Nuar ntp-4.2.8p12.orig/ntpd/ntpd.c ntp-4.2.8p12/ntpd/ntpd.c
- --- ntp-4.2.8p12.orig/ntpd/ntpd.c	2018-08-14 14:51:30.000000000 +0300
--+++ ntp-4.2.8p12/ntpd/ntpd.c	2018-10-12 08:19:01.291781773 +0300
--@@ -529,7 +529,7 @@
-++++ ntp-4.2.8p12/ntpd/ntpd.c	2018-10-13 21:25:25.858261249 +0300
-+@@ -534,6 +534,7 @@
-+  * Detach from terminal (much like daemon())
-+  * Nothe that this function calls exit()
-+  */
-++# ifdef HAVE_WORKING_FORK
-+ static void
-+ detach_from_terminal(
-+ 	int pipe_fds[2],
-+@@ -617,6 +618,7 @@
-+ 
-+ 	return;
-  }
-- #endif	/* !SIM */
-++# endif /* HAVE_WORKING_FORK */
-  
---#if !defined(SIM) && !defined(SYS_WINNT)
--+#if !defined(SIM) && !defined(SYS_WINNT) && defined(HAVE_WORKING_FORK)
-+ #ifdef HAVE_DROPROOT
-  /*
--  * Detach from terminal (much like daemon())
--  * Nothe that this function calls exit()
+I guess you also need to add _AUTORECONF = YES.
+
+baruch
+
+> + 1 file changed, 3 insertions(+), 16 deletions(-)
+> +
+> +diff --git a/configure.ac b/configure.ac
+> +index 6c6b33ac..3ed2a9e5 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -278,24 +278,11 @@ AC_SUBST(XML_CFLAGS)
+> + dnl GTK is optional and only used in examples
+> + HAVE_GTK=no
+> + HAVE_GTK_X11=no
+> +-GTK2_REQ=2.14.0
+> +-GTK3_REQ=2.91.3
+> ++GTK_REQ=3.0.0
+> + if test "x$BUILD_EXAMPLES" = "xyes"; then
+> +-  AC_MSG_CHECKING([which gtk+ version to compile examples against (optional)])
+> +-  AC_ARG_WITH([gtk],
+> +-    AC_HELP_STRING([--with-gtk=3.0|2.0],
+> +-                   [which gtk+ version to compile against (default: 2.0)]),
+> +-    [case "$with_gtk" in
+> +-        2.0) GTK_REQ=$GTK2_REQ ;;
+> +-        3.0) GTK_REQ=$GTK3_REQ ;;
+> +-        *) AC_MSG_ERROR([invalid gtk+ version specified]);;
+> +-    esac],
+> +-    [with_gtk=2.0
+> +-     GTK_REQ=$GTK2_REQ])
+> +-  AC_MSG_RESULT([$with_gtk (>= $GTK_REQ)])
+> +-  PKG_CHECK_MODULES(GTK, gtk+-$with_gtk >= $GTK_REQ, HAVE_GTK=yes, HAVE_GTK=no)
+> ++  PKG_CHECK_MODULES(GTK, gtk+-3.0 >= $GTK_REQ, HAVE_GTK=yes, HAVE_GTK=no)
+> +   dnl some examples need gtk+-x11
+> +-  PKG_CHECK_MODULES(GTK_X11, gtk+-x11-$with_gtk >= $GTK_REQ, HAVE_GTK_X11=yes, HAVE_GTK_X11=no)
+> ++  PKG_CHECK_MODULES(GTK_X11, gtk+-x11-3.0 >= $GTK_REQ, HAVE_GTK_X11=yes, HAVE_GTK_X11=no)
+> +   AC_SUBST(GTK_LIBS)
+> +   AC_SUBST(GTK_CFLAGS)
+> + fi
+> +-- 
+> +2.19.0
+
 -- 
-2.19.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
