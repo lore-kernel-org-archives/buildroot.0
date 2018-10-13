@@ -1,69 +1,112 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 13 Oct 2018 09:07:22 +0200
-Subject: [Buildroot] [PATCH 3/6] package/qt5: prepare for per-version
- hash files
-In-Reply-To: <49cfb8fd-924b-f1e9-8524-3aae0055f4e9@lucaceresoli.net>
-References: <cover.1538913431.git.yann.morin.1998@free.fr>
- <cb17b9830b43b22d08ed65f5252a036f9ca3a94d.1538913431.git.yann.morin.1998@free.fr>
- <12e99890-01c9-4a50-9276-b99815b90b71@lucaceresoli.net>
- <20181012154653.GB31509@scaer>
- <49cfb8fd-924b-f1e9-8524-3aae0055f4e9@lucaceresoli.net>
-Message-ID: <20181013070722.GE31509@scaer>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 13 Oct 2018 09:50:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mjpg-streamer: Fix build without c++
+Message-ID: <20181013075001.28039-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luca, All,
+Fixes
+http://autobuild.buildroot.net/results/1da/1da75a9d9b6e4d04d39117d2915c1d195dcae002/
+http://autobuild.buildroot.net/results/3da/3da3f4099ccf62a314c099c5720dd5b1e9463914/
+http://autobuild.buildroot.net/results/104/10438190453bd7ef7cc157929e74a9ffce9f7fdf/
+http://autobuild.buildroot.net/results/91f/91fa80348db0c248649fe003df2dfa854f37a5a2/
+http://autobuild.buildroot.net/results/4d7/4d7e722cf85a54d2813715e6b4ca1dd793e6d237/
 
-On 2018-10-13 00:07 +0200, Luca Ceresoli spake thusly:
-> On 12/10/2018 17:46, Yann E. MORIN wrote:
-> > On 2018-10-12 09:12 +0200, Luca Ceresoli spake thusly:
-> >> On 07/10/2018 13:57, Yann E. MORIN wrote:
-[--SNIP--]
-> >>> -# Hashes for license files:
-> >>> -sha256 d2cfc059acb4abd8e513cd0a73cd8489f34cbafa7bc34d5d31fb3210821cf8ca LICENSE.GPLv3
-> >>> -sha256 9e63a04ce021b8bf811b30881fa51c8c3db88afeead942cd59322f2fb69c75bc LICENSE.LGPLv3
-> >>> -sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
-> >>
-> >> Shouldn't this removal happen in patch 5?
-> > 
-> > Notice how we create the .hash file for the 5.11.2 version? This means
-> > that the hash-check for license files will be using it rather than the
-> > main hash file.
-> > 
-> > So, the hashes for the license of the 5.11.2 version are no longer
-> > usefull in the main hash file, ergo they get removed.
-> 
-> So this is a bit different from what you do to qt5base and
-> qt5virtualkeyboard. For those you leave the license hashes both in the
-> versioned files and the unversioned files.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../0001-plugins-input_opencv-needs-c.patch   | 31 ++++++++++++++
+ ...o-not-require-c-for-the-whole-projec.patch | 42 +++++++++++++++++++
+ 2 files changed, 73 insertions(+)
+ create mode 100644 package/mjpg-streamer/0001-plugins-input_opencv-needs-c.patch
+ create mode 100644 package/mjpg-streamer/0002-CMakeLists.txt-Do-not-require-c-for-the-whole-projec.patch
 
-Ah, right, I forgot to do it for those, indeed. I've fixed it.
-
-> However this difference has no practical effect since after patch 3
-> there are versioned hashes for all versions, thus the unversioned file
-> is ignored. Patch 5 will trim all the unused lines anyway, so I'm OK if
-> this is committed as-is.
-
-In fact, I'd prefer to respin with:
-
-  - a patch that does things consistently, i.e. that either removes the
-    license for the two paclages, or for none of them, not tsomething
-    in-between ;
-
-  - a better commit log that adds the explanations you requested.
-
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/mjpg-streamer/0001-plugins-input_opencv-needs-c.patch b/package/mjpg-streamer/0001-plugins-input_opencv-needs-c.patch
+new file mode 100644
+index 0000000000..5eb66bd986
+--- /dev/null
++++ b/package/mjpg-streamer/0001-plugins-input_opencv-needs-c.patch
+@@ -0,0 +1,31 @@
++From 3b7d04d28a39bc697f5bd77f1072430692ac9f8b Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sat, 13 Oct 2018 09:30:34 +0200
++Subject: [PATCH] plugins/input_opencv: needs c++
++
++This commit enables c++ for this plugin and is needed in preparation
++for the next commit which removes the c++ dependency for the whole
++mpjg-streamer project. Only this plugin needs c++.
++
++Patch sent upstream as PR 168.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ mjpg-streamer-experimental/plugins/input_opencv/CMakeLists.txt | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/mjpg-streamer-experimental/plugins/input_opencv/CMakeLists.txt b/mjpg-streamer-experimental/plugins/input_opencv/CMakeLists.txt
++index 94ee26a..69e95e0 100644
++--- a/mjpg-streamer-experimental/plugins/input_opencv/CMakeLists.txt
+++++ b/mjpg-streamer-experimental/plugins/input_opencv/CMakeLists.txt
++@@ -7,6 +7,7 @@ MJPG_STREAMER_PLUGIN_OPTION(input_opencv "OpenCV input plugin"
++                             ONLYIF OpenCV_FOUND)
++ 
++ if (PLUGIN_INPUT_OPENCV)
+++    enable_language(CXX)
++     include_directories(${OpenCV_INCLUDE_DIRS})
++ 
++     MJPG_STREAMER_PLUGIN_COMPILE(input_opencv input_opencv.cpp)
++-- 
++2.19.1
++
+diff --git a/package/mjpg-streamer/0002-CMakeLists.txt-Do-not-require-c-for-the-whole-projec.patch b/package/mjpg-streamer/0002-CMakeLists.txt-Do-not-require-c-for-the-whole-projec.patch
+new file mode 100644
+index 0000000000..3334c9098e
+--- /dev/null
++++ b/package/mjpg-streamer/0002-CMakeLists.txt-Do-not-require-c-for-the-whole-projec.patch
+@@ -0,0 +1,42 @@
++From 588db286da461ac5c02277b511ab58a7bf3f752f Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sat, 13 Oct 2018 09:13:49 +0200
++Subject: [PATCH] CMakeLists.txt: Do not require c++ for the whole project
++
++Fixes buildroot build without c++ compiler:
++http://autobuild.buildroot.net/results/1da/1da75a9d9b6e4d04d39117d2915c1d195dcae002/build-end.log
++
++CMake Error at CMakeLists.txt:4 (project):
++  The CMAKE_CXX_COMPILER:
++
++    /home/buildroot/autobuild/run/instance-3/output/host/bin/arm-linux-g++
++
++  is not a full path to an existing compiler tool.
++
++  Tell CMake where to find the compiler by setting either the environment
++  variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full path
++  to the compiler, or to the compiler name if it is in the PATH.
++
++Patch sent upstream as PR 168.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ mjpg-streamer-experimental/CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/mjpg-streamer-experimental/CMakeLists.txt b/mjpg-streamer-experimental/CMakeLists.txt
++index 187b4e6..7b91729 100644
++--- a/mjpg-streamer-experimental/CMakeLists.txt
+++++ b/mjpg-streamer-experimental/CMakeLists.txt
++@@ -1,7 +1,7 @@
++ cmake_minimum_required(VERSION 2.8.3)
++ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
++ 
++-project("mjpg-streamer")
+++project("mjpg-streamer" C)
++ 
++ # If the user doesn't manually specify a build type, use 'Release'
++ message("CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
++-- 
++2.19.1
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.19.1
