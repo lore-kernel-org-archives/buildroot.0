@@ -1,28 +1,29 @@
-From: Oscar Gomez Fuente <oscargomezf@gmail.com>
-Date: Sat, 13 Oct 2018 11:13:35 +0200
-Subject: [Buildroot] Problem with Raspberry Pi 3B+and BT
-In-Reply-To: <20181012234133.539d0a0b@gmx.net>
-References: <CALtfCQa87Q5w-mOL4sKbW8M7wh4qAH3rBRm6A6H41SEaci=3QQ@mail.gmail.com>
- <CANQCQpbD_fdXrqYGdW74d4EVyCm4eAs6pxiyasg8wTumYZ+XWA@mail.gmail.com>
- <20181012234133.539d0a0b@gmx.net>
-Message-ID: <CALtfCQYKA=MrVGPYY8a7koPLu5SczJ1GxNDOhnfXWsixBEQ_AQ@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 13 Oct 2018 12:18:21 +0200
+Subject: [Buildroot] [PATCH 1/4] DEVELOPERS: add myself for asterisk
+Message-ID: <20181013101824.23287-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-
-Thank you very much for your help. I will try on Monday I will report it to you.
-
-Do you know if there is any plan to add WiFi monitor support on the
-kernel driver for the WiFi /BT chip: CYW43455 on Raspberry Pi 3B+?
-
-
-Best regards.
-
-Oscar Gomez Fuente
-TST Sistemas
-www.tst-sistemas.es
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 990621fb11..a55ff8bbb1 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -292,6 +292,7 @@ F:	package/alsa-utils/
+ F:	package/apache/
+ F:	package/apr/
+ F:	package/apr-util/
++F:	package/asterisk/
+ F:	package/bcg729/
+ F:	package/bluez-tools/
+ F:	package/boinc/
+-- 
+2.19.1
