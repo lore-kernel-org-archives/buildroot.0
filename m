@@ -1,13 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 13 Oct 2018 14:48:02 +0200
-Subject: [Buildroot] [PATCH 5/5] support/testing: add python-twisted
- tests
-In-Reply-To: <1adacc2a-25dc-eee5-8688-47ce66aa080b@mind.be>
-References: <20180926025514.2092-1-ricardo.martincoski@gmail.com>
- <20180926025514.2092-6-ricardo.martincoski@gmail.com>
- <20181011204808.1aff4cd1@windsurf>
- <1adacc2a-25dc-eee5-8688-47ce66aa080b@mind.be>
-Message-ID: <20181013144802.72c8bf88@windsurf>
+Date: Sat, 13 Oct 2018 14:55:12 +0200
+Subject: [Buildroot] [PATCH v3 0/8] init scripts: rewrite S01logging
+In-Reply-To: <1677556181.2913340.1539345049511.JavaMail.zimbra@datacom.com.br>
+References: <20181007114605.18153-1-casantos@datacom.com.br>
+ <20181011170948.3594d391@windsurf>
+ <1677556181.2913340.1539345049511.JavaMail.zimbra@datacom.com.br>
+Message-ID: <20181013145512.6a135309@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,31 +14,58 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 11 Oct 2018 23:27:10 +0200, Arnout Vandecappelle wrote:
+On Fri, 12 Oct 2018 08:50:49 -0300 (BRT), Carlos Santos wrote:
 
-> > At some point, we will have to find a solution to store such
-> > "artefacts" somewhere, instead of having them inline in their test
-> > cases. I don't have a good idea about this.  
+> > (1) Do we really want that Busybox, syslog-ng, rsyslog, sysklogd all
+> >     install a file of the same name, S01logging ? Isn't this
+> >     contradicting our goal of not having one package overwrite files
+> >     installed by another package ?
+> > 
+> >     Wouldn't it make more sense to install S01syslog-ng, S01rsyslog,
+> >     S01sysklogd ? This way, we also have a mapping between the init
+> >     script name and the daemon/package being started ?  
 > 
->  I think it would be nice if we could add in the package directory a
-> subdirectory with files to be copied to the target for the runtime test, and a
-> python script for the test itself.
+> I don't know why it was decided to use the same name for all packages.
+> Looks like the original intention was to prevent multiple logging damons
+> from running at the same time.
+
+Yes, but why? If we go down this route, then all web servers should
+install S50httpd, and not S50lighttpd, S50apache, etc. Dropbear and
+OpenSSH should not install S50dropbear and S50sshd, etc.
+
+> Perhaps we should add an item to the "System configuration" menu allowing
+> the user to choose a logging provider, just like the "Init system" item,
+> and convert rsyslog/sysklogd/syslog-ng to virtual packages.
+
+I don't think we want to do that, because then we need to do this for
+"what mail server do you want?", "what http server do you want?", "what
+SSH server do you want?", etc.
+
+If you enable two SSH servers, the second to start will fail. If you
+enable two HTTP servers, the second to start will fail, etc. Similarly,
+if you enable two logging daemons, it will not work nicely.
+
+I don't think we should solve that problem, and just leave it up to the
+user to do a configuration that makes sense. If you enable two SSH
+servers or two logging daemons, your configuration doesn't make sense,
+and it should be fixed.
+
+> > (2) For the Busybox case, do we want to keep a single init script that
+> >     starts both klogd and syslogd ? Or should we have one init script
+> >     per daemon, so that again the init script name matches the daemon
+> >     being started ? So S01klogd, S01syslogd ?  
 > 
->  As an in-between step, we can put the files-to-be-copied inside the
-> support/testing directory and explicitly enumerate the files-to-be-copied in the
-> test fixture.
+> There is also sysklogd, from which Busyox borrowed the code (or at least
+> the idea) a long time ago. I think we should keep klogd and syslogd tied
+> to each other, since klogd does not make much sense without syslogd.
 
-I am still hesitant between putting the tests + fixtures near/in the
-packages themselves, and keeping the whole test suite thing separate.
-One issue with putting the tests+fixture near/in the packages is that a
-number of tests aren't package-related, so where do we put them? Isn't
-that also going to put a lot of mess/cruft in our packages?
+Tied to each other doesn't necessarily mean they should be handled by a
+common init script. busybox.mk can install S01klogd S02syslogd, and we
+keep this one daemon == one init script logic ?
 
-I don't have a good answer to that. Perhaps for now it makes more sense
-to have those test fixtures in support/testing/, and see where to go
-from there.
-
-Best regards,
+Otherwise, assuming we stop using the common S01logging name, what
+would be the name of the init script installed by Busybox for its
+logging daemons ?
 
 Thomas
 -- 
