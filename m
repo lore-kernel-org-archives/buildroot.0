@@ -1,53 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 13 Oct 2018 22:22:24 +0200
-Subject: [Buildroot] [PATCH] sedutil: disable for MIPS Codesourcery toolchain
-Message-ID: <20181013202225.22359-1-peter@korsgaard.com>
+Date: Sat, 13 Oct 2018 23:15:03 +0200
+Subject: [Buildroot] [PATCH] ntp: fix build for no-MMU with libcap
+In-Reply-To: <42864d6afc883db05099a7d75a31de7e09e7ce96.1539456660.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sat, 13 Oct 2018 21:51:00 +0300")
+References: <42864d6afc883db05099a7d75a31de7e09e7ce96.1539456660.git.baruch@tkos.co.il>
+Message-ID: <87h8hpr1k8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/005/00588d7cd37ba9620f01e970bf328540527558fc/
-http://autobuild.buildroot.net/results/2fc/2fc2d0111e467671ee4cec427234a9b2aada1cc9/
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Linux 4.4 moved the NVME ioctl definitions from nvme.h to nvme_ioctl.h in
-commit 9d99a8dda154 (nvme: move hardware structures out of the uapi version
-of nvme.h), but nvme_ioctl.h was only exported to user space in 4.4.4 in
-commit 7712c014b16f64d3 (uapi: update install list after nvme.h rename).
+ > Commit 87d759ced5 (ntp: fix build for no-MMU) added a patch to make MMU
+ > dependent code hidden behind HAVE_WORKING_FORK. It turns out that the
+ > patch covers too much code. When libcap is enabled we pass
+ > --enable-linuxcaps, which in turn enables HAVE_DROPROOT. This adds calls
+ > to code that is covered by HAVE_WORKING_FORK.
 
-sedutil contains the needed logic to look at either nvme.h or nvme_ioctl.h,
-but as the ioctl definitions are not exported in 4.4..4.4.3, it fails to
-build.
+ > Update the no-MMU fix so that HAVE_WORKING_FORK only covers the no-MMU
+ > incompatible routine.
 
-The MIPS Codesourcery toolchain uses 4.4.1 kernel headers, so disable the
-sedutil package if this toolchain is used.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/c5c/c5cf28bb969fec7c07864cdd094dedfa4d5439d2/
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/sedutil/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ > Cc: Artem Panfilov <apanfilov@spectracom.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-diff --git a/package/sedutil/Config.in b/package/sedutil/Config.in
-index fbfcf0dd54..f3452b60fb 100644
---- a/package/sedutil/Config.in
-+++ b/package/sedutil/Config.in
-@@ -12,6 +12,7 @@ config BR2_PACKAGE_SEDUTIL
- 	depends on BR2_PACKAGE_SEDUTIL_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # linux/nvme.h
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS # 4.4.1 headers
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	help
- 	  The Drive Trust Alliance Self Encrypting Drive Utility,
-@@ -22,6 +23,7 @@ config BR2_PACKAGE_SEDUTIL
- 
- comment "sedutil needs a toolchain w/ C++, gcc >= 4.8, headers >= 3.12"
- 	depends on BR2_PACKAGE_SEDUTIL_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+Committed, thanks.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
