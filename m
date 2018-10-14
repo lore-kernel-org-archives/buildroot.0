@@ -1,42 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Oct 2018 19:38:20 +0200
-Subject: [Buildroot] [git commit] support/testing: fix TestATFAllwinner test
- case
-Message-ID: <20181014175138.0374283723@busybox.osuosl.org>
+Date: Sun, 14 Oct 2018 20:04:54 +0200
+Subject: [Buildroot] [PATCH] sedutil: disable for MIPS Codesourcery
+ toolchain
+In-Reply-To: <20181013202225.22359-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sat, 13 Oct 2018 22:22:24 +0200")
+References: <20181013202225.22359-1-peter@korsgaard.com>
+Message-ID: <874ldoqu9l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a63cea587f66d328ad2528423f8b12f1005dd13
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-This test case uses a too old U-Boot version, which is affected by the
-infamous libfdt header conflict issue. Let's update to U-Boot 2017.11,
-which is used by our current bananapi_m64_defconfig that was the
-inspiration for this test case.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/005/00588d7cd37ba9620f01e970bf328540527558fc/
+ > http://autobuild.buildroot.net/results/2fc/2fc2d0111e467671ee4cec427234a9b2aada1cc9/
 
-Fixes:
+ > Linux 4.4 moved the NVME ioctl definitions from nvme.h to nvme_ioctl.h in
+ > commit 9d99a8dda154 (nvme: move hardware structures out of the uapi version
+ > of nvme.h), but nvme_ioctl.h was only exported to user space in 4.4.4 in
+ > commit 7712c014b16f64d3 (uapi: update install list after nvme.h rename).
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/107860310
+ > sedutil contains the needed logic to look at either nvme.h or nvme_ioctl.h,
+ > but as the ioctl definitions are not exported in 4.4..4.4.3, it fails to
+ > build.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/testing/tests/boot/test_atf.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > The MIPS Codesourcery toolchain uses 4.4.1 kernel headers, so disable the
+ > sedutil package if this toolchain is used.
 
-diff --git a/support/testing/tests/boot/test_atf.py b/support/testing/tests/boot/test_atf.py
-index 75cea01fc8..ab2239e51e 100644
---- a/support/testing/tests/boot/test_atf.py
-+++ b/support/testing/tests/boot/test_atf.py
-@@ -40,7 +40,7 @@ class TestATFAllwinner(infra.basetest.BRTest):
-         BR2_TARGET_UBOOT=y
-         BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-         BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--        BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
-+        BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
-         BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m64"
-         BR2_TARGET_UBOOT_NEEDS_DTC=y
-         BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
