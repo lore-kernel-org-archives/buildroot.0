@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 14 Oct 2018 11:02:00 +0200
-Subject: [Buildroot] [PATCH v3 8/9] package/libpjsip: add optional
- dependency to libgsm
+Date: Sun, 14 Oct 2018 11:01:59 +0200
+Subject: [Buildroot] [PATCH v3 7/9] package/libpjsip: add optional
+ dependency to speex
 In-Reply-To: <20181014090202.31122-1-bernd.kuhls@t-online.de>
 References: <20181014090202.31122-1-bernd.kuhls@t-online.de>
-Message-ID: <20181014090202.31122-8-bernd.kuhls@t-online.de>
+Message-ID: <20181014090202.31122-7-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,37 +15,40 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
 v3: initial revision
 
- package/libpjsip/libpjsip.mk | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ package/libpjsip/libpjsip.mk | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
 diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index 46f07a4f6b..5f5f1f5081 100644
+index ab9fca5821..46f07a4f6b 100644
 --- a/package/libpjsip/libpjsip.mk
 +++ b/package/libpjsip/libpjsip.mk
-@@ -39,7 +39,6 @@ LIBPJSIP_CONF_ENV = \
- 
+@@ -40,8 +40,6 @@ LIBPJSIP_CONF_ENV = \
  LIBPJSIP_CONF_OPTS = \
  	--disable-sound \
--	--disable-gsm-codec \
+ 	--disable-gsm-codec \
+-	--disable-speex-codec \
+-	--disable-speex-aec \
  	--disable-resample \
  	--disable-video \
  	--disable-opencore-amr \
-@@ -67,6 +66,16 @@ LIBPJSIP_CONF_OPTS = \
- # so we want to use it.
- LIBPJSIP_CONF_OPTS += --enable-epoll
+@@ -76,6 +74,18 @@ else
+ LIBPJSIP_CONF_OPTS += --disable-ssl
+ endif
  
-+ifeq ($(BR2_PACKAGE_LIBGSM),y)
++ifeq ($(BR2_PACKAGE_SPEEX)$(BR2_PACKAGE_SPEEXDSP),yy)
 +LIBPJSIP_CONF_OPTS += \
-+	--enable-gsm-codec \
-+	--with-external-gsm
-+LIBPJSIP_DEPENDENCIES += libgsm
++	--enable-speex-aec \
++	--enable-speex-codec \
++	--with-external-speex
++LIBPJSIP_DEPENDENCIES += speex speexdsp
 +else
 +LIBPJSIP_CONF_OPTS += \
-+	--disable-gsm-codec
++	--disable-speex-aec \
++	--disable-speex-codec
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
- LIBPJSIP_DEPENDENCIES += libopenssl
- LIBPJSIP_CONF_OPTS += --with-ssl=$(STAGING_DIR)/usr
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
+ LIBPJSIP_DEPENDENCIES += util-linux
+ endif
 -- 
 2.19.1
