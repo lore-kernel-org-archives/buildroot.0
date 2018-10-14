@@ -1,64 +1,73 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 14 Oct 2018 11:47:30 -0300
-Subject: [Buildroot] TestFileCapabilities is broken
-References: <20181014142632.GJ31509@scaer>
-Message-ID: <5bc3570246515_5aca3ff0c60b0ff82315@ultri5.mail>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Sun, 14 Oct 2018 17:57:37 +0200
+Subject: [Buildroot] [PATCH 1/2] Revert "package/luvi: bump version to
+ 2.8.0"
+In-Reply-To: <20181013080103.29974-1-bernd.kuhls@t-online.de>
+References: <20181013080103.29974-1-bernd.kuhls@t-online.de>
+Message-ID: <58d29e4a3c7adbeec389a9e6fc4fc115faba6759.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Bernd,
 
-On Sun, Oct 14, 2018 at 11:26 AM, Yann E. MORIN wrote:
-
-> On 2018-10-14 15:25 +0200, Thomas Petazzoni spake thusly:
->> The TestFileCapabilities test of our test suite is failing, with:
->> 
->> ======================================================================
->> FAIL: test_run (tests.core.test_file_capabilities.TestFileCapabilities)
->> ----------------------------------------------------------------------
->> Traceback (most recent call last):
->>   File "/builds/buildroot.org/buildroot/support/testing/tests/core/test_file_capabilities.py", line 44, in test_run
->>     self.assertIn("cap_kill", output[0])
->> AssertionError: 'cap_kill' not found in '/usr/sbin/getcap'
->> 
->> I did a local build, and I can reproduce the issue. What we do is we
->> run "getcap -v /usr/sbin/getcap" on the target, and it returns just:
->> 
->> # getcap -v /usr/sbin/getcap 
->> /usr/sbin/getcap
->> 
->> And not any of the extended attributes that getcap is supposed to have.
->> I had a quick look, and makedevs gets run with a correct device table
->> when generating the common tarball. I don't know when extended
->> attributes are lost.
-
-This is bug #11216
-
->> 
->> Could you have a look ?
+On Sat, 2018-10-13 at 10:01 +0200, Bernd Kuhls wrote:
+> This reverts commit ac6fedda6b43996545ff498cd19a781698a96050.
 > 
-> So, I also did a test build here, and it indeed fails for me too. At
-> first glance, our mksquashfs has support for extended attributes:
+> Fixes
+> http://autobuild.buildroot.net/results/111/11146b138d3d092c3a230d197528d5dbe293e3fc/
+> and many others.
+
+Does this really fix the issue about missing "c-api/compat-5.3.h" for
+you? Because it is a luv (not luvi) issue.
+
+Nevertheless, I am happy about the revert as it takes ages to fetch all
+submodules.
+
+> Quoting J?rg Krause:
+> http://lists.busybox.net/pipermail/buildroot/2018-August/228534.html
 > 
->     $ ./tests/TestFileCapabilities/host/bin/mksquashfs -h
->     [...]
->     -no-xattrs              don't store extended attributes
->     -xattrs                 store extended attributes (default)
->     [...]
+> "The version bump as version 2.8.0 does only updates the projects
+>  submodules, which we are not using at all. Instead, we always build
+>  luvi with dependencies provided as packages in Buildroot."
 > 
-> Further investigation postponed, for cause of a visitor... ;-]
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/luvi/luvi.hash | 3 +--
+>  package/luvi/luvi.mk   | 9 +++++----
+>  2 files changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/package/luvi/luvi.hash b/package/luvi/luvi.hash
+> index d5716e0036..e2239b6171 100644
+> --- a/package/luvi/luvi.hash
+> +++ b/package/luvi/luvi.hash
+> @@ -1,3 +1,2 @@
+>  # Locally calculated
+> -sha256 a18e138c7032ef8406fef6e2135a61fad713861742512f2073adc0b4ab6d8f8b  luvi-v2.8.0.tar.gz
+> -sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+> +sha256  ce9a1fb762e61267618ddea9ea129170fd543bb918c382b71cb35985d0024c42  luvi-src-v2.7.6.tar.gz
+> diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
+> index 8b3b7659b0..111dc09acd 100644
+> --- a/package/luvi/luvi.mk
+> +++ b/package/luvi/luvi.mk
+> @@ -4,10 +4,11 @@
+>  #
+>  ################################################################################
+>  
+> -LUVI_VERSION = v2.8.0
+> -LUVI_SITE = https://github.com/luvit/luvi.git
+> -LUVI_SITE_METHOD = git
+> -LUVI_GIT_SUBMODULES = YES
+> +# we keep version 2.7.6 because 2.8.0 causes build errors and only
+> +# contains updates to submodules we do not need
+> +LUVI_VERSION = v2.7.6
+> +LUVI_SOURCE = luvi-src-$(LUVI_VERSION).tar.gz
+> +LUVI_SITE = https://github.com/luvit/luvi/releases/download/$(LUVI_VERSION)
+>  LUVI_LICENSE = Apache-2.0
+>  LUVI_LICENSE_FILES = LICENSE.txt
+>  LUVI_DEPENDENCIES = libuv luajit luv host-luajit
 
-It looks like the problem occurs when extracting a tarfile with xattrs inside
-fakeroot. See the commands I used in [1]. Unfortunately I don't know how to fix
-this.
-
-The same test case works fine on the 2018.02.x branch, see [2].
-
-[1] https://bugs.busybox.net/show_bug.cgi?id=11216
-[2] https://gitlab.com/buildroot.org/buildroot/-/jobs/107232219
-
-Regards,
-Ricardo
+Best regards,
+J?rg Krause
