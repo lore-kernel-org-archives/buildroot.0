@@ -1,55 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Oct 2018 23:38:13 +0200
-Subject: [Buildroot] xargs issue on mac
-In-Reply-To: <CAD8kTsBhwsQ24_e+wzK90MZKBk0UuohBB5Jb_VP2jMB-pP3vnQ@mail.gmail.com>
- (Shaikat Hossain's message of "Sun, 14 Oct 2018 13:40:14 -0700")
-References: <CAD8kTsBhwsQ24_e+wzK90MZKBk0UuohBB5Jb_VP2jMB-pP3vnQ@mail.gmail.com>
-Message-ID: <87lg70p5tm.fsf@dell.be.48ers.dk>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun, 14 Oct 2018 19:07:10 -0300
+Subject: [Buildroot] [PATCH 4/5] support/testing: add python-incremental
+ tests
+References: <20181011204641.6ded469a@windsurf>
+Message-ID: <5bc3be0e5f649_79c83fc5c20195c4596a2@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Shaikat" == Shaikat Hossain <shossa3@gmail.com> writes:
+Hello,
 
- > Hi everyone,
- > I have been struggling to get buildroot to work on my mac for the past
- > several days. I am trying to resolve the following error message when I run
- > make:
- > "
+On Thu, Oct 11, 2018 at 03:46 PM, Thomas Petazzoni wrote:
 
- > You may have to install 'g++' on your build machine
+> On Tue, 25 Sep 2018 23:55:13 -0300, Ricardo Martincoski wrote:
+> 
+>> +class TestPythonIncremental(TestPythonBase):
+>> +    def str_test(self):
+>> +        cmd = self.interpreter + " -c 'import incremental;"
+>> +        cmd += "v = incremental.Version(\"package\", 1, 2, 3, release_candidate=4);"
+>> +        cmd += "assert(str(v) == \"[package, version 1.2.3rc4]\")'"
+> 
+> When I see this, I wonder if it wouldn't be nicer to do something like
+> this:
+> 
+> class PythonIncremental(TestPythonBase):
+> 	python_prog = """
+> import incremental
+> incremental.Version("package", 1, 2, 3, release_candidate=4)
+> assert(str(v) == "[package, version 1.2.3rc4]")
+> """
+> 
+> and have the base TestPythonBase class have some logic that executes
+> this as a Python script with the Python interpreter.
+> 
+> It would make the thing a bit more readable. Also, the TestPythonBase
+> class could push things a bit further, and have a default
+> implementation of test_run() that does self.login() + execute the
+> Python program in python_prog.
+> 
+> This way, those simple Python tests only need to provide the Buildroot
+> configuration and the small Python program to run.
 
- >>>> host-tar 1.29 Patching
+Good idea.
+I am working on this, I will send a small series in the next few days: one
+patch adding the common logic and expecting the sample script to be in a file
+to be copied in build time and 6 patches each one changing one of the current
+test cases.
 
- > xargs: illegal option -- r
 
- > usage: xargs [-0opt] [-E eofstr] [-I replstr [-R replacements]] [-J replstr]
-
- >              [-L number] [-n number [-x]] [-P maxprocs] [-s size]
-
- >              [utility [argument ...]]
-
- > make: ***
- > [/Users/shaikathossain/Downloads/erpiam-erpiam/output/build/host-tar-1.29/.stamp_patched]
- > Error 1
- > "
- > I was confused about the line suggesting I have to install g++ because I
- > definitely have it installed. Perhaps it could be a path issue? The "xargs:
- > illegal option -- r" line is what concerns me since I am using a mac and
- > supposedly it doesn't like the option "r". Are there any ways around this
- > issue without having to dive into the source code? I was trying to build
- > the following project:
-
-Buildroot is a tool for building embedded LINUX systems, so the best
-(and only supported) host system to build under is Linux.
-
-I guess some of it could be made to work under MacOS with some effort,
-but as none of the main contributors are using MacOS, this is currently
-not the case.
-
-How about building under docker or in a Linux VM instead?
-
--- 
-Bye, Peter Korsgaard
+Regards,
+Ricardo
