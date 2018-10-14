@@ -1,55 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Oct 2018 20:04:48 +0200
-Subject: [Buildroot] [git commit] sedutil: disable for MIPS Codesourcery
- toolchain
-Message-ID: <20181014180410.AAC5183728@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 14 Oct 2018 20:11:38 +0200
+Subject: [Buildroot] [PATCH 1/1] udftools: fix build with glibc 2.28
+Message-ID: <20181014181138.22326-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=671ede36f5a1b458c5b00d887585fe8a06b6bc7c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+glibc 2.28 no longer includes <sys/sysmacros.h> from <sys/types.h>,
+and therefore <sys/sysmacros.h> must be included explicitly when
+major()/minor() are used.
 
 Fixes:
-http://autobuild.buildroot.net/results/005/00588d7cd37ba9620f01e970bf328540527558fc/
-http://autobuild.buildroot.net/results/2fc/2fc2d0111e467671ee4cec427234a9b2aada1cc9/
+ - http://autobuild.buildroot.org/results/33cb370ee80d0603974b6376f0364f914d150463
 
-Linux 4.4 moved the NVME ioctl definitions from nvme.h to nvme_ioctl.h in
-commit 9d99a8dda154 (nvme: move hardware structures out of the uapi version
-of nvme.h), but nvme_ioctl.h was only exported to user space in 4.4.4 in
-commit 7712c014b16f64d3 (uapi: update install list after nvme.h rename).
-
-sedutil contains the needed logic to look at either nvme.h or nvme_ioctl.h,
-but as the ioctl definitions are not exported in 4.4..4.4.3, it fails to
-build.
-
-The MIPS Codesourcery toolchain uses 4.4.1 kernel headers, so disable the
-sedutil package if this toolchain is used.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/sedutil/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ ...event-build-breakage-with-glibc-2-25.patch | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/udftools/0003-Include-sys-sysmacros-h-to-prevent-build-breakage-with-glibc-2-25.patch
 
-diff --git a/package/sedutil/Config.in b/package/sedutil/Config.in
-index fbfcf0dd54..f3452b60fb 100644
---- a/package/sedutil/Config.in
-+++ b/package/sedutil/Config.in
-@@ -12,6 +12,7 @@ config BR2_PACKAGE_SEDUTIL
- 	depends on BR2_PACKAGE_SEDUTIL_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # linux/nvme.h
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS # 4.4.1 headers
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	help
- 	  The Drive Trust Alliance Self Encrypting Drive Utility,
-@@ -22,6 +23,7 @@ config BR2_PACKAGE_SEDUTIL
- 
- comment "sedutil needs a toolchain w/ C++, gcc >= 4.8, headers >= 3.12"
- 	depends on BR2_PACKAGE_SEDUTIL_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+diff --git a/package/udftools/0003-Include-sys-sysmacros-h-to-prevent-build-breakage-with-glibc-2-25.patch b/package/udftools/0003-Include-sys-sysmacros-h-to-prevent-build-breakage-with-glibc-2-25.patch
+new file mode 100644
+index 0000000000..ac56715d62
+--- /dev/null
++++ b/package/udftools/0003-Include-sys-sysmacros-h-to-prevent-build-breakage-with-glibc-2-25.patch
+@@ -0,0 +1,38 @@
++From cca194f17fe2892c929acab2f1d5016ad38aa305 Mon Sep 17 00:00:00 2001
++From: Lars Wendler <polynomial-c@gentoo.org>
++Date: Tue, 2 Jan 2018 15:10:34 +0100
++Subject: [PATCH] Include <sys/sysmacros.h> to prevent build breakage with
++ >=glibc-2.25
++
++libtool: link: x86_64-pc-linux-gnu-gcc -march=native -mtune=native -O2
++-pipe -Wl,-O1 -Wl,--hash-style=gnu -Wl,--sort-common -Wl,--as-needed -o
++mkudffs main.o mkudffs.o defaults.o file.o options.o
++../libudffs/.libs/libudffs.a
++main.o: In function `is_whole_disk':
++main.c:(.text+0x2ce): undefined reference to `major'
++main.c:(.text+0x2dd): undefined reference to `minor'
++main.o: In function `main':
++main.c:(.text.startup+0x72f): undefined reference to `minor'
++main.c:(.text.startup+0x741): undefined reference to `major'
++collect2: error: ld returned 1 exit status
++make[1]: *** [Makefile:378: mkudffs] Error 1
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from
++https://github.com/pali/udftools/commit/cca194f17fe2892c929acab2f1d5016ad38aa305]
++---
++ mkudffs/main.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/mkudffs/main.c b/mkudffs/main.c
++index 066afac..3e306ac 100644
++--- a/mkudffs/main.c
+++++ b/mkudffs/main.c
++@@ -43,6 +43,7 @@
++ #include <sys/ioctl.h>
++ #include <linux/fs.h>
++ #include <linux/fd.h>
+++#include <sys/sysmacros.h>
++ 
++ #include "mkudffs.h"
++ #include "defaults.h"
+-- 
+2.17.1
