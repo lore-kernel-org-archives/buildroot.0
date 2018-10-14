@@ -1,44 +1,51 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Oct 2018 14:25:45 +0200
-Subject: [Buildroot] [PATCH 6/6] docs/manual: document location of hash
- files for multi-versions packages
-In-Reply-To: <cover.1539519817.git.yann.morin.1998@free.fr>
-References: <cover.1539519817.git.yann.morin.1998@free.fr>
-Message-ID: <12cce94c6a5ee554f580f8b3dfca566d4673f2a0.1539519817.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 14 Oct 2018 14:46:46 +0200
+Subject: [Buildroot] [PATCH v3 6/9] package/libpjsip: add Asterisk patch
+ set
+In-Reply-To: <20181014090202.31122-6-bernd.kuhls@t-online.de>
+References: <20181014090202.31122-1-bernd.kuhls@t-online.de>
+ <20181014090202.31122-6-bernd.kuhls@t-online.de>
+Message-ID: <20181014144646.3ad2f867@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Baruch Siach <baruch@tkos.co.il>
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
----
- docs/manual/adding-packages-directory.txt | 7 +++++++
- 1 file changed, 7 insertions(+)
+Hello,
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index 9f85ac63e6..e6201bb86b 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -446,6 +446,13 @@ contains the hashes of the downloaded files for the +libfoo+
- package. The only reason for not adding a +.hash+ file is when hash
- checking is not possible due to how the package is downloaded.
- 
-+When a package has a version selection choice, then the hash file may be
-+stored in a subdirectory named after the version, e.g.
-++package/libfoo/1.2.3/libfoo.hash+. This is especially important if the
-+different versions have different licensing terms, but they are stored
-+in the same file. Otherwise, the hash file should stay in the package's
-+directory.
-+
- The hashes stored in that file are used to validate the integrity of the
- downloaded files and of the license files.
- 
+On Sun, 14 Oct 2018 11:01:58 +0200, Bernd Kuhls wrote:
+> Quoting https://wiki.asterisk.org/wiki/display/AST/PJSIP-pjproject
+> 
+> "Asterisk currently contains two SIP stacks: the original chan_sip SIP
+>  channel driver which is a complete standalone implementation, has been
+>  present in all previous releases of Asterisk and no longer receives
+>  core support, and the newer chan_pjsip SIP stack that is based on
+>  Teluu's "pjproject" SIP stack.
+> [...]
+>  The actual pjproject source code is NOT distributed with Asterisk.
+>  Instead the Asterisk build process downloads the official pjproject
+>  tarball then patches, configures and builds pjproject when you build
+>  Asterisk."
+> 
+> This patch allows to use a buildroot-build libpjsip with all patches,
+> except 0000-remove-third-party.patch, provided by Asterisk.
+
+I don't understand the story about 0000-remove-third-party.patch. Could
+you explain ? All patches are provided by Asterisk, they are at
+https://github.com/asterisk/asterisk/tree/16.0/third-party/pjproject/patches.
+
+One issue with this is that 16.0 is a branch name, so the patches that
+you download are not guaranteed to be stable over time.
+
+Also, what is the upstream status of those patches ? Is Asterisk
+actively contributing those patches to upstream pjsip, or are they
+doing de-facto a fork of it ?
+
+Thanks,
+
+Thomas
 -- 
-2.14.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
