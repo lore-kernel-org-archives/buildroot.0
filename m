@@ -1,65 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Oct 2018 10:58:13 +0200
-Subject: [Buildroot] [PATCH 1/1] libbsd: remove usage of
- __register_atfork
-In-Reply-To: <20181003175409.26025-1-fontaine.fabrice@gmail.com>
-References: <20181003175409.26025-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181014105813.7123ba04@windsurf>
+Date: Sun, 14 Oct 2018 10:59:24 +0200
+Subject: [Buildroot] [git commit] xerces: fix static linking with curl
+Message-ID: <20181014085806.0B7CA81002@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e954ad62a61c4b552796c27e9a176e8453fd6b3f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-+Arnout in Cc.
+When curl is statically built with openssl support, xerces needs to
+link with openssl libraries so use pkg_check_modules to get any
+needed dependencies
 
-On Wed,  3 Oct 2018 19:54:09 +0200, Fabrice Fontaine wrote:
-> The following error is raised by minizip:
-> 
-> [100%] Linking C executable minizip
-> /home/peko/autobuild/instance-0/output/host/m68k-buildroot-uclinux-uclibc/sysroot/usr/lib/libbsd.a(arc4random.o): In function `_rs_init.part.1':
-> arc4random.c:(.text+0xaa): undefined reference to `__register_atfork'
-> collect2: error: ld returned 1 exit status
-> 
-> As specified in openssl/Config.in, uClibc on noMMU doesn't provide
-> __register_atfork() so, as suggested by Arnout during review of minizip
-> patch (https://patchwork.ozlabs.org/patch/978000), remove usage of this
-> function from libbsd to always use pthread_atfork
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/df2dcbdceaa01a2ae37bf09140e4dbef0a5b9489
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...02-Remove-usage-of-__register_atfork.patch | 39 +++++++++++++++++++
->  1 file changed, 39 insertions(+)
->  create mode 100644 package/libbsd/0002-Remove-usage-of-__register_atfork.patch
+Fixes:
+ - http://autobuild.buildroot.org/results/29ca90fff2c8e38f2edf7240eca3aa3fe7397c45
 
-With this change, the build fails in the CI of libbsd:
-https://gitlab.freedesktop.org/ffontaine/libbsd/-/jobs/26984:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../xerces/0002-fix-static-linking-with-curl.patch | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-../src/.libs/libbsd.so: undefined reference to `pthread_atfork'
-
-I guess that's because pthread_atfork() requires linking against
-libpthread ?
-
-Also, pthread_atfork() does not have the dso_handle argument that
-__register_atfork() has. Is this important in the context of libbsd ?
-See
-https://gitlab.com/gnutls/gnutls/commit/84b1a7ac383bf1db4c73b8f044170446deca8b2e
-for example. I would assume no, because there was already a fallback on
-pthread_atfork() in libbsd.
-
-Also, Arnout said __register_atfork() is an internal function, but
-it is documented in LSB:
-http://refspecs.linuxbase.org/LSB_3.0.0/LSB-PDA/LSB-PDA/baselib--register-atfork.html.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/xerces/0002-fix-static-linking-with-curl.patch b/package/xerces/0002-fix-static-linking-with-curl.patch
+new file mode 100644
+index 0000000000..db38de79fc
+--- /dev/null
++++ b/package/xerces/0002-fix-static-linking-with-curl.patch
+@@ -0,0 +1,39 @@
++From 26e3f1440bbc75c704fc93ff43a2abbfbe4c0203 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 11 Oct 2018 22:56:50 +0200
++Subject: [PATCH] fix static linking with curl
++
++When curl is statically built with openssl support, xerces needs to
++link with openssl libraries so use pkg_check_modules to get any
++needed dependencies
++
++Fixes:
++ - http://autobuild.buildroot.org/results/29ca90fff2c8e38f2edf7240eca3aa3fe7397c45
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ cmake/XercesNetAccessorSelection.cmake | 8 +++++++-
++ 1 file changed, 7 insertions(+), 1 deletion(-)
++
++diff --git a/cmake/XercesNetAccessorSelection.cmake b/cmake/XercesNetAccessorSelection.cmake
++index 7a63f1f6b..e90fcf034 100644
++--- a/cmake/XercesNetAccessorSelection.cmake
+++++ b/cmake/XercesNetAccessorSelection.cmake
++@@ -31,7 +31,13 @@ if(network)
++ 
++   # Requires select() which is UNIX only
++   if(UNIX)
++-    find_package(CURL)
+++    find_package(PkgConfig)
+++    if (PkgConfig_FOUND)
+++      pkg_check_modules(CURL libcurl)
+++      if (NOT CURL_FOUND)
+++        find_package(CURL)
+++      endif()
+++    endif()
++     if(CURL_FOUND)
++       list(APPEND netaccessors curl)
++     endif()
++-- 
++2.17.1
++
