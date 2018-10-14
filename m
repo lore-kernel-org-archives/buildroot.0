@@ -1,47 +1,36 @@
-From: Shaikat Hossain <shossa3@gmail.com>
-Date: Sun, 14 Oct 2018 13:40:14 -0700
-Subject: [Buildroot] xargs issue on mac
-Message-ID: <CAD8kTsBhwsQ24_e+wzK90MZKBk0UuohBB5Jb_VP2jMB-pP3vnQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 14 Oct 2018 22:48:55 +0200
+Subject: [Buildroot] [PATCH 1/1] erlang: always use Buildroot's zlib
+In-Reply-To: <20181012141149.72489-1-fhunleth@troodon-software.com> (Frank
+ Hunleth's message of "Fri, 12 Oct 2018 10:11:49 -0400")
+References: <20181012141149.72489-1-fhunleth@troodon-software.com>
+Message-ID: <87sh18p83s.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everyone,
+>>>>> "Frank" == Frank Hunleth <fhunleth@troodon-software.com> writes:
 
-I have been struggling to get buildroot to work on my mac for the past
-several days. I am trying to resolve the following error message when I run
-make:
-"
+ > While Erlang includes a version of zlib, it's intended for Windows and
+ > there's an expectation that non-Windows platforms provide it. It's also
+ > not as regularly updated as the one in Buildroot. This change makes
+ > Erlang always use a Buildroot-provided zlib.
 
-You may have to install 'g++' on your build machine
+ > Fixes this compile error:
 
->>> host-tar 1.29 Patching
+ >  CC	/home/buildroot/autobuild/run/instance-0/output/build/erlang-21.0/erts/emulator/zlib/obj/x86_64-buildroot-linux-musl/opt/adler32.o
+ > In file included from zlib/adler32.c:11:0:
+ > zlib/zutil.h:172:39: error: "_LFS64_LARGEFILE" is not defined [-Werror=undef]
+ >      (!defined(_LARGEFILE64_SOURCE) || _LFS64_LARGEFILE-0 == 0)
+ >                                        ^~~~~~~~~~~~~~~~
 
-xargs: illegal option -- r
+ > See http://autobuild.buildroot.net/results/fc633f80c7c36a90e641487f5a888fbb767c2a54/.
 
-usage: xargs [-0opt] [-E eofstr] [-I replstr [-R replacements]] [-J replstr]
+ > Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 
-             [-L number] [-n number [-x]] [-P maxprocs] [-s size]
+Committed, thanks.
 
-             [utility [argument ...]]
-
-make: ***
-[/Users/shaikathossain/Downloads/erpiam-erpiam/output/build/host-tar-1.29/.stamp_patched]
-Error 1
-"
-I was confused about the line suggesting I have to install g++ because I
-definitely have it installed. Perhaps it could be a path issue? The "xargs:
-illegal option -- r" line is what concerns me since I am using a mac and
-supposedly it doesn't like the option "r". Are there any ways around this
-issue without having to dive into the source code? I was trying to build
-the following project:
-
-https://github.com/gbevin/erpiam
-
-Best,
-Shaikat
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181014/fcb9ecd2/attachment.html>
+-- 
+Bye, Peter Korsgaard
