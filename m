@@ -1,52 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Oct 2018 15:25:59 +0200
-Subject: [Buildroot] [PATCH 2/2] support/testing: fix TestATFMarvell test
- case
-In-Reply-To: <20181014132559.2262-1-thomas.petazzoni@bootlin.com>
-References: <20181014132559.2262-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181014132559.2262-2-thomas.petazzoni@bootlin.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 14 Oct 2018 16:26:32 +0200
+Subject: [Buildroot] TestFileCapabilities is broken
+In-Reply-To: <20181014152543.2cf6c0b2@windsurf>
+References: <20181014152543.2cf6c0b2@windsurf>
+Message-ID: <20181014142632.GJ31509@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This test case uses a too old U-Boot version, which is affected by the
-infamous libfdt header conflict issue. We update U-Boot and ATF to
-what is used in the current version of
-solidrun_macchiatobin_mainline_defconfig, for which the problem no
-longer exists.
+Thomas, All,
 
-Fixes:
+On 2018-10-14 15:25 +0200, Thomas Petazzoni spake thusly:
+> The TestFileCapabilities test of our test suite is failing, with:
+> 
+> ======================================================================
+> FAIL: test_run (tests.core.test_file_capabilities.TestFileCapabilities)
+> ----------------------------------------------------------------------
+> Traceback (most recent call last):
+>   File "/builds/buildroot.org/buildroot/support/testing/tests/core/test_file_capabilities.py", line 44, in test_run
+>     self.assertIn("cap_kill", output[0])
+> AssertionError: 'cap_kill' not found in '/usr/sbin/getcap'
+> 
+> I did a local build, and I can reproduce the issue. What we do is we
+> run "getcap -v /usr/sbin/getcap" on the target, and it returns just:
+> 
+> # getcap -v /usr/sbin/getcap 
+> /usr/sbin/getcap
+> 
+> And not any of the extended attributes that getcap is supposed to have.
+> I had a quick look, and makedevs gets run with a correct device table
+> when generating the common tarball. I don't know when extended
+> attributes are lost.
+> 
+> Could you have a look ?
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/107860312
+So, I also did a test build here, and it indeed fails for me too. At
+first glance, our mksquashfs has support for extended attributes:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/testing/tests/boot/test_atf.py | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+    $ ./tests/TestFileCapabilities/host/bin/mksquashfs -h
+    [...]
+    -no-xattrs              don't store extended attributes
+    -xattrs                 store extended attributes (default)
+    [...]
 
-diff --git a/support/testing/tests/boot/test_atf.py b/support/testing/tests/boot/test_atf.py
-index ab2239e51e..bb3701baed 100644
---- a/support/testing/tests/boot/test_atf.py
-+++ b/support/testing/tests/boot/test_atf.py
-@@ -63,7 +63,7 @@ class TestATFMarvell(infra.basetest.BRTest):
-         BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-         BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-         BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/MarvellEmbeddedProcessors/atf-marvell.git"
--        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="43965481990fd92e9666cf9371a8cf478055ec7c"
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="711ecd32afe465b38052b5ba374c825b158eea18"
-         BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="a80x0_mcbin"
-         BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
-         BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
-@@ -74,7 +74,7 @@ class TestATFMarvell(infra.basetest.BRTest):
-         BR2_TARGET_UBOOT=y
-         BR2_TARGET_UBOOT_BOARDNAME="mvebu_mcbin-88f8040"
-         BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--        BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
-+        BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.09"
-         BR2_TARGET_UBOOT_NEEDS_DTC=y
-         """
- 
+Further investigation postponed, for cause of a visitor... ;-]
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.14.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
