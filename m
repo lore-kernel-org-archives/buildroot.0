@@ -1,48 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Oct 2018 22:00:56 +0200
-Subject: [Buildroot] [PATCH 3/3] mdadm: also install mdmon
-In-Reply-To: <20181014200056.20220-1-thomas.petazzoni@bootlin.com>
-References: <20181014200056.20220-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181014200056.20220-3-thomas.petazzoni@bootlin.com>
+Date: Sun, 14 Oct 2018 22:00:54 +0200
+Subject: [Buildroot] [PATCH 1/3] mdadm: convert to generic-package
+Message-ID: <20181014200056.20220-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adjusts the mdadm package to also install the mdmon
-utility, which is used to "monitor MD external metadata arrays". It
-adds ~250 KB to the installed size:
+There is absolutely no reason for mdadm.mk to use autotools-package:
+this package does not have any configure script at all, and its
+Makefile is not generated using automake.
 
--rwxr-xr-x 1 thomas thomas 446064 Oct 14 21:55 mdadm
--rwxr-xr-x 1 thomas thomas 244672 Oct 14 21:55 mdmon
-
-Fixes bug #11376.
+Therefore, convert it to use the generic-package
+infrastructure. Compared to the previous code, we are now using
+$(TARGET_CONFIGURE_OPTS), which passes our CPPFLAGS. This overrides
+the CPPFLAGS from mdadm's Makefile, so we repeat the only CPPFLAGS
+flag passed in the Makefile, -DBINDIR.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mdadm/mdadm.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/mdadm/mdadm.mk | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
 diff --git a/package/mdadm/mdadm.mk b/package/mdadm/mdadm.mk
-index bdf77fcd56..3ee4ddd059 100644
+index 207b0be60d..6efade981d 100644
 --- a/package/mdadm/mdadm.mk
 +++ b/package/mdadm/mdadm.mk
-@@ -16,13 +16,13 @@ define MDADM_BUILD_CMDS
- 		CFLAGS="$(TARGET_CFLAGS) -DNO_COROSYNC -DNO_DLM" \
- 		CPPFLAGS="$(TARGET_CPPFLAGS) -DBINDIR=\\\"/sbin\\\"" \
- 		CHECK_RUN_DIR=0 \
--		mdadm
-+		mdadm mdmon
+@@ -10,14 +10,19 @@ MDADM_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/raid/mdadm
+ MDADM_LICENSE = GPL-2.0+
+ MDADM_LICENSE_FILES = COPYING
+ 
+-MDADM_MAKE_OPTS = \
+-	CFLAGS="$(TARGET_CFLAGS) -DNO_COROSYNC -DNO_DLM" CC="$(TARGET_CC)" CHECK_RUN_DIR=0 -C $(MDADM_DIR) mdadm
+-
+-MDADM_INSTALL_TARGET_OPTS = \
+-	DESTDIR=$(TARGET_DIR)/usr -C $(MDADM_DIR) install-mdadm
++define MDADM_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		$(TARGET_CONFIGURE_OPTS) \
++		CFLAGS="$(TARGET_CFLAGS) -DNO_COROSYNC -DNO_DLM" \
++		CPPFLAGS="$(TARGET_CPPFLAGS) -DBINDIR=\\\"/usr/sbin\\\"" \
++		CHECK_RUN_DIR=0 \
++		mdadm
++endef
+ 
+-define MDADM_CONFIGURE_CMDS
+-	# Do nothing
++define MDADM_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		DESTDIR=$(TARGET_DIR)/usr \
++		install-mdadm
  endef
  
- define MDADM_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
- 		DESTDIR=$(TARGET_DIR) \
--		install-mdadm
-+		install-mdadm install-mdmon
- endef
- 
- $(eval $(generic-package))
+-$(eval $(autotools-package))
++$(eval $(generic-package))
 -- 
 2.14.4
