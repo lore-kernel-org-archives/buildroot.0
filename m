@@ -1,38 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Oct 2018 11:00:02 +0200
-Subject: [Buildroot] [PATCH 1/1] xerces: fix static linking with curl
-In-Reply-To: <20181011212711.22694-1-fontaine.fabrice@gmail.com>
-References: <20181011212711.22694-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181014110002.71a78fa5@windsurf>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 14 Oct 2018 11:01:53 +0200
+Subject: [Buildroot] [PATCH v3 1/9] DEVELOPERS: add myself for asterisk
+Message-ID: <20181014090202.31122-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v3: no changes
+v2: initial revision
 
-On Thu, 11 Oct 2018 23:27:11 +0200, Fabrice Fontaine wrote:
-> When curl is statically built with openssl support, xerces needs to
-> link with openssl libraries so use pkg_check_modules to get any
-> needed dependencies
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/29ca90fff2c8e38f2edf7240eca3aa3fe7397c45
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../0002-fix-static-linking-with-curl.patch   | 39 +++++++++++++++++++
->  1 file changed, 39 insertions(+)
->  create mode 100644 package/xerces/0002-fix-static-linking-with-curl.patch
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Ah, an upstreamable pkg-config based solution to solve static linking
-issues: good! Could you make sure to submit this upstream?
-
-Applied to master. Thanks!
-
-Thomas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 990621fb11..a55ff8bbb1 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -292,6 +292,7 @@ F:	package/alsa-utils/
+ F:	package/apache/
+ F:	package/apr/
+ F:	package/apr-util/
++F:	package/asterisk/
+ F:	package/bcg729/
+ F:	package/bluez-tools/
+ F:	package/boinc/
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.19.1
