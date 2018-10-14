@@ -1,47 +1,63 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sun, 14 Oct 2018 21:27:21 +0300
-Subject: [Buildroot] [PATCH 1/1] python-cython: bump to version 0.29
-Message-ID: <20181014182722.11400-1-asafka7@gmail.com>
+Date: Sun, 14 Oct 2018 21:27:22 +0300
+Subject: [Buildroot] [PATCH 1/1] python-logbook: bump to version 1.4.1
+In-Reply-To: <20181014182722.11400-1-asafka7@gmail.com>
+References: <20181014182722.11400-1-asafka7@gmail.com>
+Message-ID: <20181014182722.11400-2-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+logbook also needs zlib (for gzip)
+
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-cython/python-cython.hash | 4 ++--
- package/python-cython/python-cython.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-logbook/Config.in           | 2 ++
+ package/python-logbook/python-logbook.hash | 4 ++--
+ package/python-logbook/python-logbook.mk   | 4 ++--
+ 3 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
-index 666ef4b292..8326dfe132 100644
---- a/package/python-cython/python-cython.hash
-+++ b/package/python-cython/python-cython.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/cython/json
--md5	0cb620e1259818e4ecc1a056e8c3a8be  Cython-0.28.5.tar.gz
--sha256	b64575241f64f6ec005a4d4137339fb0ba5e156e826db2fdb5f458060d9979e0  Cython-0.28.5.tar.gz
-+md5	5cb227772fbb0318be3c73b532d249ac  Cython-0.29.tar.gz
-+sha256	94916d1ede67682638d3cc0feb10648ff14dc51fb7a7f147f4fedce78eaaea97  Cython-0.29.tar.gz
+diff --git a/package/python-logbook/Config.in b/package/python-logbook/Config.in
+index 9ae914432d..d4fbf0fe67 100644
+--- a/package/python-logbook/Config.in
++++ b/package/python-logbook/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_PYTHON_LOGBOOK
+ 	bool "python-logbook"
++	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
+ 	help
+ 	  A logging replacement for Python.
+ 
+diff --git a/package/python-logbook/python-logbook.hash b/package/python-logbook/python-logbook.hash
+index b15f8b9959..a32ff3bde2 100644
+--- a/package/python-logbook/python-logbook.hash
++++ b/package/python-logbook/python-logbook.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/logbook/json
+-md5	926d40a90cfe8eceade449fca2314b16  Logbook-1.4.0.tar.gz
+-sha256	3c0a3ebd48e89fcdd725fe393eb9226c789dca5a4e7842d65e2f256645fd1cd9  Logbook-1.4.0.tar.gz
++md5	c9fab07b6a91aa7358155baa16802707  Logbook-1.4.1.tar.gz
++sha256	32375ce706d04a46886f9818bb953e53e0eda636552d7c0a2e482dd670fa56db  Logbook-1.4.1.tar.gz
  # Locally computed sha256 checksums
- sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
- sha256 e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
-diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
-index 4bd300470f..624fe2fb75 100644
---- a/package/python-cython/python-cython.mk
-+++ b/package/python-cython/python-cython.mk
+ sha256	2ca266337cc6947578654ab0dd6438de4d01fa78b2e6eb554b09757df1178f98  LICENSE
+diff --git a/package/python-logbook/python-logbook.mk b/package/python-logbook/python-logbook.mk
+index 25a520dc83..ab1b2703e2 100644
+--- a/package/python-logbook/python-logbook.mk
++++ b/package/python-logbook/python-logbook.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CYTHON_VERSION = 0.28.5
-+PYTHON_CYTHON_VERSION = 0.29
- PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
--PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/21/89/ca320e5b45d381ae0df74c4b5694f1471c1b2453c5eb4bac3449f5970481
-+PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/f0/66/6309291b19b498b672817bd237caec787d1b18013ee659f17b1ec5844887
- PYTHON_CYTHON_SETUP_TYPE = setuptools
- PYTHON_CYTHON_LICENSE = Apache-2.0
- PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
+-PYTHON_LOGBOOK_VERSION = 1.4.0
++PYTHON_LOGBOOK_VERSION = 1.4.1
+ PYTHON_LOGBOOK_SOURCE = Logbook-$(PYTHON_LOGBOOK_VERSION).tar.gz
+-PYTHON_LOGBOOK_SITE = https://files.pythonhosted.org/packages/36/4b/b610bee18d5cfc4cec7dde056639994e9b34991e4c57816bfff0f3d0ac33
++PYTHON_LOGBOOK_SITE = https://files.pythonhosted.org/packages/74/fc/3e7557ed1ef1bd4e3ee189fc670416abfc7192b550e8d3c1d858a63f41ab
+ PYTHON_LOGBOOK_SETUP_TYPE = setuptools
+ PYTHON_LOGBOOK_LICENSE = BSD-3-Clause
+ PYTHON_LOGBOOK_LICENSE_FILES = LICENSE
 -- 
 2.17.1
