@@ -1,42 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Oct 2018 15:25:43 +0200
-Subject: [Buildroot] TestFileCapabilities is broken
-Message-ID: <20181014152543.2cf6c0b2@windsurf>
+Date: Sun, 14 Oct 2018 15:25:58 +0200
+Subject: [Buildroot] [PATCH 1/2] support/testing: fix TestATFAllwinner test
+ case
+Message-ID: <20181014132559.2262-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This test case uses a too old U-Boot version, which is affected by the
+infamous libfdt header conflict issue. Let's update to U-Boot 2017.11,
+which is used by our current bananapi_m64_defconfig that was the
+inspiration for this test case.
 
-The TestFileCapabilities test of our test suite is failing, with:
+Fixes:
 
-======================================================================
-FAIL: test_run (tests.core.test_file_capabilities.TestFileCapabilities)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/builds/buildroot.org/buildroot/support/testing/tests/core/test_file_capabilities.py", line 44, in test_run
-    self.assertIn("cap_kill", output[0])
-AssertionError: 'cap_kill' not found in '/usr/sbin/getcap'
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/107860310
 
-I did a local build, and I can reproduce the issue. What we do is we
-run "getcap -v /usr/sbin/getcap" on the target, and it returns just:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/testing/tests/boot/test_atf.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-# getcap -v /usr/sbin/getcap 
-/usr/sbin/getcap
-
-And not any of the extended attributes that getcap is supposed to have.
-I had a quick look, and makedevs gets run with a correct device table
-when generating the common tarball. I don't know when extended
-attributes are lost.
-
-Could you have a look ?
-
-Thanks,
-
-Thomas
+diff --git a/support/testing/tests/boot/test_atf.py b/support/testing/tests/boot/test_atf.py
+index 75cea01fc8..ab2239e51e 100644
+--- a/support/testing/tests/boot/test_atf.py
++++ b/support/testing/tests/boot/test_atf.py
+@@ -40,7 +40,7 @@ class TestATFAllwinner(infra.basetest.BRTest):
+         BR2_TARGET_UBOOT=y
+         BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+         BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-        BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
++        BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
+         BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m64"
+         BR2_TARGET_UBOOT_NEEDS_DTC=y
+         BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.4
