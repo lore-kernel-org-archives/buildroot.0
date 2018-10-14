@@ -1,51 +1,78 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Oct 2018 14:46:46 +0200
-Subject: [Buildroot] [PATCH v3 6/9] package/libpjsip: add Asterisk patch
- set
-In-Reply-To: <20181014090202.31122-6-bernd.kuhls@t-online.de>
-References: <20181014090202.31122-1-bernd.kuhls@t-online.de>
- <20181014090202.31122-6-bernd.kuhls@t-online.de>
-Message-ID: <20181014144646.3ad2f867@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 14 Oct 2018 14:54:15 +0200
+Subject: [Buildroot] [PATCH 2/5] download/git: re-run the backend with a
+ lock to the git tree
+In-Reply-To: <20180910225228.56cdb555@windsurf>
+References: <cover.1534972250.git.yann.morin.1998@free.fr>
+ <b5a3123305e1d4cef3cbdb17985e73161d13f407.1534972250.git.yann.morin.1998@free.fr>
+ <20180910225228.56cdb555@windsurf>
+Message-ID: <20181014125415.GG31509@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, All,
 
-On Sun, 14 Oct 2018 11:01:58 +0200, Bernd Kuhls wrote:
-> Quoting https://wiki.asterisk.org/wiki/display/AST/PJSIP-pjproject
+On 2018-09-10 22:52 +0200, Thomas Petazzoni spake thusly:
+> On Wed, 22 Aug 2018 23:10:55 +0200, Yann E. MORIN wrote:
+> > The access-pattern to the git repository must be entirely atomic.
+> > 
+> > This atomicity is currently guaranteed by the caller, from a higher
+> > level. But this is not optimum, and it is better that the backend does
+> > the locking it needs by itself, so that other backends from other builds
+> > can still download for the same package (e.g. another build uses a wget
+> > download for that package).
 > 
-> "Asterisk currently contains two SIP stacks: the original chan_sip SIP
->  channel driver which is a complete standalone implementation, has been
->  present in all previous releases of Asterisk and no longer receives
->  core support, and the newer chan_pjsip SIP stack that is based on
->  Teluu's "pjproject" SIP stack.
-> [...]
->  The actual pjproject source code is NOT distributed with Asterisk.
->  Instead the Asterisk build process downloads the official pjproject
->  tarball then patches, configures and builds pjproject when you build
->  Asterisk."
+> I'd like to challenge the complexity vs. benefit of this patch and
+> PATCH 3/5. Basically, you replace a single $(FLOCK) call in dl-wrapper,
+> by 30 additional lines in the git-specific wrapper (including a
+> non-trivial trick that consists in calling itself), for a benefit that
+> is very, very limited. A download of the exact same package, from
+> another download method, happening at the same time. Can occur yes, but
+> is it really worth the additional complexity? I doubt it.
 > 
-> This patch allows to use a buildroot-build libpjsip with all patches,
-> except 0000-remove-third-party.patch, provided by Asterisk.
+> So at this point, I am not really enthusiastic about 2/5 and 3/5, but
+> perhaps you'll have some convincing arguments ?
 
-I don't understand the story about 0000-remove-third-party.patch. Could
-you explain ? All patches are provided by Asterisk, they are at
-https://github.com/asterisk/asterisk/tree/16.0/third-party/pjproject/patches.
+So, the use-case I have is that I get 9 parallel jobs on the same
+machine, with 6 of them retrieving the kernel from a very fast http/1.1
+server, and the three others getting theirs from a rather slow and big
+git repository.
 
-One issue with this is that 16.0 is a branch name, so the patches that
-you download are not guaranteed to be stable over time.
+Downloading the 6 http in parallel takes under 2 minutes, while each git
+download takes about 20 to 30 minutes.
 
-Also, what is the upstream status of those patches ? Is Asterisk
-actively contributing those patches to upstream pjsip, or are they
-doing de-facto a fork of it ?
+Scheduling (not) helping, it happens that, when a git one gets scheduled
+first, the 6 http/1.1 ones are stalled, when they could in fact proceed,
+and even finish before the first git download is done. And if scheduling
+is really mad at you, then it will schedule the two other git downloads
+before any of the http/1.1 ones.
 
-Thanks,
+So yes, it helps tremendously: some builds finish earlier and can go to
+CI earlier.
 
-Thomas
+Note that one may argue that BR2_DL_DIR should be set in the environment,
+so that it points to the non-default location, so that it gets reused
+everytime, thus alleviating the need for a big download. Yes, right, but
+there are use-cases where this is not wanted.
+
+Regards,
+Yann E. MORIN.
+
+> Best regards,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
