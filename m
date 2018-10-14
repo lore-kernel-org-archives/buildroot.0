@@ -1,80 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Oct 2018 09:59:19 +0200
-Subject: [Buildroot] [git commit] gvfs: bump to version 1.31.4
-Message-ID: <20181014075821.A8D997FA3D@busybox.osuosl.org>
+Date: Sun, 14 Oct 2018 10:00:23 +0200
+Subject: [Buildroot] [git commit] python-psycopg2: add patch to avoid
+ installing tests
+Message-ID: <20181014075903.D4B9483662@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=93b6ae03aed137fd345d974b5e1675f43e7d002d
+commit: https://git.buildroot.net/buildroot/commit/?id=5afc1582211b319d79c08915bc3c656fa528be5b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump to version 1.31.4 which is the first version including the fix for
-glibc 2.28 issue with major/minor:
-https://gitlab.gnome.org/GNOME/gvfs/commit/3424bef7ef71dc3a8c2c71310671cd6d39e7b3e7
-
-Do not bump to latest version of gvfs as:
-- this is a major rework: autotools has been dropped in favor of meson
-- it requires libglib in version 2.57.1 and we have currently 2.56.1
-
-Also:
-- add hash for license file
-- Remove --disable-bash-completion, no more option since 1.31.1:
-  https://gitlab.gnome.org/GNOME/gvfs/commit/2f28fa49cfeb1c82927a1c7c0021b15e2742149f
-- Remove --disable-hal, dropped since 1.31.1:
-  https://gitlab.gnome.org/GNOME/gvfs/commit/ec9c45d7c7671266193a93500c7477990e390fc7
+It's already on upstream, and will be removed on the next bump.
 
 Fixes:
- - http://autobuild.buildroot.net/results/07fa7b0ad9ae0fa9c2e59d54e4d4c76ae4f26166
+http://autobuild.buildroot.org/results/31c/31c942a43064fc012286724e545773cba6e57cc3/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gvfs/gvfs.hash | 7 +++++--
- package/gvfs/gvfs.mk   | 6 ++----
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ ...y-avoid-installing-tests-to-site-packages.patch | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/package/gvfs/gvfs.hash b/package/gvfs/gvfs.hash
-index 63ad77de83..6b7403ffa4 100644
---- a/package/gvfs/gvfs.hash
-+++ b/package/gvfs/gvfs.hash
-@@ -1,2 +1,5 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.30/gvfs-1.30.3.sha256sum
--sha256	b824a29489cae7f39e1a0fc0d154ac7b7bf43d8edd98ba83ffcad2f766d0f175	gvfs-1.30.3.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.31/gvfs-1.31.4.sha256sum
-+sha256	55244d447d040884dfb335fde638274cb6f2794285ada7fa84bcbbd34f06be04	gvfs-1.31.4.tar.xz
+diff --git a/package/python-psycopg2/0001-setup.py-avoid-installing-tests-to-site-packages.patch b/package/python-psycopg2/0001-setup.py-avoid-installing-tests-to-site-packages.patch
+new file mode 100644
+index 0000000000..f2dc3adca9
+--- /dev/null
++++ b/package/python-psycopg2/0001-setup.py-avoid-installing-tests-to-site-packages.patch
+@@ -0,0 +1,31 @@
++From 46c50849584d254b81ad058e1a53adcef1eb4c53 Mon Sep 17 00:00:00 2001
++From: Asaf Kahlon <asafka7@gmail.com>
++Date: Fri, 12 Oct 2018 07:57:23 +0300
++Subject: [PATCH 1/1] setup.py: avoid installing tests to site-packages
 +
-+# Hash for license file
-+sha256	45cf336e2e48176993babc5aabf44437390f40e6a86a472c6abfc7ce9c035db4	COPYING
-diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-index d5f3682e2c..19747b4cb0 100644
---- a/package/gvfs/gvfs.mk
-+++ b/package/gvfs/gvfs.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--GVFS_VERSION_MAJOR = 1.30
--GVFS_VERSION = $(GVFS_VERSION_MAJOR).3
-+GVFS_VERSION_MAJOR = 1.31
-+GVFS_VERSION = $(GVFS_VERSION_MAJOR).4
- GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.xz
- GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
- GVFS_INSTALL_STAGING = YES
-@@ -21,14 +21,12 @@ GVFS_CONF_ENV = ac_cv_path_LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-con
- GVFS_CONF_OPTS = \
- 	--disable-afc \
- 	--disable-admin \
--	--disable-bash-completion \
- 	--disable-cdda \
- 	--disable-gcr \
- 	--disable-gdu \
- 	--disable-goa \
- 	--disable-google \
- 	--disable-gphoto2 \
--	--disable-hal \
- 	--disable-keyring \
- 	--disable-libmtp \
- 	--disable-udisks2
++This patch update only setup.py from upstream patch
++(389f6c08d9536060184bfd5c8ea2491a4a91c2fb).
++
++Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
++---
++ setup.py | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/setup.py b/setup.py
++index b521290..3f309fc 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -674,8 +674,8 @@ setup(name="psycopg2",
++       long_description="\n".join(readme.split("\n")[2:]).lstrip(),
++       classifiers=[x for x in classifiers.split("\n") if x],
++       data_files=data_files,
++-      package_dir={'psycopg2': 'lib', 'psycopg2.tests': 'tests'},
++-      packages=['psycopg2', 'psycopg2.tests'],
+++      package_dir={'psycopg2': 'lib'},
+++      packages=['psycopg2'],
++       cmdclass={
++           'build_ext': psycopg_build_ext,
++           'build_py': build_py, },
++-- 
++2.17.1
++
