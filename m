@@ -1,54 +1,134 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 14 Oct 2018 11:01:59 +0200
-Subject: [Buildroot] [PATCH v3 7/9] package/libpjsip: add optional
- dependency to speex
+Date: Sun, 14 Oct 2018 11:01:56 +0200
+Subject: [Buildroot] [PATCH v3 4/9] package/asterisk: enable for uclibc
+ toolchains
 In-Reply-To: <20181014090202.31122-1-bernd.kuhls@t-online.de>
 References: <20181014090202.31122-1-bernd.kuhls@t-online.de>
-Message-ID: <20181014090202.31122-7-bernd.kuhls@t-online.de>
+Message-ID: <20181014090202.31122-4-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This patch extends the configure checks for re-entrant resolver
+functions to fix uclibc builds.
+
+Quoting Yann:
+http://lists.busybox.net/pipermail/buildroot/2017-September/203004.html
+
+"As a final stroke of genius, asterisk checks for the re-entrant variant
+of res_ninit(), and concludes that all such functions are available,
+including res_nsearch(). Uclibc-ng has the former but not the latter, so
+the build fails. Since there is no cache variable for that check, we
+can't pre-feed that result to configure, and fixing it is a bigger
+endeavour. So we make asterisk depend on glibc for now, until someone
+is brave enough to fix it."
+
+Musl builds are still broken:
+
+output/build/asterisk-16.0.0/include/asterisk/astmm.h:165:35:
+ error: expected ?=?, ?,?, ?;?, ?asm? or ?__attribute__? before ?->? token
+  Do_not_use_calloc__use_ast_calloc->fail(a, b)
+
+output/build/asterisk-16.0.0/include/asterisk/astmm.h:169:77:
+ error: expected ?=?, ?,?, ?;?, ?asm? or ?__attribute__? before ?->? token
+  Do_not_use_free__use_ast_free_or_ast_std_free_for_remotely_allocated_memory->fail(a)
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v3: initial revision
+v3: restricted to uclibc, musl is still broken
+v2: Replaced sed hack with configure.ac patch (Yann, Arnout, Thomas)
+    patch upstream status: pending, waiting for CLA approval:
+    https://wiki.asterisk.org/wiki/display/AST/Patch+Contribution+Process
 
- package/libpjsip/libpjsip.mk | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ ...tection-of-re-entrant-resolver-funct.patch | 38 +++++++++++++++++++
+ package/asterisk/Config.in                    |  7 ++--
+ package/asterisk/asterisk.mk                  |  2 +-
+ 3 files changed, 42 insertions(+), 5 deletions(-)
+ create mode 100644 package/asterisk/0005-configure-fix-detection-of-re-entrant-resolver-funct.patch
 
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index ab9fca5821..46f07a4f6b 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
-@@ -40,8 +40,6 @@ LIBPJSIP_CONF_ENV = \
- LIBPJSIP_CONF_OPTS = \
- 	--disable-sound \
- 	--disable-gsm-codec \
--	--disable-speex-codec \
--	--disable-speex-aec \
- 	--disable-resample \
- 	--disable-video \
- 	--disable-opencore-amr \
-@@ -76,6 +74,18 @@ else
- LIBPJSIP_CONF_OPTS += --disable-ssl
- endif
- 
-+ifeq ($(BR2_PACKAGE_SPEEX)$(BR2_PACKAGE_SPEEXDSP),yy)
-+LIBPJSIP_CONF_OPTS += \
-+	--enable-speex-aec \
-+	--enable-speex-codec \
-+	--with-external-speex
-+LIBPJSIP_DEPENDENCIES += speex speexdsp
-+else
-+LIBPJSIP_CONF_OPTS += \
-+	--disable-speex-aec \
-+	--disable-speex-codec
-+endif
+diff --git a/package/asterisk/0005-configure-fix-detection-of-re-entrant-resolver-funct.patch b/package/asterisk/0005-configure-fix-detection-of-re-entrant-resolver-funct.patch
+new file mode 100644
+index 0000000000..bee8fdbb1b
+--- /dev/null
++++ b/package/asterisk/0005-configure-fix-detection-of-re-entrant-resolver-funct.patch
+@@ -0,0 +1,38 @@
++From 9b4070944578336506cd0a76de6f733c72d0ca74 Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Sat, 13 Oct 2018 11:11:15 +0200
++Subject: [PATCH] configure: fix detection of re-entrant resolver functions
 +
- ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
- LIBPJSIP_DEPENDENCIES += util-linux
- endif
++Fixes https://issues.asterisk.org/jira/browse/ASTERISK-21795
++
++uClibc does not provide res_nsearch:
++asterisk-16.0.0/main/dns.c:506: undefined reference to `res_nsearch'
++
++Patch coded by Yann E. MORIN:
++http://lists.busybox.net/pipermail/buildroot/2018-October/232630.html
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ configure.ac | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index dd0c8edd13..ee1ca9ceb6 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1388,7 +1388,11 @@ AC_LINK_IFELSE(
++ 			#include <arpa/nameser.h>
++ 			#endif
++ 			#include <resolv.h>],
++-			[int foo = res_ninit(NULL);])],
+++			[
+++				int foo;
+++				foo = res_ninit(NULL);
+++				foo = res_nsearch(NULL, NULL, 0, 0, NULL, 0);
+++			])],
++ 	AC_MSG_RESULT(yes)
++ 	AC_DEFINE([HAVE_RES_NINIT], 1, [Define to 1 if your system has the re-entrant resolver functions.])
++ 	AC_SEARCH_LIBS(res_9_ndestroy, resolv)
++-- 
++2.19.1
++
+diff --git a/package/asterisk/Config.in b/package/asterisk/Config.in
+index cfea181026..b55bc0174d 100644
+--- a/package/asterisk/Config.in
++++ b/package/asterisk/Config.in
+@@ -1,9 +1,8 @@
+ config BR2_PACKAGE_ASTERISK
+ 	bool "asterisk"
+-	# Uses glibc resolver function res_nsearch()
+-	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
++	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_USE_MMU # libedit
+ 	depends on BR2_USE_WCHAR # libedit
+ 	select BR2_PACKAGE_JANSSON
+@@ -25,7 +24,7 @@ config BR2_PACKAGE_ASTERISK
+ 
+ 	  http://www.asterisk.org/
+ 
+-comment "asterisk needs a glibc toolchain w/ C++, dynamic library, wchar"
++comment "asterisk needs a glibc or uClibc toolchain w/ C++, dynamic library, wchar"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP \
++	depends on BR2_TOOLCHAIN_USES_MUSL || !BR2_INSTALL_LIBSTDCPP \
+ 		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index eb663a75bf..8a46438f92 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -21,7 +21,7 @@ ASTERISK_LICENSE_FILES = \
+ 	codecs/speex/speex_resampler.h \
+ 	utils/db1-ast/include/db.h
+ 
+-# For patches 0002 and 0003
++# For patches 0002, 0003 and 0005
+ ASTERISK_AUTORECONF = YES
+ ASTERISK_AUTORECONF_OPTS = -Iautoconf -Ithird-party -Ithird-party/pjproject
+ 
 -- 
 2.19.1
