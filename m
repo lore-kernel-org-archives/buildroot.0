@@ -1,59 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Oct 2018 22:00:54 +0200
-Subject: [Buildroot] [PATCH 1/3] mdadm: convert to generic-package
-Message-ID: <20181014200056.20220-1-thomas.petazzoni@bootlin.com>
+From: Shaikat Hossain <shossa3@gmail.com>
+Date: Sun, 14 Oct 2018 13:40:14 -0700
+Subject: [Buildroot] xargs issue on mac
+Message-ID: <CAD8kTsBhwsQ24_e+wzK90MZKBk0UuohBB5Jb_VP2jMB-pP3vnQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is absolutely no reason for mdadm.mk to use autotools-package:
-this package does not have any configure script at all, and its
-Makefile is not generated using automake.
+Hi everyone,
 
-Therefore, convert it to use the generic-package
-infrastructure. Compared to the previous code, we are now using
-$(TARGET_CONFIGURE_OPTS), which passes our CPPFLAGS. This overrides
-the CPPFLAGS from mdadm's Makefile, so we repeat the only CPPFLAGS
-flag passed in the Makefile, -DBINDIR.
+I have been struggling to get buildroot to work on my mac for the past
+several days. I am trying to resolve the following error message when I run
+make:
+"
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mdadm/mdadm.mk | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
+You may have to install 'g++' on your build machine
 
-diff --git a/package/mdadm/mdadm.mk b/package/mdadm/mdadm.mk
-index 207b0be60d..6efade981d 100644
---- a/package/mdadm/mdadm.mk
-+++ b/package/mdadm/mdadm.mk
-@@ -10,14 +10,19 @@ MDADM_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/raid/mdadm
- MDADM_LICENSE = GPL-2.0+
- MDADM_LICENSE_FILES = COPYING
- 
--MDADM_MAKE_OPTS = \
--	CFLAGS="$(TARGET_CFLAGS) -DNO_COROSYNC -DNO_DLM" CC="$(TARGET_CC)" CHECK_RUN_DIR=0 -C $(MDADM_DIR) mdadm
--
--MDADM_INSTALL_TARGET_OPTS = \
--	DESTDIR=$(TARGET_DIR)/usr -C $(MDADM_DIR) install-mdadm
-+define MDADM_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		CFLAGS="$(TARGET_CFLAGS) -DNO_COROSYNC -DNO_DLM" \
-+		CPPFLAGS="$(TARGET_CPPFLAGS) -DBINDIR=\\\"/usr/sbin\\\"" \
-+		CHECK_RUN_DIR=0 \
-+		mdadm
-+endef
- 
--define MDADM_CONFIGURE_CMDS
--	# Do nothing
-+define MDADM_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		DESTDIR=$(TARGET_DIR)/usr \
-+		install-mdadm
- endef
- 
--$(eval $(autotools-package))
-+$(eval $(generic-package))
--- 
-2.14.4
+>>> host-tar 1.29 Patching
+
+xargs: illegal option -- r
+
+usage: xargs [-0opt] [-E eofstr] [-I replstr [-R replacements]] [-J replstr]
+
+             [-L number] [-n number [-x]] [-P maxprocs] [-s size]
+
+             [utility [argument ...]]
+
+make: ***
+[/Users/shaikathossain/Downloads/erpiam-erpiam/output/build/host-tar-1.29/.stamp_patched]
+Error 1
+"
+I was confused about the line suggesting I have to install g++ because I
+definitely have it installed. Perhaps it could be a path issue? The "xargs:
+illegal option -- r" line is what concerns me since I am using a mac and
+supposedly it doesn't like the option "r". Are there any ways around this
+issue without having to dive into the source code? I was trying to build
+the following project:
+
+https://github.com/gbevin/erpiam
+
+Best,
+Shaikat
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181014/fcb9ecd2/attachment.html>
