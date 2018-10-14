@@ -1,56 +1,39 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 14 Oct 2018 18:35:03 +0200
-Subject: [Buildroot] [PATCH 2/3] pkg-perl: patch files in
- <pkg>_PATCH_XS_MAKEFILES
+Date: Sun, 14 Oct 2018 18:35:04 +0200
+Subject: [Buildroot] [PATCH 3/3] perl-netaddr-ip: fix build of the XS version
 In-Reply-To: <20181014163504.28519-1-francois.perrad@gadz.org>
 References: <20181014163504.28519-1-francois.perrad@gadz.org>
-Message-ID: <20181014163504.28519-3-francois.perrad@gadz.org>
+Message-ID: <20181014163504.28519-4-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-based on an initial work of Christopher McCrory <chrismcc@gmail.com>
+thank to PERL_NETADDR_IP_PATCH_XS_MAKEFILES
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/pkg-perl.mk | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ package/perl-netaddr-ip/perl-netaddr-ip.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
-index 07348bd5d..673c07a63 100644
---- a/package/pkg-perl.mk
-+++ b/package/pkg-perl.mk
-@@ -132,6 +132,29 @@ define $(2)_CONFIGURE_CMDS
- 	fi
- endef
- endif
-+
-+ifneq ($$($(3)_PATCH_XS_MAKEFILES),)
-+# Some arguments to Makefile.PL do not get propagated to subdirectories
-+# similar to:
-+# https://rt.cpan.org/Public/Bug/Display.html?id=28632
-+define $(2)_PATCH_XS_MAKEFILE_HOOK
-+	for f in $$($(3)_PATCH_XS_MAKEFILES); do \
-+		echo "patching: $$($$(PKG)_SRCDIR)$$$${f}"; \
-+		$(SED) "s:^AR = .*:AR = $(TARGET_AR):g" $$($$(PKG)_SRCDIR)$$$${f}; \
-+		$(SED) "s:^FULL_AR = .*:FULL_AR = $(TARGET_AR):g" $$($$(PKG)_SRCDIR)$$$${f}; \
-+		$(SED) "s:^CC = .*:CC = $(TARGET_CC):g" $$($$(PKG)_SRCDIR)$$$${f}; \
-+		$(SED) "s:^CCFLAGS = .*:CCFLAGS = $(TARGET_CFLAGS):g" $$($$(PKG)_SRCDIR)$$$${f}; \
-+		$(SED) "s:^LD = .*:LD = $(TARGET_CC):g" $$($$(PKG)_SRCDIR)$$$${f}; \
-+		$(SED) "s:^LDDLFLAGS = .*:LDDLFLAGS = -shared $(TARGET_LDFLAGS):g" $$($$(PKG)_SRCDIR)$$$${f}; \
-+		$(SED) "s:^LDLFLAGS = .*:LDLFLAGS = $(TARGET_LDFLAGS):g" $$($$(PKG)_SRCDIR)$$$${f}; \
-+		$(SED) "s:^DESTDIR = .*:DESTDIR = $(TARGET_DIR):g" $$($$(PKG)_SRCDIR)$$$${f}; \
-+		$(SED) "s:^PERL_INC = .*:PERL_INC = $(STAGING_DIR)/usr/lib/perl5/$$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE:g" $$($$(PKG)_SRCDIR)$$$${f}; \
-+	done
-+endef
-+
-+$(2)_POST_CONFIGURE_HOOKS += $(2)_PATCH_XS_MAKEFILE_HOOK
-+endif
-+
- endif
+diff --git a/package/perl-netaddr-ip/perl-netaddr-ip.mk b/package/perl-netaddr-ip/perl-netaddr-ip.mk
+index a1f02c691..6ff97202a 100644
+--- a/package/perl-netaddr-ip/perl-netaddr-ip.mk
++++ b/package/perl-netaddr-ip/perl-netaddr-ip.mk
+@@ -9,9 +9,11 @@ PERL_NETADDR_IP_SOURCE = NetAddr-IP-$(PERL_NETADDR_IP_VERSION).tar.gz
+ PERL_NETADDR_IP_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MI/MIKER
+ PERL_NETADDR_IP_LICENSE = Artistic or GPL-1.0+
+ PERL_NETADDR_IP_LICENSE_FILES = Artistic Copying
++PERL_NETADDR_IP_PATCH_XS_MAKEFILES = Lite/Makefile Lite/Util/Makefile
  
- #
+-# we always build the Pure Perl version.
+-# the build of the native part of NetAddr::IP::Util is buggy.
++ifeq ($(BR2_STATIC_LIBS),y)
++# build only the Pure Perl version.
+ PERL_NETADDR_IP_CONF_OPTS = -noxs
++endif
+ 
+ $(eval $(perl-package))
 -- 
 2.17.1
