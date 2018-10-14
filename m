@@ -1,53 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Oct 2018 21:55:59 +0200
-Subject: [Buildroot] [PATCH] wireshark: security bump to version 2.2.17
-Message-ID: <20181014195559.5389-1-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 14 Oct 2018 22:00:55 +0200
+Subject: [Buildroot] [PATCH 2/3] mdadm: move from /usr/sbin to /sbin
+In-Reply-To: <20181014200056.20220-1-thomas.petazzoni@bootlin.com>
+References: <20181014200056.20220-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20181014200056.20220-2-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+The upstream Makefile by default installs to /sbin but we override
+that to install it in /usr/sbin. Since mdadm is a pretty core utility
+for the boot process, it makes sense to comply with upstream's default
+behavior, so we change mdadm.mk to install mdadm in /sbin. This also
+removes the somewhat non-standard DESTDIR value.
 
-CVE-2018-16058: Bluetooth AVDTP dissector crash:
-https://www.wireshark.org/security/wnpa-sec-2018-44.html
-
-CVE-2018-16056: Bluetooth Attribute Protocol dissector crash:
-https://www.wireshark.org/security/wnpa-sec-2018-45.html
-
-CVE-2018-16057: Radiotap dissector crash:
-https://www.wireshark.org/security/wnpa-sec-2018-46.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/wireshark/wireshark.hash | 4 ++--
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mdadm/mdadm.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 30b00b4dd0..8b2d7bc985 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,4 +1,4 @@
--# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.16.txt
--sha256 7dcc4e9f29ad8dd75849aa3b6f70b6ec82ab6899cb168096572775a6d97ced8a  wireshark-2.2.16.tar.bz2
-+# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.17.txt
-+sha256 923d39ff9c6df83b9594868542061da33bf330e12526778a8cb3adcf912eebb0  wireshark-2.2.17.tar.bz2
- # Locally calculated
- sha256 7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 3d729ae090..fb90f2b940 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/mdadm/mdadm.mk b/package/mdadm/mdadm.mk
+index 6efade981d..bdf77fcd56 100644
+--- a/package/mdadm/mdadm.mk
++++ b/package/mdadm/mdadm.mk
+@@ -14,14 +14,14 @@ define MDADM_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		CFLAGS="$(TARGET_CFLAGS) -DNO_COROSYNC -DNO_DLM" \
+-		CPPFLAGS="$(TARGET_CPPFLAGS) -DBINDIR=\\\"/usr/sbin\\\"" \
++		CPPFLAGS="$(TARGET_CPPFLAGS) -DBINDIR=\\\"/sbin\\\"" \
+ 		CHECK_RUN_DIR=0 \
+ 		mdadm
+ endef
  
--WIRESHARK_VERSION = 2.2.16
-+WIRESHARK_VERSION = 2.2.17
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+ define MDADM_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+-		DESTDIR=$(TARGET_DIR)/usr \
++		DESTDIR=$(TARGET_DIR) \
+ 		install-mdadm
+ endef
+ 
 -- 
-2.11.0
+2.14.4
