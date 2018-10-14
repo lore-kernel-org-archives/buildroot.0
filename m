@@ -1,37 +1,80 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Oct 2018 10:05:12 +0200
-Subject: [Buildroot] [PATCH 1/1] haproxy: put back dependency on
- __sync_*_4
-In-Reply-To: <20181005194527.12140-1-fontaine.fabrice@gmail.com>
-References: <20181005194527.12140-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181014100512.7c25f449@windsurf>
+Date: Sun, 14 Oct 2018 10:08:13 +0200
+Subject: [Buildroot] [git commit] configs/bananapi_m1: bump kernel and uboot
+ version
+Message-ID: <20181014080709.EF7FB83686@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b1db486d990e132e6061da3ae3c31ac2ee787296
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  5 Oct 2018 21:45:27 +0200, Fabrice Fontaine wrote:
-> __sync_*_4 intrinsics is used by common/hathreads.h when gcc < 4.7 but
-> also by contrib/tcploop.c or include/proto/shctx.h so put back a
-> mandatory dependency on BR2_TOOLCHAIN_HAS_SYNC_4 which has been wrongly
-> removed by patch 978001
+New Linux kernel version 4.18.12
+New u-boot version 2018.07
+Config options were reordered by savedefconfig
 
-When referencing commits, please use the Git commit hash and its commit
-title and not the patchwork ID. I.e, like this:
+Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/bananapi_m1_defconfig | 36 +++++++++++++-----------------------
+ 1 file changed, 13 insertions(+), 23 deletions(-)
 
-    __sync_*_4 intrinsics is used by common/hathreads.h when gcc < 4.7 but
-    also by contrib/tcploop.c or include/proto/shctx.h so put back a
-    mandatory dependency on BR2_TOOLCHAIN_HAS_SYNC_4 which has been
-    wrongly removed by commit f22fca4bf27f884950dd7804020e5d5193b570b9
-    ("haproxy: tweak thread activation").
-
-I've applied after fixing this. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/bananapi_m1_defconfig b/configs/bananapi_m1_defconfig
+index f8c66a3334..558ef3d4ab 100644
+--- a/configs/bananapi_m1_defconfig
++++ b/configs/bananapi_m1_defconfig
+@@ -1,38 +1,28 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+-BR2_ARM_EABIHF=y
+-
+-# Linux headers same as kernel, a 4.13 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
+-
+-# Bootloader
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
++BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M1"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/bananapi/bananapi-m1/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.12"
++BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-bananapi"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Bananapi"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+-BR2_TARGET_UBOOT_FORMAT_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+ BR2_TARGET_UBOOT_BOOT_SCRIPT=y
+ BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/bananapi/bananapi-m1/boot.cmd"
+-
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.7"
+-BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-bananapi"
+-
+-# Filesystem
+-BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M1"
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/bananapi/bananapi-m1/genimage.cfg"
