@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Oct 2018 10:01:20 +0200
-Subject: [Buildroot] [PATCH 1/1] python-txtorcon: bump to version 18.3.0
-In-Reply-To: <20181012063644.10173-1-asafka7@gmail.com>
-References: <20181012063644.10173-1-asafka7@gmail.com>
-Message-ID: <20181014100120.65d0a1a3@windsurf>
+Date: Sun, 14 Oct 2018 10:01:43 +0200
+Subject: [Buildroot] [PATCH 1/1] python-pycryptodomex: update license
+ info
+In-Reply-To: <20181012063722.10301-1-asafka7@gmail.com>
+References: <20181012063722.10301-1-asafka7@gmail.com>
+Message-ID: <20181014100143.1dd033fc@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +13,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 12 Oct 2018 09:36:44 +0300, Asaf Kahlon wrote:
+On Fri, 12 Oct 2018 09:37:22 +0300, Asaf Kahlon wrote:
+> Clarify OCB license details, and add Doc/LEGAL/COPYRIGHT.pycrypto
+> to the license files list.
+> 
 > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 > ---
->  package/python-txtorcon/python-txtorcon.hash | 4 ++--
->  package/python-txtorcon/python-txtorcon.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/python-pycryptodomex/python-pycryptodomex.hash | 1 +
+>  package/python-pycryptodomex/python-pycryptodomex.mk   | 4 ++--
+>  2 files changed, 3 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
