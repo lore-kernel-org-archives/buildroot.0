@@ -1,9 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 14 Oct 2018 19:07:10 -0300
-Subject: [Buildroot] [PATCH 4/5] support/testing: add python-incremental
+Date: Sun, 14 Oct 2018 19:08:02 -0300
+Subject: [Buildroot] [PATCH 5/5] support/testing: add python-twisted
  tests
-References: <20181011204641.6ded469a@windsurf>
-Message-ID: <5bc3be0e5f649_79c83fc5c20195c4596a2@ultri5.mail>
+References: <1adacc2a-25dc-eee5-8688-47ce66aa080b@mind.be>
+Message-ID: <5bc3be429e67a_79c83fc5c20eb4985989a@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,42 +12,34 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, Oct 11, 2018 at 03:46 PM, Thomas Petazzoni wrote:
+On Thu, Oct 11, 2018 at 06:27 PM, Arnout Vandecappelle wrote:
 
-> On Tue, 25 Sep 2018 23:55:13 -0300, Ricardo Martincoski wrote:
+> On 11/10/18 20:48, Thomas Petazzoni wrote:
+>> On Tue, 25 Sep 2018 23:55:14 -0300, Ricardo Martincoski wrote:
+>> 
+>>> +TEST_SCRIPT = """
+>>> +from twisted.internet import protocol, reactor, endpoints
+>>> +class F(protocol.Factory):
+>>> +    pass
+>>> +endpoints.serverFromString(reactor, "tcp:1234").listen(F())
+>>> +reactor.run()
+>>> +"""
+>> 
+>> At some point, we will have to find a solution to store such
+>> "artefacts" somewhere, instead of having them inline in their test
+>> cases. I don't have a good idea about this.
 > 
->> +class TestPythonIncremental(TestPythonBase):
->> +    def str_test(self):
->> +        cmd = self.interpreter + " -c 'import incremental;"
->> +        cmd += "v = incremental.Version(\"package\", 1, 2, 3, release_candidate=4);"
->> +        cmd += "assert(str(v) == \"[package, version 1.2.3rc4]\")'"
+>  I think it would be nice if we could add in the package directory a
+> subdirectory with files to be copied to the target for the runtime test, and a
+> python script for the test itself.
 > 
-> When I see this, I wonder if it wouldn't be nicer to do something like
-> this:
-> 
-> class PythonIncremental(TestPythonBase):
-> 	python_prog = """
-> import incremental
-> incremental.Version("package", 1, 2, 3, release_candidate=4)
-> assert(str(v) == "[package, version 1.2.3rc4]")
-> """
-> 
-> and have the base TestPythonBase class have some logic that executes
-> this as a Python script with the Python interpreter.
-> 
-> It would make the thing a bit more readable. Also, the TestPythonBase
-> class could push things a bit further, and have a default
-> implementation of test_run() that does self.login() + execute the
-> Python program in python_prog.
-> 
-> This way, those simple Python tests only need to provide the Buildroot
-> configuration and the small Python program to run.
+>  As an in-between step, we can put the files-to-be-copied inside the
+> support/testing directory and explicitly enumerate the files-to-be-copied in the
+> test fixture.
 
 Good idea.
-I am working on this, I will send a small series in the next few days: one
-patch adding the common logic and expecting the sample script to be in a file
-to be copied in build time and 6 patches each one changing one of the current
-test cases.
+I am working on this in-between step.
+I will send a small series in the next few days.
 
 
 Regards,
