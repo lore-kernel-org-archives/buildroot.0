@@ -1,42 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Oct 2018 13:16:33 +0200
-Subject: [Buildroot] [git commit] rpi-bt-firmware: bump version to 8c1e2bff1d
-Message-ID: <20181015112324.828807FFC3@busybox.osuosl.org>
+Date: Mon, 15 Oct 2018 13:21:34 +0200
+Subject: [Buildroot] [git commit] package/nodejs: use per-build cache
+ directories
+Message-ID: <20181015112324.99CD781566@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72097dc59bb3f88071b102cc9ccc588c68b6bce2
+commit: https://git.buildroot.net/buildroot/commit/?id=4a16182d5f9f78e7d817f68a6d28449ce9c32e59
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+When two Buildroot builds run in parallel, and they both happen to call
+npm at roughly the same time, the two npm instances may conflict when
+accessing the npm cache, which is by default ~/.npm
+
+Although npm is supposed to lock access to the cache, it seems it does
+sometimes fail to do so properly, bailling out in error, when it would
+never ever crash at all when not running in parallel. We suspect that
+the sequence leading to such failures are something like:
+
+    npm-1                           npm-2
+      lock(retry=few, sleep=short)    .
+      does-stuff()                    .
+      .                               lock(retry=few, sleep=short)
+      .                               # can't lock local cache
+      .                               download-module()
+      .                                 # can't download
+      .                                 exit(1)
+      unlock()
+
+As per the docs [0], few = 10, short = 10. So if the first npm (npm-1)
+takes more than 100s (which can happen behind slow links and/or big
+modules that contain native code that is compiled), then the second npm
+(npm-2) will bail out (the download would fail if there is no network
+access, for example, and only local modules are used).
+
+Point npm to use a per-build cache directory, so they no longer compete
+across builds.
+
+That would still need some care when we do top-level parallel builds,
+though.
+
+Note also that the conflicts are not totally eliminated: two or more npm
+instances may still compete for some other resource that has not yet
+been identified.
+
+But, at least, the conflict window has been drastically shortened now,
+to the point where it now seldom occurs.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rpi-bt-firmware/rpi-bt-firmware.hash | 2 +-
- package/rpi-bt-firmware/rpi-bt-firmware.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nodejs/nodejs.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/rpi-bt-firmware/rpi-bt-firmware.hash b/package/rpi-bt-firmware/rpi-bt-firmware.hash
-index 043706a1b8..eeb7b605fe 100644
---- a/package/rpi-bt-firmware/rpi-bt-firmware.hash
-+++ b/package/rpi-bt-firmware/rpi-bt-firmware.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 c219f1d232fb80fbf23e7f2ed97d9c495855355a36dda373a8985c699ee1dd4b  rpi-bt-firmware-b5307312a172c8d87d44f6df32f5e24f1c19770e.tar.gz
-+sha256 155ebd5f08b819e0ce4e1950fcc972b2086cee3c16d36aba348beba1910c1fd2  rpi-bt-firmware-8c1e2bff1da9850f68efcfff3da5d939ec27a2ee.tar.gz
- sha256 b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d  LICENCE.broadcom_bcm43xx
-diff --git a/package/rpi-bt-firmware/rpi-bt-firmware.mk b/package/rpi-bt-firmware/rpi-bt-firmware.mk
-index b1c0aa7c94..f9f300da41 100644
---- a/package/rpi-bt-firmware/rpi-bt-firmware.mk
-+++ b/package/rpi-bt-firmware/rpi-bt-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 29462cb979..429642b795 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -153,6 +153,7 @@ NPM = $(TARGET_CONFIGURE_OPTS) \
+ 	npm_config_build_from_source=true \
+ 	npm_config_nodedir=$(BUILD_DIR)/nodejs-$(NODEJS_VERSION) \
+ 	npm_config_prefix=$(TARGET_DIR)/usr \
++	npm_config_cache=$(BUILD_DIR)/.npm-cache \
+ 	$(HOST_DIR)/bin/npm
  
--RPI_BT_FIRMWARE_VERSION = b5307312a172c8d87d44f6df32f5e24f1c19770e
-+RPI_BT_FIRMWARE_VERSION = 8c1e2bff1da9850f68efcfff3da5d939ec27a2ee
- RPI_BT_FIRMWARE_SITE = $(call github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(RPI_BT_FIRMWARE_VERSION))
- RPI_BT_FIRMWARE_LICENSE = PROPRIETARY
- RPI_BT_FIRMWARE_LICENSE_FILES = LICENCE.broadcom_bcm43xx
+ #
