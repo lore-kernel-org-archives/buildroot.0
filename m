@@ -1,60 +1,41 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 15 Oct 2018 21:38:28 +0300
-Subject: [Buildroot] [PATCH] ntp: fix build without libcap and no threads
-Message-ID: <a90754470c0613a6f8c9ccce674ff0c82299483e.1539628708.git.baruch@tkos.co.il>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 15 Oct 2018 20:50:49 +0200
+Subject: [Buildroot] [PATCH v1] qt5multimedia: add license info for examples
+ fftreal library
+Message-ID: <20181015185049.9141-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When threads support is missing the ntp build system builds the
-work_fork code. This code added call to set_user_group_ids() that is
-under HAVE_DROPROOT, which is disabled when libcap is not built.
-
-Add a patch fixing that.
-
-Fixes:
-http://autobuild.buildroot.net/results/ab9/ab9ceff1151b8b5e6b9fa77d39c0f9b0cac1a080/
-
-Cc: Artyom Panfilov <apanfilov@spectracom.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- .../0004-fix-work-fork-without-droproot.patch | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
- create mode 100644 package/ntp/0004-fix-work-fork-without-droproot.patch
+ package/qt5/qt5multimedia/qt5multimedia.hash | 1 +
+ package/qt5/qt5multimedia/qt5multimedia.mk   | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/package/ntp/0004-fix-work-fork-without-droproot.patch b/package/ntp/0004-fix-work-fork-without-droproot.patch
-new file mode 100644
-index 000000000000..cb6fec012575
---- /dev/null
-+++ b/package/ntp/0004-fix-work-fork-without-droproot.patch
-@@ -0,0 +1,26 @@
-+Fix work_fork build when droproot is disabled
-+
-+The set_user_group_ids() depends on HAVE_DROPROOT. When HAVE_DROPROOT is not
-+enabled, work_fork.c code causes a link failure:
-+
-+../libntp/libntp.a(work_fork.o): In function `send_blocking_req_internal':
-+work_fork.c:(.text+0x498): undefined reference to `set_user_group_ids'
-+
-+Make the set_user_group_ids() call depend on HAVE_DROPROOT.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: http://bugs.ntp.org/show_bug.cgi?id=3539
-+
-+--- ntp-4.2.8p12.orig/libntp/work_fork.c	2018-08-14 14:51:06.000000000 +0300
-++++ ntp-4.2.8p12/libntp/work_fork.c	2018-10-15 21:10:54.580917962 +0300
-+@@ -594,7 +594,9 @@
-+ 	init_logging("ntp_intres", 0, FALSE);
-+ 	setup_logfile(NULL);
-+ 
-++#if defined(HAVE_DROPROOT)
-+ 	(void) set_user_group_ids();
-++#endif
-+ 
-+ 	/*
-+ 	 * And now back to the portable code
+diff --git a/package/qt5/qt5multimedia/qt5multimedia.hash b/package/qt5/qt5multimedia/qt5multimedia.hash
+index dfc4d60701..fb82851162 100644
+--- a/package/qt5/qt5multimedia/qt5multimedia.hash
++++ b/package/qt5/qt5multimedia/qt5multimedia.hash
+@@ -14,3 +14,4 @@ sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.
+ sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8 LICENSE.LGPLv21
+ sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084 LGPL_EXCEPTION.txt
+ sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
++sha256 c1d75c15db4409bcbb182180d582f410a263dc9a631cd546b256e95f1da42165 examples/multimedia/spectrum/3rdparty/fftreal/license.txt
+diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
+index c97aebfd95..d044b7b96c 100644
+--- a/package/qt5/qt5multimedia/qt5multimedia.mk
++++ b/package/qt5/qt5multimedia/qt5multimedia.mk
+@@ -71,6 +71,8 @@ endef
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
++QT5MULTIMEDIA_LICENSE := $(QT5MULTIMEDIA_LICENSE), LGPL-2.1+ (examples/multimedia/spectrum/3rdparty/fftreal)
++QT5MULTIMEDIA_LICENSE_FILES += examples/multimedia/spectrum/3rdparty/fftreal/license.txt
+ define QT5MULTIMEDIA_INSTALL_TARGET_EXAMPLES
+ 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/multimedia* $(TARGET_DIR)/usr/lib/qt/examples/
+ endef
 -- 
-2.19.1
+2.19.0
