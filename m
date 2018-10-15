@@ -1,107 +1,49 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 15 Oct 2018 20:18:26 +0200
-Subject: [Buildroot] [PATCH v1] qt5wayland: remove legacy
- compile-without-QtQuick patch
-Message-ID: <20181015181826.26194-1-ps.report@gmx.net>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Mon, 15 Oct 2018 21:19:57 +0300
+Subject: [Buildroot] [PATCH 1/1] python-babel: bump to version 2.6.0
+Message-ID: <20181015181959.12446-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch was taken from upstream [1], removing it fixes [2]:
+Also add license hash.
 
-  Applying 0001-fix-compilation-without-QtQuick.patch using patch:
-  patching file src/compositor/compositor_api/compositor_api.pri
-  Reversed (or previously applied) patch detected!  Skipping patch.
-  3 out of 3 hunks ignored -- saving rejects to file src/compositor/compositor_api/compositor_api.pri.rej
-  patching file src/compositor/hardware_integration/qwlhardwarelayerintegration_p.h
-  Reversed (or previously applied) patch detected!  Skipping patch.
-  1 out of 1 hunk ignored -- saving rejects to file src/compositor/hardware_integration/qwlhardwarelayerintegration_p.h.rej
-
-[1] http://code.qt.io/cgit/qt/qtwayland.git/commit/?id=2c48ee65e8c3b894caec214641723d0777fc60b8
-[2] http://autobuild.buildroot.net/results/0d31817bb4d416d01f4d1bec3e22ce0e5b2ca1c3
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- ...0001-fix-compilation-without-QtQuick.patch | 69 -------------------
- 1 file changed, 69 deletions(-)
- delete mode 100644 package/qt5/qt5wayland/0001-fix-compilation-without-QtQuick.patch
+ package/python-babel/python-babel.hash | 8 +++++---
+ package/python-babel/python-babel.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/qt5/qt5wayland/0001-fix-compilation-without-QtQuick.patch b/package/qt5/qt5wayland/0001-fix-compilation-without-QtQuick.patch
-deleted file mode 100644
-index fe5d323db0..0000000000
---- a/package/qt5/qt5wayland/0001-fix-compilation-without-QtQuick.patch
-+++ /dev/null
-@@ -1,69 +0,0 @@
--From 2c48ee65e8c3b894caec214641723d0777fc60b8 Mon Sep 17 00:00:00 2001
--From: Alexander Schlarb <alexander@ninetailed.ninja>
--Date: Sun, 29 Jul 2018 21:27:28 +0200
--Subject: Fix compilation of QtWayland without QtQuick
--
--Change-Id: I0baf542f89274f48bf7d02121a07d64f0f3a001b
--Reviewed-by: Johan Helsing <johan.helsing@qt.io>
--Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
-----
-- src/compositor/compositor_api/compositor_api.pri               | 10 +++++-----
-- .../hardware_integration/qwlhardwarelayerintegration_p.h       |  1 -
-- 2 files changed, 5 insertions(+), 6 deletions(-)
--
--diff --git a/src/compositor/compositor_api/compositor_api.pri b/src/compositor/compositor_api/compositor_api.pri
--index e5df0f1f..4a0c0aa6 100644
----- a/src/compositor/compositor_api/compositor_api.pri
--+++ b/src/compositor/compositor_api/compositor_api.pri
--@@ -27,7 +27,6 @@ HEADERS += \
--     compositor_api/qwaylandresource.h \
--     compositor_api/qwaylandsurfacegrabber.h \
--     compositor_api/qwaylandoutputmode_p.h \
---    compositor_api/qwaylandquickhardwarelayer_p.h \
-- 
-- SOURCES += \
--     compositor_api/qwaylandcompositor.cpp \
--@@ -44,8 +43,7 @@ SOURCES += \
--     compositor_api/qwaylanddestroylistener.cpp \
--     compositor_api/qwaylandview.cpp \
--     compositor_api/qwaylandresource.cpp \
---    compositor_api/qwaylandsurfacegrabber.cpp \
---    compositor_api/qwaylandquickhardwarelayer.cpp
--+    compositor_api/qwaylandsurfacegrabber.cpp
-- 
-- qtConfig(im) {
--     HEADERS += \
--@@ -71,14 +69,16 @@ qtHaveModule(quick):qtConfig(opengl) {
--         compositor_api/qwaylandquickcompositor.cpp \
--         compositor_api/qwaylandquicksurface.cpp \
--         compositor_api/qwaylandquickoutput.cpp \
---        compositor_api/qwaylandquickitem.cpp
--+        compositor_api/qwaylandquickitem.cpp \
--+        compositor_api/qwaylandquickhardwarelayer.cpp
-- 
--     HEADERS += \
--         compositor_api/qwaylandquickcompositor.h \
--         compositor_api/qwaylandquicksurface.h \
--         compositor_api/qwaylandquickoutput.h \
--         compositor_api/qwaylandquickitem.h \
---        compositor_api/qwaylandquickitem_p.h
--+        compositor_api/qwaylandquickitem_p.h \
--+        compositor_api/qwaylandquickhardwarelayer_p.h
-- 
--     QT += qml qml-private quick quick-private
-- }
--diff --git a/src/compositor/hardware_integration/qwlhardwarelayerintegration_p.h b/src/compositor/hardware_integration/qwlhardwarelayerintegration_p.h
--index 02de8e8b..1e5fb1a1 100644
----- a/src/compositor/hardware_integration/qwlhardwarelayerintegration_p.h
--+++ b/src/compositor/hardware_integration/qwlhardwarelayerintegration_p.h
--@@ -54,7 +54,6 @@
-- #include <QtWaylandCompositor/qtwaylandcompositorglobal.h>
-- 
-- #include <QObject>
---#include <QQmlParserStatus>
-- 
-- QT_BEGIN_NAMESPACE
-- 
---- 
--cgit v1.1-6-g87c4
--
+diff --git a/package/python-babel/python-babel.hash b/package/python-babel/python-babel.hash
+index 4d7536799f..a52da012c7 100644
+--- a/package/python-babel/python-babel.hash
++++ b/package/python-babel/python-babel.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/Babel/json, sha256 locally computed
+-md5	afa20bc55b0e991833030129ad498f35  Babel-2.3.4.tar.gz
+-sha256	c535c4403802f6eb38173cd4863e419e2274921a01a8aad8a5b497c131c62875  Babel-2.3.4.tar.gz
++# md5, sha256 from https://pypi.org/pypi/babel/json
++md5	c384ac03026e8fe6f9b90f55201f1bff  Babel-2.6.0.tar.gz
++sha256	8cba50f48c529ca3fa18cf81fa9403be176d374ac4d60738b839122dfaaa3d23  Babel-2.6.0.tar.gz
++# Locally computed sha256 checksums
++sha256	178b99c90df898d0bee84bd335f36b679c76fafa9d3c288b4eaea4ebd92d8602  LICENSE
+diff --git a/package/python-babel/python-babel.mk b/package/python-babel/python-babel.mk
+index d9bd0f048e..a507cceaeb 100644
+--- a/package/python-babel/python-babel.mk
++++ b/package/python-babel/python-babel.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_BABEL_VERSION = 2.3.4
++PYTHON_BABEL_VERSION = 2.6.0
+ PYTHON_BABEL_SOURCE = Babel-$(PYTHON_BABEL_VERSION).tar.gz
+-PYTHON_BABEL_SITE = https://pypi.python.org/packages/6e/96/ba2a2462ed25ca0e651fb7b66e7080f5315f91425a07ea5b34d7c870c114
++PYTHON_BABEL_SITE = https://files.pythonhosted.org/packages/be/cc/9c981b249a455fa0c76338966325fc70b7265521bad641bf2932f77712f4
+ PYTHON_BABEL_SETUP_TYPE = setuptools
+ PYTHON_BABEL_LICENSE = BSD-3-Clause
+ PYTHON_BABEL_LICENSE_FILES = LICENSE
 -- 
-2.19.0
+2.17.1
