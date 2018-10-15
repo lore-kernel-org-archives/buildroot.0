@@ -1,9 +1,9 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 15 Oct 2018 11:46:43 -0500
-Subject: [Buildroot] [PATCH 2/3] package/dsp-tools: remove package
+Date: Mon, 15 Oct 2018 11:46:44 -0500
+Subject: [Buildroot] [PATCH 3/3] package/tidsp-binaries: remove package
 In-Reply-To: <1539622004-43558-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1539622004-43558-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1539622004-43558-2-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1539622004-43558-3-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,8 +12,6 @@ To: buildroot@busybox.net
 
 The suit of TI OMAP3 dsp tools/libraries are being removed as the
 upstream projects are no longer active.
-
-The dsp-tools package used the tidsp-binaries package.
 
 Suggest using Buildroot 2018.02.6 LTS if the feature is still
 required.
@@ -26,91 +24,85 @@ related packages to fix upstream homepage URLS. It seems the upstream
 stablized for this DSP feature set primarily for OMAP3 and then the
 technology has not been moving forward with newer processors.
 ---
- Config.in.legacy                 |  6 ++++++
- package/Config.in                |  1 -
- package/dsp-tools/Config.in      |  8 --------
- package/dsp-tools/dsp-tools.hash |  2 --
- package/dsp-tools/dsp-tools.mk   | 21 ---------------------
- 5 files changed, 6 insertions(+), 32 deletions(-)
- delete mode 100644 package/dsp-tools/Config.in
- delete mode 100644 package/dsp-tools/dsp-tools.hash
- delete mode 100644 package/dsp-tools/dsp-tools.mk
+ Config.in.legacy                           |  6 ++++++
+ package/Config.in                          |  1 -
+ package/tidsp-binaries/Config.in           |  7 -------
+ package/tidsp-binaries/tidsp-binaries.hash |  2 --
+ package/tidsp-binaries/tidsp-binaries.mk   | 16 ----------------
+ 5 files changed, 6 insertions(+), 26 deletions(-)
+ delete mode 100644 package/tidsp-binaries/Config.in
+ delete mode 100644 package/tidsp-binaries/tidsp-binaries.hash
+ delete mode 100644 package/tidsp-binaries/tidsp-binaries.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index acf578b..2089e82 100644
+index 2089e82..bd236b2 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -145,6 +145,12 @@ endif
  ###############################################################################
  comment "Legacy options removed in 2018.11"
  
-+config BR2_PACKAGE_DSP_TOOLS
-+	bool "dsp-tools package removed"
++config BR2_PACKAGE_TIDSP_BINARIES
++	bool "tidsp-binaries package removed"
 +	select BR2_LEGACY
 +	help
-+	  The dsp-tools package was removed.
++	  The tidsp-binaries package was removed.
 +
- config BR2_PACKAGE_GST_DSP
- 	bool "gst-dsp package removed"
+ config BR2_PACKAGE_DSP_TOOLS
+ 	bool "dsp-tools package removed"
  	select BR2_LEGACY
 diff --git a/package/Config.in b/package/Config.in
-index 8d995f8..2b645cd 100644
+index 2b645cd..02bd2ab 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2097,7 +2097,6 @@ menu "System tools"
- 	source "package/docker-containerd/Config.in"
- 	source "package/docker-engine/Config.in"
- 	source "package/docker-proxy/Config.in"
--	source "package/dsp-tools/Config.in"
- 	source "package/efibootmgr/Config.in"
- 	source "package/efivar/Config.in"
- 	source "package/emlog/Config.in"
-diff --git a/package/dsp-tools/Config.in b/package/dsp-tools/Config.in
+@@ -47,7 +47,6 @@ menu "Audio and video applications"
+ 	source "package/pulseaudio/Config.in"
+ 	source "package/sox/Config.in"
+ 	source "package/squeezelite/Config.in"
+-	source "package/tidsp-binaries/Config.in"
+ 	source "package/tovid/Config.in"
+ 	source "package/tstools/Config.in"
+ 	source "package/twolame/Config.in"
+diff --git a/package/tidsp-binaries/Config.in b/package/tidsp-binaries/Config.in
 deleted file mode 100644
-index 0267454..0000000
---- a/package/dsp-tools/Config.in
+index 48f85a5..0000000
+--- a/package/tidsp-binaries/Config.in
 +++ /dev/null
-@@ -1,8 +0,0 @@
--config BR2_PACKAGE_DSP_TOOLS
--	bool "dsp-tools"
+@@ -1,7 +0,0 @@
+-config BR2_PACKAGE_TIDSP_BINARIES
+-	bool "tidsp-binaries"
 -	depends on BR2_cortex_a8
--	select BR2_PACKAGE_TIDSP_BINARIES
 -	help
--	  Utilities for TI OMAP3 DSP.
+-	  TI OMAP3 DSP algorithms.
 -
--	  http://github.com/felipec/dsp-tools
-diff --git a/package/dsp-tools/dsp-tools.hash b/package/dsp-tools/dsp-tools.hash
+-	  https://gforge.ti.com/gf/project/openmax/
+diff --git a/package/tidsp-binaries/tidsp-binaries.hash b/package/tidsp-binaries/tidsp-binaries.hash
 deleted file mode 100644
-index cfcf06c..0000000
---- a/package/dsp-tools/dsp-tools.hash
+index 6649c76..0000000
+--- a/package/tidsp-binaries/tidsp-binaries.hash
 +++ /dev/null
 @@ -1,2 +0,0 @@
--# Locally computed:
--sha256 734a1d5f21fb388bdbe64f7b599fef52357c3c72ff860f38456a352e7c1c3e78  dsp-tools-v2.0.tar.gz
-diff --git a/package/dsp-tools/dsp-tools.mk b/package/dsp-tools/dsp-tools.mk
+-# locally computed
+-sha256  c56e5edd53c921768a033906426329279ca8ae6537c5d735c42b948e9778b05c  tidsp-binaries-23.i3.8.tar.gz
+diff --git a/package/tidsp-binaries/tidsp-binaries.mk b/package/tidsp-binaries/tidsp-binaries.mk
 deleted file mode 100644
-index ec63bcd..0000000
---- a/package/dsp-tools/dsp-tools.mk
+index 9736bc7..0000000
+--- a/package/tidsp-binaries/tidsp-binaries.mk
 +++ /dev/null
-@@ -1,21 +0,0 @@
+@@ -1,16 +0,0 @@
 -################################################################################
 -#
--# dsp-tools
+-# tidsp-binaries
 -#
 -################################################################################
 -
--DSP_TOOLS_VERSION = v2.0
--DSP_TOOLS_SITE = $(call github,felipec,dsp-tools,$(DSP_TOOLS_VERSION))
--DSP_TOOLS_DEPENDENCIES = tidsp-binaries
--DSP_TOOLS_LICENSE = LGPL-2.1
--DSP_TOOLS_LICENSE_FILES = LICENSE
+-TIDSP_BINARIES_VERSION = 23.i3.8
+-TIDSP_BINARIES_SITE = http://gst-dsp.googlecode.com/files
+-TIDSP_BINARIES_LICENSE = TI Proprietary License
+-TIDSP_BINARIES_LICENSE_FILES = LICENSE
 -
--define DSP_TOOLS_BUILD_CMDS
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e
--endef
--
--define DSP_TOOLS_INSTALL_TARGET_CMDS
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e DESTDIR=$(TARGET_DIR) install
+-define TIDSP_BINARIES_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) -e DESTDIR=$(TARGET_DIR) install
 -endef
 -
 -$(eval $(generic-package))
