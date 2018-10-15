@@ -1,29 +1,27 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 15 Oct 2018 06:53:05 +0000
-Subject: [Buildroot] [Bug 11376] mdmon binary missing
-In-Reply-To: <bug-11376-163@https.bugs.busybox.net/>
-References: <bug-11376-163@https.bugs.busybox.net/>
-Message-ID: <bug-11376-163-UBMCgZEUlw@https.bugs.busybox.net/>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Mon, 15 Oct 2018 00:31:44 -0700
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-10-14
+In-Reply-To: <20181015060028.2292320728@mail.bootlin.com>
+References: <20181015060028.2292320728@mail.bootlin.com>
+Message-ID: <CAMo8Bf+c9cYqa_rduvsVHCrVrXC_8-6mt-B0-TLHJRmboHU3JQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11376
+On Sun, Oct 14, 2018 at 11:00 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>       xtensa |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/586adbd49ca1deb8116f2da04ab04069f3048536 | ORPH
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+Has the following in the build-end.log:
+> collect2: error: ld returned 1 exit status
+> Makefile:108: recipe for target 'imagescaling' failed
+> make[4]: *** [imagescaling] Error 1
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |FIXED
-
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Fixed by
-https://git.buildroot.org/buildroot/commit/?id=45498bbc62d8dfbaa337854a93c379fe3aed1cd8.
-Thanks!
+so I took a look at it, but surprisingly I couldn't reproduce it.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thanks.
+-- Max
