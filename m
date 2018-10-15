@@ -1,95 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Oct 2018 14:36:45 +0200
-Subject: [Buildroot] [git commit] python-py: new package
-Message-ID: <20181015123623.CC8C1838DB@busybox.osuosl.org>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 15 Oct 2018 10:14:34 -0500
+Subject: [Buildroot] [PATCH v2] package/glibc: provide an upstream site link
+Message-ID: <1539616474-34656-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0769f7fc4b3e47e05c9a7951aefa81a2dbaeab0d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The Config.in for glibc is a blind option and not part of the menu for
+a user to select (the pkg is used for the Buildroot toolchain build),
+however this patch adds the link for completeness of the pkg-stats
+report and for future scripting which will generate xml updates of the
+package's Common Product Enumeration (used for vunerability checking).
 
-library with cross-python path, ini-parsing, io, code, log
-facilities.
-
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
- DEVELOPERS                       |  1 +
- package/Config.in                |  1 +
- package/python-py/Config.in      |  7 +++++++
- package/python-py/python-py.hash |  5 +++++
- package/python-py/python-py.mk   | 14 ++++++++++++++
- 5 files changed, 28 insertions(+)
+Changes
+v1 -> v2
+[Thomas
+ - Add a better description to the commit as a user will never use
+   kconfig to view this help message.
+---
+ package/glibc/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 990621fb11..341bf7de3b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -217,6 +217,7 @@ F:	package/python-paramiko/
- F:	package/python-passlib/
- F:	package/python-ply/
- F:	package/python-priority/
-+F:	package/python-py/
- F:	package/python-pyasn1/
- F:	package/python-pyasn1-modules/
- F:	package/python-pycryptodomex/
-diff --git a/package/Config.in b/package/Config.in
-index 8d995f82e6..fd86e37a52 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -943,6 +943,7 @@ menu "External python modules"
- 	source "package/python-psycopg2/Config.in"
- 	source "package/python-ptyprocess/Config.in"
- 	source "package/python-pudb/Config.in"
-+	source "package/python-py/Config.in"
- 	source "package/python-pyasn/Config.in"
- 	source "package/python-pyasn-modules/Config.in"
- 	source "package/python-pyasn1/Config.in"
-diff --git a/package/python-py/Config.in b/package/python-py/Config.in
-new file mode 100644
-index 0000000000..354372f5b4
---- /dev/null
-+++ b/package/python-py/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_PY
-+	bool "python-py"
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index 57a2e83..63dd0f4 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -5,5 +5,6 @@ config BR2_PACKAGE_GLIBC
+ 	default y
+ 	select BR2_PACKAGE_LINUX_HEADERS
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-
 +	help
-+	  library with cross-python path, ini-parsing, io, code, log
-+	  facilities.
-+
-+	  http://py.readthedocs.io/
-diff --git a/package/python-py/python-py.hash b/package/python-py/python-py.hash
-new file mode 100644
-index 0000000000..67926527cd
---- /dev/null
-+++ b/package/python-py/python-py.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/py/json
-+md5	e53ac12db4286737837ef3ccb4158301  py-1.7.0.tar.gz
-+sha256	bf92637198836372b520efcba9e020c330123be8ce527e535d185ed4b6f45694  py-1.7.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	2af680c39ef493fb82830356d1d3df1acb5a06033cba2dec7a19e21caa77a866  LICENSE
-diff --git a/package/python-py/python-py.mk b/package/python-py/python-py.mk
-new file mode 100644
-index 0000000000..e9c4d0a3b5
---- /dev/null
-+++ b/package/python-py/python-py.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-py
-+#
-+################################################################################
-+
-+PYTHON_PY_VERSION = 1.7.0
-+PYTHON_PY_SOURCE = py-$(PYTHON_PY_VERSION).tar.gz
-+PYTHON_PY_SITE = https://files.pythonhosted.org/packages/c7/fa/eb6dd513d9eb13436e110aaeef9a1703437a8efa466ce6bb2ff1d9217ac7
-+PYTHON_PY_SETUP_TYPE = setuptools
-+PYTHON_PY_LICENSE = MIT
-+PYTHON_PY_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
++	  https://www.gnu.org/software/libc/
+ endif
+-- 
+1.9.1
