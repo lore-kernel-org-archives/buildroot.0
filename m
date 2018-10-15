@@ -1,57 +1,107 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 15 Oct 2018 19:25:39 +0200
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{4, 9, 14,
- 18}.x series
-Message-ID: <20181015172540.29664-1-bernd.kuhls@t-online.de>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 15 Oct 2018 20:18:26 +0200
+Subject: [Buildroot] [PATCH v1] qt5wayland: remove legacy
+ compile-without-QtQuick patch
+Message-ID: <20181015181826.26194-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- linux/linux.hash                     | 8 ++++----
- package/linux-headers/Config.in.host | 8 ++++----
- 2 files changed, 8 insertions(+), 8 deletions(-)
+Patch was taken from upstream [1], removing it fixes [2]:
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 0a913de1f8..5a00e786af 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,9 +1,9 @@
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256 10604f7f8ccab5e7ce71f2e87d1410be679cd11c29c6c608ce35df1db40991de  linux-4.18.10.tar.xz
-+sha256 36c6d1360db9eab40270db6d292c259dd34d3dc06049d64afe3e4cfafb8562d3  linux-4.18.14.tar.xz
- sha256 41026d713ba4f7a5e9d514b876ce4ed28a1d993c0c58b42b2a2597d6a0e83021  linux-4.16.18.tar.xz
--sha256 df925906250bbc40fcf0137d7ad0fb8edc528d926832634f1233b7540564557f  linux-4.14.72.tar.xz
--sha256 6f5510d3fcfec1bf1e2d9c8e2fdcd7628c1886c6bdb29092adc5ccdf75e39318  linux-4.9.129.tar.xz
--sha256 571c8f6e8cabcc4e8c813869b87527f6e8e427b1c8fef96330c99743700f22a9  linux-4.4.158.tar.xz
-+sha256 ee3f19a4ff8a42793c193e361e1d34fcc821a5ca9b58db41befb2b4df0e482be  linux-4.14.76.tar.xz
-+sha256 3730fc025ba330a6f4908a6a1e4cb86d821000c84167721680ccf1b37b26563   linux-4.9.133.tar.xz
-+sha256 be0383d57c52a7ac6b1ca4d989a16a581f52ec9704ccf4ddf066b1b5b1313f87  linux-4.4.161.tar.xz
- sha256 6ad9389e55e0ea57768eae173747058a4487fa3630e10a7999cfec9f945e559c  linux-4.1.52.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v3.x/sha256sums.asc
- sha256 ad96d797571496c969aa71bf5d08e9d2a8c84458090d29a120f1b2981185a99e  linux-3.2.102.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 7c9c1d0fb0..cdf639ab3a 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -290,11 +290,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.158"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.129"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.72"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.4.161"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.133"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.76"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
--	default "4.18.10"	if BR2_KERNEL_HEADERS_4_18
-+	default "4.18.14"	if BR2_KERNEL_HEADERS_4_18
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+  Applying 0001-fix-compilation-without-QtQuick.patch using patch:
+  patching file src/compositor/compositor_api/compositor_api.pri
+  Reversed (or previously applied) patch detected!  Skipping patch.
+  3 out of 3 hunks ignored -- saving rejects to file src/compositor/compositor_api/compositor_api.pri.rej
+  patching file src/compositor/hardware_integration/qwlhardwarelayerintegration_p.h
+  Reversed (or previously applied) patch detected!  Skipping patch.
+  1 out of 1 hunk ignored -- saving rejects to file src/compositor/hardware_integration/qwlhardwarelayerintegration_p.h.rej
+
+[1] http://code.qt.io/cgit/qt/qtwayland.git/commit/?id=2c48ee65e8c3b894caec214641723d0777fc60b8
+[2] http://autobuild.buildroot.net/results/0d31817bb4d416d01f4d1bec3e22ce0e5b2ca1c3
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ ...0001-fix-compilation-without-QtQuick.patch | 69 -------------------
+ 1 file changed, 69 deletions(-)
+ delete mode 100644 package/qt5/qt5wayland/0001-fix-compilation-without-QtQuick.patch
+
+diff --git a/package/qt5/qt5wayland/0001-fix-compilation-without-QtQuick.patch b/package/qt5/qt5wayland/0001-fix-compilation-without-QtQuick.patch
+deleted file mode 100644
+index fe5d323db0..0000000000
+--- a/package/qt5/qt5wayland/0001-fix-compilation-without-QtQuick.patch
++++ /dev/null
+@@ -1,69 +0,0 @@
+-From 2c48ee65e8c3b894caec214641723d0777fc60b8 Mon Sep 17 00:00:00 2001
+-From: Alexander Schlarb <alexander@ninetailed.ninja>
+-Date: Sun, 29 Jul 2018 21:27:28 +0200
+-Subject: Fix compilation of QtWayland without QtQuick
+-
+-Change-Id: I0baf542f89274f48bf7d02121a07d64f0f3a001b
+-Reviewed-by: Johan Helsing <johan.helsing@qt.io>
+-Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+----
+- src/compositor/compositor_api/compositor_api.pri               | 10 +++++-----
+- .../hardware_integration/qwlhardwarelayerintegration_p.h       |  1 -
+- 2 files changed, 5 insertions(+), 6 deletions(-)
+-
+-diff --git a/src/compositor/compositor_api/compositor_api.pri b/src/compositor/compositor_api/compositor_api.pri
+-index e5df0f1f..4a0c0aa6 100644
+---- a/src/compositor/compositor_api/compositor_api.pri
+-+++ b/src/compositor/compositor_api/compositor_api.pri
+-@@ -27,7 +27,6 @@ HEADERS += \
+-     compositor_api/qwaylandresource.h \
+-     compositor_api/qwaylandsurfacegrabber.h \
+-     compositor_api/qwaylandoutputmode_p.h \
+--    compositor_api/qwaylandquickhardwarelayer_p.h \
+- 
+- SOURCES += \
+-     compositor_api/qwaylandcompositor.cpp \
+-@@ -44,8 +43,7 @@ SOURCES += \
+-     compositor_api/qwaylanddestroylistener.cpp \
+-     compositor_api/qwaylandview.cpp \
+-     compositor_api/qwaylandresource.cpp \
+--    compositor_api/qwaylandsurfacegrabber.cpp \
+--    compositor_api/qwaylandquickhardwarelayer.cpp
+-+    compositor_api/qwaylandsurfacegrabber.cpp
+- 
+- qtConfig(im) {
+-     HEADERS += \
+-@@ -71,14 +69,16 @@ qtHaveModule(quick):qtConfig(opengl) {
+-         compositor_api/qwaylandquickcompositor.cpp \
+-         compositor_api/qwaylandquicksurface.cpp \
+-         compositor_api/qwaylandquickoutput.cpp \
+--        compositor_api/qwaylandquickitem.cpp
+-+        compositor_api/qwaylandquickitem.cpp \
+-+        compositor_api/qwaylandquickhardwarelayer.cpp
+- 
+-     HEADERS += \
+-         compositor_api/qwaylandquickcompositor.h \
+-         compositor_api/qwaylandquicksurface.h \
+-         compositor_api/qwaylandquickoutput.h \
+-         compositor_api/qwaylandquickitem.h \
+--        compositor_api/qwaylandquickitem_p.h
+-+        compositor_api/qwaylandquickitem_p.h \
+-+        compositor_api/qwaylandquickhardwarelayer_p.h
+- 
+-     QT += qml qml-private quick quick-private
+- }
+-diff --git a/src/compositor/hardware_integration/qwlhardwarelayerintegration_p.h b/src/compositor/hardware_integration/qwlhardwarelayerintegration_p.h
+-index 02de8e8b..1e5fb1a1 100644
+---- a/src/compositor/hardware_integration/qwlhardwarelayerintegration_p.h
+-+++ b/src/compositor/hardware_integration/qwlhardwarelayerintegration_p.h
+-@@ -54,7 +54,6 @@
+- #include <QtWaylandCompositor/qtwaylandcompositorglobal.h>
+- 
+- #include <QObject>
+--#include <QQmlParserStatus>
+- 
+- QT_BEGIN_NAMESPACE
+- 
+--- 
+-cgit v1.1-6-g87c4
+-
 -- 
-2.19.1
+2.19.0
