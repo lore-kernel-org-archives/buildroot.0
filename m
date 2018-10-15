@@ -1,48 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Oct 2018 07:21:13 +0200
-Subject: [Buildroot] [git commit] mdadm: also install mdmon
-Message-ID: <20181015052049.BBE737F903@busybox.osuosl.org>
+Date: Mon, 15 Oct 2018 07:18:37 +0200
+Subject: [Buildroot] [git commit] python-logbook: bump to version 1.4.1
+Message-ID: <20181015052049.950F6837D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45498bbc62d8dfbaa337854a93c379fe3aed1cd8
+commit: https://git.buildroot.net/buildroot/commit/?id=fbaf0a6db208f77e0f69c36b7338e8c37ad269d9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit adjusts the mdadm package to also install the mdmon
-utility, which is used to "monitor MD external metadata arrays". It
-adds ~250 KB to the installed size:
+logbook also needs zlib (for gzip)
 
--rwxr-xr-x 1 thomas thomas 446064 Oct 14 21:55 mdadm
--rwxr-xr-x 1 thomas thomas 244672 Oct 14 21:55 mdmon
-
-Fixes bug #11376.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mdadm/mdadm.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/python-logbook/Config.in           | 2 ++
+ package/python-logbook/python-logbook.hash | 4 ++--
+ package/python-logbook/python-logbook.mk   | 4 ++--
+ 3 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/mdadm/mdadm.mk b/package/mdadm/mdadm.mk
-index bdf77fcd56..3ee4ddd059 100644
---- a/package/mdadm/mdadm.mk
-+++ b/package/mdadm/mdadm.mk
-@@ -16,13 +16,13 @@ define MDADM_BUILD_CMDS
- 		CFLAGS="$(TARGET_CFLAGS) -DNO_COROSYNC -DNO_DLM" \
- 		CPPFLAGS="$(TARGET_CPPFLAGS) -DBINDIR=\\\"/sbin\\\"" \
- 		CHECK_RUN_DIR=0 \
--		mdadm
-+		mdadm mdmon
- endef
+diff --git a/package/python-logbook/Config.in b/package/python-logbook/Config.in
+index 9ae914432d..d4fbf0fe67 100644
+--- a/package/python-logbook/Config.in
++++ b/package/python-logbook/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_PYTHON_LOGBOOK
+ 	bool "python-logbook"
++	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
+ 	help
+ 	  A logging replacement for Python.
  
- define MDADM_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
- 		DESTDIR=$(TARGET_DIR) \
--		install-mdadm
-+		install-mdadm install-mdmon
- endef
+diff --git a/package/python-logbook/python-logbook.hash b/package/python-logbook/python-logbook.hash
+index b15f8b9959..a32ff3bde2 100644
+--- a/package/python-logbook/python-logbook.hash
++++ b/package/python-logbook/python-logbook.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/logbook/json
+-md5	926d40a90cfe8eceade449fca2314b16  Logbook-1.4.0.tar.gz
+-sha256	3c0a3ebd48e89fcdd725fe393eb9226c789dca5a4e7842d65e2f256645fd1cd9  Logbook-1.4.0.tar.gz
++md5	c9fab07b6a91aa7358155baa16802707  Logbook-1.4.1.tar.gz
++sha256	32375ce706d04a46886f9818bb953e53e0eda636552d7c0a2e482dd670fa56db  Logbook-1.4.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256	2ca266337cc6947578654ab0dd6438de4d01fa78b2e6eb554b09757df1178f98  LICENSE
+diff --git a/package/python-logbook/python-logbook.mk b/package/python-logbook/python-logbook.mk
+index 25a520dc83..ab1b2703e2 100644
+--- a/package/python-logbook/python-logbook.mk
++++ b/package/python-logbook/python-logbook.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- $(eval $(generic-package))
+-PYTHON_LOGBOOK_VERSION = 1.4.0
++PYTHON_LOGBOOK_VERSION = 1.4.1
+ PYTHON_LOGBOOK_SOURCE = Logbook-$(PYTHON_LOGBOOK_VERSION).tar.gz
+-PYTHON_LOGBOOK_SITE = https://files.pythonhosted.org/packages/36/4b/b610bee18d5cfc4cec7dde056639994e9b34991e4c57816bfff0f3d0ac33
++PYTHON_LOGBOOK_SITE = https://files.pythonhosted.org/packages/74/fc/3e7557ed1ef1bd4e3ee189fc670416abfc7192b550e8d3c1d858a63f41ab
+ PYTHON_LOGBOOK_SETUP_TYPE = setuptools
+ PYTHON_LOGBOOK_LICENSE = BSD-3-Clause
+ PYTHON_LOGBOOK_LICENSE_FILES = LICENSE
