@@ -1,26 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Oct 2018 13:18:33 +0200
-Subject: [Buildroot] [PATCH v1 2/5] rpi-firmware: bump version to
- fbad6408c4
-In-Reply-To: <20181012210941.21515-3-ps.report@gmx.net> (Peter Seiderer's
- message of "Fri, 12 Oct 2018 23:09:38 +0200")
-References: <20181012210941.21515-1-ps.report@gmx.net>
- <20181012210941.21515-3-ps.report@gmx.net>
-Message-ID: <87efcro3ue.fsf@dell.be.48ers.dk>
+Date: Mon, 15 Oct 2018 13:24:25 +0200
+Subject: [Buildroot] [PATCH] package/nodejs: use per-build cache
+ directories
+In-Reply-To: <20181013150558.31065-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Sat, 13 Oct 2018 17:05:58 +0200")
+References: <20181013150558.31065-1-yann.morin.1998@free.fr>
+Message-ID: <87a7nfo3km.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ > When two Buildroot builds run in parallel, and they both happen to call
+ > npm at roughly the same time, the two npm instances may conflict when
+ > accessing the npm cache, which is by default ~/.npm
 
-It would be great if you could write some kind of summary of the changes
-when bumping from 1 git revision to another if possible to make it
-easier to judge if any of this should be applied to the 2018.02.x series
-as well, thanks.
+ > Although npm is supposed to lock access to the cache, it seems it does
+ > sometimes fail to do so properly, bailling out in error, when it would
+ > never ever crash at all when not running in parallel. We suspect that
+ > the sequence leading to such failures are something like:
+
+ >     npm-1                           npm-2
+ >       lock(retry=few, sleep=short)    .
+ >       does-stuff()                    .
+ >       .                               lock(retry=few, sleep=short)
+ >       .                               # can't lock local cache
+ >       .                               download-module()
+ >       .                                 # can't download
+ >       .                                 exit(1)
+ >       unlock()
+
+ > As per the docs [0], few = 10, short = 10. So if the first npm (npm-1)
+ > takes more than 100s (which can happen behind slow links and/or big
+ > modules that contain native code that is compiled), then the second npm
+ > (npm-2) will bail out (the download would fail if there is no network
+ > access, for example, and only local modules are used).
+
+ > Point npm to use a per-build cache directory, so they no longer compete
+ > across builds.
+
+ > That would still need some care when we do top-level parallel builds,
+ > though.
+
+ > Note also that the conflicts are not totally eliminated: two or more npm
+ > instances may still compete for some other resource that has not yet
+ > been identified.
+
+ > But, at least, the conflict window has been drastically shortened now,
+ > to the point where it now seldom occurs.
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Committed, thanks. This also fixes issues where ~ isn't writable,
+E.G. see commit b42fb29048128a432a (ncurses: disable terminfo database
+install for host-ncurses).
+
+I know next to nothing about nodejs. I take it that these cache
+directories do not bring any speedup when they are per-build? Would it
+be possible to completely disable the caching or point it to /dev/null
+or similar?
 
 -- 
 Bye, Peter Korsgaard
