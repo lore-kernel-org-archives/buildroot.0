@@ -1,49 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Oct 2018 07:18:27 +0200
-Subject: [Buildroot] [git commit] python-cython: bump to version 0.29
-Message-ID: <20181015052049.8CF6B8374C@busybox.osuosl.org>
+Date: Mon, 15 Oct 2018 07:19:37 +0200
+Subject: [Buildroot] [git commit] udftools: fix build with glibc 2.28
+Message-ID: <20181015052049.9FE3B8374C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=013d2e3961fda4c41a7ed803805302f045f0bce7
+commit: https://git.buildroot.net/buildroot/commit/?id=3c4c7a79ee9de47a860a64684eee1722c8784cc3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+glibc 2.28 no longer includes <sys/sysmacros.h> from <sys/types.h>,
+and therefore <sys/sysmacros.h> must be included explicitly when
+major()/minor() are used.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/33cb370ee80d0603974b6376f0364f914d150463
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-cython/python-cython.hash | 4 ++--
- package/python-cython/python-cython.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...to-prevent-build-breakage-with-glibc-2-25.patch | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
-index 666ef4b292..8326dfe132 100644
---- a/package/python-cython/python-cython.hash
-+++ b/package/python-cython/python-cython.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/cython/json
--md5	0cb620e1259818e4ecc1a056e8c3a8be  Cython-0.28.5.tar.gz
--sha256	b64575241f64f6ec005a4d4137339fb0ba5e156e826db2fdb5f458060d9979e0  Cython-0.28.5.tar.gz
-+md5	5cb227772fbb0318be3c73b532d249ac  Cython-0.29.tar.gz
-+sha256	94916d1ede67682638d3cc0feb10648ff14dc51fb7a7f147f4fedce78eaaea97  Cython-0.29.tar.gz
- # Locally computed sha256 checksums
- sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
- sha256 e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
-diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
-index 4bd300470f..624fe2fb75 100644
---- a/package/python-cython/python-cython.mk
-+++ b/package/python-cython/python-cython.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_CYTHON_VERSION = 0.28.5
-+PYTHON_CYTHON_VERSION = 0.29
- PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
--PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/21/89/ca320e5b45d381ae0df74c4b5694f1471c1b2453c5eb4bac3449f5970481
-+PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/f0/66/6309291b19b498b672817bd237caec787d1b18013ee659f17b1ec5844887
- PYTHON_CYTHON_SETUP_TYPE = setuptools
- PYTHON_CYTHON_LICENSE = Apache-2.0
- PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
+diff --git a/package/udftools/0003-Include-sys-sysmacros-h-to-prevent-build-breakage-with-glibc-2-25.patch b/package/udftools/0003-Include-sys-sysmacros-h-to-prevent-build-breakage-with-glibc-2-25.patch
+new file mode 100644
+index 0000000000..ac56715d62
+--- /dev/null
++++ b/package/udftools/0003-Include-sys-sysmacros-h-to-prevent-build-breakage-with-glibc-2-25.patch
+@@ -0,0 +1,38 @@
++From cca194f17fe2892c929acab2f1d5016ad38aa305 Mon Sep 17 00:00:00 2001
++From: Lars Wendler <polynomial-c@gentoo.org>
++Date: Tue, 2 Jan 2018 15:10:34 +0100
++Subject: [PATCH] Include <sys/sysmacros.h> to prevent build breakage with
++ >=glibc-2.25
++
++libtool: link: x86_64-pc-linux-gnu-gcc -march=native -mtune=native -O2
++-pipe -Wl,-O1 -Wl,--hash-style=gnu -Wl,--sort-common -Wl,--as-needed -o
++mkudffs main.o mkudffs.o defaults.o file.o options.o
++../libudffs/.libs/libudffs.a
++main.o: In function `is_whole_disk':
++main.c:(.text+0x2ce): undefined reference to `major'
++main.c:(.text+0x2dd): undefined reference to `minor'
++main.o: In function `main':
++main.c:(.text.startup+0x72f): undefined reference to `minor'
++main.c:(.text.startup+0x741): undefined reference to `major'
++collect2: error: ld returned 1 exit status
++make[1]: *** [Makefile:378: mkudffs] Error 1
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from
++https://github.com/pali/udftools/commit/cca194f17fe2892c929acab2f1d5016ad38aa305]
++---
++ mkudffs/main.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/mkudffs/main.c b/mkudffs/main.c
++index 066afac..3e306ac 100644
++--- a/mkudffs/main.c
+++++ b/mkudffs/main.c
++@@ -43,6 +43,7 @@
++ #include <sys/ioctl.h>
++ #include <linux/fs.h>
++ #include <linux/fd.h>
+++#include <sys/sysmacros.h>
++ 
++ #include "mkudffs.h"
++ #include "defaults.h"
