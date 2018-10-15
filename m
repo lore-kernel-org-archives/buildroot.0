@@ -1,110 +1,48 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 15 Oct 2018 11:46:44 -0500
-Subject: [Buildroot] [PATCH 3/3] package/tidsp-binaries: remove package
-In-Reply-To: <1539622004-43558-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1539622004-43558-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1539622004-43558-3-git-send-email-matthew.weber@rockwellcollins.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 15 Oct 2018 18:47:32 +0200
+Subject: [Buildroot] [PATCH 3/4] package/x11r7/xlib_libSM: bump version to
+ 1.2.3
+In-Reply-To: <20181015164734.16624-1-bernd.kuhls@t-online.de>
+References: <20181015164734.16624-1-bernd.kuhls@t-online.de>
+Message-ID: <20181015164734.16624-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The suit of TI OMAP3 dsp tools/libraries are being removed as the
-upstream projects are no longer active.
-
-Suggest using Buildroot 2018.02.6 LTS if the feature is still
-required.
-
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
+ package/x11r7/xlib_libSM/xlib_libSM.hash | 9 +++++++--
+ package/x11r7/xlib_libSM/xlib_libSM.mk   | 2 +-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-This patchset was started after an update was proposed to the TI DSP
-related packages to fix upstream homepage URLS. It seems the upstream
-stablized for this DSP feature set primarily for OMAP3 and then the
-technology has not been moving forward with newer processors.
----
- Config.in.legacy                           |  6 ++++++
- package/Config.in                          |  1 -
- package/tidsp-binaries/Config.in           |  7 -------
- package/tidsp-binaries/tidsp-binaries.hash |  2 --
- package/tidsp-binaries/tidsp-binaries.mk   | 16 ----------------
- 5 files changed, 6 insertions(+), 26 deletions(-)
- delete mode 100644 package/tidsp-binaries/Config.in
- delete mode 100644 package/tidsp-binaries/tidsp-binaries.hash
- delete mode 100644 package/tidsp-binaries/tidsp-binaries.mk
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 2089e82..bd236b2 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,12 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2018.11"
+diff --git a/package/x11r7/xlib_libSM/xlib_libSM.hash b/package/x11r7/xlib_libSM/xlib_libSM.hash
+index 79dc25c226..1653dc6d76 100644
+--- a/package/x11r7/xlib_libSM/xlib_libSM.hash
++++ b/package/x11r7/xlib_libSM/xlib_libSM.hash
+@@ -1,2 +1,7 @@
+-# From http://lists.freedesktop.org/archives/xorg/2013-September/056013.html
+-sha256	0baca8c9f5d934450a70896c4ad38d06475521255ca63b717a6510fdb6e287bd	libSM-1.2.2.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-October/002922.html
++md5  87c7fad1c1813517979184c8ccd76628  libSM-1.2.3.tar.bz2
++sha1 437d7b13fa2eba325df3a106f177df46ccec6546  libSM-1.2.3.tar.bz2
++sha256 2d264499dcb05f56438dee12a1b4b71d76736ce7ba7aa6efbf15ebb113769cbb  libSM-1.2.3.tar.bz2
++sha512 74c42e27029db78475e62025b4711dbac5e22d2f8e8a24be98a1c31b03c0fc4afe859928f851800ea0b76854f12147900dc4f27bbfd3d8ea45daaaf24b70a903  libSM-1.2.3.tar.bz2
++# Locally computed
++sha256 af7926a14d85ad367622688636e8c9c6f7807c8a6867536af1c530b5c262bfba  COPYING
+diff --git a/package/x11r7/xlib_libSM/xlib_libSM.mk b/package/x11r7/xlib_libSM/xlib_libSM.mk
+index 9049cea234..708224e2d1 100644
+--- a/package/x11r7/xlib_libSM/xlib_libSM.mk
++++ b/package/x11r7/xlib_libSM/xlib_libSM.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_TIDSP_BINARIES
-+	bool "tidsp-binaries package removed"
-+	select BR2_LEGACY
-+	help
-+	  The tidsp-binaries package was removed.
-+
- config BR2_PACKAGE_DSP_TOOLS
- 	bool "dsp-tools package removed"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 2b645cd..02bd2ab 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -47,7 +47,6 @@ menu "Audio and video applications"
- 	source "package/pulseaudio/Config.in"
- 	source "package/sox/Config.in"
- 	source "package/squeezelite/Config.in"
--	source "package/tidsp-binaries/Config.in"
- 	source "package/tovid/Config.in"
- 	source "package/tstools/Config.in"
- 	source "package/twolame/Config.in"
-diff --git a/package/tidsp-binaries/Config.in b/package/tidsp-binaries/Config.in
-deleted file mode 100644
-index 48f85a5..0000000
---- a/package/tidsp-binaries/Config.in
-+++ /dev/null
-@@ -1,7 +0,0 @@
--config BR2_PACKAGE_TIDSP_BINARIES
--	bool "tidsp-binaries"
--	depends on BR2_cortex_a8
--	help
--	  TI OMAP3 DSP algorithms.
--
--	  https://gforge.ti.com/gf/project/openmax/
-diff --git a/package/tidsp-binaries/tidsp-binaries.hash b/package/tidsp-binaries/tidsp-binaries.hash
-deleted file mode 100644
-index 6649c76..0000000
---- a/package/tidsp-binaries/tidsp-binaries.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# locally computed
--sha256  c56e5edd53c921768a033906426329279ca8ae6537c5d735c42b948e9778b05c  tidsp-binaries-23.i3.8.tar.gz
-diff --git a/package/tidsp-binaries/tidsp-binaries.mk b/package/tidsp-binaries/tidsp-binaries.mk
-deleted file mode 100644
-index 9736bc7..0000000
---- a/package/tidsp-binaries/tidsp-binaries.mk
-+++ /dev/null
-@@ -1,16 +0,0 @@
--################################################################################
--#
--# tidsp-binaries
--#
--################################################################################
--
--TIDSP_BINARIES_VERSION = 23.i3.8
--TIDSP_BINARIES_SITE = http://gst-dsp.googlecode.com/files
--TIDSP_BINARIES_LICENSE = TI Proprietary License
--TIDSP_BINARIES_LICENSE_FILES = LICENSE
--
--define TIDSP_BINARIES_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) -e DESTDIR=$(TARGET_DIR) install
--endef
--
--$(eval $(generic-package))
+-XLIB_LIBSM_VERSION = 1.2.2
++XLIB_LIBSM_VERSION = 1.2.3
+ XLIB_LIBSM_SOURCE = libSM-$(XLIB_LIBSM_VERSION).tar.bz2
+ XLIB_LIBSM_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBSM_LICENSE = MIT
 -- 
-1.9.1
+2.19.1
