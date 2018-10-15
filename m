@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 15 Oct 2018 18:47:31 +0200
-Subject: [Buildroot] [PATCH 2/4] package/x11r7/xlib_libX11: bump version to
- 1.6.7
+Date: Mon, 15 Oct 2018 18:47:33 +0200
+Subject: [Buildroot] [PATCH 4/4] package/x11r7/xdriver_xf86-input-libinput:
+ bump version to 0.28.1
 In-Reply-To: <20181015164734.16624-1-bernd.kuhls@t-online.de>
 References: <20181015164734.16624-1-bernd.kuhls@t-online.de>
-Message-ID: <20181015164734.16624-2-bernd.kuhls@t-online.de>
+Message-ID: <20181015164734.16624-4-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,39 +13,39 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xlib_libX11/xlib_libX11.hash | 10 +++++-----
- package/x11r7/xlib_libX11/xlib_libX11.mk   |  2 +-
+ .../xdriver_xf86-input-libinput.hash                   | 10 +++++-----
+ .../xdriver_xf86-input-libinput.mk                     |  2 +-
  2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
-index 4dc934177a..5dac4f1149 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.hash
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
+index cb41765f4f..c6f2577bd6 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
++++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
 @@ -1,7 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2018-August/002916.html
--md5 6b0f83e851b3b469dd660f3a95ac3e42  libX11-1.6.6.tar.bz2
--sha1 b29cf4362b58188cb27fed2294788004af7428a9  libX11-1.6.6.tar.bz2
--sha256 65fe181d40ec77f45417710c6a67431814ab252d21c2e85c75dd1ed568af414f  libX11-1.6.6.tar.bz2
--sha512 9866dc6b158b15a96efe140b6fa68a775889a37e5565a126216211fee63868e02629a9f9f41816d590ef150560f43b8864010a77a6318c9109e76aec1d21b4d7  libX11-1.6.6.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-October/002921.html
-+md5 034fdd6cc5393974d88aec6f5bc96162  libX11-1.6.7.tar.bz2
-+sha1 5076f7853713d7db958a05f6fd1c18f7e111a0ad  libX11-1.6.7.tar.bz2
-+sha256 910e9e30efba4ad3672ca277741c2728aebffa7bc526f04dcfa74df2e52a1348  libX11-1.6.7.tar.bz2
-+sha512 edd2273b9dadbbf90ad8d7b5715db29eb120a5a22ad2595f697e56532cc24b84e358580c00548fa6be8e9d26601a2b2cdab32272c59266709534317abbd05cd5  libX11-1.6.7.tar.bz2
+-# From https://lists.x.org/archives/xorg-announce/2018-July/002908.html
+-md5 2d7519ac0e39d4c88f3be32e81a637aa  xf86-input-libinput-0.28.0.tar.bz2
+-sha1 07f5559bcf0363d4ecaf0b2cecb88ee7d2b16fc6  xf86-input-libinput-0.28.0.tar.bz2
+-sha256 21994d065fc26e85d1c3fc87d8479b9c22699ed5a0119df98fbe0000e84630a1  xf86-input-libinput-0.28.0.tar.bz2
+-sha512 4276b6aea87ddc83fa1f5e8d8949e34ad117186a6b5b599549231cb90424cd0fa69f3a4701ce529739c676665bb5c936eb447817c9420511d23bc048f6be92a4  xf86-input-libinput-0.28.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-October/002923.html
++md5  9d2fb3d6b452d568a275908b856de0e2  xf86-input-libinput-0.28.1.tar.bz2
++sha1 f72f298c23fa993857ff1a9a06754f2f5962b376  xf86-input-libinput-0.28.1.tar.bz2
++sha256 9ada448e076c0078a84b48e5298fa8ce317565f9b342b74c20429214a707d98b  xf86-input-libinput-0.28.1.tar.bz2
++sha512 2b8cabfbc3490edbe928771ed9d62a0d4a423bc1373fc6cf9d3a6b5937e17ddc48ebb1b70f1191e507024e4b8220c137495cbba825292b51e50709daa7d31623  xf86-input-libinput-0.28.1.tar.bz2
  # Locally computed
- sha256 2daec087a88e7c9b8082557cdeebad5bbb8155a4137472f0b22e269cd99d0c1e  COPYING
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index 9eafd47e7b..87929c42ed 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
+ sha256 b808a8a077995380c6064bec41616f98546b0b2e79bb7f3d0247d290e275b396  COPYING
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+index b427d154cb..83de5c9610 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
++++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBX11_VERSION = 1.6.6
-+XLIB_LIBX11_VERSION = 1.6.7
- XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.bz2
- XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBX11_LICENSE = MIT
+-XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.28.0
++XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.28.1
+ XDRIVER_XF86_INPUT_LIBINPUT_SOURCE = xf86-input-libinput-$(XDRIVER_XF86_INPUT_LIBINPUT_VERSION).tar.bz2
+ XDRIVER_XF86_INPUT_LIBINPUT_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_LIBINPUT_LICENSE = MIT
 -- 
 2.19.1
