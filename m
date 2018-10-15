@@ -1,26 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Oct 2018 07:19:45 +0200
-Subject: [Buildroot] [PATCH 1/1] udftools: fix build with glibc 2.28
-In-Reply-To: <20181014181138.22326-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 14 Oct 2018 20:11:38 +0200")
-References: <20181014181138.22326-1-fontaine.fabrice@gmail.com>
-Message-ID: <87zhvfokge.fsf@dell.be.48ers.dk>
+Date: Mon, 15 Oct 2018 07:21:33 +0200
+Subject: [Buildroot] [PATCH 1/3] mdadm: convert to generic-package
+In-Reply-To: <20181014200056.20220-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Sun, 14 Oct 2018 22:00:54 +0200")
+References: <20181014200056.20220-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87va63okde.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > glibc 2.28 no longer includes <sys/sysmacros.h> from <sys/types.h>,
- > and therefore <sys/sysmacros.h> must be included explicitly when
- > major()/minor() are used.
+ > There is absolutely no reason for mdadm.mk to use autotools-package:
+ > this package does not have any configure script at all, and its
+ > Makefile is not generated using automake.
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/33cb370ee80d0603974b6376f0364f914d150463
+ > Therefore, convert it to use the generic-package
+ > infrastructure. Compared to the previous code, we are now using
+ > $(TARGET_CONFIGURE_OPTS), which passes our CPPFLAGS. This overrides
+ > the CPPFLAGS from mdadm's Makefile, so we repeat the only CPPFLAGS
+ > flag passed in the Makefile, -DBINDIR.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed, thanks.
 
