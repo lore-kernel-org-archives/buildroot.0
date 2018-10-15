@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Oct 2018 07:21:33 +0200
-Subject: [Buildroot] [PATCH 1/3] mdadm: convert to generic-package
-In-Reply-To: <20181014200056.20220-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Sun, 14 Oct 2018 22:00:54 +0200")
+Date: Mon, 15 Oct 2018 07:21:39 +0200
+Subject: [Buildroot] [PATCH 3/3] mdadm: also install mdmon
+In-Reply-To: <20181014200056.20220-3-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Sun, 14 Oct 2018 22:00:56 +0200")
 References: <20181014200056.20220-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87va63okde.fsf@dell.be.48ers.dk>
+ <20181014200056.20220-3-thomas.petazzoni@bootlin.com>
+Message-ID: <87r2grokd8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +14,14 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > There is absolutely no reason for mdadm.mk to use autotools-package:
- > this package does not have any configure script at all, and its
- > Makefile is not generated using automake.
+ > This commit adjusts the mdadm package to also install the mdmon
+ > utility, which is used to "monitor MD external metadata arrays". It
+ > adds ~250 KB to the installed size:
 
- > Therefore, convert it to use the generic-package
- > infrastructure. Compared to the previous code, we are now using
- > $(TARGET_CONFIGURE_OPTS), which passes our CPPFLAGS. This overrides
- > the CPPFLAGS from mdadm's Makefile, so we repeat the only CPPFLAGS
- > flag passed in the Makefile, -DBINDIR.
+ > -rwxr-xr-x 1 thomas thomas 446064 Oct 14 21:55 mdadm
+ > -rwxr-xr-x 1 thomas thomas 244672 Oct 14 21:55 mdmon
+
+ > Fixes bug #11376.
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
