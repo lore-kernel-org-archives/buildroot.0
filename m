@@ -1,29 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Oct 2018 07:18:01 +0200
-Subject: [Buildroot] [PATCH] wireshark: security bump to version 2.2.17
-In-Reply-To: <20181014195559.5389-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 14 Oct 2018 21:55:59 +0200")
-References: <20181014195559.5389-1-peter@korsgaard.com>
-Message-ID: <87h8hnpz3q.fsf@dell.be.48ers.dk>
+Date: Mon, 15 Oct 2018 07:18:09 +0200
+Subject: [Buildroot] [PATCH 1/1] findutils: fix build with glibc 2.28
+In-Reply-To: <20181014194945.30204-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 14 Oct 2018 21:49:45 +0200")
+References: <20181014194945.30204-1-fontaine.fabrice@gmail.com>
+Message-ID: <87d0sbpz3i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fixes the following security issues:
- > CVE-2018-16058: Bluetooth AVDTP dissector crash:
- > https://www.wireshark.org/security/wnpa-sec-2018-44.html
+ > Add two upstream patches to fix build with glibc 2.28, see:
+ > https://savannah.gnu.org/bugs/?54591
 
- > CVE-2018-16056: Bluetooth Attribute Protocol dissector crash:
- > https://www.wireshark.org/security/wnpa-sec-2018-45.html
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/0d25efeb09a6afc386eadf1a81d3a4a34eb9a989
 
- > CVE-2018-16057: Radiotap dissector crash:
- > https://www.wireshark.org/security/wnpa-sec-2018-46.html
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
