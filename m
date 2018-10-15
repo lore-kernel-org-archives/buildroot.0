@@ -1,27 +1,34 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Mon, 15 Oct 2018 00:31:44 -0700
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-10-14
-In-Reply-To: <20181015060028.2292320728@mail.bootlin.com>
-References: <20181015060028.2292320728@mail.bootlin.com>
-Message-ID: <CAMo8Bf+c9cYqa_rduvsVHCrVrXC_8-6mt-B0-TLHJRmboHU3JQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 15 Oct 2018 13:17:21 +0200
+Subject: [Buildroot] [PATCH v1 0/5] Raspberry Pi update
+In-Reply-To: <20181012210941.21515-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Fri, 12 Oct 2018 23:09:36 +0200")
+References: <20181012210941.21515-1-ps.report@gmx.net>
+Message-ID: <87in23o3we.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Oct 14, 2018 at 11:00 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->       xtensa |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/586adbd49ca1deb8116f2da04ab04069f3048536 | ORPH
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-Has the following in the build-end.log:
-> collect2: error: ld returned 1 exit status
-> Makefile:108: recipe for target 'imagescaling' failed
-> make[4]: *** [imagescaling] Error 1
+ > Update configs/raspberrypi*, rpi-firmware, rpi-userland, rpi-bt-firmware
+ > and rpi-wifi-firmware to latest versions.
 
-so I took a look at it, but surprisingly I couldn't reproduce it.
+ > Tested on Raspberry Pi 3 Model B v1.2 hardware:
+ > - raspberrypi3_defconfig updated to glibc, systemd, gcc-8.x and
+ >   qt5 (linuxfb, eglfs)
+
+
+ > Peter Seiderer (5):
+ >   configs/raspberrypi*: bump kernel version to 6d27aa156c
+ >   rpi-firmware: bump version to fbad6408c4
+ >   rpi-userland: bump version to 8f0abfb07b
+ >   rpi-bt-firmware: bump version to 8c1e2bff1d
+ >   rpi-wifi-firmware: bump version to 8c1e2bff1d
+
+Committed series, thanks.
 
 -- 
-Thanks.
--- Max
+Bye, Peter Korsgaard
