@@ -1,218 +1,32 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 15 Oct 2018 20:02:50 +0300
-Subject: [Buildroot] [PATCH 1/1] python-twisted: bummp to version 18.9.0
-Message-ID: <20181015170250.26556-1-asafka7@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 15 Oct 2018 19:25:40 +0200
+Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 4.18.14
+In-Reply-To: <20181015172540.29664-1-bernd.kuhls@t-online.de>
+References: <20181015172540.29664-1-bernd.kuhls@t-online.de>
+Message-ID: <20181015172540.29664-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove patch since the new version supports Python 3.7
-Change in LICENSE: addition of a developer to the list (hash updated).
-
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../0001-Fix-syntax-for-python3.7.patch       | 160 ------------------
- package/python-twisted/python-twisted.hash    |   6 +-
- package/python-twisted/python-twisted.mk      |   4 +-
- 3 files changed, 5 insertions(+), 165 deletions(-)
- delete mode 100644 package/python-twisted/0001-Fix-syntax-for-python3.7.patch
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-twisted/0001-Fix-syntax-for-python3.7.patch b/package/python-twisted/0001-Fix-syntax-for-python3.7.patch
-deleted file mode 100644
-index a55695c764..0000000000
---- a/package/python-twisted/0001-Fix-syntax-for-python3.7.patch
-+++ /dev/null
-@@ -1,160 +0,0 @@
--From ef2bd5d0c0ca66aae16bf1344dfb18d52a6f5c74 Mon Sep 17 00:00:00 2001
--From: Asaf Kahlon <asafka7@gmail.com>
--Date: Wed, 26 Sep 2018 17:47:02 +0300
--Subject: [PATCH 1/1] Fix syntax for python3.7
--
--Based on upstream patch (dcaf946217b4ea1684e98a9ebc4f9925d76f3108)
--to solve python3.7 syntax error with "async" keyword.
--
--Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-----
-- src/twisted/conch/manhole.py | 15 ++++++++-------
-- src/twisted/mail/imap4.py    | 19 +++++++++++--------
-- src/twisted/python/compat.py | 24 ++++++++++++++++++++++++
-- 3 files changed, 43 insertions(+), 15 deletions(-)
--
--diff --git a/src/twisted/conch/manhole.py b/src/twisted/conch/manhole.py
--index 3326f90aa..17ca05c58 100644
----- a/src/twisted/conch/manhole.py
--+++ b/src/twisted/conch/manhole.py
--@@ -19,7 +19,7 @@ from io import BytesIO
-- from twisted.conch import recvline
-- 
-- from twisted.internet import defer
---from twisted.python.compat import _tokenize
--+from twisted.python.compat import _tokenize, get_async_param
-- from twisted.python.htmlizer import TokenPrinter
-- 
-- class FileWrapper:
--@@ -151,9 +151,9 @@ class ManholeInterpreter(code.InteractiveInterpreter):
--         return failure
-- 
-- 
---    def write(self, data, async=False):
---        self.handler.addOutput(data, async)
---
--+    def write(self, data, async_=None, **kwargs):
--+        async_ = get_async_param(async_, **kwargs)
--+        self.handler.addOutput(data, async_)
-- 
-- 
-- CTRL_C = b'\x03'
--@@ -237,14 +237,15 @@ class Manhole(recvline.HistoricRecvLine):
--         return not w.endswith(b'\n') and not w.endswith(b'\x1bE')
-- 
-- 
---    def addOutput(self, data, async=False):
---        if async:
--+    def addOutput(self, data, async_=None, **kwargs):
--+        async_ = get_async_param(async_, **kwargs)
--+        if async_:
--             self.terminal.eraseLine()
--             self.terminal.cursorBackward(len(self.lineBuffer) + len(self.ps[self.pn]))
-- 
--         self.terminal.write(data)
-- 
---        if async:
--+        if async_:
--             if self._needsNewline():
--                 self.terminal.nextLine()
-- 
--diff --git a/src/twisted/mail/imap4.py b/src/twisted/mail/imap4.py
--index 0ca1f1c5e..295053a6c 100644
----- a/src/twisted/mail/imap4.py
--+++ b/src/twisted/mail/imap4.py
--@@ -42,7 +42,7 @@ from twisted.python.compat import (
--     _bytesChr, unichr as chr, _b64decodebytes as decodebytes,
--     _b64encodebytes as encodebytes,
--     intToBytes, iterbytes, long, nativeString, networkString, unicode,
---    _matchingString, _PY3
--+    _matchingString, _PY3, get_async_param,
-- )
-- from twisted.internet import interfaces
-- 
--@@ -1090,8 +1090,9 @@ class IMAP4Server(basic.LineReceiver, policies.TimeoutMixin):
--         self._respond(b'NO', tag, message)
-- 
-- 
---    def sendUntaggedResponse(self, message, async=False):
---        if not async or (self.blocked is None):
--+    def sendUntaggedResponse(self, message, async_=None, **kwargs):
--+        async_ = get_async_param(async_, **kwargs)
--+        if not async_ or (self.blocked is None):
--             self._respond(message, None, None)
--         else:
--             self._queuedAsync.append(message)
--@@ -2497,9 +2498,9 @@ class IMAP4Server(basic.LineReceiver, policies.TimeoutMixin):
--     #
--     def modeChanged(self, writeable):
--         if writeable:
---            self.sendUntaggedResponse(message=b'[READ-WRITE]', async=True)
--+            self.sendUntaggedResponse(message=b'[READ-WRITE]', async_=True)
--         else:
---            self.sendUntaggedResponse(message=b'[READ-ONLY]', async=True)
--+            self.sendUntaggedResponse(message=b'[READ-ONLY]', async_=True)
-- 
-- 
--     def flagsChanged(self, newFlags):
--@@ -2508,14 +2509,16 @@ class IMAP4Server(basic.LineReceiver, policies.TimeoutMixin):
--             msg = intToBytes(mId) + (
--                 b' FETCH (FLAGS (' +b' '.join(encodedFlags) + b'))'
--             )
---            self.sendUntaggedResponse(msg, async=True)
--+            self.sendUntaggedResponse(msg, async_=True)
-- 
-- 
--     def newMessages(self, exists, recent):
--         if exists is not None:
---            self.sendUntaggedResponse(intToBytes(exists) + b' EXISTS', async=True)
--+            self.sendUntaggedResponse(
--+                intToBytes(exists) + b' EXISTS', async_=True)
--         if recent is not None:
---            self.sendUntaggedResponse(intToBytes(recent) + b' RECENT', async=True)
--+            self.sendUntaggedResponse(
--+                intToBytes(recent) + b' RECENT', async_=True)
-- 
-- 
-- TIMEOUT_ERROR = error.TimeoutError()
--diff --git a/src/twisted/python/compat.py b/src/twisted/python/compat.py
--index 855e427aa..ba13bb4dd 100644
----- a/src/twisted/python/compat.py
--+++ b/src/twisted/python/compat.py
--@@ -833,6 +833,29 @@ except ImportError:
--     from collections import Sequence
-- 
-- 
--+def get_async_param(async_=None, **kwargs):
--+    """
--+    Provide a backwards-compatible way to get async param value that does not
--+    cause a syntax error under Python 3.7.
--+
--+    @param async_: async_ param value (should default to None)
--+    @type async_: L{bool}
--+
--+    @param kwargs: keyword arguments of the caller (only async is allowed)
--+    @type async_: L{dict}
--+
--+    @raise TypeError: Both async_ and async specified.
--+
--+    @return: Final async_ param value
--+    @rtype: L{bool}
--+    """
--+    if async_ is None and 'async' in kwargs:
--+        async_ = kwargs.pop('async')
--+    if kwargs:
--+        raise TypeError
--+    return bool(async_)
--+
--+
-- __all__ = [
--     "reraise",
--     "execfile",
--@@ -874,4 +897,5 @@ __all__ = [
--     "raw_input",
--     "_tokenize",
--     "Sequence",
--+    "get_async_param",
-- ]
---- 
--2.17.1
--
-diff --git a/package/python-twisted/python-twisted.hash b/package/python-twisted/python-twisted.hash
-index 89ae44043e..884dce1308 100644
---- a/package/python-twisted/python-twisted.hash
-+++ b/package/python-twisted/python-twisted.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/twisted/json
--md5 16396b4d8d7fd0d668736b3d510279db Twisted-18.7.0.tar.bz2
--sha256 95ae985716e8107816d8d0df249d558dbaabb677987cc2ace45272c166b267e4 Twisted-18.7.0.tar.bz2
-+md5 20fe2ec156e6e45b0b0d2ff06d9e828f Twisted-18.9.0.tar.bz2
-+sha256 294be2c6bf84ae776df2fc98e7af7d6537e1c5e60a46d33c3ce2a197677da395 Twisted-18.9.0.tar.bz2
- # Locally computed sha256
--sha256 a516053f954d4f16fbdffa8924e42d6d2490a7241fe5de053541a766ae778fd4 LICENSE
-+sha256 17305fcdb49a4048310be5b43e9f3cfa9525c508a5117089d8b2ee91800c327b LICENSE
-diff --git a/package/python-twisted/python-twisted.mk b/package/python-twisted/python-twisted.mk
-index 9f54ecae4f..a62637f0d4 100644
---- a/package/python-twisted/python-twisted.mk
-+++ b/package/python-twisted/python-twisted.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index 235018ca0b..d372c2c1f8 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -120,7 +120,7 @@ endif
  
--PYTHON_TWISTED_VERSION = 18.7.0
-+PYTHON_TWISTED_VERSION = 18.9.0
- PYTHON_TWISTED_SOURCE = Twisted-$(PYTHON_TWISTED_VERSION).tar.bz2
--PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/90/50/4c315ce5d119f67189d1819629cae7908ca0b0a6c572980df5cc6942bc22
-+PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/5d/0e/a72d85a55761c2c3ff1cb968143a2fd5f360220779ed90e0fadf4106d4f2
- PYTHON_TWISTED_SETUP_TYPE = setuptools
- PYTHON_TWISTED_LICENSE = MIT
- PYTHON_TWISTED_LICENSE_FILES = LICENSE
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.18.10" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.18.14" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.138-cip25" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
 -- 
-2.17.1
+2.19.1
