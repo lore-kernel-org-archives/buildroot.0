@@ -1,64 +1,133 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 15 Oct 2018 14:50:13 -0500
-Subject: [Buildroot] [PATCH next] uboot: support external DTB in U-Boot
- images
-In-Reply-To: <20180304171815.35061-1-clemens.gruber@pqgruber.com>
-References: <20180304171815.35061-1-clemens.gruber@pqgruber.com>
-Message-ID: <CANQCQpa6ro4XehpbrS_ZAQ1tizkMhsBG_4+f8NNM1JHfvvA25A@mail.gmail.com>
+Date: Mon, 15 Oct 2018 14:55:51 -0500
+Subject: [Buildroot] [PATCH 3/3] eudev: generate hwdb.bin at system
+ startup
+In-Reply-To: <20180130040720.20172-3-casantos@datacom.ind.br>
+References: <20180130040720.20172-1-casantos@datacom.ind.br>
+ <20180130040720.20172-3-casantos@datacom.ind.br>
+Message-ID: <CANQCQpaK0d5YWMwyDzOMXJJCQViyRgRdzZm3qK0md5KgW8cbdQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Clemens,
+Carlos, Yann,
 
-On Mon, Oct 15, 2018 at 2:43 PM Clemens Gruber
-<clemens.gruber@pqgruber.com> wrote:
+On Mon, Oct 15, 2018 at 2:43 PM Carlos Santos <casantos@datacom.ind.br> wrote:
 >
-> Allows signed FIT images to be verified with the public key in the DTB.
-> The public key is stored in the bootloader image, which must have been
-> verified by the previous stage in the trust chain, before loading it.
+> Programs that use libudev (e.g. lsusb, from usbutils) need the hwdb.bin
+> file to work properly.
 >
-> Signed-off-by: Clemens Gruber <clemens.gruber@pqgruber.com>
+> If BR2_PACKAGE_EUDEV_ENABLE_HWDB is selected then the eudev installation
+> populates /etc/udev/hwdb.d/ but does not genarete /etc/udev/hwdb.bin. It
+> must be created running "udevadm hwdb --update" on the target device but
+> this does not work on with read-only /etc, so we need these changes:
+>
+> - Add the BR2_PACKAGE_EUDEV_HWDB_BIN_PATH config, allowing the user to
+>   set the location of hwdb.bin.
+> - Patch the configuration script, allowing to set the hwdb.bin path by
+>   means of an environment variable (udevhwdbbinpath).
+> - Pass the value set in BR2_PACKAGE_EUDEV_HWDB_BIN_PATH to the configure
+>   script by means of the udevhwdbbinpath variable.
+> - Make the S10udev init script run "udevadm hwdb --update" to recreate
+>   hwdb.bin or print an error message if the operation fails (e.g. no
+>   write permission on the filesystem).
+>
+
+(aarch qemu target)
+Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
+
+> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 > ---
->  boot/uboot/Config.in | 14 ++++++++++++++
->  boot/uboot/uboot.mk  |  5 +++++
->  2 files changed, 19 insertions(+)
+>  package/eudev/Config.in |  9 +++++++++
+>  package/eudev/S10udev   |  8 +++++++-
+>  package/eudev/eudev.mk  | 13 ++++++++++++-
+>  3 files changed, 28 insertions(+), 2 deletions(-)
 >
-> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> index 264f343767..620aa02bb9 100644
-> --- a/boot/uboot/Config.in
-> +++ b/boot/uboot/Config.in
-> @@ -460,6 +460,20 @@ config BR2_TARGET_UBOOT_CUSTOM_DTS_PATH
->           To use this device tree source file, the U-Boot configuration
->           file must refer to it.
+> diff --git a/package/eudev/Config.in b/package/eudev/Config.in
+> index 2220265a55..a589a14af3 100644
+> --- a/package/eudev/Config.in
+> +++ b/package/eudev/Config.in
+> @@ -32,6 +32,15 @@ config BR2_PACKAGE_EUDEV_ENABLE_HWDB
+>         help
+>           Enables hardware database installation to /etc/udev/hwdb.d
 >
-> +config BR2_TARGET_UBOOT_EXT_DTB
-> +       bool "External DTB"
+> +config BR2_PACKAGE_EUDEV_HWDB_BIN_PATH
+
+Should this depend on BR2_PACKAGE_EUDEV_ENABLE_HWDB?  What does it do
+if you don't enable this option or have a write-able location for the
+.bin?
+
+> +       string "hwdb.bin path"
+> +       default "/etc/udev/hwdb.bin"
 > +       help
-> +         Put an external DTB in the U-Boot image. Used to store public
-> +         keys for verifying signed FIT images.
-> +
-> +config BR2_TARGET_UBOOT_EXT_DTB_PATH
-> +       string "Path to external DTB"
-> +       depends on BR2_TARGET_UBOOT_EXT_DTB
-> +       help
-> +         Path to external DTB to be put in the U-Boot image.
-> +         Prepend ${TOPDIR}/ to specify paths relative to the top
-> +         buildroot source directory.
+> +         Location of the hwdb.bin file, which is re-generated at system
+> +         startup. The default is /etc/udev/hwdb.bin but you may want to
+> +         move it elsewhere (e.g. /var/run/udev/hwdb.bin) if /etc is in
+> +         a read-only filesystem.
 > +
 >  endif
+>
+>  comment "eudev needs eudev /dev management"
+> diff --git a/package/eudev/S10udev b/package/eudev/S10udev
+> index 640fec625b..026ab6ae49 100755
+> --- a/package/eudev/S10udev
+> +++ b/package/eudev/S10udev
+> @@ -25,14 +25,20 @@ UDEV_CONFIG=/etc/udev/udev.conf
 
-Would the existing BR2_TARGET_UBOOT_CUSTOM_DTS_PATH option already
-allow you to place your custom DTS files?  Then to use them, you would
-need to either add a kconfig BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES
-fragment to build on your default board kconfig or if you have a
-custom board, set the kconfig path in
-BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE to your custom kconfig.
+This section of the patch no-longer applies (cosmetic changes required).
 
-I believe the combination KCONFIG values that point at DTS files can
-get your  BR2_TARGET_UBOOT_CUSTOM_DTS_PATH dts files included in the
-uboot build without setting EXT_DTB.  What do you think?
+>  test -r $UDEV_CONFIG || exit 6
+>  . $UDEV_CONFIG
+>
+> +UDEV_HWDB_BIN=%%UDEV_HWDB_BIN%%
+> +
+>  case "$1" in
+>      start)
+>          printf "Populating %s using udev: " "${udev_root:-/dev}"
+>          printf '\000\000\000\000' > /proc/sys/kernel/hotplug
+>          $UDEV_BIN -d || { echo "FAIL"; exit 1; }
+> +        echo "done"
+>          udevadm trigger --type=subsystems --action=add
+>          udevadm trigger --type=devices --action=add
+> -        udevadm settle --timeout=30 || echo "udevadm settle failed"
+> +        udevadm settle --timeout=30 || { echo "udevadm settle failed" && exit 1; }
+> +        echo "done"
+> +        printf "Compiling hardware database information $UDEV_HWDB_BIN: "
+> +        udevadm hwdb --update || { echo "FAIL" && exit 1; }
+
+Yann had a good point on IRC, this probably could be prebuild offline.
+
+>          echo "done"
+>          ;;
+>      stop)
+> diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+> index d08b9bb0c9..25745008d2 100644
+> --- a/package/eudev/eudev.mk
+> +++ b/package/eudev/eudev.mk
+> @@ -47,8 +47,19 @@ else
+>  EUDEV_CONF_OPTS += --disable-selinux
+>  endif
+>
+> +define EUDEV_POST_PATCH
+> +       $(SED) 's,$${udevconfdir}/hwdb.bin,$${udevhwdbbinpath:-$${udevconfdir}/hwdb.bin},' \
+> +               $(@D)/configure
+> +endef
+> +EUDEV_POST_PATCH_HOOKS += EUDEV_POST_PATCH
+> +
+> +EUDEV_CONF_ENV += udevhwdbbinpath=$(BR2_PACKAGE_EUDEV_HWDB_BIN_PATH)
+> +
+>  define EUDEV_INSTALL_INIT_SYSV
+> -       $(INSTALL) -D -m 0755 package/eudev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
+> +       $(INSTALL) -D -m 0755 package/eudev/S10udev \
+> +               $(TARGET_DIR)/etc/init.d/S10udev
+> +       $(SED) 's,%%UDEV_HWDB_BIN%%,$(BR2_PACKAGE_EUDEV_HWDB_BIN_PATH),' \
+> +               $(TARGET_DIR)/etc/init.d/S10udev
+
+Instead of a SED approach, could we add a /etc/defaults/udev cfg file
+instead and just set the value in that file if present.  Otherwise
+default the value?  (Like what was done in the recent S01logging
+suggested updates).
 
 Matt
