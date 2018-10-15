@@ -1,67 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Oct 2018 13:24:25 +0200
-Subject: [Buildroot] [PATCH] package/nodejs: use per-build cache
- directories
-In-Reply-To: <20181013150558.31065-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Sat, 13 Oct 2018 17:05:58 +0200")
-References: <20181013150558.31065-1-yann.morin.1998@free.fr>
-Message-ID: <87a7nfo3km.fsf@dell.be.48ers.dk>
+Date: Mon, 15 Oct 2018 13:15:46 +0200
+Subject: [Buildroot] [git commit] rpi-firmware: bump version to fbad6408c4
+Message-ID: <20181015112324.6B31B803DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d34ff534a13ed7233a0b2ee104ed417d0e2217f2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > When two Buildroot builds run in parallel, and they both happen to call
- > npm at roughly the same time, the two npm instances may conflict when
- > accessing the npm cache, which is by default ~/.npm
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rpi-firmware/rpi-firmware.hash | 2 +-
+ package/rpi-firmware/rpi-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Although npm is supposed to lock access to the cache, it seems it does
- > sometimes fail to do so properly, bailling out in error, when it would
- > never ever crash at all when not running in parallel. We suspect that
- > the sequence leading to such failures are something like:
-
- >     npm-1                           npm-2
- >       lock(retry=few, sleep=short)    .
- >       does-stuff()                    .
- >       .                               lock(retry=few, sleep=short)
- >       .                               # can't lock local cache
- >       .                               download-module()
- >       .                                 # can't download
- >       .                                 exit(1)
- >       unlock()
-
- > As per the docs [0], few = 10, short = 10. So if the first npm (npm-1)
- > takes more than 100s (which can happen behind slow links and/or big
- > modules that contain native code that is compiled), then the second npm
- > (npm-2) will bail out (the download would fail if there is no network
- > access, for example, and only local modules are used).
-
- > Point npm to use a per-build cache directory, so they no longer compete
- > across builds.
-
- > That would still need some care when we do top-level parallel builds,
- > though.
-
- > Note also that the conflicts are not totally eliminated: two or more npm
- > instances may still compete for some other resource that has not yet
- > been identified.
-
- > But, at least, the conflict window has been drastically shortened now,
- > to the point where it now seldom occurs.
-
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Committed, thanks. This also fixes issues where ~ isn't writable,
-E.G. see commit b42fb29048128a432a (ncurses: disable terminfo database
-install for host-ncurses).
-
-I know next to nothing about nodejs. I take it that these cache
-directories do not bring any speedup when they are per-build? Would it
-be possible to completely disable the caching or point it to /dev/null
-or similar?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
+index d481ee524f..728c53fe9a 100644
+--- a/package/rpi-firmware/rpi-firmware.hash
++++ b/package/rpi-firmware/rpi-firmware.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 5edff641f216d2e09c75469dc2e9fc66aff290e212a1cd43ed31c499f99ea055 rpi-firmware-287af2a2be0787a5d45281d1d6183a2161c798d4.tar.gz
++sha256 57c56e9e41a2d9b1ce660aa7887db5c4b44f768fc63c6b6ef1d2fe460a090d85 rpi-firmware-fbad6408c4596d3d671736ee0571aae444f24e68.tar.gz
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 853ab6ed02..bb54904ae6 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_FIRMWARE_VERSION = 287af2a2be0787a5d45281d1d6183a2161c798d4
++RPI_FIRMWARE_VERSION = fbad6408c4596d3d671736ee0571aae444f24e68
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3-Clause
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
