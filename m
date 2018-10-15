@@ -1,73 +1,64 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 15 Oct 2018 21:49:47 +0200
-Subject: [Buildroot] [PATCH v2 1/1] {linux, linux-headers}: bump 4.{4, 9, 14,
- 18}.x series
-Message-ID: <20181015194947.22644-1-bernd.kuhls@t-online.de>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 15 Oct 2018 14:50:13 -0500
+Subject: [Buildroot] [PATCH next] uboot: support external DTB in U-Boot
+ images
+In-Reply-To: <20180304171815.35061-1-clemens.gruber@pqgruber.com>
+References: <20180304171815.35061-1-clemens.gruber@pqgruber.com>
+Message-ID: <CANQCQpa6ro4XehpbrS_ZAQ1tizkMhsBG_4+f8NNM1JHfvvA25A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: squashed linux/ and package/linux-headers/ patches (Thomas)
+Clemens,
 
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 8 ++++----
- package/linux-headers/Config.in.host | 8 ++++----
- 3 files changed, 9 insertions(+), 9 deletions(-)
+On Mon, Oct 15, 2018 at 2:43 PM Clemens Gruber
+<clemens.gruber@pqgruber.com> wrote:
+>
+> Allows signed FIT images to be verified with the public key in the DTB.
+> The public key is stored in the bootloader image, which must have been
+> verified by the previous stage in the trust chain, before loading it.
+>
+> Signed-off-by: Clemens Gruber <clemens.gruber@pqgruber.com>
+> ---
+>  boot/uboot/Config.in | 14 ++++++++++++++
+>  boot/uboot/uboot.mk  |  5 +++++
+>  2 files changed, 19 insertions(+)
+>
+> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+> index 264f343767..620aa02bb9 100644
+> --- a/boot/uboot/Config.in
+> +++ b/boot/uboot/Config.in
+> @@ -460,6 +460,20 @@ config BR2_TARGET_UBOOT_CUSTOM_DTS_PATH
+>           To use this device tree source file, the U-Boot configuration
+>           file must refer to it.
+>
+> +config BR2_TARGET_UBOOT_EXT_DTB
+> +       bool "External DTB"
+> +       help
+> +         Put an external DTB in the U-Boot image. Used to store public
+> +         keys for verifying signed FIT images.
+> +
+> +config BR2_TARGET_UBOOT_EXT_DTB_PATH
+> +       string "Path to external DTB"
+> +       depends on BR2_TARGET_UBOOT_EXT_DTB
+> +       help
+> +         Path to external DTB to be put in the U-Boot image.
+> +         Prepend ${TOPDIR}/ to specify paths relative to the top
+> +         buildroot source directory.
+> +
+>  endif
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 235018ca0b..d372c2c1f8 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -120,7 +120,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.18.10" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.18.14" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.138-cip25" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 0a913de1f8..5a00e786af 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,9 +1,9 @@
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256 10604f7f8ccab5e7ce71f2e87d1410be679cd11c29c6c608ce35df1db40991de  linux-4.18.10.tar.xz
-+sha256 36c6d1360db9eab40270db6d292c259dd34d3dc06049d64afe3e4cfafb8562d3  linux-4.18.14.tar.xz
- sha256 41026d713ba4f7a5e9d514b876ce4ed28a1d993c0c58b42b2a2597d6a0e83021  linux-4.16.18.tar.xz
--sha256 df925906250bbc40fcf0137d7ad0fb8edc528d926832634f1233b7540564557f  linux-4.14.72.tar.xz
--sha256 6f5510d3fcfec1bf1e2d9c8e2fdcd7628c1886c6bdb29092adc5ccdf75e39318  linux-4.9.129.tar.xz
--sha256 571c8f6e8cabcc4e8c813869b87527f6e8e427b1c8fef96330c99743700f22a9  linux-4.4.158.tar.xz
-+sha256 ee3f19a4ff8a42793c193e361e1d34fcc821a5ca9b58db41befb2b4df0e482be  linux-4.14.76.tar.xz
-+sha256 3730fc025ba330a6f4908a6a1e4cb86d821000c84167721680ccf1b37b26563   linux-4.9.133.tar.xz
-+sha256 be0383d57c52a7ac6b1ca4d989a16a581f52ec9704ccf4ddf066b1b5b1313f87  linux-4.4.161.tar.xz
- sha256 6ad9389e55e0ea57768eae173747058a4487fa3630e10a7999cfec9f945e559c  linux-4.1.52.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v3.x/sha256sums.asc
- sha256 ad96d797571496c969aa71bf5d08e9d2a8c84458090d29a120f1b2981185a99e  linux-3.2.102.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 7c9c1d0fb0..cdf639ab3a 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -290,11 +290,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.158"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.129"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.72"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.4.161"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.133"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.76"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
--	default "4.18.10"	if BR2_KERNEL_HEADERS_4_18
-+	default "4.18.14"	if BR2_KERNEL_HEADERS_4_18
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
--- 
-2.19.1
+Would the existing BR2_TARGET_UBOOT_CUSTOM_DTS_PATH option already
+allow you to place your custom DTS files?  Then to use them, you would
+need to either add a kconfig BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES
+fragment to build on your default board kconfig or if you have a
+custom board, set the kconfig path in
+BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE to your custom kconfig.
+
+I believe the combination KCONFIG values that point at DTS files can
+get your  BR2_TARGET_UBOOT_CUSTOM_DTS_PATH dts files included in the
+uboot build without setting EXT_DTB.  What do you think?
+
+Matt
