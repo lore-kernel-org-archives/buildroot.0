@@ -1,9 +1,9 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 15 Oct 2018 21:19:58 +0300
-Subject: [Buildroot] [PATCH 1/1] python-markdown: bump to version 3.0.1
+Date: Mon, 15 Oct 2018 21:19:59 +0300
+Subject: [Buildroot] [PATCH 1/1] python-posix-ipc: bump to version 1.0.4
 In-Reply-To: <20181015181959.12446-1-asafka7@gmail.com>
 References: <20181015181959.12446-1-asafka7@gmail.com>
-Message-ID: <20181015181959.12446-2-asafka7@gmail.com>
+Message-ID: <20181015181959.12446-3-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,42 +14,41 @@ Also add license hash.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-markdown/python-markdown.hash | 8 +++++---
- package/python-markdown/python-markdown.mk   | 6 +++---
+ package/python-posix-ipc/python-posix-ipc.hash | 8 +++++---
+ package/python-posix-ipc/python-posix-ipc.mk   | 6 +++---
  2 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-markdown/python-markdown.hash b/package/python-markdown/python-markdown.hash
-index f2131edaf3..623156b509 100644
---- a/package/python-markdown/python-markdown.hash
-+++ b/package/python-markdown/python-markdown.hash
+diff --git a/package/python-posix-ipc/python-posix-ipc.hash b/package/python-posix-ipc/python-posix-ipc.hash
+index 196f186de1..d267cabc88 100644
+--- a/package/python-posix-ipc/python-posix-ipc.hash
++++ b/package/python-posix-ipc/python-posix-ipc.hash
 @@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/markdown/json, sha256 locally computed
--md5 d9ef057a5bd185f6f536400a31fc5d45 Markdown-2.6.8.tar.gz
--sha256 0ac8a81e658167da95d063a9279c9c1b2699f37c7c4153256a458b3a43860e33 Markdown-2.6.8.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/markdown/json
-+md5	72219f46ca440b657bf227500731bdf1  Markdown-3.0.1.tar.gz
-+sha256	d02e0f9b04c500cde6637c11ad7c72671f359b87b9fe924b2383649d8841db7c  Markdown-3.0.1.tar.gz
-+# Locally computed sha256
-+sha256	6f1193cb634718e65c3a537d6e25ebd614820ec0ef693cfc12248112638d64da  LICENSE.md
-diff --git a/package/python-markdown/python-markdown.mk b/package/python-markdown/python-markdown.mk
-index d5273f97a4..8349638eb3 100644
---- a/package/python-markdown/python-markdown.mk
-+++ b/package/python-markdown/python-markdown.mk
-@@ -4,12 +4,12 @@
+-# md5 from https://pypi.python.org/pypi/posix-ipc/json, sha256 locally computed
+-md5	85607a392087715ac3a3c7ded2492d06  posix_ipc-1.0.0.tar.gz
+-sha256	9c93070374ca672725575e5c9874930c8cde69367fb90378b2255e048e31efcb  posix_ipc-1.0.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/posix-ipc/json
++md5	c4fd0065244ccb2f59cb8ceedf287cf6  posix_ipc-1.0.4.tar.gz
++sha256	ff6c9077633fc62a491d6997c43b094d885bb45a7ca1f36c9a0d647c54b74b14  posix_ipc-1.0.4.tar.gz
++# Locally computed sha256 checksums
++sha256	61f0669e70518e6d32f87e485965fe9309de60e4bef938b29cecd068b3db9a98  LICENSE
+diff --git a/package/python-posix-ipc/python-posix-ipc.mk b/package/python-posix-ipc/python-posix-ipc.mk
+index 6178c75498..d4429f117e 100644
+--- a/package/python-posix-ipc/python-posix-ipc.mk
++++ b/package/python-posix-ipc/python-posix-ipc.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PYTHON_MARKDOWN_VERSION = 2.6.8
-+PYTHON_MARKDOWN_VERSION = 3.0.1
- PYTHON_MARKDOWN_SOURCE = Markdown-$(PYTHON_MARKDOWN_VERSION).tar.gz
--PYTHON_MARKDOWN_SITE = https://pypi.python.org/packages/1d/25/3f6d2cb31ec42ca5bd3bfbea99b63892b735d76e26f20dd2dcc34ffe4f0d
-+PYTHON_MARKDOWN_SITE = https://files.pythonhosted.org/packages/3c/52/7bae9e99a7a4be6af4a713fe9b692777e6468d28991c54c273dfb6ec9fb2
- PYTHON_MARKDOWN_LICENSE = BSD-3-Clause
- PYTHON_MARKDOWN_LICENSE_FILES = LICENSE.md
--PYTHON_MARKDOWN_SETUP_TYPE = distutils
-+PYTHON_MARKDOWN_SETUP_TYPE = setuptools
+-PYTHON_POSIX_IPC_VERSION = 1.0.0
++PYTHON_POSIX_IPC_VERSION = 1.0.4
+ PYTHON_POSIX_IPC_SOURCE = posix_ipc-$(PYTHON_POSIX_IPC_VERSION).tar.gz
+-PYTHON_POSIX_IPC_SITE = https://pypi.python.org/packages/f0/e6/bff62b62b2e75f695b737695951b7a4c1c6595369268a37868f5c34e1c12
++PYTHON_POSIX_IPC_SITE = https://files.pythonhosted.org/packages/c9/3e/54217da71aa26b488295d878df4d3132093253b4ae5798ac66fcb6921ef0
+ PYTHON_POSIX_IPC_LICENSE = BSD-3-Clause
+ PYTHON_POSIX_IPC_LICENSE_FILES = LICENSE
+-PYTHON_POSIX_IPC_SETUP_TYPE = distutils
++PYTHON_POSIX_IPC_SETUP_TYPE = setuptools
  
  $(eval $(python-package))
- $(eval $(host-python-package))
 -- 
 2.17.1
