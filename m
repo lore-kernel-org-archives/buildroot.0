@@ -1,71 +1,46 @@
-From: Oscar Gomez Fuente <oscargomezf@gmail.com>
-Date: Tue, 16 Oct 2018 12:27:41 +0200
-Subject: [Buildroot] Update the current date using ntp.
-In-Reply-To: <87woqimcot.fsf@dell.be.48ers.dk>
-References: <CALtfCQaov7R68HfvZtNOse+SGu9Y8vihS=4xgixjtjE__VXkkQ@mail.gmail.com>
- <CANQCQpZA_Xgjx+pKvZXp97VYvwk4M0M=PhaEUQQqu40QjV4_iQ@mail.gmail.com>
- <4f85764f-4677-56bb-01f0-46def72c3d9b@mind.be>
- <871s8qo41u.fsf@dell.be.48ers.dk>
- <CALtfCQa-jdUYs+nN5weRwzLTe3-MX+U7ENDCPS0f4HkjJ38Dxw@mail.gmail.com>
- <87woqimcot.fsf@dell.be.48ers.dk>
-Message-ID: <CALtfCQYPhf4zuED_ukm5nA4E5+u28NmjV-bBKghgkp-3WLn4Kg@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 16 Oct 2018 14:37:36 +0300
+Subject: [Buildroot] [PATCH] squid: requires C++11 toolchain
+Message-ID: <7de2a66d889a8723f41e397005c1c46a15470974.1539689856.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter
+The squid changelog for version 4.0.1 mentions that "C++11 compiler
+support is now mandatory". The code uses the std::map::emplace method
+that gcc before 4.8 does not support.
 
-> Well, the question is what should the default configuration be exactly?
-> We have a lot of packages that do not provide any default configuration.
+Also fixes:
+http://autobuild.buildroot.net/results/370/37093f8d3395850b2db5ed645f60d1c2df92768d/
+http://autobuild.buildroot.net/results/921/92117726e7b4ede08dcc0e4fd1a85171fd17aeb8/
+http://autobuild.buildroot.net/results/e67/e679ef90219c5e8f9c94ddcd7d3f9582f79ef751/
 
-I don't know, but I think it should have a default  /etc/chrony.conf
-because right now chrony is not working.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/squid/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Finally, I'm using ntpd and I made this change in the script S49ntp in
-order to execute ntpdate before running the ntpd demon:
-
-#! /bin/sh
-
-NAME=ntpd
-
-# Read config file if it is present.
-if [ -r /etc/default/$NAME ]; then
-. /etc/default/$NAME
-fi
-
-case $1 in
-start)
-        printf "Starting $NAME: "
-        NUM_SERVER=0
-        CURRENT_DATE=$(date | grep "1970")
-        while [ "$NUM_SERVER" != "3" -a "$CURRENT_DATE" = "1970" ];
-        do
-                /usr/bin/ntpdate $NUM_SERVER.pool.ntp.org > /dev/null 2>&1
-                CURRENT_DATE=$(date | grep "1970")
-                NUM_SERVER=$(( $NUM_SERVER + 1 ))
-        done
-        start-stop-daemon -S -q -x /usr/sbin/ntpd -- -g
-        [ $? = 0 ] && echo "OK" || echo "FAIL"
-        ;;
-stop)
-        printf "Stopping $NAME: "
-        start-stop-daemon -K -q -n $NAME
-        [ $? = 0 ] && echo "OK" || echo "FAIL"
-        ;;
-restart|reload)
-        echo "Restarting $NAME: "
-        $0 stop
-        sleep 1
-        $0 start
-        ;;
-*)
-        echo "Usage: $0 {start|stop|restart|reload}" >&2
-        exit 1
-        ;;
-esac
-
-exit 0
-
-Best regards.
+diff --git a/package/squid/Config.in b/package/squid/Config.in
+index aeffbc657990..50f65de433e7 100644
+--- a/package/squid/Config.in
++++ b/package/squid/Config.in
+@@ -1,12 +1,13 @@
+-comment "squid needs a toolchain w/ C++ not affected by GCC bug 64735"
++comment "squid needs a toolchain w/ C++, gcc >= 4.8 not affected by bug 64735"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735 || \
+-		!BR2_INSTALL_LIBSTDCPP
++		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 
+ config BR2_PACKAGE_SQUID
+ 	bool "squid"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::current_exception
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	# needs fork()
+ 	depends on BR2_USE_MMU
+ 	select BR2_PACKAGE_LIBCAP
+-- 
+2.19.1
