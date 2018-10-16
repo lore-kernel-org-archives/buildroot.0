@@ -1,117 +1,128 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 16 Oct 2018 12:01:09 -0500
-Subject: [Buildroot] [PATCH 1/1] ntp: added ntpdate support to the
- S49ntp script
-In-Reply-To: <1539708282-23077-1-git-send-email-oscargomezf@gmail.com>
-References: <1539708282-23077-1-git-send-email-oscargomezf@gmail.com>
-Message-ID: <CANQCQpa+VmoqqvrH079_TZmbi4y4gUAVxO3Sba0kR--027rWYg@mail.gmail.com>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Tue, 16 Oct 2018 14:01:57 -0300
+Subject: [Buildroot] [PATCH v3] eudev: generate hwdb.bin at system startup
+Message-ID: <20181016170157.14348-1-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Oscar,
+From: Carlos Santos <casantos@datacom.ind.br>
 
-On Tue, Oct 16, 2018 at 11:45 AM Oscar Gomez Fuente
-<oscargomezf@gmail.com> wrote:
->
-> Signed-off-by: Oscar Gomez Fuente <oscargomezf@gmail.com>
-> ---
->  package/ntp/S49ntp | 58 ++++++++++++++++++++++++++++++++----------------------
->  1 file changed, 34 insertions(+), 24 deletions(-)
->
-> diff --git a/package/ntp/S49ntp b/package/ntp/S49ntp
-> index 35e5874..f5c4cb8 100755
-> --- a/package/ntp/S49ntp
-> +++ b/package/ntp/S49ntp
-> @@ -1,34 +1,44 @@
->  #! /bin/sh
->
->  NAME=ntpd
-> +NTPDATE=/usr/bin/ntpdate
->
->  # Read config file if it is present.
-> -if [ -r /etc/default/$NAME ]
-> -then
-> -  . /etc/default/$NAME
-> +if [ -r /etc/default/$NAME ]; then
-> +. /etc/default/$NAME
->  fi
->
-> -case "$1" in
-> -  start)
-> -    printf "Starting $NAME: "
-> -    start-stop-daemon -S -q -x /usr/sbin/ntpd -- -g
-> -    [ $? = 0 ] && echo "OK" || echo "FAIL"
-> -    ;;
-> -  stop)
-> -    printf "Stopping $NAME: "
-> -    start-stop-daemon -K -q -n $NAME
-> -    [ $? = 0 ] && echo "OK" || echo "FAIL"
-> -    ;;
-> -  restart|reload)
-> -    echo "Restarting $NAME: "
-> -    $0 stop
-> -    sleep 1
-> -    $0 start
-> -    ;;
-> -  *)
-> -    echo "Usage: $0 {start|stop|restart|reload}" >&2
-> -    exit 1
-> -    ;;
-> +case $1 in
-> +start)
-> +       printf "Starting $NAME: "
-> +       if [ -f $NTPDATE ]; then
-> +               NUM_SERVER=0
+Programs that use libudev (e.g. lsusb, from usbutils) need the hwdb.bin
+file to work properly.
 
-I'd suggest checking if there was a preferred time server you should
-use in  /etc/default/$NAME before assuming using the pool.  I don't
-believe there is a defined syntax for that config's variables as it is
-different from the actual ntp.conf.  You can probably just assume a
-variable name like NTP_SERVER.
+If BR2_PACKAGE_EUDEV_ENABLE_HWDB is selected then the eudev installation
+populates /etc/udev/hwdb.d/ but does not genarete /etc/udev/hwdb.bin. It
+must be created running "udevadm hwdb --update" on the target device but
+this does not work with a read-only /etc, so we need these changes:
 
-> +               CURRENT_DATE=$(date | grep "1970")
-> +               while [ "$NUM_SERVER" != "4" -a "$CURRENT_DATE" != "" ]
-> +               do
-> +                       $NTPDATE $NUM_SERVER.pool.ntp.org > /dev/null 2>&1
-> +                       CURRENT_DATE=$(date | grep "1970")
-> +                       NUM_SERVER=$(( $NUM_SERVER + 1 ))
-> +               done
-> +       fi
-> +       start-stop-daemon -S -q -x /usr/sbin/ntpd -- -g
-> +       [ $? = 0 ] && echo "OK" || echo "FAIL"
-> +       ;;
-> +stop)
-> +       printf "Stopping $NAME: "
-> +       start-stop-daemon -K -q -n $NAME
-> +       [ $? = 0 ] && echo "OK" || echo "FAIL"
-> +       ;;
-> +restart|reload)
-> +       echo "Restarting $NAME: "
-> +       $0 stop
-> +       sleep 1
-> +       $0 start
-> +       ;;
-> +*)
-> +       echo "Usage: $0 {start|stop|restart|reload}" >&2
-> +       exit 1
-> +       ;;
->  esac
->
->  exit 0
-> --
-> 1.9.1
->
+- Add the BR2_PACKAGE_EUDEV_HWDB_BIN_PATH config, allowing the user to
+  set the location of hwdb.bin.
+- Patch the configuration script, allowing to set the hwdb.bin path by
+  means of an environment variable (udevhwdbbinpath).
+- Pass the value set in BR2_PACKAGE_EUDEV_HWDB_BIN_PATH to the configure
+  script by means of the udevhwdbbinpath variable.
+- Make the S10udev init script run "udevadm hwdb --update" to recreate
+  hwdb.bin or print an error message if the operation fails (e.g. no
+  write permission on the filesystem).
 
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
+---
+Changes v1->v2
+- Incorporate fixes and improvements provided by Matt Weber
+Changes v2->v3
+- Make HWDB_BIN_PATH depend on ENABLE_HWDB, as pointed by Matt Weber.
 
+Note: there was a discussion via email and on IRC, with suggetsions to
+prebuild hwdb.bin at build time and to add a /etc/defaults/udev cfg file
+instead patching S10udev (like in the recent S01logging suggested
+updates). I like both suggestions but I'd prefer to implement them in
+subsequent patches rather, since they woud require additional changes
+(e.g. adding eudev as a host tool).
+---
+ package/eudev/Config.in | 10 ++++++++++
+ package/eudev/S10udev   |  8 +++++++-
+ package/eudev/eudev.mk  | 11 ++++++++++-
+ 3 files changed, 27 insertions(+), 2 deletions(-)
+
+diff --git a/package/eudev/Config.in b/package/eudev/Config.in
+index 2220265a55..0ee5390dfb 100644
+--- a/package/eudev/Config.in
++++ b/package/eudev/Config.in
+@@ -32,6 +32,16 @@ config BR2_PACKAGE_EUDEV_ENABLE_HWDB
+ 	help
+ 	  Enables hardware database installation to /etc/udev/hwdb.d
+ 
++config BR2_PACKAGE_EUDEV_HWDB_BIN_PATH
++	string "hwdb.bin path"
++	depends on BR2_PACKAGE_EUDEV_ENABLE_HWDB
++	default "/etc/udev/hwdb.bin"
++	help
++	  Location of the hwdb.bin file, which is re-generated at system
++	  startup. The default is /etc/udev/hwdb.bin but you may want to
++	  move it elsewhere (e.g. /var/run/udev/hwdb.bin) if /etc is in
++	  a read-only filesystem.
++
+ endif
+ 
+ comment "eudev needs eudev /dev management"
+diff --git a/package/eudev/S10udev b/package/eudev/S10udev
+index 4e799d6507..08aca82dd9 100755
+--- a/package/eudev/S10udev
++++ b/package/eudev/S10udev
+@@ -21,14 +21,20 @@ UDEV_CONFIG=/etc/udev/udev.conf
+ test -r $UDEV_CONFIG || exit 6
+ . $UDEV_CONFIG
+ 
++UDEV_HWDB_BIN=%%UDEV_HWDB_BIN%%
++
+ case "$1" in
+     start)
+         printf "Populating %s using udev: " "${udev_root:-/dev}"
+         [ -e /proc/sys/kernel/hotplug ] && printf '\000\000\000\000' > /proc/sys/kernel/hotplug
+         /sbin/udevd -d || { echo "FAIL"; exit 1; }
++        echo "done"
+         udevadm trigger --type=subsystems --action=add
+         udevadm trigger --type=devices --action=add
+-        udevadm settle --timeout=30 || echo "udevadm settle failed"
++        udevadm settle --timeout=30 || { echo "udevadm settle failed" && exit 1; }
++        echo "done"
++        printf "Compiling hardware database information $UDEV_HWDB_BIN: "
++        udevadm hwdb --update || { echo "FAIL" && exit 1; }
+         echo "done"
+         ;;
+     stop)
+diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+index 11dc93762b..e4fc7c884c 100644
+--- a/package/eudev/eudev.mk
++++ b/package/eudev/eudev.mk
+@@ -33,6 +33,12 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_EUDEV_ENABLE_HWDB),y)
+ EUDEV_CONF_OPTS += --enable-hwdb
++define EUDEV_POST_PATCH
++	$(SED) 's,$${udevconfdir}/hwdb.bin,$${udevhwdbbinpath:-$${udevconfdir}/hwdb.bin},' \
++		$(@D)/configure
++endef
++EUDEV_POST_PATCH_HOOKS += EUDEV_POST_PATCH
++EUDEV_CONF_ENV += udevhwdbbinpath=$(BR2_PACKAGE_EUDEV_HWDB_BIN_PATH)
+ else
+ EUDEV_CONF_OPTS += --disable-hwdb
+ endif
+@@ -45,7 +51,10 @@ EUDEV_CONF_OPTS += --disable-selinux
+ endif
+ 
+ define EUDEV_INSTALL_INIT_SYSV
+-	$(INSTALL) -D -m 0755 package/eudev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
++	$(INSTALL) -D -m 0755 package/eudev/S10udev \
++		$(TARGET_DIR)/etc/init.d/S10udev
++	$(SED) 's,%%UDEV_HWDB_BIN%%,$(BR2_PACKAGE_EUDEV_HWDB_BIN_PATH),' \
++		$(TARGET_DIR)/etc/init.d/S10udev
+ endef
+ 
+ # Required by default rules for input devices
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / RC Linux Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+2.14.4
