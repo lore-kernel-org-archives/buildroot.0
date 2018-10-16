@@ -1,45 +1,42 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 16 Oct 2018 12:53:07 -0500
-Subject: [Buildroot] More readable buildroot logs
-In-Reply-To: <20181016173034.GA22669@smipi1-X1>
-References: <20181016173034.GA22669@smipi1-X1>
-Message-ID: <CANQCQpbhY5tiMdfv+hcff1k7cH9Mz26ZBC=rpXgK=OTe7x4EDg@mail.gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Tue, 16 Oct 2018 21:05:14 +0300
+Subject: [Buildroot] [PATCH 1/1] python-markdown2: bump to version 2.3.6
+Message-ID: <20181016180514.6055-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There was a wrapper script added to provide the "reduced output" at
-the console and full br.log saved with detail.  To use this script,
-when executing make, use "./util/brmake" (relative to the buildroot
-folder).
+Also add license hash.
 
-On Tue, Oct 16, 2018 at 12:30 PM Pieter Smith <pieter@boesman.nl> wrote:
->
-> Hi Thomas,
->
-> In 2009 you proposed more readable build output for Buildroot:
-> http://lists.busybox.net/pipermail/buildroot/2009-September/029248.html
->
-> Was there any interest / progress on the topic?
->
-> Regards,
-> Pieter Smith
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/python-markdown2/python-markdown2.hash | 3 ++-
+ package/python-markdown2/python-markdown2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-
-
+diff --git a/package/python-markdown2/python-markdown2.hash b/package/python-markdown2/python-markdown2.hash
+index 17ae7d901d..59a9a13ad1 100644
+--- a/package/python-markdown2/python-markdown2.hash
++++ b/package/python-markdown2/python-markdown2.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256	07e077f5d4aa5f1e2f061f9f94d9e22f9ea266411b8c557b9164fc0e6dff0595  python-markdown2-2.3.2.tar.gz
++sha256	53a6100ee005df09d0462cc246f8dc7cd48f4678d1074f36e7cff980a3819b48  python-markdown2-2.3.6.tar.gz
++sha256	f8c7c4d554409cf621b8d653dbfffb719745fd36f5c49b8305258649b403ef9c  LICENSE.txt
+diff --git a/package/python-markdown2/python-markdown2.mk b/package/python-markdown2/python-markdown2.mk
+index 1e343b43ff..8069ef9185 100644
+--- a/package/python-markdown2/python-markdown2.mk
++++ b/package/python-markdown2/python-markdown2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_MARKDOWN2_VERSION = 2.3.2
++PYTHON_MARKDOWN2_VERSION = 2.3.6
+ PYTHON_MARKDOWN2_SITE = $(call github,trentm,python-markdown2,$(PYTHON_MARKDOWN2_VERSION))
+ PYTHON_MARKDOWN2_SETUP_TYPE = distutils
+ PYTHON_MARKDOWN2_LICENSE = MIT
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / RC Linux Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+2.17.1
