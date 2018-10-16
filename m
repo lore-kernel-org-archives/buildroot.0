@@ -1,73 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Oct 2018 14:46:32 +0200
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.{4, 9, 14,
- 18}.x series
-Message-ID: <20181016135756.025177FF5C@busybox.osuosl.org>
+Date: Tue, 16 Oct 2018 14:47:36 +0200
+Subject: [Buildroot] [git commit] python-posix-ipc: bump to version 1.0.4
+Message-ID: <20181016135756.3CAC7838EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0064c7b25125a47d0f83075a142a24a92a05faa2
+commit: https://git.buildroot.net/buildroot/commit/?id=f099ef68166ad84eb204df8a04e97c00aae99b4c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Also add license hash.
+
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 8 ++++----
- package/linux-headers/Config.in.host | 8 ++++----
- 3 files changed, 9 insertions(+), 9 deletions(-)
+ package/python-posix-ipc/python-posix-ipc.hash | 8 +++++---
+ package/python-posix-ipc/python-posix-ipc.mk   | 6 +++---
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 235018ca0b..d372c2c1f8 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -120,7 +120,7 @@ endif
+diff --git a/package/python-posix-ipc/python-posix-ipc.hash b/package/python-posix-ipc/python-posix-ipc.hash
+index 196f186de1..d267cabc88 100644
+--- a/package/python-posix-ipc/python-posix-ipc.hash
++++ b/package/python-posix-ipc/python-posix-ipc.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/posix-ipc/json, sha256 locally computed
+-md5	85607a392087715ac3a3c7ded2492d06  posix_ipc-1.0.0.tar.gz
+-sha256	9c93070374ca672725575e5c9874930c8cde69367fb90378b2255e048e31efcb  posix_ipc-1.0.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/posix-ipc/json
++md5	c4fd0065244ccb2f59cb8ceedf287cf6  posix_ipc-1.0.4.tar.gz
++sha256	ff6c9077633fc62a491d6997c43b094d885bb45a7ca1f36c9a0d647c54b74b14  posix_ipc-1.0.4.tar.gz
++# Locally computed sha256 checksums
++sha256	61f0669e70518e6d32f87e485965fe9309de60e4bef938b29cecd068b3db9a98  LICENSE
+diff --git a/package/python-posix-ipc/python-posix-ipc.mk b/package/python-posix-ipc/python-posix-ipc.mk
+index 6178c75498..d4429f117e 100644
+--- a/package/python-posix-ipc/python-posix-ipc.mk
++++ b/package/python-posix-ipc/python-posix-ipc.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.18.10" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.18.14" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.138-cip25" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 0a913de1f8..5a00e786af 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,9 +1,9 @@
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256 10604f7f8ccab5e7ce71f2e87d1410be679cd11c29c6c608ce35df1db40991de  linux-4.18.10.tar.xz
-+sha256 36c6d1360db9eab40270db6d292c259dd34d3dc06049d64afe3e4cfafb8562d3  linux-4.18.14.tar.xz
- sha256 41026d713ba4f7a5e9d514b876ce4ed28a1d993c0c58b42b2a2597d6a0e83021  linux-4.16.18.tar.xz
--sha256 df925906250bbc40fcf0137d7ad0fb8edc528d926832634f1233b7540564557f  linux-4.14.72.tar.xz
--sha256 6f5510d3fcfec1bf1e2d9c8e2fdcd7628c1886c6bdb29092adc5ccdf75e39318  linux-4.9.129.tar.xz
--sha256 571c8f6e8cabcc4e8c813869b87527f6e8e427b1c8fef96330c99743700f22a9  linux-4.4.158.tar.xz
-+sha256 ee3f19a4ff8a42793c193e361e1d34fcc821a5ca9b58db41befb2b4df0e482be  linux-4.14.76.tar.xz
-+sha256 3730fc025ba330a6f4908a6a1e4cb86d821000c84167721680ccf1b37b26563   linux-4.9.133.tar.xz
-+sha256 be0383d57c52a7ac6b1ca4d989a16a581f52ec9704ccf4ddf066b1b5b1313f87  linux-4.4.161.tar.xz
- sha256 6ad9389e55e0ea57768eae173747058a4487fa3630e10a7999cfec9f945e559c  linux-4.1.52.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v3.x/sha256sums.asc
- sha256 ad96d797571496c969aa71bf5d08e9d2a8c84458090d29a120f1b2981185a99e  linux-3.2.102.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 7c9c1d0fb0..cdf639ab3a 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -290,11 +290,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.158"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.129"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.72"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.4.161"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.133"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.76"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
--	default "4.18.10"	if BR2_KERNEL_HEADERS_4_18
-+	default "4.18.14"	if BR2_KERNEL_HEADERS_4_18
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-PYTHON_POSIX_IPC_VERSION = 1.0.0
++PYTHON_POSIX_IPC_VERSION = 1.0.4
+ PYTHON_POSIX_IPC_SOURCE = posix_ipc-$(PYTHON_POSIX_IPC_VERSION).tar.gz
+-PYTHON_POSIX_IPC_SITE = https://pypi.python.org/packages/f0/e6/bff62b62b2e75f695b737695951b7a4c1c6595369268a37868f5c34e1c12
++PYTHON_POSIX_IPC_SITE = https://files.pythonhosted.org/packages/c9/3e/54217da71aa26b488295d878df4d3132093253b4ae5798ac66fcb6921ef0
+ PYTHON_POSIX_IPC_LICENSE = BSD-3-Clause
+ PYTHON_POSIX_IPC_LICENSE_FILES = LICENSE
+-PYTHON_POSIX_IPC_SETUP_TYPE = distutils
++PYTHON_POSIX_IPC_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
