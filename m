@@ -1,34 +1,50 @@
 From: Oscar Gomez Fuente <oscargomezf@gmail.com>
-Date: Tue, 16 Oct 2018 08:45:36 +0200
-Subject: [Buildroot] Problem with Raspberry Pi 3B+and BT
-In-Reply-To: <CALtfCQYKA=MrVGPYY8a7koPLu5SczJ1GxNDOhnfXWsixBEQ_AQ@mail.gmail.com>
-References: <CALtfCQa87Q5w-mOL4sKbW8M7wh4qAH3rBRm6A6H41SEaci=3QQ@mail.gmail.com>
- <CANQCQpbD_fdXrqYGdW74d4EVyCm4eAs6pxiyasg8wTumYZ+XWA@mail.gmail.com>
- <20181012234133.539d0a0b@gmx.net>
- <CALtfCQYKA=MrVGPYY8a7koPLu5SczJ1GxNDOhnfXWsixBEQ_AQ@mail.gmail.com>
-Message-ID: <CALtfCQaiCCCetMG8sHvTjnAZdfnBNUQvZSB0ynn3LT58NH9Omg@mail.gmail.com>
+Date: Tue, 16 Oct 2018 10:41:37 +0200
+Subject: [Buildroot] Update the current date using ntp.
+In-Reply-To: <871s8qo41u.fsf@dell.be.48ers.dk>
+References: <CALtfCQaov7R68HfvZtNOse+SGu9Y8vihS=4xgixjtjE__VXkkQ@mail.gmail.com>
+ <CANQCQpZA_Xgjx+pKvZXp97VYvwk4M0M=PhaEUQQqu40QjV4_iQ@mail.gmail.com>
+ <4f85764f-4677-56bb-01f0-46def72c3d9b@mind.be>
+ <871s8qo41u.fsf@dell.be.48ers.dk>
+Message-ID: <CALtfCQa-jdUYs+nN5weRwzLTe3-MX+U7ENDCPS0f4HkjJ38Dxw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hi everyone,
 
-I've tried the BT with the new rpi-bt-firmware [8c1e2bff1d],
-rpi-wifi-firmware [8c1e2bff1d] and linux-firmware [44d4fca992] and new
-linux [6d27aa156c] packages, but it fails with the same error:
 
-[30090.903743] Bluetooth: hci0: Frame reassembly failed (-84)
-[30092.980340] Bluetooth: Failed to disable LE scan: status 0x1f
-[30092.980346] Bluetooth: hci0 command 0x200c tx timeout
+I was trying on chrony (version 3.4) on my Raspberry Pi 3b+ but it
+seems to be that it fails wit this message:
 
-After around 8 hours the BT didn't work again.
+Could not open configuration file /etc/chrony.conf : No such file or directory
 
-Does anyone any suggestion?
+I think that it has to be added a chrony.conf default file in
+../package/chrony and it has to installed in /etc.
+
 
 Best regards.
 
 Oscar Gomez Fuente
 TST Sistemas
 www.tst-sistemas.es
+
+
+On Tue, 16 Oct 2018 at 07:26, Peter Korsgaard <peter@korsgaard.com> wrote:
+>
+> >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>
+> Hi,
+>
+>  >  I believe chrony does all this automatically. I've used chrony on boards
+>  > without battery-backed RTC and the time is correct when I log in, without any
+>  > magic added by me.
+>
+> FYI, this can be finetuned by the makestep configuration option:
+>
+> https://chrony.tuxfamily.org/doc/3.4/chrony.conf.html#makestep
+>
+> --
+> Bye, Peter Korsgaard
