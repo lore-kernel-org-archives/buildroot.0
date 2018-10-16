@@ -1,32 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Oct 2018 17:59:32 +0200
-Subject: [Buildroot] [PATCH] libssh: security bump to version 0.8.4
-In-Reply-To: <bb0e0a00bfce17b9a32210d153e052d9ac4561c6.1539693068.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 16 Oct 2018 15:31:08 +0300")
-References: <bb0e0a00bfce17b9a32210d153e052d9ac4561c6.1539693068.git.baruch@tkos.co.il>
-Message-ID: <87d0s9zxuj.fsf@dell.be.48ers.dk>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 16 Oct 2018 19:07:13 +0300
+Subject: [Buildroot] [PATCH 1/2] psmisc: correct license
+Message-ID: <c9b0eba7a84ac3590dfb9d311c2b4f39faede9e2.1539706034.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+The license heading in source files includes the "or any later"
+language.
 
- > Fixes CVE-2018-10933: authentication bypass vulnerability in the server
- > code. By presenting the server an SSH2_MSG_USERAUTH_SUCCESS message in
- > place of the SSH2_MSG_USERAUTH_REQUEST message which the server would
- > expect to initiate authentication, the attacker could successfully
- > authenticate without any credentials.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/psmisc/psmisc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- >   https://www.libssh.org/security/advisories/CVE-2018-10933.txt
-
- > Drop an upstream patch.
-
- > Cc: Scott Fan <fancp2007@gmail.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Committed, thanks.
-
+diff --git a/package/psmisc/psmisc.mk b/package/psmisc/psmisc.mk
+index 3916e34b089c..ee441f582dfd 100644
+--- a/package/psmisc/psmisc.mk
++++ b/package/psmisc/psmisc.mk
+@@ -7,7 +7,7 @@
+ PSMISC_VERSION = 23.1
+ PSMISC_SITE = http://downloads.sourceforge.net/project/psmisc/psmisc
+ PSMISC_SOURCE = psmisc-$(PSMISC_VERSION).tar.xz
+-PSMISC_LICENSE = GPL-2.0
++PSMISC_LICENSE = GPL-2.0+
+ PSMISC_LICENSE_FILES = COPYING
+ PSMISC_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+ # Patching Makefile.am
 -- 
-Bye, Peter Korsgaard
+2.19.1
