@@ -1,54 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Oct 2018 14:47:36 +0200
-Subject: [Buildroot] [git commit] python-posix-ipc: bump to version 1.0.4
-Message-ID: <20181016135756.3CAC7838EF@busybox.osuosl.org>
+Date: Tue, 16 Oct 2018 14:48:27 +0200
+Subject: [Buildroot] [git commit] ntp: fix build without libcap and no
+ threads
+Message-ID: <20181016135756.45F6A838EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f099ef68166ad84eb204df8a04e97c00aae99b4c
+commit: https://git.buildroot.net/buildroot/commit/?id=13dcc69a39da97f615627553e88113ba455875ea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add license hash.
+When threads support is missing the ntp build system builds the
+work_fork code. This code added call to set_user_group_ids() that is
+under HAVE_DROPROOT, which is disabled when libcap is not built.
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Add a patch fixing that.
+
+Fixes:
+http://autobuild.buildroot.net/results/ab9/ab9ceff1151b8b5e6b9fa77d39c0f9b0cac1a080/
+
+Cc: Artyom Panfilov <apanfilov@spectracom.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-posix-ipc/python-posix-ipc.hash | 8 +++++---
- package/python-posix-ipc/python-posix-ipc.mk   | 6 +++---
- 2 files changed, 8 insertions(+), 6 deletions(-)
+ .../ntp/0004-fix-work-fork-without-droproot.patch  | 26 ++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/package/python-posix-ipc/python-posix-ipc.hash b/package/python-posix-ipc/python-posix-ipc.hash
-index 196f186de1..d267cabc88 100644
---- a/package/python-posix-ipc/python-posix-ipc.hash
-+++ b/package/python-posix-ipc/python-posix-ipc.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/posix-ipc/json, sha256 locally computed
--md5	85607a392087715ac3a3c7ded2492d06  posix_ipc-1.0.0.tar.gz
--sha256	9c93070374ca672725575e5c9874930c8cde69367fb90378b2255e048e31efcb  posix_ipc-1.0.0.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/posix-ipc/json
-+md5	c4fd0065244ccb2f59cb8ceedf287cf6  posix_ipc-1.0.4.tar.gz
-+sha256	ff6c9077633fc62a491d6997c43b094d885bb45a7ca1f36c9a0d647c54b74b14  posix_ipc-1.0.4.tar.gz
-+# Locally computed sha256 checksums
-+sha256	61f0669e70518e6d32f87e485965fe9309de60e4bef938b29cecd068b3db9a98  LICENSE
-diff --git a/package/python-posix-ipc/python-posix-ipc.mk b/package/python-posix-ipc/python-posix-ipc.mk
-index 6178c75498..d4429f117e 100644
---- a/package/python-posix-ipc/python-posix-ipc.mk
-+++ b/package/python-posix-ipc/python-posix-ipc.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--PYTHON_POSIX_IPC_VERSION = 1.0.0
-+PYTHON_POSIX_IPC_VERSION = 1.0.4
- PYTHON_POSIX_IPC_SOURCE = posix_ipc-$(PYTHON_POSIX_IPC_VERSION).tar.gz
--PYTHON_POSIX_IPC_SITE = https://pypi.python.org/packages/f0/e6/bff62b62b2e75f695b737695951b7a4c1c6595369268a37868f5c34e1c12
-+PYTHON_POSIX_IPC_SITE = https://files.pythonhosted.org/packages/c9/3e/54217da71aa26b488295d878df4d3132093253b4ae5798ac66fcb6921ef0
- PYTHON_POSIX_IPC_LICENSE = BSD-3-Clause
- PYTHON_POSIX_IPC_LICENSE_FILES = LICENSE
--PYTHON_POSIX_IPC_SETUP_TYPE = distutils
-+PYTHON_POSIX_IPC_SETUP_TYPE = setuptools
- 
- $(eval $(python-package))
+diff --git a/package/ntp/0004-fix-work-fork-without-droproot.patch b/package/ntp/0004-fix-work-fork-without-droproot.patch
+new file mode 100644
+index 0000000000..cb6fec0125
+--- /dev/null
++++ b/package/ntp/0004-fix-work-fork-without-droproot.patch
+@@ -0,0 +1,26 @@
++Fix work_fork build when droproot is disabled
++
++The set_user_group_ids() depends on HAVE_DROPROOT. When HAVE_DROPROOT is not
++enabled, work_fork.c code causes a link failure:
++
++../libntp/libntp.a(work_fork.o): In function `send_blocking_req_internal':
++work_fork.c:(.text+0x498): undefined reference to `set_user_group_ids'
++
++Make the set_user_group_ids() call depend on HAVE_DROPROOT.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: http://bugs.ntp.org/show_bug.cgi?id=3539
++
++--- ntp-4.2.8p12.orig/libntp/work_fork.c	2018-08-14 14:51:06.000000000 +0300
+++++ ntp-4.2.8p12/libntp/work_fork.c	2018-10-15 21:10:54.580917962 +0300
++@@ -594,7 +594,9 @@
++ 	init_logging("ntp_intres", 0, FALSE);
++ 	setup_logfile(NULL);
++ 
+++#if defined(HAVE_DROPROOT)
++ 	(void) set_user_group_ids();
+++#endif
++ 
++ 	/*
++ 	 * And now back to the portable code
