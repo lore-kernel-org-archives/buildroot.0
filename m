@@ -1,33 +1,71 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Oct 2018 12:02:42 +0200
+From: Oscar Gomez Fuente <oscargomezf@gmail.com>
+Date: Tue, 16 Oct 2018 12:27:41 +0200
 Subject: [Buildroot] Update the current date using ntp.
-In-Reply-To: <CALtfCQa-jdUYs+nN5weRwzLTe3-MX+U7ENDCPS0f4HkjJ38Dxw@mail.gmail.com>
- (Oscar Gomez Fuente's message of "Tue, 16 Oct 2018 10:41:37 +0200")
+In-Reply-To: <87woqimcot.fsf@dell.be.48ers.dk>
 References: <CALtfCQaov7R68HfvZtNOse+SGu9Y8vihS=4xgixjtjE__VXkkQ@mail.gmail.com>
  <CANQCQpZA_Xgjx+pKvZXp97VYvwk4M0M=PhaEUQQqu40QjV4_iQ@mail.gmail.com>
  <4f85764f-4677-56bb-01f0-46def72c3d9b@mind.be>
  <871s8qo41u.fsf@dell.be.48ers.dk>
  <CALtfCQa-jdUYs+nN5weRwzLTe3-MX+U7ENDCPS0f4HkjJ38Dxw@mail.gmail.com>
-Message-ID: <87woqimcot.fsf@dell.be.48ers.dk>
+ <87woqimcot.fsf@dell.be.48ers.dk>
+Message-ID: <CALtfCQYPhf4zuED_ukm5nA4E5+u28NmjV-bBKghgkp-3WLn4Kg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Oscar" == Oscar Gomez Fuente <oscargomezf@gmail.com> writes:
+Hi Peter
 
- > Hi everyone,
- > I was trying on chrony (version 3.4) on my Raspberry Pi 3b+ but it
- > seems to be that it fails wit this message:
+> Well, the question is what should the default configuration be exactly?
+> We have a lot of packages that do not provide any default configuration.
 
- > Could not open configuration file /etc/chrony.conf : No such file or directory
+I don't know, but I think it should have a default  /etc/chrony.conf
+because right now chrony is not working.
 
- > I think that it has to be added a chrony.conf default file in
- > ../package/chrony and it has to installed in /etc.
+Finally, I'm using ntpd and I made this change in the script S49ntp in
+order to execute ntpdate before running the ntpd demon:
 
-Well, the question is what should the default configuration be exactly?
-We have a lot of packages that do not provide any default configuration.
+#! /bin/sh
 
--- 
-Bye, Peter Korsgaard
+NAME=ntpd
+
+# Read config file if it is present.
+if [ -r /etc/default/$NAME ]; then
+. /etc/default/$NAME
+fi
+
+case $1 in
+start)
+        printf "Starting $NAME: "
+        NUM_SERVER=0
+        CURRENT_DATE=$(date | grep "1970")
+        while [ "$NUM_SERVER" != "3" -a "$CURRENT_DATE" = "1970" ];
+        do
+                /usr/bin/ntpdate $NUM_SERVER.pool.ntp.org > /dev/null 2>&1
+                CURRENT_DATE=$(date | grep "1970")
+                NUM_SERVER=$(( $NUM_SERVER + 1 ))
+        done
+        start-stop-daemon -S -q -x /usr/sbin/ntpd -- -g
+        [ $? = 0 ] && echo "OK" || echo "FAIL"
+        ;;
+stop)
+        printf "Stopping $NAME: "
+        start-stop-daemon -K -q -n $NAME
+        [ $? = 0 ] && echo "OK" || echo "FAIL"
+        ;;
+restart|reload)
+        echo "Restarting $NAME: "
+        $0 stop
+        sleep 1
+        $0 start
+        ;;
+*)
+        echo "Usage: $0 {start|stop|restart|reload}" >&2
+        exit 1
+        ;;
+esac
+
+exit 0
+
+Best regards.
