@@ -1,55 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 16 Oct 2018 12:31:26 +0000
-Subject: [Buildroot] [Bug 11401] New: Impossible do build a qt program using
- kf5-networkmanager-qt
-Message-ID: <bug-11401-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 16 Oct 2018 14:46:19 +0200
+Subject: [Buildroot] [PATCH] squid: requires C++11 toolchain
+In-Reply-To: <7de2a66d889a8723f41e397005c1c46a15470974.1539689856.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 16 Oct 2018 14:37:36 +0300")
+References: <7de2a66d889a8723f41e397005c1c46a15470974.1539689856.git.baruch@tkos.co.il>
+Message-ID: <8736t612lg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11401
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-            Bug ID: 11401
-           Summary: Impossible do build a qt program using
-                    kf5-networkmanager-qt
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: carrier.nicolas0 at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+ > The squid changelog for version 4.0.1 mentions that "C++11 compiler
+ > support is now mandatory". The code uses the std::map::emplace method
+ > that gcc before 4.8 does not support.
 
-When trying to build a minimal c++ code, making use of the
-kf5-networkmanager-qt library, I obtain the following error:
+ > Also fixes:
+ > http://autobuild.buildroot.net/results/370/37093f8d3395850b2db5ed645f60d1c2df92768d/
+ > http://autobuild.buildroot.net/results/921/92117726e7b4ede08dcc0e4fd1a85171fd17aeb8/
+ > http://autobuild.buildroot.net/results/e67/e679ef90219c5e8f9c94ddcd7d3f9582f79ef751/
 
-    Project ERROR: Unknown module(s) in QT: NetworkManagerQt
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-There is a .pri file installed here:
-
-    output/target/usr/mkspecs/modules/qt_NetworkManagerQt.pri
-
-Which doesn't seem to be taken into account. When cp-ed alongsidef the qt .pri
-files:
-
-    cp ../output/target/usr/mkspecs/modules/qt_NetworkManagerQt.pri
-../output/host/mkspecs/modules/
-
-The build fails this time with the following error:
-
-    i686-buildroot-linux-gnu-g++: ERROR: unsafe header/library path used in
-cross-compilation: '-I/usr/include/KF5/NetworkManagerQt'
-
-Which seems to indicate that either the pri file isn't used properly or that
-its content is buggy.
+Committed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
