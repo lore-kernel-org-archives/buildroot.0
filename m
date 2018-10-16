@@ -1,85 +1,51 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 16 Oct 2018 23:49:58 +0200
-Subject: [Buildroot] [PATCH 1/1] qt5location: copy PositioningQuick.so*
- for QtQuick
-In-Reply-To: <20181015212220.GA3787@blarch>
-References: <20181015190217.GA31890@blarch> <20181015221554.1fade38f@gmx.net>
- <20181015212220.GA3787@blarch>
-Message-ID: <20181016234958.5d10fa6b@gmx.net>
+Date: Tue, 16 Oct 2018 23:56:56 +0200
+Subject: [Buildroot] Problem with Raspberry Pi 3B+and BT
+In-Reply-To: <CALtfCQaiCCCetMG8sHvTjnAZdfnBNUQvZSB0ynn3LT58NH9Omg@mail.gmail.com>
+References: <CALtfCQa87Q5w-mOL4sKbW8M7wh4qAH3rBRm6A6H41SEaci=3QQ@mail.gmail.com>
+ <CANQCQpbD_fdXrqYGdW74d4EVyCm4eAs6pxiyasg8wTumYZ+XWA@mail.gmail.com>
+ <20181012234133.539d0a0b@gmx.net>
+ <CALtfCQYKA=MrVGPYY8a7koPLu5SczJ1GxNDOhnfXWsixBEQ_AQ@mail.gmail.com>
+ <CALtfCQaiCCCetMG8sHvTjnAZdfnBNUQvZSB0ynn3LT58NH9Omg@mail.gmail.com>
+Message-ID: <20181016235656.584581d2@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Alexander,
+Hello Oscar,
 
-On Mon, 15 Oct 2018 23:22:20 +0200, Alexander 'z33ky' Hirsch <1zeeky@gmail.com> wrote:
+On Tue, 16 Oct 2018 08:45:36 +0200, Oscar Gomez Fuente <oscargomezf@gmail.com> wrote:
 
-> On Mon, 2018-10-15T22:15:54+0200, Peter Seiderer wrote:
-> > Hello Alexander,
-> > 
-> > On Mon, 15 Oct 2018 21:02:17 +0200, Alexander 'z33ky' Hirsch <1zeeky@gmail.com> wrote:
-> > 
-> > > The Location module for QtQuick depends on this library, which was not
-> > > being copied in the build rule.
-> > > 
-> > > Signed-off-by: Alexander 'z33ky' Hirsch <1zeeky@gmail.com>
-> > > ---
-> > >  package/qt5/qt5location/qt5location.mk | 4 ++++
-> > >  1 file changed, 4 insertions(+)
-> > > 
-> > > diff --git a/package/qt5/qt5location/qt5location.mk b/package/qt5/qt5location/qt5location.mk
-> > > index 18253e9..fe26b6e 100644
-> > > --- a/package/qt5/qt5location/qt5location.mk
-> > > +++ b/package/qt5/qt5location/qt5location.mk
-> > > @@ -44,6 +44,9 @@ define QT5LOCATION_INSTALL_TARGET_LOCATION
-> > >  	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Location.so.* $(TARGET_DIR)/usr/lib
-> > >  	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/geoservices $(TARGET_DIR)/usr/lib/qt/plugins/
-> > >  endef
-> > 
-> > Should depend on BR2_PACKAGE_QT5_VERSION_LATEST because the library is not
-> > build/installed in the Qt5.6.x case:
-> > 
-> > + ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-> > 
-> > > +define QT5LOCATION_INSTALL_TARGET_POSITION_QUICK
-> > > +	cp -dpf $(STAGING_DIR)/usr/lib/libQt5PositioningQuick.so.* $(TARGET_DIR)/usr/lib
-> > > +endef
-> > 
-> > + endif
-> > 
-> > Thanks for the patch, mind to resend with the changes?
-> > 
-> > Regards,
-> > Peter
-> > 
-> > >  ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
-> > >  define QT5LOCATION_INSTALL_TARGET_EXAMPLES
-> > >  	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/location $(TARGET_DIR)/usr/lib/qt/examples/
-> > > @@ -59,6 +62,7 @@ endef
-> > >  
-> > >  define QT5LOCATION_INSTALL_TARGET_CMDS
-> > >  	$(QT5LOCATION_INSTALL_TARGET_POSITION)
-> > > +	$(QT5LOCATION_INSTALL_TARGET_POSITION_QUICK)
-> > >  	$(QT5LOCATION_INSTALL_TARGET_LOCATION)
-> > >  	$(QT5LOCATION_INSTALL_TARGET_QMLS)
-> > >  	$(QT5LOCATION_INSTALL_TARGET_EXAMPLES)
-> > 
+> Hi Peter,
 > 
-> Sure, thanks for the review.
-> Wouldn't it be better to check if QT5LOCATION_VERSION >= 5.11 though? That seems to be the version where this library was added.
+> I've tried the BT with the new rpi-bt-firmware [8c1e2bff1d],
+> rpi-wifi-firmware [8c1e2bff1d] and linux-firmware [44d4fca992] and new
+> linux [6d27aa156c] packages, but it fails with the same error:
+> 
+> [30090.903743] Bluetooth: hci0: Frame reassembly failed (-84)
+> [30092.980340] Bluetooth: Failed to disable LE scan: status 0x1f
+> [30092.980346] Bluetooth: hci0 command 0x200c tx timeout
+> 
+> After around 8 hours the BT didn't work again.
+> 
+> Does anyone any suggestion?
 
-In principle your are right with your suggestion, but the current way to express
-this one in buildroot is the dump BR2_PACKAGE_QT5_VERSION_LATEST check ;-)
+Do the check with an original Raspbian Image, if the same error occurs
+complain upstream about it, otherwise find out what makes the difference...
+
+Try the search the web, your are not the only one with this problem [1], [2]...
 
 Regards,
 Peter
 
+[1] https://github.com/raspberrypi/linux/issues/2264
+[2] https://raspberrypi.stackexchange.com/questions/70217/tons-of-bluetooth-hci0-frame-reassembly-failed-84-messages
+
 > 
-> Regards
-> Alexander
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Best regards.
+> 
+> Oscar Gomez Fuente
+> TST Sistemas
+> www.tst-sistemas.es
