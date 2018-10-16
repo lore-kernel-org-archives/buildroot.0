@@ -1,48 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Oct 2018 14:45:37 +0200
-Subject: [Buildroot] [git commit] squid: requires C++11 toolchain
-Message-ID: <20181016135755.E7692838EF@busybox.osuosl.org>
+Date: Tue, 16 Oct 2018 14:47:21 +0200
+Subject: [Buildroot] [git commit] python-markdown: bump to version 3.0.1
+Message-ID: <20181016135756.3166880091@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b30cfc8eef3eef3d50347ad191c6dd90c32e591
+commit: https://git.buildroot.net/buildroot/commit/?id=35cab7793f7e7c845828679ad6b0e2eed798269d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The squid changelog for version 4.0.1 mentions that "C++11 compiler
-support is now mandatory". The code uses the std::map::emplace method
-that gcc before 4.8 does not support.
+Also add license hash.
 
-Also fixes:
-http://autobuild.buildroot.net/results/370/37093f8d3395850b2db5ed645f60d1c2df92768d/
-http://autobuild.buildroot.net/results/921/92117726e7b4ede08dcc0e4fd1a85171fd17aeb8/
-http://autobuild.buildroot.net/results/e67/e679ef90219c5e8f9c94ddcd7d3f9582f79ef751/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/squid/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/python-markdown/python-markdown.hash | 8 +++++---
+ package/python-markdown/python-markdown.mk   | 6 +++---
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/squid/Config.in b/package/squid/Config.in
-index aeffbc6579..50f65de433 100644
---- a/package/squid/Config.in
-+++ b/package/squid/Config.in
-@@ -1,12 +1,13 @@
--comment "squid needs a toolchain w/ C++ not affected by GCC bug 64735"
-+comment "squid needs a toolchain w/ C++, gcc >= 4.8 not affected by bug 64735"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735 || \
--		!BR2_INSTALL_LIBSTDCPP
-+		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+diff --git a/package/python-markdown/python-markdown.hash b/package/python-markdown/python-markdown.hash
+index f2131edaf3..623156b509 100644
+--- a/package/python-markdown/python-markdown.hash
++++ b/package/python-markdown/python-markdown.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/markdown/json, sha256 locally computed
+-md5 d9ef057a5bd185f6f536400a31fc5d45 Markdown-2.6.8.tar.gz
+-sha256 0ac8a81e658167da95d063a9279c9c1b2699f37c7c4153256a458b3a43860e33 Markdown-2.6.8.tar.gz
++# md5, sha256 from https://pypi.org/pypi/markdown/json
++md5	72219f46ca440b657bf227500731bdf1  Markdown-3.0.1.tar.gz
++sha256	d02e0f9b04c500cde6637c11ad7c72671f359b87b9fe924b2383649d8841db7c  Markdown-3.0.1.tar.gz
++# Locally computed sha256
++sha256	6f1193cb634718e65c3a537d6e25ebd614820ec0ef693cfc12248112638d64da  LICENSE.md
+diff --git a/package/python-markdown/python-markdown.mk b/package/python-markdown/python-markdown.mk
+index d5273f97a4..8349638eb3 100644
+--- a/package/python-markdown/python-markdown.mk
++++ b/package/python-markdown/python-markdown.mk
+@@ -4,12 +4,12 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_SQUID
- 	bool "squid"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::current_exception
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
- 	# needs fork()
- 	depends on BR2_USE_MMU
- 	select BR2_PACKAGE_LIBCAP
+-PYTHON_MARKDOWN_VERSION = 2.6.8
++PYTHON_MARKDOWN_VERSION = 3.0.1
+ PYTHON_MARKDOWN_SOURCE = Markdown-$(PYTHON_MARKDOWN_VERSION).tar.gz
+-PYTHON_MARKDOWN_SITE = https://pypi.python.org/packages/1d/25/3f6d2cb31ec42ca5bd3bfbea99b63892b735d76e26f20dd2dcc34ffe4f0d
++PYTHON_MARKDOWN_SITE = https://files.pythonhosted.org/packages/3c/52/7bae9e99a7a4be6af4a713fe9b692777e6468d28991c54c273dfb6ec9fb2
+ PYTHON_MARKDOWN_LICENSE = BSD-3-Clause
+ PYTHON_MARKDOWN_LICENSE_FILES = LICENSE.md
+-PYTHON_MARKDOWN_SETUP_TYPE = distutils
++PYTHON_MARKDOWN_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
+ $(eval $(host-python-package))
