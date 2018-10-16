@@ -1,146 +1,85 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 16 Oct 2018 10:21:41 -0500
-Subject: [Buildroot] [PATCH v2] eudev: generate hwdb.bin at system
- startup
-In-Reply-To: <20181016114948.26921-1-casantos@datacom.com.br>
-References: <20181016114948.26921-1-casantos@datacom.com.br>
-Message-ID: <CANQCQpZGC=DCY4v=aTko1BCV2tNVr1+tPUby6copf9DJjXAf=A@mail.gmail.com>
+Date: Tue, 16 Oct 2018 10:24:51 -0500
+Subject: [Buildroot] Update the current date using ntp.
+In-Reply-To: <CALtfCQYPhf4zuED_ukm5nA4E5+u28NmjV-bBKghgkp-3WLn4Kg@mail.gmail.com>
+References: <CALtfCQaov7R68HfvZtNOse+SGu9Y8vihS=4xgixjtjE__VXkkQ@mail.gmail.com>
+ <CANQCQpZA_Xgjx+pKvZXp97VYvwk4M0M=PhaEUQQqu40QjV4_iQ@mail.gmail.com>
+ <4f85764f-4677-56bb-01f0-46def72c3d9b@mind.be>
+ <871s8qo41u.fsf@dell.be.48ers.dk>
+ <CALtfCQa-jdUYs+nN5weRwzLTe3-MX+U7ENDCPS0f4HkjJ38Dxw@mail.gmail.com>
+ <87woqimcot.fsf@dell.be.48ers.dk>
+ <CALtfCQYPhf4zuED_ukm5nA4E5+u28NmjV-bBKghgkp-3WLn4Kg@mail.gmail.com>
+Message-ID: <CANQCQpad-ZQYV-oWL2pv6qAeh1NK9=jBsHxxq3aasP6n77Hwmw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Carlos,
+Oscar,
 
-On Tue, Oct 16, 2018 at 6:50 AM Carlos Santos <casantos@datacom.com.br> wrote:
+On Tue, Oct 16, 2018 at 5:28 AM Oscar Gomez Fuente
+<oscargomezf@gmail.com> wrote:
 >
-> From: Carlos Santos <casantos@datacom.ind.br>
+> Hi Peter
 >
-> Programs that use libudev (e.g. lsusb, from usbutils) need the hwdb.bin
-> file to work properly.
+> > Well, the question is what should the default configuration be exactly?
+> > We have a lot of packages that do not provide any default configuration.
+>
+> I don't know, but I think it should have a default  /etc/chrony.conf
+> because right now chrony is not working.
+>
+> Finally, I'm using ntpd and I made this change in the script S49ntp in
+> order to execute ntpdate before running the ntpd demon:
+>
+> #! /bin/sh
+>
+> NAME=ntpd
+>
+> # Read config file if it is present.
+> if [ -r /etc/default/$NAME ]; then
+> . /etc/default/$NAME
+> fi
+>
+> case $1 in
+> start)
+>         printf "Starting $NAME: "
+>         NUM_SERVER=0
+>         CURRENT_DATE=$(date | grep "1970")
+>         while [ "$NUM_SERVER" != "3" -a "$CURRENT_DATE" = "1970" ];
+>         do
+>                 /usr/bin/ntpdate $NUM_SERVER.pool.ntp.org > /dev/null 2>&1
+>                 CURRENT_DATE=$(date | grep "1970")
+>                 NUM_SERVER=$(( $NUM_SERVER + 1 ))
+>         done
 
-Sounds like a great runtime test?  I had wondered other then testing
-that the .bin generates, what's the example with those tools to show
-the bin is working?
+Care to submit a patch with this?  If it was pulled as an example from
+another distro, be sure to cite that in the description.
 
+>         start-stop-daemon -S -q -x /usr/sbin/ntpd -- -g
+>         [ $? = 0 ] && echo "OK" || echo "FAIL"
+>         ;;
+> stop)
+>         printf "Stopping $NAME: "
+>         start-stop-daemon -K -q -n $NAME
+>         [ $? = 0 ] && echo "OK" || echo "FAIL"
+>         ;;
+> restart|reload)
+>         echo "Restarting $NAME: "
+>         $0 stop
+>         sleep 1
+>         $0 start
+>         ;;
+> *)
+>         echo "Usage: $0 {start|stop|restart|reload}" >&2
+>         exit 1
+>         ;;
+> esac
 >
-> If BR2_PACKAGE_EUDEV_ENABLE_HWDB is selected then the eudev installation
-> populates /etc/udev/hwdb.d/ but does not genarete /etc/udev/hwdb.bin. It
-> must be created running "udevadm hwdb --update" on the target device but
-> this does not work with a read-only /etc, so we need these changes:
+> exit 0
 >
-> - Add the BR2_PACKAGE_EUDEV_HWDB_BIN_PATH config, allowing the user to
->   set the location of hwdb.bin.
-> - Patch the configuration script, allowing to set the hwdb.bin path by
->   means of an environment variable (udevhwdbbinpath).
-> - Pass the value set in BR2_PACKAGE_EUDEV_HWDB_BIN_PATH to the configure
->   script by means of the udevhwdbbinpath variable.
-> - Make the S10udev init script run "udevadm hwdb --update" to recreate
->   hwdb.bin or print an error message if the operation fails (e.g. no
->   write permission on the filesystem).
->
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> ---
-> Changes v1->v2
-> - Incorporate fixes and improvements provided by Matt Weber
->
-> Note: there was a discussion via email and on IRC, with suggetsions to
-> prebuild hwdb.bin at build time and to add a /etc/defaults/udev cfg file
-> instead patching S10udev (like in the recent S01logging suggested
-> updates). I like both suggestions but I'd prefer to implement them in
-> subsequent patches rather, since they woud require additional changes
-> (e.g. adding eudev as a host tool).
+> Best regards.
 
-Guessing the use of SED setting that value maybe a sticking point
-where there would be a push to use the default cfg approach.  Wouldn't
-need to be an offline build in this patchset.
-
-> ---
->  package/eudev/Config.in |  9 +++++++++
->  package/eudev/S10udev   |  8 +++++++-
->  package/eudev/eudev.mk  | 13 ++++++++++++-
->  3 files changed, 28 insertions(+), 2 deletions(-)
->
-> diff --git a/package/eudev/Config.in b/package/eudev/Config.in
-> index 2220265a55..a589a14af3 100644
-> --- a/package/eudev/Config.in
-> +++ b/package/eudev/Config.in
-> @@ -32,6 +32,15 @@ config BR2_PACKAGE_EUDEV_ENABLE_HWDB
->         help
->           Enables hardware database installation to /etc/udev/hwdb.d
->
-> +config BR2_PACKAGE_EUDEV_HWDB_BIN_PATH
-
-I believe the dependency needs reflected here on
-BR2_PACKAGE_EUDEV_ENABLE_HWDB?  Wouldn't that be the case?
-
-> +       string "hwdb.bin path"
-> +       default "/etc/udev/hwdb.bin"
-> +       help
-> +         Location of the hwdb.bin file, which is re-generated at system
-> +         startup. The default is /etc/udev/hwdb.bin but you may want to
-> +         move it elsewhere (e.g. /var/run/udev/hwdb.bin) if /etc is in
-> +         a read-only filesystem.
-> +
->  endif
->
->  comment "eudev needs eudev /dev management"
-> diff --git a/package/eudev/S10udev b/package/eudev/S10udev
-> index 4e799d6507..08aca82dd9 100755
-> --- a/package/eudev/S10udev
-> +++ b/package/eudev/S10udev
-> @@ -21,14 +21,20 @@ UDEV_CONFIG=/etc/udev/udev.conf
->  test -r $UDEV_CONFIG || exit 6
->  . $UDEV_CONFIG
->
-> +UDEV_HWDB_BIN=%%UDEV_HWDB_BIN%%
-> +
->  case "$1" in
->      start)
->          printf "Populating %s using udev: " "${udev_root:-/dev}"
->          [ -e /proc/sys/kernel/hotplug ] && printf '\000\000\000\000' > /proc/sys/kernel/hotplug
->          /sbin/udevd -d || { echo "FAIL"; exit 1; }
-> +        echo "done"
->          udevadm trigger --type=subsystems --action=add
->          udevadm trigger --type=devices --action=add
-> -        udevadm settle --timeout=30 || echo "udevadm settle failed"
-> +        udevadm settle --timeout=30 || { echo "udevadm settle failed" && exit 1; }
-> +        echo "done"
-> +        printf "Compiling hardware database information $UDEV_HWDB_BIN: "
-> +        udevadm hwdb --update || { echo "FAIL" && exit 1; }
->          echo "done"
->          ;;
->      stop)
-> diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-> index 11dc93762b..0a9c9d5a67 100644
-> --- a/package/eudev/eudev.mk
-> +++ b/package/eudev/eudev.mk
-> @@ -44,8 +44,19 @@ else
->  EUDEV_CONF_OPTS += --disable-selinux
->  endif
->
-> +define EUDEV_POST_PATCH
-> +       $(SED) 's,$${udevconfdir}/hwdb.bin,$${udevhwdbbinpath:-$${udevconfdir}/hwdb.bin},' \
-> +               $(@D)/configure
-> +endef
-> +EUDEV_POST_PATCH_HOOKS += EUDEV_POST_PATCH
-> +
-> +EUDEV_CONF_ENV += udevhwdbbinpath=$(BR2_PACKAGE_EUDEV_HWDB_BIN_PATH)
-> +
->  define EUDEV_INSTALL_INIT_SYSV
-> -       $(INSTALL) -D -m 0755 package/eudev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
-> +       $(INSTALL) -D -m 0755 package/eudev/S10udev \
-> +               $(TARGET_DIR)/etc/init.d/S10udev
-> +       $(SED) 's,%%UDEV_HWDB_BIN%%,$(BR2_PACKAGE_EUDEV_HWDB_BIN_PATH),' \
-> +               $(TARGET_DIR)/etc/init.d/S10udev
->  endef
->
->  # Required by default rules for input devices
-> --
-> 2.14.4
->
 
 
 -- 
