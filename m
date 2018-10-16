@@ -1,64 +1,57 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Tue, 16 Oct 2018 21:55:03 +0200
-Subject: [Buildroot] [PATCH 1/3] scancpan: remove optional dependency
-Message-ID: <20181016195505.30438-1-francois.perrad@gadz.org>
+Date: Tue, 16 Oct 2018 21:55:04 +0200
+Subject: [Buildroot] [PATCH 2/3] perl: fix the generated subdirectory
+ Makefiles
+In-Reply-To: <20181016195505.30438-1-francois.perrad@gadz.org>
+References: <20181016195505.30438-1-francois.perrad@gadz.org>
+Message-ID: <20181016195505.30438-2-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-there are also runtime dependency
-
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- utils/scancpan | 13 +------------
- 1 file changed, 1 insertion(+), 12 deletions(-)
+ ...the-generated-subdirectory-Makefiles.patch | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch
 
-diff --git a/utils/scancpan b/utils/scancpan
-index 01f3abdc8..6b810fdb6 100755
---- a/utils/scancpan
-+++ b/utils/scancpan
-@@ -521,7 +521,6 @@ my %need_host;          # name -> 1 if host package is needed
- my %need_dlopen;        # name -> 1 if requires dynamic library
- my %deps_build;         # name -> list of host dependencies
- my %deps_runtime;       # name -> list of target dependencies
--my %deps_optional;      # name -> list of optional target dependencies
- my %license_files;      # name -> hash of license files
- my %checksum;           # author -> list of checksum
- my $mirror = 'http://cpan.metacpan.org';        # a CPAN mirror
-@@ -626,7 +625,6 @@ sub fetch {
-         }
-         $deps_build{$name} = [keys %build];
-         $deps_runtime{$name} = [keys %runtime];
--        $deps_optional{$name} = [keys %optional];
-         foreach my $distname (@{$deps_build{$name}}) {
-             fetch( $distname, 0, 1 );
-         }
-@@ -634,7 +632,7 @@ sub fetch {
-             fetch( $distname, $need_target, $need_host );
-             $need_dlopen{$name} ||= $need_dlopen{$distname};
-         }
--        foreach my $distname (@{$deps_optional{$name}}) {
-+        foreach my $distname (keys %optional) {
-             fetch( $distname, $need_target, $need_host );
-         }
-     }
-@@ -748,15 +746,6 @@ while (my ($distname, $dist) = each %dist) {
-         say {$fh} qq{${brname}_LICENSE = ${license}} if $license;
-         say {$fh} qq{${brname}_LICENSE_FILES = ${license_files}} if $license_files;
-         say {$fh} qq{};
--        foreach (sort @{$deps_optional{$distname}}) {
--            next if grep { $_ eq $distname; } @{$deps_runtime{$_}};     # avoid cyclic dependencies
--            my $opt_brname = brname( $_ );
--            my $opt_fsname = fsname( $_ );
--            say {$fh} qq{ifeq (\$(BR2_PACKAGE_PERL_${opt_brname}),y)};
--            say {$fh} qq{${brname}_DEPENDENCIES += ${opt_fsname}};
--            say {$fh} qq{endif};
--            say {$fh} qq{};
--        }
-         say {$fh} qq{\$(eval \$(perl-package))} if $need_target{$distname};
-         say {$fh} qq{\$(eval \$(host-perl-package))} if $need_host{$distname};
-         close $fh;
+diff --git a/package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch b/package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch
+new file mode 100644
+index 000000000..71560c5e0
+--- /dev/null
++++ b/package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch
+@@ -0,0 +1,30 @@
++From 30ae4c9e2ac6cd27138ebf124cbda9232c56bdf7 Mon Sep 17 00:00:00 2001
++From: Francois Perrad <francois.perrad@gadz.org>
++Date: Tue, 16 Oct 2018 21:20:12 +0200
++Subject: [PATCH] fix the generated subdirectory Makefiles
++
++all variables used by BR must be propagated
++
++similar to https://github.com/Perl-Toolchain-Gang/ExtUtils-MakeMaker/commit/98e8532fffe5afa8186329acc44fb957427f1823
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++---
++ cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm b/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm
++index d579256e86..48642e98fa 100644
++--- a/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm
+++++ b/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm
++@@ -703,7 +703,7 @@ END
++         }
++         if ($self->{PARENT}) {
++             $self->{PARENT}->{CHILDREN}->{$newclass} = $self;
++-            foreach my $opt (qw(POLLUTE PERL_CORE LINKTYPE LD OPTIMIZE)) {
+++            foreach my $opt (qw(POLLUTE PERL_CORE LINKTYPE AR FULL_AR CC CCFLAGS OPTIMIZE LD LDDLFLAGS LDFLAGS PERL_ARCHLIB DESTDIR )) {
++                 if (exists $self->{PARENT}->{$opt}
++                     and not exists $self->{$opt})
++                     {
++-- 
++2.17.1
++
 -- 
 2.17.1
