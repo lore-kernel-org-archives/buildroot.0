@@ -1,10 +1,10 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Mon, 15 Oct 2018 21:42:29 -0300
-Subject: [Buildroot] [PATCH 6/7] support/testing: use default test_run for
- python-txaio
+Date: Mon, 15 Oct 2018 21:42:30 -0300
+Subject: [Buildroot] [PATCH 7/7] support/testing: use default test_run for
+ python-txtorcon
 In-Reply-To: <20181016004230.10393-1-ricardo.martincoski@gmail.com>
 References: <20181016004230.10393-1-ricardo.martincoski@gmail.com>
-Message-ID: <20181016004230.10393-7-ricardo.martincoski@gmail.com>
+Message-ID: <20181016004230.10393-8-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,76 +16,63 @@ Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- .../package/sample_python_txaio_asyncio.py    |  3 ++
- .../package/sample_python_txaio_twisted.py    |  3 ++
- .../tests/package/test_python_txaio.py        | 30 +++++--------------
- 3 files changed, 13 insertions(+), 23 deletions(-)
- create mode 100644 support/testing/tests/package/sample_python_txaio_asyncio.py
- create mode 100644 support/testing/tests/package/sample_python_txaio_twisted.py
+ .../tests/package/sample_python_txtorcon.py   |  1 +
+ .../tests/package/test_python_txtorcon.py     | 32 ++++++-------------
+ 2 files changed, 10 insertions(+), 23 deletions(-)
+ create mode 100644 support/testing/tests/package/sample_python_txtorcon.py
 
-diff --git a/support/testing/tests/package/sample_python_txaio_asyncio.py b/support/testing/tests/package/sample_python_txaio_asyncio.py
+diff --git a/support/testing/tests/package/sample_python_txtorcon.py b/support/testing/tests/package/sample_python_txtorcon.py
 new file mode 100644
-index 0000000000..77f11ed807
+index 0000000000..c4a2ae6f5b
 --- /dev/null
-+++ b/support/testing/tests/package/sample_python_txaio_asyncio.py
-@@ -0,0 +1,3 @@
-+import txaio
-+txaio.use_asyncio()
-+f0 = txaio.create_future()
-diff --git a/support/testing/tests/package/sample_python_txaio_twisted.py b/support/testing/tests/package/sample_python_txaio_twisted.py
-new file mode 100644
-index 0000000000..13ea82a961
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_txaio_twisted.py
-@@ -0,0 +1,3 @@
-+import txaio
-+txaio.use_twisted()
-+f0 = txaio.create_future()
-diff --git a/support/testing/tests/package/test_python_txaio.py b/support/testing/tests/package/test_python_txaio.py
-index af93e031b5..a4858a3f94 100644
---- a/support/testing/tests/package/test_python_txaio.py
-+++ b/support/testing/tests/package/test_python_txaio.py
-@@ -1,34 +1,18 @@
++++ b/support/testing/tests/package/sample_python_txtorcon.py
+@@ -0,0 +1 @@
++import txtorcon  # noqa
+diff --git a/support/testing/tests/package/test_python_txtorcon.py b/support/testing/tests/package/test_python_txtorcon.py
+index 352ff67825..1880b813a7 100644
+--- a/support/testing/tests/package/test_python_txtorcon.py
++++ b/support/testing/tests/package/test_python_txtorcon.py
+@@ -1,32 +1,18 @@
 -from tests.package.test_python import TestPythonBase
 +import tests.package.test_python
  
  
--class TestPythonPy2Txaio(TestPythonBase):
+-class TestPythonTxtorcon(TestPythonBase):
+-    def import_test(self):
+-        cmd = self.interpreter + " -c 'import txtorcon'"
+-        _, exit_code = self.emulator.run(cmd, timeout=30)
+-        self.assertEqual(exit_code, 0)
+-
+-
+-class TestPythonPy2Txtorcon(TestPythonTxtorcon):
 -    config = TestPythonBase.config + \
-+class TestPythonPy2Txaio(tests.package.test_python.TestPython2):
++class TestPythonTxtorcon():
 +    config_package = \
          """
 -        BR2_PACKAGE_PYTHON=y
-         BR2_PACKAGE_PYTHON_TXAIO=y
-         BR2_PACKAGE_PYTHON_TWISTED=y
+         BR2_PACKAGE_PYTHON_TXTORCON=y
          """
-+    sample_scripts = ["tests/package/sample_python_txaio_twisted.py"]
++    sample_scripts = ["tests/package/sample_python_txtorcon.py"]
++    timeout = 30
  
 -    def test_run(self):
 -        self.login()
--        cmd = self.interpreter + " -c 'import txaio;"
--        cmd += "txaio.use_twisted();"
--        cmd += "f0 = txaio.create_future()'"
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
+-        self.import_test()
  
--
--class TestPythonPy3Txaio(TestPythonBase):
++class TestPythonPy2Txtorcon(TestPythonTxtorcon, tests.package.test_python.TestPython2):
++    pass
+ 
+-class TestPythonPy3Txtorcon(TestPythonTxtorcon):
 -    config = TestPythonBase.config + \
-+class TestPythonPy3Txaio(tests.package.test_python.TestPython3):
-+    config_package = \
-         """
+-        """
 -        BR2_PACKAGE_PYTHON3=y
-         BR2_PACKAGE_PYTHON_TXAIO=y
-         """
--
+-        BR2_PACKAGE_PYTHON_TXTORCON=y
+-        """
+ 
 -    def test_run(self):
 -        self.login()
--        cmd = self.interpreter + " -c 'import txaio;"
--        cmd += "txaio.use_asyncio();"
--        cmd += "f0 = txaio.create_future()'"
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
-+    sample_scripts = ["tests/package/sample_python_txaio_asyncio.py"]
+-        self.import_test()
++class TestPythonPy3Txtorcon(TestPythonTxtorcon, tests.package.test_python.TestPython3):
++    pass
 -- 
 2.17.1
