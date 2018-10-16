@@ -1,7 +1,7 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 16 Oct 2018 10:24:51 -0500
+From: Oscar Gomez Fuente <oscargomezf@gmail.com>
+Date: Tue, 16 Oct 2018 17:54:48 +0200
 Subject: [Buildroot] Update the current date using ntp.
-In-Reply-To: <CALtfCQYPhf4zuED_ukm5nA4E5+u28NmjV-bBKghgkp-3WLn4Kg@mail.gmail.com>
+In-Reply-To: <CANQCQpad-ZQYV-oWL2pv6qAeh1NK9=jBsHxxq3aasP6n77Hwmw@mail.gmail.com>
 References: <CALtfCQaov7R68HfvZtNOse+SGu9Y8vihS=4xgixjtjE__VXkkQ@mail.gmail.com>
  <CANQCQpZA_Xgjx+pKvZXp97VYvwk4M0M=PhaEUQQqu40QjV4_iQ@mail.gmail.com>
  <4f85764f-4677-56bb-01f0-46def72c3d9b@mind.be>
@@ -9,85 +9,73 @@ References: <CALtfCQaov7R68HfvZtNOse+SGu9Y8vihS=4xgixjtjE__VXkkQ@mail.gmail.com>
  <CALtfCQa-jdUYs+nN5weRwzLTe3-MX+U7ENDCPS0f4HkjJ38Dxw@mail.gmail.com>
  <87woqimcot.fsf@dell.be.48ers.dk>
  <CALtfCQYPhf4zuED_ukm5nA4E5+u28NmjV-bBKghgkp-3WLn4Kg@mail.gmail.com>
-Message-ID: <CANQCQpad-ZQYV-oWL2pv6qAeh1NK9=jBsHxxq3aasP6n77Hwmw@mail.gmail.com>
+ <CANQCQpad-ZQYV-oWL2pv6qAeh1NK9=jBsHxxq3aasP6n77Hwmw@mail.gmail.com>
+Message-ID: <CALtfCQYRPzjZqnwVeTA3nojAmP06Q3Hb0=03NNm-v==hm_xtag@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Oscar,
+Hi Matthew,
 
-On Tue, Oct 16, 2018 at 5:28 AM Oscar Gomez Fuente
-<oscargomezf@gmail.com> wrote:
->
-> Hi Peter
->
-> > Well, the question is what should the default configuration be exactly?
-> > We have a lot of packages that do not provide any default configuration.
->
-> I don't know, but I think it should have a default  /etc/chrony.conf
-> because right now chrony is not working.
->
-> Finally, I'm using ntpd and I made this change in the script S49ntp in
-> order to execute ntpdate before running the ntpd demon:
->
-> #! /bin/sh
->
-> NAME=ntpd
->
-> # Read config file if it is present.
-> if [ -r /etc/default/$NAME ]; then
-> . /etc/default/$NAME
-> fi
->
-> case $1 in
-> start)
->         printf "Starting $NAME: "
->         NUM_SERVER=0
->         CURRENT_DATE=$(date | grep "1970")
->         while [ "$NUM_SERVER" != "3" -a "$CURRENT_DATE" = "1970" ];
->         do
->                 /usr/bin/ntpdate $NUM_SERVER.pool.ntp.org > /dev/null 2>&1
->                 CURRENT_DATE=$(date | grep "1970")
->                 NUM_SERVER=$(( $NUM_SERVER + 1 ))
->         done
+> > I don't know, but I think it should have a default  /etc/chrony.conf
+> > because right now chrony is not working.
 
-Care to submit a patch with this?  If it was pulled as an example from
-another distro, be sure to cite that in the description.
+The script was made on my own and ff course, I don't care to
+send a patch with this changes. I fixed some mistakes and
+I added an option in case you don't have the package ntpdate
+selected. The final S49ntp script is:
 
->         start-stop-daemon -S -q -x /usr/sbin/ntpd -- -g
->         [ $? = 0 ] && echo "OK" || echo "FAIL"
->         ;;
-> stop)
->         printf "Stopping $NAME: "
->         start-stop-daemon -K -q -n $NAME
->         [ $? = 0 ] && echo "OK" || echo "FAIL"
->         ;;
-> restart|reload)
->         echo "Restarting $NAME: "
->         $0 stop
->         sleep 1
->         $0 start
->         ;;
-> *)
->         echo "Usage: $0 {start|stop|restart|reload}" >&2
->         exit 1
->         ;;
-> esac
->
-> exit 0
->
-> Best regards.
+-------
+#! /bin/sh
+
+NAME=ntpd
+NTPDATE=/usr/bin/ntpdate
+
+# Read config file if it is present.
+if [ -r /etc/default/$NAME ]; then
+. /etc/default/$NAME
+fi
+
+case $1 in
+start)
+        printf "Starting $NAME: "
+        if [ -f $NTPDATE ]
+        then
+                NUM_SERVER=0
+                CURRENT_DATE=$(date | grep "1970")
+                while [ "$NUM_SERVER" != "4" -a "$CURRENT_DATE" != "" ]
+                do
+                        $NTPDATE $NUM_SERVER.pool.ntp.org > /dev/null 2>&1
+                        CURRENT_DATE=$(date | grep "1970")
+                        NUM_SERVER=$(( $NUM_SERVER + 1 ))
+                done
+        fi
+        start-stop-daemon -S -q -x /usr/sbin/ntpd -- -g
+        [ $? = 0 ] && echo "OK" || echo "FAIL"
+        ;;
+stop)
+        printf "Stopping $NAME: "
+        start-stop-daemon -K -q -n $NAME
+        [ $? = 0 ] && echo "OK" || echo "FAIL"
+        ;;
+restart|reload)
+        echo "Restarting $NAME: "
+        $0 stop
+        sleep 1
+        $0 start
+        ;;
+*)
+        echo "Usage: $0 {start|stop|restart|reload}" >&2
+        exit 1
+        ;;
+esac
+
+exit 0
+-------
+
+I've never sent a patch to buildroot, I expect to do it well.
 
 
-
--- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / RC Linux Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+Best regards.
