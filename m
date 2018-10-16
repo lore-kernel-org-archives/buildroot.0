@@ -1,142 +1,154 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 16 Oct 2018 17:09:09 +0200
-Subject: [Buildroot] [PATCH 1/1] vlc: fix build with libvorbis and tremor
-Message-ID: <20181016150909.27272-1-fontaine.fabrice@gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 16 Oct 2018 10:21:41 -0500
+Subject: [Buildroot] [PATCH v2] eudev: generate hwdb.bin at system
+ startup
+In-Reply-To: <20181016114948.26921-1-casantos@datacom.com.br>
+References: <20181016114948.26921-1-casantos@datacom.com.br>
+Message-ID: <CANQCQpZGC=DCY4v=aTko1BCV2tNVr1+tPUby6copf9DJjXAf=A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 550c42509c203891c47d934b058a19c2fa490973 "package/vlc: fix
-linking with tremor" fixed build with BR2_PACKAGE_TREMOR and without
-BR2_PACKAGE_LIBVORBIS. However, it breaks build if BR2_PACKAGE_TREMOR
-and BR2_PACKAGE_LIBVORBIS are both enabled.
-Indeed, by overiding VORBIS_LIBS by -lvorbisidec, link of
-codec/.libs/libvorbis_plugin_la-vorbis.o with -lvorbis
-failed because VORBIS_LIBS is normally used to save "-logg
--lvorbis -lvorbisenc":
-PKG_ENABLE_MODULES_VLC([VORBIS], [], [ogg vorbis >= 1.1 vorbisenc >= 1.1], [Vorbis decoder and encoder], [auto])
+Carlos,
 
-So replace fourth patch by an upstreamable patch which uses pkg-config
-to set TREMOR_LIBS if tremor is found instead of "hacking" VORBIS_LIBS
+On Tue, Oct 16, 2018 at 6:50 AM Carlos Santos <casantos@datacom.com.br> wrote:
+>
+> From: Carlos Santos <casantos@datacom.ind.br>
+>
+> Programs that use libudev (e.g. lsusb, from usbutils) need the hwdb.bin
+> file to work properly.
 
-Fixes:
- - http://autobuild.buildroot.org/results/85a7bb1996b78dee037d5900b124cbdf5b66a6ac
+Sounds like a great runtime test?  I had wondered other then testing
+that the .bin generates, what's the example with those tools to show
+the bin is working?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...he-name-of-the-vorbis-and-ogg-librar.patch | 31 ------------
- ...ld-use-pkg-config-to-get-tremor-libs.patch | 50 +++++++++++++++++++
- package/vlc/vlc.mk                            |  1 -
- 3 files changed, 50 insertions(+), 32 deletions(-)
- delete mode 100644 package/vlc/0004-Don-t-hardcode-the-name-of-the-vorbis-and-ogg-librar.patch
- create mode 100644 package/vlc/0004-build-use-pkg-config-to-get-tremor-libs.patch
+>
+> If BR2_PACKAGE_EUDEV_ENABLE_HWDB is selected then the eudev installation
+> populates /etc/udev/hwdb.d/ but does not genarete /etc/udev/hwdb.bin. It
+> must be created running "udevadm hwdb --update" on the target device but
+> this does not work with a read-only /etc, so we need these changes:
+>
+> - Add the BR2_PACKAGE_EUDEV_HWDB_BIN_PATH config, allowing the user to
+>   set the location of hwdb.bin.
+> - Patch the configuration script, allowing to set the hwdb.bin path by
+>   means of an environment variable (udevhwdbbinpath).
+> - Pass the value set in BR2_PACKAGE_EUDEV_HWDB_BIN_PATH to the configure
+>   script by means of the udevhwdbbinpath variable.
+> - Make the S10udev init script run "udevadm hwdb --update" to recreate
+>   hwdb.bin or print an error message if the operation fails (e.g. no
+>   write permission on the filesystem).
+>
+> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+> Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> ---
+> Changes v1->v2
+> - Incorporate fixes and improvements provided by Matt Weber
+>
+> Note: there was a discussion via email and on IRC, with suggetsions to
+> prebuild hwdb.bin at build time and to add a /etc/defaults/udev cfg file
+> instead patching S10udev (like in the recent S01logging suggested
+> updates). I like both suggestions but I'd prefer to implement them in
+> subsequent patches rather, since they woud require additional changes
+> (e.g. adding eudev as a host tool).
 
-diff --git a/package/vlc/0004-Don-t-hardcode-the-name-of-the-vorbis-and-ogg-librar.patch b/package/vlc/0004-Don-t-hardcode-the-name-of-the-vorbis-and-ogg-librar.patch
-deleted file mode 100644
-index a5352b7498..0000000000
---- a/package/vlc/0004-Don-t-hardcode-the-name-of-the-vorbis-and-ogg-librar.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From 6515c423f9e6b8b607678a260a16db2684d88a4e Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Tue, 1 May 2018 22:30:09 +0200
--Subject: [PATCH] Don't hardcode the name of the vorbis and ogg libraries
--
--Fixes linking error with tremor due to wrong library name.
--
--Downloaded from Gentoo package
--https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/media-video/vlc/files/vlc-2.1.0-fix-libtremor-libs.patch?view=markup
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- modules/codec/Makefile.am | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/modules/codec/Makefile.am b/modules/codec/Makefile.am
--index 10132a92f3..2fb52a586e 100644
----- a/modules/codec/Makefile.am
--+++ b/modules/codec/Makefile.am
--@@ -324,7 +324,7 @@ codec_LTLIBRARIES += $(LTLIBdaala)
-- libtremor_plugin_la_SOURCES = codec/vorbis.c
-- libtremor_plugin_la_CPPFLAGS = $(AM_CPPFLAGS) -DMODULE_NAME_IS_tremor
-- libtremor_plugin_la_LDFLAGS = $(AM_LDFLAGS) -rpath '$(codecdir)'
---libtremor_plugin_la_LIBADD = -lvorbisdec -logg
--+libtremor_plugin_la_LIBADD = $(VORBIS_LIBS) $(OGG_LIBS)
-- EXTRA_LTLIBRARIES += libtremor_plugin.la
-- codec_LTLIBRARIES += $(LTLIBtremor)
-- 
---- 
--2.14.4
--
-diff --git a/package/vlc/0004-build-use-pkg-config-to-get-tremor-libs.patch b/package/vlc/0004-build-use-pkg-config-to-get-tremor-libs.patch
-new file mode 100644
-index 0000000000..652718b013
---- /dev/null
-+++ b/package/vlc/0004-build-use-pkg-config-to-get-tremor-libs.patch
-@@ -0,0 +1,50 @@
-+From fb257e1e204c30436b3509ea3fa9f7c5fe131dc1 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 16 Oct 2018 14:25:20 +0200
-+Subject: [PATCH] build: use pkg-config to get tremor libs
-+
-+Use PKG_ENABLE_MODULES_VLC to enable tremor based on availability of
-+ogg and vorbisidec
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure.ac              | 9 +--------
-+ modules/codec/Makefile.am | 2 +-
-+ 2 files changed, 2 insertions(+), 9 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 0d3222e00f..b506d735f2 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -2710,14 +2710,7 @@ PKG_ENABLE_MODULES_VLC([VORBIS], [], [ogg vorbis >= 1.1 vorbisenc >= 1.1], [Vorb
-+ dnl
-+ dnl  Tremor plugin
-+ dnl
-+-AC_ARG_ENABLE(tremor,
-+-  [  --enable-tremor         Tremor decoder support (default disabled)])
-+-if test "${enable_tremor}" = "yes"
-+-then
-+-  AC_CHECK_HEADERS(tremor/ivorbiscodec.h, [
-+-    VLC_ADD_PLUGIN([tremor])
-+-   ],[])
-+-fi
-++PKG_ENABLE_MODULES_VLC([TREMOR], [], [vorbisidec ogg], [Tremor decoder support], [disabled])
-+ 
-+ dnl
-+ dnl  Speex plugins
-+diff --git a/modules/codec/Makefile.am b/modules/codec/Makefile.am
-+index 075ee2a0e9..637b1d45a6 100644
-+--- a/modules/codec/Makefile.am
-++++ b/modules/codec/Makefile.am
-+@@ -318,7 +318,7 @@ codec_LTLIBRARIES += $(LTLIBdaala)
-+ libtremor_plugin_la_SOURCES = codec/vorbis.c
-+ libtremor_plugin_la_CPPFLAGS = $(AM_CPPFLAGS) -DMODULE_NAME_IS_tremor
-+ libtremor_plugin_la_LDFLAGS = $(AM_LDFLAGS) -rpath '$(codecdir)'
-+-libtremor_plugin_la_LIBADD = -lvorbisdec -logg
-++libtremor_plugin_la_LIBADD = $(TREMOR_LIBS)
-+ EXTRA_LTLIBRARIES += libtremor_plugin.la
-+ codec_LTLIBRARIES += $(LTLIBtremor)
-+ 
-+-- 
-+2.17.1
-+
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 4d2e5f26c2..73f84d5eb2 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -512,7 +512,6 @@ VLC_CONF_OPTS += --disable-taglib
- endif
- 
- ifeq ($(BR2_PACKAGE_TREMOR),y)
--VLC_CONF_ENV += VORBIS_LIBS="-lvorbisidec"
- VLC_CONF_OPTS += --enable-tremor
- VLC_DEPENDENCIES += tremor
- else
+Guessing the use of SED setting that value maybe a sticking point
+where there would be a push to use the default cfg approach.  Wouldn't
+need to be an offline build in this patchset.
+
+> ---
+>  package/eudev/Config.in |  9 +++++++++
+>  package/eudev/S10udev   |  8 +++++++-
+>  package/eudev/eudev.mk  | 13 ++++++++++++-
+>  3 files changed, 28 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/eudev/Config.in b/package/eudev/Config.in
+> index 2220265a55..a589a14af3 100644
+> --- a/package/eudev/Config.in
+> +++ b/package/eudev/Config.in
+> @@ -32,6 +32,15 @@ config BR2_PACKAGE_EUDEV_ENABLE_HWDB
+>         help
+>           Enables hardware database installation to /etc/udev/hwdb.d
+>
+> +config BR2_PACKAGE_EUDEV_HWDB_BIN_PATH
+
+I believe the dependency needs reflected here on
+BR2_PACKAGE_EUDEV_ENABLE_HWDB?  Wouldn't that be the case?
+
+> +       string "hwdb.bin path"
+> +       default "/etc/udev/hwdb.bin"
+> +       help
+> +         Location of the hwdb.bin file, which is re-generated at system
+> +         startup. The default is /etc/udev/hwdb.bin but you may want to
+> +         move it elsewhere (e.g. /var/run/udev/hwdb.bin) if /etc is in
+> +         a read-only filesystem.
+> +
+>  endif
+>
+>  comment "eudev needs eudev /dev management"
+> diff --git a/package/eudev/S10udev b/package/eudev/S10udev
+> index 4e799d6507..08aca82dd9 100755
+> --- a/package/eudev/S10udev
+> +++ b/package/eudev/S10udev
+> @@ -21,14 +21,20 @@ UDEV_CONFIG=/etc/udev/udev.conf
+>  test -r $UDEV_CONFIG || exit 6
+>  . $UDEV_CONFIG
+>
+> +UDEV_HWDB_BIN=%%UDEV_HWDB_BIN%%
+> +
+>  case "$1" in
+>      start)
+>          printf "Populating %s using udev: " "${udev_root:-/dev}"
+>          [ -e /proc/sys/kernel/hotplug ] && printf '\000\000\000\000' > /proc/sys/kernel/hotplug
+>          /sbin/udevd -d || { echo "FAIL"; exit 1; }
+> +        echo "done"
+>          udevadm trigger --type=subsystems --action=add
+>          udevadm trigger --type=devices --action=add
+> -        udevadm settle --timeout=30 || echo "udevadm settle failed"
+> +        udevadm settle --timeout=30 || { echo "udevadm settle failed" && exit 1; }
+> +        echo "done"
+> +        printf "Compiling hardware database information $UDEV_HWDB_BIN: "
+> +        udevadm hwdb --update || { echo "FAIL" && exit 1; }
+>          echo "done"
+>          ;;
+>      stop)
+> diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+> index 11dc93762b..0a9c9d5a67 100644
+> --- a/package/eudev/eudev.mk
+> +++ b/package/eudev/eudev.mk
+> @@ -44,8 +44,19 @@ else
+>  EUDEV_CONF_OPTS += --disable-selinux
+>  endif
+>
+> +define EUDEV_POST_PATCH
+> +       $(SED) 's,$${udevconfdir}/hwdb.bin,$${udevhwdbbinpath:-$${udevconfdir}/hwdb.bin},' \
+> +               $(@D)/configure
+> +endef
+> +EUDEV_POST_PATCH_HOOKS += EUDEV_POST_PATCH
+> +
+> +EUDEV_CONF_ENV += udevhwdbbinpath=$(BR2_PACKAGE_EUDEV_HWDB_BIN_PATH)
+> +
+>  define EUDEV_INSTALL_INIT_SYSV
+> -       $(INSTALL) -D -m 0755 package/eudev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
+> +       $(INSTALL) -D -m 0755 package/eudev/S10udev \
+> +               $(TARGET_DIR)/etc/init.d/S10udev
+> +       $(SED) 's,%%UDEV_HWDB_BIN%%,$(BR2_PACKAGE_EUDEV_HWDB_BIN_PATH),' \
+> +               $(TARGET_DIR)/etc/init.d/S10udev
+>  endef
+>
+>  # Required by default rules for input devices
+> --
+> 2.14.4
+>
+
+
 -- 
-2.17.1
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / RC Linux Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
