@@ -1,93 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Oct 2018 14:45:15 +0200
-Subject: [Buildroot] [git commit] libssh: security bump to version 0.8.4
-Message-ID: <20181016135755.D89C47FF5C@busybox.osuosl.org>
+Date: Tue, 16 Oct 2018 14:46:32 +0200
+Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.{4, 9, 14,
+ 18}.x series
+Message-ID: <20181016135756.025177FF5C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de24e47d90f64f546978b6ec12f769dc4fd89587
+commit: https://git.buildroot.net/buildroot/commit/?id=0064c7b25125a47d0f83075a142a24a92a05faa2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2018-10933: authentication bypass vulnerability in the server
-code. By presenting the server an SSH2_MSG_USERAUTH_SUCCESS message in
-place of the SSH2_MSG_USERAUTH_REQUEST message which the server would
-expect to initiate authentication, the attacker could successfully
-authenticate without any credentials.
-
-  https://www.libssh.org/security/advisories/CVE-2018-10933.txt
-
-Drop an upstream patch.
-
-Cc: Scott Fan <fancp2007@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...fig-Fix-building-without-globbing-support.patch | 30 ----------------------
- package/libssh/libssh.hash                         |  4 +--
- package/libssh/libssh.mk                           |  2 +-
- 3 files changed, 3 insertions(+), 33 deletions(-)
+ linux/Config.in                      | 2 +-
+ linux/linux.hash                     | 8 ++++----
+ package/linux-headers/Config.in.host | 8 ++++----
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/package/libssh/0001-config-Fix-building-without-globbing-support.patch b/package/libssh/0001-config-Fix-building-without-globbing-support.patch
-deleted file mode 100644
-index 81585db49f..0000000000
---- a/package/libssh/0001-config-Fix-building-without-globbing-support.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 97b2a61d74edebad43ad09612c92a0341090f165 Mon Sep 17 00:00:00 2001
--From: Andreas Schneider <asn@cryptomilk.org>
--Date: Tue, 25 Sep 2018 14:35:43 +0200
--Subject: [PATCH] config: Fix building without globbing support
--
--Signed-off-by: Andreas Schneider <asn@cryptomilk.org>
--(cherry picked from commit f709c3ac585f7b47317758b8693a6d104b30f951)
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: commit 97b2a61d74 (stable-0.8 branch)
--
-- src/config.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/config.c b/src/config.c
--index df6b48bf6d5e..3d87a1780a58 100644
----- a/src/config.c
--+++ b/src/config.c
--@@ -462,7 +462,7 @@ static int ssh_config_parse_line(ssh_session session, const char *line,
-- 
--       p = ssh_config_get_str_tok(&s, NULL);
--       if (p && *parsing) {
---#ifdef HAVE_GLOB
--+#if defined(HAVE_GLOB) && defined(HAVE_GLOB_GL_FLAGS_MEMBER)
--         local_parse_glob(session, p, parsing, seen);
-- #else
--         local_parse_file(session, p, parsing, seen);
---- 
--2.19.1
--
-diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
-index 1810545daa..257b93cb61 100644
---- a/package/libssh/libssh.hash
-+++ b/package/libssh/libssh.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://www.libssh.org/files/0.8/libssh-0.8.3.tar.xz.asc
-+# https://www.libssh.org/files/0.8/libssh-0.8.4.tar.xz.asc
- # with key 8DFF53E18F2ABC8D8F3C92237EE0FC4DCC014E3D
--sha256 302f31f606f2368cd3ce77d7a69f7464c18eae176e73e59102e0524401bd29d0  libssh-0.8.3.tar.xz
-+sha256 6bb07713021a8586ba2120b2c36c468dc9ac8096d043f9b1726639aa4275b81b  libssh-0.8.4.tar.xz
- sha256 468cf08f784ef6fd3b3705b60dd8111e2b70fbb8f6549cd503665a6bbb3bc625  COPYING
-diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-index 42dcdc48e0..1ef09b3a21 100644
---- a/package/libssh/libssh.mk
-+++ b/package/libssh/libssh.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index 235018ca0b..d372c2c1f8 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -120,7 +120,7 @@ endif
  
- LIBSSH_VERSION_MAJOR = 0.8
--LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).3
-+LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).4
- LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
- LIBSSH_SITE = https://www.libssh.org/files/$(LIBSSH_VERSION_MAJOR)
- LIBSSH_LICENSE = LGPL-2.1
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.18.10" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.18.14" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.138-cip25" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 0a913de1f8..5a00e786af 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,9 +1,9 @@
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256 10604f7f8ccab5e7ce71f2e87d1410be679cd11c29c6c608ce35df1db40991de  linux-4.18.10.tar.xz
++sha256 36c6d1360db9eab40270db6d292c259dd34d3dc06049d64afe3e4cfafb8562d3  linux-4.18.14.tar.xz
+ sha256 41026d713ba4f7a5e9d514b876ce4ed28a1d993c0c58b42b2a2597d6a0e83021  linux-4.16.18.tar.xz
+-sha256 df925906250bbc40fcf0137d7ad0fb8edc528d926832634f1233b7540564557f  linux-4.14.72.tar.xz
+-sha256 6f5510d3fcfec1bf1e2d9c8e2fdcd7628c1886c6bdb29092adc5ccdf75e39318  linux-4.9.129.tar.xz
+-sha256 571c8f6e8cabcc4e8c813869b87527f6e8e427b1c8fef96330c99743700f22a9  linux-4.4.158.tar.xz
++sha256 ee3f19a4ff8a42793c193e361e1d34fcc821a5ca9b58db41befb2b4df0e482be  linux-4.14.76.tar.xz
++sha256 3730fc025ba330a6f4908a6a1e4cb86d821000c84167721680ccf1b37b26563   linux-4.9.133.tar.xz
++sha256 be0383d57c52a7ac6b1ca4d989a16a581f52ec9704ccf4ddf066b1b5b1313f87  linux-4.4.161.tar.xz
+ sha256 6ad9389e55e0ea57768eae173747058a4487fa3630e10a7999cfec9f945e559c  linux-4.1.52.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v3.x/sha256sums.asc
+ sha256 ad96d797571496c969aa71bf5d08e9d2a8c84458090d29a120f1b2981185a99e  linux-3.2.102.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 7c9c1d0fb0..cdf639ab3a 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -290,11 +290,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.158"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.129"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.72"	if BR2_KERNEL_HEADERS_4_14
++	default "4.4.161"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.133"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.76"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
+-	default "4.18.10"	if BR2_KERNEL_HEADERS_4_18
++	default "4.18.14"	if BR2_KERNEL_HEADERS_4_18
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
