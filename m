@@ -1,41 +1,91 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Tue, 16 Oct 2018 19:43:08 +0300
-Subject: [Buildroot] [PATCH 1/1] ccache: bump to version 3.5
-Message-ID: <20181016164308.20218-1-asafka7@gmail.com>
+From: Oscar Gomez Fuente <oscargomezf@gmail.com>
+Date: Tue, 16 Oct 2018 18:44:42 +0200
+Subject: [Buildroot] [PATCH 1/1] ntp: added ntpdate support to the S49ntp
+ script
+Message-ID: <1539708282-23077-1-git-send-email-oscargomezf@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Oscar Gomez Fuente <oscargomezf@gmail.com>
 ---
- package/ccache/ccache.hash | 2 +-
- package/ccache/ccache.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ntp/S49ntp | 58 ++++++++++++++++++++++++++++++++----------------------
+ 1 file changed, 34 insertions(+), 24 deletions(-)
 
-diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
-index e97797fd14..4ea2305a88 100644
---- a/package/ccache/ccache.hash
-+++ b/package/ccache/ccache.hash
-@@ -1,4 +1,4 @@
- # sha256 computed locally
--sha256  297e55a7622578395c1d5cfa163cc61e345ed69c52aaf94a9583634046c15f4a  ccache-3.4.3.tar.xz
-+sha256  bdd44b72ae4506a2e2deef9fefb15c606a474bbca7658cd2be26105155eec012  ccache-3.5.tar.xz
- sha256  ec6b1a326ff93b2cc21df88a697ae470ff6927a55b8929e7e491b315e1563361  GPL-3.0.txt
- sha256  449995742c9358c55b40cefbea5d2c7f05280454d562b6e17a75f46d2c2f6e85  LICENSE.adoc
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index 3e2283e586..76ae029eae 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/ntp/S49ntp b/package/ntp/S49ntp
+index 35e5874..f5c4cb8 100755
+--- a/package/ntp/S49ntp
++++ b/package/ntp/S49ntp
+@@ -1,34 +1,44 @@
+ #! /bin/sh
  
--CCACHE_VERSION = 3.4.3
-+CCACHE_VERSION = 3.5
- CCACHE_SITE = https://www.samba.org/ftp/ccache
- CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
- CCACHE_LICENSE = GPL-3.0+, others
+ NAME=ntpd
++NTPDATE=/usr/bin/ntpdate
+ 
+ # Read config file if it is present.
+-if [ -r /etc/default/$NAME ]
+-then
+-  . /etc/default/$NAME
++if [ -r /etc/default/$NAME ]; then
++. /etc/default/$NAME
+ fi
+ 
+-case "$1" in
+-  start)
+-    printf "Starting $NAME: "
+-    start-stop-daemon -S -q -x /usr/sbin/ntpd -- -g
+-    [ $? = 0 ] && echo "OK" || echo "FAIL"
+-    ;;
+-  stop)
+-    printf "Stopping $NAME: "
+-    start-stop-daemon -K -q -n $NAME
+-    [ $? = 0 ] && echo "OK" || echo "FAIL"
+-    ;;
+-  restart|reload)
+-    echo "Restarting $NAME: "
+-    $0 stop
+-    sleep 1
+-    $0 start
+-    ;;
+-  *)
+-    echo "Usage: $0 {start|stop|restart|reload}" >&2
+-    exit 1
+-    ;;
++case $1 in
++start)
++	printf "Starting $NAME: "
++	if [ -f $NTPDATE ]; then
++		NUM_SERVER=0
++		CURRENT_DATE=$(date | grep "1970")
++		while [ "$NUM_SERVER" != "4" -a "$CURRENT_DATE" != "" ]
++		do
++			$NTPDATE $NUM_SERVER.pool.ntp.org > /dev/null 2>&1
++			CURRENT_DATE=$(date | grep "1970")
++			NUM_SERVER=$(( $NUM_SERVER + 1 ))
++		done
++	fi
++	start-stop-daemon -S -q -x /usr/sbin/ntpd -- -g
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++	;;
++stop)
++	printf "Stopping $NAME: "
++	start-stop-daemon -K -q -n $NAME
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++	;;
++restart|reload)
++	echo "Restarting $NAME: "
++	$0 stop
++	sleep 1
++	$0 start
++	;;
++*)
++	echo "Usage: $0 {start|stop|restart|reload}" >&2
++	exit 1
++	;;
+ esac
+ 
+ exit 0
 -- 
-2.17.1
+1.9.1
