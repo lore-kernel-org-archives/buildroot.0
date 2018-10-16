@@ -1,35 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 16 Oct 2018 16:31:05 +0000
-Subject: [Buildroot] [Bug 11401] Impossible do build a qt program using
- kf5-networkmanager-qt
-In-Reply-To: <bug-11401-163@https.bugs.busybox.net/>
-References: <bug-11401-163@https.bugs.busybox.net/>
-Message-ID: <bug-11401-163-UYOlcapQJh@https.bugs.busybox.net/>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Tue, 16 Oct 2018 19:43:08 +0300
+Subject: [Buildroot] [PATCH 1/1] ccache: bump to version 3.5
+Message-ID: <20181016164308.20218-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11401
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/ccache/ccache.hash | 2 +-
+ package/ccache/ccache.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
---- Comment #4 from Pierre Ducroquet <pinaraf@pinaraf.info> ---
-I will try to investigate tomorrow. I did not test with a QMake project, only
-with a CMake one. Could you try converting from qmake to cmake ?
-The CMakeLists.txt would look like this:
-
-cmake_minimum_required(VERSION 3.0)
-
-find_package(Qt5 REQUIRED COMPONENTS Gui DBus)
-find_package(KF5NetworkManagerQt REQUIRED)
-add_executable(qt-network-manager main.cpp)
-target_link_libraries(qt-network-manager Qt5::Gui Qt5::DBus
-KF5::NetworkManagerQt)
-
-This would help confirm the issue lies in the QMake files.
-
-Thank you very much for your report
-
+diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
+index e97797fd14..4ea2305a88 100644
+--- a/package/ccache/ccache.hash
++++ b/package/ccache/ccache.hash
+@@ -1,4 +1,4 @@
+ # sha256 computed locally
+-sha256  297e55a7622578395c1d5cfa163cc61e345ed69c52aaf94a9583634046c15f4a  ccache-3.4.3.tar.xz
++sha256  bdd44b72ae4506a2e2deef9fefb15c606a474bbca7658cd2be26105155eec012  ccache-3.5.tar.xz
+ sha256  ec6b1a326ff93b2cc21df88a697ae470ff6927a55b8929e7e491b315e1563361  GPL-3.0.txt
+ sha256  449995742c9358c55b40cefbea5d2c7f05280454d562b6e17a75f46d2c2f6e85  LICENSE.adoc
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index 3e2283e586..76ae029eae 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CCACHE_VERSION = 3.4.3
++CCACHE_VERSION = 3.5
+ CCACHE_SITE = https://www.samba.org/ftp/ccache
+ CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
+ CCACHE_LICENSE = GPL-3.0+, others
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.17.1
