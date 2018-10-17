@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 17 Oct 2018 06:39:31 +0000
+Date: Wed, 17 Oct 2018 06:39:50 +0000
 Subject: [Buildroot] [Bug 11401] Impossible do build a qt program using
- kf5-networkmanager-qt
+ kf5-networkmanager-qt with qmake
 In-Reply-To: <bug-11401-163@https.bugs.busybox.net/>
 References: <bug-11401-163@https.bugs.busybox.net/>
-Message-ID: <bug-11401-163-NuswHFCwfq@https.bugs.busybox.net/>
+Message-ID: <bug-11401-163-s6cxY1Q85S@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,13 +17,10 @@ Pierre Ducroquet <pinaraf@pinaraf.info> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
-
---- Comment #7 from Pierre Ducroquet <pinaraf@pinaraf.info> ---
-Thank you for testing.
-My message was not to imply you had to convert your project to CMake, I'm well
-too aware of the difficulty of such a task. It was just to make sure we
-identified the proper error.
+            Summary|Impossible do build a qt    |Impossible do build a qt
+                   |program using               |program using
+                   |kf5-networkmanager-qt       |kf5-networkmanager-qt with
+                   |                            |qmake
 
 -- 
 You are receiving this mail because:
