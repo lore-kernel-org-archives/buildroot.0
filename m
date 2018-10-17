@@ -1,216 +1,259 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 17 Oct 2018 16:41:58 -0500
-Subject: [Buildroot] [PATCH v7 06/10] support/scripts/pkg-stats: add CPE
- reporting
+Date: Wed, 17 Oct 2018 16:42:00 -0500
+Subject: [Buildroot] [PATCH v7 08/10] support/scripts/cpe-report: add NIST
+ xml generation
 In-Reply-To: <1539812522-7171-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1539812522-7171-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1539812522-7171-6-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1539812522-7171-8-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pkg status now includes CPE as an item reported in the html
-output (stat summary and for each pkg)
+From: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Hooks to generate the NIST xml files required to propose an
+update to the database. The generation uses existing Buildroot
+information to create the submission information.
+
+This design uses the generated cpe-info csv and a path to the relevant
+buildroot clone for access to the packages/dir structure.
+
+Signed-off-by: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
+Signed-off-by: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
 Changes
-v6 -> v7
- - Rebased to work after url checking code was added upstream
-
-v5 -> v6
- - Rebased to capture formatting changes
-
-v4 -> v5
-[Ricardo
- - Renamed patch to correctly match file name
- - Removed extra prints as they aren't needed when we have the
-   output reports/stdout
- - Updated v4 comments about general flake formatting cleanup
-
-[Arnout
- - Collectly with Ricardo, decided to move cpe report analysis to
-   a seperate script and breakout a module that's imported for the
-   cpedb class
- - Rename cpe_dict to instead be cpedb
-
-v3 -> v4
- - Collapsed patch 5 and 6 together into this single patch
-
-[Eric
- - added except handling around file io
- - fixed condition where buildroot isn't generating a CPE
-   string as part of the infra and output that is the case.
-   (eventually these probably could be fixed but there aren't
-   many at this point)
-
-[Ricardo
- - fixed patch naming and resolved flake8 issues
- - took the opportunity to also fix other flake8 syntax
-   update suggestions
- - added except handling to have proper exits
- - cleaned up csv file header skippin
- - condensed partial cve string split
- - updated help txt as suggested
- - reworked output file requirement.  Removed -o as required but
-   added check if provided when -c isn't used
-
-v3
- - New patch
+v7
+ - New
 ---
- support/scripts/pkg-stats | 68 +++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+ support/scripts/cpe-report |  17 ++++--
+ support/scripts/cpedb.py   | 128 +++++++++++++++++++++++++++++++++++++++++----
+ 2 files changed, 132 insertions(+), 13 deletions(-)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index d0b06b1..21d1767 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -26,6 +26,7 @@ import subprocess
+diff --git a/support/scripts/cpe-report b/support/scripts/cpe-report
+index 036eab2..da4ad96 100755
+--- a/support/scripts/cpe-report
++++ b/support/scripts/cpe-report
+@@ -6,7 +6,7 @@ import csv
+ from cpedb import CPEDB
+ 
+ 
+-def get_target_cpe_report(cpe_report_file, cpedb):
++def get_target_cpe_report(cpe_report_file, pkg_dir, cpedb):
+     report_cpe_exact_match = ""
+     report_cpe_needing_update = ""
+     report_cpe_missing = ""
+@@ -21,9 +21,9 @@ def get_target_cpe_report(cpe_report_file, cpedb):
+                 if not result:
+                     result = cpedb.find_partial(cpedb.get_cpe_no_version(cpe[0]))
+                     if not result:
+-                        report_cpe_missing += cpe[0] + "\n"
++                        report_cpe_missing += cpe[0] + "," + cpe[2] + "," + cpe[4] + "\n"
+                     else:
+-                        report_cpe_needing_update += cpe[0] + "\n"
++                        report_cpe_needing_update += cpe[0] + "," + cpe[2] + "," + cpe[4] + "\n"
+                 else:
+                     report_cpe_exact_match += cpe[0] + "\n"
+     except (OSError, IOError) as e:
+@@ -34,11 +34,20 @@ def get_target_cpe_report(cpe_report_file, cpedb):
+     print("CPE: Found but REQUIRES UPDATE:\n" + report_cpe_needing_update)
+     print("CPE: Not found (proposing the following to be added):\n" + report_cpe_missing)
+ 
++    for cpe in report_cpe_needing_update.splitlines():
++        cpedb.update(cpe, pkg_dir, 1)
++    for cpe in report_cpe_missing.splitlines():
++        cpedb.update(cpe, pkg_dir, 1)
++    print("XML Generation Complete of NIST update files, see ./cpe/*")
++
+ 
+ def parse_args():
+     parser = argparse.ArgumentParser()
+     parser.add_argument('-c', dest='cpe_report', action='store', required=True,
+                         help='CPE Report generated by make cpe-info (csv format)')
++    parser.add_argument('-d', dest='pkg_dir', action='store', required=True,
++                        help='Path to dir(s) of Buildroot and BR2_EXTERNAL(s) seperated with ":". ' +
++                             'By default the script looks for a ./package/<pkgname> and ./<pkgname> in each path)')
+     return parser.parse_args()
+ 
+ 
+@@ -47,7 +56,7 @@ def __main__():
+     cpedb = CPEDB()
+     cpedb.get_xml_dict()
+     print("Performing Target CPE Report Analysis...")
+-    get_target_cpe_report(args.cpe_report, cpedb)
++    get_target_cpe_report(args.cpe_report, args.pkg_dir, cpedb)
+ 
+ 
+ __main__()
+diff --git a/support/scripts/cpedb.py b/support/scripts/cpedb.py
+index 77d1d17..9e2ea91 100644
+--- a/support/scripts/cpedb.py
++++ b/support/scripts/cpedb.py
+@@ -1,16 +1,78 @@
  import sys
- import requests  # URL checking
- from multiprocessing import Pool
-+from cpedb import CPEDB
+ import urllib2
++from collections import OrderedDict
+ import xmltodict
+ import gzip
+ from StringIO import StringIO
++import re
++import os
  
- INFRA_RE = re.compile("\$\(eval \$\(([a-z-]*)-package\)\)")
- URL_RE = re.compile("\s*https?://\S*\s*$")
-@@ -35,6 +36,7 @@ class Package:
-     all_licenses = list()
-     all_license_files = list()
-     all_versions = dict()
-+    all_cpe_id = dict()
+ CPE_XML_URL = "https://static.nvd.nist.gov/feeds/xml/cpe/dictionary/official-cpe-dictionary_v2.3.xml.gz"
  
-     def __init__(self, name, path):
-         self.name = name
-@@ -49,6 +51,8 @@ class Package:
-         self.url = None
-         self.url_status = None
-         self.url_worker = None
-+        self.cpe_id = None
-+        self.has_cpe = False
  
-     def pkgvar(self):
-         return self.name.upper().replace("-", "_")
-@@ -139,6 +143,26 @@ class Package:
-                 self.warnings = int(m.group(1))
-                 return
- 
-+    def set_cpe_info(self, cpe_dict):
-+        """
-+        Fills in the .has_cpe field
-+        """
-+        var = self.pkgvar()
-+        if var in self.all_cpe_id:
-+            self.cpe_id = self.all_cpe_id[var]
-+        if self.cpe_id is None:
-+            # BR infra did not build a CPE ID for this pkg
-+            # as it's most likely a host pkg
-+            return
-+        result = cpe_dict.find(self.cpe_id)
-+        if not result:
-+            result = cpe_dict.find_partial(cpe_dict.get_cpe_no_version(self.cpe_id))
-+            if result:
-+                self.has_cpe = "Update"
-+            # Unset case for has_cpe is assumed missing/does not exist
-+        else:
-+            self.has_cpe = cpe_dict.get_nvd_url(self.cpe_id)
++class CPE:
++    cpe_str = None
++    cpe_str_short = None
++    cpe_desc = None
++    references = {}
 +
-     def __eq__(self, other):
-         return self.path == other.path
- 
-@@ -277,6 +301,20 @@ def package_init_make_info():
- 
-         Package.all_versions[pkgvar] = value
- 
-+    # CPE ID
-+    o = subprocess.check_output(["make", "BR2_HAVE_DOT_CONFIG=y",
-+                                 "-s", "printvars", "VARS=%_CPE_ID"])
-+    for l in o.splitlines():
-+        # Get variable name and value
-+        pkgvar, value = l.split("=")
++    def __init__(self, cpe_str, product_ref=None, version_ref=None):
++        self.cpe_str = cpe_str
++        self.cpe_str_short = ":".join(self.cpe_str.split(":")[2:6])
++        pkg_name = "".join(self.cpe_str.split(":")[4:5]).replace("_", " ")
++        pkg_ver = "".join(self.cpe_str.split(":")[5:6])
++        self.cpe_desc = pkg_name.title() + " " + pkg_ver
++        if product_ref and version_ref:
++            self.references = {
++                'references': {
++                    'reference': [{
++                        '@href': product_ref,
++                        '#text': 'PRODUCT'
++                    }, {
++                        '@href': version_ref,
++                        '#text': 'VERSION'
++                    }]
++                }
++            }
 +
-+        # Strip _CPE_ID
-+        pkgvar = pkgvar[:-7]
-+        if pkgvar in ("LINUX", "LINUX_HEADERS"):
-+            Package.all_cpe_id[pkgvar] = "cpe:2.3:o:" + value + ":*:*:*:*:*:*:*"
-+        else:
-+            Package.all_cpe_id[pkgvar] = "cpe:2.3:a:" + value + ":*:*:*:*:*:*:*"
++    def update_ref(self, new_ref):
++        self.references = new_ref
 +
++    def to_dict(self):
++        cpe_dict = OrderedDict([
++            ('cpe-item', OrderedDict([
++                ('@name', 'cpe:/' + self.cpe_str_short),
++                ('title', OrderedDict([
++                        ('@xml:lang', 'en-US'),
++                        ('#text', self.cpe_desc)
++                ])),
++                ('references', self.references),
++                ('cpe-23:cpe23-item', OrderedDict([
++                        ('@name', self.cpe_str)
++                ]))
++            ]))
++        ])
++        return cpe_dict
++
++
++def find_url_in_config_in(pkg_config_in):
++    product_url = "Not Found"
++    in_help_section = False
++    if os.path.exists(pkg_config_in):
++        fp = open(pkg_config_in, "r")
++        for config_line in fp:
++            if config_line.strip() == "help":
++                in_help_section = True
++            if in_help_section and re.match("(.*)https?://", config_line):
++                product_url = ''.join(config_line.split())
++                break
++        fp.close()
++    return product_url
++
++
+ class CPEDB:
+     all_cpedb = dict()
+-    all_cpes = set()
+-    all_cpes_no_version = set()
++    all_cpes = dict()
  
- def check_url_status_worker(url, url_status):
-     if url_status != "Missing" and url_status != "No Config.in":
-@@ -322,6 +360,12 @@ def calculate_stats(packages):
-             stats["hash"] += 1
-         else:
-             stats["no-hash"] += 1
-+        if pkg.has_cpe == "Update":
-+            stats["update-cpe"] += 1
-+        elif pkg.has_cpe:
-+            stats["cpe"] += 1
-+        else:
-+            stats["no-cpe"] += 1
-         stats["patches"] += pkg.patch_count
-     return stats
+     def get_xml_dict(self):
+         print("CPE: Fetching xml manifest...")
+@@ -23,9 +85,9 @@ class CPEDB:
  
-@@ -488,6 +532,20 @@ def dump_html_pkg(f, pkg):
-     f.write("  <td class=\"%s\">%s</td>\n" %
-             (" ".join(td_class), url_str))
+             for cpe in self.all_cpedb['cpe-list']['cpe-item']:
+                 cpe_str = cpe['cpe-23:cpe23-item']['@name']
++                item = CPE(cpe_str)
+                 cpe_str_no_version = self.get_cpe_no_version(cpe_str)
+-                self.all_cpes.add(cpe_str)
+-                self.all_cpes_no_version.add(cpe_str_no_version)
++                self.all_cpes.update({cpe_str_no_version: {cpe_str: item}})
  
-+    # CPE Valid
-+    td_class = ["centered"]
-+    if not pkg.has_cpe:
-+        td_class.append("wrong")
-+        f.write("  <td class=\"%s\">%s</td>\n" %
-+                (" ".join(td_class), boolean_str(pkg.has_cpe)))
-+    elif pkg.has_cpe == "Update":
-+        td_class.append("wrong")
-+        f.write("  <td class=\"%s\">Update</td>\n" %
-+                (" ".join(td_class)))
-+    else:
-+        td_class.append("correct")
-+        f.write("  <td class=\"%s\"><a href=\"%s\">%s</a></td>\n" %
-+                (" ".join(td_class), pkg.has_cpe, boolean_str(pkg.has_cpe)))
-     f.write(" </tr>\n")
+         except urllib2.HTTPError:
+             print("CPE: HTTP Error: %s" % CPE_XML_URL)
+@@ -36,17 +98,65 @@ class CPEDB:
  
+     def find_partial(self, cpe_str):
+         cpe_str_no_version = self.get_cpe_no_version(cpe_str)
+-        if cpe_str_no_version in self.all_cpes_no_version:
++        if cpe_str_no_version in self.all_cpes:
+             return cpe_str_no_version
  
-@@ -504,6 +562,7 @@ def dump_html_all_pkgs(f, packages):
- <td class=\"centered\">Current version</td>
- <td class=\"centered\">Warnings</td>
- <td class=\"centered\">Upstream URL</td>
-+<td class=\"centered\">CPE Valid</td>
- </tr>
- """)
-     for pkg in sorted(packages):
-@@ -530,6 +589,12 @@ def dump_html_stats(f, stats):
-             stats["hash"])
-     f.write(" <tr><td>Packages not having a hash file</td><td>%s</td></tr>\n" %
-             stats["no-hash"])
-+    f.write(" <tr><td>Packages having a registered CPE</td><td>%s</td></tr>\n" %
-+            stats["cpe"])
-+    f.write(" <tr><td>Packages needing CPE update</td><td>%s</td></tr>\n" %
-+            stats["update-cpe"])
-+    f.write(" <tr><td>Packages missing a registered CPE</td><td>%s</td></tr>\n" %
-+            stats["no-cpe"])
-     f.write(" <tr><td>Total number of patches</td><td>%s</td></tr>\n" %
-             stats["patches"])
-     f.write("</table>\n")
-@@ -572,6 +637,8 @@ def __main__():
-         package_list = args.packages.split(",")
-     else:
-         package_list = None
-+    cpedb = CPEDB()
-+    cpedb.get_xml_dict()
-     print("Build package list ...")
-     packages = get_pkglist(args.npackages, package_list)
-     print("Getting package make info ...")
-@@ -585,6 +652,7 @@ def __main__():
-         pkg.set_check_package_warnings()
-         pkg.set_current_version()
-         pkg.set_url()
-+        pkg.set_cpe_info(cpedb)
-     print("Checking URL status")
-     check_package_urls(packages)
-     print("Calculate stats")
+     def find(self, cpe_str):
+-        if cpe_str in self.all_cpes:
+-            return cpe_str
++        if self.find_partial(cpe_str):
++            cpe_str_no_version = self.get_cpe_no_version(cpe_str)
++            if cpe_str in self.all_cpes[cpe_str_no_version]:
++                return cpe_str
+ 
+-    def get_cpe_no_version(self, cpe):
+-        return ":".join(cpe.split(":")[:5])
++    def check_package(self, cpe_str, pkg_dir):
++        product_site = "Not Found"
++        # For each dir, check the boot/<pkgname>/, package/<pkgname>/ and <pkgname>/ folders for Config.in
++        # This should cover regular packages, linux and boot related packages.
++        for pkg_dir_path in pkg_dir.split(":"):
++            file_to_open = os.path.join(os.path.abspath(pkg_dir_path), 'package', cpe_str, 'Config.in')
++            product_site = find_url_in_config_in(file_to_open)
++            if product_site != "Not Found":
++                break
++            file_to_open = os.path.join(os.path.abspath(pkg_dir_path), 'boot', cpe_str, 'Config.in')
++            product_site = find_url_in_config_in(file_to_open)
++            if product_site != "Not Found":
++                break
++            file_to_open = os.path.join(os.path.abspath(pkg_dir_path), cpe_str, 'Config.in')
++            product_site = find_url_in_config_in(file_to_open)
++            if product_site != "Not Found":
++                break
++        return product_site
++
++    def update(self, cpe_str, pkg_dir=None, cpe_full_str=None):
++        if cpe_full_str:
++            cpe_str = cpe_str.split(",")
++        to_update = CPE(cpe_str[0], self.check_package(cpe_str[1], pkg_dir), cpe_str[2])
++        xml = self.__gen_xml__(to_update.to_dict())
++        if not os.path.exists("cpe"):
++                os.makedirs("cpe")
++        fp = open(os.path.join('cpe', cpe_str[1] + ".xml"), "w+")
++        fp.write(xmltodict.unparse(xml, pretty=True))
++        fp.close()
+ 
+     def get_nvd_url(self, cpe_str):
+         return "https://nvd.nist.gov/products/cpe/search/results?keyword=" + \
+                 urllib2.quote(cpe_str) + \
+                 "&status=FINAL&orderBy=CPEURI&namingFormat=2.3"
++
++    def get_cpe_no_version(self, cpe):
++        return ":".join(cpe.split(":")[:5])
++
++    def __gen_xml__(self, cpe_list):
++        list_header = {
++            "cpe-list": {
++                "@xmlns:config": "http://scap.nist.gov/schema/configuration/0.1",
++                "@xmlns": "http://cpe.mitre.org/dictionary/2.0",
++                "@xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
++                "@xmlnsscap-core": "http://scap.nist.gov/schema/scap-core/0.3",
++                "@xmlns:cpe-23": "http://scap.nist.gov/schema/cpe-extension/2.3",
++                "@xmlns:ns6": "http://scap.nist.gov/schema/scap-core/0.1",
++                "@xmlns:meta": "http://scap.nist.gov/schema/cpe-dictionary-metadata/0.2",
++                "@xsi:schemaLocation": "http://scap.nist.gov/schema/cpe-extension/2.3 https://scap.nist.gov/schema/cpe/2.3/cpe-dictionary-extension_2.3.xsd http://cpe.mitre.org/dictionary/2.0 https://scap.nist.gov/schema/cpe/2.3/cpe-dictionary_2.3.xsd http://scap.nist.gov/schema/cpe-dictionary-metadata/0.2 https://scap.nist.gov/schema/cpe/2.1/cpe-dictionary-metadata_0.2.xsd http://scap.nist.gov/schema/scap-core/0.3 https://scap.nist.gov/schema/nvd/scap-core_0.3.xsd http://scap.nist.gov/schema/configuration/0.1 https://scap.nist.gov/schema/nvd/configuration_0.1.xsd http://scap.nist.gov/schema/scap-core/0.1 https://scap.nist.gov/schema/nvd/scap-core_0.1.xsd"
++             }
++        }
++        list_header['cpe-list'].update(cpe_list)
++        return list_header
 -- 
 1.9.1
