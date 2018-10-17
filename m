@@ -1,46 +1,54 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 17 Oct 2018 19:51:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.96
-Message-ID: <20181017175141.28317-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 17 Oct 2018 21:27:14 +0200
+Subject: [Buildroot] [git commit] docs/website: add TkOS to the sponsors
+Message-ID: <20181017192627.285E2839A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libdrm/libdrm.hash | 10 +++++-----
- package/libdrm/libdrm.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=6c1d0f6dbbfa207a4a671d6c66bf655d1a5d62fe
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index ac59dac4f5..78b3ef75ac 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/dri-devel/2018-October/191989.html
--md5 41b9ed196a27f5dc7fb88412b704e9fd  libdrm-2.4.95.tar.bz2
--sha1 fd7c1002001ef1aa1b6094eb2b78f1031e233bb3  libdrm-2.4.95.tar.bz2
--sha256 ef772a51b4bed97a2c243194d9a98da97319e0dbdf800d07773b025aacc895c6  libdrm-2.4.95.tar.bz2
--sha512 9bf8178a871bb059471f58f236c8362245e08877b732b2c8366d402e8066c9a74707e4ec3bf680fca12303f1319875edc98ae8e31bc9826f172798f47197e631  libdrm-2.4.95.tar.bz2
-+# From https://lists.freedesktop.org/archives/dri-devel/2018-October/193244.html
-+md5 f296d87272b1befeada3bb135751ab3d  libdrm-2.4.96.tar.bz2
-+sha1 51eb4c248a437b3f200bd1cd84461d3e0b60d71e  libdrm-2.4.96.tar.bz2
-+sha256 0d561acf7bb4cc59dc82415100e6c1a44860e8c380e00f9592923e3cd08db393  libdrm-2.4.96.tar.bz2
-+sha512 008cb7658d953b44e11fa3cc6e00dfeb3efb59c7fdadd59f7066101aff138acbbc2f2508e9ebe0528340e39dc7693937755d1641816ddde135c10a13e7d81e3b  libdrm-2.4.96.tar.bz2
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index e5b693cb11..18ef9cdd2e 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Tk Open Systems has sponsored the Buildroot Association to organize
+the Buildroot Developers Meeting.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ docs/website/images/tkos-logo.png | Bin 0 -> 10101 bytes
+ docs/website/sponsors.html        |  17 +++++++++++++++++
+ 2 files changed, 17 insertions(+)
+
+diff --git a/docs/website/images/tkos-logo.png b/docs/website/images/tkos-logo.png
+new file mode 100644
+index 0000000000..6fe58826e1
+Binary files /dev/null and b/docs/website/images/tkos-logo.png differ
+diff --git a/docs/website/sponsors.html b/docs/website/sponsors.html
+index 2e19a5e1e1..6f45b0bdf2 100644
+--- a/docs/website/sponsors.html
++++ b/docs/website/sponsors.html
+@@ -86,6 +86,23 @@
+ 	  </div>
+ 	</div>
  
--LIBDRM_VERSION = 2.4.95
-+LIBDRM_VERSION = 2.4.96
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
- LIBDRM_SITE = https://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
--- 
-2.19.1
++	<div class="col-sm-4">
++	  <div class="panel panel-default panel-sponsor">
++	    <div class="panel-body">
++	      <div class="col-sm-12">
++		<a href="http://www.tkos.col.il">
++		  <img class="img-responsive center-block" src="images/tkos-logo.png"/>
++		</a>
++	      </div>
++	      <div class="col-sm-12">
++		<a href="http://www.tkos.co.il">Tk Open Systems</a>
++		sponsored the event by contributing financially to
++		the <em>Buildroot Association</em>.
++	      </div>
++	    </div>
++	  </div>
++	</div>
++
+ 	<div class="col-sm-4">
+ 	  <div class="panel panel-default panel-sponsor">
+ 	    <div class="panel-body">
