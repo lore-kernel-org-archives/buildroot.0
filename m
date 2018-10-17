@@ -1,102 +1,54 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 17 Oct 2018 16:41:57 -0500
-Subject: [Buildroot] [PATCH v7 05/10] support/scripts/cpedb.py: new CPE XML
- helper
+Date: Wed, 17 Oct 2018 16:41:55 -0500
+Subject: [Buildroot] [PATCH v7 03/10] cpe-info: only report target pkgs
 In-Reply-To: <1539812522-7171-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1539812522-7171-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1539812522-7171-5-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1539812522-7171-3-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Python class which consumes a NIST CPE XML and provides helper
-functions to access and search the db's data.
+The reporting of host packages causes some duplication and complicates
+what is really in the targets configuration. For the purpose of the
+first version of this patchset, its assumed that host packages aren't
+relevant for the configuration and we only report the target's
+contents.
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+
 ---
-v5 -> v7
- - No change
+Changes
+v4 -> v7
+ - None
 
-v5
-[Ricardo
- - Fixed typo in join/split of cpe str without version
- - Removed extra prints as they aren't needed when we have the
-   output reports/stdout
- - Updated v4 comments about general flake formatting cleanup
- - Incorporated parts of patch 1/2 suggestions for optimizations
+v3
+ - Fixed host build error because cpe-info wasn't defined
 
-[Arnout
- - added pre-processing of cpe values into two sets, one with
-   and one without version
- - Collectly with Ricardo, decided to move cpe class to this
-   seperate script
-
-v1 -> v4
- - No version
+v1 -> v2
+[Thomas P
+ - select if target vs selecting not host
 ---
- support/scripts/cpedb.py | 52 ++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
- create mode 100644 support/scripts/cpedb.py
+ package/pkg-generic.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/support/scripts/cpedb.py b/support/scripts/cpedb.py
-new file mode 100644
-index 0000000..77d1d17
---- /dev/null
-+++ b/support/scripts/cpedb.py
-@@ -0,0 +1,52 @@
-+import sys
-+import urllib2
-+import xmltodict
-+import gzip
-+from StringIO import StringIO
-+
-+CPE_XML_URL = "https://static.nvd.nist.gov/feeds/xml/cpe/dictionary/official-cpe-dictionary_v2.3.xml.gz"
-+
-+
-+class CPEDB:
-+    all_cpedb = dict()
-+    all_cpes = set()
-+    all_cpes_no_version = set()
-+
-+    def get_xml_dict(self):
-+        print("CPE: Fetching xml manifest...")
-+        try:
-+            compressed_cpe_file = urllib2.urlopen(CPE_XML_URL)
-+            print("CPE: Unzipping xml manifest...")
-+            cpe_file = gzip.GzipFile(fileobj=StringIO(compressed_cpe_file.read())).read()
-+            print("CPE: Converting xml manifest to dict...")
-+            self.all_cpedb = xmltodict.parse(cpe_file)
-+
-+            for cpe in self.all_cpedb['cpe-list']['cpe-item']:
-+                cpe_str = cpe['cpe-23:cpe23-item']['@name']
-+                cpe_str_no_version = self.get_cpe_no_version(cpe_str)
-+                self.all_cpes.add(cpe_str)
-+                self.all_cpes_no_version.add(cpe_str_no_version)
-+
-+        except urllib2.HTTPError:
-+            print("CPE: HTTP Error: %s" % CPE_XML_URL)
-+            sys.exit(1)
-+        except urllib2.URLError:
-+            print("CPE: URL Error: %s" % CPE_XML_URL)
-+            sys.exit(1)
-+
-+    def find_partial(self, cpe_str):
-+        cpe_str_no_version = self.get_cpe_no_version(cpe_str)
-+        if cpe_str_no_version in self.all_cpes_no_version:
-+            return cpe_str_no_version
-+
-+    def find(self, cpe_str):
-+        if cpe_str in self.all_cpes:
-+            return cpe_str
-+
-+    def get_cpe_no_version(self, cpe):
-+        return ":".join(cpe.split(":")[:5])
-+
-+    def get_nvd_url(self, cpe_str):
-+        return "https://nvd.nist.gov/products/cpe/search/results?keyword=" + \
-+                urllib2.quote(cpe_str) + \
-+                "&status=FINAL&orderBy=CPEURI&namingFormat=2.3"
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index e970a66..aba41dc 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -883,10 +883,12 @@ endif
+ 
+ $(1)-cpe-info: PKG=$(2)
+ $(1)-cpe-info:
++ifeq ($$($(2)_TYPE),target)
+ ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+ 	@$$(call MESSAGE,"Collecting cpe info")
+ 	$(Q)$$(call cpe-manifest,$$($(2)_CPE_PREFIX):$$($(2)_CPE_ID):$(CPE_SUFFIX),$$($(2)_CVE_PATCHED),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_ACTUAL_SOURCE_SITE))
+ endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
++endif # ifeq ($$($(2)_TYPE),target)
+ 
+ # legal-info: declare dependencies and set values used later for the manifest
+ ifneq ($$($(2)_LICENSE_FILES),)
 -- 
 1.9.1
