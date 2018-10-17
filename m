@@ -1,53 +1,51 @@
-From: Alexey Brodkin <alexey.brodkin@synopsys.com>
-Date: Wed, 17 Oct 2018 11:40:21 +0300
-Subject: [Buildroot] [PATCH] configs/wandboard: Update kernel to 4.18.14 and
- U-Boot to 2018.09
-Message-ID: <20181017084021.3611-1-abrodkin@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 17 Oct 2018 10:42:55 +0200
+Subject: [Buildroot] [PATCH 2/3] perl: fix the generated subdirectory
+ Makefiles
+In-Reply-To: <20181016195505.30438-2-francois.perrad@gadz.org>
+References: <20181016195505.30438-1-francois.perrad@gadz.org>
+ <20181016195505.30438-2-francois.perrad@gadz.org>
+Message-ID: <20181017104255.2caae9f3@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The board is well supported in upstream projects so let's update kernel
-and U-Boot to the latest and greatest versions.
+Hello Fran?ois,
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Fabio Estevam <festevam@gmail.com>
----
- configs/wandboard_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+On Tue, 16 Oct 2018 21:55:04 +0200, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  ...the-generated-subdirectory-Makefiles.patch | 30 +++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+>  create mode 100644 package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch
+> 
+> diff --git a/package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch b/package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch
+> new file mode 100644
+> index 000000000..71560c5e0
+> --- /dev/null
+> +++ b/package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch
+> @@ -0,0 +1,30 @@
+> +From 30ae4c9e2ac6cd27138ebf124cbda9232c56bdf7 Mon Sep 17 00:00:00 2001
+> +From: Francois Perrad <francois.perrad@gadz.org>
+> +Date: Tue, 16 Oct 2018 21:20:12 +0200
+> +Subject: [PATCH] fix the generated subdirectory Makefiles
+> +
+> +all variables used by BR must be propagated
+> +
+> +similar to https://github.com/Perl-Toolchain-Gang/ExtUtils-MakeMaker/commit/98e8532fffe5afa8186329acc44fb957427f1823
+> +
+> +Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-diff --git a/configs/wandboard_defconfig b/configs/wandboard_defconfig
-index 4265fdcfb0..d2f72f734f 100644
---- a/configs/wandboard_defconfig
-+++ b/configs/wandboard_defconfig
-@@ -3,8 +3,8 @@ BR2_cortex_a9=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.18 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/wandboard/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/wandboard/post-image.sh"
-@@ -13,13 +13,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="wandboard"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.03"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.09"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.14"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-wandboard imx6dl-wandboard imx6q-wandboard-revb1 imx6dl-wandboard-revb1 imx6q-wandboard-revd1 imx6dl-wandboard-revd1 imx6qp-wandboard-revd1"
+Aaah, excellent! This is so much better than having to SED the
+Makefiles.
+
+Thanks a lot for having researched a better solution to this problem,
+much appreciated!
+
+Thomas
 -- 
-2.16.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
