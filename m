@@ -1,51 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Oct 2018 10:42:55 +0200
-Subject: [Buildroot] [PATCH 2/3] perl: fix the generated subdirectory
- Makefiles
-In-Reply-To: <20181016195505.30438-2-francois.perrad@gadz.org>
-References: <20181016195505.30438-1-francois.perrad@gadz.org>
- <20181016195505.30438-2-francois.perrad@gadz.org>
-Message-ID: <20181017104255.2caae9f3@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 17 Oct 2018 11:45:18 +0200
+Subject: [Buildroot] [PATCH 1/2] spice-protocol: bump version to 0.12.14
+Message-ID: <20181017094520.4187-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fran?ois,
+Needed by spice 0.14.x
 
-On Tue, 16 Oct 2018 21:55:04 +0200, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  ...the-generated-subdirectory-Makefiles.patch | 30 +++++++++++++++++++
->  1 file changed, 30 insertions(+)
->  create mode 100644 package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch
-> 
-> diff --git a/package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch b/package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch
-> new file mode 100644
-> index 000000000..71560c5e0
-> --- /dev/null
-> +++ b/package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch
-> @@ -0,0 +1,30 @@
-> +From 30ae4c9e2ac6cd27138ebf124cbda9232c56bdf7 Mon Sep 17 00:00:00 2001
-> +From: Francois Perrad <francois.perrad@gadz.org>
-> +Date: Tue, 16 Oct 2018 21:20:12 +0200
-> +Subject: [PATCH] fix the generated subdirectory Makefiles
-> +
-> +all variables used by BR must be propagated
-> +
-> +similar to https://github.com/Perl-Toolchain-Gang/ExtUtils-MakeMaker/commit/98e8532fffe5afa8186329acc44fb957427f1823
-> +
-> +Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/spice-protocol/spice-protocol.hash | 2 +-
+ package/spice-protocol/spice-protocol.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Aaah, excellent! This is so much better than having to SED the
-Makefiles.
-
-Thanks a lot for having researched a better solution to this problem,
-much appreciated!
-
-Thomas
+diff --git a/package/spice-protocol/spice-protocol.hash b/package/spice-protocol/spice-protocol.hash
+index c75c095cbf..e72bb2d712 100644
+--- a/package/spice-protocol/spice-protocol.hash
++++ b/package/spice-protocol/spice-protocol.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	788f0d7195bec5b14371732b562eb55ca82712aab12273b0e87529fb30532efb	spice-protocol-0.12.10.tar.bz2
++sha256	20350bc4309039fdf0d29ee4fd0033cde27bccf33501e13b3c1befafde9d0c9c	spice-protocol-0.12.14.tar.bz2
+diff --git a/package/spice-protocol/spice-protocol.mk b/package/spice-protocol/spice-protocol.mk
+index dcc6feeb13..7392e9533d 100644
+--- a/package/spice-protocol/spice-protocol.mk
++++ b/package/spice-protocol/spice-protocol.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SPICE_PROTOCOL_VERSION = 0.12.10
++SPICE_PROTOCOL_VERSION = 0.12.14
+ SPICE_PROTOCOL_SOURCE = spice-protocol-$(SPICE_PROTOCOL_VERSION).tar.bz2
+ SPICE_PROTOCOL_SITE = http://www.spice-space.org/download/releases
+ SPICE_PROTOCOL_LICENSE = BSD-3-Clause
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.11.0
