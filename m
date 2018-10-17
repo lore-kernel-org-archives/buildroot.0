@@ -1,54 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Oct 2018 21:27:14 +0200
-Subject: [Buildroot] [git commit] docs/website: add TkOS to the sponsors
-Message-ID: <20181017192627.285E2839A1@busybox.osuosl.org>
+Date: Wed, 17 Oct 2018 21:40:25 +0200
+Subject: [Buildroot] Sponsors of the Buildroot Developers meeting @ ELCE2018
+Message-ID: <20181017214025.61fb6730@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6c1d0f6dbbfa207a4a671d6c66bf655d1a5d62fe
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Tk Open Systems has sponsored the Buildroot Association to organize
-the Buildroot Developers Meeting.
+A few weeks ago, we made a call for sponsors to help organize the
+Buildroot Developers meeting at ELCE 2018, which will take place this
+Saturday/Sunday.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- docs/website/images/tkos-logo.png | Bin 0 -> 10101 bytes
- docs/website/sponsors.html        |  17 +++++++++++++++++
- 2 files changed, 17 insertions(+)
+I am happy to announce that we have received some very positive
+response from numerous companies who have chosen to support the
+Buildroot project: we have collected much more sponsoring than strictly
+needed for the ELCE2018 meeting, which means we will be able to also
+organize future events.
 
-diff --git a/docs/website/images/tkos-logo.png b/docs/website/images/tkos-logo.png
-new file mode 100644
-index 0000000000..6fe58826e1
-Binary files /dev/null and b/docs/website/images/tkos-logo.png differ
-diff --git a/docs/website/sponsors.html b/docs/website/sponsors.html
-index 2e19a5e1e1..6f45b0bdf2 100644
---- a/docs/website/sponsors.html
-+++ b/docs/website/sponsors.html
-@@ -86,6 +86,23 @@
- 	  </div>
- 	</div>
- 
-+	<div class="col-sm-4">
-+	  <div class="panel panel-default panel-sponsor">
-+	    <div class="panel-body">
-+	      <div class="col-sm-12">
-+		<a href="http://www.tkos.col.il">
-+		  <img class="img-responsive center-block" src="images/tkos-logo.png"/>
-+		</a>
-+	      </div>
-+	      <div class="col-sm-12">
-+		<a href="http://www.tkos.co.il">Tk Open Systems</a>
-+		sponsored the event by contributing financially to
-+		the <em>Buildroot Association</em>.
-+	      </div>
-+	    </div>
-+	  </div>
-+	</div>
-+
- 	<div class="col-sm-4">
- 	  <div class="panel panel-default panel-sponsor">
- 	    <div class="panel-body">
+On behalf of the Buildroot community, I would like to thank our
+sponsors:
+
+ - Mind, https://mind.be/
+
+ - Amarula Solutions, https://www.amarulasolutions.com/
+
+ - Tk Open Systems, https://www.tkos.co.il/
+
+ - Bootlin, https://www.bootlin.com/
+
+ - Logilin, https://www.logilin.fr/
+
+ - Rockwell Collins, http://www.rockwellcollins.com/
+
+The list of sponsors is also visible on our sponsors page
+https://buildroot.org/sponsors.html and on the event Wiki page
+https://elinux.org/Buildroot:DeveloperDaysELCE2018.
+
+Many, many thanks to those companies who decided to support the
+Buildroot project!
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
