@@ -1,93 +1,111 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Wed, 17 Oct 2018 12:36:44 +0200
-Subject: [Buildroot] [PATCH] ffmpeg: fix static linking build failure
+Date: Wed, 17 Oct 2018 14:37:18 +0200
+Subject: [Buildroot] [PATCH v2] ffmpeg: fix static linking build failure
  when using libavutil
-In-Reply-To: <114c7852-b588-59fb-c761-63086758511a@micronovasrl.com>
-References: <20180911204230.15890-1-giulio.benetti@micronovasrl.com>
- <20180916222224.519fa1f8@windsurf>
- <63ee101c-ee45-57cc-4aeb-7f3b49753ccb@micronovasrl.com>
- <20180924130929.4b345624@windsurf>
- <1b5dece6-8730-89d4-53dc-44f3492c49d9@micronovasrl.com>
- <8fb396bf-456c-2385-8fd0-84cbd4142e56@micronovasrl.com>
- <20181012215008.0eab3a2c@windsurf>
- <fc5ea699-9f27-f626-f5fa-a477cbf7af0c@micronovasrl.com>
- <114c7852-b588-59fb-c761-63086758511a@micronovasrl.com>
-Message-ID: <2605f69d-abb2-f265-552c-18147119a509@micronovasrl.com>
+In-Reply-To: <2605f69d-abb2-f265-552c-18147119a509@micronovasrl.com>
+References: <2605f69d-abb2-f265-552c-18147119a509@micronovasrl.com>
+Message-ID: <20181017123718.22553-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+If a package tries to static link with libavutil it fails due to the
+lack of libavutil private dependencies in libavutil.pc (-ldrm in this
+case).
 
-Il 16/10/2018 21:31, Giulio Benetti ha scritto:
-> Hello Thomas,
-> 
-> Il 12/10/2018 22:54, Giulio Benetti ha scritto:
->> Hello,
->>
->> Il 12/10/2018 21:50, Thomas Petazzoni ha scritto:
->>> Hello,
->>>
->>> On Fri, 12 Oct 2018 19:38:14 +0200, Giulio Benetti wrote:
->>>
->>>>>>>> Indeed, when we're dynamic linking, there is no need to link consumers
->>>>>>>> of libavutil with libdrm. It is only when we're statically linking that
->>>>>>>> it should be done. And that's exactly what Libs vs. Libs.private is for.
->>>>>>>
->>>>>>> You've explained me it very well, but by now FFmpeg upstreamed my patch:
->>>>>>> https://git.ffmpeg.org/gitweb/ffmpeg.git/commit/c50dc77ac708e98d02da7c422a6b9cbf9f565aa5
->>>>>>>
->>>>>>> So, do I rework and resubmit to them or can I re-create a patch for BR
->>>>>>> with what you've pointed me above?
->>>> I've missed one thing to ask you about ffmpeg:
->>>> Can I still use this hack:
->>>> https://git.ffmpeg.org/gitweb/ffmpeg.git/blobdiff/bc2301429e9c779237e43acf913331af018211f2..c50dc77ac708e98d02da7c422a6b9cbf9f565aa5:/configure
->>>>
->>>> to obtain if -ldrm is used and then add it to Libs.private like this:
->>>> Libs.private: -ldrm
->>>>
->>>> as you've pointed me.
->>>>
->>>> Or there is something that makes it simpler and better?
->>>
->>> I'm not sure what "hack" you're talking about here. My only point it is
->>> only needed to link "indirect" libraries when static linking, and
->>> therefore such "indirect" libraries should be listed in Libs.private
->>> and not Libs in pkg-config files.
-> 
-> I've worked this out, but I have a question:
-> Since FFMpeg upstreamed my previous wrong patch:
-> https://git.ffmpeg.org/gitweb/ffmpeg.git/commit/c50dc77ac708e98d02da7c422a6b9cbf9f565aa5
-> 
-> now I would submit another patch to FFMpeg to correct Libs vs
-> Libs.private problem.
-> 
-> Here is the new patch:
-> https://github.com/giuliobenetti/FFmpeg/commit/d682f418b7912b9d9e1818aefa61a51a2868fb20
-> 
-> So:
-> do I have to submit to Buildroot a patch containing both patches?
-> Or only one that merge both patches together even if it's not upstreamable?
+Add patch to:
+- Check if libdrm is present.
+- Add it to Libs.private: in libavutil.pc if present.
 
-I think I've answered myself, I need to:
-- send patch to Revert "c50dc77ac708e98d02da7c422a6b9cbf9f565aa5"
-- send new patch that is the squash of these 2 patches(1 already 
-upstream and 1 that fixes the problem):
- 
-https://github.com/giuliobenetti/FFmpeg/commit/c50dc77ac708e98d02da7c422a6b9cbf9f565aa5
- 
-https://github.com/giuliobenetti/FFmpeg/commit/d682f418b7912b9d9e1818aefa61a51a2868fb20
+Fixes:
+http://autobuild.buildroot.net/results/766/766de487f394490df8c712652ac364ebb4a3ab14/
+http://autobuild.buildroot.net/results/041/041e29dfddb2da3309ac7d34a576c60c5a75fe4d/
+http://autobuild.buildroot.net/results/780/78061b61cfe3f42554a475c048d54dacacfe11d5/
+http://autobuild.buildroot.net/results/275/275e4e0030d26c029085b408cfb272d5633969c6/
+http://autobuild.buildroot.net/results/515/5152dcca58944cf732d09fba6e6c9af8a9243c75/
+http://autobuild.buildroot.net/results/395/395be1a9cab824b82ef34c2ebd84d54243029b33/
 
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+ ...configure-add-LIBDRM-to-Libs.private.patch | 68 +++++++++++++++++++
+ 1 file changed, 68 insertions(+)
+ create mode 100644 package/ffmpeg/0002-configure-add-LIBDRM-to-Libs.private.patch
+
+diff --git a/package/ffmpeg/0002-configure-add-LIBDRM-to-Libs.private.patch b/package/ffmpeg/0002-configure-add-LIBDRM-to-Libs.private.patch
+new file mode 100644
+index 0000000000..5493473d0f
+--- /dev/null
++++ b/package/ffmpeg/0002-configure-add-LIBDRM-to-Libs.private.patch
+@@ -0,0 +1,68 @@
++From e1e11d404eec24c158ae1241d6573c263e57a7b9 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@micronovasrl.com>
++Date: Wed, 17 Oct 2018 13:13:10 +0200
++Subject: [PATCH] configure: add LIBDRM to Libs.private
++
++When static linking programs using ffmpeg libraries, if linking against
++libavutil, -ldrm is listed before -lavutil. This leads to linking
++failure due to undefined reference of drmGetVersion() and
++drmFreeVersion().
++This is why when pkg-config create libavutil.pc doesn't append -ldrm
++to Libs.private:.
++
++- Create LIBDRM=-ldrm in case libdrm is enabled.
++- Add privatelibs_avutil variable for explicit private libraries to be
++  appended to Libs.private:
++- Add $LIBDRM to privatelibs_avutil.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
++---
++ configure                     | 3 ++-
++ ffbuild/pkgconfig_generate.sh | 3 ++-
++ 2 files changed, 4 insertions(+), 2 deletions(-)
++
++diff --git a/configure b/configure
++index 7377046d0a..0996d8a85d 100755
++--- a/configure
+++++ b/configure
++@@ -5919,7 +5919,7 @@ enabled libcelt           && require libcelt celt/celt.h celt_decode -lcelt0 &&
++                                die "ERROR: libcelt must be installed and version must be >= 0.11.0."; }
++ enabled libcaca           && require_pkg_config libcaca caca caca.h caca_create_canvas
++ enabled libdc1394         && require_pkg_config libdc1394 libdc1394-2 dc1394/dc1394.h dc1394_new
++-enabled libdrm            && require_pkg_config libdrm libdrm xf86drm.h drmGetVersion
+++enabled libdrm            && require_pkg_config libdrm libdrm xf86drm.h drmGetVersion && LIBDRM="-ldrm"
++ enabled libfdk_aac        && { use_pkg_config libfdk_aac fdk-aac "fdk-aac/aacenc_lib.h" aacEncOpen ||
++                                { require libfdk_aac fdk-aac/aacenc_lib.h aacEncOpen -lfdk-aac &&
++                                  warn "using libfdk without pkg-config"; } }
++@@ -7097,6 +7097,7 @@ LIBPREF=${LIBPREF}
++ LIBSUF=${LIBSUF}
++ 
++ extralibs_avutil="$LIBRT $LIBM"
+++privatelibs_avutil="$LIBDRM"
++ extralibs_avcodec="$extralibs"
++ extralibs_avformat="$extralibs"
++ extralibs_avdevice="$extralibs"
++diff --git a/ffbuild/pkgconfig_generate.sh b/ffbuild/pkgconfig_generate.sh
++index e5de6716d2..b86486a107 100755
++--- a/ffbuild/pkgconfig_generate.sh
+++++ b/ffbuild/pkgconfig_generate.sh
++@@ -13,6 +13,7 @@ name=lib${shortname}
++ fullname=${name}${build_suffix}
++ comment=$2
++ libs=$(eval echo \$extralibs_${shortname})
+++privatelibs=$(eval echo \$privatelibs_${shortname})
++ deps=$(eval echo \$${shortname}_deps)
++ 
++ for dep in $deps; do
++@@ -39,7 +40,7 @@ Requires: $($shared || echo $requires)
++ Requires.private: $($shared && echo $requires)
++ Conflicts:
++ Libs: -L\${libdir} $rpath -l${fullname#lib} $($shared || echo $libs)
++-Libs.private: $($shared && echo $libs)
+++Libs.private: $($shared && echo $libs) ${privatelibs}
++ Cflags: -I\${includedir}
++ EOF
++ 
++-- 
++2.17.1
++
 -- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+2.17.1
