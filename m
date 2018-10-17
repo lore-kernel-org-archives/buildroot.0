@@ -1,26 +1,33 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 17 Oct 2018 16:11:24 +0000
-Subject: [Buildroot] [Bug 11401] Impossible do build a qt program using
- kf5-networkmanager-qt with qmake
-In-Reply-To: <bug-11401-163@https.bugs.busybox.net/>
-References: <bug-11401-163@https.bugs.busybox.net/>
-Message-ID: <bug-11401-163-ByIEpDkvAQ@https.bugs.busybox.net/>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Wed, 17 Oct 2018 19:27:01 +0300
+Subject: [Buildroot] [PATCH 1/1] python-py: add dependency on
+ host-python-setuptools-scm
+Message-ID: <20181017162701.13245-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11401
+Fixes:
+http://autobuild.buildroot.net/results/cde7ea2fc256ff9f1f6b8d887b26543b998d7186
 
---- Comment #11 from Pierre Ducroquet <pinaraf@pinaraf.info> ---
-After analysis and some checks (thanks Nicolas for your availability on IRC) it
-looks like there are two issues:
-- a bug in extra-cmake-modules that generates invalid pri when cross-building
-- wrong cmake settings on my side, thus putting files in wrong places
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/python-py/python-py.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-I am still working on it and confident a solution will be found by tomorrow.
-
+diff --git a/package/python-py/python-py.mk b/package/python-py/python-py.mk
+index e9c4d0a3b5..87e19ac21a 100644
+--- a/package/python-py/python-py.mk
++++ b/package/python-py/python-py.mk
+@@ -7,6 +7,7 @@
+ PYTHON_PY_VERSION = 1.7.0
+ PYTHON_PY_SOURCE = py-$(PYTHON_PY_VERSION).tar.gz
+ PYTHON_PY_SITE = https://files.pythonhosted.org/packages/c7/fa/eb6dd513d9eb13436e110aaeef9a1703437a8efa466ce6bb2ff1d9217ac7
++PYTHON_PY_DEPENDENCIES = host-python-setuptools-scm
+ PYTHON_PY_SETUP_TYPE = setuptools
+ PYTHON_PY_LICENSE = MIT
+ PYTHON_PY_LICENSE_FILES = LICENSE
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.17.1
