@@ -1,48 +1,88 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Oct 2018 21:50:19 +0200
-Subject: [Buildroot] [PATCH 1/1] vlc: fix build with libvorbis and tremor
-In-Reply-To: <20181016150909.27272-1-fontaine.fabrice@gmail.com>
-References: <20181016150909.27272-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181017215019.4b615e99@windsurf>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 17 Oct 2018 15:09:06 -0500
+Subject: [Buildroot] [PATCH 1/1] ntp: added ntpdate support to the
+ S49ntp script
+In-Reply-To: <CALtfCQaMWrgEo9MF+d1o6P-mVU-RsrkiNQHrvuch6EwNpchKaQ@mail.gmail.com>
+References: <1539708282-23077-1-git-send-email-oscargomezf@gmail.com>
+ <CANQCQpa+VmoqqvrH079_TZmbi4y4gUAVxO3Sba0kR--027rWYg@mail.gmail.com>
+ <CALtfCQZFn4CJwtphnpgwHaL=LG4E7G_CR=CbHcr8xRFVUN3t_A@mail.gmail.com>
+ <CALtfCQaMWrgEo9MF+d1o6P-mVU-RsrkiNQHrvuch6EwNpchKaQ@mail.gmail.com>
+Message-ID: <CANQCQpZX9vDt_YmXr_83MgRdTLZ199OLvVDvY6Ae=ctw1fUO_g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Oscar,
 
-On Tue, 16 Oct 2018 17:09:09 +0200, Fabrice Fontaine wrote:
-> Commit 550c42509c203891c47d934b058a19c2fa490973 "package/vlc: fix
-> linking with tremor" fixed build with BR2_PACKAGE_TREMOR and without
-> BR2_PACKAGE_LIBVORBIS. However, it breaks build if BR2_PACKAGE_TREMOR
-> and BR2_PACKAGE_LIBVORBIS are both enabled.
-> Indeed, by overiding VORBIS_LIBS by -lvorbisidec, link of
-> codec/.libs/libvorbis_plugin_la-vorbis.o with -lvorbis
-> failed because VORBIS_LIBS is normally used to save "-logg
-> -lvorbis -lvorbisenc":
-> PKG_ENABLE_MODULES_VLC([VORBIS], [], [ogg vorbis >= 1.1 vorbisenc >= 1.1], [Vorbis decoder and encoder], [auto])
-> 
-> So replace fourth patch by an upstreamable patch which uses pkg-config
-> to set TREMOR_LIBS if tremor is found instead of "hacking" VORBIS_LIBS
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/85a7bb1996b78dee037d5900b124cbdf5b66a6ac
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...he-name-of-the-vorbis-and-ogg-librar.patch | 31 ------------
->  ...ld-use-pkg-config-to-get-tremor-libs.patch | 50 +++++++++++++++++++
->  package/vlc/vlc.mk                            |  1 -
->  3 files changed, 50 insertions(+), 32 deletions(-)
->  delete mode 100644 package/vlc/0004-Don-t-hardcode-the-name-of-the-vorbis-and-ogg-librar.patch
->  create mode 100644 package/vlc/0004-build-use-pkg-config-to-get-tremor-libs.patch
+On Wed, Oct 17, 2018 at 2:49 PM Oscar Gomez Fuente
+<oscargomezf@gmail.com> wrote:
+>
+> Hi everyone,
+>
+> I made some improvements. If everyone thinks it is ok I will send a patch:
+> ----->
+> #! /bin/sh
+>
+> NAME=ntpd
+> NTPDATE=/usr/bin/ntpdate
 
-Many thanks for having investigated this problem, and found a fix that
-indeed looks good. Applied to master, thanks!
+Do you need to try more then one server?
 
-Thomas
+I'd suggest the following instead which handles the default NTP_SERVER
+without a conditional and removes the loop.
+
+NTP_SERVER=0.pool.ntp.org
+
+>
+> # Read config file if it is present.
+> if [ -r /etc/default/$NAME ]; then
+> . /etc/default/$NAME
+> fi
+>
+> case $1 in
+> start)
+>     printf "Starting $NAME: "
+>     CURRENT_DATE=$(date | grep "1970")
+>     if [ -f $NTPDATE -a "$CURRENT_DATE" != "" ]; then
+            $NTPDATE $NTP_SERVER > /dev/null 2>&1
+            [ $?  = 1 ] && echo -n "(No initial time set)"
+>     fi
+>     start-stop-daemon -S -q -x /usr/sbin/ntpd -- -g
+>     [ $? = 0 ] && echo "OK" || echo "FAIL"
+>     ;;
+> stop)
+>     printf "Stopping $NAME: "
+>     start-stop-daemon -K -q -n $NAME
+>     [ $? = 0 ] && echo "OK" || echo "FAIL"
+>     ;;
+> restart|reload)
+>     echo "Restarting $NAME: "
+>     $0 stop
+>     sleep 1
+>     $0 start
+>     ;;
+> *)
+>     echo "Usage: $0 {start|stop|restart|reload}" >&2
+>     exit 1
+>     ;;
+> esac
+>
+> exit 0
+>
+> ----->
+>
+> Best regards.
+
+
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / RC Linux Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
