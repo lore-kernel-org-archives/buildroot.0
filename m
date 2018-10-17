@@ -1,51 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Oct 2018 21:51:25 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-input-libinput:
- bump version to 0.28.1
-Message-ID: <20181018073250.2227A7F952@busybox.osuosl.org>
+Date: Wed, 17 Oct 2018 21:51:10 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server: bump
+ version to 1.20.2
+Message-ID: <20181018073250.0653483AF2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f117f07729639cc73d337d05643cd18fd3ff38fa
+commit: https://git.buildroot.net/buildroot/commit/?id=30363415962e7befa0820bc6b744e3f6babbd427
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../xdriver_xf86-input-libinput.hash                           | 10 +++++-----
- .../xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ .../{1.20.1 => 1.20.2}/0001-modesettings-needs-dri2.patch      |  0
+ .../0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch      |  0
+ .../0003-Remove-check-for-useSIGIO-option.patch                |  0
+ .../0004-include-misc.h-fix-uClibc-build.patch                 |  0
+ package/x11r7/xserver_xorg-server/Config.in                    |  4 ++--
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.hash     | 10 +++++-----
+ 6 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-index cb41765f4f..c6f2577bd6 100644
---- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-+++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-@@ -1,7 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2018-July/002908.html
--md5 2d7519ac0e39d4c88f3be32e81a637aa  xf86-input-libinput-0.28.0.tar.bz2
--sha1 07f5559bcf0363d4ecaf0b2cecb88ee7d2b16fc6  xf86-input-libinput-0.28.0.tar.bz2
--sha256 21994d065fc26e85d1c3fc87d8479b9c22699ed5a0119df98fbe0000e84630a1  xf86-input-libinput-0.28.0.tar.bz2
--sha512 4276b6aea87ddc83fa1f5e8d8949e34ad117186a6b5b599549231cb90424cd0fa69f3a4701ce529739c676665bb5c936eb447817c9420511d23bc048f6be92a4  xf86-input-libinput-0.28.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-October/002923.html
-+md5  9d2fb3d6b452d568a275908b856de0e2  xf86-input-libinput-0.28.1.tar.bz2
-+sha1 f72f298c23fa993857ff1a9a06754f2f5962b376  xf86-input-libinput-0.28.1.tar.bz2
-+sha256 9ada448e076c0078a84b48e5298fa8ce317565f9b342b74c20429214a707d98b  xf86-input-libinput-0.28.1.tar.bz2
-+sha512 2b8cabfbc3490edbe928771ed9d62a0d4a423bc1373fc6cf9d3a6b5937e17ddc48ebb1b70f1191e507024e4b8220c137495cbba825292b51e50709daa7d31623  xf86-input-libinput-0.28.1.tar.bz2
- # Locally computed
- sha256 b808a8a077995380c6064bec41616f98546b0b2e79bb7f3d0247d290e275b396  COPYING
-diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-index b427d154cb..83de5c9610 100644
---- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-+++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/x11r7/xserver_xorg-server/1.20.1/0001-modesettings-needs-dri2.patch b/package/x11r7/xserver_xorg-server/1.20.2/0001-modesettings-needs-dri2.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/1.20.1/0001-modesettings-needs-dri2.patch
+rename to package/x11r7/xserver_xorg-server/1.20.2/0001-modesettings-needs-dri2.patch
+diff --git a/package/x11r7/xserver_xorg-server/1.20.1/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch b/package/x11r7/xserver_xorg-server/1.20.2/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/1.20.1/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
+rename to package/x11r7/xserver_xorg-server/1.20.2/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
+diff --git a/package/x11r7/xserver_xorg-server/1.20.1/0003-Remove-check-for-useSIGIO-option.patch b/package/x11r7/xserver_xorg-server/1.20.2/0003-Remove-check-for-useSIGIO-option.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/1.20.1/0003-Remove-check-for-useSIGIO-option.patch
+rename to package/x11r7/xserver_xorg-server/1.20.2/0003-Remove-check-for-useSIGIO-option.patch
+diff --git a/package/x11r7/xserver_xorg-server/1.20.1/0004-include-misc.h-fix-uClibc-build.patch b/package/x11r7/xserver_xorg-server/1.20.2/0004-include-misc.h-fix-uClibc-build.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/1.20.1/0004-include-misc.h-fix-uClibc-build.patch
+rename to package/x11r7/xserver_xorg-server/1.20.2/0004-include-misc.h-fix-uClibc-build.patch
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index c6dc010980..a491f5f9f0 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -61,7 +61,7 @@ choice
+ 	bool "X Window System server version"
  
--XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.28.0
-+XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.28.1
- XDRIVER_XF86_INPUT_LIBINPUT_SOURCE = xf86-input-libinput-$(XDRIVER_XF86_INPUT_LIBINPUT_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_LIBINPUT_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_LIBINPUT_LICENSE = MIT
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_20
+-	bool "1.20.1"
++	bool "1.20.2"
+ 	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_24
+ 	select BR2_PACKAGE_XLIB_LIBXFONT2
+ 
+@@ -79,7 +79,7 @@ endchoice
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
+ 	string
+-	default "1.20.1" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_20
++	default "1.20.2" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_20
+ 	default "1.17.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
+ 	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
+ 
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+index c0d93e5580..549150fcce 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+@@ -3,8 +3,8 @@ sha1   7a95765e56b124758fcd7b609589e65b8870880b                                x
+ sha256 fcf66fa6ad86227613d2d3e8ae13ded297e2a1e947e9060a083eaf80d323451f        xorg-server-1.14.7.tar.bz2
+ # From https://lists.x.org/archives/xorg-announce/2015-October/002650.html
+ sha256 0c4b45c116a812a996eb432d8508cf26c2ec8c3916ff2a50781796882f8d6457        xorg-server-1.17.4.tar.bz2
+-# From https://lists.x.org/archives/xorg-announce/2018-August/002912.html
+-md5 e525846d1d0af5732ba835f2e2ec066d  xorg-server-1.20.1.tar.bz2
+-sha1 fd43367c2b7bbb1a4b1dd90b06a021e68a9db240  xorg-server-1.20.1.tar.bz2
+-sha256 59c99fe86fe75b8164c6567bfc6e982aecc2e4a51e6fbac1b842d5d00549e918  xorg-server-1.20.1.tar.bz2
+-sha512 ef2b93a61683c8ca8d1f14b771e70db65ba119a73db8a46e7cdbf2ac2243e3f4b2732068eb5aa5d7b76f460db995a3c04390870198a5210ec30df4360ad9f94b  xorg-server-1.20.1.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-October/002924.html
++md5 e9853601de22454c8d36ca3425e65ce3  xorg-server-1.20.2.tar.bz2
++sha1 68636544ad25062eca4c681a031be5a35b548078  xorg-server-1.20.2.tar.bz2
++sha256 0ed5f7bc48f22f54e1ae0229ad6f35a521da4232d9d5529d7cebb5e79b3ccee2  xorg-server-1.20.2.tar.bz2
++sha512 1c87d78b14529dd4b438ef038118c8540d1d17bdd58bf08ec5408a2ddbe8d0dda48033a9a9477cfc2c4c304dd1078fa40968a03c4d0cd3398359dd0fadb8e7c7  xorg-server-1.20.2.tar.bz2
