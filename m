@@ -1,48 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Oct 2018 21:51:20 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libSM: bump version to
- 1.2.3
-Message-ID: <20181018073250.19F9E7F952@busybox.osuosl.org>
+Date: Wed, 17 Oct 2018 21:51:25 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-input-libinput:
+ bump version to 0.28.1
+Message-ID: <20181018073250.2227A7F952@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b248f730f3e8595cc0e5e74a4e9bf2233f7b79e6
+commit: https://git.buildroot.net/buildroot/commit/?id=f117f07729639cc73d337d05643cd18fd3ff38fa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xlib_libSM/xlib_libSM.hash | 9 +++++++--
- package/x11r7/xlib_libSM/xlib_libSM.mk   | 2 +-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ .../xdriver_xf86-input-libinput.hash                           | 10 +++++-----
+ .../xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xlib_libSM/xlib_libSM.hash b/package/x11r7/xlib_libSM/xlib_libSM.hash
-index 79dc25c226..1653dc6d76 100644
---- a/package/x11r7/xlib_libSM/xlib_libSM.hash
-+++ b/package/x11r7/xlib_libSM/xlib_libSM.hash
-@@ -1,2 +1,7 @@
--# From http://lists.freedesktop.org/archives/xorg/2013-September/056013.html
--sha256	0baca8c9f5d934450a70896c4ad38d06475521255ca63b717a6510fdb6e287bd	libSM-1.2.2.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-October/002922.html
-+md5  87c7fad1c1813517979184c8ccd76628  libSM-1.2.3.tar.bz2
-+sha1 437d7b13fa2eba325df3a106f177df46ccec6546  libSM-1.2.3.tar.bz2
-+sha256 2d264499dcb05f56438dee12a1b4b71d76736ce7ba7aa6efbf15ebb113769cbb  libSM-1.2.3.tar.bz2
-+sha512 74c42e27029db78475e62025b4711dbac5e22d2f8e8a24be98a1c31b03c0fc4afe859928f851800ea0b76854f12147900dc4f27bbfd3d8ea45daaaf24b70a903  libSM-1.2.3.tar.bz2
-+# Locally computed
-+sha256 af7926a14d85ad367622688636e8c9c6f7807c8a6867536af1c530b5c262bfba  COPYING
-diff --git a/package/x11r7/xlib_libSM/xlib_libSM.mk b/package/x11r7/xlib_libSM/xlib_libSM.mk
-index 9049cea234..708224e2d1 100644
---- a/package/x11r7/xlib_libSM/xlib_libSM.mk
-+++ b/package/x11r7/xlib_libSM/xlib_libSM.mk
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
+index cb41765f4f..c6f2577bd6 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
++++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-July/002908.html
+-md5 2d7519ac0e39d4c88f3be32e81a637aa  xf86-input-libinput-0.28.0.tar.bz2
+-sha1 07f5559bcf0363d4ecaf0b2cecb88ee7d2b16fc6  xf86-input-libinput-0.28.0.tar.bz2
+-sha256 21994d065fc26e85d1c3fc87d8479b9c22699ed5a0119df98fbe0000e84630a1  xf86-input-libinput-0.28.0.tar.bz2
+-sha512 4276b6aea87ddc83fa1f5e8d8949e34ad117186a6b5b599549231cb90424cd0fa69f3a4701ce529739c676665bb5c936eb447817c9420511d23bc048f6be92a4  xf86-input-libinput-0.28.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-October/002923.html
++md5  9d2fb3d6b452d568a275908b856de0e2  xf86-input-libinput-0.28.1.tar.bz2
++sha1 f72f298c23fa993857ff1a9a06754f2f5962b376  xf86-input-libinput-0.28.1.tar.bz2
++sha256 9ada448e076c0078a84b48e5298fa8ce317565f9b342b74c20429214a707d98b  xf86-input-libinput-0.28.1.tar.bz2
++sha512 2b8cabfbc3490edbe928771ed9d62a0d4a423bc1373fc6cf9d3a6b5937e17ddc48ebb1b70f1191e507024e4b8220c137495cbba825292b51e50709daa7d31623  xf86-input-libinput-0.28.1.tar.bz2
+ # Locally computed
+ sha256 b808a8a077995380c6064bec41616f98546b0b2e79bb7f3d0247d290e275b396  COPYING
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+index b427d154cb..83de5c9610 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
++++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBSM_VERSION = 1.2.2
-+XLIB_LIBSM_VERSION = 1.2.3
- XLIB_LIBSM_SOURCE = libSM-$(XLIB_LIBSM_VERSION).tar.bz2
- XLIB_LIBSM_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBSM_LICENSE = MIT
+-XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.28.0
++XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.28.1
+ XDRIVER_XF86_INPUT_LIBINPUT_SOURCE = xf86-input-libinput-$(XDRIVER_XF86_INPUT_LIBINPUT_VERSION).tar.bz2
+ XDRIVER_XF86_INPUT_LIBINPUT_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_LIBINPUT_LICENSE = MIT
