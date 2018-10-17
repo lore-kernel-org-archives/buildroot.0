@@ -1,88 +1,105 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 17 Oct 2018 15:09:06 -0500
-Subject: [Buildroot] [PATCH 1/1] ntp: added ntpdate support to the
- S49ntp script
-In-Reply-To: <CALtfCQaMWrgEo9MF+d1o6P-mVU-RsrkiNQHrvuch6EwNpchKaQ@mail.gmail.com>
-References: <1539708282-23077-1-git-send-email-oscargomezf@gmail.com>
- <CANQCQpa+VmoqqvrH079_TZmbi4y4gUAVxO3Sba0kR--027rWYg@mail.gmail.com>
- <CALtfCQZFn4CJwtphnpgwHaL=LG4E7G_CR=CbHcr8xRFVUN3t_A@mail.gmail.com>
- <CALtfCQaMWrgEo9MF+d1o6P-mVU-RsrkiNQHrvuch6EwNpchKaQ@mail.gmail.com>
-Message-ID: <CANQCQpZX9vDt_YmXr_83MgRdTLZ199OLvVDvY6Ae=ctw1fUO_g@mail.gmail.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Wed, 17 Oct 2018 22:59:17 +0200
+Subject: [Buildroot] [PATCH 1/1] ltp-testsuite: Backport compilation fix
+ from upstream
+Message-ID: <20181017205917.9536-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Oscar,
+LTP fails to build 20180926 with both glibc 2.28 and uclibc-ng 1.0.30,
+due error in m4 macro check:
 
-On Wed, Oct 17, 2018 at 2:49 PM Oscar Gomez Fuente
-<oscargomezf@gmail.com> wrote:
->
-> Hi everyone,
->
-> I made some improvements. If everyone thinks it is ok I will send a patch:
-> ----->
-> #! /bin/sh
->
-> NAME=ntpd
-> NTPDATE=/usr/bin/ntpdate
+In file included from /home/rclinux/rc-buildroot-test/scripts/instance-0/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/sys/stat.h:446:0,
+                 from ../../../../include/tst_safe_macros.h:26,
+                 from ../../../../include/tst_test.h:85,
+                 from statx05.c:27:
+/home/rclinux/rc-buildroot-test/scripts/instance-0/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/bits/statx.h:87:5: note: expected 'struct statx * restrict' but argument is of type 'struct statx *'
+ int statx (int __dirfd, const char *__restrict __path, int __flags,
+     ^~~~~
+<builtin>: recipe for target 'statx01' failed
+make[5]: *** [statx01] Error 1
+<builtin>: recipe for target 'statx05' failed
+make[5]: *** [statx05] Error 1
 
-Do you need to try more then one server?
+This patch requires to regenerate configure.
 
-I'd suggest the following instead which handles the default NTP_SERVER
-without a conditional and removes the loop.
+Fixes:
+http://autobuild.buildroot.net/results/69566d0c728970a6dd6a793b08c5804df3cc00eb
+http://autobuild.buildroot.net/results/3c53ddfaca70b490a401c9123602965f3803cd0a
+http://autobuild.buildroot.net/results/8fb63f627a4ba55afea49ad0566064d20021889a
+http://autobuild.buildroot.net/results/496a1b40d378eaca98e532c03afb47e5291427b3
+http://autobuild.buildroot.net/results/47abceeda8044029b6d3200f3877d4d2c494202c
 
-NTP_SERVER=0.pool.ntp.org
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Reported-by: Florian La Roche <F.LaRoche@pilz.de>
+---
+Hi, Thomas,
 
->
-> # Read config file if it is present.
-> if [ -r /etc/default/$NAME ]; then
-> . /etc/default/$NAME
-> fi
->
-> case $1 in
-> start)
->     printf "Starting $NAME: "
->     CURRENT_DATE=$(date | grep "1970")
->     if [ -f $NTPDATE -a "$CURRENT_DATE" != "" ]; then
-            $NTPDATE $NTP_SERVER > /dev/null 2>&1
-            [ $?  = 1 ] && echo -n "(No initial time set)"
->     fi
->     start-stop-daemon -S -q -x /usr/sbin/ntpd -- -g
->     [ $? = 0 ] && echo "OK" || echo "FAIL"
->     ;;
-> stop)
->     printf "Stopping $NAME: "
->     start-stop-daemon -K -q -n $NAME
->     [ $? = 0 ] && echo "OK" || echo "FAIL"
->     ;;
-> restart|reload)
->     echo "Restarting $NAME: "
->     $0 stop
->     sleep 1
->     $0 start
->     ;;
-> *)
->     echo "Usage: $0 {start|stop|restart|reload}" >&2
->     exit 1
->     ;;
-> esac
->
-> exit 0
->
-> ----->
->
-> Best regards.
+you can add Florian as author, I don't care.
 
+Kind regards,
+Petr
+---
+ .../0002-statx-fix-compile-errors.patch       | 35 +++++++++++++++++++
+ package/ltp-testsuite/ltp-testsuite.mk        |  3 ++
+ 2 files changed, 38 insertions(+)
+ create mode 100644 package/ltp-testsuite/0002-statx-fix-compile-errors.patch
 
-
+diff --git a/package/ltp-testsuite/0002-statx-fix-compile-errors.patch b/package/ltp-testsuite/0002-statx-fix-compile-errors.patch
+new file mode 100644
+index 0000000000..6ddd2c9054
+--- /dev/null
++++ b/package/ltp-testsuite/0002-statx-fix-compile-errors.patch
+@@ -0,0 +1,35 @@
++From a945304b6a2286d0665c70250cc5475eb07fd21e Mon Sep 17 00:00:00 2001
++From: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
++Date: Wed, 26 Sep 2018 11:15:45 -0300
++Subject: [PATCH] statx: fix compile errors
++
++struct statx is only defined in sys/stat.h when _GNU_SOURCE is defined.
++The testcases do define _GNU_SOURCE, but not the m4 struct check.
++
++Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
++Acked-by: Cyril Hrubis <chrubis@suse.cz>
++---
++ m4/ltp-statx.m4 | 9 +++++++--
++ 1 file changed, 7 insertions(+), 2 deletions(-)
++
++diff --git a/m4/ltp-statx.m4 b/m4/ltp-statx.m4
++index 44303d30c..5f79a94cd 100644
++--- a/m4/ltp-statx.m4
+++++ b/m4/ltp-statx.m4
++@@ -23,6 +23,11 @@ dnl
++ AC_DEFUN([LTP_CHECK_STATX],[
++ AC_CHECK_FUNCS(statx,,,[[#include <sys/stat.h>]])
++ AC_CHECK_HEADER(linux/fs.h,,,)
++-AC_CHECK_TYPES([struct statx],,,[[#include <sys/stat.h>]])
++-AC_CHECK_TYPES([struct statx_timestamp],,,[[#include <sys/stat.h>]])
+++AC_CHECK_TYPES([struct statx],,,[[
+++	#define _GNU_SOURCE
+++	#include <sys/stat.h>
+++]])
+++AC_CHECK_TYPES([struct statx_timestamp],,,[[
+++	#define _GNU_SOURCE
+++	#include <sys/stat.h>]])
++ ])
++-- 
++2.19.0
++
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index da039bddae..9001316fbd 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -75,4 +75,7 @@ endef
+ LTP_TESTSUITE_POST_PATCH_HOOKS += LTP_TESTSUITE_REMOVE_LDD
+ endif
+ 
++# 0002-statx-fix-compile-errors.patch
++LTP_TESTSUITE_AUTORECONF = YES
++
+ $(eval $(autotools-package))
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / RC Linux Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+2.19.0
