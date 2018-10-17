@@ -1,33 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Oct 2018 08:44:41 +0200
-Subject: [Buildroot] Connection refused error
-In-Reply-To: <CAD8kTsAZSoQQ3d-MX2u8CpqpahFbUYgJqoM92uoqcfHEDHg4DQ@mail.gmail.com>
- (Shaikat Hossain's message of "Tue, 16 Oct 2018 16:27:23 -0700")
-References: <CAD8kTsAZSoQQ3d-MX2u8CpqpahFbUYgJqoM92uoqcfHEDHg4DQ@mail.gmail.com>
-Message-ID: <878t2xysva.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 17 Oct 2018 06:57:51 +0000
+Subject: [Buildroot] [Bug 11401] Impossible do build a qt program using
+ kf5-networkmanager-qt with qmake
+In-Reply-To: <bug-11401-163@https.bugs.busybox.net/>
+References: <bug-11401-163@https.bugs.busybox.net/>
+Message-ID: <bug-11401-163-24h9YTCAbl@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Shaikat" == Shaikat Hossain <shossa3@gmail.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=11401
 
- > I am receiving the following error when I run make on the Erpiam project I
- > am building from Github:
+--- Comment #8 from Nicolas Carrier <carrier.nicolas0@gmail.com> ---
+Sure, no problem, and in the meantime, I have to consider all the solutions.
 
- > "
- > shaikat at shaikat-VirtualBox:~/erpiam$ make
- >>>> host-expat 2.2.5 Downloading
- > --2018-10-16 15:59:34--
- > http://downloads.sourceforge.net/project/expat/expat/2.2.5/expat-2.2.5.tar.bz2
- > Connecting to 127.0.0.1:8080... failed: Connection refused.
- > --2018-10-16 15:59:34--  http://sources.buildroot.net/expat-2.2.5.tar.bz2
- > Connecting to 127.0.0.1:8080... failed: Connection refused.
+I'd really like to propose a patch directly, but I don't have a sufficient
+knowledge in qmake.
 
-You seem to have a proxy configured for 127.0.0.1:8080 but it isn't
-working. Either fix that or remove the proxy configuration (probably an
-http_proxy / https_proxy environment variable).
+I noticed that qt_lib_network.pri has its QT.network.includes variable
+parametered with $$QT_MODULE_INCLUDE_BASE, when for NetworkManagerQt, it's
+just:
+
+QT.NetworkManagerQt.includes = /usr/include/KF5/NetworkManagerQt
+
+Maybe something analogous should be done. But how ? As a buildroot patch ?
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
