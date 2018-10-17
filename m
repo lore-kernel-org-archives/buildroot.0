@@ -1,47 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Oct 2018 21:45:41 +0200
-Subject: [Buildroot] [git commit] {linux,
- linux-headers}: fix linux-4.9.133.tar.xz checksum
-Message-ID: <20181017194417.D68B57FFD8@busybox.osuosl.org>
+Date: Wed, 17 Oct 2018 21:45:53 +0200
+Subject: [Buildroot] [git commit] python-py: add dependency on
+ host-python-setuptools-scm
+Message-ID: <20181017194429.5BF9E839DD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6693b5f3da62b79d2309af35c8d21fdebaa8bf22
+commit: https://git.buildroot.net/buildroot/commit/?id=db888297748f6fef844d9aa63f7104d55d3babf8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The Linux tarball checksum was recently updated, including the one for
-version 4.9.133. The checksum for this particular version of Linux
-misses one character which lead to a build issue as the checksum does
-not match:
+Fixes:
+http://autobuild.buildroot.net/results/cde7ea2fc256ff9f1f6b8d887b26543b998d7186
 
-ERROR: linux-4.9.133.tar.xz has wrong sha256 hash:
-ERROR: expected: 3730fc025ba330a6f4908a6a1e4cb86d821000c84167721680ccf1b37b26563
-ERROR: got     : 53730fc025ba330a6f4908a6a1e4cb86d821000c84167721680ccf1b37b26563
-ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-
-This patch fixes it.
-
-Fixes: 0064c7b25125 ("{linux, linux-headers}: bump 4.{4, 9, 14, 18}.x series")
-Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
-Tested-by: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- linux/linux.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-py/python-py.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 5a00e786af..46f587ef6a 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -2,7 +2,7 @@
- sha256 36c6d1360db9eab40270db6d292c259dd34d3dc06049d64afe3e4cfafb8562d3  linux-4.18.14.tar.xz
- sha256 41026d713ba4f7a5e9d514b876ce4ed28a1d993c0c58b42b2a2597d6a0e83021  linux-4.16.18.tar.xz
- sha256 ee3f19a4ff8a42793c193e361e1d34fcc821a5ca9b58db41befb2b4df0e482be  linux-4.14.76.tar.xz
--sha256 3730fc025ba330a6f4908a6a1e4cb86d821000c84167721680ccf1b37b26563   linux-4.9.133.tar.xz
-+sha256 53730fc025ba330a6f4908a6a1e4cb86d821000c84167721680ccf1b37b26563  linux-4.9.133.tar.xz
- sha256 be0383d57c52a7ac6b1ca4d989a16a581f52ec9704ccf4ddf066b1b5b1313f87  linux-4.4.161.tar.xz
- sha256 6ad9389e55e0ea57768eae173747058a4487fa3630e10a7999cfec9f945e559c  linux-4.1.52.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v3.x/sha256sums.asc
+diff --git a/package/python-py/python-py.mk b/package/python-py/python-py.mk
+index e9c4d0a3b5..87e19ac21a 100644
+--- a/package/python-py/python-py.mk
++++ b/package/python-py/python-py.mk
+@@ -7,6 +7,7 @@
+ PYTHON_PY_VERSION = 1.7.0
+ PYTHON_PY_SOURCE = py-$(PYTHON_PY_VERSION).tar.gz
+ PYTHON_PY_SITE = https://files.pythonhosted.org/packages/c7/fa/eb6dd513d9eb13436e110aaeef9a1703437a8efa466ce6bb2ff1d9217ac7
++PYTHON_PY_DEPENDENCIES = host-python-setuptools-scm
+ PYTHON_PY_SETUP_TYPE = setuptools
+ PYTHON_PY_LICENSE = MIT
+ PYTHON_PY_LICENSE_FILES = LICENSE
