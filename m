@@ -1,54 +1,93 @@
-From: Alexey Brodkin <alexey.brodkin@synopsys.com>
-Date: Wed, 17 Oct 2018 12:51:51 +0300
-Subject: [Buildroot] [PATCH] configs/cubieboard2: Update kernel to 4.18.14
- and U-Boot to 2018.09
-Message-ID: <20181017095151.15575-1-abrodkin@synopsys.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Wed, 17 Oct 2018 12:36:44 +0200
+Subject: [Buildroot] [PATCH] ffmpeg: fix static linking build failure
+ when using libavutil
+In-Reply-To: <114c7852-b588-59fb-c761-63086758511a@micronovasrl.com>
+References: <20180911204230.15890-1-giulio.benetti@micronovasrl.com>
+ <20180916222224.519fa1f8@windsurf>
+ <63ee101c-ee45-57cc-4aeb-7f3b49753ccb@micronovasrl.com>
+ <20180924130929.4b345624@windsurf>
+ <1b5dece6-8730-89d4-53dc-44f3492c49d9@micronovasrl.com>
+ <8fb396bf-456c-2385-8fd0-84cbd4142e56@micronovasrl.com>
+ <20181012215008.0eab3a2c@windsurf>
+ <fc5ea699-9f27-f626-f5fa-a477cbf7af0c@micronovasrl.com>
+ <114c7852-b588-59fb-c761-63086758511a@micronovasrl.com>
+Message-ID: <2605f69d-abb2-f265-552c-18147119a509@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The board is well supported in upstream projects so let's update kernel
-and U-Boot to the latest and greatest versions.
+Hello,
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Erico Nunes <nunes.erico@gmail.com>
----
- configs/cubieboard2_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Il 16/10/2018 21:31, Giulio Benetti ha scritto:
+> Hello Thomas,
+> 
+> Il 12/10/2018 22:54, Giulio Benetti ha scritto:
+>> Hello,
+>>
+>> Il 12/10/2018 21:50, Thomas Petazzoni ha scritto:
+>>> Hello,
+>>>
+>>> On Fri, 12 Oct 2018 19:38:14 +0200, Giulio Benetti wrote:
+>>>
+>>>>>>>> Indeed, when we're dynamic linking, there is no need to link consumers
+>>>>>>>> of libavutil with libdrm. It is only when we're statically linking that
+>>>>>>>> it should be done. And that's exactly what Libs vs. Libs.private is for.
+>>>>>>>
+>>>>>>> You've explained me it very well, but by now FFmpeg upstreamed my patch:
+>>>>>>> https://git.ffmpeg.org/gitweb/ffmpeg.git/commit/c50dc77ac708e98d02da7c422a6b9cbf9f565aa5
+>>>>>>>
+>>>>>>> So, do I rework and resubmit to them or can I re-create a patch for BR
+>>>>>>> with what you've pointed me above?
+>>>> I've missed one thing to ask you about ffmpeg:
+>>>> Can I still use this hack:
+>>>> https://git.ffmpeg.org/gitweb/ffmpeg.git/blobdiff/bc2301429e9c779237e43acf913331af018211f2..c50dc77ac708e98d02da7c422a6b9cbf9f565aa5:/configure
+>>>>
+>>>> to obtain if -ldrm is used and then add it to Libs.private like this:
+>>>> Libs.private: -ldrm
+>>>>
+>>>> as you've pointed me.
+>>>>
+>>>> Or there is something that makes it simpler and better?
+>>>
+>>> I'm not sure what "hack" you're talking about here. My only point it is
+>>> only needed to link "indirect" libraries when static linking, and
+>>> therefore such "indirect" libraries should be listed in Libs.private
+>>> and not Libs in pkg-config files.
+> 
+> I've worked this out, but I have a question:
+> Since FFMpeg upstreamed my previous wrong patch:
+> https://git.ffmpeg.org/gitweb/ffmpeg.git/commit/c50dc77ac708e98d02da7c422a6b9cbf9f565aa5
+> 
+> now I would submit another patch to FFMpeg to correct Libs vs
+> Libs.private problem.
+> 
+> Here is the new patch:
+> https://github.com/giuliobenetti/FFmpeg/commit/d682f418b7912b9d9e1818aefa61a51a2868fb20
+> 
+> So:
+> do I have to submit to Buildroot a patch containing both patches?
+> Or only one that merge both patches together even if it's not upstreamable?
 
-diff --git a/configs/cubieboard2_defconfig b/configs/cubieboard2_defconfig
-index a0d23990ac..fa86be3622 100644
---- a/configs/cubieboard2_defconfig
-+++ b/configs/cubieboard2_defconfig
-@@ -1,15 +1,15 @@
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_NEON_VFPV4=y
--# Linux headers same as kernel, a 4.6 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
-+# Linux headers same as kernel, a 4.18 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
- BR2_TARGET_GENERIC_HOSTNAME="Cubieboard2"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Cubieboard2!"
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/cubietech/cubieboard2/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.14"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-cubieboard2"
-@@ -18,7 +18,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.05"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.09"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Cubieboard2"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_SPL=y
+I think I've answered myself, I need to:
+- send patch to Revert "c50dc77ac708e98d02da7c422a6b9cbf9f565aa5"
+- send new patch that is the squash of these 2 patches(1 already 
+upstream and 1 that fixes the problem):
+ 
+https://github.com/giuliobenetti/FFmpeg/commit/c50dc77ac708e98d02da7c422a6b9cbf9f565aa5
+ 
+https://github.com/giuliobenetti/FFmpeg/commit/d682f418b7912b9d9e1818aefa61a51a2868fb20
+
 -- 
-2.16.2
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
