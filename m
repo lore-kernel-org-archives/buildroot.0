@@ -1,112 +1,145 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 17 Oct 2018 16:41:59 -0500
-Subject: [Buildroot] [PATCH v7 07/10] support/scripts/cpe-report: new script
-In-Reply-To: <1539812522-7171-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1539812522-7171-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1539812522-7171-7-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Wed, 17 Oct 2018 16:41:53 -0500
+Subject: [Buildroot] [PATCH v7 01/10] cpe-info: new make target
+Message-ID: <1539812522-7171-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The script supports looking up all the CPEs provided in a
-make cpe-info csv file export from a target Buildroot build.
-It checks the current version and suggests a CPE needs update
-or possibly initial submission to NIST.
+Similar to make legal-info, produce a csv delimited file containing
+all selected packages CPE identification.
 
-Limitations
- - Currently any use of non-number version identifiers isn't
-   supported by NIST as they use ranges to determine impact
-   of a CVE
- - Any Linux version from a non-upstream is also not supported
-   without manually adjusting the information as the custom
-   kernel will more then likely not match the upstream version
-   used in the dictionary
+Have the pkg infra define CPE_ID_* defaults using the package name
+for the vendor and name as most CPE IDs seem to align with that
+assumption. Also use the pkg version as the CPE ID's version field.
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+
 ---
 Changes
-v5 -> v7
+v4 -> v7
  - No change
 
-v5
-[Ricardo
- - Updated v4 comments about general flake formatting cleanup
- - Incorporated parts of patch 1/2 suggestions for optimizations
+v3
+[Thomas P
+ - Merged infra define CPE_ID_*  into this patch
+ - Report all packages vs restricting to just allowing based on if
+   the VENDOR was set (v2). This now represents Thomas P's original
+   idea to report everything.  At first I felt I should restrict
+   the reporting to those CPE IDs we had made sure were correct.
+   Turns out we should have actually let the script handle fixing
+   the CPEs and just make a complete design of this up front.
 
-[Ricardo/Arnout
- - Collectly, decided to move cpe report analysis to this
-   script and use a seperate module cpedb class
+[Matt
+ - Moved to using the _project on all vendors instead of just name
 
-[Arnout
- - Rename cpe_dict to instead be cpedb
-
-v1 -> v4
- - Patch did not exist and was part of pkg-stats file
+v2
+[Thomas P
+ - Moved comment on conditionals back to this patchset where
+   the conditional is created vs later
 ---
- support/scripts/cpe-report | 53 ++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
- create mode 100755 support/scripts/cpe-report
+ Makefile               | 17 ++++++++++++++++-
+ package/pkg-generic.mk | 13 +++++++++++++
+ package/pkg-utils.mk   |  8 ++++++++
+ 3 files changed, 37 insertions(+), 1 deletion(-)
 
-diff --git a/support/scripts/cpe-report b/support/scripts/cpe-report
-new file mode 100755
-index 0000000..036eab2
---- /dev/null
-+++ b/support/scripts/cpe-report
-@@ -0,0 +1,53 @@
-+#!/usr/bin/env python
+diff --git a/Makefile b/Makefile
+index 82dd76e..24f4e97 100644
+--- a/Makefile
++++ b/Makefile
+@@ -146,7 +146,7 @@ nobuild_targets := source %-source \
+ 	clean distclean help show-targets graph-depends \
+ 	%-graph-depends %-show-depends %-show-version \
+ 	graph-build graph-size list-defconfigs \
+-	savedefconfig printvars
++	savedefconfig printvars cpe-info %-cpe-info
+ ifeq ($(MAKECMDGOALS),)
+ BR_BUILDING = y
+ else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
+@@ -233,6 +233,7 @@ LEGAL_MANIFEST_CSV_TARGET = $(LEGAL_INFO_DIR)/manifest.csv
+ LEGAL_MANIFEST_CSV_HOST = $(LEGAL_INFO_DIR)/host-manifest.csv
+ LEGAL_WARNINGS = $(LEGAL_INFO_DIR)/.warnings
+ LEGAL_REPORT = $(LEGAL_INFO_DIR)/README
++CPE_MANIFEST_CSV = $(BASE_DIR)/cpe-manifest.csv
+ 
+ BR2_CONFIG = $(CONFIG_DIR)/.config
+ 
+@@ -814,6 +815,19 @@ legal-info: dirs legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p
+ 		mv .legal-info.sha256 legal-info.sha256)
+ 	@echo "Legal info produced in $(LEGAL_INFO_DIR)"
+ 
++.PHONY: cpe-info-clean
++cpe-info-clean:
++	@rm -f $(CPE_MANIFEST_CSV)
 +
-+import argparse
-+import sys
-+import csv
-+from cpedb import CPEDB
++.PHONY: cpe-info-prepare
++cpe-info-prepare:
++	@$(call MESSAGE,"Gathering CPE info")
++	@$(call cpe-manifest,CPE ID,CVE PATCHED,PACKAGE,VERSION,SOURCE SITE)
 +
++.PHONY: cpe-info
++cpe-info: cpe-info-clean cpe-info-prepare $(foreach p,$(PACKAGES),$(p)-cpe-info)
++	@echo "CPE info produced in $(CPE_MANIFEST_CSV)"
 +
-+def get_target_cpe_report(cpe_report_file, cpedb):
-+    report_cpe_exact_match = ""
-+    report_cpe_needing_update = ""
-+    report_cpe_missing = ""
+ .PHONY: show-targets
+ show-targets:
+ 	@echo $(sort $(PACKAGES)) $(sort $(TARGETS_ROOTFS))
+@@ -1083,6 +1097,7 @@ help:
+ 	@echo '  source                 - download all sources needed for offline-build'
+ 	@echo '  external-deps          - list external packages used'
+ 	@echo '  legal-info             - generate info about license compliance'
++	@echo '  cpe-info               - generate info about security CPE identification'
+ 	@echo '  printvars              - dump all the internal variables'
+ 	@echo
+ 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index daf2459..503861b 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -870,6 +870,18 @@ else
+ $(2)_KCONFIG_VAR = BR2_PACKAGE_$(2)
+ endif
+ 
++$(2)_CPE_ID_VENDOR ?= $$($(2)_NAME)_project
++$(2)_CPE_ID_NAME ?= $$($(2)_NAME)
++$(2)_CPE_ID_VERSION ?= $$($(2)_VERSION)
++$(2)_CPE_ID ?= $$($(2)_CPE_ID_VENDOR):$$($(2)_CPE_ID_NAME):$$($(2)_CPE_ID_VERSION)
 +
-+    print("CPE: Checking for matches...")
-+    try:
-+        with open(cpe_report_file) as cpe_file:
-+            cpe_list = csv.reader(cpe_file)
-+            next(cpe_list)  # make cpe-info has a one line header
-+            for cpe in cpe_list:
-+                result = cpedb.find(cpe[0])
-+                if not result:
-+                    result = cpedb.find_partial(cpedb.get_cpe_no_version(cpe[0]))
-+                    if not result:
-+                        report_cpe_missing += cpe[0] + "\n"
-+                    else:
-+                        report_cpe_needing_update += cpe[0] + "\n"
-+                else:
-+                    report_cpe_exact_match += cpe[0] + "\n"
-+    except (OSError, IOError) as e:
-+        print("CPE: report csv file (%s): %s" % (e.errno, e.strerror))
-+        sys.exit(1)
++$(1)-cpe-info: PKG=$(2)
++$(1)-cpe-info:
++ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
++	@$$(call MESSAGE,"Collecting cpe info")
++	$(Q)$$(call cpe-manifest,$$($(2)_CPE_ID),$$($(2)_CVE_PATCHED),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_ACTUAL_SOURCE_SITE))
++endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
 +
-+    print("CPE: Found EXACT match:\n" + report_cpe_exact_match)
-+    print("CPE: Found but REQUIRES UPDATE:\n" + report_cpe_needing_update)
-+    print("CPE: Not found (proposing the following to be added):\n" + report_cpe_missing)
+ # legal-info: declare dependencies and set values used later for the manifest
+ ifneq ($$($(2)_LICENSE_FILES),)
+ $(2)_MANIFEST_LICENSE_FILES = $$($(2)_LICENSE_FILES)
+@@ -1011,6 +1023,7 @@ DL_TOOLS_DEPENDENCIES += $$(call extractor-dependency,$$($(2)_SOURCE))
+ 	$(1)-clean-for-reconfigure \
+ 	$(1)-clean-for-reinstall \
+ 	$(1)-configure \
++	$(1)-cpe-info \
+ 	$(1)-depends \
+ 	$(1)-dirclean \
+ 	$(1)-external-deps \
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index c3acc22..11a2457 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -95,3 +95,11 @@ define legal-license-file # pkgname, pkgname-pkgver, pkgdir, filename, file-full
+ 	} && \
+ 	cp $(5) $(LICENSE_FILES_DIR_$(6))/$(2)/$(4)
+ endef
 +
++#
++# cpe-info helper functions
++#
 +
-+def parse_args():
-+    parser = argparse.ArgumentParser()
-+    parser.add_argument('-c', dest='cpe_report', action='store', required=True,
-+                        help='CPE Report generated by make cpe-info (csv format)')
-+    return parser.parse_args()
-+
-+
-+def __main__():
-+    args = parse_args()
-+    cpedb = CPEDB()
-+    cpedb.get_xml_dict()
-+    print("Performing Target CPE Report Analysis...")
-+    get_target_cpe_report(args.cpe_report, cpedb)
-+
-+
-+__main__()
++define cpe-manifest # cpe, cve patched, pkg name, version, url
++	echo '"$(1)","$(2)","$(3)","$(4)","$(5)"' >>$(CPE_MANIFEST_CSV)
++endef
 -- 
 1.9.1
