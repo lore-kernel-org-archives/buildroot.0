@@ -1,105 +1,102 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Wed, 17 Oct 2018 22:59:17 +0200
-Subject: [Buildroot] [PATCH 1/1] ltp-testsuite: Backport compilation fix
- from upstream
-Message-ID: <20181017205917.9536-1-petr.vorel@gmail.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 17 Oct 2018 16:41:57 -0500
+Subject: [Buildroot] [PATCH v7 05/10] support/scripts/cpedb.py: new CPE XML
+ helper
+In-Reply-To: <1539812522-7171-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1539812522-7171-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1539812522-7171-5-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-LTP fails to build 20180926 with both glibc 2.28 and uclibc-ng 1.0.30,
-due error in m4 macro check:
+Python class which consumes a NIST CPE XML and provides helper
+functions to access and search the db's data.
 
-In file included from /home/rclinux/rc-buildroot-test/scripts/instance-0/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/sys/stat.h:446:0,
-                 from ../../../../include/tst_safe_macros.h:26,
-                 from ../../../../include/tst_test.h:85,
-                 from statx05.c:27:
-/home/rclinux/rc-buildroot-test/scripts/instance-0/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/bits/statx.h:87:5: note: expected 'struct statx * restrict' but argument is of type 'struct statx *'
- int statx (int __dirfd, const char *__restrict __path, int __flags,
-     ^~~~~
-<builtin>: recipe for target 'statx01' failed
-make[5]: *** [statx01] Error 1
-<builtin>: recipe for target 'statx05' failed
-make[5]: *** [statx05] Error 1
-
-This patch requires to regenerate configure.
-
-Fixes:
-http://autobuild.buildroot.net/results/69566d0c728970a6dd6a793b08c5804df3cc00eb
-http://autobuild.buildroot.net/results/3c53ddfaca70b490a401c9123602965f3803cd0a
-http://autobuild.buildroot.net/results/8fb63f627a4ba55afea49ad0566064d20021889a
-http://autobuild.buildroot.net/results/496a1b40d378eaca98e532c03afb47e5291427b3
-http://autobuild.buildroot.net/results/47abceeda8044029b6d3200f3877d4d2c494202c
-
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-Reported-by: Florian La Roche <F.LaRoche@pilz.de>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
-Hi, Thomas,
+v5 -> v7
+ - No change
 
-you can add Florian as author, I don't care.
+v5
+[Ricardo
+ - Fixed typo in join/split of cpe str without version
+ - Removed extra prints as they aren't needed when we have the
+   output reports/stdout
+ - Updated v4 comments about general flake formatting cleanup
+ - Incorporated parts of patch 1/2 suggestions for optimizations
 
-Kind regards,
-Petr
+[Arnout
+ - added pre-processing of cpe values into two sets, one with
+   and one without version
+ - Collectly with Ricardo, decided to move cpe class to this
+   seperate script
+
+v1 -> v4
+ - No version
 ---
- .../0002-statx-fix-compile-errors.patch       | 35 +++++++++++++++++++
- package/ltp-testsuite/ltp-testsuite.mk        |  3 ++
- 2 files changed, 38 insertions(+)
- create mode 100644 package/ltp-testsuite/0002-statx-fix-compile-errors.patch
+ support/scripts/cpedb.py | 52 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
+ create mode 100644 support/scripts/cpedb.py
 
-diff --git a/package/ltp-testsuite/0002-statx-fix-compile-errors.patch b/package/ltp-testsuite/0002-statx-fix-compile-errors.patch
+diff --git a/support/scripts/cpedb.py b/support/scripts/cpedb.py
 new file mode 100644
-index 0000000000..6ddd2c9054
+index 0000000..77d1d17
 --- /dev/null
-+++ b/package/ltp-testsuite/0002-statx-fix-compile-errors.patch
-@@ -0,0 +1,35 @@
-+From a945304b6a2286d0665c70250cc5475eb07fd21e Mon Sep 17 00:00:00 2001
-+From: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-+Date: Wed, 26 Sep 2018 11:15:45 -0300
-+Subject: [PATCH] statx: fix compile errors
++++ b/support/scripts/cpedb.py
+@@ -0,0 +1,52 @@
++import sys
++import urllib2
++import xmltodict
++import gzip
++from StringIO import StringIO
 +
-+struct statx is only defined in sys/stat.h when _GNU_SOURCE is defined.
-+The testcases do define _GNU_SOURCE, but not the m4 struct check.
++CPE_XML_URL = "https://static.nvd.nist.gov/feeds/xml/cpe/dictionary/official-cpe-dictionary_v2.3.xml.gz"
 +
-+Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-+Acked-by: Cyril Hrubis <chrubis@suse.cz>
-+---
-+ m4/ltp-statx.m4 | 9 +++++++--
-+ 1 file changed, 7 insertions(+), 2 deletions(-)
 +
-+diff --git a/m4/ltp-statx.m4 b/m4/ltp-statx.m4
-+index 44303d30c..5f79a94cd 100644
-+--- a/m4/ltp-statx.m4
-++++ b/m4/ltp-statx.m4
-+@@ -23,6 +23,11 @@ dnl
-+ AC_DEFUN([LTP_CHECK_STATX],[
-+ AC_CHECK_FUNCS(statx,,,[[#include <sys/stat.h>]])
-+ AC_CHECK_HEADER(linux/fs.h,,,)
-+-AC_CHECK_TYPES([struct statx],,,[[#include <sys/stat.h>]])
-+-AC_CHECK_TYPES([struct statx_timestamp],,,[[#include <sys/stat.h>]])
-++AC_CHECK_TYPES([struct statx],,,[[
-++	#define _GNU_SOURCE
-++	#include <sys/stat.h>
-++]])
-++AC_CHECK_TYPES([struct statx_timestamp],,,[[
-++	#define _GNU_SOURCE
-++	#include <sys/stat.h>]])
-+ ])
-+-- 
-+2.19.0
++class CPEDB:
++    all_cpedb = dict()
++    all_cpes = set()
++    all_cpes_no_version = set()
 +
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index da039bddae..9001316fbd 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
-@@ -75,4 +75,7 @@ endef
- LTP_TESTSUITE_POST_PATCH_HOOKS += LTP_TESTSUITE_REMOVE_LDD
- endif
- 
-+# 0002-statx-fix-compile-errors.patch
-+LTP_TESTSUITE_AUTORECONF = YES
++    def get_xml_dict(self):
++        print("CPE: Fetching xml manifest...")
++        try:
++            compressed_cpe_file = urllib2.urlopen(CPE_XML_URL)
++            print("CPE: Unzipping xml manifest...")
++            cpe_file = gzip.GzipFile(fileobj=StringIO(compressed_cpe_file.read())).read()
++            print("CPE: Converting xml manifest to dict...")
++            self.all_cpedb = xmltodict.parse(cpe_file)
 +
- $(eval $(autotools-package))
++            for cpe in self.all_cpedb['cpe-list']['cpe-item']:
++                cpe_str = cpe['cpe-23:cpe23-item']['@name']
++                cpe_str_no_version = self.get_cpe_no_version(cpe_str)
++                self.all_cpes.add(cpe_str)
++                self.all_cpes_no_version.add(cpe_str_no_version)
++
++        except urllib2.HTTPError:
++            print("CPE: HTTP Error: %s" % CPE_XML_URL)
++            sys.exit(1)
++        except urllib2.URLError:
++            print("CPE: URL Error: %s" % CPE_XML_URL)
++            sys.exit(1)
++
++    def find_partial(self, cpe_str):
++        cpe_str_no_version = self.get_cpe_no_version(cpe_str)
++        if cpe_str_no_version in self.all_cpes_no_version:
++            return cpe_str_no_version
++
++    def find(self, cpe_str):
++        if cpe_str in self.all_cpes:
++            return cpe_str
++
++    def get_cpe_no_version(self, cpe):
++        return ":".join(cpe.split(":")[:5])
++
++    def get_nvd_url(self, cpe_str):
++        return "https://nvd.nist.gov/products/cpe/search/results?keyword=" + \
++                urllib2.quote(cpe_str) + \
++                "&status=FINAL&orderBy=CPEURI&namingFormat=2.3"
 -- 
-2.19.0
+1.9.1
