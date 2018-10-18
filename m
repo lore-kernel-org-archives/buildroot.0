@@ -1,46 +1,51 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Thu, 18 Oct 2018 21:34:53 +0300
-Subject: [Buildroot] [PATCH 1/1] python-certifi: bump to version 2018.10.15
-Message-ID: <20181018183454.15543-1-asafka7@gmail.com>
+Date: Thu, 18 Oct 2018 21:34:54 +0300
+Subject: [Buildroot] [PATCH 1/1] python-requests: bump to version 2.20.0
+In-Reply-To: <20181018183454.15543-1-asafka7@gmail.com>
+References: <20181018183454.15543-1-asafka7@gmail.com>
+Message-ID: <20181018183454.15543-2-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+LICENSE update: replaced http address with https.
+
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-certifi/python-certifi.hash | 4 ++--
- package/python-certifi/python-certifi.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-requests/python-requests.hash | 6 +++---
+ package/python-requests/python-requests.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
-index 2d339dd2d5..596475fc25 100644
---- a/package/python-certifi/python-certifi.hash
-+++ b/package/python-certifi/python-certifi.hash
+diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
+index b71fe86ee7..3aa8e1359f 100644
+--- a/package/python-requests/python-requests.hash
++++ b/package/python-requests/python-requests.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/certifi/json
--md5	f5d81d0048e84285611412b0dea0630a  certifi-2018.4.16.tar.gz
--sha256	13e698f54293db9f89122b0581843a782ad0934a4fe0172d2a980ba77fc61bb7  certifi-2018.4.16.tar.gz
-+md5	3f4ca75a66bc65fea0693b8040f66d13  certifi-2018.10.15.tar.gz
-+sha256	6d58c986d22b038c8c0df30d639f23a3e6d172a05c3583e766f4c0b785c0986a  certifi-2018.10.15.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/requests/json
+-md5	6c1a31afec9d614e2e71a91ee6ca2878  requests-2.19.1.tar.gz
+-sha256	ec22d826a36ed72a7358ff3fe56cbd4ba69dd7a6718ffd450ff0e9df7a47ce6a  requests-2.19.1.tar.gz
++md5	cf034ab571854453719594120366f467  requests-2.20.0.tar.gz
++sha256	99dcfdaaeb17caf6e526f32b6a7b780461512ab3f1d992187801694cba42770c  requests-2.20.0.tar.gz
  # Locally computed sha256 checksums
- sha256	6a70a4bf6b010016d59a64b8ae4ad8dc7f5ef16f1fb453cc2ecd771c5a341131  LICENSE
-diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
-index 716e6a3840..addb52fc11 100644
---- a/package/python-certifi/python-certifi.mk
-+++ b/package/python-certifi/python-certifi.mk
+-sha256	82a869fe4e967449956d26a546adc762acace028852ce81ba16c3c5b1d76b15b  LICENSE
++sha256	be41abac2c40f8530307e8d172c590b476f4a488bc6a68f8de57b7cf64786687  LICENSE
+diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
+index 881d196526..358835d816 100644
+--- a/package/python-requests/python-requests.mk
++++ b/package/python-requests/python-requests.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CERTIFI_VERSION = 2018.4.16
-+PYTHON_CERTIFI_VERSION = 2018.10.15
- PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
--PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/4d/9c/46e950a6f4d6b4be571ddcae21e7bc846fcbb88f1de3eff0f6dd0a6be55d
-+PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/41/b6/4f0cefba47656583217acd6cd797bc2db1fede0d53090fdc28ad2c8e0716
- PYTHON_CERTIFI_SETUP_TYPE = setuptools
- PYTHON_CERTIFI_LICENSE = ISC (Python code), MPL-2.0 (cacert.pem)
- PYTHON_CERTIFI_LICENSE_FILES = LICENSE
+-PYTHON_REQUESTS_VERSION = 2.19.1
++PYTHON_REQUESTS_VERSION = 2.20.0
+ PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
+-PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/54/1f/782a5734931ddf2e1494e4cd615a51ff98e1879cbe9eecbdfeaf09aa75e9
++PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/97/10/92d25b93e9c266c94b76a5548f020f3f1dd0eb40649cb1993532c0af8f4c
+ PYTHON_REQUESTS_SETUP_TYPE = setuptools
+ PYTHON_REQUESTS_LICENSE = Apache-2.0
+ PYTHON_REQUESTS_LICENSE_FILES = LICENSE
 -- 
 2.17.1
