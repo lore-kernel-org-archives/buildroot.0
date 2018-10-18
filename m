@@ -1,51 +1,65 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Thu, 18 Oct 2018 21:34:54 +0300
-Subject: [Buildroot] [PATCH 1/1] python-requests: bump to version 2.20.0
-In-Reply-To: <20181018183454.15543-1-asafka7@gmail.com>
-References: <20181018183454.15543-1-asafka7@gmail.com>
-Message-ID: <20181018183454.15543-2-asafka7@gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 18 Oct 2018 13:52:11 -0500
+Subject: [Buildroot] [PATCH 2/2] package/strongswan: install libcharon
+ vici header
+In-Reply-To: <CANQCQpY7eZ6WfDgm5dHF_8NZRSCzp8tr6pbYdimhTe+S9G+rEw@mail.gmail.com>
+References: <1537456588-17627-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <1537456588-17627-2-git-send-email-matthew.weber@rockwellcollins.com>
+ <20180920211042.29234e83@windsurf>
+ <CANQCQpY7eZ6WfDgm5dHF_8NZRSCzp8tr6pbYdimhTe+S9G+rEw@mail.gmail.com>
+Message-ID: <CANQCQpZdcTOxxUGvYFYcBvu_h_+ngLW8aEa4eNkaYyWNptv3iQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-LICENSE update: replaced http address with https.
+Thomas,
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-requests/python-requests.hash | 6 +++---
- package/python-requests/python-requests.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+On Thu, Sep 20, 2018 at 3:00 PM Matthew Weber
+<matthew.weber@rockwellcollins.com> wrote:
+>
+> Thomas,
+>
+> On Thu, Sep 20, 2018 at 2:10 PM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> >
+> > Hello,
+> >
+> > On Thu, 20 Sep 2018 10:16:28 -0500, Matt Weber wrote:
+> > >  - Adds patch to install 'libvici.h' if
+> > >    --with-dev-headers is configured.
+> > >
+> > > Strongswan  currently installs development headers if
+> > > '--with-dev-headers' is configured, except 'libvici.h'.
+> > >
+> > > Original discussion and commit:
+> > > https://wiki.strongswan.org/projects/strongswan/repository/revisions/01c2b62362df88a03c53b748bb4e88631410f326
+> >
+> > I don't understand: if there is an upstream commit for this that dates
+> > back from 2 years ago, why do we need to have this patch ?
+>
+> That commit was never pulled into their master.  It is currently
+> hanging out on a libvici-dev-header branch.
+>
+> >
+> > Also you say "discussion", but I don't see any "discussion" at this URL.
+> >
+>
+> Shoot, I meant to include this mailing list link.  It doesn't directly
+> tie back to the commit on that branch but provides discussion on the
+> fix.
+> https://lists.strongswan.org/pipermail/users/2015-September/008777.html
+>
+> I will respond to my upstream email and include these notes and branch
+> name.  I should have asked the question about why this has never been
+> included in a release.
+>
 
-diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
-index b71fe86ee7..3aa8e1359f 100644
---- a/package/python-requests/python-requests.hash
-+++ b/package/python-requests/python-requests.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/requests/json
--md5	6c1a31afec9d614e2e71a91ee6ca2878  requests-2.19.1.tar.gz
--sha256	ec22d826a36ed72a7358ff3fe56cbd4ba69dd7a6718ffd450ff0e9df7a47ce6a  requests-2.19.1.tar.gz
-+md5	cf034ab571854453719594120366f467  requests-2.20.0.tar.gz
-+sha256	99dcfdaaeb17caf6e526f32b6a7b780461512ab3f1d992187801694cba42770c  requests-2.20.0.tar.gz
- # Locally computed sha256 checksums
--sha256	82a869fe4e967449956d26a546adc762acace028852ce81ba16c3c5b1d76b15b  LICENSE
-+sha256	be41abac2c40f8530307e8d172c590b476f4a488bc6a68f8de57b7cf64786687  LICENSE
-diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
-index 881d196526..358835d816 100644
---- a/package/python-requests/python-requests.mk
-+++ b/package/python-requests/python-requests.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_REQUESTS_VERSION = 2.19.1
-+PYTHON_REQUESTS_VERSION = 2.20.0
- PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
--PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/54/1f/782a5734931ddf2e1494e4cd615a51ff98e1879cbe9eecbdfeaf09aa75e9
-+PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/97/10/92d25b93e9c266c94b76a5548f020f3f1dd0eb40649cb1993532c0af8f4c
- PYTHON_REQUESTS_SETUP_TYPE = setuptools
- PYTHON_REQUESTS_LICENSE = Apache-2.0
- PYTHON_REQUESTS_LICENSE_FILES = LICENSE
--- 
-2.17.1
+Got some details back and turns out there is a API stable library we
+should be using for vici.  We'll see if we need to add that library to
+Buildroot or if there are any other changes.  I'll mark this current
+patch as rejected.
+https://lists.strongswan.org/pipermail/dev/2018-October/001939.html
+
+Matt
