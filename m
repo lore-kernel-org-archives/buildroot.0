@@ -1,53 +1,81 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Thu, 18 Oct 2018 22:58:35 +0200
-Subject: [Buildroot] [PATCH 3/3] cargo-bin: bump version to 0.30.0
-In-Reply-To: <20181018205835.8719-1-eric.le.bihan.dev@free.fr>
-References: <20181018205835.8719-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20181018205835.8719-4-eric.le.bihan.dev@free.fr>
+From: Clemens Gruber <clemens.gruber@pqgruber.com>
+Date: Fri, 19 Oct 2018 00:07:11 +0200
+Subject: [Buildroot] [PATCH next] uboot: support external DTB in U-Boot
+ images
+In-Reply-To: <CANQCQpa6ro4XehpbrS_ZAQ1tizkMhsBG_4+f8NNM1JHfvvA25A@mail.gmail.com>
+References: <20180304171815.35061-1-clemens.gruber@pqgruber.com>
+ <CANQCQpa6ro4XehpbrS_ZAQ1tizkMhsBG_4+f8NNM1JHfvvA25A@mail.gmail.com>
+Message-ID: <20181018220711.GA1613@archibald.tuxnet>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
----
- package/cargo-bin/cargo-bin.hash | 12 ++++++------
- package/cargo-bin/cargo-bin.mk   |  2 +-
- 2 files changed, 7 insertions(+), 7 deletions(-)
+Hi Matthew,
 
-diff --git a/package/cargo-bin/cargo-bin.hash b/package/cargo-bin/cargo-bin.hash
-index ad2da2bc00..96e90c6603 100644
---- a/package/cargo-bin/cargo-bin.hash
-+++ b/package/cargo-bin/cargo-bin.hash
-@@ -1,9 +1,9 @@
--# From https://static.rust-lang.org/dist/cargo-0.27.0-i686-unknown-linux-gnu.tar.xz.sha256
--sha256 64c2262c0577ef1824d3d885753362d68c04f36ea85a195894894c37e2445ef5  cargo-0.27.0-i686-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/cargo-0.27.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
--sha256 3688bea3d971615d9c4b33612c20783bd9a385539aa7f754e6543c196e1bcec2  cargo-0.27.0-powerpc64le-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/cargo-0.27.0-x86_64-unknown-linux-gnu.tar.xz.sha256
--sha256 d09c061daaafd735742e0b18a4da6eb656f61d4c57504d100a6ca9f766b38c71  cargo-0.27.0-x86_64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/cargo-0.30.0-i686-unknown-linux-gnu.tar.xz.sha256
-+sha256 4b828c263283241ad1c99f30e0b5d8554b6dac2737d09cfd466b4c15b0d7296a  cargo-0.30.0-i686-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/cargo-0.30.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
-+sha256 3718a63fa744d9cd856d72a4fe3ac3b84ff34575a77da72667474c4726d56155  cargo-0.30.0-powerpc64le-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/cargo-0.30.0-x86_64-unknown-linux-gnu.tar.xz.sha256
-+sha256 9524db722356307669c9068bb7df8dbd57e153717e62071b62560eb22ce2f3cd  cargo-0.30.0-x86_64-unknown-linux-gnu.tar.xz
- # Locally generated
- sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
- sha256 23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-diff --git a/package/cargo-bin/cargo-bin.mk b/package/cargo-bin/cargo-bin.mk
-index 82b020a43a..7fb4508a52 100644
---- a/package/cargo-bin/cargo-bin.mk
-+++ b/package/cargo-bin/cargo-bin.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CARGO_BIN_VERSION = 0.27.0
-+CARGO_BIN_VERSION = 0.30.0
- CARGO_BIN_SITE = https://static.rust-lang.org/dist
- CARGO_BIN_SOURCE = cargo-$(CARGO_BIN_VERSION)-$(RUSTC_HOST_NAME).tar.xz
- CARGO_BIN_LICENSE = Apache-2.0 or MIT
--- 
-2.14.4
+On Mon, Oct 15, 2018 at 02:50:13PM -0500, Matthew Weber wrote:
+> Clemens,
+> 
+> On Mon, Oct 15, 2018 at 2:43 PM Clemens Gruber
+> <clemens.gruber@pqgruber.com> wrote:
+> >
+> > Allows signed FIT images to be verified with the public key in the DTB.
+> > The public key is stored in the bootloader image, which must have been
+> > verified by the previous stage in the trust chain, before loading it.
+> >
+> > Signed-off-by: Clemens Gruber <clemens.gruber@pqgruber.com>
+> > ---
+> >  boot/uboot/Config.in | 14 ++++++++++++++
+> >  boot/uboot/uboot.mk  |  5 +++++
+> >  2 files changed, 19 insertions(+)
+> >
+> > diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+> > index 264f343767..620aa02bb9 100644
+> > --- a/boot/uboot/Config.in
+> > +++ b/boot/uboot/Config.in
+> > @@ -460,6 +460,20 @@ config BR2_TARGET_UBOOT_CUSTOM_DTS_PATH
+> >           To use this device tree source file, the U-Boot configuration
+> >           file must refer to it.
+> >
+> > +config BR2_TARGET_UBOOT_EXT_DTB
+> > +       bool "External DTB"
+> > +       help
+> > +         Put an external DTB in the U-Boot image. Used to store public
+> > +         keys for verifying signed FIT images.
+> > +
+> > +config BR2_TARGET_UBOOT_EXT_DTB_PATH
+> > +       string "Path to external DTB"
+> > +       depends on BR2_TARGET_UBOOT_EXT_DTB
+> > +       help
+> > +         Path to external DTB to be put in the U-Boot image.
+> > +         Prepend ${TOPDIR}/ to specify paths relative to the top
+> > +         buildroot source directory.
+> > +
+> >  endif
+> 
+> Would the existing BR2_TARGET_UBOOT_CUSTOM_DTS_PATH option already
+> allow you to place your custom DTS files?  Then to use them, you would
+> need to either add a kconfig BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES
+> fragment to build on your default board kconfig or if you have a
+> custom board, set the kconfig path in
+> BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE to your custom kconfig.
+> 
+> I believe the combination KCONFIG values that point at DTS files can
+> get your  BR2_TARGET_UBOOT_CUSTOM_DTS_PATH dts files included in the
+> uboot build without setting EXT_DTB.  What do you think?
+
+This would not work, afaik. The dtb passed with EXT_DTB is not just a
+"normal" device tree blob, directly generated from a dts file. 
+It's a special dtb into which the public keys (used to verify the FIT
+image signatures) were written once and the blob is then reused
+everytime the bootloader image is generated.
+
+It is described in chapter 5 of
+https://wiki.linaro.org/WorkingGroups/Security/Verified-U-boot
+
+And also in
+http://git.denx.de/?p=u-boot.git;a=blob;f=doc/uImage.FIT/beaglebone_vboot.txt
+
+Best regards,
+Clemens
