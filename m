@@ -1,61 +1,32 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 18 Oct 2018 20:59:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mariadb: add option to disable
- build of embedded server
-Message-ID: <20181018185920.16430-1-bernd.kuhls@t-online.de>
+From: Shaikat Hossain <shossa3@gmail.com>
+Date: Thu, 18 Oct 2018 13:22:49 -0700
+Subject: [Buildroot] wget: unable to resolve host address
+Message-ID: <CAD8kTsDBFFwBXKKnDL+db0S4k98_qNAhcC=qT7sT8S2jExkmOQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Size of output/target/usr:
+Hello,
 
-with embedded: 1,7G
-without embedded: 648M
+I am a bit new to Linux and Buildroot so I'm a bit inexperienced. Would
+anyone have any insights on how I could resolve the following error
+message:
 
-This config option saves space on the target if the embedded server
-is not used by any other package:
-
-https://mariadb.com/kb/en/library/embedded-mariadb-interface/
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mariadb/mariadb.mk | 4 ++++
- package/mysql/Config.in    | 5 +++++
- 2 files changed, 9 insertions(+)
-
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index 2523aaf062..06d6365fab 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -56,8 +56,12 @@ MARIADB_CONF_OPTS += -DCMAKE_CROSSCOMPILING=1
- MARIADB_CONF_OPTS += -DENABLE_DTRACE=0
- 
- ifeq ($(BR2_PACKAGE_MARIADB_SERVER),y)
-+ifeq ($(BR2_PACKAGE_MARIADB_SERVER_EMBEDDED),y)
- MARIADB_CONF_OPTS += -DWITH_EMBEDDED_SERVER=ON
- else
-+MARIADB_CONF_OPTS += -DWITH_EMBEDDED_SERVER=OFF
-+endif
-+else
- MARIADB_CONF_OPTS += -DWITHOUT_SERVER=ON
- endif
- 
-diff --git a/package/mysql/Config.in b/package/mysql/Config.in
-index 6409c8b806..257a2901a4 100644
---- a/package/mysql/Config.in
-+++ b/package/mysql/Config.in
-@@ -54,6 +54,11 @@ config BR2_PACKAGE_MARIADB_SERVER
- 	help
- 	  Install the mariadb server on the target.
- 
-+config BR2_PACKAGE_MARIADB_SERVER_EMBEDDED
-+	bool "mariadb embedded server"
-+	help
-+	  Install the mariadb embedded server on the target.
-+
- endif
- 
- if BR2_PACKAGE_ORACLE_MYSQL
--- 
-2.19.1
+Resolving ftpmirror.gnu.org (ftpmirror.gnu.org)... failed: Name or service
+not known.
+wget: unable to resolve host address 'ftpmirror.gnu.org'
+--2018-10-18 12:26:55-- http://sources.buildroot.net/libtool-2.4.6.tar.xz
+Resolving sources.buildroot.net (sources.buildroot.net)... failed: Name or
+service not known.
+wget: unable to resolve host address 'sources.buildroot.net'
+package/pkg-generic.mk:133: recipe for target
+'/home/shaikat/erpiam/output/build/host-libtool-2.4.6/.stamp_download'
+failed
+make: ***
+[/home/shaikat/erpiam/output/build/host-libtool-2.4.6/.stamp_download Error
+1
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181018/cdd2446d/attachment.html>
