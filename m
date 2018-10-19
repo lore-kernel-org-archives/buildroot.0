@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Oct 2018 00:01:16 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] git: security bump to
+Date: Sat, 20 Oct 2018 00:01:28 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] git: security bump to
  version 2.16.5
-Message-ID: <20181019215945.10D5B83B5B@busybox.osuosl.org>
+Message-ID: <20181019215959.4758F83B5E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=74953365a635aa5147a908523e4d0a3a78f6eec0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0709404fc3e52e1061270c642aa38caaffd80c4f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Fixes CVE-2018-17456: RCE issue in handling of git submodules
 
