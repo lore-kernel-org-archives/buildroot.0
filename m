@@ -1,20 +1,19 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 19 Oct 2018 14:36:20 +0200
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 19 Oct 2018 14:37:22 +0200
 Subject: [Buildroot] Legacy patches for Binutils?
 In-Reply-To: <4881796E12491D4BB15146FE0209CE6468177130@DE02WEMBXB.internal.synopsys.com>
 References: <4881796E12491D4BB15146FE0209CE6468177130@DE02WEMBXB.internal.synopsys.com>
-Message-ID: <19bd46a4-0a17-2043-4dc5-907ff0e1a354@gmail.com>
+Message-ID: <20181019143722.32f0109b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alexey,
+Hello,
 
-Le 19/10/2018 ? 14:24, Alexey Brodkin a ?crit?:
-> Hello,
-> 
+On Fri, 19 Oct 2018 12:24:26 +0000, Alexey Brodkin wrote:
+
 > This might be quite a na?ve and silly question but I'd like to understand
 > if some patches for Binutils are still really needed.
 > 
@@ -34,18 +33,15 @@ Le 19/10/2018 ? 14:24, Alexey Brodkin a ?crit?:
 > 
 > Any thoughts?
 
-I believe we need to take a look at those old and non upstreamed patches.
-It's the same problem with gcc package, the two first patches should be removed.
-
-We can discuss about it during the meeting.
+I don't have anything specific thought, but I share the general feeling
+that the stack of patches we have on binutils should be
+analyzed/revisited, as I'm also sure that a number of those patches are
+no longer needed.
 
 Best regards,
-Romain
 
-> 
-> -Alexey
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
