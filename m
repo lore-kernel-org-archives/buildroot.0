@@ -1,61 +1,134 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 19 Oct 2018 19:54:55 +0200
-Subject: [Buildroot] [PATCH v1] qt5x11extras: fix license info for 5.11.2
-Message-ID: <20181019175455.26811-1-ps.report@gmx.net>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Fri, 19 Oct 2018 20:25:44 +0200
+Subject: [Buildroot] [PATCH 4/4] webkitgtk: explicitly set
+ USE_GSTREAMER_GL build option
+In-Reply-To: <b93c6915-8190-c39a-9251-d2530d8e136d@mind.be>
+References: <20181009220852.4309-1-aperez@igalia.com>
+ <20181009220852.4309-5-aperez@igalia.com>	<20181010212630.7f47270e@windsurf>
+ <20181010202425.GN2869@scaer>	<40fb0474-283f-4b73-78e6-45ea99a1bb65@mind.be>
+ <87in281h7o.fsf@dell.be.48ers.dk> <20181011192343.GA31509@scaer>
+ <b93c6915-8190-c39a-9251-d2530d8e136d@mind.be>
+Message-ID: <20181019202544.GC941@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With the latest version update the legacy version files
-LICENSE.GPLv2 LICENSE.GPLv3 and LICENSE.LGPLv3 were removed,
-use the new ones LICENSE.GPL2 LICENSE.GPL3 and LICENSE.LGPL3
-instead.
+Hi everybody,
 
-Fixes [1]:
+I have some comments more about this topic, please read below...
 
-  qt5x11extras 5.11.2 Collecting legal info
-  sha256sum: .../build/qt5x11extras-5.11.2/LICENSE.GPLv2: No such file or directory
+On Thu, 11 Oct 2018 23:56:36 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
+> 
+> 
+> On 11/10/18 21:23, Yann E. MORIN wrote:
+> > Peter, Arnout, All,
+> > 
+> > On 2018-10-11 20:16 +0200, Peter Korsgaard spake thusly:
+> >>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+> >>  >  'imply' is syntactic sugar for 'default y if ...'. The *only* thing it changes
+> >>  > is the place where you put the imply. (To be exact, it is the same as 'default
+> >>  > ...' because it propagates the m/y/n state to the default, not just y/n. But
+> >>  > since we don't use m, it doesn't matter.)
+> >>
+> >>  >  For this specific case, it is pretty obvious that putting a 'default y if
+> >>  > BR2_PACKAGE_WEBKITGTK_MULTIMEDIA' on BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL
+> > 
+> > As the submitter said "in general it is preferred due to better
+> > performance", why don't we just have, in webkitgtk:
+> > 
+> >     select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL if BR2_PACKAGE_GST1_PLUGINS_BAD
+> > 
+> > Or even further:
+> > 
+> >     select BR2_PACKAGE_GST1_PLUGINS_BAD
+> >     select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL
+> > 
+> > Of course, that requires propagating the required dependencies...
+> > But since webkitgtk already depends on libgtk3, which itself depends on
+> > LIBEGL_WAYLAND or LIBGL, we're not too far off...
+> 
+>  For this specific case, that's a very good idea indeed. Something like (to be
+> tested!):
 
-[1] http://autobuild.buildroot.net/results/238bb74f23d7a11516eac088da3188d463abac5a
+While something like this would probably work, there can be cases in which
+GStreamer-GL cannot be built (for example when there is no windowing system
+supported by GStreamer-GL), but WebKitGTK+ may still build and work fine with
+GL support enabled and GStreamer-GL support disabled. The GL code in WebKit
+has a few different methods used at runtime as fall-back to create the GL
+context [1].  On the other hand GStreamer-GL has a few more requirements on
+the GL implementation than WebKit for building [2] ? so I do see value in
+allowing to build without GStreamer-GL ?\_(?)_/? 
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> config BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
+>         bool "multimedia support"
+>         select BR2_PACKAGE_GSTREAMER1
+>         select BR2_PACKAGE_GST1_PLUGINS_BAD
+>         select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL if
+> BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
+>         ...
+> 
+>  Ideally we would also select the plugins that make sure HAS_LIB_OPENGL becomes
+> true, but unfortunately that's really complicated. Selecting
+> BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL would help, but that has the
+> disadvantage that it might not actually make the GL plugin available (depending
+> on the state of X11/wayland/...
+
+I am a bit reluctant of doing this, due to the complications in making sure
+that ?BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL? gets selected for all
+configuration where it's supported, and the also complicated alternative of
+using ?BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL?.
+
+There's one more issue, though: I can't remember right now the precise case
+(driver, GPU, GStreamer versions, etc), but some work mates from Igalia found
+a couple of cases where using GStreamer-GL in WebKit results in garbled and/or
+tinted video output, so it can actually be handy if we allow to manually
+disable using it. So I'm leaning towards:
+
+  if BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
+
+  config BR2_PACKAGE_WEBKITGTK_USE_GSTREAMER_GL
+      bool "use gstreamer-gl"
+	  default y
+	  depends on BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL
+
+  comment "using gstreamer-gl needs gst1-plugins-bad with the gl element enabled"
+      depends on !BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL
+
+  endif
+
+WDYT?
+
+> >>  > would be crazy. On the other hand, adding the imply in webkitgtk looks nice,
+> >>  > concise and clear.
+> > 
+> > Sorry, I am still not convinced that using 'imply' in Buildroot is a
+> > good idea overall... :-(
+> > 
+> >> Exactly, which is why I suggested it to Adrian.
+> 
+>  Apparently our BDFL disagrees :-)
+
+I guess we will stay away from using ?imply? for now :)
+
+Best regards,
+
+
+-Adri?n
+
+
 ---
- package/qt5/qt5x11extras/qt5x11extras.hash | 7 +++++--
- package/qt5/qt5x11extras/qt5x11extras.mk   | 2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/package/qt5/qt5x11extras/qt5x11extras.hash b/package/qt5/qt5x11extras/qt5x11extras.hash
-index da7057c5af..9bbef5b33d 100644
---- a/package/qt5/qt5x11extras/qt5x11extras.hash
-+++ b/package/qt5/qt5x11extras/qt5x11extras.hash
-@@ -5,8 +5,11 @@ sha256 1e7a8e96e0629f2b2b78de684b156b357210cf5df6b42f30789423f2cb07677f qtx11ext
- sha256 f407ca61052d44bfb06e831fc6db7595bb2b64882b1f0af23f5db2d1ee519089 qtx11extras-everywhere-src-5.11.2.tar.xz
- 
- # Hashes for license files:
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
-+sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
-+sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
-+sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
-+sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
- sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPLv2
- sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
--sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
- sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
--sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
-diff --git a/package/qt5/qt5x11extras/qt5x11extras.mk b/package/qt5/qt5x11extras/qt5x11extras.mk
-index c439e2d31d..9d54c11061 100644
---- a/package/qt5/qt5x11extras/qt5x11extras.mk
-+++ b/package/qt5/qt5x11extras/qt5x11extras.mk
-@@ -12,7 +12,7 @@ QT5X11EXTRAS_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5X11EXTRAS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
--QT5X11EXTRAS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL
-+QT5X11EXTRAS_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
- else
- QT5X11EXTRAS_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
- QT5X11EXTRAS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
--- 
-2.19.1
+[1] In some cases it can even be enough that the driver supports Pbuffer
+    contexts which with many drivers do not even require any windowing
+	system running.
+[2] Now that it's going to be Halloween, I could tell you some horror stories
+    about how we have managed to run WebKit on some GL/EGL ?frankendriver?
+	implementations :D
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181019/23f9ca25/attachment.asc>
