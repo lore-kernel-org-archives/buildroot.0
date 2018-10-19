@@ -1,34 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 19 Oct 2018 10:08:51 +0200
-Subject: [Buildroot] [PATCH] meson: bump version to 0.48.1
-In-Reply-To: <20181018204431.29117-1-eric.le.bihan.dev@free.fr>
-References: <20181018204431.29117-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20181019100851.1ac7074e@windsurf>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 19 Oct 2018 13:18:24 +0300
+Subject: [Buildroot] [PATCH] mdadm: fix mdmon build without threads
+Message-ID: <1bb26b73a032e6492f0cbeb97e99e029c1869a1f.1539944304.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello ?ric,
+Commit 45498bbc62d8df (mdadm: also install mdmon) enabled build of hte
+mdmon utility. This utility requires USE_PTHREADS make variable
+undefined to build when threads are not supported.
 
-On Thu, 18 Oct 2018 22:44:31 +0200, Eric Le Bihan wrote:
-> Bump version to 0.48.1 and re-add the RPATH patch.
-> 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Fixes:
+http://autobuild.buildroot.net/results/4bd/4bdd03b1d8f30ef32177727aae46d8cf54fbc35e/
 
-There was another thread on the mailing list saying that the RPATH
-patch was in fact needed for host meson packages, and it seems
-therefore independent from the version bump.
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/mdadm/mdadm.mk | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
-Would it be possible to have two separate patches, one re-adding the
-RPATH fix first, one doing the bump? Indeed we may need to backport the
-former to one of our stable branches.
-
-Thanks!
-
-Thomas
+diff --git a/package/mdadm/mdadm.mk b/package/mdadm/mdadm.mk
+index 3ee4ddd059e9..b2ed5049aa1f 100644
+--- a/package/mdadm/mdadm.mk
++++ b/package/mdadm/mdadm.mk
+@@ -10,13 +10,17 @@ MDADM_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/raid/mdadm
+ MDADM_LICENSE = GPL-2.0+
+ MDADM_LICENSE_FILES = COPYING
+ 
++MDADM_BUILD_OPTS = $(TARGET_CONFIGURE_OPTS) \
++	CFLAGS="$(TARGET_CFLAGS) -DNO_COROSYNC -DNO_DLM" \
++	CPPFLAGS="$(TARGET_CPPFLAGS) -DBINDIR=\\\"/sbin\\\"" \
++	CHECK_RUN_DIR=0
++
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
++MDADM_BUILD_OPTS += USE_PTHREADS=
++endif
++
+ define MDADM_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		CFLAGS="$(TARGET_CFLAGS) -DNO_COROSYNC -DNO_DLM" \
+-		CPPFLAGS="$(TARGET_CPPFLAGS) -DBINDIR=\\\"/sbin\\\"" \
+-		CHECK_RUN_DIR=0 \
+-		mdadm mdmon
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(MDADM_BUILD_OPTS) mdadm mdmon
+ endef
+ 
+ define MDADM_INSTALL_TARGET_CMDS
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.19.1
