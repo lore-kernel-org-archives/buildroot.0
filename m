@@ -1,176 +1,63 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 19 Oct 2018 21:16:59 +0100
-Subject: [Buildroot] [PATCH 1/1] ntp: added S48ntpdate script
-In-Reply-To: <1539964343-10526-1-git-send-email-oscargomezf@gmail.com>
-References: <1539964343-10526-1-git-send-email-oscargomezf@gmail.com>
-Message-ID: <CANQCQpZcDx+fdZmh6MZypVDCWU8JJbqR0XqqBDbC4T8HnNopXw@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 19 Oct 2018 22:24:07 +0200
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 18.2.3
+Message-ID: <20181019202407.15200-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Oscar,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d-headers/mesa3d-headers.mk |  2 +-
+ package/mesa3d/mesa3d.hash               | 10 +++++-----
+ package/mesa3d/mesa3d.mk                 |  2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-
-On Fri, Oct 19, 2018 at 4:52 PM Oscar Gomez Fuente
-<oscargomezf@gmail.com> wrote:
->
-> Signed-off-by: Oscar Gomez Fuente <oscargomezf@gmail.com>
-> ---
->  package/ntp/S48ntpdate | 30 ++++++++++++++++++++++++++++++
->  package/ntp/S49ntp     | 42 +++++++++++++++++++++---------------------
->  package/ntp/ntp.mk     |  7 +++++++
->  3 files changed, 58 insertions(+), 21 deletions(-)
->  create mode 100755 package/ntp/S48ntpdate
->
-> diff --git a/package/ntp/S48ntpdate b/package/ntp/S48ntpdate
-> new file mode 100755
-> index 0000000..a8d4d70
-> --- /dev/null
-> +++ b/package/ntp/S48ntpdate
-> @@ -0,0 +1,30 @@
-> +#! /bin/sh
-> +
-> +NAME=ntpdate
-> +NTP_SERVERS="0.pool.ntp.org 1.pool.ntp.org 2.pool.ntp.org 3.pool.ntp.org"
-> +
-> +start() {
-> +       printf "Starting $NAME: "
-> +       for ntpserver in $NTP_SERVERS
-> +       do
-> +               CURRENT_UNIX_TIME="$(date +%s)"
-> +               if [ $CURRENT_UNIX_TIME -lt 1000000000 ]; then
-> +                       /usr/bin/ntpdate $ntpserver > /dev/null 2>&1
-> +               else
-> +                       break
-> +               fi
-> +       done
-> +       [ $? = 0 ] && echo "OK" || echo "FAIL"
-> +}
-> +
-> +case $1 in
-> +       start)
-> +               start
-> +               ;;
-> +       *)
-> +               echo "Usage: $0 {start}" >&2
-> +               exit 1
-> +               ;;
-> +esac
-> +
-> +exit 0
-> diff --git a/package/ntp/S49ntp b/package/ntp/S49ntp
-> index 35e5874..0e90f29 100755
-> --- a/package/ntp/S49ntp
-> +++ b/package/ntp/S49ntp
-> @@ -5,30 +5,30 @@ NAME=ntpd
->  # Read config file if it is present.
->  if [ -r /etc/default/$NAME ]
->  then
-> -  . /etc/default/$NAME
-> +       . /etc/default/$NAME
->  fi
->
->  case "$1" in
-> -  start)
-> -    printf "Starting $NAME: "
-> -    start-stop-daemon -S -q -x /usr/sbin/ntpd -- -g
-> -    [ $? = 0 ] && echo "OK" || echo "FAIL"
-> -    ;;
-> -  stop)
-> -    printf "Stopping $NAME: "
-> -    start-stop-daemon -K -q -n $NAME
-> -    [ $? = 0 ] && echo "OK" || echo "FAIL"
-> -    ;;
-> -  restart|reload)
-> -    echo "Restarting $NAME: "
-> -    $0 stop
-> -    sleep 1
-> -    $0 start
-> -    ;;
-> -  *)
-> -    echo "Usage: $0 {start|stop|restart|reload}" >&2
-> -    exit 1
-> -    ;;
-> +       start)
-> +               printf "Starting $NAME: "
-
-I went back through the discussion so far and wanted to bring back up
-"ntpd -q ".   I think it would simplify and future proof what you're
-wanting to accomplish.
- - ntpdate is deprecated and will eventually not be part of the ntp
-package so we shouldn't add a seperate startup script.  Other examples
-have kept it self contained in ntpd's.
- - ntpd -q uses the ntpd configs and there isn't any custom script
-logic or layer of new configs.  I'd suggest testing but the 1970's
-check may not need to occur.  ntpd -q may handle that sort of a
-check/fall-through.
-
-Something like the following.
-
-     CURRENT_DATE=$(date | grep "1970")
-     if [ "$CURRENT_DATE" != "" ]; then
-            # ntpd -q (equivalent to ntpdate) and expanded slew -x
-           /usr/sbin/ntpd -q -x > /dev/null 2>&1                # I
-don't believe it outputs anything so the redirects could be dropped
-when tested
-            [ $?  != 0 ] && echo -n "(No initial time set)"
-     fi
-
-> +               start-stop-daemon -S -q -x /usr/sbin/ntpd -- -g
-> +               [ $? = 0 ] && echo "OK" || echo "FAIL"
-> +               ;;
-> +       stop)
-> +               printf "Stopping $NAME: "
-> +               start-stop-daemon -K -q -n $NAME
-> +               [ $? = 0 ] && echo "OK" || echo "FAIL"
-> +               ;;
-> +       restart|reload)
-> +               echo "Restarting $NAME: "
-> +               $0 stop
-> +               sleep 1
-> +               $0 start
-> +               ;;
-> +       *)
-> +               echo "Usage: $0 {start|stop|restart|reload}" >&2
-> +               exit 1
-> +               ;;
->  esac
->
->  exit 0
-> diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-> index af3c1aa..c2c910d 100644
-> --- a/package/ntp/ntp.mk
-> +++ b/package/ntp/ntp.mk
-> @@ -93,9 +93,16 @@ define NTP_INSTALL_TARGET_CMDS
->         $(INSTALL) -m 644 package/ntp/ntpd.etc.conf $(TARGET_DIR)/etc/ntp.conf
->  endef
->
-> +ifeq ($(BR2_PACKAGE_NTP_NTPDATE),y)
-> +define NTP_INSTALL_INIT_SYSV_NTPDATE
-> +       $(INSTALL) -D -m 755 package/ntp/S48ntpdate $(TARGET_DIR)/etc/init.d/S48ntpdate
-> +endef
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_NTP_NTPD),y)
->  define NTP_INSTALL_INIT_SYSV
->         $(INSTALL) -D -m 755 package/ntp/S49ntp $(TARGET_DIR)/etc/init.d/S49ntp
-> +       $(NTP_INSTALL_INIT_SYSV_NTPDATE)
->  endef
->
->  define NTP_INSTALL_INIT_SYSTEMD
-> --
-> 1.9.1
->
-
-
---
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / RC Linux Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index aa25891f9e..c3eaaac3d8 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 18.2.2
++MESA3D_HEADERS_VERSION = 18.2.3
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index b440162f0b..5f894a771e 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2018-October/000466.html
+-md5 5931dd76a7533c7c5e702a4e5c00d3bb  mesa-18.2.2.tar.xz
+-sha1 4abcb04c7fa261c60775a826a39ae0b28ab3856b  mesa-18.2.2.tar.xz
+-sha256 c3ba82b12a89d3d9fed2bdd96b4702dbb7ab675034650a8b1b718320daf073c4  mesa-18.2.2.tar.xz
+-sha512 35c27f0673abd35d0581db34b6ad646058523dd826ff751df718e1f9d6a996409a0c5b313fbbf177058d9610a53d646f858fb86537e3ea1000df5edbddcf043a  mesa-18.2.2.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2018-October/000468.html
++md5 3ad402144c2da93f09910dd2e0fc4017  mesa-18.2.3.tar.xz
++sha1 84c037e8ac53c210e3d74ae010241f781251b72c  mesa-18.2.3.tar.xz
++sha256 e2bf83c17e1abdecb1ee81af22652e27e9aa38f963e95e60f34275cc0376304f  mesa-18.2.3.tar.xz
++sha512 20f512b1f3835b1c78b1f05f2e2125dc3437b61b8857e7ec62e0f9ac3be2ccb5b7ebe7e18f444da1117bc100d75e4b03cd2a0180f0f0b1cf760714b43bc7a664  mesa-18.2.3.tar.xz
+ # License
+ sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 23de2eb592..82a66b6d9b 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 18.2.2
++MESA3D_VERSION = 18.2.3
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
+-- 
+2.19.1
