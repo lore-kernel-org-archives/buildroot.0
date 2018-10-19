@@ -1,49 +1,45 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 19 Oct 2018 14:57:18 +0200
-Subject: [Buildroot] Legacy patches for Binutils?
-In-Reply-To: <20181019145559.320c2946@windsurf>
-References: <4881796E12491D4BB15146FE0209CE6468177130@DE02WEMBXB.internal.synopsys.com>
- <20181019143722.32f0109b@windsurf>
- <4881796E12491D4BB15146FE0209CE646817718F@DE02WEMBXB.internal.synopsys.com>
- <20181019145559.320c2946@windsurf>
-Message-ID: <753a9451-6591-3d25-8e09-d8cc8609926f@gmail.com>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Fri, 19 Oct 2018 10:38:02 -0300
+Subject: [Buildroot] [PATCH] skeleton-init-common: improve /etc/hosts
+ generation
+Message-ID: <20181019133802.19627-1-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexey, Thomas,
+If BR2_TARGET_GENERIC_HOSTNAME contains a FQDN, strip the host part and
+add it as an alias, e.g.
 
-Le 19/10/2018 ? 14:55, Thomas Petazzoni a ?crit?:
-> Hello,
-> 
-> On Fri, 19 Oct 2018 12:53:11 +0000, Alexey Brodkin wrote:
-> 
->>> I don't have anything specific thought, but I share the general feeling
->>> that the stack of patches we have on binutils should be
->>> analyzed/revisited, as I'm also sure that a number of those patches are
->>> no longer needed.  
->>
->> Should I add this as a topic for the meeting?
-> 
-> The topics we write down for the meeting are more discussion topics.
-> Here I don't think there's much discussion needed: simply someone need
-> to look at those patches, their history, the binutils source code, and
-> decide if they are still needed or not. I don't think there is anything
-> controversial here.
-> 
-> However, the meeting is also a moment for hacking, so it's definitely
-> something you can pick up as a "fun" task to achieve during the
-> meeting :-)
+    127.0.1.1	hostname.example.com hostname
 
-+1
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+---
+ package/skeleton-init-common/skeleton-init-common.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Best regards,
-Romain
-
-> 
-> Best regards,
-> 
-> Thomas
-> 
+diff --git a/package/skeleton-init-common/skeleton-init-common.mk b/package/skeleton-init-common/skeleton-init-common.mk
+index e8a0522052..93a410914a 100644
+--- a/package/skeleton-init-common/skeleton-init-common.mk
++++ b/package/skeleton-init-common/skeleton-init-common.mk
+@@ -41,10 +41,16 @@ SKELETON_INIT_COMMON_PASSWD_METHOD = $(call qstrip,$(BR2_TARGET_GENERIC_PASSWD_M
+ SKELETON_INIT_COMMON_BIN_SH = $(call qstrip,$(BR2_SYSTEM_BIN_SH))
+ 
+ ifneq ($(SKELETON_INIT_COMMON_HOSTNAME),)
++SKELETON_INIT_COMMON_HOSTS_LINE = $(SKELETON_INIT_COMMON_HOSTNAME)
++SKELETON_INIT_COMMON_SHORT_HOSTNAME = $(firstword $(subst ., ,$(SKELETON_INIT_COMMON_HOSTNAME)))
++ifneq ($(SKELETON_INIT_COMMON_HOSTNAME),$(SKELETON_INIT_COMMON_SHORT_HOSTNAME))
++SKELETON_INIT_COMMON_HOSTS_LINE += $(SKELETON_INIT_COMMON_SHORT_HOSTNAME)
++else
++endif
+ define SKELETON_INIT_COMMON_SET_HOSTNAME
+ 	mkdir -p $(TARGET_DIR)/etc
+ 	echo "$(SKELETON_INIT_COMMON_HOSTNAME)" > $(TARGET_DIR)/etc/hostname
+-	$(SED) '$$a \127.0.1.1\t$(SKELETON_INIT_COMMON_HOSTNAME)' \
++	$(SED) '$$a \127.0.1.1\t$(SKELETON_INIT_COMMON_HOSTS_LINE)' \
+ 		-e '/^127.0.1.1/d' $(TARGET_DIR)/etc/hosts
+ endef
+ SKELETON_INIT_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_INIT_COMMON_SET_HOSTNAME
+-- 
+2.14.4
