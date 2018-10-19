@@ -1,53 +1,32 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 19 Oct 2018 13:18:24 +0300
-Subject: [Buildroot] [PATCH] mdadm: fix mdmon build without threads
-Message-ID: <1bb26b73a032e6492f0cbeb97e99e029c1869a1f.1539944304.git.baruch@tkos.co.il>
+From: Alexey Brodkin <alexey.brodkin@synopsys.com>
+Date: Fri, 19 Oct 2018 12:24:26 +0000
+Subject: [Buildroot] Legacy patches for Binutils?
+Message-ID: <4881796E12491D4BB15146FE0209CE6468177130@DE02WEMBXB.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 45498bbc62d8df (mdadm: also install mdmon) enabled build of hte
-mdmon utility. This utility requires USE_PTHREADS make variable
-undefined to build when threads are not supported.
+Hello,
 
-Fixes:
-http://autobuild.buildroot.net/results/4bd/4bdd03b1d8f30ef32177727aae46d8cf54fbc35e/
+This might be quite a na?ve and silly question but I'd like to understand
+if some patches for Binutils are still really needed.
 
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/mdadm/mdadm.mk | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+1. https://git.buildroot.org/buildroot/tree/package/binutils/2.31.1/0002-ld-makefile.patch
+This one I may track down to at least 2.15.94.0.2.2 here:
+https://git.buildroot.org/buildroot/commit/toolchain/binutils/?id=c1f119b500b487dac34a730609e6a0f1c30f8bfd
+Also from that patch I may conclude it came from Debian still no rationale why it was
+created, what it fixe or improves...
 
-diff --git a/package/mdadm/mdadm.mk b/package/mdadm/mdadm.mk
-index 3ee4ddd059e9..b2ed5049aa1f 100644
---- a/package/mdadm/mdadm.mk
-+++ b/package/mdadm/mdadm.mk
-@@ -10,13 +10,17 @@ MDADM_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/raid/mdadm
- MDADM_LICENSE = GPL-2.0+
- MDADM_LICENSE_FILES = COPYING
- 
-+MDADM_BUILD_OPTS = $(TARGET_CONFIGURE_OPTS) \
-+	CFLAGS="$(TARGET_CFLAGS) -DNO_COROSYNC -DNO_DLM" \
-+	CPPFLAGS="$(TARGET_CPPFLAGS) -DBINDIR=\\\"/sbin\\\"" \
-+	CHECK_RUN_DIR=0
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
-+MDADM_BUILD_OPTS += USE_PTHREADS=
-+endif
-+
- define MDADM_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
--		$(TARGET_CONFIGURE_OPTS) \
--		CFLAGS="$(TARGET_CFLAGS) -DNO_COROSYNC -DNO_DLM" \
--		CPPFLAGS="$(TARGET_CPPFLAGS) -DBINDIR=\\\"/sbin\\\"" \
--		CHECK_RUN_DIR=0 \
--		mdadm mdmon
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(MDADM_BUILD_OPTS) mdadm mdmon
- endef
- 
- define MDADM_INSTALL_TARGET_CMDS
--- 
-2.19.1
+But in OpenEmbedded they got rid of it long ago on switch to 2.26, see
+https://github.com/openembedded/openembedded-core/commit/3c7fe424f850af70989ad682dd9c5be70cd02ca5
+
+2. Same here: https://git.buildroot.org/buildroot/tree/package/binutils/2.31.1/0003-check-ldrunpath-length.patch
+
+3. This one is pretty much the same: https://git.buildroot.org/buildroot/tree/package/binutils/2.31.1/0004-add-sysroot-fix-from-bug-3049.patch
+And bug mentioned in this patch was "fixed" a long ago, see https://sourceware.org/bugzilla/show_bug.cgi?id=10340
+
+Any thoughts?
+
+-Alexey
