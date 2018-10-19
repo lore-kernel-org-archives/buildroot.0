@@ -1,32 +1,51 @@
-From: Alexey Brodkin <alexey.brodkin@synopsys.com>
-Date: Fri, 19 Oct 2018 12:24:26 +0000
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 19 Oct 2018 14:36:20 +0200
 Subject: [Buildroot] Legacy patches for Binutils?
-Message-ID: <4881796E12491D4BB15146FE0209CE6468177130@DE02WEMBXB.internal.synopsys.com>
+In-Reply-To: <4881796E12491D4BB15146FE0209CE6468177130@DE02WEMBXB.internal.synopsys.com>
+References: <4881796E12491D4BB15146FE0209CE6468177130@DE02WEMBXB.internal.synopsys.com>
+Message-ID: <19bd46a4-0a17-2043-4dc5-907ff0e1a354@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Alexey,
 
-This might be quite a na?ve and silly question but I'd like to understand
-if some patches for Binutils are still really needed.
+Le 19/10/2018 ? 14:24, Alexey Brodkin a ?crit?:
+> Hello,
+> 
+> This might be quite a na?ve and silly question but I'd like to understand
+> if some patches for Binutils are still really needed.
+> 
+> 1. https://git.buildroot.org/buildroot/tree/package/binutils/2.31.1/0002-ld-makefile.patch
+> This one I may track down to at least 2.15.94.0.2.2 here:
+> https://git.buildroot.org/buildroot/commit/toolchain/binutils/?id=c1f119b500b487dac34a730609e6a0f1c30f8bfd
+> Also from that patch I may conclude it came from Debian still no rationale why it was
+> created, what it fixe or improves...
+> 
+> But in OpenEmbedded they got rid of it long ago on switch to 2.26, see
+> https://github.com/openembedded/openembedded-core/commit/3c7fe424f850af70989ad682dd9c5be70cd02ca5
+> 
+> 2. Same here: https://git.buildroot.org/buildroot/tree/package/binutils/2.31.1/0003-check-ldrunpath-length.patch
+> 
+> 3. This one is pretty much the same: https://git.buildroot.org/buildroot/tree/package/binutils/2.31.1/0004-add-sysroot-fix-from-bug-3049.patch
+> And bug mentioned in this patch was "fixed" a long ago, see https://sourceware.org/bugzilla/show_bug.cgi?id=10340
+> 
+> Any thoughts?
 
-1. https://git.buildroot.org/buildroot/tree/package/binutils/2.31.1/0002-ld-makefile.patch
-This one I may track down to at least 2.15.94.0.2.2 here:
-https://git.buildroot.org/buildroot/commit/toolchain/binutils/?id=c1f119b500b487dac34a730609e6a0f1c30f8bfd
-Also from that patch I may conclude it came from Debian still no rationale why it was
-created, what it fixe or improves...
+I believe we need to take a look at those old and non upstreamed patches.
+It's the same problem with gcc package, the two first patches should be removed.
 
-But in OpenEmbedded they got rid of it long ago on switch to 2.26, see
-https://github.com/openembedded/openembedded-core/commit/3c7fe424f850af70989ad682dd9c5be70cd02ca5
+We can discuss about it during the meeting.
 
-2. Same here: https://git.buildroot.org/buildroot/tree/package/binutils/2.31.1/0003-check-ldrunpath-length.patch
+Best regards,
+Romain
 
-3. This one is pretty much the same: https://git.buildroot.org/buildroot/tree/package/binutils/2.31.1/0004-add-sysroot-fix-from-bug-3049.patch
-And bug mentioned in this patch was "fixed" a long ago, see https://sourceware.org/bugzilla/show_bug.cgi?id=10340
-
-Any thoughts?
-
--Alexey
+> 
+> -Alexey
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
