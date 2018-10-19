@@ -1,133 +1,61 @@
-From: Oscar Gomez Fuente <oscargomezf@gmail.com>
-Date: Fri, 19 Oct 2018 17:52:23 +0200
-Subject: [Buildroot] [PATCH 1/1] ntp: added S48ntpdate script
-Message-ID: <1539964343-10526-1-git-send-email-oscargomezf@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 19 Oct 2018 19:54:55 +0200
+Subject: [Buildroot] [PATCH v1] qt5x11extras: fix license info for 5.11.2
+Message-ID: <20181019175455.26811-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Oscar Gomez Fuente <oscargomezf@gmail.com>
----
- package/ntp/S48ntpdate | 30 ++++++++++++++++++++++++++++++
- package/ntp/S49ntp     | 42 +++++++++++++++++++++---------------------
- package/ntp/ntp.mk     |  7 +++++++
- 3 files changed, 58 insertions(+), 21 deletions(-)
- create mode 100755 package/ntp/S48ntpdate
+With the latest version update the legacy version files
+LICENSE.GPLv2 LICENSE.GPLv3 and LICENSE.LGPLv3 were removed,
+use the new ones LICENSE.GPL2 LICENSE.GPL3 and LICENSE.LGPL3
+instead.
 
-diff --git a/package/ntp/S48ntpdate b/package/ntp/S48ntpdate
-new file mode 100755
-index 0000000..a8d4d70
---- /dev/null
-+++ b/package/ntp/S48ntpdate
-@@ -0,0 +1,30 @@
-+#! /bin/sh
-+
-+NAME=ntpdate
-+NTP_SERVERS="0.pool.ntp.org 1.pool.ntp.org 2.pool.ntp.org 3.pool.ntp.org"
-+
-+start() {
-+	printf "Starting $NAME: "
-+	for ntpserver in $NTP_SERVERS
-+	do
-+		CURRENT_UNIX_TIME="$(date +%s)"
-+		if [ $CURRENT_UNIX_TIME -lt 1000000000 ]; then
-+			/usr/bin/ntpdate $ntpserver > /dev/null 2>&1
-+		else
-+			break
-+		fi
-+	done
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+
-+case $1 in
-+	start)
-+		start
-+		;;
-+	*)
-+		echo "Usage: $0 {start}" >&2
-+		exit 1
-+		;;
-+esac
-+
-+exit 0
-diff --git a/package/ntp/S49ntp b/package/ntp/S49ntp
-index 35e5874..0e90f29 100755
---- a/package/ntp/S49ntp
-+++ b/package/ntp/S49ntp
-@@ -5,30 +5,30 @@ NAME=ntpd
- # Read config file if it is present.
- if [ -r /etc/default/$NAME ]
- then
--  . /etc/default/$NAME
-+	. /etc/default/$NAME
- fi
+Fixes [1]:
+
+  qt5x11extras 5.11.2 Collecting legal info
+  sha256sum: .../build/qt5x11extras-5.11.2/LICENSE.GPLv2: No such file or directory
+
+[1] http://autobuild.buildroot.net/results/238bb74f23d7a11516eac088da3188d463abac5a
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/qt5/qt5x11extras/qt5x11extras.hash | 7 +++++--
+ package/qt5/qt5x11extras/qt5x11extras.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/package/qt5/qt5x11extras/qt5x11extras.hash b/package/qt5/qt5x11extras/qt5x11extras.hash
+index da7057c5af..9bbef5b33d 100644
+--- a/package/qt5/qt5x11extras/qt5x11extras.hash
++++ b/package/qt5/qt5x11extras/qt5x11extras.hash
+@@ -5,8 +5,11 @@ sha256 1e7a8e96e0629f2b2b78de684b156b357210cf5df6b42f30789423f2cb07677f qtx11ext
+ sha256 f407ca61052d44bfb06e831fc6db7595bb2b64882b1f0af23f5db2d1ee519089 qtx11extras-everywhere-src-5.11.2.tar.xz
  
- case "$1" in
--  start)
--    printf "Starting $NAME: "
--    start-stop-daemon -S -q -x /usr/sbin/ntpd -- -g
--    [ $? = 0 ] && echo "OK" || echo "FAIL"
--    ;;
--  stop)
--    printf "Stopping $NAME: "
--    start-stop-daemon -K -q -n $NAME
--    [ $? = 0 ] && echo "OK" || echo "FAIL"
--    ;;
--  restart|reload)
--    echo "Restarting $NAME: "
--    $0 stop
--    sleep 1
--    $0 start
--    ;;
--  *)
--    echo "Usage: $0 {start|stop|restart|reload}" >&2
--    exit 1
--    ;;
-+	start)
-+		printf "Starting $NAME: "
-+		start-stop-daemon -S -q -x /usr/sbin/ntpd -- -g
-+		[ $? = 0 ] && echo "OK" || echo "FAIL"
-+		;;
-+	stop)
-+		printf "Stopping $NAME: "
-+		start-stop-daemon -K -q -n $NAME
-+		[ $? = 0 ] && echo "OK" || echo "FAIL"
-+		;;
-+	restart|reload)
-+		echo "Restarting $NAME: "
-+		$0 stop
-+		sleep 1
-+		$0 start
-+		;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}" >&2
-+		exit 1
-+		;;
- esac
+ # Hashes for license files:
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
++sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
++sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
++sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
+ sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPLv2
+ sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
+-sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
+ sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
+-sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
+diff --git a/package/qt5/qt5x11extras/qt5x11extras.mk b/package/qt5/qt5x11extras/qt5x11extras.mk
+index c439e2d31d..9d54c11061 100644
+--- a/package/qt5/qt5x11extras/qt5x11extras.mk
++++ b/package/qt5/qt5x11extras/qt5x11extras.mk
+@@ -12,7 +12,7 @@ QT5X11EXTRAS_INSTALL_STAGING = YES
  
- exit 0
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index af3c1aa..c2c910d 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -93,9 +93,16 @@ define NTP_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 644 package/ntp/ntpd.etc.conf $(TARGET_DIR)/etc/ntp.conf
- endef
- 
-+ifeq ($(BR2_PACKAGE_NTP_NTPDATE),y)
-+define NTP_INSTALL_INIT_SYSV_NTPDATE
-+	$(INSTALL) -D -m 755 package/ntp/S48ntpdate $(TARGET_DIR)/etc/init.d/S48ntpdate
-+endef
-+endif
-+
- ifeq ($(BR2_PACKAGE_NTP_NTPD),y)
- define NTP_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 755 package/ntp/S49ntp $(TARGET_DIR)/etc/init.d/S49ntp
-+	$(NTP_INSTALL_INIT_SYSV_NTPDATE)
- endef
- 
- define NTP_INSTALL_INIT_SYSTEMD
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ QT5X11EXTRAS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+-QT5X11EXTRAS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL
++QT5X11EXTRAS_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
+ else
+ QT5X11EXTRAS_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+ QT5X11EXTRAS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
 -- 
-1.9.1
+2.19.1
