@@ -1,379 +1,197 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Oct 2018 00:07:32 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] package/netsnmp: security
- bump to version 5.8
-Message-ID: <20181020165231.9AF97861E1@busybox.osuosl.org>
+Date: Sat, 20 Oct 2018 18:56:47 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] netsnmp: improve linking
+ avoiding useless -lz listing in shared build
+Message-ID: <20181020165534.8B02A83B5D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ab58316146eb717e736885dde16df73b0a694b7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7948dcf3a89bbb1ff0db00da5fac45459de867a2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Fixes CVE-2018-18065: _set_key in agent/helpers/table_container.c in
-Net-SNMP before 5.8 has a NULL Pointer Exception bug that can be used by an
-authenticated attacker to remotely cause the instance to crash via a crafted
-UDP packet, resulting in Denial of Service.
+In commit:
+https://git.buildroot.net/buildroot/commit/?id=13722d58f77d0e9fea9eefc50bf083d19f835433
+Patch "0003-configure-Invert-AC_CHECK_LIB-EVP_md5-.-without-lz-w.patch"
+was intended to fix AC_CHECK_FUNCS() failure on openssl functions. This
+was due to missing -lz during static linking.
+But the patch is wrong and results in explicitly linking against -lz in
+both shared and static build.
+This makes no sense, since shared linking has transitive dependency so
+it doesn't need to list -lz after -lssl, -lssl is enough.
+Differently static linking needs -lz to be listed after -lssl.
 
-For more details, see description and PoC:
-https://dumpco.re/blog/net-snmp-5.7.3-remote-dos
+So the real cause of previous build failure:
+http://autobuild.buildroot.net/results/881/881139fb049738b16609d39ad5a49bd77ff6b4aa/
+is that when AC_CHECK_FUNCS(), $LIBS variable is overwritten with
+$LIBCRYPTO without taking into accout previous $LIBS content(i.e. where
+-lz is present). This results in AC_CHEC_FUNCS() to fail while trying to
+statically link without listing -lz.
 
-Removed patch, applied upstream, autoreconf is not needed anymore.
-Added sha256 hashes for tarball and license file.
-Switched _SITE to https.
+Then:
+- Remove current "0003-configure-Invert-AC_CHECK_LIB-EVP_md5-.-without-lz-w.patch"
+- Add patch "0003-configure-fix-AC_CHECK_FUNCS-EVP_sha224-EVP_sha384-..patch"
+  where add $LIBS content to tail of new $LIBS variable like this:
+  LIBS="$LIBCRYPTO $LIBS"
+  NOTE: $LIBS is at the end to ensure static linking to work correctly.
+- Add patch 0004-configure-fix-AC_CHECK_FUNCS-TLS_method-TLSv1_method.patch
+  where add $LIBS content to tail of new $LIBS variable like this:
+  LIBS="-lssl $LIBCRYPTO $LIBS"
+  NOTE: $LIBS is at the end to ensure static linking to work correctly.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1fe32e837597ac23bcc52f121257d1de126fb5c2)
+This way AC_CHECK_FUNCS(), when static linking, try to link with -lz too
+appending it at the end of linking library list.
+And after every AC_CHECK_FUNCS(), previously saved $LIBS variable gets
+back to its original value(i.e. containing -lz if present) resulting in
+having or not -lz appended to library list according to static or
+shared build.
+
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit c5a7c287de4a3108d8aaf965731ef7978a903875)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...liminate-the-hard-coded-libnl-3-include-p.patch | 300 ---------------------
- package/netsnmp/netsnmp.hash                       |   9 +-
- package/netsnmp/netsnmp.mk                         |   5 +-
- 3 files changed, 8 insertions(+), 306 deletions(-)
+ ...nvert-AC_CHECK_LIB-EVP_md5-.-without-lz-w.patch | 41 ----------------------
+ ...ix-AC_CHECK_FUNCS-EVP_sha224-EVP_sha384-..patch | 39 ++++++++++++++++++++
+ ...ix-AC_CHECK_FUNCS-TLS_method-TLSv1_method.patch | 39 ++++++++++++++++++++
+ 3 files changed, 78 insertions(+), 41 deletions(-)
 
-diff --git a/package/netsnmp/0001-configure-Eliminate-the-hard-coded-libnl-3-include-p.patch b/package/netsnmp/0001-configure-Eliminate-the-hard-coded-libnl-3-include-p.patch
+diff --git a/package/netsnmp/0003-configure-Invert-AC_CHECK_LIB-EVP_md5-.-without-lz-w.patch b/package/netsnmp/0003-configure-Invert-AC_CHECK_LIB-EVP_md5-.-without-lz-w.patch
 deleted file mode 100644
-index cf0592233e..0000000000
---- a/package/netsnmp/0001-configure-Eliminate-the-hard-coded-libnl-3-include-p.patch
+index 5cbc35600f..0000000000
+--- a/package/netsnmp/0003-configure-Invert-AC_CHECK_LIB-EVP_md5-.-without-lz-w.patch
 +++ /dev/null
-@@ -1,300 +0,0 @@
--From 57d6c3d36045aab8957ffeb7324728bf17faf8bd Mon Sep 17 00:00:00 2001
--From: Bart Van Assche <bvanassche@acm.org>
--Date: Mon, 2 Feb 2015 20:31:29 +0100
--Subject: [PATCH] configure: Eliminate the hard-coded libnl-3 include path
+@@ -1,41 +0,0 @@
+-From 77062d4a76f5dbd8aee03a25e9eb514b7d924bcc Mon Sep 17 00:00:00 2001
+-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+-Date: Mon, 17 Sep 2018 21:44:20 +0200
+-Subject: [PATCH 3/3] configure: Invert AC_CHECK_LIB(EVP_md5,..) without -lz
+- with -lz
 -
--See also commit 3dde41998625fe0e24119a2e1f4509ba3ba2fd9a.
+-First AC_CHECK_LIB(EVP_md5,...) is going to succeed due to
+-[other-libraries] fields, but in that case it won't add -lz to LIBCRYPTO
+-resulting in failing AC_CHECH_FUNCS() with LIBS=LIBCRYPTO.
 -
--(cherry picked from commit 852dcd644cfe4cfc7177649eaec163d6221f2be1)
+-Try AC_CHECK_LIB(EVP_md5,..) where LIBS can miss -lz
+-and in action-if-not-found try AC_CHECK_LIB(EVP_md5,...) without -lz.
+-In the first case append -lz to LIBCRYPTO, in the second don't.
+-This is done to check if -lz is present and used in -lcrypto.
 -
--Original commit included modifications to configure script.
--Do not keep these modifications, since they caused lots of conflicts, and
--configure script is meant to be automatically generated.
--
--Signed-off-by: Julien Floret <julien.floret@6wind.com>
--
--Conflicts:
--	configure
+-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ----
-- aclocal.m4                  |   1 +
-- configure.d/config_os_libs2 |  30 ++++++-
-- m4/pkg.m4                   | 214 ++++++++++++++++++++++++++++++++++++++++++++
-- 3 files changed, 243 insertions(+), 2 deletions(-)
-- create mode 100644 m4/pkg.m4
+- configure.d/config_os_libs2 | 5 ++---
+- 1 file changed, 2 insertions(+), 3 deletions(-)
 -
--diff --git a/aclocal.m4 b/aclocal.m4
--index cd80c7486f2f..45e3608ed480 100644
----- a/aclocal.m4
--+++ b/aclocal.m4
--@@ -22,3 +22,4 @@ m4_include([m4/ltversion.m4])
-- m4_include([m4/lt~obsolete.m4])
-- m4_include([m4/netsnmp_arg.m4])
-- m4_include([m4/netsnmp_search_libs.m4])
--+m4_include([m4/pkg.m4])
 -diff --git a/configure.d/config_os_libs2 b/configure.d/config_os_libs2
--index 47491e24ce0a..10bd414b879e 100644
+-index 81788a209..bfd14c191 100644
 ---- a/configure.d/config_os_libs2
 -+++ b/configure.d/config_os_libs2
--@@ -225,11 +225,37 @@ fi
-- if test "x$with_nl" != "xno"; then
--     case $target_os in
--     linux*) # Check for libnl (linux)
--+        # The test below verifies whether the libnl-3 package been installed.
--+        # This test works as follows:
--+        # - If pkg-config was not installed at the time autogen.sh was run,
--+        #   the definition of the PKG_CHECK_EXISTS() macro will not be found by
--+        #   autogen.sh. Augogen.sh will generate a configure script that prints
--+        #   a warning about pkg-config and proceeds as if libnl-3 has not been
--+        #   installed.
--+        # - If pkg-config was installed at the time autogen.sh was run,
--+        #   the generated configure script will try to detect the presence of
--+        #   the libnl-3 library by looking up compile and linker flags in the
--+        #   file called libnl-3.pc.
--+        # - pkg-config settings can be overridden via the configure variables
--+        #   LIBNL3_CFLAGS and LIBNL3_LIBS (added by the pkg-config m4 macro's to
--+        #   the configure script -- see also ./configure --help).
--+        # - The LIBNL3_CFLAGS and LIBNL3_LIBS configure variables can be used
--+        #   even if the pkg-config executable is not present on the system on
--+        #   which the configure script is run.
--+        ifdef(
--+          [PKG_CHECK_EXISTS],
--+          [PKG_CHECK_EXISTS([libnl-3.0],
--+            [PKG_CHECK_MODULES([LIBNL3], [libnl-3.0])])
--+          ],
--+          AC_MSG_WARN([pkg-config has not been installed or is too old.])
--+          AC_MSG_WARN([Detection of libnl-3.0 will be skipped.])
--+        )
--+
--         netsnmp_save_CPPFLAGS="$CPPFLAGS"
---        CPPFLAGS="-I/usr/include/libnl3 $CPPFLAGS"
--+        CPPFLAGS="${LIBNL3_CFLAGS} $CPPFLAGS"
--         NETSNMP_SEARCH_LIBS(nl_connect, nl-3,
--             [AC_CHECK_HEADERS(netlink/netlink.h)
---            EXTERNAL_MIBGROUP_INCLUDES="$EXTERNAL_MIBGROUP_INCLUDES -I/usr/include/libnl3"],
--+            EXTERNAL_MIBGROUP_INCLUDES="$EXTERNAL_MIBGROUP_INCLUDES ${LIBNL3_CFLAGS}"],
--             [CPPFLAGS="$netsnmp_save_CPPFLAGS"], [], [], [LMIBLIBS])
--         if test "x$ac_cv_header_netlink_netlink_h" != xyes; then
--             NETSNMP_SEARCH_LIBS(nl_connect, nl, [
--diff --git a/m4/pkg.m4 b/m4/pkg.m4
--new file mode 100644
--index 000000000000..c5b26b52e6cd
----- /dev/null
--+++ b/m4/pkg.m4
--@@ -0,0 +1,214 @@
--+# pkg.m4 - Macros to locate and utilise pkg-config.            -*- Autoconf -*-
--+# serial 1 (pkg-config-0.24)
--+# 
--+# Copyright ?? 2004 Scott James Remnant <scott@netsplit.com>.
--+#
--+# This program is free software; you can redistribute it and/or modify
--+# it under the terms of the GNU General Public License as published by
--+# the Free Software Foundation; either version 2 of the License, or
--+# (at your option) any later version.
--+#
--+# This program is distributed in the hope that it will be useful, but
--+# WITHOUT ANY WARRANTY; without even the implied warranty of
--+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
--+# General Public License for more details.
--+#
--+# You should have received a copy of the GNU General Public License
--+# along with this program; if not, write to the Free Software
--+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
--+#
--+# As a special exception to the GNU General Public License, if you
--+# distribute this file as part of a program that contains a
--+# configuration script generated by Autoconf, you may include it under
--+# the same distribution terms that you use for the rest of that program.
--+
--+# PKG_PROG_PKG_CONFIG([MIN-VERSION])
--+# ----------------------------------
--+AC_DEFUN([PKG_PROG_PKG_CONFIG],
--+[m4_pattern_forbid([^_?PKG_[A-Z_]+$])
--+m4_pattern_allow([^PKG_CONFIG(_(PATH|LIBDIR|SYSROOT_DIR|ALLOW_SYSTEM_(CFLAGS|LIBS)))?$])
--+m4_pattern_allow([^PKG_CONFIG_(DISABLE_UNINSTALLED|TOP_BUILD_DIR|DEBUG_SPEW)$])
--+AC_ARG_VAR([PKG_CONFIG], [path to pkg-config utility])
--+AC_ARG_VAR([PKG_CONFIG_PATH], [directories to add to pkg-config's search path])
--+AC_ARG_VAR([PKG_CONFIG_LIBDIR], [path overriding pkg-config's built-in search path])
--+
--+if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
--+	AC_PATH_TOOL([PKG_CONFIG], [pkg-config])
--+fi
--+if test -n "$PKG_CONFIG"; then
--+	_pkg_min_version=m4_default([$1], [0.9.0])
--+	AC_MSG_CHECKING([pkg-config is at least version $_pkg_min_version])
--+	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
--+		AC_MSG_RESULT([yes])
--+	else
--+		AC_MSG_RESULT([no])
--+		PKG_CONFIG=""
--+	fi
--+fi[]dnl
--+])# PKG_PROG_PKG_CONFIG
--+
--+# PKG_CHECK_EXISTS(MODULES, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
--+#
--+# Check to see whether a particular set of modules exists.  Similar
--+# to PKG_CHECK_MODULES(), but does not set variables or print errors.
--+#
--+# Please remember that m4 expands AC_REQUIRE([PKG_PROG_PKG_CONFIG])
--+# only at the first occurence in configure.ac, so if the first place
--+# it's called might be skipped (such as if it is within an "if", you
--+# have to call PKG_CHECK_EXISTS manually
--+# --------------------------------------------------------------
--+AC_DEFUN([PKG_CHECK_EXISTS],
--+[AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
--+if test -n "$PKG_CONFIG" && \
--+    AC_RUN_LOG([$PKG_CONFIG --exists --print-errors "$1"]); then
--+  m4_default([$2], [:])
--+m4_ifvaln([$3], [else
--+  $3])dnl
--+fi])
--+
--+# _PKG_CONFIG([VARIABLE], [COMMAND], [MODULES])
--+# ---------------------------------------------
--+m4_define([_PKG_CONFIG],
--+[if test -n "$$1"; then
--+    pkg_cv_[]$1="$$1"
--+ elif test -n "$PKG_CONFIG"; then
--+    PKG_CHECK_EXISTS([$3],
--+                     [pkg_cv_[]$1=`$PKG_CONFIG --[]$2 "$3" 2>/dev/null`
--+		      test "x$?" != "x0" && pkg_failed=yes ],
--+		     [pkg_failed=yes])
--+ else
--+    pkg_failed=untried
--+fi[]dnl
--+])# _PKG_CONFIG
--+
--+# _PKG_SHORT_ERRORS_SUPPORTED
--+# -----------------------------
--+AC_DEFUN([_PKG_SHORT_ERRORS_SUPPORTED],
--+[AC_REQUIRE([PKG_PROG_PKG_CONFIG])
--+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
--+        _pkg_short_errors_supported=yes
--+else
--+        _pkg_short_errors_supported=no
--+fi[]dnl
--+])# _PKG_SHORT_ERRORS_SUPPORTED
--+
--+
--+# PKG_CHECK_MODULES(VARIABLE-PREFIX, MODULES, [ACTION-IF-FOUND],
--+# [ACTION-IF-NOT-FOUND])
--+#
--+#
--+# Note that if there is a possibility the first call to
--+# PKG_CHECK_MODULES might not happen, you should be sure to include an
--+# explicit call to PKG_PROG_PKG_CONFIG in your configure.ac
--+#
--+#
--+# --------------------------------------------------------------
--+AC_DEFUN([PKG_CHECK_MODULES],
--+[AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
--+AC_ARG_VAR([$1][_CFLAGS], [C compiler flags for $1, overriding pkg-config])dnl
--+AC_ARG_VAR([$1][_LIBS], [linker flags for $1, overriding pkg-config])dnl
--+
--+pkg_failed=no
--+AC_MSG_CHECKING([for $1])
--+
--+_PKG_CONFIG([$1][_CFLAGS], [cflags], [$2])
--+_PKG_CONFIG([$1][_LIBS], [libs], [$2])
--+
--+m4_define([_PKG_TEXT], [Alternatively, you may set the environment variables $1[]_CFLAGS
--+and $1[]_LIBS to avoid the need to call pkg-config.
--+See the pkg-config man page for more details.])
--+
--+if test $pkg_failed = yes; then
--+   	AC_MSG_RESULT([no])
--+        _PKG_SHORT_ERRORS_SUPPORTED
--+        if test $_pkg_short_errors_supported = yes; then
--+	        $1[]_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "$2" 2>&1`
--+        else 
--+	        $1[]_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "$2" 2>&1`
--+        fi
--+	# Put the nasty error message in config.log where it belongs
--+	echo "$$1[]_PKG_ERRORS" >&AS_MESSAGE_LOG_FD
--+
--+	m4_default([$4], [AC_MSG_ERROR(
--+[Package requirements ($2) were not met:
--+
--+$$1_PKG_ERRORS
--+
--+Consider adjusting the PKG_CONFIG_PATH environment variable if you
--+installed software in a non-standard prefix.
--+
--+_PKG_TEXT])[]dnl
--+        ])
--+elif test $pkg_failed = untried; then
--+     	AC_MSG_RESULT([no])
--+	m4_default([$4], [AC_MSG_FAILURE(
--+[The pkg-config script could not be found or is too old.  Make sure it
--+is in your PATH or set the PKG_CONFIG environment variable to the full
--+path to pkg-config.
--+
--+_PKG_TEXT
--+
--+To get pkg-config, see <http://pkg-config.freedesktop.org/>.])[]dnl
--+        ])
--+else
--+	$1[]_CFLAGS=$pkg_cv_[]$1[]_CFLAGS
--+	$1[]_LIBS=$pkg_cv_[]$1[]_LIBS
--+        AC_MSG_RESULT([yes])
--+	$3
--+fi[]dnl
--+])# PKG_CHECK_MODULES
--+
--+
--+# PKG_INSTALLDIR(DIRECTORY)
--+# -------------------------
--+# Substitutes the variable pkgconfigdir as the location where a module
--+# should install pkg-config .pc files. By default the directory is
--+# $libdir/pkgconfig, but the default can be changed by passing
--+# DIRECTORY. The user can override through the --with-pkgconfigdir
--+# parameter.
--+AC_DEFUN([PKG_INSTALLDIR],
--+[m4_pushdef([pkg_default], [m4_default([$1], ['${libdir}/pkgconfig'])])
--+m4_pushdef([pkg_description],
--+    [pkg-config installation directory @<:@]pkg_default[@:>@])
--+AC_ARG_WITH([pkgconfigdir],
--+    [AS_HELP_STRING([--with-pkgconfigdir], pkg_description)],,
--+    [with_pkgconfigdir=]pkg_default)
--+AC_SUBST([pkgconfigdir], [$with_pkgconfigdir])
--+m4_popdef([pkg_default])
--+m4_popdef([pkg_description])
--+]) dnl PKG_INSTALLDIR
--+
--+
--+# PKG_NOARCH_INSTALLDIR(DIRECTORY)
--+# -------------------------
--+# Substitutes the variable noarch_pkgconfigdir as the location where a
--+# module should install arch-independent pkg-config .pc files. By
--+# default the directory is $datadir/pkgconfig, but the default can be
--+# changed by passing DIRECTORY. The user can override through the
--+# --with-noarch-pkgconfigdir parameter.
--+AC_DEFUN([PKG_NOARCH_INSTALLDIR],
--+[m4_pushdef([pkg_default], [m4_default([$1], ['${datadir}/pkgconfig'])])
--+m4_pushdef([pkg_description],
--+    [pkg-config arch-independent installation directory @<:@]pkg_default[@:>@])
--+AC_ARG_WITH([noarch-pkgconfigdir],
--+    [AS_HELP_STRING([--with-noarch-pkgconfigdir], pkg_description)],,
--+    [with_noarch_pkgconfigdir=]pkg_default)
--+AC_SUBST([noarch_pkgconfigdir], [$with_noarch_pkgconfigdir])
--+m4_popdef([pkg_default])
--+m4_popdef([pkg_description])
--+]) dnl PKG_NOARCH_INSTALLDIR
--+
--+
--+# PKG_CHECK_VAR(VARIABLE, MODULE, CONFIG-VARIABLE,
--+# [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
--+# -------------------------------------------
--+# Retrieves the value of the pkg-config variable for the given module.
--+AC_DEFUN([PKG_CHECK_VAR],
--+[AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
--+AC_ARG_VAR([$1], [value of $3 for $2, overriding pkg-config])dnl
--+
--+_PKG_CONFIG([$1], [variable="][$3]["], [$2])
--+AS_VAR_COPY([$1], [pkg_cv_][$1])
--+
--+AS_VAR_IF([$1], [""], [$5], [$4])dnl
--+])# PKG_CHECK_VAR
+-@@ -307,11 +307,10 @@ if test "x$tryopenssl" != "xno" -a "x$tryopenssl" != "xinternal"; then
+- 
+-         if test x$CRYPTO = x; then
+-             AC_CHECK_LIB([crypto], [EVP_md5],
+--			 [CRYPTO="crypto"; LIBCRYPTO="-lcrypto"], [
+-+			 [CRYPTO="crypto"; LIBCRYPTO="-lcrypto -lz"], [
+- 		unset ac_cv_lib_crypto_EVP_md5
+- 		AC_CHECK_LIB([crypto], [EVP_md5],
+--			     [CRYPTO="crypto"; LIBCRYPTO="-lcrypto -lz"], [],
+--			     [-lz])
+-+			     [CRYPTO="crypto"; LIBCRYPTO="-lcrypto"], [])
+- 	    ])
+- 	else
+- 	    LIBCRYPTO="-l${CRYPTO}"
 --- 
--2.1.0
+-2.17.1
 -
-diff --git a/package/netsnmp/netsnmp.hash b/package/netsnmp/netsnmp.hash
-index fc77926023..d05a7de9da 100644
---- a/package/netsnmp/netsnmp.hash
-+++ b/package/netsnmp/netsnmp.hash
-@@ -1,3 +1,6 @@
--# From http://sourceforge.net/projects/net-snmp/files/net-snmp/5.7.3/
--md5	d4a3459e1577d0efa8d96ca70a885e53	net-snmp-5.7.3.tar.gz
--sha1	97dc25077257680815de44e34128d365c76bd839	net-snmp-5.7.3.tar.gz
-+# From http://sourceforge.net/projects/net-snmp/files/net-snmp/5.8/
-+md5	63bfc65fbb86cdb616598df1aff6458a		net-snmp-5.8.tar.gz
-+sha1	78f70731df9dcdb13fe8f60eb7d80d7583da4d2c	net-snmp-5.8.tar.gz
-+# Locally computed
-+sha256 b2fc3500840ebe532734c4786b0da4ef0a5f67e51ef4c86b3345d697e4976adf  net-snmp-5.8.tar.gz
-+sha256 ed869ea395a1f125819a56676385ab0557a21507764bf56f2943302011381e59  COPYING
-diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-index 742fa6e3b3..6c712ae075 100644
---- a/package/netsnmp/netsnmp.mk
-+++ b/package/netsnmp/netsnmp.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--NETSNMP_VERSION = 5.7.3
--NETSNMP_SITE = http://downloads.sourceforge.net/project/net-snmp/net-snmp/$(NETSNMP_VERSION)
-+NETSNMP_VERSION = 5.8
-+NETSNMP_SITE = https://downloads.sourceforge.net/project/net-snmp/net-snmp/$(NETSNMP_VERSION)
- NETSNMP_SOURCE = net-snmp-$(NETSNMP_VERSION).tar.gz
- NETSNMP_LICENSE = Various BSD-like
- NETSNMP_LICENSE_FILES = COPYING
-@@ -36,7 +36,6 @@ NETSNMP_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LIB_LDCONFIG_CMD=true inst
- NETSNMP_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) LIB_LDCONFIG_CMD=true install
- NETSNMP_MAKE = $(MAKE1)
- NETSNMP_CONFIG_SCRIPTS = net-snmp-config
--NETSNMP_AUTORECONF = YES
- 
- ifeq ($(BR2_ENDIAN),"BIG")
- NETSNMP_CONF_OPTS += --with-endianness=big
+diff --git a/package/netsnmp/0003-configure-fix-AC_CHECK_FUNCS-EVP_sha224-EVP_sha384-..patch b/package/netsnmp/0003-configure-fix-AC_CHECK_FUNCS-EVP_sha224-EVP_sha384-..patch
+new file mode 100644
+index 0000000000..0829042128
+--- /dev/null
++++ b/package/netsnmp/0003-configure-fix-AC_CHECK_FUNCS-EVP_sha224-EVP_sha384-..patch
+@@ -0,0 +1,39 @@
++From 8e273c688aa235ed9c68570a700d31596bac14df Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@micronovasrl.com>
++Date: Mon, 15 Oct 2018 19:07:05 +0200
++Subject: [PATCH 1/2] configure: fix AC_CHECK_FUNCS(EVP_sha224 EVP_sha384 ...)
++ failure on static linking
++
++If building as static lib, AC_CHECK_FUNCS(EVP_sha224 EVP_sha384 ...)
++fails due to missing -lz in $LIBS.
++At the moment, $LIBS contains $LIBCRYPTO only discarding previous $LIBS
++content.
++
++Add $LIBS to:
++LIBS="$LIBCRYPTO"
++as:
++LIBS="$LIBCRYPTO $LIBS"
++This way $LIBS will contain -lz at the end of linking command that in
++static linking build is mandatory.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
++---
++ configure.d/config_os_libs2 | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.d/config_os_libs2 b/configure.d/config_os_libs2
++index 81788a209..93044000b 100644
++--- a/configure.d/config_os_libs2
+++++ b/configure.d/config_os_libs2
++@@ -321,7 +321,7 @@ if test "x$tryopenssl" != "xno" -a "x$tryopenssl" != "xinternal"; then
++             AC_DEFINE(HAVE_LIBCRYPTO, 1,
++                 [Define to 1 if you have the OpenSSL library (-lcrypto or -leay32).])
++             netsnmp_save_LIBS="$LIBS"
++-            LIBS="$LIBCRYPTO"
+++            LIBS="$LIBCRYPTO $LIBS"
++             AC_CHECK_FUNCS([AES_cfb128_encrypt]dnl
++                            [EVP_sha224        EVP_sha384        ]dnl
++                            [EVP_MD_CTX_create EVP_MD_CTX_destroy]dnl
++-- 
++2.17.1
++
+diff --git a/package/netsnmp/0004-configure-fix-AC_CHECK_FUNCS-TLS_method-TLSv1_method.patch b/package/netsnmp/0004-configure-fix-AC_CHECK_FUNCS-TLS_method-TLSv1_method.patch
+new file mode 100644
+index 0000000000..a731f25761
+--- /dev/null
++++ b/package/netsnmp/0004-configure-fix-AC_CHECK_FUNCS-TLS_method-TLSv1_method.patch
+@@ -0,0 +1,39 @@
++From 1ab6e3fc3cf61fa5a7b7363e59095e868474524b Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@micronovasrl.com>
++Date: Mon, 15 Oct 2018 19:34:26 +0200
++Subject: [PATCH 2/2] configure: fix AC_CHECK_FUNCS(TLS_method TLSv1_method
++ ...) failure on static linking
++
++If building as static lib, AC_CHECK_FUNCS(TLS_method TLSv1_method ...)
++fails due to missing -lz in $LIBS.
++At the moment, $LIBS contains "-lssl $LIBCRYPTO" only discarding
++previous $LIBS content.
++
++Add $LIBS to:
++LIBS="-lssl $LIBCRYPTO"
++as:
++LIBS="-lssl $LIBCRYPTO $LIBS"
++This way $LIBS will contain -lz at the end of linking command that in
++static linking build is mandatory.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
++---
++ configure.d/config_os_libs2 | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.d/config_os_libs2 b/configure.d/config_os_libs2
++index 93044000b..c811c63ec 100644
++--- a/configure.d/config_os_libs2
+++++ b/configure.d/config_os_libs2
++@@ -349,7 +349,7 @@ if test "x$tryopenssl" != "xno" -a "x$tryopenssl" != "xinternal"; then
++             LIBS="$netsnmp_save_LIBS"
++         fi
++         netsnmp_save_LIBS="$LIBS"
++-        LIBS="-lssl $LIBCRYPTO"
+++        LIBS="-lssl $LIBCRYPTO $LIBS"
++         AC_CHECK_FUNCS([TLS_method TLSv1_method DTLS_method DTLSv1_method]dnl
++                        [SSL_library_init SSL_load_error_strings])
++         LIBS="$netsnmp_save_LIBS"
++-- 
++2.17.1
++
