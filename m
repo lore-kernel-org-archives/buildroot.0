@@ -1,47 +1,31 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Oct 2018 18:04:48 +0200
-Subject: [Buildroot] [git commit] gvfs: enable gphoto2
-Message-ID: <20181020160911.9113784381@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 20 Oct 2018 18:11:43 +0200
+Subject: [Buildroot] [git commit] package/mesa3d: add explanation for the
+ AUTORECONF = YES
+Message-ID: <20181020161012.DF20D84390@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4439eda857b8b59385d5b7ee6ee5bcad16466e3b
+commit: https://git.buildroot.net/buildroot/commit/?id=3c12325c8144473b38ea16cee494753243a8e552
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Enable gphoto2 if libgphoto2 and libgudev are available
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gvfs/gvfs.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/mesa3d/mesa3d.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-index e34033d5c7..0fdb9e1267 100644
---- a/package/gvfs/gvfs.mk
-+++ b/package/gvfs/gvfs.mk
-@@ -23,7 +23,6 @@ GVFS_CONF_OPTS = \
- 	--disable-gdu \
- 	--disable-goa \
- 	--disable-google \
--	--disable-gphoto2 \
- 	--disable-keyring \
- 	--disable-libmtp \
- 	--disable-udisks2
-@@ -99,6 +98,13 @@ else
- GVFS_CONF_OPTS += --disable-afp
- endif
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 0d67dcbf1c..d0f231792e 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -10,6 +10,7 @@ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
+ MESA3D_LICENSE_FILES = docs/license.html
++# 0002-configure.ac-invert-order-for-wayland-scanner-check.patch
+ MESA3D_AUTORECONF = YES
  
-+ifeq ($(BR2_PACKAGE_LIBGPHOTO2)$(BR2_PACKAGE_LIBGUDEV),yy)
-+GVFS_DEPENDENCIES += libgphoto2 libgudev
-+GVFS_CONF_OPTS += --enable-gphoto2
-+else
-+GVFS_CONF_OPTS += --disable-gphoto2
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBGTK3),y)
- GVFS_CONF_OPTS += --enable-gtk
- GVFS_DEPENDENCIES += libgtk3
+ MESA3D_INSTALL_STAGING = YES
