@@ -1,48 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Oct 2018 14:38:51 +0200
-Subject: [Buildroot] [git commit] python-certifi: bump to version 2018.10.15
-Message-ID: <20181020123842.D9A868105D@busybox.osuosl.org>
+Date: Sat, 20 Oct 2018 14:39:19 +0200
+Subject: [Buildroot] [git commit] python-autobahn: bump to version 18.10.1
+Message-ID: <20181020123843.08097802F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e787ded18cc76d41ba376ac474bd7a1cde4de9c
+commit: https://git.buildroot.net/buildroot/commit/?id=5e1aae8cca2531b8bcd2ed999324311da58b417d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-certifi/python-certifi.hash | 4 ++--
- package/python-certifi/python-certifi.mk   | 4 ++--
+ package/python-autobahn/python-autobahn.hash | 4 ++--
+ package/python-autobahn/python-autobahn.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
-index 2d339dd2d5..596475fc25 100644
---- a/package/python-certifi/python-certifi.hash
-+++ b/package/python-certifi/python-certifi.hash
+diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
+index a59ee2df5d..809678ba6e 100644
+--- a/package/python-autobahn/python-autobahn.hash
++++ b/package/python-autobahn/python-autobahn.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/certifi/json
--md5	f5d81d0048e84285611412b0dea0630a  certifi-2018.4.16.tar.gz
--sha256	13e698f54293db9f89122b0581843a782ad0934a4fe0172d2a980ba77fc61bb7  certifi-2018.4.16.tar.gz
-+md5	3f4ca75a66bc65fea0693b8040f66d13  certifi-2018.10.15.tar.gz
-+sha256	6d58c986d22b038c8c0df30d639f23a3e6d172a05c3583e766f4c0b785c0986a  certifi-2018.10.15.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/autobahn/json
+-md5	e8192e3a4bb7dc59db2a82234b13b080  autobahn-18.9.2.tar.gz
+-sha256	d98b924f06865700116ee616027e4a6d678004a7b44e0d01cb262eab333112d6  autobahn-18.9.2.tar.gz
++md5	66767ee7b3dd31e76c77ab18eeaa619c  autobahn-18.10.1.tar.gz
++sha256	b5767bebd94ba13fc286604f889f208e7babc77d72d9f372d331bc14c89c5a40  autobahn-18.10.1.tar.gz
  # Locally computed sha256 checksums
- sha256	6a70a4bf6b010016d59a64b8ae4ad8dc7f5ef16f1fb453cc2ecd771c5a341131  LICENSE
-diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
-index 716e6a3840..addb52fc11 100644
---- a/package/python-certifi/python-certifi.mk
-+++ b/package/python-certifi/python-certifi.mk
+ sha256	0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
+diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
+index 1668b241b0..7ec012efe4 100644
+--- a/package/python-autobahn/python-autobahn.mk
++++ b/package/python-autobahn/python-autobahn.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CERTIFI_VERSION = 2018.4.16
-+PYTHON_CERTIFI_VERSION = 2018.10.15
- PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
--PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/4d/9c/46e950a6f4d6b4be571ddcae21e7bc846fcbb88f1de3eff0f6dd0a6be55d
-+PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/41/b6/4f0cefba47656583217acd6cd797bc2db1fede0d53090fdc28ad2c8e0716
- PYTHON_CERTIFI_SETUP_TYPE = setuptools
- PYTHON_CERTIFI_LICENSE = ISC (Python code), MPL-2.0 (cacert.pem)
- PYTHON_CERTIFI_LICENSE_FILES = LICENSE
+-PYTHON_AUTOBAHN_VERSION = 18.9.2
++PYTHON_AUTOBAHN_VERSION = 18.10.1
+ PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
+-PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/68/f8/43ef6e614f27a97a88a6e91768d3917adff630936ec71665fcc3bec48e53
++PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/e3/42/8a8ba7e371c5d0cbacf42cafd9f562e12cab613edb1f752b6ddfa2f3b280
+ PYTHON_AUTOBAHN_LICENSE = MIT
+ PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
+ PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
