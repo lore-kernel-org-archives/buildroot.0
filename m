@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Oct 2018 14:18:16 +0200
-Subject: [Buildroot] [PATCH] libarchive: security bump to version 3.3.3
-In-Reply-To: <601e6365ce2efee031d9c9b6f3fd4e8e54296d07.1539926405.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 19 Oct 2018 08:20:05 +0300")
-References: <601e6365ce2efee031d9c9b6f3fd4e8e54296d07.1539926405.git.baruch@tkos.co.il>
-Message-ID: <87tvlgdd6f.fsf@dell.be.48ers.dk>
+Date: Sat, 20 Oct 2018 14:24:27 +0200
+Subject: [Buildroot] [PATCH] mdadm: fix mdmon build without threads
+In-Reply-To: <1bb26b73a032e6492f0cbeb97e99e029c1869a1f.1539944304.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 19 Oct 2018 13:18:24 +0300")
+References: <1bb26b73a032e6492f0cbeb97e99e029c1869a1f.1539944304.git.baruch@tkos.co.il>
+Message-ID: <87pnw4dcw4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +13,14 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Fixes CVE-2017-14501: An out-of-bounds read flaw exists in
- > parse_file_info in archive_read_support_format_iso9660.c in libarchive
- > 3.3.2 when extracting a specially crafted iso9660 iso file, related to
- > archive_read_format_iso9660_read_header.
+ > Commit 45498bbc62d8df (mdadm: also install mdmon) enabled build of hte
+ > mdmon utility. This utility requires USE_PTHREADS make variable
+ > undefined to build when threads are not supported.
 
- > Drop upstream patches.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/4bd/4bdd03b1d8f30ef32177727aae46d8cf54fbc35e/
 
- > Use upstream provided tarball hash.
-
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
