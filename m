@@ -1,139 +1,117 @@
 From: Valentin Korenblit <valentinkorenblit@gmail.com>
-Date: Sat, 20 Oct 2018 16:34:49 +0200
-Subject: [Buildroot] [PATCH v8 2/4] package/libclc: new package
+Date: Sat, 20 Oct 2018 16:34:50 +0200
+Subject: [Buildroot] [PATCH v8 3/4] package/mesa3d: enable OpenCL support
 In-Reply-To: <1540046091-13736-1-git-send-email-valentinkorenblit@gmail.com>
 References: <1540046091-13736-1-git-send-email-valentinkorenblit@gmail.com>
-Message-ID: <1540046091-13736-3-git-send-email-valentinkorenblit@gmail.com>
+Message-ID: <1540046091-13736-4-git-send-email-valentinkorenblit@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch provides libclc, an open source implementation of the
-library requirements of the OpenCL C programming language, as
-specified by the OpenCL 1.1 Specification. It is intended to be used
-with Clover (Mesa3D's OpenCL implementation for AMD GPUs.
+This patch provides Clover, the OpenCL 1.1 API implementation by Mesa
+for AMD GPUs. It generates libOpenCL.so.
 
-It needs to be compiled with host-clang, as it generates LLVM IR bitcode
-files containing device builtin functions for each target.
+Add --disable-opencl-icd because in Mesa 18 it defaults to on.
+When disabled, the shared library is named libOpenCL instead
+of libMesaOpenCL and CL headers are installed.
 
-Currently, libclc supports AMDGCN, R600 and NVPTX targets.
-
-As OpenCL kernels can be built dynamically on the target using libclang and
-libLLVM, it is necessary to have clc headers installed on the target. Buildroot
-removes /usr/include in its target-finalize step, so clc headers are installed to
-/usr/share/clc.
+Given that clc headers are being installed to a non-standard location, it is
+necessary to specify this path in configure.ac. Otherwise, pkg-config
+will output the absolute path to these headers located in STAGING_DIR, which
+will cause a runtime error when calling clBuildProgram.
 
 Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
 Signed-off-by: Valentin Korenblit <valentinkorenblit@gmail.com>
 ---
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/libclc/Config.in   | 10 ++++++++++
- package/libclc/libclc.hash |  3 +++
- package/libclc/libclc.mk   | 42 ++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 57 insertions(+)
- create mode 100644 package/libclc/Config.in
- create mode 100644 package/libclc/libclc.hash
- create mode 100644 package/libclc/libclc.mk
+ package/mesa3d/0003-set-LIBCLC_INCLUDEDIR.patch | 26 +++++++++++++++++++++++++
+ package/mesa3d/Config.in                        |  9 +++++++++
+ package/mesa3d/mesa3d.mk                        | 11 ++++++++++-
+ 3 files changed, 45 insertions(+), 1 deletion(-)
+ create mode 100644 package/mesa3d/0003-set-LIBCLC_INCLUDEDIR.patch
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 341bf7d..ffcbc76 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2116,6 +2116,7 @@ F:	package/tstools/
+diff --git a/package/mesa3d/0003-set-LIBCLC_INCLUDEDIR.patch b/package/mesa3d/0003-set-LIBCLC_INCLUDEDIR.patch
+new file mode 100644
+index 0000000..e9a8b25
+--- /dev/null
++++ b/package/mesa3d/0003-set-LIBCLC_INCLUDEDIR.patch
+@@ -0,0 +1,26 @@
++From 94bceeb621e36f3188c6246a763def8695526578 Mon Sep 17 00:00:00 2001
++From: Valentin Korenblit <valentinkorenblit@gmail.com>
++Date: Sat, 20 Oct 2018 10:56:23 +0200
++Subject: [PATCH 1/1] set LIBCLC_INCLUDEDIR
++
++Signed-off-by: Valentin Korenblit <valentinkorenblit@gmail.com>
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 864dcae..cc2390b 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -2429,7 +2429,7 @@ if test "x$enable_opencl" = xyes; then
++                     PKG_CONFIG_PATH environment variable.
++                     By default libclc.pc is installed to /usr/local/share/pkgconfig/])
++     else
++-        LIBCLC_INCLUDEDIR=`$PKG_CONFIG --variable=includedir libclc`
+++        LIBCLC_INCLUDEDIR="/usr/share"
++         LIBCLC_LIBEXECDIR=`$PKG_CONFIG --variable=libexecdir libclc`
++         AC_SUBST([LIBCLC_INCLUDEDIR])
++         AC_SUBST([LIBCLC_LIBEXECDIR])
++-- 
++2.7.4
++
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 872859b..f16f1b1 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -50,6 +50,15 @@ comment "llvm support needs a toolchain not affected by GCC bug 64735"
+ 	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
  
- N:	Valentin Korenblit <valentinkorenblit@gmail.com>
- F:	package/clang/
-+F:	package/libclc
- F:	package/llvm/
++#clang and libclc dependencies are satisfied by BR2_PACKAGE_MESA3D_LLVM
++config BR2_PACKAGE_MESA3D_OPENCL
++	bool "OpenCL support"
++	depends on BR2_PACKAGE_MESA3D_LLVM
++	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600 || \
++		BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
++	select BR2_PACKAGE_CLANG
++	select BR2_PACKAGE_LIBCLC
++
+ # inform the .mk file of gallium, dri or vulkan driver selection
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	bool
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 48041dd..b32ce59 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -10,6 +10,7 @@ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
+ MESA3D_LICENSE_FILES = docs/license.html
++# 0003-set-LIBCLC_INCLUDEDIR.patch needed when OpenCL is enabled
+ MESA3D_AUTORECONF = YES
  
- N:	Vanya Sergeev <vsergeev@gmail.com>
-diff --git a/package/Config.in b/package/Config.in
-index fd86e37..8d53c72 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1618,6 +1618,7 @@ menu "Other"
- 	source "package/libcap/Config.in"
- 	source "package/libcap-ng/Config.in"
- 	source "package/libcgroup/Config.in"
-+	source "package/libclc/Config.in"
- 	source "package/libcofi/Config.in"
- 	source "package/libcorrect/Config.in"
- 	source "package/libcroco/Config.in"
-diff --git a/package/libclc/Config.in b/package/libclc/Config.in
-new file mode 100644
-index 0000000..4bba6a9
---- /dev/null
-+++ b/package/libclc/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_LIBCLC
-+	bool "libclc"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8
-+	help
-+	  libclc is an open source, BSD licensed implementation of
-+	  the library requirements of the OpenCL C programming language,
-+	  as specified by the OpenCL 1.1 Specification.
-+
-+	  http://libclc.llvm.org/
-diff --git a/package/libclc/libclc.hash b/package/libclc/libclc.hash
-new file mode 100644
-index 0000000..6c06648
---- /dev/null
-+++ b/package/libclc/libclc.hash
-@@ -0,0 +1,3 @@
-+# locally calculated
-+sha256 8d7b42fba6db4a124c74f0ac475c1bc515761cbf3d559820b4cbe5b33e94f26c libclc-dabae5a2afb78cba0320a86e3f5f0b5dc83e077c.tar.gz
-+sha256 45187a46f0637e4e92decb51d8dc3c9e4957b349d0283dfbd6647e8000d9ac7f LICENSE.TXT
-diff --git a/package/libclc/libclc.mk b/package/libclc/libclc.mk
-new file mode 100644
-index 0000000..608f026
---- /dev/null
-+++ b/package/libclc/libclc.mk
-@@ -0,0 +1,42 @@
-+################################################################################
-+#
-+# libclc
-+#
-+################################################################################
-+
-+# There are only two releases: release_35 and release_38, but the last
-+# commit is from 2 years ago. Master has some recent activity.
-+LIBCLC_VERSION = dabae5a2afb78cba0320a86e3f5f0b5dc83e077c
-+LIBCLC_SITE = https://git.llvm.org/git/libclc
-+LIBCLC_SITE_METHOD = git
-+LIBCLC_LICENSE = NCSA
-+LIBCLC_LICENSE_FILES = LICENSE.TXT
-+
-+LIBCLC_DEPENDENCIES = host-clang host-llvm
-+LIBCLC_INSTALL_STAGING = YES
-+
-+# C++ compiler is used to build a small tool (prepare-builtins) for the host.
-+# It must be built with the C++ compiler from the host
-+LIBCLC_CONF_OPTS = --with-llvm-config=$(HOST_DIR)/usr/bin/llvm-config \
-+	--prefix=/usr \
-+	--includedir=/usr/share \
-+	--pkgconfigdir=/usr/lib/pkgconfig \
-+	--with-cxx-compiler=$(HOSTCXX)
-+
-+define LIBCLC_CONFIGURE_CMDS
-+	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure.py $(LIBCLC_CONF_OPTS))
-+endef
-+
-+define LIBCLC_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define LIBCLC_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+define LIBCLC_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
-+endef
-+
-+$(eval $(generic-package))
+ MESA3D_INSTALL_STAGING = YES
+@@ -43,8 +44,16 @@ else
+ MESA3D_CONF_OPTS += --disable-llvm
+ endif
+ 
+-# Disable opencl in case libclc is detected
++# Disable opencl-icd: OpenCL lib will be named libOpenCL instead of
++# libMesaOpenCL and CL headers are installed
++ifeq ($(BR2_PACKAGE_MESA3D_OPENCL),y)
++MESA3D_DEPENDENCIES += clang libclc
++MESA3D_CONF_OPTS += --enable-opencl \
++	--disable-opencl-icd \
++	--with-clang-libdir=$(STAGING_DIR)/usr/lib
++else
+ MESA3D_CONF_OPTS += --disable-opencl
++endif
+ 
+ ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS),y)
+ MESA3D_DEPENDENCIES += elfutils
 -- 
 2.7.4
