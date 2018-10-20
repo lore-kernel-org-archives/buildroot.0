@@ -1,28 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Oct 2018 19:31:32 +0200
-Subject: [Buildroot] [PATCH 1/1] ccache: bump to version 3.5
-In-Reply-To: <20181016164308.20218-1-asafka7@gmail.com>
-References: <20181016164308.20218-1-asafka7@gmail.com>
-Message-ID: <20181020193132.755042fb@windsurf.lan>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 20 Oct 2018 19:36:20 +0200
+Subject: [Buildroot] [PATCH 1/2] Revert "package/luvi: bump version to
+ 2.8.0"
+In-Reply-To: <58d29e4a3c7adbeec389a9e6fc4fc115faba6759.camel@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?= Krause"'s message of "Sun, 14 Oct 2018 17:57:37
+ +0200")
+References: <20181013080103.29974-1-bernd.kuhls@t-online.de>
+ <58d29e4a3c7adbeec389a9e6fc4fc115faba6759.camel@embedded.rocks>
+Message-ID: <877eica5bf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
-On Tue, 16 Oct 2018 19:43:08 +0300, Asaf Kahlon wrote:
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-> ---
->  package/ccache/ccache.hash | 2 +-
->  package/ccache/ccache.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+ > Hi Bernd,
+ > On Sat, 2018-10-13 at 10:01 +0200, Bernd Kuhls wrote:
+ >> This reverts commit ac6fedda6b43996545ff498cd19a781698a96050.
+ >> 
+ >> Fixes
+ >> http://autobuild.buildroot.net/results/111/11146b138d3d092c3a230d197528d5dbe293e3fc/
+ >> and many others.
 
-Applied to master, thanks.
+ > Does this really fix the issue about missing "c-api/compat-5.3.h" for
+ > you? Because it is a luv (not luvi) issue.
 
-Thomas
+It does not:
+
+fatal error: c-api/compat-5.3.h: No such file or directory
+ #include "c-api/compat-5.3.h"
+                              ^
+compilation terminated.
+CMakeFiles/luvi.dir/build.make:74: recipe for target 'CMakeFiles/luvi.dir/src/main.c.o' failed
+make[4]: *** [CMakeFiles/luvi.dir/src/main.c.o] Error 1
+CMakeFiles/Makefile2:180: recipe for target 'CMakeFiles/luvi.dir/all' failed
+make[3]: *** [CMakeFiles/luvi.dir/all] Error 2
+Makefile:127: recipe for target 'all' failed
+make[2]: *** [all] Error 2
+package/pkg-generic.mk:229: recipe for target '/home/peko/source/buildroot/output-test/build/luvi-v2.7.6/.stamp_built' failed
+make[1]: *** [/home/peko/source/buildroot/output-test/build/luvi-v2.7.6/.stamp_built] Error 2
+
+ > Nevertheless, I am happy about the revert as it takes ages to fetch all
+ > submodules.
+
+Ok, applied with the autobuilder references removed, thanks.
+
+How should the luv issue be fixed?
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
