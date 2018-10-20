@@ -1,26 +1,99 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Oct 2018 15:34:52 +0200
-Subject: [Buildroot] [PATCH] configs/cubieboard2: Update kernel to
- 4.18.14 and U-Boot to 2018.09
-In-Reply-To: <20181017095151.15575-1-abrodkin@synopsys.com> (Alexey Brodkin's
- message of "Wed, 17 Oct 2018 12:51:51 +0300")
-References: <20181017095151.15575-1-abrodkin@synopsys.com>
-Message-ID: <87efckbv2b.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 20 Oct 2018 15:00:53 +0100
+Subject: [Buildroot] [PATCH] meson: bump version to 0.48.1
+In-Reply-To: <f6178cb2-5035-a8b7-6a8c-428195fb1eda@mind.be>
+References: <20181018204431.29117-1-eric.le.bihan.dev@free.fr>
+ <20181019203050.5cdf56e0@gmx.net> <20181019203746.77ca985b@gmx.net>
+ <20181019211039.GA14986@itchy> <f6178cb2-5035-a8b7-6a8c-428195fb1eda@mind.be>
+Message-ID: <8dadf2d9-2f53-97cf-0d7f-4d1c323cc2f2@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexey" == Alexey Brodkin <alexey.brodkin@synopsys.com> writes:
 
- > The board is well supported in upstream projects so let's update kernel
- > and U-Boot to the latest and greatest versions.
 
- > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
- > Cc: Erico Nunes <nunes.erico@gmail.com>
+On 20/10/2018 13:57, Arnout Vandecappelle wrote:
+>  Hi Eric,
+>
+> On 19/10/2018 22:10, Eric Le Bihan wrote:
+>> Hi!
+>>
+>> On 2018-10-19 20:37, Peter Seiderer wrote:
+>>> On Fri, 19 Oct 2018 20:30:50 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
+> [snip]
+>>>> With the patch applied I get the following error:
+>>>>
+>>>>>>> host-meson 0.48.1 Building
+>>>> (cd .../build/host-meson-0.48.1//; PATH=".../host/bin:.../host/sbin:/usr/local/bin:/usr/bin:/bin:/usr/lib/mit/sbin" PYTHONNOUSERSITE=1  .../host/bin/python3 setup.py build  )
+>>>> Traceback (most recent call last):
+>>>>   File "setup.py", line 26, in <module>
+>>>>     from setuptools import setup
+>>>> ModuleNotFoundError: No module named 'setuptools'>>>
+>>>> 	$ ls -d build/host-python*
+>>>> build/host-python-2.7.15
+>>>> build/host-python3-3.7.0
+>>>> build/host-python-setuptools-40.0.0
+>>> graph-depends.pdf shows the following host-meson dependencies:
+>>>
+>>> - host-meson --> host-python3
+>>> - host-meson --> host-python-setuptools --> host-python
+>>> - host-meson --> host-ninja --> host-python
+>>>
+>>> Maybe host-python-setuptools are build for the wrong python version (python2 instead of python3)?
+>  That is correct. When target python or python3 is selected, then the
+> corresponding host python is also selected, and *all* host python packages are
+> built for that specific python version. But if only target python is selected,
+> then you will get host-python as well, but you can also still depend on
+> host-python3. In that case, however, all the host python packages will be built
+> only for python2, not for python3. Hence the breakage.
+>
+>  I'm surprised though that we don't see this in the autobuilders... Your patch
+> doesn't change anything there, does it?
 
-Committed, thanks.
+?It actually does... meson 0.47.1 still had a fallback on distutils if
+setuptools wasn't available, but 0.48.1 removed that fallback.
 
--- 
-Bye, Peter Korsgaard
+
+?Regards,
+?Arnout
+
+
+>
+>> I got the same issue and thought that was related to using an old build
+>> environment and not a fresh one.
+>>
+>> The package host-python-setuptools was using $(HOST_DIR)/bin/python,
+>> symlinked to $(HOST_DIR)/bin/python2.7. Symlinking to python3 and
+>> rebuilding host-python-setuptools solves host-meson build issue, but
+>> that is not a proper solution.
+>>
+>> I'm a bit puzzled... If for some reason host-meson had been built before
+>> a package requiring host-python2 and host-python-setuptools, would the build
+>> of this package fail due to host-python-setuptools having been built
+>> for host-python3?
+>  No, it purely depends on what you have selected for the target.
+>
+>  Hm, actually, if you have *nothing* selected for the target, it gets even more
+> confusing, because any host package that depends on python 2-or-3 will default
+> to python2. I guess it then depends on the build order which version gets
+> used... Bad!
+>
+>  Yann is working on a series to support side-by-side python2 and python3 on the
+> host and target. That would solve this issue.
+>
+>  Regards,
+>  Arnout
+>
+>> Thanks for the review.
+>>
+>> Regards,
+>>
+>> --
+>> ELB
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
