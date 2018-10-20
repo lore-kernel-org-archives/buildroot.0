@@ -1,33 +1,19 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 20 Oct 2018 20:04:06 +0200
-Subject: [Buildroot] [git commit] core/download: do not hard-code the path
- to the package hash file
-Message-ID: <20181020180239.594E17FF87@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/manual: document location of hash
+ files for multi-versions packages
+Message-ID: <20181020180239.68D9B7FF87@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=155f752d8a1d82611e8b180f3510996152efdcc7
+commit: https://git.buildroot.net/buildroot/commit/?id=8e293a63868741428f0d324f7f0117791d7eaefb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that packges may have hashes for their downloaded files in a
-versioned subdir or in the unversioned hash file, we can no longer
-hard-code the path to the package hash file anymore.
-
-Instead, we now make use of the per-package variable, that points to the
-package hash file.
-
-Note: of the packages for which we offer a version choice, almost none,
-but some of the qt5 ones, have a per-version hash file, so we still use
-the unversioned hash file for them. As for the few qt5 packages that do
-have a per-version hash file for their licensing terms, they've already
-been updated to duplicate their download hashes in both the unversioned
-and per-version hash files. So, one way or the other, no hash check
-would go missing with this change.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Luca Ceresoli <luca@lucaceresoli.net>
@@ -35,19 +21,24 @@ Cc: Baruch Siach <baruch@tkos.co.il>
 Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pkg-download.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ docs/manual/adding-packages-directory.txt | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index bf93b9a08e..73ea2a69f8 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -97,7 +97,7 @@ define DOWNLOAD
- 		-d '$($(PKG)_DL_DIR)' \
- 		-D '$(DL_DIR)' \
- 		-f '$(notdir $(1))' \
--		-H '$(PKGDIR)/$($(PKG)_RAWNAME).hash' \
-+		-H '$($(PKG)_HASH_FILE)' \
- 		-n '$($(PKG)_BASENAME_RAW)' \
- 		-N '$($(PKG)_RAWNAME)' \
- 		-o '$($(PKG)_DL_DIR)/$(notdir $(1))' \
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 9f85ac63e6..e6201bb86b 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -446,6 +446,13 @@ contains the hashes of the downloaded files for the +libfoo+
+ package. The only reason for not adding a +.hash+ file is when hash
+ checking is not possible due to how the package is downloaded.
+ 
++When a package has a version selection choice, then the hash file may be
++stored in a subdirectory named after the version, e.g.
+++package/libfoo/1.2.3/libfoo.hash+. This is especially important if the
++different versions have different licensing terms, but they are stored
++in the same file. Otherwise, the hash file should stay in the package's
++directory.
++
+ The hashes stored in that file are used to validate the integrity of the
+ downloaded files and of the license files.
+ 
