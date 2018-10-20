@@ -1,36 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 20 Oct 2018 20:27:45 +0200
-Subject: [Buildroot] [git commit] package/glibc: fix typo in hash file
-Message-ID: <20181020182612.8965587FE6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] toolchain-external: add fortran support
+ option for custom external toolchains
+Message-ID: <20181020182612.82D6687FE5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4b794923444b4925314b54a8acef607d39a0071
+commit: https://git.buildroot.net/buildroot/commit/?id=f0dc4fe80f415e2b431a3fbb6b2d9a24a6879c52
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
+If a custom external toolchain is used, we can't enable the fortran
+support. Add a new option for that.
 
-package/glibc/arc-2018.03-release/glibc.hash:4: expected three fields (http://nightly.buildroot.org/#adding-packages-hash)
-package/glibc/arc-2018.03-release/glibc.hash:4: unexpected type of hash (http://nightly.buildroot.org/#adding-packages-hash)
-
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/glibc/arc-2018.03-release/glibc.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../toolchain-external-custom/Config.in.options                   | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/glibc/arc-2018.03-release/glibc.hash b/package/glibc/arc-2018.03-release/glibc.hash
-index d073c9166f..f3b10d9105 100644
---- a/package/glibc/arc-2018.03-release/glibc.hash
-+++ b/package/glibc/arc-2018.03-release/glibc.hash
-@@ -1,7 +1,7 @@
- # Locally calculated (fetched from Github)
- sha256  e08ab67b2db2d0f0e8f3311d23c54fb8f6d4c1ef6fa0b4047fd5da400e3ce9de  glibc-arc-2018.03-release.tar.gz
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index 4639232bfb..8665d2e2a7 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -405,6 +405,14 @@ config BR2_TOOLCHAIN_EXTERNAL_CXX
+ 	  support. If you don't know, leave the default value,
+ 	  Buildroot will tell you if it's correct or not.
  
--$ Hashes for license files
-+# Hashes for license files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
- sha256  61abdd6930c9c599062d89e916b3e7968783879b6be0ee1c6229dd6169def431  LICENSES
++config BR2_TOOLCHAIN_EXTERNAL_FORTRAN
++	bool "Toolchain has Fortran support?"
++	select BR2_TOOLCHAIN_HAS_FORTRAN
++	help
++	  Select this option if your external toolchain has Fortran
++	  support. If you don't know, leave the default value,
++	  Buildroot will tell you if it's correct or not.
++
+ config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
+ 	string "Extra toolchain libraries to be copied to target"
+ 	help
