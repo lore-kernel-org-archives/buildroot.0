@@ -1,104 +1,115 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Sat, 20 Oct 2018 14:42:53 -0500
-Subject: [Buildroot] [PATCH v2 1/2] libfuzzer: compiler-rt integ
-Message-ID: <1540064574-54964-1-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Sat, 20 Oct 2018 14:42:54 -0500
+Subject: [Buildroot] [PATCH v2 2/2] package/rcw: new package
+In-Reply-To: <1540064574-54964-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1540064574-54964-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1540064574-54964-2-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+From: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
 
-Conflicts:
-	package/Config.in
+This package adds NXP Layerscape and QoriQ reset config word
+(RCW) / pre-bootloader (PBL) generation support.
+
+The RCW is used to setup clocking and IO allocaitons and then launches
+the next stage of boot (usually u-boot).
+
+Signed-off-by: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
- package/Config.in                    |  1 +
- package/compiler-rt/Config.in        | 13 +++++++++++++
- package/compiler-rt/compiler-rt.hash |  3 +++
- package/compiler-rt/compiler-rt.mk   | 32 ++++++++++++++++++++++++++++++++
- 4 files changed, 49 insertions(+)
- create mode 100644 package/compiler-rt/Config.in
- create mode 100644 package/compiler-rt/compiler-rt.hash
- create mode 100644 package/compiler-rt/compiler-rt.mk
+Changes v1 -> v2
+[Thomas / Yann
+ - Split out the basic package from the one providing the
+   ability to do a custom board
+---
+ DEVELOPERS                 |  1 +
+ package/Config.in.host     |  1 +
+ package/rcw/Config.in.host | 11 +++++++++++
+ package/rcw/rcw.hash       |  3 +++
+ package/rcw/rcw.mk         | 19 +++++++++++++++++++
+ 5 files changed, 35 insertions(+)
+ create mode 100644 package/rcw/Config.in.host
+ create mode 100644 package/rcw/rcw.hash
+ create mode 100644 package/rcw/rcw.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 8d53c72..2f799ee 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1592,6 +1592,7 @@ menu "Other"
- 	source "package/clapack/Config.in"
- 	source "package/classpath/Config.in"
- 	source "package/cmocka/Config.in"
-+	source "package/compiler-rt/Config.in"
- 	source "package/cppcms/Config.in"
- 	source "package/cracklib/Config.in"
- 	source "package/dawgdic/Config.in"
-diff --git a/package/compiler-rt/Config.in b/package/compiler-rt/Config.in
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 17db96a..9d5f3f2 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1434,6 +1434,7 @@ F:	package/python-posix-ipc/
+ F:	package/python-pypcap/
+ F:	package/python-pyrex/
+ F:	package/raptor/
++F:	package/rcw/
+ F:	package/rng-tools/
+ F:	package/rsyslog/
+ F:	package/setools/
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 3a3578c..b51563e 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -52,6 +52,7 @@ menu "Host utilities"
+ 	source "package/qemu/Config.in.host"
+ 	source "package/raspberrypi-usbboot/Config.in.host"
+ 	source "package/rauc/Config.in.host"
++	source "package/rcw/Config.in.host"
+ 	source "package/rustc/Config.in.host"
+ 	source "package/s6-rc/Config.in.host"
+ 	source "package/sam-ba/Config.in.host"
+diff --git a/package/rcw/Config.in.host b/package/rcw/Config.in.host
 new file mode 100644
-index 0000000..4233668
+index 0000000..74b1e97
 --- /dev/null
-+++ b/package/compiler-rt/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_COMPILER_RT
-+	bool "compiler-rt"
-+	depends on BR2_PACKAGE_CLANG
-+# Need to add libfuzzer as a sub option and a dependency on arch supported.  aarch64 doesn't seem to work
++++ b/package/rcw/Config.in.host
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_HOST_RCW
++	bool "host rcw"
 +	help
-+	  A collection of runtime libraries primarily used by clang and
-+	  llvm to provide builtins, sanitizer runtimes, profiling and
-+	  blocks runtime.
++	  This package provides an reset configuration word(RCW)
++	  compiler to build NXP QoriQ/LS PBL/RCW binary(s).
 +
-+	  https://compiler-rt.llvm.org/
++	  The package installs example configurations and scripts
++	  for each devkit supported in the current release see
++	  $(HOST_DIR)/share/rcw.
 +
-+comment "compiler-rt requires clang to be enabled"
-+	depends on !BR2_PACKAGE_CLANG
-diff --git a/package/compiler-rt/compiler-rt.hash b/package/compiler-rt/compiler-rt.hash
++	  https://github.com/qoriq-open-source/rcw
+diff --git a/package/rcw/rcw.hash b/package/rcw/rcw.hash
 new file mode 100644
-index 0000000..7acc879
+index 0000000..c6b6865
 --- /dev/null
-+++ b/package/compiler-rt/compiler-rt.hash
++++ b/package/rcw/rcw.hash
 @@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256 d0cc1342cf57e9a8d52f5498da47a3b28d24ac0d39cbc92308781b3ee0cea79a  compiler-rt-6.0.0.src.tar.xz
-+sha256 bdec7fe3cf2c85f55656c07dfb0bd93ae46f2b3dd8f33ff3ad6e7586f4c670d6  compiler-rt-7.0.0.src.tar.xz
-diff --git a/package/compiler-rt/compiler-rt.mk b/package/compiler-rt/compiler-rt.mk
++# Locally calculated
++sha256 78df534bb8fa0ebb9edd6791932b55f696abcb1b4120c8eacbd86a8b64f30318 rcw-LSDK-1703.tar.gz
++sha256 5d588eb3b157d52112afea935c88a7ff9efddc1e2d95a42c25d3b96ad9055008 COPYING
+diff --git a/package/rcw/rcw.mk b/package/rcw/rcw.mk
 new file mode 100644
-index 0000000..9853eca
+index 0000000..0a69c10
 --- /dev/null
-+++ b/package/compiler-rt/compiler-rt.mk
-@@ -0,0 +1,32 @@
++++ b/package/rcw/rcw.mk
+@@ -0,0 +1,19 @@
 +################################################################################
 +#
-+# compiler-rt
++# rcw
 +#
 +################################################################################
 +
-+COMPILER_RT_VERSION = 7.0.0
-+COMPILER_RT_SOURCE = compiler-rt-$(COMPILER_RT_VERSION).src.tar.xz
-+COMPILER_RT_SITE = http://llvm.org/releases/$(COMPILER_RT_VERSION)
-+COMPILER_RT_LICENSE = NCSA MIT
-+COMPILER_RT_LICENSE_FILES = LICENSE.TXT
-+COMPILER_RT_DEPENDENCIES = host-cmake clang
++RCW_VERSION = LSDK-1703
++RCW_SITE = $(call github,qoriq-open-source,rcw,$(RCW_VERSION))
++RCW_LICENSE = BSD-3-Clause
++RCW_LICENSE_FILES = COPYING
 +
-+COMPILER_RT_INSTALL_STAGING = YES
-+COMPILER_RT_INSTALL_TARGET = NO
++# Copy source files and script into $(HOST_DIR)/share/rcw/ so a developer
++# could use a post image or SDK to build/install PBL files.
++define HOST_RCW_INSTALL_CMDS
++	mkdir -p  $(HOST_DIR)/share/rcw
++	cp -a $(@D)/* $(HOST_DIR)/share/rcw
++endef
 +
-+#ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
-+#COMPILER_RT_TARGET_LDFLAGS += --target=aarch64-linux-gnu
-+#--gcc-toolchain=$(TOOLCHAIN_EXTERNAL_INSTALL_DIR)
-+#else
-+#COMPILER_RT_TARGET_LDFLAGS += --target=aarch64-linux-gnu --gcc-toolchain=$(HOST_DIR)
-+#endif
-+
-+COMPILER_RT_CONF_ENV = TARGET_CC="clang" \
-+         TARGET_CXX="clang++" \
-+         TARGET_CFLAGS="$(CHROMIUM_TARGET_CFLAGS)" \
-+         TARGET_CXXFLAGS="$(CHROMIUM_TARGET_CXXFLAGS)" \
-+         TARGET_LDFLAGS="$(CHROMIUM_TARGET_LDFLAGS)"
-+
-+COMPILER_RT_CONF_OPTS= -DCOMPILER_RT_INCLUDE_TESTS=ON
-+
-+$(eval $(cmake-package))
++$(eval $(host-generic-package))
 -- 
 1.9.1
