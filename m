@@ -1,30 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Oct 2018 21:00:04 +0200
-Subject: [Buildroot] [PATCH 1/1] libv4l: qv4l2 doesn't support GLES
-In-Reply-To: <20180319105531.34918-1-phil@zankapfel.net>
-References: <20180319105531.34918-1-phil@zankapfel.net>
-Message-ID: <20181020210004.24b7028d@windsurf.lan>
+Date: Sat, 20 Oct 2018 21:02:12 +0200
+Subject: [Buildroot] [PATCH] itop: new package
+In-Reply-To: <20180329195247.24360-1-alexandre.belloni@bootlin.com>
+References: <20180329195247.24360-1-alexandre.belloni@bootlin.com>
+Message-ID: <20181020210212.39ce484c@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Alex,
 
-On Mon, 19 Mar 2018 11:55:31 +0100, Phil Eichinger wrote:
-> qv4l2 explicitly sets QT_NO_OPENGL_ES_2 because GLES is not supported
-> yet. So compiling with Qt5 which has only GLES enabled fails.
+On Thu, 29 Mar 2018 21:52:47 +0200, Alexandre Belloni wrote:
+> itop is a simple top-like interrupt load monitor. It can be useful to
+> debug interrupt issues.
 > 
-> https://git.linuxtv.org/v4l-utils.git/commit/utils/qv4l2?id=c185420d494d8985ec3aab6b2a28f858046052b5
-> Signed-off-by: Phil Eichinger <phil@zankapfel.net>
+> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 > ---
->  package/libv4l/libv4l.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  DEVELOPERS             |  1 +
+>  package/Config.in      |  1 +
+>  package/itop/Config.in |  4 ++++
+>  package/itop/itop.hash |  5 +++++
+>  package/itop/itop.mk   | 21 +++++++++++++++++++++
+>  5 files changed, 32 insertions(+)
+>  create mode 100644 package/itop/Config.in
+>  create mode 100644 package/itop/itop.hash
+>  create mode 100644 package/itop/itop.mk
 
-Following the feedback from Peter Seiderer, I've marked this patch as
-Rejected in patchwork. We also don't have build failures that match
-this issue it seems.
+Peter Korsgaard made a number of comments/suggestions on this patch
+back in March, but no new version has been posted since then. I've
+marked this patch as Changes Requested in patchwork.
 
 Best regards,
 
