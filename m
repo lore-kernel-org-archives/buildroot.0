@@ -1,44 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 20 Oct 2018 20:27:45 +0200
-Subject: [Buildroot] [git commit] toolchain-external: add fortran support
- option for custom external toolchains
-Message-ID: <20181020182612.82D6687FE5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] toolchain-external-arm-aarch64-be: fix
+ check-package warning
+Message-ID: <20181020182612.8FF9E87FE5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f0dc4fe80f415e2b431a3fbb6b2d9a24a6879c52
+commit: https://git.buildroot.net/buildroot/commit/?id=76acf5ec94336cf03feae1a0bcecac1f0051c654
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If a custom external toolchain is used, we can't enable the fortran
-support. Add a new option for that.
+Fixes:
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Samuel Martin <s.martin49@gmail.com>
+toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk:12: consecutive empty lines
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../toolchain-external-custom/Config.in.options                   | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ .../toolchain-external-arm-aarch64-be.mk                                 | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index 4639232bfb..8665d2e2a7 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -405,6 +405,14 @@ config BR2_TOOLCHAIN_EXTERNAL_CXX
- 	  support. If you don't know, leave the default value,
- 	  Buildroot will tell you if it's correct or not.
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk
+index 30db8c92e6..4a4e5a01b6 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk
+@@ -9,5 +9,4 @@ TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_SITE = https://developer.arm.com/-/media/Files
  
-+config BR2_TOOLCHAIN_EXTERNAL_FORTRAN
-+	bool "Toolchain has Fortran support?"
-+	select BR2_TOOLCHAIN_HAS_FORTRAN
-+	help
-+	  Select this option if your external toolchain has Fortran
-+	  support. If you don't know, leave the default value,
-+	  Buildroot will tell you if it's correct or not.
-+
- config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
- 	string "Extra toolchain libraries to be copied to target"
- 	help
+ TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_SOURCE = gcc-arm-8.2-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION)-x86_64-aarch64_be-linux-gnu.tar.xz
+ 
+-
+ $(eval $(toolchain-external-package))
