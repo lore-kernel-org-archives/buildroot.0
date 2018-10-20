@@ -1,31 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Oct 2018 17:28:42 +0200
-Subject: [Buildroot] [PATCH] support/testing: test_hardening fix flake8
- whitespace
-In-Reply-To: <20181020152247.17493-1-matthew.weber@rockwellcollins.com>
-References: <20181020152247.17493-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20181020172842.48b656be@windsurf.lan>
+Date: Sat, 20 Oct 2018 17:29:13 +0200
+Subject: [Buildroot] [git commit] package/mesa3d: disable opencl
+Message-ID: <20181020153406.A9B1A8409D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=826b57a17064c18a7fe2b805ea689f171603e7f0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 20 Oct 2018 10:22:47 -0500, Matt Weber wrote:
-> Resolves:
-> support/testing/tests/core/test_hardening.py:25:42: E231 missing whitespace after ','
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
->  support/testing/tests/core/test_hardening.py | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Preliminary patch to prevent Mesa from building OpenCL lib as
+soon as libclc is available.
 
-Applied to master, thanks.
+Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
+Signed-off-by: Valentin Korenblit <valentinkorenblit@gmail.com>
+Acked-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mesa3d/mesa3d.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 82a66b6d9b..0d67dcbf1c 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -43,6 +43,9 @@ else
+ MESA3D_CONF_OPTS += --disable-llvm
+ endif
+ 
++# Disable opencl in case libclc is detected
++MESA3D_CONF_OPTS += --disable-opencl
++
+ ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS),y)
+ MESA3D_DEPENDENCIES += elfutils
+ endif
