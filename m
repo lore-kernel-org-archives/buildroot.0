@@ -1,28 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Oct 2018 14:46:30 +0200
-Subject: [Buildroot] [PATCH 2/2] psmisc: bump to version 23.2
-In-Reply-To: <1e4ed5f414ca10e7dfaa54179e6f3fc6310509a4.1539706034.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 16 Oct 2018 19:07:14 +0300")
-References: <c9b0eba7a84ac3590dfb9d311c2b4f39faede9e2.1539706034.git.baruch@tkos.co.il>
- <1e4ed5f414ca10e7dfaa54179e6f3fc6310509a4.1539706034.git.baruch@tkos.co.il>
-Message-ID: <87va5wbxax.fsf@dell.be.48ers.dk>
+Date: Sat, 20 Oct 2018 14:45:54 +0200
+Subject: [Buildroot] [git commit] psmisc: correct license
+Message-ID: <20181020124538.62842814A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=cfa3447a7829aed59ce673b22212f5c82f83fc61
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Drop patch #1; applied upstream.
- > Drop patch #2; not needed since we don't autoreconf, and the issue is
- > fixed upstream anyway.
+The license heading in source files includes the "or any later"
+language.
 
- > Add license hash.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/psmisc/psmisc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/psmisc/psmisc.mk b/package/psmisc/psmisc.mk
+index 3916e34b08..ee441f582d 100644
+--- a/package/psmisc/psmisc.mk
++++ b/package/psmisc/psmisc.mk
+@@ -7,7 +7,7 @@
+ PSMISC_VERSION = 23.1
+ PSMISC_SITE = http://downloads.sourceforge.net/project/psmisc/psmisc
+ PSMISC_SOURCE = psmisc-$(PSMISC_VERSION).tar.xz
+-PSMISC_LICENSE = GPL-2.0
++PSMISC_LICENSE = GPL-2.0+
+ PSMISC_LICENSE_FILES = COPYING
+ PSMISC_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+ # Patching Makefile.am
