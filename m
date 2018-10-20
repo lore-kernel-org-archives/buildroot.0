@@ -1,27 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Oct 2018 18:58:58 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/netsnmp: bump version to
- 5.8
-In-Reply-To: <20180819065146.19958-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 19 Aug 2018 08:51:46 +0200")
-References: <20180819065146.19958-1-bernd.kuhls@t-online.de>
-Message-ID: <87k1mca71p.fsf@dell.be.48ers.dk>
+Date: Sat, 20 Oct 2018 18:59:53 +0200
+Subject: [Buildroot] [git commit] netsnmp: fix static build failure due
+ to missing -lssl and -lz
+In-Reply-To: <20181011204516.D4311835D7@busybox.osuosl.org> (Peter Korsgaard's
+ message of "Thu, 11 Oct 2018 22:26:42 +0200")
+References: <20181011204516.D4311835D7@busybox.osuosl.org>
+Message-ID: <87ftx0a706.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Removed patch, applied upstream, autoreconf is not needed anymore.
- > Added sha256 hashes for tarball and license file.
- > Switched _SITE to https.
+ > commit: https://git.buildroot.net/buildroot/commit/?id=13722d58f77d0e9fea9eefc50bf083d19f835433
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > During configure some checking needing -lssl and -lz don't have them
+ > appended to linker tail. Since we are building static this leads to
+ > configure failure because of mandatory functions lack produces:
+ > "configure: error: The DTLS based transports require the libssl library
+ > from OpenSSL to be available and support DTLS"
 
-Committed to 2018.02.x and 2018.08.x as it fixes security issues,
-thanks.
+ > - Add 1 patch to fix -lssl lack in configure and .ac modules:
+ > upstreamed: https://sourceforge.net/p/net-snmp/code/ci/bd59be8e4e339870a1400f6866a7b73ca11f6460/
+ > - Add 2 patches to fix -lz lack in configure and .ac modules:
+ > 1 upstreamed: https://sourceforge.net/p/net-snmp/code/ci/13da2bcde8e22dd0127a668374fdf79bed04d353/
+ > 1 in Merge Request: https://sourceforge.net/p/net-snmp/code/merge-requests/19/
+ > - Add NETSNMP_AUTORECONF = YES
+
+Committed to 2018.02.x and 2018.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
