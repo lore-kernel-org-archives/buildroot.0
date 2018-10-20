@@ -1,35 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Oct 2018 20:26:40 +0200
-Subject: [Buildroot] [PATCH v2] toolchain-external: add fortran support
- option for custom external toolchains
-In-Reply-To: <20181020181226.17318-1-romain.naour@gmail.com>
-References: <20181020181226.17318-1-romain.naour@gmail.com>
-Message-ID: <20181020202640.27093274@windsurf.lan>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 20 Oct 2018 23:48:41 +0200
+Subject: [Buildroot] [PATCH 1/1] package/php: added support for PostgreSQL
+ (non-PDO).
+Message-ID: <20181020214841.19072-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Needed for example for phppgadmin.
 
-On Sat, 20 Oct 2018 20:12:26 +0200, Romain Naour wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/php/Config.ext | 12 ++++++++++++
+ package/php/php.mk     |  6 ++++++
+ 2 files changed, 18 insertions(+)
 
-> +config BR2_TOOLCHAIN_EXTERNAL_FORTRAN
-> +	bool "Toolchain has Fortran support?"
-> +	# on architecture building libquadmath, wchar is required
-> +	depends on !BR2_TOOLCHAIN_HAS_LIBQUADMATH || \
-> +		(BR2_TOOLCHAIN_HAS_LIBQUADMATH && BR2_USE_WCHAR)
-
-This dependency really is not necessary. Indeed, the question is "does
-your toolchain supports Fortran?". If the user lies and the toolchain
-doesn't have a fortran compiler, the check_fortran function will detect
-that and bail out. So there's no need for a more complex dependency.
-
-So I've applied your v1. Thanks!
-
-Thomas
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index 51dcbbf4a4..bcd20cd25e 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -117,6 +117,18 @@ config BR2_PACKAGE_PHP_EXT_MYSQLI
+ 	help
+ 	  MySQL Improved extension support
+ 
++config BR2_PACKAGE_PHP_EXT_PGSQL
++	bool "PostgreSQL"
++	depends on BR2_USE_MMU # postgresql
++	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_POSTGRESQL
++	help
++	  PostgreSQL support
++
++comment "PostgreSQL extension needs a toolchain w/ dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS
++
+ config BR2_PACKAGE_PHP_EXT_SQLITE
+ 	bool "SQLite3"
+ 	select BR2_PACKAGE_SQLITE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 4365847733..bd1835f65f 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -196,6 +196,12 @@ endif
+ ifeq ($(BR2_PACKAGE_PHP_EXT_MYSQLI),y)
+ PHP_CONF_OPTS += --with-mysqli
+ endif
++
++ifeq ($(BR2_PACKAGE_PHP_EXT_PGSQL),y)
++PHP_CONF_OPTS += --with-pgsql=$(STAGING_DIR)/usr
++PHP_DEPENDENCIES += postgresql
++endif
++
+ ifeq ($(BR2_PACKAGE_PHP_EXT_SQLITE),y)
+ PHP_CONF_OPTS += --with-sqlite3=$(STAGING_DIR)/usr
+ PHP_DEPENDENCIES += sqlite
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.19.1
