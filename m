@@ -1,28 +1,48 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 20 Oct 2018 18:46:36 +0000
-Subject: [Buildroot] [Bug 11411] check-uniq-files issue
-In-Reply-To: <bug-11411-163@https.bugs.busybox.net/>
-References: <bug-11411-163@https.bugs.busybox.net/>
-Message-ID: <bug-11411-163-pn3S8JkzE6@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 20 Oct 2018 20:50:48 +0200
+Subject: [Buildroot] [git commit] core: detect and reject build paths which
+ contain an '@'
+Message-ID: <20181020184957.6715D87FF2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11411
+commit: https://git.buildroot.net/buildroot/commit/?id=7007dc2bc99ad191c418c468707cdc3980273cda
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---- Comment #3 from Arnout Vandecappelle <arnout@mind.be> ---
-The originally reported problem actually only occurs when you do a
-package-reinstall. Not really the most important use case I'd say. If you do a
-package rebuild, it works correctly.
+gcc does not build when the srcdir path contains a '@', because that
+path is then substitued in a texi file as argument to an @include
+directive. But then, the '@' in the path will start a command evaluation
+of its own, thus breaking the build. For example, with a $(O) path set
+to /home/ymorin/dev/buildroot/O/to at ti :
 
-For the *.la files, the problem indeed occurs, but it already occurs on the
-first run. Indeed, after every package, we fix up the .la files, and even if
-they are not really modified, their timestamp is updated. So that really has to
-be fixed. However, a better fix is to not update all the .la files, but only
-the .la files really touched by that package.
+    perl ../../gcc/../contrib/texi2pod.pl ../../gcc/doc/invoke.texi > gcc.pod
+    ../../gcc/doc/invoke.texi:1678: unknown command `ti'
+    ../../gcc/doc/invoke.texi:1678: @include: could not find /home/ymorin/dev/buildroot/O/to/build/host-gcc-initial-7.3.0/build/gcc/../../gcc/../libiberty/at-file.texi
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+[Peter: use findstring instead of subst/compare]
+Reported-by: c32 on IRC
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Makefile | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/Makefile b/Makefile
+index 4948b7f5b1..5c9b8a803b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -60,6 +60,11 @@ override O := $(patsubst %/,%,$(patsubst %.,%,$(O)))
+ # avoid empty CANONICAL_O in case on non-existing entry.
+ CANONICAL_O := $(shell mkdir -p $(O) >/dev/null 2>&1)$(realpath $(O))
+ 
++# gcc fails to build when the srcdir contains a '@'
++ifneq ($(findstring @,$(CANONICAL_O)),)
++$(error The build directory can not contain a '@')
++endif
++
+ CANONICAL_CURDIR = $(realpath $(CURDIR))
+ 
+ REQ_UMASK = 0022
