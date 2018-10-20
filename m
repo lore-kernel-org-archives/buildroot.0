@@ -1,37 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Oct 2018 20:54:28 +0200
-Subject: [Buildroot] [PATCH 1/1] python-fastentrypoints: new package
-In-Reply-To: <20180409180403.11728-1-asafka7@gmail.com>
-References: <20180409180403.11728-1-asafka7@gmail.com>
-Message-ID: <20181020205428.449d53ae@windsurf.lan>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 20 Oct 2018 18:59:01 +0000
+Subject: [Buildroot] [Bug 11411] check-uniq-files issue
+In-Reply-To: <bug-11411-163@https.bugs.busybox.net/>
+References: <bug-11411-163@https.bugs.busybox.net/>
+Message-ID: <bug-11411-163-nGWsxlYBLp@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=11411
 
-On Mon,  9 Apr 2018 21:04:03 +0300, Asaf Kahlon wrote:
-> host-package that is able to shorten the load time of entry_points declared
-> in setup.py of python packages.
-> 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-> ---
->  DEVELOPERS                                         |  1 +
->  package/Config.in.host                             |  1 +
->  package/python-fastentrypoints/Config.in.host      |  6 ++++++
->  .../python-fastentrypoints.hash                    |  4 ++++
->  .../python-fastentrypoints.mk                      | 14 ++++++++++++++
->  5 files changed, 26 insertions(+)
->  create mode 100644 package/python-fastentrypoints/Config.in.host
->  create mode 100644 package/python-fastentrypoints/python-fastentrypoints.hash
->  create mode 100644 package/python-fastentrypoints/python-fastentrypoints.mk
+--- Comment #4 from Jean-pierre Cartal <jpcartal@free.fr> ---
+Regarding the original issue, it was not my impression that the bug was only
+happening on package reinstall.
 
-Applied to master, thanks.
+For instance the example I gave with 
+Warning: target file "./usr/lib/libdevmapper-event-lvm2thin.so" was not
+triggered by a reinstallation of the lvm package if that's what you mean ?
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
