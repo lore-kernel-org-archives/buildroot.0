@@ -1,38 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 20 Oct 2018 20:04:06 +0200
-Subject: [Buildroot] [git commit] core: add a variable that points to the
- package's hash file
-Message-ID: <20181020180239.3DEAA87F7C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] core/download: do not hard-code the path
+ to the package hash file
+Message-ID: <20181020180239.594E17FF87@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=da74078b341514096b306cba20386c9519c7ec30
+commit: https://git.buildroot.net/buildroot/commit/?id=155f752d8a1d82611e8b180f3510996152efdcc7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When a package has a version selection (e.g. Qt5), the licensing terms
-may be different across versions, but lie in similarly named files (e.g.
-'LICENSE').
+Now that packges may have hashes for their downloaded files in a
+versioned subdir or in the unversioned hash file, we can no longer
+hard-code the path to the package hash file anymore.
 
-However, when we check a file, all the hashes for it must match. So, we
-can't have the hashes for two different content of the same file. We
-overcame that limitation in the legal-license-file macro, which checks
-whether a package has a .hash file in a versioned subdir.
+Instead, we now make use of the per-package variable, that points to the
+package hash file.
 
-For consistency, we would like to also store the source hashes in that
-per-version subdir.
-
-Rather than reconstruct the path to the hash file everywhere we need it,
-add a variable that points to it.
-
-Existing users will be converted over in followup patches.
-
-Note: the check for a missing hash file is done in the check-hash helper
-script, so this variable must always yield a filename, even of a missing
-file, thus we do not use $(wildcard...) to resolve the hash file path;
-we use $(wildcard...) only to check if the versioned .hash file exists.
+Note: of the packages for which we offer a version choice, almost none,
+but some of the qt5 ones, have a per-version hash file, so we still use
+the unversioned hash file for them. As for the few qt5 packages that do
+have a per-version hash file for their licensing terms, they've already
+been updated to duplicate their download hashes in both the unversioned
+and per-version hash files. So, one way or the other, no hash check
+would go missing with this change.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
@@ -42,23 +35,19 @@ Cc: Baruch Siach <baruch@tkos.co.il>
 Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pkg-generic.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/pkg-download.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index daf24594de..7dfad2d1be 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -434,6 +434,12 @@ else
- endif
- $(2)_VERSION := $$(call sanitize,$$($(2)_DL_VERSION))
- 
-+$(2)_HASH_FILE = \
-+	$$(strip \
-+		$$(if $$(wildcard $$($(2)_PKGDIR)/$$($(2)_VERSION)/$$($(2)_RAWNAME).hash),\
-+			$$($(2)_PKGDIR)/$$($(2)_VERSION)/$$($(2)_RAWNAME).hash,\
-+			$$($(2)_PKGDIR)/$$($(2)_RAWNAME).hash))
-+
- ifdef $(3)_OVERRIDE_SRCDIR
-   $(2)_OVERRIDE_SRCDIR ?= $$($(3)_OVERRIDE_SRCDIR)
- endif
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index bf93b9a08e..73ea2a69f8 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -97,7 +97,7 @@ define DOWNLOAD
+ 		-d '$($(PKG)_DL_DIR)' \
+ 		-D '$(DL_DIR)' \
+ 		-f '$(notdir $(1))' \
+-		-H '$(PKGDIR)/$($(PKG)_RAWNAME).hash' \
++		-H '$($(PKG)_HASH_FILE)' \
+ 		-n '$($(PKG)_BASENAME_RAW)' \
+ 		-N '$($(PKG)_RAWNAME)' \
+ 		-o '$($(PKG)_DL_DIR)/$(notdir $(1))' \
