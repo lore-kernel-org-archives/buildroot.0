@@ -1,35 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Oct 2018 20:14:36 +0200
-Subject: [Buildroot] [git commit] qt download site update
-Message-ID: <20181020181302.169A87F9D6@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 20 Oct 2018 20:14:56 +0200
+Subject: [Buildroot] [PATCH 0/6] core: look for package's hashes in
+ versioned sub-directory
+In-Reply-To: <cover.1539519817.git.yann.morin.1998@free.fr>
+References: <cover.1539519817.git.yann.morin.1998@free.fr>
+Message-ID: <20181020201456.60160fbe@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2e6cd5c2d622eb1d092c1639b129a24e79c84367
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The download link was broken, former qt versions are stored into a
-distinct location.
+On Sun, 14 Oct 2018 14:25:22 +0200, Yann E. MORIN wrote:
 
-Signed-off-by: Francois Gerin <francois.gerin@essensium.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qt/qt.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Yann E. MORIN (6):
+>       core: add a variable that points to the package's hash file
+>       legal-info: use the per-package variable to get the hash file
+>       package: prepare for per-version hash files
+>       core/download: do not hard-code the path to hte package hash file
+>       package: drop unversioned hash files
+>       docs/manual: document location of hash files for multi-versions packages
 
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 921ff13d29..23cb94c11f 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -7,7 +7,7 @@
- QT_VERSION_MAJOR = 4.8
- QT_VERSION = $(QT_VERSION_MAJOR).7
- QT_SOURCE = qt-everywhere-opensource-src-$(QT_VERSION).tar.gz
--QT_SITE = http://download.qt-project.org/official_releases/qt/$(QT_VERSION_MAJOR)/$(QT_VERSION)
-+QT_SITE = http://download.qt.io/archive/qt/$(QT_VERSION_MAJOR)/$(QT_VERSION)
- QT_DEPENDENCIES = host-pkgconf
- QT_INSTALL_STAGING = YES
- 
+I've applied to master. However, there was an issue with "package:
+prepare for per-version hash files", where the hashes for three Qt5
+tarballs were inverted between the two versions. I fixed that up when
+applying.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
