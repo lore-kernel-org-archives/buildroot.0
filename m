@@ -1,9 +1,7 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Sat, 20 Oct 2018 14:42:54 -0500
-Subject: [Buildroot] [PATCH v2 2/2] package/rcw: new package
-In-Reply-To: <1540064574-54964-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1540064574-54964-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1540064574-54964-2-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Sat, 20 Oct 2018 14:44:38 -0500
+Subject: [Buildroot] [PATCH v3] package/rcw: new package
+Message-ID: <1540064678-55174-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,7 +19,11 @@ the next stage of boot (usually u-boot).
 Signed-off-by: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
 Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
-Changes v1 -> v2
+Changes
+v2 -> v3
+ - Fixed bad patch sent
+
+v1 -> v2
 [Thomas / Yann
  - Split out the basic package from the one providing the
    ability to do a custom board
