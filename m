@@ -1,55 +1,64 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Oct 2018 19:54:09 +0200
-Subject: [Buildroot] [git commit] package/mjpg-streamer: bump version
-Message-ID: <20181020175329.C67D08778A@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 20 Oct 2018 20:04:06 +0200
+Subject: [Buildroot] [git commit] core: add a variable that points to the
+ package's hash file
+Message-ID: <20181020180239.3DEAA87F7C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9203c9d6d7675fd898d06659bbbfa142ebb4e39
+commit: https://git.buildroot.net/buildroot/commit/?id=da74078b341514096b306cba20386c9519c7ec30
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This bump includes
+When a package has a version selection (e.g. Qt5), the licensing terms
+may be different across versions, but lie in similarly named files (e.g.
+'LICENSE').
 
-https://github.com/jacksonliam/mjpg-streamer/commit/588db286da461ac5c02277b511ab58a7bf3f752f
-https://github.com/jacksonliam/mjpg-streamer/commit/3b7d04d28a39bc697f5bd77f1072430692ac9f8b
+However, when we check a file, all the hashes for it must match. So, we
+can't have the hashes for two different content of the same file. We
+overcame that limitation in the legal-license-file macro, which checks
+whether a package has a .hash file in a versioned subdir.
 
-which fixes building without c++:
+For consistency, we would like to also store the source hashes in that
+per-version subdir.
 
-http://autobuild.buildroot.net/results/1da/1da75a9d9b6e4d04d39117d2915c1d195dcae002/
-http://autobuild.buildroot.net/results/3da/3da3f4099ccf62a314c099c5720dd5b1e9463914/
-http://autobuild.buildroot.net/results/104/10438190453bd7ef7cc157929e74a9ffce9f7fdf/
-http://autobuild.buildroot.net/results/91f/91fa80348db0c248649fe003df2dfa854f37a5a2/
-http://autobuild.buildroot.net/results/4d7/4d7e722cf85a54d2813715e6b4ca1dd793e6d237/
+Rather than reconstruct the path to the hash file everywhere we need it,
+add a variable that points to it.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Existing users will be converted over in followup patches.
+
+Note: the check for a missing hash file is done in the check-hash helper
+script, so this variable must always yield a filename, even of a missing
+file, thus we do not use $(wildcard...) to resolve the hash file path;
+we use $(wildcard...) only to check if the versioned .hash file exists.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Baruch Siach <baruch@tkos.co.il>
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mjpg-streamer/mjpg-streamer.hash | 2 +-
- package/mjpg-streamer/mjpg-streamer.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/pkg-generic.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/mjpg-streamer/mjpg-streamer.hash b/package/mjpg-streamer/mjpg-streamer.hash
-index f544550c53..a98aaffffd 100644
---- a/package/mjpg-streamer/mjpg-streamer.hash
-+++ b/package/mjpg-streamer/mjpg-streamer.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 094fda686ef63e5167cbef81b5ac6aea74fa98ea2674fa4eba3bc6ba29cc5857  mjpg-streamer-f387bb44e6c087271b763b27da998bf2e06c4f5d.tar.gz
-+sha256 617c6cdcf5ad6e9135e8bcd83d7acd33cc4a563b9104bca7def57d807164ae89  mjpg-streamer-75c6c4a7809c735b201df949d55287fb60397744.tar.gz
- sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  mjpg-streamer-experimental/LICENSE
-diff --git a/package/mjpg-streamer/mjpg-streamer.mk b/package/mjpg-streamer/mjpg-streamer.mk
-index e5de847825..c09d55b727 100644
---- a/package/mjpg-streamer/mjpg-streamer.mk
-+++ b/package/mjpg-streamer/mjpg-streamer.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index daf24594de..7dfad2d1be 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -434,6 +434,12 @@ else
+ endif
+ $(2)_VERSION := $$(call sanitize,$$($(2)_DL_VERSION))
  
--MJPG_STREAMER_VERSION = f387bb44e6c087271b763b27da998bf2e06c4f5d
-+MJPG_STREAMER_VERSION = 75c6c4a7809c735b201df949d55287fb60397744
- MJPG_STREAMER_SITE = $(call github,jacksonliam,mjpg-streamer,$(MJPG_STREAMER_VERSION))
- MJPG_STREAMER_SUBDIR = mjpg-streamer-experimental
- MJPG_STREAMER_LICENSE = GPL-2.0+
++$(2)_HASH_FILE = \
++	$$(strip \
++		$$(if $$(wildcard $$($(2)_PKGDIR)/$$($(2)_VERSION)/$$($(2)_RAWNAME).hash),\
++			$$($(2)_PKGDIR)/$$($(2)_VERSION)/$$($(2)_RAWNAME).hash,\
++			$$($(2)_PKGDIR)/$$($(2)_RAWNAME).hash))
++
+ ifdef $(3)_OVERRIDE_SRCDIR
+   $(2)_OVERRIDE_SRCDIR ?= $$($(3)_OVERRIDE_SRCDIR)
+ endif
