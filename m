@@ -1,108 +1,87 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 20 Oct 2018 18:49:09 +0300
-Subject: [Buildroot] [RFC] testing: add python-crossbar tests
-In-Reply-To: <CAGm1_kt3i+0Bygvnz-kwvJgtX9Hvk78mwuVsOqwW6j0Vzukcag@mail.gmail.com>
-References: <20180917155554.05aa9b43@windsurf>
- <5ba0637b42763_47f82b17fc7e25f429690@ultri5.mail>
- <CAGm1_kt3i+0Bygvnz-kwvJgtX9Hvk78mwuVsOqwW6j0Vzukcag@mail.gmail.com>
-Message-ID: <CALFsTFVpjgYWNr=VoeT3Wj+DjYtFdUNNNw9_Z2COzQMrpxQxWQ@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 20 Oct 2018 16:52:24 +0100
+Subject: [Buildroot] [PATCH] meson: bump version to 0.48.1
+In-Reply-To: <8dadf2d9-2f53-97cf-0d7f-4d1c323cc2f2@mind.be>
+References: <20181018204431.29117-1-eric.le.bihan.dev@free.fr>
+ <20181019203050.5cdf56e0@gmx.net> <20181019203746.77ca985b@gmx.net>
+ <20181019211039.GA14986@itchy> <f6178cb2-5035-a8b7-6a8c-428195fb1eda@mind.be>
+ <8dadf2d9-2f53-97cf-0d7f-4d1c323cc2f2@mind.be>
+Message-ID: <f015b0a1-8dc8-2f25-e23a-21bd146d4801@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-I just remembered I've submitted a patch for a new host package long
-time ago: http://patchwork.ozlabs.org/patch/896368/
-Yegor mentioned that maybe it can help to reduce python-crossbar
-startup time on the tests.
-Thomas/Yegor, I see the patch was reviewed by Yegor but wasn't
-applied. If there's something missing, please let me know.
-I hope it will help.
+On 20/10/2018 15:00, Arnout Vandecappelle wrote:
+>
+> On 20/10/2018 13:57, Arnout Vandecappelle wrote:
+[snip]
+>>> Maybe host-python-setuptools are build for the wrong python version (python2 instead of python3)?
+>>  That is correct. When target python or python3 is selected, then the
+>> corresponding host python is also selected, and *all* host python packages are
+>> built for that specific python version. But if only target python is selected,
+>> then you will get host-python as well, but you can also still depend on
+>> host-python3. In that case, however, all the host python packages will be built
+>> only for python2, not for python3. Hence the breakage.
+>>
+>>  I'm surprised though that we don't see this in the autobuilders... Your patch
+>> doesn't change anything there, does it?
+> ?It actually does... meson 0.47.1 still had a fallback on distutils if
+> setuptools wasn't available, but 0.48.1 removed that fallback.
 
-Regards,
-Asaf.
-On Tue, Sep 18, 2018 at 9:20 AM Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
->
-> Hi Ricardo,
->
-> On Tue, Sep 18, 2018 at 4:31 AM Ricardo Martincoski
-> <ricardo.martincoski@gmail.com> wrote:
-> >
-> > Hello,
-> >
-> > On Mon, Sep 17, 2018 at 10:55 AM, Thomas Petazzoni wrote:
-> >
-> > > On Thu, 15 Feb 2018 23:16:32 -0200, Ricardo Martincoski wrote:
-> > >
-> > >> On Thu, Feb 15, 2018 at 11:41 AM, Yegor Yefremov wrote:
-> > >>
-> > >> [snip]
-> > >> >
-> > >> > I've tried this test locally, but it always timeouts. Even if I
-> > >> > specify an hour as a timeout.
-> > >>
-> > >> I confirm that here, both test cases fail by timeout, so it should not be
-> > >> related to the host.
-> >
-> > At the time I confirmed with the patch applied on aa77030b8f and also on
-> > (aa77030b8f +
-> >  http://patchwork.ozlabs.org/patch/874421/ +
-> >  http://patchwork.ozlabs.org/patch/874422/ )
-> > and I got the timeout in both cases.
-> >
-> > >
-> > > I applied Yegor's patch, and ran he test. It doesn't time out here.
-> > > Here is what I have in the TestPythonPy2Crossbar-run.log:
-> > >
-> > > Welcome to Buildroot
-> > > buildroot login: root
-> > > # dmesg -n 1
-> > > # echo $?
-> > > 0
-> > > # python -m crossbar version
-> > > Traceback (most recent call last):
-> > >   File "usr/lib/python2.7/runpy.py", line 174, in _run_module_as_main
-> > >   File "usr/lib/python2.7/runpy.py", line 72, in _run_code
-> > >   File "usr/lib/python2.7/site-packages/crossbar/__main__.py", line 36, in <module>
-> > >   File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 479, in load_entry_point
-> > >   File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2703, in load_entry_point
-> > >   File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2320, in load
-> > >   File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2343, in require
-> > >   File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 782, in resolve
-> > > pkg_resources.ContextualVersionConflict: (txaio 2.8.2 (/usr/lib/python2.7/site-packages), Requirement.parse('txaio>=18.8.1'), set(['autobahn']))
-> > > # echo $?
-> > > 1
-> > >
-> > > So it doesn't work due to some dependency issues. Is the timeout
-> > > problem going to appear once those dependency issues are solved ? Or
-> > > should I have already seen the timeout ?
-> >
-> > Sorry, I don't know.
-> >
-> > Yegor, any idea? Could you bisect this? I already started:
-> > 2018.02-rc2-4-gaa77030b8f + patch = timeout
-> > 2018.08-425-gc5a33a11be + patch = dependency issue
-> > 2018.05-rc3-25-gd937f908f1 + patch = timeout
-> > 2018.05-756-g3d34f36806 + patch = (still running:
-> > https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/98611581 )
->
-> Thanks for working on this issue. AFAIK crossbar abandoned Py2 support
-> in the newest version, so there is less to take of, but there are
-> still issues with Py3.7 and async keywords, that need to be resolved
-> first.
->
-> I don't know when I'll have time to update crossbar, so if you can
-> take over it would be great.
->
-> Thanks.
->
-> Regards,
-> Yegor
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+?Long discussion an the BR developer meeting, here is the conclusion. Adding
+Yegor and Asaf in Cc as python maintainers.
+
+?The issue we have at the moment is that all host python packages are built for
+Python 2, not Python 3, *unless* Python 3 is selected for the target.
+
+?However, *most* packages support Python 3 as well.
+
+?So, the idea is to default to Python 3 for the host. In other words, all host
+packages will use Python 3 (independent of what is going on the target), except
+for the packages that work on python2 only. This step by itself is quite a bit
+of work because there are many packages that can use python2 OR python3.
+
+?This leaves us with two problems.
+
+?First of all, there may be python-2-only host packages that depend on some
+other host-python package that would only get built for python3. We investigated
+that, and it looks OK: there are only 4 python-2-only host packages: gdb,
+python-cheetah, python-enum34, and python-yieldfrom. The latter two are
+compatibility libraries so obviously only available on Python2. python-yieldfrom
+is not used at all. python-enum34 is only used by setools, in case it needs to
+be built for host-python2, so that should be OK. host-python-cheetah is only
+used by gr-osmosdr; bumping python-cheetah probably enables it for Python 3 so
+would solve that issue. And gdb doesn't need any other python package, just
+python itself. So all this looks fixable.
+
+?The bigger problem, is when a setup.py script tries to import a module from
+some python package. The clearest one of those is python-setuptools: any python
+package that uses setuptools will import setuptools using the same host-python
+version as on the target. So when you have python2 on the target, the setup.py
+script will be run in python2, so we need host-python-setuptools for python2.
+The solution there, we think, is to add a separate host-python2-setuptools
+package that is used instead of host-python-setuptools in case the target is
+python2. Unfortunately there are quite a few others that may need the same
+treatment. Some of them, however, probably don't really need to be imported in
+the setup.py script so they can be removed as a dependency. Others, however,
+will need the same treatment. In some cases, we might be able to just build both
+python2 and python3 versions (e.g. for python-sip this should be possible).
+
+?Finally, there are most likely some corner cases that we didn't think of...
+
+
+?So it looks like this will be a pretty big migration. Therefore, for the time
+being, it may be easier to just add a host-python3-setuptools package and use
+that in meson.
+
+
+?By the way, lirc-tools has the same problem. It adds python3
+host-python-setuptools to its dependencies, but the setuptools don't get
+imported so it just doesn't work (I think). Baruch, care to take a look at that?
+
+
+?Regards,
+?Arnout
