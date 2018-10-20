@@ -1,55 +1,77 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 20 Oct 2018 16:33:33 +0000
-Subject: [Buildroot] [Bug 11411] check-uniq-files issue
-In-Reply-To: <bug-11411-163@https.bugs.busybox.net/>
-References: <bug-11411-163@https.bugs.busybox.net/>
-Message-ID: <bug-11411-163-EHaCcty4Qa@https.bugs.busybox.net/>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 20 Oct 2018 17:35:41 +0100
+Subject: [Buildroot] Boot without busybox
+In-Reply-To: <CAJ2oMhK0wTWgqnC=kQ7yf69_vafF3X1mi-B=n4k4NiLKbgT=aw@mail.gmail.com>
+References: <CAJ2oMhJbBLv7eiJo=LNnmHSJms1SQZknD7_dTHM8UfE8xPoTxA@mail.gmail.com>
+ <c98ccac7-5680-6cee-fd6e-ef105c2fd377@mind.be>
+ <CAJ2oMhK0wTWgqnC=kQ7yf69_vafF3X1mi-B=n4k4NiLKbgT=aw@mail.gmail.com>
+Message-ID: <ea032860-86db-869e-aa3a-872f880f5214@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11411
-
---- Comment #2 from Jean-pierre Cartal <jpcartal@free.fr> ---
-Here is the patch that I tested on my builds:
-
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 58af2ef242..7d3d7c9028 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -216,7 +216,7 @@ TARGET_OBJDUMP  = $(TARGET_CROSS)objdump
- ifeq ($(BR2_STRIP_strip),y)
- STRIP_STRIP_DEBUG := --strip-debug
- TARGET_STRIP = $(TARGET_CROSS)strip
--STRIPCMD = $(TARGET_CROSS)strip --remove-section=.comment
---remove-section=.note
-+STRIPCMD = $(TARGET_CROSS)strip --remove-section=.comment
---remove-section=.note -p
- else
- TARGET_STRIP = /bin/true
- STRIPCMD = $(TARGET_STRIP)
 
 
-BTW, there are also a lot of false positive in staging because of this command
-:
-$(Q)find $(STAGING_DIR)/usr/lib* -name "*.la" | xargs --no-run-if-empty \
-                $(SED) "s:$(BASE_DIR):@BASE_DIR@:g" \
-                        -e "s:$(STAGING_DIR):@STAGING_DIR@:g" \
-                        $(if $(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
-                                -e
-"s:$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:g") \
-                        -e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
-                        $(if $(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
-                                -e
-"s:@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):g") \
-                        -e "s:@STAGING_DIR@:$(STAGING_DIR):g" \
-                        -e "s:@BASE_DIR@:$(BASE_DIR):g"
+On 20/10/2018 17:03, Ranran wrote:
+> On Sat, Oct 20, 2018 at 3:29 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>>
+>>
+>>
+>> On 20/10/2018 08:04, Ranran wrote:
+>>> Hello,
+>>>
+>>> As part of Linux hardening we want to remove busybox from filesystem.
+>>
+>>  How does replacing busybox with bloatware harden your system?
+>>
+> I actually thought of removing it totally (no replacement), but if
+> this is not possible on buildroot we might consider other alternatives
+> (such as minimizing its capability).
 
-Do you think a patch using stat/touch to keep the original modification time of
-impacted files be interesting ?
+ Assuming you want an actual *working*, *running* system, you will need
+*something* to provide the basic userspace functionality: init, shell,
+coreutils, etc. You have the choice between using busybox for that (small, thus
+easy to harden), or the "full packages" (many different packages, all of them
+much larger than busybox, so most likely more difficult to harden).
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+> 
+>>> But I am not sure if system can boot without it.
+>>> I am quite sure that there are init files that depends on busybox.
+>>>
+>>> Is it possible to boot without busybox or does it require a custom init ?
+>>
+>>  We have support for 3 different init systems: busybox, sysvinit, and systemd.
+>> There is also the "none" option, but then you're on your own for finding the
+>> appropriate init system. You can use it for using s6 as init system, for example.
+>>
+>>  If you remove Busybox entirely, you will also have to manually select all the
+>> other packages needed to get a minimal Unix system, like GNU coreutils, some
+>> shell, util-linux, ...
+>>
+> 
+> Isn't removing buildroot just a matter of selections in menuconfig ?
+
+ Yes it is. Well, you need to select a different init system before you're able
+to remove it in menuconfig.
+
+ However, that will leave you with a system that doesn't work. It will boot, it
+will start init, but then init is not able to start any other process because
+there is no shell.
+
+> I mean, must I know which package should be replcaed with others or is
+> it that buildroot menu shall automatically choose for me the correct
+> selection when I remove busybox ?
+
+ That's the point: buidroot does *not* do that for you. It just prints a warning
+that your config might be broken :-).
+
+ Note that you may actually get away with building a system without any of the
+standard tools (shell, ls, etc.). For example, a "boot-to-gecko" kind of system
+in theory needs nothing other than firefox, and firefox can be used directly as
+the "init system". But again, you're on your own to make sure that this actually
+works.
+
+ Regards,
+ Arnout
