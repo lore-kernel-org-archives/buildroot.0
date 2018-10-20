@@ -1,65 +1,56 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 20 Oct 2018 14:34:48 +0100
-Subject: [Buildroot] [PATCH v2] fs/common: allow custom user table to
- override package-defined users
-In-Reply-To: <1538521340-25386-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1538521340-25386-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <f3e57ff5-0d5d-2ebd-3a80-05355f056b9f@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 20 Oct 2018 15:35:04 +0200
+Subject: [Buildroot] [git commit] configs/wandboard: Update kernel to
+ 4.18.14 and U-Boot to 2018.09
+Message-ID: <20181020133335.8391783D2C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=5633ca9c5e739095ce98dae51e06db9237818c2f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+The board is well supported in upstream projects so let's update kernel
+and U-Boot to the latest and greatest versions.
 
-On 03/10/2018 00:02, Matt Weber wrote:
-> Currently, when a custom user table and a package define the same user,
-> the settings from the package takes precedence over the ones from the
-> custom user table.
-> 
-> However, it makes sense to allow the settings from the custom user table
-> take precedence. For example, it would allow redirecting the user's
-> home directory to an alternate location (e.g. away from tmp and into a
-> partition that is persistent).
-> 
-> The support/scripts/mkusers script will only retain settings from the
-> latest definition it finds.
-> 
-> Thus, by passing the custom user table after the package defined users,
-> it is possible to override the package provided user definitions.
-> 
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Fabio Estevam <festevam@gmail.com>
+Reviewed-by:  Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/wandboard_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
- Applied to master, thanks.
-
- Regards,
- Arnout
-
-> ---
-> Change v1 -> v2
-> [Yann
->  - Updated commit message
-> ---
->  fs/common.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/common.mk b/fs/common.mk
-> index abf3541..453da60 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -75,10 +75,11 @@ $(ROOTFS_COMMON_TAR): $(ROOTFS_COMMON_DEPENDENCIES) target-finalize
->  	echo '#!/bin/sh' > $(FAKEROOT_SCRIPT)
->  	echo "set -e" >> $(FAKEROOT_SCRIPT)
->  	echo "chown -h -R 0:0 $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
-> +
-> +	$(call PRINTF,$(PACKAGES_USERS)) >> $(USERS_TABLE)
->  ifneq ($(ROOTFS_USERS_TABLES),)
->  	cat $(ROOTFS_USERS_TABLES) >> $(USERS_TABLE)
->  endif
-> -	$(call PRINTF,$(PACKAGES_USERS)) >> $(USERS_TABLE)
->  	PATH=$(BR_PATH) $(TOPDIR)/support/scripts/mkusers $(USERS_TABLE) $(TARGET_DIR) >> $(FAKEROOT_SCRIPT)
->  ifneq ($(ROOTFS_DEVICE_TABLES),)
->  	cat $(ROOTFS_DEVICE_TABLES) > $(FULL_DEVICE_TABLE)
-> 
+diff --git a/configs/wandboard_defconfig b/configs/wandboard_defconfig
+index 4265fdcfb0..d2f72f734f 100644
+--- a/configs/wandboard_defconfig
++++ b/configs/wandboard_defconfig
+@@ -3,8 +3,8 @@ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+-# Linux headers same as kernel, a 4.16 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
++# Linux headers same as kernel, a 4.18 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/wandboard/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/wandboard/post-image.sh"
+@@ -13,13 +13,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="wandboard"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.03"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.09"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.14"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-wandboard imx6dl-wandboard imx6q-wandboard-revb1 imx6dl-wandboard-revb1 imx6q-wandboard-revd1 imx6dl-wandboard-revd1 imx6qp-wandboard-revd1"
