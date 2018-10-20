@@ -1,42 +1,71 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Oct 2018 17:52:54 +0200
-Subject: [Buildroot] [PATCH] wireguard: bump version to 0.0.20181018
-Message-ID: <20181020155254.9737-1-peter@korsgaard.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 20 Oct 2018 17:01:33 +0100
+Subject: [Buildroot] [PATCH] merge_config.sh: Fix finding redundant
+ config mechanism
+In-Reply-To: <CANQCQpaxMvn2OEfP0aztbFRk0KTOTnt8nugZ-gwKL7oML1eQUw@mail.gmail.com>
+References: <1539989903-19803-1-git-send-email-Afshin.Nasser@gmail.com>
+ <CANQCQpaxMvn2OEfP0aztbFRk0KTOTnt8nugZ-gwKL7oML1eQUw@mail.gmail.com>
+Message-ID: <7189ed78-6481-0290-f13b-88e3c1008937@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireguard/wireguard.hash | 4 ++--
- package/wireguard/wireguard.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
-index fe6439fbc2..737f7b49c2 100644
---- a/package/wireguard/wireguard.hash
-+++ b/package/wireguard/wireguard.hash
-@@ -1,4 +1,4 @@
--# From https://lists.zx2c4.com/pipermail/wireguard/2018-September/003395.html
--sha256 4a0488a07e40ec17e798f3e40a85cedf55f0560b1c3a8fd95806c7d4266cb0e8  WireGuard-0.0.20180925.tar.xz
-+# From https://lists.zx2c4.com/pipermail/wireguard/2018-October/003479.html
-+sha256 af05824211b27cbeeea2b8d6b76be29552c0d80bfe716471215e4e43d259e327  WireGuard-0.0.20181018.tar.xz
- # Locally calculated
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
-index faddbf93ad..f3ea1bccf2 100644
---- a/package/wireguard/wireguard.mk
-+++ b/package/wireguard/wireguard.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_VERSION = 0.0.20180925
-+WIREGUARD_VERSION = 0.0.20181018
- WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
- WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
- WIREGUARD_LICENSE = GPL-2.0
--- 
-2.11.0
+
+On 20/10/2018 15:56, Matthew Weber wrote:
+> Nasser,
+> 
+> On Fri, Oct 19, 2018 at 11:58 PM Nasser <afshin.nasser@gmail.com> wrote:
+>>
+>> We use BR2_* style for configuration variables in buildroot so we should
+>> use this style when extracting configuration options. Otherwise CFG_LIST
+>> will almost always be empty.
+>>
+>> The CONFIG_* style has been taken form the Linux kernel and is not
+>> appropriate in this context.
+
+ A similar patch was actually submitted earlier by Angelo [1]. I commented on
+that that it should be simplified like you propose. However...
+
+>>
+> 
+> The merge_config.sh is used for a couple scenarios
+>  - Appending kconfigs together (CONFIG_*)
+
+ ... I forgot about this one. Indeed, the buildroot merge_config.sh script is
+used in pkg-kconfig.mk to merge kernel configs. Ideally we should change that to
+use the package's merge_config.sh script. However, the location of that script
+may vary, or it may even be missing...
+
+>  - Buildroot cfgs for runtime tests (BR2_*)
+>  - As a tool by users to merge together Buildroot configs
+> 
+> I'm not sure of the cleanest approach to support both
+>  - you could detect if the file is one or the other and adjust the regex
+>  - do the inverse and build a list of lines that are not comments
+
+ I think Angelo's patch is the best approach after all.
+
+ However, there is one comment that I made on Angelo's patch that still applies
+here:
+
+ Since the kconfig stuff comes from upstream but is modified, we also maintain
+the changes as a stack of patches in support/kconfig/patches. So you should
+generate a new patch for this change and add it to the series file. I'm not sure
+why we don't use a vendor branch and just merge, but that's the way we do it :-).
+
+
+ Also, Nasser, we require your Signed-off-by to contain your full name. The
+Signed-off-by is a short way for you to assert that you are entitled to
+contribute the patch under buildroot's GPL license.  See
+http://elinux.org/Developer_Certificate_Of_Origin for more details. Itis an
+official statement, so it should be done with your full and real name. And
+please make sure that the author information matches the Signed-off-by.
+
+
+ Regards,
+ Arnout
+
+[1] http://patchwork.ozlabs.org/patch/824051/
