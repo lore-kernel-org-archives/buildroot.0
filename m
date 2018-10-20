@@ -1,53 +1,61 @@
-From: Nasser <afshin.nasser@gmail.com>
-Date: Sat, 20 Oct 2018 02:28:23 +0330
-Subject: [Buildroot] [PATCH] merge_config.sh: Fix finding redundant config
- mechanism
-Message-ID: <1539989903-19803-1-git-send-email-Afshin.Nasser@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 20 Oct 2018 08:00:28 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-10-19
+Message-ID: <20181020060028.636E6207BD@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We use BR2_* style for configuration variables in buildroot so we should
-use this style when extracting configuration options. Otherwise CFG_LIST
-will almost always be empty.
+Hello,
 
-The CONFIG_* style has been taken form the Linux kernel and is not
-appropriate in this context.
+Build statistics for 2018-10-19
+===============================
 
-Signed-off-by: Nasser <Afshin.Nasser@gmail.com>
----
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  13 |   0 |   0 |  13 |
+   2018.08.x |  11 |   1 |   0 |  12 |
+      master | 190 |   7 |   0 | 197 |
 
-If you add 'set -x' in the beginning of the script you can see that $CFG_LIST
-is always empty.
+Results for branch '2018.08.x'
+==============================
 
-When having redundancy in the configuration fragments, you can see that the
-$TMP_FILE file has redundant configuration options when calling 'make'. Note
-that after applying this patch, calling 'make' in this script, will not produce
-any warnings due to redundancy issues anymore. This is because now repeated
-options are all properly omitted before calling 'make'. After applying this
-patch '-r -m' options work as expected.
+Classification of failures by reason
+------------------------------------
 
-Further more, note that without this patch, any inconsistent re-assignment is
-not reported by this script. Although there are some warnings if you did not
-specify -m option. They are all 'make' reports.
+                    efl-1.20.7 | 1 
 
- support/kconfig/merge_config.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/kconfig/merge_config.sh b/support/kconfig/merge_config.sh
-index 67d1314..87a8d02 100755
---- a/support/kconfig/merge_config.sh
-+++ b/support/kconfig/merge_config.sh
-@@ -99,7 +99,7 @@ if [ ! -r "$INITFILE" ]; then
- fi
- 
- MERGE_LIST=$*
--SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(CONFIG_[a-zA-Z0-9_]*\)[= ].*/\2/p"
-+SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(BR2_[a-zA-Z0-9_]*\)[= ].*/\2/p"
- TMP_FILE=$(mktemp ./.tmp.config.XXXXXXXXXX)
- 
- echo "Using $INITFILE as base"
+Detail of failures
+------------------
+
+      x86_64 |                     efl-1.20.7 | NOK | http://autobuild.buildroot.net/results/34e3ee5e6949e860e7ba660475052897c174f107 |     
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+               boa-0.94.14rc21 | 2 
+                  cc-tool-0.26 | 2 
+                  mender-1.4.0 | 1 
+mjpg-streamer-f387bb44e6c08... | 1 
+             util-linux-2.32.1 | 1 
+
+
+Detail of failures
+------------------
+
+         arc |                boa-0.94.14rc21 | NOK | http://autobuild.buildroot.net/results/c4f0aa63c30a764e0874275764cd79e7c52d5219 | ORPH
+         arc |                boa-0.94.14rc21 | NOK | http://autobuild.buildroot.net/results/3f357cc2c875ee69947e0a69ab6b9f7aaebdd9ed | ORPH
+      x86_64 |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/25c3c54196a8dff4c31dc25e13b1de71ed5d4cb0 |     
+      x86_64 |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/3bb1c5499a930627e67d5ba64348fe3927e83b78 |     
+      x86_64 |                   mender-1.4.0 | NOK | http://autobuild.buildroot.net/results/c66efada33a4f079551c697cac60edd6135dc903 |     
+microblazeel | mjpg-streamer-f387bb44e6c08... | NOK | http://autobuild.buildroot.net/results/6b88933fd07aaf5e2f737113db8785ac6937687d |     
+      x86_64 |              util-linux-2.32.1 | NOK | http://autobuild.buildroot.net/results/ed9f141981840e4603328570c8c4df6f17ee5c68 |     
+
+
 -- 
-2.7.4
+http://autobuild.buildroot.net
