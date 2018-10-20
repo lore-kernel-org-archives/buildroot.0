@@ -1,87 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 21 Oct 2018 00:24:10 +0200
-Subject: [Buildroot] [PATCH 1/1] New board: FriendlyARM NanoPi Duo
-In-Reply-To: <20180419093722.10667-1-sven.haardiek@iotec-gmbh.de>
-References: <20180419093722.10667-1-sven.haardiek@iotec-gmbh.de>
-Message-ID: <20181021002410.47982274@windsurf.lan>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 20 Oct 2018 23:26:54 +0100
+Subject: [Buildroot] [PATCH 2/2] apache: pass explicit sbindir
+In-Reply-To: <20180302180756.14315-2-chrismcc@gmail.com>
+References: <20180302180756.14315-1-chrismcc@gmail.com>
+ <20180302180756.14315-2-chrismcc@gmail.com>
+Message-ID: <dfc941b2-0755-812e-d850-5927183334dc@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Sven,
+?Hi Christopher,
 
-On Thu, 19 Apr 2018 11:37:22 +0200, Sven Haardiek wrote:
-> Introduce a new board the FriendlyARM NanoPi Duo.
-> 
-> - Due to the missing defconfigs and DTS in the mainline kernel and uboot, I
->   used the ones from the FriendlyARM github page.
-> 
-> - Most of the configuration was copied from the other friendlyarm boards.
-> 
-> Signed-off-by: Sven Haardiek <sven.haardiek@iotec-gmbh.de>
+?Sorry for the late reply...
 
-Thanks a lot for your contribution, and sorry for the very, very slow
-response time. I'll add below a few comments, generally fairly minor.
-If you could fix them, and submit an updated version of your patch, it
-would be very nice.
+On 02/03/2018 18:07, Christopher McCrory wrote:
+> The apache configure script help indicates that the sbindir is
+> PREFIX/sbin , but it actually uses PREFIX/bin.  Most people
+> probably expect httpd to be located in /usr/sbin/httpd
 
-First, the commit title should be something like this:
-
-	configs/friendlyarm_nanopi_duo: new defconfig
-
-Also, the DEVELOPERS file should be updated to add an entry that
-associates your name/email with the defconfig and board directory.
-
-> diff --git a/board/friendlyarm/nanopi-duo/genimage.cfg b/board/friendlyarm/nanopi-duo/genimage.cfg
-> new file mode 100644
-> index 0000000000..8b3cc1fe75
-> --- /dev/null
-> +++ b/board/friendlyarm/nanopi-duo/genimage.cfg
-> @@ -0,0 +1,33 @@
-> +image boot.vfat {
-> +	vfat {
-> +		files = {
-> +			"zImage",
-> +            "sun8i-h2-plus-nanopi-duo.dtb",
-> +            "boot.scr"
-
-The indentation looks odd here.
+?I disagree with this patch for 4 reasons:
 
 
-> diff --git a/configs/friendlyarm_nanopi_duo_defconfig b/configs/friendlyarm_nanopi_duo_defconfig
-> new file mode 100644
-> index 0000000000..8539deaccf
-> --- /dev/null
-> +++ b/configs/friendlyarm_nanopi_duo_defconfig
-> @@ -0,0 +1,31 @@
-> +BR2_arm=y
-> +BR2_cortex_a7=y
-> +BR2_ARM_FPU_VFPV4=y
-> +BR2_TARGET_GENERIC_HOSTNAME="nanopi-duo"
-> +BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the NanoPi DUO"
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-duo/genimage.cfg"
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/friendlyarm/linux.git"
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="sunxi-4.16.y"
+- I don't think there is a real need. Upstream chooses to do it that way, why
+would we differ?
 
-Please use a tag or exact SHA1 so that the build is reproducible.
 
-> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/friendlyarm/u-boot.git"
-> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="sunxi-v2017.x"
+- It is possible that someone is using apache and assumes it is installed in
+/usr/bin.
 
-Here as well.
 
-Other than that, looks good to me! Could you send an updated version?
+- In fact, Buildroot does that, in the apache.service file. So at least that
+file would need to be updated as well.
 
-Thanks a lot,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+- If we want to change it, we should follow the upstream convention. Upstream
+uses "layouts" to specify what goes where. There are layouts for Apache, GNU,
+Fedora, Debian, RedHat, etc. So we should use a --enable-layout option instead
+of hacking our own thing.
+
+
+?With that in mind, I've marked the patch as Rejected in patchwork. If you do
+think it is relevant, my second argument can be overridden, but then the patch
+should be changed to fix the apache.service file and to use a --enable-layout
+option instead.
+
+
+?Regards,
+?Arnout
+
+
+>
+> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+> ---
+>  package/apache/apache.mk | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+> index e1b1a209cb..4fd5896d59 100644
+> --- a/package/apache/apache.mk
+> +++ b/package/apache/apache.mk
+> @@ -28,7 +28,10 @@ else ifeq ($(BR2_PACKAGE_APACHE_MPM_WORKER),y)
+>  APACHE_MPM = worker
+>  endif
+>  
+> +# Explicitly pass sbindir, because apache configure script defines it
+> +# to PREFIX/bin, which doesn't make much sense
+>  APACHE_CONF_OPTS = \
+> +	--sbindir=/usr/sbin \
+>  	--sysconfdir=/etc/apache2 \
+>  	--with-apr=$(STAGING_DIR)/usr \
+>  	--with-apr-util=$(STAGING_DIR)/usr \
