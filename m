@@ -1,74 +1,108 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 20 Oct 2018 20:04:06 +0200
-Subject: [Buildroot] [git commit] legal-info: use the per-package variable
- to get the hash file
-Message-ID: <20181020180239.47C7A7FF87@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] qt5wayland: remove legacy
+ compile-without-QtQuick patch
+Message-ID: <20181020180239.70F9E87F7C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c45649c12650e32966ae3c879595aea023d9331
+commit: https://git.buildroot.net/buildroot/commit/?id=e56febac8cb1a753f1e94b592346bf5eee493cb5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Baruch Siach <baruch@tkos.co.il>
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+Patch was taken from upstream [1], removing it fixes [2]:
+
+  Applying 0001-fix-compilation-without-QtQuick.patch using patch:
+  patching file src/compositor/compositor_api/compositor_api.pri
+  Reversed (or previously applied) patch detected!  Skipping patch.
+  3 out of 3 hunks ignored -- saving rejects to file src/compositor/compositor_api/compositor_api.pri.rej
+  patching file src/compositor/hardware_integration/qwlhardwarelayerintegration_p.h
+  Reversed (or previously applied) patch detected!  Skipping patch.
+  1 out of 1 hunk ignored -- saving rejects to file src/compositor/hardware_integration/qwlhardwarelayerintegration_p.h.rej
+
+[1] http://code.qt.io/cgit/qt/qtwayland.git/commit/?id=2c48ee65e8c3b894caec214641723d0777fc60b8
+[2] http://autobuild.buildroot.net/results/0d31817bb4d416d01f4d1bec3e22ce0e5b2ca1c3
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Makefile               | 2 +-
- package/pkg-generic.mk | 2 +-
- package/pkg-utils.mk   | 8 ++------
- 3 files changed, 4 insertions(+), 8 deletions(-)
+ .../0001-fix-compilation-without-QtQuick.patch     | 69 ----------------------
+ 1 file changed, 69 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 82dd76ea76..4948b7f5b1 100644
---- a/Makefile
-+++ b/Makefile
-@@ -792,7 +792,7 @@ legal-info-clean:
- .PHONY: legal-info-prepare
- legal-info-prepare: $(LEGAL_INFO_DIR)
- 	@$(call MESSAGE,"Buildroot $(BR2_VERSION_FULL) Collecting legal info")
--	@$(call legal-license-file,buildroot,buildroot,support/legal-info,COPYING,COPYING,HOST)
-+	@$(call legal-license-file,buildroot,buildroot,support/legal-info/buildroot.hash,COPYING,COPYING,HOST)
- 	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,TARGET)
- 	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,HOST)
- 	@$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPL-2.0+,COPYING,not saved,not saved,HOST)
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 7dfad2d1be..b8de0a9aac 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -912,7 +912,7 @@ ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
- ifeq ($$(call qstrip,$$($(2)_LICENSE_FILES)),)
- 	$(Q)$$(call legal-warning-pkg,$$($(2)_BASENAME_RAW),cannot save license ($(2)_LICENSE_FILES not defined))
- else
--	$(Q)$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME),$$($(2)_BASENAME_RAW),$$($(2)_PKGDIR),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
-+	$(Q)$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME),$$($(2)_BASENAME_RAW),$$($(2)_HASH_FILE),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
- endif # license files
- 
- ifeq ($$($(2)_SITE_METHOD),local)
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index c3acc22b17..be287dc817 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -83,14 +83,10 @@ define legal-manifest # pkg, version, license, license-files, source, url, {HOST
- 	echo '"$(1)","$(2)","$(3)","$(4)","$(5)","$(6)"' >>$(LEGAL_MANIFEST_CSV_$(7))
- endef
- 
--define legal-license-file # pkgname, pkgname-pkgver, pkgdir, filename, file-fullpath, {HOST|TARGET}
-+define legal-license-file # pkgname, pkgname-pkgver, pkg-hashfile, filename, file-fullpath, {HOST|TARGET}
- 	mkdir -p $(LICENSE_FILES_DIR_$(6))/$(2)/$(dir $(4)) && \
- 	{ \
--		if [ -f $(3)/$($(PKG)_VERSION)/$(1).hash ]; then \
--			support/download/check-hash $(3)/$($(PKG)_VERSION)/$(1).hash $(5) $(4); \
--		else \
--			support/download/check-hash $(3)/$(1).hash $(5) $(4); \
--		fi; \
-+		support/download/check-hash $(3) $(5) $(4); \
- 		case $${?} in (0|3) ;; (*) exit 1;; esac; \
- 	} && \
- 	cp $(5) $(LICENSE_FILES_DIR_$(6))/$(2)/$(4)
+diff --git a/package/qt5/qt5wayland/0001-fix-compilation-without-QtQuick.patch b/package/qt5/qt5wayland/0001-fix-compilation-without-QtQuick.patch
+deleted file mode 100644
+index fe5d323db0..0000000000
+--- a/package/qt5/qt5wayland/0001-fix-compilation-without-QtQuick.patch
++++ /dev/null
+@@ -1,69 +0,0 @@
+-From 2c48ee65e8c3b894caec214641723d0777fc60b8 Mon Sep 17 00:00:00 2001
+-From: Alexander Schlarb <alexander@ninetailed.ninja>
+-Date: Sun, 29 Jul 2018 21:27:28 +0200
+-Subject: Fix compilation of QtWayland without QtQuick
+-
+-Change-Id: I0baf542f89274f48bf7d02121a07d64f0f3a001b
+-Reviewed-by: Johan Helsing <johan.helsing@qt.io>
+-Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+----
+- src/compositor/compositor_api/compositor_api.pri               | 10 +++++-----
+- .../hardware_integration/qwlhardwarelayerintegration_p.h       |  1 -
+- 2 files changed, 5 insertions(+), 6 deletions(-)
+-
+-diff --git a/src/compositor/compositor_api/compositor_api.pri b/src/compositor/compositor_api/compositor_api.pri
+-index e5df0f1f..4a0c0aa6 100644
+---- a/src/compositor/compositor_api/compositor_api.pri
+-+++ b/src/compositor/compositor_api/compositor_api.pri
+-@@ -27,7 +27,6 @@ HEADERS += \
+-     compositor_api/qwaylandresource.h \
+-     compositor_api/qwaylandsurfacegrabber.h \
+-     compositor_api/qwaylandoutputmode_p.h \
+--    compositor_api/qwaylandquickhardwarelayer_p.h \
+- 
+- SOURCES += \
+-     compositor_api/qwaylandcompositor.cpp \
+-@@ -44,8 +43,7 @@ SOURCES += \
+-     compositor_api/qwaylanddestroylistener.cpp \
+-     compositor_api/qwaylandview.cpp \
+-     compositor_api/qwaylandresource.cpp \
+--    compositor_api/qwaylandsurfacegrabber.cpp \
+--    compositor_api/qwaylandquickhardwarelayer.cpp
+-+    compositor_api/qwaylandsurfacegrabber.cpp
+- 
+- qtConfig(im) {
+-     HEADERS += \
+-@@ -71,14 +69,16 @@ qtHaveModule(quick):qtConfig(opengl) {
+-         compositor_api/qwaylandquickcompositor.cpp \
+-         compositor_api/qwaylandquicksurface.cpp \
+-         compositor_api/qwaylandquickoutput.cpp \
+--        compositor_api/qwaylandquickitem.cpp
+-+        compositor_api/qwaylandquickitem.cpp \
+-+        compositor_api/qwaylandquickhardwarelayer.cpp
+- 
+-     HEADERS += \
+-         compositor_api/qwaylandquickcompositor.h \
+-         compositor_api/qwaylandquicksurface.h \
+-         compositor_api/qwaylandquickoutput.h \
+-         compositor_api/qwaylandquickitem.h \
+--        compositor_api/qwaylandquickitem_p.h
+-+        compositor_api/qwaylandquickitem_p.h \
+-+        compositor_api/qwaylandquickhardwarelayer_p.h
+- 
+-     QT += qml qml-private quick quick-private
+- }
+-diff --git a/src/compositor/hardware_integration/qwlhardwarelayerintegration_p.h b/src/compositor/hardware_integration/qwlhardwarelayerintegration_p.h
+-index 02de8e8b..1e5fb1a1 100644
+---- a/src/compositor/hardware_integration/qwlhardwarelayerintegration_p.h
+-+++ b/src/compositor/hardware_integration/qwlhardwarelayerintegration_p.h
+-@@ -54,7 +54,6 @@
+- #include <QtWaylandCompositor/qtwaylandcompositorglobal.h>
+- 
+- #include <QObject>
+--#include <QQmlParserStatus>
+- 
+- QT_BEGIN_NAMESPACE
+- 
+--- 
+-cgit v1.1-6-g87c4
+-
