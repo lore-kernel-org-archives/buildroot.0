@@ -1,41 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Oct 2018 21:02:12 +0200
-Subject: [Buildroot] [PATCH] itop: new package
-In-Reply-To: <20180329195247.24360-1-alexandre.belloni@bootlin.com>
-References: <20180329195247.24360-1-alexandre.belloni@bootlin.com>
-Message-ID: <20181020210212.39ce484c@windsurf.lan>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sat, 20 Oct 2018 22:04:33 +0300
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add myself for
+ python-requests and python-certifi
+In-Reply-To: <CAGm1_kte7is=wBp_WaQh=Pcqwa4b9=SzhxMjLG62pdhZK7ZwMw@mail.gmail.com>
+References: <20181020125425.29281-1-asafka7@gmail.com>
+ <CAGm1_kte7is=wBp_WaQh=Pcqwa4b9=SzhxMjLG62pdhZK7ZwMw@mail.gmail.com>
+Message-ID: <CALFsTFX1HkvfeVwKQcz0LRwyPaZGGCbqtuFL0mXTgeOB5aP-iw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Alex,
-
-On Thu, 29 Mar 2018 21:52:47 +0200, Alexandre Belloni wrote:
-> itop is a simple top-like interrupt load monitor. It can be useful to
-> debug interrupt issues.
-> 
-> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> ---
->  DEVELOPERS             |  1 +
->  package/Config.in      |  1 +
->  package/itop/Config.in |  4 ++++
->  package/itop/itop.hash |  5 +++++
->  package/itop/itop.mk   | 21 +++++++++++++++++++++
->  5 files changed, 32 insertions(+)
->  create mode 100644 package/itop/Config.in
->  create mode 100644 package/itop/itop.hash
->  create mode 100644 package/itop/itop.mk
-
-Peter Korsgaard made a number of comments/suggestions on this patch
-back in March, but no new version has been posted since then. I've
-marked this patch as Changes Requested in patchwork.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Cool, I'll update the patch.
+On Sat, Oct 20, 2018 at 4:15 PM Yegor Yefremov
+<yegorslists@googlemail.com> wrote:
+>
+> On Sat, Oct 20, 2018 at 2:54 PM Asaf Kahlon <asafka7@gmail.com> wrote:
+> >
+> > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> > ---
+> >  DEVELOPERS | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/DEVELOPERS b/DEVELOPERS
+> > index 341bf7de3b..f44dbe9950 100644
+> > --- a/DEVELOPERS
+> > +++ b/DEVELOPERS
+> > @@ -203,6 +203,7 @@ F:  package/libuv/
+> >  F:     package/python-attrs/
+> >  F:     package/python-bcrypt/
+> >  F:     package/python-bitstring/
+> > +F:     package/python-certifi/
+> >  F:     package/python-constantly/
+> >  F:     package/python-engineio/
+> >  F:     package/python-fire/
+> > @@ -228,6 +229,7 @@ F:  package/python-pyroute2/
+> >  F:     package/python-pysmi/
+> >  F:     package/python-pytz/
+> >  F:     package/python-reentry/
+> > +F:     package/python-requests/
+> >  F:     package/python-sdnotify/
+> >  F:     package/python-subprocess32/
+> >  F:     package/python-txtorcon/
+>
+> Why don't you just remove all python entries and replace it with:
+>
+> package/python*
+>
+> Yegor
