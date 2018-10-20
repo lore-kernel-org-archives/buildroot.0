@@ -1,34 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Oct 2018 18:59:53 +0200
-Subject: [Buildroot] [git commit] netsnmp: fix static build failure due
- to missing -lssl and -lz
-In-Reply-To: <20181011204516.D4311835D7@busybox.osuosl.org> (Peter Korsgaard's
- message of "Thu, 11 Oct 2018 22:26:42 +0200")
-References: <20181011204516.D4311835D7@busybox.osuosl.org>
-Message-ID: <87ftx0a706.fsf@dell.be.48ers.dk>
+Date: Sat, 20 Oct 2018 19:00:15 +0200
+Subject: [Buildroot] [PATCH] netsnmp: improve linking avoiding useless
+ -lz listing in shared build
+In-Reply-To: <20181015215955.51023-1-giulio.benetti@micronovasrl.com> (Giulio
+ Benetti's message of "Mon, 15 Oct 2018 23:59:55 +0200")
+References: <20181012220845.07b266ea@windsurf>
+ <20181015215955.51023-1-giulio.benetti@micronovasrl.com>
+Message-ID: <87bm7oa6zk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=13722d58f77d0e9fea9eefc50bf083d19f835433
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > In commit:
+ > https://git.buildroot.net/buildroot/commit/?id=13722d58f77d0e9fea9eefc50bf083d19f835433
+ > Patch "0003-configure-Invert-AC_CHECK_LIB-EVP_md5-.-without-lz-w.patch"
+ > was intended to fix AC_CHECK_FUNCS() failure on openssl functions. This
+ > was due to missing -lz during static linking.
+ > But the patch is wrong and results in explicitly linking against -lz in
+ > both shared and static build.
+ > This makes no sense, since shared linking has transitive dependency so
+ > it doesn't need to list -lz after -lssl, -lssl is enough.
+ > Differently static linking needs -lz to be listed after -lssl.
 
- > During configure some checking needing -lssl and -lz don't have them
- > appended to linker tail. Since we are building static this leads to
- > configure failure because of mandatory functions lack produces:
- > "configure: error: The DTLS based transports require the libssl library
- > from OpenSSL to be available and support DTLS"
+ > So the real cause of previous build failure:
+ > http://autobuild.buildroot.net/results/881/881139fb049738b16609d39ad5a49bd77ff6b4aa/
+ > is that when AC_CHECK_FUNCS(), $LIBS variable is overwritten with
+ > $LIBCRYPTO without taking into accout previous $LIBS content(i.e. where
+ > -lz is present). This results in AC_CHEC_FUNCS() to fail while trying to
+ > statically link without listing -lz.
 
- > - Add 1 patch to fix -lssl lack in configure and .ac modules:
- > upstreamed: https://sourceforge.net/p/net-snmp/code/ci/bd59be8e4e339870a1400f6866a7b73ca11f6460/
- > - Add 2 patches to fix -lz lack in configure and .ac modules:
- > 1 upstreamed: https://sourceforge.net/p/net-snmp/code/ci/13da2bcde8e22dd0127a668374fdf79bed04d353/
- > 1 in Merge Request: https://sourceforge.net/p/net-snmp/code/merge-requests/19/
- > - Add NETSNMP_AUTORECONF = YES
+ > Then:
+ > - Remove current "0003-configure-Invert-AC_CHECK_LIB-EVP_md5-.-without-lz-w.patch"
+ > - Add patch "0003-configure-fix-AC_CHECK_FUNCS-EVP_sha224-EVP_sha384-..patch"
+ >   where add $LIBS content to tail of new $LIBS variable like this:
+ >   LIBS="$LIBCRYPTO $LIBS"
+ >   NOTE: $LIBS is at the end to ensure static linking to work correctly.
+ > - Add patch 0004-configure-fix-AC_CHECK_FUNCS-TLS_method-TLSv1_method.patch
+ >   where add $LIBS content to tail of new $LIBS variable like this:
+ >   LIBS="-lssl $LIBCRYPTO $LIBS"
+ >   NOTE: $LIBS is at the end to ensure static linking to work correctly.
+
+ > This way AC_CHECK_FUNCS(), when static linking, try to link with -lz too
+ > appending it at the end of linking library list.
+ > And after every AC_CHECK_FUNCS(), previously saved $LIBS variable gets
+ > back to its original value(i.e. containing -lz if present) resulting in
+ > having or not -lz appended to library list according to static or
+ > shared build.
+
+ > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 
 Committed to 2018.02.x and 2018.08.x, thanks.
 
