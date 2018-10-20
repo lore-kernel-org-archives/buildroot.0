@@ -1,78 +1,55 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 20 Oct 2018 17:24:13 +0100
-Subject: [Buildroot] [git commit] utils/get-developers: make it callable
- from elsewhere than the toplevel directory
-Message-ID: <20181020162245.DF8758444B@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 20 Oct 2018 16:33:33 +0000
+Subject: [Buildroot] [Bug 11411] check-uniq-files issue
+In-Reply-To: <bug-11411-163@https.bugs.busybox.net/>
+References: <bug-11411-163@https.bugs.busybox.net/>
+Message-ID: <bug-11411-163-EHaCcty4Qa@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62d5558f76a790d1c1b3a1834f1736dc86b6e34f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=11411
 
-get-developers tries to open DEVELOPERS in the current directory, so it
-breaks when calling it from elsewhere than the toplevel Buildroot directory.
+--- Comment #2 from Jean-pierre Cartal <jpcartal@free.fr> ---
+Here is the patch that I tested on my builds:
 
-Traceback (most recent call last):
-  File "../utils/get-developers", line 107, in <module>
-    __main__()
-  File "../utils/get-developers", line 26, in __main__
-    devs = getdeveloperlib.parse_developers(os.path.dirname()
-  File "/home/peko/source/buildroot/utils/getdeveloperlib.py", line 161, in parse_developers
-    with open(os.path.join(basepath, "DEVELOPERS"), "r") as f:
-IOError: [Errno 2] No such file or directory: '/home/peko/source/buildroot/output-foo/DEVELOPERS'
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 58af2ef242..7d3d7c9028 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -216,7 +216,7 @@ TARGET_OBJDUMP  = $(TARGET_CROSS)objdump
+ ifeq ($(BR2_STRIP_strip),y)
+ STRIP_STRIP_DEBUG := --strip-debug
+ TARGET_STRIP = $(TARGET_CROSS)strip
+-STRIPCMD = $(TARGET_CROSS)strip --remove-section=.comment
+--remove-section=.note
++STRIPCMD = $(TARGET_CROSS)strip --remove-section=.comment
+--remove-section=.note -p
+ else
+ TARGET_STRIP = /bin/true
+ STRIPCMD = $(TARGET_STRIP)
 
-Fix it by instead figuring out where the DEVELOPERS file is relative to the
-location of get-developers (E.G. one level up).
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[Arnout:
-  - add realpath to support a symlinked get-developers script;
-  - pass devs_dir argument to check_developers() to support -c in subdir;
-  - convert basepath to absolute path to support -f option.
-]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- utils/get-developers     | 6 ++++--
- utils/getdeveloperlib.py | 2 ++
- 2 files changed, 6 insertions(+), 2 deletions(-)
+BTW, there are also a lot of false positive in staging because of this command
+:
+$(Q)find $(STAGING_DIR)/usr/lib* -name "*.la" | xargs --no-run-if-empty \
+                $(SED) "s:$(BASE_DIR):@BASE_DIR@:g" \
+                        -e "s:$(STAGING_DIR):@STAGING_DIR@:g" \
+                        $(if $(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
+                                -e
+"s:$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:g") \
+                        -e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
+                        $(if $(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
+                                -e
+"s:@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):g") \
+                        -e "s:@STAGING_DIR@:$(STAGING_DIR):g" \
+                        -e "s:@BASE_DIR@:$(BASE_DIR):g"
 
-diff --git a/utils/get-developers b/utils/get-developers
-index ce882e6699..c887938859 100755
---- a/utils/get-developers
-+++ b/utils/get-developers
-@@ -24,7 +24,9 @@ def parse_args():
- 
- 
- def __main__():
--    devs = getdeveloperlib.parse_developers()
-+    # DEVELOPERS is one level up from here
-+    devs_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..')
-+    devs = getdeveloperlib.parse_developers(devs_dir)
-     if devs is None:
-         sys.exit(1)
-     args = parse_args()
-@@ -50,7 +52,7 @@ def __main__():
- 
-     # Handle the check action
-     if args.check:
--        files = getdeveloperlib.check_developers(devs)
-+        files = getdeveloperlib.check_developers(devs, devs_dir)
-         for f in files:
-             print(f)
- 
-diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
-index 2c8d477583..84665520c6 100644
---- a/utils/getdeveloperlib.py
-+++ b/utils/getdeveloperlib.py
-@@ -158,6 +158,8 @@ def parse_developers(basepath=None):
-     linen = 0
-     if basepath is None:
-         basepath = os.getcwd()
-+    else:
-+        basepath = os.path.abspath(basepath)
-     with open(os.path.join(basepath, "DEVELOPERS"), "r") as f:
-         files = []
-         name = None
+Do you think a patch using stat/touch to keep the original modification time of
+impacted files be interesting ?
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
