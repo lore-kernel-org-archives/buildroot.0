@@ -1,58 +1,158 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Oct 2018 12:53:03 +0200
-Subject: [Buildroot] [git commit] BR2_FORTIFY*: toolchain wrapper limitation
- note
-Message-ID: <20181020113218.69A8A83AB3@busybox.osuosl.org>
+Date: Sat, 20 Oct 2018 13:25:27 +0200
+Subject: [Buildroot] [git commit] support/testing/tests/core: SSP &
+ hardening flags
+Message-ID: <20181020113218.7133683AB3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=394bdd11fc1f741c88c89f0e71571d87a29ab627
+commit: https://git.buildroot.net/buildroot/commit/?id=963f824511b68104469cfda6d8874df0651ed9bb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-A note is added to tie off the discussion on why moving _FORTIFY_SOURCE
-related flags into the toolchain wrapper doesn't currently work.
-
- - Currently -D_FORTIFY_SOURCE and optimizations are passed through
-   CFLAGS
-
- - Packages like linux-tools ignore CFLAGS entirely and some
-   autotools toolchain testing cases dependent on not using
-   CFLAGS.
-
- - If FORTIFY_SOURCE is passed through the wrapper, then linux-tools
-   will no longer be able to ignore it, because it's enforced at a
-   lower-level and since the optimization -Os/g/1/2/3 are via CFLAGS,
-   there is no optimization flag set.  Therefore linux-tools will do
-   all its configuration tests with FORTIFY_SOURCE forcefully enabled
-   at the wrapper level, but no optimization enabled, and consequently
-   tests will fail.
+Catch the commonly used options of SSP, Relro, and fortify.
+Using the package targets of busybox and lighttpd.  This
+can easily be expanded to a larger list.
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Makefile.in | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ .gitlab-ci.yml                               |   6 ++
+ support/testing/tests/core/test_hardening.py | 110 +++++++++++++++++++++++++++
+ 2 files changed, 116 insertions(+)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index dc0eecf1d5..44761b79c5 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -143,6 +143,15 @@ endif
- 
- TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
- 
-+# By design, _FORTIFY_SOURCE requires gcc optimization to be enabled.
-+# Therefore, we need to pass _FORTIFY_SOURCE and the optimization level
-+# through the same mechanism, i.e currently through CFLAGS. Passing
-+# _FORTIFY_SOURCE through the wrapper and the optimization level
-+# through CFLAGS would not work, because CFLAGS are sometimes
-+# ignored/overridden by packages, but the flags passed by the wrapper
-+# are enforced: this would cause _FORTIFY_SOURCE to be used without any
-+# optimization level, leading to a build / configure failure. So we keep
-+# passing _FORTIFY_SOURCE and the optimization level both through CFLAGS.
- ifeq ($(BR2_FORTIFY_SOURCE_1),y)
- TARGET_HARDENED += -D_FORTIFY_SOURCE=1
- else ifeq ($(BR2_FORTIFY_SOURCE_2),y)
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 769583b6b9..d6a2319ba0 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -265,6 +265,12 @@ tests.boot.test_atf.TestATFAllwinner: *runtime_test
+ tests.boot.test_atf.TestATFMarvell: *runtime_test
+ tests.boot.test_atf.TestATFVexpress: *runtime_test
+ tests.core.test_file_capabilities.TestFileCapabilities: *runtime_test
++tests.core.test_hardening.TestFortifyConserv: *runtime_test
++tests.core.test_hardening.TestFortifyNone: *runtime_test
++tests.core.test_hardening.TestRelro: *runtime_test
++tests.core.test_hardening.TestRelroPartial: *runtime_test
++tests.core.test_hardening.TestSspNone: *runtime_test
++tests.core.test_hardening.TestSspStrong: *runtime_test
+ tests.core.test_post_scripts.TestPostScripts: *runtime_test
+ tests.core.test_rootfs_overlay.TestRootfsOverlay: *runtime_test
+ tests.core.test_timezone.TestGlibcAllTimezone: *runtime_test
+diff --git a/support/testing/tests/core/test_hardening.py b/support/testing/tests/core/test_hardening.py
+new file mode 100644
+index 0000000000..9f26962b30
+--- /dev/null
++++ b/support/testing/tests/core/test_hardening.py
+@@ -0,0 +1,110 @@
++import os
++import subprocess
++import json
++
++import infra.basetest
++
++
++class TestHardeningBase(infra.basetest.BRTest):
++    config = \
++        """
++        BR2_powerpc64=y
++        BR2_powerpc_e5500=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
++        BR2_TOOLCHAIN_EXTERNAL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc64-e5500/tarballs/powerpc64-e5500--glibc--stable-2018.02-2.tar.bz2"
++        BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
++        BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
++        BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
++        BR2_TOOLCHAIN_EXTERNAL_CXX=y
++        BR2_PACKAGE_LIGHTTPD=y
++        BR2_PACKAGE_HOST_CHECKSEC=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    checksec_files = ["usr/sbin/lighttpd","bin/busybox"]
++
++    def checksec_run(self, target_file):
++        filepath = os.path.join(self.builddir, "target", target_file)
++        cmd = ["host/bin/checksec", "--output", "json", "--file", filepath]
++        # Checksec is being used for elf file analysis only.  There are no
++        # assumptions of target/run-time checks as part of this testing.
++        ret = subprocess.check_output(cmd,
++                                      stderr=open(os.devnull, "w"),
++                                      cwd=self.builddir,
++                                      env={"LANG": "C"})
++        return json.loads(ret)
++
++
++class TestRelro(TestHardeningBase):
++    config = TestHardeningBase.config + \
++        """
++        BR2_RELRO_FULL=y
++        """
++
++    def test_run(self):
++        for f in self.checksec_files:
++            out = self.checksec_run(f)
++            self.assertEqual(out["file"]["relro"], "full")
++            self.assertEqual(out["file"]["pie"], "yes")
++
++
++class TestRelroPartial(TestHardeningBase):
++    config = TestHardeningBase.config + \
++        """
++        BR2_RELRO_PARTIAL=y
++        """
++
++    def test_run(self):
++        for f in self.checksec_files:
++            out = self.checksec_run(f)
++            self.assertEqual(out["file"]["relro"], "partial")
++            self.assertEqual(out["file"]["pie"], "no")
++
++
++class TestSspNone(TestHardeningBase):
++    config = TestHardeningBase.config + \
++        """
++        BR2_SSP_NONE=y
++        """
++
++    def test_run(self):
++        for f in self.checksec_files:
++            out = self.checksec_run(f)
++            self.assertEqual(out["file"]["canary"], "no")
++
++
++class TestSspStrong(TestHardeningBase):
++    config = TestHardeningBase.config + \
++        """
++        BR2_SSP_STRONG=y
++        """
++
++    def test_run(self):
++        for f in self.checksec_files:
++            out = self.checksec_run(f)
++            self.assertEqual(out["file"]["canary"], "yes")
++
++
++class TestFortifyNone(TestHardeningBase):
++    config = TestHardeningBase.config + \
++        """
++        BR2_FORTIFY_SOURCE_NONE=y
++        """
++
++    def test_run(self):
++        for f in self.checksec_files:
++            out = self.checksec_run(f)
++            self.assertEqual(out["file"]["fortified"], "0")
++
++
++class TestFortifyConserv(TestHardeningBase):
++    config = TestHardeningBase.config + \
++        """
++        BR2_FORTIFY_SOURCE_1=y
++        """
++
++    def test_run(self):
++        for f in self.checksec_files:
++            out = self.checksec_run(f)
++            self.assertNotEqual(out["file"]["fortified"], "0")
