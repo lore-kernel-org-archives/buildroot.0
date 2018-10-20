@@ -1,36 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Oct 2018 19:54:47 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/mjpg-streamer: bump version
-In-Reply-To: <20181020080343.32067-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 20 Oct 2018 10:03:42 +0200")
-References: <20181020080343.32067-1-bernd.kuhls@t-online.de>
- <20181020080343.32067-2-bernd.kuhls@t-online.de>
-Message-ID: <87y3as8pw8.fsf@dell.be.48ers.dk>
+Date: Sat, 20 Oct 2018 19:53:56 +0200
+Subject: [Buildroot] [git commit] package/mjpg-streamer: fix typo in opencv3
+ dependencies
+Message-ID: <20181020175329.BF81C8778A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=133c68bb40a1427ed2457e94a075c31c367913ee
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This bump includes
- > https://github.com/jacksonliam/mjpg-streamer/commit/588db286da461ac5c02277b511ab58a7bf3f752f
- > https://github.com/jacksonliam/mjpg-streamer/commit/3b7d04d28a39bc697f5bd77f1072430692ac9f8b
+mjpg-streamer needs these OpenCV3 modules:
+https://github.com/jacksonliam/mjpg-streamer/blob/master/mjpg-streamer-experimental/plugins/input_opencv/CMakeLists.txt#L4
 
- > which fixes building without c++:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mjpg-streamer/mjpg-streamer.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > http://autobuild.buildroot.net/results/1da/1da75a9d9b6e4d04d39117d2915c1d195dcae002/
- > http://autobuild.buildroot.net/results/3da/3da3f4099ccf62a314c099c5720dd5b1e9463914/
- > http://autobuild.buildroot.net/results/104/10438190453bd7ef7cc157929e74a9ffce9f7fdf/
- > http://autobuild.buildroot.net/results/91f/91fa80348db0c248649fe003df2dfa854f37a5a2/
- > http://autobuild.buildroot.net/results/4d7/4d7e722cf85a54d2813715e6b4ca1dd793e6d237/
-
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- > ---
- > v2: bumped package after patches were committed upstream
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mjpg-streamer/mjpg-streamer.mk b/package/mjpg-streamer/mjpg-streamer.mk
+index 6ea8c47030..e5de847825 100644
+--- a/package/mjpg-streamer/mjpg-streamer.mk
++++ b/package/mjpg-streamer/mjpg-streamer.mk
+@@ -22,7 +22,7 @@ ifeq ($(BR2_PACKAGE_LIBV4L),y)
+ MJPG_STREAMER_DEPENDENCIES += libv4l
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_OPENCV3_LIB_IMGPROC)$(BR2_PACKAGE_OPENCV3_LIB_IMGPROC)$(BR2_PACKAGE_OPENCV3_LIB_IMGPROC),yyy)
++ifeq ($(BR2_PACKAGE_OPENCV3_LIB_HIGHGUI)$(BR2_PACKAGE_OPENCV3_LIB_IMGPROC)$(BR2_PACKAGE_OPENCV3_LIB_VIDEOIO),yyy)
+ MJPG_STREAMER_CONF_OPTS += -DPLUGIN_INPUT_OPENCV=ON
+ MJPG_STREAMER_DEPENDENCIES += host-pkgconf opencv3
+ else
