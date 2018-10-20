@@ -1,43 +1,55 @@
-From: Mark Corbin <mark.corbin@embecosm.com>
-Date: Sat, 20 Oct 2018 12:56:51 +0100
-Subject: [Buildroot] [PATCH 1/1] support/config-fragments: add RISC-V 64-bit
- to autobuild configs
-Message-ID: <20181020115651.6268-1-mark.corbin@embecosm.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 20 Oct 2018 13:09:57 +0100
+Subject: [Buildroot] [PATCH] skeleton-init-common: improve /etc/hosts
+ generation
+In-Reply-To: <20181019133802.19627-1-casantos@datacom.com.br>
+References: <20181019133802.19627-1-casantos@datacom.com.br>
+Message-ID: <b07b2dbf-f9a0-4dfa-31eb-c294e3c55a9f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a minimal RISC-V 64-bit autobuild configuration for the
-internal toolchain with glibc.
 
-Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
----
- .../config-fragments/autobuild/br-riscv64-internal-glibc.config | 2 ++
- support/config-fragments/autobuild/toolchain-configs.csv        | 1 +
- 2 files changed, 3 insertions(+)
- create mode 100644 support/config-fragments/autobuild/br-riscv64-internal-glibc.config
 
-diff --git a/support/config-fragments/autobuild/br-riscv64-internal-glibc.config b/support/config-fragments/autobuild/br-riscv64-internal-glibc.config
-new file mode 100644
-index 0000000000..75aa5dd915
---- /dev/null
-+++ b/support/config-fragments/autobuild/br-riscv64-internal-glibc.config
-@@ -0,0 +1,2 @@
-+BR2_riscv=y
-+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
-index 136a67f54b..d5bba8949e 100644
---- a/support/config-fragments/autobuild/toolchain-configs.csv
-+++ b/support/config-fragments/autobuild/toolchain-configs.csv
-@@ -50,6 +50,7 @@ support/config-fragments/autobuild/br-powerpc64le-power8-glibc.config,x86_64
- support/config-fragments/autobuild/br-powerpc64-power7-glibc.config,x86_64
- support/config-fragments/autobuild/br-powerpc-e500mc-full.config,x86_64
- support/config-fragments/autobuild/br-powerpc-internal-full.config,any
-+support/config-fragments/autobuild/br-riscv64-internal-glibc.config,any
- support/config-fragments/autobuild/br-sh4-full.config,x86_64
- support/config-fragments/autobuild/br-sparc-uclibc.config,x86_64
- support/config-fragments/autobuild/br-sparc64-glibc.config,x86_64
--- 
-2.17.1
+On 19/10/2018 14:38, Carlos Santos wrote:
+> If BR2_TARGET_GENERIC_HOSTNAME contains a FQDN, strip the host part and
+> add it as an alias, e.g.
+> 
+>     127.0.1.1	hostname.example.com hostname
+> 
+> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ Regards,
+ Arnout
+
+> ---
+>  package/skeleton-init-common/skeleton-init-common.mk | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/skeleton-init-common/skeleton-init-common.mk b/package/skeleton-init-common/skeleton-init-common.mk
+> index e8a0522052..93a410914a 100644
+> --- a/package/skeleton-init-common/skeleton-init-common.mk
+> +++ b/package/skeleton-init-common/skeleton-init-common.mk
+> @@ -41,10 +41,16 @@ SKELETON_INIT_COMMON_PASSWD_METHOD = $(call qstrip,$(BR2_TARGET_GENERIC_PASSWD_M
+>  SKELETON_INIT_COMMON_BIN_SH = $(call qstrip,$(BR2_SYSTEM_BIN_SH))
+>  
+>  ifneq ($(SKELETON_INIT_COMMON_HOSTNAME),)
+> +SKELETON_INIT_COMMON_HOSTS_LINE = $(SKELETON_INIT_COMMON_HOSTNAME)
+> +SKELETON_INIT_COMMON_SHORT_HOSTNAME = $(firstword $(subst ., ,$(SKELETON_INIT_COMMON_HOSTNAME)))
+> +ifneq ($(SKELETON_INIT_COMMON_HOSTNAME),$(SKELETON_INIT_COMMON_SHORT_HOSTNAME))
+> +SKELETON_INIT_COMMON_HOSTS_LINE += $(SKELETON_INIT_COMMON_SHORT_HOSTNAME)
+> +else
+> +endif
+>  define SKELETON_INIT_COMMON_SET_HOSTNAME
+>  	mkdir -p $(TARGET_DIR)/etc
+>  	echo "$(SKELETON_INIT_COMMON_HOSTNAME)" > $(TARGET_DIR)/etc/hostname
+> -	$(SED) '$$a \127.0.1.1\t$(SKELETON_INIT_COMMON_HOSTNAME)' \
+> +	$(SED) '$$a \127.0.1.1\t$(SKELETON_INIT_COMMON_HOSTS_LINE)' \
+>  		-e '/^127.0.1.1/d' $(TARGET_DIR)/etc/hosts
+>  endef
+>  SKELETON_INIT_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_INIT_COMMON_SET_HOSTNAME
+> 
