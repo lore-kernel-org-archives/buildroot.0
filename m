@@ -1,266 +1,146 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Oct 2018 14:17:46 +0200
-Subject: [Buildroot] [git commit] libarchive: security bump to version 3.3.3
-Message-ID: <20181020122336.F326E83BA1@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 20 Oct 2018 13:26:47 +0100
+Subject: [Buildroot] [PATCH 4/4] webkitgtk: explicitly set
+ USE_GSTREAMER_GL build option
+In-Reply-To: <20181019202544.GC941@momiji>
+References: <20181009220852.4309-1-aperez@igalia.com>
+ <20181009220852.4309-5-aperez@igalia.com> <20181010212630.7f47270e@windsurf>
+ <20181010202425.GN2869@scaer> <40fb0474-283f-4b73-78e6-45ea99a1bb65@mind.be>
+ <87in281h7o.fsf@dell.be.48ers.dk> <20181011192343.GA31509@scaer>
+ <b93c6915-8190-c39a-9251-d2530d8e136d@mind.be> <20181019202544.GC941@momiji>
+Message-ID: <ff71e37a-8bb8-9ed7-084f-a26f28790af5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=946f136fe174efc4560116940c93a84d456c7cfe
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2017-14501: An out-of-bounds read flaw exists in
-parse_file_info in archive_read_support_format_iso9660.c in libarchive
-3.3.2 when extracting a specially crafted iso9660 iso file, related to
-archive_read_format_iso9660_read_header.
 
-Drop upstream patches.
+On 19/10/2018 19:25, Adrian Perez de Castro wrote:
+> Hi everybody,
+> 
+> I have some comments more about this topic, please read below...
+> 
+> On Thu, 11 Oct 2018 23:56:36 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>
+>>
+>> On 11/10/18 21:23, Yann E. MORIN wrote:
+>>> Peter, Arnout, All,
+>>>
+>>> On 2018-10-11 20:16 +0200, Peter Korsgaard spake thusly:
+>>>>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>>>>  >  'imply' is syntactic sugar for 'default y if ...'. The *only* thing it changes
+>>>>  > is the place where you put the imply. (To be exact, it is the same as 'default
+>>>>  > ...' because it propagates the m/y/n state to the default, not just y/n. But
+>>>>  > since we don't use m, it doesn't matter.)
+>>>>
+>>>>  >  For this specific case, it is pretty obvious that putting a 'default y if
+>>>>  > BR2_PACKAGE_WEBKITGTK_MULTIMEDIA' on BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL
+>>>
+>>> As the submitter said "in general it is preferred due to better
+>>> performance", why don't we just have, in webkitgtk:
+>>>
+>>>     select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL if BR2_PACKAGE_GST1_PLUGINS_BAD
+>>>
+>>> Or even further:
+>>>
+>>>     select BR2_PACKAGE_GST1_PLUGINS_BAD
+>>>     select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL
+>>>
+>>> Of course, that requires propagating the required dependencies...
+>>> But since webkitgtk already depends on libgtk3, which itself depends on
+>>> LIBEGL_WAYLAND or LIBGL, we're not too far off...
+>>
+>>  For this specific case, that's a very good idea indeed. Something like (to be
+>> tested!):
+> 
+> While something like this would probably work, there can be cases in which
+> GStreamer-GL cannot be built (for example when there is no windowing system
+> supported by GStreamer-GL), but WebKitGTK+ may still build and work fine with
+> GL support enabled and GStreamer-GL support disabled. The GL code in WebKit
+> has a few different methods used at runtime as fall-back to create the GL
+> context [1].  On the other hand GStreamer-GL has a few more requirements on
+> the GL implementation than WebKit for building [2] ? so I do see value in
+> allowing to build without GStreamer-GL ?\_(?)_/? 
+> 
+>> config BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
+>>         bool "multimedia support"
+>>         select BR2_PACKAGE_GSTREAMER1
+>>         select BR2_PACKAGE_GST1_PLUGINS_BAD
+>>         select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL if
+>> BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
+>>         ...
+>>
+>>  Ideally we would also select the plugins that make sure HAS_LIB_OPENGL becomes
+>> true, but unfortunately that's really complicated. Selecting
+>> BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL would help, but that has the
+>> disadvantage that it might not actually make the GL plugin available (depending
+>> on the state of X11/wayland/...
+> 
+> I am a bit reluctant of doing this, due to the complications in making sure
+> that ?BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL? gets selected for all
+> configuration where it's supported, and the also complicated alternative of
+> using ?BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL?.
+> 
+> There's one more issue, though: I can't remember right now the precise case
+> (driver, GPU, GStreamer versions, etc), but some work mates from Igalia found
+> a couple of cases where using GStreamer-GL in WebKit results in garbled and/or
+> tinted video output, so it can actually be handy if we allow to manually
+> disable using it. So I'm leaning towards:
+> 
+>   if BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
+> 
+>   config BR2_PACKAGE_WEBKITGTK_USE_GSTREAMER_GL
+>       bool "use gstreamer-gl"
 
-Use upstream provided tarball hash.
+ Sounds good to me.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...g-sensible-for-empty-strings-to-make-fuzz.patch | 42 ------------
- ...-iso9660-validate-directory-record-length.patch | 78 ----------------------
- ...d-off-by-one-error-for-UTF16-names-in-RAR.patch | 34 ----------
- ...ct-LHA-archive-entries-with-negative-size.patch | 32 ---------
- package/libarchive/libarchive.hash                 |  3 +-
- package/libarchive/libarchive.mk                   |  2 +-
- 6 files changed, 3 insertions(+), 188 deletions(-)
+> 	  default y
+> 	  depends on BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL
 
-diff --git a/package/libarchive/0001-Do-something-sensible-for-empty-strings-to-make-fuzz.patch b/package/libarchive/0001-Do-something-sensible-for-empty-strings-to-make-fuzz.patch
-deleted file mode 100644
-index 1d1d80d708..0000000000
---- a/package/libarchive/0001-Do-something-sensible-for-empty-strings-to-make-fuzz.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From fa7438a0ff4033e4741c807394a9af6207940d71 Mon Sep 17 00:00:00 2001
--From: Joerg Sonnenberger <joerg@bec.de>
--Date: Tue, 5 Sep 2017 18:12:19 +0200
--Subject: [PATCH] Do something sensible for empty strings to make fuzzers
-- happy.
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: commit fa7438a0ff
--
-- libarchive/archive_read_support_format_xar.c | 8 +++++++-
-- 1 file changed, 7 insertions(+), 1 deletion(-)
--
--diff --git a/libarchive/archive_read_support_format_xar.c b/libarchive/archive_read_support_format_xar.c
--index 7a22beb9d8e4..93eeacc5e6eb 100644
----- a/libarchive/archive_read_support_format_xar.c
--+++ b/libarchive/archive_read_support_format_xar.c
--@@ -1040,6 +1040,9 @@ atol10(const char *p, size_t char_cnt)
-- 	uint64_t l;
-- 	int digit;
-- 
--+	if (char_cnt == 0)
--+		return (0);
--+
-- 	l = 0;
-- 	digit = *p - '0';
-- 	while (digit >= 0 && digit < 10  && char_cnt-- > 0) {
--@@ -1054,7 +1057,10 @@ atol8(const char *p, size_t char_cnt)
-- {
-- 	int64_t l;
-- 	int digit;
---        
--+
--+	if (char_cnt == 0)
--+		return (0);
--+
-- 	l = 0;
-- 	while (char_cnt-- > 0) {
-- 		if (*p >= '0' && *p <= '7')
---- 
--2.14.1
--
-diff --git a/package/libarchive/0002-iso9660-validate-directory-record-length.patch b/package/libarchive/0002-iso9660-validate-directory-record-length.patch
-deleted file mode 100644
-index 8a0c34f257..0000000000
---- a/package/libarchive/0002-iso9660-validate-directory-record-length.patch
-+++ /dev/null
-@@ -1,78 +0,0 @@
--From f9569c086ff29259c73790db9cbf39fe8fb9d862 Mon Sep 17 00:00:00 2001
--From: John Starks <jostarks@microsoft.com>
--Date: Wed, 25 Jul 2018 12:16:34 -0700
--Subject: [PATCH] iso9660: validate directory record length
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: commit f9569c086ff
--
-- .../archive_read_support_format_iso9660.c       | 17 +++++++++++------
-- 1 file changed, 11 insertions(+), 6 deletions(-)
--
--diff --git a/libarchive/archive_read_support_format_iso9660.c b/libarchive/archive_read_support_format_iso9660.c
--index f01d37bf682e..089bb7236cd1 100644
----- a/libarchive/archive_read_support_format_iso9660.c
--+++ b/libarchive/archive_read_support_format_iso9660.c
--@@ -409,7 +409,8 @@ static int	next_entry_seek(struct archive_read *, struct iso9660 *,
-- 		    struct file_info **);
-- static struct file_info *
-- 		parse_file_info(struct archive_read *a,
---		    struct file_info *parent, const unsigned char *isodirrec);
--+		    struct file_info *parent, const unsigned char *isodirrec,
--+		    size_t reclen);
-- static int	parse_rockridge(struct archive_read *a,
-- 		    struct file_info *file, const unsigned char *start,
-- 		    const unsigned char *end);
--@@ -1022,7 +1023,7 @@ read_children(struct archive_read *a, struct file_info *parent)
-- 			if (*(p + DR_name_len_offset) == 1
-- 			    && *(p + DR_name_offset) == '\001')
-- 				continue;
---			child = parse_file_info(a, parent, p);
--+			child = parse_file_info(a, parent, p, b - p);
-- 			if (child == NULL) {
-- 				__archive_read_consume(a, skip_size);
-- 				return (ARCHIVE_FATAL);
--@@ -1112,7 +1113,7 @@ choose_volume(struct archive_read *a, struct iso9660 *iso9660)
-- 	 */
-- 	seenJoliet = iso9660->seenJoliet;/* Save flag. */
-- 	iso9660->seenJoliet = 0;
---	file = parse_file_info(a, NULL, block);
--+	file = parse_file_info(a, NULL, block, vd->size);
-- 	if (file == NULL)
-- 		return (ARCHIVE_FATAL);
-- 	iso9660->seenJoliet = seenJoliet;
--@@ -1144,7 +1145,7 @@ choose_volume(struct archive_read *a, struct iso9660 *iso9660)
-- 			return (ARCHIVE_FATAL);
-- 		}
-- 		iso9660->seenJoliet = 0;
---		file = parse_file_info(a, NULL, block);
--+		file = parse_file_info(a, NULL, block, vd->size);
-- 		if (file == NULL)
-- 			return (ARCHIVE_FATAL);
-- 		iso9660->seenJoliet = seenJoliet;
--@@ -1749,7 +1750,7 @@ archive_read_format_iso9660_cleanup(struct archive_read *a)
--  */
-- static struct file_info *
-- parse_file_info(struct archive_read *a, struct file_info *parent,
---    const unsigned char *isodirrec)
--+    const unsigned char *isodirrec, size_t reclen)
-- {
-- 	struct iso9660 *iso9660;
-- 	struct file_info *file, *filep;
--@@ -1763,7 +1764,11 @@ parse_file_info(struct archive_read *a, struct file_info *parent,
-- 
-- 	iso9660 = (struct iso9660 *)(a->format->data);
-- 
---	dr_len = (size_t)isodirrec[DR_length_offset];
--+	if (reclen == 0 || reclen < (dr_len = (size_t)isodirrec[DR_length_offset])) {
--+		archive_set_error(&a->archive, ARCHIVE_ERRNO_MISC,
--+			"Invalid directory record length");
--+		return (NULL);
--+	}
-- 	name_len = (size_t)isodirrec[DR_name_len_offset];
-- 	location = archive_le32dec(isodirrec + DR_extent_offset);
-- 	fsize = toi(isodirrec + DR_size_offset, DR_size_size);
---- 
--2.18.0
--
-diff --git a/package/libarchive/0003-Avoid-a-read-off-by-one-error-for-UTF16-names-in-RAR.patch b/package/libarchive/0003-Avoid-a-read-off-by-one-error-for-UTF16-names-in-RAR.patch
-deleted file mode 100644
-index 13a80d1fb3..0000000000
---- a/package/libarchive/0003-Avoid-a-read-off-by-one-error-for-UTF16-names-in-RAR.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 5562545b5562f6d12a4ef991fae158bf4ccf92b6 Mon Sep 17 00:00:00 2001
--From: Joerg Sonnenberger <joerg@bec.de>
--Date: Sat, 9 Sep 2017 17:47:32 +0200
--Subject: [PATCH] Avoid a read off-by-one error for UTF16 names in RAR
-- archives.
--
--Reported-By: OSS-Fuzz issue 573
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: commit 5562545b5562
--
-- libarchive/archive_read_support_format_rar.c | 6 +++++-
-- 1 file changed, 5 insertions(+), 1 deletion(-)
--
--diff --git a/libarchive/archive_read_support_format_rar.c b/libarchive/archive_read_support_format_rar.c
--index cbb14c32dc3b..751de6979ba5 100644
----- a/libarchive/archive_read_support_format_rar.c
--+++ b/libarchive/archive_read_support_format_rar.c
--@@ -1496,7 +1496,11 @@ read_header(struct archive_read *a, struct archive_entry *entry,
--         return (ARCHIVE_FATAL);
--       }
--       filename[filename_size++] = '\0';
---      filename[filename_size++] = '\0';
--+      /*
--+       * Do not increment filename_size here as the computations below
--+       * add the space for the terminating NUL explicitly.
--+       */
--+      filename[filename_size] = '\0';
-- 
--       /* Decoded unicode form is UTF-16BE, so we have to update a string
--        * conversion object for it. */
---- 
--2.18.0
--
-diff --git a/package/libarchive/0004-Reject-LHA-archive-entries-with-negative-size.patch b/package/libarchive/0004-Reject-LHA-archive-entries-with-negative-size.patch
-deleted file mode 100644
-index 628e74aed4..0000000000
---- a/package/libarchive/0004-Reject-LHA-archive-entries-with-negative-size.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From 2c8c83b9731ff822fad6cc8c670ea5519c366a14 Mon Sep 17 00:00:00 2001
--From: Joerg Sonnenberger <joerg@bec.de>
--Date: Thu, 19 Jul 2018 21:14:53 +0200
--Subject: [PATCH] Reject LHA archive entries with negative size.
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: commit 2c8c83b9731
--
-- libarchive/archive_read_support_format_lha.c | 6 ++++++
-- 1 file changed, 6 insertions(+)
--
--diff --git a/libarchive/archive_read_support_format_lha.c b/libarchive/archive_read_support_format_lha.c
--index b8ef4ae10ece..95c99bb1f31e 100644
----- a/libarchive/archive_read_support_format_lha.c
--+++ b/libarchive/archive_read_support_format_lha.c
--@@ -701,6 +701,12 @@ archive_read_format_lha_read_header(struct archive_read *a,
-- 	 * Prepare variables used to read a file content.
-- 	 */
-- 	lha->entry_bytes_remaining = lha->compsize;
--+	if (lha->entry_bytes_remaining < 0) {
--+		archive_set_error(&a->archive,
--+		    ARCHIVE_ERRNO_FILE_FORMAT,
--+		    "Invalid LHa entry size");
--+		return (ARCHIVE_FATAL);
--+	}
-- 	lha->entry_offset = 0;
-- 	lha->entry_crc_calculated = 0;
-- 
---- 
--2.18.0
--
-diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
-index 60ea0d1602..cde48c8423 100644
---- a/package/libarchive/libarchive.hash
-+++ b/package/libarchive/libarchive.hash
-@@ -1,3 +1,4 @@
-+# From http://www.libarchive.org/downloads/libarchive-3.3.3.sha512.txt
-+sha512	9d12b47d6976efa9f98e62c25d8b85fd745d4e9ca7b7e6d36bfe095dfe5c4db017d4e785d110f3758f5938dad6f1a1b009267fd7e82cb7212e93e1aea237bab7  libarchive-3.3.3.tar.gz
- # Locally computed:
--sha256  ed2dbd6954792b2c054ccf8ec4b330a54b85904a80cef477a1c74643ddafa0ce  libarchive-3.3.2.tar.gz
- sha256  ae6f35cc1979beb316e4d6431fc34c6fc59f0dd126b425c8552bb41c86e4825d  COPYING
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 1c8391bda9..b7619b03db 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBARCHIVE_VERSION = 3.3.2
-+LIBARCHIVE_VERSION = 3.3.3
- LIBARCHIVE_SITE = http://www.libarchive.org/downloads
- LIBARCHIVE_INSTALL_STAGING = YES
- LIBARCHIVE_LICENSE = BSD-2-Clause, BSD-3-Clause
+ But here, I'd prefer to have
+
+	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
+	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL
+
+to make it slightly easier for the user to do the right thing.
+
+
+ Regards,
+ Arnout
+
+> 
+>   comment "using gstreamer-gl needs gst1-plugins-bad with the gl element enabled"
+>       depends on !BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL
+> 
+>   endif
+> 
+> WDYT?
+> 
+>>>>  > would be crazy. On the other hand, adding the imply in webkitgtk looks nice,
+>>>>  > concise and clear.
+>>>
+>>> Sorry, I am still not convinced that using 'imply' in Buildroot is a
+>>> good idea overall... :-(
+>>>
+>>>> Exactly, which is why I suggested it to Adrian.
+>>
+>>  Apparently our BDFL disagrees :-)
+> 
+> I guess we will stay away from using ?imply? for now :)
+> 
+> Best regards,
+> 
+> 
+> -Adri?n
+> 
+> 
+> ---
+> [1] In some cases it can even be enough that the driver supports Pbuffer
+>     contexts which with many drivers do not even require any windowing
+> 	system running.
+> [2] Now that it's going to be Halloween, I could tell you some horror stories
+>     about how we have managed to run WebKit on some GL/EGL ?frankendriver?
+> 	implementations :D
+> 
