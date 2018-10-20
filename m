@@ -1,215 +1,107 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Oct 2018 12:50:29 +0200
-Subject: [Buildroot] [git commit] toolchain/toolchain-wrapper: add BR2_RELRO_
-Message-ID: <20181020113218.5A24183AB5@busybox.osuosl.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 20 Oct 2018 12:35:03 +0100
+Subject: [Buildroot] [git commit] package/dtc: fix include guards for older
+ kernel/u-boot
+Message-ID: <20181020113337.B25E883B22@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7484c1c3b8065d6f2f5a67607e9917ecfea022eb
+commit: https://git.buildroot.net/buildroot/commit/?id=c7ffd8a75d55e24d793106eabbb80964ab91081f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The RELRO/PIE flags are currently passed via CFLAGS/LDFLAGS and this patch
-proposes moving them to the toolchain wrapper.
+U-Boot has a copy of dtc in-tree. However, it has a bug in its build
+system which could result in both one of the in-tree dtc include files
+and the same host-installed include file to be #included.
 
- (1) The flags should _always_ be passed, without leaving the possibility
-     for any package to ignore them. I.e, when BR2_RELRO_FULL=y is used
-     in a build, all executables should be built PIE. Passing those
-     options through the wrapper ensures they are used during the build
-     of all packages.
+Normally, that wouldn't be a problem, because (a) the two include files
+are compatible, so it doesn't matter which one you include, and (b) the
+include guards are the same in both, so only one of them really does
+get included. However, upstream dtc has changed the include guards,
+removing the leading underscore. Therefore, now the header file does
+get included twice, which leads to multiple definitions like:
 
- (2) Some options are incompatible with -fPIE. For example, when
-     building object files for a shared libraries, -fPIC is used, and
-     -fPIE shouldn't be used in combination with -fPIE. Similarly, -r
-     or -static are directly incompatible as they are different link
-     time behaviors then the intent of PIE. Passing those options
-     through the wrapper allows to add some "smart" logic to only pass
-     -fPIE/-pie when relevant.
+/builds/buildroot.org/buildroot/output/host/include/libfdt.h:1790:19: error: redefinition of 'fdt_appendprop_cell'
+ static inline int fdt_appendprop_cell(void *fdt, int nodeoffset,
+                   ^~~~~~~~~~~~~~~~~~~
+In file included from tools/fdt_host.h:11:0,
+                 from tools/imagetool.h:24,
+                 from tools/atmelimage.c:8:
+tools/../include/libfdt.h:1656:19: note: previous definition of 'fdt_appendprop_cell' was here
+ static inline int fdt_appendprop_cell(void *fdt, int nodeoffset,
+                   ^~~~~~~~~~~~~~~~~~~
 
- (3) Some toolchain, kernel and bootloader packages may want to
-     explicitly disable PIE in a build where the rest of the userspace
-     has intentionally enabled it. The wrapper provides an option
-     to key on the -fno-pie/-no-pie and bypass the appending of RELRO
-     flags.
-     The current Kernel and U-boot source trees include this option.
-     https://github.com/torvalds/linux/commit/8438ee76b004ef66d125ade64c91fc128047d244
-     https://github.com/u-boot/u-boot/commit/6ace36e19a8cfdd16ce7c02625edf36864897bf5
-     If using PIE with a older Kernel and/or U-boot version, a backport of these
-     changes  might be required. However this patchset also uses the
-     __KERNEL__ and __UBOOT__ defines as a way to disable PIE.
+To fix this, patch (host) dtc to accept the old include guard as well,
+which restores the old behaviour. This patch is probably not
+upstreamable, since it's really a hack to work around an issue in
+U-Boot.  Note that it has been fixed upstream, but Buildroot supports
+building older versions of U-Boot as well.
 
-NOTE: The current implementation via CFLAGS/LDFLAGS has caused some
-build time failures as the conditional logic doesn't yet exist in
-Buildroot:
+Note that the problem may still occur if you have libdtc-dev installed
+on the host. However, now there is a simple workaround: enable
+BR2_TARGET_UBOOT_NEEDS_DTC.
 
-https://bugs.busybox.net/show_bug.cgi?id=11206
-https://bugs.busybox.net/show_bug.cgi?id=11321
+Note that a similar problem also occurs with the beaglebone fork of the
+kernel. It's not clear if it has been fixed there.
 
-Good summary of the most common build failures related to
-enabling pie: https://wiki.ubuntu.com/SecurityTeam/PIE
-
-[Peter: minor cleanups]
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
+[Arnout: rewrite commit message, rewrap patch commit message]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Makefile.in            | 11 ------
- toolchain/toolchain-wrapper.c  | 82 ++++++++++++++++++++++++++++++++++++++++--
- toolchain/toolchain-wrapper.mk |  6 ++++
- 3 files changed, 86 insertions(+), 13 deletions(-)
+ ...de-guards-for-older-kernel-u-boot-sources.patch | 46 ++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index abfdb819cf..cd2148270a 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -141,9 +141,6 @@ ifeq ($(BR2_DEBUG_3),y)
- TARGET_DEBUGGING = -g3
- endif
- 
--TARGET_CFLAGS_RELRO = -Wl,-z,relro
--TARGET_CFLAGS_RELRO_FULL = -Wl,-z,now $(TARGET_CFLAGS_RELRO)
--
- TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
- 
- ifeq ($(BR2_SSP_REGULAR),y)
-@@ -154,14 +151,6 @@ else ifeq ($(BR2_SSP_ALL),y)
- TARGET_HARDENED += -fstack-protector-all
- endif
- 
--ifeq ($(BR2_RELRO_PARTIAL),y)
--TARGET_HARDENED += $(TARGET_CFLAGS_RELRO)
--TARGET_LDFLAGS += $(TARGET_CFLAGS_RELRO)
--else ifeq ($(BR2_RELRO_FULL),y)
--TARGET_HARDENED += -fPIE $(TARGET_CFLAGS_RELRO_FULL)
--TARGET_LDFLAGS += -pie $(TARGET_CFLAGS_RELRO_FULL)
--endif
--
- ifeq ($(BR2_FORTIFY_SOURCE_1),y)
- TARGET_HARDENED += -D_FORTIFY_SOURCE=1
- else ifeq ($(BR2_FORTIFY_SOURCE_2),y)
-diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index c5eb813dd0..c73a0cc079 100644
---- a/toolchain/toolchain-wrapper.c
-+++ b/toolchain/toolchain-wrapper.c
-@@ -49,8 +49,12 @@ static char _date_[sizeof("-D__DATE__=\"MMM DD YYYY\"")];
-  * 	-D__TIME__=
-  * 	-D__DATE__=
-  * 	-Wno-builtin-macro-redefined
-+ * 	-Wl,-z,now
-+ * 	-Wl,-z,relro
-+ * 	-fPIE
-+ * 	-pie
-  */
--#define EXCLUSIVE_ARGS	6
-+#define EXCLUSIVE_ARGS	10
- 
- static char *predef_args[] = {
- #ifdef BR_CCACHE
-@@ -236,7 +240,7 @@ int main(int argc, char **argv)
- 	char *env_debug;
- 	char *paranoid_wrapper;
- 	int paranoid;
--	int ret, i, count = 0, debug;
-+	int ret, i, count = 0, debug, found_shared = 0;
- 
- 	/* Calculate the relative paths */
- 	basename = strrchr(progpath, '/');
-@@ -363,6 +367,80 @@ int main(int argc, char **argv)
- 		*cur++ = "-Wno-builtin-macro-redefined";
- 	}
- 
-+#ifdef BR2_RELRO_FULL
-+	/* Patterned after Fedora/Gentoo hardening approaches.
-+	 * https://fedoraproject.org/wiki/Changes/Harden_All_Packages
-+	 * https://wiki.gentoo.org/wiki/Hardened/Toolchain#Position_Independent_Executables_.28PIEs.29
-+	 *
-+	 * A few checks are added to allow disabling of PIE
-+	 * 1) -fno-pie and -no-pie are used by other distros to disable PIE in
-+	 *    cases where the compiler enables it by default. The logic below
-+	 *    maintains that behavior.
-+	 *         Ref: https://wiki.ubuntu.com/SecurityTeam/PIE
-+	 * 2) A check for -fno-PIE has been used in older Linux Kernel builds
-+	 *    in a similar way to -fno-pie or -no-pie.
-+	 * 3) A check is added for Kernel and U-boot defines
-+	 *    (-D__KERNEL__ and -D__UBOOT__).
-+	 */
-+	for (i = 1; i < argc; i++) {
-+		/* Apply all incompatible link flag and disable checks first */
-+		if (!strcmp(argv[i], "-r") ||
-+		    !strcmp(argv[i], "-Wl,-r") ||
-+		    !strcmp(argv[i], "-static") ||
-+		    !strcmp(argv[i], "-D__KERNEL__") ||
-+		    !strcmp(argv[i], "-D__UBOOT__") ||
-+		    !strcmp(argv[i], "-fno-pie") ||
-+		    !strcmp(argv[i], "-fno-PIE") ||
-+		    !strcmp(argv[i], "-no-pie"))
-+			break;
-+		/* Record that shared was present which disables -pie but don't
-+		 * break out of loop as a check needs to occur that possibly
-+		 * still allows -fPIE to be set
-+		 */
-+		if (!strcmp(argv[i], "-shared"))
-+			found_shared = 1;
-+	}
+diff --git a/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch b/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch
+new file mode 100644
+index 0000000000..e4e49bf6e4
+--- /dev/null
++++ b/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch
+@@ -0,0 +1,46 @@
++From b1f8b84489c96465b63485b884238b61d31ca84d Mon Sep 17 00:00:00 2001
++From: Lothar Felten <lothar.felten@gmail.com>
++Date: Mon, 8 Oct 2018 13:29:44 +0200
++Subject: [PATCH 1/1] Fix include guards for older kernel/u-boot sources
 +
-+	if (i == argc) {
-+		/* Compile and link condition checking have been kept split
-+		 * between these two loops, as there maybe already are valid
-+		 * compile flags set for position independence. In that case
-+		 * the wrapper just adds the -pie for link.
-+		 */
-+		for (i = 1; i < argc; i++) {
-+			if (!strcmp(argv[i], "-fpie") ||
-+			    !strcmp(argv[i], "-fPIE") ||
-+			    !strcmp(argv[i], "-fpic") ||
-+			    !strcmp(argv[i], "-fPIC"))
-+				break;
-+		}
-+		/* Both args below can be set@compile/link time
-+		 * and are ignored correctly when not used
-+		 */
-+		if(i == argc)
-+			*cur++ = "-fPIE";
++Linux kernels before 4.17 and U-Boot versions before 2018.07 use libfdt
++include guards with leading underscores.
 +
-+		if (!found_shared)
-+			*cur++ = "-pie";
-+	}
-+#endif
-+	/* Are we building the Linux Kernel or U-Boot? */
-+	for (i = 1; i < argc; i++) {
-+		if (!strcmp(argv[i], "-D__KERNEL__") ||
-+		    !strcmp(argv[i], "-D__UBOOT__"))
-+			break;
-+	}
-+	if (i == argc) {
-+		/* https://wiki.gentoo.org/wiki/Hardened/Toolchain#Mark_Read-Only_Appropriate_Sections */
-+#ifdef BR2_RELRO_PARTIAL
-+		*cur++ = "-Wl,-z,relro";
-+#endif
-+#ifdef BR2_RELRO_FULL
-+		*cur++ = "-Wl,-z,now";
-+		*cur++ = "-Wl,-z,relro";
-+#endif
-+	}
++Those have been removed in dtc-1.4.7.
 +
- 	paranoid_wrapper = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
- 	if (paranoid_wrapper && strlen(paranoid_wrapper) > 0)
- 		paranoid = 1;
-diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-index b8074efc3c..99d303975c 100644
---- a/toolchain/toolchain-wrapper.mk
-+++ b/toolchain/toolchain-wrapper.mk
-@@ -45,6 +45,12 @@ ifeq ($(BR2_CCACHE_USE_BASEDIR),y)
- TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_BASEDIR='"$(BASE_DIR)"'
- endif
- 
-+ifeq ($(BR2_RELRO_PARTIAL),y)
-+TOOLCHAIN_WRAPPER_ARGS += -DBR2_RELRO_PARTIAL
-+else ifeq ($(BR2_RELRO_FULL),y)
-+TOOLCHAIN_WRAPPER_ARGS += -DBR2_RELRO_FULL
-+endif
++This patch handles both include guard types and allows the compilation
++of older Linux kernel and u-boot sources.
 +
- define TOOLCHAIN_WRAPPER_BUILD
- 	$(HOSTCC) $(HOST_CFLAGS) $(TOOLCHAIN_WRAPPER_ARGS) \
- 		-s -Wl,--hash-style=$(TOOLCHAIN_WRAPPER_HASH_STYLE) \
++Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
++---
++ libfdt/libfdt.h     | 4 ++++
++ libfdt/libfdt_env.h | 4 ++++
++ 2 files changed, 8 insertions(+)
++
++diff --git a/libfdt/libfdt.h b/libfdt/libfdt.h
++index 830b77e..bef4566 100644
++--- a/libfdt/libfdt.h
+++++ b/libfdt/libfdt.h
++@@ -1,3 +1,7 @@
+++#ifdef _LIBFDT_H
+++#warning "Please consider updating your kernel and/or u-boot version"
+++#define LIBFDT_H
+++#endif
++ #ifndef LIBFDT_H
++ #define LIBFDT_H
++ /*
++diff --git a/libfdt/libfdt_env.h b/libfdt/libfdt_env.h
++index eb20538..6a61e6a 100644
++--- a/libfdt/libfdt_env.h
+++++ b/libfdt/libfdt_env.h
++@@ -1,3 +1,7 @@
+++#ifdef _LIBFDT_ENV_H
+++#warning "Please consider updating your kernel and/or u-boot version"
+++#define LIBFDT_ENV_H
+++#endif
++ #ifndef LIBFDT_ENV_H
++ #define LIBFDT_ENV_H
++ /*
++-- 
++2.11.0
++
