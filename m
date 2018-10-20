@@ -1,115 +1,133 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Sat, 20 Oct 2018 17:09:17 +0200
-Subject: [Buildroot] [PATCH v8 4/4] package/clinfo: new package
-In-Reply-To: <1540046091-13736-5-git-send-email-valentinkorenblit@gmail.com>
-References: <1540046091-13736-1-git-send-email-valentinkorenblit@gmail.com>
- <1540046091-13736-5-git-send-email-valentinkorenblit@gmail.com>
-Message-ID: <ea76d828-d7cd-a8b5-79e4-286f5f4723d5@smile.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 20 Oct 2018 17:12:21 +0200
+Subject: [Buildroot] [git commit] toolchain-external: add Arm AArch64-BE
+ toolchain 8.2-2018.08
+Message-ID: <20181020151147.C1F198283F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 20/10/2018 ? 16:34, Valentin Korenblit a ?crit?:
-> This tool allows to verify if the OpenCL environment is set up correctly
-> and provides information related to the supported OpenCL platforms.
-> 
-> Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
-> Signed-off-by: Valentin Korenblit <valentinkorenblit@gmail.com>
-> ---
->  DEVELOPERS                 |  1 +
->  package/Config.in          |  1 +
->  package/clinfo/Config.in   |  9 +++++++++
->  package/clinfo/clinfo.hash |  3 +++
->  package/clinfo/clinfo.mk   | 23 +++++++++++++++++++++++
->  5 files changed, 37 insertions(+)
->  create mode 100644 package/clinfo/Config.in
->  create mode 100644 package/clinfo/clinfo.hash
->  create mode 100644 package/clinfo/clinfo.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index ffcbc76..659fa2d 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2116,6 +2116,7 @@ F:	package/tstools/
->  
->  N:	Valentin Korenblit <valentinkorenblit@gmail.com>
->  F:	package/clang/
-> +F:	package/clinfo/
->  F:	package/libclc
->  F:	package/llvm/
->  
-> diff --git a/package/Config.in b/package/Config.in
-> index 8d53c72..18b6421 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -83,6 +83,7 @@ menu "Debugging, profiling and benchmark"
->  	source "package/blktrace/Config.in"
->  	source "package/bonnie/Config.in"
->  	source "package/cache-calibrator/Config.in"
-> +	source "package/clinfo/Config.in"
->  	source "package/dhrystone/Config.in"
->  	source "package/dieharder/Config.in"
->  	source "package/dmalloc/Config.in"
-> diff --git a/package/clinfo/Config.in b/package/clinfo/Config.in
-> new file mode 100644
-> index 0000000..279b5ac
-> --- /dev/null
-> +++ b/package/clinfo/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_CLINFO
-> +	bool "clinfo"
-> +	depends on BR2_PACKAGE_MESA3D_OPENCL
-> +	help
-> +	  clinfo is a simple command-line application that enumerates
-> +	  all possible (known) properties of the OpenCL platform and
-> +	  devices available on the system.
-> +
-> +	  https://github.com/Oblomov/clinfo
-> diff --git a/package/clinfo/clinfo.hash b/package/clinfo/clinfo.hash
-> new file mode 100644
-> index 0000000..1ba3481
-> --- /dev/null
-> +++ b/package/clinfo/clinfo.hash
-> @@ -0,0 +1,3 @@
-> +# locally calculated
-> +sha256 64b02e68ccff3b95437bd0bd70dcb88438c58adec16a7145a5d4e5c26a898ccf clinfo-2.2.18.03.26.tar.gz
-> +sha256 a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499 legalcode.txt
-> diff --git a/package/clinfo/clinfo.mk b/package/clinfo/clinfo.mk
-> new file mode 100644
-> index 0000000..1477b76
-> --- /dev/null
-> +++ b/package/clinfo/clinfo.mk
-> @@ -0,0 +1,23 @@
-> +################################################################################
-> +#
-> +# clinfo
-> +#
-> +################################################################################
-> +
-> +CLINFO_VERSION = 2.2.18.03.26
+commit: https://git.buildroot.net/buildroot/commit/?id=d1b99023b98b58fb33876998d3eb2d43a4633e3d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Note there is a new version 2.2.18.04.06, but OK to merge this version and bump
-to the new version latter.
+This is the same toolchain that was previously distributed by Linaro. [1]
 
-> +CLINFO_SITE = $(call github,Oblomov,clinfo,$(CLINFO_VERSION))
-> +CLINFO_LICENSE = CC0-1.0
-> +CLINFO_LICENSE_FILES = legalcode.txt
+Switch default toolchain as this toolchain supersed the Linaro AArch64-BE toolchain.
+Only x86_64 host are supported, so keep Linaro toolchain for x86 host.
 
-There is also a LICENSE file
+[1] https://developer.arm.com/open-source/gnu-toolchain/gnu-a/downloads
 
-> +
-> +# libOpenCL is needed
-> +CLINFO_DEPENDENCIES = mesa3d
-> +
-> +define CLINFO_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
-> +endef
-> +
-> +define CLINFO_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 755 $(@D)/clinfo $(TARGET_DIR)/usr/bin/clinfo
-> +endef
-> +
-> +$(eval $(generic-package))
-> 
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                            |  1 +
+ toolchain/toolchain-external/Config.in                |  2 ++
+ .../toolchain-external-arm-aarch64-be/Config.in       | 19 +++++++++++++++++++
+ .../Config.in.options                                 |  9 +++++++++
+ .../toolchain-external-arm-aarch64-be.hash            |  4 ++++
+ .../toolchain-external-arm-aarch64-be.mk              | 13 +++++++++++++
+ 6 files changed, 48 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ed2d529b6d..5b3e8f322e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1823,6 +1823,7 @@ F:	package/upower/
+ F:	package/waffle/
+ F:	package/xenomai/
+ F:	toolchain/toolchain-external/toolchain-external-arm-aarch64/
++F:	toolchain/toolchain-external/toolchain-external-arm-aarch64-be/
+ F:	toolchain/toolchain-external/toolchain-external-arm-arm/
+ 
+ N:	Roman Gorbenkov <roman.gorbenkov@ens2m.org>
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 47e54fc354..1f14f0350a 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -17,6 +17,7 @@ source "toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
+ source "toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in"
+ 
+ # Aarch64 big-endian
++source "toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in"
+ source "toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in"
+ 
+ # ARC
+@@ -117,6 +118,7 @@ source "toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
+ source "toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in.options"
+ 
+ # Aarch64 big-endian
++source "toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in.options"
+ source "toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in.options"
+ 
+ # ARC
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
+new file mode 100644
+index 0000000000..1e303c5ec2
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
+@@ -0,0 +1,19 @@
++config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE
++	bool "Arm AArch64 BE 2018.08"
++	depends on BR2_aarch64_be
++	depends on BR2_HOSTARCH = "x86_64"
++	depends on !BR2_STATIC_LIBS
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_TOOLCHAIN_HAS_SSP
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
++	select BR2_TOOLCHAIN_HAS_FORTRAN
++	help
++	  Arm toolchain for the AArch64 Big Endian architecture.
++
++	  This is the same toolchain that was previously distributed by
++	  Linaro.
++
++	  https://developer.arm.com/open-source/gnu-toolchain
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in.options b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in.options
+new file mode 100644
+index 0000000000..add4adad2a
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in.options
+@@ -0,0 +1,9 @@
++if BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE
++
++config BR2_TOOLCHAIN_EXTERNAL_PREFIX
++	default "aarch64_be-linux-gnu"
++
++config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
++	default "toolchain-external-arm-aarch64-be"
++
++endif
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash
+new file mode 100644
+index 0000000000..9ab0eb519c
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash
+@@ -0,0 +1,4 @@
++# From https://developer.arm.com/-/media/Files/downloads/gnu-a/8.2-2018.08/gcc-arm-8.2-2018.08-x86_64-aarch64_be-linux-gnu.tar.xz.asc
++md5 789171dc11bc2e37e90ea3c6de46c719 gcc-arm-8.2-2018.08-x86_64-aarch64_be-linux-gnu.tar.xz
++# locally calculated
++sha256 2cd8a1a35a892db5f0cd738a8b17bd1563f6d6e4be43a2b527b355bcfb295df8 gcc-arm-8.2-2018.08-x86_64-aarch64_be-linux-gnu.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk
+new file mode 100644
+index 0000000000..30db8c92e6
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# toolchain-external-arm-aarch64-be
++#
++################################################################################
++
++TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION = 2018.08
++TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/8.2-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION)
++
++TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_SOURCE = gcc-arm-8.2-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION)-x86_64-aarch64_be-linux-gnu.tar.xz
++
++
++$(eval $(toolchain-external-package))
