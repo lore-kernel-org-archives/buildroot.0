@@ -1,37 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Oct 2018 20:14:56 +0200
-Subject: [Buildroot] [PATCH 0/6] core: look for package's hashes in
- versioned sub-directory
-In-Reply-To: <cover.1539519817.git.yann.morin.1998@free.fr>
-References: <cover.1539519817.git.yann.morin.1998@free.fr>
-Message-ID: <20181020201456.60160fbe@windsurf.lan>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 20 Oct 2018 20:16:32 +0200
+Subject: [Buildroot] [PATCH] qt download site update
+In-Reply-To: <7adc37ba-4418-471e-7d4b-fae12a4312f1@essensium.com>
+References: <adb6fd85-75d3-30e9-df67-a358d07338b0@essensium.com>
+ <7adc37ba-4418-471e-7d4b-fae12a4312f1@essensium.com>
+Message-ID: <CACXmViZk9cVbeOrtmn9HeKNpmMqFH3Wrr4gT7mM6_M2-jLr4EQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Tue, Oct 16, 2018 at 2:31 PM Francois Gerin
+<francois.gerin@essensium.com> wrote:
+>
+> The download link was broken, former qt versions are stored into a
+> distinct location.
+>
+> Signed-off-by: Francois Gerin <francois.gerin@essensium.com>
 
-On Sun, 14 Oct 2018 14:25:22 +0200, Yann E. MORIN wrote:
+Your patch was unfortunately badly wrapped and couldn't be applied as is.
 
-> Yann E. MORIN (6):
->       core: add a variable that points to the package's hash file
->       legal-info: use the per-package variable to get the hash file
->       package: prepare for per-version hash files
->       core/download: do not hard-code the path to hte package hash file
->       package: drop unversioned hash files
->       docs/manual: document location of hash files for multi-versions packages
+Committed after fixing that up manually, thanks.
 
-I've applied to master. However, there was an issue with "package:
-prepare for per-version hash files", where the hashes for three Qt5
-tarballs were inverted between the two versions. I fixed that up when
-applying.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--
+Bye, Peter Korsgaard
