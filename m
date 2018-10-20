@@ -1,81 +1,43 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 20 Oct 2018 12:37:45 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dtc: fix include guards for
- older kernel/u-boot
-In-Reply-To: <20181008115146.17797-1-lothar.felten@gmail.com>
-References: <20181008115146.17797-1-lothar.felten@gmail.com>
-Message-ID: <4109966e-b357-43a1-7a62-b5896ef0224d@mind.be>
+From: Mark Corbin <mark.corbin@embecosm.com>
+Date: Sat, 20 Oct 2018 12:56:51 +0100
+Subject: [Buildroot] [PATCH 1/1] support/config-fragments: add RISC-V 64-bit
+ to autobuild configs
+Message-ID: <20181020115651.6268-1-mark.corbin@embecosm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add a minimal RISC-V 64-bit autobuild configuration for the
+internal toolchain with glibc.
 
+Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
+---
+ .../config-fragments/autobuild/br-riscv64-internal-glibc.config | 2 ++
+ support/config-fragments/autobuild/toolchain-configs.csv        | 1 +
+ 2 files changed, 3 insertions(+)
+ create mode 100644 support/config-fragments/autobuild/br-riscv64-internal-glibc.config
 
-On 08/10/2018 12:51, Lothar Felten wrote:
-> Patch dtc to accept libfdt include guards with and without leading underscore.
-> A compiler warning is added to notify the user.
-> 
-> Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
-
- At the Buildroot meeting, we agreed that the warning is OK, so I extended the
-commit message and applied to master, thanks.
-
- Regards,
- Arnout
-
-> ---
->  ...de-guards-for-older-kernel-u-boot-sources.patch | 42 ++++++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch
-> 
-> diff --git a/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch b/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch
-> new file mode 100644
-> index 0000000000..40cb0bdb2a
-> --- /dev/null
-> +++ b/package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch
-> @@ -0,0 +1,42 @@
-> +From b1f8b84489c96465b63485b884238b61d31ca84d Mon Sep 17 00:00:00 2001
-> +From: Lothar Felten <lothar.felten@gmail.com>
-> +Date: Mon, 8 Oct 2018 13:29:44 +0200
-> +Subject: [PATCH 1/1] Fix include guards for older kernel/u-boot sources
-> +
-> +Linux kernels before 4.17 and U-Boot versions before 2018.07 use libfdt include guards with leading underscores.
-> +Those have been removed in dtc-1.4.7.
-> +This patch handles both include guard types and allows the compilation of older Linux kernel and u-boot sources.
-> +
-> +Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
-> +---
-> + libfdt/libfdt.h     | 4 ++++
-> + libfdt/libfdt_env.h | 4 ++++
-> + 2 files changed, 8 insertions(+)
-> +
-> +diff --git a/libfdt/libfdt.h b/libfdt/libfdt.h
-> +index 830b77e..bef4566 100644
-> +--- a/libfdt/libfdt.h
-> ++++ b/libfdt/libfdt.h
-> +@@ -1,3 +1,7 @@
-> ++#ifdef _LIBFDT_H
-> ++#warning "Please consider updating your kernel and/or u-boot version"
-> ++#define LIBFDT_H
-> ++#endif
-> + #ifndef LIBFDT_H
-> + #define LIBFDT_H
-> + /*
-> +diff --git a/libfdt/libfdt_env.h b/libfdt/libfdt_env.h
-> +index eb20538..6a61e6a 100644
-> +--- a/libfdt/libfdt_env.h
-> ++++ b/libfdt/libfdt_env.h
-> +@@ -1,3 +1,7 @@
-> ++#ifdef _LIBFDT_ENV_H
-> ++#warning "Please consider updating your kernel and/or u-boot version"
-> ++#define LIBFDT_ENV_H
-> ++#endif
-> + #ifndef LIBFDT_ENV_H
-> + #define LIBFDT_ENV_H
-> + /*
-> +-- 
-> +2.11.0
-> +
-> 
+diff --git a/support/config-fragments/autobuild/br-riscv64-internal-glibc.config b/support/config-fragments/autobuild/br-riscv64-internal-glibc.config
+new file mode 100644
+index 0000000000..75aa5dd915
+--- /dev/null
++++ b/support/config-fragments/autobuild/br-riscv64-internal-glibc.config
+@@ -0,0 +1,2 @@
++BR2_riscv=y
++BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
+index 136a67f54b..d5bba8949e 100644
+--- a/support/config-fragments/autobuild/toolchain-configs.csv
++++ b/support/config-fragments/autobuild/toolchain-configs.csv
+@@ -50,6 +50,7 @@ support/config-fragments/autobuild/br-powerpc64le-power8-glibc.config,x86_64
+ support/config-fragments/autobuild/br-powerpc64-power7-glibc.config,x86_64
+ support/config-fragments/autobuild/br-powerpc-e500mc-full.config,x86_64
+ support/config-fragments/autobuild/br-powerpc-internal-full.config,any
++support/config-fragments/autobuild/br-riscv64-internal-glibc.config,any
+ support/config-fragments/autobuild/br-sh4-full.config,x86_64
+ support/config-fragments/autobuild/br-sparc-uclibc.config,x86_64
+ support/config-fragments/autobuild/br-sparc64-glibc.config,x86_64
+-- 
+2.17.1
