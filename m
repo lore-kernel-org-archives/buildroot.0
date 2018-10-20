@@ -1,30 +1,28 @@
-From: Patrick Doyle <wpdster@gmail.com>
-Date: Sat, 20 Oct 2018 19:27:05 -0400
-Subject: [Buildroot] How can I compile a module into the kernel?
-Message-ID: <CAF_dkJAn7NgNfn5d0wQDnGF7UoCuFoUZvnpvvYDgWoA7RpV4Ag@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 21 Oct 2018 01:48:12 +0200
+Subject: [Buildroot] [PATCH v3 1/2] package/nss-mdns: Fix hook from
+ post-install to finalize
+In-Reply-To: <1527580812-14078-1-git-send-email-vincent.prince.fr@gmail.com>
+ (Vincent Prince's message of "Tue, 29 May 2018 10:00:11 +0200")
+References: <87wovnv81q.fsf@dell.be.48ers.dk>
+ <1527580812-14078-1-git-send-email-vincent.prince.fr@gmail.com>
+Message-ID: <87mur889j7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For security reasons, I would like to disable loadable modules in my
-kernel.  But my wireless driver is only available as a module.
+>>>>> "Vincent" == Vincent Prince <vincent.prince.fr@gmail.com> writes:
 
-I could drop the module into the source tree, possibly with a minor
-tweak to the Makefile, and just include it that way, but then I would
-have to maintain a source tree separately from my vendor supplied
-source tree.  And I hate proliferating yet another public git
-repository clone of a clone of a clone of the Linux kernel.
+ > Both nss-mdns and nss-myhostname patch nsswitch.conf file
+ > so it needs to be done at the final stage otherwise changes are not applied
 
-Or I could drop the module into my source tree and convert it into a
-large patch which I would apply to the kernel as part of the build
-process.  But those sorts of patches get messy to maintain.
+ > Signed-off-by: Vincent Prince <vincent.prince.fr@gmail.com>
 
-What I would really like to do is to tell buildroot and/or the kernel
-"Link this external module into the kernel at link time, not at
-runtime".
+We also need to rewrite the sed invocation so the order between
+toolchain / nss-mdns / nss-myhostname doesn't matter. I've added 2
+followup patches to do that and committed, thanks.
 
-Does anybody have any thoughts as to how I might do that?
-
---wpd
+-- 
+Bye, Peter Korsgaard
