@@ -1,152 +1,83 @@
-From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date: Sat, 20 Oct 2018 22:22:40 +0200
-Subject: [Buildroot] Boot without busybox
-In-Reply-To: <CAJ2oMhJfQthyKQciHEZmccmck537NfM=PEYDL7kThMjMZ5ESrg@mail.gmail.com>
-References: <CAJ2oMhJbBLv7eiJo=LNnmHSJms1SQZknD7_dTHM8UfE8xPoTxA@mail.gmail.com>
- <c98ccac7-5680-6cee-fd6e-ef105c2fd377@mind.be>
- <CAJ2oMhK0wTWgqnC=kQ7yf69_vafF3X1mi-B=n4k4NiLKbgT=aw@mail.gmail.com>
- <ea032860-86db-869e-aa3a-872f880f5214@mind.be>
- <CAOf5uwmSxX9+skisQ5TjJxGz8oyigb4=vo+pWGDEFL7Yo-b=Cg@mail.gmail.com>
- <CAJ2oMhJfQthyKQciHEZmccmck537NfM=PEYDL7kThMjMZ5ESrg@mail.gmail.com>
-Message-ID: <CAOf5uwms7jbi4de9LqorRG=pOOiSXt=TzBh0dz4Nm2kdmP=rYg@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 20 Oct 2018 23:07:17 +0200
+Subject: [Buildroot] [PATCH] glibc: Install iconvconfig on target with
+ gconv libs
+In-Reply-To: <20180802063830.19364-1-abrodkin@synopsys.com>
+References: <20180802063830.19364-1-abrodkin@synopsys.com>
+Message-ID: <297457d6-d63a-cb93-30e0-fefb599f1cf3@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Hi Alexey,
 
-On Sat, Oct 20, 2018 at 10:12 PM Ranran <ranshalit@gmail.com> wrote:
->
-> On Sat, Oct 20, 2018 at 9:07 PM Michael Nazzareno Trimarchi
-> <michael@amarulasolutions.com> wrote:
-> >
-> > Hi Ran
-> >
-> > On Sat, Oct 20, 2018 at 6:35 PM Arnout Vandecappelle <arnout@mind.be> wrote:
-> > >
-> > >
-> > >
-> > > On 20/10/2018 17:03, Ranran wrote:
-> > > > On Sat, Oct 20, 2018 at 3:29 PM Arnout Vandecappelle <arnout@mind.be> wrote:
-> > > >>
-> > > >>
-> > > >>
-> > > >> On 20/10/2018 08:04, Ranran wrote:
-> > > >>> Hello,
-> > > >>>
-> > > >>> As part of Linux hardening we want to remove busybox from filesystem.
-> > > >>
-> > > >>  How does replacing busybox with bloatware harden your system?
-> > > >>
-> > > > I actually thought of removing it totally (no replacement), but if
-> > > > this is not possible on buildroot we might consider other alternatives
-> > > > (such as minimizing its capability).
-> > >
-> > >  Assuming you want an actual *working*, *running* system, you will need
-> > > *something* to provide the basic userspace functionality: init, shell,
-> > > coreutils, etc. You have the choice between using busybox for that (small, thus
-> > > easy to harden), or the "full packages" (many different packages, all of them
-> > > much larger than busybox, so most likely more difficult to harden).
-> >
-> > Every process fork from init. If you have one process you can boot to
-> > your process
-> > directly cmdline of the kernel init=.... or you can create your own
-> > one simple enough.
-> >
-> > Normally CVE exploit are on top of standard service. As any other
-> > services busybox
-> > is normally checked and used.
-> >
-> > Can you please give a list of what init should do in your system?
->
-> Yes, the init should:
-> 1. start my application only , no use of shell , only ethernet for
-> application communication.
+Le 02/08/2018 ? 08:38, Alexey Brodkin a ?crit?:
+> In some cases we need to have gconv-modules.cache on target,
+> for example see [1] or glibc's test-suite (iconv/test-iconvconfig).
+> 
+> We do have iconvconfig installed in Buildroot's staging folder but
+> it gets never installed on targe because instead of calling glibc's
+> "install" target we simply copy a list of libs.
+> 
+> So then let's copy oven iconvconfig there as well in a similar manner.
+> Still we do it only if gconv libs are being copied otherwise it makes no
+> sense I guess.
+> 
+> [1] http://lists.busybox.net/pipermail/buildroot/2013-July/075097.html
+> 
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> Cc: Romain Naour <romain.naour@gmail.com>
+> Cc: Baruch Siach <baruch@tkos.co.il>
+> ---
+> 
+> I do realize my implementation might look not super correct as
+> appending *binary* to the list of *libs* is not good. But:
+> 
+> 1. It's very tiny yet working fix or even better "improvement"
+> 2. That might at least be a good starting pont for a discussion on
+>    what would be a better way :)
 
-You need to start dhcp and have some service that manage it.
+Well, we don't require copy_toolchain_lib_root to install iconvconfig binary on
+the target. Libraries needs a complicated logic to be deployed on the target
+hence copy_toolchain_lib_root.
 
-You can create a simple main that start all together and call from cmdline
+Maybe just add GLIBC_INSTALL_ICONVCONFIG:
 
-> 2, simple firewall (in userspace or kernel)
+define GLIBC_INSTALL_ICONVCONFIG
+	$(INSTALL) -m 0755 -D $(@D)/build/iconv/iconvconfig \
+		$(TARGET_DIR)/usr/sbin/iconvconfig
+endef
 
-the same you can setup iptables
+define GLIBC_INSTALL_TARGET_CMDS
+	for libpattern in $(GLIBC_LIBS_LIB); do \
+		$(call copy_toolchain_lib_root,$$libpattern) ; \
+	done
+	$(GLIBC_INSTALL_ICONVCONFIG)
+endef
 
-> 3. start selinux (please comment if you think it is wrong doing it
-> from this minimzed init)
-
-init of android is doing more or less what you need
-
-Michael
-
-> 4. optional - start auditd (or implement my own sort of auditd).
->
-> As you see no shell, or other busybox commands is required.
->
-> Thanks,
-> ranran
->
-> >
-> > Michael
-> >
-> > >
-> > > >
-> > > >>> But I am not sure if system can boot without it.
-> > > >>> I am quite sure that there are init files that depends on busybox.
-> > > >>>
-> > > >>> Is it possible to boot without busybox or does it require a custom init ?
-> > > >>
-> > > >>  We have support for 3 different init systems: busybox, sysvinit, and systemd.
-> > > >> There is also the "none" option, but then you're on your own for finding the
-> > > >> appropriate init system. You can use it for using s6 as init system, for example.
-> > > >>
-> > > >>  If you remove Busybox entirely, you will also have to manually select all the
-> > > >> other packages needed to get a minimal Unix system, like GNU coreutils, some
-> > > >> shell, util-linux, ...
-> > > >>
-> > > >
-> > > > Isn't removing buildroot just a matter of selections in menuconfig ?
-> > >
-> > >  Yes it is. Well, you need to select a different init system before you're able
-> > > to remove it in menuconfig.
-> > >
-> > >  However, that will leave you with a system that doesn't work. It will boot, it
-> > > will start init, but then init is not able to start any other process because
-> > > there is no shell.
-> > >
-> > > > I mean, must I know which package should be replcaed with others or is
-> > > > it that buildroot menu shall automatically choose for me the correct
-> > > > selection when I remove busybox ?
-> > >
-> > >  That's the point: buidroot does *not* do that for you. It just prints a warning
-> > > that your config might be broken :-).
-> > >
-> > >  Note that you may actually get away with building a system without any of the
-> > > standard tools (shell, ls, etc.). For example, a "boot-to-gecko" kind of system
-> > > in theory needs nothing other than firefox, and firefox can be used directly as
-> > > the "init system". But again, you're on your own to make sure that this actually
-> > > works.
-> > >
-> > >  Regards,
-> > >  Arnout
-> > > _______________________________________________
-> > > buildroot mailing list
-> > > buildroot at busybox.net
-> > > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
-> >
-> >
-> > --
-> > | Michael Nazzareno Trimarchi                     Amarula Solutions BV |
-> > | COO  -  Founder                                      Cruquiuskade 47 |
-> > | +31(0)851119172                                 Amsterdam 1018 AM NL |
-> > |                  [`as] http://www.amarulasolutions.com               |
+Best regards,
+Romain
 
 
-
--- 
-| Michael Nazzareno Trimarchi                     Amarula Solutions BV |
-| COO  -  Founder                                      Cruquiuskade 47 |
-| +31(0)851119172                                 Amsterdam 1018 AM NL |
-|                  [`as] http://www.amarulasolutions.com               |
+> 
+>  package/glibc/glibc.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+> index 6d21ae7ac07d..9366b3ec4199 100644
+> --- a/package/glibc/glibc.mk
+> +++ b/package/glibc/glibc.mk
+> @@ -119,6 +119,10 @@ ifeq ($(BR2_PACKAGE_GDB),y)
+>  GLIBC_LIBS_LIB += libthread_db.so.*
+>  endif
+>  
+> +ifeq ($(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY),y)
+> +GLIBC_LIBS_LIB += iconvconfig
+> +endif
+> +
+>  define GLIBC_INSTALL_TARGET_CMDS
+>  	for libpattern in $(GLIBC_LIBS_LIB); do \
+>  		$(call copy_toolchain_lib_root,$$libpattern) ; \
+> 
