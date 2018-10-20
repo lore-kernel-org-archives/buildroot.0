@@ -1,108 +1,95 @@
-From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date: Sat, 20 Oct 2018 20:07:27 +0200
-Subject: [Buildroot] Boot without busybox
-In-Reply-To: <ea032860-86db-869e-aa3a-872f880f5214@mind.be>
-References: <CAJ2oMhJbBLv7eiJo=LNnmHSJms1SQZknD7_dTHM8UfE8xPoTxA@mail.gmail.com>
- <c98ccac7-5680-6cee-fd6e-ef105c2fd377@mind.be>
- <CAJ2oMhK0wTWgqnC=kQ7yf69_vafF3X1mi-B=n4k4NiLKbgT=aw@mail.gmail.com>
- <ea032860-86db-869e-aa3a-872f880f5214@mind.be>
-Message-ID: <CAOf5uwmSxX9+skisQ5TjJxGz8oyigb4=vo+pWGDEFL7Yo-b=Cg@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 20 Oct 2018 20:05:32 +0200
+Subject: [Buildroot] [PATCH] toolchain-external: add fortran support
+ option for custom external toolchains
+In-Reply-To: <CAHXCMMJuFZn9S==hQ4y2Z3BDz8oWQqd+Fq5NU=sD9tew5mZF7w@mail.gmail.com>
+References: <20180714171542.8192-1-romain.naour@gmail.com>
+ <CAHXCMMJuFZn9S==hQ4y2Z3BDz8oWQqd+Fq5NU=sD9tew5mZF7w@mail.gmail.com>
+Message-ID: <f7b25e48-3e84-a445-ed20-12163ad6268c@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ran
+Hi Samuel,
 
-On Sat, Oct 20, 2018 at 6:35 PM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 20/10/2018 17:03, Ranran wrote:
-> > On Sat, Oct 20, 2018 at 3:29 PM Arnout Vandecappelle <arnout@mind.be> wrote:
-> >>
-> >>
-> >>
-> >> On 20/10/2018 08:04, Ranran wrote:
-> >>> Hello,
-> >>>
-> >>> As part of Linux hardening we want to remove busybox from filesystem.
-> >>
-> >>  How does replacing busybox with bloatware harden your system?
-> >>
-> > I actually thought of removing it totally (no replacement), but if
-> > this is not possible on buildroot we might consider other alternatives
-> > (such as minimizing its capability).
->
->  Assuming you want an actual *working*, *running* system, you will need
-> *something* to provide the basic userspace functionality: init, shell,
-> coreutils, etc. You have the choice between using busybox for that (small, thus
-> easy to harden), or the "full packages" (many different packages, all of them
-> much larger than busybox, so most likely more difficult to harden).
+Le 26/07/2018 ? 20:46, Samuel Martin a ?crit?:
+> Hi Romain,
+> 
+> Sorry for the late response. :s
 
-Every process fork from init. If you have one process you can boot to
-your process
-directly cmdline of the kernel init=.... or you can create your own
-one simple enough.
+Ctrl-c Ctrl-v :s
 
-Normally CVE exploit are on top of standard service. As any other
-services busybox
-is normally checked and used.
+> 
+> On Sat, Jul 14, 2018 at 7:15 PM, Romain Naour <romain.naour@gmail.com> wrote:
+>> If a custom external toolchain is used, we can't enable the fortran
+>> support. Add a new option for that.
+> 
+> Indeed, it is a long-time limitation of using buildroot toolchain as
+> external ones, all options are not necessarily available in the
+> external toolchain backend. :-/
+> 
+>>
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>> Cc: Samuel Martin <s.martin49@gmail.com>
+>> ---
+>>  .../toolchain-external-custom/Config.in.options                   | 8 ++++++++
+>>  1 file changed, 8 insertions(+)
+>>
+>> diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+>> index 6a9921c149..5ec3f961a1 100644
+>> --- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+>> +++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+>> @@ -401,6 +401,14 @@ config BR2_TOOLCHAIN_EXTERNAL_CXX
+>>           support. If you don't know, leave the default value,
+>>           Buildroot will tell you if it's correct or not.
+>>
+>> +config BR2_TOOLCHAIN_EXTERNAL_FORTRAN
+>> +       bool "Toolchain has Fortran support?"
+>> +       select BR2_TOOLCHAIN_HAS_FORTRAN
+>> +       help
+>> +         Select this option if your external toolchain has Fortran
+>> +         support. If you don't know, leave the default value,
+>> +         Buildroot will tell you if it's correct or not.
+>> +
+> 
+> In the gcc package, there is some extra checks for fortran with
+> libquadmath when available (which depends on the target architecture).
+> So, I wonder whether it should be sensitive to libquadmath (so wchar)
+> on the relevant architectures.
 
-Can you please give a list of what init should do in your system?
+Indeed, I added:
 
-Michael
+config BR2_TOOLCHAIN_EXTERNAL_FORTRAN
+	bool "Toolchain has Fortran support?"
+	# on architecture building libquadmath, wchar is required
+	depends on !BR2_TOOLCHAIN_HAS_LIBQUADMATH || \
+		(BR2_TOOLCHAIN_HAS_LIBQUADMATH && BR2_USE_WCHAR)
+	select BR2_TOOLCHAIN_HAS_FORTRAN
+	help
+	  Select this option if your external toolchain has Fortran
+	  support. If you don't know, leave the default value,
+	  Buildroot will tell you if it's correct or not.
 
->
-> >
-> >>> But I am not sure if system can boot without it.
-> >>> I am quite sure that there are init files that depends on busybox.
-> >>>
-> >>> Is it possible to boot without busybox or does it require a custom init ?
-> >>
-> >>  We have support for 3 different init systems: busybox, sysvinit, and systemd.
-> >> There is also the "none" option, but then you're on your own for finding the
-> >> appropriate init system. You can use it for using s6 as init system, for example.
-> >>
-> >>  If you remove Busybox entirely, you will also have to manually select all the
-> >> other packages needed to get a minimal Unix system, like GNU coreutils, some
-> >> shell, util-linux, ...
-> >>
-> >
-> > Isn't removing buildroot just a matter of selections in menuconfig ?
->
->  Yes it is. Well, you need to select a different init system before you're able
-> to remove it in menuconfig.
->
->  However, that will leave you with a system that doesn't work. It will boot, it
-> will start init, but then init is not able to start any other process because
-> there is no shell.
->
-> > I mean, must I know which package should be replcaed with others or is
-> > it that buildroot menu shall automatically choose for me the correct
-> > selection when I remove busybox ?
->
->  That's the point: buidroot does *not* do that for you. It just prints a warning
-> that your config might be broken :-).
->
->  Note that you may actually get away with building a system without any of the
-> standard tools (shell, ls, etc.). For example, a "boot-to-gecko" kind of system
-> in theory needs nothing other than firefox, and firefox can be used directly as
-> the "init system". But again, you're on your own to make sure that this actually
-> works.
->
->  Regards,
->  Arnout
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+comment "Fortran support needs a toolchain w/ wchar"
+	depends on BR2_TOOLCHAIN_HAS_LIBQUADMATH
+	depends on !BR2_USE_WCHAR # libquadmath
+
+I'll send a v2.
+
+Best regards,
+Romain
 
 
-
--- 
-| Michael Nazzareno Trimarchi                     Amarula Solutions BV |
-| COO  -  Founder                                      Cruquiuskade 47 |
-| +31(0)851119172                                 Amsterdam 1018 AM NL |
-|                  [`as] http://www.amarulasolutions.com               |
+> 
+>>  config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
+>>         string "Extra toolchain libraries to be copied to target"
+>>         help
+>> --
+>> 2.14.4
+>>
+> 
+> Regards,
+> 
