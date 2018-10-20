@@ -1,92 +1,62 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 20 Oct 2018 13:57:27 +0100
-Subject: [Buildroot] [PATCH] meson: bump version to 0.48.1
-In-Reply-To: <20181019211039.GA14986@itchy>
-References: <20181018204431.29117-1-eric.le.bihan.dev@free.fr>
- <20181019203050.5cdf56e0@gmx.net> <20181019203746.77ca985b@gmx.net>
- <20181019211039.GA14986@itchy>
-Message-ID: <f6178cb2-5035-a8b7-6a8c-428195fb1eda@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 20 Oct 2018 14:58:51 +0200
+Subject: [Buildroot] [PATCH 1/1] qt5base: fix build on Aarch64_be a53
+Message-ID: <20181020125851.23827-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Eric,
+Build on Aarch64_be a53 with binutils gold linker in version 2.28 fails:
+/home/rclinux/rc-buildroot-test/scripts/instance-0/output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64_be-linux-gnu/7.3.1/../../../../aarch64_be-linux-gnu/bin/ld.gold: internal error in update_erratum_insn, at /home/tcwg-buildslave/workspace/tcwg-make-release/builder_arch/amd64/label/tcwg-x86_64-build/target/aarch64_be-linux-gnu/snapshots/binutils-gdb.git~users~linaro~binutils-2_28-branch/gold/aarch64.cc:998
 
-On 19/10/2018 22:10, Eric Le Bihan wrote:
-> Hi!
-> 
-> On 2018-10-19 20:37, Peter Seiderer wrote:
->> On Fri, 19 Oct 2018 20:30:50 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
-[snip]
->>> With the patch applied I get the following error:
->>>
->>>>>> host-meson 0.48.1 Building
->>> (cd .../build/host-meson-0.48.1//; PATH=".../host/bin:.../host/sbin:/usr/local/bin:/usr/bin:/bin:/usr/lib/mit/sbin" PYTHONNOUSERSITE=1  .../host/bin/python3 setup.py build  )
->>> Traceback (most recent call last):
->>>   File "setup.py", line 26, in <module>
->>>     from setuptools import setup
->>> ModuleNotFoundError: No module named 'setuptools'>>>
->>> 	$ ls -d build/host-python*
->>> build/host-python-2.7.15
->>> build/host-python3-3.7.0
->>> build/host-python-setuptools-40.0.0
->>
->> graph-depends.pdf shows the following host-meson dependencies:
->>
->> - host-meson --> host-python3
->> - host-meson --> host-python-setuptools --> host-python
->> - host-meson --> host-ninja --> host-python
->>
->> Maybe host-python-setuptools are build for the wrong python version (python2 instead of python3)?
+This error is related to 843419 erratum:
+ - https://lore.kernel.org/patchwork/patch/847483/
+ - http://sourceware-org.1504.n7.nabble.com/PATCH-gold-Fix-aarch64-fix-errata-and-relocate-erratum-stubs-internal-error-td465738.html
 
- That is correct. When target python or python3 is selected, then the
-corresponding host python is also selected, and *all* host python packages are
-built for that specific python version. But if only target python is selected,
-then you will get host-python as well, but you can also still depend on
-host-python3. In that case, however, all the host python packages will be built
-only for python2, not for python3. Hence the breakage.
+Issue is that old versions of GNU gold are known to produce broken code
+with --fix-cortex-a53-843419 as explained in:
+ - https://sourceware.org/ml/binutils-cvs/2015-06/msg00188.html
+ - https://sourceware.org/bugzilla/show_bug.cgi?id=21491
 
- I'm surprised though that we don't see this in the autobuilders... Your patch
-doesn't change anything there, does it?
+Issue has been fixed in:
+ - https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=e70c0b5f07daf63474e805f8d0a45152fcd60468
 
-> 
-> I got the same issue and thought that was related to using an old build
-> environment and not a fresh one.
-> 
-> The package host-python-setuptools was using $(HOST_DIR)/bin/python,
-> symlinked to $(HOST_DIR)/bin/python2.7. Symlinking to python3 and
-> rebuilding host-python-setuptools solves host-meson build issue, but
-> that is not a proper solution.
-> 
-> I'm a bit puzzled... If for some reason host-meson had been built before
-> a package requiring host-python2 and host-python-setuptools, would the build
-> of this package fail due to host-python-setuptools having been built
-> for host-python3?
+We don't know if ARM64_ERRATUM_843419 is enabled or disabled when
+we're using GNU gold so we don't know if we have to pass
+--fix-cortex-a53-843419 or --no-fix-cortex-a53-843419 to the linker.
 
- No, it purely depends on what you have selected for the target.
+We don't know either what is the version of binutils used by an external
+toolchain.
 
- Hm, actually, if you have *nothing* selected for the target, it gets even more
-confusing, because any host package that depends on python 2-or-3 will default
-to python2. I guess it then depends on the build order which version gets
-used... Bad!
+So, disable gold linker through the -no-use-gold-linker option of the
+configure script to fix the issue
 
- Yann is working on a series to support side-by-side python2 and python3 on the
-host and target. That would solve this issue.
+Fixes:
+ - http://autobuild.buildroot.org/results/eb55bf44622697039a4ced510ee2d45b950d0a08
 
- Regards,
- Arnout
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/qt5/qt5base/qt5base.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> 
-> Thanks for the review.
-> 
-> Regards,
-> 
-> --
-> ELB
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index ab2b883fc4..d3c6c31d45 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -27,6 +27,12 @@ QT5BASE_CONFIGURE_OPTS += \
+ 	-no-pch \
+ 	-shared
+ 
++# internal error in update_erratum_insn on Aarch64 a53 with gold before
++# binutils 2.29: https://sourceware.org/bugzilla/show_bug.cgi?id=21491
++ifeq ($(BR2_aarch64_be)$(BR2_cortex_a53)$(BR2_TOOLCHAIN_USES_GLIBC),yyy)
++QT5BASE_CONFIGURE_OPTS += -no-use-gold-linker
++endif
++
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
+ QT5BASE_DEPENDENCIES += pcre
+ else
+-- 
+2.17.1
