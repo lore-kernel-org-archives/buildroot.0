@@ -1,71 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 20 Oct 2018 17:01:33 +0100
-Subject: [Buildroot] [PATCH] merge_config.sh: Fix finding redundant
- config mechanism
-In-Reply-To: <CANQCQpaxMvn2OEfP0aztbFRk0KTOTnt8nugZ-gwKL7oML1eQUw@mail.gmail.com>
-References: <1539989903-19803-1-git-send-email-Afshin.Nasser@gmail.com>
- <CANQCQpaxMvn2OEfP0aztbFRk0KTOTnt8nugZ-gwKL7oML1eQUw@mail.gmail.com>
-Message-ID: <7189ed78-6481-0290-f13b-88e3c1008937@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 20 Oct 2018 18:02:31 +0200
+Subject: [Buildroot] [PATCH] utils/get-developers: make it callable from
+ elsewhere than the toplevel directory
+Message-ID: <20181020160231.11895-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+get-developers tries to open DEVELOPERS in the current directory, so it
+breaks when calling it from elsewhere than the toplevel Buildroot directory.
 
+Traceback (most recent call last):
+  File "../utils/get-developers", line 107, in <module>
+    __main__()
+  File "../utils/get-developers", line 26, in __main__
+    devs = getdeveloperlib.parse_developers(os.path.dirname()
+  File "/home/peko/source/buildroot/utils/getdeveloperlib.py", line 161, in parse_developers
+    with open(os.path.join(basepath, "DEVELOPERS"), "r") as f:
+IOError: [Errno 2] No such file or directory: '/home/peko/source/buildroot/output-foo/DEVELOPERS'
 
-On 20/10/2018 15:56, Matthew Weber wrote:
-> Nasser,
-> 
-> On Fri, Oct 19, 2018 at 11:58 PM Nasser <afshin.nasser@gmail.com> wrote:
->>
->> We use BR2_* style for configuration variables in buildroot so we should
->> use this style when extracting configuration options. Otherwise CFG_LIST
->> will almost always be empty.
->>
->> The CONFIG_* style has been taken form the Linux kernel and is not
->> appropriate in this context.
+Fix it by instead figuring out where the DEVELOPERS file is relative to the
+location of get-developers (E.G. one level up).
 
- A similar patch was actually submitted earlier by Angelo [1]. I commented on
-that that it should be simplified like you propose. However...
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ utils/get-developers | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
->>
-> 
-> The merge_config.sh is used for a couple scenarios
->  - Appending kconfigs together (CONFIG_*)
-
- ... I forgot about this one. Indeed, the buildroot merge_config.sh script is
-used in pkg-kconfig.mk to merge kernel configs. Ideally we should change that to
-use the package's merge_config.sh script. However, the location of that script
-may vary, or it may even be missing...
-
->  - Buildroot cfgs for runtime tests (BR2_*)
->  - As a tool by users to merge together Buildroot configs
-> 
-> I'm not sure of the cleanest approach to support both
->  - you could detect if the file is one or the other and adjust the regex
->  - do the inverse and build a list of lines that are not comments
-
- I think Angelo's patch is the best approach after all.
-
- However, there is one comment that I made on Angelo's patch that still applies
-here:
-
- Since the kconfig stuff comes from upstream but is modified, we also maintain
-the changes as a stack of patches in support/kconfig/patches. So you should
-generate a new patch for this change and add it to the series file. I'm not sure
-why we don't use a vendor branch and just merge, but that's the way we do it :-).
-
-
- Also, Nasser, we require your Signed-off-by to contain your full name. The
-Signed-off-by is a short way for you to assert that you are entitled to
-contribute the patch under buildroot's GPL license.  See
-http://elinux.org/Developer_Certificate_Of_Origin for more details. Itis an
-official statement, so it should be done with your full and real name. And
-please make sure that the author information matches the Signed-off-by.
-
-
- Regards,
- Arnout
-
-[1] http://patchwork.ozlabs.org/patch/824051/
+diff --git a/utils/get-developers b/utils/get-developers
+index ce882e6699..8725afb914 100755
+--- a/utils/get-developers
++++ b/utils/get-developers
+@@ -24,7 +24,9 @@ def parse_args():
+ 
+ 
+ def __main__():
+-    devs = getdeveloperlib.parse_developers()
++    # DEVELOPERS is one level up from here
++    devs_dir = os.path.join(os.path.dirname(__file__), '..')
++    devs = getdeveloperlib.parse_developers(devs_dir)
+     if devs is None:
+         sys.exit(1)
+     args = parse_args()
+-- 
+2.11.0
