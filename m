@@ -1,42 +1,108 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Oct 2018 20:05:27 +0200
-Subject: [Buildroot] [PATCH v1] qt5wayland: remove legacy
- compile-without-QtQuick patch
-In-Reply-To: <20181015181826.26194-1-ps.report@gmx.net>
-References: <20181015181826.26194-1-ps.report@gmx.net>
-Message-ID: <20181020200527.74d2f624@windsurf.lan>
+From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date: Sat, 20 Oct 2018 20:07:27 +0200
+Subject: [Buildroot] Boot without busybox
+In-Reply-To: <ea032860-86db-869e-aa3a-872f880f5214@mind.be>
+References: <CAJ2oMhJbBLv7eiJo=LNnmHSJms1SQZknD7_dTHM8UfE8xPoTxA@mail.gmail.com>
+ <c98ccac7-5680-6cee-fd6e-ef105c2fd377@mind.be>
+ <CAJ2oMhK0wTWgqnC=kQ7yf69_vafF3X1mi-B=n4k4NiLKbgT=aw@mail.gmail.com>
+ <ea032860-86db-869e-aa3a-872f880f5214@mind.be>
+Message-ID: <CAOf5uwmSxX9+skisQ5TjJxGz8oyigb4=vo+pWGDEFL7Yo-b=Cg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Ran
 
-On Mon, 15 Oct 2018 20:18:26 +0200, Peter Seiderer wrote:
-> Patch was taken from upstream [1], removing it fixes [2]:
-> 
->   Applying 0001-fix-compilation-without-QtQuick.patch using patch:
->   patching file src/compositor/compositor_api/compositor_api.pri
->   Reversed (or previously applied) patch detected!  Skipping patch.
->   3 out of 3 hunks ignored -- saving rejects to file src/compositor/compositor_api/compositor_api.pri.rej
->   patching file src/compositor/hardware_integration/qwlhardwarelayerintegration_p.h
->   Reversed (or previously applied) patch detected!  Skipping patch.
->   1 out of 1 hunk ignored -- saving rejects to file src/compositor/hardware_integration/qwlhardwarelayerintegration_p.h.rej
-> 
-> [1] http://code.qt.io/cgit/qt/qtwayland.git/commit/?id=2c48ee65e8c3b894caec214641723d0777fc60b8
-> [2] http://autobuild.buildroot.net/results/0d31817bb4d416d01f4d1bec3e22ce0e5b2ca1c3
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  ...0001-fix-compilation-without-QtQuick.patch | 69 -------------------
->  1 file changed, 69 deletions(-)
->  delete mode 100644 package/qt5/qt5wayland/0001-fix-compilation-without-QtQuick.patch
+On Sat, Oct 20, 2018 at 6:35 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 20/10/2018 17:03, Ranran wrote:
+> > On Sat, Oct 20, 2018 at 3:29 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+> >>
+> >>
+> >>
+> >> On 20/10/2018 08:04, Ranran wrote:
+> >>> Hello,
+> >>>
+> >>> As part of Linux hardening we want to remove busybox from filesystem.
+> >>
+> >>  How does replacing busybox with bloatware harden your system?
+> >>
+> > I actually thought of removing it totally (no replacement), but if
+> > this is not possible on buildroot we might consider other alternatives
+> > (such as minimizing its capability).
+>
+>  Assuming you want an actual *working*, *running* system, you will need
+> *something* to provide the basic userspace functionality: init, shell,
+> coreutils, etc. You have the choice between using busybox for that (small, thus
+> easy to harden), or the "full packages" (many different packages, all of them
+> much larger than busybox, so most likely more difficult to harden).
 
-Applied to master, thanks.
+Every process fork from init. If you have one process you can boot to
+your process
+directly cmdline of the kernel init=.... or you can create your own
+one simple enough.
 
-Thomas
+Normally CVE exploit are on top of standard service. As any other
+services busybox
+is normally checked and used.
+
+Can you please give a list of what init should do in your system?
+
+Michael
+
+>
+> >
+> >>> But I am not sure if system can boot without it.
+> >>> I am quite sure that there are init files that depends on busybox.
+> >>>
+> >>> Is it possible to boot without busybox or does it require a custom init ?
+> >>
+> >>  We have support for 3 different init systems: busybox, sysvinit, and systemd.
+> >> There is also the "none" option, but then you're on your own for finding the
+> >> appropriate init system. You can use it for using s6 as init system, for example.
+> >>
+> >>  If you remove Busybox entirely, you will also have to manually select all the
+> >> other packages needed to get a minimal Unix system, like GNU coreutils, some
+> >> shell, util-linux, ...
+> >>
+> >
+> > Isn't removing buildroot just a matter of selections in menuconfig ?
+>
+>  Yes it is. Well, you need to select a different init system before you're able
+> to remove it in menuconfig.
+>
+>  However, that will leave you with a system that doesn't work. It will boot, it
+> will start init, but then init is not able to start any other process because
+> there is no shell.
+>
+> > I mean, must I know which package should be replcaed with others or is
+> > it that buildroot menu shall automatically choose for me the correct
+> > selection when I remove busybox ?
+>
+>  That's the point: buidroot does *not* do that for you. It just prints a warning
+> that your config might be broken :-).
+>
+>  Note that you may actually get away with building a system without any of the
+> standard tools (shell, ls, etc.). For example, a "boot-to-gecko" kind of system
+> in theory needs nothing other than firefox, and firefox can be used directly as
+> the "init system". But again, you're on your own to make sure that this actually
+> works.
+>
+>  Regards,
+>  Arnout
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+| Michael Nazzareno Trimarchi                     Amarula Solutions BV |
+| COO  -  Founder                                      Cruquiuskade 47 |
+| +31(0)851119172                                 Amsterdam 1018 AM NL |
+|                  [`as] http://www.amarulasolutions.com               |
