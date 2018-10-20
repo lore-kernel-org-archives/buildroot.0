@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 21 Oct 2018 00:14:32 +0200
-Subject: [Buildroot] [PATCH 1/6] package/opengl/opencl: new virtual package
+Date: Sun, 21 Oct 2018 00:14:34 +0200
+Subject: [Buildroot] [PATCH 3/6] package/mesa3d-headers: install OpenCL
+ headers when needed
 In-Reply-To: <20181020221437.12687-1-thomas.petazzoni@bootlin.com>
 References: <20181020221437.12687-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181020221437.12687-2-thomas.petazzoni@bootlin.com>
+Message-ID: <20181020221437.12687-4-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,48 +13,23 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/opengl/Config.in              | 1 +
- package/opengl/libopencl/Config.in    | 6 ++++++
- package/opengl/libopencl/libopencl.mk | 7 +++++++
- 3 files changed, 14 insertions(+)
- create mode 100644 package/opengl/libopencl/Config.in
- create mode 100644 package/opengl/libopencl/libopencl.mk
+ package/mesa3d-headers/mesa3d-headers.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/opengl/Config.in b/package/opengl/Config.in
-index 20ee28b06e..cbc001427d 100644
---- a/package/opengl/Config.in
-+++ b/package/opengl/Config.in
-@@ -1,5 +1,6 @@
- source "package/opengl/libgl/Config.in"
- source "package/opengl/libegl/Config.in"
- source "package/opengl/libgles/Config.in"
-+source "package/opengl/libopencl/Config.in"
- source "package/opengl/libopenvg/Config.in"
- source "package/opengl/libopenmax/Config.in"
-diff --git a/package/opengl/libopencl/Config.in b/package/opengl/libopencl/Config.in
-new file mode 100644
-index 0000000000..57a3ad7d0d
---- /dev/null
-+++ b/package/opengl/libopencl/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HAS_LIBOPENCL
-+	bool
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index c3eaaac3d8..a337e76cea 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -63,6 +63,10 @@ ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
+ MESA3D_HEADERS_DIRS += GLES GLES2
+ endif
+ 
++ifeq ($(BR2_PACKAGE_HAS_LIBOPENCL),y)
++MESA3D_HEADERS_DIRS += CL
++endif
 +
-+config BR2_PACKAGE_PROVIDES_LIBOPENCL
-+	string
-+	depends on BR2_PACKAGE_HAS_LIBOPENCL
-diff --git a/package/opengl/libopencl/libopencl.mk b/package/opengl/libopencl/libopencl.mk
-new file mode 100644
-index 0000000000..e1c71f82d1
---- /dev/null
-+++ b/package/opengl/libopencl/libopencl.mk
-@@ -0,0 +1,7 @@
-+################################################################################
-+#
-+# libopencl
-+#
-+################################################################################
-+
-+$(eval $(virtual-package))
+ define MESA3D_HEADERS_BUILD_CMDS
+ 	$(MESA3D_HEADERS_BUILD_DRI_PC)
+ endef
 -- 
 2.14.4
