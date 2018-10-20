@@ -1,10 +1,10 @@
 From: Romain Naour <romain.naour@smile.fr>
-Date: Sat, 20 Oct 2018 17:04:19 +0200
-Subject: [Buildroot] [PATCH v8 3/4] package/mesa3d: enable OpenCL support
-In-Reply-To: <1540046091-13736-4-git-send-email-valentinkorenblit@gmail.com>
+Date: Sat, 20 Oct 2018 17:09:17 +0200
+Subject: [Buildroot] [PATCH v8 4/4] package/clinfo: new package
+In-Reply-To: <1540046091-13736-5-git-send-email-valentinkorenblit@gmail.com>
 References: <1540046091-13736-1-git-send-email-valentinkorenblit@gmail.com>
- <1540046091-13736-4-git-send-email-valentinkorenblit@gmail.com>
-Message-ID: <04cd2b88-84b7-46f4-61bc-c9c40e4ed842@smile.fr>
+ <1540046091-13736-5-git-send-email-valentinkorenblit@gmail.com>
+Message-ID: <ea76d828-d7cd-a8b5-79e4-286f5f4723d5@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,118 +12,104 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Le 20/10/2018 ? 16:34, Valentin Korenblit a ?crit?:
-> This patch provides Clover, the OpenCL 1.1 API implementation by Mesa
-> for AMD GPUs. It generates libOpenCL.so.
-> 
-> Add --disable-opencl-icd because in Mesa 18 it defaults to on.
-
-This option is on as soon as opencl is enabled.
-
-> When disabled, the shared library is named libOpenCL instead
-> of libMesaOpenCL and CL headers are installed.
-
-Can you say with this is required in the commit log, what's the issue with
-opencl-icl option when enable.
-
-Otherwise
-  Reviewed-by: Romain Naour <romain.naour@smile.fr>
-
-
-> 
-> Given that clc headers are being installed to a non-standard location, it is
-> necessary to specify this path in configure.ac. Otherwise, pkg-config
-> will output the absolute path to these headers located in STAGING_DIR, which
-> will cause a runtime error when calling clBuildProgram.
+> This tool allows to verify if the OpenCL environment is set up correctly
+> and provides information related to the supported OpenCL platforms.
 > 
 > Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
 > Signed-off-by: Valentin Korenblit <valentinkorenblit@gmail.com>
 > ---
->  package/mesa3d/0003-set-LIBCLC_INCLUDEDIR.patch | 26 +++++++++++++++++++++++++
->  package/mesa3d/Config.in                        |  9 +++++++++
->  package/mesa3d/mesa3d.mk                        | 11 ++++++++++-
->  3 files changed, 45 insertions(+), 1 deletion(-)
->  create mode 100644 package/mesa3d/0003-set-LIBCLC_INCLUDEDIR.patch
+>  DEVELOPERS                 |  1 +
+>  package/Config.in          |  1 +
+>  package/clinfo/Config.in   |  9 +++++++++
+>  package/clinfo/clinfo.hash |  3 +++
+>  package/clinfo/clinfo.mk   | 23 +++++++++++++++++++++++
+>  5 files changed, 37 insertions(+)
+>  create mode 100644 package/clinfo/Config.in
+>  create mode 100644 package/clinfo/clinfo.hash
+>  create mode 100644 package/clinfo/clinfo.mk
 > 
-> diff --git a/package/mesa3d/0003-set-LIBCLC_INCLUDEDIR.patch b/package/mesa3d/0003-set-LIBCLC_INCLUDEDIR.patch
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index ffcbc76..659fa2d 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2116,6 +2116,7 @@ F:	package/tstools/
+>  
+>  N:	Valentin Korenblit <valentinkorenblit@gmail.com>
+>  F:	package/clang/
+> +F:	package/clinfo/
+>  F:	package/libclc
+>  F:	package/llvm/
+>  
+> diff --git a/package/Config.in b/package/Config.in
+> index 8d53c72..18b6421 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -83,6 +83,7 @@ menu "Debugging, profiling and benchmark"
+>  	source "package/blktrace/Config.in"
+>  	source "package/bonnie/Config.in"
+>  	source "package/cache-calibrator/Config.in"
+> +	source "package/clinfo/Config.in"
+>  	source "package/dhrystone/Config.in"
+>  	source "package/dieharder/Config.in"
+>  	source "package/dmalloc/Config.in"
+> diff --git a/package/clinfo/Config.in b/package/clinfo/Config.in
 > new file mode 100644
-> index 0000000..e9a8b25
+> index 0000000..279b5ac
 > --- /dev/null
-> +++ b/package/mesa3d/0003-set-LIBCLC_INCLUDEDIR.patch
-> @@ -0,0 +1,26 @@
-> +From 94bceeb621e36f3188c6246a763def8695526578 Mon Sep 17 00:00:00 2001
-> +From: Valentin Korenblit <valentinkorenblit@gmail.com>
-> +Date: Sat, 20 Oct 2018 10:56:23 +0200
-> +Subject: [PATCH 1/1] set LIBCLC_INCLUDEDIR
+> +++ b/package/clinfo/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_CLINFO
+> +	bool "clinfo"
+> +	depends on BR2_PACKAGE_MESA3D_OPENCL
+> +	help
+> +	  clinfo is a simple command-line application that enumerates
+> +	  all possible (known) properties of the OpenCL platform and
+> +	  devices available on the system.
 > +
-> +Signed-off-by: Valentin Korenblit <valentinkorenblit@gmail.com>
-> +---
-> + configure.ac | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +	  https://github.com/Oblomov/clinfo
+> diff --git a/package/clinfo/clinfo.hash b/package/clinfo/clinfo.hash
+> new file mode 100644
+> index 0000000..1ba3481
+> --- /dev/null
+> +++ b/package/clinfo/clinfo.hash
+> @@ -0,0 +1,3 @@
+> +# locally calculated
+> +sha256 64b02e68ccff3b95437bd0bd70dcb88438c58adec16a7145a5d4e5c26a898ccf clinfo-2.2.18.03.26.tar.gz
+> +sha256 a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499 legalcode.txt
+> diff --git a/package/clinfo/clinfo.mk b/package/clinfo/clinfo.mk
+> new file mode 100644
+> index 0000000..1477b76
+> --- /dev/null
+> +++ b/package/clinfo/clinfo.mk
+> @@ -0,0 +1,23 @@
+> +################################################################################
+> +#
+> +# clinfo
+> +#
+> +################################################################################
 > +
-> +diff --git a/configure.ac b/configure.ac
-> +index 864dcae..cc2390b 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -2429,7 +2429,7 @@ if test "x$enable_opencl" = xyes; then
-> +                     PKG_CONFIG_PATH environment variable.
-> +                     By default libclc.pc is installed to /usr/local/share/pkgconfig/])
-> +     else
-> +-        LIBCLC_INCLUDEDIR=`$PKG_CONFIG --variable=includedir libclc`
-> ++        LIBCLC_INCLUDEDIR="/usr/share"
-> +         LIBCLC_LIBEXECDIR=`$PKG_CONFIG --variable=libexecdir libclc`
-> +         AC_SUBST([LIBCLC_INCLUDEDIR])
-> +         AC_SUBST([LIBCLC_LIBEXECDIR])
-> +-- 
-> +2.7.4
+> +CLINFO_VERSION = 2.2.18.03.26
+
+Note there is a new version 2.2.18.04.06, but OK to merge this version and bump
+to the new version latter.
+
+> +CLINFO_SITE = $(call github,Oblomov,clinfo,$(CLINFO_VERSION))
+> +CLINFO_LICENSE = CC0-1.0
+> +CLINFO_LICENSE_FILES = legalcode.txt
+
+There is also a LICENSE file
+
 > +
-> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-> index 872859b..f16f1b1 100644
-> --- a/package/mesa3d/Config.in
-> +++ b/package/mesa3d/Config.in
-> @@ -50,6 +50,15 @@ comment "llvm support needs a toolchain not affected by GCC bug 64735"
->  	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
->  	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
->  
-> +#clang and libclc dependencies are satisfied by BR2_PACKAGE_MESA3D_LLVM
-> +config BR2_PACKAGE_MESA3D_OPENCL
-> +	bool "OpenCL support"
-> +	depends on BR2_PACKAGE_MESA3D_LLVM
-> +	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600 || \
-> +		BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
-> +	select BR2_PACKAGE_CLANG
-> +	select BR2_PACKAGE_LIBCLC
+> +# libOpenCL is needed
+> +CLINFO_DEPENDENCIES = mesa3d
 > +
->  # inform the .mk file of gallium, dri or vulkan driver selection
->  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
->  	bool
-> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-> index 48041dd..b32ce59 100644
-> --- a/package/mesa3d/mesa3d.mk
-> +++ b/package/mesa3d/mesa3d.mk
-> @@ -10,6 +10,7 @@ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
->  MESA3D_SITE = https://mesa.freedesktop.org/archive
->  MESA3D_LICENSE = MIT, SGI, Khronos
->  MESA3D_LICENSE_FILES = docs/license.html
-> +# 0003-set-LIBCLC_INCLUDEDIR.patch needed when OpenCL is enabled
->  MESA3D_AUTORECONF = YES
->  
->  MESA3D_INSTALL_STAGING = YES
-> @@ -43,8 +44,16 @@ else
->  MESA3D_CONF_OPTS += --disable-llvm
->  endif
->  
-> -# Disable opencl in case libclc is detected
-> +# Disable opencl-icd: OpenCL lib will be named libOpenCL instead of
-> +# libMesaOpenCL and CL headers are installed
-> +ifeq ($(BR2_PACKAGE_MESA3D_OPENCL),y)
-> +MESA3D_DEPENDENCIES += clang libclc
-> +MESA3D_CONF_OPTS += --enable-opencl \
-> +	--disable-opencl-icd \
-> +	--with-clang-libdir=$(STAGING_DIR)/usr/lib
-> +else
->  MESA3D_CONF_OPTS += --disable-opencl
-> +endif
->  
->  ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS),y)
->  MESA3D_DEPENDENCIES += elfutils
+> +define CLINFO_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
+> +endef
+> +
+> +define CLINFO_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 755 $(@D)/clinfo $(TARGET_DIR)/usr/bin/clinfo
+> +endef
+> +
+> +$(eval $(generic-package))
 > 
