@@ -1,10 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 22 Oct 2018 00:18:24 +0100
-Subject: [Buildroot] [PATCH v3] qt5base: Qt KMS support does not depend on
- opengl
-In-Reply-To: <1518540366-13393-1-git-send-email-joshua.henderson@microchip.com>
-References: <1518540366-13393-1-git-send-email-joshua.henderson@microchip.com>
-Message-ID: <2357aab6-f2e6-54d4-0e37-63955864e94e@mind.be>
+Date: Mon, 22 Oct 2018 00:19:46 +0100
+Subject: [Buildroot] [PATCH 2/3] package: linuxptp: enhance systemd service
+In-Reply-To: <c63fff97-491b-8d5a-fb99-095e3fa08423@jikos.cz>
+References: <1517155221-19399-1-git-send-email-brain@jikos.cz>
+ <1517155221-19399-2-git-send-email-brain@jikos.cz>
+ <20180130230054.6cb2551a@windsurf.home>
+ <c63fff97-491b-8d5a-fb99-095e3fa08423@jikos.cz>
+Message-ID: <eaee0d92-ef95-f48d-05eb-04124c459ef3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,69 +14,74 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-On 13/02/2018 16:46, Joshua Henderson wrote:
-> Qt KMS support should not explicitly depend on the availability of opengl.
-> Don't explicitly disable KMS if opengl is not available and fallback to
-> detecting if libdrm is available before disabling kms.
+On 30/01/2018 22:19, Petr Kulhavy wrote:
+> Hi Thomas,
 >
-> The scenario where this is necessary involves using the Qt linuxfb backend
-> "dumb buffer" support via the DRM API. This is new in Qt 5.9 [1] and only
-> requires KMS, but not opengl.
+> The Before= and Wants=? time-sync.target is what I found in the systemd
+> documentation. A time synchronization service should pull in this special
+> target, so that applications needing time synchronization can depend on it.
+> Other time synchronizing services like ntpd or systemd-timesyncd use the same
+> mechanism.
 
-?This sounds like we should handle the Qt 5.6 case specially.
+?I double-checked this and confirm. So I've extended the commit log a little and
+applied to master, thanks.
 
-?However, on Qt 5.6, it builds fine with the -kms option, it just ends up not
-being used. That means we have a redundant dependency on libdrm, but that
-doesn't matter that much. Handling the Qt 5.6 case differently would make the
-code quite a bit more complicated.
-
-?Therefore, I explained the above in the commit log an applied to master, thanks.
-
-?Sorry it took so long.
+?Sorry that it took so long...
 
 
 ?Regards,
 ?Arnout
 
 
+> Cheers
+> Petr
 >
-> [1] http://doc.qt.io/qt-5/embedded-linux.html#linuxfb
+> On 30/01/18 23:00, Thomas Petazzoni wrote:
+>> Hello,
+>>
+>> On Sun, 28 Jan 2018 17:00:20 +0100, Petr Kulhavy wrote:
+>>> linuxptp now pulls in the time-sync.target
+>>> phc2sys (linuxptp-system-clock.service) starts after ptp4l (linuxptp.service)
+>>>
+>>> Signed-off-by: Petr Kulhavy <brain@jikos.cz>
+>>> ---
+>>> ? package/linuxptp/linuxptp-system-clock.service | 2 +-
+>>> ? package/linuxptp/linuxptp.service????????????? | 2 ++
+>>> ? 2 files changed, 3 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/package/linuxptp/linuxptp-system-clock.service
+>>> b/package/linuxptp/linuxptp-system-clock.service
+>>> index 7327254..a4436a3 100644
+>>> --- a/package/linuxptp/linuxptp-system-clock.service
+>>> +++ b/package/linuxptp/linuxptp-system-clock.service
+>>> @@ -1,6 +1,6 @@
+>>> ? [Unit]
+>>> ? Description=Precision Time Protocol system clock synchronization
+>>> -After=syslog.target network.target
+>>> +After=linuxptp.service
+>>> ? ? [Service]
+>>> ? ExecStart=/usr/sbin/phc2sys -s /dev/ptp0 -c CLOCK_REALTIME -w -S 1.0
+>>> diff --git a/package/linuxptp/linuxptp.service
+>>> b/package/linuxptp/linuxptp.service
+>>> index f690430..14e9814 100644
+>>> --- a/package/linuxptp/linuxptp.service
+>>> +++ b/package/linuxptp/linuxptp.service
+>>> @@ -1,6 +1,8 @@
+>>> ? [Unit]
+>>> ? Description=Precision Time Protocol daemon
+>>> ? After=syslog.target network.target
+>>> +Before=time-sync.target
+>>> +Wants=time-sync.target
+>>> ? Wants=linuxptp-system-clock.service
+>>> ? ? [Service]
+>> I'm not knowledgeable enough in systemd stuff to decide on this one.
+>> Anyone with more systemd knowledge ?
+>>
+>> Thomas
 >
-> Cc: Peter Seiderer <ps.report@gmx.net>
-> Cc: Julien Corjon <corjon.j@ecagroup.com>
-> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
 >
-> ---
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 >
-> v3:
-> - Reorganize libdrm/egl make condition to be more clear.
->
-> v2:
-> - If libdrm is configured, make it an explicit dependency.
-> ---
-> package/qt5/qt5base/qt5base.mk | 11 +++++++++--
-> 1 file changed, 9 insertions(+), 2 deletions(-)
->
-> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-> index b3f9c79..644852d 100644
-> --- a/package/qt5/qt5base/qt5base.mk
-> +++ b/package/qt5/qt5base/qt5base.mk
-> @@ -35,12 +35,19 @@ endif
-> QT5BASE_CONFIGURE_OPTS += $(call qstrip,$(BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS))
-> +ifeq ($(BR2_PACKAGE_LIBDRM),y)
-> +QT5BASE_CONFIGURE_OPTS += -kms
-> +QT5BASE_DEPENDENCIES += libdrm
-> +else
-> +QT5BASE_CONFIGURE_OPTS += -no-kms
-> +endif
-> +
-> # Uses libgbm from mesa3d
-> ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
-> -QT5BASE_CONFIGURE_OPTS += -kms -gbm
-> +QT5BASE_CONFIGURE_OPTS += -gbm
-> QT5BASE_DEPENDENCIES += mesa3d
-> else
-> -QT5BASE_CONFIGURE_OPTS += -no-kms
-> +QT5BASE_CONFIGURE_OPTS += -no-gbm
-> endif
-> ifeq ($(BR2_ENABLE_DEBUG),y)
