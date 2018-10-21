@@ -1,51 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 21 Oct 2018 16:29:00 +0200
-Subject: [Buildroot] [PATCH v2] package/clang: default linker to the
- cross GNU
-In-Reply-To: <1540124495-63551-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1540124495-63551-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20181021162900.4c43e6f4@windsurf>
+From: Ryan Coe <bluemrp9@gmail.com>
+Date: Sun, 21 Oct 2018 07:29:18 -0700
+Subject: [Buildroot] [PATCH 1/1] package/mariadb: add option to disable
+ build of embedded server
+In-Reply-To: <20181018185920.16430-1-bernd.kuhls@t-online.de>
+References: <20181018185920.16430-1-bernd.kuhls@t-online.de>
+Message-ID: <6687b270-0ec6-bd4f-4ca4-3684baf2192c@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Bernd, All,
 
-On Sun, 21 Oct 2018 07:21:35 -0500, Matt Weber wrote:
-> By default clang is assuming the system linker /usr/bin/ld.  This
-> patchset updates the default to point at the cross toolchain ld.
-> 
-> Previously clang had been used on target only, this update is
-> required for host clang/clang++ to be used as a frontend for
-> cross-compiling.
-> 
-> Example build command:
-> 
-> output/host/bin/clang++ -mcpu=cortex-a53  \
->   --sysroot /<abs path>/output/staging/ \
->   -B /<abs path>/output/host/opt/ext-toolchain/ \
->   foobar.cc -o foobar
-> 
-> Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
-> Reviewed-by: Romain Naour <romain.naour@gmail.com>
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+On 10/18/18 11:59 AM, Bernd Kuhls wrote:
+> Size of output/target/usr:
+>
+> with embedded: 1,7G
+> without embedded: 648M
+>
+> This config option saves space on the target if the embedded server
+> is not used by any other package:
+>
+> https://mariadb.com/kb/en/library/embedded-mariadb-interface/
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
-> Changes
-> v1 -> v2
-> [Romain
->  - Added example build command in commit description as example
->    for an eventual wrapper
->  - Moved setting of ld path option to be with other path assignments
-> ---
->  package/clang/clang.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>   package/mariadb/mariadb.mk | 4 ++++
+>   package/mysql/Config.in    | 5 +++++
+>   2 files changed, 9 insertions(+)
+>
+> diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+> index 2523aaf062..06d6365fab 100644
+> --- a/package/mariadb/mariadb.mk
+> +++ b/package/mariadb/mariadb.mk
+> @@ -56,8 +56,12 @@ MARIADB_CONF_OPTS += -DCMAKE_CROSSCOMPILING=1
+>   MARIADB_CONF_OPTS += -DENABLE_DTRACE=0
+>   
+>   ifeq ($(BR2_PACKAGE_MARIADB_SERVER),y)
+> +ifeq ($(BR2_PACKAGE_MARIADB_SERVER_EMBEDDED),y)
+>   MARIADB_CONF_OPTS += -DWITH_EMBEDDED_SERVER=ON
+>   else
+> +MARIADB_CONF_OPTS += -DWITH_EMBEDDED_SERVER=OFF
+> +endif
+> +else
+>   MARIADB_CONF_OPTS += -DWITHOUT_SERVER=ON
+>   endif
+>   
+> diff --git a/package/mysql/Config.in b/package/mysql/Config.in
+> index 6409c8b806..257a2901a4 100644
+> --- a/package/mysql/Config.in
+> +++ b/package/mysql/Config.in
+> @@ -54,6 +54,11 @@ config BR2_PACKAGE_MARIADB_SERVER
+>   	help
+>   	  Install the mariadb server on the target.
+>   
+> +config BR2_PACKAGE_MARIADB_SERVER_EMBEDDED
+> +	bool "mariadb embedded server"
+> +	help
+> +	  Install the mariadb embedded server on the target.
+> +
+>   endif
+>   
+>   if BR2_PACKAGE_ORACLE_MYSQL
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Tested-by: Ryan Coe <bluemrp9@gmail.com>
