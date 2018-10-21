@@ -1,54 +1,95 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 21 Oct 2018 18:06:02 +0200
-Subject: [Buildroot] [PATCH 1/1] mongoose: fix hash
-In-Reply-To: <20180906214220.854-1-fontaine.fabrice@gmail.com>
-References: <20180906214220.854-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181021180602.49182723@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 21 Oct 2018 18:15:03 +0200
+Subject: [Buildroot] [PATCH v4 2/4] linux: add custom linux logo
+In-Reply-To: <1535118300-26815-2-git-send-email-angelo@amarulasolutions.com>
+ (Angelo Compagnucci's message of "Fri, 24 Aug 2018 15:44:58 +0200")
+References: <1535118300-26815-1-git-send-email-angelo@amarulasolutions.com>
+ <1535118300-26815-2-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <87woqb5la0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
 
-On Thu,  6 Sep 2018 23:42:20 +0200, Fabrice Fontaine wrote:
-> When bumping to version 6.7, hash was not updated
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/599920bc0a5821fd3fb0a028574a25a22e12430f
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/mongoose/mongoose.hash | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+ > From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+ > This patch adds a simple way to change the linux bootup logo.
+ > The patch was kept purposely simple to support only the use cause
+ > where a user needs a color linux boot up logo.
 
-I marked this patch as Rejected, because it would break older Buildroot
-releases. Indeed, all Buildroot releases since 2017.05 are using
-Mongoose 6.7. They currently fail to download Mongoose from Github due
-the hash mismatch, but they fall back to the Buildroot mirror
-successfully.
+ > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+ > ---
+ >  linux/Config.in | 10 ++++++++++
+ >  linux/linux.mk  | 15 +++++++++++++++
+ >  2 files changed, 25 insertions(+)
 
-If we update the hash, the Buildroot mirror will discard the current
-6.7 tarball, and replace it with a new tarball having the new hash.
-While this will make the new Buildroot releases happy it would break
-older Buildroot releases, that would no longer be able to download
-neither from Github nor from the Buildroot mirror.
+ > diff --git a/linux/Config.in b/linux/Config.in
+ > index b7bee99..9a410b1 100644
+ > --- a/linux/Config.in
+ > +++ b/linux/Config.in
+ > @@ -188,6 +188,16 @@ config BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES
+ >  	  A space-separated list of kernel configuration fragment files,
+ >  	  that will be merged to the main kernel configuration file.
+ 
+ > +config BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH
+ > +	string "Custom logo file path"
 
-So instead, we need to bump to a newer Mongoose version, so that we can
-keep the old mongoose-6.7 tarball on the Buildroot mirror to keep old
-Buildroot releases happy.
+It is IMHO not directly clear what this logo is about, so I've changed
+it to:
 
-So I've applied the following changes instead:
+Custom boot logo file path
 
-951f15b16f6167f4205988e5dde4d13e2f560791 package/mongoose: bump to version 6.13
-7e62211976e0b9ddfd05a11fb24c61ed8a9a4491 package/mongoose: add hash for license file
-dea3ab68400503bebf4152277d63813508f43424 package/mongoose: add security patch fixing CVE-2018-10945
+> +	help
+ > +	  Change the linux boot logo with your own graphics,
+ > +	  it can be used as an early bootsplash, framebuffer support
+ > +	  should be enabled to have this feature working.
 
-Best regards,
+Instead of describing that framebuffer support should be enabled, we
+should just enable it.
 
-Thomas
+This help text is IMHO not so clear. I've rewored it to:
+
+          Use a custom Linux framebuffer boot logo.
+          Custom logo should be in PNG or JPEG format, it will be
+
+
+> +	  Custom logo should be in png or jpg, it will be
+ > +	  converted to the linux kernel format (224 colors only)
+ > +	  and copied over the original logo file.
+ > +
+ >  #
+ >  # Binary format
+ >  #
+ > diff --git a/linux/linux.mk b/linux/linux.mk
+ > index 675e790..e38c7de 100644
+ > --- a/linux/linux.mk
+ > +++ b/linux/linux.mk
+ > @@ -248,6 +248,18 @@ define LINUX_TRY_PATCH_TIMECONST
+ >  endef
+ >  LINUX_POST_PATCH_HOOKS += LINUX_TRY_PATCH_TIMECONST
+ 
+ > +LINUX_KERNEL_CUSTOM_LOGO_PATH = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH))
+ > +ifneq ($(LINUX_KERNEL_CUSTOM_LOGO_PATH),)
+ > +LINUX_DEPENDENCIES += host-imagemagick
+ > +LINUX_KERNEL_CUSTOM_LOGO = y
+
+This variable isn't really needed as the $(if logic can just use
+LINUX_KERNEL_CUSTOM_LOGO_PATH directly.
+
+> +define LINUX_KERNEL_CUSTOM_LOGO_CONVERT
+ > +	$(HOST_DIR)/usr/bin/convert $(LINUX_KERNEL_CUSTOM_LOGO_PATH) \
+
+convert gets installed in $(HOST_DIR)/bin, so we should use that.
+
+ > +	$(if $(LINUX_KERNEL_CUSTOM_LOGO),
+ > +		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO,$(@D)/.config)
+ > +		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO_LINUX_CLUT224,$(@D)/.config))
+
+We should also enable CONFIG_FB.
+
+Committed with these changes, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
