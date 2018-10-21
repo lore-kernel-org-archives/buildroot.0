@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Oct 2018 14:46:16 +0200
-Subject: [Buildroot] [PATCH] utils/get-developers: make it callable from
- elsewhere than the toplevel directory
-In-Reply-To: <20181020160231.11895-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sat, 20 Oct 2018 18:02:31 +0200")
-References: <20181020160231.11895-1-peter@korsgaard.com>
-Message-ID: <87sh0z79if.fsf@dell.be.48ers.dk>
+Date: Sun, 21 Oct 2018 14:46:57 +0200
+Subject: [Buildroot] [PATCH] utils/get-developers: add -e flag to only
+ list email addresses for git send-email
+In-Reply-To: <20181008074333.1582-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 8 Oct 2018 09:43:33 +0200")
+References: <20181008074333.1582-1-peter@korsgaard.com>
+Message-ID: <87o9bn79ha.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,20 +14,32 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > get-developers tries to open DEVELOPERS in the current directory, so it
- > breaks when calling it from elsewhere than the toplevel Buildroot directory.
+ > When called with a list of patches, get-developers prints the entire git
+ > send-email invocation line:
 
- > Traceback (most recent call last):
- >   File "../utils/get-developers", line 107, in <module>
- >     __main__()
- >   File "../utils/get-developers", line 26, in __main__
- >     devs = getdeveloperlib.parse_developers(os.path.dirname()
- >   File "/home/peko/source/buildroot/utils/getdeveloperlib.py", line 161, in parse_developers
- >     with open(os.path.join(basepath, "DEVELOPERS"), "r") as f:
- > IOError: [Errno 2] No such file or directory: '/home/peko/source/buildroot/output-foo/DEVELOPERS'
+ > ./utils/get-developers 0001-git-security-bump-to-version-2.16.5.patch
+ > git send-email --to buildroot at buildroot.org --cc "Matt Weber <matthew.weber@rockwellcollins.com>"
 
- > Fix it by instead figuring out where the DEVELOPERS file is relative to the
- > location of get-developers (E.G. one level up).
+ > This may be handy when creating an entire patch series and editing a cover
+ > letter, but it does mean that this has to be explicitly executed and
+ > get-developers cannot be used directly by the --cc-cmd option of git
+ > send-email to automatically CC affected developers.
+
+ > So add an -e flag to only let get-developers print the email addresses of
+ > the affected developers in the one-email-per-line format expected by git
+ > send-email, similar to how get_maintainer.pl works in the Linux kernel.
+
+ > With this and a suitable git configuration:
+
+ > git config sendemail.to buildroot at buildroot.org
+ > git config sendemail.ccCmd "$(pwd)/utils/get-developers -e"
+
+ > You can simply do:
+
+ > git send-email master
+
+ > To automatically mail the buildroot list and CC affected developers on
+ > patches.
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
