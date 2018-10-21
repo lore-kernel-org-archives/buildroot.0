@@ -1,50 +1,32 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 21 Oct 2018 15:37:25 +0100
-Subject: [Buildroot] [[PATCH v2 07/14] package/mender: select
- BR2_PACKAGE_CA_CERTIFICATES
-In-Reply-To: <CADHdJwB=UQdmk8vVCPSc-gGBs8RKvAsztKRVYMZbCsSdJqBxRg@mail.gmail.com>
-References: <20180820130914.22377-1-mirza.krak@northern.tech>
- <20180820130914.22377-8-mirza.krak@northern.tech>
- <20180820165427.7f25b056@windsurf>
- <CADHdJwB=UQdmk8vVCPSc-gGBs8RKvAsztKRVYMZbCsSdJqBxRg@mail.gmail.com>
-Message-ID: <f1ac7718-b98c-c91f-5546-1b65b3b0d617@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 21 Oct 2018 16:37:31 +0200
+Subject: [Buildroot] [PATCH 1/1] postgresql: disable spinlock support
+ for riscv64
+In-Reply-To: <20181020202219.24489-1-fontaine.fabrice@gmail.com>
+References: <20181020202219.24489-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181021163731.032fe1f4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-
-On 20/08/2018 19:33, Mirza Krak wrote:
-> On Mon, Aug 20, 2018 at 4:54 PM, Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
->> Hello,
->>
->> On Mon, 20 Aug 2018 15:09:07 +0200, Mirza Krak wrote:
->>> Mender uses TLS to community with the management server,
->>> and if CA signed certificates are used we must have
->>> the ca-certificates package installed to be able to
->>> verify these.
->>>
->>> Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
->>
->> I am not sure we want to make this a mandatory dependency. If people
->> are using a management server that provides a CA signed certificate,
->> then they should add the ca-certificates package to their build.
->>
->> Perhaps this belongs more to a note in the Config.in help text. Or
->> maybe even Mender deserves a package/mender/readme.txt, which a bit like
->> boot/grub2/readme.txt, would give more details about Mender's
->> integration in Buildroot.
+On Sat, 20 Oct 2018 22:22:19 +0200, Fabrice Fontaine wrote:
+> Fixes:
+>  - http://autobuild.buildroot.org/results/deebc4b8f615e1216279d6587e91f5654da2ad68
 > 
-> Makes sense.
-> 
-> Thanks for the hint on creating a readme.txt. Will make so sure to do that.
-> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/postgresql/postgresql.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
- Assuming you're going to create this readme.txt, I've marked this patch as
-Changes Requested.
+I've changed the condition to use BR2_riscv instead of BR2_RISCV_64,
+and then applied. Thanks!
 
- Regards,
- Arnout
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
