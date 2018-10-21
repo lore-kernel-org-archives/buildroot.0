@@ -1,55 +1,44 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Sun, 21 Oct 2018 18:35:47 +0100
-Subject: [Buildroot] [PATCH] merge_config.sh: Fix finding redundant
- config mechanism
-In-Reply-To: <20181021172707.GA19294@x230>
-References: <1539989903-19803-1-git-send-email-Afshin.Nasser@gmail.com>
- <CANQCQpaxMvn2OEfP0aztbFRk0KTOTnt8nugZ-gwKL7oML1eQUw@mail.gmail.com>
- <7189ed78-6481-0290-f13b-88e3c1008937@mind.be> <20181021172707.GA19294@x230>
-Message-ID: <CANQCQpZ-c3mzU6vrWoC5gBi=xVyRagaNy6VgnU2YfRXtreoEJQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 21 Oct 2018 19:36:29 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] support/testing: fix
+ TestATFAllwinner test case
+Message-ID: <20181021173508.F3AE288487@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Petr,
+commit: https://git.buildroot.net/buildroot/commit/?id=e373f8396f8c54d5a6c77178462635451bfa4e8a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-On Sun, Oct 21, 2018 at 6:27 PM Petr Vorel <petr.vorel@gmail.com> wrote:
->
-> Hi,
->
-> > > The merge_config.sh is used for a couple scenarios
-> > >  - Appending kconfigs together (CONFIG_*)
->
-> >  ... I forgot about this one. Indeed, the buildroot merge_config.sh script is
-> > used in pkg-kconfig.mk to merge kernel configs. Ideally we should change that to
-> > use the package's merge_config.sh script. However, the location of that script
-> > may vary, or it may even be missing...
->
-> > >  - Buildroot cfgs for runtime tests (BR2_*)
-> > >  - As a tool by users to merge together Buildroot configs
->
-> > > I'm not sure of the cleanest approach to support both
-> > >  - you could detect if the file is one or the other and adjust the regex
-> > >  - do the inverse and build a list of lines that are not comments
->
-> >  I think Angelo's patch is the best approach after all.
-> +1. I also think keep using our merge_config.sh with -b switch from Angelo's
-> patch [1] is the way.
+This test case uses a too old U-Boot version, which is affected by the
+infamous libfdt header conflict issue. Let's update to U-Boot 2017.11,
+which is used by our current bananapi_m64_defconfig that was the
+inspiration for this test case.
 
-Do you think you'll be able to provide an updated patch based on Angelo's work?
+Fixes:
 
->
-> >  However, there is one comment that I made on Angelo's patch that still applies
-> > here:
->
-> >  Since the kconfig stuff comes from upstream but is modified, we also maintain
-> > the changes as a stack of patches in support/kconfig/patches. So you should
-> > generate a new patch for this change and add it to the series file. I'm not sure
-> > why we don't use a vendor branch and just merge, but that's the way we do it :-).
-> IMHO it's a common practice across distributions packaging to use quilt for own
-> patches. I guess it's to help show easily distro changes (in our case patches in
-> support/kconfig/patches/ directory are in tarballs, not just in git).
->
->
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/107860310
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 2a63cea587f66d328ad2528423f8b12f1005dd13)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/testing/tests/boot/test_atf.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/support/testing/tests/boot/test_atf.py b/support/testing/tests/boot/test_atf.py
+index 75cea01fc8..ab2239e51e 100644
+--- a/support/testing/tests/boot/test_atf.py
++++ b/support/testing/tests/boot/test_atf.py
+@@ -40,7 +40,7 @@ class TestATFAllwinner(infra.basetest.BRTest):
+         BR2_TARGET_UBOOT=y
+         BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+         BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-        BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
++        BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
+         BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m64"
+         BR2_TARGET_UBOOT_NEEDS_DTC=y
+         BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
