@@ -1,152 +1,239 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 21 Oct 2018 14:38:14 +0100
-Subject: [Buildroot] [PATCH v2 1/3] package/ca-certificates: don't hash
- certificates.crt
-In-Reply-To: <96e0d9ee-e017-9745-4fae-eaa535e77118@mind.be>
-References: <20180616220601.4629-1-martin@barkynet.com>
- <20180616220601.4629-2-martin@barkynet.com>
- <20180617212547.4bc868c3@windsurf>
- <CAFGQKxeOmRCBUu7XFCDkpRbFV51F0=A8htjRMc75rKQA8_VtoQ@mail.gmail.com>
- <20180618163931.4531ccb3@windsurf>
- <CAFGQKxcC+jryJo8RBHU00ATeRqMqmbTn_+4jcgHqj+_=kH0mLw@mail.gmail.com>
- <96e0d9ee-e017-9745-4fae-eaa535e77118@mind.be>
-Message-ID: <baa8cebb-20a7-2dc2-a80b-c380721ff0ec@mind.be>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Sun, 21 Oct 2018 14:41:56 +0100
+Subject: [Buildroot] [PATCH v2 1/2] arch: add support for RISC-V 32-bit
+ (riscv32) architecture
+In-Reply-To: <20181021130621.17834-1-mark.corbin@embecosm.com>
+References: <20181021130621.17834-1-mark.corbin@embecosm.com>
+Message-ID: <CANQCQpZtfLu_zmOE7dUpfX6P-zoEnLtBXqZbQEC8vEZCh0-ifQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Mark,
 
-On 21/10/2018 14:15, Arnout Vandecappelle wrote:
->  Hi Martin,
+On Sun, Oct 21, 2018 at 2:07 PM Mark Corbin <mark.corbin@embecosm.com> wrote:
 >
->  Sorry for the late reply,
+> This enables a riscv32 system to be built with a Buildroot generated
+> toolchain (gcc >= 7.x, binutils >= 2.30, glibc only).
 >
-> On 21/06/2018 23:04, Martin Bark wrote:
->> Thomas,
->>
->> On 18 June 2018 at 15:39, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
->>> Hello,
->>>
->>> On Mon, 18 Jun 2018 10:51:34 +0100, Martin Bark wrote:
->>>
->>>>> output/target$ ls -l etc/ssl/certs/128805a3.0
->>>>> lrwxrwxrwx 1 thomas thomas 35 Jun 17 20:58 etc/ssl/certs/128805a3.0 -> EE_Certification_Centre_Root_CA.pem
->>>> Did you check other hashes under etc/ssl/certs/ ? Check for any hashes
->>>> that link to ca-certificates.crt. I suspect you have a different hash
->>>> pointing to ca-certificates.
->>> There are no files in /etc/ssl/certs that are symlinks to
->>> ca-certificates.crt:
->>>
->>> output/target$ ls -l etc/ssl/certs/| grep ca-certificates.crt
->>> -rw-r--r-- 1 thomas thomas 207436 Jun 18 15:30 ca-certificates.crt
->> I did some more testing and found sometimes by chance it does work,
->> however, i was able to reproduce the issue as follows
->>
->>  docker run -it --rm buildroot/base:20180318.1724 bash
->>  git clone git://git.busybox.net/buildroot
->>  cd buildroot
->>  make olddefconfig
->>  make ca-certificates
->>
->> you will see an output like this at the end of the build
->>
->>  # Create symlinks to the certificates by their hash values
->>  /home/br-user/buildroot/output/host/bin/c_rehash
->> /home/br-user/buildroot/output/target/etc/ssl/certs
->>  Doing /home/br-user/buildroot/output/target/etc/ssl/certs
->>  WARNING: Skipping duplicate certificate OpenTrust_Root_CA_G1.pem
->>
->> and one the the hashes will be wrong
->>
->>  $ ls -l output/target/etc/ssl/certs/| grep ca-certificates.crt
->>  lrwxrwxrwx 1 br-user br-user     19 Jun 21 21:52 87229d21.0 ->
->> ca-certificates.crt
->>
->> the incorrect hash is the one mentioned in the warning
->  So, if I understand correctly, what happens is this:
+> This requires a custom version of glibc 2.26 from the riscv-glibc
+> repository. Note that there are no tags in this repository, so the
+> glibc version just consists of the 40 character commit id string.
 >
-> 1. certificates get installed in /etc/ssl/certs.
+> Thanks to Fabrice Bellard for pointing me towards the 32-bit glibc
+> repository and for providing the necessary patch to get it to build.
 >
-> 2. All the certificates are bundled into a ca-certificates.crt file.
+> Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
 >
-> 3. c_rehash is run. It looks at each certificate, calculates the hash, and
-> creates a symlink from that hash to the certificate.
->
->  The problem is that if ca-certificates.crt exists already, c_rehash will take
-> some random certificate from it and create a symlink to ca-certificates.crt
-> instead of to the real certificate file. But depending on the order of
-> evaluation of the different certificate files, it may actually make the symlink
-> point to the real certificate.
->
->  What you propose looks like the good solution for it. Except in case of
-> rebuild, so you should remove /etc/ssl/ca-certificates.crt before running
-> c_rehash. That would also remove the need for patch 2 I think.
->
->  Could you check if I'm correct, and if so, resubmit the series with:
->
-> - the additional rm -f;
-> - a commit message that includes the explanation above;
-> - drops patch 2.
->
->  If patch 2 really is needed, it needs a better explanation.
 
-?Investigating a bit more turns out that I was rather wrong. The rm -f is
-already there, as correctly noted in your commit message. And patch 2 really is
-needed, it fixes a completely different set of duplicates.
+I built your qemu configuration (from the second patch)successfully.
+I have not executed it yet.  See other patch for some notes
+Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
 
-
-?So I've extended the commit message a little and applied to master, thanks.
-
-
-?Regards,
-?Arnout
-
-
+> ---
+> Changes v1 -> v2:
+>   - regenerated the glibc patch correctly (Romain)
+>   - modified the conditional test for RISC-V 32-bit in glibc.mk
+>     to use the more consistent style for multiple variables (Romain)
+> ---
+>  arch/Config.in.riscv                          | 23 +++++++-
+>  arch/arch.mk.riscv                            |  4 +-
+>  configs/qemu_riscv64_virt_defconfig           |  1 +
+>  ...C-V-32-bit-build-of-riscv-glibc-2.26.patch | 59 +++++++++++++++++++
+>  .../glibc.hash                                |  7 +++
+>  package/glibc/glibc.mk                        |  7 +++
+>  6 files changed, 97 insertions(+), 4 deletions(-)
+>  create mode 100644 package/glibc/4e2943456e690d89f48e6e710757dd09404b0c9a/0001-Fix-RISC-V-32-bit-build-of-riscv-glibc-2.26.patch
+>  create mode 100644 package/glibc/4e2943456e690d89f48e6e710757dd09404b0c9a/glibc.hash
 >
+> diff --git a/arch/Config.in.riscv b/arch/Config.in.riscv
+> index 4361890bf4..4615f3c797 100644
+> --- a/arch/Config.in.riscv
+> +++ b/arch/Config.in.riscv
+> @@ -66,13 +66,26 @@ config BR2_RISCV_ISA_CUSTOM_RVC
+>  endif
 >
->  Regards,
->  Arnout
+>  config BR2_RISCV_64
+> -       bool
+> -       default y
+> +       bool "64-bit"
+> +       default n
+>         select BR2_ARCH_IS_64
 >
->>  $ ls -l /etc/ssl/certs/87229d21.0
->>  lrwxrwxrwx 1 root root 24 Mar 18 16:30 /etc/ssl/certs/87229d21.0 ->
->> OpenTrust_Root_CA_G1.pem
->>
->> The key issue is the
->>
->>   WARNING: Skipping duplicate certificate xxxxx
->>
->> where xxxx is the name of one of the files under etc/ssl/certs.
->> Sometimes it's ca-certificates.crt and hence you don't see any issue
->> (as you found).  Sometime it's one of the CA files which is the bug
->> i'm trying to fix.  You can run c_rehash directly
->>
->>  ./output/host/bin/c_rehash ./output/target/etc/ssl/certs
->>
->> and you will see the warning.  If you rm
->> output/target/etc/ssl/certs/ca-certificates.crt and try again then the
->> warning will go.
->>
->> I had not released quite how random the bug.  It certainly is not
->> always EE_Certification_Centre_Root_CA.pem, it can be any CA that goes
->> wrong.  The commit message could be changed to make it clearer the bug
->> does not allows happen to EE_Certification_Centre_Root_CA.pem but i'm
->> 100% sure this is a bug that needs fixing.
->>
->> Thanks
->>
->> Martin
->>
->>> Best regards,
->>>
->>> Thomas
->>> --
->>> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
->>> Embedded Linux and Kernel engineering
->>> https://bootlin.com
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->>
+>  choice
+>         prompt "Target ABI"
+> -       default BR2_RISCV_ABI_LP64
+> +       default BR2_RISCV_ABI_ILP32 if !BR2_ARCH_IS_64
+> +       default BR2_RISCV_ABI_LP64 if BR2_ARCH_IS_64
+> +
+> +config BR2_RISCV_ABI_ILP32
+> +       bool "ilp32"
+> +       depends on !BR2_ARCH_IS_64
+> +
+> +config BR2_RISCV_ABI_ILP32F
+> +       bool "ilp32f"
+> +       depends on !BR2_ARCH_IS_64 && BR2_RISCV_ISA_RVF
+> +
+> +config BR2_RISCV_ABI_ILP32D
+> +       bool "ilp32d"
+> +       depends on !BR2_ARCH_IS_64 && BR2_RISCV_ISA_RVD
+>
+>  config BR2_RISCV_ABI_LP64
+>         bool "lp64"
+> @@ -88,12 +101,16 @@ config BR2_RISCV_ABI_LP64D
+>  endchoice
+>
+>  config BR2_ARCH
+> +       default "riscv32" if !BR2_ARCH_IS_64
+>         default "riscv64" if BR2_ARCH_IS_64
+>
+>  config BR2_ENDIAN
+>         default "LITTLE"
+>
+>  config BR2_GCC_TARGET_ABI
+> +       default "ilp32" if BR2_RISCV_ABI_ILP32
+> +       default "ilp32f" if BR2_RISCV_ABI_ILP32F
+> +       default "ilp32d" if BR2_RISCV_ABI_ILP32D
+>         default "lp64" if BR2_RISCV_ABI_LP64
+>         default "lp64f" if BR2_RISCV_ABI_LP64F
+>         default "lp64d" if BR2_RISCV_ABI_LP64D
+> diff --git a/arch/arch.mk.riscv b/arch/arch.mk.riscv
+> index 022d1a6809..f3bf2b3467 100644
+> --- a/arch/arch.mk.riscv
+> +++ b/arch/arch.mk.riscv
+> @@ -5,8 +5,10 @@
+>
+>  ifeq ($(BR2_riscv),y)
+>
+> -ifeq ($(BR2_ARCH_IS_64),y)
+> +ifeq ($(BR2_RISCV_64),y)
+>  GCC_TARGET_ARCH := rv64i
+> +else
+> +GCC_TARGET_ARCH := rv32i
+>  endif
+>
+>  ifeq ($(BR2_RISCV_ISA_RVM),y)
+> diff --git a/configs/qemu_riscv64_virt_defconfig b/configs/qemu_riscv64_virt_defconfig
+> index 59343ee98f..e15f804341 100644
+> --- a/configs/qemu_riscv64_virt_defconfig
+> +++ b/configs/qemu_riscv64_virt_defconfig
+> @@ -1,5 +1,6 @@
+>  # Architecture
+>  BR2_riscv=y
+> +BR2_RISCV_64=y
+>
+>  # System
+>  BR2_SYSTEM_DHCP="eth0"
+> diff --git a/package/glibc/4e2943456e690d89f48e6e710757dd09404b0c9a/0001-Fix-RISC-V-32-bit-build-of-riscv-glibc-2.26.patch b/package/glibc/4e2943456e690d89f48e6e710757dd09404b0c9a/0001-Fix-RISC-V-32-bit-build-of-riscv-glibc-2.26.patch
+> new file mode 100644
+> index 0000000000..0596587ac5
+> --- /dev/null
+> +++ b/package/glibc/4e2943456e690d89f48e6e710757dd09404b0c9a/0001-Fix-RISC-V-32-bit-build-of-riscv-glibc-2.26.patch
+> @@ -0,0 +1,59 @@
+> +From 4909cfbbe8dd512b8fc0892859549c26e1b14d30 Mon Sep 17 00:00:00 2001
+> +From: Mark Corbin <mark.corbin@embecosm.com>
+> +Date: Sun, 21 Oct 2018 10:38:18 +0100
+> +Subject: [PATCH 1/1] Fix RISC-V 32-bit build of riscv-glibc 2.26
+> +
+> +This patch fixes two build errors with the 32-bit version of
+> +glibc-2.26 from the riscv-glibc repository.
+> +
+> +A void reference to 'refsym' has been added to dl-runtime.c to avoid
+> +an 'unused variable' error when building with '-Werror'.
+> +
+> +Some data types were hard-coded for 64-bit in ldsodefs.h. These have
+> +been modified to allow 32-bit builds.
+> +
+> +This patch was provided by Fabrice Bellard as part of his RISC-V
+> +Buildroot development source.
+> +
+> +Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
+> +---
+> + elf/dl-runtime.c         | 1 +
+> + sysdeps/riscv/ldsodefs.h | 4 ++--
+> + 2 files changed, 3 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/elf/dl-runtime.c b/elf/dl-runtime.c
+> +index 51d3819d4a..e728e8907e 100644
+> +--- a/elf/dl-runtime.c
+> ++++ b/elf/dl-runtime.c
+> +@@ -146,6 +146,7 @@ _dl_fixup (
+> +   if (__glibc_unlikely (GLRO(dl_bind_not)))
+> +     return value;
+> +
+> ++  (void)refsym;
+> +   return elf_machine_fixup_plt (l, result, refsym, sym, reloc, rel_addr, value);
+> + }
+> +
+> +diff --git a/sysdeps/riscv/ldsodefs.h b/sysdeps/riscv/ldsodefs.h
+> +index db993df80a..91e7a8c88f 100644
+> +--- a/sysdeps/riscv/ldsodefs.h
+> ++++ b/sysdeps/riscv/ldsodefs.h
+> +@@ -25,14 +25,14 @@ struct La_riscv_regs;
+> + struct La_riscv_retval;
+> +
+> + #define ARCH_PLTENTER_MEMBERS                                         \
+> +-    Elf64_Addr (*riscv_gnu_pltenter) (Elf64_Sym *, unsigned int,      \
+> ++    ElfW(Addr) (*riscv_gnu_pltenter) (ElfW(Sym) *, unsigned int,      \
+> +                                     uintptr_t *, uintptr_t *,         \
+> +                                     const struct La_riscv_regs *,     \
+> +                                     unsigned int *, const char *name, \
+> +                                     long int *framesizep);
+> +
+> + #define ARCH_PLTEXIT_MEMBERS                                          \
+> +-    unsigned int (*riscv_gnu_pltexit) (Elf64_Sym *, unsigned int,     \
+> ++    unsigned int (*riscv_gnu_pltexit) (ElfW(Sym) *, unsigned int,     \
+> +                                      uintptr_t *, uintptr_t *,        \
+> +                                      const struct La_riscv_regs *,    \
+> +                                      struct La_riscv_retval *,        \
+> +--
+> +2.17.1
+> +
+> diff --git a/package/glibc/4e2943456e690d89f48e6e710757dd09404b0c9a/glibc.hash b/package/glibc/4e2943456e690d89f48e6e710757dd09404b0c9a/glibc.hash
+> new file mode 100644
+> index 0000000000..3eb5e04e96
+> --- /dev/null
+> +++ b/package/glibc/4e2943456e690d89f48e6e710757dd09404b0c9a/glibc.hash
+> @@ -0,0 +1,7 @@
+> +# Locally calculated (fetched from Github)
+> +sha256 a40f908125135bad2cf92c18d07ad25b3091b161b3a5d3aea46c23ffd2ac90b8  glibc-4e2943456e690d89f48e6e710757dd09404b0c9a.tar.gz
+> +
+> +# Hashes for license files
+> +sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
+> +sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING.LIB
+> +sha256 61abdd6930c9c599062d89e916b3e7968783879b6be0ee1c6229dd6169def431 LICENSES
+> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+> index 708c22f723..408711bfb7 100644
+> --- a/package/glibc/glibc.mk
+> +++ b/package/glibc/glibc.mk
+> @@ -7,6 +7,9 @@
+>  ifeq ($(BR2_arc),y)
+>  GLIBC_VERSION =  arc-2018.03-release
+>  GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VERSION))
+> +else ifeq ($(BR2_riscv):$(BR2_RISCV_64),y:)
+> +GLIBC_VERSION = 4e2943456e690d89f48e6e710757dd09404b0c9a
+> +GLIBC_SITE = $(call github,riscv,riscv-glibc,$(GLIBC_VERSION))
+>  else
+>  # Generate version string using:
+>  #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
+> @@ -79,7 +82,11 @@ GLIBC_CONF_ENV = \
+>  # Override the default library locations of /lib64/<abi> and
+>  # /usr/lib64/<abi>/ for RISC-V.
+>  ifeq ($(BR2_riscv),y)
+> +ifeq ($(BR2_RISCV_64),y)
+>  GLIBC_CONF_ENV += libc_cv_slibdir=/lib64 libc_cv_rtlddir=/lib
+> +else
+> +GLIBC_CONF_ENV += libc_cv_slibdir=/lib32 libc_cv_rtlddir=/lib
+> +endif
+>  endif
+>
+>  # Even though we use the autotools-package infrastructure, we have to
+> --
+> 2.17.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
