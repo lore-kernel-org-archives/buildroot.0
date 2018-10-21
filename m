@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Oct 2018 23:26:13 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] package/binutils: remove
+Date: Sun, 21 Oct 2018 23:26:44 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/binutils: remove
  binutils 2.27 patches
-Message-ID: <20181021212454.4EE99884FD@busybox.osuosl.org>
+Message-ID: <20181021212506.6BF4288503@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f5644f596e37df04a8e223a65de059ad28380830
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=cfe4f3cd3ecbd611a909065ef5dcaba72014e603
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 binutils 2.27 support was removed in commit
 453d29f1f45736d0156071930a09015def68994a.
