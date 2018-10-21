@@ -1,81 +1,85 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Oct 2018 14:45:05 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] utils/get-developers:
- make it callable from elsewhere than the toplevel directory
-Message-ID: <20181021124402.2A5C8881FE@busybox.osuosl.org>
+Date: Sun, 21 Oct 2018 14:44:39 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] utils/get-developers: add
+ -e flag to only list email addresses for git send-email
+Message-ID: <20181021124402.1AE3E881FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3f32198bf2db6f867e614caf12d39b6e9e44c662
+commit: https://git.buildroot.net/buildroot/commit/?id=0aac4d6f3ef3906d03d8f467153a0cac52b8a274
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-get-developers tries to open DEVELOPERS in the current directory, so it
-breaks when calling it from elsewhere than the toplevel Buildroot directory.
+When called with a list of patches, get-developers prints the entire git
+send-email invocation line:
 
-Traceback (most recent call last):
-  File "../utils/get-developers", line 107, in <module>
-    __main__()
-  File "../utils/get-developers", line 26, in __main__
-    devs = getdeveloperlib.parse_developers(os.path.dirname()
-  File "/home/peko/source/buildroot/utils/getdeveloperlib.py", line 161, in parse_developers
-    with open(os.path.join(basepath, "DEVELOPERS"), "r") as f:
-IOError: [Errno 2] No such file or directory: '/home/peko/source/buildroot/output-foo/DEVELOPERS'
+./utils/get-developers 0001-git-security-bump-to-version-2.16.5.patch
+git send-email --to buildroot at buildroot.org --cc "Matt Weber <matthew.weber@rockwellcollins.com>"
 
-Fix it by instead figuring out where the DEVELOPERS file is relative to the
-location of get-developers (E.G. one level up).
+This may be handy when creating an entire patch series and editing a cover
+letter, but it does mean that this has to be explicitly executed and
+get-developers cannot be used directly by the --cc-cmd option of git
+send-email to automatically CC affected developers.
+
+So add an -e flag to only let get-developers print the email addresses of
+the affected developers in the one-email-per-line format expected by git
+send-email, similar to how get_maintainer.pl works in the Linux kernel.
+
+With this and a suitable git configuration:
+
+git config sendemail.to buildroot at buildroot.org
+git config sendemail.ccCmd "$(pwd)/utils/get-developers -e"
+
+You can simply do:
+
+git send-email master
+
+To automatically mail the buildroot list and CC affected developers on
+patches.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[Arnout:
-  - add realpath to support a symlinked get-developers script;
-  - pass devs_dir argument to check_developers() to support -c in subdir;
-  - convert basepath to absolute path to support -f option.
-]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-(cherry picked from commit 62d5558f76a790d1c1b3a1834f1736dc86b6e34f)
+Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit bcf2ed5cc3e6cba61aedb9eeb34f39d96d612867)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/get-developers     | 6 ++++--
- utils/getdeveloperlib.py | 2 ++
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ utils/get-developers | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
 
 diff --git a/utils/get-developers b/utils/get-developers
-index ce882e6699..c887938859 100755
+index f525ff2226..9135b41662 100755
 --- a/utils/get-developers
 +++ b/utils/get-developers
-@@ -24,7 +24,9 @@ def parse_args():
+@@ -18,6 +18,8 @@ def parse_args():
+                         help='find developers in charge of these files')
+     parser.add_argument('-c', dest='check', action='store_const',
+                         const=True, help='list files not handled by any developer')
++    parser.add_argument('-e', dest='email', action='store_const',
++                        const=True, help='only list affected developer email addresses')
+     return parser.parse_args()
  
  
- def __main__():
--    devs = getdeveloperlib.parse_developers()
-+    # DEVELOPERS is one level up from here
-+    devs_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..')
-+    devs = getdeveloperlib.parse_developers(devs_dir)
-     if devs is None:
-         sys.exit(1)
-     args = parse_args()
-@@ -50,7 +52,7 @@ def __main__():
+@@ -90,12 +92,16 @@ def __main__():
+                 if i in dev.infras:
+                     matching_devs.add(dev.name)
  
-     # Handle the check action
-     if args.check:
--        files = getdeveloperlib.check_developers(devs)
-+        files = getdeveloperlib.check_developers(devs, devs_dir)
-         for f in files:
-             print(f)
+-        result = "--to buildroot at buildroot.org"
+-        for dev in matching_devs:
+-            result += " --cc \"%s\"" % dev
++        if args.email:
++            for dev in matching_devs:
++                print dev
++        else:
++            result = "--to buildroot at buildroot.org"
++            for dev in matching_devs:
++                result += " --cc \"%s\"" % dev
  
-diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
-index 2c8d477583..84665520c6 100644
---- a/utils/getdeveloperlib.py
-+++ b/utils/getdeveloperlib.py
-@@ -158,6 +158,8 @@ def parse_developers(basepath=None):
-     linen = 0
-     if basepath is None:
-         basepath = os.getcwd()
-+    else:
-+        basepath = os.path.abspath(basepath)
-     with open(os.path.join(basepath, "DEVELOPERS"), "r") as f:
-         files = []
-         name = None
+-        if result != "":
+-            print("git send-email %s" % result)
++            if result != "":
++                print("git send-email %s" % result)
+ 
+ 
+ __main__()
