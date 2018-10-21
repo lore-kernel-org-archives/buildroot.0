@@ -1,82 +1,37 @@
-From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
-Date: Sun, 21 Oct 2018 15:13:16 +0800
-Subject: [Buildroot] [PATCH 1/1] python-multidict: new package
-Message-ID: <1540105996-23504-1-git-send-email-james.hilliard1@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 21 Oct 2018 09:28:48 +0200
+Subject: [Buildroot] [RFC] testing: add python-crossbar tests
+In-Reply-To: <5bcc083188f1f_56b83f8d16040a3c5959@ultri5.mail>
+References: <CALFsTFVpjgYWNr=VoeT3Wj+DjYtFdUNNNw9_Z2COzQMrpxQxWQ@mail.gmail.com>
+ <5bcc083188f1f_56b83f8d16040a3c5959@ultri5.mail>
+Message-ID: <20181021092848.2c1abd44@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: James Hilliard <james.hilliard1@gmail.com>
+Hello,
 
-Multidict is dict-like collection of key-value pairs where key might be occurred more than once in the container.
+On Sun, 21 Oct 2018 02:01:37 -0300, Ricardo Martincoski wrote:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/Config.in                              |  1 +
- package/python-multidict/Config.in             |  7 +++++++
- package/python-multidict/python-multidict.hash |  5 +++++
- package/python-multidict/python-multidict.mk   | 12 ++++++++++++
- 4 files changed, 25 insertions(+)
- create mode 100644 package/python-multidict/Config.in
- create mode 100644 package/python-multidict/python-multidict.hash
- create mode 100644 package/python-multidict/python-multidict.mk
+> We could update the default kernel image used by the test infra (today 3.11.0),
 
-diff --git a/package/Config.in b/package/Config.in
-index 177861e..c1a917c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -909,6 +909,7 @@ menu "External python modules"
- 	source "package/python-mistune/Config.in"
- 	source "package/python-more-itertools/Config.in"
- 	source "package/python-msgpack/Config.in"
-+	source "package/python-multidict/Config.in"
- 	source "package/python-mutagen/Config.in"
- 	source "package/python-mwclient/Config.in"
- 	source "package/python-mwscrape/Config.in"
-diff --git a/package/python-multidict/Config.in b/package/python-multidict/Config.in
-new file mode 100644
-index 0000000..cce394a
---- /dev/null
-+++ b/package/python-multidict/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_MULTIDICT
-+	bool "python-multidict"
-+	depends on BR2_PACKAGE_PYTHON3
-+	help
-+	  Multidict is dict-like collection of key-value pairs where key might be occurred more than once in the container.
-+
-+	  https://github.com/aio-libs/multidict/
-diff --git a/package/python-multidict/python-multidict.hash b/package/python-multidict/python-multidict.hash
-new file mode 100644
-index 0000000..e8fe366
---- /dev/null
-+++ b/package/python-multidict/python-multidict.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.python.org/pypi/multidict/json
-+md5	55d19168f955e5463c6f6b530e913da3  multidict-4.4.2.tar.gz
-+sha256	3c11e92c3dfc321014e22fb442bc9eb70e01af30d6ce442026b0c35723448c66  multidict-4.4.2.tar.gz
-+# Locally computed sha256 checksums
-+sha256	a1c5825513279d3085a0ba46880e148ea3710c149bbaedcf2d11605a5ed3c4ad  LICENSE
-\ No newline at end of file
-diff --git a/package/python-multidict/python-multidict.mk b/package/python-multidict/python-multidict.mk
-new file mode 100644
-index 0000000..e2fdade
---- /dev/null
-+++ b/package/python-multidict/python-multidict.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# python-multidict
-+#
-+################################################################################
-+PYTHON_MULTIDICT_VERSION = 4.4.2
-+PYTHON_MULTIDICT_SOURCE = multidict-$(PYTHON_MULTIDICT_VERSION).tar.gz
-+PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/b3/5f/5c29cde8511c95fad045b9ecaf2e76f0da18761e8363a82594f5a58c2ced
-+PYTHON_MULTIDICT_LICENSE = Apache-2.0
-+PYTHON_MULTIDICT_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
+We can definitely update that pre-built image if needed. There is no
+special reason to have a 3.11 based image, except this being the kernel
+version I had around at the time I started playing with the test
+infrastructure.
+
+> The most elegant solution IMO is to add haveged to the image built for this test
+> case by the test infra. This is what people with a real target with low entropy
+> probably would use, I guess. There is no need to update the kernel this way.
+
+I also don't see any problem with adding haveged in the image.
+
+Best regards,
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
