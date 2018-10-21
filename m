@@ -1,43 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Oct 2018 09:02:24 +0200
-Subject: [Buildroot] [git commit] wireguard: bump version to 0.0.20181018
-Message-ID: <20181021070113.9492688084@busybox.osuosl.org>
+Date: Sun, 21 Oct 2018 09:00:55 +0200
+Subject: [Buildroot] [git commit] package/mjpg-streamer: needs headers >=
+ 3.16
+Message-ID: <20181021070113.8F22D880F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3f6c914af97b7dcba8ad029763f503f4df48672
+commit: https://git.buildroot.net/buildroot/commit/?id=a517fdb2ef377d3434f39ffb430a501490d47212
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Upstream commit
+
+https://github.com/jacksonliam/mjpg-streamer/commit/29fb2b9a65630721c539a216225288fba9497c49#diff-fc82978386df1046ac9aac8cbe0a129eR825
+
+added the usage of V4L2_EVENT_SOURCE_CHANGE which was added to kernel
+version 3.16 with commit "[media] v4l: Add source change event":
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/include/uapi/linux/videodev2.h?id=3cbe6e5bcad0b102c06b9c6029fda75630045475
+
+To compare:
+- linux 3.15 without the commit:
+  https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/log/include/uapi/linux/videodev2.h?h=linux-3.15.y
+- linux 3.16 is the first kernel with the commit:
+  https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/log/include/uapi/linux/videodev2.h?h=linux-3.16.y
+
+Fixes
+http://autobuild.buildroot.net/results/4f8/4f8dc7520ee692c665167fda69dc3af66263008f/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireguard/wireguard.hash | 4 ++--
- package/wireguard/wireguard.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mjpg-streamer/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
-index fe6439fbc2..737f7b49c2 100644
---- a/package/wireguard/wireguard.hash
-+++ b/package/wireguard/wireguard.hash
-@@ -1,4 +1,4 @@
--# From https://lists.zx2c4.com/pipermail/wireguard/2018-September/003395.html
--sha256 4a0488a07e40ec17e798f3e40a85cedf55f0560b1c3a8fd95806c7d4266cb0e8  WireGuard-0.0.20180925.tar.xz
-+# From https://lists.zx2c4.com/pipermail/wireguard/2018-October/003479.html
-+sha256 af05824211b27cbeeea2b8d6b76be29552c0d80bfe716471215e4e43d259e327  WireGuard-0.0.20181018.tar.xz
- # Locally calculated
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
-index faddbf93ad..f3ea1bccf2 100644
---- a/package/wireguard/wireguard.mk
-+++ b/package/wireguard/wireguard.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/mjpg-streamer/Config.in b/package/mjpg-streamer/Config.in
+index 3587af0288..59f4208ca7 100644
+--- a/package/mjpg-streamer/Config.in
++++ b/package/mjpg-streamer/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_MJPG_STREAMER
+ 	bool "mjpg-streamer"
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # linux/uvcvideo.h
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16 # V4L2_EVENT_SOURCE_CHANGE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS # plugins need dlopen()
+@@ -12,7 +12,7 @@ config BR2_PACKAGE_MJPG_STREAMER
  
--WIREGUARD_VERSION = 0.0.20180925
-+WIREGUARD_VERSION = 0.0.20181018
- WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
- WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
- WIREGUARD_LICENSE = GPL-2.0
+ 	  https://github.com/jacksonliam/mjpg-streamer
+ 
+-comment "mjpg-streamer needs a toolchain w/ threads, headers >= 3.0, dynamic library"
++comment "mjpg-streamer needs a toolchain w/ threads, headers >= 3.16, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 || BR2_STATIC_LIBS
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16 || BR2_STATIC_LIBS
