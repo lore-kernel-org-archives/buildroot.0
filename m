@@ -1,11 +1,11 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 21 Oct 2018 14:34:28 +0200
-Subject: [Buildroot] [PATCH 2/3] package/gcc: introduce
- BR2_GCC_SUPPORTS_LIBCILKRTS
-In-Reply-To: <20181021115415.21471-3-thomas.petazzoni@bootlin.com>
+Date: Sun, 21 Oct 2018 14:37:04 +0200
+Subject: [Buildroot] [PATCH 3/3] package/gcc: remove
+ BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE
+In-Reply-To: <20181021115415.21471-4-thomas.petazzoni@bootlin.com>
 References: <20181021115415.21471-1-thomas.petazzoni@bootlin.com>
- <20181021115415.21471-3-thomas.petazzoni@bootlin.com>
-Message-ID: <efc470fd-bc7b-d7fd-bd03-98a3b98243b3@gmail.com>
+ <20181021115415.21471-4-thomas.petazzoni@bootlin.com>
+Message-ID: <de405be3-8aa4-8626-c590-333696895067@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,15 +15,12 @@ To: buildroot@busybox.net
 Hi Thomas,
 
 Le 21/10/2018 ? 13:54, Thomas Petazzoni a ?crit?:
-> libcilkrts was introduced in gcc 4.9, and removed in gcc
-> 8.x. Therefore, it does not make sense to pass --disable-libcilkrts in
-> gcc 8.x and higher. This commit introduces BR2_GCC_SUPPORTS_LIBCILKRTS
-> that allows the makefile code to know if the selected gcc version
-> supports libcilkrts or not.
-> 
-> This new option mainly allows to annotate the fact that libcilkrts
-> exists in gcc [4.9, 7] and that once we have dropped support for those
-> gcc versions, the libcilkrts related logic can be removed.
+> Since commit 8f8e9162fae5fdc1788dcf33f02b20ddaa5e6846 ("package/gcc:
+> do not mourn avr32 for too long..."), in which we dropped AVR32
+> support, the BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE is always
+> 'y'. Therefore, it is totally useless to keep this option around, and
+> this commit removes it, making the corresponding code unconditional
+> along the way.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
@@ -33,57 +30,67 @@ Best regards,
 Romain
 
 > ---
->  package/gcc/Config.in.host         |  6 ++++++
->  package/gcc/gcc-final/gcc-final.mk | 12 ++++++++++--
->  2 files changed, 16 insertions(+), 2 deletions(-)
+>  package/gcc/Config.in.host             | 4 ----
+>  package/gcc/gcc-initial/gcc-initial.mk | 9 ++-------
+>  package/gcc/gcc.mk                     | 5 +----
+>  3 files changed, 3 insertions(+), 15 deletions(-)
 > 
 > diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-> index 5a8f684a4c..3bf87fe597 100644
+> index 3bf87fe597..1d4e946f55 100644
 > --- a/package/gcc/Config.in.host
 > +++ b/package/gcc/Config.in.host
-> @@ -76,6 +76,12 @@ config BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE
->  	bool
->  	default y
+> @@ -72,10 +72,6 @@ config BR2_GCC_VERSION_8_X
 >  
-> +# libcilkrts was introduced in gcc 4.9 (oldest gcc version we
-> +# support), and removed in gcc 8.x
-> +config BR2_GCC_SUPPORTS_LIBCILKRTS
-> +	bool
-> +	default y if !BR2_TOOLCHAIN_GCC_AT_LEAST_8
-> +
->  config BR2_GCC_VERSION
->  	string
->  	default "4.9.4"     if BR2_GCC_VERSION_4_9_X
-> diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-> index 1be0b9bfc9..cbde56ce1c 100644
-> --- a/package/gcc/gcc-final/gcc-final.mk
-> +++ b/package/gcc/gcc-final/gcc-final.mk
-> @@ -76,6 +76,8 @@ HOST_GCC_FINAL_CONF_OPTS += "--with-multilib-list=m4a,m4a-nofpu"
->  HOST_GCC_FINAL_GCC_LIB_DIR = $(HOST_DIR)/$(GNU_TARGET_NAME)/lib/!m4*
+>  endchoice
+>  
+> -config BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE
+> -	bool
+> -	default y
+> -
+>  # libcilkrts was introduced in gcc 4.9 (oldest gcc version we
+>  # support), and removed in gcc 8.x
+>  config BR2_GCC_SUPPORTS_LIBCILKRTS
+> diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
+> index 9b20eb18f9..d5d925a3d9 100644
+> --- a/package/gcc/gcc-initial/gcc-initial.mk
+> +++ b/package/gcc/gcc-initial/gcc-initial.mk
+> @@ -45,13 +45,8 @@ HOST_GCC_INITIAL_CONF_OPTS = \
+>  HOST_GCC_INITIAL_CONF_ENV = \
+>  	$(HOST_GCC_COMMON_CONF_ENV)
+>  
+> -HOST_GCC_INITIAL_MAKE_OPTS = $(HOST_GCC_COMMON_MAKE_OPTS) all-gcc
+> -HOST_GCC_INITIAL_INSTALL_OPTS = install-gcc
+> -
+> -ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
+> -HOST_GCC_INITIAL_MAKE_OPTS += all-target-libgcc
+> -HOST_GCC_INITIAL_INSTALL_OPTS += install-target-libgcc
+> -endif
+> +HOST_GCC_INITIAL_MAKE_OPTS = $(HOST_GCC_COMMON_MAKE_OPTS) all-gcc all-target-libgcc
+> +HOST_GCC_INITIAL_INSTALL_OPTS = install-gcc install-target-libgcc
+>  
+>  HOST_GCC_INITIAL_TOOLCHAIN_WRAPPER_ARGS += $(HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS)
+>  HOST_GCC_INITIAL_POST_BUILD_HOOKS += TOOLCHAIN_WRAPPER_BUILD
+> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+> index 9e9069ce0e..8b0fec74f1 100644
+> --- a/package/gcc/gcc.mk
+> +++ b/package/gcc/gcc.mk
+> @@ -98,6 +98,7 @@ HOST_GCC_COMMON_CONF_OPTS = \
+>  	--with-gnu-ld \
+>  	--disable-libssp \
+>  	--disable-multilib \
+> +	--disable-decimal-float \
+>  	--with-gmp=$(HOST_DIR) \
+>  	--with-mpc=$(HOST_DIR) \
+>  	--with-mpfr=$(HOST_DIR) \
+> @@ -195,10 +196,6 @@ HOST_GCC_COMMON_CONF_OPTS += --with-float=soft
+>  endif
 >  endif
 >  
-> +ifeq ($(BR2_GCC_SUPPORTS_LIBCILKRTS),y)
-> +
->  # libcilkrts does not support v8
->  ifeq ($(BR2_sparc),y)
->  HOST_GCC_FINAL_CONF_OPTS += --disable-libcilkrts
-> @@ -86,10 +88,16 @@ ifeq ($(BR2_PTHREADS_NONE),y)
->  HOST_GCC_FINAL_CONF_OPTS += --disable-libcilkrts
->  endif
->  
-> +ifeq ($(BR2_STATIC_LIBS),y)
-> +# disable libcilkrts as there is no static version
-> +HOST_GCC_FINAL_CONF_OPTS += --disable-libcilkrts
-> +endif
-> +
-> +endif # BR2_GCC_SUPPORTS_LIBCILKRTS
-> +
->  # Disable shared libs like libstdc++ if we do static since it confuses linking
-> -# In that case also disable libcilkrts as there is no static version
->  ifeq ($(BR2_STATIC_LIBS),y)
-> -HOST_GCC_FINAL_CONF_OPTS += --disable-shared --disable-libcilkrts
-> +HOST_GCC_FINAL_CONF_OPTS += --disable-shared
->  else
->  HOST_GCC_FINAL_CONF_OPTS += --enable-shared
->  endif
+> -ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
+> -HOST_GCC_COMMON_CONF_OPTS += --disable-decimal-float
+> -endif
+> -
+>  # Determine arch/tune/abi/cpu options
+>  ifneq ($(GCC_TARGET_ARCH),)
+>  HOST_GCC_COMMON_CONF_OPTS += --with-arch="$(GCC_TARGET_ARCH)"
 > 
