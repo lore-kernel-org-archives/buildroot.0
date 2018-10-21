@@ -1,65 +1,31 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 21 Oct 2018 11:03:03 +0100
-Subject: [Buildroot] [PATCH 2/2] .gitlab-ci.yml: do runtime tests only on
- explicit trigger
-In-Reply-To: <20181021100303.18431-1-arnout@mind.be>
-References: <20181021100303.18431-1-arnout@mind.be>
-Message-ID: <20181021100303.18431-2-arnout@mind.be>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Sun, 21 Oct 2018 11:27:46 +0100
+Subject: [Buildroot] [PATCH v4 1/2] core/legal-info: Change order of
+ legal-manifest parameters
+In-Reply-To: <20180822124014.23046-1-sojkam1@fel.cvut.cz>
+References: <20180822124014.23046-1-sojkam1@fel.cvut.cz>
+Message-ID: <27c79fec-f680-6a5f-4fad-601be5ecf700@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When the runtime tests were first introduced, they still ran pretty
-quickly. Nowadays, however, there are a lot of runtime tests, and some
-of them take a really long time. So running them on every push is
-really too much.
+Hi,
 
-Just like we do for the defconfigs, run them on explicit trigger only.
+On 22/08/18 14:40, Michal Sojka wrote:
+> From: Michal Sojka <sojka@merica.cz>
+> 
+> The last parameter {HOST|TARGET} is now first. With this change,
+> adding new columns to the legal manifest file (as in the next commit)
+> will be slightly easier to review.
+> 
+> Signed-off-by: Michal Sojka <sojka@merica.cz>
+> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-The explicit trigger is now done every week, but it can be increased
-to e.g. twice or three times per week.
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-v2: properly regenerate .gitlab-ci.yml
----
- .gitlab-ci.yml    | 5 +++++
- .gitlab-ci.yml.in | 5 +++++
- 2 files changed, 10 insertions(+)
-
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index d6a2319ba0..d5e91042f1 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -62,6 +62,11 @@ check-package:
-             - output/build/packages-file-list.txt
- 
- .runtime_test: &runtime_test
-+    # Running the runtime tests for every push is too much, so limit to
-+    # explicit triggers through the API.
-+    only:
-+        - triggers
-+        - tags
-     # Keep build directories so the rootfs can be an artifact of the job. The
-     # runner will clean up those files for us.
-     # Multiply every emulator timeout by 10 to avoid sporadic failures in
-diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
-index 38e24c8d01..db526c4b5a 100644
---- a/.gitlab-ci.yml.in
-+++ b/.gitlab-ci.yml.in
-@@ -62,6 +62,11 @@ check-package:
-             - output/build/packages-file-list.txt
- 
- .runtime_test: &runtime_test
-+    # Running the runtime tests for every push is too much, so limit to
-+    # explicit triggers through the API.
-+    only:
-+        - triggers
-+        - tags
-     # Keep build directories so the rootfs can be an artifact of the job. The
-     # runner will clean up those files for us.
-     # Multiply every emulator timeout by 10 to avoid sporadic failures in
 -- 
-2.17.2
+Luca
