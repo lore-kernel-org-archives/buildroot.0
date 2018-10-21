@@ -1,85 +1,47 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Sun, 21 Oct 2018 12:53:45 +0100
-Subject: [Buildroot] [PATCH] package/clang: default linker to GNU
-In-Reply-To: <ac3e5b76-9d38-d9af-5290-0675d72c9fe3@gmail.com>
-References: <1540112964-50052-1-git-send-email-matthew.weber@rockwellcollins.com>
- <ac3e5b76-9d38-d9af-5290-0675d72c9fe3@gmail.com>
-Message-ID: <CANQCQpa2_Y3G7kmRxQKod2QiLzqw67Q9OTPa4wppsftx-P+a7w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 21 Oct 2018 13:54:13 +0200
+Subject: [Buildroot] [PATCH 1/3] package/gcc: disable libcilkrts when there
+ is no thread support
+In-Reply-To: <20181021115415.21471-1-thomas.petazzoni@bootlin.com>
+References: <20181021115415.21471-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20181021115415.21471-2-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, Valentin,
+The libcilkrts configure script errors out with "Pthreads are required
+to build libcilkrts" if the C library doesn't have thread support. To
+fix that, we disable libcilkrts when thread support is not available.
 
-On Sun, Oct 21, 2018 at 10:49 AM Romain Naour <romain.naour@gmail.com> wrote:
->
-> Hi Matt,
->
-> Adding Valentin in Cc.
->
-> Le 21/10/2018 ? 11:09, Matt Weber a ?crit :
-> > By default clang is assuming the system linker /usr/bin/ld.  This
-> > patchset updates the default to point at the cross toolchain ld.
-> >
-> > Previously clang had been used on target only, this update is
-> > required for host clang/clang++ to be used as a frontend for
-> > cross-compiling.
->
-> As we discuss during the meeting, we should probably wrap clang and clang++ in
-> order to pass the path to the sysroot like we do in the toolchain wrapper for
-> gcc (and other options when needed).
+This issue was not noticed until now, because we only regularly build
+a no-thread toolchain for ARM, and libcilkrts was enabled on ARM only
+starting in gcc 7.x.
 
-Since there isn't a package yet that has the need for this wrapper,
-would it be something that we could add to toolchain/helpers.mk?
-For this patch, maybe I just updated the commit message with and
-example of how you'd call clang w/o the wrapper?
+This fixes the build of no-thread toolchains on architectures where
+libcilkrts is supported, i.e x86/x86-64, ARM and Sparc.
 
->
-> >
-> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> > ---
-> >  package/clang/clang.mk | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/package/clang/clang.mk b/package/clang/clang.mk
-> > index 52e0b98..e2d4a08 100644
-> > --- a/package/clang/clang.mk
-> > +++ b/package/clang/clang.mk
-> > @@ -42,7 +42,8 @@ CLANG_CONF_OPTS += -DCLANG_BUILD_TOOLS=ON
-> >  HOST_CLANG_CONF_OPTS += \
-> >       -DCLANG_BUILD_EXAMPLES=OFF \
-> >       -DCLANG_INCLUDE_DOCS=OFF \
-> > -     -DCLANG_INCLUDE_TESTS=OFF
-> > +     -DCLANG_INCLUDE_TESTS=OFF \
-> > +     -DCLANG_DEFAULT_LINKER=$(TARGET_LD)
->
-> I would put it with this line:
-> HOST_CLANG_CONF_OPTS += -DLLVM_CONFIG:FILEPATH=$(HOST_DIR)/bin/llvm-config
->
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gcc/gcc-final/gcc-final.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Sounds good.
-
-> Otherwise:
-> Reviewed-by: Romain Naour <romain.naour@gmail.com>
->
-> Best regards,
-> Romain
->
-> >
-> >  CLANG_CONF_OPTS += \
-> >       -DCLANG_BUILD_EXAMPLES=OFF \
-> >
->
-
-
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index 9897d18682..1be0b9bfc9 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -81,6 +81,11 @@ ifeq ($(BR2_sparc),y)
+ HOST_GCC_FINAL_CONF_OPTS += --disable-libcilkrts
+ endif
+ 
++# Pthreads are required to build libcilkrts
++ifeq ($(BR2_PTHREADS_NONE),y)
++HOST_GCC_FINAL_CONF_OPTS += --disable-libcilkrts
++endif
++
+ # Disable shared libs like libstdc++ if we do static since it confuses linking
+ # In that case also disable libcilkrts as there is no static version
+ ifeq ($(BR2_STATIC_LIBS),y)
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / RC Linux Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+2.14.4
