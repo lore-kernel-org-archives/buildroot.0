@@ -1,136 +1,97 @@
-From: Mark Corbin <mark.corbin@embecosm.com>
-Date: Sun, 21 Oct 2018 15:12:52 +0100
-Subject: [Buildroot] [PATCH v2 2/2] configs/qemu: add
- qemu_riscv32_virt_defconfig
-In-Reply-To: <CANQCQpb2DbgJE3vSJeAVs=iBJCa-U-hOXAgs4x6DCy8geH182g@mail.gmail.com>
-References: <20181021130621.17834-1-mark.corbin@embecosm.com>
- <20181021130621.17834-2-mark.corbin@embecosm.com>
- <CANQCQpb2DbgJE3vSJeAVs=iBJCa-U-hOXAgs4x6DCy8geH182g@mail.gmail.com>
-Message-ID: <0d0fb30b-a3ec-b874-d86c-cd8b69684a1d@embecosm.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 21 Oct 2018 16:18:22 +0200
+Subject: [Buildroot] [PATCH 1/3] package/Makefile.in: Use '-isystem'
+ instead of '-I' in HOST_CFLAGS globally
+In-Reply-To: <CAD6XyYx9Uy4-Jpu9q7PYmmaYj-PFk44uFx9HAK_3xNomZwhTiw@mail.gmail.com>
+References: <20180831142024.27548-1-david.degrave@mind.be>
+ <20180909153221.6b803c9f@windsurf.home>
+ <5eeda9cf-ba1a-a83b-6413-d3e43f87dfff@mind.be>
+ <CAD6XyYx9Uy4-Jpu9q7PYmmaYj-PFk44uFx9HAK_3xNomZwhTiw@mail.gmail.com>
+Message-ID: <20181021141822.GB23085@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Matt
+David, All,
 
-On 21/10/2018 14:26, Matthew Weber wrote:
-> Mark,
->
-> On Sun, Oct 21, 2018 at 2:07 PM Mark Corbin <mark.corbin@embecosm.com> wrote:
->> Add RISC-V 32-bit defconfig for QEMU virt machine.
->>
->> Tested with QEMU 2.12.1
->>
-> Please add a readme file like the other qemu targets which gives the
-> example of the qemu launch line and version last tested.
+On 2018-09-10 15:00 +0200, David De Grave spake thusly:
+> Hello Thomas, Arnout,
+> On Mon, Sep 10, 2018 at 11:51 AM, Arnout Vandecappelle < [1]arnout@mind.be> wrote:
+> ?
+> 
+>   > Could you give a few more details about the motivation for this change.
+>   > Is it just because it is "cleaner" to refer to Buildroot
+>   > $(HOST_DIR)/include using -isystem, or does this fix some actual
+>   > problem/build issue ?
+> 
+> More than making things cleaner/logic, it fixes a build issue I've with the beagle bone
+> black's Linux kernel: [2]https://github.com/beagleboard/linux.git
+> They implemented a driver who handle DTBs overlays and what they call "capes"
+> (PCB extensions to the bbb mother board). Since the update of the DTC package few
+> weeks ago, my build is throwing compilation errors in linux when it starts to compile
+> their own version of the dtc. Due to the way they include their headers, some of them
+> were taken from the host while some others are taken from local dir. Moreover, their
+> dtc version use different names in their defines (a missing underscore) and this why
+> at a certain point, it throws a "function redefinition error". Maybe other kernels are
+> suffering from the same problem, I don't know...
+> I first fixed the issue by adding a patch to my project to change the involved sources
+> in the Kernel tree...
+> But then I thought that other people may suffers from this problem too and decided to
+> make it more generic by patching buildroot itself, so that I could save them few hours
+> of investigations. This is why I submitted my first patch who applied the same kind of
+> change in the [3]linux.mk file.
+> Then, I discussed this with Arnout and we thought it would be even more benefit to
+> make it global as it's already a requirement for uboot and now linux too. Moreover it
+> sounds more logic/cleaner to make it that way, but that was not the main idea.
+> So, that's why I submitted this patch series.
 
-Sorry - it got lost when I generated version 2 of the patch :-) It's
-back now in v3.
+The -isystem has already been tried, and lately resurfaced in another
+thread, in which it was noticed that it broke at least a few packages,
+please see:
 
-Regards
+    http://lists.busybox.net/pipermail/buildroot/2018-October/232615.html
 
-Mark
->
->> Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
->> ---
->>  board/qemu/riscv32-virt/linux.config | 23 +++++++++++++++++++++++
->>  configs/qemu_riscv32_virt_defconfig  | 24 ++++++++++++++++++++++++
->>  2 files changed, 47 insertions(+)
->>  create mode 100644 board/qemu/riscv32-virt/linux.config
->>  create mode 100644 configs/qemu_riscv32_virt_defconfig
->>
->> diff --git a/board/qemu/riscv32-virt/linux.config b/board/qemu/riscv32-virt/linux.config
->> new file mode 100644
->> index 0000000000..c25583f768
->> --- /dev/null
->> +++ b/board/qemu/riscv32-virt/linux.config
->> @@ -0,0 +1,23 @@
->> +CONFIG_ARCH_RV32I=y
->> +CONFIG_SMP=y
->> +CONFIG_NR_CPUS=8
->> +CONFIG_PCI=y
->> +CONFIG_SYSVIPC=y
->> +CONFIG_NET=y
->> +CONFIG_PACKET=y
->> +CONFIG_UNIX=y
->> +CONFIG_INET=y
->> +# CONFIG_WIRELESS is not set
->> +CONFIG_VIRTIO_BLK=y
->> +CONFIG_NETDEVICES=y
->> +CONFIG_VIRTIO_NET=y
->> +# CONFIG_ETHERNET is not set
->> +# CONFIG_WLAN is not set
->> +CONFIG_SERIAL_8250=y
->> +CONFIG_SERIAL_8250_CONSOLE=y
->> +CONFIG_SERIAL_OF_PLATFORM=y
->> +CONFIG_VIRT_DRIVERS=y
->> +CONFIG_VIRTIO_MMIO=y
->> +CONFIG_EXT2_FS=y
->> +CONFIG_EXT4_FS=y
->> +CONFIG_TMPFS=y
->> diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
->> new file mode 100644
->> index 0000000000..aec85e4639
->> --- /dev/null
->> +++ b/configs/qemu_riscv32_virt_defconfig
->> @@ -0,0 +1,24 @@
->> +# Architecture
->> +BR2_riscv=y
->> +
->> +# System
->> +BR2_SYSTEM_DHCP="eth0"
->> +
->> +# Filesystem
->> +BR2_TARGET_ROOTFS_EXT2=y
->> +BR2_TARGET_GENERIC_GETTY=y
->> +BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
->> +
->> +# Linux headers same as kernel, a 4.15 series
->> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
->> +
->> +# Kernel
->> +BR2_LINUX_KERNEL=y
->> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
->> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/riscv/riscv-linux.git"
->> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="fe92d7905c6ea0ebeabeb725b8040754ede7c220"
->> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
->> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/riscv32-virt/linux.config"
->> +
->> +# Bootloader
->> +BR2_TARGET_RISCV_PK=y
->> --
->> 2.17.1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
->
+So, before we reinstate the use of -isystem, a few packages will have to
+be fixed first.
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
+>   > Doing such a change is pretty invasive, it could potentially cause
+>   > some build failures, so I'd like to understand the motivation.
+> 
+> I understand, no problem :-)
+> Regards,
+> David.
+> --
+> 
+> +--------------------------------------------------------------------------------------------------------+
+> |        | David De Grave                                                                                |
+> | ? | Senior Embedded Software Developer                                                            |
+> |        | Gsm : +32(0)496.364.960 | Tel : +32-16-28.65.00?| Fax?:?+32-16-28a.65.01? |
+> |        | [4]Essensium-Mind - Gaston Geenslaan 9, B-3001 Leuven, Belgium                                |
+> +--------------------------------------------------------------------------------------------------------+
+> 
+> Links:
+> 1. mailto:arnout at mind.be
+> 2. https://github.com/beagleboard/linux.git
+> 3. http://linux.mk
+> 4. https://www.mind.be/
+
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 
 -- 
-
-*Mark Corbin*
-Embedded Operating Systems Lead
-Phone: +44 1590 610184?????Mobile: +44 7765 703479
-Email: mark.corbin at embecosm.com
-<mailto:mark.corbin@embecosm.com>?????Web: https://www.embecosm.com
-
-Embecosm Logo
-
-Embecosm Ltd., Palamos House #208, 66/67 High Street, Lymington, SO41
-9AL, UK
-Company No. 6577021 (England & Wales).
---
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181021/f4494ed4/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: logo.png
-Type: image/png
-Size: 8442 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181021/f4494ed4/attachment.png>
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
