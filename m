@@ -1,54 +1,81 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Oct 2018 19:22:01 +0200
-Subject: [Buildroot] [PATCH v2] python3: use stdlib UUID backend
-In-Reply-To: <1539879728-29581-1-git-send-email-matthew.weber@rockwellcollins.com>
- (Matt Weber's message of "Thu, 18 Oct 2018 11:22:08 -0500")
-References: <1539879728-29581-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <87ftwz5i6e.fsf@dell.be.48ers.dk>
+Date: Sun, 21 Oct 2018 19:20:57 +0200
+Subject: [Buildroot] [git commit] python3: use pure python UUID backend
+Message-ID: <20181021172032.003F188443@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=0b68713aae2887edf395c135ebbfaeeb8e77f2f4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Python3 at runtime identifies the uuid backend to use to implement
- > functions like uuid_generate_time. This search includes libc first
- > and then other options like util-linux's libuuid.  There is also an
- > option to use an extension module, however it looks like that requires
- > the libuuid and headers to be present (./Modules/_uuidmodule.c).  The
- > extension isn't required to make this work.
+Python3 at runtime identifies the uuid backend to use to implement safe
+time-based UUID generation functions. When the python _uuid extension
+module, /usr/lib/python3.7/lib-dynload/_uuid.cpython-37m-<arch>.so
+is not found, the fall back is to use a pure python implementation.
 
- >  - This was runtime tested by updating the python3-3.7.0/Lib/uuid.py
- >    to include debug information in the def _load_system_functions():
- >    to print "libname".  Then at runtime it was observed that libc
- >    was the selected backend.
+ - If uuid.h from util-linux is available at build time, the _uuid
+   module is built and used. A Buildroot patch allows us to disable this
+   build-time check and never build the _uuid module.
 
- >  - At build time, to prevent a dependency not being reflected on
- >    the use of the util-linux backend (some builds may use it if
- >    util-linux builds first, others not), the 0031-* patch was kept
- >    and the support to auto-detect was explicitly disabled. This
- >    has not affect on the runtime use of the libc backend.
+With the bump to python 3.7, an optional dependency on util-linux was
+added to build the _uuid module. However, this may lead to circular
+dependencies. To break this circular dependency, we can disable the
+build of the _uuid module and always use the pure python implementation.
 
- > Ref:
- > http://lists.busybox.net/pipermail/buildroot/2018-October/233113.html
- > http://lists.busybox.net/pipermail/buildroot/2018-September/231060.html
- > http://lists.busybox.net/pipermail/buildroot/2018-October/233079.html
+Ref:
+http://lists.busybox.net/pipermail/buildroot/2018-October/233113.html
+http://lists.busybox.net/pipermail/buildroot/2018-September/231060.html
+http://lists.busybox.net/pipermail/buildroot/2018-October/233079.html
 
- > CC: Adam Duskett <aduskett@greenlots.com>
- > CC: Adam Duskett <aduskett@gmail.com>
- > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
- > Tested-by: Carlos Santos <casantos@datacom.com.br>
- > ---
- > Changes
- > v1 -> v2
- > [Thomas P
- >  - Suggested keeping the patch and adding the explicit disable as
- >    util-linux being built before or after python3 would have resulted
- >    in different behavior
+CC: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Tested-by: Carlos Santos <casantos@datacom.com.br>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python3/Config.in  | 10 ----------
+ package/python3/python3.mk |  7 +++----
+ 2 files changed, 3 insertions(+), 14 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python3/Config.in b/package/python3/Config.in
+index 6d77396380..0c5018f0b3 100644
+--- a/package/python3/Config.in
++++ b/package/python3/Config.in
+@@ -89,16 +89,6 @@ config BR2_PACKAGE_PYTHON3_UNICODEDATA
+ 	  Unicode character database (used by stringprep module)
+ 	  (large).
+ 
+-config BR2_PACKAGE_PYTHON3_UUID
+-	bool "uuid module"
+-	select BR2_PACKAGE_UTIL_LINUX
+-	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+-	help
+-	  This module provides immutable UUID objects (the UUID class)
+-	  and the functions uuid1(), uuid3(), uuid4(), uuid5() for
+-	  generating version 1, 3, 4, and 5 UUIDs as specified in RFC
+-	  4122.
+-
+ config BR2_PACKAGE_PYTHON3_SQLITE
+ 	bool "sqlite module"
+ 	select BR2_PACKAGE_SQLITE
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index efb44c0454..cd01cf1ac3 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -94,11 +94,10 @@ ifneq ($(BR2_PACKAGE_PYTHON3_UNICODEDATA),y)
+ PYTHON3_CONF_OPTS += --disable-unicodedata
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_PYTHON3_UUID),y)
+-PYTHON3_DEPENDENCIES += util-linux
+-else
++# Disable auto-detection of uuid.h (util-linux)
++# which would add _uuid module support, instead
++# default to the pure python implementation
+ PYTHON3_CONF_OPTS += --disable-uuid
+-endif
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON3_BZIP2),y)
+ PYTHON3_DEPENDENCIES += bzip2
