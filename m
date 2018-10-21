@@ -1,59 +1,44 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 21 Oct 2018 11:49:21 +0200
-Subject: [Buildroot] [PATCH] package/clang: default linker to GNU
-In-Reply-To: <1540112964-50052-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1540112964-50052-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <ac3e5b76-9d38-d9af-5290-0675d72c9fe3@gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 21 Oct 2018 11:03:02 +0100
+Subject: [Buildroot] [PATCH 1/2] Makefile: .gitlab-ci.yml: fail when listing
+ tests fail
+Message-ID: <20181021100303.18431-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matt,
+To update the .gitlab-ci.yml file, we run run-tests -l to list all the
+tests and post-process the output in a format suitable for
+.gitlab-ci.yml. However, in a pipeline, it is the last command that
+gives the return value. In addition, we have to redirect stderr of
+run-tests -l because nose2 prints the tests on stderr, not stdout. Thus,
+when run-tests -l fails, the update of .gitlab-ci.yml silently succeeds
+but no tests are included in the .gitlab-ci.yml.
 
-Adding Valentin in Cc.
+To fix this, set tho pipefail option. This is bash-specific, but our
+Makefile ascertains that we are running with bash as the shell (if bash
+is available, but if it is not, dependencies.sh will error out). The
+error message is still invisible, but at least make will fail.
 
-Le 21/10/2018 ? 11:09, Matt Weber a ?crit?:
-> By default clang is assuming the system linker /usr/bin/ld.  This
-> patchset updates the default to point at the cross toolchain ld.
-> 
-> Previously clang had been used on target only, this update is
-> required for host clang/clang++ to be used as a frontend for
-> cross-compiling.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-As we discuss during the meeting, we should probably wrap clang and clang++ in
-order to pass the path to the sysroot like we do in the toolchain wrapper for
-gcc (and other options when needed).
-
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
->  package/clang/clang.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/clang/clang.mk b/package/clang/clang.mk
-> index 52e0b98..e2d4a08 100644
-> --- a/package/clang/clang.mk
-> +++ b/package/clang/clang.mk
-> @@ -42,7 +42,8 @@ CLANG_CONF_OPTS += -DCLANG_BUILD_TOOLS=ON
->  HOST_CLANG_CONF_OPTS += \
->  	-DCLANG_BUILD_EXAMPLES=OFF \
->  	-DCLANG_INCLUDE_DOCS=OFF \
-> -	-DCLANG_INCLUDE_TESTS=OFF
-> +	-DCLANG_INCLUDE_TESTS=OFF \
-> +	-DCLANG_DEFAULT_LINKER=$(TARGET_LD)
-
-I would put it with this line:
-HOST_CLANG_CONF_OPTS += -DLLVM_CONFIG:FILEPATH=$(HOST_DIR)/bin/llvm-config
-
-Otherwise:
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-
-Best regards,
-Romain
-
->  
->  CLANG_CONF_OPTS += \
->  	-DCLANG_BUILD_EXAMPLES=OFF \
-> 
+diff --git a/Makefile b/Makefile
+index 5c9b8a803b..83f5c6c994 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1151,7 +1151,7 @@ check-package:
+ .gitlab-ci.yml: .gitlab-ci.yml.in
+ 	cp $< $@
+ 	(cd configs; LC_ALL=C ls -1 *_defconfig) | sed 's/$$/: *defconfig/' >> $@
+-	./support/testing/run-tests -l 2>&1 | sed -r -e '/^test_run \((.*)\).*/!d; s//\1: *runtime_test/' | LC_ALL=C sort >> $@
++	set -o pipefail; ./support/testing/run-tests -l 2>&1 | sed -r -e '/^test_run \((.*)\).*/!d; s//\1: *runtime_test/' | LC_ALL=C sort >> $@
+ 
+ include docs/manual/manual.mk
+ -include $(foreach dir,$(BR2_EXTERNAL_DIRS),$(sort $(wildcard $(dir)/docs/*/*.mk)))
+-- 
+2.17.2
