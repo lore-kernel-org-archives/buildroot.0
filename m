@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Oct 2018 14:50:10 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] file: explicitly disable
+Date: Sun, 21 Oct 2018 14:50:32 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] file: explicitly disable
  libseccomp support for host
-Message-ID: <20181021124840.CA7D888202@busybox.osuosl.org>
+Message-ID: <20181021124857.3AC1A88206@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26109e34c35377590dc7956df2665c7354f814d1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1bad6d2a4eb31a5cd0fef0dac9158d51aeb6ed54
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Fixes:
 http://autobuild.buildroot.net/results/8a2/8a2ea2e4426416447705492237f526fc84b595d7/
