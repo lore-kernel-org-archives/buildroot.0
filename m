@@ -1,51 +1,49 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 21 Oct 2018 16:44:31 +0100
-Subject: [Buildroot] [PATCH 1/2] bluez5_utils-headers: new package
-In-Reply-To: <d71612af-2ba8-1997-333b-eb56a7b28c98@blach.pl>
-References: <20180913115656.11794-1-grzegorz@blach.pl>
- <20180915000534.210ed343@windsurf>
- <d71612af-2ba8-1997-333b-eb56a7b28c98@blach.pl>
-Message-ID: <f61bbe06-edff-c9d7-58cf-d3e63027e233@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 21 Oct 2018 18:00:34 +0200
+Subject: [Buildroot] [PATCH] package/bluez5_utils: ensure build order with
+ the headers-only variant
+Message-ID: <20181021160034.2542-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Gregorz,
+Since bluez5_utils and bluez5_utils-headers would install the same set
+of files (headers), we want to ensurfe the former is run after the
+latter.
 
-On 17/09/2018 13:14, Grzegorz Blach wrote:
-> On 9/15/18 12:05 AM, Thomas Petazzoni wrote:
->> Hello,
->>
->> On Thu, 13 Sep 2018 13:56:55 +0200, Grzegorz Blach wrote:
->>> Header files from bluez utils version 5.x.
->>>
->>> Separated headers are required to break circular dependencies
->>> when python3 is build with bluetooth support.
->>>
->>> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
->>
->> What are the changes compared to the previous iteration ?
-> 
-> - bluez5_utils-headers/bluez5_utils_headers.hash now is a symlink to
-> bluez5_utils/bluez5_utils.hash. Previously it was a copy of this file.
-> 
-> - In bluez5_utils_headers.mk I added 'BLUEZ5_UTILS_HEADERS_DL_SUBDIR =
-> bluez5_utils', because package bluez5_utils-headers and bluez5_utils downloads
-> exactly the same file.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Grzegorz Blach <grzegorz@blach.pl>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 
- I've reworked both patches a little more and applied to master, thanks.
+---
 
- The changes are:
+This will help quell issues with top-level parallel build, to avoid two
+unrelated packages to install the same files.
+---
+ package/bluez5_utils/bluez5_utils.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-- made bluez5_utils-headers a blind option (cfr. mesa3d-headers);
-- let python3 select bluez5_utils-headers if bluez5_utils is enabled;
-- correct the name of the .mk and .hash files (- instead of _);
-- don't indent inside a make condition;
-- add a comment in both bluez5_utils and bluez5_utils-headers that the versions
-should be kept in sync.
-
-
- Regards,
- Arnout
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index a613def2e2..f5b827cc30 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -9,10 +9,14 @@ BLUEZ5_UTILS_VERSION = 5.50
+ BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_INSTALL_STAGING = YES
+-BLUEZ5_UTILS_DEPENDENCIES = dbus libglib2
+ BLUEZ5_UTILS_LICENSE = GPL-2.0+, LGPL-2.1+
+ BLUEZ5_UTILS_LICENSE_FILES = COPYING COPYING.LIB
+ 
++BLUEZ5_UTILS_DEPENDENCIES = \
++	$(if $(BR2_PACKAGE_BLUEZ5_UTILS_HEADERS),bluez5_utils-headers) \
++	dbus \
++	libglib2
++
+ BLUEZ5_UTILS_CONF_OPTS = \
+ 	--enable-tools \
+ 	--enable-library \
+-- 
+2.14.1
