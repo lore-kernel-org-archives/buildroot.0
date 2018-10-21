@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Oct 2018 23:33:30 +0200
-Subject: [Buildroot] [PATCH 1/2] Makefile: .gitlab-ci.yml: fail when
- listing tests fail
-In-Reply-To: <20181021100303.18431-1-arnout@mind.be> (Arnout Vandecappelle's
- message of "Sun, 21 Oct 2018 11:03:02 +0100")
+Date: Sun, 21 Oct 2018 23:34:24 +0200
+Subject: [Buildroot] [PATCH 2/2] .gitlab-ci.yml: do runtime tests only
+ on explicit trigger
+In-Reply-To: <20181021100303.18431-2-arnout@mind.be> (Arnout Vandecappelle's
+ message of "Sun, 21 Oct 2018 11:03:03 +0100")
 References: <20181021100303.18431-1-arnout@mind.be>
-Message-ID: <87lg6r3ryt.fsf@dell.be.48ers.dk>
+ <20181021100303.18431-2-arnout@mind.be>
+Message-ID: <87h8hf3rxb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,17 +15,20 @@ To: buildroot@busybox.net
 
 >>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- > To update the .gitlab-ci.yml file, we run run-tests -l to list all the
- > tests and post-process the output in a format suitable for
- > .gitlab-ci.yml. However, in a pipeline, it is the last command that
- > gives the return value. In addition, we have to redirect stderr of
- > run-tests -l because nose2 prints the tests on stderr, not stdout. Thus,
- > when run-tests -l fails, the update of .gitlab-ci.yml silently succeeds
- > but no tests are included in the .gitlab-ci.yml.
+ > When the runtime tests were first introduced, they still ran pretty
+ > quickly. Nowadays, however, there are a lot of runtime tests, and some
+ > of them take a really long time. So running them on every push is
+ > really too much.
 
- > To fix this, set tho pipefail option. This is bash-specific, but our
+ > Just like we do for the defconfigs, run them on explicit trigger only.
 
-s/tho/the/
+ > The explicit trigger is now done every week, but it can be increased
+ > to e.g. twice or three times per week.
+
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > ---
+ > v2: properly regenerate .gitlab-ci.yml
+
 
 Committed, thanks.
 
