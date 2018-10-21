@@ -1,62 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Oct 2018 10:50:54 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] qemu: disable qemu user
- emulation on MIPS64 for host variant
-Message-ID: <20181021092409.29749863D2@busybox.osuosl.org>
+Date: Sun, 21 Oct 2018 10:51:41 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] qemu: security bump to
+ 2.12.1
+Message-ID: <20181021092409.442AB88178@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3855afdaf3273229a880c7db2e5aa544bae3ae6e
+commit: https://git.buildroot.net/buildroot/commit/?id=01e4db9fcbdfae29567d6e3f075b104afd93e176
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-According to target/mips/TODO in the Qemu sources:
+From the release notes:
 
-MIPS64
-------
-- Userland emulation (both n32 and n64) not functional.
+This update contains new mitigation functionality for CVE-2018-3639
+(Speculative Store Bypass) in x86. There are also bug fixes for
+migration, Intel IOMMU emulation, block layer/image handling, ARM
+emulation, and various other areas.
 
-And indeed, trying to run a mips64n32 binary under qemu user emulation
-results in:
+https://www.mail-archive.com/qemu-devel at nongnu.org/msg553574.html
 
-Invalid ELF image for this architecture
-
-So we move the BR2_mips64(el) dependency from
-BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS to
-BR2_PACKAGE_HOST_QEMU_SYSTEM_ARCH_SUPPORTS, so that only the system
-emulation is available on mips64, and not the user-mode emulation.
-
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 17024f5900b9803fc34388c39915f70ce51fb037)
+(cherry picked from commit b400c2ae0b06e0be99925a56f1166bed37ff3986)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qemu/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/qemu/qemu.hash | 2 +-
+ package/qemu/qemu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
-index 78ff052983..957c7d2ae1 100644
---- a/package/qemu/Config.in.host
-+++ b/package/qemu/Config.in.host
-@@ -9,8 +9,6 @@ config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
- 	default y if BR2_microblazebe
- 	default y if BR2_mips
- 	default y if BR2_mipsel
--	default y if BR2_mips64
--	default y if BR2_mips64el
- 	default y if BR2_powerpc
- 	default y if BR2_powerpc64
- 	default y if BR2_powerpc64le
-@@ -22,6 +20,8 @@ config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
- config BR2_PACKAGE_HOST_QEMU_SYSTEM_ARCH_SUPPORTS
- 	bool
- 	default y if BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
-+	default y if BR2_mips64
-+	default y if BR2_mips64el
+diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
+index fc0b4e87bf..2b27008b73 100644
+--- a/package/qemu/qemu.hash
++++ b/package/qemu/qemu.hash
+@@ -1,4 +1,4 @@
+ # Locally computed, tarball verified with GPG signature
+-sha256 e69301f361ff65bf5dabd8a19196aeaa5613c1b5ae1678f0823bdf50e7d5c6fc  qemu-2.12.0.tar.xz
++sha256 33583800e0006cd00b78226b85be5a27c8e3b156bed2e60e83ecbeb7b9b8364f  qemu-2.12.1.tar.xz
+ sha256 6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
+ sha256 48ffe9fc7f1d5462dbd19340bc4dd1d8a9e37c61ed535813e614cbe4a5f0d4df  COPYING.LIB
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 49f63dba5e..5496a5f025 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS
- 	bool
+-QEMU_VERSION = 2.12.0
++QEMU_VERSION = 2.12.1
+ QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
+ QEMU_SITE = http://download.qemu.org
+ QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
