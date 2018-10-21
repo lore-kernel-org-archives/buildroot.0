@@ -1,49 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Oct 2018 14:46:57 +0200
-Subject: [Buildroot] [PATCH] utils/get-developers: add -e flag to only
- list email addresses for git send-email
-In-Reply-To: <20181008074333.1582-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 8 Oct 2018 09:43:33 +0200")
-References: <20181008074333.1582-1-peter@korsgaard.com>
-Message-ID: <87o9bn79ha.fsf@dell.be.48ers.dk>
+Date: Sun, 21 Oct 2018 14:50:10 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] file: explicitly disable
+ libseccomp support for host
+Message-ID: <20181021124840.CA7D888202@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=26109e34c35377590dc7956df2665c7354f814d1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
- > When called with a list of patches, get-developers prints the entire git
- > send-email invocation line:
+Fixes:
+http://autobuild.buildroot.net/results/8a2/8a2ea2e4426416447705492237f526fc84b595d7/
+http://autobuild.buildroot.net/results/a1f/a1f2369d31c2387efdec908877e0bcaa728b5aeb/
 
- > ./utils/get-developers 0001-git-security-bump-to-version-2.16.5.patch
- > git send-email --to buildroot at buildroot.org --cc "Matt Weber <matthew.weber@rockwellcollins.com>"
+file-5.33 added optional seccomp support, but the filters did not cover all
+needed syscalls, leading to errors when the freshly built host-file is
+executed as part of the build on distributions with seccomp support (E.G.
+Arch Linux):
 
- > This may be handy when creating an entire patch series and editing a cover
- > letter, but it does mean that this has to be explicitly executed and
- > get-developers cannot be used directly by the --cc-cmd option of git
- > send-email to automatically CC affected developers.
+checking for seccomp_init in -lseccomp... yes
+..
+../src/file -C -m magic
+make[3]: *** [Makefile:764: magic.mgc] Bad system call
 
- > So add an -e flag to only let get-developers print the email addresses of
- > the affected developers in the one-email-per-line format expected by git
- > send-email, similar to how get_maintainer.pl works in the Linux kernel.
+This has been fixed in file-5.34, but it anyway makes sense to explicitly
+disable libseccomp support for consistency as we do not need it for the host
+build.
 
- > With this and a suitable git configuration:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit a609f83296a27f7677ba53ba40d60c9da21237a9)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/file/file.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
- > git config sendemail.to buildroot at buildroot.org
- > git config sendemail.ccCmd "$(pwd)/utils/get-developers -e"
-
- > You can simply do:
-
- > git send-email master
-
- > To automatically mail the buildroot list and CC affected developers on
- > patches.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2018.02.x and 2018.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/file/file.mk b/package/file/file.mk
+index 422e29b1ce..1f04dad688 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
+@@ -12,6 +12,7 @@ FILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ FILE_INSTALL_STAGING = YES
+ FILE_LICENSE = BSD-2-Clause, BSD-4-Clause (one file), BSD-3-Clause (one file)
+ FILE_LICENSE_FILES = COPYING src/mygetopt.h src/vasprintf.c
++HOST_FILE_CONF_OPTS = --disable-libseccomp
+ 
+ ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+ FILE_CONF_OPTS += --enable-libseccomp
