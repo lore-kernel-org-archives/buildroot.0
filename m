@@ -1,110 +1,59 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 21 Oct 2018 11:36:13 +0200
-Subject: [Buildroot] [PATCH 2/2] configs/qemu: add
- qemu_riscv32_virt_defconfig
-In-Reply-To: <20181020212443.4935-2-mark.corbin@embecosm.com>
-References: <20181020212443.4935-1-mark.corbin@embecosm.com>
- <20181020212443.4935-2-mark.corbin@embecosm.com>
-Message-ID: <f3632485-7524-fdef-323f-d3797673c014@gmail.com>
+Date: Sun, 21 Oct 2018 11:49:21 +0200
+Subject: [Buildroot] [PATCH] package/clang: default linker to GNU
+In-Reply-To: <1540112964-50052-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1540112964-50052-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <ac3e5b76-9d38-d9af-5290-0675d72c9fe3@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 20/10/2018 ? 23:24, Mark Corbin a ?crit?:
-> Add RISC-V 32-bit defconfig for QEMU virt machine.
-> 
-> Tested with QEMU 2.12.1
-> 
+Hi Matt,
 
+Adding Valentin in Cc.
+
+Le 21/10/2018 ? 11:09, Matt Weber a ?crit?:
+> By default clang is assuming the system linker /usr/bin/ld.  This
+> patchset updates the default to point at the cross toolchain ld.
+> 
+> Previously clang had been used on target only, this update is
+> required for host clang/clang++ to be used as a frontend for
+> cross-compiling.
+
+As we discuss during the meeting, we should probably wrap clang and clang++ in
+order to pass the path to the sysroot like we do in the toolchain wrapper for
+gcc (and other options when needed).
+
+> 
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> ---
+>  package/clang/clang.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/clang/clang.mk b/package/clang/clang.mk
+> index 52e0b98..e2d4a08 100644
+> --- a/package/clang/clang.mk
+> +++ b/package/clang/clang.mk
+> @@ -42,7 +42,8 @@ CLANG_CONF_OPTS += -DCLANG_BUILD_TOOLS=ON
+>  HOST_CLANG_CONF_OPTS += \
+>  	-DCLANG_BUILD_EXAMPLES=OFF \
+>  	-DCLANG_INCLUDE_DOCS=OFF \
+> -	-DCLANG_INCLUDE_TESTS=OFF
+> +	-DCLANG_INCLUDE_TESTS=OFF \
+> +	-DCLANG_DEFAULT_LINKER=$(TARGET_LD)
+
+I would put it with this line:
+HOST_CLANG_CONF_OPTS += -DLLVM_CONFIG:FILEPATH=$(HOST_DIR)/bin/llvm-config
+
+Otherwise:
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
-Tested-by: Romain Naour <romain.naour@gmail.com>
 
 Best regards,
 Romain
 
-
-> Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
-> ---
->  board/qemu/riscv32-virt/linux.config | 23 +++++++++++++++++++++++
->  board/qemu/riscv32-virt/readme.txt   |  7 +++++++
->  configs/qemu_riscv32_virt_defconfig  | 24 ++++++++++++++++++++++++
->  3 files changed, 54 insertions(+)
->  create mode 100644 board/qemu/riscv32-virt/linux.config
->  create mode 100644 board/qemu/riscv32-virt/readme.txt
->  create mode 100644 configs/qemu_riscv32_virt_defconfig
-> 
-> diff --git a/board/qemu/riscv32-virt/linux.config b/board/qemu/riscv32-virt/linux.config
-> new file mode 100644
-> index 0000000000..c25583f768
-> --- /dev/null
-> +++ b/board/qemu/riscv32-virt/linux.config
-> @@ -0,0 +1,23 @@
-> +CONFIG_ARCH_RV32I=y
-> +CONFIG_SMP=y
-> +CONFIG_NR_CPUS=8
-> +CONFIG_PCI=y
-> +CONFIG_SYSVIPC=y
-> +CONFIG_NET=y
-> +CONFIG_PACKET=y
-> +CONFIG_UNIX=y
-> +CONFIG_INET=y
-> +# CONFIG_WIRELESS is not set
-> +CONFIG_VIRTIO_BLK=y
-> +CONFIG_NETDEVICES=y
-> +CONFIG_VIRTIO_NET=y
-> +# CONFIG_ETHERNET is not set
-> +# CONFIG_WLAN is not set
-> +CONFIG_SERIAL_8250=y
-> +CONFIG_SERIAL_8250_CONSOLE=y
-> +CONFIG_SERIAL_OF_PLATFORM=y
-> +CONFIG_VIRT_DRIVERS=y
-> +CONFIG_VIRTIO_MMIO=y
-> +CONFIG_EXT2_FS=y
-> +CONFIG_EXT4_FS=y
-> +CONFIG_TMPFS=y
-> diff --git a/board/qemu/riscv32-virt/readme.txt b/board/qemu/riscv32-virt/readme.txt
-> new file mode 100644
-> index 0000000000..2da99580e5
-> --- /dev/null
-> +++ b/board/qemu/riscv32-virt/readme.txt
-> @@ -0,0 +1,7 @@
-> +Run the emulation with:
-> +
-> +  qemu-system-riscv32 -M virt -kernel output/images/bbl -append "root=/dev/vda ro console=ttyS0" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic
-> +
-> +The login prompt will appear in the terminal that started Qemu.
-> +
-> +Tested with QEMU 2.12.1
-> diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
-> new file mode 100644
-> index 0000000000..aec85e4639
-> --- /dev/null
-> +++ b/configs/qemu_riscv32_virt_defconfig
-> @@ -0,0 +1,24 @@
-> +# Architecture
-> +BR2_riscv=y
-> +
-> +# System
-> +BR2_SYSTEM_DHCP="eth0"
-> +
-> +# Filesystem
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_GENERIC_GETTY=y
-> +BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-> +
-> +# Linux headers same as kernel, a 4.15 series
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
-> +
-> +# Kernel
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/riscv/riscv-linux.git"
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="fe92d7905c6ea0ebeabeb725b8040754ede7c220"
-> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/riscv32-virt/linux.config"
-> +
-> +# Bootloader
-> +BR2_TARGET_RISCV_PK=y
+>  
+>  CLANG_CONF_OPTS += \
+>  	-DCLANG_BUILD_EXAMPLES=OFF \
 > 
