@@ -1,83 +1,55 @@
-From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
-Date: Sun, 21 Oct 2018 16:00:43 +0800
-Subject: [Buildroot] [PATCH 1/1] python-yarl: new package
-Message-ID: <1540108843-1854-1-git-send-email-james.hilliard1@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 21 Oct 2018 10:48:00 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] qemu: security bump to
+ 2.12.1
+Message-ID: <20181021084629.31DE78810C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: James Hilliard <james.hilliard1@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=282c870f986c9a945ac7ff112e2b9e5a3ecf3401
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-Yet another URL library
+From the release notes:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+This update contains new mitigation functionality for CVE-2018-3639
+(Speculative Store Bypass) in x86. There are also bug fixes for
+migration, Intel IOMMU emulation, block layer/image handling, ARM
+emulation, and various other areas.
+
+https://www.mail-archive.com/qemu-devel at nongnu.org/msg553574.html
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit b400c2ae0b06e0be99925a56f1166bed37ff3986)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                    |  1 +
- package/python-yarl/Config.in        |  9 +++++++++
- package/python-yarl/python-yarl.hash |  5 +++++
- package/python-yarl/python-yarl.mk   | 12 ++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/python-yarl/Config.in
- create mode 100644 package/python-yarl/python-yarl.hash
- create mode 100644 package/python-yarl/python-yarl.mk
+ package/qemu/qemu.hash | 2 +-
+ package/qemu/qemu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index c1a917c..e100500 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1067,6 +1067,7 @@ menu "External python modules"
- 	source "package/python-xlutils/Config.in"
- 	source "package/python-xlwt/Config.in"
- 	source "package/python-xmltodict/Config.in"
-+	source "package/python-yarl/Config.in"
- 	source "package/python-yieldfrom/Config.in"
- 	source "package/python-zeroconf/Config.in"
- 	source "package/python-zope-interface/Config.in"
-diff --git a/package/python-yarl/Config.in b/package/python-yarl/Config.in
-new file mode 100644
-index 0000000..edcce56
---- /dev/null
-+++ b/package/python-yarl/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_YARL
-+	bool "python-yarl"
-+	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_MULTIDICT
-+	select BR2_PACKAGE_PYTHON_IDNA
-+	help
-+	  Yet another URL library
-+
-+	  http://yarl.readthedocs.io/
-diff --git a/package/python-yarl/python-yarl.hash b/package/python-yarl/python-yarl.hash
-new file mode 100644
-index 0000000..118c722
---- /dev/null
-+++ b/package/python-yarl/python-yarl.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.python.org/pypi/yarl/json
-+md5	43380667129ebc52ac3c442daabb3f6d  yarl-1.2.6.tar.gz
-+sha256	c8cbc21bbfa1dd7d5386d48cc814fe3d35b80f60299cdde9279046f399c3b0d8  yarl-1.2.6.tar.gz
-+# Locally computed sha256 checksums
-+sha256	14c0820503ceef15e814a89b037d9efc066870087018294b6ae0f27163872cc5  LICENSE
-diff --git a/package/python-yarl/python-yarl.mk b/package/python-yarl/python-yarl.mk
-new file mode 100644
-index 0000000..b7aedac
---- /dev/null
-+++ b/package/python-yarl/python-yarl.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# python-yarl
-+#
-+################################################################################
-+PYTHON_YARL_VERSION = 1.2.6
-+PYTHON_YARL_SOURCE = yarl-$(PYTHON_YARL_VERSION).tar.gz
-+PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/43/b8/057c3e5b546ff4b24263164ecda13f6962d85c9dc477fcc0bcdcb3adb658
-+PYTHON_YARL_LICENSE = Apache-2.0
-+PYTHON_YARL_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
--- 
-2.7.4
+diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
+index fc0b4e87bf..2b27008b73 100644
+--- a/package/qemu/qemu.hash
++++ b/package/qemu/qemu.hash
+@@ -1,4 +1,4 @@
+ # Locally computed, tarball verified with GPG signature
+-sha256 e69301f361ff65bf5dabd8a19196aeaa5613c1b5ae1678f0823bdf50e7d5c6fc  qemu-2.12.0.tar.xz
++sha256 33583800e0006cd00b78226b85be5a27c8e3b156bed2e60e83ecbeb7b9b8364f  qemu-2.12.1.tar.xz
+ sha256 6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
+ sha256 48ffe9fc7f1d5462dbd19340bc4dd1d8a9e37c61ed535813e614cbe4a5f0d4df  COPYING.LIB
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index aec803c1ae..0b53d130af 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QEMU_VERSION = 2.12.0
++QEMU_VERSION = 2.12.1
+ QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
+ QEMU_SITE = http://download.qemu.org
+ QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
