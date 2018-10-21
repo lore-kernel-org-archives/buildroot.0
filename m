@@ -1,196 +1,130 @@
-From: Alexey Brodkin <alexey.brodkin@synopsys.com>
-Date: Sun, 21 Oct 2018 21:18:30 +0300
-Subject: [Buildroot] [PATCH] binutils: Get rid of obsolete patches
-Message-ID: <20181021181830.12667-1-abrodkin@synopsys.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 21 Oct 2018 19:23:28 +0100
+Subject: [Buildroot] [PATCH v3 1/8] busybox: update S01logging
+In-Reply-To: <20181007114605.18153-2-casantos@datacom.com.br>
+References: <20181007114605.18153-1-casantos@datacom.com.br>
+ <20181007114605.18153-2-casantos@datacom.com.br>
+Message-ID: <c68bf4a2-0731-6857-babd-81f54311d703@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some patches for Binutils seems to not be really needed.
-Moreover for some of them I was not able to find any justification
-for their introduction.
+ Hi Carlos,
 
-1. 0002-ld-makefile.patch
+ Thank you again for this series. I still have some feedback, which I discussed
+as well with the others here at the Buildroot meeting, and we generally agree on
+these aspects.
 
-   This one I may track down to at least 2.15.92.0.2 here [1].
-   Commit message just says: "Integrate some debian patches,
-   extracted from binutils_2.15-4.diff"
+ Let me start with repeating that we appreciate very much this work.
 
-   But in OpenEmbedded they got rid of it long ago on switch to 2.26, see [2].
 
-2. 0003-check-ldrunpath-length.patch
+On 07/10/2018 12:45, Carlos Santos wrote:
+> Reformat and fix syslogd/klogd startup script for better quality and
+> code style:
+> 
+> - Detect and report start/stop errors (previous version ignored them and
+>   always reported OK).
+> - Use a separate function for restart.
+> - Implement reload as restart.
+> - Support a configuration variable that completely disables the service
+>   and issues a warning message on any invocation.
+> 
+> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+> Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> ---
+> Changes v1->v2
+> - Implement suggestions made by Nicolas Cavallari and Arnout Vandecappelle
+> ---
+>  package/busybox/S01logging | 82 +++++++++++++++++++++++++-------------
 
-   The same story here.
+ Thomas mentioned that he would prefer every init script to be called the same
+as the executable it starts (which is usually the same as the package). There is
+general agreement about that aspect.
 
-3. 0004-add-sysroot-fix-from-bug-3049.patch
+ Also he mentioned that it is better to split into two separate scripts when two
+daemons are started (i.e., klogd). There's agreement on that as well.
 
-   Bug mentioned in this patch was marked as "fixed" in 2012, see [3].
+ Still, these changes can be done in follow-up patches, so it's OK if you keep
+it as S01logging for the time being (if you want to do the split right away,
+that's OK as well). However, the names of the default files would be better to
+already reflect the daemon name rather than just /etc/default/logging.
 
-[1] https://git.buildroot.org/buildroot/commit/?id=ce2722a8f2abee5b60862bc896333b77a7502c82
-[2] https://github.com/openembedded/openembedded-core/commit/3c7fe424f850af70989ad682dd9c5be70cd02ca5
-[3]https://sourceware.org/bugzilla/show_bug.cgi?id=10340
+ Note also that with the splitting, we can improve the situation for busybox a
+little. Now, it is possible that klogd is NOT selected in busybox, but it is
+still started. With a separate init script, it would be possible to install it
+only when klogd is enabled (like is done now for syslogd).
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Romain Naour <romain.naour@smile.fr>
----
- package/binutils/2.31.1/0002-ld-makefile.patch     | 41 -----------------
- .../2.31.1/0003-check-ldrunpath-length.patch       | 36 ---------------
- .../0004-add-sysroot-fix-from-bug-3049.patch       | 51 ----------------------
- 3 files changed, 128 deletions(-)
- delete mode 100644 package/binutils/2.31.1/0002-ld-makefile.patch
- delete mode 100644 package/binutils/2.31.1/0003-check-ldrunpath-length.patch
- delete mode 100644 package/binutils/2.31.1/0004-add-sysroot-fix-from-bug-3049.patch
+>  1 file changed, 54 insertions(+), 28 deletions(-)
+> 
+> diff --git a/package/busybox/S01logging b/package/busybox/S01logging
+> index fcb3e7d236..ddd27bba9a 100644
+> --- a/package/busybox/S01logging
+> +++ b/package/busybox/S01logging
+> @@ -1,40 +1,66 @@
+>  #!/bin/sh
+> -#
+> -# Start logging
+> -#
+>  
+> -SYSLOGD_ARGS=-n
+> -KLOGD_ARGS=-n
+> -[ -r /etc/default/logging ] && . /etc/default/logging
+> +DAEMON="logging"
+> +SPIDFILE="/var/run/syslogd.pid"
+> +KPIDFILE="/var/run/klogd.pid"
+>  
+> +SYSLOGD_ARGS=""
+> +KLOGD_ARGS=""
+> +ENABLED="yes"
+> +
+> +# shellcheck source=/dev/null
+> +[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON> +
+> +if [ "$ENABLED" != "yes" ]; then
+> +	printf '%s is disabled\n' "$DAEMON"
 
-diff --git a/package/binutils/2.31.1/0002-ld-makefile.patch b/package/binutils/2.31.1/0002-ld-makefile.patch
-deleted file mode 100644
-index 6893d65aa0..0000000000
---- a/package/binutils/2.31.1/0002-ld-makefile.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From ae435bc27e1eb59e4ad571a37a144bf99dc68f55 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Fri, 25 Dec 2015 11:40:53 +0100
--Subject: [PATCH] ld-makefile
--
--[Romain: rebase on top of 2.26]
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- ld/Makefile.am | 2 +-
-- ld/Makefile.in | 2 +-
-- 2 files changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/ld/Makefile.am b/ld/Makefile.am
--index d86ad0940c9..c95b0ef0252 100644
----- a/ld/Makefile.am
--+++ b/ld/Makefile.am
--@@ -57,7 +57,7 @@ endif
-- # We put the scripts in the directory $(scriptdir)/ldscripts.
-- # We can't put the scripts in $(datadir) because the SEARCH_DIR
-- # directives need to be different for native and cross linkers.
---scriptdir = $(tooldir)/lib
--+scriptdir = $(libdir)
-- 
-- EMUL = @EMUL@
-- EMULATION_OFILES = @EMULATION_OFILES@
--diff --git a/ld/Makefile.in b/ld/Makefile.in
--index 4792b2b013c..789df2d01b9 100644
----- a/ld/Makefile.in
--+++ b/ld/Makefile.in
--@@ -563,7 +563,7 @@ AM_CFLAGS = $(WARN_CFLAGS) $(ELF_CLFAGS)
-- # We put the scripts in the directory $(scriptdir)/ldscripts.
-- # We can't put the scripts in $(datadir) because the SEARCH_DIR
-- # directives need to be different for native and cross linkers.
---scriptdir = $(tooldir)/lib
--+scriptdir = $(libdir)
-- BASEDIR = $(srcdir)/..
-- BFDDIR = $(BASEDIR)/bfd
-- INCDIR = $(BASEDIR)/include
---- 
--2.14.4
--
-diff --git a/package/binutils/2.31.1/0003-check-ldrunpath-length.patch b/package/binutils/2.31.1/0003-check-ldrunpath-length.patch
-deleted file mode 100644
-index 6cdf085422..0000000000
---- a/package/binutils/2.31.1/0003-check-ldrunpath-length.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From a216bfcd91363a8e8c14db320a2870fff2985d78 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Fri, 25 Dec 2015 11:41:47 +0100
--Subject: [PATCH] check-ldrunpath-length
--
--[Romain: rebase on top of 2.26]
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- ld/emultempl/elf32.em | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/ld/emultempl/elf32.em b/ld/emultempl/elf32.em
--index 1ad9d6b6fa8..637a5d5d585 100644
----- a/ld/emultempl/elf32.em
--+++ b/ld/emultempl/elf32.em
--@@ -1471,6 +1471,8 @@ fragment <<EOF
-- 	      && command_line.rpath == NULL)
-- 	    {
-- 	      path = (const char *) getenv ("LD_RUN_PATH");
--+	      if ((path) && (strlen (path) == 0))
--+	        path = NULL;
-- 	      if (path
-- 		  && gld${EMULATION_NAME}_search_needed (path, &n, force))
-- 		break;
--@@ -1751,6 +1753,8 @@ gld${EMULATION_NAME}_before_allocation (void)
--   rpath = command_line.rpath;
--   if (rpath == NULL)
--     rpath = (const char *) getenv ("LD_RUN_PATH");
--+  if ((rpath) && (strlen (rpath) == 0))
--+    rpath = NULL;
-- 
--   for (abfd = link_info.input_bfds; abfd; abfd = abfd->link.next)
--     if (bfd_get_flavour (abfd) == bfd_target_elf_flavour)
---- 
--2.14.4
--
-diff --git a/package/binutils/2.31.1/0004-add-sysroot-fix-from-bug-3049.patch b/package/binutils/2.31.1/0004-add-sysroot-fix-from-bug-3049.patch
-deleted file mode 100644
-index 1ef1385062..0000000000
---- a/package/binutils/2.31.1/0004-add-sysroot-fix-from-bug-3049.patch
-+++ /dev/null
-@@ -1,51 +0,0 @@
--From 73ecf6f6a1f327c9fa3af1fc924d152321aac801 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Fri, 25 Dec 2015 11:42:48 +0100
--Subject: [PATCH] add sysroot fix from bug #3049
--
--Always try to prepend the sysroot prefix to absolute filenames first.
--
--http://bugs.gentoo.org/275666
--http://sourceware.org/bugzilla/show_bug.cgi?id=10340
--
--Signed-off-by: Sven Rebhan <odinshorse@googlemail.com>
--[Romain: rebase on top of 2.26]
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- ld/ldfile.c | 10 ++++++++--
-- 1 file changed, 8 insertions(+), 2 deletions(-)
--
--diff --git a/ld/ldfile.c b/ld/ldfile.c
--index a72ff135264..b3d166cbd60 100644
----- a/ld/ldfile.c
--+++ b/ld/ldfile.c
--@@ -338,18 +338,24 @@ ldfile_open_file_search (const char *arch,
--      directory first.  */
--   if (!entry->flags.maybe_archive)
--     {
---      if (entry->flags.sysrooted && IS_ABSOLUTE_PATH (entry->filename))
--+     /* For absolute pathnames, try to always open the file in the
--+	 sysroot first. If this fails, try to open the file at the
--+	 given location.  */
--+     entry->flags.sysrooted = is_sysrooted_pathname (entry->filename);
--+     if (!entry->flags.sysrooted && IS_ABSOLUTE_PATH (entry->filename)
--+     && ld_sysroot)
-- 	{
-- 	  char *name = concat (ld_sysroot, entry->filename,
-- 			       (const char *) NULL);
-- 	  if (ldfile_try_open_bfd (name, entry))
-- 	    {
-- 	      entry->filename = name;
--+	      entry->flags.sysrooted = TRUE;
-- 	      return TRUE;
-- 	    }
-- 	  free (name);
-- 	}
---      else if (ldfile_try_open_bfd (entry->filename, entry))
--+      if (ldfile_try_open_bfd (entry->filename, entry))
-- 	return TRUE;
-- 
--       if (IS_ABSOLUTE_PATH (entry->filename))
---- 
--2.14.4
--
--- 
-2.16.2
+ The ENABLED option is not useful, it is felt. If you don't want the daemon to
+be started, just remove the init script or make it non-executable.
+
+> +	exit 0
+> +fi
+> +
+> +# BusyBox' syslogd and klogd do not create pidfiles, so use "-m" to instruct
+> +# start-stop-daemon to create them. This also means that we must pass "-n" to
+> +# sylogd and klogd in the command line.
+>  start() {
+> -	printf "Starting logging: "
+> -	start-stop-daemon -b -S -q -m -p /var/run/syslogd.pid --exec /sbin/syslogd -- $SYSLOGD_ARGS> -	start-stop-daemon -b -S -q -m -p /var/run/klogd.pid --exec /sbin/klogd --
+$KLOGD_ARGS
+> -	echo "OK"
+> +	printf 'Starting %s: ' "$DAEMON"
+> +	status=0
+> +	# shellcheck disable=SC2086 # we need the word splitting
+> +	start-stop-daemon -b -S -q -m -p "$SPIDFILE" -x /sbin/syslogd -- -n $SYSLOGD_ARGS || status=$?
+
+ Small nit, personal preference of mine: I think it's clearer if the syslogd
+args themselves are on a separate line, i.e.
+
+	start-stop-daemon -b -S -q -m -p "$SPIDFILE" -x /sbin/syslogd \
+		-- -n $SYSLOGD_ARGS || status=$?
+
+> +	start-stop-daemon -b -S -q -m -p "$KPIDFILE" -x /sbin/klogd -- -n $KLOGD_ARGS || status=$?
+> +	if [ "$status" -eq 0 ]; then
+
+ There was some bikeshedding about needing quotes around $status here, but in
+the end, it's not important, as long as it's consistent.
+
+> +		echo "OK"
+> +	else
+> +		echo "FAIL"
+> +	fi
+> +	return "$status"
+>  }
+>  
+
+ The rest LGTM. So basically two important comments: 1. remove ENABLED; 2. name
+the defaults file like the daemon.	
+
+ Regards,
+ Arnout
