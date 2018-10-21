@@ -1,80 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 21 Oct 2018 13:54:14 +0200
-Subject: [Buildroot] [PATCH 2/3] package/gcc: introduce
- BR2_GCC_SUPPORTS_LIBCILKRTS
-In-Reply-To: <20181021115415.21471-1-thomas.petazzoni@bootlin.com>
-References: <20181021115415.21471-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181021115415.21471-3-thomas.petazzoni@bootlin.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 21 Oct 2018 13:58:37 +0200
+Subject: [Buildroot] [PATCH] package/clang: default linker to GNU
+In-Reply-To: <CANQCQpa2_Y3G7kmRxQKod2QiLzqw67Q9OTPa4wppsftx-P+a7w@mail.gmail.com>
+References: <1540112964-50052-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <ac3e5b76-9d38-d9af-5290-0675d72c9fe3@gmail.com>
+ <CANQCQpa2_Y3G7kmRxQKod2QiLzqw67Q9OTPa4wppsftx-P+a7w@mail.gmail.com>
+Message-ID: <2b56a55c-79ec-145c-26d7-b5f0532566ef@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libcilkrts was introduced in gcc 4.9, and removed in gcc
-8.x. Therefore, it does not make sense to pass --disable-libcilkrts in
-gcc 8.x and higher. This commit introduces BR2_GCC_SUPPORTS_LIBCILKRTS
-that allows the makefile code to know if the selected gcc version
-supports libcilkrts or not.
+Le 21/10/2018 ? 13:53, Matthew Weber a ?crit?:
+> Romain, Valentin,
+> 
+> On Sun, Oct 21, 2018 at 10:49 AM Romain Naour <romain.naour@gmail.com> wrote:
+>>
+>> Hi Matt,
+>>
+>> Adding Valentin in Cc.
+>>
+>> Le 21/10/2018 ? 11:09, Matt Weber a ?crit :
+>>> By default clang is assuming the system linker /usr/bin/ld.  This
+>>> patchset updates the default to point at the cross toolchain ld.
+>>>
+>>> Previously clang had been used on target only, this update is
+>>> required for host clang/clang++ to be used as a frontend for
+>>> cross-compiling.
+>>
+>> As we discuss during the meeting, we should probably wrap clang and clang++ in
+>> order to pass the path to the sysroot like we do in the toolchain wrapper for
+>> gcc (and other options when needed).
+> 
+> Since there isn't a package yet that has the need for this wrapper,
+> would it be something that we could add to toolchain/helpers.mk?
+> For this patch, maybe I just updated the commit message with and
+> example of how you'd call clang w/o the wrapper?
 
-This new option mainly allows to annotate the fact that libcilkrts
-exists in gcc [4.9, 7] and that once we have dropped support for those
-gcc versions, the libcilkrts related logic can be removed.
+Ok, It's fine for me.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gcc/Config.in.host         |  6 ++++++
- package/gcc/gcc-final/gcc-final.mk | 12 ++++++++++--
- 2 files changed, 16 insertions(+), 2 deletions(-)
+Best regards,
+Romain
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 5a8f684a4c..3bf87fe597 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -76,6 +76,12 @@ config BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE
- 	bool
- 	default y
- 
-+# libcilkrts was introduced in gcc 4.9 (oldest gcc version we
-+# support), and removed in gcc 8.x
-+config BR2_GCC_SUPPORTS_LIBCILKRTS
-+	bool
-+	default y if !BR2_TOOLCHAIN_GCC_AT_LEAST_8
-+
- config BR2_GCC_VERSION
- 	string
- 	default "4.9.4"     if BR2_GCC_VERSION_4_9_X
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index 1be0b9bfc9..cbde56ce1c 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -76,6 +76,8 @@ HOST_GCC_FINAL_CONF_OPTS += "--with-multilib-list=m4a,m4a-nofpu"
- HOST_GCC_FINAL_GCC_LIB_DIR = $(HOST_DIR)/$(GNU_TARGET_NAME)/lib/!m4*
- endif
- 
-+ifeq ($(BR2_GCC_SUPPORTS_LIBCILKRTS),y)
-+
- # libcilkrts does not support v8
- ifeq ($(BR2_sparc),y)
- HOST_GCC_FINAL_CONF_OPTS += --disable-libcilkrts
-@@ -86,10 +88,16 @@ ifeq ($(BR2_PTHREADS_NONE),y)
- HOST_GCC_FINAL_CONF_OPTS += --disable-libcilkrts
- endif
- 
-+ifeq ($(BR2_STATIC_LIBS),y)
-+# disable libcilkrts as there is no static version
-+HOST_GCC_FINAL_CONF_OPTS += --disable-libcilkrts
-+endif
-+
-+endif # BR2_GCC_SUPPORTS_LIBCILKRTS
-+
- # Disable shared libs like libstdc++ if we do static since it confuses linking
--# In that case also disable libcilkrts as there is no static version
- ifeq ($(BR2_STATIC_LIBS),y)
--HOST_GCC_FINAL_CONF_OPTS += --disable-shared --disable-libcilkrts
-+HOST_GCC_FINAL_CONF_OPTS += --disable-shared
- else
- HOST_GCC_FINAL_CONF_OPTS += --enable-shared
- endif
--- 
-2.14.4
+
+> 
+>>
+>>>
+>>> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+>>> ---
+>>>  package/clang/clang.mk | 3 ++-
+>>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/package/clang/clang.mk b/package/clang/clang.mk
+>>> index 52e0b98..e2d4a08 100644
+>>> --- a/package/clang/clang.mk
+>>> +++ b/package/clang/clang.mk
+>>> @@ -42,7 +42,8 @@ CLANG_CONF_OPTS += -DCLANG_BUILD_TOOLS=ON
+>>>  HOST_CLANG_CONF_OPTS += \
+>>>       -DCLANG_BUILD_EXAMPLES=OFF \
+>>>       -DCLANG_INCLUDE_DOCS=OFF \
+>>> -     -DCLANG_INCLUDE_TESTS=OFF
+>>> +     -DCLANG_INCLUDE_TESTS=OFF \
+>>> +     -DCLANG_DEFAULT_LINKER=$(TARGET_LD)
+>>
+>> I would put it with this line:
+>> HOST_CLANG_CONF_OPTS += -DLLVM_CONFIG:FILEPATH=$(HOST_DIR)/bin/llvm-config
+>>
+> 
+> Sounds good.
+> 
+>> Otherwise:
+>> Reviewed-by: Romain Naour <romain.naour@gmail.com>
+>>
+>> Best regards,
+>> Romain
+>>
+>>>
+>>>  CLANG_CONF_OPTS += \
+>>>       -DCLANG_BUILD_EXAMPLES=OFF \
+>>>
+>>
+> 
+> 
