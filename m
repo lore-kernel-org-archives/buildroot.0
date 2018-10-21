@@ -1,85 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Oct 2018 14:44:39 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] utils/get-developers: add
- -e flag to only list email addresses for git send-email
-Message-ID: <20181021124402.1AE3E881FE@busybox.osuosl.org>
+Date: Sun, 21 Oct 2018 14:46:16 +0200
+Subject: [Buildroot] [PATCH] utils/get-developers: make it callable from
+ elsewhere than the toplevel directory
+In-Reply-To: <20181020160231.11895-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sat, 20 Oct 2018 18:02:31 +0200")
+References: <20181020160231.11895-1-peter@korsgaard.com>
+Message-ID: <87sh0z79if.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0aac4d6f3ef3906d03d8f467153a0cac52b8a274
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-When called with a list of patches, get-developers prints the entire git
-send-email invocation line:
+ > get-developers tries to open DEVELOPERS in the current directory, so it
+ > breaks when calling it from elsewhere than the toplevel Buildroot directory.
 
-./utils/get-developers 0001-git-security-bump-to-version-2.16.5.patch
-git send-email --to buildroot at buildroot.org --cc "Matt Weber <matthew.weber@rockwellcollins.com>"
+ > Traceback (most recent call last):
+ >   File "../utils/get-developers", line 107, in <module>
+ >     __main__()
+ >   File "../utils/get-developers", line 26, in __main__
+ >     devs = getdeveloperlib.parse_developers(os.path.dirname()
+ >   File "/home/peko/source/buildroot/utils/getdeveloperlib.py", line 161, in parse_developers
+ >     with open(os.path.join(basepath, "DEVELOPERS"), "r") as f:
+ > IOError: [Errno 2] No such file or directory: '/home/peko/source/buildroot/output-foo/DEVELOPERS'
 
-This may be handy when creating an entire patch series and editing a cover
-letter, but it does mean that this has to be explicitly executed and
-get-developers cannot be used directly by the --cc-cmd option of git
-send-email to automatically CC affected developers.
+ > Fix it by instead figuring out where the DEVELOPERS file is relative to the
+ > location of get-developers (E.G. one level up).
 
-So add an -e flag to only let get-developers print the email addresses of
-the affected developers in the one-email-per-line format expected by git
-send-email, similar to how get_maintainer.pl works in the Linux kernel.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-With this and a suitable git configuration:
+Committed to 2018.02.x and 2018.08.x, thanks.
 
-git config sendemail.to buildroot at buildroot.org
-git config sendemail.ccCmd "$(pwd)/utils/get-developers -e"
-
-You can simply do:
-
-git send-email master
-
-To automatically mail the buildroot list and CC affected developers on
-patches.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit bcf2ed5cc3e6cba61aedb9eeb34f39d96d612867)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- utils/get-developers | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
-
-diff --git a/utils/get-developers b/utils/get-developers
-index f525ff2226..9135b41662 100755
---- a/utils/get-developers
-+++ b/utils/get-developers
-@@ -18,6 +18,8 @@ def parse_args():
-                         help='find developers in charge of these files')
-     parser.add_argument('-c', dest='check', action='store_const',
-                         const=True, help='list files not handled by any developer')
-+    parser.add_argument('-e', dest='email', action='store_const',
-+                        const=True, help='only list affected developer email addresses')
-     return parser.parse_args()
- 
- 
-@@ -90,12 +92,16 @@ def __main__():
-                 if i in dev.infras:
-                     matching_devs.add(dev.name)
- 
--        result = "--to buildroot at buildroot.org"
--        for dev in matching_devs:
--            result += " --cc \"%s\"" % dev
-+        if args.email:
-+            for dev in matching_devs:
-+                print dev
-+        else:
-+            result = "--to buildroot at buildroot.org"
-+            for dev in matching_devs:
-+                result += " --cc \"%s\"" % dev
- 
--        if result != "":
--            print("git send-email %s" % result)
-+            if result != "":
-+                print("git send-email %s" % result)
- 
- 
- __main__()
+-- 
+Bye, Peter Korsgaard
