@@ -1,30 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Oct 2018 23:27:44 +0200
-Subject: [Buildroot] [PATCH] package binutils: remove binutils 2.27
- patches
-In-Reply-To: <20181021175331.16048-1-romain.naour@gmail.com> (Romain Naour's
- message of "Sun, 21 Oct 2018 19:53:31 +0200")
-References: <20181021175331.16048-1-romain.naour@gmail.com>
-Message-ID: <87tvlf3s8f.fsf@dell.be.48ers.dk>
+Date: Sun, 21 Oct 2018 23:31:39 +0200
+Subject: [Buildroot] [PATCH] openssh: bump to version 7.9p1
+In-Reply-To: <06882d5028be809e026e5ef1f934b4b984e7fb38.1540142884.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sun, 21 Oct 2018 20:28:04 +0300")
+References: <06882d5028be809e026e5ef1f934b4b984e7fb38.1540142884.git.baruch@tkos.co.il>
+Message-ID: <87pnw33s1w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > binutils 2.27 support was removed with [1]
- > [1] 453d29f1f45736d0156071930a09015def68994a
+ > Drop patch #1. uClibc no longer includes pthreads.h indirectly.
+ > Drop patch #2. The sys/param.h header is included indirectly through the
+ > local includes.h header since version 6.8p1.
 
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
- > ---
- > This patch must be backported to 2018.02 and 2018.08.
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-I guess you mean "is applicable"? It doesn't seem very important, but it
-also cannot hurt.
-
-Committed to 2018.02.x and 2018.08.x, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
