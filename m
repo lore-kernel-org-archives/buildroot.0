@@ -1,106 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Oct 2018 15:26:26 +0200
-Subject: [Buildroot] [RFC] fs: allow passing the image file name to
- inner-rootfs
-In-Reply-To: <20180622023105.27865-1-casantos@datacom.com.br>
-References: <20180622023105.27865-1-casantos@datacom.com.br>
-Message-ID: <20181021132626.GA23085@scaer>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 21 Oct 2018 14:33:31 +0100
+Subject: [Buildroot] [git commit] package/ca-certificates: don't hash
+ certificates.crt
+Message-ID: <20181021133507.BCFDC8828B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Carlos, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=d07ddd8e4ed576dbce4c33ab006f342e24d3bd6b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2018-06-21 23:31 -0300, Carlos Santos spake thusly:
-> Suppose that you want to create a filesystem image containing only the
-> /var/lib subtree. That would something like this on a br2-external:
-[--SNIP--]
-> This can be achieved by passing a third argument to inner-rootfs with
-> the desired file name:
->     rootfs-var-lib = $(call inner-rootfs,var-lib-$(pkgname),VAR_LIB_$(call UPPERCASE,$(pkgname)),rootfs-var-lib.$(pkgname))
+c_rehash looks at all files in /etc/ssl/certs, generates the hash for
+the certificates in them, and makes a symlink from the hash to the
+certificate file.
 
-We've discussed this patch during the developers days, and we came to
-the conclusion that this should be better done by allowing filesystems
-to provide the name of their output file as a variable, something like:
+However, ca-certificates.crt is also installed in /etc/ssl/certs and
+it contains all the certificates. c_rehash will take one of them (the
+first?) and create a symlink from that hash to ca-certificates.crt.
+Usually, this results in an error like:
 
-    ROOTFS_FOOBAR_IMAGE_NAME = my-own-filesystem.data
+WARNING: Skipping duplicate certificate ca-certificates.crt
 
-Then the infrastructure would do:
+and all is well. However, depending on filesystem order,
+ca-certificates.crt may come first, and the actual certificate is
+not symlinked.
 
-    ROOTFS_$(2)_IMAGE_NAME ?= rootfs.$(1)
+To fix this install certificates.crt to /etc/ssl/certs *after* we run
+c_rehash to prevent it getting hashed by mistake.
 
-    $$(BINARIES_DIR)/$$(ROOTFS_$(2)_IMAGE_NAME): ROOTFS=$(2)
-    $$(BINARIES_DIR)/$$(ROOTFS_$(2)_IMAGE_NAME): FAKEROOT_SCRIPT=$$(ROOTFS_$(2)_DIR)/fakeroot
-    [...and so on...]
+Note: $(TARGET_DIR)/etc/ssl/certs/ is already removed during install so
+this fix also works for rebuilds.
 
-Using a variable is more inline with how we handle this kind of
-customisations in Buildrooot, and allows one to continue calling the
-'rootfs' macro instad of the 'rootfs-inner' one (which, as its name
-implies, is an inner macro, aka purely for internal use, not public).
+Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/ca-certificates/ca-certificates.mk | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Besides, the commit log was seen as too decorelated from the actual
-change. It is not needed to explain the 'sub-tree-only' case, and just
-state that some filesystems may want to tweak their output name, rather
-than the current scheme.
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-> ---
->  fs/common.mk | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/fs/common.mk b/fs/common.mk
-> index abf35418cb..2380c1dd3f 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -139,10 +139,10 @@ ROOTFS_$(2)_COMPRESS_EXT = .xz
->  ROOTFS_$(2)_COMPRESS_CMD = xz -9 -C crc32 -c
->  endif
->  
-> -$$(BINARIES_DIR)/rootfs.$(1): ROOTFS=$(2)
-> -$$(BINARIES_DIR)/rootfs.$(1): FAKEROOT_SCRIPT=$$(ROOTFS_$(2)_DIR)/fakeroot
-> -$$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
-> -	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
-> +$$(BINARIES_DIR)/$(3): ROOTFS=$(2)
-> +$$(BINARIES_DIR)/$(3): FAKEROOT_SCRIPT=$$(ROOTFS_$(2)_DIR)/fakeroot
-> +$$(BINARIES_DIR)/$(3): $$(ROOTFS_$(2)_DEPENDENCIES)
-> +	@$$(call MESSAGE,"Generating root filesystem image $(3)")
->  	rm -rf $$(ROOTFS_$(2)_DIR)
->  	mkdir -p $$(ROOTFS_$(2)_DIR)
->  	echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
-> @@ -163,7 +163,7 @@ endif
->  rootfs-$(1)-show-depends:
->  	@echo $$(ROOTFS_$(2)_DEPENDENCIES)
->  
-> -rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1)
-> +rootfs-$(1): $$(BINARIES_DIR)/$(3)
->  
->  .PHONY: rootfs-$(1) rootfs-$(1)-show-depends
->  
-> @@ -181,6 +181,6 @@ endif
->  endef
->  
->  # $(pkgname) also works well to return the filesystem name
-> -rootfs = $(call inner-rootfs,$(pkgname),$(call UPPERCASE,$(pkgname)))
-> +rootfs = $(call inner-rootfs,$(pkgname),$(call UPPERCASE,$(pkgname)),rootfs.$(pkgname))
->  
->  include $(sort $(wildcard fs/*/*.mk))
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index c19d37788b..9685d0e6f0 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
+@@ -33,11 +33,15 @@ define CA_CERTIFICATES_INSTALL_TARGET_CMDS
+ 	cd $(TARGET_DIR) ;\
+ 	for i in `find usr/share/ca-certificates -name "*.crt"` ; do \
+ 		ln -sf ../../../$$i etc/ssl/certs/`basename $${i} .crt`.pem ;\
+-		cat $$i >>etc/ssl/certs/ca-certificates.crt ;\
+-	done
++		cat $$i ;\
++	done >$(@D)/ca-certificates.crt
+ 
+ 	# Create symlinks to the certificates by their hash values
+ 	$(HOST_DIR)/bin/c_rehash $(TARGET_DIR)/etc/ssl/certs
++
++	# Install the certificates bundle
++	$(INSTALL) -D -m 644 $(@D)/ca-certificates.crt \
++		$(TARGET_DIR)/etc/ssl/certs/ca-certificates.crt
+ endef
+ 
+ $(eval $(generic-package))
