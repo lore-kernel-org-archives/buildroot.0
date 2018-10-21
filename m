@@ -1,47 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 21 Oct 2018 13:54:13 +0200
-Subject: [Buildroot] [PATCH 1/3] package/gcc: disable libcilkrts when there
- is no thread support
-In-Reply-To: <20181021115415.21471-1-thomas.petazzoni@bootlin.com>
-References: <20181021115415.21471-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181021115415.21471-2-thomas.petazzoni@bootlin.com>
+Date: Sun, 21 Oct 2018 13:54:12 +0200
+Subject: [Buildroot] [PATCH 0/3] Misc gcc fixes/improvements
+Message-ID: <20181021115415.21471-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The libcilkrts configure script errors out with "Pthreads are required
-to build libcilkrts" if the C library doesn't have thread support. To
-fix that, we disable libcilkrts when thread support is not available.
+Hello,
 
-This issue was not noticed until now, because we only regularly build
-a no-thread toolchain for ARM, and libcilkrts was enabled on ARM only
-starting in gcc 7.x.
+The first patch fixes the build of no-thread toolchains: the
+libcilkrts cannot build without threads. This was not noticed until
+now, because we don't regularly build no-thread toolchain, except for
+ARM, and libcilkrts was only enabled for ARM in gcc 7.x. This patch
+was made as minimal as possible so that it can be backported to the
+LTS branch.
 
-This fixes the build of no-thread toolchains on architectures where
-libcilkrts is supported, i.e x86/x86-64, ARM and Sparc.
+The second patch reworks a bit the licilkrts handling so that we know
+we can drop it at some point in the future (libcilkrts was removed
+starting from gcc 8.x).
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gcc/gcc-final/gcc-final.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+The third patch drops an unneeded option.
 
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index 9897d18682..1be0b9bfc9 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -81,6 +81,11 @@ ifeq ($(BR2_sparc),y)
- HOST_GCC_FINAL_CONF_OPTS += --disable-libcilkrts
- endif
- 
-+# Pthreads are required to build libcilkrts
-+ifeq ($(BR2_PTHREADS_NONE),y)
-+HOST_GCC_FINAL_CONF_OPTS += --disable-libcilkrts
-+endif
-+
- # Disable shared libs like libstdc++ if we do static since it confuses linking
- # In that case also disable libcilkrts as there is no static version
- ifeq ($(BR2_STATIC_LIBS),y)
+Best regards,
+
+Thomas
+
+Thomas Petazzoni (3):
+  package/gcc: disable libcilkrts when there is no thread support
+  package/gcc: introduce BR2_GCC_SUPPORTS_LIBCILKRTS
+  package/gcc: remove BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE
+
+ package/gcc/Config.in.host             |  6 ++++--
+ package/gcc/gcc-final/gcc-final.mk     | 17 +++++++++++++++--
+ package/gcc/gcc-initial/gcc-initial.mk |  9 ++-------
+ package/gcc/gcc.mk                     |  5 +----
+ 4 files changed, 22 insertions(+), 15 deletions(-)
+
 -- 
 2.14.4
