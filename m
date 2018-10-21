@@ -1,154 +1,425 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 21 Oct 2018 18:32:54 +0200
-Subject: [Buildroot] [scanrock 0/5] scanrock
-Message-ID: <20181021163259.28335-1-francois.perrad@gadz.org>
+Date: Sun, 21 Oct 2018 18:32:55 +0200
+Subject: [Buildroot] [scanrock 1/5] utils/scanrock: new utility for Luarocks
+ infrastructure
+In-Reply-To: <20181021163259.28335-1-francois.perrad@gadz.org>
+References: <20181021163259.28335-1-francois.perrad@gadz.org>
+Message-ID: <20181021163259.28335-2-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This serie introduces `scanrock` which populates BR files for Luarocks
-infrastructure.
-
-And now, like with perl modules, I can upgrade easily lua modules.
-
-Francois Perrad (5):
-  utils/scanrock: new utility for Luarocks infrastructure
-  lua*: regeneration of hash files
-  lua*: regeneration of *.mk files
-  lua*: regeneration of Config.in
-  [RFC] pkg-luarocks: add per package upgrade target
-
- docs/manual/adding-packages-luarocks.txt      |  12 +
- package/argparse/Config.in                    |   6 +-
- package/argparse/argparse.hash                |   5 +-
- package/argparse/argparse.mk                  |   3 +-
- package/cgilua/Config.in                      |   7 +-
- package/cgilua/cgilua.hash                    |   3 +-
- package/copas/Config.in                       |  12 +-
- package/copas/copas.hash                      |   3 +-
- package/copas/copas.mk                        |   2 +-
- package/coxpcall/Config.in                    |   6 +-
- package/coxpcall/coxpcall.hash                |   3 +-
- package/dado/Config.in                        |   4 +-
- package/dado/dado.hash                        |   3 +-
- package/ljlinenoise/Config.in                 |   7 +-
- package/ljlinenoise/ljlinenoise.hash          |   5 +-
- package/ljsyscall/Config.in                   |   6 +-
- package/lpeg/Config.in                        |   6 +-
- package/lpeg/lpeg.hash                        |   4 +-
- package/lpty/Config.in                        |   4 +-
- package/lpty/lpty.hash                        |   5 +-
- package/lrandom/Config.in                     |   4 +-
- package/lrandom/lrandom.hash                  |   6 +-
- package/lsqlite3/Config.in                    |   3 +-
- package/lsqlite3/lsqlite3.hash                |   4 +-
- package/lsqlite3/lsqlite3.mk                  |   2 +-
- package/lua-basexx/Config.in                  |   4 +-
- package/lua-basexx/lua-basexx.hash            |   3 +-
- package/lua-basexx/lua-basexx.mk              |   4 +-
- package/lua-bit32/Config.in                   |   4 +-
- package/lua-bit32/lua-bit32.hash              |   5 +-
- package/lua-cjson/Config.in                   |  12 +-
- package/lua-cjson/lua-cjson.hash              |   5 +-
- package/lua-coat/lua-coat.hash                |   5 +-
- package/lua-coatpersistent/Config.in          |   7 +-
- .../lua-coatpersistent.hash                   |   7 +-
- package/lua-compat53/lua-compat53.hash        |   3 +-
- package/lua-csnappy/Config.in                 |   3 +-
- package/lua-csnappy/lua-csnappy.hash          |   5 +-
- package/lua-curl/Config.in                    |   4 +-
- package/lua-curl/lua-curl.hash                |   3 +-
- package/lua-datafile/Config.in                |   5 +-
- package/lua-datafile/lua-datafile.hash        |   3 +-
- package/lua-fifo/Config.in                    |   2 +-
- package/lua-fifo/lua-fifo.hash                |   3 +-
- package/lua-fifo/lua-fifo.mk                  |   4 +-
- package/lua-flu/Config.in                     |   5 +-
- package/lua-flu/lua-flu.hash                  |   5 +-
- package/lua-flu/lua-flu.mk                    |   2 +-
- package/lua-http/Config.in                    |  16 +-
- package/lua-http/lua-http.hash                |   3 +-
- package/lua-iconv/Config.in                   |   4 +-
- package/lua-iconv/lua-iconv.hash              |   5 +-
- package/lua-iconv/lua-iconv.mk                |   2 +-
- package/lua-lpeg-patterns/Config.in           |   5 +-
- .../lua-lpeg-patterns/lua-lpeg-patterns.hash  |   3 +-
- package/lua-markdown/Config.in                |   3 +-
- package/lua-markdown/lua-markdown.hash        |   3 +-
- package/lua-markdown/lua-markdown.mk          |   2 +-
- package/lua-messagepack/Config.in             |   4 +-
- package/lua-messagepack/lua-messagepack.hash  |   3 +-
- package/lua-periphery/Config.in               |   4 +-
- package/lua-periphery/lua-periphery.hash      |   5 +-
- package/lua-resty-http/Config.in              |   2 +-
- package/lua-resty-http/lua-resty-http.hash    |   3 +-
- package/lua-sailor/Config.in                  |  20 +-
- package/lua-sailor/lua-sailor.hash            |   3 +-
- package/lua-sailor/lua-sailor.mk              |   2 +-
- package/lua-sdl2/Config.in                    |   6 +-
- package/lua-stdlib/Config.in                  |   7 +-
- package/lua-stdlib/lua-stdlib.hash            |   3 +-
- package/lua-testmore/Config.in                |   2 +-
- package/lua-testmore/lua-testmore.hash        |   5 +-
- package/lua-utf8/Config.in                    |   3 +-
- package/lua-utf8/lua-utf8.hash                |   2 +-
- package/lua-valua/Config.in                   |   5 +-
- package/lua-valua/lua-valua.hash              |   3 +-
- package/luabitop/Config.in                    |   5 +-
- package/luabitop/luabitop.hash                |   4 +-
- package/luacrypto/Config.in                   |   8 +-
- package/luacrypto/luacrypto.hash              |   5 +-
- package/luadbi-sqlite3/Config.in              |   5 +-
- package/luadbi-sqlite3/luadbi-sqlite3.hash    |   3 +-
- package/luadbi-sqlite3/luadbi-sqlite3.mk      |   2 +-
- package/luadbi/Config.in                      |   6 +-
- package/luadbi/luadbi.hash                    |   3 +-
- package/luadbi/luadbi.mk                      |   2 +-
- package/luaexpat/Config.in                    |   5 +-
- package/luaexpat/luaexpat.hash                |   5 +-
- package/luaexpat/luaexpat.mk                  |   2 +-
- package/luafilesystem/Config.in               |   4 +-
- package/luafilesystem/luafilesystem.hash      |   3 +-
- package/luafilesystem/luafilesystem.mk        |   4 +-
- package/luajson/Config.in                     |   6 +-
- package/luajson/luajson.hash                  |   3 +-
- package/lualogging/Config.in                  |   7 +-
- package/lualogging/lualogging.hash            |   5 +-
- package/luaossl/Config.in                     |   9 +-
- package/luaossl/luaossl.hash                  |   3 +-
- package/luaposix/Config.in                    |  10 +-
- package/luasec/Config.in                      |   7 +-
- package/luasec/luasec.hash                    |   5 +-
- package/luasocket/Config.in                   |   6 +-
- package/luasocket/luasocket.hash              |   5 +-
- package/luasql-sqlite3/Config.in              |   5 +-
- package/luasql-sqlite3/luasql-sqlite3.hash    |   5 +-
- package/lunit/Config.in                       |   2 +-
- package/lunit/lunit.hash                      |   5 +-
- package/orbit/Config.in                       |  12 +-
- package/orbit/orbit.hash                      |   2 +-
- package/orbit/orbit.mk                        |   3 +-
- package/pkg-generic.mk                        |   6 +-
- package/pkg-luarocks.mk                       |   8 +
- package/rings/Config.in                       |   5 +-
- package/rings/rings.hash                      |   5 +-
- package/wsapi-fcgi/Config.in                  |  11 +-
- package/wsapi-fcgi/wsapi-fcgi.hash            |   3 +-
- package/wsapi-fcgi/wsapi-fcgi.mk              |   8 +-
- package/wsapi-xavante/Config.in               |  15 +-
- package/wsapi-xavante/wsapi-xavante.hash      |   3 +-
- package/wsapi-xavante/wsapi-xavante.mk        |   6 +-
- package/wsapi/Config.in                       |   9 +-
- package/wsapi/wsapi.hash                      |   5 +-
- package/xavante/Config.in                     |  15 +-
- package/xavante/xavante.hash                  |   3 +-
- utils/rockspec2br.lua                         | 238 ++++++++++++++++++
- utils/scanrock                                | 128 ++++++++++
- 126 files changed, 658 insertions(+), 332 deletions(-)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ docs/manual/adding-packages-luarocks.txt |  12 ++
+ utils/rockspec2br.lua                    | 238 +++++++++++++++++++++++
+ utils/scanrock                           | 128 ++++++++++++
+ 3 files changed, 378 insertions(+)
  create mode 100644 utils/rockspec2br.lua
  create mode 100755 utils/scanrock
 
+diff --git a/docs/manual/adding-packages-luarocks.txt b/docs/manual/adding-packages-luarocks.txt
+index ec3d4e7cc..8b28c6fa8 100644
+--- a/docs/manual/adding-packages-luarocks.txt
++++ b/docs/manual/adding-packages-luarocks.txt
+@@ -50,6 +50,18 @@ Finally, on line 16, we invoke the +luarocks-package+
+ macro that generates all the Makefile rules that actually allows the
+ package to be built.
+ 
++Most of these data can be retrieved in the +rock+ and +rockspec+,
++which are fetched from https://luarocks.org.
++So, this file and the Config.in can be generated by running
++the script +utils/scanrock foo lua-foo+ in the Buildroot directory
++(or in a br2-external tree).
++This script creates a Config.in file and lua-foo.mk file for the
++requested package.
++You should still manually edit the result.
++
++* The +package/Config.in+ file has to be updated manually to include the
++  generated Config.in files.
++
+ [[luarocks-package-reference]]
+ 
+ ==== +luarocks-package+ reference
+diff --git a/utils/rockspec2br.lua b/utils/rockspec2br.lua
+new file mode 100644
+index 000000000..b3bc146e6
+--- /dev/null
++++ b/utils/rockspec2br.lua
+@@ -0,0 +1,238 @@
++--[[
++
++Copyright (C) 2018 by Francois Perrad <francois.perrad@gadz.org>
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++General Public License for more details.
++
++You should have received a copy of the GNU General Public License
++along with this program; if not, write to the Free Software
++Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
++
++This script is a part of Buildroot.
++
++]]
++
++local function usage ()
++    print [[
++Usage:
++    utils/rockspec2br [-name foo] [-subdir foo-3.2] [-license LICENSE] foo-3.2-1.rockspec
++]]
++end
++
++local function escape (s)
++    return s:gsub('-', '%%-'):gsub('%.', '%%.')
++end
++
++local function fsname (name)
++    return name:lower():gsub('_', '-')
++end
++
++local function brname (name)
++    return name:upper():gsub('-', '_')
++end
++
++local function brlicense (license)
++    if license:match('MIT/X') then
++        return 'MIT'
++    end
++    return license
++end
++
++local function wrap (txt, max)
++    local lines = {}
++    local line = ''
++    for word in txt:gmatch('(%S+)') do
++        if line:len() + word:len() > max - 1 then
++            lines[#lines+1] = line
++            line = ''
++        end
++        if line == '' then
++            line  = word
++        else
++            line = line .. ' ' .. word
++        end
++    end
++    lines[#lines+1] = line
++    return lines
++end
++
++local br_libname = {
++   curl = 'libcurl',
++   fastcgi = 'libfcgi',
++   fuse = 'libfuse',
++   iconv = 'libiconv',
++}
++
++local function get_native_dependencies ()
++    local t = {}
++    local d = external_dependencies
++    if d then
++        if d.platforms and d.platforms.unix then
++            d = d.platforms.unix
++        end
++        for k in pairs(d) do
++            if k ~= 'platforms' then
++                k = k:lower()
++                if k ~= 'crypto' then
++                    t[#t+1] = br_libname[k] or k
++                end
++            end
++        end
++        table.sort(t)
++    end
++    return t
++end
++
++local br_name = {
++    basexx = 'lua-basexx',
++    bit32 = 'lua-bit32',
++    compat53 = 'lua-compat53',
++    cqueues = 'lua-cqueues',
++    datafile = 'lua-datafile',
++    fifo = 'lua-fifo',
++    flu = 'lua-flu',
++    http = 'lua-http',
++    lpeg_patterns = 'lua-lpeg-patterns',
++    valua = 'lua-valua',
++    sailor = 'lua-sailor',
++}
++
++local function get_dependencies ()
++    local t = {}
++    for i = 1, #dependencies do
++        local dep = dependencies[i]:match('^(%S+)')
++        if dep ~= 'lua' then
++            t[#t+1] = br_name[dep] or dep
++        end
++    end
++    table.sort(t)
++    return t
++end
++
++local function generate_config (name)
++    local only_luajit = name:match('^lj')
++    local summary = description.summary or '???'
++    local homepage = description.homepage or '???'
++    local native_dependencies = get_native_dependencies()
++    local dependencies = get_dependencies()
++    local fname = 'package/' .. name .. '/Config.in'
++    local f = assert(io.open(fname, 'w'))
++    print('write ' .. fname)
++    f:write('config BR2_PACKAGE_' .. brname(name) .. '\n')
++    f:write('\tbool "' .. name .. '"\n')
++    if only_luajit then
++        f:write('\tdepends on BR2_PACKAGE_LUAJIT\n')
++    end
++    for i = 1, #native_dependencies do
++        f:write('\tselect BR2_PACKAGE_' .. brname(native_dependencies[i]) .. '\n')
++    end
++    for i = 1, #dependencies do
++        f:write('\tselect BR2_PACKAGE_' .. brname(dependencies[i]) .. ' # runtime\n')
++    end
++    f:write('\thelp\n')
++    f:write('\t  ' .. table.concat(wrap(summary, 62), '\n\t  ') .. '\n')
++    f:write('\n\t  ' .. homepage .. '\n')
++    if only_luajit then
++        f:write('\ncomment "' .. name .. ' needs LuaJIT"\n')
++        f:write('\tdepends on !BR2_PACKAGE_LUAJIT\n')
++    end
++    f:close()
++end
++
++local function generate_mk (name, subdir, license_file)
++    local need_name_upstream = false
++    local need_version_upstream = false
++    local name_upstream = package
++    local version = version
++    local version_upstream = version:match('^([^-]+)-')
++    local revision = version:match('-(%d+)$')
++    local license = description.license
++    if subdir then
++        local root = subdir:match('^(.-)-' .. escape(version) .. '$')
++        if root then
++            subdir = root .. '-$(' .. brname(name) .. '_VERSION)'
++        end
++        root = subdir:match('^(.--[Vv])' .. escape(version_upstream) .. '$')
++        if root then
++            need_version_upstream = true
++            subdir = root .. '$(' .. brname(name) .. '_VERSION_UPSTREAM)'
++        end
++        root = subdir:match('^(.-)-' .. escape(version_upstream) .. '$')
++        if root then
++            if root == name then
++                subdir = nil
++            elseif root == name_upstream then
++                subdir = nil
++                need_name_upstream = true
++            else
++                need_version_upstream = true
++                subdir = root .. '-$(' .. brname(name) .. '_VERSION_UPSTREAM)'
++            end
++        end
++    end
++    local native_dependencies = get_native_dependencies()
++    local fname = 'package/' .. name .. '/' .. name .. '.mk'
++    local f = assert(io.open(fname, 'w'))
++    print('write ' .. fname)
++    f:write('################################################################################\n')
++    f:write('#\n')
++    f:write('# ' .. name .. '\n')
++    f:write('#\n')
++    f:write('################################################################################\n')
++    f:write('\n')
++    if need_version_upstream then
++        f:write(brname(name) .. '_VERSION_UPSTREAM = ' .. version_upstream .. '\n')
++        f:write(brname(name) .. '_VERSION = $(' .. brname(name) .. '_VERSION_UPSTREAM)-' .. revision .. '\n')
++    else
++        f:write(brname(name) .. '_VERSION = ' .. version .. '\n')
++    end
++    if name ~= name_upstream:lower() or need_name_upstream then
++        f:write(brname(name) .. '_NAME_UPSTREAM = ' .. name_upstream .. '\n')
++    end
++    if subdir then
++        f:write(brname(name) .. '_SUBDIR = ' .. subdir .. '\n')
++    end
++    if license then
++        f:write(brname(name) .. '_LICENSE = ' .. brlicense(license) .. '\n')
++    end
++    if license_file then
++        f:write(brname(name) .. '_LICENSE_FILES = $(' .. brname(name) .. '_SUBDIR)/' .. license_file .. '\n')
++    end
++    if #native_dependencies > 0 then
++        f:write(brname(name) .. '_DEPENDENCIES = ' .. table.concat(native_dependencies, ' ') .. '\n')
++    end
++    f:write('\n$(eval $(luarocks-package))\n')
++    f:close()
++end
++
++local name, subdir, license
++local i = 1
++if arg[i] == '-name' then
++    name = arg[i + 1]
++    i = i + 2
++end
++if arg[i] == '-subdir' then
++    subdir = arg[i + 1]
++    i = i + 2
++end
++if arg[i] == '-license' then
++    license = arg[i + 1]
++    i = i + 2
++end
++local rockspec = arg[i]
++if not rockspec then
++    usage()
++else
++    assert(loadfile(rockspec))()
++    name = fsname(name or package)
++    generate_config(name)
++    generate_mk(name, subdir, license)
++end
+diff --git a/utils/scanrock b/utils/scanrock
+new file mode 100755
+index 000000000..3c13b3228
+--- /dev/null
++++ b/utils/scanrock
+@@ -0,0 +1,128 @@
++#!/usr/bin/env perl
++
++use 5.010;
++use strict;
++use warnings;
++use Fatal qw(open close opendir closedir);
++
++use Getopt::Long;
++use Pod::Usage;
++use Cwd;
++use Digest::SHA;
++use File::Temp qw(tempdir);
++
++my ($help, $man);
++GetOptions( 'help|?' => \$help,
++            'man' => \$man,
++) or pod2usage(-exitval => 1);
++pod2usage(-exitval => 0) if $help;
++pod2usage(-exitval => 0, -verbose => 2) if $man;
++pod2usage(-exitval => 1) if scalar @ARGV == 0;
++
++my $rockname = shift @ARGV;
++my $fsname = shift @ARGV || $rockname;
++my $cwd = getcwd();
++my $tmpdir = tempdir( CLEANUP => 1 );
++
++qx{luarocks download --source ${rockname}};
++my $rock = glob q{*.src.rock};
++
++chdir $tmpdir;
++qx{luarocks unpack ${cwd}/${rock}};
++my $unpackdir = glob q{*};
++chdir $unpackdir;
++my $rockspec = File::Spec->rel2abs( glob q{*.rockspec} );
++opendir(my $dh, q{.});
++my @subdir = grep { m|^[^\.]| && -d } readdir($dh);
++my $subdir = shift @subdir;
++closedir $dh;
++chdir $subdir;
++my @license = glob q{COPY* LICENSE* doc/LICENSE* doc/license* doc/us/license*};
++my $license = shift @license;
++chdir $cwd;
++
++if ($license) {
++    print qx{lua utils/rockspec2br.lua -name ${fsname} -subdir ${subdir} -license ${license} ${rockspec}};
++}
++else {
++    print qx{lua utils/rockspec2br.lua -name ${fsname} -subdir ${subdir} ${rockspec}};
++}
++
++my $dirname = q{package/} . $fsname;
++my $hashname = $dirname . q{/} . $fsname . q{.hash};
++mkdir $dirname unless -d $dirname;
++my $sha256 = Digest::SHA->new(256)->addfile( $rock )->hexdigest();
++say qq{write ${hashname}};
++open my $fh, q{>}, $hashname;
++say {$fh} q{# computed by scanrock};
++say {$fh} qq{sha256 ${sha256}  ${rock}};
++if ($license) {
++    $sha256 = Digest::SHA->new(256)->addfile( qq{${tmpdir}/${unpackdir}/${subdir}/${license}} )->hexdigest();
++    say {$fh} qq{sha256 ${sha256}  ${subdir}/${license}};
++}
++close $fh;
++
++unlink $rock;
++
++__END__
++
++=head1 NAME
++
++utils/scanrock foo [lua-foo]
++
++=head1 SYNOPSIS
++
++utils/scanrock [options] rockname [brname]
++
++ Options:
++   -help
++   -man
++
++=head1 OPTIONS
++
++=over 8
++
++=item B<-help>
++
++Prints a brief help message and exits.
++
++=item B<-man>
++
++Prints the manual page and exits.
++
++=back
++
++=head1 DESCRIPTION
++
++This script creates templates of the Buildroot package files for a
++Luarock module.
++
++Most of the job is delegated to C<luarocks> and to the script
++C<utils/rockspec2br.lua>, so your $(HOST_DIR)/bin must append to PATH.
++
++After running this script, it is necessary to check the generated files.
++
++See the Buildroot documentation for details on the usage of the Luarock
++infrastructure.
++
++=head1 LICENSE
++
++Copyright (C) 2018 by Francois Perrad <francois.perrad@gadz.org>
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++General Public License for more details.
++
++You should have received a copy of the GNU General Public License
++along with this program; if not, write to the Free Software
++Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
++
++This script is a part of Buildroot.
++
++=cut
 -- 
 2.17.1
