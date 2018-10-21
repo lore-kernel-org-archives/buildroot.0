@@ -1,82 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Oct 2018 10:50:18 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] qemu: introduce
- BR2_PACKAGE_HOST_QEMU_{SYSTEM, USER}_ARCH_SUPPORTS
-Message-ID: <20181021092409.225D088178@busybox.osuosl.org>
+Date: Sun, 21 Oct 2018 10:50:54 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] qemu: disable qemu user
+ emulation on MIPS64 for host variant
+Message-ID: <20181021092409.29749863D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=146cdbd5409251cb8fa64f158ea2e25560767ea7
+commit: https://git.buildroot.net/buildroot/commit/?id=3855afdaf3273229a880c7db2e5aa544bae3ae6e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Not all architectures are supported by both the system emulation and
-user-mode emulation in Qemu, so a single
-BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS doesn't work very well.
+According to target/mips/TODO in the Qemu sources:
 
-Therefore, this commit introduces the
-BR2_PACKAGE_HOST_QEMU_{SYSTEM,USER}_ARCH_SUPPORTS hidden options. We
-keep the BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS option for the (numerous)
-architectures supported by both system emulation and user-mode
-emulation.
+MIPS64
+------
+- Userland emulation (both n32 and n64) not functional.
 
-The 'select' logic to make sure that at least either system emulation
-or user-mode emulation is selected is reworked, and done carefully to
-avoid recursive Kconfig dependencies.
+And indeed, trying to run a mips64n32 binary under qemu user emulation
+results in:
 
-For now BR2_PACKAGE_HOST_QEMU_SYSTEM_ARCH_SUPPORTS and
-BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS are the same, but they will
-become different in a follow-up commit.
+Invalid ELF image for this architecture
+
+So we move the BR2_mips64(el) dependency from
+BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS to
+BR2_PACKAGE_HOST_QEMU_SYSTEM_ARCH_SUPPORTS, so that only the system
+emulation is available on mips64, and not the user-mode emulation.
+
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d7f74dced987a81ebd98de8dd2f70f5effda7463)
+(cherry picked from commit 17024f5900b9803fc34388c39915f70ce51fb037)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qemu/Config.in.host | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ package/qemu/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
-index 160778c834..78ff052983 100644
+index 78ff052983..957c7d2ae1 100644
 --- a/package/qemu/Config.in.host
 +++ b/package/qemu/Config.in.host
-@@ -19,11 +19,21 @@ config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
- 	default y if BR2_x86_64
- 	depends on !BR2_powerpc_620 && !BR2_powerpc_630 && !BR2_powerpc_970
+@@ -9,8 +9,6 @@ config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+ 	default y if BR2_microblazebe
+ 	default y if BR2_mips
+ 	default y if BR2_mipsel
+-	default y if BR2_mips64
+-	default y if BR2_mips64el
+ 	default y if BR2_powerpc
+ 	default y if BR2_powerpc64
+ 	default y if BR2_powerpc64le
+@@ -22,6 +20,8 @@ config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+ config BR2_PACKAGE_HOST_QEMU_SYSTEM_ARCH_SUPPORTS
+ 	bool
+ 	default y if BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
++	default y if BR2_mips64
++	default y if BR2_mips64el
  
-+config BR2_PACKAGE_HOST_QEMU_SYSTEM_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
-+
-+config BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
-+
- config BR2_PACKAGE_HOST_QEMU
- 	bool "host qemu"
--	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_QEMU_SYSTEM_ARCH_SUPPORTS || BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS
- 	select BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE \
--		if !BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE
-+		if !BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE && BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE \
-+		if !BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS
- 	help
- 	  QEMU is a generic and open source machine emulator and
- 	  virtualizer.
-@@ -38,12 +48,14 @@ comment "Emulators selection"
- 
- config BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE
- 	bool "Enable system emulation"
-+	depends on BR2_PACKAGE_HOST_QEMU_SYSTEM_ARCH_SUPPORTS
- 	help
- 	  Enables the build of the system emulator, which allows to
- 	  boot an entire system in Qemu.
- 
- config BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE
- 	bool "Enable Linux user-land emulation"
-+	depends on BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS
- 	help
- 	  Enables the build of the user-land emulator, which allows to
- 	  run user-space applications.
+ config BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS
+ 	bool
