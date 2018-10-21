@@ -1,65 +1,49 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 21 Oct 2018 22:05:10 +0200
-Subject: [Buildroot] [PATCH 1/1] opencv3: fix build on sparc64
-Message-ID: <20181021200510.16171-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 21 Oct 2018 23:24:53 +0200
+Subject: [Buildroot] [PATCH 3/3] cargo-bin: bump version to 0.30.0
+In-Reply-To: <20181021174157.GA7056@itchy> (Eric Le Bihan's message of "Sun,
+ 21 Oct 2018 19:41:57 +0200")
+References: <20181018205835.8719-1-eric.le.bihan.dev@free.fr>
+ <20181018205835.8719-4-eric.le.bihan.dev@free.fr>
+ <20181021000231.0addc2ca@windsurf.lan> <20181021174157.GA7056@itchy>
+Message-ID: <87y3ar3sd6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/d27fa3eb3ea600698571837981a3a15d556724ea
+>>>>> "Eric" == Eric Le Bihan <eric.le.bihan.dev@free.fr> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...otobuf-fix-compilation-issue-on-s390.patch | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/opencv3/0001-3rdparty-protobuf-fix-compilation-issue-on-s390.patch
+Hi,
 
-diff --git a/package/opencv3/0001-3rdparty-protobuf-fix-compilation-issue-on-s390.patch b/package/opencv3/0001-3rdparty-protobuf-fix-compilation-issue-on-s390.patch
-new file mode 100644
-index 0000000000..7743eae533
---- /dev/null
-+++ b/package/opencv3/0001-3rdparty-protobuf-fix-compilation-issue-on-s390.patch
-@@ -0,0 +1,38 @@
-+From ac9ec55b37b2dd3b224144b4f20857a80719b750 Mon Sep 17 00:00:00 2001
-+From: Loic Devulder <ldevulder@suse.de>
-+Date: Fri, 28 Sep 2018 15:33:18 +0200
-+Subject: [PATCH] 3rdparty/protobuf: fix compilation issue on s390
-+
-+This commit fixes an issue while trying to compile
-+on s390x architecture.
-+
-+This is simply a backport of a fixe already applied
-+in official protobuf code:
-+- https://github.com/protocolbuffers/protobuf/pull/3955
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/opencv/opencv/commit/ac9ec55b37b2dd3b224144b4f20857a80719b750]
-+---
-+ .../protobuf/stubs/atomicops_internals_generic_gcc.h      | 8 ++++++++
-+ 1 file changed, 8 insertions(+)
-+
-+diff --git a/3rdparty/protobuf/src/google/protobuf/stubs/atomicops_internals_generic_gcc.h b/3rdparty/protobuf/src/google/protobuf/stubs/atomicops_internals_generic_gcc.h
-+index 0b0b06ce6cf..075c406abab 100644
-+--- a/3rdparty/protobuf/src/google/protobuf/stubs/atomicops_internals_generic_gcc.h
-++++ b/3rdparty/protobuf/src/google/protobuf/stubs/atomicops_internals_generic_gcc.h
-+@@ -146,6 +146,14 @@ inline Atomic64 NoBarrier_Load(volatile const Atomic64* ptr) {
-+   return __atomic_load_n(ptr, __ATOMIC_RELAXED);
-+ }
-+ 
-++inline Atomic64 Release_CompareAndSwap(volatile Atomic64* ptr,
-++                                       Atomic64 old_value,
-++                                       Atomic64 new_value) {
-++  __atomic_compare_exchange_n(ptr, &old_value, new_value, false,
-++                              __ATOMIC_RELEASE, __ATOMIC_ACQUIRE);
-++  return old_value;
-++}
-++
-+ #endif // defined(__LP64__)
-+ 
-+ }  // namespace internal
+ >> This looks weird and suspicious. Has upstreaming modified their tarball
+ >> after releasing them ? Has their server been hacked, and the tarballs
+ >> replaced with some bad thing inside ?
+
+ > Void Linux seems to have the same issue [4]. They reverted a commit
+ > where the initial hash for cargo-0.30.0-i686 was
+ > 4b828c263283241ad1c99f30e0b5d8554b6dac2737d09cfd466b4c15b0d7296a (just
+ > like in my patch) to
+ > 43a5754d13fa0436b33c48b1f562b4198d6930efad3dc36284b88289ff20d74d (the
+ > new one). Sames goes for x86_64.
+
+Ahh, ok.
+
+ > The key is listed among the official ones [5,6].
+
+Thanks!
+
+ > Should the new patch with proper hashes mentions something like this?
+
+ > ```
+ > # From https://static.rust-lang.org/dist/cargo-0.30.0-i686-unknown-linux-gnu.tar.xz.sha256
+ > # Verified using https://static.rust-lang.org/dist/cargo-0.30.0-i686-unknown-linux-gnu.tar.xz.asc
+ > sha256
+ > 43a5754d13fa0436b33c48b1f562b4198d6930efad3dc36284b88289ff20d74d
+ > cargo-0.30.0-i686-unknown-linux-gnu.tar.xz
+
+Looks good to me, please send a patch with that.
+
 -- 
-2.17.1
+Bye, Peter Korsgaard
