@@ -1,98 +1,83 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sun, 21 Oct 2018 17:21:10 +0100
-Subject: [Buildroot] [PATCH v2] utils/diffconfig: remove BR2_* prefix
- restriction
-Message-ID: <20181021162110.10569-1-luca@lucaceresoli.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 21 Oct 2018 17:26:00 +0100
+Subject: [Buildroot] [RFC PATCH] linux: let to work with xenomai in
+ override mode
+In-Reply-To: <CAOf5uwnZPoBUF8nGA8tg3fa3VjFQ5JxHTn_vJehp7C9iu4ovJQ@mail.gmail.com>
+References: <1536782312-12240-1-git-send-email-michael@amarulasolutions.com>
+ <20180912220822.7c6beee4@windsurf>
+ <CAOf5uwnZPoBUF8nGA8tg3fa3VjFQ5JxHTn_vJehp7C9iu4ovJQ@mail.gmail.com>
+Message-ID: <be15f521-7cad-8d39-8697-e7365bf2c41d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Marcel Patzlaff <m.patzlaff@pilz.de>
+ Hi Michael,
 
-The utils/diffconfig script works only on variables with the BR2_
-prefix. This is OK for Buildroot [def]configs since this is the prefix
-for all user-facing variables, but it prevents using the same script
-to compare configs from kconfig-based packages.
+On 12/09/2018 21:15, Michael Nazzareno Trimarchi wrote:
+> Hi Thomas
+> 
+> On Wed, Sep 12, 2018 at 10:08 PM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+>>
+>> Hello,
+>>
+>> On Wed, 12 Sep 2018 21:58:32 +0200, Michael Trimarchi wrote:
+>>> We would like to patch xenomai in override mode. Xenomai create
+>>> symlink in order to build the kernel and those links are absolute
+>>> one. The adeos patch is not applied if it is found so we
+>>> can change the connect hook from PRE_PATCH to PRE_CONFIGURE.
+>>> The xenomi dependence should be explicit set
+>>>
+>>> Change-Id: Idc5189047451bb9ac3019d3f35674d5332159918
+>>> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+>>
+>> As I explained in our previous e-mail discussion, when you use
+>> <pkg>_OVERRIDE_SRCDIR, you should handle any needed patching yourself.
+>>
+>> Doing what you suggest here means that all patches from Linux kernel
+>> extensions will be applied in the configure step, which is:
+>>
+>>  (1) Contrary to common sense: why should patching happen outside of
+>>      the patching step ?
+>>
+> 
+> Xenomai create symlinks, and it's not only a patch by provide links to
+> the package. Adeos
+> patch xenomai but another part is connect to those symlinks. Now you
+> can not let to have
+> a complete developement project without move this is a patching step.
+> Xenomai check if the
+> patch applied correspond to the one that you are going to apply and if
+> they are the same
+> the symlink are created.
+> 
+> Now suppose to have a manifest and repo describe your buildroot
+> project and your override
+> and you want to have the kernel already patched but with symlink not
+> created. I don't going to
+> git commit symlink but I want them created automatic.
+> 
+> Is now more clear?
 
-Remove the BR2_ restriction, allowing usage such as:
+ Your intention is fairly clear, but we still disagree :-)
 
-  ./utils/diffconfig \
-	board/qemu/xtensa-lx60/linux.config \
-	board/qemu/xtensa-lx60/linux-nommu.config
+ The problem is that when you have an OVERRIDE_SRCDIR (or local site method), it
+is impossible for Buildroot to know what you intend to do with each patching
+step. One person may already have the adeos stuff applied in their repo, another
+one may not.
 
-Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+ To be consistent, we have chosen to never do any patching when OVERRIDE_SRCDIR
+is used. Whatever the patching step is doing, you can always do that manually,
+either in a script that is called before running Buildroot, or just committing
+the patched/modified/symlinked tree into your repo.
 
----
+ In case of the Adeos patch, it is not even a problem to do it this way, because
+Xenomai is fairly independent of the Adeos patch (i.e. you can have a different
+version of the Adeos patch and Xenomai usually still works).
 
-Changes v1 -> v2:
- - rewrite commit message with a different motivation
- - fix subject (use imperative verb, lowercase after colon)
----
- utils/diffconfig | 32 +++++++++++++++++---------------
- 1 file changed, 17 insertions(+), 15 deletions(-)
+ Therefore, we've marked your patch as Rejected in patchwork.
 
-diff --git a/utils/diffconfig b/utils/diffconfig
-index 5862a62f25cb..f1af23cfce5c 100755
---- a/utils/diffconfig
-+++ b/utils/diffconfig
-@@ -28,14 +28,14 @@ If no config files are specified, .config and .config.old are used.
- 
- Example usage:
-  $ diffconfig .config config-with-some-changes
---LINUX_KERNEL_INTREE_DTS_NAME "vexpress-v2p-ca9"
-- LINUX_KERNEL_DTS_SUPPORT y -> n
-- LINUX_KERNEL_USE_INTREE_DTS y -> n
-- PACKAGE_DFU_UTIL n -> y
-- PACKAGE_LIBUSB n -> y
-- TARGET_GENERIC_HOSTNAME "buildroot" -> "Tuxie"
-- TARGET_GENERIC_ISSUE "Welcome to Buildroot" -> "Welcome to CustomBoard"
--+PACKAGE_LIBUSB_COMPAT n
-+-BR2_LINUX_KERNEL_INTREE_DTS_NAME "vexpress-v2p-ca9"
-+ BR2_LINUX_KERNEL_DTS_SUPPORT y -> n
-+ BR2_LINUX_KERNEL_USE_INTREE_DTS y -> n
-+ BR2_PACKAGE_DFU_UTIL n -> y
-+ BR2_PACKAGE_LIBUSB n -> y
-+ BR2_TARGET_GENERIC_HOSTNAME "buildroot" -> "Tuxie"
-+ BR2_TARGET_GENERIC_ISSUE "Welcome to Buildroot" -> "Welcome to CustomBoard"
-++BR2_PACKAGE_LIBUSB_COMPAT n
- 
- """)
-     sys.exit(0)
-@@ -44,12 +44,14 @@ Example usage:
- def readconfig(config_file):
-     d = {}
-     for line in config_file:
--        line = line[:-1]
--        if line[:4] == "BR2_":
--            name, val = line[4:].split("=", 1)
--            d[name] = val
-+        line = line.strip()
-+        if len(line) == 0:
-+            continue
-         if line[-11:] == " is not set":
--            d[line[6:-11]] = "n"
-+            d[line[2:-11]] = "n"
-+        elif line[0] != "#":
-+            name, val = line.split("=", 1)
-+            d[name] = val
-     return d
- 
- def print_config(op, config, value, new_value):
-@@ -58,9 +60,9 @@ def print_config(op, config, value, new_value):
-     if merge_style:
-         if new_value:
-             if new_value=="n":
--                print("# BR2_%s is not set" % config)
-+                print("# %s is not set" % config)
-             else:
--                print("BR2_%s=%s" % (config, new_value))
-+                print("%s=%s" % (config, new_value))
-     else:
-         if op=="-":
-             print("-%s %s" % (config, value))
--- 
-2.17.1
+ Regards,
+ Arnout
