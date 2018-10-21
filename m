@@ -1,85 +1,81 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 21 Oct 2018 13:58:37 +0200
-Subject: [Buildroot] [PATCH] package/clang: default linker to GNU
-In-Reply-To: <CANQCQpa2_Y3G7kmRxQKod2QiLzqw67Q9OTPa4wppsftx-P+a7w@mail.gmail.com>
-References: <1540112964-50052-1-git-send-email-matthew.weber@rockwellcollins.com>
- <ac3e5b76-9d38-d9af-5290-0675d72c9fe3@gmail.com>
- <CANQCQpa2_Y3G7kmRxQKod2QiLzqw67Q9OTPa4wppsftx-P+a7w@mail.gmail.com>
-Message-ID: <2b56a55c-79ec-145c-26d7-b5f0532566ef@gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Sun, 21 Oct 2018 12:59:23 +0100
+Subject: [Buildroot] [PATCH v5 1/2] core/legal-info: Change order of
+ legal-manifest parameters
+Message-ID: <20181021115924.29838-1-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 21/10/2018 ? 13:53, Matthew Weber a ?crit?:
-> Romain, Valentin,
-> 
-> On Sun, Oct 21, 2018 at 10:49 AM Romain Naour <romain.naour@gmail.com> wrote:
->>
->> Hi Matt,
->>
->> Adding Valentin in Cc.
->>
->> Le 21/10/2018 ? 11:09, Matt Weber a ?crit :
->>> By default clang is assuming the system linker /usr/bin/ld.  This
->>> patchset updates the default to point at the cross toolchain ld.
->>>
->>> Previously clang had been used on target only, this update is
->>> required for host clang/clang++ to be used as a frontend for
->>> cross-compiling.
->>
->> As we discuss during the meeting, we should probably wrap clang and clang++ in
->> order to pass the path to the sysroot like we do in the toolchain wrapper for
->> gcc (and other options when needed).
-> 
-> Since there isn't a package yet that has the need for this wrapper,
-> would it be something that we could add to toolchain/helpers.mk?
-> For this patch, maybe I just updated the commit message with and
-> example of how you'd call clang w/o the wrapper?
+From: Michal Sojka <sojka@merica.cz>
 
-Ok, It's fine for me.
+The last parameter {HOST|TARGET} is now first. With this change,
+adding new columns to the legal manifest file (as in the next commit)
+will be slightly easier to review.
 
-Best regards,
-Romain
+Signed-off-by: Michal Sojka <sojka@merica.cz>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
 
+---
 
-> 
->>
->>>
->>> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
->>> ---
->>>  package/clang/clang.mk | 3 ++-
->>>  1 file changed, 2 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/package/clang/clang.mk b/package/clang/clang.mk
->>> index 52e0b98..e2d4a08 100644
->>> --- a/package/clang/clang.mk
->>> +++ b/package/clang/clang.mk
->>> @@ -42,7 +42,8 @@ CLANG_CONF_OPTS += -DCLANG_BUILD_TOOLS=ON
->>>  HOST_CLANG_CONF_OPTS += \
->>>       -DCLANG_BUILD_EXAMPLES=OFF \
->>>       -DCLANG_INCLUDE_DOCS=OFF \
->>> -     -DCLANG_INCLUDE_TESTS=OFF
->>> +     -DCLANG_INCLUDE_TESTS=OFF \
->>> +     -DCLANG_DEFAULT_LINKER=$(TARGET_LD)
->>
->> I would put it with this line:
->> HOST_CLANG_CONF_OPTS += -DLLVM_CONFIG:FILEPATH=$(HOST_DIR)/bin/llvm-config
->>
-> 
-> Sounds good.
-> 
->> Otherwise:
->> Reviewed-by: Romain Naour <romain.naour@gmail.com>
->>
->> Best regards,
->> Romain
->>
->>>
->>>  CLANG_CONF_OPTS += \
->>>       -DCLANG_BUILD_EXAMPLES=OFF \
->>>
->>
-> 
-> 
+Changes v4 -> v5:
+ - rebased fixing trivial, unrelated conflict
+ - add Luca's review tags
+---
+ Makefile               | 6 +++---
+ package/pkg-generic.mk | 2 +-
+ package/pkg-utils.mk   | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 5c9b8a803bb5..9f371b0d8b92 100644
+--- a/Makefile
++++ b/Makefile
+@@ -798,9 +798,9 @@ legal-info-clean:
+ legal-info-prepare: $(LEGAL_INFO_DIR)
+ 	@$(call MESSAGE,"Buildroot $(BR2_VERSION_FULL) Collecting legal info")
+ 	@$(call legal-license-file,buildroot,buildroot,support/legal-info/buildroot.hash,COPYING,COPYING,HOST)
+-	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,TARGET)
+-	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,HOST)
+-	@$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPL-2.0+,COPYING,not saved,not saved,HOST)
++	@$(call legal-manifest,TARGET,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE)
++	@$(call legal-manifest,HOST,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE)
++	@$(call legal-manifest,HOST,buildroot,$(BR2_VERSION_FULL),GPL-2.0+,COPYING,not saved,not saved)
+ 	@$(call legal-warning,the Buildroot source code has not been saved)
+ 	@cp $(BR2_CONFIG) $(LEGAL_INFO_DIR)/buildroot.config
+ 
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index b8de0a9aac00..aee22795c0f0 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -942,7 +942,7 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
+ endif # redistribute
+ 
+ endif # other packages
+-	@$$(call legal-manifest,$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_ACTUAL_SOURCE_SITE),$$(call UPPERCASE,$(4)))
++	@$$(call legal-manifest,$$(call UPPERCASE,$(4)),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_ACTUAL_SOURCE_SITE))
+ endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+ 	$$(foreach hook,$$($(2)_POST_LEGAL_INFO_HOOKS),$$(call $$(hook))$$(sep))
+ 
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index be287dc817cd..992ce0b94115 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -79,8 +79,8 @@ define legal-warning-nosource # pkg, {local|override}
+ 	$(call legal-warning-pkg,$(1),sources not saved ($(2) packages not handled))
+ endef
+ 
+-define legal-manifest # pkg, version, license, license-files, source, url, {HOST|TARGET}
+-	echo '"$(1)","$(2)","$(3)","$(4)","$(5)","$(6)"' >>$(LEGAL_MANIFEST_CSV_$(7))
++define legal-manifest # {HOST|TARGET}, pkg, version, license, license-files, source, url
++	echo '"$(2)","$(3)","$(4)","$(5)","$(6)","$(7)"' >>$(LEGAL_MANIFEST_CSV_$(1))
+ endef
+ 
+ define legal-license-file # pkgname, pkgname-pkgver, pkg-hashfile, filename, file-fullpath, {HOST|TARGET}
+-- 
+2.17.1
