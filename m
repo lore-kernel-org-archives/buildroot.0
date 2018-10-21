@@ -1,87 +1,86 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 21 Oct 2018 23:12:14 +0100
-Subject: [Buildroot] [PATCH 3/3] package: linuxptp: workaround for
- system crash if PHY is not initialized
-In-Reply-To: <a7ffc70b-d812-17af-a8cc-f03d368e3b99@jikos.cz>
-References: <1517155221-19399-1-git-send-email-brain@jikos.cz>
- <1517155221-19399-3-git-send-email-brain@jikos.cz>
- <20180130230147.46cc03ec@windsurf.home>
- <a7ffc70b-d812-17af-a8cc-f03d368e3b99@jikos.cz>
-Message-ID: <1cb0189c-1a3d-006f-e4be-aee5ef2756e9@mind.be>
+Date: Sun, 21 Oct 2018 23:35:56 +0100
+Subject: [Buildroot] [PATCH v2] gcc: Build libgcc with
+ BR2_TARGET_OPTIMIZATION flags
+In-Reply-To: <20180118165639.2154-1-abrodkin@synopsys.com>
+References: <20180118165639.2154-1-abrodkin@synopsys.com>
+Message-ID: <77954d04-08f7-bdda-8c95-fd87b2509e85@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+?Hi Alexey,
 
-On 30/01/2018 22:14, Petr Kulhavy wrote:
-> Hi Thomas,
+?Sorry for the extremely late feedback...
+
+
+On 18/01/2018 16:56, Alexey Brodkin wrote:
+> libgcc gets built very early and what's more it is built not by
+> "normal" cross gcc later found in "output/host/usr/bin" but by
+> gcc's own bare-minimal version: output/build/host-gcc-xxx/build/./gcc/xgcc.
 >
-> most likely I will post another patch for this as I have modified the service
-> file even further.
-> In the newer version both come after network-online.target because I noticed
-> ptp4l fails to execute some ioctl if started too early. This causes that it
-> doesn't start syncing.
+> Which in the end means BR2_TARGET_OPTIMIZATION is not applied to
+> cross-compiler via toolchain wrapper.
 
-?This looks to me like something that should be fixed in ptp4l itself. Like, if
-you are running ptp4l on a removable device, you have to wait for the device to
-be available. Or alternatively, trigger the service on the availability of the
-device (i.e. start it from udev). Though honestly I have no idea of how to do
-that properly from systemd.
+?TBH I don't like this BR2_TARGET_OPTIMIZATION option too much, it's too
+unpredictable, but indeed it is sometimes the only way to fix something.
 
-?Anyway, since you said that you have an improved patch lined up, I've marked
-this one as Changes Requested in patchwork.
+>
+> But given libgcc is an essential target executable we may want it to
+> be built with the same "optimization" flags as all other libs and binaries.
+>
+> Technically this is doable with TARGET_ABI which is added to TARGET_CFLAGS
+> but user cannot [or at least is not supposed to] modify TARGET_ABI as it
+> is used for tunign for a particular platform.
+>
+> But still there might be a need to compile everything for tha target with
+> a special compiler option and this change allows for that.
+>
+> For eaxmple ARC still doesn't have properly working link-time relaxation
+> which requires us to compile everything properly from the beginning, otherwise
+> we may face a situation when huge apps/libs like Qt5WebKit might fail to pass
+> the final linkage because some symbols might be too far from each other as
+> by default gcc will try to use shorter relocations. Solution is as simple as
+> rebuild of everything with "-mlong-calls" so that all the symbols are
+> compiled with full 32-bit relocations. And now only libgcc causes problems
+> because it contains quite a few symbols used widely by other binaries like
+> millicode, some math stuff etc.
+>
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>
+> Changes v1 -> v2:
+>  * Strip quotes from BR2_TARGET_OPTIMIZATION
+>    Didn't notice a problem with 1 option in BR2_TARGET_OPTIMIZATION
+>    but if another one is added libgcc configuration fails because:
+>    CFLAGS_FOR_TARGET="-xxx "-yyy -zzz"" and thus
+>    /bin/sh: -zzz: command not found
+>
+>  package/gcc/gcc.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+> index 27fc1e987c..431f534f56 100644
+> --- a/package/gcc/gcc.mk
+> +++ b/package/gcc/gcc.mk
+> @@ -109,7 +109,7 @@ HOST_GCC_COMMON_CONF_OPTS = \
+>  HOST_GCC_COMMON_CONF_ENV = \
+>  	MAKEINFO=missing
+>  
+> -GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
+> +GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS) $(call qstrip,$(BR2_TARGET_OPTIMIZATION))
+?This looks good to me, but...
+>  GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
+
+... shouldn't it be added here as well, for libstdc++?
 
 
 ?Regards,
 ?Arnout
 
 
->
-> I'm not very happy with the network-online.target either, because it literally
-> waits for the network to come up. Which makes some sense - PTP needs a peer -
-> however systemd documentation indicates this is not the most reliable way to
-> solve missing network and recommends to write robust programs which can wait
-> for network.
-> And in the end neither ptp4l or phc2sys need the network to be up. They both
-> just need the kernel to finish the initialization (which is not the same as
-> network up). Unfortunately systemd doesn't provide such target :(
->
-> I'm also not an expert in systemd. These changes are base on my
-> self-education. So a real systemd expert would be appreciated.
->
-> Petr
->
-> On 30/01/18 23:01, Thomas Petazzoni wrote:
->> Hello,
->>
->> On Sun, 28 Jan 2018 17:00:21 +0100, Petr Kulhavy wrote:
->>> On some systems (tested on i.MX6 with Freescale kernel 4.1) the system freezes
->>> if phc2sys starts before the PHY is initialized (phc2sys opens /dev/ptp0).
->>>
->>> Unfortunately systemd network.target does not guarantee the PHY to be
->>> initialized.
->>> This workaround pulls in the network-online.target dependency, which postpones
->>> the phc2sys start after the link is up.
->>>
->>> Signed-off-by: Petr Kulhavy <brain@jikos.cz>
->> Do we really want to workaround this, which appears to be a kernel
->> problem?
->>
->>> +# workaround for crashing Freescale PHY if initialized after /dev/ptp0 is open
->>> +After=network-online.target
->>> +Wants=network-online.target
->> Does it make sense to have After and Wants set to the same value ? Are
->> both really needed ?
->>
->> (Again: I don't know much about systemd, so don't hesitate to teach me
->> even the basics!)
->>
->> Thomas
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+>  
+>  # Propagate options used for target software building to GCC target libs
