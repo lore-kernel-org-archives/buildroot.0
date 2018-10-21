@@ -1,87 +1,141 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 22 Oct 2018 00:19:46 +0100
-Subject: [Buildroot] [PATCH 2/3] package: linuxptp: enhance systemd service
-In-Reply-To: <c63fff97-491b-8d5a-fb99-095e3fa08423@jikos.cz>
-References: <1517155221-19399-1-git-send-email-brain@jikos.cz>
- <1517155221-19399-2-git-send-email-brain@jikos.cz>
- <20180130230054.6cb2551a@windsurf.home>
- <c63fff97-491b-8d5a-fb99-095e3fa08423@jikos.cz>
-Message-ID: <eaee0d92-ef95-f48d-05eb-04124c459ef3@mind.be>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 22 Oct 2018 00:58:52 +0100
+Subject: [Buildroot] [PATCH v2 1/1] board/pc: ensure grub.cfg is copied
+ to target filesystem
+In-Reply-To: <20181011222445.21185-1-greg@quimbo.fr>
+References: <20181011214932.350ef220@windsurf>
+ <20181011222445.21185-1-greg@quimbo.fr>
+Message-ID: <CANQCQpYHM5uc-J-ZZFaxFxBQxSDerR1Nq_tgcfi_pVzROb-UUQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Gr?goire,
 
-On 30/01/2018 22:19, Petr Kulhavy wrote:
-> Hi Thomas,
+On Thu, Oct 11, 2018 at 11:26 PM Gr?goire Delattre <greg@quimbo.fr> wrote:
 >
-> The Before= and Wants=? time-sync.target is what I found in the systemd
-> documentation. A time synchronization service should pull in this special
-> target, so that applications needing time synchronization can depend on it.
-> Other time synchronizing services like ntpd or systemd-timesyncd use the same
-> mechanism.
-
-?I double-checked this and confirm. So I've extended the commit log a little and
-applied to master, thanks.
-
-?Sorry that it took so long...
-
-
-?Regards,
-?Arnout
-
-
-> Cheers
-> Petr
+> From: Gr?goire Delattre <gregoire.delattre@gmail.com>
 >
-> On 30/01/18 23:00, Thomas Petazzoni wrote:
->> Hello,
->>
->> On Sun, 28 Jan 2018 17:00:20 +0100, Petr Kulhavy wrote:
->>> linuxptp now pulls in the time-sync.target
->>> phc2sys (linuxptp-system-clock.service) starts after ptp4l (linuxptp.service)
->>>
->>> Signed-off-by: Petr Kulhavy <brain@jikos.cz>
->>> ---
->>> ? package/linuxptp/linuxptp-system-clock.service | 2 +-
->>> ? package/linuxptp/linuxptp.service????????????? | 2 ++
->>> ? 2 files changed, 3 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/package/linuxptp/linuxptp-system-clock.service
->>> b/package/linuxptp/linuxptp-system-clock.service
->>> index 7327254..a4436a3 100644
->>> --- a/package/linuxptp/linuxptp-system-clock.service
->>> +++ b/package/linuxptp/linuxptp-system-clock.service
->>> @@ -1,6 +1,6 @@
->>> ? [Unit]
->>> ? Description=Precision Time Protocol system clock synchronization
->>> -After=syslog.target network.target
->>> +After=linuxptp.service
->>> ? ? [Service]
->>> ? ExecStart=/usr/sbin/phc2sys -s /dev/ptp0 -c CLOCK_REALTIME -w -S 1.0
->>> diff --git a/package/linuxptp/linuxptp.service
->>> b/package/linuxptp/linuxptp.service
->>> index f690430..14e9814 100644
->>> --- a/package/linuxptp/linuxptp.service
->>> +++ b/package/linuxptp/linuxptp.service
->>> @@ -1,6 +1,8 @@
->>> ? [Unit]
->>> ? Description=Precision Time Protocol daemon
->>> ? After=syslog.target network.target
->>> +Before=time-sync.target
->>> +Wants=time-sync.target
->>> ? Wants=linuxptp-system-clock.service
->>> ? ? [Service]
->> I'm not knowledgeable enough in systemd stuff to decide on this one.
->> Anyone with more systemd knowledge ?
->>
->> Thomas
+> Before this commit, the grub configuration file was copied to the
+> TARGET_DIR in a post-image hook, after the filesystem has been
+> generated. It was kinda working because the board/pc's grub
+> configuration and the default one are the same and the later was
+> copied during the build process of the grub2 package.
+
+Agree they are the same :-)  My opinion is that we could simplify the
+number of files by removing the grub-bios.cfg from the board/pc folder
+and replace the copy step in the post script with a comment stating
+the default grub.cfg is being used.  Then the move of the post script
+from a post-build to post-image isn't necessary required.
+
+NOTE: The grub-efi.cfg has to be copied as we don't have a specific
+default for that cfg and it changes the path of the Linux image. Right
+now the same grub config is copied in from boot/grub2/grub.cfg for
+both types of boot.
+
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollin.com>
+
 >
+> This commit ensures the custom board/pc grub configuration is copied at
+> the right time.
+>
+> Signed-off-by: Gr?goire Delattre <gregoire.delattre@gmail.com>
+> ---
+>  board/pc/post-build.sh           | 15 +++++++++++++++
+>  board/pc/post-image.sh           | 14 --------------
+>  configs/pc_x86_64_bios_defconfig |  3 ++-
+>  configs/pc_x86_64_efi_defconfig  |  3 ++-
+>  4 files changed, 19 insertions(+), 16 deletions(-)
+>  create mode 100755 board/pc/post-build.sh
+>  delete mode 100755 board/pc/post-image.sh
+>
+> diff --git a/board/pc/post-build.sh b/board/pc/post-build.sh
+> new file mode 100755
+> index 0000000000..552d488160
+> --- /dev/null
+> +++ b/board/pc/post-build.sh
+> @@ -0,0 +1,15 @@
+> +#!/bin/sh
+> +
+> +set -e
+> +
+> +BOARD_DIR=$(dirname "$0")
+> +
+> +# Detect boot strategy, EFI or BIOS
+> +if [ -f "$BINARIES_DIR/efi-part/startup.nsh" ]; then
+> +    cp -f "$BOARD_DIR/grub-efi.cfg" "$BINARIES_DIR/efi-part/EFI/BOOT/grub.cfg"
+> +else
+> +    cp -f "$BOARD_DIR/grub-bios.cfg" "$TARGET_DIR/boot/grub/grub.cfg"
+> +
+> +    # Copy grub 1st stage to binaries, required for genimage
+> +    cp -f "$HOST_DIR/lib/grub/i387-pc/boot.img" "$BINARIES_DIR"
+> +fi
+> diff --git a/board/pc/post-image.sh b/board/pc/post-image.sh
+> deleted file mode 100755
+> index bdd0847ec5..0000000000
+> --- a/board/pc/post-image.sh
+> +++ /dev/null
+> @@ -1,14 +0,0 @@
+> -#!/bin/sh
+> -
+> -BOARD_DIR="$(dirname $0)"
+> -
+> -# Detect boot strategy, EFI or BIOS
+> -if [ -f ${BINARIES_DIR}/efi-part/startup.nsh ]; then
+> -  cp -f ${BOARD_DIR}/grub-efi.cfg ${BINARIES_DIR}/efi-part/EFI/BOOT/grub.cfg
+> -else
+> -  cp -f ${BOARD_DIR}/grub-bios.cfg ${TARGET_DIR}/boot/grub/grub.cfg
+> -  # Copy grub 1st stage to binaries, required for genimage
+> -  cp -f ${HOST_DIR}/lib/grub/i386-pc/boot.img ${BINARIES_DIR}
+> -fi
+> -
+> -exit $?
+> diff --git a/configs/pc_x86_64_bios_defconfig b/configs/pc_x86_64_bios_defconfig
+> index 1cfc0e424f..59e39a5ae7 100644
+> --- a/configs/pc_x86_64_bios_defconfig
+> +++ b/configs/pc_x86_64_bios_defconfig
+> @@ -19,7 +19,8 @@ BR2_TARGET_ROOTFS_EXT2=y
+>  BR2_TARGET_ROOTFS_EXT2_4=y
+>  BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+>  # BR2_TARGET_ROOTFS_TAR is not set
+> -BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image.sh support/scripts/genimage.sh"
+> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/pc/post-build.sh"
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+>  BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pc/genimage-bios.cfg"
+>
+>  # Linux headers same as kernel, a 4.18 series
+> diff --git a/configs/pc_x86_64_efi_defconfig b/configs/pc_x86_64_efi_defconfig
+> index bc99ca755b..b4190b9575 100644
+> --- a/configs/pc_x86_64_efi_defconfig
+> +++ b/configs/pc_x86_64_efi_defconfig
+> @@ -22,7 +22,8 @@ BR2_TARGET_ROOTFS_EXT2=y
+>  BR2_TARGET_ROOTFS_EXT2_4=y
+>  BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+>  # BR2_TARGET_ROOTFS_TAR is not set
+> -BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image.sh support/scripts/genimage.sh"
+> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/pc/post-build.sh"
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+>  BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pc/genimage-efi.cfg"
+>
+>  # Linux headers same as kernel, a 4.18 series
+> --
+> 2.19.1
 >
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
->
+
+
+
+--
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / RC Linux Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
