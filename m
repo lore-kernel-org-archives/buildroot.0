@@ -1,332 +1,81 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 21 Oct 2018 13:20:25 +0200
-Subject: [Buildroot] [PATCH 1/1] libcxx: new package
-In-Reply-To: <20180613141454.25028-1-nolange79@gmail.com>
-References: <20180613141454.25028-1-nolange79@gmail.com>
-Message-ID: <8ad74087-7117-e1a3-3a72-4f6baadfa901@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 21 Oct 2018 12:23:05 +0100
+Subject: [Buildroot] [PATCH] .gitlab-ci.yml: do runtime tests only on
+ explicit trigger
+In-Reply-To: <5bcbea684f4e4_3ef22b2051d8a8b4760e3@ultri5.mail>
+References: <20181020224254.5895-1-arnout@mind.be>
+ <5bcbea684f4e4_3ef22b2051d8a8b4760e3@ultri5.mail>
+Message-ID: <277d5a7f-c605-af13-c004-63259faa649a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Norbert,
 
-Le 13/06/2018 ? 16:14, Norbert Lange a ?crit?:
-> provides llvm's libc++ as package,
-> probably needs some more work to
-> better fit into buildroots toolchain construction.
+
+On 21/10/2018 03:54, Ricardo Martincoski wrote:
+> Hello,
 > 
-> It should be build after the host-g++ and C-Library,
-> but before any other packages and it does install a
-> small script host/bin/<xa-y-z>-g++-libc++
-> to allow easy use.
-
-You should take into account the external toolchain case.
-
+> On Sat, Oct 20, 2018 at 07:42 PM, Arnout Vandecappelle (Essensium/Mind) wrote:
 > 
-> For lowlevel language support ABI, it can be built with
-> libstdc++ support library or its own libc++-abi.
+> [snip]
+>> +++ b/.gitlab-ci.yml
+>> @@ -62,6 +62,11 @@ check-package:
+>>              - output/build/packages-file-list.txt
+>>  
+>>  .runtime_test: &runtime_test
+>> +    # Running the runtime tests for every push is too much, so limit to
+>> +    # explicit triggers through the API.
+>> +    only:
+>> +        - triggers
+>> +        - tags
+>>      # Keep build directories so the rootfs can be an artifact of the job. The
+>>      # runner will clean up those files for us.
+>>      # Multiply every emulator timeout by 10 to avoid sporadic failures in
+>> @@ -261,71 +266,3 @@ zynq_zc706_defconfig: *defconfig
+>>  zynq_zed_defconfig: *defconfig
+>>  zynq_zybo_defconfig: *defconfig
+>>  zynqmp_zcu106_defconfig: *defconfig
+>> -tests.boot.test_atf.TestATFAllwinner: *runtime_test
+>> -tests.boot.test_atf.TestATFMarvell: *runtime_test
+>> -tests.boot.test_atf.TestATFVexpress: *runtime_test
+> [snip]
 > 
-> the parent LLVM software needs to be available,
-> apparently for a few tools. Its downloaded currently,
-> as depending on host-llvm means this package has to be
-> built - which takes forever.
+> You forgot to re-run 'make .gitlab-ci.yml'.
+> We don't want to remove the test list.
 
-By now, llvm package is merged and updated to llvm 7.0.
-Can you try building libcxx as a standalone package (LIBCXX_STANDALONE_BUILD=ON)
-using the llvm package provided by Buildroot ?
-
-Also libcxx and libcxxabi should be packaged separately.
-
-> 
-> In the future, a option could potentially compile
-> all C++ Packages with this library.
-> 
-> -   depend on threading library if available?
->     (supposedly builds without)
-> -   proper integration in toolchain step
-> -   use libc++ for remaining packages
-
-Also you can take a look at the report from the FOSDEM meeting and the final
-report from Valentin:
-https://elinux.org/Buildroot:DeveloperDaysFOSDEM2018#LLVM.2FClang
-http://www.linuxembedded.fr/2018/07/llvmclang-integration-into-buildroot
+ Oops. Actually I didn't forget, but it failed (silently) to generate correctly
+because nsoe2 wasn't installed. So I've submitted a patch that errors out if the
+listing fails.
 
 > 
-> Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> ---
->  package/Config.in                             |   1 +
->  package/libcxx/Config.in                      |  29 +++++
->  package/libcxx/g++-libc++.in                  |  16 +++
->  package/libcxx/libcxx.hash                    |   7 ++
->  package/libcxx/libcxx.mk                      | 108 ++++++++++++++++++
->  ...i_fix_find_fpath_when_crosscompiling.patch |  27 +++++
->  6 files changed, 188 insertions(+)
->  create mode 100644 package/libcxx/Config.in
->  create mode 100644 package/libcxx/g++-libc++.in
->  create mode 100644 package/libcxx/libcxx.hash
->  create mode 100644 package/libcxx/libcxx.mk
->  create mode 100644 package/libcxx/libcxxabi_fix_find_fpath_when_crosscompiling.patch
+>> +++ b/.gitlab-ci.yml.in
+>> @@ -62,6 +62,11 @@ check-package:
+>>              - output/build/packages-file-list.txt
+>>  
+>>  .runtime_test: &runtime_test
+>> +    # Running the runtime tests for every push is too much, so limit to
+>> +    # explicit triggers through the API.
+>> +    only:
+>> +        - triggers
+>> +        - tags
 > 
-> diff --git a/package/Config.in b/package/Config.in
-> index fcabed4fde..cda825612a 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1565,6 +1565,7 @@ menu "Other"
->  	source "package/lightning/Config.in"
->  	source "package/linux-pam/Config.in"
->  	source "package/llvm/Config.in"
-> +	source "package/libcxx/Config.in"
->  if BR2_PACKAGE_LINUX_PAM
->  comment "linux-pam plugins"
->  	source "package/libpam-radius-auth/Config.in"
-> diff --git a/package/libcxx/Config.in b/package/libcxx/Config.in
-> new file mode 100644
-> index 0000000000..f5ff911b6d
-> --- /dev/null
-> +++ b/package/libcxx/Config.in
-> @@ -0,0 +1,29 @@
-> +config BR2_PACKAGE_LIBCXX
-> +	bool "libc++"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-
-C++ dependency is not enough for C++11 dependency, you should add a dependency
-on gcc >= 4.8 (at least).
-Also add a dependency on llvm supported architectures.
-
-> +	help
-> +	  libc++ is a new implementation of the C++ standard library,
-> +	  targeting C++11 (and newer). Part of the LLVM Project.
-> +
-> +	  The LLVM Project is a collection of modular and reusable
-> +	  compiler and toolchain technologies.
-> +
-> +if BR2_PACKAGE_LIBCXX
-> +choice
-> +	prompt "libc++ abi support"
-> +	default BR2_PACKAGE_LIBCXX_ABI_SUPCXX
-> +	help
-> +	  Select the c++ abi support: libsupc++ (from gcc toolchain)
-> +	  or libc++-abi (from llvm).
-> +
-> +config BR2_PACKAGE_LIBCXX_ABI_SUPCXX
-> +	bool "libsupc++"
-> +
-> +config BR2_PACKAGE_LIBCXX_ABI_CXXABI
-> +	bool "libc++-abi"
-> +
-> +endchoice
-> +endif
-> +
-> +comment "libc++ needs a toolchain w/ C++"
-> +	depends on !BR2_INSTALL_LIBSTDCPP
-> diff --git a/package/libcxx/g++-libc++.in b/package/libcxx/g++-libc++.in
-
-What's the purpose of this script ?
-
-> new file mode 100644
-> index 0000000000..db6d050a7c
-> --- /dev/null
-> +++ b/package/libcxx/g++-libc++.in
-> @@ -0,0 +1,16 @@
-> +#!/bin/sh
-> +SCRIPTPATH=$(readlink -f "$(dirname "$0")")
-> +cxx_libs="-lc++ @link_abi@"
-> +c_libs="-lc @link_comrt@"
-> +pthread_libs="-lpthread $c_libs"
-> +
-> +libs="$cxx_libs $c_libs"
-> +
-> +for i; do
-> +    if test x"$i" = x"-pthread"; then
-> +        libs="$libs $pthread_libs"
-> +        break
-> +    fi
-> +done
-> +
-> +exec "$SCRIPTPATH"/@TARGET_CROSS at g++ -nodefaultlibs -nostdinc++ $libs -isystem"$SCRIPTPATH"/../../staging/usr/include/c++/v1 "$@"
-> diff --git a/package/libcxx/libcxx.hash b/package/libcxx/libcxx.hash
-> new file mode 100644
-> index 0000000000..7d384365b6
-> --- /dev/null
-> +++ b/package/libcxx/libcxx.hash
-> @@ -0,0 +1,7 @@
-> +# locally calculated
-> +sha256  1ff53c915b4e761ef400b803f07261ade637b0c269d99569f18040f3dcee4408  llvm-6.0.0.src.tar.xz
-> +sha256  70931a87bde9d358af6cb7869e7535ec6b015f7e6df64def6d2ecdd954040dd9  libcxx-6.0.0.src.tar.xz
-> +sha256  91c6d9c5426306ce28d0627d6a4448e7d164d6a3f64b01cb1d196003b16d641b  libcxxabi-6.0.0.src.tar.xz
-> +
-> +
-> +sha256  c1938c0e9e90639d1e8f5a7f6bebaab83a3642e0ee44295a4c69934686d0bda8  LICENSE.TXT
-> diff --git a/package/libcxx/libcxx.mk b/package/libcxx/libcxx.mk
-> new file mode 100644
-> index 0000000000..9d9efc90b0
-> --- /dev/null
-> +++ b/package/libcxx/libcxx.mk
-> @@ -0,0 +1,108 @@
-> +################################################################################
-> +#
-> +# libc++
-> +#
-> +################################################################################
-> +
-> +LIBCXX_VERSION = 6.0.0
-
-Can you try with 7.0.0 version ?
-
-> +LIBCXX_SITE = http://llvm.org/releases/$(LIBCXX_VERSION)
-> +LIBCXX_SOURCE = llvm-$(LIBCXX_VERSION).src.tar.xz
-> +LIBCXX_LICENSE = MIT
-> +#LIBCXX_LICENSE_FILES = COPYRIGHT
-> +LIBCXX_SUPPORTS_IN_SOURCE_BUILD = NO
-> +LIBCXX_INSTALL_STAGING = YES
-> +
-> +LIBCXX_EXTRA_DOWNLOADS = $(patsubst %,$(LIBCXX_SITE)/%-$(LIBCXX_VERSION).src.tar.xz,libcxx libcxxabi)
-
-Can you try to package libcxx and libcxxabi separately ?
-
-> +
-> +define LIBCXX_EXTRA_EXTRACT
-> +	$(foreach arch,$(LIBCXX_EXTRA_DOWNLOADS), \
-> +		TDIR=projects/$(patsubst $(LIBCXX_SITE)/%-$(LIBCXX_VERSION).src.tar.xz,%,$(arch)); \
-> +		mkdir -p $(@D)/$$TDIR && \
-> +		$(call suitable-extractor,$(notdir $(arch))) $(LIBCXX_DL_DIR)/$(notdir $(arch)) | \
-> +		$(TAR) --strip-components=1 -C $(@D)/$$TDIR $(TAR_OPTIONS) -
-> +	)
-> +endef> +
-> +LIBCXX_POST_EXTRACT_HOOKS += LIBCXX_EXTRA_EXTRACT
-> +
-> +# Before libcxx is configured, we must have the first stage
-> +# cross-compiler and the clibrary
-> +LIBCXX_DEPENDENCIES = host-gcc-initial
-> +
-> +ifeq ($(BR2_PACKAGE_LIBCXX_ABI_CXXABI),y)
-> +_LIBCXX_ABI_TARGET = cxxabi
-> +endif
-> +
-> +_LIBCXX_ABI-$(BR2_PACKAGE_LIBCXX_ABI_CXXABI) = libcxxabi
-> +_LIBCXX_ABI-$(BR2_PACKAGE_LIBCXX_ABI_SUPCXX) = libsupc++
-> +
-> +_LIBCXX_ABI_LINK-$(BR2_PACKAGE_LIBCXX_ABI_CXXABI) = c++abi
-> +_LIBCXX_ABI_LINK-$(BR2_PACKAGE_LIBCXX_ABI_SUPCXX) = supc++
-> +
-> +LIBCXX_MAKE_OPTS = $(_LIBCXX_ABI_TARGET) cxx
-> +
-> +LIBCXX_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) $(addprefix install-,$(_LIBCXX_ABI_TARGET) cxx)
-> +
-> +LIBCXX_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) $(addprefix install-,$(_LIBCXX_ABI_TARGET) cxx)
-> +
-> +
-> +#LIBCXXABI_SYSROOT LIBCXX_SYSROOT
-> +# TODO: potentially depend on threading library?
-> +# allow using gccs libsupc++
-> +# consider whether its better to statically link libc++-abi
-> +# USe this library to build the remaining C++ packages?
-> +
-> +# llvm does not recommend using this
-> +LIBCXX_CONF_OPTS += -DBUILD_SHARED_LIBS:BOOL=OFF
-> +
-> +LIBCXX_CONF_OPTS += -DLIBCXXABI_INCLUDE_TESTS=OFF -DLIBCXXABI_ENABLE_ASSERTIONS=OFF -DLIBCXXABI_ENABLE_NEW_DELETE_DEFINITIONS=OFF -DLIBCXX_ENABLE_NEW_DELETE_DEFINITIONS=ON
-> +
-> +ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
-> +LIBCXX_CONF_OPTS += -DLIBCXX_HAS_MUSL_LIBC:BOOL=ON
-> +endif
-> +
-> +ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-> +LIBCXX_CONF_OPTS += -DLIBCXXABI_ENABLE_SHARED:BOOL=ON -DLIBCXX_ENABLE_SHARED:BOOL=ON
-> +else
-> +LIBCXX_CONF_OPTS += -DLIBCXXABI_ENABLE_SHARED:BOOL=OFF -DLIBCXX_ENABLE_SHARED:BOOL=OFF
-> +endif
-> +
-> +ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-> +LIBCXX_CONF_OPTS += -DLIBCXXABI_ENABLE_STATIC:BOOL=ON -DLIBCXX_ENABLE_STATIC:BOOL=ON
-> +else
-> +LIBCXX_CONF_OPTS += -DLIBCXXABI_ENABLE_STATIC:BOOL=OFF -DLIBCXX_ENABLE_STATIC:BOOL=OFF
-> +endif
-> +
-> +LIBCXX_CONF_OPTS += -DLIBCXX_ENABLE_ABI_LINKER_SCRIPT=ON
-> +
-> +#LIBCXX_CONF_OPTS += -DLLVM_PATH:PATH=$(@D)/llvm
-> +
-> +#LIBCXX_CONF_OPTS += -DLIBCXX_CXX_ABI:STRING=default
-> +
-> +# libc++ needs to be massaged to pick header and libs
-> +LIBCXX_CONF_OPTS += -DLIBCXX_CXX_ABI:STRING=$(_LIBCXX_ABI-y)
-> +
-> +ifneq ($(_LIBCXX_ABI_TARGET),)
-> +LIBCXX_CONF_OPTS += -DLIBCXX_CXX_ABI_INCLUDE_PATHS:PATH=$(@D)/projects/libcxxabi/include \
-> +					-DLIBCXX_CXX_ABI_LIBRARY_PATH:PATH=../../../lib
-> +endif
-> +
-> +
-> +#LIBCXX_CONF_OPTS += -DLIBCXX_INCLUDE_BENCHMARKS:BOOL=OFF
-> +#LIBCXX_CONF_OPTS += -DLIBCXX_INCLUDE_DOCS:BOOL=OFF
-> +#LIBCXX_CONF_OPTS += -DLIBCXX_INCLUDE_TESTS:BOOL=OFF
-> +
-> +cxx_libs="-lc++ @link_abi@"
-> +c_libs="-lc @link_comrt@"
-> +
-> +# Create a g++ wrapper to add the necessary aguments for building with libc++
-> +define LIBCXX_CREATE_GXXWRAPPER_TARGET
-> +	sed -e 's, at TARGET_CROSS@,$(notdir $(TARGET_CROSS)),g' \
-> +	  -e 's, at link_abi@,$(addprefix -l,$(_LIBCXX_ABI_LINK-y)),g' \
-> +	  -e 's, at link_comrt@,-lgcc_s,g' \
-> +	  $(LIBCXX_PKGDIR)g++-libc++.in > $(LIBCXX_BUILDDIR)gxxwrap.tmp
-> +	install -D -m755 $(LIBCXX_BUILDDIR)gxxwrap.tmp $(TARGET_CROSS)g++-libc++
-> +endef
-> +LIBCXX_POST_INSTALL_TARGET_HOOKS = LIBCXX_CREATE_GXXWRAPPER_TARGET
-> +
-> +$(eval $(cmake-package))
-> diff --git a/package/libcxx/libcxxabi_fix_find_fpath_when_crosscompiling.patch b/package/libcxx/libcxxabi_fix_find_fpath_when_crosscompiling.patch
-> new file mode 100644
-> index 0000000000..2fd95178f7
-> --- /dev/null
-> +++ b/package/libcxx/libcxxabi_fix_find_fpath_when_crosscompiling.patch
-
-Please, provide a patch generated with git format-patch with a commit log,
-upstream status and you SoB line.
-
-I'll mark you patch "Change Requested" in the patchwork, please send an updated
-version.
-
-Best regards,
-Romain
-
-
-> @@ -0,0 +1,27 @@
-> +diff -burN libcxx-6.0.0.org/projects/libcxxabi/CMakeLists.txt libcxx-6.0.0/projects/libcxxabi/CMakeLists.txt
-> +--- libcxx-6.0.0.org/projects/libcxxabi/CMakeLists.txt	2018-06-12 14:26:05.184675501 +0200
-> ++++ libcxx-6.0.0/projects/libcxxabi/CMakeLists.txt	2018-06-12 14:27:05.553370290 +0200
-> +@@ -115,6 +115,7 @@
-> +         ${CMAKE_BINARY_DIR}/${LIBCXXABI_LIBCXX_INCLUDES}
-> +         ${LIBCXXABI_LIBCXX_INCLUDE_DIRS}
-> +         ${LLVM_INCLUDE_DIR}/c++/v1
-> ++  NO_CMAKE_FIND_ROOT_PATH
-> +   )
-> +
-> + set(LIBCXXABI_LIBCXX_INCLUDES "${LIBCXXABI_LIBCXX_INCLUDES}" CACHE PATH
-> +@@ -127,6 +128,7 @@
-> +         ${LIBCXXABI_LIBCXX_INCLUDES}/../
-> +         ${LIBCXXABI_LIBCXX_SRC_DIRS}
-> +   NO_DEFAULT_PATH
-> ++  NO_CMAKE_FIND_ROOT_PATH
-> +   )
-> +
-> + if (LIBCXXABI_LIBCXX_PATH STREQUAL "LIBCXXABI_LIBCXX_PATH-NOTFOUND")
-> +@@ -425,6 +427,7 @@
-> +           ${LLVM_MAIN_SRC_DIR}/projects/libunwind/include
-> +           ${LLVM_MAIN_SRC_DIR}/runtimes/libunwind/include
-> +     NO_DEFAULT_PATH
-> ++    NO_CMAKE_FIND_ROOT_PATH
-> +   )
-> +
-> +   if (LIBCXXABI_LIBUNWIND_INCLUDES_INTERNAL STREQUAL "LIBCXXABI_LIBUNWIND_INCLUDES_INTERNAL-NOTFOUND")
-> --
-> 2.17.1
+> We could also allow a regexp on the branch name to trigger it:
+>          - /^.*-runtime_test$/
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+> Using the same commit, I pushed 2 branches:
+> branch name: gitlabci-triggers, #jobs = 4
+> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/33723520
+> branch name: gitlabci-triggers-runtime_test, #jobs = 72
+> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/33723541
+
+ Looks nice, but that's really material for a separate patch (and probably
+should be done for defconfigs too then).
+
+ Would it be possible to also define branches for a specific test or defconfig?
+
+ Could you take care of this?
+
+ Regards,
+ Arnout
