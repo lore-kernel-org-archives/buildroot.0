@@ -1,35 +1,65 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Sun, 21 Oct 2018 17:46:50 -0200 (BRST)
-Subject: [Buildroot] [PATCH] skeleton-init-common: improve /etc/hosts
- generation
-In-Reply-To: <b07b2dbf-f9a0-4dfa-31eb-c294e3c55a9f@mind.be>
-References: <20181019133802.19627-1-casantos@datacom.com.br>
- <b07b2dbf-f9a0-4dfa-31eb-c294e3c55a9f@mind.be>
-Message-ID: <966729012.4094656.1540151210878.JavaMail.zimbra@datacom.com.br>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 21 Oct 2018 22:05:10 +0200
+Subject: [Buildroot] [PATCH 1/1] opencv3: fix build on sparc64
+Message-ID: <20181021200510.16171-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Arnout Vandecappelle" <arnout@mind.be>
-> To: "DATACOM" <casantos@datacom.com.br>, "buildroot" <buildroot@buildroot.org>
-> Sent: Saturday, October 20, 2018 9:09:57 AM
-> Subject: Re: [Buildroot] [PATCH] skeleton-init-common: improve /etc/hosts generation
+Fixes:
+ - http://autobuild.buildroot.org/results/d27fa3eb3ea600698571837981a3a15d556724ea
 
-> On 19/10/2018 14:38, Carlos Santos wrote:
->> If BR2_TARGET_GENERIC_HOSTNAME contains a FQDN, strip the host part and
->> add it as an alias, e.g.
->> 
->>     127.0.1.1	hostname.example.com hostname
->> 
->> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-> 
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...otobuf-fix-compilation-issue-on-s390.patch | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/opencv3/0001-3rdparty-protobuf-fix-compilation-issue-on-s390.patch
 
-Warning: superseded by https://patchwork.ozlabs.org/patch/986832/
-
+diff --git a/package/opencv3/0001-3rdparty-protobuf-fix-compilation-issue-on-s390.patch b/package/opencv3/0001-3rdparty-protobuf-fix-compilation-issue-on-s390.patch
+new file mode 100644
+index 0000000000..7743eae533
+--- /dev/null
++++ b/package/opencv3/0001-3rdparty-protobuf-fix-compilation-issue-on-s390.patch
+@@ -0,0 +1,38 @@
++From ac9ec55b37b2dd3b224144b4f20857a80719b750 Mon Sep 17 00:00:00 2001
++From: Loic Devulder <ldevulder@suse.de>
++Date: Fri, 28 Sep 2018 15:33:18 +0200
++Subject: [PATCH] 3rdparty/protobuf: fix compilation issue on s390
++
++This commit fixes an issue while trying to compile
++on s390x architecture.
++
++This is simply a backport of a fixe already applied
++in official protobuf code:
++- https://github.com/protocolbuffers/protobuf/pull/3955
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/opencv/opencv/commit/ac9ec55b37b2dd3b224144b4f20857a80719b750]
++---
++ .../protobuf/stubs/atomicops_internals_generic_gcc.h      | 8 ++++++++
++ 1 file changed, 8 insertions(+)
++
++diff --git a/3rdparty/protobuf/src/google/protobuf/stubs/atomicops_internals_generic_gcc.h b/3rdparty/protobuf/src/google/protobuf/stubs/atomicops_internals_generic_gcc.h
++index 0b0b06ce6cf..075c406abab 100644
++--- a/3rdparty/protobuf/src/google/protobuf/stubs/atomicops_internals_generic_gcc.h
+++++ b/3rdparty/protobuf/src/google/protobuf/stubs/atomicops_internals_generic_gcc.h
++@@ -146,6 +146,14 @@ inline Atomic64 NoBarrier_Load(volatile const Atomic64* ptr) {
++   return __atomic_load_n(ptr, __ATOMIC_RELAXED);
++ }
++ 
+++inline Atomic64 Release_CompareAndSwap(volatile Atomic64* ptr,
+++                                       Atomic64 old_value,
+++                                       Atomic64 new_value) {
+++  __atomic_compare_exchange_n(ptr, &old_value, new_value, false,
+++                              __ATOMIC_RELEASE, __ATOMIC_ACQUIRE);
+++  return old_value;
+++}
+++
++ #endif // defined(__LP64__)
++ 
++ }  // namespace internal
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?Marched towards the enemy, spear upright, armed with the certainty
-that only the ignorant can have.? ? Epitaph of a volunteer
+2.17.1
