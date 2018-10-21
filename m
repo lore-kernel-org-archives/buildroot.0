@@ -1,33 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Oct 2018 19:44:01 +0200
-Subject: [Buildroot] [PATCH 2/2] support/testing: fix TestATFMarvell
- test case
-In-Reply-To: <20181014132559.2262-2-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Sun, 14 Oct 2018 15:25:59 +0200")
-References: <20181014132559.2262-1-thomas.petazzoni@bootlin.com>
- <20181014132559.2262-2-thomas.petazzoni@bootlin.com>
-Message-ID: <877eib5h5q.fsf@dell.be.48ers.dk>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Sun, 21 Oct 2018 19:46:13 +0200
+Subject: [Buildroot] [PATCH] merge_config.sh: Fix finding redundant
+ config mechanism
+In-Reply-To: <CANQCQpZ-c3mzU6vrWoC5gBi=xVyRagaNy6VgnU2YfRXtreoEJQ@mail.gmail.com>
+References: <1539989903-19803-1-git-send-email-Afshin.Nasser@gmail.com>
+ <CANQCQpaxMvn2OEfP0aztbFRk0KTOTnt8nugZ-gwKL7oML1eQUw@mail.gmail.com>
+ <7189ed78-6481-0290-f13b-88e3c1008937@mind.be>
+ <20181021172707.GA19294@x230>
+ <CANQCQpZ-c3mzU6vrWoC5gBi=xVyRagaNy6VgnU2YfRXtreoEJQ@mail.gmail.com>
+Message-ID: <20181021174611.GA25417@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Hi Matthew, Angelo,
 
- > This test case uses a too old U-Boot version, which is affected by the
- > infamous libfdt header conflict issue. We update U-Boot and ATF to
- > what is used in the current version of
- > solidrun_macchiatobin_mainline_defconfig, for which the problem no
- > longer exists.
+> Petr,
 
- > Fixes:
+> On Sun, Oct 21, 2018 at 6:27 PM Petr Vorel <petr.vorel@gmail.com> wrote:
 
- >   https://gitlab.com/buildroot.org/buildroot/-/jobs/107860312
+> > Hi,
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> > > > The merge_config.sh is used for a couple scenarios
+> > > >  - Appending kconfigs together (CONFIG_*)
 
-Committed to 2018.08.x, thanks.
+> > >  ... I forgot about this one. Indeed, the buildroot merge_config.sh script is
+> > > used in pkg-kconfig.mk to merge kernel configs. Ideally we should change that to
+> > > use the package's merge_config.sh script. However, the location of that script
+> > > may vary, or it may even be missing...
 
--- 
-Bye, Peter Korsgaard
+> > > >  - Buildroot cfgs for runtime tests (BR2_*)
+> > > >  - As a tool by users to merge together Buildroot configs
+
+> > > > I'm not sure of the cleanest approach to support both
+> > > >  - you could detect if the file is one or the other and adjust the regex
+> > > >  - do the inverse and build a list of lines that are not comments
+
+> > >  I think Angelo's patch is the best approach after all.
+> > +1. I also think keep using our merge_config.sh with -b switch from Angelo's
+> > patch [1] is the way.
+
+> Do you think you'll be able to provide an updated patch based on Angelo's work?
+Matthew, sure I can have look into it. Unless Angelo is planning to finish it.
+
+Kind regards,
+Petr
