@@ -1,81 +1,39 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 21 Oct 2018 12:23:05 +0100
-Subject: [Buildroot] [PATCH] .gitlab-ci.yml: do runtime tests only on
- explicit trigger
-In-Reply-To: <5bcbea684f4e4_3ef22b2051d8a8b4760e3@ultri5.mail>
-References: <20181020224254.5895-1-arnout@mind.be>
- <5bcbea684f4e4_3ef22b2051d8a8b4760e3@ultri5.mail>
-Message-ID: <277d5a7f-c605-af13-c004-63259faa649a@mind.be>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Sun, 21 Oct 2018 12:53:47 +0100
+Subject: [Buildroot] [PATCH v4 1/2] core/legal-info: Change order of
+ legal-manifest parameters
+In-Reply-To: <27c79fec-f680-6a5f-4fad-601be5ecf700@lucaceresoli.net>
+References: <20180822124014.23046-1-sojkam1@fel.cvut.cz>
+ <27c79fec-f680-6a5f-4fad-601be5ecf700@lucaceresoli.net>
+Message-ID: <8b318840-c873-06d6-4fc0-1edf4720f927@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Michal,
 
-
-On 21/10/2018 03:54, Ricardo Martincoski wrote:
-> Hello,
+On 21/10/18 12:27, Luca Ceresoli wrote:
+> Hi,
 > 
-> On Sat, Oct 20, 2018 at 07:42 PM, Arnout Vandecappelle (Essensium/Mind) wrote:
+> On 22/08/18 14:40, Michal Sojka wrote:
+>> From: Michal Sojka <sojka@merica.cz>
+>>
+>> The last parameter {HOST|TARGET} is now first. With this change,
+>> adding new columns to the legal manifest file (as in the next commit)
+>> will be slightly easier to review.
+>>
+>> Signed-off-by: Michal Sojka <sojka@merica.cz>
+>> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > 
-> [snip]
->> +++ b/.gitlab-ci.yml
->> @@ -62,6 +62,11 @@ check-package:
->>              - output/build/packages-file-list.txt
->>  
->>  .runtime_test: &runtime_test
->> +    # Running the runtime tests for every push is too much, so limit to
->> +    # explicit triggers through the API.
->> +    only:
->> +        - triggers
->> +        - tags
->>      # Keep build directories so the rootfs can be an artifact of the job. The
->>      # runner will clean up those files for us.
->>      # Multiply every emulator timeout by 10 to avoid sporadic failures in
->> @@ -261,71 +266,3 @@ zynq_zc706_defconfig: *defconfig
->>  zynq_zed_defconfig: *defconfig
->>  zynq_zybo_defconfig: *defconfig
->>  zynqmp_zcu106_defconfig: *defconfig
->> -tests.boot.test_atf.TestATFAllwinner: *runtime_test
->> -tests.boot.test_atf.TestATFMarvell: *runtime_test
->> -tests.boot.test_atf.TestATFVexpress: *runtime_test
-> [snip]
-> 
-> You forgot to re-run 'make .gitlab-ci.yml'.
-> We don't want to remove the test list.
+> Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
 
- Oops. Actually I didn't forget, but it failed (silently) to generate correctly
-because nsoe2 wasn't installed. So I've submitted a patch that errors out if the
-listing fails.
+...except the patch does not apply on current master. Since the conflict
+is trivial and unrelated, and I already fixed it for my testing, I'm
+sending the fixed pathces as v5.
 
-> 
->> +++ b/.gitlab-ci.yml.in
->> @@ -62,6 +62,11 @@ check-package:
->>              - output/build/packages-file-list.txt
->>  
->>  .runtime_test: &runtime_test
->> +    # Running the runtime tests for every push is too much, so limit to
->> +    # explicit triggers through the API.
->> +    only:
->> +        - triggers
->> +        - tags
-> 
-> We could also allow a regexp on the branch name to trigger it:
->          - /^.*-runtime_test$/
-> 
-> Using the same commit, I pushed 2 branches:
-> branch name: gitlabci-triggers, #jobs = 4
-> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/33723520
-> branch name: gitlabci-triggers-runtime_test, #jobs = 72
-> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/33723541
-
- Looks nice, but that's really material for a separate patch (and probably
-should be done for defconfigs too then).
-
- Would it be possible to also define branches for a specific test or defconfig?
-
- Could you take care of this?
-
- Regards,
- Arnout
+-- 
+Luca
