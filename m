@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Oct 2018 14:51:52 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] leveldb: fix parallel
+Date: Sun, 21 Oct 2018 14:52:37 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] leveldb: fix parallel
  build
-Message-ID: <20181021125017.4E2358820A@busybox.osuosl.org>
+Message-ID: <20181021125103.4765A8820F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c390b86d0257030c39b0e3c380595b0c8201481
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ac7b4c7e1044154e3e45f040bd32d81925f70775
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Build of leveldb sometimes fails on:
 Fatal error: can't create out-shared/db/db_bench.o: No such file or directory
