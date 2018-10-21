@@ -1,8 +1,7 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 21 Oct 2018 02:01:37 -0300
-Subject: [Buildroot] [RFC] testing: add python-crossbar tests
-References: <CALFsTFVpjgYWNr=VoeT3Wj+DjYtFdUNNNw9_Z2COzQMrpxQxWQ@mail.gmail.com>
-Message-ID: <5bcc083188f1f_56b83f8d16040a3c5959@ultri5.mail>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 21 Oct 2018 08:00:25 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-10-20
+Message-ID: <20181021060025.BA9AB20890@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,58 +10,72 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, Oct 20, 2018 at 12:49 PM, Asaf Kahlon wrote:
+Build statistics for 2018-10-20
+===============================
 
-> I just remembered I've submitted a patch for a new host package long
-> time ago: http://patchwork.ozlabs.org/patch/896368/
-> Yegor mentioned that maybe it can help to reduce python-crossbar
-> startup time on the tests.
-> Thomas/Yegor, I see the patch was reviewed by Yegor but wasn't
-> applied. If there's something missing, please let me know.
-> I hope it will help.
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  21 |   1 |   0 |  22 |
+   2018.08.x |  26 |   0 |   0 |  26 |
+      master | 192 |  19 |   0 | 211 |
 
-I am not against that patch but I am afraid it won't fix the scenario tested in
-this patch.
+Results for branch '2018.02.x'
+==============================
 
-Turns out that the qemu image we use don't have enough entropy at boot time.
+Classification of failures by reason
+------------------------------------
 
-I confirmed by running this command on the qemu:
-# cat /proc/sys/kernel/random/entropy_avail
-0
-
-Because of this, crossbar -> pynacl -> libsodium hangs waiting for /dev/random,
-see [1].
-
-We could update the default kernel image used by the test infra (today 3.11.0),
-or even use a custom one (4.14.x for instance) compiled in this test case, to
-get the getrandom syscall. It would improve a lot the startup time but we would
-yet need to use a timeout of a few minutes.
-
-The most elegant solution IMO is to add haveged to the image built for this test
-case by the test infra. This is what people with a real target with low entropy
-probably would use, I guess. There is no need to update the kernel this way.
-
-I have locally a v2 of this test case that I will send, see [2] for the test
-passing on the current master, but before I send it I will wait for feedback in
-another patch [3].
-This is the changelog for v2:
- - call 'crossbar version' instead of 'python -m "crossbar version"'
-   because it is not supported anymore, giving this message:
-   /usr/bin/python3: No module named crossbar.__main__; 'crossbar' is a package and cannot be directly executed
- - add haveged to the target to provide enough entropy, avoiding
-   hanging forever (on our current kernel 3.11.0 default image) or for
-   a long time (when the default kernel image is upgraded to a newer
-   kernel);
- - remove test for python 2 because upstream dropped support;
- - do not pass timeout parameter since version_test is now called once;
- - rewrap commit message to 72
- - update code-style (we adopted flake8 after v1 submission)
- - update .gitlab-ci.yml
-
-[1] https://github.com/pyca/pynacl/issues/327
-[2] https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/110669652
-[3] http://patchwork.ozlabs.org/patch/984425/
+                  boost-1.66.0 | 1 
 
 
-Regards,
-Ricardo
+Detail of failures
+------------------
+
+     powerpc |                   boost-1.66.0 | NOK | http://autobuild.buildroot.net/results/4022fb51042296dfff840e2c38f9f67dd7c4afa2 |     
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+         host-cargo-bin-0.30.0 | 6 
+               nfs-utils-1.3.3 | 2 
+                  cc-tool-0.26 | 1 
+      docker-containerd-v1.1.3 | 1 
+        ltp-testsuite-20180926 | 1 
+                   luvi-v2.8.0 | 1 
+                 minizip-2.5.3 | 1 
+mjpg-streamer-75c6c4a7809c7... | 1 
+               postgresql-10.5 | 1 
+           python-numpy-1.15.1 | 1 
+                   qemu-2.12.1 | 1 
+                qt5base-5.11.2 | 1 
+    trace-cmd-trace-cmd-v2.6.1 | 1 
+
+
+Detail of failures
+------------------
+
+     powerpc |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/88a8aacbd090d08583a2785bdde9a166ba4ebe02 |     
+      x86_64 |       docker-containerd-v1.1.3 | NOK | http://autobuild.buildroot.net/results/ee0eeea3e4990bbbd0bc393b03c418962c37a251 |     
+     powerpc |          host-cargo-bin-0.30.0 | NOK | http://autobuild.buildroot.net/results/11848e6feaaafca03f5819d7167c0e1bd5c09030 |     
+       nios2 |          host-cargo-bin-0.30.0 | NOK | http://autobuild.buildroot.net/results/a78f9134dfa6501f94b4e3b66882868dfc3c0264 |     
+        m68k |          host-cargo-bin-0.30.0 | NOK | http://autobuild.buildroot.net/results/c0e433fd828cd3d8d94b6a81ddb2c6c515b93fdb |     
+     powerpc |          host-cargo-bin-0.30.0 | NOK | http://autobuild.buildroot.net/results/86898050574b5ebb59bea253561b83a91f1b57ae |     
+      xtensa |          host-cargo-bin-0.30.0 | NOK | http://autobuild.buildroot.net/results/7a8d3995d54b7eb776f0afd319f27d1be5a4083c |     
+microblazeel |          host-cargo-bin-0.30.0 | NOK | http://autobuild.buildroot.net/results/501327e6688be3f266925e633551c898a7cf42a3 |     
+         arm |         ltp-testsuite-20180926 | NOK | http://autobuild.buildroot.net/results/55c642eec71aab3d737415c51b46251557db9ba1 |     
+         arm |                    luvi-v2.8.0 | NOK | http://autobuild.buildroot.net/results/d012b2621f9ed320b0c1a80a067fb165d89ecf84 |     
+         arm |                  minizip-2.5.3 | NOK | http://autobuild.buildroot.net/results/e623f003dec4074b3a191f62169c287704bf73ae |     
+     powerpc | mjpg-streamer-75c6c4a7809c7... | NOK | http://autobuild.buildroot.net/results/4f8dc7520ee692c665167fda69dc3af66263008f |     
+         arm |                nfs-utils-1.3.3 | NOK | http://autobuild.buildroot.net/results/6796c96a355071600946eb3ae02b32303ea08632 | ORPH
+         arm |                nfs-utils-1.3.3 | NOK | http://autobuild.buildroot.net/results/6f184db385ed29f4b6975210bfb7e62cae300855 | ORPH
+     riscv64 |                postgresql-10.5 | NOK | http://autobuild.buildroot.net/results/deebc4b8f615e1216279d6587e91f5654da2ad68 |     
+         arm |            python-numpy-1.15.1 | NOK | http://autobuild.buildroot.net/results/55d5017bfa35c3fc09628f0b359cacd1386a6518 |     
+        i586 |                    qemu-2.12.1 | NOK | http://autobuild.buildroot.net/results/09fff59a5c6da4f36fe2bca6c42fa6356485466b |     
+  aarch64_be |                 qt5base-5.11.2 | NOK | http://autobuild.buildroot.net/results/b568cf1115f0edddcfb179161e9aeb265df05e66 |     
+       sparc |     trace-cmd-trace-cmd-v2.6.1 | NOK | http://autobuild.buildroot.net/results/739f5a549d4f3422599576e0bef931f0115c5d06 |     
+
+
+-- 
+http://autobuild.buildroot.net
