@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 22 Oct 2018 00:16:50 +0100
-Subject: [Buildroot] [PATCH v2] qt5wayland: compositor depends on
- qt5base opengl
-In-Reply-To: <1518540433-13500-1-git-send-email-joshua.henderson@microchip.com>
-References: <1518540433-13500-1-git-send-email-joshua.henderson@microchip.com>
-Message-ID: <cd93cb2a-c654-1200-a6f7-80df90612764@mind.be>
+Date: Mon, 22 Oct 2018 00:18:24 +0100
+Subject: [Buildroot] [PATCH v3] qt5base: Qt KMS support does not depend on
+ opengl
+In-Reply-To: <1518540366-13393-1-git-send-email-joshua.henderson@microchip.com>
+References: <1518540366-13393-1-git-send-email-joshua.henderson@microchip.com>
+Message-ID: <2357aab6-f2e6-54d4-0e37-63955864e94e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +12,33 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-On 13/02/2018 16:47, Joshua Henderson wrote:
-> When building Qt 5.6.3, the qt5wayland compositor depends on Qt OpenGL support.
-> The compositor API is marked experimental prior to Qt 5.8.  In the latest
-> version of Qt this dependendency on opengl is removed.
+On 13/02/2018 16:46, Joshua Henderson wrote:
+> Qt KMS support should not explicitly depend on the availability of opengl.
+> Don't explicitly disable KMS if opengl is not available and fallback to
+> detecting if libdrm is available before disabling kms.
 >
-> This also removes the qt5wayland dependency on GL support, because this is tied
-> to the compositor API through the BR2_PACKAGE_QT5BASE_OPENGL dependency.
+> The scenario where this is necessary involves using the Qt linuxfb backend
+> "dumb buffer" support via the DRM API. This is new in Qt 5.9 [1] and only
+> requires KMS, but not opengl.
+
+?This sounds like we should handle the Qt 5.6 case specially.
+
+?However, on Qt 5.6, it builds fine with the -kms option, it just ends up not
+being used. That means we have a redundant dependency on libdrm, but that
+doesn't matter that much. Handling the Qt 5.6 case differently would make the
+code quite a bit more complicated.
+
+?Therefore, I explained the above in the commit log an applied to master, thanks.
+
+?Sorry it took so long.
+
+
+?Regards,
+?Arnout
+
+
 >
-> Fixes:
->       http://autobuild.buildroot.net/results/289d9b73d99e29d61c2df9ce228fed3968d89f5c
+> [1] http://doc.qt.io/qt-5/embedded-linux.html#linuxfb
 >
 > Cc: Peter Seiderer <ps.report@gmx.net>
 > Cc: Julien Corjon <corjon.j@ecagroup.com>
@@ -29,66 +46,35 @@ On 13/02/2018 16:47, Joshua Henderson wrote:
 >
 > ---
 >
-> v2:
-> - Due to the compositor API being experimental in Qt 5.6.3, it does not make
->   sense to address this dependency on OpenGL upstream in this version of Qt.
-> - Remove explicit dependency on GL support.
-> - Note that the compositor API is marked as stable starting with Qt 5.8 in help.
-> - Update commit message.
-> ---
->  package/qt5/qt5wayland/Config.in | 12 +++++-------
->  1 file changed, 5 insertions(+), 7 deletions(-)
+> v3:
+> - Reorganize libdrm/egl make condition to be more clear.
 >
-> diff --git a/package/qt5/qt5wayland/Config.in b/package/qt5/qt5wayland/Config.in
-> index 0182d3c..29755cf 100644
-> --- a/package/qt5/qt5wayland/Config.in
-> +++ b/package/qt5/qt5wayland/Config.in
-> @@ -1,10 +1,5 @@
-> -comment "qt5wayland needs an OpenGL-capable backend"
-> -	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-> -	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
-> -
->  config BR2_PACKAGE_QT5WAYLAND
->  	bool "qt5wayland"
-> -	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
->  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative
->  	select BR2_PACKAGE_QT5DECLARATIVE
->  	select BR2_PACKAGE_WAYLAND
-> @@ -18,10 +13,13 @@ config BR2_PACKAGE_QT5WAYLAND
->  
->  if BR2_PACKAGE_QT5WAYLAND
->  
-> +comment "qt5wayland compositor needs Qt OpenGL support"
-> +	depends on !BR2_PACKAGE_QT5BASE_OPENGL && !BR2_PACKAGE_QT5_VERSION_LATEST
+> v2:
+> - If libdrm is configured, make it an explicit dependency.
+> ---
+> package/qt5/qt5base/qt5base.mk | 11 +++++++++--
+> 1 file changed, 9 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+> index b3f9c79..644852d 100644
+> --- a/package/qt5/qt5base/qt5base.mk
+> +++ b/package/qt5/qt5base/qt5base.mk
+> @@ -35,12 +35,19 @@ endif
+> QT5BASE_CONFIGURE_OPTS += $(call qstrip,$(BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS))
+> +ifeq ($(BR2_PACKAGE_LIBDRM),y)
+> +QT5BASE_CONFIGURE_OPTS += -kms
+> +QT5BASE_DEPENDENCIES += libdrm
+> +else
+> +QT5BASE_CONFIGURE_OPTS += -no-kms
+> +endif
 > +
->  config BR2_PACKAGE_QT5WAYLAND_COMPOSITOR
->  	bool "Enable compositor (experimental)"
-
-?Since it is no longer experimental in 5.11, and we assume most people will be
-using the latest version, we can remove the (experimental) bit.
-
-
-> +	depends on BR2_PACKAGE_QT5BASE_OPENGL || BR2_PACKAGE_QT5_VERSION_LATEST
-
-?Wouldn't it make more sense to select opengl? Like:
-
-??? depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_PACKAGE_QT5_VERSION_LATEST
-
-??? select BR2_PACKAGE_QT5BASE_OPENGL if !BR2_PACKAGE_QT5_VERSION_LATEST
-
-
-?Also, you need to keep the comment that was there originally, but now apply it
-to the compositor rather than qt5wayland as a whole. And it should only be shown
-for 5.6.
-
-
-?Regards,
-?Arnout
-
-
->  	help
-> -	  The compositor API is still experimental, and not built by
-> -	  default.
-> +	  The compositor API is stable as of Qt 5.8.
->  
->  endif
+> # Uses libgbm from mesa3d
+> ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
+> -QT5BASE_CONFIGURE_OPTS += -kms -gbm
+> +QT5BASE_CONFIGURE_OPTS += -gbm
+> QT5BASE_DEPENDENCIES += mesa3d
+> else
+> -QT5BASE_CONFIGURE_OPTS += -no-kms
+> +QT5BASE_CONFIGURE_OPTS += -no-gbm
+> endif
+> ifeq ($(BR2_ENABLE_DEBUG),y)
