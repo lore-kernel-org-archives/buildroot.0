@@ -1,49 +1,81 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Oct 2018 14:44:52 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] utils/get-developers: fix
- python 3.x compatibility
-Message-ID: <20181021124402.22774881FE@busybox.osuosl.org>
+Date: Sun, 21 Oct 2018 14:45:05 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] utils/get-developers:
+ make it callable from elsewhere than the toplevel directory
+Message-ID: <20181021124402.2A5C8881FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=feea4715e16906366eb0c9d5b1ba7000a4a4fc9d
+commit: https://git.buildroot.net/buildroot/commit/?id=3f32198bf2db6f867e614caf12d39b6e9e44c662
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-This fixes a syntax error introduced in bcf2ed5cc3.
+get-developers tries to open DEVELOPERS in the current directory, so it
+breaks when calling it from elsewhere than the toplevel Buildroot directory.
 
-Output before the patch:
-    $ ./utils/get-developers outgoing/*
-        File "./utils/get-developers", line 97
-            print dev
-                    ^
-        SyntaxError: Missing parentheses in call to 'print'. Did you mean
-        print(dev)?
+Traceback (most recent call last):
+  File "../utils/get-developers", line 107, in <module>
+    __main__()
+  File "../utils/get-developers", line 26, in __main__
+    devs = getdeveloperlib.parse_developers(os.path.dirname()
+  File "/home/peko/source/buildroot/utils/getdeveloperlib.py", line 161, in parse_developers
+    with open(os.path.join(basepath, "DEVELOPERS"), "r") as f:
+IOError: [Errno 2] No such file or directory: '/home/peko/source/buildroot/output-foo/DEVELOPERS'
 
-Output after the patch:
-    $ ./utils/get-developers outgoing/*
-    git send-email --to buildroot at buildroot.org
+Fix it by instead figuring out where the DEVELOPERS file is relative to the
+location of get-developers (E.G. one level up).
 
-Signed-off-by: Gr??goire Delattre <gregoire.delattre@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8320ad3341b9242eaf82df7a4d4c1a367991ec3d)
+[Arnout:
+  - add realpath to support a symlinked get-developers script;
+  - pass devs_dir argument to check_developers() to support -c in subdir;
+  - convert basepath to absolute path to support -f option.
+]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+(cherry picked from commit 62d5558f76a790d1c1b3a1834f1736dc86b6e34f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/get-developers | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ utils/get-developers     | 6 ++++--
+ utils/getdeveloperlib.py | 2 ++
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/utils/get-developers b/utils/get-developers
-index 9135b41662..ce882e6699 100755
+index ce882e6699..c887938859 100755
 --- a/utils/get-developers
 +++ b/utils/get-developers
-@@ -94,7 +94,7 @@ def __main__():
+@@ -24,7 +24,9 @@ def parse_args():
  
-         if args.email:
-             for dev in matching_devs:
--                print dev
-+                print(dev)
-         else:
-             result = "--to buildroot at buildroot.org"
-             for dev in matching_devs:
+ 
+ def __main__():
+-    devs = getdeveloperlib.parse_developers()
++    # DEVELOPERS is one level up from here
++    devs_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..')
++    devs = getdeveloperlib.parse_developers(devs_dir)
+     if devs is None:
+         sys.exit(1)
+     args = parse_args()
+@@ -50,7 +52,7 @@ def __main__():
+ 
+     # Handle the check action
+     if args.check:
+-        files = getdeveloperlib.check_developers(devs)
++        files = getdeveloperlib.check_developers(devs, devs_dir)
+         for f in files:
+             print(f)
+ 
+diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
+index 2c8d477583..84665520c6 100644
+--- a/utils/getdeveloperlib.py
++++ b/utils/getdeveloperlib.py
+@@ -158,6 +158,8 @@ def parse_developers(basepath=None):
+     linen = 0
+     if basepath is None:
+         basepath = os.getcwd()
++    else:
++        basepath = os.path.abspath(basepath)
+     with open(os.path.join(basepath, "DEVELOPERS"), "r") as f:
+         files = []
+         name = None
