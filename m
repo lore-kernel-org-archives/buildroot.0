@@ -1,112 +1,106 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Sun, 21 Oct 2018 14:26:02 +0100
-Subject: [Buildroot] [PATCH v2 2/2] configs/qemu: add
- qemu_riscv32_virt_defconfig
-In-Reply-To: <20181021130621.17834-2-mark.corbin@embecosm.com>
-References: <20181021130621.17834-1-mark.corbin@embecosm.com>
- <20181021130621.17834-2-mark.corbin@embecosm.com>
-Message-ID: <CANQCQpb2DbgJE3vSJeAVs=iBJCa-U-hOXAgs4x6DCy8geH182g@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 21 Oct 2018 15:26:26 +0200
+Subject: [Buildroot] [RFC] fs: allow passing the image file name to
+ inner-rootfs
+In-Reply-To: <20180622023105.27865-1-casantos@datacom.com.br>
+References: <20180622023105.27865-1-casantos@datacom.com.br>
+Message-ID: <20181021132626.GA23085@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mark,
+Carlos, All,
 
-On Sun, Oct 21, 2018 at 2:07 PM Mark Corbin <mark.corbin@embecosm.com> wrote:
->
-> Add RISC-V 32-bit defconfig for QEMU virt machine.
->
-> Tested with QEMU 2.12.1
->
+On 2018-06-21 23:31 -0300, Carlos Santos spake thusly:
+> Suppose that you want to create a filesystem image containing only the
+> /var/lib subtree. That would something like this on a br2-external:
+[--SNIP--]
+> This can be achieved by passing a third argument to inner-rootfs with
+> the desired file name:
+>     rootfs-var-lib = $(call inner-rootfs,var-lib-$(pkgname),VAR_LIB_$(call UPPERCASE,$(pkgname)),rootfs-var-lib.$(pkgname))
 
-Please add a readme file like the other qemu targets which gives the
-example of the qemu launch line and version last tested.
+We've discussed this patch during the developers days, and we came to
+the conclusion that this should be better done by allowing filesystems
+to provide the name of their output file as a variable, something like:
 
-> Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
+    ROOTFS_FOOBAR_IMAGE_NAME = my-own-filesystem.data
+
+Then the infrastructure would do:
+
+    ROOTFS_$(2)_IMAGE_NAME ?= rootfs.$(1)
+
+    $$(BINARIES_DIR)/$$(ROOTFS_$(2)_IMAGE_NAME): ROOTFS=$(2)
+    $$(BINARIES_DIR)/$$(ROOTFS_$(2)_IMAGE_NAME): FAKEROOT_SCRIPT=$$(ROOTFS_$(2)_DIR)/fakeroot
+    [...and so on...]
+
+Using a variable is more inline with how we handle this kind of
+customisations in Buildrooot, and allows one to continue calling the
+'rootfs' macro instad of the 'rootfs-inner' one (which, as its name
+implies, is an inner macro, aka purely for internal use, not public).
+
+Besides, the commit log was seen as too decorelated from the actual
+change. It is not needed to explain the 'sub-tree-only' case, and just
+state that some filesystems may want to tweak their output name, rather
+than the current scheme.
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 > ---
->  board/qemu/riscv32-virt/linux.config | 23 +++++++++++++++++++++++
->  configs/qemu_riscv32_virt_defconfig  | 24 ++++++++++++++++++++++++
->  2 files changed, 47 insertions(+)
->  create mode 100644 board/qemu/riscv32-virt/linux.config
->  create mode 100644 configs/qemu_riscv32_virt_defconfig
->
-> diff --git a/board/qemu/riscv32-virt/linux.config b/board/qemu/riscv32-virt/linux.config
-> new file mode 100644
-> index 0000000000..c25583f768
-> --- /dev/null
-> +++ b/board/qemu/riscv32-virt/linux.config
-> @@ -0,0 +1,23 @@
-> +CONFIG_ARCH_RV32I=y
-> +CONFIG_SMP=y
-> +CONFIG_NR_CPUS=8
-> +CONFIG_PCI=y
-> +CONFIG_SYSVIPC=y
-> +CONFIG_NET=y
-> +CONFIG_PACKET=y
-> +CONFIG_UNIX=y
-> +CONFIG_INET=y
-> +# CONFIG_WIRELESS is not set
-> +CONFIG_VIRTIO_BLK=y
-> +CONFIG_NETDEVICES=y
-> +CONFIG_VIRTIO_NET=y
-> +# CONFIG_ETHERNET is not set
-> +# CONFIG_WLAN is not set
-> +CONFIG_SERIAL_8250=y
-> +CONFIG_SERIAL_8250_CONSOLE=y
-> +CONFIG_SERIAL_OF_PLATFORM=y
-> +CONFIG_VIRT_DRIVERS=y
-> +CONFIG_VIRTIO_MMIO=y
-> +CONFIG_EXT2_FS=y
-> +CONFIG_EXT4_FS=y
-> +CONFIG_TMPFS=y
-> diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
-> new file mode 100644
-> index 0000000000..aec85e4639
-> --- /dev/null
-> +++ b/configs/qemu_riscv32_virt_defconfig
-> @@ -0,0 +1,24 @@
-> +# Architecture
-> +BR2_riscv=y
-> +
-> +# System
-> +BR2_SYSTEM_DHCP="eth0"
-> +
-> +# Filesystem
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_GENERIC_GETTY=y
-> +BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-> +
-> +# Linux headers same as kernel, a 4.15 series
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
-> +
-> +# Kernel
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/riscv/riscv-linux.git"
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="fe92d7905c6ea0ebeabeb725b8040754ede7c220"
-> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/riscv32-virt/linux.config"
-> +
-> +# Bootloader
-> +BR2_TARGET_RISCV_PK=y
-> --
+>  fs/common.mk | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/fs/common.mk b/fs/common.mk
+> index abf35418cb..2380c1dd3f 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -139,10 +139,10 @@ ROOTFS_$(2)_COMPRESS_EXT = .xz
+>  ROOTFS_$(2)_COMPRESS_CMD = xz -9 -C crc32 -c
+>  endif
+>  
+> -$$(BINARIES_DIR)/rootfs.$(1): ROOTFS=$(2)
+> -$$(BINARIES_DIR)/rootfs.$(1): FAKEROOT_SCRIPT=$$(ROOTFS_$(2)_DIR)/fakeroot
+> -$$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
+> -	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
+> +$$(BINARIES_DIR)/$(3): ROOTFS=$(2)
+> +$$(BINARIES_DIR)/$(3): FAKEROOT_SCRIPT=$$(ROOTFS_$(2)_DIR)/fakeroot
+> +$$(BINARIES_DIR)/$(3): $$(ROOTFS_$(2)_DEPENDENCIES)
+> +	@$$(call MESSAGE,"Generating root filesystem image $(3)")
+>  	rm -rf $$(ROOTFS_$(2)_DIR)
+>  	mkdir -p $$(ROOTFS_$(2)_DIR)
+>  	echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
+> @@ -163,7 +163,7 @@ endif
+>  rootfs-$(1)-show-depends:
+>  	@echo $$(ROOTFS_$(2)_DEPENDENCIES)
+>  
+> -rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1)
+> +rootfs-$(1): $$(BINARIES_DIR)/$(3)
+>  
+>  .PHONY: rootfs-$(1) rootfs-$(1)-show-depends
+>  
+> @@ -181,6 +181,6 @@ endif
+>  endef
+>  
+>  # $(pkgname) also works well to return the filesystem name
+> -rootfs = $(call inner-rootfs,$(pkgname),$(call UPPERCASE,$(pkgname)))
+> +rootfs = $(call inner-rootfs,$(pkgname),$(call UPPERCASE,$(pkgname)),rootfs.$(pkgname))
+>  
+>  include $(sort $(wildcard fs/*/*.mk))
+> -- 
 > 2.17.1
->
+> 
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
 
-
-
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / RC Linux Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
