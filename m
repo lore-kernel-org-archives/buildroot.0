@@ -1,39 +1,85 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sun, 21 Oct 2018 12:53:47 +0100
-Subject: [Buildroot] [PATCH v4 1/2] core/legal-info: Change order of
- legal-manifest parameters
-In-Reply-To: <27c79fec-f680-6a5f-4fad-601be5ecf700@lucaceresoli.net>
-References: <20180822124014.23046-1-sojkam1@fel.cvut.cz>
- <27c79fec-f680-6a5f-4fad-601be5ecf700@lucaceresoli.net>
-Message-ID: <8b318840-c873-06d6-4fc0-1edf4720f927@lucaceresoli.net>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Sun, 21 Oct 2018 12:53:45 +0100
+Subject: [Buildroot] [PATCH] package/clang: default linker to GNU
+In-Reply-To: <ac3e5b76-9d38-d9af-5290-0675d72c9fe3@gmail.com>
+References: <1540112964-50052-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <ac3e5b76-9d38-d9af-5290-0675d72c9fe3@gmail.com>
+Message-ID: <CANQCQpa2_Y3G7kmRxQKod2QiLzqw67Q9OTPa4wppsftx-P+a7w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Michal,
+Romain, Valentin,
 
-On 21/10/18 12:27, Luca Ceresoli wrote:
-> Hi,
-> 
-> On 22/08/18 14:40, Michal Sojka wrote:
->> From: Michal Sojka <sojka@merica.cz>
->>
->> The last parameter {HOST|TARGET} is now first. With this change,
->> adding new columns to the legal manifest file (as in the next commit)
->> will be slightly easier to review.
->>
->> Signed-off-by: Michal Sojka <sojka@merica.cz>
->> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+On Sun, Oct 21, 2018 at 10:49 AM Romain Naour <romain.naour@gmail.com> wrote:
+>
+> Hi Matt,
+>
+> Adding Valentin in Cc.
+>
+> Le 21/10/2018 ? 11:09, Matt Weber a ?crit :
+> > By default clang is assuming the system linker /usr/bin/ld.  This
+> > patchset updates the default to point at the cross toolchain ld.
+> >
+> > Previously clang had been used on target only, this update is
+> > required for host clang/clang++ to be used as a frontend for
+> > cross-compiling.
+>
+> As we discuss during the meeting, we should probably wrap clang and clang++ in
+> order to pass the path to the sysroot like we do in the toolchain wrapper for
+> gcc (and other options when needed).
 
-...except the patch does not apply on current master. Since the conflict
-is trivial and unrelated, and I already fixed it for my testing, I'm
-sending the fixed pathces as v5.
+Since there isn't a package yet that has the need for this wrapper,
+would it be something that we could add to toolchain/helpers.mk?
+For this patch, maybe I just updated the commit message with and
+example of how you'd call clang w/o the wrapper?
+
+>
+> >
+> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> > ---
+> >  package/clang/clang.mk | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/package/clang/clang.mk b/package/clang/clang.mk
+> > index 52e0b98..e2d4a08 100644
+> > --- a/package/clang/clang.mk
+> > +++ b/package/clang/clang.mk
+> > @@ -42,7 +42,8 @@ CLANG_CONF_OPTS += -DCLANG_BUILD_TOOLS=ON
+> >  HOST_CLANG_CONF_OPTS += \
+> >       -DCLANG_BUILD_EXAMPLES=OFF \
+> >       -DCLANG_INCLUDE_DOCS=OFF \
+> > -     -DCLANG_INCLUDE_TESTS=OFF
+> > +     -DCLANG_INCLUDE_TESTS=OFF \
+> > +     -DCLANG_DEFAULT_LINKER=$(TARGET_LD)
+>
+> I would put it with this line:
+> HOST_CLANG_CONF_OPTS += -DLLVM_CONFIG:FILEPATH=$(HOST_DIR)/bin/llvm-config
+>
+
+Sounds good.
+
+> Otherwise:
+> Reviewed-by: Romain Naour <romain.naour@gmail.com>
+>
+> Best regards,
+> Romain
+>
+> >
+> >  CLANG_CONF_OPTS += \
+> >       -DCLANG_BUILD_EXAMPLES=OFF \
+> >
+>
+
 
 -- 
-Luca
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / RC Linux Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
