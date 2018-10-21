@@ -1,59 +1,82 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Oct 2018 09:00:55 +0200
-Subject: [Buildroot] [git commit] package/mjpg-streamer: needs headers >=
- 3.16
-Message-ID: <20181021070113.8F22D880F3@busybox.osuosl.org>
+From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
+Date: Sun, 21 Oct 2018 15:13:16 +0800
+Subject: [Buildroot] [PATCH 1/1] python-multidict: new package
+Message-ID: <1540105996-23504-1-git-send-email-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a517fdb2ef377d3434f39ffb430a501490d47212
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: James Hilliard <james.hilliard1@gmail.com>
 
-Upstream commit
+Multidict is dict-like collection of key-value pairs where key might be occurred more than once in the container.
 
-https://github.com/jacksonliam/mjpg-streamer/commit/29fb2b9a65630721c539a216225288fba9497c49#diff-fc82978386df1046ac9aac8cbe0a129eR825
-
-added the usage of V4L2_EVENT_SOURCE_CHANGE which was added to kernel
-version 3.16 with commit "[media] v4l: Add source change event":
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/include/uapi/linux/videodev2.h?id=3cbe6e5bcad0b102c06b9c6029fda75630045475
-
-To compare:
-- linux 3.15 without the commit:
-  https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/log/include/uapi/linux/videodev2.h?h=linux-3.15.y
-- linux 3.16 is the first kernel with the commit:
-  https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/log/include/uapi/linux/videodev2.h?h=linux-3.16.y
-
-Fixes
-http://autobuild.buildroot.net/results/4f8/4f8dc7520ee692c665167fda69dc3af66263008f/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/mjpg-streamer/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/Config.in                              |  1 +
+ package/python-multidict/Config.in             |  7 +++++++
+ package/python-multidict/python-multidict.hash |  5 +++++
+ package/python-multidict/python-multidict.mk   | 12 ++++++++++++
+ 4 files changed, 25 insertions(+)
+ create mode 100644 package/python-multidict/Config.in
+ create mode 100644 package/python-multidict/python-multidict.hash
+ create mode 100644 package/python-multidict/python-multidict.mk
 
-diff --git a/package/mjpg-streamer/Config.in b/package/mjpg-streamer/Config.in
-index 3587af0288..59f4208ca7 100644
---- a/package/mjpg-streamer/Config.in
-+++ b/package/mjpg-streamer/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_MJPG_STREAMER
- 	bool "mjpg-streamer"
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # linux/uvcvideo.h
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16 # V4L2_EVENT_SOURCE_CHANGE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_STATIC_LIBS # plugins need dlopen()
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_MJPG_STREAMER
- 
- 	  https://github.com/jacksonliam/mjpg-streamer
- 
--comment "mjpg-streamer needs a toolchain w/ threads, headers >= 3.0, dynamic library"
-+comment "mjpg-streamer needs a toolchain w/ threads, headers >= 3.16, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 || BR2_STATIC_LIBS
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16 || BR2_STATIC_LIBS
+diff --git a/package/Config.in b/package/Config.in
+index 177861e..c1a917c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -909,6 +909,7 @@ menu "External python modules"
+ 	source "package/python-mistune/Config.in"
+ 	source "package/python-more-itertools/Config.in"
+ 	source "package/python-msgpack/Config.in"
++	source "package/python-multidict/Config.in"
+ 	source "package/python-mutagen/Config.in"
+ 	source "package/python-mwclient/Config.in"
+ 	source "package/python-mwscrape/Config.in"
+diff --git a/package/python-multidict/Config.in b/package/python-multidict/Config.in
+new file mode 100644
+index 0000000..cce394a
+--- /dev/null
++++ b/package/python-multidict/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_MULTIDICT
++	bool "python-multidict"
++	depends on BR2_PACKAGE_PYTHON3
++	help
++	  Multidict is dict-like collection of key-value pairs where key might be occurred more than once in the container.
++
++	  https://github.com/aio-libs/multidict/
+diff --git a/package/python-multidict/python-multidict.hash b/package/python-multidict/python-multidict.hash
+new file mode 100644
+index 0000000..e8fe366
+--- /dev/null
++++ b/package/python-multidict/python-multidict.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.python.org/pypi/multidict/json
++md5	55d19168f955e5463c6f6b530e913da3  multidict-4.4.2.tar.gz
++sha256	3c11e92c3dfc321014e22fb442bc9eb70e01af30d6ce442026b0c35723448c66  multidict-4.4.2.tar.gz
++# Locally computed sha256 checksums
++sha256	a1c5825513279d3085a0ba46880e148ea3710c149bbaedcf2d11605a5ed3c4ad  LICENSE
+\ No newline at end of file
+diff --git a/package/python-multidict/python-multidict.mk b/package/python-multidict/python-multidict.mk
+new file mode 100644
+index 0000000..e2fdade
+--- /dev/null
++++ b/package/python-multidict/python-multidict.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# python-multidict
++#
++################################################################################
++PYTHON_MULTIDICT_VERSION = 4.4.2
++PYTHON_MULTIDICT_SOURCE = multidict-$(PYTHON_MULTIDICT_VERSION).tar.gz
++PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/b3/5f/5c29cde8511c95fad045b9ecaf2e76f0da18761e8363a82594f5a58c2ced
++PYTHON_MULTIDICT_LICENSE = Apache-2.0
++PYTHON_MULTIDICT_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
+-- 
+2.7.4
