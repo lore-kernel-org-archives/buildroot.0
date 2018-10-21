@@ -1,49 +1,26 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Oct 2018 18:00:34 +0200
-Subject: [Buildroot] [PATCH] package/bluez5_utils: ensure build order with
- the headers-only variant
-Message-ID: <20181021160034.2542-1-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 21 Oct 2018 18:01:28 +0200
+Subject: [Buildroot] [git commit] package/mongoose: add hash for license file
+Message-ID: <20181021155950.EC4D28839A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since bluez5_utils and bluez5_utils-headers would install the same set
-of files (headers), we want to ensurfe the former is run after the
-latter.
+commit: https://git.buildroot.net/buildroot/commit/?id=7e62211976e0b9ddfd05a11fb24c61ed8a9a4491
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Grzegorz Blach <grzegorz@blach.pl>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
+ package/mongoose/mongoose.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-This will help quell issues with top-level parallel build, to avoid two
-unrelated packages to install the same files.
----
- package/bluez5_utils/bluez5_utils.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index a613def2e2..f5b827cc30 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -9,10 +9,14 @@ BLUEZ5_UTILS_VERSION = 5.50
- BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_INSTALL_STAGING = YES
--BLUEZ5_UTILS_DEPENDENCIES = dbus libglib2
- BLUEZ5_UTILS_LICENSE = GPL-2.0+, LGPL-2.1+
- BLUEZ5_UTILS_LICENSE_FILES = COPYING COPYING.LIB
- 
-+BLUEZ5_UTILS_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_BLUEZ5_UTILS_HEADERS),bluez5_utils-headers) \
-+	dbus \
-+	libglib2
-+
- BLUEZ5_UTILS_CONF_OPTS = \
- 	--enable-tools \
- 	--enable-library \
--- 
-2.14.1
+diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
+index d5252eb687..20023382f5 100644
+--- a/package/mongoose/mongoose.hash
++++ b/package/mongoose/mongoose.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+ sha256	ccc971298db70963d3f13766c3246a3c36ae7e388acfab7ba2180149d9c8c64f  mongoose-6.7.tar.gz
++sha256	24a854f7af0b1b2bb0f3b7734fa5d2cef8c673f298697b86a6067dcdaa18bc88  LICENSE
