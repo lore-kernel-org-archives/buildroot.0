@@ -1,63 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Oct 2018 23:34:18 +0200
-Subject: [Buildroot] [git commit] .gitlab-ci.yml: do runtime tests only on
- explicit trigger
-Message-ID: <20181021213252.E1E1688520@busybox.osuosl.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 21 Oct 2018 23:02:24 +0100
+Subject: [Buildroot] [git commit] package: linuxptp: enhance systemd service
+Message-ID: <20181021220656.C75E488528@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96123c1c4f1ee45636a0b6d540d6dfc17889e622
+commit: https://git.buildroot.net/buildroot/commit/?id=85519fc6923c9b670350be2909f73da98ee05307
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When the runtime tests were first introduced, they still ran pretty
-quickly. Nowadays, however, there are a lot of runtime tests, and some
-of them take a really long time. So running them on every push is
-really too much.
+linuxptp now pulls in the time-sync.target, which other services can
+use to make sure they have a valid time before starting.
 
-Just like we do for the defconfigs, run them on explicit trigger only.
+phc2sys (linuxptp-system-clock.service) starts after ptp4l
+(linuxptp.service) so we have a valid time before writing it to the
+hardware clock.
 
-The explicit trigger is now done every week, but it can be increased
-to e.g. twice or three times per week.
-
+Signed-off-by: Petr Kulhavy <brain@jikos.cz>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .gitlab-ci.yml    | 5 +++++
- .gitlab-ci.yml.in | 5 +++++
- 2 files changed, 10 insertions(+)
+ package/linuxptp/linuxptp-system-clock.service | 2 +-
+ package/linuxptp/linuxptp.service              | 2 ++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index b5528c8c47..8b9a1f175c 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -62,6 +62,11 @@ check-package:
-             - output/build/packages-file-list.txt
+diff --git a/package/linuxptp/linuxptp-system-clock.service b/package/linuxptp/linuxptp-system-clock.service
+index 73272542cd..a4436a34a7 100644
+--- a/package/linuxptp/linuxptp-system-clock.service
++++ b/package/linuxptp/linuxptp-system-clock.service
+@@ -1,6 +1,6 @@
+ [Unit]
+ Description=Precision Time Protocol system clock synchronization
+-After=syslog.target network.target
++After=linuxptp.service
  
- .runtime_test: &runtime_test
-+    # Running the runtime tests for every push is too much, so limit to
-+    # explicit triggers through the API.
-+    only:
-+        - triggers
-+        - tags
-     # Keep build directories so the rootfs can be an artifact of the job. The
-     # runner will clean up those files for us.
-     # Multiply every emulator timeout by 10 to avoid sporadic failures in
-diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
-index 38e24c8d01..db526c4b5a 100644
---- a/.gitlab-ci.yml.in
-+++ b/.gitlab-ci.yml.in
-@@ -62,6 +62,11 @@ check-package:
-             - output/build/packages-file-list.txt
+ [Service]
+ ExecStart=/usr/sbin/phc2sys -s /dev/ptp0 -c CLOCK_REALTIME -w -S 1.0
+diff --git a/package/linuxptp/linuxptp.service b/package/linuxptp/linuxptp.service
+index f690430633..14e9814b06 100644
+--- a/package/linuxptp/linuxptp.service
++++ b/package/linuxptp/linuxptp.service
+@@ -1,6 +1,8 @@
+ [Unit]
+ Description=Precision Time Protocol daemon
+ After=syslog.target network.target
++Before=time-sync.target
++Wants=time-sync.target
+ Wants=linuxptp-system-clock.service
  
- .runtime_test: &runtime_test
-+    # Running the runtime tests for every push is too much, so limit to
-+    # explicit triggers through the API.
-+    only:
-+        - triggers
-+        - tags
-     # Keep build directories so the rootfs can be an artifact of the job. The
-     # runner will clean up those files for us.
-     # Multiply every emulator timeout by 10 to avoid sporadic failures in
+ [Service]
