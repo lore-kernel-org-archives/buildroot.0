@@ -1,43 +1,66 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Oct 2018 11:26:23 +0200
-Subject: [Buildroot] [git commit branch/next] qemu: bump to 2.12.0
-In-Reply-To: <20180810215115.706538B8DD@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Fri, 10 Aug 2018 23:57:23 +0200")
-References: <20180810215115.706538B8DD@busybox.osuosl.org>
-Message-ID: <87woqb7irk.fsf@dell.be.48ers.dk>
+From: Mark Corbin <mark.corbin@embecosm.com>
+Date: Sun, 21 Oct 2018 10:32:40 +0100
+Subject: [Buildroot] [PATCH 1/1] postgresql: disable spinlock support
+ for riscv64
+In-Reply-To: <20181020235819.42a5206b@windsurf.lan>
+References: <20181020202219.24489-1-fontaine.fabrice@gmail.com>
+ <20181020235819.42a5206b@windsurf.lan>
+Message-ID: <c8ceba8b-35f9-43b1-c4b9-e4fb135baa4f@embecosm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Hello Thomas
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=06e3957c16ae58745a29c56436c537170e246ea2
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On 20/10/2018 22:58, Thomas Petazzoni wrote:
+> Hello,
+>
+> +Mark Corbin in Cc.
+>
+> On Sat, 20 Oct 2018 22:22:19 +0200, Fabrice Fontaine wrote:
+>> Fixes:
+>>  - http://autobuild.buildroot.org/results/deebc4b8f615e1216279d6587e91f5654da2ad68
+>>
+>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>> -ifeq ($(BR2_arcle)$(BR2_arceb)$(BR2_microblazeel)$(BR2_microblazebe)$(BR2_or1k)$(BR2_nios2)$(BR2_xtensa),y)
+>> +ifeq ($(BR2_arcle)$(BR2_arceb)$(BR2_microblazeel)$(BR2_microblazebe)$(BR2_or1k)$(BR2_nios2)$(BR2_RISCV_64)$(BR2_xtensa),y)
+> Any reason for doing that only for riscv64 and not for RISC-V
+> entirely ? Does PostgreSQL has a spinlock implementation for RISC-V 32
+> but not RISC-V 64 ?
+PostgreSQL does not have any support for RISC-V architecture, so I it?
+makes sense to use BR2_riscv here instead of BR2_RISCV_64.
 
- > In addition:
- >   - Update 0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
- >     with new line numbers and file location.
- >   - Remove upstream 0002-memfd-fix-configure-test.patch
- >   - Add new options found in 2.12.0 in qemu.mk as disabled.
- >   - Remove --with-system-pixman as it's no longer optional.
+Regards
 
- > Tested with test-pkg:
-
- > ./utils/test-pkg -p qemu -c configs/qemu_min_defconfig
- >                              br-arm-full [1/6]: OK
- >                   br-arm-cortex-a9-glibc [2/6]: OK
- >                    br-arm-cortex-m4-full [3/6]: SKIPPED
- >                           br-x86-64-musl [4/6]: OK
- >                       br-arm-full-static [5/6]: OK
- >                 armv5-ctng-linux-gnueabi [6/6]: OK
- > 6 builds, 1 skipped, 0 build failed, 0 legal-info failed
-
- > Signed-off-by: Adam Duskett <aduskett@gmail.com>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2018.02.x and 2018.08.x, thanks.
+Mark
+>
+> Thanks,
+>
+> Thomas
 
 -- 
-Bye, Peter Korsgaard
+
+*Mark Corbin*
+Embedded Operating Systems Lead
+Phone: +44 1590 610184?????Mobile: +44 7765 703479
+Email: mark.corbin at embecosm.com
+<mailto:mark.corbin@embecosm.com>?????Web: https://www.embecosm.com
+
+Embecosm Logo
+
+Embecosm Ltd., Palamos House #208, 66/67 High Street, Lymington, SO41
+9AL, UK
+Company No. 6577021 (England & Wales).
+--
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181021/4451036c/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: logo.png
+Type: image/png
+Size: 8442 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181021/4451036c/attachment.png>
