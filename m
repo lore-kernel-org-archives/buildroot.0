@@ -1,48 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 21 Oct 2018 16:26:47 +0200
-Subject: [Buildroot] [git commit] package/gcc: disable libcilkrts when there
- is no thread support
-Message-ID: <20181021142523.2E630882B1@busybox.osuosl.org>
+Date: Sun, 21 Oct 2018 16:26:59 +0200
+Subject: [Buildroot] [git commit] package/gcc: remove
+ BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE
+Message-ID: <20181021142523.3DFF7882B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=076fd27da721971f44f681d5a06f68496371d96a
+commit: https://git.buildroot.net/buildroot/commit/?id=6561d925f4a78f952c3d67e0f5b25848fec32769
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The libcilkrts configure script errors out with "Pthreads are required
-to build libcilkrts" if the C library doesn't have thread support. To
-fix that, we disable libcilkrts when thread support is not available.
-
-This issue was not noticed until now, because we only regularly build
-a no-thread toolchain for ARM, and libcilkrts was enabled on ARM only
-starting in gcc 7.x.
-
-This fixes the build of no-thread toolchains on architectures where
-libcilkrts is supported, i.e x86/x86-64, ARM and Sparc.
+Since commit 8f8e9162fae5fdc1788dcf33f02b20ddaa5e6846 ("package/gcc:
+do not mourn avr32 for too long..."), in which we dropped AVR32
+support, the BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE is always
+'y'. Therefore, it is totally useless to keep this option around, and
+this commit removes it, making the corresponding code unconditional
+along the way.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gcc/gcc-final/gcc-final.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/gcc/Config.in.host             | 4 ----
+ package/gcc/gcc-initial/gcc-initial.mk | 9 ++-------
+ package/gcc/gcc.mk                     | 5 +----
+ 3 files changed, 3 insertions(+), 15 deletions(-)
 
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index 9897d18682..1be0b9bfc9 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -81,6 +81,11 @@ ifeq ($(BR2_sparc),y)
- HOST_GCC_FINAL_CONF_OPTS += --disable-libcilkrts
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 3bf87fe597..1d4e946f55 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -72,10 +72,6 @@ config BR2_GCC_VERSION_8_X
+ 
+ endchoice
+ 
+-config BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE
+-	bool
+-	default y
+-
+ # libcilkrts was introduced in gcc 4.9 (oldest gcc version we
+ # support), and removed in gcc 8.x
+ config BR2_GCC_SUPPORTS_LIBCILKRTS
+diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
+index 9b20eb18f9..d5d925a3d9 100644
+--- a/package/gcc/gcc-initial/gcc-initial.mk
++++ b/package/gcc/gcc-initial/gcc-initial.mk
+@@ -45,13 +45,8 @@ HOST_GCC_INITIAL_CONF_OPTS = \
+ HOST_GCC_INITIAL_CONF_ENV = \
+ 	$(HOST_GCC_COMMON_CONF_ENV)
+ 
+-HOST_GCC_INITIAL_MAKE_OPTS = $(HOST_GCC_COMMON_MAKE_OPTS) all-gcc
+-HOST_GCC_INITIAL_INSTALL_OPTS = install-gcc
+-
+-ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
+-HOST_GCC_INITIAL_MAKE_OPTS += all-target-libgcc
+-HOST_GCC_INITIAL_INSTALL_OPTS += install-target-libgcc
+-endif
++HOST_GCC_INITIAL_MAKE_OPTS = $(HOST_GCC_COMMON_MAKE_OPTS) all-gcc all-target-libgcc
++HOST_GCC_INITIAL_INSTALL_OPTS = install-gcc install-target-libgcc
+ 
+ HOST_GCC_INITIAL_TOOLCHAIN_WRAPPER_ARGS += $(HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS)
+ HOST_GCC_INITIAL_POST_BUILD_HOOKS += TOOLCHAIN_WRAPPER_BUILD
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 9e9069ce0e..8b0fec74f1 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -98,6 +98,7 @@ HOST_GCC_COMMON_CONF_OPTS = \
+ 	--with-gnu-ld \
+ 	--disable-libssp \
+ 	--disable-multilib \
++	--disable-decimal-float \
+ 	--with-gmp=$(HOST_DIR) \
+ 	--with-mpc=$(HOST_DIR) \
+ 	--with-mpfr=$(HOST_DIR) \
+@@ -195,10 +196,6 @@ HOST_GCC_COMMON_CONF_OPTS += --with-float=soft
+ endif
  endif
  
-+# Pthreads are required to build libcilkrts
-+ifeq ($(BR2_PTHREADS_NONE),y)
-+HOST_GCC_FINAL_CONF_OPTS += --disable-libcilkrts
-+endif
-+
- # Disable shared libs like libstdc++ if we do static since it confuses linking
- # In that case also disable libcilkrts as there is no static version
- ifeq ($(BR2_STATIC_LIBS),y)
+-ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
+-HOST_GCC_COMMON_CONF_OPTS += --disable-decimal-float
+-endif
+-
+ # Determine arch/tune/abi/cpu options
+ ifneq ($(GCC_TARGET_ARCH),)
+ HOST_GCC_COMMON_CONF_OPTS += --with-arch="$(GCC_TARGET_ARCH)"
