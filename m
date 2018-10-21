@@ -1,101 +1,45 @@
 From: Mark Corbin <mark.corbin@embecosm.com>
-Date: Sun, 21 Oct 2018 15:00:59 +0100
-Subject: [Buildroot] [PATCH v3 2/3] configs/qemu: add
- qemu_riscv32_virt_defconfig
+Date: Sun, 21 Oct 2018 15:01:00 +0100
+Subject: [Buildroot] [PATCH v3 3/3] support/config-fragments: add RISC-V
+ 32-bit to autobuild configs
 In-Reply-To: <20181021140100.19155-1-mark.corbin@embecosm.com>
 References: <20181021140100.19155-1-mark.corbin@embecosm.com>
-Message-ID: <20181021140100.19155-2-mark.corbin@embecosm.com>
+Message-ID: <20181021140100.19155-3-mark.corbin@embecosm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add RISC-V 32-bit defconfig for QEMU virt machine.
-
-Tested with QEMU 2.12.1
+Add a minimal RISC-V 32-bit autobuild configuration for the
+internal toolchain with glibc.
 
 Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
 ---
- board/qemu/riscv32-virt/linux.config | 23 +++++++++++++++++++++++
- board/qemu/riscv32-virt/readme.txt   |  7 +++++++
- configs/qemu_riscv32_virt_defconfig  | 24 ++++++++++++++++++++++++
- 3 files changed, 54 insertions(+)
- create mode 100644 board/qemu/riscv32-virt/linux.config
- create mode 100644 board/qemu/riscv32-virt/readme.txt
- create mode 100644 configs/qemu_riscv32_virt_defconfig
+ .../config-fragments/autobuild/br-riscv32-internal-glibc.config | 2 ++
+ support/config-fragments/autobuild/toolchain-configs.csv        | 1 +
+ 2 files changed, 3 insertions(+)
+ create mode 100644 support/config-fragments/autobuild/br-riscv32-internal-glibc.config
 
-diff --git a/board/qemu/riscv32-virt/linux.config b/board/qemu/riscv32-virt/linux.config
+diff --git a/support/config-fragments/autobuild/br-riscv32-internal-glibc.config b/support/config-fragments/autobuild/br-riscv32-internal-glibc.config
 new file mode 100644
-index 0000000000..c25583f768
+index 0000000000..75aa5dd915
 --- /dev/null
-+++ b/board/qemu/riscv32-virt/linux.config
-@@ -0,0 +1,23 @@
-+CONFIG_ARCH_RV32I=y
-+CONFIG_SMP=y
-+CONFIG_NR_CPUS=8
-+CONFIG_PCI=y
-+CONFIG_SYSVIPC=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+# CONFIG_WIRELESS is not set
-+CONFIG_VIRTIO_BLK=y
-+CONFIG_NETDEVICES=y
-+CONFIG_VIRTIO_NET=y
-+# CONFIG_ETHERNET is not set
-+# CONFIG_WLAN is not set
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+CONFIG_SERIAL_OF_PLATFORM=y
-+CONFIG_VIRT_DRIVERS=y
-+CONFIG_VIRTIO_MMIO=y
-+CONFIG_EXT2_FS=y
-+CONFIG_EXT4_FS=y
-+CONFIG_TMPFS=y
-diff --git a/board/qemu/riscv32-virt/readme.txt b/board/qemu/riscv32-virt/readme.txt
-new file mode 100644
-index 0000000000..2da99580e5
---- /dev/null
-+++ b/board/qemu/riscv32-virt/readme.txt
-@@ -0,0 +1,7 @@
-+Run the emulation with:
-+
-+  qemu-system-riscv32 -M virt -kernel output/images/bbl -append "root=/dev/vda ro console=ttyS0" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic
-+
-+The login prompt will appear in the terminal that started Qemu.
-+
-+Tested with QEMU 2.12.1
-diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
-new file mode 100644
-index 0000000000..aec85e4639
---- /dev/null
-+++ b/configs/qemu_riscv32_virt_defconfig
-@@ -0,0 +1,24 @@
-+# Architecture
++++ b/support/config-fragments/autobuild/br-riscv32-internal-glibc.config
+@@ -0,0 +1,2 @@
 +BR2_riscv=y
-+
-+# System
-+BR2_SYSTEM_DHCP="eth0"
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+
-+# Linux headers same as kernel, a 4.15 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/riscv/riscv-linux.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="fe92d7905c6ea0ebeabeb725b8040754ede7c220"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/riscv32-virt/linux.config"
-+
-+# Bootloader
-+BR2_TARGET_RISCV_PK=y
++BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
+index f24ec9ced0..3681bc519f 100644
+--- a/support/config-fragments/autobuild/toolchain-configs.csv
++++ b/support/config-fragments/autobuild/toolchain-configs.csv
+@@ -51,6 +51,7 @@ support/config-fragments/autobuild/br-powerpc64le-power8-glibc.config,x86_64
+ support/config-fragments/autobuild/br-powerpc64-power7-glibc.config,x86_64
+ support/config-fragments/autobuild/br-powerpc-e500mc-full.config,x86_64
+ support/config-fragments/autobuild/br-powerpc-internal-full.config,any
++support/config-fragments/autobuild/br-riscv32-internal-glibc.config,any
+ support/config-fragments/autobuild/br-riscv64-internal-glibc.config,any
+ support/config-fragments/autobuild/br-sh4-full.config,x86_64
+ support/config-fragments/autobuild/br-sparc-uclibc.config,x86_64
 -- 
 2.17.1
