@@ -1,156 +1,63 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 21 Oct 2018 20:28:04 +0300
-Subject: [Buildroot] [PATCH] openssh: bump to version 7.9p1
-Message-ID: <06882d5028be809e026e5ef1f934b4b984e7fb38.1540142884.git.baruch@tkos.co.il>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 21 Oct 2018 18:28:06 +0100
+Subject: [Buildroot] [PATCH] systemd: Allow building with no init system
+In-Reply-To: <20180917182900.15902-1-tpiepho@impinj.com>
+References: <20180917182900.15902-1-tpiepho@impinj.com>
+Message-ID: <9ddf2016-0a94-d873-311a-e1565386801e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop patch #1. uClibc no longer includes pthreads.h indirectly.
+ Hi Trent,
 
-Drop patch #2. The sys/param.h header is included indirectly through the
-local includes.h header since version 6.8p1.
+On 17/09/2018 19:29, Trent Piepho wrote:
+> It's possible to build systemd, and use the systemd libraries, on a
+> target with no init system.
+> 
+> While installing systemd when trying to use SysV init will result in
+> systemd clobbering the SysV system and vice versa, it may well work when
+> no init system has been selected.  For instance, when building an SDK
+> the sytemd headers and libraries might be necessary but there is no
+> reason to have an init system selected.  Someone creating a custom init
+> system might also want some of the systemd libraries.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- .../0001-fix-pam-uclibc-pthreads-clash.patch  | 44 -----------------
- .../openssh/0002-fix-howmany-include.patch    | 49 -------------------
- package/openssh/openssh.hash                  |  4 +-
- package/openssh/openssh.mk                    |  2 +-
- 4 files changed, 3 insertions(+), 96 deletions(-)
- delete mode 100644 package/openssh/0001-fix-pam-uclibc-pthreads-clash.patch
- delete mode 100644 package/openssh/0002-fix-howmany-include.patch
+ I understand your reasoning and I tend to agree to some extent.
 
-diff --git a/package/openssh/0001-fix-pam-uclibc-pthreads-clash.patch b/package/openssh/0001-fix-pam-uclibc-pthreads-clash.patch
-deleted file mode 100644
-index d9bc6e5d0ce4..000000000000
---- a/package/openssh/0001-fix-pam-uclibc-pthreads-clash.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--When PAM is enabled, openssh makes its own static versions of pthreads
--functions.  But when built with a uclibc toolchain, pthreads.h gets
--indirectly included.  The clashing exported and static definitions of
--the pthreads functions then cause a compile error.  This patch fixes
--the problem by changing the static pthread function names with macros
--when the static functions are defined.
--
--Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
--
--diff -urN openssh-6.1p1.orig/auth-pam.c openssh-6.1p1/auth-pam.c
----- openssh-6.1p1.orig/auth-pam.c	2009-07-12 08:07:21.000000000 -0400
--+++ openssh-6.1p1/auth-pam.c	2012-09-15 19:49:47.677288199 -0400
--@@ -166,6 +166,7 @@
-- 		sigdie("PAM: authentication thread exited uncleanly");
-- }
-- 
--+#define pthread_exit pthread_exit_AVOID_UCLIBC_PTHREAD_CLASH
-- /* ARGSUSED */
-- static void
-- pthread_exit(void *value)
--@@ -173,6 +174,7 @@
-- 	_exit(0);
-- }
-- 
--+#define pthread_create pthread_create_AVOID_UCLIBC_PTHREAD_CLASH
-- /* ARGSUSED */
-- static int
-- pthread_create(sp_pthread_t *thread, const void *attr,
--@@ -200,6 +202,7 @@
-- 	}
-- }
-- 
--+#define pthread_cancel pthread_cancel_AVOID_UCLIBC_PTHREAD_CLASH
-- static int
-- pthread_cancel(sp_pthread_t thread)
-- {
--@@ -207,6 +210,7 @@
-- 	return (kill(thread, SIGTERM));
-- }
-- 
--+#define pthread_join pthread_join_AVOID_UCLIBC_PTHREAD_CLASH
-- /* ARGSUSED */
-- static int
-- pthread_join(sp_pthread_t thread, void **value)
-diff --git a/package/openssh/0002-fix-howmany-include.patch b/package/openssh/0002-fix-howmany-include.patch
-deleted file mode 100644
-index 7a2a8e3202a3..000000000000
---- a/package/openssh/0002-fix-howmany-include.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--Update patch from 2fea21799223d41605556858a95b55e69e9960ca to openssh
--version 6.8p1
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura openssh-6.8p1.orig/openbsd-compat/bsd-poll.c openssh-6.8p1/openbsd-compat/bsd-poll.c
----- openssh-6.8p1.orig/openbsd-compat/bsd-poll.c	2015-03-18 07:11:46.184620677 -0300
--+++ openssh-6.8p1/openbsd-compat/bsd-poll.c	2015-03-18 07:12:29.120094555 -0300
--@@ -19,6 +19,7 @@
-- #include "includes.h"
-- #if !defined(HAVE_POLL)
-- 
--+#include <sys/param.h>
-- #include <sys/types.h>
-- #include <sys/time.h>
-- #ifdef HAVE_SYS_SELECT_H
--diff -Nura openssh-6.8p1.orig/sshd.c openssh-6.8p1/sshd.c
----- openssh-6.8p1.orig/sshd.c	2015-03-18 07:11:46.187620780 -0300
--+++ openssh-6.8p1/sshd.c	2015-03-18 07:13:11.889562735 -0300
--@@ -44,6 +44,7 @@
-- 
-- #include "includes.h"
-- 
--+#include <sys/param.h>
-- #include <sys/types.h>
-- #include <sys/ioctl.h>
-- #include <sys/socket.h>
--diff -Nura openssh-6.8p1.orig/ssh-keyscan.c openssh-6.8p1/ssh-keyscan.c
----- openssh-6.8p1.orig/ssh-keyscan.c	2015-03-18 07:11:46.180620539 -0300
--+++ openssh-6.8p1/ssh-keyscan.c	2015-03-18 07:13:32.092256248 -0300
--@@ -9,6 +9,7 @@
-- 
-- #include "includes.h"
--  
--+#include <sys/param.h>
-- #include <sys/types.h>
-- #include "openbsd-compat/sys-queue.h"
-- #include <sys/resource.h>
--diff -Nura openssh-6.8p1.orig/ssh-pkcs11-helper.c openssh-6.8p1/ssh-pkcs11-helper.c
----- openssh-6.8p1.orig/ssh-pkcs11-helper.c	2015-03-18 07:11:46.182620608 -0300
--+++ openssh-6.8p1/ssh-pkcs11-helper.c	2015-03-18 07:13:43.620651993 -0300
--@@ -17,6 +17,7 @@
-- 
-- #include "includes.h"
-- 
--+#include <sys/param.h>
-- #include <sys/types.h>
-- #ifdef HAVE_SYS_TIME_H
-- # include <sys/time.h>
-diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
-index 0b31f70eccf4..26b143c05939 100644
---- a/package/openssh/openssh.hash
-+++ b/package/openssh/openssh.hash
-@@ -1,4 +1,4 @@
--# From http://www.openssh.com/txt/release-7.8 (base64 encoded)
--sha256 1a484bb15152c183bb2514e112aa30dd34138c3cfb032eee5490a66c507144ca  openssh-7.8p1.tar.gz
-+# From http://www.openssh.com/txt/release-7.9 (base64 encoded)
-+sha256 6b4b3ba2253d84ed3771c8050728d597c91cfce898713beb7b64a305b6f11aad  openssh-7.9p1.tar.gz
- # Locally calculated
- sha256 05a4c25ef464e19656c5259bd4f4da8428efab01044f3541b79fbb3ff209350f  LICENCE
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 45a11ee65ec9..07f3e0d663f6 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENSSH_VERSION = 7.8p1
-+OPENSSH_VERSION = 7.9p1
- OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
- OPENSSH_LICENSE_FILES = LICENCE
--- 
-2.19.1
+ However, for the use cases you mention, you can actually just enable
+BR2_INIT_SYSTEMD. If you really don't want /sbin/init in your target, just
+remove it post-build.
+
+ To *properly* support a libsystemd-only configuration, a lot more should
+change. Basically, nothing should be installed in target except for
+libsystemd.so (and the header files which will be removed in finalize). Also,
+there is a possible conflict with eudev that needs to be resolved. Possibly
+other things would need to be cleaned up as well.
+
+ But basically, we don't really see a use case that warrants all this additional
+complexity. Just enable BR2_INIT_SYSTEMD and clean up post-build.
+
+ Regards,
+ Arnout
+
+> 
+> Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+> ---
+>  package/systemd/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+> index c858d89c05..71d37f6a5a 100644
+> --- a/package/systemd/Config.in
+> +++ b/package/systemd/Config.in
+> @@ -9,7 +9,7 @@ config BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
+>  
+>  menuconfig BR2_PACKAGE_SYSTEMD
+>  	bool "systemd"
+> -	depends on BR2_INIT_SYSTEMD
+> +	depends on BR2_INIT_SYSTEMD || BR2_INIT_NONE
+>  	depends on !BR2_STATIC_LIBS # kmod
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+>  	depends on BR2_USE_MMU # dbus
+> 
