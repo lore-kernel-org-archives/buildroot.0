@@ -1,98 +1,73 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 22 Oct 2018 03:49:13 -0500
-Subject: [Buildroot] [PATCH 1/1] ntp: added S48ntpdate script
-In-Reply-To: <CALtfCQZiF0jhNwSUXS+qgEN2oHhqkxwF56V31Ymp-_5LzcWD=Q@mail.gmail.com>
-References: <1539964343-10526-1-git-send-email-oscargomezf@gmail.com>
- <CANQCQpZcDx+fdZmh6MZypVDCWU8JJbqR0XqqBDbC4T8HnNopXw@mail.gmail.com>
- <CALtfCQZiF0jhNwSUXS+qgEN2oHhqkxwF56V31Ymp-_5LzcWD=Q@mail.gmail.com>
-Message-ID: <CANQCQpZQy=58rDrKgPP7yN_X3gCLRS4gLDneEcuPVDrVQH0AFA@mail.gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 22 Oct 2018 10:51:11 +0200
+Subject: [Buildroot] [PATCH 1/2] python-serial: update
+In-Reply-To: <1540118389-16862-1-git-send-email-james.hilliard1@gmail.com>
+References: <1540118389-16862-1-git-send-email-james.hilliard1@gmail.com>
+Message-ID: <CAGm1_ksqFXqahTp4D=3Q-SiDktKtNUtS6YCUwuruFgJK7vabbg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Oscar,
+Hi James,
 
-On Mon, Oct 22, 2018 at 2:25 AM Oscar Gomez Fuente
-<oscargomezf@gmail.com> wrote:
+On Sun, Oct 21, 2018 at 12:40 PM <james.hilliard1@gmail.com> wrote:
 >
-> Hi Matthew,
->
->
-> Thank you very much for your help.
->
-> I was checking If the script is working fine:
-> ----->
-> #! /bin/sh
->
-> NAME=ntpd
->
-> # Read config file if it is present.
-> if [ -r /etc/default/$NAME ]
-> then
->         . /etc/default/$NAME
-> fi
->
-> case "$1" in
->         start)
->                 printf "Starting $NAME: "
->                 CURRENT_DATE=$(date | grep "1970")
->                 if [ "$CURRENT_DATE" != "" ]; then
->                         /usr/sbin/ntpd -q -x
->                         [ $?  != 0 ] && echo -n "(No initial time set) - "
->                 fi
->                 start-stop-daemon -S -q -x /usr/sbin/ntpd -- -g
->                 [ $? = 0 ] && echo "OK" || echo "FAIL"
->                 ;;
->         stop)
->                 printf "Stopping $NAME: "
->                 start-stop-daemon -K -q -n $NAME
->                 [ $? = 0 ] && echo "OK" || echo "FAIL"
->                 ;;
->         restart|reload)
->                 echo "Restarting $NAME: "
->                 $0 stop
->                 sleep 1
->                 $0 start
->                 ;;
->         *)
->                 echo "Usage: $0 {start|stop|restart|reload}" >&2
->                 exit 1
->                 ;;
-> esac
->
-> exit 0
-> ----->
->
-> But it seems to be that the command "/usr/sbin/ntpd -q -x" is not
-> working properly:
->
-> # date --set "1970-01-10 10:10:00"
-> Sat Jan 10 10:10:00 UTC 1970
-> # /etc/init.d/S49ntp restart
-> Restarting ntpd:
-> Stopping ntpd: OK
-> Starting ntpd: 10 Jan 10:10:04 ntpd[1859]: ntpd 4.2.8p12 at 1.3728-o Thu
-> Oct 18 16:16:56 UTC 2018 (1): Starting
-> 10 Jan 10:10:04 ntpd[1859]: Command line: /usr/sbin/ntpd -q -x
-> 10 Jan 10:10:04 ntpd[1859]: proto: precision = 1.718 usec (-19)
-> 10 Jan 10:10:04 ntpd[1859]: Listen and drop on 0 v6wildcard [::]:123
-> 10 Jan 10:10:04 ntpd[1859]: Listen and drop on 1 v4wildcard 0.0.0.0:123
-> 10 Jan 10:10:04 ntpd[1859]: Listen normally on 2 lo 127.0.0.1:123
-> 10 Jan 10:10:04 ntpd[1859]: Listen normally on 3 eth0 192.168.20.226:123
-> 10 Jan 10:10:04 ntpd[1859]: Listen normally on 4 ppp0 172.21.39.120:123
-> 10 Jan 10:10:04 ntpd[1859]: Listen normally on 5 lo [::1]:123
-> 10 Jan 10:10:04 ntpd[1859]: Listen normally on 6 eth0
-> [xxxx::xxxx:xxxx:xxxx:xxxx%2]:123
-> 10 Jan 10:10:04 ntpd[1859]: Listening on routing socket on fd #23 for
-> interface updates
-> (No initial time set) - OK
->
-> Notice that I checking the script forcing the date to 1970 with this
-> command. Does anyone any suggestion?
->
+> From: James Hilliard <james.hilliard1@gmail.com>
 
-I'll give it a try today and let you know.
+you should mention python-serial-asyncio package here and why we don't
+need Python2 fixup anymore.
 
-Matt
+Yegor
+
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/python-serial/python-serial.hash |  8 +++++---
+>  package/python-serial/python-serial.mk   | 14 ++------------
+>  2 files changed, 7 insertions(+), 15 deletions(-)
+>
+> diff --git a/package/python-serial/python-serial.hash b/package/python-serial/python-serial.hash
+> index f98a8b9..96209a9 100644
+> --- a/package/python-serial/python-serial.hash
+> +++ b/package/python-serial/python-serial.hash
+> @@ -1,3 +1,5 @@
+> -# md5 from http://pypi.python.org/pypi?:action=show_md5&digest=e849af7f8b7ec75cbc7a53da67c51a51, sha256 locally computed
+> -md5     e849af7f8b7ec75cbc7a53da67c51a51  pyserial-3.1.tar.gz
+> -sha256  c8ffdcbd8bfd308842409e558848c32aa3499a1bfe95a591e4210072b9520f1e  pyserial-3.1.tar.gz
+> +# md5, sha256 from https://pypi.org/pypi/pyserial/json
+> +md5     ed6183b15519a0ae96675e9c3330c69b  pyserial-3.4.tar.gz
+> +sha256  6e2d401fdee0eab996cf734e67773a0143b932772ca8b42451440cfed942c627  pyserial-3.4.tar.gz
+> +# Locally computed sha256 checksums
+> +sha256 a89d951d157e2c199fbbe7ecf8d41bc3bc93de166db524aa6b9b610dbccc832d  LICENSE.txt
+> diff --git a/package/python-serial/python-serial.mk b/package/python-serial/python-serial.mk
+> index ce7ec07..d583ac6 100644
+> --- a/package/python-serial/python-serial.mk
+> +++ b/package/python-serial/python-serial.mk
+> @@ -4,21 +4,11 @@
+>  #
+>  ################################################################################
+>
+> -PYTHON_SERIAL_VERSION = 3.1
+> +PYTHON_SERIAL_VERSION = 3.4
+>  PYTHON_SERIAL_SOURCE = pyserial-$(PYTHON_SERIAL_VERSION).tar.gz
+> -PYTHON_SERIAL_SITE = https://pypi.python.org/packages/ce/9c/694ce79a9d4a164e109aeba1a40fba23336f3b7554978553e22a5d41d54d
+> +PYTHON_SERIAL_SITE = https://files.pythonhosted.org/packages/cc/74/11b04703ec416717b247d789103277269d567db575d2fd88f25d9767fe3d
+>  PYTHON_SERIAL_LICENSE = BSD-3-Clause
+>  PYTHON_SERIAL_LICENSE_FILES = LICENSE.txt
+>  PYTHON_SERIAL_SETUP_TYPE = setuptools
+>
+> -# aio.py is an experimental module, that is compatible only with
+> -# Python 3, so remove it for Python 2 environment or it will
+> -# cause compilation errors
+> -ifeq ($(BR2_PACKAGE_PYTHON),y)
+> -define PYTHON_SERIAL_REMOVE_AIO_PY
+> -       rm $(@D)/serial/aio.py
+> -endef
+> -PYTHON_SERIAL_POST_EXTRACT_HOOKS = PYTHON_SERIAL_REMOVE_AIO_PY
+> -endif
+> -
+>  $(eval $(python-package))
+> --
+> 2.7.4
+>
