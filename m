@@ -1,346 +1,62 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Mon, 22 Oct 2018 11:02:16 +0200
-Subject: [Buildroot] [PATCH 1/1] libcxx: new package
-In-Reply-To: <8ad74087-7117-e1a3-3a72-4f6baadfa901@gmail.com>
-References: <20180613141454.25028-1-nolange79@gmail.com>
- <8ad74087-7117-e1a3-3a72-4f6baadfa901@gmail.com>
-Message-ID: <CADYdroNzyLvcwivHg=qRK3Y662zjLXLCfiD3Yxy0KJ5-6mVnrw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 22 Oct 2018 11:05:13 +0200
+Subject: [Buildroot] [PATCH] core: support host gcc of the future
+Message-ID: <20181022090513.4976-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am So., 21. Okt. 2018 um 13:20 Uhr schrieb Romain Naour
-<romain.naour@gmail.com>:
->
-> Hi Norbert,
->
-> Le 13/06/2018 ? 16:14, Norbert Lange a ?crit :
-> > provides llvm's libc++ as package,
-> > probably needs some more work to
-> > better fit into buildroots toolchain construction.
-> >
-> > It should be build after the host-g++ and C-Library,
-> > but before any other packages and it does install a
-> > small script host/bin/<xa-y-z>-g++-libc++
-> > to allow easy use.
->
-> You should take into account the external toolchain case.
->
-> >
-> > For lowlevel language support ABI, it can be built with
-> > libstdc++ support library or its own libc++-abi.
-> >
-> > the parent LLVM software needs to be available,
-> > apparently for a few tools. Its downloaded currently,
-> > as depending on host-llvm means this package has to be
-> > built - which takes forever.
->
-> By now, llvm package is merged and updated to llvm 7.0.
-> Can you try building libcxx as a standalone package (LIBCXX_STANDALONE_BUILD=ON)
-> using the llvm package provided by Buildroot ?
+When we do a release, we know only of a set of gcc versions that the
+host may have. But in the future, distributions with newer gcc versions
+may show up.
 
-It is a standalone package, but its needing a few scripts from LLVMs
-buildsystem, I dont otherwise need to build/install anything from LLVM.
+Currently, we do not recognise those versions, and thus we do as if they
+were older than the oldest we know of. This means that a set of packages
+become unselectable, when they should be.
 
-so I dont fully get the request. As noted, I could get those
-scripts from host-llvm but then I need that built (completely),
-even if libcxx would be independent (or rather sitting below the llvm package).
+We fix that be capping the detected version to the highest we know of.
 
-or do you mean I should add options for building libcxx to the
-buildroots llvm package?
+Reported-by: gargar_ on IRC
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+---
+ Config.in | 3 +++
+ Makefile  | 7 +++++--
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
->
-> Also libcxx and libcxxabi should be packaged separately.
->
-> >
-> > In the future, a option could potentially compile
-> > all C++ Packages with this library.
-> >
-> > -   depend on threading library if available?
-> >     (supposedly builds without)
-> > -   proper integration in toolchain step
-> > -   use libc++ for remaining packages
->
-> Also you can take a look at the report from the FOSDEM meeting and the final
-> report from Valentin:
-> https://elinux.org/Buildroot:DeveloperDaysFOSDEM2018#LLVM.2FClang
-> http://www.linuxembedded.fr/2018/07/llvmclang-integration-into-buildroot
-
-This does not really help, as that document deals with several libraries
-depending on llvm. The issues I have are with offering a second c++ std library,
-and as its noted, toolchain support for llvm/clang which aint avaliable in
-Buildroot for now.
-
->
-> >
-> > Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> > ---
-> >  package/Config.in                             |   1 +
-> >  package/libcxx/Config.in                      |  29 +++++
-> >  package/libcxx/g++-libc++.in                  |  16 +++
-> >  package/libcxx/libcxx.hash                    |   7 ++
-> >  package/libcxx/libcxx.mk                      | 108 ++++++++++++++++++
-> >  ...i_fix_find_fpath_when_crosscompiling.patch |  27 +++++
-> >  6 files changed, 188 insertions(+)
-> >  create mode 100644 package/libcxx/Config.in
-> >  create mode 100644 package/libcxx/g++-libc++.in
-> >  create mode 100644 package/libcxx/libcxx.hash
-> >  create mode 100644 package/libcxx/libcxx.mk
-> >  create mode 100644 package/libcxx/libcxxabi_fix_find_fpath_when_crosscompiling.patch
-> >
-> > diff --git a/package/Config.in b/package/Config.in
-> > index fcabed4fde..cda825612a 100644
-> > --- a/package/Config.in
-> > +++ b/package/Config.in
-> > @@ -1565,6 +1565,7 @@ menu "Other"
-> >       source "package/lightning/Config.in"
-> >       source "package/linux-pam/Config.in"
-> >       source "package/llvm/Config.in"
-> > +     source "package/libcxx/Config.in"
-> >  if BR2_PACKAGE_LINUX_PAM
-> >  comment "linux-pam plugins"
-> >       source "package/libpam-radius-auth/Config.in"
-> > diff --git a/package/libcxx/Config.in b/package/libcxx/Config.in
-> > new file mode 100644
-> > index 0000000000..f5ff911b6d
-> > --- /dev/null
-> > +++ b/package/libcxx/Config.in
-> > @@ -0,0 +1,29 @@
-> > +config BR2_PACKAGE_LIBCXX
-> > +     bool "libc++"
-> > +     depends on BR2_INSTALL_LIBSTDCPP
->
-> C++ dependency is not enough for C++11 dependency, you should add a dependency
-> on gcc >= 4.8 (at least).
-> Also add a dependency on llvm supported architectures.
-
-Ok will look at that.
-
->
-> > +     help
-> > +       libc++ is a new implementation of the C++ standard library,
-> > +       targeting C++11 (and newer). Part of the LLVM Project.
-> > +
-> > +       The LLVM Project is a collection of modular and reusable
-> > +       compiler and toolchain technologies.
-> > +
-> > +if BR2_PACKAGE_LIBCXX
-> > +choice
-> > +     prompt "libc++ abi support"
-> > +     default BR2_PACKAGE_LIBCXX_ABI_SUPCXX
-> > +     help
-> > +       Select the c++ abi support: libsupc++ (from gcc toolchain)
-> > +       or libc++-abi (from llvm).
-> > +
-> > +config BR2_PACKAGE_LIBCXX_ABI_SUPCXX
-> > +     bool "libsupc++"
-> > +
-> > +config BR2_PACKAGE_LIBCXX_ABI_CXXABI
-> > +     bool "libc++-abi"
-> > +
-> > +endchoice
-> > +endif
-> > +
-> > +comment "libc++ needs a toolchain w/ C++"
-> > +     depends on !BR2_INSTALL_LIBSTDCPP
-> > diff --git a/package/libcxx/g++-libc++.in b/package/libcxx/g++-libc++.in
->
-> What's the purpose of this script ?
-
-You will end up with 2 C++ standard libraries,
-one from the GCC Toolchain (libstdc++) and
-one from this package (libc++).
-
-The script will add the necessary flags to GCC to
-use correct include paths and linkerflags.
-
-in other words, if eg. use this line, then the package will use
-libc++:
-./configure CXX=g++-libc++ CC=gchost-llvmc
-
-
->
-> > new file mode 100644
-> > index 0000000000..db6d050a7c
-> > --- /dev/null
-> > +++ b/package/libcxx/g++-libc++.in
-> > @@ -0,0 +1,16 @@
-> > +#!/bin/sh
-> > +SCRIPTPATH=$(readlink -f "$(dirname "$0")")
-> > +cxx_libs="-lc++ @link_abi@"
-> > +c_libs="-lc @link_comrt@"
-> > +pthread_libs="-lpthread $c_libs"
-> > +
-> > +libs="$cxx_libs $c_libs"
-> > +
-> > +for i; do
-> > +    if test x"$i" = x"-pthread"; then
-> > +        libs="$libs $pthread_libs"
-> > +        break
-> > +    fi
-> > +done
-> > +
-> > +exec "$SCRIPTPATH"/@TARGET_CROSS at g++ -nodefaultlibs -nostdinc++ $libs -isystem"$SCRIPTPATH"/../../staging/usr/include/c++/v1 "$@"
-> > diff --git a/package/libcxx/libcxx.hash b/package/libcxx/libcxx.hash
-> > new file mode 100644
-> > index 0000000000..7d384365b6
-> > --- /dev/null
-> > +++ b/package/libcxx/libcxx.hash
-> > @@ -0,0 +1,7 @@
-> > +# locally calculated
-> > +sha256  1ff53c915b4e761ef400b803f07261ade637b0c269d99569f18040f3dcee4408  llvm-6.0.0.src.tar.xz
-> > +sha256  70931a87bde9d358af6cb7869e7535ec6b015f7e6df64def6d2ecdd954040dd9  libcxx-6.0.0.src.tar.xz
-> > +sha256  91c6d9c5426306ce28d0627d6a4448e7d164d6a3f64b01cb1d196003b16d641b  libcxxabi-6.0.0.src.tar.xz
-> > +
-> > +
-> > +sha256  c1938c0e9e90639d1e8f5a7f6bebaab83a3642e0ee44295a4c69934686d0bda8  LICENSE.TXT
-> > diff --git a/package/libcxx/libcxx.mk b/package/libcxx/libcxx.mk
-> > new file mode 100644
-> > index 0000000000..9d9efc90b0
-> > --- /dev/null
-> > +++ b/package/libcxx/libcxx.mk
-> > @@ -0,0 +1,108 @@
-> > +################################################################################
-> > +#
-> > +# libc++
-> > +#
-> > +################################################################################
-> > +
-> > +LIBCXX_VERSION = 6.0.0
->
-> Can you try with 7.0.0 version ?
-
-Yeah will do when I got some time.
-
->
-> > +LIBCXX_SITE = http://llvm.org/releases/$(LIBCXX_VERSION)
-> > +LIBCXX_SOURCE = llvm-$(LIBCXX_VERSION).src.tar.xz
-> > +LIBCXX_LICENSE = MIT
-> > +#LIBCXX_LICENSE_FILES = COPYRIGHT
-> > +LIBCXX_SUPPORTS_IN_SOURCE_BUILD = NO
-> > +LIBCXX_INSTALL_STAGING = YES
-> > +
-> > +LIBCXX_EXTRA_DOWNLOADS = $(patsubst %,$(LIBCXX_SITE)/%-$(LIBCXX_VERSION).src.tar.xz,libcxx libcxxabi)
->
-> Can you try to package libcxx and libcxxabi separately ?
-
-I considered that and had some problems with it,
-the commands that need to be passed to gcc will depend on
-whether libcxx uses libcxxabi or the gcc equivalent,
-so those packages are closely related.
-
-LLVM is generally pretty monolithic to build aswell,
-its easiest to tell its build system what you want so
-the dependent libraries will be configured correctly.
-
->
-> > +
-> > +define LIBCXX_EXTRA_EXTRACT
-> > +     $(foreach arch,$(LIBCXX_EXTRA_DOWNLOADS), \
-> > +             TDIR=projects/$(patsubst $(LIBCXX_SITE)/%-$(LIBCXX_VERSION).src.tar.xz,%,$(arch)); \
-> > +             mkdir -p $(@D)/$$TDIR && \
-> > +             $(call suitable-extractor,$(notdir $(arch))) $(LIBCXX_DL_DIR)/$(notdir $(arch)) | \
-> > +             $(TAR) --strip-components=1 -C $(@D)/$$TDIR $(TAR_OPTIONS) -
-> > +     )
-> > +endef> +
-> > +LIBCXX_POST_EXTRACT_HOOKS += LIBCXX_EXTRA_EXTRACT
-> > +
-> > +# Before libcxx is configured, we must have the first stage
-> > +# cross-compiler and the clibrary
-> > +LIBCXX_DEPENDENCIES = host-gcc-initial
-> > +
-> > +ifeq ($(BR2_PACKAGE_LIBCXX_ABI_CXXABI),y)
-> > +_LIBCXX_ABI_TARGET = cxxabi
-> > +endif
-> > +
-> > +_LIBCXX_ABI-$(BR2_PACKAGE_LIBCXX_ABI_CXXABI) = libcxxabi
-> > +_LIBCXX_ABI-$(BR2_PACKAGE_LIBCXX_ABI_SUPCXX) = libsupc++
-> > +
-> > +_LIBCXX_ABI_LINK-$(BR2_PACKAGE_LIBCXX_ABI_CXXABI) = c++abi
-> > +_LIBCXX_ABI_LINK-$(BR2_PACKAGE_LIBCXX_ABI_SUPCXX) = supc++
-> > +
-> > +LIBCXX_MAKE_OPTS = $(_LIBCXX_ABI_TARGET) cxx
-> > +
-> > +LIBCXX_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) $(addprefix install-,$(_LIBCXX_ABI_TARGET) cxx)
-> > +
-> > +LIBCXX_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) $(addprefix install-,$(_LIBCXX_ABI_TARGET) cxx)
-> > +
-> > +
-> > +#LIBCXXABI_SYSROOT LIBCXX_SYSROOT
-> > +# TODO: potentially depend on threading library?
-> > +# allow using gccs libsupc++
-> > +# consider whether its better to statically link libc++-abi
-> > +# USe this library to build the remaining C++ packages?
-> > +
-> > +# llvm does not recommend using this
-> > +LIBCXX_CONF_OPTS += -DBUILD_SHARED_LIBS:BOOL=OFF
-> > +
-> > +LIBCXX_CONF_OPTS += -DLIBCXXABI_INCLUDE_TESTS=OFF -DLIBCXXABI_ENABLE_ASSERTIONS=OFF -DLIBCXXABI_ENABLE_NEW_DELETE_DEFINITIONS=OFF -DLIBCXX_ENABLE_NEW_DELETE_DEFINITIONS=ON
-> > +
-> > +ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
-> > +LIBCXX_CONF_OPTS += -DLIBCXX_HAS_MUSL_LIBC:BOOL=ON
-> > +endif
-> > +
-> > +ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-> > +LIBCXX_CONF_OPTS += -DLIBCXXABI_ENABLE_SHARED:BOOL=ON -DLIBCXX_ENABLE_SHARED:BOOL=ON
-> > +else
-> > +LIBCXX_CONF_OPTS += -DLIBCXXABI_ENABLE_SHARED:BOOL=OFF -DLIBCXX_ENABLE_SHARED:BOOL=OFF
-> > +endif
-> > +
-> > +ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-> > +LIBCXX_CONF_OPTS += -DLIBCXXABI_ENABLE_STATIC:BOOL=ON -DLIBCXX_ENABLE_STATIC:BOOL=ON
-> > +else
-> > +LIBCXX_CONF_OPTS += -DLIBCXXABI_ENABLE_STATIC:BOOL=OFF -DLIBCXX_ENABLE_STATIC:BOOL=OFF
-> > +endif
-> > +
-> > +LIBCXX_CONF_OPTS += -DLIBCXX_ENABLE_ABI_LINKER_SCRIPT=ON
-> > +
-> > +#LIBCXX_CONF_OPTS += -DLLVM_PATH:PATH=$(@D)/llvm
-> > +
-> > +#LIBCXX_CONF_OPTS += -DLIBCXX_CXX_ABI:STRING=default
-> > +
-> > +# libc++ needs to be massaged to pick header and libs
-> > +LIBCXX_CONF_OPTS += -DLIBCXX_CXX_ABI:STRING=$(_LIBCXX_ABI-y)
-> > +
-> > +ifneq ($(_LIBCXX_ABI_TARGET),)
-> > +LIBCXX_CONF_OPTS += -DLIBCXX_CXX_ABI_INCLUDE_PATHS:PATH=$(@D)/projects/libcxxabi/include \
-> > +                                     -DLIBCXX_CXX_ABI_LIBRARY_PATH:PATH=../../../lib
-> > +endif
-> > +
-> > +
-> > +#LIBCXX_CONF_OPTS += -DLIBCXX_INCLUDE_BENCHMARKS:BOOL=OFF
-> > +#LIBCXX_CONF_OPTS += -DLIBCXX_INCLUDE_DOCS:BOOL=OFF
-> > +#LIBCXX_CONF_OPTS += -DLIBCXX_INCLUDE_TESTS:BOOL=OFF
-> > +
-> > +cxx_libs="-lc++ @link_abi@"
-> > +c_libs="-lc @link_comrt@"
-> > +
-> > +# Create a g++ wrapper to add the necessary aguments for building with libc++
-> > +define LIBCXX_CREATE_GXXWRAPPER_TARGET
-> > +     sed -e 's, at TARGET_CROSS@,$(notdir $(TARGET_CROSS)),g' \
-> > +       -e 's, at link_abi@,$(addprefix -l,$(_LIBCXX_ABI_LINK-y)),g' \
-> > +       -e 's, at link_comrt@,-lgcc_s,g' \
-> > +       $(LIBCXX_PKGDIR)g++-libc++.in > $(LIBCXX_BUILDDIR)gxxwrap.tmp
-> > +     install -D -m755 $(LIBCXX_BUILDDIR)gxxwrap.tmp $(TARGET_CROSS)g++-libc++
-> > +endef
-> > +LIBCXX_POST_INSTALL_TARGET_HOOKS = LIBCXX_CREATE_GXXWRAPPER_TARGET
-> > +
-> > +$(eval $(cmake-package))
-> > diff --git a/package/libcxx/libcxxabi_fix_find_fpath_when_crosscompiling.patch b/package/libcxx/libcxxabi_fix_find_fpath_when_crosscompiling.patch
-> > new file mode 100644
-> > index 0000000000..2fd95178f7
-> > --- /dev/null
-> > +++ b/package/libcxx/libcxxabi_fix_find_fpath_when_crosscompiling.patch
->
-> Please, provide a patch generated with git format-patch with a commit log,
-> upstream status and you SoB line.
->
-> I'll mark you patch "Change Requested" in the patchwork, please send an updated
-> version.
-
-Will do (hopefully I don't need patches with 7.0.0, this one was
-nipped from upstream and should have ended in 7.0.0).
-
-Norbert
+diff --git a/Config.in b/Config.in
+index 6b5b2b043c..f6d28e362f 100644
+--- a/Config.in
++++ b/Config.in
+@@ -67,6 +67,9 @@ config BR2_HOST_GCC_AT_LEAST_8
+ 	default y if BR2_HOST_GCC_VERSION = "8"
+ 	select BR2_HOST_GCC_AT_LEAST_7
+ 
++# When adding new entries above, be sure to update
++# the HOSTCC_VERSION variable in the Makefile.
++
+ # Hidden boolean selected by packages in need of Java in order to build
+ # (example: kodi)
+ config BR2_NEEDS_HOST_JAVA
+diff --git a/Makefile b/Makefile
+index d39a94e832..6572e1e947 100644
+--- a/Makefile
++++ b/Makefile
+@@ -351,8 +351,11 @@ export HOSTARCH := $(shell LC_ALL=C $(HOSTCC_NOCCACHE) -v 2>&1 | \
+ 	    -e 's/macppc/powerpc/' \
+ 	    -e 's/sh.*/sh/' )
+ 
+-HOSTCC_VERSION := $(shell $(HOSTCC_NOCCACHE) --version | \
+-	sed -n -r 's/^.* ([0-9]*)\.([0-9]*)\.([0-9]*)[ ]*.*/\1 \2/p')
++# When adding a new host gcc version in Config.in,
++# update the major in the condition, below:
++HOSTCC_VERSION := $(shell V=$$($(HOSTCC_NOCCACHE) --version | \
++	sed -n -r 's/^.* ([0-9]*)\.([0-9]*)\.([0-9]*)[ ]*.*/\1 \2/p'); \
++	[ "$${V%% *}" -le 8 ] || V=8; printf "%s" "$${V}")
+ 
+ # For gcc >= 5.x, we only need the major version.
+ ifneq ($(firstword $(HOSTCC_VERSION)),4)
+-- 
+2.14.1
