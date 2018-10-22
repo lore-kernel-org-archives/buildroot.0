@@ -1,61 +1,68 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 22 Oct 2018 21:25:50 +0100
-Subject: [Buildroot] [git commit] qt5base: Qt KMS support does not depend on
- opengl
-Message-ID: <20181022202552.165C0885A8@busybox.osuosl.org>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Mon, 22 Oct 2018 23:09:06 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-10-21
+In-Reply-To: <20181022060034.EFADF20DCD@mail.bootlin.com>
+References: <20181022060034.EFADF20DCD@mail.bootlin.com>
+Message-ID: <6d6eb92f-2bdd-c418-6356-a8d8b499c684@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f91ea94a6f4d1387b062f9f09c98badf0766127f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Qt KMS support should not explicitly depend on the availability of opengl.
-Don't explicitly disable KMS if opengl is not available and fallback to
-detecting if libdrm is available before disabling kms.
+Il 22/10/2018 08:00, Thomas Petazzoni ha scritto:
+> Hello,
+> 
+> Build statistics for 2018-10-21
+> ===============================
+> 
+>        branch |  OK | NOK | TIM | TOT |
+>     2018.02.x |  24 |   2 |   0 |  26 |
+>     2018.08.x |  22 |   1 |   0 |  23 |
+>        master | 216 |  20 |   0 | 236 |
+> 
+> Results for branch '2018.02.x'
+> ==============================
+> 
+> Classification of failures by reason
+> ------------------------------------
+> 
+>                     attr-2.4.48 | 1
+>                ptpd2-ptpd-2.3.1 | 1
 
-The scenario where this is necessary involves using the Qt linuxfb backend
-"dumb buffer" support via the DRM API.  This is new in Qt 5.9 [1] and only
-requires KMS, but not opengl. Although on Qt 5.6, only eglfs actually
-uses libdrm/kms, it doesn't hurt to add the dependency and the -kms
-option there as well, and doing so keeps the logic in the .mk file
-simple.
+This and..
 
-[1] http://doc.qt.io/qt-5/embedded-linux.html#linuxfb
+> 
+> Detail of failures
+> ------------------
+> 
+>          bfin |                    attr-2.4.48 | NOK | http://autobuild.buildroot.net/results/0809e6db9ca8e2b77a15046f5726cfe46130f0f5 |
+>      mips64el |               ptpd2-ptpd-2.3.1 | NOK | http://autobuild.buildroot.net/results/12471bcafed9a4a1f6165e16f87dae09e372bc63 | ORPH
+> 
+> Results for branch '2018.08.x'
+> ==============================
+> 
+> Classification of failures by reason
+> ------------------------------------
+> 
+>                ptpd2-ptpd-2.3.1 | 1
 
-Cc: Peter Seiderer <ps.report@gmx.net>
-Cc: Julien Corjon <corjon.j@ecagroup.com>
-Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/qt5/qt5base/qt5base.mk | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+this are solved by these 2 patches:
+https://git.buildroot.net/buildroot/commit/?id=5b7bc560a5859d4b9f0c2a14c10e83c18fbd6bca
+https://git.buildroot.net/buildroot/commit/?id=d60973af00c5ad7dc15049597cf03bd1ad538041
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index ab2b883fc4..2b6fd39267 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -35,12 +35,19 @@ endif
- 
- QT5BASE_CONFIGURE_OPTS += $(call qstrip,$(BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS))
- 
-+ifeq ($(BR2_PACKAGE_LIBDRM),y)
-+QT5BASE_CONFIGURE_OPTS += -kms
-+QT5BASE_DEPENDENCIES += libdrm
-+else
-+QT5BASE_CONFIGURE_OPTS += -no-kms
-+endif
-+
- # Uses libgbm from mesa3d
- ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
--QT5BASE_CONFIGURE_OPTS += -kms -gbm
-+QT5BASE_CONFIGURE_OPTS += -gbm
- QT5BASE_DEPENDENCIES += mesa3d
- else
--QT5BASE_CONFIGURE_OPTS += -no-kms
-+QT5BASE_CONFIGURE_OPTS += -no-gbm
- endif
- 
- ifeq ($(BR2_ENABLE_DEBUG),y)
+Kind regards
+-- 
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
