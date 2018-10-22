@@ -1,25 +1,53 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 22 Oct 2018 12:20:49 +0000
-Subject: [Buildroot] [Bug 11421] GCC error message for ARM Cortex-A9/ARM.V7
-In-Reply-To: <bug-11421-163@https.bugs.busybox.net/>
-References: <bug-11421-163@https.bugs.busybox.net/>
-Message-ID: <bug-11421-163-thjkX3wcir@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 22 Oct 2018 15:16:41 +0200
+Subject: [Buildroot] autobuilder sandbox
+In-Reply-To: <CANQCQpa_R+UwyhmNZGeKyOtN2G3487r6-T8zaDayGufq7g2g3g@mail.gmail.com>
+References: <CANQCQpa_R+UwyhmNZGeKyOtN2G3487r6-T8zaDayGufq7g2g3g@mail.gmail.com>
+Message-ID: <20181022151641.198b2c3f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11421
+Hello,
 
---- Comment #1 from ecs.egon.derflinger at t-online.de <ecs.egon.derflinger@t-online.de> ---
-Compiled with -v option:
+On Mon, 22 Oct 2018 04:23:08 -0500, Matthew Weber wrote:
 
-GNU C11 (Buildroot 2016.11.2-g944d03b) Version 5.4.0
-(arm-buildroot-linux-gnueabi)
-        kompiliert von GNU-C-Version 5.4.0 20160609, GMP-Version 6.1.1,
-MPFR-Version 3.1.5, MPC-Version 1.0.3.
+> I was able to get a script using the bubblewrap project working.  It
+> remaps the mounted filesystem environment read-only around the
+> application/shell you call.   I was wondering what the best strategy
+> would be to start introducing these type of build failures?
 
+The best strategy is to *not* introduce build failures :-)
+
+> Maybe the autobuilder support for an alternate repo and branch needs
+> to be merged first?
+
+Well supporting alternate repo/branch is about testing different
+Buildroot versions, not about testing in different environments.
+
+I think we don't need anything special: an autobuild instance running
+in a sandbox can be considered as just another autobuild instance. Just
+like some autobuild instance run with Debian, others with Fedora, with
+varying versions of distributions and installed packages.
+
+So you could have an autobuilder instance running inside a sandboxed
+environment, and report results to autobuild.buildroot.org with a
+clearly identified "submitter" content that allows to know it's a
+sandboxed instance.
+
+To run this, I guess you have two options:
+
+ - Run the entire autobuild-run stuff in a sandbox.
+
+ - Modify autobuild-run so that it can optionally run just the build
+   inside a sandbox.
+
+Best regards,
+
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
