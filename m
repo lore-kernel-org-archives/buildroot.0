@@ -1,54 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 22 Oct 2018 14:35:51 +0000
-Subject: [Buildroot] [Bug 11426] New: pps-tools bash dependency
-Message-ID: <bug-11426-163@https.bugs.busybox.net/>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Mon, 22 Oct 2018 18:06:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/redis: Bump to version 4.0.10
+Message-ID: <20181022160630.20042-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11426
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+---
+ package/redis/redis.hash | 3 ++-
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-            Bug ID: 11426
-           Summary: pps-tools bash dependency
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: jan.dohl at airrays.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
-
-When installing the pps-tools package without installing Bash, the ppsfind
-script in the package will not work. For example:
-
-# uname -a
-Linux xla 4.14.0-xla #4 SMP PREEMPT Fri Oct 19 17:56:30 CEST 2018 aarch64
-GNU/Linux
-
-# ppsfind
--sh: ppsfind: not found
-
-# which ppsfind
-/usr/bin/ppsfind
-
-# cat /usr/bin/ppsfind | head -n 1
-#!/bin/bash
-
-Not sure what the best course of action is here, though. I think making Bash a
-dependency for pps-tools is not a good idea. The ppsfind script works fine by
-just replacing the shebang with /bin/sh instead. The latter is probably also a
-good suggestion for the upstream repository.
-
-Would a patch for the time being while also reporting this to the upstream be a
-good idea?
-
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index d9a14cef6c..d448228b56 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,4 +1,5 @@
+ # From https://github.com/antirez/redis-hashes/blob/master/README
+-sha256 98c4254ae1be4e452aa7884245471501c9aa657993e0318d88f048093e7f88fd  redis-3.2.12.tar.gz
++sha256 1db67435a704f8d18aec9b9637b373c34aa233d65b6e174bdac4c1b161f38ca4  redis-4.0.10.tar.gz
++
+ # Locally calculated
+ sha256 cbf420a3672475a6e2765e3c0984c1f81efe0212afb94a3c998ee63bfd661063  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index cbd2d7bdcb..a14ae2283f 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-REDIS_VERSION = 3.2.12
++REDIS_VERSION = 4.0.10
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.18.1
