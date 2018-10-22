@@ -1,39 +1,76 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 22 Oct 2018 23:19:06 +0100
-Subject: [Buildroot] [PATCH 1/1] dbus-python: add host package
-In-Reply-To: <20181015235048.12213-1-bgenerous@impinj.com>
-References: <20181015235048.12213-1-bgenerous@impinj.com>
-Message-ID: <bc24bc91-3edd-85b7-04bc-ba45d280532d@mind.be>
+Date: Mon, 22 Oct 2018 23:24:32 +0100
+Subject: [Buildroot] [PATCH] core: support host gcc of the future
+In-Reply-To: <20181022090513.4976-1-yann.morin.1998@free.fr>
+References: <20181022090513.4976-1-yann.morin.1998@free.fr>
+Message-ID: <2f29e023-6e86-1388-e48e-62bcea5a723b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Brent,
 
-On 10/16/18 12:51 AM, Brent Generous wrote:
-> This can be useful for Python scripts running on a host machine that
-> need to connect to a bus on a remote device, e.g. test scripts.
+
+On 10/22/18 10:05 AM, Yann E. MORIN wrote:
+> When we do a release, we know only of a set of gcc versions that the
+> host may have. But in the future, distributions with newer gcc versions
+> may show up.
 > 
-> Signed-off-by: Brent Generous <bgenerous@impinj.com>
+> Currently, we do not recognise those versions, and thus we do as if they
+> were older than the oldest we know of. This means that a set of packages
+> become unselectable, when they should be.
+> 
+> We fix that be capping the detected version to the highest we know of.
+
+ Good plan!
+
+> 
+> Reported-by: gargar_ on IRC
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
 > ---
->  package/dbus-python/dbus-python.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  Config.in | 3 +++
+>  Makefile  | 7 +++++--
+>  2 files changed, 8 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/dbus-python/dbus-python.mk b/package/dbus-python/dbus-python.mk
-> index da04b7404f..cc3fd97c9d 100644
-> --- a/package/dbus-python/dbus-python.mk
-> +++ b/package/dbus-python/dbus-python.mk
-> @@ -29,3 +29,4 @@ DBUS_PYTHON_CONF_ENV += \
->  endif
+> diff --git a/Config.in b/Config.in
+> index 6b5b2b043c..f6d28e362f 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -67,6 +67,9 @@ config BR2_HOST_GCC_AT_LEAST_8
+>  	default y if BR2_HOST_GCC_VERSION = "8"
+>  	select BR2_HOST_GCC_AT_LEAST_7
 >  
->  $(eval $(autotools-package))
-> +$(eval $(host-autotools-package))
+> +# When adding new entries above, be sure to update
+> +# the HOSTCC_VERSION variable in the Makefile.
+> +
+>  # Hidden boolean selected by packages in need of Java in order to build
+>  # (example: kodi)
+>  config BR2_NEEDS_HOST_JAVA
+> diff --git a/Makefile b/Makefile
+> index d39a94e832..6572e1e947 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -351,8 +351,11 @@ export HOSTARCH := $(shell LC_ALL=C $(HOSTCC_NOCCACHE) -v 2>&1 | \
+>  	    -e 's/macppc/powerpc/' \
+>  	    -e 's/sh.*/sh/' )
+>  
+> -HOSTCC_VERSION := $(shell $(HOSTCC_NOCCACHE) --version | \
+> -	sed -n -r 's/^.* ([0-9]*)\.([0-9]*)\.([0-9]*)[ ]*.*/\1 \2/p')
+> +# When adding a new host gcc version in Config.in,
+> +# update the major in the condition, below:
+> +HOSTCC_VERSION := $(shell V=$$($(HOSTCC_NOCCACHE) --version | \
+> +	sed -n -r 's/^.* ([0-9]*)\.([0-9]*)\.([0-9]*)[ ]*.*/\1 \2/p'); \
+> +	[ "$${V%% *}" -le 8 ] || V=8; printf "%s" "$${V}")
 
- We only accept host packages that are either a dependency of some other
-package, or can be selected through a Config.in.host option. Otherwise, its
-build will never get tested in the autobuilders, and it's not visible.
+ It is not so easy for the developer to realize that they should replace the two
+8s there when bumping maximum host gcc... Could you move it into a variable?
 
  Regards,
  Arnout
+
+>  
+>  # For gcc >= 5.x, we only need the major version.
+>  ifneq ($(firstword $(HOSTCC_VERSION)),4)
+> 
