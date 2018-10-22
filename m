@@ -1,68 +1,90 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Mon, 22 Oct 2018 23:09:06 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-10-21
-In-Reply-To: <20181022060034.EFADF20DCD@mail.bootlin.com>
-References: <20181022060034.EFADF20DCD@mail.bootlin.com>
-Message-ID: <6d6eb92f-2bdd-c418-6356-a8d8b499c684@micronovasrl.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 22 Oct 2018 23:12:31 +0200
+Subject: [Buildroot] [PATCH 2/5] download/git: re-run the backend with a
+ lock to the git tree
+In-Reply-To: <a1e6c685-bd6d-0de0-faaf-523b2f650ce7@mind.be>
+References: <cover.1534972250.git.yann.morin.1998@free.fr>
+ <b5a3123305e1d4cef3cbdb17985e73161d13f407.1534972250.git.yann.morin.1998@free.fr>
+ <20180910225228.56cdb555@windsurf> <20181014125415.GG31509@scaer>
+ <a1e6c685-bd6d-0de0-faaf-523b2f650ce7@mind.be>
+Message-ID: <20181022211231.GA3164@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 2018-10-20 23:11 +0100, Arnout Vandecappelle spake thusly:
+[--SNIP--]
+>  So, my proposal would be:
 
-Il 22/10/2018 08:00, Thomas Petazzoni ha scritto:
-> Hello,
-> 
-> Build statistics for 2018-10-21
-> ===============================
-> 
->        branch |  OK | NOK | TIM | TOT |
->     2018.02.x |  24 |   2 |   0 |  26 |
->     2018.08.x |  22 |   1 |   0 |  23 |
->        master | 216 |  20 |   0 | 236 |
-> 
-> Results for branch '2018.02.x'
-> ==============================
-> 
-> Classification of failures by reason
-> ------------------------------------
-> 
->                     attr-2.4.48 | 1
->                ptpd2-ptpd-2.3.1 | 1
+As we discussed IRL, this is a good suggestion, but now that it has had
+time to bounce a bit between my two still-working neurons, here are my
+comments on it...
 
-This and..
+> 1. Remove the redundant temporary files from the download infra.
 
-> 
-> Detail of failures
-> ------------------
-> 
->          bfin |                    attr-2.4.48 | NOK | http://autobuild.buildroot.net/results/0809e6db9ca8e2b77a15046f5726cfe46130f0f5 |
->      mips64el |               ptpd2-ptpd-2.3.1 | NOK | http://autobuild.buildroot.net/results/12471bcafed9a4a1f6165e16f87dae09e372bc63 | ORPH
-> 
-> Results for branch '2018.08.x'
-> ==============================
-> 
-> Classification of failures by reason
-> ------------------------------------
-> 
->                ptpd2-ptpd-2.3.1 | 1
+> 2. Replace the flock on the per-package download dir with a flock of a temporary
+> file named ${filename}.lock. That way, we serialize just what needs to be
+> serialized.
 
-this are solved by these 2 patches:
-https://git.buildroot.net/buildroot/commit/?id=5b7bc560a5859d4b9f0c2a14c10e83c18fbd6bca
-https://git.buildroot.net/buildroot/commit/?id=d60973af00c5ad7dc15049597cf03bd1ad538041
+And who would be responsible to remove those lock files?
 
-Kind regards
+When the download runs OK, I can see it pretty easy, even though it is
+not nice... But when the download gets interrupted (think Ctrl-C or
+SIGTERM/SIGKILL from a CI...)?
+
+I'm afraid we could end up with dozens stale such lock files cluttering
+the (per-package) directory... Locking the per-package directory itself
+was nice and dandy because it was expected to live on and stay.
+
+I could see an alternative, which would be to lock the final file,
+directly. After all, those lock are just advisory locks; they don't
+actually prevent another process to write in the locked files at all.
+
+However, that does not work, because then it would be an empty file, so
+would not match its hashes, and the download wrapper would remove it,
+thus freeing a competing build into creating that lock file again while
+the first one is still trying to download it...
+
+So we need to lock a file other than the destination file, and back to
+square one...
+
+> 3. Add a git-specific "global" lock, but do it directly from the dl-wrapper to
+> keep the code simple.
+
+And then, what should be locked?
+
+If we lock a (say) 'git.lock' file in the per-package directory, but the
+download is interrupted, the lock file would linger around. Since it is
+only ever the only git-related lock file, that is not too bad. Even if
+we had more per-backend locks, that is still just a few of them, and we
+could make them hidden files (.git.lock).
+
+If we rely on the fact that the backend would create a directory named
+after itself (e.g. the git backend creates a directory named 'git'),
+then the dl-wrapper could create that directory and handle it over to
+the backend. But then, the backend should never ever remove that
+directory (which we currently do in case the git tree is borked)), or a
+competing download could grab the lock while the first would still be
+attempting the download.
+
+So, I am not fond of all those new lock files, which have the potential
+to eventually clutter the download difrectory... :-(
+
+(Note: I am not saying that the mere presence of lock files would
+prevent future downloads; not at all, as we use flock(2) on them. I'm
+just saying that stale lock files are ugly...)
+
+> (in terms of patch order, obviously 2 and 3 have to be swapped).
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
