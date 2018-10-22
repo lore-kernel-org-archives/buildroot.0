@@ -1,93 +1,99 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 22 Oct 2018 11:23:52 +0200
-Subject: [Buildroot] [PATCH v2 2/2] python-serial-asyncio: new package
-In-Reply-To: <1540199811-4328-2-git-send-email-james.hilliard1@gmail.com>
-References: <1540199811-4328-1-git-send-email-james.hilliard1@gmail.com>
- <1540199811-4328-2-git-send-email-james.hilliard1@gmail.com>
-Message-ID: <CAGm1_kv-EssJPAa+X6aE2RGa97jXtKeajOEEft8guJurGm05Vg@mail.gmail.com>
+From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
+Date: Mon, 22 Oct 2018 17:31:36 +0800
+Subject: [Buildroot] [PATCH v2 1/1] python-yarl: new package
+Message-ID: <1540200696-4586-1-git-send-email-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 22, 2018 at 11:17 AM <james.hilliard1@gmail.com> wrote:
->
-> From: James Hilliard <james.hilliard1@gmail.com>
->
-> asyncio extension package for pyserial
->
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Yet another URL library
 
-> ---
->  package/Config.in                                        |  1 +
->  package/python-serial-asyncio/Config.in                  |  8 ++++++++
->  package/python-serial-asyncio/python-serial-asyncio.hash |  5 +++++
->  package/python-serial-asyncio/python-serial-asyncio.mk   | 14 ++++++++++++++
->  4 files changed, 28 insertions(+)
->  create mode 100644 package/python-serial-asyncio/Config.in
->  create mode 100644 package/python-serial-asyncio/python-serial-asyncio.hash
->  create mode 100644 package/python-serial-asyncio/python-serial-asyncio.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 177861e..f4cc928 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1008,6 +1008,7 @@ menu "External python modules"
->         source "package/python-see/Config.in"
->         source "package/python-semver/Config.in"
->         source "package/python-serial/Config.in"
-> +       source "package/python-serial-asyncio/Config.in"
->         source "package/python-service-identity/Config.in"
->         source "package/python-setproctitle/Config.in"
->         source "package/python-setuptools/Config.in"
-> diff --git a/package/python-serial-asyncio/Config.in b/package/python-serial-asyncio/Config.in
-> new file mode 100644
-> index 0000000..5520b72
-> --- /dev/null
-> +++ b/package/python-serial-asyncio/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_PYTHON_SERIAL_ASYNCIO
-> +       bool "python-serial-asyncio"
-> +       depends on BR2_PACKAGE_PYTHON3
-> +       select BR2_PACKAGE_PYTHON_SERIAL
-> +       help
-> +         asyncio extension package for pyserial.
-> +
-> +         https://github.com/pyserial/pyserial-asyncio
-> diff --git a/package/python-serial-asyncio/python-serial-asyncio.hash b/package/python-serial-asyncio/python-serial-asyncio.hash
-> new file mode 100644
-> index 0000000..268c7d8
-> --- /dev/null
-> +++ b/package/python-serial-asyncio/python-serial-asyncio.hash
-> @@ -0,0 +1,5 @@
-> +# md5, sha256 from https://pypi.org/pypi/pyserial-asyncio/json
-> +md5     67244fdc11cc31cf0ebf675c271c71d8  pyserial-asyncio-0.4.tar.gz
-> +sha256  c40677a8874d8c24d4423a97498746de776f6dbcd0efbb8fa43dcf011a589aee  pyserial-asyncio-0.4.tar.gz
-> +# Locally computed sha256 checksums
-> +sha256 f8ded3a7460d3b2850b0cf673e986c70e9d997fd0732d8ab3f3c84f1f191087d  LICENSE.txt
-> diff --git a/package/python-serial-asyncio/python-serial-asyncio.mk b/package/python-serial-asyncio/python-serial-asyncio.mk
-> new file mode 100644
-> index 0000000..39c3476
-> --- /dev/null
-> +++ b/package/python-serial-asyncio/python-serial-asyncio.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-serial-asyncio
-> +#
-> +################################################################################
-> +
-> +PYTHON_SERIAL_ASYNCIO_VERSION = 0.4
-> +PYTHON_SERIAL_ASYNCIO_SOURCE = pyserial-asyncio-$(PYTHON_SERIAL_ASYNCIO_VERSION).tar.gz
-> +PYTHON_SERIAL_ASYNCIO_SITE = https://files.pythonhosted.org/packages/41/3f/e26f71269cbc0890a527a736d9afc5c0d5838a2c188be680558d635b7dc2
-> +PYTHON_SERIAL_ASYNCIO_LICENSE = BSD-3-Clause
-> +PYTHON_SERIAL_ASYNCIO_LICENSE_FILES = LICENSE.txt
-> +PYTHON_SERIAL_ASYNCIO_SETUP_TYPE = setuptools
-> +
-> +$(eval $(python-package))
-> --
-> 2.7.4
->
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ DEVELOPERS                           |  3 +++
+ package/Config.in                    |  1 +
+ package/python-yarl/Config.in        |  9 +++++++++
+ package/python-yarl/python-yarl.hash |  5 +++++
+ package/python-yarl/python-yarl.mk   | 13 +++++++++++++
+ 5 files changed, 31 insertions(+)
+ create mode 100644 package/python-yarl/Config.in
+ create mode 100644 package/python-yarl/python-yarl.hash
+ create mode 100644 package/python-yarl/python-yarl.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3bcbf81..3ee4050 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1013,6 +1013,9 @@ F:	configs/orangepi_zero_plus2_defconfig
+ F:	configs/pine64_defconfig
+ F:	configs/pine64_sopine_defconfig
+ 
++N:      James Hilliard <james.hilliard1@gmail.com>
++F:      package/python-yarl/
++
+ N:	James Knight <james.knight@rockwellcollins.com>
+ F:	package/atkmm/
+ F:	package/cairomm/
+diff --git a/package/Config.in b/package/Config.in
+index c1a917c..e100500 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1067,6 +1067,7 @@ menu "External python modules"
+ 	source "package/python-xlutils/Config.in"
+ 	source "package/python-xlwt/Config.in"
+ 	source "package/python-xmltodict/Config.in"
++	source "package/python-yarl/Config.in"
+ 	source "package/python-yieldfrom/Config.in"
+ 	source "package/python-zeroconf/Config.in"
+ 	source "package/python-zope-interface/Config.in"
+diff --git a/package/python-yarl/Config.in b/package/python-yarl/Config.in
+new file mode 100644
+index 0000000..e520504
+--- /dev/null
++++ b/package/python-yarl/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_YARL
++	bool "python-yarl"
++	depends on BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON_MULTIDICT
++	select BR2_PACKAGE_PYTHON_IDNA
++	help
++	  Yet another URL library.
++
++	  http://yarl.readthedocs.io/
+diff --git a/package/python-yarl/python-yarl.hash b/package/python-yarl/python-yarl.hash
+new file mode 100644
+index 0000000..118c722
+--- /dev/null
++++ b/package/python-yarl/python-yarl.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.python.org/pypi/yarl/json
++md5	43380667129ebc52ac3c442daabb3f6d  yarl-1.2.6.tar.gz
++sha256	c8cbc21bbfa1dd7d5386d48cc814fe3d35b80f60299cdde9279046f399c3b0d8  yarl-1.2.6.tar.gz
++# Locally computed sha256 checksums
++sha256	14c0820503ceef15e814a89b037d9efc066870087018294b6ae0f27163872cc5  LICENSE
+diff --git a/package/python-yarl/python-yarl.mk b/package/python-yarl/python-yarl.mk
+new file mode 100644
+index 0000000..94c3db3
+--- /dev/null
++++ b/package/python-yarl/python-yarl.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-yarl
++#
++################################################################################
++PYTHON_YARL_VERSION = 1.2.6
++PYTHON_YARL_SOURCE = yarl-$(PYTHON_YARL_VERSION).tar.gz
++PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/43/b8/057c3e5b546ff4b24263164ecda13f6962d85c9dc477fcc0bcdcb3adb658
++PYTHON_YARL_LICENSE = Apache-2.0
++PYTHON_YARL_LICENSE_FILES = LICENSE
++PYTHON_YARL_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
+-- 
+2.7.4
