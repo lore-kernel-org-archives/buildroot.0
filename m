@@ -1,47 +1,111 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Oct 2018 00:56:40 +0200
-Subject: [Buildroot] [PATCH] redis: bump to version 4.0.11
-Message-ID: <20181022225640.5296-1-peter@korsgaard.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 23 Oct 2018 00:08:37 +0100
+Subject: [Buildroot] [PATCH] .gitlab-ci.yml: do runtime tests only on
+ explicit trigger
+In-Reply-To: <5bcd377bb2a67_2682ab89f25c7b81143d@ultri5.mail>
+References: <277d5a7f-c605-af13-c004-63259faa649a@mind.be>
+ <5bcd377bb2a67_2682ab89f25c7b81143d@ultri5.mail>
+Message-ID: <4e9b7774-6f73-418b-eba3-0036b8d7a239@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From the release notes
-(https://raw.githubusercontent.com/antirez/redis/4.0/00-RELEASENOTES):
 
-Upgrade urgency HIGH: not critical but very important bugs fixed.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/redis/redis.hash | 2 +-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 10/22/18 3:35 AM, Ricardo Martincoski wrote:
+> Hello,
+> 
+> On Sun, Oct 21, 2018 at 08:23 AM, Arnout Vandecappelle wrote:
+> 
+> [snip]
+>>>>  .runtime_test: &runtime_test
+>>>> +    # Running the runtime tests for every push is too much, so limit to
+>>>> +    # explicit triggers through the API.
+>>>> +    only:
+>>>> +        - triggers
+>>>> +        - tags
+>>>
+>>> We could also allow a regexp on the branch name to trigger it:
+>>>          - /^.*-runtime_test$/
+>>>
+>>> Using the same commit, I pushed 2 branches:
+>>> branch name: gitlabci-triggers, #jobs = 4
+>>> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/33723520
+>>> branch name: gitlabci-triggers-runtime_test, #jobs = 72
+>>> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/33723541
+>>
+>>  Looks nice, but that's really material for a separate patch (and probably
+> 
+> Indeed.
+> 
+>> should be done for defconfigs too then).
+> 
+> OK.
+> 
+>>
+>>  Would it be possible to also define branches for a specific test or defconfig?
+> 
+> Yes.
+> 
+> Using the same commit, I pushed 3 branches and a tag:
+> git push gitlab HEAD:test2               #jobs = 4
+> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/33765315
+> git push gitlab HEAD:test2-TestSyslogNg  #jobs = 5
+> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/33765342
+> git push gitlab HEAD:test2-runtime_test  #jobs = 72
+> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/33765317
+> git push gitlab test2-tag                #jobs = 260
+> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/33765321
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index d448228b56..0b4e25c61d 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/antirez/redis-hashes/blob/master/README
--sha256 1db67435a704f8d18aec9b9637b373c34aa233d65b6e174bdac4c1b161f38ca4  redis-4.0.10.tar.gz
-+sha256 fc53e73ae7586bcdacb4b63875d1ff04f68c5474c1ddeda78f00e5ae2eed1bbb  redis-4.0.11.tar.gz
- 
- # Locally calculated
- sha256 cbf420a3672475a6e2765e3c0984c1f81efe0212afb94a3c998ee63bfd661063  COPYING
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index a14ae2283f..da2307d693 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--REDIS_VERSION = 4.0.10
-+REDIS_VERSION = 4.0.11
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
--- 
-2.11.0
+ Nice! I suppose test2-tag is actually a tag, not a branch, so it matches the
+'tags' trigger?
+
+> 
+> We will need some extra 'sed' trickery to create a regexp for each test case:
+> -tests.package.test_syslog_ng.TestSyslogNg: *runtime_test
+> +tests.package.test_syslog_ng.TestSyslogNg:
+> +    <<: *runtime_test
+> +    only:
+> +        - triggers
+> +        - tags
+> +        - /^.*-runtime_test$/
+> +        - /^.*-TestSyslogNg$/
+
+ Maybe you can use variables in there? So, in the only specification of
+.runtime_test:
+
+    only:
+        - triggers
+        - tags
+        - /^.*-runtime_test$/
+        - /^.*-${CI_JOB_NAME}$/
+
+ Hm, unlikely, otherwise the other $ would have to be quoted.
+
+ Apparently nowadays there is also support for more complex only specifications
+using variables. Perhaps you could take a look at that? I'm afraid though that
+it's always an AND of the conditions you specify, so no way to specify that it's
+for tags OR for things matching the CI_JOB_NAME.
+
+ Regards,
+ Arnout
+
+> 
+> Unfortunately the inheritance using the anchor runtime_test does not allow to
+> merge two 'only' keywords, the 'only' declared on the test case key overrides
+> entirely the 'only' declared on the hidden key '.runtime_test' (or the other way
+> around if << is placed@the end), so we would need to repeat those lines for
+> every test case listed.
+> But maybe we don't care that .gitlab-ci.yml grows because those lines would be
+> automatically generated by 'make .gitlab-ci.yml'.
+> 
+>>
+>>  Could you take care of this?
+> 
+> Sure.
+> 
+> Regards,
+> Ricardo
+> 
