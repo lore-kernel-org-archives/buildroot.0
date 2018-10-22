@@ -1,37 +1,25 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 22 Oct 2018 07:33:41 +0000
-Subject: [Buildroot] [Bug 11416] check-uniq-files staging issue
-In-Reply-To: <bug-11416-163@https.bugs.busybox.net/>
-References: <bug-11416-163@https.bugs.busybox.net/>
-Message-ID: <bug-11416-163-vYSBbaxHKg@https.bugs.busybox.net/>
+Date: Mon, 22 Oct 2018 07:37:09 +0000
+Subject: [Buildroot] [Bug 11411] check-uniq-files target issue
+In-Reply-To: <bug-11411-163@https.bugs.busybox.net/>
+References: <bug-11411-163@https.bugs.busybox.net/>
+Message-ID: <bug-11411-163-yxIAsM7M8y@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11416
+https://bugs.busybox.net/show_bug.cgi?id=11411
 
---- Comment #1 from Jean-pierre Cartal <jpcartal@free.fr> ---
-The following patch avoids the false positive warnings regarding .la files: 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index a689dde4d2..110f8ee4a5 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -276,7 +276,8 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
-                                $(addprefix
-$(STAGING_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ;\
-        fi
-        @$(call MESSAGE,"Fixing libtool files")
--       $(Q)find $(STAGING_DIR)/usr/lib* -name "*.la" | xargs --no-run-if-empty
-\
-+       $(Q)for lafile in $$(find $(@D) -name *.la -exec basename {} \; | sort
--u); do \
-+               ls $(STAGING_DIR)/usr/lib*/$${lafile}; done | xargs
---no-run-if-empty \
-                $(SED) "s:$(BASE_DIR):@BASE_DIR@:g" \
-                        -e "s:$(STAGING_DIR):@STAGING_DIR@:g" \
-                        $(if $(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
+--- Comment #6 from Jean-pierre Cartal <jpcartal@free.fr> ---
+You're correct, this is happening when I force a package reinstallation, a full
+package rebuild does not trigger the issue.
+
+However, I think that adding the -p option would still be useful to avoid this
+issue when reinstalling a package.
+
+BTW I created a separate ticket for warnings in staging area (#11416)
 
 -- 
 You are receiving this mail because:
