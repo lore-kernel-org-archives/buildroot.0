@@ -1,7 +1,7 @@
 From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
-Date: Mon, 22 Oct 2018 17:31:36 +0800
-Subject: [Buildroot] [PATCH v2 1/1] python-yarl: new package
-Message-ID: <1540200696-4586-1-git-send-email-james.hilliard1@gmail.com>
+Date: Mon, 22 Oct 2018 17:37:08 +0800
+Subject: [Buildroot] [PATCH v2 1/1] python-async-timeout: new package
+Message-ID: <1540201028-4781-1-git-send-email-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,22 +10,22 @@ To: buildroot@busybox.net
 
 From: James Hilliard <james.hilliard1@gmail.com>
 
-Yet another URL library
+asyncio-compatible timeout context manager.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- DEVELOPERS                           |  3 +++
- package/Config.in                    |  1 +
- package/python-yarl/Config.in        |  9 +++++++++
- package/python-yarl/python-yarl.hash |  5 +++++
- package/python-yarl/python-yarl.mk   | 13 +++++++++++++
- 5 files changed, 31 insertions(+)
- create mode 100644 package/python-yarl/Config.in
- create mode 100644 package/python-yarl/python-yarl.hash
- create mode 100644 package/python-yarl/python-yarl.mk
+ DEVELOPERS                                             |  3 +++
+ package/Config.in                                      |  1 +
+ package/python-async-timeout/Config.in                 |  7 +++++++
+ package/python-async-timeout/python-async-timeout.hash |  5 +++++
+ package/python-async-timeout/python-async-timeout.mk   | 13 +++++++++++++
+ 5 files changed, 29 insertions(+)
+ create mode 100644 package/python-async-timeout/Config.in
+ create mode 100644 package/python-async-timeout/python-async-timeout.hash
+ create mode 100644 package/python-async-timeout/python-async-timeout.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 3bcbf81..3ee4050 100644
+index 3bcbf81..ad55e15 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
 @@ -1013,6 +1013,9 @@ F:	configs/orangepi_zero_plus2_defconfig
@@ -33,66 +33,64 @@ index 3bcbf81..3ee4050 100644
  F:	configs/pine64_sopine_defconfig
  
 +N:      James Hilliard <james.hilliard1@gmail.com>
-+F:      package/python-yarl/
++F:      package/python-async-timeout/
 +
  N:	James Knight <james.knight@rockwellcollins.com>
  F:	package/atkmm/
  F:	package/cairomm/
 diff --git a/package/Config.in b/package/Config.in
-index c1a917c..e100500 100644
+index 177861e..9b3bb68 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1067,6 +1067,7 @@ menu "External python modules"
- 	source "package/python-xlutils/Config.in"
- 	source "package/python-xlwt/Config.in"
- 	source "package/python-xmltodict/Config.in"
-+	source "package/python-yarl/Config.in"
- 	source "package/python-yieldfrom/Config.in"
- 	source "package/python-zeroconf/Config.in"
- 	source "package/python-zope-interface/Config.in"
-diff --git a/package/python-yarl/Config.in b/package/python-yarl/Config.in
+@@ -799,6 +799,7 @@ menu "External python modules"
+ 	source "package/python-argh/Config.in"
+ 	source "package/python-arrow/Config.in"
+ 	source "package/python-asn1crypto/Config.in"
++	source "package/python-async-timeout/Config.in"
+ 	source "package/python-attrs/Config.in"
+ 	source "package/python-autobahn/Config.in"
+ 	source "package/python-automat/Config.in"
+diff --git a/package/python-async-timeout/Config.in b/package/python-async-timeout/Config.in
 new file mode 100644
-index 0000000..e520504
+index 0000000..659a0fd
 --- /dev/null
-+++ b/package/python-yarl/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_YARL
-+	bool "python-yarl"
++++ b/package/python-async-timeout/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_ASYNC_TIMEOUT
++	bool "python-async-timeout"
 +	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_MULTIDICT
-+	select BR2_PACKAGE_PYTHON_IDNA
 +	help
-+	  Yet another URL library.
++	  asyncio-compatible timeout context manager.
 +
-+	  http://yarl.readthedocs.io/
-diff --git a/package/python-yarl/python-yarl.hash b/package/python-yarl/python-yarl.hash
++	  https://github.com/aio-libs/async-timeout
+diff --git a/package/python-async-timeout/python-async-timeout.hash b/package/python-async-timeout/python-async-timeout.hash
 new file mode 100644
-index 0000000..118c722
+index 0000000..f99e1da
 --- /dev/null
-+++ b/package/python-yarl/python-yarl.hash
++++ b/package/python-async-timeout/python-async-timeout.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.python.org/pypi/yarl/json
-+md5	43380667129ebc52ac3c442daabb3f6d  yarl-1.2.6.tar.gz
-+sha256	c8cbc21bbfa1dd7d5386d48cc814fe3d35b80f60299cdde9279046f399c3b0d8  yarl-1.2.6.tar.gz
++# md5, sha256 from https://pypi.python.org/pypi/async_timeout/json
++md5	305c4fa529f2485c403d0dbe14390175  async-timeout-3.0.1.tar.gz
++sha256	0c3c816a028d47f659d6ff5c745cb2acf1f966da1fe5c19c77a70282b25f4c5f  async-timeout-3.0.1.tar.gz
 +# Locally computed sha256 checksums
-+sha256	14c0820503ceef15e814a89b037d9efc066870087018294b6ae0f27163872cc5  LICENSE
-diff --git a/package/python-yarl/python-yarl.mk b/package/python-yarl/python-yarl.mk
++sha256	b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
+diff --git a/package/python-async-timeout/python-async-timeout.mk b/package/python-async-timeout/python-async-timeout.mk
 new file mode 100644
-index 0000000..94c3db3
+index 0000000..dc14e14
 --- /dev/null
-+++ b/package/python-yarl/python-yarl.mk
++++ b/package/python-async-timeout/python-async-timeout.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# python-yarl
++# python-async-timeout
 +#
 +################################################################################
-+PYTHON_YARL_VERSION = 1.2.6
-+PYTHON_YARL_SOURCE = yarl-$(PYTHON_YARL_VERSION).tar.gz
-+PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/43/b8/057c3e5b546ff4b24263164ecda13f6962d85c9dc477fcc0bcdcb3adb658
-+PYTHON_YARL_LICENSE = Apache-2.0
-+PYTHON_YARL_LICENSE_FILES = LICENSE
-+PYTHON_YARL_SETUP_TYPE = setuptools
++PYTHON_ASYNC_TIMEOUT_VERSION = 3.0.1
++PYTHON_ASYNC_TIMEOUT_SOURCE = async-timeout-$(PYTHON_ASYNC_TIMEOUT_VERSION).tar.gz
++PYTHON_ASYNC_TIMEOUT_SITE = https://files.pythonhosted.org/packages/a1/78/aae1545aba6e87e23ecab8d212b58bb70e72164b67eb090b81bb17ad38e3
++PYTHON_ASYNC_TIMEOUT_LICENSE = Apache-2.0
++PYTHON_ASYNC_TIMEOUT_LICENSE_FILES = LICENSE
++PYTHON_ASYNC_TIMEOUT_SETUP_TYPE = setuptools
 +
 +$(eval $(python-package))
 -- 
