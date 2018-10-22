@@ -1,50 +1,49 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Mon, 22 Oct 2018 18:31:11 +0000
-Subject: [Buildroot] [PATCH] systemd: Allow building with no init system
-In-Reply-To: <9ddf2016-0a94-d873-311a-e1565386801e@mind.be>
-References: <20180917182900.15902-1-tpiepho@impinj.com>
- <9ddf2016-0a94-d873-311a-e1565386801e@mind.be>
-Message-ID: <1540233070.30311.32.camel@impinj.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 22 Oct 2018 21:30:50 +0200
+Subject: [Buildroot] [PATCH 1/1] package/live555: security bump to version
+ 2018.10.17
+Message-ID: <20181022193050.20333-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 2018-10-21 at 18:28 +0100, Arnout Vandecappelle wrote:
-> On 17/09/2018 19:29, Trent Piepho wrote:
-> > It's possible to build systemd, and use the systemd libraries, on a
-> > target with no init system.
-> > 
-> > While installing systemd when trying to use SysV init will result in
-> > systemd clobbering the SysV system and vice versa, it may well work when
-> > no init system has been selected.  For instance, when building an SDK
-> > the sytemd headers and libraries might be necessary but there is no
-> > reason to have an init system selected.  Someone creating a custom init
-> > system might also want some of the systemd libraries.
-> 
->  I understand your reasoning and I tend to agree to some extent.
-> 
->  However, for the use cases you mention, you can actually just enable
-> BR2_INIT_SYSTEMD. If you really don't want /sbin/init in your target, just
-> remove it post-build.
+Changelog: http://www.live555.com/liveMedia/public/changelog.txt
 
-You get /usr/sbin/init either way.  What I was trying to do was to stop
-building target dbus plus dependencies for an SDK.  But this doesn't
-really do that so it doesn't accomplish all that much on it's own.
+Fixes CVE-2018-4013:
+https://security-tracker.debian.org/tracker/CVE-2018-4013
 
->  To *properly* support a libsystemd-only configuration, a lot more should
-> change. Basically, nothing should be installed in target except for
-> libsystemd.so (and the header files which will be removed in finalize). Also,
-> there is a possible conflict with eudev that needs to be resolved. Possibly
-> other things would need to be cleaned up as well.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/live555/live555.hash | 4 ++--
+ package/live555/live555.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I figured that either one is creating an SDK, in which case it doesn't
-matter what is in target as long as the stage has the libraries, or one
-is creating a custom hybrid init, in which case they'll have to figure
-out the above and lot of other things too.
-
-You've got a point about nothing installed on target, that happens to
-apply very much to an SDK.  Why even run the target_install steps when
-building an SDK? Why not skip the build of any target package without a
-INSTALL_STAGING component?
+diff --git a/package/live555/live555.hash b/package/live555/live555.hash
+index d74d674c7a..024dcac124 100644
+--- a/package/live555/live555.hash
++++ b/package/live555/live555.hash
+@@ -1,5 +1,5 @@
+ # From http://live555.com/liveMedia/public/live555-latest-md5.txt
+-md5 93c65b0f55f37835c727bbf65c1b61b4 live.2018.08.05.tar.gz
++md5 3383dea853735b7a73eda6ddb52b6372 live.2018.10.17.tar.gz
+ # Locally generated
+-sha256 c309fb6d499557250b4db8371243715b9ee2cdaa7ccacaf254bcc62e97566ae4  live.2018.08.05.tar.gz
++sha256 7c68d9c95b39acd309a2b6a4fc14c3837544a9be3f64062ed38d1ad6f68dc9e8  live.2018.10.17.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/live555/live555.mk b/package/live555/live555.mk
+index a5479d6d7c..6a6d353650 100644
+--- a/package/live555/live555.mk
++++ b/package/live555/live555.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIVE555_VERSION = 2018.08.05
++LIVE555_VERSION = 2018.10.17
+ LIVE555_SOURCE = live.$(LIVE555_VERSION).tar.gz
+ LIVE555_SITE = http://www.live555.com/liveMedia/public
+ LIVE555_LICENSE = LGPL-2.1+
+-- 
+2.19.1
