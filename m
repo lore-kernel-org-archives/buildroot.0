@@ -1,62 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 22 Oct 2018 11:05:13 +0200
-Subject: [Buildroot] [PATCH] core: support host gcc of the future
-Message-ID: <20181022090513.4976-1-yann.morin.1998@free.fr>
+From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
+Date: Mon, 22 Oct 2018 17:16:50 +0800
+Subject: [Buildroot] [PATCH v2 1/2] python-serial: update
+Message-ID: <1540199811-4328-1-git-send-email-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When we do a release, we know only of a set of gcc versions that the
-host may have. But in the future, distributions with newer gcc versions
-may show up.
+From: James Hilliard <james.hilliard1@gmail.com>
 
-Currently, we do not recognise those versions, and thus we do as if they
-were older than the oldest we know of. This means that a set of packages
-become unselectable, when they should be.
+we no longer need to remove aio.py since asyncio has been moved to python-serial-asyncio
 
-We fix that be capping the detected version to the highest we know of.
-
-Reported-by: gargar_ on IRC
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- Config.in | 3 +++
- Makefile  | 7 +++++--
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ package/python-serial/python-serial.hash |  8 +++++---
+ package/python-serial/python-serial.mk   | 14 ++------------
+ 2 files changed, 7 insertions(+), 15 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index 6b5b2b043c..f6d28e362f 100644
---- a/Config.in
-+++ b/Config.in
-@@ -67,6 +67,9 @@ config BR2_HOST_GCC_AT_LEAST_8
- 	default y if BR2_HOST_GCC_VERSION = "8"
- 	select BR2_HOST_GCC_AT_LEAST_7
+diff --git a/package/python-serial/python-serial.hash b/package/python-serial/python-serial.hash
+index f98a8b9..96209a9 100644
+--- a/package/python-serial/python-serial.hash
++++ b/package/python-serial/python-serial.hash
+@@ -1,3 +1,5 @@
+-# md5 from http://pypi.python.org/pypi?:action=show_md5&digest=e849af7f8b7ec75cbc7a53da67c51a51, sha256 locally computed
+-md5     e849af7f8b7ec75cbc7a53da67c51a51  pyserial-3.1.tar.gz
+-sha256  c8ffdcbd8bfd308842409e558848c32aa3499a1bfe95a591e4210072b9520f1e  pyserial-3.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/pyserial/json
++md5     ed6183b15519a0ae96675e9c3330c69b  pyserial-3.4.tar.gz
++sha256  6e2d401fdee0eab996cf734e67773a0143b932772ca8b42451440cfed942c627  pyserial-3.4.tar.gz
++# Locally computed sha256 checksums
++sha256	a89d951d157e2c199fbbe7ecf8d41bc3bc93de166db524aa6b9b610dbccc832d  LICENSE.txt
+diff --git a/package/python-serial/python-serial.mk b/package/python-serial/python-serial.mk
+index ce7ec07..d583ac6 100644
+--- a/package/python-serial/python-serial.mk
++++ b/package/python-serial/python-serial.mk
+@@ -4,21 +4,11 @@
+ #
+ ################################################################################
  
-+# When adding new entries above, be sure to update
-+# the HOSTCC_VERSION variable in the Makefile.
-+
- # Hidden boolean selected by packages in need of Java in order to build
- # (example: kodi)
- config BR2_NEEDS_HOST_JAVA
-diff --git a/Makefile b/Makefile
-index d39a94e832..6572e1e947 100644
---- a/Makefile
-+++ b/Makefile
-@@ -351,8 +351,11 @@ export HOSTARCH := $(shell LC_ALL=C $(HOSTCC_NOCCACHE) -v 2>&1 | \
- 	    -e 's/macppc/powerpc/' \
- 	    -e 's/sh.*/sh/' )
+-PYTHON_SERIAL_VERSION = 3.1
++PYTHON_SERIAL_VERSION = 3.4
+ PYTHON_SERIAL_SOURCE = pyserial-$(PYTHON_SERIAL_VERSION).tar.gz
+-PYTHON_SERIAL_SITE = https://pypi.python.org/packages/ce/9c/694ce79a9d4a164e109aeba1a40fba23336f3b7554978553e22a5d41d54d
++PYTHON_SERIAL_SITE = https://files.pythonhosted.org/packages/cc/74/11b04703ec416717b247d789103277269d567db575d2fd88f25d9767fe3d
+ PYTHON_SERIAL_LICENSE = BSD-3-Clause
+ PYTHON_SERIAL_LICENSE_FILES = LICENSE.txt
+ PYTHON_SERIAL_SETUP_TYPE = setuptools
  
--HOSTCC_VERSION := $(shell $(HOSTCC_NOCCACHE) --version | \
--	sed -n -r 's/^.* ([0-9]*)\.([0-9]*)\.([0-9]*)[ ]*.*/\1 \2/p')
-+# When adding a new host gcc version in Config.in,
-+# update the major in the condition, below:
-+HOSTCC_VERSION := $(shell V=$$($(HOSTCC_NOCCACHE) --version | \
-+	sed -n -r 's/^.* ([0-9]*)\.([0-9]*)\.([0-9]*)[ ]*.*/\1 \2/p'); \
-+	[ "$${V%% *}" -le 8 ] || V=8; printf "%s" "$${V}")
- 
- # For gcc >= 5.x, we only need the major version.
- ifneq ($(firstword $(HOSTCC_VERSION)),4)
+-# aio.py is an experimental module, that is compatible only with
+-# Python 3, so remove it for Python 2 environment or it will
+-# cause compilation errors
+-ifeq ($(BR2_PACKAGE_PYTHON),y)
+-define PYTHON_SERIAL_REMOVE_AIO_PY
+-	rm $(@D)/serial/aio.py
+-endef
+-PYTHON_SERIAL_POST_EXTRACT_HOOKS = PYTHON_SERIAL_REMOVE_AIO_PY
+-endif
+-
+ $(eval $(python-package))
 -- 
-2.14.1
+2.7.4
