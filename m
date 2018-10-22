@@ -1,36 +1,54 @@
-From: Ferdinand van Aartsen <ferdinand@ombud.nl>
-Date: Mon, 22 Oct 2018 16:18:18 +0200
-Subject: [Buildroot] [PATCH 1/1] cc-tool: use the same C++ standard as boost
-Message-ID: <20181022141818.335-1-ferdinand@ombud.nl>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 22 Oct 2018 14:35:51 +0000
+Subject: [Buildroot] [Bug 11426] New: pps-tools bash dependency
+Message-ID: <bug-11426-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When boost context is enabled, we build boost with -std=c++11.
-That causes cc-tool to fail, which was using the gcc default c++14.
+https://bugs.busybox.net/show_bug.cgi?id=11426
 
-Signed-off-by: Ferdinand van Aartsen <ferdinand@ombud.nl>
----
- package/cc-tool/cc-tool.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+            Bug ID: 11426
+           Summary: pps-tools bash dependency
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: jan.dohl at airrays.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-diff --git a/package/cc-tool/cc-tool.mk b/package/cc-tool/cc-tool.mk
-index e170e06a21..d5de920f6a 100644
---- a/package/cc-tool/cc-tool.mk
-+++ b/package/cc-tool/cc-tool.mk
-@@ -18,6 +18,11 @@ CC_TOOL_AUTORECONF = YES
- CC_TOOL_CONF_OPTS = --with-boost=$(STAGING_DIR)/usr
- CC_TOOL_CONF_ENV = LIBS="$(CC_TOOL_LIBS)"
- 
-+# With boost context selected, boost gets built with c++11
-+ifeq ($(BR2_PACKAGE_BOOST_CONTEXT)$(BR2_TOOLCHAIN_GCC_AT_LEAST_4_7),yy)
-+CC_TOOL_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
-+endif
-+
- # Help boost.m4 find the Boost Regex library, which needs the pthread
- # library, but isn't detected using a modern (pkg-config) mechanism.
- ifeq ($(BR2_STATIC_LIBS),y)
+When installing the pps-tools package without installing Bash, the ppsfind
+script in the package will not work. For example:
+
+# uname -a
+Linux xla 4.14.0-xla #4 SMP PREEMPT Fri Oct 19 17:56:30 CEST 2018 aarch64
+GNU/Linux
+
+# ppsfind
+-sh: ppsfind: not found
+
+# which ppsfind
+/usr/bin/ppsfind
+
+# cat /usr/bin/ppsfind | head -n 1
+#!/bin/bash
+
+Not sure what the best course of action is here, though. I think making Bash a
+dependency for pps-tools is not a good idea. The ppsfind script works fine by
+just replacing the shebang with /bin/sh instead. The latter is probably also a
+good suggestion for the upstream repository.
+
+Would a patch for the time being while also reporting this to the upstream be a
+good idea?
+
 -- 
-2.19.0
+You are receiving this mail because:
+You are on the CC list for the bug.
