@@ -1,32 +1,61 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Mon, 22 Oct 2018 17:25:25 -0300
-Subject: [Buildroot] Linux driver load failure with BR 2018.05
-In-Reply-To: <AM4PR0802MB2210297D6D99BC3630A51C1BEAF40@AM4PR0802MB2210.eurprd08.prod.outlook.com>
-References: <AM4PR0802MB2210297D6D99BC3630A51C1BEAF40@AM4PR0802MB2210.eurprd08.prod.outlook.com>
-Message-ID: <CAOMZO5A6mEfxx63qwzQwkGiGUfcog+Qq_-iM+ocJkTwq+n0Bfg@mail.gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 22 Oct 2018 21:25:50 +0100
+Subject: [Buildroot] [git commit] qt5base: Qt KMS support does not depend on
+ opengl
+Message-ID: <20181022202552.165C0885A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=f91ea94a6f4d1387b062f9f09c98badf0766127f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, Oct 22, 2018 at 5:19 PM Fabrice Mousset | GEOCEPT GmbH
-<fabrice.mousset@geocept.com> wrote:
->
-> Hi all,
->
->
->
-> I have build a custom Linux BS for a i.MX6SX base board (Linux 4.1.15 with Freescale/NXP patches).
+Qt KMS support should not explicitly depend on the availability of opengl.
+Don't explicitly disable KMS if opengl is not available and fallback to
+detecting if libdrm is available before disabling kms.
 
-In the latest Buildroot version we have:
+The scenario where this is necessary involves using the Qt linuxfb backend
+"dumb buffer" support via the DRM API.  This is new in Qt 5.9 [1] and only
+requires KMS, but not opengl. Although on Qt 5.6, only eglfs actually
+uses libdrm/kms, it doesn't hurt to add the dependency and the -kms
+option there as well, and doing so keeps the logic in the .mk file
+simple.
 
-configs/imx6sx-sdb_defconfig: which uses kernel mainline 4.14
-configs/freescale_imx6sxsabresd_defconfig: which uses NXP 4.9 kernel
+[1] http://doc.qt.io/qt-5/embedded-linux.html#linuxfb
 
-None of them use 4.1.15, so it seems you have selected an old kernel
-for your target.
+Cc: Peter Seiderer <ps.report@gmx.net>
+Cc: Julien Corjon <corjon.j@ecagroup.com>
+Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/qt5/qt5base/qt5base.mk | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-I would suggest you to use mainline kernel if you can.
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index ab2b883fc4..2b6fd39267 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -35,12 +35,19 @@ endif
+ 
+ QT5BASE_CONFIGURE_OPTS += $(call qstrip,$(BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS))
+ 
++ifeq ($(BR2_PACKAGE_LIBDRM),y)
++QT5BASE_CONFIGURE_OPTS += -kms
++QT5BASE_DEPENDENCIES += libdrm
++else
++QT5BASE_CONFIGURE_OPTS += -no-kms
++endif
++
+ # Uses libgbm from mesa3d
+ ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
+-QT5BASE_CONFIGURE_OPTS += -kms -gbm
++QT5BASE_CONFIGURE_OPTS += -gbm
+ QT5BASE_DEPENDENCIES += mesa3d
+ else
+-QT5BASE_CONFIGURE_OPTS += -no-kms
++QT5BASE_CONFIGURE_OPTS += -no-gbm
+ endif
+ 
+ ifeq ($(BR2_ENABLE_DEBUG),y)
