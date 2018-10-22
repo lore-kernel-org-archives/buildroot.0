@@ -1,11 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 23 Oct 2018 00:08:37 +0100
-Subject: [Buildroot] [PATCH] .gitlab-ci.yml: do runtime tests only on
- explicit trigger
-In-Reply-To: <5bcd377bb2a67_2682ab89f25c7b81143d@ultri5.mail>
-References: <277d5a7f-c605-af13-c004-63259faa649a@mind.be>
- <5bcd377bb2a67_2682ab89f25c7b81143d@ultri5.mail>
-Message-ID: <4e9b7774-6f73-418b-eba3-0036b8d7a239@mind.be>
+Date: Tue, 23 Oct 2018 00:10:16 +0100
+Subject: [Buildroot] wget: unable to resolve host address
+In-Reply-To: <CAD8kTsDBFFwBXKKnDL+db0S4k98_qNAhcC=qT7sT8S2jExkmOQ@mail.gmail.com>
+References: <CAD8kTsDBFFwBXKKnDL+db0S4k98_qNAhcC=qT7sT8S2jExkmOQ@mail.gmail.com>
+Message-ID: <bb7a2783-102b-7a85-0bf1-0b23e25fda1c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,98 +12,37 @@ To: buildroot@busybox.net
 
 
 
-On 10/22/18 3:35 AM, Ricardo Martincoski wrote:
-> Hello,
+On 10/18/18 9:22 PM, Shaikat Hossain wrote:
+> Hello,?
 > 
-> On Sun, Oct 21, 2018 at 08:23 AM, Arnout Vandecappelle wrote:
+> I am a bit new to Linux and Buildroot so I'm a bit inexperienced. Would anyone
+> have any insights on how I could resolve the following error message:?
 > 
-> [snip]
->>>>  .runtime_test: &runtime_test
->>>> +    # Running the runtime tests for every push is too much, so limit to
->>>> +    # explicit triggers through the API.
->>>> +    only:
->>>> +        - triggers
->>>> +        - tags
->>>
->>> We could also allow a regexp on the branch name to trigger it:
->>>          - /^.*-runtime_test$/
->>>
->>> Using the same commit, I pushed 2 branches:
->>> branch name: gitlabci-triggers, #jobs = 4
->>> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/33723520
->>> branch name: gitlabci-triggers-runtime_test, #jobs = 72
->>> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/33723541
->>
->>  Looks nice, but that's really material for a separate patch (and probably
-> 
-> Indeed.
-> 
->> should be done for defconfigs too then).
-> 
-> OK.
-> 
->>
->>  Would it be possible to also define branches for a specific test or defconfig?
-> 
-> Yes.
-> 
-> Using the same commit, I pushed 3 branches and a tag:
-> git push gitlab HEAD:test2               #jobs = 4
-> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/33765315
-> git push gitlab HEAD:test2-TestSyslogNg  #jobs = 5
-> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/33765342
-> git push gitlab HEAD:test2-runtime_test  #jobs = 72
-> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/33765317
-> git push gitlab test2-tag                #jobs = 260
-> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/33765321
+> Resolving ftpmirror.gnu.org <http://ftpmirror.gnu.org> (ftpmirror.gnu.org
+> <http://ftpmirror.gnu.org>)... failed: Name or service not known. 
 
- Nice! I suppose test2-tag is actually a tag, not a branch, so it matches the
-'tags' trigger?
-
-> 
-> We will need some extra 'sed' trickery to create a regexp for each test case:
-> -tests.package.test_syslog_ng.TestSyslogNg: *runtime_test
-> +tests.package.test_syslog_ng.TestSyslogNg:
-> +    <<: *runtime_test
-> +    only:
-> +        - triggers
-> +        - tags
-> +        - /^.*-runtime_test$/
-> +        - /^.*-TestSyslogNg$/
-
- Maybe you can use variables in there? So, in the only specification of
-.runtime_test:
-
-    only:
-        - triggers
-        - tags
-        - /^.*-runtime_test$/
-        - /^.*-${CI_JOB_NAME}$/
-
- Hm, unlikely, otherwise the other $ would have to be quoted.
-
- Apparently nowadays there is also support for more complex only specifications
-using variables. Perhaps you could take a look at that? I'm afraid though that
-it's always an AND of the conditions you specify, so no way to specify that it's
-for tags OR for things matching the CI_JOB_NAME.
+ You have a problem with your network, it can't resolve host names. You're
+probably running inside a VM that is not configured correctly.
 
  Regards,
  Arnout
 
+> wget: unable to resolve host address 'ftpmirror.gnu.org <http://ftpmirror.gnu.org>'
+> --2018-10-18 12:26:55-- http://sources.buildroot.net/libtool-2.4.6.tar.xz
+> Resolving sources.buildroot.net <http://sources.buildroot.net>
+> (sources.buildroot.net <http://sources.buildroot.net>)... failed: Name or
+> service not known.?
+> wget: unable to resolve host address 'sources.buildroot.net
+> <http://sources.buildroot.net>'
+> package/pkg-generic.mk:133 <http://pkg-generic.mk:133>: recipe for target
+> '/home/shaikat/erpiam/output/build/host-libtool-2.4.6/.stamp_download' failed?
+> make: *** [/home/shaikat/erpiam/output/build/host-libtool-2.4.6/.stamp_download
+> Error 1?
 > 
-> Unfortunately the inheritance using the anchor runtime_test does not allow to
-> merge two 'only' keywords, the 'only' declared on the test case key overrides
-> entirely the 'only' declared on the hidden key '.runtime_test' (or the other way
-> around if << is placed@the end), so we would need to repeat those lines for
-> every test case listed.
-> But maybe we don't care that .gitlab-ci.yml grows because those lines would be
-> automatically generated by 'make .gitlab-ci.yml'.
 > 
->>
->>  Could you take care of this?
 > 
-> Sure.
-> 
-> Regards,
-> Ricardo
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
