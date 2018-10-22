@@ -1,49 +1,60 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 22 Oct 2018 21:30:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/live555: security bump to version
- 2018.10.17
-Message-ID: <20181022193050.20333-1-bernd.kuhls@t-online.de>
+From: Fabrice Mousset | GEOCEPT GmbH <fabrice.mousset@geocept.com>
+Date: Mon, 22 Oct 2018 13:46:12 +0000
+Subject: [Buildroot] Linux driver load failure with BR 2018.05
+Message-ID: <AM4PR0802MB2210297D6D99BC3630A51C1BEAF40@AM4PR0802MB2210.eurprd08.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog: http://www.live555.com/liveMedia/public/changelog.txt
+Hi all,
 
-Fixes CVE-2018-4013:
-https://security-tracker.debian.org/tracker/CVE-2018-4013
+I have build a custom Linux BS for a i.MX6SX base board (Linux 4.1.15 with Freescale/NXP patches).
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/live555/live555.hash | 4 ++--
- package/live555/live555.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Linux boots on device but I've got strange errors for some modules (which are part of Linux source code):
+[    7.637965] bcmdhd: disagrees about version of symbol alloc_etherdev_mqs
+[    7.644774] bcmdhd: Unknown symbol alloc_etherdev_mqs (err -22)
+[    7.650832] bcmdhd: disagrees about version of symbol __nlmsg_put
+[    7.657348] bcmdhd: Unknown symbol __nlmsg_put (err -22)
+[    7.662748] bcmdhd: disagrees about version of symbol cfg80211_scan_done
+[    7.669752] bcmdhd: Unknown symbol cfg80211_scan_done (err -22)
+[    7.675814] bcmdhd: disagrees about version of symbol consume_skb
+[    7.681916] bcmdhd: Unknown symbol consume_skb (err -22)
+[    7.687755] bcmdhd: disagrees about version of symbol unregister_netdev
+[    7.694428] bcmdhd: Unknown symbol unregister_netdev (err -22)
+[    7.700298] bcmdhd: disagrees about version of symbol cfg80211_remain_on_channel_expired
+...
+[    8.991856] bcmdhd: disagrees about version of symbol wiphy_free
+[    8.998191] bcmdhd: Unknown symbol wiphy_free (err -22)
+[    9.003479] bcmdhd: disagrees about version of symbol register_netdevice
+[    9.010457] bcmdhd: Unknown symbol register_netdevice (err -22)
+modprobe: can't load module bcmdhd (kernel/drivers/net/wireless/bcmdhd/bcmdhd.ko): Invalid argument
+...
+[    9.951557] gpio_mcp23s08: disagrees about version of symbol dev_err
+[    9.961581] gpio_mcp23s08: Unknown symbol dev_err (err -22)
+...
+modprobe: can't load module gpio_mcp23s08 (kernel/drivers/gpio/gpio-mcp23s08.ko): Invalid argument
+...
+[   10.037540] mcp251x: disagrees about version of symbol can_free_echo_skb
+[   10.046368] mcp251x: Unknown symbol can_free_echo_skb (err -22)
+[   10.055396] mcp251x: disagrees about version of symbol can_put_echo_skb
+[   10.062025] mcp251x: Unknown symbol can_put_echo_skb (err -22)
+[   10.068195] mcp251x: disagrees about version of symbol consume_skb
+[   10.074430] mcp251x: Unknown symbol consume_skb (err -22)
+[   10.079845] mcp251x: disagrees about version of symbol can_get_echo_skb
+[   10.086825] mcp251x: Unknown symbol can_get_echo_skb (err -22)
+[modprobe: can't load module mcp251x (kernel/drivers/net/can/spi/mcp251x.ko): Invalid argument
 
-diff --git a/package/live555/live555.hash b/package/live555/live555.hash
-index d74d674c7a..024dcac124 100644
---- a/package/live555/live555.hash
-+++ b/package/live555/live555.hash
-@@ -1,5 +1,5 @@
- # From http://live555.com/liveMedia/public/live555-latest-md5.txt
--md5 93c65b0f55f37835c727bbf65c1b61b4 live.2018.08.05.tar.gz
-+md5 3383dea853735b7a73eda6ddb52b6372 live.2018.10.17.tar.gz
- # Locally generated
--sha256 c309fb6d499557250b4db8371243715b9ee2cdaa7ccacaf254bcc62e97566ae4  live.2018.08.05.tar.gz
-+sha256 7c68d9c95b39acd309a2b6a4fc14c3837544a9be3f64062ed38d1ad6f68dc9e8  live.2018.10.17.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/live555/live555.mk b/package/live555/live555.mk
-index a5479d6d7c..6a6d353650 100644
---- a/package/live555/live555.mk
-+++ b/package/live555/live555.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIVE555_VERSION = 2018.08.05
-+LIVE555_VERSION = 2018.10.17
- LIVE555_SOURCE = live.$(LIVE555_VERSION).tar.gz
- LIVE555_SITE = http://www.live555.com/liveMedia/public
- LIVE555_LICENSE = LGPL-2.1+
--- 
-2.19.1
+
+
+I can't figure out why I have "unknown symbol" errors and only for those drivers? All other drivers are working well (Serial/Ethernet/SDCard/etc).
+Thanks' in advance for any help.
+
+Best regards
+
+Fabrice Mousset
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181022/1700eaa2/attachment.html>
