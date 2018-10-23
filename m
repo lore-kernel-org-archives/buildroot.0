@@ -1,227 +1,70 @@
-From: =?UTF-8?q?I=C3=B1igo=20Huguet?= <inigohuguet@fanamoel.com>
-Date: Tue, 23 Oct 2018 10:25:13 +0200
-Subject: [Buildroot] [PATCH 1/1] picotts: new package
-Message-ID: <20181023082513.30099-1-inigohuguet@fanamoel.com>
+From: Fabrice Mousset | GEOCEPT GmbH <fabrice.mousset@geocept.com>
+Date: Tue, 23 Oct 2018 08:59:33 +0000
+Subject: [Buildroot] Linux driver load failure with BR 2018.05
+In-Reply-To: <874ldd4015.fsf@dell.be.48ers.dk>
+References: <AM4PR0802MB2210297D6D99BC3630A51C1BEAF40@AM4PR0802MB2210.eurprd08.prod.outlook.com>
+ <CAOMZO5A6mEfxx63qwzQwkGiGUfcog+Qq_-iM+ocJkTwq+n0Bfg@mail.gmail.com>
+ <VI1PR0802MB222117E26BBCC677A6F52306EAF50@VI1PR0802MB2221.eurprd08.prod.outlook.com>
+ <874ldd4015.fsf@dell.be.48ers.dk>
+Message-ID: <VI1PR0802MB22215356EB73D80F28A65495EAF50@VI1PR0802MB2221.eurprd08.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-PicoTTS, from SVOX, is the speech synthesizer included in Android
-AOSP. It's lighweight (actually it compiles really fast), very
-suitable for embedded devices, it sounds good and quite natural,
-and have good support of all this languages: English, Spanish,
-German, French and Italian.
+Hi all,
 
-Languages support is probably the main improvements over the existing
-speech synthesizer packages, such as flite.
+sorry for the noise!
 
-Tested in desktop PC with Ubuntu and embedded device with Allwinner
-A20 processor (ARMv7).
+I found my mistake. I have forgot to update the linux kernel in my install script. I have installed an older linux kernel.
+This is why I've got those errors.
+I think I need more sleep.
+Now all works perfectly.
 
-The program only can output the synthesized sound to a wav file, and
-you have to specify the language as an argument if it's not en_US.
-I've added to the package to scripts that are installed to /usr/bin
-to help with that:
- - picotts: create the output wav file in /tmp, play it with aplay
-   and delete it
- - picotts-lc: detect the current system language and call picotts
-   script
+Thanks a lot for you time.
 
-Signed-off-by: I?igo Huguet <inigohuguet@fanamoel.com>
----
- package/Config.in            |  1 +
- package/picotts/Config.in    |  8 ++++++
- package/picotts/picotts      | 40 ++++++++++++++++++++++++++
- package/picotts/picotts-lc   | 54 ++++++++++++++++++++++++++++++++++++
- package/picotts/picotts.hash |  1 +
- package/picotts/picotts.mk   | 34 +++++++++++++++++++++++
- 6 files changed, 138 insertions(+)
- create mode 100755 package/picotts/Config.in
- create mode 100755 package/picotts/picotts
- create mode 100755 package/picotts/picotts-lc
- create mode 100644 package/picotts/picotts.hash
- create mode 100755 package/picotts/picotts.mk
+Best regards
 
-diff --git a/package/Config.in b/package/Config.in
-index 6d2a73ff1b..97aef82b0b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -44,6 +44,7 @@ menu "Audio and video applications"
- 	source "package/omxplayer/Config.in"
- 	source "package/on2-8170-libs/Config.in"
- 	source "package/opus-tools/Config.in"
-+	source "package/picotts/Config.in"
- 	source "package/pulseaudio/Config.in"
- 	source "package/sox/Config.in"
- 	source "package/squeezelite/Config.in"
-diff --git a/package/picotts/Config.in b/package/picotts/Config.in
-new file mode 100755
-index 0000000000..7ee5505fa0
---- /dev/null
-+++ b/package/picotts/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PICOTTS
-+	bool "picotts"
-+	select BR2_PACKAGE_POPT
-+	help
-+	  PicoTTS: text-to-speech voice synthesizer from Android AOSP.
-+	  It is lightweight and sounds quite good and natural.
-+	  PicoTTS supports languages: English (British and American),
-+	  Spanish, German, French and Italian.
-diff --git a/package/picotts/picotts b/package/picotts/picotts
-new file mode 100755
-index 0000000000..331aa97080
---- /dev/null
-+++ b/package/picotts/picotts
-@@ -0,0 +1,40 @@
-+#!/bin/sh
-+
-+# help msg
-+if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
-+	echo "Usage: picotts <lang> <msg>"
-+	echo "Langs: en-US, en-GB, es-ES, de-DE, fr-FR, it-IT"
-+	exit 0
-+fi
-+
-+# errors
-+if [ $# -lt 2 ]; then
-+	echo "picotts: not enough arguments were given" >&2
-+	exit 1
-+fi
-+
-+case "$1" in
-+	en-US|en-GB|es-ES|de-DE|fr-FR|it-IT)
-+		;;
-+	*)
-+		echo "picotts: unsupported language: $1" >&2
-+		exit 1
-+		;;
-+esac
-+
-+# create temp file
-+tmpfile=$(mktemp -tp /tmp picoSndXXXXXX)
-+tmpfilewav="$tmpfile.wav"
-+mv "$tmpfile" "$tmpfilewav"
-+
-+# extract language argument
-+lang_pico=$1
-+shift
-+
-+# play message
-+pico2wave -l $lang_pico -w "$tmpfilewav" "$*"
-+aplay -q "$tmpfilewav"
-+
-+# delete temp file
-+rm "$tmpfilewav"
-+ 
-diff --git a/package/picotts/picotts-lc b/package/picotts/picotts-lc
-new file mode 100755
-index 0000000000..a926f546ad
---- /dev/null
-+++ b/package/picotts/picotts-lc
-@@ -0,0 +1,54 @@
-+#!/bin/sh
-+
-+# at least 1 arg (the message to play)
-+if [ $# -eq 0 ]; then
-+	echo "pitotts-lc: no arguments were given" >&2
-+	exit 1
-+fi
-+
-+# help message
-+if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
-+	echo "Usage: picotts-lc <msg>"
-+	echo "Language will be automatically detected from system locale"
-+	echo "Supported languages: English, Spanish, German, French and Italian"
-+	exit 0
-+fi
-+
-+# get language configured in locale environment variable
-+if [ "$LC_ALL" != "" ]; then
-+	lang=$LC_ALL
-+elif [ "$LC_MESSAGES" != "" ]; then
-+	lang=$LC_MESSAGES
-+elif [ "$LANG" != "" ]; then
-+	lang=$LANG
-+else
-+	lang="C"
-+fi
-+
-+# check if language is supported by picoTTS
-+case "$lang" in
-+	en_US*)
-+		lang_pico="en-US"
-+		;;
-+	en*)
-+		lang_pico="en-GB"
-+		;;
-+	es*)
-+		lang_pico="es-ES"
-+		;;
-+	de*)
-+		lang_pico="de-DE"
-+		;;
-+	fr*)
-+		lang_pico="fr-FR"
-+		;;
-+	it*)
-+		lang_pico="it-IT"
-+		;;
-+	*)
-+		echo "picotts-lc: unsupported language: $lang" >&2
-+		exit 1
-+		;;
-+esac
-+
-+picotts $lang_pico "$@"
-diff --git a/package/picotts/picotts.hash b/package/picotts/picotts.hash
-new file mode 100644
-index 0000000000..967544767c
---- /dev/null
-+++ b/package/picotts/picotts.hash
-@@ -0,0 +1 @@
-+sha256 1cc989efd85ea90ca228bbb694c4b842a909a232e2c8b9a307d241b3ddec246c  picotts-2f86050dc5da9ab68fc61510b594d8e6975c4d2d.tar.gz
-diff --git a/package/picotts/picotts.mk b/package/picotts/picotts.mk
-new file mode 100755
-index 0000000000..02ccb4d13f
---- /dev/null
-+++ b/package/picotts/picotts.mk
-@@ -0,0 +1,34 @@
-+################################################################################
-+#
-+# picotts
-+#
-+################################################################################
-+
-+# pkg info
-+PICOTTS_VERSION = 2f86050dc5da9ab68fc61510b594d8e6975c4d2d
-+PICOTTS_SITE = $(call github,naggety,picotts,$(PICOTTS_VERSION))
-+PICOTTS_LICENSE = Apache-2.0
-+
-+# dependencies
-+PICOTTS_DEPENDENCIES = popt
-+
-+# extract
-+define PICOTTS_EXTRACT_CMDS
-+	tar xf $(PICOTTS_DL_DIR)/picotts-$(PICOTTS_VERSION).tar.gz -C $(@D) picotts-$(PICOTTS_VERSION)/pico --strip-components=2
-+endef
-+
-+# generate build files (autotools)
-+PICOTTS_PRE_CONFIGURE_HOOKS += PICOTTS_EXEC_AUTOGEN
-+define PICOTTS_EXEC_AUTOGEN
-+	cd $(@D) && ./autogen.sh
-+endef
-+
-+# install additional files
-+PICOTTS_POST_INSTALL_TARGET_HOOKS += PICOTTS_INSTALL_ADDITIONAL_FILES
-+define PICOTTS_INSTALL_ADDITIONAL_FILES
-+	$(INSTALL) -D -m 0755 $(TOPDIR)/$(PICOTTS_PKGDIR)/picotts $(TARGET_DIR)/usr/bin/picotts
-+	$(INSTALL) -D -m 0755 $(TOPDIR)/$(PICOTTS_PKGDIR)/picotts-lc $(TARGET_DIR)/usr/bin/picotts-lc
-+endef
-+
-+# build
-+$(eval $(autotools-package))
--- 
-2.17.1
+Fabrice Mousset
+
+> -----Urspr?ngliche Nachricht-----
+> Von: Peter Korsgaard <jacmet@gmail.com> Im Auftrag von Peter Korsgaard
+> Gesendet: Dienstag, 23. Oktober 2018 09:04
+> An: Fabrice Mousset | GEOCEPT GmbH <fabrice.mousset@geocept.com>
+> Cc: 'Fabio Estevam' <festevam@gmail.com>; 'Arnout Vandecappelle'
+> <arnout@mind.be>; buildroot <buildroot@busybox.net>
+> Betreff: Re: Linux driver load failure with BR 2018.05
+> 
+> >>>>> "Fabrice" == Fabrice Mousset | GEOCEPT GmbH
+> <fabrice.mousset@geocept.com> writes:
+> 
+> Hi,
+> 
+>  >> I would suggest you to use mainline kernel if you can.
+> 
+>  > Yes I know this is not an "up to date" Kernel Version, but it is the  > used by
+> the board manufacturer which we are using.
+>  > I have ported a Yocto/Poky BSP to BuildRoot, to not have to use  > multiple
+> build tools... and in my eyes, Yocto is too big and complex.
+> 
+>  > I have notice a strange something which looks strange to me in the kernel
+> build command.
+>  > After the "make -j9" then is a HOSTCC="/usr/bin/gcc -02  -
+> I/opt/crosstools/sitec-s4/include ..."
+> 
+>  > Why HOSTCC is using /usr/bin/gcc and not /opt/crosstools/sitec-s4/bin/arm-
+> geocept-linux-gnueabihf-gcc ?
+> 
+> Because HOSTCC is the compiler used to build stuff for the host machine.
+> 
+> The -I/opt/crosstools/sitec-s4/includes looks as if you have configured the Host
+> directory (BR2_HOST_DIR) to that location. This is normally only done if you
+> want to build toolchain once and then store it there for later reuse (notice that
+> we now have 'make sdk' to handle such things instead).
+> 
+> When you do your normal build using that toolchain you should NOT set
+> BR2_HOST_DIR to that location.
+> 
+> --
+> Bye, Peter Korsgaard
