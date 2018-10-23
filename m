@@ -1,124 +1,36 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 23 Oct 2018 17:55:27 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libva: bump version to 2.3.0
-Message-ID: <20181023155527.9505-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 23 Oct 2018 18:06:17 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] ljlinenoise: fix upstream
+ URL in Config.in
+Message-ID: <20181023160441.BC5298869C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed patch 0001, applied upstream.
+commit: https://git.buildroot.net/buildroot/commit/?id=303038983978eecaf9d3130efb94c8cd5c5c796b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+The current URL no longer exists, as detected by the new pkg-stats.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 05200ad01434ce297a166c6e1bebc8196c18f7dc)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libva/0001-check-ssp.patch | 64 ------------------------------
- package/libva/libva.hash           |  4 +-
- package/libva/libva.mk             |  4 +-
- 3 files changed, 3 insertions(+), 69 deletions(-)
- delete mode 100644 package/libva/0001-check-ssp.patch
+ package/ljlinenoise/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libva/0001-check-ssp.patch b/package/libva/0001-check-ssp.patch
-deleted file mode 100644
-index ce4c42f89b..0000000000
---- a/package/libva/0001-check-ssp.patch
-+++ /dev/null
-@@ -1,64 +0,0 @@
--From c60ac5bc4f95c8d1ce3d44aa1dfad8636dbe3bee Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Sun, 29 Jul 2018 00:16:25 +0200
--Subject: [PATCH] Check for -fstack-protector
--
--Not all toolchains provide support for -fstack-protector. This patch
--provides a configure check to avoid build errors like
--
--/home/buildroot/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/6.4.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: cannot find -lssp_nonshared
--/home/buildroot/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/6.4.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: cannot find -lssp
--
--Patch sent upstream as PR 226.
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- configure.ac   | 16 ++++++++++++++++
-- va/Makefile.am |  5 ++++-
-- 2 files changed, 20 insertions(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index b0b88361..da1908cf 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -209,6 +209,22 @@ if test "$ac_cv_have_gnuc_visibility_attribute" = "yes"; then
--               [Defined to 1 if GCC visibility attribute is supported])
-- fi
-- 
--+# Check for -fstack-protector
--+ssp_cc=yes
--+if test "X$CC-cc" != "X"; then
--+    AC_MSG_CHECKING([whether ${CC-cc} accepts -fstack-protector])
--+    ssp_old_cflags="$CFLAGS"
--+    CFLAGS="$CFLAGS -fstack-protector"
--+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[alloca(100);]])], [], [ssp_cc=no])
--+    AC_MSG_RESULT([$ssp_cc])
--+    if test "X$ssp_cc" = "Xno"; then
--+        CFLAGS="$ssp_old_cflags"
--+    else
--+        AC_DEFINE([ENABLE_SSP_CC], 1, [Define if SSP C support is enabled.])
--+    fi
--+fi
--+AM_CONDITIONAL(USE_SSP, test "$ssp_cc" = "yes")
--+
-- # Check for DRM (mandatory)
-- LIBDRM_VERSION=libdrm_version
-- PKG_CHECK_MODULES([DRM], [libdrm >= $LIBDRM_VERSION])
--diff --git a/va/Makefile.am b/va/Makefile.am
--index 5b6d49ab..0e94d0ff 100644
----- a/va/Makefile.am
--+++ b/va/Makefile.am
--@@ -77,9 +77,12 @@ libva_ldflags = \
-- 
-- libva_cflags = \
-- 	-Wall			\
---	-fstack-protector	\
-- 	$(NULL)
-- 
--+if USE_SSP
--+libva_cflags += -fstack-protector
--+endif
--+
-- lib_LTLIBRARIES			= libva.la
-- libvaincludedir			= ${includedir}/va
-- libvainclude_HEADERS		= $(libva_source_h)
-diff --git a/package/libva/libva.hash b/package/libva/libva.hash
-index 72347a4f2d..333bb1d786 100644
---- a/package/libva/libva.hash
-+++ b/package/libva/libva.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/intel/libva/releases
--sha1 5b19d2fbf532f14e24c3bedb4074238a1d7f1686  libva-2.2.0.tar.bz2
-+sha1 e1138529355cce78fa2edc7c5b1c5aeb40dd0ce5  libva-2.3.0.tar.bz2
- # Locally computed
--sha256 6f6ca04c785544d30d315ef130a6aeb9435b75f934d7fbe0e4e9ba6084ce4ef2  libva-2.2.0.tar.bz2
-+sha256 60840e50da6932ee2111e15fc8911180ff8a0d6f18bb9cc6ba8c1030098fdce4  libva-2.3.0.tar.bz2
- sha256 c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-index 7c129f4d97..9a70bb83fd 100644
---- a/package/libva/libva.mk
-+++ b/package/libva/libva.mk
-@@ -4,14 +4,12 @@
- #
- ################################################################################
+diff --git a/package/ljlinenoise/Config.in b/package/ljlinenoise/Config.in
+index 61c80df0d1..e6b587e65d 100644
+--- a/package/ljlinenoise/Config.in
++++ b/package/ljlinenoise/Config.in
+@@ -8,7 +8,7 @@ config BR2_PACKAGE_LJLINENOISE
+ 	  ljlinenoise is a pure LuaJIT port of linenoise,
+ 	  a small alternative to readline and libedit.
  
--LIBVA_VERSION = 2.2.0
-+LIBVA_VERSION = 2.3.0
- LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
- LIBVA_SITE = https://github.com/intel/libva/releases/download/$(LIBVA_VERSION)
- LIBVA_LICENSE = MIT
- LIBVA_LICENSE_FILES = COPYING
- LIBVA_INSTALL_STAGING = YES
--# 0001-check-ssp.patch
--LIBVA_AUTORECONF = YES
- LIBVA_DEPENDENCIES = host-pkgconf libdrm
+-	  http://fperrad.github.io/ljlinenoise/
++	  https://fperrad.frama.io/ljlinenoise/
  
- # libdrm is a hard-dependency
--- 
-2.19.1
+ comment "ljlinenoise needs LuaJIT"
+ 	depends on !BR2_PACKAGE_LUAJIT
