@@ -1,28 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 00:53:02 +0200
-Subject: [Buildroot] [PATCH] poco: disable fpenvironment for soft
- floating point configuration
-In-Reply-To: <20181010082214.1815-1-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Wed, 10 Oct 2018 10:22:14
- +0200")
-References: <20181010082214.1815-1-yegorslists@googlemail.com>
-Message-ID: <87in1sff75.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Oct 2018 00:52:02 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] poco: disable
+ fpenvironment for soft floating point configuration
+Message-ID: <20181023225125.0E734886FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d89859866f31ec7a3fa32237a2049c5a11ccff32
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
- > From: Yegor Yefremov <yegorslists@googlemail.com>
- > Many platforms don't provide all FPU features needed by Poco when
- > configured for soft floating point in their fenv.h header. So
- > disable fpenvironment for this configuration to avoid build breakage.
+Many platforms don't provide all FPU features needed by Poco when
+configured for soft floating point in their fenv.h header. So
+disable fpenvironment for this configuration to avoid build breakage.
 
- > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit c735f39881cf49bc58ad1b8375fd630e8284ad21)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/poco/poco.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Committed to 2018.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/poco/poco.mk b/package/poco/poco.mk
+index 018344d5c7..aa96d5127b 100644
+--- a/package/poco/poco.mk
++++ b/package/poco/poco.mk
+@@ -42,6 +42,11 @@ ifeq ($(BR2_sh4a)$(BR2_nios2),y)
+ POCO_CONF_OPTS += --no-fpenvironment
+ endif
+ 
++# disable fpenvironment for soft floating point configuration
++ifeq ($(BR2_SOFT_FLOAT),y)
++POCO_CONF_OPTS += --no-fpenvironment
++endif
++
+ ifeq ($(BR2_STATIC_LIBS),y)
+ POCO_MAKE_TARGET = static_release
+ else ifeq ($(BR2_SHARED_LIBS),y)
