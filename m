@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Oct 2018 18:07:37 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] tinc: security bump to
+Date: Tue, 23 Oct 2018 18:07:55 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] tinc: security bump to
  version 1.0.35
-Message-ID: <20181023160555.DD155835DA@busybox.osuosl.org>
+Message-ID: <20181023160613.0DFA6886A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1aa66ce3e89203f953c443beb0ff0ce4b53776ac
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5ce7cfade2f56718c2eb4044767d51d23ebe8a12
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 Fixes the following security issues:
 
