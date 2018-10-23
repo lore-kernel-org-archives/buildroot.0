@@ -1,33 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 01:02:40 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] package/ntp: fix md5sum.
-Message-ID: <20181023230145.F151A81356@busybox.osuosl.org>
+Date: Wed, 24 Oct 2018 01:03:13 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] ntp: fix build without
+ libcap and no threads
+Message-ID: <20181023230146.0D18A81356@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92b391c9df1908274d414089bbde63d853dab54a
+commit: https://git.buildroot.net/buildroot/commit/?id=eb10a0ca4145c2e68a6c28f80e9205aceea28623
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-Signed-off-by: Artem Panfilov <apanfilov@spectracom.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f3c6452729e89e546d58adfc3b288ddfae5876e2)
+When threads support is missing the ntp build system builds the
+work_fork code. This code added call to set_user_group_ids() that is
+under HAVE_DROPROOT, which is disabled when libcap is not built.
+
+Add a patch fixing that.
+
+Fixes:
+http://autobuild.buildroot.net/results/ab9/ab9ceff1151b8b5e6b9fa77d39c0f9b0cac1a080/
+
+Cc: Artyom Panfilov <apanfilov@spectracom.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 13dcc69a39da97f615627553e88113ba455875ea)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ntp/ntp.hash | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../ntp/0004-fix-work-fork-without-droproot.patch  | 26 ++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/package/ntp/ntp.hash b/package/ntp/ntp.hash
-index 02dbaffcba..2fd8a8322b 100644
---- a/package/ntp/ntp.hash
-+++ b/package/ntp/ntp.hash
-@@ -1,5 +1,5 @@
--# From https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p11.tar.gz.md5
--md5 00950ca2855579541896513e78295361  ntp-4.2.8p11.tar.gz
-+# From https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p12.tar.gz.md5
-+md5 1522d66574bae14abb2622746dad2bdc  ntp-4.2.8p12.tar.gz
- # Calculated based on the hash above
- sha256 709b222b5013d77d26bfff532b5ea470a8039497ef29d09363931c036cb30454  ntp-4.2.8p12.tar.gz
- sha256 62c87b269365b38b55359b16dfde7ec28c683c722ef489db90afd0f2e478e4a1  COPYRIGHT
+diff --git a/package/ntp/0004-fix-work-fork-without-droproot.patch b/package/ntp/0004-fix-work-fork-without-droproot.patch
+new file mode 100644
+index 0000000000..cb6fec0125
+--- /dev/null
++++ b/package/ntp/0004-fix-work-fork-without-droproot.patch
+@@ -0,0 +1,26 @@
++Fix work_fork build when droproot is disabled
++
++The set_user_group_ids() depends on HAVE_DROPROOT. When HAVE_DROPROOT is not
++enabled, work_fork.c code causes a link failure:
++
++../libntp/libntp.a(work_fork.o): In function `send_blocking_req_internal':
++work_fork.c:(.text+0x498): undefined reference to `set_user_group_ids'
++
++Make the set_user_group_ids() call depend on HAVE_DROPROOT.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: http://bugs.ntp.org/show_bug.cgi?id=3539
++
++--- ntp-4.2.8p12.orig/libntp/work_fork.c	2018-08-14 14:51:06.000000000 +0300
+++++ ntp-4.2.8p12/libntp/work_fork.c	2018-10-15 21:10:54.580917962 +0300
++@@ -594,7 +594,9 @@
++ 	init_logging("ntp_intres", 0, FALSE);
++ 	setup_logfile(NULL);
++ 
+++#if defined(HAVE_DROPROOT)
++ 	(void) set_user_group_ids();
+++#endif
++ 
++ 	/*
++ 	 * And now back to the portable code
