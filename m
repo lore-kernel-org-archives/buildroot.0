@@ -1,50 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Oct 2018 16:30:58 +0200
-Subject: [Buildroot] [git commit] redis: bump to version 4.0.11
-Message-ID: <20181023143007.68C3D8863A@busybox.osuosl.org>
+Date: Tue, 23 Oct 2018 16:31:03 +0200
+Subject: [Buildroot] [git commit] package/live555: security bump to version
+ 2018.10.17
+Message-ID: <20181023143007.6C16A885F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d9292843370b7517a055d78ae5b02807232c6079
+commit: https://git.buildroot.net/buildroot/commit/?id=01d7686c907eab026781d700999ba09dec29b48e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-From the release notes
-(https://raw.githubusercontent.com/antirez/redis/4.0/00-RELEASENOTES):
+Changelog: http://www.live555.com/liveMedia/public/changelog.txt
 
-Upgrade urgency HIGH: not critical but very important bugs fixed.
+Fixes CVE-2018-4013:
+https://security-tracker.debian.org/tracker/CVE-2018-4013
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Reviewed-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/redis/redis.hash | 2 +-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/live555/live555.hash | 4 ++--
+ package/live555/live555.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index d448228b56..0b4e25c61d 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
+diff --git a/package/live555/live555.hash b/package/live555/live555.hash
+index d74d674c7a..024dcac124 100644
+--- a/package/live555/live555.hash
++++ b/package/live555/live555.hash
 @@ -1,5 +1,5 @@
- # From https://github.com/antirez/redis-hashes/blob/master/README
--sha256 1db67435a704f8d18aec9b9637b373c34aa233d65b6e174bdac4c1b161f38ca4  redis-4.0.10.tar.gz
-+sha256 fc53e73ae7586bcdacb4b63875d1ff04f68c5474c1ddeda78f00e5ae2eed1bbb  redis-4.0.11.tar.gz
- 
- # Locally calculated
- sha256 cbf420a3672475a6e2765e3c0984c1f81efe0212afb94a3c998ee63bfd661063  COPYING
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index a14ae2283f..da2307d693 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
+ # From http://live555.com/liveMedia/public/live555-latest-md5.txt
+-md5 93c65b0f55f37835c727bbf65c1b61b4 live.2018.08.05.tar.gz
++md5 3383dea853735b7a73eda6ddb52b6372 live.2018.10.17.tar.gz
+ # Locally generated
+-sha256 c309fb6d499557250b4db8371243715b9ee2cdaa7ccacaf254bcc62e97566ae4  live.2018.08.05.tar.gz
++sha256 7c68d9c95b39acd309a2b6a4fc14c3837544a9be3f64062ed38d1ad6f68dc9e8  live.2018.10.17.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/live555/live555.mk b/package/live555/live555.mk
+index a5479d6d7c..6a6d353650 100644
+--- a/package/live555/live555.mk
++++ b/package/live555/live555.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--REDIS_VERSION = 4.0.10
-+REDIS_VERSION = 4.0.11
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+-LIVE555_VERSION = 2018.08.05
++LIVE555_VERSION = 2018.10.17
+ LIVE555_SOURCE = live.$(LIVE555_VERSION).tar.gz
+ LIVE555_SITE = http://www.live555.com/liveMedia/public
+ LIVE555_LICENSE = LGPL-2.1+
