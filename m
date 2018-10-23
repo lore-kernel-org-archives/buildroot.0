@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Oct 2018 18:06:17 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] ljlinenoise: fix upstream
+Date: Tue, 23 Oct 2018 18:06:35 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] ljlinenoise: fix upstream
  URL in Config.in
-Message-ID: <20181023160441.BC5298869C@busybox.osuosl.org>
+Message-ID: <20181023160451.DE31C886A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=303038983978eecaf9d3130efb94c8cd5c5c796b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9c04f4847b10f864097d796ac4500fe8ba8913b7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 The current URL no longer exists, as detected by the new pkg-stats.
 
