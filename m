@@ -1,83 +1,122 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Tue, 23 Oct 2018 13:21:20 -0400
-Subject: [Buildroot] [PATCH] PostgreSQL: bump version to 11.0
-In-Reply-To: <20181023171555.18043-1-aduskett@gmail.com>
-References: <20181023171555.18043-1-aduskett@gmail.com>
-Message-ID: <CAFSsvmrpiNERPiw_-cNgh7TfsAgjmi8RF4TuW5MPFsJX1tnGZA@mail.gmail.com>
+Date: Tue, 23 Oct 2018 13:25:32 -0400
+Subject: [Buildroot] [PATCH 1/1] package/postgresql: needs wchar
+In-Reply-To: <20181023160931.16417-1-bernd.kuhls@t-online.de>
+References: <20181023160931.16417-1-bernd.kuhls@t-online.de>
+Message-ID: <CAFSsvmqEdPu2V3j=d55j6cUVmNeC0MSjTmA5HM1R5HcWh1LzwA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All;
-
-I didn't see that postgresql had already been bumped to 11. Please
-disregard this patch.
-On Tue, Oct 23, 2018 at 1:15 PM Adam Duskett <aduskett@gmail.com> wrote:
+Hello;
+On Tue, Oct 23, 2018 at 12:09 PM Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 >
-> Other changes:
->  - Add --without-llvm to CONF_OPTS as PostgreSQL now comes with an optional
->    JIT.
+> Upstream removed support for non-wchar toolchains:
+> https://github.com/postgres/postgres/commit/85feb77aa09cda9ff3e12cf95c757c499dc25343
 >
->  - Add POSTGRESQL_MAKE_OPTS += MAKELEVEL=0 to the MK file to avoid compiling
->    errors about missing header files.
+> Propagate the new dependency to other packages.
 >
-> All test-pkg runs passed:
->              br-arm-full [1/6]: OK
->   br-arm-cortex-a9-glibc [2/6]: OK
->    br-arm-cortex-m4-full [3/6]: SKIPPED
->           br-x86-64-musl [4/6]: OK
->       br-arm-full-static [5/6]: SKIPPED
-> armv5-ctng-linux-gnueabi [6/6]: OK
+> Fixes
+> http://autobuild.buildroot.net/results/b73/b73342a39167ed7f293224d4e3b23dde691b9abf/
 >
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/postgresql/postgresql.hash |  4 ++--
->  package/postgresql/postgresql.mk   | 11 +++++++++--
->  2 files changed, 11 insertions(+), 4 deletions(-)
+>  package/bandwidthd/Config.in      | 5 +++--
+>  package/collectd/Config.in        | 4 ++++
+>  package/postgresql/Config.in      | 5 +++--
+>  package/python-psycopg2/Config.in | 4 ++++
+>  4 files changed, 14 insertions(+), 4 deletions(-)
 >
-> diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-> index a9cc93c76c..cfea589040 100644
-> --- a/package/postgresql/postgresql.hash
-> +++ b/package/postgresql/postgresql.hash
-> @@ -1,5 +1,5 @@
-> -# From https://ftp.postgresql.org/pub/source/v10.5/postgresql-10.5.tar.bz2.sha256
-> -sha256 6c8e616c91a45142b85c0aeb1f29ebba4a361309e86469e0fb4617b6a73c4011        postgresql-10.5.tar.bz2
-> +# From https://ftp.postgresql.org/pub/source/v11.0/postgresql-11.0.tar.bz2.sha256
-> +sha256 bf9bba03d0c3902c188af12e454b35343c4a9bf9e377ec2fe50132efb44ef36b        postgresql-11.0.tar.bz2
+> diff --git a/package/bandwidthd/Config.in b/package/bandwidthd/Config.in
+> index 8a19733c2c..5a3529e0c4 100644
+> --- a/package/bandwidthd/Config.in
+> +++ b/package/bandwidthd/Config.in
+> @@ -35,6 +35,7 @@ if BR2_PACKAGE_BANDWIDTHD
+>  config BR2_PACKAGE_BANDWIDTHD_POSTGRESQL
+>         bool "enable postgresql log target support"
+>         depends on !BR2_STATIC_LIBS
+> +       depends on BR2_USE_WCHAR # postgresql
+>         select BR2_PACKAGE_POSTGRESQL
+>         help
+>           Enable support for logging the bandwidthd data to a remote
+> @@ -42,8 +43,8 @@ config BR2_PACKAGE_BANDWIDTHD_POSTGRESQL
+>           through a php site. See README in the source code
+>           (github.com/nroach44/bandwidthd) for more information.
 >
->  # License file, Locally calculated
->  sha256 24cfc70cf16b3a23242c49ffce39510683bdd48cbedb8a46fe03976ee5f5c21e        COPYRIGHT
-> diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-> index 540e1540ca..2915f5ce59 100644
-> --- a/package/postgresql/postgresql.mk
-> +++ b/package/postgresql/postgresql.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+> -comment "postgresql support needs a toolchain w/ dynamic library"
+> -       depends on BR2_STATIC_LIBS
+> +comment "postgresql support needs a toolchain w/ dynamic library, wchar"
+> +       depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
 >
-> -POSTGRESQL_VERSION = 10.5
-> +POSTGRESQL_VERSION = 11.0
->  POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
->  POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
->  POSTGRESQL_LICENSE = PostgreSQL
-> @@ -15,7 +15,14 @@ POSTGRESQL_CONF_ENV = \
->         ac_cv_type_struct_sockaddr_in6=yes \
->         pgac_cv_snprintf_long_long_int_modifier="ll" \
->         pgac_cv_snprintf_size_t_support=yes
-> -POSTGRESQL_CONF_OPTS = --disable-rpath
+>  config BR2_PACKAGE_BANDWIDTHD_SQLITE3
+>         bool "enable sqlite3 log storage"
+> diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+> index c9e61a5622..3222547b68 100644
+> --- a/package/collectd/Config.in
+> +++ b/package/collectd/Config.in
+> @@ -383,6 +383,7 @@ config BR2_PACKAGE_COLLECTD_PING
+>
+>  config BR2_PACKAGE_COLLECTD_POSTGRESQL
+>         bool "postgresql"
+> +       depends on BR2_USE_WCHAR # postgresql
+>         select BR2_PACKAGE_POSTGRESQL
+>         help
+>           Connects to and executes SQL statements on a PostgreSQL
+> @@ -390,6 +391,9 @@ config BR2_PACKAGE_COLLECTD_POSTGRESQL
+>           configuration, the returned values are then converted into
+>           collectd ?value lists?.
+>
+> +comment "postgresql support needs a toolchain w/ wchar"
+> +       depends on !BR2_USE_WCHAR
 > +
-> +POSTGRESQL_CONF_OPTS = \
-> +       --disable-rpath \
-> +       --without-llvm
-> +
-> +# This has to be set because Postgres' Makefile is being called from another
-> +# MakeFile in order to avoid rebuilding generated headers in recursive submakes.
-> +POSTGRESQL_MAKE_OPTS += MAKELEVEL=0
+>  config BR2_PACKAGE_COLLECTD_PROCESSES
+>         bool "processes"
+>         help
+> diff --git a/package/postgresql/Config.in b/package/postgresql/Config.in
+> index 9dda54bf9f..e548d3cb27 100644
+> --- a/package/postgresql/Config.in
+> +++ b/package/postgresql/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_PACKAGE_POSTGRESQL
+>         bool "postgresql"
+>         depends on BR2_USE_MMU # fork()
+> +       depends on BR2_USE_WCHAR
+>         # fails to build in a pure static linking scenario, and
+>         # postgresql is unlikely to be used in a pure statically
+>         # linked environment.
+> @@ -18,6 +19,6 @@ config BR2_PACKAGE_POSTGRESQL
 >
->  ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
->  # PostgreSQL does not build against uClibc with locales
+>           http://www.postgresql.org
+>
+> -comment "postgresql needs a toolchain w/ dynamic library"
+> +comment "postgresql needs a toolchain w/ dynamic library, wchar"
+>         depends on BR2_USE_MMU
+> -       depends on BR2_STATIC_LIBS
+> +       depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
+> diff --git a/package/python-psycopg2/Config.in b/package/python-psycopg2/Config.in
+> index ec852bb49e..ec27d706de 100644
+> --- a/package/python-psycopg2/Config.in
+> +++ b/package/python-psycopg2/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_PYTHON_PSYCOPG2
+>         bool "python-psycopg2"
+> +       depends on BR2_USE_WCHAR # postgresql
+This isn't needed because python already requires wchar.
+>         select BR2_PACKAGE_POSTGRESQL
+>         help
+>           Psycopg is the most popular PostgreSQL database adapter for
+> @@ -20,3 +21,6 @@ config BR2_PACKAGE_PYTHON_PSYCOPG2
+>           Psycopg 2 is both Unicode and Python 3 friendly.
+>
+>           http://initd.org/psycopg/
+> +
+> +comment "python-psycopg2 needs a toolchain w/ wchar"
+> +       depends on !BR2_USE_WCHAR
 > --
-> 2.17.2
+> 2.19.1
 >
+Thanks!
+
+Adam
