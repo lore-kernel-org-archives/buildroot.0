@@ -1,45 +1,31 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Oct 2018 09:03:50 +0200
-Subject: [Buildroot] Linux driver load failure with BR 2018.05
-In-Reply-To: <VI1PR0802MB222117E26BBCC677A6F52306EAF50@VI1PR0802MB2221.eurprd08.prod.outlook.com>
- (Fabrice Mousset's message of "Tue, 23 Oct 2018 06:34:39 +0000")
-References: <AM4PR0802MB2210297D6D99BC3630A51C1BEAF40@AM4PR0802MB2210.eurprd08.prod.outlook.com>
- <CAOMZO5A6mEfxx63qwzQwkGiGUfcog+Qq_-iM+ocJkTwq+n0Bfg@mail.gmail.com>
- <VI1PR0802MB222117E26BBCC677A6F52306EAF50@VI1PR0802MB2221.eurprd08.prod.outlook.com>
-Message-ID: <874ldd4015.fsf@dell.be.48ers.dk>
+From: Oscar Gomez Fuente <oscargomezf@gmail.com>
+Date: Tue, 23 Oct 2018 09:58:29 +0200
+Subject: [Buildroot] [PATCH 1/1] ntp: added S48ntpdate script
+In-Reply-To: <CANQCQpZkWNHkDW+hNL9a=mDH+WSC+=2h-JJihfoWmrn7CqB_jw@mail.gmail.com>
+References: <1539964343-10526-1-git-send-email-oscargomezf@gmail.com>
+ <CANQCQpZcDx+fdZmh6MZypVDCWU8JJbqR0XqqBDbC4T8HnNopXw@mail.gmail.com>
+ <CALtfCQZiF0jhNwSUXS+qgEN2oHhqkxwF56V31Ymp-_5LzcWD=Q@mail.gmail.com>
+ <CANQCQpZQy=58rDrKgPP7yN_X3gCLRS4gLDneEcuPVDrVQH0AFA@mail.gmail.com>
+ <CANQCQpZkWNHkDW+hNL9a=mDH+WSC+=2h-JJihfoWmrn7CqB_jw@mail.gmail.com>
+Message-ID: <CALtfCQaoFEraPV6thCvC6NTOUr3SzN1uGvmo6UFRVa1H1ZcSCw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Mousset | GEOCEPT GmbH <fabrice.mousset@geocept.com> writes:
+Hi Matthew,
 
-Hi,
+> If it's Ok with you, I'll send a v2 patch tonight and include your signed-off.
+>
+> I fixed the args (should have been -g -q) and added a timeout loop to
+> manage the fact that unlike ntpdate, ntpd won't return if there is no
+> network connection or the server can't be reached.
 
- >> I would suggest you to use mainline kernel if you can.
+Ok, thank you for your help.
 
- > Yes I know this is not an "up to date" Kernel Version, but it is the
- > used by the board manufacturer which we are using.
- > I have ported a Yocto/Poky BSP to BuildRoot, to not have to use
- > multiple build tools... and in my eyes, Yocto is too big and complex.
+Best regards.
 
- > I have notice a strange something which looks strange to me in the kernel build command.
- > After the "make -j9" then is a HOSTCC="/usr/bin/gcc -02  -I/opt/crosstools/sitec-s4/include ..."
-
- > Why HOSTCC is using /usr/bin/gcc and not /opt/crosstools/sitec-s4/bin/arm-geocept-linux-gnueabihf-gcc ?
-
-Because HOSTCC is the compiler used to build stuff for the host
-machine.
-
-The -I/opt/crosstools/sitec-s4/includes looks as if you have configured
-the Host directory (BR2_HOST_DIR) to that location. This is normally
-only done if you want to build toolchain once and then store it there
-for later reuse (notice that we now have 'make sdk' to handle such
-things instead).
-
-When you do your normal build using that toolchain you should NOT set
-BR2_HOST_DIR to that location.
-
--- 
-Bye, Peter Korsgaard
+Oscar Gomez Fuente
+TST Sistemas
+www.tst-sistemas.es
