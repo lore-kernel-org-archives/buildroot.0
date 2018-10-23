@@ -1,112 +1,42 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 23 Oct 2018 18:09:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/postgresql: needs wchar
-Message-ID: <20181023160931.16417-1-bernd.kuhls@t-online.de>
+Date: Tue, 23 Oct 2018 18:19:08 +0200
+Subject: [Buildroot] [PATCH 1/1] package/apache: bump version to 2.4.37
+Message-ID: <20181023161908.24591-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream removed support for non-wchar toolchains:
-https://github.com/postgres/postgres/commit/85feb77aa09cda9ff3e12cf95c757c499dc25343
-
-Propagate the new dependency to other packages.
-
-Fixes
-http://autobuild.buildroot.net/results/b73/b73342a39167ed7f293224d4e3b23dde691b9abf/
-
+Changelog: http://www.apache.org/dist/httpd/CHANGES_2.4.37
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/bandwidthd/Config.in      | 5 +++--
- package/collectd/Config.in        | 4 ++++
- package/postgresql/Config.in      | 5 +++--
- package/python-psycopg2/Config.in | 4 ++++
- 4 files changed, 14 insertions(+), 4 deletions(-)
+ package/apache/apache.hash | 2 +-
+ package/apache/apache.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bandwidthd/Config.in b/package/bandwidthd/Config.in
-index 8a19733c2c..5a3529e0c4 100644
---- a/package/bandwidthd/Config.in
-+++ b/package/bandwidthd/Config.in
-@@ -35,6 +35,7 @@ if BR2_PACKAGE_BANDWIDTHD
- config BR2_PACKAGE_BANDWIDTHD_POSTGRESQL
- 	bool "enable postgresql log target support"
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_USE_WCHAR # postgresql
- 	select BR2_PACKAGE_POSTGRESQL
- 	help
- 	  Enable support for logging the bandwidthd data to a remote
-@@ -42,8 +43,8 @@ config BR2_PACKAGE_BANDWIDTHD_POSTGRESQL
- 	  through a php site. See README in the source code
- 	  (github.com/nroach44/bandwidthd) for more information.
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index 32743656fd..6d21f0f614 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
+@@ -1,4 +1,4 @@
+ # From http://archive.apache.org/dist/httpd/httpd-2.4.35.tar.bz2.sha256
+-sha256 2607c6fdd4d12ac3f583127629291e9432b247b782396a563bec5678aae69b56 httpd-2.4.35.tar.bz2
++sha256 3498dc5c6772fac2eb7307dc7963122ffe243b5e806e0be4fb51974ff759d726 httpd-2.4.37.tar.bz2
+ # Locally computed
+ sha256 c49c0819a726b70142621715dae3159c47b0349c2bc9db079070f28dadac0229 LICENSE
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index 3ac317216d..283c3cbd50 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--comment "postgresql support needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
-+comment "postgresql support needs a toolchain w/ dynamic library, wchar"
-+	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
- 
- config BR2_PACKAGE_BANDWIDTHD_SQLITE3
- 	bool "enable sqlite3 log storage"
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index c9e61a5622..3222547b68 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -383,6 +383,7 @@ config BR2_PACKAGE_COLLECTD_PING
- 
- config BR2_PACKAGE_COLLECTD_POSTGRESQL
- 	bool "postgresql"
-+	depends on BR2_USE_WCHAR # postgresql
- 	select BR2_PACKAGE_POSTGRESQL
- 	help
- 	  Connects to and executes SQL statements on a PostgreSQL
-@@ -390,6 +391,9 @@ config BR2_PACKAGE_COLLECTD_POSTGRESQL
- 	  configuration, the returned values are then converted into
- 	  collectd ?value lists?.
- 
-+comment "postgresql support needs a toolchain w/ wchar"
-+	depends on !BR2_USE_WCHAR
-+
- config BR2_PACKAGE_COLLECTD_PROCESSES
- 	bool "processes"
- 	help
-diff --git a/package/postgresql/Config.in b/package/postgresql/Config.in
-index 9dda54bf9f..e548d3cb27 100644
---- a/package/postgresql/Config.in
-+++ b/package/postgresql/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_POSTGRESQL
- 	bool "postgresql"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_USE_WCHAR
- 	# fails to build in a pure static linking scenario, and
- 	# postgresql is unlikely to be used in a pure statically
- 	# linked environment.
-@@ -18,6 +19,6 @@ config BR2_PACKAGE_POSTGRESQL
- 
- 	  http://www.postgresql.org
- 
--comment "postgresql needs a toolchain w/ dynamic library"
-+comment "postgresql needs a toolchain w/ dynamic library, wchar"
- 	depends on BR2_USE_MMU
--	depends on BR2_STATIC_LIBS
-+	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
-diff --git a/package/python-psycopg2/Config.in b/package/python-psycopg2/Config.in
-index ec852bb49e..ec27d706de 100644
---- a/package/python-psycopg2/Config.in
-+++ b/package/python-psycopg2/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_PSYCOPG2
- 	bool "python-psycopg2"
-+	depends on BR2_USE_WCHAR # postgresql
- 	select BR2_PACKAGE_POSTGRESQL
- 	help
- 	  Psycopg is the most popular PostgreSQL database adapter for
-@@ -20,3 +21,6 @@ config BR2_PACKAGE_PYTHON_PSYCOPG2
- 	  Psycopg 2 is both Unicode and Python 3 friendly.
- 
- 	  http://initd.org/psycopg/
-+
-+comment "python-psycopg2 needs a toolchain w/ wchar"
-+	depends on !BR2_USE_WCHAR
+-APACHE_VERSION = 2.4.35
++APACHE_VERSION = 2.4.37
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = http://archive.apache.org/dist/httpd
+ APACHE_LICENSE = Apache-2.0
 -- 
 2.19.1
