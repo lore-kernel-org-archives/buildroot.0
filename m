@@ -1,58 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 01:04:39 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/ntp: security
- bump to version 4.2.8p12
-Message-ID: <20181023230526.198C788786@busybox.osuosl.org>
+Date: Wed, 24 Oct 2018 01:05:02 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] ntp: fix build without
+ libcap and no threads
+Message-ID: <20181023230526.3ACF681934@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a048bdf49d92c02d4a4e6343a8978c0ca62386e7
+commit: https://git.buildroot.net/buildroot/commit/?id=361d9ae731b770d3182c80b59f85194ce301efef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Release notes:
-https://www.nwtime.org/network-time-foundation-publishes-ntp-4-2-8p12
+When threads support is missing the ntp build system builds the
+work_fork code. This code added call to set_user_group_ids() that is
+under HAVE_DROPROOT, which is disabled when libcap is not built.
 
-Fixed security issues:
+Add a patch fixing that.
 
-  CVE-2016-1549 / CVE-2018-7170: Sybil vulnerability: ephemeral association
-  attack
+Fixes:
+http://autobuild.buildroot.net/results/ab9/ab9ceff1151b8b5e6b9fa77d39c0f9b0cac1a080/
 
-  CVE-2018-12327: The openhost() function used during command-line hostname
-  processing by ntpq and ntpdc can write beyond its buffer limit
-
-Signed-off-by: Artem Panfilov <apanfilov@spectracom.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit cf9344c45e85ed274cf783271344f4c03138971d)
+Cc: Artyom Panfilov <apanfilov@spectracom.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 13dcc69a39da97f615627553e88113ba455875ea)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ntp/ntp.hash | 2 +-
- package/ntp/ntp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../ntp/0004-fix-work-fork-without-droproot.patch  | 26 ++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/package/ntp/ntp.hash b/package/ntp/ntp.hash
-index ea86c1586f..02dbaffcba 100644
---- a/package/ntp/ntp.hash
-+++ b/package/ntp/ntp.hash
-@@ -1,5 +1,5 @@
- # From https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p11.tar.gz.md5
- md5 00950ca2855579541896513e78295361  ntp-4.2.8p11.tar.gz
- # Calculated based on the hash above
--sha256 f14a39f753688252d683ff907035ffff106ba8d3db21309b742e09b5c3cd278e  ntp-4.2.8p11.tar.gz
-+sha256 709b222b5013d77d26bfff532b5ea470a8039497ef29d09363931c036cb30454  ntp-4.2.8p12.tar.gz
- sha256 62c87b269365b38b55359b16dfde7ec28c683c722ef489db90afd0f2e478e4a1  COPYRIGHT
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index b5e2c1e026..edd3d521aa 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- NTP_VERSION_MAJOR = 4.2
--NTP_VERSION = $(NTP_VERSION_MAJOR).8p11
-+NTP_VERSION = $(NTP_VERSION_MAJOR).8p12
- NTP_SITE = https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
- NTP_DEPENDENCIES = host-pkgconf libevent $(if $(BR2_PACKAGE_BUSYBOX),busybox)
- NTP_LICENSE = NTP
+diff --git a/package/ntp/0004-fix-work-fork-without-droproot.patch b/package/ntp/0004-fix-work-fork-without-droproot.patch
+new file mode 100644
+index 0000000000..cb6fec0125
+--- /dev/null
++++ b/package/ntp/0004-fix-work-fork-without-droproot.patch
+@@ -0,0 +1,26 @@
++Fix work_fork build when droproot is disabled
++
++The set_user_group_ids() depends on HAVE_DROPROOT. When HAVE_DROPROOT is not
++enabled, work_fork.c code causes a link failure:
++
++../libntp/libntp.a(work_fork.o): In function `send_blocking_req_internal':
++work_fork.c:(.text+0x498): undefined reference to `set_user_group_ids'
++
++Make the set_user_group_ids() call depend on HAVE_DROPROOT.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: http://bugs.ntp.org/show_bug.cgi?id=3539
++
++--- ntp-4.2.8p12.orig/libntp/work_fork.c	2018-08-14 14:51:06.000000000 +0300
+++++ ntp-4.2.8p12/libntp/work_fork.c	2018-10-15 21:10:54.580917962 +0300
++@@ -594,7 +594,9 @@
++ 	init_logging("ntp_intres", 0, FALSE);
++ 	setup_logfile(NULL);
++ 
+++#if defined(HAVE_DROPROOT)
++ 	(void) set_user_group_ids();
+++#endif
++ 
++ 	/*
++ 	 * And now back to the portable code
