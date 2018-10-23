@@ -1,55 +1,72 @@
-From: Ferdinand van Aartsen <ferdinand@ombud.nl>
-Date: Tue, 23 Oct 2018 15:03:16 +0200
-Subject: [Buildroot] [PATCH 1/1] cc-tool: use the same C++ standard as
- boost
-In-Reply-To: <CANQCQpYPv8uJhVxPWXQ8rdjB_1R9FmKh8MHaDwZ7q1JmP41X-A@mail.gmail.com>
-References: <20181022141818.335-1-ferdinand@ombud.nl>
- <CANQCQpYPv8uJhVxPWXQ8rdjB_1R9FmKh8MHaDwZ7q1JmP41X-A@mail.gmail.com>
-Message-ID: <2a7201300934425b7dd62512108e5e15@ombud.nl>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 23 Oct 2018 08:10:18 -0500
+Subject: [Buildroot] [PATCH] package/ntp: use ntpd to set initial time
+Message-ID: <1540300218-59209-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Matthew Weber schreef op 2018-10-23 13:18:
-> Ferdinand,
-> 
-> On Mon, Oct 22, 2018 at 9:18 AM Ferdinand van Aartsen
-> <ferdinand@ombud.nl> wrote:
->> 
->> When boost context is enabled, we build boost with -std=c++11.
->> That causes cc-tool to fail, which was using the gcc default c++14.
->> 
->> Signed-off-by: Ferdinand van Aartsen <ferdinand@ombud.nl>
->> ---
->>  package/cc-tool/cc-tool.mk | 5 +++++
->>  1 file changed, 5 insertions(+)
->> 
->> diff --git a/package/cc-tool/cc-tool.mk b/package/cc-tool/cc-tool.mk
->> index e170e06a21..d5de920f6a 100644
->> --- a/package/cc-tool/cc-tool.mk
->> +++ b/package/cc-tool/cc-tool.mk
->> @@ -18,6 +18,11 @@ CC_TOOL_AUTORECONF = YES
->>  CC_TOOL_CONF_OPTS = --with-boost=$(STAGING_DIR)/usr
->>  CC_TOOL_CONF_ENV = LIBS="$(CC_TOOL_LIBS)"
->> 
->> +# With boost context selected, boost gets built with c++11
->> +ifeq 
->> ($(BR2_PACKAGE_BOOST_CONTEXT)$(BR2_TOOLCHAIN_GCC_AT_LEAST_4_7),yy)
->> +CC_TOOL_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
->> +endif
->> +
->>  # Help boost.m4 find the Boost Regex library, which needs the pthread
->>  # library, but isn't detected using a modern (pkg-config) mechanism.
->>  ifeq ($(BR2_STATIC_LIBS),y)
->> --
-> 
-> I believe this one is related to this patch, any impacts?
-> http://patchwork.ozlabs.org/patch/983327/
-> 
+The ntpdate program has been in the process of being deprecated for
+some time. (http://support.ntp.org/bin/view/Dev/DeprecatingNtpdate)
 
-You're right, hadn't spotted that one, then that seems to be the correct 
-solution.
+This patch updates the existing ntpd script to handle setting initial
+time using the new ntpd "one time set and exit" approach.
 
-Ferdinand
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Oscar Gomez Fuente <oscargomezf@gmail.com>
+---
+Based on Oscar's v1 patch to add a ntpdate startup script.
+http://patchwork.ozlabs.org/patch/986852/
+---
+ package/ntp/Config.in |  5 +++++
+ package/ntp/S49ntp    | 17 +++++++++++++++++
+ 2 files changed, 22 insertions(+)
+
+diff --git a/package/ntp/Config.in b/package/ntp/Config.in
+index efd47e1..5cc78ce 100644
+--- a/package/ntp/Config.in
++++ b/package/ntp/Config.in
+@@ -54,6 +54,11 @@ config BR2_PACKAGE_NTP_NTPDATE
+ 	  The ntpdate utility program is used to set the local date
+ 	  and time from an NTP server given as an argument.
+ 
++	  This option is deprecated by upstream and replaced with the
++	  -gq options of ntpd. The package/ntp/S49ntp script has an
++	  example implementation.
++	  (http://support.ntp.org/bin/view/Dev/DeprecatingNtpdate)
++
+ config BR2_PACKAGE_NTP_NTPDC
+ 	bool "ntpdc"
+ 	help
+diff --git a/package/ntp/S49ntp b/package/ntp/S49ntp
+index 35e5874..9851747 100755
+--- a/package/ntp/S49ntp
++++ b/package/ntp/S49ntp
+@@ -11,6 +11,23 @@ fi
+ case "$1" in
+   start)
+     printf "Starting $NAME: "
++    NTP_WAIT_DELAY=15 #sec
++    CURRENT_DATE=$(date | grep "1970")
++    if [ "$CURRENT_DATE" != "" ]; then
++        printf "checking for time"
++        /usr/sbin/ntpd -g -q > /dev/null 2>&1 &
++        NTP_PID=$!
++        while [ ${NTP_WAIT_DELAY} -gt 0 ]; do
++            [ ! -e /proc/$NTP_PID ] && break
++            sleep 1
++            printf "."
++            : $((NTP_WAIT_DELAY -= 1))
++        done
++        # ntpd never returns if it can't access the NTP server(s)
++        # noted in /etc/ntp.conf.
++        kill $NTP_PID > /dev/null 2>&1
++        [ $? = 0 ] && printf "(Not set): "
++    fi
+     start-stop-daemon -S -q -x /usr/sbin/ntpd -- -g
+     [ $? = 0 ] && echo "OK" || echo "FAIL"
+     ;;
+-- 
+1.9.1
