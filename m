@@ -1,51 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Oct 2018 16:31:03 +0200
-Subject: [Buildroot] [git commit] package/live555: security bump to version
- 2018.10.17
-Message-ID: <20181023143007.6C16A885F7@busybox.osuosl.org>
+Date: Tue, 23 Oct 2018 16:35:44 +0200
+Subject: [Buildroot] [git commit] python-serial-asyncio: new package
+Message-ID: <20181023143419.936CC88636@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01d7686c907eab026781d700999ba09dec29b48e
+commit: https://git.buildroot.net/buildroot/commit/?id=231f5403b76374d18fe14fb8e002fbe9784259a1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: http://www.live555.com/liveMedia/public/changelog.txt
+asyncio extension package for pyserial
 
-Fixes CVE-2018-4013:
-https://security-tracker.debian.org/tracker/CVE-2018-4013
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/live555/live555.hash | 4 ++--
- package/live555/live555.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/Config.in                                        |  1 +
+ package/python-serial-asyncio/Config.in                  |  8 ++++++++
+ package/python-serial-asyncio/python-serial-asyncio.hash |  5 +++++
+ package/python-serial-asyncio/python-serial-asyncio.mk   | 14 ++++++++++++++
+ 4 files changed, 28 insertions(+)
 
-diff --git a/package/live555/live555.hash b/package/live555/live555.hash
-index d74d674c7a..024dcac124 100644
---- a/package/live555/live555.hash
-+++ b/package/live555/live555.hash
-@@ -1,5 +1,5 @@
- # From http://live555.com/liveMedia/public/live555-latest-md5.txt
--md5 93c65b0f55f37835c727bbf65c1b61b4 live.2018.08.05.tar.gz
-+md5 3383dea853735b7a73eda6ddb52b6372 live.2018.10.17.tar.gz
- # Locally generated
--sha256 c309fb6d499557250b4db8371243715b9ee2cdaa7ccacaf254bcc62e97566ae4  live.2018.08.05.tar.gz
-+sha256 7c68d9c95b39acd309a2b6a4fc14c3837544a9be3f64062ed38d1ad6f68dc9e8  live.2018.10.17.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/live555/live555.mk b/package/live555/live555.mk
-index a5479d6d7c..6a6d353650 100644
---- a/package/live555/live555.mk
-+++ b/package/live555/live555.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIVE555_VERSION = 2018.08.05
-+LIVE555_VERSION = 2018.10.17
- LIVE555_SOURCE = live.$(LIVE555_VERSION).tar.gz
- LIVE555_SITE = http://www.live555.com/liveMedia/public
- LIVE555_LICENSE = LGPL-2.1+
+diff --git a/package/Config.in b/package/Config.in
+index 6d2a73ff1b..710cde6691 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1008,6 +1008,7 @@ menu "External python modules"
+ 	source "package/python-see/Config.in"
+ 	source "package/python-semver/Config.in"
+ 	source "package/python-serial/Config.in"
++	source "package/python-serial-asyncio/Config.in"
+ 	source "package/python-service-identity/Config.in"
+ 	source "package/python-setproctitle/Config.in"
+ 	source "package/python-setuptools/Config.in"
+diff --git a/package/python-serial-asyncio/Config.in b/package/python-serial-asyncio/Config.in
+new file mode 100644
+index 0000000000..5520b72506
+--- /dev/null
++++ b/package/python-serial-asyncio/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_SERIAL_ASYNCIO
++	bool "python-serial-asyncio"
++	depends on BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON_SERIAL
++	help
++	  asyncio extension package for pyserial.
++
++	  https://github.com/pyserial/pyserial-asyncio
+diff --git a/package/python-serial-asyncio/python-serial-asyncio.hash b/package/python-serial-asyncio/python-serial-asyncio.hash
+new file mode 100644
+index 0000000000..268c7d83f5
+--- /dev/null
++++ b/package/python-serial-asyncio/python-serial-asyncio.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/pyserial-asyncio/json
++md5     67244fdc11cc31cf0ebf675c271c71d8  pyserial-asyncio-0.4.tar.gz
++sha256  c40677a8874d8c24d4423a97498746de776f6dbcd0efbb8fa43dcf011a589aee  pyserial-asyncio-0.4.tar.gz
++# Locally computed sha256 checksums
++sha256	f8ded3a7460d3b2850b0cf673e986c70e9d997fd0732d8ab3f3c84f1f191087d  LICENSE.txt
+diff --git a/package/python-serial-asyncio/python-serial-asyncio.mk b/package/python-serial-asyncio/python-serial-asyncio.mk
+new file mode 100644
+index 0000000000..39c3476d9e
+--- /dev/null
++++ b/package/python-serial-asyncio/python-serial-asyncio.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-serial-asyncio
++#
++################################################################################
++
++PYTHON_SERIAL_ASYNCIO_VERSION = 0.4
++PYTHON_SERIAL_ASYNCIO_SOURCE = pyserial-asyncio-$(PYTHON_SERIAL_ASYNCIO_VERSION).tar.gz
++PYTHON_SERIAL_ASYNCIO_SITE = https://files.pythonhosted.org/packages/41/3f/e26f71269cbc0890a527a736d9afc5c0d5838a2c188be680558d635b7dc2
++PYTHON_SERIAL_ASYNCIO_LICENSE = BSD-3-Clause
++PYTHON_SERIAL_ASYNCIO_LICENSE_FILES = LICENSE.txt
++PYTHON_SERIAL_ASYNCIO_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
