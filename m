@@ -1,44 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 01:18:48 +0200
-Subject: [Buildroot] [git commit] package/apache: bump version to 2.4.37
-Message-ID: <20181023231921.C202D88651@busybox.osuosl.org>
+Date: Wed, 24 Oct 2018 01:20:43 +0200
+Subject: [Buildroot] [git commit] redis: needs dynamic library
+Message-ID: <20181023231921.D94CB88651@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f832bb812382bc45cfdcb411b57c5cc9cae56b9
+commit: https://git.buildroot.net/buildroot/commit/?id=0df5c2b13b915ca04af1d5dec012d350c415b87c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: http://www.apache.org/dist/httpd/CHANGES_2.4.37
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+dlfcn.h is included in src/debug.c and src/module.c
+module.c uses dlopen function
+
+Fixes:
+ - http://autobuild.buildroot.org/results/fdda0ee7461dfc9ea479d4d80ab42c50006a3b13
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apache/apache.hash | 2 +-
- package/apache/apache.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/redis/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index 32743656fd..6d21f0f614 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,4 +1,4 @@
- # From http://archive.apache.org/dist/httpd/httpd-2.4.35.tar.bz2.sha256
--sha256 2607c6fdd4d12ac3f583127629291e9432b247b782396a563bec5678aae69b56 httpd-2.4.35.tar.bz2
-+sha256 3498dc5c6772fac2eb7307dc7963122ffe243b5e806e0be4fb51974ff759d726 httpd-2.4.37.tar.bz2
- # Locally computed
- sha256 c49c0819a726b70142621715dae3159c47b0349c2bc9db079070f28dadac0229 LICENSE
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 3ac317216d..283c3cbd50 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/redis/Config.in b/package/redis/Config.in
+index 5d7edd8139..2450ccdf7f 100644
+--- a/package/redis/Config.in
++++ b/package/redis/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_REDIS
+ 	bool "redis"
+ 	depends on BR2_USE_MMU # fork()
++	depends on !BR2_STATIC_LIBS # dlfcn.h
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+@@ -10,7 +11,7 @@ config BR2_PACKAGE_REDIS
  
--APACHE_VERSION = 2.4.35
-+APACHE_VERSION = 2.4.37
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = http://archive.apache.org/dist/httpd
- APACHE_LICENSE = Apache-2.0
+ 	  http://www.redis.io
+ 
+-comment "redis needs a toolchain w/ threads"
++comment "redis needs a toolchain w/ dynamic library, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
