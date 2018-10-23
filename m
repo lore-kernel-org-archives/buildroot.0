@@ -1,82 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Oct 2018 16:35:44 +0200
-Subject: [Buildroot] [git commit] python-serial-asyncio: new package
-Message-ID: <20181023143419.936CC88636@busybox.osuosl.org>
+Date: Tue, 23 Oct 2018 16:35:32 +0200
+Subject: [Buildroot] [git commit] python-serial: update
+Message-ID: <20181023143419.88FA288657@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=231f5403b76374d18fe14fb8e002fbe9784259a1
+commit: https://git.buildroot.net/buildroot/commit/?id=b7cc0e9f4630dc795840b523f33d27a455e7a0cb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-asyncio extension package for pyserial
+we no longer need to remove aio.py since asyncio has been moved to python-serial-asyncio
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                                        |  1 +
- package/python-serial-asyncio/Config.in                  |  8 ++++++++
- package/python-serial-asyncio/python-serial-asyncio.hash |  5 +++++
- package/python-serial-asyncio/python-serial-asyncio.mk   | 14 ++++++++++++++
- 4 files changed, 28 insertions(+)
+ package/python-serial/python-serial.hash |  8 +++++---
+ package/python-serial/python-serial.mk   | 14 ++------------
+ 2 files changed, 7 insertions(+), 15 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 6d2a73ff1b..710cde6691 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1008,6 +1008,7 @@ menu "External python modules"
- 	source "package/python-see/Config.in"
- 	source "package/python-semver/Config.in"
- 	source "package/python-serial/Config.in"
-+	source "package/python-serial-asyncio/Config.in"
- 	source "package/python-service-identity/Config.in"
- 	source "package/python-setproctitle/Config.in"
- 	source "package/python-setuptools/Config.in"
-diff --git a/package/python-serial-asyncio/Config.in b/package/python-serial-asyncio/Config.in
-new file mode 100644
-index 0000000000..5520b72506
---- /dev/null
-+++ b/package/python-serial-asyncio/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_SERIAL_ASYNCIO
-+	bool "python-serial-asyncio"
-+	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_SERIAL
-+	help
-+	  asyncio extension package for pyserial.
-+
-+	  https://github.com/pyserial/pyserial-asyncio
-diff --git a/package/python-serial-asyncio/python-serial-asyncio.hash b/package/python-serial-asyncio/python-serial-asyncio.hash
-new file mode 100644
-index 0000000000..268c7d83f5
---- /dev/null
-+++ b/package/python-serial-asyncio/python-serial-asyncio.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/pyserial-asyncio/json
-+md5     67244fdc11cc31cf0ebf675c271c71d8  pyserial-asyncio-0.4.tar.gz
-+sha256  c40677a8874d8c24d4423a97498746de776f6dbcd0efbb8fa43dcf011a589aee  pyserial-asyncio-0.4.tar.gz
+diff --git a/package/python-serial/python-serial.hash b/package/python-serial/python-serial.hash
+index f98a8b91b2..96209a9965 100644
+--- a/package/python-serial/python-serial.hash
++++ b/package/python-serial/python-serial.hash
+@@ -1,3 +1,5 @@
+-# md5 from http://pypi.python.org/pypi?:action=show_md5&digest=e849af7f8b7ec75cbc7a53da67c51a51, sha256 locally computed
+-md5     e849af7f8b7ec75cbc7a53da67c51a51  pyserial-3.1.tar.gz
+-sha256  c8ffdcbd8bfd308842409e558848c32aa3499a1bfe95a591e4210072b9520f1e  pyserial-3.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/pyserial/json
++md5     ed6183b15519a0ae96675e9c3330c69b  pyserial-3.4.tar.gz
++sha256  6e2d401fdee0eab996cf734e67773a0143b932772ca8b42451440cfed942c627  pyserial-3.4.tar.gz
 +# Locally computed sha256 checksums
-+sha256	f8ded3a7460d3b2850b0cf673e986c70e9d997fd0732d8ab3f3c84f1f191087d  LICENSE.txt
-diff --git a/package/python-serial-asyncio/python-serial-asyncio.mk b/package/python-serial-asyncio/python-serial-asyncio.mk
-new file mode 100644
-index 0000000000..39c3476d9e
---- /dev/null
-+++ b/package/python-serial-asyncio/python-serial-asyncio.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-serial-asyncio
-+#
-+################################################################################
-+
-+PYTHON_SERIAL_ASYNCIO_VERSION = 0.4
-+PYTHON_SERIAL_ASYNCIO_SOURCE = pyserial-asyncio-$(PYTHON_SERIAL_ASYNCIO_VERSION).tar.gz
-+PYTHON_SERIAL_ASYNCIO_SITE = https://files.pythonhosted.org/packages/41/3f/e26f71269cbc0890a527a736d9afc5c0d5838a2c188be680558d635b7dc2
-+PYTHON_SERIAL_ASYNCIO_LICENSE = BSD-3-Clause
-+PYTHON_SERIAL_ASYNCIO_LICENSE_FILES = LICENSE.txt
-+PYTHON_SERIAL_ASYNCIO_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
++sha256	a89d951d157e2c199fbbe7ecf8d41bc3bc93de166db524aa6b9b610dbccc832d  LICENSE.txt
+diff --git a/package/python-serial/python-serial.mk b/package/python-serial/python-serial.mk
+index ce7ec07062..d583ac65ab 100644
+--- a/package/python-serial/python-serial.mk
++++ b/package/python-serial/python-serial.mk
+@@ -4,21 +4,11 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SERIAL_VERSION = 3.1
++PYTHON_SERIAL_VERSION = 3.4
+ PYTHON_SERIAL_SOURCE = pyserial-$(PYTHON_SERIAL_VERSION).tar.gz
+-PYTHON_SERIAL_SITE = https://pypi.python.org/packages/ce/9c/694ce79a9d4a164e109aeba1a40fba23336f3b7554978553e22a5d41d54d
++PYTHON_SERIAL_SITE = https://files.pythonhosted.org/packages/cc/74/11b04703ec416717b247d789103277269d567db575d2fd88f25d9767fe3d
+ PYTHON_SERIAL_LICENSE = BSD-3-Clause
+ PYTHON_SERIAL_LICENSE_FILES = LICENSE.txt
+ PYTHON_SERIAL_SETUP_TYPE = setuptools
+ 
+-# aio.py is an experimental module, that is compatible only with
+-# Python 3, so remove it for Python 2 environment or it will
+-# cause compilation errors
+-ifeq ($(BR2_PACKAGE_PYTHON),y)
+-define PYTHON_SERIAL_REMOVE_AIO_PY
+-	rm $(@D)/serial/aio.py
+-endef
+-PYTHON_SERIAL_POST_EXTRACT_HOOKS = PYTHON_SERIAL_REMOVE_AIO_PY
+-endif
+-
+ $(eval $(python-package))
