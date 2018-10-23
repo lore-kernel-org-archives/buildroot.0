@@ -1,9 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Tue, 23 Oct 2018 00:13:37 -0300
-Subject: [Buildroot] [PATCH] .gitlab-ci.yml: do runtime tests only on
- explicit trigger
-References: <4e9b7774-6f73-418b-eba3-0036b8d7a239@mind.be>
-Message-ID: <5bce91e173201_161d2af64544f82051e8@ultri5.mail>
+Date: Tue, 23 Oct 2018 00:15:56 -0300
+Subject: [Buildroot] [PATCH 1/7] support/testing: create default test
+ case for python packages
+References: <20181022095518.47a6fd03@windsurf>
+Message-ID: <5bce926cde3fc_161d3f9ca608f07053f7@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,63 +12,69 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, Oct 22, 2018 at 08:08 PM, Arnout Vandecappelle wrote:
+On Mon, Oct 22, 2018 at 04:55 AM, Thomas Petazzoni wrote:
 
-> On 10/22/18 3:35 AM, Ricardo Martincoski wrote:
->> 
->> On Sun, Oct 21, 2018 at 08:23 AM, Arnout Vandecappelle wrote:
 [snip]
->>>  Would it be possible to also define branches for a specific test or defconfig?
->> 
->> Yes.
->> 
->> Using the same commit, I pushed 3 branches and a tag:
->> git push gitlab HEAD:test2               #jobs = 4
->> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/33765315
->> git push gitlab HEAD:test2-TestSyslogNg  #jobs = 5
->> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/33765342
->> git push gitlab HEAD:test2-runtime_test  #jobs = 72
->> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/33765317
->> git push gitlab test2-tag                #jobs = 260
->> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/33765321
+>>      def test_run(self):
+>>          self.login()
+>> +
+>> +        if self.__class__.__name__ != "TestPython3":
+>> +            # default test_run for TestPythonPy3<Package> that inherits from this one
+>> +            self.check_sample_scripts_exist()
+>> +            self.run_sample_scripts()
+>> +            return
+>> +
+>>          self.version_test("Python 3")
+>>          self.math_floor_test()
+>>          self.libc_time_test()
 > 
->  Nice! I suppose test2-tag is actually a tag, not a branch, so it matches the
-> 'tags' trigger?
+> I don't really like that TestPython2 and TestPython3 are used for two
+> entirely separate things:
+> 
+>  - As a base class for testing individual Python packages
+>  - As test cases for the Python interpreter itself
+> 
+> So here is the class hierarchy that I think would make more sense:
+> 
+>  - TestPythonBase, defines the base configuration, login() method and
+>    that's it
+> 
+>  - TestPythonBase2, that appends the configuration with
+>    BR2_PACKAGE_PYTHON=y
+> 
+>  - TestPythonBase3, that appends the configuration with
+>    BR2_PACKAGE_PYTHON3=y
+> 
+>  - TestPythonInterpreter, defines the version_test(),
+>    math_floor_test(), etc. methods that test the interpreter, and a
+>    test_run() method that calls all those tests. Indeed, calling those
+>    tests is currently repeated between Python2/Python3.
+> 
+>  - TestPythonInterpreter2, which inherits from TestPythonInterpreter
+>    and TestPythonBase2
+> 
+>  - TestPythonInterpreter3, which inherits from TestPythonInterpreter
+>    and TestPythonBase3
+> 
+>  - TestPythonPackageBase, which has all the logic to copy sample
+>    scripts, run the scripts on the target, etc
+> 
+>  - TestPythonAutobahn that defines the sample script to use, and
+>    inherits from TestPythonPackageBase
+> 
+>  - TestPython2Autobahn that inherits from TestPythonAutobahn and
+>    TestPythonBase2
+> 
+> etc.
+> 
+> Does that make sense ? Basically, I'd like the test case of the
+> interpreter to not be a "special case".
+> 
+> Does that make sense ?
 
-Yes. It is a tag.
-
-> 
->> 
->> We will need some extra 'sed' trickery to create a regexp for each test case:
->> -tests.package.test_syslog_ng.TestSyslogNg: *runtime_test
->> +tests.package.test_syslog_ng.TestSyslogNg:
->> +    <<: *runtime_test
->> +    only:
->> +        - triggers
->> +        - tags
->> +        - /^.*-runtime_test$/
->> +        - /^.*-TestSyslogNg$/
-> 
->  Maybe you can use variables in there? So, in the only specification of
-> .runtime_test:
-> 
->     only:
->         - triggers
->         - tags
->         - /^.*-runtime_test$/
->         - /^.*-${CI_JOB_NAME}$/
-> 
->  Hm, unlikely, otherwise the other $ would have to be quoted.
-
-Maybe using %variable%. I didn't tested yet.
-
-> 
->  Apparently nowadays there is also support for more complex only specifications
-> using variables. Perhaps you could take a look at that? I'm afraid though that
-> it's always an AND of the conditions you specify, so no way to specify that it's
-> for tags OR for things matching the CI_JOB_NAME.
-
-I will take a look.
+Sure it does make sense. I will rework.
+Thank you for your review.
+I will set this series as Changes Requested.
 
 
 Regards,
