@@ -1,67 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 01:03:02 +0200
+Date: Wed, 24 Oct 2018 01:02:52 +0200
 Subject: [Buildroot] [git commit branch/2018.08.x] ntp: fix build for no-MMU
- with libcap
-Message-ID: <20181023230146.0637781356@busybox.osuosl.org>
+Message-ID: <20181023230145.F239F8872C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36b53c985116248e412d5bbd60173e399a8cfc89
+commit: https://git.buildroot.net/buildroot/commit/?id=7f825acb35c2a65a3fd8f40f5114e43f711fca0f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-Commit 87d759ced5 (ntp: fix build for no-MMU) added a patch to make MMU
-dependent code hidden behind HAVE_WORKING_FORK. It turns out that the
-patch covers too much code. When libcap is enabled we pass
---enable-linuxcaps, which in turn enables HAVE_DROPROOT. This adds calls
-to code that is covered by HAVE_WORKING_FORK.
-
-Update the no-MMU fix so that HAVE_WORKING_FORK only covers the no-MMU
-incompatible routine.
+Code rearrange in the latest ntp version exposed code that used to be
+hidden behind HAVE_WORKING_FORK. Put this code back where it belongs.
 
 Fixes:
-http://autobuild.buildroot.net/results/c5c/c5cf28bb969fec7c07864cdd094dedfa4d5439d2/
+http://autobuild.buildroot.net/results/9f4/9f4710b451df1a60f95ab6503cfb7788ad998a65/
+http://autobuild.buildroot.net/results/d0b/d0b20a6c0f37a8b06841afc2764c8aab6ffd27d2/
+http://autobuild.buildroot.net/results/85c/85c89f5e9d36915567b8d14b9c99e3720c866577/
 
 Cc: Artem Panfilov <apanfilov@spectracom.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7cf152852dd0b4bf30659e3e62d891171f1e4aa5)
+(cherry picked from commit 87d759ced52cb461a4460f4c513f2f6993292bc2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ntp/0003-fix-nommu.patch | 21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
+ package/ntp/0003-fix-nommu.patch | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
 diff --git a/package/ntp/0003-fix-nommu.patch b/package/ntp/0003-fix-nommu.patch
-index 53bf4dfcf3..0959fa0ba5 100644
---- a/package/ntp/0003-fix-nommu.patch
+new file mode 100644
+index 0000000000..53bf4dfcf3
+--- /dev/null
 +++ b/package/ntp/0003-fix-nommu.patch
-@@ -10,13 +10,20 @@ Upstream status: http://bugs.ntp.org/show_bug.cgi?id=3538
- 
- diff -Nuar ntp-4.2.8p12.orig/ntpd/ntpd.c ntp-4.2.8p12/ntpd/ntpd.c
- --- ntp-4.2.8p12.orig/ntpd/ntpd.c	2018-08-14 14:51:30.000000000 +0300
--+++ ntp-4.2.8p12/ntpd/ntpd.c	2018-10-12 08:19:01.291781773 +0300
--@@ -529,7 +529,7 @@
-++++ ntp-4.2.8p12/ntpd/ntpd.c	2018-10-13 21:25:25.858261249 +0300
-+@@ -534,6 +534,7 @@
+@@ -0,0 +1,22 @@
++Fix no-MMU build
++
++The detach_from_terminal() is unused for no-MMU, but it depends on symbols
++that are not defined for no-MMU. Don't define detach_from_terminal() when
++HAVE_WORKING_FORK is not defined.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: http://bugs.ntp.org/show_bug.cgi?id=3538
++
++diff -Nuar ntp-4.2.8p12.orig/ntpd/ntpd.c ntp-4.2.8p12/ntpd/ntpd.c
++--- ntp-4.2.8p12.orig/ntpd/ntpd.c	2018-08-14 14:51:30.000000000 +0300
+++++ ntp-4.2.8p12/ntpd/ntpd.c	2018-10-12 08:19:01.291781773 +0300
++@@ -529,7 +529,7 @@
++ }
++ #endif	/* !SIM */
++ 
++-#if !defined(SIM) && !defined(SYS_WINNT)
+++#if !defined(SIM) && !defined(SYS_WINNT) && defined(HAVE_WORKING_FORK)
++ /*
 +  * Detach from terminal (much like daemon())
 +  * Nothe that this function calls exit()
-+  */
-++# ifdef HAVE_WORKING_FORK
-+ static void
-+ detach_from_terminal(
-+ 	int pipe_fds[2],
-+@@ -617,6 +618,7 @@
-+ 
-+ 	return;
-  }
-- #endif	/* !SIM */
-++# endif /* HAVE_WORKING_FORK */
-  
---#if !defined(SIM) && !defined(SYS_WINNT)
--+#if !defined(SIM) && !defined(SYS_WINNT) && defined(HAVE_WORKING_FORK)
-+ #ifdef HAVE_DROPROOT
-  /*
--  * Detach from terminal (much like daemon())
--  * Nothe that this function calls exit()
