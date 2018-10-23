@@ -1,68 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Oct 2018 11:43:35 +0200
-Subject: [Buildroot] [git commit] core: support host gcc of the future
-Message-ID: <20181023094415.60EB7885F9@busybox.osuosl.org>
+From: Ubaldo Porcheddu <ubaldo@eja.it>
+Date: Tue, 23 Oct 2018 10:10:49 +0000
+Subject: [Buildroot] [PATCH 1/1] Add kernel headers 4.19 choice
+Message-ID: <1540289449-1977-1-git-send-email-ubaldo@eja.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3950e69dad925b684aaf7462713e50aab882de28
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-When we do a release, we know only of a set of gcc versions that the
-host may have. But in the future, distributions with newer gcc versions
-may show up.
-
-Currently, we do not recognise those versions, and thus we do as if they
-were older than the oldest we know of. This means that a set of packages
-become unselectable, when they should be.
-
-We fix that by capping the detected version to the highest we know of.
-
-Reported-by: gargar_ on IRC
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Ubaldo Porcheddu <ubaldo@eja.it>
 ---
- Config.in |  3 +++
- Makefile  | 10 ++++++++--
- 2 files changed, 11 insertions(+), 2 deletions(-)
+ package/linux-headers/Config.in.host                                 | 4 ++++
+ toolchain/Config.in                                                  | 5 +++++
+ .../toolchain-external/toolchain-external-custom/Config.in.options   | 4 ++++
+ 3 files changed, 13 insertions(+)
 
-diff --git a/Config.in b/Config.in
-index 6b5b2b043c..42cdf7a3eb 100644
---- a/Config.in
-+++ b/Config.in
-@@ -67,6 +67,9 @@ config BR2_HOST_GCC_AT_LEAST_8
- 	default y if BR2_HOST_GCC_VERSION = "8"
- 	select BR2_HOST_GCC_AT_LEAST_7
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index cdf639a..0b162a8 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -125,6 +125,10 @@ choice
+ 	  This is used to hide/show some packages that have strict
+ 	  requirements on the version of kernel headers.
  
-+# When adding new entries above, be sure to update
-+# the HOSTCC_MAX_VERSION variable in the Makefile.
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19
++	bool "4.19.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
 +
- # Hidden boolean selected by packages in need of Java in order to build
- # (example: kodi)
- config BR2_NEEDS_HOST_JAVA
-diff --git a/Makefile b/Makefile
-index d39a94e832..a69af3b645 100644
---- a/Makefile
-+++ b/Makefile
-@@ -351,8 +351,14 @@ export HOSTARCH := $(shell LC_ALL=C $(HOSTCC_NOCCACHE) -v 2>&1 | \
- 	    -e 's/macppc/powerpc/' \
- 	    -e 's/sh.*/sh/' )
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18
+ 	bool "4.18.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index c2192a5..474e3c8 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -361,10 +361,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
+ 	bool
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
  
--HOSTCC_VERSION := $(shell $(HOSTCC_NOCCACHE) --version | \
--	sed -n -r 's/^.* ([0-9]*)\.([0-9]*)\.([0-9]*)[ ]*.*/\1 \2/p')
-+# When adding a new host gcc version in Config.in,
-+# update the HOSTCC_MAX_VERSION variable:
-+HOSTCC_MAX_VERSION := 8
++config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
++	bool
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
 +
-+HOSTCC_VERSION := $(shell V=$$($(HOSTCC_NOCCACHE) --version | \
-+	sed -n -r 's/^.* ([0-9]*)\.([0-9]*)\.([0-9]*)[ ]*.*/\1 \2/p'); \
-+	[ "$${V%% *}" -le $(HOSTCC_MAX_VERSION) ] || V=$(HOSTCC_MAX_VERSION); \
-+	printf "%s" "$${V}")
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+ 	string
++	default "4.19" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
+ 	default "4.18" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
+ 	default "4.17" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
+ 	default "4.16" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index 8665d2e..288fc3f 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -123,6 +123,10 @@ choice
+ 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
+ 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
  
- # For gcc >= 5.x, we only need the major version.
- ifneq ($(firstword $(HOSTCC_VERSION)),4)
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19
++	bool "4.19.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
++
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_18
+ 	bool "4.18.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
+-- 
+1.9.1
