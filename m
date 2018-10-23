@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 01:08:03 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] scanpypi: improve BSD
+Date: Wed, 24 Oct 2018 01:08:11 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] scanpypi: improve BSD
  licence handling
-Message-ID: <20181023230620.BB03C8878A@busybox.osuosl.org>
+Message-ID: <20181023230626.977DF88793@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9610b1dd2365564fdcd0d23c2fa4e4bfd7c1dd8c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c178e735f39857ad03d8c5530b6b9276bf826d68
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 When used without spdx_lookup the BSD licence cannot be
 detected correctly because many Python packages just specify
@@ -28,10 +28,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/utils/scanpypi b/utils/scanpypi
-index bc593e0e89..56b9f420ff 100755
+index 12c96b842e..6511fc14ae 100755
 --- a/utils/scanpypi
 +++ b/utils/scanpypi
-@@ -379,7 +379,7 @@ class BuildrootPackage():
+@@ -395,7 +395,7 @@ class BuildrootPackage():
          """
          Try to determine the related license name.
  
@@ -40,7 +40,7 @@ index bc593e0e89..56b9f420ff 100755
          get license name from package's metadata or, if spdx_lookup
          package is available, the script compares license files with
          SPDX database.
-@@ -388,7 +388,7 @@ class BuildrootPackage():
+@@ -404,7 +404,7 @@ class BuildrootPackage():
          if liclookup is None:
              license_dict = {
                  'Apache Software License': 'Apache-2.0',
