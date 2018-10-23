@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 01:06:30 +0200
-Subject: [Buildroot] [PATCH] ntp: fix build for no-MMU with libcap
-In-Reply-To: <42864d6afc883db05099a7d75a31de7e09e7ce96.1539456660.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Sat, 13 Oct 2018 21:51:00 +0300")
-References: <42864d6afc883db05099a7d75a31de7e09e7ce96.1539456660.git.baruch@tkos.co.il>
-Message-ID: <87o9bke009.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Oct 2018 01:06:52 +0200
+Subject: [Buildroot] [PATCH] ntp: fix build without libcap and no threads
+In-Reply-To: <a90754470c0613a6f8c9ccce674ff0c82299483e.1539628708.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Mon, 15 Oct 2018 21:38:28 +0300")
+References: <a90754470c0613a6f8c9ccce674ff0c82299483e.1539628708.git.baruch@tkos.co.il>
+Message-ID: <87k1m8dzzn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +13,16 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Commit 87d759ced5 (ntp: fix build for no-MMU) added a patch to make MMU
- > dependent code hidden behind HAVE_WORKING_FORK. It turns out that the
- > patch covers too much code. When libcap is enabled we pass
- > --enable-linuxcaps, which in turn enables HAVE_DROPROOT. This adds calls
- > to code that is covered by HAVE_WORKING_FORK.
+ > When threads support is missing the ntp build system builds the
+ > work_fork code. This code added call to set_user_group_ids() that is
+ > under HAVE_DROPROOT, which is disabled when libcap is not built.
 
- > Update the no-MMU fix so that HAVE_WORKING_FORK only covers the no-MMU
- > incompatible routine.
+ > Add a patch fixing that.
 
  > Fixes:
- > http://autobuild.buildroot.net/results/c5c/c5cf28bb969fec7c07864cdd094dedfa4d5439d2/
+ > http://autobuild.buildroot.net/results/ab9/ab9ceff1151b8b5e6b9fa77d39c0f9b0cac1a080/
 
- > Cc: Artem Panfilov <apanfilov@spectracom.com>
+ > Cc: Artyom Panfilov <apanfilov@spectracom.com>
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to 2018.02.x and 2018.08.x, thanks.
