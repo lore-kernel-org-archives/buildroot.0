@@ -1,45 +1,62 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 23 Oct 2018 21:55:21 +0200
-Subject: [Buildroot] [PATCH 1/1] redis: needs dynamic library
-Message-ID: <20181023195521.22600-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 23 Oct 2018 21:02:16 +0100
+Subject: [Buildroot] [PATCH 1/1] bdwgc: add optional cplusplus support
+In-Reply-To: <20181023193912.10656-1-fontaine.fabrice@gmail.com>
+References: <20181023193912.10656-1-fontaine.fabrice@gmail.com>
+Message-ID: <57bbd766-94da-b00b-94f2-b8ede5e04955@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-dlfcn.h is included in src/debug.c and src/module.c
-module.c uses dlopen function
 
-Fixes:
- - http://autobuild.buildroot.org/results/fdda0ee7461dfc9ea479d4d80ab42c50006a3b13
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/redis/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+On 10/23/18 8:39 PM, Fabrice Fontaine wrote:
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/bdwgc/bdwgc.mk | 14 +++++++++++++-
+>  1 file changed, 13 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
+> index 5603df8d9d..a0d7689d31 100644
+> --- a/package/bdwgc/bdwgc.mk
+> +++ b/package/bdwgc/bdwgc.mk
+> @@ -22,14 +22,26 @@ BDWGC_AUTORECONF = YES
+>  BDWGC_CFLAGS = $(TARGET_CFLAGS)
+>  ifeq ($(BR2_sparc),y)
+>  BDWGC_CFLAGS += -DAO_NO_SPARC_V9
+> +BDWGC_CPPFLAGS += -DAO_NO_SPARC_V9
+>  endif
+>  ifeq ($(BR2_STATIC_LIBS),y)
+>  BDWGC_CFLAGS += -DGC_NO_DLOPEN
+> +BDWGC_CPPFLAGS += -DGC_NO_DLOPEN
+>  endif
+>  
+> +BDWGC_CONF_OPTS = \
+> +	CFLAGS="$(BDWGC_CFLAGS)" \
+> +	CPPFLAGS="$(BDWGC_CPPFLAGS)"
 
-diff --git a/package/redis/Config.in b/package/redis/Config.in
-index 5d7edd8139..2450ccdf7f 100644
---- a/package/redis/Config.in
-+++ b/package/redis/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_REDIS
- 	bool "redis"
- 	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_STATIC_LIBS # dlfcn.h
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
-@@ -10,7 +11,7 @@ config BR2_PACKAGE_REDIS
- 
- 	  http://www.redis.io
- 
--comment "redis needs a toolchain w/ threads"
-+comment "redis needs a toolchain w/ dynamic library, threads"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
--- 
-2.17.1
+ Is it useful to specify that twice? Isn't it enough to specify only CPPFLAGS?
+Maybe at the time this CFLAGS override was added (9d181bb93eb1, 3.5 years ago,
+by Baruch) CPPFLAGS didn't work but now it does? Or maybe it was an
+accident/convenience? The commit message doesn't say anything.
+
+ Regards,
+ Arnout
+
+> +
+>  # Ensure we use the system libatomic_ops, and not the internal one.
+> -BDWGC_CONF_OPTS = --with-libatomic-ops=yes CFLAGS="$(BDWGC_CFLAGS)"
+> +BDWGC_CONF_OPTS += --with-libatomic-ops=yes
+>  HOST_BDWGC_CONF_OPTS = --with-libatomic-ops=yes
+>  
+> +ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+> +BDWGC_CONF_OPTS += --enable-cplusplus
+> +else
+> +BDWGC_CONF_OPTS += --disable-cplusplus
+> +endif
+> +
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
+> 
