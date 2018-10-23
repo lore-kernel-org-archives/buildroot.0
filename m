@@ -1,48 +1,125 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 01:19:07 +0200
-Subject: [Buildroot] [git commit] pysmi: bump to version 0.3.2
-Message-ID: <20181023231921.C9E3C88651@busybox.osuosl.org>
+Date: Wed, 24 Oct 2018 01:17:37 +0200
+Subject: [Buildroot] [git commit] package/libva: bump version to 2.3.0
+Message-ID: <20181023231921.B2EC0887DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98406cfeb548c99e711aa5244f95562ca6e04700
+commit: https://git.buildroot.net/buildroot/commit/?id=aac064a3102afb35f8eaab032b9f55c910805653
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Removed patch 0001, applied upstream.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pysmi/python-pysmi.hash | 4 ++--
- package/python-pysmi/python-pysmi.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libva/0001-check-ssp.patch | 64 --------------------------------------
+ package/libva/libva.hash           |  4 +--
+ package/libva/libva.mk             |  4 +--
+ 3 files changed, 3 insertions(+), 69 deletions(-)
 
-diff --git a/package/python-pysmi/python-pysmi.hash b/package/python-pysmi/python-pysmi.hash
-index f3ca8a9e6a..ea4d7633ea 100644
---- a/package/python-pysmi/python-pysmi.hash
-+++ b/package/python-pysmi/python-pysmi.hash
+diff --git a/package/libva/0001-check-ssp.patch b/package/libva/0001-check-ssp.patch
+deleted file mode 100644
+index ce4c42f89b..0000000000
+--- a/package/libva/0001-check-ssp.patch
++++ /dev/null
+@@ -1,64 +0,0 @@
+-From c60ac5bc4f95c8d1ce3d44aa1dfad8636dbe3bee Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Sun, 29 Jul 2018 00:16:25 +0200
+-Subject: [PATCH] Check for -fstack-protector
+-
+-Not all toolchains provide support for -fstack-protector. This patch
+-provides a configure check to avoid build errors like
+-
+-/home/buildroot/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/6.4.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: cannot find -lssp_nonshared
+-/home/buildroot/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/6.4.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: cannot find -lssp
+-
+-Patch sent upstream as PR 226.
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- configure.ac   | 16 ++++++++++++++++
+- va/Makefile.am |  5 ++++-
+- 2 files changed, 20 insertions(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index b0b88361..da1908cf 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -209,6 +209,22 @@ if test "$ac_cv_have_gnuc_visibility_attribute" = "yes"; then
+-               [Defined to 1 if GCC visibility attribute is supported])
+- fi
+- 
+-+# Check for -fstack-protector
+-+ssp_cc=yes
+-+if test "X$CC-cc" != "X"; then
+-+    AC_MSG_CHECKING([whether ${CC-cc} accepts -fstack-protector])
+-+    ssp_old_cflags="$CFLAGS"
+-+    CFLAGS="$CFLAGS -fstack-protector"
+-+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[alloca(100);]])], [], [ssp_cc=no])
+-+    AC_MSG_RESULT([$ssp_cc])
+-+    if test "X$ssp_cc" = "Xno"; then
+-+        CFLAGS="$ssp_old_cflags"
+-+    else
+-+        AC_DEFINE([ENABLE_SSP_CC], 1, [Define if SSP C support is enabled.])
+-+    fi
+-+fi
+-+AM_CONDITIONAL(USE_SSP, test "$ssp_cc" = "yes")
+-+
+- # Check for DRM (mandatory)
+- LIBDRM_VERSION=libdrm_version
+- PKG_CHECK_MODULES([DRM], [libdrm >= $LIBDRM_VERSION])
+-diff --git a/va/Makefile.am b/va/Makefile.am
+-index 5b6d49ab..0e94d0ff 100644
+---- a/va/Makefile.am
+-+++ b/va/Makefile.am
+-@@ -77,9 +77,12 @@ libva_ldflags = \
+- 
+- libva_cflags = \
+- 	-Wall			\
+--	-fstack-protector	\
+- 	$(NULL)
+- 
+-+if USE_SSP
+-+libva_cflags += -fstack-protector
+-+endif
+-+
+- lib_LTLIBRARIES			= libva.la
+- libvaincludedir			= ${includedir}/va
+- libvainclude_HEADERS		= $(libva_source_h)
+diff --git a/package/libva/libva.hash b/package/libva/libva.hash
+index 72347a4f2d..333bb1d786 100644
+--- a/package/libva/libva.hash
++++ b/package/libva/libva.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pysmi/json
--md5	3293518c06b90bb45856cb0e0deb71d1  pysmi-0.3.1.tar.gz
--sha256	b1746f559b0d3dbaa6b7993936f215617271efde022dc3eb3166fd62380d8887  pysmi-0.3.1.tar.gz
-+md5	8df6d5ebc5d71bffb09f47787d8c7b9e  pysmi-0.3.2.tar.gz
-+sha256	309039ab9bd458cc721692ffff10b4ad2c4a8e731e6507c34866ca2727323353  pysmi-0.3.2.tar.gz
- # Locally computed sha256 checksums
- sha256	ac2f8f67cae76e36a25496fbdf3293dd14b3d6db63f1ce4242ae9dd4fb7b90fd  LICENSE.rst
-diff --git a/package/python-pysmi/python-pysmi.mk b/package/python-pysmi/python-pysmi.mk
-index 3aa4f76474..d4f2ef1cd0 100644
---- a/package/python-pysmi/python-pysmi.mk
-+++ b/package/python-pysmi/python-pysmi.mk
-@@ -4,9 +4,9 @@
+ # From https://github.com/intel/libva/releases
+-sha1 5b19d2fbf532f14e24c3bedb4074238a1d7f1686  libva-2.2.0.tar.bz2
++sha1 e1138529355cce78fa2edc7c5b1c5aeb40dd0ce5  libva-2.3.0.tar.bz2
+ # Locally computed
+-sha256 6f6ca04c785544d30d315ef130a6aeb9435b75f934d7fbe0e4e9ba6084ce4ef2  libva-2.2.0.tar.bz2
++sha256 60840e50da6932ee2111e15fc8911180ff8a0d6f18bb9cc6ba8c1030098fdce4  libva-2.3.0.tar.bz2
+ sha256 c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+index 7c129f4d97..9a70bb83fd 100644
+--- a/package/libva/libva.mk
++++ b/package/libva/libva.mk
+@@ -4,14 +4,12 @@
  #
  ################################################################################
  
--PYTHON_PYSMI_VERSION = 0.3.1
-+PYTHON_PYSMI_VERSION = 0.3.2
- PYTHON_PYSMI_SOURCE = pysmi-$(PYTHON_PYSMI_VERSION).tar.gz
--PYTHON_PYSMI_SITE = https://files.pythonhosted.org/packages/8f/14/68331f94a5cd94e00ff064c9a790e6d7b0a0ade8c66deafa543398ca72ee
-+PYTHON_PYSMI_SITE = https://files.pythonhosted.org/packages/46/be/8c1b68ec30992dd9f5127fff7bf518110ad4de8ae8533f921ad605d09a01
- PYTHON_PYSMI_SETUP_TYPE = setuptools
- PYTHON_PYSMI_LICENSE = BSD-2-Clause
- PYTHON_PYSMI_LICENSE_FILES = LICENSE.rst
+-LIBVA_VERSION = 2.2.0
++LIBVA_VERSION = 2.3.0
+ LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
+ LIBVA_SITE = https://github.com/intel/libva/releases/download/$(LIBVA_VERSION)
+ LIBVA_LICENSE = MIT
+ LIBVA_LICENSE_FILES = COPYING
+ LIBVA_INSTALL_STAGING = YES
+-# 0001-check-ssp.patch
+-LIBVA_AUTORECONF = YES
+ LIBVA_DEPENDENCIES = host-pkgconf libdrm
+ 
+ # libdrm is a hard-dependency
