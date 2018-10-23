@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 00:52:02 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] poco: disable
+Date: Wed, 24 Oct 2018 00:54:16 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] poco: disable
  fpenvironment for soft floating point configuration
-Message-ID: <20181023225125.0E734886FA@busybox.osuosl.org>
+Message-ID: <20181023225329.D7F0C88706@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d89859866f31ec7a3fa32237a2049c5a11ccff32
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6bc94e5f4194f013976ce15257548fa392668253
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Many platforms don't provide all FPU features needed by Poco when
 configured for soft floating point in their fenv.h header. So
@@ -25,10 +25,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-index 018344d5c7..aa96d5127b 100644
+index 3dddb435e9..fd3db6f52f 100644
 --- a/package/poco/poco.mk
 +++ b/package/poco/poco.mk
-@@ -42,6 +42,11 @@ ifeq ($(BR2_sh4a)$(BR2_nios2),y)
+@@ -37,6 +37,11 @@ ifeq ($(BR2_sh4a)$(BR2_nios2),y)
  POCO_CONF_OPTS += --no-fpenvironment
  endif
  
