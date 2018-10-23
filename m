@@ -1,64 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 01:03:13 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] ntp: fix build without
- libcap and no threads
-Message-ID: <20181023230146.0D18A81356@busybox.osuosl.org>
+Date: Wed, 24 Oct 2018 01:03:02 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] ntp: fix build for no-MMU
+ with libcap
+Message-ID: <20181023230146.0637781356@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb10a0ca4145c2e68a6c28f80e9205aceea28623
+commit: https://git.buildroot.net/buildroot/commit/?id=36b53c985116248e412d5bbd60173e399a8cfc89
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-When threads support is missing the ntp build system builds the
-work_fork code. This code added call to set_user_group_ids() that is
-under HAVE_DROPROOT, which is disabled when libcap is not built.
+Commit 87d759ced5 (ntp: fix build for no-MMU) added a patch to make MMU
+dependent code hidden behind HAVE_WORKING_FORK. It turns out that the
+patch covers too much code. When libcap is enabled we pass
+--enable-linuxcaps, which in turn enables HAVE_DROPROOT. This adds calls
+to code that is covered by HAVE_WORKING_FORK.
 
-Add a patch fixing that.
+Update the no-MMU fix so that HAVE_WORKING_FORK only covers the no-MMU
+incompatible routine.
 
 Fixes:
-http://autobuild.buildroot.net/results/ab9/ab9ceff1151b8b5e6b9fa77d39c0f9b0cac1a080/
+http://autobuild.buildroot.net/results/c5c/c5cf28bb969fec7c07864cdd094dedfa4d5439d2/
 
-Cc: Artyom Panfilov <apanfilov@spectracom.com>
+Cc: Artem Panfilov <apanfilov@spectracom.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 13dcc69a39da97f615627553e88113ba455875ea)
+(cherry picked from commit 7cf152852dd0b4bf30659e3e62d891171f1e4aa5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../ntp/0004-fix-work-fork-without-droproot.patch  | 26 ++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ package/ntp/0003-fix-nommu.patch | 21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
 
-diff --git a/package/ntp/0004-fix-work-fork-without-droproot.patch b/package/ntp/0004-fix-work-fork-without-droproot.patch
-new file mode 100644
-index 0000000000..cb6fec0125
---- /dev/null
-+++ b/package/ntp/0004-fix-work-fork-without-droproot.patch
-@@ -0,0 +1,26 @@
-+Fix work_fork build when droproot is disabled
-+
-+The set_user_group_ids() depends on HAVE_DROPROOT. When HAVE_DROPROOT is not
-+enabled, work_fork.c code causes a link failure:
-+
-+../libntp/libntp.a(work_fork.o): In function `send_blocking_req_internal':
-+work_fork.c:(.text+0x498): undefined reference to `set_user_group_ids'
-+
-+Make the set_user_group_ids() call depend on HAVE_DROPROOT.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: http://bugs.ntp.org/show_bug.cgi?id=3539
-+
-+--- ntp-4.2.8p12.orig/libntp/work_fork.c	2018-08-14 14:51:06.000000000 +0300
-++++ ntp-4.2.8p12/libntp/work_fork.c	2018-10-15 21:10:54.580917962 +0300
-+@@ -594,7 +594,9 @@
-+ 	init_logging("ntp_intres", 0, FALSE);
-+ 	setup_logfile(NULL);
+diff --git a/package/ntp/0003-fix-nommu.patch b/package/ntp/0003-fix-nommu.patch
+index 53bf4dfcf3..0959fa0ba5 100644
+--- a/package/ntp/0003-fix-nommu.patch
++++ b/package/ntp/0003-fix-nommu.patch
+@@ -10,13 +10,20 @@ Upstream status: http://bugs.ntp.org/show_bug.cgi?id=3538
+ 
+ diff -Nuar ntp-4.2.8p12.orig/ntpd/ntpd.c ntp-4.2.8p12/ntpd/ntpd.c
+ --- ntp-4.2.8p12.orig/ntpd/ntpd.c	2018-08-14 14:51:30.000000000 +0300
+-+++ ntp-4.2.8p12/ntpd/ntpd.c	2018-10-12 08:19:01.291781773 +0300
+-@@ -529,7 +529,7 @@
+++++ ntp-4.2.8p12/ntpd/ntpd.c	2018-10-13 21:25:25.858261249 +0300
++@@ -534,6 +534,7 @@
++  * Detach from terminal (much like daemon())
++  * Nothe that this function calls exit()
++  */
+++# ifdef HAVE_WORKING_FORK
++ static void
++ detach_from_terminal(
++ 	int pipe_fds[2],
++@@ -617,6 +618,7 @@
 + 
-++#if defined(HAVE_DROPROOT)
-+ 	(void) set_user_group_ids();
-++#endif
-+ 
-+ 	/*
-+ 	 * And now back to the portable code
++ 	return;
+  }
+- #endif	/* !SIM */
+++# endif /* HAVE_WORKING_FORK */
+  
+--#if !defined(SIM) && !defined(SYS_WINNT)
+-+#if !defined(SIM) && !defined(SYS_WINNT) && defined(HAVE_WORKING_FORK)
++ #ifdef HAVE_DROPROOT
+  /*
+-  * Detach from terminal (much like daemon())
+-  * Nothe that this function calls exit()
