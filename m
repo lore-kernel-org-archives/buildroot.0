@@ -1,171 +1,161 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 01:18:13 +0200
-Subject: [Buildroot] [git commit] package/libpqxx: bump version to 6.2.5
-Message-ID: <20181023231921.BA75C88651@busybox.osuosl.org>
+Date: Wed, 24 Oct 2018 01:19:33 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-r128:
+ bump version to 6.12.0
+Message-ID: <20181023231921.D1CA388651@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=19f6c7e53b76e943977a44575c3b32a9c244975f
+commit: https://git.buildroot.net/buildroot/commit/?id=c00304913bcbdb6b0b41af0e164e173a6cd7d329
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed patch applied upstream:
-https://github.com/jtv/libpqxx/commit/44970d7331e4f369e160af0135a2d1fc16f27a21
+Removed patches:
+- 0001 not needed anymore after upstream commits
+https://cgit.freedesktop.org/xorg/driver/xf86-video-r128/commit/?id=11b230ba61c00c69b23c5be592cf88492113355e
+https://cgit.freedesktop.org/xorg/driver/xf86-video-r128/commit/?id=9d62b878ce40d9b5f7887c63a4e2498a52253c36
+
+- 0002 was applied upstream
+https://cgit.freedesktop.org/xorg/driver/xf86-video-r128/commit/?id=c4c878d2ccb75fa75afe46e0e50ee9975c5c57fc
+
+Added license hash and all tarball hashes provided by upstream.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ude-sys-time.h-outside-fallback-select-55.patch | 119 ---------------------
- package/libpqxx/libpqxx.hash                       |   2 +-
- package/libpqxx/libpqxx.mk                         |   2 +-
- 3 files changed, 2 insertions(+), 121 deletions(-)
+ .../0001-cross-compile.patch                       | 50 ----------------------
+ .../0002-include-stdint-h.patch                    | 34 ---------------
+ .../xdriver_xf86-video-r128.hash                   |  9 +++-
+ .../xdriver_xf86-video-r128.mk                     |  3 +-
+ 4 files changed, 8 insertions(+), 88 deletions(-)
 
-diff --git a/package/libpqxx/0001-include-sys-time.h-outside-fallback-select-55.patch b/package/libpqxx/0001-include-sys-time.h-outside-fallback-select-55.patch
+diff --git a/package/x11r7/xdriver_xf86-video-r128/0001-cross-compile.patch b/package/x11r7/xdriver_xf86-video-r128/0001-cross-compile.patch
 deleted file mode 100644
-index 4c635759e0..0000000000
---- a/package/libpqxx/0001-include-sys-time.h-outside-fallback-select-55.patch
+index 7b2ebd4b80..0000000000
+--- a/package/x11r7/xdriver_xf86-video-r128/0001-cross-compile.patch
 +++ /dev/null
-@@ -1,119 +0,0 @@
--From 44970d7331e4f369e160af0135a2d1fc16f27a21 Mon Sep 17 00:00:00 2001
--From: jdknight-rockwellcollins <james.knight@rockwellcollins.com>
--Date: Mon, 15 Jan 2018 12:41:25 -0500
--Subject: [PATCH] include sys/time.h outside fallback select (#55)
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
+@@ -1,50 +0,0 @@
+-Fix cross-compile
 -
--The implementation of 'wait_fd' (inside 'connection_base.cxx') always
--relies on the existence of the 'timeval' structure. In Linux, this
--structure is provided by the header 'sys/time.h'. If polling or select
--capabilities are detected, the structure is never included into the
--source and will result in a compilation error (GCC 7.x):
+-Original patch for DRI
+-http://git.buildroot.net/buildroot/commit/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128-cross-compile.patch?id=c0726391523da6a17ffa8e62681ffa0cc895da8e
 -
--    connection_base.cxx:1153:28: error: ???{anonymous}::tv_milliseconds??? declared as an ???inline??? variable
--     inline int tv_milliseconds(timeval *tv = nullptr)
--                                ^~~~~~~
--    ...
+-Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+-(Added exa.h fix)
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 -
--The following moves the 'HAVE_SYS_TIME_H' check outside the
--select-fallback case so that the header can be included no matter the
--event-function feature is used.
+---- a/configure.ac	2008-06-23 10:39:28.000000000 -0400
+-+++ b/configure.ac	2008-06-23 10:40:46.000000000 -0400
+-@@ -85,14 +85,20 @@ sdkdir=$(pkg-config --variable=sdkdir xo
+- AC_HEADER_STDC
+- 
+- if test "$DRI" != no; then
+--	AC_CHECK_FILE([${sdkdir}/dri.h],
+-+ 	if test "$cross_compiling" = "no" ; then
+-+		AC_CHECK_FILE([${sdkdir}/dri.h],
+-                       [have_dri_h="yes"], [have_dri_h="no"])
+--	AC_CHECK_FILE([${sdkdir}/sarea.h],
+-+		AC_CHECK_FILE([${sdkdir}/sarea.h],
+-                       [have_sarea_h="yes"], [have_sarea_h="no"])
+--	AC_CHECK_FILE([${sdkdir}/dristruct.h],
+-+		AC_CHECK_FILE([${sdkdir}/dristruct.h],
+-                       [have_dristruct_h="yes"], [have_dristruct_h="no"])
+--	AC_CHECK_FILE([${sdkdir}/damage.h],
+-+		AC_CHECK_FILE([${sdkdir}/damage.h],
+-                       [have_damage_h="yes"], [have_damage_h="no"])
+-+ 	else
+-+ 		have_dri_h="yes"
+-+ 		have_sarea_h="yes"
+-+ 		have_dristruct_h="yes"
+-+ 	fi
+- fi
+- 
+- AC_MSG_CHECKING([whether to include DRI support])
+-@@ -121,7 +127,12 @@
+- AC_MSG_CHECKING([whether to enable EXA support])
+- if test "x$EXA" = xyes; then
+-         AC_MSG_RESULT(yes)
+--        AC_CHECK_FILE(${sdkdir}/exa.h, [have_exa_h="yes"], [have_exa_h="no"])
+-+	if test "$cross_compiling" = "no" ; then
+-+		AC_CHECK_FILE(${sdkdir}/exa.h,
+-+                      [have_exa_h="yes"], [have_exa_h="no"])
+-+	else
+-+		have_exa_h="yes"
+-+	fi
+- else
+-         AC_MSG_RESULT(no)
+- fi
+diff --git a/package/x11r7/xdriver_xf86-video-r128/0002-include-stdint-h.patch b/package/x11r7/xdriver_xf86-video-r128/0002-include-stdint-h.patch
+deleted file mode 100644
+index 4c15915b26..0000000000
+--- a/package/x11r7/xdriver_xf86-video-r128/0002-include-stdint-h.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From c4c878d2ccb75fa75afe46e0e50ee9975c5c57fc Mon Sep 17 00:00:00 2001
+-From: Stefan Dirsch <sndirsch@suse.de>
+-Date: Mon, 25 Jun 2018 15:57:02 +0200
+-Subject: Include <stdint.h> in order to declare uint32_t
 -
--Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+-Apparently this is needed in src/atipcirename.h since xorg-server
+-1.20 in order to still build this driver.
+-
+-Signed-off-by: Stefan Dirsch <sndirsch@suse.de>
+-Reviewed-by: Emil Velikov <emil.velikov@collabora.com>
+-
+-Downloaded from upstream commit
+-https://cgit.freedesktop.org/xorg/driver/xf86-video-r128/commit/?id=c4c878d2ccb75fa75afe46e0e50ee9975c5c57fc
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ----
-- configure               | 28 ++++++++++++----------------
-- configure.ac            |  6 +-----
-- src/connection_base.cxx |  2 +-
-- 3 files changed, 14 insertions(+), 22 deletions(-)
+- src/atipcirename.h | 1 +
+- 1 file changed, 1 insertion(+)
 -
--diff --git a/configure b/configure
--index 7d6d96a98e0fcb7dde1e05adf034afe624ada6d6..dd2a33cb54dba5d3223fc2b4c8d03be7c8abde4e 100755
----- a/configure
--+++ b/configure
--@@ -17285,22 +17285,6 @@ fi
-- done
+-diff --git a/src/atipcirename.h b/src/atipcirename.h
+-index e65ae3c..3e7f686 100644
+---- a/src/atipcirename.h
+-+++ b/src/atipcirename.h
+-@@ -34,6 +34,7 @@ enum region_type {
+-     REGION_IO 
+- };
 - 
+-+#include <stdint.h>
+- #include "xf86Module.h"
 - 
---if test "$select_h" != "yes"
---then
---for ac_header in sys/time.h
---do :
---  ac_fn_cxx_check_header_mongrel "$LINENO" "sys/time.h" "ac_cv_header_sys_time_h" "$ac_includes_default"
---if test "x$ac_cv_header_sys_time_h" = xyes; then :
---  cat >>confdefs.h <<_ACEOF
---#define HAVE_SYS_TIME_H 1
---_ACEOF
---
---fi
---
---done
---
---fi
---
-- # Some systems keep select() in a separate library which is not linked by
-- # default.  See if we need one of those.
-- socklibok=no
--@@ -17419,6 +17403,18 @@ fi
-- 
-- fi # No poll()
-- 
--+for ac_header in sys/time.h
--+do :
--+  ac_fn_cxx_check_header_mongrel "$LINENO" "sys/time.h" "ac_cv_header_sys_time_h" "$ac_includes_default"
--+if test "x$ac_cv_header_sys_time_h" = xyes; then :
--+  cat >>confdefs.h <<_ACEOF
--+#define HAVE_SYS_TIME_H 1
--+_ACEOF
--+
--+fi
--+
--+done
--+
-- 
-- # Add options to compiler command line, if compiler accepts them.
-- add_compiler_opts_if_ok() {
--diff --git a/configure.ac b/configure.ac
--index 8977c3d3900a5de66b580365d8fe7d133cd1042d..6649f7fa0ed0572489a0db09517c659012ce707c 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -117,11 +117,6 @@ then
-- select_h=no
-- AC_CHECK_HEADERS([sys/select.h], [select_h=yes])
-- 
---if test "$select_h" != "yes"
---then
---AC_CHECK_HEADERS([sys/time.h])
---fi
---
-- # Some systems keep select() in a separate library which is not linked by
-- # default.  See if we need one of those.
-- socklibok=no
--@@ -150,6 +145,7 @@ fi
-- 
-- fi # No poll()
-- 
--+AC_CHECK_HEADERS([sys/time.h])
-- 
-- # Add options to compiler command line, if compiler accepts them.
-- add_compiler_opts_if_ok() {
--diff --git a/src/connection_base.cxx b/src/connection_base.cxx
--index 37ed7728ffd02e1fded3b5d64d6fb2d5fd74d5ed..0ec55bc5bd761690f66b67396cfbf3e3c56ba618 100644
----- a/src/connection_base.cxx
--+++ b/src/connection_base.cxx
--@@ -38,10 +38,10 @@
-- #if defined(HAVE_UNISTD_H)
-- #include <unistd.h>
-- #endif
--+#endif
-- #if defined(HAVE_SYS_TIME_H)
-- #include <sys/time.h>
-- #endif
---#endif
-- 
-- #include "libpq-fe.h"
-- 
+- #if GET_ABI_MAJOR(ABI_VIDEODRV_VERSION) >= 12
 --- 
--1.8.3.msysgit.0
+-cgit v1.1
 -
-diff --git a/package/libpqxx/libpqxx.hash b/package/libpqxx/libpqxx.hash
-index 372be603c5..b04e3c3198 100644
---- a/package/libpqxx/libpqxx.hash
-+++ b/package/libpqxx/libpqxx.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	81cac92458efd799fadb0374107464320d93eba71de05aedf21afb9c8dda7c3a	libpqxx-6.0.0.tar.gz
-+sha256	36fcf8439ac7f7cc68b21e95b20e921ece4487cda1cc1d09b798a84e7cb3a4b7	libpqxx-6.2.5.tar.gz
- sha256	9e1c78fa302e4e9738bf3315b130429035c03fcb0f046531ccd977cb474f6b31	COPYING
-diff --git a/package/libpqxx/libpqxx.mk b/package/libpqxx/libpqxx.mk
-index ccafa9ce71..9e0f84db82 100644
---- a/package/libpqxx/libpqxx.mk
-+++ b/package/libpqxx/libpqxx.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash
+index b6d8bd8197..eee2865094 100644
+--- a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash
++++ b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash
+@@ -1,2 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2017-January/002764.html
+-sha256 84da21517f3af7617fdf341e84ccb22444d6cdab1647e4808fa631528b9a77de  xf86-video-r128-6.10.2.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-October/002926.html
++md5 105ebcfe1bac06fe84645ac3def91184  xf86-video-r128-6.12.0.tar.bz2
++sha1 7cfa41d386fa43b5d30299203e4845d8afba4899  xf86-video-r128-6.12.0.tar.bz2
++sha256 801c86882cbd2bbb3084d471dcc5cfee2c1754dcbfb4dc446676d58a6bd9e057  xf86-video-r128-6.12.0.tar.bz2
++sha512 0e667e2cfa8a87a00846361d86528c93754c403c812b66798953fa4c857b2143b2c4c44885da467e7f910d8cb910b69492cdcb6f25e2197bae6617364d152e38  xf86-video-r128-6.12.0.tar.bz2
++# Locally computed
++sha256 69f7c71859dc8f51aabdbe7a9ee915a480933eb81658f8af2bf4c918e65afe8b  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
+index 9dd9ef25e4..455cfbad86 100644
+--- a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
++++ b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
+@@ -4,12 +4,11 @@
  #
  ################################################################################
  
--LIBPQXX_VERSION = 6.0.0
-+LIBPQXX_VERSION = 6.2.5
- LIBPQXX_SITE = $(call github,jtv,libpqxx,$(LIBPQXX_VERSION))
- LIBPQXX_INSTALL_STAGING = YES
- LIBPQXX_DEPENDENCIES = postgresql
+-XDRIVER_XF86_VIDEO_R128_VERSION = 6.10.2
++XDRIVER_XF86_VIDEO_R128_VERSION = 6.12.0
+ XDRIVER_XF86_VIDEO_R128_SOURCE = xf86-video-r128-$(XDRIVER_XF86_VIDEO_R128_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_R128_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_R128_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_R128_LICENSE_FILES = COPYING
+-XDRIVER_XF86_VIDEO_R128_AUTORECONF = YES
+ XDRIVER_XF86_VIDEO_R128_DEPENDENCIES = xserver_xorg-server xorgproto
+ 
+ ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
