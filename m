@@ -1,27 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 01:20:49 +0200
-Subject: [Buildroot] [PATCH 1/1] redis: needs dynamic library
-In-Reply-To: <20181023195521.22600-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 23 Oct 2018 21:55:21 +0200")
-References: <20181023195521.22600-1-fontaine.fabrice@gmail.com>
-Message-ID: <87pnw0ckry.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Oct 2018 01:18:48 +0200
+Subject: [Buildroot] [git commit] package/apache: bump version to 2.4.37
+Message-ID: <20181023231921.C202D88651@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5f832bb812382bc45cfdcb411b57c5cc9cae56b9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > dlfcn.h is included in src/debug.c and src/module.c
- > module.c uses dlopen function
+Changelog: http://www.apache.org/dist/httpd/CHANGES_2.4.37
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/apache/apache.hash | 2 +-
+ package/apache/apache.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/fdda0ee7461dfc9ea479d4d80ab42c50006a3b13
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index 32743656fd..6d21f0f614 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
+@@ -1,4 +1,4 @@
+ # From http://archive.apache.org/dist/httpd/httpd-2.4.35.tar.bz2.sha256
+-sha256 2607c6fdd4d12ac3f583127629291e9432b247b782396a563bec5678aae69b56 httpd-2.4.35.tar.bz2
++sha256 3498dc5c6772fac2eb7307dc7963122ffe243b5e806e0be4fb51974ff759d726 httpd-2.4.37.tar.bz2
+ # Locally computed
+ sha256 c49c0819a726b70142621715dae3159c47b0349c2bc9db079070f28dadac0229 LICENSE
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index 3ac317216d..283c3cbd50 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-APACHE_VERSION = 2.4.35
++APACHE_VERSION = 2.4.37
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = http://archive.apache.org/dist/httpd
+ APACHE_LICENSE = Apache-2.0
