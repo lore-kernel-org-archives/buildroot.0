@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 01:06:12 +0200
-Subject: [Buildroot] [PATCH] ntp: fix build for no-MMU
-In-Reply-To: <86942174a35cf04e0a51577788542fe32ebfe291.1539335878.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 12 Oct 2018 12:17:58 +0300")
-References: <86942174a35cf04e0a51577788542fe32ebfe291.1539335878.git.baruch@tkos.co.il>
-Message-ID: <87sh0we00r.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Oct 2018 01:06:30 +0200
+Subject: [Buildroot] [PATCH] ntp: fix build for no-MMU with libcap
+In-Reply-To: <42864d6afc883db05099a7d75a31de7e09e7ce96.1539456660.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sat, 13 Oct 2018 21:51:00 +0300")
+References: <42864d6afc883db05099a7d75a31de7e09e7ce96.1539456660.git.baruch@tkos.co.il>
+Message-ID: <87o9bke009.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +13,17 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Code rearrange in the latest ntp version exposed code that used to be
- > hidden behind HAVE_WORKING_FORK. Put this code back where it belongs.
+ > Commit 87d759ced5 (ntp: fix build for no-MMU) added a patch to make MMU
+ > dependent code hidden behind HAVE_WORKING_FORK. It turns out that the
+ > patch covers too much code. When libcap is enabled we pass
+ > --enable-linuxcaps, which in turn enables HAVE_DROPROOT. This adds calls
+ > to code that is covered by HAVE_WORKING_FORK.
+
+ > Update the no-MMU fix so that HAVE_WORKING_FORK only covers the no-MMU
+ > incompatible routine.
 
  > Fixes:
- > http://autobuild.buildroot.net/results/9f4/9f4710b451df1a60f95ab6503cfb7788ad998a65/
- > http://autobuild.buildroot.net/results/d0b/d0b20a6c0f37a8b06841afc2764c8aab6ffd27d2/
- > http://autobuild.buildroot.net/results/85c/85c89f5e9d36915567b8d14b9c99e3720c866577/
+ > http://autobuild.buildroot.net/results/c5c/c5cf28bb969fec7c07864cdd094dedfa4d5439d2/
 
  > Cc: Artem Panfilov <apanfilov@spectracom.com>
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
