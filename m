@@ -1,88 +1,32 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 24 Oct 2018 00:19:13 +0100
-Subject: [Buildroot] [scanrock 5/5] [RFC] pkg-luarocks: add per package
- upgrade target
-In-Reply-To: <20181021163259.28335-6-francois.perrad@gadz.org>
-References: <20181021163259.28335-1-francois.perrad@gadz.org>
- <20181021163259.28335-6-francois.perrad@gadz.org>
-Message-ID: <2bc4f28a-f0eb-5a08-d08b-208351c4adeb@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 24 Oct 2018 01:20:07 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-r128:
+ bump version to 6.12.0
+In-Reply-To: <20181023170908.3583-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Tue, 23 Oct 2018 19:09:08 +0200")
+References: <20181023170908.3583-1-bernd.kuhls@t-online.de>
+Message-ID: <87tvlcckt4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
+ > Removed patches:
+ > - 0001 not needed anymore after upstream commits
+ > https://cgit.freedesktop.org/xorg/driver/xf86-video-r128/commit/?id=11b230ba61c00c69b23c5be592cf88492113355e
+ > https://cgit.freedesktop.org/xorg/driver/xf86-video-r128/commit/?id=9d62b878ce40d9b5f7887c63a4e2498a52253c36
 
-On 10/21/18 5:32 PM, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/pkg-generic.mk  | 6 +++++-
->  package/pkg-luarocks.mk | 8 ++++++++
->  2 files changed, 13 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 91b61c6de..f349c6c1f 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -779,6 +779,9 @@ $(1)-external-deps:
->  	@echo "file://$$($(2)_OVERRIDE_SRCDIR)"
->  endif
->  
-> +$(1)-upgrade:
-> +			+$$($(2)_UPGRADE_CMDS)
+ > - 0002 was applied upstream
+ > https://cgit.freedesktop.org/xorg/driver/xf86-video-r128/commit/?id=c4c878d2ccb75fa75afe46e0e50ee9975c5c57fc
 
- I prefer how you did it in the perl infrastructure: a private target in the
-perl infra, nothing in the generic infra. Indeed, I don't think it makes sense
-to have such an upgrade possibility in the generic case.
+ > Added license hash and all tarball hashes provided by upstream.
 
- If it ever does, we can still move it into the generic infra.
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-> +
->  $(1)-show-version:
->  			@echo $$($(2)_VERSION)
->  
-> @@ -1030,7 +1033,8 @@ DL_TOOLS_DEPENDENCIES += $$(call extractor-dependency,$$($(2)_SOURCE))
->  	$(1)-rsync \
->  	$(1)-show-depends \
->  	$(1)-show-version \
-> -	$(1)-source
-> +	$(1)-source \
-> +	$(1)-upgrade
->  
->  ifneq ($$($(2)_SOURCE),)
->  ifeq ($$($(2)_SITE),)
-> diff --git a/package/pkg-luarocks.mk b/package/pkg-luarocks.mk
-> index e2b48cfb4..55f7300d3 100644
-> --- a/package/pkg-luarocks.mk
-> +++ b/package/pkg-luarocks.mk
-> @@ -44,6 +44,14 @@ $(2)_SITE		?= $$(call qstrip,$$(BR2_LUAROCKS_MIRROR))
->  # a target package, and can just add the required dependencies
->  $(2)_DEPENDENCIES	+= host-luarocks luainterpreter
->  
-> +# Upgrade helper
-> +ifndef $(2)_UPGRADE_CMDS
-> +define $(2)_UPGRADE_CMDS
-> +	PATH=$(BR_PATH) \
-> +	utils/scanrock $$($(2)_NAME_UPSTREAM) $(1)
+Committed, thanks.
 
- This shows a good reason to use the lua-specific upgrade target: we want to use
-the Buildroot-built host-luarocks here, I guess, so we should depend on it. In
-fact, on my Fedora laptop, with the system-installed luarocks, scanrocks fails
-with "Error: Failed copying unpacked rockspec into unpacked source directory."
-(in the unpack step; I can reproduce when running manually), but it succeeds
-with the Buildroot-built luarocks. So we would want:
-
-$(1)-upgrade: host-luarocks
-	PATH=$(BR_PATH) utils/scranrock $$($(2)_NAME_UPSTREAM) $(1)
-
- Regards,
- Arnout
-
-> +endef
-> +endif
-> +
->  #
->  # Extract step. Extract into a temporary dir and move the relevant part to the
->  # source dir.
-> 
+-- 
+Bye, Peter Korsgaard
