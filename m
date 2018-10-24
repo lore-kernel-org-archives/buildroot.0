@@ -1,35 +1,52 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 24 Oct 2018 16:02:14 +0100
-Subject: [Buildroot] [PATCH] package/ntp: use ntpd to set initial time
-In-Reply-To: <CANQCQpYAjzXTQBDjKwbMPnQViP0=Qfpr6+pgs_3e7iGOYfo50g@mail.gmail.com>
-References: <1540300218-59209-1-git-send-email-matthew.weber@rockwellcollins.com>
- <3c82f1ee-58b9-ef25-35d5-bd8fd25d4d48@mind.be>
- <CANQCQpYkLV-XJBVqRsQLdrxthZzkqctsBcxfX4mJQqFY16jk5Q@mail.gmail.com>
- <f544829d-68ed-abfc-306c-ce3cebb1de3b@mind.be>
- <CANQCQpYAjzXTQBDjKwbMPnQViP0=Qfpr6+pgs_3e7iGOYfo50g@mail.gmail.com>
-Message-ID: <3232b003-ae5e-43d1-b795-f73a0ed71624@mind.be>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Wed, 24 Oct 2018 11:34:08 -0400
+Subject: [Buildroot] [PATCH] PostgreSQL: bump version to 11.0
+In-Reply-To: <n424afxool.ln2@ID-313208.user.individual.net>
+References: <20181023171555.18043-1-aduskett@gmail.com>
+ <n424afxool.ln2@ID-313208.user.individual.net>
+Message-ID: <CAFSsvmrWpqXHnzo-63j6D3jxCJVRuZgbzmMeX8hFiYqKtpL_Uw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+hey Bernd;
 
+Looking into it, I would put it there. If host-llvm is compiled,
+Postgres will find that
+and try to use it to compile the JIT, which can result in build failures.
 
-On 10/24/18 2:14 PM, Matthew Weber wrote:
+So either 2 options:
 
-> Agree.  So if we do the one invocation we'll have to figure out how to
-> deal with the return value.  Sounds like that is desired, so I'll put
-> together a test and see.  For the -w value, from testing it looks like
-> the -w should probably be ~10-15sec as a sync on average was ~8-9sec.
+1) Explicitly disable llvm using the flag --without-llvm
+2) Fix llvm detection.
 
- 8 seconds is not good. We want to get the same sync time as with ntpdate,
-otherwise we're doing something wrong. And I guess ntpdate does it in a second,
-right?
+What do you think?
 
- If I remember correctly (but it has been *years* since I used ntpd rather than
-chrony or systemd-timesyncd) ntpd had options for how fast it would converge on
-the first sync. Normally when a new peer is added, it waits for a couple of
-round trips before that peer is accepted as a healthy source. But I thought it
-was possible (and hopefully default) to just believe the first packet you
-receive during startup and sync on that.
+Adam
+On Tue, Oct 23, 2018 at 1:26 PM Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+>
+> Am Tue, 23 Oct 2018 13:15:55 -0400 schrieb Adam Duskett:
+>
+> > Other changes:
+> >  - Add --without-llvm to CONF_OPTS as PostgreSQL now comes with an
+> >  optional
+> >    JIT.
+>
+> Hi Adam,
+>
+> besides --without-llvm the bump was already committed:
+>
+> https://git.buildroot.net/buildroot/commit/?
+> id=49b9ec7d1c87c63873806bbe8b494d3b1ca99fe1
+>
+> Is --without-llvm really necessary?
+> I could not see any problems without this option.
+>
+> Regards, Bernd
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
