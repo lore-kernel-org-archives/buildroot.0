@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 13:18:46 +0200
-Subject: [Buildroot] [PATCH] libssh: security bump to version 0.8.4
-In-Reply-To: <bb0e0a00bfce17b9a32210d153e052d9ac4561c6.1539693068.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 16 Oct 2018 15:31:08 +0300")
-References: <bb0e0a00bfce17b9a32210d153e052d9ac4561c6.1539693068.git.baruch@tkos.co.il>
-Message-ID: <874ldbd23t.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Oct 2018 13:20:03 +0200
+Subject: [Buildroot] [PATCH] libssh: fix build with musl libc
+In-Reply-To: <c6c17e3d2f56efd666671cb38bb037d9741536a7.1536933561.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 14 Sep 2018 16:59:21 +0300")
+References: <c6c17e3d2f56efd666671cb38bb037d9741536a7.1536933561.git.baruch@tkos.co.il>
+Message-ID: <87zhv3bnh8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +13,13 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Fixes CVE-2018-10933: authentication bypass vulnerability in the server
- > code. By presenting the server an SSH2_MSG_USERAUTH_SUCCESS message in
- > place of the SSH2_MSG_USERAUTH_REQUEST message which the server would
- > expect to initiate authentication, the attacker could successfully
- > authenticate without any credentials.
+ > libssh uses GNU extensions to the glob() API. Update the cmake test to
+ > take that into account so that glob() is not used with musl libc.
 
- >   https://www.libssh.org/security/advisories/CVE-2018-10933.txt
-
- > Drop an upstream patch.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/0c2/0c2d17316fd6bd2bf1359e23a2a1273fa349cf2a/
+ > http://autobuild.buildroot.net/results/936/936abac5362b33980fd1efe8b830409ee2f86f6b/
+ > http://autobuild.buildroot.net/results/51b/51b1b136ab4209ee443c1b450a932341b2ff81b7/
 
  > Cc: Scott Fan <fancp2007@gmail.com>
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
