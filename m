@@ -1,46 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 12:40:46 +0200
-Subject: [Buildroot] [PATCH] freetype: drop calling autogen,
- no longer needed
-In-Reply-To: <20181011171324.22c3ec20@windsurf> (Thomas Petazzoni's message of
- "Thu, 11 Oct 2018 17:13:24 +0200")
-References: <20181003134001.23537-1-thomas.petazzoni@bootlin.com>
- <20181011171324.22c3ec20@windsurf>
-Message-ID: <87h8hbd3v5.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Oct 2018 13:08:57 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] open-plc-utils: fix build
+ with static musl
+Message-ID: <20181024110823.0EBB2826CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c894af75fd91c8a16bee0caba97b320d97058a6f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
- > Hello,
- > On Wed,  3 Oct 2018 15:40:01 +0200, Thomas Petazzoni wrote:
- >> In commit a31a66802a7a1af76a629b0ba7120424ed547646 ("freetype:
- >> security bump to version 2.5.3"), the freetype package was changed to
- >> call ./autogen.sh to regenerate the autotools stuff, because the
- >> ltmain.sh provided by upstream freetype was not compatible with
- >> Buildroot libtool-patching logic.
- >> 
- >> Since then, freetype has been bumped several times, and the current
- >> version packaged in Buildroot has an ltmain.sh that is compatible with
- >> our libtool-patching logic.
- >> 
- >> Therefore, this commit drops the no longer needed autogen stuff.
- >> 
- >> This autogen stuff was badly breaking per-package host/target
- >> directory, because the autogen happened at the post-patch hook step,
- >> at which point the host-automake/host-autoconf/host-libtool
- >> dependencies have not yet been copied into this package host
- >> directory.
- >> 
- >> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- >> ---
- >> package/freetype/freetype.mk | 18 ------------------
- >> 1 file changed, 18 deletions(-)
+Pass TARGET_LDFLAGS to EXTRA_LDFLAGS to fix following issue:
+/home/buildroot/autobuild/run/instance-3/output/build/host-gcc-final-7.3.0/build/arm-buildroot-linux-musleabihf/libgcc/../../../libgcc/config/arm/lib1funcs.S:1545: undefined reference to `raise'
 
-Committed to 2018.02.x and 2018.08.x, thanks.
+Also pass TARGET_CFLAGS to EXTRA_CFLAGS and TARGET_CXXFLAGS to
+EXTRA_CXXFLAGS and move all these variables to
+OPEN_PLC_UTILS_MAKE_OPTS for readability
 
--- 
-Bye, Peter Korsgaard
+Fixes:
+ - http://autobuild.buildroot.org/results/67bc5e7ac8ae1c49c035b022a394d2f746705cf2
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit d8738d3b97a1ec1b356143269b293d55c91de860)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/open-plc-utils/open-plc-utils.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/package/open-plc-utils/open-plc-utils.mk b/package/open-plc-utils/open-plc-utils.mk
+index d45bb9d4f5..e1e66bf7e0 100644
+--- a/package/open-plc-utils/open-plc-utils.mk
++++ b/package/open-plc-utils/open-plc-utils.mk
+@@ -15,8 +15,14 @@ OPEN_PLC_UTILS_LICENSE_FILES = LICENSE
+ # Yes, we're passing __UCLIBC__ in EXTRA_CFLAGS, as it fixes a build
+ # issue for non-uClibc toolchains. It is the very crappy solution
+ # suggested at https://github.com/qca/open-plc-utils/issues/36.
++OPEN_PLC_UTILS_MAKE_OPTS = \
++	EXTRA_CFLAGS="$(TARGET_CFLAGS) -D__UCLIBC__" \
++	EXTRA_CXXFLAGS="$(TARGET_CXXFLAGS)" \
++	EXTRA_LDFLAGS="$(TARGET_LDFLAGS)"
++
+ define OPEN_PLC_UTILS_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) CROSS=$(TARGET_CROSS) EXTRA_CFLAGS="-D__UCLIBC__" -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) CROSS=$(TARGET_CROSS) \
++		$(OPEN_PLC_UTILS_MAKE_OPTS) -C $(@D)
+ endef
+ 
+ define OPEN_PLC_UTILS_INSTALL_TARGET_CMDS
