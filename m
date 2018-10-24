@@ -1,46 +1,78 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 24 Oct 2018 22:07:58 +0200
-Subject: [Buildroot] [PATCH 1/3] package/mjpg-streamer: bump version
-Message-ID: <20181024200800.32300-1-bernd.kuhls@t-online.de>
+Date: Wed, 24 Oct 2018 22:07:59 +0200
+Subject: [Buildroot] [PATCH 2/3] package/mjpg-streamer: fix zeromq header
+ detection
+In-Reply-To: <20181024200800.32300-1-bernd.kuhls@t-online.de>
+References: <20181024200800.32300-1-bernd.kuhls@t-online.de>
+Message-ID: <20181024200800.32300-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This bump includes
-https://github.com/jacksonliam/mjpg-streamer/commit/2b751f1f2ab1dfaf1d12bedf98d4fe37a42d3edd
-
-which fixes
-http://autobuild.buildroot.net/results/247/247a55398aed37a08c67cc21db6836ad342d24ca/
+Fixes
+http://autobuild.buildroot.net/results/72f/72f560b03cab96161f6d8d127f99150ba3e48aff/
+http://autobuild.buildroot.net/results/dad/dad054954de76cab56333747274520f269be2066/
+http://autobuild.buildroot.net/results/323/323a19f9a859105e08b0476508d30553577fda69/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mjpg-streamer/mjpg-streamer.hash | 2 +-
- package/mjpg-streamer/mjpg-streamer.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...0001-FindZeroMQ-fix-header-detection.patch | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 package/mjpg-streamer/0001-FindZeroMQ-fix-header-detection.patch
 
-diff --git a/package/mjpg-streamer/mjpg-streamer.hash b/package/mjpg-streamer/mjpg-streamer.hash
-index a98aaffffd..0d995834d2 100644
---- a/package/mjpg-streamer/mjpg-streamer.hash
-+++ b/package/mjpg-streamer/mjpg-streamer.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 617c6cdcf5ad6e9135e8bcd83d7acd33cc4a563b9104bca7def57d807164ae89  mjpg-streamer-75c6c4a7809c735b201df949d55287fb60397744.tar.gz
-+sha256 e5cb7936c316998b53bc46404eca5bc4a69c45fccedeecbf95f1d3902cb6556f  mjpg-streamer-686c3be31ca7a0cdc8772641e445fe9e1c9211e5.tar.gz
- sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  mjpg-streamer-experimental/LICENSE
-diff --git a/package/mjpg-streamer/mjpg-streamer.mk b/package/mjpg-streamer/mjpg-streamer.mk
-index c09d55b727..bfde26e548 100644
---- a/package/mjpg-streamer/mjpg-streamer.mk
-+++ b/package/mjpg-streamer/mjpg-streamer.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MJPG_STREAMER_VERSION = 75c6c4a7809c735b201df949d55287fb60397744
-+MJPG_STREAMER_VERSION = 686c3be31ca7a0cdc8772641e445fe9e1c9211e5
- MJPG_STREAMER_SITE = $(call github,jacksonliam,mjpg-streamer,$(MJPG_STREAMER_VERSION))
- MJPG_STREAMER_SUBDIR = mjpg-streamer-experimental
- MJPG_STREAMER_LICENSE = GPL-2.0+
+diff --git a/package/mjpg-streamer/0001-FindZeroMQ-fix-header-detection.patch b/package/mjpg-streamer/0001-FindZeroMQ-fix-header-detection.patch
+new file mode 100644
+index 0000000000..2942e8997c
+--- /dev/null
++++ b/package/mjpg-streamer/0001-FindZeroMQ-fix-header-detection.patch
+@@ -0,0 +1,46 @@
++From a5a1506c9e003c7d2f719e09b7a6ac98c2a60459 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Wed, 24 Oct 2018 21:26:14 +0200
++Subject: [PATCH] FindZeroMQ: fix header detection
++
++FindZeroMQ.cmake, added by
++
++https://github.com/jacksonliam/mjpg-streamer/commit/8943c44e69d66650b9b1c5f873546579bfae7d2c#diff-1760adaac68b242c02c752a6efc72effR11
++
++checks for zmq.hpp but the ZeroMQ output module includes zmq.h instead:
++
++https://github.com/jacksonliam/mjpg-streamer/blob/master/mjpg-streamer-experimental/plugins/output_zmqserver/output_zmqserver.c#L40
++
++so let's check for this file instead because the output module is not
++written in C++. For reference see this Debian bug report about the split
++of the zeromq and cppzmq packages:
++
++https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=697743
++
++This patch fixes a configure error on systems where cppzmq is not
++present:
++http://autobuild.buildroot.net/results/dad/dad054954de76cab56333747274520f269be2066/build-end.log
++
++Patch sent upstream as PR 174.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ mjpg-streamer-experimental/cmake/FindZeroMQ.cmake | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/mjpg-streamer-experimental/cmake/FindZeroMQ.cmake b/mjpg-streamer-experimental/cmake/FindZeroMQ.cmake
++index 69092e5..c64e7b7 100644
++--- a/mjpg-streamer-experimental/cmake/FindZeroMQ.cmake
+++++ b/mjpg-streamer-experimental/cmake/FindZeroMQ.cmake
++@@ -8,7 +8,7 @@ endif()
++ 
++ ## use the hint from above to find where 'zmq.hpp' is located
++ find_path(ZeroMQ_INCLUDE_DIR
++-        NAMES zmq.hpp
+++        NAMES zmq.h
++         HINTS ${PC_ZeroMQ_INCLUDEDIR} ${PC_ZeroMQ_INCLUDE_DIRS}
++         )
++ 
++-- 
++2.19.1
++
 -- 
 2.19.1
