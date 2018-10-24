@@ -1,32 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 14:34:19 +0200
-Subject: [Buildroot] [git commit] package/ca-certificates: create
- ca-certificates.crt reproducibly
-In-Reply-To: <20181021133507.CEED68828B@busybox.osuosl.org> (Arnout
- Vandecappelle's message of "Sun, 21 Oct 2018 14:36:32 +0100")
-References: <20181021133507.CEED68828B@busybox.osuosl.org>
-Message-ID: <87tvlb8qwk.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Oct 2018 14:35:42 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/gcc: disable
+ libcilkrts when there is no thread support
+Message-ID: <20181024123403.4417588995@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=6e2e79824242c122783bf8b71fbcd3641e172dc5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=c61b49e5b5c83237c8895d8caf76a9c448c41241
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The libcilkrts configure script errors out with "Pthreads are required
+to build libcilkrts" if the C library doesn't have thread support. To
+fix that, we disable libcilkrts when thread support is not available.
 
- > Sort the certificates into alphabetical order so the contents of
- > ca-certificates.crt can be built reproducibly.
+This issue was not noticed until now, because we only regularly build
+a no-thread toolchain for ARM, and libcilkrts was enabled on ARM only
+starting in gcc 7.x.
 
- > Note: The certificates are sorted uppercase then lowercase filenames
- > so the contents of ca-certificates.crt matches the source debian package.
+This fixes the build of no-thread toolchains on architectures where
+libcilkrts is supported, i.e x86/x86-64, ARM and Sparc.
 
- > Signed-off-by: Martin Bark <martin@barkynet.com>
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 076fd27da721971f44f681d5a06f68496371d96a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gcc/gcc-final/gcc-final.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Committed to 2018.02.x and 2018.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index 213f3d7b66..c27376ad00 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -83,6 +83,11 @@ ifeq ($(BR2_sparc),y)
+ HOST_GCC_FINAL_CONF_OPTS += --disable-libcilkrts
+ endif
+ 
++# Pthreads are required to build libcilkrts
++ifeq ($(BR2_PTHREADS_NONE),y)
++HOST_GCC_FINAL_CONF_OPTS += --disable-libcilkrts
++endif
++
+ # Disable shared libs like libstdc++ if we do static since it confuses linking
+ # In that case also disable libcilkrts as there is no static version
+ ifeq ($(BR2_STATIC_LIBS),y)
