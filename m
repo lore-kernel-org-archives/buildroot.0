@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 13:57:42 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] erlang: always use
+Date: Wed, 24 Oct 2018 13:58:03 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] erlang: always use
  Buildroot's zlib
-Message-ID: <20181024115610.D5806888DA@busybox.osuosl.org>
+Message-ID: <20181024115621.28690888E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=138a12ae8230be9ea91d5b4254c6a8f5723ee9df
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0f148f4a5cf0e53e0ae36b7ce0e7b438a650efa4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 While Erlang includes a version of zlib, it's intended for Windows and
 there's an expectation that non-Windows platforms provide it. It's also
@@ -37,22 +37,22 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/erlang/Config.in b/package/erlang/Config.in
-index 75ba17086a..ab87eab6ff 100644
+index bf745555e8..00e8ab14d7 100644
 --- a/package/erlang/Config.in
 +++ b/package/erlang/Config.in
-@@ -23,6 +23,7 @@ config BR2_PACKAGE_ERLANG
+@@ -22,6 +22,7 @@ config BR2_PACKAGE_ERLANG
+ 	depends on BR2_USE_MMU # fork()
  	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
  	depends on BR2_PACKAGE_ERLANG_ARCH_SUPPORTS
 +	select BR2_PACKAGE_ZLIB
  	help
  	  Erlang is a programming language used to build massively
  	  scalable soft real-time systems with requirements on high
 diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
-index 2ac903ffea..ca0aa0b770 100644
+index b7fdb6b9ce..a7d7168082 100644
 --- a/package/erlang/erlang.mk
 +++ b/package/erlang/erlang.mk
-@@ -64,10 +64,9 @@ else
+@@ -69,10 +69,9 @@ else
  ERLANG_CONF_OPTS += --without-odbc
  endif
  
