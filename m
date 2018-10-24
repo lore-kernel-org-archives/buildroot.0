@@ -1,53 +1,81 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 13:15:06 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/libssh: bump
- version to 0.8.1
-Message-ID: <20181024112026.75AC888857@busybox.osuosl.org>
+Date: Wed, 24 Oct 2018 13:15:21 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] libssh: fix build with
+ musl libc
+Message-ID: <20181024112026.83C127FDB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f429a69b712c1c4e6e43a4863addbf3adfe35d3a
+commit: https://git.buildroot.net/buildroot/commit/?id=5ece68f55526ae241f1634587aa3d702a93d65a4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Fixed broken _SITE, added license hash.
+libssh uses GNU extensions to the glob() API. Update the cmake test to
+take that into account so that glob() is not used with musl libc.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes:
+http://autobuild.buildroot.net/results/0c2/0c2d17316fd6bd2bf1359e23a2a1273fa349cf2a/
+http://autobuild.buildroot.net/results/936/936abac5362b33980fd1efe8b830409ee2f86f6b/
+http://autobuild.buildroot.net/results/51b/51b1b136ab4209ee443c1b450a932341b2ff81b7/
+
+Cc: Scott Fan <fancp2007@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 23430a63a789dccd635d58d699bfa6416340da8a)
+(cherry picked from commit 81e33bc77ce659cb0f42e801a449bfdfa6af491a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libssh/libssh.hash | 8 +++-----
- package/libssh/libssh.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 7 deletions(-)
+ ...ake-check-for-GNU-compatible-glob-support.patch | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
-index 009a335e3b..7220c337cf 100644
---- a/package/libssh/libssh.hash
-+++ b/package/libssh/libssh.hash
-@@ -1,5 +1,3 @@
--# from https://red.libssh.org/projects/libssh/files/
--md5	d3fc864208bf607ad87cdee836894feb	libssh-0.7.5.tar.xz
--# Locally calculated after checking signature on uncompressed libssh-0.7.5.tar
--# https://red.libssh.org/attachments/download/217/libssh-0.7.5.tar.asc
--sha256	54e86dd5dc20e5367e58f3caab337ce37675f863f80df85b6b1614966a337095  libssh-0.7.5.tar.xz
-+# Locally calculated after checking pgp signature
-+sha256 d17f1267b4a5e46c0fbe66d39a3e702b8cefe788928f2eb6e339a18bb00b1924  libssh-0.8.1.tar.xz
-+sha256 468cf08f784ef6fd3b3705b60dd8111e2b70fbb8f6549cd503665a6bbb3bc625  COPYING
-diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-index 902865d73b..4295aa42ee 100644
---- a/package/libssh/libssh.mk
-+++ b/package/libssh/libssh.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBSSH_VERSION_MAJOR = 0.7
--LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).5
-+LIBSSH_VERSION_MAJOR = 0.8
-+LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).1
- LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
- LIBSSH_SITE = https://www.libssh.org/files/$(LIBSSH_VERSION_MAJOR)
- LIBSSH_LICENSE = LGPL-2.1
+diff --git a/package/libssh/0001-cmake-check-for-GNU-compatible-glob-support.patch b/package/libssh/0001-cmake-check-for-GNU-compatible-glob-support.patch
+new file mode 100644
+index 0000000000..139879b86c
+--- /dev/null
++++ b/package/libssh/0001-cmake-check-for-GNU-compatible-glob-support.patch
+@@ -0,0 +1,44 @@
++From 3bb8b5e4517a720d178dbe5c53b4a444d718bcf1 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Fri, 14 Sep 2018 15:19:48 +0300
++Subject: [PATCH] cmake: check for GNU compatible glob support
++
++The GLOB_TILDE flag is a GNU extension. musl libc does not implement
++this extension, which leads to build failure:
++
++.../libssh-0.8.1/src/config.c: In function 'local_parse_glob':
++/home/buildroot/autobuild/run/instance-1/output/build/libssh-0.8.1/src/config.c:329:10: error: 'glob_t {aka struct <anonymous>}' has no member named 'gl_flags'; did you mean 'gl_offs'?
++         .gl_flags = 0,
++          ^~~~~~~~
++          gl_offs
++.../libssh-0.8.1/src/config.c:334:25: error: 'GLOB_TILDE' undeclared (first use in this function); did you mean '_IO_FILE'?
++     rt = glob(fileglob, GLOB_TILDE, NULL, &globbuf);
++                         ^~~~~~~~~~
++                         _IO_FILE
++
++Check for GLOB_TILDE directly to make sure the libc provides the
++required extension.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: https://www.libssh.org/archive/libssh/2018-09/0000020.html
++
++ ConfigureChecks.cmake | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/ConfigureChecks.cmake b/ConfigureChecks.cmake
++index f91bd038f5a3..dac61bcf678e 100644
++--- a/ConfigureChecks.cmake
+++++ b/ConfigureChecks.cmake
++@@ -156,7 +156,7 @@ check_function_exists(explicit_bzero HAVE_EXPLICIT_BZERO)
++ check_function_exists(memset_s HAVE_MEMSET_S)
++ 
++ if (HAVE_GLOB_H)
++-  check_function_exists(glob HAVE_GLOB)
+++  check_symbol_exists(GLOB_TILDE "glob.h" HAVE_GLOB)
++ endif (HAVE_GLOB_H)
++ 
++ if (NOT WIN32)
++-- 
++2.18.0
++
