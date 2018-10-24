@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 13:08:57 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] open-plc-utils: fix build
+Date: Wed, 24 Oct 2018 13:10:17 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] open-plc-utils: fix build
  with static musl
-Message-ID: <20181024110823.0EBB2826CD@busybox.osuosl.org>
+Message-ID: <20181024110834.499D280FAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c894af75fd91c8a16bee0caba97b320d97058a6f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a8f6c9f95d0b596542be10567f7c3d3d2d2bc855
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Pass TARGET_LDFLAGS to EXTRA_LDFLAGS to fix following issue:
 /home/buildroot/autobuild/run/instance-3/output/build/host-gcc-final-7.3.0/build/arm-buildroot-linux-musleabihf/libgcc/../../../libgcc/config/arm/lib1funcs.S:1545: undefined reference to `raise'
