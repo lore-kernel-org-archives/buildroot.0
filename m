@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 13:45:02 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] ustr: remove source code
+Date: Wed, 24 Oct 2018 13:45:20 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] ustr: remove source code
  from target
-Message-ID: <20181024114317.DD44E888BB@busybox.osuosl.org>
+Message-ID: <20181024114339.D9986888BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=40efc14bffde4e9aff474d8863bcb55758e178f8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=08e0f9bb73f3c4e043aab6aa9be43831b1a7c452
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 For some reason, ustr installs its own source code, which means we end
 up with 448 KB of source code in /usr/share in the target filesystem:
