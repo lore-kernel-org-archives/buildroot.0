@@ -1,30 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 14:19:17 +0200
-Subject: [Buildroot] [PATCH] libarchive: security bump to version 3.3.3
-In-Reply-To: <601e6365ce2efee031d9c9b6f3fd4e8e54296d07.1539926405.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 19 Oct 2018 08:20:05 +0300")
-References: <601e6365ce2efee031d9c9b6f3fd4e8e54296d07.1539926405.git.baruch@tkos.co.il>
-Message-ID: <87sh0va662.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Oct 2018 14:19:47 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] psmisc: correct license
+Message-ID: <20181024121804.4032288943@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=6bbc887846ecd6698e2ea13bf7a8531fee892c5e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > Fixes CVE-2017-14501: An out-of-bounds read flaw exists in
- > parse_file_info in archive_read_support_format_iso9660.c in libarchive
- > 3.3.2 when extracting a specially crafted iso9660 iso file, related to
- > archive_read_format_iso9660_read_header.
+The license heading in source files includes the "or any later"
+language.
 
- > Drop upstream patches.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit cfa3447a7829aed59ce673b22212f5c82f83fc61)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/psmisc/psmisc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Use upstream provided tarball hash.
-
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Committed to 2018.02.x and 2018.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/psmisc/psmisc.mk b/package/psmisc/psmisc.mk
+index 3d9a80462d..6c343a4f2e 100644
+--- a/package/psmisc/psmisc.mk
++++ b/package/psmisc/psmisc.mk
+@@ -7,7 +7,7 @@
+ PSMISC_VERSION = 23.1
+ PSMISC_SITE = http://downloads.sourceforge.net/project/psmisc/psmisc
+ PSMISC_SOURCE = psmisc-$(PSMISC_VERSION).tar.xz
+-PSMISC_LICENSE = GPL-2.0
++PSMISC_LICENSE = GPL-2.0+
+ PSMISC_LICENSE_FILES = COPYING
+ PSMISC_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+ # Patching Makefile.am
