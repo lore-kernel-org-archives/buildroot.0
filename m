@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 17:58:44 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] package/live555: Add a
+Date: Wed, 24 Oct 2018 17:58:13 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/live555: Add a
  pkg-config file for the shared libraries
-Message-ID: <20181024155848.A8E9A81305@busybox.osuosl.org>
+Message-ID: <20181024155854.BF7B888DB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=058d6a0e942c7040f573a2b57e6a95ce58ddcad2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=52b83f394e7956df611ff55962f87aae5db10933
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Needed for vlc to fix linking issue.
 
