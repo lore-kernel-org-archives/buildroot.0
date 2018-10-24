@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 13:20:03 +0200
-Subject: [Buildroot] [PATCH] libssh: fix build with musl libc
-In-Reply-To: <c6c17e3d2f56efd666671cb38bb037d9741536a7.1536933561.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 14 Sep 2018 16:59:21 +0300")
-References: <c6c17e3d2f56efd666671cb38bb037d9741536a7.1536933561.git.baruch@tkos.co.il>
-Message-ID: <87zhv3bnh8.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Oct 2018 13:21:21 +0200
+Subject: [Buildroot] [PATCH] libssh: fix cross compile with older cmake
+In-Reply-To: <9dce5a842ebb73937268fa66a3ee699785c5ae7c.1534975110.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Thu, 23 Aug 2018 00:58:30 +0300")
+References: <9dce5a842ebb73937268fa66a3ee699785c5ae7c.1534975110.git.baruch@tkos.co.il>
+Message-ID: <87va5rbnf2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +13,14 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > libssh uses GNU extensions to the glob() API. Update the cmake test to
- > take that into account so that glob() is not used with musl libc.
+ > Old version of cmake break cross-compilation when FindThreads is used
+ > because of a try_run call. Add a workaround that avoids try_run.
 
- > Fixes:
- > http://autobuild.buildroot.net/results/0c2/0c2d17316fd6bd2bf1359e23a2a1273fa349cf2a/
- > http://autobuild.buildroot.net/results/936/936abac5362b33980fd1efe8b830409ee2f86f6b/
- > http://autobuild.buildroot.net/results/51b/51b1b136ab4209ee443c1b450a932341b2ff81b7/
+ > cmake bug report: https://gitlab.kitware.com/cmake/cmake/issues/16920
+
+ > Should fix:
+ > http://autobuild.buildroot.net/results/8aa/8aa2bd894416a4508ca7140f8947ff46243f8b78/
+ > http://autobuild.buildroot.net/results/f2c/f2cc965bb134bf4fd9e625eb267b67c949c202fc/
 
  > Cc: Scott Fan <fancp2007@gmail.com>
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
