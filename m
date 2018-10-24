@@ -1,107 +1,44 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Wed, 24 Oct 2018 21:01:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mosquitto: installing the mosquitto
- broker can be optional
-Message-ID: <20181024190103.24158-1-titouan.christophe@railnova.eu>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Wed, 24 Oct 2018 21:15:39 +0200
+Subject: [Buildroot] [PATCH] merge_config.sh: Fix finding redundant
+ config mechanism
+In-Reply-To: <13fac09f-009d-4bbf-1cce-d7d3cd2fd2d6@mind.be>
+References: <1539989903-19803-1-git-send-email-Afshin.Nasser@gmail.com>
+ <CANQCQpaxMvn2OEfP0aztbFRk0KTOTnt8nugZ-gwKL7oML1eQUw@mail.gmail.com>
+ <7189ed78-6481-0290-f13b-88e3c1008937@mind.be>
+ <20181023151902.GA18148@smart-All-Series>
+ <13fac09f-009d-4bbf-1cce-d7d3cd2fd2d6@mind.be>
+Message-ID: <20181024191538.GA943@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The mosquitto package providess both the MQTT client library and
-a broker, and the latter may be not needed (when connecting to
-a remote broker). It should be therefore possible to not install and
-start it on the target
+Hi Arnout, Nasser,
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
----
- .../0002-DIRS-externally-configurable.patch         |  9 +++++++++
- package/mosquitto/Config.in                         |  9 +++++++++
- package/mosquitto/mosquitto.mk                      | 13 ++++++++++---
- 3 files changed, 28 insertions(+), 3 deletions(-)
- create mode 100644 package/mosquitto/0002-DIRS-externally-configurable.patch
+> > Should I resend the patch applying Angelo -b approach?
+>  Yes, please do. Make sure you keep Angelo's authorship and add your Sob.
+Nice. So I'm not going to implement it (asked by Arnout).
+If you CC me, I'll review your patch.
 
-diff --git a/package/mosquitto/0002-DIRS-externally-configurable.patch b/package/mosquitto/0002-DIRS-externally-configurable.patch
-new file mode 100644
-index 0000000000..a95a7db14b
---- /dev/null
-+++ b/package/mosquitto/0002-DIRS-externally-configurable.patch
-@@ -0,0 +1,9 @@
-+--- a/Makefile
-++++ b/Makefile
-+@@ -1,6 +1,6 @@
-+ include config.mk
-+ 
-+-DIRS=lib client src
-++DIRS:=lib client src
-+ DOCDIRS=man
-+ DISTDIRS=man
-diff --git a/package/mosquitto/Config.in b/package/mosquitto/Config.in
-index 1e6418a4de..54856c1c80 100644
---- a/package/mosquitto/Config.in
-+++ b/package/mosquitto/Config.in
-@@ -14,6 +14,15 @@ config BR2_PACKAGE_MOSQUITTO
- 
- 	  http://mosquitto.org/
- 
-+
-+config BR2_PACKAGE_MOSQUITTO_INSTALL_BROKER
-+	bool "Install the mosquitto broker"
-+	default y
-+	depends on BR2_PACKAGE_MOSQUITTO
-+	help
-+	  Build and install the mosquitto broker onto target
-+
-+
- comment "mosquitto needs a toolchain w/ dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 1d72f9b16e..c6604efda3 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -67,24 +67,30 @@ endef
- MOSQUITTO_POST_PATCH_HOOKS += MOSQUITTO_DISABLE_CPP
- endif
- 
-+MOSQUITTO_MAKE_DIRS = lib client
-+ifeq ($(BR2_PACKAGE_MOSQUITTO_INSTALL_BROKER),y)
-+	MOSQUITTO_MAKE_DIRS += src
-+endif
-+
- define MOSQUITTO_BUILD_CMDS
--	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
-+	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) DIRS=$(MOSQUITTO_MAKE_DIRS) \
- 		$(MOSQUITTO_MAKE_OPTS)
- endef
- 
- define MOSQUITTO_INSTALL_STAGING_CMDS
--	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
-+	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) DIRS=$(MOSQUITTO_MAKE_DIRS) \
- 		$(MOSQUITTO_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
- endef
- 
- define MOSQUITTO_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
-+	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) DIRS=$(MOSQUITTO_MAKE_DIRS) \
- 		$(MOSQUITTO_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
- 	rm -f $(TARGET_DIR)/etc/mosquitto/*.example
- 	$(INSTALL) -D -m 0644 $(@D)/mosquitto.conf \
- 		$(TARGET_DIR)/etc/mosquitto/mosquitto.conf
- endef
- 
-+ifeq ($(BR2_PACKAGE_MOSQUITTO_INSTALL_BROKER),y)
- define MOSQUITTO_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/mosquitto/S50mosquitto \
- 		$(TARGET_DIR)/etc/init.d/S50mosquitto
-@@ -97,6 +103,7 @@ define MOSQUITTO_INSTALL_INIT_SYSTEMD
- 	ln -fs ../../../../usr/lib/systemd/system/mosquitto.service \
- 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/mosquitto.service
- endef
-+endif
- 
- define MOSQUITTO_USERS
- 	mosquitto -1 nogroup -1 * - - - Mosquitto user
--- 
-2.18.1
+> And please fix the remaining two comments I made:
+
+> - remove the hunk that replaces alldefconfig with olddefconfig;
+
+> - a patch should be added to support/kconfig/patches.
+
+
+>  As it happens, I talked today with the guy who submitted the merge_config.sh
+> script to the kernel (apparently this script comes from yocto, originally). He
+> thinks it would be a good idea to upstream this -b option to the kernel. I
+> didn't find the kconfig maintainer (Masahiro) though, but it's worth a try.
+I was planning to send a patch to linux-kbuild as well (after we complete this
+patch) as I also think it's something which upstream could take, so projects
+didn't have to carry patch for it. But feel free to implement send it there.
+
+>  Regards,
+>  Arnout
+
+Kind regards,
+Petr
