@@ -1,15 +1,34 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Tue, 23 Oct 2018 23:04:51 -0200 (BRST)
-Subject: [Buildroot] [RFC] fs: allow passing the image file name to
- inner-rootfs
-In-Reply-To: <20181021132626.GA23085@scaer>
-References: <20180622023105.27865-1-casantos@datacom.com.br>
- <20181021132626.GA23085@scaer>
-Message-ID: <1561343382.4587264.1540343091136.JavaMail.zimbra@datacom.com.br>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Tue, 23 Oct 2018 22:41:33 -0400
+Subject: [Buildroot] [PATCH 1/3] uboot: replace mkimage invocation with
+ MKIMAGE
+Message-ID: <1540348893-3286-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Superseded by https://patchwork.ozlabs.org/patch/988446/
+We already use $(MKIMAGE) instead of $(HOST_DIR)/bin/mkimage in xvisor, linux,
+and cpio; use it here too.
+
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+---
+ boot/uboot/uboot.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index fa92eaf..cbdfee6 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -286,7 +286,7 @@ define UBOOT_INSTALL_IMAGES_CMDS
+ 	)
+ 	$(UBOOT_GENERATE_ENV_IMAGE)
+ 	$(if $(BR2_TARGET_UBOOT_BOOT_SCRIPT),
+-		$(HOST_DIR)/bin/mkimage -C none -A $(MKIMAGE_ARCH) -T script \
++		$(MKIMAGE) -C none -A $(MKIMAGE_ARCH) -T script \
+ 			-d $(call qstrip,$(BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE)) \
+ 			$(BINARIES_DIR)/boot.scr)
+ endef
+-- 
+2.7.4
