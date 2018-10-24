@@ -1,42 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 17:54:31 +0200
-Subject: [Buildroot] [PATCH v3] qt5base: Qt KMS support does not depend
- on opengl
-In-Reply-To: <2357aab6-f2e6-54d4-0e37-63955864e94e@mind.be> (Arnout
- Vandecappelle's message of "Mon, 22 Oct 2018 00:18:24 +0100")
-References: <1518540366-13393-1-git-send-email-joshua.henderson@microchip.com>
- <2357aab6-f2e6-54d4-0e37-63955864e94e@mind.be>
-Message-ID: <878t2n8hmw.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Oct 2018 17:54:58 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] core: support host gcc of
+ the future
+Message-ID: <20181024155337.E713088D91@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d538f8c411cb9c75e0c1cca8468eee944f80d5d1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
- > On 13/02/2018 16:46, Joshua Henderson wrote:
- >> Qt KMS support should not explicitly depend on the availability of opengl.
- >> Don't explicitly disable KMS if opengl is not available and fallback to
- >> detecting if libdrm is available before disabling kms.
- >> 
- >> The scenario where this is necessary involves using the Qt linuxfb backend
- >> "dumb buffer" support via the DRM API. This is new in Qt 5.9 [1] and only
- >> requires KMS, but not opengl.
+When we do a release, we know only of a set of gcc versions that the
+host may have. But in the future, distributions with newer gcc versions
+may show up.
 
- > ?This sounds like we should handle the Qt 5.6 case specially.
+Currently, we do not recognise those versions, and thus we do as if they
+were older than the oldest we know of. This means that a set of packages
+become unselectable, when they should be.
 
- > ?However, on Qt 5.6, it builds fine with the -kms option, it just ends up not
- > being used. That means we have a redundant dependency on libdrm, but that
- > doesn't matter that much. Handling the Qt 5.6 case differently would make the
- > code quite a bit more complicated.
+We fix that by capping the detected version to the highest we know of.
 
- > ?Therefore, I explained the above in the commit log an applied to master, thanks.
+Reported-by: gargar_ on IRC
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 3950e69dad925b684aaf7462713e50aab882de28)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Config.in |  3 +++
+ Makefile  | 10 ++++++++--
+ 2 files changed, 11 insertions(+), 2 deletions(-)
 
- > ?Sorry it took so long.
-
-Committed to 2018.02.x and 2018.08.x with the extended commit message,
-thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/Config.in b/Config.in
+index 6b5b2b043c..42cdf7a3eb 100644
+--- a/Config.in
++++ b/Config.in
+@@ -67,6 +67,9 @@ config BR2_HOST_GCC_AT_LEAST_8
+ 	default y if BR2_HOST_GCC_VERSION = "8"
+ 	select BR2_HOST_GCC_AT_LEAST_7
+ 
++# When adding new entries above, be sure to update
++# the HOSTCC_MAX_VERSION variable in the Makefile.
++
+ # Hidden boolean selected by packages in need of Java in order to build
+ # (example: kodi)
+ config BR2_NEEDS_HOST_JAVA
+diff --git a/Makefile b/Makefile
+index 8a65b180e4..d193a9ae10 100644
+--- a/Makefile
++++ b/Makefile
+@@ -351,8 +351,14 @@ export HOSTARCH := $(shell LC_ALL=C $(HOSTCC_NOCCACHE) -v 2>&1 | \
+ 	    -e 's/macppc/powerpc/' \
+ 	    -e 's/sh.*/sh/' )
+ 
+-HOSTCC_VERSION := $(shell $(HOSTCC_NOCCACHE) --version | \
+-	sed -n -r 's/^.* ([0-9]*)\.([0-9]*)\.([0-9]*)[ ]*.*/\1 \2/p')
++# When adding a new host gcc version in Config.in,
++# update the HOSTCC_MAX_VERSION variable:
++HOSTCC_MAX_VERSION := 8
++
++HOSTCC_VERSION := $(shell V=$$($(HOSTCC_NOCCACHE) --version | \
++	sed -n -r 's/^.* ([0-9]*)\.([0-9]*)\.([0-9]*)[ ]*.*/\1 \2/p'); \
++	[ "$${V%% *}" -le $(HOSTCC_MAX_VERSION) ] || V=$(HOSTCC_MAX_VERSION); \
++	printf "%s" "$${V}")
+ 
+ # For gcc >= 5.x, we only need the major version.
+ ifneq ($(firstword $(HOSTCC_VERSION)),4)
