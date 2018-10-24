@@ -1,71 +1,107 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 24 Oct 2018 21:58:30 +0300
-Subject: [Buildroot] [PATCH v2,
- 1/1] bdwgc: add optional cplusplus support
-In-Reply-To: <CAPi7W83mdM4C5XjaXH1kqyUPhBC0+ozpAJvnrnZ3wtHykpeWMA@mail.gmail.com>
-References: <20181023210405.31753-1-fontaine.fabrice@gmail.com>
- <20181024041215.o37yjufysqt4eilt@sapphire.tkos.co.il>
- <CAPi7W83mdM4C5XjaXH1kqyUPhBC0+ozpAJvnrnZ3wtHykpeWMA@mail.gmail.com>
-Message-ID: <87r2gf6ujt.fsf@tkos.co.il>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Wed, 24 Oct 2018 21:01:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mosquitto: installing the mosquitto
+ broker can be optional
+Message-ID: <20181024190103.24158-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+The mosquitto package providess both the MQTT client library and
+a broker, and the latter may be not needed (when connecting to
+a remote broker). It should be therefore possible to not install and
+start it on the target
 
-Fabrice Fontaine writes:
-> Le mer. 24 oct. 2018 ? 06:12, Baruch Siach <baruch@tkos.co.il> a ?crit :
->> On Tue, Oct 23, 2018 at 11:04:05PM +0200, Fabrice Fontaine wrote:
->> > Use CFLAGS_EXTRA to pass C and C++ flags in a single variable
->> >
->> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->> > ---
->> > Changes v1 -> v2 (after review of Arnout Vandecappelle and Baruch
->> > Siach):
->> >  - Use CFLAGS_EXTRA to pass C and C++ flags in a single variable instead
->> >    of using CFLAGS and CPPFLAGS
->> >
->> >  package/bdwgc/bdwgc.mk | 10 +++++++++-
->> >  1 file changed, 9 insertions(+), 1 deletion(-)
->> >
->> > diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
->> > index 5603df8d9d..1d8d7284f8 100644
->> > --- a/package/bdwgc/bdwgc.mk
->> > +++ b/package/bdwgc/bdwgc.mk
->> > @@ -27,9 +27,17 @@ ifeq ($(BR2_STATIC_LIBS),y)
->> >  BDWGC_CFLAGS += -DGC_NO_DLOPEN
->> >  endif
->> >
->> > +BDWGC_CONF_OPTS = CFLAGS_EXTRA="$(BDWGC_CFLAGS)"
->>
->> I think you can just drop BDWGC_CFLAGS. Instead use CFLAGS_EXTRA alone in
->> BDWGC_CONF_OPTS.
-> I'm already just using CFLAGS_EXTRA in BDGWC_CONF_OPTS.
-> Do you suggest that I rename BDWGC_CFLAGS into BDWGC_CFLAGS_EXTRA to
-> avoid any confusion?
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+---
+ .../0002-DIRS-externally-configurable.patch         |  9 +++++++++
+ package/mosquitto/Config.in                         |  9 +++++++++
+ package/mosquitto/mosquitto.mk                      | 13 ++++++++++---
+ 3 files changed, 28 insertions(+), 3 deletions(-)
+ create mode 100644 package/mosquitto/0002-DIRS-externally-configurable.patch
 
-Yes, that's what I meant.
-
-baruch
-
->> > +
->> >  # Ensure we use the system libatomic_ops, and not the internal one.
->> > -BDWGC_CONF_OPTS = --with-libatomic-ops=yes CFLAGS="$(BDWGC_CFLAGS)"
->> > +BDWGC_CONF_OPTS += --with-libatomic-ops=yes
->> >  HOST_BDWGC_CONF_OPTS = --with-libatomic-ops=yes
->> >
->> > +ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
->> > +BDWGC_CONF_OPTS += --enable-cplusplus
->> > +else
->> > +BDWGC_CONF_OPTS += --disable-cplusplus
->> > +endif
->> > +
->> >  $(eval $(autotools-package))
->> >  $(eval $(host-autotools-package))
-
+diff --git a/package/mosquitto/0002-DIRS-externally-configurable.patch b/package/mosquitto/0002-DIRS-externally-configurable.patch
+new file mode 100644
+index 0000000000..a95a7db14b
+--- /dev/null
++++ b/package/mosquitto/0002-DIRS-externally-configurable.patch
+@@ -0,0 +1,9 @@
++--- a/Makefile
+++++ b/Makefile
++@@ -1,6 +1,6 @@
++ include config.mk
++ 
++-DIRS=lib client src
+++DIRS:=lib client src
++ DOCDIRS=man
++ DISTDIRS=man
+diff --git a/package/mosquitto/Config.in b/package/mosquitto/Config.in
+index 1e6418a4de..54856c1c80 100644
+--- a/package/mosquitto/Config.in
++++ b/package/mosquitto/Config.in
+@@ -14,6 +14,15 @@ config BR2_PACKAGE_MOSQUITTO
+ 
+ 	  http://mosquitto.org/
+ 
++
++config BR2_PACKAGE_MOSQUITTO_INSTALL_BROKER
++	bool "Install the mosquitto broker"
++	default y
++	depends on BR2_PACKAGE_MOSQUITTO
++	help
++	  Build and install the mosquitto broker onto target
++
++
+ comment "mosquitto needs a toolchain w/ dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index 1d72f9b16e..c6604efda3 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -67,24 +67,30 @@ endef
+ MOSQUITTO_POST_PATCH_HOOKS += MOSQUITTO_DISABLE_CPP
+ endif
+ 
++MOSQUITTO_MAKE_DIRS = lib client
++ifeq ($(BR2_PACKAGE_MOSQUITTO_INSTALL_BROKER),y)
++	MOSQUITTO_MAKE_DIRS += src
++endif
++
+ define MOSQUITTO_BUILD_CMDS
+-	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
++	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) DIRS=$(MOSQUITTO_MAKE_DIRS) \
+ 		$(MOSQUITTO_MAKE_OPTS)
+ endef
+ 
+ define MOSQUITTO_INSTALL_STAGING_CMDS
+-	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
++	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) DIRS=$(MOSQUITTO_MAKE_DIRS) \
+ 		$(MOSQUITTO_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
+ endef
+ 
+ define MOSQUITTO_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
++	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) DIRS=$(MOSQUITTO_MAKE_DIRS) \
+ 		$(MOSQUITTO_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
+ 	rm -f $(TARGET_DIR)/etc/mosquitto/*.example
+ 	$(INSTALL) -D -m 0644 $(@D)/mosquitto.conf \
+ 		$(TARGET_DIR)/etc/mosquitto/mosquitto.conf
+ endef
+ 
++ifeq ($(BR2_PACKAGE_MOSQUITTO_INSTALL_BROKER),y)
+ define MOSQUITTO_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 package/mosquitto/S50mosquitto \
+ 		$(TARGET_DIR)/etc/init.d/S50mosquitto
+@@ -97,6 +103,7 @@ define MOSQUITTO_INSTALL_INIT_SYSTEMD
+ 	ln -fs ../../../../usr/lib/systemd/system/mosquitto.service \
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/mosquitto.service
+ endef
++endif
+ 
+ define MOSQUITTO_USERS
+ 	mosquitto -1 nogroup -1 * - - - Mosquitto user
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.18.1
