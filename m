@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 14:35:42 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/gcc: disable
+Date: Wed, 24 Oct 2018 14:35:56 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] package/gcc: disable
  libcilkrts when there is no thread support
-Message-ID: <20181024123403.4417588995@busybox.osuosl.org>
+Message-ID: <20181024123410.AC674889A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e2e79824242c122783bf8b71fbcd3641e172dc5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d7ed6c7ce7bcb410c2e930906afa437c05d9609e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 The libcilkrts configure script errors out with "Pthreads are required
 to build libcilkrts" if the C library doesn't have thread support. To
@@ -33,10 +33,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index 213f3d7b66..c27376ad00 100644
+index 9897d18682..1be0b9bfc9 100644
 --- a/package/gcc/gcc-final/gcc-final.mk
 +++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -83,6 +83,11 @@ ifeq ($(BR2_sparc),y)
+@@ -81,6 +81,11 @@ ifeq ($(BR2_sparc),y)
  HOST_GCC_FINAL_CONF_OPTS += --disable-libcilkrts
  endif
  
