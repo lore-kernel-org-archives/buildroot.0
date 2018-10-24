@@ -1,118 +1,26 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 24 Oct 2018 11:33:03 -0500
-Subject: [Buildroot] [PATCH v1 1/1] package/davici: new package
-In-Reply-To: <20181024162713.22593-1-jared.bents@rockwellcollins.com>
-References: <20181024162713.22593-1-jared.bents@rockwellcollins.com>
-Message-ID: <CANQCQpbOd_00HdhZNh+W3+8eMVvzL1KTZjxqY0qCq21ek48iMw@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 24 Oct 2018 18:37:59 +0200
+Subject: [Buildroot] [PATCH] PostgreSQL: bump version to 11.0
+References: <20181023171555.18043-1-aduskett@gmail.com>
+ <n424afxool.ln2@ID-313208.user.individual.net>
+ <CAFSsvmrWpqXHnzo-63j6D3jxCJVRuZgbzmMeX8hFiYqKtpL_Uw@mail.gmail.com>
+Message-ID: <7oj6afxmfc.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jared,
+Am Wed, 24 Oct 2018 11:34:08 -0400 schrieb Adam Duskett:
 
-On Wed, Oct 24, 2018 at 11:27 AM Jared Bents
-<jared.bents@rockwellcollins.com> wrote:
->
-> This patch adds davici which is an alternative implementation of the
-> VICI client protocal used by Strongswan.  It targets better integration
-> with software stacks and uses a asynchronous, non-blocking API that can
-> be integrated in third-party main dispatching loops without the use of
-> threads.
->
-> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
-> ---
-> Supersedes: https://patchwork.ozlabs.org/patch/972496/
-> ---
->  package/Config.in          |  1 +
->  package/davici/Config.in   | 18 ++++++++++++++++++
->  package/davici/davici.hash |  3 +++
->  package/davici/davici.mk   | 21 +++++++++++++++++++++
->  4 files changed, 43 insertions(+)
->  create mode 100644 package/davici/Config.in
->  create mode 100644 package/davici/davici.hash
->  create mode 100644 package/davici/davici.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index fd86e37a52..56f3b8ff92 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1480,6 +1480,7 @@ menu "Networking"
->         source "package/curlpp/Config.in"
->         source "package/czmq/Config.in"
->         source "package/daq/Config.in"
-> +       source "package/davici/Config.in"
->         source "package/filemq/Config.in"
->         source "package/flickcurl/Config.in"
->         source "package/fmlib/Config.in"
-> diff --git a/package/davici/Config.in b/package/davici/Config.in
-> new file mode 100644
-> index 0000000000..9dfa0ec130
-> --- /dev/null
-> +++ b/package/davici/Config.in
-> @@ -0,0 +1,18 @@
-> +comment "davici needs a toolchain w/ threads, dynamic library"
-> +       depends on BR2_USE_MMU
-> +       depends on BR2_TOOLCHAIN_HAS_ATOMIC
-> +       depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-> +
-> +config BR2_PACKAGE_DAVICI
-> +       bool "davici"
-> +       depends on BR2_USE_MMU # fork()
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS
-> +       depends on BR2_TOOLCHAIN_HAS_ATOMIC
-> +       depends on !BR2_STATIC_LIBS
-> +       select BR2_PACKAGE_STRONGSWAN
-> +       help
-> +         davici is an alternative implementation of the VICI
-> +         client protocol, targeting better integration in other
-> +         software stacks.
-> +
-> +         https://github.com/strongswan/davici
-> diff --git a/package/davici/davici.hash b/package/davici/davici.hash
-> new file mode 100644
-> index 0000000000..257e902ce7
-> --- /dev/null
-> +++ b/package/davici/davici.hash
-> @@ -0,0 +1,3 @@
-> +# Locally calculated
-> +sha256 d3e5e806ecca841d7e133a3df768062df59f4b4c76bf98e0f90aa8064721b3bd  davici-v1.3.tar.gz
-> +sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-> diff --git a/package/davici/davici.mk b/package/davici/davici.mk
-> new file mode 100644
-> index 0000000000..0a60f085b8
-> --- /dev/null
-> +++ b/package/davici/davici.mk
-> @@ -0,0 +1,21 @@
-> +################################################################################
-> +#
-> +# davici
-> +#
-> +################################################################################
-> +
-> +DAVICI_VERSION = v1.3
-> +DAVICI_SOURCE = davici-$(DAVICI_VERSION).tar.gz
+> So either 2 options:
+> 
+> 1) Explicitly disable llvm using the flag --without-llvm
+> 2) Fix llvm detection.
 
-Please remove _SOURCE as it's the default. (check-package found it)
+Hi Adam,
 
-> +DAVICI_SITE = $(call github,strongswan,davici,$(DAVICI_VERSION))
-> +DAVICI_LICENSE = LGPL-2.1
-> +DAVICI_LICENSE_FILES = COPYING
-> +DAVICI_DEPENDENCIES = strongswan
-> +DAVICI_INSTALL_STAGING=YES
-> +DAVICI_AUTORECONF = YES
-> +
-> +define DAVICI_CREATE_M4
-> +       mkdir -p $(@D)/m4
-> +endef
-> +DAVICI_POST_PATCH_HOOKS += DAVICI_CREATE_M4
-> +
-> +$(eval $(autotools-package))
-> --
-> 2.18.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+unless 2) is easy to achieve we should go for 1).
+Personally I prefer 1) because I have no use for JIT.
+
+Regards, Bernd
