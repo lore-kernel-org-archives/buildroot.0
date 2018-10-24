@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 17:53:43 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] qt5base: Qt KMS support
+Date: Wed, 24 Oct 2018 17:53:54 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] qt5base: Qt KMS support
  does not depend on opengl
-Message-ID: <20181024155202.7F71988D88@busybox.osuosl.org>
+Message-ID: <20181024155209.4810388D8D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a8801a2a85140f2bf9529ec4bf0597454f744a2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9eb45c226c813ff8b9886e704b5e57f26884a26f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 Qt KMS support should not explicitly depend on the availability of opengl.
 Don't explicitly disable KMS if opengl is not available and fallback to
@@ -36,7 +36,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 9 insertions(+), 2 deletions(-)
 
 diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 53c98ce490..b79059c2a4 100644
+index ab2b883fc4..2b6fd39267 100644
 --- a/package/qt5/qt5base/qt5base.mk
 +++ b/package/qt5/qt5base/qt5base.mk
 @@ -35,12 +35,19 @@ endif
