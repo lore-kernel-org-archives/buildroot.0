@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 14:18:02 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] libarchive: security bump
+Date: Wed, 24 Oct 2018 14:19:02 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] libarchive: security bump
  to version 3.3.3
-Message-ID: <20181024121623.BCC5B88933@busybox.osuosl.org>
+Message-ID: <20181024121718.628E788935@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eed32a87b35c32e80402741305dd08bdab869850
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5d3e778fb9360e08f2b72ad14585d589997de531
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Fixes CVE-2017-14501: An out-of-bounds read flaw exists in
 parse_file_info in archive_read_support_format_iso9660.c in libarchive
