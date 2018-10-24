@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 14:28:22 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] qt download site update
-Message-ID: <20181024122639.B582388957@busybox.osuosl.org>
+Date: Wed, 24 Oct 2018 14:28:32 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] qt download site update
+Message-ID: <20181024122647.4A3348895C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73ea45a608f560d261da66b6e9ab9cba7add3e22
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7b02eb66cd00cad901b43b0030341d5a76bd40b7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 The download link was broken, former qt versions are stored into a
 distinct location.
