@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 12:39:28 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] freetype: drop calling
+Date: Wed, 24 Oct 2018 12:39:45 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] freetype: drop calling
  autogen, no longer needed
-Message-ID: <20181024103752.20A4F88844@busybox.osuosl.org>
+Message-ID: <20181024103802.2083388847@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c9bf7176e734b76a0f916d090efe803a2c6c334e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f8d6c8b8eb3649e81f15eb2e429a1edc4f25fd64
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 In commit a31a66802a7a1af76a629b0ba7120424ed547646 ("freetype:
 security bump to version 2.5.3"), the freetype package was changed to
@@ -38,7 +38,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 18 deletions(-)
 
 diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index 1028664799..e755c82378 100644
+index 05e9498c69..1b3a9d1755 100644
 --- a/package/freetype/freetype.mk
 +++ b/package/freetype/freetype.mk
 @@ -17,19 +17,6 @@ FREETYPE_CONFIG_SCRIPTS = freetype-config
