@@ -1,56 +1,72 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Wed, 24 Oct 2018 12:38:45 +0200
-Subject: [Buildroot] [PATCH] linux-firmware: bump version to latest d877533
-Message-ID: <20181024103845.19057-1-m.niestroj@grinn-global.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 24 Oct 2018 12:39:28 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] freetype: drop calling
+ autogen, no longer needed
+Message-ID: <20181024103752.20A4F88844@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
----
- package/linux-firmware/linux-firmware.hash | 6 +++---
- package/linux-firmware/linux-firmware.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=c9bf7176e734b76a0f916d090efe803a2c6c334e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
-index ca6ad8f59d..91645d6262 100644
---- a/package/linux-firmware/linux-firmware.hash
-+++ b/package/linux-firmware/linux-firmware.hash
-@@ -1,11 +1,11 @@
- # Locally calculated
--sha256 b279ca4d086887c2efab13e28a7ca36e409410d3df38a62d7c7b5799ee3de916 linux-firmware-44d4fca9922a252a0bd81f6307bcc072a78da54a.tar.gz
-+sha256 48f02db163bd1320cafa0c878f0c38d2184afa726f02622309be69416e420032 linux-firmware-d87753369b82c5f362250c197d04a1e1ef5bf698.tar.gz
- sha256 8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9 LICENCE.Abilis
- sha256 4b3ea5d5a03c0db81bee0bcb14b30d75b30ef568597bb5be7d4dee57f434265f LICENSE.amdgpu
- sha256 38f2037aa14631b4b29826d7a99379613c41a97064d1defdee30a7a022138b20 LICENCE.Marvell
- sha256 802b7014b26c606cf6248ae8b0ab1ce6d2d1b0db236d38dd269e676cd70710f2 LICENCE.atheros_firmware
- sha256 3b5eb392b2d9d8c46d6aae26d06c187e5ea3029b12d13bc2b8deb8b3ce6bfa53 ath10k/QCA6174/hw3.0/notice_ath10k_firmware-4.txt
--sha256 c565861ff7c42f5df98e15239241f1f42614e5e15f362094a2d3e8da724dc842 ath10k/QCA6174/hw3.0/notice_ath10k_firmware-6.txt
-+sha256 8ce5c6ea0542bf4aac31fc3ae16a39792ad22d0eae4543063fac56fb3380f021 ath10k/QCA6174/hw3.0/notice_ath10k_firmware-6.txt
- sha256 b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d LICENCE.broadcom_bcm43xx
- sha256 a5777f9e80aca0603b0648454de996168b1c530322550ccda94d6d78bcf6c061 LICENCE.chelsio_firmware
- sha256 60fbc9cccb455e1a3306c97db942d6f24fa93664be61d54c497637e6d0e2ae83 LICENCE.fw_sst_0f28
-@@ -27,5 +27,5 @@ sha256 8542aeabf2761935122d693561e16766ce1bcc2b0d003204f9040b7d6d929f2e LICENSE.
- sha256 be904cd28cb292b80cdb6cf412ab0d9159d431671e987ad433c1f62e0988a9bc LICENSE.qcom
- sha256 fc6223d4bfe9f2f9e2eddc44b9fe5721d0caf49f01cb08d602906add686d8c6f LICENSE.radeon
- sha256 2bdd2e716f05d9737d3f9a20f9a3a3c0caee0e866100ddb0673f1178e42f92b9 LICENSE.sdma_firmware
--sha256 ef38a9a8bb4b0f72b369d337426eea63ef8fc9d48453f127028d935f7dbc5820 WHENCE
-+sha256 a16234520f37d1fe170fb96f470897a12f74cc4a83bc6ab28eacfdde5bea1917 WHENCE
- sha256 fa43e1b9a13b341a07adca9dbe73d0f9072d7966fdfe811c01f0dd2872d7309a qcom/NOTICE.txt
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 4eba57434b..2beb09859c 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+In commit a31a66802a7a1af76a629b0ba7120424ed547646 ("freetype:
+security bump to version 2.5.3"), the freetype package was changed to
+call ./autogen.sh to regenerate the autotools stuff, because the
+ltmain.sh provided by upstream freetype was not compatible with
+Buildroot libtool-patching logic.
+
+Since then, freetype has been bumped several times, and the current
+version packaged in Buildroot has an ltmain.sh that is compatible with
+our libtool-patching logic.
+
+Therefore, this commit drops the no longer needed autogen stuff.
+
+This autogen stuff was badly breaking per-package host/target
+directory, because the autogen happened at the post-patch hook step,
+at which point the host-automake/host-autoconf/host-libtool
+dependencies have not yet been copied into this package host
+directory.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 88c6329521a634a6550f50900f4334b1d2e3473a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/freetype/freetype.mk | 18 ------------------
+ 1 file changed, 18 deletions(-)
+
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index 1028664799..e755c82378 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -17,19 +17,6 @@ FREETYPE_CONFIG_SCRIPTS = freetype-config
+ HOST_FREETYPE_DEPENDENCIES = host-pkgconf
+ HOST_FREETYPE_CONF_OPTS = --without-zlib --without-bzip2 --without-png
  
--LINUX_FIRMWARE_VERSION = 44d4fca9922a252a0bd81f6307bcc072a78da54a
-+LINUX_FIRMWARE_VERSION = d87753369b82c5f362250c197d04a1e1ef5bf698
- LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
- LINUX_FIRMWARE_SITE_METHOD = git
+-# Regen required because the tarball ships with an experimental ltmain.sh
+-# that can't be patched by our infra.
+-# autogen.sh is because autotools stuff lives in other directories and
+-# even AUTORECONF with _OPTS doesn't do it properly.
+-# POST_PATCH is because we still need to patch libtool after the regen.
+-define FREETYPE_RUN_AUTOGEN
+-	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
+-endef
+-FREETYPE_POST_PATCH_HOOKS += FREETYPE_RUN_AUTOGEN
+-HOST_FREETYPE_POST_PATCH_HOOKS += FREETYPE_RUN_AUTOGEN
+-FREETYPE_DEPENDENCIES += host-automake host-autoconf host-libtool
+-HOST_FREETYPE_DEPENDENCIES += host-automake host-autoconf host-libtool
+-
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ FREETYPE_DEPENDENCIES += zlib
+ FREETYPE_CONF_OPTS += --with-zlib
+@@ -72,8 +59,3 @@ FREETYPE_POST_INSTALL_STAGING_HOOKS += FREETYPE_FIX_CONFIG_FILE_LIBS
  
--- 
-2.19.1
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+-
+-# freetype-patch and host-freetype-patch use autogen.sh so add
+-# host-automake as a order-only-prerequisite because it is a phony
+-# target.
+-$(FREETYPE_TARGET_PATCH) $(HOST_FREETYPE_TARGET_PATCH): | host-automake
