@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 14:48:48 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] utils/diffconfig: remove
+Date: Wed, 24 Oct 2018 14:48:56 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] utils/diffconfig: remove
  BR2_* prefix restriction
-Message-ID: <20181024124704.B88E281391@busybox.osuosl.org>
+Message-ID: <20181024124713.8FC6688C7D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c722f34d1076a8b7e7ae829a50fbbc8f3d9fd9d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=994ab8b2f5a8e7890559967306cbf86c1f5e9e53
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 The utils/diffconfig script works only on variables with the BR2_
 prefix. This is OK for Buildroot [def]configs since this is the prefix
