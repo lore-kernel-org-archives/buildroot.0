@@ -1,162 +1,63 @@
-From: Ferdinand van Aartsen <ferdinand@ombud.nl>
-Date: Wed, 24 Oct 2018 12:10:33 +0200
-Subject: [Buildroot] [RFC PATCH 1/1] libffi: v3.2.1 doesn't support
- riscv targets yet
-In-Reply-To: <81a2a99d-9d72-7821-e7c1-9a09d76d77e5@mind.be>
-References: <20181023214409.6818-1-ferdinand@ombud.nl>
- <81a2a99d-9d72-7821-e7c1-9a09d76d77e5@mind.be>
-Message-ID: <8dc3b6276000fb8009013463a775ae86@ombud.nl>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 24 Oct 2018 12:27:26 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] nmap: use system liblinear
+Message-ID: <20181024102547.69CC2811B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout Vandecappelle schreef op 2018-10-24 02:24:
-> Hi Ferdinand,
-> 
->  I'm afraid you made some unfortunate choices for the autobuild
-> failures to fix :-)
-> 
-> 
+commit: https://git.buildroot.net/buildroot/commit/?id=7652cbed45b13462060e6347f340065d0020c082
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Oh well, that's what happens when you're looking for a place in the
-sandbox that hasn't been claimed yet. To be sure, I did ask about this
-on irc, and trawled through the mailing list, without seeing any
-indication that anyone was working on it.
+Use system liblinear instead of using included liblinear.
+liblinear in buildroot is at version 2.20 released on December 2017
+whereas liblinear in nmap has not been updated since 7 years (except for
+liblinear.vcxproj which has been updated 2 years ago)
 
+Do not use --with-liblinear option as otherwise nmap will forget to add
+-llinear to LIBS due to the following line in configure.ac:
 
-> On 10/23/18 10:44 PM, Ferdinand van Aartsen wrote:
->> Fixes:
->> http://autobuild.buildroot.org/?reason=libffi-3.2.1&arch=riscv64
->> ---
->> 
->> The upcoming version 3.3.0 will support riscv [1], so this patch would
->> be temporary. Do we wait for that release, or should we explicitly
->> disable libffi for riscv in the meantime?
->> 
->> [1] 
->> https://github.com/libffi/libffi/commit/3840d49aaa831d649b1597518a2903dfed0d57f3
-> 
->  Just backporting that patch is also a possibility.
-> 
+if test $have_liblinear != yes; then
+  AC_CHECK_HEADERS([linear.h],
+    AC_CHECK_LIB(linear, predict, [have_liblinear=yes; LIBLINEAR_LIBS="-llinear"; break],, [-lm])
+)
 
-I assumed that would be out of scope, but Buildroot really is an
-all-encompassing project. That's what I like about it.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit c0d9ba562c5522096d4ed70827c599c9a0e9aa7c)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/nmap/Config.in | 1 +
+ package/nmap/nmap.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
->> 
->> ---
->>  package/libffi/Config.in | 3 +++
->>  1 file changed, 3 insertions(+)
->> 
->> diff --git a/package/libffi/Config.in b/package/libffi/Config.in
->> index 6edf570baf..26255bb4a4 100644
->> --- a/package/libffi/Config.in
->> +++ b/package/libffi/Config.in
->> @@ -1,6 +1,7 @@
->>  config BR2_PACKAGE_LIBFFI
->>  	bool "libffi"
->>  	depends on BR2_TOOLCHAIN_HAS_THREADS
->> +	depends on !BR2_riscv
-> 
->  The problem is that this creates a Config.in dependency cycle, because 
-> there
-> are other packages (e.g. libglib2) that don't have this !riscv 
-> dependency and
-> that select libffi. Just try it: select libglib2 on a riscv 
-> architecture and
-> after exiting menuconfig you'll see a warning message. This will 
-> eventually lead
-> to a build failure because it will still try to build libffi.
-> 
->  So what you should do in theory is to propagate that dependency to all 
-> packages
-> that select libffi, and propagate it further to all packages selecting 
-> those
-> packages, etc.
-> 
->  Unfortunately that is hardly feasible. libglib2 selects libffi, and 
-> there are
-> almost 100 packages that select libglib2...
-> 
->  There are in fact already a few architectures that are not supported 
-> by libffi.
-> To avoid failures with those, we just blacklist them in the autobuild 
-> script -
-> see lines 258-267 in utils/genrandconfig. So the easiest solution is to 
-> add a
-> blacklist there.
-> 
->  If you *do* feel up to it to generate a patch that touches roughly 150
-> Config.in files, you're welcome to do so! The proper approach to do 
-> that would
-> be as follows: in libffi, start the Config.in file with:
-> 
-> config BR2_PACKAGE_LIBFFI_ARCH_SUPPORTS
-> 	bool
-> 	default y
-> 	depends on !BR2_sh2a
-> 	depends on !BR2_ARM_CPU_ARMV7M
-> 	depends on !BR2_riscv
-> 
-> config BR2_PACKAGE_LIBFFI
-> 	bool "libffi"
-> 	depends on BR2_PACKAGE_LIBFFI_ARCH_SUPPORTS
-> 	depends on BR2_TOOLCHAIN_HAS_THREADS
-> 
-> comment "libffi needs a toolchain w/ threads"
-> 	depends on BR2_PACKAGE_LIBFFI_ARCH_SUPPORTS
-> 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-> 
-> 
->  Then, each package that selects libffi should get the following as its 
-> first
-> dependency:
-> 
-> 	depends on BR2_PACKAGE_LIBFFI_ARCH_SUPPORTS # libffi
-> 
-> And each package that recursively selects it, e.g. a package that
-> selects libglib2:
-> 
-> 	depends on BR2_PACKAGE_LIBFFI_ARCH_SUPPORTS # libglib2 -> libffi
-> 
-> This dependency should also be added to the toolchain comments of
-> those packages.
-> 
-> 
->  Personally, I would be fine with doing this gradually, i.e. it is not 
-> needed to
-> fix all 150 packages in a single commit. Indeed, the build is already 
-> broken
-> anyway, so if this is shown as a circular dependency warning or as a 
-> build
-> failure of libffi doesn't matter that much.
-> 
-> 
-
-I hadn't yet realised that dependencies override each other that way.
-I'll start mapping out the territory, and work on a gradual approach.
-
-Ferdinand
-
->>  	help
->>  	  The libffi library provides a portable, high level
->>  	  programming interface to various calling conventions. This
->> @@ -11,3 +12,5 @@ config BR2_PACKAGE_LIBFFI
->> 
->>  comment "libffi needs a toolchain w/ threads"
->>  	depends on !BR2_TOOLCHAIN_HAS_THREADS
->> +comment "libffi is not supported on RISCV."
->> +	depends on BR2_riscv
-> 
->  We don't show these warnings for the architecture dependencies, 
-> because there
-> is anyway nothing the user can do about it. Instead, we even hide the 
-> other
-> warnings if the package anyway can't be selected. This is why in the 
-> example I
-> gave above, there is only one comment, and it depends on the 
-> ARCH_SUPPORTS.
-> 
->  Regards,
->  Arnout
+diff --git a/package/nmap/Config.in b/package/nmap/Config.in
+index 79f587afd1..1f2f996a64 100644
+--- a/package/nmap/Config.in
++++ b/package/nmap/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_NMAP
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_LIBLINEAR
+ 	select BR2_PACKAGE_LIBPCAP
+ 	select BR2_PACKAGE_PCRE
+ 	help
+diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+index f776660863..3110dfeba9 100644
+--- a/package/nmap/nmap.mk
++++ b/package/nmap/nmap.mk
+@@ -7,9 +7,9 @@
+ NMAP_VERSION = 7.60
+ NMAP_SITE = https://nmap.org/dist
+ NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
+-NMAP_DEPENDENCIES = libpcap pcre host-autoconf
++NMAP_DEPENDENCIES = libpcap liblinear pcre host-autoconf
+ NMAP_CONF_OPTS = --without-liblua --without-zenmap \
+-	--with-libdnet=included --with-liblinear=included \
++	--with-libdnet=included \
+ 	--with-libpcre="$(STAGING_DIR)/usr" --without-ncat
+ NMAP_LICENSE = nmap license
+ NMAP_LICENSE_FILES = COPYING
