@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 17:54:58 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] core: support host gcc of
+Date: Wed, 24 Oct 2018 17:55:31 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] core: support host gcc of
  the future
-Message-ID: <20181024155337.E713088D91@busybox.osuosl.org>
+Message-ID: <20181024155407.6D83688D99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d538f8c411cb9c75e0c1cca8468eee944f80d5d1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=336befc8e4e2c01f51fe1b205d4d3699a0ad8c6c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 When we do a release, we know only of a set of gcc versions that the
 host may have. But in the future, distributions with newer gcc versions
@@ -35,7 +35,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 11 insertions(+), 2 deletions(-)
 
 diff --git a/Config.in b/Config.in
-index 6b5b2b043c..42cdf7a3eb 100644
+index 52fb53bc6a..584a1f087f 100644
 --- a/Config.in
 +++ b/Config.in
 @@ -67,6 +67,9 @@ config BR2_HOST_GCC_AT_LEAST_8
@@ -49,10 +49,10 @@ index 6b5b2b043c..42cdf7a3eb 100644
  # (example: kodi)
  config BR2_NEEDS_HOST_JAVA
 diff --git a/Makefile b/Makefile
-index 8a65b180e4..d193a9ae10 100644
+index 83f64f491d..a3db8987eb 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -351,8 +351,14 @@ export HOSTARCH := $(shell LC_ALL=C $(HOSTCC_NOCCACHE) -v 2>&1 | \
+@@ -360,8 +360,14 @@ export HOSTARCH := $(shell LC_ALL=C $(HOSTCC_NOCCACHE) -v 2>&1 | \
  	    -e 's/macppc/powerpc/' \
  	    -e 's/sh.*/sh/' )
  
