@@ -1,96 +1,120 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 24 Oct 2018 00:57:43 +0100
-Subject: [Buildroot] [V2 4/4] [RFC] pkg-perl: add per package upgrade
- target
-In-Reply-To: <20181011161248.13457-5-francois.perrad@gadz.org>
-References: <20181011161248.13457-1-francois.perrad@gadz.org>
- <20181011161248.13457-5-francois.perrad@gadz.org>
-Message-ID: <68212947-d3be-2b5f-8b6b-7cf7f773e3c1@mind.be>
+Date: Wed, 24 Oct 2018 01:24:09 +0100
+Subject: [Buildroot] [RFC PATCH 1/1] libffi: v3.2.1 doesn't support
+ riscv targets yet
+In-Reply-To: <20181023214409.6818-1-ferdinand@ombud.nl>
+References: <20181023214409.6818-1-ferdinand@ombud.nl>
+Message-ID: <81a2a99d-9d72-7821-e7c1-9a09d76d77e5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Ferdinand,
+
+ I'm afraid you made some unfortunate choices for the autobuild failures to fix :-)
 
 
-On 10/11/18 5:12 PM, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+On 10/23/18 10:44 PM, Ferdinand van Aartsen wrote:
+> Fixes:
+> http://autobuild.buildroot.org/?reason=libffi-3.2.1&arch=riscv64
 > ---
->  package/pkg-generic.mk |  6 +++++-
->  package/pkg-perl.mk    | 11 +++++++++++
->  2 files changed, 16 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 91b61c6de..f349c6c1f 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -779,6 +779,9 @@ $(1)-external-deps:
->  	@echo "file://$$($(2)_OVERRIDE_SRCDIR)"
->  endif
+> The upcoming version 3.3.0 will support riscv [1], so this patch would
+> be temporary. Do we wait for that release, or should we explicitly
+> disable libffi for riscv in the meantime?
+> 
+> [1] https://github.com/libffi/libffi/commit/3840d49aaa831d649b1597518a2903dfed0d57f3
+
+ Just backporting that patch is also a possibility.
+
+> 
+> ---
+>  package/libffi/Config.in | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/libffi/Config.in b/package/libffi/Config.in
+> index 6edf570baf..26255bb4a4 100644
+> --- a/package/libffi/Config.in
+> +++ b/package/libffi/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_PACKAGE_LIBFFI
+>  	bool "libffi"
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on !BR2_riscv
+
+ The problem is that this creates a Config.in dependency cycle, because there
+are other packages (e.g. libglib2) that don't have this !riscv dependency and
+that select libffi. Just try it: select libglib2 on a riscv architecture and
+after exiting menuconfig you'll see a warning message. This will eventually lead
+to a build failure because it will still try to build libffi.
+
+ So what you should do in theory is to propagate that dependency to all packages
+that select libffi, and propagate it further to all packages selecting those
+packages, etc.
+
+ Unfortunately that is hardly feasible. libglib2 selects libffi, and there are
+almost 100 packages that select libglib2...
+
+ There are in fact already a few architectures that are not supported by libffi.
+To avoid failures with those, we just blacklist them in the autobuild script -
+see lines 258-267 in utils/genrandconfig. So the easiest solution is to add a
+blacklist there.
+
+ If you *do* feel up to it to generate a patch that touches roughly 150
+Config.in files, you're welcome to do so! The proper approach to do that would
+be as follows: in libffi, start the Config.in file with:
+
+config BR2_PACKAGE_LIBFFI_ARCH_SUPPORTS
+	bool
+	default y
+	depends on !BR2_sh2a
+	depends on !BR2_ARM_CPU_ARMV7M
+	depends on !BR2_riscv
+
+config BR2_PACKAGE_LIBFFI
+	bool "libffi"
+	depends on BR2_PACKAGE_LIBFFI_ARCH_SUPPORTS
+	depends on BR2_TOOLCHAIN_HAS_THREADS
+
+comment "libffi needs a toolchain w/ threads"
+	depends on BR2_PACKAGE_LIBFFI_ARCH_SUPPORTS
+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+
+
+ Then, each package that selects libffi should get the following as its first
+dependency:
+
+	depends on BR2_PACKAGE_LIBFFI_ARCH_SUPPORTS # libffi
+
+And each package that recursively selects it, e.g. a package that selects libglib2:
+
+	depends on BR2_PACKAGE_LIBFFI_ARCH_SUPPORTS # libglib2 -> libffi
+
+This dependency should also be added to the toolchain comments of those packages.
+
+
+ Personally, I would be fine with doing this gradually, i.e. it is not needed to
+fix all 150 packages in a single commit. Indeed, the build is already broken
+anyway, so if this is shown as a circular dependency warning or as a build
+failure of libffi doesn't matter that much.
+
+
+>  	help
+>  	  The libffi library provides a portable, high level
+>  	  programming interface to various calling conventions. This
+> @@ -11,3 +12,5 @@ config BR2_PACKAGE_LIBFFI
 >  
-> +$(1)-upgrade:
-> +			+$$($(2)_UPGRADE_CMDS)
-> +
+>  comment "libffi needs a toolchain w/ threads"
+>  	depends on !BR2_TOOLCHAIN_HAS_THREADS
+> +comment "libffi is not supported on RISCV."
+> +	depends on BR2_riscv
 
- Oh, I misremembered - I thought you had put this bit in pkg-perl.mk. As noted
-in the scanrock series, I don't think there should be a generic rule, only a
-perl- and luarocks-specific one. So I've moved this to pkg-perl.mk.
-
->  $(1)-show-version:
->  			@echo $$($(2)_VERSION)
->  
-> @@ -1030,7 +1033,8 @@ DL_TOOLS_DEPENDENCIES += $$(call extractor-dependency,$$($(2)_SOURCE))
->  	$(1)-rsync \
->  	$(1)-show-depends \
->  	$(1)-show-version \
-> -	$(1)-source
-> +	$(1)-source \
-> +	$(1)-upgrade
->  
->  ifneq ($$($(2)_SOURCE),)
->  ifeq ($$($(2)_SITE),)
-> diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
-> index 74a116075..53413b3eb 100644
-> --- a/package/pkg-perl.mk
-> +++ b/package/pkg-perl.mk
-> @@ -61,6 +61,17 @@ ifeq ($(4),target)
->  SCANCPAN_ALL_DISTRIB += $$($(2)_DISTNAME)
->  endif
->  
-> +# Upgrade helper
-> +ifeq ($(4),target)
-> +define $(2)_UPGRADE_CMDS
-
- With this in pkg-perl.mk, there is no longer a need for the variable.
-
-> +	utils/scancpan -force -target $$($(3)_DISTNAME)
-
- The condition is also not needed, since we can use -$(4) directly here.
-
- Instead, I've made the entire rule conditional on $(3)_DISTNAME not being empty.
-
- I've applied to master with all these changes. In the end, it doesn't resemble
-what you submitted at all anymore, but I've kept you as the author :-).
-
- I've tried it out, and I think you'll want to improve the scancpan script a
-little. For example, it would be better if it wouldn't touch a package if its
-version hasn't changed. Printing the entire package/Config.in hunk is also
-inconvenient. So just for your own sanity, I think you can improve things there
-a little :-), e.g. passing an -upgrade $(PKG_VERSION) argument instead of -force.
+ We don't show these warnings for the architecture dependencies, because there
+is anyway nothing the user can do about it. Instead, we even hide the other
+warnings if the package anyway can't be selected. This is why in the example I
+gave above, there is only one comment, and it depends on the ARCH_SUPPORTS.
 
  Regards,
  Arnout
-
-
-> +endef
-> +else
-> +define $(2)_UPGRADE_CMDS
-> +	utils/scancpan -force -host $$($(3)_DISTNAME)
-> +endef
-> +endif
-> +
->  #
->  # Configure step. Only define it if not already defined by the package
->  # .mk file. And take care of the differences between host and target
-> 
