@@ -1,31 +1,37 @@
-From: Oscar Gomez Fuente <oscargomezf@gmail.com>
-Date: Wed, 24 Oct 2018 17:43:08 +0200
-Subject: [Buildroot] [PATCH] package/ntp: use ntpd to set initial time
-In-Reply-To: <3232b003-ae5e-43d1-b795-f73a0ed71624@mind.be>
-References: <1540300218-59209-1-git-send-email-matthew.weber@rockwellcollins.com>
- <3c82f1ee-58b9-ef25-35d5-bd8fd25d4d48@mind.be>
- <CANQCQpYkLV-XJBVqRsQLdrxthZzkqctsBcxfX4mJQqFY16jk5Q@mail.gmail.com>
- <f544829d-68ed-abfc-306c-ce3cebb1de3b@mind.be>
- <CANQCQpYAjzXTQBDjKwbMPnQViP0=Qfpr6+pgs_3e7iGOYfo50g@mail.gmail.com>
- <3232b003-ae5e-43d1-b795-f73a0ed71624@mind.be>
-Message-ID: <CALtfCQb77kufnmaC4ErrVEU4PGHZhtihQcJuGbxWSQOmCfAWag@mail.gmail.com>
+From: Serj Kalichev <serj.kalichev@gmail.com>
+Date: Wed, 24 Oct 2018 18:47:29 +0300
+Subject: [Buildroot] [PATCH] Silent wrapper Suppose we use Makefile wrapper
+ and build some project out of buildroot tree (O=...). The commands like
+ "make busybox-all-external-deps" will output the string "uname 022 && make
+ ..." to stdout before the usefull information. It pollutes stdout. In the
+ same time if we use the same command in the buildroot source-tree then we
+ don't get the additional output. Some external scripts can analyze output
+ of make and additional output can break them. This patch make wrapper
+ silent.
+Message-ID: <20181024154729.21856-1-serj.kalichev@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Signed-off-by: Serj Kalichev <serj.kalichev@gmail.com>
+---
+ support/scripts/mkmakefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->  8 seconds is not good. We want to get the same sync time as with ntpdate,
-> otherwise we're doing something wrong. And I guess ntpdate does it in a second,
-> right?
-
-I made a test on my Raspberry Pi 3B+ and it took me around 10-12
-seconds to execute ntpdate.
-
-Best regards.
-
-Oscar Gomez Fuente
-TST Sistemas
-www.tst-sistemas.es
+diff --git a/support/scripts/mkmakefile b/support/scripts/mkmakefile
+index 37162a3173..3b1a9f8774 100755
+--- a/support/scripts/mkmakefile
++++ b/support/scripts/mkmakefile
+@@ -33,7 +33,7 @@ MAKEFLAGS += --no-print-directory
+ all	:= \$(filter-out Makefile,\$(MAKECMDGOALS))
+ 
+ _all:
+-	umask 0022 && \$(MAKE) \$(MAKEARGS) \$(all)
++	@umask 0022 && \$(MAKE) \$(MAKEARGS) \$(all)
+ 
+ Makefile:;
+ 
+-- 
+2.17.1
