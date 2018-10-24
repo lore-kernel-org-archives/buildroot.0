@@ -1,25 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 14:13:25 +0200
-Subject: [Buildroot] [PATCH v2 1/1] {linux, linux-headers}: bump 4.{4, 9,
- 14, 18}.x series
-In-Reply-To: <20181015194947.22644-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Mon, 15 Oct 2018 21:49:47 +0200")
-References: <20181015194947.22644-1-bernd.kuhls@t-online.de>
-Message-ID: <871s8fbl0a.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Oct 2018 14:17:23 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dtc: fix include guards for
+ older kernel/u-boot
+In-Reply-To: <20181008115146.17797-1-lothar.felten@gmail.com> (Lothar Felten's
+ message of "Mon, 8 Oct 2018 13:51:46 +0200")
+References: <20181008115146.17797-1-lothar.felten@gmail.com>
+Message-ID: <87woq7a698.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Lothar" == Lothar Felten <lothar.felten@gmail.com> writes:
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- > ---
- > v2: squashed linux/ and package/linux-headers/ patches (Thomas)
+ > Patch dtc to accept libfdt include guards with and without leading underscore.
+ > A compiler warning is added to notify the user.
 
-Committed to 2018.02.x and 2018.08.x after dropping 4.18.x and
-linux.hash, thanks.
+ > Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
+
+Committed to 2018.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
