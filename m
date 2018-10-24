@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 14:33:02 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/ca-certificates:
+Date: Wed, 24 Oct 2018 14:33:16 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] package/ca-certificates:
  fix rebuilds
-Message-ID: <20181024123123.B6B7388972@busybox.osuosl.org>
+Message-ID: <20181024123132.8E652811B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89500d4219e0d30861f8e655c6675f47b3a9563e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b557259ab4348dbdb88a05fc24f46d288a812209
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 Rebuilding ca-certificates using make ca-certificates-rebuild
 caused duplicate certificates to be installed in the target. Its build
@@ -30,7 +30,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
-index 2d685c74af..c212a198d2 100644
+index 9685d0e6f0..1df9543e03 100644
 --- a/package/ca-certificates/ca-certificates.mk
 +++ b/package/ca-certificates/ca-certificates.mk
 @@ -16,7 +16,7 @@ CA_CERTIFICATES_LICENSE = GPL-2.0+ (script), MPL-2.0 (data)
