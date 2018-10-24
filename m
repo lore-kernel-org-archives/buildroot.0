@@ -1,25 +1,95 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 14:46:37 +0200
-Subject: [Buildroot] [git commit] package/mongoose: add security patch
- fixing CVE-2018-10945
-In-Reply-To: <20181021155950.DD50288397@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Sun, 21 Oct 2018 18:01:28 +0200")
-References: <20181021155950.DD50288397@busybox.osuosl.org>
-Message-ID: <87lg6n8qc2.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Oct 2018 14:48:48 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] utils/diffconfig: remove
+ BR2_* prefix restriction
+Message-ID: <20181024124704.B88E281391@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3c722f34d1076a8b7e7ae829a50fbbc8f3d9fd9d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=dea3ab68400503bebf4152277d63813508f43424
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The utils/diffconfig script works only on variables with the BR2_
+prefix. This is OK for Buildroot [def]configs since this is the prefix
+for all user-facing variables, but it prevents using the same script
+to compare configs from kconfig-based packages.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Remove the BR2_ restriction, allowing usage such as:
 
-Committed to 2018.02.x and 2018.08.x, thanks.
+  ./utils/diffconfig \
+	board/qemu/xtensa-lx60/linux.config \
+	board/qemu/xtensa-lx60/linux-nommu.config
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit bf9ccfc37b6594c41163eb235384abb4771a6a1c)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ utils/diffconfig | 32 +++++++++++++++++---------------
+ 1 file changed, 17 insertions(+), 15 deletions(-)
+
+diff --git a/utils/diffconfig b/utils/diffconfig
+index 5862a62f25..f1af23cfce 100755
+--- a/utils/diffconfig
++++ b/utils/diffconfig
+@@ -28,14 +28,14 @@ If no config files are specified, .config and .config.old are used.
+ 
+ Example usage:
+  $ diffconfig .config config-with-some-changes
+--LINUX_KERNEL_INTREE_DTS_NAME "vexpress-v2p-ca9"
+- LINUX_KERNEL_DTS_SUPPORT y -> n
+- LINUX_KERNEL_USE_INTREE_DTS y -> n
+- PACKAGE_DFU_UTIL n -> y
+- PACKAGE_LIBUSB n -> y
+- TARGET_GENERIC_HOSTNAME "buildroot" -> "Tuxie"
+- TARGET_GENERIC_ISSUE "Welcome to Buildroot" -> "Welcome to CustomBoard"
+-+PACKAGE_LIBUSB_COMPAT n
++-BR2_LINUX_KERNEL_INTREE_DTS_NAME "vexpress-v2p-ca9"
++ BR2_LINUX_KERNEL_DTS_SUPPORT y -> n
++ BR2_LINUX_KERNEL_USE_INTREE_DTS y -> n
++ BR2_PACKAGE_DFU_UTIL n -> y
++ BR2_PACKAGE_LIBUSB n -> y
++ BR2_TARGET_GENERIC_HOSTNAME "buildroot" -> "Tuxie"
++ BR2_TARGET_GENERIC_ISSUE "Welcome to Buildroot" -> "Welcome to CustomBoard"
+++BR2_PACKAGE_LIBUSB_COMPAT n
+ 
+ """)
+     sys.exit(0)
+@@ -44,12 +44,14 @@ Example usage:
+ def readconfig(config_file):
+     d = {}
+     for line in config_file:
+-        line = line[:-1]
+-        if line[:4] == "BR2_":
+-            name, val = line[4:].split("=", 1)
+-            d[name] = val
++        line = line.strip()
++        if len(line) == 0:
++            continue
+         if line[-11:] == " is not set":
+-            d[line[6:-11]] = "n"
++            d[line[2:-11]] = "n"
++        elif line[0] != "#":
++            name, val = line.split("=", 1)
++            d[name] = val
+     return d
+ 
+ def print_config(op, config, value, new_value):
+@@ -58,9 +60,9 @@ def print_config(op, config, value, new_value):
+     if merge_style:
+         if new_value:
+             if new_value=="n":
+-                print("# BR2_%s is not set" % config)
++                print("# %s is not set" % config)
+             else:
+-                print("BR2_%s=%s" % (config, new_value))
++                print("%s=%s" % (config, new_value))
+     else:
+         if op=="-":
+             print("-%s %s" % (config, value))
