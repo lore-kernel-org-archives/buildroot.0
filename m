@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 14:19:47 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] psmisc: correct license
-Message-ID: <20181024121804.4032288943@busybox.osuosl.org>
+Date: Wed, 24 Oct 2018 14:19:56 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] psmisc: correct license
+Message-ID: <20181024121811.37F5A88947@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6bbc887846ecd6698e2ea13bf7a8531fee892c5e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a5c200b9a645e24a9422cbdaa9f2a4f1430cdb4c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 The license heading in source files includes the "or any later"
 language.
@@ -23,7 +23,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/psmisc/psmisc.mk b/package/psmisc/psmisc.mk
-index 3d9a80462d..6c343a4f2e 100644
+index 3916e34b08..ee441f582d 100644
 --- a/package/psmisc/psmisc.mk
 +++ b/package/psmisc/psmisc.mk
 @@ -7,7 +7,7 @@
