@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 14:45:59 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] package/mongoose: add
+Date: Wed, 24 Oct 2018 14:46:07 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/mongoose: add
  security patch fixing CVE-2018-10945
-Message-ID: <20181024124415.A2C76889A6@busybox.osuosl.org>
+Message-ID: <20181024124421.CB9AD889AB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ab4c1649939ba4ff163023af26e834366a44d98
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c494470c576f563ee7a3d734e4b6c39a44fde29e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 (cherry picked from commit dea3ab68400503bebf4152277d63813508f43424)
