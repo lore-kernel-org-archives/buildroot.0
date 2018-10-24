@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 14:31:38 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] package/ca-certificates:
+Date: Wed, 24 Oct 2018 14:31:49 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/ca-certificates:
  don't hash certificates.crt
-Message-ID: <20181024122957.0F26D88965@busybox.osuosl.org>
+Message-ID: <20181024123003.4963A8896C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c9bb8015f459021718abc353629abf46ee42e0d1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8ca7134eca46ccf09910465922934f6c8da4a4c7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 c_rehash looks at all files in /etc/ssl/certs, generates the hash for
 the certificates in them, and makes a symlink from the hash to the
@@ -42,7 +42,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
-index c19d37788b..9685d0e6f0 100644
+index cb0e961465..2d685c74af 100644
 --- a/package/ca-certificates/ca-certificates.mk
 +++ b/package/ca-certificates/ca-certificates.mk
 @@ -33,11 +33,15 @@ define CA_CERTIFICATES_INSTALL_TARGET_CMDS
