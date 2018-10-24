@@ -1,35 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 13:57:06 +0200
-Subject: [Buildroot] [git commit] boot/uboot: fix environment image
- generation on big endian systems
-In-Reply-To: <20181014191221.E12D083744@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Sun, 14 Oct 2018 21:11:58 +0200")
-References: <20181014191221.E12D083744@busybox.osuosl.org>
-Message-ID: <87in1rblrh.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Oct 2018 13:57:42 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] erlang: always use
+ Buildroot's zlib
+Message-ID: <20181024115610.D5806888DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=138a12ae8230be9ea91d5b4254c6a8f5723ee9df
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=d6fcf044a747284df4eddaf106082ebb571976b3
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+While Erlang includes a version of zlib, it's intended for Windows and
+there's an expectation that non-Windows platforms provide it. It's also
+not as regularly updated as the one in Buildroot. This change makes
+Erlang always use a Buildroot-provided zlib.
 
- > As reported by Jeff Wittrock in bug #11396, the U-Boot environment
- > image checksum is invalid for big endian targets, because the test on
- > the BR2_ENDIAN Config.in option doesn't take into account that it is
- > double quoted.
+Fixes this compile error:
 
- > The fix was provided by Jeff himself on bugzilla.
+ CC	/home/buildroot/autobuild/run/instance-0/output/build/erlang-21.0/erts/emulator/zlib/obj/x86_64-buildroot-linux-musl/opt/adler32.o
+In file included from zlib/adler32.c:11:0:
+zlib/zutil.h:172:39: error: "_LFS64_LARGEFILE" is not defined [-Werror=undef]
+     (!defined(_LARGEFILE64_SOURCE) || _LFS64_LARGEFILE-0 == 0)
+                                       ^~~~~~~~~~~~~~~~
 
- > Fixes bug #11396.
+See http://autobuild.buildroot.net/results/fc633f80c7c36a90e641487f5a888fbb767c2a54/.
 
- > Reported-by: Jeff Wittrock <jwittrock@faultrecorder.com>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit ec5378038f80f444ce7f5106283c7cccb8faae16)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/erlang/Config.in | 1 +
+ package/erlang/erlang.mk | 3 +--
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed to 2018.02.x and 2018.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/erlang/Config.in b/package/erlang/Config.in
+index 75ba17086a..ab87eab6ff 100644
+--- a/package/erlang/Config.in
++++ b/package/erlang/Config.in
+@@ -23,6 +23,7 @@ config BR2_PACKAGE_ERLANG
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_ERLANG_ARCH_SUPPORTS
++	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Erlang is a programming language used to build massively
+ 	  scalable soft real-time systems with requirements on high
+diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
+index 2ac903ffea..ca0aa0b770 100644
+--- a/package/erlang/erlang.mk
++++ b/package/erlang/erlang.mk
+@@ -64,10 +64,9 @@ else
+ ERLANG_CONF_OPTS += --without-odbc
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_ZLIB),y)
++# Always use Buildroot's zlib
+ ERLANG_CONF_OPTS += --enable-shared-zlib
+ ERLANG_DEPENDENCIES += zlib
+-endif
+ 
+ # Remove source, example, gs and wx files from staging and target.
+ ERLANG_REMOVE_PACKAGES = gs wx
