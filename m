@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 14:29:53 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] core: detect and reject
+Date: Wed, 24 Oct 2018 14:30:02 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] core: detect and reject
  build paths which contain an '@'
-Message-ID: <20181024122810.C5E778895F@busybox.osuosl.org>
+Message-ID: <20181024122816.E9C6A88963@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2fcf3e129512fa1efba405b28750f40e5d03ed81
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8a645fb03b443728e5d2aa52bbabaeab825f8c43
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 gcc does not build when the srcdir path contains a '@', because that
 path is then substitued in a texi file as argument to an @include
@@ -34,7 +34,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 5 insertions(+)
 
 diff --git a/Makefile b/Makefile
-index 36614a8c35..83f64f491d 100644
+index 31569472a7..8a65b180e4 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -60,6 +60,11 @@ override O := $(patsubst %/,%,$(patsubst %.,%,$(O)))
