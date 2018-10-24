@@ -1,44 +1,46 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Wed, 24 Oct 2018 21:15:39 +0200
-Subject: [Buildroot] [PATCH] merge_config.sh: Fix finding redundant
- config mechanism
-In-Reply-To: <13fac09f-009d-4bbf-1cce-d7d3cd2fd2d6@mind.be>
-References: <1539989903-19803-1-git-send-email-Afshin.Nasser@gmail.com>
- <CANQCQpaxMvn2OEfP0aztbFRk0KTOTnt8nugZ-gwKL7oML1eQUw@mail.gmail.com>
- <7189ed78-6481-0290-f13b-88e3c1008937@mind.be>
- <20181023151902.GA18148@smart-All-Series>
- <13fac09f-009d-4bbf-1cce-d7d3cd2fd2d6@mind.be>
-Message-ID: <20181024191538.GA943@x230>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 24 Oct 2018 22:07:58 +0200
+Subject: [Buildroot] [PATCH 1/3] package/mjpg-streamer: bump version
+Message-ID: <20181024200800.32300-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout, Nasser,
+This bump includes
+https://github.com/jacksonliam/mjpg-streamer/commit/2b751f1f2ab1dfaf1d12bedf98d4fe37a42d3edd
 
-> > Should I resend the patch applying Angelo -b approach?
->  Yes, please do. Make sure you keep Angelo's authorship and add your Sob.
-Nice. So I'm not going to implement it (asked by Arnout).
-If you CC me, I'll review your patch.
+which fixes
+http://autobuild.buildroot.net/results/247/247a55398aed37a08c67cc21db6836ad342d24ca/
 
-> And please fix the remaining two comments I made:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mjpg-streamer/mjpg-streamer.hash | 2 +-
+ package/mjpg-streamer/mjpg-streamer.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> - remove the hunk that replaces alldefconfig with olddefconfig;
-
-> - a patch should be added to support/kconfig/patches.
-
-
->  As it happens, I talked today with the guy who submitted the merge_config.sh
-> script to the kernel (apparently this script comes from yocto, originally). He
-> thinks it would be a good idea to upstream this -b option to the kernel. I
-> didn't find the kconfig maintainer (Masahiro) though, but it's worth a try.
-I was planning to send a patch to linux-kbuild as well (after we complete this
-patch) as I also think it's something which upstream could take, so projects
-didn't have to carry patch for it. But feel free to implement send it there.
-
->  Regards,
->  Arnout
-
-Kind regards,
-Petr
+diff --git a/package/mjpg-streamer/mjpg-streamer.hash b/package/mjpg-streamer/mjpg-streamer.hash
+index a98aaffffd..0d995834d2 100644
+--- a/package/mjpg-streamer/mjpg-streamer.hash
++++ b/package/mjpg-streamer/mjpg-streamer.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 617c6cdcf5ad6e9135e8bcd83d7acd33cc4a563b9104bca7def57d807164ae89  mjpg-streamer-75c6c4a7809c735b201df949d55287fb60397744.tar.gz
++sha256 e5cb7936c316998b53bc46404eca5bc4a69c45fccedeecbf95f1d3902cb6556f  mjpg-streamer-686c3be31ca7a0cdc8772641e445fe9e1c9211e5.tar.gz
+ sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  mjpg-streamer-experimental/LICENSE
+diff --git a/package/mjpg-streamer/mjpg-streamer.mk b/package/mjpg-streamer/mjpg-streamer.mk
+index c09d55b727..bfde26e548 100644
+--- a/package/mjpg-streamer/mjpg-streamer.mk
++++ b/package/mjpg-streamer/mjpg-streamer.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MJPG_STREAMER_VERSION = 75c6c4a7809c735b201df949d55287fb60397744
++MJPG_STREAMER_VERSION = 686c3be31ca7a0cdc8772641e445fe9e1c9211e5
+ MJPG_STREAMER_SITE = $(call github,jacksonliam,mjpg-streamer,$(MJPG_STREAMER_VERSION))
+ MJPG_STREAMER_SUBDIR = mjpg-streamer-experimental
+ MJPG_STREAMER_LICENSE = GPL-2.0+
+-- 
+2.19.1
