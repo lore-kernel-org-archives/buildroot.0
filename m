@@ -1,86 +1,51 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 24 Oct 2018 09:10:56 +0200
-Subject: [Buildroot] [PATCH] scancpan: print package/Config.in only when
- useful
-Message-ID: <20181024071056.23683-1-francois.perrad@gadz.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 24 Oct 2018 10:36:37 +0200
+Subject: [Buildroot] [RFC PATCH 1/1] libffi: v3.2.1 doesn't support
+ riscv targets yet
+In-Reply-To: <81a2a99d-9d72-7821-e7c1-9a09d76d77e5@mind.be>
+References: <20181023214409.6818-1-ferdinand@ombud.nl>
+ <81a2a99d-9d72-7821-e7c1-9a09d76d77e5@mind.be>
+Message-ID: <20181024103637.487f6190@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ie. when a new Perl package is added
+Hello,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- utils/scancpan | 38 ++++++++++++++++++++++----------------
- 1 file changed, 22 insertions(+), 16 deletions(-)
++Mark Corbin in Cc.
 
-diff --git a/utils/scancpan b/utils/scancpan
-index 7c1e4236f..f9589a4ff 100755
---- a/utils/scancpan
-+++ b/utils/scancpan
-@@ -526,6 +526,7 @@ my %checksum;           # author -> list of checksum
- my $mirror = 'http://cpan.metacpan.org';        # a CPAN mirror
- my $mcpan = MetaCPAN::API::Tiny->new(base_url => 'http://fastapi.metacpan.org/v1');
- my $ua = HTTP::Tiny->new();
-+my $new_pkgs;
- 
- my %white_list = (
-     'ExtUtils-Config' => 1,
-@@ -684,7 +685,10 @@ while (my ($distname, $dist) = each %dist) {
-     my $mkname = $dirname . q{/} . $fsname . q{.mk};
-     my $hashname = $dirname . q{/} . $fsname . q{.hash};
-     my $brname = brname( $fsname );
--    mkdir $dirname unless -d $dirname;
-+    unless (-d $dirname) {
-+        mkdir $dirname;
-+        $new_pkgs = 1;
-+    }
-     if ($need_target{$distname} && ($force || !-f $cfgname)) {
-         $dist->{abstract} =~ s|\s+$||;
-         my $abstract = wrap( q{}, qq{\t  }, $dist->{abstract} );
-@@ -773,24 +777,26 @@ while (my ($distname, $dist) = each %dist) {
-     }
- }
- 
--my %pkg;
--my $cfgname = q{package/Config.in};
--if (-f $cfgname) {
--    open my $fh, q{<}, $cfgname;
--    while (<$fh>) {
--        chomp;
--        $pkg{$_} = 1 if m|package/perl-|;
-+if ($new_pkgs) {
-+    my %pkg;
-+    my $cfgname = q{package/Config.in};
-+    if (-f $cfgname) {
-+        open my $fh, q{<}, $cfgname;
-+        while (<$fh>) {
-+            chomp;
-+            $pkg{$_} = 1 if m|package/perl-|;
-+        }
-+        close $fh;
-     }
--    close $fh;
--}
- 
--foreach my $distname (keys %need_target) {
--    my $fsname = fsname( $distname );
--    $pkg{qq{\tsource "package/${fsname}/Config.in"}} = 1;
--}
-+    foreach my $distname (keys %need_target) {
-+        my $fsname = fsname( $distname );
-+        $pkg{qq{\tsource "package/${fsname}/Config.in"}} = 1;
-+    }
- 
--say qq{${cfgname} must contain the following lines:};
--say join qq{\n}, sort keys %pkg;
-+    say qq{${cfgname} must contain the following lines:};
-+    say join qq{\n}, sort keys %pkg;
-+}
- 
- say join qq{\n}, @info;
- 
+On Wed, 24 Oct 2018 01:24:09 +0100, Arnout Vandecappelle wrote:
+
+> > The upcoming version 3.3.0 will support riscv [1], so this patch would
+> > be temporary. Do we wait for that release, or should we explicitly
+> > disable libffi for riscv in the meantime?
+> > 
+> > [1] https://github.com/libffi/libffi/commit/3840d49aaa831d649b1597518a2903dfed0d57f3  
+
+FYI, we already discussed the libffi/RISC-V situation during the
+Buildroot meeting last week end with Mark Corbin (who added the RISC-V
+64 support). And I think he was working on backporting the RISC-V
+libffi support so that we can add it as a patch in Buildroot.
+
+That being said...
+
+>  Personally, I would be fine with doing this gradually, i.e. it is not needed to
+> fix all 150 packages in a single commit. Indeed, the build is already broken
+> anyway, so if this is shown as a circular dependency warning or as a build
+> failure of libffi doesn't matter that much.
+
+... I am indeed not opposed to fixing properly the libffi arch
+dependencies. It is true that with the autobuilders in place, we can do
+this gradually. It would be cleaner than the magic exception we have in
+the autobuilder script. The downside is that we will have for a fairly
+long time a significant number of autobuilder failures.
+
+Best regards,
+
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
