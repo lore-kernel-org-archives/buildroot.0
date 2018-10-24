@@ -1,46 +1,35 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Wed, 24 Oct 2018 18:01:28 +0300
-Subject: [Buildroot] [PATCH 1/1] python-zope-interface: bump to version 4.6.0
-Message-ID: <20181024150128.9989-1-asafka7@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 24 Oct 2018 16:02:14 +0100
+Subject: [Buildroot] [PATCH] package/ntp: use ntpd to set initial time
+In-Reply-To: <CANQCQpYAjzXTQBDjKwbMPnQViP0=Qfpr6+pgs_3e7iGOYfo50g@mail.gmail.com>
+References: <1540300218-59209-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <3c82f1ee-58b9-ef25-35d5-bd8fd25d4d48@mind.be>
+ <CANQCQpYkLV-XJBVqRsQLdrxthZzkqctsBcxfX4mJQqFY16jk5Q@mail.gmail.com>
+ <f544829d-68ed-abfc-306c-ce3cebb1de3b@mind.be>
+ <CANQCQpYAjzXTQBDjKwbMPnQViP0=Qfpr6+pgs_3e7iGOYfo50g@mail.gmail.com>
+Message-ID: <3232b003-ae5e-43d1-b795-f73a0ed71624@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-zope-interface/python-zope-interface.hash | 4 ++--
- package/python-zope-interface/python-zope-interface.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-zope-interface/python-zope-interface.hash b/package/python-zope-interface/python-zope-interface.hash
-index 94493e127f..2828d85c32 100644
---- a/package/python-zope-interface/python-zope-interface.hash
-+++ b/package/python-zope-interface/python-zope-interface.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/zope-interface/json
--md5	7b669cd692d817772c61d2e3ad0f1e71  zope.interface-4.5.0.tar.gz
--sha256	57c38470d9f57e37afb460c399eb254e7193ac7fb8042bd09bdc001981a9c74c  zope.interface-4.5.0.tar.gz
-+md5	a3b24f9d079bae5e13dd7a88aa512112  zope.interface-4.6.0.tar.gz
-+sha256	1b3d0dcabc7c90b470e59e38a9acaa361be43b3a6ea644c0063951964717f0e5  zope.interface-4.6.0.tar.gz
- # Locally computed sha256 checksums
- sha256	3e671db11df687516cc1db5b3d65e4aa383eaca3c20cea3faf53a0f7335d0a3c  LICENSE.txt
-diff --git a/package/python-zope-interface/python-zope-interface.mk b/package/python-zope-interface/python-zope-interface.mk
-index 10bb70fa53..f36aab692b 100644
---- a/package/python-zope-interface/python-zope-interface.mk
-+++ b/package/python-zope-interface/python-zope-interface.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_ZOPE_INTERFACE_VERSION = 4.5.0
-+PYTHON_ZOPE_INTERFACE_VERSION = 4.6.0
- PYTHON_ZOPE_INTERFACE_SOURCE = zope.interface-$(PYTHON_ZOPE_INTERFACE_VERSION).tar.gz
--PYTHON_ZOPE_INTERFACE_SITE = https://files.pythonhosted.org/packages/ac/8a/657532df378c2cd2a1fe6b12be3b4097521570769d4852ec02c24bd3594e
-+PYTHON_ZOPE_INTERFACE_SITE = https://files.pythonhosted.org/packages/4e/d0/c9d16bd5b38de44a20c6dc5d5ed80a49626fafcb3db9f9efdc2a19026db6
- PYTHON_ZOPE_INTERFACE_SETUP_TYPE = setuptools
- PYTHON_ZOPE_INTERFACE_LICENSE = ZPL-2.1
- PYTHON_ZOPE_INTERFACE_LICENSE_FILES = LICENSE.txt
--- 
-2.17.1
+
+On 10/24/18 2:14 PM, Matthew Weber wrote:
+
+> Agree.  So if we do the one invocation we'll have to figure out how to
+> deal with the return value.  Sounds like that is desired, so I'll put
+> together a test and see.  For the -w value, from testing it looks like
+> the -w should probably be ~10-15sec as a sync on average was ~8-9sec.
+
+ 8 seconds is not good. We want to get the same sync time as with ntpdate,
+otherwise we're doing something wrong. And I guess ntpdate does it in a second,
+right?
+
+ If I remember correctly (but it has been *years* since I used ntpd rather than
+chrony or systemd-timesyncd) ntpd had options for how fast it would converge on
+the first sync. Normally when a new peer is added, it waits for a couple of
+round trips before that peer is accepted as a healthy source. But I thought it
+was possible (and hopefully default) to just believe the first packet you
+receive during startup and sync on that.
