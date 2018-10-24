@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 17:51:36 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] package/mariadb: add
+Date: Wed, 24 Oct 2018 17:51:23 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/mariadb: add
  option to disable build of embedded server
-Message-ID: <20181024154954.1F7CD88D37@busybox.osuosl.org>
+Message-ID: <20181024155011.E41F188D80@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a8b91b25d027b6fcf85ff8c99282c04130550ac4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=adeedc9d2436b064553090c194e6c02681df2cad
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Size of output/target/usr:
 
