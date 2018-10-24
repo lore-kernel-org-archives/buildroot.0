@@ -1,40 +1,60 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 24 Oct 2018 22:08:00 +0200
-Subject: [Buildroot] [PATCH 3/3] package/mjpg-streamer: add optional
- dependency to zeromq
-In-Reply-To: <20181024200800.32300-1-bernd.kuhls@t-online.de>
-References: <20181024200800.32300-1-bernd.kuhls@t-online.de>
-Message-ID: <20181024200800.32300-3-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 24 Oct 2018 23:01:36 +0200
+Subject: [Buildroot] [PATCH v3,1/1] bdwgc: add optional cplusplus support
+Message-ID: <20181024210136.8375-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The ZeroMQ output module also depends on protobuf, see upstream PR 145.
+Use CFLAGS_EXTRA to pass C and C++ flags in a single variable
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/mjpg-streamer/mjpg-streamer.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+Changes v2 -> v3 (after review of Baruch Siach):
+ - Replace BDWGC_CFLAGS by BDWGC_CFLAGS_EXTRA
 
-diff --git a/package/mjpg-streamer/mjpg-streamer.mk b/package/mjpg-streamer/mjpg-streamer.mk
-index bfde26e548..5ace2f716c 100644
---- a/package/mjpg-streamer/mjpg-streamer.mk
-+++ b/package/mjpg-streamer/mjpg-streamer.mk
-@@ -29,6 +29,13 @@ else
- MJPG_STREAMER_CONF_OPTS += -DPLUGIN_INPUT_OPENCV=OFF
+Changes v1 -> v2 (after review of Arnout Vandecappelle and Baruch
+Siach):
+ - Use CFLAGS_EXTRA to pass C and C++ flags in a single variable instead
+   of using CFLAGS and CPPFLAGS
+
+ package/bdwgc/bdwgc.mk | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
+
+diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
+index 5603df8d9d..1c80f47b92 100644
+--- a/package/bdwgc/bdwgc.mk
++++ b/package/bdwgc/bdwgc.mk
+@@ -19,17 +19,24 @@ HOST_BDWGC_DEPENDENCIES = host-libatomic_ops host-pkgconf
+ # solution.
+ BDWGC_AUTORECONF = YES
+ 
+-BDWGC_CFLAGS = $(TARGET_CFLAGS)
+ ifeq ($(BR2_sparc),y)
+-BDWGC_CFLAGS += -DAO_NO_SPARC_V9
++BDWGC_CFLAGS_EXTRA += -DAO_NO_SPARC_V9
+ endif
+ ifeq ($(BR2_STATIC_LIBS),y)
+-BDWGC_CFLAGS += -DGC_NO_DLOPEN
++BDWGC_CFLAGS_EXTRA += -DGC_NO_DLOPEN
  endif
  
-+ifeq ($(BR2_PACKAGE_PROTOBUF_C)$(BR2_PACKAGE_ZEROMQ),yy)
-+MJPG_STREAMER_CONF_OPTS += -DPLUGIN_OUTPUT_ZMQSERVER=ON
-+MJPG_STREAMER_DEPENDENCIES += host-pkgconf protobuf-c zeromq
++BDWGC_CONF_OPTS = CFLAGS_EXTRA="$(BDWGC_CFLAGS_EXTRA)"
++
+ # Ensure we use the system libatomic_ops, and not the internal one.
+-BDWGC_CONF_OPTS = --with-libatomic-ops=yes CFLAGS="$(BDWGC_CFLAGS)"
++BDWGC_CONF_OPTS += --with-libatomic-ops=yes
+ HOST_BDWGC_CONF_OPTS = --with-libatomic-ops=yes
+ 
++ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
++BDWGC_CONF_OPTS += --enable-cplusplus
 +else
-+MJPG_STREAMER_CONF_OPTS += -DPLUGIN_OUTPUT_ZMQSERVER=OFF
++BDWGC_CONF_OPTS += --disable-cplusplus
 +endif
 +
- ifeq ($(BR2_PACKAGE_SDL),y)
- MJPG_STREAMER_CONF_OPTS += -DPLUGIN_OUTPUT_VIEWER=ON
- MJPG_STREAMER_DEPENDENCIES += host-pkgconf sdl
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-2.19.1
+2.17.1
