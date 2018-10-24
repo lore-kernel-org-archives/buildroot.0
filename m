@@ -1,63 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 17:53:54 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] qt5base: Qt KMS support
- does not depend on opengl
-Message-ID: <20181024155209.4810388D8D@busybox.osuosl.org>
+Date: Wed, 24 Oct 2018 17:54:31 +0200
+Subject: [Buildroot] [PATCH v3] qt5base: Qt KMS support does not depend
+ on opengl
+In-Reply-To: <2357aab6-f2e6-54d4-0e37-63955864e94e@mind.be> (Arnout
+ Vandecappelle's message of "Mon, 22 Oct 2018 00:18:24 +0100")
+References: <1518540366-13393-1-git-send-email-joshua.henderson@microchip.com>
+ <2357aab6-f2e6-54d4-0e37-63955864e94e@mind.be>
+Message-ID: <878t2n8hmw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9eb45c226c813ff8b9886e704b5e57f26884a26f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Qt KMS support should not explicitly depend on the availability of opengl.
-Don't explicitly disable KMS if opengl is not available and fallback to
-detecting if libdrm is available before disabling kms.
+ > On 13/02/2018 16:46, Joshua Henderson wrote:
+ >> Qt KMS support should not explicitly depend on the availability of opengl.
+ >> Don't explicitly disable KMS if opengl is not available and fallback to
+ >> detecting if libdrm is available before disabling kms.
+ >> 
+ >> The scenario where this is necessary involves using the Qt linuxfb backend
+ >> "dumb buffer" support via the DRM API. This is new in Qt 5.9 [1] and only
+ >> requires KMS, but not opengl.
 
-The scenario where this is necessary involves using the Qt linuxfb backend
-"dumb buffer" support via the DRM API.  This is new in Qt 5.9 [1] and only
-requires KMS, but not opengl. Although on Qt 5.6, only eglfs actually
-uses libdrm/kms, it doesn't hurt to add the dependency and the -kms
-option there as well, and doing so keeps the logic in the .mk file
-simple.
+ > ?This sounds like we should handle the Qt 5.6 case specially.
 
-[1] http://doc.qt.io/qt-5/embedded-linux.html#linuxfb
+ > ?However, on Qt 5.6, it builds fine with the -kms option, it just ends up not
+ > being used. That means we have a redundant dependency on libdrm, but that
+ > doesn't matter that much. Handling the Qt 5.6 case differently would make the
+ > code quite a bit more complicated.
 
-Cc: Peter Seiderer <ps.report@gmx.net>
-Cc: Julien Corjon <corjon.j@ecagroup.com>
-Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit f91ea94a6f4d1387b062f9f09c98badf0766127f)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qt5/qt5base/qt5base.mk | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ > ?Therefore, I explained the above in the commit log an applied to master, thanks.
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index ab2b883fc4..2b6fd39267 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -35,12 +35,19 @@ endif
- 
- QT5BASE_CONFIGURE_OPTS += $(call qstrip,$(BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS))
- 
-+ifeq ($(BR2_PACKAGE_LIBDRM),y)
-+QT5BASE_CONFIGURE_OPTS += -kms
-+QT5BASE_DEPENDENCIES += libdrm
-+else
-+QT5BASE_CONFIGURE_OPTS += -no-kms
-+endif
-+
- # Uses libgbm from mesa3d
- ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
--QT5BASE_CONFIGURE_OPTS += -kms -gbm
-+QT5BASE_CONFIGURE_OPTS += -gbm
- QT5BASE_DEPENDENCIES += mesa3d
- else
--QT5BASE_CONFIGURE_OPTS += -no-kms
-+QT5BASE_CONFIGURE_OPTS += -no-gbm
- endif
- 
- ifeq ($(BR2_ENABLE_DEBUG),y)
+ > ?Sorry it took so long.
+
+Committed to 2018.02.x and 2018.08.x with the extended commit message,
+thanks.
+
+-- 
+Bye, Peter Korsgaard
