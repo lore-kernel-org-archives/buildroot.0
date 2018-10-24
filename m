@@ -1,65 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 14:31:49 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/ca-certificates:
- don't hash certificates.crt
-Message-ID: <20181024123003.4963A8896C@busybox.osuosl.org>
+Date: Wed, 24 Oct 2018 14:32:32 +0200
+Subject: [Buildroot] [PATCH v2 1/3] package/ca-certificates: don't hash
+ certificates.crt
+In-Reply-To: <baa8cebb-20a7-2dc2-a80b-c380721ff0ec@mind.be> (Arnout
+ Vandecappelle's message of "Sun, 21 Oct 2018 14:38:14 +0100")
+References: <20180616220601.4629-1-martin@barkynet.com>
+ <20180616220601.4629-2-martin@barkynet.com>
+ <20180617212547.4bc868c3@windsurf>
+ <CAFGQKxeOmRCBUu7XFCDkpRbFV51F0=A8htjRMc75rKQA8_VtoQ@mail.gmail.com>
+ <20180618163931.4531ccb3@windsurf>
+ <CAFGQKxcC+jryJo8RBHU00ATeRqMqmbTn_+4jcgHqj+_=kH0mLw@mail.gmail.com>
+ <96e0d9ee-e017-9745-4fae-eaa535e77118@mind.be>
+ <baa8cebb-20a7-2dc2-a80b-c380721ff0ec@mind.be>
+Message-ID: <8736sva5jz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ca7134eca46ccf09910465922934f6c8da4a4c7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-c_rehash looks at all files in /etc/ssl/certs, generates the hash for
-the certificates in them, and makes a symlink from the hash to the
-certificate file.
+Hi,
 
-However, ca-certificates.crt is also installed in /etc/ssl/certs and
-it contains all the certificates. c_rehash will take one of them (the
-first?) and create a symlink from that hash to ca-certificates.crt.
-Usually, this results in an error like:
+>> Could you check if I'm correct, and if so, resubmit the series with:
+ >> 
+ >> - the additional rm -f;
+ >> - a commit message that includes the explanation above;
+ >> - drops patch 2.
+ >> 
+ >> If patch 2 really is needed, it needs a better explanation.
 
-WARNING: Skipping duplicate certificate ca-certificates.crt
+ > ?Investigating a bit more turns out that I was rather wrong. The rm -f is
+ > already there, as correctly noted in your commit message. And patch 2 really is
+ > needed, it fixes a completely different set of duplicates.
 
-and all is well. However, depending on filesystem order,
-ca-certificates.crt may come first, and the actual certificate is
-not symlinked.
 
-To fix this install certificates.crt to /etc/ssl/certs *after* we run
-c_rehash to prevent it getting hashed by mistake.
+ > ?So I've extended the commit message a little and applied to master, thanks.
 
-Note: $(TARGET_DIR)/etc/ssl/certs/ is already removed during install so
-this fix also works for rebuilds.
+Committed to 2018.02.x and 2018.08.x with the extended commit message, thanks.
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit d07ddd8e4ed576dbce4c33ab006f342e24d3bd6b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ca-certificates/ca-certificates.mk | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
-index cb0e961465..2d685c74af 100644
---- a/package/ca-certificates/ca-certificates.mk
-+++ b/package/ca-certificates/ca-certificates.mk
-@@ -33,11 +33,15 @@ define CA_CERTIFICATES_INSTALL_TARGET_CMDS
- 	cd $(TARGET_DIR) ;\
- 	for i in `find usr/share/ca-certificates -name "*.crt"` ; do \
- 		ln -sf ../../../$$i etc/ssl/certs/`basename $${i} .crt`.pem ;\
--		cat $$i >>etc/ssl/certs/ca-certificates.crt ;\
--	done
-+		cat $$i ;\
-+	done >$(@D)/ca-certificates.crt
- 
- 	# Create symlinks to the certificates by their hash values
- 	$(HOST_DIR)/bin/c_rehash $(TARGET_DIR)/etc/ssl/certs
-+
-+	# Install the certificates bundle
-+	$(INSTALL) -D -m 644 $(@D)/ca-certificates.crt \
-+		$(TARGET_DIR)/etc/ssl/certs/ca-certificates.crt
- endef
- 
- $(eval $(generic-package))
+-- 
+Bye, Peter Korsgaard
