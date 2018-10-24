@@ -1,34 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 14:33:35 +0200
-Subject: [Buildroot] [git commit] package/ca-certificates: fix rebuilds
-In-Reply-To: <20181021133507.C5AB58828C@busybox.osuosl.org> (Arnout
- Vandecappelle's message of "Sun, 21 Oct 2018 14:34:46 +0100")
-References: <20181021133507.C5AB58828C@busybox.osuosl.org>
-Message-ID: <87y3an8qxs.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Oct 2018 14:33:56 +0200
+Subject: [Buildroot] [git commit branch/2018.08.x] package/ca-certificates:
+ create ca-certificates.crt reproducibly
+Message-ID: <20181024123213.149EC815FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1a33cfffc458aa5fc0145e9203d29c23a021ca1d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=42b10634c628918c753bfb1aad4f950fa5d41299
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Sort the certificates into alphabetical order so the contents of
+ca-certificates.crt can be built reproducibly.
 
- > Rebuilding ca-certificates using make ca-certificates-rebuild
- > caused duplicate certificates to be installed in the target. Its build
- > system is broken: it doesn't detect that the output file already exists,
- > and instead of overwriting it, a duplicate is generated under a
- > different name. The net effect is that all certificates are installed
- > twice after rebuild.
+Note: The certificates are sorted uppercase then lowercase filenames
+so the contents of ca-certificates.crt matches the source debian package.
 
- > Fix this by cleaning the build directory before building the package.
+Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit c61b49e5b5c83237c8895d8caf76a9c448c41241)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ca-certificates/ca-certificates.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Signed-off-by: Martin Bark <martin@barkynet.com>
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-Committed to 2018.02.x and 2018.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index 1df9543e03..5c259aa3ab 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
+@@ -31,7 +31,7 @@ define CA_CERTIFICATES_INSTALL_TARGET_CMDS
+ 	# Create symlinks to certificates under /etc/ssl/certs
+ 	# and generate the bundle
+ 	cd $(TARGET_DIR) ;\
+-	for i in `find usr/share/ca-certificates -name "*.crt"` ; do \
++	for i in `find usr/share/ca-certificates -name "*.crt" | LC_COLLATE=C sort` ; do \
+ 		ln -sf ../../../$$i etc/ssl/certs/`basename $${i} .crt`.pem ;\
+ 		cat $$i ;\
+ 	done >$(@D)/ca-certificates.crt
