@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Oct 2018 13:50:01 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] gvfs: fix activation of
+Date: Wed, 24 Oct 2018 13:50:31 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] gvfs: fix activation of
  http/dav backend
-Message-ID: <20181024114837.5F6EF888BE@busybox.osuosl.org>
+Message-ID: <20181024114845.AA5FA888C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a4a5a9afa88c9316da550ec27b889e4517293e1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=323255f36ad1d80aae05777b45fa16b6f9cefbd5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Since gvfs version 1.2.3, http/dav backend needs libxml2:
 https://gitlab.gnome.org/GNOME/gvfs/commit/2ef5b4192f95f9205204215aec33787641608e58
