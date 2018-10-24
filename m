@@ -1,103 +1,62 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 23 Oct 2018 23:00:25 -0500
-Subject: [Buildroot] [PATCH v2] package/ntp: use ntpd to set initial time
-Message-ID: <1540353625-36573-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 24 Oct 2018 07:12:15 +0300
+Subject: [Buildroot] [PATCH v2,
+ 1/1] bdwgc: add optional cplusplus support
+In-Reply-To: <20181023210405.31753-1-fontaine.fabrice@gmail.com>
+References: <20181023210405.31753-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181024041215.o37yjufysqt4eilt@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The ntpdate program has been in the process of being deprecated for
-some time. (http://support.ntp.org/bin/view/Dev/DeprecatingNtpdate)
+Hi Fabrice,
 
-This patch updates the existing ntpd script to handle setting initial
-time using the new ntpd "one time set and exit" approach.
-http://lists.ntp.org/pipermail/questions/2011-July/030041.html
+On Tue, Oct 23, 2018 at 11:04:05PM +0200, Fabrice Fontaine wrote:
+> Use CFLAGS_EXTRA to pass C and C++ flags in a single variable
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> Changes v1 -> v2 (after review of Arnout Vandecappelle and Baruch
+> Siach):
+>  - Use CFLAGS_EXTRA to pass C and C++ flags in a single variable instead
+>    of using CFLAGS and CPPFLAGS
+> 
+>  package/bdwgc/bdwgc.mk | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
+> index 5603df8d9d..1d8d7284f8 100644
+> --- a/package/bdwgc/bdwgc.mk
+> +++ b/package/bdwgc/bdwgc.mk
+> @@ -27,9 +27,17 @@ ifeq ($(BR2_STATIC_LIBS),y)
+>  BDWGC_CFLAGS += -DGC_NO_DLOPEN
+>  endif
+>  
+> +BDWGC_CONF_OPTS = CFLAGS_EXTRA="$(BDWGC_CFLAGS)"
 
-The patch does not use the ntpd -w "wait for first time" option and
-instead makes sure the attempt at a one-shot setting of initial time
-has completed before starting the main ntpd service.
+I think you can just drop BDWGC_CFLAGS. Instead use CFLAGS_EXTRA alone in 
+BDWGC_CONF_OPTS.
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Oscar Gomez Fuente <oscargomezf@gmail.com>
----
-Changes
-v1 -> v2
-[Arnout
- - Moved NTP_WAIT_DELAY above sourcing of configuration file
- - Switched to using unix time for current time check
- - Added comment on why redirection of stdout and stderr
- - Attempted to use the pid file but found it added more calls
-   to the shell then using a variable, so switched back
- - Adjusted printout so the actual ntpd service start was aligned
-   with the respecting Ok/Fail.
- - Dropped -g from the main service call as the "big" time jump
-   should have already occurred with the one-shot ntpd -gq.
+baruch
 
-v1
-Based on Oscar's v1 patch to add a ntpdate startup script.
-http://patchwork.ozlabs.org/patch/986852/
----
- package/ntp/Config.in |  5 +++++
- package/ntp/S49ntp    | 21 ++++++++++++++++++++-
- 2 files changed, 25 insertions(+), 1 deletion(-)
+> +
+>  # Ensure we use the system libatomic_ops, and not the internal one.
+> -BDWGC_CONF_OPTS = --with-libatomic-ops=yes CFLAGS="$(BDWGC_CFLAGS)"
+> +BDWGC_CONF_OPTS += --with-libatomic-ops=yes
+>  HOST_BDWGC_CONF_OPTS = --with-libatomic-ops=yes
+>  
+> +ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+> +BDWGC_CONF_OPTS += --enable-cplusplus
+> +else
+> +BDWGC_CONF_OPTS += --disable-cplusplus
+> +endif
+> +
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
 
-diff --git a/package/ntp/Config.in b/package/ntp/Config.in
-index efd47e1..5cc78ce 100644
---- a/package/ntp/Config.in
-+++ b/package/ntp/Config.in
-@@ -54,6 +54,11 @@ config BR2_PACKAGE_NTP_NTPDATE
- 	  The ntpdate utility program is used to set the local date
- 	  and time from an NTP server given as an argument.
- 
-+	  This option is deprecated by upstream and replaced with the
-+	  -gq options of ntpd. The package/ntp/S49ntp script has an
-+	  example implementation.
-+	  (http://support.ntp.org/bin/view/Dev/DeprecatingNtpdate)
-+
- config BR2_PACKAGE_NTP_NTPDC
- 	bool "ntpdc"
- 	help
-diff --git a/package/ntp/S49ntp b/package/ntp/S49ntp
-index 35e5874..2675789 100755
---- a/package/ntp/S49ntp
-+++ b/package/ntp/S49ntp
-@@ -2,6 +2,7 @@
- 
- NAME=ntpd
- 
-+NTP_WAIT_DELAY=15 #sec
- # Read config file if it is present.
- if [ -r /etc/default/$NAME ]
- then
-@@ -10,8 +11,26 @@ fi
- 
- case "$1" in
-   start)
-+    CURRENT_UNIX_TIME="$(date +%s)"
-+    if [ $CURRENT_UNIX_TIME -lt 1000000000 ]; then
-+        printf "Checking for time"
-+        # stderr redirected to hide output if IPv6 not enabled
-+        /usr/sbin/ntpd -g -q > /dev/null 2>&1 &
-+        NTP_PID=$!
-+        while [ ${NTP_WAIT_DELAY} -gt 0 ]; do
-+            [ ! -e /proc/$NTP_PID ] && break
-+            sleep 1
-+            printf "."
-+            : $((NTP_WAIT_DELAY -= 1))
-+        done
-+        # ntpd never returns if it can't access the NTP server(s)
-+        # noted in /etc/ntp.conf.
-+        kill $NTP_PID > /dev/null 2>&1
-+        [ $? = 0 ] && printf "(Not set)"
-+    fi
-+    echo " OK"
-     printf "Starting $NAME: "
--    start-stop-daemon -S -q -x /usr/sbin/ntpd -- -g
-+    start-stop-daemon -S -q -x /usr/sbin/ntpd --
-     [ $? = 0 ] && echo "OK" || echo "FAIL"
-     ;;
-   stop)
 -- 
-1.9.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
