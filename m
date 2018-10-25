@@ -1,59 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 25 Oct 2018 19:56:38 +0200
-Subject: [Buildroot] [git commit] Update for 2018.08.2
-Message-ID: <20181025181220.4745688F00@busybox.osuosl.org>
+Date: Thu, 25 Oct 2018 20:13:58 +0200
+Subject: [Buildroot] [git commit] docs/website: update for 2018.08.2
+Message-ID: <20181025181220.500D3887DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0106c04a04cd84506f8892272d6b902a2287e977
+commit: https://git.buildroot.net/buildroot/commit/?id=99275417a5d23adecc5072122b357df77aaabb2b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 507020139190aaf44793c3c901321d23ba476c13)
-[Peter: drop Makefile changes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 3f46831a9e..9120e59882 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,33 @@
-+2018.08.2, Released October 25th, 2018
-+
-+	Important / security related fixes.
-+
-+	Workaround added for incompatibility issues between host-dtc
-+	and older U-Boot and Linux kernel versions.
-+
-+	Detect and reject build paths containing '@', as this confuses
-+	a number of packages, including GCC.
-+
-+	utils/get-developers: Add -e option for use with git
-+	send-email.
-+
-+	utils/diffconfig: Make it work for (non-Buildroot) config
-+	files not using the BR2_ prefix.
-+
-+	u-boot: Fix for environment image handling on big endian
-+	systems.
-+
-+	Updated/fixed packages: binutils, ca-certificates,
-+	cups-filters, dtc, erlang, file, freetype, gcc, git, gvfs,
-+	jasper, leveldb, libarchive, libssh, live555, ljlinenoise,
-+	mariadb, mongoose, netsnmp, nmap, nodejs, ntp, open-plc-utils,
-+	poco, psmisc, ptpd2, python-enum34, qemu, qt, qt5base,
-+	setools, spice, spice-protocol, tinc, ustr, wireshark,
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#11396: uboot environment image checksum invalid if target is big endian
-+
- 2018.08.1, Released October 7th, 2018
+diff --git a/docs/website/download.html b/docs/website/download.html
+index ec6d1589f8..1afa46bbbc 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -42,37 +42,37 @@
+ 	</div>
+       </div>
  
- 	Important / security related fixes.
+-      <h3 style="text-align: center;">Latest stable release: <b>2018.08.1</b></h3>
++      <h3 style="text-align: center;">Latest stable release: <b>2018.08.2</b></h3>
+ 
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2018.08.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.08.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2018.08.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.08.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2018.08.1.tar.gz">buildroot-2018.08.1.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2018.08.1.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2018.08.2.tar.gz">buildroot-2018.08.2.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2018.08.2.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2018.08.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.08.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2018.08.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.08.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2018.08.1.tar.bz2">buildroot-2018.08.1.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2018.08.1.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2018.08.2.tar.bz2">buildroot-2018.08.2.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2018.08.2.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ <!--
+diff --git a/docs/website/news.html b/docs/website/news.html
+index b9d99ed755..d057d4ba86 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2018.08.2 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>25 October 2018</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2018.08.2 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2018.08.1 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.08.2">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2018-October/234252.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2018.08.2.tar.bz2">2018.08.2 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
