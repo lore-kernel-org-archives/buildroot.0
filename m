@@ -1,70 +1,112 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 25 Oct 2018 20:43:18 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] Update for 2018.02.7
-Message-ID: <20181025184151.712BD88F0D@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 25 Oct 2018 21:46:42 +0300
+Subject: [Buildroot] [PATCH v3,
+ 1/1] bdwgc: add optional cplusplus support
+In-Reply-To: <CAPi7W82rJxNkrhi78e7f_xBs2cEMknWKrizCU1=B9Btr8+LHuw@mail.gmail.com>
+References: <20181024210136.8375-1-fontaine.fabrice@gmail.com>
+ <87pnvy7k6l.fsf@tkos.co.il>
+ <CAPi7W82rJxNkrhi78e7f_xBs2cEMknWKrizCU1=B9Btr8+LHuw@mail.gmail.com>
+Message-ID: <875zxp7tkd.fsf@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c9284703c496b913d936689df72d49e095442e4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+Hi Fabrice,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES  | 27 +++++++++++++++++++++++++++
- Makefile |  4 ++--
- 2 files changed, 29 insertions(+), 2 deletions(-)
+Fabrice Fontaine writes:
+> Le jeu. 25 oct. 2018 ? 05:57, Baruch Siach <baruch@tkos.co.il> a ?crit :
+>> Fabrice Fontaine writes:
+>> > Use CFLAGS_EXTRA to pass C and C++ flags in a single variable
+>> >
+>> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>> > ---
+>> > Changes v2 -> v3 (after review of Baruch Siach):
+>> >  - Replace BDWGC_CFLAGS by BDWGC_CFLAGS_EXTRA
+>> >
+>> > Changes v1 -> v2 (after review of Arnout Vandecappelle and Baruch
+>> > Siach):
+>> >  - Use CFLAGS_EXTRA to pass C and C++ flags in a single variable instead
+>> >    of using CFLAGS and CPPFLAGS
+>> >
+>> >  package/bdwgc/bdwgc.mk | 15 +++++++++++----
+>> >  1 file changed, 11 insertions(+), 4 deletions(-)
+>> >
+>> > diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
+>> > index 5603df8d9d..1c80f47b92 100644
+>> > --- a/package/bdwgc/bdwgc.mk
+>> > +++ b/package/bdwgc/bdwgc.mk
+>> > @@ -19,17 +19,24 @@ HOST_BDWGC_DEPENDENCIES = host-libatomic_ops host-pkgconf
+>> >  # solution.
+>> >  BDWGC_AUTORECONF = YES
+>> >
+>> > -BDWGC_CFLAGS = $(TARGET_CFLAGS)
+>>
+>> This removes TARGET_CLAGS ...
+> Yes, TARGET_CFLAGS is already passed in CFLAGS and CXXFLAGS by the
+> autotools-package infrastructure.
+> Because we don't override CFLAGS anymore, this line can be removed.
+> Did I miss something?
 
-diff --git a/CHANGES b/CHANGES
-index cdf682164f..0c073bdf20 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,30 @@
-+2018.02.7, Released October 25th, 2018
-+
-+	Important / security related fixes.
-+
-+	Detect and reject build paths containing '@', as this confuses
-+	a number of packages, including GCC.
-+
-+	utils/get-developers: Add -e option for use with git
-+	send-email.
-+
-+	utils/diffconfig: Make it work for (non-Buildroot) config
-+	files not using the BR2_ prefix.
-+
-+	u-boot: Fix for environment image handling on big endian
-+	systems.
-+
-+	Updated/fixed packages: binutils, ca-certificates,
-+	cups-filters, erlang, libarchive, libcurl, libssh, live555,
-+	ljlinenoise, file, freetype, gcc, git, gvfs, leveldb, mariadb,
-+	mongoose, netsnmp, nmap, nodejs, ntp, open-plc-utils, poco,
-+	psmisc, qptpd2, python-enum34, qemu, qt, qt5base, spice,
-+	spice-protocols, setools, tinc, ustr, wireshark
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#11396: uboot environment image checksum invalid if target is big endian
-+
- 2018.02.6, Released October 7th, 2018
- 
- 	Important / security related fixes.
-diff --git a/Makefile b/Makefile
-index a3db8987eb..9fb131fe86 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2018.02.6
-+export BR2_VERSION := 2018.02.7
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1538896000
-+BR2_VERSION_EPOCH = 1540493000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+No. You are right.
+
+>> >  ifeq ($(BR2_sparc),y)
+>> > -BDWGC_CFLAGS += -DAO_NO_SPARC_V9
+>> > +BDWGC_CFLAGS_EXTRA += -DAO_NO_SPARC_V9
+>> >  endif
+>> >  ifeq ($(BR2_STATIC_LIBS),y)
+>> > -BDWGC_CFLAGS += -DGC_NO_DLOPEN
+>> > +BDWGC_CFLAGS_EXTRA += -DGC_NO_DLOPEN
+>> >  endif
+>> >
+>> > +BDWGC_CONF_OPTS = CFLAGS_EXTRA="$(BDWGC_CFLAGS_EXTRA)"
+>>
+>> ... so you need to add it back here.
+>>
+>> Nit: I'd move the BDWGC_CONF_OPTS assignment upper.
+> I can send a v4 with this update if you want. What is the best
+> practice in buildroot concerning variable assignment?
+
+The common practice is the group unconditional assignment at the top of
+the .mk file, and add conditions below.
+
+> Should we set BDWGC_CONF_OPTS = CFLAGS_EXTRA="$(BDWGC_CFLAGS_EXTRA)"
+> before putting any value in BDWGC_CFLAGS_EXTRA?
+
+Make evaluates this "recursively expanded" variable value only when
+referenced.
+
+  https://www.gnu.org/software/make/manual/html_node/Flavors.html#Flavors
+
+So no problem with BDWGC_CONF_OPTS assignment before BDWGC_CFLAGS_EXTRA
+is set.
+
+> Or perhaps the issue is that I used = to make the assignment after
+> ifeq statements.
+> If I replace = by +=, can I keep this line here?
+
+I didn't think about that. That is a another reason to follow the common
+practice of grouping unconditional assignments at the top.
+
+baruch
+
+>> > +
+>> >  # Ensure we use the system libatomic_ops, and not the internal one.
+>> > -BDWGC_CONF_OPTS = --with-libatomic-ops=yes CFLAGS="$(BDWGC_CFLAGS)"
+>> > +BDWGC_CONF_OPTS += --with-libatomic-ops=yes
+>> >  HOST_BDWGC_CONF_OPTS = --with-libatomic-ops=yes
+>> >
+>> > +ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+>> > +BDWGC_CONF_OPTS += --enable-cplusplus
+>> > +else
+>> > +BDWGC_CONF_OPTS += --disable-cplusplus
+>> > +endif
+>> > +
+>> >  $(eval $(autotools-package))
+>> >  $(eval $(host-autotools-package))
+
+--
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
