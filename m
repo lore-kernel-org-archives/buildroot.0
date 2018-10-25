@@ -1,54 +1,100 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 25 Oct 2018 21:07:31 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/mjpg-streamer: bump version
-Message-ID: <20181025190732.3474-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 25 Oct 2018 21:10:20 +0200
+Subject: [Buildroot] [git commit] docs/website: update for 2018.02.7
+Message-ID: <20181025190859.1192C88EFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This bump includes
-https://github.com/jacksonliam/mjpg-streamer/commit/2b751f1f2ab1dfaf1d12bedf98d4fe37a42d3edd
+commit: https://git.buildroot.net/buildroot/commit/?id=a02a82aa3f65833bf85b8048467095c7a3ea561e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-which fixes
-http://autobuild.buildroot.net/results/247/247a55398aed37a08c67cc21db6836ad342d24ca/
-
-and includes
-https://github.com/jacksonliam/mjpg-streamer/commit/ddb69b7b4f114f3c2ca01adf55712792ca8aed43
-
-which fixes
-http://autobuild.buildroot.net/results/dad/dad054954de76cab56333747274520f269be2066/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-v2: bumped version to include zeromq fix
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
- package/mjpg-streamer/mjpg-streamer.hash | 2 +-
- package/mjpg-streamer/mjpg-streamer.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/mjpg-streamer/mjpg-streamer.hash b/package/mjpg-streamer/mjpg-streamer.hash
-index a98aaffffd..76716266b9 100644
---- a/package/mjpg-streamer/mjpg-streamer.hash
-+++ b/package/mjpg-streamer/mjpg-streamer.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 617c6cdcf5ad6e9135e8bcd83d7acd33cc4a563b9104bca7def57d807164ae89  mjpg-streamer-75c6c4a7809c735b201df949d55287fb60397744.tar.gz
-+sha256 d2c2c9dbc95332245f34247f4a0791d741d1ae875084f9886442f48a01b01d81  mjpg-streamer-ddb69b7b4f114f3c2ca01adf55712792ca8aed43.tar.gz
- sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  mjpg-streamer-experimental/LICENSE
-diff --git a/package/mjpg-streamer/mjpg-streamer.mk b/package/mjpg-streamer/mjpg-streamer.mk
-index c09d55b727..de8bad0c03 100644
---- a/package/mjpg-streamer/mjpg-streamer.mk
-+++ b/package/mjpg-streamer/mjpg-streamer.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 1afa46bbbc..f09e7e03d9 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -8,37 +8,37 @@
+     <div class="panel-heading">Download</div>
+     <div class="panel-body">
  
--MJPG_STREAMER_VERSION = 75c6c4a7809c735b201df949d55287fb60397744
-+MJPG_STREAMER_VERSION = ddb69b7b4f114f3c2ca01adf55712792ca8aed43
- MJPG_STREAMER_SITE = $(call github,jacksonliam,mjpg-streamer,$(MJPG_STREAMER_VERSION))
- MJPG_STREAMER_SUBDIR = mjpg-streamer-experimental
- MJPG_STREAMER_LICENSE = GPL-2.0+
--- 
-2.19.1
+-      <h3 style="text-align: center;">Latest long term support release: <b>2018.02.6</b></h3>
++      <h3 style="text-align: center;">Latest long term support release: <b>2018.02.7</b></h3>
+ 
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2018.02.6.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.02.7.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2018.02.6.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.02.7.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2018.02.6.tar.gz">buildroot-2018.02.6.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2018.02.6.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2018.02.7.tar.gz">buildroot-2018.02.7.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2018.02.7.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2018.02.6.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.02.7.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2018.02.6.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.02.7.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2018.02.6.tar.bz2">buildroot-2018.02.6.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2018.02.6.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2018.02.7.tar.bz2">buildroot-2018.02.7.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2018.02.7.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index d057d4ba86..aee0d6a2d9 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2018.02.7 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>25 October 2018</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2018.02.7 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2018.02.6 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.02.7">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2018-October/234262.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2018.02.7.tar.bz2">2018.02.7 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
