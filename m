@@ -1,85 +1,180 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 25 Oct 2018 08:00:31 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-10-24
-Message-ID: <20181025060031.7D5A4208EB@mail.bootlin.com>
+From: Marcel Patzlaff <M.Patzlaff@pilz.de>
+Date: Thu, 25 Oct 2018 08:02:14 +0200
+Subject: [Buildroot] Antwort: [PATCH v3] merge_config.sh: merge also
+ buildroot config files
+In-Reply-To: <20181025022031.14043-1-afshin.nasser@gmail.com>
+References: <20181025011343.29512-1-afshin.nasser@gmail.com>
+ <20181025022031.14043-1-afshin.nasser@gmail.com>
+Message-ID: <OFFE2543D5.00FA2BCE-ONC1258331.0020E29D-C1258331.002129E5@local-dmz.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Nasser, Arnout,
 
-Build statistics for 2018-10-24
-===============================
+after looking into the uclibc config, I think it would be better to
+just remove the prefix restriction completely. What purpose does
+filtering for "CONFIG_" or "BR2_" serve?
 
-      branch |  OK | NOK | TIM | TOT |
-   2018.02.x |  24 |   0 |   0 |  24 |
-   2018.08.x |  18 |   1 |   0 |  19 |
-      master | 200 |  24 |   0 | 224 |
+Kind regards,
+Marcel
 
-Results for branch '2018.08.x'
-==============================
+"buildroot" <buildroot-bounces@busybox.net> schrieb am 25.10.2018 
+04:20:31:
 
-Classification of failures by reason
-------------------------------------
+> Von: Nasser Afshin <afshin.nasser@gmail.com>
+> An: Arnout Vandecappelle <arnout@mind.be>
+> Kopie: Nasser Afshin <afshin.nasser@gmail.com>, buildroot 
+> <buildroot@buildroot.org>
+> Datum: 25.10.2018 04:21
+> Betreff: [Buildroot] [PATCH v3] merge_config.sh: merge also 
+> buildroot config files
+> Gesendet von: "buildroot" <buildroot-bounces@busybox.net>
+> 
+> From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> 
+> This patch adds a way to merge buildroot config file programmatically.
+> It adds an option (-b, buildroot mode) to manage buildroot config files.
+> The buildroot mode changes the way the script looks for configurations
+> entries using the BR2_ prefix and modify the call to the make command
+> to be buildroot friendly.
+> 
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> Signed-off-by: Nasser Afshin <afshin.nasser@gmail.com>
+> ---
+> I forgot to apply the presented patch. Now it's applied.
+> 
+>  support/kconfig/merge_config.sh                    |  9 ++++-
+>  ...18-fix-finding-redundant-config-mechanism.patch | 41 +++++++++++
+> +++++++++++
+>  support/kconfig/patches/series                     |  1 +
+>  3 files changed, 50 insertions(+), 1 deletion(-)
+>  create mode 100644 support/kconfig/patches/18-fix-finding-
+> redundant-config-mechanism.patch
+> 
+> diff --git a/support/kconfig/merge_config.sh 
+b/support/kconfig/merge_config.sh
+> index 67d1314476..f22198023c 100755
+> --- a/support/kconfig/merge_config.sh
+> +++ b/support/kconfig/merge_config.sh
+> @@ -29,6 +29,7 @@ trap clean_up HUP INT TERM
+>  usage() {
+>     echo "Usage: $0 [OPTIONS] [CONFIG [...]]"
+>     echo "  -h    display this help text"
+> +   echo "  -b    buildroot mode (searches for BR2_ and uses a 
+> custom make command)"
+>     echo "  -m    only merge the fragments, do not execute the make 
+command"
+>     echo "  -n    use allnoconfig instead of alldefconfig"
+>     echo "  -r    list redundant entries when merging fragments"
+> @@ -39,6 +40,7 @@ RUNMAKE=true
+>  ALLTARGET=alldefconfig
+>  WARNREDUN=false
+>  OUTPUT=.
+> +CONFIG_PREFIX=CONFIG_
+> 
+>  while true; do
+>     case $1 in
+> @@ -71,6 +73,11 @@ while true; do
+>        shift 2
+>        continue
+>        ;;
+> +   "-b")
+> +      CONFIG_PREFIX=BR2_
+> +      shift
+> +      continue
+> +      ;;
+>     *)
+>        break
+>        ;;
+> @@ -99,7 +106,7 @@ if [ ! -r "$INITFILE" ]; then
+>  fi
+> 
+>  MERGE_LIST=$*
+> -SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(CONFIG_[a-zA-Z0-9_]*\)[= ].*/\2/p"
+> +SED_CONFIG_EXP="s/^\(# 
+\)\{0,1\}\(${CONFIG_PREFIX}[a-zA-Z0-9_]*\)[=].*/\2/p"
+>  TMP_FILE=$(mktemp ./.tmp.config.XXXXXXXXXX)
+> 
+>  echo "Using $INITFILE as base"
+> diff --git a/support/kconfig/patches/18-fix-finding-redundant-
+> config-mechanism.patch b/support/kconfig/patches/18-fix-finding-
+> redundant-config-mechanism.patch
+> new file mode 100644
+> index 0000000000..eec92a5fad
+> --- /dev/null
+> +++ 
+b/support/kconfig/patches/18-fix-finding-redundant-config-mechanism.patch
+> @@ -0,0 +1,41 @@
+> +Index: kconfig/merge_config.sh
+> +===================================================================
+> +--- kconfig.orig/merge_config.sh
+> ++++ kconfig/merge_config.sh
+> +@@ -29,6 +29,7 @@ trap clean_up HUP INT TERM
+> + usage() {
+> +    echo "Usage: $0 [OPTIONS] [CONFIG [...]]"
+> +    echo "  -h    display this help text"
+> ++   echo "  -b    buildroot mode (searches for BR2_ and uses a 
+> custom make command)"
+> +    echo "  -m    only merge the fragments, do not execute the make 
+command"
+> +    echo "  -n    use allnoconfig instead of alldefconfig"
+> +    echo "  -r    list redundant entries when merging fragments"
+> +@@ -39,6 +40,7 @@ RUNMAKE=true
+> + ALLTARGET=alldefconfig
+> + WARNREDUN=false
+> + OUTPUT=.
+> ++CONFIG_PREFIX=CONFIG_
+> + 
+> + while true; do
+> +    case $1 in
+> +@@ -71,6 +73,11 @@ while true; do
+> +       shift 2
+> +       continue
+> +       ;;
+> ++   "-b")
+> ++      CONFIG_PREFIX=BR2_
+> ++      shift
+> ++      continue
+> ++      ;;
+> +    *)
+> +       break
+> +       ;;
+> +@@ -99,7 +106,7 @@ if [ ! -r "$INITFILE" ]; then
+> + fi
+> + 
+> + MERGE_LIST=$*
+> +-SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(CONFIG_[a-zA-Z0-9_]*\)[= ].*/\2/p"
+> ++SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(${CONFIG_PREFIX}[a-zA-Z0-9_]*\)
+> [= ].*/\2/p"
+> + TMP_FILE=$(mktemp ./.tmp.config.XXXXXXXXXX)
+> + 
+> + echo "Using $INITFILE as base"
+> diff --git a/support/kconfig/patches/series 
+b/support/kconfig/patches/series
+> index 36591e2189..5ebc2e0225 100644
+> --- a/support/kconfig/patches/series
+> +++ b/support/kconfig/patches/series
+> @@ -6,3 +6,4 @@
+>  14-support-out-of-tree-config.patch
+>  16-fix-space-to-de-select-options.patch
+>  17-backport-kecho.patch
+> +18-fix-finding-redundant-config-mechanism.patch
+> -- 
+> 2.15.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-    trace-cmd-trace-cmd-v2.6.1 | 1 
 
-
-Detail of failures
-------------------
-
-       sparc |     trace-cmd-trace-cmd-v2.6.1 | NOK | http://autobuild.buildroot.net/results/b8b81e74c422cec78934805cd3cbe204d65e1a4c |     
-
-Results for branch 'master'
-===========================
-
-Classification of failures by reason
-------------------------------------
-
-                  libffi-3.2.1 | 8 
-               postgresql-11.0 | 3 
-                  cc-tool-0.26 | 2 
-                 dc3dd-7.2.641 | 2 
-               libiscsi-1.18.0 | 2 
-                flannel-v0.5.5 | 1 
-                   luvi-v2.7.6 | 1 
-mjpg-streamer-75c6c4a7809c7... | 1 
-                   mpd-0.20.21 | 1 
-                poppler-0.59.0 | 1 
-            qt5location-5.11.2 | 1 
-          shairport-sync-3.2.1 | 1 
-
-
-Detail of failures
-------------------
-
-      x86_64 |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/77e984925f86f48040d732c16682051a7d0e69a2 |     
-      mipsel |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/2f448e26ddf05c1fb1ef9a4143ce118f0d51406d |     
-     aarch64 |                  dc3dd-7.2.641 | NOK | http://autobuild.buildroot.net/results/5adfa093aed456dabc4a6decb14ed00b15e12adf | ORPH
-     aarch64 |                  dc3dd-7.2.641 | NOK | http://autobuild.buildroot.net/results/9629379f19e3feba1671769263b3ba5fd30bd5fd | ORPH
-      x86_64 |                 flannel-v0.5.5 | NOK | http://autobuild.buildroot.net/results/2864ed535abd8fda1b25f1355474541298ba9f98 |     
-     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/3b77a6b89ff0270a95a610fb2e1bc20d3157cdcd |     
-     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/f16e0b40fe1692a14fda81f63497f8c4360beac3 |     
-     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/e889f4e1bc038a10d6f0dd4afc1ad6105fd12ad8 |     
-     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/db770c734aecd3cffd7521ecb591c385c9539902 |     
-     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/96d26e0353ff183984ba227fefe198653d8ddf1e |     
-     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/105b25afb5e738cabfa4e975b68406f1ff1837b9 |     
-     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/6b110a3baa8484f075942fb5c28da5bb169a3d3b |     
-     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/0bac6243001c9e33ead3aeda347e5eb9727be99b |     
-     aarch64 |                libiscsi-1.18.0 | NOK | http://autobuild.buildroot.net/results/b4e50d5d71321a535e5f5d5ce3043dcced87c5a8 |     
-     aarch64 |                libiscsi-1.18.0 | NOK | http://autobuild.buildroot.net/results/67ce2dcc1ac5818dd3534e5d10da7f0826381399 |     
-      x86_64 |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/0a121e667fbf08cdd1fb6c9262024662cea59c33 |     
-     powerpc | mjpg-streamer-75c6c4a7809c7... | NOK | http://autobuild.buildroot.net/results/72f560b03cab96161f6d8d127f99150ba3e48aff |     
-         arm |                    mpd-0.20.21 | NOK | http://autobuild.buildroot.net/results/34122e25ac446603b85c6e318b68b426c31481e1 |     
-         arm |                 poppler-0.59.0 | NOK | http://autobuild.buildroot.net/results/003f6666820975589e32e7d4e9d0997e92c9d5e8 |     
-         arm |                postgresql-11.0 | NOK | http://autobuild.buildroot.net/results/810337ced32a71f0a51f46185bb5c2e59bf10bb2 |     
-microblazeel |                postgresql-11.0 | NOK | http://autobuild.buildroot.net/results/14f9f44d7eae5ff5905b0e87bee1e6cbd5ffab2d |     
-microblazeel |                postgresql-11.0 | NOK | http://autobuild.buildroot.net/results/3b4fafbbe057ceeb97de4ad9f91426bfbbc3e129 |     
-         arm |             qt5location-5.11.2 | NOK | http://autobuild.buildroot.net/results/761d1effe619a3096e96d09c6bd5f4785b72d4af |     
-         arm |           shairport-sync-3.2.1 | NOK | http://autobuild.buildroot.net/results/c0ea43d8a94de7b3a9d2004fa3b1d57733b24823 |     
-
-
--- 
-http://autobuild.buildroot.net
+Gesch?ftsf?hrung: Susanne Kunschert, Thomas Pilz
+Pilz GmbH & Co. KG, Sitz: Ostfildern, HRA 210 893, Amtsgericht Stuttgart
+Kompl. Ges. Peter Pilz GmbH, Sitz: Ostfildern, HRB 210 612, Amtsgericht Stuttgart
+Umsatzsteuer: ID-Nr. DE 145 355 773, WEEE-Reg.-Nr. DE 71636849
+This email is intended solely for the use of the named address(es). Any unauthorised disclosure, copying or distribution of these confidential information contained therein, or the taking of any action based on it, is prohibited. The sender disclaims any liability for the integrity of this email. Legally binding declarations must be in written form.
+Umweltschutz liegt uns am Herzen! - Bitte denken Sie an unsere Umwelt, bevor Sie diese E-Mail drucken.
+We do care about the environment! - Please consider the environment before printing this e-mail.
