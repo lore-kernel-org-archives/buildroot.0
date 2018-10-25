@@ -1,77 +1,86 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 25 Oct 2018 20:58:57 +0200
-Subject: [Buildroot] Buildroot 2018.02.7 released
-Message-ID: <8736st7szy.fsf@dell.be.48ers.dk>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 25 Oct 2018 21:01:24 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server: security
+ bump to version 1.20.3
+Message-ID: <20181025190124.29377-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Fixes CVE-2018-14665:
+https://lists.x.org/archives/xorg-announce/2018-October/002927.html
 
-Buildroot is a simple tool for creating complete embedded Linux systems
-(http://buildroot.org).
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../0001-modesettings-needs-dri2.patch                 |  0
+ ...02-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch |  0
+ .../0003-Remove-check-for-useSIGIO-option.patch        |  0
+ .../0004-include-misc.h-fix-uClibc-build.patch         |  0
+ package/x11r7/xserver_xorg-server/Config.in            |  4 ++--
+ .../x11r7/xserver_xorg-server/xserver_xorg-server.hash | 10 +++++-----
+ 6 files changed, 7 insertions(+), 7 deletions(-)
+ rename package/x11r7/xserver_xorg-server/{1.20.2 => 1.20.3}/0001-modesettings-needs-dri2.patch (100%)
+ rename package/x11r7/xserver_xorg-server/{1.20.2 => 1.20.3}/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch (100%)
+ rename package/x11r7/xserver_xorg-server/{1.20.2 => 1.20.3}/0003-Remove-check-for-useSIGIO-option.patch (100%)
+ rename package/x11r7/xserver_xorg-server/{1.20.2 => 1.20.3}/0004-include-misc.h-fix-uClibc-build.patch (100%)
 
-Buildroot 2018.02.7 is released - Go download it at:
-
-http://buildroot.org/downloads/buildroot-2018.02.7.tar.gz
-
-or
-
-http://buildroot.org/downloads/buildroot-2018.02.7.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.org/buildroot
-
-Buildroot 2018.02.7 is a bugfix release on the current long term
-release, fixing a number of important / security related issues
-discovered since the 2018.02.6 release.
-
-- Detect and reject build paths containing '@', as this confuses a
-  number of packages, including GCC.
-
-- u-boot: Fix for environment image handling on big endian systems.
-
-- Security fixes for git, libarchive libssh, live555, mongoose, netsnmp,
-  ntp, qemu, spice, tinc, wireshark
-
-- Fixes for download/compilation/runtime issues in ca-certificates,
-  cups-filters, erlang, file, freetype, gcc, gvfs, leveldb, libcurl,
-  mariadb, nmap, nodejs, open-plc-utils, poco, psmisc, ptpd2, qt,
-  qt5base, setools, ustr
-
-For more details, see the CHANGES file:
-
-https://git.buildroot.net/buildroot/plain/CHANGES?id=2018.02.7
-
-Users of the affected packages are strongly encouraged to upgrade.
-
-Many thanks to all the people contributing to this release:
-
-git shortlog -sn 2018.02.6..
-
-    10  Baruch Siach
-    10  Peter Korsgaard
-    10  Thomas Petazzoni
-     8  Bernd Kuhls
-     6  Fabrice Fontaine
-     4  Adam Duskett
-     3  Giulio Benetti
-     3  Martin Bark
-     3  Yann E. MORIN
-     2  Artyom Panfilov
-     2  Matt Weber
-     2  Yegor Yefremov
-     1  Francois Gerin
-     1  Frank Hunleth
-     1  Gr?goire Delattre
-     1  Joshua Henderson
-     1  Marcel Patzlaff
-     1  Olivier Schonken
-     1  Ricardo Martincoski
-     1  Romain Naour
-
---
-Bye, Peter Korsgaard
+diff --git a/package/x11r7/xserver_xorg-server/1.20.2/0001-modesettings-needs-dri2.patch b/package/x11r7/xserver_xorg-server/1.20.3/0001-modesettings-needs-dri2.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/1.20.2/0001-modesettings-needs-dri2.patch
+rename to package/x11r7/xserver_xorg-server/1.20.3/0001-modesettings-needs-dri2.patch
+diff --git a/package/x11r7/xserver_xorg-server/1.20.2/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch b/package/x11r7/xserver_xorg-server/1.20.3/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/1.20.2/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
+rename to package/x11r7/xserver_xorg-server/1.20.3/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
+diff --git a/package/x11r7/xserver_xorg-server/1.20.2/0003-Remove-check-for-useSIGIO-option.patch b/package/x11r7/xserver_xorg-server/1.20.3/0003-Remove-check-for-useSIGIO-option.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/1.20.2/0003-Remove-check-for-useSIGIO-option.patch
+rename to package/x11r7/xserver_xorg-server/1.20.3/0003-Remove-check-for-useSIGIO-option.patch
+diff --git a/package/x11r7/xserver_xorg-server/1.20.2/0004-include-misc.h-fix-uClibc-build.patch b/package/x11r7/xserver_xorg-server/1.20.3/0004-include-misc.h-fix-uClibc-build.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/1.20.2/0004-include-misc.h-fix-uClibc-build.patch
+rename to package/x11r7/xserver_xorg-server/1.20.3/0004-include-misc.h-fix-uClibc-build.patch
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index a491f5f9f0..7ccb2bd9cf 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -61,7 +61,7 @@ choice
+ 	bool "X Window System server version"
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_20
+-	bool "1.20.2"
++	bool "1.20.3"
+ 	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_24
+ 	select BR2_PACKAGE_XLIB_LIBXFONT2
+ 
+@@ -79,7 +79,7 @@ endchoice
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
+ 	string
+-	default "1.20.2" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_20
++	default "1.20.3" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_20
+ 	default "1.17.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
+ 	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
+ 
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+index 549150fcce..4cde15e5d4 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+@@ -3,8 +3,8 @@ sha1   7a95765e56b124758fcd7b609589e65b8870880b                                x
+ sha256 fcf66fa6ad86227613d2d3e8ae13ded297e2a1e947e9060a083eaf80d323451f        xorg-server-1.14.7.tar.bz2
+ # From https://lists.x.org/archives/xorg-announce/2015-October/002650.html
+ sha256 0c4b45c116a812a996eb432d8508cf26c2ec8c3916ff2a50781796882f8d6457        xorg-server-1.17.4.tar.bz2
+-# From https://lists.x.org/archives/xorg-announce/2018-October/002924.html
+-md5 e9853601de22454c8d36ca3425e65ce3  xorg-server-1.20.2.tar.bz2
+-sha1 68636544ad25062eca4c681a031be5a35b548078  xorg-server-1.20.2.tar.bz2
+-sha256 0ed5f7bc48f22f54e1ae0229ad6f35a521da4232d9d5529d7cebb5e79b3ccee2  xorg-server-1.20.2.tar.bz2
+-sha512 1c87d78b14529dd4b438ef038118c8540d1d17bdd58bf08ec5408a2ddbe8d0dda48033a9a9477cfc2c4c304dd1078fa40968a03c4d0cd3398359dd0fadb8e7c7  xorg-server-1.20.2.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-October/002928.html
++md5 8ee29e8b24cef6b3cfa747ec01b9155a  xorg-server-1.20.3.tar.bz2
++sha1 a522cd543606b4d0509d821b8061904951171c50  xorg-server-1.20.3.tar.bz2
++sha256 1b3ce466c12cacbe2252b3ad5b0ed561972eef9d09e75900d65fb1e21f9201de  xorg-server-1.20.3.tar.bz2
++sha512 ee44554f86df4297f54c5871fe7a18954eeef4338775a25f36d6577b279c4775f61128da71b86cfaeadcc080838d6749dede138d4db178866579da2056543fba  xorg-server-1.20.3.tar.bz2
+-- 
+2.19.1
