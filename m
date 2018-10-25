@@ -1,73 +1,27 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Thu, 25 Oct 2018 09:43:10 +0200
-Subject: [Buildroot] [PATCH v3] merge_config.sh: merge also buildroot
- config files
-In-Reply-To: <20181025022031.14043-1-afshin.nasser@gmail.com>
-References: <20181025011343.29512-1-afshin.nasser@gmail.com>
- <20181025022031.14043-1-afshin.nasser@gmail.com>
-Message-ID: <20181025074309.GB18528@dell5510>
+From: =?UTF-8?B?0KLQuNC80YPRgCDQn9GA0L7QutC+0L/QtdC90LrQvg==?= <prok.tim26@gmail.com>
+Date: Thu, 25 Oct 2018 11:16:35 +0300
+Subject: [Buildroot] alsa-utils: alsactl services are not installed
+Message-ID: <CANTMe2UJhVMgxj+mSX+XiNkv=Qzb6H3rQhDOphpV7=7xVB-HYw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Angelo,
+Hello,
 
-> From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+I'm trying to build Buildroot with systemd. alsa-utils seem to install
+correctly but the alsa-restore and alsa-state services aren't installed to
+the target directory but to the host directory only.
 
-> This patch adds a way to merge buildroot config file programmatically.
-> It adds an option (-b, buildroot mode) to manage buildroot config files.
-> The buildroot mode changes the way the script looks for configurations
-> entries using the BR2_ prefix and modify the call to the make command
-> to be buildroot friendly.
+It's very weird since simply copying the service files to the target
+directory and installing the resulting image works properly. Is there any
+problem with the Makefile? Using systemd v239 with alsa-utils v1.1.5
 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> Signed-off-by: Nasser Afshin <afshin.nasser@gmail.com>
-Reviewed-by: Petr Vorel <pvorel@suse.cz>
-
-LGTM. Could you please add commit where you actually use -b option?
-I guess it should be in utils/test-pkg and support/kconfig/Makefile.
-Not sure whether all packages using kconfig-package are using prefix CONFIG_,
-but probably yes.
-
-I'd suggest to move underscore to $SED_CONFIG_EXP. Or is it less intuitive?
-
-> +CONFIG_PREFIX=CONFIG_
-   CONFIG_PREFIX=CONFIG
-
->  while true; do
->  	case $1 in
-> @@ -71,6 +73,11 @@ while true; do
->  		shift 2
->  		continue
->  		;;
-> +	"-b")
-> +		CONFIG_PREFIX=BR2_
-		CONFIG_PREFIX=BR2
-
-...
->  MERGE_LIST=$*
-> -SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(CONFIG_[a-zA-Z0-9_]*\)[= ].*/\2/p"
-> +SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(${CONFIG_PREFIX}[a-zA-Z0-9_]*\)[= ].*/\2/p"
-   SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(${CONFIG_PREFIX}_[a-zA-Z0-9_]*\)[= ].*/\2/p"
-
-BTW There is some mixed spaces and tabs (pwclient fixed that but bare that in
-mind next time):
-Description: [v3] merge_config.sh: merge also buildroot config files
-Applying: merge_config.sh: merge also buildroot config files
-.git/rebase-apply/patch:63: space before tab in indent.
- 	echo "Usage: $0 [OPTIONS] [CONFIG [...]]"
-.git/rebase-apply/patch:64: space before tab in indent.
- 	echo "  -h    display this help text"
-.git/rebase-apply/patch:66: space before tab in indent.
- 	echo "  -m    only merge the fragments, do not execute the make command"
-.git/rebase-apply/patch:67: space before tab in indent.
- 	echo "  -n    use allnoconfig instead of alldefconfig"
-.git/rebase-apply/patch:68: space before tab in indent.
- 	echo "  -r    list redundant entries when merging fragments"
-warning: squelched 10 whitespace errors
-
-
-Kind regards,
-Petr
+Thank you in advance.
+-- 
+Best regards,
+Prokopenko T.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181025/5b966b4c/attachment.html>
