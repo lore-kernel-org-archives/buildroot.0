@@ -1,100 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 25 Oct 2018 20:13:58 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2018.08.2
-Message-ID: <20181025181220.500D3887DC@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 25 Oct 2018 20:33:41 +0200
+Subject: [Buildroot] [PATCH 1/1] libupnp18: bump to version 1.8.4
+Message-ID: <20181025183341.16617-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99275417a5d23adecc5072122b357df77aaabb2b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Replace LICENSE by COPYING, see:
+https://github.com/mrjimenez/pupnp/commit/d3a04002e5e5220f88b43d979505bb3156532e83
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ package/libupnp18/libupnp18.hash | 8 ++++----
+ package/libupnp18/libupnp18.mk   | 6 +++---
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index ec6d1589f8..1afa46bbbc 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -42,37 +42,37 @@
- 	</div>
-       </div>
+diff --git a/package/libupnp18/libupnp18.hash b/package/libupnp18/libupnp18.hash
+index dd59034cd3..c32ebef739 100644
+--- a/package/libupnp18/libupnp18.hash
++++ b/package/libupnp18/libupnp18.hash
+@@ -1,5 +1,5 @@
+-# From https://sourceforge.net/projects/pupnp/files/pupnp/libUPnP%201.8.3/libupnp-1.8.3.tar.bz2.sha1
+-sha1 e7c28c24905ae972ff3277a7bdaa9b839f6c66b9  libupnp-1.8.3.tar.bz2
++# From https://sourceforge.net/projects/pupnp/files/pupnp/libupnp-1.8.4/libupnp-1.8.4.tar.bz2.sha1
++sha1 93e7b3c94cf53eb59533b4b7b137ef5cc651e28b  libupnp-1.8.4.tar.bz2
+ # Locally computed:
+-sha256	9afa0b09faa9ebd9e8a6425ddbfe8d1d856544c49b1f86fde221219e569a308d	libupnp-1.8.3.tar.bz2
+-sha256	0375955c8a79d6e8fa0792d45d00fc4e7710d7ac95bcbd27f9225a83f5c946fd	LICENSE
++sha256	188d3f786d92fe14191f17634d2d87847eee7d2b568a5257ea23262fec9973d6	libupnp-1.8.4.tar.bz2
++sha256	c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3	COPYING
+diff --git a/package/libupnp18/libupnp18.mk b/package/libupnp18/libupnp18.mk
+index 07ef4382f0..13536b8f7a 100644
+--- a/package/libupnp18/libupnp18.mk
++++ b/package/libupnp18/libupnp18.mk
+@@ -4,13 +4,13 @@
+ #
+ ################################################################################
  
--      <h3 style="text-align: center;">Latest stable release: <b>2018.08.1</b></h3>
-+      <h3 style="text-align: center;">Latest stable release: <b>2018.08.2</b></h3>
+-LIBUPNP18_VERSION = 1.8.3
++LIBUPNP18_VERSION = 1.8.4
+ LIBUPNP18_SOURCE = libupnp-$(LIBUPNP18_VERSION).tar.bz2
+-LIBUPNP18_SITE = http://downloads.sourceforge.net/project/pupnp/pupnp/libUPnP%20$(LIBUPNP18_VERSION)
++LIBUPNP18_SITE = http://downloads.sourceforge.net/project/pupnp/pupnp/libupnp-$(LIBUPNP18_VERSION)
+ LIBUPNP18_CONF_ENV = ac_cv_lib_compat_ftime=no
+ LIBUPNP18_INSTALL_STAGING = YES
+ LIBUPNP18_LICENSE = BSD-3-Clause
+-LIBUPNP18_LICENSE_FILES = LICENSE
++LIBUPNP18_LICENSE_FILES = COPYING
  
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2018.08.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.08.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2018.08.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.08.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2018.08.1.tar.gz">buildroot-2018.08.1.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2018.08.1.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2018.08.2.tar.gz">buildroot-2018.08.2.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2018.08.2.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2018.08.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.08.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2018.08.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.08.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2018.08.1.tar.bz2">buildroot-2018.08.1.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2018.08.1.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2018.08.2.tar.bz2">buildroot-2018.08.2.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2018.08.2.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- <!--
-diff --git a/docs/website/news.html b/docs/website/news.html
-index b9d99ed755..d057d4ba86 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2018.08.2 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>25 October 2018</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2018.08.2 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2018.08.1 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.08.2">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2018-October/234252.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2018.08.2.tar.bz2">2018.08.2 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ LIBUPNP18_CONF_OPTS += --enable-open-ssl
+-- 
+2.17.1
