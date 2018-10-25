@@ -1,59 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 25 Oct 2018 21:07:23 +0200
-Subject: [Buildroot] [git commit] Update for 2018.02.7
-Message-ID: <20181025190859.0442388F3F@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 25 Oct 2018 21:13:16 +0200
+Subject: [Buildroot] [PATCH v4,1/1] bdwgc: add optional cplusplus support
+Message-ID: <20181025191316.8187-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=684f79d0f290c305ec488b68371b744eaa297bf5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Use CFLAGS_EXTRA to pass C and C++ flags in a single variable
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8c9284703c496b913d936689df72d49e095442e4)
-[Peter: drop Makefile changes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- CHANGES | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+Changes v3 -> v4 (after review of Baruch Siach):
+ - Move CFLAGS_EXTRA assignment before ifeq statements
 
-diff --git a/CHANGES b/CHANGES
-index 9120e59882..752d99adf9 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -490,6 +490,33 @@
- 	#10961: Grub2 fails to build for x86_64 when BR2_SSP_ALL is
- 		enabled
+Changes v2 -> v3 (after review of Baruch Siach):
+ - Replace BDWGC_CFLAGS by BDWGC_CFLAGS_EXTRA
+
+Changes v1 -> v2 (after review of Arnout Vandecappelle and Baruch
+Siach):
+ - Use CFLAGS_EXTRA to pass C and C++ flags in a single variable instead
+   of using CFLAGS and CPPFLAGS
+
+ package/bdwgc/bdwgc.mk | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
+index 5603df8d9d..0d4c8014f4 100644
+--- a/package/bdwgc/bdwgc.mk
++++ b/package/bdwgc/bdwgc.mk
+@@ -19,17 +19,23 @@ HOST_BDWGC_DEPENDENCIES = host-libatomic_ops host-pkgconf
+ # solution.
+ BDWGC_AUTORECONF = YES
  
-+2018.02.7, Released October 25th, 2018
-+
-+	Important / security related fixes.
-+
-+	Detect and reject build paths containing '@', as this confuses
-+	a number of packages, including GCC.
-+
-+	utils/get-developers: Add -e option for use with git
-+	send-email.
-+
-+	utils/diffconfig: Make it work for (non-Buildroot) config
-+	files not using the BR2_ prefix.
-+
-+	u-boot: Fix for environment image handling on big endian
-+	systems.
-+
-+	Updated/fixed packages: binutils, ca-certificates,
-+	cups-filters, erlang, file, freetype, gcc, git, gvfs, leveldb,
-+	libarchive, libcurl, libssh, live555, ljlinenoise, mariadb,
-+	mongoose, netsnmp, nmap, nodejs, ntp, open-plc-utils, poco,
-+	psmisc, ptpd2, python-enum34, qemu, qt, qt5base, setools,
-+	spice, spice-protocol, tinc, ustr, wireshark
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#11396: uboot environment image checksum invalid if target is big endian
-+
- 2018.02.6, Released October 7th, 2018
+-BDWGC_CFLAGS = $(TARGET_CFLAGS)
++BDWGC_CONF_OPTS = CFLAGS_EXTRA="$(BDWGC_CFLAGS_EXTRA)"
+ ifeq ($(BR2_sparc),y)
+-BDWGC_CFLAGS += -DAO_NO_SPARC_V9
++BDWGC_CFLAGS_EXTRA += -DAO_NO_SPARC_V9
+ endif
+ ifeq ($(BR2_STATIC_LIBS),y)
+-BDWGC_CFLAGS += -DGC_NO_DLOPEN
++BDWGC_CFLAGS_EXTRA += -DGC_NO_DLOPEN
+ endif
  
- 	Important / security related fixes.
+ # Ensure we use the system libatomic_ops, and not the internal one.
+-BDWGC_CONF_OPTS = --with-libatomic-ops=yes CFLAGS="$(BDWGC_CFLAGS)"
++BDWGC_CONF_OPTS += --with-libatomic-ops=yes
+ HOST_BDWGC_CONF_OPTS = --with-libatomic-ops=yes
+ 
++ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
++BDWGC_CONF_OPTS += --enable-cplusplus
++else
++BDWGC_CONF_OPTS += --disable-cplusplus
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+-- 
+2.17.1
