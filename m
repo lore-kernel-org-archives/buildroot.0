@@ -1,131 +1,79 @@
-From: Nasser Afshin <afshin.nasser@gmail.com>
-Date: Thu, 25 Oct 2018 05:50:31 +0330
-Subject: [Buildroot] [PATCH v3] merge_config.sh: merge also buildroot config
- files
-In-Reply-To: <20181025011343.29512-1-afshin.nasser@gmail.com>
-References: <20181025011343.29512-1-afshin.nasser@gmail.com>
-Message-ID: <20181025022031.14043-1-afshin.nasser@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 25 Oct 2018 06:57:06 +0300
+Subject: [Buildroot] [PATCH v3,
+ 1/1] bdwgc: add optional cplusplus support
+In-Reply-To: <20181024210136.8375-1-fontaine.fabrice@gmail.com>
+References: <20181024210136.8375-1-fontaine.fabrice@gmail.com>
+Message-ID: <87pnvy7k6l.fsf@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Hi Fabrice,
 
-This patch adds a way to merge buildroot config file programmatically.
-It adds an option (-b, buildroot mode) to manage buildroot config files.
-The buildroot mode changes the way the script looks for configurations
-entries using the BR2_ prefix and modify the call to the make command
-to be buildroot friendly.
+Fabrice Fontaine writes:
+> Use CFLAGS_EXTRA to pass C and C++ flags in a single variable
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> Changes v2 -> v3 (after review of Baruch Siach):
+>  - Replace BDWGC_CFLAGS by BDWGC_CFLAGS_EXTRA
+>
+> Changes v1 -> v2 (after review of Arnout Vandecappelle and Baruch
+> Siach):
+>  - Use CFLAGS_EXTRA to pass C and C++ flags in a single variable instead
+>    of using CFLAGS and CPPFLAGS
+>
+>  package/bdwgc/bdwgc.mk | 15 +++++++++++----
+>  1 file changed, 11 insertions(+), 4 deletions(-)
+>
+> diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
+> index 5603df8d9d..1c80f47b92 100644
+> --- a/package/bdwgc/bdwgc.mk
+> +++ b/package/bdwgc/bdwgc.mk
+> @@ -19,17 +19,24 @@ HOST_BDWGC_DEPENDENCIES = host-libatomic_ops host-pkgconf
+>  # solution.
+>  BDWGC_AUTORECONF = YES
+>  
+> -BDWGC_CFLAGS = $(TARGET_CFLAGS)
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Signed-off-by: Nasser Afshin <afshin.nasser@gmail.com>
----
-I forgot to apply the presented patch. Now it's applied.
+This removes TARGET_CLAGS ...
 
- support/kconfig/merge_config.sh                    |  9 ++++-
- ...18-fix-finding-redundant-config-mechanism.patch | 41 ++++++++++++++++++++++
- support/kconfig/patches/series                     |  1 +
- 3 files changed, 50 insertions(+), 1 deletion(-)
- create mode 100644 support/kconfig/patches/18-fix-finding-redundant-config-mechanism.patch
+>  ifeq ($(BR2_sparc),y)
+> -BDWGC_CFLAGS += -DAO_NO_SPARC_V9
+> +BDWGC_CFLAGS_EXTRA += -DAO_NO_SPARC_V9
+>  endif
+>  ifeq ($(BR2_STATIC_LIBS),y)
+> -BDWGC_CFLAGS += -DGC_NO_DLOPEN
+> +BDWGC_CFLAGS_EXTRA += -DGC_NO_DLOPEN
+>  endif
+>  
+> +BDWGC_CONF_OPTS = CFLAGS_EXTRA="$(BDWGC_CFLAGS_EXTRA)"
 
-diff --git a/support/kconfig/merge_config.sh b/support/kconfig/merge_config.sh
-index 67d1314476..f22198023c 100755
---- a/support/kconfig/merge_config.sh
-+++ b/support/kconfig/merge_config.sh
-@@ -29,6 +29,7 @@ trap clean_up HUP INT TERM
- usage() {
- 	echo "Usage: $0 [OPTIONS] [CONFIG [...]]"
- 	echo "  -h    display this help text"
-+	echo "  -b    buildroot mode (searches for BR2_ and uses a custom make command)"
- 	echo "  -m    only merge the fragments, do not execute the make command"
- 	echo "  -n    use allnoconfig instead of alldefconfig"
- 	echo "  -r    list redundant entries when merging fragments"
-@@ -39,6 +40,7 @@ RUNMAKE=true
- ALLTARGET=alldefconfig
- WARNREDUN=false
- OUTPUT=.
-+CONFIG_PREFIX=CONFIG_
- 
- while true; do
- 	case $1 in
-@@ -71,6 +73,11 @@ while true; do
- 		shift 2
- 		continue
- 		;;
-+	"-b")
-+		CONFIG_PREFIX=BR2_
-+		shift
-+		continue
-+		;;
- 	*)
- 		break
- 		;;
-@@ -99,7 +106,7 @@ if [ ! -r "$INITFILE" ]; then
- fi
- 
- MERGE_LIST=$*
--SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(CONFIG_[a-zA-Z0-9_]*\)[= ].*/\2/p"
-+SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(${CONFIG_PREFIX}[a-zA-Z0-9_]*\)[= ].*/\2/p"
- TMP_FILE=$(mktemp ./.tmp.config.XXXXXXXXXX)
- 
- echo "Using $INITFILE as base"
-diff --git a/support/kconfig/patches/18-fix-finding-redundant-config-mechanism.patch b/support/kconfig/patches/18-fix-finding-redundant-config-mechanism.patch
-new file mode 100644
-index 0000000000..eec92a5fad
---- /dev/null
-+++ b/support/kconfig/patches/18-fix-finding-redundant-config-mechanism.patch
-@@ -0,0 +1,41 @@
-+Index: kconfig/merge_config.sh
-+===================================================================
-+--- kconfig.orig/merge_config.sh
-++++ kconfig/merge_config.sh
-+@@ -29,6 +29,7 @@ trap clean_up HUP INT TERM
-+ usage() {
-+ 	echo "Usage: $0 [OPTIONS] [CONFIG [...]]"
-+ 	echo "  -h    display this help text"
-++	echo "  -b    buildroot mode (searches for BR2_ and uses a custom make command)"
-+ 	echo "  -m    only merge the fragments, do not execute the make command"
-+ 	echo "  -n    use allnoconfig instead of alldefconfig"
-+ 	echo "  -r    list redundant entries when merging fragments"
-+@@ -39,6 +40,7 @@ RUNMAKE=true
-+ ALLTARGET=alldefconfig
-+ WARNREDUN=false
-+ OUTPUT=.
-++CONFIG_PREFIX=CONFIG_
-+ 
-+ while true; do
-+ 	case $1 in
-+@@ -71,6 +73,11 @@ while true; do
-+ 		shift 2
-+ 		continue
-+ 		;;
-++	"-b")
-++		CONFIG_PREFIX=BR2_
-++		shift
-++		continue
-++		;;
-+ 	*)
-+ 		break
-+ 		;;
-+@@ -99,7 +106,7 @@ if [ ! -r "$INITFILE" ]; then
-+ fi
-+ 
-+ MERGE_LIST=$*
-+-SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(CONFIG_[a-zA-Z0-9_]*\)[= ].*/\2/p"
-++SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(${CONFIG_PREFIX}[a-zA-Z0-9_]*\)[= ].*/\2/p"
-+ TMP_FILE=$(mktemp ./.tmp.config.XXXXXXXXXX)
-+ 
-+ echo "Using $INITFILE as base"
-diff --git a/support/kconfig/patches/series b/support/kconfig/patches/series
-index 36591e2189..5ebc2e0225 100644
---- a/support/kconfig/patches/series
-+++ b/support/kconfig/patches/series
-@@ -6,3 +6,4 @@
- 14-support-out-of-tree-config.patch
- 16-fix-space-to-de-select-options.patch
- 17-backport-kecho.patch
-+18-fix-finding-redundant-config-mechanism.patch
+... so you need to add it back here.
+
+Nit: I'd move the BDWGC_CONF_OPTS assignment upper.
+
+baruch
+
+> +
+>  # Ensure we use the system libatomic_ops, and not the internal one.
+> -BDWGC_CONF_OPTS = --with-libatomic-ops=yes CFLAGS="$(BDWGC_CFLAGS)"
+> +BDWGC_CONF_OPTS += --with-libatomic-ops=yes
+>  HOST_BDWGC_CONF_OPTS = --with-libatomic-ops=yes
+>  
+> +ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+> +BDWGC_CONF_OPTS += --enable-cplusplus
+> +else
+> +BDWGC_CONF_OPTS += --disable-cplusplus
+> +endif
+> +
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
+
 -- 
-2.15.0
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
