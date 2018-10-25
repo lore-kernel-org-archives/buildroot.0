@@ -1,112 +1,77 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 25 Oct 2018 21:46:42 +0300
-Subject: [Buildroot] [PATCH v3,
- 1/1] bdwgc: add optional cplusplus support
-In-Reply-To: <CAPi7W82rJxNkrhi78e7f_xBs2cEMknWKrizCU1=B9Btr8+LHuw@mail.gmail.com>
-References: <20181024210136.8375-1-fontaine.fabrice@gmail.com>
- <87pnvy7k6l.fsf@tkos.co.il>
- <CAPi7W82rJxNkrhi78e7f_xBs2cEMknWKrizCU1=B9Btr8+LHuw@mail.gmail.com>
-Message-ID: <875zxp7tkd.fsf@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 25 Oct 2018 20:58:57 +0200
+Subject: [Buildroot] Buildroot 2018.02.7 released
+Message-ID: <8736st7szy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+Hi,
 
-Fabrice Fontaine writes:
-> Le jeu. 25 oct. 2018 ? 05:57, Baruch Siach <baruch@tkos.co.il> a ?crit :
->> Fabrice Fontaine writes:
->> > Use CFLAGS_EXTRA to pass C and C++ flags in a single variable
->> >
->> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->> > ---
->> > Changes v2 -> v3 (after review of Baruch Siach):
->> >  - Replace BDWGC_CFLAGS by BDWGC_CFLAGS_EXTRA
->> >
->> > Changes v1 -> v2 (after review of Arnout Vandecappelle and Baruch
->> > Siach):
->> >  - Use CFLAGS_EXTRA to pass C and C++ flags in a single variable instead
->> >    of using CFLAGS and CPPFLAGS
->> >
->> >  package/bdwgc/bdwgc.mk | 15 +++++++++++----
->> >  1 file changed, 11 insertions(+), 4 deletions(-)
->> >
->> > diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
->> > index 5603df8d9d..1c80f47b92 100644
->> > --- a/package/bdwgc/bdwgc.mk
->> > +++ b/package/bdwgc/bdwgc.mk
->> > @@ -19,17 +19,24 @@ HOST_BDWGC_DEPENDENCIES = host-libatomic_ops host-pkgconf
->> >  # solution.
->> >  BDWGC_AUTORECONF = YES
->> >
->> > -BDWGC_CFLAGS = $(TARGET_CFLAGS)
->>
->> This removes TARGET_CLAGS ...
-> Yes, TARGET_CFLAGS is already passed in CFLAGS and CXXFLAGS by the
-> autotools-package infrastructure.
-> Because we don't override CFLAGS anymore, this line can be removed.
-> Did I miss something?
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
 
-No. You are right.
+Buildroot 2018.02.7 is released - Go download it at:
 
->> >  ifeq ($(BR2_sparc),y)
->> > -BDWGC_CFLAGS += -DAO_NO_SPARC_V9
->> > +BDWGC_CFLAGS_EXTRA += -DAO_NO_SPARC_V9
->> >  endif
->> >  ifeq ($(BR2_STATIC_LIBS),y)
->> > -BDWGC_CFLAGS += -DGC_NO_DLOPEN
->> > +BDWGC_CFLAGS_EXTRA += -DGC_NO_DLOPEN
->> >  endif
->> >
->> > +BDWGC_CONF_OPTS = CFLAGS_EXTRA="$(BDWGC_CFLAGS_EXTRA)"
->>
->> ... so you need to add it back here.
->>
->> Nit: I'd move the BDWGC_CONF_OPTS assignment upper.
-> I can send a v4 with this update if you want. What is the best
-> practice in buildroot concerning variable assignment?
+http://buildroot.org/downloads/buildroot-2018.02.7.tar.gz
 
-The common practice is the group unconditional assignment at the top of
-the .mk file, and add conditions below.
+or
 
-> Should we set BDWGC_CONF_OPTS = CFLAGS_EXTRA="$(BDWGC_CFLAGS_EXTRA)"
-> before putting any value in BDWGC_CFLAGS_EXTRA?
+http://buildroot.org/downloads/buildroot-2018.02.7.tar.bz2
 
-Make evaluates this "recursively expanded" variable value only when
-referenced.
+Or get it from Git:
 
-  https://www.gnu.org/software/make/manual/html_node/Flavors.html#Flavors
+git://git.buildroot.org/buildroot
 
-So no problem with BDWGC_CONF_OPTS assignment before BDWGC_CFLAGS_EXTRA
-is set.
+Buildroot 2018.02.7 is a bugfix release on the current long term
+release, fixing a number of important / security related issues
+discovered since the 2018.02.6 release.
 
-> Or perhaps the issue is that I used = to make the assignment after
-> ifeq statements.
-> If I replace = by +=, can I keep this line here?
+- Detect and reject build paths containing '@', as this confuses a
+  number of packages, including GCC.
 
-I didn't think about that. That is a another reason to follow the common
-practice of grouping unconditional assignments at the top.
+- u-boot: Fix for environment image handling on big endian systems.
 
-baruch
+- Security fixes for git, libarchive libssh, live555, mongoose, netsnmp,
+  ntp, qemu, spice, tinc, wireshark
 
->> > +
->> >  # Ensure we use the system libatomic_ops, and not the internal one.
->> > -BDWGC_CONF_OPTS = --with-libatomic-ops=yes CFLAGS="$(BDWGC_CFLAGS)"
->> > +BDWGC_CONF_OPTS += --with-libatomic-ops=yes
->> >  HOST_BDWGC_CONF_OPTS = --with-libatomic-ops=yes
->> >
->> > +ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
->> > +BDWGC_CONF_OPTS += --enable-cplusplus
->> > +else
->> > +BDWGC_CONF_OPTS += --disable-cplusplus
->> > +endif
->> > +
->> >  $(eval $(autotools-package))
->> >  $(eval $(host-autotools-package))
+- Fixes for download/compilation/runtime issues in ca-certificates,
+  cups-filters, erlang, file, freetype, gcc, gvfs, leveldb, libcurl,
+  mariadb, nmap, nodejs, open-plc-utils, poco, psmisc, ptpd2, qt,
+  qt5base, setools, ustr
+
+For more details, see the CHANGES file:
+
+https://git.buildroot.net/buildroot/plain/CHANGES?id=2018.02.7
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2018.02.6..
+
+    10  Baruch Siach
+    10  Peter Korsgaard
+    10  Thomas Petazzoni
+     8  Bernd Kuhls
+     6  Fabrice Fontaine
+     4  Adam Duskett
+     3  Giulio Benetti
+     3  Martin Bark
+     3  Yann E. MORIN
+     2  Artyom Panfilov
+     2  Matt Weber
+     2  Yegor Yefremov
+     1  Francois Gerin
+     1  Frank Hunleth
+     1  Gr?goire Delattre
+     1  Joshua Henderson
+     1  Marcel Patzlaff
+     1  Olivier Schonken
+     1  Ricardo Martincoski
+     1  Romain Naour
 
 --
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Bye, Peter Korsgaard
