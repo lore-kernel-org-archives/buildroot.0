@@ -1,49 +1,42 @@
-From: Marcel Patzlaff <M.Patzlaff@pilz.de>
-Date: Fri, 26 Oct 2018 08:03:59 +0200
-Subject: [Buildroot] Antwort: Re: Antwort: Re: [PATCH v3] merge_config.sh:
- merge also buildroot config files
-In-Reply-To: <20181025214311.GB31691@dell5510>
-References: <20181025011343.29512-1-afshin.nasser@gmail.com>
- <20181025022031.14043-1-afshin.nasser@gmail.com>
- <20181025074309.GB18528@dell5510>
- <OF54A89E59.8DBA5497-ONC1258331.0034C458-C1258331.00357034@local-dmz.de>
- <20181025214311.GB31691@dell5510>
-Message-ID: <OF26A838D6.35610758-ONC1258332.00211513-C1258332.0021531B@local-dmz.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 26 Oct 2018 09:29:13 +0300
+Subject: [Buildroot] [PATCH] p11-kit: fix detection of certificates path
+Message-ID: <345d8a4df761992cceb2890c4cd654b0553c850a.1540535353.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Petr,
+The p11-kit configure script looked for certificates location on the
+host. This doesn't work well with cross compilation. Make the
+certificates patch depend on BR2_PACKAGE_CA_CERTIFICATES, and set the
+right target location of the path.
 
-> Looking in the code uclibc-ng uses several prefixes: CONFIG_, TARGET_, 
-UCLIBC_
-> and sometimes even configs without prefix: VERSION, WARNINGS, 
-> EXTRA_WARNINGS [1].
-> 
-> But their SED_CONFIG_EXP uses also CONFIG_.
+Fixes:
+http://autobuild.buildroot.net/results/295/295614d4aa3db9bb35bebbe56e38110f5a2de178/
+http://autobuild.buildroot.net/results/0fb/0fb454ca0df74a8585cffe8f5d1f5d23cdfdbec6/
+http://autobuild.buildroot.net/results/ef7/ef71f3d67afba547b5167253fb02476e59152803/
 
-As you said, they use several prefixes. IMHO, it does not make sense to
-filter out configuration items based on a prefix.
-And BTW, uclibc does not use it's own merge_config.sh anywhere and I
-assume that it is also not used elsewhere.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/p11-kit/p11-kit.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-I would suggest to just remove the prefix restrictions in buildroot's
-merge_config.sh unless someone can tell why they are important to be
-there.
-
-Kind regards,
-Marcel
-
-PS: Sorry for the second reply. My mailclient dropped the list...
-
+diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
+index d4cf9bc09c4c..10b5cc039300 100644
+--- a/package/p11-kit/p11-kit.mk
++++ b/package/p11-kit/p11-kit.mk
+@@ -14,4 +14,10 @@ P11_KIT_CONF_ENV = ac_cv_have_decl_program_invocation_short_name=yes \
+ P11_KIT_LICENSE = BSD-3-Clause
+ P11_KIT_LICENSE_FILES = COPYING
+ 
++ifeq ($(BR2_PACKAGE_CA_CERTIFICATES),y)
++P11_KIT_CONF_OPTS += --with-trust-paths=/etc/ssl/certs/ca-certificates.crt
++else
++P11_KIT_CONF_OPTS += --without-trust-paths
++endif
++
+ $(eval $(autotools-package))
 -- 
-
-Gesch?ftsf?hrung: Susanne Kunschert, Thomas Pilz
-Pilz GmbH & Co. KG, Sitz: Ostfildern, HRA 210 893, Amtsgericht Stuttgart
-Kompl. Ges. Peter Pilz GmbH, Sitz: Ostfildern, HRB 210 612, Amtsgericht Stuttgart
-Umsatzsteuer: ID-Nr. DE 145 355 773, WEEE-Reg.-Nr. DE 71636849
-This email is intended solely for the use of the named address(es). Any unauthorised disclosure, copying or distribution of these confidential information contained therein, or the taking of any action based on it, is prohibited. The sender disclaims any liability for the integrity of this email. Legally binding declarations must be in written form.
-Umweltschutz liegt uns am Herzen! - Bitte denken Sie an unsere Umwelt, bevor Sie diese E-Mail drucken.
-We do care about the environment! - Please consider the environment before printing this e-mail.
+2.19.1
