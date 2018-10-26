@@ -1,47 +1,82 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 26 Oct 2018 05:26:55 +0200
-Subject: [Buildroot] [PATCH 10/11] perl-net-ping: bump to version 2.71
-In-Reply-To: <20181026032656.9039-1-francois.perrad@gadz.org>
-References: <20181026032656.9039-1-francois.perrad@gadz.org>
-Message-ID: <20181026032656.9039-10-francois.perrad@gadz.org>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Fri, 26 Oct 2018 08:57:31 +0300
+Subject: [Buildroot] [PATCH 1/1] python-scapy: new package
+Message-ID: <20181026055731.2865-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/perl-net-ping/perl-net-ping.hash | 6 +++---
- package/perl-net-ping/perl-net-ping.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Interactive packet manipulation tool.
 
-diff --git a/package/perl-net-ping/perl-net-ping.hash b/package/perl-net-ping/perl-net-ping.hash
-index 363d09538..c3bff0339 100644
---- a/package/perl-net-ping/perl-net-ping.hash
-+++ b/package/perl-net-ping/perl-net-ping.hash
-@@ -1,6 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    0b01ada2bc588330456924393d47ed11 Net-Ping-2.68.tar.gz
--sha256 d01ac2fcdf684c4a23a07104fbb147cfbdbda47fd5b660912124258f29afd7e3 Net-Ping-2.68.tar.gz
-+md5    58110451d15d27b46ebc6a53f1697ff1 Net-Ping-2.71.tar.gz
-+sha256 0819d0aa87b173e98ecb3ccfd92272ce53c7fc9e86f962f64602a6fa477f7d4f Net-Ping-2.71.tar.gz
- 
- # computed by scancpan
--sha256 eb4ad254a468a977f29849efda0183f69b7f4ede0f7123e0dd5768207ee73c58 README
-+sha256 9441a22309a2b40ff1282ac1906c137f07f5e521e7b1ec162b251f6006051b47 README
-diff --git a/package/perl-net-ping/perl-net-ping.mk b/package/perl-net-ping/perl-net-ping.mk
-index 0b863008e..5e8f53be1 100644
---- a/package/perl-net-ping/perl-net-ping.mk
-+++ b/package/perl-net-ping/perl-net-ping.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PERL_NET_PING_VERSION = 2.68
-+PERL_NET_PING_VERSION = 2.71
- PERL_NET_PING_SOURCE = Net-Ping-$(PERL_NET_PING_VERSION).tar.gz
- PERL_NET_PING_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
- PERL_NET_PING_LICENSE = Artistic or GPL-1.0+
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/Config.in                      |  1 +
+ package/python-scapy/Config.in         |  8 ++++++++
+ package/python-scapy/python-scapy.hash |  5 +++++
+ package/python-scapy/python-scapy.mk   | 14 ++++++++++++++
+ 4 files changed, 28 insertions(+)
+ create mode 100644 package/python-scapy/Config.in
+ create mode 100644 package/python-scapy/python-scapy.hash
+ create mode 100644 package/python-scapy/python-scapy.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 710cde6691..93f4ba63c7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1001,6 +1001,7 @@ menu "External python modules"
+ 	source "package/python-rpi-gpio/Config.in"
+ 	source "package/python-rtslib-fb/Config.in"
+ 	source "package/python-scandir/Config.in"
++	source "package/python-scapy/Config.in"
+ 	source "package/python-scapy3k/Config.in"
+ 	source "package/python-schedule/Config.in"
+ 	source "package/python-sdnotify/Config.in"
+diff --git a/package/python-scapy/Config.in b/package/python-scapy/Config.in
+new file mode 100644
+index 0000000000..6575a33af3
+--- /dev/null
++++ b/package/python-scapy/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_SCAPY
++	bool "python-scapy"
++	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
++	help
++	  Scapy: interactive packet manipulation tool.
++
++	  http://www.secdev.org/projects/scapy
+diff --git a/package/python-scapy/python-scapy.hash b/package/python-scapy/python-scapy.hash
+new file mode 100644
+index 0000000000..4d8001b752
+--- /dev/null
++++ b/package/python-scapy/python-scapy.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/scapy/json
++md5	d7d3c4294f5a718e234775d38dbeb7ec  scapy-2.4.0.tar.gz
++sha256	452f714f5c2eac6fd0a6146b1dbddfc24dd5f4103f3ed76227995a488cfb2b73  scapy-2.4.0.tar.gz
++# Locally computed sha256 checksums
++sha256	7a49a7fdaf7b648e451dd01e4875cf4dbfa556c6359c6b97feed5047540ea989  PKG-INFO
+diff --git a/package/python-scapy/python-scapy.mk b/package/python-scapy/python-scapy.mk
+new file mode 100644
+index 0000000000..c44b2cb2e5
+--- /dev/null
++++ b/package/python-scapy/python-scapy.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-scapy
++#
++################################################################################
++
++PYTHON_SCAPY_VERSION = 2.4.0
++PYTHON_SCAPY_SOURCE = scapy-$(PYTHON_SCAPY_VERSION).tar.gz
++PYTHON_SCAPY_SITE = https://files.pythonhosted.org/packages/68/01/b9943984447e7ea6f8948e90c1729b78161c2bb3eef908430638ec3f7296
++PYTHON_SCAPY_LICENSE = GPL-2.0
++PYTHON_SCAPY_LICENSE_FILES = PKG-INFO
++PYTHON_SCAPY_SETUP_TYPE = distutils
++
++$(eval $(python-package))
 -- 
 2.17.1
