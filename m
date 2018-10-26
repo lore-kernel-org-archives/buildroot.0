@@ -1,25 +1,31 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Fri, 26 Oct 2018 21:52:52 +0200
-Subject: [Buildroot] [PATCH] iproute2: bump version to 4.19.0
-In-Reply-To: <20181026193715.10911-1-peter@korsgaard.com>
-References: <20181026193715.10911-1-peter@korsgaard.com>
-Message-ID: <20181026195251.GB14122@x230>
+From: Grzegorz Blach <grzegorz@blach.pl>
+Date: Fri, 26 Oct 2018 22:00:14 +0200
+Subject: [Buildroot] [PATCH 0/2] Creating a sparse file in ROOTFS_F2FS_CMD
+Message-ID: <20181026200016.30856-1-grzegorz@blach.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+I'm not sure if creating a sparse file using `dd` command from host OS
+is acceptable.  Maybe it's needed to find a better solution.
 
-> For support for the new 4.19+ kernel features. Release notes:
-> https://lwn.net/ml/netdev/20181023104935.282ff4ec at xeon-e3/
+Grzegorz Blach (2):
+  package/f2fs-tools: add host package
+  fs/f2fs: add support for creating a f2fs image
 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+ DEVELOPERS                        |  1 +
+ fs/Config.in                      |  1 +
+ fs/f2fs/Config.in                 | 49 +++++++++++++++++++++++++++++++
+ fs/f2fs/f2fs.mk                   | 46 +++++++++++++++++++++++++++++
+ package/Config.in.host            |  1 +
+ package/f2fs-tools/Config.in.host |  7 +++++
+ package/f2fs-tools/f2fs-tools.mk  |  2 ++
+ 7 files changed, 107 insertions(+)
+ create mode 100644 fs/f2fs/Config.in
+ create mode 100644 fs/f2fs/f2fs.mk
+ create mode 100644 package/f2fs-tools/Config.in.host
 
-Thanks for update!
-
-
-Kind regards,
-Petr
+-- 
+2.17.2
