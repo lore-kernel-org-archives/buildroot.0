@@ -1,80 +1,421 @@
-From: Nasser <afshin.nasser@gmail.com>
-Date: Sat, 27 Oct 2018 02:35:47 +0330
-Subject: [Buildroot] Antwort: Re: Antwort: Re: [PATCH v3]
- merge_config.sh: merge also buildroot config files
-In-Reply-To: <OF26A838D6.35610758-ONC1258332.00211513-C1258332.0021531B@local-dmz.de>
-References: <20181025011343.29512-1-afshin.nasser@gmail.com>
- <20181025022031.14043-1-afshin.nasser@gmail.com>
- <20181025074309.GB18528@dell5510>
- <OF54A89E59.8DBA5497-ONC1258331.0034C458-C1258331.00357034@local-dmz.de>
- <20181025214311.GB31691@dell5510>
- <OF26A838D6.35610758-ONC1258332.00211513-C1258332.0021531B@local-dmz.de>
-Message-ID: <20181026230546.GA18350@smart-ThinkPad-T410>
+From: Niall Parker <stuff@npengineering.ca>
+Date: Fri, 26 Oct 2018 16:29:55 -0700
+Subject: [Buildroot] =?utf-8?q?failure_to_build_kernel=3A_error=3A_redefi?=
+ =?utf-8?b?bml0aW9uIG9mIOKAmGZkdDE2X3RvX2NwdeKAmQ==?=
+Message-ID: <a1b3a60c-b83d-f3a7-3e4e-d576aba400c9@npengineering.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Marcel, Petr,
-On Fri, Oct 26, 2018 at 08:03:59AM +0200, Marcel Patzlaff wrote:
-> Hi Petr,
-> 
-> > Looking in the code uclibc-ng uses several prefixes: CONFIG_, TARGET_, 
-> UCLIBC_
-> > and sometimes even configs without prefix: VERSION, WARNINGS, 
-> > EXTRA_WARNINGS [1].
-> > 
-> > But their SED_CONFIG_EXP uses also CONFIG_.
-> 
-> As you said, they use several prefixes. IMHO, it does not make sense to
-> filter out configuration items based on a prefix.
-> And BTW, uclibc does not use it's own merge_config.sh anywhere and I
-> assume that it is also not used elsewhere.
-Yes uclibc does not use it's own merge_config.sh anywhere.
-> 
-> I would suggest to just remove the prefix restrictions in buildroot's
-> merge_config.sh unless someone can tell why they are important to be
-> there.
-The problem is that some of our defconfig files include comment lines
-(e.g raspberrypi_defconfig, cubieboard2_defconfig,
-qemu_arm_versatile_defconfig, ...). If we completely omit the
-${CONFIG_PREFIX} we will add first word of comments to $CFG_LIST and
-therefor will produce some false warning reports for comment lines (if
-the fist word is just repeated anywhere throughout the fragments which
-is none sense)
+Hello,
 
-If we consider the controversial part of the script which is either:
-sed -n 's/^\(# \)\{0,1\}\(CONFIG_[a-zA-Z0-9_]*\)[= ].*/\2/p' \
-defconfig_file_name
+I'm trying to build an updated kernel for a board based of the 
+beaglebone and while tag 4.9.56-ti-r70 builds OK, any of the newer tags 
+is failing. The tag I am focusing on is 4.14.71-ti-r80 (used by the 
+Debian distro for BBB).
 
-for kernel style config files or
+As shown in log below, the compile fails with a redefinition and sounded 
+like an earlier conflict between host dtc tools but I am running the 
+latest BR (master) and the fixes appear to be in place.
 
-sed -n 's/^\(# \)\{0,1\}\(BR2_[a-zA-Z0-9_]*\)[= ].*/\2/p' \
-defconfig_file_name
+Any suggestions or pointers appreciated, thanks.
 
-for buildroot style config files or
+ ???? ... Niall
 
-sed -n 's/^\(# \)\{0,1\}\([a-zA-Z0-9_]*\)[= ].*/\2/p' \
-defconfig_file_name
 
-as a general command then for different buildroot/kernel defconfig
-files, the last one will extract comments as well which IMHO is not what we
-want.
-> 
-> Kind regards,
-> Marcel
-> 
-> PS: Sorry for the second reply. My mailclient dropped the list...
-> 
-> -- 
-> 
-> Gesch?ftsf?hrung: Susanne Kunschert, Thomas Pilz
-> Pilz GmbH & Co. KG, Sitz: Ostfildern, HRA 210 893, Amtsgericht Stuttgart
-> Kompl. Ges. Peter Pilz GmbH, Sitz: Ostfildern, HRB 210 612, Amtsgericht Stuttgart
-> Umsatzsteuer: ID-Nr. DE 145 355 773, WEEE-Reg.-Nr. DE 71636849
-> This email is intended solely for the use of the named address(es). Any unauthorised disclosure, copying or distribution of these confidential information contained therein, or the taking of any action based on it, is prohibited. The sender disclaims any liability for the integrity of this email. Legally binding declarations must be in written form.
-> Umweltschutz liegt uns am Herzen! - Bitte denken Sie an unsere Umwelt, bevor Sie diese E-Mail drucken.
-> We do care about the environment! - Please consider the environment before printing this e-mail.
-Kind regards,
-Nasser
+8<----
+
+/usr/bin/make -j1 O=/opt/buildroot/output HOSTCC="/usr/bin/gcc" 
+HOSTCXX="/usr/bin/g++" silentoldconfig
+ >>> linux 4.14.71-ti-r80 Building
+cp -f 
+/home/niall/work/NPES/AML/br2-external/board/motherBoard/dts/am33xx-AMLmb.dtsi 
+/opt/buildroot/output/build/linux-4.14.71-ti-r80/arch/arm/boot/dts/
+cp -f 
+/home/niall/work/NPES/AML/br2-external/board/motherBoard/dts/am335x-common-AMLmb.dtsi 
+/opt/buildroot/output/build/linux-4.14.71-ti-r80/arch/arm/boot/dts/
+cp -f 
+/home/niall/work/NPES/AML/br2-external/board/motherBoard/dts/am335x-boneblack-wl1835-AMLmb.dtsi 
+/opt/buildroot/output/build/linux-4.14.71-ti-r80/arch/arm/boot/dts/
+cp -f 
+/home/niall/work/NPES/AML/br2-external/board/motherBoard/dts/am335x-AMLmb.dts 
+/opt/buildroot/output/build/linux-4.14.71-ti-r80/arch/arm/boot/dts/
+PATH="/opt/buildroot/output/host/bin:/opt/buildroot/output/host/sbin:/home/niall/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin" 
+BR_BINARIES_DIR=/opt/buildroot/output/images /usr/bin/make -j5 
+HOSTCC="/opt/buildroot/output/host/bin/ccache /usr/bin/gcc -O2 
+-I/opt/buildroot/output/host/include -L/opt/buildroot/output/host/lib 
+-Wl,-rpath,/opt/buildroot/output/host/lib" ARCH=arm 
+INSTALL_MOD_PATH=/opt/buildroot/output/target 
+CROSS_COMPILE="/opt/buildroot/output/host/bin/arm-linux-gnueabihf-" 
+DEPMOD=/opt/buildroot/output/host/sbin/depmod INSTALL_MOD_STRIP=1 -C 
+/opt/buildroot/output/build/linux-4.14.71-ti-r80 zImage
+ ? CHK???? include/config/kernel.release
+ ? CHK???? include/generated/uapi/linux/version.h
+ ? CHK???? include/generated/utsrelease.h
+ ? CHK???? scripts/mod/devicetable-offsets.h
+ ? HOSTCC? scripts/dtc/dtc-lexer.lex.o
+ ? HOSTCC? scripts/dtc/dtc-parser.tab.o
+ ? HOSTCC? scripts/dtc/libfdt/fdt_rw.o
+ ? HOSTCC? scripts/dtc/libfdt/fdt.o
+ ? HOSTCC? scripts/dtc/libfdt/fdt_sw.o
+ ? HOSTCC? scripts/dtc/libfdt/fdt_empty_tree.o
+ ? HOSTCC? scripts/dtc/libfdt/fdt_overlay.o
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt.c:54:
+/opt/buildroot/output/host/include/libfdt_env.h:82:24: error: 
+redefinition of ?fdt16_to_cpu?
+ ?static inline uint16_t fdt16_to_cpu(fdt16_t x)
+ ??????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt.c:51:0:
+scripts/dtc/libfdt/libfdt_env.h:81:24: note: previous definition of 
+?fdt16_to_cpu? was here
+ ?static inline uint16_t fdt16_to_cpu(fdt16_t x)
+ ??????????????????????? ^
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt.c:54:
+/opt/buildroot/output/host/include/libfdt_env.h:86:23: error: 
+redefinition of ?cpu_to_fdt16?
+ ?static inline fdt16_t cpu_to_fdt16(uint16_t x)
+ ?????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt.c:51:0:
+scripts/dtc/libfdt/libfdt_env.h:85:23: note: previous definition of 
+?cpu_to_fdt16? was here
+ ?static inline fdt16_t cpu_to_fdt16(uint16_t x)
+ ?????????????????????? ^
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt.c:54:
+/opt/buildroot/output/host/include/libfdt_env.h:91:24: error: 
+redefinition of ?fdt32_to_cpu?
+ ?static inline uint32_t fdt32_to_cpu(fdt32_t x)
+ ??????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt.c:51:0:
+scripts/dtc/libfdt/libfdt_env.h:90:24: note: previous definition of 
+?fdt32_to_cpu? was here
+ ?static inline uint32_t fdt32_to_cpu(fdt32_t x)
+ ??????????????????????? ^
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt.c:54:
+/opt/buildroot/output/host/include/libfdt_env.h:95:23: error: 
+redefinition of ?cpu_to_fdt32?
+ ?static inline fdt32_t cpu_to_fdt32(uint32_t x)
+ ?????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt.c:51:0:
+scripts/dtc/libfdt/libfdt_env.h:94:23: note: previous definition of 
+?cpu_to_fdt32? was here
+ ?static inline fdt32_t cpu_to_fdt32(uint32_t x)
+ ?????????????????????? ^
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt.c:54:
+/opt/buildroot/output/host/include/libfdt_env.h:100:24: error: 
+redefinition of ?fdt64_to_cpu?
+ ?static inline uint64_t fdt64_to_cpu(fdt64_t x)
+ ??????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt.c:51:0:
+scripts/dtc/libfdt/libfdt_env.h:99:24: note: previous definition of 
+?fdt64_to_cpu? was here
+ ?static inline uint64_t fdt64_to_cpu(fdt64_t x)
+ ??????????????????????? ^
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt.c:54:
+/opt/buildroot/output/host/include/libfdt_env.h:104:23: error: 
+redefinition of ?cpu_to_fdt64?
+ ?static inline fdt64_t cpu_to_fdt64(uint64_t x)
+ ?????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt.c:51:0:
+scripts/dtc/libfdt/libfdt_env.h:103:23: note: previous definition of 
+?cpu_to_fdt64? was here
+ ?static inline fdt64_t cpu_to_fdt64(uint64_t x)
+ ?????????????????????? ^
+scripts/Makefile.host:119: recipe for target 'scripts/dtc/libfdt/fdt.o' 
+failed
+make[4]: *** [scripts/dtc/libfdt/fdt.o] Error 1
+make[4]: *** Waiting for unfinished jobs....
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt_rw.c:54:
+/opt/buildroot/output/host/include/libfdt_env.h:82:24: error: 
+redefinition of ?fdt16_to_cpu?
+ ?static inline uint16_t fdt16_to_cpu(fdt16_t x)
+ ??????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt_rw.c:51:0:
+scripts/dtc/libfdt/libfdt_env.h:81:24: note: previous definition of 
+?fdt16_to_cpu? was here
+ ?static inline uint16_t fdt16_to_cpu(fdt16_t x)
+ ??????????????????????? ^
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt_rw.c:54:
+/opt/buildroot/output/host/include/libfdt_env.h:86:23: error: 
+redefinition of ?cpu_to_fdt16?
+ ?static inline fdt16_t cpu_to_fdt16(uint16_t x)
+ ?????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt_rw.c:51:0:
+scripts/dtc/libfdt/libfdt_env.h:85:23: note: previous definition of 
+?cpu_to_fdt16? was here
+ ?static inline fdt16_t cpu_to_fdt16(uint16_t x)
+ ?????????????????????? ^
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt_rw.c:54:
+/opt/buildroot/output/host/include/libfdt_env.h:91:24: error: 
+redefinition of ?fdt32_to_cpu?
+ ?static inline uint32_t fdt32_to_cpu(fdt32_t x)
+ ??????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt_rw.c:51:0:
+scripts/dtc/libfdt/libfdt_env.h:90:24: note: previous definition of 
+?fdt32_to_cpu? was here
+ ?static inline uint32_t fdt32_to_cpu(fdt32_t x)
+ ??????????????????????? ^
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt_rw.c:54:
+/opt/buildroot/output/host/include/libfdt_env.h:95:23: error: 
+redefinition of ?cpu_to_fdt32?
+ ?static inline fdt32_t cpu_to_fdt32(uint32_t x)
+ ?????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt_rw.c:51:0:
+scripts/dtc/libfdt/libfdt_env.h:94:23: note: previous definition of 
+?cpu_to_fdt32? was here
+ ?static inline fdt32_t cpu_to_fdt32(uint32_t x)
+ ?????????????????????? ^
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt_rw.c:54:
+/opt/buildroot/output/host/include/libfdt_env.h:100:24: error: 
+redefinition of ?fdt64_to_cpu?
+ ?static inline uint64_t fdt64_to_cpu(fdt64_t x)
+ ??????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt_rw.c:51:0:
+scripts/dtc/libfdt/libfdt_env.h:99:24: note: previous definition of 
+?fdt64_to_cpu? was here
+ ?static inline uint64_t fdt64_to_cpu(fdt64_t x)
+ ??????????????????????? ^
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt_rw.c:54:
+/opt/buildroot/output/host/include/libfdt_env.h:104:23: error: 
+redefinition of ?cpu_to_fdt64?
+ ?static inline fdt64_t cpu_to_fdt64(uint64_t x)
+ ?????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt_rw.c:51:0:
+scripts/dtc/libfdt/libfdt_env.h:103:23: note: previous definition of 
+?cpu_to_fdt64? was here
+ ?static inline fdt64_t cpu_to_fdt64(uint64_t x)
+ ?????????????????????? ^
+scripts/Makefile.host:119: recipe for target 
+'scripts/dtc/libfdt/fdt_rw.o' failed
+make[4]: *** [scripts/dtc/libfdt/fdt_rw.o] Error 1
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt_empty_tree.c:54:
+/opt/buildroot/output/host/include/libfdt_env.h:82:24: error: 
+redefinition of ?fdt16_to_cpu?
+ ?static inline uint16_t fdt16_to_cpu(fdt16_t x)
+ ??????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt_empty_tree.c:51:0:
+scripts/dtc/libfdt/libfdt_env.h:81:24: note: previous definition of 
+?fdt16_to_cpu? was here
+ ?static inline uint16_t fdt16_to_cpu(fdt16_t x)
+ ??????????????????????? ^
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt_empty_tree.c:54:
+/opt/buildroot/output/host/include/libfdt_env.h:86:23: error: 
+redefinition of ?cpu_to_fdt16?
+ ?static inline fdt16_t cpu_to_fdt16(uint16_t x)
+ ?????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt_empty_tree.c:51:0:
+scripts/dtc/libfdt/libfdt_env.h:85:23: note: previous definition of 
+?cpu_to_fdt16? was here
+ ?static inline fdt16_t cpu_to_fdt16(uint16_t x)
+ ?????????????????????? ^
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt_empty_tree.c:54:
+/opt/buildroot/output/host/include/libfdt_env.h:91:24: error: 
+redefinition of ?fdt32_to_cpu?
+ ?static inline uint32_t fdt32_to_cpu(fdt32_t x)
+ ??????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt_empty_tree.c:51:0:
+scripts/dtc/libfdt/libfdt_env.h:90:24: note: previous definition of 
+?fdt32_to_cpu? was here
+ ?static inline uint32_t fdt32_to_cpu(fdt32_t x)
+ ??????????????????????? ^
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt_empty_tree.c:54:
+/opt/buildroot/output/host/include/libfdt_env.h:95:23: error: 
+redefinition of ?cpu_to_fdt32?
+ ?static inline fdt32_t cpu_to_fdt32(uint32_t x)
+ ?????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt_empty_tree.c:51:0:
+scripts/dtc/libfdt/libfdt_env.h:94:23: note: previous definition of 
+?cpu_to_fdt32? was here
+ ?static inline fdt32_t cpu_to_fdt32(uint32_t x)
+ ?????????????????????? ^
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt_empty_tree.c:54:
+/opt/buildroot/output/host/include/libfdt_env.h:100:24: error: 
+redefinition of ?fdt64_to_cpu?
+ ?static inline uint64_t fdt64_to_cpu(fdt64_t x)
+ ??????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt_empty_tree.c:51:0:
+scripts/dtc/libfdt/libfdt_env.h:99:24: note: previous definition of 
+?fdt64_to_cpu? was here
+ ?static inline uint64_t fdt64_to_cpu(fdt64_t x)
+ ??????????????????????? ^
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt_empty_tree.c:54:
+/opt/buildroot/output/host/include/libfdt_env.h:104:23: error: 
+redefinition of ?cpu_to_fdt64?
+ ?static inline fdt64_t cpu_to_fdt64(uint64_t x)
+ ?????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt_empty_tree.c:51:0:
+scripts/dtc/libfdt/libfdt_env.h:103:23: note: previous definition of 
+?cpu_to_fdt64? was here
+ ?static inline fdt64_t cpu_to_fdt64(uint64_t x)
+ ?????????????????????? ^
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt_sw.c:54:
+/opt/buildroot/output/host/include/libfdt_env.h:82:24: error: 
+redefinition of ?fdt16_to_cpu?
+ ?static inline uint16_t fdt16_to_cpu(fdt16_t x)
+ ??????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt_sw.c:51:0:
+scripts/dtc/libfdt/libfdt_env.h:81:24: note: previous definition of 
+?fdt16_to_cpu? was here
+ ?static inline uint16_t fdt16_to_cpu(fdt16_t x)
+ ??????????????????????? ^
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt_sw.c:54:
+/opt/buildroot/output/host/include/libfdt_env.h:86:23: error: 
+redefinition of ?cpu_to_fdt16?
+ ?static inline fdt16_t cpu_to_fdt16(uint16_t x)
+ ?????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt_sw.c:51:0:
+scripts/dtc/libfdt/libfdt_env.h:85:23: note: previous definition of 
+?cpu_to_fdt16? was here
+ ?static inline fdt16_t cpu_to_fdt16(uint16_t x)
+ ?????????????????????? ^
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt_sw.c:54:
+/opt/buildroot/output/host/include/libfdt_env.h:91:24: error: 
+redefinition of ?fdt32_to_cpu?
+ ?static inline uint32_t fdt32_to_cpu(fdt32_t x)
+ ??????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt_sw.c:51:0:
+scripts/dtc/libfdt/libfdt_env.h:90:24: note: previous definition of 
+?fdt32_to_cpu? was here
+ ?static inline uint32_t fdt32_to_cpu(fdt32_t x)
+ ??????????????????????? ^
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt_sw.c:54:
+/opt/buildroot/output/host/include/libfdt_env.h:95:23: error: 
+redefinition of ?cpu_to_fdt32?
+ ?static inline fdt32_t cpu_to_fdt32(uint32_t x)
+ ?????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt_sw.c:51:0:
+scripts/dtc/libfdt/libfdt_env.h:94:23: note: previous definition of 
+?cpu_to_fdt32? was here
+ ?static inline fdt32_t cpu_to_fdt32(uint32_t x)
+ ?????????????????????? ^
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt_sw.c:54:
+/opt/buildroot/output/host/include/libfdt_env.h:100:24: error: 
+redefinition of ?fdt64_to_cpu?
+ ?static inline uint64_t fdt64_to_cpu(fdt64_t x)
+ ??????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt_sw.c:51:0:
+scripts/dtc/libfdt/libfdt_env.h:99:24: note: previous definition of 
+?fdt64_to_cpu? was here
+ ?static inline uint64_t fdt64_to_cpu(fdt64_t x)
+ ??????????????????????? ^
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt_sw.c:54:
+/opt/buildroot/output/host/include/libfdt_env.h:104:23: error: 
+redefinition of ?cpu_to_fdt64?
+ ?static inline fdt64_t cpu_to_fdt64(uint64_t x)
+ ?????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt_sw.c:51:0:
+scripts/dtc/libfdt/libfdt_env.h:103:23: note: previous definition of 
+?cpu_to_fdt64? was here
+ ?static inline fdt64_t cpu_to_fdt64(uint64_t x)
+ ?????????????????????? ^
+scripts/Makefile.host:119: recipe for target 
+'scripts/dtc/libfdt/fdt_empty_tree.o' failed
+make[4]: *** [scripts/dtc/libfdt/fdt_empty_tree.o] Error 1
+scripts/Makefile.host:119: recipe for target 
+'scripts/dtc/libfdt/fdt_sw.o' failed
+make[4]: *** [scripts/dtc/libfdt/fdt_sw.o] Error 1
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt_overlay.c:4:
+/opt/buildroot/output/host/include/libfdt_env.h:82:24: error: 
+redefinition of ?fdt16_to_cpu?
+ ?static inline uint16_t fdt16_to_cpu(fdt16_t x)
+ ??????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt_overlay.c:1:0:
+scripts/dtc/libfdt/libfdt_env.h:81:24: note: previous definition of 
+?fdt16_to_cpu? was here
+ ?static inline uint16_t fdt16_to_cpu(fdt16_t x)
+ ??????????????????????? ^
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt_overlay.c:4:
+/opt/buildroot/output/host/include/libfdt_env.h:86:23: error: 
+redefinition of ?cpu_to_fdt16?
+ ?static inline fdt16_t cpu_to_fdt16(uint16_t x)
+ ?????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt_overlay.c:1:0:
+scripts/dtc/libfdt/libfdt_env.h:85:23: note: previous definition of 
+?cpu_to_fdt16? was here
+ ?static inline fdt16_t cpu_to_fdt16(uint16_t x)
+ ?????????????????????? ^
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt_overlay.c:4:
+/opt/buildroot/output/host/include/libfdt_env.h:91:24: error: 
+redefinition of ?fdt32_to_cpu?
+ ?static inline uint32_t fdt32_to_cpu(fdt32_t x)
+ ??????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt_overlay.c:1:0:
+scripts/dtc/libfdt/libfdt_env.h:90:24: note: previous definition of 
+?fdt32_to_cpu? was here
+ ?static inline uint32_t fdt32_to_cpu(fdt32_t x)
+ ??????????????????????? ^
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt_overlay.c:4:
+/opt/buildroot/output/host/include/libfdt_env.h:95:23: error: 
+redefinition of ?cpu_to_fdt32?
+ ?static inline fdt32_t cpu_to_fdt32(uint32_t x)
+ ?????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt_overlay.c:1:0:
+scripts/dtc/libfdt/libfdt_env.h:94:23: note: previous definition of 
+?cpu_to_fdt32? was here
+ ?static inline fdt32_t cpu_to_fdt32(uint32_t x)
+ ?????????????????????? ^
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt_overlay.c:4:
+/opt/buildroot/output/host/include/libfdt_env.h:100:24: error: 
+redefinition of ?fdt64_to_cpu?
+ ?static inline uint64_t fdt64_to_cpu(fdt64_t x)
+ ??????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt_overlay.c:1:0:
+scripts/dtc/libfdt/libfdt_env.h:99:24: note: previous definition of 
+?fdt64_to_cpu? was here
+ ?static inline uint64_t fdt64_to_cpu(fdt64_t x)
+ ??????????????????????? ^
+In file included from /opt/buildroot/output/host/include/libfdt.h:54:0,
+ ???????????????? from scripts/dtc/libfdt/fdt_overlay.c:4:
+/opt/buildroot/output/host/include/libfdt_env.h:104:23: error: 
+redefinition of ?cpu_to_fdt64?
+ ?static inline fdt64_t cpu_to_fdt64(uint64_t x)
+ ?????????????????????? ^
+In file included from scripts/dtc/libfdt/fdt_overlay.c:1:0:
+scripts/dtc/libfdt/libfdt_env.h:103:23: note: previous definition of 
+?cpu_to_fdt64? was here
+ ?static inline fdt64_t cpu_to_fdt64(uint64_t x)
+ ?????????????????????? ^
+scripts/Makefile.host:119: recipe for target 
+'scripts/dtc/libfdt/fdt_overlay.o' failed
+make[4]: *** [scripts/dtc/libfdt/fdt_overlay.o] Error 1
+scripts/Makefile.build:587: recipe for target 'scripts/dtc' failed
+make[3]: *** [scripts/dtc] Error 2
+Makefile:568: recipe for target 'scripts' failed
+make[2]: *** [scripts] Error 2
+package/pkg-generic.mk:229: recipe for target 
+'/opt/buildroot/output/build/linux-4.14.71-ti-r80/.stamp_built' failed
+make[1]: *** 
+[/opt/buildroot/output/build/linux-4.14.71-ti-r80/.stamp_built] Error 2
+Makefile:79: recipe for target '_all' failed
+make: *** [_all] Error 2
+niall at preston:/opt/buildroot$
