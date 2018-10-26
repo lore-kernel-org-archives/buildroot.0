@@ -1,35 +1,31 @@
-From: Florian La Roche <F.LaRoche@pilz.de>
-Date: Fri, 26 Oct 2018 15:28:53 +0200
-Subject: [Buildroot] Antwort: [PATCH 1/1] ltp-testsuite: Backport
- compilation fix from upstream
-In-Reply-To: <20181017205917.9536-1-petr.vorel@gmail.com>
-References: <20181017205917.9536-1-petr.vorel@gmail.com>
-Message-ID: <OF9F7554CF.63A0B49A-ONC1258332.00499C95-C1258332.004A0EBE@local-dmz.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 26 Oct 2018 16:59:37 +0200
+Subject: [Buildroot] [PATCH v2] boot/xloader: remove package
+In-Reply-To: <1537480464-50744-1-git-send-email-matthew.weber@rockwellcollins.com>
+ (Matt Weber's message of "Thu, 20 Sep 2018 16:54:24 -0500")
+References: <1537480464-50744-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <87a7n04uue.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Petr Vorel,
+>>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
 
-your patch works good for me and should get added. (Patch is from 
-upstream/backport.)
+ > U-boot has provided SPL support as a viable replacement for the
+ > 2nd stage bootloader on TI platforms.  The X-loader project
+ > hasn't had a commit in the log since 12-05-2011.
+ > (https://gitorious.org/x-loader/x-loader)
 
-Sorry for replying so late.
-best regards,
+ > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+ > ---
+ > Changes
+ > v1 -> v2
+ > [Thomas
+ >  - added Config.in.legacy entry
 
-Florian La Roche
+Committed, thanks.
 
-
-
-Gesch?ftsf?hrung: Susanne Kunschert, Thomas Pilz
-Pilz GmbH & Co. KG, Sitz: Ostfildern, HRA 210 893, Amtsgericht Stuttgart
-Kompl. Ges. Peter Pilz GmbH, Sitz: Ostfildern, HRB 210 612, Amtsgericht Stuttgart
-Umsatzsteuer: ID-Nr. DE 145 355 773, WEEE-Reg.-Nr. DE 71636849
-This email is intended solely for the use of the named address(es). Any unauthorised disclosure, copying or distribution of these confidential information contained therein, or the taking of any action based on it, is prohibited. The sender disclaims any liability for the integrity of this email. Legally binding declarations must be in written form.
-Umweltschutz liegt uns am Herzen! - Bitte denken Sie an unsere Umwelt, bevor Sie diese E-Mail drucken.
-We do care about the environment! - Please consider the environment before printing this e-mail.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181026/40c597f8/attachment.html>
+-- 
+Bye, Peter Korsgaard
