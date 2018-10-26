@@ -1,48 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Oct 2018 13:54:50 +0200
-Subject: [Buildroot] [git commit] python-pytz: bump to version 2018.6
-Message-ID: <20181026115311.B75F388DB4@busybox.osuosl.org>
+Date: Fri, 26 Oct 2018 13:54:41 +0200
+Subject: [Buildroot] [git commit] python-dateutil: bump to version 2.7.4
+Message-ID: <20181026115311.AD15888FF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=615fe0655271ad9df077fb7b9fc42d0d24d37697
+commit: https://git.buildroot.net/buildroot/commit/?id=9487d99f2fd254e15f649e22099346429abeec9d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pytz/python-pytz.hash | 4 ++--
- package/python-pytz/python-pytz.mk   | 4 ++--
+ package/python-dateutil/python-dateutil.hash | 4 ++--
+ package/python-dateutil/python-dateutil.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pytz/python-pytz.hash b/package/python-pytz/python-pytz.hash
-index 0b1a0b5501..5634d5d624 100644
---- a/package/python-pytz/python-pytz.hash
-+++ b/package/python-pytz/python-pytz.hash
+diff --git a/package/python-dateutil/python-dateutil.hash b/package/python-dateutil/python-dateutil.hash
+index c55128f507..e45da864b8 100644
+--- a/package/python-dateutil/python-dateutil.hash
++++ b/package/python-dateutil/python-dateutil.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pytz/json
--md5	45409cbfa3927bdd2f3ee914dd5b1060  pytz-2018.5.tar.gz
--sha256	ffb9ef1de172603304d9d2819af6f5ece76f2e85ec10692a524dd876e72bf277  pytz-2018.5.tar.gz
-+md5	6c92d86f9e92e71c561b1adc213feba0  pytz-2018.6.tar.gz
-+sha256	642253af8eae734d1509fc6ac9c1aee5e5b69d76392660889979b9870610a46b  pytz-2018.6.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/python-dateutil/json
+-md5	175b7c1a3cc0cb01151eced07c61c0b8  python-dateutil-2.7.3.tar.gz
+-sha256	e27001de32f627c22380a688bcc43ce83504a7bc5da472209b4c70f02829f0b8  python-dateutil-2.7.3.tar.gz
++md5	0fcdcec70ebf8cdc469c647fa4966794  python-dateutil-2.7.4.tar.gz
++sha256	2f13d3ea236aeb237e7258d5729c46eafe1506fd7f8507f34730734ed8b37454  python-dateutil-2.7.4.tar.gz
  # Locally computed sha256 checksums
- sha256	39f07c72a1bfda349cbd27bac9bcb1e6f8c5b4e5cc3fadf56900406e8cc0b792  LICENSE.txt
-diff --git a/package/python-pytz/python-pytz.mk b/package/python-pytz/python-pytz.mk
-index 4ddc3f9df0..9a0ea19375 100644
---- a/package/python-pytz/python-pytz.mk
-+++ b/package/python-pytz/python-pytz.mk
-@@ -4,9 +4,9 @@
+ sha256	ba00f51a0d92823b5a1cde27d8b5b9d2321e67ed8da9bc163eff96d5e17e577e  LICENSE
+diff --git a/package/python-dateutil/python-dateutil.mk b/package/python-dateutil/python-dateutil.mk
+index 73c3c35aaf..4207a459d0 100644
+--- a/package/python-dateutil/python-dateutil.mk
++++ b/package/python-dateutil/python-dateutil.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_PYTZ_VERSION = 2018.5
-+PYTHON_PYTZ_VERSION = 2018.6
- PYTHON_PYTZ_SOURCE = pytz-$(PYTHON_PYTZ_VERSION).tar.gz
--PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/ca/a9/62f96decb1e309d6300ebe7eee9acfd7bccaeedd693794437005b9067b44
-+PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/c7/df/68a3331691a604a8241335064cf20742338d66eb008da96d4c9f3e3d4c41
- PYTHON_PYTZ_SETUP_TYPE = setuptools
- PYTHON_PYTZ_LICENSE = MIT
- PYTHON_PYTZ_LICENSE_FILES = LICENSE.txt
+-PYTHON_DATEUTIL_VERSION = 2.7.3
+-PYTHON_DATEUTIL_SITE = https://files.pythonhosted.org/packages/a0/b0/a4e3241d2dee665fea11baec21389aec6886655cd4db7647ddf96c3fad15
++PYTHON_DATEUTIL_VERSION = 2.7.4
++PYTHON_DATEUTIL_SITE = https://files.pythonhosted.org/packages/a5/15/37f2e39504a98ec4b3eba8c9a61755dd5374388201ee60d1ae5b8e7a3d09
+ PYTHON_DATEUTIL_SETUP_TYPE = setuptools
+ PYTHON_DATEUTIL_LICENSE = BSD-3-Clause
+ PYTHON_DATEUTIL_LICENSE_FILES = LICENSE
