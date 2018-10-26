@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 26 Oct 2018 05:26:47 +0200
-Subject: [Buildroot] [PATCH 02/11] perl-date-manip: bump to version 6.73
+Date: Fri, 26 Oct 2018 05:26:48 +0200
+Subject: [Buildroot] [PATCH 03/11] perl-file-slurp: bump to version 9999.23
 In-Reply-To: <20181026032656.9039-1-francois.perrad@gadz.org>
 References: <20181026032656.9039-1-francois.perrad@gadz.org>
-Message-ID: <20181026032656.9039-2-francois.perrad@gadz.org>
+Message-ID: <20181026032656.9039-3-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +12,42 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-date-manip/perl-date-manip.hash | 4 ++--
- package/perl-date-manip/perl-date-manip.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/perl-file-slurp/perl-file-slurp.hash | 6 +++---
+ package/perl-file-slurp/perl-file-slurp.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/perl-date-manip/perl-date-manip.hash b/package/perl-date-manip/perl-date-manip.hash
-index f02f65782..6fb8a1896 100644
---- a/package/perl-date-manip/perl-date-manip.hash
-+++ b/package/perl-date-manip/perl-date-manip.hash
+diff --git a/package/perl-file-slurp/perl-file-slurp.hash b/package/perl-file-slurp/perl-file-slurp.hash
+index 18f9e65ce..617973191 100644
+--- a/package/perl-file-slurp/perl-file-slurp.hash
++++ b/package/perl-file-slurp/perl-file-slurp.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    b41b0d476fd7eae3ce81324386266a85 Date-Manip-6.72.tar.gz
--sha256 38f4dd9d94b41092ca7b9da2ef72c3bb8b8c8bff6da14d785c612f3cc7a94da6 Date-Manip-6.72.tar.gz
-+md5    0f85b1d9236e22a53dcb1c7f4b4fed77 Date-Manip-6.73.tar.gz
-+sha256 d39295c7c3f19b43470d1203dded8cb649b41a1098e51b5b7c7cf17b662ca255 Date-Manip-6.73.tar.gz
+-md5    7d584cd15c4f8b9547765eff8c4ef078 File-Slurp-9999.19.tar.gz
+-sha256 ce29ebe995097ebd6e9bc03284714cdfa0c46dc94f6b14a56980747ea3253643 File-Slurp-9999.19.tar.gz
++md5    5c08acb15544113657994960f16c8910 File-Slurp-9999.23.tar.gz
++sha256 9eb73287890e172c4e39ce069f0e6a82da90df20dc7e2d52c666e9b07489a7f7 File-Slurp-9999.23.tar.gz
  
  # computed by scancpan
- sha256 8ba2a138654f8b59b7e1e3ad0d4c81918b9148ff95078b172ccbb45fa241431d LICENSE
-diff --git a/package/perl-date-manip/perl-date-manip.mk b/package/perl-date-manip/perl-date-manip.mk
-index 08d85f2d4..5e34ba4da 100644
---- a/package/perl-date-manip/perl-date-manip.mk
-+++ b/package/perl-date-manip/perl-date-manip.mk
-@@ -4,7 +4,7 @@
+-sha256 17e638d011c04b1d39b300c07ccd0c57d7857b9ccdb9fe7abce1b15f0e7b0c20 README
++sha256 21eec4bf12d10c78042734c76873852aaffce278ad4fd90814d91b8c885e6ef3 README.md
+diff --git a/package/perl-file-slurp/perl-file-slurp.mk b/package/perl-file-slurp/perl-file-slurp.mk
+index 64d5cde7a..fd80d4f6d 100644
+--- a/package/perl-file-slurp/perl-file-slurp.mk
++++ b/package/perl-file-slurp/perl-file-slurp.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PERL_DATE_MANIP_VERSION = 6.72
-+PERL_DATE_MANIP_VERSION = 6.73
- PERL_DATE_MANIP_SOURCE = Date-Manip-$(PERL_DATE_MANIP_VERSION).tar.gz
- PERL_DATE_MANIP_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SB/SBECK
- PERL_DATE_MANIP_LICENSE = Artistic or GPL-1.0+
+-PERL_FILE_SLURP_VERSION = 9999.19
++PERL_FILE_SLURP_VERSION = 9999.23
+ PERL_FILE_SLURP_SOURCE = File-Slurp-$(PERL_FILE_SLURP_VERSION).tar.gz
+-PERL_FILE_SLURP_SITE = $(BR2_CPAN_MIRROR)/authors/id/U/UR/URI
++PERL_FILE_SLURP_SITE = $(BR2_CPAN_MIRROR)/authors/id/C/CA/CAPOEIRAB
+ PERL_FILE_SLURP_LICENSE = Artistic or GPL-1.0+
+-PERL_FILE_SLURP_LICENSE_FILES = README
++PERL_FILE_SLURP_LICENSE_FILES = README.md
+ PERL_FILE_SLURP_DISTNAME = File-Slurp
+ 
+ $(eval $(perl-package))
 -- 
 2.17.1
