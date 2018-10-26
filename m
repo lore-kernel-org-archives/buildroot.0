@@ -1,34 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 26 Oct 2018 20:54:38 +0200
-Subject: [Buildroot] [PATCH] zynqmp/post-image.sh: support dots in DTS
- file names
-In-Reply-To: <20181025100528.23093-1-francois.beerten@colabti.org>
-References: <20181025100528.23093-1-francois.beerten@colabti.org>
-Message-ID: <20181026205438.5509e7e9@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 26 Oct 2018 21:14:48 +0200
+Subject: [Buildroot] [PATCH v1] libevdev: bump version to 1.6.0
+In-Reply-To: <20181026175236.18825-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Fri, 26 Oct 2018 19:52:36 +0200")
+References: <20181026175236.18825-1-ps.report@gmx.net>
+Message-ID: <87ftws34gn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-On Thu, 25 Oct 2018 12:05:28 +0200, francois.beerten at colabti.org wrote:
-> From: Francois Beerten <fbeerten.git@colabti.org>
-> 
-> Some ZynqMP device trees in the kernel have a dot in their name,
-> for example "zynqmp-zcu102-rev1.0". The post image script
-> left out the part after the dot and created an invalid symlink.
-> 
-> Signed-off-by: Francois Beerten <fbeerten.git@colabti.org>
-> ---
->  board/zynqmp/post-image.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+ > For details see [1].
+ > Rebased patch 0001-configure-add-disable-runtime-tests-option.patch.
 
-Applied to master, thanks.
+ > [1] https://lists.freedesktop.org/archives/input-tools/2018-October/001488.html
 
-Thomas
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
