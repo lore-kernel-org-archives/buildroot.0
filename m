@@ -1,33 +1,44 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 26 Oct 2018 20:36:32 +0200
-Subject: [Buildroot] [PATCH 1/1] giflib: disable xmlto
-Message-ID: <20181026183632.27684-1-fontaine.fabrice@gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Fri, 26 Oct 2018 21:44:22 +0300
+Subject: [Buildroot] [PATCH 1/1] python3: bump to version 3.7.1
+Message-ID: <20181026184422.11399-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/87c7fa4a8e393acaccc84bd2774f9eee32ef7d90
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/giflib/giflib.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/python3/python3.hash | 6 +++---
+ package/python3/python3.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/giflib/giflib.mk b/package/giflib/giflib.mk
-index c1471de408..29666eebea 100644
---- a/package/giflib/giflib.mk
-+++ b/package/giflib/giflib.mk
-@@ -18,6 +18,8 @@ GIFLIB_BINS = \
- 	gifrsize gifspnge giftext giftool gifwedge icon2gif raw2gif rgb2gif \
- 	text2gif
+diff --git a/package/python3/python3.hash b/package/python3/python3.hash
+index 9138ad6b9c..7cd9d750a7 100644
+--- a/package/python3/python3.hash
++++ b/package/python3/python3.hash
+@@ -1,5 +1,5 @@
+-# From https://www.python.org/downloads/release/python-370/
+-md5		eb8c2a6b1447d50813c02714af4681f3 Python-3.7.0.tar.xz
++# From https://www.python.org/downloads/release/python-371/
++md5		0a57e9022c07fad3dadb2eef58568edb Python-3.7.1.tar.xz
+ # Locally computed
+-sha256 0382996d1ee6aafe59763426cf0139ffebe36984474d0ec4126dd1c40a8b3549 Python-3.7.0.tar.xz
++sha256 fa7e2b8e8c9402f192ad56dc4f814089d1c4466c97d780f5e5acc02c04243d6d Python-3.7.1.tar.xz
+ sha256 b9a6d9320b8f2693e8d41e496ce56caadacaddcca9be2a64a61749278f425cf2 LICENSE
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index cd01cf1ac3..8fbb95b9ad 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+GIFLIB_CONF_ENV = ac_cv_prog_have_xmlto=no
-+
- define GIFLIB_BINS_CLEANUP
- 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,$(GIFLIB_BINS))
- endef
+ PYTHON3_VERSION_MAJOR = 3.7
+-PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).0
++PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).1
+ PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
+ PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+ PYTHON3_LICENSE = Python-2.0, others
 -- 
-2.17.1
+2.19.1
