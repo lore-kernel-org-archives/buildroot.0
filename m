@@ -1,40 +1,38 @@
-From: Serj Kalichev <serj.kalichev@gmail.com>
-Date: Fri, 26 Oct 2018 14:26:21 +0300
-Subject: [Buildroot] [PATCH 1/1] support/scripts/mkmakefile: Silent wrapper
-Message-ID: <20181026112621.8146-1-serj.kalichev@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 26 Oct 2018 13:38:11 +0200
+Subject: [Buildroot] [PATCH 1/1] brotli: update to version 1.0.7
+In-Reply-To: <20181026141425.GB4330@momiji> (Adrian Perez de Castro's message
+ of "Fri, 26 Oct 2018 14:14:25 +0300")
+References: <20181024233823.22831-1-aperez@igalia.com>
+ <87h8h958ni.fsf@dell.be.48ers.dk> <20181026141425.GB4330@momiji>
+Message-ID: <874ld95464.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Suppose we use Makefile wrapper and build
- project out of buildroot tree (with O=...). The commands like "make
- busybox-all-external-deps" will output the string "uname 022 && make ..." to
- stdout before the usefull information. It pollutes stdout. In the same time
- if we use the same command in the buildroot source-tree then we don't get the
- additional output. Some external scripts can analyze output of make and
- additional output can break them. This patch make wrapper silent.
- 
- Sorry for the previous ugly-formatted patch.
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
-Signed-off-by: Serj Kalichev <serj.kalichev@gmail.com>
----
- support/scripts/mkmakefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > On Fri, 26 Oct 2018 12:01:21 +0200, Peter Korsgaard <peter@korsgaard.com> wrote:
+ >> >>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+ >> 
+ >> > The new version, among other changes, includes important fixes
+ >> > for unaligned memory access on ARM (both for 32 and 64-bit), as well
+ >> > as performance improvements and build fixes.
+ >> 
+ >> Does this mean that we should backport this version bump to the current
+ >> LTS release (2018.02.x) as well then?
 
-diff --git a/support/scripts/mkmakefile b/support/scripts/mkmakefile
-index 37162a3173..3b1a9f8774 100755
---- a/support/scripts/mkmakefile
-+++ b/support/scripts/mkmakefile
-@@ -33,7 +33,7 @@ MAKEFLAGS += --no-print-directory
- all	:= \$(filter-out Makefile,\$(MAKECMDGOALS))
- 
- _all:
--	umask 0022 && \$(MAKE) \$(MAKEARGS) \$(all)
-+	@umask 0022 && \$(MAKE) \$(MAKEARGS) \$(all)
- 
- Makefile:;
- 
+ > This is probably a good idea. I was reluctant to suggest it from the get-go
+ > because there is no mention to security updates in the release notes, but
+ > the unaligned memory access will cause crashes, which on could argue can be
+ > exploited for DoS attacks ?. Also, it's a point release so the API/ABI of
+ > the library remains the same, and the risk of breaking things is minimal.
+
+ > So yes, I think it's a good idea to backport the update to the LTS version.
+
+Ok, thanks - I'll cherry pick it next time I sync LTS with master.
+
 -- 
-2.17.1
+Bye, Peter Korsgaard
