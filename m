@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Oct 2018 10:34:44 +0200
-Subject: [Buildroot] [PATCH] dc3dd: fix build with glibc 2.28
-In-Reply-To: <22b17739faee5b85510a51f729cce065e7891c56.1540533580.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 26 Oct 2018 08:59:40 +0300")
-References: <22b17739faee5b85510a51f729cce065e7891c56.1540533580.git.baruch@tkos.co.il>
-Message-ID: <87pnvx5cnv.fsf@dell.be.48ers.dk>
+Date: Fri, 26 Oct 2018 10:34:53 +0200
+Subject: [Buildroot] [PATCH] p11-kit: fix detection of certificates path
+In-Reply-To: <345d8a4df761992cceb2890c4cd654b0553c850a.1540535353.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 26 Oct 2018 09:29:13 +0300")
+References: <345d8a4df761992cceb2890c4cd654b0553c850a.1540535353.git.baruch@tkos.co.il>
+Message-ID: <87lg6l5cnm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +13,15 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > gnulib code in dc3dd relied in internal glibc definitions that are no
- > longer visible with glibc 2.28. Add a patch based on upstream gnulib to
- > fix the build.
+ > The p11-kit configure script looked for certificates location on the
+ > host. This doesn't work well with cross compilation. Make the
+ > certificates patch depend on BR2_PACKAGE_CA_CERTIFICATES, and set the
+ > right target location of the path.
 
  > Fixes:
- > http://autobuild.buildroot.net/results/552/552b8e44fe6585f978e2fb7a920057a868cf6689/
- > http://autobuild.buildroot.net/results/00d/00d2bf5a4c97bea2ace0427c0bed57e11f9a5f9a/
- > http://autobuild.buildroot.net/results/17a/17a9246bfb034c531ec5e27e29d38857e58db271/
+ > http://autobuild.buildroot.net/results/295/295614d4aa3db9bb35bebbe56e38110f5a2de178/
+ > http://autobuild.buildroot.net/results/0fb/0fb454ca0df74a8585cffe8f5d1f5d23cdfdbec6/
+ > http://autobuild.buildroot.net/results/ef7/ef71f3d67afba547b5167253fb02476e59152803/
 
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
