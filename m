@@ -1,103 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Oct 2018 12:12:05 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mosquitto: installing the
- mosquitto broker can be optional
-In-Reply-To: <20181024190103.24158-1-titouan.christophe@railnova.eu> (Titouan
- Christophe's message of "Wed, 24 Oct 2018 21:01:03 +0200")
-References: <20181024190103.24158-1-titouan.christophe@railnova.eu>
-Message-ID: <87d0rx585m.fsf@dell.be.48ers.dk>
+From: Alexander Dahl <post@lespocky.de>
+Date: Fri, 26 Oct 2018 12:08:43 +0200
+Subject: [Buildroot] [PATCH] configs/{at91sam9*,
+ atmel*}: drop OpenSSH as it duplicates Dropbear
+In-Reply-To: <9b5b2780-92cf-682a-7ada-f6af691652ad@microchip.com>
+References: <20181026094024.31108-1-thomas.petazzoni@bootlin.com>
+ <9b5b2780-92cf-682a-7ada-f6af691652ad@microchip.com>
+Message-ID: <20181026100842.xrkc2wqhi6te72er@falbala.home.lespocky.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
+Hei hei,
 
- > The mosquitto package providess both the MQTT client library and
- > a broker, and the latter may be not needed (when connecting to
- > a remote broker). It should be therefore possible to not install and
- > start it on the target
+On Fri, Oct 26, 2018 at 09:48:44AM +0000, Nicolas.Ferre at microchip.com wrote:
+> On 26/10/2018 at 11:40, Thomas Petazzoni wrote:
+> > The "development" defconfigs for Atmel platforms enable both OpenSSH
+> > and Dropbear, which doesn't make a lot of sense, as only one SSH
+> > server can start on port 22.
+> > 
+> > This commit therefore drops BR2_PACKAGE_OPENSSH=y from those
+> > defconfigs, keeping Dropbear as an SSH server/client.
+> 
+> A gut feeling is telling me that I would have preferred the other way 
+> around: Keeping OpenSSH.
 
- > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
- > ---
- >  .../0002-DIRS-externally-configurable.patch         |  9 +++++++++
- >  package/mosquitto/Config.in                         |  9 +++++++++
- >  package/mosquitto/mosquitto.mk                      | 13 ++++++++++---
- >  3 files changed, 28 insertions(+), 3 deletions(-)
- >  create mode 100644 package/mosquitto/0002-DIRS-externally-configurable.patch
+I would have opted for Dropbear, too. Especially because old at91
+based boards usually don't come with a lot of memory (both RAM and
+Flash).
 
- > diff --git a/package/mosquitto/0002-DIRS-externally-configurable.patch b/package/mosquitto/0002-DIRS-externally-configurable.patch
- > new file mode 100644
- > index 0000000000..a95a7db14b
- > --- /dev/null
- > +++ b/package/mosquitto/0002-DIRS-externally-configurable.patch
+> Is scp provided by Dropbear?
 
-Patches should include a description and your signed-off-by.
+Yes it is. sftp is tricky, however.
 
-> @@ -0,0 +1,9 @@
- > +--- a/Makefile
- > ++++ b/Makefile
- > +@@ -1,6 +1,6 @@
- > + include config.mk
- > + 
- > +-DIRS=lib client src
- > ++DIRS:=lib client src
-
-Why? You can also override = variables in make.
-
-
-> + DOCDIRS=man
- > + DISTDIRS=man
- > diff --git a/package/mosquitto/Config.in b/package/mosquitto/Config.in
- > index 1e6418a4de..54856c1c80 100644
- > --- a/package/mosquitto/Config.in
- > +++ b/package/mosquitto/Config.in
- > @@ -14,6 +14,15 @@ config BR2_PACKAGE_MOSQUITTO
- 
- >  	  http://mosquitto.org/
- 
- > +
- > +config BR2_PACKAGE_MOSQUITTO_INSTALL_BROKER
-
-NIT: We normally don't add _INSTALL into symbols, so
-BR2_PACKAGE_MOSQUITTO_BROKER would be nicer.
-
-> +	bool "Install the mosquitto broker"
- > +	default y
- > +	depends on BR2_PACKAGE_MOSQUITTO
- > +	help
- > +	  Build and install the mosquitto broker onto target
- > +
- > +
-
-A single empty line is enough.
-
->  comment "mosquitto needs a toolchain w/ dynamic library"
- >  	depends on BR2_USE_MMU
- >  	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-
-Are these comments / dependencies also appliciable when not building the
-broker?
-
-
- > diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
- ..
- > +ifeq ($(BR2_PACKAGE_MOSQUITTO_INSTALL_BROKER),y)
- >  define MOSQUITTO_INSTALL_INIT_SYSV
- >  	$(INSTALL) -D -m 0755 package/mosquitto/S50mosquitto \
- >  		$(TARGET_DIR)/etc/init.d/S50mosquitto
- > @@ -97,6 +103,7 @@ define MOSQUITTO_INSTALL_INIT_SYSTEMD
- >  	ln -fs ../../../../usr/lib/systemd/system/mosquitto.service \
- >  		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/mosquitto.service
- >  endef
- > +endif
- 
- >  define MOSQUITTO_USERS
- >  	mosquitto -1 nogroup -1 * - - - Mosquitto user
-
-The mosquitto user is presumably also not needed when the broker isn't
-used?
+Greets
+Alex
 
 -- 
-Bye, Peter Korsgaard
+/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
+\ / CAMPAIGN     | speech censured, the first thought forbidden, the
+ X  AGAINST      | first freedom denied, chains us all irrevocably.?
+/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181026/ce44e26a/attachment.asc>
