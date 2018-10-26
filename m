@@ -1,45 +1,61 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 26 Oct 2018 20:54:14 +0300
-Subject: [Buildroot] [PATCH 1/1] python-setuptools: bump to version 40.5.0
-Message-ID: <20181026175414.21971-1-asafka7@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 26 Oct 2018 20:06:05 +0200
+Subject: [Buildroot] [PATCH v1] valgrind: bump version to 3.14.0
+Message-ID: <20181026180605.20095-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-setuptools/python-setuptools.hash | 4 ++--
- package/python-setuptools/python-setuptools.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+- new option: link-time optimisation
 
-diff --git a/package/python-setuptools/python-setuptools.hash b/package/python-setuptools/python-setuptools.hash
-index c4e151f77a..05d9312c78 100644
---- a/package/python-setuptools/python-setuptools.hash
-+++ b/package/python-setuptools/python-setuptools.hash
-@@ -1,4 +1,4 @@
- # From https://pypi.org/pypi/setuptools/json
--md5  260630ae1a64bafa39dcc53404d63829  setuptools-40.0.0.zip
--sha256  012adb8e25fbfd64c652e99e7bab58799a3aaf05d39ab38561f69190a909015f  setuptools-40.0.0.zip
-+md5  12f8546ead968a0c237732d53fe7fcb1  setuptools-40.5.0.zip
-+sha256  2a2a200f4a760adbded23a091a00be2eca4e28efed65c6120ea275f7e89a1eab  setuptools-40.5.0.zip
- sha256  c32a3ac395af6321efd28be73d06a00f0db6ab887d1c21d4fec46128d2056d5a  LICENSE
-diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-index fb58b028e8..3dca7094e8 100644
---- a/package/python-setuptools/python-setuptools.mk
-+++ b/package/python-setuptools/python-setuptools.mk
-@@ -4,9 +4,9 @@
+For details see [1].
+
+[1] http://valgrind.org/docs/manual/dist.news.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/valgrind/valgrind.hash | 2 +-
+ package/valgrind/valgrind.mk   | 8 +++++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/package/valgrind/valgrind.hash b/package/valgrind/valgrind.hash
+index ea05dd677c..87fb496857 100644
+--- a/package/valgrind/valgrind.hash
++++ b/package/valgrind/valgrind.hash
+@@ -1,5 +1,5 @@
+ # From http://valgrind.org/downloads/current.html
+-md5 817dd08f1e8a66336b9ff206400a5369 valgrind-3.13.0.tar.bz2
++md5 74175426afa280184b62591b58c671b3 valgrind-3.14.0.tar.bz2
+ 
+ # License files
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
+diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+index b1ab7e72fc..f097c7be1f 100644
+--- a/package/valgrind/valgrind.mk
++++ b/package/valgrind/valgrind.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_SETUPTOOLS_VERSION = 40.0.0
-+PYTHON_SETUPTOOLS_VERSION = 40.5.0
- PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).zip
--PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/d3/3e/1d74cdcb393b68ab9ee18d78c11ae6df8447099f55fe86ee842f9c5b166c
-+PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/26/e5/9897eee1100b166a61f91b68528cb692e8887300d9cbdaa1a349f6304b79
- PYTHON_SETUPTOOLS_LICENSE = MIT
- PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
- PYTHON_SETUPTOOLS_SETUP_TYPE = setuptools
+-VALGRIND_VERSION = 3.13.0
++VALGRIND_VERSION = 3.14.0
+ VALGRIND_SITE = ftp://sourceware.org/pub/valgrind
+ VALGRIND_SOURCE = valgrind-$(VALGRIND_VERSION).tar.bz2
+ VALGRIND_LICENSE = GPL-2.0, GFDL-1.2
+@@ -46,6 +46,12 @@ VALGRIND_CONF_OPTS += \
+ 	--host=$(patsubst arm-%,armv7-%,$(GNU_TARGET_NAME))
+ endif
+ 
++ifeq ($(BR2_GCC_ENABLE_LTO),y)
++VALGRIND_CONF_OPTS += --enable-lto
++else
++VALGRIND_CONF_OPTS += --disable-lto
++endif
++
+ define VALGRIND_INSTALL_UCLIBC_SUPP
+ 	$(INSTALL) -D -m 0644 package/valgrind/uclibc.supp $(TARGET_DIR)/usr/lib/valgrind/uclibc.supp
+ endef
 -- 
 2.19.1
