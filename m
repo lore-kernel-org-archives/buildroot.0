@@ -1,46 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 26 Oct 2018 21:20:15 +0200
-Subject: [Buildroot] [git commit] perl-path-tiny: bump to version 0.104
-Message-ID: <20181026191920.28E7F8910C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] perl-mojolicious: bump to version 8.04
+Message-ID: <20181026191920.111B28908F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ece585dee15c7293264fd7803b795084ec08326b
+commit: https://git.buildroot.net/buildroot/commit/?id=5614ca4bc2a5656d02eeb29f0b9c6d24f6858e1a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-path-tiny/perl-path-tiny.hash | 4 ++--
- package/perl-path-tiny/perl-path-tiny.mk   | 2 +-
+ package/perl-mojolicious/perl-mojolicious.hash | 4 ++--
+ package/perl-mojolicious/perl-mojolicious.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-path-tiny/perl-path-tiny.hash b/package/perl-path-tiny/perl-path-tiny.hash
-index c73b621ebb..2ad8a6414c 100644
---- a/package/perl-path-tiny/perl-path-tiny.hash
-+++ b/package/perl-path-tiny/perl-path-tiny.hash
+diff --git a/package/perl-mojolicious/perl-mojolicious.hash b/package/perl-mojolicious/perl-mojolicious.hash
+index 528fb7a731..b406f6d82a 100644
+--- a/package/perl-mojolicious/perl-mojolicious.hash
++++ b/package/perl-mojolicious/perl-mojolicious.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    17354181d9794df01be555b25114dd24 Path-Tiny-0.104.tar.gz
--sha256 c69f1dcfeb4aa004086deb9bc14c7d79f45798b947f1efbd634a3442e267aaef Path-Tiny-0.104.tar.gz
-+md5    1a7fbdccc4585074ce4419b7bec0966c Path-Tiny-0.108.tar.gz
-+sha256 3c49482be2b3eb7ddd7e73a5b90cff648393f5d5de334ff126ce7a3632723ff5 Path-Tiny-0.108.tar.gz
+-md5    2aca5046a2efc7ce596c4470893b555f Mojolicious-7.84.tar.gz
+-sha256 7461a27e8e8665b436a60c708cf6ce4164b84dfb1b2435480a65597085d26ebc Mojolicious-7.84.tar.gz
++md5    f1d22e9110f1b51f4be9a40a84391089 Mojolicious-8.04.tar.gz
++sha256 330e919f3caf62e03fdc545dda2e66f772f30192aed6c47e19fd78f67de557fb Mojolicious-8.04.tar.gz
  
  # computed by scancpan
- sha256 a999b03d2b80e5c7f987289ac835fa2d88cafa9f0df24adf8a1fd21e175acd79 LICENSE
-diff --git a/package/perl-path-tiny/perl-path-tiny.mk b/package/perl-path-tiny/perl-path-tiny.mk
-index efcf241d0b..5d654efee3 100644
---- a/package/perl-path-tiny/perl-path-tiny.mk
-+++ b/package/perl-path-tiny/perl-path-tiny.mk
+ sha256 19e2e0f2079ea1ce1576eb4ecc0575b33fe45b2b8e71f4aa589d6bedd1da4e0a LICENSE
+diff --git a/package/perl-mojolicious/perl-mojolicious.mk b/package/perl-mojolicious/perl-mojolicious.mk
+index c4629356ac..8ea0c2e01b 100644
+--- a/package/perl-mojolicious/perl-mojolicious.mk
++++ b/package/perl-mojolicious/perl-mojolicious.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_PATH_TINY_VERSION = 0.104
-+PERL_PATH_TINY_VERSION = 0.108
- PERL_PATH_TINY_SOURCE = Path-Tiny-$(PERL_PATH_TINY_VERSION).tar.gz
- PERL_PATH_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DA/DAGOLDEN
- PERL_PATH_TINY_LICENSE = Apache-2.0
+-PERL_MOJOLICIOUS_VERSION = 7.84
++PERL_MOJOLICIOUS_VERSION = 8.04
+ PERL_MOJOLICIOUS_SOURCE = Mojolicious-$(PERL_MOJOLICIOUS_VERSION).tar.gz
+ PERL_MOJOLICIOUS_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SR/SRI
+ PERL_MOJOLICIOUS_LICENSE = Artistic-2.0
