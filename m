@@ -1,145 +1,80 @@
-From: Grzegorz Blach <grzegorz@blach.pl>
-Date: Fri, 26 Oct 2018 22:00:16 +0200
-Subject: [Buildroot] [PATCH 2/2] fs/f2fs: add support for creating a f2fs
- image
-In-Reply-To: <20181026200016.30856-1-grzegorz@blach.pl>
-References: <20181026200016.30856-1-grzegorz@blach.pl>
-Message-ID: <20181026200016.30856-3-grzegorz@blach.pl>
+From: Nasser <afshin.nasser@gmail.com>
+Date: Sat, 27 Oct 2018 02:35:47 +0330
+Subject: [Buildroot] Antwort: Re: Antwort: Re: [PATCH v3]
+ merge_config.sh: merge also buildroot config files
+In-Reply-To: <OF26A838D6.35610758-ONC1258332.00211513-C1258332.0021531B@local-dmz.de>
+References: <20181025011343.29512-1-afshin.nasser@gmail.com>
+ <20181025022031.14043-1-afshin.nasser@gmail.com>
+ <20181025074309.GB18528@dell5510>
+ <OF54A89E59.8DBA5497-ONC1258331.0034C458-C1258331.00357034@local-dmz.de>
+ <20181025214311.GB31691@dell5510>
+ <OF26A838D6.35610758-ONC1258332.00211513-C1258332.0021531B@local-dmz.de>
+Message-ID: <20181026230546.GA18350@smart-ThinkPad-T410>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch makes possible to create rootfs image using f2fs filesystem.
+Hi Marcel, Petr,
+On Fri, Oct 26, 2018 at 08:03:59AM +0200, Marcel Patzlaff wrote:
+> Hi Petr,
+> 
+> > Looking in the code uclibc-ng uses several prefixes: CONFIG_, TARGET_, 
+> UCLIBC_
+> > and sometimes even configs without prefix: VERSION, WARNINGS, 
+> > EXTRA_WARNINGS [1].
+> > 
+> > But their SED_CONFIG_EXP uses also CONFIG_.
+> 
+> As you said, they use several prefixes. IMHO, it does not make sense to
+> filter out configuration items based on a prefix.
+> And BTW, uclibc does not use it's own merge_config.sh anywhere and I
+> assume that it is also not used elsewhere.
+Yes uclibc does not use it's own merge_config.sh anywhere.
+> 
+> I would suggest to just remove the prefix restrictions in buildroot's
+> merge_config.sh unless someone can tell why they are important to be
+> there.
+The problem is that some of our defconfig files include comment lines
+(e.g raspberrypi_defconfig, cubieboard2_defconfig,
+qemu_arm_versatile_defconfig, ...). If we completely omit the
+${CONFIG_PREFIX} we will add first word of comments to $CFG_LIST and
+therefor will produce some false warning reports for comment lines (if
+the fist word is just repeated anywhere throughout the fragments which
+is none sense)
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
----
- fs/Config.in      |  1 +
- fs/f2fs/Config.in | 49 +++++++++++++++++++++++++++++++++++++++++++++++
- fs/f2fs/f2fs.mk   | 46 ++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 96 insertions(+)
- create mode 100644 fs/f2fs/Config.in
- create mode 100644 fs/f2fs/f2fs.mk
+If we consider the controversial part of the script which is either:
+sed -n 's/^\(# \)\{0,1\}\(CONFIG_[a-zA-Z0-9_]*\)[= ].*/\2/p' \
+defconfig_file_name
 
-diff --git a/fs/Config.in b/fs/Config.in
-index 24f22fd7e3..527051ef54 100644
---- a/fs/Config.in
-+++ b/fs/Config.in
-@@ -6,6 +6,7 @@ source "fs/cloop/Config.in"
- source "fs/cpio/Config.in"
- source "fs/cramfs/Config.in"
- source "fs/ext2/Config.in"
-+source "fs/f2fs/Config.in"
- source "fs/initramfs/Config.in"
- source "fs/iso9660/Config.in"
- source "fs/jffs2/Config.in"
-diff --git a/fs/f2fs/Config.in b/fs/f2fs/Config.in
-new file mode 100644
-index 0000000000..d096057890
---- /dev/null
-+++ b/fs/f2fs/Config.in
-@@ -0,0 +1,49 @@
-+config BR2_TARGET_ROOTFS_F2FS
-+	bool "f2fs root filesystem"
-+	select BR2_PACKAGE_HOST_F2FS_TOOLS
-+	help
-+	  Build a f2fs root filesystem. If you enable this option, you
-+	  probably want to enable the f2fs-tools package too.
-+
-+if BR2_TARGET_ROOTFS_F2FS
-+
-+config BR2_TARGET_ROOTFS_F2FS_LABEL
-+	string "filesystem label"
-+
-+config BR2_TARGET_ROOTFS_F2FS_SIZE
-+	string "filesystem size"
-+	default "100M"
-+	help
-+	  The size of the filesystem image in bytes.
-+	  Suffix with K, M, G or T for power-of-two kilo-, mega-, giga-
-+	  or terabytes.
-+
-+config BR2_TARGET_ROOTFS_F2FS_COLD_FILES
-+	string "extension list for cold files"
-+	help
-+	  Specify a file extension list in order f2fs to treat them
-+	  as cold files. The default list includes most of multimedia
-+	  file extensions such as jpg, gif, mpeg, mkv, and so on.
-+
-+config BR2_TARGET_ROOTFS_F2FS_OVERPROVISION
-+	int "size for overprovision area (0 for auto calculation)"
-+	default 0
-+	help
-+	  Specify the percentage over the volume size for overprovision
-+	  area. This area is hidden to users, and utilized by F2FS
-+	  cleaner. If not specified, the best number will be assigned
-+	  automatically accoring to the partition size.
-+
-+config BR2_TARGET_ROOTFS_F2FS_FEATURES
-+	string "filesystem features"
-+	help
-+	  A feature list in order f2fs filesystem will supports.
-+	  e.g "encrypt" and so on.
-+
-+config BR2_TARGET_ROOTFS_F2FS_DISCARD
-+	bool "discard policy"
-+	default y
-+	help
-+	  Enable or disable discard policy.
-+
-+endif # BR2_TARGET_ROOTFS_F2FS
-diff --git a/fs/f2fs/f2fs.mk b/fs/f2fs/f2fs.mk
-new file mode 100644
-index 0000000000..19c0082d67
---- /dev/null
-+++ b/fs/f2fs/f2fs.mk
-@@ -0,0 +1,46 @@
-+################################################################################
-+#
-+# Build the f2fs root filesystem image
-+#
-+################################################################################
-+
-+F2FS_SIZE = $(call qstrip,$(BR2_TARGET_ROOTFS_F2FS_SIZE))
-+ifeq ($(BR2_TARGET_ROOTFS_F2FS)-$(F2FS_SIZE),y-)
-+$(error BR2_TARGET_ROOTFS_F2FS_SIZE cannot be empty)
-+endif
-+
-+F2FS_COLD_FILES = $(call qstrip,$(BR2_TARGET_ROOTFS_F2FS_COLD_FILES))
-+F2FS_FEATURES = $(call qstrip,$(BR2_TARGET_ROOTFS_F2FS_FEATURES))
-+# qstrip results in stripping consecutive spaces into a single one. So the
-+# variable is not qstrip-ed to preserve the integrity of the string value.
-+F2FS_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_F2FS_LABEL))
-+# ")
-+
-+ifneq ($(BR2_TARGET_ROOTFS_F2FS_OVERPROVISION),0)
-+F2FS_OVERPROVISION=$(BR2_TARGET_ROOTFS_F2FS_OVERPROVISION)
-+endif
-+
-+ifeq ($(BR2_TARGET_ROOTFS_F2FS_DISCARD),y)
-+F2FS_DISCARD=1
-+else
-+F2FS_DISCARD=0
-+endif
-+
-+F2FS_OPTS = \
-+	-f \
-+	-l "$(F2FS_LABEL)" \
-+	$(if $(F2FS_COLD_FILES),-e "$(F2FS_COLD_FILES)") \
-+	$(if $(F2FS_OVERPROVISION),-o $(F2FS_OVERPROVISION)) \
-+	$(if $(F2FS_FEATURES),-O "$(F2FS_FEATURES)") \
-+	-t $(F2FS_DISCARD)
-+
-+ROOTFS_F2FS_DEPENDENCIES = host-f2fs-tools
-+
-+define ROOTFS_F2FS_CMD
-+	$(RM) -f $@
-+	dd if=/dev/zero of=$@ bs=1 count=0 seek=$(F2FS_SIZE)
-+	$(HOST_DIR)/sbin/mkfs.f2fs $(F2FS_OPTS) $@
-+	$(HOST_DIR)/sbin/sload.f2fs -f $(TARGET_DIR) $@
-+endef
-+
-+$(eval $(rootfs))
--- 
-2.17.2
+for kernel style config files or
+
+sed -n 's/^\(# \)\{0,1\}\(BR2_[a-zA-Z0-9_]*\)[= ].*/\2/p' \
+defconfig_file_name
+
+for buildroot style config files or
+
+sed -n 's/^\(# \)\{0,1\}\([a-zA-Z0-9_]*\)[= ].*/\2/p' \
+defconfig_file_name
+
+as a general command then for different buildroot/kernel defconfig
+files, the last one will extract comments as well which IMHO is not what we
+want.
+> 
+> Kind regards,
+> Marcel
+> 
+> PS: Sorry for the second reply. My mailclient dropped the list...
+> 
+> -- 
+> 
+> Gesch?ftsf?hrung: Susanne Kunschert, Thomas Pilz
+> Pilz GmbH & Co. KG, Sitz: Ostfildern, HRA 210 893, Amtsgericht Stuttgart
+> Kompl. Ges. Peter Pilz GmbH, Sitz: Ostfildern, HRB 210 612, Amtsgericht Stuttgart
+> Umsatzsteuer: ID-Nr. DE 145 355 773, WEEE-Reg.-Nr. DE 71636849
+> This email is intended solely for the use of the named address(es). Any unauthorised disclosure, copying or distribution of these confidential information contained therein, or the taking of any action based on it, is prohibited. The sender disclaims any liability for the integrity of this email. Legally binding declarations must be in written form.
+> Umweltschutz liegt uns am Herzen! - Bitte denken Sie an unsere Umwelt, bevor Sie diese E-Mail drucken.
+> We do care about the environment! - Please consider the environment before printing this e-mail.
+Kind regards,
+Nasser
