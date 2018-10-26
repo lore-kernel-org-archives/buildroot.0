@@ -1,120 +1,67 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 26 Oct 2018 08:59:40 +0300
-Subject: [Buildroot] [PATCH] dc3dd: fix build with glibc 2.28
-Message-ID: <22b17739faee5b85510a51f729cce065e7891c56.1540533580.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 26 Oct 2018 08:00:18 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-10-25
+Message-ID: <20181026060018.48EB9208EB@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gnulib code in dc3dd relied in internal glibc definitions that are no
-longer visible with glibc 2.28. Add a patch based on upstream gnulib to
-fix the build.
+Hello,
 
-Fixes:
-http://autobuild.buildroot.net/results/552/552b8e44fe6585f978e2fb7a920057a868cf6689/
-http://autobuild.buildroot.net/results/00d/00d2bf5a4c97bea2ace0427c0bed57e11f9a5f9a/
-http://autobuild.buildroot.net/results/17a/17a9246bfb034c531ec5e27e29d38857e58db271/
+Build statistics for 2018-10-25
+===============================
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/dc3dd/0003-fix-for-glibc-2.28.patch | 87 +++++++++++++++++++++
- 1 file changed, 87 insertions(+)
- create mode 100644 package/dc3dd/0003-fix-for-glibc-2.28.patch
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  21 |   0 |   0 |  21 |
+   2018.08.x |  18 |   0 |   0 |  18 |
+      master | 191 |  20 |   0 | 211 |
 
-diff --git a/package/dc3dd/0003-fix-for-glibc-2.28.patch b/package/dc3dd/0003-fix-for-glibc-2.28.patch
-new file mode 100644
-index 000000000000..79e52b1e6de1
---- /dev/null
-+++ b/package/dc3dd/0003-fix-for-glibc-2.28.patch
-@@ -0,0 +1,87 @@
-+Fix build with glibc 2.28
-+
-+glibc 2.28 hides a number of internal macros that used to be visible. gnulib
-+relied on these macros. Add a patch based on upstream gnulib commit
-+4af4a4a71827c0 (fflush: adjust to glibc 2.28 libio.h removal) to fix the
-+build.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: gnulib commit 4af4a4a7182
-+
-+diff -Nuar dc3dd-7.2.641.orig/lib/freadahead.c dc3dd-7.2.641/lib/freadahead.c
-+--- dc3dd-7.2.641.orig/lib/freadahead.c	2012-11-06 23:42:58.000000000 +0200
-++++ dc3dd-7.2.641/lib/freadahead.c	2018-10-26 08:46:36.612492230 +0300
-+@@ -24,7 +24,7 @@
-+ size_t
-+ freadahead (FILE *fp)
-+ {
-+-#if defined _IO_ferror_unlocked || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Linux libc5 */
-++#if defined _IO_EOF_SEEN || defined _IO_ferror_unlocked || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Linux libc5 */
-+   if (fp->_IO_write_ptr > fp->_IO_write_base)
-+     return 0;
-+   return (fp->_IO_read_end - fp->_IO_read_ptr)
-+diff -Nuar dc3dd-7.2.641.orig/lib/freadptr.c dc3dd-7.2.641/lib/freadptr.c
-+--- dc3dd-7.2.641.orig/lib/freadptr.c	2012-11-06 23:42:58.000000000 +0200
-++++ dc3dd-7.2.641/lib/freadptr.c	2018-10-26 08:36:53.965310494 +0300
-+@@ -29,7 +29,7 @@
-+   size_t size;
-+ 
-+   /* Keep this code in sync with freadahead!  */
-+-#if defined _IO_ferror_unlocked || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Linux libc5 */
-++#if defined _IO_EOF_SEEN || defined _IO_ferror_unlocked || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Linux libc5 */
-+   if (fp->_IO_write_ptr > fp->_IO_write_base)
-+     return NULL;
-+   size = fp->_IO_read_end - fp->_IO_read_ptr;
-+diff -Nuar dc3dd-7.2.641.orig/lib/freadseek.c dc3dd-7.2.641/lib/freadseek.c
-+--- dc3dd-7.2.641.orig/lib/freadseek.c	2012-11-06 23:42:58.000000000 +0200
-++++ dc3dd-7.2.641/lib/freadseek.c	2018-10-26 08:49:35.387912087 +0300
-+@@ -34,7 +34,7 @@
-+ freadptrinc (FILE *fp, size_t increment)
-+ {
-+   /* Keep this code in sync with freadptr!  */
-+-#if defined _IO_ferror_unlocked || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Linux libc5 */
-++#if defined _IO_EOF_SEEN || defined _IO_ferror_unlocked || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Linux libc5 */
-+   fp->_IO_read_ptr += increment;
-+ #elif defined __sferror || defined __DragonFly__ /* FreeBSD, NetBSD, OpenBSD, DragonFly, MacOS X, Cygwin */
-+   fp_->_p += increment;
-+diff -Nuar dc3dd-7.2.641.orig/lib/fseeko.c dc3dd-7.2.641/lib/fseeko.c
-+--- dc3dd-7.2.641.orig/lib/fseeko.c	2012-11-06 23:42:58.000000000 +0200
-++++ dc3dd-7.2.641/lib/fseeko.c	2018-10-26 08:51:02.841583936 +0300
-+@@ -44,7 +44,7 @@
-+ #endif
-+ 
-+   /* These tests are based on fpurge.c.  */
-+-#if defined _IO_ferror_unlocked || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Linux libc5 */
-++#if defined _IO_EOF_SEEN || defined _IO_ferror_unlocked || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Linux libc5 */
-+   if (fp->_IO_read_end == fp->_IO_read_ptr
-+       && fp->_IO_write_ptr == fp->_IO_write_base
-+       && fp->_IO_save_base == NULL)
-+diff -Nuar dc3dd-7.2.641.orig/lib/fseterr.c dc3dd-7.2.641/lib/fseterr.c
-+--- dc3dd-7.2.641.orig/lib/fseterr.c	2012-11-06 23:42:58.000000000 +0200
-++++ dc3dd-7.2.641/lib/fseterr.c	2018-10-26 08:47:51.209919605 +0300
-+@@ -29,7 +29,7 @@
-+   /* Most systems provide FILE as a struct and the necessary bitmask in
-+      <stdio.h>, because they need it for implementing getc() and putc() as
-+      fast macros.  */
-+-#if defined _IO_ferror_unlocked || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Linux libc5 */
-++#if defined _IO_EOF_SEEN || defined _IO_ferror_unlocked || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Linux libc5 */
-+   fp->_flags |= _IO_ERR_SEEN;
-+ #elif defined __sferror || defined __DragonFly__ /* FreeBSD, NetBSD, OpenBSD, DragonFly, MacOS X, Cygwin */
-+   fp_->_flags |= __SERR;
-+diff -Nuar dc3dd-7.2.641.orig/lib/stdio-impl.h dc3dd-7.2.641/lib/stdio-impl.h
-+--- dc3dd-7.2.641.orig/lib/stdio-impl.h	2012-11-06 23:42:58.000000000 +0200
-++++ dc3dd-7.2.641/lib/stdio-impl.h	2018-10-26 08:46:26.136291709 +0300
-+@@ -18,6 +18,12 @@
-+    the same implementation of stdio extension API, except that some fields
-+    have different naming conventions, or their access requires some casts.  */
-+ 
-++/* Glibc 2.28 made _IO_IN_BACKUP private.  For now, work around this
-++   problem by defining it ourselves.  FIXME: Do not rely on glibc
-++   internals.  */
-++#if !defined _IO_IN_BACKUP && defined _IO_EOF_SEEN
-++# define _IO_IN_BACKUP 0x100
-++#endif
-+ 
-+ /* BSD stdio derived implementations.  */
-+ 
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                  libffi-3.2.1 | 5 
+               postgresql-11.0 | 4 
+                   luvi-v2.7.6 | 2 
+               boa-0.94.14rc21 | 1 
+                  cc-tool-0.26 | 1 
+                 dc3dd-7.2.641 | 1 
+kvm-unit-tests-kvm-unit-tes... | 1 
+                 minizip-2.5.3 | 1 
+               nfs-utils-1.3.3 | 1 
+                    pppd-2.4.7 | 1 
+               qt5webkit-5.9.1 | 1 
+                  xerces-3.2.2 | 1 
+
+
+Detail of failures
+------------------
+
+         arm |                boa-0.94.14rc21 | NOK | http://autobuild.buildroot.net/results/630c9ec80b49b7f7f4ecd7caa6b26fc641e69666 | ORPH
+      x86_64 |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/2e04bfc3f8e7f57e68fe375296922c48a107bd16 |     
+     aarch64 |                  dc3dd-7.2.641 | NOK | http://autobuild.buildroot.net/results/17a9246bfb034c531ec5e27e29d38857e58db271 | ORPH
+      x86_64 | kvm-unit-tests-kvm-unit-tes... | NOK | http://autobuild.buildroot.net/results/6048b19a8b77ba3a00c339ea3b64e31c6856f675 |     
+     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/c194c39738a5146e43c2e2ce975ebe1ccddbd0c9 |     
+     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/4e069c61a5ab0b0f03e4833661b63673b32790c2 |     
+     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/3a6d69000ead2bc78993f91e22851bb493fd3260 |     
+     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/cc9d4dc33f6096accbfd6fd233e2e8186165cd1d |     
+     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/a55494bec8efee72042e791e2505bc55ff4a41bb |     
+      x86_64 |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/71f9ec4f98adba678df1a60e9183339780a86dc7 |     
+     powerpc |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/d830a07203f2e288045facd89d16fba7631392ca |     
+        m68k |                  minizip-2.5.3 | NOK | http://autobuild.buildroot.net/results/0abb750ee0c011b0ad9260e8af9a3182c8ccac5b |     
+         arm |                nfs-utils-1.3.3 | NOK | http://autobuild.buildroot.net/results/e55f57011a25fa3fc0dd79f6fe0e4c206f479841 | ORPH
+microblazeel |                postgresql-11.0 | NOK | http://autobuild.buildroot.net/results/14546b4823a14a3410925e19cdb38421657e5d9b |     
+microblazeel |                postgresql-11.0 | NOK | http://autobuild.buildroot.net/results/782a32962d7ea7c84c8b02247e5c7c6c714ed70b |     
+microblazeel |                postgresql-11.0 | NOK | http://autobuild.buildroot.net/results/f866d875585692d88bfb957a237c20d2d34698b2 |     
+     powerpc |                postgresql-11.0 | NOK | http://autobuild.buildroot.net/results/2a6fc62d285d303becbd6b3566c8c119c4052521 |     
+         arm |                     pppd-2.4.7 | NOK | http://autobuild.buildroot.net/results/8dcdf8a83f34807950251c762215e5889e9315d9 | ORPH
+      mipsel |                qt5webkit-5.9.1 | NOK | http://autobuild.buildroot.net/results/fe493823b8deebbf34ec34ce4dbfd6791c686d7a |     
+         arm |                   xerces-3.2.2 | NOK | http://autobuild.buildroot.net/results/dc7810d5d5c62658837cdd2faae6fe3390f968a2 | ORPH
+
+
 -- 
-2.19.1
+http://autobuild.buildroot.net
