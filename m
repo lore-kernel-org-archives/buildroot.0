@@ -1,46 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 26 Oct 2018 21:20:15 +0200
-Subject: [Buildroot] [git commit] perl-io-socket-ssl: bump to version 2.060
-Message-ID: <20181026191919.E6C1F8908F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] perl-net-ping: bump to version 2.71
+Message-ID: <20181026191920.210BA8910C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73458f8a8023a582c22c7ab714c3430a4f9f2148
+commit: https://git.buildroot.net/buildroot/commit/?id=0a88a6c04f7cfaa62d322ed071c972623b6b3587
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The license file hash is changed due to:
+
+ - Changes in the README file unrelated to the licensing terms.
+ - Update of the copyright year (2017 changed to 2017-2018)
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-io-socket-ssl/perl-io-socket-ssl.hash | 4 ++--
- package/perl-io-socket-ssl/perl-io-socket-ssl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/perl-net-ping/perl-net-ping.hash | 6 +++---
+ package/perl-net-ping/perl-net-ping.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
-index 5b9cb9934b..ad9e5ae4b4 100644
---- a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
-+++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
+diff --git a/package/perl-net-ping/perl-net-ping.hash b/package/perl-net-ping/perl-net-ping.hash
+index 363d095386..c3bff0339d 100644
+--- a/package/perl-net-ping/perl-net-ping.hash
++++ b/package/perl-net-ping/perl-net-ping.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    7f575fd3844263a3401dc6e1fe3ad44c IO-Socket-SSL-2.056.tar.gz
--sha256 91451ecc28b243a78b438f0a42db24c4b60a86f088879b38e40bdbd697818259 IO-Socket-SSL-2.056.tar.gz
-+md5    97fa6cd64f15db60f810cd8ab02d57fc IO-Socket-SSL-2.060.tar.gz
-+sha256 fb5b2877ac5b686a5d7b8dd71cf5464ffe75d10c32047b5570674870e46b1b8c IO-Socket-SSL-2.060.tar.gz
+-md5    0b01ada2bc588330456924393d47ed11 Net-Ping-2.68.tar.gz
+-sha256 d01ac2fcdf684c4a23a07104fbb147cfbdbda47fd5b660912124258f29afd7e3 Net-Ping-2.68.tar.gz
++md5    58110451d15d27b46ebc6a53f1697ff1 Net-Ping-2.71.tar.gz
++sha256 0819d0aa87b173e98ecb3ccfd92272ce53c7fc9e86f962f64602a6fa477f7d4f Net-Ping-2.71.tar.gz
  
  # computed by scancpan
- sha256 090aff5421fd55a9dceeaf6c612c36360402e8d29c1284aef88c87be565ce032 README
-diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
-index 2b3e675d2a..e4857c70c7 100644
---- a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
-+++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
+-sha256 eb4ad254a468a977f29849efda0183f69b7f4ede0f7123e0dd5768207ee73c58 README
++sha256 9441a22309a2b40ff1282ac1906c137f07f5e521e7b1ec162b251f6006051b47 README
+diff --git a/package/perl-net-ping/perl-net-ping.mk b/package/perl-net-ping/perl-net-ping.mk
+index 0b863008e0..5e8f53be1e 100644
+--- a/package/perl-net-ping/perl-net-ping.mk
++++ b/package/perl-net-ping/perl-net-ping.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_IO_SOCKET_SSL_VERSION = 2.056
-+PERL_IO_SOCKET_SSL_VERSION = 2.060
- PERL_IO_SOCKET_SSL_SOURCE = IO-Socket-SSL-$(PERL_IO_SOCKET_SSL_VERSION).tar.gz
- PERL_IO_SOCKET_SSL_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SU/SULLR
- PERL_IO_SOCKET_SSL_LICENSE = Artistic or GPL-1.0+
+-PERL_NET_PING_VERSION = 2.68
++PERL_NET_PING_VERSION = 2.71
+ PERL_NET_PING_SOURCE = Net-Ping-$(PERL_NET_PING_VERSION).tar.gz
+ PERL_NET_PING_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
+ PERL_NET_PING_LICENSE = Artistic or GPL-1.0+
