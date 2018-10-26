@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Oct 2018 21:38:01 +0200
-Subject: [Buildroot] [git commit branch/2018.08.x] .gitlab-ci.yml: do
+Date: Fri, 26 Oct 2018 21:38:10 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] .gitlab-ci.yml: do
  runtime tests only on explicit trigger
-Message-ID: <20181026193612.42F2E82584@busybox.osuosl.org>
+Message-ID: <20181026193620.D2BB88258E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a5277a832e3b203fbb90b30e147299f2b3cdd3e1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=067cdf70053d9102677f31571dd59b2670f9847e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 When the runtime tests were first introduced, they still ran pretty
 quickly. Nowadays, however, there are a lot of runtime tests, and some
@@ -32,10 +32,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 10 insertions(+)
 
 diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 9d4301076f..b0336356c1 100644
+index 271b938842..48def54004 100644
 --- a/.gitlab-ci.yml
 +++ b/.gitlab-ci.yml
-@@ -63,6 +63,11 @@ check-package:
+@@ -51,6 +51,11 @@ check-package:
              - output/build/packages-file-list.txt
  
  .runtime_test: &runtime_test
@@ -48,10 +48,10 @@ index 9d4301076f..b0336356c1 100644
      # runner will clean up those files for us.
      # Multiply every emulator timeout by 10 to avoid sporadic failures in
 diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
-index fb2650c5ce..6358d87fd7 100644
+index c0e9563f2f..10de027ce1 100644
 --- a/.gitlab-ci.yml.in
 +++ b/.gitlab-ci.yml.in
-@@ -63,6 +63,11 @@ check-package:
+@@ -51,6 +51,11 @@ check-package:
              - output/build/packages-file-list.txt
  
  .runtime_test: &runtime_test
