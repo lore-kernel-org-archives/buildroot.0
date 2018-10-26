@@ -1,44 +1,37 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 26 Oct 2018 21:44:22 +0300
-Subject: [Buildroot] [PATCH 1/1] python3: bump to version 3.7.1
-Message-ID: <20181026184422.11399-1-asafka7@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 26 Oct 2018 20:54:00 +0200
+Subject: [Buildroot] [git commit] board/zynqmp/post-image.sh: support dots
+ in DTS file names
+Message-ID: <20181026185236.4C31A8907D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python3/python3.hash | 6 +++---
- package/python3/python3.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=4f56655b2b7dfe753a61a48b23ee3fe62f9d12fb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index 9138ad6b9c..7cd9d750a7 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
-@@ -1,5 +1,5 @@
--# From https://www.python.org/downloads/release/python-370/
--md5		eb8c2a6b1447d50813c02714af4681f3 Python-3.7.0.tar.xz
-+# From https://www.python.org/downloads/release/python-371/
-+md5		0a57e9022c07fad3dadb2eef58568edb Python-3.7.1.tar.xz
- # Locally computed
--sha256 0382996d1ee6aafe59763426cf0139ffebe36984474d0ec4126dd1c40a8b3549 Python-3.7.0.tar.xz
-+sha256 fa7e2b8e8c9402f192ad56dc4f814089d1c4466c97d780f5e5acc02c04243d6d Python-3.7.1.tar.xz
- sha256 b9a6d9320b8f2693e8d41e496ce56caadacaddcca9be2a64a61749278f425cf2 LICENSE
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index cd01cf1ac3..8fbb95b9ad 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
+Some ZynqMP device trees in the kernel have a dot in their name,
+for example "zynqmp-zcu102-rev1.0". The post image script
+left out the part after the dot and created an invalid symlink.
+
+Signed-off-by: Francois Beerten <fbeerten.git@colabti.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ board/zynqmp/post-image.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/board/zynqmp/post-image.sh b/board/zynqmp/post-image.sh
+index 2e7bcbaab6..b2b99fed01 100755
+--- a/board/zynqmp/post-image.sh
++++ b/board/zynqmp/post-image.sh
 @@ -5,7 +5,7 @@
- ################################################################################
+ # devicetree listed in the config.
  
- PYTHON3_VERSION_MAJOR = 3.7
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).0
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).1
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python-2.0, others
--- 
-2.19.1
+ FIRST_DT=$(sed -nr \
+-               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/([-_/[:alnum:]]*).*"$|\1|p' \
++               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/([-_/[:alnum:]\\.]*).*"$|\1|p' \
+                ${BR2_CONFIG})
+ 
+ [ -z "${FIRST_DT}" ] || ln -fs ${FIRST_DT}.dtb ${BINARIES_DIR}/system.dtb
