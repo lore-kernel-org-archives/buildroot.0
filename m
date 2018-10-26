@@ -1,38 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Oct 2018 13:38:11 +0200
-Subject: [Buildroot] [PATCH 1/1] brotli: update to version 1.0.7
-In-Reply-To: <20181026141425.GB4330@momiji> (Adrian Perez de Castro's message
- of "Fri, 26 Oct 2018 14:14:25 +0300")
-References: <20181024233823.22831-1-aperez@igalia.com>
- <87h8h958ni.fsf@dell.be.48ers.dk> <20181026141425.GB4330@momiji>
-Message-ID: <874ld95464.fsf@dell.be.48ers.dk>
+Date: Fri, 26 Oct 2018 13:43:22 +0200
+Subject: [Buildroot] [PATCH] fs: allow extra arguments to common tarball
+ extraction
+In-Reply-To: <1697965583.2026245.1528505922702.JavaMail.zimbra@datacom.com.br>
+ (Carlos Santos's message of "Fri, 8 Jun 2018 21:58:42 -0300 (BRT)")
+References: <20180603022145.14222-1-casantos@datacom.com.br>
+ <20180605172345.GB29058@scaer>
+ <625048322.1426556.1528289177741.JavaMail.zimbra@datacom.com.br>
+ <20180606185136.GA2537@scaer>
+ <81235112-f5f8-dbed-ac99-7942c003b898@mind.be>
+ <1697965583.2026245.1528505922702.JavaMail.zimbra@datacom.com.br>
+Message-ID: <87zhv13pd1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+>>>>> "Carlos" == Carlos Santos <casantos@datacom.com.br> writes:
 
- > On Fri, 26 Oct 2018 12:01:21 +0200, Peter Korsgaard <peter@korsgaard.com> wrote:
- >> >>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+Hi,
+
+ >> There is (in my even less humble opinion) one way that we can solve this
+ >> generically: by adding a genimage filesystem. genimage is able to create
+ >> separate filesystem images for subtrees. so it can cover many use cases in a
+ >> generic way.
  >> 
- >> > The new version, among other changes, includes important fixes
- >> > for unaligned memory access on ARM (both for 32 and 64-bit), as well
- >> > as performance improvements and build fixes.
- >> 
- >> Does this mean that we should backport this version bump to the current
- >> LTS release (2018.02.x) as well then?
+ >> There are probably a few gotchas, but I still believe it should be possible.
 
- > This is probably a good idea. I was reluctant to suggest it from the get-go
- > because there is no mention to security updates in the release notes, but
- > the unaligned memory access will cause crashes, which on could argue can be
- > exploited for DoS attacks ?. Also, it's a point release so the API/ABI of
- > the library remains the same, and the risk of breaking things is minimal.
+ > Genimage is unable to deal with GPT partitioning, which is much better
+ > to use with UEFI BIOS. I dropped it in favour of a custom script that
+ > creates an empty disk image file using sfdisk to partition it using a
+ > file containing the partitioning scheme. Then it reads the start offset
+ > an size of each partition and dumps the corresponding FS image there.
 
- > So yes, I think it's a good idea to backport the update to the LTS version.
-
-Ok, thanks - I'll cherry pick it next time I sync LTS with master.
+It would really be nice if genimage was extended to also handle GPT
+partitioning. Did anyone discuss this with upstream?
 
 -- 
 Bye, Peter Korsgaard
