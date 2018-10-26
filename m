@@ -1,20 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Oct 2018 13:58:45 +0200
-Subject: [Buildroot] [git commit] package/dsp-tools: remove package
-Message-ID: <20181026115738.E066F89000@busybox.osuosl.org>
+Date: Fri, 26 Oct 2018 13:56:55 +0200
+Subject: [Buildroot] [git commit] package/gst-dsp: remove package
+Message-ID: <20181026115738.D6CD289000@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8eb7f5bd0672832823320dee597fb61854c13c2
+commit: https://git.buildroot.net/buildroot/commit/?id=915429073771efb2d9b1213b4c0871cd9f254fff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 The suit of TI OMAP3 dsp tools/libraries are being removed as the
 upstream projects are no longer active.
 
-The dsp-tools package used the tidsp-binaries package.
+The gst-dsp package used the tidsp-binaries package.
 
 Suggest using Buildroot 2018.02.x LTS if the feature is still
 required.
@@ -22,88 +22,87 @@ required.
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy                 |  6 ++++++
- package/Config.in                |  1 -
- package/dsp-tools/Config.in      |  8 --------
- package/dsp-tools/dsp-tools.hash |  2 --
- package/dsp-tools/dsp-tools.mk   | 21 ---------------------
- 5 files changed, 6 insertions(+), 32 deletions(-)
+ Config.in.legacy                       |  6 ++++++
+ package/gstreamer/Config.in            |  1 -
+ package/gstreamer/gst-dsp/Config.in    |  8 --------
+ package/gstreamer/gst-dsp/gst-dsp.hash |  2 --
+ package/gstreamer/gst-dsp/gst-dsp.mk   | 20 --------------------
+ 5 files changed, 6 insertions(+), 31 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index acf578bae5..2089e82b45 100644
+index c862532af2..acf578bae5 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -145,6 +145,12 @@ endif
  ###############################################################################
  comment "Legacy options removed in 2018.11"
  
-+config BR2_PACKAGE_DSP_TOOLS
-+	bool "dsp-tools package removed"
++config BR2_PACKAGE_GST_DSP
++	bool "gst-dsp package removed"
 +	select BR2_LEGACY
 +	help
-+	  The dsp-tools package was removed.
++	  The gst-dsp package was removed.
 +
- config BR2_PACKAGE_GST_DSP
- 	bool "gst-dsp package removed"
+ config BR2_PACKAGE_BOOTUTILS
+ 	bool "bootutils package removed"
  	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 710cde6691..0c39eef352 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2102,7 +2102,6 @@ menu "System tools"
- 	source "package/docker-containerd/Config.in"
- 	source "package/docker-engine/Config.in"
- 	source "package/docker-proxy/Config.in"
--	source "package/dsp-tools/Config.in"
- 	source "package/efibootmgr/Config.in"
- 	source "package/efivar/Config.in"
- 	source "package/emlog/Config.in"
-diff --git a/package/dsp-tools/Config.in b/package/dsp-tools/Config.in
+diff --git a/package/gstreamer/Config.in b/package/gstreamer/Config.in
+index c6292f4a7e..e922437f22 100644
+--- a/package/gstreamer/Config.in
++++ b/package/gstreamer/Config.in
+@@ -7,7 +7,6 @@ source "package/gstreamer/gst-plugins-good/Config.in"
+ source "package/gstreamer/gst-plugins-bad/Config.in"
+ source "package/gstreamer/gst-plugins-ugly/Config.in"
+ source "package/gstreamer/gst-ffmpeg/Config.in"
+-source "package/gstreamer/gst-dsp/Config.in"
+ source "package/gstreamer/gst-fsl-plugins/Config.in"
+ source "package/gstreamer/gst-omapfb/Config.in"
+ source "package/gstreamer/gst-plugin-x170/Config.in"
+diff --git a/package/gstreamer/gst-dsp/Config.in b/package/gstreamer/gst-dsp/Config.in
 deleted file mode 100644
-index 0267454be9..0000000000
---- a/package/dsp-tools/Config.in
+index 102cf69b45..0000000000
+--- a/package/gstreamer/gst-dsp/Config.in
 +++ /dev/null
 @@ -1,8 +0,0 @@
--config BR2_PACKAGE_DSP_TOOLS
--	bool "dsp-tools"
+-config BR2_PACKAGE_GST_DSP
+-	bool "gst-dsp"
 -	depends on BR2_cortex_a8
 -	select BR2_PACKAGE_TIDSP_BINARIES
 -	help
--	  Utilities for TI OMAP3 DSP.
+-	  GStreamer plug-in to access TI OMAP3 DSP algorithms.
 -
--	  http://github.com/felipec/dsp-tools
-diff --git a/package/dsp-tools/dsp-tools.hash b/package/dsp-tools/dsp-tools.hash
+-	  http://code.google.com/p/gst-dsp/
+diff --git a/package/gstreamer/gst-dsp/gst-dsp.hash b/package/gstreamer/gst-dsp/gst-dsp.hash
 deleted file mode 100644
-index cfcf06c8d6..0000000000
---- a/package/dsp-tools/dsp-tools.hash
+index 3bccfc1c3a..0000000000
+--- a/package/gstreamer/gst-dsp/gst-dsp.hash
 +++ /dev/null
 @@ -1,2 +0,0 @@
 -# Locally computed:
--sha256 734a1d5f21fb388bdbe64f7b599fef52357c3c72ff860f38456a352e7c1c3e78  dsp-tools-v2.0.tar.gz
-diff --git a/package/dsp-tools/dsp-tools.mk b/package/dsp-tools/dsp-tools.mk
+-sha256 45437a038979916de74e78a2cc7a0b01ba3982d0848e1e483a054c9cf0ce5883  gst-dsp-v0.10.2.tar.gz
+diff --git a/package/gstreamer/gst-dsp/gst-dsp.mk b/package/gstreamer/gst-dsp/gst-dsp.mk
 deleted file mode 100644
-index ec63bcd111..0000000000
---- a/package/dsp-tools/dsp-tools.mk
+index dedffb9822..0000000000
+--- a/package/gstreamer/gst-dsp/gst-dsp.mk
 +++ /dev/null
-@@ -1,21 +0,0 @@
+@@ -1,20 +0,0 @@
 -################################################################################
 -#
--# dsp-tools
+-# gst-dsp
 -#
 -################################################################################
 -
--DSP_TOOLS_VERSION = v2.0
--DSP_TOOLS_SITE = $(call github,felipec,dsp-tools,$(DSP_TOOLS_VERSION))
--DSP_TOOLS_DEPENDENCIES = tidsp-binaries
--DSP_TOOLS_LICENSE = LGPL-2.1
--DSP_TOOLS_LICENSE_FILES = LICENSE
+-GST_DSP_VERSION = v0.10.2
+-GST_DSP_SITE = $(call github,felipec,gst-dsp,$(GST_DSP_VERSION))
 -
--define DSP_TOOLS_BUILD_CMDS
+-define GST_DSP_BUILD_CMDS
 -	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e
 -endef
 -
--define DSP_TOOLS_INSTALL_TARGET_CMDS
+-define GST_DSP_INSTALL_TARGET_CMDS
 -	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e DESTDIR=$(TARGET_DIR) install
 -endef
+-
+-GST_DSP_DEPENDENCIES = gstreamer tidsp-binaries host-pkgconf
 -
 -$(eval $(generic-package))
