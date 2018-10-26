@@ -1,121 +1,143 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Oct 2018 10:34:04 +0200
-Subject: [Buildroot] [git commit] dc3dd: fix build with glibc 2.28
-Message-ID: <20181026083328.41AF888F92@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 26 Oct 2018 11:40:24 +0200
+Subject: [Buildroot] [PATCH] configs/{at91sam9*,
+ atmel*}: drop OpenSSH as it duplicates Dropbear
+Message-ID: <20181026094024.31108-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fd31e85b2d9e519996cb69a0c9845015e00dbb58
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The "development" defconfigs for Atmel platforms enable both OpenSSH
+and Dropbear, which doesn't make a lot of sense, as only one SSH
+server can start on port 22.
 
-gnulib code in dc3dd relied on internal glibc definitions that are no
-longer visible with glibc 2.28. Add a patch based on upstream gnulib to
-fix the build.
+This commit therefore drops BR2_PACKAGE_OPENSSH=y from those
+defconfigs, keeping Dropbear as an SSH server/client.
 
-Fixes:
-http://autobuild.buildroot.net/results/552/552b8e44fe6585f978e2fb7a920057a868cf6689/
-http://autobuild.buildroot.net/results/00d/00d2bf5a4c97bea2ace0427c0bed57e11f9a5f9a/
-http://autobuild.buildroot.net/results/17a/17a9246bfb034c531ec5e27e29d38857e58db271/
+However, since BR2_PACKAGE_OPENSSH=y was enabling OpenSSL, we keep
+BR2_PACKAGE_OPENSSL=y enable to preserve SSL support in other packages
+(for example "wget").
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
+Cc: Joshua Henderson <joshua.henderson@microchip.com>
+Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
 ---
- package/dc3dd/0003-fix-for-glibc-2.28.patch | 87 +++++++++++++++++++++++++++++
- 1 file changed, 87 insertions(+)
+ configs/at91sam9x5ek_dev_defconfig               | 2 +-
+ configs/at91sam9x5ek_mmc_dev_defconfig           | 2 +-
+ configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig | 2 +-
+ configs/atmel_sama5d2_xplained_mmc_dev_defconfig | 2 +-
+ configs/atmel_sama5d3_xplained_dev_defconfig     | 2 +-
+ configs/atmel_sama5d3_xplained_mmc_dev_defconfig | 2 +-
+ configs/atmel_sama5d4_xplained_dev_defconfig     | 2 +-
+ configs/atmel_sama5d4_xplained_mmc_dev_defconfig | 2 +-
+ 8 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/dc3dd/0003-fix-for-glibc-2.28.patch b/package/dc3dd/0003-fix-for-glibc-2.28.patch
-new file mode 100644
-index 0000000000..79e52b1e6d
---- /dev/null
-+++ b/package/dc3dd/0003-fix-for-glibc-2.28.patch
-@@ -0,0 +1,87 @@
-+Fix build with glibc 2.28
-+
-+glibc 2.28 hides a number of internal macros that used to be visible. gnulib
-+relied on these macros. Add a patch based on upstream gnulib commit
-+4af4a4a71827c0 (fflush: adjust to glibc 2.28 libio.h removal) to fix the
-+build.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: gnulib commit 4af4a4a7182
-+
-+diff -Nuar dc3dd-7.2.641.orig/lib/freadahead.c dc3dd-7.2.641/lib/freadahead.c
-+--- dc3dd-7.2.641.orig/lib/freadahead.c	2012-11-06 23:42:58.000000000 +0200
-++++ dc3dd-7.2.641/lib/freadahead.c	2018-10-26 08:46:36.612492230 +0300
-+@@ -24,7 +24,7 @@
-+ size_t
-+ freadahead (FILE *fp)
-+ {
-+-#if defined _IO_ferror_unlocked || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Linux libc5 */
-++#if defined _IO_EOF_SEEN || defined _IO_ferror_unlocked || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Linux libc5 */
-+   if (fp->_IO_write_ptr > fp->_IO_write_base)
-+     return 0;
-+   return (fp->_IO_read_end - fp->_IO_read_ptr)
-+diff -Nuar dc3dd-7.2.641.orig/lib/freadptr.c dc3dd-7.2.641/lib/freadptr.c
-+--- dc3dd-7.2.641.orig/lib/freadptr.c	2012-11-06 23:42:58.000000000 +0200
-++++ dc3dd-7.2.641/lib/freadptr.c	2018-10-26 08:36:53.965310494 +0300
-+@@ -29,7 +29,7 @@
-+   size_t size;
-+ 
-+   /* Keep this code in sync with freadahead!  */
-+-#if defined _IO_ferror_unlocked || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Linux libc5 */
-++#if defined _IO_EOF_SEEN || defined _IO_ferror_unlocked || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Linux libc5 */
-+   if (fp->_IO_write_ptr > fp->_IO_write_base)
-+     return NULL;
-+   size = fp->_IO_read_end - fp->_IO_read_ptr;
-+diff -Nuar dc3dd-7.2.641.orig/lib/freadseek.c dc3dd-7.2.641/lib/freadseek.c
-+--- dc3dd-7.2.641.orig/lib/freadseek.c	2012-11-06 23:42:58.000000000 +0200
-++++ dc3dd-7.2.641/lib/freadseek.c	2018-10-26 08:49:35.387912087 +0300
-+@@ -34,7 +34,7 @@
-+ freadptrinc (FILE *fp, size_t increment)
-+ {
-+   /* Keep this code in sync with freadptr!  */
-+-#if defined _IO_ferror_unlocked || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Linux libc5 */
-++#if defined _IO_EOF_SEEN || defined _IO_ferror_unlocked || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Linux libc5 */
-+   fp->_IO_read_ptr += increment;
-+ #elif defined __sferror || defined __DragonFly__ /* FreeBSD, NetBSD, OpenBSD, DragonFly, MacOS X, Cygwin */
-+   fp_->_p += increment;
-+diff -Nuar dc3dd-7.2.641.orig/lib/fseeko.c dc3dd-7.2.641/lib/fseeko.c
-+--- dc3dd-7.2.641.orig/lib/fseeko.c	2012-11-06 23:42:58.000000000 +0200
-++++ dc3dd-7.2.641/lib/fseeko.c	2018-10-26 08:51:02.841583936 +0300
-+@@ -44,7 +44,7 @@
-+ #endif
-+ 
-+   /* These tests are based on fpurge.c.  */
-+-#if defined _IO_ferror_unlocked || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Linux libc5 */
-++#if defined _IO_EOF_SEEN || defined _IO_ferror_unlocked || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Linux libc5 */
-+   if (fp->_IO_read_end == fp->_IO_read_ptr
-+       && fp->_IO_write_ptr == fp->_IO_write_base
-+       && fp->_IO_save_base == NULL)
-+diff -Nuar dc3dd-7.2.641.orig/lib/fseterr.c dc3dd-7.2.641/lib/fseterr.c
-+--- dc3dd-7.2.641.orig/lib/fseterr.c	2012-11-06 23:42:58.000000000 +0200
-++++ dc3dd-7.2.641/lib/fseterr.c	2018-10-26 08:47:51.209919605 +0300
-+@@ -29,7 +29,7 @@
-+   /* Most systems provide FILE as a struct and the necessary bitmask in
-+      <stdio.h>, because they need it for implementing getc() and putc() as
-+      fast macros.  */
-+-#if defined _IO_ferror_unlocked || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Linux libc5 */
-++#if defined _IO_EOF_SEEN || defined _IO_ferror_unlocked || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Linux libc5 */
-+   fp->_flags |= _IO_ERR_SEEN;
-+ #elif defined __sferror || defined __DragonFly__ /* FreeBSD, NetBSD, OpenBSD, DragonFly, MacOS X, Cygwin */
-+   fp_->_flags |= __SERR;
-+diff -Nuar dc3dd-7.2.641.orig/lib/stdio-impl.h dc3dd-7.2.641/lib/stdio-impl.h
-+--- dc3dd-7.2.641.orig/lib/stdio-impl.h	2012-11-06 23:42:58.000000000 +0200
-++++ dc3dd-7.2.641/lib/stdio-impl.h	2018-10-26 08:46:26.136291709 +0300
-+@@ -18,6 +18,12 @@
-+    the same implementation of stdio extension API, except that some fields
-+    have different naming conventions, or their access requires some casts.  */
-+ 
-++/* Glibc 2.28 made _IO_IN_BACKUP private.  For now, work around this
-++   problem by defining it ourselves.  FIXME: Do not rely on glibc
-++   internals.  */
-++#if !defined _IO_IN_BACKUP && defined _IO_EOF_SEEN
-++# define _IO_IN_BACKUP 0x100
-++#endif
-+ 
-+ /* BSD stdio derived implementations.  */
-+ 
+diff --git a/configs/at91sam9x5ek_dev_defconfig b/configs/at91sam9x5ek_dev_defconfig
+index dee365a56c..2971befa19 100644
+--- a/configs/at91sam9x5ek_dev_defconfig
++++ b/configs/at91sam9x5ek_dev_defconfig
+@@ -67,7 +67,7 @@ BR2_PACKAGE_IPTABLES=y
+ BR2_PACKAGE_IW=y
+ BR2_PACKAGE_LRZSZ=y
+ BR2_PACKAGE_MII_DIAG=y
+-BR2_PACKAGE_OPENSSH=y
++BR2_PACKAGE_OPENSSL=y
+ BR2_PACKAGE_WGET=y
+ BR2_PACKAGE_WIRELESS_TOOLS=y
+ BR2_PACKAGE_WPA_SUPPLICANT=y
+diff --git a/configs/at91sam9x5ek_mmc_dev_defconfig b/configs/at91sam9x5ek_mmc_dev_defconfig
+index a8fdad72b7..112146320e 100644
+--- a/configs/at91sam9x5ek_mmc_dev_defconfig
++++ b/configs/at91sam9x5ek_mmc_dev_defconfig
+@@ -70,7 +70,7 @@ BR2_PACKAGE_IPTABLES=y
+ BR2_PACKAGE_IW=y
+ BR2_PACKAGE_LRZSZ=y
+ BR2_PACKAGE_MII_DIAG=y
+-BR2_PACKAGE_OPENSSH=y
++BR2_PACKAGE_OPENSSL=y
+ BR2_PACKAGE_WGET=y
+ BR2_PACKAGE_WIRELESS_TOOLS=y
+ BR2_PACKAGE_WPA_SUPPLICANT=y
+diff --git a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+index f3cb11ce70..b32bcd6a28 100644
+--- a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
++++ b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+@@ -59,7 +59,7 @@ BR2_PACKAGE_IPTABLES=y
+ BR2_PACKAGE_IW=y
+ BR2_PACKAGE_LRZSZ=y
+ BR2_PACKAGE_MII_DIAG=y
+-BR2_PACKAGE_OPENSSH=y
++BR2_PACKAGE_OPENSSL=y
+ BR2_PACKAGE_WGET=y
+ BR2_PACKAGE_WIRELESS_TOOLS=y
+ BR2_PACKAGE_WPA_SUPPLICANT=y
+diff --git a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
+index 78d082f9cb..0a7685b0b1 100644
+--- a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
++++ b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
+@@ -73,7 +73,7 @@ BR2_PACKAGE_IPTABLES=y
+ BR2_PACKAGE_IW=y
+ BR2_PACKAGE_LRZSZ=y
+ BR2_PACKAGE_MII_DIAG=y
+-BR2_PACKAGE_OPENSSH=y
++BR2_PACKAGE_OPENSSL=y
+ BR2_PACKAGE_WGET=y
+ BR2_PACKAGE_WIRELESS_TOOLS=y
+ BR2_PACKAGE_WPA_SUPPLICANT=y
+diff --git a/configs/atmel_sama5d3_xplained_dev_defconfig b/configs/atmel_sama5d3_xplained_dev_defconfig
+index 91ded5bfeb..40f781531d 100644
+--- a/configs/atmel_sama5d3_xplained_dev_defconfig
++++ b/configs/atmel_sama5d3_xplained_dev_defconfig
+@@ -69,7 +69,7 @@ BR2_PACKAGE_IPTABLES=y
+ BR2_PACKAGE_IW=y
+ BR2_PACKAGE_LRZSZ=y
+ BR2_PACKAGE_MII_DIAG=y
+-BR2_PACKAGE_OPENSSH=y
++BR2_PACKAGE_OPENSSL=y
+ BR2_PACKAGE_WGET=y
+ BR2_PACKAGE_WIRELESS_TOOLS=y
+ BR2_PACKAGE_WPA_SUPPLICANT=y
+diff --git a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
+index 20dc8929ab..c16cb67fd0 100644
+--- a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
++++ b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
+@@ -72,7 +72,7 @@ BR2_PACKAGE_IPTABLES=y
+ BR2_PACKAGE_IW=y
+ BR2_PACKAGE_LRZSZ=y
+ BR2_PACKAGE_MII_DIAG=y
+-BR2_PACKAGE_OPENSSH=y
++BR2_PACKAGE_OPENSSL=y
+ BR2_PACKAGE_WGET=y
+ BR2_PACKAGE_WIRELESS_TOOLS=y
+ BR2_PACKAGE_WPA_SUPPLICANT=y
+diff --git a/configs/atmel_sama5d4_xplained_dev_defconfig b/configs/atmel_sama5d4_xplained_dev_defconfig
+index 69a71eb51e..c2e1418431 100644
+--- a/configs/atmel_sama5d4_xplained_dev_defconfig
++++ b/configs/atmel_sama5d4_xplained_dev_defconfig
+@@ -70,7 +70,7 @@ BR2_PACKAGE_IPTABLES=y
+ BR2_PACKAGE_IW=y
+ BR2_PACKAGE_LRZSZ=y
+ BR2_PACKAGE_MII_DIAG=y
+-BR2_PACKAGE_OPENSSH=y
++BR2_PACKAGE_OPENSSL=y
+ BR2_PACKAGE_WGET=y
+ BR2_PACKAGE_WIRELESS_TOOLS=y
+ BR2_PACKAGE_WPA_SUPPLICANT=y
+diff --git a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
+index 60692d98cb..9f7318d420 100644
+--- a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
++++ b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
+@@ -73,7 +73,7 @@ BR2_PACKAGE_IPTABLES=y
+ BR2_PACKAGE_IW=y
+ BR2_PACKAGE_LRZSZ=y
+ BR2_PACKAGE_MII_DIAG=y
+-BR2_PACKAGE_OPENSSH=y
++BR2_PACKAGE_OPENSSL=y
+ BR2_PACKAGE_WGET=y
+ BR2_PACKAGE_WIRELESS_TOOLS=y
+ BR2_PACKAGE_WPA_SUPPLICANT=y
+-- 
+2.14.4
