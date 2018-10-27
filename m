@@ -1,66 +1,45 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sat, 27 Oct 2018 19:59:22 +0200
-Subject: [Buildroot] [PATCH] meson: re-add patch for skipping RPATH fixing
-Message-ID: <20181027175922.26750-1-eric.le.bihan.dev@free.fr>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sat, 27 Oct 2018 21:22:54 +0300
+Subject: [Buildroot] [PATCH 1/1] python-dateutil: bump to version 2.7.5
+Message-ID: <20181027182254.20419-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The patch to skip RPATH fixing performed by Meson was removed in commit
-a03f46ca6e9f43028003aedc92f1a1204ae7480f, as the script
-support/scripts/check-host-rpath was not complaining anymore.
-
-But without it, the problem still occurs for host packages [1].
-
-So, restore this patch to fix build of host packages with Meson.
-
-[1] http://lists.busybox.net/pipermail/buildroot/2018-October/232956.html
-
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- ...y-fix-RPATH-if-install_rpath-is-not-empty.patch | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
+ package/python-dateutil/python-dateutil.hash | 4 ++--
+ package/python-dateutil/python-dateutil.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
-new file mode 100644
-index 0000000000..0e59907a05
---- /dev/null
-+++ b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
-@@ -0,0 +1,32 @@
-+From 649140f09d8a8805125830cd7b2327d35447ffe8 Mon Sep 17 00:00:00 2001
-+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-+Date: Sat, 14 Jul 2018 11:18:45 +0200
-+Subject: [PATCH] Only fix RPATH if install_rpath is not empty
-+
-+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-+---
-+ mesonbuild/minstall.py | 8 ++++++++
-+ 1 file changed, 8 insertions(+)
-+
-+diff --git a/mesonbuild/minstall.py b/mesonbuild/minstall.py
-+index 1d721795..e04e1f6a 100644
-+--- a/mesonbuild/minstall.py
-++++ b/mesonbuild/minstall.py
-+@@ -495,6 +495,14 @@ class Installer:
-+                 try:
-+                     depfixer.fix_rpath(outname, install_rpath, final_path,
-+                                        install_name_mappings, verbose=False)
-++                    # Buildroot check-host-rpath script expects RPATH
-++                    # But if install_rpath is empty, it will stripped.
-++                    # So, preserve it in this case
-++                    if install_rpath:
-++                        depfixer.fix_rpath(outname, install_rpath, final_path,
-++                                           install_name_mappings, verbose=False)
-++                    else:
-++                        print("Skipping RPATH fixing")
-+                 except SystemExit as e:
-+                     if isinstance(e.code, int) and e.code == 0:
-+                         pass
-+-- 
-+2.14.4
-+
+diff --git a/package/python-dateutil/python-dateutil.hash b/package/python-dateutil/python-dateutil.hash
+index e45da864b8..353b6e5761 100644
+--- a/package/python-dateutil/python-dateutil.hash
++++ b/package/python-dateutil/python-dateutil.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/python-dateutil/json
+-md5	0fcdcec70ebf8cdc469c647fa4966794  python-dateutil-2.7.4.tar.gz
+-sha256	2f13d3ea236aeb237e7258d5729c46eafe1506fd7f8507f34730734ed8b37454  python-dateutil-2.7.4.tar.gz
++md5	6357f8f42cbe0e0e0b1e543f3aad07b7  python-dateutil-2.7.5.tar.gz
++sha256	88f9287c0174266bb0d8cedd395cfba9c58e87e5ad86b2ce58859bc11be3cf02  python-dateutil-2.7.5.tar.gz
+ # Locally computed sha256 checksums
+ sha256	ba00f51a0d92823b5a1cde27d8b5b9d2321e67ed8da9bc163eff96d5e17e577e  LICENSE
+diff --git a/package/python-dateutil/python-dateutil.mk b/package/python-dateutil/python-dateutil.mk
+index 4207a459d0..5e90398331 100644
+--- a/package/python-dateutil/python-dateutil.mk
++++ b/package/python-dateutil/python-dateutil.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-PYTHON_DATEUTIL_VERSION = 2.7.4
+-PYTHON_DATEUTIL_SITE = https://files.pythonhosted.org/packages/a5/15/37f2e39504a98ec4b3eba8c9a61755dd5374388201ee60d1ae5b8e7a3d09
++PYTHON_DATEUTIL_VERSION = 2.7.5
++PYTHON_DATEUTIL_SITE = https://files.pythonhosted.org/packages/0e/01/68747933e8d12263d41ce08119620d9a7e5eb72c876a3442257f74490da0
+ PYTHON_DATEUTIL_SETUP_TYPE = setuptools
+ PYTHON_DATEUTIL_LICENSE = BSD-3-Clause
+ PYTHON_DATEUTIL_LICENSE_FILES = LICENSE
 -- 
-2.14.4
+2.19.1
