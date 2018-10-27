@@ -1,47 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Oct 2018 22:58:56 +0200
-Subject: [Buildroot] [git commit] python-dateutil: bump to version 2.7.5
-Message-ID: <20181027205754.BC93F82980@busybox.osuosl.org>
+Date: Sat, 27 Oct 2018 22:58:22 +0200
+Subject: [Buildroot] [git commit] iproute2: fix build on glibc < 2.21 /
+ uClibc
+Message-ID: <20181027205754.B4A8682982@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=170723fd576780e92c3d88f8785f940cfa74ccc6
+commit: https://git.buildroot.net/buildroot/commit/?id=1d9fe18e97d98ba30998a11a3626c8851dd0ec2b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Fixes:
+http://autobuild.buildroot.net/results/fc9/fc99b1ad49080f552ce611d5a7a2f9fe171b5a2c/
+http://autobuild.buildroot.net/results/5f7/5f74c258a3adafa5aecd4abc378eef0573143764/
+
+q_{etf,taprio}.c uses CLOCK_TAI, which isn't exposed by glibc < 2.21 or
+uClibc, breaking the build. Provide a fallback definition like it is done
+for IPPROTO_MPLS and others.
+
+Patch submitted upstream:
+https://lwn.net/ml/netdev/20181027153102.32302-1-peter%40korsgaard.com/
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-dateutil/python-dateutil.hash | 4 ++--
- package/python-dateutil/python-dateutil.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...s.h-provide-fallback-CLOCK_TAI-definition.patch | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-diff --git a/package/python-dateutil/python-dateutil.hash b/package/python-dateutil/python-dateutil.hash
-index e45da864b8..353b6e5761 100644
---- a/package/python-dateutil/python-dateutil.hash
-+++ b/package/python-dateutil/python-dateutil.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/python-dateutil/json
--md5	0fcdcec70ebf8cdc469c647fa4966794  python-dateutil-2.7.4.tar.gz
--sha256	2f13d3ea236aeb237e7258d5729c46eafe1506fd7f8507f34730734ed8b37454  python-dateutil-2.7.4.tar.gz
-+md5	6357f8f42cbe0e0e0b1e543f3aad07b7  python-dateutil-2.7.5.tar.gz
-+sha256	88f9287c0174266bb0d8cedd395cfba9c58e87e5ad86b2ce58859bc11be3cf02  python-dateutil-2.7.5.tar.gz
- # Locally computed sha256 checksums
- sha256	ba00f51a0d92823b5a1cde27d8b5b9d2321e67ed8da9bc163eff96d5e17e577e  LICENSE
-diff --git a/package/python-dateutil/python-dateutil.mk b/package/python-dateutil/python-dateutil.mk
-index 4207a459d0..5e90398331 100644
---- a/package/python-dateutil/python-dateutil.mk
-+++ b/package/python-dateutil/python-dateutil.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--PYTHON_DATEUTIL_VERSION = 2.7.4
--PYTHON_DATEUTIL_SITE = https://files.pythonhosted.org/packages/a5/15/37f2e39504a98ec4b3eba8c9a61755dd5374388201ee60d1ae5b8e7a3d09
-+PYTHON_DATEUTIL_VERSION = 2.7.5
-+PYTHON_DATEUTIL_SITE = https://files.pythonhosted.org/packages/0e/01/68747933e8d12263d41ce08119620d9a7e5eb72c876a3442257f74490da0
- PYTHON_DATEUTIL_SETUP_TYPE = setuptools
- PYTHON_DATEUTIL_LICENSE = BSD-3-Clause
- PYTHON_DATEUTIL_LICENSE_FILES = LICENSE
+diff --git a/package/iproute2/0001-utils.h-provide-fallback-CLOCK_TAI-definition.patch b/package/iproute2/0001-utils.h-provide-fallback-CLOCK_TAI-definition.patch
+new file mode 100644
+index 0000000000..c89db2b2eb
+--- /dev/null
++++ b/package/iproute2/0001-utils.h-provide-fallback-CLOCK_TAI-definition.patch
+@@ -0,0 +1,32 @@
++From 950bf78adc9a3290ed383eaeef01dee6543cfb97 Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Sat, 27 Oct 2018 17:25:31 +0200
++Subject: [PATCH] utils.h: provide fallback CLOCK_TAI definition
++
++q_{etf,taprio}.c uses CLOCK_TAI, which isn't exposed by glibc < 2.21 or
++uClibc, breaking the build. Provide a fallback definition like it is done
++for IPPROTO_MPLS and others.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ include/utils.h | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/include/utils.h b/include/utils.h
++index 258d630e..685d2c1d 100644
++--- a/include/utils.h
+++++ b/include/utils.h
++@@ -126,6 +126,10 @@ struct ipx_addr {
++ #define IPPROTO_MPLS	137
++ #endif
++ 
+++#ifndef CLOCK_TAI
+++# define CLOCK_TAI 11
+++#endif
+++
++ __u32 get_addr32(const char *name);
++ int get_addr_1(inet_prefix *dst, const char *arg, int family);
++ int get_prefix_1(inet_prefix *dst, char *arg, int family);
++-- 
++2.11.0
++
