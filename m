@@ -1,20 +1,46 @@
-From: jerome <mail.jeg@gmail.com>
-Date: Sat, 27 Oct 2018 11:38:02 +0200
-Subject: [Buildroot] Python scipy package availability
-Message-ID: <CAHDPKYCZ4SEWc9iUA2BTHpaw980Z4TYt_73-Ct5mbsdHLa_TUA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 27 Oct 2018 11:42:07 +0200
+Subject: [Buildroot] [git commit] iproute2: bump version to 4.19.0
+Message-ID: <20181027094200.B0A1282790@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Everyone,
+commit: https://git.buildroot.net/buildroot/commit/?id=e79df78ce26f2cd133218488eb2333939d4d7c2e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Can someone let me know if there is any plan to get a Python scipy  package
-?
+For support for the new 4.19+ kernel features. Release notes:
+https://lwn.net/ml/netdev/20181023104935.282ff4ec at xeon-e3/
 
-Thanks in advance for any info,
-J?r?me.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181027/f143bc86/attachment.html>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/iproute2/iproute2.hash | 2 +-
+ package/iproute2/iproute2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
+index 672ea66d88..00bd1c646a 100644
+--- a/package/iproute2/iproute2.hash
++++ b/package/iproute2/iproute2.hash
+@@ -1,3 +1,3 @@
+ # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
+-sha256	a9e6c70c95f513871c5e1f4e452c04fcb3c4d8a05be651bd794cd994a52daa45  iproute2-4.18.0.tar.xz
++sha256	d9ec5ca1f47d8a85416fa26e7dc1cbf5d067640eb60e90bdc1c7e5bdc6a29984  iproute2-4.19.0.tar.xz
+ sha256	e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4	COPYING
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index b2bb33b8dc..41d0b2c3d9 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IPROUTE2_VERSION = 4.18.0
++IPROUTE2_VERSION = 4.19.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
