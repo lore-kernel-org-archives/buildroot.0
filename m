@@ -1,128 +1,123 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Sat, 27 Oct 2018 07:26:23 -0500
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-10-26
-In-Reply-To: <20181027060023.5E5D720A06@mail.bootlin.com>
-References: <20181027060023.5E5D720A06@mail.bootlin.com>
-Message-ID: <CANQCQpbXOhEgYe_kCqKfEnQMLGrsRh7knZARrxdn3P9qdjf_1w@mail.gmail.com>
+Date: Sat, 27 Oct 2018 08:14:46 -0500
+Subject: [Buildroot] [PATCH 1/3] fs: apply permissions late
+In-Reply-To: <4f9a31b0fb8f87ded9c788cb92d727b6763859ac.1540626349.git.yann.morin.1998@free.fr>
+References: <cover.1540626349.git.yann.morin.1998@free.fr>
+ <4f9a31b0fb8f87ded9c788cb92d727b6763859ac.1540626349.git.yann.morin.1998@free.fr>
+Message-ID: <CANQCQpa3y_Qs7H9aB1Y7fpW9G=V2Dr2yqM9WihrQBuqUbPoEhA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Yann,
 
-On Sat, Oct 27, 2018 at 1:00 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
+On Sat, Oct 27, 2018 at 2:46 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 >
-> Hello,
+> The combination of fakeroot, tar, and capabilities is broken, because
+> fakeroot currently badly handles capabilities, which are currently
+> simply ignored.
 >
-> Build statistics for 2018-10-26
-> ===============================
->
->       branch |  OK | NOK | TIM | TOT |
->    2018.02.x |  21 |   3 |   0 |  24 |
->    2018.08.x |  24 |   5 |   0 |  29 |
->       master | 239 |  46 |   0 | 285 |
->
-> Results for branch '2018.02.x'
-> ==============================
->
-> Classification of failures by reason
-> ------------------------------------
->
->                    attr-2.4.48 | 1
->          libcpprestsdk-v2.10.1 | 1
->               wireshark-2.2.17 | 1
->
->
-> Detail of failures
-> ------------------
->
->         bfin |                    attr-2.4.48 | NOK | http://autobuild.buildroot.net/results/5629ee8b2709e5654ba64ace7539624c1e9f4946 |
->      powerpc |          libcpprestsdk-v2.10.1 | NOK | http://autobuild.buildroot.net/results/095ee556035f37b05bb279f5ab82fd36d6a11915 |
->          sh4 |               wireshark-2.2.17 | NOK | http://autobuild.buildroot.net/results/5ccbda3a3e43ef99696c316866ac834c85f038d0 | ORPH
->
-> Results for branch '2018.08.x'
-> ==============================
->
-> Classification of failures by reason
-> ------------------------------------
->
->                 p11-kit-0.23.2 | 2
->                   giflib-5.1.4 | 1
->                  lcdproc-0.5.9 | 1
->                openswan-2.6.50 | 1
->
->
-> Detail of failures
-> ------------------
->
->       x86_64 |                   giflib-5.1.4 | NOK | http://autobuild.buildroot.net/results/cbd84ad5df0b0cf9f70719f77a800336964e6f41 |
+> As described in #11216, asking tar to explicitly store and restore
+> capabilities ends up with a failling build, when tar actually tries to
+failling -> failing
 
-This was a sandboxed failure.  The sandbox was setup by using
-bubblewrap with the options below.  It stages an OS environment where
-the "--dir" items are new empty write-able directories and the
-ro-binds are readonly bind mounts of that file or location to the new
-location inside the sandbox.  The user/group is also stripped to just
-the minimal root, calling user and 65534. Right now the whole
-autobuilder-run script is being executed inside a single sandbox and
-there is no checking for new files in the write-able empty folders.
-      --ro-bind /bin /bin \
-      --ro-bind /etc/resolv.conf /etc/resolv.conf \
-      --ro-bind /etc/profile /etc/profile \
-      --ro-bind /etc/environment /etc/environment \
-      --ro-bind /etc/alternatives /etc/alternatives \
-      --ro-bind /etc/ld.so.conf /etc/ld.so.conf \
-      --ro-bind /etc/ld.so.cache /etc/ld.so.cache \
-      --ro-bind /etc/ld.so.conf.d /etc/ld.so.conf.d \
-      --ro-bind /etc/xml /etc/xml \
-      --ro-bind /etc/sgml /etc/sgml \
-      --ro-bind /lib /lib \
-      --ro-bind /lib32 /lib32 \
-      --ro-bind /libx32 /libx32 \
-      --ro-bind /lib64 /lib64 \
-      --ro-bind /sbin /sbin \
-      --ro-bind /usr /usr \
-      --dir /home \
-      --dir /home/bruser \
-      --bind /home/bruser/buildroot-test /home/bruser/buildroot-test \
-      --dir /tmp \
-      --dir /var \
-      --dir /run \
-      --symlink ../tmp var/tmp \
-      --symlink ../run var/run \
-      --proc /proc \
-      --dev /dev \
-      --chdir / \
-      --unshare-all \
-      --share-net \
-      --die-with-parent \
-      --dir /run/user/$(id -u) \
-      --setenv XDG_RUNTIME_DIR "/run/user/`id -u`" \
-      --setenv PS1 "bwrap-demo$ " \
-      --file 11 /etc/passwd \
-      --file 12 /etc/group \
-      /bin/bash) \
-    11< <(getent passwd 0 $UID 65534) \
-    12< <(getent group 0 $(id -g) 65534) \
+> restore the capabilities. Adding support for capabilities to fakeroot
+> (by adding host-libcap as dependency) does not fix the problem.
+>
+> Capabilities are stored in the extended attribute security.capabilty.
+Capabilities are stored in the extended attribute security capability.
 
-For this failure, it uncovered Xmlto validation was using the host
-OS's docbook dtd's.  I've mapped the /etc/xml and /etc/sgml into the
-sandbox to resolve this failure.  I assume for something like this an
-update to have it use a Buildroot host tool isn't necessary as the
-xmlto they are using isn't built as a dependency?
+> It turns out that tar does have special handling when extracting and
+> restoring that extended attribute, and that fails miserably when running
+> under fakeroot...
+>
+> We fix that by offloading the permissions handling down to individual
+> filesystems.
+>
+> This needs a split of the makedevs call, with the current and first one
+> now only responsible for creating the pseudo devices, while the new,
+> second call does only set the permissions.
+>
+> Fixes: #11216
+>
+> This changes the order of steps, and post-fakeroot scripts are now
+> called before the permissions are set. This could mean breaking existing
+> setups, but more probably, this woudl sovle some, where files created in
+setups, but more probably, this would solve some, where files created in
 
->                      gpsd-3.18 | 5
+> post-fakeroot scripts can now see their permissions appropriately set.
+>
+> This also slightly breaks the idea behind the intermediate image, which
+> was supposed to gather all actions common to all filesystems, so that
+> they are not repeated. Still, most actions are still created only once,
+> and moving just this is purely a practical and pragmatic workaround.
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
 
-Same failure as giflib.
+Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
->                openswan-2.6.50 | 1
+> ---
+>  fs/common.mk | 17 +++++++++++------
+>  1 file changed, 11 insertions(+), 6 deletions(-)
+>
+> diff --git a/fs/common.mk b/fs/common.mk
+> index 453da6010a..569e5d60c5 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -29,8 +29,8 @@
+>
+>  FS_DIR = $(BUILD_DIR)/buildroot-fs
+>  FULL_DEVICE_TABLE = $(FS_DIR)/device_table.txt
+> -ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE) \
+> -       $(BR2_ROOTFS_STATIC_DEVICE_TABLE))
+> +ROOTFS_PERMISSION_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE))
+> +ROOTFS_STATIC_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_STATIC_DEVICE_TABLE))
+>  USERS_TABLE = $(FS_DIR)/users_table.txt
+>  ROOTFS_USERS_TABLES = $(call qstrip,$(BR2_ROOTFS_USERS_TABLES))
+>
+> @@ -81,14 +81,13 @@ ifneq ($(ROOTFS_USERS_TABLES),)
+>         cat $(ROOTFS_USERS_TABLES) >> $(USERS_TABLE)
+>  endif
+>         PATH=$(BR_PATH) $(TOPDIR)/support/scripts/mkusers $(USERS_TABLE) $(TARGET_DIR) >> $(FAKEROOT_SCRIPT)
+> -ifneq ($(ROOTFS_DEVICE_TABLES),)
+> -       cat $(ROOTFS_DEVICE_TABLES) > $(FULL_DEVICE_TABLE)
+> +ifneq ($(ROOTFS_STATIC_DEVICE_TABLES),)
+> +       cat $(ROOTFS_STATIC_DEVICE_TABLES) > $(FULL_DEVICE_TABLE)
+>  ifeq ($(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
+>         $(call PRINTF,$(PACKAGES_DEVICES_TABLE)) >> $(FULL_DEVICE_TABLE)
+>  endif
+> -endif
+> -       $(call PRINTF,$(PACKAGES_PERMISSIONS_TABLE)) >> $(FULL_DEVICE_TABLE)
+>         echo "$(HOST_DIR)/bin/makedevs -d $(FULL_DEVICE_TABLE) $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+> +endif
+>         $(foreach s,$(call qstrip,$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
+>                 echo "echo '$(TERM_BOLD)>>>   Executing fakeroot script $(s)$(TERM_RESET)'" >> $(FAKEROOT_SCRIPT); \
+>                 echo $(EXTRA_ENV) $(s) $(TARGET_DIR) $(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $(FAKEROOT_SCRIPT)$(sep))
+> @@ -108,6 +107,7 @@ define inner-rootfs
+>
+>  ROOTFS_$(2)_DIR = $$(FS_DIR)/$(1)
+>  ROOTFS_$(2)_TARGET_DIR = $$(ROOTFS_$(2)_DIR)/target
+> +ROOTFS_$(2)_PERMISSION_TABLE = $$(ROOTFS_$(2)_DIR)/permissions.txt
+>
+>  ROOTFS_$(2)_DEPENDENCIES += rootfs-common
+>
+> @@ -149,6 +149,11 @@ $$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
+>         echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
+>         echo "set -e" >> $$(FAKEROOT_SCRIPT)
+>         $$(call PRINTF,$$(ROOTFS_COMMON_UNTAR_CMD)) >> $$(FAKEROOT_SCRIPT)
+> +ifneq ($$(ROOTFS_PERMISSION_TABLES),)
+> +       cat $$(ROOTFS_PERMISSION_TABLES) > $$(ROOTFS_$(2)_PERMISSION_TABLE)
+> +endif
+> +       $$(call PRINTF,$$(PACKAGES_PERMISSIONS_TABLE)) >> $$(ROOTFS_$(2)_PERMISSION_TABLE)
 
-
-Same failure as giflib.
-
-
+If a package duplicates an entry and is below a user provided rootfs
+permissions table similar item, I assume makedev uses the last entry
+as the one to set?  If so, should the two lines above be flipped so
+the "user provided" can always fixup/override the package default?
 
 Matt
