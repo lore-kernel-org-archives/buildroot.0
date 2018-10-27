@@ -1,69 +1,108 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Oct 2018 09:45:56 +0200
-Subject: [Buildroot] [PATCH 0/3] fs: fix and better handle capabilities
-Message-ID: <cover.1540626349.git.yann.morin.1998@free.fr>
+Date: Sat, 27 Oct 2018 09:45:58 +0200
+Subject: [Buildroot] [PATCH 1/3] fs: apply permissions late
+In-Reply-To: <cover.1540626349.git.yann.morin.1998@free.fr>
+References: <cover.1540626349.git.yann.morin.1998@free.fr>
+Message-ID: <4f9a31b0fb8f87ded9c788cb92d727b6763859ac.1540626349.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+The combination of fakeroot, tar, and capabilities is broken, because
+fakeroot currently badly handles capabilities, which are currently
+simply ignored.
 
-As reported by Ricardo in #11216, and recently noticed thanks to the
-runtime tests he added, handling file capabilities is broken.
+As described in #11216, asking tar to explicitly store and restore
+capabilities ends up with a failling build, when tar actually tries to
+restore the capabilities. Adding support for capabilities to fakeroot
+(by adding host-libcap as dependency) does not fix the problem.
 
-Ricardo did a very good job at pinpointing the issue, and that is caused
-by the recent-ish split of the filesystem infra with the use of the
-intermediate tarball.
+Capabilities are stored in the extended attribute security.capabilty.
+It turns out that tar does have special handling when extracting and
+restoring that extended attribute, and that fails miserably when running
+under fakeroot...
 
-It turns out that playing with fakeroot, tar, and capabilities is a lost
-game, as fakeroot behaves badly with the special handling tar does with
-the security.capability extended attribute.
+We fix that by offloading the permissions handling down to individual
+filesystems.
 
-To fix that, we postpone handling of capabilities later, down into each
-filesystem commands, right after extracting the intermediate tarball.
+This needs a split of the makedevs call, with the current and first one
+now only responsible for creating the pseudo devices, while the new,
+second call does only set the permissions.
 
-Discussion about this at the developers days lead to the suggestion
-that, maybe, we should in fact not use an intermediate tarball, and
-instead have each filesystem duplicate the currently common actions.
+Fixes: #11216
 
-This is a bigger endeavour, and one that needs more thinking into.
-In the meantime, this patchset is a pragmatic approach to solve the
-problem.
+This changes the order of steps, and post-fakeroot scripts are now
+called before the permissions are set. This could mean breaking existing
+setups, but more probably, this woudl sovle some, where files created in
+post-fakeroot scripts can now see their permissions appropriately set.
 
+This also slightly breaks the idea behind the intermediate image, which
+was supposed to gather all actions common to all filesystems, so that
+they are not repeated. Still, most actions are still created only once,
+and moving just this is purely a practical and pragmatic workaround.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ fs/common.mk | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-
-The following changes since commit cbf62fc5692cc04a2f721260d5e7f8a2558b4bb1
-
-  mysql: properly order "depends on" vs. bool (2018-10-26 21:28:31 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 99d38f609529976ec574c3a05b6665cf3dd0669d
-
-  fs: fix condition to create static devices (2018-10-27 09:43:55 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (3):
-      fs: apply permissions late
-      fs: be oblivious of pre-existing xattrs
-      fs: fix condition to create static devices
-
- fs/common.mk | 24 ++++++++++++++++--------
- 1 file changed, 16 insertions(+), 8 deletions(-)
-
+diff --git a/fs/common.mk b/fs/common.mk
+index 453da6010a..569e5d60c5 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -29,8 +29,8 @@
+ 
+ FS_DIR = $(BUILD_DIR)/buildroot-fs
+ FULL_DEVICE_TABLE = $(FS_DIR)/device_table.txt
+-ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE) \
+-	$(BR2_ROOTFS_STATIC_DEVICE_TABLE))
++ROOTFS_PERMISSION_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE))
++ROOTFS_STATIC_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_STATIC_DEVICE_TABLE))
+ USERS_TABLE = $(FS_DIR)/users_table.txt
+ ROOTFS_USERS_TABLES = $(call qstrip,$(BR2_ROOTFS_USERS_TABLES))
+ 
+@@ -81,14 +81,13 @@ ifneq ($(ROOTFS_USERS_TABLES),)
+ 	cat $(ROOTFS_USERS_TABLES) >> $(USERS_TABLE)
+ endif
+ 	PATH=$(BR_PATH) $(TOPDIR)/support/scripts/mkusers $(USERS_TABLE) $(TARGET_DIR) >> $(FAKEROOT_SCRIPT)
+-ifneq ($(ROOTFS_DEVICE_TABLES),)
+-	cat $(ROOTFS_DEVICE_TABLES) > $(FULL_DEVICE_TABLE)
++ifneq ($(ROOTFS_STATIC_DEVICE_TABLES),)
++	cat $(ROOTFS_STATIC_DEVICE_TABLES) > $(FULL_DEVICE_TABLE)
+ ifeq ($(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
+ 	$(call PRINTF,$(PACKAGES_DEVICES_TABLE)) >> $(FULL_DEVICE_TABLE)
+ endif
+-endif
+-	$(call PRINTF,$(PACKAGES_PERMISSIONS_TABLE)) >> $(FULL_DEVICE_TABLE)
+ 	echo "$(HOST_DIR)/bin/makedevs -d $(FULL_DEVICE_TABLE) $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
++endif
+ 	$(foreach s,$(call qstrip,$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
+ 		echo "echo '$(TERM_BOLD)>>>   Executing fakeroot script $(s)$(TERM_RESET)'" >> $(FAKEROOT_SCRIPT); \
+ 		echo $(EXTRA_ENV) $(s) $(TARGET_DIR) $(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $(FAKEROOT_SCRIPT)$(sep))
+@@ -108,6 +107,7 @@ define inner-rootfs
+ 
+ ROOTFS_$(2)_DIR = $$(FS_DIR)/$(1)
+ ROOTFS_$(2)_TARGET_DIR = $$(ROOTFS_$(2)_DIR)/target
++ROOTFS_$(2)_PERMISSION_TABLE = $$(ROOTFS_$(2)_DIR)/permissions.txt
+ 
+ ROOTFS_$(2)_DEPENDENCIES += rootfs-common
+ 
+@@ -149,6 +149,11 @@ $$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
+ 	echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
+ 	echo "set -e" >> $$(FAKEROOT_SCRIPT)
+ 	$$(call PRINTF,$$(ROOTFS_COMMON_UNTAR_CMD)) >> $$(FAKEROOT_SCRIPT)
++ifneq ($$(ROOTFS_PERMISSION_TABLES),)
++	cat $$(ROOTFS_PERMISSION_TABLES) > $$(ROOTFS_$(2)_PERMISSION_TABLE)
++endif
++	$$(call PRINTF,$$(PACKAGES_PERMISSIONS_TABLE)) >> $$(ROOTFS_$(2)_PERMISSION_TABLE)
++	echo "$$(HOST_DIR)/bin/makedevs -d $$(ROOTFS_$(2)_PERMISSION_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+ 	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),\
+ 		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
+ 	$$(call PRINTF,$$(ROOTFS_REPRODUCIBLE)) >> $$(FAKEROOT_SCRIPT)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
