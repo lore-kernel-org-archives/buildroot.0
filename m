@@ -1,59 +1,66 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sat, 27 Oct 2018 19:39:32 +0200
-Subject: [Buildroot] [PATCH] cargo-bin: bump version to 0.30.0
-Message-ID: <20181027173932.9645-1-eric.le.bihan.dev@free.fr>
+Date: Sat, 27 Oct 2018 19:59:22 +0200
+Subject: [Buildroot] [PATCH] meson: re-add patch for skipping RPATH fixing
+Message-ID: <20181027175922.26750-1-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump version to 0.30.0.
+The patch to skip RPATH fixing performed by Meson was removed in commit
+a03f46ca6e9f43028003aedc92f1a1204ae7480f, as the script
+support/scripts/check-host-rpath was not complaining anymore.
 
-The signature of the tarballs have been verified and their hash compared to the
-upstream reference.
+But without it, the problem still occurs for host packages [1].
+
+So, restore this patch to fix build of host packages with Meson.
+
+[1] http://lists.busybox.net/pipermail/buildroot/2018-October/232956.html
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/cargo-bin/cargo-bin.hash | 15 +++++++++------
- package/cargo-bin/cargo-bin.mk   |  2 +-
- 2 files changed, 10 insertions(+), 7 deletions(-)
+ ...y-fix-RPATH-if-install_rpath-is-not-empty.patch | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
 
-diff --git a/package/cargo-bin/cargo-bin.hash b/package/cargo-bin/cargo-bin.hash
-index ad2da2bc00..2673e157af 100644
---- a/package/cargo-bin/cargo-bin.hash
-+++ b/package/cargo-bin/cargo-bin.hash
-@@ -1,9 +1,12 @@
--# From https://static.rust-lang.org/dist/cargo-0.27.0-i686-unknown-linux-gnu.tar.xz.sha256
--sha256 64c2262c0577ef1824d3d885753362d68c04f36ea85a195894894c37e2445ef5  cargo-0.27.0-i686-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/cargo-0.27.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
--sha256 3688bea3d971615d9c4b33612c20783bd9a385539aa7f754e6543c196e1bcec2  cargo-0.27.0-powerpc64le-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/cargo-0.27.0-x86_64-unknown-linux-gnu.tar.xz.sha256
--sha256 d09c061daaafd735742e0b18a4da6eb656f61d4c57504d100a6ca9f766b38c71  cargo-0.27.0-x86_64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/cargo-0.30.0-i686-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/cargo-0.30.0-i686-unknown-linux-gnu.tar.xz.asc
-+sha256 43a5754d13fa0436b33c48b1f562b4198d6930efad3dc36284b88289ff20d74d  cargo-0.30.0-i686-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/cargo-0.30.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/cargo-0.30.0-powerpc64le-unknown-linux-gnu.tar.xz.asc
-+sha256 f8d7c27a40bba6343ee7dd39a324fe772b77824921adf3e9514a44d4e49059c8  cargo-0.30.0-powerpc64le-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/cargo-0.30.0-x86_64-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/cargo-0.30.0-x86_64-unknown-linux-gnu.tar.xz.asc
-+sha256 cb7c63c166baa42ab0be08429e29fa59fc7108efd17ca512462b2645b1655a7f  cargo-0.30.0-x86_64-unknown-linux-gnu.tar.xz
- # Locally generated
- sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
- sha256 23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-diff --git a/package/cargo-bin/cargo-bin.mk b/package/cargo-bin/cargo-bin.mk
-index 82b020a43a..7fb4508a52 100644
---- a/package/cargo-bin/cargo-bin.mk
-+++ b/package/cargo-bin/cargo-bin.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CARGO_BIN_VERSION = 0.27.0
-+CARGO_BIN_VERSION = 0.30.0
- CARGO_BIN_SITE = https://static.rust-lang.org/dist
- CARGO_BIN_SOURCE = cargo-$(CARGO_BIN_VERSION)-$(RUSTC_HOST_NAME).tar.xz
- CARGO_BIN_LICENSE = Apache-2.0 or MIT
+diff --git a/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
+new file mode 100644
+index 0000000000..0e59907a05
+--- /dev/null
++++ b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
+@@ -0,0 +1,32 @@
++From 649140f09d8a8805125830cd7b2327d35447ffe8 Mon Sep 17 00:00:00 2001
++From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
++Date: Sat, 14 Jul 2018 11:18:45 +0200
++Subject: [PATCH] Only fix RPATH if install_rpath is not empty
++
++Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
++---
++ mesonbuild/minstall.py | 8 ++++++++
++ 1 file changed, 8 insertions(+)
++
++diff --git a/mesonbuild/minstall.py b/mesonbuild/minstall.py
++index 1d721795..e04e1f6a 100644
++--- a/mesonbuild/minstall.py
+++++ b/mesonbuild/minstall.py
++@@ -495,6 +495,14 @@ class Installer:
++                 try:
++                     depfixer.fix_rpath(outname, install_rpath, final_path,
++                                        install_name_mappings, verbose=False)
+++                    # Buildroot check-host-rpath script expects RPATH
+++                    # But if install_rpath is empty, it will stripped.
+++                    # So, preserve it in this case
+++                    if install_rpath:
+++                        depfixer.fix_rpath(outname, install_rpath, final_path,
+++                                           install_name_mappings, verbose=False)
+++                    else:
+++                        print("Skipping RPATH fixing")
++                 except SystemExit as e:
++                     if isinstance(e.code, int) and e.code == 0:
++                         pass
++-- 
++2.14.4
++
 -- 
 2.14.4
