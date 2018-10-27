@@ -1,58 +1,47 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Sat, 27 Oct 2018 06:46:36 +0200
-Subject: [Buildroot] Antwort: Re: Antwort: Re: [PATCH v3]
- merge_config.sh: merge also buildroot config files
-In-Reply-To: <20181026230546.GA18350@smart-ThinkPad-T410>
-References: <20181025011343.29512-1-afshin.nasser@gmail.com>
- <20181025022031.14043-1-afshin.nasser@gmail.com>
- <20181025074309.GB18528@dell5510>
- <OF54A89E59.8DBA5497-ONC1258331.0034C458-C1258331.00357034@local-dmz.de>
- <20181025214311.GB31691@dell5510>
- <OF26A838D6.35610758-ONC1258332.00211513-C1258332.0021531B@local-dmz.de>
- <20181026230546.GA18350@smart-ThinkPad-T410>
-Message-ID: <20181027044635.GA26719@x230>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sat, 27 Oct 2018 08:07:23 +0300
+Subject: [Buildroot] [PATCH 1/1] python-fastentrypoints: bump to version 0.12
+Message-ID: <20181027050723.11522-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Marcel, Nasser,
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ .../python-fastentrypoints/python-fastentrypoints.hash    | 8 ++++----
+ package/python-fastentrypoints/python-fastentrypoints.mk  | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-> > I would suggest to just remove the prefix restrictions in buildroot's
-> > merge_config.sh unless someone can tell why they are important to be
-> > there.
-> The problem is that some of our defconfig files include comment lines
-> (e.g raspberrypi_defconfig, cubieboard2_defconfig,
-> qemu_arm_versatile_defconfig, ...). If we completely omit the
-> ${CONFIG_PREFIX} we will add first word of comments to $CFG_LIST and
-> therefor will produce some false warning reports for comment lines (if
-> the fist word is just repeated anywhere throughout the fragments which
-> is none sense)
-
-> If we consider the controversial part of the script which is either:
-> sed -n 's/^\(# \)\{0,1\}\(CONFIG_[a-zA-Z0-9_]*\)[= ].*/\2/p' \
-> defconfig_file_name
-
-> for kernel style config files or
-
-> sed -n 's/^\(# \)\{0,1\}\(BR2_[a-zA-Z0-9_]*\)[= ].*/\2/p' \
-> defconfig_file_name
-
-> for buildroot style config files or
-
-> sed -n 's/^\(# \)\{0,1\}\([a-zA-Z0-9_]*\)[= ].*/\2/p' \
-> defconfig_file_name
-
-> as a general command then for different buildroot/kernel defconfig
-> files, the last one will extract comments as well which IMHO is not what we
-> want.
-
-Agree. Maybe we could try to add "any prefix" pattern: '[A-Z0-9_]\+'
-
-sed -n 's/^\(# \)\{0,1\}\([A-Z0-9_]\+_[a-zA-Z0-9_]*\)[= ].*/\2/p' \
-defconfig_file_name
-
-
-Kind regards,
-Petr
+diff --git a/package/python-fastentrypoints/python-fastentrypoints.hash b/package/python-fastentrypoints/python-fastentrypoints.hash
+index 84e9b78287..71165d61fa 100644
+--- a/package/python-fastentrypoints/python-fastentrypoints.hash
++++ b/package/python-fastentrypoints/python-fastentrypoints.hash
+@@ -1,4 +1,4 @@
+-# md5 from https://pypi.python.org/pypi/fastentrypoints/json, sha256 locally computed
+-md5	9bd2a34697eb8279d87e7b927f4f7e85  fastentrypoints-0.10.tar.gz
+-sha256	ed418146ed87230694ec2d8890b9b3e2967e95d857e5ce933cafecb1067cca82  fastentrypoints-0.10.tar.gz
+-sha256	2da210da31c033faa270503884a3ac9058874543e6fdd0b094000720bf2ffb66  fastentrypoints.py
++# md5 from https://pypi.org/pypi/fastentrypoints/json, sha256 locally computed
++md5	390ad9a9229164a06156a5b1f0ef1b22  fastentrypoints-0.12.tar.gz
++sha256	ff284f1469bd65400599807d2c6284d5b251398e6e28811f5f77fd262292410b  fastentrypoints-0.12.tar.gz
++sha256	d1ce3f6a7bb1a7194c7d826a0ca318176b12e58616d9e3d8f366ad43802787c4  fastentrypoints.py
+diff --git a/package/python-fastentrypoints/python-fastentrypoints.mk b/package/python-fastentrypoints/python-fastentrypoints.mk
+index c4eb3e862f..7fa728929d 100644
+--- a/package/python-fastentrypoints/python-fastentrypoints.mk
++++ b/package/python-fastentrypoints/python-fastentrypoints.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_FASTENTRYPOINTS_VERSION = 0.10
++PYTHON_FASTENTRYPOINTS_VERSION = 0.12
+ PYTHON_FASTENTRYPOINTS_SOURCE = fastentrypoints-$(PYTHON_FASTENTRYPOINTS_VERSION).tar.gz
+-PYTHON_FASTENTRYPOINTS_SITE = https://pypi.python.org/packages/e8/c8/c2902c9c9da43d8be8c75a730f15f0c51933c42c39b91d1d7b605a88e907
++PYTHON_FASTENTRYPOINTS_SITE = https://files.pythonhosted.org/packages/56/59/69d9ae590ca39435d409651314ec13b2abe8127c1db0231c01d034ebb6b0
+ PYTHON_FASTENTRYPOINTS_SETUP_TYPE = setuptools
+ PYTHON_FASTENTRYPOINTS_LICENSE = BSD-2-Clause
+ PYTHON_FASTENTRYPOINTS_LICENSE_FILES = fastentrypoints.py
+-- 
+2.19.1
