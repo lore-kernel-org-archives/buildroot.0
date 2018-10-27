@@ -1,68 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Oct 2018 22:58:22 +0200
-Subject: [Buildroot] [git commit] iproute2: fix build on glibc < 2.21 /
- uClibc
-Message-ID: <20181027205754.B4A8682982@busybox.osuosl.org>
+Date: Sat, 27 Oct 2018 22:58:13 +0200
+Subject: [Buildroot] [git commit] python-fastentrypoints: bump to version
+ 0.12
+Message-ID: <20181027205754.AB5FA82980@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d9fe18e97d98ba30998a11a3626c8851dd0ec2b
+commit: https://git.buildroot.net/buildroot/commit/?id=2c0a2c7a3da443b2ed874f3147117d5679c8dd2d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/fc9/fc99b1ad49080f552ce611d5a7a2f9fe171b5a2c/
-http://autobuild.buildroot.net/results/5f7/5f74c258a3adafa5aecd4abc378eef0573143764/
-
-q_{etf,taprio}.c uses CLOCK_TAI, which isn't exposed by glibc < 2.21 or
-uClibc, breaking the build. Provide a fallback definition like it is done
-for IPPROTO_MPLS and others.
-
-Patch submitted upstream:
-https://lwn.net/ml/netdev/20181027153102.32302-1-peter%40korsgaard.com/
-
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...s.h-provide-fallback-CLOCK_TAI-definition.patch | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ package/python-fastentrypoints/python-fastentrypoints.hash | 8 ++++----
+ package/python-fastentrypoints/python-fastentrypoints.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/iproute2/0001-utils.h-provide-fallback-CLOCK_TAI-definition.patch b/package/iproute2/0001-utils.h-provide-fallback-CLOCK_TAI-definition.patch
-new file mode 100644
-index 0000000000..c89db2b2eb
---- /dev/null
-+++ b/package/iproute2/0001-utils.h-provide-fallback-CLOCK_TAI-definition.patch
-@@ -0,0 +1,32 @@
-+From 950bf78adc9a3290ed383eaeef01dee6543cfb97 Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Sat, 27 Oct 2018 17:25:31 +0200
-+Subject: [PATCH] utils.h: provide fallback CLOCK_TAI definition
-+
-+q_{etf,taprio}.c uses CLOCK_TAI, which isn't exposed by glibc < 2.21 or
-+uClibc, breaking the build. Provide a fallback definition like it is done
-+for IPPROTO_MPLS and others.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ include/utils.h | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/include/utils.h b/include/utils.h
-+index 258d630e..685d2c1d 100644
-+--- a/include/utils.h
-++++ b/include/utils.h
-+@@ -126,6 +126,10 @@ struct ipx_addr {
-+ #define IPPROTO_MPLS	137
-+ #endif
-+ 
-++#ifndef CLOCK_TAI
-++# define CLOCK_TAI 11
-++#endif
-++
-+ __u32 get_addr32(const char *name);
-+ int get_addr_1(inet_prefix *dst, const char *arg, int family);
-+ int get_prefix_1(inet_prefix *dst, char *arg, int family);
-+-- 
-+2.11.0
-+
+diff --git a/package/python-fastentrypoints/python-fastentrypoints.hash b/package/python-fastentrypoints/python-fastentrypoints.hash
+index 84e9b78287..71165d61fa 100644
+--- a/package/python-fastentrypoints/python-fastentrypoints.hash
++++ b/package/python-fastentrypoints/python-fastentrypoints.hash
+@@ -1,4 +1,4 @@
+-# md5 from https://pypi.python.org/pypi/fastentrypoints/json, sha256 locally computed
+-md5	9bd2a34697eb8279d87e7b927f4f7e85  fastentrypoints-0.10.tar.gz
+-sha256	ed418146ed87230694ec2d8890b9b3e2967e95d857e5ce933cafecb1067cca82  fastentrypoints-0.10.tar.gz
+-sha256	2da210da31c033faa270503884a3ac9058874543e6fdd0b094000720bf2ffb66  fastentrypoints.py
++# md5 from https://pypi.org/pypi/fastentrypoints/json, sha256 locally computed
++md5	390ad9a9229164a06156a5b1f0ef1b22  fastentrypoints-0.12.tar.gz
++sha256	ff284f1469bd65400599807d2c6284d5b251398e6e28811f5f77fd262292410b  fastentrypoints-0.12.tar.gz
++sha256	d1ce3f6a7bb1a7194c7d826a0ca318176b12e58616d9e3d8f366ad43802787c4  fastentrypoints.py
+diff --git a/package/python-fastentrypoints/python-fastentrypoints.mk b/package/python-fastentrypoints/python-fastentrypoints.mk
+index c4eb3e862f..7fa728929d 100644
+--- a/package/python-fastentrypoints/python-fastentrypoints.mk
++++ b/package/python-fastentrypoints/python-fastentrypoints.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_FASTENTRYPOINTS_VERSION = 0.10
++PYTHON_FASTENTRYPOINTS_VERSION = 0.12
+ PYTHON_FASTENTRYPOINTS_SOURCE = fastentrypoints-$(PYTHON_FASTENTRYPOINTS_VERSION).tar.gz
+-PYTHON_FASTENTRYPOINTS_SITE = https://pypi.python.org/packages/e8/c8/c2902c9c9da43d8be8c75a730f15f0c51933c42c39b91d1d7b605a88e907
++PYTHON_FASTENTRYPOINTS_SITE = https://files.pythonhosted.org/packages/56/59/69d9ae590ca39435d409651314ec13b2abe8127c1db0231c01d034ebb6b0
+ PYTHON_FASTENTRYPOINTS_SETUP_TYPE = setuptools
+ PYTHON_FASTENTRYPOINTS_LICENSE = BSD-2-Clause
+ PYTHON_FASTENTRYPOINTS_LICENSE_FILES = fastentrypoints.py
