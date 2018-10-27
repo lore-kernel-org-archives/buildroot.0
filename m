@@ -1,32 +1,22 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 27 Oct 2018 22:54:15 +0200
-Subject: [Buildroot] [PATCH 1/1] gpsd: disable documentation
-Message-ID: <20181027205415.24058-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 27 Oct 2018 22:58:32 +0200
+Subject: [Buildroot] [PATCH 1/1] python-fastentrypoints: bump to version
+ 0.12
+In-Reply-To: <20181027050723.11522-1-asafka7@gmail.com> (Asaf Kahlon's message
+ of "Sat, 27 Oct 2018 08:07:23 +0300")
+References: <20181027050723.11522-1-asafka7@gmail.com>
+Message-ID: <87y3aj14zr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/cbdb4cc34080714082f044fde7e069e6ab5a0e8e
+>>>>> "Asaf" == Asaf Kahlon <asafka7@gmail.com> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/gpsd/gpsd.mk | 1 +
- 1 file changed, 1 insertion(+)
+ > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index b8eea8bf24..ade2d2a163 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -19,6 +19,7 @@ GPSD_SCONS_ENV = $(TARGET_CONFIGURE_OPTS)
- 
- GPSD_SCONS_OPTS = \
- 	arch=$(ARCH)\
-+	manbuild=no \
- 	prefix=/usr\
- 	sysroot=$(STAGING_DIR)\
- 	strip=no\
+Committed, thanks.
+
 -- 
-2.17.1
+Bye, Peter Korsgaard
