@@ -1,46 +1,38 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 28 Oct 2018 10:39:57 +0100
-Subject: [Buildroot] [PATCH v1] valgrind: fix uclibc c99 support detection
-Message-ID: <20181028093957.20543-1-ps.report@gmx.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 28 Oct 2018 10:39:53 +0100
+Subject: [Buildroot] [PATCH 1/1] libkcapi: disable documentation
+Message-ID: <20181028093953.28938-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes [1]:
+Disable db2pdf, db2ps and xmlto which are used for building PDF, PS, man
+or html documentation
 
-  checking for /home/peko/autobuild/instance-0/output/host/bin/powerpc-linux-gcc option to accept ISO C99... unsupported
-  configure: error: Valgrind relies on a C compiler supporting C99
+Fixes:
+ - http://autobuild.buildroot.org/results/28df3b50d90bc53b965280b77224f89fe09ec2b9
 
-with the following in the valgrind-3.14.0/config.log:
-
-  configure:5517: checking for .../host/bin/powerpc-linux-gcc option to accept ISO C99
-  configure:5666: .../host/bin/powerpc-linux-gcc -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -fno-stack-protector -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 conftest.c >&5
-  conftest.c:55:9: error: unknown type name 'wchar_t'
-     const wchar_t *name;
-           ^~~~~~~
-
-[1] http://autobuild.buildroot.net/results/b25013f785a11f07e8da3735741b96036712f42a
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/valgrind/valgrind.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/libkcapi/libkcapi.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
-index f097c7be1f..459de4907e 100644
---- a/package/valgrind/valgrind.mk
-+++ b/package/valgrind/valgrind.mk
-@@ -36,6 +36,9 @@ endif
+diff --git a/package/libkcapi/libkcapi.mk b/package/libkcapi/libkcapi.mk
+index 1557d2017a..9edf0394d4 100644
+--- a/package/libkcapi/libkcapi.mk
++++ b/package/libkcapi/libkcapi.mk
+@@ -11,6 +11,10 @@ LIBKCAPI_AUTORECONF = YES
+ LIBKCAPI_INSTALL_STAGING = YES
+ LIBKCAPI_LICENSE = BSD-3-Clause (library), BSD-3-Clause or GPL-2.0 (programs)
+ LIBKCAPI_LICENSE_FILES = COPYING COPYING.gplv2 COPYING.bsd
++LIBKCAPI_CONF_ENV = \
++	ac_cv_path_DB2PDF="" \
++	ac_cv_path_DB2PS="" \
++	ac_cv_path_XMLTO=""
  
- VALGRIND_CONF_ENV = CFLAGS="$(VALGRIND_CFLAGS)"
- 
-+# fix uclibc configure c99 support detection
-+VALGRIND_CONF_ENV += ac_cv_prog_cc_c99='-std=gnu99'
-+
- # On ARM, Valgrind only supports ARMv7, and uses the arch part of the
- # host tuple to determine whether it's being built for ARMv7 or
- # not. Therefore, we adjust the host tuple to specify we're on
+ ifeq ($(BR2_PACKAGE_LIBKCAPI_HASHER),y)
+ LIBKCAPI_CONF_OPTS += --enable-kcapi-hasher
 -- 
-2.19.1
+2.17.1
