@@ -1,54 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 28 Oct 2018 08:01:28 +0100
-Subject: [Buildroot] [git commit] package/mjpg-streamer: bump version
-Message-ID: <20181028071412.C4BD582BDA@busybox.osuosl.org>
+Date: Sun, 28 Oct 2018 08:14:28 +0100
+Subject: [Buildroot] [git commit] lcdproc: use ac_cv_mtab_file
+Message-ID: <20181028071413.0471582BDA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=367d7dc7a1621f26bc8f8b9a45adc131e0580820
+commit: https://git.buildroot.net/buildroot/commit/?id=b4501ca80d9c02984e5d0715b999d8d638cda544
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This bump includes
-https://github.com/jacksonliam/mjpg-streamer/commit/2b751f1f2ab1dfaf1d12bedf98d4fe37a42d3edd
+Set ac_cv_mtab_file to /etc/mtab otherwise build will fail if no mtab,
+mnttab or fstab is found in /etc (on host)
 
-which fixes
-http://autobuild.buildroot.net/results/247/247a55398aed37a08c67cc21db6836ad342d24ca/
+Fixes:
+ - http://autobuild.buildroot.org/results/efaf2833d674c7e366c59f367f0b83c7f88546bb
 
-and includes
-https://github.com/jacksonliam/mjpg-streamer/commit/ddb69b7b4f114f3c2ca01adf55712792ca8aed43
-
-which fixes
-http://autobuild.buildroot.net/results/dad/dad054954de76cab56333747274520f269be2066/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mjpg-streamer/mjpg-streamer.hash | 2 +-
- package/mjpg-streamer/mjpg-streamer.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/lcdproc/lcdproc.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/mjpg-streamer/mjpg-streamer.hash b/package/mjpg-streamer/mjpg-streamer.hash
-index a98aaffffd..76716266b9 100644
---- a/package/mjpg-streamer/mjpg-streamer.hash
-+++ b/package/mjpg-streamer/mjpg-streamer.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 617c6cdcf5ad6e9135e8bcd83d7acd33cc4a563b9104bca7def57d807164ae89  mjpg-streamer-75c6c4a7809c735b201df949d55287fb60397744.tar.gz
-+sha256 d2c2c9dbc95332245f34247f4a0791d741d1ae875084f9886442f48a01b01d81  mjpg-streamer-ddb69b7b4f114f3c2ca01adf55712792ca8aed43.tar.gz
- sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  mjpg-streamer-experimental/LICENSE
-diff --git a/package/mjpg-streamer/mjpg-streamer.mk b/package/mjpg-streamer/mjpg-streamer.mk
-index c09d55b727..de8bad0c03 100644
---- a/package/mjpg-streamer/mjpg-streamer.mk
-+++ b/package/mjpg-streamer/mjpg-streamer.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/lcdproc/lcdproc.mk b/package/lcdproc/lcdproc.mk
+index e5b6172b15..96e59da409 100644
+--- a/package/lcdproc/lcdproc.mk
++++ b/package/lcdproc/lcdproc.mk
+@@ -18,7 +18,9 @@ endif
  
--MJPG_STREAMER_VERSION = 75c6c4a7809c735b201df949d55287fb60397744
-+MJPG_STREAMER_VERSION = ddb69b7b4f114f3c2ca01adf55712792ca8aed43
- MJPG_STREAMER_SITE = $(call github,jacksonliam,mjpg-streamer,$(MJPG_STREAMER_VERSION))
- MJPG_STREAMER_SUBDIR = mjpg-streamer-experimental
- MJPG_STREAMER_LICENSE = GPL-2.0+
+ LCDPROC_DEPENDENCIES = freetype ncurses zlib
+ 
+-LCDPROC_CONF_ENV += ac_cv_path_FT2_CONFIG=$(STAGING_DIR)/usr/bin/freetype-config
++LCDPROC_CONF_ENV += \
++	ac_cv_mtab_file=/etc/mtab \
++	ac_cv_path_FT2_CONFIG=$(STAGING_DIR)/usr/bin/freetype-config
+ 
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ LCDPROC_DEPENDENCIES += libpng
