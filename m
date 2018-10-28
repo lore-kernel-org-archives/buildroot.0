@@ -1,28 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 28 Oct 2018 16:05:23 +0100
-Subject: [Buildroot] [PATCH] scancpan: uses also README.md as default
- license file
-In-Reply-To: <20181026032740.9176-1-francois.perrad@gadz.org>
-References: <20181026032740.9176-1-francois.perrad@gadz.org>
-Message-ID: <20181028160523.1db7bdf7@windsurf>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sun, 28 Oct 2018 16:23:12 +0100
+Subject: [Buildroot] [PATCH 1/2] scancpan: add a full stop to the help text
+ when missing
+Message-ID: <20181028152313.23272-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ utils/scancpan | 1 +
+ 1 file changed, 1 insertion(+)
 
-On Fri, 26 Oct 2018 05:27:40 +0200, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  utils/scancpan | 3 +++
->  1 file changed, 3 insertions(+)
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/utils/scancpan b/utils/scancpan
+index 4b93ef769..9e0245d4b 100755
+--- a/utils/scancpan
++++ b/utils/scancpan
+@@ -701,6 +701,7 @@ while (my ($distname, $dist) = each %dist) {
+     }
+     if ($need_target{$distname} && ($force || !-f $cfgname)) {
+         $dist->{abstract} =~ s|\s+$||;
++        $dist->{abstract} .= q{.} unless $dist->{abstract} =~ m|\.$|;
+         my $abstract = wrap( q{}, qq{\t  }, $dist->{abstract} );
+         my $homepage = $dist->{resources}->{homepage} || qq{https://metacpan.org/release/${distname}};
+         say qq{write ${cfgname}} unless $quiet;
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
