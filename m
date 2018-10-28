@@ -1,94 +1,80 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 28 Oct 2018 20:58:36 -0300
-Subject: [Buildroot] [PATCH 0/3] .gitlab-ci.yml: add trigger per job and per
- type of job
-Message-ID: <20181028235839.22472-1-ricardo.martincoski@gmail.com>
+Date: Sun, 28 Oct 2018 20:58:37 -0300
+Subject: [Buildroot] [PATCH 1/3] .gitlab-ci.yml: add trigger per type of job
+In-Reply-To: <20181028235839.22472-1-ricardo.martincoski@gmail.com>
+References: <20181028235839.22472-1-ricardo.martincoski@gmail.com>
+Message-ID: <20181028235839.22472-2-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Currently the user has 2 sets of jobs that can be triggered on a GitLab
+pipeline.
+ - to trigger all defconfigs, all runtime tests and all check-* jobs:
+   $ git tag <name>
+   $ git push gitlab <name>                     # currently 260 jobs
+ - to trigger only the check-* jobs:
+   $ git push gitlab HEAD:<name>                # currently   4 jobs
 
-This series allows the user of GitLab pipeline to trigger some interesting
-subsets of jobs by pushing temporary branches with names that match regexps:
- - all defconfigs: /.*-defconfigs$/
- - all runtime tests: /.*-runtime-tests$/
- - one defconfig: /.*-defconfig_name$/
- - one test case: /.*-test_case_name$/
-The check-* jobs keep being triggered for all pushes: branches that match one of
-the regexps above, branches that don't match them, and tags.
-Pushing a tag still triggers all jobs.
+This is not much versatile, so the user ends up hand-editing the
+.gitlab-ci.yml in order to trigger some subsets, even the common ones,
+for instance all runtime tests.
 
-The first patch adds the first two regexps.
-The second patch prepares to add the per job trigger but don't change any
-functionality.
-The last patch actually adds the per defconfig and per runtime test triggers.
+Add 2 more subsets that can be triggered based on the name of the
+branch pushed.
+ - to trigger all defconfigs and all check-* jobs:
+   $ git push gitlab HEAD:<name>-defconfigs     # currently 192 jobs
+ - to trigger all runtime tests and all check-* jobs:
+   $ git push gitlab HEAD:<name>-runtime-tests  # currently  72 jobs
 
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+---
+ .gitlab-ci.yml    | 2 ++
+ .gitlab-ci.yml.in | 2 ++
+ 2 files changed, 4 insertions(+)
 
-With only patch 1 applied, using a local branch named test1:
-
-$ git tag tag1
-$ git push gitlab tag1
-results in 260 jobs
-https://gitlab.com/RicardoMartincoski/buildroot/pipelines/34613530
-
-$ git push gitlab test1
-results in 4 jobs
-https://gitlab.com/RicardoMartincoski/buildroot/pipelines/34613494
-
-$ git push gitlab HEAD:test1-defconfigs
-results in 192 jobs
-https://gitlab.com/RicardoMartincoski/buildroot/pipelines/34613558
-
-$ git push gitlab HEAD:test1-runtime-tests
-results in 72 jobs
-https://gitlab.com/RicardoMartincoski/buildroot/pipelines/34613616
-
-
-With all patches applied, using a local branch named test3:
-
-$ git tag tag3
-$ git push gitlab tag3
-results in 260 jobs
-https://gitlab.com/RicardoMartincoski/buildroot/pipelines/34614775
-
-$ git push gitlab test3
-results in 4 jobs
-https://gitlab.com/RicardoMartincoski/buildroot/pipelines/34614682
-
-$ git push gitlab HEAD:test3-defconfigs
-results in 192 jobs
-https://gitlab.com/RicardoMartincoski/buildroot/pipelines/34614821
-
-$ git push gitlab HEAD:test3-runtime-tests
-results in 72 jobs
-https://gitlab.com/RicardoMartincoski/buildroot/pipelines/34614415
-
-$ git push gitlab HEAD:test3-tests.core.test_file_capabilities.TestFileCapabilities
-results in 5 jobs
-https://gitlab.com/RicardoMartincoski/buildroot/pipelines/34614380
-
-$ git push gitlab HEAD:test3-qemu_arm_versatile_defconfig
-results in 5 jobs
-https://gitlab.com/RicardoMartincoski/buildroot/pipelines/34614400
-
-
-Regards,
-Ricardo
-
-Ricardo Martincoski (3):
-  .gitlab-ci.yml: add trigger per type of job
-  Makefile: offload .gitlab-ci.yml generation
-  .gitlab-ci.yml: add trigger per job
-
- .gitlab-ci.yml                         | 2050 +++++++++++++++++++++---
- .gitlab-ci.yml.in                      |    2 +
- Makefile                               |    4 +-
- support/scripts/generate-gitlab-ci-yml |   37 +
- 4 files changed, 1834 insertions(+), 259 deletions(-)
- create mode 100755 support/scripts/generate-gitlab-ci-yml
-
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 8b9a1f175c..d84c283dbc 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -51,6 +51,7 @@ check-package:
+     only:
+         - triggers
+         - tags
++        - /-defconfigs$/
+     script: *defconfig_script
+     artifacts:
+         when: always
+@@ -67,6 +68,7 @@ check-package:
+     only:
+         - triggers
+         - tags
++        - /-runtime-tests$/
+     # Keep build directories so the rootfs can be an artifact of the job. The
+     # runner will clean up those files for us.
+     # Multiply every emulator timeout by 10 to avoid sporadic failures in
+diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
+index db526c4b5a..ebca29ca1f 100644
+--- a/.gitlab-ci.yml.in
++++ b/.gitlab-ci.yml.in
+@@ -51,6 +51,7 @@ check-package:
+     only:
+         - triggers
+         - tags
++        - /-defconfigs$/
+     script: *defconfig_script
+     artifacts:
+         when: always
+@@ -67,6 +68,7 @@ check-package:
+     only:
+         - triggers
+         - tags
++        - /-runtime-tests$/
+     # Keep build directories so the rootfs can be an artifact of the job. The
+     # runner will clean up those files for us.
+     # Multiply every emulator timeout by 10 to avoid sporadic failures in
 -- 
 2.17.1
