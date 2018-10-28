@@ -1,19 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 28 Oct 2018 08:12:14 +0100
-Subject: [Buildroot] [PATCH 1/1] python3: bump to version 3.7.1
-In-Reply-To: <20181026184422.11399-1-asafka7@gmail.com> (Asaf Kahlon's message
- of "Fri, 26 Oct 2018 21:44:22 +0300")
-References: <20181026184422.11399-1-asafka7@gmail.com>
-Message-ID: <878t2i1r5d.fsf@dell.be.48ers.dk>
+Date: Sun, 28 Oct 2018 08:12:48 +0100
+Subject: [Buildroot] [PATCH] liburiparser: security bump to version 0.9.0
+In-Reply-To: <20181027221011.7703-1-casantos@datacom.com.br> (Carlos Santos's
+ message of "Sat, 27 Oct 2018 19:10:11 -0300")
+References: <20181027221011.7703-1-casantos@datacom.com.br>
+Message-ID: <874ld61r4f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Asaf" == Asaf Kahlon <asafka7@gmail.com> writes:
+>>>>> "Carlos" == Carlos Santos <casantos@datacom.com.br> writes:
 
- > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+ > Fixes an out-of-bounds write, detect an integer overflow and protect
+ > against acting on NULL input. For additional datails, see
+
+ >    https://github.com/uriparser/uriparser/blob/uriparser-0.9.0/ChangeLog
+
+ > Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 
 Committed, thanks.
 
