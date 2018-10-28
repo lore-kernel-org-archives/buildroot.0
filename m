@@ -1,36 +1,69 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 28 Oct 2018 12:02:00 +0100
-Subject: [Buildroot] alsa-utils: alsactl services are not installed
-In-Reply-To: <CANTMe2UJhVMgxj+mSX+XiNkv=Qzb6H3rQhDOphpV7=7xVB-HYw@mail.gmail.com>
-References: <CANTMe2UJhVMgxj+mSX+XiNkv=Qzb6H3rQhDOphpV7=7xVB-HYw@mail.gmail.com>
-Message-ID: <20181028120200.77b9aab2@gmx.net>
+Date: Sun, 28 Oct 2018 12:16:55 +0100
+Subject: [Buildroot] [PATCH v1] valgrind: fix uclibc c99 support
+ detection
+In-Reply-To: <20181028104450.39b76b65@windsurf>
+References: <20181028093957.20543-1-ps.report@gmx.net>
+ <20181028104450.39b76b65@windsurf>
+Message-ID: <20181028121655.2c01ecd6@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello ?????,
+Hello Thomas,
 
-On Thu, 25 Oct 2018 11:16:35 +0300, ????? ?????????? <prok.tim26@gmail.com> wrote:
+On Sun, 28 Oct 2018 10:44:50 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
 > Hello,
 > 
-> I'm trying to build Buildroot with systemd. alsa-utils seem to install
-> correctly but the alsa-restore and alsa-state services aren't installed to
-> the target directory but to the host directory only.
+> On Sun, 28 Oct 2018 10:39:57 +0100, Peter Seiderer wrote:
+> > Fixes [1]:
+> > 
+> >   checking for /home/peko/autobuild/instance-0/output/host/bin/powerpc-linux-gcc option to accept ISO C99... unsupported
+> >   configure: error: Valgrind relies on a C compiler supporting C99
+> > 
+> > with the following in the valgrind-3.14.0/config.log:
+> > 
+> >   configure:5517: checking for .../host/bin/powerpc-linux-gcc option to accept ISO C99
+> >   configure:5666: .../host/bin/powerpc-linux-gcc -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -fno-stack-protector -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 conftest.c >&5
+> >   conftest.c:55:9: error: unknown type name 'wchar_t'
+> >      const wchar_t *name;
+> >            ^~~~~~~
+> > 
+> > [1] http://autobuild.buildroot.net/results/b25013f785a11f07e8da3735741b96036712f42a  
 > 
-> It's very weird since simply copying the service files to the target
-> directory and installing the resulting image works properly. Is there any
-> problem with the Makefile? Using systemd v239 with alsa-utils v1.1.5
+> So the autoconf test verifies that WCHAR support is available, which is
+> not (the toolchain doesn't provide it), but in practice, Valgrind does
+> not need WCHAR support ?
 
-Seems no one missed the files until now ;-), try suggested patch
-'[PATCH v1] alsa-utils: install systemd sevice files' (see [1])...
+The difference in the configure.ac files is:
+
+	$ diff -u build/valgrind-3.13.0/configure.ac build/valgrind-3.14.0/configure.ac
+[...]
+@@ -100,6 +113,11 @@
+ fi
+ rm $tmpfile
+ 
++# Make sure we can compile in C99 mode.
++AC_PROG_CC_C99
++if test "$ac_cv_prog_cc_c99" == "no"; then
++    AC_MSG_ERROR([Valgrind relies on a C compiler supporting C99])
++fi
+[...]
+
+But the check seems to fail in case of uclibc without WCHAR support
+(but valgrind compiles fine in case the check is circumvented),
+maybe the same problem as for libv4l fixed with commit
+'libv4l: fix uclibc-ng configure/compile' (see [2])...
 
 Regards,
 Peter
 
-[1] https://patchwork.ozlabs.org/patch/989965
+[2] https://git.buildroot.net/buildroot/commit/package/libv4l?id=f01396a158f14c53b781c35f7ff29da0bea8c8d6
 
 > 
-> Thank you in advance.
+> Best regards,
+> 
+> Thomas
