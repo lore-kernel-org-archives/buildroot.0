@@ -1,47 +1,61 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sun, 28 Oct 2018 18:53:41 +0200
-Subject: [Buildroot] [PATCH 1/1] python-pycryptodomex: bump to version 3.7.0
-Message-ID: <20181028165341.22493-1-asafka7@gmail.com>
+From: Erico Nunes <nunes.erico@gmail.com>
+Date: Sun, 28 Oct 2018 19:00:54 +0100
+Subject: [Buildroot] merge_config.sh not working on out of tree builds since
+ kconfig bump
+Message-ID: <CAK4VdL0hEzyrMWJVXkokn+MrZpC=5pF-173OHVcGjT+O9W=OjQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-pycryptodomex/python-pycryptodomex.hash | 4 ++--
- package/python-pycryptodomex/python-pycryptodomex.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hello,
 
-diff --git a/package/python-pycryptodomex/python-pycryptodomex.hash b/package/python-pycryptodomex/python-pycryptodomex.hash
-index 79fe74a871..3d98d19f6d 100644
---- a/package/python-pycryptodomex/python-pycryptodomex.hash
-+++ b/package/python-pycryptodomex/python-pycryptodomex.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pycryptodomex/json
--md5	7e1884f55077ed2e48d36565525b1657  pycryptodomex-3.6.6.tar.gz
--sha256	d0d448484e161786922b41e112b5d7cf76ef5f0c725ea5107ef866bb14a38b12  pycryptodomex-3.6.6.tar.gz
-+md5	80019e535efb0575b38217dd3c6c41bb  pycryptodomex-3.7.0.tar.gz
-+sha256	9f11823636128acbe4e17c35ff668f4d0a9f3133450753a0675525b6413aa1b0  pycryptodomex-3.7.0.tar.gz
- # Locally computed sha256 checksums
- sha256	fc884f6492490d0f227613ee900ff2a27e6879b79ee637c53a4697238bf12970  LICENSE.rst
- sha256	8e563c767164faa0831a333b57d23d4311cf566eb1b15d93250f4606be4eb549  Doc/LEGAL/COPYRIGHT.pycrypto
-diff --git a/package/python-pycryptodomex/python-pycryptodomex.mk b/package/python-pycryptodomex/python-pycryptodomex.mk
-index 89b6a10fc9..1dcdb8418d 100644
---- a/package/python-pycryptodomex/python-pycryptodomex.mk
-+++ b/package/python-pycryptodomex/python-pycryptodomex.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYCRYPTODOMEX_VERSION = 3.6.6
-+PYTHON_PYCRYPTODOMEX_VERSION = 3.7.0
- PYTHON_PYCRYPTODOMEX_SOURCE = pycryptodomex-$(PYTHON_PYCRYPTODOMEX_VERSION).tar.gz
--PYTHON_PYCRYPTODOMEX_SITE = https://files.pythonhosted.org/packages/95/10/f3bd758050da1c08ea30c8b4daf9ff895f306b780f07430fcc9b38722e1b
-+PYTHON_PYCRYPTODOMEX_SITE = https://files.pythonhosted.org/packages/69/e7/5c50af65e3d46a161181089aed939bce185ad61f6cc86779994e9d8280d0
- PYTHON_PYCRYPTODOMEX_SETUP_TYPE = setuptools
- PYTHON_PYCRYPTODOMEX_LICENSE = \
- 	BSD-2-Clause, \
--- 
-2.19.1
+since commit "6eacea5ae0 support/kconfig: bump to kconfig from Linux
+4.17-rc2", buildroot/support/kconfig/merge_config.sh no longer works
+with out of tree Buildroot builds.
+Here is a simple reproducer and the issue I see:
+
+Before:
+
+$ make -C buildroot O=$PWD/output defconfig
+...
+$ cd output
+$ echo 'BR2_TARGET_GENERIC_HOSTNAME="test"' > test.frag
+$ ../buildroot/support/kconfig/merge_config.sh .config test.frag
+Using .config as base
+Merging test.frag
+umask 0022 && make -C /home/test/buildroot O=/home/test/output/. alldefconfig
+  GEN     /home/test/output/Makefile
+/tmp/.tmp.config.Mv8mtFExlv:3963:warning: override: reassigning to
+symbol BR2_TARGET_GENERIC_HOSTNAME
+#
+# configuration written to /home/test/output/.config
+#
+
+After:
+
+$ make -C buildroot O=$PWD/output defconfig
+...
+$ cd output
+$ echo 'BR2_TARGET_GENERIC_HOSTNAME="test"' > test.frag
+$ ../buildroot/support/kconfig/merge_config.sh .config test.frag
+Using .config as base
+Merging test.frag
+umask 0022 && make -C /home/test/buildroot O=/home/test/output/. alldefconfig
+  GEN     /home/test/output/Makefile
+*** Can't read seed configuration "./.tmp.config.qIcpASpUyh"!
+make[1]: *** [Makefile:925: alldefconfig] Error 1
+make: *** [Makefile:16: _all] Error 2
+
+
+I understand that kconfig is mostly ported from the kernel, but I
+don't know if this may be caused by any Buildroot customizations.
+I don't use merge_config.sh with the kernel but a simple attempt based
+on the above with 4.19-rc6 seems to work.
+The workaround seems to be to run merge_config.sh from the buildroot tree.
+Any clue?
+
+Thanks
+
+Erico
