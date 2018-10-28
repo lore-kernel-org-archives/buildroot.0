@@ -1,38 +1,42 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 28 Oct 2018 10:39:53 +0100
-Subject: [Buildroot] [PATCH 1/1] libkcapi: disable documentation
-Message-ID: <20181028093953.28938-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 28 Oct 2018 10:44:50 +0100
+Subject: [Buildroot] [PATCH v1] valgrind: fix uclibc c99 support
+ detection
+In-Reply-To: <20181028093957.20543-1-ps.report@gmx.net>
+References: <20181028093957.20543-1-ps.report@gmx.net>
+Message-ID: <20181028104450.39b76b65@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disable db2pdf, db2ps and xmlto which are used for building PDF, PS, man
-or html documentation
+Hello,
 
-Fixes:
- - http://autobuild.buildroot.org/results/28df3b50d90bc53b965280b77224f89fe09ec2b9
+On Sun, 28 Oct 2018 10:39:57 +0100, Peter Seiderer wrote:
+> Fixes [1]:
+> 
+>   checking for /home/peko/autobuild/instance-0/output/host/bin/powerpc-linux-gcc option to accept ISO C99... unsupported
+>   configure: error: Valgrind relies on a C compiler supporting C99
+> 
+> with the following in the valgrind-3.14.0/config.log:
+> 
+>   configure:5517: checking for .../host/bin/powerpc-linux-gcc option to accept ISO C99
+>   configure:5666: .../host/bin/powerpc-linux-gcc -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -fno-stack-protector -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 conftest.c >&5
+>   conftest.c:55:9: error: unknown type name 'wchar_t'
+>      const wchar_t *name;
+>            ^~~~~~~
+> 
+> [1] http://autobuild.buildroot.net/results/b25013f785a11f07e8da3735741b96036712f42a
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libkcapi/libkcapi.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+So the autoconf test verifies that WCHAR support is available, which is
+not (the toolchain doesn't provide it), but in practice, Valgrind does
+not need WCHAR support ?
 
-diff --git a/package/libkcapi/libkcapi.mk b/package/libkcapi/libkcapi.mk
-index 1557d2017a..9edf0394d4 100644
---- a/package/libkcapi/libkcapi.mk
-+++ b/package/libkcapi/libkcapi.mk
-@@ -11,6 +11,10 @@ LIBKCAPI_AUTORECONF = YES
- LIBKCAPI_INSTALL_STAGING = YES
- LIBKCAPI_LICENSE = BSD-3-Clause (library), BSD-3-Clause or GPL-2.0 (programs)
- LIBKCAPI_LICENSE_FILES = COPYING COPYING.gplv2 COPYING.bsd
-+LIBKCAPI_CONF_ENV = \
-+	ac_cv_path_DB2PDF="" \
-+	ac_cv_path_DB2PS="" \
-+	ac_cv_path_XMLTO=""
- 
- ifeq ($(BR2_PACKAGE_LIBKCAPI_HASHER),y)
- LIBKCAPI_CONF_OPTS += --enable-kcapi-hasher
+Best regards,
+
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
