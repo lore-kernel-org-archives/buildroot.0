@@ -1,40 +1,36 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 28 Oct 2018 11:57:18 +0100
-Subject: [Buildroot] [PATCH v1] alsa-utils: install systemd sevice files
-Message-ID: <20181028105718.2850-1-ps.report@gmx.net>
+Date: Sun, 28 Oct 2018 12:02:00 +0100
+Subject: [Buildroot] alsa-utils: alsactl services are not installed
+In-Reply-To: <CANTMe2UJhVMgxj+mSX+XiNkv=Qzb6H3rQhDOphpV7=7xVB-HYw@mail.gmail.com>
+References: <CANTMe2UJhVMgxj+mSX+XiNkv=Qzb6H3rQhDOphpV7=7xVB-HYw@mail.gmail.com>
+Message-ID: <20181028120200.77b9aab2@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/alsa-utils/alsa-utils.mk | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+Hello ?????,
 
-diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
-index e9a45c675f..e8a09aef84 100644
---- a/package/alsa-utils/alsa-utils.mk
-+++ b/package/alsa-utils/alsa-utils.mk
-@@ -82,4 +82,18 @@ define ALSA_UTILS_INSTALL_TARGET_CMDS
- 	fi
- endef
- 
-+ifeq ($(BR2_PACKAGE_ALSA_UTILS_ALSACTL),y)
-+define ALSA_UTILS_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 0644 $(@D)/alsactl/alsa-restore.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/alsa-restore.service
-+	$(INSTALL) -D -m 0644 $(@D)/alsactl/alsa-state.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/alsa-state.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/sound.target.wants
-+	ln -sf ../../../../lib/systemd/alsa-restore.service \
-+		$(TARGET_DIR)/etc/systemd/system/sound.target.wants/alsa-restore.service
-+	ln -sf ../../../../lib/systemd/alsa-state.service \
-+		$(TARGET_DIR)/etc/systemd/system/sound.target.wants/alsa-state.service
-+endef
-+endif
-+
- $(eval $(autotools-package))
--- 
-2.19.1
+On Thu, 25 Oct 2018 11:16:35 +0300, ????? ?????????? <prok.tim26@gmail.com> wrote:
+
+> Hello,
+> 
+> I'm trying to build Buildroot with systemd. alsa-utils seem to install
+> correctly but the alsa-restore and alsa-state services aren't installed to
+> the target directory but to the host directory only.
+> 
+> It's very weird since simply copying the service files to the target
+> directory and installing the resulting image works properly. Is there any
+> problem with the Makefile? Using systemd v239 with alsa-utils v1.1.5
+
+Seems no one missed the files until now ;-), try suggested patch
+'[PATCH v1] alsa-utils: install systemd sevice files' (see [1])...
+
+Regards,
+Peter
+
+[1] https://patchwork.ozlabs.org/patch/989965
+
+> 
+> Thank you in advance.
