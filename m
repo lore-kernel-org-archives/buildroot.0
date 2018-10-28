@@ -1,61 +1,35 @@
-From: Erico Nunes <nunes.erico@gmail.com>
-Date: Sun, 28 Oct 2018 19:00:54 +0100
-Subject: [Buildroot] merge_config.sh not working on out of tree builds since
- kconfig bump
-Message-ID: <CAK4VdL0hEzyrMWJVXkokn+MrZpC=5pF-173OHVcGjT+O9W=OjQ@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 28 Oct 2018 19:07:39 +0100
+Subject: [Buildroot] [PATCH 1/1] openswan: disable documentation
+Message-ID: <20181028180739.3851-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Disable pod2man and xmlto which are used to build man pages
 
-since commit "6eacea5ae0 support/kconfig: bump to kconfig from Linux
-4.17-rc2", buildroot/support/kconfig/merge_config.sh no longer works
-with out of tree Buildroot builds.
-Here is a simple reproducer and the issue I see:
+Fixes:
+ - http://autobuild.buildroot.org/results/2268814b8f5a071ecec1aab962b50a1edcb818d7
 
-Before:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/openswan/openswan.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-$ make -C buildroot O=$PWD/output defconfig
-...
-$ cd output
-$ echo 'BR2_TARGET_GENERIC_HOSTNAME="test"' > test.frag
-$ ../buildroot/support/kconfig/merge_config.sh .config test.frag
-Using .config as base
-Merging test.frag
-umask 0022 && make -C /home/test/buildroot O=/home/test/output/. alldefconfig
-  GEN     /home/test/output/Makefile
-/tmp/.tmp.config.Mv8mtFExlv:3963:warning: override: reassigning to
-symbol BR2_TARGET_GENERIC_HOSTNAME
-#
-# configuration written to /home/test/output/.config
-#
-
-After:
-
-$ make -C buildroot O=$PWD/output defconfig
-...
-$ cd output
-$ echo 'BR2_TARGET_GENERIC_HOSTNAME="test"' > test.frag
-$ ../buildroot/support/kconfig/merge_config.sh .config test.frag
-Using .config as base
-Merging test.frag
-umask 0022 && make -C /home/test/buildroot O=/home/test/output/. alldefconfig
-  GEN     /home/test/output/Makefile
-*** Can't read seed configuration "./.tmp.config.qIcpASpUyh"!
-make[1]: *** [Makefile:925: alldefconfig] Error 1
-make: *** [Makefile:16: _all] Error 2
-
-
-I understand that kconfig is mostly ported from the kernel, but I
-don't know if this may be caused by any Buildroot customizations.
-I don't use merge_config.sh with the kernel but a simple attempt based
-on the above with 4.19-rc6 seems to work.
-The workaround seems to be to run merge_config.sh from the buildroot tree.
-Any clue?
-
-Thanks
-
-Erico
+diff --git a/package/openswan/openswan.mk b/package/openswan/openswan.mk
+index e3c947317e..ea4446a5f3 100644
+--- a/package/openswan/openswan.mk
++++ b/package/openswan/openswan.mk
+@@ -10,7 +10,7 @@ OPENSWAN_LICENSE = GPL-2.0+, BSD-3-Clause
+ OPENSWAN_LICENSE_FILES = COPYING LICENSE
+ 
+ OPENSWAN_DEPENDENCIES = host-bison host-flex gmp iproute2
+-OPENSWAN_MAKE_OPTS = ARCH=$(BR2_ARCH) CC="$(TARGET_CC)" \
++OPENSWAN_MAKE_OPTS = ARCH=$(BR2_ARCH) CC="$(TARGET_CC)" POD2MAN="" XMLTO="" \
+ 	USERCOMPILE="$(TARGET_CFLAGS) $(if $(BR2_TOOLCHAIN_SUPPORTS_PIE),-fPIE)" \
+ 	USERLINK="$(TARGET_LDFLAGS) $(if $(BR2_TOOLCHAIN_SUPPORTS_PIE),-fPIE)" \
+ 	INC_USRLOCAL=/usr USE_KLIPS=false USE_MAST=false USE_NM=false
+-- 
+2.17.1
