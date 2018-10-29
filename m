@@ -1,51 +1,130 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 29 Oct 2018 08:15:15 -0500
-Subject: [Buildroot] [PATCH] mmc-utils: Rely on our own _FORTIFY_SOURCE
-In-Reply-To: <331ad777-5e2a-4e05-a464-a187db784250@cesnet.cz>
-References: <48287dd12fcef0440cc49ff86343867d6cb8429e.1533656185.git.jan.kundrat@cesnet.cz>
- <20180808151709.2f35030c@windsurf>
- <CANQCQpaJpUo1VRNtaRpu0QxiRaMJ5jjn7_FZTyAaeCBBbg1fSw@mail.gmail.com>
- <331ad777-5e2a-4e05-a464-a187db784250@cesnet.cz>
-Message-ID: <CANQCQpbY+43JyN_irQwzv6ke8wU7P6TAiJMi06q0tmgbFJShYQ@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 29 Oct 2018 15:08:46 +0100
+Subject: [Buildroot] [PATCH 1/1] motion: bump to version 4.2
+Message-ID: <20181029140846.27010-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jan,
+- Remove patch (already in version)
+- Add new mandatory libmicrohttpd dependency, see:
+  https://github.com/Motion-Project/motion/commit/3cd68cab497527bb51af63fc4279b024f828b536
+- Add new optional gettext dependency, see:
+  https://github.com/Motion-Project/motion/commit/4ff191be82920451f5940d6685a2ab7388e0f7b6
 
-On Thu, Oct 25, 2018 at 1:03 PM Jan Kundr?t <jan.kundrat@cesnet.cz> wrote:
->
-> On p?tek 10. srpna 2018 4:56:39 CEST, Matthew Weber wrote:
-> > This isn't related to my hardening fixes patchset (ie those patches
-> > won't fix this issue).  Instead, I'd refactor this patch to move the
-> > AM_CFLAGS "-D_FORTIFY_SOURCE=2" into the CFLAGS ?= .  That should be
-> > an upstream-able change and preserve their intent.
->
-> Hi Matthew,
-> doing just this change, as you suggested:
->
-> -AM_CFLAGS = -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2
-> -CFLAGS ?= -g -O2
-> +AM_CFLAGS = -D_FILE_OFFSET_BITS=64
-> +CFLAGS ?= -g -O2 -D_FORTIFY_SOURCE=2
->
-> ...stil results in an error when building this manually out-of-box, outside
-> of Buildroot, on a Gentoo Linux with hardened GCC which enforces
-> _FORTIFY_SOURCE via compiler spec files. The good news is that it is now
-> possible to override the CFLAGS via an env var when invoking make. I guess
-> I'll send this upstream, then.
->
-> It still doesn't work out-of-box everyhere, but it is no longer a Buildroot
-> bug (and it will work in Buildroot).
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...001-Fix-build-errors-with-FFmpeg-4.0.patch | 58 -------------------
+ package/motion/Config.in                      |  1 +
+ package/motion/motion.hash                    |  2 +-
+ package/motion/motion.mk                      |  4 +-
+ 4 files changed, 4 insertions(+), 61 deletions(-)
+ delete mode 100644 package/motion/0001-Fix-build-errors-with-FFmpeg-4.0.patch
 
-Good to note.
-
-Wasn't sure if you saw the merge of the updated hardening feature set.
-It is now handled in the toolchain wrapper and more packages (without
-changes directly in the package to allow flags to be set) should build
-with the hardening flags.  The wrapper appends them to the compiler
-args transparently and doesn't depend on ?=.
-
-Matt
+diff --git a/package/motion/0001-Fix-build-errors-with-FFmpeg-4.0.patch b/package/motion/0001-Fix-build-errors-with-FFmpeg-4.0.patch
+deleted file mode 100644
+index e738809a74..0000000000
+--- a/package/motion/0001-Fix-build-errors-with-FFmpeg-4.0.patch
++++ /dev/null
+@@ -1,58 +0,0 @@
+-From 9b93a417e37e1f0fef58d1582a7e98e4c05d3b42 Mon Sep 17 00:00:00 2001
+-From: James Cowgill <jcowgill@users.noreply.github.com>
+-Date: Sun, 25 Feb 2018 20:13:57 +0000
+-Subject: [PATCH] Fix build errors with FFmpeg 4.0
+-
+-Backported from upstream commit
+-https://github.com/Motion-Project/motion/commit/9b93a417e37e1f0fef58d1582a7e98e4c05d3b42
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- ffmpeg.c | 19 ++++++++++++++++---
+- 1 file changed, 16 insertions(+), 3 deletions(-)
+-
+-diff --git a/ffmpeg.c b/ffmpeg.c
+-index 1e6cdf6..4299ba3 100644
+---- a/ffmpeg.c
+-+++ b/ffmpeg.c
+-@@ -67,6 +67,19 @@
+- 
+- #endif
+- 
+-+/*********************************************/
+-+#if (LIBAVCODEC_VERSION_MAJOR >= 57)
+-+
+-+#define MY_CODEC_FLAG_GLOBAL_HEADER AV_CODEC_FLAG_GLOBAL_HEADER
+-+#define MY_CODEC_FLAG_QSCALE        AV_CODEC_FLAG_QSCALE
+-+
+-+#else
+-+
+-+#define MY_CODEC_FLAG_GLOBAL_HEADER CODEC_FLAG_GLOBAL_HEADER
+-+#define MY_CODEC_FLAG_QSCALE        CODEC_FLAG_QSCALE
+-+
+-+#endif
+-+
+- /*********************************************/
+- AVFrame *my_frame_alloc(void){
+-     AVFrame *pic;
+-@@ -548,7 +561,7 @@ static int ffmpeg_set_quality(struct ffmpeg *ffmpeg){
+-         /* The selection of 8000 is a subjective number based upon viewing output files */
+-         if (ffmpeg->vbr > 0){
+-             ffmpeg->vbr =(int)(((100-ffmpeg->vbr)*(100-ffmpeg->vbr)*(100-ffmpeg->vbr) * 8000) / 1000000) + 1;
+--            ffmpeg->ctx_codec->flags |= CODEC_FLAG_QSCALE;
+-+            ffmpeg->ctx_codec->flags |= MY_CODEC_FLAG_QSCALE;
+-             ffmpeg->ctx_codec->global_quality=ffmpeg->vbr;
+-         }
+-     }
+-@@ -673,7 +686,7 @@ static int ffmpeg_set_codec(struct ffmpeg *ffmpeg){
+-       ffmpeg->ctx_codec->strict_std_compliance = -2;
+-       ffmpeg->ctx_codec->level = 3;
+-     }
+--    ffmpeg->ctx_codec->flags |= CODEC_FLAG_GLOBAL_HEADER;
+-+    ffmpeg->ctx_codec->flags |= MY_CODEC_FLAG_GLOBAL_HEADER;
+- 
+-     retcd = ffmpeg_set_quality(ffmpeg);
+-     if (retcd < 0){
+--- 
+-2.18.0
+-
+diff --git a/package/motion/Config.in b/package/motion/Config.in
+index a27e7f9fb6..7a2e5dbea1 100644
+--- a/package/motion/Config.in
++++ b/package/motion/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_MOTION
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_JPEG
++	select BR2_PACKAGE_LIBMICROHTTPD
+ 	help
+ 	  Motion is a program that monitors the video signal from
+ 	  cameras. It is able to detect if a significant part of
+diff --git a/package/motion/motion.hash b/package/motion/motion.hash
+index 5b67755e8b..9c6a2b7fbe 100644
+--- a/package/motion/motion.hash
++++ b/package/motion/motion.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	2074b935bdfe28f84c2c3233274b06908336778f303bb13530d4299c3f8aa4e2	motion-release-4.1.1.tar.gz
++sha256	6ef8504fc5be00a49c82c4045c0004fbf575d9a5df8687025a9b06923efda2a9	motion-release-4.2.tar.gz
+ sha256	91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad	COPYING
+diff --git a/package/motion/motion.mk b/package/motion/motion.mk
+index 0f4898674b..1bbb548fd7 100644
+--- a/package/motion/motion.mk
++++ b/package/motion/motion.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-MOTION_VERSION = release-4.1.1
++MOTION_VERSION = release-4.2
+ MOTION_SITE = $(call github,Motion-Project,motion,$(MOTION_VERSION))
+ MOTION_LICENSE = GPL-2.0
+ MOTION_LICENSE_FILES = COPYING
+-MOTION_DEPENDENCIES = host-pkgconf jpeg
++MOTION_DEPENDENCIES = host-pkgconf jpeg libmicrohttpd $(TARGET_NLS_DEPENDENCIES)
+ # From git
+ MOTION_AUTORECONF = YES
+ 
+-- 
+2.17.1
