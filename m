@@ -1,48 +1,29 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 29 Oct 2018 16:35:33 +0100
-Subject: [Buildroot] [PATCH 1/1] synergy: needs gcc >= 4.9
-Message-ID: <20181029153533.6897-1-fontaine.fabrice@gmail.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Mon, 29 Oct 2018 16:46:24 +0100
+Subject: [Buildroot] Antwort: Re: Antwort: Re: [PATCH v3]
+ merge_config.sh: merge also buildroot config files
+In-Reply-To: <OF26A838D6.35610758-ONC1258332.00211513-C1258332.0021531B@local-dmz.de>
+References: <20181025011343.29512-1-afshin.nasser@gmail.com>
+ <20181025022031.14043-1-afshin.nasser@gmail.com>
+ <20181025074309.GB18528@dell5510>
+ <OF54A89E59.8DBA5497-ONC1258331.0034C458-C1258331.00357034@local-dmz.de>
+ <20181025214311.GB31691@dell5510>
+ <OF26A838D6.35610758-ONC1258332.00211513-C1258332.0021531B@local-dmz.de>
+Message-ID: <20181029154623.GE14084@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since version 1.9.0 and
-https://github.com/symless/synergy-core/commit/c0376e9e2f659aec23a748f9a8d8ee6cd82f1281,
-synergy needs C++14 so add a dependency on
-BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+Hi,
 
-Fixes:
- - http://autobuild.buildroot.org/results/c4646ee9342ea8bd906bfe2b29996c48cb403ccc
+FYI: Masahiro Yamada (kconfig kernel maintainer) proposed [1] solution using env.
+variable CONFIG_ (as it's already used in kconfig binary). I'm ok with it,
+I propose to take upstream commit from kernel.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/synergy/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/synergy/Config.in b/package/synergy/Config.in
-index e0ac246155..c1216c4ba9 100644
---- a/package/synergy/Config.in
-+++ b/package/synergy/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_SYNERGY
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_XLIB_LIBXTST
- 	help
-@@ -14,7 +15,8 @@ config BR2_PACKAGE_SYNERGY
- 
- 	  https://github.com/symless/synergy-core/
- 
--comment "synergy needs a toolchain w/ C++, wchar"
-+comment "synergy needs a toolchain w/ C++, wchar, gcc >= 4.9"
- 	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_USE_MMU
--	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR)
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && \
-+		BR2_TOOLCHAIN_GCC_AT_LEAST_4_9)
--- 
-2.17.1
+Kind regards,
+Petr
+
+[1] https://patchwork.kernel.org/patch/10658589/#22289439
