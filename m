@@ -1,42 +1,49 @@
-From: Christian Stewart <christian@paral.in>
-Date: Mon, 29 Oct 2018 09:54:22 -0700
-Subject: [Buildroot] [PATCH 1/1] go: bump to v1.11.1
-Message-ID: <20181029165422.32105-1-christian@paral.in>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 29 Oct 2018 19:38:05 +0100
+Subject: [Buildroot] Problem with Raspberry Pi 3B+and BT
+In-Reply-To: <CALtfCQaeH+owo2Vgr-SXRZHewzYstz=ueFy2dtbhcv-L2M4wHw@mail.gmail.com>
+References: <CALtfCQa87Q5w-mOL4sKbW8M7wh4qAH3rBRm6A6H41SEaci=3QQ@mail.gmail.com>
+ <CANQCQpbD_fdXrqYGdW74d4EVyCm4eAs6pxiyasg8wTumYZ+XWA@mail.gmail.com>
+ <20181012234133.539d0a0b@gmx.net>
+ <CALtfCQYKA=MrVGPYY8a7koPLu5SczJ1GxNDOhnfXWsixBEQ_AQ@mail.gmail.com>
+ <CALtfCQaiCCCetMG8sHvTjnAZdfnBNUQvZSB0ynn3LT58NH9Omg@mail.gmail.com>
+ <20181016235656.584581d2@gmx.net>
+ <CALtfCQa2mHAPAZeeFQcneYWJwq3G7rRyDJq17MnW4doY9+0DSw@mail.gmail.com>
+ <CALtfCQaeH+owo2Vgr-SXRZHewzYstz=ueFy2dtbhcv-L2M4wHw@mail.gmail.com>
+Message-ID: <20181029193805.480ae99f@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bumps Golang host-go compiler to 1.11.1 release.
+Hello Oscar,
 
-Signed-off-by: Christian Stewart <christian@paral.in>
----
- package/go/go.hash | 3 ++-
- package/go/go.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+On Mon, 29 Oct 2018 08:24:12 +0100, Oscar Gomez Fuente <oscargomezf@gmail.com> wrote:
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 1c766f2302..d5223d7c1d 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,2 +1,3 @@
- # From https://golang.org/dl/
--sha256	afc1e12f5fe49a471e3aae7d906c73e9d5b1fdd36d52d72652dde8f6250152fb	go1.11.src.tar.gz
-+sha256	558f8c169ae215e25b81421596e8de7572bd3ba824b79add22fba6e284db1117  go1.11.1.src.tar.gz
-+
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 57dd00b05e..ec74ba397c 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.11
-+GO_VERSION = 1.11.1
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
--- 
-2.18.1
+> Hi everyone,
+> 
+> I was checking with lower speed: 460800bps instead of 921600bps and
+> the same problem.
+
+Thanks for the update, but I think your problem is maybe not buildroot specific?
+My remaining (and repeated) advice:
+
+	Do the check with an original Raspbian Image, if the same error occurs
+	complain upstream about it, otherwise find out what makes the difference...
+
+Nevertheless an update on success/failure is welcome ;-)
+
+Regards,
+Peter
+
+> 
+> Best regards.
+> 
+> Oscar Gomez Fuente
+> TST Sistemas
+> www.tst-sistemas.es
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
