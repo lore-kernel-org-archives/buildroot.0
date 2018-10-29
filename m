@@ -1,29 +1,29 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Mon, 29 Oct 2018 16:46:24 +0100
-Subject: [Buildroot] Antwort: Re: Antwort: Re: [PATCH v3]
- merge_config.sh: merge also buildroot config files
-In-Reply-To: <OF26A838D6.35610758-ONC1258332.00211513-C1258332.0021531B@local-dmz.de>
-References: <20181025011343.29512-1-afshin.nasser@gmail.com>
- <20181025022031.14043-1-afshin.nasser@gmail.com>
- <20181025074309.GB18528@dell5510>
- <OF54A89E59.8DBA5497-ONC1258331.0034C458-C1258331.00357034@local-dmz.de>
- <20181025214311.GB31691@dell5510>
- <OF26A838D6.35610758-ONC1258332.00211513-C1258332.0021531B@local-dmz.de>
-Message-ID: <20181029154623.GE14084@x230>
+From: Lijun QIN <lijun.qin2008@gmail.com>
+Date: Mon, 29 Oct 2018 10:46:50 -0500
+Subject: [Buildroot] gcc 8.2.0 support for buildroot 2015.11
+Message-ID: <CALD51P_=q448T76Mi66Sjcy8Lfdhi-UKBn0A33_6isVHU_-bFQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+I generated gcc 8.2.0  arm-buildroot-linux-gnueabihf-gcc using
+buildroot-2018.08.2.
+I need to use arm gcc 8.2 to compile my project (buildroot 2015.11 + C++
+Codebase)  to leverage C++17 features.
+Buildroot 2015.11 seems to only support gcc up to version 5.x.
+Any patch to make 2015.11 to support arm gcc 8.2 as external toolchain ?
+Thank you,
+Lijun Qin
 
-FYI: Masahiro Yamada (kconfig kernel maintainer) proposed [1] solution using env.
-variable CONFIG_ (as it's already used in kconfig binary). I'm ok with it,
-I propose to take upstream commit from kernel.
 
 
-Kind regards,
-Petr
-
-[1] https://patchwork.kernel.org/patch/10658589/#22289439
+<https://www.avast.com/sig-email?utm_medium=email&utm_source=link&utm_campaign=sig-email&utm_content=webmail&utm_term=icon>
+Virus-free.
+www.avast.com
+<https://www.avast.com/sig-email?utm_medium=email&utm_source=link&utm_campaign=sig-email&utm_content=webmail&utm_term=link>
+<#DAB4FAD8-2DD7-40BB-A1B8-4E2AA1F9FDF2>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181029/ced53099/attachment.html>
