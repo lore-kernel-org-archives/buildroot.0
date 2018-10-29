@@ -1,52 +1,48 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 29 Oct 2018 09:43:33 -0500
-Subject: [Buildroot] [PATCH v3] eudev: generate hwdb.bin at system
- startup
-In-Reply-To: <2093934924.5380192.1540823660383.JavaMail.zimbra@datacom.com.br>
-References: <20181016170157.14348-1-casantos@datacom.com.br>
- <CANQCQpaL2yFSbc9o8YpP9Jd2gZ9ybioByL_UwKhgvYRj-HkPjQ@mail.gmail.com>
- <2093934924.5380192.1540823660383.JavaMail.zimbra@datacom.com.br>
-Message-ID: <CANQCQpb42Ko6mPB1yg9ELmangCZvsc+QF4KVD1=Kmju-6RoYag@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 29 Oct 2018 16:35:33 +0100
+Subject: [Buildroot] [PATCH 1/1] synergy: needs gcc >= 4.9
+Message-ID: <20181029153533.6897-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 29, 2018 at 9:34 AM Carlos Santos <casantos@datacom.com.br> wrote:
->
-> > From: "Matthew Weber" <matthew.weber@rockwellcollins.com>
-> > To: "DATACOM" <casantos@datacom.com.br>
-> > Cc: "buildroot" <buildroot@buildroot.org>, "Bernd Kuhls" <bernd.kuhls@t-online.de>, "Eric Le Bihan"
-> > <eric.le.bihan.dev@free.fr>, "Yann Morin" <yann.morin.1998@free.fr>, "Carlos Santos" <casantos@datacom.ind.br>
-> > Sent: Monday, October 29, 2018 11:11:17 AM
-> > Subject: Re: [PATCH v3] eudev: generate hwdb.bin at system startup
->
-> > Carlos,
-> >
-> > On Tue, Oct 16, 2018 at 12:02 PM Carlos Santos <casantos@datacom.com.br> wrote:
-> >>
-> >> From: Carlos Santos <casantos@datacom.ind.br>
-> [...]
-> >>  ifeq ($(BR2_PACKAGE_EUDEV_ENABLE_HWDB),y)
-> >>  EUDEV_CONF_OPTS += --enable-hwdb
-> >> +define EUDEV_POST_PATCH
-> >> +       $(SED)
-> >> 's,$${udevconfdir}/hwdb.bin,$${udevhwdbbinpath:-$${udevconfdir}/hwdb.bin},' \
-> >> +               $(@D)/configure
-> >> +endef
-> >> +EUDEV_POST_PATCH_HOOKS += EUDEV_POST_PATCH
-> >> +EUDEV_CONF_ENV += udevhwdbbinpath=$(BR2_PACKAGE_EUDEV_HWDB_BIN_PATH)
-> >
-> > I believe BR2_PACKAGE_EUDEV_HWDB_BIN_PATH needs a qstrip?
->
-> Not really, since the quotes are properly handled and may even be even
-> required in the unlikely situation of BR2_PACKAGE_EUDEV_HWDB_BIN_PATH
-> containing white spaces.
->
-> --
-> Carlos Santos (Casantos) - DATACOM, P&D
-> ?Marched towards the enemy, spear upright, armed with the certainty
-> that only the ignorant can have.? ? Epitaph of a volunteer
+Since version 1.9.0 and
+https://github.com/symless/synergy-core/commit/c0376e9e2f659aec23a748f9a8d8ee6cd82f1281,
+synergy needs C++14 so add a dependency on
+BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
 
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/c4646ee9342ea8bd906bfe2b29996c48cb403ccc
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/synergy/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/package/synergy/Config.in b/package/synergy/Config.in
+index e0ac246155..c1216c4ba9 100644
+--- a/package/synergy/Config.in
++++ b/package/synergy/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_SYNERGY
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXTST
+ 	help
+@@ -14,7 +15,8 @@ config BR2_PACKAGE_SYNERGY
+ 
+ 	  https://github.com/symless/synergy-core/
+ 
+-comment "synergy needs a toolchain w/ C++, wchar"
++comment "synergy needs a toolchain w/ C++, wchar, gcc >= 4.9"
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_USE_MMU
+-	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR)
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && \
++		BR2_TOOLCHAIN_GCC_AT_LEAST_4_9)
+-- 
+2.17.1
