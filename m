@@ -1,30 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Oct 2018 17:05:51 +0100
-Subject: [Buildroot] gcc 8.2.0 support for buildroot 2015.11
-In-Reply-To: <CALD51P_=q448T76Mi66Sjcy8Lfdhi-UKBn0A33_6isVHU_-bFQ@mail.gmail.com>
- (Lijun QIN's message of "Mon, 29 Oct 2018 10:46:50 -0500")
-References: <CALD51P_=q448T76Mi66Sjcy8Lfdhi-UKBn0A33_6isVHU_-bFQ@mail.gmail.com>
-Message-ID: <87in1kzqjk.fsf@dell.be.48ers.dk>
+From: Christian Stewart <christian@paral.in>
+Date: Mon, 29 Oct 2018 09:40:44 -0700
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2018-10-28
+In-Reply-To: <20181029070026.A6EF0209B0@mail.bootlin.com>
+References: <20181029070026.A6EF0209B0@mail.bootlin.com>
+Message-ID: <CA+h8R2pcuGTzowu+S4-cerB07PVs0obsZHQKDhB+=R_MrN6=qg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Lijun" == Lijun QIN <lijun.qin2008@gmail.com> writes:
+Hi,
 
- > I generated gcc 8.2.0  arm-buildroot-linux-gnueabihf-gcc using
- > buildroot-2018.08.2.
- > I need to use arm gcc 8.2 to compile my project (buildroot 2015.11 + C++
- > Codebase)  to leverage C++17 features.
- > Buildroot 2015.11 seems to only support gcc up to version 5.x.
- > Any patch to make 2015.11 to support arm gcc 8.2 as external toolchain ?
+On Mon, Oct 29, 2018 at 12:00 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+>       x86_64 |       docker-containerd-v1.1.3 | http://autobuild.buildroot.net/results/9f8ac26c691b699ac9953c5a6f5ec42f1b50e55e
+>       x86_64 |      docker-engine-v17.05.0-ce | http://autobuild.buildroot.net/results/16b07236e62a1f334e3a6a7708faf909e3c7f677
+>       x86_64 |      docker-engine-v17.05.0-ce | http://autobuild.buildroot.net/results/816b4162daf30842bfe261e4fa42493fdd3fbb3a
+>       x86_64 |      docker-engine-v17.05.0-ce | http://autobuild.buildroot.net/results/5c921fc04bc7bbdfee08451e270cf8a6ddb569d5
 
-Sorry, but you are on your own. Old software is unlikely to build with
-gcc 8.2 out of the box.
+These are the same "invalid operation" Go compiler bug that we have
+seen before. I will investigate if updating Go fixes the issue, and
+spin a patch. for 1.11.1.
 
-Buildroot 2015.11 is (for a long time) no longer supported. What is
-keeping you from moving to Buildroot 2018.08.2?
+In the meantime, has there been any further consideration to this
+patch, which affects both of these packages:
 
--- 
-Bye, Peter Korsgaard
+ - https://patchwork.ozlabs.org/patch/969253/
+
+Thanks,
+Christian
