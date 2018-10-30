@@ -1,10 +1,10 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Tue, 30 Oct 2018 20:59:37 +0200
-Subject: [Buildroot] [PATCH 2/3] python-typing: new package
-In-Reply-To: <20181012080650.2793-2-yegorslists@googlemail.com>
+Date: Tue, 30 Oct 2018 21:00:59 +0200
+Subject: [Buildroot] [PATCH 3/3] python-can: bump to version 3.0.0
+In-Reply-To: <20181012080650.2793-3-yegorslists@googlemail.com>
 References: <20181012080650.2793-1-yegorslists@googlemail.com>
- <20181012080650.2793-2-yegorslists@googlemail.com>
-Message-ID: <CALFsTFXaEr6NTjy0NQLyRZG7Nr7msmN+x9x_=R+R+psC_=fDzg@mail.gmail.com>
+ <20181012080650.2793-3-yegorslists@googlemail.com>
+Message-ID: <CALFsTFX6uRzmjfSsZmnm28rj--oDzJgW+mpBu-uZyFFM3rPLkw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,76 +15,69 @@ On Fri, Oct 12, 2018 at 11:07 AM <yegorslists@googlemail.com> wrote:
 >
 > From: Yegor Yefremov <yegorslists@googlemail.com>
 >
+> Add new dependencies and change download location.
+>
 > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 Reviewed-by: Asaf Kahlon <asafka7@gmail.com>
 > ---
->  package/Config.in                        |  1 +
->  package/python-typing/Config.in          |  8 ++++++++
->  package/python-typing/python-typing.hash |  5 +++++
->  package/python-typing/python-typing.mk   | 14 ++++++++++++++
->  4 files changed, 28 insertions(+)
->  create mode 100644 package/python-typing/Config.in
->  create mode 100644 package/python-typing/python-typing.hash
->  create mode 100644 package/python-typing/python-typing.mk
+>  package/python-can/Config.in       | 7 ++++++-
+>  package/python-can/python-can.hash | 9 +++++----
+>  package/python-can/python-can.mk   | 6 +++---
+>  3 files changed, 14 insertions(+), 8 deletions(-)
 >
-> diff --git a/package/Config.in b/package/Config.in
-> index 9092a9e237..7287e2be7d 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1040,6 +1040,7 @@ menu "External python modules"
->         source "package/python-txaio/Config.in"
->         source "package/python-txtorcon/Config.in"
->         source "package/python-typepy/Config.in"
-> +       source "package/python-typing/Config.in"
->         source "package/python-u-msgpack/Config.in"
->         source "package/python-ubjson/Config.in"
->         source "package/python-ujson/Config.in"
-> diff --git a/package/python-typing/Config.in b/package/python-typing/Config.in
-> new file mode 100644
-> index 0000000000..d5350bccd0
-> --- /dev/null
-> +++ b/package/python-typing/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_PYTHON_TYPING
-> +       bool "python-typing"
-> +       depends on BR2_PACKAGE_PYTHON
-> +       help
-> +         Type Hints for Python. This is a backport of the standard library
-> +         typing module to Python versions older than 3.5.
-> +
-> +         https://docs.python.org/3/library/typing.html
-> diff --git a/package/python-typing/python-typing.hash b/package/python-typing/python-typing.hash
-> new file mode 100644
-> index 0000000000..5bdb8c62e8
-> --- /dev/null
-> +++ b/package/python-typing/python-typing.hash
-> @@ -0,0 +1,5 @@
-> +# md5, sha256 from https://pypi.org/pypi/typing/json
-> +md5    64614206b4bdc0864fc0e0bccd69efc9  typing-3.6.6.tar.gz
-> +sha256 4027c5f6127a6267a435201981ba156de91ad0d1d98e9ddc2aa173453453492d  typing-3.6.6.tar.gz
+> diff --git a/package/python-can/Config.in b/package/python-can/Config.in
+> index 94b16ab335..f3ed1b77e3 100644
+> --- a/package/python-can/Config.in
+> +++ b/package/python-can/Config.in
+> @@ -1,9 +1,14 @@
+>  config BR2_PACKAGE_PYTHON_CAN
+>         bool "python-can"
+> +       select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+>         select BR2_PACKAGE_PYTHON_SQLITE if BR2_PACKAGE_PYTHON # runtime
+>         select BR2_PACKAGE_PYTHON3_SQLITE if BR2_PACKAGE_PYTHON3 # runtime
+> +       select BR2_PACKAGE_PYTHON_TYPING if BR2_PACKAGE_PYTHON # runtime
+> +       select BR2_PACKAGE_PYTHON_WRAPT # runtime
+> +       select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
+> +       select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
+>         help
+>           This module provides controller area network support for
+>           Python.
+>
+> -         https://bitbucket.org/hardbyte/python-can
+> +         https://github.com/hardbyte/python-can
+> diff --git a/package/python-can/python-can.hash b/package/python-can/python-can.hash
+> index 234f138562..b2dc1a33c3 100644
+> --- a/package/python-can/python-can.hash
+> +++ b/package/python-can/python-can.hash
+> @@ -1,4 +1,5 @@
+> -# sha256 for python-can from https://pypi.org/project/python-can/#files
+> -# sha256 for LICENSE.txt locally computed
+> -sha256  b5e93b2ee32bdd597d9d908afe5171c402a04c9678ba47b60f33506738b1375b  python-can-2.2.1.tar.gz
+> -sha256  ea7d049c7705dc13afc202dd18e1827f3484f8212fd3fa7b82fc4a0c363432c9  LICENSE.txt
+> +# md5, sha256 from https://pypi.org/pypi/python-can/json
+> +md5    d906a220d8bd173c4f8de2bfe7217cc2  python-can-3.0.0.tar.gz
+> +sha256 0d2ddb3b663af51b11a4c7fb7a577c63302a831986239f82bb6af65efc065b07  python-can-3.0.0.tar.gz
 > +# Locally computed sha256 checksums
-> +sha256 ff17ce94e102024deb68773eb1cc74ca76da4e658f373531f0ac22d68a6bb1ad  LICENSE
-> diff --git a/package/python-typing/python-typing.mk b/package/python-typing/python-typing.mk
-> new file mode 100644
-> index 0000000000..acb5316129
-> --- /dev/null
-> +++ b/package/python-typing/python-typing.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-typing
-> +#
-> +################################################################################
-> +
-> +PYTHON_TYPING_VERSION = 3.6.6
-> +PYTHON_TYPING_SOURCE = typing-$(PYTHON_TYPING_VERSION).tar.gz
-> +PYTHON_TYPING_SITE = https://files.pythonhosted.org/packages/bf/9b/2bf84e841575b633d8d91ad923e198a415e3901f228715524689495b4317
-> +PYTHON_TYPING_SETUP_TYPE = setuptools
-> +PYTHON_TYPING_LICENSE = Python-2.0, others
-> +PYTHON_TYPING_LICENSE_FILES = LICENSE
-> +
-> +$(eval $(python-package))
+> +sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.txt
+> diff --git a/package/python-can/python-can.mk b/package/python-can/python-can.mk
+> index 01a335f5c8..ca023ee895 100644
+> --- a/package/python-can/python-can.mk
+> +++ b/package/python-can/python-can.mk
+> @@ -4,10 +4,10 @@
+>  #
+>  ################################################################################
+>
+> -PYTHON_CAN_VERSION = 2.2.1
+> -PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/e6/49/7a25ca6f38421009621b9958a725a0bd57dc0caa656ee508324f26ea5363
+> +PYTHON_CAN_VERSION = 3.0.0
+> +PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/29/47/59d07bb02d6b244fb631487ae5424a10658c316defeeb90c923b48043792
+> +PYTHON_CAN_SETUP_TYPE = setuptools
+>  PYTHON_CAN_LICENSE = LGPL-3.0
+>  PYTHON_CAN_LICENSE_FILES = LICENSE.txt
+> -PYTHON_CAN_SETUP_TYPE = setuptools
+>
+>  $(eval $(python-package))
 > --
 > 2.17.0
 >
