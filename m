@@ -1,16 +1,17 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Tue, 30 Oct 2018 20:56:15 +0200
-Subject: [Buildroot] [PATCH 1/3] python-wrapt: new package
-In-Reply-To: <20181012080650.2793-1-yegorslists@googlemail.com>
+Date: Tue, 30 Oct 2018 20:59:37 +0200
+Subject: [Buildroot] [PATCH 2/3] python-typing: new package
+In-Reply-To: <20181012080650.2793-2-yegorslists@googlemail.com>
 References: <20181012080650.2793-1-yegorslists@googlemail.com>
-Message-ID: <CALFsTFVHT7q4ceTQFHGSotkgF02bB8uMWkw-+VfBh6F=f1YMGg@mail.gmail.com>
+ <20181012080650.2793-2-yegorslists@googlemail.com>
+Message-ID: <CALFsTFXaEr6NTjy0NQLyRZG7Nr7msmN+x9x_=R+R+psC_=fDzg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Oct 12, 2018 at 11:06 AM <yegorslists@googlemail.com> wrote:
+On Fri, Oct 12, 2018 at 11:07 AM <yegorslists@googlemail.com> wrote:
 >
 > From: Yegor Yefremov <yegorslists@googlemail.com>
 >
@@ -18,68 +19,70 @@ On Fri, Oct 12, 2018 at 11:06 AM <yegorslists@googlemail.com> wrote:
 
 Reviewed-by: Asaf Kahlon <asafka7@gmail.com>
 > ---
->  package/Config.in                      |  1 +
->  package/python-wrapt/Config.in         |  6 ++++++
->  package/python-wrapt/python-wrapt.hash |  5 +++++
->  package/python-wrapt/python-wrapt.mk   | 14 ++++++++++++++
->  4 files changed, 26 insertions(+)
->  create mode 100644 package/python-wrapt/Config.in
->  create mode 100644 package/python-wrapt/python-wrapt.hash
->  create mode 100644 package/python-wrapt/python-wrapt.mk
+>  package/Config.in                        |  1 +
+>  package/python-typing/Config.in          |  8 ++++++++
+>  package/python-typing/python-typing.hash |  5 +++++
+>  package/python-typing/python-typing.mk   | 14 ++++++++++++++
+>  4 files changed, 28 insertions(+)
+>  create mode 100644 package/python-typing/Config.in
+>  create mode 100644 package/python-typing/python-typing.hash
+>  create mode 100644 package/python-typing/python-typing.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
-> index 8d995f82e6..9092a9e237 100644
+> index 9092a9e237..7287e2be7d 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -1057,6 +1057,7 @@ menu "External python modules"
->         source "package/python-websockets/Config.in"
->         source "package/python-werkzeug/Config.in"
->         source "package/python-whoosh/Config.in"
-> +       source "package/python-wrapt/Config.in"
->         source "package/python-ws4py/Config.in"
->         source "package/python-wsaccel/Config.in"
->         source "package/python-xlib/Config.in"
-> diff --git a/package/python-wrapt/Config.in b/package/python-wrapt/Config.in
+> @@ -1040,6 +1040,7 @@ menu "External python modules"
+>         source "package/python-txaio/Config.in"
+>         source "package/python-txtorcon/Config.in"
+>         source "package/python-typepy/Config.in"
+> +       source "package/python-typing/Config.in"
+>         source "package/python-u-msgpack/Config.in"
+>         source "package/python-ubjson/Config.in"
+>         source "package/python-ujson/Config.in"
+> diff --git a/package/python-typing/Config.in b/package/python-typing/Config.in
 > new file mode 100644
-> index 0000000000..da315c9a77
+> index 0000000000..d5350bccd0
 > --- /dev/null
-> +++ b/package/python-wrapt/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PYTHON_WRAPT
-> +       bool "python-wrapt"
+> +++ b/package/python-typing/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_PYTHON_TYPING
+> +       bool "python-typing"
+> +       depends on BR2_PACKAGE_PYTHON
 > +       help
-> +         Module for decorators, wrappers and monkey patching.
+> +         Type Hints for Python. This is a backport of the standard library
+> +         typing module to Python versions older than 3.5.
 > +
-> +         https://github.com/GrahamDumpleton/wrapt
-> diff --git a/package/python-wrapt/python-wrapt.hash b/package/python-wrapt/python-wrapt.hash
+> +         https://docs.python.org/3/library/typing.html
+> diff --git a/package/python-typing/python-typing.hash b/package/python-typing/python-typing.hash
 > new file mode 100644
-> index 0000000000..dbf8932956
+> index 0000000000..5bdb8c62e8
 > --- /dev/null
-> +++ b/package/python-wrapt/python-wrapt.hash
+> +++ b/package/python-typing/python-typing.hash
 > @@ -0,0 +1,5 @@
-> +# md5, sha256 from https://pypi.org/pypi/wrapt/json
-> +md5    e1346f31782d50401f81c2345b037076  wrapt-1.10.11.tar.gz
-> +sha256 d4d560d479f2c21e1b5443bbd15fe7ec4b37fe7e53d335d3b9b0a7b1226fe3c6  wrapt-1.10.11.tar.gz
+> +# md5, sha256 from https://pypi.org/pypi/typing/json
+> +md5    64614206b4bdc0864fc0e0bccd69efc9  typing-3.6.6.tar.gz
+> +sha256 4027c5f6127a6267a435201981ba156de91ad0d1d98e9ddc2aa173453453492d  typing-3.6.6.tar.gz
 > +# Locally computed sha256 checksums
-> +sha256 b6d2e5d228202a11bc5e5988661fc5d8acc1ba4f27256c37e19029131a30b1f2  LICENSE
-> diff --git a/package/python-wrapt/python-wrapt.mk b/package/python-wrapt/python-wrapt.mk
+> +sha256 ff17ce94e102024deb68773eb1cc74ca76da4e658f373531f0ac22d68a6bb1ad  LICENSE
+> diff --git a/package/python-typing/python-typing.mk b/package/python-typing/python-typing.mk
 > new file mode 100644
-> index 0000000000..dd8b9a58e4
+> index 0000000000..acb5316129
 > --- /dev/null
-> +++ b/package/python-wrapt/python-wrapt.mk
+> +++ b/package/python-typing/python-typing.mk
 > @@ -0,0 +1,14 @@
 > +################################################################################
 > +#
-> +# python-wrapt
+> +# python-typing
 > +#
 > +################################################################################
 > +
-> +PYTHON_WRAPT_VERSION = 1.10.11
-> +PYTHON_WRAPT_SOURCE = wrapt-$(PYTHON_WRAPT_VERSION).tar.gz
-> +PYTHON_WRAPT_SITE = https://files.pythonhosted.org/packages/a0/47/66897906448185fcb77fc3c2b1bc20ed0ecca81a0f2f88eda3fc5a34fc3d
-> +PYTHON_WRAPT_SETUP_TYPE = distutils
-> +PYTHON_WRAPT_LICENSE = BSD-2-Clause
-> +PYTHON_WRAPT_LICENSE_FILES = LICENSE
+> +PYTHON_TYPING_VERSION = 3.6.6
+> +PYTHON_TYPING_SOURCE = typing-$(PYTHON_TYPING_VERSION).tar.gz
+> +PYTHON_TYPING_SITE = https://files.pythonhosted.org/packages/bf/9b/2bf84e841575b633d8d91ad923e198a415e3901f228715524689495b4317
+> +PYTHON_TYPING_SETUP_TYPE = setuptools
+> +PYTHON_TYPING_LICENSE = Python-2.0, others
+> +PYTHON_TYPING_LICENSE_FILES = LICENSE
 > +
 > +$(eval $(python-package))
 > --
