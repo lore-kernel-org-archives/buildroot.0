@@ -1,41 +1,21 @@
-From: Joshua Henderson <joshua.henderson@microchip.com>
-Date: Tue, 30 Oct 2018 14:41:33 -0700
-Subject: [Buildroot] [PATCH v3] qt5base: Qt KMS support does not depend
- on opengl
-In-Reply-To: <2357aab6-f2e6-54d4-0e37-63955864e94e@mind.be>
-References: <1518540366-13393-1-git-send-email-joshua.henderson@microchip.com>
- <2357aab6-f2e6-54d4-0e37-63955864e94e@mind.be>
-Message-ID: <5cdf69ae-4180-921e-146c-7f90f432b1b7@microchip.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 30 Oct 2018 22:49:21 +0100
+Subject: [Buildroot] [PATCH 1/1] openswan: bump to version 2.56.1.1
+In-Reply-To: <20181030205126.14095-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 30 Oct 2018 21:51:26 +0100")
+References: <20181030205126.14095-1-fontaine.fabrice@gmail.com>
+Message-ID: <87tvl3cdge.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-On 10/21/2018 04:18 PM, Arnout Vandecappelle wrote:
-> 
-> On 13/02/2018 16:46, Joshua Henderson wrote:
->> Qt KMS support should not explicitly depend on the availability of opengl.
->> Don't explicitly disable KMS if opengl is not available and fallback to
->> detecting if libdrm is available before disabling kms.
->>
->> The scenario where this is necessary involves using the Qt linuxfb backend
->> "dumb buffer" support via the DRM API. This is new in Qt 5.9 [1] and only
->> requires KMS, but not opengl.
-> 
-> ?This sounds like we should handle the Qt 5.6 case specially.
-> 
-> ?However, on Qt 5.6, it builds fine with the -kms option, it just ends up not
-> being used. That means we have a redundant dependency on libdrm, but that
-> doesn't matter that much. Handling the Qt 5.6 case differently would make the
-> code quite a bit more complicated.
-> 
-> ?Therefore, I explained the above in the commit log an applied to master, thanks.
-> 
-> ?Sorry it took so long.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-No problem.  Thanks Arnout.
+Committed, thanks.
 
-Josh
+-- 
+Bye, Peter Korsgaard
