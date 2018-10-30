@@ -1,23 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 30 Oct 2018 07:05:07 +0000
-Subject: [Buildroot] [Bug 11451] Can't find libmpfr.so.4 when using external
- toolchain on ubuntu 18.04/18.10
-In-Reply-To: <bug-11451-163@https.bugs.busybox.net/>
-References: <bug-11451-163@https.bugs.busybox.net/>
-Message-ID: <bug-11451-163-bSP1sUwXFi@https.bugs.busybox.net/>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 30 Oct 2018 09:27:54 +0100
+Subject: [Buildroot] [PATCH 1/2] qemu: sdl frontend needs x11
+Message-ID: <20181030082755.13043-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11451
+Since qemu 2.12.0 and
+https://github.com/qemu/qemu/commit/2ec78706d188df7d3dab43d07b19b05ef7800a44,
+x_keymap.h has been converted from "SDL display driver" to "X11 keymaps"
 
---- Comment #1 from galen <lgnice@sina.com> ---
-Created attachment 7841
-  --> https://bugs.busybox.net/attachment.cgi?id=7841&action=edit
-add LD_LIBRARY_PATH
+So add a select on BR2_PACKAGE_SDL_X11
 
+Fixes:
+ - http://autobuild.buildroot.org/results/1908d2d7de8d3aff11ed6fbb8fe4cf3eff54b5a5
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/qemu/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+index 61a2a1072e..d7390141f9 100644
+--- a/package/qemu/Config.in
++++ b/package/qemu/Config.in
+@@ -118,7 +118,9 @@ comment "Frontends"
+ 
+ config BR2_PACKAGE_QEMU_SDL
+ 	bool "Enable SDL frontend"
++	depends on BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_SDL
++	select BR2_PACKAGE_SDL_X11
+ 	help
+ 	  Say 'y' to enable the SDL frontend, that is, a graphical
+ 	  window presenting the VM's display.
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.17.1
