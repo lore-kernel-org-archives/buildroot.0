@@ -1,70 +1,65 @@
-From: Sumit Garg <sumit.garg@linaro.org>
-Date: Tue, 30 Oct 2018 14:35:08 +0530
-Subject: [Buildroot] Queries/suggestions regarding patch series "grub2:
- add support for arm and aarch64"
-In-Reply-To: <CAFA6WYP2bTxdkAKUem_O9GtPdt_hi4Hbg59XiWwEfNvLoc8ghQ@mail.gmail.com>
-References: <CAFA6WYP2bTxdkAKUem_O9GtPdt_hi4Hbg59XiWwEfNvLoc8ghQ@mail.gmail.com>
-Message-ID: <CAFA6WYMqv-ei1-1M4Y+D9k1iqhB1sVjvvvc=mhg_hAf86mJWVQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 30 Oct 2018 11:21:51 +0100
+Subject: [Buildroot] [PATCH 1/2] lighttpd: security bump to version 1.14.51
+Message-ID: <20181030102152.9755-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gentle reminder.
+Fixes the following security issues:
 
-On Tue, 23 Oct 2018 at 11:28, Sumit Garg <sumit.garg@linaro.org> wrote:
->
-> Hello Erico,
->
-> Firstly, apologies for not posting these comments on your patch-set
-> [1] as I joined Buildroot ML yesterday only.
->
-> I was recently exploring to test EFI boot using Buildroot on qemu
-> aarch64 target. But currently GRUB support is missing for aarch64
-> target in Buildroot. So I came across your patch-set. I have tested
-> your patch-set on qemu/u-boot aarch64 target using efi. So I would say
-> its:
->
-> Tested-by: Sumit Garg <sumit.garg@linaro.org>
->
-> However, I will suggest you to use PARTUUID for root path in grub.cfg
-> as it will make it more generic and device independent as we could use
-> either virtio, sata, usb or mmc. So I would propose a similar change
-> as in [2].
->
-> Apart from that, how do you think about adding qemu/u-boot target for
-> aarch64 to Buildroot? As u-boot already have efi booting support using
-> bootefi.
->
-> [1] https://patchwork.ozlabs.org/project/buildroot/list/?submitter=46481
->
-> [2] Change:
->
-> diff --git a/board/aarch64-efi/genimage-efi.cfg
-> b/board/aarch64-efi/genimage-efi.cfg
-> index f93ab9d..4a38bfe 100644
-> --- a/board/aarch64-efi/genimage-efi.cfg
-> +++ b/board/aarch64-efi/genimage-efi.cfg
-> @@ -16,6 +16,7 @@ image efi-part.vfat {
->  image disk.img {
->
->    hdimage {
-> +    disk-signature = 0xDEEDBEEF
->    }
->
->    partition boot {
-> diff --git a/board/aarch64-efi/grub.cfg b/board/aarch64-efi/grub.cfg
-> index ab88da9..404670b 100644
-> --- a/board/aarch64-efi/grub.cfg
-> +++ b/board/aarch64-efi/grub.cfg
-> @@ -2,5 +2,5 @@ set default="0"
->  set timeout="5"
->
->  menuentry "Buildroot" {
-> -       linux /Image root=/dev/vda2 rootwait console=ttyAMA0
-> +       linux /Image root=PARTUUID=deedbeef-02 rootwait console=ttyAMA0
->  }
->
-> Regards,
-> Sumit
+1.4.50:
+[mod_alias] security: potential path traversal with specific configs
+[core] security: use-after-free invalid Range req
+[mod_alias] security: path traversal in mod_alias (in some use cases) (fixes #2898)
+[core] security: use-after-free after invalid Range request (fixes #2899)
+
+1.4.51:
+[core,security] process headers after combining folded headers
+[mod_userdir] security: skip username ?.? and ?..?
+
+1.4.51 brings optional pam and wolfssl support.  Explicitly disable these
+options for now.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/lighttpd/lighttpd.hash | 4 ++--
+ package/lighttpd/lighttpd.mk   | 4 +++-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
+index c99e240c7b..0829c6b4c9 100644
+--- a/package/lighttpd/lighttpd.hash
++++ b/package/lighttpd/lighttpd.hash
+@@ -1,4 +1,4 @@
+-# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.49.sha256sum
+-sha256 aedf49d7127d9e4c0ea56618e9e945a17674dc46a37ac7990120f87dd939ce09  lighttpd-1.4.49.tar.xz
++# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.51.sha256sum
++sha256 2af9fdb265d1f025bfa634e13770239712ecbd585e4975b8226edf1df74e9c82  lighttpd-1.4.51.tar.xz
+ # Locally calculated
+ sha256 5c98cad2fbaf5c5e2562bcbab401a7c557c1bb1bac9914ecc63730925052fb13  COPYING
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index 06561e9f55..44bee6f90f 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -5,13 +5,15 @@
+ ################################################################################
+ 
+ LIGHTTPD_VERSION_MAJOR = 1.4
+-LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).49
++LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).51
+ LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
+ LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
+ LIGHTTPD_LICENSE = BSD-3-Clause
+ LIGHTTPD_LICENSE_FILES = COPYING
+ LIGHTTPD_DEPENDENCIES = host-pkgconf
+ LIGHTTPD_CONF_OPTS = \
++	--without-pam \
++	--without-wolfssl \
+ 	--libdir=/usr/lib/lighttpd \
+ 	--libexecdir=/usr/lib
+ 
+-- 
+2.11.0
