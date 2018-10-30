@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Oct 2018 21:00:38 +0100
-Subject: [Buildroot] [PATCH 1/1] synergy: needs gcc >= 4.9
-In-Reply-To: <20181029153533.6897-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 29 Oct 2018 16:35:33 +0100")
-References: <20181029153533.6897-1-fontaine.fabrice@gmail.com>
-Message-ID: <87wopzdx21.fsf@dell.be.48ers.dk>
+Date: Tue, 30 Oct 2018 21:02:08 +0100
+Subject: [Buildroot] [PATCH 1/2] qemu: sdl frontend needs x11
+In-Reply-To: <20181030082755.13043-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 30 Oct 2018 09:27:54 +0100")
+References: <20181030082755.13043-1-fontaine.fabrice@gmail.com>
+Message-ID: <87sh0ndwzj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +13,14 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Since version 1.9.0 and
- > https://github.com/symless/synergy-core/commit/c0376e9e2f659aec23a748f9a8d8ee6cd82f1281,
- > synergy needs C++14 so add a dependency on
- > BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ > Since qemu 2.12.0 and
+ > https://github.com/qemu/qemu/commit/2ec78706d188df7d3dab43d07b19b05ef7800a44,
+ > x_keymap.h has been converted from "SDL display driver" to "X11 keymaps"
+
+ > So add a select on BR2_PACKAGE_SDL_X11
 
  > Fixes:
- >  - http://autobuild.buildroot.org/results/c4646ee9342ea8bd906bfe2b29996c48cb403ccc
+ >  - http://autobuild.buildroot.org/results/1908d2d7de8d3aff11ed6fbb8fe4cf3eff54b5a5
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
