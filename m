@@ -1,48 +1,59 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Tue, 30 Oct 2018 21:08:00 +0200
-Subject: [Buildroot] [PATCH 1/1] python-pytz: bump to version 2018.7
-In-Reply-To: <20181030190800.13456-1-asafka7@gmail.com>
-References: <20181030190800.13456-1-asafka7@gmail.com>
-Message-ID: <20181030190800.13456-2-asafka7@gmail.com>
+From: Erico Nunes <nunes.erico@gmail.com>
+Date: Tue, 30 Oct 2018 20:23:27 +0100
+Subject: [Buildroot] Queries/suggestions regarding patch series "grub2:
+ add support for arm and aarch64"
+In-Reply-To: <CAFA6WYP2bTxdkAKUem_O9GtPdt_hi4Hbg59XiWwEfNvLoc8ghQ@mail.gmail.com>
+References: <CAFA6WYP2bTxdkAKUem_O9GtPdt_hi4Hbg59XiWwEfNvLoc8ghQ@mail.gmail.com>
+Message-ID: <CAK4VdL0+P6HLVcTb21ECatLwBb0jPQ2sVOYtMNCUiLyw44Z5-w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-pytz/python-pytz.hash | 4 ++--
- package/python-pytz/python-pytz.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hi Sumit,
 
-diff --git a/package/python-pytz/python-pytz.hash b/package/python-pytz/python-pytz.hash
-index 5634d5d624..78234ace81 100644
---- a/package/python-pytz/python-pytz.hash
-+++ b/package/python-pytz/python-pytz.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pytz/json
--md5	6c92d86f9e92e71c561b1adc213feba0  pytz-2018.6.tar.gz
--sha256	642253af8eae734d1509fc6ac9c1aee5e5b69d76392660889979b9870610a46b  pytz-2018.6.tar.gz
-+md5	4b91594c440aa20c76ac92043efa75e1  pytz-2018.7.tar.gz
-+sha256	31cb35c89bd7d333cd32c5f278fca91b523b0834369e757f4c5641ea252236ca  pytz-2018.7.tar.gz
- # Locally computed sha256 checksums
- sha256	39f07c72a1bfda349cbd27bac9bcb1e6f8c5b4e5cc3fadf56900406e8cc0b792  LICENSE.txt
-diff --git a/package/python-pytz/python-pytz.mk b/package/python-pytz/python-pytz.mk
-index 9a0ea19375..dc6046d037 100644
---- a/package/python-pytz/python-pytz.mk
-+++ b/package/python-pytz/python-pytz.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYTZ_VERSION = 2018.6
-+PYTHON_PYTZ_VERSION = 2018.7
- PYTHON_PYTZ_SOURCE = pytz-$(PYTHON_PYTZ_VERSION).tar.gz
--PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/c7/df/68a3331691a604a8241335064cf20742338d66eb008da96d4c9f3e3d4c41
-+PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/cd/71/ae99fc3df1b1c5267d37ef2c51b7d79c44ba8a5e37b48e3ca93b4d74d98b
- PYTHON_PYTZ_SETUP_TYPE = setuptools
- PYTHON_PYTZ_LICENSE = MIT
- PYTHON_PYTZ_LICENSE_FILES = LICENSE.txt
--- 
-2.19.1
+On Tue, Oct 23, 2018 at 7:58 AM Sumit Garg <sumit.garg@linaro.org> wrote:
+>
+> Hello Erico,
+>
+> Firstly, apologies for not posting these comments on your patch-set
+> [1] as I joined Buildroot ML yesterday only.
+>
+> I was recently exploring to test EFI boot using Buildroot on qemu
+> aarch64 target. But currently GRUB support is missing for aarch64
+> target in Buildroot. So I came across your patch-set. I have tested
+> your patch-set on qemu/u-boot aarch64 target using efi. So I would say
+> its:
+>
+> Tested-by: Sumit Garg <sumit.garg@linaro.org>
+
+Thanks for your testing and feedback.
+
+Yes it is taking a while to have this patchset reviewed, but right now
+there are well over 200 patches in the patchwork queue, so I think it
+is understandable that it is taking some time. At this point I believe
+it will only be considered after 2018.11 (for 2019.02) anyway.
+
+> However, I will suggest you to use PARTUUID for root path in grub.cfg
+> as it will make it more generic and device independent as we could use
+> either virtio, sata, usb or mmc. So I would propose a similar change
+> as in [2].
+>
+> Apart from that, how do you think about adding qemu/u-boot target for
+> aarch64 to Buildroot? As u-boot already have efi booting support using
+> bootefi.
+
+Using PARTUUID seems to be an interesting change. I'd like to hear the
+opinion of the other Buildroot developers before making this change in
+this patchset though, since most other platforms in Buildroot are not
+doing this.
+If there is interest in it, maybe we can do this change for other
+platforms too and in a separate patchset?
+For example, then it might be also interesting to change it in the
+pc_* platforms, as it may solve /dev/sda and /dev/vda issue for
+testing them with qemu.
+
+Cheers
+
+Erico
