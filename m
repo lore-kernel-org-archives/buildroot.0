@@ -1,76 +1,140 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Oct 2018 22:50:30 +0100
-Subject: [Buildroot] [git commit] package/network-manager: Add upstream
- patch to fix CVE-2018-15688
-Message-ID: <20181030214925.0C38F83556@busybox.osuosl.org>
+Date: Tue, 30 Oct 2018 22:49:00 +0100
+Subject: [Buildroot] [git commit] configs/{at91,
+ atmel}*_dev*: drop Dropbear as it duplicates OpenSSH
+Message-ID: <20181030214924.F0CDA811AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a51ba655c6eed7a2a8be116b855259adbaf7bd6
+commit: https://git.buildroot.net/buildroot/commit/?id=dab153961337e11675a224af0cf3c3e029561910
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-NetworkManager includes some parts of the systemd-networkd code in its
-codebase. That can be found at src/systemd/src/libsystemd-networkd.
-The DHCP implementation provided by systemd-networkd is used when
-NetworkManager is configured to use the internal implementation,
-however the default is to use dhclient.
+The "development" defconfigs for Atmel platforms enable both OpenSSH
+and Dropbear, which doesn't make a lot of sense, as only one SSH
+server can start on port 22.
 
-When NetworkManager is configured to use the internal dhcp and an
-interface is setup with ipv6.method=auto (which is the default value)
-or ipv6.method=dhcp, this flaw can be exploited. When using
-ipv6.method=auto, the DHCPv6 client can be automatically started with a
-Router Advertisement packet.
+This commit therefore drops BR2_PACKAGE_DROPBEAR=y from those
+defconfigs, keeping OpenSSH as an SSH server/client, as was requested
+by Atmel/Microchip folks in the review of an earlier version of this
+patch [1]. Since those defconfigs are "development" defconfigs, they
+are not meant to be minimal, and already provide an arbitrary set of
+packages, so using openssh is just as good as using dropbear in this
+case.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[1] https://patchwork.ozlabs.org/patch/989516/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
+Cc: Joshua Henderson <joshua.henderson@microchip.com>
+Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...sure-we-have-enough-space-for-the-DHCP6-o.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ configs/at91sam9x5ek_dev_defconfig               | 1 -
+ configs/at91sam9x5ek_mmc_dev_defconfig           | 1 -
+ configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig | 1 -
+ configs/atmel_sama5d2_xplained_mmc_dev_defconfig | 1 -
+ configs/atmel_sama5d3_xplained_dev_defconfig     | 1 -
+ configs/atmel_sama5d3_xplained_mmc_dev_defconfig | 1 -
+ configs/atmel_sama5d4_xplained_dev_defconfig     | 1 -
+ configs/atmel_sama5d4_xplained_mmc_dev_defconfig | 1 -
+ 8 files changed, 8 deletions(-)
 
-diff --git a/package/network-manager/0001-dhcp6-make-sure-we-have-enough-space-for-the-DHCP6-o.patch b/package/network-manager/0001-dhcp6-make-sure-we-have-enough-space-for-the-DHCP6-o.patch
-new file mode 100644
-index 0000000000..c6066abe28
---- /dev/null
-+++ b/package/network-manager/0001-dhcp6-make-sure-we-have-enough-space-for-the-DHCP6-o.patch
-@@ -0,0 +1,38 @@
-+From 01ca2053bbea09f35b958c8cc7631e15469acb79 Mon Sep 17 00:00:00 2001
-+From: Lennart Poettering <lennart@poettering.net>
-+Date: Fri, 19 Oct 2018 12:12:33 +0200
-+Subject: dhcp6: make sure we have enough space for the DHCP6 option header
-+
-+Fixes a vulnerability originally discovered by Felix Wilhelm from
-+Google.
-+
-+CVE-2018-15688
-+LP: #1795921
-+https://bugzilla.redhat.com/show_bug.cgi?id=1639067
-+
-+(cherry picked from commit 4dac5eaba4e419b29c97da38a8b1f82336c2c892)
-+
-+Patch downloaded from upstream commit:
-+https://cgit.freedesktop.org/NetworkManager/NetworkManager/commit/?id=01ca2053bbea09f35b958c8cc7631e15469acb79
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ src/systemd/src/libsystemd-network/dhcp6-option.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/systemd/src/libsystemd-network/dhcp6-option.c b/src/systemd/src/libsystemd-network/dhcp6-option.c
-+index d178fe2..9027c14 100644
-+--- a/src/systemd/src/libsystemd-network/dhcp6-option.c
-++++ b/src/systemd/src/libsystemd-network/dhcp6-option.c
-+@@ -108,7 +108,7 @@ int dhcp6_option_append_ia(uint8_t **buf, size_t *buflen, const DHCP6IA *ia) {
-+                 return -EINVAL;
-+         }
-+ 
-+-        if (*buflen < len)
-++        if (*buflen < offsetof(DHCP6Option, data) + len)
-+                 return -ENOBUFS;
-+ 
-+         ia_hdr = *buf;
-+-- 
-+cgit v1.1
-+
+diff --git a/configs/at91sam9x5ek_dev_defconfig b/configs/at91sam9x5ek_dev_defconfig
+index dee365a56c..505be8d047 100644
+--- a/configs/at91sam9x5ek_dev_defconfig
++++ b/configs/at91sam9x5ek_dev_defconfig
+@@ -59,7 +59,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
+ BR2_PACKAGE_BLUEZ_UTILS=y
+ BR2_PACKAGE_BRIDGE_UTILS=y
+ BR2_PACKAGE_CAN_UTILS=y
+-BR2_PACKAGE_DROPBEAR=y
+ BR2_PACKAGE_ETHTOOL=y
+ BR2_PACKAGE_IPERF=y
+ BR2_PACKAGE_IPROUTE2=y
+diff --git a/configs/at91sam9x5ek_mmc_dev_defconfig b/configs/at91sam9x5ek_mmc_dev_defconfig
+index a8fdad72b7..cd65912883 100644
+--- a/configs/at91sam9x5ek_mmc_dev_defconfig
++++ b/configs/at91sam9x5ek_mmc_dev_defconfig
+@@ -62,7 +62,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
+ BR2_PACKAGE_BLUEZ_UTILS=y
+ BR2_PACKAGE_BRIDGE_UTILS=y
+ BR2_PACKAGE_CAN_UTILS=y
+-BR2_PACKAGE_DROPBEAR=y
+ BR2_PACKAGE_ETHTOOL=y
+ BR2_PACKAGE_IPERF=y
+ BR2_PACKAGE_IPROUTE2=y
+diff --git a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+index f3cb11ce70..9985b64727 100644
+--- a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
++++ b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+@@ -51,7 +51,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
+ BR2_PACKAGE_BLUEZ_UTILS=y
+ BR2_PACKAGE_BRIDGE_UTILS=y
+ BR2_PACKAGE_CAN_UTILS=y
+-BR2_PACKAGE_DROPBEAR=y
+ BR2_PACKAGE_ETHTOOL=y
+ BR2_PACKAGE_IPERF=y
+ BR2_PACKAGE_IPROUTE2=y
+diff --git a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
+index 78d082f9cb..bc5414c4f4 100644
+--- a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
++++ b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
+@@ -65,7 +65,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
+ BR2_PACKAGE_BLUEZ_UTILS=y
+ BR2_PACKAGE_BRIDGE_UTILS=y
+ BR2_PACKAGE_CAN_UTILS=y
+-BR2_PACKAGE_DROPBEAR=y
+ BR2_PACKAGE_ETHTOOL=y
+ BR2_PACKAGE_IPERF=y
+ BR2_PACKAGE_IPROUTE2=y
+diff --git a/configs/atmel_sama5d3_xplained_dev_defconfig b/configs/atmel_sama5d3_xplained_dev_defconfig
+index 91ded5bfeb..520cbc833d 100644
+--- a/configs/atmel_sama5d3_xplained_dev_defconfig
++++ b/configs/atmel_sama5d3_xplained_dev_defconfig
+@@ -61,7 +61,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
+ BR2_PACKAGE_BLUEZ_UTILS=y
+ BR2_PACKAGE_BRIDGE_UTILS=y
+ BR2_PACKAGE_CAN_UTILS=y
+-BR2_PACKAGE_DROPBEAR=y
+ BR2_PACKAGE_ETHTOOL=y
+ BR2_PACKAGE_IPERF=y
+ BR2_PACKAGE_IPROUTE2=y
+diff --git a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
+index 20dc8929ab..a1e34ab810 100644
+--- a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
++++ b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
+@@ -64,7 +64,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
+ BR2_PACKAGE_BLUEZ_UTILS=y
+ BR2_PACKAGE_BRIDGE_UTILS=y
+ BR2_PACKAGE_CAN_UTILS=y
+-BR2_PACKAGE_DROPBEAR=y
+ BR2_PACKAGE_ETHTOOL=y
+ BR2_PACKAGE_IPERF=y
+ BR2_PACKAGE_IPROUTE2=y
+diff --git a/configs/atmel_sama5d4_xplained_dev_defconfig b/configs/atmel_sama5d4_xplained_dev_defconfig
+index 69a71eb51e..9197564c20 100644
+--- a/configs/atmel_sama5d4_xplained_dev_defconfig
++++ b/configs/atmel_sama5d4_xplained_dev_defconfig
+@@ -62,7 +62,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
+ BR2_PACKAGE_BLUEZ_UTILS=y
+ BR2_PACKAGE_BRIDGE_UTILS=y
+ BR2_PACKAGE_CAN_UTILS=y
+-BR2_PACKAGE_DROPBEAR=y
+ BR2_PACKAGE_ETHTOOL=y
+ BR2_PACKAGE_IPERF=y
+ BR2_PACKAGE_IPROUTE2=y
+diff --git a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
+index 60692d98cb..f20e114ff1 100644
+--- a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
++++ b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
+@@ -65,7 +65,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
+ BR2_PACKAGE_BLUEZ_UTILS=y
+ BR2_PACKAGE_BRIDGE_UTILS=y
+ BR2_PACKAGE_CAN_UTILS=y
+-BR2_PACKAGE_DROPBEAR=y
+ BR2_PACKAGE_ETHTOOL=y
+ BR2_PACKAGE_IPERF=y
+ BR2_PACKAGE_IPROUTE2=y
