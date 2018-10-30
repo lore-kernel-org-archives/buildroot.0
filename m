@@ -1,82 +1,48 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 30 Oct 2018 08:05:11 -0500
-Subject: [Buildroot] [PATCH 2/2] qemu: switch to sdl2
-In-Reply-To: <20181030082755.13043-2-fontaine.fabrice@gmail.com>
-References: <20181030082755.13043-1-fontaine.fabrice@gmail.com>
- <20181030082755.13043-2-fontaine.fabrice@gmail.com>
-Message-ID: <CANQCQpaqUjBfpnwDaFbYS62XPeKZuXL3TrRPp9Tf8S9BfZAf7Q@mail.gmail.com>
+From: =?UTF-8?Q?I=c3=b1igo_Huguet?= <inigohuguet@fanamoel.com>
+Date: Tue, 30 Oct 2018 14:20:18 +0100
+Subject: [Buildroot] gcc 8.2.0 support for buildroot 2015.11
+In-Reply-To: <87in1kzqjk.fsf@dell.be.48ers.dk>
+References: <CALD51P_=q448T76Mi66Sjcy8Lfdhi-UKBn0A33_6isVHU_-bFQ@mail.gmail.com>
+ <87in1kzqjk.fsf@dell.be.48ers.dk>
+Message-ID: <33b7beca-b21c-4692-034b-c88e72d139a7@fanamoel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice,
+I supose that you need gcc 8.2 to build a specific program. If you can't 
+move to v2018.08.2, you can compile that program using gcc 8.2 out of 
+buildroot, and create your own buildroot package to directly install the 
+binaries, without building them from buildroot.
 
-On Tue, Oct 30, 2018 at 3:28 AM Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
->
-> Since version 2.12.0 and
-> https://github.com/qemu/qemu/commit/e52c6ba34149b4f39c3fd60e59ee32b809db2bfa,
-> SDL 1.2 is deprecated so switch to SDL 2.0 as SDL 1.2 will be removed in
-> the last release of 2018
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/qemu/Config.in | 8 +++++---
->  package/qemu/qemu.mk   | 4 ++--
->  2 files changed, 7 insertions(+), 5 deletions(-)
->
-> diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-> index d7390141f9..33d4cccd7b 100644
-> --- a/package/qemu/Config.in
-> +++ b/package/qemu/Config.in
-> @@ -118,13 +118,15 @@ comment "Frontends"
->
->  config BR2_PACKAGE_QEMU_SDL
->         bool "Enable SDL frontend"
-> -       depends on BR2_PACKAGE_XORG7
-> -       select BR2_PACKAGE_SDL
-> -       select BR2_PACKAGE_SDL_X11
+A bit more complex, but cleaner (not very much, though), you can create 
+your own buildroot package which requires you to provide the path to an 
+external gcc 8.2 compiler in Config.in. Then, pass that compiler path to 
+the program from the buildroot package makefile. How to do that depends 
+on the program build system, for example if it's an autotools package: 
+PACKAGENAME_CONF_OPTS += CC=$(BR2_PACKAGE_PACKAGENAME_EXTERNAL_GCC_PATH)
 
-SDL2 has a X11 option (BR2_PACKAGE_SDL2_X11), any reason to drop that
-select from your original first patch? If you do add it back, make
-sure to keep the "depends on BR2_PACKAGE_XORG7" and add a "depends on
-BR2_USE_MMU # fork()" from the "config BR2_PACKAGE_SDL2_X11".
+(BR2_PACKAGE_PACKAGENAME_EXTERNAL_GCC_PATH would be the name of the 
+option in Config.in to provide the path to the external compiler)
 
-> +       depends on !BR2_STATIC_LIBS # sdl2
-> +       select BR2_PACKAGE_SDL2
->         help
->           Say 'y' to enable the SDL frontend, that is, a graphical
->           window presenting the VM's display.
->
-> +comment "SDL frontend needs a toolchain w/ dynamic library"
-> +       depends on BR2_STATIC_LIBS
-> +
->  comment "Misc. features"
->
->  config BR2_PACKAGE_QEMU_FDT
-> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-> index 968c8073e4..5bdf390bc9 100644
-> --- a/package/qemu/qemu.mk
-> +++ b/package/qemu/qemu.mk
-> @@ -62,8 +62,8 @@ endif
->
->  ifeq ($(BR2_PACKAGE_QEMU_SDL),y)
->  QEMU_OPTS += --enable-sdl
-> -QEMU_DEPENDENCIES += sdl
-> -QEMU_VARS += SDL_CONFIG=$(BR2_STAGING_DIR)/usr/bin/sdl-config
-> +QEMU_DEPENDENCIES += sdl2
-> +QEMU_VARS += SDL2_CONFIG=$(BR2_STAGING_DIR)/usr/bin/sdl2-config
->  else
->  QEMU_OPTS += --disable-sdl
->  endif
-> --
-> 2.17.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Of course, you will have less problems if you achieve to upgrade to 
+newer versions of Buildroot, instead of trying to keep working an old 
+and unsupported project.
 
-Matt
+
+El 29/10/18 a las 17:05, Peter Korsgaard escribi?:
+>>>>>> "Lijun" == Lijun QIN <lijun.qin2008@gmail.com> writes:
+>   > I generated gcc 8.2.0  arm-buildroot-linux-gnueabihf-gcc using
+>   > buildroot-2018.08.2.
+>   > I need to use arm gcc 8.2 to compile my project (buildroot 2015.11 + C++
+>   > Codebase)  to leverage C++17 features.
+>   > Buildroot 2015.11 seems to only support gcc up to version 5.x.
+>   > Any patch to make 2015.11 to support arm gcc 8.2 as external toolchain ?
+>
+> Sorry, but you are on your own. Old software is unlikely to build with
+> gcc 8.2 out of the box.
+>
+> Buildroot 2015.11 is (for a long time) no longer supported. What is
+> keeping you from moving to Buildroot 2018.08.2?
+>
