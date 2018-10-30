@@ -1,25 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Oct 2018 21:03:15 +0100
-Subject: [Buildroot] [PATCH 2/2] qemu: switch to sdl2
-In-Reply-To: <20181030082755.13043-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 30 Oct 2018 09:27:55 +0100")
-References: <20181030082755.13043-1-fontaine.fabrice@gmail.com>
- <20181030082755.13043-2-fontaine.fabrice@gmail.com>
-Message-ID: <87o9bbdwxo.fsf@dell.be.48ers.dk>
+Date: Tue, 30 Oct 2018 21:04:59 +0100
+Subject: [Buildroot] [PATCH 1/2] lighttpd: security bump to version
+ 1.14.51
+In-Reply-To: <20181030102152.9755-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 30 Oct 2018 11:21:51 +0100")
+References: <20181030102152.9755-1-peter@korsgaard.com>
+Message-ID: <87k1lzdwus.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Since version 2.12.0 and
- > https://github.com/qemu/qemu/commit/e52c6ba34149b4f39c3fd60e59ee32b809db2bfa,
- > SDL 1.2 is deprecated so switch to SDL 2.0 as SDL 1.2 will be removed in
- > the last release of 2018
+ > Fixes the following security issues:
+ > 1.4.50:
+ > [mod_alias] security: potential path traversal with specific configs
+ > [core] security: use-after-free invalid Range req
+ > [mod_alias] security: path traversal in mod_alias (in some use cases) (fixes #2898)
+ > [core] security: use-after-free after invalid Range request (fixes #2899)
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > 1.4.51:
+ > [core,security] process headers after combining folded headers
+ > [mod_userdir] security: skip username ?.? and ?..?
+
+ > 1.4.51 brings optional pam and wolfssl support.  Explicitly disable these
+ > options for now.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
