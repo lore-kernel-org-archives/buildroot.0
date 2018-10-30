@@ -1,24 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Oct 2018 20:55:11 +0100
-Subject: [Buildroot] [PATCH 1/1] openswan: security bump to version
- 2.6.50.1
-In-Reply-To: <20181028102235.16817-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 28 Oct 2018 11:22:35 +0100")
-References: <20181028102235.16817-1-fontaine.fabrice@gmail.com>
-Message-ID: <87in1jfbvk.fsf@dell.be.48ers.dk>
+Date: Tue, 30 Oct 2018 20:55:47 +0100
+Subject: [Buildroot] [PATCH 1/1] python-pycryptodomex: bump to version
+ 3.7.0
+In-Reply-To: <20181028165341.22493-1-asafka7@gmail.com> (Asaf Kahlon's message
+ of "Sun, 28 Oct 2018 18:53:41 +0200")
+References: <20181028165341.22493-1-asafka7@gmail.com>
+Message-ID: <87efc7fbuk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Asaf" == Asaf Kahlon <asafka7@gmail.com> writes:
 
- > - Fixes CVE-2018-15836 (a Bleichenbacher-style signature forgery which
- >   involves RSA padding attack)
- > - Add hash for license files
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 
 Committed, thanks.
 
