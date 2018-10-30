@@ -1,43 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Oct 2018 22:48:22 +0100
-Subject: [Buildroot] [git commit] openswan: bump to version 2.56.1.1
-Message-ID: <20181030214924.D7852836A0@busybox.osuosl.org>
+Date: Tue, 30 Oct 2018 22:50:22 +0100
+Subject: [Buildroot] [git commit] package/network-manager: bump version to
+ 1.10.8
+Message-ID: <20181030214925.04D89811AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03d142edc8089f6c025ab3f6d0f2ae0ab8593467
+commit: https://git.buildroot.net/buildroot/commit/?id=b01f05e775187518c70c09b19e32d850647e4417
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Added license hashes.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openswan/openswan.hash | 2 +-
- package/openswan/openswan.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/network-manager/network-manager.hash | 7 +++++--
+ package/network-manager/network-manager.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/openswan/openswan.hash b/package/openswan/openswan.hash
-index 02fe0f90c6..de0fa05058 100644
---- a/package/openswan/openswan.hash
-+++ b/package/openswan/openswan.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256 ec6bc5c7ff0b807482a95ca368bb273f35da2863c5069fbf7539e87a8bab8af4  openswan-2.6.50.1.tar.gz
-+sha256 857c0d0b9a7e447d2857bf4d0f7118d7ed1196499e0b640e53e5c6bd0c0185d9  openswan-2.6.51.1.tar.gz
- sha256 1c36ae1e7b0f6cce4b4ffe969b71f83635734804acdd38544443564b00f8783a  COPYING
- sha256 d7d012ef3be47faffba4d97a83d4986c9f4a63ac997ebf5961d33852e5f1801a  LICENSE
-diff --git a/package/openswan/openswan.mk b/package/openswan/openswan.mk
-index ea4446a5f3..d7f1c46471 100644
---- a/package/openswan/openswan.mk
-+++ b/package/openswan/openswan.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+index 8fedc64729..3439439175 100644
+--- a/package/network-manager/network-manager.hash
++++ b/package/network-manager/network-manager.hash
+@@ -1,2 +1,5 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.10/NetworkManager-1.10.2.sha256sum
+-sha256 169c34f50770e3c96b431f7d2cff654455246f2e6ccd46eccfb4454d4595625b  NetworkManager-1.10.2.tar.xz
++# From https://download.gnome.org/sources/NetworkManager/1.10/NetworkManager-1.10.8.sha256sum
++sha256 eb4ac8ce75fed5ec804f409caec7b54342d4e01512baf7d7fc119fd40ac8a938  NetworkManager-1.10.8.tar.xz
++# Locally computed
++sha256 49d9659a4f9a09747c320d51d3cf9dfde210de67b70862acf849890f6477b00d  COPYING
++sha256 3a2968e3abb4fea464cd8dc1146d71996f9544af91a5f687bc4f3a2932df49b4  libnm-util/COPYING
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index a520aad9c0..2b9f68a030 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--OPENSWAN_VERSION = 2.6.50.1
-+OPENSWAN_VERSION = 2.6.51.1
- OPENSWAN_SITE = https://download.openswan.org/openswan
- OPENSWAN_LICENSE = GPL-2.0+, BSD-3-Clause
- OPENSWAN_LICENSE_FILES = COPYING LICENSE
+ NETWORK_MANAGER_VERSION_MAJOR = 1.10
+-NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).2
++NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).8
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
