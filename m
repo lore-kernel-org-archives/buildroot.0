@@ -1,49 +1,71 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 29 Oct 2018 19:38:05 +0100
-Subject: [Buildroot] Problem with Raspberry Pi 3B+and BT
-In-Reply-To: <CALtfCQaeH+owo2Vgr-SXRZHewzYstz=ueFy2dtbhcv-L2M4wHw@mail.gmail.com>
-References: <CALtfCQa87Q5w-mOL4sKbW8M7wh4qAH3rBRm6A6H41SEaci=3QQ@mail.gmail.com>
- <CANQCQpbD_fdXrqYGdW74d4EVyCm4eAs6pxiyasg8wTumYZ+XWA@mail.gmail.com>
- <20181012234133.539d0a0b@gmx.net>
- <CALtfCQYKA=MrVGPYY8a7koPLu5SczJ1GxNDOhnfXWsixBEQ_AQ@mail.gmail.com>
- <CALtfCQaiCCCetMG8sHvTjnAZdfnBNUQvZSB0ynn3LT58NH9Omg@mail.gmail.com>
- <20181016235656.584581d2@gmx.net>
- <CALtfCQa2mHAPAZeeFQcneYWJwq3G7rRyDJq17MnW4doY9+0DSw@mail.gmail.com>
- <CALtfCQaeH+owo2Vgr-SXRZHewzYstz=ueFy2dtbhcv-L2M4wHw@mail.gmail.com>
-Message-ID: <20181029193805.480ae99f@gmx.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 30 Oct 2018 06:37:28 +0000
+Subject: [Buildroot] [Bug 11451] New: Can't find libmpfr.so.4 when using
+ external toolchain on ubuntu 18.04/18.10
+Message-ID: <bug-11451-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Oscar,
+https://bugs.busybox.net/show_bug.cgi?id=11451
 
-On Mon, 29 Oct 2018 08:24:12 +0100, Oscar Gomez Fuente <oscargomezf@gmail.com> wrote:
+            Bug ID: 11451
+           Summary: Can't find libmpfr.so.4 when using external toolchain
+                    on ubuntu 18.04/18.10
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: critical
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: lgnice at sina.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-> Hi everyone,
-> 
-> I was checking with lower speed: 460800bps instead of 921600bps and
-> the same problem.
+Created attachment 7836
+  --> https://bugs.busybox.net/attachment.cgi?id=7836&action=edit
+libzlib configure error
 
-Thanks for the update, but I think your problem is maybe not buildroot specific?
-My remaining (and repeated) advice:
+When I upgraded ubuntu from 16.04 to 18.04, output/build/libzlib-1.2.11 will
+have a compilation error, because I used the toolchain provided by the bsp
+vendor.
 
-	Do the check with an original Raspbian Image, if the same error occurs
-	complain upstream about it, otherwise find out what makes the difference...
+The reason is: ubuntu 18.04/18.10 removed
+Libgmpv4-dev - Multiprecision arithmetic library developers tools (GCC 4.x
+compatible)
 
-Nevertheless an update on success/failure is welcome ;-)
+Only reserved: libmpfr6 - multiple precision floating-point computation
 
-Regards,
-Peter
+However, I found that all toolchains provide libmpfr.so by themselves:
 
-> 
-> Best regards.
-> 
-> Oscar Gomez Fuente
-> TST Sistemas
-> www.tst-sistemas.es
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+/opt/Vatics/vtcs_toolchain/arm-eabi-uclibc/usr/lib/libmpfr.so
+/opt/ralink/arm-buildroot-gcc463-for-ibox/usr/lib/libmpfr.so
+/opt/ralink/buildroot-gcc463/usr/lib/libmpfr.so
+/opt/mtk_mipsel_gcc-4.6.3_uclibc-0.9.33/usr/lib/libmpfr.so
+/opt/GrainMedia/gm813x/toolchain_gnueabi-4.4.0_ARMv5TE/usr/lib/libmpfr.so
+/opt/mipsel-24kec-linux-uclibc-4.9-2017.07/usr/lib/libmpfr.so
+/opt/960A/buildroot-gcc463/usr/lib/libmpfr.so
+
+?Just set the environment variable LD_LIBRARY_PATH to solve it.
+
+Export
+LD_LIBRARY_PATH=/opt/mipsel-24kec-linux-uclibc-4.9-2017.07/usr/lib:$LD_LIBRARY_PATH
+
+
+but, once LD_LIBRARY_PATH is set, an error will be reported in buildroot:
+
+You seem to have the current working directory in your
+LD_LIBRARY_PATH environment variable. This doesn't work.
+Make: *** [support/dependencies/dependencies.mk:25: core-dependencies] Error 1
+
+
+How to solve it?
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
