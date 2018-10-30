@@ -1,46 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Oct 2018 18:05:25 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2018-10-28
-In-Reply-To: <CA+h8R2pcuGTzowu+S4-cerB07PVs0obsZHQKDhB+=R_MrN6=qg@mail.gmail.com>
- (Christian Stewart's message of "Mon, 29 Oct 2018 09:40:44 -0700")
-References: <20181029070026.A6EF0209B0@mail.bootlin.com>
- <CA+h8R2pcuGTzowu+S4-cerB07PVs0obsZHQKDhB+=R_MrN6=qg@mail.gmail.com>
-Message-ID: <87sh0nfjqi.fsf@dell.be.48ers.dk>
+Date: Tue, 30 Oct 2018 18:16:14 +0100
+Subject: [Buildroot] [PATCH] ifupdown-script: send current hostname in DHCP
+ request
+Message-ID: <20181030171614.32609-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+For the default (BR2_SYSTEM_DHCP) /etc/network/interfaces handling.
 
- > Hi,
- > On Mon, Oct 29, 2018 at 12:00 AM Thomas Petazzoni
- > <thomas.petazzoni@bootlin.com> wrote:
- >> 
- >> x86_64 | docker-containerd-v1.1.3 |
- >> http://autobuild.buildroot.net/results/9f8ac26c691b699ac9953c5a6f5ec42f1b50e55e
- >> x86_64 | docker-engine-v17.05.0-ce |
- >> http://autobuild.buildroot.net/results/16b07236e62a1f334e3a6a7708faf909e3c7f677
- >> x86_64 | docker-engine-v17.05.0-ce |
- >> http://autobuild.buildroot.net/results/816b4162daf30842bfe261e4fa42493fdd3fbb3a
- >> x86_64 | docker-engine-v17.05.0-ce |
- >> http://autobuild.buildroot.net/results/5c921fc04bc7bbdfee08451e270cf8a6ddb569d5
+Both the "big" and busybox ifupdown variants pass the hostname argument to
+the DHCP client through the shell, so we can use $() to expand to the
+current hostname value.
 
- > These are the same "invalid operation" Go compiler bug that we have
- > seen before. I will investigate if updating Go fixes the issue, and
- > spin a patch. for 1.11.1.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ifupdown-scripts/ifupdown-scripts.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Ok, thanks.
-
- > In the meantime, has there been any further consideration to this
- > patch, which affects both of these packages:
-
- >  - https://patchwork.ozlabs.org/patch/969253/
-
-I see Thomas did a review and asked a number of questions. Please reply
-to those, thanks.
-
+diff --git a/package/ifupdown-scripts/ifupdown-scripts.mk b/package/ifupdown-scripts/ifupdown-scripts.mk
+index ebc89b3872..17364aed03 100644
+--- a/package/ifupdown-scripts/ifupdown-scripts.mk
++++ b/package/ifupdown-scripts/ifupdown-scripts.mk
+@@ -23,6 +23,7 @@ define IFUPDOWN_SCRIPTS_DHCP
+ 		echo "iface $(IFUPDOWN_SCRIPTS_DHCP_IFACE) inet dhcp"; \
+ 		echo "  pre-up /etc/network/nfs_check"; \
+ 		echo "  wait-delay 15"; \
++		echo "  hostname \$$(hostname)"; \
+ 	) >> $(TARGET_DIR)/etc/network/interfaces
+ 	$(INSTALL) -m 0755 -D $(IFUPDOWN_SCRIPTS_PKGDIR)/nfs_check \
+ 		$(TARGET_DIR)/etc/network/nfs_check
 -- 
-Bye, Peter Korsgaard
+2.11.0
