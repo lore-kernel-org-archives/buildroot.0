@@ -1,9 +1,9 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 30 Oct 2018 13:40:24 +0200
-Subject: [Buildroot] [PATCH 6/6] gnupg2: bump to version 2.2.10
+Date: Tue, 30 Oct 2018 13:40:20 +0200
+Subject: [Buildroot] [PATCH 2/6] libgpg-error: bump to version 1.32
 In-Reply-To: <df3569102a6ce73ffbde85da1e4ccc7d877ee1b6.1540899624.git.baruch@tkos.co.il>
 References: <df3569102a6ce73ffbde85da1e4ccc7d877ee1b6.1540899624.git.baruch@tkos.co.il>
-Message-ID: <cc367b24ae0b7619724f8f796700d65a59c48128.1540899624.git.baruch@tkos.co.il>
+Message-ID: <5cc7d624ca0a601d7f12efdc23a11f95578741b6.1540899624.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,38 +12,36 @@ To: buildroot@busybox.net
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/gnupg2/gnupg2.hash | 9 +++++----
- package/gnupg2/gnupg2.mk   | 2 +-
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/libgpg-error/libgpg-error.hash | 5 +++--
+ package/libgpg-error/libgpg-error.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
-index f5890c5e2aa1..a367effcab72 100644
---- a/package/gnupg2/gnupg2.hash
-+++ b/package/gnupg2/gnupg2.hash
+diff --git a/package/libgpg-error/libgpg-error.hash b/package/libgpg-error/libgpg-error.hash
+index 608f9c62d710..93593b14116e 100644
+--- a/package/libgpg-error/libgpg-error.hash
++++ b/package/libgpg-error/libgpg-error.hash
 @@ -1,6 +1,7 @@
--# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q2/000425.html
--sha1 d87553a125832ea90e8aeb3ceeecf24f88de56fb  gnupg-2.2.8.tar.bz2
-+# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q3/000428.html
-+sha1 3e87504e2ca317718aa9b6299947ebf7e906b54e  gnupg-2.2.10.tar.bz2
- # Calculated based on the hash above and signature
--# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.8.tar.bz2.sig
--sha256 777b4cb8ced21965a5053d4fa20fe11484f0a478f3d011cef508a1a49db50dcd  gnupg-2.2.8.tar.bz2
-+# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.10.tar.bz2.sig
+ # Locally calculated after checking pgp signature
+-# https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.31.tar.bz2.sig
+-sha256 40d0a823c9329478063903192a1f82496083b277265904878f4bc09e0db7a4ef  libgpg-error-1.31.tar.bz2
++# https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.32.tar.bz2.sig
 +# using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
-+sha256 799dd37a86a1448732e339bd20440f4f5ee6e69755f6fd7a73ee8af30840c915  gnupg-2.2.10.tar.bz2
- sha256 bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index 3151860f3779..64329522d513 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
++sha256 c345c5e73cc2332f8d50db84a2280abfb1d8f6d4f1858b9daa30404db44540ca  libgpg-error-1.32.tar.bz2
+ # Locally calculated
+ sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+ sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
+diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
+index aed5a517b0a5..ef817c7cc689 100644
+--- a/package/libgpg-error/libgpg-error.mk
++++ b/package/libgpg-error/libgpg-error.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GNUPG2_VERSION = 2.2.8
-+GNUPG2_VERSION = 2.2.10
- GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
- GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
- GNUPG2_LICENSE = GPL-3.0+
+-LIBGPG_ERROR_VERSION = 1.31
++LIBGPG_ERROR_VERSION = 1.32
+ LIBGPG_ERROR_SITE = https://www.gnupg.org/ftp/gcrypt/libgpg-error
+ LIBGPG_ERROR_SOURCE = libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
+ LIBGPG_ERROR_LICENSE = GPL-2.0+, LGPL-2.1+
 -- 
 2.19.1
