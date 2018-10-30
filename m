@@ -1,48 +1,54 @@
-From: =?UTF-8?Q?I=c3=b1igo_Huguet?= <inigohuguet@fanamoel.com>
-Date: Tue, 30 Oct 2018 14:20:18 +0100
-Subject: [Buildroot] gcc 8.2.0 support for buildroot 2015.11
-In-Reply-To: <87in1kzqjk.fsf@dell.be.48ers.dk>
-References: <CALD51P_=q448T76Mi66Sjcy8Lfdhi-UKBn0A33_6isVHU_-bFQ@mail.gmail.com>
- <87in1kzqjk.fsf@dell.be.48ers.dk>
-Message-ID: <33b7beca-b21c-4692-034b-c88e72d139a7@fanamoel.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 30 Oct 2018 14:49:26 +0100
+Subject: [Buildroot] [PATCH 2/2] lighttpd: add optional pam support
+In-Reply-To: <87h8h38y1v.fsf@tkos.co.il> (Baruch Siach's message of "Tue, 30
+ Oct 2018 13:38:04 +0200")
+References: <20181030102152.9755-1-peter@korsgaard.com>
+ <20181030102152.9755-2-peter@korsgaard.com>
+ <87h8h38y1v.fsf@tkos.co.il>
+Message-ID: <87wopzfst5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I supose that you need gcc 8.2 to build a specific program. If you can't 
-move to v2018.08.2, you can compile that program using gcc 8.2 out of 
-buildroot, and create your own buildroot package to directly install the 
-binaries, without building them from buildroot.
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-A bit more complex, but cleaner (not very much, though), you can create 
-your own buildroot package which requires you to provide the path to an 
-external gcc 8.2 compiler in Config.in. Then, pass that compiler path to 
-the program from the buildroot package makefile. How to do that depends 
-on the program build system, for example if it's an autotools package: 
-PACKAGENAME_CONF_OPTS += CC=$(BR2_PACKAGE_PACKAGENAME_EXTERNAL_GCC_PATH)
+ > Hi Peter,
+ > Peter Korsgaard writes:
+ >> Let the option depend on linux-pam as pam has quite some dependencies and
+ >> this is unlikely to be used if pam isn't explicitly enabled.
+ >> 
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ >> ---
+ >> package/lighttpd/Config.in   | 7 +++++++
+ >> package/lighttpd/lighttpd.mk | 8 +++++++-
+ >> 2 files changed, 14 insertions(+), 1 deletion(-)
+ >> 
+ >> diff --git a/package/lighttpd/Config.in b/package/lighttpd/Config.in
+ >> index 383c10f70f..0f37422aea 100644
+ >> --- a/package/lighttpd/Config.in
+ >> +++ b/package/lighttpd/Config.in
+ >> @@ -26,6 +26,13 @@ config BR2_PACKAGE_LIGHTTPD_OPENSSL
+ >> help
+ >> Enable OpenSSL support for lighttpd.
+ >> 
+ >> +config BR2_PACKAGE_LIGHTTPD_PAM
+ >> +       bool "pam authentication support"
+ >> +       depends on BR2_PACKAGE_LINUX_PAM
+ >> +       default y
+ >> +       help
+ >> +         Enable PAM authentication support for lighttpd.
+ >> +
 
-(BR2_PACKAGE_PACKAGENAME_EXTERNAL_GCC_PATH would be the name of the 
-option in Config.in to provide the path to the external compiler)
+ > Why do we need a config option? What is the size impact of the lighttpd
+ > PAM support?
 
-Of course, you will have less problems if you achieve to upgrade to 
-newer versions of Buildroot, instead of trying to keep working an old 
-and unsupported project.
+Just for consistency with the other BR2_PACKAGE_LIGHTTPD_* options. I
+would also prefer to use automatic dependencies like we do elsewhere,
+but as we are explicitly handling the other optional dependencies it
+seemed more sensible to do it for pam as well.
 
-
-El 29/10/18 a las 17:05, Peter Korsgaard escribi?:
->>>>>> "Lijun" == Lijun QIN <lijun.qin2008@gmail.com> writes:
->   > I generated gcc 8.2.0  arm-buildroot-linux-gnueabihf-gcc using
->   > buildroot-2018.08.2.
->   > I need to use arm gcc 8.2 to compile my project (buildroot 2015.11 + C++
->   > Codebase)  to leverage C++17 features.
->   > Buildroot 2015.11 seems to only support gcc up to version 5.x.
->   > Any patch to make 2015.11 to support arm gcc 8.2 as external toolchain ?
->
-> Sorry, but you are on your own. Old software is unlikely to build with
-> gcc 8.2 out of the box.
->
-> Buildroot 2015.11 is (for a long time) no longer supported. What is
-> keeping you from moving to Buildroot 2018.08.2?
->
+-- 
+Bye, Peter Korsgaard
