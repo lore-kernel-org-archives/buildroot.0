@@ -1,40 +1,63 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 30 Oct 2018 09:27:54 +0100
-Subject: [Buildroot] [PATCH 1/2] qemu: sdl frontend needs x11
-Message-ID: <20181030082755.13043-1-fontaine.fabrice@gmail.com>
+Date: Tue, 30 Oct 2018 09:27:55 +0100
+Subject: [Buildroot] [PATCH 2/2] qemu: switch to sdl2
+In-Reply-To: <20181030082755.13043-1-fontaine.fabrice@gmail.com>
+References: <20181030082755.13043-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181030082755.13043-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since qemu 2.12.0 and
-https://github.com/qemu/qemu/commit/2ec78706d188df7d3dab43d07b19b05ef7800a44,
-x_keymap.h has been converted from "SDL display driver" to "X11 keymaps"
-
-So add a select on BR2_PACKAGE_SDL_X11
-
-Fixes:
- - http://autobuild.buildroot.org/results/1908d2d7de8d3aff11ed6fbb8fe4cf3eff54b5a5
+Since version 2.12.0 and
+https://github.com/qemu/qemu/commit/e52c6ba34149b4f39c3fd60e59ee32b809db2bfa,
+SDL 1.2 is deprecated so switch to SDL 2.0 as SDL 1.2 will be removed in
+the last release of 2018
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/qemu/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/qemu/Config.in | 8 +++++---
+ package/qemu/qemu.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 61a2a1072e..d7390141f9 100644
+index d7390141f9..33d4cccd7b 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -118,7 +118,9 @@ comment "Frontends"
+@@ -118,13 +118,15 @@ comment "Frontends"
  
  config BR2_PACKAGE_QEMU_SDL
  	bool "Enable SDL frontend"
-+	depends on BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_SDL
-+	select BR2_PACKAGE_SDL_X11
+-	depends on BR2_PACKAGE_XORG7
+-	select BR2_PACKAGE_SDL
+-	select BR2_PACKAGE_SDL_X11
++	depends on !BR2_STATIC_LIBS # sdl2
++	select BR2_PACKAGE_SDL2
  	help
  	  Say 'y' to enable the SDL frontend, that is, a graphical
  	  window presenting the VM's display.
+ 
++comment "SDL frontend needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
++
+ comment "Misc. features"
+ 
+ config BR2_PACKAGE_QEMU_FDT
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 968c8073e4..5bdf390bc9 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -62,8 +62,8 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_QEMU_SDL),y)
+ QEMU_OPTS += --enable-sdl
+-QEMU_DEPENDENCIES += sdl
+-QEMU_VARS += SDL_CONFIG=$(BR2_STAGING_DIR)/usr/bin/sdl-config
++QEMU_DEPENDENCIES += sdl2
++QEMU_VARS += SDL2_CONFIG=$(BR2_STAGING_DIR)/usr/bin/sdl2-config
+ else
+ QEMU_OPTS += --disable-sdl
+ endif
 -- 
 2.17.1
