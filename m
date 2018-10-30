@@ -1,7 +1,9 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Tue, 30 Oct 2018 21:07:59 +0200
-Subject: [Buildroot] [PATCH 1/1] python-psutil: bump to version 5.4.8
-Message-ID: <20181030190800.13456-1-asafka7@gmail.com>
+Date: Tue, 30 Oct 2018 21:08:00 +0200
+Subject: [Buildroot] [PATCH 1/1] python-pytz: bump to version 2018.7
+In-Reply-To: <20181030190800.13456-1-asafka7@gmail.com>
+References: <20181030190800.13456-1-asafka7@gmail.com>
+Message-ID: <20181030190800.13456-2-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,37 +12,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-psutil/python-psutil.hash | 4 ++--
- package/python-psutil/python-psutil.mk   | 4 ++--
+ package/python-pytz/python-pytz.hash | 4 ++--
+ package/python-pytz/python-pytz.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
-index 9629d81ed7..1f44281e29 100644
---- a/package/python-psutil/python-psutil.hash
-+++ b/package/python-psutil/python-psutil.hash
+diff --git a/package/python-pytz/python-pytz.hash b/package/python-pytz/python-pytz.hash
+index 5634d5d624..78234ace81 100644
+--- a/package/python-pytz/python-pytz.hash
++++ b/package/python-pytz/python-pytz.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/psutil/json
--md5	434cd8f9a1fdc93ce7903fdc9b5e3906  psutil-5.4.7.tar.gz
--sha256	5b6322b167a5ba0c5463b4d30dfd379cd4ce245a1162ebf8fc7ab5c5ffae4f3b  psutil-5.4.7.tar.gz
-+md5	0f08bf02400f81c28c4581619ca3e6cb  psutil-5.4.8.tar.gz
-+sha256	6e265c8f3da00b015d24b842bfeb111f856b13d24f2c57036582568dc650d6c3  psutil-5.4.8.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pytz/json
+-md5	6c92d86f9e92e71c561b1adc213feba0  pytz-2018.6.tar.gz
+-sha256	642253af8eae734d1509fc6ac9c1aee5e5b69d76392660889979b9870610a46b  pytz-2018.6.tar.gz
++md5	4b91594c440aa20c76ac92043efa75e1  pytz-2018.7.tar.gz
++sha256	31cb35c89bd7d333cd32c5f278fca91b523b0834369e757f4c5641ea252236ca  pytz-2018.7.tar.gz
  # Locally computed sha256 checksums
- sha256	bb073826b0dfb43b631c38ad5d9844cda74cc631d2a5569ad8798be4274a3e17  LICENSE
-diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
-index 61a303f84a..18567702bc 100644
---- a/package/python-psutil/python-psutil.mk
-+++ b/package/python-psutil/python-psutil.mk
+ sha256	39f07c72a1bfda349cbd27bac9bcb1e6f8c5b4e5cc3fadf56900406e8cc0b792  LICENSE.txt
+diff --git a/package/python-pytz/python-pytz.mk b/package/python-pytz/python-pytz.mk
+index 9a0ea19375..dc6046d037 100644
+--- a/package/python-pytz/python-pytz.mk
++++ b/package/python-pytz/python-pytz.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PSUTIL_VERSION = 5.4.7
-+PYTHON_PSUTIL_VERSION = 5.4.8
- PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
--PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/7d/9a/1e93d41708f8ed2b564395edfa3389f0fd6d567597401c2e5e2775118d8b
-+PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/e3/58/0eae6e4466e5abf779d7e2b71fac7fba5f59e00ea36ddb3ed690419ccb0f
- PYTHON_PSUTIL_SETUP_TYPE = setuptools
- PYTHON_PSUTIL_LICENSE = BSD-3-Clause
- PYTHON_PSUTIL_LICENSE_FILES = LICENSE
+-PYTHON_PYTZ_VERSION = 2018.6
++PYTHON_PYTZ_VERSION = 2018.7
+ PYTHON_PYTZ_SOURCE = pytz-$(PYTHON_PYTZ_VERSION).tar.gz
+-PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/c7/df/68a3331691a604a8241335064cf20742338d66eb008da96d4c9f3e3d4c41
++PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/cd/71/ae99fc3df1b1c5267d37ef2c51b7d79c44ba8a5e37b48e3ca93b4d74d98b
+ PYTHON_PYTZ_SETUP_TYPE = setuptools
+ PYTHON_PYTZ_LICENSE = MIT
+ PYTHON_PYTZ_LICENSE_FILES = LICENSE.txt
 -- 
 2.19.1
