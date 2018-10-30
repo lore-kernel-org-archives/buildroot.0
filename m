@@ -1,52 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Oct 2018 21:00:35 +0100
-Subject: [Buildroot] [git commit] synergy: needs gcc >= 4.9
-Message-ID: <20181030201013.02B7D83239@busybox.osuosl.org>
+Date: Tue, 30 Oct 2018 21:02:51 +0100
+Subject: [Buildroot] [git commit] qemu: switch to sdl2
+Message-ID: <20181030201013.11EEA835D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=54000d187a291f295d74ad23d16eeabc50ff23ea
+commit: https://git.buildroot.net/buildroot/commit/?id=0646d67c1d8e5ba4a1376a215d0c7e69751835df
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since version 1.9.0 and
-https://github.com/symless/synergy-core/commit/c0376e9e2f659aec23a748f9a8d8ee6cd82f1281,
-synergy needs C++14 so add a dependency on
-BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-
-Fixes:
- - http://autobuild.buildroot.org/results/c4646ee9342ea8bd906bfe2b29996c48cb403ccc
+Since version 2.12.0 and
+https://github.com/qemu/qemu/commit/e52c6ba34149b4f39c3fd60e59ee32b809db2bfa,
+SDL 1.2 is deprecated so switch to SDL 2.0 as SDL 1.2 will be removed in
+the last release of 2018
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Tested-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
-Reviewed-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/synergy/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/qemu/Config.in | 8 +++++---
+ package/qemu/qemu.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/synergy/Config.in b/package/synergy/Config.in
-index e0ac246155..c1216c4ba9 100644
---- a/package/synergy/Config.in
-+++ b/package/synergy/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_SYNERGY
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_XLIB_LIBXTST
+diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+index d7390141f9..33d4cccd7b 100644
+--- a/package/qemu/Config.in
++++ b/package/qemu/Config.in
+@@ -118,13 +118,15 @@ comment "Frontends"
+ 
+ config BR2_PACKAGE_QEMU_SDL
+ 	bool "Enable SDL frontend"
+-	depends on BR2_PACKAGE_XORG7
+-	select BR2_PACKAGE_SDL
+-	select BR2_PACKAGE_SDL_X11
++	depends on !BR2_STATIC_LIBS # sdl2
++	select BR2_PACKAGE_SDL2
  	help
-@@ -14,7 +15,8 @@ config BR2_PACKAGE_SYNERGY
+ 	  Say 'y' to enable the SDL frontend, that is, a graphical
+ 	  window presenting the VM's display.
  
- 	  https://github.com/symless/synergy-core/
++comment "SDL frontend needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
++
+ comment "Misc. features"
  
--comment "synergy needs a toolchain w/ C++, wchar"
-+comment "synergy needs a toolchain w/ C++, wchar, gcc >= 4.9"
- 	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_USE_MMU
--	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR)
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && \
-+		BR2_TOOLCHAIN_GCC_AT_LEAST_4_9)
+ config BR2_PACKAGE_QEMU_FDT
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 968c8073e4..5bdf390bc9 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -62,8 +62,8 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_QEMU_SDL),y)
+ QEMU_OPTS += --enable-sdl
+-QEMU_DEPENDENCIES += sdl
+-QEMU_VARS += SDL_CONFIG=$(BR2_STAGING_DIR)/usr/bin/sdl-config
++QEMU_DEPENDENCIES += sdl2
++QEMU_VARS += SDL2_CONFIG=$(BR2_STAGING_DIR)/usr/bin/sdl2-config
+ else
+ QEMU_OPTS += --disable-sdl
+ endif
