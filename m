@@ -1,28 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Oct 2018 20:56:47 +0100
-Subject: [Buildroot] [PATCH 1/1] neardal: fix static build with libedit
- and libbsd
-In-Reply-To: <20181028212038.11514-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 28 Oct 2018 22:20:38 +0100")
-References: <20181028212038.11514-1-fontaine.fabrice@gmail.com>
-Message-ID: <87a7mvfbsw.fsf@dell.be.48ers.dk>
+Date: Tue, 30 Oct 2018 20:59:25 +0100
+Subject: [Buildroot] [PATCH 0/3] Kconfig fixes
+In-Reply-To: <20181028230952.27293-1-petr.vorel@gmail.com> (Petr Vorel's
+ message of "Mon, 29 Oct 2018 00:09:49 +0100")
+References: <20181028230952.27293-1-petr.vorel@gmail.com>
+Message-ID: <875zxjfboi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
 
- > Add an upstreamable patch to use pkg-config for finding libedit and
- > readline dependencies and drop ncurses "hack"
+ > Hi,
+ > here are fixes of my last kconfig update.
+ > 6eacea5ae0 ("support/kconfig: bump to kconfig from Linux 4.17-rc2")
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/b0b17f4a5b0a32631a12bdb350ba7c21f7c595d0
+ > I left patch 17-backport-kecho.patch from v3 which got merged
+ > and I accidentally deleted 2 changes which didn't have patches.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Erico, thanks for reporting bug.
+ > Sorry for mistakes.
 
-Committed, thanks.
+
+ > Kind regards,
+ > Petr
+
+ > Petr Vorel (3):
+ >   kconfig: Add missing patch
+ >   kconfig: Restore missing custom changes + add patches
+ >   kconfig: Refresh patches
+
+Committed all 3, thanks.
 
 -- 
 Bye, Peter Korsgaard
