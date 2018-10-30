@@ -1,75 +1,72 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 30 Oct 2018 07:43:45 -0500
-Subject: [Buildroot] [PATCH 2/2] lighttpd: add optional pam support
-In-Reply-To: <20181030102152.9755-2-peter@korsgaard.com>
-References: <20181030102152.9755-1-peter@korsgaard.com>
- <20181030102152.9755-2-peter@korsgaard.com>
-Message-ID: <CANQCQpZdmbSeQSgTGBu67LMzeSzL33+9onhJTPWsmHJ5FOo0Kw@mail.gmail.com>
+Date: Tue, 30 Oct 2018 08:00:10 -0500
+Subject: [Buildroot] [PATCH 1/2] qemu: sdl frontend needs x11
+In-Reply-To: <20181030082755.13043-1-fontaine.fabrice@gmail.com>
+References: <20181030082755.13043-1-fontaine.fabrice@gmail.com>
+Message-ID: <CANQCQpbV+Ld09XUJLitGh4if+_T324RLdN-gSnq-V5U8OQqctQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Fabrice,
 
+On Tue, Oct 30, 2018 at 3:28 AM Fabrice Fontaine
+<fontaine.fabrice@gmail.com> wrote:
+>
+> Since qemu 2.12.0 and
+> https://github.com/qemu/qemu/commit/2ec78706d188df7d3dab43d07b19b05ef7800a44,
+> x_keymap.h has been converted from "SDL display driver" to "X11 keymaps"
+>
+> So add a select on BR2_PACKAGE_SDL_X11
+>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/1908d2d7de8d3aff11ed6fbb8fe4cf3eff54b5a5
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-On Tue, Oct 30, 2018 at 5:22 AM Peter Korsgaard <peter@korsgaard.com> wrote:
->
-> Let the option depend on linux-pam as pam has quite some dependencies and
-> this is unlikely to be used if pam isn't explicitly enabled.
->
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Guessing this one may pop up again when Xen bumps qemu versions.  In
+Xen we have the explicit "--disable-sdl" without an option for SDK.
+For QEMU, did it look like the "--disable-sdl" still correctly
+disables the new x11 dependency?
+
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+
 > ---
->  package/lighttpd/Config.in   | 7 +++++++
->  package/lighttpd/lighttpd.mk | 8 +++++++-
->  2 files changed, 14 insertions(+), 1 deletion(-)
+>  package/qemu/Config.in | 2 ++
+>  1 file changed, 2 insertions(+)
 >
-> diff --git a/package/lighttpd/Config.in b/package/lighttpd/Config.in
-> index 383c10f70f..0f37422aea 100644
-> --- a/package/lighttpd/Config.in
-> +++ b/package/lighttpd/Config.in
-> @@ -26,6 +26,13 @@ config BR2_PACKAGE_LIGHTTPD_OPENSSL
+> diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+> index 61a2a1072e..d7390141f9 100644
+> --- a/package/qemu/Config.in
+> +++ b/package/qemu/Config.in
+> @@ -118,7 +118,9 @@ comment "Frontends"
+>
+>  config BR2_PACKAGE_QEMU_SDL
+>         bool "Enable SDL frontend"
+> +       depends on BR2_PACKAGE_XORG7
+>         select BR2_PACKAGE_SDL
+> +       select BR2_PACKAGE_SDL_X11
 >         help
->           Enable OpenSSL support for lighttpd.
+>           Say 'y' to enable the SDL frontend, that is, a graphical
+>           window presenting the VM's display.
+> --
+> 2.17.1
 >
-> +config BR2_PACKAGE_LIGHTTPD_PAM
-> +       bool "pam authentication support"
-> +       depends on BR2_PACKAGE_LINUX_PAM
-> +       default y
-> +       help
-> +         Enable PAM authentication support for lighttpd.
-> +
->  config BR2_PACKAGE_LIGHTTPD_ZLIB
->         bool "zlib support"
->         select BR2_PACKAGE_ZLIB
-> diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-> index 44bee6f90f..d8f64dc7e8 100644
-> --- a/package/lighttpd/lighttpd.mk
-> +++ b/package/lighttpd/lighttpd.mk
-> @@ -12,7 +12,6 @@ LIGHTTPD_LICENSE = BSD-3-Clause
->  LIGHTTPD_LICENSE_FILES = COPYING
->  LIGHTTPD_DEPENDENCIES = host-pkgconf
->  LIGHTTPD_CONF_OPTS = \
-> -       --without-pam \
->         --without-wolfssl \
->         --libdir=/usr/lib/lighttpd \
->         --libexecdir=/usr/lib
-> @@ -24,6 +23,13 @@ else
->  LIGHTTPD_CONF_OPTS += --without-openssl
->  endif
->
-> +ifeq ($(BR2_PACKAGE_LIGHTTPD_PAM),y)
-> +LIGHTTPD_DEPENDENCIES += linux-pam
-> +LIGHTTPD_CONF_OPTS += --with-pam
-> +else
-> +LIGHTTPD_CONF_OPTS += --without-pam
-> +endif
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-On the same note as Baruch, I dug through the code a bit and it looks
-like enabling it just adds the mod_auth_pam support.  However a
-configuration file still needs to call out using that support.  So it
-looks like from a compatibility to old target builds perspective, this
-can be enabled if PAM is present without any impact.
 
-Matt
+
+--
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / RC Linux Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
