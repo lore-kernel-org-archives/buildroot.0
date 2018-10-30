@@ -1,140 +1,103 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Oct 2018 22:49:00 +0100
-Subject: [Buildroot] [git commit] configs/{at91,
- atmel}*_dev*: drop Dropbear as it duplicates OpenSSH
-Message-ID: <20181030214924.F0CDA811AF@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 30 Oct 2018 23:34:45 +0100
+Subject: [Buildroot] alsa-utils: alsactl services are not installed
+In-Reply-To: <CANTMe2VT27m=f=D=u_fD6mTYoWw7QQUcc-bFbhir0QrPV=MMtw@mail.gmail.com>
+References: <CANTMe2UJhVMgxj+mSX+XiNkv=Qzb6H3rQhDOphpV7=7xVB-HYw@mail.gmail.com>
+ <20181028120200.77b9aab2@gmx.net>
+ <CANTMe2XmyFiQiXErMRLM2BOqQdW3iGBUqfeHtxu1Jv87vokVTA@mail.gmail.com>
+ <CANTMe2VT27m=f=D=u_fD6mTYoWw7QQUcc-bFbhir0QrPV=MMtw@mail.gmail.com>
+Message-ID: <20181030233445.4c44adee@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dab153961337e11675a224af0cf3c3e029561910
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello ?????,
 
-The "development" defconfigs for Atmel platforms enable both OpenSSH
-and Dropbear, which doesn't make a lot of sense, as only one SSH
-server can start on port 22.
+On Tue, 30 Oct 2018 16:10:59 +0300, ????? ?????????? <prok.tim26@gmail.com> wrote:
 
-This commit therefore drops BR2_PACKAGE_DROPBEAR=y from those
-defconfigs, keeping OpenSSH as an SSH server/client, as was requested
-by Atmel/Microchip folks in the review of an earlier version of this
-patch [1]. Since those defconfigs are "development" defconfigs, they
-are not meant to be minimal, and already provide an arbitrary set of
-packages, so using openssh is just as good as using dropbear in this
-case.
+> Hello, Peter.
+> 
+> Thanks for your patch. What I did was similar but I installed the
+> alsa-restore udev rules as well.
+> Also, the symlinks seem to be created incorrectly:
+> 
+> +ln -sf ../../../../lib/systemd/alsa-restore.service \
+> +
+>  $(TARGET_DIR)/etc/systemd/system/sound.target.wants/alsa-restore.service
+> +ln -sf ../../../../lib/systemd/alsa-state.service \
+> +
+>  $(TARGET_DIR)/etc/systemd/system/sound.target.wants/alsa-state.service
+> 
+> rather than
+> 
+> +ln -sf ../../../../lib/systemd/system/alsa-restore.service \
+> +
+> 
+>  $(TARGET_DIR)/etc/systemd/system/sound.target.wants/alsa-restore.service
+> +ln -sf ../../../../lib/systemd/system/alsa-state.service \
+> +
+> 
+>  $(TARGET_DIR)/etc/systemd/system/sound.target.wants/alsa-state.service
 
-[1] https://patchwork.ozlabs.org/patch/989516/
+Many thanks for testing and feedback, will fix it on next patch iteration...
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
-Cc: Joshua Henderson <joshua.henderson@microchip.com>
-Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/at91sam9x5ek_dev_defconfig               | 1 -
- configs/at91sam9x5ek_mmc_dev_defconfig           | 1 -
- configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig | 1 -
- configs/atmel_sama5d2_xplained_mmc_dev_defconfig | 1 -
- configs/atmel_sama5d3_xplained_dev_defconfig     | 1 -
- configs/atmel_sama5d3_xplained_mmc_dev_defconfig | 1 -
- configs/atmel_sama5d4_xplained_dev_defconfig     | 1 -
- configs/atmel_sama5d4_xplained_mmc_dev_defconfig | 1 -
- 8 files changed, 8 deletions(-)
+> 
+> Is it possible to comment on Patchwork and how can I send a patch to be
+> reviewed there?
 
-diff --git a/configs/at91sam9x5ek_dev_defconfig b/configs/at91sam9x5ek_dev_defconfig
-index dee365a56c..505be8d047 100644
---- a/configs/at91sam9x5ek_dev_defconfig
-+++ b/configs/at91sam9x5ek_dev_defconfig
-@@ -59,7 +59,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
- BR2_PACKAGE_BLUEZ_UTILS=y
- BR2_PACKAGE_BRIDGE_UTILS=y
- BR2_PACKAGE_CAN_UTILS=y
--BR2_PACKAGE_DROPBEAR=y
- BR2_PACKAGE_ETHTOOL=y
- BR2_PACKAGE_IPERF=y
- BR2_PACKAGE_IPROUTE2=y
-diff --git a/configs/at91sam9x5ek_mmc_dev_defconfig b/configs/at91sam9x5ek_mmc_dev_defconfig
-index a8fdad72b7..cd65912883 100644
---- a/configs/at91sam9x5ek_mmc_dev_defconfig
-+++ b/configs/at91sam9x5ek_mmc_dev_defconfig
-@@ -62,7 +62,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
- BR2_PACKAGE_BLUEZ_UTILS=y
- BR2_PACKAGE_BRIDGE_UTILS=y
- BR2_PACKAGE_CAN_UTILS=y
--BR2_PACKAGE_DROPBEAR=y
- BR2_PACKAGE_ETHTOOL=y
- BR2_PACKAGE_IPERF=y
- BR2_PACKAGE_IPROUTE2=y
-diff --git a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-index f3cb11ce70..9985b64727 100644
---- a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-@@ -51,7 +51,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
- BR2_PACKAGE_BLUEZ_UTILS=y
- BR2_PACKAGE_BRIDGE_UTILS=y
- BR2_PACKAGE_CAN_UTILS=y
--BR2_PACKAGE_DROPBEAR=y
- BR2_PACKAGE_ETHTOOL=y
- BR2_PACKAGE_IPERF=y
- BR2_PACKAGE_IPROUTE2=y
-diff --git a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-index 78d082f9cb..bc5414c4f4 100644
---- a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-@@ -65,7 +65,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
- BR2_PACKAGE_BLUEZ_UTILS=y
- BR2_PACKAGE_BRIDGE_UTILS=y
- BR2_PACKAGE_CAN_UTILS=y
--BR2_PACKAGE_DROPBEAR=y
- BR2_PACKAGE_ETHTOOL=y
- BR2_PACKAGE_IPERF=y
- BR2_PACKAGE_IPROUTE2=y
-diff --git a/configs/atmel_sama5d3_xplained_dev_defconfig b/configs/atmel_sama5d3_xplained_dev_defconfig
-index 91ded5bfeb..520cbc833d 100644
---- a/configs/atmel_sama5d3_xplained_dev_defconfig
-+++ b/configs/atmel_sama5d3_xplained_dev_defconfig
-@@ -61,7 +61,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
- BR2_PACKAGE_BLUEZ_UTILS=y
- BR2_PACKAGE_BRIDGE_UTILS=y
- BR2_PACKAGE_CAN_UTILS=y
--BR2_PACKAGE_DROPBEAR=y
- BR2_PACKAGE_ETHTOOL=y
- BR2_PACKAGE_IPERF=y
- BR2_PACKAGE_IPROUTE2=y
-diff --git a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-index 20dc8929ab..a1e34ab810 100644
---- a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-@@ -64,7 +64,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
- BR2_PACKAGE_BLUEZ_UTILS=y
- BR2_PACKAGE_BRIDGE_UTILS=y
- BR2_PACKAGE_CAN_UTILS=y
--BR2_PACKAGE_DROPBEAR=y
- BR2_PACKAGE_ETHTOOL=y
- BR2_PACKAGE_IPERF=y
- BR2_PACKAGE_IPROUTE2=y
-diff --git a/configs/atmel_sama5d4_xplained_dev_defconfig b/configs/atmel_sama5d4_xplained_dev_defconfig
-index 69a71eb51e..9197564c20 100644
---- a/configs/atmel_sama5d4_xplained_dev_defconfig
-+++ b/configs/atmel_sama5d4_xplained_dev_defconfig
-@@ -62,7 +62,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
- BR2_PACKAGE_BLUEZ_UTILS=y
- BR2_PACKAGE_BRIDGE_UTILS=y
- BR2_PACKAGE_CAN_UTILS=y
--BR2_PACKAGE_DROPBEAR=y
- BR2_PACKAGE_ETHTOOL=y
- BR2_PACKAGE_IPERF=y
- BR2_PACKAGE_IPROUTE2=y
-diff --git a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-index 60692d98cb..f20e114ff1 100644
---- a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-@@ -65,7 +65,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
- BR2_PACKAGE_BLUEZ_UTILS=y
- BR2_PACKAGE_BRIDGE_UTILS=y
- BR2_PACKAGE_CAN_UTILS=y
--BR2_PACKAGE_DROPBEAR=y
- BR2_PACKAGE_ETHTOOL=y
- BR2_PACKAGE_IPERF=y
- BR2_PACKAGE_IPROUTE2=y
+Patchwork is only collecting from the buildroot mailing list, reply to
+a patch and keeping buildroot at busybox.net in CC will show up as
+comment in Patchwork...
+
+Regards,
+Peter
+
+> 
+> 
+> 
+> On Sun, Oct 28, 2018 at 3:38 PM ????? ?????????? <prok.tim26@gmail.com>
+> wrote:
+> 
+> > Hello, Peter.
+> >
+> > Thanks for your reply, I actually already did exactly that but was
+> > wondering if that was really necessary or if I was missing something.
+> >
+> > Best regards,
+> > Timur
+> >
+> > On Sun, Oct 28, 2018 at 2:02 PM Peter Seiderer <ps.report@gmx.net> wrote:
+> >  
+> >> Hello ?????,
+> >>
+> >> On Thu, 25 Oct 2018 11:16:35 +0300, ????? ?????????? <  
+> >> prok.tim26 at gmail.com> wrote:  
+> >>  
+> >> > Hello,
+> >> >
+> >> > I'm trying to build Buildroot with systemd. alsa-utils seem to install
+> >> > correctly but the alsa-restore and alsa-state services aren't installed  
+> >> to  
+> >> > the target directory but to the host directory only.
+> >> >
+> >> > It's very weird since simply copying the service files to the target
+> >> > directory and installing the resulting image works properly. Is there  
+> >> any  
+> >> > problem with the Makefile? Using systemd v239 with alsa-utils v1.1.5  
+> >>
+> >> Seems no one missed the files until now ;-), try suggested patch
+> >> '[PATCH v1] alsa-utils: install systemd sevice files' (see [1])...
+> >>
+> >> Regards,
+> >> Peter
+> >>
+> >> [1] https://patchwork.ozlabs.org/patch/989965
+> >>  
+> >> >
+> >> > Thank you in advance.  
+> >>
+> >>  
+> >  
+> 
