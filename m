@@ -1,80 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Oct 2018 21:10:28 +0100
-Subject: [Buildroot] [git commit] python-typing: new package
-Message-ID: <20181030201013.3B77283239@busybox.osuosl.org>
+Date: Tue, 30 Oct 2018 21:05:19 +0100
+Subject: [Buildroot] [git commit] ruby: security bump to version 2.4.5
+Message-ID: <20181030201013.20BC3812B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0135bc5b60d65426c3d41a6b3ac0a33defcf4b58
+commit: https://git.buildroot.net/buildroot/commit/?id=646ae5a0b1ec9e7c099de0088c333470283f7e33
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Reviewed-by: Asaf Kahlon <asafka7@gmail.com>
+Fixes the following security issues:
+
+- CVE-2018-16396: Tainted flags are not propagated in Array#pack and
+  String#unpack with some directives
+https://www.ruby-lang.org/en/news/2018/10/17/not-propagated-taint-flag-in-some-formats-of-pack-cve-2018-16396/
+
+- CVE-2018-16395: OpenSSL::X509::Name equality check does not work correctly
+https://www.ruby-lang.org/en/news/2018/10/17/openssl-x509-name-equality-check-does-not-work-correctly-cve-2018-16395/
+
+Update hash of LEGAL as it had a few (wayback machine) URLs added/changed.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                        |  1 +
- package/python-typing/Config.in          |  8 ++++++++
- package/python-typing/python-typing.hash |  5 +++++
- package/python-typing/python-typing.mk   | 14 ++++++++++++++
- 4 files changed, 28 insertions(+)
+ package/ruby/ruby.hash | 6 +++---
+ package/ruby/ruby.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 94e19e4a19..7e8224cc7e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1041,6 +1041,7 @@ menu "External python modules"
- 	source "package/python-txaio/Config.in"
- 	source "package/python-txtorcon/Config.in"
- 	source "package/python-typepy/Config.in"
-+	source "package/python-typing/Config.in"
- 	source "package/python-u-msgpack/Config.in"
- 	source "package/python-ubjson/Config.in"
- 	source "package/python-ujson/Config.in"
-diff --git a/package/python-typing/Config.in b/package/python-typing/Config.in
-new file mode 100644
-index 0000000000..d5350bccd0
---- /dev/null
-+++ b/package/python-typing/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_TYPING
-+	bool "python-typing"
-+	depends on BR2_PACKAGE_PYTHON
-+	help
-+	  Type Hints for Python. This is a backport of the standard library
-+	  typing module to Python versions older than 3.5.
-+
-+	  https://docs.python.org/3/library/typing.html
-diff --git a/package/python-typing/python-typing.hash b/package/python-typing/python-typing.hash
-new file mode 100644
-index 0000000000..5bdb8c62e8
---- /dev/null
-+++ b/package/python-typing/python-typing.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/typing/json
-+md5	64614206b4bdc0864fc0e0bccd69efc9  typing-3.6.6.tar.gz
-+sha256	4027c5f6127a6267a435201981ba156de91ad0d1d98e9ddc2aa173453453492d  typing-3.6.6.tar.gz
-+# Locally computed sha256 checksums
-+sha256	ff17ce94e102024deb68773eb1cc74ca76da4e658f373531f0ac22d68a6bb1ad  LICENSE
-diff --git a/package/python-typing/python-typing.mk b/package/python-typing/python-typing.mk
-new file mode 100644
-index 0000000000..acb5316129
---- /dev/null
-+++ b/package/python-typing/python-typing.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-typing
-+#
-+################################################################################
-+
-+PYTHON_TYPING_VERSION = 3.6.6
-+PYTHON_TYPING_SOURCE = typing-$(PYTHON_TYPING_VERSION).tar.gz
-+PYTHON_TYPING_SITE = https://files.pythonhosted.org/packages/bf/9b/2bf84e841575b633d8d91ad923e198a415e3901f228715524689495b4317
-+PYTHON_TYPING_SETUP_TYPE = setuptools
-+PYTHON_TYPING_LICENSE = Python-2.0, others
-+PYTHON_TYPING_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index dd4cfc202b..b36d49461c 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
+@@ -1,6 +1,6 @@
+-# From https://www.ruby-lang.org/en/news/2018/03/28/ruby-2-4-4-released/
+-sha256 1d0034071d675193ca769f64c91827e5f54cb3a7962316a41d5217c7bc6949f0  ruby-2.4.4.tar.xz
++# https://www.ruby-lang.org/en/news/2018/10/17/ruby-2-4-5-released/
++sha256 2f0cdcce9989f63ef7c2939bdb17b1ef244c4f384d85b8531d60e73d8cc31eeb  ruby-2.4.5.tar.xz
+ # License files, Locally calculated
+-sha256 5cda9584acd5e1096276a375085b7e659fa67a072fd69ec2c3931e54f7f563bb  LEGAL
++sha256 609292a6d848ab223073944fc2d844449391a5ba2055a8b5baf1726bc13b39cb  LEGAL
+ sha256 f5eb1b2956d5f7a67b2e5722a3749bc2fe86f9c580f2e3f5a08519cf073b5864  COPYING
+ sha256 a5e3042dacb53eebda91f3b1caefbfec8307711df8c4ed1ed20e4e97c43307a4  BSDL
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index b85ee9d069..3e71596bb4 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ RUBY_VERSION_MAJOR = 2.4
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).4
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).5
+ RUBY_VERSION_EXT = 2.4.0
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
