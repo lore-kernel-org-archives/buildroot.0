@@ -1,56 +1,81 @@
-From: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
-Date: Tue, 30 Oct 2018 12:30:09 +0100
-Subject: [Buildroot] [PATCH 1/1] synergy: needs gcc >= 4.9
-In-Reply-To: <20181029153533.6897-1-fontaine.fabrice@gmail.com>
-References: <20181029153533.6897-1-fontaine.fabrice@gmail.com>
-Message-ID: <CAMOMa6Pk3090oCtnGsr-2L5YhSaJ_oFg7f4ACFTieQ6YLoT6bA@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 30 Oct 2018 13:38:04 +0200
+Subject: [Buildroot] [PATCH 2/2] lighttpd: add optional pam support
+In-Reply-To: <20181030102152.9755-2-peter@korsgaard.com>
+References: <20181030102152.9755-1-peter@korsgaard.com>
+ <20181030102152.9755-2-peter@korsgaard.com>
+Message-ID: <87h8h38y1v.fsf@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Op ma 29 okt. 2018 om 16:35 schreef Fabrice Fontaine
-<fontaine.fabrice@gmail.com>:
+Hi Peter,
+
+Peter Korsgaard writes:
+> Let the option depend on linux-pam as pam has quite some dependencies and
+> this is unlikely to be used if pam isn't explicitly enabled.
 >
-> Since version 1.9.0 and
-> https://github.com/symless/synergy-core/commit/c0376e9e2f659aec23a748f9a8d8ee6cd82f1281,
-> synergy needs C++14 so add a dependency on
-> BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
->
-> Fixes:
->  - http://autobuild.buildroot.org/results/c4646ee9342ea8bd906bfe2b29996c48cb403ccc
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Tested-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
-Reviewed-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 > ---
->  package/synergy/Config.in | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  package/lighttpd/Config.in   | 7 +++++++
+>  package/lighttpd/lighttpd.mk | 8 +++++++-
+>  2 files changed, 14 insertions(+), 1 deletion(-)
 >
-> diff --git a/package/synergy/Config.in b/package/synergy/Config.in
-> index e0ac246155..c1216c4ba9 100644
-> --- a/package/synergy/Config.in
-> +++ b/package/synergy/Config.in
-> @@ -4,6 +4,7 @@ config BR2_PACKAGE_SYNERGY
->         depends on BR2_INSTALL_LIBSTDCPP
->         depends on BR2_USE_WCHAR
->         depends on BR2_USE_MMU # fork()
-> +       depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
->         select BR2_PACKAGE_XLIB_LIBX11
->         select BR2_PACKAGE_XLIB_LIBXTST
->         help
-> @@ -14,7 +15,8 @@ config BR2_PACKAGE_SYNERGY
->
->           https://github.com/symless/synergy-core/
->
-> -comment "synergy needs a toolchain w/ C++, wchar"
-> +comment "synergy needs a toolchain w/ C++, wchar, gcc >= 4.9"
->         depends on BR2_PACKAGE_XORG7
->         depends on BR2_USE_MMU
-> -       depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR)
-> +       depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && \
-> +               BR2_TOOLCHAIN_GCC_AT_LEAST_4_9)
-> --
-> 2.17.1
->
+> diff --git a/package/lighttpd/Config.in b/package/lighttpd/Config.in
+> index 383c10f70f..0f37422aea 100644
+> --- a/package/lighttpd/Config.in
+> +++ b/package/lighttpd/Config.in
+> @@ -26,6 +26,13 @@ config BR2_PACKAGE_LIGHTTPD_OPENSSL
+>  	help
+>  	  Enable OpenSSL support for lighttpd.
+>  
+> +config BR2_PACKAGE_LIGHTTPD_PAM
+> +       bool "pam authentication support"
+> +       depends on BR2_PACKAGE_LINUX_PAM
+> +       default y
+> +       help
+> +         Enable PAM authentication support for lighttpd.
+> +
+
+Why do we need a config option? What is the size impact of the lighttpd
+PAM support?
+
+baruch
+
+>  config BR2_PACKAGE_LIGHTTPD_ZLIB
+>  	bool "zlib support"
+>  	select BR2_PACKAGE_ZLIB
+> diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+> index 44bee6f90f..d8f64dc7e8 100644
+> --- a/package/lighttpd/lighttpd.mk
+> +++ b/package/lighttpd/lighttpd.mk
+> @@ -12,7 +12,6 @@ LIGHTTPD_LICENSE = BSD-3-Clause
+>  LIGHTTPD_LICENSE_FILES = COPYING
+>  LIGHTTPD_DEPENDENCIES = host-pkgconf
+>  LIGHTTPD_CONF_OPTS = \
+> -	--without-pam \
+>  	--without-wolfssl \
+>  	--libdir=/usr/lib/lighttpd \
+>  	--libexecdir=/usr/lib
+> @@ -24,6 +23,13 @@ else
+>  LIGHTTPD_CONF_OPTS += --without-openssl
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_LIGHTTPD_PAM),y)
+> +LIGHTTPD_DEPENDENCIES += linux-pam
+> +LIGHTTPD_CONF_OPTS += --with-pam
+> +else
+> +LIGHTTPD_CONF_OPTS += --without-pam
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_LIGHTTPD_ZLIB),y)
+>  LIGHTTPD_DEPENDENCIES += zlib
+>  LIGHTTPD_CONF_OPTS += --with-zlib
+
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
