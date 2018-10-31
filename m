@@ -1,69 +1,36 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Wed, 31 Oct 2018 18:55:23 +0100
-Subject: [Buildroot] [PATCH 1/2] Revert "package/luvi: bump version to
- 2.8.0"
-In-Reply-To: <877eica5bf.fsf@dell.be.48ers.dk>
-References: <20181013080103.29974-1-bernd.kuhls@t-online.de>
- <58d29e4a3c7adbeec389a9e6fc4fc115faba6759.camel@embedded.rocks>
- <877eica5bf.fsf@dell.be.48ers.dk>
-Message-ID: <453696296ed4936d016a18fc21914d8677692d31.camel@embedded.rocks>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 31 Oct 2018 19:21:36 +0100
+Subject: [Buildroot] brcmrpi_quick defconfig
+In-Reply-To: <CAHS=Uo_1tyUbfxk0_SvWMLNGD3JonDfAVUq=x5gwK4Zv5hpcwQ@mail.gmail.com>
+References: <CAHS=Uo_1tyUbfxk0_SvWMLNGD3JonDfAVUq=x5gwK4Zv5hpcwQ@mail.gmail.com>
+Message-ID: <20181031182136.GL28575@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Michael,
 
-On Sat, 2018-10-20 at 19:36 +0200, Peter Korsgaard wrote:
-> > > > > > "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
-> 
->  > Hi Bernd,
->  > On Sat, 2018-10-13 at 10:01 +0200, Bernd Kuhls wrote:
->  >> This reverts commit ac6fedda6b43996545ff498cd19a781698a96050.
->  >> 
->  >> Fixes
->  >> http://autobuild.buildroot.net/results/111/11146b138d3d092c3a230d197528d5dbe293e3fc/
->  >> and many others.
-> 
->  > Does this really fix the issue about missing "c-api/compat-5.3.h" for
->  > you? Because it is a luv (not luvi) issue.
-> 
-> It does not:
-> 
-> fatal error: c-api/compat-5.3.h: No such file or directory
->  #include "c-api/compat-5.3.h"
->                               ^
-> compilation terminated.
-> CMakeFiles/luvi.dir/build.make:74: recipe for target 'CMakeFiles/luvi.dir/src/main.c.o' failed
-> make[4]: *** [CMakeFiles/luvi.dir/src/main.c.o] Error 1
-> CMakeFiles/Makefile2:180: recipe for target 'CMakeFiles/luvi.dir/all' failed
-> make[3]: *** [CMakeFiles/luvi.dir/all] Error 2
-> Makefile:127: recipe for target 'all' failed
-> make[2]: *** [all] Error 2
-> package/pkg-generic.mk:229: recipe for target '/home/peko/source/buildroot/output-test/build/luvi-v2.7.6/.stamp_built' failed
-> make[1]: *** [/home/peko/source/buildroot/output-test/build/luvi-v2.7.6/.stamp_built] Error 2
-> 
->  > Nevertheless, I am happy about the revert as it takes ages to fetch all
->  > submodules.
-> 
-> Ok, applied with the autobuilder references removed, thanks.
-> 
-> How should the luv issue be fixed?
+Please, do not directly contact the individuals to ask questions. This
+is a community project, and as such you should ask questions on the
+official support channels, i.e. the mailing list or the IRC channel.
 
-I had a look at this issue. luv shouldn't include the compat-5.3.h
-header file in luv.h, but in luv.c.
+On 2018-10-31 17:34 +0100, Michael Toldo spake thusly:
+> Just found this: [1]https://git.busybox.net/buildroot/commit/?id=a10d2c5c40f361eef777a1a7fa0fd88b67efa825
+> Could you please give me a quick hint how to apply the brcmrpi_quick defconfig in a buildroot setup?
 
-However, this leads to another issue, as luvi is using `luaL_newlib`
-from Lua >= 5.2. The was not an issue with the previous version 1.9.1
-of luv, as luv.h defined this macro. If luvi is using this non-Lua-5.1
-macro, it should provide a definition itself, as the main Lua engine is
-LuaJIT.
+This is a 5-year old commit; things have changed since then, and there
+is no longer a bcmrpi_quick defconfig in the rpi kernel fork. Only the
+bcmrpi_defconfig still exists, and that is what Buildroot uses.
 
-I've send a PR to upstream [1]. I will wait for feedback until I
-propose the patches for luv and luvi to Buildroot.
+Regards,
+Yann E. MORIN.
 
-[1] https://github.com/luvit/luv/pull/310
-
-Best regards,
-J?rg Krause
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
