@@ -1,43 +1,107 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Wed, 31 Oct 2018 11:35:38 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-10-30
-In-Reply-To: <20181031070025.BCA5220736@mail.bootlin.com>
-References: <20181031070025.BCA5220736@mail.bootlin.com>
-Message-ID: <20181031113538.GE6241@momiji>
+Date: Wed, 31 Oct 2018 11:48:52 +0200
+Subject: [Buildroot] [PATCH 1/1] webkitgtk: bump to version 2.22.3
+Message-ID: <20181031094852.59447-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Release notes:
 
-On Wed, 31 Oct 2018 08:00:25 +0100 (CET), Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+    https://webkitgtk.org/2018/10/29/webkitgtk2.22.3-released.html
+
+Patch "0001-ARM-Building-FELightingNEON.cpp-fails-due-to-missing.patch"
+is removed because it is included in the new release.
+
+This is a maintenance release which further improves playback of video
+when using media source extensions (MSE), specially for WebM content,
+and provides a few correctness fixes.
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ ...ightingNEON.cpp-fails-due-to-missing.patch | 41 -------------------
+ package/webkitgtk/webkitgtk.hash              |  8 ++--
+ package/webkitgtk/webkitgtk.mk                |  2 +-
+ 3 files changed, 5 insertions(+), 46 deletions(-)
+ delete mode 100644 package/webkitgtk/0001-ARM-Building-FELightingNEON.cpp-fails-due-to-missing.patch
+
+diff --git a/package/webkitgtk/0001-ARM-Building-FELightingNEON.cpp-fails-due-to-missing.patch b/package/webkitgtk/0001-ARM-Building-FELightingNEON.cpp-fails-due-to-missing.patch
+deleted file mode 100644
+index 6fb309d9fb..0000000000
+--- a/package/webkitgtk/0001-ARM-Building-FELightingNEON.cpp-fails-due-to-missing.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From b252c7aed3fa6f22db8a26c3ab0bfe66e3490eef Mon Sep 17 00:00:00 2001
+-From: Adrian Perez de Castro <aperez@igalia.com>
+-Date: Sun, 23 Sep 2018 02:34:26 +0300
+-Subject: [PATCH xserver] [ARM] Building FELightingNEON.cpp fails due to
+- missing lightVector member https://bugs.webkit.org/show_bug.cgi?id=189890
+-
+-Reviewed by NOBODY (OOPS!).
+-
+-No new tests needed.
+-
+-* platform/graphics/cpu/arm/filters/FELightingNEON.h:
+-(WebCore::FELighting::platformApplyNeon): Adapt to new layout of "struct PaintingData" after r225122.
+----
+- Source/WebCore/ChangeLog                             | 12 ++++++++++++
+- .../graphics/cpu/arm/filters/FELightingNEON.h        |  6 +++---
+- 2 files changed, 15 insertions(+), 3 deletions(-)
+-
+-Fetch from: https://bugs.webkit.org/show_bug.cgi?id=189890
+-Upstream-Status: Pending
+-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+-
+-diff --git a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h b/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h
+-index 42af922374b..b542a4c81aa 100644
+---- a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h
+-+++ b/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h
+-@@ -144,9 +144,9 @@ inline void FELighting::platformApplyNeon(const LightingData& data, const LightS
+-             neonData.flags |= FLAG_CONE_EXPONENT_IS_1;
+-     } else {
+-         ASSERT(m_lightSource->type() == LS_DISTANT);
+--        floatArguments.lightX = paintingData.lightVector.x();
+--        floatArguments.lightY = paintingData.lightVector.y();
+--        floatArguments.lightZ = paintingData.lightVector.z();
+-+        floatArguments.lightX = paintingData.initialLightingData.lightVector.x();
+-+        floatArguments.lightY = paintingData.initialLightingData.lightVector.y();
+-+        floatArguments.lightZ = paintingData.initialLightingData.lightVector.z();
+-         floatArguments.padding2 = 1;
+-     }
+- 
+--- 
+-2.19.0
+-
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 0b9b94ca49..709af973bc 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.22.2.tar.xz.sums
+-md5 207d50d313c07b03726f3a7f22643934 webkitgtk-2.22.2.tar.xz
+-sha1 ff0c40e81e240aa0743f7e6483f175defebd1417 webkitgtk-2.22.2.tar.xz
+-sha256 345487d4d1896e711683f951d1e09387d3b90d7cf59295c0e634af7f515e99ba webkitgtk-2.22.2.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.22.3.tar.xz.sums
++md5 6dae6837c884a25413fb1d4527c9894a webkitgtk-2.22.2.tar.xz
++sha1 c16129f4098b35597457255e63e60126ff3e6daa webkitgtk-2.22.2.tar.xz
++sha256 9dfd542902953be9af8ff32bd37fe662ca3d75f7348514ebac15c6252a6ccd72 webkitgtk-2.22.2.tar.xz
  
-> [...]
->
-> Detail of failures
-> ------------------
->
-> [...]
->
->       mipsel |               webkitgtk-2.22.2 | NOK | http://autobuild.buildroot.net/results/39eae49f4acd54edd3691bc2ee7bf3ee9914b3d8 |     
-
-The WebKitGTK+ build failure has the same cause as other recent similar
-ones related to the CMake configuration assuming (not always correctly)
-that GStreamer-GL must be available of OpenGL support is enabled. This
-build failure would be fixed by the following patch:
-
-   https://patchwork.ozlabs.org/patch/988847/
-
-Cheers,
-
--Adri?n
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181031/13daf37f/attachment.asc>
+ # Hashes for license files:
+ sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 39d681b1d4..23452f18d8 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBKITGTK_VERSION = 2.22.2
++WEBKITGTK_VERSION = 2.22.3
+ WEBKITGTK_SITE = http://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
+-- 
+2.19.1
