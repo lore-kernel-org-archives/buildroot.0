@@ -1,65 +1,54 @@
-From: Oscar Gomez Fuente <oscargomezf@gmail.com>
-Date: Wed, 31 Oct 2018 09:37:43 +0100
-Subject: [Buildroot] [PATCH] package/ntp: use ntpd to set initial time
-In-Reply-To: <CANQCQpa-kkDU56c7vjVnw=EDFxVxda2PPNPWMPazzkdhJt1jCg@mail.gmail.com>
-References: <1540300218-59209-1-git-send-email-matthew.weber@rockwellcollins.com>
- <3c82f1ee-58b9-ef25-35d5-bd8fd25d4d48@mind.be>
- <CANQCQpYkLV-XJBVqRsQLdrxthZzkqctsBcxfX4mJQqFY16jk5Q@mail.gmail.com>
- <f544829d-68ed-abfc-306c-ce3cebb1de3b@mind.be>
- <CANQCQpYAjzXTQBDjKwbMPnQViP0=Qfpr6+pgs_3e7iGOYfo50g@mail.gmail.com>
- <3232b003-ae5e-43d1-b795-f73a0ed71624@mind.be>
- <CANQCQpa-kkDU56c7vjVnw=EDFxVxda2PPNPWMPazzkdhJt1jCg@mail.gmail.com>
-Message-ID: <CALtfCQbVvZOwfmTx8nykn0h8JXsj_GeMiLK6f+OM+7fw0o7q+w@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 31 Oct 2018 09:40:55 +0100
+Subject: [Buildroot] [PATCH] libcurl: security bump to version 7.62.0
+Message-ID: <20181031084056.25144-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everyone,
+Fixes the following security issues:
 
-I was checking it on my Raspberry Pi 3B+ and it works perfectly.
+CVE-2018-16839: SASL password overflow via integer overflow
+https://curl.haxx.se/docs/CVE-2018-16839.html
 
-The only weird thing is the log related to the other ntp servers, but
-I think they are normal. It sees to be that they are duplicated, the
-alternative servers exist in case one of them it was down, so it is
-ok.
+CVE-2018-16840: use-after-free in handle close
+https://curl.haxx.se/docs/CVE-2018-16840.html
 
------>
-# date --set "1970-01-01 10:10:00"
-Thu Jan  1 10:10:00 UTC 1970
+CVE-2018-16842: warning message out-of-buffer read
+https://curl.haxx.se/docs/CVE-2018-16842.html
 
-# sntp -K /tmp/kod -sS -M 128 0.pool.ntp.org 1.pool.ntp.org
-2.pool.ntp.org 3.pool.ntp.org
-sntp 4.2.8p12 at 1.3728-o Wed Oct 31 08:22:38 UTC 2018 (1)
-213.251.52.234:123 0.pool.ntp.org duplicate address from 1.pool.ntp.org ignored.
-37.139.121.60:123 0.pool.ntp.org duplicate address from 1.pool.ntp.org ignored.
-185.132.136.116:123 0.pool.ntp.org duplicate address from
-1.pool.ntp.org ignored.
-81.19.96.148:123 0.pool.ntp.org duplicate address from 1.pool.ntp.org ignored.
-213.251.52.234:123 0.pool.ntp.org duplicate address from 2.pool.ntp.org ignored.
-81.19.96.148:123 0.pool.ntp.org duplicate address from 2.pool.ntp.org ignored.
-185.132.136.116:123 0.pool.ntp.org duplicate address from
-2.pool.ntp.org ignored.
-37.139.121.60:123 0.pool.ntp.org duplicate address from 2.pool.ntp.org ignored.
-Send to [2001:720:1014:a205::2]:123 failed, Network is unreachable
-213.251.52.234:123 0.pool.ntp.org duplicate address from 3.pool.ntp.org ignored.
-81.19.96.148:123 0.pool.ntp.org duplicate address from 3.pool.ntp.org ignored.
-185.132.136.116:123 0.pool.ntp.org duplicate address from
-3.pool.ntp.org ignored.
-37.139.121.60:123 0.pool.ntp.org duplicate address from 3.pool.ntp.org ignored.
-Send to [2001:720:1014:a202::2]:123 failed, Network is unreachable
-1970-01-01 10:10:05.624784 (+0000) +1540938259.059756 +/-
-1027292172.738343 0.pool.ntp.org 213.251.52.234 s2 no-leap
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-# date
-Wed Oct 31 08:34:26 UTC 2018
------>
-
-Great Job!
-
-Best regards.
-
-Oscar Gomez Fuente
-TST Sistemas
-www.tst-sistemas.es
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 395307653d..432943538a 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.haxx.se/download/curl-7.61.1.tar.xz.asc
++# https://curl.haxx.se/download/curl-7.62.0.tar.xz.asc
+ # with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256 3d5913d6a39bd22e68e34dff697fd6e4c3c81563f580c76fca2009315cd81891  curl-7.61.1.tar.xz
++sha256 dab5643a5fe775ae92570b9f3df6b0ef4bc2a827a959361fb130c73b721275c1  curl-7.62.0.tar.xz
+ sha256 5f3849ec38ddb927e79f514bf948890c41b8d1407286a49609b8fb1585931095  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index c3da8aa3e5..99a451b636 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 7.61.1
++LIBCURL_VERSION = 7.62.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
+-- 
+2.11.0
