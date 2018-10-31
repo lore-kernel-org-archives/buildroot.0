@@ -1,16 +1,20 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 31 Oct 2018 16:22:42 +0100
-Subject: [Buildroot] [PATCH 1/1] libxmlpp: bump to version 3.0.1
-Message-ID: <20181031152242.3311-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 31 Oct 2018 18:08:16 +0100
+Subject: [Buildroot] [git commit] libxmlpp: bump to version 3.0.1
+Message-ID: <20181031170617.60B1F838DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=9b4f9a0977c93172f3fb98923208543cc09eb0a8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
  package/libxmlpp/libxmlpp.hash | 7 +++++--
  package/libxmlpp/libxmlpp.mk   | 2 +-
@@ -41,5 +45,3 @@ index d0f6329e79..14a3d97a8f 100644
  LIBXMLPP_VERSION = $(LIBXMLPP_VERSION_MAJOR).1
  LIBXMLPP_LICENSE = LGPL-2.1 (library), LGPL-2.0+ (examples)
  LIBXMLPP_LICENSE_FILES = COPYING
--- 
-2.17.1
