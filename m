@@ -1,49 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 31 Oct 2018 11:43:48 +0100
-Subject: [Buildroot] Report of the Buildroot Developers meeting @ ELCE 2018
-Message-ID: <20181031114348.5a95ce59@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 31 Oct 2018 11:51:23 +0100
+Subject: [Buildroot] [git commit] lighttpd: adjust Config.in to make
+ check-package happy
+In-Reply-To: <20181031112643.01ebb772@windsurf> (Thomas Petazzoni's message of
+ "Wed, 31 Oct 2018 11:26:43 +0100")
+References: <20181031095117.912A283807@busybox.osuosl.org>
+ <874ld2ct7u.fsf@dell.be.48ers.dk> <20181031112643.01ebb772@windsurf>
+Message-ID: <87va5ibd90.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-On October 20-21, a number of Buildroot developers gathered in
-Edinburgh (UK) for a 2-day Developers meeting. A short report for this
-meeting is now available at (thanks Arnout):
+ > Hello,
+ > On Wed, 31 Oct 2018 11:21:09 +0100, Peter Korsgaard wrote:
 
-  https://elinux.org/Buildroot:DeveloperDaysELCE2018#Meeting_report
+ >> Ups, wonder how that happened. I'll have a look at executing
+ >> check-package in a git pre-commit hook.
 
-We discussed:
+ > If you do this, could you share whatever you have done? I'd like to
+ > have this here as well, to avoid having such issues in the future.
 
- - top level parallel build
- - reproducible builds
- - doing more testing
- - hardening support in the toolchain wrapper
- - LTO support
- - S01logging updates
- - Download of extra downloads with identical file names
+I simply added a post-commit / post-applypatch script which runs 'make
+checkpackage' for now.
 
-Also, we had a general assembly of the Buildroot Association. And
-finally, most of the time was dedicated to actual hacking on Buildroot,
-with a strong focus on going through the patchwork backlog, and
-reviewing, replying and merging as many patches as possible. By the end
-of ELCE, the backlog of patches was down to ~200 patches.
+A more optimal solution could be made which would only run it on
+added/changed files, but I haven't tried that. Probably it can be done
+with git show | lsdiff -s and then filter out removed (prefixed with -)
+files.
 
-Once again, I would like to thank our sponsors for this event:
-
- - Mind, https://www.mind.be/
- - Amarula Solutions, https://www.amarulasolutions.com/
- - TK Open Systems, http://tkos.co.il/
- - Bootlin, https://www.bootlin.com
- - Logilin, https://www.logilin.fr/
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
