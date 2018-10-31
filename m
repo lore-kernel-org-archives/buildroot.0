@@ -1,49 +1,106 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Wed, 31 Oct 2018 20:35:51 +0100
-Subject: [Buildroot] [PATCH v3] merge_config.sh: merge also buildroot
- config files
-In-Reply-To: <20181027104806.GA11024@smart-All-Series>
-References: <20181025011343.29512-1-afshin.nasser@gmail.com>
- <20181025022031.14043-1-afshin.nasser@gmail.com>
- <20181025074309.GB18528@dell5510>
- <OF54A89E59.8DBA5497-ONC1258331.0034C458-C1258331.00357034@local-dmz.de>
- <20181025214311.GB31691@dell5510>
- <OF26A838D6.35610758-ONC1258332.00211513-C1258332.0021531B@local-dmz.de>
- <20181026230546.GA18350@smart-ThinkPad-T410>
- <20181027044635.GA26719@x230>
- <20181027104806.GA11024@smart-All-Series>
-Message-ID: <20181031193550.GC24966@x230>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 31 Oct 2018 21:06:15 +0100
+Subject: [Buildroot] [PATCH v2 1/1] python-uvloop: new package
+In-Reply-To: <20181031190238.17631-1-asafka7@gmail.com>
+References: <20181031190238.17631-1-asafka7@gmail.com>
+Message-ID: <CAGm1_kvq4MAgfxFzXYarRjJO694eCQdw0ZCVVuJqZUTjgwuhog@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Nasser,
+On Wed, Oct 31, 2018 at 8:02 PM Asaf Kahlon <asafka7@gmail.com> wrote:
+>
+> Fast implementation of asyncio event loop on top of libuv.
+>
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 
-> > > as a general command then for different buildroot/kernel defconfig
-> > > files, the last one will extract comments as well which IMHO is not what we
-> > > want.
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-> > Agree. Maybe we could try to add "any prefix" pattern: '[A-Z0-9_]\+'
-
-> > sed -n 's/^\(# \)\{0,1\}\([A-Z0-9_]\+_[a-zA-Z0-9_]*\)[= ].*/\2/p' \
-> > defconfig_file_name
-> I agree. It seems to be a better solution.
-Upstream solution in kernel has been merged [1] and will be part of kernel 4.21
-(kbuild updates for 4.20 has been merged day before).
-Would you like to backport it to buildroot + add necessary applications (setting
-the variable?) or shell I do it?
-
-I also have plans to upgrade our kconfig to 4.19 + review the patches (some of
-them might can be adjusted to be suitable for upstream, so we'd be able to get
-rid of them).
-
-
-> Kind regards,
-> Nasser
-
-Kind regards,
-Petr
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git/commit/?h=for-next&id=f6fe19e9d84400e1c9544c1909952c2c7c6a90a2
+> ---
+> v1->v2: remove entry in DEVELOPERS file.
+> ---
+>  package/Config.in                        |  1 +
+>  package/python-uvloop/Config.in          | 18 ++++++++++++++++++
+>  package/python-uvloop/python-uvloop.hash |  6 ++++++
+>  package/python-uvloop/python-uvloop.mk   | 17 +++++++++++++++++
+>  4 files changed, 42 insertions(+)
+>  create mode 100644 package/python-uvloop/Config.in
+>  create mode 100644 package/python-uvloop/python-uvloop.hash
+>  create mode 100644 package/python-uvloop/python-uvloop.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 7e8224cc7e..dc49e7c2ba 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1047,6 +1047,7 @@ menu "External python modules"
+>         source "package/python-ujson/Config.in"
+>         source "package/python-urllib3/Config.in"
+>         source "package/python-urwid/Config.in"
+> +       source "package/python-uvloop/Config.in"
+>         source "package/python-validators/Config.in"
+>         source "package/python-versiontools/Config.in"
+>         source "package/python-visitor/Config.in"
+> diff --git a/package/python-uvloop/Config.in b/package/python-uvloop/Config.in
+> new file mode 100644
+> index 0000000000..17c50e6a93
+> --- /dev/null
+> +++ b/package/python-uvloop/Config.in
+> @@ -0,0 +1,18 @@
+> +config BR2_PACKAGE_PYTHON_UVLOOP
+> +       bool "python-uvloop"
+> +       depends on BR2_PACKAGE_PYTHON3
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
+> +       depends on BR2_USE_MMU # libuv
+> +       depends on !BR2_STATIC_LIBS # libuv
+> +       depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
+> +       select BR2_PACKAGE_LIBUV
+> +       select BR2_PACKAGE_PYTHON3_SSL
+> +       help
+> +         Fast implementation of asyncio event loop on top of libuv.
+> +
+> +         http://github.com/MagicStack/uvloop
+> +
+> +comment "python-uvloop needs a toolchain w/ NPTL, dynamic library"
+> +       depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+> +       depends on BR2_USE_MMU
+> +       depends on BR2_TOOLCHAIN_HAS_SYNC_4
+> diff --git a/package/python-uvloop/python-uvloop.hash b/package/python-uvloop/python-uvloop.hash
+> new file mode 100644
+> index 0000000000..ac65fbaaca
+> --- /dev/null
+> +++ b/package/python-uvloop/python-uvloop.hash
+> @@ -0,0 +1,6 @@
+> +# md5, sha256 from https://pypi.org/pypi/uvloop/json
+> +md5    7d509d78b18a5863cc06697ccfd835ad  uvloop-0.11.2.tar.gz
+> +sha256 a97bd62ebbdf7e6e84bf44afe439d9b24ce4d8661a29a639626a8c03748f6f98  uvloop-0.11.2.tar.gz
+> +# Locally computed sha256 checksums
+> +sha256 2fdc436a67077941295c58647f521fbef8f50e46db0970552fa1a4dd8ae261c6  LICENSE-APACHE
+> +sha256 9185f3c77e9f6ef8859a6ba4c94128ac1329876be3e813aad32d7645e51ae409  LICENSE-MIT
+> diff --git a/package/python-uvloop/python-uvloop.mk b/package/python-uvloop/python-uvloop.mk
+> new file mode 100644
+> index 0000000000..a835a9952b
+> --- /dev/null
+> +++ b/package/python-uvloop/python-uvloop.mk
+> @@ -0,0 +1,17 @@
+> +################################################################################
+> +#
+> +# python-uvloop
+> +#
+> +################################################################################
+> +
+> +PYTHON_UVLOOP_VERSION = 0.11.2
+> +PYTHON_UVLOOP_SOURCE = uvloop-$(PYTHON_UVLOOP_VERSION).tar.gz
+> +PYTHON_UVLOOP_SITE = https://files.pythonhosted.org/packages/5c/37/6daa39aac42b2deda6ee77f408bec0419b600e27b89b374b0d440af32b10
+> +PYTHON_UVLOOP_SETUP_TYPE = setuptools
+> +PYTHON_UVLOOP_LICENSE = Apache-2.0, MIT
+> +PYTHON_UVLOOP_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+> +PYTHON_UVLOOP_BUILD_OPTS = build_ext --inplace --use-system-libuv
+> +PYTHON_UVLOOP_INSTALL_TARGET_OPTS = build_ext --inplace --use-system-libuv
+> +PYTHON_UVLOOP_DEPENDENCIES = libuv
+> +
+> +$(eval $(python-package))
+> --
+> 2.19.1
+>
