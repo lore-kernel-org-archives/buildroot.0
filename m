@@ -1,61 +1,37 @@
-From: Markus Mayer <mmayer@broadcom.com>
-Date: Wed, 31 Oct 2018 14:39:30 -0700
-Subject: [Buildroot] [PATCH] Config.in: add BR2_DL_DIR_OPTS
-Message-ID: <20181031213930.49837-1-mmayer@broadcom.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 31 Oct 2018 22:49:39 +0100
+Subject: [Buildroot] [PATCH 1/3] fs: apply permissions late
+In-Reply-To: <CANQCQpZEKo9oFpVh5SPb-8NYzq88hH0sg4LzFwVqk7Zz6AQTuA@mail.gmail.com>
+References: <cover.1540626349.git.yann.morin.1998@free.fr>
+ <4f9a31b0fb8f87ded9c788cb92d727b6763859ac.1540626349.git.yann.morin.1998@free.fr>
+ <CANQCQpa3y_Qs7H9aB1Y7fpW9G=V2Dr2yqM9WihrQBuqUbPoEhA@mail.gmail.com>
+ <20181030202331.GI28575@scaer>
+ <CANQCQpZEKo9oFpVh5SPb-8NYzq88hH0sg4LzFwVqk7Zz6AQTuA@mail.gmail.com>
+Message-ID: <20181031214939.GO28575@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Provide a simple mechanism to pass extra arguments to "mkdir" when
-creating download directories. This can be helpful if one needs the
-download directories to be writable multiple users ("shared download
-cache").
+Matt, All,
 
-Signed-off-by: Markus Mayer <mmayer@broadcom.com>
----
- Config.in               | 14 ++++++++++++++
- package/pkg-download.mk |  2 +-
- 2 files changed, 15 insertions(+), 1 deletion(-)
+On 2018-10-30 20:18 -0500, Matthew Weber spake thusly:
+> On Tue, Oct 30, 2018 at 3:23 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> >     Since kernel 2.6.24, the kernel supports associating capability sets
+> >     [...] stored in an extended attribute (see setxattr(2)) named
+> >     security.capability.o
+> :-) Fair,  security.capabilty -> security.capability
 
-diff --git a/Config.in b/Config.in
-index 42cdf7a3ebdc..0442d8403b4a 100644
---- a/Config.in
-+++ b/Config.in
-@@ -214,6 +214,20 @@ config BR2_DL_DIR
- 
- 	  The default is $(TOPDIR)/dl
- 
-+config BR2_DL_DIR_OPTS
-+	string "Options for mkdir when it creates BR2_DL_DIR"
-+	default ""
-+	help
-+	  Specify command line options for the mkdir command when it
-+	  creates BR2_DL_DIR.
-+
-+	  For example, this can be used to specify directory permissions
-+	  (say, "-m 0775") for directories inside BR2_DL_DIR. One would
-+	  want this if the download directory is a shared "cache" for
-+	  multiple users, so everybody can write to these directories.
-+
-+	  The default empty (no additional options).
-+
- config BR2_HOST_DIR
- 	string "Host dir"
- 	default "$(BASE_DIR)/host"
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 73ea2a69f829..d6bfe2bb06d0 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -91,7 +91,7 @@ endif
- endif
- 
- define DOWNLOAD
--	$(Q)mkdir -p $($(PKG)_DL_DIR)
-+	$(Q)mkdir $(BR2_DL_DIR_OPTS) -p $($(PKG)_DL_DIR)
- 	$(Q)$(EXTRA_ENV) $(FLOCK) $(DL_WRAPPER) \
- 		-c '$($(PKG)_DL_VERSION)' \
- 		-d '$($(PKG)_DL_DIR)' \
+Muahaha! Thanks :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.17.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
