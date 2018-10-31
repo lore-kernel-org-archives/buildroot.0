@@ -1,42 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 31 Oct 2018 09:37:11 +0100
-Subject: [Buildroot] [git commit] luarocks: bump to version 3.0.4
-Message-ID: <20181031083508.DF31883733@busybox.osuosl.org>
+From: Oscar Gomez Fuente <oscargomezf@gmail.com>
+Date: Wed, 31 Oct 2018 09:37:43 +0100
+Subject: [Buildroot] [PATCH] package/ntp: use ntpd to set initial time
+In-Reply-To: <CANQCQpa-kkDU56c7vjVnw=EDFxVxda2PPNPWMPazzkdhJt1jCg@mail.gmail.com>
+References: <1540300218-59209-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <3c82f1ee-58b9-ef25-35d5-bd8fd25d4d48@mind.be>
+ <CANQCQpYkLV-XJBVqRsQLdrxthZzkqctsBcxfX4mJQqFY16jk5Q@mail.gmail.com>
+ <f544829d-68ed-abfc-306c-ce3cebb1de3b@mind.be>
+ <CANQCQpYAjzXTQBDjKwbMPnQViP0=Qfpr6+pgs_3e7iGOYfo50g@mail.gmail.com>
+ <3232b003-ae5e-43d1-b795-f73a0ed71624@mind.be>
+ <CANQCQpa-kkDU56c7vjVnw=EDFxVxda2PPNPWMPazzkdhJt1jCg@mail.gmail.com>
+Message-ID: <CALtfCQbVvZOwfmTx8nykn0h8JXsj_GeMiLK6f+OM+7fw0o7q+w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=864f85262f3fdeb3ea76a777e62f31ccc12c75ed
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi everyone,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/luarocks/luarocks.hash | 2 +-
- package/luarocks/luarocks.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I was checking it on my Raspberry Pi 3B+ and it works perfectly.
 
-diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
-index 6c4a103f34..224dbcc164 100644
---- a/package/luarocks/luarocks.hash
-+++ b/package/luarocks/luarocks.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 f9a3fca236c87db55bc128a182ff605731ca15b43b1c4942d98f5e34acc88a6e  luarocks-3.0.3.tar.gz
-+sha256 1236a307ca5c556c4fed9fdbd35a7e0e80ccf063024becc8c3bf212f37ff0edf  luarocks-3.0.4.tar.gz
- sha256 542ad0ee9b8ba582437ca7b4d0959c9b9432f25d2067f144d017188a7a84dd2f  COPYING
-diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-index 0af775c780..cfef8f19b3 100644
---- a/package/luarocks/luarocks.mk
-+++ b/package/luarocks/luarocks.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUAROCKS_VERSION = 3.0.3
-+LUAROCKS_VERSION = 3.0.4
- LUAROCKS_SITE = http://luarocks.org/releases
- LUAROCKS_LICENSE = MIT
- LUAROCKS_LICENSE_FILES = COPYING
+The only weird thing is the log related to the other ntp servers, but
+I think they are normal. It sees to be that they are duplicated, the
+alternative servers exist in case one of them it was down, so it is
+ok.
+
+----->
+# date --set "1970-01-01 10:10:00"
+Thu Jan  1 10:10:00 UTC 1970
+
+# sntp -K /tmp/kod -sS -M 128 0.pool.ntp.org 1.pool.ntp.org
+2.pool.ntp.org 3.pool.ntp.org
+sntp 4.2.8p12 at 1.3728-o Wed Oct 31 08:22:38 UTC 2018 (1)
+213.251.52.234:123 0.pool.ntp.org duplicate address from 1.pool.ntp.org ignored.
+37.139.121.60:123 0.pool.ntp.org duplicate address from 1.pool.ntp.org ignored.
+185.132.136.116:123 0.pool.ntp.org duplicate address from
+1.pool.ntp.org ignored.
+81.19.96.148:123 0.pool.ntp.org duplicate address from 1.pool.ntp.org ignored.
+213.251.52.234:123 0.pool.ntp.org duplicate address from 2.pool.ntp.org ignored.
+81.19.96.148:123 0.pool.ntp.org duplicate address from 2.pool.ntp.org ignored.
+185.132.136.116:123 0.pool.ntp.org duplicate address from
+2.pool.ntp.org ignored.
+37.139.121.60:123 0.pool.ntp.org duplicate address from 2.pool.ntp.org ignored.
+Send to [2001:720:1014:a205::2]:123 failed, Network is unreachable
+213.251.52.234:123 0.pool.ntp.org duplicate address from 3.pool.ntp.org ignored.
+81.19.96.148:123 0.pool.ntp.org duplicate address from 3.pool.ntp.org ignored.
+185.132.136.116:123 0.pool.ntp.org duplicate address from
+3.pool.ntp.org ignored.
+37.139.121.60:123 0.pool.ntp.org duplicate address from 3.pool.ntp.org ignored.
+Send to [2001:720:1014:a202::2]:123 failed, Network is unreachable
+1970-01-01 10:10:05.624784 (+0000) +1540938259.059756 +/-
+1027292172.738343 0.pool.ntp.org 213.251.52.234 s2 no-leap
+
+# date
+Wed Oct 31 08:34:26 UTC 2018
+----->
+
+Great Job!
+
+Best regards.
+
+Oscar Gomez Fuente
+TST Sistemas
+www.tst-sistemas.es
