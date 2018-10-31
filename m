@@ -1,45 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 31 Oct 2018 10:26:11 +0100
-Subject: [Buildroot] [PATCH 1/1] go: bump to v1.11.1
-In-Reply-To: <20181029165422.32105-1-christian@paral.in>
-References: <20181029165422.32105-1-christian@paral.in>
-Message-ID: <20181031102611.511a7e3a@windsurf>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Wed, 31 Oct 2018 11:35:38 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-10-30
+In-Reply-To: <20181031070025.BCA5220736@mail.bootlin.com>
+References: <20181031070025.BCA5220736@mail.bootlin.com>
+Message-ID: <20181031113538.GE6241@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-On Mon, 29 Oct 2018 09:54:22 -0700, Christian Stewart wrote:
-> Bumps Golang host-go compiler to 1.11.1 release.
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> ---
->  package/go/go.hash | 3 ++-
->  package/go/go.mk   | 2 +-
->  2 files changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/go/go.hash b/package/go/go.hash
-> index 1c766f2302..d5223d7c1d 100644
-> --- a/package/go/go.hash
-> +++ b/package/go/go.hash
-> @@ -1,2 +1,3 @@
->  # From https://golang.org/dl/
-> -sha256	afc1e12f5fe49a471e3aae7d906c73e9d5b1fdd36d52d72652dde8f6250152fb	go1.11.src.tar.gz
-> +sha256	558f8c169ae215e25b81421596e8de7572bd3ba824b79add22fba6e284db1117  go1.11.1.src.tar.gz
-> +
+On Wed, 31 Oct 2018 08:00:25 +0100 (CET), Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+ 
+> [...]
+>
+> Detail of failures
+> ------------------
+>
+> [...]
+>
+>       mipsel |               webkitgtk-2.22.2 | NOK | http://autobuild.buildroot.net/results/39eae49f4acd54edd3691bc2ee7bf3ee9914b3d8 |     
 
-You are adding an empty new line here. I dropped that and applied to
-master, thanks!
+The WebKitGTK+ build failure has the same cause as other recent similar
+ones related to the CMake configuration assuming (not always correctly)
+that GStreamer-GL must be available of OpenGL support is enabled. This
+build failure would be fixed by the following patch:
 
-It would be nice to add a hash for the license file, though.
+   https://patchwork.ozlabs.org/patch/988847/
 
-Thanks!
+Cheers,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+-Adri?n
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181031/13daf37f/attachment.asc>
