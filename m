@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 31 Oct 2018 12:41:42 +0100
-Subject: [Buildroot] [PATCH 1/1] libxmlrpc: bump to version 1.43.08
-Message-ID: <20181031114142.26274-1-fontaine.fabrice@gmail.com>
+Date: Wed, 31 Oct 2018 12:46:13 +0100
+Subject: [Buildroot] [PATCH v2,1/1] libxmlrpc: bump to version 1.43.08
+Message-ID: <20181031114613.30749-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,7 +9,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 - Remove first patch and pass CC_FOR_BUILD and other variables in
-  LIBXMLRPC_CONF_OPTS instead of LIBXMLRPC_CONF_ENV because a similar
+  LIBXMLRPC_MAKE_OPTS instead of LIBXMLRPC_MAKE_ENV because a similar
   solution is already in version thanks to
   https://sourceforge.net/p/xmlrpc-c/code/2905
 - Remove second patch (already in version thanks to
@@ -20,6 +20,9 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Fix commit log and replace LIBXMLRPC_CONV_xxx by LIBXMLRPC_MAKE_xxx
+
  .../libxmlrpc/0001-fix-gennmtab-build.patch   | 25 -----------------
  ...tch => 0001-use-correct-curl-config.patch} |  0
  ...ix-shared-libraries-build-for-uClibc.patch | 27 ------------------
