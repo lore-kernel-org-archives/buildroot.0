@@ -1,30 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 31 Oct 2018 18:08:35 +0100
-Subject: [Buildroot] [PATCH 1/1] libxmlpp: bump to version 3.0.1
-In-Reply-To: <20181031152242.3311-1-fontaine.fabrice@gmail.com>
-References: <20181031152242.3311-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181031180835.743fe3d0@windsurf>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Wed, 31 Oct 2018 18:24:58 +0100
+Subject: [Buildroot] [PATCH] lua-compat53: bump to version 0.7
+Message-ID: <20181031172458.16964-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/lua-compat53/lua-compat53.hash | 2 +-
+ package/lua-compat53/lua-compat53.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Wed, 31 Oct 2018 16:22:42 +0100, Fabrice Fontaine wrote:
-> Add hash for license file
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libxmlpp/libxmlpp.hash | 7 +++++--
->  package/libxmlpp/libxmlpp.mk   | 2 +-
->  2 files changed, 6 insertions(+), 3 deletions(-)
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/lua-compat53/lua-compat53.hash b/package/lua-compat53/lua-compat53.hash
+index 7f1e1bb22f..f311b9ce85 100644
+--- a/package/lua-compat53/lua-compat53.hash
++++ b/package/lua-compat53/lua-compat53.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 fd0117156f59d1cb3824d5cca63be84c72cb5519b714377545433be3bb31afdf  compat53-0.5-1.src.rock
++sha256 cb5fdca362780a30405c4134310ea78627a092b0ee8445a52456f2fceeeaea4e  compat53-0.7-1.src.rock
+diff --git a/package/lua-compat53/lua-compat53.mk b/package/lua-compat53/lua-compat53.mk
+index 969f816393..13e24391b0 100644
+--- a/package/lua-compat53/lua-compat53.mk
++++ b/package/lua-compat53/lua-compat53.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUA_COMPAT53_VERSION_UPSTREAM = 0.5
++LUA_COMPAT53_VERSION_UPSTREAM = 0.7
+ LUA_COMPAT53_VERSION = $(LUA_COMPAT53_VERSION_UPSTREAM)-1
+ LUA_COMPAT53_NAME_UPSTREAM = compat53
+ LUA_COMPAT53_SUBDIR = lua-compat-5.3-$(LUA_COMPAT53_VERSION_UPSTREAM)
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.19.1
