@@ -1,138 +1,40 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 31 Oct 2018 07:19:18 +0200
-Subject: [Buildroot] [PATCH] uclibc: fix mkostemp
-In-Reply-To: <20181031013815.4089-1-casantos@datacom.com.br>
-References: <20181031013815.4089-1-casantos@datacom.com.br>
-Message-ID: <20181031051918.6obvzpncii5dl3lx@sapphire.tkos.co.il>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed, 31 Oct 2018 07:50:14 +0100
+Subject: [Buildroot] [PATCH] luarocks: bump to version 3.0.4
+Message-ID: <20181031065014.10160-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Carlos,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/luarocks/luarocks.hash | 2 +-
+ package/luarocks/luarocks.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Tue, Oct 30, 2018 at 10:38:15PM -0300, Carlos Santos wrote:
-> Pull a patch already submitted upstream[1] that fixes mkostemp when
-> _LARGEFILE64_SOURCE is defined. This is required to prevent failures
-> on eudev:
-> 
->     # udevadm hwdb --update
->     Failure writing database //etc/udev/hwdb.bin: Invalid argument
-
-You forgot your upstream submission reference:
-
-[1] https://mailman.uclibc-ng.org/pipermail/devel/2018-October/thread.html
-
-baruch
-
-> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-> ---
-> Test:
-> 
->     $ cat test.c
->     #include <errno.h>
->     #include <fcntl.h>
->     #include <stdio.h>
->     #include <stdlib.h>
->     #include <string.h>
->     #include <sys/types.h>
->     #include <sys/stat.h>
-> 
->     void fatal(int n)
->     {
->         fprintf(stderr, "fatal[%d]: %s\n", n, strerror(errno));
->         exit(1);
->     }
-> 
->     int main(int argc, char *argv[])
->     {
->         FILE *f;
->         int cur_mode;
->         char template[64];
->         strncpy(template, argc > 1 ? argv[1] : "testXXXXXX", 63);
-> 
->         umask(077);
->         printf("main[1]: %s, %07o\n", template, O_WRONLY|O_CLOEXEC);
->         int fd = mkostemp(template, O_WRONLY|O_CLOEXEC);
->         if (fd < 0) {
->             fatal(1);
->         }
->         cur_mode = fcntl(fd, F_GETFL);
->         printf("main[2]: %s, %07o\n", template, cur_mode);
-> 
->         printf("main[3]: %d, %s\n", fd, "we");
->         f = fdopen(fd, "we");
->         if (!f) {
->             fatal(2);
->         }
-> 
->         if (fclose(f) == EOF) {
->             fatal(3);
->         }
-> 
->         return 0;
->     }
-> 
-> $ x86_64-buildroot-linux-uclibc-cc -Wall -Werror -D_GNU_SOURCE \
->     -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 \
->     -o mkostemp-test-large test.c
-> 
-> [ copy executables to target device (qemu, in this case) ]
-> 
->     # mkostemp-test-large
->     main[1]: testXXXXXX, 2000001
->     main[2]: testiXRydb, 0100003
->     main[3]: 3, we
->     fatal[2]: Invalid argument
-> ---
->  ...stemp64-clear-flags-as-mkostemp-does.patch | 38 +++++++++++++++++++
->  1 file changed, 38 insertions(+)
->  create mode 100644 package/uclibc/0004-mkostemp64-clear-flags-as-mkostemp-does.patch
-> 
-> diff --git a/package/uclibc/0004-mkostemp64-clear-flags-as-mkostemp-does.patch b/package/uclibc/0004-mkostemp64-clear-flags-as-mkostemp-does.patch
-> new file mode 100644
-> index 0000000000..992d660214
-> --- /dev/null
-> +++ b/package/uclibc/0004-mkostemp64-clear-flags-as-mkostemp-does.patch
-> @@ -0,0 +1,38 @@
-> +From 8810ead09006e7f0d7d342303120d74440774421 Mon Sep 17 00:00:00 2001
-> +From: Carlos Santos <casantos@datacom.com.br>
-> +Date: Mon, 29 Oct 2018 01:17:38 -0300
-> +Subject: [PATCH] mkostemp64: clear flags, as mkostemp does
-> +
-> +This should have been made in commit 9649721950 but was forgotten.
-> +
-> +Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-> +---
-> + libc/stdlib/mkostemp64.c | 3 ++-
-> + 1 file changed, 2 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/libc/stdlib/mkostemp64.c b/libc/stdlib/mkostemp64.c
-> +index aa9736cd6..f4674bb0c 100644
-> +--- a/libc/stdlib/mkostemp64.c
-> ++++ b/libc/stdlib/mkostemp64.c
-> +@@ -15,9 +15,9 @@
-> +    License along with the GNU C Library; if not, see
-> +    <http://www.gnu.org/licenses/>.  */
-> + 
-> +-#include <fcntl.h>
-> + #include <stdio.h>
-> + #include <stdlib.h>
-> ++#include <fcntl.h>
-> + #include "../misc/internals/tempname.h"
-> + 
-> + /* Generate a unique temporary file name from TEMPLATE.
-> +@@ -27,6 +27,7 @@
-> + int
-> + mkostemp64 (char *template, int flags)
-> + {
-> ++  flags -= flags & O_ACCMODE; /* Remove O_RDONLY, O_WRONLY, and O_RDWR. */
-> +   return __gen_tempname (template, __GT_BIGFILE, flags | O_LARGEFILE, 0,
-> +                          S_IRUSR | S_IWUSR);
-> + }
-
+diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
+index 6c4a103f3..224dbcc16 100644
+--- a/package/luarocks/luarocks.hash
++++ b/package/luarocks/luarocks.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 f9a3fca236c87db55bc128a182ff605731ca15b43b1c4942d98f5e34acc88a6e  luarocks-3.0.3.tar.gz
++sha256 1236a307ca5c556c4fed9fdbd35a7e0e80ccf063024becc8c3bf212f37ff0edf  luarocks-3.0.4.tar.gz
+ sha256 542ad0ee9b8ba582437ca7b4d0959c9b9432f25d2067f144d017188a7a84dd2f  COPYING
+diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+index 0af775c78..cfef8f19b 100644
+--- a/package/luarocks/luarocks.mk
++++ b/package/luarocks/luarocks.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUAROCKS_VERSION = 3.0.3
++LUAROCKS_VERSION = 3.0.4
+ LUAROCKS_SITE = http://luarocks.org/releases
+ LUAROCKS_LICENSE = MIT
+ LUAROCKS_LICENSE_FILES = COPYING
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.17.1
