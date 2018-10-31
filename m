@@ -1,51 +1,138 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 30 Oct 2018 22:34:03 -0500
-Subject: [Buildroot] [PATCH] package/ntp: use ntpd to set initial time
-In-Reply-To: <3232b003-ae5e-43d1-b795-f73a0ed71624@mind.be>
-References: <1540300218-59209-1-git-send-email-matthew.weber@rockwellcollins.com>
- <3c82f1ee-58b9-ef25-35d5-bd8fd25d4d48@mind.be>
- <CANQCQpYkLV-XJBVqRsQLdrxthZzkqctsBcxfX4mJQqFY16jk5Q@mail.gmail.com>
- <f544829d-68ed-abfc-306c-ce3cebb1de3b@mind.be>
- <CANQCQpYAjzXTQBDjKwbMPnQViP0=Qfpr6+pgs_3e7iGOYfo50g@mail.gmail.com>
- <3232b003-ae5e-43d1-b795-f73a0ed71624@mind.be>
-Message-ID: <CANQCQpa-kkDU56c7vjVnw=EDFxVxda2PPNPWMPazzkdhJt1jCg@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 31 Oct 2018 07:19:18 +0200
+Subject: [Buildroot] [PATCH] uclibc: fix mkostemp
+In-Reply-To: <20181031013815.4089-1-casantos@datacom.com.br>
+References: <20181031013815.4089-1-casantos@datacom.com.br>
+Message-ID: <20181031051918.6obvzpncii5dl3lx@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Oscar,
+Hi Carlos,
 
-On Wed, Oct 24, 2018 at 10:02 AM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 10/24/18 2:14 PM, Matthew Weber wrote:
->
-> > Agree.  So if we do the one invocation we'll have to figure out how to
-> > deal with the return value.  Sounds like that is desired, so I'll put
-> > together a test and see.  For the -w value, from testing it looks like
-> > the -w should probably be ~10-15sec as a sync on average was ~8-9sec.
->
->  8 seconds is not good. We want to get the same sync time as with ntpdate,
-> otherwise we're doing something wrong. And I guess ntpdate does it in a second,
-> right?
->
->  If I remember correctly (but it has been *years* since I used ntpd rather than
-> chrony or systemd-timesyncd) ntpd had options for how fast it would converge on
-> the first sync. Normally when a new peer is added, it waits for a couple of
-> round trips before that peer is accepted as a healthy source. But I thought it
-> was possible (and hopefully default) to just believe the first packet you
-> receive during startup and sync on that.
+On Tue, Oct 30, 2018 at 10:38:15PM -0300, Carlos Santos wrote:
+> Pull a patch already submitted upstream[1] that fixes mkostemp when
+> _LARGEFILE64_SOURCE is defined. This is required to prevent failures
+> on eudev:
+> 
+>     # udevadm hwdb --update
+>     Failure writing database //etc/udev/hwdb.bin: Invalid argument
 
-All the research I've found and also inspection of the code leads me
-to believe that the -w option can be used to wait for an initial sync
-of "good time".  Not an initial step which is large and set to system
-time right away.  I've submitted a v3 using the new sntp tool which I
-believe has got some traction as the replacement for ntpdate.
-https://patchwork.ozlabs.org/patch/991267/
+You forgot your upstream submission reference:
 
-Oscar, this new script should sync time quite fast ~1sec in my QEMU.
+[1] https://mailman.uclibc-ng.org/pipermail/devel/2018-October/thread.html
 
-Matt
+baruch
+
+> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+> ---
+> Test:
+> 
+>     $ cat test.c
+>     #include <errno.h>
+>     #include <fcntl.h>
+>     #include <stdio.h>
+>     #include <stdlib.h>
+>     #include <string.h>
+>     #include <sys/types.h>
+>     #include <sys/stat.h>
+> 
+>     void fatal(int n)
+>     {
+>         fprintf(stderr, "fatal[%d]: %s\n", n, strerror(errno));
+>         exit(1);
+>     }
+> 
+>     int main(int argc, char *argv[])
+>     {
+>         FILE *f;
+>         int cur_mode;
+>         char template[64];
+>         strncpy(template, argc > 1 ? argv[1] : "testXXXXXX", 63);
+> 
+>         umask(077);
+>         printf("main[1]: %s, %07o\n", template, O_WRONLY|O_CLOEXEC);
+>         int fd = mkostemp(template, O_WRONLY|O_CLOEXEC);
+>         if (fd < 0) {
+>             fatal(1);
+>         }
+>         cur_mode = fcntl(fd, F_GETFL);
+>         printf("main[2]: %s, %07o\n", template, cur_mode);
+> 
+>         printf("main[3]: %d, %s\n", fd, "we");
+>         f = fdopen(fd, "we");
+>         if (!f) {
+>             fatal(2);
+>         }
+> 
+>         if (fclose(f) == EOF) {
+>             fatal(3);
+>         }
+> 
+>         return 0;
+>     }
+> 
+> $ x86_64-buildroot-linux-uclibc-cc -Wall -Werror -D_GNU_SOURCE \
+>     -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 \
+>     -o mkostemp-test-large test.c
+> 
+> [ copy executables to target device (qemu, in this case) ]
+> 
+>     # mkostemp-test-large
+>     main[1]: testXXXXXX, 2000001
+>     main[2]: testiXRydb, 0100003
+>     main[3]: 3, we
+>     fatal[2]: Invalid argument
+> ---
+>  ...stemp64-clear-flags-as-mkostemp-does.patch | 38 +++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 package/uclibc/0004-mkostemp64-clear-flags-as-mkostemp-does.patch
+> 
+> diff --git a/package/uclibc/0004-mkostemp64-clear-flags-as-mkostemp-does.patch b/package/uclibc/0004-mkostemp64-clear-flags-as-mkostemp-does.patch
+> new file mode 100644
+> index 0000000000..992d660214
+> --- /dev/null
+> +++ b/package/uclibc/0004-mkostemp64-clear-flags-as-mkostemp-does.patch
+> @@ -0,0 +1,38 @@
+> +From 8810ead09006e7f0d7d342303120d74440774421 Mon Sep 17 00:00:00 2001
+> +From: Carlos Santos <casantos@datacom.com.br>
+> +Date: Mon, 29 Oct 2018 01:17:38 -0300
+> +Subject: [PATCH] mkostemp64: clear flags, as mkostemp does
+> +
+> +This should have been made in commit 9649721950 but was forgotten.
+> +
+> +Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+> +---
+> + libc/stdlib/mkostemp64.c | 3 ++-
+> + 1 file changed, 2 insertions(+), 1 deletion(-)
+> +
+> +diff --git a/libc/stdlib/mkostemp64.c b/libc/stdlib/mkostemp64.c
+> +index aa9736cd6..f4674bb0c 100644
+> +--- a/libc/stdlib/mkostemp64.c
+> ++++ b/libc/stdlib/mkostemp64.c
+> +@@ -15,9 +15,9 @@
+> +    License along with the GNU C Library; if not, see
+> +    <http://www.gnu.org/licenses/>.  */
+> + 
+> +-#include <fcntl.h>
+> + #include <stdio.h>
+> + #include <stdlib.h>
+> ++#include <fcntl.h>
+> + #include "../misc/internals/tempname.h"
+> + 
+> + /* Generate a unique temporary file name from TEMPLATE.
+> +@@ -27,6 +27,7 @@
+> + int
+> + mkostemp64 (char *template, int flags)
+> + {
+> ++  flags -= flags & O_ACCMODE; /* Remove O_RDONLY, O_WRONLY, and O_RDWR. */
+> +   return __gen_tempname (template, __GT_BIGFILE, flags | O_LARGEFILE, 0,
+> +                          S_IRUSR | S_IWUSR);
+> + }
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
