@@ -1,22 +1,31 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Oct 2018 11:25:02 +0100
-Subject: [Buildroot] [PATCH 1/1] python-zope-interface: bump to version
- 4.6.0
-In-Reply-To: <20181024150128.9989-1-asafka7@gmail.com> (Asaf Kahlon's message
- of "Wed, 24 Oct 2018 18:01:28 +0300")
-References: <20181024150128.9989-1-asafka7@gmail.com>
-Message-ID: <87zhuubegx.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 31 Oct 2018 11:26:43 +0100
+Subject: [Buildroot] [git commit] lighttpd: adjust Config.in to make
+ check-package happy
+In-Reply-To: <874ld2ct7u.fsf@dell.be.48ers.dk>
+References: <20181031095117.912A283807@busybox.osuosl.org>
+ <874ld2ct7u.fsf@dell.be.48ers.dk>
+Message-ID: <20181031112643.01ebb772@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Asaf" == Asaf Kahlon <asafka7@gmail.com> writes:
+Hello,
 
- > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+On Wed, 31 Oct 2018 11:21:09 +0100, Peter Korsgaard wrote:
 
-Committed, thanks.
+> Ups, wonder how that happened. I'll have a look at executing
+> check-package in a git pre-commit hook.
 
+If you do this, could you share whatever you have done? I'd like to
+have this here as well, to avoid having such issues in the future.
+
+Thanks,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
