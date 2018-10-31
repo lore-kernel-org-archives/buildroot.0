@@ -1,122 +1,45 @@
-From: Nuno Mota <nrmmota@gmail.com>
-Date: Wed, 31 Oct 2018 20:53:14 +0000
-Subject: [Buildroot] ELFCLASS issue on building Perl module Term::ReadKey
-Message-ID: <CAAnJVhCshyo-nHCVo303qLJiXJd8c7xh91-mDHgFsDn4VyYoVw@mail.gmail.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Wed, 31 Oct 2018 21:56:09 +0100
+Subject: [Buildroot] [PATCH v3] merge_config.sh: merge also buildroot
+ config files
+In-Reply-To: <20181031203831.GA4311@smart-ThinkPad-T410>
+References: <20181025022031.14043-1-afshin.nasser@gmail.com>
+ <20181025074309.GB18528@dell5510>
+ <OF54A89E59.8DBA5497-ONC1258331.0034C458-C1258331.00357034@local-dmz.de>
+ <20181025214311.GB31691@dell5510>
+ <OF26A838D6.35610758-ONC1258332.00211513-C1258332.0021531B@local-dmz.de>
+ <20181026230546.GA18350@smart-ThinkPad-T410>
+ <20181027044635.GA26719@x230>
+ <20181027104806.GA11024@smart-All-Series>
+ <20181031193550.GC24966@x230>
+ <20181031203831.GA4311@smart-ThinkPad-T410>
+Message-ID: <20181031205608.GA4061@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-I'm using buildroot for a project and so far so good. I've added a lot of
-perl modules, but a new one just failed. I have no clue how to fix this.
-I simply cloned this git project to use swupdate
-https://github.com/Trellis-Logic/buildroot-external/tree/swupdate
+Hi Nasser,
 
->>> perl-termreadkey 2.37 Building
-cd
-/opt/home/nrm/ubuntudocker/GS_Gateway/buildroot/output/build/perl-termreadkey-2.37/
-&& if [ -f Build.PL ] && [ MB != "EUMM" ] ; then PERL5LIB=
-PERL_USE_UNSAFE_INC=1
-/opt/home/nrm/ubuntudocker/GS_Gateway/buildroot/output/host/bin/perl Build
-build; else /usr/bin/make -j1
-PERL_INC=/opt/home/nrm/ubuntudocker/GS_Gateway/buildroot/output/host/i686-buildroot-linux-uclibc/sysroot/usr/lib/perl5/5.26.2/i686-linux/CORE
-FIXIN=:  pure_all; fi
-"/opt/home/nrm/ubuntudocker/GS_Gateway/buildroot/output/host/bin/perl"
--MExtUtils::Command::MM -e 'cp_nonempty' -- ReadKey.bs
-blib/arch/auto/Term/ReadKey/ReadKey.bs 644
-"/opt/home/nrm/ubuntudocker/GS_Gateway/buildroot/output/host/bin/perl"
-"-Iblib/arch" "-Iblib/lib" ReadKey_pm.PL ReadKey.pm
-Creating ReadKey.pm
-Can't load 'blib/arch/auto/Term/ReadKey/ReadKey.so' for module
-Term::ReadKey: blib/arch/auto/Term/ReadKey/ReadKey.so: wrong ELF class:
-ELFCLASS32 at
-/opt/home/nrm/ubuntudocker/GS_Gateway/buildroot/output/host/lib/perl5/5.26.2/x86_64-linux/DynaLoader.pm
-line 193.
- at
-/opt/home/nrm/ubuntudocker/GS_Gateway/buildroot/output/host/lib/perl5/5.26.2/x86_64-linux/DynaLoader.pm
-line 95.
-DynaLoader::croak("Can't load 'blib/arch/auto/Term/ReadKey/ReadKey.so' for
-modul"...) called at
-/opt/home/nrm/ubuntudocker/GS_Gateway/buildroot/output/host/lib/perl5/5.26.2/x86_64-linux/DynaLoader.pm
-line 193
-DynaLoader::bootstrap("Term::ReadKey") called at ReadKey_pm.PL line 515
-Bootstrapping the XS for blockoptions: make[2]: *** [ReadKey.pm] Error 255
-make[1]: ***
-[/opt/home/nrm/ubuntudocker/GS_Gateway/buildroot/output/build/perl-termreadkey-2.37/.stamp_built]
-Error 2
-make: *** [_all] Error 2
-make: Leaving directory `/opt/home/nrm/ubuntudocker/GS_Gateway/buildroot'
+> > Upstream solution in kernel has been merged [1] and will be part of kernel 4.21
+> > (kbuild updates for 4.20 has been merged day before).
+> I see. Seems great.
+> > Would you like to backport it to buildroot + add necessary applications (setting
+> > the variable?) or shell I do it?
+> Sure, I'll do it.
+Good, leave it for you.
 
-This is now my external config:
-BR2_x86_nocona=y
-BR2_KERNEL_HEADERS_4_15=y
-BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-BR2_PTHREAD_DEBUG=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_TARGET_GENERIC_HOSTNAME="gsgateway"
-BR2_TARGET_GENERIC_ISSUE="Welcome"
-BR2_TARGET_GENERIC_PASSWD_SHA512=y
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-# BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
-BR2_ROOTFS_USERS_TABLES="../base_external/configs/users.config"
-BR2_ROOTFS_OVERLAY="../base_external/rootfs-overlay"
-BR2_ROOTFS_POST_BUILD_SCRIPT="../base_external/scripts/pre-image.sh"
-BR2_ROOTFS_POST_IMAGE_SCRIPT="../base_external/scripts/post-image.sh"
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="../base_external/configs/linux_kernel_defconfig"
-BR2_LINUX_KERNEL_INSTALL_TARGET=y
-BR2_PACKAGE_BUSYBOX_CONFIG="../base_external/configs/busybox.config"
-BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-BR2_PACKAGE_VLC=y
-BR2_PACKAGE_DMIDECODE=y
-BR2_PACKAGE_PERL=y
-BR2_PACKAGE_PERL_MOJOLICIOUS_PLUGIN_AUTHENTICATION=y
-BR2_PACKAGE_EVENTLOG=y
-BR2_PACKAGE_LINUX_PAM=y
-BR2_PACKAGE_PCRE_UCP=y
-BR2_PACKAGE_BWM_NG=y
-BR2_PACKAGE_IFTOP=y
-BR2_PACKAGE_IFUPDOWN=y
-BR2_PACKAGE_IPTABLES=y
-BR2_PACKAGE_NGINX=y
-BR2_PACKAGE_NGINX_HTTP_CACHE=y
-BR2_PACKAGE_NGINX_HTTP_SSL_MODULE=y
-BR2_PACKAGE_NGINX_HTTP_V2_MODULE=y
-BR2_PACKAGE_OPENSSH=y
-BR2_PACKAGE_OPENVPN=y
-BR2_PACKAGE_TCPDUMP=y
-BR2_PACKAGE_TRACEROUTE=y
-BR2_PACKAGE_VSFTPD=y
-BR2_PACKAGE_FILE=y
-BR2_PACKAGE_LOGROTATE=y
-BR2_PACKAGE_SUDO=y
-BR2_PACKAGE_HTOP=y
-BR2_PACKAGE_SWUPDATE=y
-BR2_PACKAGE_SWUPDATE_CONFIG="../base_external/configs/swupdate.config"
-# BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE is not set
-BR2_PACKAGE_UTIL_LINUX_FSCK=y
-BR2_PACKAGE_UTIL_LINUX_KILL=y
-BR2_PACKAGE_UTIL_LINUX_LAST=y
-BR2_PACKAGE_UTIL_LINUX_LOGGER=y
-BR2_PACKAGE_UTIL_LINUX_MORE=y
-BR2_PACKAGE_UTIL_LINUX_MOUNT=y
-BR2_TARGET_ROOTFS_EXT2=y
-BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-# BR2_TARGET_ROOTFS_TAR is not set
-BR2_TARGET_GRUB2=y
-BR2_TARGET_GRUB2_BUILTIN_MODULES="boot linux ext2 fat squash4 part_msdos
-part_gpt normal biosdisk loadenv search"
-BR2_PACKAGE_HOST_GENIMAGE=y
-BR2_PACKAGE_PERL_SWITCH=y
-BR2_PACKAGE_PERL_DATA_VALIDATE_IP=y
-BR2_PACKAGE_PERL_AUTHEN_PAM=y
-BR2_PACKAGE_PERL_TERMREADKEY=y
+> > I also have plans to upgrade our kconfig to 4.19 + review the patches (some of
+> > them might can be adjusted to be suitable for upstream, so we'd be able to get
+> > rid of them).
+> Yes, I would like to do it also.
+> I think I should begin with the first task and then upgrade our kconfig
+> to 4.19.
+Good. I'll leave update kconfig in buildroot for you.
+I also leave upstreaming kconfig patches for you, if you want.
+Please CC me on these patches.
+Thanks a lot.
 
-Thank you,
-NRM
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181031/ada8aaf3/attachment.html>
+Kind regards,
+Petr
