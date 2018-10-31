@@ -1,54 +1,49 @@
-From: Michael Toldo <michael.toldo@gmail.com>
-Date: Wed, 31 Oct 2018 20:32:05 +0100
-Subject: [Buildroot] brcmrpi_quick defconfig
-In-Reply-To: <20181031182136.GL28575@scaer>
-References: <CAHS=Uo_1tyUbfxk0_SvWMLNGD3JonDfAVUq=x5gwK4Zv5hpcwQ@mail.gmail.com>
- <20181031182136.GL28575@scaer>
-Message-ID: <CAHS=Uo8B1Pyb1mUff0WsC0yCCJN2hHv+anAFK0R6aoayfSRyKQ@mail.gmail.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Wed, 31 Oct 2018 20:35:51 +0100
+Subject: [Buildroot] [PATCH v3] merge_config.sh: merge also buildroot
+ config files
+In-Reply-To: <20181027104806.GA11024@smart-All-Series>
+References: <20181025011343.29512-1-afshin.nasser@gmail.com>
+ <20181025022031.14043-1-afshin.nasser@gmail.com>
+ <20181025074309.GB18528@dell5510>
+ <OF54A89E59.8DBA5497-ONC1258331.0034C458-C1258331.00357034@local-dmz.de>
+ <20181025214311.GB31691@dell5510>
+ <OF26A838D6.35610758-ONC1258332.00211513-C1258332.0021531B@local-dmz.de>
+ <20181026230546.GA18350@smart-ThinkPad-T410>
+ <20181027044635.GA26719@x230>
+ <20181027104806.GA11024@smart-All-Series>
+Message-ID: <20181031193550.GC24966@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks a lot!
+Hi Nasser,
 
-Am Mi., 31. Okt. 2018 um 19:21 Uhr schrieb Yann E. MORIN <
-yann.morin.1998@free.fr>:
+> > > as a general command then for different buildroot/kernel defconfig
+> > > files, the last one will extract comments as well which IMHO is not what we
+> > > want.
 
-> Michael,
->
-> Please, do not directly contact the individuals to ask questions. This
-> is a community project, and as such you should ask questions on the
-> official support channels, i.e. the mailing list or the IRC channel.
->
-> On 2018-10-31 17:34 +0100, Michael Toldo spake thusly:
-> > Just found this: [1]
-> https://git.busybox.net/buildroot/commit/?id=a10d2c5c40f361eef777a1a7fa0fd88b67efa825
-> > Could you please give me a quick hint how to apply the brcmrpi_quick
-> defconfig in a buildroot setup?
->
-> This is a 5-year old commit; things have changed since then, and there
-> is no longer a bcmrpi_quick defconfig in the rpi kernel fork. Only the
-> bcmrpi_defconfig still exists, and that is what Buildroot uses.
->
-> Regards,
-> Yann E. MORIN.
->
-> --
->
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is
-> no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------------'
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181031/a145b500/attachment.html>
+> > Agree. Maybe we could try to add "any prefix" pattern: '[A-Z0-9_]\+'
+
+> > sed -n 's/^\(# \)\{0,1\}\([A-Z0-9_]\+_[a-zA-Z0-9_]*\)[= ].*/\2/p' \
+> > defconfig_file_name
+> I agree. It seems to be a better solution.
+Upstream solution in kernel has been merged [1] and will be part of kernel 4.21
+(kbuild updates for 4.20 has been merged day before).
+Would you like to backport it to buildroot + add necessary applications (setting
+the variable?) or shell I do it?
+
+I also have plans to upgrade our kconfig to 4.19 + review the patches (some of
+them might can be adjusted to be suitable for upstream, so we'd be able to get
+rid of them).
+
+
+> Kind regards,
+> Nasser
+
+Kind regards,
+Petr
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git/commit/?h=for-next&id=f6fe19e9d84400e1c9544c1909952c2c7c6a90a2
