@@ -1,106 +1,122 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 31 Oct 2018 21:06:15 +0100
-Subject: [Buildroot] [PATCH v2 1/1] python-uvloop: new package
-In-Reply-To: <20181031190238.17631-1-asafka7@gmail.com>
-References: <20181031190238.17631-1-asafka7@gmail.com>
-Message-ID: <CAGm1_kvq4MAgfxFzXYarRjJO694eCQdw0ZCVVuJqZUTjgwuhog@mail.gmail.com>
+From: Nuno Mota <nrmmota@gmail.com>
+Date: Wed, 31 Oct 2018 20:53:14 +0000
+Subject: [Buildroot] ELFCLASS issue on building Perl module Term::ReadKey
+Message-ID: <CAAnJVhCshyo-nHCVo303qLJiXJd8c7xh91-mDHgFsDn4VyYoVw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Oct 31, 2018 at 8:02 PM Asaf Kahlon <asafka7@gmail.com> wrote:
->
-> Fast implementation of asyncio event loop on top of libuv.
->
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Hi,
+I'm using buildroot for a project and so far so good. I've added a lot of
+perl modules, but a new one just failed. I have no clue how to fix this.
+I simply cloned this git project to use swupdate
+https://github.com/Trellis-Logic/buildroot-external/tree/swupdate
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+>>> perl-termreadkey 2.37 Building
+cd
+/opt/home/nrm/ubuntudocker/GS_Gateway/buildroot/output/build/perl-termreadkey-2.37/
+&& if [ -f Build.PL ] && [ MB != "EUMM" ] ; then PERL5LIB=
+PERL_USE_UNSAFE_INC=1
+/opt/home/nrm/ubuntudocker/GS_Gateway/buildroot/output/host/bin/perl Build
+build; else /usr/bin/make -j1
+PERL_INC=/opt/home/nrm/ubuntudocker/GS_Gateway/buildroot/output/host/i686-buildroot-linux-uclibc/sysroot/usr/lib/perl5/5.26.2/i686-linux/CORE
+FIXIN=:  pure_all; fi
+"/opt/home/nrm/ubuntudocker/GS_Gateway/buildroot/output/host/bin/perl"
+-MExtUtils::Command::MM -e 'cp_nonempty' -- ReadKey.bs
+blib/arch/auto/Term/ReadKey/ReadKey.bs 644
+"/opt/home/nrm/ubuntudocker/GS_Gateway/buildroot/output/host/bin/perl"
+"-Iblib/arch" "-Iblib/lib" ReadKey_pm.PL ReadKey.pm
+Creating ReadKey.pm
+Can't load 'blib/arch/auto/Term/ReadKey/ReadKey.so' for module
+Term::ReadKey: blib/arch/auto/Term/ReadKey/ReadKey.so: wrong ELF class:
+ELFCLASS32 at
+/opt/home/nrm/ubuntudocker/GS_Gateway/buildroot/output/host/lib/perl5/5.26.2/x86_64-linux/DynaLoader.pm
+line 193.
+ at
+/opt/home/nrm/ubuntudocker/GS_Gateway/buildroot/output/host/lib/perl5/5.26.2/x86_64-linux/DynaLoader.pm
+line 95.
+DynaLoader::croak("Can't load 'blib/arch/auto/Term/ReadKey/ReadKey.so' for
+modul"...) called at
+/opt/home/nrm/ubuntudocker/GS_Gateway/buildroot/output/host/lib/perl5/5.26.2/x86_64-linux/DynaLoader.pm
+line 193
+DynaLoader::bootstrap("Term::ReadKey") called at ReadKey_pm.PL line 515
+Bootstrapping the XS for blockoptions: make[2]: *** [ReadKey.pm] Error 255
+make[1]: ***
+[/opt/home/nrm/ubuntudocker/GS_Gateway/buildroot/output/build/perl-termreadkey-2.37/.stamp_built]
+Error 2
+make: *** [_all] Error 2
+make: Leaving directory `/opt/home/nrm/ubuntudocker/GS_Gateway/buildroot'
 
-> ---
-> v1->v2: remove entry in DEVELOPERS file.
-> ---
->  package/Config.in                        |  1 +
->  package/python-uvloop/Config.in          | 18 ++++++++++++++++++
->  package/python-uvloop/python-uvloop.hash |  6 ++++++
->  package/python-uvloop/python-uvloop.mk   | 17 +++++++++++++++++
->  4 files changed, 42 insertions(+)
->  create mode 100644 package/python-uvloop/Config.in
->  create mode 100644 package/python-uvloop/python-uvloop.hash
->  create mode 100644 package/python-uvloop/python-uvloop.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 7e8224cc7e..dc49e7c2ba 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1047,6 +1047,7 @@ menu "External python modules"
->         source "package/python-ujson/Config.in"
->         source "package/python-urllib3/Config.in"
->         source "package/python-urwid/Config.in"
-> +       source "package/python-uvloop/Config.in"
->         source "package/python-validators/Config.in"
->         source "package/python-versiontools/Config.in"
->         source "package/python-visitor/Config.in"
-> diff --git a/package/python-uvloop/Config.in b/package/python-uvloop/Config.in
-> new file mode 100644
-> index 0000000000..17c50e6a93
-> --- /dev/null
-> +++ b/package/python-uvloop/Config.in
-> @@ -0,0 +1,18 @@
-> +config BR2_PACKAGE_PYTHON_UVLOOP
-> +       bool "python-uvloop"
-> +       depends on BR2_PACKAGE_PYTHON3
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
-> +       depends on BR2_USE_MMU # libuv
-> +       depends on !BR2_STATIC_LIBS # libuv
-> +       depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
-> +       select BR2_PACKAGE_LIBUV
-> +       select BR2_PACKAGE_PYTHON3_SSL
-> +       help
-> +         Fast implementation of asyncio event loop on top of libuv.
-> +
-> +         http://github.com/MagicStack/uvloop
-> +
-> +comment "python-uvloop needs a toolchain w/ NPTL, dynamic library"
-> +       depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-> +       depends on BR2_USE_MMU
-> +       depends on BR2_TOOLCHAIN_HAS_SYNC_4
-> diff --git a/package/python-uvloop/python-uvloop.hash b/package/python-uvloop/python-uvloop.hash
-> new file mode 100644
-> index 0000000000..ac65fbaaca
-> --- /dev/null
-> +++ b/package/python-uvloop/python-uvloop.hash
-> @@ -0,0 +1,6 @@
-> +# md5, sha256 from https://pypi.org/pypi/uvloop/json
-> +md5    7d509d78b18a5863cc06697ccfd835ad  uvloop-0.11.2.tar.gz
-> +sha256 a97bd62ebbdf7e6e84bf44afe439d9b24ce4d8661a29a639626a8c03748f6f98  uvloop-0.11.2.tar.gz
-> +# Locally computed sha256 checksums
-> +sha256 2fdc436a67077941295c58647f521fbef8f50e46db0970552fa1a4dd8ae261c6  LICENSE-APACHE
-> +sha256 9185f3c77e9f6ef8859a6ba4c94128ac1329876be3e813aad32d7645e51ae409  LICENSE-MIT
-> diff --git a/package/python-uvloop/python-uvloop.mk b/package/python-uvloop/python-uvloop.mk
-> new file mode 100644
-> index 0000000000..a835a9952b
-> --- /dev/null
-> +++ b/package/python-uvloop/python-uvloop.mk
-> @@ -0,0 +1,17 @@
-> +################################################################################
-> +#
-> +# python-uvloop
-> +#
-> +################################################################################
-> +
-> +PYTHON_UVLOOP_VERSION = 0.11.2
-> +PYTHON_UVLOOP_SOURCE = uvloop-$(PYTHON_UVLOOP_VERSION).tar.gz
-> +PYTHON_UVLOOP_SITE = https://files.pythonhosted.org/packages/5c/37/6daa39aac42b2deda6ee77f408bec0419b600e27b89b374b0d440af32b10
-> +PYTHON_UVLOOP_SETUP_TYPE = setuptools
-> +PYTHON_UVLOOP_LICENSE = Apache-2.0, MIT
-> +PYTHON_UVLOOP_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
-> +PYTHON_UVLOOP_BUILD_OPTS = build_ext --inplace --use-system-libuv
-> +PYTHON_UVLOOP_INSTALL_TARGET_OPTS = build_ext --inplace --use-system-libuv
-> +PYTHON_UVLOOP_DEPENDENCIES = libuv
-> +
-> +$(eval $(python-package))
-> --
-> 2.19.1
->
+This is now my external config:
+BR2_x86_nocona=y
+BR2_KERNEL_HEADERS_4_15=y
+BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+BR2_PTHREAD_DEBUG=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_TARGET_GENERIC_HOSTNAME="gsgateway"
+BR2_TARGET_GENERIC_ISSUE="Welcome"
+BR2_TARGET_GENERIC_PASSWD_SHA512=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+# BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
+BR2_ROOTFS_USERS_TABLES="../base_external/configs/users.config"
+BR2_ROOTFS_OVERLAY="../base_external/rootfs-overlay"
+BR2_ROOTFS_POST_BUILD_SCRIPT="../base_external/scripts/pre-image.sh"
+BR2_ROOTFS_POST_IMAGE_SCRIPT="../base_external/scripts/post-image.sh"
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="../base_external/configs/linux_kernel_defconfig"
+BR2_LINUX_KERNEL_INSTALL_TARGET=y
+BR2_PACKAGE_BUSYBOX_CONFIG="../base_external/configs/busybox.config"
+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+BR2_PACKAGE_VLC=y
+BR2_PACKAGE_DMIDECODE=y
+BR2_PACKAGE_PERL=y
+BR2_PACKAGE_PERL_MOJOLICIOUS_PLUGIN_AUTHENTICATION=y
+BR2_PACKAGE_EVENTLOG=y
+BR2_PACKAGE_LINUX_PAM=y
+BR2_PACKAGE_PCRE_UCP=y
+BR2_PACKAGE_BWM_NG=y
+BR2_PACKAGE_IFTOP=y
+BR2_PACKAGE_IFUPDOWN=y
+BR2_PACKAGE_IPTABLES=y
+BR2_PACKAGE_NGINX=y
+BR2_PACKAGE_NGINX_HTTP_CACHE=y
+BR2_PACKAGE_NGINX_HTTP_SSL_MODULE=y
+BR2_PACKAGE_NGINX_HTTP_V2_MODULE=y
+BR2_PACKAGE_OPENSSH=y
+BR2_PACKAGE_OPENVPN=y
+BR2_PACKAGE_TCPDUMP=y
+BR2_PACKAGE_TRACEROUTE=y
+BR2_PACKAGE_VSFTPD=y
+BR2_PACKAGE_FILE=y
+BR2_PACKAGE_LOGROTATE=y
+BR2_PACKAGE_SUDO=y
+BR2_PACKAGE_HTOP=y
+BR2_PACKAGE_SWUPDATE=y
+BR2_PACKAGE_SWUPDATE_CONFIG="../base_external/configs/swupdate.config"
+# BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE is not set
+BR2_PACKAGE_UTIL_LINUX_FSCK=y
+BR2_PACKAGE_UTIL_LINUX_KILL=y
+BR2_PACKAGE_UTIL_LINUX_LAST=y
+BR2_PACKAGE_UTIL_LINUX_LOGGER=y
+BR2_PACKAGE_UTIL_LINUX_MORE=y
+BR2_PACKAGE_UTIL_LINUX_MOUNT=y
+BR2_TARGET_ROOTFS_EXT2=y
+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+# BR2_TARGET_ROOTFS_TAR is not set
+BR2_TARGET_GRUB2=y
+BR2_TARGET_GRUB2_BUILTIN_MODULES="boot linux ext2 fat squash4 part_msdos
+part_gpt normal biosdisk loadenv search"
+BR2_PACKAGE_HOST_GENIMAGE=y
+BR2_PACKAGE_PERL_SWITCH=y
+BR2_PACKAGE_PERL_DATA_VALIDATE_IP=y
+BR2_PACKAGE_PERL_AUTHEN_PAM=y
+BR2_PACKAGE_PERL_TERMREADKEY=y
+
+Thank you,
+NRM
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181031/ada8aaf3/attachment.html>
