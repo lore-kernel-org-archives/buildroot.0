@@ -1,53 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 31 Oct 2018 10:52:14 +0100
-Subject: [Buildroot] [git commit] lighttpd: adjust Config.in to make
- check-package happy
-Message-ID: <20181031095117.912A283807@busybox.osuosl.org>
+Date: Wed, 31 Oct 2018 10:57:04 +0100
+Subject: [Buildroot] [PATCH 1/1] webkitgtk: add an option to control
+ USE_GSTREAMER_GL
+In-Reply-To: <20181025002738.27486-1-aperez@igalia.com>
+References: <20181025002738.27486-1-aperez@igalia.com>
+Message-ID: <20181031105704.0e824ff6@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=71f4f97d0aebe36c6399822840fe5301a5339b10
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Commit b9d75c717e01aed474b7567c969236418e87eda8 ("lighttpd: add
-optional pam support") introduced a new Config.in option, but
-check-package was not happy about it:
+On Thu, 25 Oct 2018 03:27:38 +0300, Adrian Perez de Castro wrote:
+> This covers the case where GL/GLES is available (so -DENABLE_OPENGL=ON
+> gets passed), which makes the webkitgtk build system assume GStreamer-GL
+> is available, while actually it is not.
+> 
+> Also, providing an option to manually disable usage of GStremer-GL can
+> help with certain target configurations in which using OpenGL for video
+> handling might result in incorrect rendering.
+> 
+> This fixes some autobuilder failures like the following:
+> 
+>   http://autobuild.buildroot.net/results/187796535af53ece426641ff7d88aabada281674
+>   http://autobuild.buildroot.net/results/00c1a8ea23a99728a4f3f4478705f2383414ae41
+> 
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> ---
+>  package/webkitgtk/Config.in    | 15 +++++++++++++++
+>  package/webkitgtk/webkitgtk.mk |  7 +++++++
+>  2 files changed, 22 insertions(+)
 
-package/lighttpd/Config.in:30: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
-package/lighttpd/Config.in:31: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
-package/lighttpd/Config.in:32: attributes order: type, default, depends on, select, help (http://nightly.buildroot.org/#_config_files)
-package/lighttpd/Config.in:32: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
-package/lighttpd/Config.in:33: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
-package/lighttpd/Config.in:34: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
+Applied to master, thanks.
 
-This commit fixes those indentation and ordering issues.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/lighttpd/Config.in | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/lighttpd/Config.in b/package/lighttpd/Config.in
-index 0f37422aea..7d75663629 100644
---- a/package/lighttpd/Config.in
-+++ b/package/lighttpd/Config.in
-@@ -27,11 +27,11 @@ config BR2_PACKAGE_LIGHTTPD_OPENSSL
- 	  Enable OpenSSL support for lighttpd.
- 
- config BR2_PACKAGE_LIGHTTPD_PAM
--       bool "pam authentication support"
--       depends on BR2_PACKAGE_LINUX_PAM
--       default y
--       help
--         Enable PAM authentication support for lighttpd.
-+	bool "pam authentication support"
-+	default y
-+	depends on BR2_PACKAGE_LINUX_PAM
-+	help
-+	  Enable PAM authentication support for lighttpd.
- 
- config BR2_PACKAGE_LIGHTTPD_ZLIB
- 	bool "zlib support"
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
