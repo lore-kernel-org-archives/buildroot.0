@@ -1,153 +1,42 @@
-From: Ludovic Desroches <ludovic.desroches@microchip.com>
-Date: Wed, 31 Oct 2018 08:35:00 +0100
-Subject: [Buildroot] [PATCH v2] configs/{at91,
- atmel}*_dev*: drop Dropbear as it duplicates OpenSSH
-In-Reply-To: <20181030213845.20161-1-thomas.petazzoni@bootlin.com>
-References: <20181030213845.20161-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181031073500.smolxl7ef3f3iz3a@M43218.corp.atmel.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 31 Oct 2018 09:37:11 +0100
+Subject: [Buildroot] [git commit] luarocks: bump to version 3.0.4
+Message-ID: <20181031083508.DF31883733@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Oct 30, 2018 at 10:38:45PM +0100, Thomas Petazzoni wrote:
-> The "development" defconfigs for Atmel platforms enable both OpenSSH
-> and Dropbear, which doesn't make a lot of sense, as only one SSH
-> server can start on port 22.
-> 
-> This commit therefore drops BR2_PACKAGE_DROPBEAR=y from those
-> defconfigs, keeping OpenSSH as an SSH server/client, as was requested
-> by Atmel/Microchip folks in the review of an earlier version of this
-> patch [1]. Since those defconfigs are "development" defconfigs, they
-> are not meant to be minimal, and already provide an arbitrary set of
-> packages, so using openssh is just as good as using dropbear in this
-> case.
-> 
-> [1] https://patchwork.ozlabs.org/patch/989516/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
-> Cc: Joshua Henderson <joshua.henderson@microchip.com>
-> Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=864f85262f3fdeb3ea76a777e62f31ccc12c75ed
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for taking care of this.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/luarocks/luarocks.hash | 2 +-
+ package/luarocks/luarocks.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Regards
-
-Ludovic
-
-> ---
-> Changes since v1:
->  - Keep OpenSSH and drop Dropbear, as suggested by Nicolas Ferre from
->    Microchip.
-> ---
->  configs/at91sam9x5ek_dev_defconfig               | 1 -
->  configs/at91sam9x5ek_mmc_dev_defconfig           | 1 -
->  configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig | 1 -
->  configs/atmel_sama5d2_xplained_mmc_dev_defconfig | 1 -
->  configs/atmel_sama5d3_xplained_dev_defconfig     | 1 -
->  configs/atmel_sama5d3_xplained_mmc_dev_defconfig | 1 -
->  configs/atmel_sama5d4_xplained_dev_defconfig     | 1 -
->  configs/atmel_sama5d4_xplained_mmc_dev_defconfig | 1 -
->  8 files changed, 8 deletions(-)
-> 
-> diff --git a/configs/at91sam9x5ek_dev_defconfig b/configs/at91sam9x5ek_dev_defconfig
-> index dee365a56c..505be8d047 100644
-> --- a/configs/at91sam9x5ek_dev_defconfig
-> +++ b/configs/at91sam9x5ek_dev_defconfig
-> @@ -59,7 +59,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
->  BR2_PACKAGE_BLUEZ_UTILS=y
->  BR2_PACKAGE_BRIDGE_UTILS=y
->  BR2_PACKAGE_CAN_UTILS=y
-> -BR2_PACKAGE_DROPBEAR=y
->  BR2_PACKAGE_ETHTOOL=y
->  BR2_PACKAGE_IPERF=y
->  BR2_PACKAGE_IPROUTE2=y
-> diff --git a/configs/at91sam9x5ek_mmc_dev_defconfig b/configs/at91sam9x5ek_mmc_dev_defconfig
-> index a8fdad72b7..cd65912883 100644
-> --- a/configs/at91sam9x5ek_mmc_dev_defconfig
-> +++ b/configs/at91sam9x5ek_mmc_dev_defconfig
-> @@ -62,7 +62,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
->  BR2_PACKAGE_BLUEZ_UTILS=y
->  BR2_PACKAGE_BRIDGE_UTILS=y
->  BR2_PACKAGE_CAN_UTILS=y
-> -BR2_PACKAGE_DROPBEAR=y
->  BR2_PACKAGE_ETHTOOL=y
->  BR2_PACKAGE_IPERF=y
->  BR2_PACKAGE_IPROUTE2=y
-> diff --git a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-> index f3cb11ce70..9985b64727 100644
-> --- a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-> +++ b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-> @@ -51,7 +51,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
->  BR2_PACKAGE_BLUEZ_UTILS=y
->  BR2_PACKAGE_BRIDGE_UTILS=y
->  BR2_PACKAGE_CAN_UTILS=y
-> -BR2_PACKAGE_DROPBEAR=y
->  BR2_PACKAGE_ETHTOOL=y
->  BR2_PACKAGE_IPERF=y
->  BR2_PACKAGE_IPROUTE2=y
-> diff --git a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-> index 78d082f9cb..bc5414c4f4 100644
-> --- a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-> +++ b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-> @@ -65,7 +65,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
->  BR2_PACKAGE_BLUEZ_UTILS=y
->  BR2_PACKAGE_BRIDGE_UTILS=y
->  BR2_PACKAGE_CAN_UTILS=y
-> -BR2_PACKAGE_DROPBEAR=y
->  BR2_PACKAGE_ETHTOOL=y
->  BR2_PACKAGE_IPERF=y
->  BR2_PACKAGE_IPROUTE2=y
-> diff --git a/configs/atmel_sama5d3_xplained_dev_defconfig b/configs/atmel_sama5d3_xplained_dev_defconfig
-> index 91ded5bfeb..520cbc833d 100644
-> --- a/configs/atmel_sama5d3_xplained_dev_defconfig
-> +++ b/configs/atmel_sama5d3_xplained_dev_defconfig
-> @@ -61,7 +61,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
->  BR2_PACKAGE_BLUEZ_UTILS=y
->  BR2_PACKAGE_BRIDGE_UTILS=y
->  BR2_PACKAGE_CAN_UTILS=y
-> -BR2_PACKAGE_DROPBEAR=y
->  BR2_PACKAGE_ETHTOOL=y
->  BR2_PACKAGE_IPERF=y
->  BR2_PACKAGE_IPROUTE2=y
-> diff --git a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-> index 20dc8929ab..a1e34ab810 100644
-> --- a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-> +++ b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-> @@ -64,7 +64,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
->  BR2_PACKAGE_BLUEZ_UTILS=y
->  BR2_PACKAGE_BRIDGE_UTILS=y
->  BR2_PACKAGE_CAN_UTILS=y
-> -BR2_PACKAGE_DROPBEAR=y
->  BR2_PACKAGE_ETHTOOL=y
->  BR2_PACKAGE_IPERF=y
->  BR2_PACKAGE_IPROUTE2=y
-> diff --git a/configs/atmel_sama5d4_xplained_dev_defconfig b/configs/atmel_sama5d4_xplained_dev_defconfig
-> index 69a71eb51e..9197564c20 100644
-> --- a/configs/atmel_sama5d4_xplained_dev_defconfig
-> +++ b/configs/atmel_sama5d4_xplained_dev_defconfig
-> @@ -62,7 +62,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
->  BR2_PACKAGE_BLUEZ_UTILS=y
->  BR2_PACKAGE_BRIDGE_UTILS=y
->  BR2_PACKAGE_CAN_UTILS=y
-> -BR2_PACKAGE_DROPBEAR=y
->  BR2_PACKAGE_ETHTOOL=y
->  BR2_PACKAGE_IPERF=y
->  BR2_PACKAGE_IPROUTE2=y
-> diff --git a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-> index 60692d98cb..f20e114ff1 100644
-> --- a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-> +++ b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-> @@ -65,7 +65,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
->  BR2_PACKAGE_BLUEZ_UTILS=y
->  BR2_PACKAGE_BRIDGE_UTILS=y
->  BR2_PACKAGE_CAN_UTILS=y
-> -BR2_PACKAGE_DROPBEAR=y
->  BR2_PACKAGE_ETHTOOL=y
->  BR2_PACKAGE_IPERF=y
->  BR2_PACKAGE_IPROUTE2=y
-> -- 
-> 2.14.4
-> 
+diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
+index 6c4a103f34..224dbcc164 100644
+--- a/package/luarocks/luarocks.hash
++++ b/package/luarocks/luarocks.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 f9a3fca236c87db55bc128a182ff605731ca15b43b1c4942d98f5e34acc88a6e  luarocks-3.0.3.tar.gz
++sha256 1236a307ca5c556c4fed9fdbd35a7e0e80ccf063024becc8c3bf212f37ff0edf  luarocks-3.0.4.tar.gz
+ sha256 542ad0ee9b8ba582437ca7b4d0959c9b9432f25d2067f144d017188a7a84dd2f  COPYING
+diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+index 0af775c780..cfef8f19b3 100644
+--- a/package/luarocks/luarocks.mk
++++ b/package/luarocks/luarocks.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUAROCKS_VERSION = 3.0.3
++LUAROCKS_VERSION = 3.0.4
+ LUAROCKS_SITE = http://luarocks.org/releases
+ LUAROCKS_LICENSE = MIT
+ LUAROCKS_LICENSE_FILES = COPYING
