@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Nov 2018 22:28:13 +0100
+Date: Thu, 1 Nov 2018 22:30:46 +0100
 Subject: [Buildroot] [PATCH 1/1] package/postgresql: needs wchar
-In-Reply-To: <20181023160931.16417-1-bernd.kuhls@t-online.de>
+In-Reply-To: <643ca3d2-1825-4707-5fbb-0817229188f9@mind.be>
 References: <20181023160931.16417-1-bernd.kuhls@t-online.de>
-Message-ID: <20181101222813.72c4126b@windsurf>
+ <CAFSsvmqEdPu2V3j=d55j6cUVmNeC0MSjTmA5HM1R5HcWh1LzwA@mail.gmail.com>
+ <643ca3d2-1825-4707-5fbb-0817229188f9@mind.be>
+Message-ID: <20181101223046.72222a3c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +14,34 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 23 Oct 2018 18:09:31 +0200, Bernd Kuhls wrote:
-> Upstream removed support for non-wchar toolchains:
-> https://github.com/postgres/postgres/commit/85feb77aa09cda9ff3e12cf95c757c499dc25343
-> 
-> Propagate the new dependency to other packages.
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/b73/b73342a39167ed7f293224d4e3b23dde691b9abf/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/bandwidthd/Config.in      | 5 +++--
->  package/collectd/Config.in        | 4 ++++
->  package/postgresql/Config.in      | 5 +++--
->  package/python-psycopg2/Config.in | 4 ++++
->  4 files changed, 14 insertions(+), 4 deletions(-)
+On Tue, 23 Oct 2018 19:04:26 +0100, Arnout Vandecappelle wrote:
 
-I also propagated the dependency to php, qt and qt5base, and then
-applied to master. Thanks!
+>  It is not strictly needed, but it is still useful to have it because:
+
+True. In this case:
+
+ - Bernd did not propagate the dependency to p?p, qt and qt5base, which
+   all three are also directly selecting BR2_PACKAGE_POSTGRESQL
+
+ - A number of places where BR2_PACKAGE_POSTGRESQL is selected do not
+   have the !BR2_STATIC_LIBS dependency.
+
+I am really wondering what to do with those "useless" dependencies in
+general. On one hand, I agree with you that semantically, it is better
+to have them. On the other hand:
+
+ - It's an additional maintenance burden.
+
+ - It's never tested by the autobuilders, because such "useless"
+   dependencies are well, useless, because they are hidden by another
+   higher-level dependency. Because they are not tested, they are often
+   wrong and not maintained.
+
+Due to this, whether we propagate them or not is completely random
+currently through the Buildroot tree, and I'm not sure it's a very nice
+situation.
+
+Best regards,
 
 Thomas
 -- 
