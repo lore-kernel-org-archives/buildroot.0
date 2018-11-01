@@ -1,94 +1,97 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 1 Nov 2018 10:06:16 +0100
-Subject: [Buildroot] [PATCH] Config.in: add BR2_DL_DIR_OPTS
-In-Reply-To: <20181031213930.49837-1-mmayer@broadcom.com>
-References: <20181031213930.49837-1-mmayer@broadcom.com>
-Message-ID: <20181101090616.GQ28575@scaer>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 1 Nov 2018 11:42:51 +0100
+Subject: [Buildroot] [git commit] python-uvloop: new package
+Message-ID: <20181101104525.9AFAF83A5E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Markus, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=2f2ef15d35320dda3598f18dc62ea6e4b69fbb21
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2018-10-31 14:39 -0700, Markus Mayer spake thusly:
-> Provide a simple mechanism to pass extra arguments to "mkdir" when
-> creating download directories. This can be helpful if one needs the
-> download directories to be writable multiple users ("shared download
-> cache").
+Fast implementation of asyncio event loop on top of libuv.
 
-In retrospect, I think our enforcing of umask globally is wrong.
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+[Arnout: change order of 'depends on' lines]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/Config.in                        |  1 +
+ package/python-uvloop/Config.in          | 18 ++++++++++++++++++
+ package/python-uvloop/python-uvloop.hash |  6 ++++++
+ package/python-uvloop/python-uvloop.mk   | 17 +++++++++++++++++
+ 4 files changed, 42 insertions(+)
 
-It was added in commit bee5745ccc2 (Makefile: don't depend on the umask)
-under the requirements that modes in target/ be predicatble.
-
-Although that is indeed a good reason, I think we should have instead
-ensured those modes with a plain chmod on target/ during the
-target-finalize step.
-
-That way, we could drop our umask override, and let the user define
-whatever umask they need.
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Markus Mayer <mmayer@broadcom.com>
-> ---
->  Config.in               | 14 ++++++++++++++
->  package/pkg-download.mk |  2 +-
->  2 files changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Config.in b/Config.in
-> index 42cdf7a3ebdc..0442d8403b4a 100644
-> --- a/Config.in
-> +++ b/Config.in
-> @@ -214,6 +214,20 @@ config BR2_DL_DIR
->  
->  	  The default is $(TOPDIR)/dl
->  
-> +config BR2_DL_DIR_OPTS
-> +	string "Options for mkdir when it creates BR2_DL_DIR"
-> +	default ""
-> +	help
-> +	  Specify command line options for the mkdir command when it
-> +	  creates BR2_DL_DIR.
-> +
-> +	  For example, this can be used to specify directory permissions
-> +	  (say, "-m 0775") for directories inside BR2_DL_DIR. One would
-> +	  want this if the download directory is a shared "cache" for
-> +	  multiple users, so everybody can write to these directories.
-> +
-> +	  The default empty (no additional options).
-> +
->  config BR2_HOST_DIR
->  	string "Host dir"
->  	default "$(BASE_DIR)/host"
-> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index 73ea2a69f829..d6bfe2bb06d0 100644
-> --- a/package/pkg-download.mk
-> +++ b/package/pkg-download.mk
-> @@ -91,7 +91,7 @@ endif
->  endif
->  
->  define DOWNLOAD
-> -	$(Q)mkdir -p $($(PKG)_DL_DIR)
-> +	$(Q)mkdir $(BR2_DL_DIR_OPTS) -p $($(PKG)_DL_DIR)
->  	$(Q)$(EXTRA_ENV) $(FLOCK) $(DL_WRAPPER) \
->  		-c '$($(PKG)_DL_VERSION)' \
->  		-d '$($(PKG)_DL_DIR)' \
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/Config.in b/package/Config.in
+index 7e8224cc7e..dc49e7c2ba 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1047,6 +1047,7 @@ menu "External python modules"
+ 	source "package/python-ujson/Config.in"
+ 	source "package/python-urllib3/Config.in"
+ 	source "package/python-urwid/Config.in"
++	source "package/python-uvloop/Config.in"
+ 	source "package/python-validators/Config.in"
+ 	source "package/python-versiontools/Config.in"
+ 	source "package/python-visitor/Config.in"
+diff --git a/package/python-uvloop/Config.in b/package/python-uvloop/Config.in
+new file mode 100644
+index 0000000000..76e06ac3f4
+--- /dev/null
++++ b/package/python-uvloop/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_PYTHON_UVLOOP
++	bool "python-uvloop"
++	depends on BR2_PACKAGE_PYTHON3
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
++	depends on BR2_USE_MMU # libuv
++	depends on !BR2_STATIC_LIBS # libuv
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
++	select BR2_PACKAGE_LIBUV
++	select BR2_PACKAGE_PYTHON3_SSL
++	help
++	  Fast implementation of asyncio event loop on top of libuv.
++
++	  http://github.com/MagicStack/uvloop
++
++comment "python-uvloop needs a toolchain w/ NPTL, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on BR2_USE_MMU
+diff --git a/package/python-uvloop/python-uvloop.hash b/package/python-uvloop/python-uvloop.hash
+new file mode 100644
+index 0000000000..ac65fbaaca
+--- /dev/null
++++ b/package/python-uvloop/python-uvloop.hash
+@@ -0,0 +1,6 @@
++# md5, sha256 from https://pypi.org/pypi/uvloop/json
++md5	7d509d78b18a5863cc06697ccfd835ad  uvloop-0.11.2.tar.gz
++sha256	a97bd62ebbdf7e6e84bf44afe439d9b24ce4d8661a29a639626a8c03748f6f98  uvloop-0.11.2.tar.gz
++# Locally computed sha256 checksums
++sha256	2fdc436a67077941295c58647f521fbef8f50e46db0970552fa1a4dd8ae261c6  LICENSE-APACHE
++sha256	9185f3c77e9f6ef8859a6ba4c94128ac1329876be3e813aad32d7645e51ae409  LICENSE-MIT
+diff --git a/package/python-uvloop/python-uvloop.mk b/package/python-uvloop/python-uvloop.mk
+new file mode 100644
+index 0000000000..a835a9952b
+--- /dev/null
++++ b/package/python-uvloop/python-uvloop.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# python-uvloop
++#
++################################################################################
++
++PYTHON_UVLOOP_VERSION = 0.11.2
++PYTHON_UVLOOP_SOURCE = uvloop-$(PYTHON_UVLOOP_VERSION).tar.gz
++PYTHON_UVLOOP_SITE = https://files.pythonhosted.org/packages/5c/37/6daa39aac42b2deda6ee77f408bec0419b600e27b89b374b0d440af32b10
++PYTHON_UVLOOP_SETUP_TYPE = setuptools
++PYTHON_UVLOOP_LICENSE = Apache-2.0, MIT
++PYTHON_UVLOOP_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
++PYTHON_UVLOOP_BUILD_OPTS = build_ext --inplace --use-system-libuv
++PYTHON_UVLOOP_INSTALL_TARGET_OPTS = build_ext --inplace --use-system-libuv
++PYTHON_UVLOOP_DEPENDENCIES = libuv
++
++$(eval $(python-package))
