@@ -1,84 +1,71 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  1 Nov 2018 14:23:26 +0100
-Subject: [Buildroot] [PATCH 2/2] ngrep: add libnet optional dependency
-In-Reply-To: <20181101132326.13015-1-fontaine.fabrice@gmail.com>
-References: <20181101132326.13015-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181101132326.13015-2-fontaine.fabrice@gmail.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Thu, 1 Nov 2018 14:23:51 +0100
+Subject: [Buildroot] [PATCH] merge_config.sh: Fix merging buildroot
+ config files
+In-Reply-To: <20181101105513.GB4937@smart-ThinkPad-T410>
+References: <20181031205608.GA4061@x230>
+ <20181101010953.20996-1-afshin.nasser@gmail.com>
+ <20181101062448.GC8261@x230>
+ <20181101105513.GB4937@smart-ThinkPad-T410>
+Message-ID: <20181101132350.GA3634@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Enable tcpkill based on libnet availability
-- Add BSD-3-Clause for tcpkill, added in version 1.46 and
-  https://github.com/jpr5/ngrep/commit/f2a1f8b09194a8ab87787c1fdb60b968f5957c05
+Hi Nasser,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...heck-for-libnet_init-in-configure-in.patch | 28 +++++++++++++++++++
- package/ngrep/ngrep.mk                        |  9 +++++-
- 2 files changed, 36 insertions(+), 1 deletion(-)
- create mode 100644 package/ngrep/0002-Check-for-libnet_init-in-configure-in.patch
+> > > +unset CONFIG_
+> > You added unset, which isn't in upstream patch. This has no effect, so I'd be
+> > for removing it. Even if it has (if it was needed), it'd be better to 1) ask
+> > upstream to add it 2) keep it in separate patch in meanwhile (otherwise it
+> > complicates patch rebasing during update and can be lost).
+> Removing unset will cause the following make command work wrong. Note
+> that the value of this environment variable is checked [1] and used. The
+> result of removing the unset line is that we will have double BR2_
+> prefixes in the final .config file as well as lots of warnings when
+> checking if all specified config values have been taken.
+You're right. The reason is that we don't actually use BR2_ as a real prefix
+(as Masahiro noted [1], but I didn't realize that), but here in utils/test-pkg
+we pass it as merge_config.sh needs to work with prefixes [2]:
 
-diff --git a/package/ngrep/0002-Check-for-libnet_init-in-configure-in.patch b/package/ngrep/0002-Check-for-libnet_init-in-configure-in.patch
-new file mode 100644
-index 0000000000..22b18ab7ee
---- /dev/null
-+++ b/package/ngrep/0002-Check-for-libnet_init-in-configure-in.patch
-@@ -0,0 +1,28 @@
-+From 0a51c8bc62c7b49b8d67a360daa6b1957256f4f5 Mon Sep 17 00:00:00 2001
-+From: Romain Francoise <romain@rfr.io>
-+Date: Mon, 1 Jan 2018 18:01:13 +0100
-+Subject: [PATCH] Check for libnet_init in configure.in
-+
-+libnet_init_packet was the old libnet 1.0 function which is now long
-+deprecated.
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/jpr5/ngrep/commit/0a51c8bc62c7b49b8d67a360daa6b1957256f4f5]
-+---
-+ configure.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.in b/configure.in
-+index 06c050a..dbef39b 100644
-+--- a/configure.in
-++++ b/configure.in
-+@@ -174,7 +174,7 @@ dnl
-+ AC_ARG_ENABLE(tcpkill,
-+ [  --enable-tcpkill        enable connection killing support (default off)],
-+ [
-+-  AC_CHECK_LIB(net, libnet_init_packet,,echo !!! error: tcpkill feature enabled but no libnet found; exit)
-++  AC_CHECK_LIB(net, libnet_init,,echo !!! error: tcpkill feature enabled but no libnet found; exit)
-+   use_tcpkill="$enableval"
-+ ],
-+ [ use_tcpkill="no" ])
-diff --git a/package/ngrep/ngrep.mk b/package/ngrep/ngrep.mk
-index f116e34e42..d4c84b9639 100644
---- a/package/ngrep/ngrep.mk
-+++ b/package/ngrep/ngrep.mk
-@@ -6,7 +6,7 @@
- 
- NGREP_VERSION = 1_47
- NGREP_SITE = $(call github,jpr5,ngrep,V$(NGREP_VERSION))
--NGREP_LICENSE = BSD-4-Clause-like
-+NGREP_LICENSE = BSD-4-Clause-like, BSD-3-Clause (tcpkill)
- NGREP_LICENSE_FILES = LICENSE
- NGREP_INSTALL_STAGING = YES
- # We're patching configure.in
-@@ -25,4 +25,11 @@ NGREP_CONF_OPTS = \
- 
- NGREP_DEPENDENCIES = libpcap pcre
- 
-+ifeq ($(BR2_PACKAGE_LIBNET),y)
-+NGREP_DEPENDENCIES += libnet
-+NGREP_CONF_OPTS += --enable-tcpkill
-+else
-+NGREP_CONF_OPTS += --disable-tcpkill
-+endif
-+
- $(eval $(autotools-package))
--- 
-2.17.1
+-    support/kconfig/merge_config.sh -O "${dir}" \
++    CONFIG_=BR2_ support/kconfig/merge_config.sh -O "${dir}" \
+
+Delta is smaller, but it's still a patch, which is needed :(.
+
+> > BTW (I noted that before) your patch contain trailing whitespace and mixing tab
+> > and spaces. git am and pwclient fixes that, only when applying with patch they
+> > get committed, so nothing serious.
+
+> > $ pwclient git-am -p buildroot 991781
+> > .git/rebase-apply/patch:59: space before tab in indent.
+> >  	echo "  -r    list redundant entries when merging fragments"
+> > .git/rebase-apply/patch:60: space before tab in indent.
+> >  	echo "  -O    dir to put generated output files.  Consider setting \$KCONFIG_CONFIG instead."
+> > .git/rebase-apply/patch:61: space before tab in indent.
+> >  	echo "  -e    colon-separated list of br2-external trees to use (optional)"
+> > .git/rebase-apply/patch:66: trailing whitespace.
+
+> > .git/rebase-apply/patch:72: trailing whitespace.
+
+> > warning: squelched 6 whitespace errors
+> > warning: 10 lines applied after fixing whitespace errors.
+> > Applying: merge_config.sh: Fix merging buildroot config files
+> > Applying patch #991781 using 'git am'
+> > Description: merge_config.sh: Fix merging buildroot config files
+
+> I think this is because we are including a patch in another patch. As
+> you can see in your previous commit:
+> a3366b270562f42723a3b8032f73bb03b541d113, this patch has the same issue
+> because it includes another patch.
+> I don't know how to avoid that if we should do so.
+Again, you're right. I'm sorry for bothering you with it.
+
+
+Kind regards,
+Petr
+
+[1] https://patchwork.kernel.org/patch/10658589/#22290097
+[2] https://patchwork.ozlabs.org/patch/991781/
