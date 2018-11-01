@@ -1,50 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Nov 2018 22:30:46 +0100
-Subject: [Buildroot] [PATCH 1/1] package/postgresql: needs wchar
-In-Reply-To: <643ca3d2-1825-4707-5fbb-0817229188f9@mind.be>
-References: <20181023160931.16417-1-bernd.kuhls@t-online.de>
- <CAFSsvmqEdPu2V3j=d55j6cUVmNeC0MSjTmA5HM1R5HcWh1LzwA@mail.gmail.com>
- <643ca3d2-1825-4707-5fbb-0817229188f9@mind.be>
-Message-ID: <20181101223046.72222a3c@windsurf>
+Date: Thu, 1 Nov 2018 22:36:39 +0100
+Subject: [Buildroot] [git commit] bdwgc: add optional cplusplus support
+Message-ID: <20181101213438.AB0B483954@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=3f38fbedc1c242589cd788413f42884693f18ccb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 23 Oct 2018 19:04:26 +0100, Arnout Vandecappelle wrote:
+Use CFLAGS_EXTRA to pass C and C++ flags in a single variable
 
->  It is not strictly needed, but it is still useful to have it because:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/bdwgc/bdwgc.mk | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-True. In this case:
-
- - Bernd did not propagate the dependency to p?p, qt and qt5base, which
-   all three are also directly selecting BR2_PACKAGE_POSTGRESQL
-
- - A number of places where BR2_PACKAGE_POSTGRESQL is selected do not
-   have the !BR2_STATIC_LIBS dependency.
-
-I am really wondering what to do with those "useless" dependencies in
-general. On one hand, I agree with you that semantically, it is better
-to have them. On the other hand:
-
- - It's an additional maintenance burden.
-
- - It's never tested by the autobuilders, because such "useless"
-   dependencies are well, useless, because they are hidden by another
-   higher-level dependency. Because they are not tested, they are often
-   wrong and not maintained.
-
-Due to this, whether we propagate them or not is completely random
-currently through the Buildroot tree, and I'm not sure it's a very nice
-situation.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
+index 5603df8d9d..0d4c8014f4 100644
+--- a/package/bdwgc/bdwgc.mk
++++ b/package/bdwgc/bdwgc.mk
+@@ -19,17 +19,23 @@ HOST_BDWGC_DEPENDENCIES = host-libatomic_ops host-pkgconf
+ # solution.
+ BDWGC_AUTORECONF = YES
+ 
+-BDWGC_CFLAGS = $(TARGET_CFLAGS)
++BDWGC_CONF_OPTS = CFLAGS_EXTRA="$(BDWGC_CFLAGS_EXTRA)"
+ ifeq ($(BR2_sparc),y)
+-BDWGC_CFLAGS += -DAO_NO_SPARC_V9
++BDWGC_CFLAGS_EXTRA += -DAO_NO_SPARC_V9
+ endif
+ ifeq ($(BR2_STATIC_LIBS),y)
+-BDWGC_CFLAGS += -DGC_NO_DLOPEN
++BDWGC_CFLAGS_EXTRA += -DGC_NO_DLOPEN
+ endif
+ 
+ # Ensure we use the system libatomic_ops, and not the internal one.
+-BDWGC_CONF_OPTS = --with-libatomic-ops=yes CFLAGS="$(BDWGC_CFLAGS)"
++BDWGC_CONF_OPTS += --with-libatomic-ops=yes
+ HOST_BDWGC_CONF_OPTS = --with-libatomic-ops=yes
+ 
++ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
++BDWGC_CONF_OPTS += --enable-cplusplus
++else
++BDWGC_CONF_OPTS += --disable-cplusplus
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
