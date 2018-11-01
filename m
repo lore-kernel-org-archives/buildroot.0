@@ -1,28 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Nov 2018 14:39:45 +0100
-Subject: [Buildroot] [PATCH] lua-compat53: bump to version 0.7
-In-Reply-To: <20181031172458.16964-1-joerg.krause@embedded.rocks>
-References: <20181031172458.16964-1-joerg.krause@embedded.rocks>
-Message-ID: <20181101143945.49ce3601@windsurf>
+Date: Thu, 1 Nov 2018 14:41:00 +0100
+Subject: [Buildroot] [git commit] utils/scancpan: add a full stop to the
+ help text when missing
+Message-ID: <20181101133903.527AC846ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ccd05f6fe5ca90c969d8a468390ada162c1d9c92
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 31 Oct 2018 18:24:58 +0100, J?rg Krause wrote:
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/lua-compat53/lua-compat53.hash | 2 +-
->  package/lua-compat53/lua-compat53.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ utils/scancpan | 1 +
+ 1 file changed, 1 insertion(+)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/utils/scancpan b/utils/scancpan
+index e77863de34..5465ff4304 100755
+--- a/utils/scancpan
++++ b/utils/scancpan
+@@ -690,6 +690,7 @@ while (my ($distname, $dist) = each %dist) {
+     mkdir $dirname unless -d $dirname;
+     if ($need_target{$distname} && ($force || !-f $cfgname)) {
+         $dist->{abstract} =~ s|\s+$||;
++        $dist->{abstract} .= q{.} unless $dist->{abstract} =~ m|\.$|;
+         my $abstract = wrap( q{}, qq{\t  }, $dist->{abstract} );
+         my $homepage = $dist->{resources}->{homepage} || qq{https://metacpan.org/release/${distname}};
+         say qq{write ${cfgname}} unless $quiet;
