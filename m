@@ -1,59 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Nov 2018 21:35:30 +0100
-Subject: [Buildroot] [git commit] package/pkg-genric: add possibility to
- declare download dependencies
-Message-ID: <20181101210018.AC8FF867CB@busybox.osuosl.org>
+Date: Thu, 1 Nov 2018 21:31:36 +0100
+Subject: [Buildroot] [git commit] package/pkg-generic: postpone evaluation
+ of dependency conditions
+Message-ID: <20181101210018.9DFA2870DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60d8633ea331225eca24bf3279297091862aee41
+commit: https://git.buildroot.net/buildroot/commit/?id=e8c0caadec8e2518364027855fa885b1fa884835
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For some packages, we may need to have a certain set of host-tools built
-before the download of said packages are attempted. For example, when
-the system tar is not suitable, we will want to build our own tar before
-we attempt a git download (because we generate a tarball in the git
-backend).
+In the pkg-inner macros, all variables, but the positional arguments,
+must be $$-prefixed, so that they are expanded only when the macro is
+evaluated in each package, not when the macro is parsed.
 
-Mimick the _EXTRACT_DEPENDENCIES, and introduce _DOWNLOAD_DEPENDENCIES.
-As for _EXTRACT_DEPENDENCIES, we do not document _DOWNLOAD_DEPENDENCIES,
-on the assumption that it is mostly for internal use.
+It is to be noted, though, that the current code, even though
+incorrect by the above rules, seemed to work. However, the upcoming
+addition of download dependencies, mimicking that code, would not work
+unless it was $$-prefixed.
+
+So, for consistency sake, and for correctness sake, let's always use
+the $$-prefix in the inner macro.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pkg-generic.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/pkg-generic.mk | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 6c72e13632..747e286baf 100644
+index 39174edf6a..6c72e13632 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -608,11 +608,13 @@ endif
+@@ -582,26 +582,26 @@ ifneq ($(1),host-skeleton)
+ $(2)_DEPENDENCIES += host-skeleton
+ endif
  
- # Eliminate duplicates in dependencies
- $(2)_FINAL_DEPENDENCIES = $$(sort $$($(2)_DEPENDENCIES))
-+$(2)_FINAL_DOWNLOAD_DEPENDENCIES = $$(sort $$($(2)_DOWNLOAD_DEPENDENCIES))
- $(2)_FINAL_EXTRACT_DEPENDENCIES = $$(sort $$($(2)_EXTRACT_DEPENDENCIES))
- $(2)_FINAL_PATCH_DEPENDENCIES = $$(sort $$($(2)_PATCH_DEPENDENCIES))
- $(2)_FINAL_ALL_DEPENDENCIES = \
- 	$$(sort \
- 		$$($(2)_FINAL_DEPENDENCIES) \
-+		$$($(2)_FINAL_DOWNLOAD_DEPENDENCIES) \
- 		$$($(2)_FINAL_EXTRACT_DEPENDENCIES) \
- 		$$($(2)_FINAL_PATCH_DEPENDENCIES))
- $(2)_FINAL_RECURSIVE_DEPENDENCIES = \
-@@ -753,6 +755,7 @@ $$($(2)_TARGET_EXTRACT): | $$($(2)_FINAL_EXTRACT_DEPENDENCIES)
- $(1)-depends:		$$($(2)_FINAL_DEPENDENCIES)
+-ifeq ($(filter host-tar host-skeleton host-fakedate,$(1)),)
+-$(2)_EXTRACT_DEPENDENCIES += $(BR2_TAR_HOST_DEPENDENCY)
++ifeq ($$(filter host-tar host-skeleton host-fakedate,$(1)),)
++$(2)_EXTRACT_DEPENDENCIES += $$(BR2_TAR_HOST_DEPENDENCY)
+ endif
  
- $(1)-source:		$$($(2)_TARGET_SOURCE)
-+$$($(2)_TARGET_SOURCE): | $$($(2)_FINAL_DOWNLOAD_DEPENDENCIES)
+-ifeq ($(filter host-tar host-skeleton host-xz host-lzip host-fakedate,$(1)),)
+-$(2)_EXTRACT_DEPENDENCIES += $(BR2_XZCAT_HOST_DEPENDENCY)
++ifeq ($$(filter host-tar host-skeleton host-xz host-lzip host-fakedate,$(1)),)
++$(2)_EXTRACT_DEPENDENCIES += $$(BR2_XZCAT_HOST_DEPENDENCY)
+ endif
  
- $(1)-all-source:	$(1)-legal-source
- $(1)-legal-info:	$(1)-legal-source
+-ifeq ($(filter host-tar host-skeleton host-xz host-lzip host-fakedate,$(1)),)
+-$(2)_EXTRACT_DEPENDENCIES += $(BR2_LZIP_HOST_DEPENDENCY)
++ifeq ($$(filter host-tar host-skeleton host-xz host-lzip host-fakedate,$(1)),)
++$(2)_EXTRACT_DEPENDENCIES += $$(BR2_LZIP_HOST_DEPENDENCY)
+ endif
+ 
+-ifeq ($(BR2_CCACHE),y)
+-ifeq ($(filter host-tar host-skeleton host-xz host-lzip host-fakedate host-ccache,$(1)),)
++ifeq ($$(BR2_CCACHE),y)
++ifeq ($$(filter host-tar host-skeleton host-xz host-lzip host-fakedate host-ccache,$(1)),)
+ $(2)_DEPENDENCIES += host-ccache
+ endif
+ endif
+ 
+-ifeq ($(BR2_REPRODUCIBLE),y)
+-ifeq ($(filter host-skeleton host-fakedate,$(1)),)
++ifeq ($$(BR2_REPRODUCIBLE),y)
++ifeq ($$(filter host-skeleton host-fakedate,$(1)),)
+ $(2)_DEPENDENCIES += host-fakedate
+ endif
+ endif
