@@ -1,97 +1,89 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 1 Nov 2018 18:04:28 +0100
-Subject: [Buildroot] [PATCH] Config.in: add BR2_DL_DIR_OPTS
-In-Reply-To: <CAGt4E5vUJGDUnO1vhzkMqdP86Li05Ae+eMmSNN1h8g85MsXK7g@mail.gmail.com>
-References: <20181031213930.49837-1-mmayer@broadcom.com>
- <23d9ca8b-1c2a-5f1b-891e-5867b25d1ec7@mind.be>
- <20181101122302.GS28575@scaer>
- <CAGt4E5vUJGDUnO1vhzkMqdP86Li05Ae+eMmSNN1h8g85MsXK7g@mail.gmail.com>
-Message-ID: <20181101170428.GV28575@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu,  1 Nov 2018 18:05:22 +0100
+Subject: [Buildroot] [PATCH 1/3] package/alsa-utils: re-enable in
+ BR2_STATIC_LIBS configuration
+Message-ID: <20181101170524.2756-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Markus, All,
+In commit 4707383c5d501a9ad7698579e5d0a4e2ab758c7e ("alsa-utils: needs
+dynamic library support"), we added a !BR2_STATIC_LIBS dependency
+because topology/topology.c was including <dlfcn.h>.
 
-On 2018-11-01 08:16 -0700, Markus Mayer spake thusly:
-> On Thu, 1 Nov 2018 at 05:23, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > On 2018-11-01 13:19 +0100, Arnout Vandecappelle spake thusly:
-> > > On 31/10/18 22:39, Markus Mayer wrote:
-> > > > Provide a simple mechanism to pass extra arguments to "mkdir" when
-> > > > creating download directories. This can be helpful if one needs the
-> > > > download directories to be writable multiple users ("shared download
-> > > > cache").
-> > >
-> > >  I think having a Config.in option for this is way overkill. You can just make
-> > > the directory before calling Buildroot, right? And if it is a shared directory,
-> > > it should be created only once anyway.
-> >
-> > Yes for the top-level BR2_DL_DIR. But Buildroot does create sub-dirs,
-> > one per package, and Bbuildroot also enforces the umask to 0022, which
-> > means sub-dirs will not have the group-writable bit set.
-> 
-> Yep. That's exactly the problem we are running into. There was no
-> issue when buildroot wasn't creating sub-dirs per package. But now,
-> with a sub-dir per package, those sub-directories end up being
-> non-writable by group, which means that a different user building
-> buildroot at a time when there is a new source tar-ball to download,
-> will receive a permission error.
-> 
-> BTW, the whole exercise of using a shared "dl" directory is to
-> conserve disk space on build machines.
+However, it turns out that this include is not needed/used at all, so
+we can instead drop it, and re-enable the package in BR2_STATIC_LIBS
+configuration.
 
-Note: I'm all in favour of fixing this use-case, but I have a few other
-suggestion in addition to fixing the issue:
+This was discovered when analyzing why we have
+package/alsa-lib/0003-alsa-lib-conditionally-enable-libdl-in-AM_PATH_ALSA-.patch. This
+patch fixes the AM_PATH_ALSA autoconf macro, used by alsa-utils, so
+that ALSA_LIBS doesn't carry the -ldl option, fixing static-linking
+scenarios. This patch had become useless since alsa-utils was no
+longer available in BR2_STATIC_LIBS configuration.
 
-0. one may use newgrp to switch to the grou that owns the download
-   directory:
-    - first, prepare the directory:
-        $ mkdir /some/place/dl-dir
-        $ chown some-group /some/place/dl-dir
-        $ chmod g+rwxs /some/place/dl-dir
-    - now, each user uses newgrp:
-        $ export BR2_DL_DIR=/some/place/dl-dir
-        $ newgrp some-group
-        $ make source
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...-topology.c-drop-unneeded-dlfcn.h-include.patch | 29 ++++++++++++++++++++++
+ package/alsa-utils/Config.in                       |  5 ++--
+ 2 files changed, 31 insertions(+), 3 deletions(-)
+ create mode 100644 package/alsa-utils/0001-topology-topology.c-drop-unneeded-dlfcn.h-include.patch
 
-1. one could also use a de-duplicating filesystem, like btrfs for example.
-
-But as I said, I'd like we also fix your use-case, and I have a series
-locally that gets rid of the umask altogether. But even that will
-require that participating users use an appropriate umask of course.
-
-Regards,
-Yann E. MORIN.
-
-> Thanks,
-> -Markus
-> 
-> > Regards,
-> > Yann E. MORIN.
-> >
-> > >  Regards,
-> > >  Arnout
-> > >
-> > > [snip]
-> > > _______________________________________________
-> > > buildroot mailing list
-> > > buildroot at busybox.net
-> > > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
-> > --
-> > .-----------------.--------------------.------------------.--------------------.
-> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> > | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> > '------------------------------^-------^------------------^--------------------'
-
+diff --git a/package/alsa-utils/0001-topology-topology.c-drop-unneeded-dlfcn.h-include.patch b/package/alsa-utils/0001-topology-topology.c-drop-unneeded-dlfcn.h-include.patch
+new file mode 100644
+index 0000000000..2a8be0b0b7
+--- /dev/null
++++ b/package/alsa-utils/0001-topology-topology.c-drop-unneeded-dlfcn.h-include.patch
+@@ -0,0 +1,29 @@
++From 4c9462a5ef2f680b24ddf6bae7ac7c693fa6a136 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Thu, 1 Nov 2018 15:15:31 +0100
++Subject: [PATCH] topology/topology.c: drop unneeded <dlfcn.h> include
++
++This include is not used/needed and prevents building on systems that
++don't provide <dlfcn.h>.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Upstream: http://mailman.alsa-project.org/pipermail/alsa-devel/2018-November/141375.html
++---
++ topology/topology.c | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/topology/topology.c b/topology/topology.c
++index 097c255..b72e341 100644
++--- a/topology/topology.c
+++++ b/topology/topology.c
++@@ -27,7 +27,6 @@
++ #include <errno.h>
++ #include <string.h>
++ #include <sys/stat.h>
++-#include <dlfcn.h>
++ #include <getopt.h>
++ #include <assert.h>
++ 
++-- 
++2.14.4
++
+diff --git a/package/alsa-utils/Config.in b/package/alsa-utils/Config.in
+index edf5d39f26..012f28aef4 100644
+--- a/package/alsa-utils/Config.in
++++ b/package/alsa-utils/Config.in
+@@ -1,12 +1,11 @@
+-comment "alsa-utils needs a toolchain w/ threads, dynamic library"
++comment "alsa-utils needs a toolchain w/ threads"
+ 	depends on BR2_USE_MMU # fork
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ menuconfig BR2_PACKAGE_ALSA_UTILS
+ 	bool "alsa-utils"
+ 	depends on BR2_USE_MMU # fork
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
+-	depends on !BR2_STATIC_LIBS # uses dlfcn.h
+ 	select BR2_PACKAGE_ALSA_LIB
+ 	help
+ 	  This package contains the command line utilities for the ALSA
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.4
