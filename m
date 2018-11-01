@@ -1,84 +1,76 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 1 Nov 2018 11:54:29 +0100
-Subject: [Buildroot] [git commit] python-multidict: new package
-Message-ID: <20181101105259.52E3D83A82@busybox.osuosl.org>
+From: Nasser <afshin.nasser@gmail.com>
+Date: Thu, 1 Nov 2018 14:25:13 +0330
+Subject: [Buildroot] [PATCH] merge_config.sh: Fix merging buildroot
+ config files
+In-Reply-To: <20181101062448.GC8261@x230>
+References: <20181031205608.GA4061@x230>
+ <20181101010953.20996-1-afshin.nasser@gmail.com>
+ <20181101062448.GC8261@x230>
+Message-ID: <20181101105513.GB4937@smart-ThinkPad-T410>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a4e3de63e43af74c021307567e5cc8570ce4654c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Petr,
+On Thu, Nov 01, 2018 at 07:24:49AM +0100, Petr Vorel wrote:
+> Hi Nasser,
+> 
+> ...
+> > @@ -157,6 +162,7 @@ fi
+> >  # Use the merged file as the starting point for:
+> >  # alldefconfig: Fills in any missing symbols with Kconfig default
+> >  # allnoconfig: Fills in any missing symbols with # CONFIG_* is not set
+> > +unset CONFIG_
+> You added unset, which isn't in upstream patch. This has no effect, so I'd be
+> for removing it. Even if it has (if it was needed), it'd be better to 1) ask
+> upstream to add it 2) keep it in separate patch in meanwhile (otherwise it
+> complicates patch rebasing during update and can be lost).
+Removing unset will cause the following make command work wrong. Note
+that the value of this environment variable is checked [1] and used. The
+result of removing the unset line is that we will have double BR2_
+prefixes in the final .config file as well as lots of warnings when
+checking if all specified config values have been taken.
 
-Multidict is dict-like collection of key-value pairs where a key may
-occur more than once in the container.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-[Arnout: extend help text based on commit message.]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/Config.in                              |  1 +
- package/python-multidict/Config.in             |  8 ++++++++
- package/python-multidict/python-multidict.hash |  5 +++++
- package/python-multidict/python-multidict.mk   | 14 ++++++++++++++
- 4 files changed, 28 insertions(+)
-
-diff --git a/package/Config.in b/package/Config.in
-index dc49e7c2ba..3334d0d1cf 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -908,6 +908,7 @@ menu "External python modules"
- 	source "package/python-mistune/Config.in"
- 	source "package/python-more-itertools/Config.in"
- 	source "package/python-msgpack/Config.in"
-+	source "package/python-multidict/Config.in"
- 	source "package/python-mutagen/Config.in"
- 	source "package/python-mwclient/Config.in"
- 	source "package/python-mwscrape/Config.in"
-diff --git a/package/python-multidict/Config.in b/package/python-multidict/Config.in
-new file mode 100644
-index 0000000000..7bfaa36db2
---- /dev/null
-+++ b/package/python-multidict/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_MULTIDICT
-+	bool "python-multidict"
-+	depends on BR2_PACKAGE_PYTHON3
-+	help
-+	  Multidict is dict-like collection of key-value pairs where a
-+	  key may occur more than once in the container.
-+
-+	  https://github.com/aio-libs/multidict
-diff --git a/package/python-multidict/python-multidict.hash b/package/python-multidict/python-multidict.hash
-new file mode 100644
-index 0000000000..aa15eed1c7
---- /dev/null
-+++ b/package/python-multidict/python-multidict.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/multidict/json
-+md5	55d19168f955e5463c6f6b530e913da3  multidict-4.4.2.tar.gz
-+sha256	3c11e92c3dfc321014e22fb442bc9eb70e01af30d6ce442026b0c35723448c66  multidict-4.4.2.tar.gz
-+# Locally computed sha256 checksums
-+sha256	a1c5825513279d3085a0ba46880e148ea3710c149bbaedcf2d11605a5ed3c4ad  LICENSE
-diff --git a/package/python-multidict/python-multidict.mk b/package/python-multidict/python-multidict.mk
-new file mode 100644
-index 0000000000..f88135cb69
---- /dev/null
-+++ b/package/python-multidict/python-multidict.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-multidict
-+#
-+################################################################################
-+
-+PYTHON_MULTIDICT_VERSION = 4.4.2
-+PYTHON_MULTIDICT_SOURCE = multidict-$(PYTHON_MULTIDICT_VERSION).tar.gz
-+PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/b3/5f/5c29cde8511c95fad045b9ecaf2e76f0da18761e8363a82594f5a58c2ced
-+PYTHON_MULTIDICT_SETUP_TYPE = setuptools
-+PYTHON_MULTIDICT_LICENSE = Apache-2.0
-+PYTHON_MULTIDICT_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+I think we should follow your steps to include it.
+> 
+> ...
+> > diff --git a/support/kconfig/patches/20-merge_config.sh-Allow-to-define-config-prefix.patch b/support/kconfig/patches/20-merge_config.sh-Allow-to-define-config-prefix.patch
+> ...
+> > + # Use the merged file as the starting point for:
+> > + # alldefconfig: Fills in any missing symbols with Kconfig default
+> > + # allnoconfig: Fills in any missing symbols with # CONFIG_* is not set
+> > ++unset CONFIG_
+> 
+> BTW (I noted that before) your patch contain trailing whitespace and mixing tab
+> and spaces. git am and pwclient fixes that, only when applying with patch they
+> get committed, so nothing serious.
+> 
+> $ pwclient git-am -p buildroot 991781
+> .git/rebase-apply/patch:59: space before tab in indent.
+>  	echo "  -r    list redundant entries when merging fragments"
+> .git/rebase-apply/patch:60: space before tab in indent.
+>  	echo "  -O    dir to put generated output files.  Consider setting \$KCONFIG_CONFIG instead."
+> .git/rebase-apply/patch:61: space before tab in indent.
+>  	echo "  -e    colon-separated list of br2-external trees to use (optional)"
+> .git/rebase-apply/patch:66: trailing whitespace.
+>  
+> .git/rebase-apply/patch:72: trailing whitespace.
+>  
+> warning: squelched 6 whitespace errors
+> warning: 10 lines applied after fixing whitespace errors.
+> Applying: merge_config.sh: Fix merging buildroot config files
+> Applying patch #991781 using 'git am'
+> Description: merge_config.sh: Fix merging buildroot config files
+> 
+I think this is because we are including a patch in another patch. As
+you can see in your previous commit:
+a3366b270562f42723a3b8032f73bb03b541d113, this patch has the same issue
+because it includes another patch.
+I don't know how to avoid that if we should do so.
+> Kind regards,
+> Petr
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git/tree/scripts/kconfig/lkc.h?h=for-next&id=f6fe19e9d84400e1c9544c1909952c2c7c6a90#n26
+Kind regards,
+Nasser
