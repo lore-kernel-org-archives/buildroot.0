@@ -1,35 +1,97 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Thu, 1 Nov 2018 17:19:19 +0100
-Subject: [Buildroot] [PATCH] merge_config.sh: Fix merging buildroot
- config files
-In-Reply-To: <7ba255c0-e72e-7e02-d972-f8f082ce5214@mind.be>
-References: <20181031205608.GA4061@x230>
- <20181101010953.20996-1-afshin.nasser@gmail.com>
- <20181101062448.GC8261@x230>
- <20181101105513.GB4937@smart-ThinkPad-T410>
- <7ba255c0-e72e-7e02-d972-f8f082ce5214@mind.be>
-Message-ID: <20181101161918.GA30470@x230>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 1 Nov 2018 18:04:28 +0100
+Subject: [Buildroot] [PATCH] Config.in: add BR2_DL_DIR_OPTS
+In-Reply-To: <CAGt4E5vUJGDUnO1vhzkMqdP86Li05Ae+eMmSNN1h8g85MsXK7g@mail.gmail.com>
+References: <20181031213930.49837-1-mmayer@broadcom.com>
+ <23d9ca8b-1c2a-5f1b-891e-5867b25d1ec7@mind.be>
+ <20181101122302.GS28575@scaer>
+ <CAGt4E5vUJGDUnO1vhzkMqdP86Li05Ae+eMmSNN1h8g85MsXK7g@mail.gmail.com>
+Message-ID: <20181101170428.GV28575@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Markus, All,
 
-> > Removing unset will cause the following make command work wrong. Note
-> > that the value of this environment variable is checked [1] and used. The
-> > result of removing the unset line is that we will have double BR2_
-> > prefixes in the final .config file as well as lots of warnings when
-> > checking if all specified config values have been taken.
+On 2018-11-01 08:16 -0700, Markus Mayer spake thusly:
+> On Thu, 1 Nov 2018 at 05:23, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > On 2018-11-01 13:19 +0100, Arnout Vandecappelle spake thusly:
+> > > On 31/10/18 22:39, Markus Mayer wrote:
+> > > > Provide a simple mechanism to pass extra arguments to "mkdir" when
+> > > > creating download directories. This can be helpful if one needs the
+> > > > download directories to be writable multiple users ("shared download
+> > > > cache").
+> > >
+> > >  I think having a Config.in option for this is way overkill. You can just make
+> > > the directory before calling Buildroot, right? And if it is a shared directory,
+> > > it should be created only once anyway.
+> >
+> > Yes for the top-level BR2_DL_DIR. But Buildroot does create sub-dirs,
+> > one per package, and Bbuildroot also enforces the umask to 0022, which
+> > means sub-dirs will not have the group-writable bit set.
+> 
+> Yep. That's exactly the problem we are running into. There was no
+> issue when buildroot wasn't creating sub-dirs per package. But now,
+> with a sub-dir per package, those sub-directories end up being
+> non-writable by group, which means that a different user building
+> buildroot at a time when there is a new source tar-ball to download,
+> will receive a permission error.
+> 
+> BTW, the whole exercise of using a shared "dl" directory is to
+> conserve disk space on build machines.
 
->  We have no prefix, the BR2_ is mere convention. So when calling merge_config,
-> we should set CONFIG_ to empty, not to BR2_.
+Note: I'm all in favour of fixing this use-case, but I have a few other
+suggestion in addition to fixing the issue:
 
->  So indeed, the unset should be removed.
+0. one may use newgrp to switch to the grou that owns the download
+   directory:
+    - first, prepare the directory:
+        $ mkdir /some/place/dl-dir
+        $ chown some-group /some/place/dl-dir
+        $ chmod g+rwxs /some/place/dl-dir
+    - now, each user uses newgrp:
+        $ export BR2_DL_DIR=/some/place/dl-dir
+        $ newgrp some-group
+        $ make source
 
-+1. I overlooked that regexp works with empty $CONFIG_ as well.
-Thanks for explanation.
+1. one could also use a de-duplicating filesystem, like btrfs for example.
 
-Kind regards,
-Petr
+But as I said, I'd like we also fix your use-case, and I have a series
+locally that gets rid of the umask altogether. But even that will
+require that participating users use an appropriate umask of course.
+
+Regards,
+Yann E. MORIN.
+
+> Thanks,
+> -Markus
+> 
+> > Regards,
+> > Yann E. MORIN.
+> >
+> > >  Regards,
+> > >  Arnout
+> > >
+> > > [snip]
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot at busybox.net
+> > > http://lists.busybox.net/mailman/listinfo/buildroot
+> >
+> > --
+> > .-----------------.--------------------.------------------.--------------------.
+> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> > | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> > '------------------------------^-------^------------------^--------------------'
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
