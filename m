@@ -1,45 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Nov 2018 14:51:15 +0100
-Subject: [Buildroot] [PATCH v2] alsa-utils: install systemd sevice files
-In-Reply-To: <20181030224139.5140-1-ps.report@gmx.net>
-References: <20181030224139.5140-1-ps.report@gmx.net>
-Message-ID: <20181101145115.38919e8f@windsurf>
+Date: Thu, 1 Nov 2018 14:51:30 +0100
+Subject: [Buildroot] [git commit] package/pdbg: bump to version v2.0
+Message-ID: <20181101134944.61AF884D73@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ee0a12eac954f0953ac6a09fe7eecbd347c8c450
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 30 Oct 2018 23:41:39 +0100, Peter Seiderer wrote:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v1 -> v2:
->   - fix symlinks (reported by ????? ??????????)
-> ---
->  package/alsa-utils/alsa-utils.mk | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pdbg/pdbg.hash | 2 +-
+ package/pdbg/pdbg.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-So, I have applied (after fixing the typo in the commit title), but I
-am not a big fan in fact. Indeed, the alsa-utils build system has all
-the logic to install those service files, provided --enable-systemd is
-passed.
-
-Unfortunately, we completely override the alsa-utils "make install"
-before since we define ALSA_UTILS_INSTALL_TARGET_CMDS.
-
-Perhaps the alsa-utils package should be reworked to use
-ALSA_UTILS_INSTALL_TARGET_CMDS, and then use post-install target hooks
-to remove unwanted programs/data if applicable.
-
-But since that was clearly a larger effort, I took your patch as-is as
-it does the right thing considering how alsa-utils.mk works today.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/pdbg/pdbg.hash b/package/pdbg/pdbg.hash
+index cd7a6b0cb7..2f11ad5996 100644
+--- a/package/pdbg/pdbg.hash
++++ b/package/pdbg/pdbg.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 bb1a77b66322b6976c9a11a573cf29d59bf4179f839c0157aa1cd49db6c0f25c pdbg-pdbg-1.1-rc3.tar.gz
++sha256 da65ebbd9a710555e9684472ee36fff37e897111034fcc2c07172cc39016d169 pdbg-v2.0.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
+diff --git a/package/pdbg/pdbg.mk b/package/pdbg/pdbg.mk
+index 45a1a288ee..ba3b0b8877 100644
+--- a/package/pdbg/pdbg.mk
++++ b/package/pdbg/pdbg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PDBG_VERSION = pdbg-1.1-rc3
++PDBG_VERSION = v2.0
+ PDBG_SITE = $(call github,open-power,pdbg,$(PDBG_VERSION))
+ PDBG_LICENSE = Apache-2.0
+ PDBG_LICENSE_FILES = COPYING
