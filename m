@@ -1,90 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 1 Nov 2018 22:01:03 +0100
-Subject: [Buildroot] [PATCH v2] fs: allow filesystems to set the name of
- their output file
-In-Reply-To: <20181025002043.2235-1-casantos@datacom.com.br>
-References: <20181024143616.GA31663@scaer>
- <20181025002043.2235-1-casantos@datacom.com.br>
-Message-ID: <20181101210103.GX28575@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 1 Nov 2018 22:01:46 +0100
+Subject: [Buildroot] [git commit] fs/common: always depend on build host-tar
+ if needed
+Message-ID: <20181101210018.CD644870DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Carlos, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=89c92487cf3268fd679e1b92bfad85fedcde22e4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2018-10-24 21:20 -0300, Carlos Santos spake thusly:
-> Some filesystems may want to tweak their output names, rather than using
-> the fixed "rootfs.foo" scheme. Add a ROOTFS_FOO_IMAGE_NAME variable for
-> this purpose.
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-> ---
-> Supersedes: https://patchwork.ozlabs.org/patch/988446/
-> 
-> Changes v1->v2:
-> - Prevent leading space when the filesystem gets 'imaginative', as
->   pointed by Yann Morin.
-> 
-> NOTE: https://patchwork.ozlabs.org/patch/927116/ must be upated to
-> document this.
-> ---
->  fs/common.mk | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
-> 
-> diff --git a/fs/common.mk b/fs/common.mk
-> index 453da6010a..9c2f9c6dd4 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -106,6 +106,8 @@ rootfs-common-show-depends:
->  # all variable references except the arguments must be $$-quoted.
->  define inner-rootfs
->  
-> +ROOTFS_$(2)_IMAGE_NAME ?= rootfs.$(1)
-> +ROOTFS_$(2)_FINAL_IMAGE_NAME = $$(call qstrip,$$(ROOTFS_$()_IMAGE_NAME))
-                                                           ^^^
+Currently, the filesystems do not depend on building host-tar when it
+is needed, even though all of them have to extract the intermediate
+tarball.
 
-This patch has not been tested at all, it can't even possibly work...
+However, in degenerate (but legally valid) configurations with no
+user-selectable package selected, host-tar would not be built, so the
+rootfs images would use whatever improper tar the system has.
 
-Regards,
-Yann E. MORIN.
+Add the conditional dependency to host-tar to the rootfs-common
+intermediate image. Since this is the internal step that all real rootfs
+generators depend on, they now properly depend on host-tar when needed.
 
->  ROOTFS_$(2)_DIR = $$(FS_DIR)/$(1)
->  ROOTFS_$(2)_TARGET_DIR = $$(ROOTFS_$(2)_DIR)/target
->  
-> @@ -140,10 +142,10 @@ ROOTFS_$(2)_COMPRESS_EXT = .xz
->  ROOTFS_$(2)_COMPRESS_CMD = xz -9 -C crc32 -c
->  endif
->  
-> -$$(BINARIES_DIR)/rootfs.$(1): ROOTFS=$(2)
-> -$$(BINARIES_DIR)/rootfs.$(1): FAKEROOT_SCRIPT=$$(ROOTFS_$(2)_DIR)/fakeroot
-> -$$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
-> -	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
-> +$$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME): ROOTFS=$(2)
-> +$$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME): FAKEROOT_SCRIPT=$$(ROOTFS_$(2)_DIR)/fakeroot
-> +$$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME): $$(ROOTFS_$(2)_DEPENDENCIES)
-> +	@$$(call MESSAGE,"Generating filesystem image $$(ROOTFS_$(2)_FINAL_IMAGE_NAME)")
->  	rm -rf $$(ROOTFS_$(2)_DIR)
->  	mkdir -p $$(ROOTFS_$(2)_DIR)
->  	echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
-> @@ -164,7 +166,7 @@ endif
->  rootfs-$(1)-show-depends:
->  	@echo $$(ROOTFS_$(2)_DEPENDENCIES)
->  
-> -rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1)
-> +rootfs-$(1): $$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME)
->  
->  .PHONY: rootfs-$(1) rootfs-$(1)-show-depends
->  
-> -- 
-> 2.17.1
-> 
+In practice, when host-tar is needed, it will always be built before the
+rootfs images, because it is a dependency of all packages (except a very
+few, like the skeleton), of which host-fakeroot, which is a mandatory
+dependency of rootfs-comon anyway. But for consistency sake, let's
+explicitly add host-tar as a dependency to rootfs-common too.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Note that rootfs-tar already had that dependency, and we leave it as-is
+because it is semantically correct, even if superfluous.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ fs/common.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/fs/common.mk b/fs/common.mk
+index 453da6010a..2a5a202a89 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -63,6 +63,7 @@ ROOTFS_COMMON_TARGET_DIR = $(FS_DIR)/target
+ 
+ ROOTFS_COMMON_DEPENDENCIES = \
+ 	host-fakeroot host-makedevs \
++	$(BR2_TAR_HOST_DEPENDENCY) \
+ 	$(if $(PACKAGES_USERS)$(ROOTFS_USERS_TABLES),host-mkpasswd)
+ 
+ $(ROOTFS_COMMON_TAR): ROOTFS=COMMON
