@@ -1,47 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Nov 2018 13:53:36 +0100
-Subject: [Buildroot] [git commit] libgpg-error: bump to version 1.32
-Message-ID: <20181101131712.0E1FF83CAB@busybox.osuosl.org>
+Date: Thu, 1 Nov 2018 13:53:43 +0100
+Subject: [Buildroot] [git commit] libgpgme: bump to version 1.12.0
+Message-ID: <20181101131712.1626883CAB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00f879faf5169f5b78f8ee2d267f7add639eb8ba
+commit: https://git.buildroot.net/buildroot/commit/?id=858fa64203a6bc9896075198ef25dfa97ab06ec9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libgpg-error/libgpg-error.hash | 5 +++--
- package/libgpg-error/libgpg-error.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/libgpgme/libgpgme.hash | 9 +++++----
+ package/libgpgme/libgpgme.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/libgpg-error/libgpg-error.hash b/package/libgpg-error/libgpg-error.hash
-index 608f9c62d7..93593b1411 100644
---- a/package/libgpg-error/libgpg-error.hash
-+++ b/package/libgpg-error/libgpg-error.hash
-@@ -1,6 +1,7 @@
+diff --git a/package/libgpgme/libgpgme.hash b/package/libgpgme/libgpgme.hash
+index 54c7bf7a09..1e61fbd833 100644
+--- a/package/libgpgme/libgpgme.hash
++++ b/package/libgpgme/libgpgme.hash
+@@ -1,7 +1,8 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q2/000423.html
+-sha1 95b1fc427871ca8d30d6d3b1985c816fe0b5077b  gpgme-1.11.1.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q4/000429.html
++sha1 6f1828fcd7de4366ca063e57f35e4ab24bc91baf  gpgme-1.12.0.tar.bz2
  # Locally calculated after checking pgp signature
--# https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.31.tar.bz2.sig
--sha256 40d0a823c9329478063903192a1f82496083b277265904878f4bc09e0db7a4ef  libgpg-error-1.31.tar.bz2
-+# https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.32.tar.bz2.sig
+-# https://gnupg.org/ftp/gcrypt/gpgme/gpgme-1.11.1.tar.bz2.sig
+-sha256 2d1b111774d2e3dd26dcd7c251819ce4ef774ec5e566251eb9308fa7542fbd6f  gpgme-1.11.1.tar.bz2
++# https://gnupg.org/ftp/gcrypt/gpgme/gpgme-1.12.0.tar.bz2.sig
 +# using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
-+sha256 c345c5e73cc2332f8d50db84a2280abfb1d8f6d4f1858b9daa30404db44540ca  libgpg-error-1.32.tar.bz2
++sha256 b4dc951c3743a60e2e120a77892e9e864fb936b2e58e7c77e8581f4d050e8cd8  gpgme-1.12.0.tar.bz2
  # Locally calculated
- sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
- sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
-diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
-index aed5a517b0..ef817c7cc6 100644
---- a/package/libgpg-error/libgpg-error.mk
-+++ b/package/libgpg-error/libgpg-error.mk
+ sha256 ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LESSER
+diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
+index 03402cf382..a70ffcf11d 100644
+--- a/package/libgpgme/libgpgme.mk
++++ b/package/libgpgme/libgpgme.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGPG_ERROR_VERSION = 1.31
-+LIBGPG_ERROR_VERSION = 1.32
- LIBGPG_ERROR_SITE = https://www.gnupg.org/ftp/gcrypt/libgpg-error
- LIBGPG_ERROR_SOURCE = libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
- LIBGPG_ERROR_LICENSE = GPL-2.0+, LGPL-2.1+
+-LIBGPGME_VERSION = 1.11.1
++LIBGPGME_VERSION = 1.12.0
+ LIBGPGME_SITE = https://gnupg.org/ftp/gcrypt/gpgme
+ LIBGPGME_SOURCE = gpgme-$(LIBGPGME_VERSION).tar.bz2
+ LIBGPGME_LICENSE = LGPL-2.1+
