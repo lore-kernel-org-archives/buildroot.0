@@ -1,53 +1,54 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Thu,  1 Nov 2018 13:58:16 -0500
-Subject: [Buildroot] [PATCH 2/2] package/libdrm: correct cunit test
- dependency
-In-Reply-To: <1541098696-25824-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1541098696-25824-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1541098696-25824-2-git-send-email-matthew.weber@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 1 Nov 2018 21:20:21 +0100
+Subject: [Buildroot] [PATCH v1] libv4l: bump version to 1.16.1
+In-Reply-To: <20181026192647.22826-1-ps.report@gmx.net>
+References: <20181026192647.22826-1-ps.report@gmx.net>
+Message-ID: <20181101212021.4636aa20@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Previously the option to install tests would result in the test
-cases that don't have a cunit dependency, to build and be installed.
+Hello,
 
-This patch adds the cunit dependency so all test cases are built and
-installed to target when that is selected via kconfig.
+On Fri, 26 Oct 2018 21:26:47 +0200, Peter Seiderer wrote:
+> Removed patches:
+> 
+> - 0003-libdvbv5-add-optional-copy-of-TEMP_FAILURE_RETRY-mac.patch
+>   (Upstream accepted, see [1])
+> 
+> - 0005-libv4lconvert-fix-compiler-warning.patch
+>   (From upstream, see [2])
+> 
+> - 0006-v4l2-ctl-fix-glibc-2.28-build.patch
+>   (From upstream, see [3])
+> 
+> Disable new qvidcap for now.
+> 
+> [1] https://git.linuxtv.org/v4l-utils.git/commit/?id=c28248deeb2d7fe43fcde948c00b9b8fa2bc1e8f
+> [2] https://git.linuxtv.org/v4l-utils.git/commit/?id=380fe7d4548a99bfcfc1594b6f0b3dd2369978f1
+> [3] https://git.linuxtv.org/v4l-utils.git/commit/?id=65e7b2a4076845d3932b88cb9c76f1fa4b78c32c
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  ...ional-copy-of-TEMP_FAILURE_RETRY-mac.patch | 39 ----------------
+>  ...5-libv4lconvert-fix-compiler-warning.patch | 45 -------------------
+>  .../0006-v4l2-ctl-fix-glibc-2.28-build.patch  | 30 -------------
+>  package/libv4l/libv4l.hash                    |  4 +-
+>  package/libv4l/libv4l.mk                      |  8 ++--
+>  5 files changed, 6 insertions(+), 120 deletions(-)
+>  delete mode 100644 package/libv4l/0003-libdvbv5-add-optional-copy-of-TEMP_FAILURE_RETRY-mac.patch
+>  delete mode 100644 package/libv4l/0005-libv4lconvert-fix-compiler-warning.patch
+>  delete mode 100644 package/libv4l/0006-v4l2-ctl-fix-glibc-2.28-build.patch
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- package/libdrm/Config.in | 1 +
- package/libdrm/libdrm.mk | 3 +++
- 2 files changed, 4 insertions(+)
+Applied to master, thanks. It would be nice to try to upstream the few
+remaining patches we have on libv4l.
 
-diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
-index 581f921..9dd1fb7 100644
---- a/package/libdrm/Config.in
-+++ b/package/libdrm/Config.in
-@@ -99,6 +99,7 @@ config BR2_PACKAGE_LIBDRM_VC4
- 
- config BR2_PACKAGE_LIBDRM_INSTALL_TESTS
- 	bool "Install test programs"
-+	select BR2_PACKAGE_CUNIT
- 	help
- 	  This option allows to install the libdrm test programs.
- 
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 18ef9cd..e927dd1 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -115,6 +115,9 @@ endif
- 
- ifeq ($(BR2_PACKAGE_LIBDRM_INSTALL_TESTS),y)
- LIBDRM_CONF_OPTS += --enable-install-test-programs
-+# By default most of the test cases with automatically
-+# be disabled if cunit is not present
-+LIBDRM_DEPENDENCIES += cunit
- endif
- 
- $(eval $(autotools-package))
+Thanks!
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
