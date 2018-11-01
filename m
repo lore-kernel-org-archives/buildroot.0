@@ -1,49 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Nov 2018 13:53:30 +0100
-Subject: [Buildroot] [git commit] libgpg-error: enable riscv64 support
-Message-ID: <20181101131712.02E7483CAB@busybox.osuosl.org>
+Date: Thu, 1 Nov 2018 13:53:36 +0100
+Subject: [Buildroot] [git commit] libgpg-error: bump to version 1.32
+Message-ID: <20181101131712.0E1FF83CAB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b32d92f456b638f33551f6b9a17d9fe11ea50d71
+commit: https://git.buildroot.net/buildroot/commit/?id=00f879faf5169f5b78f8ee2d267f7add639eb8ba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libgpg-error version 1.28 added support for riscv64.
-
-Cc: Mark Corbin <mark.corbin@embecosm.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libgpg-error/Config.in | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ package/libgpg-error/libgpg-error.hash | 5 +++--
+ package/libgpg-error/libgpg-error.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/libgpg-error/Config.in b/package/libgpg-error/Config.in
-index 40424e41cf..0659a834bf 100644
---- a/package/libgpg-error/Config.in
-+++ b/package/libgpg-error/Config.in
-@@ -6,9 +6,10 @@ config BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
- 		BR2_armeb	|| BR2_i386		|| BR2_mips	|| \
- 		BR2_mipsel	|| BR2_mips64		|| BR2_mips64el	|| \
- 		BR2_m68k	|| BR2_nios2		|| BR2_powerpc	|| \
--		BR2_powerpc64 	|| BR2_powerpc64le 	|| BR2_sh4	|| \
--		BR2_sh4eb	|| BR2_sh4a		|| BR2_sh4aeb	|| \
--		BR2_sparc	|| BR2_sparc64		|| BR2_x86_64
-+		BR2_powerpc64 	|| BR2_powerpc64le 	|| BR2_RISCV_64	|| \
-+		BR2_sh4		|| BR2_sh4eb		|| BR2_sh4a	|| \
-+		BR2_sh4aeb	|| BR2_sparc		|| BR2_sparc64	|| \
-+		BR2_x86_64
+diff --git a/package/libgpg-error/libgpg-error.hash b/package/libgpg-error/libgpg-error.hash
+index 608f9c62d7..93593b1411 100644
+--- a/package/libgpg-error/libgpg-error.hash
++++ b/package/libgpg-error/libgpg-error.hash
+@@ -1,6 +1,7 @@
+ # Locally calculated after checking pgp signature
+-# https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.31.tar.bz2.sig
+-sha256 40d0a823c9329478063903192a1f82496083b277265904878f4bc09e0db7a4ef  libgpg-error-1.31.tar.bz2
++# https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.32.tar.bz2.sig
++# using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
++sha256 c345c5e73cc2332f8d50db84a2280abfb1d8f6d4f1858b9daa30404db44540ca  libgpg-error-1.32.tar.bz2
+ # Locally calculated
+ sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+ sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
+diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
+index aed5a517b0..ef817c7cc6 100644
+--- a/package/libgpg-error/libgpg-error.mk
++++ b/package/libgpg-error/libgpg-error.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_LIBGPG_ERROR
- 	bool "libgpg-error"
-@@ -39,6 +40,8 @@ config BR2_PACKAGE_LIBGPG_ERROR_SYSCFG
- 		if BR2_powerpc
- 	default "powerpc64-unknown-linux-gnu" \
- 		if BR2_powerpc64 || BR2_powerpc64le
-+	default "riscv64-unknown-linux-gnu" \
-+		if BR2_RISCV_64
- 	default "sh4-unknown-linux-gnu" \
- 		if BR2_sh4 || BR2_sh4eb || BR2_sh4a || BR2_sh4aeb
- 	default "sparc-unknown-linux-gnu" \
+-LIBGPG_ERROR_VERSION = 1.31
++LIBGPG_ERROR_VERSION = 1.32
+ LIBGPG_ERROR_SITE = https://www.gnupg.org/ftp/gcrypt/libgpg-error
+ LIBGPG_ERROR_SOURCE = libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
+ LIBGPG_ERROR_LICENSE = GPL-2.0+, LGPL-2.1+
