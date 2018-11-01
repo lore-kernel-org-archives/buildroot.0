@@ -1,50 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Nov 2018 22:44:53 +0100
-Subject: [Buildroot] [PATCH 1/1] ltp-testsuite: Backport compilation fix
- from upstream
-In-Reply-To: <20181017205917.9536-1-petr.vorel@gmail.com>
-References: <20181017205917.9536-1-petr.vorel@gmail.com>
-Message-ID: <20181101224453.3dcb6b81@windsurf>
+Date: Thu, 1 Nov 2018 23:00:22 +0100
+Subject: [Buildroot] [PATCH] linux-firmware: bump version to latest
+ d877533
+In-Reply-To: <20181024103845.19057-1-m.niestroj@grinn-global.com>
+References: <20181024103845.19057-1-m.niestroj@grinn-global.com>
+Message-ID: <20181101230022.318b0cfd@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Marcin,
 
-On Wed, 17 Oct 2018 22:59:17 +0200, Petr Vorel wrote:
-> LTP fails to build 20180926 with both glibc 2.28 and uclibc-ng 1.0.30,
-> due error in m4 macro check:
-> 
-> In file included from /home/rclinux/rc-buildroot-test/scripts/instance-0/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/sys/stat.h:446:0,
->                  from ../../../../include/tst_safe_macros.h:26,
->                  from ../../../../include/tst_test.h:85,
->                  from statx05.c:27:
-> /home/rclinux/rc-buildroot-test/scripts/instance-0/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/bits/statx.h:87:5: note: expected 'struct statx * restrict' but argument is of type 'struct statx *'
->  int statx (int __dirfd, const char *__restrict __path, int __flags,
->      ^~~~~
-> <builtin>: recipe for target 'statx01' failed
-> make[5]: *** [statx01] Error 1
-> <builtin>: recipe for target 'statx05' failed
-> make[5]: *** [statx05] Error 1
-> 
-> This patch requires to regenerate configure.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/69566d0c728970a6dd6a793b08c5804df3cc00eb
-> http://autobuild.buildroot.net/results/3c53ddfaca70b490a401c9123602965f3803cd0a
-> http://autobuild.buildroot.net/results/8fb63f627a4ba55afea49ad0566064d20021889a
-> http://autobuild.buildroot.net/results/496a1b40d378eaca98e532c03afb47e5291427b3
-> http://autobuild.buildroot.net/results/47abceeda8044029b6d3200f3877d4d2c494202c
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> Reported-by: Florian La Roche <F.LaRoche@pilz.de>
+Thanks for your patch, I have some issues/questions below.
+
+On Wed, 24 Oct 2018 12:38:45 +0200, Marcin Niestroj wrote:
+> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 > ---
-> Hi, Thomas,
+>  package/linux-firmware/linux-firmware.hash | 6 +++---
+>  package/linux-firmware/linux-firmware.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
+> index ca6ad8f59d..91645d6262 100644
+> --- a/package/linux-firmware/linux-firmware.hash
+> +++ b/package/linux-firmware/linux-firmware.hash
+> @@ -1,11 +1,11 @@
+>  # Locally calculated
+> -sha256 b279ca4d086887c2efab13e28a7ca36e409410d3df38a62d7c7b5799ee3de916 linux-firmware-44d4fca9922a252a0bd81f6307bcc072a78da54a.tar.gz
+> +sha256 48f02db163bd1320cafa0c878f0c38d2184afa726f02622309be69416e420032 linux-firmware-d87753369b82c5f362250c197d04a1e1ef5bf698.tar.gz
 
-Applied to master, thanks. I simply tweaked the commit title because
-"backport compilation fix from upstream is a bit vague".
+I don't get the same hash here:
+
+ERROR: linux-firmware-d87753369b82c5f362250c197d04a1e1ef5bf698.tar.gz has wrong sha256 hash:
+ERROR: expected: 48f02db163bd1320cafa0c878f0c38d2184afa726f02622309be69416e420032
+ERROR: got     : 3c5ba0e3b282e44d5cef3d34a547caf3633c90b83807469357e92cca1fff8a38
+
+And apparently Yann E. Morin also calculated the same hash as me after
+applying your version bump. Could you check what is happening ?
+
+>  sha256 8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9 LICENCE.Abilis
+>  sha256 4b3ea5d5a03c0db81bee0bcb14b30d75b30ef568597bb5be7d4dee57f434265f LICENSE.amdgpu
+>  sha256 38f2037aa14631b4b29826d7a99379613c41a97064d1defdee30a7a022138b20 LICENCE.Marvell
+>  sha256 802b7014b26c606cf6248ae8b0ab1ce6d2d1b0db236d38dd269e676cd70710f2 LICENCE.atheros_firmware
+>  sha256 3b5eb392b2d9d8c46d6aae26d06c187e5ea3029b12d13bc2b8deb8b3ce6bfa53 ath10k/QCA6174/hw3.0/notice_ath10k_firmware-4.txt
+> -sha256 c565861ff7c42f5df98e15239241f1f42614e5e15f362094a2d3e8da724dc842 ath10k/QCA6174/hw3.0/notice_ath10k_firmware-6.txt
+> +sha256 8ce5c6ea0542bf4aac31fc3ae16a39792ad22d0eae4543063fac56fb3380f021 ath10k/QCA6174/hw3.0/notice_ath10k_firmware-6.txt
+
+What are the changes in this file? They should be briefly explained in
+the commit log.
+
+>  sha256 b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d LICENCE.broadcom_bcm43xx
+>  sha256 a5777f9e80aca0603b0648454de996168b1c530322550ccda94d6d78bcf6c061 LICENCE.chelsio_firmware
+>  sha256 60fbc9cccb455e1a3306c97db942d6f24fa93664be61d54c497637e6d0e2ae83 LICENCE.fw_sst_0f28
+> @@ -27,5 +27,5 @@ sha256 8542aeabf2761935122d693561e16766ce1bcc2b0d003204f9040b7d6d929f2e LICENSE.
+>  sha256 be904cd28cb292b80cdb6cf412ab0d9159d431671e987ad433c1f62e0988a9bc LICENSE.qcom
+>  sha256 fc6223d4bfe9f2f9e2eddc44b9fe5721d0caf49f01cb08d602906add686d8c6f LICENSE.radeon
+>  sha256 2bdd2e716f05d9737d3f9a20f9a3a3c0caee0e866100ddb0673f1178e42f92b9 LICENSE.sdma_firmware
+> -sha256 ef38a9a8bb4b0f72b369d337426eea63ef8fc9d48453f127028d935f7dbc5820 WHENCE
+> +sha256 a16234520f37d1fe170fb96f470897a12f74cc4a83bc6ab28eacfdde5bea1917 WHENCE
+
+For this one, there's no real need to explain in the commit log: the
+WHENCE file is updated basically everytime a firmware is added/removed.
 
 Thanks!
 
