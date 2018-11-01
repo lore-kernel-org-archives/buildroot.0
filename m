@@ -1,55 +1,53 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 1 Nov 2018 12:18:55 +0100
-Subject: [Buildroot] [PATCH] Config.in: add BR2_DL_DIR_OPTS
-In-Reply-To: <20181101120151.4d8e4055@windsurf>
-References: <20181031213930.49837-1-mmayer@broadcom.com>
- <20181101090616.GQ28575@scaer> <20181101120151.4d8e4055@windsurf>
-Message-ID: <20181101111855.GR28575@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 1 Nov 2018 12:59:22 +0100
+Subject: [Buildroot] [PATCH v6 1/2] board: amarula: Add A64-Relic support
+In-Reply-To: <20181026130358.11776-1-jagan@amarulasolutions.com>
+References: <20181026130358.11776-1-jagan@amarulasolutions.com>
+Message-ID: <5400d862-d44e-c5ab-b3e6-b3b68193862e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+ Hi Jagan,
 
-On 2018-11-01 12:01 +0100, Thomas Petazzoni spake thusly:
-> On Thu, 1 Nov 2018 10:06:16 +0100, Yann E. MORIN wrote:
-> > On 2018-10-31 14:39 -0700, Markus Mayer spake thusly:
-> > > Provide a simple mechanism to pass extra arguments to "mkdir" when
-> > > creating download directories. This can be helpful if one needs the
-> > > download directories to be writable multiple users ("shared download
-> > > cache").  
-> > 
-> > In retrospect, I think our enforcing of umask globally is wrong.
-> > 
-> > It was added in commit bee5745ccc2 (Makefile: don't depend on the umask)
-> > under the requirements that modes in target/ be predicatble.
-> > 
-> > Although that is indeed a good reason, I think we should have instead
-> > ensured those modes with a plain chmod on target/ during the
-> > target-finalize step.
+On 26/10/18 15:03, Jagan Teki wrote:
+> Add initial support for Amarula A64-Relic board
+> with below features:
+> - U-Boot 2018.07
+> - Linux 4.17.0-rc6
+> - Default packages from buildroot
 > 
-> But is it possible to have a plain "chmod" on target/ that will
-> properly preserve whatever packages have decided to use as permissions
-> when installing files ?
+> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 
-Right, but specifying modes at install time is not reliable anyway, as
-it is not running root. The reason for explicitly setting permissions at
-install time is mostly due to packages wanting to set suid bits, which
-can't work. There can be outliers too, but they mostly are corner cases
-which should be fixed not to set permissions.
+ I was about to apply, but U-Boot doesn't seem to build without swig:
 
-So packages should instead provide FOO_PERMISSIONS, or users should use
-permissions tables.
+PYMOD   scripts/dtc/pylibfdt/_libfdt.so
+unable to execute 'swig': No such file or directory
+error: command 'swig' failed with exit status 1
+make[5]: *** [scripts/dtc/pylibfdt/Makefile:27: scripts/dtc/pylibfdt/_libfdt.so]
+Error 1
 
-Regards,
-Yann E. MORIN.
+ I believe this has been discussed before but I can't find it.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+ Also (but not needed to fix before acceptance):
+
+[snip]
+> +7. Write images from host onto eMMC using fastboot
+> +  $ cd output/images
+> +  $ sudo fastboot -i 0x1f3a flash loader1 sunxi-spl.bin
+> +  $ sudo fastboot -i 0x1f3a flash loader2 u-boot.itb
+> +  $ sudo fastboot -i 0x1f3a flash esp boot.vfat
+> +  $ sudo fastboot -i 0x1f3a flash system rootfs.ext4
+
+ Wouldn't it be simpler to have just a single partition that contains the kernel
+and device tree in /boot in the ext4 partition? Of course, that requires
+changing the default U-Boot environment, but it seems to me to be simpler than
+this dual-partition approach.
+
+ Also it isn't clear to me why the extlinux.conf is needed when we're actually
+using U-Boot, but I guess there must be a reason for it :-)
+
+ Regards,
+ Arnout
