@@ -1,54 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Nov 2018 22:01:46 +0100
-Subject: [Buildroot] [git commit] fs/common: always depend on build host-tar
- if needed
-Message-ID: <20181101210018.CD644870DC@busybox.osuosl.org>
+Date: Thu, 1 Nov 2018 22:01:12 +0100
+Subject: [Buildroot] [git commit] package/pkg-generic: add host-tar
+ dependency for downloads from repositories
+Message-ID: <20181101210018.C0652867CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89c92487cf3268fd679e1b92bfad85fedcde22e4
+commit: https://git.buildroot.net/buildroot/commit/?id=5b5feea8753520320d11896a24b970c60331bcdc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, the filesystems do not depend on building host-tar when it
-is needed, even though all of them have to extract the intermediate
-tarball.
+Three of our download backends need a host tar that can generate
+reproducible archives: cvs, git, and svn. The other two, bzr and hg,
+use their internal implementation.
 
-However, in degenerate (but legally valid) configurations with no
-user-selectable package selected, host-tar would not be built, so the
-rootfs images would use whatever improper tar the system has.
-
-Add the conditional dependency to host-tar to the rootfs-common
-intermediate image. Since this is the internal step that all real rootfs
-generators depend on, they now properly depend on host-tar when needed.
-
-In practice, when host-tar is needed, it will always be built before the
-rootfs images, because it is a dependency of all packages (except a very
-few, like the skeleton), of which host-fakeroot, which is a mandatory
-dependency of rootfs-comon anyway. But for consistency sake, let's
-explicitly add host-tar as a dependency to rootfs-common too.
-
-Note that rootfs-tar already had that dependency, and we leave it as-is
-because it is semantically correct, even if superfluous.
+So, for those three that need it, and a dependency on host-tar when the
+system tar is not appropriate.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- fs/common.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/pkg-generic.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index 453da6010a..2a5a202a89 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -63,6 +63,7 @@ ROOTFS_COMMON_TARGET_DIR = $(FS_DIR)/target
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 747e286baf..f34f46afc8 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -582,6 +582,10 @@ ifneq ($(1),host-skeleton)
+ $(2)_DEPENDENCIES += host-skeleton
+ endif
  
- ROOTFS_COMMON_DEPENDENCIES = \
- 	host-fakeroot host-makedevs \
-+	$(BR2_TAR_HOST_DEPENDENCY) \
- 	$(if $(PACKAGES_USERS)$(ROOTFS_USERS_TABLES),host-mkpasswd)
- 
- $(ROOTFS_COMMON_TAR): ROOTFS=COMMON
++ifneq ($$(filter cvs git svn,$$($(2)_SITE_METHOD)),)
++$(2)_DOWNLOAD_DEPENDENCIES += $(BR2_TAR_HOST_DEPENDENCY)
++endif
++
+ ifeq ($$(filter host-tar host-skeleton host-fakedate,$(1)),)
+ $(2)_EXTRACT_DEPENDENCIES += $$(BR2_TAR_HOST_DEPENDENCY)
+ endif
