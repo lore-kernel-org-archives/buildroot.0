@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Nov 2018 21:21:15 +0100
-Subject: [Buildroot] [PATCH] lua-curl: fix build with libcurl 7.62.0
-In-Reply-To: <6fc47b7d2219db0c3ede0ab64d207c62bfca285c.1541096104.git.baruch@tkos.co.il>
-References: <6fc47b7d2219db0c3ede0ab64d207c62bfca285c.1541096104.git.baruch@tkos.co.il>
-Message-ID: <20181101212115.0632ec28@windsurf>
+Date: Thu, 1 Nov 2018 21:21:18 +0100
+Subject: [Buildroot] [PATCH v2 1/1] python-django: bump to version 2.1.3
+In-Reply-To: <20181101184735.22613-1-asafka7@gmail.com>
+References: <20181101184735.22613-1-asafka7@gmail.com>
+Message-ID: <20181101212118.562ea62b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  1 Nov 2018 20:15:04 +0200, Baruch Siach wrote:
-> The last libcurl bump changed error code definitions in a way that
-> breaks lua-curl build. Add a patch to fix that.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/fa6/fa6e289162124b3e079c4a2d9c3f00910c8cc063/
-> http://autobuild.buildroot.net/results/7b9/7b962a63630abaed21d99f719c1bd710ec4d4b28/
-> http://autobuild.buildroot.net/results/c5b/c5b2a7f21259bbf79861bd95a2d7ca055920bf09/
-> 
-> Cc: Francois Perrad <francois.perrad@gadz.org>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+On Thu,  1 Nov 2018 20:47:35 +0200, Asaf Kahlon wrote:
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 > ---
->  .../0001-Fix-build-with-curl-7.62.0.patch     | 58 +++++++++++++++++++
->  1 file changed, 58 insertions(+)
->  create mode 100644 package/lua-curl/0001-Fix-build-with-curl-7.62.0.patch
+>  package/python-django/python-django.hash | 4 ++--
+>  package/python-django/python-django.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
