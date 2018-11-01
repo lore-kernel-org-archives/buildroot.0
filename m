@@ -1,39 +1,35 @@
 From: Andreas Naumann <anaumann@ultratronik.de>
-Date: Thu,  1 Nov 2018 15:02:28 +0100
-Subject: [Buildroot] [PATCH 0/3] RFC on per-package development/fixes
-Message-ID: <20181101140231.24380-1-anaumann@ultratronik.de>
+Date: Thu,  1 Nov 2018 15:02:30 +0100
+Subject: [Buildroot] [PATCH 2/3] OVERRIDE_SOURCEDIR: Fix build with
+ per-package infrastructure
+In-Reply-To: <20181101140231.24380-1-anaumann@ultratronik.de>
+References: <20181101140231.24380-1-anaumann@ultratronik.de>
+Message-ID: <20181101140231.24380-3-anaumann@ultratronik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-After the ELC I was really interested how the per-package stuff is performing,
-so I gave it a shot with my typical config. Things crashed in numerous places,
-so I started looking into it and thought I might as well share what i found.
+The host/target per-package dirs are not created during the rsync step, so
+make up for it in the configure_prepare step.
 
-This is based on Thomas ppsh-v4 branch, which I have locally rebased on master.
-I probably screwed up with the qt5 changes, so here I send only my stuff on
-top it.
+Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+---
+ package/pkg-generic.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Rechecking the first patch, which is to move the per-package host-dir
-preparation into a separate step, makes me now think that this could
-be simplified even more: Why not create the per-package host/target dir with
-the _FINAL_ALL_DEPENDENCIES, which includes all other dependencies, right at
-the beginning, e.g. before the extract-step? That way we could get rid of
-similar code during extract.
-I dont think the slight loss in possible parallelization (during the
-extract-step) would be noticeable.
-
-
-Andreas Naumann (3):
-  core: Move per-package host preparation into separate step
-  OVERRIDE_SOURCEDIR: Fix build with per-package infrastructure
-  fs: Add common rootfs dependencies to PACKAGES
-
- fs/common.mk           |  2 ++
- package/pkg-generic.mk | 28 ++++++++++++++++++++--------
- 2 files changed, 22 insertions(+), 8 deletions(-)
-
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 2cb4582d97..6d6a16e927 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -227,6 +227,7 @@ $(foreach dir,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)),\
+ $(BUILD_DIR)/%/.stamp_configure_prepared:
+ 	@$(call step_start,configure_prepared)
+ 	@$(call MESSAGE,"Prepare per-package host")
++	@mkdir -p $(HOST_DIR) $(STAGING_DIR)
+ 	$(foreach pkg,$($(PKG)_FINAL_DEPENDENCIES),\
+ 		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/host/ \
+ 		$(PER_PACKAGE_DIR)/$(pkg)/host/ \
 -- 
 2.19.1
