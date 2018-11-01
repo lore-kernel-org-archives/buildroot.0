@@ -1,92 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Nov 2018 21:20:37 +0100
-Subject: [Buildroot] [git commit] lua-curl: fix build with libcurl 7.62.0
-Message-ID: <20181101201835.16B1F867C3@busybox.osuosl.org>
+Date: Thu, 1 Nov 2018 21:20:40 +0100
+Subject: [Buildroot] [git commit] python-django: bump to version 2.1.3
+Message-ID: <20181101201835.1DF8681208@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3988480bf02e138e945bc9ad083880697d5ab376
+commit: https://git.buildroot.net/buildroot/commit/?id=0b404b1c896581c3dcf3f77ecc4228949dcf02e2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The last libcurl bump changed error code definitions in a way that
-breaks lua-curl build. Add a patch to fix that.
-
-Fixes:
-http://autobuild.buildroot.net/results/fa6/fa6e289162124b3e079c4a2d9c3f00910c8cc063/
-http://autobuild.buildroot.net/results/7b9/7b962a63630abaed21d99f719c1bd710ec4d4b28/
-http://autobuild.buildroot.net/results/c5b/c5b2a7f21259bbf79861bd95a2d7ca055920bf09/
-
-Cc: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../lua-curl/0001-Fix-build-with-curl-7.62.0.patch | 58 ++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/lua-curl/0001-Fix-build-with-curl-7.62.0.patch b/package/lua-curl/0001-Fix-build-with-curl-7.62.0.patch
-new file mode 100644
-index 0000000000..456afb30f7
---- /dev/null
-+++ b/package/lua-curl/0001-Fix-build-with-curl-7.62.0.patch
-@@ -0,0 +1,58 @@
-+From 4e3764ecf2b2c3f62475579fee6af4a753729f07 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Thu, 1 Nov 2018 19:12:20 +0200
-+Subject: [PATCH] Fix build with curl 7.62.0
-+
-+Fixes #134.
-+
-+curl 7.62.0 deprecates the CURLE_SSL_CACERT error code, and unifies it
-+with CURLE_PEER_FAILED_VERIFICATION. Adjust the errors list to match.
-+
-+This fixes the following build failure:
-+
-+src/lcerr_easy.h: In function 'lcurl_err_easy_mnemo':
-+src/lcerror.c:32:22: error: duplicate case value
-+ #define ERR_ENTRY(E) case CURLE_##E: return #E;
-+                      ^
-+src/lcerr_easy.h:74:1: note: in expansion of macro 'ERR_ENTRY'
-+ ERR_ENTRY ( SSL_CACERT               )
-+ ^~~~~~~~~
-+src/lcerror.c:32:22: note: previously used here
-+ #define ERR_ENTRY(E) case CURLE_##E: return #E;
-+                      ^
-+src/lcerr_easy.h:65:1: note: in expansion of macro 'ERR_ENTRY'
-+ ERR_ENTRY ( PEER_FAILED_VERIFICATION )
-+ ^~~~~~~~~
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: https://github.com/Lua-cURL/Lua-cURLv3/pull/136
-+
-+diff --git a/src/lcerr_easy.h b/src/lcerr_easy.h
-+index 94ad143c3bfe..895c6d87d72f 100644
-+--- a/Lua-cURLv3-0.3.7/src/lcerr_easy.h
-++++ b/Lua-cURLv3-0.3.7/src/lcerr_easy.h
-+@@ -62,7 +62,11 @@ ERR_ENTRY ( UNKNOWN_TELNET_OPTION    ) /* User specified an unknown option */
-+ #endif
-+ ERR_ENTRY ( TELNET_OPTION_SYNTAX     )
-+ ERR_ENTRY ( OBSOLETE50               )
-++#if LCURL_CURL_VER_GE(7,62,0)
-++ERR_ENTRY ( OBSOLETE51               )
-++#else
-+ ERR_ENTRY ( PEER_FAILED_VERIFICATION )
-++#endif
-+ ERR_ENTRY ( GOT_NOTHING              )
-+ ERR_ENTRY ( SSL_ENGINE_NOTFOUND      )
-+ ERR_ENTRY ( SSL_ENGINE_SETFAILED     )
-+@@ -71,7 +75,11 @@ ERR_ENTRY ( RECV_ERROR               )
-+ ERR_ENTRY ( OBSOLETE57               )
-+ ERR_ENTRY ( SSL_CERTPROBLEM          )
-+ ERR_ENTRY ( SSL_CIPHER               )
-++#if LCURL_CURL_VER_GE(7,62,0)
-++ERR_ENTRY ( PEER_FAILED_VERIFICATION )
-++#else
-+ ERR_ENTRY ( SSL_CACERT               )
-++#endif
-+ ERR_ENTRY ( BAD_CONTENT_ENCODING     )
-+ ERR_ENTRY ( LDAP_INVALID_URL         )
-+ ERR_ENTRY ( FILESIZE_EXCEEDED        )
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 9a9889ab1c..1b8ee83682 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5	383ca4e98ad5d0aa9d71378fe743bdef  Django-2.1.2.tar.gz
+-sha256	efbcad7ebb47daafbcead109b38a5bd519a3c3cd92c6ed0f691ff97fcdd16b45  Django-2.1.2.tar.gz
++md5	1a447e95c81e1c9b2a7ad61f4681f022  Django-2.1.3.tar.gz
++sha256	1ffab268ada3d5684c05ba7ce776eaeedef360712358d6a6b340ae9f16486916  Django-2.1.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index e3f20fd1cb..29eb0b616b 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_DJANGO_VERSION = 2.1.2
++PYTHON_DJANGO_VERSION = 2.1.3
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/8b/03/4c74d3712919613f2c611e6689522df507a2753a92049009661a81b4b72f
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/93/b1/0d6febb88712c39aced7df232d432fa22f5613c4bff246a1f4841248a60d
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_SETUP_TYPE = setuptools
