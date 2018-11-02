@@ -1,76 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 2 Nov 2018 22:51:21 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/davici: new package
-In-Reply-To: <20181024175936.27574-1-jared.bents@rockwellcollins.com>
-References: <20181024175936.27574-1-jared.bents@rockwellcollins.com>
-Message-ID: <20181102225121.0c731e7f@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 2 Nov 2018 23:11:21 +0100
+Subject: [Buildroot] [PATCH] package/bdwgc: drop AUTORECONF = YES
+In-Reply-To: <20181102203338.23534-1-thomas.petazzoni@bootlin.com>
+References: <20181102203338.23534-1-thomas.petazzoni@bootlin.com>
+Message-ID: <CAPi7W82m75-mmEA2JQZY7YkjnJwE_FGku2awQ7H24AHjBPHJ_g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Thomas,
+Le ven. 2 nov. 2018 ? 21:33, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
+>
+> Since commit 4e1dbd063d1f3ea7dfc95698320f6fd40139085d ("package/bdwgc:
+> bump to version 8.0.0"), we no longer have any patch that requires
+> autoreconf. In addition, the libtool shipped with the package seems to
+> no longer be bogus, because it builds perfectly fine without
+> autoreconf. Therefore, let's drop this autoreconf.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/bdwgc/bdwgc.mk | 6 ------
+>  1 file changed, 6 deletions(-)
+>
+> diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
+> index 8607234e5d..8ffac476f3 100644
+> --- a/package/bdwgc/bdwgc.mk
+> +++ b/package/bdwgc/bdwgc.mk
+> @@ -13,12 +13,6 @@ BDWGC_LICENSE_FILES = README.QUICK
+>  BDWGC_DEPENDENCIES = libatomic_ops host-pkgconf
+>  HOST_BDWGC_DEPENDENCIES = host-libatomic_ops host-pkgconf
+>
+> -# The libtool shipped with the package is bogus and generates some
+> -# -L/usr/lib flags. It uses a version not supported by Buildroot
+> -# libtool patches, so autoreconfiguring the packages is the easiest
+> -# solution.
+> -BDWGC_AUTORECONF = YES
+> -
+>  BDWGC_CONF_OPTS = CFLAGS_EXTRA="$(BDWGC_CFLAGS_EXTRA)"
+>  ifeq ($(BR2_sparc),y)
+>  BDWGC_CFLAGS_EXTRA += -DAO_NO_SPARC_V9
+> --
+> 2.14.4
+>
+Best Regards,
 
-On Wed, 24 Oct 2018 12:59:36 -0500, Jared Bents wrote:
-> This patch adds davici which is an alternative implementation of the
-> VICI client protocal used by Strongswan.  It targets better integration
-> with software stacks and uses a asynchronous, non-blocking API that can
-> be integrated in third-party main dispatching loops without the use of
-> threads.
-> 
-> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
-
-I've applied, with a few changes, see below.
-
->  package/Config.in          |  1 +
->  package/davici/Config.in   | 18 ++++++++++++++++++
->  package/davici/davici.hash |  3 +++
->  package/davici/davici.mk   | 20 ++++++++++++++++++++
-
-An entry to the DEVELOPERS file was missing.
-
-> diff --git a/package/davici/Config.in b/package/davici/Config.in
-> new file mode 100644
-> index 0000000000..9dfa0ec130
-> --- /dev/null
-> +++ b/package/davici/Config.in
-> @@ -0,0 +1,18 @@
-> +comment "davici needs a toolchain w/ threads, dynamic library"
-> +	depends on BR2_USE_MMU
-> +	depends on BR2_TOOLCHAIN_HAS_ATOMIC
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-> +
-> +config BR2_PACKAGE_DAVICI
-> +	bool "davici"
-> +	depends on BR2_USE_MMU # fork()
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_TOOLCHAIN_HAS_ATOMIC
-> +	depends on !BR2_STATIC_LIBS
-> +	select BR2_PACKAGE_STRONGSWAN
-
-Here I hesitated between keeping your select, or switching to a
-"depends on". Indeed, in the case of this library, it's pretty clear
-that the user willing to use it will know that he needs strongswan. But
-it's a matter of taste, so in the end, I kept your select.
-
-> +DAVICI_VERSION = v1.3
-> +DAVICI_SITE = $(call github,strongswan,davici,$(DAVICI_VERSION))
-> +DAVICI_LICENSE = LGPL-2.1
-
-The license is LGPL-2.1+, the source files carry the "or later"
-indication.
-
-> +DAVICI_LICENSE_FILES = COPYING
-> +DAVICI_DEPENDENCIES = strongswan
-> +DAVICI_INSTALL_STAGING=YES
-
-Missing spaces around the = sign.
-
-Applied with those issues fixed. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fabrice
