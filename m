@@ -1,36 +1,37 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 2 Nov 2018 15:29:39 -0500
-Subject: [Buildroot] [PATCH 1/3] fs: apply permissions late
-In-Reply-To: <20181031214939.GO28575@scaer>
-References: <cover.1540626349.git.yann.morin.1998@free.fr>
- <4f9a31b0fb8f87ded9c788cb92d727b6763859ac.1540626349.git.yann.morin.1998@free.fr>
- <CANQCQpa3y_Qs7H9aB1Y7fpW9G=V2Dr2yqM9WihrQBuqUbPoEhA@mail.gmail.com>
- <20181030202331.GI28575@scaer>
- <CANQCQpZEKo9oFpVh5SPb-8NYzq88hH0sg4LzFwVqk7Zz6AQTuA@mail.gmail.com>
- <20181031214939.GO28575@scaer>
-Message-ID: <CANQCQpZAR0xh9MkHWFcV+6_k9oD2bXXTVaCyC83_Yt6xu8cYgw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 2 Nov 2018 21:29:56 +0100
+Subject: [Buildroot] [PATCH v2 1/1] support/scripts/mkmakefile: Wrapper
+ is silent by default
+In-Reply-To: <20181102112933.14823-1-serj.kalichev@gmail.com>
+References: <20181026112621.8146-1-serj.kalichev@gmail.com>
+ <20181102112933.14823-1-serj.kalichev@gmail.com>
+Message-ID: <20181102212956.435734c2@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Hello,
 
+On Fri,  2 Nov 2018 14:29:33 +0300, Serj Kalichev wrote:
+> Suppose we use Makefile wrapper and build some
+> project out of buildroot tree (O=...). The commands like "make
+> busybox-all-external-deps" will output the string "uname 022 && make ..." to
+> stdout before the usefull information. It pollutes stdout. In the same time
+> if we use the same command in the buildroot source-tree then we don't get the
+> additional output. This patch makes wrapper silent by default. People who
+> prefer to see more verbose output can use V=1.
+> 
+> Signed-off-by: Serj Kalichev <serj.kalichev@gmail.com>
+> ---
+>  support/scripts/mkmakefile | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
 
-On Wed, Oct 31, 2018 at 4:49 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Matt, All,
->
-> On 2018-10-30 20:18 -0500, Matthew Weber spake thusly:
-> > On Tue, Oct 30, 2018 at 3:23 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > >     Since kernel 2.6.24, the kernel supports associating capability sets
-> > >     [...] stored in an extended attribute (see setxattr(2)) named
-> > >     security.capability.o
-> > :-) Fair,  security.capabilty -> security.capability
->
+Applied to master, thanks.
 
-Tested-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-
-Ran some scenaios as a regression on existing target builds before and
-after the change.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
