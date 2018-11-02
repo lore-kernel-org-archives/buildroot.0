@@ -1,68 +1,45 @@
-From: yamada.masahiro at socionext.com <yamada.masahiro@socionext.com>
-Date: Fri, 2 Nov 2018 07:55:14 +0000
-Subject: [Buildroot] [PATCH] merge_config.sh: Fix merging buildroot
- config files
-In-Reply-To: <20181102021259.GA8966@smart-ThinkPad-T410>
-References: <20181031205608.GA4061@x230>
- <20181101010953.20996-1-afshin.nasser@gmail.com> <20181101062448.GC8261@x230>
- <20181101105513.GB4937@smart-ThinkPad-T410>
- <7ba255c0-e72e-7e02-d972-f8f082ce5214@mind.be> <20181101161918.GA30470@x230>
- <20181102021259.GA8966@smart-ThinkPad-T410>
-Message-ID: <5b88530949cb4aaf93436bcbc36f9fbf@SOC-EX01V.e01.socionext.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 2 Nov 2018 09:34:41 +0100
+Subject: [Buildroot] [PATCH] linux-firmware: bump version to latest
+ d877533
+In-Reply-To: <20181101220848.GZ28575@scaer>
+References: <20181024103845.19057-1-m.niestroj@grinn-global.com>
+ <20181101230022.318b0cfd@windsurf> <20181101220848.GZ28575@scaer>
+Message-ID: <20181102093441.617a43a9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi.
+Hello,
 
-> -----Original Message-----
-> From: Nasser [mailto:afshin.nasser at gmail.com]
-> Sent: Friday, November 02, 2018 11:13 AM
-> To: Petr Vorel <petr.vorel@gmail.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>; buildroot at buildroot.org;
-> Matthew Weber <matthew.weber@rockwellcollins.com>; Angelo Compagnucci
-> <angelo.compagnucci@gmail.com>; Yamada, Masahiro/?? ??
-> <yamada.masahiro@socionext.com>
-> Subject: Re: [PATCH] merge_config.sh: Fix merging buildroot config files
+On Thu, 1 Nov 2018 23:08:48 +0100, Yann E. MORIN wrote:
+
+> > I don't get the same hash here:
+> > 
+> > ERROR: linux-firmware-d87753369b82c5f362250c197d04a1e1ef5bf698.tar.gz has wrong sha256 hash:
+> > ERROR: expected: 48f02db163bd1320cafa0c878f0c38d2184afa726f02622309be69416e420032
+> > ERROR: got     : 3c5ba0e3b282e44d5cef3d34a547caf3633c90b83807469357e92cca1fff8a38
+> > 
+> > And apparently Yann E. Morin also calculated the same hash as me after
+> > applying your version bump. Could you check what is happening ?  
 > 
-> Hi Petr, Arnout,
-> On Thu, Nov 01, 2018 at 05:19:19PM +0100, Petr Vorel wrote:
-> > Hi Arnout,
-> >
-> > > > Removing unset will cause the following make command work wrong. Note
-> > > > that the value of this environment variable is checked [1] and used.
-> The
-> > > > result of removing the unset line is that we will have double BR2_
-> > > > prefixes in the final .config file as well as lots of warnings when
-> > > > checking if all specified config values have been taken.
-> >
-> > >  We have no prefix, the BR2_ is mere convention. So when calling
-> merge_config,
-> > > we should set CONFIG_ to empty, not to BR2_.
-> >
-> > >  So indeed, the unset should be removed.
-> >
-> > +1. I overlooked that regexp works with empty $CONFIG_ as well.
-> > Thanks for explanation.
-> As we discussed earlier [1], setting CONFIG_ to empty, makes most comments
-> to
-> be identified as config fragments and generate false warnings.
+> If using a recent distribution that has tar 1.30 (e.g. Fedroa 28+,
+> Arch, or other rolling-release distros), you may have fallen in the
+> download dependencies trap, where host-tar would not be built when doing
+> a 'make source' from a clean tree.
 
-I was also being worried about this.
+Which has just been fixed as of
+https://git.buildroot.org/buildroot/commit/?id=5b5feea8753520320d11896a24b970c60331bcdc,
+so Marcin, you may see automagically the new/correct hash if you retry
+on the latest Buildroot master (I merged this host-tar fix from Yann
+yesterday evening).
 
-We could improve the sed pattern.
+Thanks,
 
-How about this?
-https://patchwork.kernel.org/patch/10665119/
-
-
-
-> >
-> > Kind regards,
-> > Petr
-> Kind regards,
-> Nasser
-> 
-> [1] https://patchwork.ozlabs.org/comment/2018492/
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
