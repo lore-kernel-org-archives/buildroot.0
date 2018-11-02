@@ -1,45 +1,126 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 2 Nov 2018 09:34:41 +0100
-Subject: [Buildroot] [PATCH] linux-firmware: bump version to latest
- d877533
-In-Reply-To: <20181101220848.GZ28575@scaer>
-References: <20181024103845.19057-1-m.niestroj@grinn-global.com>
- <20181101230022.318b0cfd@windsurf> <20181101220848.GZ28575@scaer>
-Message-ID: <20181102093441.617a43a9@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  2 Nov 2018 09:40:14 +0100
+Subject: [Buildroot] [PATCH 1/1] bdwgc: bump to version 8.0.0
+Message-ID: <20181102084014.7086-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+- Remove first patch (already in version):
+  https://github.com/ivmai/bdwgc/commit/7c13fb8fccdebfa4bf9a11abf6fa1619c5902828
+- Remove second patch (already in version)
+- Update license hash: Update header copyright (add Ivan Maidanski), see
+  https://github.com/ivmai/bdwgc/commit/3bd265a64b612af9d906b73394f2adb161bd0dec
 
-On Thu, 1 Nov 2018 23:08:48 +0100, Yann E. MORIN wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...d-check-for-NO_GETCONTEXT-definition.patch | 28 ---------------
+ ...s-unknown-error-in-brief_async_signa.patch | 35 -------------------
+ package/bdwgc/bdwgc.hash                      |  4 +--
+ package/bdwgc/bdwgc.mk                        |  2 +-
+ 4 files changed, 3 insertions(+), 66 deletions(-)
+ delete mode 100644 package/bdwgc/0001-configure.ac-add-check-for-NO_GETCONTEXT-definition.patch
+ delete mode 100644 package/bdwgc/0002-Fix-size-of-tv-is-unknown-error-in-brief_async_signa.patch
 
-> > I don't get the same hash here:
-> > 
-> > ERROR: linux-firmware-d87753369b82c5f362250c197d04a1e1ef5bf698.tar.gz has wrong sha256 hash:
-> > ERROR: expected: 48f02db163bd1320cafa0c878f0c38d2184afa726f02622309be69416e420032
-> > ERROR: got     : 3c5ba0e3b282e44d5cef3d34a547caf3633c90b83807469357e92cca1fff8a38
-> > 
-> > And apparently Yann E. Morin also calculated the same hash as me after
-> > applying your version bump. Could you check what is happening ?  
-> 
-> If using a recent distribution that has tar 1.30 (e.g. Fedroa 28+,
-> Arch, or other rolling-release distros), you may have fallen in the
-> download dependencies trap, where host-tar would not be built when doing
-> a 'make source' from a clean tree.
-
-Which has just been fixed as of
-https://git.buildroot.org/buildroot/commit/?id=5b5feea8753520320d11896a24b970c60331bcdc,
-so Marcin, you may see automagically the new/correct hash if you retry
-on the latest Buildroot master (I merged this host-tar fix from Yann
-yesterday evening).
-
-Thanks,
-
-Thomas
+diff --git a/package/bdwgc/0001-configure.ac-add-check-for-NO_GETCONTEXT-definition.patch b/package/bdwgc/0001-configure.ac-add-check-for-NO_GETCONTEXT-definition.patch
+deleted file mode 100644
+index 393ad9039a..0000000000
+--- a/package/bdwgc/0001-configure.ac-add-check-for-NO_GETCONTEXT-definition.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-configure.ac: add check for NO_GETCONTEXT definition
+-
+-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+-[yann.morin.1998 at free.fr: add a comment, change variable name, use
+- AS_IF, remove debug traces, use AC_CHECK_FUNCS (as suggested by
+- Thomas)]
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+----
+- configure.ac | 6 ++++++
+- 1 file changed, 6 insertions(+)
+-
+---- bdwgc-7.2f.orig/configure.ac	2014-06-01 19:00:47.000000000 +0200
+-+++ bdwgc-7.2f/configure.ac	2014-12-23 14:13:11.585716713 +0100
+-@@ -365,6 +365,12 @@
+-   AC_MSG_RESULT($ac_cv_fno_strict_aliasing)
+- fi
+- 
+-+# Check for getcontext (uClibc can be configured without it, for example)
+-+AC_CHECK_FUNCS([getcontext])
+-+AS_IF([test "$ac_cv_func_getcontext" = "no"],
+-+  [CFLAGS="$CFLAGS -DNO_GETCONTEXT"
+-+   CPPFLAGS="$CPPFLAGS -DNO_GETCONTEXT"])
+-+
+- case "$host" in
+- # While IRIX 6 has libdl for the O32 and N32 ABIs, it's missing for N64
+- # and unnecessary everywhere.
+diff --git a/package/bdwgc/0002-Fix-size-of-tv-is-unknown-error-in-brief_async_signa.patch b/package/bdwgc/0002-Fix-size-of-tv-is-unknown-error-in-brief_async_signa.patch
+deleted file mode 100644
+index e17ed84666..0000000000
+--- a/package/bdwgc/0002-Fix-size-of-tv-is-unknown-error-in-brief_async_signa.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 31eef02317d59b4d204624efbddaea641e861390 Mon Sep 17 00:00:00 2001
+-From: Mikael Djurfeldt <mikael@djurfeldt.com>
+-Date: Sun, 26 Feb 2017 20:09:56 +0100
+-Subject: [PATCH] Fix 'size of tv is unknown' error in
+- brief_async_signal_safe_sleep (musl) (fix commits 62097c3, 9f48082)
+-
+-Include <sys/time.h> to get struct timeval defined and select() declared.
+-
+-* pthread_stop_world.c [GC_ENABLE_SUSPEND_THREAD]: Include sys/time.h
+-before GC_brief_async_signal_safe_sleep definition.
+-
+-Upstream status: upstream
+-commit ffad61d3bbe86c09ffe062dab393fcb0e4940580
+-
+-[Romain: backported to 7.6.0]
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- pthread_stop_world.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/pthread_stop_world.c b/pthread_stop_world.c
+-index dad1fdc..8c76944 100644
+---- a/pthread_stop_world.c
+-+++ b/pthread_stop_world.c
+-@@ -391,6 +391,7 @@ STATIC void GC_restart_handler(int sig)
+- #   ifndef GC_TIME_LIMIT
+- #     define GC_TIME_LIMIT 50
+- #   endif
+-+#   include <sys/time.h>
+- 
+-     STATIC void GC_brief_async_signal_safe_sleep(void)
+-     {
+--- 
+-2.9.4
+-
+diff --git a/package/bdwgc/bdwgc.hash b/package/bdwgc/bdwgc.hash
+index 0ebc41c76d..6cc4674e62 100644
+--- a/package/bdwgc/bdwgc.hash
++++ b/package/bdwgc/bdwgc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 bd112005563d787675163b5afff02c364fc8deb13a99c03f4e80fdf6608ad41e  gc-7.6.2.tar.gz
+-sha256 9944acfcee6cca308d974933977c1608804f5ad4345aac7cb8608137104e3742  README.QUICK
++sha256 8f23f9a20883d00af2bff122249807e645bdf386de0de8cbd6cce3e0c6968f04  gc-8.0.0.tar.gz
++sha256 aeeaabbf44e67d413e18719f0c6ac9c23387ab0b33e7a15ee46cf59ddef12cc7  README.QUICK
+diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
+index 0d4c8014f4..8607234e5d 100644
+--- a/package/bdwgc/bdwgc.mk
++++ b/package/bdwgc/bdwgc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BDWGC_VERSION = 7.6.2
++BDWGC_VERSION = 8.0.0
+ BDWGC_SOURCE = gc-$(BDWGC_VERSION).tar.gz
+ BDWGC_SITE = http://www.hboehm.info/gc/gc_source
+ BDWGC_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
