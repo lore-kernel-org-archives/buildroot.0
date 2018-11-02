@@ -1,52 +1,58 @@
-From: Sumit Garg <sumit.garg@linaro.org>
-Date: Fri,  2 Nov 2018 18:06:47 +0530
-Subject: [Buildroot] [PATCH 1/1] fwts: Enable optional efi_runtime kernel
- module build
-Message-ID: <1541162207-8770-1-git-send-email-sumit.garg@linaro.org>
+From: Erico Nunes <nunes.erico@gmail.com>
+Date: Fri, 2 Nov 2018 14:05:30 +0100
+Subject: [Buildroot] [PATCH 1/1] linux-firmware: bump version and fix
+ hash
+In-Reply-To: <20181101210640.GY28575@scaer>
+References: <20180926223806.12704-1-nunes.erico@gmail.com>
+ <87mus2vkos.fsf@dell.be.48ers.dk>
+ <CAK4VdL0mu+5Od73gU4T7dRLVRHior7gYg6NQ3+bNKms9P5R=EQ@mail.gmail.com>
+ <20181003194023.GA2383@scaer>
+ <CAK4VdL0_csVF1ZpA=J+V1J9o1v-1DRUNn9P6p7XymG_SEonn2A@mail.gmail.com>
+ <20181101141411.GU28575@scaer> <20181101210640.GY28575@scaer>
+Message-ID: <CAK4VdL1pO5X4dnr+MupeNYe1K5bw6+9-Q5fPn-2FfeOYaq90NQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Firmware test suite does provides efi_runtime kernel module required
-to run UEFI tests. So optionally enable this module build.
+On Thu, Nov 1, 2018 at 10:06 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> >     https://patchwork.ozlabs.org/project/buildroot/list/?series=43275
+> The part of that series that was dealing with download dependencies has
+> now been applied, so you should now be able to use 'make clean; make
+> source' and get the expected host-tar when needed.
+>
+> Can you confirm that on your side with your fancy Fedora 28+ ? ;-)
 
-Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
----
- package/fwts/Config.in | 8 ++++++++
- package/fwts/fwts.mk   | 6 ++++++
- 2 files changed, 14 insertions(+)
+Looks like you predicted this issue some time ago :)
+And the new applied patches do fix it, a host-tar build gets triggered
+even on 'make source' now and therefore the problem is gone.
 
-diff --git a/package/fwts/Config.in b/package/fwts/Config.in
-index 959d871..3ddb989 100644
---- a/package/fwts/Config.in
-+++ b/package/fwts/Config.in
-@@ -28,3 +28,11 @@ comment "fwts needs a glibc toolchain w/ wchar, threads"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_USES_GLIBC
-+
-+config BR2_PACKAGE_FWTS_EFI_RUNTIME_MODULE
-+	bool "efi_runtime_module"
-+	depends on BR2_PACKAGE_FWTS
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  Firmware Test Suite (FWTS) also provides EFI runtime kernel
-+	  module required to run UEFI tests.
-diff --git a/package/fwts/fwts.mk b/package/fwts/fwts.mk
-index 15f0afc..840190e 100644
---- a/package/fwts/fwts.mk
-+++ b/package/fwts/fwts.mk
-@@ -14,3 +14,9 @@ FWTS_DEPENDENCIES = host-bison host-flex host-pkgconf json-c libglib2 libbsd \
- 	$(if $(BR2_PACKAGE_DTC),dtc)
- 
- $(eval $(autotools-package))
-+
-+ifdef BR2_PACKAGE_FWTS_EFI_RUNTIME_MODULE
-+FWTS_DEPENDENCIES += linux
-+FWTS_MODULE_SUBDIRS = efi_runtime
-+$(eval $(kernel-module))
-+endif
--- 
-2.7.4
+> > Does pigz isdentifies itself as pigz, or does it really impersonate
+> > gzip? If the former, then it will be easy to detect, but if the latter,
+> > it becomes more complex (we'd have to compress a wellknown blob and see
+> > if the compressed stream matches what we expect.)
+
+So with the symlink setup, all of the gzip related commands point to
+/usr/bin/pigz, which detects the called command name and then act
+accordingly.
+With the parallelism I was able to get significant performance
+improvements on e.g. compressing large Buildroot built images with
+this setup.
+Too bad it seems to affect the reproducibility right now.
+
+Looks like it is still detectable:
+
+$ gzip --version
+pigz 2.4
+
+I think it is a much minor issue though, more likely my fault than an
+issue with Buildroot. Would be better to be able to keep some of the
+parallelism benefits while maintaining reproducibility than forcing a
+host-gzip. I guess I'll just try some flags with it or maybe file an
+issue on the project to figure that out better.
+
+
+Thanks Yann for the support and the fix.
+
+Erico
