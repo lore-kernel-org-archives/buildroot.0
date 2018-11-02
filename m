@@ -1,8 +1,8 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri,  2 Nov 2018 14:41:17 +0100
-Subject: [Buildroot] [PATCH] scanpypi: use archive file name to specify the
- extraction folder
-Message-ID: <20181102134117.12566-1-yegorslists@googlemail.com>
+Date: Fri,  2 Nov 2018 14:45:01 +0100
+Subject: [Buildroot] [PATCH v2] scanpypi: use archive file name to specify
+ the extraction folder
+Message-ID: <20181102134501.13860-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,14 +11,14 @@ To: buildroot@busybox.net
 
 From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Some packages have archive names that is different from package name.
+Some packages have archive name that is different from package name.
 For example websocket-client's archive name is websocket_client-*.tar.gz.
 scanpypi expects the temporary extract folder to be:
 
 /tmp-folder/BR-package-name/PyPI-packagename-and-version
 
 In the case of websocket-client package the real extraction folder
-will be different from the expected one because of the '-' in the
+will be different from the expected one because of the '_' in the
 archive file name.
 
 Use archive file name instead of package name to specify the extraction
@@ -29,8 +29,15 @@ Bonus: remove obsolete "return None, None" as the function doesn't return
 anything. OSError class doesn't provide "message" member, so replace it
 with "strerror".
 
+Fixes:
+https://bugs.busybox.net/show_bug.cgi?id=11251
+
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
+Changes v1->v2:
+	- fix typos
+	- add fixes tag
+
  utils/scanpypi | 19 ++++++++++---------
  1 file changed, 10 insertions(+), 9 deletions(-)
 
