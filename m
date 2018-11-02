@@ -1,25 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 02 Nov 2018 08:44:51 +0000
-Subject: [Buildroot] [Bug 11476] stdio2.h error invalid use of
- __builtin_va_arg_pack
-In-Reply-To: <bug-11476-163@https.bugs.busybox.net/>
-References: <bug-11476-163@https.bugs.busybox.net/>
-Message-ID: <bug-11476-163-C5XbdKs68J@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 2 Nov 2018 09:45:04 +0100
+Subject: [Buildroot] [PATCH 1/1] opencv3: fix build on sparc64
+In-Reply-To: <20181021200510.16171-1-fontaine.fabrice@gmail.com>
+References: <20181021200510.16171-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181102094504.2ac62480@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11476
+Hello,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+On Sun, 21 Oct 2018 22:05:10 +0200, Fabrice Fontaine wrote:
+> Fixes:
+>  - http://autobuild.buildroot.org/results/d27fa3eb3ea600698571837981a3a15d556724ea
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...otobuf-fix-compilation-issue-on-s390.patch | 38 +++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 package/opencv3/0001-3rdparty-protobuf-fix-compilation-issue-on-s390.patch
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-           Assignee|unassigned at buildroot.uclibc |romain.naour at gmail.com
-                   |.org                        |
+Applied to master, thanks.
 
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
