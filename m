@@ -1,115 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 2 Nov 2018 22:41:03 +0100
-Subject: [Buildroot] [git commit] package/davici: new package
-Message-ID: <20181102213919.68C5C8834F@busybox.osuosl.org>
+Date: Fri, 2 Nov 2018 22:51:21 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/davici: new package
+In-Reply-To: <20181024175936.27574-1-jared.bents@rockwellcollins.com>
+References: <20181024175936.27574-1-jared.bents@rockwellcollins.com>
+Message-ID: <20181102225121.0c731e7f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ddbe7f5364e6b88da8c87d32051c9db4e5dc8d6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-This patch adds davici which is an alternative implementation of the
-VICI client protocal used by Strongswan.  It targets better integration
-with software stacks and uses a asynchronous, non-blocking API that can
-be integrated in third-party main dispatching loops without the use of
-threads.
+On Wed, 24 Oct 2018 12:59:36 -0500, Jared Bents wrote:
+> This patch adds davici which is an alternative implementation of the
+> VICI client protocal used by Strongswan.  It targets better integration
+> with software stacks and uses a asynchronous, non-blocking API that can
+> be integrated in third-party main dispatching loops without the use of
+> threads.
+> 
+> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
 
-Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
-[Thomas: fix license, it's LGPL-2.1+, add entry in DEVELOPERS file.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                 |  3 +++
- package/Config.in          |  1 +
- package/davici/Config.in   | 18 ++++++++++++++++++
- package/davici/davici.hash |  3 +++
- package/davici/davici.mk   | 20 ++++++++++++++++++++
- 5 files changed, 45 insertions(+)
+I've applied, with a few changes, see below.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2ff13b3c1d..49ff2487cd 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1014,6 +1014,9 @@ F:	package/python-pexpect/
- F:	package/python-ptyprocess/
- F:	package/zynq-boot-bin/
- 
-+N:	Jared Bents <jared.bents@rockwellcollins.com>
-+F:	package/davici/
-+
- N:	Jarkko Sakkinen <jarkko.sakkinen@intel.com>
- F:	package/quota/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 8f561b3491..712e360402 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1488,6 +1488,7 @@ menu "Networking"
- 	source "package/curlpp/Config.in"
- 	source "package/czmq/Config.in"
- 	source "package/daq/Config.in"
-+	source "package/davici/Config.in"
- 	source "package/filemq/Config.in"
- 	source "package/flickcurl/Config.in"
- 	source "package/fmlib/Config.in"
-diff --git a/package/davici/Config.in b/package/davici/Config.in
-new file mode 100644
-index 0000000000..9dfa0ec130
---- /dev/null
-+++ b/package/davici/Config.in
-@@ -0,0 +1,18 @@
-+comment "davici needs a toolchain w/ threads, dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+
-+config BR2_PACKAGE_DAVICI
-+	bool "davici"
-+	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_STRONGSWAN
-+	help
-+	  davici is an alternative implementation of the VICI
-+	  client protocol, targeting better integration in other
-+	  software stacks.
-+
-+	  https://github.com/strongswan/davici
-diff --git a/package/davici/davici.hash b/package/davici/davici.hash
-new file mode 100644
-index 0000000000..257e902ce7
---- /dev/null
-+++ b/package/davici/davici.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 d3e5e806ecca841d7e133a3df768062df59f4b4c76bf98e0f90aa8064721b3bd  davici-v1.3.tar.gz
-+sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/davici/davici.mk b/package/davici/davici.mk
-new file mode 100644
-index 0000000000..5c4b9774ea
---- /dev/null
-+++ b/package/davici/davici.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# davici
-+#
-+################################################################################
-+
-+DAVICI_VERSION = v1.3
-+DAVICI_SITE = $(call github,strongswan,davici,$(DAVICI_VERSION))
-+DAVICI_LICENSE = LGPL-2.1+
-+DAVICI_LICENSE_FILES = COPYING
-+DAVICI_DEPENDENCIES = strongswan
-+DAVICI_INSTALL_STAGING = YES
-+DAVICI_AUTORECONF = YES
-+
-+define DAVICI_CREATE_M4
-+	mkdir -p $(@D)/m4
-+endef
-+DAVICI_POST_PATCH_HOOKS += DAVICI_CREATE_M4
-+
-+$(eval $(autotools-package))
+>  package/Config.in          |  1 +
+>  package/davici/Config.in   | 18 ++++++++++++++++++
+>  package/davici/davici.hash |  3 +++
+>  package/davici/davici.mk   | 20 ++++++++++++++++++++
+
+An entry to the DEVELOPERS file was missing.
+
+> diff --git a/package/davici/Config.in b/package/davici/Config.in
+> new file mode 100644
+> index 0000000000..9dfa0ec130
+> --- /dev/null
+> +++ b/package/davici/Config.in
+> @@ -0,0 +1,18 @@
+> +comment "davici needs a toolchain w/ threads, dynamic library"
+> +	depends on BR2_USE_MMU
+> +	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+> +
+> +config BR2_PACKAGE_DAVICI
+> +	bool "davici"
+> +	depends on BR2_USE_MMU # fork()
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+> +	depends on !BR2_STATIC_LIBS
+> +	select BR2_PACKAGE_STRONGSWAN
+
+Here I hesitated between keeping your select, or switching to a
+"depends on". Indeed, in the case of this library, it's pretty clear
+that the user willing to use it will know that he needs strongswan. But
+it's a matter of taste, so in the end, I kept your select.
+
+> +DAVICI_VERSION = v1.3
+> +DAVICI_SITE = $(call github,strongswan,davici,$(DAVICI_VERSION))
+> +DAVICI_LICENSE = LGPL-2.1
+
+The license is LGPL-2.1+, the source files carry the "or later"
+indication.
+
+> +DAVICI_LICENSE_FILES = COPYING
+> +DAVICI_DEPENDENCIES = strongswan
+> +DAVICI_INSTALL_STAGING=YES
+
+Missing spaces around the = sign.
+
+Applied with those issues fixed. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
