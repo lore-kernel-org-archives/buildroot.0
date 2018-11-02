@@ -1,81 +1,275 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 1 Nov 2018 21:56:05 -0500
-Subject: [Buildroot] [PATCH] package/ntp: use ntpd to set initial time
-In-Reply-To: <CANQCQpZFJG=9tG2ooLY5=vPpG_mGcztYDtgFPQiEynxvJA15Kg@mail.gmail.com>
-References: <1540300218-59209-1-git-send-email-matthew.weber@rockwellcollins.com>
- <3c82f1ee-58b9-ef25-35d5-bd8fd25d4d48@mind.be>
- <CANQCQpYkLV-XJBVqRsQLdrxthZzkqctsBcxfX4mJQqFY16jk5Q@mail.gmail.com>
- <f544829d-68ed-abfc-306c-ce3cebb1de3b@mind.be>
- <CANQCQpYAjzXTQBDjKwbMPnQViP0=Qfpr6+pgs_3e7iGOYfo50g@mail.gmail.com>
- <3232b003-ae5e-43d1-b795-f73a0ed71624@mind.be>
- <CANQCQpa-kkDU56c7vjVnw=EDFxVxda2PPNPWMPazzkdhJt1jCg@mail.gmail.com>
- <CALtfCQbVvZOwfmTx8nykn0h8JXsj_GeMiLK6f+OM+7fw0o7q+w@mail.gmail.com>
- <CANQCQpZFJG=9tG2ooLY5=vPpG_mGcztYDtgFPQiEynxvJA15Kg@mail.gmail.com>
-Message-ID: <CANQCQpa3Lqw5BZP251AV8Ets-N+TL5SGwfiVW9xTi3Utv9Z3ng@mail.gmail.com>
+Date: Thu, 1 Nov 2018 22:08:53 -0500
+Subject: [Buildroot] [PATCH v4 1/3] arch: add support for RISC-V 32-bit
+ (riscv32) architecture
+In-Reply-To: <20181021191203.2148-1-mark.corbin@embecosm.com>
+References: <20181021191203.2148-1-mark.corbin@embecosm.com>
+Message-ID: <CANQCQpa6vK4LuXn0RRjjgTLdnncV=Q3WOHOB5HTkrZRGHXfUpg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Oscar,
+Mark,
 
-On Wed, Oct 31, 2018 at 7:44 AM Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
+On Sun, Oct 21, 2018 at 2:13 PM Mark Corbin <mark.corbin@embecosm.com> wrote:
 >
-> Oscar,
+> This enables a riscv32 system to be built with a Buildroot generated
+> toolchain (gcc >= 7.x, binutils >= 2.30, glibc only).
 >
-> On Wed, Oct 31, 2018 at 3:38 AM Oscar Gomez Fuente
-> <oscargomezf@gmail.com> wrote:
-> >
-> > Hi everyone,
-> >
-> > I was checking it on my Raspberry Pi 3B+ and it works perfectly.
-> >
-> > The only weird thing is the log related to the other ntp servers, but
-> > I think they are normal. It sees to be that they are duplicated, the
-> > alternative servers exist in case one of them it was down, so it is
-> > ok.
-> >
-> > ----->
-> > # date --set "1970-01-01 10:10:00"
-> > Thu Jan  1 10:10:00 UTC 1970
-> >
-> > # sntp -K /tmp/kod -sS -M 128 0.pool.ntp.org 1.pool.ntp.org
-> > 2.pool.ntp.org 3.pool.ntp.org
-> > sntp 4.2.8p12 at 1.3728-o Wed Oct 31 08:22:38 UTC 2018 (1)
-> > 213.251.52.234:123 0.pool.ntp.org duplicate address from 1.pool.ntp.org ignored.
-> > 37.139.121.60:123 0.pool.ntp.org duplicate address from 1.pool.ntp.org ignored.
-> > 185.132.136.116:123 0.pool.ntp.org duplicate address from
-> > 1.pool.ntp.org ignored.
-> > 81.19.96.148:123 0.pool.ntp.org duplicate address from 1.pool.ntp.org ignored.
-> > 213.251.52.234:123 0.pool.ntp.org duplicate address from 2.pool.ntp.org ignored.
-> > 81.19.96.148:123 0.pool.ntp.org duplicate address from 2.pool.ntp.org ignored.
-> > 185.132.136.116:123 0.pool.ntp.org duplicate address from
-> > 2.pool.ntp.org ignored.
-> > 37.139.121.60:123 0.pool.ntp.org duplicate address from 2.pool.ntp.org ignored.
-> > Send to [2001:720:1014:a205::2]:123 failed, Network is unreachable
-> > 213.251.52.234:123 0.pool.ntp.org duplicate address from 3.pool.ntp.org ignored.
-> > 81.19.96.148:123 0.pool.ntp.org duplicate address from 3.pool.ntp.org ignored.
-> > 185.132.136.116:123 0.pool.ntp.org duplicate address from
-> > 3.pool.ntp.org ignored.
-> > 37.139.121.60:123 0.pool.ntp.org duplicate address from 3.pool.ntp.org ignored.
-> > Send to [2001:720:1014:a202::2]:123 failed, Network is unreachable
-> > 1970-01-01 10:10:05.624784 (+0000) +1540938259.059756 +/-
-> > 1027292172.738343 0.pool.ntp.org 213.251.52.234 s2 no-leap
-> >
-> > # date
-> > Wed Oct 31 08:34:26 UTC 2018
-> > ----->
+> This requires a custom version of glibc 2.26 from the riscv-glibc
+> repository. Note that there are no tags in this repository, so the
+> glibc version just consists of the 40 character commit id string.
 >
-> I debated keeping all the pool servers in the list.  When the sntp
-> agent resolves any of the "0/1/2/3.pool.ntp.org or pool.ntp.org", the
-> DNS response is 4 server IPs.  The sntp agent then uses all 4 in
-> serial or a -c flag can be set to concurrently check them.  So
-> realistically just pool.ntp.org could be set as the sole server,
-> assuming there are 4 servers provided when it resolves.
+> Thanks to Fabrice Bellard for pointing me towards the 32-bit glibc
+> repository and for providing the necessary patch to get it to build.
 >
+> Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
 
-Would you mind testing my v4 patch which defaults to one server and if
-all looks good, provide your tested-by on that patch's email?
-https://patchwork.ozlabs.org/patch/992167/
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+(Tested v3 before the variable rework)
+
+> ---
+> Changes v3 -> v4:
+>   - added choice for selecting 32-bit or 64-bit in Config.in.riscv
+>     This provides a new variable BR2_RISCV_32
+>
+> Changes v2 -> v3:
+>   - updated the autobuild configuration for RISC-V 64-bit as the
+>     default RISC-V configuration is now 32-bit
+>
+> Changes v1 -> v2:
+>   - regenerated the glibc patch correctly (Romain)
+>   - modified the conditional test for RISC-V 32-bit in glibc.mk
+>     to use the more consistent style for multiple variables (Romain)
+> ---
+>  arch/Config.in.riscv                          | 31 +++++++++-
+>  arch/arch.mk.riscv                            |  4 +-
+>  configs/qemu_riscv64_virt_defconfig           |  1 +
+>  ...C-V-32-bit-build-of-riscv-glibc-2.26.patch | 59 +++++++++++++++++++
+>  .../glibc.hash                                |  7 +++
+>  package/glibc/glibc.mk                        |  7 +++
+>  .../br-riscv64-internal-glibc.config          |  1 +
+>  7 files changed, 106 insertions(+), 4 deletions(-)
+>  create mode 100644 package/glibc/4e2943456e690d89f48e6e710757dd09404b0c9a/0001-Fix-RISC-V-32-bit-build-of-riscv-glibc-2.26.patch
+>  create mode 100644 package/glibc/4e2943456e690d89f48e6e710757dd09404b0c9a/glibc.hash
+>
+> diff --git a/arch/Config.in.riscv b/arch/Config.in.riscv
+> index 4361890bf4..097719e846 100644
+> --- a/arch/Config.in.riscv
+> +++ b/arch/Config.in.riscv
+> @@ -65,14 +65,35 @@ config BR2_RISCV_ISA_CUSTOM_RVC
+>         select BR2_RISCV_ISA_RVC
+>  endif
+>
+> +choice
+> +       prompt "Target Architecture Size"
+> +       default BR2_RISCV_64
+> +
+> +config BR2_RISCV_32
+> +       bool "32-bit"
+> +
+>  config BR2_RISCV_64
+> -       bool
+> -       default y
+> +       bool "64-bit"
+>         select BR2_ARCH_IS_64
+>
+> +endchoice
+> +
+>  choice
+>         prompt "Target ABI"
+> -       default BR2_RISCV_ABI_LP64
+> +       default BR2_RISCV_ABI_ILP32 if !BR2_ARCH_IS_64
+> +       default BR2_RISCV_ABI_LP64 if BR2_ARCH_IS_64
+> +
+> +config BR2_RISCV_ABI_ILP32
+> +       bool "ilp32"
+> +       depends on !BR2_ARCH_IS_64
+> +
+> +config BR2_RISCV_ABI_ILP32F
+> +       bool "ilp32f"
+> +       depends on !BR2_ARCH_IS_64 && BR2_RISCV_ISA_RVF
+> +
+> +config BR2_RISCV_ABI_ILP32D
+> +       bool "ilp32d"
+> +       depends on !BR2_ARCH_IS_64 && BR2_RISCV_ISA_RVD
+>
+>  config BR2_RISCV_ABI_LP64
+>         bool "lp64"
+> @@ -88,12 +109,16 @@ config BR2_RISCV_ABI_LP64D
+>  endchoice
+>
+>  config BR2_ARCH
+> +       default "riscv32" if !BR2_ARCH_IS_64
+>         default "riscv64" if BR2_ARCH_IS_64
+>
+>  config BR2_ENDIAN
+>         default "LITTLE"
+>
+>  config BR2_GCC_TARGET_ABI
+> +       default "ilp32" if BR2_RISCV_ABI_ILP32
+> +       default "ilp32f" if BR2_RISCV_ABI_ILP32F
+> +       default "ilp32d" if BR2_RISCV_ABI_ILP32D
+>         default "lp64" if BR2_RISCV_ABI_LP64
+>         default "lp64f" if BR2_RISCV_ABI_LP64F
+>         default "lp64d" if BR2_RISCV_ABI_LP64D
+> diff --git a/arch/arch.mk.riscv b/arch/arch.mk.riscv
+> index 022d1a6809..f3bf2b3467 100644
+> --- a/arch/arch.mk.riscv
+> +++ b/arch/arch.mk.riscv
+> @@ -5,8 +5,10 @@
+>
+>  ifeq ($(BR2_riscv),y)
+>
+> -ifeq ($(BR2_ARCH_IS_64),y)
+> +ifeq ($(BR2_RISCV_64),y)
+>  GCC_TARGET_ARCH := rv64i
+> +else
+> +GCC_TARGET_ARCH := rv32i
+>  endif
+>
+>  ifeq ($(BR2_RISCV_ISA_RVM),y)
+> diff --git a/configs/qemu_riscv64_virt_defconfig b/configs/qemu_riscv64_virt_defconfig
+> index 59343ee98f..e15f804341 100644
+> --- a/configs/qemu_riscv64_virt_defconfig
+> +++ b/configs/qemu_riscv64_virt_defconfig
+> @@ -1,5 +1,6 @@
+>  # Architecture
+>  BR2_riscv=y
+> +BR2_RISCV_64=y
+>
+>  # System
+>  BR2_SYSTEM_DHCP="eth0"
+> diff --git a/package/glibc/4e2943456e690d89f48e6e710757dd09404b0c9a/0001-Fix-RISC-V-32-bit-build-of-riscv-glibc-2.26.patch b/package/glibc/4e2943456e690d89f48e6e710757dd09404b0c9a/0001-Fix-RISC-V-32-bit-build-of-riscv-glibc-2.26.patch
+> new file mode 100644
+> index 0000000000..0596587ac5
+> --- /dev/null
+> +++ b/package/glibc/4e2943456e690d89f48e6e710757dd09404b0c9a/0001-Fix-RISC-V-32-bit-build-of-riscv-glibc-2.26.patch
+> @@ -0,0 +1,59 @@
+> +From 4909cfbbe8dd512b8fc0892859549c26e1b14d30 Mon Sep 17 00:00:00 2001
+> +From: Mark Corbin <mark.corbin@embecosm.com>
+> +Date: Sun, 21 Oct 2018 10:38:18 +0100
+> +Subject: [PATCH 1/1] Fix RISC-V 32-bit build of riscv-glibc 2.26
+> +
+> +This patch fixes two build errors with the 32-bit version of
+> +glibc-2.26 from the riscv-glibc repository.
+> +
+> +A void reference to 'refsym' has been added to dl-runtime.c to avoid
+> +an 'unused variable' error when building with '-Werror'.
+> +
+> +Some data types were hard-coded for 64-bit in ldsodefs.h. These have
+> +been modified to allow 32-bit builds.
+> +
+> +This patch was provided by Fabrice Bellard as part of his RISC-V
+> +Buildroot development source.
+> +
+> +Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
+> +---
+> + elf/dl-runtime.c         | 1 +
+> + sysdeps/riscv/ldsodefs.h | 4 ++--
+> + 2 files changed, 3 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/elf/dl-runtime.c b/elf/dl-runtime.c
+> +index 51d3819d4a..e728e8907e 100644
+> +--- a/elf/dl-runtime.c
+> ++++ b/elf/dl-runtime.c
+> +@@ -146,6 +146,7 @@ _dl_fixup (
+> +   if (__glibc_unlikely (GLRO(dl_bind_not)))
+> +     return value;
+> +
+> ++  (void)refsym;
+> +   return elf_machine_fixup_plt (l, result, refsym, sym, reloc, rel_addr, value);
+> + }
+> +
+> +diff --git a/sysdeps/riscv/ldsodefs.h b/sysdeps/riscv/ldsodefs.h
+> +index db993df80a..91e7a8c88f 100644
+> +--- a/sysdeps/riscv/ldsodefs.h
+> ++++ b/sysdeps/riscv/ldsodefs.h
+> +@@ -25,14 +25,14 @@ struct La_riscv_regs;
+> + struct La_riscv_retval;
+> +
+> + #define ARCH_PLTENTER_MEMBERS                                         \
+> +-    Elf64_Addr (*riscv_gnu_pltenter) (Elf64_Sym *, unsigned int,      \
+> ++    ElfW(Addr) (*riscv_gnu_pltenter) (ElfW(Sym) *, unsigned int,      \
+> +                                     uintptr_t *, uintptr_t *,         \
+> +                                     const struct La_riscv_regs *,     \
+> +                                     unsigned int *, const char *name, \
+> +                                     long int *framesizep);
+> +
+> + #define ARCH_PLTEXIT_MEMBERS                                          \
+> +-    unsigned int (*riscv_gnu_pltexit) (Elf64_Sym *, unsigned int,     \
+> ++    unsigned int (*riscv_gnu_pltexit) (ElfW(Sym) *, unsigned int,     \
+> +                                      uintptr_t *, uintptr_t *,        \
+> +                                      const struct La_riscv_regs *,    \
+> +                                      struct La_riscv_retval *,        \
+> +--
+> +2.17.1
+> +
+> diff --git a/package/glibc/4e2943456e690d89f48e6e710757dd09404b0c9a/glibc.hash b/package/glibc/4e2943456e690d89f48e6e710757dd09404b0c9a/glibc.hash
+> new file mode 100644
+> index 0000000000..3eb5e04e96
+> --- /dev/null
+> +++ b/package/glibc/4e2943456e690d89f48e6e710757dd09404b0c9a/glibc.hash
+> @@ -0,0 +1,7 @@
+> +# Locally calculated (fetched from Github)
+> +sha256 a40f908125135bad2cf92c18d07ad25b3091b161b3a5d3aea46c23ffd2ac90b8  glibc-4e2943456e690d89f48e6e710757dd09404b0c9a.tar.gz
+> +
+> +# Hashes for license files
+> +sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
+> +sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING.LIB
+> +sha256 61abdd6930c9c599062d89e916b3e7968783879b6be0ee1c6229dd6169def431 LICENSES
+> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+> index 708c22f723..b05e78e895 100644
+> --- a/package/glibc/glibc.mk
+> +++ b/package/glibc/glibc.mk
+> @@ -7,6 +7,9 @@
+>  ifeq ($(BR2_arc),y)
+>  GLIBC_VERSION =  arc-2018.03-release
+>  GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VERSION))
+> +else ifeq ($(BR2_RISCV_32),y)
+> +GLIBC_VERSION = 4e2943456e690d89f48e6e710757dd09404b0c9a
+> +GLIBC_SITE = $(call github,riscv,riscv-glibc,$(GLIBC_VERSION))
+>  else
+>  # Generate version string using:
+>  #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
+> @@ -79,7 +82,11 @@ GLIBC_CONF_ENV = \
+>  # Override the default library locations of /lib64/<abi> and
+>  # /usr/lib64/<abi>/ for RISC-V.
+>  ifeq ($(BR2_riscv),y)
+> +ifeq ($(BR2_RISCV_64),y)
+>  GLIBC_CONF_ENV += libc_cv_slibdir=/lib64 libc_cv_rtlddir=/lib
+> +else
+> +GLIBC_CONF_ENV += libc_cv_slibdir=/lib32 libc_cv_rtlddir=/lib
+> +endif
+>  endif
+>
+>  # Even though we use the autotools-package infrastructure, we have to
+> diff --git a/support/config-fragments/autobuild/br-riscv64-internal-glibc.config b/support/config-fragments/autobuild/br-riscv64-internal-glibc.config
+> index 75aa5dd915..d952c73a86 100644
+> --- a/support/config-fragments/autobuild/br-riscv64-internal-glibc.config
+> +++ b/support/config-fragments/autobuild/br-riscv64-internal-glibc.config
+> @@ -1,2 +1,3 @@
+>  BR2_riscv=y
+> +BR2_RISCV_64=y
+>  BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+> --
+> 2.17.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
+-- 
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / RC Linux Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
