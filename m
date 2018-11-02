@@ -1,58 +1,191 @@
-From: Erico Nunes <nunes.erico@gmail.com>
-Date: Fri, 2 Nov 2018 14:05:30 +0100
-Subject: [Buildroot] [PATCH 1/1] linux-firmware: bump version and fix
- hash
-In-Reply-To: <20181101210640.GY28575@scaer>
-References: <20180926223806.12704-1-nunes.erico@gmail.com>
- <87mus2vkos.fsf@dell.be.48ers.dk>
- <CAK4VdL0mu+5Od73gU4T7dRLVRHior7gYg6NQ3+bNKms9P5R=EQ@mail.gmail.com>
- <20181003194023.GA2383@scaer>
- <CAK4VdL0_csVF1ZpA=J+V1J9o1v-1DRUNn9P6p7XymG_SEonn2A@mail.gmail.com>
- <20181101141411.GU28575@scaer> <20181101210640.GY28575@scaer>
-Message-ID: <CAK4VdL1pO5X4dnr+MupeNYe1K5bw6+9-Q5fPn-2FfeOYaq90NQ@mail.gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 2 Nov 2018 08:07:58 -0500
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-11-01
+In-Reply-To: <20181102070019.EB5432089C@mail.bootlin.com>
+References: <20181102070019.EB5432089C@mail.bootlin.com>
+Message-ID: <CANQCQpa5X=BKAk-_hce1nUhAr_ECNd85O7M8MMsMFfnohxz+3w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Nov 1, 2018 at 10:06 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> >     https://patchwork.ozlabs.org/project/buildroot/list/?series=43275
-> The part of that series that was dealing with download dependencies has
-> now been applied, so you should now be able to use 'make clean; make
-> source' and get the expected host-tar when needed.
+Peter,
+
+On Fri, Nov 2, 2018 at 2:00 AM Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
+
+> Hello,
 >
-> Can you confirm that on your side with your fancy Fedora 28+ ? ;-)
-
-Looks like you predicted this issue some time ago :)
-And the new applied patches do fix it, a host-tar build gets triggered
-even on 'make source' now and therefore the problem is gone.
-
-> > Does pigz isdentifies itself as pigz, or does it really impersonate
-> > gzip? If the former, then it will be easy to detect, but if the latter,
-> > it becomes more complex (we'd have to compress a wellknown blob and see
-> > if the compressed stream matches what we expect.)
-
-So with the symlink setup, all of the gzip related commands point to
-/usr/bin/pigz, which detects the called command name and then act
-accordingly.
-With the parallelism I was able to get significant performance
-improvements on e.g. compressing large Buildroot built images with
-this setup.
-Too bad it seems to affect the reproducibility right now.
-
-Looks like it is still detectable:
-
-$ gzip --version
-pigz 2.4
-
-I think it is a much minor issue though, more likely my fault than an
-issue with Buildroot. Would be better to be able to keep some of the
-parallelism benefits while maintaining reproducibility than forcing a
-host-gzip. I guess I'll just try some flags with it or maybe file an
-issue on the project to figure that out better.
+> Build statistics for 2018-11-01
+> ===============================
+>
+>       branch |  OK | NOK | TIM | TOT |
+>    2018.02.x |  17 |   4 |   0 |  21 |
+>    2018.08.x |  12 |   1 |   0 |  13 |
+>       master | 122 |  20 |   0 | 142 |
+>
+> Results for branch '2018.02.x'
+> ==============================
+>
+>
+I would be up for volunteering to help merge backports to LTS  (Assuming
+someone else is doing the original commit to master).  Today, a few
+failures like below fall into that case.
 
 
-Thanks Yann for the support and the fix.
+> Classification of failures by reason
+> ------------------------------------
+>
+>                      gpsd-3.17 | 1
+>
+ c0deed8
 
-Erico
+                p11-kit-0.23.2 | 1
+>
+ 30efa8e
+
+    trace-cmd-trace-cmd-v2.6.1 | 1
+>        xproto_inputproto-2.3.2 | 1
+>
+>
+> Detail of failures
+> ------------------
+>
+>      sparc64 |                      gpsd-3.17 | NOK |
+> http://autobuild.buildroot.net/results/11045cc8c28a59f74cb229d75e2d463e2bf80231
+> | ORPH
+>     mips64el |                 p11-kit-0.23.2 | NOK |
+> http://autobuild.buildroot.net/results/7d9773a756bfae789a6a83ec35aa1a0ba5b0646b
+> | ORPH
+>        sparc |     trace-cmd-trace-cmd-v2.6.1 | NOK |
+> http://autobuild.buildroot.net/results/ef07bcb4e02fd26018ee197ee595fc61ef2e5e6c
+> |
+>       x86_64 |        xproto_inputproto-2.3.2 | NOK |
+> http://autobuild.buildroot.net/results/bc3f06c686e10cad013b5ec9911b143ca566b290
+> |
+>
+> Results for branch '2018.08.x'
+> ==============================
+>
+> Classification of failures by reason
+> ------------------------------------
+>
+>     xserver_xorg-server-1.20.1 | 1
+>
+>
+> Detail of failures
+> ------------------
+>
+>         or1k |     xserver_xorg-server-1.20.1 | NOK |
+> http://autobuild.buildroot.net/results/ba2caba0b3ed6de867b66f9b0169a40898bddbd0
+> |
+>
+> Results for branch 'master'
+> ===========================
+>
+> Classification of failures by reason
+> ------------------------------------
+>
+>                   libffi-3.2.1 | 3
+>               lua-curl-0.3.7-1 | 3
+>                    luvi-v2.7.6 | 2
+>                postgresql-11.0 | 2
+>                valgrind-3.14.0 | 2
+>       docker-containerd-v1.1.3 | 1
+>      docker-engine-v17.05.0-ce | 1
+>                 flannel-v0.5.5 | 1
+>        gst-plugins-bad-0.10.23 | 1
+>                 libmpeg2-0.5.1 | 1
+>                    mpd-0.20.21 | 1
+>               webkitgtk-2.22.3 | 1
+> xdriver_xf86-video-geode-2.... | 1
+>
+>
+> Detail of failures
+> ------------------
+>
+>       x86_64 |       docker-containerd-v1.1.3 | NOK |
+> http://autobuild.buildroot.net/results/cbeeaeede724b8e93295fd3e71bc8758a1934f82
+> |
+>       x86_64 |      docker-engine-v17.05.0-ce | NOK |
+> http://autobuild.buildroot.net/results/d6be01884607898240b51582b95a817ea3d12c5f
+> |
+>       x86_64 |                 flannel-v0.5.5 | NOK |
+> http://autobuild.buildroot.net/results/2dd5e9be49f48afd20c1aa78ffe2a83dd4447993
+> |
+>      sparc64 |        gst-plugins-bad-0.10.23 | NOK |
+> http://autobuild.buildroot.net/results/427a8c0cf16576183f84eeb0e6a0a0bd5b8e97b6
+> | ORPH
+>      riscv64 |                   libffi-3.2.1 | NOK |
+> http://autobuild.buildroot.net/results/c9ed764b5c1a5bf6ba562c0284745384c128548d
+> |
+>      riscv64 |                   libffi-3.2.1 | NOK |
+> http://autobuild.buildroot.net/results/8c57983eaab51d7cb7264e93a417e4c6cf503c4e
+> |
+>      riscv64 |                   libffi-3.2.1 | NOK |
+> http://autobuild.buildroot.net/results/ed140bf3931b5ecd10e900677a33a54d67853ef8
+> |
+>      powerpc |                 libmpeg2-0.5.1 | NOK |
+> http://autobuild.buildroot.net/results/b5a8bcf1d98469707ce4208425f0ba0f45582c23
+> | ORPH
+>       xtensa |               lua-curl-0.3.7-1 | NOK |
+> http://autobuild.buildroot.net/results/7b962a63630abaed21d99f719c1bd710ec4d4b28
+> |
+>      powerpc |               lua-curl-0.3.7-1 | NOK |
+> http://autobuild.buildroot.net/results/fa6e289162124b3e079c4a2d9c3f00910c8cc063
+> |
+>      aarch64 |               lua-curl-0.3.7-1 | NOK |
+> http://autobuild.buildroot.net/results/566a9084d4762b9e14bf3bdd2f6938153f9c17db
+> |
+>       x86_64 |                    luvi-v2.7.6 | NOK |
+> http://autobuild.buildroot.net/results/33c4b4c0375f4aa5f3f0af9b62b39ddf869030d9
+> |
+>       x86_64 |                    luvi-v2.7.6 | NOK |
+> http://autobuild.buildroot.net/results/61d108a13adb79493f7fa0014e32c0f8939a7c78
+> |
+>       x86_64 |                    mpd-0.20.21 | NOK |
+> http://autobuild.buildroot.net/results/53c87361923cc177de7889523b3d16ba6b1d3d0f
+> |
+> microblazeel |                postgresql-11.0 | NOK |
+> http://autobuild.buildroot.net/results/c5ead9304b7d78d395c6b7f4044e83320c42d057
+> |
+> microblazeel |                postgresql-11.0 | NOK |
+> http://autobuild.buildroot.net/results/67228ce6b43f24c97dc997441f8fcccd58d3280a
+> |
+>     mips64el |                valgrind-3.14.0 | NOK |
+> http://autobuild.buildroot.net/results/9c062826ef3ce22db8192865049d5c5bd326556d
+> | ORPH
+>     mips64el |                valgrind-3.14.0 | NOK |
+> http://autobuild.buildroot.net/results/b084b8d2abf1fcb7739e2c4705db149e652597e6
+> | ORPH
+>       mipsel |               webkitgtk-2.22.3 | NOK |
+> http://autobuild.buildroot.net/results/eeaf3edbf6f5bf468b10adc3d053f703c6ceba96
+> |
+>         i586 | xdriver_xf86-video-geode-2.... | NOK |
+> http://autobuild.buildroot.net/results/a9baf6ecf147f336021edda20bb091b8aa071209
+> |
+>
+>
+> --
+> http://autobuild.buildroot.net
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+
+
+-- 
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / RC Linux Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted Third
+Party Intellectual Property (TPIP) content must be encrypted and sent to
+matthew.weber at corp.rockwellcollins.com.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181102/cde429c6/attachment.html>
