@@ -1,65 +1,40 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 2 Nov 2018 15:31:19 -0500
-Subject: [Buildroot] [PATCH 2/3] fs: be oblivious of pre-existing xattrs
-In-Reply-To: <ee8beeb5af2d893714d4aa82915e7068154ba46e.1540626349.git.yann.morin.1998@free.fr>
-References: <cover.1540626349.git.yann.morin.1998@free.fr>
- <ee8beeb5af2d893714d4aa82915e7068154ba46e.1540626349.git.yann.morin.1998@free.fr>
-Message-ID: <CANQCQpYSOs=6H-Koiws6=j9es_Z1hsUfGLdX8ovU+Z5duV5aQw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri,  2 Nov 2018 21:33:38 +0100
+Subject: [Buildroot] [PATCH] package/bdwgc: drop AUTORECONF = YES
+Message-ID: <20181102203338.23534-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Since commit 4e1dbd063d1f3ea7dfc95698320f6fd40139085d ("package/bdwgc:
+bump to version 8.0.0"), we no longer have any patch that requires
+autoreconf. In addition, the libtool shipped with the package seems to
+no longer be bogus, because it builds perfectly fine without
+autoreconf. Therefore, let's drop this autoreconf.
 
-On Sat, Oct 27, 2018 at 2:46 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Now that we handle permissions in each filesystems, and no longer in the
-> intermediate tarball, we no longer need tar to store extended attributes.
->
-> What's more, we really want it to store no attributes at all, to be sure
-> we don't have rogue extended attributes leaking in...
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/bdwgc/bdwgc.mk | 6 ------
+ 1 file changed, 6 deletions(-)
 
-
-Tested-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-
-Ran some scenaios as a regression on existing target builds before and
-after the change.  I did not use a SElinux enabled system.  I'll keep
-that in mind as a scenario that probably needs checked.
-
-> ---
->  fs/common.mk | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/fs/common.mk b/fs/common.mk
-> index 569e5d60c5..fd1e80ab93 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -45,6 +45,7 @@ ROOTFS_COMMON_TAR = $(FS_DIR)/rootfs.common.tar
->  # Command to create the common tarball from the base target directory.
->  define ROOTFS_COMMON_TAR_CMD
->         tar cf $(ROOTFS_COMMON_TAR) --numeric-owner \
-> +               --no-xattrs \
->                 --exclude=$(notdir $(TARGET_DIR_WARNING_FILE)) \
->                 -C $(TARGET_DIR) .
->  endef
-> @@ -52,7 +53,9 @@ endef
->  # Command to extract the common tarball into the per-rootfs target directory
->  define ROOTFS_COMMON_UNTAR_CMD
->         mkdir -p $(TARGET_DIR)
-> -       tar xf $(ROOTFS_COMMON_TAR) -C $(TARGET_DIR)
-> +       tar xf $(ROOTFS_COMMON_TAR) \
-> +               --no-xattrs \
-> +               -C $(TARGET_DIR)
->  endef
->
->  .PHONY: rootfs-common
-> --
-> 2.14.1
->
+diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
+index 8607234e5d..8ffac476f3 100644
+--- a/package/bdwgc/bdwgc.mk
++++ b/package/bdwgc/bdwgc.mk
+@@ -13,12 +13,6 @@ BDWGC_LICENSE_FILES = README.QUICK
+ BDWGC_DEPENDENCIES = libatomic_ops host-pkgconf
+ HOST_BDWGC_DEPENDENCIES = host-libatomic_ops host-pkgconf
+ 
+-# The libtool shipped with the package is bogus and generates some
+-# -L/usr/lib flags. It uses a version not supported by Buildroot
+-# libtool patches, so autoreconfiguring the packages is the easiest
+-# solution.
+-BDWGC_AUTORECONF = YES
+-
+ BDWGC_CONF_OPTS = CFLAGS_EXTRA="$(BDWGC_CFLAGS_EXTRA)"
+ ifeq ($(BR2_sparc),y)
+ BDWGC_CFLAGS_EXTRA += -DAO_NO_SPARC_V9
+-- 
+2.14.4
