@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 2 Nov 2018 21:43:51 +0100
-Subject: [Buildroot] [PATCH 1/2] wireshark: add libssh optional
- dependency
-In-Reply-To: <20181031225647.23660-1-fontaine.fabrice@gmail.com>
-References: <20181031225647.23660-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181102214351.383ac5f6@windsurf>
+Date: Fri, 2 Nov 2018 21:58:40 +0100
+Subject: [Buildroot] [PATCH 1/1] libxmlrpc: bump to version 1.43.08
+In-Reply-To: <87in1ibaey.fsf@dell.be.48ers.dk>
+References: <20181031114142.26274-1-fontaine.fabrice@gmail.com>
+ <87in1ibaey.fsf@dell.be.48ers.dk>
+Message-ID: <20181102215840.07126e3f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +13,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 31 Oct 2018 23:56:46 +0100, Fabrice Fontaine wrote:
-> - Optional dependency to libssh has been added with version 2.2.1 and
->   https://github.com/wireshark/wireshark/commit/d6da95231ee790fd884ca2a41fe59aa9b05ccde9
-> - Specify the path to found libssh as this is done for other options
+On Wed, 31 Oct 2018 12:52:37 +0100, Peter Korsgaard wrote:
+> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:  
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/wireshark/wireshark.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+>  > - Remove first patch and pass CC_FOR_BUILD and other variables in
+>  >   LIBXMLRPC_CONF_OPTS instead of LIBXMLRPC_CONF_ENV because a similar
+>  >   solution is already in version thanks to
+>  >   https://sourceforge.net/p/xmlrpc-c/code/2905
+>  > - Remove second patch (already in version thanks to
+>  >   https://sourceforge.net/p/xmlrpc-c/code/2908)
+>  > - Remove third path (already in version thanks to
+>  >   https://sourceforge.net/p/xmlrpc-c/code/2909)
+>  > - Add hash for license file  
+> 
+>  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>  
+> 
+> Committed, thanks.
 
-Both applied. Thanks!
+Fabrice had sent a v2 just a few minutes after the v1, and a few
+minutes before you merged the v1.
+
+But anyway, they seem to be the same, except for the commit log, so no
+big deal.
+
+I'll mark the v2 as Not Applicable in patchwork.
 
 Thomas
 -- 
