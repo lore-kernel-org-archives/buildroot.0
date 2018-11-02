@@ -1,78 +1,163 @@
-From: Nasser <afshin.nasser@gmail.com>
-Date: Fri, 2 Nov 2018 05:48:32 +0330
-Subject: [Buildroot] [PATCH] merge_config.sh: Fix merging buildroot
- config files
-In-Reply-To: <20181101132350.GA3634@x230>
-References: <20181031205608.GA4061@x230>
- <20181101010953.20996-1-afshin.nasser@gmail.com>
- <20181101062448.GC8261@x230>
- <20181101105513.GB4937@smart-ThinkPad-T410>
- <20181101132350.GA3634@x230>
-Message-ID: <20181102021832.GB8966@smart-ThinkPad-T410>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Thu,  1 Nov 2018 21:52:34 -0500
+Subject: [Buildroot] [PATCH v4] package/ntp: sntp time sync script
+Message-ID: <1541127154-45957-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Petr,
-On Thu, Nov 01, 2018 at 02:23:51PM +0100, Petr Vorel wrote:
-> Hi Nasser,
-> 
-> > > > +unset CONFIG_
-> > > You added unset, which isn't in upstream patch. This has no effect, so I'd be
-> > > for removing it. Even if it has (if it was needed), it'd be better to 1) ask
-> > > upstream to add it 2) keep it in separate patch in meanwhile (otherwise it
-> > > complicates patch rebasing during update and can be lost).
-> > Removing unset will cause the following make command work wrong. Note
-> > that the value of this environment variable is checked [1] and used. The
-> > result of removing the unset line is that we will have double BR2_
-> > prefixes in the final .config file as well as lots of warnings when
-> > checking if all specified config values have been taken.
-> You're right. The reason is that we don't actually use BR2_ as a real prefix
-> (as Masahiro noted [1], but I didn't realize that), but here in utils/test-pkg
-> we pass it as merge_config.sh needs to work with prefixes [2]:
-> 
-> -    support/kconfig/merge_config.sh -O "${dir}" \
-> +    CONFIG_=BR2_ support/kconfig/merge_config.sh -O "${dir}" \
-> 
-> Delta is smaller, but it's still a patch, which is needed :(.
-OK. I'll prepare a separate patch for this chunk.
-> 
-> > > BTW (I noted that before) your patch contain trailing whitespace and mixing tab
-> > > and spaces. git am and pwclient fixes that, only when applying with patch they
-> > > get committed, so nothing serious.
-> 
-> > > $ pwclient git-am -p buildroot 991781
-> > > .git/rebase-apply/patch:59: space before tab in indent.
-> > >  	echo "  -r    list redundant entries when merging fragments"
-> > > .git/rebase-apply/patch:60: space before tab in indent.
-> > >  	echo "  -O    dir to put generated output files.  Consider setting \$KCONFIG_CONFIG instead."
-> > > .git/rebase-apply/patch:61: space before tab in indent.
-> > >  	echo "  -e    colon-separated list of br2-external trees to use (optional)"
-> > > .git/rebase-apply/patch:66: trailing whitespace.
-> 
-> > > .git/rebase-apply/patch:72: trailing whitespace.
-> 
-> > > warning: squelched 6 whitespace errors
-> > > warning: 10 lines applied after fixing whitespace errors.
-> > > Applying: merge_config.sh: Fix merging buildroot config files
-> > > Applying patch #991781 using 'git am'
-> > > Description: merge_config.sh: Fix merging buildroot config files
-> 
-> > I think this is because we are including a patch in another patch. As
-> > you can see in your previous commit:
-> > a3366b270562f42723a3b8032f73bb03b541d113, this patch has the same issue
-> > because it includes another patch.
-> > I don't know how to avoid that if we should do so.
-> Again, you're right. I'm sorry for bothering you with it.
-No problem :-).
-> 
-> 
-> Kind regards,
-> Petr
-> 
-> [1] https://patchwork.kernel.org/patch/10658589/#22290097
-> [2] https://patchwork.ozlabs.org/patch/991781/
-Kind regards,
-Nasser
+This patch adds the installation of a startup script if the sntp
+utility is selected as an option. The utility is design to do a
+one time step/slew adjustment of the system time (similar to the
+ntpdate tool http://support.ntp.org/bin/view/Dev/DeprecatingNtpdate).
+One nice benefit over ntpdate is that sntp can run while ntpd is still
+running. However, ntpd may still need to be restarted if the time
+step was large enough.
+
+The script provides the ability to override the arguments as part of a
+/etc/defaults/sntp file.
+
+On a local LAN, the initial large step adjustment took less then
+one second to be retrieved and system time updated. If a user already
+has a RTC maintaining the time and the system was powered off for
+a long period of time, the script assumes a slew adjustment when
++/- 128ms, rather then a time step(jump). This could be further
+tuned by a user with the /etc/defaults/sntp configuration file.
+
+One NTP pool server is being set as sntp uses all of the servers
+provided when the DNS is resolved as servers to attempt to retrieve
+time from before timing out. It looks like currently that is 4 servers
+per *pool.ntp.org hostname.
+
+Cc: Oscar Gomez Fuente <oscargomezf@gmail.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+---
+
+Major design/observations
+(v2) Originally an attempt was made to use the ntpd in one shot mode
+but it required more complex logic to handle the cases of a timeout
+where the app had to be killed before the actual ntpd was started.
+Similarly bad server addreses or network connection being down had
+to be handled with the timeout case as the app in one shot mode
+wouldn't exit.
+http://lists.ntp.org/pipermail/questions/2011-July/030041.html
+
+(post v2) An attempt was made to use the wait -w feature of ntpd but it
+seems that approach requires a longer period of stability.  I believe
+the -w actually means to wait for good stable time vs time being set
+with the possibility of slewing required. So apps could pend on
+ntp-wait to get good time before proceeding.  This doesn't work for
+a quick initial time set.
+
+(v3+) So the approach in this series uses ntpd to cleanup the time after
+a quick initial set.  Plus using the feature of the sntp to manage
+do we time jump or do some minor slewing.
+
+Changes
+v3 -> v4
+ - Updated S48sntp script to just use a single pool host which provides
+   4 NTP servers sntp will query before timing out
+
+v2 -> v3
+ - Moved initial time set to a S48sntp script as originally suggested
+   by Oscar and preferred by Arnout
+ - Switched to sntp tool as it simplified the logic around when and
+   how do we call the tool to perform this time sync (it handles
+   when to slew/step and multiple servers at once)
+
+v1 -> v2
+[Arnout
+ - Moved NTP_WAIT_DELAY above sourcing of configuration file
+ - Switched to using unix time for current time check
+ - Added comment on why redirection of stdout and stderr
+ - Attempted to use the pid file but found it added more calls
+   to the shell then using a variable, so switched back
+ - Adjusted printout so the actual ntpd service start was aligned
+   with the respecting Ok/Fail.
+ - Dropped -g from the main service call as the "big" time jump
+   should have already occurred with the one-shot ntpd -gq.
+
+v1
+Based on Oscar's v1 patch to add a ntpdate startup script.
+http://patchwork.ozlabs.org/patch/986852/
+---
+ package/ntp/S48sntp | 42 ++++++++++++++++++++++++++++++++++++++++++
+ package/ntp/ntp.mk  |  9 +++++++++
+ 2 files changed, 51 insertions(+)
+ create mode 100755 package/ntp/S48sntp
+
+diff --git a/package/ntp/S48sntp b/package/ntp/S48sntp
+new file mode 100755
+index 0000000..cc0948e
+--- /dev/null
++++ b/package/ntp/S48sntp
+@@ -0,0 +1,42 @@
++#! /bin/sh
++
++NAME=sntp
++# sntp uses all the IPs resolved for the hostname (i.e. pool.ntp.org has 4).
++# It will try each until they either all timeout or time has been set. Thus
++# default to only providing one NTP pool host.
++SNTP_SERVERS="pool.ntp.org"
++# Step if time delta is greater then 128ms, otherwise slew
++SNTP_ARGS="-Ss -M 128"
++SNTP_KEY_CACHE="/tmp/kod"
++
++# Read config file if it is present.
++if [ -r /etc/default/$NAME ]
++then
++	. /etc/default/$NAME
++fi
++
++# Create key cache file to prevents warning that file is missing
++touch $SNTP_KEY_CACHE
++
++case "$1" in
++	start)
++		echo "Starting $NAME: "
++		$NAME $SNTP_ARGS -K $SNTP_KEY_CACHE $SNTP_SERVERS
++		[ $? = 0 ] && echo "OK" || echo "FAIL"
++		;;
++	stop)
++		echo "Stopping $NAME: OK"
++		;;
++	restart|reload)
++		echo "Restarting $NAME: "
++		$0 stop
++		sleep 1
++		$0 start
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}" >&2
++		exit 1
++		;;
++esac
++
++exit 0
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index af3c1aa..aad1cdd 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -93,9 +93,18 @@ define NTP_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 644 package/ntp/ntpd.etc.conf $(TARGET_DIR)/etc/ntp.conf
+ endef
+ 
++# This script will step the time if there is a large difference
++# before ntpd takes over the necessary slew adjustments
++ifeq ($(BR2_PACKAGE_NTP_SNTP),y)
++define NTP_INSTALL_INIT_SYSV_SNTP
++	$(INSTALL) -D -m 755 package/ntp/S48sntp $(TARGET_DIR)/etc/init.d/S48sntp
++endef
++endif
++
+ ifeq ($(BR2_PACKAGE_NTP_NTPD),y)
+ define NTP_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 755 package/ntp/S49ntp $(TARGET_DIR)/etc/init.d/S49ntp
++	$(NTP_INSTALL_INIT_SYSV_SNTP)
+ endef
+ 
+ define NTP_INSTALL_INIT_SYSTEMD
+-- 
+1.9.1
