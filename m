@@ -1,68 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Nov 2018 23:00:40 +0100
-Subject: [Buildroot] [git commit] package/opencv3: fix build on sparc64 due
- to missing 64-bit Release_CompareAndSwap()
-Message-ID: <20181102083942.7CF9E8042B@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 02 Nov 2018 08:44:32 +0000
+Subject: [Buildroot] [Bug 11476] stdio2.h error invalid use of
+ __builtin_va_arg_pack
+In-Reply-To: <bug-11476-163@https.bugs.busybox.net/>
+References: <bug-11476-163@https.bugs.busybox.net/>
+Message-ID: <bug-11476-163-m6ougA8X71@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d1eb16c4bde86b43c70e50306feb8f1c5d9affbc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=11476
 
-Fixes:
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Thanks for your bug report. Could you try without the following options:
 
-  http://autobuild.buildroot.org/results/d27fa3eb3ea600698571837981a3a15d556724ea
+BR2_SSP_REGULAR=y
+BR2_RELRO_PARTIAL=y
+BR2_FORTIFY_SOURCE_1=y
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...ty-protobuf-fix-compilation-issue-on-s390.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+and see if the problem still appears ? If it does not appear, enabling those
+options one by one to see which one breaks the build would be useful.
 
-diff --git a/package/opencv3/0001-3rdparty-protobuf-fix-compilation-issue-on-s390.patch b/package/opencv3/0001-3rdparty-protobuf-fix-compilation-issue-on-s390.patch
-new file mode 100644
-index 0000000000..7743eae533
---- /dev/null
-+++ b/package/opencv3/0001-3rdparty-protobuf-fix-compilation-issue-on-s390.patch
-@@ -0,0 +1,38 @@
-+From ac9ec55b37b2dd3b224144b4f20857a80719b750 Mon Sep 17 00:00:00 2001
-+From: Loic Devulder <ldevulder@suse.de>
-+Date: Fri, 28 Sep 2018 15:33:18 +0200
-+Subject: [PATCH] 3rdparty/protobuf: fix compilation issue on s390
-+
-+This commit fixes an issue while trying to compile
-+on s390x architecture.
-+
-+This is simply a backport of a fixe already applied
-+in official protobuf code:
-+- https://github.com/protocolbuffers/protobuf/pull/3955
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/opencv/opencv/commit/ac9ec55b37b2dd3b224144b4f20857a80719b750]
-+---
-+ .../protobuf/stubs/atomicops_internals_generic_gcc.h      | 8 ++++++++
-+ 1 file changed, 8 insertions(+)
-+
-+diff --git a/3rdparty/protobuf/src/google/protobuf/stubs/atomicops_internals_generic_gcc.h b/3rdparty/protobuf/src/google/protobuf/stubs/atomicops_internals_generic_gcc.h
-+index 0b0b06ce6cf..075c406abab 100644
-+--- a/3rdparty/protobuf/src/google/protobuf/stubs/atomicops_internals_generic_gcc.h
-++++ b/3rdparty/protobuf/src/google/protobuf/stubs/atomicops_internals_generic_gcc.h
-+@@ -146,6 +146,14 @@ inline Atomic64 NoBarrier_Load(volatile const Atomic64* ptr) {
-+   return __atomic_load_n(ptr, __ATOMIC_RELAXED);
-+ }
-+ 
-++inline Atomic64 Release_CompareAndSwap(volatile Atomic64* ptr,
-++                                       Atomic64 old_value,
-++                                       Atomic64 new_value) {
-++  __atomic_compare_exchange_n(ptr, &old_value, new_value, false,
-++                              __ATOMIC_RELEASE, __ATOMIC_ACQUIRE);
-++  return old_value;
-++}
-++
-+ #endif // defined(__LP64__)
-+ 
-+ }  // namespace internal
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
