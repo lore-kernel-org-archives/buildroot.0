@@ -1,30 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 2 Nov 2018 09:49:07 +0100
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 18.2.4
-In-Reply-To: <20181031205657.13054-1-bernd.kuhls@t-online.de>
-References: <20181031205657.13054-1-bernd.kuhls@t-online.de>
-Message-ID: <20181102094907.5c8dadd7@windsurf>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Fri,  2 Nov 2018 10:53:39 +0200
+Subject: [Buildroot] [PATCH 1/1] python-cython: write full package name on
+ .mk title.
+Message-ID: <20181102085341.29421-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Renamed 'cython' to 'python-cython'.
 
-On Wed, 31 Oct 2018 21:56:57 +0100, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/mesa3d-headers/mesa3d-headers.mk |  2 +-
->  package/mesa3d/mesa3d.hash               | 10 +++++-----
->  package/mesa3d/mesa3d.mk                 |  2 +-
->  3 files changed, 7 insertions(+), 7 deletions(-)
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/python-cython/python-cython.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
+index 624fe2fb75..f4cff975f1 100644
+--- a/package/python-cython/python-cython.mk
++++ b/package/python-cython/python-cython.mk
+@@ -1,6 +1,6 @@
+ ################################################################################
+ #
+-# cython
++# python-cython
+ #
+ ################################################################################
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.19.1
