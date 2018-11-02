@@ -1,64 +1,54 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 1 Nov 2018 22:09:51 -0500
-Subject: [Buildroot] [PATCH v4 3/3] support/config-fragments: add RISC-V
- 32-bit to autobuild configs
-In-Reply-To: <20181021191203.2148-3-mark.corbin@embecosm.com>
-References: <20181021191203.2148-1-mark.corbin@embecosm.com>
- <20181021191203.2148-3-mark.corbin@embecosm.com>
-Message-ID: <CANQCQpZE8pxPZWYC4=nDcvau30a-fn6jE4GNz4F6+AVRXuwHDw@mail.gmail.com>
+Date: Thu, 1 Nov 2018 22:28:17 -0500
+Subject: [Buildroot] [PATCH] ifupdown-script: send current hostname in
+ DHCP request
+In-Reply-To: <20181030171614.32609-1-peter@korsgaard.com>
+References: <20181030171614.32609-1-peter@korsgaard.com>
+Message-ID: <CANQCQpbA-2rdHtpBs8sE=R0UE0R+GGY4fXza-kxtY+x_7LrLdg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mark,
+Peter,
 
-On Sun, Oct 21, 2018 at 2:13 PM Mark Corbin <mark.corbin@embecosm.com> wrote:
+On Tue, Oct 30, 2018 at 12:16 PM Peter Korsgaard <peter@korsgaard.com> wrote:
 >
-> Add a minimal RISC-V 32-bit autobuild configuration for the
-> internal toolchain with glibc.
+> For the default (BR2_SYSTEM_DHCP) /etc/network/interfaces handling.
 >
-> Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
-
+> Both the "big" and busybox ifupdown variants pass the hostname argument to
+> the DHCP client through the shell, so we can use $() to expand to the
+> current hostname value.
+>
+The man page for the interfaces file mentioned that only pump, dhcpcd
+and udhcpc use the hostname value from interfaces.  With dhclient
+requiring the dhclient.conf to specify the set hostname option with
+the hostname string.  Would it be worth mentioning that here in the
+comment that for most (pump, dhcpcd, udhcpc) the hostname parameter
+will work but some clients like dhclient require a separate
+configuration file?
 
 Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
-(Tested v3 before the variable rework)
 
-
->
 > ---
-> Changes v3 -> v4:
->   - set new variable BR2_RISCV_32 in br-riscv32-internal-glibc.config
-> ---
->  .../autobuild/br-riscv32-internal-glibc.config                 | 3 +++
->  support/config-fragments/autobuild/toolchain-configs.csv       | 1 +
->  2 files changed, 4 insertions(+)
->  create mode 100644 support/config-fragments/autobuild/br-riscv32-internal-glibc.config
+>  package/ifupdown-scripts/ifupdown-scripts.mk | 1 +
+>  1 file changed, 1 insertion(+)
 >
-> diff --git a/support/config-fragments/autobuild/br-riscv32-internal-glibc.config b/support/config-fragments/autobuild/br-riscv32-internal-glibc.config
-> new file mode 100644
-> index 0000000000..c5348a28da
-> --- /dev/null
-> +++ b/support/config-fragments/autobuild/br-riscv32-internal-glibc.config
-> @@ -0,0 +1,3 @@
-> +BR2_riscv=y
-> +BR2_RISCV_32=y
-> +BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-> diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
-> index f24ec9ced0..3681bc519f 100644
-> --- a/support/config-fragments/autobuild/toolchain-configs.csv
-> +++ b/support/config-fragments/autobuild/toolchain-configs.csv
-> @@ -51,6 +51,7 @@ support/config-fragments/autobuild/br-powerpc64le-power8-glibc.config,x86_64
->  support/config-fragments/autobuild/br-powerpc64-power7-glibc.config,x86_64
->  support/config-fragments/autobuild/br-powerpc-e500mc-full.config,x86_64
->  support/config-fragments/autobuild/br-powerpc-internal-full.config,any
-> +support/config-fragments/autobuild/br-riscv32-internal-glibc.config,any
->  support/config-fragments/autobuild/br-riscv64-internal-glibc.config,any
->  support/config-fragments/autobuild/br-sh4-full.config,x86_64
->  support/config-fragments/autobuild/br-sparc-uclibc.config,x86_64
+> diff --git a/package/ifupdown-scripts/ifupdown-scripts.mk b/package/ifupdown-scripts/ifupdown-scripts.mk
+> index ebc89b3872..17364aed03 100644
+> --- a/package/ifupdown-scripts/ifupdown-scripts.mk
+> +++ b/package/ifupdown-scripts/ifupdown-scripts.mk
+> @@ -23,6 +23,7 @@ define IFUPDOWN_SCRIPTS_DHCP
+>                 echo "iface $(IFUPDOWN_SCRIPTS_DHCP_IFACE) inet dhcp"; \
+>                 echo "  pre-up /etc/network/nfs_check"; \
+>                 echo "  wait-delay 15"; \
+> +               echo "  hostname \$$(hostname)"; \
+>         ) >> $(TARGET_DIR)/etc/network/interfaces
+>         $(INSTALL) -m 0755 -D $(IFUPDOWN_SCRIPTS_PKGDIR)/nfs_check \
+>                 $(TARGET_DIR)/etc/network/nfs_check
 > --
-> 2.17.1
+> 2.11.0
 >
 > _______________________________________________
 > buildroot mailing list
