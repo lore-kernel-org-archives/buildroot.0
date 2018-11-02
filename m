@@ -1,47 +1,115 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Fri, 2 Nov 2018 17:01:15 -0200 (BRST)
-Subject: [Buildroot] [PATCH v3 2/8] busybox: add logging configuration
- file
-In-Reply-To: <14a8b23d-ce2f-2d42-5ed3-c65eb6df0bd8@mind.be>
-References: <20181007114605.18153-1-casantos@datacom.com.br>
- <20181007114605.18153-3-casantos@datacom.com.br>
- <14a8b23d-ce2f-2d42-5ed3-c65eb6df0bd8@mind.be>
-Message-ID: <829805537.4906.1541185275271.JavaMail.zimbra@datacom.com.br>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri,  2 Nov 2018 20:01:08 +0100
+Subject: [Buildroot] [PATCH v1] libv4l: add missing bpf_common.h header
+Message-ID: <20181102190108.29507-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Arnout Vandecappelle" <arnout@mind.be>
-> To: "DATACOM" <casantos@datacom.com.br>, "buildroot" <buildroot@buildroot.org>
-> Cc: "ratbert90" <aduskett@gmail.com>, "Matthew Weber" <matthew.weber@rockwellcollins.com>, "Chris Packham"
-> <judge.packham@gmail.com>
-> Sent: Domingo, 21 de outubro de 2018 15:27:24
-> Subject: Re: [PATCH v3 2/8] busybox: add logging configuration file
+Fixes [1] (for older toolchains not providing this header):
 
-> On 07/10/2018 12:45, Carlos Santos wrote:
->> Provide a template to help users to customize syslogd and klogd without
->> editting the startup script.
->> 
->> syslogd options worth to configure are remote logging (-R), rotation
->> (-s, -b) and minimal priority level (-l).
->> 
->> klogd minimal priority level (-c) can be configured too, preventing
->> non-critical kernel messages from appearing on the console.
->> 
->> This file is also useful as an example for init script authors.
-> 
-> We also discussed this, and we agreed in the end that it is not very useful to
-> have a default defaults file. It needlessly consumes space on the target, the
-> user anyway probably has to consult documentation to know which options to use,
-> and there is (usually) only one option that can be set in the file:
-> <DAEMON>_ARGS. In addition, we can't expect all package authors to submit
-> something that is of such a high quality as this example...
+    CC       keytable.o
+  In file included from bpf.h:26:0,
+                   from keytable.c:37:
+  ../../include/linux/bpf.h:12:10: fatal error: linux/bpf_common.h: No such file or directory
+   #include <linux/bpf_common.h>
+            ^~~~~~~~~~~~~~~~~~~~
 
-OK, I will drop the default files from the series.
+[1] http://autobuild.buildroot.org/results/d22c0939eed4bc949f7eaeae7595d01ec45cc2cd
 
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ .../0005-Add-missing-linux-bpf_common.h.patch | 80 +++++++++++++++++++
+ 1 file changed, 80 insertions(+)
+ create mode 100644 package/libv4l/0005-Add-missing-linux-bpf_common.h.patch
+
+diff --git a/package/libv4l/0005-Add-missing-linux-bpf_common.h.patch b/package/libv4l/0005-Add-missing-linux-bpf_common.h.patch
+new file mode 100644
+index 0000000000..d43ea70027
+--- /dev/null
++++ b/package/libv4l/0005-Add-missing-linux-bpf_common.h.patch
+@@ -0,0 +1,80 @@
++From 311e344039d58cfde09dd34f14804db8ac0513c9 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Fri, 2 Nov 2018 18:58:53 +0100
++Subject: [PATCH] Add missing linux/bpf_common.h
++
++Copy from [1], needed by bpf.h.
++
++https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/plain/include/uapi/linux/bpf_common.h?h=v4.19
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ include/linux/bpf_common.h | 57 ++++++++++++++++++++++++++++++++++++++
++ 1 file changed, 57 insertions(+)
++ create mode 100644 include/linux/bpf_common.h
++
++diff --git a/include/linux/bpf_common.h b/include/linux/bpf_common.h
++new file mode 100644
++index 00000000..ee97668b
++--- /dev/null
+++++ b/include/linux/bpf_common.h
++@@ -0,0 +1,57 @@
+++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+++#ifndef _UAPI__LINUX_BPF_COMMON_H__
+++#define _UAPI__LINUX_BPF_COMMON_H__
+++
+++/* Instruction classes */
+++#define BPF_CLASS(code) ((code) & 0x07)
+++#define		BPF_LD		0x00
+++#define		BPF_LDX		0x01
+++#define		BPF_ST		0x02
+++#define		BPF_STX		0x03
+++#define		BPF_ALU		0x04
+++#define		BPF_JMP		0x05
+++#define		BPF_RET		0x06
+++#define		BPF_MISC        0x07
+++
+++/* ld/ldx fields */
+++#define BPF_SIZE(code)  ((code) & 0x18)
+++#define		BPF_W		0x00 /* 32-bit */
+++#define		BPF_H		0x08 /* 16-bit */
+++#define		BPF_B		0x10 /*  8-bit */
+++/* eBPF		BPF_DW		0x18    64-bit */
+++#define BPF_MODE(code)  ((code) & 0xe0)
+++#define		BPF_IMM		0x00
+++#define		BPF_ABS		0x20
+++#define		BPF_IND		0x40
+++#define		BPF_MEM		0x60
+++#define		BPF_LEN		0x80
+++#define		BPF_MSH		0xa0
+++
+++/* alu/jmp fields */
+++#define BPF_OP(code)    ((code) & 0xf0)
+++#define		BPF_ADD		0x00
+++#define		BPF_SUB		0x10
+++#define		BPF_MUL		0x20
+++#define		BPF_DIV		0x30
+++#define		BPF_OR		0x40
+++#define		BPF_AND		0x50
+++#define		BPF_LSH		0x60
+++#define		BPF_RSH		0x70
+++#define		BPF_NEG		0x80
+++#define		BPF_MOD		0x90
+++#define		BPF_XOR		0xa0
+++
+++#define		BPF_JA		0x00
+++#define		BPF_JEQ		0x10
+++#define		BPF_JGT		0x20
+++#define		BPF_JGE		0x30
+++#define		BPF_JSET        0x40
+++#define BPF_SRC(code)   ((code) & 0x08)
+++#define		BPF_K		0x00
+++#define		BPF_X		0x08
+++
+++#ifndef BPF_MAXINSNS
+++#define BPF_MAXINSNS 4096
+++#endif
+++
+++#endif /* _UAPI__LINUX_BPF_COMMON_H__ */
++-- 
++2.19.1
++
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?Marched towards the enemy, spear upright, armed with the certainty
-that only the ignorant can have.? ? Epitaph of a volunteer
+2.19.1
