@@ -1,10 +1,10 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Fri,  2 Nov 2018 01:12:36 -0300
-Subject: [Buildroot] [PATCH v2 07/12] support/testing: use
- TestPythonPackageBase for python-incremental
+Date: Fri,  2 Nov 2018 01:12:37 -0300
+Subject: [Buildroot] [PATCH v2 08/12] support/testing: use
+ TestPythonPackageBase for python-twisted
 In-Reply-To: <20181102041241.28910-1-ricardo.martincoski@gmail.com>
 References: <20181102041241.28910-1-ricardo.martincoski@gmail.com>
-Message-ID: <20181102041241.28910-8-ricardo.martincoski@gmail.com>
+Message-ID: <20181102041241.28910-9-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -22,66 +22,91 @@ Cc: Yegor Yefremov <yegorslists@googlemail.com>
 ---
 Changes v1 -> v2:
   - refresh after creating TestPythonPackageBase;
+  - override run_sample_scripts instead of test_run;
 ---
- .../package/sample_python_incremental.py      |  3 ++
- .../tests/package/test_python_incremental.py  | 32 ++++++-------------
- 2 files changed, 12 insertions(+), 23 deletions(-)
- create mode 100644 support/testing/tests/package/sample_python_incremental.py
+ .../tests/package/sample_python_twisted.py    |  9 ++++
+ .../tests/package/test_python_twisted.py      | 42 +++++--------------
+ 2 files changed, 20 insertions(+), 31 deletions(-)
+ create mode 100644 support/testing/tests/package/sample_python_twisted.py
 
-diff --git a/support/testing/tests/package/sample_python_incremental.py b/support/testing/tests/package/sample_python_incremental.py
+diff --git a/support/testing/tests/package/sample_python_twisted.py b/support/testing/tests/package/sample_python_twisted.py
 new file mode 100644
-index 0000000000..b6e2aa803c
+index 0000000000..47d6c5debc
 --- /dev/null
-+++ b/support/testing/tests/package/sample_python_incremental.py
-@@ -0,0 +1,3 @@
-+import incremental
-+v = incremental.Version("package", 1, 2, 3, release_candidate=4)
-+assert(str(v) == "[package, version 1.2.3rc4]")
-diff --git a/support/testing/tests/package/test_python_incremental.py b/support/testing/tests/package/test_python_incremental.py
-index 5a98efc666..22dde5e358 100644
---- a/support/testing/tests/package/test_python_incremental.py
-+++ b/support/testing/tests/package/test_python_incremental.py
-@@ -1,32 +1,18 @@
++++ b/support/testing/tests/package/sample_python_twisted.py
+@@ -0,0 +1,9 @@
++from twisted.internet import protocol, reactor, endpoints
++
++
++class F(protocol.Factory):
++    pass
++
++
++endpoints.serverFromString(reactor, "tcp:1234").listen(F())
++reactor.run()
+diff --git a/support/testing/tests/package/test_python_twisted.py b/support/testing/tests/package/test_python_twisted.py
+index 74b32fbd62..fa83620e5e 100644
+--- a/support/testing/tests/package/test_python_twisted.py
++++ b/support/testing/tests/package/test_python_twisted.py
+@@ -1,25 +1,19 @@
 -from tests.package.test_python import TestPythonBase, TestPythonBase2, TestPythonBase3
+-
+-TEST_SCRIPT = """
+-from twisted.internet import protocol, reactor, endpoints
+-class F(protocol.Factory):
+-    pass
+-endpoints.serverFromString(reactor, "tcp:1234").listen(F())
+-reactor.run()
+-"""
 +from tests.package.test_python import TestPythonPackageBase, TestPythonBase2, TestPythonBase3
  
  
--class TestPythonIncremental(TestPythonBase):
--    def str_test(self):
--        cmd = self.interpreter + " -c 'import incremental;"
--        cmd += "v = incremental.Version(\"package\", 1, 2, 3, release_candidate=4);"
--        cmd += "assert(str(v) == \"[package, version 1.2.3rc4]\")'"
--        _, exit_code = self.emulator.run(cmd, timeout=30)
+-class TestPythonTwisted(TestPythonBase):
+-    def import_test(self):
+-        cmd = "printf '{}' > test.py".format(TEST_SCRIPT)
+-        _, exit_code = self.emulator.run(cmd)
 -        self.assertEqual(exit_code, 0)
--
--
--class TestPythonPy2Incremental(TestPythonIncremental, TestPythonBase2):
--    config = TestPythonBase2.config + \
-+class TestPythonIncremental(TestPythonPackageBase):
++class TestPythonTwisted(TestPythonPackageBase):
 +    config_package = \
-         """
-         BR2_PACKAGE_PYTHON_INCREMENTAL=y
-         """
-+    sample_scripts = ["tests/package/sample_python_incremental.py"]
-+    timeout = 30
++        """
++        BR2_PACKAGE_PYTHON_TWISTED=y
++        """
++    sample_scripts = ["tests/package/sample_python_twisted.py"]
  
++    def run_sample_scripts(self):
+         cmd = "netstat -ltn 2>/dev/null | grep 0.0.0.0:1234"
+         _, exit_code = self.emulator.run(cmd)
+         self.assertEqual(exit_code, 1)
+ 
+-        cmd = self.interpreter + " test.py &"
++        cmd = self.interpreter + " sample_python_twisted.py &"
+         # give some time to setup the server
+         cmd += "sleep 30"
+         _, exit_code = self.emulator.run(cmd, timeout=35)
+@@ -31,22 +25,8 @@ class TestPythonTwisted(TestPythonBase):
+ 
+ 
+ class TestPythonPy2Twisted(TestPythonTwisted, TestPythonBase2):
+-    config = TestPythonBase2.config + \
+-        """
+-        BR2_PACKAGE_PYTHON_TWISTED=y
+-        """
+-
 -    def test_run(self):
 -        self.login()
--        self.str_test()
- 
-+class TestPythonPy2Incremental(TestPythonIncremental, TestPythonBase2):
+-        self.import_test()
 +    pass
  
--class TestPythonPy3Incremental(TestPythonIncremental, TestPythonBase3):
+ 
+ class TestPythonPy3Twisted(TestPythonTwisted, TestPythonBase3):
 -    config = TestPythonBase3.config + \
 -        """
--        BR2_PACKAGE_PYTHON_INCREMENTAL=y
+-        BR2_PACKAGE_PYTHON_TWISTED=y
 -        """
- 
+-
 -    def test_run(self):
 -        self.login()
--        self.str_test()
-+class TestPythonPy3Incremental(TestPythonIncremental, TestPythonBase3):
+-        self.import_test()
 +    pass
 -- 
 2.17.1
