@@ -1,59 +1,114 @@
-From: Marcin =?utf-8?Q?Niestr=C3=B3j?= <m.niestroj@grinn-global.com>
-Date: Fri, 02 Nov 2018 16:29:38 +0100
-Subject: [Buildroot] [PATCH] linux-firmware: bump version to latest
- d877533
-In-Reply-To: <20181102093441.617a43a9@windsurf>
-References: <20181024103845.19057-1-m.niestroj@grinn-global.com>
- <20181101230022.318b0cfd@windsurf> <20181101220848.GZ28575@scaer>
- <20181102093441.617a43a9@windsurf>
-Message-ID: <87r2g3lcpp.fsf@grinn-global.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 2 Nov 2018 18:01:31 +0100
+Subject: [Buildroot] [PATCH 1/1] libv4l: needs kernel headers >= 3.18
+In-Reply-To: <20181102151958.23d16ccc@gmx.net>
+References: <20181102133521.2297-1-fontaine.fabrice@gmail.com>
+ <20181102151958.23d16ccc@gmx.net>
+Message-ID: <CAPi7W81WAgkXDjzBy-c+0gKwpiuENN46awE2G6FyXBoXS0AcCw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Yann,
-
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
-
-> Hello,
+Dear Peter,
+Le ven. 2 nov. 2018 ? 15:20, Peter Seiderer <ps.report@gmx.net> a ?crit :
 >
-> On Thu, 1 Nov 2018 23:08:48 +0100, Yann E. MORIN wrote:
+> Hello Fabrice,
 >
->> > I don't get the same hash here:
->> > 
->> > ERROR: linux-firmware-d87753369b82c5f362250c197d04a1e1ef5bf698.tar.gz has wrong sha256 hash:
->> > ERROR: expected: 48f02db163bd1320cafa0c878f0c38d2184afa726f02622309be69416e420032
->> > ERROR: got     : 3c5ba0e3b282e44d5cef3d34a547caf3633c90b83807469357e92cca1fff8a38
->> > 
->> > And apparently Yann E. Morin also calculated the same hash as me after
->> > applying your version bump. Could you check what is happening ?  
->> 
->> If using a recent distribution that has tar 1.30 (e.g. Fedroa 28+,
->> Arch, or other rolling-release distros), you may have fallen in the
->> download dependencies trap, where host-tar would not be built when doing
->> a 'make source' from a clean tree.
+> On Fri,  2 Nov 2018 14:35:21 +0100, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 >
-> Which has just been fixed as of
-> https://git.buildroot.org/buildroot/commit/?id=5b5feea8753520320d11896a24b970c60331bcdc,
-> so Marcin, you may see automagically the new/correct hash if you retry
-> on the latest Buildroot master (I merged this host-tar fix from Yann
-> yesterday evening).
-
-I have rebased my patch on master and I still get the same hash as
-previously. That is logical, because I had host-tar already built when I
-tested patch before submission. Can you confirm that problem was
-actually on your side (i.e. my hash is correct)? After that I will
-bump linux-firmware version to newest, extend commit message and send
-PATCH v2.
-
+> > Bump to version 1.16.1 added a dependency to bpf headers:
+> > https://git.linuxtv.org/v4l-utils.git/commit/?id=d6025b0e8c7f57b0f9390f987acc5eed57360d80
+> >
+> > BPF headers are available since kernel 3.18:
+> > https://github.com/torvalds/linux/commit/c15952dc18d8a293d976ac6c06d44d9d98023b45
+> >
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/d22c0939eed4bc949f7eaeae7595d01ec45cc2cd
+> >
 >
-> Thanks,
+> Thanks for taking care of the autobuild failure, but....
 >
-> Thomas
+> To be exact, only utils/keytable depend on the (new) linux kernel bpf header, so
+> it would be sufficient for only v4l-utils to depend on headers >= 3.18 (or split
+> v4l-utils into the single utils with different dependencies)?
+Yes, you're right, at least I should have moved this dependency to the
+utils option.
+>
+> Or: the commit d6025b0e8c7f57b0f9390f987acc5eed57360d80 adds already a copy
+> of the linux/bpf.h header, maybe only the dependent linux/bpf_common.h file is
+> missing?
+Indeed, I think this is the best solution. I will set this patch as
+rejected and let you send a new patch.
 
+We have an other build failure with this bump:
+http://autobuild.buildroot.org/results/c18/c18fb7f1ac81496db9c3a4e91ea028a26ca600b0/build-end.log
 
--- 
-Regards,
-Marcin
+This build failure is due to the clang dependency that has been added with:
+https://git.linuxtv.org/v4l-utils.git/commit/?id=91b37c0d9cb71fc2d5f78cc96aa2ef9f3bba145b
+
+I'm trying to fix it but I don't know if this will be easy as I'm not
+familiar with clang.
+At least, we'll have to add host-clang (which is a "big" dependency)
+and remove or customize the "-target bpf" in the following command
+line:
+$(CLANG) $(CLANG_SYS_INCLUDES) -I$(top_srcdir)/include -target bpf -O2 -c $<
+
+An other option would be to disable BPF protocols for the time being
+by setting ac_cv_prog_CLANG to "".
+Do you have an opinion on this one?
+>
+> Regards,
+> Peter
+>
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  package/libv4l/Config.in   | 2 +-
+> >  package/v4l2grab/Config.in | 2 +-
+> >  package/zbar/Config.in     | 2 +-
+> >  3 files changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
+> > index 57ddde1dfb..84844349a4 100644
+> > --- a/package/libv4l/Config.in
+> > +++ b/package/libv4l/Config.in
+> > @@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBV4L
+> >       bool "libv4l"
+> >       depends on BR2_TOOLCHAIN_HAS_THREADS
+> >       depends on BR2_INSTALL_LIBSTDCPP
+> > -     depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # media headers
+> > +     depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18 # bpf headers
+> >       select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
+> >       select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+> >       help
+> > diff --git a/package/v4l2grab/Config.in b/package/v4l2grab/Config.in
+> > index ec3a7a8c54..e25b1618e8 100644
+> > --- a/package/v4l2grab/Config.in
+> > +++ b/package/v4l2grab/Config.in
+> > @@ -4,7 +4,7 @@ config BR2_PACKAGE_V4L2GRAB
+> >       depends on BR2_USE_MMU # libv4l
+> >       depends on !BR2_STATIC_LIBS # libv4l
+> >       depends on BR2_INSTALL_LIBSTDCPP # libv4l
+> > -     depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # libv4l
+> > +     depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18 # libv4l
+> >       select BR2_PACKAGE_JPEG
+> >       select BR2_PACKAGE_LIBV4L
+> >       help
+> > diff --git a/package/zbar/Config.in b/package/zbar/Config.in
+> > index 05c9b769ce..1d8f1be7cf 100644
+> > --- a/package/zbar/Config.in
+> > +++ b/package/zbar/Config.in
+> > @@ -3,7 +3,7 @@ config BR2_PACKAGE_ZBAR
+> >       depends on BR2_TOOLCHAIN_HAS_THREADS # libv4l
+> >       depends on BR2_USE_MMU # libv4l
+> >       depends on BR2_INSTALL_LIBSTDCPP # libv4l
+> > -     depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # libv4l
+> > +     depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18 # libv4l
+> >       select BR2_PACKAGE_JPEG
+> >       select BR2_PACKAGE_LIBV4L
+> >       help
+>
+Best Regards,
+
+Fabrice
