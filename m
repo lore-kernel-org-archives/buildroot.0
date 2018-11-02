@@ -1,43 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 2 Nov 2018 12:00:42 +0100
-Subject: [Buildroot] Queries/suggestions regarding patch series "grub2:
- add support for arm and aarch64"
-In-Reply-To: <CAFA6WYPKMzjuCv1hFyByOTg_7vGKytWO3OZf4La21VyuF8CffQ@mail.gmail.com>
-References: <CAFA6WYP2bTxdkAKUem_O9GtPdt_hi4Hbg59XiWwEfNvLoc8ghQ@mail.gmail.com>
- <CAK4VdL0+P6HLVcTb21ECatLwBb0jPQ2sVOYtMNCUiLyw44Z5-w@mail.gmail.com>
- <20181102110420.0f4f44f1@windsurf>
- <CAFA6WYPKMzjuCv1hFyByOTg_7vGKytWO3OZf4La21VyuF8CffQ@mail.gmail.com>
-Message-ID: <20181102120042.060a3451@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 02 Nov 2018 11:26:30 +0000
+Subject: [Buildroot] [Bug 11481] New: Docs: Is external.desc required?
+Message-ID: <bug-11481-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Sumit,
+https://bugs.busybox.net/show_bug.cgi?id=11481
 
-On Fri, 2 Nov 2018 16:23:37 +0530, Sumit Garg wrote:
+            Bug ID: 11481
+           Summary: Docs: Is external.desc required?
+           Product: buildroot
+           Version: 2018.08.2
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: imphil at philipp-wagner.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-> Yes disk-signature is disk-wide identifier. But it could work with
-> multiple partitions in following manner:
-> 
-> Like the change, I have proposed with disk-signature = 0xDEEDBEEF,
-> PARTUUID=deedbeef-02 refers to 2nd partition in disk with
-> corresponding signature.
+I have a minor docs comment.
 
-Aaah, yes, I had entirely missed the -02 part in the root=PARTUUID=
-statement. Indeed, it's a lot clearer now how this can work.
+https://buildroot.org/downloads/manual/manual.html#customize
 
-> AFAIK, I don't think partitioning format changes for a particular
-> device boot sequence if underlying disk changes (usb, sata, mmc etc.).
-> So "-02" string should remain a constant.
+In the user guide, section "9.1. Recommended directory structure" the directory
+tree shows two files for a br2 external tree: 
 
-Yes, absolutely! Thanks for the additional explanation!
+=====
++-- Config.in (if using a br2-external tree)
++-- external.mk (if using a br2-external tree)
+=====
 
-Best regards,
+The documentation further down suggests that three files are needed:
 
-Thomas
+=====
+9.2.1. Layout of a br2-external tree
+
+A br2-external tree must contain at least those three files, described in the
+following chapters:
+
+    external.desc
+    external.mk
+    Config.in 
+=====
+
+
+Most likely the external.desc file is missing from the top section?
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
