@@ -1,42 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 2 Nov 2018 21:34:21 +0100
-Subject: [Buildroot] [PATCH 1/1] bdwgc: bump to version 8.0.0
-In-Reply-To: <20181102084014.7086-1-fontaine.fabrice@gmail.com>
-References: <20181102084014.7086-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181102213421.6d0aee2c@windsurf>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 2 Nov 2018 15:34:33 -0500
+Subject: [Buildroot] [PATCH 3/3] fs: fix condition to create static
+ devices
+In-Reply-To: <99d38f609529976ec574c3a05b6665cf3dd0669d.1540626349.git.yann.morin.1998@free.fr>
+References: <cover.1540626349.git.yann.morin.1998@free.fr>
+ <99d38f609529976ec574c3a05b6665cf3dd0669d.1540626349.git.yann.morin.1998@free.fr>
+Message-ID: <CANQCQpYjYUKjfFfxWhn4Fk273vPkhY93tghY9N0KEJ+4ctisQw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Yann,
 
-On Fri,  2 Nov 2018 09:40:14 +0100, Fabrice Fontaine wrote:
-> - Remove first patch (already in version):
->   https://github.com/ivmai/bdwgc/commit/7c13fb8fccdebfa4bf9a11abf6fa1619c5902828
-> - Remove second patch (already in version)
-> - Update license hash: Update header copyright (add Ivan Maidanski), see
->   https://github.com/ivmai/bdwgc/commit/3bd265a64b612af9d906b73394f2adb161bd0dec
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On Sat, Oct 27, 2018 at 2:46 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> Currently, we parse the static devices tables even when we're not using
+> static device nodes; this is a left over from when we mixed devices
+> tables and permissions tables together. Creating package-defined device
+> nodes is guarded by the condition that there is at elast one devices
+
+elast -> least
+
+> table.
+>
+> This means that, when using static device nodes, but no device table, we
+> would miss on the package-defined device nodes.
+>
+> We fix that by inverting the condition: static device tables are now
+> parsed only when using static devices, but the package-defined device
+> nodes are no longer conditioned to there being at least one devices
+> table.
+>
+> Note: when there is no device table, the package-defined device ndoes
+
+ndoes -> nodes
+
+> are appended to the file. That file can't exist from a previous build,
+> because the whole directory is rmoved at the beginning of the rule.
+
+rmoved -> removed
+
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+
 > ---
->  ...d-check-for-NO_GETCONTEXT-definition.patch | 28 ---------------
->  ...s-unknown-error-in-brief_async_signa.patch | 35 -------------------
->  package/bdwgc/bdwgc.hash                      |  4 +--
->  package/bdwgc/bdwgc.mk                        |  2 +-
->  4 files changed, 3 insertions(+), 66 deletions(-)
->  delete mode 100644 package/bdwgc/0001-configure.ac-add-check-for-NO_GETCONTEXT-definition.patch
->  delete mode 100644 package/bdwgc/0002-Fix-size-of-tv-is-unknown-error-in-brief_async_signa.patch
-
-Applied to master, thanks. I have sent a follow-up patch that drops
-<pkg>_AUTORECONF, it would be nice if you could review/test (it works
-for me, but a double check would be nice). Thanks!
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>  fs/common.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/fs/common.mk b/fs/common.mk
+> index fd1e80ab93..a0699b035d 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -84,11 +84,11 @@ ifneq ($(ROOTFS_USERS_TABLES),)
+>         cat $(ROOTFS_USERS_TABLES) >> $(USERS_TABLE)
+>  endif
+>         PATH=$(BR_PATH) $(TOPDIR)/support/scripts/mkusers $(USERS_TABLE) $(TARGET_DIR) >> $(FAKEROOT_SCRIPT)
+> +ifeq ($(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
+>  ifneq ($(ROOTFS_STATIC_DEVICE_TABLES),)
+>         cat $(ROOTFS_STATIC_DEVICE_TABLES) > $(FULL_DEVICE_TABLE)
+> -ifeq ($(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
+> +endif
+>         $(call PRINTF,$(PACKAGES_DEVICES_TABLE)) >> $(FULL_DEVICE_TABLE)
+> -endif
+>         echo "$(HOST_DIR)/bin/makedevs -d $(FULL_DEVICE_TABLE) $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+>  endif
+>         $(foreach s,$(call qstrip,$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
+> --
