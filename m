@@ -1,10 +1,10 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Fri,  2 Nov 2018 01:12:34 -0300
-Subject: [Buildroot] [PATCH v2 05/12] support/testing: use
- TestPythonPackageBase for python-autobahn
+Date: Fri,  2 Nov 2018 01:12:35 -0300
+Subject: [Buildroot] [PATCH v2 06/12] support/testing: use
+ TestPythonPackageBase for python-cryptography
 In-Reply-To: <20181102041241.28910-1-ricardo.martincoski@gmail.com>
 References: <20181102041241.28910-1-ricardo.martincoski@gmail.com>
-Message-ID: <20181102041241.28910-6-ricardo.martincoski@gmail.com>
+Message-ID: <20181102041241.28910-7-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -23,60 +23,65 @@ Cc: Yegor Yefremov <yegorslists@googlemail.com>
 Changes v1 -> v2:
   - refresh after creating TestPythonPackageBase;
 ---
- .../tests/package/sample_python_autobahn.py   |  1 +
- .../tests/package/test_python_autobahn.py     | 29 +++++--------------
- 2 files changed, 9 insertions(+), 21 deletions(-)
- create mode 100644 support/testing/tests/package/sample_python_autobahn.py
+ .../package/sample_python_cryptography.py     |  3 ++
+ .../tests/package/test_python_cryptography.py | 32 ++++++-------------
+ 2 files changed, 12 insertions(+), 23 deletions(-)
+ create mode 100644 support/testing/tests/package/sample_python_cryptography.py
 
-diff --git a/support/testing/tests/package/sample_python_autobahn.py b/support/testing/tests/package/sample_python_autobahn.py
+diff --git a/support/testing/tests/package/sample_python_cryptography.py b/support/testing/tests/package/sample_python_cryptography.py
 new file mode 100644
-index 0000000000..8189b6a6b3
+index 0000000000..ec9883dc64
 --- /dev/null
-+++ b/support/testing/tests/package/sample_python_autobahn.py
-@@ -0,0 +1 @@
-+import autobahn.wamp  # noqa
-diff --git a/support/testing/tests/package/test_python_autobahn.py b/support/testing/tests/package/test_python_autobahn.py
-index 5e514c24c5..b32a428fd8 100644
---- a/support/testing/tests/package/test_python_autobahn.py
-+++ b/support/testing/tests/package/test_python_autobahn.py
-@@ -1,30 +1,17 @@
++++ b/support/testing/tests/package/sample_python_cryptography.py
+@@ -0,0 +1,3 @@
++from cryptography.fernet import Fernet
++key = Fernet.generate_key()
++f = Fernet(key)
+diff --git a/support/testing/tests/package/test_python_cryptography.py b/support/testing/tests/package/test_python_cryptography.py
+index 2a8ce1d8f7..5f380b2750 100644
+--- a/support/testing/tests/package/test_python_cryptography.py
++++ b/support/testing/tests/package/test_python_cryptography.py
+@@ -1,32 +1,18 @@
 -from tests.package.test_python import TestPythonBase, TestPythonBase2, TestPythonBase3
 +from tests.package.test_python import TestPythonPackageBase, TestPythonBase2, TestPythonBase3
  
  
--class TestPythonAutobahn(TestPythonBase):
--    def import_test(self):
--        cmd = self.interpreter + " -c 'import autobahn.wamp'"
--        _, exit_code = self.emulator.run(cmd)
+-class TestPythonCryptography(TestPythonBase):
+-    def fernet_test(self, timeout=-1):
+-        cmd = self.interpreter + " -c 'from cryptography.fernet import Fernet;"
+-        cmd += "key = Fernet.generate_key();"
+-        cmd += "f = Fernet(key)'"
+-        _, exit_code = self.emulator.run(cmd, timeout)
 -        self.assertEqual(exit_code, 0)
 -
 -
--class TestPythonPy2Autobahn(TestPythonAutobahn, TestPythonBase2):
+-class TestPythonPy2Cryptography(TestPythonCryptography, TestPythonBase2):
 -    config = TestPythonBase2.config + \
-+class TestPythonAutobahn(TestPythonPackageBase):
++class TestPythonCryptography(TestPythonPackageBase):
 +    config_package = \
          """
-         BR2_PACKAGE_PYTHON_AUTOBAHN=y
+         BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
          """
-+    sample_scripts = ["tests/package/sample_python_autobahn.py"]
++    sample_scripts = ["tests/package/sample_python_cryptography.py"]
++    timeout = 40
  
 -    def test_run(self):
 -        self.login()
--        self.import_test()
+-        self.fernet_test(40)
  
-+class TestPythonPy2Autobahn(TestPythonAutobahn, TestPythonBase2):
++class TestPythonPy2Cryptography(TestPythonCryptography, TestPythonBase2):
 +    pass
  
--class TestPythonPy3Autobahn(TestPythonAutobahn, TestPythonBase3):
+-class TestPythonPy3Cryptography(TestPythonCryptography, TestPythonBase3):
 -    config = TestPythonBase3.config + \
 -        """
--        BR2_PACKAGE_PYTHON_AUTOBAHN=y
+-        BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
 -        """
  
 -    def test_run(self):
 -        self.login()
--        self.import_test()
-+class TestPythonPy3Autobahn(TestPythonAutobahn, TestPythonBase3):
+-        self.fernet_test(40)
++class TestPythonPy3Cryptography(TestPythonCryptography, TestPythonBase3):
 +    pass
 -- 
 2.17.1
