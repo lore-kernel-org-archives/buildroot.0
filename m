@@ -1,61 +1,36 @@
-From: Sumit Garg <sumit.garg@linaro.org>
-Date: Fri, 2 Nov 2018 16:23:37 +0530
-Subject: [Buildroot] Queries/suggestions regarding patch series "grub2:
- add support for arm and aarch64"
-In-Reply-To: <20181102110420.0f4f44f1@windsurf>
-References: <CAFA6WYP2bTxdkAKUem_O9GtPdt_hi4Hbg59XiWwEfNvLoc8ghQ@mail.gmail.com>
- <CAK4VdL0+P6HLVcTb21ECatLwBb0jPQ2sVOYtMNCUiLyw44Z5-w@mail.gmail.com>
- <20181102110420.0f4f44f1@windsurf>
-Message-ID: <CAFA6WYPKMzjuCv1hFyByOTg_7vGKytWO3OZf4La21VyuF8CffQ@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 02 Nov 2018 10:57:24 +0000
+Subject: [Buildroot] [Bug 11206] zlib: fails to build with Linaro toolchain,
+ BR2_RELRO_FULL=y and BR2_FORTIFY_SOURCE_2=y
+In-Reply-To: <bug-11206-163@https.bugs.busybox.net/>
+References: <bug-11206-163@https.bugs.busybox.net/>
+Message-ID: <bug-11206-163-qsxmL5YQjL@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 2 Nov 2018 at 15:34, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Tue, 30 Oct 2018 20:23:27 +0100, Erico Nunes wrote:
->
-> > Using PARTUUID seems to be an interesting change. I'd like to hear the
-> > opinion of the other Buildroot developers before making this change in
-> > this patchset though, since most other platforms in Buildroot are not
-> > doing this.
->
-> It is certainly a good idea to use PARTUUID when possible.
->
-> > If there is interest in it, maybe we can do this change for other
-> > platforms too and in a separate patchset?
->
-> In general yes. However, my understanding was that it works only with a
-> GPT partition table, because only the GPT partition table can embed a
-> unique identifier per partition, not the old MBR partition table. But
-> apparently this disk-signature thing allows to embed a disk-wide
-> identifier, not a per-partition one, so it works only when there's a
-> single partition ?
->
+https://bugs.busybox.net/show_bug.cgi?id=11206
 
-Yes disk-signature is disk-wide identifier. But it could work with
-multiple partitions in following manner:
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Like the change, I have proposed with disk-signature = 0xDEEDBEEF,
-PARTUUID=deedbeef-02 refers to 2nd partition in disk with
-corresponding signature.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |FIXED
 
-AFAIK, I don't think partitioning format changes for a particular
-device boot sequence if underlying disk changes (usb, sata, mmc etc.).
-So "-02" string should remain a constant.
+--- Comment #6 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+I believe this has been fixed by the changes to the toolchain wrapper to make
+it handle the hardening options:
 
-Regards,
-Sumit
+394bdd11fc1f741c88c89f0e71571d87a29ab627 BR2_FORTIFY*: toolchain wrapper
+limitation note
+f10822d151085bcbfecd0ecf2542ac5f5623fd9d toolchain/toolchain-wrapper: add
+BR2_SSP_* support
+7484c1c3b8065d6f2f5a67607e9917ecfea022eb toolchain/toolchain-wrapper: add
+BR2_RELRO_
 
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
