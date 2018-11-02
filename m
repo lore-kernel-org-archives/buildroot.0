@@ -1,19 +1,36 @@
-From: Serj Kalichev <serj.kalichev@gmail.com>
-Date: Fri, 2 Nov 2018 14:36:04 +0300
-Subject: [Buildroot] [PATCH 1/1] support/scripts/mkmakefile: Silent
- wrapper
-In-Reply-To: <20181101204441.GW28575@scaer>
-References: <20181026112621.8146-1-serj.kalichev@gmail.com>
- <20181101204441.GW28575@scaer>
-Message-ID: <4058cf9b-11ef-8c4b-9624-4864840f7c12@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 02 Nov 2018 11:51:21 +0000
+Subject: [Buildroot] [Bug 11481] Docs: Is external.desc required?
+In-Reply-To: <bug-11481-163@https.bugs.busybox.net/>
+References: <bug-11481-163@https.bugs.busybox.net/>
+Message-ID: <bug-11481-163-wyFrnWEwT0@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-01.11.2018 23:44, Yann E. MORIN ?????:
-> The default would be to be silent (what you expect), while still
-> allowing people like me to turn on the verbose mode when needed.
->
-Yes, it's better solution. I have changed the patch. See patch v2
+https://bugs.busybox.net/show_bug.cgi?id=11481
+
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |yann.morin.1998 at free.fr
+           Assignee|unassigned at buildroot.uclibc |yann.morin.1998 at free.fr
+                   |.org                        |
+             Status|NEW                         |ASSIGNED
+
+--- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Philipp, All,
+
+Indeed, external.desc is missiing from section 9.1.
+
+Can you send a patch to fix that, to the list, please?
+
+Regards,
+Yann E. MORIN.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
