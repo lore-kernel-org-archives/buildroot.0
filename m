@@ -1,64 +1,115 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 2 Nov 2018 22:30:56 +0100
-Subject: [Buildroot] [PATCH 1/1] xerces: fix static linking with mbedtls
-In-Reply-To: <20181025205402.10649-1-fontaine.fabrice@gmail.com>
-References: <20181025205402.10649-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181102223056.668a3c81@windsurf>
+Date: Fri, 2 Nov 2018 22:41:03 +0100
+Subject: [Buildroot] [git commit] package/davici: new package
+Message-ID: <20181102213919.68C5C8834F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=0ddbe7f5364e6b88da8c87d32051c9db4e5dc8d6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 25 Oct 2018 22:54:02 +0200, Fabrice Fontaine wrote:
-> curl can be statically linked with mbedtls, in this case build will
-> fail on:
-> kex.c:(.text+0x1be0): undefined reference to `mbedtls_mpi_read_binary'
-> 
-> This is due to the fact that CURL_LIBRARIES does not contain mbedtls
-> library:
-> CURL_LIBRARIES:INTERNAL=curl;cares;ssh2;ssh2;z;ssl;crypto;z;z;crypto;z;z;ssl;z;z;crypto;z
-> 
-> even if libcurl.pc is correct:
-> Libs.private: -lcares -lssh2 -L/home/fabrice/buildroot/output/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -lssh2 /home/fabrice/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libmbedcrypto.a /home/fabrice/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libmbedcrypto.a -L/home/fabrice/buildroot/output/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -L/home/fabrice/buildroot/output/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -lz -lssl -lcrypto -lssl -lz -lz -lcrypto -lz -lz
+This patch adds davici which is an alternative implementation of the
+VICI client protocal used by Strongswan.  It targets better integration
+with software stacks and uses a asynchronous, non-blocking API that can
+be integrated in third-party main dispatching loops without the use of
+threads.
 
-A quick guess is that CURL_LIBRARIES doesn't mention mbedtls because
-it's listed in Libs.private using a full path to the .a files rather
-than using the gcc -l<something> flag.
+Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+[Thomas: fix license, it's LGPL-2.1+, add entry in DEVELOPERS file.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                 |  3 +++
+ package/Config.in          |  1 +
+ package/davici/Config.in   | 18 ++++++++++++++++++
+ package/davici/davici.hash |  3 +++
+ package/davici/davici.mk   | 20 ++++++++++++++++++++
+ 5 files changed, 45 insertions(+)
 
-Perhaps this is what should be fixed instead ?
-
-BTW, do you have a minimal defconfig that exhibits this problem?
-
-I tried with:
-
-BR2_arm=y
-BR2_STATIC_LIBS=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-static-2018.05.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_LIBSSH2=y
-BR2_PACKAGE_MBEDTLS=y
-BR2_PACKAGE_XERCES=y
-BR2_PACKAGE_LIBCURL=y
-# BR2_TARGET_ROOTFS_TAR is not set
-
-but it build just fine.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 2ff13b3c1d..49ff2487cd 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1014,6 +1014,9 @@ F:	package/python-pexpect/
+ F:	package/python-ptyprocess/
+ F:	package/zynq-boot-bin/
+ 
++N:	Jared Bents <jared.bents@rockwellcollins.com>
++F:	package/davici/
++
+ N:	Jarkko Sakkinen <jarkko.sakkinen@intel.com>
+ F:	package/quota/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 8f561b3491..712e360402 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1488,6 +1488,7 @@ menu "Networking"
+ 	source "package/curlpp/Config.in"
+ 	source "package/czmq/Config.in"
+ 	source "package/daq/Config.in"
++	source "package/davici/Config.in"
+ 	source "package/filemq/Config.in"
+ 	source "package/flickcurl/Config.in"
+ 	source "package/fmlib/Config.in"
+diff --git a/package/davici/Config.in b/package/davici/Config.in
+new file mode 100644
+index 0000000000..9dfa0ec130
+--- /dev/null
++++ b/package/davici/Config.in
+@@ -0,0 +1,18 @@
++comment "davici needs a toolchain w/ threads, dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++
++config BR2_PACKAGE_DAVICI
++	bool "davici"
++	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
++	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_STRONGSWAN
++	help
++	  davici is an alternative implementation of the VICI
++	  client protocol, targeting better integration in other
++	  software stacks.
++
++	  https://github.com/strongswan/davici
+diff --git a/package/davici/davici.hash b/package/davici/davici.hash
+new file mode 100644
+index 0000000000..257e902ce7
+--- /dev/null
++++ b/package/davici/davici.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 d3e5e806ecca841d7e133a3df768062df59f4b4c76bf98e0f90aa8064721b3bd  davici-v1.3.tar.gz
++sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/davici/davici.mk b/package/davici/davici.mk
+new file mode 100644
+index 0000000000..5c4b9774ea
+--- /dev/null
++++ b/package/davici/davici.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# davici
++#
++################################################################################
++
++DAVICI_VERSION = v1.3
++DAVICI_SITE = $(call github,strongswan,davici,$(DAVICI_VERSION))
++DAVICI_LICENSE = LGPL-2.1+
++DAVICI_LICENSE_FILES = COPYING
++DAVICI_DEPENDENCIES = strongswan
++DAVICI_INSTALL_STAGING = YES
++DAVICI_AUTORECONF = YES
++
++define DAVICI_CREATE_M4
++	mkdir -p $(@D)/m4
++endef
++DAVICI_POST_PATCH_HOOKS += DAVICI_CREATE_M4
++
++$(eval $(autotools-package))
