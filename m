@@ -1,51 +1,61 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri,  2 Nov 2018 11:18:12 +0100
-Subject: [Buildroot] [PATCH] python-tornado: bump version to 5.1.1
-Message-ID: <20181102101812.18630-1-yegorslists@googlemail.com>
+From: Sumit Garg <sumit.garg@linaro.org>
+Date: Fri, 2 Nov 2018 16:23:37 +0530
+Subject: [Buildroot] Queries/suggestions regarding patch series "grub2:
+ add support for arm and aarch64"
+In-Reply-To: <20181102110420.0f4f44f1@windsurf>
+References: <CAFA6WYP2bTxdkAKUem_O9GtPdt_hi4Hbg59XiWwEfNvLoc8ghQ@mail.gmail.com>
+ <CAK4VdL0+P6HLVcTb21ECatLwBb0jPQ2sVOYtMNCUiLyw44Z5-w@mail.gmail.com>
+ <20181102110420.0f4f44f1@windsurf>
+Message-ID: <CAFA6WYPKMzjuCv1hFyByOTg_7vGKytWO3OZf4La21VyuF8CffQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+On Fri, 2 Nov 2018 at 15:34, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Tue, 30 Oct 2018 20:23:27 +0100, Erico Nunes wrote:
+>
+> > Using PARTUUID seems to be an interesting change. I'd like to hear the
+> > opinion of the other Buildroot developers before making this change in
+> > this patchset though, since most other platforms in Buildroot are not
+> > doing this.
+>
+> It is certainly a good idea to use PARTUUID when possible.
+>
+> > If there is interest in it, maybe we can do this change for other
+> > platforms too and in a separate patchset?
+>
+> In general yes. However, my understanding was that it works only with a
+> GPT partition table, because only the GPT partition table can embed a
+> unique identifier per partition, not the old MBR partition table. But
+> apparently this disk-signature thing allows to embed a disk-wide
+> identifier, not a per-partition one, so it works only when there's a
+> single partition ?
+>
 
-Add hash for the license file.
+Yes disk-signature is disk-wide identifier. But it could work with
+multiple partitions in following manner:
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/python-tornado/python-tornado.hash | 8 +++++---
- package/python-tornado/python-tornado.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+Like the change, I have proposed with disk-signature = 0xDEEDBEEF,
+PARTUUID=deedbeef-02 refers to 2nd partition in disk with
+corresponding signature.
 
-diff --git a/package/python-tornado/python-tornado.hash b/package/python-tornado/python-tornado.hash
-index c64e537eed..fbf5efa60a 100644
---- a/package/python-tornado/python-tornado.hash
-+++ b/package/python-tornado/python-tornado.hash
-@@ -1,3 +1,5 @@
--# md5, sha256 from https://pypi.python.org/pypi/tornado/json
--md5	e5e24ce1c8a4e6442dc38d470172f59e  tornado-5.0.2.tar.gz
--sha256	1b83d5c10550f2653380b4c77331d6f8850f287c4f67d7ce1e1c639d9222fbc7  tornado-5.0.2.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/tornado/json
-+md5	a1ce4f392d30ff0ebcb255150d89b826  tornado-5.1.1.tar.gz
-+sha256	4e5158d97583502a7e2739951553cbd88a72076f152b4b11b64b9a10c4c49409  tornado-5.1.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-tornado/python-tornado.mk b/package/python-tornado/python-tornado.mk
-index ed3a61fcf8..71f536f023 100644
---- a/package/python-tornado/python-tornado.mk
-+++ b/package/python-tornado/python-tornado.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_TORNADO_VERSION = 5.0.2
-+PYTHON_TORNADO_VERSION = 5.1.1
- PYTHON_TORNADO_SOURCE = tornado-$(PYTHON_TORNADO_VERSION).tar.gz
--PYTHON_TORNADO_SITE = https://pypi.python.org/packages/cf/d1/3be271ae5eba9fb59df63c9891fdc7d8044b999e8ac145994cdbfd2ae66a
-+PYTHON_TORNADO_SITE = https://files.pythonhosted.org/packages/e6/78/6e7b5af12c12bdf38ca9bfe863fcaf53dc10430a312d0324e76c1e5ca426
- PYTHON_TORNADO_LICENSE = Apache-2.0
- PYTHON_TORNADO_LICENSE_FILES = LICENSE
- PYTHON_TORNADO_SETUP_TYPE = setuptools
--- 
-2.17.0
+AFAIK, I don't think partitioning format changes for a particular
+device boot sequence if underlying disk changes (usb, sata, mmc etc.).
+So "-02" string should remain a constant.
+
+Regards,
+Sumit
+
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
