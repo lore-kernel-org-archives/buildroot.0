@@ -1,23 +1,71 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Fri,  2 Nov 2018 01:12:32 -0300
-Subject: [Buildroot] [PATCH v2 03/12] support/testing: create intermediate
- class per Python version
+Date: Fri,  2 Nov 2018 01:12:33 -0300
+Subject: [Buildroot] [PATCH v2 04/12] support/testing: create default test
+ case for python packages
 In-Reply-To: <20181102041241.28910-1-ricardo.martincoski@gmail.com>
 References: <20181102041241.28910-1-ricardo.martincoski@gmail.com>
-Message-ID: <20181102041241.28910-4-ricardo.martincoski@gmail.com>
+Message-ID: <20181102041241.28910-5-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently all test cases for python packages add BR2_PACKAGE_PYTHON=y or
-BR2_PACKAGE_PYTHON3=y by their own.
+Test cases for python packages are very similar among each other: run a
+simple script in the target that minimally tests the package.
+So create a new helper class named TestPythonPackageBase that holds all
+the logic to run a script on the target. This new class is not a
+subclass of unittest.TestCase and therefore nose2 ignores it, avoiding
+to create a bogus test case.
 
-Move those configs to two intermediate classes named TestPythonBase2 and
-TestPythonBase3, and change all test cases that need those configs to
-get them through the new classes.
-A few classes still need to inherit directly from TestPythonBase.
+TestPythonPackageBase adds in build time one or more sample scripts to
+be run on the target. The test case for the python package must
+explicitly list them in the "sample_scripts" property. The test case
+then automatically logins to the target, checks the scripts are really
+in the rootfs (it calls "md5sum" instead of "ls" or "test" in an attempt
+to make the logfile more friendly, since someone analysing a failure can
+easily check the expected script was executed) and then calls the python
+interpreter passing the sample script as parameter.
+An optional property "timeout" exists for the case the sample script
+needs more time to run than the default timeout from the test infra
+(currently 5 seconds).
+
+A simple test case for a package that only supports Python 2 will look
+like this:
+
+|from tests.package.test_python import TestPythonPackageBase, TestPythonBase2
+|
+|
+|class TestPython2<Package>(TestPythonPackageBase, TestPythonBase2):
+|    config_package = \
+|        """
+|        BR2_PACKAGE_PYTHON_<PACKAGE>=y
+|        """
+|    sample_scripts = ["tests/package/sample_python_<package>.py"]
+|    timeout = 15
+
+When the python package supports both Python 2 and Python 3 a helper
+class can be used to hold the common properties:
+|class TestPython<Package>(TestPythonPackageBase):
+|    config_package = \
+...
+|class TestPythonPy2<Package>(TestPython<Package>, TestPythonBase2):
+...
+|class TestPythonPy3<Package>(TestPython<Package>, TestPythonBase3):
+
+A trick is used in order to allow this new class to change the defconfig
+used in the build of the image for the testcase: this class' __init__
+method calls the __init__ method from a parent class that in turn
+inherits from unittest.TestCase. This would be a normal usage ... if
+this class actually inherited from another class!
+This is done to make nose2 to ignore this class when looking for test
+cases. And it works because all classes that inherit from it also are
+subclasses of unittest.TestCase.
+An alternative solution to this would be to create yet another help
+class in test_python.py that doesn't inherit from unittest.TestCase to
+hold only the test_run method and make every test case for python
+package (not the helper class, i.e. TestPythonArgh) to inherit from
+this class too.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
@@ -25,308 +73,86 @@ Cc: Asaf Kahlon <asafka7@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Yegor Yefremov <yegorslists@googlemail.com>
 ---
-Changes v1 -> v2:
-  - new patch to gradually prepare the current python test cases to
-    receive the new class TestPythonPackageBase (see review of
-    http://patchwork.ozlabs.org/patch/984425/);
----
- support/testing/tests/package/test_ipython.py | 12 ++++-----
- support/testing/tests/package/test_python.py  | 26 ++++++++++++-------
- .../tests/package/test_python_autobahn.py     | 12 ++++-----
- .../tests/package/test_python_cryptography.py | 12 ++++-----
- .../tests/package/test_python_incremental.py  | 12 ++++-----
- .../tests/package/test_python_twisted.py      | 12 ++++-----
- .../tests/package/test_python_txaio.py        | 12 ++++-----
- .../tests/package/test_python_txtorcon.py     | 12 ++++-----
- 8 files changed, 51 insertions(+), 59 deletions(-)
+NOTE: example of the alternative solution without the mentioned trick:
+https://gitlab.com/RicardoMartincoski/buildroot/commit/ea7177c7a233a32129230189f609ecd36853d7e2
 
-diff --git a/support/testing/tests/package/test_ipython.py b/support/testing/tests/package/test_ipython.py
-index da2b7f4682..83bbd5c8a0 100644
---- a/support/testing/tests/package/test_ipython.py
-+++ b/support/testing/tests/package/test_ipython.py
-@@ -1,4 +1,4 @@
--from tests.package.test_python import TestPythonInterpreter, TestPythonBase
-+from tests.package.test_python import TestPythonInterpreter, TestPythonBase2, TestPythonBase3
- #
- # The following pythong tests are not being used here:
- #
-@@ -17,17 +17,15 @@ class TestIPython(TestPythonInterpreter):
-         self.libc_time_test(40)
- 
- 
--class TestIPythonPy2(TestIPython, TestPythonBase):
--    config = TestPythonBase.config + \
-+class TestIPythonPy2(TestIPython, TestPythonBase2):
-+    config = TestPythonBase2.config + \
-         """
--        BR2_PACKAGE_PYTHON=y
-         BR2_PACKAGE_PYTHON_IPYTHON=y
-         """
- 
- 
--class TestIPythonPy3(TestIPython, TestPythonBase):
--    config = TestPythonBase.config + \
-+class TestIPythonPy3(TestIPython, TestPythonBase3):
-+    config = TestPythonBase3.config + \
-         """
--        BR2_PACKAGE_PYTHON3=y
-         BR2_PACKAGE_PYTHON_IPYTHON=y
-         """
+Changes v1 -> v2:
+  - do not reuse TestPython2 and TestPython3 to for two entirely
+    separate things: (Thomas)
+    - As a base class for testing individual Python packages;
+    - As test cases for the Python interpreter itself;
+  - use a better class hierarchy (Thomas). I did this in various patches
+    (before and after this one) trying to make the review easier.
+  - with the new class hierarchy the trick that allows the defconfig to
+    be changed by each test case without explicitly naming the class
+    that contains the base defconfig is moved from every test case to
+    the new base class.
+
+v1: http://patchwork.ozlabs.org/patch/984425/
+---
+ .../package/copy-sample-script-to-target.sh   |  7 ++++
+ support/testing/tests/package/test_python.py  | 38 +++++++++++++++++++
+ 2 files changed, 45 insertions(+)
+ create mode 100755 support/testing/tests/package/copy-sample-script-to-target.sh
+
+diff --git a/support/testing/tests/package/copy-sample-script-to-target.sh b/support/testing/tests/package/copy-sample-script-to-target.sh
+new file mode 100755
+index 0000000000..6448a80d6d
+--- /dev/null
++++ b/support/testing/tests/package/copy-sample-script-to-target.sh
+@@ -0,0 +1,7 @@
++#!/bin/sh
++set -e
++
++shift
++for file in "$@"; do
++	cp -f "${file}" "${TARGET_DIR}/root/"
++done
 diff --git a/support/testing/tests/package/test_python.py b/support/testing/tests/package/test_python.py
-index f9237f719d..e4679233df 100644
+index e4679233df..bc2e14a1ed 100644
 --- a/support/testing/tests/package/test_python.py
 +++ b/support/testing/tests/package/test_python.py
-@@ -19,6 +19,20 @@ class TestPythonBase(infra.basetest.BRTest):
-         self.emulator.login()
+@@ -73,3 +73,41 @@ class TestPython2(TestPythonInterpreter, TestPythonBase2):
  
- 
-+class TestPythonBase2(TestPythonBase):
-+    config = TestPythonBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON=y
-+        """
-+
-+
-+class TestPythonBase3(TestPythonBase):
-+    config = TestPythonBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        """
-+
-+
- class TestPythonInterpreter():
-     version_string = None
- 
-@@ -53,17 +67,9 @@ class TestPythonInterpreter():
-         self.zlib_test()
- 
- 
--class TestPython2(TestPythonInterpreter, TestPythonBase):
--    config = TestPythonBase.config + \
--        """
--        BR2_PACKAGE_PYTHON=y
--        """
-+class TestPython2(TestPythonInterpreter, TestPythonBase2):
-     version_string = "Python 2"
- 
- 
--class TestPython3(TestPythonInterpreter, TestPythonBase):
--    config = TestPythonBase.config + \
--        """
--        BR2_PACKAGE_PYTHON3=y
--        """
-+class TestPython3(TestPythonInterpreter, TestPythonBase3):
+ class TestPython3(TestPythonInterpreter, TestPythonBase3):
      version_string = "Python 3"
-diff --git a/support/testing/tests/package/test_python_autobahn.py b/support/testing/tests/package/test_python_autobahn.py
-index 2bc0f0cccf..5e514c24c5 100644
---- a/support/testing/tests/package/test_python_autobahn.py
-+++ b/support/testing/tests/package/test_python_autobahn.py
-@@ -1,4 +1,4 @@
--from tests.package.test_python import TestPythonBase
-+from tests.package.test_python import TestPythonBase, TestPythonBase2, TestPythonBase3
- 
- 
- class TestPythonAutobahn(TestPythonBase):
-@@ -8,10 +8,9 @@ class TestPythonAutobahn(TestPythonBase):
-         self.assertEqual(exit_code, 0)
- 
- 
--class TestPythonPy2Autobahn(TestPythonAutobahn):
--    config = TestPythonBase.config + \
-+class TestPythonPy2Autobahn(TestPythonAutobahn, TestPythonBase2):
-+    config = TestPythonBase2.config + \
-         """
--        BR2_PACKAGE_PYTHON=y
-         BR2_PACKAGE_PYTHON_AUTOBAHN=y
-         """
- 
-@@ -20,10 +19,9 @@ class TestPythonPy2Autobahn(TestPythonAutobahn):
-         self.import_test()
- 
- 
--class TestPythonPy3Autobahn(TestPythonAutobahn):
--    config = TestPythonBase.config + \
-+class TestPythonPy3Autobahn(TestPythonAutobahn, TestPythonBase3):
-+    config = TestPythonBase3.config + \
-         """
--        BR2_PACKAGE_PYTHON3=y
-         BR2_PACKAGE_PYTHON_AUTOBAHN=y
-         """
- 
-diff --git a/support/testing/tests/package/test_python_cryptography.py b/support/testing/tests/package/test_python_cryptography.py
-index 78c3ef55b3..2a8ce1d8f7 100644
---- a/support/testing/tests/package/test_python_cryptography.py
-+++ b/support/testing/tests/package/test_python_cryptography.py
-@@ -1,4 +1,4 @@
--from tests.package.test_python import TestPythonBase
-+from tests.package.test_python import TestPythonBase, TestPythonBase2, TestPythonBase3
- 
- 
- class TestPythonCryptography(TestPythonBase):
-@@ -10,10 +10,9 @@ class TestPythonCryptography(TestPythonBase):
-         self.assertEqual(exit_code, 0)
- 
- 
--class TestPythonPy2Cryptography(TestPythonCryptography):
--    config = TestPythonBase.config + \
-+class TestPythonPy2Cryptography(TestPythonCryptography, TestPythonBase2):
-+    config = TestPythonBase2.config + \
-         """
--        BR2_PACKAGE_PYTHON=y
-         BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
-         """
- 
-@@ -22,10 +21,9 @@ class TestPythonPy2Cryptography(TestPythonCryptography):
-         self.fernet_test(40)
- 
- 
--class TestPythonPy3Cryptography(TestPythonCryptography):
--    config = TestPythonBase.config + \
-+class TestPythonPy3Cryptography(TestPythonCryptography, TestPythonBase3):
-+    config = TestPythonBase3.config + \
-         """
--        BR2_PACKAGE_PYTHON3=y
-         BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
-         """
- 
-diff --git a/support/testing/tests/package/test_python_incremental.py b/support/testing/tests/package/test_python_incremental.py
-index acf743cdd2..5a98efc666 100644
---- a/support/testing/tests/package/test_python_incremental.py
-+++ b/support/testing/tests/package/test_python_incremental.py
-@@ -1,4 +1,4 @@
--from tests.package.test_python import TestPythonBase
-+from tests.package.test_python import TestPythonBase, TestPythonBase2, TestPythonBase3
- 
- 
- class TestPythonIncremental(TestPythonBase):
-@@ -10,10 +10,9 @@ class TestPythonIncremental(TestPythonBase):
-         self.assertEqual(exit_code, 0)
- 
- 
--class TestPythonPy2Incremental(TestPythonIncremental):
--    config = TestPythonBase.config + \
-+class TestPythonPy2Incremental(TestPythonIncremental, TestPythonBase2):
-+    config = TestPythonBase2.config + \
-         """
--        BR2_PACKAGE_PYTHON=y
-         BR2_PACKAGE_PYTHON_INCREMENTAL=y
-         """
- 
-@@ -22,10 +21,9 @@ class TestPythonPy2Incremental(TestPythonIncremental):
-         self.str_test()
- 
- 
--class TestPythonPy3Incremental(TestPythonIncremental):
--    config = TestPythonBase.config + \
-+class TestPythonPy3Incremental(TestPythonIncremental, TestPythonBase3):
-+    config = TestPythonBase3.config + \
-         """
--        BR2_PACKAGE_PYTHON3=y
-         BR2_PACKAGE_PYTHON_INCREMENTAL=y
-         """
- 
-diff --git a/support/testing/tests/package/test_python_twisted.py b/support/testing/tests/package/test_python_twisted.py
-index ccee07d61d..74b32fbd62 100644
---- a/support/testing/tests/package/test_python_twisted.py
-+++ b/support/testing/tests/package/test_python_twisted.py
-@@ -1,4 +1,4 @@
--from tests.package.test_python import TestPythonBase
-+from tests.package.test_python import TestPythonBase, TestPythonBase2, TestPythonBase3
- 
- TEST_SCRIPT = """
- from twisted.internet import protocol, reactor, endpoints
-@@ -30,10 +30,9 @@ class TestPythonTwisted(TestPythonBase):
-         self.assertEqual(exit_code, 0)
- 
- 
--class TestPythonPy2Twisted(TestPythonTwisted):
--    config = TestPythonBase.config + \
-+class TestPythonPy2Twisted(TestPythonTwisted, TestPythonBase2):
-+    config = TestPythonBase2.config + \
-         """
--        BR2_PACKAGE_PYTHON=y
-         BR2_PACKAGE_PYTHON_TWISTED=y
-         """
- 
-@@ -42,10 +41,9 @@ class TestPythonPy2Twisted(TestPythonTwisted):
-         self.import_test()
- 
- 
--class TestPythonPy3Twisted(TestPythonTwisted):
--    config = TestPythonBase.config + \
-+class TestPythonPy3Twisted(TestPythonTwisted, TestPythonBase3):
-+    config = TestPythonBase3.config + \
-         """
--        BR2_PACKAGE_PYTHON3=y
-         BR2_PACKAGE_PYTHON_TWISTED=y
-         """
- 
-diff --git a/support/testing/tests/package/test_python_txaio.py b/support/testing/tests/package/test_python_txaio.py
-index af93e031b5..6b285fb083 100644
---- a/support/testing/tests/package/test_python_txaio.py
-+++ b/support/testing/tests/package/test_python_txaio.py
-@@ -1,10 +1,9 @@
--from tests.package.test_python import TestPythonBase
-+from tests.package.test_python import TestPythonBase2, TestPythonBase3
- 
- 
--class TestPythonPy2Txaio(TestPythonBase):
--    config = TestPythonBase.config + \
-+class TestPythonPy2Txaio(TestPythonBase2):
-+    config = TestPythonBase2.config + \
-         """
--        BR2_PACKAGE_PYTHON=y
-         BR2_PACKAGE_PYTHON_TXAIO=y
-         BR2_PACKAGE_PYTHON_TWISTED=y
-         """
-@@ -18,10 +17,9 @@ class TestPythonPy2Txaio(TestPythonBase):
-         self.assertEqual(exit_code, 0)
- 
- 
--class TestPythonPy3Txaio(TestPythonBase):
--    config = TestPythonBase.config + \
-+class TestPythonPy3Txaio(TestPythonBase3):
-+    config = TestPythonBase3.config + \
-         """
--        BR2_PACKAGE_PYTHON3=y
-         BR2_PACKAGE_PYTHON_TXAIO=y
-         """
- 
-diff --git a/support/testing/tests/package/test_python_txtorcon.py b/support/testing/tests/package/test_python_txtorcon.py
-index 352ff67825..2e10b37c55 100644
---- a/support/testing/tests/package/test_python_txtorcon.py
-+++ b/support/testing/tests/package/test_python_txtorcon.py
-@@ -1,4 +1,4 @@
--from tests.package.test_python import TestPythonBase
-+from tests.package.test_python import TestPythonBase, TestPythonBase2, TestPythonBase3
- 
- 
- class TestPythonTxtorcon(TestPythonBase):
-@@ -8,10 +8,9 @@ class TestPythonTxtorcon(TestPythonBase):
-         self.assertEqual(exit_code, 0)
- 
- 
--class TestPythonPy2Txtorcon(TestPythonTxtorcon):
--    config = TestPythonBase.config + \
-+class TestPythonPy2Txtorcon(TestPythonTxtorcon, TestPythonBase2):
-+    config = TestPythonBase2.config + \
-         """
--        BR2_PACKAGE_PYTHON=y
-         BR2_PACKAGE_PYTHON_TXTORCON=y
-         """
- 
-@@ -20,10 +19,9 @@ class TestPythonPy2Txtorcon(TestPythonTxtorcon):
-         self.import_test()
- 
- 
--class TestPythonPy3Txtorcon(TestPythonTxtorcon):
--    config = TestPythonBase.config + \
-+class TestPythonPy3Txtorcon(TestPythonTxtorcon, TestPythonBase3):
-+    config = TestPythonBase3.config + \
-         """
--        BR2_PACKAGE_PYTHON3=y
-         BR2_PACKAGE_PYTHON_TXTORCON=y
-         """
- 
++
++
++class TestPythonPackageBase():
++    config_package = None
++    config_sample_scripts = \
++        """
++        BR2_ROOTFS_POST_BUILD_SCRIPT="{}"
++        BR2_ROOTFS_POST_SCRIPT_ARGS="{}"
++        """.format(infra.filepath("tests/package/copy-sample-script-to-target.sh"),
++                   "{sample_scripts}")
++    sample_scripts = None
++    timeout = -1
++
++    def __init__(self, names):
++        # every class that inherits from this one will inherit from TestPythonBase too
++        super(TestPythonBase, self).__init__(names)
++        if self.config_package:
++            self.config += self.config_package
++        if self.sample_scripts:
++            scripts = [infra.filepath(s) for s in self.sample_scripts]
++            self.config += self.config_sample_scripts.format(sample_scripts=" ".join(scripts))
++
++    def check_sample_scripts_exist(self):
++        scripts = [os.path.basename(s) for s in self.sample_scripts]
++        cmd = "md5sum " + " ".join(scripts)
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++
++    def run_sample_scripts(self):
++        for script in self.sample_scripts:
++            cmd = self.interpreter + " " + os.path.basename(script)
++            _, exit_code = self.emulator.run(cmd, timeout=self.timeout)
++            self.assertEqual(exit_code, 0)
++
++    def test_run(self):
++        self.login()
++        self.check_sample_scripts_exist()
++        self.run_sample_scripts()
 -- 
 2.17.1
