@@ -1,29 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 2 Nov 2018 19:21:00 +0100
-Subject: [Buildroot] [PATCH 1/1] python-pip: bump to version 18.1
-In-Reply-To: <20181102085341.29421-3-asafka7@gmail.com>
-References: <20181102085341.29421-1-asafka7@gmail.com>
- <20181102085341.29421-3-asafka7@gmail.com>
-Message-ID: <20181102192100.74299ccb@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  2 Nov 2018 19:24:16 +0100
+Subject: [Buildroot] [PATCH 1/1] mpv: disable static build with qt-zlib
+Message-ID: <20181102182416.27015-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Static build of mpv with qt-zlib will fail because zlib and qt-zlib
+defines the same functions (inflateReset, inflatePrime ...)
 
-On Fri,  2 Nov 2018 10:53:41 +0200, Asaf Kahlon wrote:
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-> ---
->  package/python-pip/python-pip.hash | 4 ++--
->  package/python-pip/python-pip.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+So add a dependency on !(BR2_STATIC_LIBS && BR2_PACKAGE_QT_QTZLIB)
 
-Applied to master, thanks.
+Theoretically, this dependency should be put on zlib package on all its
+reverse dependencies but this make a lot of packages
 
-Thomas
+Fixes:
+ - http://autobuild.buildroot.org/results/0be6e359d46a8a701006305c32b514687854b035
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/mpv/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/mpv/Config.in b/package/mpv/Config.in
+index 69810038f1..a2b023868a 100644
+--- a/package/mpv/Config.in
++++ b/package/mpv/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_MPV
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
++	depends on !(BR2_STATIC_LIBS && BR2_PACKAGE_QT_QTZLIB)
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_FFMPEG
+ 	select BR2_PACKAGE_FFMPEG_SWSCALE
+@@ -25,5 +26,6 @@ config BR2_PACKAGE_MPV
+ comment "mpv needs a toolchain w/ threads, gcc >= 4.5"
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
++	depends on !(BR2_STATIC_LIBS && BR2_PACKAGE_QT_QTZLIB)
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
