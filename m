@@ -1,73 +1,90 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 2 Nov 2018 15:34:33 -0500
-Subject: [Buildroot] [PATCH 3/3] fs: fix condition to create static
- devices
-In-Reply-To: <99d38f609529976ec574c3a05b6665cf3dd0669d.1540626349.git.yann.morin.1998@free.fr>
-References: <cover.1540626349.git.yann.morin.1998@free.fr>
- <99d38f609529976ec574c3a05b6665cf3dd0669d.1540626349.git.yann.morin.1998@free.fr>
-Message-ID: <CANQCQpYjYUKjfFfxWhn4Fk273vPkhY93tghY9N0KEJ+4ctisQw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 2 Nov 2018 21:35:08 +0100
+Subject: [Buildroot] [git commit] utils/scanpypi: use archive file name to
+ specify the extraction folder
+Message-ID: <20181102203303.9FFE7882DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+commit: https://git.buildroot.net/buildroot/commit/?id=fd29797f659c09cbc2aeba33f8d6f5b992e65cd4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, Oct 27, 2018 at 2:46 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Currently, we parse the static devices tables even when we're not using
-> static device nodes; this is a left over from when we mixed devices
-> tables and permissions tables together. Creating package-defined device
-> nodes is guarded by the condition that there is at elast one devices
+Some packages have archive name that is different from package name.
+For example websocket-client's archive name is websocket_client-*.tar.gz.
+scanpypi expects the temporary extract folder to be:
 
-elast -> least
+/tmp-folder/BR-package-name/PyPI-packagename-and-version
 
-> table.
->
-> This means that, when using static device nodes, but no device table, we
-> would miss on the package-defined device nodes.
->
-> We fix that by inverting the condition: static device tables are now
-> parsed only when using static devices, but the package-defined device
-> nodes are no longer conditioned to there being at least one devices
-> table.
->
-> Note: when there is no device table, the package-defined device ndoes
+In the case of websocket-client package the real extraction folder
+will be different from the expected one because of the '_' in the
+archive file name.
 
-ndoes -> nodes
+Use archive file name instead of package name to specify the extraction
+folder. As the version is already part of this file, we don't need to
+specify it.
 
-> are appended to the file. That file can't exist from a previous build,
-> because the whole directory is rmoved at the beginning of the rule.
+Bonus: remove obsolete "return None, None" as the function doesn't return
+anything. OSError class doesn't provide "message" member, so replace it
+with "strerror".
 
-rmoved -> removed
+Fixes:
+https://bugs.busybox.net/show_bug.cgi?id=11251
 
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Reviewed-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ utils/scanpypi | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
-Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-
-> ---
->  fs/common.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/fs/common.mk b/fs/common.mk
-> index fd1e80ab93..a0699b035d 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -84,11 +84,11 @@ ifneq ($(ROOTFS_USERS_TABLES),)
->         cat $(ROOTFS_USERS_TABLES) >> $(USERS_TABLE)
->  endif
->         PATH=$(BR_PATH) $(TOPDIR)/support/scripts/mkusers $(USERS_TABLE) $(TARGET_DIR) >> $(FAKEROOT_SCRIPT)
-> +ifeq ($(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
->  ifneq ($(ROOTFS_STATIC_DEVICE_TABLES),)
->         cat $(ROOTFS_STATIC_DEVICE_TABLES) > $(FULL_DEVICE_TABLE)
-> -ifeq ($(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
-> +endif
->         $(call PRINTF,$(PACKAGES_DEVICES_TABLE)) >> $(FULL_DEVICE_TABLE)
-> -endif
->         echo "$(HOST_DIR)/bin/makedevs -d $(FULL_DEVICE_TABLE) $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
->  endif
->         $(foreach s,$(call qstrip,$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
-> --
+diff --git a/utils/scanpypi b/utils/scanpypi
+index 3983be1ad1..3d3e604435 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -243,13 +243,14 @@ class BuildrootPackage():
+                     os.makedirs(tmp_pkg)
+                 except OSError as exception:
+                     if exception.errno != errno.EEXIST:
+-                        print("ERROR: ", exception.message, file=sys.stderr)
+-                        return None, None
+-                    print('WARNING:', exception.message, file=sys.stderr)
++                        print("ERROR: ", exception.strerror, file=sys.stderr)
++                        return
++                    print('WARNING:', exception.strerror, file=sys.stderr)
+                     print('Removing {pkg}...'.format(pkg=tmp_pkg))
+                     shutil.rmtree(tmp_pkg)
+                     os.makedirs(tmp_pkg)
+                 as_zipfile.extractall(tmp_pkg)
++                pkg_filename = self.filename.split(".zip")[0]
+         else:
+             with tarfile.open(fileobj=as_file) as as_tarfile:
+                 tmp_pkg = os.path.join(tmp_path, self.buildroot_name)
+@@ -257,19 +258,19 @@ class BuildrootPackage():
+                     os.makedirs(tmp_pkg)
+                 except OSError as exception:
+                     if exception.errno != errno.EEXIST:
+-                        print("ERROR: ", exception.message, file=sys.stderr)
+-                        return None, None
+-                    print('WARNING:', exception.message, file=sys.stderr)
++                        print("ERROR: ", exception.strerror, file=sys.stderr)
++                        return
++                    print('WARNING:', exception.strerror, file=sys.stderr)
+                     print('Removing {pkg}...'.format(pkg=tmp_pkg))
+                     shutil.rmtree(tmp_pkg)
+                     os.makedirs(tmp_pkg)
+                 as_tarfile.extractall(tmp_pkg)
++                pkg_filename = self.filename.split(".tar")[0]
+ 
+-        tmp_extract = '{folder}/{name}-{version}'
++        tmp_extract = '{folder}/{name}'
+         self.tmp_extract = tmp_extract.format(
+             folder=tmp_pkg,
+-            name=self.metadata_name,
+-            version=self.version)
++            name=pkg_filename)
+ 
+     def load_setup(self):
+         """
