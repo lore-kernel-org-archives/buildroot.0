@@ -1,104 +1,59 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 2 Nov 2018 17:28:03 +0200
-Subject: [Buildroot] [PATCH v2] scanpypi: use archive file name to
- specify the extraction folder
-In-Reply-To: <20181102134501.13860-1-yegorslists@googlemail.com>
-References: <20181102134501.13860-1-yegorslists@googlemail.com>
-Message-ID: <CALFsTFXQNeUGJE_oTeBbdJVhYVyHX=6-eHQ9rEVsnnXqredZMw@mail.gmail.com>
+From: Marcin =?utf-8?Q?Niestr=C3=B3j?= <m.niestroj@grinn-global.com>
+Date: Fri, 02 Nov 2018 16:29:38 +0100
+Subject: [Buildroot] [PATCH] linux-firmware: bump version to latest
+ d877533
+In-Reply-To: <20181102093441.617a43a9@windsurf>
+References: <20181024103845.19057-1-m.niestroj@grinn-global.com>
+ <20181101230022.318b0cfd@windsurf> <20181101220848.GZ28575@scaer>
+ <20181102093441.617a43a9@windsurf>
+Message-ID: <87r2g3lcpp.fsf@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Nov 2, 2018 at 3:45 PM <yegorslists@googlemail.com> wrote:
->
-> From: Yegor Yefremov <yegorslists@googlemail.com>
+Hi Thomas, Yann,
 
-Reviewed-by: Asaf Kahlon <asafka7@gmail.com>
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+
+> Hello,
 >
-> Some packages have archive name that is different from package name.
-> For example websocket-client's archive name is websocket_client-*.tar.gz.
-> scanpypi expects the temporary extract folder to be:
+> On Thu, 1 Nov 2018 23:08:48 +0100, Yann E. MORIN wrote:
 >
-> /tmp-folder/BR-package-name/PyPI-packagename-and-version
+>> > I don't get the same hash here:
+>> > 
+>> > ERROR: linux-firmware-d87753369b82c5f362250c197d04a1e1ef5bf698.tar.gz has wrong sha256 hash:
+>> > ERROR: expected: 48f02db163bd1320cafa0c878f0c38d2184afa726f02622309be69416e420032
+>> > ERROR: got     : 3c5ba0e3b282e44d5cef3d34a547caf3633c90b83807469357e92cca1fff8a38
+>> > 
+>> > And apparently Yann E. Morin also calculated the same hash as me after
+>> > applying your version bump. Could you check what is happening ?  
+>> 
+>> If using a recent distribution that has tar 1.30 (e.g. Fedroa 28+,
+>> Arch, or other rolling-release distros), you may have fallen in the
+>> download dependencies trap, where host-tar would not be built when doing
+>> a 'make source' from a clean tree.
 >
-> In the case of websocket-client package the real extraction folder
-> will be different from the expected one because of the '_' in the
-> archive file name.
+> Which has just been fixed as of
+> https://git.buildroot.org/buildroot/commit/?id=5b5feea8753520320d11896a24b970c60331bcdc,
+> so Marcin, you may see automagically the new/correct hash if you retry
+> on the latest Buildroot master (I merged this host-tar fix from Yann
+> yesterday evening).
+
+I have rebased my patch on master and I still get the same hash as
+previously. That is logical, because I had host-tar already built when I
+tested patch before submission. Can you confirm that problem was
+actually on your side (i.e. my hash is correct)? After that I will
+bump linux-firmware version to newest, extend commit message and send
+PATCH v2.
+
 >
-> Use archive file name instead of package name to specify the extraction
-> folder. As the version is already part of this file, we don't need to
-> specify it.
+> Thanks,
 >
-> Bonus: remove obsolete "return None, None" as the function doesn't return
-> anything. OSError class doesn't provide "message" member, so replace it
-> with "strerror".
->
-> Fixes:
-> https://bugs.busybox.net/show_bug.cgi?id=11251
->
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
-> Changes v1->v2:
->         - fix typos
->         - add fixes tag
->
->  utils/scanpypi | 19 ++++++++++---------
->  1 file changed, 10 insertions(+), 9 deletions(-)
->
-> diff --git a/utils/scanpypi b/utils/scanpypi
-> index 3983be1ad1..3d3e604435 100755
-> --- a/utils/scanpypi
-> +++ b/utils/scanpypi
-> @@ -243,13 +243,14 @@ class BuildrootPackage():
->                      os.makedirs(tmp_pkg)
->                  except OSError as exception:
->                      if exception.errno != errno.EEXIST:
-> -                        print("ERROR: ", exception.message, file=sys.stderr)
-> -                        return None, None
-> -                    print('WARNING:', exception.message, file=sys.stderr)
-> +                        print("ERROR: ", exception.strerror, file=sys.stderr)
-> +                        return
-> +                    print('WARNING:', exception.strerror, file=sys.stderr)
->                      print('Removing {pkg}...'.format(pkg=tmp_pkg))
->                      shutil.rmtree(tmp_pkg)
->                      os.makedirs(tmp_pkg)
->                  as_zipfile.extractall(tmp_pkg)
-> +                pkg_filename = self.filename.split(".zip")[0]
->          else:
->              with tarfile.open(fileobj=as_file) as as_tarfile:
->                  tmp_pkg = os.path.join(tmp_path, self.buildroot_name)
-> @@ -257,19 +258,19 @@ class BuildrootPackage():
->                      os.makedirs(tmp_pkg)
->                  except OSError as exception:
->                      if exception.errno != errno.EEXIST:
-> -                        print("ERROR: ", exception.message, file=sys.stderr)
-> -                        return None, None
-> -                    print('WARNING:', exception.message, file=sys.stderr)
-> +                        print("ERROR: ", exception.strerror, file=sys.stderr)
-> +                        return
-> +                    print('WARNING:', exception.strerror, file=sys.stderr)
->                      print('Removing {pkg}...'.format(pkg=tmp_pkg))
->                      shutil.rmtree(tmp_pkg)
->                      os.makedirs(tmp_pkg)
->                  as_tarfile.extractall(tmp_pkg)
-> +                pkg_filename = self.filename.split(".tar")[0]
->
-> -        tmp_extract = '{folder}/{name}-{version}'
-> +        tmp_extract = '{folder}/{name}'
->          self.tmp_extract = tmp_extract.format(
->              folder=tmp_pkg,
-> -            name=self.metadata_name,
-> -            version=self.version)
-> +            name=pkg_filename)
->
->      def load_setup(self):
->          """
-> --
-> 2.17.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Thomas
+
+
+-- 
+Regards,
+Marcin
