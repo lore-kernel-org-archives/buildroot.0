@@ -1,68 +1,108 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 1 Nov 2018 22:28:17 -0500
-Subject: [Buildroot] [PATCH] ifupdown-script: send current hostname in
- DHCP request
-In-Reply-To: <20181030171614.32609-1-peter@korsgaard.com>
-References: <20181030171614.32609-1-peter@korsgaard.com>
-Message-ID: <CANQCQpbA-2rdHtpBs8sE=R0UE0R+GGY4fXza-kxtY+x_7LrLdg@mail.gmail.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Fri,  2 Nov 2018 01:12:29 -0300
+Subject: [Buildroot] [PATCH v2 00/12] default runtime test case for python
+ packages v2
+In-Reply-To: <20181016004230.10393-1-ricardo.martincoski@gmail.com>
+References: <20181016004230.10393-1-ricardo.martincoski@gmail.com>
+Message-ID: <20181102041241.28910-1-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Hello,
 
-On Tue, Oct 30, 2018 at 12:16 PM Peter Korsgaard <peter@korsgaard.com> wrote:
->
-> For the default (BR2_SYSTEM_DHCP) /etc/network/interfaces handling.
->
-> Both the "big" and busybox ifupdown variants pass the hostname argument to
-> the DHCP client through the shell, so we can use $() to expand to the
-> current hostname value.
->
-The man page for the interfaces file mentioned that only pump, dhcpcd
-and udhcpc use the hostname value from interfaces.  With dhclient
-requiring the dhclient.conf to specify the set hostname option with
-the hostname string.  Would it be worth mentioning that here in the
-comment that for most (pump, dhcpcd, udhcpc) the hostname parameter
-will work but some clients like dhclient require a separate
-configuration file?
+This series creates a standard runtime test case for python packages and is
+based on ideas from Thomas and Arnout.
 
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+The sample scripts that run on the target (fixture for the test case) are stored
+in a separate file (so it becomes more readable than inline in the test case).
+For the time being, they are stored on support/testing.
+Those sample scripts are copied by the default test case to the target image in
+build time. The test infra builds the image, and the default test case logs in
+the target, checks the script is in the rootfs and calls the Python interpreter
+passing the sample script.
 
-> ---
->  package/ifupdown-scripts/ifupdown-scripts.mk | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/package/ifupdown-scripts/ifupdown-scripts.mk b/package/ifupdown-scripts/ifupdown-scripts.mk
-> index ebc89b3872..17364aed03 100644
-> --- a/package/ifupdown-scripts/ifupdown-scripts.mk
-> +++ b/package/ifupdown-scripts/ifupdown-scripts.mk
-> @@ -23,6 +23,7 @@ define IFUPDOWN_SCRIPTS_DHCP
->                 echo "iface $(IFUPDOWN_SCRIPTS_DHCP_IFACE) inet dhcp"; \
->                 echo "  pre-up /etc/network/nfs_check"; \
->                 echo "  wait-delay 15"; \
-> +               echo "  hostname \$$(hostname)"; \
->         ) >> $(TARGET_DIR)/etc/network/interfaces
->         $(INSTALL) -m 0755 -D $(IFUPDOWN_SCRIPTS_PKGDIR)/nfs_check \
->                 $(TARGET_DIR)/etc/network/nfs_check
-> --
-> 2.11.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Patches 1 to 3 gradually prepare the current python test cases to receive the
+new class TestPythonPackageBase.
 
+Patch 4 adds the new class with common logic to copy the sample script and
+execute it.
 
+Patches 5 to 10 change one by one the 6 current test cases for python packages
+to use the new class.
+Since the sample scripts are now stored on separate files they are automatically
+picked by the check-flake8 job on GitLab CI, so I formatted them to comply to
+flake8 (only empty lines or adding "# noqa" for the script that only import the
+module but don't use it).
+
+Patch 11 use a new naming convention for test cases related to Python.
+
+Patch 12 refreshes a test case that Yegor created for python-crossbar.
+
+Here a complete run of runtime tests on Gitlab CI:
+https://gitlab.com/RicardoMartincoski/buildroot/pipelines/35168102
+
+Changes v1 -> v2:
+  - do not reuse TestPython2 and TestPython3 for two entirely separate things:
+    (Thomas)
+    - As a base class for testing individual Python packages;
+    - As test cases for the Python interpreter itself;
+  - use a better class hierarchy (Thomas). I did this in various patches (1, 2,
+    3, 4, 11) trying to make the review easier.
+  - with the new class hierarchy the trick that allows the defconfig to be
+    changed by each test case without explicitly naming the class that contains
+    the base defconfig is moved from every test case to the new base class;
+  - new patch to the series, resending a patch from Yegor;
+
+Regards,
+Ricardo
+
+Ricardo Martincoski (11):
+  support/testing: use helper class in IPython test
+  support/testing: use helper class in Python test
+  support/testing: create intermediate class per Python version
+  support/testing: create default test case for python packages
+  support/testing: use TestPythonPackageBase for python-autobahn
+  support/testing: use TestPythonPackageBase for python-cryptography
+  support/testing: use TestPythonPackageBase for python-incremental
+  support/testing: use TestPythonPackageBase for python-twisted
+  support/testing: use TestPythonPackageBase for python-txaio
+  support/testing: use TestPythonPackageBase for python-txtorcon
+  support/testing: rename python* test cases
+
+Yegor Yefremov (1):
+  testing: add python-crossbar tests
+
+ .gitlab-ci.yml                                | 29 +++----
+ .../package/copy-sample-script-to-target.sh   |  7 ++
+ .../tests/package/sample_python_autobahn.py   |  1 +
+ .../package/sample_python_cryptography.py     |  3 +
+ .../package/sample_python_incremental.py      |  3 +
+ .../tests/package/sample_python_twisted.py    |  9 +++
+ .../package/sample_python_txaio_asyncio.py    |  3 +
+ .../package/sample_python_txaio_twisted.py    |  3 +
+ .../tests/package/sample_python_txtorcon.py   |  1 +
+ support/testing/tests/package/test_ipython.py | 25 +++----
+ support/testing/tests/package/test_python.py  | 75 +++++++++++++++----
+ .../tests/package/test_python_autobahn.py     | 31 ++------
+ .../tests/package/test_python_crossbar.py     | 20 +++++
+ .../tests/package/test_python_cryptography.py | 34 +++------
+ .../tests/package/test_python_incremental.py  | 34 +++------
+ .../tests/package/test_python_twisted.py      | 48 ++++--------
+ .../tests/package/test_python_txaio.py        | 30 ++------
+ .../tests/package/test_python_txtorcon.py     | 32 +++-----
+ 18 files changed, 189 insertions(+), 199 deletions(-)
+ create mode 100755 support/testing/tests/package/copy-sample-script-to-target.sh
+ create mode 100644 support/testing/tests/package/sample_python_autobahn.py
+ create mode 100644 support/testing/tests/package/sample_python_cryptography.py
+ create mode 100644 support/testing/tests/package/sample_python_incremental.py
+ create mode 100644 support/testing/tests/package/sample_python_twisted.py
+ create mode 100644 support/testing/tests/package/sample_python_txaio_asyncio.py
+ create mode 100644 support/testing/tests/package/sample_python_txaio_twisted.py
+ create mode 100644 support/testing/tests/package/sample_python_txtorcon.py
+ create mode 100644 support/testing/tests/package/test_python_crossbar.py
 
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / RC Linux Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+2.17.1
