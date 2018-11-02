@@ -1,93 +1,100 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri,  2 Nov 2018 14:45:01 +0100
-Subject: [Buildroot] [PATCH v2] scanpypi: use archive file name to specify
- the extraction folder
-Message-ID: <20181102134501.13860-1-yegorslists@googlemail.com>
+From: Erico Nunes <nunes.erico@gmail.com>
+Date: Fri, 2 Nov 2018 14:57:10 +0100
+Subject: [Buildroot] [PATCH 1/1] fwts: Enable optional efi_runtime
+ kernel module build
+In-Reply-To: <1541162207-8770-1-git-send-email-sumit.garg@linaro.org>
+References: <1541162207-8770-1-git-send-email-sumit.garg@linaro.org>
+Message-ID: <CAK4VdL2=P8w_6aoVkHmvtx8N6JnCSosG_btJooDz+Db1K9rRAg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+On Fri, Nov 2, 2018 at 1:37 PM Sumit Garg <sumit.garg@linaro.org> wrote:
+>
+> Firmware test suite does provides efi_runtime kernel module required
+> to run UEFI tests. So optionally enable this module build.
 
-Some packages have archive name that is different from package name.
-For example websocket-client's archive name is websocket_client-*.tar.gz.
-scanpypi expects the temporary extract folder to be:
+Thanks for working on this. I ended up never adding support for it in
+the package because efi_runtime can also be enabled in the kernel
+config (config EFI_TEST) rather than being provided by fwts. But I
+think it's not bad to also have the support here for the source
+shipped with the given fwts version.
 
-/tmp-folder/BR-package-name/PyPI-packagename-and-version
+I have some suggestions below.
 
-In the case of websocket-client package the real extraction folder
-will be different from the expected one because of the '_' in the
-archive file name.
+>
+> Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+> ---
+>  package/fwts/Config.in | 8 ++++++++
+>  package/fwts/fwts.mk   | 6 ++++++
+>  2 files changed, 14 insertions(+)
+>
+> diff --git a/package/fwts/Config.in b/package/fwts/Config.in
+> index 959d871..3ddb989 100644
+> --- a/package/fwts/Config.in
+> +++ b/package/fwts/Config.in
+> @@ -28,3 +28,11 @@ comment "fwts needs a glibc toolchain w/ wchar, threads"
+>         depends on BR2_USE_MMU
+>         depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+>                 !BR2_TOOLCHAIN_USES_GLIBC
+> +
+> +config BR2_PACKAGE_FWTS_EFI_RUNTIME_MODULE
+> +       bool "efi_runtime_module"
 
-Use archive file name instead of package name to specify the extraction
-folder. As the version is already part of this file, we don't need to
-specify it.
+For a slightly better looking menu, I'd suggest dropping the second
+underscore and making it "efi_runtime module".
 
-Bonus: remove obsolete "return None, None" as the function doesn't return
-anything. OSError class doesn't provide "message" member, so replace it
-with "strerror".
+> +       depends on BR2_PACKAGE_FWTS
 
-Fixes:
-https://bugs.busybox.net/show_bug.cgi?id=11251
+Looking at most packages, I think a more clear way to show this option
+only then fwts is selected, is to wrap it inside a 'if
+BR2_PACKAGE_FWTS' instead of a 'depends on' for this case. Not sure if
+it changes anything in practice but it seems more appropriate than a
+'depends on' to me.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
-Changes v1->v2:
-	- fix typos
-	- add fixes tag
+> +       depends on BR2_LINUX_KERNEL
+> +       help
+> +         Firmware Test Suite (FWTS) also provides EFI runtime kernel
+> +         module required to run UEFI tests.
 
- utils/scanpypi | 19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
+As it is, the option looks confusing in the menu as it doesn't look
+like a fwts suboption. It looks like this:
+[*] fwts
+[ ] efi_runtime_module
 
-diff --git a/utils/scanpypi b/utils/scanpypi
-index 3983be1ad1..3d3e604435 100755
---- a/utils/scanpypi
-+++ b/utils/scanpypi
-@@ -243,13 +243,14 @@ class BuildrootPackage():
-                     os.makedirs(tmp_pkg)
-                 except OSError as exception:
-                     if exception.errno != errno.EEXIST:
--                        print("ERROR: ", exception.message, file=sys.stderr)
--                        return None, None
--                    print('WARNING:', exception.message, file=sys.stderr)
-+                        print("ERROR: ", exception.strerror, file=sys.stderr)
-+                        return
-+                    print('WARNING:', exception.strerror, file=sys.stderr)
-                     print('Removing {pkg}...'.format(pkg=tmp_pkg))
-                     shutil.rmtree(tmp_pkg)
-                     os.makedirs(tmp_pkg)
-                 as_zipfile.extractall(tmp_pkg)
-+                pkg_filename = self.filename.split(".zip")[0]
-         else:
-             with tarfile.open(fileobj=as_file) as as_tarfile:
-                 tmp_pkg = os.path.join(tmp_path, self.buildroot_name)
-@@ -257,19 +258,19 @@ class BuildrootPackage():
-                     os.makedirs(tmp_pkg)
-                 except OSError as exception:
-                     if exception.errno != errno.EEXIST:
--                        print("ERROR: ", exception.message, file=sys.stderr)
--                        return None, None
--                    print('WARNING:', exception.message, file=sys.stderr)
-+                        print("ERROR: ", exception.strerror, file=sys.stderr)
-+                        return
-+                    print('WARNING:', exception.strerror, file=sys.stderr)
-                     print('Removing {pkg}...'.format(pkg=tmp_pkg))
-                     shutil.rmtree(tmp_pkg)
-                     os.makedirs(tmp_pkg)
-                 as_tarfile.extractall(tmp_pkg)
-+                pkg_filename = self.filename.split(".tar")[0]
- 
--        tmp_extract = '{folder}/{name}-{version}'
-+        tmp_extract = '{folder}/{name}'
-         self.tmp_extract = tmp_extract.format(
-             folder=tmp_pkg,
--            name=self.metadata_name,
--            version=self.version)
-+            name=pkg_filename)
- 
-     def load_setup(self):
-         """
--- 
-2.17.0
+I don't fully understand the Kconfig inner workings, but if
+BR2_PACKAGE_FWTS_EFI_RUNTIME_MODULE is moved to right after
+BR2_PACKAGE_FWTS (before the comment) then it becomes automatically
+indented and to me much more easier to understand that it is a fwts
+suboption:
+[*] fwts
+[ ]   efi_runtime_module
+
+> diff --git a/package/fwts/fwts.mk b/package/fwts/fwts.mk
+> index 15f0afc..840190e 100644
+> --- a/package/fwts/fwts.mk
+> +++ b/package/fwts/fwts.mk
+> @@ -14,3 +14,9 @@ FWTS_DEPENDENCIES = host-bison host-flex host-pkgconf json-c libglib2 libbsd \
+>         $(if $(BR2_PACKAGE_DTC),dtc)
+>
+>  $(eval $(autotools-package))
+> +
+> +ifdef BR2_PACKAGE_FWTS_EFI_RUNTIME_MODULE
+> +FWTS_DEPENDENCIES += linux
+
+You don't need to add linux as an explicit dependency if you are using
+$(kernel-module).
+
+> +FWTS_MODULE_SUBDIRS = efi_runtime
+> +$(eval $(kernel-module))
+> +endif
+
+This doesn't work for me, it doesn't trigger linux as a dependency and
+fails to build from a clean build. The entire block including the
+$(eval $(kernel-module)) needs to happen before $(eval
+$(autotools-package)) so that it works as intended.
+
+
+Erico
