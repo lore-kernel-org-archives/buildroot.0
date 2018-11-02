@@ -1,29 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 02 Nov 2018 09:55:53 +0000
-Subject: [Buildroot] [Bug 11366] [2018.08] SysV IPC not available for
- fakeroot on WSL
-In-Reply-To: <bug-11366-163@https.bugs.busybox.net/>
-References: <bug-11366-163@https.bugs.busybox.net/>
-Message-ID: <bug-11366-163-j6mD4ek2YA@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 2 Nov 2018 11:04:20 +0100
+Subject: [Buildroot] Queries/suggestions regarding patch series "grub2:
+ add support for arm and aarch64"
+In-Reply-To: <CAK4VdL0+P6HLVcTb21ECatLwBb0jPQ2sVOYtMNCUiLyw44Z5-w@mail.gmail.com>
+References: <CAFA6WYP2bTxdkAKUem_O9GtPdt_hi4Hbg59XiWwEfNvLoc8ghQ@mail.gmail.com>
+ <CAK4VdL0+P6HLVcTb21ECatLwBb0jPQ2sVOYtMNCUiLyw44Z5-w@mail.gmail.com>
+Message-ID: <20181102110420.0f4f44f1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11366
+Hello,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+On Tue, 30 Oct 2018 20:23:27 +0100, Erico Nunes wrote:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-           Assignee|jfdoyon at gmail.com           |yann.morin.1998 at free.fr
+> Using PARTUUID seems to be an interesting change. I'd like to hear the
+> opinion of the other Buildroot developers before making this change in
+> this patchset though, since most other platforms in Buildroot are not
+> doing this.
 
---- Comment #10 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-J.F, could you send a proper Buildroot patch on the mailing list, which
-includes the fakeroot source code changes and the fakeroot.mk changes, all with
-a proper description ?
+It is certainly a good idea to use PARTUUID when possible.
 
+> If there is interest in it, maybe we can do this change for other
+> platforms too and in a separate patchset?
+
+In general yes. However, my understanding was that it works only with a
+GPT partition table, because only the GPT partition table can embed a
+unique identifier per partition, not the old MBR partition table. But
+apparently this disk-signature thing allows to embed a disk-wide
+identifier, not a per-partition one, so it works only when there's a
+single partition ?
+
+Best regards,
+
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
