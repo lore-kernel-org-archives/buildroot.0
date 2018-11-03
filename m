@@ -1,63 +1,68 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 3 Nov 2018 15:15:30 +0100
-Subject: [Buildroot] [PATCH 1/4] llvm: fix build of host-llvm
-In-Reply-To: <20181103122758.10578-1-fontaine.fabrice@gmail.com>
+From: Valentin Korenblit <valentinkorenblit@gmail.com>
+Date: Sat, 3 Nov 2018 15:24:26 +0100
+Subject: [Buildroot] [PATCH 2/4] llvm: enable bpf
+In-Reply-To: <CAPi7W801n8zqM-PLUF1RE5uShZ7+Xh9G2OkrnVEdZ3_Y3=bGpQ@mail.gmail.com>
 References: <20181103122758.10578-1-fontaine.fabrice@gmail.com>
-Message-ID: <83cfc6de-40c3-9c92-1f6e-fcc0bf13ff4e@gmail.com>
+ <20181103122758.10578-2-fontaine.fabrice@gmail.com>
+ <20181103141443.3c86e3f9@windsurf>
+ <CAPi7W801n8zqM-PLUF1RE5uShZ7+Xh9G2OkrnVEdZ3_Y3=bGpQ@mail.gmail.com>
+Message-ID: <f28fcd90-d01b-e62d-2fa0-1e1d4fb04473@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+Fabrice, Thomas,
 
-Le 03/11/2018 ? 13:27, Fabrice Fontaine a ?crit?:
-> If BR2_PACKAGE_LLVM_TARGET_ARCH is empty because llvm is not supported
-> on target, build of the host-llvm will fail on "Unknown architecture".
-> 
-> This is an issue because host-llvm (and host-clang) can be needed on
-> host. For example the libv4l package uses clang to build BPF (in-kernel
-> bytecode machine) files.
-> 
-> To fix this, add a new "host" default value to
-> BR2_PACKAGE_LLVM_TARGET_ARCH
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/llvm/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/llvm/Config.in b/package/llvm/Config.in
-> index 83e94660eb..0e111f1b76 100644
-> --- a/package/llvm/Config.in
-> +++ b/package/llvm/Config.in
-> @@ -10,6 +10,7 @@ config BR2_PACKAGE_LLVM_TARGET_ARCH
->  	default "AArch64" if BR2_aarch64
->  	default "ARM" if BR2_arm || BR2_armeb
->  	default "X86" if BR2_i386 || BR2_x86_64
-> +	default "host"
+> Dear Thomas,
+> Le sam. 3 nov. 2018 ? 14:14, Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> a ?crit :
+>> Hello,
+>>
+>> On Sat,  3 Nov 2018 13:27:56 +0100, Fabrice Fontaine wrote:
+>>> BPF (in-kernel bytecode machine) is needed by libv4l
+>>>
+>>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>>> ---
+>>>   package/llvm/llvm.mk | 3 +++
+>>>   1 file changed, 3 insertions(+)
+>>>
+>>> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+>>> index 1f9bd447f5..dae5d3f16d 100644
+>>> --- a/package/llvm/llvm.mk
+>>> +++ b/package/llvm/llvm.mk
+>>> @@ -54,6 +54,9 @@ ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
+>>>   LLVM_TARGETS_TO_BUILD += AMDGPU
+>>>   endif
+>>>
+>>> +# Build BPF (in-kernel bytecode machine)
+>>> +LLVM_TARGETS_TO_BUILD += BPF
+>> Perhaps we should make this optional ? Or maybe the build time
+>> difference is not that significant ?
+> llvm and clang are already taking a long time to build on my "old"
+> machine, I didn't notice a significant difference with or without BPF
+> but I didn't measure it.
 
-I'm not sure this is the correct thing to do since BR2_PACKAGE_LLVM_TARGET_ARCH
-will be used for the target variant.
+I think we should add a new option just like we did with AMDGPU backend
+as we said we were only going to build backend for target archictecture
+by default.
 
-"host" stand for "automatic detection"
-
-Maybe you want to add "X86" along with LLVM_TARGETS_TO_BUILD for host-llvm ?
-
-Something like:
-
-HOST_LLVM_TARGETS_TO_BUILD = $(LLVM_TARGETS_TO_BUILD) X86
-
-HOST_LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst
-$(space),;,$(HOST_LLVM_TARGETS_TO_BUILD))"
-
-Also your host must be an x86 or x86_64.
+>> Best regards,
+>>
+>> Thomas
+>> --
+>> Thomas Petazzoni, CTO, Bootlin
+>> Embedded Linux and Kernel engineering
+>> https://bootlin.com
+> Best Regards,
+>
+> Fabrice
 
 Best regards,
-Romain
 
->  
->  config BR2_PACKAGE_LLVM
->  	bool "llvm"
-> 
+Valentin
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181103/bf3d35b5/attachment.html>
