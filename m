@@ -1,32 +1,86 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Nov 2018 15:37:33 +0100
-Subject: [Buildroot] [PATCH 1/2] package/f2fs-tools: add host package
-In-Reply-To: <20181026200016.30856-2-grzegorz@blach.pl>
-References: <20181026200016.30856-1-grzegorz@blach.pl>
- <20181026200016.30856-2-grzegorz@blach.pl>
-Message-ID: <20181103153733.0ada615d@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 3 Nov 2018 15:45:15 +0100
+Subject: [Buildroot] [PATCH 2/4] llvm: enable bpf
+In-Reply-To: <f28fcd90-d01b-e62d-2fa0-1e1d4fb04473@gmail.com>
+References: <20181103122758.10578-1-fontaine.fabrice@gmail.com>
+ <20181103122758.10578-2-fontaine.fabrice@gmail.com>
+ <20181103141443.3c86e3f9@windsurf>
+ <CAPi7W801n8zqM-PLUF1RE5uShZ7+Xh9G2OkrnVEdZ3_Y3=bGpQ@mail.gmail.com>
+ <f28fcd90-d01b-e62d-2fa0-1e1d4fb04473@gmail.com>
+Message-ID: <CAPi7W81BuFs9s-nNVip_xBHwoju2owF8tNDW4H5b8hQ16aDWZA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Valentin,
+Le sam. 3 nov. 2018 ? 15:24, Valentin Korenblit
+<valentinkorenblit@gmail.com> a ?crit :
+>
+> Fabrice, Thomas,
+>
+> Dear Thomas,
+> Le sam. 3 nov. 2018 ? 14:14, Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> a ?crit :
+>
+> Hello,
+>
+> On Sat,  3 Nov 2018 13:27:56 +0100, Fabrice Fontaine wrote:
+>
+> BPF (in-kernel bytecode machine) is needed by libv4l
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/llvm/llvm.mk | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+> index 1f9bd447f5..dae5d3f16d 100644
+> --- a/package/llvm/llvm.mk
+> +++ b/package/llvm/llvm.mk
+> @@ -54,6 +54,9 @@ ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
+>  LLVM_TARGETS_TO_BUILD += AMDGPU
+>  endif
+>
+> +# Build BPF (in-kernel bytecode machine)
+> +LLVM_TARGETS_TO_BUILD += BPF
+>
+> Perhaps we should make this optional ? Or maybe the build time
+> difference is not that significant ?
+>
+> llvm and clang are already taking a long time to build on my "old"
+> machine, I didn't notice a significant difference with or without BPF
+> but I didn't measure it.
+>
+> I think we should add a new option just like we did with AMDGPU backend
+> as we said we were only going to build backend for target archictecture
+> by default.
+I would like some advice to add this option, this BPF option should be
+selectable even if BR2_PACKAGE_LLVM is not set as llvm is not needed
+on the target.
 
-On Fri, 26 Oct 2018 22:00:15 +0200, Grzegorz Blach wrote:
-> This package is useful to create f2fs filesystem during build process.
-> 
-> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+So should I put some kind of hidden option like:
+config BR2_PACKAGE_HOST_LLVM_TARGET_BPF
+        bool
 
-Thanks, I have applied, after adding --without-selinux --without-blkid
-to HOST_F2FS_TOOLS_CONF_OPTS. --without-blkid was suggested by Yann.
-However, contrary to Yann, I don't think we should unconditionally
-enable SELinux support, so I've added a --without-selinux.
+and select it in libv4l/Config.in?
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+> Best Regards,
+>
+> Fabrice
+>
+> Best regards,
+>
+> Valentin
+Best Regards,
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fabrice
