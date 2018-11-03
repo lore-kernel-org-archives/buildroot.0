@@ -1,41 +1,40 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  3 Nov 2018 17:27:15 +0100
-Subject: [Buildroot] [PATCH 6/6] wireshark: add snappy optional dependency
-In-Reply-To: <20181103162715.15580-1-fontaine.fabrice@gmail.com>
-References: <20181103162715.15580-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181103162715.15580-6-fontaine.fabrice@gmail.com>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Sat,  3 Nov 2018 13:42:43 -0300
+Subject: [Buildroot] [PATCH 3/4] linux: enble AUDIT if the audit package is
+ selected
+In-Reply-To: <20181103164244.10607-1-casantos@datacom.com.br>
+References: <20181103164244.10607-1-casantos@datacom.com.br>
+Message-ID: <20181103164244.10607-4-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Optional dependency to snappy has been added with version 2.4.0 and
-  https://github.com/wireshark/wireshark/commit/47649d1c7fb6ba48b805e19268a711404eb6908b
-- Specify the path to found libssh as this is done for other options
+We already turn on kernel features for several packages, so let's do it
+for audit too, since the daemon is useless and fails to load otherwise.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Notice that we also turn NET on, since AUDIT depends on NET, like we do
+for the wireguard package.
+
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 ---
- package/wireshark/wireshark.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ linux/linux.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index c67fa3a697..3632b25646 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -134,6 +134,13 @@ else
- WIRESHARK_CONF_OPTS += --with-sbc=no
- endif
- 
-+ifeq ($(BR2_PACKAGE_SNAPPY),y)
-+WIRESHARK_CONF_OPTS += --with-snappy=$(STAGING_DIR)/usr
-+WIRESHARK_DEPENDENCIES += snappy
-+else
-+WIRESHARK_CONF_OPTS += --without-snappy
-+endif
-+
- define WIRESHARK_REMOVE_DOCS
- 	find $(TARGET_DIR)/usr/share/wireshark -name '*.txt' -print0 \
- 		-o -name '*.html' -print0 | xargs -0 rm -f
+diff --git a/linux/linux.mk b/linux/linux.mk
+index e9c75153b2..476ff16329 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -320,6 +320,9 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
+ 	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config))
++	$(if $(BR2_PACKAGE_AUDIT),
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NET,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT,$(@D)/.config))
+ 	$(if $(BR2_PACKAGE_KTAP),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS,$(@D)/.config)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_ENABLE_DEFAULT_TRACERS,$(@D)/.config)
 -- 
 2.17.1
