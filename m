@@ -1,51 +1,39 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 3 Nov 2018 12:41:00 +0100
-Subject: [Buildroot] [Bug 11476] stdio2.h error invalid use of
- __builtin_va_arg_pack
-In-Reply-To: <bug-11476-163-ETpiKCs0B2@https.bugs.busybox.net/>
-References: <bug-11476-163@https.bugs.busybox.net/>
- <bug-11476-163-ETpiKCs0B2@https.bugs.busybox.net/>
-Message-ID: <15a9f365-6533-b286-5a25-ade9d8f291cf@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  3 Nov 2018 13:27:55 +0100
+Subject: [Buildroot] [PATCH 1/4] llvm: fix build of host-llvm
+Message-ID: <20181103122758.10578-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matt,
+If BR2_PACKAGE_LLVM_TARGET_ARCH is empty because llvm is not supported
+on target, build of the host-llvm will fail on "Unknown architecture".
 
-Le 03/11/2018 ? 12:31, bugzilla at busybox.net a ?crit?:
-> https://bugs.busybox.net/show_bug.cgi?id=11476
-> 
-> --- Comment #6 from romain.naour at gmail.com ---
-> (In reply to goldstar611 from comment #5)
-> Hi,
-> 
-> Are you using libitm ?
-> If not, you can workaround this issue by disabling libitm with:
-> HOST_GCC_COMMON_CONF_OPTS += --disable-libitm
-> 
-> This issue is trigged with gcc5 + libitm and Fortify_Source.
-> I'm able to reproduce it on x86_64.
-> 
-> Unfortunately, we don't test the toolchain build with all possible options.
-> For example, Fortify_Source option is not enabled while building pre-built
-> Bootlin toolchains [1]. That's why this issue is only discovered now...
-> This is something that can be improved on our side.
+This is an issue because host-llvm (and host-clang) can be needed on
+host. For example the libv4l package uses clang to build BPF (in-kernel
+bytecode machine) files.
 
-There is an interesting issue with Fortify_Source :)
+To fix this, add a new "host" default value to
+BR2_PACKAGE_LLVM_TARGET_ARCH
 
-Best regards,
-Romain
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/llvm/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-> 
-> Any additional testing are welcome, feel free to run a matrix of PPC big endian
-> you are interested in and report to us or upstream if it works or not.
-> 
-> About gcc5, at some point it will be removed from Buildroot. I can't say when.
-> 
-> [1] https://toolchains.bootlin.com
-> 
-> Best regards,
-> Romain
-> 
+diff --git a/package/llvm/Config.in b/package/llvm/Config.in
+index 83e94660eb..0e111f1b76 100644
+--- a/package/llvm/Config.in
++++ b/package/llvm/Config.in
+@@ -10,6 +10,7 @@ config BR2_PACKAGE_LLVM_TARGET_ARCH
+ 	default "AArch64" if BR2_aarch64
+ 	default "ARM" if BR2_arm || BR2_armeb
+ 	default "X86" if BR2_i386 || BR2_x86_64
++	default "host"
+ 
+ config BR2_PACKAGE_LLVM
+ 	bool "llvm"
+-- 
+2.17.1
