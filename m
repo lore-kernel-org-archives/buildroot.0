@@ -1,59 +1,55 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  3 Nov 2018 16:28:11 +0100
-Subject: [Buildroot] [PATCH 1/1] libssh2: update second patch
-Message-ID: <20181103152811.6532-1-fontaine.fabrice@gmail.com>
+From: Oscar Gomez Fuente <oscargomezf@gmail.com>
+Date: Sat, 3 Nov 2018 16:49:10 +0100
+Subject: [Buildroot] [PATCH] package/ntp: use ntpd to set initial time
+In-Reply-To: <CALtfCQaMyoMXXn9S+BpuDR0kBS=Bn-xQsS2YfhHWYhUFyaMh-w@mail.gmail.com>
+References: <1540300218-59209-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <3c82f1ee-58b9-ef25-35d5-bd8fd25d4d48@mind.be>
+ <CANQCQpYkLV-XJBVqRsQLdrxthZzkqctsBcxfX4mJQqFY16jk5Q@mail.gmail.com>
+ <f544829d-68ed-abfc-306c-ce3cebb1de3b@mind.be>
+ <CANQCQpYAjzXTQBDjKwbMPnQViP0=Qfpr6+pgs_3e7iGOYfo50g@mail.gmail.com>
+ <3232b003-ae5e-43d1-b795-f73a0ed71624@mind.be>
+ <CANQCQpa-kkDU56c7vjVnw=EDFxVxda2PPNPWMPazzkdhJt1jCg@mail.gmail.com>
+ <CALtfCQbVvZOwfmTx8nykn0h8JXsj_GeMiLK6f+OM+7fw0o7q+w@mail.gmail.com>
+ <CANQCQpZFJG=9tG2ooLY5=vPpG_mGcztYDtgFPQiEynxvJA15Kg@mail.gmail.com>
+ <CANQCQpa3Lqw5BZP251AV8Ets-N+TL5SGwfiVW9xTi3Utv9Z3ng@mail.gmail.com>
+ <CALtfCQaMyoMXXn9S+BpuDR0kBS=Bn-xQsS2YfhHWYhUFyaMh-w@mail.gmail.com>
+Message-ID: <CALtfCQbEUCmK5-NSi-UOFYySDbQ=ShueSXCZPC=HCQbGZTAHew@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-curl can be statically linked with mbedtls, in this case build will
-fail on:
-kex.c:(.text+0x1be0): undefined reference to `mbedtls_mpi_read_binary'
+Hi Matthew,
 
-This is due to the fact that CURL_LIBRARIES does not contain mbedtls
-library:
-CURL_LIBRARIES:INTERNAL=curl;cares;ssh2;ssh2;z;ssl;crypto;z;z;crypto;z;z;ssl;z;z;crypto;z
 
-even if libcurl.pc is correct:
-Libs.private: -lcares -lssh2 -L/home/fabrice/buildroot/output/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -lssh2 /home/fabrice/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libmbedcrypto.a /home/fabrice/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libmbedcrypto.a -L/home/fabrice/buildroot/output/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -L/home/fabrice/buildroot/output/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -lz -lssl -lcrypto -lssl -lz -lz -lcrypto -lz -lz
+I was able to connect by VPN and check the new patch v4. Everything
+works fine on my Raspberry Pi 3B+:
 
-This full library path is added by the second patch on libssh2 so update
-it to replace $LIBMBDEDCRYPTO by $LTLIBMBEDCRYPTO as suggested by Thomas
-during review of https://patchwork.ozlabs.org/patch/989339
+# /etc/init.d/S49ntp stop
+Stopping ntpd: OK
+# date
+Sat Nov  3 15:41:17 UTC 2018
+# date --set "1970-02-01 10:10:10"
+Sun Feb  1 10:10:10 UTC 1970
+# date
+Sun Feb  1 10:10:11 UTC 1970
+# /etc/init.d/S48sntp start
+Starting sntp:
+sntp 4.2.8p12 at 1.3728-o Wed Oct 31 08:22:38 UTC 2018 (1)
+1970-02-01 10:10:24.982820 (+0000) +1538544675.515026 +/-
+1025696450.421369 pool.ntp.org 37.139.121.60 s2 no-leap
+OK
+# date
+Sat Nov  3 15:41:42 UTC 2018
 
-Fixes:
- - http://autobuild.buildroot.org/results/dc7810d5d5c62658837cdd2faae6fe3390f968a2
+But I don't how to do that:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libssh2/0002-acinclude.m4-add-mbedtls-to-LIBS.patch | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+> >... provide your tested-by on that patch's email?
+> > https://patchwork.ozlabs.org/patch/992167/
 
-diff --git a/package/libssh2/0002-acinclude.m4-add-mbedtls-to-LIBS.patch b/package/libssh2/0002-acinclude.m4-add-mbedtls-to-LIBS.patch
-index 76e08c51a9..b74c6c9c48 100644
---- a/package/libssh2/0002-acinclude.m4-add-mbedtls-to-LIBS.patch
-+++ b/package/libssh2/0002-acinclude.m4-add-mbedtls-to-LIBS.patch
-@@ -8,6 +8,10 @@ libssh2.pc contains correct info for the benefit of pkg-config users.
- Static link with libssh2 requires this information.
- 
- Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Replace $LIBMBEDCRYTO by $LTLIBMBEDCRYPTO to avoid adding a full
-+library path to libssh2.pc as it raises build failures on some packages
-+such as xerces]
- ---
- Upstream status: https://github.com/libssh2/libssh2/pull/242
- 
-@@ -22,7 +26,7 @@ index c0e89a1a0c98..02c70845d27c 100644
-  [mbedtls], [
-    LIBSSH2_LIB_HAVE_LINKFLAGS([mbedcrypto], [], [#include <mbedtls/version.h>], [
-      AC_DEFINE(LIBSSH2_MBEDTLS, 1, [Use $1])
--+    LIBS="$LIBS $LIBMBEDCRYPTO"
-++    LIBS="$LIBS $LTLIBMBEDCRYPTO"
-      found_crypto="$1"
-      support_clear_memory=yes
-    ])
--- 
-2.17.1
+Best regards.
+
+Oscar Gomez Fuente
+TST Sistemas
+www.tst-sistemas.es
