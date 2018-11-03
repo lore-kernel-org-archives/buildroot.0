@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Nov 2018 15:55:57 +0100
-Subject: [Buildroot] [PATCH 1/1] libv4l: disable clang
-In-Reply-To: <20181103140609.4528-1-fontaine.fabrice@gmail.com>
-References: <20181103140609.4528-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181103155557.3c0cb017@windsurf>
+Date: Sat, 3 Nov 2018 15:56:02 +0100
+Subject: [Buildroot] [PATCH 1/4] uboot: bump to version 2018.09
+In-Reply-To: <20181103125608.2255-1-jagan@amarulasolutions.com>
+References: <20181103125608.2255-1-jagan@amarulasolutions.com>
+Message-ID: <20181103155602.6e1e9b43@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat,  3 Nov 2018 15:06:09 +0100, Fabrice Fontaine wrote:
-> For the time being, disable clang that is used to build BPF (in-kernel
-> bytecode machine) protocols.
-> Indeed, if an old version of clang is found on the host, it could be
-> used to build object files with a "None" architecture which will be
-> rejected by support/scripts/check-bin-arch
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/c18fb7f1ac81496db9c3a4e91ea028a26ca600b0
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On Sat,  3 Nov 2018 18:26:05 +0530, Jagan Teki wrote:
+> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 > ---
->  package/libv4l/libv4l.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+>  boot/uboot/Config.in  | 4 ++--
+>  boot/uboot/uboot.hash | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
