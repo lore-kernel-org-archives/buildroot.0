@@ -1,43 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Nov 2018 14:28:25 +0100
-Subject: [Buildroot] [git commit] package/bdwgc: drop AUTORECONF = YES
-Message-ID: <20181103132614.A885F882D1@busybox.osuosl.org>
+Date: Sat, 3 Nov 2018 14:28:36 +0100
+Subject: [Buildroot] [PATCH] package/bdwgc: drop AUTORECONF = YES
+In-Reply-To: <20181102203338.23534-1-thomas.petazzoni@bootlin.com>
+References: <20181102203338.23534-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20181103142836.54e2a39e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8bba9e78d886fe7958fbbd9c02f93e9d4bec04c3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Since commit 4e1dbd063d1f3ea7dfc95698320f6fd40139085d ("package/bdwgc:
-bump to version 8.0.0"), we no longer have any patch that requires
-autoreconf. In addition, the libtool shipped with the package seems to
-no longer be bogus, because it builds perfectly fine without
-autoreconf. Therefore, let's drop this autoreconf.
+On Fri,  2 Nov 2018 21:33:38 +0100, Thomas Petazzoni wrote:
+> Since commit 4e1dbd063d1f3ea7dfc95698320f6fd40139085d ("package/bdwgc:
+> bump to version 8.0.0"), we no longer have any patch that requires
+> autoreconf. In addition, the libtool shipped with the package seems to
+> no longer be bogus, because it builds perfectly fine without
+> autoreconf. Therefore, let's drop this autoreconf.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  package/bdwgc/bdwgc.mk | 6 ------
+>  1 file changed, 6 deletions(-)
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/bdwgc/bdwgc.mk | 6 ------
- 1 file changed, 6 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
-index 8607234e5d..8ffac476f3 100644
---- a/package/bdwgc/bdwgc.mk
-+++ b/package/bdwgc/bdwgc.mk
-@@ -13,12 +13,6 @@ BDWGC_LICENSE_FILES = README.QUICK
- BDWGC_DEPENDENCIES = libatomic_ops host-pkgconf
- HOST_BDWGC_DEPENDENCIES = host-libatomic_ops host-pkgconf
- 
--# The libtool shipped with the package is bogus and generates some
--# -L/usr/lib flags. It uses a version not supported by Buildroot
--# libtool patches, so autoreconfiguring the packages is the easiest
--# solution.
--BDWGC_AUTORECONF = YES
--
- BDWGC_CONF_OPTS = CFLAGS_EXTRA="$(BDWGC_CFLAGS_EXTRA)"
- ifeq ($(BR2_sparc),y)
- BDWGC_CFLAGS_EXTRA += -DAO_NO_SPARC_V9
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
