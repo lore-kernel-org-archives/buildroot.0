@@ -1,83 +1,33 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sat,  3 Nov 2018 01:56:24 -0300
-Subject: [Buildroot] [PATCH 5/5] support/testing: test check-package ignores
- external.mk
-In-Reply-To: <20181103045624.31059-1-ricardo.martincoski@gmail.com>
-References: <20181103045624.31059-1-ricardo.martincoski@gmail.com>
-Message-ID: <20181103045624.31059-6-ricardo.martincoski@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 03 Nov 2018 05:09:40 +0000
+Subject: [Buildroot] [Bug 11271] utils/check-package fails with exception
+ depending on path prefix
+In-Reply-To: <bug-11271-163@https.bugs.busybox.net/>
+References: <bug-11271-163@https.bugs.busybox.net/>
+Message-ID: <bug-11271-163-uJ9Ty3gGcx@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Check external.mk is ignored only when in the root path of a
-br2-external.
+https://bugs.busybox.net/show_bug.cgi?id=11271
 
-Add a file called external.mk as a fixture to be used by the test case.
+Ricardo Martincoski <ricardo.martincoski@datacom.com.br> changed:
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
----
- .../tests/utils/br2-external/external.mk      |  2 ++
- .../br2-external/package/external/external.mk |  1 +
- .../testing/tests/utils/test_check_package.py | 25 ++++++++++++++++++-
- 3 files changed, 27 insertions(+), 1 deletion(-)
- create mode 100644 support/testing/tests/utils/br2-external/package/external/external.mk
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
 
-diff --git a/support/testing/tests/utils/br2-external/external.mk b/support/testing/tests/utils/br2-external/external.mk
-index e69de29bb2..470c01a382 100644
---- a/support/testing/tests/utils/br2-external/external.mk
-+++ b/support/testing/tests/utils/br2-external/external.mk
-@@ -0,0 +1,2 @@
-+custom-target:
-+	@echo "do nothing"
-diff --git a/support/testing/tests/utils/br2-external/package/external/external.mk b/support/testing/tests/utils/br2-external/package/external/external.mk
-new file mode 100644
-index 0000000000..74fb6540ab
---- /dev/null
-+++ b/support/testing/tests/utils/br2-external/package/external/external.mk
-@@ -0,0 +1 @@
-+# wrong
-diff --git a/support/testing/tests/utils/test_check_package.py b/support/testing/tests/utils/test_check_package.py
-index 85f2e280a8..301aae51ac 100644
---- a/support/testing/tests/utils/test_check_package.py
-+++ b/support/testing/tests/utils/test_check_package.py
-@@ -66,7 +66,7 @@ class TestCheckPackageBasicUsage(TestCheckPackage):
-     The script can be called either using relative path, absolute path or from PATH.
-     The files to be checked can be passed as arguments using either relative path or absolute path.
-     When in in-tree mode (without -b) some in-tree files and also all out-of-tree files are ignored.
--    When in out-tree mode (with -b) the script does generate warnings.
-+    When in out-tree mode (with -b) the script does generate warnings but ignores external.mk.
-     """
- 
-     def test_run(self):
-@@ -146,3 +146,26 @@ class TestCheckPackageBasicUsage(TestCheckPackage):
-         self.assert_file_was_processed(m)
-         self.assert_warnings_generated_for_file(m)
-         self.assertIn("{}:1: empty line at end of file".format(abs_file), w)
-+
-+        # external.mk is ignored only when in the root path of a br2-external
-+        rel_file = "external.mk"
-+        abs_file = os.path.join(abs_path, rel_file)
-+
-+        _, m = call_script(["check-package", "-b", rel_file], self.WITH_UTILS_IN_PATH, abs_path)
-+        self.assert_file_was_ignored(m)
-+
-+        _, m = call_script(["check-package", "-b", abs_file], self.WITH_UTILS_IN_PATH, infra.basepath())
-+        self.assert_file_was_ignored(m)
-+
-+        rel_file = "package/external/external.mk"
-+        abs_file = os.path.join(abs_path, rel_file)
-+
-+        w, m = call_script(["check-package", "-b", rel_file], self.WITH_UTILS_IN_PATH, abs_path)
-+        self.assert_file_was_processed(m)
-+        self.assert_warnings_generated_for_file(m)
-+        self.assertIn("{}:1: should be 80 hashes (http://nightly.buildroot.org/#writing-rules-mk)".format(abs_file), w)
-+
-+        w, m = call_script(["check-package", "-b", abs_file], self.WITH_UTILS_IN_PATH, infra.basepath())
-+        self.assert_file_was_processed(m)
-+        self.assert_warnings_generated_for_file(m)
-+        self.assertIn("{}:1: should be 80 hashes (http://nightly.buildroot.org/#writing-rules-mk)".format(abs_file), w)
+--- Comment #2 from Ricardo Martincoski <ricardo.martincoski@datacom.com.br> ---
+(In reply to Thomas Petazzoni from comment #1)
+
+Vitaliy, Thomas,
+Sorry about the delayed answer.
+
+I just sent a series:
+http://patchwork.ozlabs.org/project/buildroot/list/?series=73895
+
 -- 
-2.17.1
+You are receiving this mail because:
+You are on the CC list for the bug.
