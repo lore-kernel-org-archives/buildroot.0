@@ -1,44 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 03 Nov 2018 11:31:58 +0000
-Subject: [Buildroot] [Bug 11476] stdio2.h error invalid use of
- __builtin_va_arg_pack
-In-Reply-To: <bug-11476-163@https.bugs.busybox.net/>
-References: <bug-11476-163@https.bugs.busybox.net/>
-Message-ID: <bug-11476-163-ETpiKCs0B2@https.bugs.busybox.net/>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 3 Nov 2018 12:36:02 +0100
+Subject: [Buildroot] [PATCH] gcc: Don't mess with test-suite exclusion
+In-Reply-To: <20181103120821.01761bd0@windsurf>
+References: <20181030083124.2766-1-abrodkin@synopsys.com>
+ <cdd891b6-f6b5-6963-8292-9a24916f276b@mind.be>
+ <20181103120821.01761bd0@windsurf>
+Message-ID: <705f8efb-9f7b-35f6-28bf-5065a0408cdd@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11476
+Hi, All,
 
---- Comment #6 from romain.naour at gmail.com ---
-(In reply to goldstar611 from comment #5)
-Hi,
+Le 03/11/2018 ? 12:08, Thomas Petazzoni a ?crit?:
+> Hello,
+> 
+> On Sat, 3 Nov 2018 12:00:44 +0100, Arnout Vandecappelle wrote:
+> 
+>>  Romain, I believe you introduced this feature. If you do think there's a good
+>> reason to keep it, please send a revert.
 
-Are you using libitm ?
-If not, you can workaround this issue by disabling libitm with:
-HOST_GCC_COMMON_CONF_OPTS += --disable-libitm
+It's fine for me as soon as the testsuite build :)
 
-This issue is trigged with gcc5 + libitm and Fortify_Source.
-I'm able to reproduce it on x86_64.
+> 
+> Actually, I was the one who introduced it. See
+> 00e9b1e4f78633d5667b187332f36972a94b9f8b.
 
-Unfortunately, we don't test the toolchain build with all possible options.
-For example, Fortify_Source option is not enabled while building pre-built
-Bootlin toolchains [1]. That's why this issue is only discovered now...
-This is something that can be improved on our side.
-
-Any additional testing are welcome, feel free to run a matrix of PPC big endian
-you are interested in and report to us or upstream if it works or not.
-
-About gcc5, at some point it will be removed from Buildroot. I can't say when.
-
-[1] https://toolchains.bootlin.com
+Indeed, I added a patch to build the toolchain without the testsuite since gcc7.
 
 Best regards,
 Romain
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+> 
+> Best regards,
+> 
+> Thomas
+> 
