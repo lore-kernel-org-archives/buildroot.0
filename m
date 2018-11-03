@@ -1,28 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Nov 2018 15:56:02 +0100
-Subject: [Buildroot] [PATCH 1/4] uboot: bump to version 2018.09
-In-Reply-To: <20181103125608.2255-1-jagan@amarulasolutions.com>
-References: <20181103125608.2255-1-jagan@amarulasolutions.com>
-Message-ID: <20181103155602.6e1e9b43@windsurf>
+Date: Sat, 3 Nov 2018 15:56:57 +0100
+Subject: [Buildroot] [git commit] package/wireshark: add libkrb5 optional
+ dependency
+Message-ID: <20181103145452.B5CA4812D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=eceb09c3b856664f338fcb9b448e81a6bee8a15d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  3 Nov 2018 18:26:05 +0530, Jagan Teki wrote:
-> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-> ---
->  boot/uboot/Config.in  | 4 ++--
->  boot/uboot/uboot.hash | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Specify the path to found libkrb5 as this is done for other options
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/wireshark/wireshark.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 421338f0f8..357ef10c9f 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -19,7 +19,6 @@ WIRESHARK_AUTORECONF = YES
+ # wireshark adds -I$includedir to CFLAGS, causing host/target headers mixup.
+ # Work around it by pointing includedir at staging
+ WIRESHARK_CONF_OPTS = \
+-	--without-krb5 \
+ 	--enable-static=no \
+ 	--with-libsmi=no \
+ 	--with-pcap=$(STAGING_DIR)/usr \
+@@ -84,6 +83,13 @@ else
+ WIRESHARK_CONF_OPTS += --with-gcrypt=no
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBKRB5),y)
++WIRESHARK_CONF_OPTS += --with-krb5=$(STAGING_DIR)/usr
++WIRESHARK_DEPENDENCIES += libkrb5
++else
++WIRESHARK_CONF_OPTS += --without-krb5
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBNL),y)
+ WIRESHARK_CONF_OPTS += --with-libnl
+ WIRESHARK_DEPENDENCIES += libnl
