@@ -1,29 +1,45 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 3 Nov 2018 23:15:00 +0100
-Subject: [Buildroot] [PATCH 1/1] mpv: disable static build with qt-zlib
-In-Reply-To: <20181103142607.59465b91@windsurf>
-References: <20181102182416.27015-1-fontaine.fabrice@gmail.com>
- <20181103142607.59465b91@windsurf>
-Message-ID: <f4c48e31-b230-5fbd-80d3-1504000852e3@mind.be>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Sat, 3 Nov 2018 20:25:41 -0200 (BRST)
+Subject: [Buildroot] [PATCH v2] fs: allow filesystems to set the name of
+ their output file
+In-Reply-To: <400754389.13590.1541211606004.JavaMail.zimbra@datacom.com.br>
+References: <20181024143616.GA31663@scaer>
+ <20181025002043.2235-1-casantos@datacom.com.br>
+ <20181101210103.GX28575@scaer>
+ <400754389.13590.1541211606004.JavaMail.zimbra@datacom.com.br>
+Message-ID: <1338398979.26630.1541283941592.JavaMail.zimbra@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+> From: "DATACOM" <casantos@datacom.com.br>
+> To: "Yann Morin" <yann.morin.1998@free.fr>
+> Cc: "buildroot" <buildroot@buildroot.org>
+> Sent: Sexta-feira, 2 de novembro de 2018 23:20:06
+> Subject: Re: [Buildroot] [PATCH v2] fs: allow filesystems to set the name of their output file
 
+>> From: "Yann Morin" <yann.morin.1998@free.fr>
+>> To: "DATACOM" <casantos@datacom.com.br>
+>> Cc: "buildroot" <buildroot@buildroot.org>
+>> Sent: Quinta-feira, 1 de novembro de 2018 18:01:03
+>> Subject: Re: [PATCH v2] fs: allow filesystems to set the name of their output
+>> file
+> 
+>>> +ROOTFS_$(2)_FINAL_IMAGE_NAME = $$(call qstrip,$$(ROOTFS_$()_IMAGE_NAME))
+>>                                                           ^^^
+>> 
+>> This patch has not been tested at all, it can't even possibly work...
+> 
+> Pfff, I will send a follow-up fixing that. Sorry.
+> 
+> Scratching my head attempting to find how it happened.
 
-On 03/11/18 14:26, Thomas Petazzoni wrote:
-[snip]
-> It would be great if you could confirm that the same configuration
-> builds properly when BR2_PACKAGE_QT_SYSTEMZLIB is used instead of
-> BR2_PACKAGE_QT_QTZLIB. If that is the case, then I believe the right
-> fix is to add a depends on !BR2_STATIC_LIBS to the
-> BR2_PACKAGE_QT_QTZLIB option.
+FYI: I figured out the reason why the buggy patch was sent but I won't
+tell ya because it is too much embarrassing. :-(
 
- Or maybe remove the QTZLIB option entirely.
-
- (Or maybe remove qt4 entirely :-)
-
- Regards,
- Arnout
+-- 
+Carlos Santos (Casantos) - DATACOM, P&D
+?Marched towards the enemy, spear upright, armed with the certainty
+that only the ignorant can have.? ? Epitaph of a volunteer
