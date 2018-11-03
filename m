@@ -1,41 +1,71 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  3 Nov 2018 15:06:09 +0100
-Subject: [Buildroot] [PATCH 1/1] libv4l: disable clang
-Message-ID: <20181103140609.4528-1-fontaine.fabrice@gmail.com>
+Date: Sat, 3 Nov 2018 15:06:57 +0100
+Subject: [Buildroot] [PATCH 3/4] libv4l: add elfutils optional dependency
+In-Reply-To: <20181103141824.6e47adbc@windsurf>
+References: <20181103122758.10578-1-fontaine.fabrice@gmail.com>
+ <20181103122758.10578-3-fontaine.fabrice@gmail.com>
+ <20181103141824.6e47adbc@windsurf>
+Message-ID: <CAPi7W83KME_2=P9Ke9RQHE54brQqBPmc9hM5YjwS19p4h8OhYA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For the time being, disable clang that is used to build BPF (in-kernel
-bytecode machine) protocols.
-Indeed, if an old version of clang is found on the host, it could be
-used to build object files with a "None" architecture which will be
-rejected by support/scripts/check-bin-arch
+Dear Thomas,
+Le sam. 3 nov. 2018 ? 14:18, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
+>
+> Hello,
+>
+> On Sat,  3 Nov 2018 13:27:57 +0100, Fabrice Fontaine wrote:
+> > Bump to version 1.61.1 added an optional dependency to elfutils:
+> > https://git.linuxtv.org/v4l-utils.git/commit/?id=d6025b0e8c7f57b0f9390f987acc5eed57360d80
+> >
+> > host-clang is also needed to build PBF protocols, see:
+>
+> PBF -> BPF
+>
+> > https://git.linuxtv.org/v4l-utils.git/commit/?id=91b37c0d9cb71fc2d5f78cc96aa2ef9f3bba145b
+>
+> I'm not sure to understand: there are two separate commits upstream,
+> one that adds the elfutils dependency, one that adds the clang
+> dependency. Are they both needed to have BPF protocols ? If so, why
+> were those two dependencies introduced in separate commits upstream ?
+Yes, BPF protocols are enabled only if elfutils is available:
 
-Fixes:
- - http://autobuild.buildroot.org/results/c18fb7f1ac81496db9c3a4e91ea028a26ca600b0
+AM_CONDITIONAL([HAVE_LIBELF], [test x$libelf_pkgconfig = xyes])
+if test "x$libelf_pkgconfig" = "xyes"; then
+AC_CHECK_PROG([CLANG], clang, clang)
+AC_DEFINE([HAVE_LIBELF], [1], [libelf library is present])
+else
+AC_MSG_WARN(libelf library not available)
+fi
+>
+> > +ifeq ($(BR2_PACKAGE_ELFUTILS),y)
+> > +# host-clang is needed to build BPF protocols
+> > +LIBV4L_DEPENDENCIES += elfutils host-clang
+> > +endif
+>
+> I think an explicit sub-option would make sense in this case, because
+> it's not trivial at all to know that you need elfutils. So I would
+> prefer to have
+>
+> config BR2_PACKAGE_LIBV4L_KEYTABLE_BPF_PROTOCOLS
+>         bool "keytable BPF protocols"
+>         select BR2_PACKAGE_ELFUTILS
+>         depends on BR2_USE_WCHAR # elfutils
+>         depends on !BR2_STATIC_LIBS # elfutils
+>         depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
+OK, I will update the patch to add this option.
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+Best Regards,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libv4l/libv4l.mk | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-index 4e82dea6ad..f473c03806 100644
---- a/package/libv4l/libv4l.mk
-+++ b/package/libv4l/libv4l.mk
-@@ -55,6 +55,10 @@ endif
- ifeq ($(BR2_PACKAGE_LIBV4L_UTILS),y)
- LIBV4L_CONF_OPTS += --enable-v4l-utils
- LIBV4L_DEPENDENCIES += $(TARGET_NLS_DEPENDENCIES)
-+
-+# Disable clang that is used to build BPF (in-kernel bytecode machine) protocols
-+LIBV4L_CONF_ENV += ac_cv_prog_CLANG=""
-+
- ifeq ($(BR2_PACKAGE_QT5BASE)$(BR2_PACKAGE_QT5BASE_GUI)$(BR2_PACKAGE_QT5BASE_WIDGETS),yyy)
- LIBV4L_CONF_OPTS += --enable-qv4l2
- LIBV4L_DEPENDENCIES += qt5base
--- 
-2.17.1
+Fabrice
