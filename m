@@ -1,64 +1,48 @@
 From: Carlos Santos <casantos@datacom.com.br>
-Date: Sat,  3 Nov 2018 13:42:41 -0300
-Subject: [Buildroot] [PATCH 1/4] audit: fix audispd path in auditd.conf
+Date: Sat,  3 Nov 2018 13:42:44 -0300
+Subject: [Buildroot] [PATCH 4/4] audit: bump to version 2.8.4
 In-Reply-To: <20181103164244.10607-1-casantos@datacom.com.br>
 References: <20181103164244.10607-1-casantos@datacom.com.br>
-Message-ID: <20181103164244.10607-2-casantos@datacom.com.br>
+Message-ID: <20181103164244.10607-5-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-audispd is installed at /usr/sbin but the configuration file pointed
-to /sbin, causing auditd to fail on startup.
+Fix a segfault in auditd when dns resolution isn't available. Additional
+changes since 2.8.2 can be seen at
 
-This patch cannot be sent upstream because audispd does not exist
-anymore on the master branch (it was merged to auditd).
+    http://people.redhat.com/sgrubb/audit/ChangeLog
 
 Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 ---
- ...0001-Fix-audispd-path-in-auditd.conf.patch | 32 +++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/audit/0001-Fix-audispd-path-in-auditd.conf.patch
+ package/audit/audit.hash | 2 +-
+ package/audit/audit.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/audit/0001-Fix-audispd-path-in-auditd.conf.patch b/package/audit/0001-Fix-audispd-path-in-auditd.conf.patch
-new file mode 100644
-index 0000000000..ccf45db911
---- /dev/null
-+++ b/package/audit/0001-Fix-audispd-path-in-auditd.conf.patch
-@@ -0,0 +1,32 @@
-+From 6e1fd09f7bc131c8f16d9cc43e2455ba4650c651 Mon Sep 17 00:00:00 2001
-+From: Carlos Santos <casantos@datacom.com.br>
-+Date: Sat, 3 Nov 2018 08:25:58 -0300
-+Subject: [PATCH] Fix audispd path in auditd.conf
-+
-+audispd is installed at /usr/sbin but the configuration file pointed
-+to /sbin, causing auditd to fail on startup.
-+
-+This patch cannot be sent upstream because audispd does not exist
-+anymore on the master branch (it was merged to auditd).
-+
-+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-+---
-+ init.d/auditd.conf | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/init.d/auditd.conf b/init.d/auditd.conf
-+index 4dcda83..998904f 100644
-+--- a/init.d/auditd.conf
-++++ b/init.d/auditd.conf
-+@@ -13,7 +13,7 @@ max_log_file = 8
-+ num_logs = 5
-+ priority_boost = 4
-+ disp_qos = lossy
-+-dispatcher = /sbin/audispd
-++dispatcher = /usr/sbin/audispd
-+ name_format = NONE
-+ ##name = mydomain
-+ max_log_file_action = ROTATE
-+-- 
-+2.17.1
-+
+diff --git a/package/audit/audit.hash b/package/audit/audit.hash
+index fb37577782..8c3c9dc4af 100644
+--- a/package/audit/audit.hash
++++ b/package/audit/audit.hash
+@@ -1,4 +1,4 @@
+ #Locally computed
+-sha256 67b59b2b77afee9ed87afa4d80ffc8e6f3a1f4bbedd5f2871f387c952147bcba audit-2.8.2.tar.gz
++sha256 a410694d09fc5708d980a61a5abcb9633a591364f1ecc7e97ad5daef9c898c38  audit-2.8.4.tar.gz
+ sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670 COPYING
+ sha256 f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa COPYING.LIB
+diff --git a/package/audit/audit.mk b/package/audit/audit.mk
+index 228ef9998c..0988f88d8d 100644
+--- a/package/audit/audit.mk
++++ b/package/audit/audit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AUDIT_VERSION = 2.8.2
++AUDIT_VERSION = 2.8.4
+ AUDIT_SITE = http://people.redhat.com/sgrubb/audit
+ AUDIT_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+ AUDIT_LICENSE_FILES = COPYING COPYING.LIB
 -- 
 2.17.1
