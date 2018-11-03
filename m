@@ -1,35 +1,43 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat, 03 Nov 2018 21:27:06 +0200
-Subject: [Buildroot] [PATCH v2 2/4] board: orangepi: Add Orangepi One
- Plus support
-In-Reply-To: <20181103125608.2255-2-jagan@amarulasolutions.com>
-References: <20181103125608.2255-1-jagan@amarulasolutions.com>
- <20181103125608.2255-2-jagan@amarulasolutions.com>
-Message-ID: <87zhuqner9.fsf@tkos.co.il>
+From: Vitaliy Lotorev <lotorev@gmail.com>
+Date: Sat, 3 Nov 2018 23:09:21 +0300
+Subject: [Buildroot] [1/5] check-package: fix check of file in current dir
+ with -b
+Message-ID: <CALi-FuibAQV3amqYvLzSe28-cNPLYvi7xTNmYaAZNhtZHzJTBw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jagan,
+Hi Ricardo Martincoski,
 
-Jagan Teki writes:
-> diff --git a/board/orangepi/orangepi-one-plus/extlinux.conf b/board/orangepi/orangepi-one-plus/extlinux.conf
-> new file mode 100644
-> index 0000000000..eae328449c
-> --- /dev/null
-> +++ b/board/orangepi/orangepi-one-plus/extlinux.conf
-> @@ -0,0 +1,4 @@
-> +label linux-4.18.0-rc3
+My comments regarding patch [1].
 
-This doesn't match the actual kernel version. I think you can just drop
-the version from the label. It is easy to forget keeping it in sync with
-the kernel version.
+> always use the absolute path of the file being checked when
+> -b was passed. A small drawback is that the warning messages will occupy
+> more columns in this case,
 
-baruch
+For user it would be quite unexpected to see that paths used in
+check-package arguments mismatch paths printed in stdout.
+I can't think of applications that absolutize paths.
+?.g when GCC, flake8, cppcheck find errors/warnings they print file names
+as they were passed to binary call.
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+My current usage of check-package - verify patch on Gerrit and vote back.
+But in future I'd like to have an ability to report back each line warning
+as a bot comment right on file diff screen.
+To do this I neet to construct JSON containing list of {'filename', 'line',
+'message'} dicts where 'filename' - file path relative to repo root.
+Simplified calls when commit under review is checked out:
+files=$(git diff --diff-filter ACMRT --name-only HEAD~)
+<path-to-buildroot>/utils/check-package --br2-external $files > errors.log
+<convert-to-json> errors.txt > errors.json
+<post-comments> errors.json
+
+In case check-package will print absolute paths into errors.log extra logic
+will be required to make paths relative back again.
+
+[1] http://patchwork.ozlabs.org/patch/992601/
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181103/823adb51/attachment.html>
