@@ -1,129 +1,109 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 3 Nov 2018 14:34:52 +0100
-Subject: [Buildroot] [PATCH] fs: allow filesystems to set the name of
- their output file
-In-Reply-To: <649da177-0e70-3e8a-d4ff-934d49b9c530@mind.be>
-References: <20181021132626.GA23085@scaer>
- <20181024010149.3970-1-casantos@datacom.com.br>
- <20181024143616.GA31663@scaer>
- <649da177-0e70-3e8a-d4ff-934d49b9c530@mind.be>
-Message-ID: <20181103133452.GA24754@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 3 Nov 2018 14:38:35 +0100
+Subject: [Buildroot] [PATCH 1/3] fs: apply permissions late
+In-Reply-To: <4f9a31b0fb8f87ded9c788cb92d727b6763859ac.1540626349.git.yann.morin.1998@free.fr>
+References: <cover.1540626349.git.yann.morin.1998@free.fr>
+ <4f9a31b0fb8f87ded9c788cb92d727b6763859ac.1540626349.git.yann.morin.1998@free.fr>
+Message-ID: <20181103143835.5b2f9142@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Hello,
 
-On 2018-11-03 11:37 +0100, Arnout Vandecappelle spake thusly:
-> On 24/10/18 16:36, Yann E. MORIN wrote:
-[--SNIP--]
-> >     +ROOTFS_EXT2_IMAGE_NAME = \
-> >     +	$(if $(BR2_TARGET_ROOTFS_EXT2_2r0),rootfs.ext2) \
-> >     +	$(if $(BR2_TARGET_ROOTFS_EXT2_2r1),rootfs.ext2) \
-> >     +	$(if $(BR2_TARGET_ROOTFS_EXT2_3),rootfs.ext3) \
-> >     +	$(if $(BR2_TARGET_ROOTFS_EXT2_4),rootfs.ext4)
-> 
->  NACK that. You're defining ROOTFS_EXT2_IMAGE_NAME to contain spaces, so I think
-> that's a bug on your side, not on the side where we use the variable.
+On Sat, 27 Oct 2018 09:45:58 +0200, Yann E. MORIN wrote:
 
-So, why do we call qstrip on other user-provided options, like FOO_SITE,
-FOO_SOURCE, FOO_LICENSE_FILES for example, or others that we simply
-strip, like FOO_VERSION? Those are even less prone to contain unexpected
-spaces to begin with, yet we decided to sanitise them based on some
-feedback from users who would write things like (see 2f074857816):
+> This needs a split of the makedevs call, with the current and first one
+> now only responsible for creating the pseudo devices, while the new,
+> second call does only set the permissions.
 
-    FOO_VERSION = something # some comment
+What happens if there are special permissions/extended attributes set
+on pseudo devices in the static device table ?
 
-Note: in fact, here, when I suggested we call qstrip, I was wrong; I
-should have said plain strip instead. Mea culpa.
+> diff --git a/fs/common.mk b/fs/common.mk
+> index 453da6010a..569e5d60c5 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -29,8 +29,8 @@
+>  
+>  FS_DIR = $(BUILD_DIR)/buildroot-fs
+>  FULL_DEVICE_TABLE = $(FS_DIR)/device_table.txt
 
-> The proper
-> definition of this variable would be:
-> 
-> ifeq ($(BR2_TARGET_ROOTFS_EXT2_2r0),y)
-> ROOTFS_EXT2_IMAGE_NAME = rootfs.ext2
-> else ifeq (....)
+I no longer like the name FULL_DEVICE_TABLE, nor device_table.txt,
+because it's no longer the "full device table".
 
-We already use the $(if...) construct in many places, so I don't see
-what is wrong with it, and I find it in fact more readable than the
-alternative... See the huge one in util-linux for an extreme example
-(which would be barely readbale should we switch to the ifeq-else-endif
-format), or aircrack-ng for a more reasonable case.
+> -ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE) \
+> -	$(BR2_ROOTFS_STATIC_DEVICE_TABLE))
+> +ROOTFS_PERMISSION_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE))
+> +ROOTFS_STATIC_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_STATIC_DEVICE_TABLE))
+>  USERS_TABLE = $(FS_DIR)/users_table.txt
+>  ROOTFS_USERS_TABLES = $(call qstrip,$(BR2_ROOTFS_USERS_TABLES))
+>  
+> @@ -81,14 +81,13 @@ ifneq ($(ROOTFS_USERS_TABLES),)
+>  	cat $(ROOTFS_USERS_TABLES) >> $(USERS_TABLE)
+>  endif
+>  	PATH=$(BR_PATH) $(TOPDIR)/support/scripts/mkusers $(USERS_TABLE) $(TARGET_DIR) >> $(FAKEROOT_SCRIPT)
+> -ifneq ($(ROOTFS_DEVICE_TABLES),)
+> -	cat $(ROOTFS_DEVICE_TABLES) > $(FULL_DEVICE_TABLE)
+> +ifneq ($(ROOTFS_STATIC_DEVICE_TABLES),)
+> +	cat $(ROOTFS_STATIC_DEVICE_TABLES) > $(FULL_DEVICE_TABLE)
+>  ifeq ($(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
+>  	$(call PRINTF,$(PACKAGES_DEVICES_TABLE)) >> $(FULL_DEVICE_TABLE)
+>  endif
+> -endif
+> -	$(call PRINTF,$(PACKAGES_PERMISSIONS_TABLE)) >> $(FULL_DEVICE_TABLE)
+>  	echo "$(HOST_DIR)/bin/makedevs -d $(FULL_DEVICE_TABLE) $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+> +endif
+>  	$(foreach s,$(call qstrip,$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
+>  		echo "echo '$(TERM_BOLD)>>>   Executing fakeroot script $(s)$(TERM_RESET)'" >> $(FAKEROOT_SCRIPT); \
+>  		echo $(EXTRA_ENV) $(s) $(TARGET_DIR) $(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $(FAKEROOT_SCRIPT)$(sep))
+> @@ -108,6 +107,7 @@ define inner-rootfs
+>  
+>  ROOTFS_$(2)_DIR = $$(FS_DIR)/$(1)
+>  ROOTFS_$(2)_TARGET_DIR = $$(ROOTFS_$(2)_DIR)/target
+> +ROOTFS_$(2)_PERMISSION_TABLE = $$(ROOTFS_$(2)_DIR)/permissions.txt
 
-We even already use it in fs/btrfs too, which was added recently-ish.
+There is no reason for this variable to be filesystem-specific, nor for
+this permissions.txt file to be generated for each filesystem format.
 
->  Because this is a bit verbose, we often handle the "switch" in Config.in rather
-> than *.mk.
+So I'd prefer to see something like this in fs/common.mk:
 
-Sorry, but the above is pretty trivial, so yes it becomes easy to do in
-kconfig. But under more complex situations, where the extension can be
-computed, it might be easier to do in the .mk file.
+ROOTFS_FULL_STATIC_DEVICE_TABLE = $(FS_DIR)/full_static_device_table.txt
+ROOTFS_FULL_PERMISSION_TABLE = $(FS_DIR)/full_permission_table.txt
 
->  You should know this stuff :-)
+both are generated in fs/common.mk, but only
+ROOTFS_FULL_STATIC_DEVICE_TABLE is used in the makedevs call in
+fs/common.mk.
 
-Well, yeah, I know it, and I even tested it on version 1 of Carlos
-patch.
 
->  Bottom line: NACK against the stripping, Carlos' original patch was fine.
+>  ROOTFS_$(2)_DEPENDENCIES += rootfs-common
+>  
+> @@ -149,6 +149,11 @@ $$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
+>  	echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
+>  	echo "set -e" >> $$(FAKEROOT_SCRIPT)
+>  	$$(call PRINTF,$$(ROOTFS_COMMON_UNTAR_CMD)) >> $$(FAKEROOT_SCRIPT)
+> +ifneq ($$(ROOTFS_PERMISSION_TABLES),)
+> +	cat $$(ROOTFS_PERMISSION_TABLES) > $$(ROOTFS_$(2)_PERMISSION_TABLE)
+> +endif
+> +	$$(call PRINTF,$$(PACKAGES_PERMISSIONS_TABLE)) >> $$(ROOTFS_$(2)_PERMISSION_TABLE)
 
-Meh, I was dragged in just because that touches the fs infra, but I
-don't even care about this feature; I was even pretty oppposed to it to
-begin with. This is even only a corner case that we won't even be
-subjected to in Buildroot itself, so I don't care about the outcome...
+i.e, those lines would migrate back into fs/common.mk.
 
-My position with that would have been to suggest that, should a user
-want to name their generated image differently, they should do as we
-currently do in the ext filesystem: add a post-gen hook that creates
-a (sym|hard)link to the name of their heart's content.
+> +	echo "$$(HOST_DIR)/bin/makedevs -d $$(ROOTFS_$(2)_PERMISSION_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
 
-Regards,
-Yann E. MORIN.
+And this would use $(ROOTFS_FULL_PERMISSION_TABLE)
 
->  Regards,
->  Arnout
-> 
-> >     +
-> >      $(eval $(rootfs))
-> > 
-> > And then, the variable gets a leading sapce, unfortunately.
-> > 
-> > So, you need to qstrip the variable before using it, probably going with
-> > an intermediate variable (in the fs infrastructure):
-> > 
-> >     ROOTFS_$(2)_IMAGE_NAME ?= rootfs.$(1)
-> >     ROOTFS_$(2)_FINAL_IMAGE_NAME = $$(call qstrip,$$(ROOTFS_$()_IMAGE_NAME))
-> > 
-> > and then use ROOTFS_$(2)_FINAL_IMAGE_NAME to generate the rules...
-> > 
-> > Regards,
-> > Yann E. MORIN.
-> > 
-> >> +$$(BINARIES_DIR)/$$(ROOTFS_$(2)_IMAGE_NAME): FAKEROOT_SCRIPT=$$(ROOTFS_$(2)_DIR)/fakeroot
-> >> +$$(BINARIES_DIR)/$$(ROOTFS_$(2)_IMAGE_NAME): $$(ROOTFS_$(2)_DEPENDENCIES)
-> >> +	@$$(call MESSAGE,"Generating filesystem image $$(ROOTFS_$(2)_IMAGE_NAME)")
-> >>  	rm -rf $$(ROOTFS_$(2)_DIR)
-> >>  	mkdir -p $$(ROOTFS_$(2)_DIR)
-> >>  	echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
-> >> @@ -164,7 +165,7 @@ endif
-> >>  rootfs-$(1)-show-depends:
-> >>  	@echo $$(ROOTFS_$(2)_DEPENDENCIES)
-> >>  
-> >> -rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1)
-> >> +rootfs-$(1): $$(BINARIES_DIR)/$$(ROOTFS_$(2)_IMAGE_NAME)
-> >>  
-> >>  .PHONY: rootfs-$(1) rootfs-$(1)-show-depends
-> >>  
-> >> -- 
-> >> 2.17.1
-> >>
-> > 
+This would make the whole thing more consistent IMO. Of course unless
+we decide that pseudo devices in the static device table can have
+extended attributes, in which case, the makedevs for static devices
+anyway needs to be moved to the per-filesystem code.
 
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
