@@ -1,63 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Nov 2018 22:16:36 +0100
-Subject: [Buildroot] [git commit] package/libssh2: fix static linking
- scenarios involving mbedtls
-Message-ID: <20181103212453.3851D81390@busybox.osuosl.org>
+Date: Sat, 3 Nov 2018 22:21:31 +0100
+Subject: [Buildroot] [git commit] package/audit: fix audispd path in
+ auditd.conf
+Message-ID: <20181103212453.4032A812D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48218732a3a7b983825ff3a8cf0767f847ac8d04
+commit: https://git.buildroot.net/buildroot/commit/?id=4be494b8045b51ddc41cec370950a95bc72fba55
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-curl can be statically linked with mbedtls, in this case build will
-fail on:
-kex.c:(.text+0x1be0): undefined reference to `mbedtls_mpi_read_binary'
+audispd is installed at /usr/sbin but the configuration file pointed
+to /sbin, causing auditd to fail on startup.
 
-This is due to the fact that CURL_LIBRARIES does not contain mbedtls
-library:
-CURL_LIBRARIES:INTERNAL=curl;cares;ssh2;ssh2;z;ssl;crypto;z;z;crypto;z;z;ssl;z;z;crypto;z
+This patch cannot be sent upstream because audispd does not exist
+anymore on the master branch (it was merged to auditd).
 
-even if libcurl.pc is correct:
-Libs.private: -lcares -lssh2 -L/home/fabrice/buildroot/output/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -lssh2 /home/fabrice/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libmbedcrypto.a /home/fabrice/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libmbedcrypto.a -L/home/fabrice/buildroot/output/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -L/home/fabrice/buildroot/output/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -lz -lssl -lcrypto -lssl -lz -lz -lcrypto -lz -lz
-
-This full library path is added by patch
-0002-acinclude.m4-add-mbedtls-to-LIBS.patch on libssh2 so update it to
-replace $LIBMBDEDCRYPTO by $LTLIBMBEDCRYPTO as suggested by Thomas
-during review of https://patchwork.ozlabs.org/patch/989339
-
-Fixes:
- - http://autobuild.buildroot.org/results/dc7810d5d5c62658837cdd2faae6fe3390f968a2
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libssh2/0002-acinclude.m4-add-mbedtls-to-LIBS.patch | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ .../0001-Fix-audispd-path-in-auditd.conf.patch     | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-diff --git a/package/libssh2/0002-acinclude.m4-add-mbedtls-to-LIBS.patch b/package/libssh2/0002-acinclude.m4-add-mbedtls-to-LIBS.patch
-index 76e08c51a9..01ae0813dd 100644
---- a/package/libssh2/0002-acinclude.m4-add-mbedtls-to-LIBS.patch
-+++ b/package/libssh2/0002-acinclude.m4-add-mbedtls-to-LIBS.patch
-@@ -8,6 +8,10 @@ libssh2.pc contains correct info for the benefit of pkg-config users.
- Static link with libssh2 requires this information.
- 
- Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+[Fabrice: Replace $LIBMBEDCRYTO by $LTLIBMBEDCRYPTO to avoid adding a
-+full library path to libssh2.pc as it raises build failures on some
-+packages such as xerces]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
- Upstream status: https://github.com/libssh2/libssh2/pull/242
- 
-@@ -22,7 +26,7 @@ index c0e89a1a0c98..02c70845d27c 100644
-  [mbedtls], [
-    LIBSSH2_LIB_HAVE_LINKFLAGS([mbedcrypto], [], [#include <mbedtls/version.h>], [
-      AC_DEFINE(LIBSSH2_MBEDTLS, 1, [Use $1])
--+    LIBS="$LIBS $LIBMBEDCRYPTO"
-++    LIBS="$LIBS $LTLIBMBEDCRYPTO"
-      found_crypto="$1"
-      support_clear_memory=yes
-    ])
+diff --git a/package/audit/0001-Fix-audispd-path-in-auditd.conf.patch b/package/audit/0001-Fix-audispd-path-in-auditd.conf.patch
+new file mode 100644
+index 0000000000..ccf45db911
+--- /dev/null
++++ b/package/audit/0001-Fix-audispd-path-in-auditd.conf.patch
+@@ -0,0 +1,32 @@
++From 6e1fd09f7bc131c8f16d9cc43e2455ba4650c651 Mon Sep 17 00:00:00 2001
++From: Carlos Santos <casantos@datacom.com.br>
++Date: Sat, 3 Nov 2018 08:25:58 -0300
++Subject: [PATCH] Fix audispd path in auditd.conf
++
++audispd is installed at /usr/sbin but the configuration file pointed
++to /sbin, causing auditd to fail on startup.
++
++This patch cannot be sent upstream because audispd does not exist
++anymore on the master branch (it was merged to auditd).
++
++Signed-off-by: Carlos Santos <casantos@datacom.com.br>
++---
++ init.d/auditd.conf | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/init.d/auditd.conf b/init.d/auditd.conf
++index 4dcda83..998904f 100644
++--- a/init.d/auditd.conf
+++++ b/init.d/auditd.conf
++@@ -13,7 +13,7 @@ max_log_file = 8
++ num_logs = 5
++ priority_boost = 4
++ disp_qos = lossy
++-dispatcher = /sbin/audispd
+++dispatcher = /usr/sbin/audispd
++ name_format = NONE
++ ##name = mydomain
++ max_log_file_action = ROTATE
++-- 
++2.17.1
++
