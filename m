@@ -1,40 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Nov 2018 22:22:05 +0100
-Subject: [Buildroot] [git commit] linux: enable CONFIG_AUDIT if the audit
- package is selected
-Message-ID: <20181103212453.4D5D781390@busybox.osuosl.org>
+Date: Sat, 3 Nov 2018 22:21:53 +0100
+Subject: [Buildroot] [git commit] package/audit: ensure that it starts after
+ the logging daemon
+Message-ID: <20181103212453.46FF481391@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c828ed72fa51607714cbd7a53304d11db7145c3
+commit: https://git.buildroot.net/buildroot/commit/?id=6fe5fe4c4d034bd471a9ed28e5fba81475ae09ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We already turn on kernel features for several packages, so let's do it
-for audit too, since the daemon is useless and fails to load otherwise.
-
-Notice that we also turn NET on, since AUDIT depends on NET, like we do
-for the wireguard package.
+audit uses syslog(). Rename its init script to S02auditd to ensure that
+it will start after syslogd. Otherwise the initial log messages will be
+sent to the console (and probably lost, since almost nobody watches the
+system console on embedded systems).
 
 Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- linux/linux.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/audit/{S01auditd => S02auditd} | 0
+ package/audit/audit.mk                 | 2 +-
+ 2 files changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index e9c75153b2..476ff16329 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -320,6 +320,9 @@ define LINUX_KCONFIG_FIXUP_CMDS
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
- 	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config))
-+	$(if $(BR2_PACKAGE_AUDIT),
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NET,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT,$(@D)/.config))
- 	$(if $(BR2_PACKAGE_KTAP),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_ENABLE_DEFAULT_TRACERS,$(@D)/.config)
+diff --git a/package/audit/S01auditd b/package/audit/S02auditd
+similarity index 100%
+rename from package/audit/S01auditd
+rename to package/audit/S02auditd
+diff --git a/package/audit/audit.mk b/package/audit/audit.mk
+index 2f6e6653b3..228ef9998c 100644
+--- a/package/audit/audit.mk
++++ b/package/audit/audit.mk
+@@ -38,7 +38,7 @@ AUDIT_CONF_OPTS += --disable-systemd
+ endif
+ 
+ define AUDIT_INSTALL_INIT_SYSV
+-	$(INSTALL) -D -m 755 package/audit/S01auditd $(TARGET_DIR)/etc/init.d/S01auditd
++	$(INSTALL) -D -m 755 package/audit/S02auditd $(TARGET_DIR)/etc/init.d/S02auditd
+ endef
+ 
+ define AUDIT_INSTALL_INIT_SYSTEMD
