@@ -1,61 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Nov 2018 11:44:16 +0100
-Subject: [Buildroot] [PATCH v3 0/8] init scripts: rewrite S01logging
-In-Reply-To: <36c0075b-ff46-2d57-7fda-96e23621ddc6@mind.be>
-References: <20181007114605.18153-1-casantos@datacom.com.br>
- <20181011170948.3594d391@windsurf>
- <1677556181.2913340.1539345049511.JavaMail.zimbra@datacom.com.br>
- <20181013145512.6a135309@windsurf>
- <1901226171.9682.1541193229814.JavaMail.zimbra@datacom.com.br>
- <20181102222518.24d7bb60@windsurf>
- <36c0075b-ff46-2d57-7fda-96e23621ddc6@mind.be>
-Message-ID: <20181103114416.17be42df@windsurf>
+From: Jagan Teki <jagan@amarulasolutions.com>
+Date: Sat, 3 Nov 2018 16:18:20 +0530
+Subject: [Buildroot] [PATCH v6 1/2] board: amarula: Add A64-Relic support
+In-Reply-To: <20181101142255.4a9d2316@windsurf>
+References: <20181026130358.11776-1-jagan@amarulasolutions.com>
+ <20181101142255.4a9d2316@windsurf>
+Message-ID: <CAMty3ZB21E3jv1=eU3HjjX0+evAakYzgwcHYAtb3wvFuftn39g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Thu, Nov 1, 2018 at 6:52 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Jagan,
+>
+> On Fri, 26 Oct 2018 18:33:57 +0530, Jagan Teki wrote:
+> > Add initial support for Amarula A64-Relic board
+> > with below features:
+> > - U-Boot 2018.07
+> > - Linux 4.17.0-rc6
+> > - Default packages from buildroot
+> >
+> > Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+> > ---
+> > Changes for v6
+> > - Use 2018.07 u-boot
+> > - Use release tag for linux
+> > - Add command to select u-boot UMS on readme.txt
+> > Changes for v5:
+> > - Rebase to master
+> > - Fix DEVELOPERS file for proper position of amarula_a64_relic_defconfig
+> > Changes for v4:
+> > - remove sdcard.img image creation
+> > - on readme 'cd output/images' not output/images
+> > - add 'sudo' for fastboot commands on readme.txt
+> > Changes for v3:
+> > - Use 4.17 kernel headers
+> > - Add wiki link
+> > - Add BR2_PACKAGE_HOST_ANDROID_TOOLS_FASTBOOT
+> > - Update comments on readme.txt suggested by Thomas
+> > Changes for v2:
+> > - Use mainline U-Boot
+> > - Drop uboot.fragment since the UMS used for developement,
+> >   so note it on readme.txt how to use.
+> > - format the 'Write eMMC' steps suggested by Arnout.
+> > - fix fastboot steps in readme.txt
+> > - add offset in genimage.cfg for boot partition instead of size
+>
+> This patch was missing BR2_TARGET_UBOOT_NEEDS_PYLIBFDT and
+> BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL for the build to succeed in a
+> pristine build environment. I've fixed that, did a few minor tweaks
+> (commit titles) and applied. Thanks!
 
-On Fri, 2 Nov 2018 23:30:10 +0100, Arnout Vandecappelle wrote:
+Thanks for the help.
 
-> > To me, this is exactly like what happens if you enable both Dropbear
-> > and OpenSSH. It installs two init scripts with different names, even if
-> > in practice, only one SSH server will start. We don't handle this
-> > "conflict" for the SSH servers, I don't see why we should have some
-> > special thing to handle it for logging daemons.  
-> 
->  There is one big difference with the HTTP daemon, however: even if busybox
-> httpd is enabled, we don't install an init script for it. However, S01logging is
-> installed unconditionally, even if the user didn't consciously choose for
-> busybox as its logging provider.
-
-Well, my point was not simply for Busybox HTTP server, but for HTTP
-servers in general. We have S50apache and S50lighttpd for example, and
-possibly others as well. We have S50dropbear and S50sshd.
-
-So the problem doesn't exist today for the Busybox HTTP server, because
-we don't have an init script for it (but we may add one at some point
-in the future). But it already exists for tons of other
-daemons/services.
-
->  In that sense, it does make sense to offer an option to choose between the
-> logging providers.
-
-No, see above :-)
-
->  However, as I mentioned before, I see this as completely orthogonal to the
-> S01logging cleanup, because this series is in fact mostly about standardizing
-> the format of the init scripts. So Carlos, if you prefer to keep it as
-> S01logging, that's fine.
-
-On this, I totally agree, it is independent from Carlos work.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Jagan.
