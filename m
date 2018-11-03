@@ -1,68 +1,124 @@
-From: Valentin Korenblit <valentinkorenblit@gmail.com>
-Date: Sat, 3 Nov 2018 15:24:26 +0100
-Subject: [Buildroot] [PATCH 2/4] llvm: enable bpf
-In-Reply-To: <CAPi7W801n8zqM-PLUF1RE5uShZ7+Xh9G2OkrnVEdZ3_Y3=bGpQ@mail.gmail.com>
-References: <20181103122758.10578-1-fontaine.fabrice@gmail.com>
- <20181103122758.10578-2-fontaine.fabrice@gmail.com>
- <20181103141443.3c86e3f9@windsurf>
- <CAPi7W801n8zqM-PLUF1RE5uShZ7+Xh9G2OkrnVEdZ3_Y3=bGpQ@mail.gmail.com>
-Message-ID: <f28fcd90-d01b-e62d-2fa0-1e1d4fb04473@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  3 Nov 2018 15:28:56 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-geode: add
+ upstream commits to fix build errors
+Message-ID: <20181103142856.11664-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, Thomas,
+Fixes
+http://autobuild.buildroot.net/results/a9b/a9baf6ecf147f336021edda20bb091b8aa071209/
 
-> Dear Thomas,
-> Le sam. 3 nov. 2018 ? 14:14, Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> a ?crit :
->> Hello,
->>
->> On Sat,  3 Nov 2018 13:27:56 +0100, Fabrice Fontaine wrote:
->>> BPF (in-kernel bytecode machine) is needed by libv4l
->>>
->>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->>> ---
->>>   package/llvm/llvm.mk | 3 +++
->>>   1 file changed, 3 insertions(+)
->>>
->>> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
->>> index 1f9bd447f5..dae5d3f16d 100644
->>> --- a/package/llvm/llvm.mk
->>> +++ b/package/llvm/llvm.mk
->>> @@ -54,6 +54,9 @@ ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
->>>   LLVM_TARGETS_TO_BUILD += AMDGPU
->>>   endif
->>>
->>> +# Build BPF (in-kernel bytecode machine)
->>> +LLVM_TARGETS_TO_BUILD += BPF
->> Perhaps we should make this optional ? Or maybe the build time
->> difference is not that significant ?
-> llvm and clang are already taking a long time to build on my "old"
-> machine, I didn't notice a significant difference with or without BPF
-> but I didn't measure it.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../0001-Remove-call-to-LoaderGetOS.patch     | 53 +++++++++++++++++++
+ ...ANDR-initialization-for-xserver-1.20.patch | 35 ++++++++++++
+ 2 files changed, 88 insertions(+)
+ create mode 100644 package/x11r7/xdriver_xf86-video-geode/0001-Remove-call-to-LoaderGetOS.patch
+ create mode 100644 package/x11r7/xdriver_xf86-video-geode/0002-gx-Fix-RANDR-initialization-for-xserver-1.20.patch
 
-I think we should add a new option just like we did with AMDGPU backend
-as we said we were only going to build backend for target archictecture
-by default.
-
->> Best regards,
->>
->> Thomas
->> --
->> Thomas Petazzoni, CTO, Bootlin
->> Embedded Linux and Kernel engineering
->> https://bootlin.com
-> Best Regards,
->
-> Fabrice
-
-Best regards,
-
-Valentin
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181103/bf3d35b5/attachment.html>
+diff --git a/package/x11r7/xdriver_xf86-video-geode/0001-Remove-call-to-LoaderGetOS.patch b/package/x11r7/xdriver_xf86-video-geode/0001-Remove-call-to-LoaderGetOS.patch
+new file mode 100644
+index 0000000000..18e4a60da0
+--- /dev/null
++++ b/package/x11r7/xdriver_xf86-video-geode/0001-Remove-call-to-LoaderGetOS.patch
+@@ -0,0 +1,53 @@
++From 09aaa3d1fae4aeb099b16e7a046151761bcdea95 Mon Sep 17 00:00:00 2001
++From: Adam Jackson <ajax@redhat.com>
++Date: Tue, 24 Jan 2017 09:53:06 -0500
++Subject: Remove call to LoaderGetOS
++
++On OSes that don't have a /dev/videox we'll just fail the open() and not
++initialize the Xv adaptor.
++
++Signed-off-by: Adam Jackson <ajax@redhat.com>
++
++Downloaded from upstream commit
++https://cgit.freedesktop.org/xorg/driver/xf86-video-geode/commit/?id=09aaa3d1fae4aeb099b16e7a046151761bcdea95
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/z4l.c | 13 -------------
++ 1 file changed, 13 deletions(-)
++
++diff --git a/src/z4l.c b/src/z4l.c
++index eccefe8..be0d345 100644
++--- a/src/z4l.c
+++++ b/src/z4l.c
++@@ -1709,7 +1709,6 @@ _X_EXPORT XF86ModuleData ztvModuleData = { &z4lVersionRec, z4lSetup, NULL };
++ static pointer
++ z4lSetup(pointer module, pointer opts, int *errmaj, int *errmin)
++ {
++-    const char *osname;
++     static Bool setupDone = FALSE;
++ 
++     if (setupDone != FALSE) {
++@@ -1719,19 +1718,7 @@ z4lSetup(pointer module, pointer opts, int *errmaj, int *errmin)
++     }
++ 
++     setupDone = TRUE;
++-    LoaderGetOS(&osname, NULL, NULL, NULL);
++-
++-    if (osname == NULL || strcmp(osname, "linux") != 0) {
++-        if (errmaj)
++-            *errmaj = LDR_BADOS;
++-        if (errmin)
++-            *errmin = 0;
++-
++-        return NULL;
++-    }
++-
++     xf86AddDriver(&Z4l, module, 0);
++-
++     return (pointer) 1;
++ }
++ 
++-- 
++cgit v1.1
++
+diff --git a/package/x11r7/xdriver_xf86-video-geode/0002-gx-Fix-RANDR-initialization-for-xserver-1.20.patch b/package/x11r7/xdriver_xf86-video-geode/0002-gx-Fix-RANDR-initialization-for-xserver-1.20.patch
+new file mode 100644
+index 0000000000..37e4a25e76
+--- /dev/null
++++ b/package/x11r7/xdriver_xf86-video-geode/0002-gx-Fix-RANDR-initialization-for-xserver-1.20.patch
+@@ -0,0 +1,35 @@
++From 8382e6bb0c76a8029493eae3f2d7a3dbfd0cfc12 Mon Sep 17 00:00:00 2001
++From: Adam Jackson <ajax@redhat.com>
++Date: Mon, 5 Mar 2018 10:28:15 -0500
++Subject: gx: Fix RANDR initialization for xserver 1.20
++
++xf86DisableRandR() doesn't exist anymore, and we don't need it anyway,
++the core code will notice that we set up RANDR ourselves.
++
++Signed-off-by: Adam Jackson <ajax@redhat.com>
++
++Downloaded from upstream commit
++https://cgit.freedesktop.org/xorg/driver/xf86-video-geode/commit/?id=8382e6bb0c76a8029493eae3f2d7a3dbfd0cfc12
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/gx_driver.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/gx_driver.c b/src/gx_driver.c
++index ab57df1..4de336e 100644
++--- a/src/gx_driver.c
+++++ b/src/gx_driver.c
++@@ -1426,7 +1426,9 @@ GXScreenInit(SCREEN_INIT_ARGS_DECL)
++ 
++     /* Set up RandR */
++ 
+++#if GET_ABI_MAJOR(ABI_VIDEODRV_VERSION) < 24
++     xf86DisableRandR();         /* We provide our own RandR goodness */
+++#endif
++ 
++     /* Try to set up the shadow FB for rotation */
++ 
++-- 
++cgit v1.1
++
+-- 
+2.19.1
