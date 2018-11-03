@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Nov 2018 15:45:32 +0100
-Subject: [Buildroot] [PATCH 1/2] package/f2fs-tools: add host package
-In-Reply-To: <20181031212128.GM28575@scaer>
+Date: Sat, 3 Nov 2018 15:48:43 +0100
+Subject: [Buildroot] [PATCH 2/2] fs/f2fs: add support for creating a
+ f2fs image
+In-Reply-To: <20181026200016.30856-3-grzegorz@blach.pl>
 References: <20181026200016.30856-1-grzegorz@blach.pl>
- <20181026200016.30856-2-grzegorz@blach.pl>
- <20181031212128.GM28575@scaer>
-Message-ID: <20181103154532.3b9d8e94@windsurf>
+ <20181026200016.30856-3-grzegorz@blach.pl>
+Message-ID: <20181103154843.761e9e07@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +14,50 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 31 Oct 2018 22:21:28 +0100, Yann E. MORIN wrote:
+On Fri, 26 Oct 2018 22:00:16 +0200, Grzegorz Blach wrote:
+> This patch makes possible to create rootfs image using f2fs filesystem.
+> 
+> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 
-> I don't think that libblkid is needed for the host variant, so we should
-> probably explicitly disable it. On the other hand, libblkid is always
-> built by host-util-linux.
+I have applied, after doing a number of changes, mainly splitting into
+separate patches, as suggested by Yann E. Morin.
 
-Agreed, I've added --without-blkid.
+However, now that you have added F2FS support, it would be good if you
+could add a test in our test suite for this filesystem. Look at
+support/testing/tests/fs/ for the other filesystem tests that we have.
+Could you add something like this ?
 
-> Also, we do have host-libselinux, so wyou may want to also enable that
-> unconditionally.
+> +config BR2_TARGET_ROOTFS_F2FS_COLD_FILES
+> +	string "extension list for cold files"
 
-I don't really agree here. We try to build only a minimal set of
-dependencies, so we shouldn't build against host-libselinux by default.
-Yes, solving that properly requires introducing Config.in options for
-host packages :-)
+Any reason for having added this option for cold files, but not the
+symmetric option for hot files ?
+
+> +	help
+> +	  Specify a file extension list in order f2fs to treat them
+> +	  as cold files. The default list includes most of multimedia
+> +	  file extensions such as jpg, gif, mpeg, mkv, and so on.
+
+I've seen this after committing, but the help text of mkfs.f2fs seems
+to imply that the list of extensions should be comma separated. If
+that's the case, it should be mentioned in the help text, because most
+Buildroot options use space-separated lists, not comma-separated ones.
+
+> +config BR2_TARGET_ROOTFS_F2FS_OVERPROVISION
+> +	int "size for overprovision area (0 for auto calculation)"
+
+Actually 0 is not auto-calculation. 0 will not pass any -O option, and
+therefore mkfs.f2fs will use its default of 5%.
+
+Also, this option doesn't give the size, but the ratio.
+
+I've fixed both aspects when committing.
+
+> +	dd if=/dev/zero of=$@ bs=1 count=0 seek=$(F2FS_SIZE)
+
+I've replaced by a truncate, as suggested by Yann.
+
+Thanks!
 
 Thomas
 -- 
