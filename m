@@ -1,48 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Nov 2018 22:22:49 +0100
-Subject: [Buildroot] [git commit] package/audit: bump to version 2.8.4
-Message-ID: <20181103212453.565F181390@busybox.osuosl.org>
+Date: Sat, 3 Nov 2018 22:22:05 +0100
+Subject: [Buildroot] [git commit] linux: enable CONFIG_AUDIT if the audit
+ package is selected
+Message-ID: <20181103212453.4D5D781390@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d03c33f22a845218681d19eadddebfda0ef39f6
+commit: https://git.buildroot.net/buildroot/commit/?id=2c828ed72fa51607714cbd7a53304d11db7145c3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix a segfault in auditd when dns resolution isn't available. Additional
-changes since 2.8.2 can be seen at
+We already turn on kernel features for several packages, so let's do it
+for audit too, since the daemon is useless and fails to load otherwise.
 
-    http://people.redhat.com/sgrubb/audit/ChangeLog
+Notice that we also turn NET on, since AUDIT depends on NET, like we do
+for the wireguard package.
 
 Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/audit/audit.hash | 2 +-
- package/audit/audit.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ linux/linux.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/audit/audit.hash b/package/audit/audit.hash
-index fb37577782..d8c11a3d19 100644
---- a/package/audit/audit.hash
-+++ b/package/audit/audit.hash
-@@ -1,4 +1,4 @@
- #Locally computed
--sha256 67b59b2b77afee9ed87afa4d80ffc8e6f3a1f4bbedd5f2871f387c952147bcba audit-2.8.2.tar.gz
-+sha256 a410694d09fc5708d980a61a5abcb9633a591364f1ecc7e97ad5daef9c898c38 audit-2.8.4.tar.gz
- sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670 COPYING
- sha256 f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa COPYING.LIB
-diff --git a/package/audit/audit.mk b/package/audit/audit.mk
-index 228ef9998c..0988f88d8d 100644
---- a/package/audit/audit.mk
-+++ b/package/audit/audit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--AUDIT_VERSION = 2.8.2
-+AUDIT_VERSION = 2.8.4
- AUDIT_SITE = http://people.redhat.com/sgrubb/audit
- AUDIT_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
- AUDIT_LICENSE_FILES = COPYING COPYING.LIB
+diff --git a/linux/linux.mk b/linux/linux.mk
+index e9c75153b2..476ff16329 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -320,6 +320,9 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
+ 	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config))
++	$(if $(BR2_PACKAGE_AUDIT),
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NET,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT,$(@D)/.config))
+ 	$(if $(BR2_PACKAGE_KTAP),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS,$(@D)/.config)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_ENABLE_DEFAULT_TRACERS,$(@D)/.config)
