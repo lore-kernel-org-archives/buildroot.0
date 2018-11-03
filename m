@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Nov 2018 15:35:59 +0100
-Subject: [Buildroot] [PATCH 1/4] llvm: fix build of host-llvm
-In-Reply-To: <83cfc6de-40c3-9c92-1f6e-fcc0bf13ff4e@gmail.com>
-References: <20181103122758.10578-1-fontaine.fabrice@gmail.com>
- <83cfc6de-40c3-9c92-1f6e-fcc0bf13ff4e@gmail.com>
-Message-ID: <20181103153559.43c5277e@windsurf>
+Date: Sat, 3 Nov 2018 15:37:33 +0100
+Subject: [Buildroot] [PATCH 1/2] package/f2fs-tools: add host package
+In-Reply-To: <20181026200016.30856-2-grzegorz@blach.pl>
+References: <20181026200016.30856-1-grzegorz@blach.pl>
+ <20181026200016.30856-2-grzegorz@blach.pl>
+Message-ID: <20181103153733.0ada615d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +13,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 3 Nov 2018 15:15:30 +0100, Romain Naour wrote:
-
-> > @@ -10,6 +10,7 @@ config BR2_PACKAGE_LLVM_TARGET_ARCH
-> >  	default "AArch64" if BR2_aarch64
-> >  	default "ARM" if BR2_arm || BR2_armeb
-> >  	default "X86" if BR2_i386 || BR2_x86_64
-> > +	default "host"  
+On Fri, 26 Oct 2018 22:00:15 +0200, Grzegorz Blach wrote:
+> This package is useful to create f2fs filesystem during build process.
 > 
-> I'm not sure this is the correct thing to do since BR2_PACKAGE_LLVM_TARGET_ARCH
-> will be used for the target variant.
-> 
-> "host" stand for "automatic detection"
-> 
-> Maybe you want to add "X86" along with LLVM_TARGETS_TO_BUILD for host-llvm ?
-> 
-> Something like:
-> 
-> HOST_LLVM_TARGETS_TO_BUILD = $(LLVM_TARGETS_TO_BUILD) X86
+> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 
-For the host, it makes sense to use "automatic detection", so what
-about:
+Thanks, I have applied, after adding --without-selinux --without-blkid
+to HOST_F2FS_TOOLS_CONF_OPTS. --without-blkid was suggested by Yann.
+However, contrary to Yann, I don't think we should unconditionally
+enable SELinux support, so I've added a --without-selinux.
 
-HOST_LLVM_TARGETS_TO_BUILD = $(LLVM_TARGETS_TO_BUILD) host
-
-i.e, have support for the target architecture, but also the
-architecture ?
-
-However, presumably, LLVM may not have support for all host
-architectures, so this calls for a BR2_PACKAGE_HOST_LLVM_ARCH_SUPPORTS ?
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
