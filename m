@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Nov 2018 14:14:43 +0100
-Subject: [Buildroot] [PATCH 2/4] llvm: enable bpf
-In-Reply-To: <20181103122758.10578-2-fontaine.fabrice@gmail.com>
+Date: Sat, 3 Nov 2018 14:18:24 +0100
+Subject: [Buildroot] [PATCH 3/4] libv4l: add elfutils optional dependency
+In-Reply-To: <20181103122758.10578-3-fontaine.fabrice@gmail.com>
 References: <20181103122758.10578-1-fontaine.fabrice@gmail.com>
- <20181103122758.10578-2-fontaine.fabrice@gmail.com>
-Message-ID: <20181103141443.3c86e3f9@windsurf>
+ <20181103122758.10578-3-fontaine.fabrice@gmail.com>
+Message-ID: <20181103141824.6e47adbc@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +13,38 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat,  3 Nov 2018 13:27:56 +0100, Fabrice Fontaine wrote:
-> BPF (in-kernel bytecode machine) is needed by libv4l
+On Sat,  3 Nov 2018 13:27:57 +0100, Fabrice Fontaine wrote:
+> Bump to version 1.61.1 added an optional dependency to elfutils:
+> https://git.linuxtv.org/v4l-utils.git/commit/?id=d6025b0e8c7f57b0f9390f987acc5eed57360d80
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/llvm/llvm.mk | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-> index 1f9bd447f5..dae5d3f16d 100644
-> --- a/package/llvm/llvm.mk
-> +++ b/package/llvm/llvm.mk
-> @@ -54,6 +54,9 @@ ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
->  LLVM_TARGETS_TO_BUILD += AMDGPU
->  endif
->  
-> +# Build BPF (in-kernel bytecode machine)
-> +LLVM_TARGETS_TO_BUILD += BPF
+> host-clang is also needed to build PBF protocols, see:
 
-Perhaps we should make this optional ? Or maybe the build time
-difference is not that significant ?
+PBF -> BPF
 
-Best regards,
+> https://git.linuxtv.org/v4l-utils.git/commit/?id=91b37c0d9cb71fc2d5f78cc96aa2ef9f3bba145b
+
+I'm not sure to understand: there are two separate commits upstream,
+one that adds the elfutils dependency, one that adds the clang
+dependency. Are they both needed to have BPF protocols ? If so, why
+were those two dependencies introduced in separate commits upstream ?
+
+> +ifeq ($(BR2_PACKAGE_ELFUTILS),y)
+> +# host-clang is needed to build BPF protocols
+> +LIBV4L_DEPENDENCIES += elfutils host-clang
+> +endif
+
+I think an explicit sub-option would make sense in this case, because
+it's not trivial at all to know that you need elfutils. So I would
+prefer to have
+
+config BR2_PACKAGE_LIBV4L_KEYTABLE_BPF_PROTOCOLS
+	bool "keytable BPF protocols"
+	select BR2_PACKAGE_ELFUTILS
+        depends on BR2_USE_WCHAR # elfutils
+        depends on !BR2_STATIC_LIBS # elfutils
+        depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
+
+Thanks,
 
 Thomas
 -- 
