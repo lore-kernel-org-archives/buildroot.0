@@ -1,48 +1,44 @@
 From: Carlos Santos <casantos@datacom.com.br>
-Date: Sat,  3 Nov 2018 13:42:44 -0300
-Subject: [Buildroot] [PATCH 4/4] audit: bump to version 2.8.4
+Date: Sat,  3 Nov 2018 13:42:42 -0300
+Subject: [Buildroot] [PATCH 2/4] audit: ensure that it starts after the
+ logging daemon
 In-Reply-To: <20181103164244.10607-1-casantos@datacom.com.br>
 References: <20181103164244.10607-1-casantos@datacom.com.br>
-Message-ID: <20181103164244.10607-5-casantos@datacom.com.br>
+Message-ID: <20181103164244.10607-3-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix a segfault in auditd when dns resolution isn't available. Additional
-changes since 2.8.2 can be seen at
-
-    http://people.redhat.com/sgrubb/audit/ChangeLog
+audit uses syslog(). Rename its init script to S02auditd to ensure that
+it will start after syslogd. Otherwise the initial log messages will be
+sent to the console (and probably lost, since almost nobody watches the
+system console on embedded systems).
 
 Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 ---
- package/audit/audit.hash | 2 +-
- package/audit/audit.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/audit/{S01auditd => S02auditd} | 0
+ package/audit/audit.mk                 | 2 +-
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+ rename package/audit/{S01auditd => S02auditd} (100%)
 
-diff --git a/package/audit/audit.hash b/package/audit/audit.hash
-index fb37577782..8c3c9dc4af 100644
---- a/package/audit/audit.hash
-+++ b/package/audit/audit.hash
-@@ -1,4 +1,4 @@
- #Locally computed
--sha256 67b59b2b77afee9ed87afa4d80ffc8e6f3a1f4bbedd5f2871f387c952147bcba audit-2.8.2.tar.gz
-+sha256 a410694d09fc5708d980a61a5abcb9633a591364f1ecc7e97ad5daef9c898c38  audit-2.8.4.tar.gz
- sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670 COPYING
- sha256 f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa COPYING.LIB
+diff --git a/package/audit/S01auditd b/package/audit/S02auditd
+similarity index 100%
+rename from package/audit/S01auditd
+rename to package/audit/S02auditd
 diff --git a/package/audit/audit.mk b/package/audit/audit.mk
-index 228ef9998c..0988f88d8d 100644
+index 2f6e6653b3..228ef9998c 100644
 --- a/package/audit/audit.mk
 +++ b/package/audit/audit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -38,7 +38,7 @@ AUDIT_CONF_OPTS += --disable-systemd
+ endif
  
--AUDIT_VERSION = 2.8.2
-+AUDIT_VERSION = 2.8.4
- AUDIT_SITE = http://people.redhat.com/sgrubb/audit
- AUDIT_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
- AUDIT_LICENSE_FILES = COPYING COPYING.LIB
+ define AUDIT_INSTALL_INIT_SYSV
+-	$(INSTALL) -D -m 755 package/audit/S01auditd $(TARGET_DIR)/etc/init.d/S01auditd
++	$(INSTALL) -D -m 755 package/audit/S02auditd $(TARGET_DIR)/etc/init.d/S02auditd
+ endef
+ 
+ define AUDIT_INSTALL_INIT_SYSTEMD
 -- 
 2.17.1
