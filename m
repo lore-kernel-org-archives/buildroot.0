@@ -1,53 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Nov 2018 14:20:20 +0100
-Subject: [Buildroot] [PATCH 4/4] scripts/check-bin-arch: fix failure
- with bpf
-In-Reply-To: <20181103122758.10578-4-fontaine.fabrice@gmail.com>
-References: <20181103122758.10578-1-fontaine.fabrice@gmail.com>
- <20181103122758.10578-4-fontaine.fabrice@gmail.com>
-Message-ID: <20181103142020.0d7e9005@windsurf>
+Date: Sat, 3 Nov 2018 14:26:07 +0100
+Subject: [Buildroot] [PATCH 1/1] mpv: disable static build with qt-zlib
+In-Reply-To: <20181102182416.27015-1-fontaine.fabrice@gmail.com>
+References: <20181102182416.27015-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181103142607.59465b91@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Fabrice,
 
-On Sat,  3 Nov 2018 13:27:58 +0100, Fabrice Fontaine wrote:
-> Do not return an error if architecture is "Linux BPF" (in-kernel
-> bytecode machine)
+On Fri,  2 Nov 2018 19:24:16 +0100, Fabrice Fontaine wrote:
+> Static build of mpv with qt-zlib will fail because zlib and qt-zlib
+> defines the same functions (inflateReset, inflatePrime ...)
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/c18fb7f1ac81496db9c3a4e91ea028a26ca600b0
+> So add a dependency on !(BR2_STATIC_LIBS && BR2_PACKAGE_QT_QTZLIB)
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  support/scripts/check-bin-arch | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/support/scripts/check-bin-arch b/support/scripts/check-bin-arch
-> index 7f97696735..a0de7a6ac4 100755
-> --- a/support/scripts/check-bin-arch
-> +++ b/support/scripts/check-bin-arch
-> @@ -74,6 +74,11 @@ while read f; do
->  		continue
->  	fi
->  
-> +	# If architecture is Linux BPF (in-kernel bytecode machine), continue
-> +	if test "${arch}" = "Linux BPF" ; then
-> +		continue
-> +	fi
+> Theoretically, this dependency should be put on zlib package on all its
+> reverse dependencies but this make a lot of packages
 
-In the build failure
-http://autobuild.buildroot.org/results/c18fb7f1ac81496db9c3a4e91ea028a26ca600b0/build-end.log
-that you point, the architecture is reported as "None", not as "Linux
-BPF". Am I misunderstanding something here ?
+Why? zlib doesn't have any problem at all.
 
-As a first step, could we explicitly disable building BPF protocols,
-before we merge the necessary LLVM/V4L logic to build these properly ?
+I don't think this patch is the right solution. First, because the
+problem is in Qt, not in MPV. Fixing it at the MPV level means that all
+other packages that use Qt may still be affected by the same issue.
 
-Thanks,
+I believe the problem comes the fact that Qt can use Zlib in two modes:
+with a built-in zlib copy (BR2_PACKAGE_QT_QTZLIB) and with the system
+zlib (BR2_PACKAGE_QT_SYSTEMZLIB). Because those options are part of a
+choice, and choices are not randomized by the autobuilder
+infrastructure, only BR2_PACKAGE_QT_QTZLIB gets tested and
+BR2_PACKAGE_QT_SYSTEMZLIB is never tested.
+
+I believe that with BR2_PACKAGE_QT_SYSTEMZLIB, the static build should
+work, because there is only one copy of the zlib functions, in libz.a.
+The problem with BR2_PACKAGE_QT_QTZLIB is that you end up with two
+copies of all zlib functions: one in libz.a and one in libQtCore.a.
+
+It would be great if you could confirm that the same configuration
+builds properly when BR2_PACKAGE_QT_SYSTEMZLIB is used instead of
+BR2_PACKAGE_QT_QTZLIB. If that is the case, then I believe the right
+fix is to add a depends on !BR2_STATIC_LIBS to the
+BR2_PACKAGE_QT_QTZLIB option.
+
+Thanks!
 
 Thomas
 -- 
