@@ -1,56 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Nov 2018 15:17:02 +0100
-Subject: [Buildroot] [git commit] fs/f2fs: add option to define list of cold
- file extensions
-Message-ID: <20181103143121.EE8968354A@busybox.osuosl.org>
+Date: Sat, 3 Nov 2018 15:35:59 +0100
+Subject: [Buildroot] [PATCH 1/4] llvm: fix build of host-llvm
+In-Reply-To: <83cfc6de-40c3-9c92-1f6e-fcc0bf13ff4e@gmail.com>
+References: <20181103122758.10578-1-fontaine.fabrice@gmail.com>
+ <83cfc6de-40c3-9c92-1f6e-fcc0bf13ff4e@gmail.com>
+Message-ID: <20181103153559.43c5277e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0446f34d97c1098a95bcb90eb6167033932ec831
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-[Thomas: split from the initial patch from Grzegorz]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- fs/f2fs/Config.in | 7 +++++++
- fs/f2fs/f2fs.mk   | 4 +++-
- 2 files changed, 10 insertions(+), 1 deletion(-)
+On Sat, 3 Nov 2018 15:15:30 +0100, Romain Naour wrote:
 
-diff --git a/fs/f2fs/Config.in b/fs/f2fs/Config.in
-index e62bc652ef..ca838096d9 100644
---- a/fs/f2fs/Config.in
-+++ b/fs/f2fs/Config.in
-@@ -18,4 +18,11 @@ config BR2_TARGET_ROOTFS_F2FS_SIZE
- 	  Suffix with K, M, G or T for power-of-two kilo-, mega-, giga-
- 	  or terabytes.
- 
-+config BR2_TARGET_ROOTFS_F2FS_COLD_FILES
-+	string "extension list for cold files"
-+	help
-+	  Specify a file extension list in order f2fs to treat them as
-+	  cold files. The default list includes most of multimedia
-+	  file extensions such as jpg, gif, mpeg, mkv, and so on.
-+
- endif # BR2_TARGET_ROOTFS_F2FS
-diff --git a/fs/f2fs/f2fs.mk b/fs/f2fs/f2fs.mk
-index c954386b05..6025aad4bb 100644
---- a/fs/f2fs/f2fs.mk
-+++ b/fs/f2fs/f2fs.mk
-@@ -13,10 +13,12 @@ endif
- # variable is not qstrip-ed to preserve the integrity of the string value.
- F2FS_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_F2FS_LABEL))
- # ")
-+F2FS_COLD_FILES = $(call qstrip,$(BR2_TARGET_ROOTFS_F2FS_COLD_FILES))
- 
- F2FS_OPTS = \
- 	-f \
--	-l "$(F2FS_LABEL)"
-+	-l "$(F2FS_LABEL)" \
-+	$(if $(F2FS_COLD_FILES),-e "$(F2FS_COLD_FILES)")
- 
- ROOTFS_F2FS_DEPENDENCIES = host-f2fs-tools
- 
+> > @@ -10,6 +10,7 @@ config BR2_PACKAGE_LLVM_TARGET_ARCH
+> >  	default "AArch64" if BR2_aarch64
+> >  	default "ARM" if BR2_arm || BR2_armeb
+> >  	default "X86" if BR2_i386 || BR2_x86_64
+> > +	default "host"  
+> 
+> I'm not sure this is the correct thing to do since BR2_PACKAGE_LLVM_TARGET_ARCH
+> will be used for the target variant.
+> 
+> "host" stand for "automatic detection"
+> 
+> Maybe you want to add "X86" along with LLVM_TARGETS_TO_BUILD for host-llvm ?
+> 
+> Something like:
+> 
+> HOST_LLVM_TARGETS_TO_BUILD = $(LLVM_TARGETS_TO_BUILD) X86
+
+For the host, it makes sense to use "automatic detection", so what
+about:
+
+HOST_LLVM_TARGETS_TO_BUILD = $(LLVM_TARGETS_TO_BUILD) host
+
+i.e, have support for the target architecture, but also the
+architecture ?
+
+However, presumably, LLVM may not have support for all host
+architectures, so this calls for a BR2_PACKAGE_HOST_LLVM_ARCH_SUPPORTS ?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
