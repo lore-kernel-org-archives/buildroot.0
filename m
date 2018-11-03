@@ -1,15 +1,29 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Sat, 3 Nov 2018 20:13:26 -0200 (BRST)
-Subject: [Buildroot] [PATCH v2] fs: allow filesystems to set the name of
- their output file
-In-Reply-To: <20181025002043.2235-1-casantos@datacom.com.br>
-References: <20181024143616.GA31663@scaer>
- <20181025002043.2235-1-casantos@datacom.com.br>
-Message-ID: <530565277.26618.1541283206048.JavaMail.zimbra@datacom.com.br>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 3 Nov 2018 23:15:00 +0100
+Subject: [Buildroot] [PATCH 1/1] mpv: disable static build with qt-zlib
+In-Reply-To: <20181103142607.59465b91@windsurf>
+References: <20181102182416.27015-1-fontaine.fabrice@gmail.com>
+ <20181103142607.59465b91@windsurf>
+Message-ID: <f4c48e31-b230-5fbd-80d3-1504000852e3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Superseded-by: https://patchwork.ozlabs.org/patch/992684/
+
+
+On 03/11/18 14:26, Thomas Petazzoni wrote:
+[snip]
+> It would be great if you could confirm that the same configuration
+> builds properly when BR2_PACKAGE_QT_SYSTEMZLIB is used instead of
+> BR2_PACKAGE_QT_QTZLIB. If that is the case, then I believe the right
+> fix is to add a depends on !BR2_STATIC_LIBS to the
+> BR2_PACKAGE_QT_QTZLIB option.
+
+ Or maybe remove the QTZLIB option entirely.
+
+ (Or maybe remove qt4 entirely :-)
+
+ Regards,
+ Arnout
