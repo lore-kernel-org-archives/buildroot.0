@@ -1,39 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Nov 2018 14:28:10 +0100
-Subject: [Buildroot] [PATCH v1] libv4l: add missing bpf_common.h header
-In-Reply-To: <20181102190108.29507-1-ps.report@gmx.net>
-References: <20181102190108.29507-1-ps.report@gmx.net>
-Message-ID: <20181103142810.7c8fe947@windsurf>
+Date: Sat, 3 Nov 2018 14:28:25 +0100
+Subject: [Buildroot] [git commit] package/bdwgc: drop AUTORECONF = YES
+Message-ID: <20181103132614.A885F882D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8bba9e78d886fe7958fbbd9c02f93e9d4bec04c3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  2 Nov 2018 20:01:08 +0100, Peter Seiderer wrote:
-> Fixes [1] (for older toolchains not providing this header):
-> 
->     CC       keytable.o
->   In file included from bpf.h:26:0,
->                    from keytable.c:37:
->   ../../include/linux/bpf.h:12:10: fatal error: linux/bpf_common.h: No such file or directory
->    #include <linux/bpf_common.h>
->             ^~~~~~~~~~~~~~~~~~~~
-> 
-> [1] http://autobuild.buildroot.org/results/d22c0939eed4bc949f7eaeae7595d01ec45cc2cd
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  .../0005-Add-missing-linux-bpf_common.h.patch | 80 +++++++++++++++++++
->  1 file changed, 80 insertions(+)
->  create mode 100644 package/libv4l/0005-Add-missing-linux-bpf_common.h.patch
+Since commit 4e1dbd063d1f3ea7dfc95698320f6fd40139085d ("package/bdwgc:
+bump to version 8.0.0"), we no longer have any patch that requires
+autoreconf. In addition, the libtool shipped with the package seems to
+no longer be bogus, because it builds perfectly fine without
+autoreconf. Therefore, let's drop this autoreconf.
 
-Applied to master, thanks. Could you submit this upstream? Thanks!
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/bdwgc/bdwgc.mk | 6 ------
+ 1 file changed, 6 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
+index 8607234e5d..8ffac476f3 100644
+--- a/package/bdwgc/bdwgc.mk
++++ b/package/bdwgc/bdwgc.mk
+@@ -13,12 +13,6 @@ BDWGC_LICENSE_FILES = README.QUICK
+ BDWGC_DEPENDENCIES = libatomic_ops host-pkgconf
+ HOST_BDWGC_DEPENDENCIES = host-libatomic_ops host-pkgconf
+ 
+-# The libtool shipped with the package is bogus and generates some
+-# -L/usr/lib flags. It uses a version not supported by Buildroot
+-# libtool patches, so autoreconfiguring the packages is the easiest
+-# solution.
+-BDWGC_AUTORECONF = YES
+-
+ BDWGC_CONF_OPTS = CFLAGS_EXTRA="$(BDWGC_CFLAGS_EXTRA)"
+ ifeq ($(BR2_sparc),y)
+ BDWGC_CFLAGS_EXTRA += -DAO_NO_SPARC_V9
