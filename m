@@ -1,50 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Nov 2018 15:00:33 +0100
-Subject: [Buildroot] [PATCH 4/4] scripts/check-bin-arch: fix failure
- with bpf
-In-Reply-To: <CAPi7W80r=y9NZseUxw31Mq_9nhPcRjK+AJrE_TbjvXUzGehnNw@mail.gmail.com>
-References: <20181103122758.10578-1-fontaine.fabrice@gmail.com>
- <20181103122758.10578-4-fontaine.fabrice@gmail.com>
- <20181103142020.0d7e9005@windsurf>
- <CAPi7W80r=y9NZseUxw31Mq_9nhPcRjK+AJrE_TbjvXUzGehnNw@mail.gmail.com>
-Message-ID: <20181103150033.1e4d78d2@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  3 Nov 2018 15:06:09 +0100
+Subject: [Buildroot] [PATCH 1/1] libv4l: disable clang
+Message-ID: <20181103140609.4528-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+For the time being, disable clang that is used to build BPF (in-kernel
+bytecode machine) protocols.
+Indeed, if an old version of clang is found on the host, it could be
+used to build object files with a "None" architecture which will be
+rejected by support/scripts/check-bin-arch
 
-On Sat, 3 Nov 2018 14:53:48 +0100, Fabrice Fontaine wrote:
+Fixes:
+ - http://autobuild.buildroot.org/results/c18fb7f1ac81496db9c3a4e91ea028a26ca600b0
 
-> I wasn't able to reproduce this "None" architecture issue.
-> But I think it was "None" because the llvm/clang found on Peter's
-> machine was very old (3.8):
-> clang -idirafter /usr/local/include -idirafter
-> /usr/lib/llvm-3.8/bin/../lib/clang/3.8.1/include -idirafter
-> /usr/include/x86_64-linux-gnu -idirafter /usr/include
-> -I../../../include -target bpf -O2 -c grundig.c
-> 
-> With my patch's serie, I'm building a host-clang in version 7.0 that
-> supports BPF and in this case the architecture is correctly set to
-> "Linux BPF".
-> I tested with a clang in version 6.0 installed from Ubuntu 18.04
-> repositories on my host machine and it was also "Linux BPF".
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libv4l/libv4l.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-OK, but then you're not fixing the problem on Peter's machine: with
-your patch series, if he doesn't enable BR2_PACKAGE_ELFUTILS, libv4l
-configure script will still detect the system-wide clang/llvm
-installed, which will produce those bogus "None" binaries.
-
-Which is why there is a need to explicitly disable building the BPF
-protocol support, except if we know that Buildroot is providing all the
-necessary dependencies.
-
-Thanks!
-
-Thomas
+diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
+index 4e82dea6ad..f473c03806 100644
+--- a/package/libv4l/libv4l.mk
++++ b/package/libv4l/libv4l.mk
+@@ -55,6 +55,10 @@ endif
+ ifeq ($(BR2_PACKAGE_LIBV4L_UTILS),y)
+ LIBV4L_CONF_OPTS += --enable-v4l-utils
+ LIBV4L_DEPENDENCIES += $(TARGET_NLS_DEPENDENCIES)
++
++# Disable clang that is used to build BPF (in-kernel bytecode machine) protocols
++LIBV4L_CONF_ENV += ac_cv_prog_CLANG=""
++
+ ifeq ($(BR2_PACKAGE_QT5BASE)$(BR2_PACKAGE_QT5BASE_GUI)$(BR2_PACKAGE_QT5BASE_WIDGETS),yyy)
+ LIBV4L_CONF_OPTS += --enable-qv4l2
+ LIBV4L_DEPENDENCIES += qt5base
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
