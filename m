@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Nov 2018 14:18:24 +0100
-Subject: [Buildroot] [PATCH 3/4] libv4l: add elfutils optional dependency
-In-Reply-To: <20181103122758.10578-3-fontaine.fabrice@gmail.com>
+Date: Sat, 3 Nov 2018 14:20:20 +0100
+Subject: [Buildroot] [PATCH 4/4] scripts/check-bin-arch: fix failure
+ with bpf
+In-Reply-To: <20181103122758.10578-4-fontaine.fabrice@gmail.com>
 References: <20181103122758.10578-1-fontaine.fabrice@gmail.com>
- <20181103122758.10578-3-fontaine.fabrice@gmail.com>
-Message-ID: <20181103141824.6e47adbc@windsurf>
+ <20181103122758.10578-4-fontaine.fabrice@gmail.com>
+Message-ID: <20181103142020.0d7e9005@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +14,38 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat,  3 Nov 2018 13:27:57 +0100, Fabrice Fontaine wrote:
-> Bump to version 1.61.1 added an optional dependency to elfutils:
-> https://git.linuxtv.org/v4l-utils.git/commit/?id=d6025b0e8c7f57b0f9390f987acc5eed57360d80
+On Sat,  3 Nov 2018 13:27:58 +0100, Fabrice Fontaine wrote:
+> Do not return an error if architecture is "Linux BPF" (in-kernel
+> bytecode machine)
 > 
-> host-clang is also needed to build PBF protocols, see:
+> Fixes:
+>  - http://autobuild.buildroot.org/results/c18fb7f1ac81496db9c3a4e91ea028a26ca600b0
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  support/scripts/check-bin-arch | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/support/scripts/check-bin-arch b/support/scripts/check-bin-arch
+> index 7f97696735..a0de7a6ac4 100755
+> --- a/support/scripts/check-bin-arch
+> +++ b/support/scripts/check-bin-arch
+> @@ -74,6 +74,11 @@ while read f; do
+>  		continue
+>  	fi
+>  
+> +	# If architecture is Linux BPF (in-kernel bytecode machine), continue
+> +	if test "${arch}" = "Linux BPF" ; then
+> +		continue
+> +	fi
 
-PBF -> BPF
+In the build failure
+http://autobuild.buildroot.org/results/c18fb7f1ac81496db9c3a4e91ea028a26ca600b0/build-end.log
+that you point, the architecture is reported as "None", not as "Linux
+BPF". Am I misunderstanding something here ?
 
-> https://git.linuxtv.org/v4l-utils.git/commit/?id=91b37c0d9cb71fc2d5f78cc96aa2ef9f3bba145b
-
-I'm not sure to understand: there are two separate commits upstream,
-one that adds the elfutils dependency, one that adds the clang
-dependency. Are they both needed to have BPF protocols ? If so, why
-were those two dependencies introduced in separate commits upstream ?
-
-> +ifeq ($(BR2_PACKAGE_ELFUTILS),y)
-> +# host-clang is needed to build BPF protocols
-> +LIBV4L_DEPENDENCIES += elfutils host-clang
-> +endif
-
-I think an explicit sub-option would make sense in this case, because
-it's not trivial at all to know that you need elfutils. So I would
-prefer to have
-
-config BR2_PACKAGE_LIBV4L_KEYTABLE_BPF_PROTOCOLS
-	bool "keytable BPF protocols"
-	select BR2_PACKAGE_ELFUTILS
-        depends on BR2_USE_WCHAR # elfutils
-        depends on !BR2_STATIC_LIBS # elfutils
-        depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
+As a first step, could we explicitly disable building BPF protocols,
+before we merge the necessary LLVM/V4L logic to build these properly ?
 
 Thanks,
 
