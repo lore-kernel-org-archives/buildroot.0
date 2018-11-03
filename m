@@ -1,89 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Nov 2018 15:02:07 +0100
-Subject: [Buildroot] [git commit] package/f2fs-tools: add host variant
-Message-ID: <20181103143121.DEBBF88407@busybox.osuosl.org>
+Date: Sat, 3 Nov 2018 15:17:02 +0100
+Subject: [Buildroot] [git commit] fs/f2fs: add option to define list of cold
+ file extensions
+Message-ID: <20181103143121.EE8968354A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a879a6bc28cb5378ed692a04f50dc265b3e9d8b2
+commit: https://git.buildroot.net/buildroot/commit/?id=0446f34d97c1098a95bcb90eb6167033932ec831
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Having a host variant of this package is useful to create f2fs
-filesystem images.
-
 Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-[Thomas: add explicit --without-blkid and --without-selinux options,
-following the review from Yann E. Morin.]
+[Thomas: split from the initial patch from Grzegorz]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                        | 1 +
- package/Config.in.host            | 1 +
- package/f2fs-tools/Config.in.host | 7 +++++++
- package/f2fs-tools/f2fs-tools.mk  | 9 +++++++++
- 4 files changed, 18 insertions(+)
+ fs/f2fs/Config.in | 7 +++++++
+ fs/f2fs/f2fs.mk   | 4 +++-
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 49ff2487cd..179f30451f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -891,6 +891,7 @@ F:	package/sofia-sip/
+diff --git a/fs/f2fs/Config.in b/fs/f2fs/Config.in
+index e62bc652ef..ca838096d9 100644
+--- a/fs/f2fs/Config.in
++++ b/fs/f2fs/Config.in
+@@ -18,4 +18,11 @@ config BR2_TARGET_ROOTFS_F2FS_SIZE
+ 	  Suffix with K, M, G or T for power-of-two kilo-, mega-, giga-
+ 	  or terabytes.
  
- N:	Grzegorz Blach <grzegorz@blach.pl>
- F:	package/bluez5_utils-headers/
-+F:	package/f2fs-tools/
- F:	package/pigpio/
- F:	package/python-falcon/
- F:	package/python-mimeparse/
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 3a3578ceeb..16b474fc9d 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -16,6 +16,7 @@ menu "Host utilities"
- 	source "package/dtc/Config.in.host"
- 	source "package/e2fsprogs/Config.in.host"
- 	source "package/e2tools/Config.in.host"
-+	source "package/f2fs-tools/Config.in.host"
- 	source "package/faketime/Config.in.host"
- 	source "package/fwup/Config.in.host"
- 	source "package/genext2fs/Config.in.host"
-diff --git a/package/f2fs-tools/Config.in.host b/package/f2fs-tools/Config.in.host
-new file mode 100644
-index 0000000000..19c77b9c89
---- /dev/null
-+++ b/package/f2fs-tools/Config.in.host
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_HOST_F2FS_TOOLS
-+	bool "host f2fs-tools"
-+	select BR2_PACKAGE_HOST_UTIL_LINUX
++config BR2_TARGET_ROOTFS_F2FS_COLD_FILES
++	string "extension list for cold files"
 +	help
-+	  Tools for Flash-Friendly File System (F2FS)
++	  Specify a file extension list in order f2fs to treat them as
++	  cold files. The default list includes most of multimedia
++	  file extensions such as jpg, gif, mpeg, mkv, and so on.
 +
-+	  https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git
-diff --git a/package/f2fs-tools/f2fs-tools.mk b/package/f2fs-tools/f2fs-tools.mk
-index 119cef35cc..ba16218bda 100644
---- a/package/f2fs-tools/f2fs-tools.mk
-+++ b/package/f2fs-tools/f2fs-tools.mk
-@@ -9,6 +9,7 @@ F2FS_TOOLS_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-to
- F2FS_TOOLS_SITE_METHOD = git
- F2FS_TOOLS_CONF_ENV = ac_cv_file__git=no
- F2FS_TOOLS_DEPENDENCIES = host-pkgconf util-linux
-+HOST_F2FS_TOOLS_DEPENDENCIES = host-pkgconf host-util-linux
- # GIT version, shipped without configure
- F2FS_TOOLS_AUTORECONF = YES
- F2FS_TOOLS_INSTALL_STAGING = YES
-@@ -29,4 +30,12 @@ else
- F2FS_TOOLS_CONF_OPTS += --without-blkid
- endif
+ endif # BR2_TARGET_ROOTFS_F2FS
+diff --git a/fs/f2fs/f2fs.mk b/fs/f2fs/f2fs.mk
+index c954386b05..6025aad4bb 100644
+--- a/fs/f2fs/f2fs.mk
++++ b/fs/f2fs/f2fs.mk
+@@ -13,10 +13,12 @@ endif
+ # variable is not qstrip-ed to preserve the integrity of the string value.
+ F2FS_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_F2FS_LABEL))
+ # ")
++F2FS_COLD_FILES = $(call qstrip,$(BR2_TARGET_ROOTFS_F2FS_COLD_FILES))
  
-+# blkid is only used to detect if we're overwriting a filesystem
-+# during mkfs, which only makes sense on the target, so we disable
-+# blkid support even if we have host-util-linux
-+HOST_F2FS_TOOLS_CONF_OPTS = \
-+	--without-selinux \
-+	--without-blkid
-+
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+ F2FS_OPTS = \
+ 	-f \
+-	-l "$(F2FS_LABEL)"
++	-l "$(F2FS_LABEL)" \
++	$(if $(F2FS_COLD_FILES),-e "$(F2FS_COLD_FILES)")
+ 
+ ROOTFS_F2FS_DEPENDENCIES = host-f2fs-tools
+ 
