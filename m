@@ -1,132 +1,131 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Nov 2018 10:22:33 +0100
-Subject: [Buildroot] [PATCH 1/1] package/vsomeip: add vsomeip to bildroot
-In-Reply-To: <DBXPR03MB493D98B7C74731F638479FFA0F40@DBXPR03MB493.eurprd03.prod.outlook.com>
-References: <DBXPR03MB493D98B7C74731F638479FFA0F40@DBXPR03MB493.eurprd03.prod.outlook.com>
-Message-ID: <20181103102233.56d87c05@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 3 Nov 2018 11:37:02 +0100
+Subject: [Buildroot] [PATCH] fs: allow filesystems to set the name of
+ their output file
+In-Reply-To: <20181024143616.GA31663@scaer>
+References: <20181021132626.GA23085@scaer>
+ <20181024010149.3970-1-casantos@datacom.com.br>
+ <20181024143616.GA31663@scaer>
+Message-ID: <649da177-0e70-3e8a-d4ff-934d49b9c530@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Maik,
 
-Thanks for your contribution! Since it's your first contribution, I
-obviously have a few comments, but it's nice to see contributions from
-Continental! See below for my comments.
 
-On Mon, 22 Oct 2018 10:33:43 +0000, Brenke, Maik wrote:
-
-> attached I want to commit a patch to add the vsomeip library to the buildroot system.
-
-First of all, please don't "attach" patches, instead use the "git
-send-email" tool to send your patches. This will ensure they are sent
-the proper way, and can be applied.
-
-> From 21a47c26a09c1fd2c81f60269f0a07ff71d7baa4 Mon Sep 17 00:00:00 2001
+On 24/10/18 16:36, Yann E. MORIN wrote:
+> On 2018-10-23 22:01 -0300, Carlos Santos spake thusly:
+>> Some filesystems may want to tweak their output names, rather than using
+>> the fixed "rootfs.foo" scheme. Add a ROOTFS_FOO_IMAGE_NAME variable for
+>> this purpose and document it.
+>>
+>> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+>> ---
+>> NOTE: https://patchwork.ozlabs.org/patch/927116/ must be upated to
+>> document this.
+>> ---
+>>  fs/common.mk | 11 ++++++-----
+>>  1 file changed, 6 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/fs/common.mk b/fs/common.mk
+>> index 453da6010a..22ca56a1ff 100644
+>> --- a/fs/common.mk
+>> +++ b/fs/common.mk
+>> @@ -106,6 +106,7 @@ rootfs-common-show-depends:
+>>  # all variable references except the arguments must be $$-quoted.
+>>  define inner-rootfs
+>>  
+>> +ROOTFS_$(2)_IMAGE_NAME ?= rootfs.$(1)
+>>  ROOTFS_$(2)_DIR = $$(FS_DIR)/$(1)
+>>  ROOTFS_$(2)_TARGET_DIR = $$(ROOTFS_$(2)_DIR)/target
+>>  
+>> @@ -140,10 +141,10 @@ ROOTFS_$(2)_COMPRESS_EXT = .xz
+>>  ROOTFS_$(2)_COMPRESS_CMD = xz -9 -C crc32 -c
+>>  endif
+>>  
+>> -$$(BINARIES_DIR)/rootfs.$(1): ROOTFS=$(2)
+>> -$$(BINARIES_DIR)/rootfs.$(1): FAKEROOT_SCRIPT=$$(ROOTFS_$(2)_DIR)/fakeroot
+>> -$$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
+>> -	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
+>> +$$(BINARIES_DIR)/$$(ROOTFS_$(2)_IMAGE_NAME): ROOTFS=$(2)
 > 
-> From: Maik Brenke <maik.brenke@continental-corporation.com>
-> Date: Thu, 18 Oct 2018 12:16:47 +0200
-> Subject: [PATCH] add-vsomeip-library-(automotive-ethernet-protocol)
-
-The commit title should be:
-
-	package/vsomeip: new package
-
+> This unfortunately does not work when the filesystem gets 'imaginative'
+> when setting that variable.
 > 
-> Signed-off-by: Maik Brenke <maik.brenke@continental-corporation.com>
-> ---
->  package/Config.in          |  1 +
->  package/vsomeip/Config.in  | 25 +++++++++++++++++++++++++
->  package/vsomeip/vsomeip.mk | 13 +++++++++++++
->  3 files changed, 39 insertions(+)
+> For example, I tweaked the ext2 fs in Buildroot to remove the current
+> hook, and replacing it with a conditionally set name:
+> 
+>     diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
+>     index 6bb4b1c7f8..923ccdca2f 100644
+>     --- a/fs/ext2/ext2.mk
+>     +++ b/fs/ext2/ext2.mk
+>     @@ -40,7 +40,13 @@ ifneq ($(BR2_TARGET_ROOTFS_EXT2_GEN),2)
+>      define ROOTFS_EXT2_SYMLINK
+>      	ln -sf rootfs.ext2$(ROOTFS_EXT2_COMPRESS_EXT) $(BINARIES_DIR)/rootfs.ext$(BR2_TARGET_ROOTFS_EXT2_GEN)$(ROOTFS_EXT2_COMPRESS_EXT)
+>      endef
+>     -ROOTFS_EXT2_POST_GEN_HOOKS += ROOTFS_EXT2_SYMLINK
+>     +#ROOTFS_EXT2_POST_GEN_HOOKS += ROOTFS_EXT2_SYMLINK
+>      endif
+>      
+>     +ROOTFS_EXT2_IMAGE_NAME = \
+>     +	$(if $(BR2_TARGET_ROOTFS_EXT2_2r0),rootfs.ext2) \
+>     +	$(if $(BR2_TARGET_ROOTFS_EXT2_2r1),rootfs.ext2) \
+>     +	$(if $(BR2_TARGET_ROOTFS_EXT2_3),rootfs.ext3) \
+>     +	$(if $(BR2_TARGET_ROOTFS_EXT2_4),rootfs.ext4)
 
-Please add an entry in the DEVELOPERS file for this new package. This
-allows us to know who is taking care of which package. This also allows
-you to get notified when there are build issues with this package, or
-get CC'ed when other people contribute patches touching this package.
+ NACK that. You're defining ROOTFS_EXT2_IMAGE_NAME to contain spaces, so I think
+that's a bug on your side, not on the side where we use the variable. The proper
+definition of this variable would be:
 
-Also, your package lacks a vsomeip.hash, which should contain the hash
-of the tarball being downloaded, as well as the hash of the license
-file (see other packages for examples).
+ifeq ($(BR2_TARGET_ROOTFS_EXT2_2r0),y)
+ROOTFS_EXT2_IMAGE_NAME = rootfs.ext2
+else ifeq (....)
+...
 
-> diff --git a/package/vsomeip/Config.in b/package/vsomeip/Config.in
-> new file mode 100644
-> index 0000000..9c04162
-> --- /dev/null
-> +++ b/package/vsomeip/Config.in
-> @@ -0,0 +1,25 @@
-> +config BR2_PACKAGE_VSOMEIP
-> +    bool "vsomeip"
-> +    depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-> +    depends on BR2_INSTALL_LIBSTDCPP
-> +    depends on BR2_TOOLCHAIN_HAS_THREADS # boost
-> +    depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
-> +    select BR2_PACKAGE_BOOST
-> +    select BR2_PACKAGE_BOOST_SYSTEM
-> +    select BR2_PACKAGE_BOOST_THREAD
-> +    select BR2_PACKAGE_BOOST_LOG
-> +    help
-> +      The vsomeip stack implements the Scalable service-Oriented
-> +      MiddlewarE over IP (SOME/IP)) protocol (http://some-ip.com/).
-> +      The stack consists out of:
-> +
-> +       * a shared library for SOME/IP (`libvsomeip.so`)
-> +       * a second shared library for SOME/IP's service discovery
-> +         (`libvsomeip-sd.so`) which is loaded during runtime if
-> +         the service discovery is enabled.
-> +
-> +      https://github.com/GENIVI/vsomeip
-> +
-> +comment "vsomeip needs toolchain w/ C++, threads; gcc >= 4.8; Boost system, thread, log"
+ Because this is a bit verbose, we often handle the "switch" in Config.in rather
+than *.mk.
 
-No need to indicate Boost system, thread, log in the comment: these are
-selected.
+ You should know this stuff :-)
 
-> +    depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
-> +    depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ Bottom line: NACK against the stripping, Carlos' original patch was fine.
 
-You forgot || !BR2_TOOLCHAIN_HAS_THREADS
+ Regards,
+ Arnout
 
-Also, BR2_PACKAGE_BOOST has a dependency on BR2_USE_WCHAR, so it should
-be replicated as well to your package.
-
-> diff --git a/package/vsomeip/vsomeip.mk b/package/vsomeip/vsomeip.mk
-> new file mode 100644
-> index 0000000..81b25de
-> --- /dev/null
-> +++ b/package/vsomeip/vsomeip.mk
-> @@ -0,0 +1,13 @@
-> +################################################################################
-> +#
-> +# vsomeip
-> +#
-> +################################################################################
-> +
-> +VSOMEIP_VERSION = 2.10.21
-> +VSOMEIP_SITE = $(call github,GENIVI,vsomeip,$(VSOMEIP_VERSION))
-> +VSOMEIP_LICENSE = MPL
-
-According to https://spdx.org/licenses/, MPL is not a valid SPDX
-license tag, it needs to have the license version. Looking at
-https://github.com/GENIVI/vsomeip/blob/master/LICENSE, it's version
-2.0, so:
-
-VSOMEIP_LICENSE = MPL-2.0
-
-> +VSOMEIP_LICENSE_FILES = LICENSE
-> +VSOMEIP_DEPENDENCIES = boost
-> +
-> +$(eval $(cmake-package))
-
-Could you adjust your patch according to those comments, and send an
-updated version ?
-
-Thanks a lot!
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>     +
+>      $(eval $(rootfs))
+> 
+> And then, the variable gets a leading sapce, unfortunately.
+> 
+> So, you need to qstrip the variable before using it, probably going with
+> an intermediate variable (in the fs infrastructure):
+> 
+>     ROOTFS_$(2)_IMAGE_NAME ?= rootfs.$(1)
+>     ROOTFS_$(2)_FINAL_IMAGE_NAME = $$(call qstrip,$$(ROOTFS_$()_IMAGE_NAME))
+> 
+> and then use ROOTFS_$(2)_FINAL_IMAGE_NAME to generate the rules...
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>> +$$(BINARIES_DIR)/$$(ROOTFS_$(2)_IMAGE_NAME): FAKEROOT_SCRIPT=$$(ROOTFS_$(2)_DIR)/fakeroot
+>> +$$(BINARIES_DIR)/$$(ROOTFS_$(2)_IMAGE_NAME): $$(ROOTFS_$(2)_DEPENDENCIES)
+>> +	@$$(call MESSAGE,"Generating filesystem image $$(ROOTFS_$(2)_IMAGE_NAME)")
+>>  	rm -rf $$(ROOTFS_$(2)_DIR)
+>>  	mkdir -p $$(ROOTFS_$(2)_DIR)
+>>  	echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
+>> @@ -164,7 +165,7 @@ endif
+>>  rootfs-$(1)-show-depends:
+>>  	@echo $$(ROOTFS_$(2)_DEPENDENCIES)
+>>  
+>> -rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1)
+>> +rootfs-$(1): $$(BINARIES_DIR)/$$(ROOTFS_$(2)_IMAGE_NAME)
+>>  
+>>  .PHONY: rootfs-$(1) rootfs-$(1)-show-depends
+>>  
+>> -- 
+>> 2.17.1
+>>
+> 
