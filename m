@@ -1,45 +1,45 @@
 From: Zenichi Amano <crow.misia@gmail.com>
-Date: Sun, 4 Nov 2018 20:43:05 +0900
-Subject: [Buildroot] [PATCH 1/1] package/{alsa-lib,
- alsa-utils}: bump to version to 1.1.7
-In-Reply-To: <20181104122913.456c0f13@windsurf>
-References: <20181104081241.4354-1-crow.misia@gmail.com>
- <20181104112440.52080034@windsurf>
- <CAN_c_0h1f_+naWBaCrZAWRE9LjWA3W29WJZ2qEeuyUJP_H4_9A@mail.gmail.com>
- <20181104122913.456c0f13@windsurf>
-Message-ID: <CAN_c_0h0VJwC3bBzbYa170E6aiGvkJ-xmbb-CjLzwcEkQbyL5Q@mail.gmail.com>
+Date: Sun,  4 Nov 2018 20:48:11 +0900
+Subject: [Buildroot] [PATCH v2 1/2] package/alsa-lib: bump to version to
+ 1.1.7
+Message-ID: <20181104114810.22697-1-crow.misia@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello, Thomas.
+Signed-off-by: Zenichi Amano <crow.misia@gmail.com>
+---
+Changes v1 -> v2:
+  - separete patch  (suggested by Thomas Petazzoni)
 
-> Unless there is a known problem with bumping alsa-lib separately from
-> alsa-utils, we prefer to have two separate patches.
+ package/alsa-lib/alsa-lib.hash | 2 +-
+ package/alsa-lib/alsa-lib.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I will re-create the patch.
-
-thanks.
-
-2018?11?4?(?) 20:29 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
->
-> Hello,
->
-> On Sun, 4 Nov 2018 20:09:45 +0900, Zenichi Amano wrote:
->
-> > Since "alsa-utils" depends on "alsa-lib", version bumps in the same patch.
-> >
-> > If there seems to be problems, I will recreate patches one by one.
->
-> Unless there is a known problem with bumping alsa-lib separately from
-> alsa-utils, we prefer to have two separate patches.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
+index c4f16d6df3..4373a2a592 100644
+--- a/package/alsa-lib/alsa-lib.hash
++++ b/package/alsa-lib/alsa-lib.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256 5f2cd274b272cae0d0d111e8a9e363f08783329157e8dd68b3de0c096de6d724  alsa-lib-1.1.6.tar.bz2
++sha256 9d6000b882a3b2df56300521225d69717be6741b71269e488bb20a20783bdc09  alsa-lib-1.1.7.tar.bz2
+ sha256 32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
+ sha256 bfe16cf823bcff261fc6a062c07ee96660e3c39678f42f39a788a68dbc234ced  aserver/COPYING
+diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
+index 98fc486e2d..9de45d2089 100644
+--- a/package/alsa-lib/alsa-lib.mk
++++ b/package/alsa-lib/alsa-lib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ALSA_LIB_VERSION = 1.1.6
++ALSA_LIB_VERSION = 1.1.7
+ ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
+ ALSA_LIB_SITE = ftp://ftp.alsa-project.org/pub/lib
+ ALSA_LIB_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (aserver)
+-- 
+2.19.1
