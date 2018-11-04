@@ -1,13 +1,42 @@
-From: Oscar Gomez Fuente <oscargomezf@gmail.com>
-Date: Sun, 4 Nov 2018 19:47:38 +0100
-Subject: [Buildroot] [PATCH v4] package/ntp: sntp time sync script
-In-Reply-To: <1541127154-45957-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1541127154-45957-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <CALtfCQasCTAGo2ZMj7zLozT3ZNz1Csc-+CKwMK4aeiG46eyYZQ@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  4 Nov 2018 19:49:14 +0100
+Subject: [Buildroot] [PATCH 1/1] package/tor: bump version to 0.3.4.9
+Message-ID: <20181104184914.18372-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tested-by: Oscar Gomez Fuente <oscargomezf@gmail.com>
+Release notes: https://blog.torproject.org/new-release-tor-0349
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/tor/tor.hash | 2 +-
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index e28f02dcec..71aef25d79 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 826a4cb2c099a29c7cf91516ffffcfcb5aace7533b8853a8c8bddcfe2bfb1023  tor-0.3.4.8.tar.gz
++sha256 1a171081f02b9a6ff9e28c0898defb7670e5bbb3bdbcaddfcf4e4304aedd164a  tor-0.3.4.9.tar.gz
+ sha256 f9a4f724d8037711dde7d3f1d17094fb7d211545b3a3bbb1b03e769e13ca5608  LICENSE
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index a20763a97e..0a7691d4c8 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TOR_VERSION = 0.3.4.8
++TOR_VERSION = 0.3.4.9
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
+-- 
+2.19.1
