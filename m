@@ -1,52 +1,50 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 4 Nov 2018 22:20:06 +0100
-Subject: [Buildroot] qt-webkit-kiosk on Raspberry Pi
-In-Reply-To: <CAHS=Uo8ra0EvLoVoRys_F=5Qq=J-8vaJ9e60jL97dwx+zP2oRQ@mail.gmail.com>
-References: <CAHS=Uo8ra0EvLoVoRys_F=5Qq=J-8vaJ9e60jL97dwx+zP2oRQ@mail.gmail.com>
-Message-ID: <20181104222006.6ca268bc@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 4 Nov 2018 22:25:01 +0100
+Subject: [Buildroot] [PATCH] qt5: use ccache for building host code
+In-Reply-To: <20181104221220.5805582b@gmx.net>
+References: <20181020132535.24508-1-thomas.petazzoni@bootlin.com>
+ <20181104221220.5805582b@gmx.net>
+Message-ID: <20181104222501.28e36390@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Michael,
+Hello Peter,
 
-On Wed, 31 Oct 2018 18:28:27 +0100, Michael Toldo <michael.toldo@gmail.com> wrote:
+Thanks for looking at this patch!
 
-> Hi,
-> 
-> I just tried to compile the master buildroot for the Raspberry Pi 0 W.
-> Everything worked well an I was able to boot the image. I wanted to start
-> the qt-webkit-kiosk but this error occured:
-> 
-> 
-> 
-> 
-> 
-> 
-> *qt.qpa.plugin: Could not find the Qt platform plugin "eglfs" in ""This
-> application failed to start because no Qt platform plugin could be
-> initialized. Reinstalling the application may fix this problem.Available
-> platform plugins are: linuxfb, minimal, offscreen, vnc.Aborted*
-> 
-> The .config tells me "*eglfs backend available if OpenGL and EGL are
-> enabled*" but I guess OpenGL and EGL is already supported by the
-> rpi-userland.
+On Sun, 4 Nov 2018 22:12:20 +0100, Peter Seiderer wrote:
 
-Seems your have set BR2_PACKAGE_QT5BASE_DEFAULT_QPA=eglfs without
-setting BR2_PACKAGE_QT5BASE_EGLFS=y (maybe disabled because of
-missing dependencies)? Or you need to do a complete re-build
-(after changing some options, see [1])?
-
-Mind to share your .config file?
-
-Regards,
-Peter
-
-[1] http://nightly.buildroot.org/manual.html#full-rebuild
-
+> > +# This allows to use ccache when available
+> > +define QT5BASE_CONFIGURE_HOSTCC
+> > +	$(SED) 's,^QMAKE_COMPILER\s*=.*,QMAKE_COMPILER=$(HOSTCC),' $(@D)/mkspecs/common/g++-base.conf
+> > +	$(SED) 's,^QMAKE_CC\s*=.*,QMAKE_CC=$(HOSTCC),' $(@D)/mkspecs/common/g++-base.conf
+> > +	$(SED) 's,^QMAKE_CXX\s*=.*,QMAKE_CXX=$(HOSTCXX),' $(@D)/mkspecs/common/g++-base.conf
+> > +endef
+> > +  
 > 
-> Can somebody please give me a hint?
-> 
-> Regards
+> With this sed commands applied, a qmake host compile is always using ccache (same
+> behavior already for the cross/target compile?)?
+
+I'm not sure to understand what you mean here. This change ensures that
+qmake is built with $(HOSTCC) / $(HOSTCXX) instead of gcc/g++.
+
+HOSTCC is set to "gcc" and HOSTCXX to "g++", except when BR2_CCACHE=y,
+in which case HOSTCC is "ccache gcc" and HOSTCXX is "ccache g++".
+
+So basically, this patch ensures that qmake is built with what
+Buildroot considers to be the "host compiler", which may or may not
+have ccache enabled.
+
+Does this answer your question, or perhaps I misunderstood it
+completely ?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
