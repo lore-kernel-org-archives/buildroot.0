@@ -1,46 +1,48 @@
 From: Carlos Santos <casantos@datacom.com.br>
-Date: Sun,  4 Nov 2018 19:02:37 -0200
-Subject: [Buildroot] [PATCH 0/4] update/improve intel-microcode and
- iucode-tool
-Message-ID: <20181104210241.20237-1-casantos@datacom.com.br>
+Date: Sun,  4 Nov 2018 19:02:40 -0200
+Subject: [Buildroot] [PATCH 3/4] iucode-tool: bump to version 2.3.1
+In-Reply-To: <20181104210241.20237-1-casantos@datacom.com.br>
+References: <20181104210241.20237-1-casantos@datacom.com.br>
+Message-ID: <20181104210241.20237-4-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch 1 enables MICROCODE_INTEL if intel-microcode is selected, since
-otherwise it's impossible to load microcode (by means of iucode-tools).
+Brings several fixes and enhancements. Check the change log at
 
-Patch 2 updates intel-microcode to the latest version and moves its
-installation path from /usr/share/misc/ to /lib/firmware/, along with
-the files installed by linux-firmware. That path is also used by other
-Linux distros (e.g. Ubuntu). Notice that the package now installs 100
-binary files under /lib/firmware/intel-ucode/ instead of a big text file
-at /usr/share/misc/intel-microcode.dat.
+    https://gitlab.com/iucode-tool/iucode-tool/raw/v2.3.1/ChangeLog
 
-Patch 3 updates iucode-tool to the latest version.
+Tested on an equipment with Intel C3000 processor.
 
-Patch 4 updates the iucode-tool init script. That's what I was doing
-initially. All other patches are just a consequence ot the "plucking a
-feather brings a hen" effect.
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+---
+ package/iucode-tool/iucode-tool.hash | 2 +-
+ package/iucode-tool/iucode-tool.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Patches 1, 2 and 3 can be applied in any order (I tested this) but patch
-4 is on top of patch 2.
-
-Carlos Santos (4):
-  linux: enable MICROCODE_INTEL if intel-microcode is selected
-  intel-microcode: bump to version 20180807a
-  iucode-tool: bump to version 2.3.1
-  iucode-tool: rewrite init script
-
- linux/linux.mk                               |  3 ++
- package/intel-microcode/intel-microcode.hash |  4 +-
- package/intel-microcode/intel-microcode.mk   | 16 +++-----
- package/iucode-tool/S00iucode-tool           | 39 ++++++++++++--------
- package/iucode-tool/iucode-tool.hash         |  2 +-
- package/iucode-tool/iucode-tool.mk           |  2 +-
- 6 files changed, 36 insertions(+), 30 deletions(-)
-
+diff --git a/package/iucode-tool/iucode-tool.hash b/package/iucode-tool/iucode-tool.hash
+index 1dab8de978..6d8fb635d0 100644
+--- a/package/iucode-tool/iucode-tool.hash
++++ b/package/iucode-tool/iucode-tool.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 9810daf925b8a9ca244adc4e1916bcab65601c9ebe87e91c2281f78055982971  iucode-tool_2.2.tar.xz
++sha256 12b88efa4d0d95af08db05a50b3dcb217c0eb2bfc67b483779e33d498ddb2f95  iucode-tool_2.3.1.tar.xz
+ sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/iucode-tool/iucode-tool.mk b/package/iucode-tool/iucode-tool.mk
+index 38f9da438e..e900888d7d 100644
+--- a/package/iucode-tool/iucode-tool.mk
++++ b/package/iucode-tool/iucode-tool.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IUCODE_TOOL_VERSION = 2.2
++IUCODE_TOOL_VERSION = 2.3.1
+ IUCODE_TOOL_SOURCE = iucode-tool_$(IUCODE_TOOL_VERSION).tar.xz
+ IUCODE_TOOL_SITE = https://gitlab.com/iucode-tool/releases/raw/master
+ ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
 -- 
 2.17.1
