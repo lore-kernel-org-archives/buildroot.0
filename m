@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 4 Nov 2018 21:30:14 +0100
-Subject: [Buildroot] [PATCH 1/2] Revert "package/libssh2: fix static
- linking scenarios involving mbedtls"
-In-Reply-To: <20181104125211.20852-1-fontaine.fabrice@gmail.com>
-References: <20181104125211.20852-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181104213014.243d7dd5@windsurf>
+Date: Sun, 4 Nov 2018 21:32:06 +0100
+Subject: [Buildroot] [PATCH v2,1/2] ngrep: bump to version 1.47
+In-Reply-To: <20181104121427.14889-1-fontaine.fabrice@gmail.com>
+References: <20181104121427.14889-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181104213206.649a4aee@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +12,33 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  4 Nov 2018 13:52:10 +0100, Fabrice Fontaine wrote:
-> This reverts commit 48218732a3a7b983825ff3a8cf0767f847ac8d04 because
-> LTLIBMBEDCRYPTO will return "-lmbedcrypto
-> -R/accts/mlweber1/scripts/instance-3/output/host/i586-buildroot-linux-musl/sysroot/usr/lib"
-> 
-> On some compilers, -R option won't be recognized and this will prevent
-> the detection of libz:
-> 
-> configure:17809: /accts/mlweber1/scripts/instance-3/output/host/bin/i586-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I/accts/mlweber1/scripts/instance-3/output/host/i586-buildroot-linux-musl/sysroot/usr/include  conftest.c /accts/mlweber1/scripts/instance-3/output/host/i586-buildroot-linux-musl/sysroot/usr/lib/libz.so -Wl,-rpath -Wl,/accts/mlweber1/scripts/instance-3/output/host/i586-buildroot-linux-musl/sysroot/usr/lib  -L/accts/mlweber1/scripts/instance-3/output/host/i586-buildroot-linux-musl/sysroot/usr/lib -lmbedcrypto -R/accts/mlweber1/scripts/instance-3/output/host/i586-buildroot-linux-musl/sysroot/usr/lib >&5
-> i586-linux-gcc.br_real: error: unrecognized command line option '-R'; did you mean '-R'?
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/68623f22b49473177c889fe7b12625d779cbd1ed
+On Sun,  4 Nov 2018 13:14:26 +0100, Fabrice Fontaine wrote:
+> - Switch site from sourceforge to github as there is no new releases on
+>   sourceforge and http://ngrep.sourceforge.net/ is redirected to
+>   https://github.com/jpr5/ngrep/
+> - Remove first patch, not needed since version 1.46 and
+>   https://github.com/jpr5/ngrep/commit/997c9d81d34d3a6646e6c5e363645015e644b3de
+>   as this commit added the support for system pcre
+> - Remove second patch, not needed since version 1.46 and
+>   https://github.com/jpr5/ngrep/commit/2d8fd9ac7ef1ac6947f738f6005e7b533654f331
+> - Remove third patch and LIBS=-lpcap -lpcre, not needed since 1.46 and
+>   https://github.com/jpr5/ngrep/commit/cca6e3121f2d80dd32a5a33dead9495fe40eed70
+> - LICENSE.txt has been renamed to LICENSE since version 1.47 and
+>   https://github.com/jpr5/ngrep/commit/3cb4c580a9de4afe11c2c17b0f354b59b74ae974
+> - Add an upstream patch to fix --enable-pcre: keep pcre as a mandatory
+>   dependency as this is the current behavior in version 1.45. PCRE will
+>   made optional in an other patch
+> - Remove --with-pcre which is not recognized anymore
+> - Add two other patches to fix --disable-tcpkill
+> - Add hash for license file
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/libssh2/0002-acinclude.m4-add-mbedtls-to-LIBS.patch | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
+> Changes v1 -> v2 (after review of Thomas Petazzoni):
+>  - Add --disable-tcpkill
+>  - Remove NGREP_CONF_ENV += LIBS+="$(NGREP_LIBS)"
 
-I am not a big fan of the proposed solution, but we need a fix for
-this, and what you propose is simple enough. So I've applied both
-patches to master. Thanks!
+Both applied. Thanks!
 
 Thomas
 -- 
