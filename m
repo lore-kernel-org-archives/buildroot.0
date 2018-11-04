@@ -1,42 +1,59 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  4 Nov 2018 19:51:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: bump version to 3.4.5
-Message-ID: <20181104185108.21665-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 4 Nov 2018 21:28:29 +0100
+Subject: [Buildroot] [git commit] libssh2: fix static linking scenarios
+ involving mbedtls
+Message-ID: <20181104202614.E3BF78145F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=8b575ffd1b9d0635be5de5a7848d354b53babb49
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index 7d64d8441c..e00c4ec56c 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256 386f7601e865df6bddde05bb6927119b5a853f0b92e2e9834f59c125a17d3fc6  ffmpeg-3.4.4.tar.xz
-+sha256 741cbd6394eaed370774ca4cc089eaafbc54d0824b9aa360d4b3b0cbcbc4a92c  ffmpeg-3.4.5.tar.xz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
- sha256 b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
- sha256 73d99bc83313fff665b426d6672b4e0479102bc402fe22314ac9ce94a38aa5ff  LICENSE.md
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index b8cc696f83..b86d465df8 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+curl can be statically linked with mbedtls, in this case build will fail
+on:
+kex.c:(.text+0x1be0): undefined reference to `mbedtls_mpi_read_binary'
+
+This is due to the fact that CURL_LIBRARIES does not contain mbedtls
+library:
+CURL_LIBRARIES:INTERNAL=curl;cares;ssh2;ssh2;z;ssl;crypto;z;z;crypto;z;z;ssl;z;z;crypto;z
+
+even if libcurl.pc is correct:
+Libs.private: -lcares -lssh2 -L/home/fabrice/buildroot/output/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -lssh2 /home/fabrice/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libmbedcrypto.a /home/fabrice/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libmbedcrypto.a -L/home/fabrice/buildroot/output/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -L/home/fabrice/buildroot/output/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -lz -lssl -lcrypto -lssl -lz -lz -lcrypto -lz -lz
+
+This full library path is added by patch
+0002-acinclude.m4-add-mbedtls-to-LIBS.patch on libssh2 so update it to
+replace $LIBMBDEDCRYPTO by -lmbedcrypto
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libssh2/0002-acinclude.m4-add-mbedtls-to-LIBS.patch | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/package/libssh2/0002-acinclude.m4-add-mbedtls-to-LIBS.patch b/package/libssh2/0002-acinclude.m4-add-mbedtls-to-LIBS.patch
+index 76e08c51a9..a70b1fe84f 100644
+--- a/package/libssh2/0002-acinclude.m4-add-mbedtls-to-LIBS.patch
++++ b/package/libssh2/0002-acinclude.m4-add-mbedtls-to-LIBS.patch
+@@ -8,6 +8,10 @@ libssh2.pc contains correct info for the benefit of pkg-config users.
+ Static link with libssh2 requires this information.
  
--FFMPEG_VERSION = 3.4.4
-+FFMPEG_VERSION = 3.4.5
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
--- 
-2.19.1
+ Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++[Fabrice: Replace $LIBMBEDCRYTO by -lmdedcrypto to avoid adding a full
++library path to libssh2.pc as it raises build failures on some packages
++such as xerces]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
+ Upstream status: https://github.com/libssh2/libssh2/pull/242
+ 
+@@ -22,7 +26,7 @@ index c0e89a1a0c98..02c70845d27c 100644
+  [mbedtls], [
+    LIBSSH2_LIB_HAVE_LINKFLAGS([mbedcrypto], [], [#include <mbedtls/version.h>], [
+      AC_DEFINE(LIBSSH2_MBEDTLS, 1, [Use $1])
+-+    LIBS="$LIBS $LIBMBEDCRYPTO"
+++    LIBS="$LIBS -lmbedcrypto"
+      found_crypto="$1"
+      support_clear_memory=yes
+    ])
