@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 4 Nov 2018 11:20:52 +0100
-Subject: [Buildroot] [PATCH 1/1] mpv: disable static build with qt-zlib
-In-Reply-To: <f4c48e31-b230-5fbd-80d3-1504000852e3@mind.be>
-References: <20181102182416.27015-1-fontaine.fabrice@gmail.com>
- <20181103142607.59465b91@windsurf>
- <f4c48e31-b230-5fbd-80d3-1504000852e3@mind.be>
-Message-ID: <20181104112052.25dd15f1@windsurf>
+Date: Sun, 4 Nov 2018 11:24:40 +0100
+Subject: [Buildroot] [PATCH 1/1] package/{alsa-lib,
+ alsa-utils}: bump to version to 1.1.7
+In-Reply-To: <20181104081241.4354-1-crow.misia@gmail.com>
+References: <20181104081241.4354-1-crow.misia@gmail.com>
+Message-ID: <20181104112440.52080034@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,12 +13,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 3 Nov 2018 23:15:00 +0100, Arnout Vandecappelle wrote:
+On Sun,  4 Nov 2018 17:12:41 +0900, Zenichi Amano wrote:
+> Signed-off-by: Zenichi Amano <crow.misia@gmail.com>
 
->  Or maybe remove the QTZLIB option entirely.
+Thanks. Is there any reason to do both version bumps in the same patch?
+We normally have one patch per package being bumped, unless there is a
+strong for both packages to be bumped at the same time.
 
-Yeah, true. I'm not sure what is the motivation for using the
-non-system zlib variant.
+Thanks!
 
 Thomas
 -- 
