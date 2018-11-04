@@ -1,33 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 4 Nov 2018 12:29:13 +0100
-Subject: [Buildroot] [PATCH 1/1] package/{alsa-lib,
- alsa-utils}: bump to version to 1.1.7
-In-Reply-To: <CAN_c_0h1f_+naWBaCrZAWRE9LjWA3W29WJZ2qEeuyUJP_H4_9A@mail.gmail.com>
-References: <20181104081241.4354-1-crow.misia@gmail.com>
- <20181104112440.52080034@windsurf>
- <CAN_c_0h1f_+naWBaCrZAWRE9LjWA3W29WJZ2qEeuyUJP_H4_9A@mail.gmail.com>
-Message-ID: <20181104122913.456c0f13@windsurf>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 04 Nov 2018 13:34:10 +0200
+Subject: [Buildroot] [PATCH 1/2] ngrep: bump to version 1.47
+In-Reply-To: <CAPi7W83CQfQGjuhZBUvZoPBsJJLSE2sgRj_P9UHt7Lvb9bpqpA@mail.gmail.com>
+References: <20181101132326.13015-1-fontaine.fabrice@gmail.com>
+ <20181103224222.229c064a@windsurf>
+ <CAPi7W8388ghbe_PtDyJ_Hi1=2PLo4sAoZbzwORjH4qLGQ-ue5w@mail.gmail.com>
+ <20181104111953.08d765e0@windsurf>
+ <CAPi7W83CQfQGjuhZBUvZoPBsJJLSE2sgRj_P9UHt7Lvb9bpqpA@mail.gmail.com>
+Message-ID: <87lg69nkjx.fsf@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Fabric,
 
-On Sun, 4 Nov 2018 20:09:45 +0900, Zenichi Amano wrote:
+Fabrice Fontaine writes:
+> Dear Thomas,
+> Le dim. 4 nov. 2018 ? 11:19, Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> a ?crit :
+>>
+>> Hello,
+>>
+>> On Sat, 3 Nov 2018 23:01:07 +0100, Fabrice Fontaine wrote:
+>>
+>> > > So PCRE is not mandatory.
+>> > Indeed, PCRE is not really "mandatory", ngrep use GNU regex by default
+>> > but this was already the case before the bump (in version 1.45): see
+>> > https://github.com/jpr5/ngrep/blob/V1_45/configure.in.
+>> > I didn't want to change this behavior when bumping the package and I
+>> > could find why pcre wasn't made optional in the initial commit back in
+>> > 2011.
+>> > However, I'll add a third patch in my serie to make pcre an optional
+>> > dependency before bumping the package..
+>>
+>> Indeed, it could be a third patch.
+> OK, when I tried to enable GNU regex (on 1.47), I got the following error:
+> /usr/bin/make w -j --jobserver-fds=3,4 -C regex-0.12 regex.o
+> make[2]: Entering directory
+> '/home/fabrice/buildroot/output/build/ngrep-1_47/regex-0.12'
+> make[2]: *** No rule to make target 'w'.  Stop.
+>
+> This error is raised by this command:
+> $(MAKE) $(MAKEFLAGS) -C $(REGEX_DIR) $(notdir $(REGEX_OBJS))
+>
+> which means that MAKEFLAGS is set to "w -j --jobserver-fds=3,4".
+> I don't understand where this "w" and not "-w" is coming from. Do you
+> have any advice or clue?
 
-> Since "alsa-utils" depends on "alsa-lib", version bumps in the same patch.
-> 
-> If there seems to be problems, I will recreate patches one by one.
+This is most likely related to mismatch of make versions being used when
+we build our own host-make. See the discussion in this thread related to
+boa:
 
-Unless there is a known problem with bumping alsa-lib separately from
-alsa-utils, we prefer to have two separate patches.
+  http://lists.busybox.net/pipermail/buildroot/2018-October/232957.html
 
-Thanks!
+There is no fix to this issue yet.
 
-Thomas
+baruch
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
