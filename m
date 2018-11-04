@@ -1,48 +1,51 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Sun,  4 Nov 2018 19:02:40 -0200
-Subject: [Buildroot] [PATCH 3/4] iucode-tool: bump to version 2.3.1
-In-Reply-To: <20181104210241.20237-1-casantos@datacom.com.br>
-References: <20181104210241.20237-1-casantos@datacom.com.br>
-Message-ID: <20181104210241.20237-4-casantos@datacom.com.br>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 4 Nov 2018 22:08:51 +0100
+Subject: [Buildroot] [PATCH] qt5: use ccache for building host code
+In-Reply-To: <20181103144917.05c221c1@windsurf>
+References: <20181020132535.24508-1-thomas.petazzoni@bootlin.com>
+ <20181103144917.05c221c1@windsurf>
+Message-ID: <20181104220851.7accc310@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Brings several fixes and enhancements. Check the change log at
+Hello Thomas,
 
-    https://gitlab.com/iucode-tool/iucode-tool/raw/v2.3.1/ChangeLog
+On Sat, 3 Nov 2018 14:49:17 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-Tested on an equipment with Intel C3000 processor.
+> Hello Peter,
+> 
+> On Sat, 20 Oct 2018 15:25:35 +0200, Thomas Petazzoni wrote:
+> > qt5 currently doesn't use HOSTCC/HOSTCXX, so it doesn't use ccache
+> > when building all its host code (especially qmake). This means that
+> > even with ccache enabled and a hot cache, it still takes a long time
+> > to build qt5base.
+> > 
+> > Before this patch, building qt5base takes:
+> > 
+> >  - 446 seconds with a cold ccache
+> >  - 185 seconds with a hot ccache
+> > 
+> > This is because the ccache is not used for host code.
+> > 
+> > After this patch, building qt5base takes:
+> > 
+> >  - 450 seconds with a cold ccache
+> >  - 15 seconds with a hot ccache
+> > 
+> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>  
+> 
+> Any comment on this patch ?
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
----
- package/iucode-tool/iucode-tool.hash | 2 +-
- package/iucode-tool/iucode-tool.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Sorry, not an regular ccache user (maybe an mistake ;-) ), so I did not
+examine this patch yet, nice speedup, some questions at he patch reply...
 
-diff --git a/package/iucode-tool/iucode-tool.hash b/package/iucode-tool/iucode-tool.hash
-index 1dab8de978..6d8fb635d0 100644
---- a/package/iucode-tool/iucode-tool.hash
-+++ b/package/iucode-tool/iucode-tool.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 9810daf925b8a9ca244adc4e1916bcab65601c9ebe87e91c2281f78055982971  iucode-tool_2.2.tar.xz
-+sha256 12b88efa4d0d95af08db05a50b3dcb217c0eb2bfc67b483779e33d498ddb2f95  iucode-tool_2.3.1.tar.xz
- sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/iucode-tool/iucode-tool.mk b/package/iucode-tool/iucode-tool.mk
-index 38f9da438e..e900888d7d 100644
---- a/package/iucode-tool/iucode-tool.mk
-+++ b/package/iucode-tool/iucode-tool.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IUCODE_TOOL_VERSION = 2.2
-+IUCODE_TOOL_VERSION = 2.3.1
- IUCODE_TOOL_SOURCE = iucode-tool_$(IUCODE_TOOL_VERSION).tar.xz
- IUCODE_TOOL_SITE = https://gitlab.com/iucode-tool/releases/raw/master
- ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
--- 
-2.17.1
+Regards,
+Peter
+
+> 
+> Thanks!
+> 
+> Thomas
