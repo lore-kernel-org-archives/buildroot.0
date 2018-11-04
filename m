@@ -1,38 +1,46 @@
 From: Carlos Santos <casantos@datacom.com.br>
-Date: Sun,  4 Nov 2018 19:02:38 -0200
-Subject: [Buildroot] [PATCH 1/4] linux: enable MICROCODE_INTEL if
- intel-microcode is selected
-In-Reply-To: <20181104210241.20237-1-casantos@datacom.com.br>
-References: <20181104210241.20237-1-casantos@datacom.com.br>
-Message-ID: <20181104210241.20237-2-casantos@datacom.com.br>
+Date: Sun,  4 Nov 2018 19:02:37 -0200
+Subject: [Buildroot] [PATCH 0/4] update/improve intel-microcode and
+ iucode-tool
+Message-ID: <20181104210241.20237-1-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We already turn on kernel features for several packages, so let's do it
-for intel-microcode too, otherwise it's impossible to load the microcode
-(by means of iucode-tools).
+Patch 1 enables MICROCODE_INTEL if intel-microcode is selected, since
+otherwise it's impossible to load microcode (by means of iucode-tools).
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
----
- linux/linux.mk | 3 +++
- 1 file changed, 3 insertions(+)
+Patch 2 updates intel-microcode to the latest version and moves its
+installation path from /usr/share/misc/ to /lib/firmware/, along with
+the files installed by linux-firmware. That path is also used by other
+Linux distros (e.g. Ubuntu). Notice that the package now installs 100
+binary files under /lib/firmware/intel-ucode/ instead of a big text file
+at /usr/share/misc/intel-microcode.dat.
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 476ff16329..b0cdbe933d 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -323,6 +323,9 @@ define LINUX_KCONFIG_FIXUP_CMDS
- 	$(if $(BR2_PACKAGE_AUDIT),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_NET,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT,$(@D)/.config))
-+	$(if $(BR2_PACKAGE_INTEL_MICROCODE),
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_MICROCODE,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_MICROCODE_INTEL,$(@D)/.config))
- 	$(if $(BR2_PACKAGE_KTAP),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_ENABLE_DEFAULT_TRACERS,$(@D)/.config)
+Patch 3 updates iucode-tool to the latest version.
+
+Patch 4 updates the iucode-tool init script. That's what I was doing
+initially. All other patches are just a consequence ot the "plucking a
+feather brings a hen" effect.
+
+Patches 1, 2 and 3 can be applied in any order (I tested this) but patch
+4 is on top of patch 2.
+
+Carlos Santos (4):
+  linux: enable MICROCODE_INTEL if intel-microcode is selected
+  intel-microcode: bump to version 20180807a
+  iucode-tool: bump to version 2.3.1
+  iucode-tool: rewrite init script
+
+ linux/linux.mk                               |  3 ++
+ package/intel-microcode/intel-microcode.hash |  4 +-
+ package/intel-microcode/intel-microcode.mk   | 16 +++-----
+ package/iucode-tool/S00iucode-tool           | 39 ++++++++++++--------
+ package/iucode-tool/iucode-tool.hash         |  2 +-
+ package/iucode-tool/iucode-tool.mk           |  2 +-
+ 6 files changed, 36 insertions(+), 30 deletions(-)
+
 -- 
 2.17.1
