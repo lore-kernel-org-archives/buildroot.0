@@ -1,59 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 4 Nov 2018 11:40:44 +0100
-Subject: [Buildroot] [PATCH v2 00/12] default runtime test case for
- python packages v2
-In-Reply-To: <20181102041241.28910-1-ricardo.martincoski@gmail.com>
-References: <20181016004230.10393-1-ricardo.martincoski@gmail.com>
- <20181102041241.28910-1-ricardo.martincoski@gmail.com>
-Message-ID: <20181104114044.3a01aa11@windsurf>
+Date: Sun, 4 Nov 2018 11:42:05 +0100
+Subject: [Buildroot] [git commit] package/php: add support for PostgreSQL
+ (non-PDO)
+Message-ID: <20181104104113.76C5B81412@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ricardo,
+commit: https://git.buildroot.net/buildroot/commit/?id=03d52226e2f02d642bf3d44ca299cc190cb0b253
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  2 Nov 2018 01:12:29 -0300, Ricardo Martincoski wrote:
+Needed for example for phppgadmin.
 
-> Ricardo Martincoski (11):
->   support/testing: use helper class in IPython test
->   support/testing: use helper class in Python test
->   support/testing: create intermediate class per Python version
->   support/testing: create default test case for python packages
->   support/testing: use TestPythonPackageBase for python-autobahn
->   support/testing: use TestPythonPackageBase for python-cryptography
->   support/testing: use TestPythonPackageBase for python-incremental
->   support/testing: use TestPythonPackageBase for python-twisted
->   support/testing: use TestPythonPackageBase for python-txaio
->   support/testing: use TestPythonPackageBase for python-txtorcon
->   support/testing: rename python* test cases
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Thomas: add missing BR2_USE_WCHAR dependency.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/php/Config.ext | 13 +++++++++++++
+ package/php/php.mk     |  6 ++++++
+ 2 files changed, 19 insertions(+)
 
-I was about to apply this patch series, but the logic in PATCH 04/12 to
-call the TestPythonBase constructor from a class that isn't a child
-class of TestPythonBase really looked awkward.
-
-So I google a bit for people having the same issue, i.e defining a base
-class for unit tests, but wanting this base class to be ignored.
-
-This answer looks particular useful:
-
-  https://stackoverflow.com/a/25695512/643208
-
-Alternatively this one, which looks less nice to me:
-
-  https://stackoverflow.com/a/22836015/643208
-
-Also, the first answer points to an article that describe potential
-issues when using multiple inheritance like we're doing:
-https://nedbatchelder.com/blog/201210/multiple_inheritance_is_hard.html.
-
-What do you think about this ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index 808551e77b..3082462b4f 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -117,6 +117,19 @@ config BR2_PACKAGE_PHP_EXT_MYSQLI
+ 	help
+ 	  MySQL Improved extension support
+ 
++config BR2_PACKAGE_PHP_EXT_PGSQL
++	bool "PostgreSQL"
++	depends on BR2_USE_MMU # postgresql
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_USE_WCHAR # postgresql
++	select BR2_PACKAGE_POSTGRESQL
++	help
++	  PostgreSQL support
++
++comment "PostgreSQL extension needs a toolchain w/ dynamic library, wchar"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
++
+ config BR2_PACKAGE_PHP_EXT_SQLITE
+ 	bool "SQLite3"
+ 	select BR2_PACKAGE_SQLITE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 4365847733..bd1835f65f 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -196,6 +196,12 @@ endif
+ ifeq ($(BR2_PACKAGE_PHP_EXT_MYSQLI),y)
+ PHP_CONF_OPTS += --with-mysqli
+ endif
++
++ifeq ($(BR2_PACKAGE_PHP_EXT_PGSQL),y)
++PHP_CONF_OPTS += --with-pgsql=$(STAGING_DIR)/usr
++PHP_DEPENDENCIES += postgresql
++endif
++
+ ifeq ($(BR2_PACKAGE_PHP_EXT_SQLITE),y)
+ PHP_CONF_OPTS += --with-sqlite3=$(STAGING_DIR)/usr
+ PHP_DEPENDENCIES += sqlite
