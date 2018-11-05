@@ -1,7 +1,9 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon,  5 Nov 2018 23:04:25 +0100
-Subject: [Buildroot] [PATCH v1 1/2] ell: new package
-Message-ID: <20181105220426.17194-1-ps.report@gmx.net>
+Date: Mon,  5 Nov 2018 23:04:26 +0100
+Subject: [Buildroot] [PATCH v1 2/2] iwd: new package
+In-Reply-To: <20181105220426.17194-1-ps.report@gmx.net>
+References: <20181105220426.17194-1-ps.report@gmx.net>
+Message-ID: <20181105220426.17194-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,152 +13,255 @@ To: buildroot@busybox.net
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
  package/Config.in                             |  1 +
- ...-standard-sigset_t-fixes-musl-compil.patch | 57 +++++++++++++++++++
- package/ell/Config.in                         | 13 +++++
- package/ell/ell.hash                          |  5 ++
- package/ell/ell.mk                            | 27 +++++++++
- 5 files changed, 103 insertions(+)
- create mode 100644 package/ell/0001-ell-signal.h-use-standard-sigset_t-fixes-musl-compil.patch
- create mode 100644 package/ell/Config.in
- create mode 100644 package/ell/ell.hash
- create mode 100644 package/ell/ell.mk
+ ...til.c-add-missing-ell-utf8.h-include.patch | 46 +++++++++++++++++++
+ ...cap.c-add-missing-sys-stat.h-include.patch | 46 +++++++++++++++++++
+ ..._iwd_backtrace_init-availability-det.patch | 32 +++++++++++++
+ package/iwd/Config.in                         | 14 ++++++
+ package/iwd/iwd.hash                          |  5 ++
+ package/iwd/iwd.mk                            | 46 +++++++++++++++++++
+ 7 files changed, 190 insertions(+)
+ create mode 100644 package/iwd/0001-src-util.c-add-missing-ell-utf8.h-include.patch
+ create mode 100644 package/iwd/0002-monitor-pcap.c-add-missing-sys-stat.h-include.patch
+ create mode 100644 package/iwd/0003-src-main.c-fix-__iwd_backtrace_init-availability-det.patch
+ create mode 100644 package/iwd/Config.in
+ create mode 100644 package/iwd/iwd.hash
+ create mode 100644 package/iwd/iwd.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 712e360402..b60e7700ad 100644
+index b60e7700ad..2f2c0dc4e3 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1608,6 +1608,7 @@ menu "Other"
- 	source "package/ding-libs/Config.in"
- 	source "package/eigen/Config.in"
- 	source "package/elfutils/Config.in"
-+	source "package/ell/Config.in"
- 	source "package/fftw/Config.in"
- 	source "package/flann/Config.in"
- 	source "package/flatbuffers/Config.in"
-diff --git a/package/ell/0001-ell-signal.h-use-standard-sigset_t-fixes-musl-compil.patch b/package/ell/0001-ell-signal.h-use-standard-sigset_t-fixes-musl-compil.patch
+@@ -1866,6 +1866,7 @@ menu "Networking applications"
+ 	source "package/iputils/Config.in"
+ 	source "package/irssi/Config.in"
+ 	source "package/iw/Config.in"
++	source "package/iwd/Config.in"
+ 	source "package/janus-gateway/Config.in"
+ 	source "package/keepalived/Config.in"
+ 	source "package/kismet/Config.in"
+diff --git a/package/iwd/0001-src-util.c-add-missing-ell-utf8.h-include.patch b/package/iwd/0001-src-util.c-add-missing-ell-utf8.h-include.patch
 new file mode 100644
-index 0000000000..a1d252b42a
+index 0000000000..549cd6fdd1
 --- /dev/null
-+++ b/package/ell/0001-ell-signal.h-use-standard-sigset_t-fixes-musl-compil.patch
-@@ -0,0 +1,57 @@
-+From abff9db9a6e86e00613a420dd6a0ba3bc81e2b72 Mon Sep 17 00:00:00 2001
++++ b/package/iwd/0001-src-util.c-add-missing-ell-utf8.h-include.patch
+@@ -0,0 +1,46 @@
++From 174eb3088e78b75b4e488c023808c6f3bf7aae06 Mon Sep 17 00:00:00 2001
 +From: Peter Seiderer <ps.report@gmx.net>
-+Date: Fri, 2 Nov 2018 12:58:57 +0100
-+Subject: [PATCH] ell/signal.h: use standard sigset_t, fixes musl compile
++Date: Fri, 2 Nov 2018 14:19:12 +0100
++Subject: [PATCH] src/util.c: add missing ell/utf8.h include
 +MIME-Version: 1.0
 +Content-Type: text/plain; charset=UTF-8
 +Content-Transfer-Encoding: 8bit
 +
-+Use standard sigset_t (instead __sigset_t):
-+
-+- fixes musl compile
-+- fies mismatch between header and implementation file
-+
 +Fixes:
 +
-+  In file included from ell/main.c:35:0:
-+  ell/signal.h:39:40: error: unknown type name ?__sigset_t?
-+   struct l_signal *l_signal_create(const __sigset_t *mask,
-+                                          ^~~~~~~~~~
-+  In file included from ell/signal.c:35:0:
-+  ell/signal.h:39:40: error: unknown type name ?__sigset_t?
-+   struct l_signal *l_signal_create(const __sigset_t *mask,
-+                                          ^~~~~~~~~~
-+  ell/signal.c:153:29: error: conflicting types for ?l_signal_create?
-+   LIB_EXPORT struct l_signal *l_signal_create(const sigset_t *mask,
-+                               ^~~~~~~~~~~~~~~
-+  In file included from ell/signal.c:35:0:
-+  ell/signal.h:39:18: note: previous declaration of ?l_signal_create? was here
-+   struct l_signal *l_signal_create(const __sigset_t *mask,
-+                    ^~~~~~~~~~~~~~~
-+
-+Reverts upstream commit [1], superseeded in the next version by [2].
-+
-+[1] https://git.kernel.org/pub/scm/libs/ell/ell.git/commit/?id=7af8e3ba0ed522897f5a87e6c8f2980f82ff5012
-+[2] https://git.kernel.org/pub/scm/libs/ell/ell.git/commit/?id=4a386a10d88ff52097a974167ab889b3fc2add70
++  src/util.c: In function ?util_ssid_to_utf8?:
++  src/util.c:57:16: warning: implicit declaration of function ?l_utf8_validate? [-Wimplicit-function-declaration]
++    while (i && (!l_utf8_validate((const char *)start, i,
++                  ^~~~~~~~~~~~~~~
++  src/util.c: In function ?util_string_to_address?:
++  src/util.c:128:8: warning: implicit declaration of function ?l_ascii_isxdigit? [-Wimplicit-function-declaration]
++     if (!l_ascii_isxdigit(str[i]))
++          ^~~~~~~~~~~~~~~~
++[...]
++  src/util.o: In function `util_string_to_address':
++  util.c:(.text+0x21c): undefined reference to `l_ascii_isxdigit'
++  util.c:(.text+0x228): undefined reference to `l_ascii_isxdigit'
++  util.c:(.text+0x24c): undefined reference to `l_ascii_isxdigit'
++  util.c:(.text+0x258): undefined reference to `l_ascii_isxdigit'
++  collect2: error: ld returned 1 exit status
 +
 +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 +---
-+ ell/signal.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ src/util.c | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+diff --git a/ell/signal.h b/ell/signal.h
-+index 0d4fdc8..98cf0fa 100644
-+--- a/ell/signal.h
-++++ b/ell/signal.h
-+@@ -36,7 +36,7 @@ typedef void (*l_signal_notify_cb_t) (struct l_signal *signal,
-+ 					uint32_t signo, void *user_data);
-+ typedef void (*l_signal_destroy_cb_t) (void *user_data);
++diff --git a/src/util.c b/src/util.c
++index 7a08940..e12b622 100644
++--- a/src/util.c
+++++ b/src/util.c
++@@ -29,6 +29,7 @@
++ #include <sys/uio.h>
 + 
-+-struct l_signal *l_signal_create(const __sigset_t *mask,
-++struct l_signal *l_signal_create(const sigset_t *mask,
-+ 			l_signal_notify_cb_t callback,
-+ 			void *user_data, l_signal_destroy_cb_t destroy);
-+ void l_signal_remove(struct l_signal *signal);
++ #include <ell/string.h>
+++#include <ell/utf8.h>
++ #include <ell/genl.h>
++ #include <ell/util.h>
++ #include <ell/log.h>
 +-- 
 +2.19.1
 +
-diff --git a/package/ell/Config.in b/package/ell/Config.in
+diff --git a/package/iwd/0002-monitor-pcap.c-add-missing-sys-stat.h-include.patch b/package/iwd/0002-monitor-pcap.c-add-missing-sys-stat.h-include.patch
 new file mode 100644
-index 0000000000..8809dc6042
+index 0000000000..10875749c8
 --- /dev/null
-+++ b/package/ell/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_ELL
-+	bool "ell"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_USE_WCHAR
++++ b/package/iwd/0002-monitor-pcap.c-add-missing-sys-stat.h-include.patch
+@@ -0,0 +1,46 @@
++From 6e90d02b38d2fad19d396c27d3e6d89c8f0e703f Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Fri, 2 Nov 2018 14:29:53 +0100
++Subject: [PATCH] monitor/pcap.c: add missing sys/stat.h include
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Fixes:
++
++    CC       monitor/pcap.o
++  monitor/pcap.c: In function ?pcap_create?:
++  monitor/pcap.c:121:6: error: ?S_IRUSR? undeclared (first use in this function)
++        S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
++        ^
++  monitor/pcap.c:121:6: note: each undeclared identifier is reported only once for each function it appears in
++  monitor/pcap.c:121:16: error: ?S_IWUSR? undeclared (first use in this function)
++        S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
++                  ^
++  monitor/pcap.c:121:26: error: ?S_IRGRP? undeclared (first use in this function)
++        S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
++                            ^
++  monitor/pcap.c:121:36: error: ?S_IROTH? undeclared (first use in this function)
++        S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
++                                      ^
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ monitor/pcap.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/monitor/pcap.c b/monitor/pcap.c
++index aae0956..64382dd 100644
++--- a/monitor/pcap.c
+++++ b/monitor/pcap.c
++@@ -28,6 +28,7 @@
++ #include <fcntl.h>
++ #include <unistd.h>
++ #include <stdlib.h>
+++#include <sys/stat.h>
++ #include <sys/uio.h>
++ #include <ell/ell.h>
++ 
++-- 
++2.19.1
++
+diff --git a/package/iwd/0003-src-main.c-fix-__iwd_backtrace_init-availability-det.patch b/package/iwd/0003-src-main.c-fix-__iwd_backtrace_init-availability-det.patch
+new file mode 100644
+index 0000000000..e6ac3bee45
+--- /dev/null
++++ b/package/iwd/0003-src-main.c-fix-__iwd_backtrace_init-availability-det.patch
+@@ -0,0 +1,32 @@
++From 5f0fbde7ecfe76fdd437aaf0af34b3726e2c29fb Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Fri, 2 Nov 2018 14:38:37 +0100
++Subject: [PATCH] src/main.c: fix __iwd_backtrace_init() availability detection
++
++Fixes:
++
++  src/main.o: In function `main':
++  main.c:(.text.startup+0x798): undefined reference to `__iwd_backtrace_init'
++  collect2: error: ld returned 1 exit status
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ src/main.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/main.c b/src/main.c
++index afb895e..649e301 100644
++--- a/src/main.c
+++++ b/src/main.c
++@@ -431,7 +431,7 @@ int main(int argc, char *argv[])
++ 	if (debugopt)
++ 		l_debug_enable(debugopt);
++ 
++-#ifdef __GLIBC__
+++#if defined(__GLIBC__) && defined(HAVE_EXECINFO_H)
++ 	__iwd_backtrace_init();
++ #endif
++ 
++-- 
++2.19.1
++
+diff --git a/package/iwd/Config.in b/package/iwd/Config.in
+new file mode 100644
+index 0000000000..c65e5e05d2
+--- /dev/null
++++ b/package/iwd/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_IWD
++	bool "iwd"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # ell
++	depends on !BR2_STATIC_LIBS # ell
++	depends on BR2_USE_WCHAR # ell
++	select BR2_PACKAGE_ELL
 +	help
-+	  Embedded Linux library (ell)
++	  iNet Wireless daemon (iwd)
 +
-+	  https://01.org/ell
++	  https://iwd.wiki.kernel.org/
 +
-+comment "ell needs a toolchain w/ dynamic library, wchar"
++comment "iwd needs a toolchain w/ dynamic library, wchar"
 +	depends on BR2_STATIC_LIBS
 +	depends on !BR2_USE_WCHAR
-diff --git a/package/ell/ell.hash b/package/ell/ell.hash
+diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
 new file mode 100644
-index 0000000000..c6b23baec8
+index 0000000000..32018531b2
 --- /dev/null
-+++ b/package/ell/ell.hash
++++ b/package/iwd/iwd.hash
 @@ -0,0 +1,5 @@
 +# Locally computed
-+sha256 8e629347d49d30418e215ccf80f05eb6ff617f752396f93287ed723169aec006 ell-0.13.tar.gz
++sha256 cb071b9e10688e7347bb3f2d6927c27c635614e9a2b1c5eb3ea6203ca2894c05 iwd-0.10.tar.gz
 +
 +# License files
 +sha256 ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5 COPYING
-diff --git a/package/ell/ell.mk b/package/ell/ell.mk
+diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
 new file mode 100644
-index 0000000000..8ea95a6d77
+index 0000000000..2e9d849d3f
 --- /dev/null
-+++ b/package/ell/ell.mk
-@@ -0,0 +1,27 @@
++++ b/package/iwd/iwd.mk
+@@ -0,0 +1,46 @@
 +################################################################################
 +#
-+# ell
++# iwd
 +#
 +################################################################################
 +
-+ELL_VERSION = 0.13
-+ELL_SITE = https://git.kernel.org/pub/scm/libs/ell/ell.git
-+ELL_SITE_METHOD = git
-+ELL_LICENSE = LGPL-2.1+
-+ELL_LICENSE_FILES = COPYING
-+ELL_INSTALL_STAGING = YES
++IWD_VERSION = 0.10
++IWD_SITE = https://git.kernel.org/pub/scm/network/wireless/iwd.git
++IWD_SITE_METHOD = git
++# iwd client depends on readline (GPL-3.0+)
++IWD_LICENSE = LGPL-2.1+, GPL-3.0+ (client)
++IWD_LICENSE_FILES = COPYING
 +# sources from git, no configure script provided
-+ELL_AUTORECONF = YES
++IWD_AUTORECONF = YES
++
++IWD_CONF_OPTS = --enable-external-ell
++IWD_DEPENDENCIES = ell
 +
 +# autoreconf requires an existing build-aux directory
-+define ELL_MKDIR_BUILD_AUX
++define IWD_MKDIR_BUILD_AUX
 +	mkdir -p $(@D)/build-aux
 +endef
-+ELL_POST_PATCH_HOOKS += ELL_MKDIR_BUILD_AUX
++IWD_POST_PATCH_HOOKS += IWD_MKDIR_BUILD_AUX
 +
-+ELL_DEPENDENCIES = host-pkgconf
++ifeq ($(BR2_PACKAGE_DBUS),y)
++IWD_CONF_OPTS += --enable-dbus-policy
++IWD_DEPENDENCIES += dbus
++else
++IWD_CONF_OPTS += --disable-dbus-policy
++endif
 +
-+# disable ell/glib main loop example
-+ELL_CONF_OPTS = --disable-glib
++ifeq ($(BR2_PACKAGE_READLINE),y)
++IWD_CONF_OPTS += --enable-client
++IWD_DEPENDENCIES += readline
++else
++IWD_CONF_OPTS += --disable-client
++endif
++
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++IWD_CONF_OPTS += --enable-systemd-service
++IWD_DEPENDENCIES += systemd
++else
++IWD_CONF_OPTS += --disable-systemd-service
++endif
 +
 +$(eval $(autotools-package))
 -- 
