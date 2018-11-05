@@ -1,80 +1,44 @@
-From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
-Date: Mon,  5 Nov 2018 10:56:31 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/mmc-utils: add patch to fix
- build failure
-Message-ID: <20181105095631.11811-1-sebastien.szymanski@armadeus.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Mon,  5 Nov 2018 17:39:39 +0200
+Subject: [Buildroot] [PATCH 1/1] webkitgtk: disable JIT usage on MIPS32 R6
+Message-ID: <20181105153939.36369-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch taken from:
- - https://patchwork.kernel.org/patch/10654531/
+Currently JavaScriptCore does not support JIT on MIPS32 R6, so remove
+it from the list of supported architectures. Reported upstream:
 
-Fixes:
- - http://autobuild.buildroot.net/results/404bfbd095a7b80273391ea36ea81ba496164b80
- - http://autobuild.buildroot.net/results/233ef5c00951b5be10a59408f4a8781ecc658d74
- - http://autobuild.buildroot.net/results/eba3cf4ac21095bca5af2d5d1d69aca0c9098f9b
+  https://bugs.webkit.org/show_bug.cgi?id=191258
 
-Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+This fixes the following autobuilder failure:
+
+  http://autobuild.buildroot.net/results/eeaf3edbf6f5bf468b10adc3d053f703c6ceba96/
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
+ package/webkitgtk/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Changes for v2:
- - use git format-patch
-
- .../0002-fix-overlapping-with-strncpy.patch        | 43 ++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
- create mode 100644 package/mmc-utils/0002-fix-overlapping-with-strncpy.patch
-
-diff --git a/package/mmc-utils/0002-fix-overlapping-with-strncpy.patch b/package/mmc-utils/0002-fix-overlapping-with-strncpy.patch
-new file mode 100644
-index 0000000000..194862e801
---- /dev/null
-+++ b/package/mmc-utils/0002-fix-overlapping-with-strncpy.patch
-@@ -0,0 +1,43 @@
-+From 1c90a7534658056b884d71ef82dc7ca8bad4271b Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
-+Date: Wed, 24 Oct 2018 13:00:47 +0200
-+Subject: [PATCH 1/1] mmc-utils: fix overlapping with strncpy
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+GCC 8.2 warns about an overlapping using strncpy.
-+
-+Replace strncpy with a memmove to avoid this issue.
-+
-+In file included from /usr/include/string.h:494,
-+                 from lsmmc.c:46:
-+In function ?strncpy?,
-+    inlined from ?read_file? at lsmmc.c:356:3:
-+/usr/include/x86_64-linux-gnu/bits/string_fortified.h:106:10: error: ?__builtin_strncpy? accessing 4096 bytes at offsets 0 and 1 overlaps 4095 bytes at offset 1 [-Werror=restrict]
-+   return __builtin___strncpy_chk (__dest, __src, __len, __bos (__dest));
-+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+cc1: all warnings being treated as errors
-+make: *** [Makefile:36: lsmmc.o] Error 1
-+
-+Signed-off-by: Cl?ment P?ron <peron.clem@gmail.com>
-+---
-+ lsmmc.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/lsmmc.c b/lsmmc.c
-+index c4faa00..bcb854d 100644
-+--- a/lsmmc.c
-++++ b/lsmmc.c
-+@@ -353,7 +353,7 @@ char *read_file(char *name)
-+ 		line[strlen(line) - 1] = '\0';
-+ 
-+ 	while (isspace(line[0]))
-+-		strncpy(&line[0], &line[1], sizeof(line));
-++		memmove(&line[0], &line[1], sizeof(line)-1);
-+ 
-+ 	return strdup(line);
-+ }
-+-- 
-+2.16.4
-+
+diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+index f1228892af..8714677b6a 100644
+--- a/package/webkitgtk/Config.in
++++ b/package/webkitgtk/Config.in
+@@ -22,11 +22,11 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS_JIT
+ 	default y if BR2_i386
+ 	default y if BR2_x86_64
+ 	# JIT is known not to work on MIPS64.
+-	# Plain MIPS32 (pre R2) is not well tested and likely broken.
++	# Plain MIPS32 (pre R2) is not well tested and likely broken, and R6
++	# is unsupported, see https://bugs.webkit.org/show_bug.cgi?id=191258
+ 	# The MIPS support is completely untested in big-endian mode.
+ 	default y if BR2_mipsel && BR2_MIPS_CPU_MIPS32R2
+ 	default y if BR2_mipsel && BR2_MIPS_CPU_MIPS32R5
+-	default y if BR2_mipsel && BR2_MIPS_CPU_MIPS32R6
+ 
+ comment "webkitgtk needs libgtk3 and a glibc toolchain w/ C++, gcc >= 6, host gcc >= 4.8"
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
 -- 
-2.16.4
+2.19.1
