@@ -1,86 +1,127 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Mon,  5 Nov 2018 02:02:29 +0100
-Subject: [Buildroot] [PATCH 1/2] package/libnfs: add patch to fix musl build
- issue
-Message-ID: <20181105010230.18425-1-joerg.krause@embedded.rocks>
+From: Sumit Garg <sumit.garg@linaro.org>
+Date: Mon, 5 Nov 2018 09:45:23 +0530
+Subject: [Buildroot] [PATCH 1/1] fwts: Enable optional efi_runtime
+ kernel module build
+In-Reply-To: <20181102141958.GB28575@scaer>
+References: <1541162207-8770-1-git-send-email-sumit.garg@linaro.org>
+ <CAK4VdL2=P8w_6aoVkHmvtx8N6JnCSosG_btJooDz+Db1K9rRAg@mail.gmail.com>
+ <20181102141958.GB28575@scaer>
+Message-ID: <CAFA6WYP5b83mYdNu_xh0bGuDOTFzkamaYzyaDVUgAU0kBxK8Gg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch to fix build issues with the musl C library.
+On Fri, 2 Nov 2018 at 19:50, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> Erico, Sumit, All,
+>
+> On 2018-11-02 14:57 +0100, Erico Nunes spake thusly:
+> > On Fri, Nov 2, 2018 at 1:37 PM Sumit Garg <sumit.garg@linaro.org> wrote:
+> > > +config BR2_PACKAGE_FWTS_EFI_RUNTIME_MODULE
+> > > +       bool "efi_runtime_module"
+> >
+> > For a slightly better looking menu, I'd suggest dropping the second
+> > underscore and making it "efi_runtime module".
+>
+> ACK.
+>
 
-This patch fixes an autobuild issue when linking the mpd package
-against libnfs. The header file libnfs.h uses `struct timeval` which is
-defined in `<sys/time.h>` for POSIX systems. Unfortunately, upstream
-only includes it conditionally, based on the system. Therefore, we
-remove the check in the first patch.
+Ok.
 
-Reported upstream:
-https://github.com/sahlberg/libnfs/issues/272
+> > > +       depends on BR2_PACKAGE_FWTS
+> >
+> > Looking at most packages, I think a more clear way to show this option
+> > only then fwts is selected, is to wrap it inside a 'if
+> > BR2_PACKAGE_FWTS' instead of a 'depends on' for this case. Not sure if
+> > it changes anything in practice but it seems more appropriate than a
+> > 'depends on' to me.
+>
+> It depends (pun intended). While I do prefer an if-block as you suggest,
+> some package do use 'depends on', especially when there is only one or
+> two sub-options. So, historically, both exist, but using an the if-block
+> makes it more consistent.
+>
 
-Fixes:
-http://autobuild.buildroot.org/results/452/4522014698b9fe50720a71b663e47a75805bcf54
-http://autobuild.buildroot.org/results/b0a/b0a0c20ad1705e9fa7ba4a12eb9c182e8077ab0c
-http://autobuild.buildroot.org/results/53c/53c87361923cc177de7889523b3d16ba6b1d3d0f
-.. and more.
+Ok will use if block instead.
 
-Previous patch: Changes requested
-http://patchwork.ozlabs.org/patch/973605/
+> > > +       depends on BR2_LINUX_KERNEL
+> > > +       help
+> > > +         Firmware Test Suite (FWTS) also provides EFI runtime kernel
+> > > +         module required to run UEFI tests.
+> >
+> > As it is, the option looks confusing in the menu as it doesn't look
+> > like a fwts suboption. It looks like this:
+> > [*] fwts
+> > [ ] efi_runtime_module
+> >
+> > I don't fully understand the Kconfig inner workings, but if
+> > BR2_PACKAGE_FWTS_EFI_RUNTIME_MODULE is moved to right after
+> > BR2_PACKAGE_FWTS (before the comment) then it becomes automatically
+> > indented and to me much more easier to understand that it is a fwts
+> > suboption:
+> > [*] fwts
+> > [ ]   efi_runtime_module
+>
+> Exactly: options are only indented when they are right below the option
+> they depend on. This is an idiosyncracy of kconfig.
+>
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- .../libnfs/0001-Fix-include-sys-time.h.patch  | 41 +++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 package/libnfs/0001-Fix-include-sys-time.h.patch
+Ok will move this option right below "fwts".
 
-diff --git a/package/libnfs/0001-Fix-include-sys-time.h.patch b/package/libnfs/0001-Fix-include-sys-time.h.patch
-new file mode 100644
-index 0000000000..15b281672a
---- /dev/null
-+++ b/package/libnfs/0001-Fix-include-sys-time.h.patch
-@@ -0,0 +1,41 @@
-+From 9df082012cba1dc32d83e5e8b0bdc0892f250058 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Mon, 5 Nov 2018 00:43:07 +0100
-+Subject: [PATCH] Fix include sys/time.h
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+POSIX says `struct timeval` is defined if <sys/time.h> is included.
-+
-+Instead of the mess that is currently done based on the system on which
-+the stuff is being compiled, include it unconditionally.
-+
-+Reported upstream:
-+https://github.com/sahlberg/libnfs/issues/272
-+
-+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-+---
-+ include/nfsc/libnfs.h | 5 -----
-+ 1 file changed, 5 deletions(-)
-+
-+diff --git a/include/nfsc/libnfs.h b/include/nfsc/libnfs.h
-+index 09dcf1c..b6db58c 100755
-+--- a/include/nfsc/libnfs.h
-++++ b/include/nfsc/libnfs.h
-+@@ -24,12 +24,7 @@
-+ #define _LIBNFS_H_
-+ 
-+ #include <stdint.h>
-+-#if defined(__ANDROID__) || defined(AROS) \
-+- || ( defined(__APPLE__) && defined(__MACH__) )
-+ #include <sys/time.h>
-+-#else
-+-#include <time.h>
-+-#endif
-+ 
-+ #ifdef __cplusplus
-+ extern "C" {
-+-- 
-+2.19.1
-+
--- 
-2.19.1
+> And using 'depends on' or an if-block is basically just equivalent.
+>
+> > > diff --git a/package/fwts/fwts.mk b/package/fwts/fwts.mk
+> > > index 15f0afc..840190e 100644
+> > > --- a/package/fwts/fwts.mk
+> > > +++ b/package/fwts/fwts.mk
+> > > @@ -14,3 +14,9 @@ FWTS_DEPENDENCIES = host-bison host-flex host-pkgconf json-c libglib2 libbsd \
+> > >         $(if $(BR2_PACKAGE_DTC),dtc)
+> > >
+> > >  $(eval $(autotools-package))
+> > > +
+> > > +ifdef BR2_PACKAGE_FWTS_EFI_RUNTIME_MODULE
+> > > +FWTS_DEPENDENCIES += linux
+> >
+> > You don't need to add linux as an explicit dependency if you are using
+> > $(kernel-module).
+> >
+
+Ok will remove linux as a dependency.
+
+> > > +FWTS_MODULE_SUBDIRS = efi_runtime
+> > > +$(eval $(kernel-module))
+> > > +endif
+> >
+> > This doesn't work for me, it doesn't trigger linux as a dependency and
+> > fails to build from a clean build. The entire block including the
+> > $(eval $(kernel-module)) needs to happen before $(eval
+> > $(autotools-package)) so that it works as intended.
+>
+
+Ok.
+
+> Exactly, see:
+>     https://buildroot.org/downloads/manual/manual.html#_infrastructure_for_packages_building_kernel_modules
+>
+>     Unlike other package infrastructures, [kernel-module] is not
+>     stand-alone, and requires any of the other *-package macros be
+>     called after it.
+>
+
+Thanks for the explanation.
+
+Regards,
+Sumit
+
+> Regards,
+> Yann E. MORIN.
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
