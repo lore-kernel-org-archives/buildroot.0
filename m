@@ -1,148 +1,163 @@
-From: Nuno Mota <nrmmota@gmail.com>
-Date: Mon, 5 Nov 2018 21:36:56 +0000
-Subject: [Buildroot] ELFCLASS issue on building Perl module Term::ReadKey
-In-Reply-To: <CALURroQDySKs3+paup7i8sz_6qZN4Gi63v1G=yEH1o70y2qEeQ@mail.gmail.com>
-References: <CAAnJVhCshyo-nHCVo303qLJiXJd8c7xh91-mDHgFsDn4VyYoVw@mail.gmail.com>
- <CALURroQDySKs3+paup7i8sz_6qZN4Gi63v1G=yEH1o70y2qEeQ@mail.gmail.com>
-Message-ID: <CAAnJVhBYbr97ywRCkQWA6Y+CEGP0B9swYb2g8quda78O6axmMQ@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon,  5 Nov 2018 23:04:25 +0100
+Subject: [Buildroot] [PATCH v1 1/2] ell: new package
+Message-ID: <20181105220426.17194-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ok. Thanks for the update.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/Config.in                             |  1 +
+ ...-standard-sigset_t-fixes-musl-compil.patch | 57 +++++++++++++++++++
+ package/ell/Config.in                         | 13 +++++
+ package/ell/ell.hash                          |  5 ++
+ package/ell/ell.mk                            | 27 +++++++++
+ 5 files changed, 103 insertions(+)
+ create mode 100644 package/ell/0001-ell-signal.h-use-standard-sigset_t-fixes-musl-compil.patch
+ create mode 100644 package/ell/Config.in
+ create mode 100644 package/ell/ell.hash
+ create mode 100644 package/ell/ell.mk
 
-Regards,
-Nuno
-
-On Mon, Nov 5, 2018, 21:25 Christopher McCrory <chrismcc@gmail.com wrote:
-
-> Hello
->
-> On phone so sorry for top posting. I was able to get an error, but I don't
-> know why yet (worked fine last time I tried it). Will look at it again
-> tomorrow.
->
-> On Wed, Oct 31, 2018, 1:53 PM Nuno Mota <nrmmota@gmail.com> wrote:
->
->> Hi,
->> I'm using buildroot for a project and so far so good. I've added a lot of
->> perl modules, but a new one just failed. I have no clue how to fix this.
->> I simply cloned this git project to use swupdate
->> https://github.com/Trellis-Logic/buildroot-external/tree/swupdate
->>
->> >>> perl-termreadkey 2.37 Building
->> cd
->> /opt/home/nrm/ubuntudocker/GS_Gateway/buildroot/output/build/perl-termreadkey-2.37/
->> && if [ -f Build.PL ] && [ MB != "EUMM" ] ; then PERL5LIB=
->> PERL_USE_UNSAFE_INC=1
->> /opt/home/nrm/ubuntudocker/GS_Gateway/buildroot/output/host/bin/perl Build
->> build; else /usr/bin/make -j1
->> PERL_INC=/opt/home/nrm/ubuntudocker/GS_Gateway/buildroot/output/host/i686-buildroot-linux-uclibc/sysroot/usr/lib/perl5/5.26.2/i686-linux/CORE
->> FIXIN=:  pure_all; fi
->> "/opt/home/nrm/ubuntudocker/GS_Gateway/buildroot/output/host/bin/perl"
->> -MExtUtils::Command::MM -e 'cp_nonempty' -- ReadKey.bs
->> blib/arch/auto/Term/ReadKey/ReadKey.bs 644
->> "/opt/home/nrm/ubuntudocker/GS_Gateway/buildroot/output/host/bin/perl"
->> "-Iblib/arch" "-Iblib/lib" ReadKey_pm.PL ReadKey.pm
->> Creating ReadKey.pm
->> Can't load 'blib/arch/auto/Term/ReadKey/ReadKey.so' for module
->> Term::ReadKey: blib/arch/auto/Term/ReadKey/ReadKey.so: wrong ELF class:
->> ELFCLASS32 at
->> /opt/home/nrm/ubuntudocker/GS_Gateway/buildroot/output/host/lib/perl5/5.26.2/x86_64-linux/DynaLoader.pm
->> line 193.
->>  at
->> /opt/home/nrm/ubuntudocker/GS_Gateway/buildroot/output/host/lib/perl5/5.26.2/x86_64-linux/DynaLoader.pm
->> line 95.
->> DynaLoader::croak("Can't load 'blib/arch/auto/Term/ReadKey/ReadKey.so'
->> for modul"...) called at
->> /opt/home/nrm/ubuntudocker/GS_Gateway/buildroot/output/host/lib/perl5/5.26.2/x86_64-linux/DynaLoader.pm
->> line 193
->> DynaLoader::bootstrap("Term::ReadKey") called at ReadKey_pm.PL line 515
->> Bootstrapping the XS for blockoptions: make[2]: *** [ReadKey.pm] Error 255
->> make[1]: ***
->> [/opt/home/nrm/ubuntudocker/GS_Gateway/buildroot/output/build/perl-termreadkey-2.37/.stamp_built]
->> Error 2
->> make: *** [_all] Error 2
->> make: Leaving directory `/opt/home/nrm/ubuntudocker/GS_Gateway/buildroot'
->>
->> This is now my external config:
->> BR2_x86_nocona=y
->> BR2_KERNEL_HEADERS_4_15=y
->> BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
->> BR2_PTHREAD_DEBUG=y
->> BR2_TOOLCHAIN_BUILDROOT_CXX=y
->> BR2_TARGET_GENERIC_HOSTNAME="gsgateway"
->> BR2_TARGET_GENERIC_ISSUE="Welcome"
->> BR2_TARGET_GENERIC_PASSWD_SHA512=y
->> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
->> # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
->> BR2_ROOTFS_USERS_TABLES="../base_external/configs/users.config"
->> BR2_ROOTFS_OVERLAY="../base_external/rootfs-overlay"
->> BR2_ROOTFS_POST_BUILD_SCRIPT="../base_external/scripts/pre-image.sh"
->> BR2_ROOTFS_POST_IMAGE_SCRIPT="../base_external/scripts/post-image.sh"
->> BR2_LINUX_KERNEL=y
->> BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
->>
->> BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="../base_external/configs/linux_kernel_defconfig"
->> BR2_LINUX_KERNEL_INSTALL_TARGET=y
->> BR2_PACKAGE_BUSYBOX_CONFIG="../base_external/configs/busybox.config"
->> BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
->> BR2_PACKAGE_VLC=y
->> BR2_PACKAGE_DMIDECODE=y
->> BR2_PACKAGE_PERL=y
->> BR2_PACKAGE_PERL_MOJOLICIOUS_PLUGIN_AUTHENTICATION=y
->> BR2_PACKAGE_EVENTLOG=y
->> BR2_PACKAGE_LINUX_PAM=y
->> BR2_PACKAGE_PCRE_UCP=y
->> BR2_PACKAGE_BWM_NG=y
->> BR2_PACKAGE_IFTOP=y
->> BR2_PACKAGE_IFUPDOWN=y
->> BR2_PACKAGE_IPTABLES=y
->> BR2_PACKAGE_NGINX=y
->> BR2_PACKAGE_NGINX_HTTP_CACHE=y
->> BR2_PACKAGE_NGINX_HTTP_SSL_MODULE=y
->> BR2_PACKAGE_NGINX_HTTP_V2_MODULE=y
->> BR2_PACKAGE_OPENSSH=y
->> BR2_PACKAGE_OPENVPN=y
->> BR2_PACKAGE_TCPDUMP=y
->> BR2_PACKAGE_TRACEROUTE=y
->> BR2_PACKAGE_VSFTPD=y
->> BR2_PACKAGE_FILE=y
->> BR2_PACKAGE_LOGROTATE=y
->> BR2_PACKAGE_SUDO=y
->> BR2_PACKAGE_HTOP=y
->> BR2_PACKAGE_SWUPDATE=y
->> BR2_PACKAGE_SWUPDATE_CONFIG="../base_external/configs/swupdate.config"
->> # BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE is not set
->> BR2_PACKAGE_UTIL_LINUX_FSCK=y
->> BR2_PACKAGE_UTIL_LINUX_KILL=y
->> BR2_PACKAGE_UTIL_LINUX_LAST=y
->> BR2_PACKAGE_UTIL_LINUX_LOGGER=y
->> BR2_PACKAGE_UTIL_LINUX_MORE=y
->> BR2_PACKAGE_UTIL_LINUX_MOUNT=y
->> BR2_TARGET_ROOTFS_EXT2=y
->> BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
->> # BR2_TARGET_ROOTFS_TAR is not set
->> BR2_TARGET_GRUB2=y
->> BR2_TARGET_GRUB2_BUILTIN_MODULES="boot linux ext2 fat squash4 part_msdos
->> part_gpt normal biosdisk loadenv search"
->> BR2_PACKAGE_HOST_GENIMAGE=y
->> BR2_PACKAGE_PERL_SWITCH=y
->> BR2_PACKAGE_PERL_DATA_VALIDATE_IP=y
->> BR2_PACKAGE_PERL_AUTHEN_PAM=y
->> BR2_PACKAGE_PERL_TERMREADKEY=y
->>
->> Thank you,
->> NRM
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->>
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181105/0308021a/attachment.html>
+diff --git a/package/Config.in b/package/Config.in
+index 712e360402..b60e7700ad 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1608,6 +1608,7 @@ menu "Other"
+ 	source "package/ding-libs/Config.in"
+ 	source "package/eigen/Config.in"
+ 	source "package/elfutils/Config.in"
++	source "package/ell/Config.in"
+ 	source "package/fftw/Config.in"
+ 	source "package/flann/Config.in"
+ 	source "package/flatbuffers/Config.in"
+diff --git a/package/ell/0001-ell-signal.h-use-standard-sigset_t-fixes-musl-compil.patch b/package/ell/0001-ell-signal.h-use-standard-sigset_t-fixes-musl-compil.patch
+new file mode 100644
+index 0000000000..a1d252b42a
+--- /dev/null
++++ b/package/ell/0001-ell-signal.h-use-standard-sigset_t-fixes-musl-compil.patch
+@@ -0,0 +1,57 @@
++From abff9db9a6e86e00613a420dd6a0ba3bc81e2b72 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Fri, 2 Nov 2018 12:58:57 +0100
++Subject: [PATCH] ell/signal.h: use standard sigset_t, fixes musl compile
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Use standard sigset_t (instead __sigset_t):
++
++- fixes musl compile
++- fies mismatch between header and implementation file
++
++Fixes:
++
++  In file included from ell/main.c:35:0:
++  ell/signal.h:39:40: error: unknown type name ?__sigset_t?
++   struct l_signal *l_signal_create(const __sigset_t *mask,
++                                          ^~~~~~~~~~
++  In file included from ell/signal.c:35:0:
++  ell/signal.h:39:40: error: unknown type name ?__sigset_t?
++   struct l_signal *l_signal_create(const __sigset_t *mask,
++                                          ^~~~~~~~~~
++  ell/signal.c:153:29: error: conflicting types for ?l_signal_create?
++   LIB_EXPORT struct l_signal *l_signal_create(const sigset_t *mask,
++                               ^~~~~~~~~~~~~~~
++  In file included from ell/signal.c:35:0:
++  ell/signal.h:39:18: note: previous declaration of ?l_signal_create? was here
++   struct l_signal *l_signal_create(const __sigset_t *mask,
++                    ^~~~~~~~~~~~~~~
++
++Reverts upstream commit [1], superseeded in the next version by [2].
++
++[1] https://git.kernel.org/pub/scm/libs/ell/ell.git/commit/?id=7af8e3ba0ed522897f5a87e6c8f2980f82ff5012
++[2] https://git.kernel.org/pub/scm/libs/ell/ell.git/commit/?id=4a386a10d88ff52097a974167ab889b3fc2add70
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ ell/signal.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/ell/signal.h b/ell/signal.h
++index 0d4fdc8..98cf0fa 100644
++--- a/ell/signal.h
+++++ b/ell/signal.h
++@@ -36,7 +36,7 @@ typedef void (*l_signal_notify_cb_t) (struct l_signal *signal,
++ 					uint32_t signo, void *user_data);
++ typedef void (*l_signal_destroy_cb_t) (void *user_data);
++ 
++-struct l_signal *l_signal_create(const __sigset_t *mask,
+++struct l_signal *l_signal_create(const sigset_t *mask,
++ 			l_signal_notify_cb_t callback,
++ 			void *user_data, l_signal_destroy_cb_t destroy);
++ void l_signal_remove(struct l_signal *signal);
++-- 
++2.19.1
++
+diff --git a/package/ell/Config.in b/package/ell/Config.in
+new file mode 100644
+index 0000000000..8809dc6042
+--- /dev/null
++++ b/package/ell/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_ELL
++	bool "ell"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_USE_WCHAR
++	help
++	  Embedded Linux library (ell)
++
++	  https://01.org/ell
++
++comment "ell needs a toolchain w/ dynamic library, wchar"
++	depends on BR2_STATIC_LIBS
++	depends on !BR2_USE_WCHAR
+diff --git a/package/ell/ell.hash b/package/ell/ell.hash
+new file mode 100644
+index 0000000000..c6b23baec8
+--- /dev/null
++++ b/package/ell/ell.hash
+@@ -0,0 +1,5 @@
++# Locally computed
++sha256 8e629347d49d30418e215ccf80f05eb6ff617f752396f93287ed723169aec006 ell-0.13.tar.gz
++
++# License files
++sha256 ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5 COPYING
+diff --git a/package/ell/ell.mk b/package/ell/ell.mk
+new file mode 100644
+index 0000000000..8ea95a6d77
+--- /dev/null
++++ b/package/ell/ell.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# ell
++#
++################################################################################
++
++ELL_VERSION = 0.13
++ELL_SITE = https://git.kernel.org/pub/scm/libs/ell/ell.git
++ELL_SITE_METHOD = git
++ELL_LICENSE = LGPL-2.1+
++ELL_LICENSE_FILES = COPYING
++ELL_INSTALL_STAGING = YES
++# sources from git, no configure script provided
++ELL_AUTORECONF = YES
++
++# autoreconf requires an existing build-aux directory
++define ELL_MKDIR_BUILD_AUX
++	mkdir -p $(@D)/build-aux
++endef
++ELL_POST_PATCH_HOOKS += ELL_MKDIR_BUILD_AUX
++
++ELL_DEPENDENCIES = host-pkgconf
++
++# disable ell/glib main loop example
++ELL_CONF_OPTS = --disable-glib
++
++$(eval $(autotools-package))
+-- 
+2.19.1
