@@ -1,60 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 5 Nov 2018 09:26:37 +0100
-Subject: [Buildroot] [PATCH 1/1] picotts: new package
-In-Reply-To: <1e8836fe-f499-1067-c2a0-9c7e0821af6a@fanamoel.com>
-References: <20181023082513.30099-1-inigohuguet@fanamoel.com>
- <20181102221146.4884a16b@windsurf>
- <1e8836fe-f499-1067-c2a0-9c7e0821af6a@fanamoel.com>
-Message-ID: <20181105092637.2623858e@windsurf>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Mon, 5 Nov 2018 09:35:56 +0100
+Subject: [Buildroot] [PATCH] merge_config.sh: Fix merging buildroot
+ config files
+In-Reply-To: <547a4ff728664a39a4e0870731c5446f@SOC-EX01V.e01.socionext.com>
+References: <20181101062448.GC8261@x230>
+ <20181101105513.GB4937@smart-ThinkPad-T410>
+ <7ba255c0-e72e-7e02-d972-f8f082ce5214@mind.be>
+ <20181101161918.GA30470@x230>
+ <20181102021259.GA8966@smart-ThinkPad-T410>
+ <5b88530949cb4aaf93436bcbc36f9fbf@SOC-EX01V.e01.socionext.com>
+ <4c5ee82c-00eb-33e6-6ec1-fc4f21eba039@mind.be>
+ <20181102225056.GB11633@dell5510>
+ <20181103213223.GA7084@smart-ThinkPad-T410>
+ <547a4ff728664a39a4e0870731c5446f@SOC-EX01V.e01.socionext.com>
+Message-ID: <20181105083554.GC4485@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-On Mon, 5 Nov 2018 08:52:02 +0100, I?igo Huguet wrote:
+> > > >  Perhaps it's better to make the entire pattern explicit, like:
 
-> The problem is that there is no upstream anywhere. This program source 
-> was "extracted" from Android source, but there is not any "official" 
-> team maintaining it. Actually, I got the source code from Ubuntu's 
-> package and uploaded it to my own github.
+> > > > SED_CONFIG_EXP="s/^\(${CONFIG_PREFIX}[a-zA-Z0-9_]*\)=.*$\|^#
+> > > > \(${CONFIG_PREFIX}[a-zA-Z0-9_]*\) is not set$/\1\2/p"
 
-Meh, Android is really wonderful open-source :-)
+> > > > (\1\2 works because only one of the two subexpressions matches, so either
+> > \1 or
+> > > > \2 must be empty).
+> > > I'd prefer original Masahiro's version - it's easier to read and without
+> > > duplicity.
 
-> About the scripts being use case specific, I think they're not. The 
-> program only can create a .wav file, so if you want to use it to make 
-> "on the fly" speech, you need to create a temporary wav, play it, and 
-> delete it. This is in fact what the helper scripts do.
-> 
-> I you think they must be removed I will do it, please tell me exactly 
-> what to do. Or, since the repository from which the package download the 
-> program is mine, I can include them to my repo directly.
+> > I agree with you. +1 for not having duplicity.
+> > This patch makes merge_config.sh to work well in many more tests. I'm waiting
+> > for Masahiro's version to be applied to
+> > the his kbuild tree and then re-prepare the patch here.
 
-Yes, it would be nicer if you included them directly in your repo.
 
-An example of something that was not completely correct is that your
-script uses aplay, but the package does not select
-BR2_PACAKAGE_ALSA_UTILS. But I believe it should not: there are
-possible use cases for this text-to-speech engine that don't involve
-playing the sound on the local device.
+> OK, I think Arnout's one is unreadable, but
+> we can make it readable by splitting the complex pattern into two.
 
-> > Please add a blank line, and then the upstream URL of the project.  
-> 
-> Same problem, there is not any upstream URL.
+> I posted this for comparison.
+> https://patchwork.kernel.org/patch/10667571/
 
-Just put the Github URL then :)
+LGTM. It's quite verbose, but more precise regexp is better and readability is also
+good.
 
-> It will work if I just add those packages as dependencies?
 
-Yes, but we very much prefer to use <pkg>_AUTORECONF = YES when
-possible.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Kind regards,
+Petr
