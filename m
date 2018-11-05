@@ -1,67 +1,78 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 5 Nov 2018 21:16:49 +0100
-Subject: [Buildroot] [PATCH] qt5: use ccache for building host code
-In-Reply-To: <20181105084934.0044782e@windsurf>
-References: <20181020132535.24508-1-thomas.petazzoni@bootlin.com>
- <20181104221220.5805582b@gmx.net>
- <20181104222501.28e36390@windsurf>
- <20181104224638.1385e69f@gmx.net>
- <20181105084934.0044782e@windsurf>
-Message-ID: <20181105211649.7da32747@gmx.net>
+Date: Mon, 5 Nov 2018 21:19:31 +0100
+Subject: [Buildroot] qt-webkit-kiosk on Raspberry Pi
+In-Reply-To: <CAHS=Uo_N6w84weSWBXMBZG1t4kFduSFREy-2h9RWujY6TOS3EQ@mail.gmail.com>
+References: <CAHS=Uo8ra0EvLoVoRys_F=5Qq=J-8vaJ9e60jL97dwx+zP2oRQ@mail.gmail.com>
+ <20181104222006.6ca268bc@gmx.net>
+ <CAHS=Uo_N6w84weSWBXMBZG1t4kFduSFREy-2h9RWujY6TOS3EQ@mail.gmail.com>
+Message-ID: <20181105211931.164a695e@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hello Michael,
 
-On Mon, 5 Nov 2018 08:49:34 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+On Mon, 5 Nov 2018 08:59:29 +0100, Michael Toldo <michael.toldo@gmail.com> wrote:
 
-> Hello Peter,
+> Hi Peter,
 > 
-> On Sun, 4 Nov 2018 22:46:38 +0100, Peter Seiderer wrote:
-> 
-> > Thanks for the answer (you got it right)...., so in case I use the
-> > buildroot-generated qmake I will always use ccache (if configured),
-> > even if used outside of the buildroot build system, right?  
-> 
-> Well, in the context of Buildroot, qmake is essentially used to build
-> code for the target, using the cross-compiler. In this case, ccache was
-> already used, because invoking ccache is hidden inside the toolchain
-> wrapper, so there's no way around it :-)
-> 
-> However, I guess with the right qmake invocations, you can make it
-> build code for the host as well. And then yes, in this case, I assume
-> it would now start using ccache.
+> Thank you for your reply! I enabled the BR2_PACKAGE_QT5BASE_EGLFS and did a
+> full rebuild again. It's working now!
 > 
 
-So host ccache usage will behave the same as target usage..., O.k.
-
-> > The $(HOSTCC) is expanded at the sed command running time,
-> > g++-base.conf will contain 'QMAKE_COMPILER=gcc' or
-> > 'QMAKE_COMPILER=ccache gcc'...
-> > 
-
-Ups, missed the context here, the above was only to be sure it is expanded
-at configure time...
-
-> > Not sure if this matters for some use cases...  
-
-And this should be at the context host ccache usage...
-
-> 
-> What are you worried about? The fact that there is a space in the
-> QMAKE_COMPILER variable value ?
-
-No worries, you can add my:
-
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+This is good news ;-), thanks for the feedback...
 
 Regards,
 Peter
-
+ 
+> Regards,
+> Michael
 > 
-> Best regards,
+> Am So., 4. Nov. 2018 um 22:20 Uhr schrieb Peter Seiderer <ps.report@gmx.net
+> >:  
 > 
-> Thomas
+> > Hello Michael,
+> >
+> > On Wed, 31 Oct 2018 18:28:27 +0100, Michael Toldo <michael.toldo@gmail.com>
+> > wrote:
+> >  
+> > > Hi,
+> > >
+> > > I just tried to compile the master buildroot for the Raspberry Pi 0 W.
+> > > Everything worked well an I was able to boot the image. I wanted to start
+> > > the qt-webkit-kiosk but this error occured:
+> > >
+> > >
+> > >
+> > >
+> > >
+> > >
+> > > *qt.qpa.plugin: Could not find the Qt platform plugin "eglfs" in ""This
+> > > application failed to start because no Qt platform plugin could be
+> > > initialized. Reinstalling the application may fix this problem.Available
+> > > platform plugins are: linuxfb, minimal, offscreen, vnc.Aborted*
+> > >
+> > > The .config tells me "*eglfs backend available if OpenGL and EGL are
+> > > enabled*" but I guess OpenGL and EGL is already supported by the
+> > > rpi-userland.  
+> >
+> > Seems your have set BR2_PACKAGE_QT5BASE_DEFAULT_QPA=eglfs without
+> > setting BR2_PACKAGE_QT5BASE_EGLFS=y (maybe disabled because of
+> > missing dependencies)? Or you need to do a complete re-build
+> > (after changing some options, see [1])?
+> >
+> > Mind to share your .config file?
+> >
+> > Regards,
+> > Peter
+> >
+> > [1] http://nightly.buildroot.org/manual.html#full-rebuild
+> >  
+> > >
+> > > Can somebody please give me a hint?
+> > >
+> > > Regards  
+> >
+> >  
