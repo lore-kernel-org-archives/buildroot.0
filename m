@@ -1,95 +1,86 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Mon,  5 Nov 2018 02:02:30 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libnfs: bump to version 3.0.0
-In-Reply-To: <20181105010230.18425-1-joerg.krause@embedded.rocks>
-References: <20181105010230.18425-1-joerg.krause@embedded.rocks>
-Message-ID: <20181105010230.18425-2-joerg.krause@embedded.rocks>
+Date: Mon,  5 Nov 2018 02:02:29 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libnfs: add patch to fix musl build
+ issue
+Message-ID: <20181105010230.18425-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add an patch from upstream to fix building libnfs with the musl C
-library. This issue was introduced upstream between version 2.0.0 and
-version 3.0.0.
+Add a patch to fix build issues with the musl C library.
 
-Note, that upstreams commit message says it fixes a warning. However, as
-musl is more strictly regarding missing headers it actually fixes the
-build with musl.
+This patch fixes an autobuild issue when linking the mpd package
+against libnfs. The header file libnfs.h uses `struct timeval` which is
+defined in `<sys/time.h>` for POSIX systems. Unfortunately, upstream
+only includes it conditionally, based on the system. Therefore, we
+remove the check in the first patch.
+
+Reported upstream:
+https://github.com/sahlberg/libnfs/issues/272
+
+Fixes:
+http://autobuild.buildroot.org/results/452/4522014698b9fe50720a71b663e47a75805bcf54
+http://autobuild.buildroot.org/results/b0a/b0a0c20ad1705e9fa7ba4a12eb9c182e8077ab0c
+http://autobuild.buildroot.org/results/53c/53c87361923cc177de7889523b3d16ba6b1d3d0f
+.. and more.
+
+Previous patch: Changes requested
+http://patchwork.ozlabs.org/patch/973605/
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- ...-libnfs.c-include-time.h-in-libnfs.c.patch | 35 +++++++++++++++++++
- package/libnfs/libnfs.hash                    |  2 +-
- package/libnfs/libnfs.mk                      |  2 +-
- 3 files changed, 37 insertions(+), 2 deletions(-)
- create mode 100644 package/libnfs/0002-libnfs.c-include-time.h-in-libnfs.c.patch
+ .../libnfs/0001-Fix-include-sys-time.h.patch  | 41 +++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+ create mode 100644 package/libnfs/0001-Fix-include-sys-time.h.patch
 
-diff --git a/package/libnfs/0002-libnfs.c-include-time.h-in-libnfs.c.patch b/package/libnfs/0002-libnfs.c-include-time.h-in-libnfs.c.patch
+diff --git a/package/libnfs/0001-Fix-include-sys-time.h.patch b/package/libnfs/0001-Fix-include-sys-time.h.patch
 new file mode 100644
-index 0000000000..34e584017e
+index 0000000000..15b281672a
 --- /dev/null
-+++ b/package/libnfs/0002-libnfs.c-include-time.h-in-libnfs.c.patch
-@@ -0,0 +1,35 @@
-+From b56bd3d99f67a3273fec3c0c5d9560413465a1db Mon Sep 17 00:00:00 2001
-+From: Anna Lyons <Anna.Lyons@data61.csiro.au>
-+Date: Thu, 12 Jul 2018 17:45:23 +1000
-+Subject: [PATCH] libnfs.c: include <time.h> in libnfs.c
++++ b/package/libnfs/0001-Fix-include-sys-time.h.patch
+@@ -0,0 +1,41 @@
++From 9df082012cba1dc32d83e5e8b0bdc0892f250058 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Mon, 5 Nov 2018 00:43:07 +0100
++Subject: [PATCH] Fix include sys/time.h
 +MIME-Version: 1.0
 +Content-Type: text/plain; charset=UTF-8
 +Content-Transfer-Encoding: 8bit
 +
-+time() is used in this file, which is from time.h. Fixes a warning.
++POSIX says `struct timeval` is defined if <sys/time.h> is included.
 +
-+Note, that building with musl breaks otherwise, as it is more strict regarding
-+missing header inclusions.
++Instead of the mess that is currently done based on the system on which
++the stuff is being compiled, include it unconditionally.
 +
-+Backported from: 794a29f01f8e5961adc5c79d5ba5ac1062877e6c
++Reported upstream:
++https://github.com/sahlberg/libnfs/issues/272
 +
 +Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 +---
-+ lib/libnfs.c | 1 +
-+ 1 file changed, 1 insertion(+)
++ include/nfsc/libnfs.h | 5 -----
++ 1 file changed, 5 deletions(-)
 +
-+diff --git a/lib/libnfs.c b/lib/libnfs.c
-+index d89d84d..43c17b9 100755
-+--- a/lib/libnfs.c
-++++ b/lib/libnfs.c
-+@@ -70,6 +70,7 @@
-+ #include <stdarg.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-++#include <time.h>
-+ #include "slist.h"
-+ #include "libnfs.h"
-+ #include "libnfs-raw.h"
++diff --git a/include/nfsc/libnfs.h b/include/nfsc/libnfs.h
++index 09dcf1c..b6db58c 100755
++--- a/include/nfsc/libnfs.h
+++++ b/include/nfsc/libnfs.h
++@@ -24,12 +24,7 @@
++ #define _LIBNFS_H_
++ 
++ #include <stdint.h>
++-#if defined(__ANDROID__) || defined(AROS) \
++- || ( defined(__APPLE__) && defined(__MACH__) )
++ #include <sys/time.h>
++-#else
++-#include <time.h>
++-#endif
++ 
++ #ifdef __cplusplus
++ extern "C" {
 +-- 
 +2.19.1
 +
-diff --git a/package/libnfs/libnfs.hash b/package/libnfs/libnfs.hash
-index 2bd8caf255..ae8feb777a 100644
---- a/package/libnfs/libnfs.hash
-+++ b/package/libnfs/libnfs.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256 7ea6cd8fa6c461d01091e584d424d28e137d23ff4b65b95d01a3fd0ef95d120e  libnfs-libnfs-2.0.0.tar.gz
-+sha256 445d92c5fc55e4a5b115e358e60486cf8f87ee50e0103d46a02e7fb4618566a5  libnfs-libnfs-3.0.0.tar.gz
- sha256 2d152e3a2f31ef0fe14d4908377277f8215fb5c82ec9329d1eed081c845fc85f  COPYING
- sha256 d9406ced95457941032aa11d04623b8ab71f2827a3395ebef137aec475be35b1  LICENCE-BSD.txt
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENCE-LGPL-2.1.txt
-diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
-index 0cf07d2143..3a84e0aafa 100644
---- a/package/libnfs/libnfs.mk
-+++ b/package/libnfs/libnfs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNFS_VERSION = libnfs-2.0.0
-+LIBNFS_VERSION = libnfs-3.0.0
- LIBNFS_SITE = $(call github,sahlberg,libnfs,$(LIBNFS_VERSION))
- LIBNFS_INSTALL_STAGING = YES
- LIBNFS_AUTORECONF = YES
 -- 
 2.19.1
