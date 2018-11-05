@@ -1,40 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 05 Nov 2018 23:22:03 +0100
-Subject: [Buildroot] [PATCH] ifupdown-script: send current hostname in
- DHCP request
-In-Reply-To: <CANQCQpbA-2rdHtpBs8sE=R0UE0R+GGY4fXza-kxtY+x_7LrLdg@mail.gmail.com>
- (Matthew Weber's message of "Thu, 1 Nov 2018 22:28:17 -0500")
-References: <20181030171614.32609-1-peter@korsgaard.com>
- <CANQCQpbA-2rdHtpBs8sE=R0UE0R+GGY4fXza-kxtY+x_7LrLdg@mail.gmail.com>
-Message-ID: <8736sfcghg.fsf@dell.be.48ers.dk>
+Date: Mon, 5 Nov 2018 23:18:28 +0100
+Subject: [Buildroot] [git commit] ngrep: fix static build
+Message-ID: <20181105222005.8ED72814E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=16db3937c09e6aaa914e3e05f8472323e2e088a8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Peter,
- > On Tue, Oct 30, 2018 at 12:16 PM Peter Korsgaard <peter@korsgaard.com> wrote:
- >> 
- >> For the default (BR2_SYSTEM_DHCP) /etc/network/interfaces handling.
- >> 
- >> Both the "big" and busybox ifupdown variants pass the hostname argument to
- >> the DHCP client through the shell, so we can use $() to expand to the
- >> current hostname value.
- >> 
- > The man page for the interfaces file mentioned that only pump, dhcpcd
- > and udhcpc use the hostname value from interfaces.  With dhclient
- > requiring the dhclient.conf to specify the set hostname option with
- > the hostname string.  Would it be worth mentioning that here in the
- > comment that for most (pump, dhcpcd, udhcpc) the hostname parameter
- > will work but some clients like dhclient require a separate
- > configuration file?
+Commit 54eeb08d6498e54cc77e212e4f9873b579f76638 wrongly replaced
+`$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs` by
+"$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs"
 
- > Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/3dd8c768beef075494d6be7eff4cbb57b5ec8a41
 
-I've added a comment about that and applied, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ngrep/ngrep.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ngrep/ngrep.mk b/package/ngrep/ngrep.mk
+index 41d08d9f26..d17792cda0 100644
+--- a/package/ngrep/ngrep.mk
++++ b/package/ngrep/ngrep.mk
+@@ -13,7 +13,7 @@ NGREP_INSTALL_STAGING = YES
+ NGREP_AUTORECONF = YES
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+-NGREP_CONF_ENV += LIBS="$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs"
++NGREP_CONF_ENV += LIBS=`$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`
+ endif
+ 
+ NGREP_CONF_OPTS = \
