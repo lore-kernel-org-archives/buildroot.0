@@ -1,47 +1,62 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 5 Nov 2018 09:22:12 +0100
-Subject: [Buildroot] [PATCH v2] scanpypi: use archive file name to
- specify the extraction folder
-In-Reply-To: <20181102213640.3a274edc@windsurf>
-References: <20181102134501.13860-1-yegorslists@googlemail.com>
- <20181102213640.3a274edc@windsurf>
-Message-ID: <CAGm1_kt-oH0S5m8TfEXL9E08t_1-1a9pH10e3CSEKxAsjF0E8Q@mail.gmail.com>
+From: yamada.masahiro at socionext.com <yamada.masahiro@socionext.com>
+Date: Mon, 5 Nov 2018 08:23:54 +0000
+Subject: [Buildroot] [PATCH] merge_config.sh: Fix merging buildroot
+ config files
+In-Reply-To: <20181103213223.GA7084@smart-ThinkPad-T410>
+References: <20181031205608.GA4061@x230>
+ <20181101010953.20996-1-afshin.nasser@gmail.com> <20181101062448.GC8261@x230>
+ <20181101105513.GB4937@smart-ThinkPad-T410>
+ <7ba255c0-e72e-7e02-d972-f8f082ce5214@mind.be> <20181101161918.GA30470@x230>
+ <20181102021259.GA8966@smart-ThinkPad-T410>
+ <5b88530949cb4aaf93436bcbc36f9fbf@SOC-EX01V.e01.socionext.com>
+ <4c5ee82c-00eb-33e6-6ec1-fc4f21eba039@mind.be>
+ <20181102225056.GB11633@dell5510> <20181103213223.GA7084@smart-ThinkPad-T410>
+Message-ID: <547a4ff728664a39a4e0870731c5446f@SOC-EX01V.e01.socionext.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Nov 2, 2018 at 9:36 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Fri,  2 Nov 2018 14:45:01 +0100, yegorslists at googlemail.com wrote:
-> > From: Yegor Yefremov <yegorslists@googlemail.com>
-> >
-> > Some packages have archive name that is different from package name.
-> > For example websocket-client's archive name is websocket_client-*.tar.gz.
-> > scanpypi expects the temporary extract folder to be:
-> >
-> > /tmp-folder/BR-package-name/PyPI-packagename-and-version
-> >
-> > In the case of websocket-client package the real extraction folder
-> > will be different from the expected one because of the '_' in the
-> > archive file name.
-> >
-> > Use archive file name instead of package name to specify the extraction
-> > folder. As the version is already part of this file, we don't need to
-> > specify it.
-> >
-> > Bonus: remove obsolete "return None, None" as the function doesn't return
-> > anything. OSError class doesn't provide "message" member, so replace it
-> > with "strerror".
->
-> I've applied to master, but I believe it should perhaps have been two
-> separate patches. Indeed, I don't see the relationship between the use
-> of the archive file name, and the change around "return None, None".
+Hi.
 
-You're right. Will do next time.
+> -----Original Message-----
+> From: Nasser [mailto:afshin.nasser at gmail.com]
+> Sent: Sunday, November 04, 2018 6:32 AM
+> To: Petr Vorel <petr.vorel@gmail.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>; Yamada, Masahiro/?? ??
+> <yamada.masahiro@socionext.com>; buildroot at buildroot.org;
+> matthew.weber at rockwellcollins.com; angelo.compagnucci at gmail.com
+> Subject: Re: [PATCH] merge_config.sh: Fix merging buildroot config files
+> 
+> Hi Petr, Mahasiro,
+> On Fri, Nov 02, 2018 at 11:50:58PM +0100, Petr Vorel wrote:
+> > Hi Arnout,
+> >
+> > > > How about this?
+> > > > https://patchwork.kernel.org/patch/10665119/
+> >
+> > >  Perhaps it's better to make the entire pattern explicit, like:
+> >
+> > > SED_CONFIG_EXP="s/^\(${CONFIG_PREFIX}[a-zA-Z0-9_]*\)=.*$\|^#
+> > > \(${CONFIG_PREFIX}[a-zA-Z0-9_]*\) is not set$/\1\2/p"
+> >
+> > > (\1\2 works because only one of the two subexpressions matches, so either
+> \1 or
+> > > \2 must be empty).
+> > I'd prefer original Masahiro's version - it's easier to read and without
+> > duplicity.
+> >
+> I agree with you. +1 for not having duplicity.
+> This patch makes merge_config.sh to work well in many more tests. I'm waiting
+> for Masahiro's version to be applied to
+> the his kbuild tree and then re-prepare the patch here.
 
-Yegor
+
+OK, I think Arnout's one is unreadable, but
+we can make it readable by splitting the complex pattern into two.
+
+I posted this for comparison.
+https://patchwork.kernel.org/patch/10667571/
+
+Thanks.
