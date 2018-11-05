@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 5 Nov 2018 09:17:24 +0100
-Subject: [Buildroot] [PATCH v2] package/libnfs: bump to version 3.0.0
-In-Reply-To: <20181105062705.20985-1-joerg.krause@embedded.rocks>
-References: <20181105062705.20985-1-joerg.krause@embedded.rocks>
-Message-ID: <20181105091724.4e542ff8@windsurf>
+Date: Mon, 5 Nov 2018 09:18:07 +0100
+Subject: [Buildroot] [PATCH] package/libid3tag: add .pc file and install
+ to staging hook
+In-Reply-To: <20181105062926.21284-1-joerg.krause@embedded.rocks>
+References: <20181105062926.21284-1-joerg.krause@embedded.rocks>
+Message-ID: <20181105091807.220a68d5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +13,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  5 Nov 2018 07:27:05 +0100, J?rg Krause wrote:
-> Also add an patch from upstream to fix building libnfs with the musl C
-> library. This issue was introduced upstream between version 2.0.0 and
-> version 3.0.0.
-> 
-> Note, that upstreams commit message says it fixes a warning. However, as
-> musl is more strictly regarding missing headers it actually fixes the
-> build with musl.
-> 
+On Mon,  5 Nov 2018 07:29:26 +0100, J?rg Krause wrote:
 > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
-> v1 -> v2:
->  - fix hash of license file COPYING
 
-What are the changes in the COPYING file ?
+This probably needs a non-empty commit log. What is the motivation for
+adding a .pc file ? Is it used by some other package in Buildroot ? By
+a private application/library ?
 
-Thanks,
+Thanks!
 
 Thomas
 -- 
