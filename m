@@ -1,37 +1,65 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  5 Nov 2018 19:24:57 +0100
-Subject: [Buildroot] [PATCH 1/1] ngrep: fix static build
-Message-ID: <20181105182457.22098-1-fontaine.fabrice@gmail.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Mon,  5 Nov 2018 19:27:01 +0100
+Subject: [Buildroot] [PATCH v2] package/libid3tag: add .pc file and install
+ to staging hook
+Message-ID: <20181105182701.5646-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 54eeb08d6498e54cc77e212e4f9873b579f76638 wrongly replaced
-`$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs` by
-"$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs"
+The MPD project dropped autotools support in version 0.21.x in favor of
+meson. While adapting the package to the meson build infrastructure, the
+recognition of libid3tag failed, as only pkg-config is used to detect
+the library. Note, that the version bump of the mpd package to 0.21.x is
+not submitted, yet.
 
-Fixes:
- - http://autobuild.buildroot.org/results/3dd8c768beef075494d6be7eff4cbb57b5ec8a41
+To help finding the build system to detect libid3tag with pkg-config
+properly, add a .pc file and install it to staging.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/ngrep/ngrep.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v1 -> v2:
+ - add commit message (Thomas)
+---
+ package/libid3tag/id3tag.pc    | 11 +++++++++++
+ package/libid3tag/libid3tag.mk |  7 +++++++
+ 2 files changed, 18 insertions(+)
+ create mode 100644 package/libid3tag/id3tag.pc
 
-diff --git a/package/ngrep/ngrep.mk b/package/ngrep/ngrep.mk
-index 1df026861f..c09060f046 100644
---- a/package/ngrep/ngrep.mk
-+++ b/package/ngrep/ngrep.mk
-@@ -13,7 +13,7 @@ NGREP_INSTALL_STAGING = YES
- NGREP_AUTORECONF = YES
+diff --git a/package/libid3tag/id3tag.pc b/package/libid3tag/id3tag.pc
+new file mode 100644
+index 0000000000..845eb3276b
+--- /dev/null
++++ b/package/libid3tag/id3tag.pc
+@@ -0,0 +1,11 @@
++prefix=/usr
++exec_prefix=${prefix}
++libdir=${exec_prefix}/lib
++includedir=${prefix}/include
++
++Name: id3tag
++Description: ID3 tag reading library
++Version: 0.15.1b
++Requires:
++Libs: -L${libdir} -lid3tag
++Cflags: -I${includedir}
+diff --git a/package/libid3tag/libid3tag.mk b/package/libid3tag/libid3tag.mk
+index 951ae09c77..24342186cc 100644
+--- a/package/libid3tag/libid3tag.mk
++++ b/package/libid3tag/libid3tag.mk
+@@ -12,4 +12,11 @@ LIBID3TAG_INSTALL_STAGING = YES
+ LIBID3TAG_DEPENDENCIES = zlib
+ LIBID3TAG_LIBTOOL_PATCH = NO
  
- ifeq ($(BR2_STATIC_LIBS),y)
--NGREP_CONF_ENV += LIBS="$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs"
-+NGREP_CONF_ENV += LIBS=`$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`
- endif
- 
- NGREP_CONF_OPTS = \
++define LIBID3TAG_INSTALL_STAGING_PC
++	$(INSTALL) -D package/libid3tag/id3tag.pc \
++		$(STAGING_DIR)/usr/lib/pkgconfig/id3tag.pc
++endef
++
++LIBID3TAG_POST_INSTALL_STAGING_HOOKS += LIBID3TAG_INSTALL_STAGING_PC
++
+ $(eval $(autotools-package))
 -- 
-2.17.1
+2.19.1
