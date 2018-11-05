@@ -1,50 +1,95 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Mon,  5 Nov 2018 01:05:18 +0100
-Subject: [Buildroot] [PATCH] package/meson: bump to version 0.47.2
-Message-ID: <20181105000518.32336-1-joerg.krause@embedded.rocks>
+Date: Mon,  5 Nov 2018 02:02:30 +0100
+Subject: [Buildroot] [PATCH 2/2] package/libnfs: bump to version 3.0.0
+In-Reply-To: <20181105010230.18425-1-joerg.krause@embedded.rocks>
+References: <20181105010230.18425-1-joerg.krause@embedded.rocks>
+Message-ID: <20181105010230.18425-2-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Note, that there is already a patch [1] to bump the version to 0.48.1.
-However, the bump to version 0.48.x has some unresolved issues.
+Also add an patch from upstream to fix building libnfs with the musl C
+library. This issue was introduced upstream between version 2.0.0 and
+version 3.0.0.
 
-In the meantime, until the issue with 0.48 is resolved, bump to latest
-version of the 0.47 branch.
-
-[1] http://patchwork.ozlabs.org/patch/986260/
+Note, that upstreams commit message says it fixes a warning. However, as
+musl is more strictly regarding missing headers it actually fixes the
+build with musl.
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/meson/meson.hash | 4 ++--
- package/meson/meson.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...-libnfs.c-include-time.h-in-libnfs.c.patch | 35 +++++++++++++++++++
+ package/libnfs/libnfs.hash                    |  2 +-
+ package/libnfs/libnfs.mk                      |  2 +-
+ 3 files changed, 37 insertions(+), 2 deletions(-)
+ create mode 100644 package/libnfs/0002-libnfs.c-include-time.h-in-libnfs.c.patch
 
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index 4a4923bd12..a9968977d4 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/0.47.1/meson-0.47.1.tar.gz.asc
--sha256 d673de79f7bab064190a5ea06140eaa8415efb386d0121ba549f6d66c555ada6 meson-0.47.1.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/0.47.2/meson-0.47.2.tar.gz.asc
-+sha256 92d8afd921751261e36151643464efd3394162f69efbe8cd53e0a66b1cf395eb meson-0.47.2.tar.gz
- sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index 08e5c505c9..e1675c21b8 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
+diff --git a/package/libnfs/0002-libnfs.c-include-time.h-in-libnfs.c.patch b/package/libnfs/0002-libnfs.c-include-time.h-in-libnfs.c.patch
+new file mode 100644
+index 0000000000..34e584017e
+--- /dev/null
++++ b/package/libnfs/0002-libnfs.c-include-time.h-in-libnfs.c.patch
+@@ -0,0 +1,35 @@
++From b56bd3d99f67a3273fec3c0c5d9560413465a1db Mon Sep 17 00:00:00 2001
++From: Anna Lyons <Anna.Lyons@data61.csiro.au>
++Date: Thu, 12 Jul 2018 17:45:23 +1000
++Subject: [PATCH] libnfs.c: include <time.h> in libnfs.c
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++time() is used in this file, which is from time.h. Fixes a warning.
++
++Note, that building with musl breaks otherwise, as it is more strict regarding
++missing header inclusions.
++
++Backported from: 794a29f01f8e5961adc5c79d5ba5ac1062877e6c
++
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
++---
++ lib/libnfs.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/lib/libnfs.c b/lib/libnfs.c
++index d89d84d..43c17b9 100755
++--- a/lib/libnfs.c
+++++ b/lib/libnfs.c
++@@ -70,6 +70,7 @@
++ #include <stdarg.h>
++ #include <stdlib.h>
++ #include <string.h>
+++#include <time.h>
++ #include "slist.h"
++ #include "libnfs.h"
++ #include "libnfs-raw.h"
++-- 
++2.19.1
++
+diff --git a/package/libnfs/libnfs.hash b/package/libnfs/libnfs.hash
+index 2bd8caf255..ae8feb777a 100644
+--- a/package/libnfs/libnfs.hash
++++ b/package/libnfs/libnfs.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256 7ea6cd8fa6c461d01091e584d424d28e137d23ff4b65b95d01a3fd0ef95d120e  libnfs-libnfs-2.0.0.tar.gz
++sha256 445d92c5fc55e4a5b115e358e60486cf8f87ee50e0103d46a02e7fb4618566a5  libnfs-libnfs-3.0.0.tar.gz
+ sha256 2d152e3a2f31ef0fe14d4908377277f8215fb5c82ec9329d1eed081c845fc85f  COPYING
+ sha256 d9406ced95457941032aa11d04623b8ab71f2827a3395ebef137aec475be35b1  LICENCE-BSD.txt
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENCE-LGPL-2.1.txt
+diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
+index 0cf07d2143..3a84e0aafa 100644
+--- a/package/libnfs/libnfs.mk
++++ b/package/libnfs/libnfs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MESON_VERSION = 0.47.1
-+MESON_VERSION = 0.47.2
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
+-LIBNFS_VERSION = libnfs-2.0.0
++LIBNFS_VERSION = libnfs-3.0.0
+ LIBNFS_SITE = $(call github,sahlberg,libnfs,$(LIBNFS_VERSION))
+ LIBNFS_INSTALL_STAGING = YES
+ LIBNFS_AUTORECONF = YES
 -- 
 2.19.1
