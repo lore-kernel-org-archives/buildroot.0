@@ -1,72 +1,73 @@
-From: =?UTF-8?Q?I=c3=b1igo_Huguet?= <inigohuguet@fanamoel.com>
-Date: Mon, 5 Nov 2018 08:52:02 +0100
-Subject: [Buildroot] [PATCH 1/1] picotts: new package
-In-Reply-To: <20181102221146.4884a16b@windsurf>
-References: <20181023082513.30099-1-inigohuguet@fanamoel.com>
- <20181102221146.4884a16b@windsurf>
-Message-ID: <1e8836fe-f499-1067-c2a0-9c7e0821af6a@fanamoel.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 5 Nov 2018 09:15:55 +0100
+Subject: [Buildroot] [PATCH v2 00/12] default runtime test case for
+ python packages v2
+In-Reply-To: <5bdf75d55554f_4f663ff4e40da8e0185a@ultri5.mail>
+References: <20181104114044.3a01aa11@windsurf>
+ <5bdf75d55554f_4f663ff4e40da8e0185a@ultri5.mail>
+Message-ID: <20181105091555.484cb898@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, some comments below.
+Hello Ricardo,
 
+On Sun, 04 Nov 2018 20:42:29 -0200, Ricardo Martincoski wrote:
 
-El 02/11/18 a las 22:11, Thomas Petazzoni escribi?:
->> to help with that:
->>   - picotts: create the output wav file in /tmp, play it with aplay
->>     and delete it
->>   - picotts-lc: detect the current system language and call picotts
->>     script
-> However, I am not convinced that we want those helper scripts. They
-> seem to be pretty use case specific, and it's not really the point of
-> Buildroot to carry this type of script IMO. If you think they are
-> generally useful, then talk with upstream to get them merged.
+> I am really unsure about the best approach here.
+> TBH all (my v1 and v2, and the 2 links above) look a bit hackish to me.
+> 
+> But I just found deeper on nose2 docs [3] the __test__ attribute. It seems the
+> most correct solution as it depends on a feature that was implemented and
+> documented. I just failed to find it earlier.
+> 
+> In the multi inheritance version it would look like this:
+> class TestPythonPackageBase(TestPythonBase):
+> ...
+>     def __init__(self, names):
+>         if not issubclass(self.__class__, TestPythonBase2) and not issubclass(self.__class__, TestPythonBase3):
+>             self.__test__ = False
+>         super(TestPythonBase, self).__init__(names)
+>         if self.config_package:
+> ...
+> 
+> And without multi inheritance you can see a hackish patch on top of v2 in [4].
+> 
+> I know I changed my mind a few times.
+> But now I prefer to resend using [4] (reworking each patch, of course) because:
+>  - it does not use multi inheritance that can potentially lead to future
+>    problems as the article you found pointed. Let's avoid it while we can;
+>  - the code for each test case for a python package looks nice, i.e. [2];
+> But it is not a strong preference.
+> 
+> What do you think about this?
 
-The problem is that there is no upstream anywhere. This program source 
-was "extracted" from Android source, but there is not any "official" 
-team maintaining it. Actually, I got the source code from Ubuntu's 
-package and uploaded it to my own github.
+First of all, thanks a lot for this additional research. self.__test__
+= False is definitely what we need here.
 
-About the scripts being use case specific, I think they're not. The 
-program only can create a .wav file, so if you want to use it to make 
-"on the fly" speech, you need to create a temporary wav, play it, and 
-delete it. This is in fact what the helper scripts do.
+I also like the proposal that doesn't use multiple inheritance.
 
-I you think they must be removed I will do it, please tell me exactly 
-what to do. Or, since the repository from which the package download the 
-program is mine, I can include them to my repo directly.
+Let me make two possible additional proposals:
 
-> Please add a blank line, and then the upstream URL of the project.
+ - Use an integer for the Python version variable, rather than a
+   string, there is really no need for this to be a string I believe ?
 
-Same problem, there is not any upstream URL.
+ - Alternatively, you could derive the version of the Python
+   interpreter to use from the child class name. Maybe this is too
+   "implicit" and a bit tricky, but I wanted to mention this
+   possibility. I.e, in the base class, you use
+   self.__class__.__name__, and it gives you the actual name of the
+   class that is instantiated. You can then check if the string
+   contains Python2 or Python3, and decide which interpreter to use
+   according to this. I am not saying I absolutely want this, I'm just
+   offering this as an alternative solution.
 
->> +# generate build files (autotools)
->> +PICOTTS_PRE_CONFIGURE_HOOKS += PICOTTS_EXEC_AUTOGEN
->> +define PICOTTS_EXEC_AUTOGEN
->> +	cd $(@D) && ./autogen.sh
->> +endef
-> This won't work correctly, because you're not adding host-autoconf,
-> host-automake and host-libtool in dependencies.
->
-> Could you use PICOTTS_AUTORECONF = YES instead? If it doesn't work,
-> could you give more details at what doesn't work?
+Thanks!
 
-It will work if I just add those packages as dependencies? I will also 
-try with autoreconf, I didn't do it because I don't know enough about 
-how autotools works to know if there is any important difference or not.
-
-> Could you rework the package to take into account those comments, and
-> send an updated version ?
->
-> Thanks a lot!
->
-> Thomas
-
-Of course, I can.
-
-Regards
-
-I?igo
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
