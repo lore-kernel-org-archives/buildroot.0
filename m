@@ -1,39 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 05 Nov 2018 23:17:46 +0100
-Subject: [Buildroot] [PATCH] Config.in: security hardening: disable
- FORTIFY_SOURCE for gcc < 6
-In-Reply-To: <CANQCQpYGPBpEivKh893TPeoqoOtS+FxGmNjYvmgwGWoArOyu=A@mail.gmail.com>
- (Matthew Weber's message of "Mon, 5 Nov 2018 14:35:56 -0600")
-References: <20181105200750.6039-1-romain.naour@gmail.com>
- <CANQCQpYGPBpEivKh893TPeoqoOtS+FxGmNjYvmgwGWoArOyu=A@mail.gmail.com>
-Message-ID: <87bm73cgol.fsf@dell.be.48ers.dk>
+Date: Mon, 05 Nov 2018 23:18:33 +0100
+Subject: [Buildroot] [PATCH 1/1] ngrep: fix static build
+In-Reply-To: <20181105182457.22098-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 5 Nov 2018 19:24:57 +0100")
+References: <20181105182457.22098-1-fontaine.fabrice@gmail.com>
+Message-ID: <877ehrcgna.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Romain ,
- > On Mon, Nov 5, 2018, 14:07 Romain Naour <romain.naour@gmail.com wrote:
+ > Commit 54eeb08d6498e54cc77e212e4f9873b579f76638 wrongly replaced
+ > `$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs` by
+ > "$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs"
 
- >> As reported in the bug report [1], gcc < 6 doesn't build when
- >> FORTIFY_SOURCE is set to 1 or 2. The issue is related to the
- >> upstream bug report [2] but the patch fixing the issue for gcc 6
- >> has not been backported to earlier gcc versions.
- >> 
- >> Add a dependency on gcc at least version 6 to BR2_FORTIFY_SOURCE_1
- >> and BR2_FORTIFY_SOURCE_2.
- >> 
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/3dd8c768beef075494d6be7eff4cbb57b5ec8a41
 
- > Sorry about the HTML email.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- > Could this dependency be conditional on if a internal toolchain is used?
-
-Ahh yes, if this is really about *building* gcc, then it should be
-
-depends on !BR2_TOOLCHAIN_BUILDROOT || BR2_TOOLCHAIN_GCC_AT_LEAST_6
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
