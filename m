@@ -1,57 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Nov 2018 08:54:25 +0100
-Subject: [Buildroot] [git commit] Config.in: security hardening: disable
- FORTIFY_SOURCE for gcc < 6
-Message-ID: <20181106100541.CFA3381515@busybox.osuosl.org>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Tue,  6 Nov 2018 08:11:16 -0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: take aer-inject
+Message-ID: <20181106101116.5851-1-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a75ee0e8124023185f4a05e95b2fcd29fa9449d8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Tiago is leaving the company and will unlikely have access to the
+hardware required to test the package.
 
-As reported in the bug report [1], gcc < 6 doesn't build when
-FORTIFY_SOURCE is set to 1 or 2. The issue is related to the
-upstream bug report [2] but the patch fixing the issue for gcc 6
-has not been backported to earlier gcc versions.
-
-Add a dependency on gcc at least version 6 to BR2_FORTIFY_SOURCE_1
-and BR2_FORTIFY_SOURCE_2.
-
-[1] https://bugs.busybox.net/show_bug.cgi?id=11476
-[2] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=61164
-[3] https://github.com/gcc-mirror/gcc/commit/55f12fce4ccf77513644a247f9c401a5b1fa2402
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-[Peter: only limit for internal toolchain as suggested by Matthew]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 ---
- Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ DEVELOPERS | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index 42cdf7a3eb..03e4eb3928 100644
---- a/Config.in
-+++ b/Config.in
-@@ -812,6 +812,8 @@ config BR2_FORTIFY_SOURCE_NONE
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8d5ed199ce..ae3900b9d5 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -413,6 +413,7 @@ N:	Carlo Caione <carlo.caione@gmail.com>
+ F:	package/sunxi-boards/
  
- config BR2_FORTIFY_SOURCE_1
- 	bool "Conservative"
-+	# gcc bug https://gcc.gnu.org/bugzilla/show_bug.cgi?id=61164
-+	depends on !BR2_TOOLCHAIN_BUILDROOT || BR2_TOOLCHAIN_GCC_AT_LEAST_6
- 	help
- 	  This option sets _FORTIFY_SOURCE to 1 and only introduces
- 	  checks that shouldn't change the behavior of conforming
-@@ -819,6 +821,8 @@ config BR2_FORTIFY_SOURCE_1
+ N:	Carlos Santos <casantos@datacom.com.br>
++F:	package/aer-inject/
+ F:	package/busybox/
+ F:	package/gtest/
+ F:	package/initscripts/
+@@ -2088,9 +2089,6 @@ F:	package/wayland/
+ F:	package/weston/
+ F:	toolchain/
  
- config BR2_FORTIFY_SOURCE_2
- 	bool "Aggressive"
-+	# gcc bug https://gcc.gnu.org/bugzilla/show_bug.cgi?id=61164
-+	depends on !BR2_TOOLCHAIN_BUILDROOT || BR2_TOOLCHAIN_GCC_AT_LEAST_6
- 	help
- 	  This option sets _FORTIFY_SOURCES to 2 and some more
- 	  checking is added, but some conforming programs might fail.
+-N:	Tiago Brusamarello <tiago.brusamarello@datacom.com.br>
+-F:	package/aer-inject/
+-
+ N:	Timo Ketola <timo.ketola@exertus.fi>
+ F:	package/fbgrab/
+ 
+-- 
+2.14.5
