@@ -1,37 +1,23 @@
-From: mws <mike.w.shapiro+buildroot@gmail.com>
-Date: Tue, 6 Nov 2018 10:49:24 -0600 (CST)
-Subject: [Buildroot] glibc link fails on x86_64 with fPIC error
-In-Reply-To: <CANQCQpZ1j-Nfh+z0qSkshZqrZrLi4pcgYhEJfrOJrOcfDyXm-A@mail.gmail.com>
-References: <1541520575003-0.post@n4.nabble.com>
- <CANQCQpZ1j-Nfh+z0qSkshZqrZrLi4pcgYhEJfrOJrOcfDyXm-A@mail.gmail.com>
-Message-ID: <1541522964822-0.post@n4.nabble.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 6 Nov 2018 12:24:06 -0600
+Subject: [Buildroot] Clang and SDK relocation
+Message-ID: <CANQCQpZ41eFDSffOMmpGEOSTDzZhDp92fffHrSZTVJX4P2n0cA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-$ cat defconfig
-BR2_x86_64=y
-BR2_x86_core_avx2=y
-BR2_JLEVEL=1
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_KERNEL_HEADERS_4_9=y
-BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-BR2_PACKAGE_PCIUTILS=y
-BR2_PACKAGE_LIBXML2=y
-BR2_PACKAGE_ELFUTILS=y
-BR2_PACKAGE_LIBCAP=y
-BR2_PACKAGE_BASH=y
+While working on a patchset for adding the compiler-rt sanitizers.  We
+noticed an issue if we moved the build as an SDK (path changed on
+system so that the orig build doesn't exist).  The include search
+paths provided to Clang seem to be ignored (sysroot/-I).  These
+options do work if using the tools from the original build location.
+Do you guys happen to know of any options I could start investigating
+to adjust to make a relative path or prefix with sysroot fix in the
+Clang build?
 
-$ grep -i relro .config
-BR2_RELRO_NONE=y
-# BR2_RELRO_PARTIAL is not set
-# BR2_RELRO_FULL is not set
+I'll keep looking through the code and see what I can find.
 
-Thanks for any ideas.
-
-
-
---
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+Thanks!
+Matt
