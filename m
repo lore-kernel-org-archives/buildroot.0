@@ -1,70 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 6 Nov 2018 22:10:08 +0100
-Subject: [Buildroot] Out of tree Linux kernel builds?
-In-Reply-To: <20181106084534.08bc72ca@windsurf>
-References: <02530ea6-3942-3fe1-91b8-9040e3838972@gmail.com>
- <20181106084534.08bc72ca@windsurf>
-Message-ID: <20181106211008.GE24754@scaer>
+From: Christian Stewart <christian@paral.in>
+Date: Tue,  6 Nov 2018 14:28:10 -0800
+Subject: [Buildroot] [PATCH 1/1] go: bump to v1.11.2
+Message-ID: <20181106222810.6805-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Florian, All,
+Bumps Golang host-go compiler to 1.11.2 release.
 
-On 2018-11-06 08:45 +0100, Thomas Petazzoni spake thusly:
-> On Mon, 5 Nov 2018 16:08:05 -0800, Florian Fainelli wrote:
-> > AFAIR a while back you mentioned that you were looking into adding
-> > support for out of tree Linux builds. Do you have working patches for
-> > that, or you would rather have someone take a stab at doing it?
-> 
-> In fact we are not planning on supporting out of tree kernel builds,
-> but rather to support out of tree build for all packages in a generic
-> way, which would include the 'linux' package of course.
-> 
-> I did some work in this area many years ago, Yann picked up some of the
-> work, see the current status at
-> https://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/oot.
-> 
-> I see he has other "oot" branches, such as
-> https://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/oot-build-dir,
-> https://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/oot-libtool
-> and
-> https://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/oot-same-source.
-> I'm not sure how they relate to each other (I haven't looked at the
-> patches).
+Add hash for LICENSE.
 
-The branch are organised as such (+n patches on top of the parent
-branch):
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ package/go/go.hash | 3 ++-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-    master
-        yem/oot-same-source (+5)
-            yem/oot-libtool (+3)
-                yem/oot-build-dir (+3)
-                    yem/oot (+15)
-
-Which means that yem/oot would bring all of the others.
-
-The idea being to split the big series that originated with Thomas, into
-more manageable chunks. Then rebase on master and adapt to the new state
-of the tree.
-
-Needless to say that it is not a trivial task! ;-) I even probably took
-the not-so-trivial ones first. :-/  But basically, I think some branches
-can be swapped without too much trouble.
-
-I've put that in limbo for a moment, but I'm planning to work on it back
-soon (winter means I no longer need to go outside take care of the
-garden as much as I need to in summer. Wee! ;-] ).
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 9f908e3f03..bd6af0358f 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,2 +1,3 @@
+ # From https://golang.org/dl/
+-sha256	558f8c169ae215e25b81421596e8de7572bd3ba824b79add22fba6e284db1117  go1.11.1.src.tar.gz
++sha256	042fba357210816160341f1002440550e952eb12678f7c9e7e9d389437942550  go1.11.2.src.tar.gz
++sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index ec74ba397c..2e434f3bad 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.11.1
++GO_VERSION = 1.11.2
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.18.1
