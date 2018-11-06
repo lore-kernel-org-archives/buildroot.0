@@ -1,91 +1,89 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 06 Nov 2018 07:18:15 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/mmc-utils: add patch to fix
- build failure
-In-Reply-To: <20181105095631.11811-1-sebastien.szymanski@armadeus.com>
-References: <20181105095631.11811-1-sebastien.szymanski@armadeus.com>
-Message-ID: <87muqm7pig.fsf@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue,  6 Nov 2018 08:00:48 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-11-05
+Message-ID: <20181106070048.36CDE2089C@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi S?bastien,
+Hello,
 
-S?bastien Szymanski writes:
-> Patch taken from:
->  - https://patchwork.kernel.org/patch/10654531/
->
-> Fixes:
->  - http://autobuild.buildroot.net/results/404bfbd095a7b80273391ea36ea81ba496164b80
->  - http://autobuild.buildroot.net/results/233ef5c00951b5be10a59408f4a8781ecc658d74
->  - http://autobuild.buildroot.net/results/eba3cf4ac21095bca5af2d5d1d69aca0c9098f9b
->
-> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
-> ---
->
-> Changes for v2:
->  - use git format-patch
->
->  .../0002-fix-overlapping-with-strncpy.patch        | 43 ++++++++++++++++++++++
->  1 file changed, 43 insertions(+)
->  create mode 100644 package/mmc-utils/0002-fix-overlapping-with-strncpy.patch
->
-> diff --git a/package/mmc-utils/0002-fix-overlapping-with-strncpy.patch b/package/mmc-utils/0002-fix-overlapping-with-strncpy.patch
-> new file mode 100644
-> index 0000000000..194862e801
-> --- /dev/null
-> +++ b/package/mmc-utils/0002-fix-overlapping-with-strncpy.patch
-> @@ -0,0 +1,43 @@
-> +From 1c90a7534658056b884d71ef82dc7ca8bad4271b Mon Sep 17 00:00:00 2001
-> +From: =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
-> +Date: Wed, 24 Oct 2018 13:00:47 +0200
-> +Subject: [PATCH 1/1] mmc-utils: fix overlapping with strncpy
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +GCC 8.2 warns about an overlapping using strncpy.
-> +
-> +Replace strncpy with a memmove to avoid this issue.
-> +
-> +In file included from /usr/include/string.h:494,
-> +                 from lsmmc.c:46:
-> +In function ?strncpy?,
-> +    inlined from ?read_file? at lsmmc.c:356:3:
-> +/usr/include/x86_64-linux-gnu/bits/string_fortified.h:106:10: error: ?__builtin_strncpy? accessing 4096 bytes at offsets 0 and 1 overlaps 4095 bytes at offset 1 [-Werror=restrict]
-> +   return __builtin___strncpy_chk (__dest, __src, __len, __bos (__dest));
-> +          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +cc1: all warnings being treated as errors
-> +make: *** [Makefile:36: lsmmc.o] Error 1
-> +
-> +Signed-off-by: Cl?ment P?ron <peron.clem@gmail.com>
+Build statistics for 2018-11-05
+===============================
 
-Please add your sign-off on the patch here.
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  16 |   4 |   0 |  20 |
+   2018.08.x |  15 |   0 |   0 |  15 |
+      master | 174 |  23 |   0 | 197 |
 
-Thanks,
-baruch
+Results for branch '2018.02.x'
+==============================
 
-> +---
-> + lsmmc.c | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/lsmmc.c b/lsmmc.c
-> +index c4faa00..bcb854d 100644
-> +--- a/lsmmc.c
-> ++++ b/lsmmc.c
-> +@@ -353,7 +353,7 @@ char *read_file(char *name)
-> + 		line[strlen(line) - 1] = '\0';
-> + 
-> + 	while (isspace(line[0]))
-> +-		strncpy(&line[0], &line[1], sizeof(line));
-> ++		memmove(&line[0], &line[1], sizeof(line)-1);
-> + 
-> + 	return strdup(line);
-> + }
+Classification of failures by reason
+------------------------------------
+
+                     gpsd-3.17 | 3 
+                  giflib-5.1.4 | 1 
+
+
+Detail of failures
+------------------
+
+        m68k |                   giflib-5.1.4 | NOK | http://autobuild.buildroot.net/results/57d57ce3ca18c12dbd8e8d08d2ef5654bc48c088 |     
+      x86_64 |                      gpsd-3.17 | NOK | http://autobuild.buildroot.net/results/1d59b33c72f8fba7c6ba1ac01c1a0e370d3e58e9 | ORPH
+         arc |                      gpsd-3.17 | NOK | http://autobuild.buildroot.net/results/6220fe3d57daae4c28649e5d8eb89107280e6169 | ORPH
+     sparc64 |                      gpsd-3.17 | NOK | http://autobuild.buildroot.net/results/57d823f898d86450696165fac656e77349de809e | ORPH
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                  libffi-3.2.1 | 8 
+                  guile-2.0.14 | 2 
+                   luvi-v2.7.6 | 2 
+                    ngrep-1_47 | 2 
+                   dante-1.4.1 | 1 
+      docker-containerd-v1.1.3 | 1 
+imx-uuc-2ae634281a39c82b6a8... | 1 
+                libmpeg2-0.5.1 | 1 
+                 libv4l-1.16.1 | 1 
+                    php-7.2.11 | 1 
+              traceroute-2.1.0 | 1 
+               valgrind-3.14.0 | 1 
+              wireshark-2.2.17 | 1 
+
+
+Detail of failures
+------------------
+
+  aarch64_be |                    dante-1.4.1 | NOK | http://autobuild.buildroot.net/results/fa976dee3c58d303eff7b6727376feb87833b8ec |     
+      x86_64 |       docker-containerd-v1.1.3 | NOK | http://autobuild.buildroot.net/results/c1e7c593a1007454d4c13f5f89ca7a6f333e904c |     
+         arm |                   guile-2.0.14 | NOK | http://autobuild.buildroot.net/results/65942739bb7593b500ad2e8dbc18f3088ed40f88 | ORPH
+         arm |                   guile-2.0.14 | NOK | http://autobuild.buildroot.net/results/2b23d445e57a5e0f417f5cb9417b0a668bb7bf1c | ORPH
+         arm | imx-uuc-2ae634281a39c82b6a8... | NOK | http://autobuild.buildroot.net/results/b39d56c1573308c4f947de23363da7c05e2aaf0d |     
+     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/e884c0860b31a171a62e48b7f190ebb74da65306 |     
+     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/b6d82bb0953fcd0b2d6eeea08f7b6015f599122a |     
+     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/e245ae0689bba1e379e3d61a6f947c52abf318a1 |     
+     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/7a95a2cd87ff8c73edab180bfce7b4e3a8ebeccd |     
+     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/22bf5712e2173c33055c778cf856c5a666054c21 |     
+     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/dfe2302e1b84dce22733f78b7ea3a2091abc243a |     
+     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/cf3e8e2480e5c0e7f5943911b837d59b574f257b |     
+     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/050267b5b568aafd6563d06a1ffbe0cfa6c6e81c |     
+     powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/66e6394ea65916aeb1d878eb6a55b8fb75c0acbb | ORPH
+         arm |                  libv4l-1.16.1 | NOK | http://autobuild.buildroot.net/results/b48f9b284102d94b847a35ed1ca50a157fbcb1c9 |     
+      x86_64 |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/d9da354b8d2356741b32bdbb9caeb5a8c4fc8a3f |     
+         arm |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/e4c9355f41213a6afe6f087c4b4bbb83edbf66e3 |     
+         arm |                     ngrep-1_47 | NOK | http://autobuild.buildroot.net/results/3dd8c768beef075494d6be7eff4cbb57b5ec8a41 |     
+     powerpc |                     ngrep-1_47 | NOK | http://autobuild.buildroot.net/results/b2af8b7d29c0f92c839dadbc1089b11dc7cd3686 |     
+         arm |                     php-7.2.11 | NOK | http://autobuild.buildroot.net/results/a02d87c225fb69af0445f32242a84f40ef89d295 | ORPH
+         arc |               traceroute-2.1.0 | NOK | http://autobuild.buildroot.net/results/83660c7f321eaa3a223f31e5da1046589b0e2fc4 |     
+      mipsel |                valgrind-3.14.0 | NOK | http://autobuild.buildroot.net/results/35eb5824baf9e774d602db3861b9a20930b22a1b | ORPH
+   powerpc64 |               wireshark-2.2.17 | NOK | http://autobuild.buildroot.net/results/acbc29898b21373a556a2712fbbf20cc566644c7 | ORPH
+
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+http://autobuild.buildroot.net
