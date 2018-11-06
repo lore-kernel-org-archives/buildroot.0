@@ -1,76 +1,39 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Tue,  6 Nov 2018 22:06:15 +0200
-Subject: [Buildroot] [PATCH 1/1] python-crossbar: bump to version 18.11.1
-Message-ID: <20181106200615.27766-1-asafka7@gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 6 Nov 2018 14:29:05 -0600
+Subject: [Buildroot] glibc link fails on x86_64 with fPIC error
+In-Reply-To: <A800D6A5-EA42-4289-9ADB-B7ABAF44BB3F@gmail.com>
+References: <1541520575003-0.post@n4.nabble.com>
+ <CANQCQpZ1j-Nfh+z0qSkshZqrZrLi4pcgYhEJfrOJrOcfDyXm-A@mail.gmail.com>
+ <A800D6A5-EA42-4289-9ADB-B7ABAF44BB3F@gmail.com>
+Message-ID: <CANQCQpZsw2w=ok==PzbUk=eC3P=vbtjX25xe22vDtoBg83XWog@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adjust patch to fit the new version.
+Mike,
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- .../0002-Remove-idna-requirement.patch              | 13 ++++++++-----
- package/python-crossbar/python-crossbar.hash        |  4 ++--
- package/python-crossbar/python-crossbar.mk          |  4 ++--
- 3 files changed, 12 insertions(+), 9 deletions(-)
+On Tue, Nov 6, 2018 at 10:48 AM Mike Shapiro <mike.w.shapiro@gmail.com> wrote:
+>
+>
+> $ cat defconfig
+> BR2_x86_64=y
+> BR2_x86_core_avx2=y
+> BR2_JLEVEL=1
+> BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+> BR2_KERNEL_HEADERS_4_9=y
+> BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+> BR2_PACKAGE_PCIUTILS=y
+> BR2_PACKAGE_LIBXML2=y
+> BR2_PACKAGE_ELFUTILS=y
+> BR2_PACKAGE_LIBCAP=y
+> BR2_PACKAGE_BASH=y
+>
 
-diff --git a/package/python-crossbar/0002-Remove-idna-requirement.patch b/package/python-crossbar/0002-Remove-idna-requirement.patch
-index b4bbe3b5a5..4948b91b05 100644
---- a/package/python-crossbar/0002-Remove-idna-requirement.patch
-+++ b/package/python-crossbar/0002-Remove-idna-requirement.patch
-@@ -13,14 +13,17 @@ Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-  1 file changed, 1 deletion(-)
- 
- diff --git a/requirements-min.txt b/requirements-min.txt
--index d7c2a562..84bf1878 100644
-+index 92fb0f8f..13cdac87 100644
- --- a/requirements-min.txt
- +++ b/requirements-min.txt
--@@ -1,4 +1,3 @@
-+@@ -6,7 +6,6 @@ click>=6.7
-+ constantly>=15.1.0
-+ cryptography>=1.9
-+ h2>=3.0,<4.0
- -idna<2.6,>=2.5
-- click>=6.7
-- setuptools>=36.0.1
-- zope.interface>=4.4.2
-+ incremental>=17.5.0
-+ jinja2>=2.9.6
-+ lmdb>=0.92
- -- 
- 2.17.1
- 
-diff --git a/package/python-crossbar/python-crossbar.hash b/package/python-crossbar/python-crossbar.hash
-index a9c40c91e6..aee07a7382 100644
---- a/package/python-crossbar/python-crossbar.hash
-+++ b/package/python-crossbar/python-crossbar.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/crossbar/json
--md5	6c684c9613091d7ba8adadb6bff5c1cd  crossbar-18.9.2.tar.gz
--sha256	8486f2daa73c45475633baa9d21dcaf74d635781939df6ab6748cc2958aa9d75  crossbar-18.9.2.tar.gz
-+md5	e3f0c51c6c496a3d7f1c62d7f64f23db  crossbar-18.11.1.tar.gz
-+sha256	ab24031f40077ee283469aab5f270bdc223b29b1e6f45d69cf38bf4cad80df2a  crossbar-18.11.1.tar.gz
- # Locally computed
- sha256  57c8ff33c9c0cfc3ef00e650a1cc910d7ee479a8bc509f6c9209a7c2a11399d6  LICENSE
-diff --git a/package/python-crossbar/python-crossbar.mk b/package/python-crossbar/python-crossbar.mk
-index ee7d2a6a32..de5dcea931 100644
---- a/package/python-crossbar/python-crossbar.mk
-+++ b/package/python-crossbar/python-crossbar.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_CROSSBAR_VERSION = 18.9.2
-+PYTHON_CROSSBAR_VERSION = 18.11.1
- PYTHON_CROSSBAR_SOURCE = crossbar-$(PYTHON_CROSSBAR_VERSION).tar.gz
--PYTHON_CROSSBAR_SITE = https://files.pythonhosted.org/packages/1c/71/27e6b5ba1e557d28d155badee90022f73f4216b752d063221edbe2b188f0
-+PYTHON_CROSSBAR_SITE = https://files.pythonhosted.org/packages/99/02/7f7f7dee3e8787e44d9452cc1d712183e5903d8a76455693b15a900385eb
- PYTHON_CROSSBAR_LICENSE = AGPL-3.0
- PYTHON_CROSSBAR_LICENSE_FILES = LICENSE
- PYTHON_CROSSBAR_SETUP_TYPE = setuptools
--- 
-2.19.1
+I was able to checkout 2018.08.2, use your defconfig but with
+BR2_JLEVEL set to 0 and the build was successful.  I had the following
+host machine:
+gcc version 4.8.4 (Ubuntu 4.8.4-2ubuntu1~14.04.4)
+
+Matt
