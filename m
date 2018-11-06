@@ -1,59 +1,84 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 6 Nov 2018 08:59:10 +0100
-Subject: [Buildroot] [PATCH 1/2] ngrep: bump to version 1.47
-In-Reply-To: <616d82b7-c580-49cd-b4bf-ad1b6da2368b@mind.be>
-References: <20181101132326.13015-1-fontaine.fabrice@gmail.com>
- <20181103224222.229c064a@windsurf>
- <CAPi7W8388ghbe_PtDyJ_Hi1=2PLo4sAoZbzwORjH4qLGQ-ue5w@mail.gmail.com>
- <20181104111953.08d765e0@windsurf>
- <CAPi7W83CQfQGjuhZBUvZoPBsJJLSE2sgRj_P9UHt7Lvb9bpqpA@mail.gmail.com>
- <87lg69nkjx.fsf@tkos.co.il>
- <616d82b7-c580-49cd-b4bf-ad1b6da2368b@mind.be>
-Message-ID: <20181106085910.665564c3@windsurf>
+From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
+Date: Tue,  6 Nov 2018 09:21:27 +0100
+Subject: [Buildroot] [PATCH v3 1/1] package/mmc-utils: add patch to fix
+ build failure
+Message-ID: <20181106082127.29476-1-sebastien.szymanski@armadeus.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Patch taken from:
+ - https://patchwork.kernel.org/patch/10654531/
 
-On Tue, 6 Nov 2018 01:14:48 +0100, Arnout Vandecappelle wrote:
+Fixes:
+ - http://autobuild.buildroot.net/results/404bfbd095a7b80273391ea36ea81ba496164b80
+ - http://autobuild.buildroot.net/results/233ef5c00951b5be10a59408f4a8781ecc658d74
+ - http://autobuild.buildroot.net/results/eba3cf4ac21095bca5af2d5d1d69aca0c9098f9b
 
->  Since we don't really want to pass any flags from Buildroot down to the package
-> build systems, perhaps we should just set
-> 
-> override MAKE := make <jlevel stuff>
-> 
-> at the top of package/Makefile.in? I've done a quick test, and it seems to fix
-> the boa issue at least.
-> 
->  This would revert the following commit though:
-> 
-> commit 4705b600764c683e934da7db54f7971a3c647e8a
-> Author: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-> Date:   Tue Jul 17 14:09:07 2007
-> 
->     Ensure we use host 'make', even when building 'make' in buildroot
-> 
-> but that doesn't explain why it is not wanted to use the Buildroot-built make...
+Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+---
 
-But then it would mean that if you have a build like this:
+Changes for v3:
+ - add my SoB tag in the patch
 
-packageA
-packageB
-packageC
-host-make
-packageD
-packageE
-packageF
+Changes for v2:
+ - use git format-patch
 
-then package{A,B,C} would be built with the system-provided make, and
-then package{D,E,F} would be built with host-make ? Is this really a
-desirable situation ?
+ .../0002-fix-overlapping-with-strncpy.patch        | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+ create mode 100644 package/mmc-utils/0002-fix-overlapping-with-strncpy.patch
 
-Thomas
+diff --git a/package/mmc-utils/0002-fix-overlapping-with-strncpy.patch b/package/mmc-utils/0002-fix-overlapping-with-strncpy.patch
+new file mode 100644
+index 0000000000..a134dd3c5a
+--- /dev/null
++++ b/package/mmc-utils/0002-fix-overlapping-with-strncpy.patch
+@@ -0,0 +1,44 @@
++From 1c90a7534658056b884d71ef82dc7ca8bad4271b Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
++Date: Wed, 24 Oct 2018 13:00:47 +0200
++Subject: [PATCH 1/1] mmc-utils: fix overlapping with strncpy
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++GCC 8.2 warns about an overlapping using strncpy.
++
++Replace strncpy with a memmove to avoid this issue.
++
++In file included from /usr/include/string.h:494,
++                 from lsmmc.c:46:
++In function ?strncpy?,
++    inlined from ?read_file? at lsmmc.c:356:3:
++/usr/include/x86_64-linux-gnu/bits/string_fortified.h:106:10: error: ?__builtin_strncpy? accessing 4096 bytes at offsets 0 and 1 overlaps 4095 bytes at offset 1 [-Werror=restrict]
++   return __builtin___strncpy_chk (__dest, __src, __len, __bos (__dest));
++          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++cc1: all warnings being treated as errors
++make: *** [Makefile:36: lsmmc.o] Error 1
++
++Signed-off-by: Cl?ment P?ron <peron.clem@gmail.com>
++Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
++---
++ lsmmc.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/lsmmc.c b/lsmmc.c
++index c4faa00..bcb854d 100644
++--- a/lsmmc.c
+++++ b/lsmmc.c
++@@ -353,7 +353,7 @@ char *read_file(char *name)
++ 		line[strlen(line) - 1] = '\0';
++ 
++ 	while (isspace(line[0]))
++-		strncpy(&line[0], &line[1], sizeof(line));
+++		memmove(&line[0], &line[1], sizeof(line)-1);
++ 
++ 	return strdup(line);
++ }
++-- 
++2.16.4
++
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.16.4
