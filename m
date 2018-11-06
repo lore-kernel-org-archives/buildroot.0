@@ -1,42 +1,28 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Tue,  6 Nov 2018 08:11:16 -0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: take aer-inject
-Message-ID: <20181106101116.5851-1-casantos@datacom.com.br>
+From: =?UTF-8?B?0KLQuNC80YPRgCDQn9GA0L7QutC+0L/QtdC90LrQvg==?= <prok.tim26@gmail.com>
+Date: Tue, 6 Nov 2018 13:29:51 +0300
+Subject: [Buildroot] systemd: build fails with meson
+Message-ID: <CANTMe2VOTDZTx_BjaLJ1jo1TqdU37DSMK3XuKCzL8so6pa+2gg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tiago is leaving the company and will unlikely have access to the
-hardware required to test the package.
+Hello,
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
----
- DEVELOPERS | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+I've been trying to build Buildroot with systemd v239. Regular build works
+fine but when I try to do it using docker, the build fails with
+bad interpreter: No such file or directory
+which seems to be a python error which occurs when the absolute path length
+to the interpreter exceeds the limit (in this case, the 1st line in
+buildroot/output/host/bin/meson is over 128 symbols which is most likely
+the problem).
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 8d5ed199ce..ae3900b9d5 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -413,6 +413,7 @@ N:	Carlo Caione <carlo.caione@gmail.com>
- F:	package/sunxi-boards/
- 
- N:	Carlos Santos <casantos@datacom.com.br>
-+F:	package/aer-inject/
- F:	package/busybox/
- F:	package/gtest/
- F:	package/initscripts/
-@@ -2088,9 +2089,6 @@ F:	package/wayland/
- F:	package/weston/
- F:	toolchain/
- 
--N:	Tiago Brusamarello <tiago.brusamarello@datacom.com.br>
--F:	package/aer-inject/
--
- N:	Timo Ketola <timo.ketola@exertus.fi>
- F:	package/fbgrab/
- 
+Is there any way to solve this without shortening the absolute paths? Thank
+you in advance.
 -- 
-2.14.5
+Best regards,
+Timur
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181106/bac8a759/attachment.html>
