@@ -1,79 +1,70 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 6 Nov 2018 22:02:46 +0100
-Subject: [Buildroot] glibc link fails on x86_64 with fPIC error
-In-Reply-To: <1541536520382-0.post@n4.nabble.com>
-References: <1541520575003-0.post@n4.nabble.com>
- <CANQCQpZ1j-Nfh+z0qSkshZqrZrLi4pcgYhEJfrOJrOcfDyXm-A@mail.gmail.com>
- <CANQCQpZsw2w=ok==PzbUk=eC3P=vbtjX25xe22vDtoBg83XWog@mail.gmail.com>
- <1541536520382-0.post@n4.nabble.com>
-Message-ID: <ad5a8efa-05ea-08ef-a847-213bfeb345d0@gmail.com>
+Date: Tue, 6 Nov 2018 22:06:27 +0100
+Subject: [Buildroot] [PATCH] Config.in: security hardening: disable
+ FORTIFY_SOURCE for gcc < 6
+In-Reply-To: <CANQCQpa7zCrhy-j4MZDVK5A+yAeDSX5MLwXCYEP=6HL4zVNP8Q@mail.gmail.com>
+References: <20181105200750.6039-1-romain.naour@gmail.com>
+ <CANQCQpYGPBpEivKh893TPeoqoOtS+FxGmNjYvmgwGWoArOyu=A@mail.gmail.com>
+ <87bm73cgol.fsf@dell.be.48ers.dk>
+ <CANQCQpZJphzALGYtMA-45_3ppea0yLhj0VrECKX8wS_BT891jg@mail.gmail.com>
+ <CANQCQpa7zCrhy-j4MZDVK5A+yAeDSX5MLwXCYEP=6HL4zVNP8Q@mail.gmail.com>
+Message-ID: <50bcd2a5-d72e-6148-93c6-e75e70280e11@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
-Le 06/11/2018 ? 21:35, mws a ?crit?:
-> Thanks Matt and also Roman. In meantime I discovered something interesting:
-> with libc=musl the build succeeds, but with libc=uClibc-ng it fails in a way
-> similar to glibc, which I think exonerates glibc.  Here is the ucLibC
-> failure with the similar linking error:
+Le 06/11/2018 ? 13:27, Matthew Weber a ?crit?:
+> All,
 > 
-> $ tail -20 tools.log
->  AR cr libc/libc_so.a
->  STRIP -x -R .note -R .comment libc/libc_so.a
->  CC libpthread/nptl/pthread_atfork.oS
->  AR cr lib/libpthread_nonshared.a
->  STRIP -x -R .note -R .comment lib/libpthread_nonshared.a
->  LD libuClibc-1.0.30.so
-> ./lib/ld64-uClibc.so.1: warning: multiple common of
-> `_dl_internal_error_number'
-> libc/libc_so.a(libdl.oS): warning: previous common is here
-> ./lib/ld64-uClibc.so.1: warning: multiple common of `_dl_error_number'
-> libc/libc_so.a(libdl.oS): warning: previous common is here
-> ./lib/ld64-uClibc.so.1: warning: multiple common of `_dl_free_function'
-> libc/libc_so.a(libdl.oS): warning: previous common is here
-> ./lib/ld64-uClibc.so.1: warning: multiple common of `_dl_malloc_function'
-> libc/libc_so.a(libdl.oS): warning: previous common is here
-> /home/build/src/docker/buildroot/host/lib/gcc/x86_64-buildroot-linux-uclibc/7.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld:
+> On Mon, Nov 5, 2018 at 4:21 PM Matthew Weber
+> <matthew.weber@rockwellcollins.com> wrote:
+>>
+>> Peter/Romain,
+>>
+>>
+>> On Mon, Nov 5, 2018 at 4:17 PM Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>
+>>>>>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
+>>>
+>>>  > Romain ,
+>>>  > On Mon, Nov 5, 2018, 14:07 Romain Naour <romain.naour@gmail.com wrote:
+>>>
+>>>  >> As reported in the bug report [1], gcc < 6 doesn't build when
+>>>  >> FORTIFY_SOURCE is set to 1 or 2. The issue is related to the
+>>>  >> upstream bug report [2] but the patch fixing the issue for gcc 6
+>>>  >> has not been backported to earlier gcc versions.
+>>>  >>
+>>>  >> Add a dependency on gcc at least version 6 to BR2_FORTIFY_SOURCE_1
+>>>  >> and BR2_FORTIFY_SOURCE_2.
+>>>  >>
+>>>
+>>>  > Sorry about the HTML email.
+>>>
+>>>  > Could this dependency be conditional on if a internal toolchain is used?
+>>>
+>>> Ahh yes, if this is really about *building* gcc, then it should be
+>>>
+>>> depends on !BR2_TOOLCHAIN_BUILDROOT || BR2_TOOLCHAIN_GCC_AT_LEAST_6
+>>>
+>>
+>> Correct.  I'll have to dig a bit and see what the minimum supported
+>> external toolchain version is.  I believe 5.4.x
+> 
+> Found an old post....  https://access.redhat.com/blogs/766093/posts/1976213
+> Looks like the FORTIFY options should work from GCC 4.0+ and is more
+> dependent on GLIBC being new enough (which we won't run into).
+> Macros are supported since GLIBC2.3.4 -
+> http://man7.org/linux/man-pages/man7/feature_test_macros.7.html
 
-Can you try outside of docker ?
-Also, we don't recommend to run the build as root.
+Maybe it worth to backport this patch?
+
+https://github.com/gcc-mirror/gcc/commit/55f12fce4ccf77513644a247f9c401a5b1fa2402
 
 Best regards,
 Romain
 
-> libc/libc_so.a(libc-cancellation.oS): relocation R_X86_64_PC32 against
-> symbol `__pthread_unwind' can not be used when making a shared object;
-> recompile with -fPIC
-> /home/build/src/docker/buildroot/host/lib/gcc/x86_64-buildroot-linux-uclibc/7.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld:
-> final link failed: Bad value
-> collect2: error: ld returned 1 exit status
-> make[2]: *** [lib/libc.so] Error 1
-> make[1]: ***
-> [/home/build/src/docker/buildroot/build/uclibc-1.0.30/.stamp_built] Error 2
-> make: *** [_all] Error 2
 > 
-> So my hypothesis is that something about my build system environment is
-> causing a misconfiguration of the toolchain with respect to gcc's defaults. 
-> I am thinking maybe the pic/PIC default or the mcmodel default is somehow
-> different from what glibc or uClibc-ng Makefiles expect it to be, and they
-> are not setting those options to be explicitly the way they should be in
-> their respective Makefiles.
-> 
-> So I need to figure out what part of the toolchain build is looking at the
-> system itself to determine defaults in this area, or alternatively find the
-> specific gcc setting and change its default manually in buildroot's config.
-> 
-> 
-> 
-> 
-> --
-> Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Matt
 > 
