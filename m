@@ -1,47 +1,78 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 6 Nov 2018 13:49:17 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-posix-ipc: enable also
- for python3
-In-Reply-To: <20181106121459.24903-1-daniel@fahlgren.se>
-References: <20181106121459.24903-1-daniel@fahlgren.se>
-Message-ID: <CAGm1_ktQC_sdyj=XDTy=ND1yDU9NSme_7DGwLR8FNk+hoiEpQw@mail.gmail.com>
+From: =?UTF-8?Q?Einar_J=C3=B3n?= <tolvupostur@gmail.com>
+Date: Tue, 6 Nov 2018 14:48:44 +0100
+Subject: [Buildroot] [PATCH 1/2] package/opengl/libgbm: new virtual
+ package
+In-Reply-To: <20181105164347.4bd8d103@windsurf>
+References: <20180913194410.24077-1-bernd.kuhls@t-online.de>
+ <20181030221420.65c7aed3@windsurf> <20181105124735.3qbms4ymnrgpw3op@flea>
+ <CABhNV23smKagYKYME1Na=Cyz0+hn2BPOEpKumruu3OyAmLt1fw@mail.gmail.com>
+ <20181105164347.4bd8d103@windsurf>
+Message-ID: <CABhNV20QpHnRCEi=Ky-AKCVByGkNLRxOXfMHK5H9PCr3eBeAXA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Nov 6, 2018 at 1:42 PM Daniel Fahlgren <daniel@fahlgren.se> wrote:
+On Mon, 5 Nov 2018 at 16:43, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 >
-> The python-posix-ipc package can be used both with python2 and python3.
+> Hello,
 >
-> Signed-off-by: Daniel Fahlgren <daniel@fahlgren.se>
-> ---
->  package/python-posix-ipc/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> On Mon, 5 Nov 2018 16:35:02 +0100, Einar J?n wrote:
 >
-> diff --git a/package/python-posix-ipc/Config.in b/package/python-posix-ipc/Config.in
-> index eba36edd7b..1f588577f5 100644
-> --- a/package/python-posix-ipc/Config.in
-> +++ b/package/python-posix-ipc/Config.in
-> @@ -1,6 +1,6 @@
->  config BR2_PACKAGE_PYTHON_POSIX_IPC
->         bool "python-posix-ipc"
-> -       depends on BR2_PACKAGE_PYTHON
+> > I'm not much help here.
+> > My only concern was building QT5 on an embedded AM335x with ti-sgx-*
+> > libraries and update the kernel to 4.9 (bumping TI SDK from 2.0 to
+> > 4.0).
+> > There is now a kernel 4.14 (TI SDK 5.0), with only minor changes to
+> > the ti-sgx-* libraries (support gbm_bo and GCC7).
+> > http://www.ti.com/tool/PROCESSOR-SDK-AM335X
+> >
+> > kmscube seems to depend heavily on the mesa3d implementation, so I
+> > don't think it's easy to make it work with the other libgbm versions.
+> > Would building a working QT be a valid test of the libgbm build?
+>
+> Yes, it would be. So what you're saying is that the libgbm
+> implementation provided by TI SGX mimics well enough the libgbm
+> implementation of Mesa3D that QT5 is happy with TI SGX libgbm
+> implementation ?
 
-just remove this depends line. Python package are enabled for both
-Python2 and 3 by default.
+That's exactly what I'm saying, but currently only with a big fat
+"works for me" caveat.
+My company has the same CPU as the beaglebone, but our boards have
+considerable HW changes.
+We're using an older 3.x kernel with ti-gfx, but I have a working
+build with QT 5.9 on kernel 4.9/4.14 and ti-sgx.
 
-Yegor
+I'll try to throw together a minimal working set with QT tomorrow, but
+I'm not sure how useful it is without a rootfs
+(busybox/kernel/udev/etc).
 
-> +       depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
->         depends on BR2_TOOLCHAIN_HAS_THREADS
->         help
->           The Python extension module posix_ipc gives access to POSIX
-> --
-> 2.14.1
+> > Note that ti-sgx-um depends on wayland, due to a library dependency on
+> > libwayland-server.so.0 and libwayland-client.so.0  (see ldd libpvrs_WAYLAND.so)
+> > So the dropped dependency to wayland in ti-sgx-libgbm should have been
+> > on ti-sgx-um.
+> > Without it, QT5 will not find any EGL backend.
+> >
+> > So the ti-sgx-um should be adding
+> > select BR2_PACKAGE_WAYLAND
+> > select BR2_PACKAGE_HAS_LIBEGL_WAYLAND
 >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> ACK.
+>
+> > That way Qt5 can build with a valid EGL backend, using ti-sgx instead
+> > of the ancient ti-gfx.
+> > But this does nothing to help build kmscube.
+>
+> Right. I'm still confused by this libgbm thing though, where everyone
+> seems to have its own implementation, but there is no common API
+> implemented by everybody.
+
+So am I. The ti-sgx-libgbm repo seems to be maintained by ti.com, but
+there seems to be no real effort into making it more than just the
+bare minimum to use ti-sgx-um.
+
+-- 
+Regards
+Einar J?n
