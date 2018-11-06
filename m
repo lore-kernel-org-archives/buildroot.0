@@ -1,63 +1,39 @@
-From: mws <mike.w.shapiro+buildroot@gmail.com>
-Date: Tue, 6 Nov 2018 14:35:20 -0600 (CST)
-Subject: [Buildroot] glibc link fails on x86_64 with fPIC error
-In-Reply-To: <CANQCQpZsw2w=ok==PzbUk=eC3P=vbtjX25xe22vDtoBg83XWog@mail.gmail.com>
-References: <1541520575003-0.post@n4.nabble.com>
- <CANQCQpZ1j-Nfh+z0qSkshZqrZrLi4pcgYhEJfrOJrOcfDyXm-A@mail.gmail.com>
- <CANQCQpZsw2w=ok==PzbUk=eC3P=vbtjX25xe22vDtoBg83XWog@mail.gmail.com>
-Message-ID: <1541536520382-0.post@n4.nabble.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 6 Nov 2018 22:00:57 +0100
+Subject: [Buildroot] Clang and SDK relocation
+In-Reply-To: <CANQCQpZ41eFDSffOMmpGEOSTDzZhDp92fffHrSZTVJX4P2n0cA@mail.gmail.com>
+References: <CANQCQpZ41eFDSffOMmpGEOSTDzZhDp92fffHrSZTVJX4P2n0cA@mail.gmail.com>
+Message-ID: <e906588a-3b7d-7b65-25cd-595b79fa8588@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks Matt and also Roman. In meantime I discovered something interesting:
-with libc=musl the build succeeds, but with libc=uClibc-ng it fails in a way
-similar to glibc, which I think exonerates glibc.  Here is the ucLibC
-failure with the similar linking error:
+Hi Matt,
 
-$ tail -20 tools.log
- AR cr libc/libc_so.a
- STRIP -x -R .note -R .comment libc/libc_so.a
- CC libpthread/nptl/pthread_atfork.oS
- AR cr lib/libpthread_nonshared.a
- STRIP -x -R .note -R .comment lib/libpthread_nonshared.a
- LD libuClibc-1.0.30.so
-./lib/ld64-uClibc.so.1: warning: multiple common of
-`_dl_internal_error_number'
-libc/libc_so.a(libdl.oS): warning: previous common is here
-./lib/ld64-uClibc.so.1: warning: multiple common of `_dl_error_number'
-libc/libc_so.a(libdl.oS): warning: previous common is here
-./lib/ld64-uClibc.so.1: warning: multiple common of `_dl_free_function'
-libc/libc_so.a(libdl.oS): warning: previous common is here
-./lib/ld64-uClibc.so.1: warning: multiple common of `_dl_malloc_function'
-libc/libc_so.a(libdl.oS): warning: previous common is here
-/home/build/src/docker/buildroot/host/lib/gcc/x86_64-buildroot-linux-uclibc/7.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld:
-libc/libc_so.a(libc-cancellation.oS): relocation R_X86_64_PC32 against
-symbol `__pthread_unwind' can not be used when making a shared object;
-recompile with -fPIC
-/home/build/src/docker/buildroot/host/lib/gcc/x86_64-buildroot-linux-uclibc/7.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld:
-final link failed: Bad value
-collect2: error: ld returned 1 exit status
-make[2]: *** [lib/libc.so] Error 1
-make[1]: ***
-[/home/build/src/docker/buildroot/build/uclibc-1.0.30/.stamp_built] Error 2
-make: *** [_all] Error 2
+Le 06/11/2018 ? 19:24, Matthew Weber a ?crit?:
+> While working on a patchset for adding the compiler-rt sanitizers.  We
+> noticed an issue if we moved the build as an SDK (path changed on
+> system so that the orig build doesn't exist).  The include search
+> paths provided to Clang seem to be ignored (sysroot/-I).  These
+> options do work if using the tools from the original build location.
+> Do you guys happen to know of any options I could start investigating
+> to adjust to make a relative path or prefix with sysroot fix in the
+> Clang build?
 
-So my hypothesis is that something about my build system environment is
-causing a misconfiguration of the toolchain with respect to gcc's defaults. 
-I am thinking maybe the pic/PIC default or the mcmodel default is somehow
-different from what glibc or uClibc-ng Makefiles expect it to be, and they
-are not setting those options to be explicitly the way they should be in
-their respective Makefiles.
+AFAIK, we didn't test to relocate the SDK with LLVM/Clang.
+It's also a problem if we want to include LLVM/Clang as an external toolchain.
 
-So I need to figure out what part of the toolchain build is looking at the
-system itself to determine defaults in this area, or alternatively find the
-specific gcc setting and change its default manually in buildroot's config.
+> 
+> I'll keep looking through the code and see what I can find.
 
+Ok thanks!
 
+Best regards,
+Romain
 
-
---
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+> 
+> Thanks!
+> Matt
+> 
