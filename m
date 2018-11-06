@@ -1,79 +1,76 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 6 Nov 2018 21:01:31 +0100
-Subject: [Buildroot] [PATCH v1] libv4l: add missing bpf_common.h header
-In-Reply-To: <20181105215927.2d4bd31a@gmx.net>
-References: <20181102190108.29507-1-ps.report@gmx.net>
- <20181103142810.7c8fe947@windsurf>
- <20181105215927.2d4bd31a@gmx.net>
-Message-ID: <CAPi7W833FdDxhQyXmJrTRAQgd2u-CFvyL_pqOTC9kdK+6AO8FA@mail.gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Tue,  6 Nov 2018 22:06:15 +0200
+Subject: [Buildroot] [PATCH 1/1] python-crossbar: bump to version 18.11.1
+Message-ID: <20181106200615.27766-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter,
-Le lun. 5 nov. 2018 ? 21:59, Peter Seiderer <ps.report@gmx.net> a ?crit :
->
-> Hello Thomas,
->
-> On Sat, 3 Nov 2018 14:28:10 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
->
-> > Hello,
-> >
-> > On Fri,  2 Nov 2018 20:01:08 +0100, Peter Seiderer wrote:
-> > > Fixes [1] (for older toolchains not providing this header):
-> > >
-> > >     CC       keytable.o
-> > >   In file included from bpf.h:26:0,
-> > >                    from keytable.c:37:
-> > >   ../../include/linux/bpf.h:12:10: fatal error: linux/bpf_common.h: No such file or directory
-> > >    #include <linux/bpf_common.h>
-> > >             ^~~~~~~~~~~~~~~~~~~~
-> > >
-> > > [1] http://autobuild.buildroot.org/results/d22c0939eed4bc949f7eaeae7595d01ec45cc2cd
-> > >
-> > > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > > ---
-> > >  .../0005-Add-missing-linux-bpf_common.h.patch | 80 +++++++++++++++++++
-> > >  1 file changed, 80 insertions(+)
-> > >  create mode 100644 package/libv4l/0005-Add-missing-linux-bpf_common.h.patch
-> >
-> > Applied to master, thanks. Could you submit this upstream? Thanks!
->
-> Yes, just done, see [1]...
-Thanks for submitting this patch however build failures remain on some
-architectures (ARM cortex a8 / a9 / arm926ej-s) with "old" kernel
-headers (3.13) :
-- http://autobuild.buildroot.org/results/b48/b48f9b284102d94b847a35ed1ca50a157fbcb1c9/build-end.log
-- http://autobuild.buildroot.org/results/339/3391705aca7022111ef743212b7cad57f0cdea9a/build-end.log
+Adjust patch to fit the new version.
 
-Build failures are raised because _NR_bpf is not defined:
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ .../0002-Remove-idna-requirement.patch              | 13 ++++++++-----
+ package/python-crossbar/python-crossbar.hash        |  4 ++--
+ package/python-crossbar/python-crossbar.mk          |  4 ++--
+ 3 files changed, 12 insertions(+), 9 deletions(-)
 
-bpf.c:48:4: error: #error __NR_bpf not defined. libbpf does not
-support your arch.
- #  error __NR_bpf not defined. libbpf does not support your arch.
-
-From my understanding, __NR_bpf should be normally defined by the
-kernel (when it is not too old).
-For example, __NR_bpf has been defined for m68k and powerpc since 3.18:
-- https://github.com/torvalds/linux/commit/f7bbd12a4b7e088f53f20dd31019984459699fb9
-- https://github.com/torvalds/linux/commit/fcbb539f279f7d854bd49819b889fea0612909f8
-The code in bpf.c only defines fallback for very few few
-architectures: i386, x86_64, aarch64, sparc and s390.
-
-So finally, should we add a dependency on
-BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18 on a new
-BR2_PACKAGE_LIBV4L_KEYTABLE_BPF_PROTOCOLS option?
->
-> Regards,
-> Peter
->
-> [1] https://www.mail-archive.com/linux-media at vger.kernel.org/msg136103.html
->
-> >
-> > Thomas
->
-Best Regards,
-
-Fabrice
+diff --git a/package/python-crossbar/0002-Remove-idna-requirement.patch b/package/python-crossbar/0002-Remove-idna-requirement.patch
+index b4bbe3b5a5..4948b91b05 100644
+--- a/package/python-crossbar/0002-Remove-idna-requirement.patch
++++ b/package/python-crossbar/0002-Remove-idna-requirement.patch
+@@ -13,14 +13,17 @@ Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+  1 file changed, 1 deletion(-)
+ 
+ diff --git a/requirements-min.txt b/requirements-min.txt
+-index d7c2a562..84bf1878 100644
++index 92fb0f8f..13cdac87 100644
+ --- a/requirements-min.txt
+ +++ b/requirements-min.txt
+-@@ -1,4 +1,3 @@
++@@ -6,7 +6,6 @@ click>=6.7
++ constantly>=15.1.0
++ cryptography>=1.9
++ h2>=3.0,<4.0
+ -idna<2.6,>=2.5
+- click>=6.7
+- setuptools>=36.0.1
+- zope.interface>=4.4.2
++ incremental>=17.5.0
++ jinja2>=2.9.6
++ lmdb>=0.92
+ -- 
+ 2.17.1
+ 
+diff --git a/package/python-crossbar/python-crossbar.hash b/package/python-crossbar/python-crossbar.hash
+index a9c40c91e6..aee07a7382 100644
+--- a/package/python-crossbar/python-crossbar.hash
++++ b/package/python-crossbar/python-crossbar.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/crossbar/json
+-md5	6c684c9613091d7ba8adadb6bff5c1cd  crossbar-18.9.2.tar.gz
+-sha256	8486f2daa73c45475633baa9d21dcaf74d635781939df6ab6748cc2958aa9d75  crossbar-18.9.2.tar.gz
++md5	e3f0c51c6c496a3d7f1c62d7f64f23db  crossbar-18.11.1.tar.gz
++sha256	ab24031f40077ee283469aab5f270bdc223b29b1e6f45d69cf38bf4cad80df2a  crossbar-18.11.1.tar.gz
+ # Locally computed
+ sha256  57c8ff33c9c0cfc3ef00e650a1cc910d7ee479a8bc509f6c9209a7c2a11399d6  LICENSE
+diff --git a/package/python-crossbar/python-crossbar.mk b/package/python-crossbar/python-crossbar.mk
+index ee7d2a6a32..de5dcea931 100644
+--- a/package/python-crossbar/python-crossbar.mk
++++ b/package/python-crossbar/python-crossbar.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CROSSBAR_VERSION = 18.9.2
++PYTHON_CROSSBAR_VERSION = 18.11.1
+ PYTHON_CROSSBAR_SOURCE = crossbar-$(PYTHON_CROSSBAR_VERSION).tar.gz
+-PYTHON_CROSSBAR_SITE = https://files.pythonhosted.org/packages/1c/71/27e6b5ba1e557d28d155badee90022f73f4216b752d063221edbe2b188f0
++PYTHON_CROSSBAR_SITE = https://files.pythonhosted.org/packages/99/02/7f7f7dee3e8787e44d9452cc1d712183e5903d8a76455693b15a900385eb
+ PYTHON_CROSSBAR_LICENSE = AGPL-3.0
+ PYTHON_CROSSBAR_LICENSE_FILES = LICENSE
+ PYTHON_CROSSBAR_SETUP_TYPE = setuptools
+-- 
+2.19.1
