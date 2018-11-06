@@ -1,87 +1,61 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 6 Nov 2018 01:14:48 +0100
-Subject: [Buildroot] [PATCH 1/2] ngrep: bump to version 1.47
-In-Reply-To: <87lg69nkjx.fsf@tkos.co.il>
-References: <20181101132326.13015-1-fontaine.fabrice@gmail.com>
- <20181103224222.229c064a@windsurf>
- <CAPi7W8388ghbe_PtDyJ_Hi1=2PLo4sAoZbzwORjH4qLGQ-ue5w@mail.gmail.com>
- <20181104111953.08d765e0@windsurf>
- <CAPi7W83CQfQGjuhZBUvZoPBsJJLSE2sgRj_P9UHt7Lvb9bpqpA@mail.gmail.com>
- <87lg69nkjx.fsf@tkos.co.il>
-Message-ID: <616d82b7-c580-49cd-b4bf-ad1b6da2368b@mind.be>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Mon, 05 Nov 2018 23:57:15 -0200
+Subject: [Buildroot] [PATCH v2 00/12] default runtime test case for
+ python packages v2
+References: <20181105091555.484cb898@windsurf>
+Message-ID: <5be0f4fb15b71_1ffa2af2b3fab998208b9@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Thomas,
 
+On Mon, Nov 05, 2018 at 06:15 AM, Thomas Petazzoni wrote:
 
-On 04/11/18 12:34, Baruch Siach wrote:
-> Hi Fabric,
+> On Sun, 04 Nov 2018 20:42:29 -0200, Ricardo Martincoski wrote:
+[snip]
+>> But now I prefer to resend using [4] (reworking each patch, of course) because:
+>>  - it does not use multi inheritance that can potentially lead to future
+>>    problems as the article you found pointed. Let's avoid it while we can;
+>>  - the code for each test case for a python package looks nice, i.e. [2];
+>> But it is not a strong preference.
+>> 
+>> What do you think about this?
 > 
-> Fabrice Fontaine writes:
->> Dear Thomas,
->> Le dim. 4 nov. 2018 ? 11:19, Thomas Petazzoni
->> <thomas.petazzoni@bootlin.com> a ?crit :
->>>
->>> Hello,
->>>
->>> On Sat, 3 Nov 2018 23:01:07 +0100, Fabrice Fontaine wrote:
->>>
->>>>> So PCRE is not mandatory.
->>>> Indeed, PCRE is not really "mandatory", ngrep use GNU regex by default
->>>> but this was already the case before the bump (in version 1.45): see
->>>> https://github.com/jpr5/ngrep/blob/V1_45/configure.in.
->>>> I didn't want to change this behavior when bumping the package and I
->>>> could find why pcre wasn't made optional in the initial commit back in
->>>> 2011.
->>>> However, I'll add a third patch in my serie to make pcre an optional
->>>> dependency before bumping the package..
->>>
->>> Indeed, it could be a third patch.
->> OK, when I tried to enable GNU regex (on 1.47), I got the following error:
->> /usr/bin/make w -j --jobserver-fds=3,4 -C regex-0.12 regex.o
->> make[2]: Entering directory
->> '/home/fabrice/buildroot/output/build/ngrep-1_47/regex-0.12'
->> make[2]: *** No rule to make target 'w'.  Stop.
->>
->> This error is raised by this command:
->> $(MAKE) $(MAKEFLAGS) -C $(REGEX_DIR) $(notdir $(REGEX_OBJS))
->>
->> which means that MAKEFLAGS is set to "w -j --jobserver-fds=3,4".
->> I don't understand where this "w" and not "-w" is coming from. Do you
->> have any advice or clue?
+> First of all, thanks a lot for this additional research. self.__test__
+> = False is definitely what we need here.
 > 
-> This is most likely related to mismatch of make versions being used when
-> we build our own host-make. See the discussion in this thread related to
-> boa:
+> I also like the proposal that doesn't use multiple inheritance.
 > 
->   http://lists.busybox.net/pipermail/buildroot/2018-October/232957.html
+> Let me make two possible additional proposals:
 > 
-> There is no fix to this issue yet.
+>  - Use an integer for the Python version variable, rather than a
+>    string, there is really no need for this to be a string I believe ?
 
- Since we don't really want to pass any flags from Buildroot down to the package
-build systems, perhaps we should just set
+You are correct. There is no need for a string. I will use an integer.
 
-override MAKE := make <jlevel stuff>
+> 
+>  - Alternatively, you could derive the version of the Python
+>    interpreter to use from the child class name. Maybe this is too
+>    "implicit" and a bit tricky, but I wanted to mention this
+>    possibility. I.e, in the base class, you use
+>    self.__class__.__name__, and it gives you the actual name of the
+>    class that is instantiated. You can then check if the string
+>    contains Python2 or Python3, and decide which interpreter to use
+>    according to this. I am not saying I absolutely want this, I'm just
+>    offering this as an alternative solution.
 
-at the top of package/Makefile.in? I've done a quick test, and it seems to fix
-the boa issue at least.
+For comparison only, I created a patch on top of the wip v3:
+https://gitlab.com/RicardoMartincoski/buildroot/commit/c824c5dfe9c1b0953088c9a818575287fe984fc4
 
- This would revert the following commit though:
+I guess/hope that using the explicit python_version is easier to understand for
+a newcomer.
+Maybe a matter of taste.
 
-commit 4705b600764c683e934da7db54f7971a3c647e8a
-Author: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date:   Tue Jul 17 14:09:07 2007
-
-    Ensure we use host 'make', even when building 'make' in buildroot
-
-but that doesn't explain why it is not wanted to use the Buildroot-built make...
+I will send v3 using the explicit attribute.
 
 
- Regards,
- Arnout
-
- Regards,
- Arnout
+Regards,
+Ricardo
