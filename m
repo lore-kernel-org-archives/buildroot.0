@@ -1,32 +1,91 @@
-From: Florian Fainelli <f.fainelli@gmail.com>
-Date: Mon, 05 Nov 2018 20:44:54 -0800
-Subject: [Buildroot] Out of tree Linux kernel builds?
-In-Reply-To: <87o9b27rhj.fsf@tkos.co.il>
-References: <02530ea6-3942-3fe1-91b8-9040e3838972@gmail.com>
- <87o9b27rhj.fsf@tkos.co.il>
-Message-ID: <E9ECB5E7-2ECB-4B58-941F-20A0A28E8516@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 06 Nov 2018 07:18:15 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/mmc-utils: add patch to fix
+ build failure
+In-Reply-To: <20181105095631.11811-1-sebastien.szymanski@armadeus.com>
+References: <20181105095631.11811-1-sebastien.szymanski@armadeus.com>
+Message-ID: <87muqm7pig.fsf@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi S?bastien,
 
-On November 5, 2018 8:35:36 PM PST, Baruch Siach <baruch@tkos.co.il> wrote:
->Hi Florian,
+S?bastien Szymanski writes:
+> Patch taken from:
+>  - https://patchwork.kernel.org/patch/10654531/
 >
->Florian Fainelli writes:
->> Hi Yann, all,
->>
->> AFAIR a while back you mentioned that you were looking into adding
->> support for out of tree Linux builds. Do you have working patches for
->> that, or you would rather have someone take a stab at doing it?
+> Fixes:
+>  - http://autobuild.buildroot.net/results/404bfbd095a7b80273391ea36ea81ba496164b80
+>  - http://autobuild.buildroot.net/results/233ef5c00951b5be10a59408f4a8781ecc658d74
+>  - http://autobuild.buildroot.net/results/eba3cf4ac21095bca5af2d5d1d69aca0c9098f9b
 >
->What do you mean by "out of tree Linux builds"? Buildroot has supported
->custom kernel tree build since long ago. Did you mean external kernel
->modules?
+> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+> ---
+>
+> Changes for v2:
+>  - use git format-patch
+>
+>  .../0002-fix-overlapping-with-strncpy.patch        | 43 ++++++++++++++++++++++
+>  1 file changed, 43 insertions(+)
+>  create mode 100644 package/mmc-utils/0002-fix-overlapping-with-strncpy.patch
+>
+> diff --git a/package/mmc-utils/0002-fix-overlapping-with-strncpy.patch b/package/mmc-utils/0002-fix-overlapping-with-strncpy.patch
+> new file mode 100644
+> index 0000000000..194862e801
+> --- /dev/null
+> +++ b/package/mmc-utils/0002-fix-overlapping-with-strncpy.patch
+> @@ -0,0 +1,43 @@
+> +From 1c90a7534658056b884d71ef82dc7ca8bad4271b Mon Sep 17 00:00:00 2001
+> +From: =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
+> +Date: Wed, 24 Oct 2018 13:00:47 +0200
+> +Subject: [PATCH 1/1] mmc-utils: fix overlapping with strncpy
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
+> +
+> +GCC 8.2 warns about an overlapping using strncpy.
+> +
+> +Replace strncpy with a memmove to avoid this issue.
+> +
+> +In file included from /usr/include/string.h:494,
+> +                 from lsmmc.c:46:
+> +In function ?strncpy?,
+> +    inlined from ?read_file? at lsmmc.c:356:3:
+> +/usr/include/x86_64-linux-gnu/bits/string_fortified.h:106:10: error: ?__builtin_strncpy? accessing 4096 bytes at offsets 0 and 1 overlaps 4095 bytes at offset 1 [-Werror=restrict]
+> +   return __builtin___strncpy_chk (__dest, __src, __len, __bos (__dest));
+> +          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +cc1: all warnings being treated as errors
+> +make: *** [Makefile:36: lsmmc.o] Error 1
+> +
+> +Signed-off-by: Cl?ment P?ron <peron.clem@gmail.com>
 
-I am talking about using Linux's ability to build objects into a different directory than where sources are. This is achieved by using make O=. The idea is that it would avoid using rsync to copy the kernel sources when using a custom build directory because this takes both unnecessary time and space to do the initial copy into build/linux-custom.
+Please add your sign-off on the patch here.
+
+Thanks,
+baruch
+
+> +---
+> + lsmmc.c | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/lsmmc.c b/lsmmc.c
+> +index c4faa00..bcb854d 100644
+> +--- a/lsmmc.c
+> ++++ b/lsmmc.c
+> +@@ -353,7 +353,7 @@ char *read_file(char *name)
+> + 		line[strlen(line) - 1] = '\0';
+> + 
+> + 	while (isspace(line[0]))
+> +-		strncpy(&line[0], &line[1], sizeof(line));
+> ++		memmove(&line[0], &line[1], sizeof(line)-1);
+> + 
+> + 	return strdup(line);
+> + }
+
 -- 
-Florian
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
