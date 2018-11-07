@@ -1,44 +1,92 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 6 Nov 2018 18:32:47 -0600
-Subject: [Buildroot] [PATCH v4 3/4] sysklogd: rewrite init script
-In-Reply-To: <2fb11fa7-b523-f4d0-1955-648c8d9f9ba7@mind.be>
-References: <20181103182427.11738-1-casantos@datacom.com.br>
- <20181103182427.11738-4-casantos@datacom.com.br>
- <CANQCQpYA3zOuH7K_SJzL3xkTVbZt8WPp1FG0K-3ODdU3AT-Y8g@mail.gmail.com>
- <2fb11fa7-b523-f4d0-1955-648c8d9f9ba7@mind.be>
-Message-ID: <CANQCQpZbioW-ydZ9704LyQBw_dgqHpKDsBMiuQzsp7E6j9JZww@mail.gmail.com>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Tue,  6 Nov 2018 22:49:08 -0200
+Subject: [Buildroot] [PATCH v5 0/4] init scripts: rewrite S01logging
+Message-ID: <20181107004912.13349-1-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+Continuing our effort to improve daemon startup scripts, this series
+focuses on S01logging, which starts the logging daemon. Common features
+are:
 
-On Tue, Nov 6, 2018 at 6:08 PM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 05/11/18 15:07, Matthew Weber wrote:
-> > So by default the user may take a busybox based target and get the
-> > logging daemons from busybox's default config.  Then they choose to go
-> > enable one of the other logging options but don't understand they need
-> > to make a custom busybox config.  For sysklogd, the install would just
-> > copy over the init scripts busybox installed, however do we need to
-> > handle this case with rsyslog(S02klogd would be left in the target
-> > from busybox) and syslog-ng(both S01/S02 would be left) ?  Maybe a
-> > check for existance and exit with warning that the busybox
-> > configuration needs to have logging disabled....
->
->  That is handled in busybox.mk:
->
-> +# Only install our logging scripts if no other package does it.
-> +ifeq ($(BR2_PACKAGE_SYSKLOGD)$(BR2_PACKAGE_RSYSLOG)$(BR2_PACKAGE_SYSLOG_NG),)
->  define BUSYBOX_INSTALL_LOGGING_SCRIPT
->
->
+- Indent with tabs, not spaces.
+- Implement start, stop, restart and reload as functions.
+- Use start-stop-daemon.
+- Correctly detect and report start/stop/restart/reload errors.
+- Support a configuration file at /etc/default.
+- Use one init script per daemom. Name the script accordding to the
+  daemon it starts (e.g. S01syslogd, S02klogd).
 
-Agree, just more of a "if you don't do a clean build" what questions
-will hit the mailing list and how could we prevent that.....
+All files implement the following FSM:
 
-Matt
+                                                  +---------+
+             +-------stop--------+   +----(1s)----| stopped |
+             |                   |   |            |     |
+             |                   |   |            +---------+
+             v                   |   v                 ^
+      +---------+             +---------+              |
+      |         |             |         |----restart---+
+      | STOPPED |----start--->| STARTED |
+      |         |             |         |----reload----+
+      +---------+             +---------+              |
+                                     ^                 |
+                                     |                 |
+                                     +-----------------+
+
+* "stopped" is an intermediary state that transitions to STARTED after
+  one second.
+
+Attempts to do invalid transitions (e.g. start from STARTED state) will
+fail. That's why we don't pass -o (--oknodo) to start-stop-daemon. This
+changes the script behavior, in some cases, while in other cases just
+reports errors that were ignored previously.
+
+The "restart" transition is implemented as "stop, sleep 1, start", so
+restarting from STOPPED state is possible, although an error message is
+shown because "stop" fails.
+
+The "reload" transition semantics is "reload the configuration and keep
+running", when possible, otherwise it is the same as "restart" (in this
+series, sysklogd and syslog-ng support true "reload" operations).
+
+The scripts were checked with shellcheck v0.5.0:
+
+  $ shellcheck package/*/S0*log*
+
+Carlos Santos (4):
+  busybox: rewrite logging init script
+  rsyslog: rewrite init script
+  sysklogd: rewrite init script
+  syslog-ng: rewrite init script
+
+ package/busybox/S01logging     | 40 ---------------------
+ package/busybox/S01syslogd     | 55 ++++++++++++++++++++++++++++
+ package/busybox/S02klogd       | 55 ++++++++++++++++++++++++++++
+ package/busybox/busybox.mk     | 19 +++++-----
+ package/rsyslog/S01logging     | 36 -------------------
+ package/rsyslog/S01rsyslogd    | 53 +++++++++++++++++++++++++++
+ package/rsyslog/rsyslog.mk     |  4 +--
+ package/sysklogd/S01logging    | 25 -------------
+ package/sysklogd/S01syslogd    | 62 ++++++++++++++++++++++++++++++++
+ package/sysklogd/S02klogd      | 65 ++++++++++++++++++++++++++++++++++
+ package/sysklogd/sysklogd.mk   |  6 ++--
+ package/syslog-ng/S01logging   | 38 --------------------
+ package/syslog-ng/S01syslog-ng | 62 ++++++++++++++++++++++++++++++++
+ package/syslog-ng/syslog-ng.mk |  4 +--
+ 14 files changed, 371 insertions(+), 153 deletions(-)
+ delete mode 100644 package/busybox/S01logging
+ create mode 100644 package/busybox/S01syslogd
+ create mode 100644 package/busybox/S02klogd
+ delete mode 100644 package/rsyslog/S01logging
+ create mode 100644 package/rsyslog/S01rsyslogd
+ delete mode 100644 package/sysklogd/S01logging
+ create mode 100644 package/sysklogd/S01syslogd
+ create mode 100644 package/sysklogd/S02klogd
+ delete mode 100644 package/syslog-ng/S01logging
+ create mode 100644 package/syslog-ng/S01syslog-ng
+
+-- 
+2.17.1
