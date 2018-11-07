@@ -1,63 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 07 Nov 2018 22:08:54 +0100
-Subject: [Buildroot] [PATCH] traceroute: fix 'no rule to make target
+Date: Wed, 7 Nov 2018 22:09:38 +0100
+Subject: [Buildroot] [git commit] traceroute: fix 'no rule to make target
  -lm' error
-In-Reply-To: <51e4e1aa-c4c8-0353-dbfa-722756a49f71@mind.be> (Arnout
- Vandecappelle's message of "Tue, 6 Nov 2018 00:40:38 +0100")
-References: <1539902241-10211-1-git-send-email-sergio.prado@e-labworks.com>
- <20181104114514.523365ee@windsurf> <20181104122638.7103719d@windsurf>
- <19d8f97c-f90d-9a44-6b2b-ad2132aa69af@mind.be>
- <51e4e1aa-c4c8-0353-dbfa-722756a49f71@mind.be>
-Message-ID: <878t24bno9.fsf@dell.be.48ers.dk>
+Message-ID: <20181107210741.113C981515@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=49dd099650c21950c8bf957eee3d67b1b20fdcbe
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Fix the following build error:
 
- >  Now, the incorrect dependencies will only affect us in case a Makefile contains
- > a rule like this:
+make[3]: *** No rule to make target '-lm', needed by 'traceroute'.
 
- > foo: -lbar
- > 	$(CC) -o $@ $^
+Fixes:
+http://autobuild.buildroot.org/results/dde63672e1de1d4ba036331ab127ccc8ff044444
+http://autobuild.buildroot.org/results/4efb67e6a29c3dd784676d30a1051f9f0c2a6c80
+http://autobuild.buildroot.org/results/7ac23a3959aec22297695899c0f76dbbc4e114d3
+And many more...
 
- > because make will expand $^ into the vpath-expanded /usr/lib/libbar.so (assuming
- > we set VPATH to STAGING_DIR, but libbar.so doesn't exist in STAGING_DIR). But in
- > that case, we'll get a link error so that situation will be detected and the
- > Makefile can be patched.
+As explained by Arnout, this happens when host-make is built (E.G.  when
+glibc is built on a machine with an old make version) because the traceroute
+Makefiles have a target with a dependency on -lm, and make automatically will
+look in make's $prefix/lib directory for libm.so / libm.a to satisfy this
+dependency.  From the make info pages:
 
- >  For traceroute, this isn't the case; it has something like:
+   When a prerequisite's name has the form '-lNAME', 'make' handles it
+specially by searching for the file 'libNAME.so', and, if it is not
+found, for the file 'libNAME.a' in the current directory, in directories
+specified by matching 'vpath' search paths and the 'VPATH' search path,
+and then in the directories '/lib', '/usr/lib', and 'PREFIX/lib'
+(normally '/usr/local/lib', but MS-DOS/MS-Windows versions of 'make'
+behave as if PREFIX is defined to be the root of the DJGPP installation
+tree).
 
- > LIBS := -lbar
- > foo: $(LIBS)
- > 	$(CC) -o $@ $(LIBS)
+Our host-make is configured with prefix=$(HOST_DIR), and $(HOST_DIR)/lib
+does not contain libm.so / libm.a, causing make to error out.
 
- > so the VPATH override should work.
+Work around it by pointing VPATH to $(STAGING_DIR)/usr/lib, so make will
+find the (target) libm.so / libm.a.
 
-I still find it a bit strange to list system libraries as dependencies
-when the Makefile doesn't have any rules to create/update them, but yeah.
+[Peter: extend description based on Arnouts investigation]
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/traceroute/traceroute.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
- >  Bottom line: it looks like Sergio's patch is indeed correct, and moreover, it
- > looks like it might be better to add it to TARGET_MAKE_ENV. Note sure if we want
- > to take the risk at this point to make such a landslide change?
-
-I've now committed Sergio's patch with these details added to the
-description, thanks for the investigation.
-
-Notice that this particular case could also be fixed by filtering out
--l% from LIBS, just like traceroute already does for -L entries:
-
-LIBDEPS = $(filter-out -L%,$(LIBS))
-
-..
-
-$(TARGET): $(OBJS) $(MOD_OBJS) $(LIBDEPS)
-           $(CC) $(LDFLAGS) -o $@ $(OBJS) $(MOD_OBJS) $(LIBS)
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/traceroute/traceroute.mk b/package/traceroute/traceroute.mk
+index 192197498d..a02982a6b5 100644
+--- a/package/traceroute/traceroute.mk
++++ b/package/traceroute/traceroute.mk
+@@ -11,7 +11,7 @@ TRACEROUTE_LICENSE = GPL-2.0+, LGPL-2.1+
+ TRACEROUTE_LICENSE_FILES = COPYING COPYING.LIB
+ 
+ define TRACEROUTE_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++	$(TARGET_MAKE_ENV) VPATH=$(STAGING_DIR)/usr/lib $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+ 		CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" -C $(@D)
+ endef
+ 
