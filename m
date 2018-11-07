@@ -1,105 +1,32 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 7 Nov 2018 21:41:56 +0100
-Subject: [Buildroot] [PATCH 2/3] graph-depends: split off
- get_version/get_depends into pkgutil.py
-In-Reply-To: <20181107193903.GC4702@scaer>
-References: <20170203205745.14488-1-patrickdepinguin@gmail.com>
- <20170203205745.14488-4-patrickdepinguin@gmail.com>
- <20181107180753.GA4702@scaer>
- <CAAXf6LVC==B0Rb7-ZpDh=k2VyF4UJZYaamQ0hhhZzpS6z=Syrg@mail.gmail.com>
- <20181107193903.GC4702@scaer>
-Message-ID: <CAAXf6LVjAtrzEERUTMyBUe3pXFHa1BZgXkYfCySKxTEU=GCaoQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 07 Nov 2018 22:02:44 +0100
+Subject: [Buildroot] [PATCH] traceroute: fix 'no rule to make target
+ -lm' error
+In-Reply-To: <1539902241-10211-1-git-send-email-sergio.prado@e-labworks.com>
+ (Sergio Prado's message of "Thu, 18 Oct 2018 19:37:21 -0300")
+References: <1539902241-10211-1-git-send-email-sergio.prado@e-labworks.com>
+Message-ID: <87d0rgbnyj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+>>>>> "Sergio" == Sergio Prado <sergio.prado@e-labworks.com> writes:
 
-El mi?., 7 nov. 2018 a las 20:39, Yann E. MORIN
-(<yann.morin.1998@free.fr>) escribi?:
->
-> Thomas, All,
->
-> On 2018-11-07 20:06 +0100, Thomas De Schampheleire spake thusly:
-> > El mi?., 7 nov. 2018 a las 19:07, Yann E. MORIN
-> > (<yann.morin.1998@free.fr>) escribi?:
-> > > On 2017-02-03 21:57 +0100, Thomas De Schampheleire spake thusly:
-> > > > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> > > >
-> > > > Functions to obtain the version and dependencies of a package from Python
-> > > > can be useful for several scripts. Extract this logic out of graph-depends
-> > > > into pkgutil.py.
-> > >
-> > > Coming back to this script, because I'm rewriting the way graph-depends
-> > > gets the dependency tree. When you said "useful for several scripts,"
-> > > did you expect it to be useful to scripts that are not in Buildroot
-> > > (e.g. user-local scripts)?
-> >
-> > Yes, exactly. We are using the logic from pkgutil from another python
-> > script and want to avoid code duplication.
-> > This particular script is not something that upstream accepts, i.e.
-> > generating opkg files for specific packages (and for that, we need to
-> > know the dependencies and versions of each package).
->
-> So, if you were to get a new function that would return basically the
-> same, but in another format, but much quicker (~4s instead of ~45s),
-> would that be something you could adapt to?
->
-> I'm changing the way the dependency tree is extracted from the Makefile
-> data, and the function now has this API (function name yet to be
-> bike-shedded about):
->
->     dict_deps, dict_types = get_dependency_tree(direction)
->
-> where:
->
->   - direction is either string 'forward' or 'back',
->
->   - dict_deps is a dictionnary, which keys are the package names, and
->     which values are lists of packages that are direct dependencies of
->     the key package (basically, what get_all_depends() currently
->     returns, but the whole dependency tree)
+ > Fix the following build error:
+ > make[3]: *** No rule to make target '-lm', needed by 'traceroute'.
 
-How is dict_deps different from what get_depends in brpkgutil.py
-currently returns? Your statement "but the whole dependency tree" is
-not clear to me.
+ > Fixes:
+ > http://autobuild.buildroot.org/results/dde63672e1de1d4ba036331ab127ccc8ff044444
+ > http://autobuild.buildroot.org/results/4efb67e6a29c3dd784676d30a1051f9f0c2a6c80
+ > http://autobuild.buildroot.org/results/7ac23a3959aec22297695899c0f76dbbc4e114d3
+ > And many more...
 
->
->   - dict_types is a dictionnary, which keys are the package names, and
->     the values are string representing whtehr the packages are target or
->     host, and virtual or not, e.g.: 'target', 'target-virtual', 'host',
->     'host-virtual'.
->
-> If needed, I could very easily make it return a three-tuple, with the
-> third one being dict_versions, keyed by package names, with values the
-> package version.
->
-> Would that be something that would be usable in your use case?
+ > Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 
-To help the discussion, here are some snippets from our code:
+Committed after significantly extending the commit message based on
+Arnouts investigation, thanks.
 
-        Package.versions = brpkgutil.get_version(list(Package.files.keys()))
-        Package.depends = brpkgutil.get_depends(list(Package.files.keys()))
-        ...
-        self.version = Package.versions[self.pkg]        # this
-variable will be used in several places, we just need the string
-representing the version
-    ...
-    def get_opkg_depends(self):
-        """Return the dependencies that need to be declared in the opkg"""
-        deps = set(Package.depends[self.pkg]).intersection(set(Package.requested_pkgs))
-        if deps is not None:
-            return ','.join(deps)
-        else:
-            return ''
-
-The code above is basically all we do with the version and dependencies.
-As long as we can get this info in some way, I'm fine with changes.
-Returning the versions together with the dependencies in one call,
-removing the call to brpkgutil.get_version is fine by me, if it is
-better for the in-tree usage (I'm fine with either way).
-
-Thanks,
-Thomas
+-- 
+Bye, Peter Korsgaard
