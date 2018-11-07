@@ -1,56 +1,104 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 07 Nov 2018 17:59:03 +0100
-Subject: [Buildroot] [PATCH v1] libv4l: add missing bpf_common.h header
-In-Reply-To: <CAPi7W833FdDxhQyXmJrTRAQgd2u-CFvyL_pqOTC9kdK+6AO8FA@mail.gmail.com>
- (Fabrice Fontaine's message of "Tue, 6 Nov 2018 21:01:31 +0100")
-References: <20181102190108.29507-1-ps.report@gmx.net>
- <20181103142810.7c8fe947@windsurf> <20181105215927.2d4bd31a@gmx.net>
- <CAPi7W833FdDxhQyXmJrTRAQgd2u-CFvyL_pqOTC9kdK+6AO8FA@mail.gmail.com>
-Message-ID: <87h8gsbz8o.fsf@dell.be.48ers.dk>
+From: Nicolas Carrier <nicolas.carrier@orolia.com>
+Date: Wed, 7 Nov 2018 17:08:29 +0000
+Subject: [Buildroot] [PATCH 1/1] Added local directory as source of
+ kernel code
+In-Reply-To: <20181107174411.0b67a064@windsurf>
+References: <20181107100605.13141-1-nicolas.carrier@orolia.com>
+ <CANQCQpb6BYDMXJTDKEXKgpmBG1jHjOt2G1_eDF_cSVbCM=x=nw@mail.gmail.com>
+ <PR1PR06MB49557D35D7EB1F1D03DEFDD784C40@PR1PR06MB4955.eurprd06.prod.outlook.com>,
+ <20181107174411.0b67a064@windsurf>
+Message-ID: <PR1PR06MB49552DC5F79CB5C801B824F384C40@PR1PR06MB4955.eurprd06.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+I think I understand better the issue.
 
-Hi,
+The thing is there are 2 sort of packages, the ones managed internally by buildroot and the external ones. Linux and u-boot are special, at least for us, because they are internal buildroot packages for which we want to manage the sources like we do for external ones by using the "local" method.
 
- > Thanks for submitting this patch however build failures remain on some
- > architectures (ARM cortex a8 / a9 / arm926ej-s) with "old" kernel
- > headers (3.13) :
- > - http://autobuild.buildroot.org/results/b48/b48f9b284102d94b847a35ed1ca50a157fbcb1c9/build-end.log
- > - http://autobuild.buildroot.org/results/339/3391705aca7022111ef743212b7cad57f0cdea9a/build-end.log
+I think the solution you propose will work and I'm going to use it if the patch is refused.
 
- > Build failures are raised because _NR_bpf is not defined:
+But still I find it a little bit hackish compared to the possibility to use a local source tree, which is an alternative which makes sense, when we already have the possibility to use, a custom svn, git, tarball...
 
- > bpf.c:48:4: error: #error __NR_bpf not defined. libbpf does not
- > support your arch.
- >  #  error __NR_bpf not defined. libbpf does not support your arch.
 
- > From my understanding, __NR_bpf should be normally defined by the
- > kernel (when it is not too old).
- > For example, __NR_bpf has been defined for m68k and powerpc since 3.18:
- > - https://github.com/torvalds/linux/commit/f7bbd12a4b7e088f53f20dd31019984459699fb9
- > - https://github.com/torvalds/linux/commit/fcbb539f279f7d854bd49819b889fea0612909f8
- > The code in bpf.c only defines fallback for very few few
- > architectures: i386, x86_64, aarch64, sparc and s390.
+If you end up deciding to integrate the patch, I have the u-boot patch, originally written by Adam Duskett, rebased on top of master and ready for submission ^^
 
-But the fallback only fixes setups with older kernel headers than the
-runtime kernel, which is IMHO fairly rare in Buildroot - Unless the tool
-works correctly when the bpf syscall fails.
 
- > So finally, should we add a dependency on
- > BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18 on a new
- > BR2_PACKAGE_LIBV4L_KEYTABLE_BPF_PROTOCOLS option?
+________________________________
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Sent: Wednesday, November 7, 2018 5:44:11 PM
+To: Nicolas Carrier
+Cc: Matthew Weber; Peter Korsgaard; rafal.fabich at gmail.com; buildroot
+Subject: Re: [Buildroot] [PATCH 1/1] Added local directory as source of kernel code
 
-The BPF_PROTOCOLS conditional seems to be about using clang to compile
-bdf byte code, which is not directly the code that is failing here.
+Hello Nicolas,
 
-If it is easy to disable bpf support completely, then that is probably
-the nicest solution, otherwise I am fine with depending on 3.18, that is
-after all almost 4 years old by now.
+On Wed, 7 Nov 2018 14:40:39 +0000, Nicolas Carrier wrote:
 
--- 
-Bye, Peter Korsgaard
+> I have a workspace managed by google repo, which fetches the sources
+> of the external git repositories for which we have created .mk
+> buildroot Makefiles.
+>
+> Because the sources are cloned by repo, I don't want them to be
+> fetched by buildroot, hence I used "_SITE_METHOD = local" for all the
+> packages.
+>
+> For linux and u-boot, I can't do that because they dont support the
+> local method and I think there is no reason to make these two
+> packages an exception.
+
+Well your patch is actually making u-boot and linux be exceptions. What
+if someone wants to build busybox from a local source tree ? And qt5 ?
+And openssl ? And then this other package ?
+
+As you can see, this approach does not really scale: we would have to
+add Config.in options to all packages to say "please build using the
+source code from folder XYZ instead of the normal upstream source
+code". That's why we have chosen to support this use case using
+OVERRIDE_SRCDIR.
+
+> As for modifying the local.mk file to put some LINUX_OVERRIDE_SRCDIR
+> value inside, I want to avoid it because it would force me to version
+> the local.mk file for things to work out-of-the-box. Versionning this
+> file is problematic because developers needing to modify it
+> temporarily may commit it by error.
+
+Here is what you could do:
+
+ - Set BR2_PACKAGE_OVERRIDE_FILE to point to whatever file you like
+   instead of local.mk, say package-overrides.mk.
+
+ - In this file, you set LINUX_OVERRIDE_SRCDIR as appropriate, but you
+   also do
+
+   -include local.mk
+
+And then you version control package-overrides.mk. Then your developer
+can continue locally to tinker with local.mk to have their own custom
+OVERRIDE_SRCDIR, and still have LINUX_OVERRIDE_SRCDIR used.
+
+Alternatively, maybe we should decide that linux and u-boot are special
+packages, and just like for those packages we support fetching from
+custom tarballs and custom Git repositories, we should support fetching
+from custom local directories (this is what your patch implements, but
+until now, we have resisted going into this direction).
+
+Best regards,
+
+Thomas
+--
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+Bootlin ? Embedded Linux and kernel engineering<https://bootlin.com/>
+bootlin.com
+The Embedded Linux Conference Europe edition 2018 took place last week in Edinburgh, Scotland, and no less than 9 engineers from Bootlin attended the conference.
+
+
+ATTENTION: This email came from an external source.
+Do not open attachments or click on links from unknown senders or unexpected emails.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181107/8bf0a47e/attachment.html>
