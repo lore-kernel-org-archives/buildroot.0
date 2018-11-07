@@ -1,65 +1,127 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 Nov 2018 22:09:38 +0100
-Subject: [Buildroot] [git commit] traceroute: fix 'no rule to make target
- -lm' error
-Message-ID: <20181107210741.113C981515@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 7 Nov 2018 22:14:01 +0100
+Subject: [Buildroot] [PATCH 2/3] graph-depends: split off
+ get_version/get_depends into pkgutil.py
+In-Reply-To: <20181107210657.GD4702@scaer>
+References: <20170203205745.14488-1-patrickdepinguin@gmail.com>
+ <20170203205745.14488-4-patrickdepinguin@gmail.com>
+ <20181107180753.GA4702@scaer>
+ <CAAXf6LVC==B0Rb7-ZpDh=k2VyF4UJZYaamQ0hhhZzpS6z=Syrg@mail.gmail.com>
+ <20181107193903.GC4702@scaer>
+ <CAAXf6LVjAtrzEERUTMyBUe3pXFHa1BZgXkYfCySKxTEU=GCaoQ@mail.gmail.com>
+ <20181107210657.GD4702@scaer>
+Message-ID: <CAAXf6LVGOGew5yTZBjHZ+mrSae5FxGHp4WQJOv6qM__6FvYqSA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49dd099650c21950c8bf957eee3d67b1b20fdcbe
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+El mi?., 7 nov. 2018 a las 22:07, Yann E. MORIN
+(<yann.morin.1998@free.fr>) escribi?:
+>
+> On 2018-11-07 21:41 +0100, Thomas De Schampheleire spake thusly:
+> > El mi?., 7 nov. 2018 a las 20:39, Yann E. MORIN
+> > (<yann.morin.1998@free.fr>) escribi?:
+> > > On 2018-11-07 20:06 +0100, Thomas De Schampheleire spake thusly:
+> > > > El mi?., 7 nov. 2018 a las 19:07, Yann E. MORIN
+> > > > (<yann.morin.1998@free.fr>) escribi?:
+> > > > > On 2017-02-03 21:57 +0100, Thomas De Schampheleire spake thusly:
+> > > > > > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> > > > > >
+> > > > > > Functions to obtain the version and dependencies of a package from Python
+> > > > > > can be useful for several scripts. Extract this logic out of graph-depends
+> > > > > > into pkgutil.py.
+> > > > >
+> > > > > Coming back to this script, because I'm rewriting the way graph-depends
+> > > > > gets the dependency tree. When you said "useful for several scripts,"
+> > > > > did you expect it to be useful to scripts that are not in Buildroot
+> > > > > (e.g. user-local scripts)?
+> > > >
+> > > > Yes, exactly. We are using the logic from pkgutil from another python
+> > > > script and want to avoid code duplication.
+> > > > This particular script is not something that upstream accepts, i.e.
+> > > > generating opkg files for specific packages (and for that, we need to
+> > > > know the dependencies and versions of each package).
+> > >
+> > > So, if you were to get a new function that would return basically the
+> > > same, but in another format, but much quicker (~4s instead of ~45s),
+> > > would that be something you could adapt to?
+> > >
+> > > I'm changing the way the dependency tree is extracted from the Makefile
+> > > data, and the function now has this API (function name yet to be
+> > > bike-shedded about):
+> > >
+> > >     dict_deps, dict_types = get_dependency_tree(direction)
+> > >
+> > > where:
+> > >
+> > >   - direction is either string 'forward' or 'back',
+> > >
+> > >   - dict_deps is a dictionnary, which keys are the package names, and
+> > >     which values are lists of packages that are direct dependencies of
+> > >     the key package (basically, what get_all_depends() currently
+> > >     returns, but the whole dependency tree)
+> >
+> > How is dict_deps different from what get_depends in brpkgutil.py
+> > currently returns? Your statement "but the whole dependency tree" is
+> > not clear to me.
+>
+> Currently, brpkgutil.get_depends() takes a list of packages for which
+> to get the dependencies. The new get_dependency_tree() does not take
+> such a list; it always returns the whole dependency tree (i.e. from the
+> 'ALL' meta package).
 
-Fix the following build error:
+Ok, thanks.
 
-make[3]: *** No rule to make target '-lm', needed by 'traceroute'.
+>
+> > >   - dict_types is a dictionnary, which keys are the package names, and
+> > >     the values are string representing whtehr the packages are target or
+> > >     host, and virtual or not, e.g.: 'target', 'target-virtual', 'host',
+> > >     'host-virtual'.
+> > >
+> > > If needed, I could very easily make it return a three-tuple, with the
+> > > third one being dict_versions, keyed by package names, with values the
+> > > package version.
+> > >
+> > > Would that be something that would be usable in your use case?
+> >
+> > To help the discussion, here are some snippets from our code:
+> >
+> >         Package.versions = brpkgutil.get_version(list(Package.files.keys()))
+> >         Package.depends = brpkgutil.get_depends(list(Package.files.keys()))
+>
+> So you could write:
+>
+>     Package.depends, Package.versions = brpkgutil.get_dependency_tree('forward')
+>
+> >         self.version = Package.versions[self.pkg]        # this
+> > variable will be used in several places, we just need the string
+> > representing the version
+> >     ...
+> >     def get_opkg_depends(self):
+> >         """Return the dependencies that need to be declared in the opkg"""
+> >         deps = set(Package.depends[self.pkg]).intersection(set(Package.requested_pkgs))
+> >         if deps is not None:
+> >             return ','.join(deps)
+> >         else:
+> >             return ''
+> >
+> > The code above is basically all we do with the version and dependencies.
+> > As long as we can get this info in some way, I'm fine with changes.
+> > Returning the versions together with the dependencies in one call,
+> > removing the call to brpkgutil.get_version is fine by me, if it is
+> > better for the in-tree usage (I'm fine with either way).
+>
+> OK, good.
+>
+> Currently, in Buildroot, we use the version string just because we need
+> to know whether a package is virutal or not. Do you really need the
+> version string for what it is, or just to test if it is virtual or not?
 
-Fixes:
-http://autobuild.buildroot.org/results/dde63672e1de1d4ba036331ab127ccc8ff044444
-http://autobuild.buildroot.org/results/4efb67e6a29c3dd784676d30a1051f9f0c2a6c80
-http://autobuild.buildroot.org/results/7ac23a3959aec22297695899c0f76dbbc4e114d3
-And many more...
+We do need the version, which is used in the .ipk filename as well as
+in its metadata.
+Whether the package is virtual or not is not a concern for us.
 
-As explained by Arnout, this happens when host-make is built (E.G.  when
-glibc is built on a machine with an old make version) because the traceroute
-Makefiles have a target with a dependency on -lm, and make automatically will
-look in make's $prefix/lib directory for libm.so / libm.a to satisfy this
-dependency.  From the make info pages:
-
-   When a prerequisite's name has the form '-lNAME', 'make' handles it
-specially by searching for the file 'libNAME.so', and, if it is not
-found, for the file 'libNAME.a' in the current directory, in directories
-specified by matching 'vpath' search paths and the 'VPATH' search path,
-and then in the directories '/lib', '/usr/lib', and 'PREFIX/lib'
-(normally '/usr/local/lib', but MS-DOS/MS-Windows versions of 'make'
-behave as if PREFIX is defined to be the root of the DJGPP installation
-tree).
-
-Our host-make is configured with prefix=$(HOST_DIR), and $(HOST_DIR)/lib
-does not contain libm.so / libm.a, causing make to error out.
-
-Work around it by pointing VPATH to $(STAGING_DIR)/usr/lib, so make will
-find the (target) libm.so / libm.a.
-
-[Peter: extend description based on Arnouts investigation]
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/traceroute/traceroute.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/traceroute/traceroute.mk b/package/traceroute/traceroute.mk
-index 192197498d..a02982a6b5 100644
---- a/package/traceroute/traceroute.mk
-+++ b/package/traceroute/traceroute.mk
-@@ -11,7 +11,7 @@ TRACEROUTE_LICENSE = GPL-2.0+, LGPL-2.1+
- TRACEROUTE_LICENSE_FILES = COPYING COPYING.LIB
- 
- define TRACEROUTE_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+	$(TARGET_MAKE_ENV) VPATH=$(STAGING_DIR)/usr/lib $(MAKE) $(TARGET_CONFIGURE_OPTS) \
- 		CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" -C $(@D)
- endef
- 
+Thanks,
+Thomas
