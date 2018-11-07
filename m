@@ -1,90 +1,112 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 Nov 2018 23:46:33 +0100
-Subject: [Buildroot] [git commit] package/alsa-utils: re-enable in
- BR2_STATIC_LIBS configuration
-Message-ID: <20181107224643.5C9E281604@busybox.osuosl.org>
+Date: Wed, 7 Nov 2018 23:47:11 +0100
+Subject: [Buildroot] [git commit] package/alsa-lib: drop patch
+ 0002-alsa-lib-provide-dummy-definitions-of-RTLD_-if-neces.patch
+Message-ID: <20181107224643.6359781604@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc717ce33964b5b83dd6db543bcd04710cffffb6
+commit: https://git.buildroot.net/buildroot/commit/?id=fa627bacc2eeffaba9f0287fa039864b2232d60c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In commit 4707383c5d501a9ad7698579e5d0a4e2ab758c7e ("alsa-utils: needs
-dynamic library support"), we added a !BR2_STATIC_LIBS dependency
-because topology/topology.c was including <dlfcn.h>.
+The description of this patch was no longer correct: it no longer
+provided dummy definitions of RTLD_* macros since commit
+ccad7db515fa79d2331e4e949aafb32eca0b5214 ("alsa-lib: bump to version
+1.1.6"). All it did is make two <dlfcn.h> inclusions optional.
 
-However, it turns out that this include is not needed/used at all, so
-we can instead drop it, and re-enable the package in BR2_STATIC_LIBS
-configuration.
+However, this is no longer needed, since the alsa-lib code base
+contains four inclusions of <dlfcn.h>, which are all properly handled:
 
-This was discovered when analyzing why we have
-package/alsa-lib/0003-alsa-lib-conditionally-enable-libdl-in-AM_PATH_ALSA-.patch. This
-patch fixes the AM_PATH_ALSA autoconf macro, used by alsa-utils, so
-that ALSA_LIBS doesn't carry the -ldl option, fixing static-linking
-scenarios. This patch had become useless since alsa-utils was no
-longer available in BR2_STATIC_LIBS configuration.
+ - include/local.h, the include is guarded by #ifdef HAVE_LIBDL
+
+ - modules/mixer/simple/sbasedl.c, modules are only built if
+   BUILD_MODULES is enabled, and BUILD_MODULES is only enabled if
+   HAVE_LIBDL is enabled
+
+ - src/mixer/simple_abst.c, this file is only built if BUILD_MODULES
+   is enabled, which itself is only enabled if HAVE_LIBDL is enabled
+
+ - src/pcm/pcm_meter.c, this file is only built if
+   BUILD_PCM_PLUGIN_METER is enabled, and this is not enabled if
+   HAVE_LIBDL is not enabled.
+
+Conclusion: the patch can be dropped. The third patch is renumbered as
+appropriate.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-topology.c-drop-unneeded-dlfcn.h-include.patch | 29 ++++++++++++++++++++++
- package/alsa-utils/Config.in                       |  5 ++--
- 2 files changed, 31 insertions(+), 3 deletions(-)
+ ...ditionally-enable-libdl-in-AM_PATH_ALSA-.patch} |  0
+ ...ovide-dummy-definitions-of-RTLD_-if-neces.patch | 57 ----------------------
+ 2 files changed, 57 deletions(-)
 
-diff --git a/package/alsa-utils/0001-topology-topology.c-drop-unneeded-dlfcn.h-include.patch b/package/alsa-utils/0001-topology-topology.c-drop-unneeded-dlfcn.h-include.patch
-new file mode 100644
-index 0000000000..2a8be0b0b7
---- /dev/null
-+++ b/package/alsa-utils/0001-topology-topology.c-drop-unneeded-dlfcn.h-include.patch
-@@ -0,0 +1,29 @@
-+From 4c9462a5ef2f680b24ddf6bae7ac7c693fa6a136 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Thu, 1 Nov 2018 15:15:31 +0100
-+Subject: [PATCH] topology/topology.c: drop unneeded <dlfcn.h> include
-+
-+This include is not used/needed and prevents building on systems that
-+don't provide <dlfcn.h>.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Upstream: http://mailman.alsa-project.org/pipermail/alsa-devel/2018-November/141375.html
-+---
-+ topology/topology.c | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/topology/topology.c b/topology/topology.c
-+index 097c255..b72e341 100644
-+--- a/topology/topology.c
-++++ b/topology/topology.c
-+@@ -27,7 +27,6 @@
-+ #include <errno.h>
-+ #include <string.h>
-+ #include <sys/stat.h>
-+-#include <dlfcn.h>
-+ #include <getopt.h>
-+ #include <assert.h>
-+ 
-+-- 
-+2.14.4
-+
-diff --git a/package/alsa-utils/Config.in b/package/alsa-utils/Config.in
-index edf5d39f26..012f28aef4 100644
---- a/package/alsa-utils/Config.in
-+++ b/package/alsa-utils/Config.in
-@@ -1,12 +1,11 @@
--comment "alsa-utils needs a toolchain w/ threads, dynamic library"
-+comment "alsa-utils needs a toolchain w/ threads"
- 	depends on BR2_USE_MMU # fork
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
- 
- menuconfig BR2_PACKAGE_ALSA_UTILS
- 	bool "alsa-utils"
- 	depends on BR2_USE_MMU # fork
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
--	depends on !BR2_STATIC_LIBS # uses dlfcn.h
- 	select BR2_PACKAGE_ALSA_LIB
- 	help
- 	  This package contains the command line utilities for the ALSA
+diff --git a/package/alsa-lib/0003-alsa-lib-conditionally-enable-libdl-in-AM_PATH_ALSA-.patch b/package/alsa-lib/0002-alsa-lib-conditionally-enable-libdl-in-AM_PATH_ALSA-.patch
+similarity index 100%
+rename from package/alsa-lib/0003-alsa-lib-conditionally-enable-libdl-in-AM_PATH_ALSA-.patch
+rename to package/alsa-lib/0002-alsa-lib-conditionally-enable-libdl-in-AM_PATH_ALSA-.patch
+diff --git a/package/alsa-lib/0002-alsa-lib-provide-dummy-definitions-of-RTLD_-if-neces.patch b/package/alsa-lib/0002-alsa-lib-provide-dummy-definitions-of-RTLD_-if-neces.patch
+deleted file mode 100644
+index f489f913d9..0000000000
+--- a/package/alsa-lib/0002-alsa-lib-provide-dummy-definitions-of-RTLD_-if-neces.patch
++++ /dev/null
+@@ -1,57 +0,0 @@
+-From ff91d50a250e10a419bcd35176f3069161ac33bb Mon Sep 17 00:00:00 2001
+-From: Sonic Zhang <sonic.zhang@analog.com>
+-Date: Fri, 13 Apr 2018 09:11:23 +0200
+-Subject: [PATCH] alsa-lib: provide dummy definitions of RTLD_* if necessary
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-The FLAT GNU toolchain (e.g. blackfin) doesn't include the dlfcn.h header
+-file, so we need to guard that include. Additionally, provide dummy
+-definitions for parameters RTLD_GLOBAL / RTLD_NOW which are normally
+-provided by dlfcn.h.
+-
+-Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+-[Thomas: don't add separate dlmisc.h, move dummy defs to global.h]
+-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+-[J??rg: update for 1.1.6]
+-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+----
+- modules/mixer/simple/sbasedl.c | 4 +++-
+- src/mixer/simple_abst.c        | 3 +++
+- 2 files changed, 6 insertions(+), 1 deletion(-)
+-
+-diff --git a/modules/mixer/simple/sbasedl.c b/modules/mixer/simple/sbasedl.c
+-index d8cbf0f1..daa0ab30 100644
+---- a/modules/mixer/simple/sbasedl.c
+-+++ b/modules/mixer/simple/sbasedl.c
+-@@ -27,8 +27,10 @@
+- #include <fcntl.h>
+- #include <sys/ioctl.h>
+- #include <math.h>
+--#include <dlfcn.h>
+- #include "config.h"
+-+#ifdef HAVE_DLFCN
+-+#include <dlfcn.h>
+-+#endif
+- #include "asoundlib.h"
+- #include "mixer_abst.h"
+- #include "sbase.h"
+-diff --git a/src/mixer/simple_abst.c b/src/mixer/simple_abst.c
+-index 9c61cb58..0ca58fe0 100644
+---- a/src/mixer/simple_abst.c
+-+++ b/src/mixer/simple_abst.c
+-@@ -34,7 +34,10 @@
+- #include <fcntl.h>
+- #include <sys/ioctl.h>
+- #include <math.h>
+-+#include "config.h"
+-+#ifdef HAVE_DLFCN
+- #include <dlfcn.h>
+-+#endif
+- #include "mixer_local.h"
+- #include "mixer_simple.h"
+- 
+--- 
+-2.14.3
+-
