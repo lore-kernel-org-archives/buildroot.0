@@ -1,74 +1,95 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 7 Nov 2018 17:44:11 +0100
-Subject: [Buildroot] [PATCH 1/1] Added local directory as source of
- kernel code
-In-Reply-To: <PR1PR06MB49557D35D7EB1F1D03DEFDD784C40@PR1PR06MB4955.eurprd06.prod.outlook.com>
-References: <20181107100605.13141-1-nicolas.carrier@orolia.com>
- <CANQCQpb6BYDMXJTDKEXKgpmBG1jHjOt2G1_eDF_cSVbCM=x=nw@mail.gmail.com>
- <PR1PR06MB49557D35D7EB1F1D03DEFDD784C40@PR1PR06MB4955.eurprd06.prod.outlook.com>
-Message-ID: <20181107174411.0b67a064@windsurf>
+From: Brad Love <brad@nextdimension.cc>
+Date: Wed, 7 Nov 2018 10:38:45 -0600
+Subject: [Buildroot] Altering a package to pull from GIT
+In-Reply-To: <CAJ+vNU2bzK3AD8BV6u_F-eXGdyKjGrrmGkyGT-e2kyRNxEE+zg@mail.gmail.com>
+References: <CAJ+vNU2bzK3AD8BV6u_F-eXGdyKjGrrmGkyGT-e2kyRNxEE+zg@mail.gmail.com>
+Message-ID: <56d800fc-d0a5-1517-4e13-8d3b411245a8@nextdimension.cc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Nicolas,
+Hi Tim,
 
-On Wed, 7 Nov 2018 14:40:39 +0000, Nicolas Carrier wrote:
 
-> I have a workspace managed by google repo, which fetches the sources
-> of the external git repositories for which we have created .mk
-> buildroot Makefiles.
-> 
-> Because the sources are cloned by repo, I don't want them to be
-> fetched by buildroot, hence I used "_SITE_METHOD = local" for all the
-> packages.
-> 
-> For linux and u-boot, I can't do that because they dont support the
-> local method and I think there is no reason to make these two
-> packages an exception.
+On 07/11/2018 10.17, Tim Harvey wrote:
+> Greetings,
+>
+> I'm trying to alter the openocd package to pull code from a specific
+> git sha. Looking over the manual and searching a bit it seems like the
+> following is the thing to do:
+>
+> diff --git a/package/openocd/openocd.mk <http://openocd.mk>
+> b/package/openocd/openocd.mk <http://openocd.mk>
+> index 548d8b8..76594fe 100644
+> --- a/package/openocd/openocd.mk <http://openocd.mk>
+> +++ b/package/openocd/openocd.mk <http://openocd.mk>
+> @@ -4,9 +4,10 @@
+> ?#
+> ?################################################################################
+> ?
+> -OPENOCD_VERSION = 0.10.0
+> +OPENOCD_VERSION = da4b2d5beb
+> ?OPENOCD_SOURCE = openocd-$(OPENOCD_VERSION).tar.bz2
+> -OPENOCD_SITE =
+> http://sourceforge.net/projects/openocd/files/openocd/$(OPENOCD_VERSION)
+> +OPENOCD_SITE = git://git.code.sf.net/p/openocd/code
+> <http://git.code.sf.net/p/openocd/code>
+> +OPENCOD_SITE_METHOD = git
 
-Well your patch is actually making u-boot and linux be exceptions. What
-if someone wants to build busybox from a local source tree ? And qt5 ?
-And openssl ? And then this other package ?
 
-As you can see, this approach does not really scale: we would have to
-add Config.in options to all packages to say "please build using the
-source code from folder XYZ instead of the normal upstream source
-code". That's why we have chosen to support this use case using
-OVERRIDE_SRCDIR.
+Note your spelling error:
 
-> As for modifying the local.mk file to put some LINUX_OVERRIDE_SRCDIR
-> value inside, I want to avoid it because it would force me to version
-> the local.mk file for things to work out-of-the-box. Versionning this
-> file is problematic because developers needing to modify it
-> temporarily may commit it by error.
+OPENCOD_SITE_METHOD
 
-Here is what you could do:
 
- - Set BR2_PACKAGE_OVERRIDE_FILE to point to whatever file you like
-   instead of local.mk, say package-overrides.mk.
+Cheers,
 
- - In this file, you set LINUX_OVERRIDE_SRCDIR as appropriate, but you
-   also do
+Brad
 
-   -include local.mk
 
-And then you version control package-overrides.mk. Then your developer
-can continue locally to tinker with local.mk to have their own custom
-OVERRIDE_SRCDIR, and still have LINUX_OVERRIDE_SRCDIR used.
 
-Alternatively, maybe we should decide that linux and u-boot are special
-packages, and just like for those packages we support fetching from
-custom tarballs and custom Git repositories, we should support fetching
-from custom local directories (this is what your patch implements, but
-until now, we have resisted going into this direction).
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> ?OPENOCD_LICENSE = GPL-2.0+
+> ?OPENOCD_LICENSE_FILES = COPYING
+> ?# 0002-configure-enable-build-on-uclinux.patch patches configure.ac
+> <http://configure.ac>
+>
+>
+> In other words _SITE needs to be the git:// URL and _VERSION should be
+> the branch/tag/sha. However when I build I get:
+>
+> >>> openocd da4b2d5beb Extracting
+> bzcat /usr/src/ventana/buildroot/dl/openocd/openocd-da4b2d5beb.tar.bz2
+> | tar --s
+> trip-components=1 -C
+> /usr/src/ventana/buildroot/output/build/openocd-da4b2d5beb?
+> ? -xf -
+> bzcat:
+> /usr/src/ventana/buildroot/dl/openocd/openocd-da4b2d5beb.tar.bz2 is not a
+> ?bzip2 file.
+> tar: This does not look like a tar archive??
+> tar: Exiting with failure status due to previous errors
+> package/pkg-generic.mk:160 <http://pkg-generic.mk:160>: recipe for
+> target '/usr/src/ventana/buildroot/output
+> /build/openocd-da4b2d5beb/.stamp_extracted' failed
+> make[1]: ***
+> [/usr/src/ventana/buildroot/output/build/openocd-da4b2d5beb/.stamp_
+> extracted] Error 2
+> Makefile:84: recipe for target '_all' failed
+> make: *** [_all] Error 2
+>
+> I thought it was the fact there was an openocd.hash but removing it
+> still fails. Any ideas?
+>
+> Best regards,
+>
+> Tim
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181107/0c90c317/attachment.html>
