@@ -1,85 +1,98 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Wed,  7 Nov 2018 00:32:17 -0200
-Subject: [Buildroot] [PATCH] util-linux: bump to version 2.33
-Message-ID: <20181107023217.3564-1-casantos@datacom.com.br>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed,  7 Nov 2018 08:00:22 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-11-06
+Message-ID: <20181107070022.266AD20723@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Update "basic set" help to include the new "choom" utility.
-- Re-generate checksums for license files, whose names now follow the
-  SPDX License List.
+Hello,
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
----
- package/util-linux/Config.in       |  2 +-
- package/util-linux/util-linux.hash | 14 +++++++-------
- package/util-linux/util-linux.mk   | 11 ++++++++---
- 3 files changed, 16 insertions(+), 11 deletions(-)
+Build statistics for 2018-11-06
+===============================
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 5f0a35cdbb..a5a137bfe0 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -53,7 +53,7 @@ config BR2_PACKAGE_UTIL_LINUX_BINARIES
- 	help
- 	  Install the basic set of util-linux binaries.
- 
--	  blkdiscard, blkid, blockdev, chcpu, col, colcrt, colrm,
-+	  blkdiscard, blkid, blockdev, chcpu, choom, col, colcrt, colrm,
- 	  column, ctrlaltdel, dmesg, fdisk, fincore, findfs, findmnt,
- 	  flock, fsfreeze, fstrim, getopt, hexdump, ipcmk, isosize,
- 	  ldattach, look, lsblk, lscpu, lsipc, lslocks, lsns, mcookie,
-diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
-index 1b7d6db45a..ed503a12ed 100644
---- a/package/util-linux/util-linux.hash
-+++ b/package/util-linux/util-linux.hash
-@@ -1,9 +1,9 @@
--# From https://www.kernel.org/pub/linux/utils/util-linux/v2.32/sha256sums.asc
--sha256 86e6707a379c7ff5489c218cfaf1e3464b0b95acf7817db0bc5f179e356a67b2  util-linux-2.32.1.tar.xz
-+# From https://www.kernel.org/pub/linux/utils/util-linux/v2.33/sha256sums.asc
-+sha256 f261b9d73c35bfeeea04d26941ac47ee1df937bd3b0583e748217c1ea423658a  util-linux-2.33.tar.xz
- # License files, locally calculated
--sha256 1e4b65802b0df8115395c697029d03339f983d451a473a08643309c684410d9a  README.licensing
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Documentation/licenses/COPYING.GPLv2
--sha256 ba7640f00d93e72e92b94b9d71f25ec53bac2f1682f5c4adcccb0018359f60f8  Documentation/licenses/COPYING.UCB
--sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  Documentation/licenses/COPYING.LGPLv2.1
--sha256 9b718a9460fed5952466421235bc79eb49d4e9eacc920d7a9dd6285ab8fd6c6d  Documentation/licenses/COPYING.BSD-3
-+sha256 4335620e8f478ee4dc4d26540448d39469091ef1d8e3fbbbb8bf753206ceac74  README.licensing
-+sha256 9b718a9460fed5952466421235bc79eb49d4e9eacc920d7a9dd6285ab8fd6c6d  Documentation/licenses/COPYING.BSD-3-Clause
-+sha256 ba7640f00d93e72e92b94b9d71f25ec53bac2f1682f5c4adcccb0018359f60f8  Documentation/licenses/COPYING.BSD-4-Clause-UC
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Documentation/licenses/COPYING.GPL-2.0-or-later
- sha256 e53348ce276358e9997014071c5294b36a18c4b34f32f00ee57b9acce0aafd63  Documentation/licenses/COPYING.ISC
-+sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  Documentation/licenses/COPYING.LGPL-2.1-or-later
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index d6b3c33b26..c176d364ce 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -4,15 +4,20 @@
- #
- ################################################################################
- 
--UTIL_LINUX_VERSION_MAJOR = 2.32
--UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).1
-+UTIL_LINUX_VERSION_MAJOR = 2.33
-+UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR)
- UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
- UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
- 
- # README.licensing claims that some files are GPL-2.0 only, but this is not true.
- # Some files are GPL-3.0+ but only in tests. rfkill uses an ISC-style license.
- UTIL_LINUX_LICENSE = GPL-2.0+, BSD-4-Clause, LGPL-2.1+ (libblkid, libfdisk, libmount), BSD-3-Clause (libuuid) ISC (rfkill)
--UTIL_LINUX_LICENSE_FILES = README.licensing Documentation/licenses/COPYING.GPLv2 Documentation/licenses/COPYING.UCB Documentation/licenses/COPYING.LGPLv2.1 Documentation/licenses/COPYING.BSD-3 Documentation/licenses/COPYING.ISC
-+UTIL_LINUX_LICENSE_FILES = README.licensing \
-+	Documentation/licenses/COPYING.BSD-3-Clause \
-+	Documentation/licenses/COPYING.BSD-4-Clause-UC \
-+	Documentation/licenses/COPYING.GPL-2.0-or-later \
-+	Documentation/licenses/COPYING.ISC \
-+	Documentation/licenses/COPYING.LGPL-2.1-or-later
- UTIL_LINUX_INSTALL_STAGING = YES
- UTIL_LINUX_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
- UTIL_LINUX_CONF_OPTS += \
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  11 |   4 |   0 |  15 |
+   2018.08.x |  17 |   3 |   0 |  20 |
+      master | 184 |  16 |   1 | 201 |
+
+Results for branch '2018.02.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                  giflib-5.1.4 | 3 
+               openswan-2.6.50 | 1 
+
+
+Detail of failures
+------------------
+
+        or1k |                   giflib-5.1.4 | NOK | http://autobuild.buildroot.net/results/f573969f39445d8fe8cba317b1233336e2058d84 |     
+         arm |                   giflib-5.1.4 | NOK | http://autobuild.buildroot.net/results/9cfb597489b03e1407df44755fa43c5b0756e9fa |     
+         arc |                   giflib-5.1.4 | NOK | http://autobuild.buildroot.net/results/1b2f87e64bec75dec97509ecdc51aeb0491b9e78 |     
+         arm |                openswan-2.6.50 | NOK | http://autobuild.buildroot.net/results/02a8ba13f1989ab8188e0c3cbd0cb87d3fc8646f | ORPH
+
+Results for branch '2018.08.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                p11-kit-0.23.2 | 2 
+               openswan-2.6.50 | 1 
+
+
+Detail of failures
+------------------
+
+       nios2 |                openswan-2.6.50 | NOK | http://autobuild.buildroot.net/results/a5669e00202ca62a90e5249f73701e0d71dfa133 | ORPH
+     powerpc |                 p11-kit-0.23.2 | NOK | http://autobuild.buildroot.net/results/89ad782e361b865f0487790d7bdce98ba8fd6385 | ORPH
+    mips64el |                 p11-kit-0.23.2 | NOK | http://autobuild.buildroot.net/results/450df5c928cb86c65412b01a8be3b51005a63528 | ORPH
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                  guile-2.0.14 | 6 
+               valgrind-3.14.0 | 2 
+                flannel-v0.5.5 | 1 
+                host-libsodium | 1 
+kvm-unit-tests-kvm-unit-tes... | 1 
+                  libffi-3.2.1 | 1 
+                libmpeg2-0.5.1 | 1 
+                 libv4l-1.16.1 | 1 
+                  mender-1.4.0 | 1 
+               skalibs-2.6.4.0 | 1 
+              wireshark-2.2.17 | 1 
+
+
+Detail of failures
+------------------
+
+      x86_64 |                 flannel-v0.5.5 | NOK | http://autobuild.buildroot.net/results/61b1e901d2177b7fe6db1386c22093f984834f1b |     
+         arm |                   guile-2.0.14 | NOK | http://autobuild.buildroot.net/results/7a37a345e93fd872a96bb50e2b0cb3024d1c74a0 | ORPH
+       sparc |                   guile-2.0.14 | NOK | http://autobuild.buildroot.net/results/ca13595a83744d818c6b58b708f320631e80fe98 | ORPH
+       sparc |                   guile-2.0.14 | NOK | http://autobuild.buildroot.net/results/95e6e08ca38bcee113b613e3309e0a3bfec603d1 | ORPH
+       sparc |                   guile-2.0.14 | NOK | http://autobuild.buildroot.net/results/b49b21d1da629cac00b48e805d86dbf2e010ac5b | ORPH
+         arm |                   guile-2.0.14 | NOK | http://autobuild.buildroot.net/results/d87d9fd1f3c1c776d158c5b481f6965b793cb295 | ORPH
+         arm |                   guile-2.0.14 | NOK | http://autobuild.buildroot.net/results/61d2f2d2b7d182de5109b688046ada69ac726bc1 | ORPH
+      xtensa |                 host-libsodium | TIM | http://autobuild.buildroot.net/results/5a250d8641b6b8a0f63ce5d61a26e30317a34e13 |     
+      x86_64 | kvm-unit-tests-kvm-unit-tes... | NOK | http://autobuild.buildroot.net/results/b1c19fc15cbb26717dbc5027684a92adade846c4 |     
+     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/601d4c24e58e99e2161f42654ad871ea9bd56bb1 |     
+     powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/19a4c6c1078c83dc03137a3625437515cabcf015 | ORPH
+         arm |                  libv4l-1.16.1 | NOK | http://autobuild.buildroot.net/results/a4a0b87588a5fdbadab8df01e697aba5b195b6f7 |     
+      x86_64 |                   mender-1.4.0 | NOK | http://autobuild.buildroot.net/results/4b4e41b07563121247690dc01e75161ebb03969c |     
+       sparc |                skalibs-2.6.4.0 | NOK | http://autobuild.buildroot.net/results/75c97bc4d7463964869f5a2be341e5d160bb71a6 |     
+    mips64el |                valgrind-3.14.0 | NOK | http://autobuild.buildroot.net/results/01acab1baa9be3dd870d6966a469315ad23a485b | ORPH
+    mips64el |                valgrind-3.14.0 | NOK | http://autobuild.buildroot.net/results/cac47797e485384f494c1396fc3ad6bcfd5b74ff | ORPH
+microblazeel |               wireshark-2.2.17 | NOK | http://autobuild.buildroot.net/results/0b30debd6ce55d32aa385ebd7eb7a4bd14631275 | ORPH
+
+
 -- 
-2.17.1
+http://autobuild.buildroot.net
