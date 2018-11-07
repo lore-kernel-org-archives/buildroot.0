@@ -1,61 +1,145 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 Nov 2018 23:47:40 +0100
-Subject: [Buildroot] [git commit] package/alsa-lib: update upstream status
- of patches
-Message-ID: <20181107224643.6B2577FC73@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 8 Nov 2018 00:43:11 +0100
+Subject: [Buildroot] [PATCH 1/3] fs: apply permissions late
+In-Reply-To: <4f9a31b0fb8f87ded9c788cb92d727b6763859ac.1540626349.git.yann.morin.1998@free.fr>
+References: <cover.1540626349.git.yann.morin.1998@free.fr>
+ <4f9a31b0fb8f87ded9c788cb92d727b6763859ac.1540626349.git.yann.morin.1998@free.fr>
+Message-ID: <762db85d-d4a9-95b5-8280-d46dfd5f2a72@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1c59c30275d72744a4e35c841cbe57636e47bd1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The remaining two patches have been submitted upstream for inclusion,
-so let's update their upstream status.
 
-While at it, I update @free-electrons.com to @bootlin.com in the first
+On 27/10/18 09:45, Yann E. MORIN wrote:
+> The combination of fakeroot, tar, and capabilities is broken, because
+> fakeroot currently badly handles capabilities, which are currently
+> simply ignored.
+
+ "simply ignored" can't be the case, otherwise it still wouldn't work after this
 patch.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/alsa-lib/0001-Don-t-use-fork-on-noMMU-platforms.patch        | 5 +++--
- .../0002-alsa-lib-conditionally-enable-libdl-in-AM_PATH_ALSA-.patch  | 1 +
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ I *think* the real problem is that fakeroot forgets to wrap the setxattrat and
+lsetxattrat syscalls, and these are the ones that are used by tar.
 
-diff --git a/package/alsa-lib/0001-Don-t-use-fork-on-noMMU-platforms.patch b/package/alsa-lib/0001-Don-t-use-fork-on-noMMU-platforms.patch
-index 29cdf8fed8..5bf9dd2057 100644
---- a/package/alsa-lib/0001-Don-t-use-fork-on-noMMU-platforms.patch
-+++ b/package/alsa-lib/0001-Don-t-use-fork-on-noMMU-platforms.patch
-@@ -1,14 +1,15 @@
- From 41c029755502acf01ed634db437ac06d09be6c41 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- Date: Fri, 13 Apr 2018 09:02:37 +0200
- Subject: [PATCH] Don't use fork() on noMMU platforms
- MIME-Version: 1.0
- Content-Type: text/plain; charset=UTF-8
- Content-Transfer-Encoding: 8bit
- 
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- [J??rg: update patch for 1.1.6]
- Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-+Upstream: http://mailman.alsa-project.org/pipermail/alsa-devel/2018-November/141376.html
- ---
-  configure.ac         |  2 ++
-  src/pcm/pcm_direct.c | 10 +++++++++-
-diff --git a/package/alsa-lib/0002-alsa-lib-conditionally-enable-libdl-in-AM_PATH_ALSA-.patch b/package/alsa-lib/0002-alsa-lib-conditionally-enable-libdl-in-AM_PATH_ALSA-.patch
-index 181e56deb4..3aab64e5e8 100644
---- a/package/alsa-lib/0002-alsa-lib-conditionally-enable-libdl-in-AM_PATH_ALSA-.patch
-+++ b/package/alsa-lib/0002-alsa-lib-conditionally-enable-libdl-in-AM_PATH_ALSA-.patch
-@@ -17,6 +17,7 @@ result to conditionally add -ldl to the list of libraries.
- Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
- [J??rg: update for 1.1.6]
- Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-+Upstream: http://mailman.alsa-project.org/pipermail/alsa-devel/2018-November/141377.html
- ---
-  utils/alsa.m4 | 4 +++-
-  1 file changed, 3 insertions(+), 1 deletion(-)
+> As described in #11216, asking tar to explicitly store and restore
+> capabilities ends up with a failling build, when tar actually tries to
+> restore the capabilities. Adding support for capabilities to fakeroot
+> (by adding host-libcap as dependency) does not fix the problem.
+
+ Just to be clear: with this patch, the 'tar' filesystem does still work because
+the creation of the tarball works OK, it's just the extraction that goes wrong,
+right?
+
+
+> Capabilities are stored in the extended attribute security.capabilty.
+> It turns out that tar does have special handling when extracting and
+> restoring that extended attribute, and that fails miserably when running
+> under fakeroot...
+> 
+> We fix that by offloading the permissions handling down to individual
+> filesystems.
+> 
+> This needs a split of the makedevs call, with the current and first one
+> now only responsible for creating the pseudo devices, while the new,
+> second call does only set the permissions.
+
+ Why? Is that just to reduce the impact on post-fakeroot scripts?
+
+ I'd rather move the entire makedevs call to the per-filesystem phase.
+
+> 
+> Fixes: #11216
+> 
+> This changes the order of steps, and post-fakeroot scripts are now
+> called before the permissions are set. This could mean breaking existing
+> setups, but more probably, this woudl sovle some, where files created in
+> post-fakeroot scripts can now see their permissions appropriately set.
+
+ Since extracting xattrs doesn't work correctly, this is not true. And normally
+in a post-fakeroot script, you would do any permission setting in the script
+itself and not use the permissions table. So I think this statement is utterly
+wrong. That said, I doubt that post-build scripts would be affected by the
+permissions tables anyway.
+
+
+> This also slightly breaks the idea behind the intermediate image, which
+> was supposed to gather all actions common to all filesystems, so that
+> they are not repeated. Still, most actions are still created only once,
+> and moving just this is purely a practical and pragmatic workaround.
+
+ Still, I'd prefer to fix fakeroot :-)
+
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+> ---
+>  fs/common.mk | 17 +++++++++++------
+>  1 file changed, 11 insertions(+), 6 deletions(-)
+> 
+> diff --git a/fs/common.mk b/fs/common.mk
+> index 453da6010a..569e5d60c5 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -29,8 +29,8 @@
+>  
+>  FS_DIR = $(BUILD_DIR)/buildroot-fs
+>  FULL_DEVICE_TABLE = $(FS_DIR)/device_table.txt
+> -ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE) \
+> -	$(BR2_ROOTFS_STATIC_DEVICE_TABLE))
+> +ROOTFS_PERMISSION_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE))
+> +ROOTFS_STATIC_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_STATIC_DEVICE_TABLE))
+>  USERS_TABLE = $(FS_DIR)/users_table.txt
+>  ROOTFS_USERS_TABLES = $(call qstrip,$(BR2_ROOTFS_USERS_TABLES))
+>  
+> @@ -81,14 +81,13 @@ ifneq ($(ROOTFS_USERS_TABLES),)
+>  	cat $(ROOTFS_USERS_TABLES) >> $(USERS_TABLE)
+>  endif
+>  	PATH=$(BR_PATH) $(TOPDIR)/support/scripts/mkusers $(USERS_TABLE) $(TARGET_DIR) >> $(FAKEROOT_SCRIPT)
+> -ifneq ($(ROOTFS_DEVICE_TABLES),)
+> -	cat $(ROOTFS_DEVICE_TABLES) > $(FULL_DEVICE_TABLE)
+> +ifneq ($(ROOTFS_STATIC_DEVICE_TABLES),)
+> +	cat $(ROOTFS_STATIC_DEVICE_TABLES) > $(FULL_DEVICE_TABLE)
+>  ifeq ($(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
+>  	$(call PRINTF,$(PACKAGES_DEVICES_TABLE)) >> $(FULL_DEVICE_TABLE)
+>  endif
+> -endif
+> -	$(call PRINTF,$(PACKAGES_PERMISSIONS_TABLE)) >> $(FULL_DEVICE_TABLE)
+>  	echo "$(HOST_DIR)/bin/makedevs -d $(FULL_DEVICE_TABLE) $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+> +endif
+>  	$(foreach s,$(call qstrip,$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
+>  		echo "echo '$(TERM_BOLD)>>>   Executing fakeroot script $(s)$(TERM_RESET)'" >> $(FAKEROOT_SCRIPT); \
+>  		echo $(EXTRA_ENV) $(s) $(TARGET_DIR) $(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $(FAKEROOT_SCRIPT)$(sep))
+> @@ -108,6 +107,7 @@ define inner-rootfs
+>  
+>  ROOTFS_$(2)_DIR = $$(FS_DIR)/$(1)
+>  ROOTFS_$(2)_TARGET_DIR = $$(ROOTFS_$(2)_DIR)/target
+> +ROOTFS_$(2)_PERMISSION_TABLE = $$(ROOTFS_$(2)_DIR)/permissions.txt
+
+ BTW I agree with Thomas that it's better to create this file only once and only
+do the makedevs call in the per-filesystem stage.
+
+ Regards,
+ Arnout
+
+
+>  
+>  ROOTFS_$(2)_DEPENDENCIES += rootfs-common
+>  
+> @@ -149,6 +149,11 @@ $$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
+>  	echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
+>  	echo "set -e" >> $$(FAKEROOT_SCRIPT)
+>  	$$(call PRINTF,$$(ROOTFS_COMMON_UNTAR_CMD)) >> $$(FAKEROOT_SCRIPT)
+> +ifneq ($$(ROOTFS_PERMISSION_TABLES),)
+> +	cat $$(ROOTFS_PERMISSION_TABLES) > $$(ROOTFS_$(2)_PERMISSION_TABLE)
+> +endif
+> +	$$(call PRINTF,$$(PACKAGES_PERMISSIONS_TABLE)) >> $$(ROOTFS_$(2)_PERMISSION_TABLE)
+> +	echo "$$(HOST_DIR)/bin/makedevs -d $$(ROOTFS_$(2)_PERMISSION_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+>  	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),\
+>  		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
+>  	$$(call PRINTF,$$(ROOTFS_REPRODUCIBLE)) >> $$(FAKEROOT_SCRIPT)
+> 
