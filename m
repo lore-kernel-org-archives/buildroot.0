@@ -1,45 +1,33 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 7 Nov 2018 21:08:16 +0100
-Subject: [Buildroot] Altering a package to pull from GIT
-In-Reply-To: <20181107173842.1c7f0755@windsurf>
-References: <CAJ+vNU2bzK3AD8BV6u_F-eXGdyKjGrrmGkyGT-e2kyRNxEE+zg@mail.gmail.com>
- <20181107173842.1c7f0755@windsurf>
-Message-ID: <e78429cc-fea9-4583-160b-564f3f1f782b@mind.be>
+From: Christian Stewart <christian@paral.in>
+Date: Wed,  7 Nov 2018 12:12:58 -0800
+Subject: [Buildroot] [PATCH 1/2] go: specify GOARM when compiling target
+ binaries
+Message-ID: <20181107201259.28717-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Currently, GOARM is not specified correctly when compiling target binaries. This
+results in incompatibility / illegal instruction issues on some ARM devices.
 
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ package/go/go.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-On 07/11/18 17:38, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Wed, 7 Nov 2018 08:17:47 -0800, Tim Harvey wrote:
-> 
->> -OPENOCD_VERSION = 0.10.0
->> +OPENOCD_VERSION = da4b2d5beb
->>  OPENOCD_SOURCE = openocd-$(OPENOCD_VERSION).tar.bz2
->> -OPENOCD_SITE =
->> http://sourceforge.net/projects/openocd/files/openocd/$(OPENOCD_VERSION)
->> +OPENOCD_SITE = git://git.code.sf.net/p/openocd/code
-> 
->> +OPENCOD_SITE_METHOD = git
-> 
->        ^^^^ Typo here :-)
-> 
-> Also, the OPENOCD_SOURCE variable is no longer needed, but really the
-> issue comes from the typo.
-
- Actually, no. The _SITE_METHOD is not needed at all because the _SITE starts
-with git://.
-
- However, the git download method will create a gzipped tarball and save it as
-OPENOCD_SOURCE. But then the tar extraction will try to extract it as if it's a
-bzip2. That is the failure.
-
- Bottom line: remove the _SOURCE definition, or change the .bz2 into .gz.
-
- Regards,
- Arnout
+diff --git a/package/go/go.mk b/package/go/go.mk
+index ec74ba397c..8423dc7eea 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -43,6 +43,7 @@ HOST_GO_ROOT = $(HOST_DIR)/lib/go
+ HOST_GO_TOOLDIR = $(HOST_GO_ROOT)/pkg/tool/linux_$(GO_GOARCH)
+ HOST_GO_TARGET_ENV = \
+ 	GOARCH=$(GO_GOARCH) \
++	$(if $(GO_GOARM),GOARM=$(GO_GOARM)) \
+ 	GOROOT="$(HOST_GO_ROOT)" \
+ 	CC="$(TARGET_CC)" \
+ 	CXX="$(TARGET_CXX)" \
+-- 
+2.18.1
