@@ -1,81 +1,204 @@
-From: Henrique Marks <henrique.marks@datacom.ind.br>
-Date: Wed, 7 Nov 2018 16:07:32 -0200 (BRST)
-Subject: [Buildroot] Weird OOM problem
-In-Reply-To: <CAF_dkJDX+XuGWcxahLLr4wCAgg9r6PdUrUC-+oPEVuXgAPyMHQ@mail.gmail.com>
-References: <CAF_dkJDX+XuGWcxahLLr4wCAgg9r6PdUrUC-+oPEVuXgAPyMHQ@mail.gmail.com>
-Message-ID: <391130199.694669.1541614052863.JavaMail.zimbra@datacom.com.br>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 7 Nov 2018 19:07:53 +0100
+Subject: [Buildroot] [PATCH 2/3] graph-depends: split off
+ get_version/get_depends into pkgutil.py
+In-Reply-To: <20170203205745.14488-4-patrickdepinguin@gmail.com>
+References: <20170203205745.14488-1-patrickdepinguin@gmail.com>
+ <20170203205745.14488-4-patrickdepinguin@gmail.com>
+Message-ID: <20181107180753.GA4702@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Patrick,
+Thomas DS, All,
 
------ Mensagem original -----
-> De: "Patrick Doyle" <wpdster@gmail.com>
-> Para: "buildroot" <buildroot@busybox.net>
-> Enviadas: Quarta-feira, 7 de novembro de 2018 13:07:54
-> Assunto: [Buildroot] Weird OOM problem
+On 2017-02-03 21:57 +0100, Thomas De Schampheleire spake thusly:
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> 
+> Functions to obtain the version and dependencies of a package from Python
+> can be useful for several scripts. Extract this logic out of graph-depends
+> into pkgutil.py.
 
-> Hello fellow buildrooters.
-> I know this is the wrong list on which to ask this question, but you
-> are all experts in this field and can probably either direct me to the
-> proper list, or give me some tips here.  (After all, this is where I
-> hang out).
-> 
-> I have an embedded system with 128MB of RAM and no SWAP.
-> 
-> /tmp is mounted on a tmpfs
-> 
-> Shortly after boot, I can log in and look at how much memory is free:
-> 
-> # free
->             total       used       free     shared    buffers     cached
-> Mem:        120912      45224      75688        100       7700      17900
-> -/+ buffers/cache:      19624     101288
-> Swap:            0          0          0
-> 
-> I create a 25MB file in /tmp, and look again:
-> # dd if=/dev/urandom bs=1M count=25 of=/tmp/foo
-> 25+0 records in
-> 25+0 records out
-> # free
->             total       used       free     shared    buffers     cached
-> Mem:        120912      53620      67292      25700       1040      33324
-> -/+ buffers/cache:      19256     101656
-> Swap:            0          0          0
-> 
-> If I try to create a 2nd 25MB file (or even an 8MB file) in /tmp, then
-> the OOM killer kicks in, despite the cat that I have somewhere between
-> 67 and 101MB free.
-> 
-> It would appear that the OOM killer kicks in when the disk cache (aka
-> "shared") grows beyond 25% of total RAM.
-> 
-> Is that true?  Can I tune that?
-> 
-> I am going to keep looking on my own now that I have learned this
-> much, but I figured I would put the question out to the experts in the
-> mean time.
-> 
-> Thanks for any tips you can give me, (even if the tip is, "Go ask SO").
-> 
-> --wpd
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Coming back to this script, because I'm rewriting the way graph-depends
+gets the dependency tree. When you said "useful for several scripts,"
+did you expect it to be useful to scripts that are not in Buildroot
+(e.g. user-local scripts)?
 
-Had some problems with this, it was caused by the use of a RAMDISK and a wrong parameter passed by uboot for the kernel.
+Regards,
+Yann E. MORIN.
 
-Can you post the line you use ?
-
-Thanks
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> ---
+>  support/scripts/graph-depends | 55 ++++---------------------------------------
+>  support/scripts/pkgutil.py    | 55 +++++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 59 insertions(+), 51 deletions(-)
+>  create mode 100644 support/scripts/pkgutil.py
+> 
+> diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+> index 095619a..7aedcb5 100755
+> --- a/support/scripts/graph-depends
+> +++ b/support/scripts/graph-depends
+> @@ -26,6 +26,8 @@ import subprocess
+>  import argparse
+>  from fnmatch import fnmatch
+>  
+> +import pkgutil
+> +
+>  # Modes of operation:
+>  MODE_FULL = 1   # draw full dependency graph for all selected packages
+>  MODE_PKG  = 2   # draw dependency graph for a given package
+> @@ -122,28 +124,6 @@ host_colour = colours[2]
+>  
+>  allpkgs = []
+>  
+> -# Execute the "make <pkg>-show-version" command to get the version of a given
+> -# list of packages, and return the version formatted as a Python dictionary.
+> -def get_version(pkgs):
+> -    sys.stderr.write("Getting version for %s\n" % pkgs)
+> -    cmd = ["make", "-s", "--no-print-directory" ]
+> -    for pkg in pkgs:
+> -        cmd.append("%s-show-version" % pkg)
+> -    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
+> -    output = p.communicate()[0]
+> -    if p.returncode != 0:
+> -        sys.stderr.write("Error getting version %s\n" % pkgs)
+> -        sys.exit(1)
+> -    output = output.split("\n")
+> -    if len(output) != len(pkgs) + 1:
+> -        sys.stderr.write("Error getting version\n")
+> -        sys.exit(1)
+> -    version = {}
+> -    for i in range(0, len(pkgs)):
+> -        pkg = pkgs[i]
+> -        version[pkg] = output[i]
+> -    return version
+> -
+>  # Execute the "make show-targets" command to get the list of the main
+>  # Buildroot PACKAGES and return it formatted as a Python list. This
+>  # list is used as the starting point for full dependency graphs
+> @@ -158,33 +138,6 @@ def get_targets():
+>          return []
+>      return output.split(' ')
+>  
+> -# Execute the "make <pkg>-show-depends" command to get the list of
+> -# dependencies of a given list of packages, and return the list of
+> -# dependencies formatted as a Python dictionary.
+> -def get_depends(pkgs, rule):
+> -    sys.stderr.write("Getting dependencies for %s\n" % pkgs)
+> -    cmd = ["make", "-s", "--no-print-directory" ]
+> -    for pkg in pkgs:
+> -        cmd.append("%s-%s" % (pkg, rule))
+> -    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
+> -    output = p.communicate()[0]
+> -    if p.returncode != 0:
+> -        sys.stderr.write("Error getting dependencies %s\n" % pkgs)
+> -        sys.exit(1)
+> -    output = output.split("\n")
+> -    if len(output) != len(pkgs) + 1:
+> -        sys.stderr.write("Error getting dependencies\n")
+> -        sys.exit(1)
+> -    deps = {}
+> -    for i in range(0, len(pkgs)):
+> -        pkg = pkgs[i]
+> -        pkg_deps = output[i].split(" ")
+> -        if pkg_deps == ['']:
+> -            deps[pkg] = []
+> -        else:
+> -            deps[pkg] = pkg_deps
+> -    return deps
+> -
+>  # Recursive function that builds the tree of dependencies for a given
+>  # list of packages. The dependencies are built in a list called
+>  # 'dependencies', which contains tuples of the form (pkg1 ->
+> @@ -204,7 +157,7 @@ def get_all_depends(pkgs):
+>      if len(filtered_pkgs) == 0:
+>          return []
+>  
+> -    depends = get_depends(filtered_pkgs, rule)
+> +    depends = pkgutil.get_depends(filtered_pkgs, rule)
+>  
+>      deps = set()
+>      for pkg in filtered_pkgs:
+> @@ -377,7 +330,7 @@ if check_only:
+>      sys.exit(0)
+>  
+>  dict_deps = remove_extra_deps(dict_deps)
+> -dict_version = get_version([pkg for pkg in allpkgs
+> +dict_version = pkgutil.get_version([pkg for pkg in allpkgs
+>                                  if pkg != "all" and not pkg.startswith("root")])
+>  
+>  # Print the attributes of a node: label and fill-color
+> diff --git a/support/scripts/pkgutil.py b/support/scripts/pkgutil.py
+> new file mode 100644
+> index 0000000..a911123
+> --- /dev/null
+> +++ b/support/scripts/pkgutil.py
+> @@ -0,0 +1,55 @@
+> +#!/usr/bin/env python
+> +
+> +# Copyright (C) 2010-2013 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +
+> +import sys
+> +import subprocess
+> +
+> +# Execute the "make <pkg>-show-version" command to get the version of a given
+> +# list of packages, and return the version formatted as a Python dictionary.
+> +def get_version(pkgs):
+> +    sys.stderr.write("Getting version for %s\n" % pkgs)
+> +    cmd = ["make", "-s", "--no-print-directory" ]
+> +    for pkg in pkgs:
+> +        cmd.append("%s-show-version" % pkg)
+> +    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
+> +    output = p.communicate()[0]
+> +    if p.returncode != 0:
+> +        sys.stderr.write("Error getting version %s\n" % pkgs)
+> +        sys.exit(1)
+> +    output = output.split("\n")
+> +    if len(output) != len(pkgs) + 1:
+> +        sys.stderr.write("Error getting version\n")
+> +        sys.exit(1)
+> +    version = {}
+> +    for i in range(0, len(pkgs)):
+> +        pkg = pkgs[i]
+> +        version[pkg] = output[i]
+> +    return version
+> +
+> +# Execute the "make <pkg>-show-depends" command to get the list of
+> +# dependencies of a given list of packages, and return the list of
+> +# dependencies formatted as a Python dictionary.
+> +def get_depends(pkgs, rule):
+> +    sys.stderr.write("Getting dependencies for %s\n" % pkgs)
+> +    cmd = ["make", "-s", "--no-print-directory" ]
+> +    for pkg in pkgs:
+> +        cmd.append("%s-%s" % (pkg, rule))
+> +    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
+> +    output = p.communicate()[0]
+> +    if p.returncode != 0:
+> +        sys.stderr.write("Error getting dependencies %s\n" % pkgs)
+> +        sys.exit(1)
+> +    output = output.split("\n")
+> +    if len(output) != len(pkgs) + 1:
+> +        sys.stderr.write("Error getting dependencies\n")
+> +        sys.exit(1)
+> +    deps = {}
+> +    for i in range(0, len(pkgs)):
+> +        pkg = pkgs[i]
+> +        pkg_deps = output[i].split(" ")
+> +        if pkg_deps == ['']:
+> +            deps[pkg] = []
+> +        else:
+> +            deps[pkg] = pkg_deps
+> +    return deps
+> -- 
+> 2.10.2
+> 
 
 -- 
-Dr. Henrique Marks
-henrique.marks at datacom.ind.br
-R. Am?rica, 1000 - Eldorado do Sul - RS
-CEP: 92990-000 - Brasil
-Fone: +55 51 3933 3000 - Ramal 3466
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
