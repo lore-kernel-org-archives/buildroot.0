@@ -1,127 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 7 Nov 2018 22:06:57 +0100
-Subject: [Buildroot] [PATCH 2/3] graph-depends: split off
- get_version/get_depends into pkgutil.py
-In-Reply-To: <CAAXf6LVjAtrzEERUTMyBUe3pXFHa1BZgXkYfCySKxTEU=GCaoQ@mail.gmail.com>
-References: <20170203205745.14488-1-patrickdepinguin@gmail.com>
- <20170203205745.14488-4-patrickdepinguin@gmail.com>
- <20181107180753.GA4702@scaer>
- <CAAXf6LVC==B0Rb7-ZpDh=k2VyF4UJZYaamQ0hhhZzpS6z=Syrg@mail.gmail.com>
- <20181107193903.GC4702@scaer>
- <CAAXf6LVjAtrzEERUTMyBUe3pXFHa1BZgXkYfCySKxTEU=GCaoQ@mail.gmail.com>
-Message-ID: <20181107210657.GD4702@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 07 Nov 2018 22:08:54 +0100
+Subject: [Buildroot] [PATCH] traceroute: fix 'no rule to make target
+ -lm' error
+In-Reply-To: <51e4e1aa-c4c8-0353-dbfa-722756a49f71@mind.be> (Arnout
+ Vandecappelle's message of "Tue, 6 Nov 2018 00:40:38 +0100")
+References: <1539902241-10211-1-git-send-email-sergio.prado@e-labworks.com>
+ <20181104114514.523365ee@windsurf> <20181104122638.7103719d@windsurf>
+ <19d8f97c-f90d-9a44-6b2b-ad2132aa69af@mind.be>
+ <51e4e1aa-c4c8-0353-dbfa-722756a49f71@mind.be>
+Message-ID: <878t24bno9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2018-11-07 21:41 +0100, Thomas De Schampheleire spake thusly:
-> El mi?., 7 nov. 2018 a las 20:39, Yann E. MORIN
-> (<yann.morin.1998@free.fr>) escribi?:
-> > On 2018-11-07 20:06 +0100, Thomas De Schampheleire spake thusly:
-> > > El mi?., 7 nov. 2018 a las 19:07, Yann E. MORIN
-> > > (<yann.morin.1998@free.fr>) escribi?:
-> > > > On 2017-02-03 21:57 +0100, Thomas De Schampheleire spake thusly:
-> > > > > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> > > > >
-> > > > > Functions to obtain the version and dependencies of a package from Python
-> > > > > can be useful for several scripts. Extract this logic out of graph-depends
-> > > > > into pkgutil.py.
-> > > >
-> > > > Coming back to this script, because I'm rewriting the way graph-depends
-> > > > gets the dependency tree. When you said "useful for several scripts,"
-> > > > did you expect it to be useful to scripts that are not in Buildroot
-> > > > (e.g. user-local scripts)?
-> > >
-> > > Yes, exactly. We are using the logic from pkgutil from another python
-> > > script and want to avoid code duplication.
-> > > This particular script is not something that upstream accepts, i.e.
-> > > generating opkg files for specific packages (and for that, we need to
-> > > know the dependencies and versions of each package).
-> >
-> > So, if you were to get a new function that would return basically the
-> > same, but in another format, but much quicker (~4s instead of ~45s),
-> > would that be something you could adapt to?
-> >
-> > I'm changing the way the dependency tree is extracted from the Makefile
-> > data, and the function now has this API (function name yet to be
-> > bike-shedded about):
-> >
-> >     dict_deps, dict_types = get_dependency_tree(direction)
-> >
-> > where:
-> >
-> >   - direction is either string 'forward' or 'back',
-> >
-> >   - dict_deps is a dictionnary, which keys are the package names, and
-> >     which values are lists of packages that are direct dependencies of
-> >     the key package (basically, what get_all_depends() currently
-> >     returns, but the whole dependency tree)
-> 
-> How is dict_deps different from what get_depends in brpkgutil.py
-> currently returns? Your statement "but the whole dependency tree" is
-> not clear to me.
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Currently, brpkgutil.get_depends() takes a list of packages for which
-to get the dependencies. The new get_dependency_tree() does not take
-such a list; it always returns the whole dependency tree (i.e. from the
-'ALL' meta package).
+Hi,
 
-> >   - dict_types is a dictionnary, which keys are the package names, and
-> >     the values are string representing whtehr the packages are target or
-> >     host, and virtual or not, e.g.: 'target', 'target-virtual', 'host',
-> >     'host-virtual'.
-> >
-> > If needed, I could very easily make it return a three-tuple, with the
-> > third one being dict_versions, keyed by package names, with values the
-> > package version.
-> >
-> > Would that be something that would be usable in your use case?
-> 
-> To help the discussion, here are some snippets from our code:
-> 
->         Package.versions = brpkgutil.get_version(list(Package.files.keys()))
->         Package.depends = brpkgutil.get_depends(list(Package.files.keys()))
+ >  Now, the incorrect dependencies will only affect us in case a Makefile contains
+ > a rule like this:
 
-So you could write:
+ > foo: -lbar
+ > 	$(CC) -o $@ $^
 
-    Package.depends, Package.versions = brpkgutil.get_dependency_tree('forward')
+ > because make will expand $^ into the vpath-expanded /usr/lib/libbar.so (assuming
+ > we set VPATH to STAGING_DIR, but libbar.so doesn't exist in STAGING_DIR). But in
+ > that case, we'll get a link error so that situation will be detected and the
+ > Makefile can be patched.
 
->         self.version = Package.versions[self.pkg]        # this
-> variable will be used in several places, we just need the string
-> representing the version
->     ...
->     def get_opkg_depends(self):
->         """Return the dependencies that need to be declared in the opkg"""
->         deps = set(Package.depends[self.pkg]).intersection(set(Package.requested_pkgs))
->         if deps is not None:
->             return ','.join(deps)
->         else:
->             return ''
-> 
-> The code above is basically all we do with the version and dependencies.
-> As long as we can get this info in some way, I'm fine with changes.
-> Returning the versions together with the dependencies in one call,
-> removing the call to brpkgutil.get_version is fine by me, if it is
-> better for the in-tree usage (I'm fine with either way).
+ >  For traceroute, this isn't the case; it has something like:
 
-OK, good.
+ > LIBS := -lbar
+ > foo: $(LIBS)
+ > 	$(CC) -o $@ $(LIBS)
 
-Currently, in Buildroot, we use the version string just because we need
-to know whether a package is virutal or not. Do you really need the
-version string for what it is, or just to test if it is virtual or not?
+ > so the VPATH override should work.
 
-Regards,
-Yann E. MORIN.
+I still find it a bit strange to list system libraries as dependencies
+when the Makefile doesn't have any rules to create/update them, but yeah.
 
-> Thanks,
-> Thomas
+
+ >  Bottom line: it looks like Sergio's patch is indeed correct, and moreover, it
+ > looks like it might be better to add it to TARGET_MAKE_ENV. Note sure if we want
+ > to take the risk at this point to make such a landslide change?
+
+I've now committed Sergio's patch with these details added to the
+description, thanks for the investigation.
+
+Notice that this particular case could also be fixed by filtering out
+-l% from LIBS, just like traceroute already does for -L entries:
+
+LIBDEPS = $(filter-out -L%,$(LIBS))
+
+..
+
+$(TARGET): $(OBJS) $(MOD_OBJS) $(LIBDEPS)
+           $(CC) $(LDFLAGS) -o $@ $(OBJS) $(MOD_OBJS) $(LIBS)
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
