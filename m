@@ -1,283 +1,107 @@
-From: Christian Stewart <christian@paral.in>
-Date: Wed,  7 Nov 2018 19:24:58 -0800
-Subject: [Buildroot] [PATCH v8 1/1] docker-engine: split docker-{cli, engine},
- bump to v18.06.1-ce
-Message-ID: <20181108032458.1028-1-christian@paral.in>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu,  8 Nov 2018 08:00:39 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-11-07
+Message-ID: <20181108070039.3833C2072B@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Docker upstream has split the Docker daemon and CLI into separate codebases:
+Hello,
 
- - github.com/docker/engine: daemon, "dockerd" binary
- - github.com/docker/cli: "docker" command line interface
+Build statistics for 2018-11-07
+===============================
 
-This commit splits the docker-engine package into docker-engine and docker-cli.
-Conveniently, the Docker project has begun maintaining two separate
-release-tagged repositories for the CLI and daemon as of v18.06-ce-rc1. Previous
-versions were tagged in a common "docker-ce" repository which makes compilation
-awkward for Buildroot, especially due to some limitations in the new Go package
-infrastructure.
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  19 |   6 |   0 |  25 |
+   2018.08.x |  14 |   4 |   0 |  18 |
+      master | 162 |  19 |   0 | 181 |
 
-Docker repositories "engine" and "cli" recently started tagging releases as
-recent as the latest stable v18.06.1.
+Results for branch '2018.02.x'
+==============================
 
-The CLI is no longer automatically included with the engine. Users will need to
-select BR2_PACKAGE_DOCKER_CLI to produce a both docker and dockerd target
-binaries.
+Classification of failures by reason
+------------------------------------
 
-Docker CLI can be statically compiled. This enables usage of the system docker
-client binary to access the parent daemon API from within containers, where
-shared libraries are not available.
+                p11-kit-0.23.2 | 2 
+       xproto_inputproto-2.3.2 | 2 
+                  boost-1.66.0 | 1 
+               qt5webkit-5.9.1 | 1 
 
-Signed-off-by: Christian Stewart <christian@paral.in>
 
----
+Detail of failures
+------------------
 
-Changes since v4:
+     powerpc |                   boost-1.66.0 | NOK | http://autobuild.buildroot.net/results/cf63500de2d19a67f2992cce531aa269d6785cd0 |     
+        m68k |                 p11-kit-0.23.2 | NOK | http://autobuild.buildroot.net/results/cfea3172fe9f9541fcb99b5dcd2926288d449183 | ORPH
+      x86_64 |                 p11-kit-0.23.2 | NOK | http://autobuild.buildroot.net/results/a0ae58531f7ba46a6115022739996eb0bc24698f | ORPH
+      mipsel |                qt5webkit-5.9.1 | NOK | http://autobuild.buildroot.net/results/82e2f7d000eb759005f3c325ede7020eb661652f |     
+        or1k |        xproto_inputproto-2.3.2 | NOK | http://autobuild.buildroot.net/results/9e92ccadccf76ec64f56459432c90b7cc7179ce6 |     
+    mips64el |        xproto_inputproto-2.3.2 | NOK | http://autobuild.buildroot.net/results/d39df78e9cce3699c27cb3a7d9785fd45e1c129c |     
 
- - Use latest stable release v18.06.1
+Results for branch '2018.08.x'
+==============================
 
-Changes since v5:
+Classification of failures by reason
+------------------------------------
 
- - Clarify commit message
- - Move legacy option to 2018.11 segment and clarify helptext
- - Daemon no longer automatically selects CLI
- - Remove duplicate journald build tag merge artifact in docker-engine
- - Remove unnecessary IAMSTATIC declaration
- - Remove unnecessary containerd -> docker-containerd link
+                  giflib-5.1.4 | 1 
+                     gpsd-3.17 | 1 
+                 lcdproc-0.5.9 | 1 
+                libkcapi-1.1.3 | 1 
 
-Changes since v6:
 
- - Remove static docker client option, causes SIGILL on thumb2 arm
+Detail of failures
+------------------
 
-Changes since v7:
+        i686 |                   giflib-5.1.4 | NOK | http://autobuild.buildroot.net/results/9e759853dbf4ea71591de0e6a98fe82679d03e59 |     
+    mips64el |                      gpsd-3.17 | NOK | http://autobuild.buildroot.net/results/a37780bd8af15b454abd5abb7b929455a9c44a11 | ORPH
+  aarch64_be |                  lcdproc-0.5.9 | NOK | http://autobuild.buildroot.net/results/a3ee29917ecefb0269d936523a2f415681db864a |     
+      x86_64 |                 libkcapi-1.1.3 | NOK | http://autobuild.buildroot.net/results/0463c7980f0fbcb1081572e3ad06e44f94db8491 |     
 
- - Re-introduce static compilation option for client by disabling cgo
- - Without cgo, there are no shared-linked dependencies for the docker cli
----
- Config.in.legacy                         |  9 +++++++
- package/Config.in                        |  1 +
- package/docker-cli/Config.in             | 25 +++++++++++++++++++
- package/docker-cli/docker-cli.hash       |  2 ++
- package/docker-cli/docker-cli.mk         | 31 ++++++++++++++++++++++++
- package/docker-engine/Config.in          |  6 -----
- package/docker-engine/docker-engine.hash |  2 +-
- package/docker-engine/docker-engine.mk   | 25 ++++---------------
- 8 files changed, 74 insertions(+), 27 deletions(-)
- create mode 100644 package/docker-cli/Config.in
- create mode 100644 package/docker-cli/docker-cli.hash
- create mode 100644 package/docker-cli/docker-cli.mk
+Results for branch 'master'
+===========================
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index c3df37ddd9..3ceefc98b1 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,15 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2018.11"
- 
-+config BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT
-+	bool "docker-engine static client option renamed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_DOCKER_CLI_STATIC
-+	help
-+	  BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT has been renamed to
-+	  BR2_PACKAGE_DOCKER_CLI_STATIC, following the package split of
-+	  docker-engine and docker-cli.
-+
- config BR2_TARGET_XLOADER
- 	bool "xloader has been removed"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 712e360402..8ca88e7d28 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2105,6 +2105,7 @@ menu "System tools"
- 	source "package/dcron/Config.in"
- 	source "package/ddrescue/Config.in"
- 	source "package/debianutils/Config.in"
-+	source "package/docker-cli/Config.in"
- 	source "package/docker-compose/Config.in"
- 	source "package/docker-containerd/Config.in"
- 	source "package/docker-engine/Config.in"
-diff --git a/package/docker-cli/Config.in b/package/docker-cli/Config.in
-new file mode 100644
-index 0000000000..82c35c453d
---- /dev/null
-+++ b/package/docker-cli/Config.in
-@@ -0,0 +1,25 @@
-+config BR2_PACKAGE_DOCKER_CLI
-+	bool "docker-cli"
-+	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  Docker is a platform to build, ship,
-+	  and run applications as lightweight containers.
-+
-+	  https://github.com/docker/cli
-+
-+if BR2_PACKAGE_DOCKER_CLI
-+
-+config BR2_PACKAGE_DOCKER_CLI_STATIC
-+	bool "build static client"
-+	depends on !BR2_STATIC_LIBS
-+	help
-+	  Build a static docker client.
-+
-+endif
-+
-+comment "docker-cli needs a toolchain w/ threads"
-+	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
-new file mode 100644
-index 0000000000..50a81792d0
---- /dev/null
-+++ b/package/docker-cli/docker-cli.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	47eda354afc199693aa338f5b2bb87e4511354c02561ddc6520a06d169921bdf	docker-cli-v18.06.1-ce.tar.gz
-diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-new file mode 100644
-index 0000000000..46449fa058
---- /dev/null
-+++ b/package/docker-cli/docker-cli.mk
-@@ -0,0 +1,31 @@
-+###############################################################################
-+#
-+# docker-cli
-+#
-+################################################################################
-+
-+DOCKER_CLI_VERSION = v18.06.1-ce
-+DOCKER_CLI_SITE = $(call github,docker,cli,$(DOCKER_CLI_VERSION))
-+DOCKER_CLI_WORKSPACE = gopath
-+
-+DOCKER_CLI_LICENSE = Apache-2.0
-+DOCKER_CLI_LICENSE_FILES = LICENSE
-+
-+DOCKER_CLI_DEPENDENCIES = host-go host-pkgconf
-+
-+DOCKER_CLI_TAGS = cgo autogen
-+DOCKER_CLI_BUILD_TARGETS = cmd/docker
-+
-+DOCKER_CLI_LDFLAGS = \
-+	-X github.com/docker/cli/cli.GitCommit=$(DOCKER_CLI_VERSION) \
-+	-X github.com/docker/cli/cli.Version=$(DOCKER_CLI_VERSION)
-+
-+ifeq ($(BR2_PACKAGE_DOCKER_CLI_STATIC),y)
-+DOCKER_CLI_LDFLAGS += -extldflags '-static'
-+DOCKER_CLI_TAGS += osusergo netgo
-+DOCKER_CLI_GO_ENV = CGO_ENABLED=no
-+endif
-+
-+DOCKER_CLI_INSTALL_BINS = $(notdir $(DOCKER_CLI_BUILD_TARGETS))
-+
-+$(eval $(golang-package))
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-index 8feb11b48c..11f17820a7 100644
---- a/package/docker-engine/Config.in
-+++ b/package/docker-engine/Config.in
-@@ -26,12 +26,6 @@ config BR2_PACKAGE_DOCKER_ENGINE_DAEMON
- config BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL
- 	bool "build experimental features"
- 
--config BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT
--	bool "build static client"
--	depends on !BR2_STATIC_LIBS
--	help
--	  Build a static docker client.
--
- if BR2_PACKAGE_DOCKER_ENGINE_DAEMON
- 
- config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 6c0ed338a5..d5167a41a0 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	4716df117d867b82ddab2e82395cd40aa3d0925a689eedcec8919729e4c9f121	docker-engine-v17.05.0-ce.tar.gz
-+sha256	df4a3d2100d9b55c36288e721277dc61e4ceded5738423b09fe0d5ed42369f54	docker-engine-v18.06.1-ce.tar.gz
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index ba84b4cf0a..7023d40f58 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -4,25 +4,21 @@
- #
- ################################################################################
- 
--DOCKER_ENGINE_VERSION = v17.05.0-ce
--DOCKER_ENGINE_COMMIT = 89658bed64c2a8fe05a978e5b87dbec409d57a0f
--DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
-+DOCKER_ENGINE_VERSION = v18.06.1-ce
-+DOCKER_ENGINE_SITE = $(call github,docker,engine,$(DOCKER_ENGINE_VERSION))
- 
- DOCKER_ENGINE_LICENSE = Apache-2.0
- DOCKER_ENGINE_LICENSE_FILES = LICENSE
- 
- DOCKER_ENGINE_DEPENDENCIES = host-go host-pkgconf
-+DOCKER_ENGINE_SRC_SUBDIR = github.com/docker/docker
- 
- DOCKER_ENGINE_LDFLAGS = \
- 	-X main.GitCommit=$(DOCKER_ENGINE_VERSION) \
- 	-X main.Version=$(DOCKER_ENGINE_VERSION)
- 
--ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT),y)
--DOCKER_ENGINE_LDFLAGS += -extldflags '-static'
--endif
--
- DOCKER_ENGINE_TAGS = cgo exclude_graphdriver_zfs autogen
--DOCKER_ENGINE_BUILD_TARGETS = cmd/docker
-+DOCKER_ENGINE_BUILD_TARGETS = cmd/dockerd
- 
- ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
- DOCKER_ENGINE_TAGS += seccomp
-@@ -30,15 +26,9 @@ DOCKER_ENGINE_DEPENDENCIES += libseccomp
- endif
- 
- ifeq ($(BR2_INIT_SYSTEMD),y)
--DOCKER_ENGINE_TAGS += journald
- DOCKER_ENGINE_DEPENDENCIES += systemd
-+DOCKER_ENGINE_TAGS += systemd journald
- endif
--
--ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
--DOCKER_ENGINE_TAGS += daemon
--DOCKER_ENGINE_BUILD_TARGETS += cmd/dockerd
--endif
--
- ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL),y)
- DOCKER_ENGINE_TAGS += experimental
- endif
-@@ -65,7 +55,6 @@ DOCKER_ENGINE_INSTALL_BINS = $(notdir $(DOCKER_ENGINE_BUILD_TARGETS))
- 
- define DOCKER_ENGINE_RUN_AUTOGEN
- 	cd $(@D) && \
--		GITCOMMIT="$$(echo $(DOCKER_ENGINE_COMMIT) | head -c7)" \
- 		BUILDTIME="$$(date)" \
- 		VERSION="$(patsubst v%,%,$(DOCKER_ENGINE_VERSION))" \
- 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" $(TARGET_MAKE_ENV) \
-@@ -74,8 +63,6 @@ endef
- 
- DOCKER_ENGINE_POST_CONFIGURE_HOOKS += DOCKER_ENGINE_RUN_AUTOGEN
- 
--ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
--
- define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/docker.service
-@@ -90,6 +77,4 @@ define DOCKER_ENGINE_USERS
- 	- - docker -1 * - - - Docker Application Container Framework
- endef
- 
--endif
--
- $(eval $(golang-package))
+Classification of failures by reason
+------------------------------------
+
+                  libffi-3.2.1 | 6 
+                   luvi-v2.7.6 | 3 
+               valgrind-3.14.0 | 2 
+               boa-0.94.14rc21 | 1 
+                   dante-1.4.1 | 1 
+      docker-containerd-v1.1.3 | 1 
+                 libv4l-1.16.1 | 1 
+                qt5base-5.11.2 | 1 
+              qt5script-5.11.2 | 1 
+runc-69663f0bd4b60df09991c0... | 1 
+              traceroute-2.1.0 | 1 
+
+
+Detail of failures
+------------------
+
+         arc |                boa-0.94.14rc21 | NOK | http://autobuild.buildroot.net/results/45d328a94f36426f792e013e1eaeb199e7582059 | ORPH
+     aarch64 |                    dante-1.4.1 | NOK | http://autobuild.buildroot.net/results/56bbf0130db9cec10ad31b4fb93374669108881d |     
+      x86_64 |       docker-containerd-v1.1.3 | NOK | http://autobuild.buildroot.net/results/a909d5fa39545f0cad4c2a87d3a13fa0e801684a |     
+     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/5c21938652f9506577ea9b618790b93425e00f25 |     
+     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/a3d2d3c875b61960e5af44ff99ac8c093ce798bb |     
+     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/8593aed0eac5295b3340878c91b6301e18ba4d00 |     
+     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/e998ba05852c83a31a7b1ea791ea95123d536a1b |     
+     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/4502e217ee32a5fc18cea739398f8f1ec94a2518 |     
+     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/e9fd8548fcb13166fccb1bc915606fa92be8810a |     
+     powerpc |                  libv4l-1.16.1 | NOK | http://autobuild.buildroot.net/results/442de57cb76a7b38d71d690490faadc641036374 |     
+        i686 |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/893999a7c497ddd545a034a9d2834e13e6d6689a |     
+      x86_64 |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/b6d071f44900a132ebb275e2738a9d40f36cfe77 |     
+     powerpc |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/f58af91067761df3bafc6fc885239537117c1372 |     
+  aarch64_be |                 qt5base-5.11.2 | NOK | http://autobuild.buildroot.net/results/bdbd5bdd054fa53a80e1aeaa2002430ed472f6b9 |     
+      x86_64 |               qt5script-5.11.2 | NOK | http://autobuild.buildroot.net/results/e8d9f8de5121d6c88779ed7f90d34f3d5a447001 |     
+      x86_64 | runc-69663f0bd4b60df09991c0... | NOK | http://autobuild.buildroot.net/results/8d6f65b53fd1f8fc2e73faaf581385994fd9de37 |     
+         arc |               traceroute-2.1.0 | NOK | http://autobuild.buildroot.net/results/11f0ea3ec053230f38ff0d6b137129c49dbab3ec |     
+    mips64el |                valgrind-3.14.0 | NOK | http://autobuild.buildroot.net/results/34f6e2352f1559f98c724fe5394db0035b42ddb1 | ORPH
+    mips64el |                valgrind-3.14.0 | NOK | http://autobuild.buildroot.net/results/dc52088222e9fbedcebffc1c39be6d2fecfffe5d | ORPH
+
+
 -- 
-2.18.1
+http://autobuild.buildroot.net
