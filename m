@@ -1,107 +1,96 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri,  9 Nov 2018 00:08:14 +0100
-Subject: [Buildroot] [PATCH v1] valgrind: fix mips64 compile
-Message-ID: <20181108230814.4773-1-ps.report@gmx.net>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 9 Nov 2018 00:49:33 +0100
+Subject: [Buildroot] [PATCH 1/1] gcc: Support configure option
+ --with-linker-hash-style
+In-Reply-To: <05e7f492-8a32-5f93-701d-377442ccd2b9@petroprogram.com>
+References: <20171215232530.9388-1-stefan.froberg@petroprogram.com>
+ <20171216162337.667a30da@windsurf>
+ <05e7f492-8a32-5f93-701d-377442ccd2b9@petroprogram.com>
+Message-ID: <25d8acce-eb03-0e2c-8f4d-e854b45a613c@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disable gcc march mips64r2 detection (use compile flags already
-set by buildroot only), avoids double setting like '-march=mips64
-... -march=mips64r2 -mabi=64'.
+Hi Thomas,
 
-Fixes [1]:
+I'm looking at this oldest patch in the patchwork...
 
-  error: '-mips64r2' conflicts with the other architecture options, which specify a mips64 processor
+So, at the moment we use both hash (sysv and gnu) by default for toolchains with
+binutils >= 2.30, except for mips architecure which still use sysv hash.
 
-[1] http://autobuild.buildroot.net/results/34f6e2352f1559f98c724fe5394db0035b42ddb1
+See [1]:
+  # Enable gnu hash only on GNU targets, but not mips
+  mips*-*-*) enable_default_hash_style=sysv ;;
+  *-*-gnu* | *-*-linux* | *-*-nacl*) enable_default_hash_style=both ;;
+  *) enable_default_hash_style=sysv ;;
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- ...disable-gcc-march-mips64r2-detection.patch | 58 +++++++++++++++++++
- package/valgrind/valgrind.mk                  |  3 +
- 2 files changed, 61 insertions(+)
- create mode 100644 package/valgrind/0003-configure.ac-disable-gcc-march-mips64r2-detection.patch
+gnu hash style was introduced by [2] (binutils 2.18)
 
-diff --git a/package/valgrind/0003-configure.ac-disable-gcc-march-mips64r2-detection.patch b/package/valgrind/0003-configure.ac-disable-gcc-march-mips64r2-detection.patch
-new file mode 100644
-index 0000000000..75874fe7fd
---- /dev/null
-+++ b/package/valgrind/0003-configure.ac-disable-gcc-march-mips64r2-detection.patch
-@@ -0,0 +1,58 @@
-+From a4584ead274388b91b05b94bad2452a5f0ad3530 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Thu, 8 Nov 2018 23:55:30 +0100
-+Subject: [PATCH] configure.ac: disable gcc march mips64r2 detection
-+
-+Disable gcc march mips64r2 detection, compile flags already
-+set by buildroot, fixes [1]:
-+
-+  error: '-mips64r2' conflicts with the other architecture options, which specify a mips64 processor
-+
-+[1] http://autobuild.buildroot.net/results/34f6e2352f1559f98c724fe5394db0035b42ddb1
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ configure.ac | 24 ++++++++++++------------
-+ 1 file changed, 12 insertions(+), 12 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index c18ae5f2a..70bfe1bb6 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -1769,21 +1769,21 @@ case "${host_cpu}" in
-+ 
-+ 
-+         # does this compiler support -march=mips64r2 (mips64r2 default) ?
-+-        AC_MSG_CHECKING([if gcc accepts -march=mips64r2 -mabi=64])
-++        #AC_MSG_CHECKING([if gcc accepts -march=mips64r2 -mabi=64])
-+ 
-+-        safe_CFLAGS=$CFLAGS
-+-        CFLAGS="$CFLAGS -march=mips64r2 -mabi=64 -Werror"
-++        #safe_CFLAGS=$CFLAGS
-++        #CFLAGS="$CFLAGS -march=mips64r2 -mabi=64 -Werror"
-+ 
-+-        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[
-+-          return 0;
-+-        ]])], [
-+-        FLAG_M64="-march=mips64r2 -mabi=64"
-+-        AC_MSG_RESULT([yes])
-+-        ], [
-++        #AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[
-++        #  return 0;
-++        #]])], [
-++        #FLAG_M64="-march=mips64r2 -mabi=64"
-++        #AC_MSG_RESULT([yes])
-++        #], [
-+         FLAG_M64=""
-+-        AC_MSG_RESULT([no])
-+-        ])
-+-        CFLAGS=$safe_CFLAGS
-++        #AC_MSG_RESULT([no])
-++        #])
-++        #CFLAGS=$safe_CFLAGS
-+ 
-+         AC_SUBST(FLAG_M64)
-+         ;;
-+-- 
-+2.19.1
-+
-diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
-index 459de4907e..67b2854f86 100644
---- a/package/valgrind/valgrind.mk
-+++ b/package/valgrind/valgrind.mk
-@@ -13,6 +13,9 @@ VALGRIND_CONF_OPTS = \
- 	--disable-ubsan \
- 	--without-mpicc
- VALGRIND_INSTALL_STAGING = YES
-+# Patch 0001-configure.ac-disable-gcc-march-mips64r2-detection.patch
-+# touches configure.ac
-+VALGRIND_AUTORECONF = YES
- 
- # Valgrind must be compiled with no stack protection, so forcefully
- # pass -fno-stack-protector to override what Buildroot may have in
--- 
-2.19.1
+The gnu hash style is enabled by default since binutils 2.30 [3] along with sysv
+hash style.
+
+If --hash-style option is supported by the compiler, glibc use both hash (sysv
+and gnu) [4]. But this doesn't mean that all binaries will be build with gnu
+style hash if binutils < 2.30.
+
+So, I'm not sure we want to enable only gnu style for all binaries on the target
+(especially the libc). Binaries that contains only gnu hash style are
+incompatible with binaries that contains only sysv hash style.
+
+The default for the choice should be BR2_GCC_HASH_STYLE_BOTH instead of
+BR2_GCC_HASH_STYLE_GNU if we want to make this option configurable.
+
+Best regards,
+Romain
+
+[1]
+https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=blob;f=ld/configure;h=e46248cd089e71323ed20bc33ab0efdde526a2bc;hb=refs/heads/binutils-2_31-branch#l15884
+[2]
+https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=fdc90cb46b0f96dd4444ec3d126c87de75fb6e6b
+[3]
+https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=2760f24c4942853eac7b921e4b8843d57a602654
+[4]
+https://sourceware.org/git/?p=glibc.git;a=commit;h=871b91589bf4f6dfe19d5987b0a05bd7cf936ecc
+
+Le 17/12/2017 ? 15:30, Stefan Fr?berg a ?crit?:
+> Hi Thomas
+> 
+> Well, I was just worried that if setting the linking hash style to stone
+> (aka "gnu") then could
+> it maybe break builds in some other archs than x86, x86_64 and ARM ?
+> 
+> So I played carefull and made it configurable by choice.
+> 
+> Im not sure but I think that option has been hiding in GCC since 4.x and
+> buildroot lowest is 4.9.
+> So if it's okay I can cook another patch where it just set's it in stone
+> without choice ?
+> 
+> -S-
+> 
+> Thomas Petazzoni kirjoitti 16.12.2017 klo 17:23:
+>> Hello,
+>>
+>> On Sat, 16 Dec 2017 01:25:30 +0200, Stefan Fr?berg wrote:
+>>> This will set the default hash style that GCC will 
+>>> always use during linking.
+>>>
+>>> Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+>> Could you explain the motivation for configuring the default hash
+>> style? If "gnu" gives the best application startup time, why would we
+>> use a different one?
+>>
+>> Generally, the commit log lacks a bit of background, i.e the "why" we
+>> would want such a change.
+>>
+>> Thanks!
+>>
+>> Thomas
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
