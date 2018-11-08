@@ -1,142 +1,316 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 8 Nov 2018 23:20:08 +0100
-Subject: [Buildroot] [PATCH v1 2/2] iwd: new package
-In-Reply-To: <20181108221851.6e7cf9e5@windsurf.home>
-References: <20181105220426.17194-1-ps.report@gmx.net>
- <20181105220426.17194-2-ps.report@gmx.net>
- <20181108221851.6e7cf9e5@windsurf.home>
-Message-ID: <20181108232008.679e1642@gmx.net>
+Date: Thu,  8 Nov 2018 23:41:00 +0100
+Subject: [Buildroot] [PATCH v2] iwd: new package
+Message-ID: <20181108224100.9462-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Changes v1 -> v2:
+  - update patch 0003-Fix-__iwd_backtrace_init-availability-detection.patch
+  - fix iwd needs comment (missing depends on BR2_TOOLCHAIN_HAS_SYNC_4)
+  - moved GPL-3.0+ (client) to enable client section
+  - add DEVELOPERS entry
+---
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ ...til.c-add-missing-ell-utf8.h-include.patch | 46 ++++++++++++++
+ ...cap.c-add-missing-sys-stat.h-include.patch | 46 ++++++++++++++
+ ...acktrace_init-availability-detection.patch | 62 +++++++++++++++++++
+ package/iwd/Config.in                         | 14 +++++
+ package/iwd/iwd.hash                          |  5 ++
+ package/iwd/iwd.mk                            | 47 ++++++++++++++
+ 8 files changed, 222 insertions(+)
+ create mode 100644 package/iwd/0001-src-util.c-add-missing-ell-utf8.h-include.patch
+ create mode 100644 package/iwd/0002-monitor-pcap.c-add-missing-sys-stat.h-include.patch
+ create mode 100644 package/iwd/0003-Fix-__iwd_backtrace_init-availability-detection.patch
+ create mode 100644 package/iwd/Config.in
+ create mode 100644 package/iwd/iwd.hash
+ create mode 100644 package/iwd/iwd.mk
 
-On Thu, 8 Nov 2018 22:18:51 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-
-> Hello Peter,
-> 
-> On Mon,  5 Nov 2018 23:04:26 +0100, Peter Seiderer wrote:
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> >  package/Config.in                             |  1 +
-> >  ...til.c-add-missing-ell-utf8.h-include.patch | 46 +++++++++++++++++++
-> >  ...cap.c-add-missing-sys-stat.h-include.patch | 46 +++++++++++++++++++
-> >  ..._iwd_backtrace_init-availability-det.patch | 32 +++++++++++++
-> >  package/iwd/Config.in                         | 14 ++++++
-> >  package/iwd/iwd.hash                          |  5 ++
-> >  package/iwd/iwd.mk                            | 46 +++++++++++++++++++  
-> 
-> Entry to DEVELOPERS file is missing.
-
-O.k., will fix...
-
-> 
-> > +-#ifdef __GLIBC__
-> > ++#if defined(__GLIBC__) && defined(HAVE_EXECINFO_H)  
-> 
-> The HAVE_EXECINFO_H check is sufficient, checking for __GLIBC__ in
-> addition is not very useful.
-
-Mhhh, wanted to keep the symmetry to src/backtrace.h halfway:
-
- 22 #ifdef __GLIBC__
- 23 void __iwd_backtrace_init();
- 24 void __iwd_backtrace_print(unsigned int offset);
- 25 #endif
-
-Would changing this one to '#if defined(HAVE_EXECINFO_H)' o.k?
-
-The header src/backtrace.h is only included from src/main.c
-(after including config.h) and (unused) from plugins/ofono.c
-(without including config.h)...
-
-> plugins/ofono.c
-> > diff --git a/package/iwd/Config.in b/package/iwd/Config.in
-> > new file mode 100644
-> > index 0000000000..c65e5e05d2
-> > --- /dev/null
-> > +++ b/package/iwd/Config.in
-> > @@ -0,0 +1,14 @@
-> > +config BR2_PACKAGE_IWD
-> > +	bool "iwd"
-> > +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # ell
-> > +	depends on !BR2_STATIC_LIBS # ell
-> > +	depends on BR2_USE_WCHAR # ell
-> > +	select BR2_PACKAGE_ELL
-> > +	help
-> > +	  iNet Wireless daemon (iwd)
-> > +
-> > +	  https://iwd.wiki.kernel.org/
-> > +
-> > +comment "iwd needs a toolchain w/ dynamic library, wchar"
-> > +	depends on BR2_STATIC_LIBS
-> > +	depends on !BR2_USE_WCHAR  
-> 
-> This needs to be fixed, like I have done for the ell package.
-
-O.k. will do (thanks for fixing it in the ell package)...
-
-> 
-> > +IWD_VERSION = 0.10
-> > +IWD_SITE = https://git.kernel.org/pub/scm/network/wireless/iwd.git
-> > +IWD_SITE_METHOD = git
-> > +# iwd client depends on readline (GPL-3.0+)
-> > +IWD_LICENSE = LGPL-2.1+, GPL-3.0+ (client)  
-> 
-> The , GPL-3.0+ (client) part could instead go...
-> 
-> > +ifeq ($(BR2_PACKAGE_READLINE),y)
-> > +IWD_CONF_OPTS += --enable-client
-> > +IWD_DEPENDENCIES += readline  
-> 
-> ... here, like this:
-> 
-> IWD_LICENSE := $(IWD_LICENSE), GPL-3.0+ (client)
-
-O.k. will do...
-
-> 
-> However, with readline enabled, it doesn't build here:
-> 
-> In file included from /home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/readline/history.h:35:0,
->                  from client/display.c:28:
-> /home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/readline/rltypedefs.h:71:28: error: unknown type name ?FILE?
->  typedef int rl_getc_func_t PARAMS((FILE *));
->                             ^
-> /home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/readline/readline.h:429:20: error: unknown type name ?FILE?
->  extern int rl_getc PARAMS((FILE *));
->                     ^
-> In file included from client/display.c:29:0:
-> /home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/readline/readline.h:558:8: error: unknown type name ?FILE?
->  extern FILE *rl_instream;
->         ^
-> /home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/readline/readline.h:559:8: error: unknown type name ?FILE?
->  extern FILE *rl_outstream;
->         ^
-> /home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/readline/readline.h:588:8: error: unknown type name ?rl_getc_func_t?
->  extern rl_getc_func_t *rl_getc_function;
->         ^
-> /home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/readline/readline.h:917:3: error: unknown type name ?FILE?
->    FILE *inf;
->    ^
-> /home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/readline/readline.h:918:3: error: unknown type name ?FILE?
->    FILE *outf;
->    ^
-> make[3]: *** [Makefile:1878: client/display.o] Error 1
-> make[3]: *** Waiting for unfinished jobs....
-> make[2]: *** [Makefile:1187: all] Error 2
-> make[1]: *** [package/pkg-generic.mk:232: /home/thomas/projets/buildroot/output/build/iwd-0.10/.stamp_built] Error 2
-> make: *** [Makefile:84: _all] Error 2
-
-Did not happen here, mind to share your defconfig?
-
-Regards,
-Peter
-
-> 
-> Best regards,
-> 
-> Thomas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 53467da489..d2c553a2ca 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1660,6 +1660,7 @@ F:	package/ghostscript-fonts/
+ F:	package/gstreamer1/gst1-interpipe/
+ F:	package/gstreamer1/gst1-validate/
+ F:	package/gstreamer1/gstreamer1-editing-services/
++F:	package/iwd/
+ F:	package/libevdev/
+ F:	package/log4cplus/
+ F:	package/postgresql/
+diff --git a/package/Config.in b/package/Config.in
+index b60e7700ad..2f2c0dc4e3 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1866,6 +1866,7 @@ menu "Networking applications"
+ 	source "package/iputils/Config.in"
+ 	source "package/irssi/Config.in"
+ 	source "package/iw/Config.in"
++	source "package/iwd/Config.in"
+ 	source "package/janus-gateway/Config.in"
+ 	source "package/keepalived/Config.in"
+ 	source "package/kismet/Config.in"
+diff --git a/package/iwd/0001-src-util.c-add-missing-ell-utf8.h-include.patch b/package/iwd/0001-src-util.c-add-missing-ell-utf8.h-include.patch
+new file mode 100644
+index 0000000000..549cd6fdd1
+--- /dev/null
++++ b/package/iwd/0001-src-util.c-add-missing-ell-utf8.h-include.patch
+@@ -0,0 +1,46 @@
++From 174eb3088e78b75b4e488c023808c6f3bf7aae06 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Fri, 2 Nov 2018 14:19:12 +0100
++Subject: [PATCH] src/util.c: add missing ell/utf8.h include
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Fixes:
++
++  src/util.c: In function ?util_ssid_to_utf8?:
++  src/util.c:57:16: warning: implicit declaration of function ?l_utf8_validate? [-Wimplicit-function-declaration]
++    while (i && (!l_utf8_validate((const char *)start, i,
++                  ^~~~~~~~~~~~~~~
++  src/util.c: In function ?util_string_to_address?:
++  src/util.c:128:8: warning: implicit declaration of function ?l_ascii_isxdigit? [-Wimplicit-function-declaration]
++     if (!l_ascii_isxdigit(str[i]))
++          ^~~~~~~~~~~~~~~~
++[...]
++  src/util.o: In function `util_string_to_address':
++  util.c:(.text+0x21c): undefined reference to `l_ascii_isxdigit'
++  util.c:(.text+0x228): undefined reference to `l_ascii_isxdigit'
++  util.c:(.text+0x24c): undefined reference to `l_ascii_isxdigit'
++  util.c:(.text+0x258): undefined reference to `l_ascii_isxdigit'
++  collect2: error: ld returned 1 exit status
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ src/util.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/util.c b/src/util.c
++index 7a08940..e12b622 100644
++--- a/src/util.c
+++++ b/src/util.c
++@@ -29,6 +29,7 @@
++ #include <sys/uio.h>
++ 
++ #include <ell/string.h>
+++#include <ell/utf8.h>
++ #include <ell/genl.h>
++ #include <ell/util.h>
++ #include <ell/log.h>
++-- 
++2.19.1
++
+diff --git a/package/iwd/0002-monitor-pcap.c-add-missing-sys-stat.h-include.patch b/package/iwd/0002-monitor-pcap.c-add-missing-sys-stat.h-include.patch
+new file mode 100644
+index 0000000000..10875749c8
+--- /dev/null
++++ b/package/iwd/0002-monitor-pcap.c-add-missing-sys-stat.h-include.patch
+@@ -0,0 +1,46 @@
++From 6e90d02b38d2fad19d396c27d3e6d89c8f0e703f Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Fri, 2 Nov 2018 14:29:53 +0100
++Subject: [PATCH] monitor/pcap.c: add missing sys/stat.h include
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Fixes:
++
++    CC       monitor/pcap.o
++  monitor/pcap.c: In function ?pcap_create?:
++  monitor/pcap.c:121:6: error: ?S_IRUSR? undeclared (first use in this function)
++        S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
++        ^
++  monitor/pcap.c:121:6: note: each undeclared identifier is reported only once for each function it appears in
++  monitor/pcap.c:121:16: error: ?S_IWUSR? undeclared (first use in this function)
++        S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
++                  ^
++  monitor/pcap.c:121:26: error: ?S_IRGRP? undeclared (first use in this function)
++        S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
++                            ^
++  monitor/pcap.c:121:36: error: ?S_IROTH? undeclared (first use in this function)
++        S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
++                                      ^
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ monitor/pcap.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/monitor/pcap.c b/monitor/pcap.c
++index aae0956..64382dd 100644
++--- a/monitor/pcap.c
+++++ b/monitor/pcap.c
++@@ -28,6 +28,7 @@
++ #include <fcntl.h>
++ #include <unistd.h>
++ #include <stdlib.h>
+++#include <sys/stat.h>
++ #include <sys/uio.h>
++ #include <ell/ell.h>
++ 
++-- 
++2.19.1
++
+diff --git a/package/iwd/0003-Fix-__iwd_backtrace_init-availability-detection.patch b/package/iwd/0003-Fix-__iwd_backtrace_init-availability-detection.patch
+new file mode 100644
+index 0000000000..9fa3ff24cc
+--- /dev/null
++++ b/package/iwd/0003-Fix-__iwd_backtrace_init-availability-detection.patch
+@@ -0,0 +1,62 @@
++From 9bd1f13316c3db64548b4f194497b86b05c79a88 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Fri, 2 Nov 2018 14:38:37 +0100
++Subject: [PATCH] Fix __iwd_backtrace_init() availability detection
++
++Check for HAVE_EXECINFO_H for all __iwd_backtrace_init usages (and
++remove unused backtrace.h usage from plugins/ofono.c).
++
++Fixes:
++
++  src/main.o: In function `main':
++  main.c:(.text.startup+0x798): undefined reference to `__iwd_backtrace_init'
++  collect2: error: ld returned 1 exit status
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ plugins/ofono.c | 1 -
++ src/backtrace.h | 2 +-
++ src/main.c      | 2 +-
++ 3 files changed, 2 insertions(+), 3 deletions(-)
++
++diff --git a/plugins/ofono.c b/plugins/ofono.c
++index 8c019ce..077045f 100644
++--- a/plugins/ofono.c
+++++ b/plugins/ofono.c
++@@ -31,7 +31,6 @@
++ 
++ #include "src/dbus.h"
++ #include "src/simauth.h"
++-#include "src/backtrace.h"
++ 
++ /*
++  * This plugin takes care of all the communication with ofono in order to
++diff --git a/src/backtrace.h b/src/backtrace.h
++index bfdc858..829ba02 100644
++--- a/src/backtrace.h
+++++ b/src/backtrace.h
++@@ -19,7 +19,7 @@
++  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
++  *
++  */
++-#ifdef __GLIBC__
+++#ifdef HAVE_EXECINFO_H
++ void __iwd_backtrace_init();
++ void __iwd_backtrace_print(unsigned int offset);
++ #endif
++diff --git a/src/main.c b/src/main.c
++index afb895e..02250df 100644
++--- a/src/main.c
+++++ b/src/main.c
++@@ -431,7 +431,7 @@ int main(int argc, char *argv[])
++ 	if (debugopt)
++ 		l_debug_enable(debugopt);
++ 
++-#ifdef __GLIBC__
+++#ifdef HAVE_EXECINFO_H
++ 	__iwd_backtrace_init();
++ #endif
++ 
++-- 
++2.19.1
++
+diff --git a/package/iwd/Config.in b/package/iwd/Config.in
+new file mode 100644
+index 0000000000..c790f3dba1
+--- /dev/null
++++ b/package/iwd/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_IWD
++	bool "iwd"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # ell
++	depends on !BR2_STATIC_LIBS # ell
++	depends on BR2_USE_WCHAR # ell
++	select BR2_PACKAGE_ELL
++	help
++	  iNet Wireless daemon (iwd)
++
++	  https://iwd.wiki.kernel.org/
++
++comment "iwd needs a toolchain w/ dynamic library, wchar"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # ell
++	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
+diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
+new file mode 100644
+index 0000000000..32018531b2
+--- /dev/null
++++ b/package/iwd/iwd.hash
+@@ -0,0 +1,5 @@
++# Locally computed
++sha256 cb071b9e10688e7347bb3f2d6927c27c635614e9a2b1c5eb3ea6203ca2894c05 iwd-0.10.tar.gz
++
++# License files
++sha256 ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5 COPYING
+diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
+new file mode 100644
+index 0000000000..82027e5e03
+--- /dev/null
++++ b/package/iwd/iwd.mk
+@@ -0,0 +1,47 @@
++################################################################################
++#
++# iwd
++#
++################################################################################
++
++IWD_VERSION = 0.10
++IWD_SITE = https://git.kernel.org/pub/scm/network/wireless/iwd.git
++IWD_SITE_METHOD = git
++IWD_LICENSE = LGPL-2.1+
++IWD_LICENSE_FILES = COPYING
++# sources from git, no configure script provided
++IWD_AUTORECONF = YES
++
++IWD_CONF_OPTS = --enable-external-ell
++IWD_DEPENDENCIES = ell
++
++# autoreconf requires an existing build-aux directory
++define IWD_MKDIR_BUILD_AUX
++	mkdir -p $(@D)/build-aux
++endef
++IWD_POST_PATCH_HOOKS += IWD_MKDIR_BUILD_AUX
++
++ifeq ($(BR2_PACKAGE_DBUS),y)
++IWD_CONF_OPTS += --enable-dbus-policy
++IWD_DEPENDENCIES += dbus
++else
++IWD_CONF_OPTS += --disable-dbus-policy
++endif
++
++ifeq ($(BR2_PACKAGE_READLINE),y)
++# iwd client depends on readline (GPL-3.0+)
++IWD_LICENSE := $(IWD_LICENSE), GPL-3.0+ (client)
++IWD_CONF_OPTS += --enable-client
++IWD_DEPENDENCIES += readline
++else
++IWD_CONF_OPTS += --disable-client
++endif
++
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++IWD_CONF_OPTS += --enable-systemd-service
++IWD_DEPENDENCIES += systemd
++else
++IWD_CONF_OPTS += --disable-systemd-service
++endif
++
++$(eval $(autotools-package))
+-- 
+2.19.1
