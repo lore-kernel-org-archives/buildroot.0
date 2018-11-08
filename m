@@ -1,48 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Nov 2018 21:04:59 +0100
-Subject: [Buildroot] [git commit] python-autobahn: bump to version 18.11.1
-Message-ID: <20181108200244.714C4817A6@busybox.osuosl.org>
+Date: Thu, 8 Nov 2018 21:05:10 +0100
+Subject: [Buildroot] [git commit] python-crossbar: bump to version 18.11.1
+Message-ID: <20181108200244.78117817A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83c19a40c09e40db3bfcd0dbfab58bd9e2112cf3
+commit: https://git.buildroot.net/buildroot/commit/?id=74804a631157d96a074ceb09d2b26589524f855b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Adjust patch to fit the new version.
+
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-autobahn/python-autobahn.hash | 4 ++--
- package/python-autobahn/python-autobahn.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-crossbar/0002-Remove-idna-requirement.patch | 13 ++++++++-----
+ package/python-crossbar/python-crossbar.hash               |  4 ++--
+ package/python-crossbar/python-crossbar.mk                 |  4 ++--
+ 3 files changed, 12 insertions(+), 9 deletions(-)
 
-diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
-index 809678ba6e..522e28b5e5 100644
---- a/package/python-autobahn/python-autobahn.hash
-+++ b/package/python-autobahn/python-autobahn.hash
+diff --git a/package/python-crossbar/0002-Remove-idna-requirement.patch b/package/python-crossbar/0002-Remove-idna-requirement.patch
+index b4bbe3b5a5..4948b91b05 100644
+--- a/package/python-crossbar/0002-Remove-idna-requirement.patch
++++ b/package/python-crossbar/0002-Remove-idna-requirement.patch
+@@ -13,14 +13,17 @@ Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+  1 file changed, 1 deletion(-)
+ 
+ diff --git a/requirements-min.txt b/requirements-min.txt
+-index d7c2a562..84bf1878 100644
++index 92fb0f8f..13cdac87 100644
+ --- a/requirements-min.txt
+ +++ b/requirements-min.txt
+-@@ -1,4 +1,3 @@
++@@ -6,7 +6,6 @@ click>=6.7
++ constantly>=15.1.0
++ cryptography>=1.9
++ h2>=3.0,<4.0
+ -idna<2.6,>=2.5
+- click>=6.7
+- setuptools>=36.0.1
+- zope.interface>=4.4.2
++ incremental>=17.5.0
++ jinja2>=2.9.6
++ lmdb>=0.92
+ -- 
+ 2.17.1
+ 
+diff --git a/package/python-crossbar/python-crossbar.hash b/package/python-crossbar/python-crossbar.hash
+index a9c40c91e6..aee07a7382 100644
+--- a/package/python-crossbar/python-crossbar.hash
++++ b/package/python-crossbar/python-crossbar.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/autobahn/json
--md5	66767ee7b3dd31e76c77ab18eeaa619c  autobahn-18.10.1.tar.gz
--sha256	b5767bebd94ba13fc286604f889f208e7babc77d72d9f372d331bc14c89c5a40  autobahn-18.10.1.tar.gz
-+md5	a3a0648371b41328282a9ab7fe48ccbe  autobahn-18.11.1.tar.gz
-+sha256	c7e775e46fc033160fa89942de4953ca739f26167f74431dc2c8a3cd165b8755  autobahn-18.11.1.tar.gz
- # Locally computed sha256 checksums
- sha256	0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
-diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
-index 7ec012efe4..c5faacf965 100644
---- a/package/python-autobahn/python-autobahn.mk
-+++ b/package/python-autobahn/python-autobahn.mk
+ # md5, sha256 from https://pypi.org/pypi/crossbar/json
+-md5	6c684c9613091d7ba8adadb6bff5c1cd  crossbar-18.9.2.tar.gz
+-sha256	8486f2daa73c45475633baa9d21dcaf74d635781939df6ab6748cc2958aa9d75  crossbar-18.9.2.tar.gz
++md5	e3f0c51c6c496a3d7f1c62d7f64f23db  crossbar-18.11.1.tar.gz
++sha256	ab24031f40077ee283469aab5f270bdc223b29b1e6f45d69cf38bf4cad80df2a  crossbar-18.11.1.tar.gz
+ # Locally computed
+ sha256  57c8ff33c9c0cfc3ef00e650a1cc910d7ee479a8bc509f6c9209a7c2a11399d6  LICENSE
+diff --git a/package/python-crossbar/python-crossbar.mk b/package/python-crossbar/python-crossbar.mk
+index ee7d2a6a32..de5dcea931 100644
+--- a/package/python-crossbar/python-crossbar.mk
++++ b/package/python-crossbar/python-crossbar.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AUTOBAHN_VERSION = 18.10.1
-+PYTHON_AUTOBAHN_VERSION = 18.11.1
- PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
--PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/e3/42/8a8ba7e371c5d0cbacf42cafd9f562e12cab613edb1f752b6ddfa2f3b280
-+PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/01/ee/d401d58dc7732fadf4fd12d7fb87dd2f3e5e2d0ba65865495565f97c2c31
- PYTHON_AUTOBAHN_LICENSE = MIT
- PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
- PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
+-PYTHON_CROSSBAR_VERSION = 18.9.2
++PYTHON_CROSSBAR_VERSION = 18.11.1
+ PYTHON_CROSSBAR_SOURCE = crossbar-$(PYTHON_CROSSBAR_VERSION).tar.gz
+-PYTHON_CROSSBAR_SITE = https://files.pythonhosted.org/packages/1c/71/27e6b5ba1e557d28d155badee90022f73f4216b752d063221edbe2b188f0
++PYTHON_CROSSBAR_SITE = https://files.pythonhosted.org/packages/99/02/7f7f7dee3e8787e44d9452cc1d712183e5903d8a76455693b15a900385eb
+ PYTHON_CROSSBAR_LICENSE = AGPL-3.0
+ PYTHON_CROSSBAR_LICENSE_FILES = LICENSE
+ PYTHON_CROSSBAR_SETUP_TYPE = setuptools
