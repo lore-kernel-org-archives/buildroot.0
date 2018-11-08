@@ -1,47 +1,45 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  8 Nov 2018 21:56:22 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-mwclient: bump version to
- 0.9.2
-Message-ID: <20181108205622.9516-1-bernd.kuhls@t-online.de>
+Date: Thu,  8 Nov 2018 22:00:30 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sconeserver: bump version
+Message-ID: <20181108210030.23071-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://github.com/sconemad/sconeserver/commit/6b932d7d8dbb700b830205e7111e469cefff490c
+adds support for OpenSSL 1.1
+
+Added license hash.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python-mwclient/python-mwclient.hash | 4 ++--
- package/python-mwclient/python-mwclient.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/sconeserver/sconeserver.hash | 3 ++-
+ package/sconeserver/sconeserver.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-mwclient/python-mwclient.hash b/package/python-mwclient/python-mwclient.hash
-index a20950a249..fccfbcdcb6 100644
---- a/package/python-mwclient/python-mwclient.hash
-+++ b/package/python-mwclient/python-mwclient.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/mwclient/json
--md5	b9fc00d68dbf4a3db4ca476d438d6b57  mwclient-0.9.1.tar.gz
--sha256	ed7a0eeb98f0309946ae8762b60eae10eb507e4b67400931ec24abd0aee3d7b4  mwclient-0.9.1.tar.gz
-+md5	994337c4153d86345f2dfdf74e53b546  mwclient-0.9.2.tar.gz
-+sha256	60ed0b13fdef8cb2ce4dde79bc92dd729de093e86f188225b4bcd73e32d75282  mwclient-0.9.2.tar.gz
+diff --git a/package/sconeserver/sconeserver.hash b/package/sconeserver/sconeserver.hash
+index 978b442f53..e1ff4486bc 100644
+--- a/package/sconeserver/sconeserver.hash
++++ b/package/sconeserver/sconeserver.hash
+@@ -1,2 +1,3 @@
  # Locally computed
- sha256	d29eaa80939b6d8fc3ab458bab90f4af879fa9e0430ed7e0fb2b94752e7eb33f  mwclient/__init__.py
-diff --git a/package/python-mwclient/python-mwclient.mk b/package/python-mwclient/python-mwclient.mk
-index 7edf05add1..0e20dd6261 100644
---- a/package/python-mwclient/python-mwclient.mk
-+++ b/package/python-mwclient/python-mwclient.mk
-@@ -4,9 +4,9 @@
+-sha256 38e72b962eb42bea8f0deb6f101833f8f2f2fa8c53f0dc03f3eb5d56873517c8 sconeserver-d659468cd164e6a6cc12932cc6780566b04f8328.tar.gz
++sha256 dfdbbcd29c089eeb341dd3bbd434cca97fefaa97f94c91525e5953d3ab0a2d9a  sconeserver-6b932d7d8dbb700b830205e7111e469cefff490c.tar.gz
++sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
+index cf7bcbcb15..12cadbfd20 100644
+--- a/package/sconeserver/sconeserver.mk
++++ b/package/sconeserver/sconeserver.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_MWCLIENT_VERSION = 0.9.1
-+PYTHON_MWCLIENT_VERSION = 0.9.2
- PYTHON_MWCLIENT_SOURCE = mwclient-$(PYTHON_MWCLIENT_VERSION).tar.gz
--PYTHON_MWCLIENT_SITE = https://files.pythonhosted.org/packages/1b/9b/c790760100c336e596b99ad13537fda36c13ea6f289b88594e9ad0d90a1e
-+PYTHON_MWCLIENT_SITE = https://files.pythonhosted.org/packages/f8/5a/9a5cf29e256c5720b9dc3b60586be6557e5f8bbf313d90bf75b0d967f0af
- PYTHON_MWCLIENT_LICENSE = MIT
- PYTHON_MWCLIENT_LICENSE_FILES = mwclient/__init__.py
- PYTHON_MWCLIENT_SETUP_TYPE = setuptools
+-SCONESERVER_VERSION = d659468cd164e6a6cc12932cc6780566b04f8328
++SCONESERVER_VERSION = 6b932d7d8dbb700b830205e7111e469cefff490c
+ SCONESERVER_SITE = $(call github,sconemad,sconeserver,$(SCONESERVER_VERSION))
+ SCONESERVER_LICENSE = GPL-2.0+
+ SCONESERVER_LICENSE_FILES = COPYING
 -- 
 2.19.1
