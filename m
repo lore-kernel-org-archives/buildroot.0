@@ -1,66 +1,96 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Nov 2018 21:35:28 +0100
-Subject: [Buildroot] [PATCH 4/4] support/testing: add test for a f2fs
- filesystem
-In-Reply-To: <20181106140647.18251-4-grzegorz@blach.pl>
-References: <20181106140647.18251-1-grzegorz@blach.pl>
- <20181106140647.18251-4-grzegorz@blach.pl>
-Message-ID: <20181108213528.5ec746b2@windsurf.home>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu,  8 Nov 2018 21:39:06 +0100
+Subject: [Buildroot] [PATCH 1/1] package/php: bump version to 7.2.12
+Message-ID: <20181108203906.6028-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Changelog: http://www.php.net/ChangeLog-7.php#7.2.12
 
-On Tue,  6 Nov 2018 15:06:47 +0100, Grzegorz Blach wrote:
-> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-> ---
->  .../testing/conf/f2fs-kernel-fragment.config  |  5 ++
->  support/testing/tests/fs/test_f2fs.py         | 49 +++++++++++++++++++
->  2 files changed, 54 insertions(+)
->  create mode 100644 support/testing/conf/f2fs-kernel-fragment.config
->  create mode 100644 support/testing/tests/fs/test_f2fs.py
-> 
-> diff --git a/support/testing/conf/f2fs-kernel-fragment.config b/support/testing/conf/f2fs-kernel-fragment.config
-> new file mode 100644
-> index 0000000000..0fca7e784b
-> --- /dev/null
-> +++ b/support/testing/conf/f2fs-kernel-fragment.config
-> @@ -0,0 +1,5 @@
-> +CONFIG_F2FS_FS=y
-> +CONFIG_F2FS_STAT_FS=y
-> +CONFIG_F2FS_FS_XATTR=y
-> +CONFIG_F2FS_FS_POSIX_ACL=y
-> +CONFIG_F2FS_FS_SECURITY=y
-> diff --git a/support/testing/tests/fs/test_f2fs.py b/support/testing/tests/fs/test_f2fs.py
-> new file mode 100644
-> index 0000000000..f95d6dae07
-> --- /dev/null
-> +++ b/support/testing/tests/fs/test_f2fs.py
-> @@ -0,0 +1,49 @@
-> +import os
-> +import subprocess
-> +
-> +import infra.basetest
-> +
-> +def dumpf2fs_getprop(out, prop):
-> +    for line in out:
-> +        fields = line.split(" = ")
-> +        if fields[0] == prop:
-> +            return fields[1].strip()
-> +
-> +class TestF4FS(infra.basetest.BRTest):
+Rebased patch 0004 and updated license hash after white space removal:
+https://github.com/php/php-src/commit/902d39a3a79c6efe93c8879575fdd5a759cf03de
 
-TestF4FS ? :-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ ...lock-mechanism-is-obviously-linux-so-force-.patch | 12 +++++++-----
+ package/php/php.hash                                 |  4 ++--
+ package/php/php.mk                                   |  2 +-
+ 3 files changed, 10 insertions(+), 8 deletions(-)
 
-I've fixed this typo, and applied. Thanks!
-
-Best regards,
-
-Thomas
+diff --git a/package/php/0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch b/package/php/0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch
+index 9b530361c9..2c08437e4d 100644
+--- a/package/php/0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch
++++ b/package/php/0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch
+@@ -4,6 +4,8 @@ Date: Tue, 9 Aug 2016 11:52:19 +0200
+ Subject: [PATCH] OPcache: flock mechanism is obviously linux so force it.
+ 
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Bernd: update for 7.2.12]
+ ---
+  ext/opcache/config.m4 | 34 ++--------------------------------
+  1 file changed, 2 insertions(+), 32 deletions(-)
+@@ -21,12 +23,12 @@ index fbb9b21..ffddc8e 100644
+ -AC_TRY_RUN([
+ -  #include <fcntl.h>
+ -  struct flock lock = { 1, 2, 3, 4, 5 };
+--  int main() { 
++-  int main() {
+ -    if(lock.l_type == 1 && lock.l_whence == 2 && lock.l_start == 3 && lock.l_len == 4) {
+ -		return 0;
+ -    }
+ -    return 1;
+--  } 
++-  }
+ -], [
+ -	flock_type=linux
+ -    AC_DEFINE([HAVE_FLOCK_LINUX], [], [Struct flock is Linux-type])
+@@ -37,15 +39,15 @@ index fbb9b21..ffddc8e 100644
+ -AC_TRY_RUN([
+ -  #include <fcntl.h>
+ -  struct flock lock = { 1, 2, 3, 4, 5 };
+--  int main() { 
++-  int main() {
+ -    if(lock.l_start == 1 && lock.l_len == 2 && lock.l_type == 4 && lock.l_whence == 5) {
+ -		return 0;
+ -    }
+ -    return 1;
+--  } 
++-  }
+ -], [
+ -	flock_type=bsd
+--    AC_DEFINE([HAVE_FLOCK_BSD], [], [Struct flock is BSD-type]) 
++-    AC_DEFINE([HAVE_FLOCK_BSD], [], [Struct flock is BSD-type])
+ -    AC_MSG_RESULT("yes")
+ -], AC_MSG_RESULT("no") )
+ +flock_type=linux
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 59532771a9..cea6997aa2 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From http://php.net/downloads.php
+-sha256 da1a705c0bc46410e330fc6baa967666c8cd2985378fb9707c01a8e33b01d985  php-7.2.11.tar.xz
++sha256 989c04cc879ee71a5e1131db867f3c5102f1f7565f805e2bb8bde33f93147fe1  php-7.2.12.tar.xz
+ 
+ # License file
+-sha256 00e567a8d50359d93ee1f9afdd9511277660c1e70a0cbf3229f84403aa9aebb1  LICENSE
++sha256 f689b8fa63bea7950ce6a21bf52ed88ea0d77673ee76e6de12f51191174d91b8  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index bd1835f65f..ae7e742b65 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.2.11
++PHP_VERSION = 7.2.12
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.19.1
