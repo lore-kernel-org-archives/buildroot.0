@@ -1,28 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 08 Nov 2018 22:17:07 +0100
-Subject: [Buildroot] [PATCH 1/1] wireshark: disable guides
-In-Reply-To: <20181108203044.32715-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 8 Nov 2018 21:30:44 +0100")
-References: <20181108203044.32715-1-fontaine.fabrice@gmail.com>
-Message-ID: <87wopn8e24.fsf@dell.be.48ers.dk>
+Date: Thu, 08 Nov 2018 22:17:27 +0100
+Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.9.2
+In-Reply-To: <20181108203356.5475-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Thu, 8 Nov 2018 21:33:56 +0100")
+References: <20181108203356.5475-1-bernd.kuhls@t-online.de>
+Message-ID: <87sh0b8e1k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > --disable-guides has been added since version 2.5.0:
- > https://github.com/wireshark/wireshark/commit/aa04d2355effb1cf611831b0a260cf1aff199b9a
+ > Release notes: https://www.samba.org/samba/history/samba-4.9.2.html
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/5ae6d46573942713687f4e659b3eaf0b768ebc71
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed after extending the commit description that this is about
-build the user guide, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
