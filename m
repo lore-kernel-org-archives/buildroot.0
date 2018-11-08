@@ -1,36 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Nov 2018 21:01:16 +0100
-Subject: [Buildroot] [PATCH 1/1] qt: disable static build for qt-zlib
-In-Reply-To: <20181108192829.17014-1-fontaine.fabrice@gmail.com>
-References: <20181108192829.17014-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181108210116.59332e38@windsurf.home>
+Date: Thu, 8 Nov 2018 21:01:27 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: add Christian Stewart for go
+Message-ID: <20181108195900.B89BF81734@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1aee7cc5a0c226c5ea33de5d9e8f5ba2fe7bbef5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  8 Nov 2018 20:28:29 +0100, Fabrice Fontaine wrote:
-> Static build of applications using qt-zlib and zlib (such as mpv) will
-> fail because zlib and qt-zlib defines the same functions (inflateReset,
-> inflatePrime ...)
-> 
-> So add a dependency on !BR2_STATIC_LIBS on BR2_PACKAGE_QT_QTZLIB
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/0be6e359d46a8a701006305c32b514687854b035
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/qt/Config.in | 4 ++++
->  1 file changed, 4 insertions(+)
+I am now maintaining / submitting regular patches for the Go toolchain as well.
 
-Applied to master, thanks.
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ae3900b9d5..5dca21e72b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -469,6 +469,7 @@ F:	package/batman-adv/
+ F:	package/docker-containerd/
+ F:	package/docker-engine/
+ F:	package/docker-proxy/
++F:	package/go/
+ F:	package/mosh/
+ F:	package/rtl8821au/
+ F:	package/runc/
