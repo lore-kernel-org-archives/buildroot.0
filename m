@@ -1,98 +1,262 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 8 Nov 2018 22:18:07 +0100
-Subject: [Buildroot] [git commit] package/php: bump version to 7.2.12
-Message-ID: <20181108212411.85A1E81D35@busybox.osuosl.org>
+Date: Thu, 8 Nov 2018 22:20:51 +0100
+Subject: [Buildroot] [git commit] twolame: fix static linking with libmagic
+Message-ID: <20181108212411.AA1D381948@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d383a73a8e5f45f291afda56af912ab088f2f255
+commit: https://git.buildroot.net/buildroot/commit/?id=393b205de132658d2a7e68d8c9d45de6298813c7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: http://www.php.net/ChangeLog-7.php#7.2.12
+libmagic (from file package) already provides the buffer_init function
+so to avoid a build failure for applications wanting to statically link
+with twolame and libmagic (for example sox), rename buffer_init into
+bitbuffer_init (also rename buffer_deinit into bitbuffer_deinit and
+buffer_sstell into bitbuffer_sstell for consistency)
 
-Rebased patch 0004 and updated license hash after white space removal:
-https://github.com/php/php-src/commit/902d39a3a79c6efe93c8879575fdd5a759cf03de
+Fixes:
+ - http://autobuild.buildroot.org/results/b3fc62e7f372fe595966e84091c11ccdb4cfa77c
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...Pcache-flock-mechanism-is-obviously-linux-so-force-.patch | 12 +++++++-----
- package/php/php.hash                                         |  4 ++--
- package/php/php.mk                                           |  2 +-
- 3 files changed, 10 insertions(+), 8 deletions(-)
+ .../0001-Fix-static-linking-with-libmagic.patch    | 228 +++++++++++++++++++++
+ 1 file changed, 228 insertions(+)
 
-diff --git a/package/php/0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch b/package/php/0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch
-index 9b530361c9..2c08437e4d 100644
---- a/package/php/0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch
-+++ b/package/php/0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch
-@@ -4,6 +4,8 @@ Date: Tue, 9 Aug 2016 11:52:19 +0200
- Subject: [PATCH] OPcache: flock mechanism is obviously linux so force it.
- 
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[Bernd: update for 7.2.12]
- ---
-  ext/opcache/config.m4 | 34 ++--------------------------------
-  1 file changed, 2 insertions(+), 32 deletions(-)
-@@ -21,12 +23,12 @@ index fbb9b21..ffddc8e 100644
- -AC_TRY_RUN([
- -  #include <fcntl.h>
- -  struct flock lock = { 1, 2, 3, 4, 5 };
---  int main() { 
-+-  int main() {
- -    if(lock.l_type == 1 && lock.l_whence == 2 && lock.l_start == 3 && lock.l_len == 4) {
- -		return 0;
- -    }
- -    return 1;
---  } 
-+-  }
- -], [
- -	flock_type=linux
- -    AC_DEFINE([HAVE_FLOCK_LINUX], [], [Struct flock is Linux-type])
-@@ -37,15 +39,15 @@ index fbb9b21..ffddc8e 100644
- -AC_TRY_RUN([
- -  #include <fcntl.h>
- -  struct flock lock = { 1, 2, 3, 4, 5 };
---  int main() { 
-+-  int main() {
- -    if(lock.l_start == 1 && lock.l_len == 2 && lock.l_type == 4 && lock.l_whence == 5) {
- -		return 0;
- -    }
- -    return 1;
---  } 
-+-  }
- -], [
- -	flock_type=bsd
---    AC_DEFINE([HAVE_FLOCK_BSD], [], [Struct flock is BSD-type]) 
-+-    AC_DEFINE([HAVE_FLOCK_BSD], [], [Struct flock is BSD-type])
- -    AC_MSG_RESULT("yes")
- -], AC_MSG_RESULT("no") )
- +flock_type=linux
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 59532771a9..cea6997aa2 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From http://php.net/downloads.php
--sha256 da1a705c0bc46410e330fc6baa967666c8cd2985378fb9707c01a8e33b01d985  php-7.2.11.tar.xz
-+sha256 989c04cc879ee71a5e1131db867f3c5102f1f7565f805e2bb8bde33f93147fe1  php-7.2.12.tar.xz
- 
- # License file
--sha256 00e567a8d50359d93ee1f9afdd9511277660c1e70a0cbf3229f84403aa9aebb1  LICENSE
-+sha256 f689b8fa63bea7950ce6a21bf52ed88ea0d77673ee76e6de12f51191174d91b8  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index bd1835f65f..ae7e742b65 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 7.2.11
-+PHP_VERSION = 7.2.12
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+diff --git a/package/twolame/0001-Fix-static-linking-with-libmagic.patch b/package/twolame/0001-Fix-static-linking-with-libmagic.patch
+new file mode 100644
+index 0000000000..094d7e997e
+--- /dev/null
++++ b/package/twolame/0001-Fix-static-linking-with-libmagic.patch
+@@ -0,0 +1,228 @@
++From 484275de103b2214cb8ff3868a2562e2c61ce0e1 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 8 Nov 2018 20:57:08 +0100
++Subject: [PATCH] Fix static linking with libmagic
++
++libmagic (from file package) already provides the buffer_init function
++so to avoid a build failure for applications wanting to statically link
++with twolame and libmagic (for example sox), rename buffer_init into
++bitbuffer_init (also rename buffer_deinit into bitbuffer_deinit and
++buffer_sstell into bitbuffer_sstell for consistency)
++
++Fixes:
++ - http://autobuild.buildroot.org/results/b3fc62e7f372fe595966e84091c11ccdb4cfa77c
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/njh/twolame/pull/81]
++---
++ libtwolame/bitbuffer.c |  4 ++--
++ libtwolame/bitbuffer.h |  6 +++---
++ libtwolame/energy.c    |  2 +-
++ libtwolame/twolame.c   | 32 ++++++++++++++++----------------
++ 4 files changed, 22 insertions(+), 22 deletions(-)
++
++diff --git a/libtwolame/bitbuffer.c b/libtwolame/bitbuffer.c
++index 38a632b..5b2fc4b 100644
++--- a/libtwolame/bitbuffer.c
+++++ b/libtwolame/bitbuffer.c
++@@ -33,7 +33,7 @@
++ 
++ 
++ /*create bit buffer*/
++-bit_stream *buffer_init(unsigned char *buffer, int buffer_size)
+++bit_stream *bitbuffer_init(unsigned char *buffer, int buffer_size)
++ {
++     bit_stream *bs = (bit_stream *) TWOLAME_MALLOC(sizeof(bit_stream));
++ 
++@@ -49,7 +49,7 @@ bit_stream *buffer_init(unsigned char *buffer, int buffer_size)
++ }
++ 
++ /* Dellocate bit buffer */
++-void buffer_deinit(bit_stream ** bs)
+++void bitbuffer_deinit(bit_stream ** bs)
++ {
++ 
++     if (bs == NULL || *bs == NULL)
++diff --git a/libtwolame/bitbuffer.h b/libtwolame/bitbuffer.h
++index 0201347..f377c8f 100644
++--- a/libtwolame/bitbuffer.h
+++++ b/libtwolame/bitbuffer.h
++@@ -39,11 +39,11 @@ typedef struct bit_stream_struc {
++ } bit_stream;
++ 
++ 
++-bit_stream *buffer_init(unsigned char *buffer, int buffer_size);
++-void buffer_deinit(bit_stream ** bs);
+++bit_stream *bitbuffer_init(unsigned char *buffer, int buffer_size);
+++void bitbuffer_deinit(bit_stream ** bs);
++ 
++ /*return the current bit stream length (in bits)*/
++-#define buffer_sstell(bs) (bs->totbit)
+++#define bitbuffer_sstell(bs) (bs->totbit)
++ 
++ #endif
++ 
++diff --git a/libtwolame/energy.c b/libtwolame/energy.c
++index 219bd2c..312d8ae 100644
++--- a/libtwolame/energy.c
+++++ b/libtwolame/energy.c
++@@ -73,7 +73,7 @@ void do_energy_levels(twolame_options * glopts, bit_stream * bs)
++     unsigned char rhibyte, rlobyte, lhibyte, llobyte;
++ 
++     // Get the position (in butes) of the end of the mpeg audio frame
++-    int frameEnd = buffer_sstell(bs) / 8;
+++    int frameEnd = bitbuffer_sstell(bs) / 8;
++ 
++ 
++     // find the maximum in the left and right channels
++diff --git a/libtwolame/twolame.c b/libtwolame/twolame.c
++index fa4bcc0..d3b8450 100644
++--- a/libtwolame/twolame.c
+++++ b/libtwolame/twolame.c
++@@ -442,7 +442,7 @@ static int encode_frame(twolame_options * glopts, bit_stream * bs)
++     glopts->num_crc_bits = 0;
++ 
++     // Store the number of bits initially in the bit buffer
++-    initial_bits = buffer_sstell(bs);
+++    initial_bits = bitbuffer_sstell(bs);
++ 
++     adb = available_bits(glopts);
++ 
++@@ -580,7 +580,7 @@ static int encode_frame(twolame_options * glopts, bit_stream * bs)
++ 
++ 
++     // Calulate the number of bits in this frame
++-    frameBits = buffer_sstell(bs) - initial_bits;
+++    frameBits = bitbuffer_sstell(bs) - initial_bits;
++     if (frameBits % 8) {        /* a program failure */
++         fprintf(stderr, "Sent %ld bits = %ld slots plus %ld\n", frameBits, frameBits / 8,
++                 frameBits % 8);
++@@ -630,7 +630,7 @@ int twolame_encode_buffer(twolame_options * glopts,
++ 
++     // now would be a great time to validate the size of the buffer.
++     // samples/1152 * sizeof(frame) < mp2buffer_size 
++-    mybs = buffer_init(mp2buffer, mp2buffer_size);
+++    mybs = bitbuffer_init(mp2buffer, mp2buffer_size);
++ 
++ 
++     // Use up all the samples in in_buffer
++@@ -658,7 +658,7 @@ int twolame_encode_buffer(twolame_options * glopts,
++         if (glopts->samples_in_buffer >= TWOLAME_SAMPLES_PER_FRAME) {
++             int bytes = encode_frame(glopts, mybs);
++             if (bytes <= 0) {
++-                buffer_deinit(&mybs);
+++                bitbuffer_deinit(&mybs);
++                 return bytes;
++             }
++             mp2_size += bytes;
++@@ -667,7 +667,7 @@ int twolame_encode_buffer(twolame_options * glopts,
++     }
++ 
++     // free up the bit stream buffer structure
++-    buffer_deinit(&mybs);
+++    bitbuffer_deinit(&mybs);
++ 
++     return (mp2_size);
++ }
++@@ -687,7 +687,7 @@ int twolame_encode_buffer_interleaved(twolame_options * glopts,
++ 
++     // now would be a great time to validate the size of the buffer.
++     // samples/1152 * sizeof(frame) < mp2buffer_size 
++-    mybs = buffer_init(mp2buffer, mp2buffer_size);
+++    mybs = bitbuffer_init(mp2buffer, mp2buffer_size);
++ 
++     // Use up all the samples in in_buffer
++     while (num_samples) {
++@@ -714,7 +714,7 @@ int twolame_encode_buffer_interleaved(twolame_options * glopts,
++         if (glopts->samples_in_buffer >= TWOLAME_SAMPLES_PER_FRAME) {
++             int bytes = encode_frame(glopts, mybs);
++             if (bytes <= 0) {
++-                buffer_deinit(&mybs);
+++                bitbuffer_deinit(&mybs);
++                 return bytes;
++             }
++             mp2_size += bytes;
++@@ -723,7 +723,7 @@ int twolame_encode_buffer_interleaved(twolame_options * glopts,
++     }
++ 
++     // free up the bit stream buffer structure
++-    buffer_deinit(&mybs);
+++    bitbuffer_deinit(&mybs);
++ 
++ 
++     return (mp2_size);
++@@ -771,7 +771,7 @@ int twolame_encode_buffer_float32(twolame_options * glopts,
++ 
++     // now would be a great time to validate the size of the buffer.
++     // samples/1152 * sizeof(frame) < mp2buffer_size 
++-    mybs = buffer_init(mp2buffer, mp2buffer_size);
+++    mybs = bitbuffer_init(mp2buffer, mp2buffer_size);
++ 
++ 
++     // Use up all the samples in in_buffer
++@@ -800,7 +800,7 @@ int twolame_encode_buffer_float32(twolame_options * glopts,
++         if (glopts->samples_in_buffer >= TWOLAME_SAMPLES_PER_FRAME) {
++             int bytes = encode_frame(glopts, mybs);
++             if (bytes <= 0) {
++-                buffer_deinit(&mybs);
+++                bitbuffer_deinit(&mybs);
++                 return bytes;
++             }
++             mp2_size += bytes;
++@@ -809,7 +809,7 @@ int twolame_encode_buffer_float32(twolame_options * glopts,
++     }
++ 
++     // free up the bit stream buffer structure
++-    buffer_deinit(&mybs);
+++    bitbuffer_deinit(&mybs);
++ 
++     return (mp2_size);
++ }
++@@ -829,7 +829,7 @@ int twolame_encode_buffer_float32_interleaved(twolame_options * glopts,
++ 
++     // now would be a great time to validate the size of the buffer.
++     // samples/1152 * sizeof(frame) < mp2buffer_size 
++-    mybs = buffer_init(mp2buffer, mp2buffer_size);
+++    mybs = bitbuffer_init(mp2buffer, mp2buffer_size);
++ 
++     // Use up all the samples in in_buffer
++     while (num_samples) {
++@@ -857,7 +857,7 @@ int twolame_encode_buffer_float32_interleaved(twolame_options * glopts,
++         if (glopts->samples_in_buffer >= TWOLAME_SAMPLES_PER_FRAME) {
++             int bytes = encode_frame(glopts, mybs);
++             if (bytes <= 0) {
++-                buffer_deinit(&mybs);
+++                bitbuffer_deinit(&mybs);
++                 return bytes;
++             }
++             mp2_size += bytes;
++@@ -866,7 +866,7 @@ int twolame_encode_buffer_float32_interleaved(twolame_options * glopts,
++     }
++ 
++     // free up the bit stream buffer structure
++-    buffer_deinit(&mybs);
+++    bitbuffer_deinit(&mybs);
++ 
++ 
++     return (mp2_size);
++@@ -885,7 +885,7 @@ int twolame_encode_flush(twolame_options * glopts, unsigned char *mp2buffer, int
++         return 0;
++     }
++     // Create bit stream structure
++-    mybs = buffer_init(mp2buffer, mp2buffer_size);
+++    mybs = bitbuffer_init(mp2buffer, mp2buffer_size);
++ 
++     // Pad out the PCM buffers with 0 and encode the frame
++     for (i = glopts->samples_in_buffer; i < TWOLAME_SAMPLES_PER_FRAME; i++) {
++@@ -897,7 +897,7 @@ int twolame_encode_flush(twolame_options * glopts, unsigned char *mp2buffer, int
++     glopts->samples_in_buffer = 0;
++ 
++     // free up the bit stream buffer structure
++-    buffer_deinit(&mybs);
+++    bitbuffer_deinit(&mybs);
++ 
++     return mp2_size;
++ }
++-- 
++2.17.1
++
