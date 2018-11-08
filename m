@@ -1,44 +1,37 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  8 Nov 2018 20:28:29 +0100
-Subject: [Buildroot] [PATCH 1/1] qt: disable static build for qt-zlib
-Message-ID: <20181108192829.17014-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 8 Nov 2018 20:51:27 +0100
+Subject: [Buildroot] [PATCH] package/gcc: fix xtensa uclinux code
+ generation
+In-Reply-To: <CAMo8Bf+=OZWK2m8=i9e99UGBBDY5h9k+SaNB54h_ag9MiaLUOg@mail.gmail.com>
+References: <20181107212050.32439-1-jcmvbkbc@gmail.com>
+ <20181108113533.1f72e417@windsurf>
+ <CAMo8Bf+=OZWK2m8=i9e99UGBBDY5h9k+SaNB54h_ag9MiaLUOg@mail.gmail.com>
+Message-ID: <20181108205127.76b81a8a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Static build of applications using qt-zlib and zlib (such as mpv) will
-fail because zlib and qt-zlib defines the same functions (inflateReset,
-inflatePrime ...)
+Hello,
 
-So add a dependency on !BR2_STATIC_LIBS on BR2_PACKAGE_QT_QTZLIB
+On Thu, 8 Nov 2018 10:28:01 -0800, Max Filippov wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/0be6e359d46a8a701006305c32b514687854b035
+> On Thu, Nov 8, 2018 at 2:35 AM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> > Do we actually support xtensa-uclinux (i.e noMMU Xtensa with BFLT) in
+> > the context of Buildroot ?  
+> 
+> We do. There's even configs/qemu_xtensa_lx60_nommu_defconfig
+> with an example config that builds working image.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/qt/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+Ah, forgot about this! Nice. Perhaps we should be testing this in the
+autobuilders ?
 
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index 0ecfafada5..a1218ecf39 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -309,9 +309,13 @@ choice
- 
- config BR2_PACKAGE_QT_QTZLIB
- 	bool "Qt zlib"
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  Use the zlib bundled with Qt.
- 
-+comment "Qt zlib needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-+
- config BR2_PACKAGE_QT_SYSTEMZLIB
- 	bool "System zlib"
- 	select BR2_PACKAGE_ZLIB
+Best regards,
+
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
