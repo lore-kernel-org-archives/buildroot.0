@@ -1,56 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu,  8 Nov 2018 20:54:42 +0100
-Subject: [Buildroot] [PATCH] postgresql: security bump to version 11.1
-Message-ID: <20181108195442.31413-1-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 8 Nov 2018 20:54:53 +0100
+Subject: [Buildroot] [git commit] python-requests: bump to version 2.20.1
+Message-ID: <20181108195230.1CA14816A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issue:
+commit: https://git.buildroot.net/buildroot/commit/?id=745132abc05e9cb81b0015a1303a602437f0a06f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-CVE-2018-16850: SQL injection in pg_upgrade and pg_dump, via CREATE TRIGGER
-...  REFERENCING
-
-For more details, see the advisory:
-
-https://www.postgresql.org/about/news/1905/
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/postgresql/postgresql.hash | 8 ++++----
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-requests/python-requests.hash | 4 ++--
+ package/python-requests/python-requests.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index 40c128c221..28d4a988d2 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,7 +1,7 @@
--# From https://ftp.postgresql.org/pub/source/v11.0/postgresql-11.0.tar.bz2.md5
--md5 338ede84c0443db02ff6e8c4c8cbc5e9  postgresql-11.0.tar.bz2
--# From https://ftp.postgresql.org/pub/source/v11.0/postgresql-11.0.tar.bz2.sha256
--sha256 bf9bba03d0c3902c188af12e454b35343c4a9bf9e377ec2fe50132efb44ef36b  postgresql-11.0.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v11.1/postgresql-11.1.tar.bz2.md5
-+md5 5e45f6d5b859cc76b5d62f1e328e9711  postgresql-11.1.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v11.1/postgresql-11.1.tar.bz2.sha256
-+sha256 90815e812874831e9a4bf6e1136bf73bc2c5a0464ef142e2dfea40cda206db08  postgresql-11.1.tar.bz2
- 
- # License file, Locally calculated
- sha256	24cfc70cf16b3a23242c49ffce39510683bdd48cbedb8a46fe03976ee5f5c21e	COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 2754526684..c4ba0daa17 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
+index 3aa8e1359f..e3b77744af 100644
+--- a/package/python-requests/python-requests.hash
++++ b/package/python-requests/python-requests.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/requests/json
+-md5	cf034ab571854453719594120366f467  requests-2.20.0.tar.gz
+-sha256	99dcfdaaeb17caf6e526f32b6a7b780461512ab3f1d992187801694cba42770c  requests-2.20.0.tar.gz
++md5	2918817ea4688f4ea21cb4b11e353448  requests-2.20.1.tar.gz
++sha256	ea881206e59f41dbd0bd445437d792e43906703fff75ca8ff43ccdb11f33f263  requests-2.20.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256	be41abac2c40f8530307e8d172c590b476f4a488bc6a68f8de57b7cf64786687  LICENSE
+diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
+index 358835d816..0c327759b0 100644
+--- a/package/python-requests/python-requests.mk
++++ b/package/python-requests/python-requests.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--POSTGRESQL_VERSION = 11.0
-+POSTGRESQL_VERSION = 11.1
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
--- 
-2.11.0
+-PYTHON_REQUESTS_VERSION = 2.20.0
++PYTHON_REQUESTS_VERSION = 2.20.1
+ PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
+-PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/97/10/92d25b93e9c266c94b76a5548f020f3f1dd0eb40649cb1993532c0af8f4c
++PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/40/35/298c36d839547b50822985a2cf0611b3b978a5ab7a5af5562b8ebe3e1369
+ PYTHON_REQUESTS_SETUP_TYPE = setuptools
+ PYTHON_REQUESTS_LICENSE = Apache-2.0
+ PYTHON_REQUESTS_LICENSE_FILES = LICENSE
