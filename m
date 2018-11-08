@@ -1,316 +1,90 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu,  8 Nov 2018 23:41:00 +0100
-Subject: [Buildroot] [PATCH v2] iwd: new package
-Message-ID: <20181108224100.9462-1-ps.report@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 08 Nov 2018 23:58:10 +0100
+Subject: [Buildroot] [PATCH 1/3] fs: apply permissions late
+In-Reply-To: <4f9a31b0fb8f87ded9c788cb92d727b6763859ac.1540626349.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Sat, 27 Oct 2018 09:45:58 +0200")
+References: <cover.1540626349.git.yann.morin.1998@free.fr>
+ <4f9a31b0fb8f87ded9c788cb92d727b6763859ac.1540626349.git.yann.morin.1998@free.fr>
+Message-ID: <87bm6z89dp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Changes v1 -> v2:
-  - update patch 0003-Fix-__iwd_backtrace_init-availability-detection.patch
-  - fix iwd needs comment (missing depends on BR2_TOOLCHAIN_HAS_SYNC_4)
-  - moved GPL-3.0+ (client) to enable client section
-  - add DEVELOPERS entry
----
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- ...til.c-add-missing-ell-utf8.h-include.patch | 46 ++++++++++++++
- ...cap.c-add-missing-sys-stat.h-include.patch | 46 ++++++++++++++
- ...acktrace_init-availability-detection.patch | 62 +++++++++++++++++++
- package/iwd/Config.in                         | 14 +++++
- package/iwd/iwd.hash                          |  5 ++
- package/iwd/iwd.mk                            | 47 ++++++++++++++
- 8 files changed, 222 insertions(+)
- create mode 100644 package/iwd/0001-src-util.c-add-missing-ell-utf8.h-include.patch
- create mode 100644 package/iwd/0002-monitor-pcap.c-add-missing-sys-stat.h-include.patch
- create mode 100644 package/iwd/0003-Fix-__iwd_backtrace_init-availability-detection.patch
- create mode 100644 package/iwd/Config.in
- create mode 100644 package/iwd/iwd.hash
- create mode 100644 package/iwd/iwd.mk
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 53467da489..d2c553a2ca 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1660,6 +1660,7 @@ F:	package/ghostscript-fonts/
- F:	package/gstreamer1/gst1-interpipe/
- F:	package/gstreamer1/gst1-validate/
- F:	package/gstreamer1/gstreamer1-editing-services/
-+F:	package/iwd/
- F:	package/libevdev/
- F:	package/log4cplus/
- F:	package/postgresql/
-diff --git a/package/Config.in b/package/Config.in
-index b60e7700ad..2f2c0dc4e3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1866,6 +1866,7 @@ menu "Networking applications"
- 	source "package/iputils/Config.in"
- 	source "package/irssi/Config.in"
- 	source "package/iw/Config.in"
-+	source "package/iwd/Config.in"
- 	source "package/janus-gateway/Config.in"
- 	source "package/keepalived/Config.in"
- 	source "package/kismet/Config.in"
-diff --git a/package/iwd/0001-src-util.c-add-missing-ell-utf8.h-include.patch b/package/iwd/0001-src-util.c-add-missing-ell-utf8.h-include.patch
-new file mode 100644
-index 0000000000..549cd6fdd1
---- /dev/null
-+++ b/package/iwd/0001-src-util.c-add-missing-ell-utf8.h-include.patch
-@@ -0,0 +1,46 @@
-+From 174eb3088e78b75b4e488c023808c6f3bf7aae06 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Fri, 2 Nov 2018 14:19:12 +0100
-+Subject: [PATCH] src/util.c: add missing ell/utf8.h include
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fixes:
-+
-+  src/util.c: In function ?util_ssid_to_utf8?:
-+  src/util.c:57:16: warning: implicit declaration of function ?l_utf8_validate? [-Wimplicit-function-declaration]
-+    while (i && (!l_utf8_validate((const char *)start, i,
-+                  ^~~~~~~~~~~~~~~
-+  src/util.c: In function ?util_string_to_address?:
-+  src/util.c:128:8: warning: implicit declaration of function ?l_ascii_isxdigit? [-Wimplicit-function-declaration]
-+     if (!l_ascii_isxdigit(str[i]))
-+          ^~~~~~~~~~~~~~~~
-+[...]
-+  src/util.o: In function `util_string_to_address':
-+  util.c:(.text+0x21c): undefined reference to `l_ascii_isxdigit'
-+  util.c:(.text+0x228): undefined reference to `l_ascii_isxdigit'
-+  util.c:(.text+0x24c): undefined reference to `l_ascii_isxdigit'
-+  util.c:(.text+0x258): undefined reference to `l_ascii_isxdigit'
-+  collect2: error: ld returned 1 exit status
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ src/util.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/util.c b/src/util.c
-+index 7a08940..e12b622 100644
-+--- a/src/util.c
-++++ b/src/util.c
-+@@ -29,6 +29,7 @@
-+ #include <sys/uio.h>
-+ 
-+ #include <ell/string.h>
-++#include <ell/utf8.h>
-+ #include <ell/genl.h>
-+ #include <ell/util.h>
-+ #include <ell/log.h>
-+-- 
-+2.19.1
-+
-diff --git a/package/iwd/0002-monitor-pcap.c-add-missing-sys-stat.h-include.patch b/package/iwd/0002-monitor-pcap.c-add-missing-sys-stat.h-include.patch
-new file mode 100644
-index 0000000000..10875749c8
---- /dev/null
-+++ b/package/iwd/0002-monitor-pcap.c-add-missing-sys-stat.h-include.patch
-@@ -0,0 +1,46 @@
-+From 6e90d02b38d2fad19d396c27d3e6d89c8f0e703f Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Fri, 2 Nov 2018 14:29:53 +0100
-+Subject: [PATCH] monitor/pcap.c: add missing sys/stat.h include
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fixes:
-+
-+    CC       monitor/pcap.o
-+  monitor/pcap.c: In function ?pcap_create?:
-+  monitor/pcap.c:121:6: error: ?S_IRUSR? undeclared (first use in this function)
-+        S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-+        ^
-+  monitor/pcap.c:121:6: note: each undeclared identifier is reported only once for each function it appears in
-+  monitor/pcap.c:121:16: error: ?S_IWUSR? undeclared (first use in this function)
-+        S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-+                  ^
-+  monitor/pcap.c:121:26: error: ?S_IRGRP? undeclared (first use in this function)
-+        S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-+                            ^
-+  monitor/pcap.c:121:36: error: ?S_IROTH? undeclared (first use in this function)
-+        S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-+                                      ^
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ monitor/pcap.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/monitor/pcap.c b/monitor/pcap.c
-+index aae0956..64382dd 100644
-+--- a/monitor/pcap.c
-++++ b/monitor/pcap.c
-+@@ -28,6 +28,7 @@
-+ #include <fcntl.h>
-+ #include <unistd.h>
-+ #include <stdlib.h>
-++#include <sys/stat.h>
-+ #include <sys/uio.h>
-+ #include <ell/ell.h>
-+ 
-+-- 
-+2.19.1
-+
-diff --git a/package/iwd/0003-Fix-__iwd_backtrace_init-availability-detection.patch b/package/iwd/0003-Fix-__iwd_backtrace_init-availability-detection.patch
-new file mode 100644
-index 0000000000..9fa3ff24cc
---- /dev/null
-+++ b/package/iwd/0003-Fix-__iwd_backtrace_init-availability-detection.patch
-@@ -0,0 +1,62 @@
-+From 9bd1f13316c3db64548b4f194497b86b05c79a88 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Fri, 2 Nov 2018 14:38:37 +0100
-+Subject: [PATCH] Fix __iwd_backtrace_init() availability detection
-+
-+Check for HAVE_EXECINFO_H for all __iwd_backtrace_init usages (and
-+remove unused backtrace.h usage from plugins/ofono.c).
-+
-+Fixes:
-+
-+  src/main.o: In function `main':
-+  main.c:(.text.startup+0x798): undefined reference to `__iwd_backtrace_init'
-+  collect2: error: ld returned 1 exit status
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ plugins/ofono.c | 1 -
-+ src/backtrace.h | 2 +-
-+ src/main.c      | 2 +-
-+ 3 files changed, 2 insertions(+), 3 deletions(-)
-+
-+diff --git a/plugins/ofono.c b/plugins/ofono.c
-+index 8c019ce..077045f 100644
-+--- a/plugins/ofono.c
-++++ b/plugins/ofono.c
-+@@ -31,7 +31,6 @@
-+ 
-+ #include "src/dbus.h"
-+ #include "src/simauth.h"
-+-#include "src/backtrace.h"
-+ 
-+ /*
-+  * This plugin takes care of all the communication with ofono in order to
-+diff --git a/src/backtrace.h b/src/backtrace.h
-+index bfdc858..829ba02 100644
-+--- a/src/backtrace.h
-++++ b/src/backtrace.h
-+@@ -19,7 +19,7 @@
-+  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-+  *
-+  */
-+-#ifdef __GLIBC__
-++#ifdef HAVE_EXECINFO_H
-+ void __iwd_backtrace_init();
-+ void __iwd_backtrace_print(unsigned int offset);
-+ #endif
-+diff --git a/src/main.c b/src/main.c
-+index afb895e..02250df 100644
-+--- a/src/main.c
-++++ b/src/main.c
-+@@ -431,7 +431,7 @@ int main(int argc, char *argv[])
-+ 	if (debugopt)
-+ 		l_debug_enable(debugopt);
-+ 
-+-#ifdef __GLIBC__
-++#ifdef HAVE_EXECINFO_H
-+ 	__iwd_backtrace_init();
-+ #endif
-+ 
-+-- 
-+2.19.1
-+
-diff --git a/package/iwd/Config.in b/package/iwd/Config.in
-new file mode 100644
-index 0000000000..c790f3dba1
---- /dev/null
-+++ b/package/iwd/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_IWD
-+	bool "iwd"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # ell
-+	depends on !BR2_STATIC_LIBS # ell
-+	depends on BR2_USE_WCHAR # ell
-+	select BR2_PACKAGE_ELL
-+	help
-+	  iNet Wireless daemon (iwd)
-+
-+	  https://iwd.wiki.kernel.org/
-+
-+comment "iwd needs a toolchain w/ dynamic library, wchar"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # ell
-+	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
-diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
-new file mode 100644
-index 0000000000..32018531b2
---- /dev/null
-+++ b/package/iwd/iwd.hash
-@@ -0,0 +1,5 @@
-+# Locally computed
-+sha256 cb071b9e10688e7347bb3f2d6927c27c635614e9a2b1c5eb3ea6203ca2894c05 iwd-0.10.tar.gz
-+
-+# License files
-+sha256 ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5 COPYING
-diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
-new file mode 100644
-index 0000000000..82027e5e03
---- /dev/null
-+++ b/package/iwd/iwd.mk
-@@ -0,0 +1,47 @@
-+################################################################################
-+#
-+# iwd
-+#
-+################################################################################
-+
-+IWD_VERSION = 0.10
-+IWD_SITE = https://git.kernel.org/pub/scm/network/wireless/iwd.git
-+IWD_SITE_METHOD = git
-+IWD_LICENSE = LGPL-2.1+
-+IWD_LICENSE_FILES = COPYING
-+# sources from git, no configure script provided
-+IWD_AUTORECONF = YES
-+
-+IWD_CONF_OPTS = --enable-external-ell
-+IWD_DEPENDENCIES = ell
-+
-+# autoreconf requires an existing build-aux directory
-+define IWD_MKDIR_BUILD_AUX
-+	mkdir -p $(@D)/build-aux
-+endef
-+IWD_POST_PATCH_HOOKS += IWD_MKDIR_BUILD_AUX
-+
-+ifeq ($(BR2_PACKAGE_DBUS),y)
-+IWD_CONF_OPTS += --enable-dbus-policy
-+IWD_DEPENDENCIES += dbus
-+else
-+IWD_CONF_OPTS += --disable-dbus-policy
-+endif
-+
-+ifeq ($(BR2_PACKAGE_READLINE),y)
-+# iwd client depends on readline (GPL-3.0+)
-+IWD_LICENSE := $(IWD_LICENSE), GPL-3.0+ (client)
-+IWD_CONF_OPTS += --enable-client
-+IWD_DEPENDENCIES += readline
-+else
-+IWD_CONF_OPTS += --disable-client
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+IWD_CONF_OPTS += --enable-systemd-service
-+IWD_DEPENDENCIES += systemd
-+else
-+IWD_CONF_OPTS += --disable-systemd-service
-+endif
-+
-+$(eval $(autotools-package))
+ > The combination of fakeroot, tar, and capabilities is broken, because
+ > fakeroot currently badly handles capabilities, which are currently
+ > simply ignored.
+
+ > As described in #11216, asking tar to explicitly store and restore
+ > capabilities ends up with a failling build, when tar actually tries to
+ > restore the capabilities. Adding support for capabilities to fakeroot
+ > (by adding host-libcap as dependency) does not fix the problem.
+
+ > Capabilities are stored in the extended attribute security.capabilty.
+ > It turns out that tar does have special handling when extracting and
+ > restoring that extended attribute, and that fails miserably when running
+ > under fakeroot...
+
+Hmm, playing a bit around with tar here (1.29, Debian) it looks like it
+doesn't actually extract the security.capability xattrs when --xattrs is
+used unless --xattrs-include='*.*' is used:
+
+getcap /usr/bin/i3status
+/usr/bin/i3status = cap_net_admin+ep
+
+sudo tar -cvvvf foo.tar /usr/bin/i3status
+tar: Removing leading `/' from member names
+-rwxr-xr-x root/root     84888 2017-01-21 15:42 /usr/bin/i3status
+hexdump -C foo.tar | grep -A2 ecu
+
+No security.capability in the .tar
+
+sudo tar --xattrs -cvvvf foo.tar /usr/bin/i3status
+tar: Removing leading `/' from member names
+-rwxr-xr-x  root/root     84888 2017-01-21 15:42 /usr/bin/i3status
+hexdump -C foo.tar | grep -A2 ecu
+00000240  43 48 49 4c 59 2e 78 61  74 74 72 2e 73 65 63 75  |CHILY.xattr.secu|
+00000250  72 69 74 79 2e 63 61 70  61 62 69 6c 69 74 79 3d  |rity.capability=|
+00000260  01 00 00 02 00 10 00 00  00 00 00 00 00 00 00 00  |................|
+
+With --xattrs they are included but not listed in the verbose output:
+
+sudo tar --xattrs --xattrs-include='*.*' -cvvvf foo.tar /usr/bin/i3status
+tar: Removing leading `/' from member names
+-rwxr-xr-x* root/root     84888 2017-01-21 15:42 /usr/bin/i3status
+  x: 20 security.capability
+hexdump -C foo.tar | grep -A2 ecu
+00000240  43 48 49 4c 59 2e 78 61  74 74 72 2e 73 65 63 75  |CHILY.xattr.secu|
+00000250  72 69 74 79 2e 63 61 70  61 62 69 6c 69 74 79 3d  |rity.capability=|
+00000260  01 00 00 02 00 10 00 00  00 00 00 00 00 00 00 00  |................|
+
+Same .tar content but now also listed in the verbose output.
+
+
+For extraction:
+
+tar -xvvvf ../foo.tar && getcap usr/bin/i3status
+-rwxr-xr-x root/root     84888 2017-01-21 15:42 usr/bin/i3status
+
+No capability.
+
+tar --xattrs -xvvvf ../foo.tar && getcap usr/bin/i3status
+-rwxr-xr-x  root/root     84888 2017-01-21 15:42 usr/bin/i3status
+
+Still no capability.
+
+tar --xattrs --xattrs-include='*.*' -xvvvf ../foo.tar && getcap usr/bin/i3status
+-rwxr-xr-x* root/root     84888 2017-01-21 15:42 usr/bin/i3status
+  x: 20 security.capability
+usr/bin/i3status = cap_net_admin+ep
+
+Now it works.
+
+I don't see where we are passing --xattrs-include. Are we sure this is a
+fakeroot issue after all?
+
 -- 
-2.19.1
+Bye, Peter Korsgaard
