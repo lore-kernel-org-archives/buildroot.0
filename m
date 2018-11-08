@@ -1,8 +1,8 @@
 From: Christian Stewart <christian@paral.in>
-Date: Wed,  7 Nov 2018 16:45:11 -0800
-Subject: [Buildroot] [PATCH v7 1/1] docker-engine: split docker-{cli, engine},
+Date: Wed,  7 Nov 2018 19:24:58 -0800
+Subject: [Buildroot] [PATCH v8 1/1] docker-engine: split docker-{cli, engine},
  bump to v18.06.1-ce
-Message-ID: <20181108004511.23021-1-christian@paral.in>
+Message-ID: <20181108032458.1028-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -28,6 +28,10 @@ The CLI is no longer automatically included with the engine. Users will need to
 select BR2_PACKAGE_DOCKER_CLI to produce a both docker and dockerd target
 binaries.
 
+Docker CLI can be statically compiled. This enables usage of the system docker
+client binary to access the parent daemon API from within containers, where
+shared libraries are not available.
+
 Signed-off-by: Christian Stewart <christian@paral.in>
 
 ---
@@ -48,19 +52,45 @@ Changes since v5:
 Changes since v6:
 
  - Remove static docker client option, causes SIGILL on thumb2 arm
+
+Changes since v7:
+
+ - Re-introduce static compilation option for client by disabling cgo
+ - Without cgo, there are no shared-linked dependencies for the docker cli
 ---
+ Config.in.legacy                         |  9 +++++++
  package/Config.in                        |  1 +
- package/docker-cli/Config.in             | 15 ++++++++++++++
+ package/docker-cli/Config.in             | 25 +++++++++++++++++++
  package/docker-cli/docker-cli.hash       |  2 ++
- package/docker-cli/docker-cli.mk         | 25 ++++++++++++++++++++++++
- package/docker-engine/Config.in          |  6 ------
+ package/docker-cli/docker-cli.mk         | 31 ++++++++++++++++++++++++
+ package/docker-engine/Config.in          |  6 -----
  package/docker-engine/docker-engine.hash |  2 +-
- package/docker-engine/docker-engine.mk   | 25 +++++-------------------
- 7 files changed, 49 insertions(+), 27 deletions(-)
+ package/docker-engine/docker-engine.mk   | 25 ++++---------------
+ 8 files changed, 74 insertions(+), 27 deletions(-)
  create mode 100644 package/docker-cli/Config.in
  create mode 100644 package/docker-cli/docker-cli.hash
  create mode 100644 package/docker-cli/docker-cli.mk
 
+diff --git a/Config.in.legacy b/Config.in.legacy
+index c3df37ddd9..3ceefc98b1 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,15 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2018.11"
+ 
++config BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT
++	bool "docker-engine static client option renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_DOCKER_CLI_STATIC
++	help
++	  BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT has been renamed to
++	  BR2_PACKAGE_DOCKER_CLI_STATIC, following the package split of
++	  docker-engine and docker-cli.
++
+ config BR2_TARGET_XLOADER
+ 	bool "xloader has been removed"
+ 	select BR2_LEGACY
 diff --git a/package/Config.in b/package/Config.in
 index 712e360402..8ca88e7d28 100644
 --- a/package/Config.in
@@ -75,10 +105,10 @@ index 712e360402..8ca88e7d28 100644
  	source "package/docker-engine/Config.in"
 diff --git a/package/docker-cli/Config.in b/package/docker-cli/Config.in
 new file mode 100644
-index 0000000000..b1c4495e54
+index 0000000000..82c35c453d
 --- /dev/null
 +++ b/package/docker-cli/Config.in
-@@ -0,0 +1,15 @@
+@@ -0,0 +1,25 @@
 +config BR2_PACKAGE_DOCKER_CLI
 +	bool "docker-cli"
 +	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
@@ -89,6 +119,16 @@ index 0000000000..b1c4495e54
 +	  and run applications as lightweight containers.
 +
 +	  https://github.com/docker/cli
++
++if BR2_PACKAGE_DOCKER_CLI
++
++config BR2_PACKAGE_DOCKER_CLI_STATIC
++	bool "build static client"
++	depends on !BR2_STATIC_LIBS
++	help
++	  Build a static docker client.
++
++endif
 +
 +comment "docker-cli needs a toolchain w/ threads"
 +	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
@@ -104,10 +144,10 @@ index 0000000000..50a81792d0
 +sha256	47eda354afc199693aa338f5b2bb87e4511354c02561ddc6520a06d169921bdf	docker-cli-v18.06.1-ce.tar.gz
 diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
 new file mode 100644
-index 0000000000..3b02f0c111
+index 0000000000..46449fa058
 --- /dev/null
 +++ b/package/docker-cli/docker-cli.mk
-@@ -0,0 +1,25 @@
+@@ -0,0 +1,31 @@
 +###############################################################################
 +#
 +# docker-cli
@@ -123,12 +163,18 @@ index 0000000000..3b02f0c111
 +
 +DOCKER_CLI_DEPENDENCIES = host-go host-pkgconf
 +
++DOCKER_CLI_TAGS = cgo autogen
++DOCKER_CLI_BUILD_TARGETS = cmd/docker
++
 +DOCKER_CLI_LDFLAGS = \
 +	-X github.com/docker/cli/cli.GitCommit=$(DOCKER_CLI_VERSION) \
 +	-X github.com/docker/cli/cli.Version=$(DOCKER_CLI_VERSION)
 +
-+DOCKER_CLI_TAGS = cgo autogen
-+DOCKER_CLI_BUILD_TARGETS = cmd/docker
++ifeq ($(BR2_PACKAGE_DOCKER_CLI_STATIC),y)
++DOCKER_CLI_LDFLAGS += -extldflags '-static'
++DOCKER_CLI_TAGS += osusergo netgo
++DOCKER_CLI_GO_ENV = CGO_ENABLED=no
++endif
 +
 +DOCKER_CLI_INSTALL_BINS = $(notdir $(DOCKER_CLI_BUILD_TARGETS))
 +
