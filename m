@@ -1,262 +1,87 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 8 Nov 2018 22:20:51 +0100
-Subject: [Buildroot] [git commit] twolame: fix static linking with libmagic
-Message-ID: <20181108212411.AA1D381948@busybox.osuosl.org>
+Date: Thu, 08 Nov 2018 22:33:16 +0100
+Subject: [Buildroot] [PATCH] libcurl: Allow selection of TLS package
+ libcurl will use
+In-Reply-To: <20181108001209.14889-1-tpiepho@impinj.com> (Trent Piepho's
+ message of "Thu, 8 Nov 2018 00:12:23 +0000")
+References: <20181108001209.14889-1-tpiepho@impinj.com>
+Message-ID: <87ftwb8db7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=393b205de132658d2a7e68d8c9d45de6298813c7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Trent" == Trent Piepho <tpiepho@impinj.com> writes:
 
-libmagic (from file package) already provides the buffer_init function
-so to avoid a build failure for applications wanting to statically link
-with twolame and libmagic (for example sox), rename buffer_init into
-bitbuffer_init (also rename buffer_deinit into bitbuffer_deinit and
-buffer_sstell into bitbuffer_sstell for consistency)
+ > Instead of defaulting to OpenSSL, allow selection of package to use
+ > through a choice in libcurl's config.  The default will be to select the
+ > first enabled TLS provider in the same preference order as is used now,
+ > i.e. no change from current behavior.
 
-Fixes:
- - http://autobuild.buildroot.org/results/b3fc62e7f372fe595966e84091c11ccdb4cfa77c
+ > Some of the alternative libraries have advantages over OpenSSL in
+ > certain areas.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0001-Fix-static-linking-with-libmagic.patch    | 228 +++++++++++++++++++++
- 1 file changed, 228 insertions(+)
+ > For example, gnutls has vastly superior PKCS11 support.  One can use
+ > client TLS private keys by supplying a PKCS11 URI instead of a private
+ > key file name.  The TLS server cert trust store can be a PKCS11 URI,
+ > e.g. configure libcurl with a ca-bundle of "pkcs11:model=p11-kit-trust".
+ > Now server certs can be stored in a software and/or hardware HSM(s).
+ > This doesn't work with OpenSSL.
 
-diff --git a/package/twolame/0001-Fix-static-linking-with-libmagic.patch b/package/twolame/0001-Fix-static-linking-with-libmagic.patch
-new file mode 100644
-index 0000000000..094d7e997e
---- /dev/null
-+++ b/package/twolame/0001-Fix-static-linking-with-libmagic.patch
-@@ -0,0 +1,228 @@
-+From 484275de103b2214cb8ff3868a2562e2c61ce0e1 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 8 Nov 2018 20:57:08 +0100
-+Subject: [PATCH] Fix static linking with libmagic
-+
-+libmagic (from file package) already provides the buffer_init function
-+so to avoid a build failure for applications wanting to statically link
-+with twolame and libmagic (for example sox), rename buffer_init into
-+bitbuffer_init (also rename buffer_deinit into bitbuffer_deinit and
-+buffer_sstell into bitbuffer_sstell for consistency)
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/b3fc62e7f372fe595966e84091c11ccdb4cfa77c
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/njh/twolame/pull/81]
-+---
-+ libtwolame/bitbuffer.c |  4 ++--
-+ libtwolame/bitbuffer.h |  6 +++---
-+ libtwolame/energy.c    |  2 +-
-+ libtwolame/twolame.c   | 32 ++++++++++++++++----------------
-+ 4 files changed, 22 insertions(+), 22 deletions(-)
-+
-+diff --git a/libtwolame/bitbuffer.c b/libtwolame/bitbuffer.c
-+index 38a632b..5b2fc4b 100644
-+--- a/libtwolame/bitbuffer.c
-++++ b/libtwolame/bitbuffer.c
-+@@ -33,7 +33,7 @@
-+ 
-+ 
-+ /*create bit buffer*/
-+-bit_stream *buffer_init(unsigned char *buffer, int buffer_size)
-++bit_stream *bitbuffer_init(unsigned char *buffer, int buffer_size)
-+ {
-+     bit_stream *bs = (bit_stream *) TWOLAME_MALLOC(sizeof(bit_stream));
-+ 
-+@@ -49,7 +49,7 @@ bit_stream *buffer_init(unsigned char *buffer, int buffer_size)
-+ }
-+ 
-+ /* Dellocate bit buffer */
-+-void buffer_deinit(bit_stream ** bs)
-++void bitbuffer_deinit(bit_stream ** bs)
-+ {
-+ 
-+     if (bs == NULL || *bs == NULL)
-+diff --git a/libtwolame/bitbuffer.h b/libtwolame/bitbuffer.h
-+index 0201347..f377c8f 100644
-+--- a/libtwolame/bitbuffer.h
-++++ b/libtwolame/bitbuffer.h
-+@@ -39,11 +39,11 @@ typedef struct bit_stream_struc {
-+ } bit_stream;
-+ 
-+ 
-+-bit_stream *buffer_init(unsigned char *buffer, int buffer_size);
-+-void buffer_deinit(bit_stream ** bs);
-++bit_stream *bitbuffer_init(unsigned char *buffer, int buffer_size);
-++void bitbuffer_deinit(bit_stream ** bs);
-+ 
-+ /*return the current bit stream length (in bits)*/
-+-#define buffer_sstell(bs) (bs->totbit)
-++#define bitbuffer_sstell(bs) (bs->totbit)
-+ 
-+ #endif
-+ 
-+diff --git a/libtwolame/energy.c b/libtwolame/energy.c
-+index 219bd2c..312d8ae 100644
-+--- a/libtwolame/energy.c
-++++ b/libtwolame/energy.c
-+@@ -73,7 +73,7 @@ void do_energy_levels(twolame_options * glopts, bit_stream * bs)
-+     unsigned char rhibyte, rlobyte, lhibyte, llobyte;
-+ 
-+     // Get the position (in butes) of the end of the mpeg audio frame
-+-    int frameEnd = buffer_sstell(bs) / 8;
-++    int frameEnd = bitbuffer_sstell(bs) / 8;
-+ 
-+ 
-+     // find the maximum in the left and right channels
-+diff --git a/libtwolame/twolame.c b/libtwolame/twolame.c
-+index fa4bcc0..d3b8450 100644
-+--- a/libtwolame/twolame.c
-++++ b/libtwolame/twolame.c
-+@@ -442,7 +442,7 @@ static int encode_frame(twolame_options * glopts, bit_stream * bs)
-+     glopts->num_crc_bits = 0;
-+ 
-+     // Store the number of bits initially in the bit buffer
-+-    initial_bits = buffer_sstell(bs);
-++    initial_bits = bitbuffer_sstell(bs);
-+ 
-+     adb = available_bits(glopts);
-+ 
-+@@ -580,7 +580,7 @@ static int encode_frame(twolame_options * glopts, bit_stream * bs)
-+ 
-+ 
-+     // Calulate the number of bits in this frame
-+-    frameBits = buffer_sstell(bs) - initial_bits;
-++    frameBits = bitbuffer_sstell(bs) - initial_bits;
-+     if (frameBits % 8) {        /* a program failure */
-+         fprintf(stderr, "Sent %ld bits = %ld slots plus %ld\n", frameBits, frameBits / 8,
-+                 frameBits % 8);
-+@@ -630,7 +630,7 @@ int twolame_encode_buffer(twolame_options * glopts,
-+ 
-+     // now would be a great time to validate the size of the buffer.
-+     // samples/1152 * sizeof(frame) < mp2buffer_size 
-+-    mybs = buffer_init(mp2buffer, mp2buffer_size);
-++    mybs = bitbuffer_init(mp2buffer, mp2buffer_size);
-+ 
-+ 
-+     // Use up all the samples in in_buffer
-+@@ -658,7 +658,7 @@ int twolame_encode_buffer(twolame_options * glopts,
-+         if (glopts->samples_in_buffer >= TWOLAME_SAMPLES_PER_FRAME) {
-+             int bytes = encode_frame(glopts, mybs);
-+             if (bytes <= 0) {
-+-                buffer_deinit(&mybs);
-++                bitbuffer_deinit(&mybs);
-+                 return bytes;
-+             }
-+             mp2_size += bytes;
-+@@ -667,7 +667,7 @@ int twolame_encode_buffer(twolame_options * glopts,
-+     }
-+ 
-+     // free up the bit stream buffer structure
-+-    buffer_deinit(&mybs);
-++    bitbuffer_deinit(&mybs);
-+ 
-+     return (mp2_size);
-+ }
-+@@ -687,7 +687,7 @@ int twolame_encode_buffer_interleaved(twolame_options * glopts,
-+ 
-+     // now would be a great time to validate the size of the buffer.
-+     // samples/1152 * sizeof(frame) < mp2buffer_size 
-+-    mybs = buffer_init(mp2buffer, mp2buffer_size);
-++    mybs = bitbuffer_init(mp2buffer, mp2buffer_size);
-+ 
-+     // Use up all the samples in in_buffer
-+     while (num_samples) {
-+@@ -714,7 +714,7 @@ int twolame_encode_buffer_interleaved(twolame_options * glopts,
-+         if (glopts->samples_in_buffer >= TWOLAME_SAMPLES_PER_FRAME) {
-+             int bytes = encode_frame(glopts, mybs);
-+             if (bytes <= 0) {
-+-                buffer_deinit(&mybs);
-++                bitbuffer_deinit(&mybs);
-+                 return bytes;
-+             }
-+             mp2_size += bytes;
-+@@ -723,7 +723,7 @@ int twolame_encode_buffer_interleaved(twolame_options * glopts,
-+     }
-+ 
-+     // free up the bit stream buffer structure
-+-    buffer_deinit(&mybs);
-++    bitbuffer_deinit(&mybs);
-+ 
-+ 
-+     return (mp2_size);
-+@@ -771,7 +771,7 @@ int twolame_encode_buffer_float32(twolame_options * glopts,
-+ 
-+     // now would be a great time to validate the size of the buffer.
-+     // samples/1152 * sizeof(frame) < mp2buffer_size 
-+-    mybs = buffer_init(mp2buffer, mp2buffer_size);
-++    mybs = bitbuffer_init(mp2buffer, mp2buffer_size);
-+ 
-+ 
-+     // Use up all the samples in in_buffer
-+@@ -800,7 +800,7 @@ int twolame_encode_buffer_float32(twolame_options * glopts,
-+         if (glopts->samples_in_buffer >= TWOLAME_SAMPLES_PER_FRAME) {
-+             int bytes = encode_frame(glopts, mybs);
-+             if (bytes <= 0) {
-+-                buffer_deinit(&mybs);
-++                bitbuffer_deinit(&mybs);
-+                 return bytes;
-+             }
-+             mp2_size += bytes;
-+@@ -809,7 +809,7 @@ int twolame_encode_buffer_float32(twolame_options * glopts,
-+     }
-+ 
-+     // free up the bit stream buffer structure
-+-    buffer_deinit(&mybs);
-++    bitbuffer_deinit(&mybs);
-+ 
-+     return (mp2_size);
-+ }
-+@@ -829,7 +829,7 @@ int twolame_encode_buffer_float32_interleaved(twolame_options * glopts,
-+ 
-+     // now would be a great time to validate the size of the buffer.
-+     // samples/1152 * sizeof(frame) < mp2buffer_size 
-+-    mybs = buffer_init(mp2buffer, mp2buffer_size);
-++    mybs = bitbuffer_init(mp2buffer, mp2buffer_size);
-+ 
-+     // Use up all the samples in in_buffer
-+     while (num_samples) {
-+@@ -857,7 +857,7 @@ int twolame_encode_buffer_float32_interleaved(twolame_options * glopts,
-+         if (glopts->samples_in_buffer >= TWOLAME_SAMPLES_PER_FRAME) {
-+             int bytes = encode_frame(glopts, mybs);
-+             if (bytes <= 0) {
-+-                buffer_deinit(&mybs);
-++                bitbuffer_deinit(&mybs);
-+                 return bytes;
-+             }
-+             mp2_size += bytes;
-+@@ -866,7 +866,7 @@ int twolame_encode_buffer_float32_interleaved(twolame_options * glopts,
-+     }
-+ 
-+     // free up the bit stream buffer structure
-+-    buffer_deinit(&mybs);
-++    bitbuffer_deinit(&mybs);
-+ 
-+ 
-+     return (mp2_size);
-+@@ -885,7 +885,7 @@ int twolame_encode_flush(twolame_options * glopts, unsigned char *mp2buffer, int
-+         return 0;
-+     }
-+     // Create bit stream structure
-+-    mybs = buffer_init(mp2buffer, mp2buffer_size);
-++    mybs = bitbuffer_init(mp2buffer, mp2buffer_size);
-+ 
-+     // Pad out the PCM buffers with 0 and encode the frame
-+     for (i = glopts->samples_in_buffer; i < TWOLAME_SAMPLES_PER_FRAME; i++) {
-+@@ -897,7 +897,7 @@ int twolame_encode_flush(twolame_options * glopts, unsigned char *mp2buffer, int
-+     glopts->samples_in_buffer = 0;
-+ 
-+     // free up the bit stream buffer structure
-+-    buffer_deinit(&mybs);
-++    bitbuffer_deinit(&mybs);
-+ 
-+     return mp2_size;
-+ }
-+-- 
-+2.17.1
-+
+ > However, some software only supports OpenSSL for TLS or other crypto
+ > functions.  So it might be necessary to enable OpenSSL for that reason.
+
+Ok, nice description.
+
+ > Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+ > ---
+ >  package/libcurl/Config.in  | 28 ++++++++++++++++++++++++++++
+ >  package/libcurl/libcurl.mk | 15 ++++++++-------
+ >  2 files changed, 36 insertions(+), 7 deletions(-)
+
+ > diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
+ > index 21c2ee2b7f..0b2334beb9 100644
+ > --- a/package/libcurl/Config.in
+ > +++ b/package/libcurl/Config.in
+ > @@ -19,4 +19,32 @@ config BR2_PACKAGE_LIBCURL_VERBOSE
+ >  	help
+ >  	  Enable verbose text strings
+ 
+ > +choice
+ > +	prompt "SSL/TLS library to use"
+ > +	default BR2_PACKAGE_LIBCURL_OPENSSL if BR2_PACKAGE_OPENSSL
+ > +	default BR2_PACKAGE_LIBCURL_GNUTLS if BR2_PACKAGE_GNUTLS
+ > +	default BR2_PACKAGE_LIBCURL_LIBNSS if BR2_PACKAGE_LIBNSS
+ > +	default BR2_PACKAGE_LIBCURL_MBEDTLS if BR2_PACKAGE_MBEDTLS
+
+kconfig defaults to the first available option, so these default .. if
+.. can be removed.
+
+> +
+ > +config BR2_PACKAGE_LIBCURL_OPENSSL
+ > +	bool "OpenSSL"
+ > +	depends on BR2_PACKAGE_OPENSSL
+ > +
+ > +config BR2_PACKAGE_LIBCURL_GNUTLS
+ > +	bool "GnuTLS"
+ > +	depends on BR2_PACKAGE_GNUTLS
+ > +
+ > +config BR2_PACKAGE_LIBCURL_LIBNSS
+ > +	bool "NSS"
+ > +	depends on BR2_PACKAGE_LIBNSS
+ > +
+ > +config BR2_PACKAGE_LIBCURL_MBEDTLS
+ > +	bool "mbed TLS"
+ > +	depends on BR2_PACKAGE_MBEDTLS
+ > +
+ > +config BR2_PACKAGE_LIBCURL_NOSSL
+ > +	bool "No SSL/TLS support"
+
+Is there really a use case for building curl without TLS support if one
+or more of the libraries are available? If not, then I would simply make
+the choice depend on openssl || gnutls || libnss || mbedtls and drop
+this nossl option.
+
+-- 
+Bye, Peter Korsgaard
