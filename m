@@ -1,55 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Nov 2018 22:41:53 +0100
-Subject: [Buildroot] [git commit] support/testing/tests/fs/test_f2fs: fix
- flake8 warning
-Message-ID: <20181108213927.17B2B81E38@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu,  8 Nov 2018 22:49:32 +0100
+Subject: [Buildroot] [PATCH v1] valgrind: disable for mips64r6/mips64elr6
+Message-ID: <20181108214932.460-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bff6b61adf36e7b96f0d775f94d963789f57c3a6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes [1]:
 
-This commit fixes the following flake8 warnings:
+  /tmp/ccBAUqbI.s: Assembler messages:
+  /tmp/ccBAUqbI.s:622: Error: opcode not supported on this processor: mips64r6 (mips64r6) `movn $2,$4,$7'
+  /tmp/ccBAUqbI.s:2607: Error: opcode not supported on this processor: mips64r6 (mips64r6) `movn $2,$4,$7'
 
-support/testing/tests/fs/test_f2fs.py:6:1: E302 expected 2 blank lines, found 1
-support/testing/tests/fs/test_f2fs.py:12:1: E302 expected 2 blank lines, found 1
-support/testing/tests/fs/test_f2fs.py:38:23: E225 missing whitespace around operator
+[1] http://autobuild.buildroot.net/results/dc52088222e9fbedcebffc1c39be6d2fecfffe5d
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- support/testing/tests/fs/test_f2fs.py | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/valgrind/Config.in | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/fs/test_f2fs.py b/support/testing/tests/fs/test_f2fs.py
-index 9f7c393cdc..819c619a36 100644
---- a/support/testing/tests/fs/test_f2fs.py
-+++ b/support/testing/tests/fs/test_f2fs.py
-@@ -3,12 +3,14 @@ import subprocess
- 
- import infra.basetest
- 
-+
- def dumpf2fs_getprop(out, prop):
-     for line in out:
-         fields = line.split(" = ")
-         if fields[0] == prop:
-             return fields[1].strip()
- 
-+
- class TestF2FS(infra.basetest.BRTest):
-     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-         """
-@@ -35,8 +37,8 @@ class TestF2FS(infra.basetest.BRTest):
-         self.assertEqual(prop, "262144 (128 MB)")
- 
-         kernel = os.path.join(self.builddir, "images", "zImage")
--        kernel_cmdline=["root=/dev/mmcblk0", "rootfstype=f2fs",
--                        "console=ttyAMA0"]
-+        kernel_cmdline = ["root=/dev/mmcblk0", "rootfstype=f2fs",
-+                          "console=ttyAMA0"]
-         dtb = infra.download(self.downloaddir, "vexpress-v2p-ca9.dtb")
-         options = ["-M", "vexpress-a9", "-dtb", dtb,
-                    "-drive", "file={},if=sd,format=raw".format(img)]
+diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
+index 56e4af21fa..8fe7080cd7 100644
+--- a/package/valgrind/Config.in
++++ b/package/valgrind/Config.in
+@@ -2,7 +2,10 @@ config BR2_PACKAGE_VALGRIND_ARCH_SUPPORTS
+ 	bool
+ 	default y if BR2_aarch64
+ 	default y if BR2_ARM_CPU_ARMV7A
+-	default y if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
++	default y if BR2_mips || BR2_mipsel
++	# MIPS64 R6 is unsupported
++	default y if BR2_mips64 && !BR2_mips_64r6
++	default y if BR2_mips64el && !BR2_mips_64r6
+ 	default y if BR2_i386 || BR2_x86_64
+ 	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
+ 	depends on !BR2_MIPS_SOFT_FLOAT
+-- 
+2.19.1
