@@ -1,49 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Nov 2018 21:17:49 +0100
-Subject: [Buildroot] [git commit] fs/f2fs: simplify overprovision option
- handling
-Message-ID: <20181108202325.0B13D817EA@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu,  8 Nov 2018 21:30:44 +0100
+Subject: [Buildroot] [PATCH 1/1] wireshark: disable guides
+Message-ID: <20181108203044.32715-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3946f74b00f96eb0e178f73a25d50d75c8a03e9e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+--disable-guides has been added since version 2.5.0:
+https://github.com/wireshark/wireshark/commit/aa04d2355effb1cf611831b0a260cf1aff199b9a
 
-Setting overprovision to 0 and omitting this option has exactly
-the same effect.
+Fixes:
+ - http://autobuild.buildroot.org/results/5ae6d46573942713687f4e659b3eaf0b768ebc71
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- fs/f2fs/f2fs.mk | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ package/wireshark/wireshark.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/f2fs/f2fs.mk b/fs/f2fs/f2fs.mk
-index d4b8310ba3..f35bb60ad0 100644
---- a/fs/f2fs/f2fs.mk
-+++ b/fs/f2fs/f2fs.mk
-@@ -16,10 +16,6 @@ F2FS_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_F2FS_LABEL))
- F2FS_COLD_FILES = $(call qstrip,$(BR2_TARGET_ROOTFS_F2FS_COLD_FILES))
- F2FS_HOT_FILES = $(call qstrip,$(BR2_TARGET_ROOTFS_F2FS_HOT_FILES))
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 2e41c3d652..6be0016af7 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -15,6 +15,7 @@ WIRESHARK_CONF_ENV = \
+ 	PCAP_CONFIG=$(STAGING_DIR)/usr/bin/pcap-config
  
--ifneq ($(BR2_TARGET_ROOTFS_F2FS_OVERPROVISION),0)
--F2FS_OVERPROVISION = $(BR2_TARGET_ROOTFS_F2FS_OVERPROVISION)
--endif
--
- ifeq ($(BR2_TARGET_ROOTFS_F2FS_DISCARD),y)
- F2FS_DISCARD = 1
- else
-@@ -32,9 +28,9 @@ F2FS_OPTS = \
- 	-f \
- 	-l "$(F2FS_LABEL)" \
- 	-t $(F2FS_DISCARD) \
-+	-o $(BR2_TARGET_ROOTFS_F2FS_OVERPROVISION) \
- 	$(if $(F2FS_COLD_FILES),-e "$(F2FS_COLD_FILES)") \
- 	$(if $(F2FS_HOT_FILES),-E "$(F2FS_HOT_FILES)") \
--	$(if $(F2FS_OVERPROVISION),-o $(F2FS_OVERPROVISION)) \
- 	$(if $(F2FS_FEATURES),-O "$(F2FS_FEATURES)")
- 
- ROOTFS_F2FS_DEPENDENCIES = host-f2fs-tools
+ WIRESHARK_CONF_OPTS = \
++	--disable-guides \
+ 	--enable-static=no \
+ 	--with-libsmi=no \
+ 	--with-pcap=$(STAGING_DIR)/usr
+-- 
+2.17.1
