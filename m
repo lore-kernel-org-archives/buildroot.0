@@ -1,111 +1,107 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Thu, 8 Nov 2018 22:25:31 +0000
-Subject: [Buildroot] [PATCH v2] libcurl: Allow selection of TLS package
- libcurl will use
-Message-ID: <20181108222517.20629-1-tpiepho@impinj.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri,  9 Nov 2018 00:08:14 +0100
+Subject: [Buildroot] [PATCH v1] valgrind: fix mips64 compile
+Message-ID: <20181108230814.4773-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Instead of defaulting to OpenSSL, allow selection of package to use
-through a choice in libcurl's config.  The default will be to select the
-first enabled TLS provider in the same preference order as is used now,
-i.e. no change from current behavior.
+Disable gcc march mips64r2 detection (use compile flags already
+set by buildroot only), avoids double setting like '-march=mips64
+... -march=mips64r2 -mabi=64'.
 
-Some of the alternative libraries have advantages over OpenSSL in
-certain areas.
+Fixes [1]:
 
-For example, gnutls has vastly superior PKCS11 support.  One can use
-client TLS private keys by supplying a PKCS11 URI instead of a private
-key file name.  The TLS server cert trust store can be a PKCS11 URI,
-e.g. configure libcurl with a ca-bundle of "pkcs11:model=p11-kit-trust". 
-Now server certs can be stored in a software and/or hardware HSM(s). 
-This doesn't work with OpenSSL.
+  error: '-mips64r2' conflicts with the other architecture options, which specify a mips64 processor
 
-However, some software only supports OpenSSL for TLS or other crypto
-functions.  So it might be necessary to enable OpenSSL for that reason.
+[1] http://autobuild.buildroot.net/results/34f6e2352f1559f98c724fe5394db0035b42ddb1
 
-Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
-Changes since v1:
-  Removed unneeded defaults.
-  Removed no TLS choice, replaced with comment
+ ...disable-gcc-march-mips64r2-detection.patch | 58 +++++++++++++++++++
+ package/valgrind/valgrind.mk                  |  3 +
+ 2 files changed, 61 insertions(+)
+ create mode 100644 package/valgrind/0003-configure.ac-disable-gcc-march-mips64r2-detection.patch
 
- package/libcurl/Config.in  | 25 +++++++++++++++++++++++++
- package/libcurl/libcurl.mk | 15 ++++++++-------
- 2 files changed, 33 insertions(+), 7 deletions(-)
-
-diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
-index 21c2ee2b7f..6309e5bfc0 100644
---- a/package/libcurl/Config.in
-+++ b/package/libcurl/Config.in
-@@ -19,4 +19,29 @@ config BR2_PACKAGE_LIBCURL_VERBOSE
- 	help
- 	  Enable verbose text strings
+diff --git a/package/valgrind/0003-configure.ac-disable-gcc-march-mips64r2-detection.patch b/package/valgrind/0003-configure.ac-disable-gcc-march-mips64r2-detection.patch
+new file mode 100644
+index 0000000000..75874fe7fd
+--- /dev/null
++++ b/package/valgrind/0003-configure.ac-disable-gcc-march-mips64r2-detection.patch
+@@ -0,0 +1,58 @@
++From a4584ead274388b91b05b94bad2452a5f0ad3530 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Thu, 8 Nov 2018 23:55:30 +0100
++Subject: [PATCH] configure.ac: disable gcc march mips64r2 detection
++
++Disable gcc march mips64r2 detection, compile flags already
++set by buildroot, fixes [1]:
++
++  error: '-mips64r2' conflicts with the other architecture options, which specify a mips64 processor
++
++[1] http://autobuild.buildroot.net/results/34f6e2352f1559f98c724fe5394db0035b42ddb1
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ configure.ac | 24 ++++++++++++------------
++ 1 file changed, 12 insertions(+), 12 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index c18ae5f2a..70bfe1bb6 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1769,21 +1769,21 @@ case "${host_cpu}" in
++ 
++ 
++         # does this compiler support -march=mips64r2 (mips64r2 default) ?
++-        AC_MSG_CHECKING([if gcc accepts -march=mips64r2 -mabi=64])
+++        #AC_MSG_CHECKING([if gcc accepts -march=mips64r2 -mabi=64])
++ 
++-        safe_CFLAGS=$CFLAGS
++-        CFLAGS="$CFLAGS -march=mips64r2 -mabi=64 -Werror"
+++        #safe_CFLAGS=$CFLAGS
+++        #CFLAGS="$CFLAGS -march=mips64r2 -mabi=64 -Werror"
++ 
++-        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[
++-          return 0;
++-        ]])], [
++-        FLAG_M64="-march=mips64r2 -mabi=64"
++-        AC_MSG_RESULT([yes])
++-        ], [
+++        #AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[
+++        #  return 0;
+++        #]])], [
+++        #FLAG_M64="-march=mips64r2 -mabi=64"
+++        #AC_MSG_RESULT([yes])
+++        #], [
++         FLAG_M64=""
++-        AC_MSG_RESULT([no])
++-        ])
++-        CFLAGS=$safe_CFLAGS
+++        #AC_MSG_RESULT([no])
+++        #])
+++        #CFLAGS=$safe_CFLAGS
++ 
++         AC_SUBST(FLAG_M64)
++         ;;
++-- 
++2.19.1
++
+diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+index 459de4907e..67b2854f86 100644
+--- a/package/valgrind/valgrind.mk
++++ b/package/valgrind/valgrind.mk
+@@ -13,6 +13,9 @@ VALGRIND_CONF_OPTS = \
+ 	--disable-ubsan \
+ 	--without-mpicc
+ VALGRIND_INSTALL_STAGING = YES
++# Patch 0001-configure.ac-disable-gcc-march-mips64r2-detection.patch
++# touches configure.ac
++VALGRIND_AUTORECONF = YES
  
-+choice
-+	prompt "SSL/TLS library to use"
-+
-+config BR2_PACKAGE_LIBCURL_OPENSSL
-+	bool "OpenSSL"
-+	depends on BR2_PACKAGE_OPENSSL
-+
-+config BR2_PACKAGE_LIBCURL_GNUTLS
-+	bool "GnuTLS"
-+	depends on BR2_PACKAGE_GNUTLS
-+
-+config BR2_PACKAGE_LIBCURL_LIBNSS
-+	bool "NSS"
-+	depends on BR2_PACKAGE_LIBNSS
-+
-+config BR2_PACKAGE_LIBCURL_MBEDTLS
-+	bool "mbed TLS"
-+	depends on BR2_PACKAGE_MBEDTLS
-+
-+endchoice
-+
-+comment "A TLS library is needed for SSL/TLS support"
-+       depends on !BR2_PACKAGE_OPENSSL && !BR2_PACKAGE_GNUTLS && \
-+                  !BR2_PACKAGE_LIBNSS && !BR2_PACKAGE_MBEDTLS
-+
- endif
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index c3da8aa3e5..ac368fbb53 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -35,7 +35,7 @@ endif
- 
- LIBCURL_CONFIG_SCRIPTS = curl-config
- 
--ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+ifeq ($(BR2_PACKAGE_LIBCURL_OPENSSL),y)
- LIBCURL_DEPENDENCIES += openssl
- # configure adds the cross openssl dir to LD_LIBRARY_PATH which screws up
- # native stuff during the rest of configure when target == host.
-@@ -44,15 +44,16 @@ LIBCURL_DEPENDENCIES += openssl
- LIBCURL_CONF_ENV += LD_LIBRARY_PATH=$(if $(LD_LIBRARY_PATH),$(LD_LIBRARY_PATH):)/lib:/usr/lib
- LIBCURL_CONF_OPTS += --with-ssl=$(STAGING_DIR)/usr \
- 	--with-ca-path=/etc/ssl/certs
--else ifeq ($(BR2_PACKAGE_GNUTLS),y)
--LIBCURL_CONF_OPTS += --with-gnutls=$(STAGING_DIR)/usr
-+else ifeq ($(BR2_PACKAGE_LIBCURL_GNUTLS),y)
-+LIBCURL_CONF_OPTS += --with-gnutls=$(STAGING_DIR)/usr --without-ssl
- LIBCURL_DEPENDENCIES += gnutls
--else ifeq ($(BR2_PACKAGE_LIBNSS),y)
--LIBCURL_CONF_OPTS += --with-nss=$(STAGING_DIR)/usr
-+else ifeq ($(BR2_PACKAGE_LIBCURL_LIBNSS),y)
-+LIBCURL_CONF_OPTS += --with-nss=$(STAGING_DIR)/usr --without-ssl --without-gnutls
- LIBCURL_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) `$(PKG_CONFIG_HOST_BINARY) nspr nss --cflags`"
- LIBCURL_DEPENDENCIES += libnss
--else ifeq ($(BR2_PACKAGE_MBEDTLS),y)
--LIBCURL_CONF_OPTS += --with-mbedtls=$(STAGING_DIR)/usr
-+else ifeq ($(BR2_PACKAGE_LIBCURL_MBEDTLS),y)
-+LIBCURL_CONF_OPTS += --with-mbedtls=$(STAGING_DIR)/usr \
-+	--without-ssl --without-gnutls --without-nss
- LIBCURL_DEPENDENCIES += mbedtls
- else
- LIBCURL_CONF_OPTS += --without-ssl --without-gnutls \
+ # Valgrind must be compiled with no stack protection, so forcefully
+ # pass -fno-stack-protector to override what Buildroot may have in
 -- 
-2.14.4
+2.19.1
