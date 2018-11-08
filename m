@@ -1,36 +1,43 @@
 From: Andreas Naumann <anaumann@ultratronik.de>
-Date: Thu,  8 Nov 2018 14:04:15 +0100
-Subject: [Buildroot] [PATCH 0/2] Preparation for per-package host/target
-Message-ID: <20181108130417.1277-1-anaumann@ultratronik.de>
+Date: Thu,  8 Nov 2018 14:04:16 +0100
+Subject: [Buildroot] [PATCH 1/2] fs: Add common rootfs dependencies to
+ PACKAGES
+In-Reply-To: <20181108130417.1277-1-anaumann@ultratronik.de>
+References: <20181108130417.1277-1-anaumann@ultratronik.de>
+Message-ID: <20181108130417.1277-2-anaumann@ultratronik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, all,
+Up to now only the filesystem-specific dependencies are explicitely
+added to PACKAGES. The common dependencies, e.g. host-fakeroot, were
+built indirectly via the rootfs-common/rootfs-tar dependency.
 
-maybe my post from last week was too involved so here's a more focused version.
+However, when switching to per-package host/target, we need to assemble
+the global host from the per-package folders. In order to do this by
+looping through PACKAGES, we need to directly add the common rootfs
+dependencies.
+That way then the filesystem recipes may continue to use these tools
+from the global host directory.
 
-I have played with your per-package patches and found them very interesting
-because the possible parallelization speeds up the build considerably.
+Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+---
+ fs/common.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-For a start, here are two patches I needed in order to solve some build failures.
-I'd be happy for feedback as well as some idea how further development on this
-feature is planned.
-
-
-best regards,
-Andreas
-
-
-Andreas Naumann (2):
-  fs: Add common rootfs dependencies to PACKAGES
-  linux: Make dtc install step more reliable
-
- fs/common.mk   | 1 +
- linux/linux.mk | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
-
+diff --git a/fs/common.mk b/fs/common.mk
+index 2a5a202a89..a4a178c88a 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -65,6 +65,7 @@ ROOTFS_COMMON_DEPENDENCIES = \
+ 	host-fakeroot host-makedevs \
+ 	$(BR2_TAR_HOST_DEPENDENCY) \
+ 	$(if $(PACKAGES_USERS)$(ROOTFS_USERS_TABLES),host-mkpasswd)
++PACKAGES += $(ROOTFS_COMMON_DEPENDENCIES)
+ 
+ $(ROOTFS_COMMON_TAR): ROOTFS=COMMON
+ $(ROOTFS_COMMON_TAR): FAKEROOT_SCRIPT=$(FS_DIR)/fakeroot.fs
 -- 
 2.19.1
