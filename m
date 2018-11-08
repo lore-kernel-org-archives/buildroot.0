@@ -1,37 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Nov 2018 21:00:25 +0100
-Subject: [Buildroot] [PATCH] postgresql: security bump to version 11.1
-In-Reply-To: <20181108195442.31413-1-peter@korsgaard.com>
-References: <20181108195442.31413-1-peter@korsgaard.com>
-Message-ID: <20181108210025.5ec4d750@windsurf.home>
+Date: Thu, 8 Nov 2018 21:00:49 +0100
+Subject: [Buildroot] [git commit] qt: disable static build for qt-zlib
+Message-ID: <20181108195838.AB04D8172D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=112667fd120d136bcacef7e4a78f16a4ac92178a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  8 Nov 2018 20:54:42 +0100, Peter Korsgaard wrote:
-> Fixes the following security issue:
-> 
-> CVE-2018-16850: SQL injection in pg_upgrade and pg_dump, via CREATE TRIGGER
-> ...  REFERENCING
-> 
-> For more details, see the advisory:
-> 
-> https://www.postgresql.org/about/news/1905/
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/postgresql/postgresql.hash | 8 ++++----
->  package/postgresql/postgresql.mk   | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
+Static build of applications using qt-zlib and zlib (such as mpv) will
+fail because zlib and qt-zlib defines the same functions (inflateReset,
+inflatePrime ...)
 
-Applied to master, thanks.
+So add a dependency on !BR2_STATIC_LIBS on BR2_PACKAGE_QT_QTZLIB
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+ - http://autobuild.buildroot.org/results/0be6e359d46a8a701006305c32b514687854b035
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qt/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index 0ecfafada5..a1218ecf39 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -309,9 +309,13 @@ choice
+ 
+ config BR2_PACKAGE_QT_QTZLIB
+ 	bool "Qt zlib"
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  Use the zlib bundled with Qt.
+ 
++comment "Qt zlib needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
++
+ config BR2_PACKAGE_QT_SYSTEMZLIB
+ 	bool "System zlib"
+ 	select BR2_PACKAGE_ZLIB
