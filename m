@@ -1,145 +1,110 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 8 Nov 2018 00:43:11 +0100
-Subject: [Buildroot] [PATCH 1/3] fs: apply permissions late
-In-Reply-To: <4f9a31b0fb8f87ded9c788cb92d727b6763859ac.1540626349.git.yann.morin.1998@free.fr>
-References: <cover.1540626349.git.yann.morin.1998@free.fr>
- <4f9a31b0fb8f87ded9c788cb92d727b6763859ac.1540626349.git.yann.morin.1998@free.fr>
-Message-ID: <762db85d-d4a9-95b5-8280-d46dfd5f2a72@mind.be>
+From: Trent Piepho <tpiepho@impinj.com>
+Date: Thu, 8 Nov 2018 00:12:23 +0000
+Subject: [Buildroot] [PATCH] libcurl: Allow selection of TLS package libcurl
+ will use
+Message-ID: <20181108001209.14889-1-tpiepho@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Instead of defaulting to OpenSSL, allow selection of package to use
+through a choice in libcurl's config.  The default will be to select the
+first enabled TLS provider in the same preference order as is used now,
+i.e. no change from current behavior.
 
+Some of the alternative libraries have advantages over OpenSSL in
+certain areas.
 
-On 27/10/18 09:45, Yann E. MORIN wrote:
-> The combination of fakeroot, tar, and capabilities is broken, because
-> fakeroot currently badly handles capabilities, which are currently
-> simply ignored.
+For example, gnutls has vastly superior PKCS11 support.  One can use
+client TLS private keys by supplying a PKCS11 URI instead of a private
+key file name.  The TLS server cert trust store can be a PKCS11 URI,
+e.g. configure libcurl with a ca-bundle of "pkcs11:model=p11-kit-trust".
+Now server certs can be stored in a software and/or hardware HSM(s).
+This doesn't work with OpenSSL.
 
- "simply ignored" can't be the case, otherwise it still wouldn't work after this
-patch.
+However, some software only supports OpenSSL for TLS or other crypto
+functions.  So it might be necessary to enable OpenSSL for that reason.
 
- I *think* the real problem is that fakeroot forgets to wrap the setxattrat and
-lsetxattrat syscalls, and these are the ones that are used by tar.
+Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+---
+ package/libcurl/Config.in  | 28 ++++++++++++++++++++++++++++
+ package/libcurl/libcurl.mk | 15 ++++++++-------
+ 2 files changed, 36 insertions(+), 7 deletions(-)
 
-> As described in #11216, asking tar to explicitly store and restore
-> capabilities ends up with a failling build, when tar actually tries to
-> restore the capabilities. Adding support for capabilities to fakeroot
-> (by adding host-libcap as dependency) does not fix the problem.
-
- Just to be clear: with this patch, the 'tar' filesystem does still work because
-the creation of the tarball works OK, it's just the extraction that goes wrong,
-right?
-
-
-> Capabilities are stored in the extended attribute security.capabilty.
-> It turns out that tar does have special handling when extracting and
-> restoring that extended attribute, and that fails miserably when running
-> under fakeroot...
-> 
-> We fix that by offloading the permissions handling down to individual
-> filesystems.
-> 
-> This needs a split of the makedevs call, with the current and first one
-> now only responsible for creating the pseudo devices, while the new,
-> second call does only set the permissions.
-
- Why? Is that just to reduce the impact on post-fakeroot scripts?
-
- I'd rather move the entire makedevs call to the per-filesystem phase.
-
-> 
-> Fixes: #11216
-> 
-> This changes the order of steps, and post-fakeroot scripts are now
-> called before the permissions are set. This could mean breaking existing
-> setups, but more probably, this woudl sovle some, where files created in
-> post-fakeroot scripts can now see their permissions appropriately set.
-
- Since extracting xattrs doesn't work correctly, this is not true. And normally
-in a post-fakeroot script, you would do any permission setting in the script
-itself and not use the permissions table. So I think this statement is utterly
-wrong. That said, I doubt that post-build scripts would be affected by the
-permissions tables anyway.
-
-
-> This also slightly breaks the idea behind the intermediate image, which
-> was supposed to gather all actions common to all filesystems, so that
-> they are not repeated. Still, most actions are still created only once,
-> and moving just this is purely a practical and pragmatic workaround.
-
- Still, I'd prefer to fix fakeroot :-)
-
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
->  fs/common.mk | 17 +++++++++++------
->  1 file changed, 11 insertions(+), 6 deletions(-)
-> 
-> diff --git a/fs/common.mk b/fs/common.mk
-> index 453da6010a..569e5d60c5 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -29,8 +29,8 @@
->  
->  FS_DIR = $(BUILD_DIR)/buildroot-fs
->  FULL_DEVICE_TABLE = $(FS_DIR)/device_table.txt
-> -ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE) \
-> -	$(BR2_ROOTFS_STATIC_DEVICE_TABLE))
-> +ROOTFS_PERMISSION_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE))
-> +ROOTFS_STATIC_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_STATIC_DEVICE_TABLE))
->  USERS_TABLE = $(FS_DIR)/users_table.txt
->  ROOTFS_USERS_TABLES = $(call qstrip,$(BR2_ROOTFS_USERS_TABLES))
->  
-> @@ -81,14 +81,13 @@ ifneq ($(ROOTFS_USERS_TABLES),)
->  	cat $(ROOTFS_USERS_TABLES) >> $(USERS_TABLE)
->  endif
->  	PATH=$(BR_PATH) $(TOPDIR)/support/scripts/mkusers $(USERS_TABLE) $(TARGET_DIR) >> $(FAKEROOT_SCRIPT)
-> -ifneq ($(ROOTFS_DEVICE_TABLES),)
-> -	cat $(ROOTFS_DEVICE_TABLES) > $(FULL_DEVICE_TABLE)
-> +ifneq ($(ROOTFS_STATIC_DEVICE_TABLES),)
-> +	cat $(ROOTFS_STATIC_DEVICE_TABLES) > $(FULL_DEVICE_TABLE)
->  ifeq ($(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
->  	$(call PRINTF,$(PACKAGES_DEVICES_TABLE)) >> $(FULL_DEVICE_TABLE)
->  endif
-> -endif
-> -	$(call PRINTF,$(PACKAGES_PERMISSIONS_TABLE)) >> $(FULL_DEVICE_TABLE)
->  	echo "$(HOST_DIR)/bin/makedevs -d $(FULL_DEVICE_TABLE) $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
-> +endif
->  	$(foreach s,$(call qstrip,$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
->  		echo "echo '$(TERM_BOLD)>>>   Executing fakeroot script $(s)$(TERM_RESET)'" >> $(FAKEROOT_SCRIPT); \
->  		echo $(EXTRA_ENV) $(s) $(TARGET_DIR) $(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $(FAKEROOT_SCRIPT)$(sep))
-> @@ -108,6 +107,7 @@ define inner-rootfs
->  
->  ROOTFS_$(2)_DIR = $$(FS_DIR)/$(1)
->  ROOTFS_$(2)_TARGET_DIR = $$(ROOTFS_$(2)_DIR)/target
-> +ROOTFS_$(2)_PERMISSION_TABLE = $$(ROOTFS_$(2)_DIR)/permissions.txt
-
- BTW I agree with Thomas that it's better to create this file only once and only
-do the makedevs call in the per-filesystem stage.
-
- Regards,
- Arnout
-
-
->  
->  ROOTFS_$(2)_DEPENDENCIES += rootfs-common
->  
-> @@ -149,6 +149,11 @@ $$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
->  	echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
->  	echo "set -e" >> $$(FAKEROOT_SCRIPT)
->  	$$(call PRINTF,$$(ROOTFS_COMMON_UNTAR_CMD)) >> $$(FAKEROOT_SCRIPT)
-> +ifneq ($$(ROOTFS_PERMISSION_TABLES),)
-> +	cat $$(ROOTFS_PERMISSION_TABLES) > $$(ROOTFS_$(2)_PERMISSION_TABLE)
-> +endif
-> +	$$(call PRINTF,$$(PACKAGES_PERMISSIONS_TABLE)) >> $$(ROOTFS_$(2)_PERMISSION_TABLE)
-> +	echo "$$(HOST_DIR)/bin/makedevs -d $$(ROOTFS_$(2)_PERMISSION_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
->  	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),\
->  		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
->  	$$(call PRINTF,$$(ROOTFS_REPRODUCIBLE)) >> $$(FAKEROOT_SCRIPT)
-> 
+diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
+index 21c2ee2b7f..0b2334beb9 100644
+--- a/package/libcurl/Config.in
++++ b/package/libcurl/Config.in
+@@ -19,4 +19,32 @@ config BR2_PACKAGE_LIBCURL_VERBOSE
+ 	help
+ 	  Enable verbose text strings
+ 
++choice
++	prompt "SSL/TLS library to use"
++	default BR2_PACKAGE_LIBCURL_OPENSSL if BR2_PACKAGE_OPENSSL
++	default BR2_PACKAGE_LIBCURL_GNUTLS if BR2_PACKAGE_GNUTLS
++	default BR2_PACKAGE_LIBCURL_LIBNSS if BR2_PACKAGE_LIBNSS
++	default BR2_PACKAGE_LIBCURL_MBEDTLS if BR2_PACKAGE_MBEDTLS
++
++config BR2_PACKAGE_LIBCURL_OPENSSL
++	bool "OpenSSL"
++	depends on BR2_PACKAGE_OPENSSL
++
++config BR2_PACKAGE_LIBCURL_GNUTLS
++	bool "GnuTLS"
++	depends on BR2_PACKAGE_GNUTLS
++
++config BR2_PACKAGE_LIBCURL_LIBNSS
++	bool "NSS"
++	depends on BR2_PACKAGE_LIBNSS
++
++config BR2_PACKAGE_LIBCURL_MBEDTLS
++	bool "mbed TLS"
++	depends on BR2_PACKAGE_MBEDTLS
++
++config BR2_PACKAGE_LIBCURL_NOSSL
++	bool "No SSL/TLS support"
++
++endchoice
++
+ endif
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index c3da8aa3e5..ac368fbb53 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -35,7 +35,7 @@ endif
+ 
+ LIBCURL_CONFIG_SCRIPTS = curl-config
+ 
+-ifeq ($(BR2_PACKAGE_OPENSSL),y)
++ifeq ($(BR2_PACKAGE_LIBCURL_OPENSSL),y)
+ LIBCURL_DEPENDENCIES += openssl
+ # configure adds the cross openssl dir to LD_LIBRARY_PATH which screws up
+ # native stuff during the rest of configure when target == host.
+@@ -44,15 +44,16 @@ LIBCURL_DEPENDENCIES += openssl
+ LIBCURL_CONF_ENV += LD_LIBRARY_PATH=$(if $(LD_LIBRARY_PATH),$(LD_LIBRARY_PATH):)/lib:/usr/lib
+ LIBCURL_CONF_OPTS += --with-ssl=$(STAGING_DIR)/usr \
+ 	--with-ca-path=/etc/ssl/certs
+-else ifeq ($(BR2_PACKAGE_GNUTLS),y)
+-LIBCURL_CONF_OPTS += --with-gnutls=$(STAGING_DIR)/usr
++else ifeq ($(BR2_PACKAGE_LIBCURL_GNUTLS),y)
++LIBCURL_CONF_OPTS += --with-gnutls=$(STAGING_DIR)/usr --without-ssl
+ LIBCURL_DEPENDENCIES += gnutls
+-else ifeq ($(BR2_PACKAGE_LIBNSS),y)
+-LIBCURL_CONF_OPTS += --with-nss=$(STAGING_DIR)/usr
++else ifeq ($(BR2_PACKAGE_LIBCURL_LIBNSS),y)
++LIBCURL_CONF_OPTS += --with-nss=$(STAGING_DIR)/usr --without-ssl --without-gnutls
+ LIBCURL_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) `$(PKG_CONFIG_HOST_BINARY) nspr nss --cflags`"
+ LIBCURL_DEPENDENCIES += libnss
+-else ifeq ($(BR2_PACKAGE_MBEDTLS),y)
+-LIBCURL_CONF_OPTS += --with-mbedtls=$(STAGING_DIR)/usr
++else ifeq ($(BR2_PACKAGE_LIBCURL_MBEDTLS),y)
++LIBCURL_CONF_OPTS += --with-mbedtls=$(STAGING_DIR)/usr \
++	--without-ssl --without-gnutls --without-nss
+ LIBCURL_DEPENDENCIES += mbedtls
+ else
+ LIBCURL_CONF_OPTS += --without-ssl --without-gnutls \
+-- 
+2.14.4
