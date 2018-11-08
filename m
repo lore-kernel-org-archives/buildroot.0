@@ -1,31 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Nov 2018 21:05:37 +0100
-Subject: [Buildroot] [PATCH 1/1] python-crossbar: bump to version 18.11.1
-In-Reply-To: <20181106200615.27766-1-asafka7@gmail.com>
-References: <20181106200615.27766-1-asafka7@gmail.com>
-Message-ID: <20181108210537.0ae78196@windsurf.home>
+Date: Thu, 8 Nov 2018 21:06:27 +0100
+Subject: [Buildroot] [git commit] fs/f2fs: clarify help messages
+Message-ID: <20181108200409.476C3817B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c3159a2d14420f323d1fb309ba4be91d233f7735
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  6 Nov 2018 22:06:15 +0200, Asaf Kahlon wrote:
-> Adjust patch to fit the new version.
-> 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-> ---
->  .../0002-Remove-idna-requirement.patch              | 13 ++++++++-----
->  package/python-crossbar/python-crossbar.hash        |  4 ++--
->  package/python-crossbar/python-crossbar.mk          |  4 ++--
->  3 files changed, 12 insertions(+), 9 deletions(-)
+For BR2_TARGET_ROOTFS_F2FS_COLD_FILES clarify that extension list must
+be a coma separated.
 
-Applied to master, thanks.
+For BR2_TARGET_ROOTFS_F2FS_OVERPROVISION clarify that the default
+overprovision ratio is autocalculated according to the partition size.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ fs/f2fs/Config.in | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/fs/f2fs/Config.in b/fs/f2fs/Config.in
+index 32d86d8ce3..57473fdc43 100644
+--- a/fs/f2fs/Config.in
++++ b/fs/f2fs/Config.in
+@@ -21,9 +21,10 @@ config BR2_TARGET_ROOTFS_F2FS_SIZE
+ config BR2_TARGET_ROOTFS_F2FS_COLD_FILES
+ 	string "extension list for cold files"
+ 	help
+-	  Specify a file extension list in order f2fs to treat them as
+-	  cold files. The default list includes most of multimedia
+-	  file extensions such as jpg, gif, mpeg, mkv, and so on.
++	  Specify a comma separated file extension list in order f2fs
++	  to treat them as cold files. The default list includes most
++	  of multimedia file extensions such as jpg, gif, mpeg, mkv,
++	  and so on.
+ 
+ config BR2_TARGET_ROOTFS_F2FS_OVERPROVISION
+ 	int "overprovision ratio"
+@@ -33,8 +34,8 @@ config BR2_TARGET_ROOTFS_F2FS_OVERPROVISION
+ 	  area. This area is hidden to users, and utilized by F2FS
+ 	  cleaner.
+ 
+-	  Leave at 0 to use the default overprovision ratio of
+-	  mkfs.f2fs.
++	  Leave at 0 for autocalculation according to the partition
++	  size.
+ 
+ config BR2_TARGET_ROOTFS_F2FS_DISCARD
+ 	bool "discard policy"
