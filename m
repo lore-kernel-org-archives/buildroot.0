@@ -1,108 +1,131 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 9 Nov 2018 14:05:44 +0100
-Subject: [Buildroot] [git commit] mosquitto: security bump to version 1.5.4
-Message-ID: <20181109130553.708AC81EEF@busybox.osuosl.org>
+Date: Fri, 9 Nov 2018 14:05:48 +0100
+Subject: [Buildroot] [git commit] nginx: security bump to 1.15.6
+Message-ID: <20181109130553.766BA81E37@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a4c111b1f359e2ba50e31ef1246e48456a391de
+commit: https://git.buildroot.net/buildroot/commit/?id=c2f5b3a3a866859528747edc191fb9c241343e88
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-From the announcement:
+Fixes the following security issues:
 
-When using a TLS enabled websockets listener with require_certificate
-enabled, the mosquitto broker does not correctly verify client certificates.
-This is now fixed.  All other security measures operate as expected, and in
-particular non-websockets listeners are not affected by this.
+CVE-2018-16843: Excessive memory usage in HTTP/2
 
-https://mosquitto.org/blog/2018/11/version-154-released/
+CVE-2018-16844: Excessive CPU usage in HTTP/2
 
-Drop patch 0001, now applied upstream:
-https://github.com/eclipse/mosquitto/pull/933
+CVE-2018-16845: Memory disclosure in the ngx_http_mp4_module
+
+Refreshed patch 0004 + 0007 as they no longer applied cleanly.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...001-_GNU_SOURCE-needed-for-EAI_INPROGRESS.patch | 46 ----------------------
- package/mosquitto/mosquitto.hash                   |  2 +-
- package/mosquitto/mosquitto.mk                     |  2 +-
- 3 files changed, 2 insertions(+), 48 deletions(-)
+ .../nginx/0004-auto-lib-libxslt-conf-use-pkg-config.patch  | 14 ++++++++------
+ .../nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch    | 12 +++++++-----
+ package/nginx/nginx.hash                                   |  2 +-
+ package/nginx/nginx.mk                                     |  2 +-
+ 4 files changed, 17 insertions(+), 13 deletions(-)
 
-diff --git a/package/mosquitto/0001-_GNU_SOURCE-needed-for-EAI_INPROGRESS.patch b/package/mosquitto/0001-_GNU_SOURCE-needed-for-EAI_INPROGRESS.patch
-deleted file mode 100644
-index e350e465b4..0000000000
---- a/package/mosquitto/0001-_GNU_SOURCE-needed-for-EAI_INPROGRESS.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From d684055b2b92e7ec5793e70c9a80c7f8e45e0696 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Fri, 24 Aug 2018 16:38:42 +0200
--Subject: [PATCH] _GNU_SOURCE needed for EAI_INPROGRESS
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Define of _GNU_SOURCE is needed to be able to use EAI_INPROGRESS in
--loop.c.
--
--This patch fixes a build error
--
--loop.c:334:17: error: ???EAI_INPROGRESS??? undeclared (first use in this function)
--        if(rc == EAI_INPROGRESS){
--
--occuring with a glibc-2.27-based buildroot toolchain for sparc64
--
--Target: sparc64-buildroot-linux-gnu
--[...]
--gcc version 6.4.0 (Buildroot 2018.05)
--
--Source:
--http://autobuild.buildroot.org/toolchains/tarballs/br-sparc64-full-2018.05.tar.bz2
--
--Patch sent upstream as PR 933.
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- config.h | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/config.h b/config.h
--index 7607019..ba0ba93 100644
----- a/config.h
--+++ b/config.h
--@@ -39,4 +39,6 @@
-- #  define _POSIX_C_SOURCE 200809L
-- #endif
-- 
--+#define _GNU_SOURCE
--+
-- #endif
---- 
--2.18.0
--
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index b38830b8b5..96e2ae9369 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking gpg signature
--sha256 3081a998d303a883b1cd064009beabc88aa9159e26f5258a4ae6007160491d10  mosquitto-1.5.3.tar.gz
-+sha256 5fd7f3454fd6d286645d032bc07f44a1c8583cec02ef2422c9eb32e0a89a9b2f  mosquitto-1.5.4.tar.gz
+diff --git a/package/nginx/0004-auto-lib-libxslt-conf-use-pkg-config.patch b/package/nginx/0004-auto-lib-libxslt-conf-use-pkg-config.patch
+index 103f90b305..09e708b73c 100644
+--- a/package/nginx/0004-auto-lib-libxslt-conf-use-pkg-config.patch
++++ b/package/nginx/0004-auto-lib-libxslt-conf-use-pkg-config.patch
+@@ -1,4 +1,4 @@
+-From 211b9f19a3a62826fadef55d2f89d6f66fbf4aa6 Mon Sep 17 00:00:00 2001
++From 7783d63c87f94797aa134786214b0a84c000be75 Mon Sep 17 00:00:00 2001
+ From: Samuel Martin <s.martin49@gmail.com>
+ Date: Thu, 29 May 2014 19:22:27 +0200
+ Subject: [PATCH] auto/lib/libxslt/conf: use pkg-config
+@@ -7,12 +7,14 @@ Change to using pkg-config to find the path to libxslt and its
+ dependencies.
  
- # License files
- sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 1d72f9b16e..fcce0535cb 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
+ Signed-off-by: Martin Bark <martin@barkynet.com>
++[Peter: updated for 1.15.6]
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ ---
+- auto/lib/libxslt/conf | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
++ auto/lib/libxslt/conf | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
+ 
+ diff --git a/auto/lib/libxslt/conf b/auto/lib/libxslt/conf
+-index 3a0f37b..3c2a60e 100644
++index 3063ac7c..3209e364 100644
+ --- a/auto/lib/libxslt/conf
+ +++ b/auto/lib/libxslt/conf
+ @@ -12,8 +12,9 @@
+@@ -26,7 +28,7 @@ index 3a0f37b..3c2a60e 100644
+ +    ngx_feature_libs="$(${PKG_CONFIG:=pkg-config} --libs libxslt)"
+      ngx_feature_test="xmlParserCtxtPtr    ctxt = NULL;
+                        xsltStylesheetPtr   sheet = NULL;
+-                       xmlDocPtr           doc;
++                       xmlDocPtr           doc = NULL;
+ -- 
+-2.8.2
++2.11.0
+ 
+diff --git a/package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch b/package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch
+index 34e7981c8f..cea68035e1 100644
+--- a/package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch
++++ b/package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch
+@@ -1,4 +1,4 @@
+-From fd9885fe5fef5826034547ca6be7299863f99769 Mon Sep 17 00:00:00 2001
++From 0551f2e5eb4143be0aacc0185cdc4afc9ca80204 Mon Sep 17 00:00:00 2001
+ From: Martin Bark <martin@barkynet.com>
+ Date: Fri, 6 May 2016 14:48:49 +0100
+ Subject: [PATCH] auto/lib/libgd/conf: use pkg-config
+@@ -7,12 +7,14 @@ Change to using pkg-config to find the path to libgd and its
+ dependencies.
+ 
+ Signed-off-by: Martin Bark <martin@barkynet.com>
++[Peter: updated for 1.15.6]
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ ---
+  auto/lib/libgd/conf | 4 ++--
+  1 file changed, 2 insertions(+), 2 deletions(-)
+ 
+ diff --git a/auto/lib/libgd/conf b/auto/lib/libgd/conf
+-index 6e4e91c..1c536a2 100644
++index 67863976..1a4379a5 100644
+ --- a/auto/lib/libgd/conf
+ +++ b/auto/lib/libgd/conf
+ @@ -7,8 +7,8 @@
+@@ -23,9 +25,9 @@ index 6e4e91c..1c536a2 100644
+ -    ngx_feature_libs="-lgd"
+ +    ngx_feature_path="$(${GDLIB_CONFIG:=gdlib-config} --includedir)"
+ +    ngx_feature_libs="$(${GDLIB_CONFIG:=gdlib-config} --libs)"
+-     ngx_feature_test="gdImagePtr img = gdImageCreateFromGifPtr(1, NULL);"
++     ngx_feature_test="gdImagePtr img = gdImageCreateFromGifPtr(1, NULL);
++                       (void) img"
+      . auto/feature
+- 
+ -- 
+-2.8.2
++2.11.0
+ 
+diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
+index 51284aefbe..c3e6b6a720 100644
+--- a/package/nginx/nginx.hash
++++ b/package/nginx/nginx.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256	b0b58c9a3fd73aa8b89edf5cfadc6641a352e0e6d3071db1eb3215d72b7fb516	nginx-1.15.0.tar.gz
++sha256	a3d8c67c2035808c7c0d475fffe263db8c353b11521aa7ade468b780ed826cc6	nginx-1.15.6.tar.gz
+ # License files, locally calculated
+ sha256	e18f05bcaad47528f8b21861d4a0fb9815ca1bbb4be946c51a51d36623758bcc	LICENSE
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 23cf2b46d5..5253174478 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MOSQUITTO_VERSION = 1.5.3
-+MOSQUITTO_VERSION = 1.5.4
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
+-NGINX_VERSION = 1.15.0
++NGINX_VERSION = 1.15.6
+ NGINX_SITE = http://nginx.org/download
+ NGINX_LICENSE = BSD-2-Clause
+ NGINX_LICENSE_FILES = LICENSE
