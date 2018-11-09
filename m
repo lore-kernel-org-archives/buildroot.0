@@ -1,28 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 09 Nov 2018 14:05:58 +0100
-Subject: [Buildroot] [PATCH] nginx: security bump to 1.15.6
-In-Reply-To: <20181109100820.10293-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 9 Nov 2018 11:08:19 +0100")
-References: <20181109100820.10293-1-peter@korsgaard.com>
-Message-ID: <87y3a2764p.fsf@dell.be.48ers.dk>
+Date: Fri, 09 Nov 2018 14:07:54 +0100
+Subject: [Buildroot] [PATCH 1/1] attr: Add a patch to fix an
+ unconditional infinite recursion.
+In-Reply-To: <20181109111050.11260-1-nicolas.cavallari@green-communications.fr>
+ (Nicolas Cavallari's message of "Fri, 9 Nov 2018 12:10:50 +0100")
+References: <20181109111050.11260-1-nicolas.cavallari@green-communications.fr>
+Message-ID: <87tvkq761h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Nicolas" == Nicolas Cavallari <nicolas.cavallari@green-communications.fr> writes:
 
- > Fixes the following security issues:
- > CVE-2018-16843: Excessive memory usage in HTTP/2
+ > The bump to 2.4.48 introduced a bug that, according to the author,
+ > only happen in certain cases on glibc. But under uclibc-ng, it happens
+ > every time.
 
- > CVE-2018-16844: Excessive CPU usage in HTTP/2
+ > The bug essentially cause any program calling any libattr.so function
+ > to enter an infinite recursion, because of a symbol conflict between
+ > uclibc-ng and libattr wrappers, that causes the libattr wrappers to
+ > call themselves.
 
- > CVE-2018-16845: Memory disclosure in the ngx_http_mp4_module
+ > This infinite recursion does not consume the stack, so programs
+ > basically behave like they enter an infinite loop.
 
- > Refreshed patch 0004 + 0007 as they no longer applied cleanly.
+ > It is easy to reproduce with qemu_arm_versatile_defconfig +
+ > BR2_PACKAGE_ATTR: "getfattr ." never returns and takes 100% CPU.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Upstream fixed it, but the patch is not part of a release yet,
+ > so take the patch.
+
+ > Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+
+ > --
+ > An alternative is to bump the version to this commit in the master
+ > branch.  The other changes[1] are mostly related to tests or
+ > documentation, except for one patch[2] that tries more aggressively to
+ > enable large file support.
+
+ > [1] http://git.savannah.nongnu.org/cgit/attr.git/log/
+ > [2] http://git.savannah.nongnu.org/cgit/attr.git/commit/?id=fd1d8ee21df8d11460baa858ae5c5d20e38fb70e
 
 Committed, thanks.
 
