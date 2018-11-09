@@ -1,54 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Nov 2018 00:12:52 +0100
-Subject: [Buildroot] [git commit] docs/website/news.html: update for
- 2018.11-rc1
-Message-ID: <20181109231039.0F47B822C7@busybox.osuosl.org>
+Date: Sat, 10 Nov 2018 00:15:59 +0100
+Subject: [Buildroot] [PATCH v2] libcurl: Allow selection of TLS package
+ libcurl will use
+In-Reply-To: <1541804005.30311.392.camel@impinj.com> (Trent Piepho's message
+ of "Fri, 9 Nov 2018 22:53:25 +0000")
+References: <20181108222517.20629-1-tpiepho@impinj.com>
+ <89e08627-ea80-393e-53da-c8ab90df66f1@mind.be>
+ <878t217u30.fsf@dell.be.48ers.dk>
+ <1541804005.30311.392.camel@impinj.com>
+Message-ID: <87zhuh6dw0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=956f05595f7fc3d286c4470628a1c6448ab437b0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Trent" == Trent Piepho <tpiepho@impinj.com> writes:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/website/news.html | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+Hi,
 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index aee0d6a2d9..1f2bd2867c 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,30 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2018.11-rc1 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>9 November 2018</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>We have a new release candidate! Lots of changes all over the
-+	  tree, see the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.11-rc1">CHANGES</a>
-+	  file for details and/or read
-+	  the <a href="http://lists.busybox.net/pipermail/buildroot/2018-November/235405.html">announcement</a>.
-+	</p>
-+
-+	<p>Head to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2018.11-rc1.tar.bz2">2018.11-rc1
-+	    release candidate</a>, and report any problems found to the
-+	  <a href="support.html">mailing list</a> or
-+	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+ >> >  Note that that means that libcurl will by default select openssl, which was not
+ >> > the case before. However, I think it makes complete sense to default to enabling
+ >> > TLS support in libcurl. Peter, what do you think? This would obviously have to
+ >> > be mentioned in the release notes because the behaviour of existing configs
+ >> > would change.
+
+ > Don't most optional features in buildroot get auto-enabled when the
+ > package they need is enabled?  Which in effect means the feature is
+ > turned on, not by a setting under the user, but by turning on the
+ > dependency.  I know I've seen this pattern many many times in
+ > buildroot.
+
+ > Is this pattern of turning on the dependency via an option under the
+ > user of the dependency used elsewhere?  Or would it be a new pattern
+ > unique to libcurl?
+
+We use automatic dependencies for most packages, but there are a few
+with explicit sub options to pull in the optional dependencies.
+
+ >> Either that or add a:
+ >> 
+ >> depends on BR2_PACKAGE_OPENSSL || BR2_PACKAGE_GNUTLS || \
+ >> BR2_PACKAGE_LIBNSS || BR2_PACKAGE_MBEDTLS
+ >> 
+ >> To the choice option and drop the _LIBCURL_NONE variant. With that we
+ >> have the same behaviour as before, except that you _CAN_ select the TLS
+ >> provider in case multiple providers are available.
+
+ > I did drop the NONE variant.  Do you mean in Arnout's alternate
+ > example?  It doesn't provide entirely the same behavior.  Example:
+
+ > openssl off, gnutls on
+
+ > Current: libcurl uses gnutls
+ > My patch: libcurl uses gnutls
+ > Arnout's proposal: libcurl enables openssl and uses it.  Need to change
+ > config to select gnutls and turn off openssl.
+ > Peter's modification: Same as Arnout's
+
+ > I believe your modification only produces the same behavior in the case
+ > where all four tls libs are off.  As soon as one turns on, then libcurl
+ > will select openssl.
+
+Correct, so I think it makes sense to use 'depends on' for the
+individual sub options like you had. With that, the default behaviour
+should be like it was before.
+
+-- 
+Bye, Peter Korsgaard
