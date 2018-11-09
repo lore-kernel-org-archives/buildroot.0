@@ -1,40 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 09 Nov 2018 15:57:10 +0100
-Subject: [Buildroot] [PATCH 1/2] package/libnfs: add patch to fix musl
- build issue
-In-Reply-To: <20181105010230.18425-1-joerg.krause@embedded.rocks>
- (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Mon, 5 Nov 2018 02:02:29 +0100")
-References: <20181105010230.18425-1-joerg.krause@embedded.rocks>
-Message-ID: <87h8gq70zd.fsf@dell.be.48ers.dk>
+Date: Fri, 09 Nov 2018 15:57:49 +0100
+Subject: [Buildroot] [PATCH] squid: security bump to version 4.4
+In-Reply-To: <20181109135533.18802-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 9 Nov 2018 14:55:32 +0100")
+References: <20181109135533.18802-1-peter@korsgaard.com>
+Message-ID: <87d0re70ya.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Add a patch to fix build issues with the musl C library.
- > This patch fixes an autobuild issue when linking the mpd package
- > against libnfs. The header file libnfs.h uses `struct timeval` which is
- > defined in `<sys/time.h>` for POSIX systems. Unfortunately, upstream
- > only includes it conditionally, based on the system. Therefore, we
- > remove the check in the first patch.
+ > Fixes SQUID-2018_4:
+ > Due to incorrect input handling, Squid is vulnerable to a Cross-Site
+ > Scripting vulnerability when generating HTTPS response messages about TLS
+ > errors.
 
- > Reported upstream:
- > https://github.com/sahlberg/libnfs/issues/272
+ > For more details, see the advisory:
 
- > Fixes:
- > http://autobuild.buildroot.org/results/452/4522014698b9fe50720a71b663e47a75805bcf54
- > http://autobuild.buildroot.org/results/b0a/b0a0c20ad1705e9fa7ba4a12eb9c182e8077ab0c
- > http://autobuild.buildroot.org/results/53c/53c87361923cc177de7889523b3d16ba6b1d3d0f
- > .. and more.
+ > http://www.squid-cache.org/Advisories/SQUID-2018_4.txt
 
- > Previous patch: Changes requested
- > http://patchwork.ozlabs.org/patch/973605/
-
- > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
