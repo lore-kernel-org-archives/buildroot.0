@@ -1,70 +1,151 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Nov 2018 00:15:59 +0100
-Subject: [Buildroot] [PATCH v2] libcurl: Allow selection of TLS package
- libcurl will use
-In-Reply-To: <1541804005.30311.392.camel@impinj.com> (Trent Piepho's message
- of "Fri, 9 Nov 2018 22:53:25 +0000")
-References: <20181108222517.20629-1-tpiepho@impinj.com>
- <89e08627-ea80-393e-53da-c8ab90df66f1@mind.be>
- <878t217u30.fsf@dell.be.48ers.dk>
- <1541804005.30311.392.camel@impinj.com>
-Message-ID: <87zhuh6dw0.fsf@dell.be.48ers.dk>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 10 Nov 2018 00:17:24 +0100
+Subject: [Buildroot] [PATCH v3 1/2] ell: bump version to 0.14
+Message-ID: <20181109231725.20059-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Trent" == Trent Piepho <tpiepho@impinj.com> writes:
+- remove superseeded patch 0001-ell-signal.h-use-standard-sigset_t-fixes-musl-compil.patch
+- add patch for missing l_genl_family_set_unicast_handler symbol export
 
-Hi,
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Changes v2 -> v3:
+  - new patch (needed by iwd update to 0.11)
+---
+ ...missing-l_genl_family_set_unicast_ha.patch | 30 ++++++++++
+ ...-standard-sigset_t-fixes-musl-compil.patch | 57 -------------------
+ package/ell/ell.hash                          |  2 +-
+ package/ell/ell.mk                            |  2 +-
+ 4 files changed, 32 insertions(+), 59 deletions(-)
+ create mode 100644 package/ell/0001-ell-ell.sym-add-missing-l_genl_family_set_unicast_ha.patch
+ delete mode 100644 package/ell/0001-ell-signal.h-use-standard-sigset_t-fixes-musl-compil.patch
 
- >> >  Note that that means that libcurl will by default select openssl, which was not
- >> > the case before. However, I think it makes complete sense to default to enabling
- >> > TLS support in libcurl. Peter, what do you think? This would obviously have to
- >> > be mentioned in the release notes because the behaviour of existing configs
- >> > would change.
-
- > Don't most optional features in buildroot get auto-enabled when the
- > package they need is enabled?  Which in effect means the feature is
- > turned on, not by a setting under the user, but by turning on the
- > dependency.  I know I've seen this pattern many many times in
- > buildroot.
-
- > Is this pattern of turning on the dependency via an option under the
- > user of the dependency used elsewhere?  Or would it be a new pattern
- > unique to libcurl?
-
-We use automatic dependencies for most packages, but there are a few
-with explicit sub options to pull in the optional dependencies.
-
- >> Either that or add a:
- >> 
- >> depends on BR2_PACKAGE_OPENSSL || BR2_PACKAGE_GNUTLS || \
- >> BR2_PACKAGE_LIBNSS || BR2_PACKAGE_MBEDTLS
- >> 
- >> To the choice option and drop the _LIBCURL_NONE variant. With that we
- >> have the same behaviour as before, except that you _CAN_ select the TLS
- >> provider in case multiple providers are available.
-
- > I did drop the NONE variant.  Do you mean in Arnout's alternate
- > example?  It doesn't provide entirely the same behavior.  Example:
-
- > openssl off, gnutls on
-
- > Current: libcurl uses gnutls
- > My patch: libcurl uses gnutls
- > Arnout's proposal: libcurl enables openssl and uses it.  Need to change
- > config to select gnutls and turn off openssl.
- > Peter's modification: Same as Arnout's
-
- > I believe your modification only produces the same behavior in the case
- > where all four tls libs are off.  As soon as one turns on, then libcurl
- > will select openssl.
-
-Correct, so I think it makes sense to use 'depends on' for the
-individual sub options like you had. With that, the default behaviour
-should be like it was before.
-
+diff --git a/package/ell/0001-ell-ell.sym-add-missing-l_genl_family_set_unicast_ha.patch b/package/ell/0001-ell-ell.sym-add-missing-l_genl_family_set_unicast_ha.patch
+new file mode 100644
+index 0000000000..e521a93f7a
+--- /dev/null
++++ b/package/ell/0001-ell-ell.sym-add-missing-l_genl_family_set_unicast_ha.patch
+@@ -0,0 +1,30 @@
++From e68d797ffdfe768c1e4a356add5bb12c43f40a72 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Fri, 9 Nov 2018 23:28:39 +0100
++Subject: [PATCH] ell/ell.sym: add missing l_genl_family_set_unicast_handler
++
++Fixes iwd compile failure:
++
++  src/netdev.o: In function `netdev_set_nl80211':
++  netdev.c:(.text+0x6f04): undefined reference to `l_genl_family_set_unicast_handler'
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ ell/ell.sym | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/ell/ell.sym b/ell/ell.sym
++index 614bc93..cdd2c21 100644
++--- a/ell/ell.sym
+++++ b/ell/ell.sym
++@@ -257,6 +257,7 @@ global:
++ 	l_genl_family_new;
++ 	l_genl_family_ref;
++ 	l_genl_family_unref;
+++	l_genl_family_set_unicast_handler;
++ 	l_genl_family_set_watches;
++ 	l_genl_family_get_version;
++ 	l_genl_family_get_genl;
++-- 
++2.19.1
++
+diff --git a/package/ell/0001-ell-signal.h-use-standard-sigset_t-fixes-musl-compil.patch b/package/ell/0001-ell-signal.h-use-standard-sigset_t-fixes-musl-compil.patch
+deleted file mode 100644
+index a1d252b42a..0000000000
+--- a/package/ell/0001-ell-signal.h-use-standard-sigset_t-fixes-musl-compil.patch
++++ /dev/null
+@@ -1,57 +0,0 @@
+-From abff9db9a6e86e00613a420dd6a0ba3bc81e2b72 Mon Sep 17 00:00:00 2001
+-From: Peter Seiderer <ps.report@gmx.net>
+-Date: Fri, 2 Nov 2018 12:58:57 +0100
+-Subject: [PATCH] ell/signal.h: use standard sigset_t, fixes musl compile
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Use standard sigset_t (instead __sigset_t):
+-
+-- fixes musl compile
+-- fies mismatch between header and implementation file
+-
+-Fixes:
+-
+-  In file included from ell/main.c:35:0:
+-  ell/signal.h:39:40: error: unknown type name ?__sigset_t?
+-   struct l_signal *l_signal_create(const __sigset_t *mask,
+-                                          ^~~~~~~~~~
+-  In file included from ell/signal.c:35:0:
+-  ell/signal.h:39:40: error: unknown type name ?__sigset_t?
+-   struct l_signal *l_signal_create(const __sigset_t *mask,
+-                                          ^~~~~~~~~~
+-  ell/signal.c:153:29: error: conflicting types for ?l_signal_create?
+-   LIB_EXPORT struct l_signal *l_signal_create(const sigset_t *mask,
+-                               ^~~~~~~~~~~~~~~
+-  In file included from ell/signal.c:35:0:
+-  ell/signal.h:39:18: note: previous declaration of ?l_signal_create? was here
+-   struct l_signal *l_signal_create(const __sigset_t *mask,
+-                    ^~~~~~~~~~~~~~~
+-
+-Reverts upstream commit [1], superseeded in the next version by [2].
+-
+-[1] https://git.kernel.org/pub/scm/libs/ell/ell.git/commit/?id=7af8e3ba0ed522897f5a87e6c8f2980f82ff5012
+-[2] https://git.kernel.org/pub/scm/libs/ell/ell.git/commit/?id=4a386a10d88ff52097a974167ab889b3fc2add70
+-
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- ell/signal.h | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/ell/signal.h b/ell/signal.h
+-index 0d4fdc8..98cf0fa 100644
+---- a/ell/signal.h
+-+++ b/ell/signal.h
+-@@ -36,7 +36,7 @@ typedef void (*l_signal_notify_cb_t) (struct l_signal *signal,
+- 					uint32_t signo, void *user_data);
+- typedef void (*l_signal_destroy_cb_t) (void *user_data);
+- 
+--struct l_signal *l_signal_create(const __sigset_t *mask,
+-+struct l_signal *l_signal_create(const sigset_t *mask,
+- 			l_signal_notify_cb_t callback,
+- 			void *user_data, l_signal_destroy_cb_t destroy);
+- void l_signal_remove(struct l_signal *signal);
+--- 
+-2.19.1
+-
+diff --git a/package/ell/ell.hash b/package/ell/ell.hash
+index c6b23baec8..84827437ec 100644
+--- a/package/ell/ell.hash
++++ b/package/ell/ell.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256 8e629347d49d30418e215ccf80f05eb6ff617f752396f93287ed723169aec006 ell-0.13.tar.gz
++sha256 1791d2e18f0089af0d58a3d2f76a2846c2d9fa59eb2848124a713ce380561b0e ell-0.14.tar.gz
+ 
+ # License files
+ sha256 ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5 COPYING
+diff --git a/package/ell/ell.mk b/package/ell/ell.mk
+index 8ea95a6d77..56d53be868 100644
+--- a/package/ell/ell.mk
++++ b/package/ell/ell.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ELL_VERSION = 0.13
++ELL_VERSION = 0.14
+ ELL_SITE = https://git.kernel.org/pub/scm/libs/ell/ell.git
+ ELL_SITE_METHOD = git
+ ELL_LICENSE = LGPL-2.1+
 -- 
-Bye, Peter Korsgaard
+2.19.1
