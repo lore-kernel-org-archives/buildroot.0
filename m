@@ -1,35 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 9 Nov 2018 22:22:02 +0100
-Subject: [Buildroot] [PATCH v1] valgrind: disable for mips64r6/mips64elr6
-In-Reply-To: <20181108214932.460-1-ps.report@gmx.net>
-References: <20181108214932.460-1-ps.report@gmx.net>
-Message-ID: <20181109222202.428cfe2c@windsurf>
+Date: Fri, 9 Nov 2018 22:24:37 +0100
+Subject: [Buildroot] [git commit] package/meson: bump to version 0.47.2
+Message-ID: <20181109212208.94F88821CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=55b5dfc1bf99999592ad074ef18f59ce92c69a76
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  8 Nov 2018 22:49:32 +0100, Peter Seiderer wrote:
-> Fixes [1]:
-> 
->   /tmp/ccBAUqbI.s: Assembler messages:
->   /tmp/ccBAUqbI.s:622: Error: opcode not supported on this processor: mips64r6 (mips64r6) `movn $2,$4,$7'
->   /tmp/ccBAUqbI.s:2607: Error: opcode not supported on this processor: mips64r6 (mips64r6) `movn $2,$4,$7'
-> 
-> [1] http://autobuild.buildroot.net/results/dc52088222e9fbedcebffc1c39be6d2fecfffe5d
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/valgrind/Config.in | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+Note, that there is already a patch [1] to bump the version to 0.48.1.
+However, the bump to version 0.48.x has some unresolved issues.
 
-Applied to master, thanks.
+In the meantime, until the issue with 0.48 is resolved, bump to latest
+version of the 0.47 branch.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+[1] http://patchwork.ozlabs.org/patch/986260/
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/meson/meson.hash | 4 ++--
+ package/meson/meson.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index 4a4923bd12..a9968977d4 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/0.47.1/meson-0.47.1.tar.gz.asc
+-sha256 d673de79f7bab064190a5ea06140eaa8415efb386d0121ba549f6d66c555ada6 meson-0.47.1.tar.gz
++# https://github.com/mesonbuild/meson/releases/download/0.47.2/meson-0.47.2.tar.gz.asc
++sha256 92d8afd921751261e36151643464efd3394162f69efbe8cd53e0a66b1cf395eb meson-0.47.2.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index 08e5c505c9..e1675c21b8 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MESON_VERSION = 0.47.1
++MESON_VERSION = 0.47.2
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
