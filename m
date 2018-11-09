@@ -1,41 +1,50 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 9 Nov 2018 21:48:28 +0100
-Subject: [Buildroot] [PATCH 0/1] mariadb and mysql
-In-Reply-To: <20181108170950.30189-1-chrismcc@gmail.com>
-References: <20181108170950.30189-1-chrismcc@gmail.com>
-Message-ID: <d9420d7c-1991-4658-63c2-94f56129312b@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 9 Nov 2018 21:54:04 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/1] libv4l: add an option for IR BPF based decoders
+In-Reply-To: <20181109172648.10289-1-fontaine.fabrice@gmail.com>
+References: <20181109172648.10289-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181109215404.345454ec@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-
-On 08/11/2018 18:09, Christopher McCrory wrote:
-> I ran into this again when testing perl-termreadkey.  I started with an
-> existing config that used perl-dbd-mysql. Thought I would send the
-> patch I generated a while ago. As an aside, used mariadb because the
-> oracle-mysql 5.1 version was EOL 5 ish years ago.
-
- Feel free to bump it :-)
-
- However, note that at the moment, there is a huge size difference between
-oracle-mysql and mariadb: oracle-mysql server is just around 10MB, while mariadb
-is over 100MB.
-
-
- Regards,
- Arnout
-
+On Fri,  9 Nov 2018 18:26:48 +0100, Fabrice Fontaine wrote:
+> Bump to version 1.61.1 added BPF based protocols support:
+> https://git.linuxtv.org/v4l-utils.git/commit/?id=d6025b0e8c7f57b0f9390f987acc5eed57360d80
 > 
-> Hopefully my commit messages are getting better :)
+> However, this dependency needs BPF support in kernel. On old kernels
+> (before 3.18), __NR_BPF is not defined for all architectures.
+> So retrieve upstream patch and add an option to enable BPF only if
+> headers are above 3.18.
 > 
+> Also drop patch to add bpf_common.h on old kernels (not needed anymore)
 > 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/442de57cb76a7b38d71d690490faadc641036374
 > 
-> Christopher McCrory (1):
->   mariadb: fix mysql_config when cross compiling
-> 
->  package/mariadb/mariadb.mk | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Thanks for working on this!
+
+
+> +ifeq ($(BR2_PACKAGE_LIBV4L_UTILS_IR_BPF_BASED_DECODERS),y)
+> +LIBV4L_CONF_OPTS += --enable-bpf
+> +LIBV4L_DEPENDENCIES += elfutils
+> +
+>  # Disable clang that is used to build BPF (in-kernel bytecode machine) protocols
+>  LIBV4L_CONF_ENV += ac_cv_prog_CLANG=""
+
+So without clang, how are BPF protocols being built ?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
