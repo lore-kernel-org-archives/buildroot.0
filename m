@@ -1,35 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 9 Nov 2018 11:55:56 +0100
-Subject: [Buildroot] [PATCH v1] valgrind: fix mips64 compile
-In-Reply-To: <20181108230814.4773-1-ps.report@gmx.net>
-References: <20181108230814.4773-1-ps.report@gmx.net>
-Message-ID: <20181109115556.424971fe@windsurf>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Fri,  9 Nov 2018 12:01:44 +0100
+Subject: [Buildroot] [PATCH] libgpiod: bump version to v1.2
+Message-ID: <20181109110144.21013-1-brgl@bgdev.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Release notes:
+  https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/tree/NEWS?h=v1.2.x
 
-On Fri,  9 Nov 2018 00:08:14 +0100, Peter Seiderer wrote:
-> Disable gcc march mips64r2 detection (use compile flags already
-> set by buildroot only), avoids double setting like '-march=mips64
-> ... -march=mips64r2 -mabi=64'.
-> 
-> Fixes [1]:
-> 
->   error: '-mips64r2' conflicts with the other architecture options, which specify a mips64 processor
-> 
-> [1] http://autobuild.buildroot.net/results/34f6e2352f1559f98c724fe5394db0035b42ddb1
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+---
+ package/libgpiod/libgpiod.hash | 2 +-
+ package/libgpiod/libgpiod.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks for this patch. Could we find something acceptable upstream? Why
-is valgrind configure script enforcing those CFLAGS ?
-
-Thomas
+diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
+index 99f7f8a298..318a107adf 100644
+--- a/package/libgpiod/libgpiod.hash
++++ b/package/libgpiod/libgpiod.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
+-sha256 172fa1544ecb51f37533b3e67862298d50c0a5cc84975f3c0706dc15467f0dfd  libgpiod-1.1.1.tar.xz
++sha256 b6b9079c933f7c8524815437937dda6b795a16141bca202a9eec70ba5844b5ba  libgpiod-1.2.tar.xz
+ # Hash for license file
+ sha256 ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
+diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+index 8854b3b0c8..545526515f 100644
+--- a/package/libgpiod/libgpiod.mk
++++ b/package/libgpiod/libgpiod.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGPIOD_VERSION = 1.1.1
++LIBGPIOD_VERSION = 1.2
+ LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
+ LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
+ LIBGPIOD_LICENSE = LGPL-2.1+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.19.1
