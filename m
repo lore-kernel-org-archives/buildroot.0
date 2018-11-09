@@ -1,44 +1,178 @@
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Fri,  9 Nov 2018 12:01:44 +0100
-Subject: [Buildroot] [PATCH] libgpiod: bump version to v1.2
-Message-ID: <20181109110144.21013-1-brgl@bgdev.pl>
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Date: Fri,  9 Nov 2018 12:10:50 +0100
+Subject: [Buildroot] [PATCH 1/1] attr: Add a patch to fix an unconditional
+ infinite recursion.
+Message-ID: <20181109111050.11260-1-nicolas.cavallari@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-  https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/tree/NEWS?h=v1.2.x
+The bump to 2.4.48 introduced a bug that, according to the author,
+only happen in certain cases on glibc. But under uclibc-ng, it happens
+every time.
 
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+The bug essentially cause any program calling any libattr.so function
+to enter an infinite recursion, because of a symbol conflict between
+uclibc-ng and libattr wrappers, that causes the libattr wrappers to
+call themselves.
+
+This infinite recursion does not consume the stack, so programs
+basically behave like they enter an infinite loop.
+
+It is easy to reproduce with qemu_arm_versatile_defconfig +
+BR2_PACKAGE_ATTR: "getfattr ." never returns and takes 100% CPU.
+
+Upstream fixed it, but the patch is not part of a release yet,
+so take the patch.
+
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+
+--
+An alternative is to bump the version to this commit in the master
+branch.  The other changes[1] are mostly related to tests or
+documentation, except for one patch[2] that tries more aggressively to
+enable large file support.
+
+[1] http://git.savannah.nongnu.org/cgit/attr.git/log/
+[2] http://git.savannah.nongnu.org/cgit/attr.git/commit/?id=fd1d8ee21df8d11460baa858ae5c5d20e38fb70e
 ---
- package/libgpiod/libgpiod.hash | 2 +-
- package/libgpiod/libgpiod.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../attr/0002-Switch-back-to-syscall.patch    | 126 ++++++++++++++++++
+ 1 file changed, 126 insertions(+)
+ create mode 100644 package/attr/0002-Switch-back-to-syscall.patch
 
-diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
-index 99f7f8a298..318a107adf 100644
---- a/package/libgpiod/libgpiod.hash
-+++ b/package/libgpiod/libgpiod.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
--sha256 172fa1544ecb51f37533b3e67862298d50c0a5cc84975f3c0706dc15467f0dfd  libgpiod-1.1.1.tar.xz
-+sha256 b6b9079c933f7c8524815437937dda6b795a16141bca202a9eec70ba5844b5ba  libgpiod-1.2.tar.xz
- # Hash for license file
- sha256 ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
-diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
-index 8854b3b0c8..545526515f 100644
---- a/package/libgpiod/libgpiod.mk
-+++ b/package/libgpiod/libgpiod.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGPIOD_VERSION = 1.1.1
-+LIBGPIOD_VERSION = 1.2
- LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
- LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
- LIBGPIOD_LICENSE = LGPL-2.1+
+diff --git a/package/attr/0002-Switch-back-to-syscall.patch b/package/attr/0002-Switch-back-to-syscall.patch
+new file mode 100644
+index 0000000000..de879e23ab
+--- /dev/null
++++ b/package/attr/0002-Switch-back-to-syscall.patch
+@@ -0,0 +1,126 @@
++From 14adc898a36948267bfe5c63b399996879e94c98 Mon Sep 17 00:00:00 2001
++From: Andreas Gruenbacher <agruenba@redhat.com>
++Date: Fri, 17 Aug 2018 14:07:31 +0200
++Subject: Switch back to syscall()
++
++Switch back to syscall() for the *xattr system calls.  The current
++mechanism of forwarding those calls to glibc breaks libraries like
++libfakeroot (fakeroot) and libasan (the gcc address sanitizer; gcc
++-fsanitize=address).
++
++Those libraries provide wrappers for functions defined in other shared
++libraries, usually glibc, do their own processing, and forward calls to
++the original symbols looke dup via dlsym(RTLD_NEXT, "symbol_name").  In
++our case, dlsym returns the libattr_*xattr wrappers.  However, when our
++wrappers try calling glibc, they end up calling the libfakeroot /
++libasan wrappers instead because those override the original symbols =>
++recursion.
++
++The libattr_*xattr wrappers will only be used when symbols are looked up
++at runtime (dlopen / dlsym).  Programs linking against libattr will
++directly use the glibc provided symbols.  Therefore, the slightly worse
++performance of syscall() won't affect any of the "normal" users of
++libattr.
++
++[nicolas.cavallari: with uclibc-ng, the recursion always happen]
++Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
++---
++ libattr/syscalls.c | 26 ++++++++++++++------------
++ 1 file changed, 14 insertions(+), 12 deletions(-)
++
++diff --git a/libattr/syscalls.c b/libattr/syscalls.c
++index 3013aa0..721ad7f 100644
++--- a/libattr/syscalls.c
+++++ b/libattr/syscalls.c
++@@ -22,6 +22,8 @@
++ 
++ #include "config.h"
++ 
+++#include <unistd.h>
+++#include <sys/syscall.h>
++ #include <sys/xattr.h>
++ 
++ #ifdef HAVE_VISIBILITY_ATTRIBUTE
++@@ -31,67 +33,67 @@
++ int libattr_setxattr(const char *path, const char *name,
++ 		     void *value, size_t size, int flags)
++ {
++-	return setxattr(path, name, value, size, flags);
+++	return syscall(__NR_setxattr, path, name, value, size, flags);
++ }
++ 
++ int libattr_lsetxattr(const char *path, const char *name,
++ 		      void *value, size_t size, int flags)
++ {
++-	return lsetxattr(path, name, value, size, flags);
+++	return syscall(__NR_lsetxattr, path, name, value, size, flags);
++ }
++ 
++ int libattr_fsetxattr(int filedes, const char *name,
++ 		      void *value, size_t size, int flags)
++ {
++-	return fsetxattr(filedes, name, value, size, flags);
+++	return syscall(__NR_fsetxattr, filedes, name, value, size, flags);
++ }
++ 
++ ssize_t libattr_getxattr(const char *path, const char *name,
++ 			 void *value, size_t size)
++ {
++-	return getxattr(path, name, value, size);
+++	return syscall(__NR_getxattr, path, name, value, size);
++ }
++ 
++ ssize_t libattr_lgetxattr(const char *path, const char *name,
++ 			  void *value, size_t size)
++ {
++-	return lgetxattr(path, name, value, size);
+++	return syscall(__NR_lgetxattr, path, name, value, size);
++ }
++ 
++ ssize_t libattr_fgetxattr(int filedes, const char *name,
++ 			  void *value, size_t size)
++ {
++-	return fgetxattr(filedes, name, value, size);
+++	return syscall(__NR_fgetxattr, filedes, name, value, size);
++ }
++ 
++ ssize_t libattr_listxattr(const char *path, char *list, size_t size)
++ {
++-	return listxattr(path, list, size);
+++	return syscall(__NR_listxattr, path, list, size);
++ }
++ 
++ ssize_t libattr_llistxattr(const char *path, char *list, size_t size)
++ {
++-	return llistxattr(path, list, size);
+++	return syscall(__NR_llistxattr, path, list, size);
++ }
++ 
++ ssize_t libattr_flistxattr(int filedes, char *list, size_t size)
++ {
++-	return flistxattr(filedes, list, size);
+++	return syscall(__NR_flistxattr, filedes, list, size);
++ }
++ 
++ int libattr_removexattr(const char *path, const char *name)
++ {
++-	return removexattr(path, name);
+++	return syscall(__NR_removexattr, path, name);
++ }
++ 
++ int libattr_lremovexattr(const char *path, const char *name)
++ {
++-	return lremovexattr(path, name);
+++	return syscall(__NR_lremovexattr, path, name);
++ }
++ 
++ int libattr_fremovexattr(int filedes, const char *name)
++ {
++-	return fremovexattr(filedes, name);
+++	return syscall(__NR_fremovexattr, filedes, name);
++ }
++ 
++ #ifdef HAVE_VISIBILITY_ATTRIBUTE
++-- 
++cgit v1.0-41-gc330
++
 -- 
 2.19.1
