@@ -1,70 +1,126 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 9 Nov 2018 22:06:10 +0100
-Subject: [Buildroot] [PATCH v2] linux-firmware: bump version to latest
- 1baa348
-In-Reply-To: <20181109215700.6b8dc6af@windsurf>
-References: <20181108153322.17362-1-m.niestroj@grinn-global.com>
- <20181109215700.6b8dc6af@windsurf>
-Message-ID: <20181109210610.GB2445@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 9 Nov 2018 22:07:03 +0100
+Subject: [Buildroot] [PATCH v2] iwd: new package
+In-Reply-To: <20181108224100.9462-1-ps.report@gmx.net>
+References: <20181108224100.9462-1-ps.report@gmx.net>
+Message-ID: <ee834fdd-4841-0cf4-6e3a-436b7c203b78@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Marcin, Thomas, All,
+ He Peter,
 
-On 2018-11-09 21:57 +0100, Thomas Petazzoni spake thusly:
-> On Thu,  8 Nov 2018 16:33:22 +0100, Marcin Niestroj wrote:
-> 
-> > -sha256 b279ca4d086887c2efab13e28a7ca36e409410d3df38a62d7c7b5799ee3de916 linux-firmware-44d4fca9922a252a0bd81f6307bcc072a78da54a.tar.gz
-> > +sha256 3e4fcbac18990a14d52159fefdc70081a56c5244adba28b14242e159a748e755 linux-firmware-1baa34868b2c0a004dc595b20678145e3fff83e7.tar.gz
-> 
-> I am sorry, but this hash is still not good for me, I get:
-> 
->   5c636765fd1ac638176893feccfd4a4854f59fc3d01b38f3ccdbb89bd5bb6ef1
-> 
-> I.e:
-> 
-> ERROR: linux-firmware-1baa34868b2c0a004dc595b20678145e3fff83e7.tar.gz has wrong sha256 hash:
-> ERROR: expected: 3e4fcbac18990a14d52159fefdc70081a56c5244adba28b14242e159a748e755
-> ERROR: got     : 5c636765fd1ac638176893feccfd4a4854f59fc3d01b38f3ccdbb89bd5bb6ef1
-> 
-> And this morning, Yann E. Morin reported having the same hash as me:
-> 
-> 08:07 < y_morin> kos_tom: I also have a different hash here.
-> 08:10 < y_morin> kos_tom: FTR, I got: 5c636765fd1ac638176893feccfd4a4854f59fc3d01b38f3ccdbb89bd5bb6ef1
+On 08/11/2018 23:41, Peter Seiderer wrote:
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+> Changes v1 -> v2:
+>   - update patch 0003-Fix-__iwd_backtrace_init-availability-detection.patch
+>   - fix iwd needs comment (missing depends on BR2_TOOLCHAIN_HAS_SYNC_4)
+>   - moved GPL-3.0+ (client) to enable client section
+>   - add DEVELOPERS entry
+> ---
+>  DEVELOPERS                                    |  1 +
+>  package/Config.in                             |  1 +
+>  ...til.c-add-missing-ell-utf8.h-include.patch | 46 ++++++++++++++
+>  ...cap.c-add-missing-sys-stat.h-include.patch | 46 ++++++++++++++
+>  ...acktrace_init-availability-detection.patch | 62 +++++++++++++++++++
+>  package/iwd/Config.in                         | 14 +++++
+>  package/iwd/iwd.hash                          |  5 ++
+>  package/iwd/iwd.mk                            | 47 ++++++++++++++
+>  8 files changed, 222 insertions(+)
+>  create mode 100644 package/iwd/0001-src-util.c-add-missing-ell-utf8.h-include.patch
+>  create mode 100644 package/iwd/0002-monitor-pcap.c-add-missing-sys-stat.h-include.patch
+>  create mode 100644 package/iwd/0003-Fix-__iwd_backtrace_init-availability-detection.patch
 
-Right.
+ Have you sent these patches upstream?
 
-> My system tar is 1.29, which is considered as a "good" version by
-> support/dependencies/check-host-tar.sh. I have nonetheless forced
-> building host-tar, and I still get the same hash.
-
-Recently, another user reported hash issues as well, and it turned out
-that they had changed gzip to be really pigz (a parallel gzip). Can you
-check if that is not your case too?
-
-Regards,
-Yann E. MORIN.
-
-> I have uploaded the tarball at
-> https://bootlin.com/~thomas/pub/linux-firmware-1baa34868b2c0a004dc595b20678145e3fff83e7.tar.gz.
-> Could you upload the tarball that was generated on your side so that we
-> can compare them, and see where the problem lies ?
+>  create mode 100644 package/iwd/Config.in
+>  create mode 100644 package/iwd/iwd.hash
+>  create mode 100644 package/iwd/iwd.mk
 > 
-> Best regards,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 53467da489..d2c553a2ca 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1660,6 +1660,7 @@ F:	package/ghostscript-fonts/
+>  F:	package/gstreamer1/gst1-interpipe/
+>  F:	package/gstreamer1/gst1-validate/
+>  F:	package/gstreamer1/gstreamer1-editing-services/
+> +F:	package/iwd/
+>  F:	package/libevdev/
+>  F:	package/log4cplus/
+>  F:	package/postgresql/
+> diff --git a/package/Config.in b/package/Config.in
+> index b60e7700ad..2f2c0dc4e3 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1866,6 +1866,7 @@ menu "Networking applications"
+>  	source "package/iputils/Config.in"
+>  	source "package/irssi/Config.in"
+>  	source "package/iw/Config.in"
+> +	source "package/iwd/Config.in"
+>  	source "package/janus-gateway/Config.in"
+>  	source "package/keepalived/Config.in"
+>  	source "package/kismet/Config.in"
+> diff --git a/package/iwd/0001-src-util.c-add-missing-ell-utf8.h-include.patch b/package/iwd/0001-src-util.c-add-missing-ell-utf8.h-include.patch
+> new file mode 100644
+> index 0000000000..549cd6fdd1
+> --- /dev/null
+> +++ b/package/iwd/0001-src-util.c-add-missing-ell-utf8.h-include.patch
+> @@ -0,0 +1,46 @@
+> +From 174eb3088e78b75b4e488c023808c6f3bf7aae06 Mon Sep 17 00:00:00 2001
+> +From: Peter Seiderer <ps.report@gmx.net>
+> +Date: Fri, 2 Nov 2018 14:19:12 +0100
+> +Subject: [PATCH] src/util.c: add missing ell/utf8.h include
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+ Anything wrong with upstream patch be5bf7ee155677afd2fc900ddf1bb6f91e65afe3?
+
+
+ Regards,
+ Arnout
+
+
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
+> +
+> +Fixes:
+> +
+> +  src/util.c: In function ?util_ssid_to_utf8?:
+> +  src/util.c:57:16: warning: implicit declaration of function ?l_utf8_validate? [-Wimplicit-function-declaration]
+> +    while (i && (!l_utf8_validate((const char *)start, i,
+> +                  ^~~~~~~~~~~~~~~
+> +  src/util.c: In function ?util_string_to_address?:
+> +  src/util.c:128:8: warning: implicit declaration of function ?l_ascii_isxdigit? [-Wimplicit-function-declaration]
+> +     if (!l_ascii_isxdigit(str[i]))
+> +          ^~~~~~~~~~~~~~~~
+> +[...]
+> +  src/util.o: In function `util_string_to_address':
+> +  util.c:(.text+0x21c): undefined reference to `l_ascii_isxdigit'
+> +  util.c:(.text+0x228): undefined reference to `l_ascii_isxdigit'
+> +  util.c:(.text+0x24c): undefined reference to `l_ascii_isxdigit'
+> +  util.c:(.text+0x258): undefined reference to `l_ascii_isxdigit'
+> +  collect2: error: ld returned 1 exit status
+> +
+> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> +---
+> + src/util.c | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/src/util.c b/src/util.c
+> +index 7a08940..e12b622 100644
+> +--- a/src/util.c
+> ++++ b/src/util.c
+> +@@ -29,6 +29,7 @@
+> + #include <sys/uio.h>
+> + 
+> + #include <ell/string.h>
+> ++#include <ell/utf8.h>
+> + #include <ell/genl.h>
+> + #include <ell/util.h>
+> + #include <ell/log.h>
+> +-- 
+> +2.19.1
+[snip]
