@@ -1,52 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 9 Nov 2018 22:24:37 +0100
-Subject: [Buildroot] [git commit] package/meson: bump to version 0.47.2
-Message-ID: <20181109212208.94F88821CE@busybox.osuosl.org>
+Date: Fri, 9 Nov 2018 22:24:49 +0100
+Subject: [Buildroot] [PATCH] package/meson: bump to version 0.47.2
+In-Reply-To: <20181105000518.32336-1-joerg.krause@embedded.rocks>
+References: <20181105000518.32336-1-joerg.krause@embedded.rocks>
+Message-ID: <20181109222449.62f55771@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55b5dfc1bf99999592ad074ef18f59ce92c69a76
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Note, that there is already a patch [1] to bump the version to 0.48.1.
-However, the bump to version 0.48.x has some unresolved issues.
+On Mon,  5 Nov 2018 01:05:18 +0100, J?rg Krause wrote:
+> Note, that there is already a patch [1] to bump the version to 0.48.1.
+> However, the bump to version 0.48.x has some unresolved issues.
+> 
+> In the meantime, until the issue with 0.48 is resolved, bump to latest
+> version of the 0.47 branch.
+> 
+> [1] http://patchwork.ozlabs.org/patch/986260/
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+>  package/meson/meson.hash | 4 ++--
+>  package/meson/meson.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-In the meantime, until the issue with 0.48 is resolved, bump to latest
-version of the 0.47 branch.
+Applied to master, thanks.
 
-[1] http://patchwork.ozlabs.org/patch/986260/
-
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/meson/meson.hash | 4 ++--
- package/meson/meson.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index 4a4923bd12..a9968977d4 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/0.47.1/meson-0.47.1.tar.gz.asc
--sha256 d673de79f7bab064190a5ea06140eaa8415efb386d0121ba549f6d66c555ada6 meson-0.47.1.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/0.47.2/meson-0.47.2.tar.gz.asc
-+sha256 92d8afd921751261e36151643464efd3394162f69efbe8cd53e0a66b1cf395eb meson-0.47.2.tar.gz
- sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index 08e5c505c9..e1675c21b8 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MESON_VERSION = 0.47.1
-+MESON_VERSION = 0.47.2
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
