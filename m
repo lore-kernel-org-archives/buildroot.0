@@ -1,170 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 9 Nov 2018 14:08:02 +0100
-Subject: [Buildroot] [git commit] attr: Add a patch to fix an unconditional
- infinite recursion
-Message-ID: <20181109130553.7E1BA81EEF@busybox.osuosl.org>
+Date: Fri,  9 Nov 2018 14:55:32 +0100
+Subject: [Buildroot] [PATCH] squid: security bump to version 4.4
+Message-ID: <20181109135533.18802-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99989d3b91ef6cadc0c8d1a73203178da9ac6af7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes SQUID-2018_4:
 
-The bump to 2.4.48 introduced a bug that, according to the author,
-only happen in certain cases on glibc. But under uclibc-ng, it happens
-every time.
+Due to incorrect input handling, Squid is vulnerable to a Cross-Site
+Scripting vulnerability when generating HTTPS response messages about TLS
+errors.
 
-The bug essentially cause any program calling any libattr.so function
-to enter an infinite recursion, because of a symbol conflict between
-uclibc-ng and libattr wrappers, that causes the libattr wrappers to
-call themselves.
+For more details, see the advisory:
 
-This infinite recursion does not consume the stack, so programs
-basically behave like they enter an infinite loop.
+http://www.squid-cache.org/Advisories/SQUID-2018_4.txt
 
-It is easy to reproduce with qemu_arm_versatile_defconfig +
-BR2_PACKAGE_ATTR: "getfattr ." never returns and takes 100% CPU.
-
-Upstream fixed it, but the patch is not part of a release yet,
-so take the patch.
-
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/attr/0002-Switch-back-to-syscall.patch | 126 +++++++++++++++++++++++++
- 1 file changed, 126 insertions(+)
+ package/squid/squid.hash | 8 ++++----
+ package/squid/squid.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/attr/0002-Switch-back-to-syscall.patch b/package/attr/0002-Switch-back-to-syscall.patch
-new file mode 100644
-index 0000000000..de879e23ab
---- /dev/null
-+++ b/package/attr/0002-Switch-back-to-syscall.patch
-@@ -0,0 +1,126 @@
-+From 14adc898a36948267bfe5c63b399996879e94c98 Mon Sep 17 00:00:00 2001
-+From: Andreas Gruenbacher <agruenba@redhat.com>
-+Date: Fri, 17 Aug 2018 14:07:31 +0200
-+Subject: Switch back to syscall()
-+
-+Switch back to syscall() for the *xattr system calls.  The current
-+mechanism of forwarding those calls to glibc breaks libraries like
-+libfakeroot (fakeroot) and libasan (the gcc address sanitizer; gcc
-+-fsanitize=address).
-+
-+Those libraries provide wrappers for functions defined in other shared
-+libraries, usually glibc, do their own processing, and forward calls to
-+the original symbols looke dup via dlsym(RTLD_NEXT, "symbol_name").  In
-+our case, dlsym returns the libattr_*xattr wrappers.  However, when our
-+wrappers try calling glibc, they end up calling the libfakeroot /
-+libasan wrappers instead because those override the original symbols =>
-+recursion.
-+
-+The libattr_*xattr wrappers will only be used when symbols are looked up
-+at runtime (dlopen / dlsym).  Programs linking against libattr will
-+directly use the glibc provided symbols.  Therefore, the slightly worse
-+performance of syscall() won't affect any of the "normal" users of
-+libattr.
-+
-+[nicolas.cavallari: with uclibc-ng, the recursion always happen]
-+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-+---
-+ libattr/syscalls.c | 26 ++++++++++++++------------
-+ 1 file changed, 14 insertions(+), 12 deletions(-)
-+
-+diff --git a/libattr/syscalls.c b/libattr/syscalls.c
-+index 3013aa0..721ad7f 100644
-+--- a/libattr/syscalls.c
-++++ b/libattr/syscalls.c
-+@@ -22,6 +22,8 @@
-+ 
-+ #include "config.h"
-+ 
-++#include <unistd.h>
-++#include <sys/syscall.h>
-+ #include <sys/xattr.h>
-+ 
-+ #ifdef HAVE_VISIBILITY_ATTRIBUTE
-+@@ -31,67 +33,67 @@
-+ int libattr_setxattr(const char *path, const char *name,
-+ 		     void *value, size_t size, int flags)
-+ {
-+-	return setxattr(path, name, value, size, flags);
-++	return syscall(__NR_setxattr, path, name, value, size, flags);
-+ }
-+ 
-+ int libattr_lsetxattr(const char *path, const char *name,
-+ 		      void *value, size_t size, int flags)
-+ {
-+-	return lsetxattr(path, name, value, size, flags);
-++	return syscall(__NR_lsetxattr, path, name, value, size, flags);
-+ }
-+ 
-+ int libattr_fsetxattr(int filedes, const char *name,
-+ 		      void *value, size_t size, int flags)
-+ {
-+-	return fsetxattr(filedes, name, value, size, flags);
-++	return syscall(__NR_fsetxattr, filedes, name, value, size, flags);
-+ }
-+ 
-+ ssize_t libattr_getxattr(const char *path, const char *name,
-+ 			 void *value, size_t size)
-+ {
-+-	return getxattr(path, name, value, size);
-++	return syscall(__NR_getxattr, path, name, value, size);
-+ }
-+ 
-+ ssize_t libattr_lgetxattr(const char *path, const char *name,
-+ 			  void *value, size_t size)
-+ {
-+-	return lgetxattr(path, name, value, size);
-++	return syscall(__NR_lgetxattr, path, name, value, size);
-+ }
-+ 
-+ ssize_t libattr_fgetxattr(int filedes, const char *name,
-+ 			  void *value, size_t size)
-+ {
-+-	return fgetxattr(filedes, name, value, size);
-++	return syscall(__NR_fgetxattr, filedes, name, value, size);
-+ }
-+ 
-+ ssize_t libattr_listxattr(const char *path, char *list, size_t size)
-+ {
-+-	return listxattr(path, list, size);
-++	return syscall(__NR_listxattr, path, list, size);
-+ }
-+ 
-+ ssize_t libattr_llistxattr(const char *path, char *list, size_t size)
-+ {
-+-	return llistxattr(path, list, size);
-++	return syscall(__NR_llistxattr, path, list, size);
-+ }
-+ 
-+ ssize_t libattr_flistxattr(int filedes, char *list, size_t size)
-+ {
-+-	return flistxattr(filedes, list, size);
-++	return syscall(__NR_flistxattr, filedes, list, size);
-+ }
-+ 
-+ int libattr_removexattr(const char *path, const char *name)
-+ {
-+-	return removexattr(path, name);
-++	return syscall(__NR_removexattr, path, name);
-+ }
-+ 
-+ int libattr_lremovexattr(const char *path, const char *name)
-+ {
-+-	return lremovexattr(path, name);
-++	return syscall(__NR_lremovexattr, path, name);
-+ }
-+ 
-+ int libattr_fremovexattr(int filedes, const char *name)
-+ {
-+-	return fremovexattr(filedes, name);
-++	return syscall(__NR_fremovexattr, filedes, name);
-+ }
-+ 
-+ #ifdef HAVE_VISIBILITY_ATTRIBUTE
-+-- 
-+cgit v1.0-41-gc330
-+
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index 195477359a..5e872707ce 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,6 +1,6 @@
+-# From http://www.squid-cache.org/Versions/v4/squid-4.3.tar.xz.asc
+-md5 ebb67abaec4db9d298c0edd8e1ffaca4 squid-4.3.tar.xz
+-sha1 690540e7d0904e3959557f8beca45dbac1c94578 squid-4.3.tar.xz
++# From http://www.squid-cache.org/Versions/v4/squid-4.4.tar.xz.asc
++md5 892504ca9700e1f139a53f84098613bd squid-4.4.tar.xz
++sha1 0ab6b133f65866d825bf72cbbe8cef209768b2fa squid-4.4.tar.xz
+ # Locally calculated
+-sha256 322612ef0544828f6c673a25124b32364fb41ef5e2847e21c89480b5546a4c7c squid-4.3.tar.xz
++sha256 4905e6da7f5574d2583ba36f398bb062a12d51e70d67035078b6e85b09e9ee82 squid-4.4.tar.xz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 9335615559..b661d5d133 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SQUID_VERSION = 4.3
++SQUID_VERSION = 4.4
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v4
+ SQUID_LICENSE = GPL-2.0+
+-- 
+2.11.0
