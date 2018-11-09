@@ -1,56 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri,  9 Nov 2018 14:55:32 +0100
-Subject: [Buildroot] [PATCH] squid: security bump to version 4.4
-Message-ID: <20181109135533.18802-1-peter@korsgaard.com>
+From: Alexey Brodkin <alexey.brodkin@synopsys.com>
+Date: Fri,  9 Nov 2018 17:00:23 +0300
+Subject: [Buildroot] [PATCH] toolchain: Enable Glibc for all little-endian
+ ARCs with atomic ops
+Message-ID: <20181109140023.21402-1-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes SQUID-2018_4:
+Initially we had a port only for ARCv2 cores but
+then with a simple change ARCompact cores got supported as well.
 
-Due to incorrect input handling, Squid is vulnerable to a Cross-Site
-Scripting vulnerability when generating HTTPS response messages about TLS
-errors.
+So we generalize from BR2_archs to BR2_arcle as we haven't tried
+to get glibc working on big-endian ARCs yet.
 
-For more details, see the advisory:
+Also we never bothered to check avaialbility of atomic
+instructions in the core but in case of Glibc for ARC this is
+really a must, so we add this check here.
 
-http://www.squid-cache.org/Advisories/SQUID-2018_4.txt
+Note in case of uClibc we may have system w/o HW atomics but:
+ 1. Only single-core systems are allowed
+ 2. Atomic instructions are emulated via arc_usr_cmpxchg syscall
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/squid/squid.hash | 8 ++++----
- package/squid/squid.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ toolchain/toolchain-buildroot/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index 195477359a..5e872707ce 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,6 +1,6 @@
--# From http://www.squid-cache.org/Versions/v4/squid-4.3.tar.xz.asc
--md5 ebb67abaec4db9d298c0edd8e1ffaca4 squid-4.3.tar.xz
--sha1 690540e7d0904e3959557f8beca45dbac1c94578 squid-4.3.tar.xz
-+# From http://www.squid-cache.org/Versions/v4/squid-4.4.tar.xz.asc
-+md5 892504ca9700e1f139a53f84098613bd squid-4.4.tar.xz
-+sha1 0ab6b133f65866d825bf72cbbe8cef209768b2fa squid-4.4.tar.xz
- # Locally calculated
--sha256 322612ef0544828f6c673a25124b32364fb41ef5e2847e21c89480b5546a4c7c squid-4.3.tar.xz
-+sha256 4905e6da7f5574d2583ba36f398bb062a12d51e70d67035078b6e85b09e9ee82 squid-4.4.tar.xz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 9335615559..b661d5d133 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SQUID_VERSION = 4.3
-+SQUID_VERSION = 4.4
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v4
- SQUID_LICENSE = GPL-2.0+
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 7d9428c70ed0..8d6997e7790b 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -48,7 +48,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 		   BR2_powerpc     || BR2_powerpc64  || BR2_powerpc64le || \
+ 		   BR2_riscv       || BR2_sh         || BR2_sparc64     || \
+ 		   BR2_x86_64      || BR2_microblaze || BR2_nios2       || \
+-		   BR2_archs38
++		   BR2_arcle
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+@@ -56,6 +56,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5 || !BR2_MIPS_NAN_2008
+ 	depends on !BR2_powerpc_SPE
+ 	depends on BR2_RISCV_ISA_RVA || !BR2_riscv
++	depends on BR2_ARC_ATOMIC_EXT || !BR2_arc
+ 	select BR2_TOOLCHAIN_USES_GLIBC
+ 	# our glibc.mk enables RPC support
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
 -- 
-2.11.0
+2.19.1
