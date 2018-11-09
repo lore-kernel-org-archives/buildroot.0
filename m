@@ -1,28 +1,169 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 09 Nov 2018 15:51:23 +0100
-Subject: [Buildroot] [PATCH] package/gcc: fix xtensa uclinux code
+Date: Fri, 9 Nov 2018 15:51:07 +0100
+Subject: [Buildroot] [git commit] package/gcc: fix xtensa uclinux code
  generation
-In-Reply-To: <20181107212050.32439-1-jcmvbkbc@gmail.com> (Max Filippov's
- message of "Wed, 7 Nov 2018 13:20:50 -0800")
-References: <20181107212050.32439-1-jcmvbkbc@gmail.com>
-Message-ID: <87pnve7190.fsf@dell.be.48ers.dk>
+Message-ID: <20181109144900.C58678208E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Max" == Max Filippov <jcmvbkbc@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=4debb2fbb7d60ed7f81ddab82d8b48ac9c4c3055
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > xtensa-uclinux uses bFLT executable file format that cannot relocate
- > fields representing offsets from data to code. C++ objects built as PIC
- > use offsets to encode FDE structures. As a result C++ exception handling
- > doesn't work correctly on xtensa-uclinux. Don't use PIC by default on
- > xtensa-uclinux.
+xtensa-uclinux uses bFLT executable file format that cannot relocate
+fields representing offsets from data to code. C++ objects built as PIC
+use offsets to encode FDE structures. As a result C++ exception handling
+doesn't work correctly on xtensa-uclinux. Don't use PIC by default on
+xtensa-uclinux.
 
- > Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...xtensa-don-t-force-PIC-for-uclinux-target.patch | 41 ++++++++++++++++++++++
+ ...xtensa-don-t-force-PIC-for-uclinux-target.patch | 41 ++++++++++++++++++++++
+ ...xtensa-don-t-force-PIC-for-uclinux-target.patch | 41 ++++++++++++++++++++++
+ 3 files changed, 123 insertions(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gcc/6.4.0/0004-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch b/package/gcc/6.4.0/0004-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch
+new file mode 100644
+index 0000000000..360947cbb1
+--- /dev/null
++++ b/package/gcc/6.4.0/0004-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch
+@@ -0,0 +1,41 @@
++From 960a2552f7b418134cdf7a31e96023a3811b98dd Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Sun, 4 Nov 2018 23:55:59 -0800
++Subject: [PATCH] gcc: xtensa: don't force PIC for uclinux target
++
++xtensa-uclinux uses bFLT executable file format that cannot relocate
++fields representing offsets from data to code. C++ objects built as PIC
++use offsets to encode FDE structures. As a result C++ exception handling
++doesn't work correctly on xtensa-uclinux. Don't use PIC by default on
++xtensa-uclinux.
++
++gcc/
++2018-11-05  Max Filippov  <jcmvbkbc@gmail.com>
++
++	* config/xtensa/uclinux.h (XTENSA_ALWAYS_PIC): Change to 0.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: r265823
++
++ gcc/config/xtensa/uclinux.h | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/gcc/config/xtensa/uclinux.h b/gcc/config/xtensa/uclinux.h
++index ba26187c8f7a..c7743df9d97c 100644
++--- a/gcc/config/xtensa/uclinux.h
+++++ b/gcc/config/xtensa/uclinux.h
++@@ -59,8 +59,8 @@ along with GCC; see the file COPYING3.  If not see
++ #undef LOCAL_LABEL_PREFIX
++ #define LOCAL_LABEL_PREFIX	"."
++ 
++-/* Always enable "-fpic" for Xtensa Linux.  */
++-#define XTENSA_ALWAYS_PIC 1
+++/* Don't enable "-fpic" for Xtensa uclinux.  */
+++#define XTENSA_ALWAYS_PIC 0
++ 
++ #undef TARGET_LIBC_HAS_FUNCTION
++ #define TARGET_LIBC_HAS_FUNCTION no_c99_libc_has_function
++-- 
++2.11.0
++
+diff --git a/package/gcc/7.3.0/0005-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch b/package/gcc/7.3.0/0005-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch
+new file mode 100644
+index 0000000000..360947cbb1
+--- /dev/null
++++ b/package/gcc/7.3.0/0005-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch
+@@ -0,0 +1,41 @@
++From 960a2552f7b418134cdf7a31e96023a3811b98dd Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Sun, 4 Nov 2018 23:55:59 -0800
++Subject: [PATCH] gcc: xtensa: don't force PIC for uclinux target
++
++xtensa-uclinux uses bFLT executable file format that cannot relocate
++fields representing offsets from data to code. C++ objects built as PIC
++use offsets to encode FDE structures. As a result C++ exception handling
++doesn't work correctly on xtensa-uclinux. Don't use PIC by default on
++xtensa-uclinux.
++
++gcc/
++2018-11-05  Max Filippov  <jcmvbkbc@gmail.com>
++
++	* config/xtensa/uclinux.h (XTENSA_ALWAYS_PIC): Change to 0.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: r265823
++
++ gcc/config/xtensa/uclinux.h | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/gcc/config/xtensa/uclinux.h b/gcc/config/xtensa/uclinux.h
++index ba26187c8f7a..c7743df9d97c 100644
++--- a/gcc/config/xtensa/uclinux.h
+++++ b/gcc/config/xtensa/uclinux.h
++@@ -59,8 +59,8 @@ along with GCC; see the file COPYING3.  If not see
++ #undef LOCAL_LABEL_PREFIX
++ #define LOCAL_LABEL_PREFIX	"."
++ 
++-/* Always enable "-fpic" for Xtensa Linux.  */
++-#define XTENSA_ALWAYS_PIC 1
+++/* Don't enable "-fpic" for Xtensa uclinux.  */
+++#define XTENSA_ALWAYS_PIC 0
++ 
++ #undef TARGET_LIBC_HAS_FUNCTION
++ #define TARGET_LIBC_HAS_FUNCTION no_c99_libc_has_function
++-- 
++2.11.0
++
+diff --git a/package/gcc/8.2.0/0005-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch b/package/gcc/8.2.0/0005-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch
+new file mode 100644
+index 0000000000..360947cbb1
+--- /dev/null
++++ b/package/gcc/8.2.0/0005-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch
+@@ -0,0 +1,41 @@
++From 960a2552f7b418134cdf7a31e96023a3811b98dd Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Sun, 4 Nov 2018 23:55:59 -0800
++Subject: [PATCH] gcc: xtensa: don't force PIC for uclinux target
++
++xtensa-uclinux uses bFLT executable file format that cannot relocate
++fields representing offsets from data to code. C++ objects built as PIC
++use offsets to encode FDE structures. As a result C++ exception handling
++doesn't work correctly on xtensa-uclinux. Don't use PIC by default on
++xtensa-uclinux.
++
++gcc/
++2018-11-05  Max Filippov  <jcmvbkbc@gmail.com>
++
++	* config/xtensa/uclinux.h (XTENSA_ALWAYS_PIC): Change to 0.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: r265823
++
++ gcc/config/xtensa/uclinux.h | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/gcc/config/xtensa/uclinux.h b/gcc/config/xtensa/uclinux.h
++index ba26187c8f7a..c7743df9d97c 100644
++--- a/gcc/config/xtensa/uclinux.h
+++++ b/gcc/config/xtensa/uclinux.h
++@@ -59,8 +59,8 @@ along with GCC; see the file COPYING3.  If not see
++ #undef LOCAL_LABEL_PREFIX
++ #define LOCAL_LABEL_PREFIX	"."
++ 
++-/* Always enable "-fpic" for Xtensa Linux.  */
++-#define XTENSA_ALWAYS_PIC 1
+++/* Don't enable "-fpic" for Xtensa uclinux.  */
+++#define XTENSA_ALWAYS_PIC 0
++ 
++ #undef TARGET_LIBC_HAS_FUNCTION
++ #define TARGET_LIBC_HAS_FUNCTION no_c99_libc_has_function
++-- 
++2.11.0
++
