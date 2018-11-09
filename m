@@ -1,68 +1,87 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 09 Nov 2018 15:54:54 +0100
-Subject: [Buildroot] [PATCH 1/1] mariadb: fix mysql_config when cross
- compiling
-In-Reply-To: <20181108170950.30189-2-chrismcc@gmail.com> (Christopher
- McCrory's message of "Thu, 8 Nov 2018 09:09:50 -0800")
-References: <20181108170950.30189-1-chrismcc@gmail.com>
- <20181108170950.30189-2-chrismcc@gmail.com>
-Message-ID: <87lg627135.fsf@dell.be.48ers.dk>
+Date: Fri, 9 Nov 2018 15:57:02 +0100
+Subject: [Buildroot] [git commit] package/libnfs: add patch to fix musl
+ build issue
+Message-ID: <20181109145437.C5350820E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Christopher" == Christopher McCrory <chrismcc@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=582fd7c094c697a3408c054b87406fcf249bcf72
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Mariadb_config in staging is not a shell script, this breaks
- > mysql_config when cross-compiling.  This in turn breaks package builds
- > needing the location of the include and library files. So remove it after
- > installation into $TARGET_DIR
+Add a patch to fix build issues with the musl C library.
 
- > Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
- > ---
- >  package/mariadb/mariadb.mk | 5 +++++
- >  1 file changed, 5 insertions(+)
+This patch fixes an autobuild issue when linking the mpd package
+against libnfs. The header file libnfs.h uses `struct timeval` which is
+defined in `<sys/time.h>` for POSIX systems. Unfortunately, upstream
+only includes it conditionally, based on the system. Therefore, we
+remove the check in the first patch.
 
- > diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
- > index 06d6365fab..52d47f98fc 100644
- > --- a/package/mariadb/mariadb.mk
- > +++ b/package/mariadb/mariadb.mk
- > @@ -125,10 +125,15 @@ endif
- 
- >  # We don't need mysql_config on the target as it's only useful in staging
- >  # We also don't need the test suite on the target
- > +# Also mariadb_config in staging is not a shell script, this breaks
- > +# mysql_config when cross-compiling.  This in turn breaks package builds
- > +# needing the location of the include and library files. So remove it after
- > +# installation into $TARGET_DIR
+Reported upstream:
+https://github.com/sahlberg/libnfs/issues/272
 
-Ehh, STAGING_DIR or TARGET_DIR?
+Fixes:
+http://autobuild.buildroot.org/results/452/4522014698b9fe50720a71b663e47a75805bcf54
+http://autobuild.buildroot.org/results/b0a/b0a0c20ad1705e9fa7ba4a12eb9c182e8077ab0c
+http://autobuild.buildroot.org/results/53c/53c87361923cc177de7889523b3d16ba6b1d3d0f
+.. and more.
 
-What then happens when those packages try to run mariadb_config to get
-the include/library locations? What if the build machine already has
-mariadb_config in the path?
+Previous patch: Changes requested
+http://patchwork.ozlabs.org/patch/973605/
 
->  define MARIADB_POST_INSTALL
- >  	mkdir -p $(TARGET_DIR)/var/lib/mysql
- >  	$(RM) $(TARGET_DIR)/usr/bin/mysql_config
- >  	$(RM) -r $(TARGET_DIR)/usr/share/mysql/test
- > +	$(RM) $(STAGING_DIR)/usr/bin/mariadb_config
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libnfs/0001-Fix-include-sys-time.h.patch | 41 ++++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-Fixups to STAGING_DIR should not be mixed up wiith the TARGET_DIR
-installation logic, please add a POST_INSTALL_STAGING_HOOK instead.
-
->  endef
- 
- >  MARIADB_POST_INSTALL_TARGET_HOOKS += MARIADB_POST_INSTALL
- > -- 
- > 2.14.5
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libnfs/0001-Fix-include-sys-time.h.patch b/package/libnfs/0001-Fix-include-sys-time.h.patch
+new file mode 100644
+index 0000000000..15b281672a
+--- /dev/null
++++ b/package/libnfs/0001-Fix-include-sys-time.h.patch
+@@ -0,0 +1,41 @@
++From 9df082012cba1dc32d83e5e8b0bdc0892f250058 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Mon, 5 Nov 2018 00:43:07 +0100
++Subject: [PATCH] Fix include sys/time.h
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++POSIX says `struct timeval` is defined if <sys/time.h> is included.
++
++Instead of the mess that is currently done based on the system on which
++the stuff is being compiled, include it unconditionally.
++
++Reported upstream:
++https://github.com/sahlberg/libnfs/issues/272
++
++Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
++---
++ include/nfsc/libnfs.h | 5 -----
++ 1 file changed, 5 deletions(-)
++
++diff --git a/include/nfsc/libnfs.h b/include/nfsc/libnfs.h
++index 09dcf1c..b6db58c 100755
++--- a/include/nfsc/libnfs.h
+++++ b/include/nfsc/libnfs.h
++@@ -24,12 +24,7 @@
++ #define _LIBNFS_H_
++ 
++ #include <stdint.h>
++-#if defined(__ANDROID__) || defined(AROS) \
++- || ( defined(__APPLE__) && defined(__MACH__) )
++ #include <sys/time.h>
++-#else
++-#include <time.h>
++-#endif
++ 
++ #ifdef __cplusplus
++ extern "C" {
++-- 
++2.19.1
++
