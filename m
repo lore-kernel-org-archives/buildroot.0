@@ -1,178 +1,32 @@
-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Date: Fri,  9 Nov 2018 12:10:50 +0100
-Subject: [Buildroot] [PATCH 1/1] attr: Add a patch to fix an unconditional
- infinite recursion.
-Message-ID: <20181109111050.11260-1-nicolas.cavallari@green-communications.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 09 Nov 2018 14:05:54 +0100
+Subject: [Buildroot] [PATCH] mosquitto: security bump to version 1.5.4
+In-Reply-To: <20181109081507.18820-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 9 Nov 2018 09:15:07 +0100")
+References: <20181109081507.18820-1-peter@korsgaard.com>
+Message-ID: <8736sa8kp9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The bump to 2.4.48 introduced a bug that, according to the author,
-only happen in certain cases on glibc. But under uclibc-ng, it happens
-every time.
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-The bug essentially cause any program calling any libattr.so function
-to enter an infinite recursion, because of a symbol conflict between
-uclibc-ng and libattr wrappers, that causes the libattr wrappers to
-call themselves.
+ > From the announcement:
+ > When using a TLS enabled websockets listener with require_certificate
+ > enabled, the mosquitto broker does not correctly verify client certificates.
+ > This is now fixed.  All other security measures operate as expected, and in
+ > particular non-websockets listeners are not affected by this.
 
-This infinite recursion does not consume the stack, so programs
-basically behave like they enter an infinite loop.
+ > https://mosquitto.org/blog/2018/11/version-154-released/
 
-It is easy to reproduce with qemu_arm_versatile_defconfig +
-BR2_PACKAGE_ATTR: "getfattr ." never returns and takes 100% CPU.
+ > Drop patch 0001, now applied upstream:
+ > https://github.com/eclipse/mosquitto/pull/933
 
-Upstream fixed it, but the patch is not part of a release yet,
-so take the patch.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Committed, thanks.
 
---
-An alternative is to bump the version to this commit in the master
-branch.  The other changes[1] are mostly related to tests or
-documentation, except for one patch[2] that tries more aggressively to
-enable large file support.
-
-[1] http://git.savannah.nongnu.org/cgit/attr.git/log/
-[2] http://git.savannah.nongnu.org/cgit/attr.git/commit/?id=fd1d8ee21df8d11460baa858ae5c5d20e38fb70e
----
- .../attr/0002-Switch-back-to-syscall.patch    | 126 ++++++++++++++++++
- 1 file changed, 126 insertions(+)
- create mode 100644 package/attr/0002-Switch-back-to-syscall.patch
-
-diff --git a/package/attr/0002-Switch-back-to-syscall.patch b/package/attr/0002-Switch-back-to-syscall.patch
-new file mode 100644
-index 0000000000..de879e23ab
---- /dev/null
-+++ b/package/attr/0002-Switch-back-to-syscall.patch
-@@ -0,0 +1,126 @@
-+From 14adc898a36948267bfe5c63b399996879e94c98 Mon Sep 17 00:00:00 2001
-+From: Andreas Gruenbacher <agruenba@redhat.com>
-+Date: Fri, 17 Aug 2018 14:07:31 +0200
-+Subject: Switch back to syscall()
-+
-+Switch back to syscall() for the *xattr system calls.  The current
-+mechanism of forwarding those calls to glibc breaks libraries like
-+libfakeroot (fakeroot) and libasan (the gcc address sanitizer; gcc
-+-fsanitize=address).
-+
-+Those libraries provide wrappers for functions defined in other shared
-+libraries, usually glibc, do their own processing, and forward calls to
-+the original symbols looke dup via dlsym(RTLD_NEXT, "symbol_name").  In
-+our case, dlsym returns the libattr_*xattr wrappers.  However, when our
-+wrappers try calling glibc, they end up calling the libfakeroot /
-+libasan wrappers instead because those override the original symbols =>
-+recursion.
-+
-+The libattr_*xattr wrappers will only be used when symbols are looked up
-+at runtime (dlopen / dlsym).  Programs linking against libattr will
-+directly use the glibc provided symbols.  Therefore, the slightly worse
-+performance of syscall() won't affect any of the "normal" users of
-+libattr.
-+
-+[nicolas.cavallari: with uclibc-ng, the recursion always happen]
-+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-+---
-+ libattr/syscalls.c | 26 ++++++++++++++------------
-+ 1 file changed, 14 insertions(+), 12 deletions(-)
-+
-+diff --git a/libattr/syscalls.c b/libattr/syscalls.c
-+index 3013aa0..721ad7f 100644
-+--- a/libattr/syscalls.c
-++++ b/libattr/syscalls.c
-+@@ -22,6 +22,8 @@
-+ 
-+ #include "config.h"
-+ 
-++#include <unistd.h>
-++#include <sys/syscall.h>
-+ #include <sys/xattr.h>
-+ 
-+ #ifdef HAVE_VISIBILITY_ATTRIBUTE
-+@@ -31,67 +33,67 @@
-+ int libattr_setxattr(const char *path, const char *name,
-+ 		     void *value, size_t size, int flags)
-+ {
-+-	return setxattr(path, name, value, size, flags);
-++	return syscall(__NR_setxattr, path, name, value, size, flags);
-+ }
-+ 
-+ int libattr_lsetxattr(const char *path, const char *name,
-+ 		      void *value, size_t size, int flags)
-+ {
-+-	return lsetxattr(path, name, value, size, flags);
-++	return syscall(__NR_lsetxattr, path, name, value, size, flags);
-+ }
-+ 
-+ int libattr_fsetxattr(int filedes, const char *name,
-+ 		      void *value, size_t size, int flags)
-+ {
-+-	return fsetxattr(filedes, name, value, size, flags);
-++	return syscall(__NR_fsetxattr, filedes, name, value, size, flags);
-+ }
-+ 
-+ ssize_t libattr_getxattr(const char *path, const char *name,
-+ 			 void *value, size_t size)
-+ {
-+-	return getxattr(path, name, value, size);
-++	return syscall(__NR_getxattr, path, name, value, size);
-+ }
-+ 
-+ ssize_t libattr_lgetxattr(const char *path, const char *name,
-+ 			  void *value, size_t size)
-+ {
-+-	return lgetxattr(path, name, value, size);
-++	return syscall(__NR_lgetxattr, path, name, value, size);
-+ }
-+ 
-+ ssize_t libattr_fgetxattr(int filedes, const char *name,
-+ 			  void *value, size_t size)
-+ {
-+-	return fgetxattr(filedes, name, value, size);
-++	return syscall(__NR_fgetxattr, filedes, name, value, size);
-+ }
-+ 
-+ ssize_t libattr_listxattr(const char *path, char *list, size_t size)
-+ {
-+-	return listxattr(path, list, size);
-++	return syscall(__NR_listxattr, path, list, size);
-+ }
-+ 
-+ ssize_t libattr_llistxattr(const char *path, char *list, size_t size)
-+ {
-+-	return llistxattr(path, list, size);
-++	return syscall(__NR_llistxattr, path, list, size);
-+ }
-+ 
-+ ssize_t libattr_flistxattr(int filedes, char *list, size_t size)
-+ {
-+-	return flistxattr(filedes, list, size);
-++	return syscall(__NR_flistxattr, filedes, list, size);
-+ }
-+ 
-+ int libattr_removexattr(const char *path, const char *name)
-+ {
-+-	return removexattr(path, name);
-++	return syscall(__NR_removexattr, path, name);
-+ }
-+ 
-+ int libattr_lremovexattr(const char *path, const char *name)
-+ {
-+-	return lremovexattr(path, name);
-++	return syscall(__NR_lremovexattr, path, name);
-+ }
-+ 
-+ int libattr_fremovexattr(int filedes, const char *name)
-+ {
-+-	return fremovexattr(filedes, name);
-++	return syscall(__NR_fremovexattr, filedes, name);
-+ }
-+ 
-+ #ifdef HAVE_VISIBILITY_ATTRIBUTE
-+-- 
-+cgit v1.0-41-gc330
-+
 -- 
-2.19.1
+Bye, Peter Korsgaard
