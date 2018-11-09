@@ -1,169 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 9 Nov 2018 15:51:07 +0100
-Subject: [Buildroot] [git commit] package/gcc: fix xtensa uclinux code
- generation
-Message-ID: <20181109144900.C58678208E@busybox.osuosl.org>
+Date: Fri, 09 Nov 2018 15:54:54 +0100
+Subject: [Buildroot] [PATCH 1/1] mariadb: fix mysql_config when cross
+ compiling
+In-Reply-To: <20181108170950.30189-2-chrismcc@gmail.com> (Christopher
+ McCrory's message of "Thu, 8 Nov 2018 09:09:50 -0800")
+References: <20181108170950.30189-1-chrismcc@gmail.com>
+ <20181108170950.30189-2-chrismcc@gmail.com>
+Message-ID: <87lg627135.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4debb2fbb7d60ed7f81ddab82d8b48ac9c4c3055
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Christopher" == Christopher McCrory <chrismcc@gmail.com> writes:
 
-xtensa-uclinux uses bFLT executable file format that cannot relocate
-fields representing offsets from data to code. C++ objects built as PIC
-use offsets to encode FDE structures. As a result C++ exception handling
-doesn't work correctly on xtensa-uclinux. Don't use PIC by default on
-xtensa-uclinux.
+ > Mariadb_config in staging is not a shell script, this breaks
+ > mysql_config when cross-compiling.  This in turn breaks package builds
+ > needing the location of the include and library files. So remove it after
+ > installation into $TARGET_DIR
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...xtensa-don-t-force-PIC-for-uclinux-target.patch | 41 ++++++++++++++++++++++
- ...xtensa-don-t-force-PIC-for-uclinux-target.patch | 41 ++++++++++++++++++++++
- ...xtensa-don-t-force-PIC-for-uclinux-target.patch | 41 ++++++++++++++++++++++
- 3 files changed, 123 insertions(+)
+ > Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+ > ---
+ >  package/mariadb/mariadb.mk | 5 +++++
+ >  1 file changed, 5 insertions(+)
 
-diff --git a/package/gcc/6.4.0/0004-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch b/package/gcc/6.4.0/0004-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch
-new file mode 100644
-index 0000000000..360947cbb1
---- /dev/null
-+++ b/package/gcc/6.4.0/0004-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch
-@@ -0,0 +1,41 @@
-+From 960a2552f7b418134cdf7a31e96023a3811b98dd Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Sun, 4 Nov 2018 23:55:59 -0800
-+Subject: [PATCH] gcc: xtensa: don't force PIC for uclinux target
-+
-+xtensa-uclinux uses bFLT executable file format that cannot relocate
-+fields representing offsets from data to code. C++ objects built as PIC
-+use offsets to encode FDE structures. As a result C++ exception handling
-+doesn't work correctly on xtensa-uclinux. Don't use PIC by default on
-+xtensa-uclinux.
-+
-+gcc/
-+2018-11-05  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+	* config/xtensa/uclinux.h (XTENSA_ALWAYS_PIC): Change to 0.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+Backported from: r265823
-+
-+ gcc/config/xtensa/uclinux.h | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/gcc/config/xtensa/uclinux.h b/gcc/config/xtensa/uclinux.h
-+index ba26187c8f7a..c7743df9d97c 100644
-+--- a/gcc/config/xtensa/uclinux.h
-++++ b/gcc/config/xtensa/uclinux.h
-+@@ -59,8 +59,8 @@ along with GCC; see the file COPYING3.  If not see
-+ #undef LOCAL_LABEL_PREFIX
-+ #define LOCAL_LABEL_PREFIX	"."
-+ 
-+-/* Always enable "-fpic" for Xtensa Linux.  */
-+-#define XTENSA_ALWAYS_PIC 1
-++/* Don't enable "-fpic" for Xtensa uclinux.  */
-++#define XTENSA_ALWAYS_PIC 0
-+ 
-+ #undef TARGET_LIBC_HAS_FUNCTION
-+ #define TARGET_LIBC_HAS_FUNCTION no_c99_libc_has_function
-+-- 
-+2.11.0
-+
-diff --git a/package/gcc/7.3.0/0005-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch b/package/gcc/7.3.0/0005-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch
-new file mode 100644
-index 0000000000..360947cbb1
---- /dev/null
-+++ b/package/gcc/7.3.0/0005-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch
-@@ -0,0 +1,41 @@
-+From 960a2552f7b418134cdf7a31e96023a3811b98dd Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Sun, 4 Nov 2018 23:55:59 -0800
-+Subject: [PATCH] gcc: xtensa: don't force PIC for uclinux target
-+
-+xtensa-uclinux uses bFLT executable file format that cannot relocate
-+fields representing offsets from data to code. C++ objects built as PIC
-+use offsets to encode FDE structures. As a result C++ exception handling
-+doesn't work correctly on xtensa-uclinux. Don't use PIC by default on
-+xtensa-uclinux.
-+
-+gcc/
-+2018-11-05  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+	* config/xtensa/uclinux.h (XTENSA_ALWAYS_PIC): Change to 0.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+Backported from: r265823
-+
-+ gcc/config/xtensa/uclinux.h | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/gcc/config/xtensa/uclinux.h b/gcc/config/xtensa/uclinux.h
-+index ba26187c8f7a..c7743df9d97c 100644
-+--- a/gcc/config/xtensa/uclinux.h
-++++ b/gcc/config/xtensa/uclinux.h
-+@@ -59,8 +59,8 @@ along with GCC; see the file COPYING3.  If not see
-+ #undef LOCAL_LABEL_PREFIX
-+ #define LOCAL_LABEL_PREFIX	"."
-+ 
-+-/* Always enable "-fpic" for Xtensa Linux.  */
-+-#define XTENSA_ALWAYS_PIC 1
-++/* Don't enable "-fpic" for Xtensa uclinux.  */
-++#define XTENSA_ALWAYS_PIC 0
-+ 
-+ #undef TARGET_LIBC_HAS_FUNCTION
-+ #define TARGET_LIBC_HAS_FUNCTION no_c99_libc_has_function
-+-- 
-+2.11.0
-+
-diff --git a/package/gcc/8.2.0/0005-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch b/package/gcc/8.2.0/0005-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch
-new file mode 100644
-index 0000000000..360947cbb1
---- /dev/null
-+++ b/package/gcc/8.2.0/0005-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch
-@@ -0,0 +1,41 @@
-+From 960a2552f7b418134cdf7a31e96023a3811b98dd Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Sun, 4 Nov 2018 23:55:59 -0800
-+Subject: [PATCH] gcc: xtensa: don't force PIC for uclinux target
-+
-+xtensa-uclinux uses bFLT executable file format that cannot relocate
-+fields representing offsets from data to code. C++ objects built as PIC
-+use offsets to encode FDE structures. As a result C++ exception handling
-+doesn't work correctly on xtensa-uclinux. Don't use PIC by default on
-+xtensa-uclinux.
-+
-+gcc/
-+2018-11-05  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+	* config/xtensa/uclinux.h (XTENSA_ALWAYS_PIC): Change to 0.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+Backported from: r265823
-+
-+ gcc/config/xtensa/uclinux.h | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/gcc/config/xtensa/uclinux.h b/gcc/config/xtensa/uclinux.h
-+index ba26187c8f7a..c7743df9d97c 100644
-+--- a/gcc/config/xtensa/uclinux.h
-++++ b/gcc/config/xtensa/uclinux.h
-+@@ -59,8 +59,8 @@ along with GCC; see the file COPYING3.  If not see
-+ #undef LOCAL_LABEL_PREFIX
-+ #define LOCAL_LABEL_PREFIX	"."
-+ 
-+-/* Always enable "-fpic" for Xtensa Linux.  */
-+-#define XTENSA_ALWAYS_PIC 1
-++/* Don't enable "-fpic" for Xtensa uclinux.  */
-++#define XTENSA_ALWAYS_PIC 0
-+ 
-+ #undef TARGET_LIBC_HAS_FUNCTION
-+ #define TARGET_LIBC_HAS_FUNCTION no_c99_libc_has_function
-+-- 
-+2.11.0
-+
+ > diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+ > index 06d6365fab..52d47f98fc 100644
+ > --- a/package/mariadb/mariadb.mk
+ > +++ b/package/mariadb/mariadb.mk
+ > @@ -125,10 +125,15 @@ endif
+ 
+ >  # We don't need mysql_config on the target as it's only useful in staging
+ >  # We also don't need the test suite on the target
+ > +# Also mariadb_config in staging is not a shell script, this breaks
+ > +# mysql_config when cross-compiling.  This in turn breaks package builds
+ > +# needing the location of the include and library files. So remove it after
+ > +# installation into $TARGET_DIR
+
+Ehh, STAGING_DIR or TARGET_DIR?
+
+What then happens when those packages try to run mariadb_config to get
+the include/library locations? What if the build machine already has
+mariadb_config in the path?
+
+>  define MARIADB_POST_INSTALL
+ >  	mkdir -p $(TARGET_DIR)/var/lib/mysql
+ >  	$(RM) $(TARGET_DIR)/usr/bin/mysql_config
+ >  	$(RM) -r $(TARGET_DIR)/usr/share/mysql/test
+ > +	$(RM) $(STAGING_DIR)/usr/bin/mariadb_config
+
+Fixups to STAGING_DIR should not be mixed up wiith the TARGET_DIR
+installation logic, please add a POST_INSTALL_STAGING_HOOK instead.
+
+>  endef
+ 
+ >  MARIADB_POST_INSTALL_TARGET_HOOKS += MARIADB_POST_INSTALL
+ > -- 
+ > 2.14.5
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+Bye, Peter Korsgaard
