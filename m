@@ -1,43 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 9 Nov 2018 22:03:25 +0100
-Subject: [Buildroot] [PATCH v2] toolchain: Enable Glibc for all
- little-endian ARCs with atomic ops
-In-Reply-To: <20181109200949.5170-1-abrodkin@synopsys.com>
-References: <20181109200949.5170-1-abrodkin@synopsys.com>
-Message-ID: <20181109220325.31584b18@windsurf>
+Date: Fri, 9 Nov 2018 22:04:21 +0100
+Subject: [Buildroot] [git commit] package/sconeserver: bump version
+Message-ID: <20181109210209.165DE821A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ca17e0c7a02298b0250cdc121bcacef0b58fffe1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  9 Nov 2018 23:09:49 +0300, Alexey Brodkin wrote:
-> Initially we had a port only for ARCv2 cores but
-> then with a simple change ARCompact cores got supported as well.
-> 
-> So we generalize from BR2_archs to BR2_arcle as we haven't tried
-> to get glibc working on big-endian ARCs yet.
-> 
-> Also we never bothered to check avaialbility of atomic
-> instructions in the core but in case of Glibc for ARC this is
-> really a must, so we add this check here.
-> 
-> Note in case of uClibc we may have system w/o HW atomics but:
->  1. Only single-core systems are allowed
->  2. Atomic instructions are emulated via arc_usr_cmpxchg syscall
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> ---
+https://github.com/sconemad/sconeserver/commit/6b932d7d8dbb700b830205e7111e469cefff490c
+adds support for OpenSSL 1.1
 
-Applied to master, thanks.
+Added license hash.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/sconeserver/sconeserver.hash | 3 ++-
+ package/sconeserver/sconeserver.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/sconeserver/sconeserver.hash b/package/sconeserver/sconeserver.hash
+index 978b442f53..e1ff4486bc 100644
+--- a/package/sconeserver/sconeserver.hash
++++ b/package/sconeserver/sconeserver.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 38e72b962eb42bea8f0deb6f101833f8f2f2fa8c53f0dc03f3eb5d56873517c8 sconeserver-d659468cd164e6a6cc12932cc6780566b04f8328.tar.gz
++sha256 dfdbbcd29c089eeb341dd3bbd434cca97fefaa97f94c91525e5953d3ab0a2d9a  sconeserver-6b932d7d8dbb700b830205e7111e469cefff490c.tar.gz
++sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
+index cf7bcbcb15..12cadbfd20 100644
+--- a/package/sconeserver/sconeserver.mk
++++ b/package/sconeserver/sconeserver.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SCONESERVER_VERSION = d659468cd164e6a6cc12932cc6780566b04f8328
++SCONESERVER_VERSION = 6b932d7d8dbb700b830205e7111e469cefff490c
+ SCONESERVER_SITE = $(call github,sconemad,sconeserver,$(SCONESERVER_VERSION))
+ SCONESERVER_LICENSE = GPL-2.0+
+ SCONESERVER_LICENSE_FILES = COPYING
