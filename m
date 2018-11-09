@@ -1,51 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 9 Nov 2018 21:57:00 +0100
-Subject: [Buildroot] [PATCH v2] linux-firmware: bump version to latest
- 1baa348
-In-Reply-To: <20181108153322.17362-1-m.niestroj@grinn-global.com>
-References: <20181108153322.17362-1-m.niestroj@grinn-global.com>
-Message-ID: <20181109215700.6b8dc6af@windsurf>
+Date: Fri, 9 Nov 2018 21:58:46 +0100
+Subject: [Buildroot] [git commit] libgpiod: bump version to v1.2
+Message-ID: <20181109205837.9F4258215E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=87290b8084d2ce1d3568740695a401a8e592839d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  8 Nov 2018 16:33:22 +0100, Marcin Niestroj wrote:
+Release notes:
+  https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/tree/NEWS?h=v1.2.x
 
-> -sha256 b279ca4d086887c2efab13e28a7ca36e409410d3df38a62d7c7b5799ee3de916 linux-firmware-44d4fca9922a252a0bd81f6307bcc072a78da54a.tar.gz
-> +sha256 3e4fcbac18990a14d52159fefdc70081a56c5244adba28b14242e159a748e755 linux-firmware-1baa34868b2c0a004dc595b20678145e3fff83e7.tar.gz
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libgpiod/libgpiod.hash | 2 +-
+ package/libgpiod/libgpiod.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I am sorry, but this hash is still not good for me, I get:
-
-  5c636765fd1ac638176893feccfd4a4854f59fc3d01b38f3ccdbb89bd5bb6ef1
-
-I.e:
-
-ERROR: linux-firmware-1baa34868b2c0a004dc595b20678145e3fff83e7.tar.gz has wrong sha256 hash:
-ERROR: expected: 3e4fcbac18990a14d52159fefdc70081a56c5244adba28b14242e159a748e755
-ERROR: got     : 5c636765fd1ac638176893feccfd4a4854f59fc3d01b38f3ccdbb89bd5bb6ef1
-
-And this morning, Yann E. Morin reported having the same hash as me:
-
-08:07 < y_morin> kos_tom: I also have a different hash here.
-08:10 < y_morin> kos_tom: FTR, I got: 5c636765fd1ac638176893feccfd4a4854f59fc3d01b38f3ccdbb89bd5bb6ef1
-
-My system tar is 1.29, which is considered as a "good" version by
-support/dependencies/check-host-tar.sh. I have nonetheless forced
-building host-tar, and I still get the same hash.
-
-I have uploaded the tarball at
-https://bootlin.com/~thomas/pub/linux-firmware-1baa34868b2c0a004dc595b20678145e3fff83e7.tar.gz.
-Could you upload the tarball that was generated on your side so that we
-can compare them, and see where the problem lies ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
+index 99f7f8a298..318a107adf 100644
+--- a/package/libgpiod/libgpiod.hash
++++ b/package/libgpiod/libgpiod.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
+-sha256 172fa1544ecb51f37533b3e67862298d50c0a5cc84975f3c0706dc15467f0dfd  libgpiod-1.1.1.tar.xz
++sha256 b6b9079c933f7c8524815437937dda6b795a16141bca202a9eec70ba5844b5ba  libgpiod-1.2.tar.xz
+ # Hash for license file
+ sha256 ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
+diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+index 8854b3b0c8..545526515f 100644
+--- a/package/libgpiod/libgpiod.mk
++++ b/package/libgpiod/libgpiod.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGPIOD_VERSION = 1.1.1
++LIBGPIOD_VERSION = 1.2
+ LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
+ LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
+ LIBGPIOD_LICENSE = LGPL-2.1+
