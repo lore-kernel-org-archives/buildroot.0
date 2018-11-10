@@ -1,110 +1,215 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Sat, 10 Nov 2018 20:30:47 -0200 (BRST)
-Subject: [Buildroot] [PATCH 1/1] busybox: add patch to fix seg fault in
- 'ifup -a'
-In-Reply-To: <20181110193319.1273-1-daniel.m@sent.com>
-References: <20181110193319.1273-1-daniel.m@sent.com>
-Message-ID: <1989059802.1429665.1541889047561.JavaMail.zimbra@datacom.com.br>
+From: kaplan2539 at gmail.com <kaplan2539@gmail.com>
+Date: Sat, 10 Nov 2018 15:58:46 -0800
+Subject: [Buildroot] [PATCH 1/1] package/sunxi-tools: add tool selection
+Message-ID: <1541894326-2838-1-git-send-email-kaplan2539@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Daniel Mentz" <daniel.m@sent.com>
-> To: "buildroot" <buildroot@buildroot.org>
-> Cc: "ratbert90" <aduskett@gmail.com>, "DATACOM" <casantos@datacom.com.br>, "Daniel Mentz" <daniel.m@sent.com>
-> Sent: S?bado, 10 de novembro de 2018 17:33:19
-> Subject: [PATCH 1/1] busybox: add patch to fix seg fault in 'ifup -a'
+From: Alex Kaplan <kaplan2539@gmail.com>
 
-> Building busybox for arm64 generates the following warning message:
-> 
-> libbb/get_line_from_file.c: In function ?xmalloc_fgets?:
-> libbb/get_line_from_file.c:52:38: warning: passing argument 2 of
-> ?bb_get_chunk_from_file? from incompatible pointer type
-> [-Wincompatible-pointer-types]
->  return bb_get_chunk_from_file(file, &i);
->                                      ^
-> libbb/get_line_from_file.c:13:17: note: expected ?size_t * {aka long unsigned
-> int *}? but argument is of type ?int *?
-> char* FAST_FUNC bb_get_chunk_from_file(FILE *file, size_t *end)
->                 ^~~~~~~~~~~~~~~~~~~~~~
-> 
-> As it turned out, this is a real bug that leads to stack corruption.
-> The following command crashed on my device due to a NULL pointer being
-> derefenced. That pointer turned out to be a victim of the stack
-> corruption.
-> 
-> /sbin/ifup -a
-> 
-> The affected pointer was liface in ifupdown_main(). The crash occured on
-> the following line:
-> 
-> if (strcmp(liface, currif->iface) == 0) {
-> 
-> liface should have pointed to "eth0" but got corrupted.
-> 
-> Signed-off-by: Daniel Mentz <daniel.m@sent.com>
-> ---
-> ..._fgets-use-size_t-for-bb_get_chunk_f.patch | 27 +++++++++++++++++++
-> 1 file changed, 27 insertions(+)
-> create mode 100644
-> package/busybox/0004-libbb-in-xmalloc_fgets-use-size_t-for-bb_get_chunk_f.patch
-> 
-> diff --git
-> a/package/busybox/0004-libbb-in-xmalloc_fgets-use-size_t-for-bb_get_chunk_f.patch
-> b/package/busybox/0004-libbb-in-xmalloc_fgets-use-size_t-for-bb_get_chunk_f.patch
-> new file mode 100644
-> index 0000000000..62e7cf6c3d
-> --- /dev/null
-> +++
-> b/package/busybox/0004-libbb-in-xmalloc_fgets-use-size_t-for-bb_get_chunk_f.patch
-> @@ -0,0 +1,27 @@
-> +From 22a99516206b33b7ae124d426319bab03d5c8309 Mon Sep 17 00:00:00 2001
-> +From: Denys Vlasenko <vda.linux@googlemail.com>
-> +Date: Sun, 2 Sep 2018 18:48:09 +0200
-> +Subject: [PATCH] libbb: in xmalloc_fgets(), use size_t for
-> + bb_get_chunk_from_file()
-> +
-> +Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
-> +---
-> + libbb/get_line_from_file.c | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/libbb/get_line_from_file.c b/libbb/get_line_from_file.c
-> +index 49ef093c2..903ff1fb6 100644
-> +--- a/libbb/get_line_from_file.c
-> ++++ b/libbb/get_line_from_file.c
-> +@@ -47,7 +47,7 @@ char* FAST_FUNC bb_get_chunk_from_file(FILE *file, size_t
-> *end)
-> + /* Get line, including trailing \n if any */
-> + char* FAST_FUNC xmalloc_fgets(FILE *file)
-> + {
-> +-	int i;
-> ++	size_t i;
-> +
-> + 	return bb_get_chunk_from_file(file, &i);
-> + }
-> +--
-> +2.17.1
-> +
-> --
-> 2.17.1
+This patch allows to select which of the sunxi-tools are built and installed in host and target diretories.
+This way it is possible to have e.g. sunxi-nand-image-builder among the host tools, or to install sunxi-fel on the target device.
+The corresponding config options have been added to Config.in and Config.in.host and the sunxi-tools.mk has been adapted respectively.
+The defaults have been selected to produce the same output as without this patch.
 
-Busybox 1.29.3, which is on Buildroot master since commit 77497f5497,
-aleady has this fix:
+Signed-off-by: Alex Kaplan <kaplan2539@gmail.com>
+---
+ package/sunxi-tools/Config.in      | 51 +++++++++++++++++++++++++++++++++++---
+ package/sunxi-tools/Config.in.host | 40 ++++++++++++++++++++++++++++++
+ package/sunxi-tools/sunxi-tools.mk | 51 ++++++++++++++++++++++++++++++++------
+ 3 files changed, 130 insertions(+), 12 deletions(-)
 
-Applying 0004-libbb-in-xmalloc_fgets-use-size_t-for-bb_get_chunk_f.patch using patch: 
-patching file libbb/get_line_from_file.c
-Reversed (or previously applied) patch detected!  Skipping patch.
-
-What Busybox version are you using? Perhaps your patch could be
-applied on the LTS branches but I think we should just bump it
-to 1.29.3 on those branches too.
-
-Peter?
-
+diff --git a/package/sunxi-tools/Config.in b/package/sunxi-tools/Config.in
+index 02eba95..83eb982 100644
+--- a/package/sunxi-tools/Config.in
++++ b/package/sunxi-tools/Config.in
+@@ -1,9 +1,52 @@
+ config BR2_PACKAGE_SUNXI_TOOLS
+-	bool "sunxi nand-part"
++	bool "sunxi-tools"
+ 	depends on BR2_arm
+ 	help
+-	  nand-part is part of sunxi-tools for Allwinner A10 (aka
+-	  sun4i) and A13 (aka sun5i) based devices. It is a tool to
+-	  repartition the internal NAND on sunxi devices.
++	  Tools for Allwinner A10 (aka sun4i) and A13 (aka sun5i)
++	  based devices. This includes fex2bin which can be used to
++	  compile .fex board definition files to the binary script.bin
++	  format required by the linux-sunxi kernel. These tools are
++	  specific for linux-sunxi kernel and do not apply to the
++	  mainline Linux kernel version.
+ 
+ 	  http://linux-sunxi.org/Sunxi-tools
++
++if BR2_PACKAGE_SUNXI_TOOLS
++
++# from the "tools" make target
++config BR2_PACKAGE_SUNXI_TOOLS_FEXC
++    bool "sunxi-fexc"
++    default n
++
++config BR2_PACKAGE_SUNXI_TOOLS_BOOTINFO
++    bool "sunxi-bootinfo"
++    default n
++
++config BR2_PACKAGE_SUNXI_TOOLS_FEL
++    bool "sunxi-fel"
++    default n
++
++config BR2_PACKAGE_SUNXI_TOOLS_NAND_PART
++    bool "sunxi-nand-part"
++    default y
++
++config BR2_PACKAGE_SUNXI_TOOLS_PIO
++    bool "sunxi-pio"
++    default n
++
++# from the "target-tools" make target
++config BR2_PACKAGE_SUNXI_TOOLS_MEMINFO
++    bool "sunxi-meminfo"
++    default n
++
++# from the "misc" make target
++config BR2_PACKAGE_SUNXI_TOOLS_PHOENIX_INFO
++    bool "phoenix_info"
++    default n
++
++config BR2_PACKAGE_SUNXI_TOOLS_NAND_IMAGE_BUILDER
++    bool "sunxi-nand-image-builder"
++    default n
++
++endif #BR2_PACKAGE_SUNXI_TOOLS
++
+diff --git a/package/sunxi-tools/Config.in.host b/package/sunxi-tools/Config.in.host
+index 5fab5e6..f02fd40 100644
+--- a/package/sunxi-tools/Config.in.host
++++ b/package/sunxi-tools/Config.in.host
+@@ -10,3 +10,43 @@ config BR2_PACKAGE_HOST_SUNXI_TOOLS
+ 	  mainline Linux kernel version.
+ 
+ 	  http://linux-sunxi.org/Sunxi-tools
++
++if BR2_PACKAGE_HOST_SUNXI_TOOLS
++
++# from the "tools" make target
++config BR2_PACKAGE_HOST_SUNXI_TOOLS_FEXC
++    bool "sunxi-fexc"
++    default y
++
++config BR2_PACKAGE_HOST_SUNXI_TOOLS_BOOTINFO
++    bool "sunxi-bootinfo"
++    default y
++
++config BR2_PACKAGE_HOST_SUNXI_TOOLS_FEL
++    bool "sunxi-fel"
++    default y
++
++config BR2_PACKAGE_HOST_SUNXI_TOOLS_NAND_PART
++    bool "sunxi-nand-part"
++    default y
++
++config BR2_PACKAGE_HOST_SUNXI_TOOLS_PIO
++    bool "sunxi-pio"
++    default y
++
++# from the "target-tools" make target
++config BR2_PACKAGE_HOST_SUNXI_TOOLS_MEMINFO
++    bool "sunxi-meminfo"
++    default n
++
++# from the "misc" make target
++config BR2_PACKAGE_HOST_SUNXI_TOOLS_PHOENIX_INFO
++    bool "phoenix_info"
++    default n
++
++config BR2_PACKAGE_HOST_SUNXI_TOOLS_NAND_IMAGE_BUILDER
++    bool "sunxi-nand-image-builder"
++    default n
++
++endif #BR2_PACKAGE_HOST_SUNXI_TOOLS
++
+diff --git a/package/sunxi-tools/sunxi-tools.mk b/package/sunxi-tools/sunxi-tools.mk
+index 3a44cf6..2cc4443 100644
+--- a/package/sunxi-tools/sunxi-tools.mk
++++ b/package/sunxi-tools/sunxi-tools.mk
+@@ -4,6 +4,11 @@
+ #
+ ################################################################################
+ 
++#SUNXI_TOOLS_VERSION = 24be7518cbc3622b65d3fc29f892e06bb4800ab9
++
++#v 1.4.2 not officially released yet?!?
++#SUNXI_TOOLS_VERSION = 60ea132fccce2dda22987da6f1694095fb33cb53
++
+ SUNXI_TOOLS_VERSION = v1.4.1
+ SUNXI_TOOLS_SITE = $(call github,linux-sunxi,sunxi-tools,$(SUNXI_TOOLS_VERSION))
+ SUNXI_TOOLS_LICENSE = GPL-2.0+
+@@ -11,25 +16,55 @@ SUNXI_TOOLS_LICENSE_FILES = LICENSE.md
+ HOST_SUNXI_TOOLS_DEPENDENCIES = host-libusb host-pkgconf
+ FEX2BIN = $(HOST_DIR)/bin/fex2bin
+ 
++HOST_SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_FEXC)               += sunxi-fexc
++HOST_SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_BOOTINFO)           += sunxi-bootinfo
++HOST_SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_FEL)                += sunxi-fel
++HOST_SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_NAND_PART)          += sunxi-nand-part
++HOST_SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_PIO)                += sunxi-pio
++HOST_SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_MEMINFO)            += sunxi-meminfo
++HOST_SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_PHOENIX_INFO)       += phoenix_info
++HOST_SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_NAND_IMAGE_BUILDER) += sunxi-nand-image-builder
++
++SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_FEXC)               += sunxi-fexc
++SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_BOOTINFO)           += sunxi-bootinfo
++SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_FEL)                += sunxi-fel
++SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_NAND_PART)          += sunxi-nand-part
++SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_PIO)                += sunxi-pio
++SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_MEMINFO)            += sunxi-meminfo
++SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_PHOENIX_INFO)       += phoenix_info
++SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_NAND_IMAGE_BUILDER) += sunxi-nand-image-builder
++
++ifeq ($(BR2_PACKAGE_SUNXI_TOOLS_FEL),y)
++	SUNXI_TOOLS_DEPENDENCIES += libusb host-pkgconf
++endif
++
++
+ define HOST_SUNXI_TOOLS_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) CC="$(HOSTCC)" PREFIX=$(HOST_DIR) \
++	$(foreach t,$(HOST_SUNXI_TOOLS_TARGETS_y), \
++	    $(HOST_MAKE_ENV) $(MAKE) CROSS_COMPILE="" CC="$(HOSTCC)" PREFIX=$(HOST_DIR) \
+ 		EXTRA_CFLAGS="$(HOST_CFLAGS)" LDFLAGS="$(HOST_LDFLAGS)" \
+-		-C $(@D) tools
++		-C $(@D) $(t)
++	)
+ endef
+ 
+ define HOST_SUNXI_TOOLS_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) PREFIX=$(HOST_DIR) \
+-		-C $(@D) install-tools
++	$(foreach t,$(HOST_SUNXI_TOOLS_TARGETS_y), \
++		$(INSTALL) -D -m 0755 $(@D)/$(t) $(HOST_DIR)/usr/bin/$(t)
++	)
+ endef
+ 
+ define SUNXI_TOOLS_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" PREFIX=/usr \
+-		EXTRA_CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" \
+-		-C $(@D) sunxi-nand-part
++	$(foreach t,$(SUNXI_TOOLS_TARGETS_y), \
++		$(TARGET_MAKE_ENV) $(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" CC="$(TARGET_CC)" PREFIX=/usr \
++			EXTRA_CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" \
++			-C $(@D) $(t)
++	)
+ endef
+ 
+ define SUNXI_TOOLS_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/sunxi-nand-part $(TARGET_DIR)/usr/bin/sunxi-nand-part
++	$(foreach t,$(SUNXI_TOOLS_TARGETS_y), \
++		$(INSTALL) -D -m 0755 $(@D)/$(t) $(TARGET_DIR)/usr/bin/$(t)
++	)
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?Marched towards the enemy, spear upright, armed with the certainty
-that only the ignorant can have.? ? Epitaph of a volunteer
+2.7.4
