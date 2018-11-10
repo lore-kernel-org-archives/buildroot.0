@@ -1,127 +1,109 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Fri, 9 Nov 2018 23:47:50 +0000
-Subject: [Buildroot] [PATCH] libp11: Add new package for OpenSSL PKCS#11
- engine
-Message-ID: <20181109234640.18735-1-tpiepho@impinj.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 10 Nov 2018 08:00:19 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-11-09
+Message-ID: <20181110070019.CEFC0224E7@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Library for using PKCS#11, which includes an engine for OpenSSL that
-lets it use PKCS#11 modules.  Which is really what this package is
-about, not that libp11 library itself, which has no users outside the of
-OpenSSL engine.
+Hello,
 
-If p11-kit is enabled, configure the engine to use that as the default
-PKCS#11 module.  That module is a sort of multiplexer that allows
-multiple modules to be used at once, so it makes sense to use it even if
-there are other modules present, e.g. softhsm2, nssckbi, pkcs11-proxy,
-ykcs11, etc.
+Build statistics for 2018-11-09
+===============================
 
-A host package is created too, with a host configuration option.  Since
-this a dynamically loaded module, there is no build time reason to
-select it from a host package.  It could be used by host openssl, to
-allow host rauc to sign a software update bundle using a key from a HSM
-with a PKCS#11 interface.
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  23 |   4 |   0 |  27 |
+   2018.08.x |  19 |   2 |   0 |  21 |
+      master | 168 |  24 |   0 | 192 |
 
-Signed-off-by: Trent Piepho <tpiepho@impinj.com>
----
- package/Config.in             |  1 +
- package/Config.in.host        |  1 +
- package/libp11/Config.in      |  7 +++++++
- package/libp11/Config.in.host |  6 ++++++
- package/libp11/libp11.hash    |  3 +++
- package/libp11/libp11.mk      | 19 +++++++++++++++++++
- 6 files changed, 37 insertions(+)
- create mode 100644 package/libp11/Config.in
- create mode 100644 package/libp11/Config.in.host
- create mode 100644 package/libp11/libp11.hash
- create mode 100644 package/libp11/libp11.mk
+Results for branch '2018.02.x'
+==============================
 
-diff --git a/package/Config.in b/package/Config.in
-index fd86e37a52..4ed8a82fa4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1162,6 +1162,7 @@ menu "Crypto"
- 	source "package/libmcrypt/Config.in"
- 	source "package/libmhash/Config.in"
- 	source "package/libnss/Config.in"
-+	source "package/libp11/Config.in"
- 	source "package/libscrypt/Config.in"
- 	source "package/libsecret/Config.in"
- 	source "package/libsha1/Config.in"
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 28ae8c3ac7..c528f6bd44 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -30,6 +30,7 @@ menu "Host utilities"
- 	source "package/imx-usb-loader/Config.in.host"
- 	source "package/jq/Config.in.host"
- 	source "package/jsmin/Config.in.host"
-+	source "package/libp11/Config.in.host"
- 	source "package/lpc3250loader/Config.in.host"
- 	source "package/lttng-babeltrace/Config.in.host"
- 	source "package/mfgtools/Config.in.host"
-diff --git a/package/libp11/Config.in b/package/libp11/Config.in
-new file mode 100644
-index 0000000000..0b9a739db3
---- /dev/null
-+++ b/package/libp11/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBP11
-+	bool "libp11"
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  OpenSSL engine for PKCS#11 modules.  Part of the OpenSC project.
-+
-+	  https://github.com/OpenSC/OpenSC/wiki
-diff --git a/package/libp11/Config.in.host b/package/libp11/Config.in.host
-new file mode 100644
-index 0000000000..ccc171025a
---- /dev/null
-+++ b/package/libp11/Config.in.host
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HOST_LIBP11
-+	bool "host libp11"
-+	help
-+	  OpenSSL engine for PKCS#11 modules.  Part of the OpenSC project.
-+
-+	  https://github.com/OpenSC/OpenSC/wiki
-diff --git a/package/libp11/libp11.hash b/package/libp11/libp11.hash
-new file mode 100644
-index 0000000000..01cea6466b
---- /dev/null
-+++ b/package/libp11/libp11.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256 9d1c76d74c21ca224f96204982097ebc6b956f645b2b0b5f9c502a20e9ffcfd8  libp11-0.4.9.tar.gz
-+sha256 d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING
-diff --git a/package/libp11/libp11.mk b/package/libp11/libp11.mk
-new file mode 100644
-index 0000000000..a720b1c629
---- /dev/null
-+++ b/package/libp11/libp11.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# libp11
-+#
-+################################################################################
-+
-+LIBP11_VERSION = 0.4.9
-+LIBP11_SITE = https://github.com/OpenSC/libp11/releases/download/libp11-$(LIBP11_VERSION)
-+LIBP11_DEPENDENCIES = openssl
-+LIBP11_INSTALL_STAGING = YES
-+LIBP11_LICENSE = LGPLv2.1
-+LIBP11_LICENSE_FILES = COPYING
-+
-+ifeq ($(BR2_PACKAGE_P11_KIT),y)
-+LIBP11_CONF_OPTS += --with-pkcs11-module=/usr/lib/p11-kit-proxy.so
-+endif
-+
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+Classification of failures by reason
+------------------------------------
+
+                  giflib-5.1.4 | 2 
+               host-efl-1.20.6 | 1 
+                p11-kit-0.23.2 | 1 
+
+
+Detail of failures
+------------------
+
+microblazeel |                   giflib-5.1.4 | NOK | http://autobuild.buildroot.net/results/2174d75fa8cc6141dc7cb7c67a7f1267f8080c52 |     
+         arc |                   giflib-5.1.4 | NOK | http://autobuild.buildroot.net/results/81191f37c2eb3aee2ca9bf6cd9778b73ad656a6f |     
+      x86_64 |                host-efl-1.20.6 | NOK | http://autobuild.buildroot.net/results/b91dfbe77510f5ff316c25c018b394696e7a33ce |     
+     sparc64 |                 p11-kit-0.23.2 | NOK | http://autobuild.buildroot.net/results/eb1864975100d9e0d64b5f06114b8a02ca915a1f | ORPH
+
+Results for branch '2018.08.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                  giflib-5.1.4 | 1 
+                 lcdproc-0.5.9 | 1 
+
+
+Detail of failures
+------------------
+
+    mips64el |                   giflib-5.1.4 | NOK | http://autobuild.buildroot.net/results/2e1c6a0553e080c6f6c76afca2992c58ebaf3f59 |     
+      x86_64 |                  lcdproc-0.5.9 | NOK | http://autobuild.buildroot.net/results/a8173a87287885ded855beb4667ba84b50be2d28 |     
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                  libffi-3.2.1 | 4 
+                   luvi-v2.7.6 | 4 
+      docker-containerd-v1.1.3 | 2 
+     docker-engine-v17.05.0-ce | 2 
+               valgrind-3.14.0 | 2 
+               boa-0.94.14rc21 | 1 
+          host-libsemanage-2.8 | 1 
+               libiscsi-1.18.0 | 1 
+                 libv4l-1.16.1 | 1 
+                 minizip-2.5.3 | 1 
+                    php-7.2.12 | 1 
+                   qemu-2.12.1 | 1 
+            qt5location-5.11.2 | 1 
+            supertuxkart-0.9.3 | 1 
+               wireshark-2.6.4 | 1 
+
+
+Detail of failures
+------------------
+
+         arc |                boa-0.94.14rc21 | NOK | http://autobuild.buildroot.net/results/c7f4c5c8f15393faf57f115dacc08e49c7887005 | ORPH
+      x86_64 |       docker-containerd-v1.1.3 | NOK | http://autobuild.buildroot.net/results/0970a67e852b438359b4846cd06a0a015403906f |     
+      x86_64 |       docker-containerd-v1.1.3 | NOK | http://autobuild.buildroot.net/results/296330fb3bec37b4736fa0e91048c3728c64297e |     
+      x86_64 |      docker-engine-v17.05.0-ce | NOK | http://autobuild.buildroot.net/results/35ae3bbc90703e5f0bf5037b3f45f442e19ea8ea |     
+      x86_64 |      docker-engine-v17.05.0-ce | NOK | http://autobuild.buildroot.net/results/b29806b3f6f19de57fdf2b79b19b43c17e6a9332 |     
+         arm |           host-libsemanage-2.8 | NOK | http://autobuild.buildroot.net/results/4e8ac635e2d7884cff0f1d722617b52c607d65c8 |     
+     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/59b98b9ce7f9ecea5a8329cd39b3bb8a94fef024 |     
+     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/6682f87b0f2290b0c50e0c1c3fba23b35ebade47 |     
+     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/8219371755d521f034ba2740cd5c14b48a02c664 |     
+     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/c92bdbe2f9f572441ff43433768411f8c63c799c |     
+     aarch64 |                libiscsi-1.18.0 | NOK | http://autobuild.buildroot.net/results/5c4107754758b78c0cefa2d6e7f806a15c308e6b |     
+         arm |                  libv4l-1.16.1 | NOK | http://autobuild.buildroot.net/results/bc30fec83fe714c054e8b701a4a405f2ba6946b8 |     
+      x86_64 |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/d8440887498480858e6e0aaebda9b23477a0a901 |     
+     powerpc |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/fc9d560f183399bb3c26d826375866d05eb12835 |     
+      x86_64 |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/958729077db22a2c33d38cb55b4e9948be8ea7ea |     
+      x86_64 |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/ad285ddce30d38a6026c43074938a725b38d0c86 |     
+        m68k |                  minizip-2.5.3 | NOK | http://autobuild.buildroot.net/results/964feba6530eee27296dbf0e3b8bcd4c92896423 |     
+        i586 |                     php-7.2.12 | NOK | http://autobuild.buildroot.net/results/628b677d1ceb8b404265d89357225e0a1dce1407 | ORPH
+         arm |                    qemu-2.12.1 | NOK | http://autobuild.buildroot.net/results/d4736a930144fc5e25b377bc1c0baf44fbf8718d |     
+         arm |             qt5location-5.11.2 | NOK | http://autobuild.buildroot.net/results/e3709bea6e87ae236fae35d783a9a91cbaf0c5de |     
+      x86_64 |             supertuxkart-0.9.3 | NOK | http://autobuild.buildroot.net/results/52bd5c45b0d04a863a2530d388899b3e46494ee9 |     
+    mips64el |                valgrind-3.14.0 | NOK | http://autobuild.buildroot.net/results/484489860ba1a6ca5950e136e8bcd2e99002ec55 | ORPH
+      mipsel |                valgrind-3.14.0 | NOK | http://autobuild.buildroot.net/results/443f3b5497a7e702ef38d23870b31acac88d92bb | ORPH
+        mips |                wireshark-2.6.4 | NOK | http://autobuild.buildroot.net/results/8cdca627413a595ed48097ace0516991baf17f17 | ORPH
+
+
 -- 
-2.14.4
+http://autobuild.buildroot.net
