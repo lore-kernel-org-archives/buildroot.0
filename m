@@ -1,26 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Nov 2018 09:43:21 +0100
-Subject: [Buildroot] [PATCH 1/1] libiscsi: fix build failures due to
- warnings
-In-Reply-To: <20181109175740.28258-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 9 Nov 2018 18:57:40 +0100")
-References: <20181109175740.28258-1-fontaine.fabrice@gmail.com>
-Message-ID: <87r2ft5nme.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 10 Nov 2018 08:54:22 +0000
+Subject: [Buildroot] [Bug 11426] pps-tools bash dependency
+In-Reply-To: <bug-11426-163@https.bugs.busybox.net/>
+References: <bug-11426-163@https.bugs.busybox.net/>
+Message-ID: <bug-11426-163-4dvVOcJyYP@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=11426
 
- > Retrieve two upstream patches to fix build failures due to warnings
- > Fixes:
- >  - http://autobuild.buildroot.org/results/7ec1e1cc060bbdaaf758c0d55a053247b731e792
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |yann.morin.1998 at free.fr
 
-Committed, thanks.
+--- Comment #3 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Jan, All,
+
+Yes, please send an update to bump the version. You should maybe
+entice upstream to cut out a release of their own. If they don't,
+then it would be acceptable to bu;p to the latest sha1 from their
+master.
+
+Notice that since yesterday evening, we're now in feature-freeze
+for the next Buildroot release, so this would only be applied
+after the release is cut, scheduled for the end of the month.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
