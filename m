@@ -1,109 +1,111 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 10 Nov 2018 08:00:19 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-11-09
-Message-ID: <20181110070019.CEFC0224E7@mail.bootlin.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 10 Nov 2018 08:59:05 +0100
+Subject: [Buildroot] [PATCH 1/1] libiscsi: fix build failures due to
+ warnings
+In-Reply-To: <20181109175740.28258-1-fontaine.fabrice@gmail.com>
+References: <20181109175740.28258-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181110075905.GC2445@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fabrice, All,
 
-Build statistics for 2018-11-09
-===============================
+On 2018-11-09 18:57 +0100, Fabrice Fontaine spake thusly:
+> Retrieve two upstream patches to fix build failures due to warnings
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/7ec1e1cc060bbdaaf758c0d55a053247b731e792
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-      branch |  OK | NOK | TIM | TOT |
-   2018.02.x |  23 |   4 |   0 |  27 |
-   2018.08.x |  19 |   2 |   0 |  21 |
-      master | 168 |  24 |   0 | 192 |
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Results for branch '2018.02.x'
-==============================
+Regards,
+Yann E. MORIN.
 
-Classification of failures by reason
-------------------------------------
-
-                  giflib-5.1.4 | 2 
-               host-efl-1.20.6 | 1 
-                p11-kit-0.23.2 | 1 
-
-
-Detail of failures
-------------------
-
-microblazeel |                   giflib-5.1.4 | NOK | http://autobuild.buildroot.net/results/2174d75fa8cc6141dc7cb7c67a7f1267f8080c52 |     
-         arc |                   giflib-5.1.4 | NOK | http://autobuild.buildroot.net/results/81191f37c2eb3aee2ca9bf6cd9778b73ad656a6f |     
-      x86_64 |                host-efl-1.20.6 | NOK | http://autobuild.buildroot.net/results/b91dfbe77510f5ff316c25c018b394696e7a33ce |     
-     sparc64 |                 p11-kit-0.23.2 | NOK | http://autobuild.buildroot.net/results/eb1864975100d9e0d64b5f06114b8a02ca915a1f | ORPH
-
-Results for branch '2018.08.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-                  giflib-5.1.4 | 1 
-                 lcdproc-0.5.9 | 1 
-
-
-Detail of failures
-------------------
-
-    mips64el |                   giflib-5.1.4 | NOK | http://autobuild.buildroot.net/results/2e1c6a0553e080c6f6c76afca2992c58ebaf3f59 |     
-      x86_64 |                  lcdproc-0.5.9 | NOK | http://autobuild.buildroot.net/results/a8173a87287885ded855beb4667ba84b50be2d28 |     
-
-Results for branch 'master'
-===========================
-
-Classification of failures by reason
-------------------------------------
-
-                  libffi-3.2.1 | 4 
-                   luvi-v2.7.6 | 4 
-      docker-containerd-v1.1.3 | 2 
-     docker-engine-v17.05.0-ce | 2 
-               valgrind-3.14.0 | 2 
-               boa-0.94.14rc21 | 1 
-          host-libsemanage-2.8 | 1 
-               libiscsi-1.18.0 | 1 
-                 libv4l-1.16.1 | 1 
-                 minizip-2.5.3 | 1 
-                    php-7.2.12 | 1 
-                   qemu-2.12.1 | 1 
-            qt5location-5.11.2 | 1 
-            supertuxkart-0.9.3 | 1 
-               wireshark-2.6.4 | 1 
-
-
-Detail of failures
-------------------
-
-         arc |                boa-0.94.14rc21 | NOK | http://autobuild.buildroot.net/results/c7f4c5c8f15393faf57f115dacc08e49c7887005 | ORPH
-      x86_64 |       docker-containerd-v1.1.3 | NOK | http://autobuild.buildroot.net/results/0970a67e852b438359b4846cd06a0a015403906f |     
-      x86_64 |       docker-containerd-v1.1.3 | NOK | http://autobuild.buildroot.net/results/296330fb3bec37b4736fa0e91048c3728c64297e |     
-      x86_64 |      docker-engine-v17.05.0-ce | NOK | http://autobuild.buildroot.net/results/35ae3bbc90703e5f0bf5037b3f45f442e19ea8ea |     
-      x86_64 |      docker-engine-v17.05.0-ce | NOK | http://autobuild.buildroot.net/results/b29806b3f6f19de57fdf2b79b19b43c17e6a9332 |     
-         arm |           host-libsemanage-2.8 | NOK | http://autobuild.buildroot.net/results/4e8ac635e2d7884cff0f1d722617b52c607d65c8 |     
-     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/59b98b9ce7f9ecea5a8329cd39b3bb8a94fef024 |     
-     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/6682f87b0f2290b0c50e0c1c3fba23b35ebade47 |     
-     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/8219371755d521f034ba2740cd5c14b48a02c664 |     
-     riscv64 |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/c92bdbe2f9f572441ff43433768411f8c63c799c |     
-     aarch64 |                libiscsi-1.18.0 | NOK | http://autobuild.buildroot.net/results/5c4107754758b78c0cefa2d6e7f806a15c308e6b |     
-         arm |                  libv4l-1.16.1 | NOK | http://autobuild.buildroot.net/results/bc30fec83fe714c054e8b701a4a405f2ba6946b8 |     
-      x86_64 |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/d8440887498480858e6e0aaebda9b23477a0a901 |     
-     powerpc |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/fc9d560f183399bb3c26d826375866d05eb12835 |     
-      x86_64 |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/958729077db22a2c33d38cb55b4e9948be8ea7ea |     
-      x86_64 |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/ad285ddce30d38a6026c43074938a725b38d0c86 |     
-        m68k |                  minizip-2.5.3 | NOK | http://autobuild.buildroot.net/results/964feba6530eee27296dbf0e3b8bcd4c92896423 |     
-        i586 |                     php-7.2.12 | NOK | http://autobuild.buildroot.net/results/628b677d1ceb8b404265d89357225e0a1dce1407 | ORPH
-         arm |                    qemu-2.12.1 | NOK | http://autobuild.buildroot.net/results/d4736a930144fc5e25b377bc1c0baf44fbf8718d |     
-         arm |             qt5location-5.11.2 | NOK | http://autobuild.buildroot.net/results/e3709bea6e87ae236fae35d783a9a91cbaf0c5de |     
-      x86_64 |             supertuxkart-0.9.3 | NOK | http://autobuild.buildroot.net/results/52bd5c45b0d04a863a2530d388899b3e46494ee9 |     
-    mips64el |                valgrind-3.14.0 | NOK | http://autobuild.buildroot.net/results/484489860ba1a6ca5950e136e8bcd2e99002ec55 | ORPH
-      mipsel |                valgrind-3.14.0 | NOK | http://autobuild.buildroot.net/results/443f3b5497a7e702ef38d23870b31acac88d92bb | ORPH
-        mips |                wireshark-2.6.4 | NOK | http://autobuild.buildroot.net/results/8cdca627413a595ed48097ace0516991baf17f17 | ORPH
-
+> ---
+>  ...ng-message-that-includes-target-name.patch | 29 +++++++++++++++++++
+>  package/libiscsi/0003-avoid-fallthrough.patch | 24 +++++++++++++++
+>  2 files changed, 53 insertions(+)
+>  create mode 100644 package/libiscsi/0002-avoid-truncation-when-logging-message-that-includes-target-name.patch
+>  create mode 100644 package/libiscsi/0003-avoid-fallthrough.patch
+> 
+> diff --git a/package/libiscsi/0002-avoid-truncation-when-logging-message-that-includes-target-name.patch b/package/libiscsi/0002-avoid-truncation-when-logging-message-that-includes-target-name.patch
+> new file mode 100644
+> index 0000000000..1334a8352c
+> --- /dev/null
+> +++ b/package/libiscsi/0002-avoid-truncation-when-logging-message-that-includes-target-name.patch
+> @@ -0,0 +1,29 @@
+> +From bffafc1c3003c2ee05d28eaa345e5854bc36014d Mon Sep 17 00:00:00 2001
+> +From: Paolo Bonzini <pbonzini@redhat.com>
+> +Date: Mon, 1 Oct 2018 14:16:14 +0200
+> +Subject: [PATCH] avoid truncation when logging message that includes target
+> + name
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Retrieved from:
+> +https://github.com/sahlberg/libiscsi/commit/bffafc1c3003c2ee05d28eaa345e5854bc36014d]
+> +---
+> + lib/logging.c | 4 ++--
+> + 1 file changed, 2 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/lib/logging.c b/lib/logging.c
+> +index be518fc5..61c74407 100644
+> +--- a/lib/logging.c
+> ++++ b/lib/logging.c
+> +@@ -73,9 +73,9 @@ iscsi_log_message(struct iscsi_context *iscsi, int level, const char *format, ..
+> + 	}
+> + 
+> + 	if (iscsi->target_name[0]) {
+> +-		static char message2[1024];
+> ++		static char message2[1282];
+> + 
+> +-		snprintf(message2, 1024, "%s [%s]", message, iscsi->target_name);
+> ++		snprintf(message2, 1282, "%s [%s]", message, iscsi->target_name);
+> + 		iscsi->log_fn(level, message2);
+> + 	}
+> + 	else
+> diff --git a/package/libiscsi/0003-avoid-fallthrough.patch b/package/libiscsi/0003-avoid-fallthrough.patch
+> new file mode 100644
+> index 0000000000..94f653a99c
+> --- /dev/null
+> +++ b/package/libiscsi/0003-avoid-fallthrough.patch
+> @@ -0,0 +1,24 @@
+> +From 679d0abe7c142df178a907397551c4d9695cc667 Mon Sep 17 00:00:00 2001
+> +From: Paolo Bonzini <pbonzini@redhat.com>
+> +Date: Mon, 1 Oct 2018 14:14:24 +0200
+> +Subject: [PATCH] avoid fallthrough
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Retrieved from:
+> +https://github.com/sahlberg/libiscsi/commit/679d0abe7c142df178a907397551c4d9695cc667]
+> +---
+> + lib/scsi-lowlevel.c | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/lib/scsi-lowlevel.c b/lib/scsi-lowlevel.c
+> +index 5ddd709c..747ce0c4 100644
+> +--- a/lib/scsi-lowlevel.c
+> ++++ b/lib/scsi-lowlevel.c
+> +@@ -1086,6 +1086,7 @@ scsi_maintenancein_datain_getfullsize(struct scsi_task *task)
+> + 				(task_get_uint8(task, 1) & 0x80) ? 12 : 0 +
+> + 				task_get_uint16(task, 2);
+> + 		}
+> ++		return -1;
+> + 	default:
+> + 		return -1;
+> + 	}
+> -- 
+> 2.17.1
+> 
 
 -- 
-http://autobuild.buildroot.net
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
