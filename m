@@ -1,23 +1,18 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sat, 10 Nov 2018 00:16:06 -0200
-Subject: [Buildroot] [PATCH v3 5/8] support/testing: use
- TestPythonPackageBase for python-twisted
+Date: Sat, 10 Nov 2018 00:16:07 -0200
+Subject: [Buildroot] [PATCH v3 6/8] support/testing: use
+ TestPythonPackageBase for python-txaio
 In-Reply-To: <20181110021609.14684-1-ricardo.martincoski@gmail.com>
 References: <20181110021609.14684-1-ricardo.martincoski@gmail.com>
-Message-ID: <20181110021609.14684-6-ricardo.martincoski@gmail.com>
+Message-ID: <20181110021609.14684-7-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Move the test script to be run on the target from inline in the test
+Move the test scripts to be run on the target from inline in the test
 case to a separate file.
-
-Get the base defconfig fragment from the immediate parent class and not
-directly from TestPythonBase because it is the correct way of doing
-this. This way the base class TestPythonTwisted could even be placed in
-a separate file.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
@@ -27,96 +22,82 @@ Cc: Yegor Yefremov <yegorslists@googlemail.com>
 ---
 Changes v2 -> v3:
   - refresh;
-  - get the config from immediate parent class;
 
 Changes v1 -> v2:
   - refresh after creating TestPythonPackageBase;
-  - override run_sample_scripts instead of test_run;
 ---
- .../tests/package/sample_python_twisted.py    |  9 +++++
- .../tests/package/test_python_twisted.py      | 35 ++++++-------------
- 2 files changed, 19 insertions(+), 25 deletions(-)
- create mode 100644 support/testing/tests/package/sample_python_twisted.py
+ .../package/sample_python_txaio_asyncio.py    |  3 ++
+ .../package/sample_python_txaio_twisted.py    |  3 ++
+ .../tests/package/test_python_txaio.py        | 30 ++++++-------------
+ 3 files changed, 15 insertions(+), 21 deletions(-)
+ create mode 100644 support/testing/tests/package/sample_python_txaio_asyncio.py
+ create mode 100644 support/testing/tests/package/sample_python_txaio_twisted.py
 
-diff --git a/support/testing/tests/package/sample_python_twisted.py b/support/testing/tests/package/sample_python_twisted.py
+diff --git a/support/testing/tests/package/sample_python_txaio_asyncio.py b/support/testing/tests/package/sample_python_txaio_asyncio.py
 new file mode 100644
-index 0000000000..47d6c5debc
+index 0000000000..77f11ed807
 --- /dev/null
-+++ b/support/testing/tests/package/sample_python_twisted.py
-@@ -0,0 +1,9 @@
-+from twisted.internet import protocol, reactor, endpoints
-+
-+
-+class F(protocol.Factory):
-+    pass
-+
-+
-+endpoints.serverFromString(reactor, "tcp:1234").listen(F())
-+reactor.run()
-diff --git a/support/testing/tests/package/test_python_twisted.py b/support/testing/tests/package/test_python_twisted.py
-index ccee07d61d..a458ee45dd 100644
---- a/support/testing/tests/package/test_python_twisted.py
-+++ b/support/testing/tests/package/test_python_twisted.py
-@@ -1,25 +1,16 @@
++++ b/support/testing/tests/package/sample_python_txaio_asyncio.py
+@@ -0,0 +1,3 @@
++import txaio
++txaio.use_asyncio()
++f0 = txaio.create_future()
+diff --git a/support/testing/tests/package/sample_python_txaio_twisted.py b/support/testing/tests/package/sample_python_txaio_twisted.py
+new file mode 100644
+index 0000000000..13ea82a961
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_txaio_twisted.py
+@@ -0,0 +1,3 @@
++import txaio
++txaio.use_twisted()
++f0 = txaio.create_future()
+diff --git a/support/testing/tests/package/test_python_txaio.py b/support/testing/tests/package/test_python_txaio.py
+index af93e031b5..7bff1bc23c 100644
+--- a/support/testing/tests/package/test_python_txaio.py
++++ b/support/testing/tests/package/test_python_txaio.py
+@@ -1,34 +1,22 @@
 -from tests.package.test_python import TestPythonBase
 +from tests.package.test_python import TestPythonPackageBase
  
--TEST_SCRIPT = """
--from twisted.internet import protocol, reactor, endpoints
--class F(protocol.Factory):
--    pass
--endpoints.serverFromString(reactor, "tcp:1234").listen(F())
--reactor.run()
--"""
  
-+class TestPythonTwisted(TestPythonPackageBase):
-+    config = TestPythonPackageBase.config
-+    sample_scripts = ["tests/package/sample_python_twisted.py"]
- 
--class TestPythonTwisted(TestPythonBase):
--    def import_test(self):
--        cmd = "printf '{}' > test.py".format(TEST_SCRIPT)
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
--
-+    def run_sample_scripts(self):
-         cmd = "netstat -ltn 2>/dev/null | grep 0.0.0.0:1234"
-         _, exit_code = self.emulator.run(cmd)
-         self.assertEqual(exit_code, 1)
- 
--        cmd = self.interpreter + " test.py &"
-+        cmd = self.interpreter + " sample_python_twisted.py &"
-         # give some time to setup the server
-         cmd += "sleep 30"
-         _, exit_code = self.emulator.run(cmd, timeout=35)
-@@ -31,24 +22,18 @@ class TestPythonTwisted(TestPythonBase):
- 
- 
- class TestPythonPy2Twisted(TestPythonTwisted):
+-class TestPythonPy2Txaio(TestPythonBase):
 -    config = TestPythonBase.config + \
++class TestPythonPy2Txaio(TestPythonPackageBase):
 +    __test__ = True
-+    config = TestPythonTwisted.config + \
++    config = TestPythonPackageBase.config + \
          """
          BR2_PACKAGE_PYTHON=y
+         BR2_PACKAGE_PYTHON_TXAIO=y
          BR2_PACKAGE_PYTHON_TWISTED=y
          """
++    sample_scripts = ["tests/package/sample_python_txaio_twisted.py"]
  
 -    def test_run(self):
 -        self.login()
--        self.import_test()
--
+-        cmd = self.interpreter + " -c 'import txaio;"
+-        cmd += "txaio.use_twisted();"
+-        cmd += "f0 = txaio.create_future()'"
+-        _, exit_code = self.emulator.run(cmd)
+-        self.assertEqual(exit_code, 0)
  
- class TestPythonPy3Twisted(TestPythonTwisted):
+-
+-class TestPythonPy3Txaio(TestPythonBase):
 -    config = TestPythonBase.config + \
++class TestPythonPy3Txaio(TestPythonPackageBase):
 +    __test__ = True
-+    config = TestPythonTwisted.config + \
++    config = TestPythonPackageBase.config + \
          """
          BR2_PACKAGE_PYTHON3=y
-         BR2_PACKAGE_PYTHON_TWISTED=y
+         BR2_PACKAGE_PYTHON_TXAIO=y
          """
 -
 -    def test_run(self):
 -        self.login()
--        self.import_test()
+-        cmd = self.interpreter + " -c 'import txaio;"
+-        cmd += "txaio.use_asyncio();"
+-        cmd += "f0 = txaio.create_future()'"
+-        _, exit_code = self.emulator.run(cmd)
+-        self.assertEqual(exit_code, 0)
++    sample_scripts = ["tests/package/sample_python_txaio_asyncio.py"]
 -- 
 2.17.1
