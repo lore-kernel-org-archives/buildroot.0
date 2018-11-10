@@ -1,64 +1,92 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Nov 2018 09:40:55 +0100
-Subject: [Buildroot] [PATCH] util-linux: bump to version 2.33
-In-Reply-To: <20181108001634.7022-1-casantos@datacom.com.br> (Carlos Santos's
- message of "Wed, 7 Nov 2018 22:16:34 -0200")
-References: <20181108001634.7022-1-casantos@datacom.com.br>
-Message-ID: <87va555nqg.fsf@dell.be.48ers.dk>
+Date: Sat, 10 Nov 2018 09:43:12 +0100
+Subject: [Buildroot] [git commit] libiscsi: fix build failures due to
+ warnings
+Message-ID: <20181110084048.A6F10821CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Carlos" == Carlos Santos <casantos@datacom.com.br> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=6a5e9a7ac6e20f8cb2251b61b09b54d51bedfa82
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > - Update "basic set" help to include the new "choom" utility.
- > - Re-generate checksums for license files, whose names now follow the
- >   SPDX License List.
- > - Pull a patch already applied upstream that make rtcwake use poweroff
- >   if shutdown is not found (e.g. Busybox, which the default init system
- >   on Buldroot).
- > - Pull a patch already submitted upstream to fix the output of escaped
- >   characters by agetty.
+Retrieve two upstream patches to fix build failures due to warnings
 
- > Signed-off-by: Carlos Santos <casantos@datacom.com.br>
- > ---
- > Supersedes: https://patchwork.ozlabs.org/patch/994061/
- > ---
- > Changes v1->v2:
- > - Pull the patches on rtcwake and agetty.
- > ---
- >  ...se-poweroff-if-shutdown-is-not-found.patch | 86 +++++++++++++++++++
- >  ...tty-fix-output-of-escaped-characters.patch | 26 ++++++
- >  package/util-linux/Config.in                  |  2 +-
- >  package/util-linux/util-linux.hash            | 14 +--
- >  package/util-linux/util-linux.mk              | 11 ++-
- >  5 files changed, 128 insertions(+), 11 deletions(-)
- >  create mode 100644 package/util-linux/0001-rtcwake-use-poweroff-if-shutdown-is-not-found.patch
- >  create mode 100644 package/util-linux/0002-agetty-fix-output-of-escaped-characters.patch
+Fixes:
+ - http://autobuild.buildroot.org/results/7ec1e1cc060bbdaaf758c0d55a053247b731e792
 
- > diff --git a/package/util-linux/0001-rtcwake-use-poweroff-if-shutdown-is-not-found.patch b/package/util-linux/0001-rtcwake-use-poweroff-if-shutdown-is-not-found.patch
- > new file mode 100644
- > index 0000000000..980795fc15
- > --- /dev/null
- > +++ b/package/util-linux/0001-rtcwake-use-poweroff-if-shutdown-is-not-found.patch
- > @@ -0,0 +1,86 @@
- > +From e1686b25acdedb34cc357f08f0dd3ca01c559dfd Mon Sep 17 00:00:00 2001
- > +From: Justin Chen <justinpopo6@gmail.com>
- > +Date: Thu, 1 Nov 2018 11:10:38 -0700
- > +Subject: [PATCH 1/2] rtcwake: use poweroff if shutdown is not found
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...logging-message-that-includes-target-name.patch | 29 ++++++++++++++++++++++
+ package/libiscsi/0003-avoid-fallthrough.patch      | 24 ++++++++++++++++++
+ 2 files changed, 53 insertions(+)
 
-Please drop the PATCH x/y (E.G. use git format-patch -N) as it tends to
-get out of date.
-
-Notice that check-package now also warns about this:
-
-Applying: util-linux: bump to version 2.33
-package/util-linux/0001-rtcwake-use-poweroff-if-shutdown-is-not-found.patch:4: generate your patches with 'git format-patch -N'
-package/util-linux/0002-agetty-fix-output-of-escaped-characters.patch:4: generate your patches with 'git format-patch -N'
-
-Committed with that fixed to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libiscsi/0002-avoid-truncation-when-logging-message-that-includes-target-name.patch b/package/libiscsi/0002-avoid-truncation-when-logging-message-that-includes-target-name.patch
+new file mode 100644
+index 0000000000..1334a8352c
+--- /dev/null
++++ b/package/libiscsi/0002-avoid-truncation-when-logging-message-that-includes-target-name.patch
+@@ -0,0 +1,29 @@
++From bffafc1c3003c2ee05d28eaa345e5854bc36014d Mon Sep 17 00:00:00 2001
++From: Paolo Bonzini <pbonzini@redhat.com>
++Date: Mon, 1 Oct 2018 14:16:14 +0200
++Subject: [PATCH] avoid truncation when logging message that includes target
++ name
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/sahlberg/libiscsi/commit/bffafc1c3003c2ee05d28eaa345e5854bc36014d]
++---
++ lib/logging.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/lib/logging.c b/lib/logging.c
++index be518fc5..61c74407 100644
++--- a/lib/logging.c
+++++ b/lib/logging.c
++@@ -73,9 +73,9 @@ iscsi_log_message(struct iscsi_context *iscsi, int level, const char *format, ..
++ 	}
++ 
++ 	if (iscsi->target_name[0]) {
++-		static char message2[1024];
+++		static char message2[1282];
++ 
++-		snprintf(message2, 1024, "%s [%s]", message, iscsi->target_name);
+++		snprintf(message2, 1282, "%s [%s]", message, iscsi->target_name);
++ 		iscsi->log_fn(level, message2);
++ 	}
++ 	else
+diff --git a/package/libiscsi/0003-avoid-fallthrough.patch b/package/libiscsi/0003-avoid-fallthrough.patch
+new file mode 100644
+index 0000000000..94f653a99c
+--- /dev/null
++++ b/package/libiscsi/0003-avoid-fallthrough.patch
+@@ -0,0 +1,24 @@
++From 679d0abe7c142df178a907397551c4d9695cc667 Mon Sep 17 00:00:00 2001
++From: Paolo Bonzini <pbonzini@redhat.com>
++Date: Mon, 1 Oct 2018 14:14:24 +0200
++Subject: [PATCH] avoid fallthrough
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/sahlberg/libiscsi/commit/679d0abe7c142df178a907397551c4d9695cc667]
++---
++ lib/scsi-lowlevel.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/lib/scsi-lowlevel.c b/lib/scsi-lowlevel.c
++index 5ddd709c..747ce0c4 100644
++--- a/lib/scsi-lowlevel.c
+++++ b/lib/scsi-lowlevel.c
++@@ -1086,6 +1086,7 @@ scsi_maintenancein_datain_getfullsize(struct scsi_task *task)
++ 				(task_get_uint8(task, 1) & 0x80) ? 12 : 0 +
++ 				task_get_uint16(task, 2);
++ 		}
+++		return -1;
++ 	default:
++ 		return -1;
++ 	}
