@@ -1,48 +1,18 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sat, 10 Nov 2018 00:16:02 -0200
-Subject: [Buildroot] [PATCH v3 1/8] support/testing: create default test
- case for python packages
+Date: Sat, 10 Nov 2018 00:16:03 -0200
+Subject: [Buildroot] [PATCH v3 2/8] support/testing: use
+ TestPythonPackageBase for python-autobahn
 In-Reply-To: <20181110021609.14684-1-ricardo.martincoski@gmail.com>
 References: <20181110021609.14684-1-ricardo.martincoski@gmail.com>
-Message-ID: <20181110021609.14684-2-ricardo.martincoski@gmail.com>
+Message-ID: <20181110021609.14684-3-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Test cases for python packages are very similar among each other: run a
-simple script in the target that minimally tests the package.
-So create a new helper class named TestPythonPackageBase that holds all
-the logic to run a script on the target.
-
-TestPythonPackageBase adds in build time one or more sample scripts to
-be run on the target. The test case for the python package must
-explicitly list them in the "sample_scripts" property. The test case
-then automatically logins to the target, checks the scripts are really
-in the rootfs (it calls "md5sum" instead of "ls" or "test" in an attempt
-to make the logfile more friendly, since someone analysing a failure can
-easily check the expected script was executed) and then calls the python
-interpreter passing the sample script as parameter.
-An optional property "timeout" exists for the case the sample script
-needs more time to run than the default timeout from the test infra
-(currently 5 seconds).
-
-A simple test case for a package that only supports Python 2 will look
-like this:
-
-|from tests.package.test_python import TestPythonPackageBase
-|
-|
-|class TestPythonPy2<Package>(TestPythonPackageBase):
-|    __test__ = True
-|    config = TestPythonPackageBase.config + \
-|        """
-|        BR2_PACKAGE_PYTHON=y
-|        BR2_PACKAGE_PYTHON_<PACKAGE>=y
-|        """
-|    sample_scripts = ["tests/package/sample_python_<package>.py"]
-|    timeout = 15
+Move the test script to be run on the target from inline in the test
+case to a separate file.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
@@ -51,112 +21,68 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Yegor Yefremov <yegorslists@googlemail.com>
 ---
 Changes v2 -> v3:
-  - back to v1 but without any tricks and using a separate class;
-  - fix typo when using super() TestPythonBase -> TestPythonPackageBase,
-    in v2 it ended up calling the same method, but it is wrong;
-Changes v1 -> v3:
-  - don't use a hack, use __test__ = False from nose2 to declare a class
-    that looks like a test case but is not a test case, as consequence
-    all classes that inherits from it and are test cases must set
-    __test__ = True;
-  - create a new class TestPythonPackageBase;
-  - add docstring;
+  - refresh;
 
 Changes v1 -> v2:
-  - do not reuse TestPython2 and TestPython3 to for two entirely
-    separate things: (Thomas)
-    - As a base class for testing individual Python packages;
-    - As test cases for the Python interpreter itself;
-  - use a better class hierarchy (Thomas). I did this in various patches
-    (before and after this one) trying to make the review easier.
-  - with the new class hierarchy the trick that allows the defconfig to
-    be changed by each test case without explicitly naming the class
-    that contains the base defconfig is moved from every test case to
-    the new base class.
-
-v1: http://patchwork.ozlabs.org/patch/984425/
+  - refresh after creating TestPythonPackageBase;
 ---
- .../package/copy-sample-script-to-target.sh   |  7 +++
- support/testing/tests/package/test_python.py  | 56 +++++++++++++++++++
- 2 files changed, 63 insertions(+)
- create mode 100755 support/testing/tests/package/copy-sample-script-to-target.sh
+ .../tests/package/sample_python_autobahn.py   |  1 +
+ .../tests/package/test_python_autobahn.py     | 29 ++++++-------------
+ 2 files changed, 10 insertions(+), 20 deletions(-)
+ create mode 100644 support/testing/tests/package/sample_python_autobahn.py
 
-diff --git a/support/testing/tests/package/copy-sample-script-to-target.sh b/support/testing/tests/package/copy-sample-script-to-target.sh
-new file mode 100755
-index 0000000000..6448a80d6d
+diff --git a/support/testing/tests/package/sample_python_autobahn.py b/support/testing/tests/package/sample_python_autobahn.py
+new file mode 100644
+index 0000000000..8189b6a6b3
 --- /dev/null
-+++ b/support/testing/tests/package/copy-sample-script-to-target.sh
-@@ -0,0 +1,7 @@
-+#!/bin/sh
-+set -e
-+
-+shift
-+for file in "$@"; do
-+	cp -f "${file}" "${TARGET_DIR}/root/"
-+done
-diff --git a/support/testing/tests/package/test_python.py b/support/testing/tests/package/test_python.py
-index 26cf49947b..c422bdbf50 100644
---- a/support/testing/tests/package/test_python.py
-+++ b/support/testing/tests/package/test_python.py
-@@ -68,3 +68,59 @@ class TestPython3(TestPythonBase):
-         self.math_floor_test()
-         self.libc_time_test()
-         self.zlib_test()
-+
-+
-+class TestPythonPackageBase(TestPythonBase):
-+    """Common class to test a python package.
-+
-+    Build an image containing the scripts listed in sample_scripts, start the
-+    emulator, login to it and for each sample script in the image run the python
-+    interpreter passing the name of the script and check the status code is 0.
-+
-+    Each test case that inherits from this class must have:
-+    __test__ = True  - to let nose2 know that it is a test case
-+    config           - defconfig fragment with the packages to run the test
-+    It also can have:
-+    sample_scripts   - list of scripts to add to the image and run on the target
-+    timeout          - timeout to the script to run when the default from the
-+                       test infra is not enough
-+    When custom commands need be issued on the target the method
-+    run_sample_scripts can be overridden.
-+    """
-+
-+    __test__ = False
-+    config_sample_scripts = \
-+        """
-+        BR2_ROOTFS_POST_BUILD_SCRIPT="{}"
-+        BR2_ROOTFS_POST_SCRIPT_ARGS="{}"
-+        """.format(infra.filepath("tests/package/copy-sample-script-to-target.sh"),
-+                   "{sample_scripts}")
-+    sample_scripts = None
-+    timeout = -1
-+
-+    def __init__(self, names):
-+        """Add the scripts to the target in build time."""
-+        super(TestPythonPackageBase, self).__init__(names)
-+        if self.sample_scripts:
-+            scripts = [infra.filepath(s) for s in self.sample_scripts]
-+            self.config += self.config_sample_scripts.format(sample_scripts=" ".join(scripts))
-+
-+    def check_sample_scripts_exist(self):
-+        """Check the scripts were really added to the image."""
-+        scripts = [os.path.basename(s) for s in self.sample_scripts]
-+        cmd = "md5sum " + " ".join(scripts)
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+
-+    def run_sample_scripts(self):
-+        """Run each script previously added to the image."""
-+        for script in self.sample_scripts:
-+            cmd = self.interpreter + " " + os.path.basename(script)
-+            _, exit_code = self.emulator.run(cmd, timeout=self.timeout)
-+            self.assertEqual(exit_code, 0)
-+
-+    def test_run(self):
-+        """Test a python package."""
-+        self.login()
-+        self.check_sample_scripts_exist()
-+        self.run_sample_scripts()
++++ b/support/testing/tests/package/sample_python_autobahn.py
+@@ -0,0 +1 @@
++import autobahn.wamp  # noqa
+diff --git a/support/testing/tests/package/test_python_autobahn.py b/support/testing/tests/package/test_python_autobahn.py
+index 2bc0f0cccf..af1f617d6d 100644
+--- a/support/testing/tests/package/test_python_autobahn.py
++++ b/support/testing/tests/package/test_python_autobahn.py
+@@ -1,32 +1,21 @@
+-from tests.package.test_python import TestPythonBase
++from tests.package.test_python import TestPythonPackageBase
+ 
+ 
+-class TestPythonAutobahn(TestPythonBase):
+-    def import_test(self):
+-        cmd = self.interpreter + " -c 'import autobahn.wamp'"
+-        _, exit_code = self.emulator.run(cmd)
+-        self.assertEqual(exit_code, 0)
+-
+-
+-class TestPythonPy2Autobahn(TestPythonAutobahn):
+-    config = TestPythonBase.config + \
++class TestPythonPy2Autobahn(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
+         """
+         BR2_PACKAGE_PYTHON=y
+         BR2_PACKAGE_PYTHON_AUTOBAHN=y
+         """
++    sample_scripts = ["tests/package/sample_python_autobahn.py"]
+ 
+-    def test_run(self):
+-        self.login()
+-        self.import_test()
+ 
+-
+-class TestPythonPy3Autobahn(TestPythonAutobahn):
+-    config = TestPythonBase.config + \
++class TestPythonPy3Autobahn(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
+         """
+         BR2_PACKAGE_PYTHON3=y
+         BR2_PACKAGE_PYTHON_AUTOBAHN=y
+         """
+-
+-    def test_run(self):
+-        self.login()
+-        self.import_test()
++    sample_scripts = ["tests/package/sample_python_autobahn.py"]
 -- 
 2.17.1
