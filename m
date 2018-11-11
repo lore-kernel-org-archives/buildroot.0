@@ -1,27 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 11 Nov 2018 21:55:47 +0100
-Subject: [Buildroot] [PATCH] systemd: Explicitly configure
- split-usr=false and split-bin=true
-In-Reply-To: <20181111150652.17459-7-alexander.sverdlin@gmail.com>
-References: <20181111150652.17459-1-alexander.sverdlin@gmail.com>
- <20181111150652.17459-7-alexander.sverdlin@gmail.com>
-Message-ID: <20181111215547.488b4a96@windsurf.home>
+Date: Sun, 11 Nov 2018 21:56:54 +0100
+Subject: [Buildroot] [git commit branch/next] libmicrohttpd: bump to version
+ 0.9.60
+Message-ID: <20181111205547.9C8E2825CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=35f468b0f0dc8de16fda6f8b5824e41e5fd94266
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 11 Nov 2018 16:06:52 +0100, Alexander Sverdlin wrote:
-> bison-based build of systemd runs couple of checks on the structure of the
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libmicrohttpd/libmicrohttpd.hash | 2 +-
+ package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I assume you wanted to say "meson-based build" and not "bison-based
-build". I've fixed that and applied to master. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
+index e534e8e80b..d54d2bbc14 100644
+--- a/package/libmicrohttpd/libmicrohttpd.hash
++++ b/package/libmicrohttpd/libmicrohttpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 9b9ccd7d0b11b0e179f1f58dc2caa3e0c62c8609e1e1dc7dcaadf941b67d923c  libmicrohttpd-0.9.59.tar.gz
++sha256 cd0e5d3f95a9e55ef7cdf4d0530e997ba00b8411af9149d9287db785d729c471  libmicrohttpd-0.9.60.tar.gz
+ sha256 70e12e2a60151b9ed1a4c94a5ffeb99cd086fa94542b5a92fec581506e8d3121  COPYING
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index 1cda434819..f5bf774bea 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMICROHTTPD_VERSION = 0.9.59
++LIBMICROHTTPD_VERSION = 0.9.60
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_INSTALL_STAGING = YES
