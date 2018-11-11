@@ -1,35 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Nov 2018 21:03:43 +0100
-Subject: [Buildroot] [PATCH 1/3] fs: apply permissions late
-In-Reply-To: <90236f5b-e72e-e73a-b4fa-e982ee3cc42c@mind.be> (Arnout
- Vandecappelle's message of "Sun, 11 Nov 2018 17:02:59 +0100")
-References: <cover.1540626349.git.yann.morin.1998@free.fr>
- <4f9a31b0fb8f87ded9c788cb92d727b6763859ac.1540626349.git.yann.morin.1998@free.fr>
- <762db85d-d4a9-95b5-8280-d46dfd5f2a72@mind.be>
- <20181110175724.GG2445@scaer>
- <90236f5b-e72e-e73a-b4fa-e982ee3cc42c@mind.be>
-Message-ID: <87in135qlc.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 11 Nov 2018 21:13:37 +0100
+Subject: [Buildroot] [git commit] trace-cmd: fix site
+Message-ID: <20181111201150.1B44E8233A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e311d8387dc829d3f0dfe5508cfabc3458e0fa93
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > On 10/11/2018 18:57, Yann E. MORIN wrote:
- >> Arnout, All,
- >> 
- >> On 2018-11-08 00:43 +0100, Arnout Vandecappelle spake thusly:
- > [snip]
- >>> Still, I'd prefer to fix fakeroot :-)
- >> 
- >> Then, please be my guest! ;-) I already fixed something in fakeroot, and
- >> I dread working on that code base any more...
+Replace $(BR2_KERNEL_MIRROR) by https://git.kernel.org/pub, which
+fixes the download of this package:
 
- >  Time to switch to pseudo? The .11-rc period is ideal for that, isn't it? :-)
+>>> trace-cmd trace-cmd-v2.6.1 Downloading
+Initialized empty Git repository in /home/thomas/dl/trace-cmd/git/.git/
+Fetching all references
+fatal: repository 'https://cdn.kernel.org/pub/scm/linux/kernel/git/rostedt/trace-cmd.git/' not found
+Detected a corrupted git cache.
+Removing it and starting afresh.
+Initialized empty Git repository in /home/thomas/dl/trace-cmd/git/.git/
+Fetching all references
+fatal: repository 'https://cdn.kernel.org/pub/scm/linux/kernel/git/rostedt/trace-cmd.git/' not found
+Detected a corrupted git cache.
+This is the second time in a row; bailing out
+--2018-11-11 21:08:00--  http://sources.buildroot.net/trace-cmd/trace-cmd-trace-cmd-v2.6.1.tar.gz
+Resolving sources.buildroot.net (sources.buildroot.net)... 104.25.210.19, 104.25.211.19, 2606:4700:20::6819:d313, ...
+Connecting to sources.buildroot.net (sources.buildroot.net)|104.25.210.19|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 1859835 (1.8M) [application/x-gtar-compressed]
 
-I see the smiley, but does pseudo correctly handle xattrs/capabilities?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/trace-cmd/trace-cmd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
+index 0dc145674f..578e9f124f 100644
+--- a/package/trace-cmd/trace-cmd.mk
++++ b/package/trace-cmd/trace-cmd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ TRACE_CMD_VERSION = trace-cmd-v2.6.1
+-TRACE_CMD_SITE = $(BR2_KERNEL_MIRROR)/scm/linux/kernel/git/rostedt/trace-cmd.git
++TRACE_CMD_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/trace-cmd.git
+ TRACE_CMD_SITE_METHOD = git
+ TRACE_CMD_INSTALL_STAGING = YES
+ TRACE_CMD_LICENSE = GPL-2.0, LGPL-2.1
