@@ -1,149 +1,94 @@
-From: kaplan2539 at gmail.com <kaplan2539@gmail.com>
-Date: Sat, 10 Nov 2018 21:38:34 -0800
-Subject: [Buildroot] [PATCH 1/1] package/android-tools: add ext4_utils to
- host
-Message-ID: <1541914714-17359-1-git-send-email-kaplan2539@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 11 Nov 2018 08:00:15 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-11-10
+Message-ID: <20181111070015.59E602072B@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Alex Kaplan <kaplan2539@gmail.com>
+Hello,
 
-This patch adds an option to build and install the ext4_utils for the host,
-i.e. make_ext4fs, ext4fixup, ext2simg, img2simg, simg2img and simg2simg.
-As a default building of ext4_utils is disabled.
+Build statistics for 2018-11-10
+===============================
 
-Signed-off-by: Alex Kaplan <kaplan2539@gmail.com>
----
- ...akefiles-for-out-of-tree-ext4_utils-build.patch | 48 ++++++++++++++++++++++
- package/android-tools/Config.in.host               |  8 ++++
- package/android-tools/android-tools.mk             | 18 ++++++--
- 3 files changed, 70 insertions(+), 4 deletions(-)
- create mode 100644 package/android-tools/0009-Fix-makefiles-for-out-of-tree-ext4_utils-build.patch
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  20 |   4 |   0 |  24 |
+   2018.08.x |  28 |   1 |   0 |  29 |
+      master | 186 |  12 |   1 | 199 |
 
-diff --git a/package/android-tools/0009-Fix-makefiles-for-out-of-tree-ext4_utils-build.patch b/package/android-tools/0009-Fix-makefiles-for-out-of-tree-ext4_utils-build.patch
-new file mode 100644
-index 0000000..80ea1ec
---- /dev/null
-+++ b/package/android-tools/0009-Fix-makefiles-for-out-of-tree-ext4_utils-build.patch
-@@ -0,0 +1,48 @@
-+From d24abbec201975a5eb7f8589614cfb424b8c80b6 Mon Sep 17 00:00:00 2001
-+From: Alex Kaplan <kaplan2539@gmail.com>
-+Date: Sat, 10 Nov 2018 19:50:51 -0800
-+Subject: [PATCH] Fix makefiles for out-of-tree ext4_utils build
-+
-+Signed-off-by: Alex Kaplan <kaplan2539@gmail.com>
-+---
-+ debian/makefiles/ext4_utils.mk | 10 +++++-----
-+ 1 file changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/debian/makefiles/ext4_utils.mk b/debian/makefiles/ext4_utils.mk
-+index cb64916..c5904bf 100644
-+--- a/debian/makefiles/ext4_utils.mk
-++++ b/debian/makefiles/ext4_utils.mk
-+@@ -1,6 +1,7 @@
-+ # Makefile for ext4_utils; based on https://heiher.info/2227.html
-+ # Author: Dmitrijs Ledkovs <xnox@ubuntu.com>
-+ 
-++VPATH+=$(SRCDIR)/extras/ext4_utils
-+ SRCS+=make_ext4fs.c
-+ SRCS+=ext4fixup.c
-+ SRCS+=ext4_utils.c
-+@@ -13,7 +14,7 @@ SRCS+=sha1.c
-+ SRCS+=wipe.c
-+ SRCS+=crc16.c
-+ 
-+-VPATH+=../../core/libsparse
-++VPATH+=$(SRCDIR)/core/libsparse
-+ SRCS+= backed_block.c
-+ SRCS+= sparse_crc32.c
-+ SRCS+= sparse.c
-+@@ -31,10 +32,9 @@ SRCS+=img2simg.c
-+ SRCS+=simg2img.c
-+ SRCS+=simg2simg.c
-+ 
-+-CPPFLAGS+= -I.
-+-CPPFLAGS+= -I/usr/include
-+-CPPFLAGS+= -I../../core/include
-+-CPPFLAGS+= -I../../core/libsparse/include/
-++CPPFLAGS+= -I$(SRCDIR)
-++CPPFLAGS+= -I$(SRCDIR)/core/include
-++CPPFLAGS+= -I$(SRCDIR)/core/libsparse/include/
-+ 
-+ LIBS+= -lz -lselinux
-+ 
-+-- 
-+2.7.4
-+
-diff --git a/package/android-tools/Config.in.host b/package/android-tools/Config.in.host
-index 993c4c9..6359e39 100644
---- a/package/android-tools/Config.in.host
-+++ b/package/android-tools/Config.in.host
-@@ -23,4 +23,12 @@ config BR2_PACKAGE_HOST_ANDROID_TOOLS_ADB
- 	  host, which can be used to interact with target devices
- 	  implementing the ADB protocol.
- 
-+config BR2_PACKAGE_HOST_ANDROID_TOOLS_EXT4_UTILS
-+	bool "ext4 utils"
-+	default n
-+	help
-+	  This option will build and install the ext4 utils for the
-+	  host, i.e. make_ext4fs, ext4fixup, ext2simg, img2simg,
-+	  simg2img and simg2simg.
-+
- endif
-diff --git a/package/android-tools/android-tools.mk b/package/android-tools/android-tools.mk
-index 879d788..b59ee13 100644
---- a/package/android-tools/android-tools.mk
-+++ b/package/android-tools/android-tools.mk
-@@ -31,15 +31,23 @@ HOST_ANDROID_TOOLS_PRE_PATCH_HOOKS += ANDROID_TOOLS_DEBIAN_PATCH
- ANDROID_TOOLS_PRE_PATCH_HOOKS += ANDROID_TOOLS_DEBIAN_PATCH
- 
- ifeq ($(BR2_PACKAGE_HOST_ANDROID_TOOLS_FASTBOOT),y)
--HOST_ANDROID_TOOLS_TARGETS += fastboot
-+HOST_ANDROID_TOOLS_BUILD_TARGETS += fastboot
-+HOST_ANDROID_TOOLS_INSTALL_TARGETS += fastboot
- HOST_ANDROID_TOOLS_DEPENDENCIES += host-zlib host-libselinux
- endif
- 
- ifeq ($(BR2_PACKAGE_HOST_ANDROID_TOOLS_ADB),y)
--HOST_ANDROID_TOOLS_TARGETS += adb
-+HOST_ANDROID_TOOLS_BUILD_TARGETS += adb
-+HOST_ANDROID_TOOLS_INSTALL_TARGETS += adb
- HOST_ANDROID_TOOLS_DEPENDENCIES += host-zlib host-openssl
- endif
- 
-+ifeq ($(BR2_PACKAGE_HOST_ANDROID_TOOLS_EXT4_UTILS),y)
-+HOST_ANDROID_TOOLS_BUILD_TARGETS += ext4_utils
-+HOST_ANDROID_TOOLS_INSTALL_TARGETS_EXT4_UTILS += make_ext4fs ext4fixup ext2simg img2simg simg2img simg2simg
-+HOST_ANDROID_TOOLS_DEPENDENCIES += host-libselinux
-+endif
-+
- ifeq ($(BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT),y)
- ANDROID_TOOLS_TARGETS += fastboot
- ANDROID_TOOLS_DEPENDENCIES += zlib libselinux
-@@ -58,7 +66,7 @@ endif
- # Build each tool in its own directory not to share object files
- 
- define HOST_ANDROID_TOOLS_BUILD_CMDS
--	$(foreach t,$(HOST_ANDROID_TOOLS_TARGETS),\
-+	$(foreach t,$(HOST_ANDROID_TOOLS_BUILD_TARGETS),\
- 		mkdir -p $(@D)/build-$(t) && \
- 		$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) SRCDIR=$(@D) \
- 			-C $(@D)/build-$(t) -f $(@D)/debian/makefiles/$(t).mk$(sep))
-@@ -72,8 +80,10 @@ define ANDROID_TOOLS_BUILD_CMDS
- endef
- 
- define HOST_ANDROID_TOOLS_INSTALL_CMDS
--	$(foreach t,$(HOST_ANDROID_TOOLS_TARGETS),\
-+	$(foreach t,$(HOST_ANDROID_TOOLS_INSTALL_TARGETS),\
- 		$(INSTALL) -D -m 0755 $(@D)/build-$(t)/$(t) $(HOST_DIR)/bin/$(t)$(sep))
-+	$(foreach t,$(HOST_ANDROID_TOOLS_INSTALL_TARGETS_EXT4_UTILS),\
-+		$(INSTALL) -D -m 0755 $(@D)/build-ext4_utils/$(t) $(HOST_DIR)/bin/$(t)$(sep))
- endef
- 
- define ANDROID_TOOLS_INSTALL_TARGET_CMDS
+Results for branch '2018.02.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                   dante-1.4.1 | 1 
+               host-efl-1.20.6 | 1 
+                p11-kit-0.23.2 | 1 
+                   qemu-2.12.1 | 1 
+
+
+Detail of failures
+------------------
+
+    mips64el |                    dante-1.4.1 | NOK | http://autobuild.buildroot.net/results/66a706c4c55b0c0f9b78a451e141db954d97f323 |     
+      x86_64 |                host-efl-1.20.6 | NOK | http://autobuild.buildroot.net/results/f5bf13d4eb9fcbc1517965a413ae29cb20abba0f |     
+       nios2 |                 p11-kit-0.23.2 | NOK | http://autobuild.buildroot.net/results/1292d02aa1a8ef361201dbf53d152f6e049d3153 | ORPH
+         arm |                    qemu-2.12.1 | NOK | http://autobuild.buildroot.net/results/d4153c6f456b08c024cc1469ab0b0dcb850d01fe |     
+
+Results for branch '2018.08.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                  giflib-5.1.4 | 1 
+
+
+Detail of failures
+------------------
+
+microblazeel |                   giflib-5.1.4 | NOK | http://autobuild.buildroot.net/results/ddcfdcbbfb1c78ace5544e78aab57b83af244f5e |     
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+    trace-cmd-trace-cmd-v2.6.1 | 2 
+      docker-containerd-v1.1.3 | 1 
+             gstreamer1-1.14.4 | 1 
+                host-libsodium | 1 
+          libmicrohttpd-0.9.59 | 1 
+                  libnspr-4.19 | 1 
+                   luvi-v2.7.6 | 1 
+                 minizip-2.5.3 | 1 
+                   qemu-2.12.1 | 1 
+                qt5base-5.11.2 | 1 
+runc-69663f0bd4b60df09991c0... | 1 
+uclibc-ng-test-c6d62cbc6050... | 1 
+
+
+Detail of failures
+------------------
+
+      x86_64 |       docker-containerd-v1.1.3 | NOK | http://autobuild.buildroot.net/results/ec0cc98d21d90b2104a92e8f65a2bba87c940e51 |     
+     riscv64 |              gstreamer1-1.14.4 | NOK | http://autobuild.buildroot.net/results/ce8b5bff223cd55601d6bff503c76aa2684637b9 |     
+         arm |                 host-libsodium | TIM | http://autobuild.buildroot.net/results/923d663b99433095ea41a777deab2a38ddcf31e6 |     
+     riscv64 |           libmicrohttpd-0.9.59 | NOK | http://autobuild.buildroot.net/results/910dc7164312637bf4dcd89e4cb476ae198466c8 |     
+     riscv64 |                   libnspr-4.19 | NOK | http://autobuild.buildroot.net/results/a98db13ea105d627f2a4770969b31550926c2791 | ORPH
+     powerpc |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/8217e863c2776d299cb90b90f1a2ed8233ec82ba |     
+         arm |                  minizip-2.5.3 | NOK | http://autobuild.buildroot.net/results/5fdee934bc55f75d95c386c1bfea23e6b37fa7aa |     
+         arm |                    qemu-2.12.1 | NOK | http://autobuild.buildroot.net/results/50e0d7d1b4f5c2b827b50bb82d8fbc066bf31118 |     
+  aarch64_be |                 qt5base-5.11.2 | NOK | http://autobuild.buildroot.net/results/e6b07f898196ae6f2ef0cb14902c91b8d9127414 |     
+      x86_64 | runc-69663f0bd4b60df09991c0... | NOK | http://autobuild.buildroot.net/results/2c98b9585ed23d5db21e2f78c1c95be6863fa59e |     
+       sparc |     trace-cmd-trace-cmd-v2.6.1 | NOK | http://autobuild.buildroot.net/results/5500858a3d060489330b7dac92603bde9c0ab5c4 |     
+     sparc64 |     trace-cmd-trace-cmd-v2.6.1 | NOK | http://autobuild.buildroot.net/results/25ab9c250c2e4dfe73a999ee2fd7f1a4e5a22ecd |     
+     aarch64 | uclibc-ng-test-c6d62cbc6050... | NOK | http://autobuild.buildroot.net/results/578b9b11dc65b433b8d8f6d53d09b00c1a2fd5a3 |     
+
+
 -- 
-2.7.4
+http://autobuild.buildroot.net
