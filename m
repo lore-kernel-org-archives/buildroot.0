@@ -1,44 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 11 Nov 2018 22:08:25 +0100
-Subject: [Buildroot] [git commit] libkrb5: fix build on riscv
-Message-ID: <20181111210613.40C68825E6@busybox.osuosl.org>
+Date: Sun, 11 Nov 2018 22:09:02 +0100
+Subject: [Buildroot] [git commit] supertuxkart: fix build on bdver3
+Message-ID: <20181111210628.95451825FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e86af4c3961e1f30f2d48a8946a35edd95ab3ec4
+commit: https://git.buildroot.net/buildroot/commit/?id=236a7d5d786ba332154d770bc434c5f4e978d539
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Define _REENTRANT otherwise pthread detection will fail
+Retrieve upstream patch to fix build failure in
+lib/graphics_utils/mipmap/cpusimd.h due to direct inclusion of
+intrinsics headers:
+https://github.com/supertuxkart/stk-code/issues/3091
 
 Fixes:
- - http://autobuild.buildroot.org/results/39a51d0c3feab74edd8a17c9174d031ccc7ffe1d
+ - http://autobuild.buildroot.org/results/52bd5c45b0d04a863a2530d388899b3e46494ee9
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libkrb5/libkrb5.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ package/supertuxkart/0001-Fix-3091.patch | 59 ++++++++++++++++++++++++++++++++
+ 1 file changed, 59 insertions(+)
 
-diff --git a/package/libkrb5/libkrb5.mk b/package/libkrb5/libkrb5.mk
-index d9d7160ae8..6534c069ee 100644
---- a/package/libkrb5/libkrb5.mk
-+++ b/package/libkrb5/libkrb5.mk
-@@ -52,7 +52,14 @@ else
- LIBKRB5_CONF_OPTS += --without-readline
- endif
- 
--ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+# gcc on riscv doesn't define _REENTRANT when -pthread is passed while
-+# it should. Compensate this deficiency here otherwise libkrb5 configure
-+# script doesn't find that thread support is enabled.
-+ifeq ($(BR2_riscv),y)
-+LIBKRB5_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_REENTRANT"
-+endif
-+else
- LIBKRB5_CONF_OPTS += --disable-thread-support
- endif
- 
+diff --git a/package/supertuxkart/0001-Fix-3091.patch b/package/supertuxkart/0001-Fix-3091.patch
+new file mode 100644
+index 0000000000..dae2a37ce1
+--- /dev/null
++++ b/package/supertuxkart/0001-Fix-3091.patch
+@@ -0,0 +1,59 @@
++From 813b08bc73e4e93714b972ee56c64b4771735e01 Mon Sep 17 00:00:00 2001
++From: Benau <Benau@users.noreply.github.com>
++Date: Sun, 14 Jan 2018 10:19:37 +0800
++Subject: [PATCH] Fix #3091
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com
++[Retrieved from:
++https://github.com/supertuxkart/stk-code/commit/813b08bc73e4e93714b972ee56c64b4771735e01]
++---
++ lib/graphics_utils/mipmap/cpusimd.h | 14 +++++++-------
++ 1 file changed, 7 insertions(+), 7 deletions(-)
++
++diff --git a/lib/graphics_utils/mipmap/cpusimd.h b/lib/graphics_utils/mipmap/cpusimd.h
++index 1dc2c730b2..5e2cf30e5f 100644
++--- a/lib/graphics_utils/mipmap/cpusimd.h
+++++ b/lib/graphics_utils/mipmap/cpusimd.h
++@@ -38,11 +38,11 @@
++  #include <mmintrin.h>
++  #define CPU_MMX_SUPPORT (1)
++ #endif
++-#if __SSE__ || _M_X64 || _M_IX86_FP >= 1  || CPU_ENABLE_SSE
+++#if __SSE__ || defined(_M_X64) || ( defined(_M_IX86_FP) && ( _M_IX86_FP >= 1 ) ) || CPU_ENABLE_SSE
++  #include <xmmintrin.h>
++  #define CPU_SSE_SUPPORT (1)
++ #endif
++-#if __SSE2__ || _M_X64 || _M_IX86_FP >= 2  || CPU_ENABLE_SSE2
+++#if __SSE2__ || defined(_M_X64) || ( defined(_M_IX86_FP) && ( _M_IX86_FP >= 2 ) ) || CPU_ENABLE_SSE2
++  #include <emmintrin.h>
++  #define CPU_SSE2_SUPPORT (1)
++ #endif
++@@ -95,23 +95,23 @@
++  #define CPU_POPCNT_SUPPORT (1)
++ #endif
++ #if __LZCNT__ || CPU_ENABLE_LZCNT
++- #include <lzcntintrin.h>
+++ #include <x86intrin.h>
++  #define CPU_LZCNT_SUPPORT (1)
++ #endif
++ #if __F16C__ || CPU_ENABLE_F16C
++- #include <f16cintrin.h>
+++ #include <x86intrin.h>
++  #define CPU_F16C_SUPPORT (1)
++ #endif
++ #if __BMI__ || CPU_ENABLE_BMI
++- #include <bmiintrin.h>
+++ #include <x86intrin.h>
++  #define CPU_BMI_SUPPORT (1)
++ #endif
++ #if __BMI2__ || CPU_ENABLE_BMI2
++- #include <bmi2intrin.h>
+++ #include <x86intrin.h>
++  #define CPU_BMI2_SUPPORT (1)
++ #endif
++ #if __TBM__ || CPU_ENABLE_TBM
++- #include <tbmintrin.h>
+++ #include <x86intrin.h>
++  #define CPU_TBM_SUPPORT (1)
++ #endif
++ 
