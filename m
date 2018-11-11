@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 11 Nov 2018 22:10:40 +0100
-Subject: [Buildroot] [PATCH 1/1] libkrb5: fix build on riscv
-In-Reply-To: <20181111175210.14031-1-fontaine.fabrice@gmail.com>
-References: <20181111175210.14031-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181111221040.1bd99cd0@windsurf.home>
+Date: Sun, 11 Nov 2018 22:10:45 +0100
+Subject: [Buildroot] [PATCH 1/1] supertuxkart: fix build on bdver3
+In-Reply-To: <20181110142041.17651-1-fontaine.fabrice@gmail.com>
+References: <20181110142041.17651-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181111221045.12937871@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +12,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 11 Nov 2018 18:52:10 +0100, Fabrice Fontaine wrote:
-> Define _REENTRANT otherwise pthread detection will fail
+On Sat, 10 Nov 2018 15:20:41 +0100, Fabrice Fontaine wrote:
+> Retrieve upstream patch to fix build failure in
+> lib/graphics_utils/mipmap/cpusimd.h due to direct inclusion of
+> intrinsics headers:
+> https://github.com/supertuxkart/stk-code/issues/3091
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/39a51d0c3feab74edd8a17c9174d031ccc7ffe1d
+>  - http://autobuild.buildroot.org/results/52bd5c45b0d04a863a2530d388899b3e46494ee9
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/libkrb5/libkrb5.mk | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
+>  package/supertuxkart/0001-Fix-3091.patch | 59 ++++++++++++++++++++++++
+>  1 file changed, 59 insertions(+)
+>  create mode 100644 package/supertuxkart/0001-Fix-3091.patch
 
 Applied to master, thanks.
 
