@@ -1,61 +1,40 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 11 Nov 2018 17:34:49 +0100
-Subject: [Buildroot] [PATCH] systemd: Explicitly configure
- split-usr=false and split-bin=true
-In-Reply-To: <20181111150652.17459-7-alexander.sverdlin@gmail.com>
-References: <20181111150652.17459-1-alexander.sverdlin@gmail.com>
- <20181111150652.17459-7-alexander.sverdlin@gmail.com>
-Message-ID: <20181111163449.GH2445@scaer>
+Date: Sun, 11 Nov 2018 17:44:14 +0100
+Subject: [Buildroot] [PATCH 1/3] fs: apply permissions late
+In-Reply-To: <90236f5b-e72e-e73a-b4fa-e982ee3cc42c@mind.be>
+References: <cover.1540626349.git.yann.morin.1998@free.fr>
+ <4f9a31b0fb8f87ded9c788cb92d727b6763859ac.1540626349.git.yann.morin.1998@free.fr>
+ <762db85d-d4a9-95b5-8280-d46dfd5f2a72@mind.be>
+ <20181110175724.GG2445@scaer>
+ <90236f5b-e72e-e73a-b4fa-e982ee3cc42c@mind.be>
+Message-ID: <20181111164414.GI2445@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexander, All,
+Arnout, All,
 
-On 2018-11-11 16:06 +0100, Alexander Sverdlin spake thusly:
-> bison-based build of systemd runs couple of checks on the structure of the
-> *host* system which will incorrectly configure systemd if build host
-> configuration doesn't match Buildroot target.
+On 2018-11-11 17:02 +0100, Arnout Vandecappelle spake thusly:
+> On 10/11/2018 18:57, Yann E. MORIN wrote:
+> > Arnout, All,
+> > 
+> > On 2018-11-08 00:43 +0100, Arnout Vandecappelle spake thusly:
+> [snip]
+> >>  Still, I'd prefer to fix fakeroot :-)
+> > 
+> > Then, please be my guest! ;-) I already fixed something in fakeroot, and
+> > I dread working on that code base any more...
 > 
-> One can also find the following in the NEWS file:
-> 
-> * A new -Dsplit-bin= build configuration switch may be used to specify
->   whether bin and sbin directories are merged, or if they should be
->   included separately in $PATH and various listings of executable
->   directories. The build configuration scripts will try to autodetect
->   the proper values of -Dsplit-usr= and -Dsplit-bin= based on build
->   system, but distributions are encouraged to configure this
->   explicitly.
-> 
-> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+>  Time to switch to pseudo? The .11-rc period is ideal for that, isn't it? :-)
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+I already made that joke on IRC the other day! ;-)
+    2018-11-09 22:01 < y_morin> Maybe we will eventually have to switch
+                                to an alternative (pseudo?)  NOOOO!!!!!! :-]
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  package/systemd/systemd.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 4813496670..ecbf7e97ff 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -29,6 +29,8 @@ SYSTEMD_CONF_OPTS += \
->  	-Dldconfig=false \
->  	-Ddefault-dnssec=no \
->  	-Dtests=false \
-> +	-Dsplit-bin=true \
-> +	-Dsplit-usr=false \
->  	-Dsystem-uid-max=999 \
->  	-Dsystem-gid-max=999 \
->  	-Dtelinit-path=$(TARGET_DIR)/sbin/telinit \
-> -- 
-> 2.19.1
-> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
