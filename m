@@ -1,38 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 11 Nov 2018 22:08:07 +0100
-Subject: [Buildroot] [PATCH 1/1] libkrb5: fix build on riscv
-In-Reply-To: <CAPi7W80ucvAmN6PDtBbNxfYFniJ1kveZ_Q3yTHiXbpabYkhbSQ@mail.gmail.com>
-References: <20181111175210.14031-1-fontaine.fabrice@gmail.com>
- <20181111205343.76b10bff@windsurf.home>
- <CAPi7W839q1wsnB9u99kUy8BnGAQg61inS=2+aEh+jO9_Yc5ftA@mail.gmail.com>
- <20181111213112.417acc8b@windsurf.home>
- <CAPi7W80ucvAmN6PDtBbNxfYFniJ1kveZ_Q3yTHiXbpabYkhbSQ@mail.gmail.com>
-Message-ID: <20181111220807.62f45653@windsurf.home>
+Date: Sun, 11 Nov 2018 22:08:25 +0100
+Subject: [Buildroot] [git commit] libkrb5: fix build on riscv
+Message-ID: <20181111210613.40C68825E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e86af4c3961e1f30f2d48a8946a35edd95ab3ec4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 11 Nov 2018 21:39:26 +0100, Fabrice Fontaine wrote:
+Define _REENTRANT otherwise pthread detection will fail
 
-> > This commit is in gcc upstream since gcc 7.1.0. So I guess we could
-> > drop the ARC-specific workaround on libmicrohttpd, since we don't
-> > really support "old" gcc versions on ARC anyway.  
-> OK, are you ok to do this patch? I assume that the patch on
-> libmicrohttpd for riscv is still valid or do you want that I made a
-> patch serie on libmicrohttpd?
+Fixes:
+ - http://autobuild.buildroot.org/results/39a51d0c3feab74edd8a17c9174d031ccc7ffe1d
 
-I applied your libmicrohttpd patch, and I'll do the same with the
-libkrb5 patch. We can drop the libmicrohttpd work-around for ARC
-at a later point.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libkrb5/libkrb5.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libkrb5/libkrb5.mk b/package/libkrb5/libkrb5.mk
+index d9d7160ae8..6534c069ee 100644
+--- a/package/libkrb5/libkrb5.mk
++++ b/package/libkrb5/libkrb5.mk
+@@ -52,7 +52,14 @@ else
+ LIBKRB5_CONF_OPTS += --without-readline
+ endif
+ 
+-ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++# gcc on riscv doesn't define _REENTRANT when -pthread is passed while
++# it should. Compensate this deficiency here otherwise libkrb5 configure
++# script doesn't find that thread support is enabled.
++ifeq ($(BR2_riscv),y)
++LIBKRB5_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_REENTRANT"
++endif
++else
+ LIBKRB5_CONF_OPTS += --disable-thread-support
+ endif
+ 
