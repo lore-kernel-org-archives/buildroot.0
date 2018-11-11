@@ -1,92 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 11 Nov 2018 22:09:02 +0100
-Subject: [Buildroot] [git commit] supertuxkart: fix build on bdver3
-Message-ID: <20181111210628.95451825FA@busybox.osuosl.org>
+Date: Sun, 11 Nov 2018 22:10:40 +0100
+Subject: [Buildroot] [PATCH 1/1] libkrb5: fix build on riscv
+In-Reply-To: <20181111175210.14031-1-fontaine.fabrice@gmail.com>
+References: <20181111175210.14031-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181111221040.1bd99cd0@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=236a7d5d786ba332154d770bc434c5f4e978d539
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Retrieve upstream patch to fix build failure in
-lib/graphics_utils/mipmap/cpusimd.h due to direct inclusion of
-intrinsics headers:
-https://github.com/supertuxkart/stk-code/issues/3091
+On Sun, 11 Nov 2018 18:52:10 +0100, Fabrice Fontaine wrote:
+> Define _REENTRANT otherwise pthread detection will fail
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/39a51d0c3feab74edd8a17c9174d031ccc7ffe1d
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/libkrb5/libkrb5.mk | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
 
-Fixes:
- - http://autobuild.buildroot.org/results/52bd5c45b0d04a863a2530d388899b3e46494ee9
+Applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/supertuxkart/0001-Fix-3091.patch | 59 ++++++++++++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
-
-diff --git a/package/supertuxkart/0001-Fix-3091.patch b/package/supertuxkart/0001-Fix-3091.patch
-new file mode 100644
-index 0000000000..dae2a37ce1
---- /dev/null
-+++ b/package/supertuxkart/0001-Fix-3091.patch
-@@ -0,0 +1,59 @@
-+From 813b08bc73e4e93714b972ee56c64b4771735e01 Mon Sep 17 00:00:00 2001
-+From: Benau <Benau@users.noreply.github.com>
-+Date: Sun, 14 Jan 2018 10:19:37 +0800
-+Subject: [PATCH] Fix #3091
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com
-+[Retrieved from:
-+https://github.com/supertuxkart/stk-code/commit/813b08bc73e4e93714b972ee56c64b4771735e01]
-+---
-+ lib/graphics_utils/mipmap/cpusimd.h | 14 +++++++-------
-+ 1 file changed, 7 insertions(+), 7 deletions(-)
-+
-+diff --git a/lib/graphics_utils/mipmap/cpusimd.h b/lib/graphics_utils/mipmap/cpusimd.h
-+index 1dc2c730b2..5e2cf30e5f 100644
-+--- a/lib/graphics_utils/mipmap/cpusimd.h
-++++ b/lib/graphics_utils/mipmap/cpusimd.h
-+@@ -38,11 +38,11 @@
-+  #include <mmintrin.h>
-+  #define CPU_MMX_SUPPORT (1)
-+ #endif
-+-#if __SSE__ || _M_X64 || _M_IX86_FP >= 1  || CPU_ENABLE_SSE
-++#if __SSE__ || defined(_M_X64) || ( defined(_M_IX86_FP) && ( _M_IX86_FP >= 1 ) ) || CPU_ENABLE_SSE
-+  #include <xmmintrin.h>
-+  #define CPU_SSE_SUPPORT (1)
-+ #endif
-+-#if __SSE2__ || _M_X64 || _M_IX86_FP >= 2  || CPU_ENABLE_SSE2
-++#if __SSE2__ || defined(_M_X64) || ( defined(_M_IX86_FP) && ( _M_IX86_FP >= 2 ) ) || CPU_ENABLE_SSE2
-+  #include <emmintrin.h>
-+  #define CPU_SSE2_SUPPORT (1)
-+ #endif
-+@@ -95,23 +95,23 @@
-+  #define CPU_POPCNT_SUPPORT (1)
-+ #endif
-+ #if __LZCNT__ || CPU_ENABLE_LZCNT
-+- #include <lzcntintrin.h>
-++ #include <x86intrin.h>
-+  #define CPU_LZCNT_SUPPORT (1)
-+ #endif
-+ #if __F16C__ || CPU_ENABLE_F16C
-+- #include <f16cintrin.h>
-++ #include <x86intrin.h>
-+  #define CPU_F16C_SUPPORT (1)
-+ #endif
-+ #if __BMI__ || CPU_ENABLE_BMI
-+- #include <bmiintrin.h>
-++ #include <x86intrin.h>
-+  #define CPU_BMI_SUPPORT (1)
-+ #endif
-+ #if __BMI2__ || CPU_ENABLE_BMI2
-+- #include <bmi2intrin.h>
-++ #include <x86intrin.h>
-+  #define CPU_BMI2_SUPPORT (1)
-+ #endif
-+ #if __TBM__ || CPU_ENABLE_TBM
-+- #include <tbmintrin.h>
-++ #include <x86intrin.h>
-+  #define CPU_TBM_SUPPORT (1)
-+ #endif
-+ 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
