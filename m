@@ -1,37 +1,82 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Nov 2018 21:25:13 +0100
-Subject: [Buildroot] [git commit] ncmpc: disable documentation
-Message-ID: <20181111202637.900318256A@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 11 Nov 2018 21:31:12 +0100
+Subject: [Buildroot] [PATCH 1/1] libkrb5: fix build on riscv
+In-Reply-To: <CAPi7W839q1wsnB9u99kUy8BnGAQg61inS=2+aEh+jO9_Yc5ftA@mail.gmail.com>
+References: <20181111175210.14031-1-fontaine.fabrice@gmail.com>
+ <20181111205343.76b10bff@windsurf.home>
+ <CAPi7W839q1wsnB9u99kUy8BnGAQg61inS=2+aEh+jO9_Yc5ftA@mail.gmail.com>
+Message-ID: <20181111213112.417acc8b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=243118288ff40add3d8447c9240cc7e42ad36403
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes:
- - http://autobuild.buildroot.org/results/4822b195628b3ce0d3fd6428bcba2cca158e92be
+On Sun, 11 Nov 2018 21:15:10 +0100, Fabrice Fontaine wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ncmpc/ncmpc.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+> > You did a similar change in libmicrothttpd, for which the same fix was
+> > already done for ARC. Any idea why libmicrohttpd needs this hack for
+> > both ARC and RISC-V, while libkrb5 would need it only for RISC-V ?  
+> I didn't try to build libkrb5 on ARC but I found that back in 2016,
+> for libmicrohttpd, you were writing that "Fixing the compilers is
+> definitely the right thing to do":
+> https://patchwork.ozlabs.org/patch/643857.
+> Perhaps since that time, the ARC toolchains have been fixed?
 
-diff --git a/package/ncmpc/ncmpc.mk b/package/ncmpc/ncmpc.mk
-index f981ce5f7d..787f58201a 100644
---- a/package/ncmpc/ncmpc.mk
-+++ b/package/ncmpc/ncmpc.mk
-@@ -12,7 +12,9 @@ NCMPC_DEPENDENCIES = host-pkgconf libglib2 libmpdclient ncurses
- NCMPC_LICENSE = GPL-2.0+
- NCMPC_LICENSE_FILES = COPYING
- 
--NCMPC_CONF_OPTS = -Dcurses=ncurses
-+NCMPC_CONF_OPTS = \
-+	-Dcurses=ncurses \
-+	-Ddocumentation=false
- 
- ifeq ($(BR2_PACKAGE_LIRC_TOOLS),y)
- NCMPC_DEPENDENCIES += lirc-tools
+Indeed! It was fixed in the following gcc commit:
+
+commit de4c7f60f2891193bf3f5da823b17fa0d7fd4830
+Author: claziss <claziss@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date:   Tue Mar 28 08:56:44 2017 +0000
+
+    [ARC] Define _REENTRANT when -pthread is passed.
+    
+    The compiler is supposed to have the builtin defined _REENTRANT defined
+    when -pthread is passed, which wasn't done on the ARC architecture.
+    
+    When _REENTRANT is not passed, the C library will not use reentrant
+    functions, and the latest version of ax_pthread.m4 from the
+    autoconf-archive will no longer detect that thread support is
+    available (see https://savannah.gnu.org/patch/?8186).
+    
+    gcc/
+    2017-03-28  Claudiu Zissulescu  <claziss@synopsys.com>
+                Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+    
+            * config/arc/arc.h (CPP_SPEC): Add subtarget_cpp_spec.
+            (EXTRA_SPECS): Define.
+            (SUBTARGET_EXTRA_SPECS): Likewise.
+            (SUBTARGET_CPP_SPEC): Likewise.
+            * config/arc/elf.h (EXTRA_SPECS): Renamed to
+            SUBTARGET_EXTRA_SPECS.
+            * config/arc/linux.h (SUBTARGET_CPP_SPEC): Define.
+    
+    git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 246524 138bc75d-0d04-0410-961f-82ee72b054a4
+
+diff --git a/gcc/config/arc/linux.h b/gcc/config/arc/linux.h
+index 6e1a96efc23..83e5a1d61f2 100644
+--- a/gcc/config/arc/linux.h
++++ b/gcc/config/arc/linux.h
+@@ -78,3 +78,8 @@ along with GCC; see the file COPYING3.  If not see
+ /* Linux toolchains use r25 as the thread pointer register.  */
+ #undef TARGET_ARC_TP_REGNO_DEFAULT
+ #define TARGET_ARC_TP_REGNO_DEFAULT 25
++
++#undef SUBTARGET_CPP_SPEC
++#define SUBTARGET_CPP_SPEC "\
++   %{pthread:-D_REENTRANT} \
++"
+
+This commit is in gcc upstream since gcc 7.1.0. So I guess we could
+drop the ARC-specific workaround on libmicrohttpd, since we don't
+really support "old" gcc versions on ARC anyway.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
