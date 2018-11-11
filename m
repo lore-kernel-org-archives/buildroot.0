@@ -1,29 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 11 Nov 2018 21:58:48 +0100
-Subject: [Buildroot] [PATCH/next 1/1] libmicrohttpd: bump to version
- 0.9.60
-In-Reply-To: <20181110161807.6949-1-fontaine.fabrice@gmail.com>
-References: <20181110161807.6949-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181111215848.5d04f714@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 11 Nov 2018 21:58:31 +0100
+Subject: [Buildroot] [PATCH/next 2/2] ncmpc: add pcre optional dependency
+In-Reply-To: <20181111205831.8213-1-fontaine.fabrice@gmail.com>
+References: <20181111205831.8213-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181111205831.8213-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+pcre dependency has been added in version 0.32:
+https://github.com/MusicPlayerDaemon/ncmpc/commit/0b3169510014f0f336de58864b97a3cc0f308500
 
-On Sat, 10 Nov 2018 17:18:07 +0100, Fabrice Fontaine wrote:
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libmicrohttpd/libmicrohttpd.hash | 2 +-
->  package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/ncmpc/ncmpc.mk | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-Applied to next, thanks.
-
-Thomas
+diff --git a/package/ncmpc/ncmpc.mk b/package/ncmpc/ncmpc.mk
+index 4167974490..2e52be27d5 100644
+--- a/package/ncmpc/ncmpc.mk
++++ b/package/ncmpc/ncmpc.mk
+@@ -14,8 +14,7 @@ NCMPC_LICENSE_FILES = COPYING
+ 
+ NCMPC_CONF_OPTS = \
+ 	-Dcurses=ncurses \
+-	-Ddocumentation=disabled \
+-	-Dregex=disabled
++	-Ddocumentation=disabled
+ 
+ ifeq ($(BR2_PACKAGE_LIRC_TOOLS),y)
+ NCMPC_DEPENDENCIES += lirc-tools
+@@ -24,4 +23,11 @@ else
+ NCMPC_CONF_OPTS += -Dlirc=disabled
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PCRE),y)
++NCMPC_DEPENDENCIES += pcre
++NCMPC_CONF_OPTS += -Dregex=enabled
++else
++NCMPC_CONF_OPTS += -Dregex=disabled
++endif
++
+ $(eval $(meson-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
