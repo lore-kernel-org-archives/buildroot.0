@@ -1,88 +1,85 @@
 From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Date: Sun, 11 Nov 2018 16:06:47 +0100
-Subject: [Buildroot] [PATCH] Add syslinux installer host package
+Date: Sun, 11 Nov 2018 16:06:48 +0100
+Subject: [Buildroot] [PATCH] linux-tools: Add liblockdep
 In-Reply-To: <20181111150652.17459-1-alexander.sverdlin@gmail.com>
 References: <20181111150652.17459-1-alexander.sverdlin@gmail.com>
-Message-ID: <20181111150652.17459-2-alexander.sverdlin@gmail.com>
+Message-ID: <20181111150652.17459-3-alexander.sverdlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add host installer for syslinux bootloader which allows to pre-install
-syslinux in the generated firmware images. BR2_ROOTFS_POST_IMAGE_SCRIPT
-can do something like this:
-
-	${HOST_DIR}/usr/bin/syslinux -d /syslinux/ -i ${IMGFILE}
-
-if the rest of syslinux is installed under /syslinux inside the firmware
-image.
-
 Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 ---
- package/Config.in.host                    |  1 +
- package/syslinux-installer/Config.in.host |  7 +++++++
- package/syslinux-installer/syslinux.mk    | 25 +++++++++++++++++++++++
- 3 files changed, 33 insertions(+)
- create mode 100644 package/syslinux-installer/Config.in.host
- create mode 100644 package/syslinux-installer/syslinux.mk
+ package/linux-tools/Config.in                | 13 ++++++++
+ package/linux-tools/linux-tool-liblockdep.mk | 34 ++++++++++++++++++++
+ 2 files changed, 47 insertions(+)
+ create mode 100644 package/linux-tools/linux-tool-liblockdep.mk
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 16b474fc9d..24a51d0e79 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -59,6 +59,7 @@ menu "Host utilities"
- 	source "package/squashfs/Config.in.host"
- 	source "package/sunxi-tools/Config.in.host"
- 	source "package/swig/Config.in.host"
-+	source "package/syslinux-installer/Config.in.host"
- 	source "package/tegrarcm/Config.in.host"
- 	source "package/ti-cgt-pru/Config.in.host"
- 	source "package/uboot-tools/Config.in.host"
-diff --git a/package/syslinux-installer/Config.in.host b/package/syslinux-installer/Config.in.host
-new file mode 100644
-index 0000000000..d82e7f00d7
---- /dev/null
-+++ b/package/syslinux-installer/Config.in.host
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_HOST_SYSLINUX_INSTALLER
-+	bool "host syslinux installer"
-+	depends on BR2_TARGET_SYSLINUX
+diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+index 349dc6bf0d..63b48cfa80 100644
+--- a/package/linux-tools/Config.in
++++ b/package/linux-tools/Config.in
+@@ -34,6 +34,19 @@ config BR2_PACKAGE_LINUX_TOOLS_IIO
+ 
+ 	  These tools are available only from kernel version 4.7.
+ 
++config BR2_PACKAGE_LINUX_TOOLS_LIBLOCKDEP
++	bool "liblockdep"
 +	help
-+	  Host installer for syslinux bootloader
++	  liblockdep is a tiny wrapper built around kernel/lockdep.c.
++	  The aim is to provide the same functionality the kernel gets
++	  from lockdep to userspace.
 +
-+	  http://syslinux.org
-diff --git a/package/syslinux-installer/syslinux.mk b/package/syslinux-installer/syslinux.mk
++	  The bulk of the code here is the LD_PRELOAD support which
++	  provides users an easy way to test their code without having
++	  to integrate liblockdep into said code.
++
++	  http://lwn.net/Articles/536363/
++
+ config BR2_PACKAGE_LINUX_TOOLS_PERF
+ 	bool "perf"
+ 	select BR2_PACKAGE_LINUX_TOOLS
+diff --git a/package/linux-tools/linux-tool-liblockdep.mk b/package/linux-tools/linux-tool-liblockdep.mk
 new file mode 100644
-index 0000000000..cbcf49d47a
+index 0000000000..63c6fa3500
 --- /dev/null
-+++ b/package/syslinux-installer/syslinux.mk
-@@ -0,0 +1,25 @@
++++ b/package/linux-tools/linux-tool-liblockdep.mk
+@@ -0,0 +1,34 @@
 +################################################################################
 +#
-+# host syslinux installer
++# liblockdep
 +#
 +################################################################################
 +
-+SYSLINUX_INSTALLER_VERSION = $(SYSLINUX_VERSION)
-+SYSLINUX_INSTALLER_SOURCE = $(SYSLINUX_SOURCE)
-+SYSLINUX_INSTALLER_SITE = $(SYSLINUX_SITE)
++LINUX_TOOLS += liblockdep
 +
-+SYSLINUX_INSTALLER_LICENSE = $(SYSLINUX_LICENSE)
-+SYSLINUX_INSTALLER_LICENSE_FILES = $(SYSLINUX_LICENSE_FILES)
++LIBLOCKDEP_MAKE_FLAGS = \
++	$(LINUX_MAKE_FLAGS) \
++	prefix=/usr
 +
-+HOST_SYSLINUX_INSTALLER_DEPENDENCIES = syslinux
++define LIBLOCKDEP_BUILD_CMDS
++	$(Q)if test ! -f $(@D)/tools/lib/lockdep/Makefile ; then \
++		echo "Your kernel version is too old and does not have the liblockdep." ; \
++		echo "At least kernel 4.1 must be used." ; \
++		exit 1 ; \
++	fi
 +
-+define HOST_SYSLINUX_INSTALLER_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) \
-+		-C $(@D) installer
++	$(TARGET_MAKE_ENV) $(MAKE) $(LIBLOCKDEP_MAKE_FLAGS) -C $(@D)/tools \
++		liblockdep
 +endef
 +
-+define HOST_SYSLINUX_INSTALLER_INSTALL_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/bios/mtools/syslinux $(HOST_DIR)/usr/bin/syslinux
++define LIBLOCKDEP_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(LIBLOCKDEP_MAKE_FLAGS) -C $(@D)/tools \
++		DESTDIR=$(STAGING_DIR) \
++		liblockdep_install
 +endef
 +
-+$(eval $(host-generic-package))
++define LIBLOCKDEP_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(LIBLOCKDEP_MAKE_FLAGS) -C $(@D)/tools \
++		DESTDIR=$(TARGET_DIR) \
++		liblockdep_install
++endef
 -- 
 2.19.1
