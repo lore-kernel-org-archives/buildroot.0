@@ -1,37 +1,93 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 11 Nov 2018 21:37:57 +0100
-Subject: [Buildroot] [PATCH v2] uboot: add support for bundling ATF BL31
- in ELF format into U-Boot
-In-Reply-To: <20181111164532.12185-1-michal.lyszczek@bofc.pl>
-References: <20181111164532.12185-1-michal.lyszczek@bofc.pl>
-Message-ID: <20181111213757.0823d68e@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 11 Nov 2018 21:39:26 +0100
+Subject: [Buildroot] [PATCH 1/1] libkrb5: fix build on riscv
+In-Reply-To: <20181111213112.417acc8b@windsurf.home>
+References: <20181111175210.14031-1-fontaine.fabrice@gmail.com>
+ <20181111205343.76b10bff@windsurf.home>
+ <CAPi7W839q1wsnB9u99kUy8BnGAQg61inS=2+aEh+jO9_Yc5ftA@mail.gmail.com>
+ <20181111213112.417acc8b@windsurf.home>
+Message-ID: <CAPi7W80ucvAmN6PDtBbNxfYFniJ1kveZ_Q3yTHiXbpabYkhbSQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Thomas,
+Le dim. 11 nov. 2018 ? 21:31, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
+>
+> Hello,
+>
+> On Sun, 11 Nov 2018 21:15:10 +0100, Fabrice Fontaine wrote:
+>
+> > > You did a similar change in libmicrothttpd, for which the same fix was
+> > > already done for ARC. Any idea why libmicrohttpd needs this hack for
+> > > both ARC and RISC-V, while libkrb5 would need it only for RISC-V ?
+> > I didn't try to build libkrb5 on ARC but I found that back in 2016,
+> > for libmicrohttpd, you were writing that "Fixing the compilers is
+> > definitely the right thing to do":
+> > https://patchwork.ozlabs.org/patch/643857.
+> > Perhaps since that time, the ARC toolchains have been fixed?
+>
+> Indeed! It was fixed in the following gcc commit:
+>
+> commit de4c7f60f2891193bf3f5da823b17fa0d7fd4830
+> Author: claziss <claziss@138bc75d-0d04-0410-961f-82ee72b054a4>
+> Date:   Tue Mar 28 08:56:44 2017 +0000
+>
+>     [ARC] Define _REENTRANT when -pthread is passed.
+>
+>     The compiler is supposed to have the builtin defined _REENTRANT defined
+>     when -pthread is passed, which wasn't done on the ARC architecture.
+>
+>     When _REENTRANT is not passed, the C library will not use reentrant
+>     functions, and the latest version of ax_pthread.m4 from the
+>     autoconf-archive will no longer detect that thread support is
+>     available (see https://savannah.gnu.org/patch/?8186).
+>
+>     gcc/
+>     2017-03-28  Claudiu Zissulescu  <claziss@synopsys.com>
+>                 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>
+>             * config/arc/arc.h (CPP_SPEC): Add subtarget_cpp_spec.
+>             (EXTRA_SPECS): Define.
+>             (SUBTARGET_EXTRA_SPECS): Likewise.
+>             (SUBTARGET_CPP_SPEC): Likewise.
+>             * config/arc/elf.h (EXTRA_SPECS): Renamed to
+>             SUBTARGET_EXTRA_SPECS.
+>             * config/arc/linux.h (SUBTARGET_CPP_SPEC): Define.
+>
+>     git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 246524 138bc75d-0d04-0410-961f-82ee72b054a4
+>
+> diff --git a/gcc/config/arc/linux.h b/gcc/config/arc/linux.h
+> index 6e1a96efc23..83e5a1d61f2 100644
+> --- a/gcc/config/arc/linux.h
+> +++ b/gcc/config/arc/linux.h
+> @@ -78,3 +78,8 @@ along with GCC; see the file COPYING3.  If not see
+>  /* Linux toolchains use r25 as the thread pointer register.  */
+>  #undef TARGET_ARC_TP_REGNO_DEFAULT
+>  #define TARGET_ARC_TP_REGNO_DEFAULT 25
+> +
+> +#undef SUBTARGET_CPP_SPEC
+> +#define SUBTARGET_CPP_SPEC "\
+> +   %{pthread:-D_REENTRANT} \
+> +"
+>
+> This commit is in gcc upstream since gcc 7.1.0. So I guess we could
+> drop the ARC-specific workaround on libmicrohttpd, since we don't
+> really support "old" gcc versions on ARC anyway.
+OK, are you ok to do this patch? I assume that the patch on
+libmicrohttpd for riscv is still valid or do you want that I made a
+patch serie on libmicrohttpd?
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+Best Regards,
 
-On Sun, 11 Nov 2018 17:45:32 +0100, Micha? ?yszczek wrote:
-> Rockchip's rk3328 encapsulates the BL31 part of ATP but it needs
-> image in ELF format. This is extension to
-> 2c4809e6088660dc71de9de8cee0bba312aafbe4
-> 
-> This commit introduces a BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF variable
-> to achieve this.
-> 
-> Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
-> Tested-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
-
-Another small comment: there is no need to have your own Tested-by.
-Indeed, when you send a patch, we expect that you have tested it :-)
-
-Tested-by are useful when other people than the patch author give their
-Tested-by.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fabrice
