@@ -1,100 +1,93 @@
-From: =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>
-Date: Sun, 11 Nov 2018 22:39:42 +0100
-Subject: [Buildroot] [PATCH v3] uboot: add support for bundling ATF BL31 in
- ELF format into U-Boot
-Message-ID: <20181111213942.3833-1-michal.lyszczek@bofc.pl>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 11 Nov 2018 22:53:02 +0100
+Subject: [Buildroot] [PATCH] linux-tools: Add liblockdep
+In-Reply-To: <20181111150652.17459-3-alexander.sverdlin@gmail.com>
+References: <20181111150652.17459-1-alexander.sverdlin@gmail.com>
+ <20181111150652.17459-3-alexander.sverdlin@gmail.com>
+Message-ID: <20181111225302.61f04f5d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rockchip's rk3328 encapsulates the BL31 part of ATP but it needs
-image in ELF format. This is extension to
-2c4809e6088660dc71de9de8cee0bba312aafbe4
+Hello,
 
-This commit introduces a BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF variable
-to achieve this.
+Thanks for this patch, unfortunately, I encountered a number of issues
+while testing it, and I have some review comments. See below.
 
-Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
+On Sun, 11 Nov 2018 16:06:48 +0100, Alexander Sverdlin wrote:
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+> ---
+>  package/linux-tools/Config.in                | 13 ++++++++
+>  package/linux-tools/linux-tool-liblockdep.mk | 34 ++++++++++++++++++++
 
----
-Changes v2 -> v3:
-  - change 'config' to 'choice' in uboot/Config.in
+This file should be named linux-tool-liblockdep.mk.in, to follow the
+pattern of other files in the same folder.
 
-Changes v1 -> v2:
-  - fix wrong prefix BR_ to BR2_
----
- boot/arm-trusted-firmware/arm-trusted-firmware.mk |  7 +++++++
- boot/uboot/Config.in                              | 13 +++++++++++++
- boot/uboot/uboot.mk                               |  4 ++++
- 3 files changed, 24 insertions(+)
+> +config BR2_PACKAGE_LINUX_TOOLS_LIBLOCKDEP
 
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index 23f493653d..8f0f745ac0 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -94,6 +94,12 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += RESET_TO_BL31=1
- ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-uboot-tools
- endif
- 
-+ifeq ($(BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF),y)
-+define ARM_TRUSTED_FIRMWARE_BL31_UBOOT_INSTALL_ELF
-+	cp -dpf $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/bl31/bl31.elf $(BINARIES_DIR)/
-+endef
-+endif
-+
- define ARM_TRUSTED_FIRMWARE_BUILD_CMDS
- 	$(ARM_TRUSTED_FIRMWARE_BUILD_FIPTOOL)
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(ARM_TRUSTED_FIRMWARE_MAKE_OPTS) \
-@@ -104,6 +110,7 @@ endef
- define ARM_TRUSTED_FIRMWARE_INSTALL_IMAGES_CMDS
- 	cp -dpf $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/*.bin $(BINARIES_DIR)/
- 	$(ARM_TRUSTED_FIRMWARE_BL31_UBOOT_INSTALL)
-+	$(ARM_TRUSTED_FIRMWARE_BL31_UBOOT_INSTALL_ELF)
- endef
- 
- # Configuration check
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index ac6f8bc8c1..cbbbd5f1a4 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -179,6 +179,19 @@ config BR2_TARGET_UBOOT_NEEDS_ATF_BL31
- 	  variable pointing to ATF's BL31 binary, is passed during the
- 	  Buildroot build.
- 
-+choice
-+	prompt "U-Boot ATF BL31 format"
-+	depends on BR2_TARGET_UBOOT_NEEDS_ATF_BL31
-+	default BR2_TARGET_UBOOT_NEEDS_ATF_BL31_BIN
-+
-+config BR2_TARGET_UBOOT_NEEDS_ATF_BL31_BIN
-+	bool "bl31.bin"
-+
-+config BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF
-+	bool "bl31.elf"
-+
-+endchoice
-+
- menu "U-Boot binary format"
- 
- config BR2_TARGET_UBOOT_FORMAT_AIS
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index cbdfee6ac3..06efd7b052 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -137,8 +137,12 @@ UBOOT_MAKE_OPTS += \
- 
- ifeq ($(BR2_TARGET_UBOOT_NEEDS_ATF_BL31),y)
- UBOOT_DEPENDENCIES += arm-trusted-firmware
-+ifeq ($(BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF),y)
-+UBOOT_MAKE_OPTS += BL31=$(BINARIES_DIR)/bl31.elf
-+else
- UBOOT_MAKE_OPTS += BL31=$(BINARIES_DIR)/bl31.bin
- endif
-+endif
- 
- ifeq ($(BR2_TARGET_UBOOT_NEEDS_DTC),y)
- UBOOT_DEPENDENCIES += host-dtc
+You need a:
+
+	# <execinfo.h>
+	depends on BR2_TOOLCHAIN_USES_GLIBC
+
+because the liblockdep source code uses <execinfo.h>, which is only
+provided by glibc.
+
+Also, you forgot:
+
+	select BR2_PACKAGE_LINUX_TOOLS
+
+and therefore if only liblockdep is selected in linux-tools, the
+linux-tools package is not built at all.
+
+> +	bool "liblockdep"
+> +	help
+> +	  liblockdep is a tiny wrapper built around kernel/lockdep.c.
+> +	  The aim is to provide the same functionality the kernel gets
+> +	  from lockdep to userspace.
+> +
+> +	  The bulk of the code here is the LD_PRELOAD support which
+> +	  provides users an easy way to test their code without having
+> +	  to integrate liblockdep into said code.
+> +
+> +	  http://lwn.net/Articles/536363/
+
+And therefore, you need:
+
+comment "liblockdep needs a toolchain w/ glibc"
+	depends on !BR2_TOOLCHAIN_USES_GLIBC
+
+> +LIBLOCKDEP_MAKE_FLAGS = \
+
+We are not very consistent between the different .mk.in files, but I
+think I'd prefer to see this variable named LIBLOCKDEP_MAKE_OPTS.
+
+> +define LIBLOCKDEP_BUILD_CMDS
+> +	$(Q)if test ! -f $(@D)/tools/lib/lockdep/Makefile ; then \
+
+It clearly doesn't work with $(@D) here, you need to use $(LINUX_DIR)
+everywhere.
+
+But even with this fixed, I get:
+
+  CC       lockdep.o
+In file included from lockdep.c:8:0:
+../../../kernel/locking/lockdep.c:49:10: fatal error: linux/jhash.h: No such file or directory
+ #include <linux/jhash.h>
+          ^~~~~~~~~~~~~~~
+compilation terminated.
+mv: cannot stat './.lockdep.o.tmp': No such file or directory
+
+When building with Linux 4.9.
+
+Could you have a look at those issues, and send an updated version ?
+
+Thanks a lot!
+
+Thomas
 -- 
-2.18.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
