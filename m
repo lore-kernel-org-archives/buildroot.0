@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 11 Nov 2018 21:36:47 +0100
+Date: Sun, 11 Nov 2018 21:37:57 +0100
 Subject: [Buildroot] [PATCH v2] uboot: add support for bundling ATF BL31
  in ELF format into U-Boot
 In-Reply-To: <20181111164532.12185-1-michal.lyszczek@bofc.pl>
 References: <20181111164532.12185-1-michal.lyszczek@bofc.pl>
-Message-ID: <20181111213647.12da8e5a@windsurf.home>
+Message-ID: <20181111213757.0823d68e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,85 +13,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-Thanks for this contribution!
-
 On Sun, 11 Nov 2018 17:45:32 +0100, Micha? ?yszczek wrote:
+> Rockchip's rk3328 encapsulates the BL31 part of ATP but it needs
+> image in ELF format. This is extension to
+> 2c4809e6088660dc71de9de8cee0bba312aafbe4
+> 
+> This commit introduces a BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF variable
+> to achieve this.
+> 
+> Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
+> Tested-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
 
-> diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> index 23f493653d..8f0f745ac0 100644
-> --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> @@ -94,6 +94,12 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += RESET_TO_BL31=1
->  ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-uboot-tools
->  endif
->  
-> +ifeq ($(BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF),y)
-> +define ARM_TRUSTED_FIRMWARE_BL31_UBOOT_INSTALL_ELF
-> +	cp -dpf $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/bl31/bl31.elf $(BINARIES_DIR)/
-> +endef
-> +endif
-> +
->  define ARM_TRUSTED_FIRMWARE_BUILD_CMDS
->  	$(ARM_TRUSTED_FIRMWARE_BUILD_FIPTOOL)
->  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(ARM_TRUSTED_FIRMWARE_MAKE_OPTS) \
-> @@ -104,6 +110,7 @@ endef
->  define ARM_TRUSTED_FIRMWARE_INSTALL_IMAGES_CMDS
->  	cp -dpf $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/*.bin $(BINARIES_DIR)/
->  	$(ARM_TRUSTED_FIRMWARE_BL31_UBOOT_INSTALL)
-> +	$(ARM_TRUSTED_FIRMWARE_BL31_UBOOT_INSTALL_ELF)
->  endef
->  
->  # Configuration check
-> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> index ac6f8bc8c1..7f2f7945ac 100644
-> --- a/boot/uboot/Config.in
-> +++ b/boot/uboot/Config.in
-> @@ -179,6 +179,13 @@ config BR2_TARGET_UBOOT_NEEDS_ATF_BL31
->  	  variable pointing to ATF's BL31 binary, is passed during the
->  	  Buildroot build.
->  
-> +config BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF
-> +	bool "U-Boot needs bl31.elf"
-> +	depends on BR2_TARGET_UBOOT_NEEDS_ATF_BL31
-> +	help
-> +		Uses bl31.elf instead of bl31.bin image.  This is needed by some
-> +		platforms (like rk3328) to generate valid uboot.itb with ATF
+Another small comment: there is no need to have your own Tested-by.
+Indeed, when you send a patch, we expect that you have tested it :-)
 
-Nit: the indentation for the help text should be one tab + two spaces.
-
->  ifeq ($(BR2_TARGET_UBOOT_NEEDS_ATF_BL31),y)
->  UBOOT_DEPENDENCIES += arm-trusted-firmware
-> +ifeq ($(BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF),y)
-> +UBOOT_MAKE_OPTS += BL31=$(BINARIES_DIR)/bl31.elf
-> +else
->  UBOOT_MAKE_OPTS += BL31=$(BINARIES_DIR)/bl31.bin
->  endif
-
-So this code means that you can either use the bl31 as ELF *or* the
-bl31 as binary. So I believe it should not be possible to select both.
-Therefore, I would suggest to instead have:
-
-config BR2_TARGET_UBOOT_NEEDS_ATF_BL31
-        bool "U-Boot needs ATF BL31"
-	... as it already exists ...
-
-choice
-	prompt "U-Boot ATF BL31 format"
-	default BR2_TARGET_UBOOT_NEEDS_ATF_BL31_BIN
-
-config BR2_TARGET_UBOOT_NEEDS_ATF_BL31_BIN
-	bool "bl31.bin"
-
-config BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF
-	bool "bl31.elf"
-
-endchoice
-
-And then use that in both arm-trusted-firmware.mk and uboot.mk.
-
-What do you think ?
-
-Thanks!
+Tested-by are useful when other people than the patch author give their
+Tested-by.
 
 Thomas
 -- 
