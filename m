@@ -1,7 +1,8 @@
 From: kaplan2539 at gmail.com <kaplan2539@gmail.com>
-Date: Sat, 10 Nov 2018 15:58:46 -0800
-Subject: [Buildroot] [PATCH 1/1] package/sunxi-tools: add tool selection
-Message-ID: <1541894326-2838-1-git-send-email-kaplan2539@gmail.com>
+Date: Sat, 10 Nov 2018 21:38:34 -0800
+Subject: [Buildroot] [PATCH 1/1] package/android-tools: add ext4_utils to
+ host
+Message-ID: <1541914714-17359-1-git-send-email-kaplan2539@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,206 +11,139 @@ To: buildroot@busybox.net
 
 From: Alex Kaplan <kaplan2539@gmail.com>
 
-This patch allows to select which of the sunxi-tools are built and installed in host and target diretories.
-This way it is possible to have e.g. sunxi-nand-image-builder among the host tools, or to install sunxi-fel on the target device.
-The corresponding config options have been added to Config.in and Config.in.host and the sunxi-tools.mk has been adapted respectively.
-The defaults have been selected to produce the same output as without this patch.
+This patch adds an option to build and install the ext4_utils for the host,
+i.e. make_ext4fs, ext4fixup, ext2simg, img2simg, simg2img and simg2simg.
+As a default building of ext4_utils is disabled.
 
 Signed-off-by: Alex Kaplan <kaplan2539@gmail.com>
 ---
- package/sunxi-tools/Config.in      | 51 +++++++++++++++++++++++++++++++++++---
- package/sunxi-tools/Config.in.host | 40 ++++++++++++++++++++++++++++++
- package/sunxi-tools/sunxi-tools.mk | 51 ++++++++++++++++++++++++++++++++------
- 3 files changed, 130 insertions(+), 12 deletions(-)
+ ...akefiles-for-out-of-tree-ext4_utils-build.patch | 48 ++++++++++++++++++++++
+ package/android-tools/Config.in.host               |  8 ++++
+ package/android-tools/android-tools.mk             | 18 ++++++--
+ 3 files changed, 70 insertions(+), 4 deletions(-)
+ create mode 100644 package/android-tools/0009-Fix-makefiles-for-out-of-tree-ext4_utils-build.patch
 
-diff --git a/package/sunxi-tools/Config.in b/package/sunxi-tools/Config.in
-index 02eba95..83eb982 100644
---- a/package/sunxi-tools/Config.in
-+++ b/package/sunxi-tools/Config.in
-@@ -1,9 +1,52 @@
- config BR2_PACKAGE_SUNXI_TOOLS
--	bool "sunxi nand-part"
-+	bool "sunxi-tools"
- 	depends on BR2_arm
- 	help
--	  nand-part is part of sunxi-tools for Allwinner A10 (aka
--	  sun4i) and A13 (aka sun5i) based devices. It is a tool to
--	  repartition the internal NAND on sunxi devices.
-+	  Tools for Allwinner A10 (aka sun4i) and A13 (aka sun5i)
-+	  based devices. This includes fex2bin which can be used to
-+	  compile .fex board definition files to the binary script.bin
-+	  format required by the linux-sunxi kernel. These tools are
-+	  specific for linux-sunxi kernel and do not apply to the
-+	  mainline Linux kernel version.
+diff --git a/package/android-tools/0009-Fix-makefiles-for-out-of-tree-ext4_utils-build.patch b/package/android-tools/0009-Fix-makefiles-for-out-of-tree-ext4_utils-build.patch
+new file mode 100644
+index 0000000..80ea1ec
+--- /dev/null
++++ b/package/android-tools/0009-Fix-makefiles-for-out-of-tree-ext4_utils-build.patch
+@@ -0,0 +1,48 @@
++From d24abbec201975a5eb7f8589614cfb424b8c80b6 Mon Sep 17 00:00:00 2001
++From: Alex Kaplan <kaplan2539@gmail.com>
++Date: Sat, 10 Nov 2018 19:50:51 -0800
++Subject: [PATCH] Fix makefiles for out-of-tree ext4_utils build
++
++Signed-off-by: Alex Kaplan <kaplan2539@gmail.com>
++---
++ debian/makefiles/ext4_utils.mk | 10 +++++-----
++ 1 file changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/debian/makefiles/ext4_utils.mk b/debian/makefiles/ext4_utils.mk
++index cb64916..c5904bf 100644
++--- a/debian/makefiles/ext4_utils.mk
+++++ b/debian/makefiles/ext4_utils.mk
++@@ -1,6 +1,7 @@
++ # Makefile for ext4_utils; based on https://heiher.info/2227.html
++ # Author: Dmitrijs Ledkovs <xnox@ubuntu.com>
++ 
+++VPATH+=$(SRCDIR)/extras/ext4_utils
++ SRCS+=make_ext4fs.c
++ SRCS+=ext4fixup.c
++ SRCS+=ext4_utils.c
++@@ -13,7 +14,7 @@ SRCS+=sha1.c
++ SRCS+=wipe.c
++ SRCS+=crc16.c
++ 
++-VPATH+=../../core/libsparse
+++VPATH+=$(SRCDIR)/core/libsparse
++ SRCS+= backed_block.c
++ SRCS+= sparse_crc32.c
++ SRCS+= sparse.c
++@@ -31,10 +32,9 @@ SRCS+=img2simg.c
++ SRCS+=simg2img.c
++ SRCS+=simg2simg.c
++ 
++-CPPFLAGS+= -I.
++-CPPFLAGS+= -I/usr/include
++-CPPFLAGS+= -I../../core/include
++-CPPFLAGS+= -I../../core/libsparse/include/
+++CPPFLAGS+= -I$(SRCDIR)
+++CPPFLAGS+= -I$(SRCDIR)/core/include
+++CPPFLAGS+= -I$(SRCDIR)/core/libsparse/include/
++ 
++ LIBS+= -lz -lselinux
++ 
++-- 
++2.7.4
++
+diff --git a/package/android-tools/Config.in.host b/package/android-tools/Config.in.host
+index 993c4c9..6359e39 100644
+--- a/package/android-tools/Config.in.host
++++ b/package/android-tools/Config.in.host
+@@ -23,4 +23,12 @@ config BR2_PACKAGE_HOST_ANDROID_TOOLS_ADB
+ 	  host, which can be used to interact with target devices
+ 	  implementing the ADB protocol.
  
- 	  http://linux-sunxi.org/Sunxi-tools
++config BR2_PACKAGE_HOST_ANDROID_TOOLS_EXT4_UTILS
++	bool "ext4 utils"
++	default n
++	help
++	  This option will build and install the ext4 utils for the
++	  host, i.e. make_ext4fs, ext4fixup, ext2simg, img2simg,
++	  simg2img and simg2simg.
 +
-+if BR2_PACKAGE_SUNXI_TOOLS
-+
-+# from the "tools" make target
-+config BR2_PACKAGE_SUNXI_TOOLS_FEXC
-+    bool "sunxi-fexc"
-+    default n
-+
-+config BR2_PACKAGE_SUNXI_TOOLS_BOOTINFO
-+    bool "sunxi-bootinfo"
-+    default n
-+
-+config BR2_PACKAGE_SUNXI_TOOLS_FEL
-+    bool "sunxi-fel"
-+    default n
-+
-+config BR2_PACKAGE_SUNXI_TOOLS_NAND_PART
-+    bool "sunxi-nand-part"
-+    default y
-+
-+config BR2_PACKAGE_SUNXI_TOOLS_PIO
-+    bool "sunxi-pio"
-+    default n
-+
-+# from the "target-tools" make target
-+config BR2_PACKAGE_SUNXI_TOOLS_MEMINFO
-+    bool "sunxi-meminfo"
-+    default n
-+
-+# from the "misc" make target
-+config BR2_PACKAGE_SUNXI_TOOLS_PHOENIX_INFO
-+    bool "phoenix_info"
-+    default n
-+
-+config BR2_PACKAGE_SUNXI_TOOLS_NAND_IMAGE_BUILDER
-+    bool "sunxi-nand-image-builder"
-+    default n
-+
-+endif #BR2_PACKAGE_SUNXI_TOOLS
-+
-diff --git a/package/sunxi-tools/Config.in.host b/package/sunxi-tools/Config.in.host
-index 5fab5e6..f02fd40 100644
---- a/package/sunxi-tools/Config.in.host
-+++ b/package/sunxi-tools/Config.in.host
-@@ -10,3 +10,43 @@ config BR2_PACKAGE_HOST_SUNXI_TOOLS
- 	  mainline Linux kernel version.
+ endif
+diff --git a/package/android-tools/android-tools.mk b/package/android-tools/android-tools.mk
+index 879d788..b59ee13 100644
+--- a/package/android-tools/android-tools.mk
++++ b/package/android-tools/android-tools.mk
+@@ -31,15 +31,23 @@ HOST_ANDROID_TOOLS_PRE_PATCH_HOOKS += ANDROID_TOOLS_DEBIAN_PATCH
+ ANDROID_TOOLS_PRE_PATCH_HOOKS += ANDROID_TOOLS_DEBIAN_PATCH
  
- 	  http://linux-sunxi.org/Sunxi-tools
-+
-+if BR2_PACKAGE_HOST_SUNXI_TOOLS
-+
-+# from the "tools" make target
-+config BR2_PACKAGE_HOST_SUNXI_TOOLS_FEXC
-+    bool "sunxi-fexc"
-+    default y
-+
-+config BR2_PACKAGE_HOST_SUNXI_TOOLS_BOOTINFO
-+    bool "sunxi-bootinfo"
-+    default y
-+
-+config BR2_PACKAGE_HOST_SUNXI_TOOLS_FEL
-+    bool "sunxi-fel"
-+    default y
-+
-+config BR2_PACKAGE_HOST_SUNXI_TOOLS_NAND_PART
-+    bool "sunxi-nand-part"
-+    default y
-+
-+config BR2_PACKAGE_HOST_SUNXI_TOOLS_PIO
-+    bool "sunxi-pio"
-+    default y
-+
-+# from the "target-tools" make target
-+config BR2_PACKAGE_HOST_SUNXI_TOOLS_MEMINFO
-+    bool "sunxi-meminfo"
-+    default n
-+
-+# from the "misc" make target
-+config BR2_PACKAGE_HOST_SUNXI_TOOLS_PHOENIX_INFO
-+    bool "phoenix_info"
-+    default n
-+
-+config BR2_PACKAGE_HOST_SUNXI_TOOLS_NAND_IMAGE_BUILDER
-+    bool "sunxi-nand-image-builder"
-+    default n
-+
-+endif #BR2_PACKAGE_HOST_SUNXI_TOOLS
-+
-diff --git a/package/sunxi-tools/sunxi-tools.mk b/package/sunxi-tools/sunxi-tools.mk
-index 3a44cf6..2cc4443 100644
---- a/package/sunxi-tools/sunxi-tools.mk
-+++ b/package/sunxi-tools/sunxi-tools.mk
-@@ -4,6 +4,11 @@
- #
- ################################################################################
+ ifeq ($(BR2_PACKAGE_HOST_ANDROID_TOOLS_FASTBOOT),y)
+-HOST_ANDROID_TOOLS_TARGETS += fastboot
++HOST_ANDROID_TOOLS_BUILD_TARGETS += fastboot
++HOST_ANDROID_TOOLS_INSTALL_TARGETS += fastboot
+ HOST_ANDROID_TOOLS_DEPENDENCIES += host-zlib host-libselinux
+ endif
  
-+#SUNXI_TOOLS_VERSION = 24be7518cbc3622b65d3fc29f892e06bb4800ab9
-+
-+#v 1.4.2 not officially released yet?!?
-+#SUNXI_TOOLS_VERSION = 60ea132fccce2dda22987da6f1694095fb33cb53
-+
- SUNXI_TOOLS_VERSION = v1.4.1
- SUNXI_TOOLS_SITE = $(call github,linux-sunxi,sunxi-tools,$(SUNXI_TOOLS_VERSION))
- SUNXI_TOOLS_LICENSE = GPL-2.0+
-@@ -11,25 +16,55 @@ SUNXI_TOOLS_LICENSE_FILES = LICENSE.md
- HOST_SUNXI_TOOLS_DEPENDENCIES = host-libusb host-pkgconf
- FEX2BIN = $(HOST_DIR)/bin/fex2bin
+ ifeq ($(BR2_PACKAGE_HOST_ANDROID_TOOLS_ADB),y)
+-HOST_ANDROID_TOOLS_TARGETS += adb
++HOST_ANDROID_TOOLS_BUILD_TARGETS += adb
++HOST_ANDROID_TOOLS_INSTALL_TARGETS += adb
+ HOST_ANDROID_TOOLS_DEPENDENCIES += host-zlib host-openssl
+ endif
  
-+HOST_SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_FEXC)               += sunxi-fexc
-+HOST_SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_BOOTINFO)           += sunxi-bootinfo
-+HOST_SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_FEL)                += sunxi-fel
-+HOST_SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_NAND_PART)          += sunxi-nand-part
-+HOST_SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_PIO)                += sunxi-pio
-+HOST_SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_MEMINFO)            += sunxi-meminfo
-+HOST_SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_PHOENIX_INFO)       += phoenix_info
-+HOST_SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_NAND_IMAGE_BUILDER) += sunxi-nand-image-builder
-+
-+SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_FEXC)               += sunxi-fexc
-+SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_BOOTINFO)           += sunxi-bootinfo
-+SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_FEL)                += sunxi-fel
-+SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_NAND_PART)          += sunxi-nand-part
-+SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_PIO)                += sunxi-pio
-+SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_MEMINFO)            += sunxi-meminfo
-+SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_PHOENIX_INFO)       += phoenix_info
-+SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_HOST_SUNXI_TOOLS_NAND_IMAGE_BUILDER) += sunxi-nand-image-builder
-+
-+ifeq ($(BR2_PACKAGE_SUNXI_TOOLS_FEL),y)
-+	SUNXI_TOOLS_DEPENDENCIES += libusb host-pkgconf
++ifeq ($(BR2_PACKAGE_HOST_ANDROID_TOOLS_EXT4_UTILS),y)
++HOST_ANDROID_TOOLS_BUILD_TARGETS += ext4_utils
++HOST_ANDROID_TOOLS_INSTALL_TARGETS_EXT4_UTILS += make_ext4fs ext4fixup ext2simg img2simg simg2img simg2simg
++HOST_ANDROID_TOOLS_DEPENDENCIES += host-libselinux
 +endif
 +
-+
- define HOST_SUNXI_TOOLS_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) CC="$(HOSTCC)" PREFIX=$(HOST_DIR) \
-+	$(foreach t,$(HOST_SUNXI_TOOLS_TARGETS_y), \
-+	    $(HOST_MAKE_ENV) $(MAKE) CROSS_COMPILE="" CC="$(HOSTCC)" PREFIX=$(HOST_DIR) \
- 		EXTRA_CFLAGS="$(HOST_CFLAGS)" LDFLAGS="$(HOST_LDFLAGS)" \
--		-C $(@D) tools
-+		-C $(@D) $(t)
-+	)
+ ifeq ($(BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT),y)
+ ANDROID_TOOLS_TARGETS += fastboot
+ ANDROID_TOOLS_DEPENDENCIES += zlib libselinux
+@@ -58,7 +66,7 @@ endif
+ # Build each tool in its own directory not to share object files
+ 
+ define HOST_ANDROID_TOOLS_BUILD_CMDS
+-	$(foreach t,$(HOST_ANDROID_TOOLS_TARGETS),\
++	$(foreach t,$(HOST_ANDROID_TOOLS_BUILD_TARGETS),\
+ 		mkdir -p $(@D)/build-$(t) && \
+ 		$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) SRCDIR=$(@D) \
+ 			-C $(@D)/build-$(t) -f $(@D)/debian/makefiles/$(t).mk$(sep))
+@@ -72,8 +80,10 @@ define ANDROID_TOOLS_BUILD_CMDS
  endef
  
- define HOST_SUNXI_TOOLS_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) PREFIX=$(HOST_DIR) \
--		-C $(@D) install-tools
-+	$(foreach t,$(HOST_SUNXI_TOOLS_TARGETS_y), \
-+		$(INSTALL) -D -m 0755 $(@D)/$(t) $(HOST_DIR)/usr/bin/$(t)
-+	)
+ define HOST_ANDROID_TOOLS_INSTALL_CMDS
+-	$(foreach t,$(HOST_ANDROID_TOOLS_TARGETS),\
++	$(foreach t,$(HOST_ANDROID_TOOLS_INSTALL_TARGETS),\
+ 		$(INSTALL) -D -m 0755 $(@D)/build-$(t)/$(t) $(HOST_DIR)/bin/$(t)$(sep))
++	$(foreach t,$(HOST_ANDROID_TOOLS_INSTALL_TARGETS_EXT4_UTILS),\
++		$(INSTALL) -D -m 0755 $(@D)/build-ext4_utils/$(t) $(HOST_DIR)/bin/$(t)$(sep))
  endef
  
- define SUNXI_TOOLS_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" PREFIX=/usr \
--		EXTRA_CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" \
--		-C $(@D) sunxi-nand-part
-+	$(foreach t,$(SUNXI_TOOLS_TARGETS_y), \
-+		$(TARGET_MAKE_ENV) $(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" CC="$(TARGET_CC)" PREFIX=/usr \
-+			EXTRA_CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" \
-+			-C $(@D) $(t)
-+	)
- endef
- 
- define SUNXI_TOOLS_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/sunxi-nand-part $(TARGET_DIR)/usr/bin/sunxi-nand-part
-+	$(foreach t,$(SUNXI_TOOLS_TARGETS_y), \
-+		$(INSTALL) -D -m 0755 $(@D)/$(t) $(TARGET_DIR)/usr/bin/$(t)
-+	)
- endef
- 
- $(eval $(generic-package))
+ define ANDROID_TOOLS_INSTALL_TARGET_CMDS
 -- 
 2.7.4
