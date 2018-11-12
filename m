@@ -1,53 +1,57 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Mon, 12 Nov 2018 10:44:02 +0100
-Subject: [Buildroot] [PATCH] imx-uuc: bump revision to 79e9798e
-Message-ID: <20181112094402.1815-1-gary.bisson@boundarydevices.com>
+From: Andreas Naumann <dev@andin.de>
+Date: Mon, 12 Nov 2018 13:53:05 +0100
+Subject: [Buildroot] [PATCH 1/2] fs: Add common rootfs dependencies to
+ PACKAGES
+In-Reply-To: <f91c9608-9c78-222a-fc88-232e7a4b639a@mind.be>
+References: <20181108130417.1277-1-anaumann@ultratronik.de>
+ <20181108130417.1277-2-anaumann@ultratronik.de>
+ <f91c9608-9c78-222a-fc88-232e7a4b639a@mind.be>
+Message-ID: <7c555849-2594-6776-4a40-2a4e416ab914@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Main changes:
-- fix build error by gcc 8.2
-- re-factor the code
-- use unique CPU ID when available
-- improve UDC management
+Hi Arnout,
 
-Fixes:
-http://autobuild.buildroot.net/results/b39d56c1573308c4f947de23363da7c05e2aaf0d/
+Am 09.11.18 um 23:11 schrieb Arnout Vandecappelle:
+> 
+> 
+> On 08/11/2018 14:04, Andreas Naumann wrote:
+...
+>> +PACKAGES += $(ROOTFS_COMMON_DEPENDENCIES)
+> 
+>   I don't really like this, for the simple reason that it will enable the
+> dependencies even if they are not needed because we're not building any rootfs.
 
-Also switch back the repository from codeauroraforum to NXPmicro now
-that the Qualcomm/NXP merger was denied.
+good point, I dont like that either. I'd propose to change/move the 
+patch into something like
+   PACKAGES += $$(filter-out $$(PACKAGES),$$(ROOTFS_COMMON_DEPENDENCIES))
+inside the rootfs-conditional clause at the bottom of fs/common.mk. 
+Actually I'm not sure the filter-out stuff is really needed since 
+duplicate targets may accumulate in PACKAGES anyway.
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
----
- package/freescale-imx/imx-uuc/imx-uuc.hash | 2 +-
- package/freescale-imx/imx-uuc/imx-uuc.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+best regards,
+Andreas
 
-diff --git a/package/freescale-imx/imx-uuc/imx-uuc.hash b/package/freescale-imx/imx-uuc/imx-uuc.hash
-index c9c29f8692..623bd27644 100644
---- a/package/freescale-imx/imx-uuc/imx-uuc.hash
-+++ b/package/freescale-imx/imx-uuc/imx-uuc.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 1463e855d1229e6b6c02df2085f6bff5974bc061d13a61646b63675c160cba99  imx-uuc-2ae634281a39c82b6a8ee0fdcfbfbe42183ceb53.tar.gz
-+sha256 ac4960b9dc53cfd09709951c4bf1f774567ff0918d0b216b480e1f7df8c6ee48  imx-uuc-79e9798eee9cd972d92ed2b18f170de856d153c9.tar.gz
-diff --git a/package/freescale-imx/imx-uuc/imx-uuc.mk b/package/freescale-imx/imx-uuc/imx-uuc.mk
-index 5e0bb3be0e..bdfa51b171 100644
---- a/package/freescale-imx/imx-uuc/imx-uuc.mk
-+++ b/package/freescale-imx/imx-uuc/imx-uuc.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--IMX_UUC_VERSION = 2ae634281a39c82b6a8ee0fdcfbfbe42183ceb53
--IMX_UUC_SITE = $(call github,codeauroraforum,imx-uuc,$(IMX_UUC_VERSION))
-+IMX_UUC_VERSION = 79e9798eee9cd972d92ed2b18f170de856d153c9
-+IMX_UUC_SITE = $(call github,NXPmicro,imx-uuc,$(IMX_UUC_VERSION))
- IMX_UUC_LICENSE = GPL-2.0+
- IMX_UUC_LICENSE_FILES = COPYING
- 
--- 
-2.19.1
+> 
+>   It's a small thing though, and working around it is a lot more complicated (you
+> could e.g. select a new Config.in symbol that is selected by all the rootfses).
+> And when we ever get the Config.in.host for all host packages, it's solved
+> already. So
+> 
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> 
+>   Regards,
+>   Arnout
+> 
+>>   
+>>   $(ROOTFS_COMMON_TAR): ROOTFS=COMMON
+>>   $(ROOTFS_COMMON_TAR): FAKEROOT_SCRIPT=$(FS_DIR)/fakeroot.fs
+>>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
