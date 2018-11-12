@@ -1,52 +1,99 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Sun, 11 Nov 2018 22:03:10 -0200 (BRST)
-Subject: [Buildroot] [PATCH] Add syslinux installer host package
-In-Reply-To: <20181111213316.18f86c81@windsurf.home>
-References: <20181111150652.17459-1-alexander.sverdlin@gmail.com>
- <20181111150652.17459-2-alexander.sverdlin@gmail.com>
- <20181111213316.18f86c81@windsurf.home>
-Message-ID: <1370627641.1453046.1541980990981.JavaMail.zimbra@datacom.com.br>
+From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
+Date: Mon, 12 Nov 2018 08:02:20 +0800
+Subject: [Buildroot] [PATCH 2/2] python-aiodns: new package
+In-Reply-To: <1541980940-30821-1-git-send-email-james.hilliard1@gmail.com>
+References: <1541980940-30821-1-git-send-email-james.hilliard1@gmail.com>
+Message-ID: <1541980940-30821-2-git-send-email-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
-> To: "Alexander Sverdlin" <alexander.sverdlin@gmail.com>
-> Cc: "buildroot" <buildroot@buildroot.org>, "Carlos Santos" <casantos@datacom.ind.br>
-> Sent: Domingo, 11 de novembro de 2018 18:33:16
-> Subject: Re: [Buildroot] [PATCH] Add syslinux installer host package
+From: James Hilliard <james.hilliard1@gmail.com>
 
-> Hello,
-> 
-> Thanks for this contribution! I'm adding Carlos Santos, who also uses
-> syslinux.
-> 
-> On Sun, 11 Nov 2018 16:06:47 +0100, Alexander Sverdlin wrote:
->> Add host installer for syslinux bootloader which allows to pre-install
->> syslinux in the generated firmware images. BR2_ROOTFS_POST_IMAGE_SCRIPT
->> can do something like this:
->> 
->> 	${HOST_DIR}/usr/bin/syslinux -d /syslinux/ -i ${IMGFILE}
->> 
->> if the rest of syslinux is installed under /syslinux inside the firmware
->> image.
->> 
->> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
->> ---
->>  package/Config.in.host                    |  1 +
->>  package/syslinux-installer/Config.in.host |  7 +++++++
->>  package/syslinux-installer/syslinux.mk    | 25 +++++++++++++++++++++++
-> 
-> Instead of making a separate package for this, what about adding a host
-> variant of the existing syslinux package ?
+Simple DNS resolver for asyncio.
 
-host-sylinux makes sense. The package would not build syslinux for the
-host, just the installer, but this would not be a real problem, since
-host packages are meant to be tools used to generate the target system. 
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ DEVELOPERS                               |  1 +
+ package/Config.in                        |  1 +
+ package/python-aiodns/Config.in          |  8 ++++++++
+ package/python-aiodns/python-aiodns.hash |  5 +++++
+ package/python-aiodns/python-aiodns.mk   | 14 ++++++++++++++
+ 5 files changed, 29 insertions(+)
+ create mode 100644 package/python-aiodns/Config.in
+ create mode 100644 package/python-aiodns/python-aiodns.hash
+ create mode 100644 package/python-aiodns/python-aiodns.mk
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 88dcbc1..5350531 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -984,6 +984,7 @@ F:	configs/pine64_defconfig
+ F:	configs/pine64_sopine_defconfig
+ 
+ N:	James Hilliard <james.hilliard1@gmail.com>
++F:	package/python-aiodns/
+ F:	package/python-async-timeout/
+ F:	package/python-multidict/
+ F:	package/python-pycares/
+diff --git a/package/Config.in b/package/Config.in
+index 4d7ed65..e1c87ae 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -794,6 +794,7 @@ endif
+ if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ menu "External python modules"
+ 	source "package/python-aiocoap/Config.in"
++	source "package/python-aiodns/Config.in"
+ 	source "package/python-alsaaudio/Config.in"
+ 	source "package/python-argh/Config.in"
+ 	source "package/python-arrow/Config.in"
+diff --git a/package/python-aiodns/Config.in b/package/python-aiodns/Config.in
+new file mode 100644
+index 0000000..ccc87fa
+--- /dev/null
++++ b/package/python-aiodns/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_AIODNS
++	bool "python-aiodns"
++	depends on BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON_PYCARES
++	help
++	  Simple DNS resolver for asyncio.
++
++	  http://github.com/saghul/aiodns
+diff --git a/package/python-aiodns/python-aiodns.hash b/package/python-aiodns/python-aiodns.hash
+new file mode 100644
+index 0000000..b66693f
+--- /dev/null
++++ b/package/python-aiodns/python-aiodns.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/aiodns/json
++md5	80e0419b49bb4c540b4857ec142219b8  aiodns-1.1.1.tar.gz
++sha256	d8677adc679ce8d0ef706c14d9c3d2f27a0e0cc11d59730cdbaf218ad52dd9ea  aiodns-1.1.1.tar.gz
++# Locally computed sha256 checksums
++sha256	eb0455d35129425ed399883cd710923de3e246a510e2eb84d9f00032d0bbec97  LICENSE
+diff --git a/package/python-aiodns/python-aiodns.mk b/package/python-aiodns/python-aiodns.mk
+new file mode 100644
+index 0000000..94f719d
+--- /dev/null
++++ b/package/python-aiodns/python-aiodns.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-aiodns
++#
++################################################################################
++
++PYTHON_AIODNS_VERSION = 1.1.1
++PYTHON_AIODNS_SOURCE = aiodns-$(PYTHON_AIODNS_VERSION).tar.gz
++PYTHON_AIODNS_SITE = https://files.pythonhosted.org/packages/3b/45/dcee156eabca900af3a1bab8acb9531636b13db4b677d44ba468a43969e0
++PYTHON_AIODNS_SETUP_TYPE = setuptools
++PYTHON_AIODNS_LICENSE = MIT
++PYTHON_AIODNS_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?Marched towards the enemy, spear upright, armed with the certainty
-that only the ignorant can have.? ? Epitaph of a volunteer
+2.7.4
