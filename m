@@ -1,54 +1,49 @@
 From: Andreas Naumann <dev@andin.de>
-Date: Mon, 12 Nov 2018 13:53:05 +0100
-Subject: [Buildroot] [PATCH 1/2] fs: Add common rootfs dependencies to
- PACKAGES
-In-Reply-To: <f91c9608-9c78-222a-fc88-232e7a4b639a@mind.be>
+Date: Mon, 12 Nov 2018 13:55:06 +0100
+Subject: [Buildroot] [PATCH 2/2] linux: Make dtc install step more
+ reliable
+In-Reply-To: <6a53c610-705f-41c6-5675-a514c61acb8d@mind.be>
 References: <20181108130417.1277-1-anaumann@ultratronik.de>
- <20181108130417.1277-2-anaumann@ultratronik.de>
- <f91c9608-9c78-222a-fc88-232e7a4b639a@mind.be>
-Message-ID: <7c555849-2594-6776-4a40-2a4e416ab914@andin.de>
+ <20181108130417.1277-3-anaumann@ultratronik.de>
+ <6a53c610-705f-41c6-5675-a514c61acb8d@mind.be>
+Message-ID: <1ea7068f-6be1-9a09-e2ff-50ca406be783@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Hi,
 
-Am 09.11.18 um 23:11 schrieb Arnout Vandecappelle:
+Am 09.11.18 um 23:14 schrieb Arnout Vandecappelle:
 > 
 > 
 > On 08/11/2018 14:04, Andreas Naumann wrote:
 ...
->> +PACKAGES += $(ROOTFS_COMMON_DEPENDENCIES)
+>> -		if [ ! -e $(HOST_DIR)/bin/dtc ]; then \
+>> +		if [ "$(BR2_PACKAGE_HOST_DTC)" != "y" ]; then \
+>>   			ln -sf linux-dtc $(HOST_DIR)/bin/dtc ; \
+>>   		fi \
 > 
->   I don't really like this, for the simple reason that it will enable the
-> dependencies even if they are not needed because we're not building any rootfs.
+>   Since now it's purely steered by a make variable, you can change it into
+> 
+>   		$(if $(BR2_PACKAGE_HOST_DTC),ln -sf linux-dtc $(HOST_DIR)/bin/dtc;) \
 
-good point, I dont like that either. I'd propose to change/move the 
-patch into something like
-   PACKAGES += $$(filter-out $$(PACKAGES),$$(ROOTFS_COMMON_DEPENDENCIES))
-inside the rootfs-conditional clause at the bottom of fs/common.mk. 
-Actually I'm not sure the filter-out stuff is really needed since 
-duplicate targets may accumulate in PACKAGES anyway.
+Thanks. I'll resend v2.
+
 
 best regards,
-Andreas
+Andi
 
 > 
->   It's a small thing though, and working around it is a lot more complicated (you
-> could e.g. select a new Config.in symbol that is selected by all the rootfses).
-> And when we ever get the Config.in.host for all host packages, it's solved
-> already. So
 > 
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> (note that the semicolon is still needed because it's in the CONFIG_DTC condition).
 > 
 >   Regards,
 >   Arnout
 > 
->>   
->>   $(ROOTFS_COMMON_TAR): ROOTFS=COMMON
->>   $(ROOTFS_COMMON_TAR): FAKEROOT_SCRIPT=$(FS_DIR)/fakeroot.fs
+> 
+>>   	fi
 >>
 > _______________________________________________
 > buildroot mailing list
