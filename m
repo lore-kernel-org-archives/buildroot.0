@@ -1,73 +1,66 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 12 Nov 2018 23:38:16 +0100
-Subject: [Buildroot] [PATCH 3/6 v2] fs: rename internal variable
-In-Reply-To: <1a4428b01a76f6189b154cecd1068663ee515332.1542043922.git.yann.morin.1998@free.fr>
-References: <cover.1542043922.git.yann.morin.1998@free.fr>
- <1a4428b01a76f6189b154cecd1068663ee515332.1542043922.git.yann.morin.1998@free.fr>
-Message-ID: <83baff45-7514-c5bc-0008-0b31981e208b@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 12 Nov 2018 23:44:31 +0100
+Subject: [Buildroot] [PATCH] elfutils: security bump to version 0.174
+Message-ID: <20181112224431.11501-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes the following security issues:
 
+CVE-2018-16062: dwarf_getaranges in dwarf_getaranges.c in libdw in elfutils
+before 2018-08-18 allows remote attackers to cause a denial of service
+(heap-based buffer over-read) via a crafted file.
 
-On 12/11/2018 18:33, Yann E. MORIN wrote:
-> In preparation of more renames, rename the variable that points to the
-> final users table.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  fs/common.mk | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/fs/common.mk b/fs/common.mk
-> index 358801d44f..d1b6a56913 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -31,9 +31,11 @@ FS_DIR = $(BUILD_DIR)/buildroot-fs
->  FULL_DEVICE_TABLE = $(FS_DIR)/device_table.txt
->  ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE) \
->  	$(BR2_ROOTFS_STATIC_DEVICE_TABLE))
-> -USERS_TABLE = $(FS_DIR)/users_table.txt
-> +
->  ROOTFS_USERS_TABLES = $(call qstrip,$(BR2_ROOTFS_USERS_TABLES))
->  
-> +ROOTFS_FINAL_USERS_TABLE = $(FS_DIR)/full_users_table.txt
+CVE-2018-16402: libelf/elf_end.c in elfutils 0.173 allows remote attackers
+to cause a denial of service (double free and application crash) or possibly
+have unspecified other impact because it tries to decompress twice.
 
- Nitpicking: make sure the file name is the same as the variable name. Either
-name is OK for me, with a light preference for full rather than final.
+CVE-2018-16403: libdw in elfutils 0.173 checks the end of the attributes
+list incorrectly in dwarf_getabbrev in dwarf_getabbrev.c and dwarf_hasattr
+in dwarf_hasattr.c, leading to a heap-based buffer over-read and an
+application crash.
 
- With that:
-  Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+For more details, see the announcement:
+https://sourceware.org/ml/elfutils-devel/2018-q3/msg00116.html
 
- Regards,
- Arnout
+0.172 and 0.173 also included fixes for crashes and hangs found by afl-fuzz
+(no CVEs assigned):
+https://sourceware.org/ml/elfutils-devel/2018-q2/msg00272.html
+https://sourceware.org/ml/elfutils-devel/2018-q2/msg00209.html
 
-> +
->  ifeq ($(BR2_REPRODUCIBLE),y)
->  define ROOTFS_REPRODUCIBLE
->  	find $(TARGET_DIR) -print0 | xargs -0 -r touch -hd @$(SOURCE_DATE_EPOCH)
-> @@ -51,9 +53,9 @@ rootfs-common: $(ROOTFS_COMMON_DEPENDENCIES) target-finalize
->  	rm -rf $(FS_DIR)
->  	mkdir -p $(FS_DIR)
->  
-> -	$(call PRINTF,$(PACKAGES_USERS)) >> $(USERS_TABLE)
-> +	$(call PRINTF,$(PACKAGES_USERS)) >> $(ROOTFS_FINAL_USERS_TABLE)
->  ifneq ($(ROOTFS_USERS_TABLES),)
-> -	cat $(ROOTFS_USERS_TABLES) >> $(USERS_TABLE)
-> +	cat $(ROOTFS_USERS_TABLES) >> $(ROOTFS_FINAL_USERS_TABLE)
->  endif
->  ifneq ($(ROOTFS_DEVICE_TABLES),)
->  	cat $(ROOTFS_DEVICE_TABLES) > $(FULL_DEVICE_TABLE)
-> @@ -119,7 +121,7 @@ $$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
->  	echo "set -e" >> $$(FAKEROOT_SCRIPT)
->  
->  	echo "chown -h -R 0:0 $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
-> -	PATH=$$(BR_PATH) $$(TOPDIR)/support/scripts/mkusers $$(USERS_TABLE) $$(TARGET_DIR) >> $$(FAKEROOT_SCRIPT)
-> +	PATH=$$(BR_PATH) $$(TOPDIR)/support/scripts/mkusers $$(ROOTFS_FINAL_USERS_TABLE) $$(TARGET_DIR) >> $$(FAKEROOT_SCRIPT)
->  	echo "$$(HOST_DIR)/bin/makedevs -d $$(FULL_DEVICE_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
->  	$$(foreach s,$$(call qstrip,$$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
->  		echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
-> 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/elfutils/elfutils.hash | 4 ++--
+ package/elfutils/elfutils.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/elfutils/elfutils.hash b/package/elfutils/elfutils.hash
+index dc321e9359..5a76cd5868 100644
+--- a/package/elfutils/elfutils.hash
++++ b/package/elfutils/elfutils.hash
+@@ -1,5 +1,5 @@
+-# From https://sourceware.org/elfutils/ftp/0.171/sha512.sum
+-sha512 777be2d63ca9b11440bf358a33428d9ca974e2612a880934156c9f7194af596ed627c1ed2d48dbd47a3761c94913b8f39565f9dcb6b62c92bf229f04c96d5ee3  elfutils-0.171.tar.bz2
++# From https://sourceware.org/elfutils/ftp/0.174/sha512.sum
++sha512 696708309c2a9a076099748809ecdc0490f4a8a842b2efc1aae0d746e7c5a8b203743f5626739eff837216b0c052696516b2821f5d3cc3f2eef86597c96d42df  elfutils-0.174.tar.bz2
+ # Locally calculated
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING-GPLV2
+diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
+index 5eaaaeadad..2d62017bba 100644
+--- a/package/elfutils/elfutils.mk
++++ b/package/elfutils/elfutils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ELFUTILS_VERSION = 0.171
++ELFUTILS_VERSION = 0.174
+ ELFUTILS_SOURCE = elfutils-$(ELFUTILS_VERSION).tar.bz2
+ ELFUTILS_SITE = https://sourceware.org/elfutils/ftp/$(ELFUTILS_VERSION)
+ ELFUTILS_INSTALL_STAGING = YES
+-- 
+2.11.0
