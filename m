@@ -1,102 +1,75 @@
-From: Jared Bents <jared.bents@rockwellcollins.com>
-Date: Mon, 12 Nov 2018 08:30:17 -0600
-Subject: [Buildroot] [PATCH v1 1/2] package/proftpd: add tunable buffer
- size
-In-Reply-To: <5cc7a533-2760-cdd0-7586-9405553179ed@mind.be>
-References: <20181109193503.7984-1-jared.bents@rockwellcollins.com>
- <5cc7a533-2760-cdd0-7586-9405553179ed@mind.be>
-Message-ID: <CAM=7fbeen4x00_QeR7LUMf-H2dwz5HqOeUsA89q9jvLVLqPucw@mail.gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 12 Nov 2018 08:42:29 -0600
+Subject: [Buildroot] [PATCH] libsemanage: define installation location
+ of semanage.conf for host
+In-Reply-To: <20181109215730.30795-1-thomas.petazzoni@bootlin.com>
+References: <20181109215730.30795-1-thomas.petazzoni@bootlin.com>
+Message-ID: <CANQCQpa5Nf1WBvX5dNo9_kxBHK5fps0nKzjv2KZEF=OTrUMKiA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Thomas,
 
-On Fri, Nov 9, 2018 at 2:40 PM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->  Hi Jared,
->
-> On 09/11/2018 20:35, Jared Bents wrote:
-> > Enables tunable buffer size as a compile time option
-> >
-> > Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
-> > ---
-> >  package/proftpd/Config.in  | 8 ++++++++
-> >  package/proftpd/proftpd.mk | 4 ++++
-> >  2 files changed, 12 insertions(+)
-> >
-> > diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
-> > index b615a5ff4c..51c795501e 100644
-> > --- a/package/proftpd/Config.in
-> > +++ b/package/proftpd/Config.in
-> > @@ -65,4 +65,12 @@ config BR2_PACKAGE_PROFTPD_MOD_QUOTATAB_SQL
-> >         Compile mod_quotatab with mod_quotatab_sql table.
-> >
-> >  endif
-> > +
-> > +config BR2_PACKAGE_PROFTPD_BUFFER_SIZE
-> > +     int "buffer size (0 for default)"
->
->  You should specify the unit here, so "buffer size in bytes".
->
-> > +     default "0"
-> > +     help
-> > +       Compile ProFTPD with tunable buffer size. Size in
-> > +       bytes. 0 uses default size.
->
->  It's not very clear what this means. I like the text from [1], so the help text
-> could be something like:
->
->           By increasing the buffer size above the default of 1K,
->           proftpd reads and writes data in larger chunks, and makes
->           fewer expensive system calls. Use of this option to set buffer
->           sizes of 8K or more has been reported to drastically increase
->           transfer speeds (depending on network configurations).
->
->           0 uses the default size of 1024.
->
 
-I'll update to include the units and the more informative help.
-
-> > +
-> >  endif
-> > diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
-> > index 8f3ff5088e..5ff0bc17e5 100644
-> > --- a/package/proftpd/proftpd.mk
-> > +++ b/package/proftpd/proftpd.mk
-> > @@ -121,4 +121,8 @@ define PROFTPD_INSTALL_INIT_SYSTEMD
-> >               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/proftpd.service
-> >  endef
-> >
-> > +ifneq ($(BR2_PACKAGE_PROFTPD_BUFFER_SIZE),0)
-> > +PROFTPD_CONF_OPTS += --enable-tunable-buffer-size=$(BR2_PACKAGE_PROFTPD_BUFFER_SIZE)
+On Fri, Nov 9, 2018 at 3:57 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 >
->  Have you tested this? As far as I can see, the option is actually called
-> --enable-buffer-size. [1] indeed mentions --enable-tunable-buffer-size; I guess
-> that's either a mistake or from an earlier version, though.
+> When /etc/selinux/semanage.conf does not exist, libsemanage tries to
+> overwrite it. For the target package, it works fine because $(DESTDIR)
+> is taken into account.
+>
+> However, for the host package, $(DESTDIR) is empty, and the location
+> used for /etc/selinux/semanage.conf is not affected by $(PREFIX). This
+> causes host-libsemanage to try to install /etc/selinux/semanage.conf,
+> which obviously fails with:
+>
+>   test -f /etc/selinux/semanage.conf || install -m 644 -D semanage.conf /etc/selinux/semanage.conf
+>   install: cannot create directory '/etc/selinux': Permission denied
+>
+> To fix this, this commit passes DEFAULT_SEMANAGE_CONF_LOCATION in the
+> make options when building/installing host-libsemanage, providing a
+> path to semanage.conf that Buildroot can write to.
+>
+> Fixes:
+>
+>   http://autobuild.buildroot.net/results/cd27e3c66274622d0c3dd5a601a36efb1bc45011/
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
+
+> ---
+>  package/libsemanage/libsemanage.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
+> index d554a33356..bbde50f49f 100644
+> --- a/package/libsemanage/libsemanage.mk
+> +++ b/package/libsemanage/libsemanage.mk
+> @@ -31,7 +31,8 @@ HOST_LIBSEMANAGE_DEPENDENCIES = host-bison host-audit host-libsepol host-libseli
+>  HOST_LIBSEMANAGE_MAKE_OPTS += \
+>         $(HOST_CONFIGURE_OPTS) \
+>         PREFIX=$(HOST_DIR) \
+> -       SWIG_LIB="$(HOST_DIR)/share/swig/$(SWIG_VERSION)/"
+> +       SWIG_LIB="$(HOST_DIR)/share/swig/$(SWIG_VERSION)/" \
+> +       DEFAULT_SEMANAGE_CONF_LOCATION=$(HOST_DIR)/etc/selinux/semanage.conf
+>
+>  ifeq ($(BR2_PACKAGE_PYTHON3),y)
+>  HOST_LIBSEMANAGE_DEPENDENCIES += host-python3
+> --
+> 2.14.5
 >
 
-Yes, it looks like --enable-tunable-buffer-size is the older version.
- was looking at [1] when looking into adjusting the buffer size but it
-looks like the package actually use --enable-buffer-size, I will
-update to use --enable-buffer-size.
 
->
->  I've marked this patch as Changes Requested in patchwork. Could you send an
-> updated version?
->
->  Regards,
->  Arnout
->
->
-> > +endif
-> > +
-> >  $(eval $(autotools-package))
-> >
->
-> [1] http://www.proftpd.org/docs/howto/BCP.html
+--
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / RC Linux Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
 
-Thank you,
-Jared
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
