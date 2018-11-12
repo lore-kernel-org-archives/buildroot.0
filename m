@@ -1,12 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 12 Nov 2018 23:28:57 +0100
-Subject: [Buildroot] [PATCH 2/6 v2] fs/tar: add support for xattrs (thus
- capabilties)
-In-Reply-To: <f15d05f6-0b97-3c9a-d485-71e181ad7a6e@mind.be>
+Date: Mon, 12 Nov 2018 23:30:36 +0100
+Subject: [Buildroot] [PATCH 0/6 v2] fs: fix and better handle
+ capabilities
+In-Reply-To: <cover.1542043922.git.yann.morin.1998@free.fr>
 References: <cover.1542043922.git.yann.morin.1998@free.fr>
- <0b788d4ef7c7f0d02c1a15b31a69d08de3401abe.1542043922.git.yann.morin.1998@free.fr>
- <f15d05f6-0b97-3c9a-d485-71e181ad7a6e@mind.be>
-Message-ID: <fdd1869f-9d76-138c-06a4-e3be4dcffddc@mind.be>
+Message-ID: <7cb8d7d2-de00-a35e-4407-3312f785dd85@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,63 +12,77 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-On 12/11/2018 23:09, Arnout Vandecappelle wrote:
->
-> On 12/11/2018 18:33, Yann E. MORIN wrote:
->> By default, tar will not include any extended attribute (xattr) when
->> creating archives, and thus will not store capabilties either (as they
->> are stored in the xattr 'security.capability').
->  So... currently capabilities are not included at all in the tarball, since
-> --xattrs is not passed at the moment?
->
->  But after this patch, they are still not included? Or does --xattrs-include
-> imply --xattrs?
 
-?Tested and confirmed: --xattrs-include implies --xattrs. At least in my tar
-1.29. So
+On 12/11/2018 18:32, Yann E. MORIN wrote:
+> Hello All!
+> 
+> As reported by Ricardo in #11216, and recently noticed thanks to the
+> runtime tests he added, handling file capabilities is broken.
+> 
+> Ricardo did a very good job at pinpointing the issue, and that is caused
+> by the recent-ish split of the filesystem infra with the use of the
+> intermediate tarball.
+> 
+> It turns out that playing with fakeroot, tar, and capabilities is a lost
+> game, as fakeroot behaves badly with the special handling tar does with
+> the security.capability extended attribute.
+> 
+> This series fixes the issue with the first patch, in which we simply get
+> rid of the intermediate tarball, and directly rsync from the global
+> target/ directory to populate the per-filesystem target directory. This
+> means that any common fincalisation under fakaeroot is no longer
+> possible, so they have to be replicated for each filesystem instead.
+> 
+> The only remaining common part is now the generation of the various
+> tables: devices, permisions and users.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Just to be clear: this is the only patch for master, right? The rest is for next?
 
+> 
+> Then, the tar filesystem is fixed to store the xattrs.
 
-?Regards,
-?Arnout
+ Like this one, tar has never contained xattrs, right?
 
+ Regards,
+ Arnout
 
->
->> Using option --xattrs is enough to create a tarball with all the xattrs
->> attached to a file. However, extracting all xattrs from a tarball
->> requires that --xattrs-include='*' be used. This is not symetric (but on
->> purpose, as per the documentation), and so is confusing to some.
->>
->> So, we use --xattrs-include='*' to create the archive, so as to be
->> explicit that we want all xattrs to be stored.
->>
->> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
->> Cc: Peter Korsgaard <peter@korsgaard.com>
->> Cc: Arnout Vandecappelle <arnout@mind.be>
->> ---
->>  fs/tar/tar.mk | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/fs/tar/tar.mk b/fs/tar/tar.mk
->> index 68149e9eb7..4c6327ace8 100644
->> --- a/fs/tar/tar.mk
->> +++ b/fs/tar/tar.mk
->> @@ -10,7 +10,7 @@ ROOTFS_TAR_DEPENDENCIES = $(BR2_TAR_HOST_DEPENDENCY)
->>  
->>  define ROOTFS_TAR_CMD
->>  	(cd $(TARGET_DIR); find -print0 | LC_ALL=C sort -z | \
->> -		tar $(TAR_OPTS) -cf $@ --null --no-recursion -T - --numeric-owner)
->> +		tar $(TAR_OPTS) -cf $@ --null --xattrs-include='*' --no-recursion -T - --numeric-owner)
->  I think --xattrs-include should come before TAR_OPTS, so it can still be
-> overridden. Ah, darn, never mind, it can't be overridden, several
-> --xattrs-include options are cumulative and their order doesn't matter.
->
->  Regards,
->  Arnout
->
->>  endef
->>  
->>  $(eval $(rootfs))
->>
+> 
+> Then there are tow clean-up patches, which pave the way to two fixes.
+> 
+> First, we allow permissions provided by users to override the internal
+> permissions, as we do for all user-provided settings. Second, we fix the
+> static device creation conditions.
+> 
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+> 
+> The following changes since commit cd0ca09e43be8bd87fa35c96fa099a338b85de36
+> 
+>   {linux, linux-headers}: bump 4.{4, 9, 14, 18}.x series (2018-11-11 22:11:04 +0100)
+> 
+> 
+> are available in the git repository at:
+> 
+>   git://git.buildroot.org/~ymorin/git/buildroot.git
+> 
+> for you to fetch changes up to ae80646fbb9d0e7f40434b16ebe5173ee3a4654c
+> 
+>   fs: make static device nodes creation more logical (2018-11-12 18:28:28 +0100)
+> 
+> 
+> ----------------------------------------------------------------
+> Yann E. MORIN (6):
+>       fs: get over the intermediate tarball
+>       fs/tar: add support for xattrs (thus capabilties)
+>       fs: rename internal variable
+>       fs: split devices and permissions tables
+>       fs: allow user provided permissions to override packages permissions
+>       fs: make static device nodes creation more logical
+> 
+>  fs/common.mk                                    | 92 +++++++++++--------------
+>  fs/tar/tar.mk                                   |  2 +-
+>  support/testing/tests/core/test_post_scripts.py |  4 +-
+>  3 files changed, 44 insertions(+), 54 deletions(-)
+> 
