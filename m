@@ -1,106 +1,53 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 12 Nov 2018 09:28:17 +0100
-Subject: [Buildroot] [PATCH v2 2/2] python-aiodns: new package
-In-Reply-To: <1542010156-31085-2-git-send-email-james.hilliard1@gmail.com>
-References: <1542010156-31085-1-git-send-email-james.hilliard1@gmail.com>
- <1542010156-31085-2-git-send-email-james.hilliard1@gmail.com>
-Message-ID: <CAGm1_kvRK_7DSj+h9n5G5XOBUeOQun2wPk7V7S1BqVbbS7d0VA@mail.gmail.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Mon, 12 Nov 2018 10:44:02 +0100
+Subject: [Buildroot] [PATCH] imx-uuc: bump revision to 79e9798e
+Message-ID: <20181112094402.1815-1-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Nov 12, 2018 at 9:09 AM <james.hilliard1@gmail.com> wrote:
->
-> From: James Hilliard <james.hilliard1@gmail.com>
->
-> Simple DNS resolver for asyncio.
->
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Main changes:
+- fix build error by gcc 8.2
+- re-factor the code
+- use unique CPU ID when available
+- improve UDC management
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Fixes:
+http://autobuild.buildroot.net/results/b39d56c1573308c4f947de23363da7c05e2aaf0d/
 
-> ---
->  DEVELOPERS                               |  1 +
->  package/Config.in                        |  1 +
->  package/python-aiodns/Config.in          |  8 ++++++++
->  package/python-aiodns/python-aiodns.hash |  5 +++++
->  package/python-aiodns/python-aiodns.mk   | 14 ++++++++++++++
->  5 files changed, 29 insertions(+)
->  create mode 100644 package/python-aiodns/Config.in
->  create mode 100644 package/python-aiodns/python-aiodns.hash
->  create mode 100644 package/python-aiodns/python-aiodns.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 88dcbc1..5350531 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -984,6 +984,7 @@ F:  configs/pine64_defconfig
->  F:     configs/pine64_sopine_defconfig
->
->  N:     James Hilliard <james.hilliard1@gmail.com>
-> +F:     package/python-aiodns/
->  F:     package/python-async-timeout/
->  F:     package/python-multidict/
->  F:     package/python-pycares/
-> diff --git a/package/Config.in b/package/Config.in
-> index 4d7ed65..e1c87ae 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -794,6 +794,7 @@ endif
->  if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
->  menu "External python modules"
->         source "package/python-aiocoap/Config.in"
-> +       source "package/python-aiodns/Config.in"
->         source "package/python-alsaaudio/Config.in"
->         source "package/python-argh/Config.in"
->         source "package/python-arrow/Config.in"
-> diff --git a/package/python-aiodns/Config.in b/package/python-aiodns/Config.in
-> new file mode 100644
-> index 0000000..aa59705
-> --- /dev/null
-> +++ b/package/python-aiodns/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_PYTHON_AIODNS
-> +       bool "python-aiodns"
-> +       depends on BR2_PACKAGE_PYTHON3
-> +       select BR2_PACKAGE_PYTHON_PYCARES # runtime
-> +       help
-> +         Simple DNS resolver for asyncio.
-> +
-> +         http://github.com/saghul/aiodns
-> diff --git a/package/python-aiodns/python-aiodns.hash b/package/python-aiodns/python-aiodns.hash
-> new file mode 100644
-> index 0000000..b66693f
-> --- /dev/null
-> +++ b/package/python-aiodns/python-aiodns.hash
-> @@ -0,0 +1,5 @@
-> +# md5, sha256 from https://pypi.org/pypi/aiodns/json
-> +md5    80e0419b49bb4c540b4857ec142219b8  aiodns-1.1.1.tar.gz
-> +sha256 d8677adc679ce8d0ef706c14d9c3d2f27a0e0cc11d59730cdbaf218ad52dd9ea  aiodns-1.1.1.tar.gz
-> +# Locally computed sha256 checksums
-> +sha256 eb0455d35129425ed399883cd710923de3e246a510e2eb84d9f00032d0bbec97  LICENSE
-> diff --git a/package/python-aiodns/python-aiodns.mk b/package/python-aiodns/python-aiodns.mk
-> new file mode 100644
-> index 0000000..94f719d
-> --- /dev/null
-> +++ b/package/python-aiodns/python-aiodns.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-aiodns
-> +#
-> +################################################################################
-> +
-> +PYTHON_AIODNS_VERSION = 1.1.1
-> +PYTHON_AIODNS_SOURCE = aiodns-$(PYTHON_AIODNS_VERSION).tar.gz
-> +PYTHON_AIODNS_SITE = https://files.pythonhosted.org/packages/3b/45/dcee156eabca900af3a1bab8acb9531636b13db4b677d44ba468a43969e0
-> +PYTHON_AIODNS_SETUP_TYPE = setuptools
-> +PYTHON_AIODNS_LICENSE = MIT
-> +PYTHON_AIODNS_LICENSE_FILES = LICENSE
-> +
-> +$(eval $(python-package))
-> --
-> 2.7.4
->
+Also switch back the repository from codeauroraforum to NXPmicro now
+that the Qualcomm/NXP merger was denied.
+
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+---
+ package/freescale-imx/imx-uuc/imx-uuc.hash | 2 +-
+ package/freescale-imx/imx-uuc/imx-uuc.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/freescale-imx/imx-uuc/imx-uuc.hash b/package/freescale-imx/imx-uuc/imx-uuc.hash
+index c9c29f8692..623bd27644 100644
+--- a/package/freescale-imx/imx-uuc/imx-uuc.hash
++++ b/package/freescale-imx/imx-uuc/imx-uuc.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 1463e855d1229e6b6c02df2085f6bff5974bc061d13a61646b63675c160cba99  imx-uuc-2ae634281a39c82b6a8ee0fdcfbfbe42183ceb53.tar.gz
++sha256 ac4960b9dc53cfd09709951c4bf1f774567ff0918d0b216b480e1f7df8c6ee48  imx-uuc-79e9798eee9cd972d92ed2b18f170de856d153c9.tar.gz
+diff --git a/package/freescale-imx/imx-uuc/imx-uuc.mk b/package/freescale-imx/imx-uuc/imx-uuc.mk
+index 5e0bb3be0e..bdfa51b171 100644
+--- a/package/freescale-imx/imx-uuc/imx-uuc.mk
++++ b/package/freescale-imx/imx-uuc/imx-uuc.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-IMX_UUC_VERSION = 2ae634281a39c82b6a8ee0fdcfbfbe42183ceb53
+-IMX_UUC_SITE = $(call github,codeauroraforum,imx-uuc,$(IMX_UUC_VERSION))
++IMX_UUC_VERSION = 79e9798eee9cd972d92ed2b18f170de856d153c9
++IMX_UUC_SITE = $(call github,NXPmicro,imx-uuc,$(IMX_UUC_VERSION))
+ IMX_UUC_LICENSE = GPL-2.0+
+ IMX_UUC_LICENSE_FILES = COPYING
+ 
+-- 
+2.19.1
