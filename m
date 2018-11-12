@@ -1,41 +1,26 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 12 Nov 2018 23:46:32 +0100
-Subject: [Buildroot] [PATCH 4/6 v2] fs: split devices and permissions
- tables
-In-Reply-To: <84c91aa0b6b8503e5d9ece861f2215058b971082.1542043922.git.yann.morin.1998@free.fr>
-References: <cover.1542043922.git.yann.morin.1998@free.fr>
- <84c91aa0b6b8503e5d9ece861f2215058b971082.1542043922.git.yann.morin.1998@free.fr>
-Message-ID: <dd2976be-2a89-9555-829a-429b18d8f618@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 12 Nov 2018 23:55:44 +0100
+Subject: [Buildroot] [PATCH 1/1] libnspr: bump to version 4.20
+In-Reply-To: <20181110161511.5630-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 10 Nov 2018 17:15:11 +0100")
+References: <20181110161511.5630-1-fontaine.fabrice@gmail.com>
+Message-ID: <87woph52j3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
+ > Support for riscv was added in this version
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/a98db13ea105d627f2a4770969b31550926c2791
 
-On 12/11/2018 18:33, Yann E. MORIN wrote:
-> Currently, we conflate device tables and permissions tables, on the
-> premise they are both created and applied with the same tool, makedevs.
-> 
-> Split the two, in to their own final aggregated tables and their own
-> call to makedevs.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- Sorry, I don't think there is a good reason to split them up. I don't think
-this enables any other improvements either - the following two patches don't
-depend on this, right? I also don't feel that this change makes the code easier
-to understand (not more difficult either, but if it ain't broken, don't fix it).
+Committed to master because of the riscv fixes and because it is a
+dependency on libnss 3.39, thanks.
 
- So nack from me.
-
- Regards,
- Arnout
-
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> ---
->  fs/common.mk | 27 +++++++++++++++++++--------
->  1 file changed, 19 insertions(+), 8 deletions(-)
-[snip]
+-- 
+Bye, Peter Korsgaard
