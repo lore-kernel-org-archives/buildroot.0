@@ -1,111 +1,75 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 12 Nov 2018 01:05:10 -0700
-Subject: [Buildroot] [PATCH 1/2] python-pycares: new package
-In-Reply-To: <CAGm1_ksvo_EvP5Vts-qNWrVw9z1Vq_7WhonT-+PhLzZds+tDBQ@mail.gmail.com>
-References: <1541980940-30821-1-git-send-email-james.hilliard1@gmail.com>
- <CAGm1_ksvo_EvP5Vts-qNWrVw9z1Vq_7WhonT-+PhLzZds+tDBQ@mail.gmail.com>
-Message-ID: <CADvTj4ok_aSLdiRRNsKb36tJ00h5tePkGwZ69uadyiy72zu3sQ@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 12 Nov 2018 08:05:59 +0000
+Subject: [Buildroot] [Bug 11501] New: compile sdl2 with enable wayland
+Message-ID: <bug-11501-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yeah, cffi only seems to be used for pypy here which is why I don't
-have it selected.
-On Mon, Nov 12, 2018 at 12:59 AM Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
->
-> On Mon, Nov 12, 2018 at 1:02 AM <james.hilliard1@gmail.com> wrote:
-> >
-> > From: James Hilliard <james.hilliard1@gmail.com>
-> >
-> > Python interface for c-ares.
-> >
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
->
-> Hm, cffi support seems to be optional ...
->
-> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
->
-> > ---
-> >  DEVELOPERS                                 |  1 +
-> >  package/Config.in                          |  1 +
-> >  package/python-pycares/Config.in           |  6 ++++++
-> >  package/python-pycares/python-pycares.hash |  5 +++++
-> >  package/python-pycares/python-pycares.mk   | 14 ++++++++++++++
-> >  5 files changed, 27 insertions(+)
-> >  create mode 100644 package/python-pycares/Config.in
-> >  create mode 100644 package/python-pycares/python-pycares.hash
-> >  create mode 100644 package/python-pycares/python-pycares.mk
-> >
-> > diff --git a/DEVELOPERS b/DEVELOPERS
-> > index 53467da..88dcbc1 100644
-> > --- a/DEVELOPERS
-> > +++ b/DEVELOPERS
-> > @@ -986,6 +986,7 @@ F:  configs/pine64_sopine_defconfig
-> >  N:     James Hilliard <james.hilliard1@gmail.com>
-> >  F:     package/python-async-timeout/
-> >  F:     package/python-multidict/
-> > +F:     package/python-pycares/
-> >  F:     package/python-yarl/
-> >
-> >  N:     James Knight <james.knight@rockwellcollins.com>
-> > diff --git a/package/Config.in b/package/Config.in
-> > index b60e770..4d7ed65 100644
-> > --- a/package/Config.in
-> > +++ b/package/Config.in
-> > @@ -949,6 +949,7 @@ menu "External python modules"
-> >         source "package/python-pyasn-modules/Config.in"
-> >         source "package/python-pyasn1/Config.in"
-> >         source "package/python-pyasn1-modules/Config.in"
-> > +       source "package/python-pycares/Config.in"
-> >         source "package/python-pycli/Config.in"
-> >         source "package/python-pycparser/Config.in"
-> >         source "package/python-pycrypto/Config.in"
-> > diff --git a/package/python-pycares/Config.in b/package/python-pycares/Config.in
-> > new file mode 100644
-> > index 0000000..4144952
-> > --- /dev/null
-> > +++ b/package/python-pycares/Config.in
-> > @@ -0,0 +1,6 @@
-> > +config BR2_PACKAGE_PYTHON_PYCARES
-> > +       bool "python-pycares"
-> > +       help
-> > +         Python interface for c-ares.
-> > +
-> > +         http://github.com/saghul/pycares
-> > diff --git a/package/python-pycares/python-pycares.hash b/package/python-pycares/python-pycares.hash
-> > new file mode 100644
-> > index 0000000..2e80a97
-> > --- /dev/null
-> > +++ b/package/python-pycares/python-pycares.hash
-> > @@ -0,0 +1,5 @@
-> > +# md5, sha256 from https://pypi.org/pypi/pycares/json
-> > +md5    74893b2b380fbb45329a406ae4b1ae89  pycares-2.3.0.tar.gz
-> > +sha256 36f4c03df57c41a87eb3d642201684eb5a8bc194f4bafaa9f60ee6dc0aef8e40  pycares-2.3.0.tar.gz
-> > +# Locally computed sha256 checksums
-> > +sha256 427bb3a5372024a26e2c290b24382512bcc7ca123431c4dd178dd613beea7eee  LICENSE
-> > diff --git a/package/python-pycares/python-pycares.mk b/package/python-pycares/python-pycares.mk
-> > new file mode 100644
-> > index 0000000..961c87e
-> > --- /dev/null
-> > +++ b/package/python-pycares/python-pycares.mk
-> > @@ -0,0 +1,14 @@
-> > +################################################################################
-> > +#
-> > +# python-pycares
-> > +#
-> > +################################################################################
-> > +
-> > +PYTHON_PYCARES_VERSION = 2.3.0
-> > +PYTHON_PYCARES_SOURCE = pycares-$(PYTHON_PYCARES_VERSION).tar.gz
-> > +PYTHON_PYCARES_SITE = https://files.pythonhosted.org/packages/89/5c/3a7e1a52d6abb52b9ca1a56d2df699936e89d8b98f75cfd60d03363e7c10
-> > +PYTHON_PYCARES_SETUP_TYPE = setuptools
-> > +PYTHON_PYCARES_LICENSE = MIT
-> > +PYTHON_PYCARES_LICENSE_FILES = LICENSE
-> > +
-> > +$(eval $(python-package))
-> > --
-> > 2.7.4
-> >
+https://bugs.busybox.net/show_bug.cgi?id=11501
+
+            Bug ID: 11501
+           Summary: compile sdl2 with enable wayland
+           Product: buildroot
+           Version: 2018.02.3
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: 1989wanghang at 163.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
+
+compile sdl2 with enable wayland will get error, show below:
+
+/bin/bash: /usr/bin/wayland-scanner: No such file or directory
+/bin/bash: /usr/bin/wayland-scanner: No such file or directory
+  GEN    gen/pointer-constraints-unstable-v1-protocol.c
+/bin/bash: /usr/bin/wayland-scanner: No such file or directory
+  CC     build/SDL_waylandevents.lo
+/bin/bash: /usr/bin/wayland-scanner: No such file or directory
+  GEN    gen/relative-pointer-unstable-v1-protocol.c
+/bin/bash: /usr/bin/wayland-scanner: No such file or directory
+Makefile:674: recipe for target 'gen/wayland-client-protocol.h' failed
+make[2]: *** [gen/wayland-client-protocol.h] Error 127
+make[2]: *** Waiting for unfinished jobs....
+Makefile:681: recipe for target
+'gen/relative-pointer-unstable-v1-client-protocol.h' failed
+make[2]: *** [gen/relative-pointer-unstable-v1-client-protocol.h] Error 127
+Makefile:670: recipe for target 'gen/wayland-protocol.c' failed
+make[2]: *** [gen/wayland-protocol.c] Error 127
+Makefile:693: recipe for target
+'gen/pointer-constraints-unstable-v1-protocol.c' failed
+make[2]: *** [gen/pointer-constraints-unstable-v1-protocol.c] Error 127
+Makefile:685: recipe for target
+'gen/pointer-constraints-unstable-v1-client-protocol.h' failed
+make[2]: *** [gen/pointer-constraints-unstable-v1-client-protocol.h] Error 127
+/bin/bash: /usr/bin/wayland-scanner: No such file or directory
+Makefile:689: recipe for target 'gen/relative-pointer-unstable-v1-protocol.c'
+failed
+make[2]: *** [gen/relative-pointer-unstable-v1-protocol.c] Error 127
+/home/wh/3399/buildroot/output/rockchip_rk3399/build/sdl2-2.0.7/src/video/wayland/SDL_waylandevents.c:41:61:
+fatal error: pointer-constraints-unstable-v1-client-protocol.h: No such file or
+directory
+ #include "pointer-constraints-unstable-v1-client-protocol.h"
+                                                             ^
+compilation terminated.
+Makefile:563: recipe for target 'build/SDL_waylandevents.lo' failed
+make[2]: *** [build/SDL_waylandevents.lo] Error 1
+package/pkg-generic.mk:247: recipe for target
+'/home/wh/3399/buildroot/output/rockchip_rk3399/build/sdl2-2.0.7/.stamp_built'
+failed
+make[1]: ***
+[/home/wh/3399/buildroot/output/rockchip_rk3399/build/sdl2-2.0.7/.stamp_built]
+Error 2
+Makefile:16: recipe for target '_all' failed
+make: *** [_all] Error 2
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
