@@ -1,88 +1,63 @@
 From: Jared Bents <jared.bents@rockwellcollins.com>
-Date: Mon, 12 Nov 2018 08:52:27 -0600
-Subject: [Buildroot] [PATCH v1 2/2] package/proftpd: add sendfile
-In-Reply-To: <da5a6b9b-cac6-c39c-2123-9fa7700371c6@mind.be>
-References: <20181109193503.7984-1-jared.bents@rockwellcollins.com>
- <20181109193503.7984-2-jared.bents@rockwellcollins.com>
- <da5a6b9b-cac6-c39c-2123-9fa7700371c6@mind.be>
-Message-ID: <CAM=7fbdLe5M4cozQp3XvnOkgJ1hYiZ5o7wL08Unh7pG52kgH1g@mail.gmail.com>
+Date: Mon, 12 Nov 2018 10:45:20 -0600
+Subject: [Buildroot] [PATCH v2 1/2] package/proftpd: add enable buffer size
+Message-ID: <20181112164521.27220-1-jared.bents@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Enable buffer size as a compile time option to change internal
+buffer size.
 
-On Fri, Nov 9, 2018 at 2:44 PM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 09/11/2018 20:35, Jared Bents wrote:
-> > Enables sendfile as a compile time option
-> >
-> > Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
-> > ---
-> >  package/proftpd/Config.in  | 6 ++++++
-> >  package/proftpd/proftpd.mk | 4 ++++
-> >  2 files changed, 10 insertions(+)
-> >
-> > diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
-> > index 51c795501e..ab3f0d3bf3 100644
-> > --- a/package/proftpd/Config.in
-> > +++ b/package/proftpd/Config.in
-> > @@ -73,4 +73,10 @@ config BR2_PACKAGE_PROFTPD_BUFFER_SIZE
-> >         Compile ProFTPD with tunable buffer size. Size in
-> >         bytes. 0 uses default size.
-> >
-> > +config BR2_PACKAGE_PROFTPD_SENDFILE
-> > +     bool "sendfile support"
-> > +     help
-> > +       Compile ProFTPD with sendfile. Sendfile implements
-> > +       zero-copy transfers.
->
->  Is there any reason to make this optional? sendfile has been supported in Linux
-> for ages. And anyway, the configure script checks that.
+Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
 
-I will update to include it in the default PROFTPD_CONF_OPTS and
-remove the option.
+--
+[v1->v2]:
+- Update to enable-buffer-size instead of previous
+  enable-tunable-buffer-size.
+- Update to the help information for added option to Config.in
+  and included units.
+---
+ package/proftpd/Config.in  | 13 +++++++++++++
+ package/proftpd/proftpd.mk |  4 ++++
+ 2 files changed, 17 insertions(+)
 
->
-> > +
-> >  endif
-> > diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
-> > index 5ff0bc17e5..45bc13eafa 100644
-> > --- a/package/proftpd/proftpd.mk
-> > +++ b/package/proftpd/proftpd.mk
-> > @@ -125,4 +125,8 @@ ifneq ($(BR2_PACKAGE_PROFTPD_BUFFER_SIZE),0)
-> >  PROFTPD_CONF_OPTS += --enable-tunable-buffer-size=$(BR2_PACKAGE_PROFTPD_BUFFER_SIZE)
-> >  endif
-> >
-> > +ifeq ($(BR2_PACKAGE_PROFTPD_SENDFILE),y)
-> > +PROFTPD_CONF_OPTS += --enable-sendfile
->
->  If we indeed keep it optional, you should also add an explicit disable:
->
-> else
-> PROFTPD_CONF_OPTS += --disable-sendfile
->
->
->  I have marked your patch as Changes Requested in patchwork, so unless you
-> resend it (with the fixes mentioned above), we will forget about it.
->
->  Thank you!
->
->  Regards,
->  Arnout
->
->
->  Regards,
->  Arnout
->
-> > +endif
-> > +
-> >  $(eval $(autotools-package))
-> >
-
-Thank you,
-Jared
+diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
+index b615a5ff4c..478a7e80e1 100644
+--- a/package/proftpd/Config.in
++++ b/package/proftpd/Config.in
+@@ -65,4 +65,17 @@ config BR2_PACKAGE_PROFTPD_MOD_QUOTATAB_SQL
+ 	  Compile mod_quotatab with mod_quotatab_sql table.
+ 
+ endif
++
++config BR2_PACKAGE_PROFTPD_BUFFER_SIZE
++	int "buffer size in bytes (0 for default)"
++	default "0"
++	help
++	  By increasing the buffer size above the default of 1K,
++	  proftpd reads and writes data in larger chunks, and makes
++	  fewer expensive system calls. Use of this option to set buffer
++	  sizes of 8K or more has been reported to drastically increase
++	  transfer speeds (depending on network configurations).
++
++	  0 uses the default size of 1024.
++
+ endif
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index 8f3ff5088e..324a602761 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -121,4 +121,8 @@ define PROFTPD_INSTALL_INIT_SYSTEMD
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/proftpd.service
+ endef
+ 
++ifneq ($(BR2_PACKAGE_PROFTPD_BUFFER_SIZE),0)
++PROFTPD_CONF_OPTS += --enable-buffer-size=$(BR2_PACKAGE_PROFTPD_BUFFER_SIZE)
++endif
++
+ $(eval $(autotools-package))
+-- 
+2.18.0
