@@ -1,106 +1,103 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 12 Nov 2018 08:55:39 +0100
-Subject: [Buildroot] [PATCH 1/1] python-cchardet: new package
-In-Reply-To: <1541978592-13102-1-git-send-email-james.hilliard1@gmail.com>
-References: <1541978592-13102-1-git-send-email-james.hilliard1@gmail.com>
-Message-ID: <CAGm1_kvN3iLmWJ5nfSqZUP=4kS4kqTAiSYNGsFbtnXdwS7QqYA@mail.gmail.com>
+Date: Mon, 12 Nov 2018 08:58:55 +0100
+Subject: [Buildroot] [PATCH 1/2] python-pycares: new package
+In-Reply-To: <1541980940-30821-1-git-send-email-james.hilliard1@gmail.com>
+References: <1541980940-30821-1-git-send-email-james.hilliard1@gmail.com>
+Message-ID: <CAGm1_ksvo_EvP5Vts-qNWrVw9z1Vq_7WhonT-+PhLzZds+tDBQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Nov 12, 2018 at 12:24 AM <james.hilliard1@gmail.com> wrote:
+On Mon, Nov 12, 2018 at 1:02 AM <james.hilliard1@gmail.com> wrote:
 >
 > From: James Hilliard <james.hilliard1@gmail.com>
+>
+> Python interface for c-ares.
+>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+
+Hm, cffi support seems to be optional ...
 
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
->
-> cChardet is high speed universal character encoding detector.
->
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  DEVELOPERS                                   |  1 +
->  package/Config.in                            |  1 +
->  package/python-cchardet/Config.in            | 11 +++++++++++
->  package/python-cchardet/python-cchardet.hash |  5 +++++
->  package/python-cchardet/python-cchardet.mk   | 14 ++++++++++++++
->  5 files changed, 32 insertions(+)
->  create mode 100644 package/python-cchardet/Config.in
->  create mode 100644 package/python-cchardet/python-cchardet.hash
->  create mode 100644 package/python-cchardet/python-cchardet.mk
+>  DEVELOPERS                                 |  1 +
+>  package/Config.in                          |  1 +
+>  package/python-pycares/Config.in           |  6 ++++++
+>  package/python-pycares/python-pycares.hash |  5 +++++
+>  package/python-pycares/python-pycares.mk   | 14 ++++++++++++++
+>  5 files changed, 27 insertions(+)
+>  create mode 100644 package/python-pycares/Config.in
+>  create mode 100644 package/python-pycares/python-pycares.hash
+>  create mode 100644 package/python-pycares/python-pycares.mk
 >
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index 53467da..4e9f989 100644
+> index 53467da..88dcbc1 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
-> @@ -985,6 +985,7 @@ F:  configs/pine64_sopine_defconfig
->
+> @@ -986,6 +986,7 @@ F:  configs/pine64_sopine_defconfig
 >  N:     James Hilliard <james.hilliard1@gmail.com>
 >  F:     package/python-async-timeout/
-> +F:     package/python-cchardet/
 >  F:     package/python-multidict/
+> +F:     package/python-pycares/
 >  F:     package/python-yarl/
 >
+>  N:     James Knight <james.knight@rockwellcollins.com>
 > diff --git a/package/Config.in b/package/Config.in
-> index b60e770..bc94e33 100644
+> index b60e770..4d7ed65 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -813,6 +813,7 @@ menu "External python modules"
->         source "package/python-cached-property/Config.in"
->         source "package/python-can/Config.in"
->         source "package/python-cbor/Config.in"
-> +       source "package/python-cchardet/Config.in"
->         source "package/python-certifi/Config.in"
->         source "package/python-cffi/Config.in"
->         source "package/python-characteristic/Config.in"
-> diff --git a/package/python-cchardet/Config.in b/package/python-cchardet/Config.in
+> @@ -949,6 +949,7 @@ menu "External python modules"
+>         source "package/python-pyasn-modules/Config.in"
+>         source "package/python-pyasn1/Config.in"
+>         source "package/python-pyasn1-modules/Config.in"
+> +       source "package/python-pycares/Config.in"
+>         source "package/python-pycli/Config.in"
+>         source "package/python-pycparser/Config.in"
+>         source "package/python-pycrypto/Config.in"
+> diff --git a/package/python-pycares/Config.in b/package/python-pycares/Config.in
 > new file mode 100644
-> index 0000000..7415312
+> index 0000000..4144952
 > --- /dev/null
-> +++ b/package/python-cchardet/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_PYTHON_CCHARDET
-> +       bool "python-cchardet"
-> +       depends on BR2_INSTALL_LIBSTDCPP
+> +++ b/package/python-pycares/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_PYTHON_PYCARES
+> +       bool "python-pycares"
 > +       help
-> +         cChardet is high speed universal character encoding
-> +         detector.
+> +         Python interface for c-ares.
 > +
-> +         https://github.com/PyYoshi/cChardet
-> +
-> +comment "python-cchardet needs a toolchain w/ C++"
-> +       depends on !BR2_INSTALL_LIBSTDCPP
-> diff --git a/package/python-cchardet/python-cchardet.hash b/package/python-cchardet/python-cchardet.hash
+> +         http://github.com/saghul/pycares
+> diff --git a/package/python-pycares/python-pycares.hash b/package/python-pycares/python-pycares.hash
 > new file mode 100644
-> index 0000000..231804e
+> index 0000000..2e80a97
 > --- /dev/null
-> +++ b/package/python-cchardet/python-cchardet.hash
+> +++ b/package/python-pycares/python-pycares.hash
 > @@ -0,0 +1,5 @@
-> +# md5, sha256 from https://pypi.org/pypi/cchardet/json
-> +md5    17af20af67cb18e958854e273d857a88  cchardet-2.1.4.tar.gz
-> +sha256 cc9745e0400da4cfb49f075e7819f22473b66443f953427058fee2c7b9547cc0  cchardet-2.1.4.tar.gz
+> +# md5, sha256 from https://pypi.org/pypi/pycares/json
+> +md5    74893b2b380fbb45329a406ae4b1ae89  pycares-2.3.0.tar.gz
+> +sha256 36f4c03df57c41a87eb3d642201684eb5a8bc194f4bafaa9f60ee6dc0aef8e40  pycares-2.3.0.tar.gz
 > +# Locally computed sha256 checksums
-> +sha256 107a29ccdd2d778aa2df5462f85dddfa099059abd22e064e07ec2cc9bafc37cd  COPYING
-> diff --git a/package/python-cchardet/python-cchardet.mk b/package/python-cchardet/python-cchardet.mk
+> +sha256 427bb3a5372024a26e2c290b24382512bcc7ca123431c4dd178dd613beea7eee  LICENSE
+> diff --git a/package/python-pycares/python-pycares.mk b/package/python-pycares/python-pycares.mk
 > new file mode 100644
-> index 0000000..9ac170c
+> index 0000000..961c87e
 > --- /dev/null
-> +++ b/package/python-cchardet/python-cchardet.mk
+> +++ b/package/python-pycares/python-pycares.mk
 > @@ -0,0 +1,14 @@
 > +################################################################################
 > +#
-> +# python-cchardet
+> +# python-pycares
 > +#
 > +################################################################################
 > +
-> +PYTHON_CCHARDET_VERSION = 2.1.4
-> +PYTHON_CCHARDET_SOURCE = cchardet-$(PYTHON_CCHARDET_VERSION).tar.gz
-> +PYTHON_CCHARDET_SITE = https://files.pythonhosted.org/packages/74/64/3988d388315c1af3e24f447689dadf30edead43366fb2041cb103380b57f
-> +PYTHON_CCHARDET_SETUP_TYPE = setuptools
-> +PYTHON_CCHARDET_LICENSE = MPL-1.1
-> +PYTHON_CCHARDET_LICENSE_FILES = COPYING
+> +PYTHON_PYCARES_VERSION = 2.3.0
+> +PYTHON_PYCARES_SOURCE = pycares-$(PYTHON_PYCARES_VERSION).tar.gz
+> +PYTHON_PYCARES_SITE = https://files.pythonhosted.org/packages/89/5c/3a7e1a52d6abb52b9ca1a56d2df699936e89d8b98f75cfd60d03363e7c10
+> +PYTHON_PYCARES_SETUP_TYPE = setuptools
+> +PYTHON_PYCARES_LICENSE = MIT
+> +PYTHON_PYCARES_LICENSE_FILES = LICENSE
 > +
 > +$(eval $(python-package))
 > --
