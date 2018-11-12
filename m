@@ -1,48 +1,60 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 12 Nov 2018 18:33:12 +0100
-Subject: [Buildroot] [PATCH 2/6 v2] fs/tar: add support for xattrs (thus
- capabilties)
+Date: Mon, 12 Nov 2018 18:33:13 +0100
+Subject: [Buildroot] [PATCH 3/6 v2] fs: rename internal variable
 In-Reply-To: <cover.1542043922.git.yann.morin.1998@free.fr>
 References: <cover.1542043922.git.yann.morin.1998@free.fr>
-Message-ID: <0b788d4ef7c7f0d02c1a15b31a69d08de3401abe.1542043922.git.yann.morin.1998@free.fr>
+Message-ID: <1a4428b01a76f6189b154cecd1068663ee515332.1542043922.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-By default, tar will not include any extended attribute (xattr) when
-creating archives, and thus will not store capabilties either (as they
-are stored in the xattr 'security.capability').
-
-Using option --xattrs is enough to create a tarball with all the xattrs
-attached to a file. However, extracting all xattrs from a tarball
-requires that --xattrs-include='*' be used. This is not symetric (but on
-purpose, as per the documentation), and so is confusing to some.
-
-So, we use --xattrs-include='*' to create the archive, so as to be
-explicit that we want all xattrs to be stored.
+In preparation of more renames, rename the variable that points to the
+final users table.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- fs/tar/tar.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/common.mk | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/fs/tar/tar.mk b/fs/tar/tar.mk
-index 68149e9eb7..4c6327ace8 100644
---- a/fs/tar/tar.mk
-+++ b/fs/tar/tar.mk
-@@ -10,7 +10,7 @@ ROOTFS_TAR_DEPENDENCIES = $(BR2_TAR_HOST_DEPENDENCY)
+diff --git a/fs/common.mk b/fs/common.mk
+index 358801d44f..d1b6a56913 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -31,9 +31,11 @@ FS_DIR = $(BUILD_DIR)/buildroot-fs
+ FULL_DEVICE_TABLE = $(FS_DIR)/device_table.txt
+ ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE) \
+ 	$(BR2_ROOTFS_STATIC_DEVICE_TABLE))
+-USERS_TABLE = $(FS_DIR)/users_table.txt
++
+ ROOTFS_USERS_TABLES = $(call qstrip,$(BR2_ROOTFS_USERS_TABLES))
  
- define ROOTFS_TAR_CMD
- 	(cd $(TARGET_DIR); find -print0 | LC_ALL=C sort -z | \
--		tar $(TAR_OPTS) -cf $@ --null --no-recursion -T - --numeric-owner)
-+		tar $(TAR_OPTS) -cf $@ --null --xattrs-include='*' --no-recursion -T - --numeric-owner)
- endef
++ROOTFS_FINAL_USERS_TABLE = $(FS_DIR)/full_users_table.txt
++
+ ifeq ($(BR2_REPRODUCIBLE),y)
+ define ROOTFS_REPRODUCIBLE
+ 	find $(TARGET_DIR) -print0 | xargs -0 -r touch -hd @$(SOURCE_DATE_EPOCH)
+@@ -51,9 +53,9 @@ rootfs-common: $(ROOTFS_COMMON_DEPENDENCIES) target-finalize
+ 	rm -rf $(FS_DIR)
+ 	mkdir -p $(FS_DIR)
  
- $(eval $(rootfs))
+-	$(call PRINTF,$(PACKAGES_USERS)) >> $(USERS_TABLE)
++	$(call PRINTF,$(PACKAGES_USERS)) >> $(ROOTFS_FINAL_USERS_TABLE)
+ ifneq ($(ROOTFS_USERS_TABLES),)
+-	cat $(ROOTFS_USERS_TABLES) >> $(USERS_TABLE)
++	cat $(ROOTFS_USERS_TABLES) >> $(ROOTFS_FINAL_USERS_TABLE)
+ endif
+ ifneq ($(ROOTFS_DEVICE_TABLES),)
+ 	cat $(ROOTFS_DEVICE_TABLES) > $(FULL_DEVICE_TABLE)
+@@ -119,7 +121,7 @@ $$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
+ 	echo "set -e" >> $$(FAKEROOT_SCRIPT)
+ 
+ 	echo "chown -h -R 0:0 $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+-	PATH=$$(BR_PATH) $$(TOPDIR)/support/scripts/mkusers $$(USERS_TABLE) $$(TARGET_DIR) >> $$(FAKEROOT_SCRIPT)
++	PATH=$$(BR_PATH) $$(TOPDIR)/support/scripts/mkusers $$(ROOTFS_FINAL_USERS_TABLE) $$(TARGET_DIR) >> $$(FAKEROOT_SCRIPT)
+ 	echo "$$(HOST_DIR)/bin/makedevs -d $$(FULL_DEVICE_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+ 	$$(foreach s,$$(call qstrip,$$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
+ 		echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
 -- 
 2.14.1
