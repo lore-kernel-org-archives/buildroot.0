@@ -1,109 +1,44 @@
-From: Ezequiel Garcia <ezequiel@collabora.com>
-Date: Mon, 12 Nov 2018 15:19:28 -0300
-Subject: [Buildroot] [PATCH] ci20: Fix U-Boot build with codesourcery
- toolchain
-Message-ID: <20181112181928.26634-1-ezequiel@collabora.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 12 Nov 2018 19:41:13 +0100
+Subject: [Buildroot] [PATCH v1] valgrind: fix mips64 compile
+In-Reply-To: <20181109115556.424971fe@windsurf>
+References: <20181108230814.4773-1-ps.report@gmx.net>
+ <20181109115556.424971fe@windsurf>
+Message-ID: <20181112194113.2802404d@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, U-Boot is failing to build, due to some issues
-with the toolchain and the U-Boot port.
+Hello Thomas,
 
-Fix it.
+On Fri, 9 Nov 2018 11:55:56 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
----
- .../0001-mips-Remove-default-endiannes.patch  | 66 +++++++++++++++++++
- configs/ci20_defconfig                        |  1 +
- 2 files changed, 67 insertions(+)
- create mode 100644 board/ci20/patches/uboot/0001-mips-Remove-default-endiannes.patch
+> Hello,
+> 
+> On Fri,  9 Nov 2018 00:08:14 +0100, Peter Seiderer wrote:
+> > Disable gcc march mips64r2 detection (use compile flags already
+> > set by buildroot only), avoids double setting like '-march=mips64
+> > ... -march=mips64r2 -mabi=64'.
+> > 
+> > Fixes [1]:
+> > 
+> >   error: '-mips64r2' conflicts with the other architecture options, which specify a mips64 processor
+> > 
+> > [1] http://autobuild.buildroot.net/results/34f6e2352f1559f98c724fe5394db0035b42ddb1
+> > 
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>  
+> 
+> Thanks for this patch. Could we find something acceptable upstream? Why
+> is valgrind configure script enforcing those CFLAGS ?
 
-diff --git a/board/ci20/patches/uboot/0001-mips-Remove-default-endiannes.patch b/board/ci20/patches/uboot/0001-mips-Remove-default-endiannes.patch
-new file mode 100644
-index 000000000000..a6191804f1e3
---- /dev/null
-+++ b/board/ci20/patches/uboot/0001-mips-Remove-default-endiannes.patch
-@@ -0,0 +1,66 @@
-+From b3a1e97498e7987073775d49a703932c20f2df1d Mon Sep 17 00:00:00 2001
-+From: Ezequiel Garcia <ezequiel@collabora.com>
-+Date: Mon, 12 Nov 2018 14:04:46 -0300
-+Subject: [PATCH] mips: Remove default endiannes
-+
-+Currently, trying to build ci20_mmc fails on little-endian
-+toolchains. The problem seems to be that some targets don't
-+have CONFIG_SYS_LITTLE_ENDIAN properly set, and therefore
-+the default -EB switch is selected.
-+
-+Let's get rid of the default switch entirely, and fix this problem.
-+While this may be a hack, it is a quick solution until
-+U-Boot gets CI20 proper support.
-+
-+make ARCH=mips CROSS_COMPILE=mips-linux-gnu- ci20_mmc
-+Configuring for ci20_mmc - Board: ci20, Options: SPL_MMC_SUPPORT,ENV_IS_IN_MMC
-+make
-+make[1]: Entering directory '/home/zeta/repos/u-boot-ci20'
-+Generating include/autoconf.mk
-+Generating include/autoconf.mk.dep
-+mips-linux-gnu-gcc: error: may not use both -EB and -EL
-+mips-linux-gnu-gcc: error: may not use both -EB and -EL
-+Generating include/spl-autoconf.mk
-+mips-linux-gnu-gcc: error: may not use both -EB and -EL
-+Generating include/tpl-autoconf.mk
-+mips-linux-gnu-gcc: error: may not use both -EB and -EL
-+mips-linux-gnu-gcc -DDO_DEPS_ONLY \
-+	-g  -Os   -ffunction-sections -fdata-sections -D__KERNEL__ -I/home/zeta/repos/u-boot-ci20/include -fno-builtin -ffreestanding -nostdinc -isystem /home/zeta/repos/buildroot/mips/output/host/opt/ext-toolchain/bin/../lib/gcc/mips-linux-gnu/5.3.0/include -pipe  -DCONFIG_MIPS -D__MIPS__ -G 0 -EB -msoft-float -fpic -mabicalls -march=mips32 -mabi=32 -DCONFIG_32BIT -mno-branch-likely -Wall -Wstrict-prototypes       \
-+	-o lib/asm-offsets.s lib/asm-offsets.c -c -S
-+if [ -f arch/mips/cpu/xburst/jz4780/asm-offsets.c ];then \
-+	mips-linux-gnu-gcc -DDO_DEPS_ONLY \
-+	-g  -Os   -ffunction-sections -fdata-sections -D__KERNEL__ -I/home/zeta/repos/u-boot-ci20/include -fno-builtin -ffreestanding -nostdinc -isystem /home/zeta/repos/buildroot/mips/output/host/opt/ext-toolchain/bin/../lib/gcc/mips-linux-gnu/5.3.0/include -pipe  -DCONFIG_MIPS -D__MIPS__ -G 0 -EB -msoft-float -fpic -mabicalls -march=mips32 -mabi=32 -DCONFIG_32BIT -mno-branch-likely -Wall -Wstrict-prototypes       \
-+		-o arch/mips/cpu/xburst/jz4780/asm-offsets.s arch/mips/cpu/xburst/jz4780/asm-offsets.c -c -S; \
-+else \
-+	touch arch/mips/cpu/xburst/jz4780/asm-offsets.s; \
-+fi
-+mips-linux-gnu-gcc: error: may not use both -EB and -EL
-+make[1]: *** [Makefile:747: lib/asm-offsets.s] Error 1
-+make[1]: *** Waiting for unfinished jobs....
-+make[1]: Leaving directory '/home/zeta/repos/u-boot-ci20'
-+make: *** [.boards.depend:463: ci20_mmc] Error 2
-+
-+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-+---
-+https://github.com/MIPS/CI20_u-boot/pull/19
-+
-+ arch/mips/config.mk | 3 ---
-+ 1 file changed, 3 deletions(-)
-+
-+diff --git a/arch/mips/config.mk b/arch/mips/config.mk
-+index c89279025507..43560abbc0e1 100644
-+--- a/arch/mips/config.mk
-++++ b/arch/mips/config.mk
-+@@ -20,9 +20,6 @@ ifdef CONFIG_SYS_BIG_ENDIAN
-+ ENDIANNESS := -EB
-+ endif
-+ 
-+-# Default to EB if no endianess is configured
-+-ENDIANNESS ?= -EB
-+-
-+ PLATFORM_CPPFLAGS += -DCONFIG_MIPS -D__MIPS__
-+ 
-+ #
-+-- 
-+2.19.1
-+
-diff --git a/configs/ci20_defconfig b/configs/ci20_defconfig
-index 6e860b1e7e19..8f2604b07c8e 100644
---- a/configs/ci20_defconfig
-+++ b/configs/ci20_defconfig
-@@ -27,6 +27,7 @@ BR2_TARGET_UBOOT_BOARDNAME="ci20_mmc"
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/MIPS/CI20_u-boot"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa"
-+BR2_TARGET_UBOOT_PATCH="board/ci20/patches/uboot"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.bin"
--- 
-2.19.1
+Suggested upstream, see:
+
+https://bugs.kde.org/show_bug.cgi?id=400975
+
+Regards,
+Peter
+
+> 
+> Thomas
