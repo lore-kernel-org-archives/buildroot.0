@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 12 Nov 2018 23:30:36 +0100
-Subject: [Buildroot] [PATCH 0/6 v2] fs: fix and better handle
- capabilities
-In-Reply-To: <cover.1542043922.git.yann.morin.1998@free.fr>
+Date: Mon, 12 Nov 2018 23:38:16 +0100
+Subject: [Buildroot] [PATCH 3/6 v2] fs: rename internal variable
+In-Reply-To: <1a4428b01a76f6189b154cecd1068663ee515332.1542043922.git.yann.morin.1998@free.fr>
 References: <cover.1542043922.git.yann.morin.1998@free.fr>
-Message-ID: <7cb8d7d2-de00-a35e-4407-3312f785dd85@mind.be>
+ <1a4428b01a76f6189b154cecd1068663ee515332.1542043922.git.yann.morin.1998@free.fr>
+Message-ID: <83baff45-7514-c5bc-0008-0b31981e208b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,76 +13,61 @@ To: buildroot@busybox.net
 
 
 
-On 12/11/2018 18:32, Yann E. MORIN wrote:
-> Hello All!
+On 12/11/2018 18:33, Yann E. MORIN wrote:
+> In preparation of more renames, rename the variable that points to the
+> final users table.
 > 
-> As reported by Ricardo in #11216, and recently noticed thanks to the
-> runtime tests he added, handling file capabilities is broken.
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  fs/common.mk | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
 > 
-> Ricardo did a very good job at pinpointing the issue, and that is caused
-> by the recent-ish split of the filesystem infra with the use of the
-> intermediate tarball.
-> 
-> It turns out that playing with fakeroot, tar, and capabilities is a lost
-> game, as fakeroot behaves badly with the special handling tar does with
-> the security.capability extended attribute.
-> 
-> This series fixes the issue with the first patch, in which we simply get
-> rid of the intermediate tarball, and directly rsync from the global
-> target/ directory to populate the per-filesystem target directory. This
-> means that any common fincalisation under fakaeroot is no longer
-> possible, so they have to be replicated for each filesystem instead.
-> 
-> The only remaining common part is now the generation of the various
-> tables: devices, permisions and users.
+> diff --git a/fs/common.mk b/fs/common.mk
+> index 358801d44f..d1b6a56913 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -31,9 +31,11 @@ FS_DIR = $(BUILD_DIR)/buildroot-fs
+>  FULL_DEVICE_TABLE = $(FS_DIR)/device_table.txt
+>  ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE) \
+>  	$(BR2_ROOTFS_STATIC_DEVICE_TABLE))
+> -USERS_TABLE = $(FS_DIR)/users_table.txt
+> +
+>  ROOTFS_USERS_TABLES = $(call qstrip,$(BR2_ROOTFS_USERS_TABLES))
+>  
+> +ROOTFS_FINAL_USERS_TABLE = $(FS_DIR)/full_users_table.txt
 
- Just to be clear: this is the only patch for master, right? The rest is for next?
+ Nitpicking: make sure the file name is the same as the variable name. Either
+name is OK for me, with a light preference for full rather than final.
 
-> 
-> Then, the tar filesystem is fixed to store the xattrs.
-
- Like this one, tar has never contained xattrs, right?
+ With that:
+  Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
 
-> 
-> Then there are tow clean-up patches, which pave the way to two fixes.
-> 
-> First, we allow permissions provided by users to override the internal
-> permissions, as we do for all user-provided settings. Second, we fix the
-> static device creation conditions.
-> 
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> 
-> The following changes since commit cd0ca09e43be8bd87fa35c96fa099a338b85de36
-> 
->   {linux, linux-headers}: bump 4.{4, 9, 14, 18}.x series (2018-11-11 22:11:04 +0100)
-> 
-> 
-> are available in the git repository at:
-> 
->   git://git.buildroot.org/~ymorin/git/buildroot.git
-> 
-> for you to fetch changes up to ae80646fbb9d0e7f40434b16ebe5173ee3a4654c
-> 
->   fs: make static device nodes creation more logical (2018-11-12 18:28:28 +0100)
-> 
-> 
-> ----------------------------------------------------------------
-> Yann E. MORIN (6):
->       fs: get over the intermediate tarball
->       fs/tar: add support for xattrs (thus capabilties)
->       fs: rename internal variable
->       fs: split devices and permissions tables
->       fs: allow user provided permissions to override packages permissions
->       fs: make static device nodes creation more logical
-> 
->  fs/common.mk                                    | 92 +++++++++++--------------
->  fs/tar/tar.mk                                   |  2 +-
->  support/testing/tests/core/test_post_scripts.py |  4 +-
->  3 files changed, 44 insertions(+), 54 deletions(-)
+> +
+>  ifeq ($(BR2_REPRODUCIBLE),y)
+>  define ROOTFS_REPRODUCIBLE
+>  	find $(TARGET_DIR) -print0 | xargs -0 -r touch -hd @$(SOURCE_DATE_EPOCH)
+> @@ -51,9 +53,9 @@ rootfs-common: $(ROOTFS_COMMON_DEPENDENCIES) target-finalize
+>  	rm -rf $(FS_DIR)
+>  	mkdir -p $(FS_DIR)
+>  
+> -	$(call PRINTF,$(PACKAGES_USERS)) >> $(USERS_TABLE)
+> +	$(call PRINTF,$(PACKAGES_USERS)) >> $(ROOTFS_FINAL_USERS_TABLE)
+>  ifneq ($(ROOTFS_USERS_TABLES),)
+> -	cat $(ROOTFS_USERS_TABLES) >> $(USERS_TABLE)
+> +	cat $(ROOTFS_USERS_TABLES) >> $(ROOTFS_FINAL_USERS_TABLE)
+>  endif
+>  ifneq ($(ROOTFS_DEVICE_TABLES),)
+>  	cat $(ROOTFS_DEVICE_TABLES) > $(FULL_DEVICE_TABLE)
+> @@ -119,7 +121,7 @@ $$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
+>  	echo "set -e" >> $$(FAKEROOT_SCRIPT)
+>  
+>  	echo "chown -h -R 0:0 $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+> -	PATH=$$(BR_PATH) $$(TOPDIR)/support/scripts/mkusers $$(USERS_TABLE) $$(TARGET_DIR) >> $$(FAKEROOT_SCRIPT)
+> +	PATH=$$(BR_PATH) $$(TOPDIR)/support/scripts/mkusers $$(ROOTFS_FINAL_USERS_TABLE) $$(TARGET_DIR) >> $$(FAKEROOT_SCRIPT)
+>  	echo "$$(HOST_DIR)/bin/makedevs -d $$(FULL_DEVICE_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+>  	$$(foreach s,$$(call qstrip,$$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
+>  		echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
 > 
