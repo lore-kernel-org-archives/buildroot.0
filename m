@@ -1,75 +1,88 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 12 Nov 2018 08:42:29 -0600
-Subject: [Buildroot] [PATCH] libsemanage: define installation location
- of semanage.conf for host
-In-Reply-To: <20181109215730.30795-1-thomas.petazzoni@bootlin.com>
-References: <20181109215730.30795-1-thomas.petazzoni@bootlin.com>
-Message-ID: <CANQCQpa5Nf1WBvX5dNo9_kxBHK5fps0nKzjv2KZEF=OTrUMKiA@mail.gmail.com>
+From: Jared Bents <jared.bents@rockwellcollins.com>
+Date: Mon, 12 Nov 2018 08:52:27 -0600
+Subject: [Buildroot] [PATCH v1 2/2] package/proftpd: add sendfile
+In-Reply-To: <da5a6b9b-cac6-c39c-2123-9fa7700371c6@mind.be>
+References: <20181109193503.7984-1-jared.bents@rockwellcollins.com>
+ <20181109193503.7984-2-jared.bents@rockwellcollins.com>
+ <da5a6b9b-cac6-c39c-2123-9fa7700371c6@mind.be>
+Message-ID: <CAM=7fbdLe5M4cozQp3XvnOkgJ1hYiZ5o7wL08Unh7pG52kgH1g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hi Arnout,
 
+On Fri, Nov 9, 2018 at 2:44 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 09/11/2018 20:35, Jared Bents wrote:
+> > Enables sendfile as a compile time option
+> >
+> > Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+> > ---
+> >  package/proftpd/Config.in  | 6 ++++++
+> >  package/proftpd/proftpd.mk | 4 ++++
+> >  2 files changed, 10 insertions(+)
+> >
+> > diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
+> > index 51c795501e..ab3f0d3bf3 100644
+> > --- a/package/proftpd/Config.in
+> > +++ b/package/proftpd/Config.in
+> > @@ -73,4 +73,10 @@ config BR2_PACKAGE_PROFTPD_BUFFER_SIZE
+> >         Compile ProFTPD with tunable buffer size. Size in
+> >         bytes. 0 uses default size.
+> >
+> > +config BR2_PACKAGE_PROFTPD_SENDFILE
+> > +     bool "sendfile support"
+> > +     help
+> > +       Compile ProFTPD with sendfile. Sendfile implements
+> > +       zero-copy transfers.
+>
+>  Is there any reason to make this optional? sendfile has been supported in Linux
+> for ages. And anyway, the configure script checks that.
 
-On Fri, Nov 9, 2018 at 3:57 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> When /etc/selinux/semanage.conf does not exist, libsemanage tries to
-> overwrite it. For the target package, it works fine because $(DESTDIR)
-> is taken into account.
->
-> However, for the host package, $(DESTDIR) is empty, and the location
-> used for /etc/selinux/semanage.conf is not affected by $(PREFIX). This
-> causes host-libsemanage to try to install /etc/selinux/semanage.conf,
-> which obviously fails with:
->
->   test -f /etc/selinux/semanage.conf || install -m 644 -D semanage.conf /etc/selinux/semanage.conf
->   install: cannot create directory '/etc/selinux': Permission denied
->
-> To fix this, this commit passes DEFAULT_SEMANAGE_CONF_LOCATION in the
-> make options when building/installing host-libsemanage, providing a
-> path to semanage.conf that Buildroot can write to.
->
-> Fixes:
->
->   http://autobuild.buildroot.net/results/cd27e3c66274622d0c3dd5a601a36efb1bc45011/
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+I will update to include it in the default PROFTPD_CONF_OPTS and
+remove the option.
 
-Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
-
-> ---
->  package/libsemanage/libsemanage.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
 >
-> diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
-> index d554a33356..bbde50f49f 100644
-> --- a/package/libsemanage/libsemanage.mk
-> +++ b/package/libsemanage/libsemanage.mk
-> @@ -31,7 +31,8 @@ HOST_LIBSEMANAGE_DEPENDENCIES = host-bison host-audit host-libsepol host-libseli
->  HOST_LIBSEMANAGE_MAKE_OPTS += \
->         $(HOST_CONFIGURE_OPTS) \
->         PREFIX=$(HOST_DIR) \
-> -       SWIG_LIB="$(HOST_DIR)/share/swig/$(SWIG_VERSION)/"
-> +       SWIG_LIB="$(HOST_DIR)/share/swig/$(SWIG_VERSION)/" \
-> +       DEFAULT_SEMANAGE_CONF_LOCATION=$(HOST_DIR)/etc/selinux/semanage.conf
+> > +
+> >  endif
+> > diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+> > index 5ff0bc17e5..45bc13eafa 100644
+> > --- a/package/proftpd/proftpd.mk
+> > +++ b/package/proftpd/proftpd.mk
+> > @@ -125,4 +125,8 @@ ifneq ($(BR2_PACKAGE_PROFTPD_BUFFER_SIZE),0)
+> >  PROFTPD_CONF_OPTS += --enable-tunable-buffer-size=$(BR2_PACKAGE_PROFTPD_BUFFER_SIZE)
+> >  endif
+> >
+> > +ifeq ($(BR2_PACKAGE_PROFTPD_SENDFILE),y)
+> > +PROFTPD_CONF_OPTS += --enable-sendfile
 >
->  ifeq ($(BR2_PACKAGE_PYTHON3),y)
->  HOST_LIBSEMANAGE_DEPENDENCIES += host-python3
-> --
-> 2.14.5
+>  If we indeed keep it optional, you should also add an explicit disable:
 >
+> else
+> PROFTPD_CONF_OPTS += --disable-sendfile
+>
+>
+>  I have marked your patch as Changes Requested in patchwork, so unless you
+> resend it (with the fixes mentioned above), we will forget about it.
+>
+>  Thank you!
+>
+>  Regards,
+>  Arnout
+>
+>
+>  Regards,
+>  Arnout
+>
+> > +endif
+> > +
+> >  $(eval $(autotools-package))
+> >
 
-
---
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / RC Linux Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+Thank you,
+Jared
