@@ -1,99 +1,109 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 12 Nov 2018 18:44:58 +0100
-Subject: [Buildroot] [PATCH 1/2] fs: Add common rootfs dependencies to
- PACKAGES
-In-Reply-To: <aedf0524-07eb-5e4d-8309-a97eea515058@mind.be>
-References: <20181108130417.1277-1-anaumann@ultratronik.de>
- <20181108130417.1277-2-anaumann@ultratronik.de>
- <f91c9608-9c78-222a-fc88-232e7a4b639a@mind.be>
- <7c555849-2594-6776-4a40-2a4e416ab914@andin.de>
- <20181112164610.GE10271@scaer>
- <aedf0524-07eb-5e4d-8309-a97eea515058@mind.be>
-Message-ID: <20181112174458.GF10271@scaer>
+From: Ezequiel Garcia <ezequiel@collabora.com>
+Date: Mon, 12 Nov 2018 15:19:28 -0300
+Subject: [Buildroot] [PATCH] ci20: Fix U-Boot build with codesourcery
+ toolchain
+Message-ID: <20181112181928.26634-1-ezequiel@collabora.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Currently, U-Boot is failing to build, due to some issues
+with the toolchain and the U-Boot port.
 
-On 2018-11-12 18:32 +0100, Arnout Vandecappelle spake thusly:
-> On 12/11/2018 17:46, Yann E. MORIN wrote:
-> > Andreas, All,
-> > 
-> > On 2018-11-12 13:53 +0100, Andreas Naumann spake thusly:
-> >> Am 09.11.18 um 23:11 schrieb Arnout Vandecappelle:
-> >>> On 08/11/2018 14:04, Andreas Naumann wrote:
-> >> ...
-> >>>> +PACKAGES += $(ROOTFS_COMMON_DEPENDENCIES)
-> >>>
-> >>>  I don't really like this, for the simple reason that it will enable the
-> >>> dependencies even if they are not needed because we're not building any rootfs.
-> >>
-> >> good point, I dont like that either. I'd propose to change/move the patch
-> >> into something like
-> >>   PACKAGES += $$(filter-out $$(PACKAGES),$$(ROOTFS_COMMON_DEPENDENCIES))
-> >> inside the rootfs-conditional clause at the bottom of fs/common.mk. Actually
-> >> I'm not sure the filter-out stuff is really needed since duplicate targets
-> >> may accumulate in PACKAGES anyway.
-> > 
-> > Yes, that would be OK to moce them to the per-filesystem macro, but we
-> > already have:
-> > 
-> >     ROOTFS_$(2)_DEPENDENCIES += rootfs-common
-> > 
-> > So maybe just do:
-> > 
-> >     ROOTFS_$(2)_DEPENDENCIES += \
-> >         rootfs-common \
-> >         $$(ROOTFS_COMMON_DEPENDENCIES)
-> 
->  It's about adding to PACKAGES, not _DEPENDENCIES.
+Fix it.
 
-Yeah, but _DEPENDENCIES are added to PACKAGES.
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+---
+ .../0001-mips-Remove-default-endiannes.patch  | 66 +++++++++++++++++++
+ configs/ci20_defconfig                        |  1 +
+ 2 files changed, 67 insertions(+)
+ create mode 100644 board/ci20/patches/uboot/0001-mips-Remove-default-endiannes.patch
 
-And I think with the series I just posted [0]. there is no reason to
-have dependencies in the common step anymore, since there are now only
-calls to 'cat' and 'printf' in there. So it makes sense to make those
-dependencies, dependencies of each individual filesystem now.
-
-Regards,
-Yann E. MORIN.
-
-> > 
-> > Regards,
-> > Yann E. MORIN.
-> > 
-> >>>
-> >>>  It's a small thing though, and working around it is a lot more complicated (you
-> >>> could e.g. select a new Config.in symbol that is selected by all the rootfses).
-> >>> And when we ever get the Config.in.host for all host packages, it's solved
-> >>> already. So
-> >>>
-> >>> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> >>>
-> >>>  Regards,
-> >>>  Arnout
-> >>>
-> >>>>  $(ROOTFS_COMMON_TAR): ROOTFS=COMMON
-> >>>>  $(ROOTFS_COMMON_TAR): FAKEROOT_SCRIPT=$(FS_DIR)/fakeroot.fs
-> >>>>
-> >>> _______________________________________________
-> >>> buildroot mailing list
-> >>> buildroot at busybox.net
-> >>> http://lists.busybox.net/mailman/listinfo/buildroot
-> >>>
-> >> _______________________________________________
-> >> buildroot mailing list
-> >> buildroot at busybox.net
-> >> http://lists.busybox.net/mailman/listinfo/buildroot
-> > 
-
+diff --git a/board/ci20/patches/uboot/0001-mips-Remove-default-endiannes.patch b/board/ci20/patches/uboot/0001-mips-Remove-default-endiannes.patch
+new file mode 100644
+index 000000000000..a6191804f1e3
+--- /dev/null
++++ b/board/ci20/patches/uboot/0001-mips-Remove-default-endiannes.patch
+@@ -0,0 +1,66 @@
++From b3a1e97498e7987073775d49a703932c20f2df1d Mon Sep 17 00:00:00 2001
++From: Ezequiel Garcia <ezequiel@collabora.com>
++Date: Mon, 12 Nov 2018 14:04:46 -0300
++Subject: [PATCH] mips: Remove default endiannes
++
++Currently, trying to build ci20_mmc fails on little-endian
++toolchains. The problem seems to be that some targets don't
++have CONFIG_SYS_LITTLE_ENDIAN properly set, and therefore
++the default -EB switch is selected.
++
++Let's get rid of the default switch entirely, and fix this problem.
++While this may be a hack, it is a quick solution until
++U-Boot gets CI20 proper support.
++
++make ARCH=mips CROSS_COMPILE=mips-linux-gnu- ci20_mmc
++Configuring for ci20_mmc - Board: ci20, Options: SPL_MMC_SUPPORT,ENV_IS_IN_MMC
++make
++make[1]: Entering directory '/home/zeta/repos/u-boot-ci20'
++Generating include/autoconf.mk
++Generating include/autoconf.mk.dep
++mips-linux-gnu-gcc: error: may not use both -EB and -EL
++mips-linux-gnu-gcc: error: may not use both -EB and -EL
++Generating include/spl-autoconf.mk
++mips-linux-gnu-gcc: error: may not use both -EB and -EL
++Generating include/tpl-autoconf.mk
++mips-linux-gnu-gcc: error: may not use both -EB and -EL
++mips-linux-gnu-gcc -DDO_DEPS_ONLY \
++	-g  -Os   -ffunction-sections -fdata-sections -D__KERNEL__ -I/home/zeta/repos/u-boot-ci20/include -fno-builtin -ffreestanding -nostdinc -isystem /home/zeta/repos/buildroot/mips/output/host/opt/ext-toolchain/bin/../lib/gcc/mips-linux-gnu/5.3.0/include -pipe  -DCONFIG_MIPS -D__MIPS__ -G 0 -EB -msoft-float -fpic -mabicalls -march=mips32 -mabi=32 -DCONFIG_32BIT -mno-branch-likely -Wall -Wstrict-prototypes       \
++	-o lib/asm-offsets.s lib/asm-offsets.c -c -S
++if [ -f arch/mips/cpu/xburst/jz4780/asm-offsets.c ];then \
++	mips-linux-gnu-gcc -DDO_DEPS_ONLY \
++	-g  -Os   -ffunction-sections -fdata-sections -D__KERNEL__ -I/home/zeta/repos/u-boot-ci20/include -fno-builtin -ffreestanding -nostdinc -isystem /home/zeta/repos/buildroot/mips/output/host/opt/ext-toolchain/bin/../lib/gcc/mips-linux-gnu/5.3.0/include -pipe  -DCONFIG_MIPS -D__MIPS__ -G 0 -EB -msoft-float -fpic -mabicalls -march=mips32 -mabi=32 -DCONFIG_32BIT -mno-branch-likely -Wall -Wstrict-prototypes       \
++		-o arch/mips/cpu/xburst/jz4780/asm-offsets.s arch/mips/cpu/xburst/jz4780/asm-offsets.c -c -S; \
++else \
++	touch arch/mips/cpu/xburst/jz4780/asm-offsets.s; \
++fi
++mips-linux-gnu-gcc: error: may not use both -EB and -EL
++make[1]: *** [Makefile:747: lib/asm-offsets.s] Error 1
++make[1]: *** Waiting for unfinished jobs....
++make[1]: Leaving directory '/home/zeta/repos/u-boot-ci20'
++make: *** [.boards.depend:463: ci20_mmc] Error 2
++
++Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
++---
++https://github.com/MIPS/CI20_u-boot/pull/19
++
++ arch/mips/config.mk | 3 ---
++ 1 file changed, 3 deletions(-)
++
++diff --git a/arch/mips/config.mk b/arch/mips/config.mk
++index c89279025507..43560abbc0e1 100644
++--- a/arch/mips/config.mk
+++++ b/arch/mips/config.mk
++@@ -20,9 +20,6 @@ ifdef CONFIG_SYS_BIG_ENDIAN
++ ENDIANNESS := -EB
++ endif
++ 
++-# Default to EB if no endianess is configured
++-ENDIANNESS ?= -EB
++-
++ PLATFORM_CPPFLAGS += -DCONFIG_MIPS -D__MIPS__
++ 
++ #
++-- 
++2.19.1
++
+diff --git a/configs/ci20_defconfig b/configs/ci20_defconfig
+index 6e860b1e7e19..8f2604b07c8e 100644
+--- a/configs/ci20_defconfig
++++ b/configs/ci20_defconfig
+@@ -27,6 +27,7 @@ BR2_TARGET_UBOOT_BOARDNAME="ci20_mmc"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/MIPS/CI20_u-boot"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa"
++BR2_TARGET_UBOOT_PATCH="board/ci20/patches/uboot"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.bin"
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.19.1
