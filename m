@@ -1,31 +1,44 @@
-From: Patrick Doyle <wpdster@gmail.com>
-Date: Tue, 13 Nov 2018 13:19:46 -0500
-Subject: [Buildroot] Weird OOM problem
-In-Reply-To: <CAF_dkJDX+XuGWcxahLLr4wCAgg9r6PdUrUC-+oPEVuXgAPyMHQ@mail.gmail.com>
-References: <CAF_dkJDX+XuGWcxahLLr4wCAgg9r6PdUrUC-+oPEVuXgAPyMHQ@mail.gmail.com>
-Message-ID: <CAF_dkJBK3V8DViM05GcCuLoc2sJ+ZKjNDD5NgdVxOxXpupgdEA@mail.gmail.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Tue, 13 Nov 2018 19:26:29 +0100
+Subject: [Buildroot] [PATCH v3 2/3] test-pkg: Use the correct config
+ prefix when merging
+In-Reply-To: <20181113134404.32235-3-afshin.nasser@gmail.com>
+References: <20181105083554.GC4485@x230>
+ <20181113134404.32235-1-afshin.nasser@gmail.com>
+ <20181113134404.32235-3-afshin.nasser@gmail.com>
+Message-ID: <20181113182628.GA16657@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Closing the loop on this in case anybody else runs into a similar
-problem someday (and doesn't want to spend 6 days trying to figure out
-what is going on).
+Hi Nasser,
 
-My kernel was configured with FORCE_MAX_ZONEORDER=15, which, as I
-understand things, means that the kernel would attempt (be required?)
-to keep blocks of 16K (2^14) pages available to be allocated in
-contiguous chunks.  With 128M of RAM, I only have 32K physical pages
-of memory available.  Apparently when the contents of my tmpfs grew
-beyond 32M (8K pages), the kernel decided it needed to do some
-housekeeping in order to ensure that it could provide a 16Kpage chunk
-of memory, should anybody ask for one.  That led to the OOM killer.
+> From: Nasser Afshin <Afshin.Nasser@gmail.com>
 
-That's my explanation and I'm sticking to it... until somebody
-educates me as to the real cause of my problem.  All I know is that
-when I changed FORCE_MAX_ZONEORDER back to its default value of 11, I
-could use more space in my tmpfs and all was good again.
+> We should use an empty prefix as we do not have any prefix.
+> Note that BR2_ is mere a convention.
 
---wpd
+> Signed-off-by: Nasser Afshin <Afshin.Nasser@gmail.com>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+> ---
+>  utils/test-pkg | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+> diff --git a/utils/test-pkg b/utils/test-pkg
+> index aa91ee02cf..7bf1c97fba 100755
+> --- a/utils/test-pkg
+> +++ b/utils/test-pkg
+> @@ -129,7 +129,7 @@ build_one() {
+
+>      mkdir -p "${dir}"
+
+> -    support/kconfig/merge_config.sh -O "${dir}" \
+> +    CONFIG_="" support/kconfig/merge_config.sh -O "${dir}" \
+Please, can you omit "" (not needed):
+CONFIG_= support/kconfig/merge_config.sh -O "${dir}" \
+
+
+Kind regards,
+Petr
