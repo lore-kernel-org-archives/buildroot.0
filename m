@@ -1,58 +1,98 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Nov 2018 22:42:35 +0100
-Subject: [Buildroot] [PATCH/next 1/2] ncmpc: bump to version 0.33
-In-Reply-To: <20181111205831.8213-1-fontaine.fabrice@gmail.com>
-References: <20181111205831.8213-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181113224235.4bc0bf9a@windsurf>
+Date: Tue, 13 Nov 2018 22:44:02 +0100
+Subject: [Buildroot] [git commit branch/next] python-cchardet: new package
+Message-ID: <20181113214324.2E7FB82B49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=3db2ed427138ff0e20aebcac3f40e5b90a749d08
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Thanks for this version bump!
+cChardet is high speed universal character encoding detector.
 
-On Sun, 11 Nov 2018 21:58:30 +0100, Fabrice Fontaine wrote:
-> - Remove second patch (already in version)
-> - Replace true/false by enabled/disabled, see:
->   https://github.com/MusicPlayerDaemon/ncmpc/commit/67d96543e64ec2eff2d3e9907c570ca09918c893
-> - Add new boost system dependency:
->   https://github.com/MusicPlayerDaemon/ncmpc/commit/74cc24bdfcfd0ba288b78f0fb75f409832d7586d
->   https://github.com/MusicPlayerDaemon/ncmpc/commit/bef9017712da31b750799e6c7fb9d2829fa5e69c
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/python-cchardet/Config.in            | 11 +++++++++++
+ package/python-cchardet/python-cchardet.hash |  5 +++++
+ package/python-cchardet/python-cchardet.mk   | 14 ++++++++++++++
+ 5 files changed, 32 insertions(+)
 
-If you need the boost system module, shouldn't you:
-
-	select BR2_PACKAGE_BOOST_SYSTEM
-
-> - Remove glib dependency:
->   https://github.com/MusicPlayerDaemon/ncmpc/commit/dfcb3ab0216d6c9ae35d06060cee806bd919c2ba
-> - Disable new regex option (based on pcre)
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Also, this patch doesn't apply cleanly here:
-
-thomas at windsurf:~/projets/buildroot (next)$ git pwam 996189
-Applying patch #996189 using "git am -s"
-Description: [PATCH/next,1/2] ncmpc: bump to version 0.33
-Applying: ncmpc: bump to version 0.33
-error: patch failed: package/ncmpc/Config.in:2
-error: package/ncmpc/Config.in: patch does not apply
-error: patch failed: package/ncmpc/ncmpc.mk:5
-error: package/ncmpc/ncmpc.mk: patch does not apply
-Patch failed at 0001 ncmpc: bump to version 0.33
-hint: Use 'git am --show-current-patch' to see the failed patch
-When you have resolved this problem, run "git am --continue".
-If you prefer to skip this patch, run "git am --skip" instead.
-To restore the original branch and stop patching, run "git am --abort".
-'git am' failed with exit status 128
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 53505314d7..85621fcc97 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -986,6 +986,7 @@ F:	configs/pine64_sopine_defconfig
+ N:	James Hilliard <james.hilliard1@gmail.com>
+ F:	package/python-aiodns/
+ F:	package/python-async-timeout/
++F:	package/python-cchardet/
+ F:	package/python-multidict/
+ F:	package/python-pycares/
+ F:	package/python-yarl/
+diff --git a/package/Config.in b/package/Config.in
+index e1c87aee25..3f2478e6b7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -814,6 +814,7 @@ menu "External python modules"
+ 	source "package/python-cached-property/Config.in"
+ 	source "package/python-can/Config.in"
+ 	source "package/python-cbor/Config.in"
++	source "package/python-cchardet/Config.in"
+ 	source "package/python-certifi/Config.in"
+ 	source "package/python-cffi/Config.in"
+ 	source "package/python-characteristic/Config.in"
+diff --git a/package/python-cchardet/Config.in b/package/python-cchardet/Config.in
+new file mode 100644
+index 0000000000..74153126fb
+--- /dev/null
++++ b/package/python-cchardet/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PYTHON_CCHARDET
++	bool "python-cchardet"
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  cChardet is high speed universal character encoding
++	  detector.
++
++	  https://github.com/PyYoshi/cChardet
++
++comment "python-cchardet needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/python-cchardet/python-cchardet.hash b/package/python-cchardet/python-cchardet.hash
+new file mode 100644
+index 0000000000..231804ee3c
+--- /dev/null
++++ b/package/python-cchardet/python-cchardet.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/cchardet/json
++md5	17af20af67cb18e958854e273d857a88  cchardet-2.1.4.tar.gz
++sha256	cc9745e0400da4cfb49f075e7819f22473b66443f953427058fee2c7b9547cc0  cchardet-2.1.4.tar.gz
++# Locally computed sha256 checksums
++sha256	107a29ccdd2d778aa2df5462f85dddfa099059abd22e064e07ec2cc9bafc37cd  COPYING
+diff --git a/package/python-cchardet/python-cchardet.mk b/package/python-cchardet/python-cchardet.mk
+new file mode 100644
+index 0000000000..9ac170c22d
+--- /dev/null
++++ b/package/python-cchardet/python-cchardet.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-cchardet
++#
++################################################################################
++
++PYTHON_CCHARDET_VERSION = 2.1.4
++PYTHON_CCHARDET_SOURCE = cchardet-$(PYTHON_CCHARDET_VERSION).tar.gz
++PYTHON_CCHARDET_SITE = https://files.pythonhosted.org/packages/74/64/3988d388315c1af3e24f447689dadf30edead43366fb2041cb103380b57f
++PYTHON_CCHARDET_SETUP_TYPE = setuptools
++PYTHON_CCHARDET_LICENSE = MPL-1.1
++PYTHON_CCHARDET_LICENSE_FILES = COPYING
++
++$(eval $(python-package))
