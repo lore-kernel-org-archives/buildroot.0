@@ -1,31 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Nov 2018 00:12:34 +0100
-Subject: [Buildroot] [PATCH] ruby: security bump to version 2.4.5
-In-Reply-To: <20181030123755.13818-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 30 Oct 2018 13:37:55 +0100")
-References: <20181030123755.13818-1-peter@korsgaard.com>
-Message-ID: <874lckwp0d.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 14 Nov 2018 00:42:45 +0100
+Subject: [Buildroot] [PATCH] libnftnl: drop useless
+ BR2_PACKAGE_LIBNFTNL_XML
+In-Reply-To: <20181113212149.255fb576@windsurf>
+References: <d8767e3da1e02d6a5f1770bf490028b1bab13e46.1542139148.git.baruch@tkos.co.il>
+ <20181113212149.255fb576@windsurf>
+Message-ID: <69681f58-047c-05ff-1b35-d0a6fe62baec@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes the following security issues:
- > - CVE-2018-16396: Tainted flags are not propagated in Array#pack and
- >   String#unpack with some directives
- > https://www.ruby-lang.org/en/news/2018/10/17/not-propagated-taint-flag-in-some-formats-of-pack-cve-2018-16396/
 
- > - CVE-2018-16395: OpenSSL::X509::Name equality check does not work correctly
- > https://www.ruby-lang.org/en/news/2018/10/17/openssl-x509-name-equality-check-does-not-work-correctly-cve-2018-16395/
+On 13/11/2018 21:21, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Tue, 13 Nov 2018 21:59:08 +0200, Baruch Siach wrote:
+>> Commit fa0d1ebff99 (libnftnl: bump to version 1.0.9) removed the mxml
+>> dependency. Remove the redundant BR2_PACKAGE_LIBNFTNL_XML config symbol
+>> as well.
+>>
+>> Cc: Yegor Yefremov <yegorslists@googlemail.com>
+>> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> 
+> Do we need Config.in.legacy handling ?
+> 
+> We normally add Config.in.legacy handling when removing options, but on
+> the other hand, this option has had no effect since 2018.02.
 
- > Update hash of LEGAL as it had a few (wayback machine) URLs added/changed.
+ Legacy handling is there mostly to make sure the appropriate alternative option
+can be selected. In this case there is no alternative.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ Also, compare this to a situation where it would have been an automatic
+optional dependency: in that case, the feature also disappears silently.
 
-Committed to 2018.02.x and 2018.08.x, thanks.
+ That said: legacy handling costs nothing and can be useful for some users. And
+it can be backported to 2018.02.x.
 
--- 
-Bye, Peter Korsgaard
+ Regards,
+ Arnout
