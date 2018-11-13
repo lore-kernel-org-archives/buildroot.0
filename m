@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Nov 2018 23:54:01 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] giflib: disable xmlto
-Message-ID: <20181113225123.BECFF82BBB@busybox.osuosl.org>
+Date: Tue, 13 Nov 2018 23:54:17 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] giflib: disable xmlto
+Message-ID: <20181113225138.2170382BC2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2732eb06d86d49ef479df07b711e4452e69c2a3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b803c7e85ccdd24901660cc78a15ccd76b9eff89
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Fixes:
  - http://autobuild.buildroot.org/results/87c7fa4a8e393acaccc84bd2774f9eee32ef7d90
