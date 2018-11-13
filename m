@@ -1,9 +1,9 @@
 From: Marcin =?utf-8?Q?Niestr=C3=B3j?= <m.niestroj@grinn-global.com>
-Date: Tue, 13 Nov 2018 21:46:54 +0100
+Date: Tue, 13 Nov 2018 21:52:55 +0100
 Subject: [Buildroot] [PATCH 1/1] dt-utils: fix hash
 In-Reply-To: <20181113201842.30055-1-fontaine.fabrice@gmail.com>
 References: <20181113201842.30055-1-fontaine.fabrice@gmail.com>
-Message-ID: <878t1wvh6p.fsf@grinn-global.com>
+Message-ID: <877ehgvgwo.fsf@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -35,6 +35,13 @@ Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 > +sha256 d0f53c76bc9f821a6506c8db3b623922d82570a017a9a40ad118bd7c957672b6  dt-utils-v2018.05.0.tar.gz
 >  sha256 a45932c79317d15116eadbf1c9c6fc59117ec3c4621db3a876066defa723963b  COPYING
 
+The reason of difference is basically the same as in [1]
+("linux-firmware: bump version to latest 1baa348").
+
+[1] http://lists.busybox.net/pipermail/buildroot/2018-November/235368.html
+
+Reviewed-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Tested-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 
 -- 
 Marcin Niestr?j
