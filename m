@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 13 Nov 2018 20:55:45 +0100
 Subject: [Buildroot] [git commit branch/next] support/testing: use
- TestPythonPackageBase for python-cryptography
-Message-ID: <20181113195358.892D882960@busybox.osuosl.org>
+ TestPythonPackageBase for python-txtorcon
+Message-ID: <20181113195358.8CD3D8285F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f07994f7d64e06c74d87c3eec89adfc248445187
+commit: https://git.buildroot.net/buildroot/commit/?id=6a24761c72e164e776056b891532e8d6a276e37f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Move the test script to be run on the target from inline in the test
@@ -22,66 +22,62 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../tests/package/sample_python_cryptography.py    |  3 ++
- .../tests/package/test_python_cryptography.py      | 33 ++++++++--------------
- 2 files changed, 14 insertions(+), 22 deletions(-)
+ .../tests/package/sample_python_txtorcon.py        |  1 +
+ .../testing/tests/package/test_python_txtorcon.py  | 31 ++++++++--------------
+ 2 files changed, 12 insertions(+), 20 deletions(-)
 
-diff --git a/support/testing/tests/package/sample_python_cryptography.py b/support/testing/tests/package/sample_python_cryptography.py
+diff --git a/support/testing/tests/package/sample_python_txtorcon.py b/support/testing/tests/package/sample_python_txtorcon.py
 new file mode 100644
-index 0000000000..ec9883dc64
+index 0000000000..c4a2ae6f5b
 --- /dev/null
-+++ b/support/testing/tests/package/sample_python_cryptography.py
-@@ -0,0 +1,3 @@
-+from cryptography.fernet import Fernet
-+key = Fernet.generate_key()
-+f = Fernet(key)
-diff --git a/support/testing/tests/package/test_python_cryptography.py b/support/testing/tests/package/test_python_cryptography.py
-index 78c3ef55b3..14515fcd2d 100644
---- a/support/testing/tests/package/test_python_cryptography.py
-+++ b/support/testing/tests/package/test_python_cryptography.py
-@@ -1,34 +1,23 @@
++++ b/support/testing/tests/package/sample_python_txtorcon.py
+@@ -0,0 +1 @@
++import txtorcon  # noqa
+diff --git a/support/testing/tests/package/test_python_txtorcon.py b/support/testing/tests/package/test_python_txtorcon.py
+index 352ff67825..1ac2f6919a 100644
+--- a/support/testing/tests/package/test_python_txtorcon.py
++++ b/support/testing/tests/package/test_python_txtorcon.py
+@@ -1,32 +1,23 @@
 -from tests.package.test_python import TestPythonBase
 +from tests.package.test_python import TestPythonPackageBase
  
  
--class TestPythonCryptography(TestPythonBase):
--    def fernet_test(self, timeout=-1):
--        cmd = self.interpreter + " -c 'from cryptography.fernet import Fernet;"
--        cmd += "key = Fernet.generate_key();"
--        cmd += "f = Fernet(key)'"
--        _, exit_code = self.emulator.run(cmd, timeout)
+-class TestPythonTxtorcon(TestPythonBase):
+-    def import_test(self):
+-        cmd = self.interpreter + " -c 'import txtorcon'"
+-        _, exit_code = self.emulator.run(cmd, timeout=30)
 -        self.assertEqual(exit_code, 0)
 -
 -
--class TestPythonPy2Cryptography(TestPythonCryptography):
+-class TestPythonPy2Txtorcon(TestPythonTxtorcon):
 -    config = TestPythonBase.config + \
-+class TestPythonPy2Cryptography(TestPythonPackageBase):
++class TestPythonPy2Txtorcon(TestPythonPackageBase):
 +    __test__ = True
 +    config = TestPythonPackageBase.config + \
          """
          BR2_PACKAGE_PYTHON=y
-         BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
+         BR2_PACKAGE_PYTHON_TXTORCON=y
          """
-+    sample_scripts = ["tests/package/sample_python_cryptography.py"]
-+    timeout = 40
++    sample_scripts = ["tests/package/sample_python_txtorcon.py"]
++    timeout = 30
  
 -    def test_run(self):
 -        self.login()
--        self.fernet_test(40)
+-        self.import_test()
  
 -
--class TestPythonPy3Cryptography(TestPythonCryptography):
+-class TestPythonPy3Txtorcon(TestPythonTxtorcon):
 -    config = TestPythonBase.config + \
-+class TestPythonPy3Cryptography(TestPythonPackageBase):
++class TestPythonPy3Txtorcon(TestPythonPackageBase):
 +    __test__ = True
 +    config = TestPythonPackageBase.config + \
          """
          BR2_PACKAGE_PYTHON3=y
-         BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
+         BR2_PACKAGE_PYTHON_TXTORCON=y
          """
 -
 -    def test_run(self):
 -        self.login()
--        self.fernet_test(40)
-+    sample_scripts = ["tests/package/sample_python_cryptography.py"]
-+    timeout = 40
+-        self.import_test()
++    sample_scripts = ["tests/package/sample_python_txtorcon.py"]
++    timeout = 30
