@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Nov 2018 23:51:26 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] tar: adjust Config.in
+Date: Tue, 13 Nov 2018 23:51:55 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] tar: adjust Config.in
  comment dependency
-Message-ID: <20181113224905.5EC0E82BAA@busybox.osuosl.org>
+Message-ID: <20181113224922.2D23882BAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3e04f3e1a3089be66f0aa56460308d6417112b1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=adac24dc04cde45e1f4c41c3262402692f574a71
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Since commit 916b21a7fbf266f452b8dc4116133cc57fdad269 ("package/tar:
 Depends on MMU"), BR2_PACKAGE_TAR depends on BR2_USE_MMU. However, the
