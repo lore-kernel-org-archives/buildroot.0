@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Nov 2018 00:05:09 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] neardal: fix static build
+Date: Wed, 14 Nov 2018 00:05:38 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] neardal: fix static build
  with libedit and libbsd
-Message-ID: <20181113230244.AE4B581E88@busybox.osuosl.org>
+Message-ID: <20181113230306.1E43482DEA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc0a1ef822a05ea4e99b6951317984c8b4682e74
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2f3dd72e30875fe3c16dc956b8d8cf3b7b41cc98
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Add an upstreamable patch to use pkg-config for finding libedit and
 readline dependencies and drop ncurses "hack"
