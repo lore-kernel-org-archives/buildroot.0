@@ -1,24 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Nov 2018 23:54:29 +0100
-Subject: [Buildroot] [PATCH 1/1] giflib: disable xmlto
-In-Reply-To: <20181026183632.27684-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 26 Oct 2018 20:36:32 +0200")
-References: <20181026183632.27684-1-fontaine.fabrice@gmail.com>
-Message-ID: <87k1lgy4ey.fsf@dell.be.48ers.dk>
+Date: Tue, 13 Nov 2018 23:55:23 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] mysql: properly order
+ "depends on" vs. bool
+Message-ID: <20181113225247.AE8E682BC8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b76722dff422532dfcf4f91e4c250c89df734e80
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/87c7fa4a8e393acaccc84bd2774f9eee32ef7d90
+This fixes a check-package warning introduced by commit
+19df27ed03b33cd86c971afb355091161972851f ("package/mariadb: add option
+to disable build of embedded server")
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
 
-Committed to 2018.02.x and 2018.08.x, thanks.
+package/mysql/Config.in:59: attributes order: type, default, depends on, select, help (http://nightly.buildroot.org/#_config_files)
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit cbf62fc5692cc04a2f721260d5e7f8a2558b4bb1)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mysql/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/mysql/Config.in b/package/mysql/Config.in
+index 66bd0faa57..b4e49e47fa 100644
+--- a/package/mysql/Config.in
++++ b/package/mysql/Config.in
+@@ -55,8 +55,8 @@ config BR2_PACKAGE_MARIADB_SERVER
+ 	  Install the mariadb server on the target.
+ 
+ config BR2_PACKAGE_MARIADB_SERVER_EMBEDDED
+-	depends on BR2_PACKAGE_MARIADB_SERVER
+ 	bool "mariadb embedded server"
++	depends on BR2_PACKAGE_MARIADB_SERVER
+ 	help
+ 	  Install the mariadb embedded server on the target.
+ 
