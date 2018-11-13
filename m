@@ -1,55 +1,32 @@
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Date: Tue, 13 Nov 2018 21:17:28 +0100
-Subject: [Buildroot] [PATCH v2] acpid: Add systemd service
-Message-ID: <20181113201728.19936-1-alexander.sverdlin@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 13 Nov 2018 21:18:42 +0100
+Subject: [Buildroot] [PATCH 1/1] dt-utils: fix hash
+Message-ID: <20181113201842.30055-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This one is based on Archlinux's service file.
+Hash has been reported as wrong by autobuilder since August 16th
+Perhaps, it was wrong since bump to v2018.05.0 on August 9th
 
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/c6c8ede30623cc20011916cc95dbdae34dcc0344
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/acpid/acpid.mk      | 8 ++++++++
- package/acpid/acpid.service | 9 +++++++++
- 2 files changed, 17 insertions(+)
- create mode 100644 package/acpid/acpid.service
+ package/dt-utils/dt-utils.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/acpid/acpid.mk b/package/acpid/acpid.mk
-index 48fe005e5e..514fd31fe6 100644
---- a/package/acpid/acpid.mk
-+++ b/package/acpid/acpid.mk
-@@ -10,6 +10,14 @@ ACPID_SITE = http://downloads.sourceforge.net/project/acpid2
- ACPID_LICENSE = GPL-2.0+
- ACPID_LICENSE_FILES = COPYING
- 
-+define ACPID_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 0755 package/acpid/acpid.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/acpid.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf ../../../../usr/lib/systemd/system/acpid.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/acpid.service
-+endef
-+
- define ACPID_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/acpid/S02acpid \
- 		$(TARGET_DIR)/etc/init.d/S02acpid
-diff --git a/package/acpid/acpid.service b/package/acpid/acpid.service
-new file mode 100644
-index 0000000000..5252b52f5f
---- /dev/null
-+++ b/package/acpid/acpid.service
-@@ -0,0 +1,9 @@
-+[Unit]
-+Description=ACPI event daemon
-+Documentation=man:acpid(8)
-+
-+[Service]
-+ExecStart=/usr/sbin/acpid --foreground --netlink
-+
-+[Install]
-+WantedBy=multi-user.target
+diff --git a/package/dt-utils/dt-utils.hash b/package/dt-utils/dt-utils.hash
+index 0d63b12353..5805adf361 100644
+--- a/package/dt-utils/dt-utils.hash
++++ b/package/dt-utils/dt-utils.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 a3aae73da39fd46775de390b7babafb63767082da10870c01b6595c4c9762af6  dt-utils-v2018.05.0.tar.gz
++sha256 d0f53c76bc9f821a6506c8db3b623922d82570a017a9a40ad118bd7c957672b6  dt-utils-v2018.05.0.tar.gz
+ sha256 a45932c79317d15116eadbf1c9c6fc59117ec3c4621db3a876066defa723963b  COPYING
 -- 
-2.19.1
+2.14.1
