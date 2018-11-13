@@ -1,100 +1,186 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Nov 2018 08:00:56 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-11-12
-Message-ID: <20181113070056.A9A0A2217E@mail.bootlin.com>
+From: kaplan2539 at gmail.com <kaplan2539@gmail.com>
+Date: Mon, 12 Nov 2018 23:09:58 -0800
+Subject: [Buildroot] [PATCH 1/1] package/sunxi-tools: additional build
+ options
+Message-ID: <1542092998-21977-1-git-send-email-kaplan2539@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Alex Kaplan <kaplan2539@gmail.com>
 
-Build statistics for 2018-11-12
-===============================
+This patch allows to select the installation of additional commands
+which are part of the sunxi-tools. It's now possible to e.g. install
+sunxi-fel on the target device. The corresponding options have been
+added to Config.in and sunxi-tools.mk has been modified respectively.
+The default setting is to only build sunxi-nand-part.
 
-      branch |  OK | NOK | TIM | TOT |
-   2018.02.x |  15 |   2 |   0 |  17 |
-   2018.08.x |  16 |   5 |   0 |  21 |
-      master | 176 |  16 |   0 | 192 |
+On the host building of the misc-tools target is added, which provides
+sunxi-nand-image-builder and phoenix_info.
 
-Results for branch '2018.02.x'
-==============================
+Signed-off-by: Alex Kaplan <kaplan2539@gmail.com>
+---
+ package/sunxi-tools/Config.in      | 67 +++++++++++++++++++++++++++++++++++---
+ package/sunxi-tools/Config.in.host |  1 +
+ package/sunxi-tools/sunxi-tools.mk | 45 ++++++++++++++++++++-----
+ 3 files changed, 100 insertions(+), 13 deletions(-)
 
-Classification of failures by reason
-------------------------------------
-
-                  giflib-5.1.4 | 1 
-                 lcdproc-0.5.9 | 1 
-
-
-Detail of failures
-------------------
-
-         arm |                   giflib-5.1.4 | NOK | http://autobuild.buildroot.net/results/25c8ea34b0f5bdedb1da0e52da266126aa1fd3ad |     
-        or1k |                  lcdproc-0.5.9 | NOK | http://autobuild.buildroot.net/results/b48da84141b8dd401eb665e211820c680aa0b076 |     
-
-Results for branch '2018.08.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-                  giflib-5.1.4 | 2 
-                  boost-1.67.0 | 1 
-               openswan-2.6.50 | 1 
-                    sox-14.4.2 | 1 
-
-
-Detail of failures
-------------------
-
-        mips |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/6966cfbe482d5896d8b92d8e08b0b1d0a6a5aa8b |     
-    mips64el |                   giflib-5.1.4 | NOK | http://autobuild.buildroot.net/results/b94cfae47f365f2e512702fd301d7687de80a97e |     
-      xtensa |                   giflib-5.1.4 | NOK | http://autobuild.buildroot.net/results/3bb47b04968b65e509fcbbc7f1c40a3061e4fdab |     
-         arm |                openswan-2.6.50 | NOK | http://autobuild.buildroot.net/results/2c44ca1a8ad2693b9633862d034aae9eeaa90acb | ORPH
-        m68k |                     sox-14.4.2 | NOK | http://autobuild.buildroot.net/results/5f017d86919c60f049defa30d9498c16c9ff755c | ORPH
-
-Results for branch 'master'
-===========================
-
-Classification of failures by reason
-------------------------------------
-
-             gstreamer1-1.14.4 | 3 
-                  libnspr-4.19 | 2 
-               wireshark-2.6.4 | 2 
-      docker-containerd-v1.1.3 | 1 
-                flannel-v0.5.5 | 1 
-       gst-plugins-bad-0.10.23 | 1 
-             libid3tag-0.15.1b | 1 
-               mono-5.14.0.177 | 1 
-                qt5base-5.11.2 | 1 
-             qt5wayland-5.11.2 | 1 
-uclibc-ng-test-c6d62cbc6050... | 1 
-               valgrind-3.14.0 | 1 
-
-
-Detail of failures
-------------------
-
-      x86_64 |       docker-containerd-v1.1.3 | NOK | http://autobuild.buildroot.net/results/09ea2fe56d1f6de05ad8e6b3c5a6880cfd56aaf8 |     
-      x86_64 |                 flannel-v0.5.5 | NOK | http://autobuild.buildroot.net/results/984d49d95b40f677e3e52a66063eaebfd4bede10 |     
-         arm |        gst-plugins-bad-0.10.23 | NOK | http://autobuild.buildroot.net/results/127ce41512aa419dd3265311476f65a311f0ad1c | ORPH
-     riscv64 |              gstreamer1-1.14.4 | NOK | http://autobuild.buildroot.net/results/0814bed176abe34be0131e9070694def665bf4be |     
-     riscv64 |              gstreamer1-1.14.4 | NOK | http://autobuild.buildroot.net/results/1783960a46793aacd9d050dea58775b54a36b5e0 |     
-     riscv64 |              gstreamer1-1.14.4 | NOK | http://autobuild.buildroot.net/results/eb605fc7e3020b7d77ef2dd9146d8ab3ee372b76 |     
-         arm |              libid3tag-0.15.1b | NOK | http://autobuild.buildroot.net/results/a4fc44f1b1b632c55ef66128fcb21f4d187f1e2b | ORPH
-     riscv64 |                   libnspr-4.19 | NOK | http://autobuild.buildroot.net/results/b071b1fefbd5654305d9ad28780a315f15f3bfad | ORPH
-     riscv64 |                   libnspr-4.19 | NOK | http://autobuild.buildroot.net/results/aeabf9be40dc7d28b33375b2d32df74abaa3d7e3 | ORPH
-         arm |                mono-5.14.0.177 | NOK | http://autobuild.buildroot.net/results/d37a5d60783d24433bd6fea5b17e9970c741e4e9 |     
-  aarch64_be |                 qt5base-5.11.2 | NOK | http://autobuild.buildroot.net/results/4894438f0d6ea20e6d45dda458e5544d480033d3 |     
-    mips64el |              qt5wayland-5.11.2 | NOK | http://autobuild.buildroot.net/results/37b8366cc6c18b1c919ada4da003cd9acca5a22c |     
-     aarch64 | uclibc-ng-test-c6d62cbc6050... | NOK | http://autobuild.buildroot.net/results/f7bb21d5df851a987255e1871eb3bc5bd4abce8c |     
-    mips64el |                valgrind-3.14.0 | NOK | http://autobuild.buildroot.net/results/d3c05ab390f56d329585c0b75c525588b0c8a619 | ORPH
-         arm |                wireshark-2.6.4 | NOK | http://autobuild.buildroot.net/results/9089e74c0f8428d28953ae037a84aa8a08db7ded | ORPH
-      mipsel |                wireshark-2.6.4 | NOK | http://autobuild.buildroot.net/results/e9f4cd35403a63fc7417c315c315ad970970e967 | ORPH
-
-
+diff --git a/package/sunxi-tools/Config.in b/package/sunxi-tools/Config.in
+index 02eba95..9b61dac 100644
+--- a/package/sunxi-tools/Config.in
++++ b/package/sunxi-tools/Config.in
+@@ -1,9 +1,68 @@
+ config BR2_PACKAGE_SUNXI_TOOLS
+-	bool "sunxi nand-part"
++	bool "sunxi-tools"
+ 	depends on BR2_arm
+ 	help
+-	  nand-part is part of sunxi-tools for Allwinner A10 (aka
+-	  sun4i) and A13 (aka sun5i) based devices. It is a tool to
+-	  repartition the internal NAND on sunxi devices.
++	  Tools for Allwinner A10 (aka sun4i) and A13 (aka sun5i)
++	  based devices.
+ 
+ 	  http://linux-sunxi.org/Sunxi-tools
++
++if BR2_PACKAGE_SUNXI_TOOLS
++
++# from the "tools" make target
++config BR2_PACKAGE_SUNXI_TOOLS_FEXC
++	bool "sunxi-fexc (fex2bin & bin2fex)"
++	help
++		Convert between .fex board definition files and binary format.
++		These tools are specific for the linux-sunxi kernel and do not
++		apply to the mainline Linux kernel version.
++
++config BR2_PACKAGE_SUNXI_TOOLS_BOOTINFO
++    bool "sunxi-bootinfo"
++	help
++	    Displays information about sunxi boot code.
++
++config BR2_PACKAGE_SUNXI_TOOLS_FEL
++	bool "sunxi-fel"
++	depends on BR2_TOOLCHAIN_HAS_THREADS #libusb
++	select BR2_PACKAGE_LIBUSB
++	help
++		The sunxi-fel command can interact with a sunxi device in fel
++		mode. This allows do download code to memory and execute it.
++comment "sunxi-fel needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
++config BR2_PACKAGE_SUNXI_TOOLS_NAND_PART
++	bool "sunxi-nand-part"
++	help
++		The sunxi-nand-part command allows to repartition the internal
++		NAND on sunxi devices.
++    default y
++
++config BR2_PACKAGE_SUNXI_TOOLS_PIO
++	bool "sunxi-pio"
++	help
++	    GPIO manipulation tool for sunxi boards.
++
++config BR2_PACKAGE_SUNXI_TOOLS_MEMINFO
++	bool "sunxi-meminfo"
++	help
++		Utility to retrieve DRAM information from registers on Allwinner
++		SoCs. Specific for the linux-sunxi kernel - does not apply to
++		the mainline Linux kernel version.
++
++config BR2_PACKAGE_SUNXI_TOOLS_PHOENIX_INFO
++	bool "phoenix_info"
++	help
++		Display information about self-installing SD card images (created
++		with Phoenix Card).
++
++		https://linux-sunxi.org/PhoenixCard
++
++config BR2_PACKAGE_SUNXI_TOOLS_NAND_IMAGE_BUILDER
++	bool "sunxi-nand-image-builder"
++	help
++		Creates a raw NAND image that can be read by the sunxi NAND
++		controller.
++
++endif #BR2_PACKAGE_SUNXI_TOOLS
+diff --git a/package/sunxi-tools/Config.in.host b/package/sunxi-tools/Config.in.host
+index 5fab5e6..66056ca 100644
+--- a/package/sunxi-tools/Config.in.host
++++ b/package/sunxi-tools/Config.in.host
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_HOST_SUNXI_TOOLS
+ 	bool "host sunxi-tools"
+ 	depends on BR2_arm
++	select BR2_PACKAGE_HOST_LIBUSB
+ 	help
+ 	  Tools for Allwinner A10 (aka sun4i) and A13 (aka sun5i)
+ 	  based devices. This includes fex2bin which can be used to
+diff --git a/package/sunxi-tools/sunxi-tools.mk b/package/sunxi-tools/sunxi-tools.mk
+index 3a44cf6..4f0b944 100644
+--- a/package/sunxi-tools/sunxi-tools.mk
++++ b/package/sunxi-tools/sunxi-tools.mk
+@@ -11,25 +11,52 @@ SUNXI_TOOLS_LICENSE_FILES = LICENSE.md
+ HOST_SUNXI_TOOLS_DEPENDENCIES = host-libusb host-pkgconf
+ FEX2BIN = $(HOST_DIR)/bin/fex2bin
+ 
++SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_SUNXI_TOOLS_FEXC) += sunxi-fexc
++SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_SUNXI_TOOLS_BOOTINFO) += sunxi-bootinfo
++SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_SUNXI_TOOLS_FEL) += sunxi-fel
++SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_SUNXI_TOOLS_NAND_PART) += sunxi-nand-part
++SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_SUNXI_TOOLS_PIO) += sunxi-pio
++SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_SUNXI_TOOLS_MEMINFO) += sunxi-meminfo
++SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_SUNXI_TOOLS_PHOENIX_INFO) += phoenix_info
++SUNXI_TOOLS_TARGETS_$(BR2_PACKAGE_SUNXI_TOOLS_NAND_IMAGE_BUILDER) += \
++	sunxi-nand-image-builder
++
++ifeq ($(BR2_PACKAGE_SUNXI_TOOLS_FEXC),y)
++SUNXI_TOOLS_FEXC_LINKS += fex2bin bin2fex
++endif
++
++ifeq ($(BR2_PACKAGE_SUNXI_TOOLS_FEL),y)
++SUNXI_TOOLS_DEPENDENCIES += libusb host-pkgconf
++endif
++
+ define HOST_SUNXI_TOOLS_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) CC="$(HOSTCC)" PREFIX=$(HOST_DIR) \
+-		EXTRA_CFLAGS="$(HOST_CFLAGS)" LDFLAGS="$(HOST_LDFLAGS)" \
+-		-C $(@D) tools
++	$(HOST_MAKE_ENV) $(MAKE) CROSS_COMPILE="" CC="$(HOSTCC)" \
++		PREFIX=$(HOST_DIR) EXTRA_CFLAGS="$(HOST_CFLAGS)" \
++		LDFLAGS="$(HOST_LDFLAGS)" -C $(@D) tools misc
+ endef
+ 
+ define HOST_SUNXI_TOOLS_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) PREFIX=$(HOST_DIR) \
+-		-C $(@D) install-tools
++	$(HOST_MAKE_ENV) $(MAKE) CROSS_COMPILE="" CC="$(HOSTCC)" \
++		PREFIX=$(HOST_DIR) EXTRA_CFLAGS="$(HOST_CFLAGS)" \
++		LDFLAGS="$(HOST_LDFLAGS)"  -C $(@D) install-tools install-misc
+ endef
+ 
+ define SUNXI_TOOLS_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" PREFIX=/usr \
+-		EXTRA_CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" \
+-		-C $(@D) sunxi-nand-part
++	$(foreach t,$(SUNXI_TOOLS_TARGETS_y), \
++		$(TARGET_MAKE_ENV) $(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" \
++		    CC="$(TARGET_CC)" PREFIX=/usr \
++			EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
++	        LDFLAGS="$(TARGET_LDFLAGS)" -C $(@D) $(t)
++	)
+ endef
+ 
+ define SUNXI_TOOLS_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/sunxi-nand-part $(TARGET_DIR)/usr/bin/sunxi-nand-part
++	$(foreach t,$(SUNXI_TOOLS_TARGETS_y), \
++		$(INSTALL) -D -m 0755 $(@D)/$(t) $(TARGET_DIR)/usr/bin/$(t)
++	)
++	$(foreach t,$(SUNXI_TOOLS_FEXC_LINKS), \
++		ln -nfs sunxi-fexc $(TARGET_DIR)/usr/bin/$(t)
++	)
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-http://autobuild.buildroot.net
+2.7.4
