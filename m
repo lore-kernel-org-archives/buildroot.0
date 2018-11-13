@@ -1,36 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 13 Nov 2018 07:18:58 +0000
-Subject: [Buildroot] [Bug 11216] Capabilities not applied to filesystem
-In-Reply-To: <bug-11216-163@https.bugs.busybox.net/>
-References: <bug-11216-163@https.bugs.busybox.net/>
-Message-ID: <bug-11216-163-M15UQX1HnW@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 13 Nov 2018 08:26:29 +0100
+Subject: [Buildroot] [PATCH] libcurl: Don't need
+ --without-(ssl/gnutls/nss/mbedtls) twice
+In-Reply-To: <20181113002334.12473-1-tpiepho@impinj.com> (Trent Piepho's
+ message of "Tue, 13 Nov 2018 00:24:02 +0000")
+References: <20181113002334.12473-1-tpiepho@impinj.com>
+Message-ID: <87o9at4evu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11216
+>>>>> "Trent" == Trent Piepho <tpiepho@impinj.com> writes:
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+ > Remove the --without-* options from the yes side of the TLS libraries
+ > selection checks.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|---                         |FIXED
+ > Since the --without-* option is now specified when the corresponding TLS
+ > library is not being used, it's no longer necessary when enabling a TLS
+ > library to explicity list all the other TLS libs that curl should not
+ > use.
 
---- Comment #4 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Ricardo, All,
+ > Signed-off-by: Trent Piepho <tpiepho@impinj.com>
 
-Fixed by:
-   
-https://git.buildroot.org/buildroot/commit?id=409d4c3fe9949f01b009712a1a731baf597e0f8d
-
-Thanks for the very detailed report! :-)
-
-Regards,
-Yann E. MORIN.
+Committed to next, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
