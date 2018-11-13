@@ -1,33 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Nov 2018 23:55:53 +0100
-Subject: [Buildroot] [git commit] mysql: properly order "depends on" vs.
- bool
-In-Reply-To: <20181026192745.48A868283C@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Fri, 26 Oct 2018 21:28:31 +0200")
-References: <20181026192745.48A868283C@busybox.osuosl.org>
-Message-ID: <87ftw4y4cm.fsf@dell.be.48ers.dk>
+Date: Tue, 13 Nov 2018 23:57:08 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] gpsd: disable
+ documentation
+Message-ID: <20181113225433.7192082BD3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=43b5fa2f73fc424cfb28a2f444e492ee59e63c27
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=cbf62fc5692cc04a2f721260d5e7f8a2558b4bb1
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes:
+ - http://autobuild.buildroot.org/results/cbdb4cc34080714082f044fde7e069e6ab5a0e8e
 
- > This fixes a check-package warning introduced by commit
- > 19df27ed03b33cd86c971afb355091161972851f ("package/mariadb: add option
- > to disable build of embedded server")
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit c0deed8eed0a4e4cd0380b7bcaa54d0056f6df46)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gpsd/gpsd.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
- > Fixes:
-
- > package/mysql/Config.in:59: attributes order: type, default, depends on, select, help (http://nightly.buildroot.org/#_config_files)
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2018.02.x and 2018.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index 8c8023e818..e734d222af 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -19,6 +19,7 @@ GPSD_SCONS_ENV = $(TARGET_CONFIGURE_OPTS)
+ 
+ GPSD_SCONS_OPTS = \
+ 	arch=$(ARCH)\
++	manbuild=no \
+ 	prefix=/usr\
+ 	sysroot=$(STAGING_DIR)\
+ 	strip=no\
