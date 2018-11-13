@@ -1,38 +1,77 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Tue, 13 Nov 2018 00:35:19 +0000
-Subject: [Buildroot] [PATCH] libp11: Add new package for OpenSSL PKCS#11
- engine
-In-Reply-To: <20181109234640.18735-1-tpiepho@impinj.com>
-References: <20181109234640.18735-1-tpiepho@impinj.com>
-Message-ID: <1542069318.30311.399.camel@impinj.com>
+From: Gustavo Pimentel <gustavo.pimentel@synopsys.com>
+Date: Tue, 13 Nov 2018 06:55:53 +0100
+Subject: [Buildroot] [PATCH v2] package/linux-tools: add support for pcitest
+ tool
+Message-ID: <ffbc28844740f39f96b54a32d623bd1bf8409814.1542088510.git.gustavo.pimentel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 2018-11-09 at 23:47 +0000, Trent Piepho wrote:
-> Library for using PKCS#11, which includes an engine for OpenSSL that
-> lets it use PKCS#11 modules.  Which is really what this package is
-> about, not that libp11 library itself, which has no users outside the of
-> OpenSSL engine.
+Add support for selection and compiling the pcitest tool on buildroot.
 
-> 
-> +LIBP11_VERSION = 0.4.9
-> +LIBP11_SITE = https://na01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2FOpenSC%2Flibp11%2Freleases%2Fdownload%2Flibp11-%24(LIBP11_VERSION&amp;data=02%7C01%7Ctpiepho%40impinj.com%7Cbd8de140ec3244b8c42108d6469dc209%7C6de70f0f73574529a415d8cbb7e93e5e%7C0%7C0%7C636774040745907586&amp;sdata=IYhav3gbZ4QzBNDl%2BOxKLKP7R%2F9YysTtBH38oFcvs1w%3D&amp;reserved=0)
-> +LIBP11_DEPENDENCIES = openssl
-> +LIBP11_INSTALL_STAGING = YES
-> +LIBP11_LICENSE = LGPLv2.1
-> +LIBP11_LICENSE_FILES = COPYING
-> +
-> +ifeq ($(BR2_PACKAGE_P11_KIT),y)
-> +LIBP11_CONF_OPTS += --with-pkcs11-module=/usr/lib/p11-kit-proxy.so
-> +endif
+This tool is available to be compiled since kernel 4.20.
 
-Forgot to add:
+Signed-off-by: Gustavo Pimentel <gustavo.pimentel@synopsys.com>
+---
+ package/linux-tools/Config.in            |  9 +++++++++
+ package/linux-tools/linux-tool-pci.mk.in | 27 +++++++++++++++++++++++++++
+ 2 files changed, 36 insertions(+)
+ create mode 100644 package/linux-tools/linux-tool-pci.mk.in
 
-HOST_LIBP11_DEPENDENCIES = host-openssl
-
-> +
-> +$(eval $(autotools-package))
-> +$(eval $(host-autotools-package))
+diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+index 349dc6b..f4199fd 100644
+--- a/package/linux-tools/Config.in
++++ b/package/linux-tools/Config.in
+@@ -34,6 +34,15 @@ config BR2_PACKAGE_LINUX_TOOLS_IIO
+ 
+ 	  These tools are available only from kernel version 4.7.
+ 
++config BR2_PACKAGE_LINUX_TOOLS_PCI
++	bool "pci"
++	select BR2_PACKAGE_LINUX_TOOLS
++	help
++	  pcitest is a tool for testing capabilities related to a
++	  PCI Endpoint (only works with specific Endpoints).
++
++	  These tools are available only from kernel version 4.20.
++
+ config BR2_PACKAGE_LINUX_TOOLS_PERF
+ 	bool "perf"
+ 	select BR2_PACKAGE_LINUX_TOOLS
+diff --git a/package/linux-tools/linux-tool-pci.mk.in b/package/linux-tools/linux-tool-pci.mk.in
+new file mode 100644
+index 0000000..4ef0368
+--- /dev/null
++++ b/package/linux-tools/linux-tool-pci.mk.in
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# pci
++#
++################################################################################
++
++LINUX_TOOLS += pci
++
++PCI_MAKE_OPTS = $(LINUX_MAKE_FLAGS)
++
++define PCI_BUILD_CMDS
++	$(Q)if ! grep install $(LINUX_DIR)/tools/pci/Makefile >/dev/null 2>&1 ; then \
++		echo "Your kernel version is too old and does not have install section in the pci tools." ; \
++		echo "At least kernel 4.20 must be used." ; \
++		exit 1 ; \
++	fi
++
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/pci \
++		$(PCI_MAKE_OPTS)
++endef
++
++define PCI_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/pci \
++		$(PCI_MAKE_OPTS) \
++		DESTDIR=$(TARGET_DIR) \
++		install
++endef
+-- 
+2.7.4
