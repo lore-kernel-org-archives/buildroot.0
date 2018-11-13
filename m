@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Nov 2018 23:55:23 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] mysql: properly order
+Date: Tue, 13 Nov 2018 23:55:33 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] mysql: properly order
  "depends on" vs. bool
-Message-ID: <20181113225247.AE8E682BC8@busybox.osuosl.org>
+Message-ID: <20181113225254.AE0AE82BCC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b76722dff422532dfcf4f91e4c250c89df734e80
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=628b2a1c2cf06c862ac3e02271f4d53c7c00d17d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 This fixes a check-package warning introduced by commit
 19df27ed03b33cd86c971afb355091161972851f ("package/mariadb: add option
