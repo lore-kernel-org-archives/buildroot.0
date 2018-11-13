@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Nov 2018 00:00:51 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] libkcapi: disable
+Date: Wed, 14 Nov 2018 00:01:22 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] libkcapi: disable
  documentation
-Message-ID: <20181113225822.9C31D82DB5@busybox.osuosl.org>
+Message-ID: <20181113225846.51A6482DBC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4cff194139a0d8f08ba43994b38fc41cfbe63a3c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ce93f3d6ba4603001fcc8bbbde91c2ec1b47e983
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Disable db2pdf, db2ps and xmlto which are used for building PDF, PS, man
 or html documentation
@@ -27,7 +27,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 4 insertions(+)
 
 diff --git a/package/libkcapi/libkcapi.mk b/package/libkcapi/libkcapi.mk
-index 1557d2017a..9edf0394d4 100644
+index d21c81b168..1e27371702 100644
 --- a/package/libkcapi/libkcapi.mk
 +++ b/package/libkcapi/libkcapi.mk
 @@ -11,6 +11,10 @@ LIBKCAPI_AUTORECONF = YES
@@ -39,5 +39,5 @@ index 1557d2017a..9edf0394d4 100644
 +	ac_cv_path_DB2PS="" \
 +	ac_cv_path_XMLTO=""
  
- ifeq ($(BR2_PACKAGE_LIBKCAPI_HASHER),y)
- LIBKCAPI_CONF_OPTS += --enable-kcapi-hasher
+ ifeq ($(BR2_PACKAGE_LIBKCAPI_APPS),y)
+ LIBKCAPI_CONF_OPTS += \
