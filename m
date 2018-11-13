@@ -1,50 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Nov 2018 23:58:04 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] liburiparser: security
- bump to version 0.9.0
-Message-ID: <20181113225527.65D5A82C1F@busybox.osuosl.org>
+Date: Tue, 13 Nov 2018 23:58:36 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] liburiparser: bump to
+ version 0.8.5 and move to GitHub
+Message-ID: <20181113225614.DFA0082DA6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2dba65050bc15788195da5042954cc8510572c67
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=fff27a900ed2c579d2f55ea4f613d44ae6e291bc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Fixes an out-of-bounds write, detect an integer overflow and protect
-against acting on NULL input. For additional datails, see
+uriparser 0.8.5 with bugfixes has been released. It has also moved from
+SourceForge to GitHub:
 
-   https://github.com/uriparser/uriparser/blob/uriparser-0.9.0/ChangeLog
+    https://uriparser.github.io/
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 2f3042a79b5091cd93ef383d9283c00c91de177e)
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit ca0e6272008dfc5e90f3f5a0de5eaa4d345b122e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/liburiparser/liburiparser.hash | 2 +-
- package/liburiparser/liburiparser.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/liburiparser/Config.in         | 2 +-
+ package/liburiparser/liburiparser.hash | 6 ++----
+ package/liburiparser/liburiparser.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 7 deletions(-)
 
+diff --git a/package/liburiparser/Config.in b/package/liburiparser/Config.in
+index e85a2626d2..b39e3907dd 100644
+--- a/package/liburiparser/Config.in
++++ b/package/liburiparser/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_LIBURIPARSER
+ 	  uriparser is a strictly RFC 3986 compliant URI parsing and
+ 	  handling library written in C.
+ 
+-	  http://uriparser.sourceforge.net
++	  https://uriparser.github.io
 diff --git a/package/liburiparser/liburiparser.hash b/package/liburiparser/liburiparser.hash
-index 1fd65d2f19..f71dd5cc7b 100644
+index 9e9517c17f..c03e832f9f 100644
 --- a/package/liburiparser/liburiparser.hash
 +++ b/package/liburiparser/liburiparser.hash
-@@ -1,3 +1,3 @@
+@@ -1,5 +1,3 @@
+-# From http://sourceforge.net/projects/uriparser/files/Sources/0.8.4/
+-md5	9aabdc3611546f553f4af372167de6d6		uriparser-0.8.4.tar.bz2
+-sha1	7a1948c20bed54b04dad0e1d7d2fa8f80fc7b2b3	uriparser-0.8.4.tar.bz2
  # Locally calculated
--sha256  0709a7e572417db763f0356250d91686c19a64ab48e9da9f5a1e8055dc2a4a54  uriparser-0.8.6.tar.bz2
-+sha256  ec67eb34feda8eac166f281799f03ed48387694fca44f6f5852f61f8fb535e2c  uriparser-0.9.0.tar.bz2
- sha256  ee90029e62d11f48faa59360d15c3ad8e7c094c74cc25b055716d92340da561f  COPYING
+-sha256  c6ef125800c2ef13a41a22126bfc77e8b8c08993a6b96196117695988ea76249  COPYING
++sha256  58eacd5c03d9e341c04eb0b30831faec89f3b415949ff8d72254e63432352cdd  uriparser-0.8.5.tar.bz2
++sha256  ee90029e62d11f48faa59360d15c3ad8e7c094c74cc25b055716d92340da561f  COPYING
 diff --git a/package/liburiparser/liburiparser.mk b/package/liburiparser/liburiparser.mk
-index baed4506a4..62bc8d30d1 100644
+index 856a6aafd4..4b32b7f7f2 100644
 --- a/package/liburiparser/liburiparser.mk
 +++ b/package/liburiparser/liburiparser.mk
-@@ -4,7 +4,7 @@
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBURIPARSER_VERSION = 0.8.6
-+LIBURIPARSER_VERSION = 0.9.0
+-LIBURIPARSER_VERSION = 0.8.4
++LIBURIPARSER_VERSION = 0.8.5
  LIBURIPARSER_SOURCE = uriparser-$(LIBURIPARSER_VERSION).tar.bz2
- LIBURIPARSER_SITE = https://github.com/uriparser/uriparser/releases/download/uriparser-$(LIBURIPARSER_VERSION)
+-LIBURIPARSER_SITE = http://sourceforge.net/projects/uriparser/files/Sources/$(LIBURIPARSER_VERSION)
++LIBURIPARSER_SITE = https://github.com/uriparser/uriparser/releases/download/uriparser-$(LIBURIPARSER_VERSION)
  LIBURIPARSER_LICENSE = BSD-3-Clause
+ LIBURIPARSER_LICENSE_FILES = COPYING
+ LIBURIPARSER_INSTALL_STAGING = YES
