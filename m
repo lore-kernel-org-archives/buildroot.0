@@ -1,115 +1,55 @@
-From: Nasser Afshin <afshin.nasser@gmail.com>
-Date: Tue, 13 Nov 2018 17:14:04 +0330
-Subject: [Buildroot] [PATCH v3 3/3] merge_config.sh: Avoid false positive
- matches from comment lines
-In-Reply-To: <20181113134404.32235-1-afshin.nasser@gmail.com>
-References: <20181105083554.GC4485@x230>
- <20181113134404.32235-1-afshin.nasser@gmail.com>
-Message-ID: <20181113134404.32235-4-afshin.nasser@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 13 Nov 2018 15:51:02 +0100
+Subject: [Buildroot] [PATCH 1/2] fs: Add common rootfs dependencies to
+ PACKAGES
+In-Reply-To: <20181108130417.1277-2-anaumann@ultratronik.de>
+References: <20181108130417.1277-1-anaumann@ultratronik.de>
+ <20181108130417.1277-2-anaumann@ultratronik.de>
+Message-ID: <20181113155102.4f977baa@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Nasser Afshin <Afshin.Nasser@gmail.com>
+Hello Andres,
 
-We are using empty CONFIG_PREFIX_. This results in false positive match
-for comment lines when merging config fragments.
+On Thu,  8 Nov 2018 14:04:16 +0100, Andreas Naumann wrote:
 
-To avoid false positive reports, we use separate sed expressions and
-address comment lines explicitly.
+> diff --git a/fs/common.mk b/fs/common.mk
+> index 2a5a202a89..a4a178c88a 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -65,6 +65,7 @@ ROOTFS_COMMON_DEPENDENCIES = \
+>  	host-fakeroot host-makedevs \
+>  	$(BR2_TAR_HOST_DEPENDENCY) \
+>  	$(if $(PACKAGES_USERS)$(ROOTFS_USERS_TABLES),host-mkpasswd)
+> +PACKAGES += $(ROOTFS_COMMON_DEPENDENCIES)
 
-This is actually an upstream patch [1] from linux/kbuild project.
+Thanks a lot for testing the PPSH stuff and providing some bug fixes!
 
-[1] https://patchwork.kernel.org/patch/10667571/
+I've integrated into my patch series the following change:
 
-Signed-off-by: Nasser Afshin <Afshin.Nasser@gmail.com>
----
- support/kconfig/merge_config.sh                    |  7 +++--
- ...false-positive-matches-from-comment-lines.patch | 32 ++++++++++++++++++++++
- support/kconfig/patches/series                     |  1 +
- 3 files changed, 37 insertions(+), 3 deletions(-)
- create mode 100644 support/kconfig/patches/21-Avoid-false-positive-matches-from-comment-lines.patch
+@@ -171,7 +172,7 @@ rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1)
+ 
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
+ TARGETS_ROOTFS += rootfs-$(1)
+-PACKAGES += $$(filter-out rootfs-%,$$(ROOTFS_$(2)_DEPENDENCIES))
++PACKAGES += $$(filter-out rootfs-%,$$(ROOTFS_$(2)_DEPENDENCIES)) $(ROOTFS_COMMON_DEPENDENCIES)
+ endif
+ 
+ # Check for legacy POST_TARGETS rules
 
-diff --git a/support/kconfig/merge_config.sh b/support/kconfig/merge_config.sh
-index 404ca3864f..14917806a3 100755
---- a/support/kconfig/merge_config.sh
-+++ b/support/kconfig/merge_config.sh
-@@ -109,7 +109,8 @@ if [ ! -r "$INITFILE" ]; then
- fi
- 
- MERGE_LIST=$*
--SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(${CONFIG_PREFIX}[a-zA-Z0-9_]*\)[= ].*/\2/p"
-+SED_CONFIG_EXP1="s/^\(${CONFIG_PREFIX}[a-zA-Z0-9_]*\)=.*/\1/p"
-+SED_CONFIG_EXP2="s/^# \(${CONFIG_PREFIX}[a-zA-Z0-9_]*\) is not set$/\1/p"
- 
- TMP_FILE=$(mktemp -t .tmp.config.XXXXXXXXXX)
- 
-@@ -123,7 +124,7 @@ for MERGE_FILE in $MERGE_LIST ; do
- 		echo "The merge file '$MERGE_FILE' does not exist.  Exit." >&2
- 		exit 1
- 	fi
--	CFG_LIST=$(sed -n "$SED_CONFIG_EXP" $MERGE_FILE)
-+	CFG_LIST=$(sed -n -e "$SED_CONFIG_EXP1" -e "$SED_CONFIG_EXP2" $MERGE_FILE)
- 
- 	for CFG in $CFG_LIST ; do
- 		grep -q -w $CFG $TMP_FILE || continue
-@@ -166,7 +167,7 @@ make KCONFIG_ALLCONFIG=$TMP_FILE $EXTERNAL_ARG $OUTPUT_ARG $ALLTARGET
- 
- 
- # Check all specified config values took (might have missed-dependency issues)
--for CFG in $(sed -n "$SED_CONFIG_EXP" $TMP_FILE); do
-+for CFG in $(sed -n -e "$SED_CONFIG_EXP1" -e "$SED_CONFIG_EXP2" $TMP_FILE); do
- 
- 	REQUESTED_VAL=$(grep -w -e "$CFG" $TMP_FILE)
- 	ACTUAL_VAL=$(grep -w -e "$CFG" "$KCONFIG_CONFIG")
-diff --git a/support/kconfig/patches/21-Avoid-false-positive-matches-from-comment-lines.patch b/support/kconfig/patches/21-Avoid-false-positive-matches-from-comment-lines.patch
-new file mode 100644
-index 0000000000..c11144e47e
---- /dev/null
-+++ b/support/kconfig/patches/21-Avoid-false-positive-matches-from-comment-lines.patch
-@@ -0,0 +1,32 @@
-+Index: kconfig/merge_config.sh
-+===================================================================
-+--- kconfig.orig/merge_config.sh
-++++ kconfig/merge_config.sh
-+@@ -109,7 +109,8 @@ if [ ! -r "$INITFILE" ]; then
-+ fi
-+ 
-+ MERGE_LIST=$*
-+-SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(${CONFIG_PREFIX}[a-zA-Z0-9_]*\)[= ].*/\2/p"
-++SED_CONFIG_EXP1="s/^\(${CONFIG_PREFIX}[a-zA-Z0-9_]*\)=.*/\1/p"
-++SED_CONFIG_EXP2="s/^# \(${CONFIG_PREFIX}[a-zA-Z0-9_]*\) is not set$/\1/p"
-+ 
-+ TMP_FILE=$(mktemp -t .tmp.config.XXXXXXXXXX)
-+ 
-+@@ -123,7 +124,7 @@ for MERGE_FILE in $MERGE_LIST ; do
-+ 		echo "The merge file '$MERGE_FILE' does not exist.  Exit." >&2
-+ 		exit 1
-+ 	fi
-+-	CFG_LIST=$(sed -n "$SED_CONFIG_EXP" $MERGE_FILE)
-++	CFG_LIST=$(sed -n -e "$SED_CONFIG_EXP1" -e "$SED_CONFIG_EXP2" $MERGE_FILE)
-+ 
-+ 	for CFG in $CFG_LIST ; do
-+ 		grep -q -w $CFG $TMP_FILE || continue
-+@@ -166,7 +167,7 @@ make KCONFIG_ALLCONFIG=$TMP_FILE $EXTERN
-+ 
-+ 
-+ # Check all specified config values took (might have missed-dependency issues)
-+-for CFG in $(sed -n "$SED_CONFIG_EXP" $TMP_FILE); do
-++for CFG in $(sed -n -e "$SED_CONFIG_EXP1" -e "$SED_CONFIG_EXP2" $TMP_FILE); do
-+ 
-+ 	REQUESTED_VAL=$(grep -w -e "$CFG" $TMP_FILE)
-+ 	ACTUAL_VAL=$(grep -w -e "$CFG" "$KCONFIG_CONFIG")
-diff --git a/support/kconfig/patches/series b/support/kconfig/patches/series
-index be8627db13..e5a6f69d8f 100644
---- a/support/kconfig/patches/series
-+++ b/support/kconfig/patches/series
-@@ -9,3 +9,4 @@
- 18-merge-config.sh-create-temporary-files-in-tmp.patch
- 19-merge_config.sh-add-br2-external-support.patch
- 20-merge_config.sh-Allow-to-define-config-prefix.patch
-+21-Avoid-false-positive-matches-from-comment-lines.patch
+which addresses this problem, while adding the dependencies only when a
+filesystem image is selected. Having duplicates in PACKAGES is not a
+problem.
+
+I hope to send a v4 of my series soon.
+
+Thanks!
+
+Thomas
 -- 
-2.15.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
