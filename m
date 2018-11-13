@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Nov 2018 23:57:08 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] gpsd: disable
+Date: Tue, 13 Nov 2018 23:57:19 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] gpsd: disable
  documentation
-Message-ID: <20181113225433.7192082BD3@busybox.osuosl.org>
+Message-ID: <20181113225441.4AF9382BD6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43b5fa2f73fc424cfb28a2f444e492ee59e63c27
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a893191052d59274696bc1b99939b8a8e5429bf6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Fixes:
  - http://autobuild.buildroot.org/results/cbdb4cc34080714082f044fde7e069e6ab5a0e8e
