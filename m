@@ -1,12 +1,12 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Tue, 13 Nov 2018 19:26:29 +0100
-Subject: [Buildroot] [PATCH v3 2/3] test-pkg: Use the correct config
- prefix when merging
-In-Reply-To: <20181113134404.32235-3-afshin.nasser@gmail.com>
+Date: Tue, 13 Nov 2018 19:35:55 +0100
+Subject: [Buildroot] [PATCH v3 1/3] merge_config.sh: Fix merging
+ buildroot config files
+In-Reply-To: <20181113134404.32235-2-afshin.nasser@gmail.com>
 References: <20181105083554.GC4485@x230>
  <20181113134404.32235-1-afshin.nasser@gmail.com>
- <20181113134404.32235-3-afshin.nasser@gmail.com>
-Message-ID: <20181113182628.GA16657@x230>
+ <20181113134404.32235-2-afshin.nasser@gmail.com>
+Message-ID: <20181113183554.GB16826@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,30 +15,21 @@ To: buildroot@busybox.net
 
 Hi Nasser,
 
-> From: Nasser Afshin <Afshin.Nasser@gmail.com>
+> This patch allows us to define config prefix with CONFIG_ environment
+> variable.
 
-> We should use an empty prefix as we do not have any prefix.
-> Note that BR2_ is mere a convention.
+> By setting the proper config prefix, we will have proper 'redundant
+> configuration warnings' when we use '-r -m' options.
 
-> Signed-off-by: Nasser Afshin <Afshin.Nasser@gmail.com>
+> This is actually an upstream patch [1] from linux/kbuild project.
+
+> [1] https://patchwork.kernel.org/patch/10660207/
+This is actually already in mainline for v4.20-rc1:
+2cd3faf87d2d8f6123adf34741b9a7b98828a76f
+("merge_config.sh: Allow to define config prefix")
+
+> Signed-off-by: Nasser Afshin <afshin.nasser@gmail.com>
 Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
->  utils/test-pkg | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-
-> diff --git a/utils/test-pkg b/utils/test-pkg
-> index aa91ee02cf..7bf1c97fba 100755
-> --- a/utils/test-pkg
-> +++ b/utils/test-pkg
-> @@ -129,7 +129,7 @@ build_one() {
-
->      mkdir -p "${dir}"
-
-> -    support/kconfig/merge_config.sh -O "${dir}" \
-> +    CONFIG_="" support/kconfig/merge_config.sh -O "${dir}" \
-Please, can you omit "" (not needed):
-CONFIG_= support/kconfig/merge_config.sh -O "${dir}" \
-
 
 Kind regards,
 Petr
