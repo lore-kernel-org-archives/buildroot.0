@@ -1,57 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Nov 2018 21:57:47 +0100
-Subject: [Buildroot] [PATCH v2] linux-firmware: bump version to latest
- 1baa348
-In-Reply-To: <20181113202946.GH10271@scaer>
-References: <20181108153322.17362-1-m.niestroj@grinn-global.com>
- <20181109215700.6b8dc6af@windsurf> <20181109210610.GB2445@scaer>
- <87bm6svqpy.fsf@grinn-global.com>
- <20181113210216.37879bd4@windsurf> <20181113202946.GH10271@scaer>
-Message-ID: <20181113215747.6960cbb3@windsurf>
+Date: Tue, 13 Nov 2018 21:59:04 +0100
+Subject: [Buildroot] [git commit branch/next] nftables: bump to version 0.9.0
+Message-ID: <20181113205721.067BA82AB7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2c9d505fba6912bd1135f8728f9b0cf8bb071956
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 13 Nov 2018 21:29:46 +0100, Yann E. MORIN wrote:
+Switch to https download site to save a redirect.
 
-> > On my side, I have updated to Fedora 29, which ships tar 1.30, that we
-> > consider as broken, and therefore now for everything single small build
-> > that I do, I'm paying the price of building tar, which is super
-> > annoying. This is especially annoying as tar 1.30 is only problematic
-> > when *creating* tarballs of git-fetched packages, which clearly does
-> > not happen at every build.  
-> 
-> Well, we only need host-tar and host-gzip when creating tarballs, not
-> extracting them, correct? So, we could very well envision the fact that
-> host-tar (and host-gzip) are only added to FOO_DOWNLOAD dependecies when
-> FOO_SITE_METHOD == git (and they are needed, of course), no?
+Optionally depend on the jansson for the newly introduced JSON output
+support.
 
-For host-tar, it's a bit complicated, because we have two conditions:
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/nftables/nftables.hash |  7 ++-----
+ package/nftables/nftables.mk   | 11 +++++++++--
+ 2 files changed, 11 insertions(+), 7 deletions(-)
 
- - tar must be >= 1.27 for *extraction* to work properly.
-
- - tar must be < 1.30 for *creation* to work properly
-
-So, if we add $(BR2_TAR_HOST_DEPENDENCY) to the package dependencies
-only when FOO_SITE_METHOD = git, we would miss the case where it is
-needed for extracting plain regular tarballs.
-
-> > It would be truly horrible to also have to build our own gzip. Maybe we
-> > need to somehow revisit our requirement that we need to have
-> > reproducible tarballs for git-fetched packages ?  
-> 
-> I am ready to pay the price for reproducibility any time.
-
-Well, for a "normal" build, I agree. When doing active BR development,
-where one regularly builds from scratch small configurations, every
-additional amount of time/stuff to build is annoying.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/nftables/nftables.hash b/package/nftables/nftables.hash
+index 3effe68f2e..a0e0d5e779 100644
+--- a/package/nftables/nftables.hash
++++ b/package/nftables/nftables.hash
+@@ -1,6 +1,3 @@
+-# From http://www.netfilter.org/projects/nftables/downloads.html
+-sha1	533cb3bf17e90579d24f9621fdb22bdb4f7e3287 	nftables-0.8.3.tar.bz2
+-# Locally calculated after checking pgp signature
+-# http://www.netfilter.org/projects/nftables/files/nftables-0.8.3.tar.bz2.sig
+-sha256	d16be1f5db88e95d29fc0b0e4df88acd079f3ee8e2b872ec7673f9a0d5d95e38	nftables-0.8.3.tar.bz2
++# From https://netfilter.org/projects/nftables/downloads.html
++sha256	ad8181b5fcb9ca572f444bed54018749588522ee97e4c21922648bb78d7e7e91	nftables-0.9.0.tar.bz2
+ sha256	c17bc4fa5b2434c6f283ffcb2312e5bf3c7cdf5787b79505f094d8de734ac53e	COPYING
+diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
+index 571cd33ad5..9f12e42c58 100644
+--- a/package/nftables/nftables.mk
++++ b/package/nftables/nftables.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-NFTABLES_VERSION = 0.8.3
++NFTABLES_VERSION = 0.9.0
+ NFTABLES_SOURCE = nftables-$(NFTABLES_VERSION).tar.bz2
+-NFTABLES_SITE = http://www.netfilter.org/projects/nftables/files
++NFTABLES_SITE = https://www.netfilter.org/projects/nftables/files
+ NFTABLES_DEPENDENCIES = gmp libmnl libnftnl host-bison host-flex \
+ 	host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+ NFTABLES_LICENSE = GPL-2.0
+@@ -20,6 +20,13 @@ else
+ NFTABLES_CONF_OPTS += --without-cli
+ endif
+ 
++ifeq ($(BR2_PACKAGE_JANSSON),y)
++NFTABLES_DEPENDENCIES += jansson
++NFTABLES_CONF_OPTS += --with-json
++else
++NFTABLES_CONF_OPTS += --without-json
++endif
++
+ ifeq ($(BR2_STATIC_LIBS)$(BR2_PACKAGE_LIBNFTNL_JSON),yy)
+ NFTABLES_LIBS += -ljansson -lm
+ endif
