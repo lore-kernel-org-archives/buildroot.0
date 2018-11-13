@@ -1,43 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Nov 2018 09:16:46 +0100
-Subject: [Buildroot] [PATCH] elfutils: security bump to version 0.174
-In-Reply-To: <20181112224431.11501-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 12 Nov 2018 23:44:31 +0100")
-References: <20181112224431.11501-1-peter@korsgaard.com>
-Message-ID: <87bm6t4ck1.fsf@dell.be.48ers.dk>
+Date: Tue, 13 Nov 2018 09:16:28 +0100
+Subject: [Buildroot] [git commit] libnss: security bump to version 3.39
+Message-ID: <20181113081430.8BB6782765@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1c32e4c298d02ce7ca3c3551be8c31051dde7801
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes the following security issues:
- > CVE-2018-16062: dwarf_getaranges in dwarf_getaranges.c in libdw in elfutils
- > before 2018-08-18 allows remote attackers to cause a denial of service
- > (heap-based buffer over-read) via a crafted file.
+Fixes the following security issue:
 
- > CVE-2018-16402: libelf/elf_end.c in elfutils 0.173 allows remote attackers
- > to cause a denial of service (double free and application crash) or possibly
- > have unspecified other impact because it tries to decompress twice.
+CVE-2018-12384: NSS responded to an SSLv2-compatible ClientHello with a
+ServerHello that had an all-zero random.
 
- > CVE-2018-16403: libdw in elfutils 0.173 checks the end of the attributes
- > list incorrectly in dwarf_getabbrev in dwarf_getabbrev.c and dwarf_hasattr
- > in dwarf_hasattr.c, leading to a heap-based buffer over-read and an
- > application crash.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > For more details, see the announcement:
- > https://sourceware.org/ml/elfutils-devel/2018-q3/msg00116.html
-
- > 0.172 and 0.173 also included fixes for crashes and hangs found by afl-fuzz
- > (no CVEs assigned):
- > https://sourceware.org/ml/elfutils-devel/2018-q2/msg00272.html
- > https://sourceware.org/ml/elfutils-devel/2018-q2/msg00209.html
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 2a7ca2b065..9c3cefd818 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_38_RTM/src/SHA256SUMS
+-sha256	2c643d3c08d6935f4d325f40743719b6990aa25a79ec2f8f712c99d086672f62  nss-3.38.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_39_RTM/src/SHA256SUMS
++sha256	6be64dd76f212415cc8bc34343ac1e7389048db4db9a023a84873c411dc5864b  nss-3.39.tar.gz
+ # Locally calculated
+ sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 0693f71ee6..73c9b08fd2 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.38
++LIBNSS_VERSION = 3.39
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
