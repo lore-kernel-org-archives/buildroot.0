@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Nov 2018 23:47:28 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] brotli: update to version
+Date: Tue, 13 Nov 2018 23:47:37 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] brotli: update to version
  1.0.7
-Message-ID: <20181113224450.2B88A82BA2@busybox.osuosl.org>
+Message-ID: <20181113224459.1F3C382BA4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=021e95bca3b87c20b85e81774bb7360c978af903
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b67ad87e887850ac47077a822f2e19de57531d44
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 The new version, among other changes, includes important fixes
 for unaligned memory access on ARM (both for 32 and 64-bit), as well
