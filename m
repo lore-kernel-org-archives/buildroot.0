@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Nov 2018 00:12:12 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] ruby: security bump to
+Date: Wed, 14 Nov 2018 00:12:19 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] ruby: security bump to
  version 2.4.5
-Message-ID: <20181113230934.43144831C6@busybox.osuosl.org>
+Message-ID: <20181113230941.13FC8831CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6167179b0244c233e5ce9916b475c9ceb962482a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7b45d4b5fba5544b801688365b9da2b366dbf2d7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 Fixes the following security issues:
 
@@ -46,7 +46,7 @@ index dd4cfc202b..b36d49461c 100644
  sha256 f5eb1b2956d5f7a67b2e5722a3749bc2fe86f9c580f2e3f5a08519cf073b5864  COPYING
  sha256 a5e3042dacb53eebda91f3b1caefbfec8307711df8c4ed1ed20e4e97c43307a4  BSDL
 diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 93c3170cf6..d6e5fdb43c 100644
+index b85ee9d069..3e71596bb4 100644
 --- a/package/ruby/ruby.mk
 +++ b/package/ruby/ruby.mk
 @@ -5,7 +5,7 @@
