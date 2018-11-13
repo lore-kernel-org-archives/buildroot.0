@@ -1,59 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Nov 2018 08:25:36 +0100
-Subject: [Buildroot] [git commit branch/next] libcurl: Don't need
- --without-(ssl/gnutls/nss/mbedtls) twice
-Message-ID: <20181113072414.AFCB2827EE@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 13 Nov 2018 09:43:08 +0200
+Subject: [Buildroot] [PATCH] libnspr: fix nios2 and microblaze support
+ patches
+Message-ID: <5e84d7a9d569bbcaf66e3a8b0c947f1cda075d2f.1542094988.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=97060f445eed65d30326db8554be7ed3151ffa33
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Commit c9e3d5b6c57 (libnspr: bump to version 4.20) did not refresh the
+hunks touching the _linux.cfg file. As a result, these hunk were applied
+to the wrong (x86 specific) place in that file, rendering them
+ineffective. Refresh the patches to fix that.
 
-Remove the --without-* options from the yes side of the TLS libraries
-selection checks.
+Fixes:
+http://autobuild.buildroot.net/results/2d1/2d1288e98a6459d84c2599c99b5617a2fde81f62/
 
-Since the --without-* option is now specified when the corresponding TLS
-library is not being used, it's no longer necessary when enabling a TLS
-library to explicity list all the other TLS libs that curl should not
-use.
-
-Signed-off-by: Trent Piepho <tpiepho@impinj.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/libcurl/libcurl.mk | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ package/libnspr/0001-nios2.patch      | 6 +++---
+ package/libnspr/0002-microblaze.patch | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index b6b8e0abc8..5aa6d542ad 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -50,14 +50,14 @@ LIBCURL_CONF_OPTS += -without-ssl
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBCURL_GNUTLS),y)
--LIBCURL_CONF_OPTS += --with-gnutls=$(STAGING_DIR)/usr --without-ssl
-+LIBCURL_CONF_OPTS += --with-gnutls=$(STAGING_DIR)/usr
- LIBCURL_DEPENDENCIES += gnutls
- else
- LIBCURL_CONF_OPTS += --without-gnutls
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBCURL_LIBNSS),y)
--LIBCURL_CONF_OPTS += --with-nss=$(STAGING_DIR)/usr --without-ssl --without-gnutls
-+LIBCURL_CONF_OPTS += --with-nss=$(STAGING_DIR)/usr
- LIBCURL_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) `$(PKG_CONFIG_HOST_BINARY) nspr nss --cflags`"
- LIBCURL_DEPENDENCIES += libnss
- else
-@@ -65,8 +65,7 @@ LIBCURL_CONF_OPTS += --without-nss
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBCURL_MBEDTLS),y)
--LIBCURL_CONF_OPTS += --with-mbedtls=$(STAGING_DIR)/usr \
--	--without-ssl --without-gnutls --without-nss
-+LIBCURL_CONF_OPTS += --with-mbedtls=$(STAGING_DIR)/usr
- LIBCURL_DEPENDENCIES += mbedtls
- else
- LIBCURL_CONF_OPTS += --without-mbedtls
+diff --git a/package/libnspr/0001-nios2.patch b/package/libnspr/0001-nios2.patch
+index c08fbb272b91..2a967c4593c9 100644
+--- a/package/libnspr/0001-nios2.patch
++++ b/package/libnspr/0001-nios2.patch
+@@ -9,9 +9,9 @@ Index: b/nspr/pr/include/md/_linux.cfg
+ ===================================================================
+ --- a/nspr/pr/include/md/_linux.cfg
+ +++ b/nspr/pr/include/md/_linux.cfg
+-@@ -1017,6 +1017,51 @@
+- #define PR_BYTES_PER_WORD_LOG2   2
+- #define PR_BYTES_PER_DWORD_LOG2  3
++@@ -1112,6 +1112,51 @@
++ #define PR_BYTES_PER_WORD_LOG2  3
++ #define PR_BYTES_PER_DWORD_LOG2 3
+  
+ +#elif defined(__nios2__)
+ +
+diff --git a/package/libnspr/0002-microblaze.patch b/package/libnspr/0002-microblaze.patch
+index 46a44852776e..4c23259d58c6 100644
+--- a/package/libnspr/0002-microblaze.patch
++++ b/package/libnspr/0002-microblaze.patch
+@@ -9,7 +9,7 @@ Index: b/nspr/pr/include/md/_linux.cfg
+ ===================================================================
+ --- a/nspr/pr/include/md/_linux.cfg
+ +++ b/nspr/pr/include/md/_linux.cfg
+-@@ -1062,6 +1062,56 @@
++@@ -1157,6 +1157,56 @@
+  #define PR_BYTES_PER_WORD_LOG2   2
+  #define PR_BYTES_PER_DWORD_LOG2  3
+  
+-- 
+2.19.1
