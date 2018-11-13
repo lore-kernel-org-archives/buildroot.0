@@ -1,72 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Nov 2018 20:55:49 +0100
-Subject: [Buildroot] [git commit branch/next] support/testing: add
- python-crossbar tests
-Message-ID: <20181113195358.8E44282961@busybox.osuosl.org>
+Date: Tue, 13 Nov 2018 20:55:45 +0100
+Subject: [Buildroot] [git commit branch/next] support/testing: use
+ TestPythonPackageBase for python-autobahn
+Message-ID: <20181113195358.61C3C8285F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad361c69f6003bc1e5df5bf6a6b64fe8d9b54645
+commit: https://git.buildroot.net/buildroot/commit/?id=b5dd9364ee710ef036556dcda78f682ae27fefa0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This test invokes "crossbar version" command, that checks all
-dependencies found in setup.py files and prints some system related
-information.
-Add haveged to the target to generate enough entropy so crossbar ->
-pynacl -> libsodium don't hang waiting for /dev/random.
+Move the test script to be run on the target from inline in the test
+case to a separate file.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-[Ricardo: move test script to a separate file, remove Python 2 variant,
- add haveged to target to add entropy and avoid hanging]
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Asaf Kahlon <asafka7@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .gitlab-ci.yml                                          |  1 +
- support/testing/tests/package/sample_python_crossbar.py |  3 +++
- support/testing/tests/package/test_python_crossbar.py   | 14 ++++++++++++++
- 3 files changed, 18 insertions(+)
+ .../tests/package/sample_python_autobahn.py        |  1 +
+ .../testing/tests/package/test_python_autobahn.py  | 29 +++++++---------------
+ 2 files changed, 10 insertions(+), 20 deletions(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index c78f2ea581..0dfb3537c1 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -316,6 +316,7 @@ tests.package.test_python.TestPython2: *runtime_test
- tests.package.test_python.TestPython3: *runtime_test
- tests.package.test_python_autobahn.TestPythonPy2Autobahn: *runtime_test
- tests.package.test_python_autobahn.TestPythonPy3Autobahn: *runtime_test
-+tests.package.test_python_crossbar.TestPythonPy3Crossbar: *runtime_test
- tests.package.test_python_cryptography.TestPythonPy2Cryptography: *runtime_test
- tests.package.test_python_cryptography.TestPythonPy3Cryptography: *runtime_test
- tests.package.test_python_incremental.TestPythonPy2Incremental: *runtime_test
-diff --git a/support/testing/tests/package/sample_python_crossbar.py b/support/testing/tests/package/sample_python_crossbar.py
+diff --git a/support/testing/tests/package/sample_python_autobahn.py b/support/testing/tests/package/sample_python_autobahn.py
 new file mode 100644
-index 0000000000..3695fe92c0
+index 0000000000..8189b6a6b3
 --- /dev/null
-+++ b/support/testing/tests/package/sample_python_crossbar.py
-@@ -0,0 +1,3 @@
-+import crossbar
-+
-+crossbar.run(["version"])
-diff --git a/support/testing/tests/package/test_python_crossbar.py b/support/testing/tests/package/test_python_crossbar.py
-new file mode 100644
-index 0000000000..2d7b739b5c
---- /dev/null
-+++ b/support/testing/tests/package/test_python_crossbar.py
-@@ -0,0 +1,14 @@
++++ b/support/testing/tests/package/sample_python_autobahn.py
+@@ -0,0 +1 @@
++import autobahn.wamp  # noqa
+diff --git a/support/testing/tests/package/test_python_autobahn.py b/support/testing/tests/package/test_python_autobahn.py
+index 2bc0f0cccf..af1f617d6d 100644
+--- a/support/testing/tests/package/test_python_autobahn.py
++++ b/support/testing/tests/package/test_python_autobahn.py
+@@ -1,32 +1,21 @@
+-from tests.package.test_python import TestPythonBase
 +from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonPy3Crossbar(TestPythonPackageBase):
+ 
+ 
+-class TestPythonAutobahn(TestPythonBase):
+-    def import_test(self):
+-        cmd = self.interpreter + " -c 'import autobahn.wamp'"
+-        _, exit_code = self.emulator.run(cmd)
+-        self.assertEqual(exit_code, 0)
+-
+-
+-class TestPythonPy2Autobahn(TestPythonAutobahn):
+-    config = TestPythonBase.config + \
++class TestPythonPy2Autobahn(TestPythonPackageBase):
 +    __test__ = True
-+    # use haveged to generate enough entropy so crossbar -> pynacl -> libsodium don't hang waiting for /dev/random
 +    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_CROSSBAR=y
-+        BR2_PACKAGE_HAVEGED=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_crossbar.py"]
-+    timeout = 60
+         """
+         BR2_PACKAGE_PYTHON=y
+         BR2_PACKAGE_PYTHON_AUTOBAHN=y
+         """
++    sample_scripts = ["tests/package/sample_python_autobahn.py"]
+ 
+-    def test_run(self):
+-        self.login()
+-        self.import_test()
+ 
+-
+-class TestPythonPy3Autobahn(TestPythonAutobahn):
+-    config = TestPythonBase.config + \
++class TestPythonPy3Autobahn(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
+         """
+         BR2_PACKAGE_PYTHON3=y
+         BR2_PACKAGE_PYTHON_AUTOBAHN=y
+         """
+-
+-    def test_run(self):
+-        self.login()
+-        self.import_test()
++    sample_scripts = ["tests/package/sample_python_autobahn.py"]
