@@ -1,35 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Nov 2018 22:08:10 +0100
-Subject: [Buildroot] [PATCH] imx-uuc: bump revision to 79e9798e
-In-Reply-To: <20181112094402.1815-1-gary.bisson@boundarydevices.com>
-References: <20181112094402.1815-1-gary.bisson@boundarydevices.com>
-Message-ID: <20181113220810.3f4c3cba@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 13 Nov 2018 22:30:43 +0100
+Subject: [Buildroot] [PATCH 1/1] shadowsocks-libev: fix build on riscv
+Message-ID: <20181113213043.9083-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Gary,
+Define _REENTRANT otherwise pthread detection will fail
 
-On Mon, 12 Nov 2018 10:44:02 +0100, Gary Bisson wrote:
-> Main changes:
-> - fix build error by gcc 8.2
+Fixes:
+ - http://autobuild.buildroot.org/results/c5406206190b46e15d35d05c5ed026ee7632f5b1
 
-I know it is what the upstream commit says, but the makedev() issue has
-nothing to do with gcc 8.2, but with glibc 2.28. I fixed up the commit
-log on that aspect.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/shadowsocks-libev/shadowsocks-libev.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-To be honest, I hesitated a bit because we normally don't take version
-bumps in master at this point. However, this is a fairly small
-and not that widely used package, the number of upstream changes is not
-enormous, so I applied it to master. But I really hesitated with asking
-for just a backport of the glibc 2.28 fix instead.
-
-Thanks,
-
-Thomas
+diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
+index caae2176b4..7fdcd3f772 100644
+--- a/package/shadowsocks-libev/shadowsocks-libev.mk
++++ b/package/shadowsocks-libev/shadowsocks-libev.mk
+@@ -14,4 +14,11 @@ SHADOWSOCKS_LIBEV_CONF_OPTS = \
+ 	--with-pcre=$(STAGING_DIR)/usr \
+ 	--disable-ssp
+ 
++# gcc on riscv doesn't define _REENTRANT when -pthread is passed while
++# it should. Compensate this deficiency here otherwise shadowsocks-libev
++# configure script doesn't find that thread support is enabled.
++ifeq ($(BR2_riscv),y)
++SHADOWSOCKS_LIBEV_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_REENTRANT"
++endif
++
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.1
