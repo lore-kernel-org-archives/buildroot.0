@@ -1,38 +1,52 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 13 Nov 2018 22:30:43 +0100
-Subject: [Buildroot] [PATCH 1/1] shadowsocks-libev: fix build on riscv
-Message-ID: <20181113213043.9083-1-fontaine.fabrice@gmail.com>
+From: Marcin =?utf-8?Q?Niestr=C3=B3j?= <m.niestroj@grinn-global.com>
+Date: Tue, 13 Nov 2018 22:34:12 +0100
+Subject: [Buildroot] [PATCH v2] linux-firmware: bump version to latest
+ 1baa348
+In-Reply-To: <20181113210216.37879bd4@windsurf>
+References: <20181108153322.17362-1-m.niestroj@grinn-global.com>
+ <20181109215700.6b8dc6af@windsurf> <20181109210610.GB2445@scaer>
+ <87bm6svqpy.fsf@grinn-global.com> <20181113210216.37879bd4@windsurf>
+Message-ID: <87a7mcsluz.fsf@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Define _REENTRANT otherwise pthread detection will fail
+Hi,
 
-Fixes:
- - http://autobuild.buildroot.org/results/c5406206190b46e15d35d05c5ed026ee7632f5b1
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/shadowsocks-libev/shadowsocks-libev.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+> Hello,
+>
+> On Tue, 13 Nov 2018 18:20:57 +0100, Marcin Niestr?j wrote:
+>
+>> I have investigated the issue on my side. It turns out that gzip is
+>> really the issue here.
+>
+> Thanks for the additional investigation!
 
-diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
-index caae2176b4..7fdcd3f772 100644
---- a/package/shadowsocks-libev/shadowsocks-libev.mk
-+++ b/package/shadowsocks-libev/shadowsocks-libev.mk
-@@ -14,4 +14,11 @@ SHADOWSOCKS_LIBEV_CONF_OPTS = \
- 	--with-pcre=$(STAGING_DIR)/usr \
- 	--disable-ssp
- 
-+# gcc on riscv doesn't define _REENTRANT when -pthread is passed while
-+# it should. Compensate this deficiency here otherwise shadowsocks-libev
-+# configure script doesn't find that thread support is enabled.
-+ifeq ($(BR2_riscv),y)
-+SHADOWSOCKS_LIBEV_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_REENTRANT"
-+endif
-+
- $(eval $(autotools-package))
+Some new findings now. It turned out that I actually used pigz instead
+of gzip. It was not directly clear, because I had PATH variable
+prepended with a directory containing "gzip -> /usr/bin/pigz". I have
+set this up ~3 years ago and totally forgot about that. Sorry for
+misleading that gzip version / patch could be the reason of wrong hash
+in my case.
+
+I need to really go through all the patches that got applied to
+master...
+
+>
+>> You can find differences in package here:
+>> https://git.archlinux.org/svntogit/packages.git/log/trunk?h=packages/gzip
+>> 
+>> I have also checked output of gzip command on another PC with pigz
+>> configured as gzip drop-in replacement. It outputs even different file,
+>> with different sha256 hash.
+>> 
+>> I think the overall conclusion is that a host-gzip package is needed,
+>> just like host-tar. In the meantime I will send v3 of this patch with
+>> proper hash (the same as you calculated above).
+
 -- 
-2.14.1
+Marcin Niestr?j
