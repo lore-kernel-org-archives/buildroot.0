@@ -1,55 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Nov 2018 21:02:16 +0100
-Subject: [Buildroot] [PATCH v2] linux-firmware: bump version to latest
- 1baa348
-In-Reply-To: <87bm6svqpy.fsf@grinn-global.com>
-References: <20181108153322.17362-1-m.niestroj@grinn-global.com>
- <20181109215700.6b8dc6af@windsurf> <20181109210610.GB2445@scaer>
- <87bm6svqpy.fsf@grinn-global.com>
-Message-ID: <20181113210216.37879bd4@windsurf>
+Date: Tue, 13 Nov 2018 20:58:05 +0100
+Subject: [Buildroot] [git commit branch/next] package/linux-tools: add
+ support for pcitest tool
+Message-ID: <20181113200124.333DC82962@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=63e457639abb29781582320825496fece79a675e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 13 Nov 2018 18:20:57 +0100, Marcin Niestr?j wrote:
+Add support for selection and compiling the pcitest tool on buildroot.
 
-> I have investigated the issue on my side. It turns out that gzip is
-> really the issue here.
+This tool is available to be compiled since kernel 4.20.
 
-Thanks for the additional investigation!
+Signed-off-by: Gustavo Pimentel <gustavo.pimentel@synopsys.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/linux-tools/Config.in            |  9 +++++++++
+ package/linux-tools/linux-tool-pci.mk.in | 27 +++++++++++++++++++++++++++
+ 2 files changed, 36 insertions(+)
 
-> You can find differences in package here:
-> https://git.archlinux.org/svntogit/packages.git/log/trunk?h=packages/gzip
-> 
-> I have also checked output of gzip command on another PC with pigz
-> configured as gzip drop-in replacement. It outputs even different file,
-> with different sha256 hash.
-> 
-> I think the overall conclusion is that a host-gzip package is needed,
-> just like host-tar. In the meantime I will send v3 of this patch with
-> proper hash (the same as you calculated above).
-
-This is getting really horrible.
-
-On my side, I have updated to Fedora 29, which ships tar 1.30, that we
-consider as broken, and therefore now for everything single small build
-that I do, I'm paying the price of building tar, which is super
-annoying. This is especially annoying as tar 1.30 is only problematic
-when *creating* tarballs of git-fetched packages, which clearly does
-not happen at every build.
-
-It would be truly horrible to also have to build our own gzip. Maybe we
-need to somehow revisit our requirement that we need to have
-reproducible tarballs for git-fetched packages ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+index 349dc6bf0d..f4199fd618 100644
+--- a/package/linux-tools/Config.in
++++ b/package/linux-tools/Config.in
+@@ -34,6 +34,15 @@ config BR2_PACKAGE_LINUX_TOOLS_IIO
+ 
+ 	  These tools are available only from kernel version 4.7.
+ 
++config BR2_PACKAGE_LINUX_TOOLS_PCI
++	bool "pci"
++	select BR2_PACKAGE_LINUX_TOOLS
++	help
++	  pcitest is a tool for testing capabilities related to a
++	  PCI Endpoint (only works with specific Endpoints).
++
++	  These tools are available only from kernel version 4.20.
++
+ config BR2_PACKAGE_LINUX_TOOLS_PERF
+ 	bool "perf"
+ 	select BR2_PACKAGE_LINUX_TOOLS
+diff --git a/package/linux-tools/linux-tool-pci.mk.in b/package/linux-tools/linux-tool-pci.mk.in
+new file mode 100644
+index 0000000000..4ef0368a32
+--- /dev/null
++++ b/package/linux-tools/linux-tool-pci.mk.in
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# pci
++#
++################################################################################
++
++LINUX_TOOLS += pci
++
++PCI_MAKE_OPTS = $(LINUX_MAKE_FLAGS)
++
++define PCI_BUILD_CMDS
++	$(Q)if ! grep install $(LINUX_DIR)/tools/pci/Makefile >/dev/null 2>&1 ; then \
++		echo "Your kernel version is too old and does not have install section in the pci tools." ; \
++		echo "At least kernel 4.20 must be used." ; \
++		exit 1 ; \
++	fi
++
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/pci \
++		$(PCI_MAKE_OPTS)
++endef
++
++define PCI_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/pci \
++		$(PCI_MAKE_OPTS) \
++		DESTDIR=$(TARGET_DIR) \
++		install
++endef
