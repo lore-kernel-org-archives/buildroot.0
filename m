@@ -1,46 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Nov 2018 00:09:13 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] qemu: sdl frontend needs
- x11
-Message-ID: <20181113230808.AFF4C82DFB@busybox.osuosl.org>
+Date: Wed, 14 Nov 2018 00:11:25 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] lighttpd: bump to version
+ 1.4.49
+Message-ID: <20181113230854.4FE7A82EAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d1d92ff1fd1ae552cc72d50889b1789d1f1635bc
+commit: https://git.buildroot.net/buildroot/commit/?id=da7f34d20b4f592cf25de7ee8a6f7eaa4e2d9000
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Since qemu 2.12.0 and
-https://github.com/qemu/qemu/commit/2ec78706d188df7d3dab43d07b19b05ef7800a44,
-x_keymap.h has been converted from "SDL display driver" to "X11 keymaps"
-
-So add a select on BR2_PACKAGE_SDL_X11
-
-Fixes:
- - http://autobuild.buildroot.org/results/1908d2d7de8d3aff11ed6fbb8fe4cf3eff54b5a5
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8153ce21e7d1a11c6ac9a722d81a2e14f5428dbd)
+(cherry picked from commit b94ddb8d5d1cc74eaf47d3272c2313860d96430d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qemu/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/lighttpd/lighttpd.hash | 4 ++--
+ package/lighttpd/lighttpd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 13b615bfba..cf25c35194 100644
---- a/package/qemu/Config.in
-+++ b/package/qemu/Config.in
-@@ -97,7 +97,9 @@ comment "Frontends"
+diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
+index 813d1cd0e0..c99e240c7b 100644
+--- a/package/lighttpd/lighttpd.hash
++++ b/package/lighttpd/lighttpd.hash
+@@ -1,4 +1,4 @@
+-# From http://www.lighttpd.net/
+-sha256 0f8ad5aac7529d7b948b9d7e8cd0b4a9e177309d85d6bf6516e28e6e40d74f36  lighttpd-1.4.48.tar.xz
++# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.49.sha256sum
++sha256 aedf49d7127d9e4c0ea56618e9e945a17674dc46a37ac7990120f87dd939ce09  lighttpd-1.4.49.tar.xz
+ # Locally calculated
+ sha256 5c98cad2fbaf5c5e2562bcbab401a7c557c1bb1bac9914ecc63730925052fb13  COPYING
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index 0a09d9127b..06561e9f55 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- config BR2_PACKAGE_QEMU_SDL
- 	bool "Enable SDL frontend"
-+	depends on BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_SDL
-+	select BR2_PACKAGE_SDL_X11
- 	help
- 	  Say 'y' to enable the SDL frontend, that is, a graphical
- 	  window presenting the VM's display.
+ LIGHTTPD_VERSION_MAJOR = 1.4
+-LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).48
++LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).49
+ LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
+ LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
+ LIGHTTPD_LICENSE = BSD-3-Clause
