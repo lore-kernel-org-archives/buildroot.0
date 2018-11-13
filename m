@@ -1,34 +1,29 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 13 Nov 2018 23:14:24 +0100
-Subject: [Buildroot] [PATCH 1/1] wireshark: fix static build with snappy
-Message-ID: <20181113221424.6607-1-fontaine.fabrice@gmail.com>
+From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Date: Tue, 13 Nov 2018 23:19:26 +0100
+Subject: [Buildroot] [PATCH] systemd: Explicitly configure
+ split-usr=false and split-bin=true
+In-Reply-To: <20181111215547.488b4a96@windsurf.home>
+References: <20181111150652.17459-1-alexander.sverdlin@gmail.com>
+ <20181111150652.17459-7-alexander.sverdlin@gmail.com>
+ <20181111215547.488b4a96@windsurf.home>
+Message-ID: <d51164b2-20f6-74a7-290e-a0d2f742d2ed@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/9089e74c0f8428d28953ae037a84aa8a08db7ded
+Hello Thomas,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/wireshark/wireshark.mk | 3 +++
- 1 file changed, 3 insertions(+)
+On 11/11/2018 21:55, Thomas Petazzoni wrote:
+>> bison-based build of systemd runs couple of checks on the structure of the
+> I assume you wanted to say "meson-based build" and not "bison-based
+> build". I've fixed that and applied to master. Thanks!
 
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 7c7dc784fe..4720960e59 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -138,6 +138,9 @@ endif
- ifeq ($(BR2_PACKAGE_SNAPPY),y)
- WIRESHARK_CONF_OPTS += --with-snappy=$(STAGING_DIR)/usr
- WIRESHARK_DEPENDENCIES += snappy
-+ifeq ($(BR2_STATIC_LIBS),y)
-+WIRESHARK_CONF_ENV += LIBS=-lstdc++
-+endif
- else
- WIRESHARK_CONF_OPTS += --without-snappy
- endif
--- 
-2.14.1
+this commit BTW fixes 7684637bf6 ("systemd: bump to v239")
+(broken PATH env passed to all services started by systemd),
+so it can go to 2018.08.x...
+
+--
+Best regards,
+Alexander.
