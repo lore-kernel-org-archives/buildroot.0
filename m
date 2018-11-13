@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Nov 2018 23:59:37 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] lcdproc: use
+Date: Tue, 13 Nov 2018 23:59:50 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] lcdproc: use
  ac_cv_mtab_file
-Message-ID: <20181113225657.E1AE882DAE@busybox.osuosl.org>
+Message-ID: <20181113225712.4A86082DB0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=961aa15808ac5843ffb577f3f9e41acd4c72137d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a62833438ee71385bb9841ca922283af371f6057
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Set ac_cv_mtab_file to /etc/mtab otherwise build will fail if no mtab,
 mnttab or fstab is found in /etc (on host)
