@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Nov 2018 23:44:19 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] p11-kit: fix detection of
+Date: Tue, 13 Nov 2018 23:44:33 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] p11-kit: fix detection of
  certificates path
-Message-ID: <20181113224147.90ED482B92@busybox.osuosl.org>
+Message-ID: <20181113224155.F092F82B96@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45852d82ea0d8a75831d94f20e0849bde38f586c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=bd87905b02f3d4e8f7051d3025e1ae0574f28ac2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 The p11-kit configure script looked for certificates location on the
 host. This doesn't work well with cross compilation. Make the
