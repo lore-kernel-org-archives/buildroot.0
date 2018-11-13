@@ -1,60 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Nov 2018 09:16:13 +0100
-Subject: [Buildroot] [git commit] libnspr: fix nios2 and microblaze support
- patches
-Message-ID: <20181113081430.8241982816@busybox.osuosl.org>
+Date: Tue, 13 Nov 2018 09:16:58 +0100
+Subject: [Buildroot] [git commit] elfutils: security bump to version 0.174
+Message-ID: <20181113081430.974A082765@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=56825a6518e46af5e0845760e20652426d6fe3b2
+commit: https://git.buildroot.net/buildroot/commit/?id=6a74acb6fb6b21a0a5c97cdfc73f0d20a9af2f75
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit c9e3d5b6c57 (libnspr: bump to version 4.20) did not refresh the
-hunks touching the _linux.cfg file. As a result, these hunk were applied
-to the wrong (x86 specific) place in that file, rendering them
-ineffective. Refresh the patches to fix that.
+Fixes the following security issues:
 
-Fixes:
-http://autobuild.buildroot.net/results/2d1/2d1288e98a6459d84c2599c99b5617a2fde81f62/
+CVE-2018-16062: dwarf_getaranges in dwarf_getaranges.c in libdw in elfutils
+before 2018-08-18 allows remote attackers to cause a denial of service
+(heap-based buffer over-read) via a crafted file.
 
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+CVE-2018-16402: libelf/elf_end.c in elfutils 0.173 allows remote attackers
+to cause a denial of service (double free and application crash) or possibly
+have unspecified other impact because it tries to decompress twice.
+
+CVE-2018-16403: libdw in elfutils 0.173 checks the end of the attributes
+list incorrectly in dwarf_getabbrev in dwarf_getabbrev.c and dwarf_hasattr
+in dwarf_hasattr.c, leading to a heap-based buffer over-read and an
+application crash.
+
+For more details, see the announcement:
+https://sourceware.org/ml/elfutils-devel/2018-q3/msg00116.html
+
+0.172 and 0.173 also included fixes for crashes and hangs found by afl-fuzz
+(no CVEs assigned):
+https://sourceware.org/ml/elfutils-devel/2018-q2/msg00272.html
+https://sourceware.org/ml/elfutils-devel/2018-q2/msg00209.html
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnspr/0001-nios2.patch      | 6 +++---
- package/libnspr/0002-microblaze.patch | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/elfutils/elfutils.hash | 4 ++--
+ package/elfutils/elfutils.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libnspr/0001-nios2.patch b/package/libnspr/0001-nios2.patch
-index c08fbb272b..2a967c4593 100644
---- a/package/libnspr/0001-nios2.patch
-+++ b/package/libnspr/0001-nios2.patch
-@@ -9,9 +9,9 @@ Index: b/nspr/pr/include/md/_linux.cfg
- ===================================================================
- --- a/nspr/pr/include/md/_linux.cfg
- +++ b/nspr/pr/include/md/_linux.cfg
--@@ -1017,6 +1017,51 @@
-- #define PR_BYTES_PER_WORD_LOG2   2
-- #define PR_BYTES_PER_DWORD_LOG2  3
-+@@ -1112,6 +1112,51 @@
-+ #define PR_BYTES_PER_WORD_LOG2  3
-+ #define PR_BYTES_PER_DWORD_LOG2 3
-  
- +#elif defined(__nios2__)
- +
-diff --git a/package/libnspr/0002-microblaze.patch b/package/libnspr/0002-microblaze.patch
-index 46a4485277..4c23259d58 100644
---- a/package/libnspr/0002-microblaze.patch
-+++ b/package/libnspr/0002-microblaze.patch
-@@ -9,7 +9,7 @@ Index: b/nspr/pr/include/md/_linux.cfg
- ===================================================================
- --- a/nspr/pr/include/md/_linux.cfg
- +++ b/nspr/pr/include/md/_linux.cfg
--@@ -1062,6 +1062,56 @@
-+@@ -1157,6 +1157,56 @@
-  #define PR_BYTES_PER_WORD_LOG2   2
-  #define PR_BYTES_PER_DWORD_LOG2  3
-  
+diff --git a/package/elfutils/elfutils.hash b/package/elfutils/elfutils.hash
+index dc321e9359..5a76cd5868 100644
+--- a/package/elfutils/elfutils.hash
++++ b/package/elfutils/elfutils.hash
+@@ -1,5 +1,5 @@
+-# From https://sourceware.org/elfutils/ftp/0.171/sha512.sum
+-sha512 777be2d63ca9b11440bf358a33428d9ca974e2612a880934156c9f7194af596ed627c1ed2d48dbd47a3761c94913b8f39565f9dcb6b62c92bf229f04c96d5ee3  elfutils-0.171.tar.bz2
++# From https://sourceware.org/elfutils/ftp/0.174/sha512.sum
++sha512 696708309c2a9a076099748809ecdc0490f4a8a842b2efc1aae0d746e7c5a8b203743f5626739eff837216b0c052696516b2821f5d3cc3f2eef86597c96d42df  elfutils-0.174.tar.bz2
+ # Locally calculated
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING-GPLV2
+diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
+index 5eaaaeadad..2d62017bba 100644
+--- a/package/elfutils/elfutils.mk
++++ b/package/elfutils/elfutils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ELFUTILS_VERSION = 0.171
++ELFUTILS_VERSION = 0.174
+ ELFUTILS_SOURCE = elfutils-$(ELFUTILS_VERSION).tar.bz2
+ ELFUTILS_SITE = https://sourceware.org/elfutils/ftp/$(ELFUTILS_VERSION)
+ ELFUTILS_INSTALL_STAGING = YES
