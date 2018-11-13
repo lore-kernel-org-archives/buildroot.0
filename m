@@ -1,27 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Nov 2018 00:00:09 +0100
-Subject: [Buildroot] [PATCH 1/1] lcdproc: use ac_cv_mtab_file
-In-Reply-To: <20181027210114.8662-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 27 Oct 2018 23:01:14 +0200")
-References: <20181027210114.8662-1-fontaine.fabrice@gmail.com>
-Message-ID: <8736s4y45i.fsf@dell.be.48ers.dk>
+Date: Wed, 14 Nov 2018 00:00:51 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] libkcapi: disable
+ documentation
+Message-ID: <20181113225822.9C31D82DB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=4cff194139a0d8f08ba43994b38fc41cfbe63a3c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
- > Set ac_cv_mtab_file to /etc/mtab otherwise build will fail if no mtab,
- > mnttab or fstab is found in /etc (on host)
+Disable db2pdf, db2ps and xmlto which are used for building PDF, PS, man
+or html documentation
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/efaf2833d674c7e366c59f367f0b83c7f88546bb
+Fixes:
+ - http://autobuild.buildroot.org/results/28df3b50d90bc53b965280b77224f89fe09ec2b9
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 8b3dea2c2a0434fae4824cfe3098b93e684979ba)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libkcapi/libkcapi.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Committed to 2018.02.x and 2018.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libkcapi/libkcapi.mk b/package/libkcapi/libkcapi.mk
+index 1557d2017a..9edf0394d4 100644
+--- a/package/libkcapi/libkcapi.mk
++++ b/package/libkcapi/libkcapi.mk
+@@ -11,6 +11,10 @@ LIBKCAPI_AUTORECONF = YES
+ LIBKCAPI_INSTALL_STAGING = YES
+ LIBKCAPI_LICENSE = BSD-3-Clause (library), BSD-3-Clause or GPL-2.0 (programs)
+ LIBKCAPI_LICENSE_FILES = COPYING COPYING.gplv2 COPYING.bsd
++LIBKCAPI_CONF_ENV = \
++	ac_cv_path_DB2PDF="" \
++	ac_cv_path_DB2PS="" \
++	ac_cv_path_XMLTO=""
+ 
+ ifeq ($(BR2_PACKAGE_LIBKCAPI_HASHER),y)
+ LIBKCAPI_CONF_OPTS += --enable-kcapi-hasher
