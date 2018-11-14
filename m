@@ -1,64 +1,150 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 14 Nov 2018 11:55:56 +0100
-Subject: [Buildroot] [PATCH next v4 5/6] Makefile: define
- TARGET_DIR_WARNING_FILE relative to TARGET_DIR
-In-Reply-To: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
-References: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181114105557.12599-6-thomas.petazzoni@bootlin.com>
+Date: Wed, 14 Nov 2018 11:55:51 +0100
+Subject: [Buildroot] [PATCH next v4 0/6] Per-package host/target directory
+ support
+Message-ID: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In commit 7e9870ce32d6329d9e3d602247fbe1709a2275a4 ("core: introduce
-intermediate BASE_TARGET_DIR variable"), the definition of
-TARGET_DIR_WARNING_FILE was changed to use $(BASE_TARGET_DIR) instead
-of $(TARGET_DIR).
+Hello,
 
-However, this change is incompatible with per-package directories, and
-is in fact not needed.
+Here is a fourth iteration of the per-package SDK and target directory
+implementation.
 
-With per-package directories, using $(BASE_TARGET_DIR) means that
-TARGET_DIR_WARNING_FILE is
-output/target/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM. Due to this, when
-skeleton-init-common or skeleton-custom attempt to install it, it
-fails, because it should be installed to their package per-package
-target directory, and not the global output/target folder that doesn't
-exist yet. The failure looks like this:
+If you're interested in testing it, you can find the patch series at:
 
-/usr/bin/install -m 0644 support/misc/target-dir-warning.txt /home/thomas/projets/buildroot/output/target/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
-/usr/bin/install: cannot create regular file '/home/thomas/projets/buildroot/output/target/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM': No such file or directory
-make[1]: *** [package/pkg-generic.mk:336: /home/thomas/projets/buildroot/output/build/skeleton-init-common/.stamp_target_installed] Error 1
+  http://git.bootlin.com/users/thomas-petazzoni/buildroot/log/?h=ppsh-v4
 
-TARGET_DIR_WARNING_FILE is used in three places:
+Changes since v4
+================
 
- - In skeleton-custom.mk and skeleton-init-common.mk, where as
-   explained above, using $(TARGET_DIR) fixes the use of
-   $(TARGET_DIR_WARNING_FILE) in the context of per-package target
-   directories.
+ - Dropped patches that have been merged upstream, mainly the "extract
+   dependency" patches, but also a few other preparation patches.
 
- - In fs/common.mk, where it is used as argument to $(notdir ...) to
-   retrieve just the name of the warning file. So in this case, we
-   really don't care about the path of the file, just its name.
+ - Dropped the change of the RPATH handling. As discussed during
+   previous Buildroot Developers meeting, it is not a big problem if
+   during the build, the RPATH of a binary points to the library
+   folder of another package per-package folder. Therefore, instead of
+   fixing up RPATH at the end of each package installation, we keep
+   what Buildroot does today: fix them at the very end of the build.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ - Made the support for per-package folders optional. Indeed, we
+   realized there was no way to make sure it would be perfect from day
+   1. Even if the principle works, there are lots of package-specific
+   details to solve, and solving all of them before merging the base
+   per-package folder support is not reasonable. So for now, an option
+   BR2_PER_PACKAGE_FOLDERS is introduced, which defaults to off. When
+   this option is enabled, the .NOTPARALLEL statement of the main
+   Makefile goes away, which allows to do top-level parallel build.
 
-diff --git a/Makefile b/Makefile
-index 24c803872d..23032988a5 100644
---- a/Makefile
-+++ b/Makefile
-@@ -468,7 +468,7 @@ BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(PATH)"
- 
- # Location of a file giving a big fat warning that output/target
- # should not be used as the root filesystem.
--TARGET_DIR_WARNING_FILE = $(BASE_TARGET_DIR)/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
-+TARGET_DIR_WARNING_FILE = $(TARGET_DIR)/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
- 
- ifeq ($(BR2_CCACHE),y)
- CCACHE = $(HOST_DIR)/bin/ccache
+ - Addition of a commit that reworks how the top-level directories are
+   created.
+
+ - Introduction of a prepare-per-package-folder function in
+   pkg-generic.mk to encapsulate the logic to create the per-package
+   folders from the dependencies of a package.
+
+ - Rebased on top of the latest master.
+
+Changes since v3
+================
+
+ - Dropped patches that have been merged upstream:
+   pkgconf: use relative path to  STAGING_DIR instead of absolute path
+   toolchain: post-pone evaluation of  TOOLCHAIN_EXTERNAL_BIN
+
+ - For now, removed the most controversial/complicated patches
+   (changing the rpath strategy, and switching to per-package
+   host/target directories). The goal for now is to merge only the
+   preparation patches.
+
+Changes since v2
+================
+
+ - Solved the problem of all DEPENDENCIES_HOST_PREREQ targets:
+   host-ccache, host-tar, host-lzip, host-xz, host-fakedate.
+
+   To achieve this, introduced <pkg>_EXTRACT_DEPENDENCIES and used
+   that to handle the dependencies on host-tar, host-lzip and host-xz.
+
+   Used regular dependencies for host-ccache and host-fakedate.
+
+   See below for more details.
+
+Changes since v1
+================
+
+ - Rebased on the latest Buildroot next branch
+
+ - The pkg-config changes are reworked according to Arnout's comments:
+   only @STAGING_SUBDIR@ is replaced in pkg-config.in to generate
+   pkg-config, the rest of the logic is internal to the script.
+
+ - New patch to move the "host skeleton" logic into a proper
+   host-skeleton package.
+
+ - New patch to have the CMake related files generated as part of the
+   toolchain package.
+
+ - New patch to add a new "install" step that depends on the different
+   install steps (target, staging, images, host). This is needed to
+   later add some logic that is executed once all install steps of a
+   package have been done.
+
+ - Fix the approach to solve the RPATH logic: instead of using
+   LD_LIBRARY_PATH, we actually fix with patchelf the RPATH of host
+   binaries right after their installation.
+
+ - Misc other improvements in the per-package SDK implementation.
+
+What is this all about ?
+========================
+
+See the cover letter of v3 for details:
+http://lists.busybox.net/pipermail/buildroot/2017-December/208384.html
+
+What remains to be done?
+========================
+
+The main problem that remains is fixing packages that don't work well
+with per-package folders. I have already sent a few fixes (such as
+adding missing host-pkgconf dependencies, or fixing the freetype
+package), but I have setup a separate autobuilder instance to test
+this, and it uncovered a number of other problematic packages:
+
+ - apr-util doesn't build, because some hardcoded paths from the "apr"
+   per-package folders leak into the apr-util build.
+
+ - Meson packages currently do not build, because pkg-meson.mk doesn't
+   use $$(HOST_DIR) to reference cross-compilation.conf, but more
+   importantly because cross-compilation.conf uses hardcoded paths.
+
+ - The qt5 stack is entirely broken, because qmake hardcodes the
+   installation path to be $(STAGING_DIR), so all qt5 packages install
+   to the per-package $(STAGING_DIR) of qt5base. I started working on
+   this topic, and will be sending a separate e-mail about this.
+
+Best regards,
+
+Thomas
+
+Thomas Petazzoni (6):
+  Makefile: evaluate CCACHE and HOST{CC,CXX} at time of use
+  support/scripts/check-host-rpath: split condition on two statements
+  Makefile: rework main directory creation logic
+  Makefile: move .NOTPARALLEL statement after including .config file
+  Makefile: define TARGET_DIR_WARNING_FILE relative to TARGET_DIR
+  core: implement per-package SDK and target
+
+ Config.in                        | 18 ++++++
+ Makefile                         | 94 ++++++++++++++++++++------------
+ fs/common.mk                     |  3 +-
+ package/pkg-generic.mk           | 27 ++++++++-
+ support/scripts/check-host-rpath |  8 ++-
+ 5 files changed, 110 insertions(+), 40 deletions(-)
+
 -- 
 2.19.1
