@@ -1,44 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 14 Nov 2018 11:55:53 +0100
-Subject: [Buildroot] [PATCH next v4 2/6] support/scripts/check-host-rpath:
- split condition on two statements
+Date: Wed, 14 Nov 2018 11:55:52 +0100
+Subject: [Buildroot] [PATCH next v4 1/6] Makefile: evaluate CCACHE and
+ HOST{CC, CXX} at time of use
 In-Reply-To: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
 References: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181114105557.12599-3-thomas.petazzoni@bootlin.com>
+Message-ID: <20181114105557.12599-2-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Inside the check_elf_has_rpath(), we check if the host binary has a
-correct RPATH, which should be either an absolute path to
-$(HOST_DIR)/lib, or a relative path using $ORIGIN. Those two
-conditions are checked in a single statements, but as we are going to
-add a third condition, let's split this up a bit:
+As we are going to move to per-package SDK, the location of CCACHE and
+therefore the definitions of HOSTCC and HOSTCXX need to be evaluated
+at the time of use and not at the time of assignment. Indeed, the
+value of HOST_DIR changes from one package to the other.
 
- - If we have a RPATH to $(HOST_DIR)/lib -> we're good, return 0
- - If we have a RPATH to $ORIGIN/../lib -> we're good, return 0
- - Otherwise, we will exit the loop, and return 1
+Therefore, we need to change from := to =.
+
+In addition, while doing A := $(something) $(A) is possible, doing A =
+$(something) $(A) is not legal. So, instead of defining HOSTCC in
+terms of the current HOSTCC variable, we re-use HOSTCC_NOCCACHE
+instead.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/check-host-rpath | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Changes since v2:
+ - New patch
+---
+ Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
-index 169628decb..6c5767da05 100755
---- a/support/scripts/check-host-rpath
-+++ b/support/scripts/check-host-rpath
-@@ -63,7 +63,8 @@ check_elf_has_rpath() {
-         for dir in ${rpath//:/ }; do
-             # Remove duplicate and trailing '/' for proper match
-             dir="$( sed -r -e 's:/+:/:g; s:/$::;' <<<"${dir}" )"
--            [ "${dir}" = "${hostdir}/lib" -o "${dir}" = "\$ORIGIN/../lib" ] && return 0
-+            [ "${dir}" = "${hostdir}/lib" ] && return 0
-+            [ "${dir}" = "\$ORIGIN/../lib" ] && return 0
-         done
-     done < <( readelf -d "${file}"                                              \
-               |sed -r -e '/.* \(R(UN)?PATH\) +Library r(un)?path: \[(.+)\]$/!d' \
+diff --git a/Makefile b/Makefile
+index 94adff3406..2819d44124 100644
+--- a/Makefile
++++ b/Makefile
+@@ -471,11 +471,11 @@ BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(PATH)"
+ TARGET_DIR_WARNING_FILE = $(BASE_TARGET_DIR)/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
+ 
+ ifeq ($(BR2_CCACHE),y)
+-CCACHE := $(HOST_DIR)/bin/ccache
++CCACHE = $(HOST_DIR)/bin/ccache
+ BR_CACHE_DIR ?= $(call qstrip,$(BR2_CCACHE_DIR))
+ export BR_CACHE_DIR
+-HOSTCC := $(CCACHE) $(HOSTCC)
+-HOSTCXX := $(CCACHE) $(HOSTCXX)
++HOSTCC = $(CCACHE) $(HOSTCC_NOCCACHE)
++HOSTCXX = $(CCACHE) $(HOSTCXX_NOCCACHE)
+ else
+ export BR_NO_CCACHE
+ endif
 -- 
 2.19.1
