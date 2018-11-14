@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Nov 2018 23:25:33 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x]
+Date: Wed, 14 Nov 2018 23:25:47 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x]
  support/scripts/mkmakefile: make wrapper silent by default
-Message-ID: <20181114222259.5321D83666@busybox.osuosl.org>
+Message-ID: <20181114222308.18F798366A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46964be408402624d1bb7bd9e5896293627b141a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=64e3896a10e46fe7f728700c0bf24a7c41df01e5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Suppose we use Makefile wrapper and build some project out of
 buildroot tree (O=...). A command like "make
