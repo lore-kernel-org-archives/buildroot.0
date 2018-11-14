@@ -1,54 +1,81 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Nov 2018 23:19:10 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] postgresql: security bump
- to version 10.6
-Message-ID: <20181114221634.3081A83649@busybox.osuosl.org>
+Date: Wed, 14 Nov 2018 23:20:50 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] nfs-utils: add patch to
+ fix build with glibc 2.28
+Message-ID: <20181114221840.D38B383654@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49e16bb1031486848373e1f135b4db4ce45e2daf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=92012e5515e63510a70a00a379310ddfc5ae19fc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-Fixes the following security issue:
+Fixes:
 
-CVE-2018-16850: SQL injection in pg_upgrade and pg_dump, via CREATE TRIGGER
-...  REFERENCING
+  http://autobuild.buildroot.net/results/feb2b42028f7035f791db9cb76d07ead55d7733a/
 
-For more details, see the advisory:
-
-https://www.postgresql.org/about/news/1905/
-
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit f0cf62abae4e9c4e479b015327b38d837cba9512)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/postgresql/postgresql.hash | 4 ++--
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...Include-sys-sysmacros.h-where-appropriate.patch | 50 ++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index a9cc93c76c..05f94b4c76 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,5 +1,5 @@
--# From https://ftp.postgresql.org/pub/source/v10.5/postgresql-10.5.tar.bz2.sha256
--sha256	6c8e616c91a45142b85c0aeb1f29ebba4a361309e86469e0fb4617b6a73c4011	postgresql-10.5.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v10.6/postgresql-10.6.tar.bz2.sha256
-+sha256	68a8276f08bda8fbefe562faaf8831cb20664a7a1d3ffdbbcc5b83e08637624b	postgresql-10.6.tar.bz2
- 
- # License file, Locally calculated
- sha256	24cfc70cf16b3a23242c49ffce39510683bdd48cbedb8a46fe03976ee5f5c21e	COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index f6dad978e3..66af8fe5a9 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POSTGRESQL_VERSION = 10.5
-+POSTGRESQL_VERSION = 10.6
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+diff --git a/package/nfs-utils/0006-Include-sys-sysmacros.h-where-appropriate.patch b/package/nfs-utils/0006-Include-sys-sysmacros.h-where-appropriate.patch
+new file mode 100644
+index 0000000000..a593ca3b6f
+--- /dev/null
++++ b/package/nfs-utils/0006-Include-sys-sysmacros.h-where-appropriate.patch
+@@ -0,0 +1,50 @@
++From e3918d70b0b4a1d0f5421318e542ec807833da3f Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Fri, 2 Nov 2018 10:45:21 +0100
++Subject: [PATCH] Include <sys/sysmacros.h> where appropriate
++
++Since glibc 2.28, the major() and minor() macros need to explicitly
++include <sys/sysmacros.h>.
++
++Patch initially contributed by
++Timothy Pearson <tpearson@raptorengineering.com>.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ support/nfs/nfsexport.c | 4 ++++
++ utils/mountd/cache.c    | 4 ++++
++ 2 files changed, 8 insertions(+)
++
++diff --git a/support/nfs/nfsexport.c b/support/nfs/nfsexport.c
++index afd7c90..a7cbc14 100644
++--- a/support/nfs/nfsexport.c
+++++ b/support/nfs/nfsexport.c
++@@ -17,6 +17,10 @@
++ #include <unistd.h>
++ #include <fcntl.h>
++ 
+++#ifdef __GLIBC__
+++#include <sys/sysmacros.h>
+++#endif
+++
++ #include "nfslib.h"
++ #include "misc.h"
++ 
++diff --git a/utils/mountd/cache.c b/utils/mountd/cache.c
++index 179ea18..61f9b14 100644
++--- a/utils/mountd/cache.c
+++++ b/utils/mountd/cache.c
++@@ -36,6 +36,10 @@
++ #include "blkid/blkid.h"
++ #endif
++ 
+++#ifdef __GLIBC__
+++#include <sys/sysmacros.h>
+++#endif
+++
++ /*
++  * Invoked by RPC service loop
++  */
++-- 
++2.14.4
++
