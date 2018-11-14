@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Nov 2018 10:44:17 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] webkitgtk: bump to
+Date: Wed, 14 Nov 2018 10:45:06 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] webkitgtk: bump to
  version 2.22.3
-Message-ID: <20181114094153.6868983544@busybox.osuosl.org>
+Message-ID: <20181114094227.2D610835BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab8c30b893d21109b6d7be1b3f16fdb9cfcda116
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b3f35e05fda153a2a4ae090423573f999549cb4a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Release notes:
 
