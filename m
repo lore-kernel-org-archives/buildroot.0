@@ -1,49 +1,78 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed, 14 Nov 2018 10:29:07 +0100
-Subject: [Buildroot] [PATCH] imx-uuc: bump revision to 79e9798e
-In-Reply-To: <20181113220810.3f4c3cba@windsurf>
-References: <20181112094402.1815-1-gary.bisson@boundarydevices.com>
- <20181113220810.3f4c3cba@windsurf>
-Message-ID: <CAAMH-yvtQmrzSu4NYeM6O7T2y+9QB3AWXENt6GFsiHp5nJk7cw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 14 Nov 2018 10:43:49 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] webkitgtk: add an option
+ to control USE_GSTREAMER_GL
+Message-ID: <20181114094153.61AE683579@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=df2ade1319cf476c2cf0c5efe3a18cb55a699b86
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-On Tue, Nov 13, 2018 at 10:08 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Gary,
->
-> On Mon, 12 Nov 2018 10:44:02 +0100, Gary Bisson wrote:
-> > Main changes:
-> > - fix build error by gcc 8.2
->
-> I know it is what the upstream commit says, but the makedev() issue has
-> nothing to do with gcc 8.2, but with glibc 2.28. I fixed up the commit
-> log on that aspect.
+This covers the case where GL/GLES is available (so -DENABLE_OPENGL=ON
+gets passed), which makes the webkitgtk build system assume GStreamer-GL
+is available, while actually it is not.
 
-Thanks, I actually didn't even dig deeper once I saw that this commit
-was fixing the exact same error.
+Also, providing an option to manually disable usage of GStremer-GL can
+help with certain target configurations in which using OpenGL for video
+handling might result in incorrect rendering.
 
-> To be honest, I hesitated a bit because we normally don't take version
-> bumps in master at this point. However, this is a fairly small
-> and not that widely used package, the number of upstream changes is not
-> enormous, so I applied it to master. But I really hesitated with asking
-> for just a backport of the glibc 2.28 fix instead.
+This fixes some autobuilder failures like the following:
 
-I understand, but note that there are a couple of other patches in
-that bump that also fix some other possible build issues (although the
-titles aren't very useful):
-e05cc55 fix build error when gcc over 7.0
-7c7562b fix build error
+  http://autobuild.buildroot.net/results/187796535af53ece426641ff7d88aabada281674
+  http://autobuild.buildroot.net/results/00c1a8ea23a99728a4f3f4478705f2383414ae41
 
-So really a version bump seemed like the easy route instead of
-backporting all those patches.
-But I understand it isn't ideal at this stage of the 2018.11 release.
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 4ac29a8196903f7e88674bb4b2f58c0f29fb122d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/webkitgtk/Config.in    | 15 +++++++++++++++
+ package/webkitgtk/webkitgtk.mk |  7 +++++++
+ 2 files changed, 22 insertions(+)
 
-Regards,
-Gary
+diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+index 96a7ab0c94..260fa15bad 100644
+--- a/package/webkitgtk/Config.in
++++ b/package/webkitgtk/Config.in
+@@ -88,6 +88,21 @@ config BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
+ 	  This option pulls in all of the required dependencies
+ 	  to enable multimedia (video/audio) support.
+ 
++if BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
++
++config BR2_PACKAGE_WEBKITGTK_USE_GSTREAMER_GL
++	bool "use gstreamer-gl"
++	default y
++	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
++	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL
++	help
++	  Use the GStreamer GL elements for handling video content.
++	  This is recommended as it improves performance of video
++	  playback. In some target configurations incorrect rendering
++	  might be produced, and disabling this option may help.
++
++endif
++
+ config BR2_PACKAGE_WEBKITGTK_WEBDRIVER
+ 	bool "WebDriver support"
+ 	help
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index f28417ac73..8ac3ff467b 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -97,4 +97,11 @@ WEBKITGTK_CONF_OPTS += -DENABLE_WAYLAND_TARGET=ON
+ endif
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WEBKITGTK_USE_GSTREAMER_GL),y)
++WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER_GL=ON
++WEBKITGTK_DEPENDENCIES += gst1-plugins-bad
++else
++WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER_GL=OFF
++endif
++
+ $(eval $(cmake-package))
