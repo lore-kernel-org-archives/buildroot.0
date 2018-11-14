@@ -1,43 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Nov 2018 09:14:57 +0100
-Subject: [Buildroot] [PATCH v2] configs/{at91,
- atmel}*_dev*: drop Dropbear as it duplicates OpenSSH
-In-Reply-To: <20181030213845.20161-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Tue, 30 Oct 2018 22:38:45 +0100")
-References: <20181030213845.20161-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87va50ulby.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 14 Nov 2018 09:18:40 +0100
+Subject: [Buildroot] [git commit branch/next] package/proftpd: add sendfile
+Message-ID: <20181114081608.BD83683458@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ff59a29732a6671c858dfe4cef851dff76f7f995
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > The "development" defconfigs for Atmel platforms enable both OpenSSH
- > and Dropbear, which doesn't make a lot of sense, as only one SSH
- > server can start on port 22.
+Enables sendfile to ProFTPD for zero-copy transfers.
 
- > This commit therefore drops BR2_PACKAGE_DROPBEAR=y from those
- > defconfigs, keeping OpenSSH as an SSH server/client, as was requested
- > by Atmel/Microchip folks in the review of an earlier version of this
- > patch [1]. Since those defconfigs are "development" defconfigs, they
- > are not meant to be minimal, and already provide an arbitrary set of
- > packages, so using openssh is just as good as using dropbear in this
- > case.
+Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/proftpd/proftpd.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
- > [1] https://patchwork.ozlabs.org/patch/989516/
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
- > Cc: Joshua Henderson <joshua.henderson@microchip.com>
- > Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
-> ---
- > Changes since v1:
- >  - Keep OpenSSH and drop Dropbear, as suggested by Nicolas Ferre from
- >    Microchip.
-
-Committed to 2018.02.x and 2018.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index 324a602761..a228d58e03 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -20,6 +20,7 @@ PROFTPD_CONF_OPTS = \
+ 	--disable-ncurses \
+ 	--disable-facl \
+ 	--disable-dso \
++	--enable-sendfile \
+ 	--enable-shadow \
+ 	--with-gnu-ld
+ 
