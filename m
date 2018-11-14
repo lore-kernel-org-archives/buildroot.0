@@ -1,40 +1,92 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Nov 2018 23:33:08 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] scanpypi: place a warning
- into *.mk file if licence id couldn't be detected
-Message-ID: <20181114223212.1EBAA836D3@busybox.osuosl.org>
+Date: Wed, 14 Nov 2018 23:33:56 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] utils/scanpypi: use
+ archive file name to specify the extraction folder
+Message-ID: <20181114223212.25B95836D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31ce6e50812284323ce55023a51fb86eaeaee3ff
+commit: https://git.buildroot.net/buildroot/commit/?id=577c3a7d97bf07755290757dca98eca33e18dc6c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-If a license file could be found, but license id couldn't be detected place
-following warning into *.mk file:
+Some packages have archive name that is different from package name.
+For example websocket-client's archive name is websocket_client-*.tar.gz.
+scanpypi expects the temporary extract folder to be:
 
-FOO_LICENSE = FIXME: license id couldn't be detected
+/tmp-folder/BR-package-name/PyPI-packagename-and-version
+
+In the case of websocket-client package the real extraction folder
+will be different from the expected one because of the '_' in the
+archive file name.
+
+Use archive file name instead of package name to specify the extraction
+folder. As the version is already part of this file, we don't need to
+specify it.
+
+Bonus: remove obsolete "return None, None" as the function doesn't return
+anything. OSError class doesn't provide "message" member, so replace it
+with "strerror".
+
+Fixes:
+https://bugs.busybox.net/show_bug.cgi?id=11251
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Reviewed-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0101ac62c81e468ba7fd47b991972a722cf1b43c)
+(cherry picked from commit fd29797f659c09cbc2aeba33f8d6f5b992e65cd4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/scanpypi | 2 ++
- 1 file changed, 2 insertions(+)
+ utils/scanpypi | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
 diff --git a/utils/scanpypi b/utils/scanpypi
-index 6511fc14ae..3983be1ad1 100755
+index 3983be1ad1..3d3e604435 100755
 --- a/utils/scanpypi
 +++ b/utils/scanpypi
-@@ -444,6 +444,8 @@ class BuildrootPackage():
-                     match = liclookup.match(lic_file.read())
-                 if match is not None and match.confidence >= 90.0:
-                     license_names.append(match.license.id)
-+                else:
-+                    license_names.append("FIXME: license id couldn't be detected")
+@@ -243,13 +243,14 @@ class BuildrootPackage():
+                     os.makedirs(tmp_pkg)
+                 except OSError as exception:
+                     if exception.errno != errno.EEXIST:
+-                        print("ERROR: ", exception.message, file=sys.stderr)
+-                        return None, None
+-                    print('WARNING:', exception.message, file=sys.stderr)
++                        print("ERROR: ", exception.strerror, file=sys.stderr)
++                        return
++                    print('WARNING:', exception.strerror, file=sys.stderr)
+                     print('Removing {pkg}...'.format(pkg=tmp_pkg))
+                     shutil.rmtree(tmp_pkg)
+                     os.makedirs(tmp_pkg)
+                 as_zipfile.extractall(tmp_pkg)
++                pkg_filename = self.filename.split(".zip")[0]
+         else:
+             with tarfile.open(fileobj=as_file) as as_tarfile:
+                 tmp_pkg = os.path.join(tmp_path, self.buildroot_name)
+@@ -257,19 +258,19 @@ class BuildrootPackage():
+                     os.makedirs(tmp_pkg)
+                 except OSError as exception:
+                     if exception.errno != errno.EEXIST:
+-                        print("ERROR: ", exception.message, file=sys.stderr)
+-                        return None, None
+-                    print('WARNING:', exception.message, file=sys.stderr)
++                        print("ERROR: ", exception.strerror, file=sys.stderr)
++                        return
++                    print('WARNING:', exception.strerror, file=sys.stderr)
+                     print('Removing {pkg}...'.format(pkg=tmp_pkg))
+                     shutil.rmtree(tmp_pkg)
+                     os.makedirs(tmp_pkg)
+                 as_tarfile.extractall(tmp_pkg)
++                pkg_filename = self.filename.split(".tar")[0]
  
-             if len(license_names) > 0:
-                 license_line = ('{name}_LICENSE ='
+-        tmp_extract = '{folder}/{name}-{version}'
++        tmp_extract = '{folder}/{name}'
+         self.tmp_extract = tmp_extract.format(
+             folder=tmp_pkg,
+-            name=self.metadata_name,
+-            version=self.version)
++            name=pkg_filename)
+ 
+     def load_setup(self):
+         """
