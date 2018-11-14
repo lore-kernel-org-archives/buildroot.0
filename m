@@ -1,81 +1,78 @@
-From: Nasser Afshin <afshin.nasser@gmail.com>
-Date: Wed, 14 Nov 2018 12:34:47 +0330
-Subject: [Buildroot] [PATCH v3 2/3] test-pkg: Use the correct config
- prefix when merging
-In-Reply-To: <bfcad053-5720-84af-1530-b188056f7fd0@mind.be>
-References: <20181114071156.10453-1-afshin.nasser@gmail.com>
- <20181114071156.10453-3-afshin.nasser@gmail.com>
- <20181114071731.GA22153@dell5510>
- <20181114074838.GA12239@smart-All-Series>
- <bfcad053-5720-84af-1530-b188056f7fd0@mind.be>
-Message-ID: <20181114090447.GC12239@smart-All-Series>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 14 Nov 2018 10:33:41 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] package/network-manager:
+ Add upstream patch to fix CVE-2018-15688
+Message-ID: <20181114093103.2C603834A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
-On Wed, Nov 14, 2018 at 09:24:32AM +0100, Arnout Vandecappelle wrote:
->  Hi Nasser,
-> 
->  Two remarks for your future contributions.
-> 
-> On 14/11/2018 08:49, Nasser Afshin wrote:
-> > Hi Petr
-> > On Wed, Nov 14, 2018 at 08:17:33AM +0100, Petr Vorel wrote:
-> >> Hi Nasser,
-> >>
-> >>> From: Nasser Afshin <Afshin.Nasser@gmail.com>
-> >>
-> >>> We should use an empty prefix as we do not have any prefix.
-> >>> Note that BR2_ is mere a convention.
-> >>
-> >>> Signed-off-by: Nasser Afshin <Afshin.Nasser@gmail.com>
-> 
->  When you send a v2 or later, please include a patch changelog, like so:
-> 
-> ---
-> v2: remove quotes from the empty CONFIG_ assignment (suggested by Peter Vorel)
-> 
-> 
->  The --- splits the commit message from additional notes that won't be included
-> when the patch is applied.
-> 
-I thought it's a tiny change. You're right I should have included the
-changelog anyway.
-> >> Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
-> > Sorry I forgot to mention that. Resent.
-> 
->  There is no need to resend for that: patchwork will include it automatically.
-Ok. Thank you for reviewing my patch and sending your tips.
-Sorry for being a novice.
-> 
-> 
->  Regards,
->  Arnout
-> 
-> >>> ---
-> >>>  utils/test-pkg | 2 +-
-> >>>  1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >>> diff --git a/utils/test-pkg b/utils/test-pkg
-> >>> index aa91ee02cf..e4f68ed061 100755
-> >>> --- a/utils/test-pkg
-> >>> +++ b/utils/test-pkg
-> >>> @@ -129,7 +129,7 @@ build_one() {
-> >>
-> >>>      mkdir -p "${dir}"
-> >>
-> >>> -    support/kconfig/merge_config.sh -O "${dir}" \
-> >>> +    CONFIG_= support/kconfig/merge_config.sh -O "${dir}" \
-> >> Thanks for a change.
-> >>
-> >>
-> >> Kind regards,
-> >> Petr
-> > Kind regards,
-> > Nasser
-> > 
-Kind regards,
-Nasser
+commit: https://git.buildroot.net/buildroot/commit/?id=92b1901bf188d1023433208118136425e88f4ea1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+
+NetworkManager includes some parts of the systemd-networkd code in its
+codebase. That can be found at src/systemd/src/libsystemd-networkd.
+The DHCP implementation provided by systemd-networkd is used when
+NetworkManager is configured to use the internal implementation,
+however the default is to use dhclient.
+
+When NetworkManager is configured to use the internal dhcp and an
+interface is setup with ipv6.method=auto (which is the default value)
+or ipv6.method=dhcp, this flaw can be exploited. When using
+ipv6.method=auto, the DHCPv6 client can be automatically started with a
+Router Advertisement packet.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 0a51ba655c6eed7a2a8be116b855259adbaf7bd6)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...sure-we-have-enough-space-for-the-DHCP6-o.patch | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+
+diff --git a/package/network-manager/0001-dhcp6-make-sure-we-have-enough-space-for-the-DHCP6-o.patch b/package/network-manager/0001-dhcp6-make-sure-we-have-enough-space-for-the-DHCP6-o.patch
+new file mode 100644
+index 0000000000..c6066abe28
+--- /dev/null
++++ b/package/network-manager/0001-dhcp6-make-sure-we-have-enough-space-for-the-DHCP6-o.patch
+@@ -0,0 +1,38 @@
++From 01ca2053bbea09f35b958c8cc7631e15469acb79 Mon Sep 17 00:00:00 2001
++From: Lennart Poettering <lennart@poettering.net>
++Date: Fri, 19 Oct 2018 12:12:33 +0200
++Subject: dhcp6: make sure we have enough space for the DHCP6 option header
++
++Fixes a vulnerability originally discovered by Felix Wilhelm from
++Google.
++
++CVE-2018-15688
++LP: #1795921
++https://bugzilla.redhat.com/show_bug.cgi?id=1639067
++
++(cherry picked from commit 4dac5eaba4e419b29c97da38a8b1f82336c2c892)
++
++Patch downloaded from upstream commit:
++https://cgit.freedesktop.org/NetworkManager/NetworkManager/commit/?id=01ca2053bbea09f35b958c8cc7631e15469acb79
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/systemd/src/libsystemd-network/dhcp6-option.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/systemd/src/libsystemd-network/dhcp6-option.c b/src/systemd/src/libsystemd-network/dhcp6-option.c
++index d178fe2..9027c14 100644
++--- a/src/systemd/src/libsystemd-network/dhcp6-option.c
+++++ b/src/systemd/src/libsystemd-network/dhcp6-option.c
++@@ -108,7 +108,7 @@ int dhcp6_option_append_ia(uint8_t **buf, size_t *buflen, const DHCP6IA *ia) {
++                 return -EINVAL;
++         }
++ 
++-        if (*buflen < len)
+++        if (*buflen < offsetof(DHCP6Option, data) + len)
++                 return -ENOBUFS;
++ 
++         ia_hdr = *buf;
++-- 
++cgit v1.1
++
