@@ -1,59 +1,37 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 14 Nov 2018 09:18:40 +0100
-Subject: [Buildroot] [git commit branch/next] package/proftpd: add enable
- buffer size
-Message-ID: <20181114081608.B642E83459@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 14 Nov 2018 09:21:38 +0100
+Subject: [Buildroot] [PATCH v2 1/2] package/proftpd: add enable buffer
+ size
+In-Reply-To: <20181114050450.4y2s2225fnm2uzse@sapphire.tkos.co.il>
+References: <20181112164521.27220-1-jared.bents@rockwellcollins.com>
+ <adba6a5b-96e8-78a4-c9ca-d80f9c3aa519@mind.be>
+ <20181114050450.4y2s2225fnm2uzse@sapphire.tkos.co.il>
+Message-ID: <b1b07d45-1f6b-694d-1667-6332babb6861@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39ec1ee783414fa4f0051447bb099477ff8a5013
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Enable buffer size as a compile time option to change internal
-buffer size.
 
-Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/proftpd/Config.in  | 13 +++++++++++++
- package/proftpd/proftpd.mk |  4 ++++
- 2 files changed, 17 insertions(+)
+On 14/11/2018 06:04, Baruch Siach wrote:
+> Hi Arnout,
+> 
+> On Tue, Nov 13, 2018 at 12:56:34AM +0100, Arnout Vandecappelle wrote:
+>> On 12/11/2018 17:45, Jared Bents wrote:
+>>> Enable buffer size as a compile time option to change internal
+>>> buffer size.
+>>>
+>>> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+>>
+>>  Both applied to next, thanks!
+> 
+> Not in next as of commit 3db2ed427138f (python-cchardet: new package).
 
-diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
-index b615a5ff4c..478a7e80e1 100644
---- a/package/proftpd/Config.in
-+++ b/package/proftpd/Config.in
-@@ -65,4 +65,17 @@ config BR2_PACKAGE_PROFTPD_MOD_QUOTATAB_SQL
- 	  Compile mod_quotatab with mod_quotatab_sql table.
- 
- endif
-+
-+config BR2_PACKAGE_PROFTPD_BUFFER_SIZE
-+	int "buffer size in bytes (0 for default)"
-+	default "0"
-+	help
-+	  By increasing the buffer size above the default of 1K,
-+	  proftpd reads and writes data in larger chunks, and makes
-+	  fewer expensive system calls. Use of this option to set buffer
-+	  sizes of 8K or more has been reported to drastically increase
-+	  transfer speeds (depending on network configurations).
-+
-+	  0 uses the default size of 1024.
-+
- endif
-diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
-index 8f3ff5088e..324a602761 100644
---- a/package/proftpd/proftpd.mk
-+++ b/package/proftpd/proftpd.mk
-@@ -121,4 +121,8 @@ define PROFTPD_INSTALL_INIT_SYSTEMD
- 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/proftpd.service
- endef
- 
-+ifneq ($(BR2_PACKAGE_PROFTPD_BUFFER_SIZE),0)
-+PROFTPD_CONF_OPTS += --enable-buffer-size=$(BR2_PACKAGE_PROFTPD_BUFFER_SIZE)
-+endif
-+
- $(eval $(autotools-package))
+ Oops, I pushed to a local clone instead of to git.buildroot.org...
+
+ Done now.
+
+ Regards,
+ Arnout
