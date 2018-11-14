@@ -1,70 +1,99 @@
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Date: Wed, 14 Nov 2018 21:54:33 +0100
-Subject: [Buildroot] [PATCH v2] boot/syslinux: Fix build with glibc 2.28+
-Message-ID: <20181114205433.3233-1-alexander.sverdlin@gmail.com>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Wed, 14 Nov 2018 15:43:25 -0600
+Subject: [Buildroot] [PATCH 1/1] websocketpp: new package
+Message-ID: <20181114214325.25574-1-ryan.barnett@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When building with glibc 2.28+, the "major", "minor" and "makedev"
-functions are defined in "sys/sysmacros.h". The patch
-"extlinux: pull in sys/sysmacros.h for major/minor/makedev",
-applied to Syslinux during 2016Apr, should help. Please note that not
-only Syslinux is affected by this change in glibc.
-
-Link: https://www.syslinux.org/wiki/index.php?title=Building
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
 ---
+ DEVELOPERS                           |  1 +
+ package/Config.in                    |  1 +
+ package/websocketpp/Config.in        | 15 +++++++++++++++
+ package/websocketpp/websocketpp.hash |  3 +++
+ package/websocketpp/websocketpp.mk   | 15 +++++++++++++++
+ 5 files changed, 35 insertions(+)
+ create mode 100644 package/websocketpp/Config.in
+ create mode 100644 package/websocketpp/websocketpp.hash
+ create mode 100644 package/websocketpp/websocketpp.mk
 
-Changelog:
-v2:
-- Commit message: 2.23 -> 2.28
-
- ...-sysmacros-h-for-major-minor-makedev.patch | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 boot/syslinux/0012-pull-in-sys-sysmacros-h-for-major-minor-makedev.patch
-
-diff --git a/boot/syslinux/0012-pull-in-sys-sysmacros-h-for-major-minor-makedev.patch b/boot/syslinux/0012-pull-in-sys-sysmacros-h-for-major-minor-makedev.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 53467da489..7c21b2f520 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1822,6 +1822,7 @@ F:	package/python-pysnmp/
+ F:	package/python-pysnmp-apps/
+ F:	package/python-pysnmp-mibs/
+ F:	package/python-tornado/
++F:	package/websocketpp/
+ 
+ N:	Ryan Coe <bluemrp9@gmail.com>
+ F:	package/inadyn/
+diff --git a/package/Config.in b/package/Config.in
+index b60e7700ad..b6abeee8e2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1582,6 +1582,7 @@ menu "Networking"
+ 	source "package/sofia-sip/Config.in"
+ 	source "package/thrift/Config.in"
+ 	source "package/usbredir/Config.in"
++	source "package/websocketpp/Config.in"
+ 	source "package/wampcc/Config.in"
+ 	source "package/zeromq/Config.in"
+ 	source "package/zmqpp/Config.in"
+diff --git a/package/websocketpp/Config.in b/package/websocketpp/Config.in
 new file mode 100644
-index 0000000000..beba5cc245
+index 0000000000..cadb9ff696
 --- /dev/null
-+++ b/boot/syslinux/0012-pull-in-sys-sysmacros-h-for-major-minor-makedev.patch
-@@ -0,0 +1,34 @@
-+From 1a74985b2a404639b08882c57f3147229605dfd5 Mon Sep 17 00:00:00 2001
-+From: Mike Frysinger <vapier@gentoo.org>
-+Date: Tue, 19 Apr 2016 06:50:31 -0400
-+Subject: [PATCH] extlinux: pull in sys/sysmacros.h for major/minor/makedev
++++ b/package/websocketpp/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_WEBSOCKETPP
++	bool "websocketpp"
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  WebSocket++ is a header only C++ library that implements
++	  RFC6455 The WebSocket Protocol. It allows integrating
++	  WebSocket client and server functionality into C++ programs.
++	  It uses interchangeable network transport modules including
++	  one based on C++ iostreams and one based on Boost Asio.
 +
-+These functions are defined in sys/sysmacros.h, so add the include to
-+main.c.  This is already handled correctly in mountinfo.c.  Otherwise
-+we get build failures like:
++	  http://www.zaphoyd.com/websocketpp
 +
-+main.o: In function 'find_device_sysfs':
-+extlinux/main.c:1131: undefined reference to 'minor'
++comment "websocketpp needs a toolchain w/ C++ and gcc >= 4.8"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+diff --git a/package/websocketpp/websocketpp.hash b/package/websocketpp/websocketpp.hash
+new file mode 100644
+index 0000000000..8bf671d96e
+--- /dev/null
++++ b/package/websocketpp/websocketpp.hash
+@@ -0,0 +1,3 @@
++# Locally Computed:
++sha256  178899de48c02853b55b1ea8681599641cedcdfce59e56beaff3dd0874bf0286  websocketpp-0.8.1.tar.gz
++sha256  b31e597bc777d884a39663c11d0557a0af40780e1f451de11ea5103924a69667  COPYING
+diff --git a/package/websocketpp/websocketpp.mk b/package/websocketpp/websocketpp.mk
+new file mode 100644
+index 0000000000..47da4dbe2f
+--- /dev/null
++++ b/package/websocketpp/websocketpp.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# websocketpp
++#
++################################################################################
 +
-+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
-+Signed-off-by: Gene Cumm <gene.cumm@gmail.com>
-+Signed-off-by: Alexander Sverdlin <alexader.sverdlin@gmail.com>
-+---
-+ extlinux/main.c | 1 +
-+ 1 file changed, 1 insertion(+)
++WEBSOCKETPP_VERSION = 0.8.1
++WEBSOCKETPP_SITE = $(call github,zaphoyd,websocketpp,$(WEBSOCKETPP_VERSION))
++WEBSOCKETPP_LICENSE = BSD-3c, MIT, Zlib
++WEBSOCKETPP_LICENSE_FILES = COPYING
++WEBSOCKETPP_INSTALL_STAGING = YES
++# Only installs headers
++WEBSOCKETPP_INSTALL_TARGET = NO
 +
-+diff --git a/extlinux/main.c b/extlinux/main.c
-+index a7ebd49..ebff7ea 100644
-+--- a/extlinux/main.c
-++++ b/extlinux/main.c
-+@@ -38,6 +38,7 @@
-+ #include <sysexits.h>
-+ #include <sys/ioctl.h>
-+ #include <sys/stat.h>
-++#include <sys/sysmacros.h>
-+ #include <sys/types.h>
-+ #include <sys/mount.h>
-+ #include <sys/vfs.h>
-+-- 
-+2.10.5.GIT
-+
++$(eval $(cmake-package))
 -- 
-2.19.1
+2.18.0
