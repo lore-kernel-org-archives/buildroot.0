@@ -1,75 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Nov 2018 22:57:37 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] uclibc: fix mkostemp
-Message-ID: <20181114215629.D00108363E@busybox.osuosl.org>
+Date: Wed, 14 Nov 2018 23:18:25 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] postgresql: security bump
+ to version 10.6
+Message-ID: <20181114221616.8F4C383644@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=826f70cb3bcaf7464cd1b7c471e485b4eac63c7a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=519cfbd9497decc6ee87dd940da9e0092de2dc63
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-Pull a patch already submitted upstream[1] that fixes mkostemp when
-_LARGEFILE64_SOURCE is defined. This is required to prevent failures
-on eudev[2]:
+Fixes the following security issue:
 
-    # udevadm hwdb --update
-    Failure writing database //etc/udev/hwdb.bin: Invalid argument
+CVE-2018-16850: SQL injection in pg_upgrade and pg_dump, via CREATE TRIGGER
+...  REFERENCING
 
-1. https://patchwork.ozlabs.org/patch/990045/
-2. https://patchwork.ozlabs.org/patch/984848/
+For more details, see the advisory:
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit c33fb6e9f190273abef5fd8186ab0d5a496ef06a)
+https://www.postgresql.org/about/news/1905/
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...4-mkostemp64-clear-flags-as-mkostemp-does.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/uclibc/0004-mkostemp64-clear-flags-as-mkostemp-does.patch b/package/uclibc/0004-mkostemp64-clear-flags-as-mkostemp-does.patch
-new file mode 100644
-index 0000000000..f87abd8849
---- /dev/null
-+++ b/package/uclibc/0004-mkostemp64-clear-flags-as-mkostemp-does.patch
-@@ -0,0 +1,38 @@
-+From 09a776103e4aa75f95c9ad44554a9c2b56de3535 Mon Sep 17 00:00:00 2001
-+From: Carlos Santos <casantos@datacom.com.br>
-+Date: Mon, 29 Oct 2018 01:17:38 -0300
-+Subject: [PATCH] mkostemp64: clear flags, as mkostemp does
-+
-+This should have been made in commit 9649721950 but was forgotten.
-+
-+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-+---
-+ libc/stdlib/mkostemp64.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/libc/stdlib/mkostemp64.c b/libc/stdlib/mkostemp64.c
-+index aa9736cd6..f4674bb0c 100644
-+--- a/libc/stdlib/mkostemp64.c
-++++ b/libc/stdlib/mkostemp64.c
-+@@ -15,9 +15,9 @@
-+    License along with the GNU C Library; if not, see
-+    <http://www.gnu.org/licenses/>.  */
-+ 
-+-#include <fcntl.h>
-+ #include <stdio.h>
-+ #include <stdlib.h>
-++#include <fcntl.h>
-+ #include "../misc/internals/tempname.h"
-+ 
-+ /* Generate a unique temporary file name from TEMPLATE.
-+@@ -27,6 +27,7 @@
-+ int
-+ mkostemp64 (char *template, int flags)
-+ {
-++  flags -= flags & O_ACCMODE; /* Remove O_RDONLY, O_WRONLY, and O_RDWR. */
-+   return __gen_tempname (template, __GT_BIGFILE, flags | O_LARGEFILE, 0,
-+                          S_IRUSR | S_IWUSR);
-+ }
-+-- 
-+2.14.5
-+
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index a9cc93c76c..05f94b4c76 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,5 +1,5 @@
+-# From https://ftp.postgresql.org/pub/source/v10.5/postgresql-10.5.tar.bz2.sha256
+-sha256	6c8e616c91a45142b85c0aeb1f29ebba4a361309e86469e0fb4617b6a73c4011	postgresql-10.5.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v10.6/postgresql-10.6.tar.bz2.sha256
++sha256	68a8276f08bda8fbefe562faaf8831cb20664a7a1d3ffdbbcc5b83e08637624b	postgresql-10.6.tar.bz2
+ 
+ # License file, Locally calculated
+ sha256	24cfc70cf16b3a23242c49ffce39510683bdd48cbedb8a46fe03976ee5f5c21e	COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 540e1540ca..72e1c7601b 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 10.5
++POSTGRESQL_VERSION = 10.6
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
