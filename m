@@ -1,81 +1,59 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Wed, 14 Nov 2018 09:18:40 +0100
-Subject: [Buildroot] [git commit branch/next] .gitlab-ci.yml: add trigger
- per type of job
-Message-ID: <20181114081608.AD81283458@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/proftpd: add enable
+ buffer size
+Message-ID: <20181114081608.B642E83459@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f177fd66e47879a72bb678a2de7ce658410cc4b9
+commit: https://git.buildroot.net/buildroot/commit/?id=39ec1ee783414fa4f0051447bb099477ff8a5013
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Currently the user has 2 sets of jobs that can be triggered on a GitLab
-pipeline.
- - to trigger all defconfigs, all runtime tests and all check-* jobs:
-   $ git tag <name>
-   $ git push gitlab <name>                     # currently 260 jobs
- - to trigger only the check-* jobs:
-   $ git push gitlab HEAD:<name>                # currently   4 jobs
+Enable buffer size as a compile time option to change internal
+buffer size.
 
-This is not much versatile, so the user ends up hand-editing the
-.gitlab-ci.yml in order to trigger some subsets, even the common ones,
-for instance all runtime tests.
-
-Add 2 more subsets that can be triggered based on the name of the
-branch pushed.
- - to trigger all defconfigs and all check-* jobs:
-   $ git push gitlab HEAD:<name>-defconfigs     # currently 192 jobs
- - to trigger all runtime tests and all check-* jobs:
-   $ git push gitlab HEAD:<name>-runtime-tests  # currently  72 jobs
-
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .gitlab-ci.yml    | 2 ++
- .gitlab-ci.yml.in | 2 ++
- 2 files changed, 4 insertions(+)
+ package/proftpd/Config.in  | 13 +++++++++++++
+ package/proftpd/proftpd.mk |  4 ++++
+ 2 files changed, 17 insertions(+)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 0dfb3537c1..98f9463928 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -51,6 +51,7 @@ check-package:
-     only:
-         - triggers
-         - tags
-+        - /-defconfigs$/
-     script: *defconfig_script
-     artifacts:
-         when: always
-@@ -67,6 +68,7 @@ check-package:
-     only:
-         - triggers
-         - tags
-+        - /-runtime-tests$/
-     # Keep build directories so the rootfs can be an artifact of the job. The
-     # runner will clean up those files for us.
-     # Multiply every emulator timeout by 10 to avoid sporadic failures in
-diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
-index db526c4b5a..ebca29ca1f 100644
---- a/.gitlab-ci.yml.in
-+++ b/.gitlab-ci.yml.in
-@@ -51,6 +51,7 @@ check-package:
-     only:
-         - triggers
-         - tags
-+        - /-defconfigs$/
-     script: *defconfig_script
-     artifacts:
-         when: always
-@@ -67,6 +68,7 @@ check-package:
-     only:
-         - triggers
-         - tags
-+        - /-runtime-tests$/
-     # Keep build directories so the rootfs can be an artifact of the job. The
-     # runner will clean up those files for us.
-     # Multiply every emulator timeout by 10 to avoid sporadic failures in
+diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
+index b615a5ff4c..478a7e80e1 100644
+--- a/package/proftpd/Config.in
++++ b/package/proftpd/Config.in
+@@ -65,4 +65,17 @@ config BR2_PACKAGE_PROFTPD_MOD_QUOTATAB_SQL
+ 	  Compile mod_quotatab with mod_quotatab_sql table.
+ 
+ endif
++
++config BR2_PACKAGE_PROFTPD_BUFFER_SIZE
++	int "buffer size in bytes (0 for default)"
++	default "0"
++	help
++	  By increasing the buffer size above the default of 1K,
++	  proftpd reads and writes data in larger chunks, and makes
++	  fewer expensive system calls. Use of this option to set buffer
++	  sizes of 8K or more has been reported to drastically increase
++	  transfer speeds (depending on network configurations).
++
++	  0 uses the default size of 1024.
++
+ endif
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index 8f3ff5088e..324a602761 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -121,4 +121,8 @@ define PROFTPD_INSTALL_INIT_SYSTEMD
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/proftpd.service
+ endef
+ 
++ifneq ($(BR2_PACKAGE_PROFTPD_BUFFER_SIZE),0)
++PROFTPD_CONF_OPTS += --enable-buffer-size=$(BR2_PACKAGE_PROFTPD_BUFFER_SIZE)
++endif
++
+ $(eval $(autotools-package))
