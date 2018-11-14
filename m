@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 14 Nov 2018 08:50:05 +0100
-Subject: [Buildroot] [PATCH] boot/syslinux: Fix build with glibc 2.23+
-In-Reply-To: <20181114000205.9110-1-alexander.sverdlin@gmail.com>
-References: <20181114000205.9110-1-alexander.sverdlin@gmail.com>
-Message-ID: <20181114085005.63db5bf6@windsurf>
+Date: Wed, 14 Nov 2018 08:52:09 +0100
+Subject: [Buildroot] [PATCH 1/1] libsigsegv: fix build on riscv
+In-Reply-To: <20181113225214.15957-1-fontaine.fabrice@gmail.com>
+References: <20181113225214.15957-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181114085209.40229d66@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 14 Nov 2018 01:02:05 +0100, Alexander Sverdlin wrote:
-> When building with glibc 2.23+, the "major", "minor" and "makedev"
+On Tue, 13 Nov 2018 23:52:14 +0100, Fabrice Fontaine wrote:
+> Fixes:
+>  - http://autobuild.buildroot.org/results/bd12cb3db3b46860a4ab8fb91052319dce75202a
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-It is really since glibc 2.28 that there is a build issue related to
-this. Prior to glibc 2.28, <sys/sysmacros.h> was implicitly included by
-another header that was very commonly included, "hiding" the issue.
+I already submitted a similar patch a few hours earlier:
 
-Best regards,
+  http://patchwork.ozlabs.org/patch/997399/
+
+ :-)
 
 Thomas
 -- 
