@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Nov 2018 23:18:25 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] postgresql: security bump
+Date: Wed, 14 Nov 2018 23:19:10 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] postgresql: security bump
  to version 10.6
-Message-ID: <20181114221616.8F4C383644@busybox.osuosl.org>
+Message-ID: <20181114221634.3081A83649@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=519cfbd9497decc6ee87dd940da9e0092de2dc63
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=49e16bb1031486848373e1f135b4db4ce45e2daf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Fixes the following security issue:
 
@@ -40,7 +40,7 @@ index a9cc93c76c..05f94b4c76 100644
  # License file, Locally calculated
  sha256	24cfc70cf16b3a23242c49ffce39510683bdd48cbedb8a46fe03976ee5f5c21e	COPYRIGHT
 diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 540e1540ca..72e1c7601b 100644
+index f6dad978e3..66af8fe5a9 100644
 --- a/package/postgresql/postgresql.mk
 +++ b/package/postgresql/postgresql.mk
 @@ -4,7 +4,7 @@
