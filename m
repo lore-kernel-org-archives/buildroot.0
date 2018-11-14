@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Nov 2018 23:20:50 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] nfs-utils: add patch to
+Date: Wed, 14 Nov 2018 23:22:05 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] nfs-utils: add patch to
  fix build with glibc 2.28
-Message-ID: <20181114221840.D38B383654@busybox.osuosl.org>
+Message-ID: <20181114221935.4C2E38365D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92012e5515e63510a70a00a379310ddfc5ae19fc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f225caedecd03de6ac95a64205166d8f1d4af4af
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Fixes:
 
