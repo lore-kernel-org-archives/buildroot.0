@@ -1,38 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 14 Nov 2018 11:50:30 +0100
-Subject: [Buildroot] [PATCH v3 1/2] ell: bump version to 0.14
-In-Reply-To: <20181109231725.20059-1-ps.report@gmx.net>
-References: <20181109231725.20059-1-ps.report@gmx.net>
-Message-ID: <20181114115030.34c8e537@windsurf>
+Date: Wed, 14 Nov 2018 11:55:53 +0100
+Subject: [Buildroot] [PATCH next v4 2/6] support/scripts/check-host-rpath:
+ split condition on two statements
+In-Reply-To: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
+References: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20181114105557.12599-3-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Inside the check_elf_has_rpath(), we check if the host binary has a
+correct RPATH, which should be either an absolute path to
+$(HOST_DIR)/lib, or a relative path using $ORIGIN. Those two
+conditions are checked in a single statements, but as we are going to
+add a third condition, let's split this up a bit:
 
-On Sat, 10 Nov 2018 00:17:24 +0100, Peter Seiderer wrote:
-> - remove superseeded patch 0001-ell-signal.h-use-standard-sigset_t-fixes-musl-compil.patch
-> - add patch for missing l_genl_family_set_unicast_handler symbol export
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v2 -> v3:
->   - new patch (needed by iwd update to 0.11)
-> ---
->  ...missing-l_genl_family_set_unicast_ha.patch | 30 ++++++++++
->  ...-standard-sigset_t-fixes-musl-compil.patch | 57 -------------------
->  package/ell/ell.hash                          |  2 +-
->  package/ell/ell.mk                            |  2 +-
->  4 files changed, 32 insertions(+), 59 deletions(-)
->  create mode 100644 package/ell/0001-ell-ell.sym-add-missing-l_genl_family_set_unicast_ha.patch
->  delete mode 100644 package/ell/0001-ell-signal.h-use-standard-sigset_t-fixes-musl-compil.patch
+ - If we have a RPATH to $(HOST_DIR)/lib -> we're good, return 0
+ - If we have a RPATH to $ORIGIN/../lib -> we're good, return 0
+ - Otherwise, we will exit the loop, and return 1
 
-Both applied to next. Thanks!
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/scripts/check-host-rpath | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Thomas
+diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
+index 169628decb..6c5767da05 100755
+--- a/support/scripts/check-host-rpath
++++ b/support/scripts/check-host-rpath
+@@ -63,7 +63,8 @@ check_elf_has_rpath() {
+         for dir in ${rpath//:/ }; do
+             # Remove duplicate and trailing '/' for proper match
+             dir="$( sed -r -e 's:/+:/:g; s:/$::;' <<<"${dir}" )"
+-            [ "${dir}" = "${hostdir}/lib" -o "${dir}" = "\$ORIGIN/../lib" ] && return 0
++            [ "${dir}" = "${hostdir}/lib" ] && return 0
++            [ "${dir}" = "\$ORIGIN/../lib" ] && return 0
+         done
+     done < <( readelf -d "${file}"                                              \
+               |sed -r -e '/.* \(R(UN)?PATH\) +Library r(un)?path: \[(.+)\]$/!d' \
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.19.1
