@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Nov 2018 10:33:41 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] package/network-manager:
+Date: Wed, 14 Nov 2018 10:34:19 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/network-manager:
  Add upstream patch to fix CVE-2018-15688
-Message-ID: <20181114093103.2C603834A5@busybox.osuosl.org>
+Message-ID: <20181114093141.6CE28834AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92b1901bf188d1023433208118136425e88f4ea1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9cd3f1b1ab8fee601f3fa6ad8ed01abe54e9caa9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 NetworkManager includes some parts of the systemd-networkd code in its
 codebase. That can be found at src/systemd/src/libsystemd-networkd.
