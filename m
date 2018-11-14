@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Nov 2018 23:33:56 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] utils/scanpypi: use
+Date: Wed, 14 Nov 2018 23:35:48 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] utils/scanpypi: use
  archive file name to specify the extraction folder
-Message-ID: <20181114223212.25B95836D3@busybox.osuosl.org>
+Message-ID: <20181114223323.B05A6836D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=577c3a7d97bf07755290757dca98eca33e18dc6c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ea1bf543b7753fba8f164808189177e10a21cbf0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Some packages have archive name that is different from package name.
 For example websocket-client's archive name is websocket_client-*.tar.gz.
@@ -43,10 +43,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 10 insertions(+), 9 deletions(-)
 
 diff --git a/utils/scanpypi b/utils/scanpypi
-index 3983be1ad1..3d3e604435 100755
+index 56b9f420ff..cb4b5e76a3 100755
 --- a/utils/scanpypi
 +++ b/utils/scanpypi
-@@ -243,13 +243,14 @@ class BuildrootPackage():
+@@ -227,13 +227,14 @@ class BuildrootPackage():
                      os.makedirs(tmp_pkg)
                  except OSError as exception:
                      if exception.errno != errno.EEXIST:
@@ -64,7 +64,7 @@ index 3983be1ad1..3d3e604435 100755
          else:
              with tarfile.open(fileobj=as_file) as as_tarfile:
                  tmp_pkg = os.path.join(tmp_path, self.buildroot_name)
-@@ -257,19 +258,19 @@ class BuildrootPackage():
+@@ -241,19 +242,19 @@ class BuildrootPackage():
                      os.makedirs(tmp_pkg)
                  except OSError as exception:
                      if exception.errno != errno.EEXIST:
