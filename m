@@ -1,78 +1,111 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Nov 2018 10:43:49 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] webkitgtk: add an option
- to control USE_GSTREAMER_GL
-Message-ID: <20181114094153.61AE683579@busybox.osuosl.org>
+Date: Wed, 14 Nov 2018 10:44:17 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] webkitgtk: bump to
+ version 2.22.3
+Message-ID: <20181114094153.6868983544@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df2ade1319cf476c2cf0c5efe3a18cb55a699b86
+commit: https://git.buildroot.net/buildroot/commit/?id=ab8c30b893d21109b6d7be1b3f16fdb9cfcda116
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-This covers the case where GL/GLES is available (so -DENABLE_OPENGL=ON
-gets passed), which makes the webkitgtk build system assume GStreamer-GL
-is available, while actually it is not.
+Release notes:
 
-Also, providing an option to manually disable usage of GStremer-GL can
-help with certain target configurations in which using OpenGL for video
-handling might result in incorrect rendering.
+    https://webkitgtk.org/2018/10/29/webkitgtk2.22.3-released.html
 
-This fixes some autobuilder failures like the following:
+Patch "0001-ARM-Building-FELightingNEON.cpp-fails-due-to-missing.patch"
+is removed because it is included in the new release.
 
-  http://autobuild.buildroot.net/results/187796535af53ece426641ff7d88aabada281674
-  http://autobuild.buildroot.net/results/00c1a8ea23a99728a4f3f4478705f2383414ae41
+This is a maintenance release which further improves playback of video
+when using media source extensions (MSE), specially for WebM content,
+and provides a few correctness fixes.
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4ac29a8196903f7e88674bb4b2f58c0f29fb122d)
+(cherry picked from commit 0def20865d75baf80b0dad5dcc81efd606cfb3af)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webkitgtk/Config.in    | 15 +++++++++++++++
- package/webkitgtk/webkitgtk.mk |  7 +++++++
- 2 files changed, 22 insertions(+)
+ ...g-FELightingNEON.cpp-fails-due-to-missing.patch | 41 ----------------------
+ package/webkitgtk/webkitgtk.hash                   |  8 ++---
+ package/webkitgtk/webkitgtk.mk                     |  2 +-
+ 3 files changed, 5 insertions(+), 46 deletions(-)
 
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index 96a7ab0c94..260fa15bad 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -88,6 +88,21 @@ config BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
- 	  This option pulls in all of the required dependencies
- 	  to enable multimedia (video/audio) support.
+diff --git a/package/webkitgtk/0001-ARM-Building-FELightingNEON.cpp-fails-due-to-missing.patch b/package/webkitgtk/0001-ARM-Building-FELightingNEON.cpp-fails-due-to-missing.patch
+deleted file mode 100644
+index 6fb309d9fb..0000000000
+--- a/package/webkitgtk/0001-ARM-Building-FELightingNEON.cpp-fails-due-to-missing.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From b252c7aed3fa6f22db8a26c3ab0bfe66e3490eef Mon Sep 17 00:00:00 2001
+-From: Adrian Perez de Castro <aperez@igalia.com>
+-Date: Sun, 23 Sep 2018 02:34:26 +0300
+-Subject: [PATCH xserver] [ARM] Building FELightingNEON.cpp fails due to
+- missing lightVector member https://bugs.webkit.org/show_bug.cgi?id=189890
+-
+-Reviewed by NOBODY (OOPS!).
+-
+-No new tests needed.
+-
+-* platform/graphics/cpu/arm/filters/FELightingNEON.h:
+-(WebCore::FELighting::platformApplyNeon): Adapt to new layout of "struct PaintingData" after r225122.
+----
+- Source/WebCore/ChangeLog                             | 12 ++++++++++++
+- .../graphics/cpu/arm/filters/FELightingNEON.h        |  6 +++---
+- 2 files changed, 15 insertions(+), 3 deletions(-)
+-
+-Fetch from: https://bugs.webkit.org/show_bug.cgi?id=189890
+-Upstream-Status: Pending
+-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+-
+-diff --git a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h b/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h
+-index 42af922374b..b542a4c81aa 100644
+---- a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h
+-+++ b/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h
+-@@ -144,9 +144,9 @@ inline void FELighting::platformApplyNeon(const LightingData& data, const LightS
+-             neonData.flags |= FLAG_CONE_EXPONENT_IS_1;
+-     } else {
+-         ASSERT(m_lightSource->type() == LS_DISTANT);
+--        floatArguments.lightX = paintingData.lightVector.x();
+--        floatArguments.lightY = paintingData.lightVector.y();
+--        floatArguments.lightZ = paintingData.lightVector.z();
+-+        floatArguments.lightX = paintingData.initialLightingData.lightVector.x();
+-+        floatArguments.lightY = paintingData.initialLightingData.lightVector.y();
+-+        floatArguments.lightZ = paintingData.initialLightingData.lightVector.z();
+-         floatArguments.padding2 = 1;
+-     }
+- 
+--- 
+-2.19.0
+-
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 0b9b94ca49..19f0c487dd 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.22.2.tar.xz.sums
+-md5 207d50d313c07b03726f3a7f22643934 webkitgtk-2.22.2.tar.xz
+-sha1 ff0c40e81e240aa0743f7e6483f175defebd1417 webkitgtk-2.22.2.tar.xz
+-sha256 345487d4d1896e711683f951d1e09387d3b90d7cf59295c0e634af7f515e99ba webkitgtk-2.22.2.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.22.3.tar.xz.sums
++md5 6dae6837c884a25413fb1d4527c9894a webkitgtk-2.22.3.tar.xz
++sha1 c16129f4098b35597457255e63e60126ff3e6daa webkitgtk-2.22.3.tar.xz
++sha256 9dfd542902953be9af8ff32bd37fe662ca3d75f7348514ebac15c6252a6ccd72 webkitgtk-2.22.3.tar.xz
  
-+if BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
-+
-+config BR2_PACKAGE_WEBKITGTK_USE_GSTREAMER_GL
-+	bool "use gstreamer-gl"
-+	default y
-+	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
-+	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL
-+	help
-+	  Use the GStreamer GL elements for handling video content.
-+	  This is recommended as it improves performance of video
-+	  playback. In some target configurations incorrect rendering
-+	  might be produced, and disabling this option may help.
-+
-+endif
-+
- config BR2_PACKAGE_WEBKITGTK_WEBDRIVER
- 	bool "WebDriver support"
- 	help
+ # Hashes for license files:
+ sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
 diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index f28417ac73..8ac3ff467b 100644
+index 8ac3ff467b..603827ba09 100644
 --- a/package/webkitgtk/webkitgtk.mk
 +++ b/package/webkitgtk/webkitgtk.mk
-@@ -97,4 +97,11 @@ WEBKITGTK_CONF_OPTS += -DENABLE_WAYLAND_TARGET=ON
- endif
- endif
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_WEBKITGTK_USE_GSTREAMER_GL),y)
-+WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER_GL=ON
-+WEBKITGTK_DEPENDENCIES += gst1-plugins-bad
-+else
-+WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER_GL=OFF
-+endif
-+
- $(eval $(cmake-package))
+-WEBKITGTK_VERSION = 2.22.2
++WEBKITGTK_VERSION = 2.22.3
+ WEBKITGTK_SITE = http://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
