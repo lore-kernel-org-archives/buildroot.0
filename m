@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Nov 2018 09:10:15 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] package/systemd: Add
+Date: Wed, 14 Nov 2018 09:11:24 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/systemd: Add
  upstream patch to fix CVE-2018-15688
-Message-ID: <20181114080742.7CA8383253@busybox.osuosl.org>
+Message-ID: <20181114080958.34C9383294@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e0c86d9c23372a7a26c2646436432b68d2c4b9f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2e755e82ec58784c926c5c8b44be404f14166d9e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Systemd-networkd is vulnerable to an out out-of-bounds heap write in the
 DHCPv6 client when handling options sent by network adjacent DHCP servers.
