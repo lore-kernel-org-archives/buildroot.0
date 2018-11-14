@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Nov 2018 09:14:09 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] configs/{at91,
+Date: Wed, 14 Nov 2018 09:14:20 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] configs/{at91,
  atmel}*_dev*: drop Dropbear as it duplicates OpenSSH
-Message-ID: <20181114081134.0562E832CE@busybox.osuosl.org>
+Message-ID: <20181114081140.E4D6C8343E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=129c83e06ff26ee229951441f213389cf76dc6cc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2802e0d990378e870081d678a662f17d303556b5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 The "development" defconfigs for Atmel platforms enable both OpenSSH
 and Dropbear, which doesn't make a lot of sense, as only one SSH
@@ -45,10 +45,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  8 files changed, 8 deletions(-)
 
 diff --git a/configs/at91sam9x5ek_dev_defconfig b/configs/at91sam9x5ek_dev_defconfig
-index 3af4ba74e8..3f711ffebb 100644
+index dee365a56c..505be8d047 100644
 --- a/configs/at91sam9x5ek_dev_defconfig
 +++ b/configs/at91sam9x5ek_dev_defconfig
-@@ -60,7 +60,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
+@@ -59,7 +59,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
  BR2_PACKAGE_BLUEZ_UTILS=y
  BR2_PACKAGE_BRIDGE_UTILS=y
  BR2_PACKAGE_CAN_UTILS=y
@@ -57,45 +57,9 @@ index 3af4ba74e8..3f711ffebb 100644
  BR2_PACKAGE_IPERF=y
  BR2_PACKAGE_IPROUTE2=y
 diff --git a/configs/at91sam9x5ek_mmc_dev_defconfig b/configs/at91sam9x5ek_mmc_dev_defconfig
-index 931cf7dec8..73c90a4951 100644
+index a8fdad72b7..cd65912883 100644
 --- a/configs/at91sam9x5ek_mmc_dev_defconfig
 +++ b/configs/at91sam9x5ek_mmc_dev_defconfig
-@@ -63,7 +63,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
- BR2_PACKAGE_BLUEZ_UTILS=y
- BR2_PACKAGE_BRIDGE_UTILS=y
- BR2_PACKAGE_CAN_UTILS=y
--BR2_PACKAGE_DROPBEAR=y
- BR2_PACKAGE_ETHTOOL=y
- BR2_PACKAGE_IPERF=y
- BR2_PACKAGE_IPROUTE2=y
-diff --git a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-index 3752129202..0c04150151 100644
---- a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-@@ -52,7 +52,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
- BR2_PACKAGE_BLUEZ_UTILS=y
- BR2_PACKAGE_BRIDGE_UTILS=y
- BR2_PACKAGE_CAN_UTILS=y
--BR2_PACKAGE_DROPBEAR=y
- BR2_PACKAGE_ETHTOOL=y
- BR2_PACKAGE_IPERF=y
- BR2_PACKAGE_IPROUTE2=y
-diff --git a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-index 23a2582086..4563ed1163 100644
---- a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-@@ -66,7 +66,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
- BR2_PACKAGE_BLUEZ_UTILS=y
- BR2_PACKAGE_BRIDGE_UTILS=y
- BR2_PACKAGE_CAN_UTILS=y
--BR2_PACKAGE_DROPBEAR=y
- BR2_PACKAGE_ETHTOOL=y
- BR2_PACKAGE_IPERF=y
- BR2_PACKAGE_IPROUTE2=y
-diff --git a/configs/atmel_sama5d3_xplained_dev_defconfig b/configs/atmel_sama5d3_xplained_dev_defconfig
-index f403e2308d..6a5ed37516 100644
---- a/configs/atmel_sama5d3_xplained_dev_defconfig
-+++ b/configs/atmel_sama5d3_xplained_dev_defconfig
 @@ -62,7 +62,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
  BR2_PACKAGE_BLUEZ_UTILS=y
  BR2_PACKAGE_BRIDGE_UTILS=y
@@ -104,10 +68,22 @@ index f403e2308d..6a5ed37516 100644
  BR2_PACKAGE_ETHTOOL=y
  BR2_PACKAGE_IPERF=y
  BR2_PACKAGE_IPROUTE2=y
-diff --git a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-index a3351482cf..37112ce434 100644
---- a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
+diff --git a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+index f3cb11ce70..9985b64727 100644
+--- a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
++++ b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+@@ -51,7 +51,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
+ BR2_PACKAGE_BLUEZ_UTILS=y
+ BR2_PACKAGE_BRIDGE_UTILS=y
+ BR2_PACKAGE_CAN_UTILS=y
+-BR2_PACKAGE_DROPBEAR=y
+ BR2_PACKAGE_ETHTOOL=y
+ BR2_PACKAGE_IPERF=y
+ BR2_PACKAGE_IPROUTE2=y
+diff --git a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
+index 78d082f9cb..bc5414c4f4 100644
+--- a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
++++ b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
 @@ -65,7 +65,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
  BR2_PACKAGE_BLUEZ_UTILS=y
  BR2_PACKAGE_BRIDGE_UTILS=y
@@ -116,11 +92,35 @@ index a3351482cf..37112ce434 100644
  BR2_PACKAGE_ETHTOOL=y
  BR2_PACKAGE_IPERF=y
  BR2_PACKAGE_IPROUTE2=y
+diff --git a/configs/atmel_sama5d3_xplained_dev_defconfig b/configs/atmel_sama5d3_xplained_dev_defconfig
+index 91ded5bfeb..520cbc833d 100644
+--- a/configs/atmel_sama5d3_xplained_dev_defconfig
++++ b/configs/atmel_sama5d3_xplained_dev_defconfig
+@@ -61,7 +61,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
+ BR2_PACKAGE_BLUEZ_UTILS=y
+ BR2_PACKAGE_BRIDGE_UTILS=y
+ BR2_PACKAGE_CAN_UTILS=y
+-BR2_PACKAGE_DROPBEAR=y
+ BR2_PACKAGE_ETHTOOL=y
+ BR2_PACKAGE_IPERF=y
+ BR2_PACKAGE_IPROUTE2=y
+diff --git a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
+index 20dc8929ab..a1e34ab810 100644
+--- a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
++++ b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
+@@ -64,7 +64,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
+ BR2_PACKAGE_BLUEZ_UTILS=y
+ BR2_PACKAGE_BRIDGE_UTILS=y
+ BR2_PACKAGE_CAN_UTILS=y
+-BR2_PACKAGE_DROPBEAR=y
+ BR2_PACKAGE_ETHTOOL=y
+ BR2_PACKAGE_IPERF=y
+ BR2_PACKAGE_IPROUTE2=y
 diff --git a/configs/atmel_sama5d4_xplained_dev_defconfig b/configs/atmel_sama5d4_xplained_dev_defconfig
-index 7ebfde173c..266411ff9e 100644
+index 69a71eb51e..9197564c20 100644
 --- a/configs/atmel_sama5d4_xplained_dev_defconfig
 +++ b/configs/atmel_sama5d4_xplained_dev_defconfig
-@@ -63,7 +63,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
+@@ -62,7 +62,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
  BR2_PACKAGE_BLUEZ_UTILS=y
  BR2_PACKAGE_BRIDGE_UTILS=y
  BR2_PACKAGE_CAN_UTILS=y
@@ -129,10 +129,10 @@ index 7ebfde173c..266411ff9e 100644
  BR2_PACKAGE_IPERF=y
  BR2_PACKAGE_IPROUTE2=y
 diff --git a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-index c31f15a1ee..a295831912 100644
+index 60692d98cb..f20e114ff1 100644
 --- a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
 +++ b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-@@ -66,7 +66,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
+@@ -65,7 +65,6 @@ BR2_PACKAGE_DTC_PROGRAMS=y
  BR2_PACKAGE_BLUEZ_UTILS=y
  BR2_PACKAGE_BRIDGE_UTILS=y
  BR2_PACKAGE_CAN_UTILS=y
