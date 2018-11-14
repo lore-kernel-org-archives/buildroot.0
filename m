@@ -1,99 +1,70 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 14 Nov 2018 21:42:24 +0100
-Subject: [Buildroot] [PATCH 1/1] uclibc-ng-test: fix build with glibc 2.28
-Message-ID: <20181114204224.27123-1-fontaine.fabrice@gmail.com>
+From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Date: Wed, 14 Nov 2018 21:54:33 +0100
+Subject: [Buildroot] [PATCH v2] boot/syslinux: Fix build with glibc 2.28+
+Message-ID: <20181114205433.3233-1-alexander.sverdlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since glibc 2.28
-(https://savannah.gnu.org/forum/forum.php?forum_id=9205), the obsolete
-functions encrypt, encrypt_r, setkey, setkey_r, cbc_crypt, ecb_crypt,
-and des_setparity are no longer available to newly linked binaries, and
-the headers <rpc/des_crypt.h> and <rpc/rpc_des.h> are no longer
-installed. These functions encrypted and decrypted data with the DES
-block cipher, which is no longer considered secure. Software that still
-uses these functions should switch to a modern cryptography library,
-such as libgcrypt.
+When building with glibc 2.28+, the "major", "minor" and "makedev"
+functions are defined in "sys/sysmacros.h". The patch
+"extlinux: pull in sys/sysmacros.h for major/minor/makedev",
+applied to Syslinux during 2016Apr, should help. Please note that not
+only Syslinux is affected by this change in glibc.
 
-So add a NO_CRYPT variable to disable test/crypt
-
-Fixes:
- - http://autobuild.buildroot.org/results/158438debb0ce313b012b871e199bed42ba38294
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Link: https://www.syslinux.org/wiki/index.php?title=Building
+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 ---
- ...Add-NO_CRYPT-to-fix-build-with-glibc-2.28.patch | 43 ++++++++++++++++++++++
- package/uclibc-ng-test/uclibc-ng-test.mk           |  5 +++
- 2 files changed, 48 insertions(+)
- create mode 100644 package/uclibc-ng-test/0002-Add-NO_CRYPT-to-fix-build-with-glibc-2.28.patch
 
-diff --git a/package/uclibc-ng-test/0002-Add-NO_CRYPT-to-fix-build-with-glibc-2.28.patch b/package/uclibc-ng-test/0002-Add-NO_CRYPT-to-fix-build-with-glibc-2.28.patch
+Changelog:
+v2:
+- Commit message: 2.23 -> 2.28
+
+ ...-sysmacros-h-for-major-minor-makedev.patch | 34 +++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 boot/syslinux/0012-pull-in-sys-sysmacros-h-for-major-minor-makedev.patch
+
+diff --git a/boot/syslinux/0012-pull-in-sys-sysmacros-h-for-major-minor-makedev.patch b/boot/syslinux/0012-pull-in-sys-sysmacros-h-for-major-minor-makedev.patch
 new file mode 100644
-index 0000000000..34760f3dfb
+index 0000000000..beba5cc245
 --- /dev/null
-+++ b/package/uclibc-ng-test/0002-Add-NO_CRYPT-to-fix-build-with-glibc-2.28.patch
-@@ -0,0 +1,43 @@
-+From 164b1b5592ef6ad9fceba06bdfa31787e9c0329d Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 14 Nov 2018 21:26:54 +0100
-+Subject: [PATCH] Add NO_CRYPT to fix build with glibc 2.28
++++ b/boot/syslinux/0012-pull-in-sys-sysmacros-h-for-major-minor-makedev.patch
+@@ -0,0 +1,34 @@
++From 1a74985b2a404639b08882c57f3147229605dfd5 Mon Sep 17 00:00:00 2001
++From: Mike Frysinger <vapier@gentoo.org>
++Date: Tue, 19 Apr 2016 06:50:31 -0400
++Subject: [PATCH] extlinux: pull in sys/sysmacros.h for major/minor/makedev
 +
-+Since glibc 2.28
-+(https://savannah.gnu.org/forum/forum.php?forum_id=9205), the obsolete
-+functions encrypt, encrypt_r, setkey, setkey_r, cbc_crypt, ecb_crypt,
-+and des_setparity are no longer available to newly linked binaries, and
-+the headers <rpc/des_crypt.h> and <rpc/rpc_des.h> are no longer
-+installed. These functions encrypted and decrypted data with the DES
-+block cipher, which is no longer considered secure. Software that still
-+uses these functions should switch to a modern cryptography library,
-+such as libgcrypt.
++These functions are defined in sys/sysmacros.h, so add the include to
++main.c.  This is already handled correctly in mountinfo.c.  Otherwise
++we get build failures like:
 +
-+So add a NO_CRYPT variable to disable test/crypt
++main.o: In function 'find_device_sysfs':
++extlinux/main.c:1131: undefined reference to 'minor'
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/158438debb0ce313b012b871e199bed42ba38294
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Signed-off-by: Mike Frysinger <vapier@gentoo.org>
++Signed-off-by: Gene Cumm <gene.cumm@gmail.com>
++Signed-off-by: Alexander Sverdlin <alexader.sverdlin@gmail.com>
 +---
-+ test/Makefile | 4 ++++
-+ 1 file changed, 4 insertions(+)
++ extlinux/main.c | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+diff --git a/test/Makefile b/test/Makefile
-+index 5a136ea..6690d25 100644
-+--- a/test/Makefile
-++++ b/test/Makefile
-+@@ -39,6 +39,10 @@ ifeq ($(NO_MATH),1)
-+ DIRS := $(filter-out math,$(DIRS))
-+ endif
-+ 
-++ifeq ($(NO_CRYPT),1)
-++DIRS := $(filter-out crypt,$(DIRS))
-++endif
-++
-+ test check all: run
-+ 
-+ run: subdirs_run
++diff --git a/extlinux/main.c b/extlinux/main.c
++index a7ebd49..ebff7ea 100644
++--- a/extlinux/main.c
+++++ b/extlinux/main.c
++@@ -38,6 +38,7 @@
++ #include <sysexits.h>
++ #include <sys/ioctl.h>
++ #include <sys/stat.h>
+++#include <sys/sysmacros.h>
++ #include <sys/types.h>
++ #include <sys/mount.h>
++ #include <sys/vfs.h>
 +-- 
-+2.14.1
++2.10.5.GIT
 +
-diff --git a/package/uclibc-ng-test/uclibc-ng-test.mk b/package/uclibc-ng-test/uclibc-ng-test.mk
-index 0e6433c83d..aeea799d88 100644
---- a/package/uclibc-ng-test/uclibc-ng-test.mk
-+++ b/package/uclibc-ng-test/uclibc-ng-test.mk
-@@ -13,6 +13,11 @@ UCLIBC_NG_TEST_LICENSE_FILES = COPYING.LIB
- # regular testing is possible
- UCLIBC_NG_TEST_MAKE_ENV += NO_MATH=1
- 
-+# obsolete encrypt and setkey functions are not available since glibc 2.28
-+ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
-+UCLIBC_NG_TEST_MAKE_ENV += NO_CRYPT=1
-+endif
-+
- # locale tests are not compatible with musl, yet
- ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
- UCLIBC_NG_TEST_MAKE_ENV += NO_LOCALE=1
 -- 
-2.14.1
+2.19.1
