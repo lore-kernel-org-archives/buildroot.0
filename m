@@ -1,37 +1,111 @@
 From: Nasser Afshin <afshin.nasser@gmail.com>
-Date: Wed, 14 Nov 2018 10:41:53 +0330
-Subject: [Buildroot] [PATCH v3 0/3] Fix merging configuration fragments
-Message-ID: <20181114071156.10453-1-afshin.nasser@gmail.com>
+Date: Wed, 14 Nov 2018 10:41:54 +0330
+Subject: [Buildroot] [PATCH v3 1/3] merge_config.sh: Fix merging buildroot
+ config files
+In-Reply-To: <20181114071156.10453-1-afshin.nasser@gmail.com>
+References: <20181114071156.10453-1-afshin.nasser@gmail.com>
+Message-ID: <20181114071156.10453-2-afshin.nasser@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Nasser Afshin <Afshin.Nasser@gmail.com>
+This patch allows us to define config prefix with CONFIG_ environment
+variable.
 
-We use merge_config.sh as a helper script to merge many types of config
-fragments. The script has recently improved to better support buildroot. Now
-the report mechanism (-r -m) works as expected for buildroot configuration
-fragments.
+By setting the proper config prefix, we will have proper 'redundant
+configuration warnings' when we use '-r -m' options.
 
-When using this feature in buildroot with empty config prefixes, we have some
-false positive reports from comment lines. The last patch tries to avoid such
-false positive matches.
+This is actually already in mainline for v4.20-rc1:
+2cd3faf87d2d8f6123adf34741b9a7b98828a76f
+("merge_config.sh: Allow to define config prefix")
 
-Nasser Afshin (3):
-  merge_config.sh: Fix merging buildroot config files
-  test-pkg: Use the correct config prefix when merging
-  merge_config.sh: Avoid false positive matches from comment lines
-
- support/kconfig/merge_config.sh                    | 12 ++++++--
- ...e_config.sh-Allow-to-define-config-prefix.patch | 31 +++++++++++++++++++++
- ...false-positive-matches-from-comment-lines.patch | 32 ++++++++++++++++++++++
- support/kconfig/patches/series                     |  2 ++
- utils/test-pkg                                     |  2 +-
- 5 files changed, 75 insertions(+), 4 deletions(-)
+Signed-off-by: Nasser Afshin <afshin.nasser@gmail.com>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+---
+ support/kconfig/merge_config.sh                    |  7 ++++-
+ ...e_config.sh-Allow-to-define-config-prefix.patch | 31 ++++++++++++++++++++++
+ support/kconfig/patches/series                     |  1 +
+ 3 files changed, 38 insertions(+), 1 deletion(-)
  create mode 100644 support/kconfig/patches/20-merge_config.sh-Allow-to-define-config-prefix.patch
- create mode 100644 support/kconfig/patches/21-Avoid-false-positive-matches-from-comment-lines.patch
 
+diff --git a/support/kconfig/merge_config.sh b/support/kconfig/merge_config.sh
+index 50de5114dc..404ca3864f 100755
+--- a/support/kconfig/merge_config.sh
++++ b/support/kconfig/merge_config.sh
+@@ -34,12 +34,16 @@ usage() {
+ 	echo "  -r    list redundant entries when merging fragments"
+ 	echo "  -O    dir to put generated output files.  Consider setting \$KCONFIG_CONFIG instead."
+ 	echo "  -e    colon-separated list of br2-external trees to use (optional)"
++	echo
++	echo "Used prefix: '$CONFIG_PREFIX'. You can redefine it with \$CONFIG_
++	environment variable."
+ }
+ 
+ RUNMAKE=true
+ ALLTARGET=alldefconfig
+ WARNREDUN=false
+ OUTPUT=.
++CONFIG_PREFIX=${CONFIG_-CONFIG_}
+ 
+ while true; do
+ 	case $1 in
+@@ -105,7 +109,8 @@ if [ ! -r "$INITFILE" ]; then
+ fi
+ 
+ MERGE_LIST=$*
+-SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(CONFIG_[a-zA-Z0-9_]*\)[= ].*/\2/p"
++SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(${CONFIG_PREFIX}[a-zA-Z0-9_]*\)[= ].*/\2/p"
++
+ TMP_FILE=$(mktemp -t .tmp.config.XXXXXXXXXX)
+ 
+ echo "Using $INITFILE as base"
+diff --git a/support/kconfig/patches/20-merge_config.sh-Allow-to-define-config-prefix.patch b/support/kconfig/patches/20-merge_config.sh-Allow-to-define-config-prefix.patch
+new file mode 100644
+index 0000000000..645043b163
+--- /dev/null
++++ b/support/kconfig/patches/20-merge_config.sh-Allow-to-define-config-prefix.patch
+@@ -0,0 +1,31 @@
++Index: kconfig/merge_config.sh
++===================================================================
++--- kconfig.orig/merge_config.sh
+++++ kconfig/merge_config.sh
++@@ -34,12 +34,16 @@ usage() {
++ 	echo "  -r    list redundant entries when merging fragments"
++ 	echo "  -O    dir to put generated output files.  Consider setting \$KCONFIG_CONFIG instead."
++ 	echo "  -e    colon-separated list of br2-external trees to use (optional)"
+++	echo
+++	echo "Used prefix: '$CONFIG_PREFIX'. You can redefine it with \$CONFIG_
+++	environment variable."
++ }
++ 
++ RUNMAKE=true
++ ALLTARGET=alldefconfig
++ WARNREDUN=false
++ OUTPUT=.
+++CONFIG_PREFIX=${CONFIG_-CONFIG_}
++ 
++ while true; do
++ 	case $1 in
++@@ -105,7 +109,8 @@ if [ ! -r "$INITFILE" ]; then
++ fi
++ 
++ MERGE_LIST=$*
++-SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(CONFIG_[a-zA-Z0-9_]*\)[= ].*/\2/p"
+++SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(${CONFIG_PREFIX}[a-zA-Z0-9_]*\)[= ].*/\2/p"
+++
++ TMP_FILE=$(mktemp -t .tmp.config.XXXXXXXXXX)
++ 
++ echo "Using $INITFILE as base"
+diff --git a/support/kconfig/patches/series b/support/kconfig/patches/series
+index e136de7937..be8627db13 100644
+--- a/support/kconfig/patches/series
++++ b/support/kconfig/patches/series
+@@ -8,3 +8,4 @@
+ 17-backport-kecho.patch
+ 18-merge-config.sh-create-temporary-files-in-tmp.patch
+ 19-merge_config.sh-add-br2-external-support.patch
++20-merge_config.sh-Allow-to-define-config-prefix.patch
 -- 
 2.15.0
