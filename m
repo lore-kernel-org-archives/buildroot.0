@@ -1,33 +1,75 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 14 Nov 2018 07:04:50 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/proftpd: add enable buffer
- size
-In-Reply-To: <adba6a5b-96e8-78a4-c9ca-d80f9c3aa519@mind.be>
-References: <20181112164521.27220-1-jared.bents@rockwellcollins.com>
- <adba6a5b-96e8-78a4-c9ca-d80f9c3aa519@mind.be>
-Message-ID: <20181114050450.4y2s2225fnm2uzse@sapphire.tkos.co.il>
+From: Christian Stewart <christian@paral.in>
+Date: Tue, 13 Nov 2018 21:53:23 -0800
+Subject: [Buildroot] [PATCH v8 1/1] docker-engine: split docker-{cli,
+ engine}, bump to v18.06.1-ce
+In-Reply-To: <CANQCQpa0SGdEHVFxn_wmKnktat18iAJ2YLXYQd+4Uqzq5GzG4A@mail.gmail.com>
+References: <20181108032458.1028-1-christian@paral.in>
+ <CANQCQpa0SGdEHVFxn_wmKnktat18iAJ2YLXYQd+4Uqzq5GzG4A@mail.gmail.com>
+Message-ID: <874lcki4rw.fsf@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Matthew,
 
-On Tue, Nov 13, 2018 at 12:56:34AM +0100, Arnout Vandecappelle wrote:
-> On 12/11/2018 17:45, Jared Bents wrote:
-> > Enable buffer size as a compile time option to change internal
-> > buffer size.
-> > 
-> > Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
-> 
->  Both applied to next, thanks!
+Matthew Weber <matthew.weber@rockwellcollins.com> writes:
+> I've started to test this series and wondered what the most minimal BR
+> config would look like for the host /parent build?  Just systemd and
+> docker-engine? Or are there dependencies on full core-utils /
+> util-linux items?  I did look at your SkiffOS project and when I merge
+> a config together their were a good amount of packages and a ~150MB
+> rootfs.  Just curious what a minimal build might look like.
 
-Not in next as of commit 3db2ed427138f (python-cchardet: new package).
+This is an interesting question. I had a quick scan of a defconfig Skiff
+produces, and took some quick notes on what might be immediately
+removable without consequence:
 
-baruch
+ - util-linux: fallocate, kill, line, login, more, newgrp, rfkill, setpriv, su
+ - editors: nano and vim (can be removed)
+ - wpa-supplicant: cli, hotspot, wps support likely can be removed
+ - other utils: file, ssh server (dropbear could be used), mosh, compression tools
+ - libv4l: unsure if necessary
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+The majority of these can be disabled from the base config fragments
+here:
+
+https://github.com/paralin/SkiffOS/tree/master/configs/skiff/standard/buildroot
+
+They were originally included due to operational requirements / ease of
+use in the early days of the project, but are probably not necessary in
+a "production" image. They can certainly be removed from the base Skiff
+packages, and left to developers to enable in other packages if needed.
+
+I'll begin doing some tests of minimal images this week.
+
+Something else to note: it's likely unnecessary to include Docker at
+all, and these days Docker brings a lot of binary bloat with it. It
+contains a full cluster management system (swarm) and a kubernetes
+client, for example.
+
+Some alternatives:
+
+ - http://cri-o.io/ - container runtime interface, will add to BR
+ - runc - can be used independently of Docker
+ - docker-containerd - separate daemon for managing container basics
+ - rkt - coreos container manager
+ - libpod/podman: https://github.com/containers/libpod
+
+I hope to add at least cri-o, rkt, and podman support to Buildroot in
+the near future.
+
+>> +sha256 47eda354afc199693aa338f5b2bb87e4511354c02561ddc6520a06d169921bdf        docker-cli-v18.06.1-ce.tar.gz
+>
+> Please add license file hashes for both packages.
+
+Will include in the next revision of the series:
+
+# docker-cli.hash
+sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+# docker-engine.hash
+sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+
+Thanks,
+Christian
