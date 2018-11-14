@@ -1,78 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Nov 2018 10:44:42 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] webkitgtk: add an option
- to control USE_GSTREAMER_GL
-Message-ID: <20181114094227.26557835BA@busybox.osuosl.org>
+Date: Wed, 14 Nov 2018 10:45:38 +0100
+Subject: [Buildroot] [PATCH v2 1/1] webkitgtk: bump to version 2.22.3
+In-Reply-To: <20181031100424.92554-1-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Wed, 31 Oct 2018 12:04:24 +0200")
+References: <20181031100424.92554-1-aperez@igalia.com>
+Message-ID: <87in10uh4t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03b24bf276983d2bcf9dcc5a8bd3c219ad06b153
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
-This covers the case where GL/GLES is available (so -DENABLE_OPENGL=ON
-gets passed), which makes the webkitgtk build system assume GStreamer-GL
-is available, while actually it is not.
+ > Release notes:
+ >     https://webkitgtk.org/2018/10/29/webkitgtk2.22.3-released.html
 
-Also, providing an option to manually disable usage of GStremer-GL can
-help with certain target configurations in which using OpenGL for video
-handling might result in incorrect rendering.
+ > Patch "0001-ARM-Building-FELightingNEON.cpp-fails-due-to-missing.patch"
+ > is removed because it is included in the new release.
 
-This fixes some autobuilder failures like the following:
+ > This is a maintenance release which further improves playback of video
+ > when using media source extensions (MSE), specially for WebM content,
+ > and provides a few correctness fixes.
 
-  http://autobuild.buildroot.net/results/187796535af53ece426641ff7d88aabada281674
-  http://autobuild.buildroot.net/results/00c1a8ea23a99728a4f3f4478705f2383414ae41
+ > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4ac29a8196903f7e88674bb4b2f58c0f29fb122d)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/webkitgtk/Config.in    | 15 +++++++++++++++
- package/webkitgtk/webkitgtk.mk |  7 +++++++
- 2 files changed, 22 insertions(+)
+ > ---
+ > Changes v1 -> v2:
+ >   - Fix wrong tarball file name in webkitgtk.hash
 
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index 96a7ab0c94..260fa15bad 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -88,6 +88,21 @@ config BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
- 	  This option pulls in all of the required dependencies
- 	  to enable multimedia (video/audio) support.
- 
-+if BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
-+
-+config BR2_PACKAGE_WEBKITGTK_USE_GSTREAMER_GL
-+	bool "use gstreamer-gl"
-+	default y
-+	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
-+	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL
-+	help
-+	  Use the GStreamer GL elements for handling video content.
-+	  This is recommended as it improves performance of video
-+	  playback. In some target configurations incorrect rendering
-+	  might be produced, and disabling this option may help.
-+
-+endif
-+
- config BR2_PACKAGE_WEBKITGTK_WEBDRIVER
- 	bool "WebDriver support"
- 	help
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index f28417ac73..8ac3ff467b 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -97,4 +97,11 @@ WEBKITGTK_CONF_OPTS += -DENABLE_WAYLAND_TARGET=ON
- endif
- endif
- 
-+ifeq ($(BR2_PACKAGE_WEBKITGTK_USE_GSTREAMER_GL),y)
-+WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER_GL=ON
-+WEBKITGTK_DEPENDENCIES += gst1-plugins-bad
-+else
-+WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER_GL=OFF
-+endif
-+
- $(eval $(cmake-package))
+Committed to 2018.02.x and 2018.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
