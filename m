@@ -1,75 +1,35 @@
-From: Christian Stewart <christian@paral.in>
-Date: Tue, 13 Nov 2018 21:53:23 -0800
-Subject: [Buildroot] [PATCH v8 1/1] docker-engine: split docker-{cli,
- engine}, bump to v18.06.1-ce
-In-Reply-To: <CANQCQpa0SGdEHVFxn_wmKnktat18iAJ2YLXYQd+4Uqzq5GzG4A@mail.gmail.com>
-References: <20181108032458.1028-1-christian@paral.in>
- <CANQCQpa0SGdEHVFxn_wmKnktat18iAJ2YLXYQd+4Uqzq5GzG4A@mail.gmail.com>
-Message-ID: <874lcki4rw.fsf@paral.in>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 14 Nov 2018 08:03:22 +0200
+Subject: [Buildroot] [PATCH] boot/syslinux: Fix build with glibc 2.23+
+In-Reply-To: <20181114000205.9110-1-alexander.sverdlin@gmail.com>
+References: <20181114000205.9110-1-alexander.sverdlin@gmail.com>
+Message-ID: <20181114060320.2fjxyowtvomgivtl@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Matthew,
+Hi Alexander,
 
-Matthew Weber <matthew.weber@rockwellcollins.com> writes:
-> I've started to test this series and wondered what the most minimal BR
-> config would look like for the host /parent build?  Just systemd and
-> docker-engine? Or are there dependencies on full core-utils /
-> util-linux items?  I did look at your SkiffOS project and when I merge
-> a config together their were a good amount of packages and a ~150MB
-> rootfs.  Just curious what a minimal build might look like.
+On Wed, Nov 14, 2018 at 01:02:05AM +0100, Alexander Sverdlin wrote:
+> When building with glibc 2.23+, the "major", "minor" and "makedev"
 
-This is an interesting question. I had a quick scan of a defconfig Skiff
-produces, and took some quick notes on what might be immediately
-removable without consequence:
+Should be "glibc 2.28+". Ditto for the subject line.
 
- - util-linux: fallocate, kill, line, login, more, newgrp, rfkill, setpriv, su
- - editors: nano and vim (can be removed)
- - wpa-supplicant: cli, hotspot, wps support likely can be removed
- - other utils: file, ssh server (dropbear could be used), mosh, compression tools
- - libv4l: unsure if necessary
+> functions are defined in "sys/sysmacros.h". The patch
+> "extlinux: pull in sys/sysmacros.h for major/minor/makedev",
+> applied to Syslinux during 2016Apr, should help. Please note that not
+> only Syslinux is affected by this change in glibc.
+> 
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+> Link: https://www.syslinux.org/wiki/index.php?title=Building
 
-The majority of these can be disabled from the base config fragments
-here:
+This line should be above the sign-off as part of the commit log.
 
-https://github.com/paralin/SkiffOS/tree/master/configs/skiff/standard/buildroot
+baruch
 
-They were originally included due to operational requirements / ease of
-use in the early days of the project, but are probably not necessary in
-a "production" image. They can certainly be removed from the base Skiff
-packages, and left to developers to enable in other packages if needed.
-
-I'll begin doing some tests of minimal images this week.
-
-Something else to note: it's likely unnecessary to include Docker at
-all, and these days Docker brings a lot of binary bloat with it. It
-contains a full cluster management system (swarm) and a kubernetes
-client, for example.
-
-Some alternatives:
-
- - http://cri-o.io/ - container runtime interface, will add to BR
- - runc - can be used independently of Docker
- - docker-containerd - separate daemon for managing container basics
- - rkt - coreos container manager
- - libpod/podman: https://github.com/containers/libpod
-
-I hope to add at least cri-o, rkt, and podman support to Buildroot in
-the near future.
-
->> +sha256 47eda354afc199693aa338f5b2bb87e4511354c02561ddc6520a06d169921bdf        docker-cli-v18.06.1-ce.tar.gz
->
-> Please add license file hashes for both packages.
-
-Will include in the next revision of the series:
-
-# docker-cli.hash
-sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-# docker-engine.hash
-sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-
-Thanks,
-Christian
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
