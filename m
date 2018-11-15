@@ -1,70 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Nov 2018 15:37:10 +0100
-Subject: [Buildroot] [PATCH next v4 0/6] Per-package host/target
- directory support
-In-Reply-To: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
-References: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181115153710.70c26880@windsurf>
+From: tochansky at tochlab.net <tochansky@tochlab.net>
+Date: Thu, 15 Nov 2018 14:21:36 +0000
+Subject: [Buildroot] version `GLIBC_2.27' not found
+Message-ID: <a59aa43d9d9f5a8e734185c9efd73c75@tochlab.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi!
 
-On Wed, 14 Nov 2018 11:55:51 +0100, Thomas Petazzoni wrote:
+I have a strange behavior of toolchain built by buildroot.
 
-> Here is a fourth iteration of the per-package SDK and target directory
-> implementation.
+I made a toolchain on pc with gentoo linux and took it to kubuntu 16.04 LTS and ld reports:
 
-FYI, I did a test build of some given configuration (randomly chosen),
-in the following situations, which provided the following results
+/opt/moonshine/bin/x86_64-moonshine-linux-gnu-ld: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.27' not found (required by /opt/moonshine/bin/x86_64-moonshine-linux-gnu-ld)
 
- - Per-package folder support disabled
+same time /opt/moonshine/bin/x86_64-moonshine-linux-gnu-gcc works fine.
 
-real    5m11.261s
-user    8m58.011s
-sys     1m54.650s
+As I can see, there is glibc 2.27 on gentoo and 2.23 on kubuntu. Thing I can't understand is why other tools(gcc for example) works normal.
 
- - Per-package folder support enabled, sequential build
-
-real    5m15.744s
-user    9m4.848s
-sys     1m55.885s
-
- - Per-package folder support enabled, parallel build
-
-real    4m17.059s
-user    9m55.024s
-sys     2m2.344s
-
-So, there is a small performance hit in doing all the rsyncs needed for
-per-package folders: 4.5 seconds on a build of ~5 minutes.
-
-However, this performance hit is largely compensated by the parallelism
-of the build. It is worth mentioning that this specific configuration
-only lead to a small amount of parallelism, as can be seen in the
-attached PDF files.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--
+D
 -------------- next part --------------
-A non-text attachment was scrubbed...
-Name: no-parallel.pdf
-Type: application/pdf
-Size: 17122 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181115/57d59566/attachment.pdf>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: parallel.pdf
-Type: application/pdf
-Size: 16636 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181115/57d59566/attachment-0001.pdf>
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181115/8e4a81c0/attachment.html>
