@@ -1,79 +1,50 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Thu, 15 Nov 2018 17:41:35 +0100
-Subject: [Buildroot] [PATCH next v4 6/6] core: implement per-package SDK
- and target
-In-Reply-To: <20181114105557.12599-7-thomas.petazzoni@bootlin.com>
-References: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
- <20181114105557.12599-7-thomas.petazzoni@bootlin.com>
-Message-ID: <de9da9af-71f4-cfe2-f691-5aae17e3ca0a@andin.de>
+From: =?UTF-8?q?DUPONCHEEL=20S=C3=A9bastien?= <sebastien.duponcheel@corp.ovh.com>
+Date: Thu, 15 Nov 2018 17:43:09 +0100
+Subject: [Buildroot] [PATCH 1/1] shadowsocks-libev: add connmarktos build
+ option
+Message-ID: <1542300189-12939-1-git-send-email-sebastien.duponcheel@corp.ovh.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: DUPONCHEEL S?bastien <sebastien.duponcheel@corp.ovh.com>
+---
+ package/shadowsocks-libev/Config.in            | 7 +++++++
+ package/shadowsocks-libev/shadowsocks-libev.mk | 4 ++++
+ 2 files changed, 11 insertions(+)
 
-Am 14.11.18 um 11:55 schrieb Thomas Petazzoni:
-...
-> +# $1: deps
-> +ifeq ($(BR2_PER_PACKAGE_FOLDERS),y)
-> +define prepare-per-package-folder
-> +	mkdir -p $(HOST_DIR) $(TARGET_DIR)
-> +	$(foreach pkg,$(1),\
-> +		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/host/ \
-> +		$(PER_PACKAGE_DIR)/$(pkg)/host/ \
-> +		$(HOST_DIR)$(sep))
-> +	$(foreach pkg,$(1),\
-> +		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/target/ \
-> +		$(PER_PACKAGE_DIR)/$(pkg)/target/ \
-> +		$(TARGET_DIR)$(sep))
-> +endef
-> +endif
-> +
->   ################################################################################
->   # Implicit targets -- produce a stamp file for each step of a package build
->   ################################################################################
-> @@ -133,6 +148,7 @@ endif
->   # Retrieve the archive
->   $(BUILD_DIR)/%/.stamp_downloaded:
->   	@$(call step_start,download)
-> +	$(call prepare-per-package-folder,$($(PKG)_FINAL_DOWNLOAD_DEPENDENCIES))
->   	$(foreach hook,$($(PKG)_PRE_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
->   # Only show the download message if it isn't already downloaded
->   	$(Q)for p in $($(PKG)_ALL_DOWNLOADS); do \
-> @@ -159,6 +175,7 @@ $(BUILD_DIR)/%/.stamp_actual_downloaded:
->   $(BUILD_DIR)/%/.stamp_extracted:
->   	@$(call step_start,extract)
->   	@$(call MESSAGE,"Extracting")
-> +	$(call prepare-per-package-folder,$($(PKG)_FINAL_EXTRACT_DEPENDENCIES))
->   	$(foreach hook,$($(PKG)_PRE_EXTRACT_HOOKS),$(call $(hook))$(sep))
->   	$(Q)mkdir -p $(@D)
->   	$($(PKG)_EXTRACT_CMDS)
-> @@ -219,6 +236,7 @@ $(foreach dir,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)),\
->   $(BUILD_DIR)/%/.stamp_configured:
->   	@$(call step_start,configure)
->   	@$(call MESSAGE,"Configuring")
-> +	$(call prepare-per-package-folder,$($(PKG)_FINAL_DEPENDENCIES))
->   	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
->   	$($(PKG)_CONFIGURE_CMDS)
->   	$(foreach hook,$($(PKG)_POST_CONFIGURE_HOOKS),$(call $(hook))$(sep))
-
-This is much clearer to me than v3, however there is a problem with 
-kconfig packages. Unfortunately, the kconfig infrastructure is running 
-the 'make xxx_defconfig' step before the configure-step is "officially" 
-started. This is due to the kconfig_fixup target being a dependency of 
--configure. This in turn requires availability of the toolchain and 
-other prerequisites that are part of _FINAL_DEPENDENCIES earlier as 
-prepared in your above patch.
-
-I made a patch which moves the _FINAL_DEPENDENCIES preparation to an 
-additional .stamp-configure-prepare step just before .stamp_configured. 
-That works but is not particularly beautiful.
-I guess a more proper solution would be to somehow move the 
-kconfig_fixup code into the configure-step. Maybe use the 
-pre-configure-hook, any suggestions?
-
-
-regards,
-Andreas
+diff --git a/package/shadowsocks-libev/Config.in b/package/shadowsocks-libev/Config.in
+index f58abdb..acd9a67 100644
+--- a/package/shadowsocks-libev/Config.in
++++ b/package/shadowsocks-libev/Config.in
+@@ -15,6 +15,13 @@ config BR2_PACKAGE_SHADOWSOCKS_LIBEV
+ 
+ 	  https://github.com/shadowsocks/shadowsocks-libev
+ 
++config BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS
++	bool "enable connmarktos feature"
++	depends on BR2_PACKAGE_SHADOWSOCKS_LIBEV
++	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
++	help
++	  Build with the connmark to TOS feature
++
+ comment "shadowsocks-libev needs a toolchain w/ threads"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_8 || !BR2_ARCH_IS_64
+diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
+index 7fdcd3f..34d95ca 100644
+--- a/package/shadowsocks-libev/shadowsocks-libev.mk
++++ b/package/shadowsocks-libev/shadowsocks-libev.mk
+@@ -21,4 +21,8 @@ ifeq ($(BR2_riscv),y)
+ SHADOWSOCKS_LIBEV_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_REENTRANT"
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS),y)
++SHADOWSOCKS_LIBEV_CONF_OPTS += --enable-connmarktos
++endif
++
+ $(eval $(autotools-package))
+-- 
+2.7.4
