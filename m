@@ -1,96 +1,106 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu, 15 Nov 2018 20:28:46 +0100
-Subject: [Buildroot] [PATCH 2/2] package/luvi: add patch to fix build issue
-In-Reply-To: <20181115192846.18380-1-joerg.krause@embedded.rocks>
-References: <20181115192846.18380-1-joerg.krause@embedded.rocks>
-Message-ID: <20181115192846.18380-2-joerg.krause@embedded.rocks>
+Date: Thu, 15 Nov 2018 20:28:45 +0100
+Subject: [Buildroot] [PATCH 1/2] package/luv: add patch to fix build issue
+ with luvi
+Message-ID: <20181115192846.18380-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since bumping luv from version 1.9.1 to 1.22.0, building luvi fails, as
-"luv.h" now includes "compat-5.3.h", which is locally shipped as a
-dependency to lua-compat-5.3.
+Add a patch to fix a build issue with luvi after bumping luv from
+version 1.9.1 to 1.22.0.
 
-Fixing the issue reveals, that luvi is using `luaL_newlib` which is not
-available in the Lua 5.1 API. Building luvi with luv 1.9.1 was not an
-issue before, because luv 1.9.1 defined `luaL_newlib` in luv.h, which
-was removed in 1.22.0 in favour of using lua-compat-5.3.
+The problem is that luv now uses lua-compat-5.3 instead of defining the
+Lua 5.3 API itself. Unfortunately, luv.h now includes compat-5.3.h in the
+header file, which causes the build issue with luvi, as luvi does not
+find this local header file. Note, that luv ships lua-compat-5.3 as a
+dependency.
 
-Therefore, add a patch which defines `luaL_newlib` in luvi.h.
+Therefore, the patch includes compat-5.3.h in the source file luv.c, so
+it isn't exposed to external programs.
+
+Fixes:
+http://autobuild.buildroot.net/results/2244cd30986aff29b763fb7183f6fc27a82bd7fa
+http://autobuild.buildroot.net/results/01938f7f018dc69d564c22489933647b1daf62f3
+http://autobuild.buildroot.net/results/8217e863c2776d299cb90b90f1a2ed8233ec82ba
+.. and many more
+
+Note, that fixing this issue reveals another issue in luvi, which is
+fixed by the follow up patch.
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- ...g-define-for-luaL_newlib-for-Lua-5.1.patch | 61 +++++++++++++++++++
- 1 file changed, 61 insertions(+)
- create mode 100644 package/luvi/0001-Add-missing-define-for-luaL_newlib-for-Lua-5.1.patch
+ ...lude-compat-5.3.h-in-luv-header-file.patch | 62 +++++++++++++++++++
+ 1 file changed, 62 insertions(+)
+ create mode 100644 package/luv/0001-Do-not-include-compat-5.3.h-in-luv-header-file.patch
 
-diff --git a/package/luvi/0001-Add-missing-define-for-luaL_newlib-for-Lua-5.1.patch b/package/luvi/0001-Add-missing-define-for-luaL_newlib-for-Lua-5.1.patch
+diff --git a/package/luv/0001-Do-not-include-compat-5.3.h-in-luv-header-file.patch b/package/luv/0001-Do-not-include-compat-5.3.h-in-luv-header-file.patch
 new file mode 100644
-index 0000000000..903b9d6a69
+index 0000000000..22428c98f7
 --- /dev/null
-+++ b/package/luvi/0001-Add-missing-define-for-luaL_newlib-for-Lua-5.1.patch
-@@ -0,0 +1,61 @@
-+From 7f9fcbd827295df72b15466fd3c47589d52117b9 Mon Sep 17 00:00:00 2001
++++ b/package/luv/0001-Do-not-include-compat-5.3.h-in-luv-header-file.patch
+@@ -0,0 +1,62 @@
++From 0b541b828142dab6c23b0f4415dd2fd052d69ff1 Mon Sep 17 00:00:00 2001
 +From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Wed, 31 Oct 2018 18:22:31 +0100
-+Subject: [PATCH] Add missing define for luaL_newlib for Lua 5.1
++Date: Wed, 31 Oct 2018 18:14:18 +0100
++Subject: [PATCH] Do not include compat-5.3.h in luv header file
 +MIME-Version: 1.0
 +Content-Type: text/plain; charset=UTF-8
 +Content-Transfer-Encoding: 8bit
 +
-+Since commit c286f3b741d0968fd1c49c28da83bc723468ecba, which bumped the
-+library luv to version 1.22.0-1, building luvi fails.
++Do not include compat-5.3.h in luv header file
 +
-+The reason for this error is, that instead of defining Lua 5.3 API itself,
-+luv now [1] uses lua-compat-5.3 [1,2] for providing a Lua 5.3 API.
++Exposing the compat-5.3.h header file directly in the luv.h header file
++is not a good idea, because it causes redefinition errors when building,
++for example latest luvi version 2.8.0, with a shared luv library and
++LuaJIT 2.0.5.
 +
-+Unfortunately, upstreams "luv.h" now exposes "compat-5.3.h" directly, causing
-+redefinition errors when building luvi 2.7.6 (as well as latest release 2.8.0)
-+with luv 1.22.0-1. Instead, "compat-5.3.h" should only be included in "luv.c",
-+which is addressed in patching luv (Patch: "Do not include compat-5.3.h in luv
-+header file").
++Therefore, include the compat header file in the luv.c source file.
 +
-+Patching luv reveals an issue in luvi itself, as it is using the Lua 5.3 API,
-+without defining the Lua 5.3 itself, nor using lua-compat-5.3. Instead, it was
-+using the definition provided by the "luv.h" file in luv versions before 1.22.0.
++Note, that luvi version 2.8.0 (and 2.7.6) still fails to build against the
++shared luv library using LuaJIT 2.0.5, as it does use `luaL_newlib` which is
++not available in Lua 5.1. However, this is unrelated to the luv library as
++luvi itself should define the macro for Lua 5.1.
 +
-+Correctly, luvi should define the necessary Lua 5.3 itself, which is done by
-+this patch, by providing a definition for `luaL_newlib`.
-+
-+Note, that this patch is not upstreamable, as upstream already switched to
-+using lua-compat-5.3 [3,4]. However, backporting this patch set is to much of a
-+burden, so we keep it simple, by just defining `luaL_newlib`.
-+
-+[1] https://github.com/luvit/luv/commit/34ada3e1d75796d2295ec54f3f20b3e2abf93406
-+[2] https://github.com/keplerproject/lua-compat-5.3
-+[3] https://github.com/luvit/luvi/commit/3a444d183d2fde91b6c2f3798b37881cdaa29691
-+[4] https://github.com/luvit/luvi/commit/0376894bae7c1c3bee42ddad65e824da9cccdada
++Upstream status: https://github.com/luvit/luv/pull/310
 +
 +Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 +---
-+ src/luvi.h | 6 ++++++
-+ 1 file changed, 6 insertions(+)
++ src/luv.c | 3 +++
++ src/luv.h | 4 ----
++ 2 files changed, 3 insertions(+), 4 deletions(-)
 +
-+diff --git a/src/luvi.h b/src/luvi.h
-+index e7558b3..ceca2b9 100644
-+--- a/src/luvi.h
-++++ b/src/luvi.h
-+@@ -52,6 +52,12 @@ int luaopen_lpeg(lua_State* L);
-+ #endif
++diff --git a/src/luv.c b/src/luv.c
++index c4c7cb7..4af7582 100644
++--- a/src/luv.c
+++++ b/src/luv.c
++@@ -15,6 +15,9 @@
++  *
++  */
++ 
+++#if (LUA_VERSION_NUM != 503)
+++#include "c-api/compat-5.3.h"
+++#endif
++ #include "luv.h"
++ #include "util.c"
++ #include "lhandle.c"
++diff --git a/src/luv.h b/src/luv.h
++index 27c8c94..4fedd3f 100644
++--- a/src/luv.h
+++++ b/src/luv.h
++@@ -50,10 +50,6 @@
++ #define MAX_TITLE_LENGTH (8192)
 + #endif
 + 
-++#if LUA_VERSION_NUM < 502
-++#ifndef luaL_newlib
-++# define luaL_newlib(L,l) (lua_newtable(L), luaL_register(L,NULL,l))
-++#endif
-++#endif
-++
-+ #if (LUA_VERSION_NUM >= 502)
-+ # undef luaL_register
-+ # define luaL_register(L,n,f) \
++-#if (LUA_VERSION_NUM != 503)
++-#include "c-api/compat-5.3.h"
++-#endif
++-
++ #if defined(__clang__)
++ #pragma clang diagnostic push
++ #pragma clang diagnostic ignored "-Wunused-function"
 +-- 
 +2.19.1
 +
