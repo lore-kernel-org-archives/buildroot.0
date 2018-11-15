@@ -1,107 +1,70 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 15 Nov 2018 15:09:56 +0100
-Subject: [Buildroot] [PATCH] gcc: Enable __cxa_atexit for final GCC
-In-Reply-To: <20181115040150.11472-1-abrodkin@synopsys.com>
-References: <20181115040150.11472-1-abrodkin@synopsys.com>
-Message-ID: <29a9c019-4236-bd1c-d572-f7d27f269852@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 15 Nov 2018 15:37:10 +0100
+Subject: [Buildroot] [PATCH next v4 0/6] Per-package host/target
+ directory support
+In-Reply-To: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
+References: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20181115153710.70c26880@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+On Wed, 14 Nov 2018 11:55:51 +0100, Thomas Petazzoni wrote:
 
-On 15/11/2018 05:01, Alexey Brodkin wrote:
-> This is what GCC manual says [1]:
-> -------------------------->8----------------------
-> --enable-__cxa_atexit
-> 
->     Define if you want to use __cxa_atexit, rather than atexit,
->     to register C++ destructors for local statics and global objects.
-> 
->     This is essential for fully standards-compliant handling of destructors,
->     but requires __cxa_atexit in libc.
-> 
->     This option is currently only available on systems with GNU libc
->     ...
-> -------------------------->8----------------------
-> 
-> Important disadvantages of a simple atexit() are that [2]:
-> -------------------------->8----------------------
-> 1999 C Standard only requires that the implementation support 32
-> registered functions, although most implementations support many more.
-> 
-> More important it does not deal at all with the ability in most implementations
-> to remove DSOs from a running program image by calling dlclose
-> prior to program termination.
-> -------------------------->8----------------------
-> 
-> Essentially for initial GCC there's no point in enabling that feature
-> as we're not going to build CPP applications wit hit.
-                                               ^^^^^^^ with it
+> Here is a fourth iteration of the per-package SDK and target directory
+> implementation.
 
- But also, there's no point disabling the feature. So I'd set it to enabled in
-both initial and final.
+FYI, I did a test build of some given configuration (randomly chosen),
+in the following situations, which provided the following results
 
-> 
-> Also it seems like all libc's we support in Buildroot (Glibc, uClibc and musl)
-> support __cxa_at_exit() so enable it unconditionally.
+ - Per-package folder support disabled
 
- Also, it seems that gcc's configure will default it to yes and do a
-AC_CHECK_FUNC(__cxa_atexit, ...) as well.
+real    5m11.261s
+user    8m58.011s
+sys     1m54.650s
 
- Finally, it looks like the handling of this option hasn't changed at all since
-4.8, so we're safe in that aspect as well.
+ - Per-package folder support enabled, sequential build
 
- So, with the --enable in the common options:
+real    5m15.744s
+user    9m4.848s
+sys     1m55.885s
 
-  Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ - Per-package folder support enabled, parallel build
 
- Regards,
- Arnout
+real    4m17.059s
+user    9m55.024s
+sys     2m2.344s
 
-> 
-> [1] https://gcc.gnu.org/install/configure.html
-> [2] https://itanium-cxx-abi.github.io/cxx-abi/abi.html#dso-dtor-motivation
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Mark Corbin <mark.corbin@embecosm.com>
-> Cc: Romain Naour <romain.naour@gmail.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-> Cc: Claudiu Zissulescu <claziss@synopsys.com>
-> Cc: Cupertino Miranda <cmiranda@synopsys.com>
-> Cc: Vineet Gupta <vgupta@synopsys.com>
-> ---
->  package/gcc/gcc-initial/gcc-initial.mk | 1 +
->  package/gcc/gcc.mk                     | 2 +-
->  2 files changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-> index d5d925a3d9..745a85607a 100644
-> --- a/package/gcc/gcc-initial/gcc-initial.mk
-> +++ b/package/gcc/gcc-initial/gcc-initial.mk
-> @@ -40,6 +40,7 @@ HOST_GCC_INITIAL_CONF_OPTS = \
->  	--with-newlib \
->  	--disable-largefile \
->  	--disable-nls \
-> +	--disable-__cxa_atexit \
->  	$(call qstrip,$(BR2_EXTRA_GCC_CONFIG_OPTIONS))
->  
->  HOST_GCC_INITIAL_CONF_ENV = \
-> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-> index e47435677e..5901624ea5 100644
-> --- a/package/gcc/gcc.mk
-> +++ b/package/gcc/gcc.mk
-> @@ -87,7 +87,7 @@ HOST_GCC_COMMON_DEPENDENCIES = \
->  HOST_GCC_COMMON_CONF_OPTS = \
->  	--target=$(GNU_TARGET_NAME) \
->  	--with-sysroot=$(STAGING_DIR) \
-> -	--disable-__cxa_atexit \
-> +	--enable-__cxa_atexit \
->  	--with-gnu-ld \
->  	--disable-libssp \
->  	--disable-multilib \
-> 
+So, there is a small performance hit in doing all the rsyncs needed for
+per-package folders: 4.5 seconds on a build of ~5 minutes.
+
+However, this performance hit is largely compensated by the parallelism
+of the build. It is worth mentioning that this specific configuration
+only lead to a small amount of parallelism, as can be seen in the
+attached PDF files.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: no-parallel.pdf
+Type: application/pdf
+Size: 17122 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181115/57d59566/attachment.pdf>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: parallel.pdf
+Type: application/pdf
+Size: 16636 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181115/57d59566/attachment-0001.pdf>
