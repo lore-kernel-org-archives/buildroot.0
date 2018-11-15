@@ -1,40 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 15 Nov 2018 09:40:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-geode:
- add upstream commits to fix build errors
-In-Reply-To: <87zhua6fwk.fsf@tkos.co.il> (Baruch Siach's message of "Thu, 15
- Nov 2018 07:58:19 +0200")
-References: <20181103142856.11664-1-bernd.kuhls@t-online.de>
- <87k1lftgr9.fsf@dell.be.48ers.dk> <87zhua6fwk.fsf@tkos.co.il>
-Message-ID: <877eheu41h.fsf@dell.be.48ers.dk>
+From: Alexey Brodkin <alexey.brodkin@synopsys.com>
+Date: Thu, 15 Nov 2018 10:22:35 +0000
+Subject: [Buildroot] [PATCH] gcc: Enable __cxa_atexit for final GCC
+In-Reply-To: <f4e74170-b562-b93b-316c-b62dad8f7a4f@green-communications.fr>
+References: <20181115040150.11472-1-abrodkin@synopsys.com>
+ <f4e74170-b562-b93b-316c-b62dad8f7a4f@green-communications.fr>
+Message-ID: <b4a9357524ef910b7699e3ce4c4bb37c0147f3de.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Hi Nicolas,
 
- > Hi Peter,
- > Peter Korsgaard writes:
+On Thu, 2018-11-15 at 11:17 +0100, Nicolas Cavallari wrote:
+> On 15/11/2018 05:01, Alexey Brodkin wrote:
+> > This is what GCC manual says [1]:
+> > -------------------------->8----------------------
+> > --enable-__cxa_atexit
+> > 
+> >     Define if you want to use __cxa_atexit, rather than atexit,
+> >     to register C++ destructors for local statics and global objects.
+> > 
+> >     This is essential for fully standards-compliant handling of destructors,
+> >     but requires __cxa_atexit in libc.
+> > 
+> 
+> For what is is worth, we enabled cxa_atexit in BR2_EXTRA_GCC_CONFIG_OPTIONS five
+> years ago, to fix a crash that occurred when catching exceptions and logging
+> them using a log system that used global variables.  But we couldn't remember
+> the details.
 
- >>>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
- >> 
- >> > Fixes
- >> > http://autobuild.buildroot.net/results/a9b/a9baf6ecf147f336021edda20bb091b8aa071209/
- >> 
- >> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- >> 
- >> Committed to 2018.02.x and 2018.08.x, thanks.
+So you've been using BR with cxa_atexit since then, right?
+Or you mean it was enabled in upstream BR for some time and then reverted back to disabled state?
 
- > Not in the 2018.02.x branch as of ea1bf543b7753.
-
-Sorry, it is pushed now.
-
- > Is this fix applicable to 2018.02.x?
-
-I did not verify it, but we are using the same version of the geode
-driver in 2018.02.x and 2018.08.x / master.
-
--- 
-Bye, Peter Korsgaard
+-Alexey
