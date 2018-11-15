@@ -1,70 +1,29 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 15 Nov 2018 20:05:58 +0100
-Subject: [Buildroot] [PATCH v2] linux-firmware: bump version to latest
- 1baa348
-In-Reply-To: <016ed0ed-6489-2fa0-a32e-9f2a6918af01@mind.be>
-References: <20181108153322.17362-1-m.niestroj@grinn-global.com>
- <20181109215700.6b8dc6af@windsurf> <20181109210610.GB2445@scaer>
- <87bm6svqpy.fsf@grinn-global.com>
- <20181113210216.37879bd4@windsurf> <20181113202946.GH10271@scaer>
- <016ed0ed-6489-2fa0-a32e-9f2a6918af01@mind.be>
-Message-ID: <20181115190558.GM10271@scaer>
+From: tochansky at tochlab.net <tochansky@tochlab.net>
+Date: Thu, 15 Nov 2018 19:07:43 +0000
+Subject: [Buildroot] version `GLIBC_2.27' not found
+In-Reply-To: <20181115162037.6a4f2208@windsurf>
+References: <20181115162037.6a4f2208@windsurf>
+ <a59aa43d9d9f5a8e734185c9efd73c75@tochlab.net>
+Message-ID: <d58e4fe6a02db152b13723aa730b9768@tochlab.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+15 ?????? 2018 ?., 18:20, "Thomas Petazzoni" <thomas.petazzoni@bootlin.com> ???????:
 
-On 2018-11-14 00:54 +0100, Arnout Vandecappelle spake thusly:
-> On 13/11/2018 21:29, Yann E. MORIN wrote:
-> > On 2018-11-13 21:02 +0100, Thomas Petazzoni spake thusly:
-> >> On Tue, 13 Nov 2018 18:20:57 +0100, Marcin Niestr?j wrote:
-> >>> I think the overall conclusion is that a host-gzip package is needed,
-> >>> just like host-tar. In the meantime I will send v3 of this patch with
-> >>> proper hash (the same as you calculated above).
-> >> This is getting really horrible.
-> > Well, we only need host-tar and host-gzip when creating tarballs, not
-> > extracting them, correct? So, we could very well envision the fact that
-> > host-tar (and host-gzip) are only added to FOO_DOWNLOAD dependecies when
-> > FOO_SITE_METHOD == git (and they are needed, of course), no?
-> 
->  Since we have the same problems sometimes with github tarballs, I think we need
-> a more fundamental solution. I would propose a new tarsha256 hash type, which
-> extracts the tarball to calculate the hash. In a simple version it's not so
-> complicated, something like
-> 
-> tar -xf - --to-command=$(TOPDIR)/support/scripts/tarsha256 | sort | sha256sum -
-> 
-> where tarsha256 contains:
-> 
-> { echo $TAR_FILENAME; echo $TAR_MODE; echo $TAR_FILETYPE; cat - } | \
-> 	sha256sum - | cut -f 1 -d ' '
-> 
-> As usually, entirely untested.
+> It depends on the glibc symbols they use. You need to build your
+> toolchain on a system that has a glibc <= 2.23.
+I found that glibc was updated on gentoo to 2.27 few days ago, that's why I haven't see this problem before. Thanks for clarification, I was afraid that something goes wrong.
+ 
+> You can also have a look at the pre-built toolchains available at
+> https://toolchains.bootlin.com, we build them in chroots with old
+> system, specifically to make them as compatible as possible. The
+> "stable" toolchains are currently built inside a Debian Squeeze chroot,
+> while the "bleeding-edge" toolchains are built inside a Debian Jessie
+> chroot, because gdb 8.0 requires a C++11 capable compiler.
+Thanks for useful link, Thomas.
 
-I don't like it, because this is totally non-standard. People expect to
-be able to check hashes by running the *usual* XXXsum commands, directly
-on the shipped/received files.
-
-Introducing our own hash mechanism, how reliable or simple as it would
-be, breaks this assumption, and the tool to actually check them is not
-available at all except internally to Buildroot, so it is not possible
-to reproduce the checks outside of Buildroot.
-
-This goes counter one of the initial goal of hashes, which is to be able
-to track archives and their validity across a supply chain, inbound (as
-sent by a provider to Buildroot, to do the build) or outbound (as received
-by a recepient, from Buildroot, for compliance) alike.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+--
+D
