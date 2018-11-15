@@ -1,70 +1,68 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 15 Nov 2018 17:59:03 +0100
-Subject: [Buildroot] [PATCH 1/1] package/postgresql: needs wchar
-In-Reply-To: <20181101223046.72222a3c@windsurf>
-References: <20181023160931.16417-1-bernd.kuhls@t-online.de>
- <CAFSsvmqEdPu2V3j=d55j6cUVmNeC0MSjTmA5HM1R5HcWh1LzwA@mail.gmail.com>
- <643ca3d2-1825-4707-5fbb-0817229188f9@mind.be>
- <20181101223046.72222a3c@windsurf>
-Message-ID: <20181115165903.GL10271@scaer>
+Date: Thu, 15 Nov 2018 18:03:48 +0100
+Subject: [Buildroot] [PATCH] core: ensure we use the realpath(3) of DL_DIR
+Message-ID: <20181115170348.15731-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+When $(TOPDIR)/dl is a symlink, checking out git submodules can fail,
+as reported by Michael in #11086.
 
-On 2018-11-01 22:30 +0100, Thomas Petazzoni spake thusly:
-> On Tue, 23 Oct 2018 19:04:26 +0100, Arnout Vandecappelle wrote:
-> >  It is not strictly needed, but it is still useful to have it because:
+To reproduce a similarly-related mis-behaviour:
 
-I agree with Arnout here.
+    $ mkdir -p foo/bar foo/buz
+    $ cd foo/bar
+    $ ln -s ../buz meh
+    $ cd meh
+    $ cd ../../foo
 
-However, from a purely pragmatic point of view, I see that it is totally
-useless in practice, so I would not mind we drop them.
+The last command should not succeed, because, relative to meh, there is
+no ../../foo directory; we would expect it to be ../../../foo, instead.
+But since meh is a symlink to a directory, then a relative path from that
+symlink is interpreted as relative to the derefrenced directory, i.e.
+from buz in this case.
 
-And in retrospect, I think it *is* better that we do drop them. If the
-top-level option loses that dependency, then it is 'easy' to detect it
-has become mandatory for a sub-option, because the autobuilders will
-fail.
+But where this gine even werider, is that, if the last command is
+replaced by:
 
-However, if we repeat the dependency and the top-level option lses it
-and we forget to remove it, we will never realise that the sub-option
-shouldalso lose it.
+    $ cd ../../../foo
 
-> True. In this case:
-> 
->  - Bernd did not propagate the dependency to p?p, qt and qt5base, which
->    all three are also directly selecting BR2_PACKAGE_POSTGRESQL
-> 
->  - A number of places where BR2_PACKAGE_POSTGRESQL is selected do not
->    have the !BR2_STATIC_LIBS dependency.
-> 
-> I am really wondering what to do with those "useless" dependencies in
-> general. On one hand, I agree with you that semantically, it is better
-> to have them. On the other hand:
-> 
->  - It's an additional maintenance burden.
-> 
->  - It's never tested by the autobuilders, because such "useless"
->    dependencies are well, useless, because they are hidden by another
->    higher-level dependency. Because they are not tested, they are often
->    wrong and not maintained.
-> 
-> Due to this, whether we propagate them or not is completely random
-> currently through the Buildroot tree, and I'm not sure it's a very nice
-> situation.
+then it still works, too.
 
-I agree with you. Whatever we choose, we should do it consistently.
+And that is the root of Michael's issue: the dl directory in Buildroot's
+TOPDIR is a symlink to a similarly-named directory one directory higher,
+which then confuses relative paths, which gets especially and noticeably
+bad for git submodules.
 
-Regards,
-Yann E. MORIN.
+Avoid this strangeness, and just use so-called "physical" path, i.e. a
+path where all symlinks to directories have been dereferenced.
 
+Fixes: #11086
+
+Reported-by: Michael Nosthoff <posted@heine.so>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Michael Nosthoff <posted@heine.so>
+---
+ package/pkg-download.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 73ea2a69f8..0def845cbc 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -32,8 +32,8 @@ else
+ BR2_DL_DIR = $(DL_DIR)
+ endif
+ 
+-# ensure it exists and a absolute path
+-DL_DIR := $(shell mkdir -p $(DL_DIR) && cd $(DL_DIR) >/dev/null && pwd)
++# ensure it exists and a absolute path, derefrecing symlinks
++DL_DIR := $(shell mkdir -p $(DL_DIR) && cd $(DL_DIR) >/dev/null && pwd -P)
+ 
+ #
+ # URI scheme helper functions
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
