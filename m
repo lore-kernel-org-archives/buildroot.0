@@ -1,209 +1,89 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 15 Nov 2018 22:09:46 +0100
-Subject: [Buildroot] [PATCH next v4 3/6] Makefile: rework main directory
- creation logic
-In-Reply-To: <20181114105557.12599-4-thomas.petazzoni@bootlin.com>
-References: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
- <20181114105557.12599-4-thomas.petazzoni@bootlin.com>
-Message-ID: <20181115210946.GR10271@scaer>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 15 Nov 2018 15:30:51 -0600
+Subject: [Buildroot] [PATCH v8 1/1] docker-engine: split docker-{cli,
+ engine}, bump to v18.06.1-ce
+In-Reply-To: <874lcki4rw.fsf@paral.in>
+References: <20181108032458.1028-1-christian@paral.in>
+ <CANQCQpa0SGdEHVFxn_wmKnktat18iAJ2YLXYQd+4Uqzq5GzG4A@mail.gmail.com>
+ <874lcki4rw.fsf@paral.in>
+Message-ID: <CANQCQpaK4m3iqadyDAzuypV2Ze3LdhedHhn50AxF41buOMrTDQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Christian,
 
-On 2018-11-14 11:55 +0100, Thomas Petazzoni spake thusly:
-> In the current code, the creation of the main output folders
-> (BUILD_DIR, STAGING_DIR, HOST_DIR, TARGET_DIR, etc.) is done by a
-> global "dirs" target. While this works fine in the current situation,
-> it doesn't work well in a context where per-package host and target
-> directories are used.
-> 
-> For example, with the current code and per-package host directories,
-> the output/staging symbolic link ends up being created as a link to
-> the per-package package sysroot directory of the first package being
-> built, instead of the global sysroot.
-> 
-> This commit reworks the creation of those directories by having the
-> package/pkg-generic.mk code ensure that the build directory, target
-> directory, host directory, staging directory and binaries directory
-> exist before they are needed.
+On Tue, Nov 13, 2018 at 11:53 PM Christian Stewart <christian@paral.in> wrote:
+>
+> Matthew,
+>
+> Matthew Weber <matthew.weber@rockwellcollins.com> writes:
+> > I've started to test this series and wondered what the most minimal BR
+> > config would look like for the host /parent build?  Just systemd and
+> > docker-engine? Or are there dependencies on full core-utils /
+> > util-linux items?  I did look at your SkiffOS project and when I merge
+> > a config together their were a good amount of packages and a ~150MB
+> > rootfs.  Just curious what a minimal build might look like.
+>
+> This is an interesting question. I had a quick scan of a defconfig Skiff
+> produces, and took some quick notes on what might be immediately
+> removable without consequence:
+>
+>  - util-linux: fallocate, kill, line, login, more, newgrp, rfkill, setpriv, su
+>  - editors: nano and vim (can be removed)
+>  - wpa-supplicant: cli, hotspot, wps support likely can be removed
+>  - other utils: file, ssh server (dropbear could be used), mosh, compression tools
+>  - libv4l: unsure if necessary
+>
+> The majority of these can be disabled from the base config fragments
+> here:
+>
+> https://github.com/paralin/SkiffOS/tree/master/configs/skiff/standard/buildroot
+>
+> They were originally included due to operational requirements / ease of
+> use in the early days of the project, but are probably not necessary in
+> a "production" image. They can certainly be removed from the base Skiff
+> packages, and left to developers to enable in other packages if needed.
+>
+> I'll begin doing some tests of minimal images this week.
+>
 
-I don't think we do need anything special to create HOST_DIR,
-STAGING_DIR and TARGET_DIR: 
+I did find that the dockercli just hangs when I call it, however I
+check and the daemon is running.  I'll see if I can get more debug
+(strace, etc).
 
-  - host-skeleton is the first package to run, and that one does ensure
-    the existence of $(HOST_DIR) by the mere act of creating it (which
-    it cirrently does not do, but should)
+> Something else to note: it's likely unnecessary to include Docker at
+> all, and these days Docker brings a lot of binary bloat with it. It
+> contains a full cluster management system (swarm) and a kubernetes
+> client, for example.
+>
+> Some alternatives:
+>
+>  - http://cri-o.io/ - container runtime interface, will add to BR
+>  - runc - can be used independently of Docker
+>  - docker-containerd - separate daemon for managing container basics
+>  - rkt - coreos container manager
+>  - libpod/podman: https://github.com/containers/libpod
+>
+> I hope to add at least cri-o, rkt, and podman support to Buildroot in
+> the near future.
 
-  - skeleton is the first package to install in target/ and staging, and
-    currently the skeleton-custom and skeleton-init-common should both
-    create target/ and staging/
+Are any of those OCI compliant and not written in GO? :-)
 
-> Two new targets, host-finalize and staging-finalize are added in the
-> main Makefile to create the compatibility symlinks for host and
-> staging directories. They will be extended later with additional logic
-> for per-package directories.
-> 
-> Thanks to those changes, the global "dirs" target is entirely removed.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  Makefile               | 21 +++++++++------------
->  fs/common.mk           |  1 +
->  package/pkg-generic.mk |  7 ++++++-
->  3 files changed, 16 insertions(+), 13 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 2819d44124..e675ac26aa 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -572,10 +572,6 @@ $(foreach pkg,$(call UPPERCASE,$(PACKAGES)),\
->  
->  endif
->  
-> -.PHONY: dirs
-> -dirs: $(BUILD_DIR) $(STAGING_DIR) $(BASE_TARGET_DIR) \
-> -	$(HOST_DIR) $(HOST_DIR_SYMLINK) $(BINARIES_DIR)
-> -
->  $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
->  	$(MAKE1) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" syncconfig
->  
-> @@ -605,11 +601,6 @@ sdk: prepare-sdk $(BR2_TAR_HOST_DEPENDENCY)
->  		--transform='s#^\.#$(BR2_SDK_PREFIX)#' \
->  		-C $(HOST_DIR) "."
->  
-> -# Populating the staging with the base directories is handled by the skeleton package
-> -$(STAGING_DIR):
-> -	@mkdir -p $(STAGING_DIR)
-> -	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
-> -
->  RSYNC_VCS_EXCLUSIONS = \
->  	--exclude .svn --exclude .git --exclude .hg --exclude .bzr \
->  	--exclude CVS
-> @@ -710,8 +701,14 @@ $(TARGETS_ROOTFS): target-finalize
->  # Avoid the rootfs name leaking down the dependency chain
->  target-finalize: ROOTFS=
->  
-> +host-finalize: $(HOST_DIR_SYMLINK)
-> +
-> +.PHONY: staging-finalize
-> +staging-finalize:
-> +	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
-> +
->  .PHONY: target-finalize
-> -target-finalize: $(PACKAGES)
-> +target-finalize: $(PACKAGES) host-finalize
+>
+> >> +sha256 47eda354afc199693aa338f5b2bb87e4511354c02561ddc6520a06d169921bdf        docker-cli-v18.06.1-ce.tar.gz
+> >
+> > Please add license file hashes for both packages.
+>
+> Will include in the next revision of the series:
+>
+> # docker-cli.hash
+> sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+> # docker-engine.hash
+> sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+>
 
-Shouldn't we ensure that host-finalize be done before staging-finalize
-too?
-
-We would also need to ensure that packages are all installed before
-running staging-finalize.
-
-So,=maybe we need to add:
-
-    staging-finalize: $(PACKAGES) host-finalize
-
-Regards,
-Yann E. MORIN.
-
->  	@$(call MESSAGE,"Finalizing target directory")
->  	# Check files that are touched by more than one package
->  	./support/scripts/check-uniq-files -t target $(BUILD_DIR)/packages-file-list.txt
-> @@ -782,7 +779,7 @@ endif
->  	touch $(TARGET_DIR)/usr
->  
->  .PHONY: target-post-image
-> -target-post-image: $(TARGETS_ROOTFS) target-finalize
-> +target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize
->  	@rm -f $(ROOTFS_COMMON_TAR)
->  	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
->  		$(call MESSAGE,"Executing post-image script $(s)"); \
-> @@ -811,7 +808,7 @@ legal-info-prepare: $(LEGAL_INFO_DIR)
->  	@cp $(BR2_CONFIG) $(LEGAL_INFO_DIR)/buildroot.config
->  
->  .PHONY: legal-info
-> -legal-info: dirs legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p)-all-legal-info) \
-> +legal-info: legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p)-all-legal-info) \
->  		$(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST)
->  	@cat support/legal-info/README.header >>$(LEGAL_REPORT)
->  	@if [ -r $(LEGAL_WARNINGS) ]; then \
-> diff --git a/fs/common.mk b/fs/common.mk
-> index 2a5a202a89..96658428ba 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -145,6 +145,7 @@ $$(BINARIES_DIR)/rootfs.$(1): ROOTFS=$(2)
->  $$(BINARIES_DIR)/rootfs.$(1): FAKEROOT_SCRIPT=$$(ROOTFS_$(2)_DIR)/fakeroot
->  $$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
->  	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
-> +	mkdir -p $$(@D)
->  	rm -rf $$(ROOTFS_$(2)_DIR)
->  	mkdir -p $$(ROOTFS_$(2)_DIR)
->  	echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index f34f46afc8..309fd8cd48 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -173,6 +173,7 @@ $(BUILD_DIR)/%/.stamp_extracted:
->  $(BUILD_DIR)/%/.stamp_rsynced:
->  	@$(call step_start,rsync)
->  	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
-> +	@mkdir -p $(@D)
->  	$(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
->  	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
->  	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $($(PKG)_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
-> @@ -238,6 +239,7 @@ $(BUILD_DIR)/%/.stamp_built::
->  $(BUILD_DIR)/%/.stamp_host_installed:
->  	@$(call step_start,install-host)
->  	@$(call MESSAGE,"Installing to host directory")
-> +	@mkdir -p $(HOST_DIR)
->  	$(foreach hook,$($(PKG)_PRE_INSTALL_HOOKS),$(call $(hook))$(sep))
->  	+$($(PKG)_INSTALL_CMDS)
->  	$(foreach hook,$($(PKG)_POST_INSTALL_HOOKS),$(call $(hook))$(sep))
-> @@ -267,6 +269,7 @@ $(BUILD_DIR)/%/.stamp_host_installed:
->  $(BUILD_DIR)/%/.stamp_staging_installed:
->  	@$(call step_start,install-staging)
->  	@$(call MESSAGE,"Installing to staging directory")
-> +	@mkdir -p $(STAGING_DIR)
->  	$(foreach hook,$($(PKG)_PRE_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
->  	+$($(PKG)_INSTALL_STAGING_CMDS)
->  	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
-> @@ -298,6 +301,7 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
->  # Install to images dir
->  $(BUILD_DIR)/%/.stamp_images_installed:
->  	@$(call step_start,install-image)
-> +	@mkdir -p $(BINARIES_DIR)
->  	$(foreach hook,$($(PKG)_PRE_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
->  	@$(call MESSAGE,"Installing to images directory")
->  	+$($(PKG)_INSTALL_IMAGES_CMDS)
-> @@ -309,6 +313,7 @@ $(BUILD_DIR)/%/.stamp_images_installed:
->  $(BUILD_DIR)/%/.stamp_target_installed:
->  	@$(call step_start,install-target)
->  	@$(call MESSAGE,"Installing to target")
-> +	@mkdir -p $(TARGET_DIR)
->  	$(foreach hook,$($(PKG)_PRE_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
->  	+$($(PKG)_INSTALL_TARGET_CMDS)
->  	$(if $(BR2_INIT_SYSTEMD),\
-> @@ -735,7 +740,7 @@ $$($(2)_TARGET_BUILD):	$$($(2)_TARGET_CONFIGURE)
->  $(1)-configure:			$$($(2)_TARGET_CONFIGURE)
->  $$($(2)_TARGET_CONFIGURE):	| $$($(2)_FINAL_DEPENDENCIES)
->  
-> -$$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dirs prepare
-> +$$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | prepare
->  $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dependencies
->  
->  ifeq ($$($(2)_OVERRIDE_SRCDIR),)
-> -- 
-> 2.19.1
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thanks for the response and details!
+Matt
