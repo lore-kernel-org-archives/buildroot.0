@@ -1,41 +1,37 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Thu, 15 Nov 2018 05:16:20 +0100
-Subject: [Buildroot] [PATCH 1/2] olimex_imx233_olinuxino: bump kernel version
-Message-ID: <20181115041621.6377-1-francois.perrad@gadz.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 15 Nov 2018 07:58:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-geode:
+ add upstream commits to fix build errors
+In-Reply-To: <87k1lftgr9.fsf@dell.be.48ers.dk>
+References: <20181103142856.11664-1-bernd.kuhls@t-online.de>
+ <87k1lftgr9.fsf@dell.be.48ers.dk>
+Message-ID: <87zhua6fwk.fsf@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- configs/olimex_imx233_olinuxino_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Hi Peter,
 
-diff --git a/configs/olimex_imx233_olinuxino_defconfig b/configs/olimex_imx233_olinuxino_defconfig
-index 89ab5952c..232d9d0dc 100644
---- a/configs/olimex_imx233_olinuxino_defconfig
-+++ b/configs/olimex_imx233_olinuxino_defconfig
-@@ -2,8 +2,8 @@
- BR2_arm=y
- BR2_arm926t=y
- 
--# Linux headers same as kernel, a 4.14 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-@@ -14,7 +14,7 @@ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.2"
- BR2_LINUX_KERNEL_DEFCONFIG="mxs"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olimex/imx233_olinuxino/linux-wifi.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
+Peter Korsgaard writes:
+
+>>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>
+>  > Fixes
+>  > http://autobuild.buildroot.net/results/a9b/a9baf6ecf147f336021edda20bb091b8aa071209/
+>
+>  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+>
+> Committed to 2018.02.x and 2018.08.x, thanks.
+
+Not in the 2018.02.x branch as of ea1bf543b7753.
+
+Is this fix applicable to 2018.02.x?
+
+baruch
+
 -- 
-2.17.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
