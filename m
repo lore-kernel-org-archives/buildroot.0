@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 15 Nov 2018 21:45:55 +0100
-Subject: [Buildroot] [PATCH next 2/2] package/apache: add patch to fix
- per-package folder build
-In-Reply-To: <20181115152107.5834-3-thomas.petazzoni@bootlin.com>
-References: <20181115152107.5834-1-thomas.petazzoni@bootlin.com>
- <20181115152107.5834-3-thomas.petazzoni@bootlin.com>
-Message-ID: <20181115204555.GO10271@scaer>
+Date: Thu, 15 Nov 2018 21:49:16 +0100
+Subject: [Buildroot] [PATCH next v4 1/6] Makefile: evaluate CCACHE and
+ HOST{CC, CXX} at time of use
+In-Reply-To: <20181114105557.12599-2-thomas.petazzoni@bootlin.com>
+References: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
+ <20181114105557.12599-2-thomas.petazzoni@bootlin.com>
+Message-ID: <20181115204916.GP10271@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,92 +14,52 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2018-11-15 16:21 +0100, Thomas Petazzoni spake thusly:
-> When APR_INCLUDEDIR and APU_INCLUDEDIR point to the same directory,
-> Apache builds properly. However, with per-package folder support, they
-> point to different directories, and APU_INCLUDEDIR contains both the
-> APR headers and the APU headers.
+On 2018-11-14 11:55 +0100, Thomas Petazzoni spake thusly:
+> As we are going to move to per-package SDK, the location of CCACHE and
+> therefore the definitions of HOSTCC and HOSTCXX need to be evaluated
+> at the time of use and not at the time of assignment. Indeed, the
+> value of HOST_DIR changes from one package to the other.
 > 
-> Due to this, the Apache Makefile logic to generate its exports.c file
-> leads to duplicate definitions, because the APR headers are considered
-> twice: once from APR_INCLUDEDIR, once from APU_INCLUDEDIR.
+> Therefore, we need to change from := to =.
 > 
-> We fix this by introducing a patch to the Apache build system.
+> In addition, while doing A := $(something) $(A) is possible, doing A =
+> $(something) $(A) is not legal. So, instead of defining HOSTCC in
+> terms of the current HOSTCC variable, we re-use HOSTCC_NOCCACHE
+> instead.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-I guess this can very well be applied now, without waiting for TLPB.
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-> ---
->  ...in-handle-separate-APR_INCLUDE_DIR-A.patch | 47 +++++++++++++++++++
->  1 file changed, 47 insertions(+)
->  create mode 100644 package/apache/0003-server-Makefile.in-handle-separate-APR_INCLUDE_DIR-A.patch
-> 
-> diff --git a/package/apache/0003-server-Makefile.in-handle-separate-APR_INCLUDE_DIR-A.patch b/package/apache/0003-server-Makefile.in-handle-separate-APR_INCLUDE_DIR-A.patch
-> new file mode 100644
-> index 0000000000..299840bee2
-> --- /dev/null
-> +++ b/package/apache/0003-server-Makefile.in-handle-separate-APR_INCLUDE_DIR-A.patch
-> @@ -0,0 +1,47 @@
-> +From 00281390e82db18fe0de4033be4045f9391a8ee5 Mon Sep 17 00:00:00 2001
-> +From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> +Date: Thu, 15 Nov 2018 14:04:29 +0100
-> +Subject: [PATCH] server/Makefile.in: handle separate
-> + APR_INCLUDE_DIR/APU_INCLUDE_DIR
-> +
-> +If APR_INCLUDEDIR and APU_INCLUDEDIR point to different directories,
-> +but for example APU_INCLUDEDIR contains both the apr headers and apu
-> +headers, the "export_files" file will contain duplicate header files,
-> +causing the exports.c file to contain duplicate definitions, making
-> +the build fail.
-> +
-> +This commit fixes that by making sure we only use the apr headers from
-> +APR_INCLUDEDIR and the apu headers from the APU_INCLUDEDIR.
-> +
-> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-No upstream status? I think they want patches to be contributed as bug
-reports [0], and there is a section dealing just with the buildsystem [1].
-
-[0] https://httpd.apache.org/dev/patches.html
-[1] https://bz.apache.org/bugzilla/buglist.cgi?component=Build&order=bug_id%20DESC&product=Apache%20httpd-2
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> +---
-> + server/Makefile.in | 6 ++----
-> + 1 file changed, 2 insertions(+), 4 deletions(-)
-> +
-> +diff --git a/server/Makefile.in b/server/Makefile.in
-> +index 1fa334467d..2258f0bdf2 100644
-> +--- a/server/Makefile.in
-> ++++ b/server/Makefile.in
-> +@@ -34,7 +34,6 @@ test_char.h: gen_test_char
-> + util.lo: test_char.h
-> + 
-> + EXPORT_DIRS = $(top_srcdir)/include $(top_srcdir)/os/$(OS_DIR)
-> +-EXPORT_DIRS_APR = $(APR_INCLUDEDIR) $(APU_INCLUDEDIR)
-> + 
-> + # If export_files is a dependency here, but we remove it during this stage,
-> + # when exports.c is generated, make will not detect that export_files is no
-> +@@ -60,9 +59,8 @@ export_files:
-> + 	      ls $$dir/*.h ; \
-> + 	  done; \
-> + 	  echo "$(top_srcdir)/server/mpm_fdqueue.h"; \
-> +-	  for dir in $(EXPORT_DIRS_APR); do \
-> +-	      ls $$dir/ap[ru].h $$dir/ap[ru]_*.h 2>/dev/null; \
-> +-	  done; \
-> ++	  ls $(APR_INCLUDE_DIR)/{apr.h,apr_*.h} 2>/dev/null; \
-> ++	  ls $(APU_INCLUDE_DIR)/{apu.h,apu_*.h} 2>/dev/null; \
-> + 	) | sed -e s,//,/,g | sort -u > $@
-> + 
-> + exports.c: export_files
-> +-- 
-> +2.19.1
-> +
+> ---
+> Changes since v2:
+>  - New patch
+> ---
+>  Makefile | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 94adff3406..2819d44124 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -471,11 +471,11 @@ BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(PATH)"
+>  TARGET_DIR_WARNING_FILE = $(BASE_TARGET_DIR)/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
+>  
+>  ifeq ($(BR2_CCACHE),y)
+> -CCACHE := $(HOST_DIR)/bin/ccache
+> +CCACHE = $(HOST_DIR)/bin/ccache
+>  BR_CACHE_DIR ?= $(call qstrip,$(BR2_CCACHE_DIR))
+>  export BR_CACHE_DIR
+> -HOSTCC := $(CCACHE) $(HOSTCC)
+> -HOSTCXX := $(CCACHE) $(HOSTCXX)
+> +HOSTCC = $(CCACHE) $(HOSTCC_NOCCACHE)
+> +HOSTCXX = $(CCACHE) $(HOSTCXX_NOCCACHE)
+>  else
+>  export BR_NO_CCACHE
+>  endif
 > -- 
 > 2.19.1
 > 
