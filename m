@@ -1,84 +1,86 @@
-From: Alexey Brodkin <alexey.brodkin@synopsys.com>
-Date: Thu, 15 Nov 2018 07:01:50 +0300
-Subject: [Buildroot] [PATCH] gcc: Enable __cxa_atexit for final GCC
-Message-ID: <20181115040150.11472-1-abrodkin@synopsys.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Thu, 15 Nov 2018 05:16:21 +0100
+Subject: [Buildroot] [PATCH 2/2] olimex_a20_olinuxino_lime*: bump versions
+In-Reply-To: <20181115041621.6377-1-francois.perrad@gadz.org>
+References: <20181115041621.6377-1-francois.perrad@gadz.org>
+Message-ID: <20181115041621.6377-2-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is what GCC manual says [1]:
--------------------------->8----------------------
---enable-__cxa_atexit
-
-    Define if you want to use __cxa_atexit, rather than atexit,
-    to register C++ destructors for local statics and global objects.
-
-    This is essential for fully standards-compliant handling of destructors,
-    but requires __cxa_atexit in libc.
-
-    This option is currently only available on systems with GNU libc
-    ...
--------------------------->8----------------------
-
-Important disadvantages of a simple atexit() are that [2]:
--------------------------->8----------------------
-1999 C Standard only requires that the implementation support 32
-registered functions, although most implementations support many more.
-
-More important it does not deal at all with the ability in most implementations
-to remove DSOs from a running program image by calling dlclose
-prior to program termination.
--------------------------->8----------------------
-
-Essentially for initial GCC there's no point in enabling that feature
-as we're not going to build CPP applications wit hit.
-
-Also it seems like all libc's we support in Buildroot (Glibc, uClibc and musl)
-support __cxa_at_exit() so enable it unconditionally.
-
-[1] https://gcc.gnu.org/install/configure.html
-[2] https://itanium-cxx-abi.github.io/cxx-abi/abi.html#dso-dtor-motivation
-
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Mark Corbin <mark.corbin@embecosm.com>
-Cc: Romain Naour <romain.naour@gmail.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Cc: Claudiu Zissulescu <claziss@synopsys.com>
-Cc: Cupertino Miranda <cmiranda@synopsys.com>
-Cc: Vineet Gupta <vgupta@synopsys.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/gcc/gcc-initial/gcc-initial.mk | 1 +
- package/gcc/gcc.mk                     | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ configs/olimex_a20_olinuxino_lime2_defconfig | 8 ++++----
+ configs/olimex_a20_olinuxino_lime_defconfig  | 8 ++++----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-index d5d925a3d9..745a85607a 100644
---- a/package/gcc/gcc-initial/gcc-initial.mk
-+++ b/package/gcc/gcc-initial/gcc-initial.mk
-@@ -40,6 +40,7 @@ HOST_GCC_INITIAL_CONF_OPTS = \
- 	--with-newlib \
- 	--disable-largefile \
- 	--disable-nls \
-+	--disable-__cxa_atexit \
- 	$(call qstrip,$(BR2_EXTRA_GCC_CONFIG_OPTIONS))
+diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
+index 716995aa7..d846f4fed 100644
+--- a/configs/olimex_a20_olinuxino_lime2_defconfig
++++ b/configs/olimex_a20_olinuxino_lime2_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_EABIHF=y
  
- HOST_GCC_INITIAL_CONF_ENV = \
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index e47435677e..5901624ea5 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -87,7 +87,7 @@ HOST_GCC_COMMON_DEPENDENCIES = \
- HOST_GCC_COMMON_CONF_OPTS = \
- 	--target=$(GNU_TARGET_NAME) \
- 	--with-sysroot=$(STAGING_DIR) \
--	--disable-__cxa_atexit \
-+	--enable-__cxa_atexit \
- 	--with-gnu-ld \
- 	--disable-libssp \
- 	--disable-multilib \
+-# Linux headers same as kernel, a 4.18 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
++# Linux headers same as kernel, a 4.19 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ 
+ # System configuration
+ BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
+@@ -18,7 +18,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.7"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.2"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -34,7 +34,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.09"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.11"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index ed8ea8623..e60bf0882 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_EABIHF=y
+ 
+-# Linux headers same as kernel, a 4.18 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
++# Linux headers same as kernel, a 4.19 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ 
+ # System configuration
+ BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
+@@ -18,7 +18,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.7"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.2"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -34,7 +34,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.09"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.11"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
 -- 
-2.16.2
+2.17.1
