@@ -1,55 +1,79 @@
 From: Andreas Naumann <dev@andin.de>
-Date: Thu, 15 Nov 2018 17:41:27 +0100
-Subject: [Buildroot] [PATCH next v4 0/6] Per-package host/target
- directory support
-In-Reply-To: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
+Date: Thu, 15 Nov 2018 17:41:35 +0100
+Subject: [Buildroot] [PATCH next v4 6/6] core: implement per-package SDK
+ and target
+In-Reply-To: <20181114105557.12599-7-thomas.petazzoni@bootlin.com>
 References: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
-Message-ID: <a062a8a1-7a56-d8ec-6d9d-06f444a72d6b@andin.de>
+ <20181114105557.12599-7-thomas.petazzoni@bootlin.com>
+Message-ID: <de9da9af-71f4-cfe2-f691-5aae17e3ca0a@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-
+Hi,
 
 Am 14.11.18 um 11:55 schrieb Thomas Petazzoni:
-> Hello,
-> 
-> Here is a fourth iteration of the per-package SDK and target directory
-> implementation.
-> 
-> If you're interested in testing it, you can find the patch series at:
-> 
->    http://git.bootlin.com/users/thomas-petazzoni/buildroot/log/?h=ppsh-v4
-> 
+...
+> +# $1: deps
+> +ifeq ($(BR2_PER_PACKAGE_FOLDERS),y)
+> +define prepare-per-package-folder
+> +	mkdir -p $(HOST_DIR) $(TARGET_DIR)
+> +	$(foreach pkg,$(1),\
+> +		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/host/ \
+> +		$(PER_PACKAGE_DIR)/$(pkg)/host/ \
+> +		$(HOST_DIR)$(sep))
+> +	$(foreach pkg,$(1),\
+> +		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/target/ \
+> +		$(PER_PACKAGE_DIR)/$(pkg)/target/ \
+> +		$(TARGET_DIR)$(sep))
+> +endef
+> +endif
+> +
+>   ################################################################################
+>   # Implicit targets -- produce a stamp file for each step of a package build
+>   ################################################################################
+> @@ -133,6 +148,7 @@ endif
+>   # Retrieve the archive
+>   $(BUILD_DIR)/%/.stamp_downloaded:
+>   	@$(call step_start,download)
+> +	$(call prepare-per-package-folder,$($(PKG)_FINAL_DOWNLOAD_DEPENDENCIES))
+>   	$(foreach hook,$($(PKG)_PRE_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+>   # Only show the download message if it isn't already downloaded
+>   	$(Q)for p in $($(PKG)_ALL_DOWNLOADS); do \
+> @@ -159,6 +175,7 @@ $(BUILD_DIR)/%/.stamp_actual_downloaded:
+>   $(BUILD_DIR)/%/.stamp_extracted:
+>   	@$(call step_start,extract)
+>   	@$(call MESSAGE,"Extracting")
+> +	$(call prepare-per-package-folder,$($(PKG)_FINAL_EXTRACT_DEPENDENCIES))
+>   	$(foreach hook,$($(PKG)_PRE_EXTRACT_HOOKS),$(call $(hook))$(sep))
+>   	$(Q)mkdir -p $(@D)
+>   	$($(PKG)_EXTRACT_CMDS)
+> @@ -219,6 +236,7 @@ $(foreach dir,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)),\
+>   $(BUILD_DIR)/%/.stamp_configured:
+>   	@$(call step_start,configure)
+>   	@$(call MESSAGE,"Configuring")
+> +	$(call prepare-per-package-folder,$($(PKG)_FINAL_DEPENDENCIES))
+>   	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
+>   	$($(PKG)_CONFIGURE_CMDS)
+>   	$(foreach hook,$($(PKG)_POST_CONFIGURE_HOOKS),$(call $(hook))$(sep))
 
+This is much clearer to me than v3, however there is a problem with 
+kconfig packages. Unfortunately, the kconfig infrastructure is running 
+the 'make xxx_defconfig' step before the configure-step is "officially" 
+started. This is due to the kconfig_fixup target being a dependency of 
+-configure. This in turn requires availability of the toolchain and 
+other prerequisites that are part of _FINAL_DEPENDENCIES earlier as 
+prepared in your above patch.
 
-thank you for the updated version. I tried to run it with my configs. 
-For that I needed
-a) a generic patch for all kconfig packages, see my answer on the final 
-patch
-b) linux-specific patch posted two days ago: [PATCH v2 1/1] linux: Make 
-dtc install step more reliable
+I made a patch which moves the _FINAL_DEPENDENCIES preparation to an 
+additional .stamp-configure-prepare step just before .stamp_configured. 
+That works but is not particularly beautiful.
+I guess a more proper solution would be to somehow move the 
+kconfig_fixup code into the configure-step. Maybe use the 
+pre-configure-hook, any suggestions?
 
-On my local machine things seemed to work, however final rootfs creation 
-failed in our CI environment due to broken host- binaries, e.g. 
-mkfs.ubifs not finding some required lib (liblzo2.so.2 in that 
-particular case).
-It seems some things with rpath manipulation/checking do not yet work 
-properly. Looking into the binary with ldd I see libs used from the 
-host-machine that probably should come from buildroots host/usr/lib...
-	linux-vdso.so.1 =>  (0x00007ffc06fcc000)
-	libz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007f760428f000)
-	liblzo2.so.2 => not found
-	libuuid.so.1 => /lib/x86_64-linux-gnu/libuuid.so.1 (0x00007f760408a000)
-	libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f7603d81000)
-	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f76039b7000)
-	/lib64/ld-linux-x86-64.so.2 (0x00007f76044a9000)
-
-I couldnt find out in reasonable time where things go wrong so I'd be 
-thankful for a pointer on how to debug this.
 
 regards,
 Andreas
