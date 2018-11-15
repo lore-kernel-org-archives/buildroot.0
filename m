@@ -1,71 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 15 Nov 2018 17:33:36 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pkg-generic.mk: Fix
- show-build-order stdout pollution
-In-Reply-To: <20181115154542.29277-1-serj.kalichev@gmail.com>
-References: <20181115154542.29277-1-serj.kalichev@gmail.com>
-Message-ID: <20181115163336.GI10271@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 15 Nov 2018 17:34:09 +0100
+Subject: [Buildroot] [PATCH] utils/genrandconfig: add missing new line when
+ creating the configuration
+Message-ID: <20181115163409.8825-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Serj, All,
+When adding the custom BR2_WGET value in the configuration,
+genrandconfig forgets to add a newline. Due to this, the next option
+that is added is printed on the same line as BR2_WGET="", which causes
+it to be ignored.
 
-On 2018-11-15 18:45 +0300, Serj Kalichev spake thusly:
-> The commands like  "make show-build-order" or "make <package>-show-build-order" show
-> the build order and then print "make[1]: Nothing to be done for 'show-build-order'" to
-> stdout. It pollutes output. Technically this message is true but it's not true for user
-> because he gets an information.
-> 
-> The <package>-show-build-order targets use $(info) for package name printing.
-> The make utility doesn't consider the internal directive as a command so it
-> think that it's "Nothing to be done". The patch adds the empty command to
-> <package>-show-build-order to inform make utility that taget makes some real
-> actions.
-> 
-> Signed-off-by: Serj Kalichev <serj.kalichev@gmail.com>
-> ---
->  package/pkg-generic.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index f34f46afc8..74f3c55394 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -819,6 +819,7 @@ $(1)-show-recursive-rdepends:
->  
->  $(1)-show-build-order: $$(patsubst %,%-show-build-order,$$($(2)_FINAL_ALL_DEPENDENCIES))
->  	$$(info $(1))
-> +	@:
+Due to this, in all builds, the line right after BR2_WGET was
+ignored. It could have been BR2_ENABLE_DEBUG, BR2_INIT_BUSYBOX,
+BR2_INIT_SYSTEMD, BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV,
+BR2_STATIC_LIBS or BR2_PACKAGE_PYTHON_PY_ONLY depending on the
+randomization.
 
-The other places where we use that construct, we put the command first,
-and the info last, for example:
-    https://git.buildroot.org/buildroot/tree/Makefile#n1001
+Fix that by adding a proper newline at the end of the BR2_WGET option.
 
-With that fixed (which a maintainer may do when applying, no need to
-resend), or even as-is (if the maintainers prefer this way):
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ utils/genrandconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
->  $(1)-graph-depends: graph-depends-requirements
->  	$(call pkg-graph-depends,$(1),--direct)
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 27f84ea555..1d6ff990f5 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -351,7 +351,7 @@ def gen_config(args):
+         configlines += minimalf.readlines()
+ 
+     # Allow hosts with old certificates to download over https
+-    configlines.append("BR2_WGET=\"wget --passive-ftp -nd -t 3 --no-check-certificate\"")
++    configlines.append("BR2_WGET=\"wget --passive-ftp -nd -t 3 --no-check-certificate\"\n")
+ 
+     # Amend the configuration with a few things.
+     if randint(0, 20) == 0:
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.19.1
