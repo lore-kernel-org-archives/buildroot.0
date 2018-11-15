@@ -1,10 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 15 Nov 2018 08:21:40 +0100
-Subject: [Buildroot] [PATCH] lua-curl: fix build with libcurl 7.62.0
-In-Reply-To: <6fc47b7d2219db0c3ede0ab64d207c62bfca285c.1541096104.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Thu, 1 Nov 2018 20:15:04 +0200")
-References: <6fc47b7d2219db0c3ede0ab64d207c62bfca285c.1541096104.git.baruch@tkos.co.il>
-Message-ID: <87bm6qu7p7.fsf@dell.be.48ers.dk>
+Date: Thu, 15 Nov 2018 09:40:42 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-geode:
+ add upstream commits to fix build errors
+In-Reply-To: <87zhua6fwk.fsf@tkos.co.il> (Baruch Siach's message of "Thu, 15
+ Nov 2018 07:58:19 +0200")
+References: <20181103142856.11664-1-bernd.kuhls@t-online.de>
+ <87k1lftgr9.fsf@dell.be.48ers.dk> <87zhua6fwk.fsf@tkos.co.il>
+Message-ID: <877eheu41h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +15,26 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > The last libcurl bump changed error code definitions in a way that
- > breaks lua-curl build. Add a patch to fix that.
+ > Hi Peter,
+ > Peter Korsgaard writes:
 
- > Fixes:
- > http://autobuild.buildroot.net/results/fa6/fa6e289162124b3e079c4a2d9c3f00910c8cc063/
- > http://autobuild.buildroot.net/results/7b9/7b962a63630abaed21d99f719c1bd710ec4d4b28/
- > http://autobuild.buildroot.net/results/c5b/c5b2a7f21259bbf79861bd95a2d7ca055920bf09/
+ >>>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+ >> 
+ >> > Fixes
+ >> > http://autobuild.buildroot.net/results/a9b/a9baf6ecf147f336021edda20bb091b8aa071209/
+ >> 
+ >> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ >> 
+ >> Committed to 2018.02.x and 2018.08.x, thanks.
 
- > Cc: Francois Perrad <francois.perrad@gadz.org>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Not in the 2018.02.x branch as of ea1bf543b7753.
 
-Committed to 2018.02.x and 2018.08.x, thanks.
+Sorry, it is pushed now.
+
+ > Is this fix applicable to 2018.02.x?
+
+I did not verify it, but we are using the same version of the geode
+driver in 2018.02.x and 2018.08.x / master.
 
 -- 
 Bye, Peter Korsgaard
