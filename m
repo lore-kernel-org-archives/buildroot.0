@@ -1,9 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Nov 2018 16:20:37 +0100
-Subject: [Buildroot] version `GLIBC_2.27' not found
-In-Reply-To: <a59aa43d9d9f5a8e734185c9efd73c75@tochlab.net>
-References: <a59aa43d9d9f5a8e734185c9efd73c75@tochlab.net>
-Message-ID: <20181115162037.6a4f2208@windsurf>
+Date: Thu, 15 Nov 2018 16:21:05 +0100
+Subject: [Buildroot] [PATCH next 0/2] Per-package folder fixes
+Message-ID: <20181115152107.5834-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +10,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 15 Nov 2018 14:21:36 +0000, tochansky at tochlab.net wrote:
+Here are two patches that illustrate the kind of issue that one can
+face with some packages when using per-package folders.
 
-> I have a strange behavior of toolchain built by buildroot.
-> 
-> I made a toolchain on pc with gentoo linux and took it to kubuntu 16.04 LTS and ld reports:
-> 
-> /opt/moonshine/bin/x86_64-moonshine-linux-gnu-ld: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.27' not found (required by /opt/moonshine/bin/x86_64-moonshine-linux-gnu-ld)
-> 
-> same time /opt/moonshine/bin/x86_64-moonshine-linux-gnu-gcc works fine.
-> 
-> As I can see, there is glibc 2.27 on gentoo and 2.23 on kubuntu. Thing I can't understand is why other tools(gcc for example) works normal.
-
-It depends on the glibc symbols they use. You need to build your
-toolchain on a system that has a glibc <= 2.23.
-
-You can also have a look@the pre-built toolchains available at
-https://toolchains.bootlin.com/, we build them in chroots with old
-system, specifically to make them as compatible as possible. The
-"stable" toolchains are currently built inside a Debian Squeeze chroot,
-while the "bleeding-edge" toolchains are built inside a Debian Jessie
-chroot, because gdb 8.0 requires a C++11 capable compiler.
-
-Best regards,
+The commit log explain in further details the problems.
 
 Thomas
+
+Thomas Petazzoni (2):
+  package/apr-util: fix build with per-package folders
+  package/apache: add patch to fix per-package folder build
+
+ ...in-handle-separate-APR_INCLUDE_DIR-A.patch | 47 +++++++++++++++++++
+ package/apr-util/apr-util.mk                  |  9 ++++
+ 2 files changed, 56 insertions(+)
+ create mode 100644 package/apache/0003-server-Makefile.in-handle-separate-APR_INCLUDE_DIR-A.patch
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.19.1
