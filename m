@@ -1,127 +1,95 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Nov 2018 23:50:18 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x]
- package/x11r7/xdriver_xf86-video-geode: add upstream commits to fix build
- errors
-Message-ID: <20181115071809.8669183715@busybox.osuosl.org>
+Date: Thu, 15 Nov 2018 08:20:50 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] lua-curl: fix build with
+ libcurl 7.62.0
+Message-ID: <20181115071809.8AC55836D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8188d4680c1a5686cc94dc06873922c3a7c0895e
+commit: https://git.buildroot.net/buildroot/commit/?id=27177f455c58ee584939964f2ab7087c5083bc26
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Fixes
-http://autobuild.buildroot.net/results/a9b/a9baf6ecf147f336021edda20bb091b8aa071209/
+The last libcurl bump changed error code definitions in a way that
+breaks lua-curl build. Add a patch to fix that.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes:
+http://autobuild.buildroot.net/results/fa6/fa6e289162124b3e079c4a2d9c3f00910c8cc063/
+http://autobuild.buildroot.net/results/7b9/7b962a63630abaed21d99f719c1bd710ec4d4b28/
+http://autobuild.buildroot.net/results/c5b/c5b2a7f21259bbf79861bd95a2d7ca055920bf09/
+
+Cc: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 34743203e1a003d3b713c62293b988f2778037a2)
+(cherry picked from commit 3988480bf02e138e945bc9ad083880697d5ab376)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Remove-call-to-LoaderGetOS.patch          | 53 ++++++++++++++++++++++
- ...Fix-RANDR-initialization-for-xserver-1.20.patch | 35 ++++++++++++++
- 2 files changed, 88 insertions(+)
+ .../lua-curl/0001-Fix-build-with-curl-7.62.0.patch | 58 ++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
 
-diff --git a/package/x11r7/xdriver_xf86-video-geode/0001-Remove-call-to-LoaderGetOS.patch b/package/x11r7/xdriver_xf86-video-geode/0001-Remove-call-to-LoaderGetOS.patch
+diff --git a/package/lua-curl/0001-Fix-build-with-curl-7.62.0.patch b/package/lua-curl/0001-Fix-build-with-curl-7.62.0.patch
 new file mode 100644
-index 0000000000..18e4a60da0
+index 0000000000..456afb30f7
 --- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-geode/0001-Remove-call-to-LoaderGetOS.patch
-@@ -0,0 +1,53 @@
-+From 09aaa3d1fae4aeb099b16e7a046151761bcdea95 Mon Sep 17 00:00:00 2001
-+From: Adam Jackson <ajax@redhat.com>
-+Date: Tue, 24 Jan 2017 09:53:06 -0500
-+Subject: Remove call to LoaderGetOS
++++ b/package/lua-curl/0001-Fix-build-with-curl-7.62.0.patch
+@@ -0,0 +1,58 @@
++From 4e3764ecf2b2c3f62475579fee6af4a753729f07 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Thu, 1 Nov 2018 19:12:20 +0200
++Subject: [PATCH] Fix build with curl 7.62.0
 +
-+On OSes that don't have a /dev/videox we'll just fail the open() and not
-+initialize the Xv adaptor.
++Fixes #134.
 +
-+Signed-off-by: Adam Jackson <ajax@redhat.com>
++curl 7.62.0 deprecates the CURLE_SSL_CACERT error code, and unifies it
++with CURLE_PEER_FAILED_VERIFICATION. Adjust the errors list to match.
 +
-+Downloaded from upstream commit
-+https://cgit.freedesktop.org/xorg/driver/xf86-video-geode/commit/?id=09aaa3d1fae4aeb099b16e7a046151761bcdea95
++This fixes the following build failure:
 +
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++src/lcerr_easy.h: In function 'lcurl_err_easy_mnemo':
++src/lcerror.c:32:22: error: duplicate case value
++ #define ERR_ENTRY(E) case CURLE_##E: return #E;
++                      ^
++src/lcerr_easy.h:74:1: note: in expansion of macro 'ERR_ENTRY'
++ ERR_ENTRY ( SSL_CACERT               )
++ ^~~~~~~~~
++src/lcerror.c:32:22: note: previously used here
++ #define ERR_ENTRY(E) case CURLE_##E: return #E;
++                      ^
++src/lcerr_easy.h:65:1: note: in expansion of macro 'ERR_ENTRY'
++ ERR_ENTRY ( PEER_FAILED_VERIFICATION )
++ ^~~~~~~~~
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 +---
-+ src/z4l.c | 13 -------------
-+ 1 file changed, 13 deletions(-)
++Upstream status: https://github.com/Lua-cURL/Lua-cURLv3/pull/136
 +
-+diff --git a/src/z4l.c b/src/z4l.c
-+index eccefe8..be0d345 100644
-+--- a/src/z4l.c
-++++ b/src/z4l.c
-+@@ -1709,7 +1709,6 @@ _X_EXPORT XF86ModuleData ztvModuleData = { &z4lVersionRec, z4lSetup, NULL };
-+ static pointer
-+ z4lSetup(pointer module, pointer opts, int *errmaj, int *errmin)
-+ {
-+-    const char *osname;
-+     static Bool setupDone = FALSE;
-+ 
-+     if (setupDone != FALSE) {
-+@@ -1719,19 +1718,7 @@ z4lSetup(pointer module, pointer opts, int *errmaj, int *errmin)
-+     }
-+ 
-+     setupDone = TRUE;
-+-    LoaderGetOS(&osname, NULL, NULL, NULL);
-+-
-+-    if (osname == NULL || strcmp(osname, "linux") != 0) {
-+-        if (errmaj)
-+-            *errmaj = LDR_BADOS;
-+-        if (errmin)
-+-            *errmin = 0;
-+-
-+-        return NULL;
-+-    }
-+-
-+     xf86AddDriver(&Z4l, module, 0);
-+-
-+     return (pointer) 1;
-+ }
-+ 
-+-- 
-+cgit v1.1
-+
-diff --git a/package/x11r7/xdriver_xf86-video-geode/0002-gx-Fix-RANDR-initialization-for-xserver-1.20.patch b/package/x11r7/xdriver_xf86-video-geode/0002-gx-Fix-RANDR-initialization-for-xserver-1.20.patch
-new file mode 100644
-index 0000000000..37e4a25e76
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-geode/0002-gx-Fix-RANDR-initialization-for-xserver-1.20.patch
-@@ -0,0 +1,35 @@
-+From 8382e6bb0c76a8029493eae3f2d7a3dbfd0cfc12 Mon Sep 17 00:00:00 2001
-+From: Adam Jackson <ajax@redhat.com>
-+Date: Mon, 5 Mar 2018 10:28:15 -0500
-+Subject: gx: Fix RANDR initialization for xserver 1.20
-+
-+xf86DisableRandR() doesn't exist anymore, and we don't need it anyway,
-+the core code will notice that we set up RANDR ourselves.
-+
-+Signed-off-by: Adam Jackson <ajax@redhat.com>
-+
-+Downloaded from upstream commit
-+https://cgit.freedesktop.org/xorg/driver/xf86-video-geode/commit/?id=8382e6bb0c76a8029493eae3f2d7a3dbfd0cfc12
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ src/gx_driver.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/gx_driver.c b/src/gx_driver.c
-+index ab57df1..4de336e 100644
-+--- a/src/gx_driver.c
-++++ b/src/gx_driver.c
-+@@ -1426,7 +1426,9 @@ GXScreenInit(SCREEN_INIT_ARGS_DECL)
-+ 
-+     /* Set up RandR */
-+ 
-++#if GET_ABI_MAJOR(ABI_VIDEODRV_VERSION) < 24
-+     xf86DisableRandR();         /* We provide our own RandR goodness */
++diff --git a/src/lcerr_easy.h b/src/lcerr_easy.h
++index 94ad143c3bfe..895c6d87d72f 100644
++--- a/Lua-cURLv3-0.3.7/src/lcerr_easy.h
+++++ b/Lua-cURLv3-0.3.7/src/lcerr_easy.h
++@@ -62,7 +62,11 @@ ERR_ENTRY ( UNKNOWN_TELNET_OPTION    ) /* User specified an unknown option */
++ #endif
++ ERR_ENTRY ( TELNET_OPTION_SYNTAX     )
++ ERR_ENTRY ( OBSOLETE50               )
+++#if LCURL_CURL_VER_GE(7,62,0)
+++ERR_ENTRY ( OBSOLETE51               )
+++#else
++ ERR_ENTRY ( PEER_FAILED_VERIFICATION )
 ++#endif
-+ 
-+     /* Try to set up the shadow FB for rotation */
-+ 
-+-- 
-+cgit v1.1
-+
++ ERR_ENTRY ( GOT_NOTHING              )
++ ERR_ENTRY ( SSL_ENGINE_NOTFOUND      )
++ ERR_ENTRY ( SSL_ENGINE_SETFAILED     )
++@@ -71,7 +75,11 @@ ERR_ENTRY ( RECV_ERROR               )
++ ERR_ENTRY ( OBSOLETE57               )
++ ERR_ENTRY ( SSL_CERTPROBLEM          )
++ ERR_ENTRY ( SSL_CIPHER               )
+++#if LCURL_CURL_VER_GE(7,62,0)
+++ERR_ENTRY ( PEER_FAILED_VERIFICATION )
+++#else
++ ERR_ENTRY ( SSL_CACERT               )
+++#endif
++ ERR_ENTRY ( BAD_CONTENT_ENCODING     )
++ ERR_ENTRY ( LDAP_INVALID_URL         )
++ ERR_ENTRY ( FILESIZE_EXCEEDED        )
