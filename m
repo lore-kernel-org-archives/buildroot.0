@@ -1,68 +1,58 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 15 Nov 2018 18:03:48 +0100
-Subject: [Buildroot] [PATCH] core: ensure we use the realpath(3) of DL_DIR
-Message-ID: <20181115170348.15731-1-yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Thu, 15 Nov 2018 18:05:03 +0100
+Subject: [Buildroot] [PATCH 2/5] package/llvm: install target
+ binary/debug tools
+In-Reply-To: <1542150146-12188-2-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1542150146-12188-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <1542150146-12188-2-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <3084bcf2-4ad0-58e5-285d-83fbb2deb0b6@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When $(TOPDIR)/dl is a symlink, checking out git submodules can fail,
-as reported by Michael in #11086.
+Hi Matt,
 
-To reproduce a similarly-related mis-behaviour:
+Le 14/11/2018 ? 00:02, Matt Weber a ?crit?:
+> The compiler-rt fuzzer and address sanitizer tools require additional
+> LLVM binary tools installed to allow stack trace decoding actively during
+> executable analysis.
+> 
+> https://github.com/google/sanitizers/wiki/AddressSanitizerCallStack
+> 
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> ---
+>  package/llvm/llvm.mk | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+> index 1f9bd44..79477f0 100644
+> --- a/package/llvm/llvm.mk
+> +++ b/package/llvm/llvm.mk
+> @@ -197,8 +197,17 @@ HOST_LLVM_CONF_OPTS += \
+>  # We need to activate LLVM_INCLUDE_TOOLS, otherwise it does not generate
+>  # libLLVM.so
+>  LLVM_CONF_OPTS += \
+> -	-DLLVM_INCLUDE_TOOLS=ON \
+> +	-DLLVM_INCLUDE_TOOLS=ON
+> +
+> +# The llvm-symbolizer binary is used by the Compiler-RT Fuzzer
+> +# and AddressSanitizer tools for stack traces.
+> +ifeq ($(BR2_PACKAGE_COMPILER_RT),y)
+> +LLVM_CONF_OPTS += \
+> +	-DLLVM_BUILD_TOOLS=ON
+> +else
+> +LLVM_CONF_OPTS += \
+>  	-DLLVM_BUILD_TOOLS=OFF
+> +endif
 
-    $ mkdir -p foo/bar foo/buz
-    $ cd foo/bar
-    $ ln -s ../buz meh
-    $ cd meh
-    $ cd ../../foo
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
 
-The last command should not succeed, because, relative to meh, there is
-no ../../foo directory; we would expect it to be ../../../foo, instead.
-But since meh is a symlink to a directory, then a relative path from that
-symlink is interpreted as relative to the derefrenced directory, i.e.
-from buz in this case.
+Best regards,
+Romain
 
-But where this gine even werider, is that, if the last command is
-replaced by:
-
-    $ cd ../../../foo
-
-then it still works, too.
-
-And that is the root of Michael's issue: the dl directory in Buildroot's
-TOPDIR is a symlink to a similarly-named directory one directory higher,
-which then confuses relative paths, which gets especially and noticeably
-bad for git submodules.
-
-Avoid this strangeness, and just use so-called "physical" path, i.e. a
-path where all symlinks to directories have been dereferenced.
-
-Fixes: #11086
-
-Reported-by: Michael Nosthoff <posted@heine.so>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Michael Nosthoff <posted@heine.so>
----
- package/pkg-download.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 73ea2a69f8..0def845cbc 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -32,8 +32,8 @@ else
- BR2_DL_DIR = $(DL_DIR)
- endif
- 
--# ensure it exists and a absolute path
--DL_DIR := $(shell mkdir -p $(DL_DIR) && cd $(DL_DIR) >/dev/null && pwd)
-+# ensure it exists and a absolute path, derefrecing symlinks
-+DL_DIR := $(shell mkdir -p $(DL_DIR) && cd $(DL_DIR) >/dev/null && pwd -P)
- 
- #
- # URI scheme helper functions
--- 
-2.14.1
+>  
+>  # Compiler-rt not in the source tree.
+>  # llvm runtime libraries are not in the source tree.
+> 
