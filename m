@@ -1,41 +1,62 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 15 Nov 2018 17:49:56 +0100
-Subject: [Buildroot] [PATCH 1/1] fs/common.mk: Fix show-build-order
-In-Reply-To: <20181115163520.GJ10271@scaer>
-References: <20181115152541.27596-1-serj.kalichev@gmail.com>
- <20181115163520.GJ10271@scaer>
-Message-ID: <20181115164956.GK10271@scaer>
+Date: Thu, 15 Nov 2018 17:59:03 +0100
+Subject: [Buildroot] [PATCH 1/1] package/postgresql: needs wchar
+In-Reply-To: <20181101223046.72222a3c@windsurf>
+References: <20181023160931.16417-1-bernd.kuhls@t-online.de>
+ <CAFSsvmqEdPu2V3j=d55j6cUVmNeC0MSjTmA5HM1R5HcWh1LzwA@mail.gmail.com>
+ <643ca3d2-1825-4707-5fbb-0817229188f9@mind.be>
+ <20181101223046.72222a3c@windsurf>
+Message-ID: <20181115165903.GL10271@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Serj, All,
+Thomas, All,
 
-On 2018-11-15 17:35 +0100, Yann E. MORIN spake thusly:
-> On 2018-11-15 18:25 +0300, Serj Kalichev spake thusly:
-> > The command "make show-build-order" doesn't show dependencies of rootfs-common target.
-> > 
-> > This patch adds $(ROOTFS_COMMON_DEPENDENCIES) to PACKAGES variable.
-> > 
-> > Signed-off-by: Serj Kalichev <serj.kalichev@gmail.com>
+On 2018-11-01 22:30 +0100, Thomas Petazzoni spake thusly:
+> On Tue, 23 Oct 2018 19:04:26 +0100, Arnout Vandecappelle wrote:
+> >  It is not strictly needed, but it is still useful to have it because:
+
+I agree with Arnout here.
+
+However, from a purely pragmatic point of view, I see that it is totally
+useless in practice, so I would not mind we drop them.
+
+And in retrospect, I think it *is* better that we do drop them. If the
+top-level option loses that dependency, then it is 'easy' to detect it
+has become mandatory for a sub-option, because the autobuilders will
+fail.
+
+However, if we repeat the dependency and the top-level option lses it
+and we forget to remove it, we will never realise that the sub-option
+shouldalso lose it.
+
+> True. In this case:
 > 
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  - Bernd did not propagate the dependency to p?p, qt and qt5base, which
+>    all three are also directly selecting BR2_PACKAGE_POSTGRESQL
 > 
-> (I would still have preferred they be added to the _DEPENDENCIES list,
-> but others disagreed, so...)
+>  - A number of places where BR2_PACKAGE_POSTGRESQL is selected do not
+>    have the !BR2_STATIC_LIBS dependency.
+> 
+> I am really wondering what to do with those "useless" dependencies in
+> general. On one hand, I agree with you that semantically, it is better
+> to have them. On the other hand:
+> 
+>  - It's an additional maintenance burden.
+> 
+>  - It's never tested by the autobuilders, because such "useless"
+>    dependencies are well, useless, because they are hidden by another
+>    higher-level dependency. Because they are not tested, they are often
+>    wrong and not maintained.
+> 
+> Due to this, whether we propagate them or not is completely random
+> currently through the Buildroot tree, and I'm not sure it's a very nice
+> situation.
 
-I somehow got confused to see that patch pop up on the list, wen Thomas
-said he had integrated it in his PPS series.
-
-It turns out that the previous thread was started by Andreas:
-    http://lists.busybox.net/pipermail/buildroot/2018-November/thread.html#235256
-
-This patch by Serj confused me because the reason for that same change
-is totally different (but as valid).
-
-My Reviewed-by tag still stands, obviously.
+I agree with you. Whatever we choose, we should do it consistently.
 
 Regards,
 Yann E. MORIN.
