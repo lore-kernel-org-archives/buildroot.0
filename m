@@ -1,58 +1,32 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Thu, 15 Nov 2018 18:05:03 +0100
-Subject: [Buildroot] [PATCH 2/5] package/llvm: install target
- binary/debug tools
-In-Reply-To: <1542150146-12188-2-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1542150146-12188-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1542150146-12188-2-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <3084bcf2-4ad0-58e5-285d-83fbb2deb0b6@smile.fr>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 15 Nov 2018 11:22:45 -0600
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-11-14
+In-Reply-To: <20181115070028.760D7207BB@mail.bootlin.com>
+References: <20181115070028.760D7207BB@mail.bootlin.com>
+Message-ID: <CANQCQpZRsbTf_OfruKiZNES6Dpm1XGm+nnaAaGZcnw4R1KjOxQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matt,
+All,
 
-Le 14/11/2018 ? 00:02, Matt Weber a ?crit?:
-> The compiler-rt fuzzer and address sanitizer tools require additional
-> LLVM binary tools installed to allow stack trace decoding actively during
-> executable analysis.
-> 
-> https://github.com/google/sanitizers/wiki/AddressSanitizerCallStack
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
->  package/llvm/llvm.mk | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-> index 1f9bd44..79477f0 100644
-> --- a/package/llvm/llvm.mk
-> +++ b/package/llvm/llvm.mk
-> @@ -197,8 +197,17 @@ HOST_LLVM_CONF_OPTS += \
->  # We need to activate LLVM_INCLUDE_TOOLS, otherwise it does not generate
->  # libLLVM.so
->  LLVM_CONF_OPTS += \
-> -	-DLLVM_INCLUDE_TOOLS=ON \
-> +	-DLLVM_INCLUDE_TOOLS=ON
-> +
-> +# The llvm-symbolizer binary is used by the Compiler-RT Fuzzer
-> +# and AddressSanitizer tools for stack traces.
-> +ifeq ($(BR2_PACKAGE_COMPILER_RT),y)
-> +LLVM_CONF_OPTS += \
-> +	-DLLVM_BUILD_TOOLS=ON
-> +else
-> +LLVM_CONF_OPTS += \
->  	-DLLVM_BUILD_TOOLS=OFF
-> +endif
 
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
+On Thu, Nov 15, 2018 at 1:00 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> Build statistics for 2018-11-14
+> ===============================
+>
 
-Best regards,
-Romain
+>      aarch64 |                     xen-4.10.2 | NOK | http://autobuild.buildroot.net/results/6e0d8e962e861a32f5bf2e5031ef51c25768f1f6 |
 
->  
->  # Compiler-rt not in the source tree.
->  # llvm runtime libraries are not in the source tree.
-> 
+I'm working on a series of patches to fix this failure(s).  Looks like
+a bunch of array-bounds fixups. (I fixed this failure and got another,
+3 deep so far...)
+
+Matt
