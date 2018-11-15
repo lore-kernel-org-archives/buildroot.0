@@ -1,89 +1,132 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 15 Nov 2018 15:30:51 -0600
-Subject: [Buildroot] [PATCH v8 1/1] docker-engine: split docker-{cli,
- engine}, bump to v18.06.1-ce
-In-Reply-To: <874lcki4rw.fsf@paral.in>
-References: <20181108032458.1028-1-christian@paral.in>
- <CANQCQpa0SGdEHVFxn_wmKnktat18iAJ2YLXYQd+4Uqzq5GzG4A@mail.gmail.com>
- <874lcki4rw.fsf@paral.in>
-Message-ID: <CANQCQpaK4m3iqadyDAzuypV2Ze3LdhedHhn50AxF41buOMrTDQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 15 Nov 2018 22:37:58 +0100
+Subject: [Buildroot] [PATCH next v4 4/6] Makefile: move .NOTPARALLEL
+ statement after including .config file
+In-Reply-To: <20181114105557.12599-5-thomas.petazzoni@bootlin.com>
+References: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
+ <20181114105557.12599-5-thomas.petazzoni@bootlin.com>
+Message-ID: <20181115213758.GS10271@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Christian,
+Thomas, All,
 
-On Tue, Nov 13, 2018 at 11:53 PM Christian Stewart <christian@paral.in> wrote:
->
-> Matthew,
->
-> Matthew Weber <matthew.weber@rockwellcollins.com> writes:
-> > I've started to test this series and wondered what the most minimal BR
-> > config would look like for the host /parent build?  Just systemd and
-> > docker-engine? Or are there dependencies on full core-utils /
-> > util-linux items?  I did look at your SkiffOS project and when I merge
-> > a config together their were a good amount of packages and a ~150MB
-> > rootfs.  Just curious what a minimal build might look like.
->
-> This is an interesting question. I had a quick scan of a defconfig Skiff
-> produces, and took some quick notes on what might be immediately
-> removable without consequence:
->
->  - util-linux: fallocate, kill, line, login, more, newgrp, rfkill, setpriv, su
->  - editors: nano and vim (can be removed)
->  - wpa-supplicant: cli, hotspot, wps support likely can be removed
->  - other utils: file, ssh server (dropbear could be used), mosh, compression tools
->  - libv4l: unsure if necessary
->
-> The majority of these can be disabled from the base config fragments
-> here:
->
-> https://github.com/paralin/SkiffOS/tree/master/configs/skiff/standard/buildroot
->
-> They were originally included due to operational requirements / ease of
-> use in the early days of the project, but are probably not necessary in
-> a "production" image. They can certainly be removed from the base Skiff
-> packages, and left to developers to enable in other packages if needed.
->
-> I'll begin doing some tests of minimal images this week.
->
+On 2018-11-14 11:55 +0100, Thomas Petazzoni spake thusly:
+> In a follow-up commit, we will make the .NOTPARALLEL statement
+> conditional on a Config.in option, so we need to move it further down.
 
-I did find that the dockercli just hangs when I call it, however I
-check and the daemon is running.  I'll see if I can get more debug
-(strace, etc).
+Ultimately, I don't see why we do need a config option to turn top-level
+parallel build on/off. It will ultimately be the user's choice to do so
+when calling 'make -jN' no?
 
-> Something else to note: it's likely unnecessary to include Docker at
-> all, and these days Docker brings a lot of binary bloat with it. It
-> contains a full cluster management system (swarm) and a kubernetes
-> client, for example.
->
-> Some alternatives:
->
->  - http://cri-o.io/ - container runtime interface, will add to BR
->  - runc - can be used independently of Docker
->  - docker-containerd - separate daemon for managing container basics
->  - rkt - coreos container manager
->  - libpod/podman: https://github.com/containers/libpod
->
-> I hope to add at least cri-o, rkt, and podman support to Buildroot in
-> the near future.
+However, what we do need for now, is a config option that enabled
+per-package directories (PPD, formerly known as PPS, per-package
+staging). When that is turned off, we must not allow top-level
+parallel build.
 
-Are any of those OCI compliant and not written in GO? :-)
+I was thinking that we would not need that option either, because we
+would enable PPD when we detect that the user is doing top-level parllel
+build, by inspecting $(MAKEFLAGS) to see if they contained -j.
 
->
-> >> +sha256 47eda354afc199693aa338f5b2bb87e4511354c02561ddc6520a06d169921bdf        docker-cli-v18.06.1-ce.tar.gz
-> >
-> > Please add license file hashes for both packages.
->
-> Will include in the next revision of the series:
->
-> # docker-cli.hash
-> sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-> # docker-engine.hash
-> sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
->
+However, make is our fiend here, because it does not include -j in the
+MAKFLAGS variable, but the one that is exported:
 
-Thanks for the response and details!
-Matt
+    $ cat Makefile
+    $(info var MAKEFLAGS='$(MAKEFLAGS)')
+    all:
+        @echo "env MAKEFLAGS='$${MAKEFLAGS}'"
+
+    $ make -j1
+    var MAKEFLAGS=''
+    env MAKEFLAGS=''
+
+    $ make -j3
+    var MAKEFLAGS=''
+    env MAKEFLAGS=' -j --jobserver-fds=3,4'
+
+    $ make -j
+    var MAKEFLAGS=''
+    env MAKEFLAGS=' -j'
+
+And there is no other variable in make that specifies that either...
+
+So yes, this means we have no way from the Makefile to detect whether
+we're parallel or not. Sigh. :-(
+
+So we do need that option for PPD.
+
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  Makefile | 32 ++++++++++++++++----------------
+>  1 file changed, 16 insertions(+), 16 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index e675ac26aa..24c803872d 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -105,22 +105,6 @@ ifneq ($(firstword $(sort $(RUNNING_MAKE_VERSION) $(MIN_MAKE_VERSION))),$(MIN_MA
+>  $(error You have make '$(RUNNING_MAKE_VERSION)' installed. GNU make >= $(MIN_MAKE_VERSION) is required)
+>  endif
+>  
+> -# Parallel execution of this Makefile is disabled because it changes
+> -# the packages building order, that can be a problem for two reasons:
+> -# - If a package has an unspecified optional dependency and that
+> -#   dependency is present when the package is built, it is used,
+> -#   otherwise it isn't (but compilation happily proceeds) so the end
+> -#   result will differ if the order is swapped due to parallel
+> -#   building.
+> -# - Also changing the building order can be a problem if two packages
+> -#   manipulate the same file in the target directory.
+> -#
+> -# Taking into account the above considerations, if you still want to execute
+> -# this top-level Makefile in parallel comment the ".NOTPARALLEL" line and
+> -# use the -j<jobs> option when building, e.g:
+> -#      make -j$((`getconf _NPROCESSORS_ONLN`+1))
+> -.NOTPARALLEL:
+> -
+>  # absolute path
+>  TOPDIR := $(CURDIR)
+>  CONFIG_CONFIG_IN = Config.in
+> @@ -246,6 +230,22 @@ ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
+>  -include $(BR2_CONFIG)
+>  endif
+>  
+> +# Parallel execution of this Makefile is disabled because it changes
+> +# the packages building order, that can be a problem for two reasons:
+> +# - If a package has an unspecified optional dependency and that
+> +#   dependency is present when the package is built, it is used,
+> +#   otherwise it isn't (but compilation happily proceeds) so the end
+> +#   result will differ if the order is swapped due to parallel
+> +#   building.
+> +# - Also changing the building order can be a problem if two packages
+> +#   manipulate the same file in the target directory.
+> +#
+> +# Taking into account the above considerations, if you still want to execute
+> +# this top-level Makefile in parallel comment the ".NOTPARALLEL" line and
+> +# use the -j<jobs> option when building, e.g:
+> +#      make -j$((`getconf _NPROCESSORS_ONLN`+1))
+> +.NOTPARALLEL:
+> +
+>  # timezone and locale may affect build output
+>  ifeq ($(BR2_REPRODUCIBLE),y)
+>  export TZ = UTC
+> -- 
+> 2.19.1
+> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
