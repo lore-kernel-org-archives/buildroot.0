@@ -1,61 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 15 Nov 2018 17:35:20 +0100
-Subject: [Buildroot] [PATCH 1/1] fs/common.mk: Fix show-build-order
-In-Reply-To: <20181115152541.27596-1-serj.kalichev@gmail.com>
-References: <20181115152541.27596-1-serj.kalichev@gmail.com>
-Message-ID: <20181115163520.GJ10271@scaer>
+From: Andreas Naumann <dev@andin.de>
+Date: Thu, 15 Nov 2018 17:41:27 +0100
+Subject: [Buildroot] [PATCH next v4 0/6] Per-package host/target
+ directory support
+In-Reply-To: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
+References: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
+Message-ID: <a062a8a1-7a56-d8ec-6d9d-06f444a72d6b@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Serj, All,
+Hi Thomas,
 
-On 2018-11-15 18:25 +0300, Serj Kalichev spake thusly:
-> The command "make show-build-order" doesn't show dependencies of rootfs-common target.
+
+Am 14.11.18 um 11:55 schrieb Thomas Petazzoni:
+> Hello,
 > 
-> This patch adds $(ROOTFS_COMMON_DEPENDENCIES) to PACKAGES variable.
+> Here is a fourth iteration of the per-package SDK and target directory
+> implementation.
 > 
-> Signed-off-by: Serj Kalichev <serj.kalichev@gmail.com>
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-(I would still have preferred they be added to the _DEPENDENCIES list,
-but others disagreed, so...)
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  fs/common.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> If you're interested in testing it, you can find the patch series at:
 > 
-> diff --git a/fs/common.mk b/fs/common.mk
-> index 358801d44f..e4a6a4897b 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -148,7 +148,7 @@ rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1)
->  
->  ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
->  TARGETS_ROOTFS += rootfs-$(1)
-> -PACKAGES += $$(filter-out rootfs-%,$$(ROOTFS_$(2)_DEPENDENCIES))
-> +PACKAGES += $$(filter-out rootfs-%,$$(ROOTFS_$(2)_DEPENDENCIES) $$(ROOTFS_COMMON_DEPENDENCIES))
->  endif
->  
->  # Check for legacy POST_TARGETS rules
-> -- 
-> 2.17.1
+>    http://git.bootlin.com/users/thomas-petazzoni/buildroot/log/?h=ppsh-v4
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+
+thank you for the updated version. I tried to run it with my configs. 
+For that I needed
+a) a generic patch for all kconfig packages, see my answer on the final 
+patch
+b) linux-specific patch posted two days ago: [PATCH v2 1/1] linux: Make 
+dtc install step more reliable
+
+On my local machine things seemed to work, however final rootfs creation 
+failed in our CI environment due to broken host- binaries, e.g. 
+mkfs.ubifs not finding some required lib (liblzo2.so.2 in that 
+particular case).
+It seems some things with rpath manipulation/checking do not yet work 
+properly. Looking into the binary with ldd I see libs used from the 
+host-machine that probably should come from buildroots host/usr/lib...
+	linux-vdso.so.1 =>  (0x00007ffc06fcc000)
+	libz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007f760428f000)
+	liblzo2.so.2 => not found
+	libuuid.so.1 => /lib/x86_64-linux-gnu/libuuid.so.1 (0x00007f760408a000)
+	libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f7603d81000)
+	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f76039b7000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007f76044a9000)
+
+I couldnt find out in reasonable time where things go wrong so I'd be 
+thankful for a pointer on how to debug this.
+
+regards,
+Andreas
