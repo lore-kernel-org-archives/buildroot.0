@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 15 Nov 2018 08:20:50 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] lua-curl: fix build with
+Date: Thu, 15 Nov 2018 08:21:00 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] lua-curl: fix build with
  libcurl 7.62.0
-Message-ID: <20181115071809.8AC55836D6@busybox.osuosl.org>
+Message-ID: <20181115071818.6C36183719@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27177f455c58ee584939964f2ab7087c5083bc26
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9029579d0d31040bb5ad5669e298aa955caae430
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 The last libcurl bump changed error code definitions in a way that
 breaks lua-curl build. Add a patch to fix that.
