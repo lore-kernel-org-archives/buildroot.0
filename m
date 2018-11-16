@@ -1,72 +1,131 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 16 Nov 2018 17:18:45 +0100
-Subject: [Buildroot] Making the Qt5 packaging compatible with per-package
- folder
-Message-ID: <20181116171845.4bc2a936@windsurf>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 16 Nov 2018 10:27:53 -0600
+Subject: [Buildroot] [PATCH v2 1/1] vmtouch: new package
+In-Reply-To: <20181116155253.4233-1-brandon.maier@rockwellcollins.com>
+References: <20181115174250.109988-1-brandon.maier@rockwellcollins.com>
+ <20181116155253.4233-1-brandon.maier@rockwellcollins.com>
+Message-ID: <CANQCQpb12Xbj5k4wGepxcZVug1Hdzx_fNNkPjDQxnRzpgjZ6Fg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, Ga?l,
+On Fri, Nov 16, 2018 at 9:53 AM Brandon Maier
+<brandon.maier@rockwellcollins.com> wrote:
+>
+> Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
+>
 
-I don't know if you have followed the discussion, but I recently sent a
-new iteration of the per-package folder series [1], which allows to
-support top-level parallel build.
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
 
-One issue is that the Qt5 packaging as done today in Buildroot is not
-compatible with per-package folders.
+> ---
+> Changes v1 -> v2:
+>   - Switch to v1.3.1 and drop patches
+>   - Add myself to DEVELOPERS
+> ---
+>  DEVELOPERS                   |  3 +++
+>  package/Config.in            |  1 +
+>  package/vmtouch/Config.in    | 11 +++++++++++
+>  package/vmtouch/vmtouch.hash |  5 +++++
+>  package/vmtouch/vmtouch.mk   | 21 +++++++++++++++++++++
+>  5 files changed, 41 insertions(+)
+>  create mode 100644 package/vmtouch/Config.in
+>  create mode 100644 package/vmtouch/vmtouch.hash
+>  create mode 100644 package/vmtouch/vmtouch.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 53467da489..3d0b9b270c 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -403,6 +403,9 @@ N:  Bogdan Radulescu <bogdan@nimblex.net>
+>  F:     package/iftop/
+>  F:     package/ncdu/
+>
+> +N:     Brandon Maier <brandon.maier@rockwellcollins.com>
+> +F:     package/vmtouch/
+> +
+>  N:     Brock Williams <brock@cottonwoodcomputer.com>
+>  F:     package/pdmenu/
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index b60e7700ad..5d92fa5911 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -131,6 +131,7 @@ menu "Debugging, profiling and benchmark"
+>         source "package/trinity/Config.in"
+>         source "package/uclibc-ng-test/Config.in"
+>         source "package/valgrind/Config.in"
+> +       source "package/vmtouch/Config.in"
+>         source "package/whetstone/Config.in"
+>  endmenu
+>
+> diff --git a/package/vmtouch/Config.in b/package/vmtouch/Config.in
+> new file mode 100644
+> index 0000000000..daae03aa32
+> --- /dev/null
+> +++ b/package/vmtouch/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_VMTOUCH
+> +       bool "vmtouch"
+> +       depends on BR2_USE_MMU # fork()
+> +       help
+> +         vmtouch is a tool for learning about and controlling
+> +         the file system cache of unix and unix-like systems. It
+> +         can discover which files the OS is caching, tell the OS
+> +         to cache or evict some files or regions of files, lock
+> +         files into memory so the OS won't evict them, and more.
+> +
+> +         https://hoytech.com/vmtouch/
+> diff --git a/package/vmtouch/vmtouch.hash b/package/vmtouch/vmtouch.hash
+> new file mode 100644
+> index 0000000000..2b98891d1c
+> --- /dev/null
+> +++ b/package/vmtouch/vmtouch.hash
+> @@ -0,0 +1,5 @@
+> +# Locally computed
+> +sha256 d57b7b3ae1146c4516429ab7d6db6f2122401db814ddd9cdaad10980e9c8428c  vmtouch-v1.3.1.tar.gz
+> +
+> +# Hash for license files:
+> +sha256 13258709ed29c17394e0a3ba8c8b9360af35b85231db514f11a0ba385cecd08e  LICENSE
+> diff --git a/package/vmtouch/vmtouch.mk b/package/vmtouch/vmtouch.mk
+> new file mode 100644
+> index 0000000000..856835acd4
+> --- /dev/null
+> +++ b/package/vmtouch/vmtouch.mk
+> @@ -0,0 +1,21 @@
+> +################################################################################
+> +#
+> +# vmtouch
+> +#
+> +################################################################################
+> +
+> +VMTOUCH_VERSION = v1.3.1
+> +VMTOUCH_SITE = $(call github,hoytech,vmtouch,$(VMTOUCH_VERSION))
+> +VMTOUCH_LICENSE = BSD-3-Clause
+> +VMTOUCH_LICENSE_FILES = LICENSE
+> +
+> +define VMTOUCH_BUILD_CMDS
+> +       $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+> +endef
+> +
+> +define VMTOUCH_INSTALL_TARGET_CMDS
+> +       $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) install \
+> +               DESTDIR=$(TARGET_DIR) PREFIX=/usr
+> +endef
+> +
+> +$(eval $(generic-package))
+> --
+> 2.19.0
+>
 
-If you remember well, the installation of each Qt5 module works like
-this:
 
- - Staging installation
-
-   Just "make install". No DESTDIR or INSTALL_ROOT is passed, because
-   the installation path is hardcoded in qmake itself. "make install"
-   will install stuff to both $(HOST_DIR) and $(STAGING_DIR).
-
- - Target installation
-
-   We manually copy the shared libraries, QML files, fonts, and other
-   stuff. This is already annoying to maintain today, because we
-   sometimes forget to install something that is important, we need to
-   handle the LTS/latest Qt5 version difference, etc. It would be a lot
-   less maintenance if we could use "make install" also for the target
-   installation.
-
-Even if the current packaging is not ideal, it worked fine. But it
-breaks badly with per-package folders. As explained above, the paths in
-qmake are hardcoded. So when you do "make install" in qt5location for
-example, it ends up being installed in the per-package folder of
-qt5base (both HOST_DIR and STAGING_DIR), as it's the qt5base
-HOST_DIR/STAGING_DIR that are hardcoded inside the qmake binary.
-
-I tried to fix this issue, but for the moment, I haven't found a
-solution. I first tried to use the -extprefix ./configure option, but
-it didn't behave as we needed. Then I tried to do some manual
-replacement in the Qt5 Makefiles after they have been generated (like
-OpenEmbedded is doing), but they unfortunately get re-generated because
-we tweak the .prl files from Qt5, and the Qt5 Makefiles regenerates the
-Mkaefiles if they are older than the .prl files.
-
-The current status of my experiment is visible at
-https://git.bootlin.com/users/thomas-petazzoni/buildroot/commit/?h=ppsh-qt5&id=676d26ab1ca3d8f8ee5788dbc06f4e0703188bf1,
-with a very long commit that explains the problem, and what was tried
-so far. At this point, I am considering cheating on the date of
-the .prl file to avoid the Makefiles from being re-generated, but this
-is really a hack on top of what is already a hack.
-
-Do you have some other ideas to solve this ? Can we fix qmake to do the
-right thing ?
-
-Thanks a lot for your help,
-
-Thomas
-
-[1] http://patchwork.ozlabs.org/project/buildroot/list/?series=75909
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / RC Linux Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
