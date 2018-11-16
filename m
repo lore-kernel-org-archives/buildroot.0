@@ -1,87 +1,97 @@
-From: Alexey Brodkin <alexey.brodkin@synopsys.com>
-Date: Fri, 16 Nov 2018 14:26:18 +0300
-Subject: [Buildroot] [PATCH v2] gcc: Enable __cxa_atexit for final GCC
-Message-ID: <20181116112618.17034-1-abrodkin@synopsys.com>
+From: Julien Grossholtz <julien.grossholtz@openest.io>
+Date: Fri, 16 Nov 2018 12:39:57 +0100
+Subject: [Buildroot] [PATCH 1/1] paho-mqtt-c: bump to version 1.3.0
+Message-ID: <20181116113957.3400-1-julien.grossholtz@openest.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is what GCC manual says [1]:
--------------------------->8----------------------
---enable-__cxa_atexit
+paho-mqtt-c 1.3.0 is the current stable version of paho-mqtt-c.
 
-    Define if you want to use __cxa_atexit, rather than atexit,
-    to register C++ destructors for local statics and global objects.
+The patch 0001-Declare-mqtt-tests-as-a-C-only-project.patch is no longer
+required, a similar fix was applied upstream with:
+a87450ebcefed573ad4cdac77e2c893a3c314762.
 
-    This is essential for fully standards-compliant handling of destructors,
-    but requires __cxa_atexit in libc.
-
-    This option is currently only available on systems with GNU libc
-    ...
--------------------------->8----------------------
-
-Important disadvantages of a simple atexit() are that [2]:
--------------------------->8----------------------
-1999 C Standard only requires that the implementation support 32
-registered functions, although most implementations support many more.
-
-More important it does not deal at all with the ability in most implementations
-to remove DSOs from a running program image by calling dlclose
-prior to program termination.
--------------------------->8----------------------
-
-Also it seems like all libc's we support in Buildroot (Glibc, uClibc and musl)
-support __cxa_at_exit() so enable it unconditionally.
-
-FWIW if we look around we'll see:
- 1. In OpenEmbedded it is enabled for everything except gcc-cross-initial: [3], [4]
- 2. In Crosstool-NG it is enabled by default: [5]
- 3. In OpenWrt it is disabled only for uClibc, otherwise enabled: [6]
-
-So I think we should be good with it as well.
-
-[1] https://gcc.gnu.org/install/configure.html
-[2] https://itanium-cxx-abi.github.io/cxx-abi/abi.html#dso-dtor-motivation
-[3] https://github.com/openembedded/openembedded-core/blob/master/meta/recipes-devtools/gcc/gcc-configure-common.inc#L59
-[4] https://github.com/openembedded/openembedded-core/blob/master/meta/recipes-devtools/gcc/gcc-cross-initial.inc#L23
-[5] https://github.com/crosstool-ng/crosstool-ng/blob/master/config/cc/gcc.in#L270
-[6] https://github.com/openwrt/openwrt/blob/master/toolchain/gcc/common.mk#L170
-
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Mark Corbin <mark.corbin@embecosm.com>
-Cc: Romain Naour <romain.naour@gmail.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Cc: Claudiu Zissulescu <claziss@synopsys.com>
-Cc: Cupertino Miranda <cmiranda@synopsys.com>
-Cc: Vineet Gupta <vgupta@synopsys.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Julien Grossholtz <julien.grossholtz@openest.io>
 ---
+ DEVELOPERS                                    |  3 +++
+ ...clare-mqtt-tests-as-a-C-only-project.patch | 27 -------------------
+ package/paho-mqtt-c/paho-mqtt-c.hash          |  2 +-
+ package/paho-mqtt-c/paho-mqtt-c.mk            |  2 +-
+ 4 files changed, 5 insertions(+), 29 deletions(-)
+ delete mode 100644 package/paho-mqtt-c/0001-Declare-mqtt-tests-as-a-C-only-project.patch
 
-Changes v1 -> v2:
-
- * Added references to other buildsystems in commit message
- * Dropped disable in gcc-initial so we have it enabled always
-
- package/gcc/gcc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index e47435677e..5901624ea5 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -87,7 +87,7 @@ HOST_GCC_COMMON_DEPENDENCIES = \
- HOST_GCC_COMMON_CONF_OPTS = \
- 	--target=$(GNU_TARGET_NAME) \
- 	--with-sysroot=$(STAGING_DIR) \
--	--disable-__cxa_atexit \
-+	--enable-__cxa_atexit \
- 	--with-gnu-ld \
- 	--disable-libssp \
- 	--disable-multilib \
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 53467da489..55a420b26e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1167,6 +1167,9 @@ F:	package/qt5/
+ N:	Julien Floret <julien.floret@6wind.com>
+ F:	package/lldpd/
+ 
++N:	Julien Grossholtz <julien.grossholtz@openest.io>
++F:	package/paho-mqtt-c
++
+ N:	Julien Viard de Galbert <julien@vdg.name>
+ F:	package/dieharder/
+ F:	package/easy-rsa/
+diff --git a/package/paho-mqtt-c/0001-Declare-mqtt-tests-as-a-C-only-project.patch b/package/paho-mqtt-c/0001-Declare-mqtt-tests-as-a-C-only-project.patch
+deleted file mode 100644
+index 9edb2c4a8b..0000000000
+--- a/package/paho-mqtt-c/0001-Declare-mqtt-tests-as-a-C-only-project.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-From 6556e62a07972eafccaefdcdf32bd0d386c64ca2 Mon Sep 17 00:00:00 2001
+-From: Yegor Yefremov <yegorslists@googlemail.com>
+-Date: Wed, 13 Sep 2017 07:59:50 +0200
+-Subject: [PATCH] Declare mqtt-tests as a C-only project
+-
+-This way CMake doesn't break the build on the systems without
+-C++ compiler.
+-
+-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+-Reported-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
+----
+- test/CMakeLists.txt | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+-index 5c88c44..3aca80f 100644
+---- a/test/CMakeLists.txt
+-+++ b/test/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--PROJECT(mqtt-tests)
+-+PROJECT(mqtt-tests C)
+- 
+- IF (WIN32)
+-   SET(MQTT_TEST_BROKER "tcp://mqtt.iotree.co.uk:1883" CACHE STRING "Hostname of a test MQTT broker to use")
+--- 
+-2.1.4
+-
+diff --git a/package/paho-mqtt-c/paho-mqtt-c.hash b/package/paho-mqtt-c/paho-mqtt-c.hash
+index 3bee8914f9..d628d06611 100644
+--- a/package/paho-mqtt-c/paho-mqtt-c.hash
++++ b/package/paho-mqtt-c/paho-mqtt-c.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  0cb0396554ebe0e8ac6b0de1cbc16601ef169b6a63baf6f0f3ddeb405f5471a5  paho-mqtt-c-v1.2.0.tar.gz
++sha256  87cf846b02dde6328b84832287d8725d91f12f41366eecb4d59eeda1d6c7efdf  paho-mqtt-c-v1.3.0.tar.gz
+ sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
+ sha256  44277b2bec6093e4ac313afec251a4de599d24c4e768f8574d95b13a9d2d97b5  epl-v10
+diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
+index 5df7a55c62..9e8ae29999 100644
+--- a/package/paho-mqtt-c/paho-mqtt-c.mk
++++ b/package/paho-mqtt-c/paho-mqtt-c.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PAHO_MQTT_C_VERSION = v1.2.0
++PAHO_MQTT_C_VERSION = v1.3.0
+ PAHO_MQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,$(PAHO_MQTT_C_VERSION))
+ PAHO_MQTT_C_LICENSE = EPL-1.0 or BSD-3-Clause
+ PAHO_MQTT_C_LICENSE_FILES = epl-v10 edl-v10
 -- 
-2.16.2
+2.17.2
