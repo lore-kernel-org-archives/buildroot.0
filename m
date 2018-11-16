@@ -1,8 +1,8 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 16 Nov 2018 06:38:10 +0200
-Subject: [Buildroot] [PATCH v3] libnftnl: drop useless
+Date: Fri, 16 Nov 2018 08:40:43 +0200
+Subject: [Buildroot] [PATCH v4] libnftnl: drop useless
  BR2_PACKAGE_LIBNFTNL_XML
-Message-ID: <401185492ad592f2b825ac9451b4eea0f7e110e2.1542343090.git.baruch@tkos.co.il>
+Message-ID: <316a06e0166e9f1294cefb7c6a07af79bb1d60bf.1542350443.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,6 +16,8 @@ as well.
 Cc: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
+v4: Add missing 'bool' type to the legacy entry
+
 v3: Remove the dependency comment as well
 
 v2: Add Config.in.legacy entry (Thomas, Arnout)
@@ -24,19 +26,20 @@ Note: the legacy entry is under 2018.11. If this patch is backported to
 stable branch it should probably move to an appropriate place per
 branch.
 ---
- Config.in.legacy           |  5 +++++
+ Config.in.legacy           |  6 ++++++
  package/libnftnl/Config.in | 10 ----------
- 2 files changed, 5 insertions(+), 10 deletions(-)
+ 2 files changed, 6 insertions(+), 10 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index c3df37ddd9cb..9aafd624ea36 100644
+index c3df37ddd9cb..a5e0c9fe4fe0 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -232,6 +232,11 @@ config BR2_KERNEL_HEADERS_4_17
+@@ -232,6 +232,12 @@ config BR2_KERNEL_HEADERS_4_17
  	  Version 4.17.x of the Linux kernel headers are no longer
  	  maintained upstream and are now removed.
  
 +config BR2_PACKAGE_LIBNFTNL_XML
++	bool "libnftl no longer supports XML output"
 +	select BR2_LEGACY
 +	help
 +	  libnftnl removed integration with libmxml.
