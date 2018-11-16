@@ -1,108 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 16 Nov 2018 15:08:39 +0100
+Date: Fri, 16 Nov 2018 15:15:36 +0100
 Subject: [Buildroot] [PATCH next v4 3/6] Makefile: rework main directory
  creation logic
-In-Reply-To: <20181115210946.GR10271@scaer>
+In-Reply-To: <CANQCQpaBS+vSiDngcmfBEJ4GCCKEqt0hXR=4upA2A=++-n-Bpg@mail.gmail.com>
 References: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
  <20181114105557.12599-4-thomas.petazzoni@bootlin.com>
- <20181115210946.GR10271@scaer>
-Message-ID: <20181116150839.0369b1dd@windsurf>
+ <CANQCQpaBS+vSiDngcmfBEJ4GCCKEqt0hXR=4upA2A=++-n-Bpg@mail.gmail.com>
+Message-ID: <20181116151536.666d593a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Matt,
 
-On Thu, 15 Nov 2018 22:09:46 +0100, Yann E. MORIN wrote:
+Thanks for the feedback, and for testing the patch series.
 
-> I don't think we do need anything special to create HOST_DIR,
-> STAGING_DIR and TARGET_DIR: 
+On Thu, 15 Nov 2018 19:21:27 -0600, Matthew Weber wrote:
+
+> > -# Populating the staging with the base directories is handled by the
+> > skeleton package
+> > -$(STAGING_DIR):
+> > -	@mkdir -p $(STAGING_DIR)
+> > -	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
+> > -  
 > 
->   - host-skeleton is the first package to run, and that one does ensure
->     the existence of $(HOST_DIR) by the mere act of creating it (which
->     it cirrently does not do, but should)
-> 
->   - skeleton is the first package to install in target/ and staging, and
->     currently the skeleton-custom and skeleton-init-common should both
->     create target/ and staging/
+> With per package disabled, the staging directory never gets created
+> early enough for packages to be able to reference content.
+> Specifically I noticed docker couldn't find -lsystemd.  I'm assuming
+> it's because of the new target dependency on target-post-image?
 
-So, what you suggest is to remove the following hunks from my patch ?
+The STAGING_DIR itself is definitely created at the beginning of the
+build, at the first package installing something into it.
 
-@@ -238,6 +239,7 @@ $(BUILD_DIR)/%/.stamp_built::
- $(BUILD_DIR)/%/.stamp_host_installed:
- 	@$(call step_start,install-host)
- 	@$(call MESSAGE,"Installing to host directory")
-+	@mkdir -p $(HOST_DIR)
- 	$(foreach hook,$($(PKG)_PRE_INSTALL_HOOKS),$(call $(hook))$(sep))
- 	+$($(PKG)_INSTALL_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_HOOKS),$(call $(hook))$(sep))
-@@ -267,6 +269,7 @@ $(BUILD_DIR)/%/.stamp_host_installed:
- $(BUILD_DIR)/%/.stamp_staging_installed:
- 	@$(call step_start,install-staging)
- 	@$(call MESSAGE,"Installing to staging directory")
-+	@mkdir -p $(STAGING_DIR)
- 	$(foreach hook,$($(PKG)_PRE_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
- 	+$($(PKG)_INSTALL_STAGING_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
-@@ -298,6 +301,7 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
- # Install to images dir
- $(BUILD_DIR)/%/.stamp_images_installed:
- 	@$(call step_start,install-image)
-+	@mkdir -p $(BINARIES_DIR)
- 	$(foreach hook,$($(PKG)_PRE_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
- 	@$(call MESSAGE,"Installing to images directory")
- 	+$($(PKG)_INSTALL_IMAGES_CMDS)
-@@ -309,6 +313,7 @@ $(BUILD_DIR)/%/.stamp_images_installed:
- $(BUILD_DIR)/%/.stamp_target_installed:
- 	@$(call step_start,install-target)
- 	@$(call MESSAGE,"Installing to target")
-+	@mkdir -p $(TARGET_DIR)
- 	$(foreach hook,$($(PKG)_PRE_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
- 	+$($(PKG)_INSTALL_TARGET_CMDS)
- 	$(if $(BR2_INIT_SYSTEMD),\
+However, with this patch, the $(BASE_DIR)/staging symlink indeed gets
+created at the end of the build rather than at the beginning of the
+build. However, this symlink is only a compatibility one. The code
+should use $(STAGING_DIR) everywhere, which should not depend on this
+"staging" compatibility symlink.
 
-Is this what you mean ?
-
-> > +host-finalize: $(HOST_DIR_SYMLINK)
-> > +
-> > +.PHONY: staging-finalize
-> > +staging-finalize:
-> > +	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
-> > +
-> >  .PHONY: target-finalize
-> > -target-finalize: $(PACKAGES)
-> > +target-finalize: $(PACKAGES) host-finalize  
-> 
-> Shouldn't we ensure that host-finalize be done before staging-finalize
-> too?
-
-Why so ?
-
-> We would also need to ensure that packages are all installed before
-> running staging-finalize.
-> 
-> So,=maybe we need to add:
-> 
->     staging-finalize: $(PACKAGES) host-finalize
-
-Same, we don't really need all packages to be installed just to create
-that dummy symlink.
-
-In fact, maybe I should go one step further: STAGING_DIR is part of
-HOST_DIR, so maybe I should simply create this compatibility "staging"
-symlink as part of "host-finalize".
-
-I.e:
-
-STAGING_DIR_SYMLINK := $(BASE_DIR)/staging
-$(STAGING_DIR_SYMLINK): $(BASE_DIR)
-	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
-
-host-finalize: $(HOST_DIR_SYMLINK) $(STAGING_DIR_SYMLINK
-
-What do you think about this idea ?
+I've started a build here to reproduce the issue, but in general it
+would be nice when you report issues to include an example defconfig
+that exhibits the problem, as well as the build log. It would be a lot
+easier to understand the specifics of the problem, and be able to
+reproduce it.
 
 Thanks,
 
