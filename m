@@ -1,83 +1,30 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 16 Nov 2018 10:57:39 -0600
-Subject: [Buildroot] [PATCH v2 1/3] package/xen: tools/libxc fix strncpy size
-Message-ID: <1542387461-26373-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Fri, 16 Nov 2018 18:10:24 +0100
+Subject: [Buildroot] [PATCH 1/1] ltp-testsuite: Update patch filename
+Message-ID: <20181116171024.11756-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gcc-8 errs on possible truncation of trailing '\0'
-
-Resolves:
-http://autobuild.buildroot.net/results/6e0d8e962e861a32f5bf2e5031ef51c25768f1f6/
-
-Upstream Commit:
-https://xenbits.xen.org/gitweb/?p=xen.git;a=commit;h=fa7789ef18bd2e716997937af71b2e4b5b00a159
-
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
-v1 -> v2
- - Re-generated patch on upstream clone of 4.10.2 and included SOF
----
- .../xen/0003-tools-libxc-fix-strncpy-size.patch    | 48 ++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
- create mode 100644 package/xen/0003-tools-libxc-fix-strncpy-size.patch
+ ...001-rpc-tirpc-disable-tirpc_auth_authdes_-create-tests.patch | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/xen/0003-tools-libxc-fix-strncpy-size.patch b/package/xen/0003-tools-libxc-fix-strncpy-size.patch
-new file mode 100644
-index 0000000..4b40b29
---- /dev/null
-+++ b/package/xen/0003-tools-libxc-fix-strncpy-size.patch
-@@ -0,0 +1,48 @@
-+From 9302803dc77365187a3c544f71e7c7faf5518b31 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?=
-+ <marmarek@invisiblethingslab.com>
-+Date: Thu, 5 Apr 2018 03:50:49 +0200
-+Subject: [PATCH] tools/libxc: fix strncpy size
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+gcc-8 warns about possible truncation of trailing '\0'.
-+Final character is overridden by '\0' anyway, so don't bother to copy
-+it.
-+
-+This fixes compile failure:
-+
-+    xc_pm.c: In function 'xc_set_cpufreq_gov':
-+    xc_pm.c:308:5: error: 'strncpy' specified bound 16 equals destination size [-Werror=stringop-truncation]
-+         strncpy(scaling_governor, govname, CPUFREQ_NAME_LEN);
-+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+    cc1: all warnings being treated as errors
-+
-+Upstream:
-+https://xenbits.xen.org/gitweb/?p=xen.git;a=commit;h=fa7789ef18bd2e716997937af71b2e4b5b00a159
-+
-+Signed-off-by: Marek Marczykowski-G?recki <marmarek@invisiblethingslab.com>
-+Acked-by: Wei Liu <wei.liu2@citrix.com>
-+Release-Acked-by: Juergen Gross <jgross@suse.com>
-+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-+---
-+ tools/libxc/xc_pm.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/tools/libxc/xc_pm.c b/tools/libxc/xc_pm.c
-+index ae917bc..0fc4704 100644
-+--- a/tools/libxc/xc_pm.c
-++++ b/tools/libxc/xc_pm.c
-+@@ -305,7 +305,7 @@ int xc_set_cpufreq_gov(xc_interface *xch, int cpuid, char *govname)
-+     sysctl.cmd = XEN_SYSCTL_pm_op;
-+     sysctl.u.pm_op.cmd = SET_CPUFREQ_GOV;
-+     sysctl.u.pm_op.cpuid = cpuid;
-+-    strncpy(scaling_governor, govname, CPUFREQ_NAME_LEN);
-++    strncpy(scaling_governor, govname, CPUFREQ_NAME_LEN - 1);
-+     scaling_governor[CPUFREQ_NAME_LEN - 1] = '\0';
-+ 
-+     return xc_sysctl(xch, &sysctl);
-+-- 
-+1.9.1
-+
+diff --git a/package/ltp-testsuite/0001-rpc-tirpc-disable-tirpc_auth_authdes_-create-tests.patch b/package/ltp-testsuite/0001-rpc-tirpc-disable-tirpc_auth_authdes_-create-tests.patch
+index 344ba4ae94..6fe2d6e72b 100644
+--- a/package/ltp-testsuite/0001-rpc-tirpc-disable-tirpc_auth_authdes_-create-tests.patch
++++ b/package/ltp-testsuite/0001-rpc-tirpc-disable-tirpc_auth_authdes_-create-tests.patch
+@@ -3,7 +3,7 @@ From: Erico Nunes <nunes.erico@gmail.com>
+ Date: Fri, 30 Sep 2016 17:43:08 +0200
+ Subject: [PATCH] rpc-tirpc: disable tirpc_auth_authdes_*create tests
+ 
+-Due to Buildroot patch 0007-Disable-DES-authentification-support.patch on
++Due to Buildroot patch 0005-Disable-DES-authentification-support.patch on
+ libtirpc, this library is built without method authdes_create. Any code
+ that uses this library, like the rpc-tirpc testsuite, thus fails to link.
+ 
 -- 
-1.9.1
+2.19.1
