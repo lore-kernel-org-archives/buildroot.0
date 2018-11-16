@@ -1,63 +1,64 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 16 Nov 2018 06:14:26 +0200
-Subject: [Buildroot] [PATCH] libpng: bump to 1.6.35
-In-Reply-To: <20181115225315.31171-1-afshin.nasser@gmail.com>
-References: <20181115225315.31171-1-afshin.nasser@gmail.com>
-Message-ID: <87muq964m5.fsf@tkos.co.il>
+Date: Fri, 16 Nov 2018 06:33:53 +0200
+Subject: [Buildroot] [PATCH v2] libnftnl: drop useless
+ BR2_PACKAGE_LIBNFTNL_XML
+Message-ID: <c2f9898e4a5c646c6b65710008a8553e23373126.1542342833.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Nasser,
+Commit fa0d1ebff99 (libnftnl: bump to version 1.0.9) removed the mxml
+dependency. Remove the redundant BR2_PACKAGE_LIBNFTNL_XML config symbol
+as well.
 
-Nasser Afshin writes:
-> Also use https instead of http to retrieve the hashes.
->
-> Signed-off-by: Nasser Afshin <afshin.nasser@gmail.com>
-> ---
->  package/libpng/libpng.hash | 10 +++++-----
->  package/libpng/libpng.mk   |  2 +-
->  2 files changed, 6 insertions(+), 6 deletions(-)
->
-> diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
-> index 0a0cebee91..27f66a5d01 100644
-> --- a/package/libpng/libpng.hash
-> +++ b/package/libpng/libpng.hash
-> @@ -1,7 +1,7 @@
-> -# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.34/
-> -md5		c05b6ca7190a5e387b78657dbe5536b2			libpng-1.6.34.tar.xz
-> -sha1	45de4ec996ffcc3e18037e7c128abe95f4d0292a	libpng-1.6.34.tar.xz
-> +# From https://sourceforge.net/projects/libpng/files/libpng16/1.6.35/
-> +md5		678b7e696a62a193ed3503b04bf449d6			libpng-1.6.35.tar.xz
-> +sha1	0df1561aa1da610e892239348970d574b14deed0	libpng-1.6.35.tar.xz
->  
->  # Locally computed:
-> -sha256	2f1e960d92ce3b3abd03d06dfec9637dfbd22febf107a536b44f7a47c60659f6	libpng-1.6.34.tar.xz
-> -sha256	a247c24f82bacf0403fe2f3d5550493a91cdb575fe7036b764bda8cacf3efd9c	LICENSE
-> +sha256	23912ec8c9584917ed9b09c5023465d71709dce089be503c7867fec68a93bcd7	libpng-1.6.35.tar.xz
-> +sha256	f9850940c6606003eea9c8864b2a3f177eb5c963614aba5a3c5a24c47dd043ab	LICENSE
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+v2: Add Config.in.legacy entry (Thomas, Arnout)
 
-Please mentions in the commit log what changed in the LICENSE file.
+Note: the legacy entry is under 2018.11. If this patch is backported to
+stable branch it should probably move to an appropriate place per
+branch.
+---
+ Config.in.legacy           | 5 +++++
+ package/libnftnl/Config.in | 7 -------
+ 2 files changed, 5 insertions(+), 7 deletions(-)
 
-> diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-> index ace62cd876..b6d1d8d071 100644
-> --- a/package/libpng/libpng.mk
-> +++ b/package/libpng/libpng.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBPNG_VERSION = 1.6.34
-> +LIBPNG_VERSION = 1.6.35
->  LIBPNG_SERIES = 16
->  LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
->  LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng$(LIBPNG_SERIES)/$(LIBPNG_VERSION)
-
-baruch
-
+diff --git a/Config.in.legacy b/Config.in.legacy
+index c3df37ddd9cb..9aafd624ea36 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -232,6 +232,11 @@ config BR2_KERNEL_HEADERS_4_17
+ 	  Version 4.17.x of the Linux kernel headers are no longer
+ 	  maintained upstream and are now removed.
+ 
++config BR2_PACKAGE_LIBNFTNL_XML
++	select BR2_LEGACY
++	help
++	  libnftnl removed integration with libmxml.
++
+ ###############################################################################
+ comment "Legacy options removed in 2018.08"
+ 
+diff --git a/package/libnftnl/Config.in b/package/libnftnl/Config.in
+index d4c9a1bb54e3..65390011a983 100644
+--- a/package/libnftnl/Config.in
++++ b/package/libnftnl/Config.in
+@@ -22,13 +22,6 @@ config BR2_PACKAGE_LIBNFTNL_JSON
+ 	help
+ 	  Enable JSON parsing support
+ 
+-config BR2_PACKAGE_LIBNFTNL_XML
+-	bool "enable XML support"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_PACKAGE_MXML
+-	help
+-	  Enable XML parsing support
+-
+ comment "libnftnl XML parsing support needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.19.1
