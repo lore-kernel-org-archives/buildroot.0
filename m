@@ -1,41 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 16 Nov 2018 23:29:01 +0100
-Subject: [Buildroot] [PATCH] package/openocd: add missing host-pkgconf
- dependency
-In-Reply-To: <20181115164655.9978-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Thu, 15 Nov 2018 17:46:55 +0100")
-References: <20181115164655.9978-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87bm6or70y.fsf@dell.be.48ers.dk>
+From: Trent Piepho <tpiepho@impinj.com>
+Date: Fri, 16 Nov 2018 20:17:39 +0000
+Subject: [Buildroot] [PATCH 2/2] libcurl: Use GnuTLS's default cert path
+In-Reply-To: <20181116201718.22455-1-tpiepho@impinj.com>
+References: <20181116201718.22455-1-tpiepho@impinj.com>
+Message-ID: <20181116201718.22455-2-tpiepho@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+libcurl doesn't find any trust path for CA certs when it cross-compiles.
+When using OpenSSL, it is explicitly configured to use the SSL cert
+directory with OpenSSL style hash files in it.  But with GnuTLS, it gets
+nothing.
 
- > The configure.ac script uses PKG_CHECK_MODULES(), and we autoreconf
- > the package, so host-pkgconf should be listed in the dependencies.
+Rather than configure libcurl to use the OpenSSL directory or a bundle
+file, configure it to use the GnuTLS default.  This way the CA certs
+path can be configured in one place (gnutls) and then libcurl and anyone
+else who uses gnutls can default to that.
 
- > This issue is seen either with per-package folders, or by doing a
- > clean build with just "make openocd":
+Also, when libcurl with gnutls is configured to use a directory, it ends
+up loading each cert three times.
 
- >>>> openocd 0.10.0 Configuring
- >>>> openocd 0.10.0 Autoreconfiguring
- > [...]
- > configure.ac:12: error: possibly undefined macro: AC_MSG_WARN
- >       If this token and others are legitimate, please use m4_pattern_allow.
- >       See the Autoconf documentation.
- > configure.ac:201: error: possibly undefined macro: AC_DEFINE
- > configure.ac:582: error: possibly undefined macro: AC_MSG_NOTICE
+Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+---
+ package/libcurl/libcurl.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- > Even if the message seems unrelated, it's really the lack of pkg.m4
- > from host-pkgconf that causes the issue.
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-
-Committed, thanks.
-
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 5aa6d542ad..3bc5207951 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -50,7 +50,8 @@ LIBCURL_CONF_OPTS += -without-ssl
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBCURL_GNUTLS),y)
+-LIBCURL_CONF_OPTS += --with-gnutls=$(STAGING_DIR)/usr
++LIBCURL_CONF_OPTS += --with-gnutls=$(STAGING_DIR)/usr \
++	--with-ca-fallback
+ LIBCURL_DEPENDENCIES += gnutls
+ else
+ LIBCURL_CONF_OPTS += --without-gnutls
 -- 
-Bye, Peter Korsgaard
+2.14.4
