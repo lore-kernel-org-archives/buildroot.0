@@ -1,58 +1,123 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Fri, 16 Nov 2018 20:13:00 -0200
-Subject: [Buildroot] [PATCH 3/5] support/testing/infra/emulator.py:
- support aarch64
-References: <1542150146-12188-3-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <5bef40ec4534b_55dd3fae540e463c159d7@ultri5.mail>
+Date: Fri, 16 Nov 2018 20:21:47 -0200
+Subject: [Buildroot] [next] test_rust: use standard defconfig fragment style
+Message-ID: <20181116222147.13887-1-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Since commit "2927f412be support/testing: standardize defconfig
+fragments style" all other test cases use the same style for defconfig
+fragments:
+ - start after a backslash;
+ - be declared as a multi-line string literal;
+ - be indented one level more than the variable that contains it.
 
-+ Thomas
+Do the same here for consistency.
 
-On Tue, Nov 13, 2018 at 09:02 PM, Matt Weber wrote:
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+---
+ support/testing/tests/package/test_rust.py | 78 +++++++++++-----------
+ 1 file changed, 39 insertions(+), 39 deletions(-)
 
->  - Add the condition under the -kernel assignment for aarch64
->  - Tested with a defconfig simliar to qemu_aarch64_virt_defconfig
-
-s/simliar/similar
-
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
->  support/testing/infra/emulator.py | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
-> index 802e89d..8e5a7e9 100644
-> --- a/support/testing/infra/emulator.py
-> +++ b/support/testing/infra/emulator.py
-> @@ -62,7 +62,9 @@ class Emulator(object):
->                      kernel = infra.download(self.downloaddir,
->                                              "kernel-versatile")
->                      qemu_cmd += ["-M", "versatilepb"]
-> -
-> +            elif arch == "aarch64":
-> +                kernel_cmdline.append("console=ttyAMA0")
-> +                qemu_cmd += ["-M", "virt", "-cpu", "cortex-a53"]
-
-We don't really need this code here.
-You could do this in the test case:
-
-self.emulator.boot(arch="aarch64",
-                   kernel=kern,
-                   kernel_cmdline=["console=ttyAMA0"],
-                   options=["-M", "virt", "-cpu", "cortex-a53", "-m", "512", "-initrd", img])
-
-If we think more and more test cases would need/want this we could add this
-here, preferably as a "builtin" pre-compiled kernel for aarch64.
-
-But for now, I suggest to move this code to the test case.
-
-
-Regards,
-Ricardo
+diff --git a/support/testing/tests/package/test_rust.py b/support/testing/tests/package/test_rust.py
+index 2dc814f99d..9854c3692e 100644
+--- a/support/testing/tests/package/test_rust.py
++++ b/support/testing/tests/package/test_rust.py
+@@ -57,25 +57,25 @@ class TestRustBase(infra.basetest.BRTest):
+ 
+ class TestRustBin(TestRustBase):
+     config = \
+-             """
+-             BR2_arm=y
+-             BR2_cortex_a9=y
+-             BR2_ARM_ENABLE_NEON=y
+-             BR2_ARM_ENABLE_VFP=y
+-             BR2_TOOLCHAIN_EXTERNAL=y
+-             BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+-             BR2_SYSTEM_DHCP="eth0"
+-             BR2_LINUX_KERNEL=y
+-             BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-             BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.3"
+-             BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+-             BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-             BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
+-             BR2_TARGET_ROOTFS_CPIO=y
+-             # BR2_TARGET_ROOTFS_TAR is not set
+-             BR2_PACKAGE_HOST_CARGO=y
+-             BR2_PACKAGE_HOST_RUSTC=y
+-             """
++        """
++        BR2_arm=y
++        BR2_cortex_a9=y
++        BR2_ARM_ENABLE_NEON=y
++        BR2_ARM_ENABLE_VFP=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_SYSTEM_DHCP="eth0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.3"
++        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
++        BR2_LINUX_KERNEL_DTS_SUPPORT=y
++        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        BR2_PACKAGE_HOST_CARGO=y
++        BR2_PACKAGE_HOST_RUSTC=y
++        """
+ 
+     def test_run(self):
+         self.build_test_prog()
+@@ -86,26 +86,26 @@ class TestRustBin(TestRustBase):
+ 
+ class TestRust(TestRustBase):
+     config = \
+-             """
+-             BR2_arm=y
+-             BR2_cortex_a9=y
+-             BR2_ARM_ENABLE_NEON=y
+-             BR2_ARM_ENABLE_VFP=y
+-             BR2_TOOLCHAIN_EXTERNAL=y
+-             BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+-             BR2_SYSTEM_DHCP="eth0"
+-             BR2_LINUX_KERNEL=y
+-             BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-             BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.3"
+-             BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+-             BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-             BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
+-             BR2_TARGET_ROOTFS_CPIO=y
+-             # BR2_TARGET_ROOTFS_TAR is not set
+-             BR2_PACKAGE_HOST_CARGO=y
+-             BR2_PACKAGE_HOST_RUSTC=y
+-             BR2_PACKAGE_HOST_RUST=y
+-             """
++        """
++        BR2_arm=y
++        BR2_cortex_a9=y
++        BR2_ARM_ENABLE_NEON=y
++        BR2_ARM_ENABLE_VFP=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_SYSTEM_DHCP="eth0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.3"
++        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
++        BR2_LINUX_KERNEL_DTS_SUPPORT=y
++        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        BR2_PACKAGE_HOST_CARGO=y
++        BR2_PACKAGE_HOST_RUSTC=y
++        BR2_PACKAGE_HOST_RUST=y
++        """
+ 
+     def test_run(self):
+         self.build_test_prog()
+-- 
+2.17.1
