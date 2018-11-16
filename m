@@ -1,123 +1,21 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Fri, 16 Nov 2018 20:21:47 -0200
-Subject: [Buildroot] [next] test_rust: use standard defconfig fragment style
-Message-ID: <20181116222147.13887-1-ricardo.martincoski@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 16 Nov 2018 23:26:33 +0100
+Subject: [Buildroot] [PATCH 1/1] libuv: bump to version 1.24.0
+In-Reply-To: <20181115182346.5743-1-asafka7@gmail.com> (Asaf Kahlon's message
+ of "Thu, 15 Nov 2018 20:23:45 +0200")
+References: <20181115182346.5743-1-asafka7@gmail.com>
+Message-ID: <87k1lcr752.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since commit "2927f412be support/testing: standardize defconfig
-fragments style" all other test cases use the same style for defconfig
-fragments:
- - start after a backslash;
- - be declared as a multi-line string literal;
- - be indented one level more than the variable that contains it.
+>>>>> "Asaf" == Asaf Kahlon <asafka7@gmail.com> writes:
 
-Do the same here for consistency.
+ > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
----
- support/testing/tests/package/test_rust.py | 78 +++++++++++-----------
- 1 file changed, 39 insertions(+), 39 deletions(-)
+Committed to next, thanks.
 
-diff --git a/support/testing/tests/package/test_rust.py b/support/testing/tests/package/test_rust.py
-index 2dc814f99d..9854c3692e 100644
---- a/support/testing/tests/package/test_rust.py
-+++ b/support/testing/tests/package/test_rust.py
-@@ -57,25 +57,25 @@ class TestRustBase(infra.basetest.BRTest):
- 
- class TestRustBin(TestRustBase):
-     config = \
--             """
--             BR2_arm=y
--             BR2_cortex_a9=y
--             BR2_ARM_ENABLE_NEON=y
--             BR2_ARM_ENABLE_VFP=y
--             BR2_TOOLCHAIN_EXTERNAL=y
--             BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
--             BR2_SYSTEM_DHCP="eth0"
--             BR2_LINUX_KERNEL=y
--             BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--             BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.3"
--             BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
--             BR2_LINUX_KERNEL_DTS_SUPPORT=y
--             BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
--             BR2_TARGET_ROOTFS_CPIO=y
--             # BR2_TARGET_ROOTFS_TAR is not set
--             BR2_PACKAGE_HOST_CARGO=y
--             BR2_PACKAGE_HOST_RUSTC=y
--             """
-+        """
-+        BR2_arm=y
-+        BR2_cortex_a9=y
-+        BR2_ARM_ENABLE_NEON=y
-+        BR2_ARM_ENABLE_VFP=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_SYSTEM_DHCP="eth0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.3"
-+        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
-+        BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        BR2_PACKAGE_HOST_CARGO=y
-+        BR2_PACKAGE_HOST_RUSTC=y
-+        """
- 
-     def test_run(self):
-         self.build_test_prog()
-@@ -86,26 +86,26 @@ class TestRustBin(TestRustBase):
- 
- class TestRust(TestRustBase):
-     config = \
--             """
--             BR2_arm=y
--             BR2_cortex_a9=y
--             BR2_ARM_ENABLE_NEON=y
--             BR2_ARM_ENABLE_VFP=y
--             BR2_TOOLCHAIN_EXTERNAL=y
--             BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
--             BR2_SYSTEM_DHCP="eth0"
--             BR2_LINUX_KERNEL=y
--             BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--             BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.3"
--             BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
--             BR2_LINUX_KERNEL_DTS_SUPPORT=y
--             BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
--             BR2_TARGET_ROOTFS_CPIO=y
--             # BR2_TARGET_ROOTFS_TAR is not set
--             BR2_PACKAGE_HOST_CARGO=y
--             BR2_PACKAGE_HOST_RUSTC=y
--             BR2_PACKAGE_HOST_RUST=y
--             """
-+        """
-+        BR2_arm=y
-+        BR2_cortex_a9=y
-+        BR2_ARM_ENABLE_NEON=y
-+        BR2_ARM_ENABLE_VFP=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_SYSTEM_DHCP="eth0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.3"
-+        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
-+        BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        BR2_PACKAGE_HOST_CARGO=y
-+        BR2_PACKAGE_HOST_RUSTC=y
-+        BR2_PACKAGE_HOST_RUST=y
-+        """
- 
-     def test_run(self):
-         self.build_test_prog()
 -- 
-2.17.1
+Bye, Peter Korsgaard
