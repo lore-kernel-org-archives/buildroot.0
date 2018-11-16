@@ -1,60 +1,120 @@
-From: lists at philipp-wagner.com <lists@philipp-wagner.com>
-Date: Fri, 16 Nov 2018 16:45:01 +0100
-Subject: [Buildroot] [PATCH] Make BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT public
-Message-ID: <20181116154501.14961-1-lists@philipp-wagner.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 16 Nov 2018 10:57:41 -0600
+Subject: [Buildroot] [PATCH v2 3/3] package/xen: tools/xenpmd: fix possible
+ truncation
+In-Reply-To: <1542387461-26373-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1542387461-26373-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1542387461-26373-3-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Philipp Wagner <philipp.wagner@tum.de>
+gcc-8 complains:
+    xenpmd.c:207:9: error: 'strncpy' specified bound 32 equals destination size [-Werror=stringop-truncation]
+             strncpy(info->oem_info, attrib_value, 32);
+             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Currently the BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT option is only
-available as dependency. This option controls if the Linux build system
-should build the DTB itself, or if buildroot explicitly calls the Linux
-Makefile like "make something.dtb".
+Upstream:
+https://xenbits.xen.org/gitweb/?p=xen.git;a=commit;h=938c8f53b1f80175c6f7a1399efdb984abb0cb8b
 
-My use case: I want to build an OpenRISC image with a custom device tree
-file. OpenRISC does not support appended DTBs, and I'm not using a
-bootloader, but link everything into a single kernel (vmlinux) image.
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+--
+Bug found while fixing:
+http://autobuild.buildroot.net/results/6e0d8e962e861a32f5bf2e5031ef51c25768f1f6/
 
-The kernel option CONFIG_OPENRISC_BUILTIN_DTB allows me to specify a dtb
-file, which is typically located in the kernel source tree in
-arch/openrisc/boot/dts/NAME.dts.
+v1 -> v2
+ - Re-generated patch on upstream clone of 4.10.2 and included SOF
 
-Since my dts file is not part of the upstream kernel, I have two
-options: either patch the kernel to include the DTS file, and then
-specify it using the CONFIG_OPENRISC_BUILTIN_DTB option.
-
-Or use buildroot's BR2_LINUX_KERNEL_CUSTOM_DTS_PATH config option to
-copy any DTS file to the kernel source tree, and then specify this file
-with CONFIG_OPENRISC_BUILTIN_DTB as before.
-
-However, the second option also requries the buildroot option
-BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT to be set, otherwise I end up with a
-"make -C kerneldir NAME.dts" call, which doesn't work (no such target
-exists).
-
-Currently the BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT option exists, but it's
-not visible/available. Simply making it available solves the problem for
-me nicely.
 ---
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/xen/0004-tools-xenpmd-truncation.patch | 78 ++++++++++++++++++++++++++
+ 1 file changed, 78 insertions(+)
+ create mode 100644 package/xen/0004-tools-xenpmd-truncation.patch
 
-diff --git a/linux/Config.in b/linux/Config.in
-index ecb12d0b16..1f02ee6e3b 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -373,7 +373,7 @@ if BR2_LINUX_KERNEL_DTS_SUPPORT
- # The variable below address the second case, were you only want
- # limited actions from buildroot.
- config BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT
--	bool
-+	bool "DTB is built by kernel itself"
- 
- config BR2_LINUX_KERNEL_APPENDED_DTB
- 	bool
+diff --git a/package/xen/0004-tools-xenpmd-truncation.patch b/package/xen/0004-tools-xenpmd-truncation.patch
+new file mode 100644
+index 0000000..65f7fe3
+--- /dev/null
++++ b/package/xen/0004-tools-xenpmd-truncation.patch
+@@ -0,0 +1,78 @@
++From be44f7c25c81237243ac5f834b1687d88379a253 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?=
++ <marmarek@invisiblethingslab.com>
++Date: Thu, 5 Apr 2018 03:50:53 +0200
++Subject: [PATCH] tools/xenpmd: fix possible '\0' truncation
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++gcc-8 complains:
++    xenpmd.c:207:9: error: 'strncpy' specified bound 32 equals destination size [-Werror=stringop-truncation]
++             strncpy(info->oem_info, attrib_value, 32);
++             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++    xenpmd.c:201:9: error: 'strncpy' specified bound 32 equals destination size [-Werror=stringop-truncation]
++             strncpy(info->battery_type, attrib_value, 32);
++             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++    xenpmd.c:195:9: error: 'strncpy' specified bound 32 equals destination size [-Werror=stringop-truncation]
++             strncpy(info->serial_number, attrib_value, 32);
++             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++    xenpmd.c:189:9: error: 'strncpy' specified bound 32 equals destination size [-Werror=stringop-truncation]
++             strncpy(info->model_number, attrib_value, 32);
++             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++Copy 31 chars, then make sure terminating '\0' is present. Those fields
++are passed to strlen and as '%s' for snprintf later.
++
++Upstream:
++https://xenbits.xen.org/gitweb/?p=xen.git;a=commit;h=938c8f53b1f80175c6f7a1399efdb984abb0cb8b
++
++Signed-off-by: Marek Marczykowski-G?recki <marmarek@invisiblethingslab.com>
++Acked-by: Wei Liu <wei.liu2@citrix.com>
++Release-Acked-by: Juergen Gross <jgross@suse.com>
++Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
++---
++ tools/xenpmd/xenpmd.c | 12 ++++++++----
++ 1 file changed, 8 insertions(+), 4 deletions(-)
++
++diff --git a/tools/xenpmd/xenpmd.c b/tools/xenpmd/xenpmd.c
++index 689c8fd..56412a9 100644
++--- a/tools/xenpmd/xenpmd.c
+++++ b/tools/xenpmd/xenpmd.c
++@@ -186,25 +186,29 @@ void set_attribute_battery_info(char *attrib_name,
++ 
++     if ( strstr(attrib_name, "model number") ) 
++     {
++-        strncpy(info->model_number, attrib_value, 32);
+++        strncpy(info->model_number, attrib_value, 31);
+++        info->model_number[31] = '\0';
++         return;
++     }
++ 
++     if ( strstr(attrib_name, "serial number") ) 
++     {
++-        strncpy(info->serial_number, attrib_value, 32);
+++        strncpy(info->serial_number, attrib_value, 31);
+++        info->serial_number[31] = '\0';
++         return;
++     }
++ 
++     if ( strstr(attrib_name, "battery type") ) 
++     {
++-        strncpy(info->battery_type, attrib_value, 32);
+++        strncpy(info->battery_type, attrib_value, 31);
+++        info->battery_type[31] = '\0';
++         return;
++     }
++ 
++     if ( strstr(attrib_name, "OEM info") ) 
++     {
++-        strncpy(info->oem_info, attrib_value, 32);
+++        strncpy(info->oem_info, attrib_value, 31);
+++        info->oem_info[31] = '\0';
++         return;
++     }
++ 
++-- 
++1.9.1
++
 -- 
-2.19.1
+1.9.1
