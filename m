@@ -1,78 +1,113 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 16 Nov 2018 08:06:11 -0600
-Subject: [Buildroot] [PATCH 1/3] package/xen: tools/libxc fix strncpy
- size
-In-Reply-To: <b9b7ae47-7166-514f-58ec-5e0aef529eb9@mind.be>
-References: <1542303868-39761-1-git-send-email-matthew.weber@rockwellcollins.com>
- <b9b7ae47-7166-514f-58ec-5e0aef529eb9@mind.be>
-Message-ID: <CANQCQpbeH57W-a88azDOAp0y416ojzKGTQkHJxK40=KtdTQbbQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 16 Nov 2018 15:08:39 +0100
+Subject: [Buildroot] [PATCH next v4 3/6] Makefile: rework main directory
+ creation logic
+In-Reply-To: <20181115210946.GR10271@scaer>
+References: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
+ <20181114105557.12599-4-thomas.petazzoni@bootlin.com>
+ <20181115210946.GR10271@scaer>
+Message-ID: <20181116150839.0369b1dd@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+Hello,
 
+On Thu, 15 Nov 2018 22:09:46 +0100, Yann E. MORIN wrote:
 
-On Fri, Nov 16, 2018 at 8:05 AM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->  Hi Matt,
->
-> On 15/11/2018 18:44, Matt Weber wrote:
-> > gcc-8 errs on possible truncation of trailing '\0'
-> >
-> > Resolves:
-> > http://autobuild.buildroot.net/results/6e0d8e962e861a32f5bf2e5031ef51c25768f1f6/
-> >
-> > Upstream Commit:
-> > https://xenbits.xen.org/gitweb/?p=xen.git;a=commit;h=fa7789ef18bd2e716997937af71b2e4b5b00a159
-> >
-> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> > ---
-> >  .../xen/0003-tools-libxc-fix-strncpy-size.patch    | 47 ++++++++++++++++++++++
-> >  1 file changed, 47 insertions(+)
-> >  create mode 100644 package/xen/0003-tools-libxc-fix-strncpy-size.patch
-> >
-> > diff --git a/package/xen/0003-tools-libxc-fix-strncpy-size.patch b/package/xen/0003-tools-libxc-fix-strncpy-size.patch
-> > new file mode 100644
-> > index 0000000..19f4711
-> > --- /dev/null
-> > +++ b/package/xen/0003-tools-libxc-fix-strncpy-size.patch
-> > @@ -0,0 +1,47 @@
-> > +From fa7789ef18bd2e716997937af71b2e4b5b00a159 Mon Sep 17 00:00:00 2001
-> > +From: =?utf8?q?Marek=20Marczykowski-G=C3=B3recki?=
-> > + <marmarek@invisiblethingslab.com>
-> > +Date: Thu, 5 Apr 2018 03:50:49 +0200
-> > +Subject: [PATCH] tools/libxc: fix strncpy size
-> > +MIME-Version: 1.0
-> > +Content-Type: text/plain; charset=utf8
-> > +Content-Transfer-Encoding: 8bit
-> > +
-> > +gcc-8 warns about possible truncation of trailing '\0'.
-> > +Final character is overridden by '\0' anyway, so don't bother to copy
-> > +it.
-> > +
-> > +This fixes compile failure:
-> > +
-> > +    xc_pm.c: In function 'xc_set_cpufreq_gov':
-> > +    xc_pm.c:308:5: error: 'strncpy' specified bound 16 equals destination size [-Werror=stringop-truncation]
-> > +         strncpy(scaling_governor, govname, CPUFREQ_NAME_LEN);
-> > +         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > +    cc1: all warnings being treated as errors
-> > +
-> > +Signed-off-by: Marek Marczykowski-G??recki <marmarek@invisiblethingslab.com>
-> > +Acked-by: Wei Liu <wei.liu2@citrix.com>
-> > +Release-Acked-by: Juergen Gross <jgross@suse.com>
-> > +
-> > +Upstream:
-> > +https://xenbits.xen.org/gitweb/?p=xen.git;a=commit;h=fa7789ef18bd2e716997937af71b2e4b5b00a159
->
->  You SoB is missing in this and the following patches. It's easier if you rebase
-> the patches on a git clone and re-generate them with git-format-patch, because
-> git-am will add the SoB for you.
->
+> I don't think we do need anything special to create HOST_DIR,
+> STAGING_DIR and TARGET_DIR: 
+> 
+>   - host-skeleton is the first package to run, and that one does ensure
+>     the existence of $(HOST_DIR) by the mere act of creating it (which
+>     it cirrently does not do, but should)
+> 
+>   - skeleton is the first package to install in target/ and staging, and
+>     currently the skeleton-custom and skeleton-init-common should both
+>     create target/ and staging/
 
-Fair, will do.
+So, what you suggest is to remove the following hunks from my patch ?
 
-Matt
+@@ -238,6 +239,7 @@ $(BUILD_DIR)/%/.stamp_built::
+ $(BUILD_DIR)/%/.stamp_host_installed:
+ 	@$(call step_start,install-host)
+ 	@$(call MESSAGE,"Installing to host directory")
++	@mkdir -p $(HOST_DIR)
+ 	$(foreach hook,$($(PKG)_PRE_INSTALL_HOOKS),$(call $(hook))$(sep))
+ 	+$($(PKG)_INSTALL_CMDS)
+ 	$(foreach hook,$($(PKG)_POST_INSTALL_HOOKS),$(call $(hook))$(sep))
+@@ -267,6 +269,7 @@ $(BUILD_DIR)/%/.stamp_host_installed:
+ $(BUILD_DIR)/%/.stamp_staging_installed:
+ 	@$(call step_start,install-staging)
+ 	@$(call MESSAGE,"Installing to staging directory")
++	@mkdir -p $(STAGING_DIR)
+ 	$(foreach hook,$($(PKG)_PRE_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
+ 	+$($(PKG)_INSTALL_STAGING_CMDS)
+ 	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
+@@ -298,6 +301,7 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
+ # Install to images dir
+ $(BUILD_DIR)/%/.stamp_images_installed:
+ 	@$(call step_start,install-image)
++	@mkdir -p $(BINARIES_DIR)
+ 	$(foreach hook,$($(PKG)_PRE_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
+ 	@$(call MESSAGE,"Installing to images directory")
+ 	+$($(PKG)_INSTALL_IMAGES_CMDS)
+@@ -309,6 +313,7 @@ $(BUILD_DIR)/%/.stamp_images_installed:
+ $(BUILD_DIR)/%/.stamp_target_installed:
+ 	@$(call step_start,install-target)
+ 	@$(call MESSAGE,"Installing to target")
++	@mkdir -p $(TARGET_DIR)
+ 	$(foreach hook,$($(PKG)_PRE_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
+ 	+$($(PKG)_INSTALL_TARGET_CMDS)
+ 	$(if $(BR2_INIT_SYSTEMD),\
+
+Is this what you mean ?
+
+> > +host-finalize: $(HOST_DIR_SYMLINK)
+> > +
+> > +.PHONY: staging-finalize
+> > +staging-finalize:
+> > +	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
+> > +
+> >  .PHONY: target-finalize
+> > -target-finalize: $(PACKAGES)
+> > +target-finalize: $(PACKAGES) host-finalize  
+> 
+> Shouldn't we ensure that host-finalize be done before staging-finalize
+> too?
+
+Why so ?
+
+> We would also need to ensure that packages are all installed before
+> running staging-finalize.
+> 
+> So,=maybe we need to add:
+> 
+>     staging-finalize: $(PACKAGES) host-finalize
+
+Same, we don't really need all packages to be installed just to create
+that dummy symlink.
+
+In fact, maybe I should go one step further: STAGING_DIR is part of
+HOST_DIR, so maybe I should simply create this compatibility "staging"
+symlink as part of "host-finalize".
+
+I.e:
+
+STAGING_DIR_SYMLINK := $(BASE_DIR)/staging
+$(STAGING_DIR_SYMLINK): $(BASE_DIR)
+	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
+
+host-finalize: $(HOST_DIR_SYMLINK) $(STAGING_DIR_SYMLINK
+
+What do you think about this idea ?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
