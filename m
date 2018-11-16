@@ -1,80 +1,73 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 16 Nov 2018 16:08:07 +0100
-Subject: [Buildroot] [PATCH next] package/pkg-luarocks: use
- <pkg>_EXTRACT_DEPENDENCIES
-In-Reply-To: <20181116135300.27234-1-thomas.petazzoni@bootlin.com>
-References: <20181116135300.27234-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181116150807.GT10271@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 16 Nov 2018 16:14:47 +0100
+Subject: [Buildroot] [PATCH next v4 3/6] Makefile: rework main directory
+ creation logic
+In-Reply-To: <20181116151536.666d593a@windsurf>
+References: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
+ <20181114105557.12599-4-thomas.petazzoni@bootlin.com>
+ <CANQCQpaBS+vSiDngcmfBEJ4GCCKEqt0hXR=4upA2A=++-n-Bpg@mail.gmail.com>
+ <20181116151536.666d593a@windsurf>
+Message-ID: <20181116161447.7632d0bd@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-On 2018-11-16 14:53 +0100, Thomas Petazzoni spake thusly:
-> The host luarocks tool is needed when *extracting* luarocks
-> packages. Since regular dependencies are only available at the
-> configure step, it caused the "luarocks" program to be available too
-> late to be used to extract luarocks packages.
-> 
-> To work around this, host-luarocks was manually added as a dependency
-> of the extract step of luarocks packages. While this worked fine until
-> now, it breaks badly with per-package folders, because host-luarocks
-> is not recorded as an extract dependency of luarocks packages, and
-> therefore is not copied to the per-package host folder, causing a
-> failure.
-> 
-> In the mean time, the <pkg>_EXTRACT_DEPENDENCIES mechanism was added,
-> which aims at fixing exactly this problem, so let's use it and
-> simplify pkg-luarocks.mk.
-> 
-> Cc: Francois Perrad <francois.perrad@gadz.org>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+On Fri, 16 Nov 2018 15:15:36 +0100, Thomas Petazzoni wrote:
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/pkg-luarocks.mk | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
+> On Thu, 15 Nov 2018 19:21:27 -0600, Matthew Weber wrote:
 > 
-> diff --git a/package/pkg-luarocks.mk b/package/pkg-luarocks.mk
-> index e2b48cfb4c..29c5e66cd1 100644
-> --- a/package/pkg-luarocks.mk
-> +++ b/package/pkg-luarocks.mk
-> @@ -42,7 +42,8 @@ $(2)_SITE		?= $$(call qstrip,$$(BR2_LUAROCKS_MIRROR))
->  
->  # Since we do not support host-luarocks-package, we know this is
->  # a target package, and can just add the required dependencies
-> -$(2)_DEPENDENCIES	+= host-luarocks luainterpreter
-> +$(2)_DEPENDENCIES	+= luainterpreter
-> +$(2)_EXTRACT_DEPENDENCIES += host-luarocks
->  
->  #
->  # Extract step. Extract into a temporary dir and move the relevant part to the
-> @@ -71,10 +72,6 @@ endif
->  # make targets
->  $(call inner-generic-package,$(1),$(2),$(3),$(4))
->  
-> -# $(2)_DEPENDENCIES are handled for configure step (too late)
-> -# but host-luarocks is required to do the extract
-> -$$($(2)_TARGET_EXTRACT): | host-luarocks
-> -
->  endef
->  
->  ################################################################################
-> -- 
-> 2.19.1
+> > > -# Populating the staging with the base directories is handled by the
+> > > skeleton package
+> > > -$(STAGING_DIR):
+> > > -	@mkdir -p $(STAGING_DIR)
+> > > -	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
+> > > -    
+> > 
+> > With per package disabled, the staging directory never gets created
+> > early enough for packages to be able to reference content.
+> > Specifically I noticed docker couldn't find -lsystemd.  I'm assuming
+> > it's because of the new target dependency on target-post-image?  
 > 
+> The STAGING_DIR itself is definitely created at the beginning of the
+> build, at the first package installing something into it.
+> 
+> However, with this patch, the $(BASE_DIR)/staging symlink indeed gets
+> created at the end of the build rather than at the beginning of the
+> build. However, this symlink is only a compatibility one. The code
+> should use $(STAGING_DIR) everywhere, which should not depend on this
+> "staging" compatibility symlink.
+> 
+> I've started a build here to reproduce the issue, but in general it
+> would be nice when you report issues to include an example defconfig
+> that exhibits the problem, as well as the build log. It would be a lot
+> easier to understand the specifics of the problem, and be able to
+> reproduce it.
 
+FWIW, the following defconfig:
+
+BR2_arm=y
+BR2_cortex_a8=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y
+BR2_INIT_SYSTEMD=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_DOCKER_ENGINE=y
+# BR2_TARGET_ROOTFS_TAR is not set
+
+with ppsh-v4, but BR2_PER_PACKAGE_FOLDERS disabled, builds just fine,
+and dockerd is linked with libsystemd.
+
+Could you give more details about the issue you're seeing ?
+
+Thanks,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
