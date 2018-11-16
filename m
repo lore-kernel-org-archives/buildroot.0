@@ -1,105 +1,161 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 16 Nov 2018 20:57:41 +0100
-Subject: [Buildroot] [PATCH next v4 6/6] core: implement per-package SDK
- and target
-In-Reply-To: <CAAXf6LWM0dcCJSVTSerox320PWKkpPcOXORF2cTaWfHitgRguQ@mail.gmail.com>
-References: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
- <20181114105557.12599-7-thomas.petazzoni@bootlin.com>
- <de9da9af-71f4-cfe2-f691-5aae17e3ca0a@andin.de>
- <20181116144735.19585727@windsurf>
- <CAAXf6LWM0dcCJSVTSerox320PWKkpPcOXORF2cTaWfHitgRguQ@mail.gmail.com>
-Message-ID: <20181116195741.GV10271@scaer>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Fri, 16 Nov 2018 21:42:20 +0100
+Subject: [Buildroot] Making the Luarocks integration compatible with
+ per-package folders
+In-Reply-To: <20181116170611.0bad6190@windsurf>
+References: <20181116170611.0bad6190@windsurf>
+Message-ID: <CAB0FRsveCsQ+Vuk4J4e_LbTRHYQ1prvfQ4+RODP0ZgB9KZYW8w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas?, All,
+Le ven. 16 nov. 2018 ? 17:06, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+a ?crit :
 
-On 2018-11-16 16:22 +0100, Thomas De Schampheleire spake thusly:
-> On Fri, Nov 16, 2018, 14:47 Thomas Petazzoni < [1]thomas.petazzoni@bootlin.com wrote:
->   On Thu, 15 Nov 2018 17:41:35 +0100, Andreas Naumann wrote:
-[--SNIP--]
->   > I made a patch which moves the _FINAL_DEPENDENCIES preparation to an
->   > additional .stamp-configure-prepare step just before .stamp_configured.
->   > That works but is not particularly beautiful.
-> 
->   That is not too bad actually. Semantically speaking, preparing the
->   per-package folders is not really part of the configuration step. It
->   could be logical to do it in a "prepare" step.
+> Fran?ois,
+>
+> I don't know if you have followed the discussion, but I recently sent a
+> new iteration of the per-package folder series [1], which allows to
+> support top-level parallel build.
+>
+> Currently the Luarocks integration in Buildroot doesn't work with this
+> per-package folder stuff.
+>
+> I fixed a first problem in http://patchwork.ozlabs.org/patch/998962/,
+> which prevented the host luarocks binary from being available to
+> Luarocks packages.
+>
+> But then the build still doesn't work, with the following error:
+>
+> >>> dado 1.8.3-1 Building
+> >>> dado 1.8.3-1 Installing to target
+> cd /home/thomas/projets/buildroot/output/build/dado-1.8.3-1/dado-1.8.3 &&
+> LUA_PATH="/home/thomas/projets/buildroot/output/per-package/dado/host/share/lua/5.3/?.lua"
+> flock /home/thomas/projets/buildroot/output/per-package/dado/target
+> /home/thomas/projets/buildroot/output/per-package/dado/host/bin/lua
+> /home/thomas/projets/buildroot/output/per-package/dado/host/bin/luarocks
+> make --keep dado-1.8.3-1.rockspec
+>
+> Error: Failed finding Lua library. You may need to configure LUA_LIBDIR.
+> make[1]: *** [package/pkg-generic.mk:337:
+> /home/thomas/projets/buildroot/output/build/dado-1.8.3-1/.stamp_target_installed]
+> Error 1
+> make: *** [Makefile:84: _all] Error 2
+>
+> (You can reproduce this issue by using
+> https://git.bootlin.com/users/thomas-petazzoni/buildroot/log/?h=ppsh-v4
+> + http://patchwork.ozlabs.org/patch/998962/, and simply building any
+> Luarocks package).
+>
+> I have not investigated in details, but I believe that the problem
+> comes from the /etc/luarocks/config-5.3.lua file in $(HOST_DIR), which
+> contains a number of absolute paths to the $(HOST_DIR) and
+> $(STAGING_DIR), but at the time of the host-luarocks build. This works
+> fine when per-package folder is disabled because there is a single
+> HOST_DIR and a single STAGING_DIR, global to all packages. But the
+> whole purpose of per-package folders is to have separate HOST_DIR (and
+> therefore STAGING_DIR) for each package.
+>
+> So, we would need to change this config-5.3.lua file, and we have two
+> options:
+>
+>  (1) Either we can use relative paths in this file, or make it use
+>      environment variables. In this case, we can keep a single instance
+>      of this file, and ensure it behaves properly for each package thanks
+>      to the relative path and/or environment variables passed during the
+>      build.
+>
+>
+Thomas,
 
-And IIRC, you alreqady proposed such a step, specifically to be able to
-do the autopreconf for OOT building (which I am still working on, btw).
+The use of environment variables is doable (I did some experiments in
+master branch).
+The config file is written in plain Lua, but loaded in a sandbox
+environment.
+A small patch of luarocks (see attachment) is required for allowing the
+getenv function.
+After you could generate a config, like this:
+--- a/package/luarocks/luarocks.mk
++++ b/package/luarocks/luarocks.mk
+@@ -31,17 +31,20 @@ define HOST_LUAROCKS_INSTALL_CMDS
+     rm -f $(LUAROCKS_CONFIG_FILE)
+     $(MAKE1) -C $(@D) install
+     echo "-- BR cross-compilation"                                  >>
+$(LUAROCKS_CONFIG_FILE)
+-    echo "variables.LUA_INCDIR = [[$(STAGING_DIR)/usr/include]]"    >>
+$(LUAROCKS_CONFIG_FILE)
+-    echo "variables.LUA_LIBDIR = [[$(STAGING_DIR)/usr/lib]]"        >>
+$(LUAROCKS_CONFIG_FILE)
++    echo "variables.LUA_INCDIR = getenv('STAGING_DIR') ..
+[[/usr/include]]"      >> $(LUAROCKS_CONFIG_FILE)
++    echo "variables.LUA_LIBDIR = getenv('STAGING_DIR') ..
+[[/usr/lib]]"          >> $(LUAROCKS_CONFIG_FILE)
+     echo "variables.CC = [[$(TARGET_CC)]]"                          >>
+$(LUAROCKS_CONFIG_FILE)
+     echo "variables.LD = [[$(TARGET_CC)]]"                          >>
+$(LUAROCKS_CONFIG_FILE)
+     echo "variables.CFLAGS = [[$(LUAROCKS_CFLAGS)]]"                >>
+$(LUAROCKS_CONFIG_FILE)
+     echo "variables.LIBFLAG = [[-shared $(TARGET_LDFLAGS)]]"        >>
+$(LUAROCKS_CONFIG_FILE)
+-    echo "external_deps_dirs = { [[$(STAGING_DIR)/usr]] }"          >>
+$(LUAROCKS_CONFIG_FILE)
++    echo "external_deps_dirs = { getenv('STAGING_DIR') .. [[/usr]]
+}"            >> $(LUAROCKS_CONFIG_FILE)
+     echo "gcc_rpath = false"                                        >>
+$(LUAROCKS_CONFIG_FILE)
+-    echo "rocks_trees = { [[$(TARGET_DIR)/usr]] }"                  >>
+$(LUAROCKS_CONFIG_FILE)
++    echo "rocks_trees = { getenv('STAGING_DIR') .. [[/usr]] }"      >>
+$(LUAROCKS_CONFIG_FILE)
+     echo "wrap_bin_scripts = false"                                 >>
+$(LUAROCKS_CONFIG_FILE)
+     echo "deps_mode = [[none]]"                                     >>
+$(LUAROCKS_CONFIG_FILE)
++    echo "-- BR override"                                           >>
+$(LUAROCKS_CONFIG_FILE)
++    echo "variables.LUA_DIR = getenv('HOST_DIR')"                   >>
+$(LUAROCKS_CONFIG_FILE)
++    echo "variables.LUA_BINDIR = getenv('HOST_DIR') .. [[/bin]]"    >>
+$(LUAROCKS_CONFIG_FILE)
+ endef
 
-Maybe this step can be re-used for various pacakges infras, like the
-kconfig one, to add preparation steps.
+Good test cases are lsqlite3 and luasec which require external libraries
+(so, access to staging directory).
 
->   The only thing that I dislike a bit with this is that it would no
->   longer be consistent with what we do for download and extract
->   dependencies: we prepare the per-package folders with download and
->   extract dependencies respectively in the download and extract steps. So
->   it would be quite logical to also do the same for the "configuration
->   dependencies" (which we name just "dependencies" in Buildroot).
-> 
->   So, this leaves us with 3 options:
-> 
->   ?- Keep the dependency preparation within the download, extract and
->   ? ?configure step, as proposed in this v4. This will require changing
->   ? ?the kconfig logic to prepare the configuration file inside the
->   ? ?"configure" step and not as a additional step injected before the
->   ? ?"configure" step.
-> 
->   ?- Keep the dependency preparation within the download and extract
->   ? ?steps, and make an exception for the configure step, with a separate
->   ? ?"prepare" step that comes before. Not nice in terms of consistency,
->   ? ?as explained above.
-> 
->   ?- Introduce "prepare download", "prepare extract" and "prepare
->   ? ?configure" steps that would do the dependency preparation.
-> 
->   > I guess a more proper solution would be to somehow move the
->   > kconfig_fixup code into the configure-step. Maybe use the
->   > pre-configure-hook, any suggestions?
-> 
->   I don't recall why they need to be done before the configuration step,
->   but I'm pretty sure there is a reason for that.
-> 
->   Yann, Thomas, do you remember ?
-> 
-> My mind triggers a big red warning light right now, so let's be careful :-)
+Fran?ois
 
-Yes, we got bitten pretty hard when preparing the kconfig infra. But
-what can we remember from an almost-5-year old work initiated after
-FOSDEM? ;-)
-
-> The goal is that one can run 'make foo-menuconfig' from a clean tree,
-> without first processing (downloading, building, ...) the dependencies
-> of foo first.
-> If you put this stuff in the configure step of foo, you are bound byi
-> its dependencies. There may be other reasons too, not sure.
-
-I am all in favour of simplifying it if it can be made simpler by adding
-an official extra 'prepare' step, that exists for all types of package
-infras. This we'd have 4 levels of dependencies:
-
- 1- download dependencies
- 2- extract dependencies
- 3- prepare dependencies
- 4- configure dependencies
-
-Currently, 1, 2, and 4 are implemented in a generic way and thus
-available to all types of packages, while 3 is implemented only for
-kconfig-package, in an ad-hoc way, and used only by the linux kernel to
-ensure the toolchain is available before its kconfig is called.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+ (2) Or if the first option doesn't work, we have to create a separate
+>      version of config-5.3.lua for each package that we build.
+>
+> Do you know if option (1) is doable ? If not, are you
+> interested/available to work on option (2) ? If not, I'm willing to try
+> to implement it, but I might need some help since I'm not familiar with
+> luarocks.
+>
+> Thanks for your help!
+>
+> Thomas
+>
+> [1] http://patchwork.ozlabs.org/project/buildroot/list/?series=75909
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181116/649f4e3f/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0002-getenv-in-config.patch
+Type: text/x-patch
+Size: 826 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181116/649f4e3f/attachment-0001.bin>
