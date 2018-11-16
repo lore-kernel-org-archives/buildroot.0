@@ -1,56 +1,113 @@
-From: Christian Stewart <christian@paral.in>
-Date: Thu, 15 Nov 2018 19:22:05 -0800
-Subject: [Buildroot] [PATCH v8 1/1] docker-engine: split docker-{cli,
- engine}, bump to v18.06.1-ce
-In-Reply-To: <CANQCQpaK4m3iqadyDAzuypV2Ze3LdhedHhn50AxF41buOMrTDQ@mail.gmail.com>
-References: <20181108032458.1028-1-christian@paral.in>
- <CANQCQpa0SGdEHVFxn_wmKnktat18iAJ2YLXYQd+4Uqzq5GzG4A@mail.gmail.com>
- <874lcki4rw.fsf@paral.in>
- <CANQCQpaK4m3iqadyDAzuypV2Ze3LdhedHhn50AxF41buOMrTDQ@mail.gmail.com>
-Message-ID: <871s7liu5e.fsf@paral.in>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Fri, 16 Nov 2018 01:57:20 -0200
+Subject: [Buildroot] [next 00/15] a few more runtime test cases for python
+ packages - series 2/n
+In-Reply-To: <20180926025514.2092-1-ricardo.martincoski@gmail.com>
+References: <20180926025514.2092-1-ricardo.martincoski@gmail.com>
+Message-ID: <20181116035735.31507-1-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matthew,
+Hello,
 
-Matthew Weber <matthew.weber@rockwellcollins.com> writes:
-> I did find that the dockercli just hangs when I call it, however I
-> check and the daemon is running.  I'll see if I can get more debug
-> (strace, etc).
+One way to reduce the burden of manual tests and also detect broken runtime
+dependencies is to have more test cases (even simple ones) for python packages.
+Well... here are some.
 
-The CLI itself is fine, but the daemon sometimes hangs on startup. I
-have noticed this problem on my laptop as well (x86) so it's not
-specific to this build or environment, it seems.
+All runtime-tests on GitLab CI:
+https://gitlab.com/RicardoMartincoski/buildroot/pipelines/36800857
 
-The daemon will be called, but will not log anything, and basically hang
-for sometimes minutes. I try restarting it a few times, but that doesn't
-seem to work. If I wait, it usually starts up eventually.
+Regards,
+Ricardo
 
-Most of the time the daemon starts immediately, but something seems to
-trigger this hang.
+Ricardo Martincoski (15):
+  support/testing: add python-argh tests
+  support/testing: add python-attrs tests
+  support/testing: add python-automat tests
+  support/testing: add python-bitstring tests
+  support/testing: add python-cbor tests
+  support/testing: add python-click tests
+  support/testing: add python-constantly tests
+  support/testing: add python-passlib tests
+  support/testing: add python-pexpect tests
+  support/testing: add python-pynacl tests
+  support/testing: add python-pyyaml tests
+  support/testing: add python-service-identity tests
+  support/testing: add python-subprocess32 test
+  support/testing: add python-treq tests
+  support/testing: add python-ubjson tests
 
-Once the daemon is running and logging messages, the CLI is responsive.
+ .gitlab-ci.yml                                | 29 ++++++++++++
+ .../tests/package/sample_python_argh.py       | 10 +++++
+ .../tests/package/sample_python_attrs.py      | 15 +++++++
+ .../tests/package/sample_python_automat.py    | 27 +++++++++++
+ .../tests/package/sample_python_bitstring.py  |  6 +++
+ .../tests/package/sample_python_cbor_dec.py   | 10 +++++
+ .../tests/package/sample_python_cbor_enc.py   | 14 ++++++
+ .../tests/package/sample_python_click.py      | 12 +++++
+ .../tests/package/sample_python_constantly.py | 19 ++++++++
+ .../tests/package/sample_python_passlib.py    |  5 +++
+ .../tests/package/sample_python_pexpect.py    |  8 ++++
+ .../tests/package/sample_python_pynacl.py     |  3 ++
+ .../tests/package/sample_python_pyyaml_dec.py | 10 +++++
+ .../tests/package/sample_python_pyyaml_enc.py | 14 ++++++
+ .../package/sample_python_service_identity.py |  2 +
+ .../package/sample_python_subprocess32.py     |  6 +++
+ .../tests/package/sample_python_treq.py       | 16 +++++++
+ .../tests/package/sample_python_ubjson_dec.py | 10 +++++
+ .../tests/package/sample_python_ubjson_enc.py | 14 ++++++
+ .../testing/tests/package/test_python_argh.py | 45 +++++++++++++++++++
+ .../tests/package/test_python_attrs.py        | 21 +++++++++
+ .../tests/package/test_python_automat.py      | 23 ++++++++++
+ .../tests/package/test_python_bitstring.py    | 21 +++++++++
+ .../testing/tests/package/test_python_cbor.py | 23 ++++++++++
+ .../tests/package/test_python_click.py        | 44 ++++++++++++++++++
+ .../tests/package/test_python_constantly.py   | 21 +++++++++
+ .../tests/package/test_python_passlib.py      | 23 ++++++++++
+ .../tests/package/test_python_pexpect.py      | 21 +++++++++
+ .../tests/package/test_python_pynacl.py       | 27 +++++++++++
+ .../tests/package/test_python_pyyaml.py       | 23 ++++++++++
+ .../package/test_python_service_identity.py   | 23 ++++++++++
+ .../tests/package/test_python_subprocess32.py | 11 +++++
+ .../testing/tests/package/test_python_treq.py | 29 ++++++++++++
+ .../tests/package/test_python_ubjson.py       | 23 ++++++++++
+ 34 files changed, 608 insertions(+)
+ create mode 100644 support/testing/tests/package/sample_python_argh.py
+ create mode 100644 support/testing/tests/package/sample_python_attrs.py
+ create mode 100644 support/testing/tests/package/sample_python_automat.py
+ create mode 100644 support/testing/tests/package/sample_python_bitstring.py
+ create mode 100644 support/testing/tests/package/sample_python_cbor_dec.py
+ create mode 100644 support/testing/tests/package/sample_python_cbor_enc.py
+ create mode 100644 support/testing/tests/package/sample_python_click.py
+ create mode 100644 support/testing/tests/package/sample_python_constantly.py
+ create mode 100644 support/testing/tests/package/sample_python_passlib.py
+ create mode 100644 support/testing/tests/package/sample_python_pexpect.py
+ create mode 100644 support/testing/tests/package/sample_python_pynacl.py
+ create mode 100644 support/testing/tests/package/sample_python_pyyaml_dec.py
+ create mode 100644 support/testing/tests/package/sample_python_pyyaml_enc.py
+ create mode 100644 support/testing/tests/package/sample_python_service_identity.py
+ create mode 100644 support/testing/tests/package/sample_python_subprocess32.py
+ create mode 100644 support/testing/tests/package/sample_python_treq.py
+ create mode 100644 support/testing/tests/package/sample_python_ubjson_dec.py
+ create mode 100644 support/testing/tests/package/sample_python_ubjson_enc.py
+ create mode 100644 support/testing/tests/package/test_python_argh.py
+ create mode 100644 support/testing/tests/package/test_python_attrs.py
+ create mode 100644 support/testing/tests/package/test_python_automat.py
+ create mode 100644 support/testing/tests/package/test_python_bitstring.py
+ create mode 100644 support/testing/tests/package/test_python_cbor.py
+ create mode 100644 support/testing/tests/package/test_python_click.py
+ create mode 100644 support/testing/tests/package/test_python_constantly.py
+ create mode 100644 support/testing/tests/package/test_python_passlib.py
+ create mode 100644 support/testing/tests/package/test_python_pexpect.py
+ create mode 100644 support/testing/tests/package/test_python_pynacl.py
+ create mode 100644 support/testing/tests/package/test_python_pyyaml.py
+ create mode 100644 support/testing/tests/package/test_python_service_identity.py
+ create mode 100644 support/testing/tests/package/test_python_subprocess32.py
+ create mode 100644 support/testing/tests/package/test_python_treq.py
+ create mode 100644 support/testing/tests/package/test_python_ubjson.py
 
-It will probably require a strace to figure out why Docker is hanging on
-startup like this.
-
->> Some alternatives:
->>
->>  - http://cri-o.io/ - container runtime interface, will add to BR
->>  - runc - can be used independently of Docker
->>  - docker-containerd - separate daemon for managing container basics
->>  - rkt - coreos container manager
->>  - libpod/podman: https://github.com/containers/libpod
->>
->> I hope to add at least cri-o, rkt, and podman support to Buildroot in
->> the near future.
->
-> Are any of those OCI compliant and not written in GO? :-)
-
-I haven't seen a OCI compliant runtime that is not Go, yet.
-
-Best,
-Christian
+-- 
+2.17.1
