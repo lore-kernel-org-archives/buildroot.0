@@ -1,79 +1,106 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Fri, 16 Nov 2018 01:57:24 -0200
-Subject: [Buildroot] [next 04/15] support/testing: add python-bitstring tests
+Date: Fri, 16 Nov 2018 01:57:25 -0200
+Subject: [Buildroot] [next 05/15] support/testing: add python-cbor tests
 In-Reply-To: <20181116035735.31507-1-ricardo.martincoski@gmail.com>
 References: <20181116035735.31507-1-ricardo.martincoski@gmail.com>
-Message-ID: <20181116035735.31507-5-ricardo.martincoski@gmail.com>
+Message-ID: <20181116035735.31507-6-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a simple test case to check the basic usage by checking the
-corresponding representation of a 12-bit decimal number in hex, binary
-and integer.
+Add a simple test case to check the basic usage, storing a dict into a
+file and then retrieving the dict from the file.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
  .gitlab-ci.yml                                |  2 ++
- .../tests/package/sample_python_bitstring.py  |  6 ++++++
- .../tests/package/test_python_bitstring.py    | 21 +++++++++++++++++++
- 3 files changed, 29 insertions(+)
- create mode 100644 support/testing/tests/package/sample_python_bitstring.py
- create mode 100644 support/testing/tests/package/test_python_bitstring.py
+ .../tests/package/sample_python_cbor_dec.py   | 10 ++++++++
+ .../tests/package/sample_python_cbor_enc.py   | 14 +++++++++++
+ .../testing/tests/package/test_python_cbor.py | 23 +++++++++++++++++++
+ 4 files changed, 49 insertions(+)
+ create mode 100644 support/testing/tests/package/sample_python_cbor_dec.py
+ create mode 100644 support/testing/tests/package/sample_python_cbor_enc.py
+ create mode 100644 support/testing/tests/package/test_python_cbor.py
 
 diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 7f311f74cf..2fc0fe7e6a 100644
+index 2fc0fe7e6a..d6f2e6595f 100644
 --- a/.gitlab-ci.yml
 +++ b/.gitlab-ci.yml
-@@ -324,6 +324,8 @@ tests.package.test_python_autobahn.TestPythonPy2Autobahn: *runtime_test
- tests.package.test_python_autobahn.TestPythonPy3Autobahn: *runtime_test
- tests.package.test_python_automat.TestPythonPy2Automat: *runtime_test
+@@ -326,6 +326,8 @@ tests.package.test_python_automat.TestPythonPy2Automat: *runtime_test
  tests.package.test_python_automat.TestPythonPy3Automat: *runtime_test
-+tests.package.test_python_bitstring.TestPythonPy2Bitstring: *runtime_test
-+tests.package.test_python_bitstring.TestPythonPy3Bitstring: *runtime_test
+ tests.package.test_python_bitstring.TestPythonPy2Bitstring: *runtime_test
+ tests.package.test_python_bitstring.TestPythonPy3Bitstring: *runtime_test
++tests.package.test_python_cbor.TestPythonPy2Cbor: *runtime_test
++tests.package.test_python_cbor.TestPythonPy3Cbor: *runtime_test
  tests.package.test_python_crossbar.TestPythonPy3Crossbar: *runtime_test
  tests.package.test_python_cryptography.TestPythonPy2Cryptography: *runtime_test
  tests.package.test_python_cryptography.TestPythonPy3Cryptography: *runtime_test
-diff --git a/support/testing/tests/package/sample_python_bitstring.py b/support/testing/tests/package/sample_python_bitstring.py
+diff --git a/support/testing/tests/package/sample_python_cbor_dec.py b/support/testing/tests/package/sample_python_cbor_dec.py
 new file mode 100644
-index 0000000000..2cc10dba65
+index 0000000000..5ca5e3aa7c
 --- /dev/null
-+++ b/support/testing/tests/package/sample_python_bitstring.py
-@@ -0,0 +1,6 @@
-+import bitstring
++++ b/support/testing/tests/package/sample_python_cbor_dec.py
+@@ -0,0 +1,10 @@
++import cbor
 +
-+value = bitstring.BitArray("uint:12=42")
-+assert(value.hex == "02a")
-+assert(value.bin == "000000101010")
-+assert(value.uint == 42)
-diff --git a/support/testing/tests/package/test_python_bitstring.py b/support/testing/tests/package/test_python_bitstring.py
++with open("/tmp/data.cbor", "rb") as f:
++    serialized = f.read()
++data = cbor.loads(serialized)
++print(data)
++assert(data["name"] == "python-cbor")
++assert(data["versions"] == ["1", "2"])
++assert(data["group"]["is_a_package"] is True)
++assert(data["group"]["value"] == 42)
+diff --git a/support/testing/tests/package/sample_python_cbor_enc.py b/support/testing/tests/package/sample_python_cbor_enc.py
 new file mode 100644
-index 0000000000..63b3fdb69c
+index 0000000000..1bde92bb9f
 --- /dev/null
-+++ b/support/testing/tests/package/test_python_bitstring.py
-@@ -0,0 +1,21 @@
++++ b/support/testing/tests/package/sample_python_cbor_enc.py
+@@ -0,0 +1,14 @@
++import cbor
++
++data = {
++    "name": "python-cbor",
++    "versions": ["1", "2"],
++    "group": {
++        "is_a_package": True,
++        "value": 42
++    }
++}
++serialized = cbor.dumps(data)
++print(serialized)
++with open("/tmp/data.cbor", "wb") as f:
++    f.write(serialized)
+diff --git a/support/testing/tests/package/test_python_cbor.py b/support/testing/tests/package/test_python_cbor.py
+new file mode 100644
+index 0000000000..9da3503763
+--- /dev/null
++++ b/support/testing/tests/package/test_python_cbor.py
+@@ -0,0 +1,23 @@
 +from tests.package.test_python import TestPythonPackageBase
 +
 +
-+class TestPythonPy2Bitstring(TestPythonPackageBase):
++class TestPythonPy2Cbor(TestPythonPackageBase):
 +    __test__ = True
 +    config = TestPythonPackageBase.config + \
 +        """
 +        BR2_PACKAGE_PYTHON=y
-+        BR2_PACKAGE_PYTHON_BITSTRING=y
++        BR2_PACKAGE_PYTHON_CBOR=y
 +        """
-+    sample_scripts = ["tests/package/sample_python_bitstring.py"]
++    sample_scripts = ["tests/package/sample_python_cbor_enc.py",
++                      "tests/package/sample_python_cbor_dec.py"]
 +
 +
-+class TestPythonPy3Bitstring(TestPythonPackageBase):
++class TestPythonPy3Cbor(TestPythonPackageBase):
 +    __test__ = True
 +    config = TestPythonPackageBase.config + \
 +        """
 +        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_BITSTRING=y
++        BR2_PACKAGE_PYTHON_CBOR=y
 +        """
-+    sample_scripts = ["tests/package/sample_python_bitstring.py"]
++    sample_scripts = ["tests/package/sample_python_cbor_enc.py",
++                      "tests/package/sample_python_cbor_dec.py"]
 -- 
 2.17.1
