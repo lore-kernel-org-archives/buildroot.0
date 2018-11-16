@@ -1,87 +1,107 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Fri, 16 Nov 2018 01:57:22 -0200
-Subject: [Buildroot] [next 02/15] support/testing: add python-attrs tests
+Date: Fri, 16 Nov 2018 01:57:21 -0200
+Subject: [Buildroot] [next 01/15] support/testing: add python-argh tests
 In-Reply-To: <20181116035735.31507-1-ricardo.martincoski@gmail.com>
 References: <20181116035735.31507-1-ricardo.martincoski@gmail.com>
-Message-ID: <20181116035735.31507-3-ricardo.martincoski@gmail.com>
+Message-ID: <20181116035735.31507-2-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use a minimal script to check the basic usage creating a class with 2
-attributes.
+Use a simple script to check the basic usage. Since this package
+provides command line arguments, override run_sample_scripts to call the
+script with arguments and check the expected output.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
- .gitlab-ci.yml                                |  2 ++
- .../tests/package/sample_python_attrs.py      | 15 +++++++++++++
- .../tests/package/test_python_attrs.py        | 21 +++++++++++++++++++
- 3 files changed, 38 insertions(+)
- create mode 100644 support/testing/tests/package/sample_python_attrs.py
- create mode 100644 support/testing/tests/package/test_python_attrs.py
+ .gitlab-ci.yml                                |  2 +
+ .../tests/package/sample_python_argh.py       | 10 +++++
+ .../testing/tests/package/test_python_argh.py | 45 +++++++++++++++++++
+ 3 files changed, 57 insertions(+)
+ create mode 100644 support/testing/tests/package/sample_python_argh.py
+ create mode 100644 support/testing/tests/package/test_python_argh.py
 
 diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 62f3768d3d..494894a782 100644
+index 98f9463928..62f3768d3d 100644
 --- a/.gitlab-ci.yml
 +++ b/.gitlab-ci.yml
-@@ -318,6 +318,8 @@ tests.package.test_python.TestPython2: *runtime_test
+@@ -316,6 +316,8 @@ tests.package.test_ipython.TestIPythonPy2: *runtime_test
+ tests.package.test_ipython.TestIPythonPy3: *runtime_test
+ tests.package.test_python.TestPython2: *runtime_test
  tests.package.test_python.TestPython3: *runtime_test
- tests.package.test_python_argh.TestPythonPy2Argh: *runtime_test
- tests.package.test_python_argh.TestPythonPy3Argh: *runtime_test
-+tests.package.test_python_attrs.TestPythonPy2Attrs: *runtime_test
-+tests.package.test_python_attrs.TestPythonPy3Attrs: *runtime_test
++tests.package.test_python_argh.TestPythonPy2Argh: *runtime_test
++tests.package.test_python_argh.TestPythonPy3Argh: *runtime_test
  tests.package.test_python_autobahn.TestPythonPy2Autobahn: *runtime_test
  tests.package.test_python_autobahn.TestPythonPy3Autobahn: *runtime_test
  tests.package.test_python_crossbar.TestPythonPy3Crossbar: *runtime_test
-diff --git a/support/testing/tests/package/sample_python_attrs.py b/support/testing/tests/package/sample_python_attrs.py
+diff --git a/support/testing/tests/package/sample_python_argh.py b/support/testing/tests/package/sample_python_argh.py
 new file mode 100644
-index 0000000000..f224944914
+index 0000000000..48247bf604
 --- /dev/null
-+++ b/support/testing/tests/package/sample_python_attrs.py
-@@ -0,0 +1,15 @@
-+import attr
++++ b/support/testing/tests/package/sample_python_argh.py
+@@ -0,0 +1,10 @@
++import argh
 +
 +
-+ at attr.s
-+class Obj(object):
-+    x = attr.ib()
-+    y = attr.ib(default=1)
++ at argh.arg("foo", help="help for foo")
++ at argh.arg("--bar", help="help for bar")
++def main(foo, bar=False):
++    print("{}, {}".format(foo, bar))
 +
 +
-+obj1 = Obj(2)
-+assert(obj1.x == 2)
-+assert(obj1.y == 1)
-+obj2 = Obj(3, 4)
-+assert(obj2.x == 3)
-+assert(obj2.y == 4)
-diff --git a/support/testing/tests/package/test_python_attrs.py b/support/testing/tests/package/test_python_attrs.py
++argh.dispatch_command(main)
+diff --git a/support/testing/tests/package/test_python_argh.py b/support/testing/tests/package/test_python_argh.py
 new file mode 100644
-index 0000000000..9f597034ae
+index 0000000000..de4b4cbe74
 --- /dev/null
-+++ b/support/testing/tests/package/test_python_attrs.py
-@@ -0,0 +1,21 @@
++++ b/support/testing/tests/package/test_python_argh.py
+@@ -0,0 +1,45 @@
 +from tests.package.test_python import TestPythonPackageBase
 +
 +
-+class TestPythonPy2Attrs(TestPythonPackageBase):
++class TestPythonArgh(TestPythonPackageBase):
++    config = TestPythonPackageBase.config
++    sample_scripts = ["tests/package/sample_python_argh.py"]
++
++    def run_sample_scripts(self):
++        cmd = self.interpreter + " sample_python_argh.py -h"
++        output, exit_code = self.emulator.run(cmd)
++        self.assertIn("usage:", output[0])
++        self.assertEqual(exit_code, 0)
++
++        cmd = self.interpreter + " sample_python_argh.py 123"
++        output, exit_code = self.emulator.run(cmd)
++        self.assertEqual(output[0], "123, False")
++        self.assertEqual(exit_code, 0)
++
++        cmd = self.interpreter + " sample_python_argh.py --bar 456"
++        output, exit_code = self.emulator.run(cmd)
++        self.assertEqual(output[0], "456, True")
++        self.assertEqual(exit_code, 0)
++
++        cmd = self.interpreter + " sample_python_argh.py"
++        output, exit_code = self.emulator.run(cmd)
++        self.assertIn("usage:", output[0])
++        self.assertEqual(exit_code, 2)
++
++
++class TestPythonPy2Argh(TestPythonArgh):
 +    __test__ = True
-+    config = TestPythonPackageBase.config + \
++    config = TestPythonArgh.config + \
 +        """
 +        BR2_PACKAGE_PYTHON=y
-+        BR2_PACKAGE_PYTHON_ATTRS=y
++        BR2_PACKAGE_PYTHON_ARGH=y
 +        """
-+    sample_scripts = ["tests/package/sample_python_attrs.py"]
 +
 +
-+class TestPythonPy3Attrs(TestPythonPackageBase):
++class TestPythonPy3Argh(TestPythonArgh):
 +    __test__ = True
-+    config = TestPythonPackageBase.config + \
++    config = TestPythonArgh.config + \
 +        """
 +        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_ATTRS=y
++        BR2_PACKAGE_PYTHON_ARGH=y
 +        """
-+    sample_scripts = ["tests/package/sample_python_attrs.py"]
 -- 
 2.17.1
