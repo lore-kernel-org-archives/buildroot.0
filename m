@@ -1,47 +1,40 @@
 From: Carlos Santos <casantos@datacom.com.br>
-Date: Fri, 16 Nov 2018 00:41:15 -0200
-Subject: [Buildroot] [PATCH next] libressl: bump to version 2.8.2
-Message-ID: <20181116024115.27628-1-casantos@datacom.com.br>
+Date: Fri, 16 Nov 2018 00:52:14 -0200
+Subject: [Buildroot] [PATCH next 0/3] Update TPM2 packages
+Message-ID: <20181116025217.27928-1-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See release notes since 2.7.4 at
+This series should be applied in a single commit, since the upgrade of
+tpm2-tss breaks tpm2-abrmd and tpm2-tools if they are not upgraded too.
+A single large patch, however, would be much harder to review.
 
-  https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-2.8.0-relnotes.txt
-  https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-2.8.1-relnotes.txt
-  https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-2.8.2-relnotes.txt
+Carlos Santos (3):
+  tpm2-tss: bump to version 2.1.0
+  tpm2-abrmd: bump to version 2.0.3
+  tpm2-tools: bump to version 3.1.3
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
----
- package/libressl/libressl.hash | 2 +-
- package/libressl/libressl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/tpm2-abrmd/Config.in                  |  7 +-
+ package/tpm2-abrmd/S80tpm2-abrmd              |  2 +-
+ package/tpm2-abrmd/tpm2-abrmd.hash            |  2 +-
+ package/tpm2-abrmd/tpm2-abrmd.mk              |  2 +-
+ .../0001-Fix-build-with-LibreSSL.patch        | 64 -------------------
+ ...-type-may-be-used-uninitialized-warn.patch | 14 ++--
+ package/tpm2-tools/Config.in                  |  7 +-
+ package/tpm2-tools/tpm2-tools.hash            |  2 +-
+ package/tpm2-tools/tpm2-tools.mk              |  2 +-
+ .../0001-ESYS-Fix-build-with-LibreSSL.patch   | 48 ++++++++++++++
+ ....cpp-add-missing-inclusion-of-sys-se.patch | 33 ----------
+ package/tpm2-tss/Config.in                    |  5 +-
+ package/tpm2-tss/tpm2-tss.hash                |  4 +-
+ package/tpm2-tss/tpm2-tss.mk                  |  9 +--
+ 14 files changed, 70 insertions(+), 131 deletions(-)
+ delete mode 100644 package/tpm2-tools/0001-Fix-build-with-LibreSSL.patch
+ create mode 100644 package/tpm2-tss/0001-ESYS-Fix-build-with-LibreSSL.patch
+ delete mode 100644 package/tpm2-tss/0001-tcti-tcti_socket.cpp-add-missing-inclusion-of-sys-se.patch
 
-diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
-index 111fe4feed..b0d1928e10 100644
---- a/package/libressl/libressl.hash
-+++ b/package/libressl/libressl.hash
-@@ -1,4 +1,4 @@
- # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
--sha256 1e3a9fada06c1c060011470ad0ff960de28f9a0515277d7336f7e09362517da6  libressl-2.7.4.tar.gz
-+sha256 b8cb31e59f1294557bfc80f2a662969bc064e83006ceef0574e2553a1c254fd5  libressl-2.8.2.tar.gz
- # Locally computed
- sha256 5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
-diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
-index 35494c8239..f035f9044e 100644
---- a/package/libressl/libressl.mk
-+++ b/package/libressl/libressl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBRESSL_VERSION = 2.7.4
-+LIBRESSL_VERSION = 2.8.2
- LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
- LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
- LIBRESSL_LICENSE_FILES = COPYING
 -- 
 2.19.1
