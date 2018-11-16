@@ -1,50 +1,26 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Fri, 16 Nov 2018 20:17:32 +0000
-Subject: [Buildroot] [PATCH 1/2] gnutls: Give library a default trust
- location
-Message-ID: <20181116201718.22455-1-tpiepho@impinj.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 16 Nov 2018 23:12:15 +0100
+Subject: [Buildroot] [PATCH 1/1] paho-mqtt-c: bump to version 1.3.0
+In-Reply-To: <20181116113957.3400-1-julien.grossholtz@openest.io> (Julien
+ Grossholtz's message of "Fri, 16 Nov 2018 12:39:57 +0100")
+References: <20181116113957.3400-1-julien.grossholtz@openest.io>
+Message-ID: <87sh00r7sw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gnutls is building with no default location to look for CA certs.  Since
-there are buildroot packages to provide these, configure it to use them
-by default.
+>>>>> "Julien" == Julien Grossholtz <julien.grossholtz@openest.io> writes:
 
-Configure gnutls to find them using the bundle file which contains all
-certs, rather than looking in the cert directory.  When gnutls is told
-to use the directory, it loads *every* file in it.  This means it loads
-the bundle with all certs, then loads each cert a second time using the
-individual pem files, and then loads them all the third time via the
-hash symlinks to the pem files.
+ > paho-mqtt-c 1.3.0 is the current stable version of paho-mqtt-c.
+ > The patch 0001-Declare-mqtt-tests-as-a-C-only-project.patch is no longer
+ > required, a similar fix was applied upstream with:
+ > a87450ebcefed573ad4cdac77e2c893a3c314762.
 
-When p11-kit is enabled, use its trust module instead of the bundle
-file.  p11-kit can be configured to use the bundle (the default), but it
-can do other things too, such as integrate with the "trust" command for
-adding and removing trust anchors.
+ > Signed-off-by: Julien Grossholtz <julien.grossholtz@openest.io>
 
-Signed-off-by: Trent Piepho <tpiepho@impinj.com>
----
- package/gnutls/gnutls.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+Committed to next, thanks.
 
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 18af684376..7492254e8c 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -95,4 +95,11 @@ else
- GNUTLS_CONF_OPTS += --without-zlib
- endif
- 
-+# Provide a default CA cert location
-+ifeq ($(BR2_PACKAGE_P11_KIT),y)
-+GNUTLS_CONF_OPTS += --with-default-trust-store-pkcs11=pkcs11:model=p11-kit-trust
-+else ifeq ($(BR2_PACKAGE_CA_CERTIFICATES),y)
-+GNUTLS_CONF_OPTS += --with-default-trust-store-file=/etc/ssl/certs/ca-certificates.crt
-+endif
-+
- $(eval $(autotools-package))
 -- 
-2.14.4
+Bye, Peter Korsgaard
