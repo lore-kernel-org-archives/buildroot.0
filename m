@@ -1,15 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 16 Nov 2018 09:35:13 +0100
-Subject: [Buildroot] [PATCH v2] linux-firmware: bump version to latest
- 1baa348
-In-Reply-To: <20181115190558.GM10271@scaer>
-References: <20181108153322.17362-1-m.niestroj@grinn-global.com>
- <20181109215700.6b8dc6af@windsurf> <20181109210610.GB2445@scaer>
- <87bm6svqpy.fsf@grinn-global.com>
- <20181113210216.37879bd4@windsurf> <20181113202946.GH10271@scaer>
- <016ed0ed-6489-2fa0-a32e-9f2a6918af01@mind.be>
- <20181115190558.GM10271@scaer>
-Message-ID: <20181116093513.152dc10c@windsurf>
+Date: Fri, 16 Nov 2018 09:53:28 +0100
+Subject: [Buildroot] [PATCH next v4 4/6] Makefile: move .NOTPARALLEL
+ statement after including .config file
+In-Reply-To: <20181115213758.GS10271@scaer>
+References: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
+ <20181114105557.12599-5-thomas.petazzoni@bootlin.com>
+ <20181115213758.GS10271@scaer>
+Message-ID: <20181116095328.283584ad@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,41 +15,75 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 15 Nov 2018 20:05:58 +0100, Yann E. MORIN wrote:
+On Thu, 15 Nov 2018 22:37:58 +0100, Yann E. MORIN wrote:
 
-> >  Since we have the same problems sometimes with github tarballs, I think we need
-> > a more fundamental solution. I would propose a new tarsha256 hash type, which
-> > extracts the tarball to calculate the hash. In a simple version it's not so
-> > complicated, something like
-> > 
-> > tar -xf - --to-command=$(TOPDIR)/support/scripts/tarsha256 | sort | sha256sum -
-> > 
-> > where tarsha256 contains:
-> > 
-> > { echo $TAR_FILENAME; echo $TAR_MODE; echo $TAR_FILETYPE; cat - } | \
-> > 	sha256sum - | cut -f 1 -d ' '
-> > 
-> > As usually, entirely untested.  
+> Ultimately, I don't see why we do need a config option to turn top-level
+> parallel build on/off. It will ultimately be the user's choice to do so
+> when calling 'make -jN' no?
 > 
-> I don't like it, because this is totally non-standard. People expect to
-> be able to check hashes by running the *usual* XXXsum commands, directly
-> on the shipped/received files.
+> However, what we do need for now, is a config option that enabled
+> per-package directories (PPD, formerly known as PPS, per-package
+> staging). When that is turned off, we must not allow top-level
+> parallel build.
 > 
-> Introducing our own hash mechanism, how reliable or simple as it would
-> be, breaks this assumption, and the tool to actually check them is not
-> available at all except internally to Buildroot, so it is not possible
-> to reproduce the checks outside of Buildroot.
+> I was thinking that we would not need that option either, because we
+> would enable PPD when we detect that the user is doing top-level parllel
+> build, by inspecting $(MAKEFLAGS) to see if they contained -j.
 > 
-> This goes counter one of the initial goal of hashes, which is to be able
-> to track archives and their validity across a supply chain, inbound (as
-> sent by a provider to Buildroot, to do the build) or outbound (as received
-> by a recepient, from Buildroot, for compliance) alike.
+> However, make is our fiend here, because it does not include -j in the
+> MAKFLAGS variable, but the one that is exported:
+> 
+>     $ cat Makefile
+>     $(info var MAKEFLAGS='$(MAKEFLAGS)')
+>     all:
+>         @echo "env MAKEFLAGS='$${MAKEFLAGS}'"
+> 
+>     $ make -j1
+>     var MAKEFLAGS=''
+>     env MAKEFLAGS=''
+> 
+>     $ make -j3
+>     var MAKEFLAGS=''
+>     env MAKEFLAGS=' -j --jobserver-fds=3,4'
+> 
+>     $ make -j
+>     var MAKEFLAGS=''
+>     env MAKEFLAGS=' -j'
+> 
+> And there is no other variable in make that specifies that either...
+> 
+> So yes, this means we have no way from the Makefile to detect whether
+> we're parallel or not. Sigh. :-(
+> 
+> So we do need that option for PPD.
+> 
+> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>  
+> 
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-I understand this argument, but do you have some alternative solution ?
+Thanks for this research and the review. I think there is another
+reason to have an option, at least for the moment: I'm pretty sure a
+number of people not aware of top-level parallel build issues use
+Buildroot with "make -jN" today, as they have learned that using make
+-jN will "speed up their build" (I mean in general, not specifically
+for Buildroot).
 
-Even building our own host-tar and host-gzip doesn't solve entirely the
-problem, because it doesn't solve the case of tarballs fetched from
-github, that tend to change in subtle ways once in a while.
+If we were to use make -jN as the criteria to decide if PPD should be
+used or not, then suddenly all such users would start using PPD, which
+is still way too experimental to expose it without the user's explicit
+consent.
+
+My plan is rather the following:
+
+ (1) Have it under an explicit option for now.
+
+ (2) Once we consider it stable, drop the option entirely, and always
+     use PPD, even if the user doesn't use top-level parallel build.
+     There's a slight additional cost, but there's also a huge benefit
+     in terms of dependency checking/isolation.
+
+Note that we might stay on step (1) for a little while, I think it will
+take time to really make it fully usable.
 
 Best regards,
 
