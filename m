@@ -1,113 +1,87 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Fri, 16 Nov 2018 01:57:20 -0200
-Subject: [Buildroot] [next 00/15] a few more runtime test cases for python
- packages - series 2/n
-In-Reply-To: <20180926025514.2092-1-ricardo.martincoski@gmail.com>
-References: <20180926025514.2092-1-ricardo.martincoski@gmail.com>
-Message-ID: <20181116035735.31507-1-ricardo.martincoski@gmail.com>
+Date: Fri, 16 Nov 2018 01:57:22 -0200
+Subject: [Buildroot] [next 02/15] support/testing: add python-attrs tests
+In-Reply-To: <20181116035735.31507-1-ricardo.martincoski@gmail.com>
+References: <20181116035735.31507-1-ricardo.martincoski@gmail.com>
+Message-ID: <20181116035735.31507-3-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Use a minimal script to check the basic usage creating a class with 2
+attributes.
 
-One way to reduce the burden of manual tests and also detect broken runtime
-dependencies is to have more test cases (even simple ones) for python packages.
-Well... here are some.
-
-All runtime-tests on GitLab CI:
-https://gitlab.com/RicardoMartincoski/buildroot/pipelines/36800857
-
-Regards,
-Ricardo
-
-Ricardo Martincoski (15):
-  support/testing: add python-argh tests
-  support/testing: add python-attrs tests
-  support/testing: add python-automat tests
-  support/testing: add python-bitstring tests
-  support/testing: add python-cbor tests
-  support/testing: add python-click tests
-  support/testing: add python-constantly tests
-  support/testing: add python-passlib tests
-  support/testing: add python-pexpect tests
-  support/testing: add python-pynacl tests
-  support/testing: add python-pyyaml tests
-  support/testing: add python-service-identity tests
-  support/testing: add python-subprocess32 test
-  support/testing: add python-treq tests
-  support/testing: add python-ubjson tests
-
- .gitlab-ci.yml                                | 29 ++++++++++++
- .../tests/package/sample_python_argh.py       | 10 +++++
- .../tests/package/sample_python_attrs.py      | 15 +++++++
- .../tests/package/sample_python_automat.py    | 27 +++++++++++
- .../tests/package/sample_python_bitstring.py  |  6 +++
- .../tests/package/sample_python_cbor_dec.py   | 10 +++++
- .../tests/package/sample_python_cbor_enc.py   | 14 ++++++
- .../tests/package/sample_python_click.py      | 12 +++++
- .../tests/package/sample_python_constantly.py | 19 ++++++++
- .../tests/package/sample_python_passlib.py    |  5 +++
- .../tests/package/sample_python_pexpect.py    |  8 ++++
- .../tests/package/sample_python_pynacl.py     |  3 ++
- .../tests/package/sample_python_pyyaml_dec.py | 10 +++++
- .../tests/package/sample_python_pyyaml_enc.py | 14 ++++++
- .../package/sample_python_service_identity.py |  2 +
- .../package/sample_python_subprocess32.py     |  6 +++
- .../tests/package/sample_python_treq.py       | 16 +++++++
- .../tests/package/sample_python_ubjson_dec.py | 10 +++++
- .../tests/package/sample_python_ubjson_enc.py | 14 ++++++
- .../testing/tests/package/test_python_argh.py | 45 +++++++++++++++++++
- .../tests/package/test_python_attrs.py        | 21 +++++++++
- .../tests/package/test_python_automat.py      | 23 ++++++++++
- .../tests/package/test_python_bitstring.py    | 21 +++++++++
- .../testing/tests/package/test_python_cbor.py | 23 ++++++++++
- .../tests/package/test_python_click.py        | 44 ++++++++++++++++++
- .../tests/package/test_python_constantly.py   | 21 +++++++++
- .../tests/package/test_python_passlib.py      | 23 ++++++++++
- .../tests/package/test_python_pexpect.py      | 21 +++++++++
- .../tests/package/test_python_pynacl.py       | 27 +++++++++++
- .../tests/package/test_python_pyyaml.py       | 23 ++++++++++
- .../package/test_python_service_identity.py   | 23 ++++++++++
- .../tests/package/test_python_subprocess32.py | 11 +++++
- .../testing/tests/package/test_python_treq.py | 29 ++++++++++++
- .../tests/package/test_python_ubjson.py       | 23 ++++++++++
- 34 files changed, 608 insertions(+)
- create mode 100644 support/testing/tests/package/sample_python_argh.py
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+---
+ .gitlab-ci.yml                                |  2 ++
+ .../tests/package/sample_python_attrs.py      | 15 +++++++++++++
+ .../tests/package/test_python_attrs.py        | 21 +++++++++++++++++++
+ 3 files changed, 38 insertions(+)
  create mode 100644 support/testing/tests/package/sample_python_attrs.py
- create mode 100644 support/testing/tests/package/sample_python_automat.py
- create mode 100644 support/testing/tests/package/sample_python_bitstring.py
- create mode 100644 support/testing/tests/package/sample_python_cbor_dec.py
- create mode 100644 support/testing/tests/package/sample_python_cbor_enc.py
- create mode 100644 support/testing/tests/package/sample_python_click.py
- create mode 100644 support/testing/tests/package/sample_python_constantly.py
- create mode 100644 support/testing/tests/package/sample_python_passlib.py
- create mode 100644 support/testing/tests/package/sample_python_pexpect.py
- create mode 100644 support/testing/tests/package/sample_python_pynacl.py
- create mode 100644 support/testing/tests/package/sample_python_pyyaml_dec.py
- create mode 100644 support/testing/tests/package/sample_python_pyyaml_enc.py
- create mode 100644 support/testing/tests/package/sample_python_service_identity.py
- create mode 100644 support/testing/tests/package/sample_python_subprocess32.py
- create mode 100644 support/testing/tests/package/sample_python_treq.py
- create mode 100644 support/testing/tests/package/sample_python_ubjson_dec.py
- create mode 100644 support/testing/tests/package/sample_python_ubjson_enc.py
- create mode 100644 support/testing/tests/package/test_python_argh.py
  create mode 100644 support/testing/tests/package/test_python_attrs.py
- create mode 100644 support/testing/tests/package/test_python_automat.py
- create mode 100644 support/testing/tests/package/test_python_bitstring.py
- create mode 100644 support/testing/tests/package/test_python_cbor.py
- create mode 100644 support/testing/tests/package/test_python_click.py
- create mode 100644 support/testing/tests/package/test_python_constantly.py
- create mode 100644 support/testing/tests/package/test_python_passlib.py
- create mode 100644 support/testing/tests/package/test_python_pexpect.py
- create mode 100644 support/testing/tests/package/test_python_pynacl.py
- create mode 100644 support/testing/tests/package/test_python_pyyaml.py
- create mode 100644 support/testing/tests/package/test_python_service_identity.py
- create mode 100644 support/testing/tests/package/test_python_subprocess32.py
- create mode 100644 support/testing/tests/package/test_python_treq.py
- create mode 100644 support/testing/tests/package/test_python_ubjson.py
 
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 62f3768d3d..494894a782 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -318,6 +318,8 @@ tests.package.test_python.TestPython2: *runtime_test
+ tests.package.test_python.TestPython3: *runtime_test
+ tests.package.test_python_argh.TestPythonPy2Argh: *runtime_test
+ tests.package.test_python_argh.TestPythonPy3Argh: *runtime_test
++tests.package.test_python_attrs.TestPythonPy2Attrs: *runtime_test
++tests.package.test_python_attrs.TestPythonPy3Attrs: *runtime_test
+ tests.package.test_python_autobahn.TestPythonPy2Autobahn: *runtime_test
+ tests.package.test_python_autobahn.TestPythonPy3Autobahn: *runtime_test
+ tests.package.test_python_crossbar.TestPythonPy3Crossbar: *runtime_test
+diff --git a/support/testing/tests/package/sample_python_attrs.py b/support/testing/tests/package/sample_python_attrs.py
+new file mode 100644
+index 0000000000..f224944914
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_attrs.py
+@@ -0,0 +1,15 @@
++import attr
++
++
++ at attr.s
++class Obj(object):
++    x = attr.ib()
++    y = attr.ib(default=1)
++
++
++obj1 = Obj(2)
++assert(obj1.x == 2)
++assert(obj1.y == 1)
++obj2 = Obj(3, 4)
++assert(obj2.x == 3)
++assert(obj2.y == 4)
+diff --git a/support/testing/tests/package/test_python_attrs.py b/support/testing/tests/package/test_python_attrs.py
+new file mode 100644
+index 0000000000..9f597034ae
+--- /dev/null
++++ b/support/testing/tests/package/test_python_attrs.py
+@@ -0,0 +1,21 @@
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonPy2Attrs(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON=y
++        BR2_PACKAGE_PYTHON_ATTRS=y
++        """
++    sample_scripts = ["tests/package/sample_python_attrs.py"]
++
++
++class TestPythonPy3Attrs(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_ATTRS=y
++        """
++    sample_scripts = ["tests/package/sample_python_attrs.py"]
 -- 
 2.17.1
