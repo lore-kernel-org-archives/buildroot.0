@@ -1,194 +1,47 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 15 Nov 2018 19:21:27 -0600
-Subject: [Buildroot] [PATCH next v4 3/6] Makefile: rework main directory
- creation logic
-In-Reply-To: <20181114105557.12599-4-thomas.petazzoni@bootlin.com>
-References: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
- <20181114105557.12599-4-thomas.petazzoni@bootlin.com>
-Message-ID: <CANQCQpaBS+vSiDngcmfBEJ4GCCKEqt0hXR=4upA2A=++-n-Bpg@mail.gmail.com>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Fri, 16 Nov 2018 00:41:15 -0200
+Subject: [Buildroot] [PATCH next] libressl: bump to version 2.8.2
+Message-ID: <20181116024115.27628-1-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+See release notes since 2.7.4 at
 
-On 11/14/18, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> In the current code, the creation of the main output folders
-> (BUILD_DIR, STAGING_DIR, HOST_DIR, TARGET_DIR, etc.) is done by a
-> global "dirs" target. While this works fine in the current situation,
-> it doesn't work well in a context where per-package host and target
-> directories are used.
->
-> For example, with the current code and per-package host directories,
-> the output/staging symbolic link ends up being created as a link to
-> the per-package package sysroot directory of the first package being
-> built, instead of the global sysroot.
->
-> This commit reworks the creation of those directories by having the
-> package/pkg-generic.mk code ensure that the build directory, target
-> directory, host directory, staging directory and binaries directory
-> exist before they are needed.
->
-> Two new targets, host-finalize and staging-finalize are added in the
-> main Makefile to create the compatibility symlinks for host and
-> staging directories. They will be extended later with additional logic
-> for per-package directories.
->
-> Thanks to those changes, the global "dirs" target is entirely removed.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  Makefile               | 21 +++++++++------------
->  fs/common.mk           |  1 +
->  package/pkg-generic.mk |  7 ++++++-
->  3 files changed, 16 insertions(+), 13 deletions(-)
->
-> diff --git a/Makefile b/Makefile
-> index 2819d44124..e675ac26aa 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -572,10 +572,6 @@ $(foreach pkg,$(call UPPERCASE,$(PACKAGES)),\
->
->  endif
->
-> -.PHONY: dirs
-> -dirs: $(BUILD_DIR) $(STAGING_DIR) $(BASE_TARGET_DIR) \
-> -	$(HOST_DIR) $(HOST_DIR_SYMLINK) $(BINARIES_DIR)
-> -
->  $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
->  	$(MAKE1) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)"
-> HOSTCXX="$(HOSTCXX_NOCCACHE)" syncconfig
->
-> @@ -605,11 +601,6 @@ sdk: prepare-sdk $(BR2_TAR_HOST_DEPENDENCY)
->  		--transform='s#^\.#$(BR2_SDK_PREFIX)#' \
->  		-C $(HOST_DIR) "."
->
-> -# Populating the staging with the base directories is handled by the
-> skeleton package
-> -$(STAGING_DIR):
-> -	@mkdir -p $(STAGING_DIR)
-> -	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
-> -
+  https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-2.8.0-relnotes.txt
+  https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-2.8.1-relnotes.txt
+  https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-2.8.2-relnotes.txt
 
-With per package disabled, the staging directory never gets created
-early enough for packages to be able to reference content.
-Specifically I noticed docker couldn't find -lsystemd.  I'm assuming
-it's because of the new target dependency on target-post-image?
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+---
+ package/libressl/libressl.hash | 2 +-
+ package/libressl/libressl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
->  RSYNC_VCS_EXCLUSIONS = \
->  	--exclude .svn --exclude .git --exclude .hg --exclude .bzr \
->  	--exclude CVS
-> @@ -710,8 +701,14 @@ $(TARGETS_ROOTFS): target-finalize
->  # Avoid the rootfs name leaking down the dependency chain
->  target-finalize: ROOTFS=
->
-> +host-finalize: $(HOST_DIR_SYMLINK)
-> +
-> +.PHONY: staging-finalize
-> +staging-finalize:
-> +	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
-> +
->  .PHONY: target-finalize
-> -target-finalize: $(PACKAGES)
-> +target-finalize: $(PACKAGES) host-finalize
->  	@$(call MESSAGE,"Finalizing target directory")
->  	# Check files that are touched by more than one package
->  	./support/scripts/check-uniq-files -t target
-> $(BUILD_DIR)/packages-file-list.txt
-> @@ -782,7 +779,7 @@ endif
->  	touch $(TARGET_DIR)/usr
->
->  .PHONY: target-post-image
-> -target-post-image: $(TARGETS_ROOTFS) target-finalize
-> +target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize
->  	@rm -f $(ROOTFS_COMMON_TAR)
->  	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
->  		$(call MESSAGE,"Executing post-image script $(s)"); \
-> @@ -811,7 +808,7 @@ legal-info-prepare: $(LEGAL_INFO_DIR)
->  	@cp $(BR2_CONFIG) $(LEGAL_INFO_DIR)/buildroot.config
->
->  .PHONY: legal-info
-> -legal-info: dirs legal-info-clean legal-info-prepare $(foreach
-> p,$(PACKAGES),$(p)-all-legal-info) \
-> +legal-info: legal-info-clean legal-info-prepare $(foreach
-> p,$(PACKAGES),$(p)-all-legal-info) \
->  		$(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST)
->  	@cat support/legal-info/README.header >>$(LEGAL_REPORT)
->  	@if [ -r $(LEGAL_WARNINGS) ]; then \
-> diff --git a/fs/common.mk b/fs/common.mk
-> index 2a5a202a89..96658428ba 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -145,6 +145,7 @@ $$(BINARIES_DIR)/rootfs.$(1): ROOTFS=$(2)
->  $$(BINARIES_DIR)/rootfs.$(1): FAKEROOT_SCRIPT=$$(ROOTFS_$(2)_DIR)/fakeroot
->  $$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
->  	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
-> +	mkdir -p $$(@D)
->  	rm -rf $$(ROOTFS_$(2)_DIR)
->  	mkdir -p $$(ROOTFS_$(2)_DIR)
->  	echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index f34f46afc8..309fd8cd48 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -173,6 +173,7 @@ $(BUILD_DIR)/%/.stamp_extracted:
->  $(BUILD_DIR)/%/.stamp_rsynced:
->  	@$(call step_start,rsync)
->  	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
-> +	@mkdir -p $(@D)
->  	$(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
->  	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
->  	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS)
-> $($(PKG)_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
-> @@ -238,6 +239,7 @@ $(BUILD_DIR)/%/.stamp_built::
->  $(BUILD_DIR)/%/.stamp_host_installed:
->  	@$(call step_start,install-host)
->  	@$(call MESSAGE,"Installing to host directory")
-> +	@mkdir -p $(HOST_DIR)
->  	$(foreach hook,$($(PKG)_PRE_INSTALL_HOOKS),$(call $(hook))$(sep))
->  	+$($(PKG)_INSTALL_CMDS)
->  	$(foreach hook,$($(PKG)_POST_INSTALL_HOOKS),$(call $(hook))$(sep))
-> @@ -267,6 +269,7 @@ $(BUILD_DIR)/%/.stamp_host_installed:
->  $(BUILD_DIR)/%/.stamp_staging_installed:
->  	@$(call step_start,install-staging)
->  	@$(call MESSAGE,"Installing to staging directory")
-> +	@mkdir -p $(STAGING_DIR)
->  	$(foreach hook,$($(PKG)_PRE_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
->  	+$($(PKG)_INSTALL_STAGING_CMDS)
->  	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call
-> $(hook))$(sep))
-> @@ -298,6 +301,7 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
->  # Install to images dir
->  $(BUILD_DIR)/%/.stamp_images_installed:
->  	@$(call step_start,install-image)
-> +	@mkdir -p $(BINARIES_DIR)
->  	$(foreach hook,$($(PKG)_PRE_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
->  	@$(call MESSAGE,"Installing to images directory")
->  	+$($(PKG)_INSTALL_IMAGES_CMDS)
-> @@ -309,6 +313,7 @@ $(BUILD_DIR)/%/.stamp_images_installed:
->  $(BUILD_DIR)/%/.stamp_target_installed:
->  	@$(call step_start,install-target)
->  	@$(call MESSAGE,"Installing to target")
-> +	@mkdir -p $(TARGET_DIR)
->  	$(foreach hook,$($(PKG)_PRE_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
->  	+$($(PKG)_INSTALL_TARGET_CMDS)
->  	$(if $(BR2_INIT_SYSTEMD),\
-> @@ -735,7 +740,7 @@ $$($(2)_TARGET_BUILD):	$$($(2)_TARGET_CONFIGURE)
->  $(1)-configure:			$$($(2)_TARGET_CONFIGURE)
->  $$($(2)_TARGET_CONFIGURE):	| $$($(2)_FINAL_DEPENDENCIES)
->
-> -$$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dirs prepare
-> +$$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | prepare
->  $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dependencies
->
->  ifeq ($$($(2)_OVERRIDE_SRCDIR),)
-> --
-> 2.19.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
+index 111fe4feed..b0d1928e10 100644
+--- a/package/libressl/libressl.hash
++++ b/package/libressl/libressl.hash
+@@ -1,4 +1,4 @@
+ # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
+-sha256 1e3a9fada06c1c060011470ad0ff960de28f9a0515277d7336f7e09362517da6  libressl-2.7.4.tar.gz
++sha256 b8cb31e59f1294557bfc80f2a662969bc064e83006ceef0574e2553a1c254fd5  libressl-2.8.2.tar.gz
+ # Locally computed
+ sha256 5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+index 35494c8239..f035f9044e 100644
+--- a/package/libressl/libressl.mk
++++ b/package/libressl/libressl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBRESSL_VERSION = 2.7.4
++LIBRESSL_VERSION = 2.8.2
+ LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
+ LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
+ LIBRESSL_LICENSE_FILES = COPYING
+-- 
+2.19.1
