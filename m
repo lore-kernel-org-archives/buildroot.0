@@ -1,60 +1,92 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 16 Nov 2018 14:53:00 +0100
-Subject: [Buildroot] [PATCH next] package/pkg-luarocks: use
- <pkg>_EXTRACT_DEPENDENCIES
-Message-ID: <20181116135300.27234-1-thomas.petazzoni@bootlin.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 16 Nov 2018 15:05:15 +0100
+Subject: [Buildroot] [PATCH 1/3] package/xen: tools/libxc fix strncpy
+ size
+In-Reply-To: <1542303868-39761-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1542303868-39761-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <b9b7ae47-7166-514f-58ec-5e0aef529eb9@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The host luarocks tool is needed when *extracting* luarocks
-packages. Since regular dependencies are only available at the
-configure step, it caused the "luarocks" program to be available too
-late to be used to extract luarocks packages.
+ Hi Matt,
 
-To work around this, host-luarocks was manually added as a dependency
-of the extract step of luarocks packages. While this worked fine until
-now, it breaks badly with per-package folders, because host-luarocks
-is not recorded as an extract dependency of luarocks packages, and
-therefore is not copied to the per-package host folder, causing a
-failure.
+On 15/11/2018 18:44, Matt Weber wrote:
+> gcc-8 errs on possible truncation of trailing '\0'
+> 
+> Resolves:
+> http://autobuild.buildroot.net/results/6e0d8e962e861a32f5bf2e5031ef51c25768f1f6/
+> 
+> Upstream Commit:
+> https://xenbits.xen.org/gitweb/?p=xen.git;a=commit;h=fa7789ef18bd2e716997937af71b2e4b5b00a159
+> 
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> ---
+>  .../xen/0003-tools-libxc-fix-strncpy-size.patch    | 47 ++++++++++++++++++++++
+>  1 file changed, 47 insertions(+)
+>  create mode 100644 package/xen/0003-tools-libxc-fix-strncpy-size.patch
+> 
+> diff --git a/package/xen/0003-tools-libxc-fix-strncpy-size.patch b/package/xen/0003-tools-libxc-fix-strncpy-size.patch
+> new file mode 100644
+> index 0000000..19f4711
+> --- /dev/null
+> +++ b/package/xen/0003-tools-libxc-fix-strncpy-size.patch
+> @@ -0,0 +1,47 @@
+> +From fa7789ef18bd2e716997937af71b2e4b5b00a159 Mon Sep 17 00:00:00 2001
+> +From: =?utf8?q?Marek=20Marczykowski-G=C3=B3recki?=
+> + <marmarek@invisiblethingslab.com>
+> +Date: Thu, 5 Apr 2018 03:50:49 +0200
+> +Subject: [PATCH] tools/libxc: fix strncpy size
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=utf8
+> +Content-Transfer-Encoding: 8bit
+> +
+> +gcc-8 warns about possible truncation of trailing '\0'.
+> +Final character is overridden by '\0' anyway, so don't bother to copy
+> +it.
+> +
+> +This fixes compile failure:
+> +
+> +    xc_pm.c: In function 'xc_set_cpufreq_gov':
+> +    xc_pm.c:308:5: error: 'strncpy' specified bound 16 equals destination size [-Werror=stringop-truncation]
+> +         strncpy(scaling_governor, govname, CPUFREQ_NAME_LEN);
+> +         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +    cc1: all warnings being treated as errors
+> +
+> +Signed-off-by: Marek Marczykowski-G??recki <marmarek@invisiblethingslab.com>
+> +Acked-by: Wei Liu <wei.liu2@citrix.com>
+> +Release-Acked-by: Juergen Gross <jgross@suse.com>
+> +
+> +Upstream:
+> +https://xenbits.xen.org/gitweb/?p=xen.git;a=commit;h=fa7789ef18bd2e716997937af71b2e4b5b00a159
 
-In the mean time, the <pkg>_EXTRACT_DEPENDENCIES mechanism was added,
-which aims at fixing exactly this problem, so let's use it and
-simplify pkg-luarocks.mk.
+ You SoB is missing in this and the following patches. It's easier if you rebase
+the patches on a git clone and re-generate them with git-format-patch, because
+git-am will add the SoB for you.
 
-Cc: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/pkg-luarocks.mk | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ Regards,
+ Arnout
 
-diff --git a/package/pkg-luarocks.mk b/package/pkg-luarocks.mk
-index e2b48cfb4c..29c5e66cd1 100644
---- a/package/pkg-luarocks.mk
-+++ b/package/pkg-luarocks.mk
-@@ -42,7 +42,8 @@ $(2)_SITE		?= $$(call qstrip,$$(BR2_LUAROCKS_MIRROR))
- 
- # Since we do not support host-luarocks-package, we know this is
- # a target package, and can just add the required dependencies
--$(2)_DEPENDENCIES	+= host-luarocks luainterpreter
-+$(2)_DEPENDENCIES	+= luainterpreter
-+$(2)_EXTRACT_DEPENDENCIES += host-luarocks
- 
- #
- # Extract step. Extract into a temporary dir and move the relevant part to the
-@@ -71,10 +72,6 @@ endif
- # make targets
- $(call inner-generic-package,$(1),$(2),$(3),$(4))
- 
--# $(2)_DEPENDENCIES are handled for configure step (too late)
--# but host-luarocks is required to do the extract
--$$($(2)_TARGET_EXTRACT): | host-luarocks
--
- endef
- 
- ################################################################################
--- 
-2.19.1
+> +
+> +---
+> + tools/libxc/xc_pm.c | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/tools/libxc/xc_pm.c b/tools/libxc/xc_pm.c
+> +index 67e2418e3f..6f8d548e44 100644
+> +--- a/tools/libxc/xc_pm.c
+> ++++ b/tools/libxc/xc_pm.c
+> +@@ -305,7 +305,7 @@ int xc_set_cpufreq_gov(xc_interface *xch, int cpuid, char *govname)
+> +     sysctl.cmd = XEN_SYSCTL_pm_op;
+> +     sysctl.u.pm_op.cmd = SET_CPUFREQ_GOV;
+> +     sysctl.u.pm_op.cpuid = cpuid;
+> +-    strncpy(scaling_governor, govname, CPUFREQ_NAME_LEN);
+> ++    strncpy(scaling_governor, govname, CPUFREQ_NAME_LEN - 1);
+> +     scaling_governor[CPUFREQ_NAME_LEN - 1] = '\0';
+> + 
+> +     return xc_sysctl(xch, &sysctl);
+> +-- 
+> +2.11.0
+> 
