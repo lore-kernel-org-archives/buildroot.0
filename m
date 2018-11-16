@@ -1,131 +1,115 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 16 Nov 2018 10:27:53 -0600
-Subject: [Buildroot] [PATCH v2 1/1] vmtouch: new package
-In-Reply-To: <20181116155253.4233-1-brandon.maier@rockwellcollins.com>
-References: <20181115174250.109988-1-brandon.maier@rockwellcollins.com>
- <20181116155253.4233-1-brandon.maier@rockwellcollins.com>
-Message-ID: <CANQCQpb12Xbj5k4wGepxcZVug1Hdzx_fNNkPjDQxnRzpgjZ6Fg@mail.gmail.com>
+From: Joel Carlson <JoelsonCarl@gmail.com>
+Date: Fri, 16 Nov 2018 09:35:09 -0700
+Subject: [Buildroot] [PATCH 1/1] busybox: add patch to fix seg fault in
+ 'ifup -a'
+In-Reply-To: <1989059802.1429665.1541889047561.JavaMail.zimbra@datacom.com.br>
+References: <20181110193319.1273-1-daniel.m@sent.com>
+ <1989059802.1429665.1541889047561.JavaMail.zimbra@datacom.com.br>
+Message-ID: <CA+1k=2b2EPjS_JBF__mVhgaLcJc22P=nCp-BSzo2hdLPwzp0Eg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Nov 16, 2018 at 9:53 AM Brandon Maier
-<brandon.maier@rockwellcollins.com> wrote:
+On Sat, Nov 10, 2018 at 3:30 PM Carlos Santos <casantos@datacom.com.br> wrote:
 >
-> Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
+> > From: "Daniel Mentz" <daniel.m@sent.com>
+> > To: "buildroot" <buildroot@buildroot.org>
+> > Cc: "ratbert90" <aduskett@gmail.com>, "DATACOM" <casantos@datacom.com.br>, "Daniel Mentz" <daniel.m@sent.com>
+> > Sent: S?bado, 10 de novembro de 2018 17:33:19
+> > Subject: [PATCH 1/1] busybox: add patch to fix seg fault in 'ifup -a'
 >
+> > Building busybox for arm64 generates the following warning message:
+> >
+> > libbb/get_line_from_file.c: In function ?xmalloc_fgets?:
+> > libbb/get_line_from_file.c:52:38: warning: passing argument 2 of
+> > ?bb_get_chunk_from_file? from incompatible pointer type
+> > [-Wincompatible-pointer-types]
+> >  return bb_get_chunk_from_file(file, &i);
+> >                                      ^
+> > libbb/get_line_from_file.c:13:17: note: expected ?size_t * {aka long unsigned
+> > int *}? but argument is of type ?int *?
+> > char* FAST_FUNC bb_get_chunk_from_file(FILE *file, size_t *end)
+> >                 ^~~~~~~~~~~~~~~~~~~~~~
+> >
+> > As it turned out, this is a real bug that leads to stack corruption.
+> > The following command crashed on my device due to a NULL pointer being
+> > derefenced. That pointer turned out to be a victim of the stack
+> > corruption.
+> >
+> > /sbin/ifup -a
+> >
+> > The affected pointer was liface in ifupdown_main(). The crash occured on
+> > the following line:
+> >
+> > if (strcmp(liface, currif->iface) == 0) {
+> >
+> > liface should have pointed to "eth0" but got corrupted.
+> >
+> > Signed-off-by: Daniel Mentz <daniel.m@sent.com>
+> > ---
+> > ..._fgets-use-size_t-for-bb_get_chunk_f.patch | 27 +++++++++++++++++++
+> > 1 file changed, 27 insertions(+)
+> > create mode 100644
+> > package/busybox/0004-libbb-in-xmalloc_fgets-use-size_t-for-bb_get_chunk_f.patch
+> >
+> > diff --git
+> > a/package/busybox/0004-libbb-in-xmalloc_fgets-use-size_t-for-bb_get_chunk_f.patch
+> > b/package/busybox/0004-libbb-in-xmalloc_fgets-use-size_t-for-bb_get_chunk_f.patch
+> > new file mode 100644
+> > index 0000000000..62e7cf6c3d
+> > --- /dev/null
+> > +++
+> > b/package/busybox/0004-libbb-in-xmalloc_fgets-use-size_t-for-bb_get_chunk_f.patch
+> > @@ -0,0 +1,27 @@
+> > +From 22a99516206b33b7ae124d426319bab03d5c8309 Mon Sep 17 00:00:00 2001
+> > +From: Denys Vlasenko <vda.linux@googlemail.com>
+> > +Date: Sun, 2 Sep 2018 18:48:09 +0200
+> > +Subject: [PATCH] libbb: in xmalloc_fgets(), use size_t for
+> > + bb_get_chunk_from_file()
+> > +
+> > +Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
+> > +---
+> > + libbb/get_line_from_file.c | 2 +-
+> > + 1 file changed, 1 insertion(+), 1 deletion(-)
+> > +
+> > +diff --git a/libbb/get_line_from_file.c b/libbb/get_line_from_file.c
+> > +index 49ef093c2..903ff1fb6 100644
+> > +--- a/libbb/get_line_from_file.c
+> > ++++ b/libbb/get_line_from_file.c
+> > +@@ -47,7 +47,7 @@ char* FAST_FUNC bb_get_chunk_from_file(FILE *file, size_t
+> > *end)
+> > + /* Get line, including trailing \n if any */
+> > + char* FAST_FUNC xmalloc_fgets(FILE *file)
+> > + {
+> > +-    int i;
+> > ++    size_t i;
+> > +
+> > +     return bb_get_chunk_from_file(file, &i);
+> > + }
+> > +--
+> > +2.17.1
+> > +
+> > --
+> > 2.17.1
+>
+> Busybox 1.29.3, which is on Buildroot master since commit 77497f5497,
+> aleady has this fix:
+>
+> Applying 0004-libbb-in-xmalloc_fgets-use-size_t-for-bb_get_chunk_f.patch using patch:
+> patching file libbb/get_line_from_file.c
+> Reversed (or previously applied) patch detected!  Skipping patch.
+>
+> What Busybox version are you using? Perhaps your patch could be
+> applied on the LTS branches but I think we should just bump it
+> to 1.29.3 on those branches too.
+>
+> Peter?
 
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
-
-> ---
-> Changes v1 -> v2:
->   - Switch to v1.3.1 and drop patches
->   - Add myself to DEVELOPERS
-> ---
->  DEVELOPERS                   |  3 +++
->  package/Config.in            |  1 +
->  package/vmtouch/Config.in    | 11 +++++++++++
->  package/vmtouch/vmtouch.hash |  5 +++++
->  package/vmtouch/vmtouch.mk   | 21 +++++++++++++++++++++
->  5 files changed, 41 insertions(+)
->  create mode 100644 package/vmtouch/Config.in
->  create mode 100644 package/vmtouch/vmtouch.hash
->  create mode 100644 package/vmtouch/vmtouch.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 53467da489..3d0b9b270c 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -403,6 +403,9 @@ N:  Bogdan Radulescu <bogdan@nimblex.net>
->  F:     package/iftop/
->  F:     package/ncdu/
->
-> +N:     Brandon Maier <brandon.maier@rockwellcollins.com>
-> +F:     package/vmtouch/
-> +
->  N:     Brock Williams <brock@cottonwoodcomputer.com>
->  F:     package/pdmenu/
->
-> diff --git a/package/Config.in b/package/Config.in
-> index b60e7700ad..5d92fa5911 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -131,6 +131,7 @@ menu "Debugging, profiling and benchmark"
->         source "package/trinity/Config.in"
->         source "package/uclibc-ng-test/Config.in"
->         source "package/valgrind/Config.in"
-> +       source "package/vmtouch/Config.in"
->         source "package/whetstone/Config.in"
->  endmenu
->
-> diff --git a/package/vmtouch/Config.in b/package/vmtouch/Config.in
-> new file mode 100644
-> index 0000000000..daae03aa32
-> --- /dev/null
-> +++ b/package/vmtouch/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_VMTOUCH
-> +       bool "vmtouch"
-> +       depends on BR2_USE_MMU # fork()
-> +       help
-> +         vmtouch is a tool for learning about and controlling
-> +         the file system cache of unix and unix-like systems. It
-> +         can discover which files the OS is caching, tell the OS
-> +         to cache or evict some files or regions of files, lock
-> +         files into memory so the OS won't evict them, and more.
-> +
-> +         https://hoytech.com/vmtouch/
-> diff --git a/package/vmtouch/vmtouch.hash b/package/vmtouch/vmtouch.hash
-> new file mode 100644
-> index 0000000000..2b98891d1c
-> --- /dev/null
-> +++ b/package/vmtouch/vmtouch.hash
-> @@ -0,0 +1,5 @@
-> +# Locally computed
-> +sha256 d57b7b3ae1146c4516429ab7d6db6f2122401db814ddd9cdaad10980e9c8428c  vmtouch-v1.3.1.tar.gz
-> +
-> +# Hash for license files:
-> +sha256 13258709ed29c17394e0a3ba8c8b9360af35b85231db514f11a0ba385cecd08e  LICENSE
-> diff --git a/package/vmtouch/vmtouch.mk b/package/vmtouch/vmtouch.mk
-> new file mode 100644
-> index 0000000000..856835acd4
-> --- /dev/null
-> +++ b/package/vmtouch/vmtouch.mk
-> @@ -0,0 +1,21 @@
-> +################################################################################
-> +#
-> +# vmtouch
-> +#
-> +################################################################################
-> +
-> +VMTOUCH_VERSION = v1.3.1
-> +VMTOUCH_SITE = $(call github,hoytech,vmtouch,$(VMTOUCH_VERSION))
-> +VMTOUCH_LICENSE = BSD-3-Clause
-> +VMTOUCH_LICENSE_FILES = LICENSE
-> +
-> +define VMTOUCH_BUILD_CMDS
-> +       $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-> +endef
-> +
-> +define VMTOUCH_INSTALL_TARGET_CMDS
-> +       $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) install \
-> +               DESTDIR=$(TARGET_DIR) PREFIX=/usr
-> +endef
-> +
-> +$(eval $(generic-package))
-> --
-> 2.19.0
->
-
-
--- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / RC Linux Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+I'm not Peter (obviously), but I'd recommend bumping the buildroot
+version on any LTS branches still using busybox 1.29.2.  I have a
+branch off of 2018.08, and I was hitting the same segfault issue until
+I cherry-picked the commit from master that bumps busybox to 1.29.3.
+The only change between 1.29.2 and 1.29.3 was the commit to fix this
+issue.
