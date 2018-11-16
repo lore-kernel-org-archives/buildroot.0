@@ -1,23 +1,26 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 16 Nov 2018 10:57:41 -0600
-Subject: [Buildroot] [PATCH v2 3/3] package/xen: tools/xenpmd: fix possible
- truncation
+Date: Fri, 16 Nov 2018 10:57:40 -0600
+Subject: [Buildroot] [PATCH v2 2/3] package/xen: libxl/arm: Fix build on
+ arm64
 In-Reply-To: <1542387461-26373-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1542387461-26373-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1542387461-26373-3-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1542387461-26373-2-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gcc-8 complains:
-    xenpmd.c:207:9: error: 'strncpy' specified bound 32 equals destination size [-Werror=stringop-truncation]
-             strncpy(info->oem_info, attrib_value, 32);
-             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Add zero-padding to #defined ACPI table strings that are copied.
+Provides sufficient characters to satisfy the length required to
+fully populate the destination and prevent array-bounds warnings.
+Add BUILD_BUG_ON sizeof checks for compile-time length checking.
 
-Upstream:
-https://xenbits.xen.org/gitweb/?p=xen.git;a=commit;h=938c8f53b1f80175c6f7a1399efdb984abb0cb8b
+Origin:
+http://git.yoctoproject.org/cgit/cgit.cgi/meta-virtualization/plain/recipes-extended/xen/files/xen-4.11-arm-acpi-fix-string-lengths.patch
+
+Upstream post:
+https://lists.xenproject.org/archives/html/xen-devel/2018-11/msg01726.html
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 --
@@ -28,91 +31,85 @@ v1 -> v2
  - Re-generated patch on upstream clone of 4.10.2 and included SOF
 
 ---
- package/xen/0004-tools-xenpmd-truncation.patch | 78 ++++++++++++++++++++++++++
- 1 file changed, 78 insertions(+)
- create mode 100644 package/xen/0004-tools-xenpmd-truncation.patch
+ package/xen/0005-arm-acpi-fix-string-lengths.patch | 72 ++++++++++++++++++++++
+ 1 file changed, 72 insertions(+)
+ create mode 100644 package/xen/0005-arm-acpi-fix-string-lengths.patch
 
-diff --git a/package/xen/0004-tools-xenpmd-truncation.patch b/package/xen/0004-tools-xenpmd-truncation.patch
+diff --git a/package/xen/0005-arm-acpi-fix-string-lengths.patch b/package/xen/0005-arm-acpi-fix-string-lengths.patch
 new file mode 100644
-index 0000000..65f7fe3
+index 0000000..6a1e0a8
 --- /dev/null
-+++ b/package/xen/0004-tools-xenpmd-truncation.patch
-@@ -0,0 +1,78 @@
-+From be44f7c25c81237243ac5f834b1687d88379a253 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?=
-+ <marmarek@invisiblethingslab.com>
-+Date: Thu, 5 Apr 2018 03:50:53 +0200
-+Subject: [PATCH] tools/xenpmd: fix possible '\0' truncation
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++++ b/package/xen/0005-arm-acpi-fix-string-lengths.patch
+@@ -0,0 +1,72 @@
++From 09fd70da9418bb94e7f13a817e99a5a66ec117eb Mon Sep 17 00:00:00 2001
++From: Christopher Clark <christopher.w.clark@gmail.com>
++Date: Thu, 16 Aug 2018 13:04:52 -0700
++Subject: [PATCH] libxl/arm: Fix build on arm64 + acpi w/ gcc 8.2
 +
-+gcc-8 complains:
-+    xenpmd.c:207:9: error: 'strncpy' specified bound 32 equals destination size [-Werror=stringop-truncation]
-+             strncpy(info->oem_info, attrib_value, 32);
-+             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+    xenpmd.c:201:9: error: 'strncpy' specified bound 32 equals destination size [-Werror=stringop-truncation]
-+             strncpy(info->battery_type, attrib_value, 32);
-+             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+    xenpmd.c:195:9: error: 'strncpy' specified bound 32 equals destination size [-Werror=stringop-truncation]
-+             strncpy(info->serial_number, attrib_value, 32);
-+             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+    xenpmd.c:189:9: error: 'strncpy' specified bound 32 equals destination size [-Werror=stringop-truncation]
-+             strncpy(info->model_number, attrib_value, 32);
-+             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++[modified for Xen 4.11 to add required: #include <xen-tools/libs.h>]
 +
-+Copy 31 chars, then make sure terminating '\0' is present. Those fields
-+are passed to strlen and as '%s' for snprintf later.
++Add zero-padding to #defined ACPI table strings that are copied.
++Provides sufficient characters to satisfy the length required to
++fully populate the destination and prevent array-bounds warnings.
++Add BUILD_BUG_ON sizeof checks for compile-time length checking.
 +
-+Upstream:
-+https://xenbits.xen.org/gitweb/?p=xen.git;a=commit;h=938c8f53b1f80175c6f7a1399efdb984abb0cb8b
++Origin:
++http://git.yoctoproject.org/cgit/cgit.cgi/meta-virtualization/plain/recipes-extended/xen/files/xen-4.11-arm-acpi-fix-string-lengths.patch
 +
-+Signed-off-by: Marek Marczykowski-G?recki <marmarek@invisiblethingslab.com>
++Signed-off-by: Christopher Clark <christopher.clark6@baesystems.com>
++Reviewed-by: Stefano Stabellini <sstabellini@kernel.org>
 +Acked-by: Wei Liu <wei.liu2@citrix.com>
-+Release-Acked-by: Juergen Gross <jgross@suse.com>
 +Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 +---
-+ tools/xenpmd/xenpmd.c | 12 ++++++++----
-+ 1 file changed, 8 insertions(+), 4 deletions(-)
++ tools/libxl/libxl_arm_acpi.c | 11 ++++++++---
++ 1 file changed, 8 insertions(+), 3 deletions(-)
 +
-+diff --git a/tools/xenpmd/xenpmd.c b/tools/xenpmd/xenpmd.c
-+index 689c8fd..56412a9 100644
-+--- a/tools/xenpmd/xenpmd.c
-++++ b/tools/xenpmd/xenpmd.c
-+@@ -186,25 +186,29 @@ void set_attribute_battery_info(char *attrib_name,
++diff --git a/tools/libxl/libxl_arm_acpi.c b/tools/libxl/libxl_arm_acpi.c
++index 636f724..8924396 100644
++--- a/tools/libxl/libxl_arm_acpi.c
+++++ b/tools/libxl/libxl_arm_acpi.c
++@@ -29,6 +29,7 @@ typedef int64_t s64;
 + 
-+     if ( strstr(attrib_name, "model number") ) 
-+     {
-+-        strncpy(info->model_number, attrib_value, 32);
-++        strncpy(info->model_number, attrib_value, 31);
-++        info->model_number[31] = '\0';
-+         return;
-+     }
++ #include <acpi/acconfig.h>
++ #include <acpi/actbl.h>
+++#include <xen-tools/libs.h>
 + 
-+     if ( strstr(attrib_name, "serial number") ) 
-+     {
-+-        strncpy(info->serial_number, attrib_value, 32);
-++        strncpy(info->serial_number, attrib_value, 31);
-++        info->serial_number[31] = '\0';
-+         return;
-+     }
++ #ifndef BITS_PER_LONG
++ #ifdef _LP64
++@@ -48,9 +49,9 @@ extern const unsigned char dsdt_anycpu_arm[];
++ _hidden
++ extern const int dsdt_anycpu_arm_len;
 + 
-+     if ( strstr(attrib_name, "battery type") ) 
-+     {
-+-        strncpy(info->battery_type, attrib_value, 32);
-++        strncpy(info->battery_type, attrib_value, 31);
-++        info->battery_type[31] = '\0';
-+         return;
-+     }
++-#define ACPI_OEM_ID "Xen"
++-#define ACPI_OEM_TABLE_ID "ARM"
++-#define ACPI_ASL_COMPILER_ID "XL"
+++#define ACPI_OEM_ID "Xen\0\0"
+++#define ACPI_OEM_TABLE_ID "ARM\0\0\0\0"
+++#define ACPI_ASL_COMPILER_ID "XL\0"
 + 
-+     if ( strstr(attrib_name, "OEM info") ) 
-+     {
-+-        strncpy(info->oem_info, attrib_value, 32);
-++        strncpy(info->oem_info, attrib_value, 31);
-++        info->oem_info[31] = '\0';
-+         return;
-+     }
++ enum {
++     RSDP,
++@@ -190,6 +191,7 @@ static void make_acpi_rsdp(libxl__gc *gc, struct xc_dom_image *dom,
++     struct acpi_table_rsdp *rsdp = (void *)dom->acpi_modules[0].data + offset;
 + 
++     memcpy(rsdp->signature, "RSD PTR ", sizeof(rsdp->signature));
+++    BUILD_BUG_ON(sizeof(ACPI_OEM_ID) != sizeof(rsdp->oem_id));
++     memcpy(rsdp->oem_id, ACPI_OEM_ID, sizeof(rsdp->oem_id));
++     rsdp->length = acpitables[RSDP].size;
++     rsdp->revision = 0x02;
++@@ -205,9 +207,12 @@ static void make_acpi_header(struct acpi_table_header *h, const char *sig,
++     memcpy(h->signature, sig, 4);
++     h->length = len;
++     h->revision = rev;
+++    BUILD_BUG_ON(sizeof(ACPI_OEM_ID) != sizeof(h->oem_id));
++     memcpy(h->oem_id, ACPI_OEM_ID, sizeof(h->oem_id));
+++    BUILD_BUG_ON(sizeof(ACPI_OEM_TABLE_ID) != sizeof(h->oem_table_id));
++     memcpy(h->oem_table_id, ACPI_OEM_TABLE_ID, sizeof(h->oem_table_id));
++     h->oem_revision = 0;
+++    BUILD_BUG_ON(sizeof(ACPI_ASL_COMPILER_ID) != sizeof(h->asl_compiler_id));
++     memcpy(h->asl_compiler_id, ACPI_ASL_COMPILER_ID,
++            sizeof(h->asl_compiler_id));
++     h->asl_compiler_revision = 0;
 +-- 
 +1.9.1
 +
