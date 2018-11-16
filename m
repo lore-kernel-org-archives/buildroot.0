@@ -1,91 +1,87 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 16 Nov 2018 16:22:45 +0100
-Subject: [Buildroot] [PATCH next v4 6/6] core: implement per-package SDK
- and target
-In-Reply-To: <20181116144735.19585727@windsurf>
-References: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
- <20181114105557.12599-7-thomas.petazzoni@bootlin.com>
- <de9da9af-71f4-cfe2-f691-5aae17e3ca0a@andin.de>
- <20181116144735.19585727@windsurf>
-Message-ID: <CAAXf6LWM0dcCJSVTSerox320PWKkpPcOXORF2cTaWfHitgRguQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 16 Nov 2018 16:27:19 +0100
+Subject: [Buildroot] [PATCH] support/dependencies: add a check for a
+ suitable gzip
+Message-ID: <20181116152719.24591-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Nov 16, 2018, 14:47 Thomas Petazzoni <thomas.petazzoni@bootlin.com
-wrote:
+Recently, some hash mismatch have been reported, both by users as well
+as autobuilder failures, about tarballs generated from git repositories.
 
-> Hello,
->
-> Yann was already in Cc, I've added Thomas De Schampheleire as well.
-> Yann, Thomas, there is some kconfig related discussion below, we
-> need you :-)
->
-> On Thu, 15 Nov 2018 17:41:35 +0100, Andreas Naumann wrote:
->
-> > This is much clearer to me than v3, however there is a problem with
-> > kconfig packages. Unfortunately, the kconfig infrastructure is running
-> > the 'make xxx_defconfig' step before the configure-step is "officially"
-> > started. This is due to the kconfig_fixup target being a dependency of
-> > -configure. This in turn requires availability of the toolchain and
-> > other prerequisites that are part of _FINAL_DEPENDENCIES earlier as
-> > prepared in your above patch.
-> >
-> > I made a patch which moves the _FINAL_DEPENDENCIES preparation to an
-> > additional .stamp-configure-prepare step just before .stamp_configured.
-> > That works but is not particularly beautiful.
->
-> That is not too bad actually. Semantically speaking, preparing the
-> per-package folders is not really part of the configuration step. It
-> could be logical to do it in a "prepare" step.
->
-> The only thing that I dislike a bit with this is that it would no
-> longer be consistent with what we do for download and extract
-> dependencies: we prepare the per-package folders with download and
-> extract dependencies respectively in the download and extract steps. So
-> it would be quite logical to also do the same for the "configuration
-> dependencies" (which we name just "dependencies" in Buildroot).
->
-> So, this leaves us with 3 options:
->
->  - Keep the dependency preparation within the download, extract and
->    configure step, as proposed in this v4. This will require changing
->    the kconfig logic to prepare the configuration file inside the
->    "configure" step and not as a additional step injected before the
->    "configure" step.
->
->  - Keep the dependency preparation within the download and extract
->    steps, and make an exception for the configure step, with a separate
->    "prepare" step that comes before. Not nice in terms of consistency,
->    as explained above.
->
->  - Introduce "prepare download", "prepare extract" and "prepare
->    configure" steps that would do the dependency preparation.
->
-> > I guess a more proper solution would be to somehow move the
-> > kconfig_fixup code into the configure-step. Maybe use the
-> > pre-configure-hook, any suggestions?
->
-> I don't recall why they need to be done before the configuration step,
-> but I'm pretty sure there is a reason for that.
->
-> Yann, Thomas, do you remember ?
->
+This turned out to be caused by users having the 'gzip' command somehow
+aliased to 'pigz' (which stand for: parallel implementation of gzip,
+which takes advantage of multi-processor system to parallelise the
+compression).
 
-My mind triggers a big red warning light right now, so let's be careful :-)
+Unfortunately, the output of pigz-compressed archives differ from that
+of gzip (even though they *are* valid gzip-compressed streams).
 
-The goal is that one can run 'make foo-menuconfig' from a clean tree,
-without first processing (downloading, building, ...) the dependencies of
-foo first.
-If you put this stuff in the configure step of foo, you are bound by its
-dependencies.
+Add a dependency check that ensures that gzip is not pigz. If that is
+the case, bail out and refuse to build.
 
-There may be other reasons too, not sure.
+This is a stop-gap measure in preparation of the release. A complete
+solution would accept pigz as a decompressor (because that is totally
+OK), and ensure that we do build a host-gzip package should that be
+needed. This is a much bigger endeavour, so this simple solution is
+deemed enough for the release (after all, use of pigz is just atypical
+enough that it should not pose such a problem for users to reverti to
+using plain gzip).
 
-Best regards,
-Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181116/705cfae7/attachment.html>
+Fixes:
+    http://autobuild.buildroot.org/results/330/3308271fc641cadb59dbf1b5ee529a84f79e6d5c/
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Marcin Niestr?j <m.niestroj@grinn-global.com>
+Cc: Erico Nunes <nunes.erico@gmail.com>
+---
+ support/dependencies/check-host-gzip.mk |  3 +++
+ support/dependencies/check-host-gzip.sh | 21 +++++++++++++++++++++
+ 2 files changed, 24 insertions(+)
+ create mode 100644 support/dependencies/check-host-gzip.mk
+ create mode 100755 support/dependencies/check-host-gzip.sh
+
+diff --git a/support/dependencies/check-host-gzip.mk b/support/dependencies/check-host-gzip.mk
+new file mode 100644
+index 0000000000..867bbb04f8
+--- /dev/null
++++ b/support/dependencies/check-host-gzip.mk
+@@ -0,0 +1,3 @@
++ifeq (,$(call suitable-host-package,gzip))
++$(error No suitable gzip found)
++endif
+diff --git a/support/dependencies/check-host-gzip.sh b/support/dependencies/check-host-gzip.sh
+new file mode 100755
+index 0000000000..350fe552d5
+--- /dev/null
++++ b/support/dependencies/check-host-gzip.sh
+@@ -0,0 +1,21 @@
++#!/bin/sh
++
++candidate="$1" # ignored
++
++gzip="$(which gzip)"
++if [ ! -x "${gzip}" ]; then
++    exit 1
++fi
++
++# gzip displays its version string on stdout
++# pigz displays its version string on stderr
++version="$("${gzip}" --version 2>&1)"
++case "${version}" in
++  (*pigz*)
++    printf "%s (%s) is not acceptable as a gzip implementation\n" \
++        "${gzip}" "${version}" >&2
++    exit 1
++    ;;
++esac
++
++printf "%s" "${gzip}"
+-- 
+2.14.1
