@@ -1,55 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 17 Nov 2018 12:58:58 +0100
-Subject: [Buildroot] [git commit branch/next] libpng: bump to 1.6.35
-Message-ID: <20181117115636.D9DDA8350E@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 17 Nov 2018 14:00:54 +0100
+Subject: [Buildroot] [PATCH 1/1] easydbus: fix build without C++
+Message-ID: <20181117130054.21752-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb9fe6531312101b22aa804f317c3b061d73cf53
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Specify that easydbus is a C project file otherwise build will fail if
+no C++ compiler is found by cmake
 
-Also use https instead of http to retrieve the hashes.
+Fixes:
+ - http://autobuild.buildroot.org/results/486c3cd98124e7415dee2fd1463bd5e0fcc9ba91
 
-Note that the only changes in the LICENSE file is the copy-right date and
-the version number.
-
-Signed-off-by: Nasser Afshin <afshin.nasser@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libpng/libpng.hash | 10 +++++-----
- package/libpng/libpng.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ .../0001-easydbus-is-a-C-project-file.patch   | 33 +++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/easydbus/0001-easydbus-is-a-C-project-file.patch
 
-diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
-index 0a0cebee91..27f66a5d01 100644
---- a/package/libpng/libpng.hash
-+++ b/package/libpng/libpng.hash
-@@ -1,7 +1,7 @@
--# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.34/
--md5		c05b6ca7190a5e387b78657dbe5536b2			libpng-1.6.34.tar.xz
--sha1	45de4ec996ffcc3e18037e7c128abe95f4d0292a	libpng-1.6.34.tar.xz
-+# From https://sourceforge.net/projects/libpng/files/libpng16/1.6.35/
-+md5		678b7e696a62a193ed3503b04bf449d6			libpng-1.6.35.tar.xz
-+sha1	0df1561aa1da610e892239348970d574b14deed0	libpng-1.6.35.tar.xz
- 
- # Locally computed:
--sha256	2f1e960d92ce3b3abd03d06dfec9637dfbd22febf107a536b44f7a47c60659f6	libpng-1.6.34.tar.xz
--sha256	a247c24f82bacf0403fe2f3d5550493a91cdb575fe7036b764bda8cacf3efd9c	LICENSE
-+sha256	23912ec8c9584917ed9b09c5023465d71709dce089be503c7867fec68a93bcd7	libpng-1.6.35.tar.xz
-+sha256	f9850940c6606003eea9c8864b2a3f177eb5c963614aba5a3c5a24c47dd043ab	LICENSE
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index ace62cd876..b6d1d8d071 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBPNG_VERSION = 1.6.34
-+LIBPNG_VERSION = 1.6.35
- LIBPNG_SERIES = 16
- LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
- LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng$(LIBPNG_SERIES)/$(LIBPNG_VERSION)
+diff --git a/package/easydbus/0001-easydbus-is-a-C-project-file.patch b/package/easydbus/0001-easydbus-is-a-C-project-file.patch
+new file mode 100644
+index 0000000000..1c149c582c
+--- /dev/null
++++ b/package/easydbus/0001-easydbus-is-a-C-project-file.patch
+@@ -0,0 +1,33 @@
++From a4bd47f593fbe55bd3ab17532e64be74aff5b29d Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 17 Nov 2018 11:38:05 +0100
++Subject: [PATCH] easydbus is a C project file
++
++Specify that easydbus is a C project file otherwise build will fail if
++no C++ compiler is found by cmake
++
++Fixes:
++ - http://autobuild.buildroot.org/results/486c3cd98124e7415dee2fd1463bd5e0fcc9ba91
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/mniestroj/easydbus/pull/2]
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 58ccb2d..575eb24 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -5,7 +5,7 @@
++ #
++ 
++ cmake_minimum_required(VERSION 2.6)
++-project(easydbus)
+++project(easydbus C)
++ 
++ add_definitions("-Wall -Wextra -Wno-unused-parameter")
++ set(CMAKE_C_FLAGS_RELEASE "-O2")
++-- 
++2.17.1
++
+-- 
+2.17.1
