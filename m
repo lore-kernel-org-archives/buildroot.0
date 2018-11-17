@@ -1,9 +1,9 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 17 Nov 2018 23:16:49 +0100
-Subject: [Buildroot] [PATCH 1/1] libv4l: v4l2-compliance needs fork
-In-Reply-To: <20181117205222.17636-1-fontaine.fabrice@gmail.com>
-References: <20181117205222.17636-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181117231649.5eea2b4f@gmx.net>
+Date: Sat, 17 Nov 2018 23:19:14 +0100
+Subject: [Buildroot] [PATCH 1/1] gstreamer: fix build on riscv
+In-Reply-To: <20181117184533.21169-1-fontaine.fabrice@gmail.com>
+References: <20181117184533.21169-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181117231914.6600b731@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,116 +12,36 @@ To: buildroot@busybox.net
 
 Hello Fabrice,
 
-On Sat, 17 Nov 2018 21:52:22 +0100, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sat, 17 Nov 2018 19:45:33 +0100, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Since bump to 1.16.2, v4l2-compliance uses fork, see:
-> https://git.linuxtv.org/v4l-utils.git/commit/utils/v4l2-compliance/?id=79d98edd1a27233667a6bc38d3d7f8958c2ec02c
-> 
-> So add a patch to disable v4l2-compliance if fork is unavailable
-
-Alternative (and less intrusive) solution would be to disable only the stream
-locking test from v4l2-compliance in case fork is not available (keeping
-v4l2-compliance for low-level systems)...
-
+> RISC-V supports unaligned accesses, but these might run extremely slowly
+> depending on the implementation so set as_cv_unaligned_access to no on
+> this architecture, see:
+> https://gitlab.freedesktop.org/gstreamer/gstreamer/commit/8a156d1725ecd03f2e8cdc8874e081dda2d3b43d
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/447d792ce21c0e33a36ca9384fee46e099435ed8
-
-If no one complains about the disabling v4l2-compliance tool you can add my
-
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-
-for this solution to fix the autobuild failure...
-
-Regards,
-Peter
-
+>  - http://autobuild.buildroot.org/results/dca32c929350311fca1a85e251d318b43c4a3177
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  .../0004-v4l2-compliance-needs-fork.patch     | 76 +++++++++++++++++++
->  1 file changed, 76 insertions(+)
->  create mode 100644 package/libv4l/0004-v4l2-compliance-needs-fork.patch
+>  package/gstreamer/gstreamer/gstreamer.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/libv4l/0004-v4l2-compliance-needs-fork.patch b/package/libv4l/0004-v4l2-compliance-needs-fork.patch
-> new file mode 100644
-> index 0000000000..d29a059520
-> --- /dev/null
-> +++ b/package/libv4l/0004-v4l2-compliance-needs-fork.patch
-> @@ -0,0 +1,76 @@
-> +From 21d7082c635433176aebcd9d6f0177edb059f41f Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Sat, 17 Nov 2018 21:26:57 +0100
-> +Subject: [PATCH] v4l2-compliance needs fork
-> +
-> +v4l2-compliance uses fork, since
-> +https://git.linuxtv.org/v4l-utils.git/commit/utils/v4l2-compliance/?id=79d98edd1a27233667a6bc38d3d7f8958c2ec02c
-> +
-> +So don't build it if fork is not available
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/447d792ce21c0e33a36ca9384fee46e099435ed8
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + configure.ac      | 5 ++++-
-> + utils/Makefile.am | 6 +++++-
-> + 2 files changed, 9 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/configure.ac b/configure.ac
-> +index 5cc34c24..52ea5c6d 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -478,7 +478,8 @@ AM_CONDITIONAL([WITH_QTGL],	    [test x${qt_pkgconfig_gl} = xtrue])
-> + AM_CONDITIONAL([WITH_GCONV],        [test x$enable_gconv = xyes -a x$enable_shared == xyes -a x$with_gconvdir != x -a -f $with_gconvdir/gconv-modules])
-> + AM_CONDITIONAL([WITH_V4L2_CTL_LIBV4L], [test x${enable_v4l2_ctl_libv4l} != xno])
-> + AM_CONDITIONAL([WITH_V4L2_CTL_STREAM_TO], [test x${enable_v4l2_ctl_stream_to} != xno])
-> +-AM_CONDITIONAL([WITH_V4L2_COMPLIANCE_LIBV4L], [test x${enable_v4l2_compliance_libv4l} != xno])
-> ++AM_CONDITIONAL([WITH_V4L2_COMPLIANCE], [test x$ac_cv_func_fork = xyes])
-> ++AM_CONDITIONAL([WITH_V4L2_COMPLIANCE_LIBV4L], [test x$ac_cv_func_fork = xyes -a x${enable_v4l2_compliance_libv4l} != xno])
-> + AM_CONDITIONAL([WITH_BPF],          [test x$enable_bpf != xno -a x$libelf_pkgconfig = xyes -a x$CLANG = xclang])
-> + 
-> + # append -static to libtool compile and link command to enforce static libs
-> +@@ -509,6 +510,7 @@ AM_COND_IF([WITH_V4L_PLUGINS], [USE_V4L_PLUGINS="yes"
-> + AM_COND_IF([WITH_V4L_WRAPPERS], [USE_V4L_WRAPPERS="yes"], [USE_V4L_WRAPPERS="no"])
-> + AM_COND_IF([WITH_GCONV], [USE_GCONV="yes"], [USE_GCONV="no"])
-> + AM_COND_IF([WITH_V4L2_CTL_LIBV4L], [USE_V4L2_CTL_LIBV4L="yes"], [USE_V4L2_CTL_LIBV4L="no"])
-> ++AM_COND_IF([WITH_V4L2_COMPLIANCE], [USE_V4L2_COMPLIANCE="yes"], [USE_V4L2_COMPLIANCE="no"])
-> + AM_COND_IF([WITH_V4L2_COMPLIANCE_LIBV4L], [USE_V4L2_COMPLIANCE_LIBV4L="yes"], [USE_V4L2_COMPLIANCE_LIBV4L="no"])
-> + AM_COND_IF([WITH_BPF],         [USE_BPF="yes"
-> +                                 AC_DEFINE([HAVE_BPF], [1], [BPF IR decoder support enabled])],
-> +@@ -556,6 +558,7 @@ compile time options summary
-> +     qv4l2                      : $USE_QV4L2
-> +     qvidcap                    : $USE_QVIDCAP
-> +     v4l2-ctl uses libv4l       : $USE_V4L2_CTL_LIBV4L
-> ++    v4l2-compliance            : $USE_V4L2_COMPLIANCE
-> +     v4l2-compliance uses libv4l: $USE_V4L2_COMPLIANCE_LIBV4L
-> +     BPF IR Decoders:           : $USE_BPF
-> + EOF
-> +diff --git a/utils/Makefile.am b/utils/Makefile.am
-> +index 2d507028..9c29926a 100644
-> +--- a/utils/Makefile.am
-> ++++ b/utils/Makefile.am
-> +@@ -6,7 +6,6 @@ SUBDIRS = \
-> + 	cx18-ctl \
-> + 	keytable \
-> + 	media-ctl \
-> +-	v4l2-compliance \
-> + 	v4l2-ctl \
-> + 	v4l2-dbg \
-> + 	v4l2-sysfs-path \
-> +@@ -20,6 +19,11 @@ SUBDIRS += \
-> + 	dvb
-> + endif
-> + 
-> ++if WITH_V4L2_COMPLIANCE
-> ++SUBDIRS += \
-> ++	v4l2-compliance
-> ++endif
-> ++
-> + if WITH_QV4L2
-> + SUBDIRS += qv4l2
-> + endif
-> +-- 
-> +2.17.1
-> +
+> diff --git a/package/gstreamer/gstreamer/gstreamer.mk b/package/gstreamer/gstreamer/gstreamer.mk
+> index 88cc798828..2ec360c94d 100644
+> --- a/package/gstreamer/gstreamer/gstreamer.mk
+> +++ b/package/gstreamer/gstreamer/gstreamer.mk
+> @@ -15,7 +15,7 @@ GSTREAMER_LICENSE_FILES = COPYING
+>  # Checking if unaligned memory access works correctly cannot be done when cross
+>  # compiling. For the following architectures there is no information available
+>  # in the configure script.
+> -ifeq ($(BR2_arc)$(BR2_xtensa)$(BR2_microblaze)$(BR2_nios2)$(BR2_or1k),y)
+> +ifeq ($(BR2_arc)$(BR2_xtensa)$(BR2_microblaze)$(BR2_nios2)$(BR2_or1k)$(BR2_riscv),y)
+>  GSTREAMER_CONF_ENV = as_cv_unaligned_access=no
+>  endif
+>  ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
+
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+
+Regards,
+Peter
