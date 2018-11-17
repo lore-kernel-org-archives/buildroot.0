@@ -1,47 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 17 Nov 2018 21:57:24 +0100
-Subject: [Buildroot] [git commit] memcached: bump to version 1.5.12
-Message-ID: <20181202071555.E38017F901@busybox.osuosl.org>
+Date: Sat, 17 Nov 2018 12:58:58 +0100
+Subject: [Buildroot] [git commit] libpng: bump to 1.6.35
+Message-ID: <20181202071555.D02968A3F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b2b7c9aa86191e07d07d0100497ba326eb280010
+commit: https://git.buildroot.net/buildroot/commit/?id=cb9fe6531312101b22aa804f317c3b061d73cf53
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Also use https instead of http to retrieve the hashes.
+
+Note that the only changes in the LICENSE file is the copy-right date and
+the version number.
+
+Signed-off-by: Nasser Afshin <afshin.nasser@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/memcached/memcached.hash | 6 +++---
- package/memcached/memcached.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libpng/libpng.hash | 10 +++++-----
+ package/libpng/libpng.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
-index c3cc11c3b4..df430cf4ff 100644
---- a/package/memcached/memcached.hash
-+++ b/package/memcached/memcached.hash
-@@ -1,6 +1,6 @@
--# From http://www.memcached.org/files/memcached-1.5.10.tar.gz.sha1
--sha1 fff9351b360a09497cd805d3e4c1ffbe860d067d  memcached-1.5.10.tar.gz
-+# From http://www.memcached.org/files/memcached-1.5.12.tar.gz.sha1
-+sha1 f67096ba64b0c47668bcad5b680010c4f8987d4c  memcached-1.5.12.tar.gz
+diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
+index 0a0cebee91..27f66a5d01 100644
+--- a/package/libpng/libpng.hash
++++ b/package/libpng/libpng.hash
+@@ -1,7 +1,7 @@
+-# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.34/
+-md5		c05b6ca7190a5e387b78657dbe5536b2			libpng-1.6.34.tar.xz
+-sha1	45de4ec996ffcc3e18037e7c128abe95f4d0292a	libpng-1.6.34.tar.xz
++# From https://sourceforge.net/projects/libpng/files/libpng16/1.6.35/
++md5		678b7e696a62a193ed3503b04bf449d6			libpng-1.6.35.tar.xz
++sha1	0df1561aa1da610e892239348970d574b14deed0	libpng-1.6.35.tar.xz
  
- # Locally computed
--sha256 494c060dbd96d546c74ab85a3cc3984d009b4423767ac33e05dd2340c01f1c4b  memcached-1.5.10.tar.gz
-+sha256 c02f97d5685617b209fbe25f3464317b234d765b427d254c2413410a5c095b29  memcached-1.5.12.tar.gz
- sha256 bc887c4ad8051fe690ace9528fe37a2e0bb362e6d963331d82e845ca9b585a0c  COPYING
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
-index f591fcf1c3..b7c36ec155 100644
---- a/package/memcached/memcached.mk
-+++ b/package/memcached/memcached.mk
+ # Locally computed:
+-sha256	2f1e960d92ce3b3abd03d06dfec9637dfbd22febf107a536b44f7a47c60659f6	libpng-1.6.34.tar.xz
+-sha256	a247c24f82bacf0403fe2f3d5550493a91cdb575fe7036b764bda8cacf3efd9c	LICENSE
++sha256	23912ec8c9584917ed9b09c5023465d71709dce089be503c7867fec68a93bcd7	libpng-1.6.35.tar.xz
++sha256	f9850940c6606003eea9c8864b2a3f177eb5c963614aba5a3c5a24c47dd043ab	LICENSE
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index ace62cd876..b6d1d8d071 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MEMCACHED_VERSION = 1.5.10
-+MEMCACHED_VERSION = 1.5.12
- MEMCACHED_SITE = http://www.memcached.org/files
- MEMCACHED_DEPENDENCIES = libevent
- MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+-LIBPNG_VERSION = 1.6.34
++LIBPNG_VERSION = 1.6.35
+ LIBPNG_SERIES = 16
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
+ LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng$(LIBPNG_SERIES)/$(LIBPNG_VERSION)
