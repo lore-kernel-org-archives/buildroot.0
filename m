@@ -1,55 +1,95 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 17 Nov 2018 12:58:58 +0100
-Subject: [Buildroot] [git commit] libpng: bump to 1.6.35
-Message-ID: <20181202071555.D02968A3F3@busybox.osuosl.org>
+Date: Sat, 17 Nov 2018 21:57:04 +0100
+Subject: [Buildroot] [git commit] sdl2: bump to version 2.0.9
+Message-ID: <20181202071555.D87D88A3F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb9fe6531312101b22aa804f317c3b061d73cf53
+commit: https://git.buildroot.net/buildroot/commit/?id=84f69b5d1d5b44583e20dc026493281ae81723e9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also use https instead of http to retrieve the hashes.
+Remove patch (already in version)
 
-Note that the only changes in the LICENSE file is the copy-right date and
-the version number.
-
-Signed-off-by: Nasser Afshin <afshin.nasser@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libpng/libpng.hash | 10 +++++-----
- package/libpng/libpng.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ ...irectFB-renderer-not-being-enabled-in-aut.patch | 42 ----------------------
+ package/sdl2/sdl2.hash                             |  4 +--
+ package/sdl2/sdl2.mk                               |  2 +-
+ 3 files changed, 3 insertions(+), 45 deletions(-)
 
-diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
-index 0a0cebee91..27f66a5d01 100644
---- a/package/libpng/libpng.hash
-+++ b/package/libpng/libpng.hash
-@@ -1,7 +1,7 @@
--# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.34/
--md5		c05b6ca7190a5e387b78657dbe5536b2			libpng-1.6.34.tar.xz
--sha1	45de4ec996ffcc3e18037e7c128abe95f4d0292a	libpng-1.6.34.tar.xz
-+# From https://sourceforge.net/projects/libpng/files/libpng16/1.6.35/
-+md5		678b7e696a62a193ed3503b04bf449d6			libpng-1.6.35.tar.xz
-+sha1	0df1561aa1da610e892239348970d574b14deed0	libpng-1.6.35.tar.xz
- 
- # Locally computed:
--sha256	2f1e960d92ce3b3abd03d06dfec9637dfbd22febf107a536b44f7a47c60659f6	libpng-1.6.34.tar.xz
--sha256	a247c24f82bacf0403fe2f3d5550493a91cdb575fe7036b764bda8cacf3efd9c	LICENSE
-+sha256	23912ec8c9584917ed9b09c5023465d71709dce089be503c7867fec68a93bcd7	libpng-1.6.35.tar.xz
-+sha256	f9850940c6606003eea9c8864b2a3f177eb5c963614aba5a3c5a24c47dd043ab	LICENSE
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index ace62cd876..b6d1d8d071 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
+diff --git a/package/sdl2/0001-Fixed-the-DirectFB-renderer-not-being-enabled-in-aut.patch b/package/sdl2/0001-Fixed-the-DirectFB-renderer-not-being-enabled-in-aut.patch
+deleted file mode 100644
+index 53926c03b5..0000000000
+--- a/package/sdl2/0001-Fixed-the-DirectFB-renderer-not-being-enabled-in-aut.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-From a0acea5bcce3f47badbfeeab7bc2e36eba08fd84 Mon Sep 17 00:00:00 2001
+-From: Sam Lantinga <slouken@libsdl.org>
+-Date: Mon, 27 Aug 2018 11:51:05 -0700
+-Subject: [PATCH] Fixed the DirectFB renderer not being enabled in autoconf
+- builds
+-
+-Upstream-url: https://hg.libsdl.org/SDL/raw-rev/751cdc74d55c
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- configure    | 3 +++
+- configure.in | 1 +
+- 2 files changed, 4 insertions(+)
+-
+-diff --git a/configure b/configure
+-index e88b38001..40ac14d21 100755
+---- a/configure
+-+++ b/configure
+-@@ -21501,6 +21501,9 @@ fi
+- 
+- $as_echo "#define SDL_VIDEO_DRIVER_DIRECTFB 1" >>confdefs.h
+- 
+-+
+-+$as_echo "#define SDL_VIDEO_RENDER_DIRECTFB 1" >>confdefs.h
+-+
+-             SOURCES="$SOURCES $srcdir/src/video/directfb/*.c"
+-             EXTRA_CFLAGS="$EXTRA_CFLAGS $DIRECTFB_CFLAGS"
+- 
+-diff --git a/configure.in b/configure.in
+-index 5bf5d717b..ce1d57ea1 100644
+---- a/configure.in
+-+++ b/configure.in
+-@@ -2163,6 +2163,7 @@ AC_HELP_STRING([--enable-directfb-shared], [dynamically load directfb support [[
+-                               , enable_directfb_shared=yes)
+- 
+-             AC_DEFINE(SDL_VIDEO_DRIVER_DIRECTFB, 1, [ ])
+-+            AC_DEFINE(SDL_VIDEO_RENDER_DIRECTFB, 1, [ ])
+-             SOURCES="$SOURCES $srcdir/src/video/directfb/*.c"
+-             EXTRA_CFLAGS="$EXTRA_CFLAGS $DIRECTFB_CFLAGS"
+- 
+--- 
+-2.11.0
+-
+diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
+index 997b4a5d4f..0668883f06 100644
+--- a/package/sdl2/sdl2.hash
++++ b/package/sdl2/sdl2.hash
+@@ -1,4 +1,4 @@
+-# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.0.8.tar.gz.sig
+-sha256 edc77c57308661d576e843344d8638e025a7818bff73f8fbfab09c3c5fd092ec  SDL2-2.0.8.tar.gz
++# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.0.9.tar.gz.sig
++sha256 255186dc676ecd0c1dbf10ec8a2cc5d6869b5079d8a38194c2aecdff54b324b1  SDL2-2.0.9.tar.gz
+ # Locally calculated
+ sha256 61e627031e1160bf8b9bdbc9cda27656d422ea8eaab199b64b4a4a4168437154  COPYING.txt
+diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+index bd71485f18..d2fba9d810 100644
+--- a/package/sdl2/sdl2.mk
++++ b/package/sdl2/sdl2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBPNG_VERSION = 1.6.34
-+LIBPNG_VERSION = 1.6.35
- LIBPNG_SERIES = 16
- LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
- LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng$(LIBPNG_SERIES)/$(LIBPNG_VERSION)
+-SDL2_VERSION = 2.0.8
++SDL2_VERSION = 2.0.9
+ SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
+ SDL2_SITE = http://www.libsdl.org/release
+ SDL2_LICENSE = Zlib
