@@ -1,74 +1,127 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 17 Nov 2018 22:56:46 +0100
-Subject: [Buildroot] Making the Meson integration compatible with
- per-package folders
-In-Reply-To: <20181116164859.4c0f4781@windsurf>
-References: <20181116164859.4c0f4781@windsurf>
-Message-ID: <20181117225646.0874e8f4@gmx.net>
+Date: Sat, 17 Nov 2018 23:16:49 +0100
+Subject: [Buildroot] [PATCH 1/1] libv4l: v4l2-compliance needs fork
+In-Reply-To: <20181117205222.17636-1-fontaine.fabrice@gmail.com>
+References: <20181117205222.17636-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181117231649.5eea2b4f@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hello Fabrice,
 
-On Fri, 16 Nov 2018 16:48:59 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+On Sat, 17 Nov 2018 21:52:22 +0100, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Eric, Peter,
+> Since bump to 1.16.2, v4l2-compliance uses fork, see:
+> https://git.linuxtv.org/v4l-utils.git/commit/utils/v4l2-compliance/?id=79d98edd1a27233667a6bc38d3d7f8958c2ec02c
 > 
-> I don't know if you have followed the discussion, but I recently sent a
-> new iteration of the per-package folder series [1], which allows to
-> support top-level parallel build.
+> So add a patch to disable v4l2-compliance if fork is unavailable
 
-Not in details (and did no test the patches yet)...
+Alternative (and less intrusive) solution would be to disable only the stream
+locking test from v4l2-compliance in case fork is not available (keeping
+v4l2-compliance for low-level systems)...
 
 > 
-> Currently the Meson integration in Buildroot doesn't work with this
-> per-package folder stuff.
-> 
-> The initial issue is that:
-> 
->    --cross-file=$(HOST_DIR)/etc/meson/cross-compilation.conf
-> 
-> should be:
-> 
->    --cross-file=$$(HOST_DIR)/etc/meson/cross-compilation.conf
-> 
-> But of course, behind that, there's a bigger issue: this
-> cross-compilation.conf hardcodes the compiler path, library path, etc.
-> However, with per-package folders, we really need to use the compiler
-> and libraries from the per-package folder of the current package.
-> 
-> To achieve this, we will need to generate a per-package
-> cross-compilation.conf, which is something Peter was already proposing
-> in http://patchwork.ozlabs.org/patch/946599/. However, compared to this
-> patch, we would need:
-> 
->  (1) Replacing not only the CFLAGS, but also the compiler/library paths.
-> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/447d792ce21c0e33a36ca9384fee46e099435ed8
 
-First draft version:
+If no one complains about the disabling v4l2-compliance tool you can add my
 
-    http://patchwork.ozlabs.org/patch/999406/
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 
-Maybe $$($$(PKG)_SRCDIR) could be exchanged with $$(HOST_DIR)...
-
->  (2) Producing a final cross-compilation.conf, which can be used by
->      people using the toolchain outside of Buildroot.
-> 
-
-No problem, just keep the original code in package/meson/meson.mk?
+for this solution to fix the autobuild failure...
 
 Regards,
 Peter
 
-> I am sending this e-mail to see if you are willing/available to help on
-> this, or if you would like me to take over this work and propose a
-> patch series.
 > 
-> Thanks a lot!
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  .../0004-v4l2-compliance-needs-fork.patch     | 76 +++++++++++++++++++
+>  1 file changed, 76 insertions(+)
+>  create mode 100644 package/libv4l/0004-v4l2-compliance-needs-fork.patch
 > 
-> Thomas
-> 
-> [1] http://patchwork.ozlabs.org/project/buildroot/list/?series=75909
+> diff --git a/package/libv4l/0004-v4l2-compliance-needs-fork.patch b/package/libv4l/0004-v4l2-compliance-needs-fork.patch
+> new file mode 100644
+> index 0000000000..d29a059520
+> --- /dev/null
+> +++ b/package/libv4l/0004-v4l2-compliance-needs-fork.patch
+> @@ -0,0 +1,76 @@
+> +From 21d7082c635433176aebcd9d6f0177edb059f41f Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Sat, 17 Nov 2018 21:26:57 +0100
+> +Subject: [PATCH] v4l2-compliance needs fork
+> +
+> +v4l2-compliance uses fork, since
+> +https://git.linuxtv.org/v4l-utils.git/commit/utils/v4l2-compliance/?id=79d98edd1a27233667a6bc38d3d7f8958c2ec02c
+> +
+> +So don't build it if fork is not available
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/447d792ce21c0e33a36ca9384fee46e099435ed8
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +---
+> + configure.ac      | 5 ++++-
+> + utils/Makefile.am | 6 +++++-
+> + 2 files changed, 9 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/configure.ac b/configure.ac
+> +index 5cc34c24..52ea5c6d 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -478,7 +478,8 @@ AM_CONDITIONAL([WITH_QTGL],	    [test x${qt_pkgconfig_gl} = xtrue])
+> + AM_CONDITIONAL([WITH_GCONV],        [test x$enable_gconv = xyes -a x$enable_shared == xyes -a x$with_gconvdir != x -a -f $with_gconvdir/gconv-modules])
+> + AM_CONDITIONAL([WITH_V4L2_CTL_LIBV4L], [test x${enable_v4l2_ctl_libv4l} != xno])
+> + AM_CONDITIONAL([WITH_V4L2_CTL_STREAM_TO], [test x${enable_v4l2_ctl_stream_to} != xno])
+> +-AM_CONDITIONAL([WITH_V4L2_COMPLIANCE_LIBV4L], [test x${enable_v4l2_compliance_libv4l} != xno])
+> ++AM_CONDITIONAL([WITH_V4L2_COMPLIANCE], [test x$ac_cv_func_fork = xyes])
+> ++AM_CONDITIONAL([WITH_V4L2_COMPLIANCE_LIBV4L], [test x$ac_cv_func_fork = xyes -a x${enable_v4l2_compliance_libv4l} != xno])
+> + AM_CONDITIONAL([WITH_BPF],          [test x$enable_bpf != xno -a x$libelf_pkgconfig = xyes -a x$CLANG = xclang])
+> + 
+> + # append -static to libtool compile and link command to enforce static libs
+> +@@ -509,6 +510,7 @@ AM_COND_IF([WITH_V4L_PLUGINS], [USE_V4L_PLUGINS="yes"
+> + AM_COND_IF([WITH_V4L_WRAPPERS], [USE_V4L_WRAPPERS="yes"], [USE_V4L_WRAPPERS="no"])
+> + AM_COND_IF([WITH_GCONV], [USE_GCONV="yes"], [USE_GCONV="no"])
+> + AM_COND_IF([WITH_V4L2_CTL_LIBV4L], [USE_V4L2_CTL_LIBV4L="yes"], [USE_V4L2_CTL_LIBV4L="no"])
+> ++AM_COND_IF([WITH_V4L2_COMPLIANCE], [USE_V4L2_COMPLIANCE="yes"], [USE_V4L2_COMPLIANCE="no"])
+> + AM_COND_IF([WITH_V4L2_COMPLIANCE_LIBV4L], [USE_V4L2_COMPLIANCE_LIBV4L="yes"], [USE_V4L2_COMPLIANCE_LIBV4L="no"])
+> + AM_COND_IF([WITH_BPF],         [USE_BPF="yes"
+> +                                 AC_DEFINE([HAVE_BPF], [1], [BPF IR decoder support enabled])],
+> +@@ -556,6 +558,7 @@ compile time options summary
+> +     qv4l2                      : $USE_QV4L2
+> +     qvidcap                    : $USE_QVIDCAP
+> +     v4l2-ctl uses libv4l       : $USE_V4L2_CTL_LIBV4L
+> ++    v4l2-compliance            : $USE_V4L2_COMPLIANCE
+> +     v4l2-compliance uses libv4l: $USE_V4L2_COMPLIANCE_LIBV4L
+> +     BPF IR Decoders:           : $USE_BPF
+> + EOF
+> +diff --git a/utils/Makefile.am b/utils/Makefile.am
+> +index 2d507028..9c29926a 100644
+> +--- a/utils/Makefile.am
+> ++++ b/utils/Makefile.am
+> +@@ -6,7 +6,6 @@ SUBDIRS = \
+> + 	cx18-ctl \
+> + 	keytable \
+> + 	media-ctl \
+> +-	v4l2-compliance \
+> + 	v4l2-ctl \
+> + 	v4l2-dbg \
+> + 	v4l2-sysfs-path \
+> +@@ -20,6 +19,11 @@ SUBDIRS += \
+> + 	dvb
+> + endif
+> + 
+> ++if WITH_V4L2_COMPLIANCE
+> ++SUBDIRS += \
+> ++	v4l2-compliance
+> ++endif
+> ++
+> + if WITH_QV4L2
+> + SUBDIRS += qv4l2
+> + endif
+> +-- 
+> +2.17.1
+> +
