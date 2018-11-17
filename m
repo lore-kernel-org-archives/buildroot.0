@@ -1,7 +1,9 @@
 From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Sat, 17 Nov 2018 15:12:01 +0100
-Subject: [Buildroot] [PATCH 1/3] libsigrok: bump version to 0.5.1
-Message-ID: <20181117141203.19695-1-brgl@bgdev.pl>
+Date: Sat, 17 Nov 2018 15:12:02 +0100
+Subject: [Buildroot] [PATCH 2/3] libsigrokdecode: bump version to 0.5.2
+In-Reply-To: <20181117141203.19695-1-brgl@bgdev.pl>
+References: <20181117141203.19695-1-brgl@bgdev.pl>
+Message-ID: <20181117141203.19695-2-brgl@bgdev.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,57 +12,33 @@ To: buildroot@busybox.net
 
 From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 
-Since commit 79034d4f39f7 ("strutil: Locale independent snprintf()
-and vsnprintf() functions") libsigrok now needs to know locale_t.
-
 Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 ---
- package/libsigrok/Config.in      | 3 ++-
- package/libsigrok/libsigrok.hash | 2 +-
- package/libsigrok/libsigrok.mk   | 2 +-
- 3 files changed, 4 insertions(+), 3 deletions(-)
+ package/libsigrokdecode/libsigrokdecode.hash | 2 +-
+ package/libsigrokdecode/libsigrokdecode.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libsigrok/Config.in b/package/libsigrok/Config.in
-index fb74beaab5..bb76e09d2d 100644
---- a/package/libsigrok/Config.in
-+++ b/package/libsigrok/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBSIGROK
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU
-+	depends on BR2_ENABLE_LOCALE
- 	depends on !BR2_STATIC_LIBS # libzip
- 	# std=c11
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-@@ -35,7 +36,7 @@ comment "C++ bindings need a toolchain w/ C++, gcc >= 4.9"
- 
- endif
- 
--comment "libsigrok needs a toolchain w/ wchar, threads, dynamic library, gcc >= 4.7"
-+comment "libsigrok needs a toolchain w/ wchar, locale, threads, dynamic library, gcc >= 4.7"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS \
- 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || BR2_STATIC_LIBS
-diff --git a/package/libsigrok/libsigrok.hash b/package/libsigrok/libsigrok.hash
-index 47ad6129f6..7a52c6ca1b 100644
---- a/package/libsigrok/libsigrok.hash
-+++ b/package/libsigrok/libsigrok.hash
-@@ -1,2 +1,2 @@
+diff --git a/package/libsigrokdecode/libsigrokdecode.hash b/package/libsigrokdecode/libsigrokdecode.hash
+index c2e15f61cb..e6eb4a080b 100644
+--- a/package/libsigrokdecode/libsigrokdecode.hash
++++ b/package/libsigrokdecode/libsigrokdecode.hash
+@@ -1,3 +1,3 @@
  # Locally computed
--sha256	4c8c86779b880a5c419f6c77a08b1147021e5a19fa83b0f3b19da27463c9f3a4	libsigrok-0.5.0.tar.gz
-+sha256	e40fde7af98d29e922e9d3cbe0a6c0569889153fc31e47b8b1afe4d846292b9c	libsigrok-0.5.1.tar.gz
-diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
-index ef7fab82bd..5bca9ad518 100644
---- a/package/libsigrok/libsigrok.mk
-+++ b/package/libsigrok/libsigrok.mk
+-sha256	493d8b555ae4c245a5feebbd94de33aec7ee85a4f16bc3f4c3985961b459b51e  libsigrokdecode-0.5.1.tar.gz
++sha256	e08d9e797c54eccf3144da631b6e5f1498ac531e51520428df537a1da82583f0  libsigrokdecode-0.5.2.tar.gz
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/libsigrokdecode/libsigrokdecode.mk b/package/libsigrokdecode/libsigrokdecode.mk
+index 8b4802a7f3..f509fbdf7e 100644
+--- a/package/libsigrokdecode/libsigrokdecode.mk
++++ b/package/libsigrokdecode/libsigrokdecode.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBSIGROK_VERSION = 0.5.0
-+LIBSIGROK_VERSION = 0.5.1
- LIBSIGROK_SITE = http://sigrok.org/download/source/libsigrok
- LIBSIGROK_LICENSE = GPL-3.0+
- LIBSIGROK_LICENSE_FILES = COPYING
+-LIBSIGROKDECODE_VERSION = 0.5.1
++LIBSIGROKDECODE_VERSION = 0.5.2
+ LIBSIGROKDECODE_SITE = http://sigrok.org/download/source/libsigrokdecode
+ LIBSIGROKDECODE_LICENSE = GPL-3.0+
+ LIBSIGROKDECODE_LICENSE_FILES = COPYING
 -- 
 2.19.1
