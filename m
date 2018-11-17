@@ -1,95 +1,145 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 17 Nov 2018 21:57:04 +0100
-Subject: [Buildroot] [git commit branch/next] sdl2: bump to version 2.0.9
-Message-ID: <20181117205831.E78C9837D2@busybox.osuosl.org>
+Date: Sat, 17 Nov 2018 21:58:50 +0100
+Subject: [Buildroot] [git commit branch/next] doxygen: bump version to 1.8.14
+Message-ID: <20181117205832.01A48834AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84f69b5d1d5b44583e20dc026493281ae81723e9
+commit: https://git.buildroot.net/buildroot/commit/?id=14142b3d0c8503edae30b159d6c414ec483c4b24
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Remove patch (already in version)
+Patches are now upstream - remove both.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...irectFB-renderer-not-being-enabled-in-aut.patch | 42 ----------------------
- package/sdl2/sdl2.hash                             |  4 +--
- package/sdl2/sdl2.mk                               |  2 +-
- 3 files changed, 3 insertions(+), 45 deletions(-)
+ ...1.8.13-Regression-Segfault-building-the-b.patch | 30 -----------
+ ...build-fix-the-way-lang_cfg.h-is-generated.patch | 58 ----------------------
+ package/doxygen/doxygen.hash                       |  2 +-
+ package/doxygen/doxygen.mk                         |  2 +-
+ 4 files changed, 2 insertions(+), 90 deletions(-)
 
-diff --git a/package/sdl2/0001-Fixed-the-DirectFB-renderer-not-being-enabled-in-aut.patch b/package/sdl2/0001-Fixed-the-DirectFB-renderer-not-being-enabled-in-aut.patch
+diff --git a/package/doxygen/0001-Bug-776791-1.8.13-Regression-Segfault-building-the-b.patch b/package/doxygen/0001-Bug-776791-1.8.13-Regression-Segfault-building-the-b.patch
 deleted file mode 100644
-index 53926c03b5..0000000000
---- a/package/sdl2/0001-Fixed-the-DirectFB-renderer-not-being-enabled-in-aut.patch
+index b64158ca6e..0000000000
+--- a/package/doxygen/0001-Bug-776791-1.8.13-Regression-Segfault-building-the-b.patch
 +++ /dev/null
-@@ -1,42 +0,0 @@
--From a0acea5bcce3f47badbfeeab7bc2e36eba08fd84 Mon Sep 17 00:00:00 2001
--From: Sam Lantinga <slouken@libsdl.org>
--Date: Mon, 27 Aug 2018 11:51:05 -0700
--Subject: [PATCH] Fixed the DirectFB renderer not being enabled in autoconf
-- builds
+@@ -1,30 +0,0 @@
+-From 0f02761a158a5e9ddbd5801682482af8986dbc35 Mon Sep 17 00:00:00 2001
+-From: albert-github <albert.tests@gmail.com>
+-Date: Wed, 4 Jan 2017 12:24:55 +0100
+-Subject: [PATCH] Bug 776791 - [1.8.13 Regression] Segfault building the
+- breathe docs
 -
--Upstream-url: https://hg.libsdl.org/SDL/raw-rev/751cdc74d55c
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+-Protected against NULL pointer of variable al
+-
+-[Romain: backport from upstream]
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ----
-- configure    | 3 +++
-- configure.in | 1 +
-- 2 files changed, 4 insertions(+)
+- src/xmlgen.cpp | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/configure b/configure
--index e88b38001..40ac14d21 100755
----- a/configure
--+++ b/configure
--@@ -21501,6 +21501,9 @@ fi
+-diff --git a/src/xmlgen.cpp b/src/xmlgen.cpp
+-index fe95c7a..70e198a 100644
+---- a/src/xmlgen.cpp
+-+++ b/src/xmlgen.cpp
+-@@ -620,7 +620,7 @@ static void generateXMLForMember(MemberDef *md,FTextStream &ti,FTextStream &t,De
+-     if (md->isInline()) t << "yes"; else t << "no";
+-     t << "\"";
 - 
-- $as_echo "#define SDL_VIDEO_DRIVER_DIRECTFB 1" >>confdefs.h
-- 
--+
--+$as_echo "#define SDL_VIDEO_RENDER_DIRECTFB 1" >>confdefs.h
--+
--             SOURCES="$SOURCES $srcdir/src/video/directfb/*.c"
--             EXTRA_CFLAGS="$EXTRA_CFLAGS $DIRECTFB_CFLAGS"
-- 
--diff --git a/configure.in b/configure.in
--index 5bf5d717b..ce1d57ea1 100644
----- a/configure.in
--+++ b/configure.in
--@@ -2163,6 +2163,7 @@ AC_HELP_STRING([--enable-directfb-shared], [dynamically load directfb support [[
--                               , enable_directfb_shared=yes)
-- 
--             AC_DEFINE(SDL_VIDEO_DRIVER_DIRECTFB, 1, [ ])
--+            AC_DEFINE(SDL_VIDEO_RENDER_DIRECTFB, 1, [ ])
--             SOURCES="$SOURCES $srcdir/src/video/directfb/*.c"
--             EXTRA_CFLAGS="$EXTRA_CFLAGS $DIRECTFB_CFLAGS"
-- 
+--    if (al->refQualifier!=RefQualifierNone)
+-+    if (al!=0 && al->refQualifier!=RefQualifierNone)
+-     {
+-       t << " refqual=\"";
+-       if (al->refQualifier==RefQualifierLValue) t << "lvalue"; else t << "rvalue";
 --- 
--2.11.0
+-2.9.4
 -
-diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
-index 997b4a5d4f..0668883f06 100644
---- a/package/sdl2/sdl2.hash
-+++ b/package/sdl2/sdl2.hash
-@@ -1,4 +1,4 @@
--# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.0.8.tar.gz.sig
--sha256 edc77c57308661d576e843344d8638e025a7818bff73f8fbfab09c3c5fd092ec  SDL2-2.0.8.tar.gz
-+# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.0.9.tar.gz.sig
-+sha256 255186dc676ecd0c1dbf10ec8a2cc5d6869b5079d8a38194c2aecdff54b324b1  SDL2-2.0.9.tar.gz
- # Locally calculated
- sha256 61e627031e1160bf8b9bdbc9cda27656d422ea8eaab199b64b4a4a4168437154  COPYING.txt
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index bd71485f18..d2fba9d810 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
+diff --git a/package/doxygen/0002-build-fix-the-way-lang_cfg.h-is-generated.patch b/package/doxygen/0002-build-fix-the-way-lang_cfg.h-is-generated.patch
+deleted file mode 100644
+index 282b2bdcd8..0000000000
+--- a/package/doxygen/0002-build-fix-the-way-lang_cfg.h-is-generated.patch
++++ /dev/null
+@@ -1,58 +0,0 @@
+-From f9a3aa72c2bf15726bcdafd140fd21f790de555d Mon Sep 17 00:00:00 2001
+-From: Bartosz Golaszewski <brgl@bgdev.pl>
+-Date: Wed, 21 Jun 2017 14:32:25 +0200
+-Subject: [PATCH] build: fix the way lang_cfg.h is generated
+-
+-This header is generated by running cmake/lang_cfg.cmake and
+-redirecting its stderr. If any warning is emitted by this script, it
+-ends up in the generated header and breaks the build.
+-
+-To avoid such problems: pass the path to the header as an argument to
+-the cmake script and use the cmake 'file' command instead of 'message'.
+-
+-We can't even use message(STATUS...) as - although it prints to stdout
+-as opposed to other types of messages - it prepends all output with
+-a double hyphen.
+-
+-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+----
+- cmake/lang_cfg.cmake | 10 +++++-----
+- src/CMakeLists.txt   |  2 +-
+- 2 files changed, 6 insertions(+), 6 deletions(-)
+-
+-diff --git a/cmake/lang_cfg.cmake b/cmake/lang_cfg.cmake
+-index c57d3ed..86c2d9a 100644
+---- a/cmake/lang_cfg.cmake
+-+++ b/cmake/lang_cfg.cmake
+-@@ -1,10 +1,10 @@
+--if(${CMAKE_ARGC} GREATER 1)
+--	if ("${CMAKE_ARGV3}" STREQUAL "ENONLY")
+--		message("#define ENGLISH_ONLY")
+-+if(${CMAKE_ARGC} GREATER 2)
+-+	if ("${CMAKE_ARGV4}" STREQUAL "ENONLY")
+-+		file(APPEND ${CMAKE_ARGV3} " #define ENGLISH_ONLY")
+- 	else()
+- 		math(EXPR UPTO ${CMAKE_ARGC}-1)
+--		foreach(i RANGE 3 ${UPTO})
+--			message("#define LANG_${CMAKE_ARGV${i}}")
+-+		foreach(i RANGE 4 ${UPTO})
+-+			file(APPEND ${CMAKE_ARGV3} " #define LANG_${CMAKE_ARGV${i}}")
+- 		endforeach()
+- 	endif()
+- endif()
+-diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+-index 08c8439..dcf4ef8 100644
+---- a/src/CMakeLists.txt
+-+++ b/src/CMakeLists.txt
+-@@ -73,7 +73,7 @@ set_source_files_properties(${GENERATED_SRC}/ce_parse.h PROPERTIES GENERATED 1)
+- # lang_cfg.h
+- add_custom_command(
+-     COMMENT  "Generating ${GENERATED_SRC}/lang_cfg.h"
+--    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_SOURCE_DIR}/cmake/lang_cfg.cmake ${LANG_CODES} 2> ${GENERATED_SRC}/lang_cfg.h
+-+    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_SOURCE_DIR}/cmake/lang_cfg.cmake ${GENERATED_SRC}/lang_cfg.h ${LANG_CODES}
+-     DEPENDS ${LANGUAGE_FILES}
+-     OUTPUT ${GENERATED_SRC}/lang_cfg.h
+- )
+--- 
+-2.9.3
+-
+diff --git a/package/doxygen/doxygen.hash b/package/doxygen/doxygen.hash
+index 4cf53e7acb..db70b74d23 100644
+--- a/package/doxygen/doxygen.hash
++++ b/package/doxygen/doxygen.hash
+@@ -1,2 +1,2 @@
+ # Computed locally
+-sha256 af667887bd7a87dc0dbf9ac8d86c96b552dfb8ca9c790ed1cbffaa6131573f6b  doxygen-1.8.13.src.tar.gz
++sha256 d1757e02755ef6f56fd45f1f4398598b920381948d6fcfa58f5ca6aa56f59d4d  doxygen-1.8.14.src.tar.gz
+diff --git a/package/doxygen/doxygen.mk b/package/doxygen/doxygen.mk
+index 10cdcf97e0..5e11a1d187 100644
+--- a/package/doxygen/doxygen.mk
++++ b/package/doxygen/doxygen.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SDL2_VERSION = 2.0.8
-+SDL2_VERSION = 2.0.9
- SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
- SDL2_SITE = http://www.libsdl.org/release
- SDL2_LICENSE = Zlib
+-DOXYGEN_VERSION = 1.8.13
++DOXYGEN_VERSION = 1.8.14
+ DOXYGEN_SOURCE = doxygen-$(DOXYGEN_VERSION).src.tar.gz
+ DOXYGEN_SITE = http://ftp.stack.nl/pub/users/dimitri
+ DOXYGEN_LICENSE = GPL-2.0
