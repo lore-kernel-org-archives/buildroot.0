@@ -1,61 +1,52 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 Nov 2018 18:15:48 +0100
-Subject: [Buildroot] [PATCH 1/4 v2] core/download: drop the SSH command
+Date: Sat, 17 Nov 2018 18:15:49 +0100
+Subject: [Buildroot] [PATCH 2/4 v2] support/dependencies: treat BSD-tar like
+ the other cases
 In-Reply-To: <cover.1542474939.git.yann.morin.1998@free.fr>
 References: <cover.1542474939.git.yann.morin.1998@free.fr>
-Message-ID: <3112a0a19120c6af84b83833aa09014a3dd95fb5.1542474939.git.yann.morin.1998@free.fr>
+Message-ID: <4f64f0e70862eef52fe97b713186f1e3bbff3449.1542474939.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The ssh command was added back in 2011 with commit c61788f09 (GENTARGETS:
-add support for scp://) and was used to check that the remote file
-existed, back when we supported 'make source-check'.
+Currently, when we detect that tar is BSD-tar, we fake an unsupported
+version (major, minor) and rely on the version check to reject BSD-tar.
 
-However, in 2017, with commit bf28a165d (pkg-{download, generic}: remove
-source-check), we actually removed support for source-check.
+There is no reason to use such shenanigans, when we can simply reject it
+from the onset.
 
-The SSH command however was not removed then, and stuck, even though
-nothing ever uses it It is not even exported in the environment, and scp
-does not use it either (it has -S to specify an ssh-compatible program).
+Simplify the logic:
+  - use positive logic in the condition
+  - directly exit in error
 
-Get rid of it.
+Also, comment that case like the other cases are commented.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 ---
- Config.in               | 4 ----
- package/pkg-download.mk | 1 -
- 2 files changed, 5 deletions(-)
+ support/dependencies/check-host-tar.sh | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index 03e4eb3928..f965e9d6d8 100644
---- a/Config.in
-+++ b/Config.in
-@@ -136,10 +136,6 @@ config BR2_SCP
- 	string "Secure copy (scp) command"
- 	default "scp"
+diff --git a/support/dependencies/check-host-tar.sh b/support/dependencies/check-host-tar.sh
+index 0857307396..934cb61299 100755
+--- a/support/dependencies/check-host-tar.sh
++++ b/support/dependencies/check-host-tar.sh
+@@ -20,10 +20,11 @@ major=`echo "$version" | cut -d. -f1`
+ minor=`echo "$version" | cut -d. -f2`
+ bugfix=`echo "$version" | cut -d. -f3`
+ version_bsd=`$tar --version | grep 'bsdtar'`
+-if [ ! -z "${version_bsd}" ] ; then 
+-  # mark as invalid version - not all command line options are available
+-  major=0
+-  minor=0
++
++# BSD tar does not have all the command-line options
++if [ -n "${version_bsd}" ] ; then
++    # echo nothing: no suitable tar found
++    exit 1
+ fi
  
--config BR2_SSH
--	string "Secure shell (ssh) command"
--	default "ssh"
--
- config BR2_HG
- 	string "Mercurial (hg) command"
- 	default "hg"
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 73ea2a69f8..6293e2985b 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -15,7 +15,6 @@ export BZR := $(call qstrip,$(BR2_BZR))
- export GIT := $(call qstrip,$(BR2_GIT))
- export HG := $(call qstrip,$(BR2_HG))
- export SCP := $(call qstrip,$(BR2_SCP))
--SSH := $(call qstrip,$(BR2_SSH))
- export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
- 
- DL_WRAPPER = support/download/dl-wrapper
+ # Minimal version = 1.27 (previous versions do not correctly unpack archives
 -- 
 2.14.1
