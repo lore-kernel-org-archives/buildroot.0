@@ -1,117 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 17 Nov 2018 08:00:18 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-11-16
-Message-ID: <20181117070018.7BA2A207BD@mail.bootlin.com>
+From: Nasser Afshin <afshin.nasser@gmail.com>
+Date: Sat, 17 Nov 2018 10:34:29 +0330
+Subject: [Buildroot] [PATCH] libpng: bump to 1.6.35
+In-Reply-To: <87muq964m5.fsf@tkos.co.il>
+References: <20181115225315.31171-1-afshin.nasser@gmail.com>
+ <87muq964m5.fsf@tkos.co.il>
+Message-ID: <20181117070408.GA7710@smart-All-Series>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-Build statistics for 2018-11-16
-===============================
-
-      branch |  OK | NOK | TIM | TOT |
-   2018.02.x |  19 |   2 |   0 |  21 |
-   2018.08.x |  24 |   2 |   0 |  26 |
-      master | 182 |  16 |   0 | 198 |
-        next |  34 |   3 |   1 |  38 |
-
-Results for branch '2018.02.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-neardal-33b54a55032b047fd88... | 1 
-       xproto_inputproto-2.3.2 | 1 
-
-
-Detail of failures
-------------------
-
-         arc | neardal-33b54a55032b047fd88... | NOK | http://autobuild.buildroot.net/results/6a0d5ffc85e898aa54c85a9b34270bcdfdb00af1 |     
-     aarch64 |        xproto_inputproto-2.3.2 | NOK | http://autobuild.buildroot.net/results/bd1236659dac10d77fad105104f558a556fe9469 |     
-
-Results for branch '2018.08.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-           musl-compat-headers | 1 
-          shairport-sync-3.2.1 | 1 
-
-
-Detail of failures
-------------------
-
-         arm |            musl-compat-headers | NOK | http://autobuild.buildroot.net/results/67e975378bf1674fd3f70ab8dbf4c877dcdb9609 |     
-         arm |           shairport-sync-3.2.1 | NOK | http://autobuild.buildroot.net/results/ace188c90deb877dc858b1d7f0e338acf3e7e5d1 |     
-
-Results for branch 'master'
-===========================
-
-Classification of failures by reason
-------------------------------------
-
-                   luvi-v2.7.6 | 3 
-               boa-0.94.14rc21 | 2 
-      docker-containerd-v1.1.3 | 1 
-     docker-engine-v17.05.0-ce | 1 
-       gst-plugins-bad-0.10.23 | 1 
-             libid3tag-0.15.1b | 1 
-            mesa3d-demos-8.4.0 | 1 
-           musl-compat-headers | 1 
-                poppler-0.59.0 | 1 
-                      qt-4.8.7 | 1 
-    trace-cmd-trace-cmd-v2.6.1 | 1 
-uclibc-ng-test-c6d62cbc6050... | 1 
-               valgrind-3.14.0 | 1 
-
-
-Detail of failures
-------------------
-
-         arc |                boa-0.94.14rc21 | NOK | http://autobuild.buildroot.net/results/2b68745754ac8399084e19152e7d44404c684f9e | ORPH
-     riscv64 |                boa-0.94.14rc21 | NOK | http://autobuild.buildroot.net/results/384c7f20905b3fae4054ce7199aed8210e1494c5 | ORPH
-      x86_64 |       docker-containerd-v1.1.3 | NOK | http://autobuild.buildroot.net/results/008a287b31e7f720e5513ed8d0b61f0262beb47d |     
-      x86_64 |      docker-engine-v17.05.0-ce | NOK | http://autobuild.buildroot.net/results/bb5ea22e4ac79508e7ccc37ddcd42880b6235f08 |     
-        mips |        gst-plugins-bad-0.10.23 | NOK | http://autobuild.buildroot.net/results/3cec1fb8ed637729d2ef6f23f957d54d71e54c1c | ORPH
-         arm |              libid3tag-0.15.1b | NOK | http://autobuild.buildroot.net/results/ac3870208aab6001db6b790b6c5dde64d08f7669 | ORPH
-      x86_64 |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/4da45322834d52c9358e2a50e9c895830a301c19 |     
-      x86_64 |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/94f629daeb929eaae9d7aaeb0a8e6f314b0d2217 |     
-      x86_64 |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/c6cf715c4d4c92a75cbae05f5a0ef9b0b5438c69 |     
-     aarch64 |             mesa3d-demos-8.4.0 | NOK | http://autobuild.buildroot.net/results/356de83d2f00ea69a1cde703b6574890d5a1c38a |     
-      x86_64 |            musl-compat-headers | NOK | http://autobuild.buildroot.net/results/796d26509f748f0f90b50c5e2292c8b11180313f |     
-         arm |                 poppler-0.59.0 | NOK | http://autobuild.buildroot.net/results/2fada81c3fc6b13de4705ceac04225c85f882511 |     
-         arm |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/d7e302a7e163a5ff4ea80db6da144dbdf9e9a79a | ORPH
-       sparc |     trace-cmd-trace-cmd-v2.6.1 | NOK | http://autobuild.buildroot.net/results/5f1ababa8d9bb4c94391e65c6bd929c3ae321835 |     
-         arm | uclibc-ng-test-c6d62cbc6050... | NOK | http://autobuild.buildroot.net/results/a316e2b48d84da6ad5fa1dc873d272df33cef931 |     
-    mips64el |                valgrind-3.14.0 | NOK | http://autobuild.buildroot.net/results/917d9ec5fbdf70e98c837465a4105c42647aa58a | ORPH
-
-Results for branch 'next'
-=========================
-
-Classification of failures by reason
-------------------------------------
-
-               boa-0.94.14rc21 | 1 
-     docker-engine-v17.05.0-ce | 1 
-             gstreamer-0.10.36 | 1 
-                host-libsodium | 1 
-
-
-Detail of failures
-------------------
-
-         arm |                boa-0.94.14rc21 | NOK | http://autobuild.buildroot.net/results/324f3211332ff5f443e758946f993ee0469c510e | ORPH
-         arm |      docker-engine-v17.05.0-ce | NOK | http://autobuild.buildroot.net/results/0505e31c0feab9b38235b4ef5b3a1ef47c538a15 |     
-     riscv64 |              gstreamer-0.10.36 | NOK | http://autobuild.buildroot.net/results/da6dff69a9a008a80e56100c2cf6cb5daacb4706 | ORPH
-      mipsel |                 host-libsodium | TIM | http://autobuild.buildroot.net/results/fa624a4032da5116dfface072658bc77bc9b8062 |     
-
-
--- 
-http://autobuild.buildroot.net
+Hi Baruch,
+On Fri, Nov 16, 2018 at 06:14:26AM +0200, Baruch Siach wrote:
+> Hi Nasser,
+> 
+> Nasser Afshin writes:
+> > Also use https instead of http to retrieve the hashes.
+> >
+> > Signed-off-by: Nasser Afshin <afshin.nasser@gmail.com>
+> > ---
+> >  package/libpng/libpng.hash | 10 +++++-----
+> >  package/libpng/libpng.mk   |  2 +-
+> >  2 files changed, 6 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
+> > index 0a0cebee91..27f66a5d01 100644
+> > --- a/package/libpng/libpng.hash
+> > +++ b/package/libpng/libpng.hash
+> > @@ -1,7 +1,7 @@
+> > -# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.34/
+> > -md5		c05b6ca7190a5e387b78657dbe5536b2			libpng-1.6.34.tar.xz
+> > -sha1	45de4ec996ffcc3e18037e7c128abe95f4d0292a	libpng-1.6.34.tar.xz
+> > +# From https://sourceforge.net/projects/libpng/files/libpng16/1.6.35/
+> > +md5		678b7e696a62a193ed3503b04bf449d6			libpng-1.6.35.tar.xz
+> > +sha1	0df1561aa1da610e892239348970d574b14deed0	libpng-1.6.35.tar.xz
+> >  
+> >  # Locally computed:
+> > -sha256	2f1e960d92ce3b3abd03d06dfec9637dfbd22febf107a536b44f7a47c60659f6	libpng-1.6.34.tar.xz
+> > -sha256	a247c24f82bacf0403fe2f3d5550493a91cdb575fe7036b764bda8cacf3efd9c	LICENSE
+> > +sha256	23912ec8c9584917ed9b09c5023465d71709dce089be503c7867fec68a93bcd7	libpng-1.6.35.tar.xz
+> > +sha256	f9850940c6606003eea9c8864b2a3f177eb5c963614aba5a3c5a24c47dd043ab	LICENSE
+> 
+> Please mentions in the commit log what changed in the LICENSE file.
+OK, I 'll resend the patch.
+> 
+> > diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+> > index ace62cd876..b6d1d8d071 100644
+> > --- a/package/libpng/libpng.mk
+> > +++ b/package/libpng/libpng.mk
+> > @@ -4,7 +4,7 @@
+> >  #
+> >  ################################################################################
+> >  
+> > -LIBPNG_VERSION = 1.6.34
+> > +LIBPNG_VERSION = 1.6.35
+> >  LIBPNG_SERIES = 16
+> >  LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
+> >  LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng$(LIBPNG_SERIES)/$(LIBPNG_VERSION)
+> 
+> baruch
+> 
+> -- 
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Kind regards,
+Nasser
