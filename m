@@ -1,52 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 Nov 2018 18:15:49 +0100
-Subject: [Buildroot] [PATCH 2/4 v2] support/dependencies: treat BSD-tar like
- the other cases
+Date: Sat, 17 Nov 2018 18:15:50 +0100
+Subject: [Buildroot] [PATCH 3/4 v2] package/gzip: add host variant
 In-Reply-To: <cover.1542474939.git.yann.morin.1998@free.fr>
 References: <cover.1542474939.git.yann.morin.1998@free.fr>
-Message-ID: <4f64f0e70862eef52fe97b713186f1e3bbff3449.1542474939.git.yann.morin.1998@free.fr>
+Message-ID: <b361da9fb70b68c8d768b9e6fbadc8f3f0539ec5.1542474939.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, when we detect that tar is BSD-tar, we fake an unsupported
-version (major, minor) and rely on the version check to reject BSD-tar.
+In case someone is building on a musl-based distro (Alpine), we do as
+for the target variant, and force the fflush_stdin detection.
 
-There is no reason to use such shenanigans, when we can simply reject it
-from the onset.
-
-Simplify the logic:
-  - use positive logic in the condition
-  - directly exit in error
-
-Also, comment that case like the other cases are commented.
+We however do not do the /bin/sh trick, because we are building
+natively, so the shell check is working.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- support/dependencies/check-host-tar.sh | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ package/gzip/gzip.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/support/dependencies/check-host-tar.sh b/support/dependencies/check-host-tar.sh
-index 0857307396..934cb61299 100755
---- a/support/dependencies/check-host-tar.sh
-+++ b/support/dependencies/check-host-tar.sh
-@@ -20,10 +20,11 @@ major=`echo "$version" | cut -d. -f1`
- minor=`echo "$version" | cut -d. -f2`
- bugfix=`echo "$version" | cut -d. -f3`
- version_bsd=`$tar --version | grep 'bsdtar'`
--if [ ! -z "${version_bsd}" ] ; then 
--  # mark as invalid version - not all command line options are available
--  major=0
--  minor=0
-+
-+# BSD tar does not have all the command-line options
-+if [ -n "${version_bsd}" ] ; then
-+    # echo nothing: no suitable tar found
-+    exit 1
- fi
+diff --git a/package/gzip/gzip.mk b/package/gzip/gzip.mk
+index d48cb1aa15..8ac6ddd6ed 100644
+--- a/package/gzip/gzip.mk
++++ b/package/gzip/gzip.mk
+@@ -12,6 +12,7 @@ GZIP_CONF_OPTS = --exec-prefix=/
+ GZIP_LICENSE = GPL-3.0+
+ GZIP_LICENSE_FILES = COPYING
+ GZIP_CONF_ENV += gl_cv_func_fflush_stdin=yes
++HOST_GZIP_CONF_ENV += gl_cv_func_fflush_stdin=yes
+ # configure substitutes $(SHELL) for the shell shebang in scripts like
+ # gzexe. Unfortunately, the same $(SHELL) variable will also be used by
+ # make to run its commands. Fortunately, /bin/sh is always a POSIX shell
+@@ -21,3 +22,4 @@ GZIP_CONF_ENV += gl_cv_func_fflush_stdin=yes
+ GZIP_CONF_ENV += ac_cv_path_shell=/bin/sh
  
- # Minimal version = 1.27 (previous versions do not correctly unpack archives
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 2.14.1
