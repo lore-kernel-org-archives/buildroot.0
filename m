@@ -1,64 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 17 Nov 2018 22:04:04 +0100
-Subject: [Buildroot] [git commit] easydbus: fix build without C++
-Message-ID: <20181117210248.21A0F837FE@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 17 Nov 2018 22:48:04 +0100
+Subject: [Buildroot] [DRAFT v1] meson: change from global to per package
+ cross-compilation.conf
+Message-ID: <20181117214804.30194-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8fc4364a40a518fa21fe5c830675c7f30ede8ff
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Specify that easydbus is a C project file otherwise build will fail if
-no C++ compiler is found by cmake
-
-Fixes:
- - http://autobuild.buildroot.org/results/486c3cd98124e7415dee2fd1463bd5e0fcc9ba91
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- .../0001-easydbus-is-a-C-project-file.patch        | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ package/pkg-meson.mk | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/package/easydbus/0001-easydbus-is-a-C-project-file.patch b/package/easydbus/0001-easydbus-is-a-C-project-file.patch
-new file mode 100644
-index 0000000000..1c149c582c
---- /dev/null
-+++ b/package/easydbus/0001-easydbus-is-a-C-project-file.patch
-@@ -0,0 +1,33 @@
-+From a4bd47f593fbe55bd3ab17532e64be74aff5b29d Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 17 Nov 2018 11:38:05 +0100
-+Subject: [PATCH] easydbus is a C project file
-+
-+Specify that easydbus is a C project file otherwise build will fail if
-+no C++ compiler is found by cmake
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/486c3cd98124e7415dee2fd1463bd5e0fcc9ba91
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/mniestroj/easydbus/pull/2]
-+---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 58ccb2d..575eb24 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -5,7 +5,7 @@
-+ #
-+ 
-+ cmake_minimum_required(VERSION 2.6)
-+-project(easydbus)
-++project(easydbus C)
-+ 
-+ add_definitions("-Wall -Wextra -Wno-unused-parameter")
-+ set(CMAKE_C_FLAGS_RELEASE "-O2")
-+-- 
-+2.17.1
-+
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index 507e686068..a01fe26060 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -64,12 +64,22 @@ ifeq ($(4),target)
+ define $(2)_CONFIGURE_CMDS
+ 	rm -rf $$($$(PKG)_SRCDIR)/build
+ 	mkdir -p $$($$(PKG)_SRCDIR)/build
++	sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
++	    -e "s%@TARGET_ARCH@%$(ARCH)%g" \
++	    -e "s%@TARGET_CPU@%$$(GCC_TARGET_CPU)%g" \
++	    -e "s%@TARGET_ENDIAN@%$(call LOWERCASE,$(BR2_ENDIAN))%g" \
++	    -e "s%@TARGET_CFLAGS@%$(if $(TARGET_CFLAGS),`printf '"%s"$(comma) ' $(TARGET_CFLAGS)`)%g" \
++	    -e "s%@TARGET_LDFLAGS@%$(if $(TARGET_LDFLAGS),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)%g" \
++	    -e "s%@TARGET_CXXFLAGS@%$(if $(TARGET_CXXFLAGS),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)%g" \
++	    -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
++	    package/meson/cross-compilation.conf.in \
++	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
+ 	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
+ 		--prefix=/usr \
+ 		--libdir=lib \
+ 		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
+ 		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
+-		--cross-file=$(HOST_DIR)/etc/meson/cross-compilation.conf \
++		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
+ 		$$($$(PKG)_CONF_OPTS) \
+ 		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
+ endef
+-- 
+2.19.1
