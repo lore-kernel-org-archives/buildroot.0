@@ -1,44 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 Nov 2018 22:00:00 +0100
-Subject: [Buildroot] [git commit] msmtp: enable msmtpd if MMU is available
-Message-ID: <20181202071556.56E028843B@busybox.osuosl.org>
+Date: Sat, 17 Nov 2018 21:59:47 +0100
+Subject: [Buildroot] [git commit] libsigrok: bump version to 0.5.1
+Message-ID: <20181202071555.F2CEF8843B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6dbfbb7be2eaed7688dbfc4039ee6b1eaf74f399
+commit: https://git.buildroot.net/buildroot/commit/?id=922b82bde9d554237769c21e50f6c5b4f73f41a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-msmtpd uses fork so enable it if MMU is available
+Since commit 79034d4f39f7 ("strutil: Locale independent snprintf()
+and vsnprintf() functions") libsigrok now needs to know locale_t.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/msmtp/msmtp.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ package/libsigrok/Config.in      | 3 ++-
+ package/libsigrok/libsigrok.hash | 2 +-
+ package/libsigrok/libsigrok.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
-index 2370591614..a495072abf 100644
---- a/package/msmtp/msmtp.mk
-+++ b/package/msmtp/msmtp.mk
-@@ -8,10 +8,17 @@ MSMTP_VERSION = 1.8.0
- MSMTP_SITE = https://marlam.de/msmtp/releases
- MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.xz
- MSMTP_DEPENDENCIES = host-pkgconf
--MSMTP_CONF_OPTS = --disable-gai-idn --without-msmtpd
-+MSMTP_CONF_OPTS = --disable-gai-idn
- MSMTP_LICENSE = GPL-3.0+
- MSMTP_LICENSE_FILES = COPYING
+diff --git a/package/libsigrok/Config.in b/package/libsigrok/Config.in
+index fb74beaab5..bb76e09d2d 100644
+--- a/package/libsigrok/Config.in
++++ b/package/libsigrok/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBSIGROK
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
++	depends on BR2_ENABLE_LOCALE
+ 	depends on !BR2_STATIC_LIBS # libzip
+ 	# std=c11
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+@@ -35,7 +36,7 @@ comment "C++ bindings need a toolchain w/ C++, gcc >= 4.9"
  
-+# msmtpd needs fork
-+ifeq ($(BR2_USE_MMU),y)
-+MSMTP_CONF_OPTS += --with-msmtpd
-+else
-+MSMTP_CONF_OPTS += --without-msmtpd
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBGSASL),y)
- MSMTP_CONF_OPTS += --with-libgsasl
- MSMTP_DEPENDENCIES += libgsasl
+ endif
+ 
+-comment "libsigrok needs a toolchain w/ wchar, threads, dynamic library, gcc >= 4.7"
++comment "libsigrok needs a toolchain w/ wchar, locale, threads, dynamic library, gcc >= 4.7"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || BR2_STATIC_LIBS
+diff --git a/package/libsigrok/libsigrok.hash b/package/libsigrok/libsigrok.hash
+index 47ad6129f6..7a52c6ca1b 100644
+--- a/package/libsigrok/libsigrok.hash
++++ b/package/libsigrok/libsigrok.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	4c8c86779b880a5c419f6c77a08b1147021e5a19fa83b0f3b19da27463c9f3a4	libsigrok-0.5.0.tar.gz
++sha256	e40fde7af98d29e922e9d3cbe0a6c0569889153fc31e47b8b1afe4d846292b9c	libsigrok-0.5.1.tar.gz
+diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
+index ef7fab82bd..5bca9ad518 100644
+--- a/package/libsigrok/libsigrok.mk
++++ b/package/libsigrok/libsigrok.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBSIGROK_VERSION = 0.5.0
++LIBSIGROK_VERSION = 0.5.1
+ LIBSIGROK_SITE = http://sigrok.org/download/source/libsigrok
+ LIBSIGROK_LICENSE = GPL-3.0+
+ LIBSIGROK_LICENSE_FILES = COPYING
