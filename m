@@ -1,46 +1,74 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 17 Nov 2018 22:48:04 +0100
-Subject: [Buildroot] [DRAFT v1] meson: change from global to per package
- cross-compilation.conf
-Message-ID: <20181117214804.30194-1-ps.report@gmx.net>
+Date: Sat, 17 Nov 2018 22:56:46 +0100
+Subject: [Buildroot] Making the Meson integration compatible with
+ per-package folders
+In-Reply-To: <20181116164859.4c0f4781@windsurf>
+References: <20181116164859.4c0f4781@windsurf>
+Message-ID: <20181117225646.0874e8f4@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/pkg-meson.mk | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+Hello Thomas,
 
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index 507e686068..a01fe26060 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -64,12 +64,22 @@ ifeq ($(4),target)
- define $(2)_CONFIGURE_CMDS
- 	rm -rf $$($$(PKG)_SRCDIR)/build
- 	mkdir -p $$($$(PKG)_SRCDIR)/build
-+	sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
-+	    -e "s%@TARGET_ARCH@%$(ARCH)%g" \
-+	    -e "s%@TARGET_CPU@%$$(GCC_TARGET_CPU)%g" \
-+	    -e "s%@TARGET_ENDIAN@%$(call LOWERCASE,$(BR2_ENDIAN))%g" \
-+	    -e "s%@TARGET_CFLAGS@%$(if $(TARGET_CFLAGS),`printf '"%s"$(comma) ' $(TARGET_CFLAGS)`)%g" \
-+	    -e "s%@TARGET_LDFLAGS@%$(if $(TARGET_LDFLAGS),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)%g" \
-+	    -e "s%@TARGET_CXXFLAGS@%$(if $(TARGET_CXXFLAGS),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)%g" \
-+	    -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
-+	    package/meson/cross-compilation.conf.in \
-+	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
- 	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
- 		--prefix=/usr \
- 		--libdir=lib \
- 		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
- 		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
--		--cross-file=$(HOST_DIR)/etc/meson/cross-compilation.conf \
-+		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
- 		$$($$(PKG)_CONF_OPTS) \
- 		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
- endef
--- 
-2.19.1
+On Fri, 16 Nov 2018 16:48:59 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+
+> Eric, Peter,
+> 
+> I don't know if you have followed the discussion, but I recently sent a
+> new iteration of the per-package folder series [1], which allows to
+> support top-level parallel build.
+
+Not in details (and did no test the patches yet)...
+
+> 
+> Currently the Meson integration in Buildroot doesn't work with this
+> per-package folder stuff.
+> 
+> The initial issue is that:
+> 
+>    --cross-file=$(HOST_DIR)/etc/meson/cross-compilation.conf
+> 
+> should be:
+> 
+>    --cross-file=$$(HOST_DIR)/etc/meson/cross-compilation.conf
+> 
+> But of course, behind that, there's a bigger issue: this
+> cross-compilation.conf hardcodes the compiler path, library path, etc.
+> However, with per-package folders, we really need to use the compiler
+> and libraries from the per-package folder of the current package.
+> 
+> To achieve this, we will need to generate a per-package
+> cross-compilation.conf, which is something Peter was already proposing
+> in http://patchwork.ozlabs.org/patch/946599/. However, compared to this
+> patch, we would need:
+> 
+>  (1) Replacing not only the CFLAGS, but also the compiler/library paths.
+> 
+
+First draft version:
+
+    http://patchwork.ozlabs.org/patch/999406/
+
+Maybe $$($$(PKG)_SRCDIR) could be exchanged with $$(HOST_DIR)...
+
+>  (2) Producing a final cross-compilation.conf, which can be used by
+>      people using the toolchain outside of Buildroot.
+> 
+
+No problem, just keep the original code in package/meson/meson.mk?
+
+Regards,
+Peter
+
+> I am sending this e-mail to see if you are willing/available to help on
+> this, or if you would like me to take over this work and propose a
+> patch series.
+> 
+> Thanks a lot!
+> 
+> Thomas
+> 
+> [1] http://patchwork.ozlabs.org/project/buildroot/list/?series=75909
