@@ -1,9 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 18 Nov 2018 19:50:15 -0200
-Subject: [Buildroot] [PATCH v2 5/6] testing/tests: CLANG compiler-rt
- runtime test
-References: <1542426982-54683-5-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <5bf1de972509d_7ce43f955806b7385643a@ultri5.mail>
+Date: Sun, 18 Nov 2018 19:53:07 -0200
+Subject: [Buildroot] [PATCH v2 6/6] llvm/clang: add note about version
+ bumping together
+References: <1542426982-54683-6-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <5bf1df435c888_7ce43f955803c58c56625@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,28 +12,35 @@ To: buildroot@busybox.net
 
 Hello,
 
-IMO, much nicer the way you did, using the project in the package instead of
-adding a copy of the .cc file!
+Here again, the changes could be made while applying.
+But please double-check, maybe I missed something.
 
 On Sat, Nov 17, 2018 at 01:56 AM, Matt Weber wrote:
 
-> This patch adds a test case that
->  1) Builds the complete LLVM and CLANG set of host tools
->  2) Cross-compiles the compiler-rt runtime using CLANG
->  3) Builds a cross-compiled application using CLANG and the libfuzzer
->     compiler-rt library.
->  4) Executes the fuzz application (part of the libfuzzer package) on
->     target and checks expected output
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+[snip]
+> +++ b/package/clang/clang.mk
+> @@ -4,6 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> +# LLVM and Clang should be version bumped together
 
-Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-[with the entire series applied on next branch:
- https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/121908178
- NOTE: this test case takes longer than test_rust, ~2 hours in my host
- machine with all tarballs previously downloaded]
-Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+As I replied to patch 1, shouldn't compiler-rt be added to this list?
+
+>  CLANG_VERSION = 7.0.0
+>  CLANG_SITE = http://llvm.org/releases/$(CLANG_VERSION)
+>  CLANG_SOURCE = cfe-$(CLANG_VERSION).src.tar.xz
+> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+> index 79477f0..56f6ed9 100644
+> --- a/package/llvm/llvm.mk
+> +++ b/package/llvm/llvm.mk
+> @@ -4,6 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> +# LLVM and Clang should be version bumped together
+
+Same here.
 
 
 Regards,
