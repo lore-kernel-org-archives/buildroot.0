@@ -1,196 +1,85 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 Nov 2018 21:15:18 +0100
-Subject: [Buildroot] [git commit] binutils: Get rid of obsolete patches
-Message-ID: <20181202071556.466AA8843B@busybox.osuosl.org>
+Date: Sun, 18 Nov 2018 21:59:24 +0100
+Subject: [Buildroot] [git commit] msmtp: bump to version 1.8.0
+Message-ID: <20181202071556.4ED208843B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bfb6d66483814703239de2149dd3daf80de1129a
+commit: https://git.buildroot.net/buildroot/commit/?id=b68ad1b2d0d1c290489e0b4e1afec46b8220a8b9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some patches for Binutils seems to not be really needed.
-Moreover for some of them I was not able to find any justification
-for their introduction.
+- Update site to https://marlam.de/msmtp/ (see
+  https://sourceforge.net/projects/msmtp)
+- Replace libidn by libidn2:
+  https://github.com/marlam/msmtp-mirror/commit/0d8be2a35f0c7757d1f423e2d21f042626fec60e
+- Disable msmtpd (minimal SMTP server) as it uses fork:
+  https://github.com/marlam/msmtp-mirror/commit/e0bc975fbfb8b26a6dfaac87ebc64d3f37ef1e36
 
-1. 0002-ld-makefile.patch
-
-   This one I may track down to at least 2.15.92.0.2 here [1].
-   Commit message just says: "Integrate some debian patches,
-   extracted from binutils_2.15-4.diff"
-
-   But in OpenEmbedded they got rid of it long ago on switch to 2.26, see [2].
-
-2. 0003-check-ldrunpath-length.patch
-
-   The same story here.
-
-3. 0004-add-sysroot-fix-from-bug-3049.patch
-
-   Bug mentioned in this patch was marked as "fixed" in 2012, see [3].
-
-[1] https://git.buildroot.org/buildroot/commit/?id=ce2722a8f2abee5b60862bc896333b77a7502c82
-[2] https://github.com/openembedded/openembedded-core/commit/3c7fe424f850af70989ad682dd9c5be70cd02ca5
-[3]https://sourceware.org/bugzilla/show_bug.cgi?id=10340
-
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Romain Naour <romain.naour@smile.fr>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/binutils/2.31.1/0002-ld-makefile.patch     | 41 -----------------
- .../2.31.1/0003-check-ldrunpath-length.patch       | 36 ---------------
- .../0004-add-sysroot-fix-from-bug-3049.patch       | 51 ----------------------
- 3 files changed, 128 deletions(-)
+ package/msmtp/Config.in  |  2 +-
+ package/msmtp/msmtp.hash |  7 ++-----
+ package/msmtp/msmtp.mk   | 10 +++++-----
+ 3 files changed, 8 insertions(+), 11 deletions(-)
 
-diff --git a/package/binutils/2.31.1/0002-ld-makefile.patch b/package/binutils/2.31.1/0002-ld-makefile.patch
-deleted file mode 100644
-index 6893d65aa0..0000000000
---- a/package/binutils/2.31.1/0002-ld-makefile.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From ae435bc27e1eb59e4ad571a37a144bf99dc68f55 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Fri, 25 Dec 2015 11:40:53 +0100
--Subject: [PATCH] ld-makefile
--
--[Romain: rebase on top of 2.26]
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- ld/Makefile.am | 2 +-
-- ld/Makefile.in | 2 +-
-- 2 files changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/ld/Makefile.am b/ld/Makefile.am
--index d86ad0940c9..c95b0ef0252 100644
----- a/ld/Makefile.am
--+++ b/ld/Makefile.am
--@@ -57,7 +57,7 @@ endif
-- # We put the scripts in the directory $(scriptdir)/ldscripts.
-- # We can't put the scripts in $(datadir) because the SEARCH_DIR
-- # directives need to be different for native and cross linkers.
---scriptdir = $(tooldir)/lib
--+scriptdir = $(libdir)
-- 
-- EMUL = @EMUL@
-- EMULATION_OFILES = @EMULATION_OFILES@
--diff --git a/ld/Makefile.in b/ld/Makefile.in
--index 4792b2b013c..789df2d01b9 100644
----- a/ld/Makefile.in
--+++ b/ld/Makefile.in
--@@ -563,7 +563,7 @@ AM_CFLAGS = $(WARN_CFLAGS) $(ELF_CLFAGS)
-- # We put the scripts in the directory $(scriptdir)/ldscripts.
-- # We can't put the scripts in $(datadir) because the SEARCH_DIR
-- # directives need to be different for native and cross linkers.
---scriptdir = $(tooldir)/lib
--+scriptdir = $(libdir)
-- BASEDIR = $(srcdir)/..
-- BFDDIR = $(BASEDIR)/bfd
-- INCDIR = $(BASEDIR)/include
---- 
--2.14.4
--
-diff --git a/package/binutils/2.31.1/0003-check-ldrunpath-length.patch b/package/binutils/2.31.1/0003-check-ldrunpath-length.patch
-deleted file mode 100644
-index 6cdf085422..0000000000
---- a/package/binutils/2.31.1/0003-check-ldrunpath-length.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From a216bfcd91363a8e8c14db320a2870fff2985d78 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Fri, 25 Dec 2015 11:41:47 +0100
--Subject: [PATCH] check-ldrunpath-length
--
--[Romain: rebase on top of 2.26]
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- ld/emultempl/elf32.em | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/ld/emultempl/elf32.em b/ld/emultempl/elf32.em
--index 1ad9d6b6fa8..637a5d5d585 100644
----- a/ld/emultempl/elf32.em
--+++ b/ld/emultempl/elf32.em
--@@ -1471,6 +1471,8 @@ fragment <<EOF
-- 	      && command_line.rpath == NULL)
-- 	    {
-- 	      path = (const char *) getenv ("LD_RUN_PATH");
--+	      if ((path) && (strlen (path) == 0))
--+	        path = NULL;
-- 	      if (path
-- 		  && gld${EMULATION_NAME}_search_needed (path, &n, force))
-- 		break;
--@@ -1751,6 +1753,8 @@ gld${EMULATION_NAME}_before_allocation (void)
--   rpath = command_line.rpath;
--   if (rpath == NULL)
--     rpath = (const char *) getenv ("LD_RUN_PATH");
--+  if ((rpath) && (strlen (rpath) == 0))
--+    rpath = NULL;
-- 
--   for (abfd = link_info.input_bfds; abfd; abfd = abfd->link.next)
--     if (bfd_get_flavour (abfd) == bfd_target_elf_flavour)
---- 
--2.14.4
--
-diff --git a/package/binutils/2.31.1/0004-add-sysroot-fix-from-bug-3049.patch b/package/binutils/2.31.1/0004-add-sysroot-fix-from-bug-3049.patch
-deleted file mode 100644
-index 1ef1385062..0000000000
---- a/package/binutils/2.31.1/0004-add-sysroot-fix-from-bug-3049.patch
-+++ /dev/null
-@@ -1,51 +0,0 @@
--From 73ecf6f6a1f327c9fa3af1fc924d152321aac801 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Fri, 25 Dec 2015 11:42:48 +0100
--Subject: [PATCH] add sysroot fix from bug #3049
--
--Always try to prepend the sysroot prefix to absolute filenames first.
--
--http://bugs.gentoo.org/275666
--http://sourceware.org/bugzilla/show_bug.cgi?id=10340
--
--Signed-off-by: Sven Rebhan <odinshorse@googlemail.com>
--[Romain: rebase on top of 2.26]
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- ld/ldfile.c | 10 ++++++++--
-- 1 file changed, 8 insertions(+), 2 deletions(-)
--
--diff --git a/ld/ldfile.c b/ld/ldfile.c
--index a72ff135264..b3d166cbd60 100644
----- a/ld/ldfile.c
--+++ b/ld/ldfile.c
--@@ -338,18 +338,24 @@ ldfile_open_file_search (const char *arch,
--      directory first.  */
--   if (!entry->flags.maybe_archive)
--     {
---      if (entry->flags.sysrooted && IS_ABSOLUTE_PATH (entry->filename))
--+     /* For absolute pathnames, try to always open the file in the
--+	 sysroot first. If this fails, try to open the file at the
--+	 given location.  */
--+     entry->flags.sysrooted = is_sysrooted_pathname (entry->filename);
--+     if (!entry->flags.sysrooted && IS_ABSOLUTE_PATH (entry->filename)
--+     && ld_sysroot)
-- 	{
-- 	  char *name = concat (ld_sysroot, entry->filename,
-- 			       (const char *) NULL);
-- 	  if (ldfile_try_open_bfd (name, entry))
-- 	    {
-- 	      entry->filename = name;
--+	      entry->flags.sysrooted = TRUE;
-- 	      return TRUE;
-- 	    }
-- 	  free (name);
-- 	}
---      else if (ldfile_try_open_bfd (entry->filename, entry))
--+      if (ldfile_try_open_bfd (entry->filename, entry))
-- 	return TRUE;
-- 
--       if (IS_ABSOLUTE_PATH (entry->filename))
---- 
--2.14.4
--
+diff --git a/package/msmtp/Config.in b/package/msmtp/Config.in
+index 46bb1985e3..c83525d5ba 100644
+--- a/package/msmtp/Config.in
++++ b/package/msmtp/Config.in
+@@ -5,4 +5,4 @@ config BR2_PACKAGE_MSMTP
+ 	  mail to an SMTP server (for example at a free mail provider)
+ 	  which takes care of further delivery.
+ 
+-	  http://msmtp.sourceforge.net/
++	  https://marlam.de/msmtp/
+diff --git a/package/msmtp/msmtp.hash b/package/msmtp/msmtp.hash
+index 0b66cec862..f966e5d6d4 100644
+--- a/package/msmtp/msmtp.hash
++++ b/package/msmtp/msmtp.hash
+@@ -1,9 +1,6 @@
+-# From http://sourceforge.net/projects/msmtp/files/msmtp/1.6.6/
+-md5	82b0520b57db4b2cf05333d11fb5974d	msmtp-1.6.6.tar.xz
+-sha1	f997f40dfb3f882df837cfd9a63bd4d271dcdc41	msmtp-1.6.6.tar.xz
+ # Locally calculated after checking signature
+-# http://downloads.sourceforge.net/project/msmtp/msmtp/1.6.6/msmtp-1.6.6.tar.xz.sig
+-sha256	da15db1f62bd0201fce5310adb89c86188be91cd745b7cb3b62b81a501e7fb5e	msmtp-1.6.6.tar.xz
++# https://marlam.de/msmtp/releases/msmtp-1.8.0.tar.xz.sig
++sha256	bd730cbf000d1b8382849ea21d569a387e63f936be00dc07c569f67915e53ccd	msmtp-1.8.0.tar.xz
+ 
+ # Hash for license file:
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
+index 65fd0e4319..2370591614 100644
+--- a/package/msmtp/msmtp.mk
++++ b/package/msmtp/msmtp.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-MSMTP_VERSION = 1.6.6
+-MSMTP_SITE = http://downloads.sourceforge.net/project/msmtp/msmtp/$(MSMTP_VERSION)
++MSMTP_VERSION = 1.8.0
++MSMTP_SITE = https://marlam.de/msmtp/releases
+ MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.xz
+ MSMTP_DEPENDENCIES = host-pkgconf
+-MSMTP_CONF_OPTS = --disable-gai-idn
++MSMTP_CONF_OPTS = --disable-gai-idn --without-msmtpd
+ MSMTP_LICENSE = GPL-3.0+
+ MSMTP_LICENSE_FILES = COPYING
+ 
+@@ -19,9 +19,9 @@ else
+ MSMTP_CONF_OPTS += --without-libgsasl
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBIDN),y)
++ifeq ($(BR2_PACKAGE_LIBIDN2),y)
+ MSMTP_CONF_OPTS += --with-libidn
+-MSMTP_DEPENDENCIES += libidn
++MSMTP_DEPENDENCIES += libidn2
+ else
+ MSMTP_CONF_OPTS += --without-libidn
+ endif
