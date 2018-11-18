@@ -1,9 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 18 Nov 2018 19:41:53 -0200
-Subject: [Buildroot] [PATCH v2 4/6] testing/infra/basetest: support
- br2-external
-References: <1542426982-54683-4-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <5bf1dca178106_7ce43f955809f26856228@ultri5.mail>
+Date: Sun, 18 Nov 2018 19:50:15 -0200
+Subject: [Buildroot] [PATCH v2 5/6] testing/tests: CLANG compiler-rt
+ runtime test
+References: <1542426982-54683-5-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <5bf1de972509d_7ce43f955806b7385643a@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +12,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-Another nit that can be fixed while applying.
+IMO, much nicer the way you did, using the project in the package instead of
+adding a copy of the .cc file!
 
 On Sat, Nov 17, 2018 at 01:56 AM, Matt Weber wrote:
 
-> From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+> This patch adds a test case that
+>  1) Builds the complete LLVM and CLANG set of host tools
+>  2) Cross-compiles the compiler-rt runtime using CLANG
+>  3) Builds a cross-compiled application using CLANG and the libfuzzer
+>     compiler-rt library.
+>  4) Executes the fuzz application (part of the libfuzzer package) on
+>     target and checks expected output
 > 
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 
-> This change will be needed when adding a common class to test the git
-> download infra.
-
-Just like in patch 3, this is not untrue.
-But in the context of your series, perhaps it could be replaced by:
-"
-Some upcoming test cases can use one or more br2-external trees as
-fixtures that provide packages used only in runtime tests.
-
-Add support for br2-external into the BRTest class. Any test case can
-then provide a list of paths for be used as br2-external trees during
-the build of the image to be tested.
-"
-And who applies it could even tweak this to a better phrase.
-
-> 
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> ---
-
-I reviewed it and the contents are OK.
+Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+[with the entire series applied on next branch:
+ https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/121908178
+ NOTE: this test case takes longer than test_rust, ~2 hours in my host
+ machine with all tarballs previously downloaded]
+Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 
 
 Regards,
