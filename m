@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 Nov 2018 18:56:22 +0100
-Subject: [Buildroot] [PATCH 1/1] sconeserver: needs zlib
-In-Reply-To: <20181118115234.17369-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 18 Nov 2018 12:52:34 +0100")
-References: <20181118115234.17369-1-fontaine.fabrice@gmail.com>
-Message-ID: <87r2finubd.fsf@dell.be.48ers.dk>
+Date: Sun, 18 Nov 2018 19:02:21 +0100
+Subject: [Buildroot] [PATCH 1/1] flatcc: fix debug build
+In-Reply-To: <20181118165848.2111-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 18 Nov 2018 17:58:48 +0100")
+References: <20181118165848.2111-1-fontaine.fabrice@gmail.com>
+Message-ID: <87muq6nu1e.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +13,14 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Since bump to 6b932d7d8dbb700b830205e7111e469cefff490c and
- > https://github.com/sconemad/sconeserver/commit/34b01e9d332f912da82ab1c09529a33969ff6ebb,
- > sconeserver needs zlib so select it
+ > flatcc is named flatcc_d if BR2_ENABLE_DEBUG is set because of the
+ > following line in CMakeLists.txt: set(CMAKE_DEBUG_POSTFIX "_d")
+
+ > So update FLATCC_TARGET_REMOVE_FLATCC_COMPILER hook to replace flatcc
+ > by flatcc*
 
  > Fixes:
- >  - http://autobuild.buildroot.org/results/b5e2b8635b37e6f2803a6031b154cf67685a4221
+ >  - http://autobuild.buildroot.org/results/a47f49cd2fdd809257bd7e83dca620f2e6aac85b
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
