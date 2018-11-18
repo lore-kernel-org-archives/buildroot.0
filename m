@@ -1,53 +1,64 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 18 Nov 2018 19:35:05 -0200
-Subject: [Buildroot] [PATCH v2 3/6] testing/infra/builder: build with
- target and environment
-References: <1542426982-54683-3-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <5bf1db0932a14_7ce43f95580d1a605603b@ultri5.mail>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 18 Nov 2018 22:37:24 +0100
+Subject: [Buildroot] [PATCH v2 1/2] c-ares: support host build
+In-Reply-To: <8b5155dd-c5e5-570f-69ca-6f3a9ecc149c@mind.be>
+References: <20181118211942.28839-1-robertroyrose@gmail.com>
+ <8b5155dd-c5e5-570f-69ca-6f3a9ecc149c@mind.be>
+Message-ID: <1b557238-e153-5b9c-646f-e188deb8e41b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+?D'oh
 
-Another nit that can be fixed while applying.
+On 18/11/2018 22:33, Arnout Vandecappelle wrote:
+>  Hi Robert,
+>
+> On 18/11/2018 22:19, Robert Rose wrote:
+>> Signed-off-by: Robert Rose <robertroyrose@gmail.com>
+>> ---
+>>  package/c-ares/c-ares.mk | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
+>> index 67254244a1..76e9687b37 100644
+>> --- a/package/c-ares/c-ares.mk
+>> +++ b/package/c-ares/c-ares.mk
+>> @@ -15,3 +15,4 @@ C_ARES_LICENSE = MIT
+>>  C_ARES_LICENSE_FILES = ares_mkquery.c
+>>  
+>>  $(eval $(autotools-package))
+>> +$(eval $(host-autotools-package))
+>  We only include host packages if there is a justification for it. That means
+> either:
+>
+> - it is needed for building some other package; in this case, you should submit
+> the patch adding the host package in a series together with the other package; or
 
-On Sat, Nov 17, 2018 at 01:56 AM, Matt Weber wrote:
-
-> From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
-> 
-> Make the builder able to call 'VAR1=1 make VAR2=2 target'.
-> 
-> Allow to send extra parameters to be added to the end of make command
-> line. It can be used for these purposes:
->  - to configure a br2-external, by passing 'BR2_EXTERNAL="dir"';
->  - to specify a make target, such as 'foo-source'.
-> 
-> Allow to add variables to the environment in which make runs. It can be
-> used to override values from environment, such as 'BR2_DL_DIR="dl"'.
-> 
-
-> This change will be needed when adding a common class to test the git
-> download infra.
-
-This is not untrue.
-But in the context of your series, perhaps it could be replaced by:
-"
-This change will be needed when adding support to br2-externals to the
-test infra.
-"
-And who applies could even tweak this to a better phrase.
-
-> 
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-
-It feels weird to add a tag to my own patch :-)
-But I reviewed it and the contents are OK.
+?Sorry, patch 2/2 hadn't arrived yet when I was writing this, and I hadn't
+noticed the 1/2 in the subject. Obviously it's this situation.
 
 
-Regards,
-Ricardo
+?So:
+
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+
+?I'd like to add that there is no need to specify the --with-random option for
+the host like we do for the target, because for the host it can be autodiscovered.
+
+
+?Regards,
+?Arnout
+
+
+>
+> - it is used in a post-{build,fakeroot,image} script; in that case, there should
+> be a Config.in.host option for it so it can be selected, and the commit log
+> should have some explanation of why it could be useful in a post-* script.
+>
+>
+>  Regards,
+>  Arnout
