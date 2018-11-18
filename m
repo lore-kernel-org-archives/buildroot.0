@@ -1,71 +1,30 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 Nov 2018 19:35:50 +0100
-Subject: [Buildroot] [git commit] core: ensure we use the realpath(3) of
- DL_DIR
-Message-ID: <20181118183625.EF49B8391C@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 18 Nov 2018 18:39:39 +0000
+Subject: [Buildroot] [Bug 11086] download/git submodule breaks on symlinked
+ dl folder
+In-Reply-To: <bug-11086-163@https.bugs.busybox.net/>
+References: <bug-11086-163@https.bugs.busybox.net/>
+Message-ID: <bug-11086-163-IKst9X15zL@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=632e164a19fc3d1ce419c60eb85214d42a673b28
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=11086
 
-When $(TOPDIR)/dl is a symlink, checking out git submodules can fail,
-as reported by Michael in #11086.
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-To reproduce a similarly-related mis-behaviour:
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|ASSIGNED                    |RESOLVED
 
-    $ mkdir -p foo/bar foo/buz
-    $ cd foo/bar
-    $ ln -s ../buz meh
-    $ cd meh
-    $ cd ../../foo
+--- Comment #2 from Peter Korsgaard <jacmet@uclibc.org> ---
+Fixed by
+https://git.buildroot.org/buildroot/commit/?id=632e164a19fc3d1ce419c60eb85214d42a673b28,
+thanks
 
-The last command should not succeed, because, relative to meh, there is
-no ../../foo directory; we would expect it to be ../../../foo, instead.
-But since meh is a symlink to a directory, then a relative path from that
-symlink is interpreted as relative to the derefrenced directory, i.e.
-from buz in this case.
-
-But where this gets even weirder, is that, if the last command is
-replaced by:
-
-    $ cd ../../../foo
-
-then it still works, too.
-
-And that is the root of Michael's issue: the dl directory in Buildroot's
-TOPDIR is a symlink to a similarly-named directory one directory higher,
-which then confuses relative paths, which gets especially and noticeably
-bad for git submodules.
-
-Avoid this strangeness, and just use so-called "physical" path, i.e. a
-path where all symlinks to directories have been dereferenced.
-
-Fixes: #11086
-
-Reported-by: Michael Nosthoff <posted@heine.so>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Michael Nosthoff <posted@heine.so>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pkg-download.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 73ea2a69f8..0def845cbc 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -32,8 +32,8 @@ else
- BR2_DL_DIR = $(DL_DIR)
- endif
- 
--# ensure it exists and a absolute path
--DL_DIR := $(shell mkdir -p $(DL_DIR) && cd $(DL_DIR) >/dev/null && pwd)
-+# ensure it exists and a absolute path, derefrecing symlinks
-+DL_DIR := $(shell mkdir -p $(DL_DIR) && cd $(DL_DIR) >/dev/null && pwd -P)
- 
- #
- # URI scheme helper functions
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
