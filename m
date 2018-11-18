@@ -1,36 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 Nov 2018 20:42:06 +0100
-Subject: [Buildroot] [git commit] wireshark: fix static build with snappy
-Message-ID: <20181118194050.761D983962@busybox.osuosl.org>
+Date: Sun, 18 Nov 2018 20:50:51 +0100
+Subject: [Buildroot] [arc-buildroot] [PATCH] toolchain: Bump ARC tools
+ to arc-2018.09-rc1
+In-Reply-To: <a4c4c371bc8fbefc5e3e1a466ed80dfd334a4b9a.camel@synopsys.com>
+ (Alexey Brodkin's message of "Thu, 15 Nov 2018 03:51:49 +0000")
+References: <20181108113207.40589-1-Evgeniy.Didin@synopsys.com>
+ <a4c4c371bc8fbefc5e3e1a466ed80dfd334a4b9a.camel@synopsys.com>
+Message-ID: <87sgzymag4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c11c424181e8178c66e278545a5b0af3fe58529
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Alexey" == Alexey Brodkin <alexey.brodkin@synopsys.com> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/9089e74c0f8428d28953ae037a84aa8a08db7ded
+ > Hi Thomas, Peter, Arnout!
+ > On Thu, 2018-11-08 at 14:32 +0300, Evgeniy Didin wrote:
+ >> This commit bumps ARC toolchain to arc-2018.09-rc1.
+ >> We want to test how new toolchain-rc1 builds packages,
+ >> so we can make fixes before release of toolcain.
+ >> 
+ >> ARC GNU tools of version arc-2018.09-rc1 bring some quite significant changes like:
+ >> * Binutils v2.31.1 with additional ARC patches
+ >> * GCC 8.2.1 with additional ARC patches
+ >> * glibc 2.28 with additional ARC patches
+ >> 
+ >> Please note that it is a release candidate and it might contain some
+ >> breakages, please don't use it for production builds.
+ >> 
+ >> Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+ >> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ >> Cc: arc-buildroot at synopsys.com
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireshark/wireshark.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ > Any chance arc-2018.09 tools to be accepted in v2018.11 BR release?
 
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 7c7dc784fe..4720960e59 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -138,6 +138,9 @@ endif
- ifeq ($(BR2_PACKAGE_SNAPPY),y)
- WIRESHARK_CONF_OPTS += --with-snappy=$(STAGING_DIR)/usr
- WIRESHARK_DEPENDENCIES += snappy
-+ifeq ($(BR2_STATIC_LIBS),y)
-+WIRESHARK_CONF_ENV += LIBS=-lstdc++
-+endif
- else
- WIRESHARK_CONF_OPTS += --without-snappy
- endif
+Sorry, I find it too late for that by now. I have instead applied it to
+next, hopefully that is OK?
+
+ > In the meantime we've got RC2 cut just yesterday with a couple of more
+ > critical fixes so it might make sense to bump right to arc-2018.09-rc2
+ > instead but still it might be applied on top of this one so pls let us
+ > know what would you prefer.
+
+Please send a patch for next to bump it to RC2.
+
+-- 
+Bye, Peter Korsgaard
