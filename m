@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 Nov 2018 20:53:45 +0100
-Subject: [Buildroot] [PATCH v2 1/2] package/alsa-lib: bump to version to
- 1.1.7
-In-Reply-To: <20181104114810.22697-1-crow.misia@gmail.com> (Zenichi Amano's
- message of "Sun, 4 Nov 2018 20:48:11 +0900")
-References: <20181104114810.22697-1-crow.misia@gmail.com>
-Message-ID: <87o9ammaba.fsf@dell.be.48ers.dk>
+Date: Sun, 18 Nov 2018 20:53:50 +0100
+Subject: [Buildroot] [PATCH v2 2/2] package/alsa-utils: bump to version
+ to 1.1.7
+In-Reply-To: <20181104115334.22803-1-crow.misia@gmail.com> (Zenichi Amano's
+ message of "Sun, 4 Nov 2018 20:53:35 +0900")
+References: <20181104115334.22803-1-crow.misia@gmail.com>
+Message-ID: <87k1lamab5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
