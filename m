@@ -1,122 +1,109 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Sat, 17 Nov 2018 18:14:28 -0600
-Subject: [Buildroot] [PATCH] package/xen: Bump Xen to 4.11.0 and
- backport a fix
-In-Reply-To: <20181117221707.28399-1-alistair@alistair23.me>
-References: <20181117221707.28399-1-alistair@alistair23.me>
-Message-ID: <CANQCQpbyf4Q72Qkjug8D417kHWB2q7g0b0SwMVAcKW7u9pEyGg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 18 Nov 2018 08:01:14 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-11-17
+Message-ID: <20181118070114.2592A20D73@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alistair,
+Hello,
 
-On Sat, Nov 17, 2018 at 4:19 PM Alistair Francis <alistair23@gmail.com> wrote:
->
-> Bump the Xen package to the latest release and backport a fix from the
-> Xen master brach.
->
+Build statistics for 2018-11-17
+===============================
 
-Good call on doing the bump, I didn't look close enough to see that
-would catch the patches[1][2] I sent and my [3] was a yocto reference
-to your patch below.  I'll reject mine and provide my tested by on
-this set as it is a much cleaner fix.
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  15 |   1 |   0 |  16 |
+   2018.08.x |  18 |   0 |   0 |  18 |
+      master | 179 |  20 |   1 | 200 |
+        next |  36 |   9 |   0 |  45 |
 
-I'd suggest splitting this patch into a two separate patches(unsure of
-others preference).
+Results for branch '2018.02.x'
+==============================
 
-Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Classification of failures by reason
+------------------------------------
 
-[1] https://patchwork.ozlabs.org/patch/999090/
-[2] https://patchwork.ozlabs.org/patch/999089/
-[3] https://patchwork.ozlabs.org/patch/999088/
+neardal-33b54a55032b047fd88... | 1 
 
 
-> This fixes autobuilder issue:
-> http://autobuild.buildroot.net/results/6e0d8e962e861a32f5bf2e5031ef51c25768f1f6/
->
-> Signed-off-by: Alistair Francis <alistair@alistair23.me>
-> ---
->  ...rm-Fix-build-on-arm64-acpi-w-gcc-8.2.patch | 37 +++++++++++++++++++
->  package/xen/xen.hash                          |  2 +-
->  package/xen/xen.mk                            |  2 +-
->  3 files changed, 39 insertions(+), 2 deletions(-)
->  create mode 100644 package/xen/0003-libxl-arm-Fix-build-on-arm64-acpi-w-gcc-8.2.patch
->
-> diff --git a/package/xen/0003-libxl-arm-Fix-build-on-arm64-acpi-w-gcc-8.2.patch b/package/xen/0003-libxl-arm-Fix-build-on-arm64-acpi-w-gcc-8.2.patch
-> new file mode 100644
-> index 0000000000..db2bbe8363
-> --- /dev/null
-> +++ b/package/xen/0003-libxl-arm-Fix-build-on-arm64-acpi-w-gcc-8.2.patch
-> @@ -0,0 +1,37 @@
-> +From c8993743d611ed23ebded3168ac3ac6ff3e5d2fa Mon Sep 17 00:00:00 2001
-> +From: Christopher Clark <christopher.w.clark@gmail.com>
-> +Date: Thu, 16 Aug 2018 13:22:41 -0700
-> +Subject: [PATCH] libxl/arm: Fix build on arm64 + acpi w/ gcc 8.2
-> +
-> +Add zero-padding to #defined ACPI table strings that are copied.
-> +Provides sufficient characters to satisfy the length required to
-> +fully populate the destination and prevent array-bounds warnings.
-> +Add BUILD_BUG_ON sizeof checks for compile-time length checking.
-> +
-> +Signed-off-by: Christopher Clark <christopher.clark6@baesystems.com>
-> +Reviewed-by: Stefano Stabellini <sstabellini@kernel.org>
-> +Acked-by: Wei Liu <wei.liu2@citrix.com>
+Detail of failures
+------------------
 
-Missing your signed off
+         arm | neardal-33b54a55032b047fd88... | NOK | http://autobuild.buildroot.net/results/eab421e3a5f51462a13cbc9fcfba5f1001d033c5 |     
 
-> +---
-> + tools/libxl/libxl_arm_acpi.c | 6 +++---
-> + 1 file changed, 3 insertions(+), 3 deletions(-)
-> +
-> +diff --git a/tools/libxl/libxl_arm_acpi.c b/tools/libxl/libxl_arm_acpi.c
-> +index 636f724039..eeca1def06 100644
-> +--- a/tools/libxl/libxl_arm_acpi.c
-> ++++ b/tools/libxl/libxl_arm_acpi.c
-> +@@ -48,9 +48,9 @@ extern const unsigned char dsdt_anycpu_arm[];
-> + _hidden
-> + extern const int dsdt_anycpu_arm_len;
-> +
-> +-#define ACPI_OEM_ID "Xen"
-> +-#define ACPI_OEM_TABLE_ID "ARM"
-> +-#define ACPI_ASL_COMPILER_ID "XL"
-> ++#define ACPI_OEM_ID "Xen\0\0"
-> ++#define ACPI_OEM_TABLE_ID "ARM\0\0\0\0"
-> ++#define ACPI_ASL_COMPILER_ID "XL\0"
-> +
-> + enum {
-> +     RSDP,
-> +--
-> +2.17.1
-> +
-> diff --git a/package/xen/xen.hash b/package/xen/xen.hash
-> index 1b3fc12f94..376013eb7a 100644
-> --- a/package/xen/xen.hash
-> +++ b/package/xen/xen.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256 d5a944a34e47e9d52b2837f616821eb4a9514c8fd0955dcc723111dba499acd4 xen-4.10.2.tar.gz
-> +sha256 826e3a9f6d0eac94a825d272cc2c1294e22640ae75af906eb13920f9ad667643 xen-4.11.0.tar.gz
->  sha256 dba0d79260259c013c52e5d4daeaea564a2fbb9ff7fc6778c377a401ec3898de COPYING
-> diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-> index fb34d64c3f..8d7b92eadc 100644
-> --- a/package/xen/xen.mk
-> +++ b/package/xen/xen.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->
-> -XEN_VERSION = 4.10.2
-> +XEN_VERSION = 4.11.0
->  XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
->  XEN_LICENSE = GPL-2.0
->  XEN_LICENSE_FILES = COPYING
-> --
-> 2.17.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+               boa-0.94.14rc21 | 4 
+             gstreamer-0.10.36 | 3 
+      docker-containerd-v1.1.3 | 2 
+                 libv4l-1.16.2 | 2 
+                   dante-1.4.1 | 1 
+     docker-engine-v17.05.0-ce | 1 
+easydbus-59c340f2cd2c92ded8... | 1 
+                host-libsodium | 1 
+                libmpeg2-0.5.1 | 1 
+                   luvi-v2.7.6 | 1 
+                  mender-1.4.0 | 1 
+                 minizip-2.5.3 | 1 
+                   mpd-0.20.23 | 1 
+                qt5base-5.11.2 | 1 
+
+
+Detail of failures
+------------------
+
+         arc |                boa-0.94.14rc21 | NOK | http://autobuild.buildroot.net/results/8fa1df4aab3c32ff3f867e287488301da84f501c | ORPH
+         arm |                boa-0.94.14rc21 | NOK | http://autobuild.buildroot.net/results/512a6a20928e803a5653a2be12adeb6f11202aa1 | ORPH
+         arc |                boa-0.94.14rc21 | NOK | http://autobuild.buildroot.net/results/d91ddf13788d1d798add5301df15d7a4413c8e57 | ORPH
+         arc |                boa-0.94.14rc21 | NOK | http://autobuild.buildroot.net/results/8ceb9c3f16da40acb40658e8b49253f209c37f9a | ORPH
+ powerpc64le |                    dante-1.4.1 | NOK | http://autobuild.buildroot.net/results/ed8fbc96c60c517b8ae822e58868458c805ee6f4 |     
+      x86_64 |       docker-containerd-v1.1.3 | NOK | http://autobuild.buildroot.net/results/d95a5a940ee8f3d931fea0d1b5497c2119d45f8f |     
+      x86_64 |       docker-containerd-v1.1.3 | NOK | http://autobuild.buildroot.net/results/a1d3f4ae8e44ed7bd86f2c6e2058dbbf68633acf |     
+      x86_64 |      docker-engine-v17.05.0-ce | NOK | http://autobuild.buildroot.net/results/c10bd1bfe8431b128c9b799bd6e2bbd27f891bda |     
+     riscv64 | easydbus-59c340f2cd2c92ded8... | NOK | http://autobuild.buildroot.net/results/486c3cd98124e7415dee2fd1463bd5e0fcc9ba91 |     
+     riscv64 |              gstreamer-0.10.36 | NOK | http://autobuild.buildroot.net/results/4a2b64434caea1fa7cb97a89ccaa040e1ebb4726 | ORPH
+     riscv64 |              gstreamer-0.10.36 | NOK | http://autobuild.buildroot.net/results/2a4a47d5ffe32d1f91e30538d472a45a56544a80 | ORPH
+     riscv64 |              gstreamer-0.10.36 | NOK | http://autobuild.buildroot.net/results/dca32c929350311fca1a85e251d318b43c4a3177 | ORPH
+         arm |                 host-libsodium | TIM | http://autobuild.buildroot.net/results/7b450fe3e5e7530114c2ae9eb4cce36b1055f46e |     
+     powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/4a770ae6cd4eab568ad35658c221f119f8286364 | ORPH
+        m68k |                  libv4l-1.16.2 | NOK | http://autobuild.buildroot.net/results/7d5139e480f1a450647bb838748f0f2b6bdc9568 |     
+         arm |                  libv4l-1.16.2 | NOK | http://autobuild.buildroot.net/results/447d792ce21c0e33a36ca9384fee46e099435ed8 |     
+      x86_64 |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/a474b2bdea3789a1fb6cbd4bbd000329f04af668 |     
+      x86_64 |                   mender-1.4.0 | NOK | http://autobuild.buildroot.net/results/0499bfcef85d217e6deb4451ac1e7e09942434a3 |     
+        m68k |                  minizip-2.5.3 | NOK | http://autobuild.buildroot.net/results/29ae473f42d68d4f6a8889f2a402ef9f05d70d0c |     
+         arm |                    mpd-0.20.23 | NOK | http://autobuild.buildroot.net/results/4db7d1b4fc4b4891c8757e81124b8cb241db6711 |     
+  aarch64_be |                 qt5base-5.11.2 | NOK | http://autobuild.buildroot.net/results/103ab699160a5208ff8d2a2502726016882615b9 |     
+
+Results for branch 'next'
+=========================
+
+Classification of failures by reason
+------------------------------------
+
+                tpm2-tss-2.1.0 | 7 
+             gstreamer1-1.14.4 | 1 
+               libiscsi-1.18.0 | 1 
+
+
+Detail of failures
+------------------
+
+     riscv64 |              gstreamer1-1.14.4 | NOK | http://autobuild.buildroot.net/results/70c7164739075395d93e3176dd0a01b9bfb9efc0 |     
+     aarch64 |                libiscsi-1.18.0 | NOK | http://autobuild.buildroot.net/results/789e359e4e35e2ea88c68e4289bcbbaa9f3bf784 |     
+         arc |                 tpm2-tss-2.1.0 | NOK | http://autobuild.buildroot.net/results/f863947a7384cb754706e6c346d222be59ad4136 |     
+         arm |                 tpm2-tss-2.1.0 | NOK | http://autobuild.buildroot.net/results/cfc3bfef5e93329bf944a57947086d9ddc4fece3 |     
+      mipsel |                 tpm2-tss-2.1.0 | NOK | http://autobuild.buildroot.net/results/ceb824033888086f6dde22c66d5b5f692a253c7e |     
+    mips64el |                 tpm2-tss-2.1.0 | NOK | http://autobuild.buildroot.net/results/f230fe6bbeb8b22d2b5b7cfb3f0ac4b3b936dc37 |     
+    mips64el |                 tpm2-tss-2.1.0 | NOK | http://autobuild.buildroot.net/results/e469b47a6c8f1e8812325fd2860345105052316c |     
+         arc |                 tpm2-tss-2.1.0 | NOK | http://autobuild.buildroot.net/results/08b2a8a4bdd1c38703626a4fc37dab31dce98f49 |     
+    mips64el |                 tpm2-tss-2.1.0 | NOK | http://autobuild.buildroot.net/results/44221140fb8e2ddcb7d624e657b92a59375c02dd |     
+
+
+-- 
+http://autobuild.buildroot.net
