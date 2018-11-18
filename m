@@ -1,64 +1,47 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 18 Nov 2018 22:37:24 +0100
-Subject: [Buildroot] [PATCH v2 1/2] c-ares: support host build
-In-Reply-To: <8b5155dd-c5e5-570f-69ca-6f3a9ecc149c@mind.be>
-References: <20181118211942.28839-1-robertroyrose@gmail.com>
- <8b5155dd-c5e5-570f-69ca-6f3a9ecc149c@mind.be>
-Message-ID: <1b557238-e153-5b9c-646f-e188deb8e41b@mind.be>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun, 18 Nov 2018 19:41:53 -0200
+Subject: [Buildroot] [PATCH v2 4/6] testing/infra/basetest: support
+ br2-external
+References: <1542426982-54683-4-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <5bf1dca178106_7ce43f955809f26856228@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-?D'oh
+Hello,
 
-On 18/11/2018 22:33, Arnout Vandecappelle wrote:
->  Hi Robert,
->
-> On 18/11/2018 22:19, Robert Rose wrote:
->> Signed-off-by: Robert Rose <robertroyrose@gmail.com>
->> ---
->>  package/c-ares/c-ares.mk | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
->> index 67254244a1..76e9687b37 100644
->> --- a/package/c-ares/c-ares.mk
->> +++ b/package/c-ares/c-ares.mk
->> @@ -15,3 +15,4 @@ C_ARES_LICENSE = MIT
->>  C_ARES_LICENSE_FILES = ares_mkquery.c
->>  
->>  $(eval $(autotools-package))
->> +$(eval $(host-autotools-package))
->  We only include host packages if there is a justification for it. That means
-> either:
->
-> - it is needed for building some other package; in this case, you should submit
-> the patch adding the host package in a series together with the other package; or
+Another nit that can be fixed while applying.
 
-?Sorry, patch 2/2 hadn't arrived yet when I was writing this, and I hadn't
-noticed the 1/2 in the subject. Obviously it's this situation.
+On Sat, Nov 17, 2018 at 01:56 AM, Matt Weber wrote:
 
+> From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+> 
 
-?So:
+> This change will be needed when adding a common class to test the git
+> download infra.
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Just like in patch 3, this is not untrue.
+But in the context of your series, perhaps it could be replaced by:
+"
+Some upcoming test cases can use one or more br2-external trees as
+fixtures that provide packages used only in runtime tests.
+
+Add support for br2-external into the BRTest class. Any test case can
+then provide a list of paths for be used as br2-external trees during
+the build of the image to be tested.
+"
+And who applies it could even tweak this to a better phrase.
+
+> 
+> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> ---
+
+I reviewed it and the contents are OK.
 
 
-?I'd like to add that there is no need to specify the --with-random option for
-the host like we do for the target, because for the host it can be autodiscovered.
-
-
-?Regards,
-?Arnout
-
-
->
-> - it is used in a post-{build,fakeroot,image} script; in that case, there should
-> be a Config.in.host option for it so it can be selected, and the commit log
-> should have some explanation of why it could be useful in a post-* script.
->
->
->  Regards,
->  Arnout
+Regards,
+Ricardo
