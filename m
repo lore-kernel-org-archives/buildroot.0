@@ -1,60 +1,82 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 18 Nov 2018 13:14:03 +0100
-Subject: [Buildroot] [PATCH 1/1] prosody: security bump to version 0.10.2
-Message-ID: <20181118121403.25528-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 18 Nov 2018 14:44:03 +0100
+Subject: [Buildroot] [PATCH 4/4 v2] support/dependencies: add a check
+ for a suitable gzip
+In-Reply-To: <CANQCQpY9KckNd=VjAu7AHuUeURoCRhY=5gP-wfOf_-Kog0e-sg@mail.gmail.com>
+References: <cover.1542474939.git.yann.morin.1998@free.fr>
+ <ba548d03f79279b7f02605006a709ffc630e8639.1542474939.git.yann.morin.1998@free.fr>
+ <CANQCQpY9KckNd=VjAu7AHuUeURoCRhY=5gP-wfOf_-Kog0e-sg@mail.gmail.com>
+Message-ID: <20181118134403.GB2601@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This fixes a cross-host authentication vulnerability, CVE-2018-10847.
-The issue affects Prosody instances that have multiple virtual hosts
-(including anonymous authenticated hosts):
-https://blog.prosody.im/prosody-0-10-2-security-release
+Matthew, All,
 
-A full security advisory is available at
-https://prosody.im/security/advisory_20180531
+On 2018-11-17 11:23 -0600, Matthew Weber spake thusly:
+> On Sat, Nov 17, 2018 at 11:16 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+[--SNIP--]
+> > Add a dependency check that ensures that gzip is not pigz. If that is
+> > the case, define a conditional dependency to host-gzip, that is used as
+> > a download dependency for packages that will generate compressed files,
+> > i.e. cvs, git, and svn.
+[--SNIP--]
+> (Not wanting to hijack the intent of this patch :-) )
+> As part of a reproducible build, why should we conditionally build
+> these dependencies and not instead always build them.  Then builds
+> start become reproducible with the same cached dl folder of material
+> across a series of distro releases?  Best example I have is a product
+> that is under development for 2-3years and we may have a spread of
+> build machine distros (ie Ubuntu 14 -> 18 LTS).  We've recently
+> started to run into this as products stabilize with the Buildroot
+> concept of having these conditional host dependencies building.  Where
+> depending on the machine, we may miss a source archive in our
+> collection of dl material at release time.  Thoughts?
 
-Compute hashes locally as they are no more available on
-https://prosody.im/downloads/source/{MD5,SHA1,SHA256,SHA512}SUMS
+So, two things, that are contradictory one to the other:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/prosody/prosody.hash | 10 +++++-----
- package/prosody/prosody.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ 1- we want reproducible builds,
+ 2- we want fast builds
 
-diff --git a/package/prosody/prosody.hash b/package/prosody/prosody.hash
-index 898d21814f..b38414294c 100644
---- a/package/prosody/prosody.hash
-+++ b/package/prosody/prosody.hash
-@@ -1,8 +1,8 @@
--# Hashes from: https://prosody.im/downloads/source/{MD5,SHA1,SHA256,SHA512}SUMS
--md5    0eebf7a18ce1fc7dd9954c94ebd85f54  prosody-0.10.0.tar.gz
--sha1   57c1c5a665e6453bdde06727ef398cd69accd9d7  prosody-0.10.0.tar.gz
--sha256 7414e447256c60b2645578c4a5913113cd74b419ca5a032b54db90d98a978498  prosody-0.10.0.tar.gz
--sha512 ee66e240afba6a8cb286623da48d9b535798153fb65e32070cec93aafe360e91f7087eeb49dec0f7d145e24f04339ed0878e50835b52f682130b204e22990ce9  prosody-0.10.0.tar.gz
-+# Locally computed:
-+md5    4cb1ac0db2b739b933ded5038551d7c2  prosody-0.10.2.tar.gz
-+sha1   1d51e542475c3f3e712eace29537b042c941d6ab  prosody-0.10.2.tar.gz
-+sha256 75b5f035e7a74d5f208eeeaf8419b94a85d09b40252d444cff8033fde3c9768e  prosody-0.10.2.tar.gz
-+sha512 9fc05e34b45b0c16835ba94a73532fb3b4ee335f27d56bb9260e1b3e22614f89f44eb5d04b4e90d016db0b5bee6f5c7e7d099e1defb027e6823ee7667c1fe28f  prosody-0.10.2.tar.gz
- 
- # Hash for license file:
- sha256 bbbdc1c5426e5944cf869fc0faeaf19d88a220cd2b39ea98b7b8e86b0e88a2ef  COPYING
-diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
-index 5282a9af0f..8c09645210 100644
---- a/package/prosody/prosody.mk
-+++ b/package/prosody/prosody.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PROSODY_VERSION = 0.10.0
-+PROSODY_VERSION = 0.10.2
- PROSODY_SITE = https://prosody.im/downloads/source
- PROSODY_LICENSE = MIT
- PROSODY_LICENSE_FILES = COPYING
+For 1, it would mean that we should build as much tools as possible.
+However, the more we build, the slower the build is.
+
+For 2, we should rely as much as possible on distro-provided tools,
+However, the more we rely on the host, the less reproducible we get.
+
+gzip has been rock stable over the years. IIRC, I took one of the first
+releases from way back 1993-or-so, and the latest one, 1.9; they were
+generating the exact same output, 25 years apart! That, is stability.
+
+Given the goals of the gzip authors and maintainers, I don't expect they
+change anything to it anytime.
+
+So, we really don't want to build it if the host provides it.
+
+Now, we can't know what the future will be, and we can't predict what
+other tool is gonna change its behaviour, that we have to build our
+own. So, when you update to a newer host, you'll also have to adapt,
+even if that means adding a few new archives to your BR2_DL_DIR, yes.
+
+If you want to be sure that, in the future, you'll be as reproducible as
+possible, then do a chroot. Even now, having a chroot ensures that all
+users/developpers of your project have a known and reproducible devel
+environment (no more "it builds for me" arguments!) You may even go
+further, and mandate a VM, and even go as far as having HW spares for
+the project lifetime (to run the VM on!).
+
+As for Buildroot, I guess we're going to continue relying on the host
+tools when they meet our expectations.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.17.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
