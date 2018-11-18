@@ -1,43 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 Nov 2018 19:02:05 +0100
-Subject: [Buildroot] [git commit] flatcc: fix debug build
-Message-ID: <20181118175952.D951A838E3@busybox.osuosl.org>
+Date: Sun, 18 Nov 2018 18:54:54 +0100
+Subject: [Buildroot] [git commit] sconeserver: needs zlib
+Message-ID: <20181118175952.D4F68838C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7abb6250282d3860e2330d5412e25606d78efe6
+commit: https://git.buildroot.net/buildroot/commit/?id=a18eb7f785e0a92ac6245591d3dd738571533d26
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-flatcc is named flatcc_d if BR2_ENABLE_DEBUG is set because of the
-following line in CMakeLists.txt: set(CMAKE_DEBUG_POSTFIX "_d")
-
-So update FLATCC_TARGET_REMOVE_FLATCC_COMPILER hook to replace flatcc
-by flatcc*
+Since bump to 6b932d7d8dbb700b830205e7111e469cefff490c and
+https://github.com/sconemad/sconeserver/commit/34b01e9d332f912da82ab1c09529a33969ff6ebb,
+sconeserver needs zlib so select it
 
 Fixes:
- - http://autobuild.buildroot.org/results/a47f49cd2fdd809257bd7e83dca620f2e6aac85b
+ - http://autobuild.buildroot.org/results/b5e2b8635b37e6f2803a6031b154cf67685a4221
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/flatcc/flatcc.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/sconeserver/Config.in      | 1 +
+ package/sconeserver/sconeserver.mk | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/flatcc/flatcc.mk b/package/flatcc/flatcc.mk
-index 9f961a37b1..1c8d0ec7fb 100644
---- a/package/flatcc/flatcc.mk
-+++ b/package/flatcc/flatcc.mk
-@@ -19,8 +19,9 @@ HOST_FLATCC_CONF_OPTS += -DFLATCC_TEST=OFF
- FLATCC_CONF_OPTS += -DFLATCC_INSTALL=ON
- HOST_FLATCC_CONF_OPTS += -DFLATCC_INSTALL=ON
- 
-+# compiler is named flatcc or flatcc_d depending on BR2_ENABLE_DEBUG value
- define FLATCC_TARGET_REMOVE_FLATCC_COMPILER
--	rm $(TARGET_DIR)/usr/bin/flatcc
-+	rm $(TARGET_DIR)/usr/bin/flatcc*
- endef
- 
- FLATCC_POST_INSTALL_TARGET_HOOKS += FLATCC_TARGET_REMOVE_FLATCC_COMPILER
+diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
+index 7027bd9a15..e984801de5 100644
+--- a/package/sconeserver/Config.in
++++ b/package/sconeserver/Config.in
+@@ -4,6 +4,7 @@ menuconfig BR2_PACKAGE_SCONESERVER
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on !BR2_STATIC_LIBS # dlopen()
+ 	select BR2_PACKAGE_PCRE
++	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Sconeserver is a modular, object-orientated and extremely
+ 	  versatile network server framework for GNU/Linux and
+diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
+index 12cadbfd20..c160c8bf7c 100644
+--- a/package/sconeserver/sconeserver.mk
++++ b/package/sconeserver/sconeserver.mk
+@@ -10,7 +10,7 @@ SCONESERVER_LICENSE = GPL-2.0+
+ SCONESERVER_LICENSE_FILES = COPYING
+ # fetching from Git, we need to generate the configure script
+ SCONESERVER_AUTORECONF = YES
+-SCONESERVER_DEPENDENCIES = host-pkgconf pcre
++SCONESERVER_DEPENDENCIES = host-pkgconf pcre zlib
+ # disable markdown module because its git submodule cmark
+ # https://github.com/sconemad/sconeserver/tree/master/markdown
+ # has no cross-compile support provided by the sconeserver build system
