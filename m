@@ -1,68 +1,37 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Sun, 18 Nov 2018 20:14:06 +0100
-Subject: [Buildroot] [PATCH v2 2/6] package/llvm: install target
- binary/debug tools
-In-Reply-To: <1542426982-54683-2-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1542426982-54683-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1542426982-54683-2-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <50862e38-68c7-e166-a719-82ab28f7aad9@smile.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 18 Nov 2018 20:16:27 +0100
+Subject: [Buildroot] [PATCH 1/1] uclibc-ng-test: fix build with glibc
+ 2.28
+In-Reply-To: <20181114204224.27123-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 14 Nov 2018 21:42:24 +0100")
+References: <20181114204224.27123-1-fontaine.fabrice@gmail.com>
+Message-ID: <875zwunqlw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matt,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Le 17/11/2018 ? 04:56, Matt Weber a ?crit?:
-> The compiler-rt fuzzer and address sanitizer tools require additional
-> LLVM binary tools installed to allow stack trace decoding actively during
-> executable analysis.
-> 
-> https://github.com/google/sanitizers/wiki/AddressSanitizerCallStack
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> Reviewed-by: Romain Naour <romain.naour@smile.fr>
+ > Since glibc 2.28
+ > (https://savannah.gnu.org/forum/forum.php?forum_id=9205), the obsolete
+ > functions encrypt, encrypt_r, setkey, setkey_r, cbc_crypt, ecb_crypt,
+ > and des_setparity are no longer available to newly linked binaries, and
+ > the headers <rpc/des_crypt.h> and <rpc/rpc_des.h> are no longer
+ > installed. These functions encrypted and decrypted data with the DES
+ > block cipher, which is no longer considered secure. Software that still
+ > uses these functions should switch to a modern cryptography library,
+ > such as libgcrypt.
 
-For some reason I get an error while building llvm package tools.
+ > So add a NO_CRYPT variable to disable test/crypt
 
-x86_64-linux-g++: WARNING: unsafe header/library path used in cross-compilation:
-'-I/usr/include/libxml2'
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/158438debb0ce313b012b871e199bed42ba38294
 
-Can you have a look?
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Best regards,
-Romain
+Committed, thanks.
 
-> ---
-> Changes
-> v1 -> v2
->  - None
-> ---
->  package/llvm/llvm.mk | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-> index 1f9bd44..79477f0 100644
-> --- a/package/llvm/llvm.mk
-> +++ b/package/llvm/llvm.mk
-> @@ -197,8 +197,17 @@ HOST_LLVM_CONF_OPTS += \
->  # We need to activate LLVM_INCLUDE_TOOLS, otherwise it does not generate
->  # libLLVM.so
->  LLVM_CONF_OPTS += \
-> -	-DLLVM_INCLUDE_TOOLS=ON \
-> +	-DLLVM_INCLUDE_TOOLS=ON
-> +
-> +# The llvm-symbolizer binary is used by the Compiler-RT Fuzzer
-> +# and AddressSanitizer tools for stack traces.
-> +ifeq ($(BR2_PACKAGE_COMPILER_RT),y)
-> +LLVM_CONF_OPTS += \
-> +	-DLLVM_BUILD_TOOLS=ON
-> +else
-> +LLVM_CONF_OPTS += \
->  	-DLLVM_BUILD_TOOLS=OFF
-> +endif
->  
->  # Compiler-rt not in the source tree.
->  # llvm runtime libraries are not in the source tree.
-> 
+-- 
+Bye, Peter Korsgaard
