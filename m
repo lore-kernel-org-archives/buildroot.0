@@ -1,69 +1,43 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 18 Nov 2018 19:32:09 -0200
-Subject: [Buildroot] [PATCH v2 1/6] package/compiler-rt: new package
-References: <1542426982-54683-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <5bf1da59c7a62_7ce42af15420bd205581@ultri5.mail>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 18 Nov 2018 22:33:58 +0100
+Subject: [Buildroot] [PATCH v2 1/2] c-ares: support host build
+In-Reply-To: <20181118211942.28839-1-robertroyrose@gmail.com>
+References: <20181118211942.28839-1-robertroyrose@gmail.com>
+Message-ID: <8b5155dd-c5e5-570f-69ca-6f3a9ecc149c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+ Hi Robert,
 
-This is not a full review. I just spotted some nits while reviewing/testing the
-runtime test in the series.
-I guess/hope all of them can be fixed while applying. No need to resend just for
-these.
-
-On Sat, Nov 17, 2018 at 01:56 AM, Matt Weber wrote:
-
-> This patch adds support for the compiler-rt (CLANG runtime) libary.
-
-s/libary/library
-
-> It builds a set of static libraries and installs them into the
-> CLANG/LLVM toolchain resource folder.
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> Cc: Romain Naour <romain.naour@smile.fr>
+On 18/11/2018 22:19, Robert Rose wrote:
+> Signed-off-by: Robert Rose <robertroyrose@gmail.com>
 > ---
-[snip]
-> +++ b/package/compiler-rt/compiler-rt.mk
-> @@ -0,0 +1,35 @@
-> +################################################################################
-> +#
-> +# compiler-rt
-> +#
-> +################################################################################
-> +
-> +# Compiler-RT should be bumped together with LLVM and Clang as the run-time is
-> +# tied to the version of those tools
+>  package/c-ares/c-ares.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
+> index 67254244a1..76e9687b37 100644
+> --- a/package/c-ares/c-ares.mk
+> +++ b/package/c-ares/c-ares.mk
+> @@ -15,3 +15,4 @@ C_ARES_LICENSE = MIT
+>  C_ARES_LICENSE_FILES = ares_mkquery.c
+>  
+>  $(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
 
-OK, but then shouldn't be better to also mention Compiler-RT in the comments
-added to LLVM and Clang in patch 6?
+ We only include host packages if there is a justification for it. That means
+either:
 
-> +COMPILER_RT_VERSION = 7.0.0
-> +COMPILER_RT_SOURCE = compiler-rt-$(COMPILER_RT_VERSION).src.tar.xz
-> +COMPILER_RT_SITE = http://llvm.org/releases/$(COMPILER_RT_VERSION)
-> +COMPILER_RT_LICENSE = NCSA MIT
-> +COMPILER_RT_LICENSE_FILES = LICENSE.TXT
-> +COMPILER_RT_DEPENDENCIES = host-clang llvm
-> +
-> +COMPILER_RT_INSTALL_STAGING = YES
-> +COMPILER_RT_INSTALL_TARGET = NO
-> +
-> +
+- it is needed for building some other package; in this case, you should submit
+the patch adding the host package in a series together with the other package; or
 
-I was testing your series and I saw the job check-package in GitLab CI failed:
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/121907593
-package/compiler-rt/compiler-rt.mk:19: consecutive empty lines
-
-> +# -DCMAKE_INSTALL_PREFIX="" allows the COMPILER_RT_INSTALL_STAGING_CMDS to
-> +# provide the complete path to compilier-rt for installation of the runtime
-
-s/compilier/compiler
+- it is used in a post-{build,fakeroot,image} script; in that case, there should
+be a Config.in.host option for it so it can be selected, and the commit log
+should have some explanation of why it could be useful in a post-* script.
 
 
-Regards,
-Ricardo
+ Regards,
+ Arnout
