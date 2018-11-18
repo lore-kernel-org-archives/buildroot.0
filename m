@@ -1,110 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 Nov 2018 19:12:38 +0100
-Subject: [Buildroot] [git commit] libv4l: v4l2-compliance needs fork
-Message-ID: <20181118181113.D9E6F838F0@busybox.osuosl.org>
+Date: Sun, 18 Nov 2018 19:38:17 +0100
+Subject: [Buildroot] [PATCH] core: ensure we use the realpath(3) of
+ DL_DIR
+In-Reply-To: <20181115170348.15731-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Thu, 15 Nov 2018 18:03:48 +0100")
+References: <20181115170348.15731-1-yann.morin.1998@free.fr>
+Message-ID: <87efbinsdi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa1879be7e4e0884d9b355b3492f4b6c1357cccc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Since bump to 1.16.2, v4l2-compliance uses fork, see:
-https://git.linuxtv.org/v4l-utils.git/commit/utils/v4l2-compliance/?id=79d98edd1a27233667a6bc38d3d7f8958c2ec02c
+ > When $(TOPDIR)/dl is a symlink, checking out git submodules can fail,
+ > as reported by Michael in #11086.
 
-So add a patch to disable v4l2-compliance if fork is unavailable
+ > To reproduce a similarly-related mis-behaviour:
 
-Fixes:
- - http://autobuild.buildroot.org/results/447d792ce21c0e33a36ca9384fee46e099435ed8
+ >     $ mkdir -p foo/bar foo/buz
+ >     $ cd foo/bar
+ >     $ ln -s ../buz meh
+ >     $ cd meh
+ >     $ cd ../../foo
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../libv4l/0004-v4l2-compliance-needs-fork.patch   | 76 ++++++++++++++++++++++
- 1 file changed, 76 insertions(+)
+ > The last command should not succeed, because, relative to meh, there is
+ > no ../../foo directory; we would expect it to be ../../../foo, instead.
+ > But since meh is a symlink to a directory, then a relative path from that
+ > symlink is interpreted as relative to the derefrenced directory, i.e.
+ > from buz in this case.
 
-diff --git a/package/libv4l/0004-v4l2-compliance-needs-fork.patch b/package/libv4l/0004-v4l2-compliance-needs-fork.patch
-new file mode 100644
-index 0000000000..d29a059520
---- /dev/null
-+++ b/package/libv4l/0004-v4l2-compliance-needs-fork.patch
-@@ -0,0 +1,76 @@
-+From 21d7082c635433176aebcd9d6f0177edb059f41f Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 17 Nov 2018 21:26:57 +0100
-+Subject: [PATCH] v4l2-compliance needs fork
-+
-+v4l2-compliance uses fork, since
-+https://git.linuxtv.org/v4l-utils.git/commit/utils/v4l2-compliance/?id=79d98edd1a27233667a6bc38d3d7f8958c2ec02c
-+
-+So don't build it if fork is not available
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/447d792ce21c0e33a36ca9384fee46e099435ed8
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure.ac      | 5 ++++-
-+ utils/Makefile.am | 6 +++++-
-+ 2 files changed, 9 insertions(+), 2 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 5cc34c24..52ea5c6d 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -478,7 +478,8 @@ AM_CONDITIONAL([WITH_QTGL],	    [test x${qt_pkgconfig_gl} = xtrue])
-+ AM_CONDITIONAL([WITH_GCONV],        [test x$enable_gconv = xyes -a x$enable_shared == xyes -a x$with_gconvdir != x -a -f $with_gconvdir/gconv-modules])
-+ AM_CONDITIONAL([WITH_V4L2_CTL_LIBV4L], [test x${enable_v4l2_ctl_libv4l} != xno])
-+ AM_CONDITIONAL([WITH_V4L2_CTL_STREAM_TO], [test x${enable_v4l2_ctl_stream_to} != xno])
-+-AM_CONDITIONAL([WITH_V4L2_COMPLIANCE_LIBV4L], [test x${enable_v4l2_compliance_libv4l} != xno])
-++AM_CONDITIONAL([WITH_V4L2_COMPLIANCE], [test x$ac_cv_func_fork = xyes])
-++AM_CONDITIONAL([WITH_V4L2_COMPLIANCE_LIBV4L], [test x$ac_cv_func_fork = xyes -a x${enable_v4l2_compliance_libv4l} != xno])
-+ AM_CONDITIONAL([WITH_BPF],          [test x$enable_bpf != xno -a x$libelf_pkgconfig = xyes -a x$CLANG = xclang])
-+ 
-+ # append -static to libtool compile and link command to enforce static libs
-+@@ -509,6 +510,7 @@ AM_COND_IF([WITH_V4L_PLUGINS], [USE_V4L_PLUGINS="yes"
-+ AM_COND_IF([WITH_V4L_WRAPPERS], [USE_V4L_WRAPPERS="yes"], [USE_V4L_WRAPPERS="no"])
-+ AM_COND_IF([WITH_GCONV], [USE_GCONV="yes"], [USE_GCONV="no"])
-+ AM_COND_IF([WITH_V4L2_CTL_LIBV4L], [USE_V4L2_CTL_LIBV4L="yes"], [USE_V4L2_CTL_LIBV4L="no"])
-++AM_COND_IF([WITH_V4L2_COMPLIANCE], [USE_V4L2_COMPLIANCE="yes"], [USE_V4L2_COMPLIANCE="no"])
-+ AM_COND_IF([WITH_V4L2_COMPLIANCE_LIBV4L], [USE_V4L2_COMPLIANCE_LIBV4L="yes"], [USE_V4L2_COMPLIANCE_LIBV4L="no"])
-+ AM_COND_IF([WITH_BPF],         [USE_BPF="yes"
-+                                 AC_DEFINE([HAVE_BPF], [1], [BPF IR decoder support enabled])],
-+@@ -556,6 +558,7 @@ compile time options summary
-+     qv4l2                      : $USE_QV4L2
-+     qvidcap                    : $USE_QVIDCAP
-+     v4l2-ctl uses libv4l       : $USE_V4L2_CTL_LIBV4L
-++    v4l2-compliance            : $USE_V4L2_COMPLIANCE
-+     v4l2-compliance uses libv4l: $USE_V4L2_COMPLIANCE_LIBV4L
-+     BPF IR Decoders:           : $USE_BPF
-+ EOF
-+diff --git a/utils/Makefile.am b/utils/Makefile.am
-+index 2d507028..9c29926a 100644
-+--- a/utils/Makefile.am
-++++ b/utils/Makefile.am
-+@@ -6,7 +6,6 @@ SUBDIRS = \
-+ 	cx18-ctl \
-+ 	keytable \
-+ 	media-ctl \
-+-	v4l2-compliance \
-+ 	v4l2-ctl \
-+ 	v4l2-dbg \
-+ 	v4l2-sysfs-path \
-+@@ -20,6 +19,11 @@ SUBDIRS += \
-+ 	dvb
-+ endif
-+ 
-++if WITH_V4L2_COMPLIANCE
-++SUBDIRS += \
-++	v4l2-compliance
-++endif
-++
-+ if WITH_QV4L2
-+ SUBDIRS += qv4l2
-+ endif
-+-- 
-+2.17.1
-+
+ > But where this gine even werider, is that, if the last command is
+ > replaced by:
+
+ >     $ cd ../../../foo
+
+ > then it still works, too.
+
+ > And that is the root of Michael's issue: the dl directory in Buildroot's
+ > TOPDIR is a symlink to a similarly-named directory one directory higher,
+ > which then confuses relative paths, which gets especially and noticeably
+ > bad for git submodules.
+
+ > Avoid this strangeness, and just use so-called "physical" path, i.e. a
+ > path where all symlinks to directories have been dereferenced.
+
+ > Fixes: #11086
+
+ > Reported-by: Michael Nosthoff <posted@heine.so>
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Michael Nosthoff <posted@heine.so>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
