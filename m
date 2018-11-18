@@ -1,43 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 Nov 2018 20:52:58 +0100
-Subject: [Buildroot] [git commit branch/next] package/alsa-utils: bump to
- version to 1.1.7
-Message-ID: <20181118195108.162778127C@busybox.osuosl.org>
+Date: Sun, 18 Nov 2018 21:15:32 +0100
+Subject: [Buildroot] [PATCH] binutils: Get rid of obsolete patches
+In-Reply-To: <80cbbaa5-d6b7-3a85-43a6-82ae94859876@gmail.com> (Romain Naour's
+ message of "Sat, 27 Oct 2018 09:46:33 +0200")
+References: <20181021181830.12667-1-abrodkin@synopsys.com>
+ <80cbbaa5-d6b7-3a85-43a6-82ae94859876@gmail.com>
+Message-ID: <87ftvym9az.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=23a974fa0b2a6910b9466ff9ce3fb494018f8049
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-Signed-off-by: Zenichi Amano <crow.misia@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/alsa-utils/alsa-utils.hash | 2 +-
- package/alsa-utils/alsa-utils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Hi Alexey,
+ > Thanks for doing this :)
 
-diff --git a/package/alsa-utils/alsa-utils.hash b/package/alsa-utils/alsa-utils.hash
-index ff8fd08013..f0468fb886 100644
---- a/package/alsa-utils/alsa-utils.hash
-+++ b/package/alsa-utils/alsa-utils.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 155caecc40b2220f686f34ba3655a53e3bdbc0586adb1056733949feaaf7d36e  alsa-utils-1.1.6.tar.bz2
-+sha256 1db27fb54ab7fdeb54b00d68b8a174808ffea198cfbd67e3c959482194e1540a  alsa-utils-1.1.7.tar.bz2
- sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
-index 0c65082a14..14d256fca7 100644
---- a/package/alsa-utils/alsa-utils.mk
-+++ b/package/alsa-utils/alsa-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ALSA_UTILS_VERSION = 1.1.6
-+ALSA_UTILS_VERSION = 1.1.7
- ALSA_UTILS_SOURCE = alsa-utils-$(ALSA_UTILS_VERSION).tar.bz2
- ALSA_UTILS_SITE = ftp://ftp.alsa-project.org/pub/utils
- ALSA_UTILS_LICENSE = GPL-2.0
+ > Le 21/10/2018 ? 20:18, Alexey Brodkin a ?crit?:
+ >> Some patches for Binutils seems to not be really needed.
+ >> Moreover for some of them I was not able to find any justification
+ >> for their introduction.
+
+ > Those patches are annoying while bumping the binutils version, I never figured
+ > out why there are in Buildroot.
+
+ >> 
+ >> 1. 0002-ld-makefile.patch
+ >> 
+ >> This one I may track down to at least 2.15.92.0.2 here [1].
+ >> Commit message just says: "Integrate some debian patches,
+ >> extracted from binutils_2.15-4.diff"
+ >> 
+ >> But in OpenEmbedded they got rid of it long ago on switch to 2.26, see [2].
+ >> 
+ >> 2. 0003-check-ldrunpath-length.patch
+ >> 
+ >> The same story here.
+ >> 
+ >> 3. 0004-add-sysroot-fix-from-bug-3049.patch
+ >> 
+ >> Bug mentioned in this patch was marked as "fixed" in 2012, see [3].
+
+ > Based on the commit date, this patch is part of Binutils 2.23 release.
+
+ > Reviewed-by: Romain Naour <romain.naour@gmail.com>
+
+Committed to next, thanks.
+
+-- 
+Bye, Peter Korsgaard
