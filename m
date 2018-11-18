@@ -1,41 +1,32 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 18 Nov 2018 17:58:48 +0100
-Subject: [Buildroot] [PATCH 1/1] flatcc: fix debug build
-Message-ID: <20181118165848.2111-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 18 Nov 2018 18:54:29 +0100
+Subject: [Buildroot] [PATCH 1/1] prosody: security bump to version 0.10.2
+In-Reply-To: <20181118121403.25528-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 18 Nov 2018 13:14:03 +0100")
+References: <20181118121403.25528-1-fontaine.fabrice@gmail.com>
+Message-ID: <87va4unuei.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-flatcc is named flatcc_d if BR2_ENABLE_DEBUG is set because of the
-following line in CMakeLists.txt: set(CMAKE_DEBUG_POSTFIX "_d")
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-So update FLATCC_TARGET_REMOVE_FLATCC_COMPILER hook to replace flatcc
-by flatcc*
+ > This fixes a cross-host authentication vulnerability, CVE-2018-10847.
+ > The issue affects Prosody instances that have multiple virtual hosts
+ > (including anonymous authenticated hosts):
+ > https://blog.prosody.im/prosody-0-10-2-security-release
 
-Fixes:
- - http://autobuild.buildroot.org/results/a47f49cd2fdd809257bd7e83dca620f2e6aac85b
+ > A full security advisory is available at
+ > https://prosody.im/security/advisory_20180531
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/flatcc/flatcc.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ > Compute hashes locally as they are no more available on
+ > https://prosody.im/downloads/source/{MD5,SHA1,SHA256,SHA512}SUMS
 
-diff --git a/package/flatcc/flatcc.mk b/package/flatcc/flatcc.mk
-index 9f961a37b1..1c8d0ec7fb 100644
---- a/package/flatcc/flatcc.mk
-+++ b/package/flatcc/flatcc.mk
-@@ -19,8 +19,9 @@ HOST_FLATCC_CONF_OPTS += -DFLATCC_TEST=OFF
- FLATCC_CONF_OPTS += -DFLATCC_INSTALL=ON
- HOST_FLATCC_CONF_OPTS += -DFLATCC_INSTALL=ON
- 
-+# compiler is named flatcc or flatcc_d depending on BR2_ENABLE_DEBUG value
- define FLATCC_TARGET_REMOVE_FLATCC_COMPILER
--	rm $(TARGET_DIR)/usr/bin/flatcc
-+	rm $(TARGET_DIR)/usr/bin/flatcc*
- endef
- 
- FLATCC_POST_INSTALL_TARGET_HOOKS += FLATCC_TARGET_REMOVE_FLATCC_COMPILER
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
 -- 
-2.17.1
+Bye, Peter Korsgaard
