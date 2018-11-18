@@ -1,43 +1,37 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 18 Nov 2018 22:33:58 +0100
-Subject: [Buildroot] [PATCH v2 1/2] c-ares: support host build
-In-Reply-To: <20181118211942.28839-1-robertroyrose@gmail.com>
-References: <20181118211942.28839-1-robertroyrose@gmail.com>
-Message-ID: <8b5155dd-c5e5-570f-69ca-6f3a9ecc149c@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 18 Nov 2018 22:34:39 +0100
+Subject: [Buildroot] [PATCH 1/1] flare-engine: fix debug build
+Message-ID: <20181118213439.10404-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Robert,
+If BR2_ENABLE_DEBUG is set, use RelWithDebInfo instead of default Debug
+as Debug will add -pg (gprof) which is not always available on toolchain
 
-On 18/11/2018 22:19, Robert Rose wrote:
-> Signed-off-by: Robert Rose <robertroyrose@gmail.com>
-> ---
->  package/c-ares/c-ares.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
-> index 67254244a1..76e9687b37 100644
-> --- a/package/c-ares/c-ares.mk
-> +++ b/package/c-ares/c-ares.mk
-> @@ -15,3 +15,4 @@ C_ARES_LICENSE = MIT
->  C_ARES_LICENSE_FILES = ares_mkquery.c
->  
->  $(eval $(autotools-package))
-> +$(eval $(host-autotools-package))
+Fixes:
+ - http://autobuild.buildroot.org/results/a12ae622a44bbe025c3a8b7e8e4c253b52927ae8
 
- We only include host packages if there is a justification for it. That means
-either:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/flare-engine/flare-engine.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-- it is needed for building some other package; in this case, you should submit
-the patch adding the host package in a series together with the other package; or
-
-- it is used in a post-{build,fakeroot,image} script; in that case, there should
-be a Config.in.host option for it so it can be selected, and the commit log
-should have some explanation of why it could be useful in a post-* script.
-
-
- Regards,
- Arnout
+diff --git a/package/flare-engine/flare-engine.mk b/package/flare-engine/flare-engine.mk
+index 0aac3bd33c..2f36602348 100644
+--- a/package/flare-engine/flare-engine.mk
++++ b/package/flare-engine/flare-engine.mk
+@@ -14,4 +14,9 @@ FLARE_ENGINE_DEPENDENCIES += sdl2 sdl2_image sdl2_mixer sdl2_ttf
+ # Don't use /usr/games and /usr/share/games
+ FLARE_ENGINE_CONF_OPTS += -DBINDIR=bin -DDATADIR=share/flare
+ 
++# Don't use the default Debug type as it adds -pg (gprof)
++ifeq ($(BR2_ENABLE_DEBUG),y)
++FLARE_ENGINE_CONF_OPTS += -DCMAKE_BUILD_TYPE=RelWithDebInfo
++endif
++
+ $(eval $(cmake-package))
+-- 
+2.17.1
