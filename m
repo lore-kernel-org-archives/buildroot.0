@@ -1,27 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 Nov 2018 08:36:44 +0100
-Subject: [Buildroot] [PATCH 1/1] gstreamer: fix build on riscv
-In-Reply-To: <20181117184533.21169-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 17 Nov 2018 19:45:33 +0100")
-References: <20181117184533.21169-1-fontaine.fabrice@gmail.com>
-Message-ID: <878t1qq1kj.fsf@dell.be.48ers.dk>
+Date: Sun, 18 Nov 2018 08:37:32 +0100
+Subject: [Buildroot] [PATCH] utils/genrandconfig: add missing new line
+ when creating the configuration
+In-Reply-To: <20181115163409.8825-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Thu, 15 Nov 2018 17:34:09 +0100")
+References: <20181115163409.8825-1-thomas.petazzoni@bootlin.com>
+Message-ID: <874lceq1j7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > RISC-V supports unaligned accesses, but these might run extremely slowly
- > depending on the implementation so set as_cv_unaligned_access to no on
- > this architecture, see:
- > https://gitlab.freedesktop.org/gstreamer/gstreamer/commit/8a156d1725ecd03f2e8cdc8874e081dda2d3b43d
+ > When adding the custom BR2_WGET value in the configuration,
+ > genrandconfig forgets to add a newline. Due to this, the next option
+ > that is added is printed on the same line as BR2_WGET="", which causes
+ > it to be ignored.
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/dca32c929350311fca1a85e251d318b43c4a3177
+ > Due to this, in all builds, the line right after BR2_WGET was
+ > ignored. It could have been BR2_ENABLE_DEBUG, BR2_INIT_BUSYBOX,
+ > BR2_INIT_SYSTEMD, BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV,
+ > BR2_STATIC_LIBS or BR2_PACKAGE_PYTHON_PY_ONLY depending on the
+ > randomization.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Fix that by adding a proper newline at the end of the BR2_WGET option.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed, thanks.
 
