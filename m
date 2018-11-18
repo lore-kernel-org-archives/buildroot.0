@@ -1,66 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 17 Nov 2018 21:59:47 +0100
-Subject: [Buildroot] [git commit] libsigrok: bump version to 0.5.1
-Message-ID: <20181202071555.F2CEF8843B@busybox.osuosl.org>
+Date: Sun, 18 Nov 2018 20:52:48 +0100
+Subject: [Buildroot] [git commit] package/alsa-lib: bump to version to 1.1.7
+Message-ID: <20181202071556.36F458843B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=922b82bde9d554237769c21e50f6c5b4f73f41a8
+commit: https://git.buildroot.net/buildroot/commit/?id=85ab94022f10a5c6e69afb570275a942fb4c5279
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since commit 79034d4f39f7 ("strutil: Locale independent snprintf()
-and vsnprintf() functions") libsigrok now needs to know locale_t.
-
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Signed-off-by: Zenichi Amano <crow.misia@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libsigrok/Config.in      | 3 ++-
- package/libsigrok/libsigrok.hash | 2 +-
- package/libsigrok/libsigrok.mk   | 2 +-
- 3 files changed, 4 insertions(+), 3 deletions(-)
+ package/alsa-lib/alsa-lib.hash | 2 +-
+ package/alsa-lib/alsa-lib.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libsigrok/Config.in b/package/libsigrok/Config.in
-index fb74beaab5..bb76e09d2d 100644
---- a/package/libsigrok/Config.in
-+++ b/package/libsigrok/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBSIGROK
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU
-+	depends on BR2_ENABLE_LOCALE
- 	depends on !BR2_STATIC_LIBS # libzip
- 	# std=c11
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-@@ -35,7 +36,7 @@ comment "C++ bindings need a toolchain w/ C++, gcc >= 4.9"
- 
- endif
- 
--comment "libsigrok needs a toolchain w/ wchar, threads, dynamic library, gcc >= 4.7"
-+comment "libsigrok needs a toolchain w/ wchar, locale, threads, dynamic library, gcc >= 4.7"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS \
- 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || BR2_STATIC_LIBS
-diff --git a/package/libsigrok/libsigrok.hash b/package/libsigrok/libsigrok.hash
-index 47ad6129f6..7a52c6ca1b 100644
---- a/package/libsigrok/libsigrok.hash
-+++ b/package/libsigrok/libsigrok.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	4c8c86779b880a5c419f6c77a08b1147021e5a19fa83b0f3b19da27463c9f3a4	libsigrok-0.5.0.tar.gz
-+sha256	e40fde7af98d29e922e9d3cbe0a6c0569889153fc31e47b8b1afe4d846292b9c	libsigrok-0.5.1.tar.gz
-diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
-index ef7fab82bd..5bca9ad518 100644
---- a/package/libsigrok/libsigrok.mk
-+++ b/package/libsigrok/libsigrok.mk
+diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
+index c4f16d6df3..4373a2a592 100644
+--- a/package/alsa-lib/alsa-lib.hash
++++ b/package/alsa-lib/alsa-lib.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256 5f2cd274b272cae0d0d111e8a9e363f08783329157e8dd68b3de0c096de6d724  alsa-lib-1.1.6.tar.bz2
++sha256 9d6000b882a3b2df56300521225d69717be6741b71269e488bb20a20783bdc09  alsa-lib-1.1.7.tar.bz2
+ sha256 32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
+ sha256 bfe16cf823bcff261fc6a062c07ee96660e3c39678f42f39a788a68dbc234ced  aserver/COPYING
+diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
+index 98fc486e2d..9de45d2089 100644
+--- a/package/alsa-lib/alsa-lib.mk
++++ b/package/alsa-lib/alsa-lib.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBSIGROK_VERSION = 0.5.0
-+LIBSIGROK_VERSION = 0.5.1
- LIBSIGROK_SITE = http://sigrok.org/download/source/libsigrok
- LIBSIGROK_LICENSE = GPL-3.0+
- LIBSIGROK_LICENSE_FILES = COPYING
+-ALSA_LIB_VERSION = 1.1.6
++ALSA_LIB_VERSION = 1.1.7
+ ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
+ ALSA_LIB_SITE = ftp://ftp.alsa-project.org/pub/lib
+ ALSA_LIB_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (aserver)
