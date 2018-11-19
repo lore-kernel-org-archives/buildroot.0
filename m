@@ -1,38 +1,46 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 19 Nov 2018 18:46:29 +0100
-Subject: [Buildroot] [PATCH 1/1] libcorrect: fix debug build
-Message-ID: <20181119174629.1613-1-fontaine.fabrice@gmail.com>
+Date: Mon, 19 Nov 2018 19:06:48 +0100
+Subject: [Buildroot] [PATCH/next 1/3] keepalived: remove popt dependency
+Message-ID: <20181119180650.30516-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If BR2_ENABLE_DEBUG is set, Debug release will be used and as a result
--fsanitize=address will be added to CFLAGS which will fail on some
-toolchains because it requires asan library
-
-So add -DCMAKE_BUILD_TYPE=Release unconditionally
-
-Fixes:
- - http://autobuild.buildroot.net/results/221d6a418e75b39fe645c3a56cee676518d2cff6
+popt is not needed since version 1.3.1 and:
+https://github.com/acassen/keepalived/commit/3452517c4f2b69badabf19fc06cc56db49d37603
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libcorrect/libcorrect.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/keepalived/Config.in     | 1 -
+ package/keepalived/keepalived.mk | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/libcorrect/libcorrect.mk b/package/libcorrect/libcorrect.mk
-index 0a84aa5c26..cb25e0d0cd 100644
---- a/package/libcorrect/libcorrect.mk
-+++ b/package/libcorrect/libcorrect.mk
-@@ -9,5 +9,7 @@ LIBCORRECT_SITE = $(call github,quiet,libcorrect,$(LIBCORRECT_VERSION))
- LIBCORRECT_LICENSE = BSD-3-Clause
- LIBCORRECT_LICENSE_FILES = LICENSE
- LIBCORRECT_INSTALL_STAGING = YES
-+# Debug release adds -fsanitize=address so always use Release
-+LIBCORRECT_CONF_OPTS = -DCMAKE_BUILD_TYPE=Release
+diff --git a/package/keepalived/Config.in b/package/keepalived/Config.in
+index 0140e62ae2..c71821545c 100644
+--- a/package/keepalived/Config.in
++++ b/package/keepalived/Config.in
+@@ -4,7 +4,6 @@ config BR2_PACKAGE_KEEPALIVED
+ 	depends on !BR2_STATIC_LIBS # uses libdl
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
+ 	select BR2_PACKAGE_OPENSSL
+-	select BR2_PACKAGE_POPT
+ 	help
+ 	  The main goal of the keepalived project is to add a strong &
+ 	  robust keepalive facility to the Linux Virtual Server
+diff --git a/package/keepalived/keepalived.mk b/package/keepalived/keepalived.mk
+index e8a280a19c..8756811e04 100644
+--- a/package/keepalived/keepalived.mk
++++ b/package/keepalived/keepalived.mk
+@@ -6,7 +6,7 @@
  
- $(eval $(cmake-package))
+ KEEPALIVED_VERSION = 1.4.2
+ KEEPALIVED_SITE = http://www.keepalived.org/software
+-KEEPALIVED_DEPENDENCIES = host-pkgconf openssl popt
++KEEPALIVED_DEPENDENCIES = host-pkgconf openssl
+ KEEPALIVED_LICENSE = GPL-2.0+
+ KEEPALIVED_LICENSE_FILES = COPYING
+ # 0001-configure.ac-do-not-force-PIE.patch
 -- 
-2.14.1
+2.17.1
