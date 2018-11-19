@@ -1,45 +1,136 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 19 Nov 2018 16:09:59 +0200
-Subject: [Buildroot] [PATCH 1/3] glibc: ensure BR2_MAKE is also used for
- subdirs
-In-Reply-To: <20181119140228.19937-1-peter@korsgaard.com>
-References: <20181119140228.19937-1-peter@korsgaard.com>
-Message-ID: <20181119140959.erkagh6xkfojza65@sapphire.tkos.co.il>
+From: Andreas Naumann <dev@andin.de>
+Date: Mon, 19 Nov 2018 15:17:41 +0100
+Subject: [Buildroot] [PATCH next v4 0/6] Per-package host/target
+ directory support
+In-Reply-To: <20181116154335.42ddaa49@windsurf>
+References: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
+ <a062a8a1-7a56-d8ec-6d9d-06f444a72d6b@andin.de>
+ <20181116154335.42ddaa49@windsurf>
+Message-ID: <2f83f041-4a7d-4c8b-fda0-c7ba64dfc776@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hi Thomas,
 
-On Mon, Nov 19, 2018 at 03:02:26PM +0100, Peter Korsgaard wrote:
-> The configure script contains logic to figure out what make program to
-> invoke for subdirectories (trying gnumake, gmake, make).  Explicitly force
-> it to use our BR2_MAKE to ensure the right make version is used.
+Am 16.11.18 um 15:43 schrieb Thomas Petazzoni:
+> Hello Andreas,
 > 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/glibc/glibc.mk | 1 +
->  1 file changed, 1 insertion(+)
+> Thanks for your feedback!
 > 
-> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-> index 708c22f723..c15f32aa3e 100644
-> --- a/package/glibc/glibc.mk
-> +++ b/package/glibc/glibc.mk
-> @@ -34,6 +34,7 @@ GLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-bison host-gawk \
->  # glibc requires make >= 4.0 since 2.28 release.
->  # https://www.sourceware.org/ml/libc-alpha/2018-08/msg00003.html
->  GLIBC_MAKE = $(BR2_MAKE)
-> +GLIBC_CONV_ENV += ac_cv_prog_MAKE="$(BR2_MAKE)"
+> On Thu, 15 Nov 2018 17:41:27 +0100, Andreas Naumann wrote:
+> 
+>> thank you for the updated version. I tried to run it with my configs.
+> 
+> Thanks a lot for testing!
+> 
+>> For that I needed
+>> a) a generic patch for all kconfig packages, see my answer on the final
+>> patch
+> 
+> For this one, we need to continue the discussion with Yann and Thomas
+> De Schampheleire to understand what is the right approach.
 
-GLIBC_CONF_ENV maybe?
+Ok.
 
-baruch
+> 
+>> b) linux-specific patch posted two days ago: [PATCH v2 1/1] linux: Make
+>> dtc install step more reliable
+> 
+> This one is a package-specific fix, which can be merged separately from
+> the core of the PPSH series. I want to keep the PPSH series focused on
+> introducing PPSH support, and not make it grow infinitely with fixup
+> patches for lots of packages.
+> 
+> However, perhaps what we could do is to collect those patches in
+> branch, this way we could have two branches:
+> 
+>   - One with the PPSH core stuff
+> 
+>   - One with all the PPSH-related fixes, which are being
+>     submitted/applied progressively to Buildroot, even before PPSH
+>     itself is merged.
+> 
+> What do you think ?
 
->  GLIBC_SUBDIR = build
+Ok, but right now I have only this one additional patch.
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+> 
+>> On my local machine things seemed to work, however final rootfs creation
+>> failed in our CI environment due to broken host- binaries, e.g.
+>> mkfs.ubifs not finding some required lib (liblzo2.so.2 in that
+>> particular case).
+>> It seems some things with rpath manipulation/checking do not yet work
+>> properly. Looking into the binary with ldd I see libs used from the
+>> host-machine that probably should come from buildroots host/usr/lib...
+>> 	linux-vdso.so.1 =>  (0x00007ffc06fcc000)
+>> 	libz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007f760428f000)
+>> 	liblzo2.so.2 => not found
+>> 	libuuid.so.1 => /lib/x86_64-linux-gnu/libuuid.so.1 (0x00007f760408a000)
+>> 	libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f7603d81000)
+>> 	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f76039b7000)
+>> 	/lib64/ld-linux-x86-64.so.2 (0x00007f76044a9000)
+> 
+> This is weird, because it works fine here:
+> 
+> thomas at windsurf:~/projets/outputs/t$ ldd host/sbin/mkfs.ubifs
+> 	linux-vdso.so.1 (0x00007ffe8cd3b000)
+> 	libz.so.1 => /home/thomas/projets/outputs/t/per-package/host-mtd/host/lib/libz.so.1 (0x00007f1a683ff000)
+> 	liblzo2.so.2 => /home/thomas/projets/outputs/t/per-package/host-mtd/host/lib/liblzo2.so.2 (0x00007f1a683db000)
+> 	libuuid.so.1 => /home/thomas/projets/outputs/t/per-package/host-mtd/host/lib/libuuid.so.1 (0x00007f1a683d2000)
+> 	libm.so.6 => /lib64/libm.so.6 (0x00007f1a6821e000)
+> 	libc.so.6 => /lib64/libc.so.6 (0x00007f1a68058000)
+> 	/lib64/ld-linux-x86-64.so.2 (0x00007f1a6841b000)
+> 
+> Could you dump the RPATH of the mkfs.ubifs library, like this:
+> 
+> thomas at windsurf:~/projets/outputs/t$ readelf -d host/sbin/mkfs.ubifs
+> 
+> Dynamic section at offset 0x11dd0 contains 29 entries:
+>    Tag        Type                         Name/Value
+>   0x0000000000000001 (NEEDED)             Shared library: [libz.so.1]
+>   0x0000000000000001 (NEEDED)             Shared library: [liblzo2.so.2]
+>   0x0000000000000001 (NEEDED)             Shared library: [libuuid.so.1]
+>   0x0000000000000001 (NEEDED)             Shared library: [libm.so.6]
+>   0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+>   0x000000000000000f (RPATH)              Library rpath: [/home/thomas/projets/outputs/t/per-package/host-mtd/host/lib:/home/thomas/projets/outputs/t/per-package/host-util-linux/host/lib]
+>   0x000000000000000c (INIT)               0x402000
+>   0x000000000000000d (FINI)               0x40bb08
+>   0x0000000000000019 (INIT_ARRAY)         0x412dc0
+>   0x000000000000001b (INIT_ARRAYSZ)       8 (bytes)
+>   0x000000000000001a (FINI_ARRAY)         0x412dc8
+>   0x000000000000001c (FINI_ARRAYSZ)       8 (bytes)
+>   0x000000006ffffef5 (GNU_HASH)           0x400308
+>   0x0000000000000005 (STRTAB)             0x4009b8
+>   0x0000000000000006 (SYMTAB)             0x400340
+>   0x000000000000000a (STRSZ)              781 (bytes)
+>   0x000000000000000b (SYMENT)             24 (bytes)
+>   0x0000000000000015 (DEBUG)              0x0
+>   0x0000000000000003 (PLTGOT)             0x413000
+>   0x0000000000000002 (PLTRELSZ)           1464 (bytes)
+>   0x0000000000000014 (PLTREL)             RELA
+>   0x0000000000000017 (JMPREL)             0x400e58
+>   0x0000000000000007 (RELA)               0x400db0
+>   0x0000000000000008 (RELASZ)             168 (bytes)
+>   0x0000000000000009 (RELAENT)            24 (bytes)
+>   0x000000006ffffffe (VERNEED)            0x400d50
+>   0x000000006fffffff (VERNEEDNUM)         2
+>   0x000000006ffffff0 (VERSYM)             0x400cc6
+>   0x0000000000000000 (NULL)               0x0
+> 
+
+I've done that and found that in the troubling case the RPATH is empty. 
+This might be a problem of a custom wrapper I use which creates multiple 
+images in different output folders. Digging deeper will take some time, 
+thanks for the pointer!
+
+
+regards,
+Andreas
+
+> Thanks a lot!
+> 
+> Thomas
+> 
