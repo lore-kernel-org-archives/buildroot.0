@@ -1,42 +1,54 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Mon, 19 Nov 2018 00:26:24 -0200
-Subject: [Buildroot] [PATCH next] tpm2-tss: fix build without stack smashing
- protection (SSP)
-Message-ID: <20181119022624.22729-1-casantos@datacom.com.br>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Sun, 18 Nov 2018 20:37:43 -0600
+Subject: [Buildroot] [PATCH v3 2/6] package/llvm: install target
+ binary/debug tools
+In-Reply-To: <1542595067-45972-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1542595067-45972-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1542595067-45972-2-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Restore a configuration environment setup that was incorrectly removed
-along with the upgrade to version 2.1.0.
+The compiler-rt fuzzer and address sanitizer tools require additional
+LLVM binary tools installed to allow stack trace decoding actively during
+executable analysis.
 
-Fixes:
-  http://autobuild.buildroot.net/results/44221140fb8e2ddcb7d624e657b92a59375c02dd
-  http://autobuild.buildroot.net/results/08b2a8a4bdd1c38703626a4fc37dab31dce98f49
-  http://autobuild.buildroot.net/results/e469b47a6c8f1e8812325fd2860345105052316c
-  http://autobuild.buildroot.net/results/f230fe6bbeb8b22d2b5b7cfb3f0ac4b3b936dc37
-  http://autobuild.buildroot.net/results/ceb824033888086f6dde22c66d5b5f692a253c7e
-  http://autobuild.buildroot.net/results/f863947a7384cb754706e6c346d222be59ad4136
+https://github.com/google/sanitizers/wiki/AddressSanitizerCallStack
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
 ---
- package/tpm2-tss/tpm2-tss.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+Changes
+v1 -> v3
+ - None
+---
+ package/llvm/llvm.mk | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
-index 3bb0702916..f005e5d6b8 100644
---- a/package/tpm2-tss/tpm2-tss.mk
-+++ b/package/tpm2-tss/tpm2-tss.mk
-@@ -12,4 +12,8 @@ TPM2_TSS_INSTALL_STAGING = YES
- TPM2_TSS_DEPENDENCIES = liburiparser openssl host-pkgconf
- TPM2_TSS_CONF_OPTS = --with-crypto=ossl --disable-doxygen-doc
- 
-+# configure.ac doesn't contain a link test, so it doesn't detect when
-+# libssp is missing.
-+TPM2_TSS_CONF_ENV = ax_cv_check_cflags___________Wall__Werror_______fstack_protector_all=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
+diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+index 1f9bd44..79477f0 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm/llvm.mk
+@@ -197,8 +197,17 @@ HOST_LLVM_CONF_OPTS += \
+ # We need to activate LLVM_INCLUDE_TOOLS, otherwise it does not generate
+ # libLLVM.so
+ LLVM_CONF_OPTS += \
+-	-DLLVM_INCLUDE_TOOLS=ON \
++	-DLLVM_INCLUDE_TOOLS=ON
 +
- $(eval $(autotools-package))
++# The llvm-symbolizer binary is used by the Compiler-RT Fuzzer
++# and AddressSanitizer tools for stack traces.
++ifeq ($(BR2_PACKAGE_COMPILER_RT),y)
++LLVM_CONF_OPTS += \
++	-DLLVM_BUILD_TOOLS=ON
++else
++LLVM_CONF_OPTS += \
+ 	-DLLVM_BUILD_TOOLS=OFF
++endif
+ 
+ # Compiler-rt not in the source tree.
+ # llvm runtime libraries are not in the source tree.
 -- 
-2.19.1
+1.9.1
