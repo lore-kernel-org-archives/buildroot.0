@@ -1,103 +1,60 @@
-From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
-Date: Tue, 20 Nov 2018 03:52:38 +0800
-Subject: [Buildroot] [PATCH 1/1] python-aiohttp: new package
-Message-ID: <1542657158-9559-1-git-send-email-james.hilliard1@gmail.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Mon, 19 Nov 2018 21:28:59 +0100
+Subject: [Buildroot] [PATCH next 1/2] package/pkg-luarocks: drop flock
+ at installation time
+In-Reply-To: <20181119103227.24726-2-thomas.petazzoni@bootlin.com>
+References: <20181119103227.24726-1-thomas.petazzoni@bootlin.com>
+ <20181119103227.24726-2-thomas.petazzoni@bootlin.com>
+Message-ID: <CAB0FRsu5=s7c2uOA9gtbAwsbLZn1gY5goaFCxhRYw_WHLOXE2A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: James Hilliard <james.hilliard1@gmail.com>
+Le lun. 19 nov. 2018 ? 11:32, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+a ?crit :
 
-Async http client/server framework (asyncio).
+> In commit 22b327fc743b48a33aec0a9190bd67118641b294 ("pkg-luarocks: fix
+> top-level parallel makefile support"), a flock on $(TARGET_DIR) was
+> added to ensure that two Luarocks packages are not installed at the
+> same time.
+>
+> However, to support top-level parallel build, we have now clearly
+> decided that per-package folders is a requirement. Therefore,
+> TARGET_DIR is anyway going to be different for each package, making
+> this flock unnecessary.
+>
+> Trying to use top-level parallel build without per-package folder is
+> simply not supported, so this commit drops the unnecessary flock.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Acked-by: Francois Perrad <francois.perrad@gadz.org>
+
 ---
- DEVELOPERS                                 |  1 +
- package/Config.in                          |  1 +
- package/python-aiohttp/Config.in           | 14 ++++++++++++++
- package/python-aiohttp/python-aiohttp.hash |  5 +++++
- package/python-aiohttp/python-aiohttp.mk   | 14 ++++++++++++++
- 5 files changed, 35 insertions(+)
- create mode 100644 package/python-aiohttp/Config.in
- create mode 100644 package/python-aiohttp/python-aiohttp.hash
- create mode 100644 package/python-aiohttp/python-aiohttp.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f4d98d9..cfc076b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -985,6 +985,7 @@ F:	configs/pine64_sopine_defconfig
- 
- N:	James Hilliard <james.hilliard1@gmail.com>
- F:	package/python-aiodns/
-+F:	package/python-aiohttp/
- F:	package/python-async-timeout/
- F:	package/python-cchardet/
- F:	package/python-multidict/
-diff --git a/package/Config.in b/package/Config.in
-index 5a5d840..776691b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -795,6 +795,7 @@ if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- menu "External python modules"
- 	source "package/python-aiocoap/Config.in"
- 	source "package/python-aiodns/Config.in"
-+	source "package/python-aiohttp/Config.in"
- 	source "package/python-alsaaudio/Config.in"
- 	source "package/python-argh/Config.in"
- 	source "package/python-arrow/Config.in"
-diff --git a/package/python-aiohttp/Config.in b/package/python-aiohttp/Config.in
-new file mode 100644
-index 0000000..81862c9
---- /dev/null
-+++ b/package/python-aiohttp/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_PYTHON_AIOHTTP
-+	bool "python-aiohttp"
-+	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_ATTRS # runtime
-+	select BR2_PACKAGE_PYTHON_CCHARDET if BR2_INSTALL_LIBSTDCPP # runtime
-+	select BR2_PACKAGE_PYTHON_CHARDET if !BR2_INSTALL_LIBSTDCPP # runtime
-+	select BR2_PACKAGE_PYTHON_MULTIDICT # runtime
-+	select BR2_PACKAGE_PYTHON_ASYNC_TIMEOUT # runtime
-+	select BR2_PACKAGE_PYTHON_YARL # runtime
-+	select BR2_PACKAGE_PYTHON_AIODNS # runtime
-+	help
-+	  Async http client/server framework (asyncio).
-+
-+	  https://github.com/aio-libs/aiohttp
-diff --git a/package/python-aiohttp/python-aiohttp.hash b/package/python-aiohttp/python-aiohttp.hash
-new file mode 100644
-index 0000000..8f158af
---- /dev/null
-+++ b/package/python-aiohttp/python-aiohttp.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/aiohttp/json
-+md5	80a6e0c6c452d511d1d37755d6f0995a  aiohttp-3.4.4.tar.gz
-+sha256	51afec6ffa50a9da4cdef188971a802beb1ca8e8edb40fa429e5e529db3475fa  aiohttp-3.4.4.tar.gz
-+# Locally computed sha256 checksums
-+sha256	bb0c0eeae85492ebfa03442b7784d4c42a623e15346df54ae85f55df972a82af  LICENSE.txt
-diff --git a/package/python-aiohttp/python-aiohttp.mk b/package/python-aiohttp/python-aiohttp.mk
-new file mode 100644
-index 0000000..df8bdfb
---- /dev/null
-+++ b/package/python-aiohttp/python-aiohttp.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-aiohttp
-+#
-+################################################################################
-+
-+PYTHON_AIOHTTP_VERSION = 3.4.4
-+PYTHON_AIOHTTP_SOURCE = aiohttp-$(PYTHON_AIOHTTP_VERSION).tar.gz
-+PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/70/27/6098b4b60a3302a97f8ec97eb85d42f55a2fa904da4a369235a8e3b84352
-+PYTHON_AIOHTTP_SETUP_TYPE = setuptools
-+PYTHON_AIOHTTP_LICENSE = Apache-2.0
-+PYTHON_AIOHTTP_LICENSE_FILES = LICENSE.txt
-+
-+$(eval $(python-package))
--- 
-2.7.4
+>  package/pkg-luarocks.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/pkg-luarocks.mk b/package/pkg-luarocks.mk
+> index 29c5e66cd1..f0985433b7 100644
+> --- a/package/pkg-luarocks.mk
+> +++ b/package/pkg-luarocks.mk
+> @@ -63,7 +63,7 @@ endif
+>  #
+>  ifndef $(2)_INSTALL_TARGET_CMDS
+>  define $(2)_INSTALL_TARGET_CMDS
+> -       cd $$($(2)_SRCDIR) && $$(LUAROCKS_RUN_ENV) flock $$(TARGET_DIR) \
+> +       cd $$($(2)_SRCDIR) && $$(LUAROCKS_RUN_ENV) \
+>                 $$(LUAROCKS_RUN_CMD) make --keep $$($(2)_ROCKSPEC)
+> $$($(2)_BUILD_OPTS)
+>  endef
+>  endif
+> --
+> 2.19.1
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181119/3b6f5b56/attachment.html>
