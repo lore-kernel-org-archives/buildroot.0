@@ -1,35 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Nov 2018 21:59:28 +0100
-Subject: [Buildroot] [PATCH next] tpm2-tss: depend on shared libraries
-In-Reply-To: <20181119044123.19463-1-casantos@datacom.com.br>
-References: <20181119044123.19463-1-casantos@datacom.com.br>
-Message-ID: <20181119215928.4d913218@windsurf.home>
+Date: Mon, 19 Nov 2018 22:01:35 +0100
+Subject: [Buildroot] [git commit] package/webkitgtk: use proper USE_WOFF2
+ flag instead of ENABLE_WOFF2
+Message-ID: <20181119205851.6B58183AEA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Carlos,
+commit: https://git.buildroot.net/buildroot/commit/?id=ef3deade617769e6e2f509985cddf0958cda4a02
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 19 Nov 2018 02:41:23 -0200, Carlos Santos wrote:
-> The code includes dlfcn.h even if --enable-static and --disable-shared
-> are passed to configure. There is an "#ifndef NO_DL ... #endif" wrapper
-> but NO_DL is never defined and adding "-DNO_DL" to CFLAGS causes other
-> compilation errors.
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/cfc3bfef5e93329bf944a57947086d9ddc4fece3
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/webkitgtk/webkitgtk.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-You need to propagate this dependency to the reverse dependencies of
-tpm2-tss.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 54a791cd14..16644f0e93 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -22,10 +22,10 @@ WEBKITGTK_CONF_OPTS = \
+ 	-DENABLE_INTROSPECTION=OFF \
+ 	-DENABLE_MINIBROWSER=ON \
+ 	-DENABLE_SPELLCHECK=ON \
+-	-DENABLE_WOFF2=ON \
+ 	-DPORT=GTK \
+ 	-DUSE_LIBNOTIFY=OFF \
+-	-DUSE_LIBHYPHEN=OFF
++	-DUSE_LIBHYPHEN=OFF \
++	-DUSE_WOFF2=ON
+ 
+ ifeq ($(BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS_JIT),y)
+ WEBKITGTK_CONF_OPTS += -DENABLE_JIT=ON
