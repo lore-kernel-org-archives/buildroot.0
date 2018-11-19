@@ -1,72 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Nov 2018 22:10:26 +0100
-Subject: [Buildroot] [PATCH 2/2] libtirpc: Fix whitespace on 4th patch
-In-Reply-To: <20181117194856.29604-2-petr.vorel@gmail.com>
-References: <20181117194856.29604-1-petr.vorel@gmail.com>
- <20181117194856.29604-2-petr.vorel@gmail.com>
-Message-ID: <20181119221026.7a21f37b@windsurf.home>
+Date: Mon, 19 Nov 2018 22:11:31 +0100
+Subject: [Buildroot] [git commit branch/next] core/download: drop the SSH
+ command
+Message-ID: <20181119210837.F3A4483AFB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=db9473bf6cd7bd12aa1f9faad0a917c973c33827
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 17 Nov 2018 20:48:56 +0100, Petr Vorel wrote:
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
-> Should be the same as v1.
-> ---
->  ...es-needed-to-build-rpcbind-on-top-of.patch | 78 +++++++++----------
->  1 file changed, 38 insertions(+), 40 deletions(-)
-> 
-> diff --git a/package/libtirpc/0004-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch b/package/libtirpc/0004-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch
-> index 7f53ffca16..797fb7a42c 100644
-> --- a/package/libtirpc/0004-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch
-> +++ b/package/libtirpc/0004-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch
-> @@ -22,16 +22,16 @@ index aa5908e..4999066 100644
->  +++ b/Makefile.am
->  @@ -2,6 +2,9 @@ SUBDIRS = src man doc rpcgen
->   ACLOCAL_AMFLAGS = -I m4
-> - 
-> +
+The ssh command was added back in 2011 with commit c61788f09 (GENTARGETS:
+add support for scp://) and was used to check that the remote file
+existed, back when we supported 'make source-check'.
 
-These are additional changes, i.e you are removing whitespace that is
-here in the original source code.
+However, in 2017, with commit bf28a165d (pkg-{download, generic}: remove
+source-check), we actually removed support for source-check.
 
->   GENFILES	       = tirpc/rpcsvc/crypt.h \
->  +			 tirpc/rpcsvc/mount.h \
->  +			 tirpc/rpcsvc/nfs_prot.h \
->  +			 tirpc/rpcsvc/rquota.h \
->   			 tirpc/rpc/rpcb_prot.h
-> - 
-> +
+The SSH command however was not removed then, and stuck, even though
+nothing ever uses it It is not even exported in the environment, and scp
+does not use it either (it has -S to specify an ssh-compatible program).
 
-Ditto.
+Get rid of it.
 
->   noinst_HEADERS	       = tirpc/reentrant.h \
->  @@ -11,6 +14,9 @@ noinst_HEADERS	       = tirpc/reentrant.h \
-> - 
-> +
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ Config.in               | 4 ----
+ package/pkg-download.mk | 1 -
+ 2 files changed, 5 deletions(-)
 
-Ditto.
-
-I.e, in the Makefile.am, our patch is not adding any more trailing
-whitespace.
-
-Then, in the .x files, those are copy/pasted from I don't remember
-which project. I'm not sure how much sense it makes to fix trailing
-whitespace in those patches.
-
-Instead, it would be tremendously more useful to work with libtirpc
-upstream to get all of those patches merged. I think I tried to do so a
-number of years ago, but without much luck.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/Config.in b/Config.in
+index 03e4eb3928..f965e9d6d8 100644
+--- a/Config.in
++++ b/Config.in
+@@ -136,10 +136,6 @@ config BR2_SCP
+ 	string "Secure copy (scp) command"
+ 	default "scp"
+ 
+-config BR2_SSH
+-	string "Secure shell (ssh) command"
+-	default "ssh"
+-
+ config BR2_HG
+ 	string "Mercurial (hg) command"
+ 	default "hg"
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 73ea2a69f8..6293e2985b 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -15,7 +15,6 @@ export BZR := $(call qstrip,$(BR2_BZR))
+ export GIT := $(call qstrip,$(BR2_GIT))
+ export HG := $(call qstrip,$(BR2_HG))
+ export SCP := $(call qstrip,$(BR2_SCP))
+-SSH := $(call qstrip,$(BR2_SSH))
+ export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
+ 
+ DL_WRAPPER = support/download/dl-wrapper
