@@ -1,41 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 17 Nov 2018 22:00:04 +0100
-Subject: [Buildroot] [git commit] pulseview: bump version to 0.4.1
-Message-ID: <20181202071556.0E31E8843B@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 19 Nov 2018 22:08:14 +0100
+Subject: [Buildroot] [git commit] libtirpc: bump to version 1.1.4
+Message-ID: <20181202071556.98C1C8843B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e85f4607f5be243f527b78d6d619555e75768342
+commit: https://git.buildroot.net/buildroot/commit/?id=a62fdaa49618568975b8b7b2fe1f7792e097eb35
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pulseview/pulseview.hash | 2 +-
- package/pulseview/pulseview.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libtirpc/libtirpc.hash | 4 ++--
+ package/libtirpc/libtirpc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/pulseview/pulseview.hash b/package/pulseview/pulseview.hash
-index 7883eabe59..09b9d67bc2 100644
---- a/package/pulseview/pulseview.hash
-+++ b/package/pulseview/pulseview.hash
-@@ -1,2 +1,2 @@
+diff --git a/package/libtirpc/libtirpc.hash b/package/libtirpc/libtirpc.hash
+index 643a5d2050..eacc94d1de 100644
+--- a/package/libtirpc/libtirpc.hash
++++ b/package/libtirpc/libtirpc.hash
+@@ -1,5 +1,5 @@
+ # From sourceforge's info on download page:
+-sha1 48adb32dc7c3b73c66f001c239da76b8398abf11  libtirpc-1.0.3.tar.bz2
++sha1 d85717035cb9bd6c45557a1eb1351d3af9a69ff7  libtirpc-1.1.4.tar.bz2
  # Locally computed
--sha256	78f8291045c6f65b4827b12e83c8e68cea2d5e7268b15a51aaca9726c8100eb9	pulseview-0.4.0.tar.gz
-+sha256	9ee7ce3dd1457c6a5f5e4e9c2469903a1f070ba077ea68535cc29ef1dfac6f2f	pulseview-0.4.1.tar.gz
-diff --git a/package/pulseview/pulseview.mk b/package/pulseview/pulseview.mk
-index e9bbf4f5c0..67d525f626 100644
---- a/package/pulseview/pulseview.mk
-+++ b/package/pulseview/pulseview.mk
+-sha256 86c3a78fc1bddefa96111dd233124c703b22a78884203c55c3e06b3be6a0fd5e  libtirpc-1.0.3.tar.bz2
++sha256 2ca529f02292e10c158562295a1ffd95d2ce8af97820e3534fe1b0e3aec7561d  libtirpc-1.1.4.tar.bz2
+ sha256 17cf6098f95bdbb269f0bbc68e76c88fe20487ca7ec53f454923ab4256ecd2e7  COPYING
+diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
+index 36f9f7ef21..1e1905b713 100644
+--- a/package/libtirpc/libtirpc.mk
++++ b/package/libtirpc/libtirpc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PULSEVIEW_VERSION = 0.4.0
-+PULSEVIEW_VERSION = 0.4.1
- PULSEVIEW_SITE = http://sigrok.org/download/source/pulseview
- PULSEVIEW_LICENSE = GPL-3.0+
- PULSEVIEW_LICENSE_FILES = COPYING
+-LIBTIRPC_VERSION = 1.0.3
++LIBTIRPC_VERSION = 1.1.4
+ LIBTIRPC_SOURCE = libtirpc-$(LIBTIRPC_VERSION).tar.bz2
+ LIBTIRPC_SITE = http://downloads.sourceforge.net/project/libtirpc/libtirpc/$(LIBTIRPC_VERSION)
+ LIBTIRPC_LICENSE = BSD-3-Clause
