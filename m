@@ -1,32 +1,43 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Sun, 18 Nov 2018 21:00:49 -0600
-Subject: [Buildroot] [PATCH] package/xproto_inputproto: disable documentation
-Message-ID: <1542596449-55950-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Mon, 19 Nov 2018 02:41:23 -0200
+Subject: [Buildroot] [PATCH next] tpm2-tss: depend on shared libraries
+Message-ID: <20181119044123.19463-1-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Resolves:
-http://autobuild.buildroot.net/results/e6b/e6badde04047e10023b97946bbff434abc07344d/
+The code includes dlfcn.h even if --enable-static and --disable-shared
+are passed to configure. There is an "#ifndef NO_DL ... #endif" wrapper
+but NO_DL is never defined and adding "-DNO_DL" to CFLAGS causes other
+compilation errors.
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Fixes:
+  http://autobuild.buildroot.net/results/cfc3bfef5e93329bf944a57947086d9ddc4fece3
+
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 ---
- package/x11r7/xproto_inputproto/xproto_inputproto.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/tpm2-tss/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/x11r7/xproto_inputproto/xproto_inputproto.mk b/package/x11r7/xproto_inputproto/xproto_inputproto.mk
-index 20169b5..5b3c63a 100644
---- a/package/x11r7/xproto_inputproto/xproto_inputproto.mk
-+++ b/package/x11r7/xproto_inputproto/xproto_inputproto.mk
-@@ -11,6 +11,7 @@ XPROTO_INPUTPROTO_LICENSE = MIT
- XPROTO_INPUTPROTO_LICENSE_FILES = COPYING
- XPROTO_INPUTPROTO_INSTALL_STAGING = YES
- XPROTO_INPUTPROTO_INSTALL_TARGET = NO
-+XPROTO_INPUTPROTO_CONF_ENV = ac_cv_path_ASCIIDOC=""
+diff --git a/package/tpm2-tss/Config.in b/package/tpm2-tss/Config.in
+index 4e299eccc1..26a120c46b 100644
+--- a/package/tpm2-tss/Config.in
++++ b/package/tpm2-tss/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_TPM2_TSS
+ 	bool "tpm2-tss"
++	depends on !BR2_STATIC_LIBS # dlfcn.h
+ 	select BR2_PACKAGE_LIBURIPARSER
+ 	select BR2_PACKAGE_OPENSSL
+ 	help
+@@ -30,3 +31,6 @@ config BR2_PACKAGE_TPM2_TSS
+ 	    Microsoft software TPM2 simulator.
  
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ 	  https://github.com/tpm2-software/tpm2-tss
++
++comment "tpm2-tss needs a toolchain w/ dynamic library"
++	depends BR2_STATIC_LIBS
 -- 
-1.9.1
+2.19.1
