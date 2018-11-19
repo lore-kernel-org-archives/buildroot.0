@@ -1,61 +1,82 @@
-From: Alexey Brodkin <alexey.brodkin@synopsys.com>
-Date: Mon, 19 Nov 2018 08:14:35 +0000
-Subject: [Buildroot] [arc-buildroot] [PATCH] toolchain: Bump ARC tools
- to arc-2018.09-rc1
-In-Reply-To: <87sgzymag4.fsf@dell.be.48ers.dk>
-References: <20181108113207.40589-1-Evgeniy.Didin@synopsys.com>
- <a4c4c371bc8fbefc5e3e1a466ed80dfd334a4b9a.camel@synopsys.com>
- <87sgzymag4.fsf@dell.be.48ers.dk>
-Message-ID: <10340406050326f099c2688645f8dfca2b1f9b7f.camel@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 19 Nov 2018 09:29:26 +0100
+Subject: [Buildroot] Builtin kernel images for the testing infra
+In-Reply-To: <5bf21e60dc34c_14b03ff574120a44459ee@ultri5.mail>
+References: <CANQCQpa+p3sxjO9M14ptoxaNWJMZ22FdYOmG_jEwT1pk4mkoDQ@mail.gmail.com>
+ <5bf21e60dc34c_14b03ff574120a44459ee@ultri5.mail>
+Message-ID: <20181119092926.2ba493a7@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hello,
 
-On Sun, 2018-11-18 at 20:50 +0100, Peter Korsgaard wrote:
-> > > > > > "Alexey" == Alexey Brodkin <alexey.brodkin@synopsys.com> writes:
-> 
->  > Hi Thomas, Peter, Arnout!
->  > On Thu, 2018-11-08 at 14:32 +0300, Evgeniy Didin wrote:
->  >> This commit bumps ARC toolchain to arc-2018.09-rc1.
->  >> We want to test how new toolchain-rc1 builds packages,
->  >> so we can make fixes before release of toolcain.
->  >> 
->  >> ARC GNU tools of version arc-2018.09-rc1 bring some quite significant changes like:
->  >> * Binutils v2.31.1 with additional ARC patches
->  >> * GCC 8.2.1 with additional ARC patches
->  >> * glibc 2.28 with additional ARC patches
->  >> 
->  >> Please note that it is a release candidate and it might contain some
->  >> breakages, please don't use it for production builds.
->  >> 
->  >> Signed-off-by: Evgeniy Didin <didin@synopsys.com>
->  >> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->  >> Cc: arc-buildroot at synopsys.com
-> 
->  > Any chance arc-2018.09 tools to be accepted in v2018.11 BR release?
-> 
-> Sorry, I find it too late for that by now. I have instead applied it to
-> next, hopefully that is OK?
+On Mon, 19 Nov 2018 00:22:24 -0200, Ricardo Martincoski wrote:
 
-Well, the hope was to get arc-2018.09 in BR v2018.11 release as
-we're going to cut the final release in coming days but...
+> As I see it, these are the steps:
+> 1 - prefer to reuse the pre-built kernel images that already exist whenever
+>     possible;
+> 2 - if that is not enough, build one, preferably based on an existing
+>     qemu...defconfig;
+> 3 - when many tests need to build a kernel, check the commonalities between
+>     them and provide a new pre-built that fits many tests;
+> 4 - back to 1;
+> And we are currently in step 2, near to go to step 3.
+> But that is only my opinion, of course.
 
-maybe it's good that we'll have a longer stabilization cycle
-for our tools in BR especially keeping in mind that we're
-switching from GCC 7.x to 8.x and there might come up some
-issues related more to GCC 8.x than to ARC port itself.
+Yes, fully agreed. The idea of those pre-built kernel images is to save
+time. For a purely user-space test such as the Python test cases, or
+Lua test cases, it already takes quite some time to rebuild the Python
+interpreter for each test case, it would be annoying to rebuild the
+kernel as well.
 
->  > In the meantime we've got RC2 cut just yesterday with a couple of more
->  > critical fixes so it might make sense to bump right to arc-2018.09-rc2
->  > instead but still it might be applied on top of this one so pls let us
->  > know what would you prefer.
-> 
-> Please send a patch for next to bump it to RC2.
+So it makes sense to provide a few pre-built kernel images for a
+variety of architectures, with some "sane" kernel configuration.
 
-We'll do that, sure.
+Of course, this doesn't prevent from adding other test cases that will
+build the Linux kernel:
 
--Alexey
+ - To test the Buildroot Linux kernel packaging
+ - Because we want to build some Buildroot packages that provide kernel
+   modules, or need some very special kernel configuration options to
+   be set
+
+> Concerning new builtin images, if you want to add a new one, I suppose you
+> could do this:
+>  - generate the new image and store it in a public temporary url;
+>  - add the support in the test infra for this new image and use it in at least
+>    one test case;
+>  - test your test case by placing the image in the test-dl or your usual
+>    BR2_DL_DIR folder. It works even on GitLab CI!, see [1];
+>  - send the patch for review adding a note below "---" with the url for the
+>    image to be stored in the current artifacts url;
+
+Absolutely.
+
+> Since you mentioned version control...
+> Maybe, in the long term, we could create a separate repo, i.e.
+> buildroot-runtime-tests-binaries in GitHub and accept merges.
+> I think people in the list would not like to receive patches with 2-5 MB.
+> A .txt file along each binary stating how the image was generated (i.e. the
+> sha1 of buildroot and defconfig name, and even the url for a build in GitLab CI)
+> would be nice IMO.
+> Just an idea/example.
+
+The way we handle those artifacts right now is very basic, and there
+are certainly ways of improving that over time.
+
+> Should we trim down to have a small image? Should we add stuff to allow maximum
+> reuse? IMO, using the default kernel intree defconfig selected by our qemu
+> defconfigs seems a good compromise.
+
+Agree.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
