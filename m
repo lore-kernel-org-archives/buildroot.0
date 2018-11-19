@@ -1,32 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Nov 2018 08:48:23 +0100
-Subject: [Buildroot] [PATCH 1/1] busybox: add patch to fix seg fault in
- 'ifup -a'
-In-Reply-To: <1542585919.3880044.1581250240.4A44208F@webmail.messagingengine.com>
- (Daniel Mentz's message of "Sun, 18 Nov 2018 16:05:19 -0800")
-References: <20181110193319.1273-1-daniel.m@sent.com>
- <1989059802.1429665.1541889047561.JavaMail.zimbra@datacom.com.br>
- <CA+1k=2b2EPjS_JBF__mVhgaLcJc22P=nCp-BSzo2hdLPwzp0Eg@mail.gmail.com>
- <87d0r4stxe.fsf@dell.be.48ers.dk>
- <1542585919.3880044.1581250240.4A44208F@webmail.messagingengine.com>
-Message-ID: <87pnv1ld88.fsf@dell.be.48ers.dk>
+Date: Mon, 19 Nov 2018 08:51:13 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x]
+ package/xproto_inputproto: disable documentation
+Message-ID: <20181119074825.AE4C383A8E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Daniel" == Daniel Mentz <daniel.m@sent.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=67de8b9d6d34c242f70820f7336d11144bacb7fe
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > On Fri, Nov 16, 2018, at 11:29 AM, Peter Korsgaard wrote:
- >> 2018.08.x still had 1.29.2, so I've bumped that to 1.29.3.
+Resolves:
+http://autobuild.buildroot.net/results/e6b/e6badde04047e10023b97946bbff434abc07344d/
 
- > You said you bumped busybox on 2018.08.x to 1.29.3? I just ran "git
- > fetch", but I can't see the change in origin/2018.08.x
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/x11r7/xproto_inputproto/xproto_inputproto.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Ups, it never got pushed. It is there now:
-
-https://git.buildroot.net/buildroot/commit/?h=2018.08.x&id=1eaf77e729a57b176c1a25bb2855f4974b6ab9b0
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/x11r7/xproto_inputproto/xproto_inputproto.mk b/package/x11r7/xproto_inputproto/xproto_inputproto.mk
+index 20169b5c46..5b3c63a588 100644
+--- a/package/x11r7/xproto_inputproto/xproto_inputproto.mk
++++ b/package/x11r7/xproto_inputproto/xproto_inputproto.mk
+@@ -11,6 +11,7 @@ XPROTO_INPUTPROTO_LICENSE = MIT
+ XPROTO_INPUTPROTO_LICENSE_FILES = COPYING
+ XPROTO_INPUTPROTO_INSTALL_STAGING = YES
+ XPROTO_INPUTPROTO_INSTALL_TARGET = NO
++XPROTO_INPUTPROTO_CONF_ENV = ac_cv_path_ASCIIDOC=""
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
