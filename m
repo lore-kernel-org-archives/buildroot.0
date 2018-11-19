@@ -1,54 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Nov 2018 12:19:45 +0100
-Subject: [Buildroot] [PATCH] rpm: really take DEPENDENCIES into account
-Message-ID: <20181119111945.17683-1-thomas.petazzoni@bootlin.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 19 Nov 2018 07:03:05 -0600
+Subject: [Buildroot] [PATCH] package/xproto_inputproto: disable
+ documentation
+In-Reply-To: <87lg5pld2t.fsf@dell.be.48ers.dk>
+References: <1542596449-55950-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <87lg5pld2t.fsf@dell.be.48ers.dk>
+Message-ID: <CANQCQpZkpV1KaH_syk=98kAb1SNiNZDw=Gy+1GtsJGa_+aYAtQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit e7af4033c32560594ddbd457b68f6d3713662a26 ("rpm: use the new
-gettext logic") introduced a really nasty bug: by adding
-$(TARGET_NLS_DEPENDENCIES) to RPM_DEPENDENCIES, it completely
-overwrote the existing value of RPM_DEPENDENCIES, entirely masking all
-mandatory RPM dependencies.
+Peter,
 
-rpm is fairly towards the end of the alphabet, and most other
-mandatory dependencies (berkeleydb, host-pkgconf, file and popt)
-appear earlier by alphabetic ordering. Only zlib was afterwards, but
-since file depends on zlib, it was always built before. This probably
-explains why our autobuilders haven't encountered a single build
-failure.
+On Mon, Nov 19, 2018 at 1:51 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+>
+> >>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
+>
+>  > Resolves:
+>  > http://autobuild.buildroot.net/results/e6b/e6badde04047e10023b97946bbff434abc07344d/
+>
+>  > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+>
+> Please clearly state when patches are for the LTS branch instead of
+> master.
+>
 
-However, a simple "make rpm" clearly exhibits the failure, and
-obviously the upcoming per-package folder mechanism makes such bugs
-even more obvious.
+Sorry about that, didn't notice the test results were just pointing at
+LTS.  It should also be applied to master as there isn't a reason we'd
+want docs enabled.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
-I don't know who was this guy @free-electrons.com who did this silly
-change, but something wasn't quite right with him :-)
----
- package/rpm/rpm.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
-index 159ae72aa8..87c2059e71 100644
---- a/package/rpm/rpm.mk
-+++ b/package/rpm/rpm.mk
-@@ -8,10 +8,10 @@ RPM_VERSION_MAJOR = 4.13
- RPM_VERSION = $(RPM_VERSION_MAJOR).0.1
- RPM_SOURCE = rpm-$(RPM_VERSION).tar.bz2
- RPM_SITE = http://ftp.rpm.org/releases/rpm-$(RPM_VERSION_MAJOR).x
--RPM_DEPENDENCIES = host-pkgconf berkeleydb file popt zlib
-+RPM_DEPENDENCIES = host-pkgconf berkeleydb file popt zlib \
-+	$(TARGET_NLS_DEPENDENCIES)
- RPM_LICENSE = GPL-2.0 or LGPL-2.0 (library only)
- RPM_LICENSE_FILES = COPYING
--RPM_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- 
- # 0001-configure-ac-use-link-instead-of-compile-for-gcc-flags-test.patch
- # 0002-configure-ac-correct-stack-protector-check.patch
--- 
-2.19.1
+Matt
