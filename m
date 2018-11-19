@@ -1,48 +1,55 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 19 Nov 2018 10:22:27 -0600
-Subject: [Buildroot] [PATCH] package/xproto_inputproto: disable
- documentation
-In-Reply-To: <87d0r1kvmj.fsf@dell.be.48ers.dk>
-References: <1542596449-55950-1-git-send-email-matthew.weber@rockwellcollins.com>
- <87lg5pld2t.fsf@dell.be.48ers.dk>
- <CANQCQpZkpV1KaH_syk=98kAb1SNiNZDw=Gy+1GtsJGa_+aYAtQ@mail.gmail.com>
- <87d0r1kvmj.fsf@dell.be.48ers.dk>
-Message-ID: <CANQCQpaxJAoMruSakE7aBZPJy2BXuPmzqSKZgcsmpC6YCeJvRQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 19 Nov 2018 17:25:13 +0100
+Subject: [Buildroot] [PATCH v3 1/3] glibc: ensure BR2_MAKE is also used for
+ subdirs
+Message-ID: <20181119162515.20360-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+The configure script contains logic to figure out what make program to
+invoke for subdirectories (trying gnumake, gmake, make).  Explicitly force
+it to use our BR2_MAKE to ensure the right make version is used.
 
-On Mon, Nov 19, 2018 at 8:08 AM Peter Korsgaard <peter@korsgaard.com> wrote:
->
-> >>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
->
->  > Peter,
->  > On Mon, Nov 19, 2018 at 1:51 AM Peter Korsgaard <peter@korsgaard.com> wrote:
->  >>
->  >> >>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
->  >>
->  >> > Resolves:
->  >> > http://autobuild.buildroot.net/results/e6b/e6badde04047e10023b97946bbff434abc07344d/
->  >>
->  >> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
->  >>
->  >> Please clearly state when patches are for the LTS branch instead of
->  >> master.
->  >>
->
->  > Sorry about that, didn't notice the test results were just pointing at
->  > LTS.  It should also be applied to master as there isn't a reason we'd
->  > want docs enabled.
->
-> But on master (and 2018.08.x) we have replaced all of the xproto_*
-> packages with the single xorgproto package?
->
+As GLIBC_CONF_ENV is only initialized below, move this section below it.
 
-Oops, yes.  I went through that new package and it doesn't look like
-there is any build target (yet) for docs.  So no change.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+v3: No changes
+v2:
+- Fix CONV/CONF typo, move section below GLIBC_CONF_ENV initialization
 
-Matt
+ package/glibc/glibc.mk | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 708c22f723..762c040688 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -31,10 +31,6 @@ GLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
+ GLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-bison host-gawk \
+ 	$(BR2_MAKE_HOST_DEPENDENCY)
+ 
+-# glibc requires make >= 4.0 since 2.28 release.
+-# https://www.sourceware.org/ml/libc-alpha/2018-08/msg00003.html
+-GLIBC_MAKE = $(BR2_MAKE)
+-
+ GLIBC_SUBDIR = build
+ 
+ GLIBC_INSTALL_STAGING = YES
+@@ -82,6 +78,11 @@ ifeq ($(BR2_riscv),y)
+ GLIBC_CONF_ENV += libc_cv_slibdir=/lib64 libc_cv_rtlddir=/lib
+ endif
+ 
++# glibc requires make >= 4.0 since 2.28 release.
++# https://www.sourceware.org/ml/libc-alpha/2018-08/msg00003.html
++GLIBC_MAKE = $(BR2_MAKE)
++GLIBC_CONF_ENV += ac_cv_prog_MAKE="$(BR2_MAKE)"
++
+ # Even though we use the autotools-package infrastructure, we have to
+ # override the default configure commands for several reasons:
+ #
+-- 
+2.11.0
