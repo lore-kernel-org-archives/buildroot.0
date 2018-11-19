@@ -1,39 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Nov 2018 16:07:21 +0100
-Subject: [Buildroot] [git commit] flare-engine: fix debug build
-Message-ID: <20181119150542.95B9783AAC@busybox.osuosl.org>
+From: Zeno Endemann <zeno.endemann@googlemail.com>
+Date: Mon, 19 Nov 2018 17:04:52 +0100
+Subject: [Buildroot] qemu-aarch64 applications misbehaving
+Message-ID: <CAKAbLo9SzmvsEGfhRyZRYLgRSocJUEgEbR=a9v2cBUsdqeKVig@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa9d77c8518c5245b4e220d5f15e7c3733aa78be
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Applications run under qemu-aarch64 are misbehaving for me. For example,
+minimal (console only) Qt application are crashing on startup, and also the
+BusyBox's "df" (disk usage) is printing out silly numbers. While I'm not
+positive I suspect these are bugs in qemu.
 
-If BR2_ENABLE_DEBUG is set, use RelWithDebInfo instead of default Debug
-as Debug will add -pg (gprof) which is not always available on toolchain
+I build the guest os using buildroot 2018.08.2,
+qemu_aarch64_virt_defconfig, and running it as instructed (minus network,
+don't need it):
 
-Fixes:
- - http://autobuild.buildroot.org/results/a12ae622a44bbe025c3a8b7e8e4c253b52927ae8
+qemu-system-aarch64 -M virt -cpu cortex-a57 -nographic -smp 1 -kernel
+output/images/Image -append "root=/dev/vda console=ttyAMA0" -drive
+file=output/images/rootfs.ext4,if=none,format=raw,id=hd0 -device
+virtio-blk-device,drive=hd0
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/flare-engine/flare-engine.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+(Host os is Ubuntu 18.04, QEMU emulator version 2.11.1(Debian
+1:2.11+dfsg-1ubuntu7.7))
 
-diff --git a/package/flare-engine/flare-engine.mk b/package/flare-engine/flare-engine.mk
-index 0aac3bd33c..2f36602348 100644
---- a/package/flare-engine/flare-engine.mk
-+++ b/package/flare-engine/flare-engine.mk
-@@ -14,4 +14,9 @@ FLARE_ENGINE_DEPENDENCIES += sdl2 sdl2_image sdl2_mixer sdl2_ttf
- # Don't use /usr/games and /usr/share/games
- FLARE_ENGINE_CONF_OPTS += -DBINDIR=bin -DDATADIR=share/flare
- 
-+# Don't use the default Debug type as it adds -pg (gprof)
-+ifeq ($(BR2_ENABLE_DEBUG),y)
-+FLARE_ENGINE_CONF_OPTS += -DCMAKE_BUILD_TYPE=RelWithDebInfo
-+endif
-+
- $(eval $(cmake-package))
+Can someone confirm this? Any hints would be much appreciated.
+
+While at it, another side question: Is there a reason why the
+qemu_aarch64_virt_defconfig built kernel does not include the drivers for
+qemu graphics emulation?
+
+Thanks,
+Zeno
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181119/eff621a1/attachment.html>
