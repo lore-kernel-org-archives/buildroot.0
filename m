@@ -1,41 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Nov 2018 15:08:36 +0100
-Subject: [Buildroot] [PATCH] package/xproto_inputproto: disable
- documentation
-In-Reply-To: <CANQCQpZkpV1KaH_syk=98kAb1SNiNZDw=Gy+1GtsJGa_+aYAtQ@mail.gmail.com>
- (Matthew Weber's message of "Mon, 19 Nov 2018 07:03:05 -0600")
-References: <1542596449-55950-1-git-send-email-matthew.weber@rockwellcollins.com>
- <87lg5pld2t.fsf@dell.be.48ers.dk>
- <CANQCQpZkpV1KaH_syk=98kAb1SNiNZDw=Gy+1GtsJGa_+aYAtQ@mail.gmail.com>
-Message-ID: <87d0r1kvmj.fsf@dell.be.48ers.dk>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 19 Nov 2018 16:09:59 +0200
+Subject: [Buildroot] [PATCH 1/3] glibc: ensure BR2_MAKE is also used for
+ subdirs
+In-Reply-To: <20181119140228.19937-1-peter@korsgaard.com>
+References: <20181119140228.19937-1-peter@korsgaard.com>
+Message-ID: <20181119140959.erkagh6xkfojza65@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
+Hi Peter,
 
- > Peter,
- > On Mon, Nov 19, 2018 at 1:51 AM Peter Korsgaard <peter@korsgaard.com> wrote:
- >> 
- >> >>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
- >> 
- >> > Resolves:
- >> > http://autobuild.buildroot.net/results/e6b/e6badde04047e10023b97946bbff434abc07344d/
- >> 
- >> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
- >> 
- >> Please clearly state when patches are for the LTS branch instead of
- >> master.
- >> 
+On Mon, Nov 19, 2018 at 03:02:26PM +0100, Peter Korsgaard wrote:
+> The configure script contains logic to figure out what make program to
+> invoke for subdirectories (trying gnumake, gmake, make).  Explicitly force
+> it to use our BR2_MAKE to ensure the right make version is used.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/glibc/glibc.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+> index 708c22f723..c15f32aa3e 100644
+> --- a/package/glibc/glibc.mk
+> +++ b/package/glibc/glibc.mk
+> @@ -34,6 +34,7 @@ GLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-bison host-gawk \
+>  # glibc requires make >= 4.0 since 2.28 release.
+>  # https://www.sourceware.org/ml/libc-alpha/2018-08/msg00003.html
+>  GLIBC_MAKE = $(BR2_MAKE)
+> +GLIBC_CONV_ENV += ac_cv_prog_MAKE="$(BR2_MAKE)"
 
- > Sorry about that, didn't notice the test results were just pointing at
- > LTS.  It should also be applied to master as there isn't a reason we'd
- > want docs enabled.
+GLIBC_CONF_ENV maybe?
 
-But on master (and 2018.08.x) we have replaced all of the xproto_*
-packages with the single xorgproto package?
+baruch
+
+>  GLIBC_SUBDIR = build
 
 -- 
-Bye, Peter Korsgaard
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
