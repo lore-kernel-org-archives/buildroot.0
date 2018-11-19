@@ -1,106 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 23 Nov 2018 22:05:46 +0100
-Subject: [Buildroot] [git commit] support/testing: add python-click tests
-Message-ID: <20181202071557.E3F278A3F5@busybox.osuosl.org>
+Date: Mon, 19 Nov 2018 21:50:46 +0100
+Subject: [Buildroot] [git commit] tpm2-tss: fix build without stack smashing
+ protection (SSP)
+Message-ID: <20181202071556.8E9DE8843B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=887248d3545bdec263e2fe3013a83939111d3a02
+commit: https://git.buildroot.net/buildroot/commit/?id=d81767c98857869d46012189ea97c078ee211bad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use a simple script to check the basic usage. Since this package
-provides command line arguments, override run_sample_scripts to call the
-script with arguments and check the expected output.
+Restore a configuration environment setup that was incorrectly removed
+along with the upgrade to version 2.1.0.
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Fixes:
+  http://autobuild.buildroot.net/results/44221140fb8e2ddcb7d624e657b92a59375c02dd
+  http://autobuild.buildroot.net/results/08b2a8a4bdd1c38703626a4fc37dab31dce98f49
+  http://autobuild.buildroot.net/results/e469b47a6c8f1e8812325fd2860345105052316c
+  http://autobuild.buildroot.net/results/f230fe6bbeb8b22d2b5b7cfb3f0ac4b3b936dc37
+  http://autobuild.buildroot.net/results/ceb824033888086f6dde22c66d5b5f692a253c7e
+  http://autobuild.buildroot.net/results/f863947a7384cb754706e6c346d222be59ad4136
+
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .gitlab-ci.yml                                     |  2 +
- .../testing/tests/package/sample_python_click.py   | 12 ++++++
- support/testing/tests/package/test_python_click.py | 44 ++++++++++++++++++++++
- 3 files changed, 58 insertions(+)
+ package/tpm2-tss/tpm2-tss.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index d6f2e6595f..eb6a187615 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -328,6 +328,8 @@ tests.package.test_python_bitstring.TestPythonPy2Bitstring: *runtime_test
- tests.package.test_python_bitstring.TestPythonPy3Bitstring: *runtime_test
- tests.package.test_python_cbor.TestPythonPy2Cbor: *runtime_test
- tests.package.test_python_cbor.TestPythonPy3Cbor: *runtime_test
-+tests.package.test_python_click.TestPythonPy2Click: *runtime_test
-+tests.package.test_python_click.TestPythonPy3Click: *runtime_test
- tests.package.test_python_crossbar.TestPythonPy3Crossbar: *runtime_test
- tests.package.test_python_cryptography.TestPythonPy2Cryptography: *runtime_test
- tests.package.test_python_cryptography.TestPythonPy3Cryptography: *runtime_test
-diff --git a/support/testing/tests/package/sample_python_click.py b/support/testing/tests/package/sample_python_click.py
-new file mode 100644
-index 0000000000..759868d087
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_click.py
-@@ -0,0 +1,12 @@
-+import click
+diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
+index 3bb0702916..f005e5d6b8 100644
+--- a/package/tpm2-tss/tpm2-tss.mk
++++ b/package/tpm2-tss/tpm2-tss.mk
+@@ -12,4 +12,8 @@ TPM2_TSS_INSTALL_STAGING = YES
+ TPM2_TSS_DEPENDENCIES = liburiparser openssl host-pkgconf
+ TPM2_TSS_CONF_OPTS = --with-crypto=ossl --disable-doxygen-doc
+ 
++# configure.ac doesn't contain a link test, so it doesn't detect when
++# libssp is missing.
++TPM2_TSS_CONF_ENV = ax_cv_check_cflags___________Wall__Werror_______fstack_protector_all=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
 +
-+
-+ at click.command()
-+ at click.argument("foo")
-+ at click.option("--bar", is_flag=True, help="help for bar")
-+def main(foo, bar):
-+    click.echo("{}, {}".format(foo, bar))
-+
-+
-+if __name__ == '__main__':
-+    main()
-diff --git a/support/testing/tests/package/test_python_click.py b/support/testing/tests/package/test_python_click.py
-new file mode 100644
-index 0000000000..db57d3aa9f
---- /dev/null
-+++ b/support/testing/tests/package/test_python_click.py
-@@ -0,0 +1,44 @@
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonClick(TestPythonPackageBase):
-+    sample_scripts = ["tests/package/sample_python_click.py"]
-+
-+    def run_sample_scripts(self):
-+        cmd = self.interpreter + " sample_python_click.py --help"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertIn("Usage:", output[0])
-+        self.assertEqual(exit_code, 0)
-+
-+        cmd = self.interpreter + " sample_python_click.py 123"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(output[0], "123, False")
-+        self.assertEqual(exit_code, 0)
-+
-+        cmd = self.interpreter + " sample_python_click.py --bar 456"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(output[0], "456, True")
-+        self.assertEqual(exit_code, 0)
-+
-+        cmd = self.interpreter + " sample_python_click.py"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertIn("Usage:", output[0])
-+        self.assertEqual(exit_code, 2)
-+
-+
-+class TestPythonPy2Click(TestPythonClick):
-+    __test__ = True
-+    config = TestPythonClick.config + \
-+        """
-+        BR2_PACKAGE_PYTHON=y
-+        BR2_PACKAGE_PYTHON_CLICK=y
-+        """
-+
-+
-+class TestPythonPy3Click(TestPythonClick):
-+    __test__ = True
-+    config = TestPythonClick.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_CLICK=y
-+        """
+ $(eval $(autotools-package))
