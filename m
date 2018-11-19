@@ -1,23 +1,27 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 19 Nov 2018 21:32:11 +0100
-Subject: [Buildroot] [PATCH/next 1/1] jpeg-turbo: bump to version 2.0.1
-Message-ID: <20181119203211.21429-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 19 Nov 2018 21:40:25 +0100
+Subject: [Buildroot] [git commit branch/next] jpeg-turbo: bump to version
+ 2.0.1
+Message-ID: <20181119203756.8945F83AC8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=95c78d277c04753562c76f2fda9ceb1c2df1f1eb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
 Remove patch (already in version), see:
 https://github.com/libjpeg-turbo/libjpeg-turbo/commit/950580eb0c020598a4c6c8aa46c86e31062e1ddc
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...-binaries-with-a-static-only-library.patch | 42 -------------------
- package/jpeg-turbo/jpeg-turbo.hash            |  8 ++--
- package/jpeg-turbo/jpeg-turbo.mk              |  2 +-
+ ...ll-of-binaries-with-a-static-only-library.patch | 42 ----------------------
+ package/jpeg-turbo/jpeg-turbo.hash                 |  8 ++---
+ package/jpeg-turbo/jpeg-turbo.mk                   |  2 +-
  3 files changed, 5 insertions(+), 47 deletions(-)
- delete mode 100644 package/jpeg-turbo/0001-fix-install-of-binaries-with-a-static-only-library.patch
 
 diff --git a/package/jpeg-turbo/0001-fix-install-of-binaries-with-a-static-only-library.patch b/package/jpeg-turbo/0001-fix-install-of-binaries-with-a-static-only-library.patch
 deleted file mode 100644
@@ -96,5 +100,3 @@ index 1807cc294e..b848b66899 100644
  JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
  JPEG_TURBO_SITE = https://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
  JPEG_TURBO_LICENSE = IJG (libjpeg), BSD-3-Clause (TurboJPEG), Zlib (SIMD)
--- 
-2.17.1
