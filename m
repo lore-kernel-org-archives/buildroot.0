@@ -1,71 +1,61 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 19 Nov 2018 09:09:45 +0100
-Subject: [Buildroot] [PATCH v2 2/6] package/llvm: install target
- binary/debug tools
-In-Reply-To: <CANQCQpbU9jTkv9L8B80o+k2x_sAtDVOhhE9KFjUXA_nVuV=ang@mail.gmail.com>
-References: <1542426982-54683-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1542426982-54683-2-git-send-email-matthew.weber@rockwellcollins.com>
- <50862e38-68c7-e166-a719-82ab28f7aad9@smile.fr>
- <CANQCQpbU9jTkv9L8B80o+k2x_sAtDVOhhE9KFjUXA_nVuV=ang@mail.gmail.com>
-Message-ID: <CANLo3Ji5+U+2OkL8pMD=8B-iQL29AZLDGXWdcijjzgzSqc3hzQ@mail.gmail.com>
+From: Alexey Brodkin <alexey.brodkin@synopsys.com>
+Date: Mon, 19 Nov 2018 08:14:35 +0000
+Subject: [Buildroot] [arc-buildroot] [PATCH] toolchain: Bump ARC tools
+ to arc-2018.09-rc1
+In-Reply-To: <87sgzymag4.fsf@dell.be.48ers.dk>
+References: <20181108113207.40589-1-Evgeniy.Didin@synopsys.com>
+ <a4c4c371bc8fbefc5e3e1a466ed80dfd334a4b9a.camel@synopsys.com>
+ <87sgzymag4.fsf@dell.be.48ers.dk>
+Message-ID: <10340406050326f099c2688645f8dfca2b1f9b7f.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matt,
+Hi Peter,
 
-Le lun. 19 nov. 2018 ? 02:48, Matthew Weber <
-matthew.weber@rockwellcollins.com> a ?crit :
+On Sun, 2018-11-18 at 20:50 +0100, Peter Korsgaard wrote:
+> > > > > > "Alexey" == Alexey Brodkin <alexey.brodkin@synopsys.com> writes:
+> 
+>  > Hi Thomas, Peter, Arnout!
+>  > On Thu, 2018-11-08 at 14:32 +0300, Evgeniy Didin wrote:
+>  >> This commit bumps ARC toolchain to arc-2018.09-rc1.
+>  >> We want to test how new toolchain-rc1 builds packages,
+>  >> so we can make fixes before release of toolcain.
+>  >> 
+>  >> ARC GNU tools of version arc-2018.09-rc1 bring some quite significant changes like:
+>  >> * Binutils v2.31.1 with additional ARC patches
+>  >> * GCC 8.2.1 with additional ARC patches
+>  >> * glibc 2.28 with additional ARC patches
+>  >> 
+>  >> Please note that it is a release candidate and it might contain some
+>  >> breakages, please don't use it for production builds.
+>  >> 
+>  >> Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+>  >> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>  >> Cc: arc-buildroot at synopsys.com
+> 
+>  > Any chance arc-2018.09 tools to be accepted in v2018.11 BR release?
+> 
+> Sorry, I find it too late for that by now. I have instead applied it to
+> next, hopefully that is OK?
 
-> Romain,
->
-> On Sun, Nov 18, 2018 at 1:14 PM Romain Naour <romain.naour@smile.fr>
-> wrote:
-> >
-> > Hi Matt,
-> >
-> > Le 17/11/2018 ? 04:56, Matt Weber a ?crit :
-> > > The compiler-rt fuzzer and address sanitizer tools require additional
-> > > LLVM binary tools installed to allow stack trace decoding actively
-> during
-> > > executable analysis.
-> > >
-> > > https://github.com/google/sanitizers/wiki/AddressSanitizerCallStack
-> > >
-> > > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> > > Reviewed-by: Romain Naour <romain.naour@smile.fr>
-> >
-> > For some reason I get an error while building llvm package tools.
-> >
-> > x86_64-linux-g++: WARNING: unsafe header/library path used in
-> cross-compilation:
-> > '-I/usr/include/libxml2'
-> >
-> > Can you have a look?
->
-> I went back and checked my logs on the clang compiler-rt run-test
-> build for that warning and didn't find it.  I then checked and my
-> config and it has the unsafe header/library as error.  Was your build
-> test just applying my patches and doing an explicit 'make llvm'?
->
+Well, the hope was to get arc-2018.09 in BR v2018.11 release as
+we're going to cut the final release in coming days but...
 
-Indeed,
-Some tools use libxml2, so you have to add target libxml2 package as build
-dependency.
+maybe it's good that we'll have a longer stabilization cycle
+for our tools in BR especially keeping in mind that we're
+switching from GCC 7.x to 8.x and there might come up some
+issues related more to GCC 8.x than to ARC port itself.
 
-Best regards,
-Romain
+>  > In the meantime we've got RC2 cut just yesterday with a couple of more
+>  > critical fixes so it might make sense to bump right to arc-2018.09-rc2
+>  > instead but still it might be applied on top of this one so pls let us
+>  > know what would you prefer.
+> 
+> Please send a patch for next to bump it to RC2.
 
+We'll do that, sure.
 
-> Thanks
-> Matt
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181119/ae4b7cff/attachment.html>
+-Alexey
