@@ -1,43 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Nov 2018 22:11:45 +0100
-Subject: [Buildroot] [PATCH 1/4 v2] core/download: drop the SSH command
-In-Reply-To: <3112a0a19120c6af84b83833aa09014a3dd95fb5.1542474939.git.yann.morin.1998@free.fr>
-References: <cover.1542474939.git.yann.morin.1998@free.fr>
- <3112a0a19120c6af84b83833aa09014a3dd95fb5.1542474939.git.yann.morin.1998@free.fr>
-Message-ID: <20181119221145.3920ef06@windsurf.home>
+Date: Mon, 19 Nov 2018 22:13:30 +0100
+Subject: [Buildroot] [git commit] ltp-testsuite: update patch filename
+Message-ID: <20181119211058.C28B183B07@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=28b725d27eaa1f3cdc21b58aa870b40e2d425665
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 17 Nov 2018 18:15:48 +0100, Yann E. MORIN wrote:
-> The ssh command was added back in 2011 with commit c61788f09 (GENTARGETS:
-> add support for scp://) and was used to check that the remote file
-> existed, back when we supported 'make source-check'.
-> 
-> However, in 2017, with commit bf28a165d (pkg-{download, generic}: remove
-> source-check), we actually removed support for source-check.
-> 
-> The SSH command however was not removed then, and stuck, even though
-> nothing ever uses it It is not even exported in the environment, and scp
-> does not use it either (it has -S to specify an ssh-compatible program).
-> 
-> Get rid of it.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> ---
->  Config.in               | 4 ----
->  package/pkg-download.mk | 1 -
->  2 files changed, 5 deletions(-)
+The patch 0007-Disable-DES-authentification-support.patch has been
+renamed to 0005-Disable-DES-authentification-support.patch.
 
-Applied to next, thanks.
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-rpc-tirpc-disable-tirpc_auth_authdes_-create-tests.patch       | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/ltp-testsuite/0001-rpc-tirpc-disable-tirpc_auth_authdes_-create-tests.patch b/package/ltp-testsuite/0001-rpc-tirpc-disable-tirpc_auth_authdes_-create-tests.patch
+index 344ba4ae94..6fe2d6e72b 100644
+--- a/package/ltp-testsuite/0001-rpc-tirpc-disable-tirpc_auth_authdes_-create-tests.patch
++++ b/package/ltp-testsuite/0001-rpc-tirpc-disable-tirpc_auth_authdes_-create-tests.patch
+@@ -3,7 +3,7 @@ From: Erico Nunes <nunes.erico@gmail.com>
+ Date: Fri, 30 Sep 2016 17:43:08 +0200
+ Subject: [PATCH] rpc-tirpc: disable tirpc_auth_authdes_*create tests
+ 
+-Due to Buildroot patch 0007-Disable-DES-authentification-support.patch on
++Due to Buildroot patch 0005-Disable-DES-authentification-support.patch on
+ libtirpc, this library is built without method authdes_create. Any code
+ that uses this library, like the rpc-tirpc testsuite, thus fails to link.
+ 
