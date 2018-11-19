@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Nov 2018 21:41:00 +0100
-Subject: [Buildroot] [PATCH/next 1/1] jpeg-turbo: bump to version 2.0.1
-In-Reply-To: <20181119203211.21429-1-fontaine.fabrice@gmail.com>
-References: <20181119203211.21429-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181119214100.55738b69@windsurf.home>
+Date: Mon, 19 Nov 2018 21:42:01 +0100
+Subject: [Buildroot] [PATCH 1/1] libcorrect: fix debug build
+In-Reply-To: <20181119174629.1613-1-fontaine.fabrice@gmail.com>
+References: <20181119174629.1613-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181119214201.185c2e54@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +12,34 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 19 Nov 2018 21:32:11 +0100, Fabrice Fontaine wrote:
-> Remove patch (already in version), see:
-> https://github.com/libjpeg-turbo/libjpeg-turbo/commit/950580eb0c020598a4c6c8aa46c86e31062e1ddc
+On Mon, 19 Nov 2018 18:46:29 +0100, Fabrice Fontaine wrote:
+> If BR2_ENABLE_DEBUG is set, Debug release will be used and as a result
+> -fsanitize=address will be added to CFLAGS which will fail on some
+> toolchains because it requires asan library
+> 
+> So add -DCMAKE_BUILD_TYPE=Release unconditionally
+> 
+> Fixes:
+>  - http://autobuild.buildroot.net/results/221d6a418e75b39fe645c3a56cee676518d2cff6
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  ...-binaries-with-a-static-only-library.patch | 42 -------------------
->  package/jpeg-turbo/jpeg-turbo.hash            |  8 ++--
->  package/jpeg-turbo/jpeg-turbo.mk              |  2 +-
->  3 files changed, 5 insertions(+), 47 deletions(-)
->  delete mode 100644 package/jpeg-turbo/0001-fix-install-of-binaries-with-a-static-only-library.patch
+>  package/libcorrect/libcorrect.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/libcorrect/libcorrect.mk b/package/libcorrect/libcorrect.mk
+> index 0a84aa5c26..cb25e0d0cd 100644
+> --- a/package/libcorrect/libcorrect.mk
+> +++ b/package/libcorrect/libcorrect.mk
+> @@ -9,5 +9,7 @@ LIBCORRECT_SITE = $(call github,quiet,libcorrect,$(LIBCORRECT_VERSION))
+>  LIBCORRECT_LICENSE = BSD-3-Clause
+>  LIBCORRECT_LICENSE_FILES = LICENSE
+>  LIBCORRECT_INSTALL_STAGING = YES
+> +# Debug release adds -fsanitize=address so always use Release
+> +LIBCORRECT_CONF_OPTS = -DCMAKE_BUILD_TYPE=Release
 
-Applied to next, thanks.
+This is a bit of a hack. What about making upstream check if
+-fsanitize=address is supported by the toolchain before using it ?
 
 Thomas
 -- 
