@@ -1,38 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Nov 2018 21:42:34 +0100
-Subject: [Buildroot] [git commit branch/next] keepalive: add optional json-c
- dependency
-Message-ID: <20181119203952.1737D83AC5@busybox.osuosl.org>
+Date: Mon, 19 Nov 2018 21:43:07 +0100
+Subject: [Buildroot] [PATCH/next 1/3] keepalived: remove popt dependency
+In-Reply-To: <20181119180650.30516-1-fontaine.fabrice@gmail.com>
+References: <20181119180650.30516-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181119214307.702479a0@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6748f35f3d28c6ccf7f10d3f4660ca681abb191b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/keepalived/keepalived.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+On Mon, 19 Nov 2018 19:06:48 +0100, Fabrice Fontaine wrote:
+> popt is not needed since version 1.3.1 and:
+> https://github.com/acassen/keepalived/commit/3452517c4f2b69badabf19fc06cc56db49d37603
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/keepalived/Config.in     | 1 -
+>  package/keepalived/keepalived.mk | 2 +-
+>  2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/keepalived/keepalived.mk b/package/keepalived/keepalived.mk
-index 8756811e04..fa8b2e4112 100644
---- a/package/keepalived/keepalived.mk
-+++ b/package/keepalived/keepalived.mk
-@@ -13,6 +13,13 @@ KEEPALIVED_LICENSE_FILES = COPYING
- KEEPALIVED_AUTORECONF = YES
- KEEPALIVED_CONF_OPTS += --disable-dbus
- 
-+ifeq ($(BR2_PACKAGE_JSON_C),y)
-+KEEPALIVED_DEPENDENCIES += json-c
-+KEEPALIVED_CONF_OPTS += --enable-json
-+else
-+KEEPALIVED_CONF_OPTS += --disable-json
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBNL)$(BR2_PACKAGE_LIBNFNETLINK),yy)
- KEEPALIVED_DEPENDENCIES += libnl libnfnetlink
- KEEPALIVED_CONF_OPTS += --enable-libnl
+Series applied to next. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
