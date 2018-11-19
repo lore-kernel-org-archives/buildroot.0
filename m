@@ -1,126 +1,103 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 19 Nov 2018 20:49:05 +0100
-Subject: [Buildroot] [PATCH next v4 6/6] core: implement per-package SDK
- and target
-In-Reply-To: <20181119114806.4fb9d98b@windsurf.home>
-References: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
- <20181114105557.12599-7-thomas.petazzoni@bootlin.com>
- <de9da9af-71f4-cfe2-f691-5aae17e3ca0a@andin.de>
- <20181116144735.19585727@windsurf>
- <CAAXf6LWM0dcCJSVTSerox320PWKkpPcOXORF2cTaWfHitgRguQ@mail.gmail.com>
- <20181116195741.GV10271@scaer>
- <10c54101-3264-eefb-58d0-4770ef723717@mind.be>
- <20181119114806.4fb9d98b@windsurf.home>
-Message-ID: <20181119194905.GC2601@scaer>
+From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
+Date: Tue, 20 Nov 2018 03:52:38 +0800
+Subject: [Buildroot] [PATCH 1/1] python-aiohttp: new package
+Message-ID: <1542657158-9559-1-git-send-email-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+From: James Hilliard <james.hilliard1@gmail.com>
 
-On 2018-11-19 11:48 +0100, Thomas Petazzoni spake thusly:
-> On Sun, 18 Nov 2018 22:55:26 +0100, Arnout Vandecappelle wrote:
-[--SNIP--]
-> > > I am all in favour of simplifying it if it can be made simpler by adding
-> > > an official extra 'prepare' step, that exists for all types of package
-> > > infras. This we'd have 4 levels of dependencies:
-> > > 
-> > >  1- download dependencies
-> > >  2- extract dependencies
-> > >  3- prepare dependencies
-> > >  4- configure dependencies  
-> > 
-> >  I think your mixing two things here. The "prepare" that ThomasP is talking
-> > about is really the PPD creation. The additional step for autoreconf or kconfig
-> > is something else - it's a step with commands that are defined by the package
-> > (infra).
-> 
-> I don't think Yann is mixing things here. Indeed we are using the word
-> "prepare" for two different things: preparing the PPD folder, and
-> "doing some stuff before the configure step".
+Async http client/server framework (asyncio).
 
-Yeah, I was actually kinda mixing things here, in fact. ;-)
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ DEVELOPERS                                 |  1 +
+ package/Config.in                          |  1 +
+ package/python-aiohttp/Config.in           | 14 ++++++++++++++
+ package/python-aiohttp/python-aiohttp.hash |  5 +++++
+ package/python-aiohttp/python-aiohttp.mk   | 14 ++++++++++++++
+ 5 files changed, 35 insertions(+)
+ create mode 100644 package/python-aiohttp/Config.in
+ create mode 100644 package/python-aiohttp/python-aiohttp.hash
+ create mode 100644 package/python-aiohttp/python-aiohttp.mk
 
-> For the PPD folder, some preparation currently occurs at the download
-> step (for download dependencies), some preparation occurs at the
-> extract step (for the extract dependencies) and some preparation occurs
-> at the configuration step (for the normal dependencies).
-
-Thanks, I was missing that piece. PPD preparation is split into as many
-step as we have.
-
-> The issue with the kconfig infrastructure is that it creates a new type
-> of dependency called "kconfig dependency", which should be ready to do
-> all the kconfig-related activities, but that we want separate from the
-> normal "configure dependencies" because we want to be able to do "make
-> linux-menuconfig" or "make busybox-menuconfig" without having to wait
-> for their dependencies to build.
-
-Exactly.
-
-> So what Yann is proposing is that instead of having this "kconfig
-> dependency" stuff be shoe-horned into the dependency chain by
-> pkg-kconfig.mk, we should promote it to a new step in the build steps.
-
-Yes.
-
-> By the lack of better naming, Yann named that step "prepare", but it
-> has nothing to do with "preparing PPD".
-
-So, that's where I got it mixed up, indeed.
-
-> Indeed, what we would do is:
-> 
->  1. Download step
->     Prepare PPD with download dependencies
->     Do the normal download stuff
-> 
->  2. Extract step
->     Prepare PPD with extract dependencies
->     Do the normal extract stuff
-> 
->  3. Patch step
->     Prepare PPD with patch dependencies
->     Do the normal patch stuff
-> 
->  4. Prepare step
->     Prepare PPD with the prepare dependencies
->     Do the prepare stuff (i.e only the kconfig stuff for now)
-> 
->  5. Configure step
->     Prepare PPD with the normal dependencies
->     Do the normal configure stuff
-> 
-> Does that clarify Yann's proposal ?
-
-Yes, that clarifies it perfectly. Thanks! :-)
-
-> I personally find it OK, even though it's a bit annoying to introduce
-> yet another step just for the sake of pkg-kconfig.
-> 
-> Also: I would not move autoreconf into this prepare step, but keep it
-> as it is today, within the configure step. I don't (today at least) see
-> the point/usefulness of moving the autoreconf into this prepare step.
-
-For the PPD stuff? Definitely not.
-
-But it will be usefull to run autoreconf in a step that is not the
-configure step, so we are able to share the source tree between host and
-target build, as well as stop rsyncing from _OVERRIDE_SRCDIR.
-
-But then, I wonder if that is really the same as the 'prepare' step
-above, because autoreconf will also require the same dependencies as the
-configure step.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f4d98d9..cfc076b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -985,6 +985,7 @@ F:	configs/pine64_sopine_defconfig
+ 
+ N:	James Hilliard <james.hilliard1@gmail.com>
+ F:	package/python-aiodns/
++F:	package/python-aiohttp/
+ F:	package/python-async-timeout/
+ F:	package/python-cchardet/
+ F:	package/python-multidict/
+diff --git a/package/Config.in b/package/Config.in
+index 5a5d840..776691b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -795,6 +795,7 @@ if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ menu "External python modules"
+ 	source "package/python-aiocoap/Config.in"
+ 	source "package/python-aiodns/Config.in"
++	source "package/python-aiohttp/Config.in"
+ 	source "package/python-alsaaudio/Config.in"
+ 	source "package/python-argh/Config.in"
+ 	source "package/python-arrow/Config.in"
+diff --git a/package/python-aiohttp/Config.in b/package/python-aiohttp/Config.in
+new file mode 100644
+index 0000000..81862c9
+--- /dev/null
++++ b/package/python-aiohttp/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_PYTHON_AIOHTTP
++	bool "python-aiohttp"
++	depends on BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON_ATTRS # runtime
++	select BR2_PACKAGE_PYTHON_CCHARDET if BR2_INSTALL_LIBSTDCPP # runtime
++	select BR2_PACKAGE_PYTHON_CHARDET if !BR2_INSTALL_LIBSTDCPP # runtime
++	select BR2_PACKAGE_PYTHON_MULTIDICT # runtime
++	select BR2_PACKAGE_PYTHON_ASYNC_TIMEOUT # runtime
++	select BR2_PACKAGE_PYTHON_YARL # runtime
++	select BR2_PACKAGE_PYTHON_AIODNS # runtime
++	help
++	  Async http client/server framework (asyncio).
++
++	  https://github.com/aio-libs/aiohttp
+diff --git a/package/python-aiohttp/python-aiohttp.hash b/package/python-aiohttp/python-aiohttp.hash
+new file mode 100644
+index 0000000..8f158af
+--- /dev/null
++++ b/package/python-aiohttp/python-aiohttp.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/aiohttp/json
++md5	80a6e0c6c452d511d1d37755d6f0995a  aiohttp-3.4.4.tar.gz
++sha256	51afec6ffa50a9da4cdef188971a802beb1ca8e8edb40fa429e5e529db3475fa  aiohttp-3.4.4.tar.gz
++# Locally computed sha256 checksums
++sha256	bb0c0eeae85492ebfa03442b7784d4c42a623e15346df54ae85f55df972a82af  LICENSE.txt
+diff --git a/package/python-aiohttp/python-aiohttp.mk b/package/python-aiohttp/python-aiohttp.mk
+new file mode 100644
+index 0000000..df8bdfb
+--- /dev/null
++++ b/package/python-aiohttp/python-aiohttp.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-aiohttp
++#
++################################################################################
++
++PYTHON_AIOHTTP_VERSION = 3.4.4
++PYTHON_AIOHTTP_SOURCE = aiohttp-$(PYTHON_AIOHTTP_VERSION).tar.gz
++PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/70/27/6098b4b60a3302a97f8ec97eb85d42f55a2fa904da4a369235a8e3b84352
++PYTHON_AIOHTTP_SETUP_TYPE = setuptools
++PYTHON_AIOHTTP_LICENSE = Apache-2.0
++PYTHON_AIOHTTP_LICENSE_FILES = LICENSE.txt
++
++$(eval $(python-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
