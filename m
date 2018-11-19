@@ -1,48 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Nov 2018 21:42:01 +0100
-Subject: [Buildroot] [PATCH 1/1] libcorrect: fix debug build
-In-Reply-To: <20181119174629.1613-1-fontaine.fabrice@gmail.com>
-References: <20181119174629.1613-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181119214201.185c2e54@windsurf.home>
+Date: Mon, 19 Nov 2018 21:42:43 +0100
+Subject: [Buildroot] [git commit branch/next] keepalived: add libglib2
+ optional dependency
+Message-ID: <20181119203952.1EE8D83AC5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=fcb77d51d47a754f4b53e2da11be2562fd3f0304
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 19 Nov 2018 18:46:29 +0100, Fabrice Fontaine wrote:
-> If BR2_ENABLE_DEBUG is set, Debug release will be used and as a result
-> -fsanitize=address will be added to CFLAGS which will fail on some
-> toolchains because it requires asan library
-> 
-> So add -DCMAKE_BUILD_TYPE=Release unconditionally
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/221d6a418e75b39fe645c3a56cee676518d2cff6
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libcorrect/libcorrect.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/libcorrect/libcorrect.mk b/package/libcorrect/libcorrect.mk
-> index 0a84aa5c26..cb25e0d0cd 100644
-> --- a/package/libcorrect/libcorrect.mk
-> +++ b/package/libcorrect/libcorrect.mk
-> @@ -9,5 +9,7 @@ LIBCORRECT_SITE = $(call github,quiet,libcorrect,$(LIBCORRECT_VERSION))
->  LIBCORRECT_LICENSE = BSD-3-Clause
->  LIBCORRECT_LICENSE_FILES = LICENSE
->  LIBCORRECT_INSTALL_STAGING = YES
-> +# Debug release adds -fsanitize=address so always use Release
-> +LIBCORRECT_CONF_OPTS = -DCMAKE_BUILD_TYPE=Release
+gio from libglib2 is used for dbus support
 
-This is a bit of a hack. What about making upstream check if
--fsanitize=address is supported by the toolchain before using it ?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/keepalived/keepalived.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/keepalived/keepalived.mk b/package/keepalived/keepalived.mk
+index fa8b2e4112..ed80a79f8a 100644
+--- a/package/keepalived/keepalived.mk
++++ b/package/keepalived/keepalived.mk
+@@ -11,7 +11,6 @@ KEEPALIVED_LICENSE = GPL-2.0+
+ KEEPALIVED_LICENSE_FILES = COPYING
+ # 0001-configure.ac-do-not-force-PIE.patch
+ KEEPALIVED_AUTORECONF = YES
+-KEEPALIVED_CONF_OPTS += --disable-dbus
+ 
+ ifeq ($(BR2_PACKAGE_JSON_C),y)
+ KEEPALIVED_DEPENDENCIES += json-c
+@@ -20,6 +19,13 @@ else
+ KEEPALIVED_CONF_OPTS += --disable-json
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
++KEEPALIVED_DEPENDENCIES += libglib2
++KEEPALIVED_CONF_OPTS += --enable-dbus
++else
++KEEPALIVED_CONF_OPTS += --disable-dbus
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBNL)$(BR2_PACKAGE_LIBNFNETLINK),yy)
+ KEEPALIVED_DEPENDENCIES += libnl libnfnetlink
+ KEEPALIVED_CONF_OPTS += --enable-libnl
