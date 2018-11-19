@@ -1,42 +1,45 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 18 Nov 2018 23:31:24 -0200
-Subject: [Buildroot] [PATCH 4/5] support/testing/tests: CLANG
- compiler-rt runtime test
-References: <CANQCQpa8Qv9k9OepMP_9eC9RX8feynYwytCJXb5sUWSGBenb=Q@mail.gmail.com>
-Message-ID: <5bf2126c115b0_14b03ff57404dc704575c@ultri5.mail>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Sun, 18 Nov 2018 19:48:26 -0600
+Subject: [Buildroot] [PATCH v2 2/6] package/llvm: install target
+ binary/debug tools
+In-Reply-To: <50862e38-68c7-e166-a719-82ab28f7aad9@smile.fr>
+References: <1542426982-54683-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <1542426982-54683-2-git-send-email-matthew.weber@rockwellcollins.com>
+ <50862e38-68c7-e166-a719-82ab28f7aad9@smile.fr>
+Message-ID: <CANQCQpbU9jTkv9L8B80o+k2x_sAtDVOhhE9KFjUXA_nVuV=ang@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Matt,
+Romain,
 
-+ Arnout
-+ Thomas
-+ Yann
+On Sun, Nov 18, 2018 at 1:14 PM Romain Naour <romain.naour@smile.fr> wrote:
+>
+> Hi Matt,
+>
+> Le 17/11/2018 ? 04:56, Matt Weber a ?crit :
+> > The compiler-rt fuzzer and address sanitizer tools require additional
+> > LLVM binary tools installed to allow stack trace decoding actively during
+> > executable analysis.
+> >
+> > https://github.com/google/sanitizers/wiki/AddressSanitizerCallStack
+> >
+> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> > Reviewed-by: Romain Naour <romain.naour@smile.fr>
+>
+> For some reason I get an error while building llvm package tools.
+>
+> x86_64-linux-g++: WARNING: unsafe header/library path used in cross-compilation:
+> '-I/usr/include/libxml2'
+>
+> Can you have a look?
 
-On Sat, Nov 17, 2018 at 12:30 AM, Matthew Weber wrote:
+I went back and checked my logs on the clang compiler-rt run-test
+build for that warning and didn't find it.  I then checked and my
+config and it has the unsafe header/library as error.  Was your build
+test just applying my patches and doing an explicit 'make llvm'?
 
-[snip]
-> I've got a v2 tested and read to send out (You sketch was quite
-> complete and worked).  One general question came to mind.  Why don't
-> we just create a single br2_external for support/test?
-
-While keeping them separate, there is no room for interaction between the
-fixtures for unrelated test cases.
-Each br2-external will be simple.
-
-If we end up moving each test case to the folder of the package it tests (I
-hope we do) the fixtures for the test case can be in a subfolder of the package.
-And a few years from now, when we remove a package that have test cases, we just
-need to remove the entire package folder, because the package folder contains
-everything related to it.
-
-There is a small price to pay: the 3 small files per br2-external.
-But not all test cases will use a br2-external, only a subset. All current 70
-test cases don't need it.
-
-
-Regards,
-Ricardo
+Thanks
+Matt
