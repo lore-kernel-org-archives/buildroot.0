@@ -1,38 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Nov 2018 11:20:29 +0100
-Subject: [Buildroot] Making the Luarocks integration compatible with
- per-package folders
-In-Reply-To: <CAB0FRsveCsQ+Vuk4J4e_LbTRHYQ1prvfQ4+RODP0ZgB9KZYW8w@mail.gmail.com>
-References: <20181116170611.0bad6190@windsurf>
- <CAB0FRsveCsQ+Vuk4J4e_LbTRHYQ1prvfQ4+RODP0ZgB9KZYW8w@mail.gmail.com>
-Message-ID: <20181119112029.5397e08a@windsurf.home>
+Date: Mon, 19 Nov 2018 11:32:26 +0100
+Subject: [Buildroot] [PATCH next 1/2] package/pkg-luarocks: drop flock at
+ installation time
+In-Reply-To: <20181119103227.24726-1-thomas.petazzoni@bootlin.com>
+References: <20181119103227.24726-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20181119103227.24726-2-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fran?ois,
+In commit 22b327fc743b48a33aec0a9190bd67118641b294 ("pkg-luarocks: fix
+top-level parallel makefile support"), a flock on $(TARGET_DIR) was
+added to ensure that two Luarocks packages are not installed at the
+same time.
 
-On Fri, 16 Nov 2018 21:42:20 +0100, Fran?ois Perrad wrote:
+However, to support top-level parallel build, we have now clearly
+decided that per-package folders is a requirement. Therefore,
+TARGET_DIR is anyway going to be different for each package, making
+this flock unnecessary.
 
-> The use of environment variables is doable (I did some experiments in
-> master branch).
-> The config file is written in plain Lua, but loaded in a sandbox
-> environment.
-> A small patch of luarocks (see attachment) is required for allowing the
-> getenv function.
+Trying to use top-level parallel build without per-package folder is
+simply not supported, so this commit drops the unnecessary flock.
 
-Thanks a lot for all this feedback, it was extremely useful, and I
-could come up with a set of patches that address the problem. I will
-send it to the mailing list and Cc you.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pkg-luarocks.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Again, thanks a lot for your support!
-
-Best regards,
-
-Thomas
+diff --git a/package/pkg-luarocks.mk b/package/pkg-luarocks.mk
+index 29c5e66cd1..f0985433b7 100644
+--- a/package/pkg-luarocks.mk
++++ b/package/pkg-luarocks.mk
+@@ -63,7 +63,7 @@ endif
+ #
+ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
+-	cd $$($(2)_SRCDIR) && $$(LUAROCKS_RUN_ENV) flock $$(TARGET_DIR) \
++	cd $$($(2)_SRCDIR) && $$(LUAROCKS_RUN_ENV) \
+ 		$$(LUAROCKS_RUN_CMD) make --keep $$($(2)_ROCKSPEC) $$($(2)_BUILD_OPTS)
+ endef
+ endif
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.19.1
