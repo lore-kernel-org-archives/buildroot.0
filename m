@@ -1,8 +1,8 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 18 Nov 2018 23:11:49 -0200
-Subject: [Buildroot] [RFC 1/4] support/testing: add perl test
-References: <20181117175244.23594-2-francois.perrad@gadz.org>
-Message-ID: <5bf20dd5ecdd5_3eca3f95580c57882082e@ultri5.mail>
+Date: Sun, 18 Nov 2018 23:14:54 -0200
+Subject: [Buildroot] [RFC 2/4] support/testing: add perl-time-hires test
+References: <20181117175244.23594-3-francois.perrad@gadz.org>
+Message-ID: <5bf20e8e32505_3eca3f955807cd6c210f5@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,44 +11,33 @@ To: buildroot@busybox.net
 
 Hello,
 
-In overall, the series looks good.
-Except for the general discussion in the cover letter about which path we want
-to follow (add the infra to add a .pl to the image in build time or not), I have
-only nits.
+Just giving an example of what I mentioned in a reply to the cover letter...
 
 On Sat, Nov 17, 2018 at 03:52 PM, Francois Perrad wrote:
 
 [snip]
-> +class TestPerl(infra.basetest.BRTest):
-> +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+> +class TestPerlTimeHiRes(TestPerl):
+> +    config = TestPerl.config + \
 > +        """
-> +        BR2_TARGET_ROOTFS_CPIO=y
-> +        # BR2_TARGET_ROOTFS_TAR is not set
-> +        BR2_PACKAGE_PERL=y
-
-nit: this is not the order after 'make savedefconfig'
-
+> +        BR2_PACKAGE_PERL_TIME_HIRES=y
 > +        """
 > +
-[snip]
-> +    def version_test(self, timeout=-1):
+> +    def test_run(self):
+> +        self.login()
+> +        self.module_test("Time::HiRes")
 
-This timeout is always used with its default value, you can remove from here and
-from the call to emulator.run 2 lines below.
+Another way to test a perl package would be to have an script added to the image
+in build time, something like this:
+sample_perl_time_hires.pl:
+|use Time::HiRes;
+|
+|Time::HiRes::usleep(1_000_000)
 
-> +        cmd = "perl -v"
+And call:
+perl sample_perl_time_hires.pl
 
-What about using this instead?
-        cmd = "perl -v | grep 'This is perl 5'"
-I guess Perl 6 will take a long time to be supported in Buildroot.
-
-> +        _, exit_code = self.emulator.run(cmd, timeout)
-> +        self.assertEqual(exit_code, 0)
-> +
-> +    def module_test(self, module, script="1", timeout=-1):
-
-If we end up using the extra logic (basically copied from TestPythonPackageBase)
-and having the .pl file added to the tree, this method would not be needed.
+This way we could test scripts with a few lines of code and keep it readable in
+the tree.
 
 
 Regards,
