@@ -1,10 +1,8 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Nov 2018 22:39:41 +0100
-Subject: [Buildroot] [PATCH v4] libnftnl: drop useless
- BR2_PACKAGE_LIBNFTNL_XML
-In-Reply-To: <316a06e0166e9f1294cefb7c6a07af79bb1d60bf.1542350443.git.baruch@tkos.co.il>
-References: <316a06e0166e9f1294cefb7c6a07af79bb1d60bf.1542350443.git.baruch@tkos.co.il>
-Message-ID: <20181119223941.336f80b5@windsurf.home>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Mon, 19 Nov 2018 20:57:32 -0200
+Subject: [Buildroot] [RFC 2/4] support/testing: add perl-time-hires test
+References: <CAB0FRsuRPxXBA80jCnj8WLvNHvZEujWY+CA5-AqVG6q_u5RkTg@mail.gmail.com>
+Message-ID: <5bf33fdc45405_133b3fef2209088448826@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +11,52 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 16 Nov 2018 08:40:43 +0200, Baruch Siach wrote:
-> Commit fa0d1ebff99 (libnftnl: bump to version 1.0.9) removed the mxml
-> dependency. Remove the redundant BR2_PACKAGE_LIBNFTNL_XML config symbol
-> as well.
-> 
-> Cc: Yegor Yefremov <yegorslists@googlemail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
-> v4: Add missing 'bool' type to the legacy entry
+On Mon, Nov 19, 2018 at 05:29 PM, Fran?ois Perrad wrote:
 
-Applied to master, thanks.
+> Le lun. 19 nov. 2018 ? 02:14, Ricardo Martincoski <
+> ricardo.martincoski at gmail.com> a ?crit :
+[snip]
+>> Another way to test a perl package would be to have an script added to the
+>> image
+>> in build time, something like this:
+>> sample_perl_time_hires.pl:
+>> |use Time::HiRes;
+>> |
+>> |Time::HiRes::usleep(1_000_000)
+>>
+>> And call:
+>> perl sample_perl_time_hires.pl
+>>
+>> This way we could test scripts with a few lines of code and keep it
+>> readable in
+>> the tree.
+>>
+>>
+> With the current TestPerl class, this test could be written as:
+>         self.module_test("Time::HiRes", "Time::HiRes::usleep(1_000_000);")
+> A long oneliner script could be written with a multiline layout, like this:
+>         self.module_test("Time::HiRes", "use strict;" +
+>                                         "use warnings;" +
+>                                         "Time::HiRes::usleep(1_000_000);")
+> So, we don't need to handle sample_perl_*.pl scripts.
+> Same thing with Lua.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+This is (kind of) how we were handling the tests for python packages before.
+
+But you have a point.
+
+Testing python packages got really messy when a class was needed in the script
+because of the indentation. In those cases a oneliner was not enough.
+Lua and Perl packages can always be tested with oneliners AFAIK.
+
+Another issue that made python scripts less readable was the escaping for string
+delimiters.
+I guess that for lua and perl scripts we can always use those fancy quotes
+([[string]], q{string}) when needed.
+
+If Thomas and Arnout don't disagree, let's keep using oneliners to test lua and
+perl packages, as you originally proposed.
+
+
+Regards,
+Ricardo
