@@ -1,40 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Nov 2018 23:11:37 +0100
-Subject: [Buildroot] [git commit] weston: drop libunwind optional dependency
-Message-ID: <20181202071556.CA43C8843B@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 19 Nov 2018 21:42:43 +0100
+Subject: [Buildroot] [git commit] keepalived: add libglib2 optional
+ dependency
+Message-ID: <20181202071556.7F8638843B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fac4474cefc5ce0fd5efd620552dda2d217b497c
+commit: https://git.buildroot.net/buildroot/commit/?id=fcb77d51d47a754f4b53e2da11be2562fd3f0304
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libunwind was dropped since 3.0.91, see:
-https://github.com/wayland-project/weston/commit/bb707dc0fe331c9af112a0552b7aa6fde755dd83
+gio from libglib2 is used for dbus support
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/weston/weston.mk | 6 ------
- 1 file changed, 6 deletions(-)
+ package/keepalived/keepalived.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index efe12bc01e..66f5d5d792 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -60,12 +60,6 @@ WESTON_CONF_OPTS += \
- 	--disable-simple-egl-clients
+diff --git a/package/keepalived/keepalived.mk b/package/keepalived/keepalived.mk
+index fa8b2e4112..ed80a79f8a 100644
+--- a/package/keepalived/keepalived.mk
++++ b/package/keepalived/keepalived.mk
+@@ -11,7 +11,6 @@ KEEPALIVED_LICENSE = GPL-2.0+
+ KEEPALIVED_LICENSE_FILES = COPYING
+ # 0001-configure.ac-do-not-force-PIE.patch
+ KEEPALIVED_AUTORECONF = YES
+-KEEPALIVED_CONF_OPTS += --disable-dbus
+ 
+ ifeq ($(BR2_PACKAGE_JSON_C),y)
+ KEEPALIVED_DEPENDENCIES += json-c
+@@ -20,6 +19,13 @@ else
+ KEEPALIVED_CONF_OPTS += --disable-json
  endif
  
--ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
--WESTON_DEPENDENCIES += libunwind
--else
--WESTON_CONF_OPTS += --disable-libunwind
--endif
--
- ifeq ($(BR2_PACKAGE_WESTON_RDP),y)
- WESTON_DEPENDENCIES += freerdp
- WESTON_CONF_OPTS += --enable-rdp-compositor
++ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
++KEEPALIVED_DEPENDENCIES += libglib2
++KEEPALIVED_CONF_OPTS += --enable-dbus
++else
++KEEPALIVED_CONF_OPTS += --disable-dbus
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBNL)$(BR2_PACKAGE_LIBNFNETLINK),yy)
+ KEEPALIVED_DEPENDENCIES += libnl libnfnetlink
+ KEEPALIVED_CONF_OPTS += --enable-libnl
