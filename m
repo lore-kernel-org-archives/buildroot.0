@@ -1,38 +1,36 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 20 Nov 2018 21:19:25 +0100
-Subject: [Buildroot] [PATCH/next 1/1] weston: drop libunwind optional
- dependency
-Message-ID: <20181120201925.21004-1-fontaine.fabrice@gmail.com>
+Date: Tue, 20 Nov 2018 21:20:03 +0100
+Subject: [Buildroot] [PATCH 1/1] weston: egl support needs egl glesv2
+Message-ID: <20181120202003.21053-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libunwind was dropped since 3.0.91, see:
-https://github.com/wayland-project/weston/commit/bb707dc0fe331c9af112a0552b7aa6fde755dd83
+Fixes:
+ - http://autobuild.buildroot.org/results/95db3f4ad4c7ae866b7db4431293c26faa5c1dfc
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/weston/weston.mk | 6 ------
- 1 file changed, 6 deletions(-)
+ package/weston/weston.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index efe12bc01e..66f5d5d792 100644
+index 66f5d5d792..dba5f35bf4 100644
 --- a/package/weston/weston.mk
 +++ b/package/weston/weston.mk
-@@ -60,12 +60,6 @@ WESTON_CONF_OPTS += \
- 	--disable-simple-egl-clients
+@@ -50,9 +50,9 @@ else
+ WESTON_CONF_OPTS += --disable-weston-launch
  endif
  
--ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
--WESTON_DEPENDENCIES += libunwind
--else
--WESTON_CONF_OPTS += --disable-libunwind
--endif
--
- ifeq ($(BR2_PACKAGE_WESTON_RDP),y)
- WESTON_DEPENDENCIES += freerdp
- WESTON_CONF_OPTS += --enable-rdp-compositor
+-ifeq ($(BR2_PACKAGE_HAS_LIBEGL_WAYLAND),y)
++ifeq ($(BR2_PACKAGE_HAS_LIBEGL_WAYLAND)$(BR2_PACKAGE_HAS_LIBGLES),yy)
+ WESTON_CONF_OPTS += --enable-egl
+-WESTON_DEPENDENCIES += libegl
++WESTON_DEPENDENCIES += libegl libgles
+ else
+ WESTON_CONF_OPTS += \
+ 	--disable-egl \
 -- 
 2.14.1
