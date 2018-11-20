@@ -1,92 +1,82 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Nov 2018 23:20:02 +0100
-Subject: [Buildroot] [git commit branch/next] tpm2-tss: depend on shared
- libraries
-Message-ID: <20181120221726.C887883D27@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 20 Nov 2018 23:25:01 +0100
+Subject: [Buildroot] [PATCH 1/1] shadowsocks-libev: add connmarktos
+ build option
+In-Reply-To: <da5a2951-731f-d529-f32d-a7437041ca30@corp.ovh.com>
+References: <1542300189-12939-1-git-send-email-sebastien.duponcheel@corp.ovh.com>
+ <87o9aq5hcb.fsf@tkos.co.il>
+ <25f6955b-c3f1-28a1-2a51-6ad90f391c9c@corp.ovh.com>
+ <871s7jh1jd.fsf@tkos.co.il>
+ <da5a2951-731f-d529-f32d-a7437041ca30@corp.ovh.com>
+Message-ID: <cb8d9edb-ac71-c5b6-15dc-8c89ea712c6c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=945353895f721aa3227b2c4b04244d8e4565b196
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The code includes dlfcn.h even if --enable-static and --disable-shared
-are passed to configure. There is an "#ifndef NO_DL ... #endif" wrapper
-but NO_DL is never defined and adding "-DNO_DL" to CFLAGS causes other
-compilation errors.
 
-Fixes:
-  http://autobuild.buildroot.net/results/cfc3bfef5e93329bf944a57947086d9ddc4fece3
+On 20/11/2018 14:56, DUPONCHEEL S?bastien wrote:
+> Hi Baruch,
+> 
+> Please see my feedback below :
+> 
+> Le 17/11/2018 ? 21:49, Baruch Siach a ?crit?:
+[snip]
+>> The AC_ARG_ENABLE macro in configure.ac automatically provides
+>> --enable-foo and --disable-foo.
+> 
+> The AC_ARG_ENABLE statement in shadowsocks looks broken, neither --disable-connmarktos 
+> nor --enable-connmarktos=no are working. In fact, it activates the feature.
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/tpm2-abrmd/Config.in | 6 ++++--
- package/tpm2-tools/Config.in | 6 ++++--
- package/tpm2-tss/Config.in   | 4 ++++
- 3 files changed, 12 insertions(+), 4 deletions(-)
+ Yes, that's a classic problem - people refuse to read documentation so they
+don't notice that the third argument is not "code to run when the option is yes"
+but actually it is "code to run when the option is given".
 
-diff --git a/package/tpm2-abrmd/Config.in b/package/tpm2-abrmd/Config.in
-index 31c5ae7d6b..d18f736182 100644
---- a/package/tpm2-abrmd/Config.in
-+++ b/package/tpm2-abrmd/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_TPM2_ABRMD
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
- 	depends on BR2_USE_MMU # dbus, libglib2
-+	depends on !BR2_STATIC_LIBS # tpm2-tss
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_TPM2_TSS
-@@ -20,6 +21,7 @@ config BR2_PACKAGE_TPM2_ABRMD
- 
- 	  https://github.com/tpm2-software/tpm2-abrmd
- 
--comment "tpm2-abrmd needs a toolchain w/ wchar, threads"
-+comment "tpm2-abrmd needs a toolchain w/ dynamic library, wchar, threads"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_STATIC_LIBS
-diff --git a/package/tpm2-tools/Config.in b/package/tpm2-tools/Config.in
-index 24cd4b8f9a..cc87e2a1bf 100644
---- a/package/tpm2-tools/Config.in
-+++ b/package/tpm2-tools/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_TPM2_TOOLS
- 	depends on BR2_USE_MMU # dbus, libglib
- 	depends on BR2_USE_WCHAR # libglib -> gettext
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib
-+	depends on !BR2_STATIC_LIBS # tpm2-tss
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_LIBCURL
- 	select BR2_PACKAGE_LIBGLIB2
-@@ -18,6 +19,7 @@ config BR2_PACKAGE_TPM2_TOOLS
- 
- 	  https://github.com/tpm2-software/tpm2-tools
- 
--comment "tpm2-tools needs a toolchain w/ wchar, threads"
-+comment "tpm2-tools needs a toolchain w/ dynamic library, wchar, threads"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_STATIC_LIBS
-diff --git a/package/tpm2-tss/Config.in b/package/tpm2-tss/Config.in
-index 4e299eccc1..933adb4b2a 100644
---- a/package/tpm2-tss/Config.in
-+++ b/package/tpm2-tss/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_TPM2_TSS
- 	bool "tpm2-tss"
-+	depends on !BR2_STATIC_LIBS # dlfcn.h
- 	select BR2_PACKAGE_LIBURIPARSER
- 	select BR2_PACKAGE_OPENSSL
- 	help
-@@ -30,3 +31,6 @@ config BR2_PACKAGE_TPM2_TSS
- 	    Microsoft software TPM2 simulator.
- 
- 	  https://github.com/tpm2-software/tpm2-tss
-+
-+comment "tpm2-tss needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
+ So, either you fix this by patching shadowsocks-libev's configure.ac and replacing
+
+-  enable_connmarktos="yes"
++  enable_connmarktos="$enableval"
+
+and sending the patch upstream, or you do
+
+ifeq ($(BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS),y)
+SHADOWSOCKS_LIBEV_DEPENDENCIES += libnetfilter_conntrack
+SHADOWSOCKS_LIBEV_CONF_OPTS += --enable-connmarktos
+# --disable-connmarktos *enables* it.
+endif
+
+ Obviously, the first option is preferred.
+
+ Regards,
+ Arnout
+
+> 
+> ifeq ($(BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS),y)
+> SHADOWSOCKS_LIBEV_DEPENDENCIES += libnetfilter_conntrack
+> SHADOWSOCKS_LIBEV_CONF_OPTS += --enable-connmarktos
+> else
+> SHADOWSOCKS_LIBEV_CONF_OPTS += --disable-connmarktos
+> endif
+> 
+> seb at compile:src/buildroot ?shadowsocks?$ cat .config | grep CONNMARK                   
+> # BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS is not set
+> seb at compile:src/buildroot ?shadowsocks*?$ ldd ./output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/bin/ss-server | grep libnetfilter_conntrack.so.3
+> 	libnetfilter_conntrack.so.3 => /home/seb/src/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/libnetfilter_conntrack.so.3 (0x00006f816dde4000)
+> 
+> Best regards,
+> DUPONCHEEL S?bastien.
+> 
+>> baruch
+>>
+>> --
+>>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+>> =}------------------------------------------------ooO--U--Ooo------------{=
+>>    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
