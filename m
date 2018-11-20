@@ -1,10 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Nov 2018 08:57:56 +0100
-Subject: [Buildroot] [PATCH 1/1] netplug (/etc/init.d/S29netplug): Fix
- the quoting of ${NETWORKING}.
-In-Reply-To: <20181115134818.11190-1-thomas.claveirole@green-communications.fr>
-References: <20181115134818.11190-1-thomas.claveirole@green-communications.fr>
-Message-ID: <20181120085756.40fc677c@windsurf.home>
+Date: Tue, 20 Nov 2018 09:00:26 +0100
+Subject: [Buildroot] [PATCH 1/1] shadowsocks-libev: add connmarktos
+ build option
+In-Reply-To: <871s7jh1jd.fsf@tkos.co.il>
+References: <1542300189-12939-1-git-send-email-sebastien.duponcheel@corp.ovh.com>
+ <87o9aq5hcb.fsf@tkos.co.il>
+ <25f6955b-c3f1-28a1-2a51-6ad90f391c9c@corp.ovh.com>
+ <871s7jh1jd.fsf@tkos.co.il>
+Message-ID: <20181120090026.0091891c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +16,34 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 15 Nov 2018 14:48:17 +0100, Thomas Claveirole wrote:
-> Since 4adaa581b27dc27298eb7cc421ee8f530f88e18e, S29netplug looks for
-> /etc/default/network instead of /etc/sysconfig/network.  When this
-> file exists but does not define $NETWORKING, the script fails on line
-> 29 with something like:
-> 
-> /etc/init.d/S29netplug: 29: [: =: unexpected operator
-> 
-> Fix quoting so this error no longer happens.
-> 
-> Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-> ---
->  package/netplug/S29netplug | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/netplug/S29netplug b/package/netplug/S29netplug
-> index 66459061b3..6c344662bb 100755
-> --- a/package/netplug/S29netplug
-> +++ b/package/netplug/S29netplug
-> @@ -26,7 +26,7 @@ if [ -f /etc/default/network ]; then
->  	. /etc/default/network
->  
->  	# Check that networking is up.
-> -	[ ${NETWORKING} = "no" ] && exit 0
-> +	[ "$NETWORKING" = no ] && exit 0
+On Sat, 17 Nov 2018 22:49:58 +0200, Baruch Siach wrote:
 
-I don't think it was really necessary to remove the double quotes
-around "no", and to remove the curly braces to reference the variable.
-So I've added those back, tweaked the commit title and applied to
-master. Thanks!
+> > config BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS
+> > - bool "enable connmarktos feature"
+> > + bool "ss-server: enable connmarktos feature"
+> >  depends on BR2_PACKAGE_SHADOWSOCKS_LIBEV
+> >  select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
+> >  help
+> > - Build with the connmark to TOS feature
+> > + Build ss-server with the connmark to TOS feature.
+> > + This feature require advanced tc, iptables and conntrac
+> > + rules to perform QoS on the server side.
+> > + if unsure say N.  
+> 
+> Sounds reasonable to me. Let's see what others think.
+
+Yes, soon reasonable to me as well. Perhaps the option title should be:
+
+	bool "conmarktos support in ss-server"
+
+or
+
+	bool "ss-server conmarktos support"
+
+S?bastien, could you take into account the various comments received
+from Baruch, and send an updated version ?
+
+Thanks!
 
 Thomas
 -- 
