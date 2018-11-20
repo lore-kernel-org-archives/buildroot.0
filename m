@@ -1,58 +1,93 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 20 Nov 2018 22:48:24 +0100
-Subject: [Buildroot] [PATCH 2/2] libostree: bump to version 2018.9.1
-In-Reply-To: <20181120214824.9541-1-fontaine.fabrice@gmail.com>
-References: <20181120214824.9541-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181120214824.9541-2-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 20 Nov 2018 22:53:53 +0100
+Subject: [Buildroot] buildroot error: No hash found for gcc-7.3.0.tar.xz
+In-Reply-To: <2776276a.afc0d.167306f454d.Coremail.lixuejun@vip.163.com>
+References: <2776276a.afc0d.167306f454d.Coremail.lixuejun@vip.163.com>
+Message-ID: <05e7b91c-7801-8985-8a83-38d53193aa84@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump to v2018.9 added ostree-finalize-staged.path through
-https://github.com/ostreedev/ostree/commit/ac1a919ffd4fe944d06c4f4510604baa73d1bf8e
 
-However, this file was not added in the tarball until commit:
-https://github.com/ostreedev/ostree/commit/62594765b2fae72e332ffb21fbd11085d911ef83
 
-So use the new 2018.9.1 tarball to get this file otherwise build with
-systemd will fail
+On 20/11/2018 10:24, ??? wrote:
+> Dear Buildroot developers
+> 
+> ?
+> 
+> As a beginner, I?m looking?for?someadvices on the issue :?No hash found for
+> gcc-7.3.0.tar.xz.
+> 
+> ?My platform is ubantu 18.04(64 bit) on VirtualBox(X86), buildroot 2018.08. The
+> .config file is attached.
+> 
+> The following is a copy of the log from running buildroot make command:
+> 
+> ?
+> 
+> *ERROR: No hash found for gcc-7.3.0.tar.xz*
+> 
+> *package/pkg-generic.mk:135: recipe for target
+> '/home/lxj/buildroot-2018.08.2/output/build/host-gcc-initial-7.3.0/.stamp_downloaded'
+> failed*
+> 
+> *make: ***
+> [/home/lxj/buildroot-2018.08.2/output/build/host-gcc-initial-7.3.0/.stamp_downloaded]
+> Error 1*
+> 
+> *root at lxj-VirtualBox:/home/lxj/buildroot-2018.08.2#*
+> 
+> ?
+> 
+> There is a file ?gcc-7.3.0.tar.xz??at path /home/lxj/buildroot-2018.08.2/dl/gcc,
+> and its sha256sum is:?
+> *ad41a7e4584e40e92cdf860bc0288500fbaf5dfb7e8c3fcabe9eba809c87bcfa85b46c19c19921b0cdf6d05483faede8287bb9ea120c0d1559449a70e602c8d4
+> ?gcc-7.3.0.tar.xz*
+> 
+> ?
+> 
+> There is a file ?gcc.hash??at path /home/lxj/buildroot-2018.08.2/package/gcc,
 
-Fixes:
- - http://autobuild.buildroot.org/results/fc6435282630e60927f88bf5954805ebbaa60cb3
+ There should be a symlink from package/gcc/gcc-initial/gcc-initial.hash to this
+file. Is that symlink present, and is it pointing to the correct file?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libostree/libostree.hash | 2 +-
- package/libostree/libostree.mk   | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ Regards,
+ Arnout
 
-diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
-index 35bf2caf0a..ddd15b5099 100644
---- a/package/libostree/libostree.hash
-+++ b/package/libostree/libostree.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 9a3c17af133e6d381bb997473c6371ef8f048c1cfb6bd0acdb5662ede712aa5a  libostree-2018.9.tar.xz
-+sha256 f263cfed75dcc9e312a874d28241e7143d8a0d8c774938f2165327bae67dbe06  libostree-2018.9.1.tar.xz
- sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-index 8538cdc69c..e8cdd64d6e 100644
---- a/package/libostree/libostree.mk
-+++ b/package/libostree/libostree.mk
-@@ -4,9 +4,10 @@
- #
- ################################################################################
- 
--LIBOSTREE_VERSION = 2018.9
-+LIBOSTREE_VERSION_MAJOR = 2018.9
-+LIBOSTREE_VERSION= $(LIBOSTREE_VERSION_MAJOR).1
- LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
--LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
-+LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION_MAJOR)
- 
- LIBOSTREE_LICENSE = LGPL-2.0+
- LIBOSTREE_LICENSE_FILES = COPYING
--- 
-2.14.1
+
+> include the foloowing lines:
+> 
+> *# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-7.3.0/sha512.sum*
+> 
+> *sha512
+> ?ad41a7e4584e40e92cdf860bc0288500fbaf5dfb7e8c3fcabe9eba809c87bcfa85b46c19c19921b0cdf6d05483faede8287bb9ea120c0d1559449a70e602c8d4
+> ?gcc-7.3.0.tar.xz*
+> 
+> ?
+> 
+> Thank you?for?your consideration in advance.
+> 
+> ?Xuejun Li
+> 
+> 
+> 
+> 
+> 
+> --
+> --------------------------------------------------------------------------------
+> ??VIP????????????????????????????????????
+> ????????????????????????????????????
+> Alert message of Netease Vipmail?Never provide your password, security
+> questions, verification codes, or any other personal important information
+> details to anyone else.
+> You can identify mail message by telephone,video-chat or other ways.You should
+> make sure that your email address, bank account and other confidential
+> information as secure as possible. Thank you for keeping your email account secure.
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
