@@ -1,88 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 20 Nov 2018 19:50:05 +0100
-Subject: [Buildroot] [PATCH v2] linux-firmware: bump version to latest
- 1baa348
-In-Reply-To: <20181116093513.152dc10c@windsurf>
-References: <20181108153322.17362-1-m.niestroj@grinn-global.com>
- <20181109215700.6b8dc6af@windsurf> <20181109210610.GB2445@scaer>
- <87bm6svqpy.fsf@grinn-global.com>
- <20181113210216.37879bd4@windsurf> <20181113202946.GH10271@scaer>
- <016ed0ed-6489-2fa0-a32e-9f2a6918af01@mind.be>
- <20181115190558.GM10271@scaer> <20181116093513.152dc10c@windsurf>
-Message-ID: <20181120185005.GE2601@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 20 Nov 2018 19:52:37 +0100
+Subject: [Buildroot] [PATCH 1/1] mtd: fix build on riscv
+Message-ID: <20181120185237.31403-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Define _REENTRANT otherwise pthread detection will fail
 
-On 2018-11-16 09:35 +0100, Thomas Petazzoni spake thusly:
-> On Thu, 15 Nov 2018 20:05:58 +0100, Yann E. MORIN wrote:
-> > >  Since we have the same problems sometimes with github tarballs, I think we need
-> > > a more fundamental solution. I would propose a new tarsha256 hash type, which
-> > > extracts the tarball to calculate the hash. In a simple version it's not so
-> > > complicated, something like
-> > > 
-> > > tar -xf - --to-command=$(TOPDIR)/support/scripts/tarsha256 | sort | sha256sum -
-> > > 
-> > > where tarsha256 contains:
-> > > 
-> > > { echo $TAR_FILENAME; echo $TAR_MODE; echo $TAR_FILETYPE; cat - } | \
-> > > 	sha256sum - | cut -f 1 -d ' '
-> > > 
-> > > As usually, entirely untested.  
-> > 
-> > I don't like it, because this is totally non-standard. People expect to
-> > be able to check hashes by running the *usual* XXXsum commands, directly
-> > on the shipped/received files.
-> > 
-> > Introducing our own hash mechanism, how reliable or simple as it would
-> > be, breaks this assumption, and the tool to actually check them is not
-> > available at all except internally to Buildroot, so it is not possible
-> > to reproduce the checks outside of Buildroot.
-> > 
-> > This goes counter one of the initial goal of hashes, which is to be able
-> > to track archives and their validity across a supply chain, inbound (as
-> > sent by a provider to Buildroot, to do the build) or outbound (as received
-> > by a recepient, from Buildroot, for compliance) alike.
-> 
-> I understand this argument, but do you have some alternative solution ?
+Fixes:
+ - http://autobuild.buildroot.org/results/b0e7978a997a2aae383161455b5d898b8c28e2e1
 
-No.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/mtd/mtd.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Also, the tarshasum thingy would not work either, because it is not
-enough to hash the content of files. There are cases where the metadat
-also matters, for example if a tarball is regenerated with new dates in
-it. This could trigger a rebuild of parts of the package, for example if
-configure.ac is now younger than configure. Obviously, we could add that
-info to be hashed...
-
-Until we find anotehr type of info we can't get via the --to-command,
-like extended attributes for example...
-
-So, I am still opposed to the tarshasum idea.
-
-> Even building our own host-tar and host-gzip doesn't solve entirely the
-> problem, because it doesn't solve the case of tarballs fetched from
-> github, that tend to change in subtle ways once in a while.
-
-For that, we can simply decide to ditch the github macro, and revert
-to using Github for what it is: a git repository, and switch to the git
-method.
-
-Yes, yes, I know, this is a shame, especially since there are big
-repositories out there. But OTOH, we now have the git cache, so it
-should not be such a hassle in the end.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 13e501fc33..2d627ffa3d 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -11,6 +11,13 @@ MTD_LICENSE = GPL-2.0
+ MTD_LICENSE_FILES = COPYING
+ MTD_INSTALL_STAGING = YES
+ 
++# gcc on riscv doesn't define _REENTRANT when -pthread is passed while
++# it should. Compensate this deficiency here otherwise mtd configure
++# script doesn't find that thread support is enabled.
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS):$(BR2_riscv),y:y)
++MTD_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_REENTRANT"
++endif
++
+ ifeq ($(BR2_PACKAGE_MTD_JFFS_UTILS),y)
+ MTD_DEPENDENCIES += zlib lzo host-pkgconf
+ MTD_CONF_OPTS += --with-jffs
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
