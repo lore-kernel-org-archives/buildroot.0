@@ -1,82 +1,71 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 20 Nov 2018 23:25:01 +0100
-Subject: [Buildroot] [PATCH 1/1] shadowsocks-libev: add connmarktos
- build option
-In-Reply-To: <da5a2951-731f-d529-f32d-a7437041ca30@corp.ovh.com>
-References: <1542300189-12939-1-git-send-email-sebastien.duponcheel@corp.ovh.com>
- <87o9aq5hcb.fsf@tkos.co.il>
- <25f6955b-c3f1-28a1-2a51-6ad90f391c9c@corp.ovh.com>
- <871s7jh1jd.fsf@tkos.co.il>
- <da5a2951-731f-d529-f32d-a7437041ca30@corp.ovh.com>
-Message-ID: <cb8d9edb-ac71-c5b6-15dc-8c89ea712c6c@mind.be>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 20 Nov 2018 23:36:57 +0100
+Subject: [Buildroot] [PATCH v2 2/6] package/llvm: install target
+ binary/debug tools
+In-Reply-To: <CANQCQpbdA1O5sRxpxax3ZQepzsA7WPhinB=oW8dVYYweQrbTOQ@mail.gmail.com>
+References: <1542426982-54683-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <1542426982-54683-2-git-send-email-matthew.weber@rockwellcollins.com>
+ <50862e38-68c7-e166-a719-82ab28f7aad9@smile.fr>
+ <CANQCQpbU9jTkv9L8B80o+k2x_sAtDVOhhE9KFjUXA_nVuV=ang@mail.gmail.com>
+ <CANLo3Ji5+U+2OkL8pMD=8B-iQL29AZLDGXWdcijjzgzSqc3hzQ@mail.gmail.com>
+ <CANQCQpbdA1O5sRxpxax3ZQepzsA7WPhinB=oW8dVYYweQrbTOQ@mail.gmail.com>
+Message-ID: <6b1c1219-de01-1012-09a8-eb33181cc2bc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Matt,
 
-
-On 20/11/2018 14:56, DUPONCHEEL S?bastien wrote:
-> Hi Baruch,
+Le 19/11/2018 ? 14:04, Matthew Weber a ?crit?:
+> Romain,
 > 
-> Please see my feedback below :
-> 
-> Le 17/11/2018 ? 21:49, Baruch Siach a ?crit?:
-[snip]
->> The AC_ARG_ENABLE macro in configure.ac automatically provides
->> --enable-foo and --disable-foo.
-> 
-> The AC_ARG_ENABLE statement in shadowsocks looks broken, neither --disable-connmarktos 
-> nor --enable-connmarktos=no are working. In fact, it activates the feature.
-
- Yes, that's a classic problem - people refuse to read documentation so they
-don't notice that the third argument is not "code to run when the option is yes"
-but actually it is "code to run when the option is given".
-
- So, either you fix this by patching shadowsocks-libev's configure.ac and replacing
-
--  enable_connmarktos="yes"
-+  enable_connmarktos="$enableval"
-
-and sending the patch upstream, or you do
-
-ifeq ($(BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS),y)
-SHADOWSOCKS_LIBEV_DEPENDENCIES += libnetfilter_conntrack
-SHADOWSOCKS_LIBEV_CONF_OPTS += --enable-connmarktos
-# --disable-connmarktos *enables* it.
-endif
-
- Obviously, the first option is preferred.
-
- Regards,
- Arnout
-
-> 
-> ifeq ($(BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS),y)
-> SHADOWSOCKS_LIBEV_DEPENDENCIES += libnetfilter_conntrack
-> SHADOWSOCKS_LIBEV_CONF_OPTS += --enable-connmarktos
-> else
-> SHADOWSOCKS_LIBEV_CONF_OPTS += --disable-connmarktos
-> endif
-> 
-> seb at compile:src/buildroot ?shadowsocks?$ cat .config | grep CONNMARK                   
-> # BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS is not set
-> seb at compile:src/buildroot ?shadowsocks*?$ ldd ./output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/bin/ss-server | grep libnetfilter_conntrack.so.3
-> 	libnetfilter_conntrack.so.3 => /home/seb/src/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/libnetfilter_conntrack.so.3 (0x00006f816dde4000)
-> 
-> Best regards,
-> DUPONCHEEL S?bastien.
-> 
->> baruch
+> On Mon, Nov 19, 2018 at 2:10 AM Romain Naour <romain.naour@gmail.com> wrote:
 >>
->> --
->>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
->> =}------------------------------------------------ooO--U--Ooo------------{=
->>    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+>> Hi Matt,
+>>
+>> Le lun. 19 nov. 2018 ? 02:48, Matthew Weber <matthew.weber@rockwellcollins.com> a ?crit :
+>>>
+>>> Romain,
+>>>
+>>> On Sun, Nov 18, 2018 at 1:14 PM Romain Naour <romain.naour@smile.fr> wrote:
+>>>>
+>>>> Hi Matt,
+>>>>
+>>>> Le 17/11/2018 ? 04:56, Matt Weber a ?crit :
+>>>>> The compiler-rt fuzzer and address sanitizer tools require additional
+>>>>> LLVM binary tools installed to allow stack trace decoding actively during
+>>>>> executable analysis.
+>>>>>
+>>>>> https://github.com/google/sanitizers/wiki/AddressSanitizerCallStack
+>>>>>
+>>>>> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+>>>>> Reviewed-by: Romain Naour <romain.naour@smile.fr>
+>>>>
+>>>> For some reason I get an error while building llvm package tools.
+>>>>
+>>>> x86_64-linux-g++: WARNING: unsafe header/library path used in cross-compilation:
+>>>> '-I/usr/include/libxml2'
+>>>>
+>>>> Can you have a look?
+>>>
+>>> I went back and checked my logs on the clang compiler-rt run-test
+>>> build for that warning and didn't find it.  I then checked and my
+>>> config and it has the unsafe header/library as error.  Was your build
+>>> test just applying my patches and doing an explicit 'make llvm'?
+>>
+>>
+>> Indeed,
+>> Some tools use libxml2, so you have to add target libxml2 package as build dependency.
+>>
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Would you mind sharing your verbose output and equivalent of cmake
+> config guess/status?
 > 
+
+I need to rebuild from scratch since I've fixed the build locally.
+I'll restart a new one next week-end.
+
+Best regards,
+Romain
