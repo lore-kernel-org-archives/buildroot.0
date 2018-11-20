@@ -1,141 +1,127 @@
-From: =?UTF-8?Q?DUPONCHEEL_S=c3=a9bastien?= <sebastien.duponcheel@corp.ovh.com>
-Date: Tue, 20 Nov 2018 14:56:17 +0100
-Subject: [Buildroot] [PATCH 1/1] shadowsocks-libev: add connmarktos
- build option
-In-Reply-To: <871s7jh1jd.fsf@tkos.co.il>
-References: <1542300189-12939-1-git-send-email-sebastien.duponcheel@corp.ovh.com>
- <87o9aq5hcb.fsf@tkos.co.il>
- <25f6955b-c3f1-28a1-2a51-6ad90f391c9c@corp.ovh.com>
- <871s7jh1jd.fsf@tkos.co.il>
-Message-ID: <da5a2951-731f-d529-f32d-a7437041ca30@corp.ovh.com>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Tue, 20 Nov 2018 11:22:02 -0300
+Subject: [Buildroot] [PATCH] ci20: Fix U-Boot build with codesourcery
+ toolchain
+In-Reply-To: <20181112181928.26634-1-ezequiel@collabora.com>
+References: <20181112181928.26634-1-ezequiel@collabora.com>
+Message-ID: <CAAEAJfA5-zJXgDvr2Jz6UsvHSUD6+EkvJUKv4ELLxrgm117adw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
-
-Please see my feedback below :
-
-Le 17/11/2018 ? 21:49, Baruch Siach a ?crit?:
-> Hi S?bastien,
+On Mon, 12 Nov 2018 at 15:27, Ezequiel Garcia <ezequiel@collabora.com> wrote:
 >
-> Please keep the list on Cc.
+> Currently, U-Boot is failing to build, due to some issues
+> with the toolchain and the U-Boot port.
 >
-> DUPONCHEEL S?bastien writes:
->> it's nice to see you here :)
->> Thank you for your review and comments.
->>
->> See my proposal below :
->>
->> Le 15/11/2018 ? 19:24, Baruch Siach a ?crit:
->>> Thanks for your contribution. A few comments below.
->>>
->>> DUPONCHEEL S?bastien writes:
->>>
->>>> Signed-off-by: DUPONCHEEL S?bastien <sebastien.duponcheel@corp.ovh.com>
->>>> ---
->>>>    package/shadowsocks-libev/Config.in            | 7 +++++++
->>>>    package/shadowsocks-libev/shadowsocks-libev.mk | 4 ++++
->>>>    2 files changed, 11 insertions(+)
->>>>
->>>> diff --git a/package/shadowsocks-libev/Config.in b/package/shadowsocks-libev/Config.in
->>>> index f58abdb..acd9a67 100644
->>>> --- a/package/shadowsocks-libev/Config.in
->>>> +++ b/package/shadowsocks-libev/Config.in
->>>> @@ -15,6 +15,13 @@ config BR2_PACKAGE_SHADOWSOCKS_LIBEV
->>>>
->>>>    	  https://github.com/shadowsocks/shadowsocks-libev
->>>>
->>>> +config BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS
->>>> +	bool "enable connmarktos feature"
->>>> +	depends on BR2_PACKAGE_SHADOWSOCKS_LIBEV
->>>> +	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
->>>> +	help
->>>> +	  Build with the connmark to TOS feature
->>> If the size increase of enabling this feature is not huge we usually
->>> just enable it unconditionally when the required dependencies are
->>> enabled. This reduced the number of config options that the user has to
->>> go through.
->> For now, this feature only concerns ss-server and requires the operation of
->> advanced iptables and tc rules. This is a very specific feature that will not
->> be widely used, I think it is better to disable it by default
->>
->> So, i propose to be more verbose on what this feature implies :
->>
->> config BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS
->> - bool "enable connmarktos feature"
->> + bool "ss-server: enable connmarktos feature"
->>   depends on BR2_PACKAGE_SHADOWSOCKS_LIBEV
->>   select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
->>   help
->> - Build with the connmark to TOS feature
->> + Build ss-server with the connmark to TOS feature.
->> + This feature require advanced tc, iptables and conntrac
->> + rules to perform QoS on the server side.
->> + if unsure say N.
-> Sounds reasonable to me. Let's see what others think.
+> Fix it.
 >
->>>>    comment "shadowsocks-libev needs a toolchain w/ threads"
->>>>    	depends on BR2_TOOLCHAIN_HAS_SYNC_4
->>>>    	depends on BR2_TOOLCHAIN_HAS_SYNC_8 || !BR2_ARCH_IS_64
->>>> diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
->>>> index 7fdcd3f..34d95ca 100644
->>>> --- a/package/shadowsocks-libev/shadowsocks-libev.mk
->>>> +++ b/package/shadowsocks-libev/shadowsocks-libev.mk
->>>> @@ -21,4 +21,8 @@ ifeq ($(BR2_riscv),y)
->>>>    SHADOWSOCKS_LIBEV_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_REENTRANT"
->>>>    endif
->>>>
->>>> +ifeq ($(BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS),y)
->>> So instead of that do
->>>
->>> ifeq ($(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),y)
->>>
->>>> +SHADOWSOCKS_LIBEV_CONF_OPTS += --enable-connmarktos
->>> If libnetfilter_conntrack is a build time dependency you also need to
->>> add it to SHADOWSOCKS_LIBEV_DEPENDENCIES here to make sure it build
->>> before shadowsocks-libev.
->> As seen in "squid.mk", i propose to do something like this :
->>
->> -SHADOWSOCKS_LIBEV_DEPENDENCIES = host-pkgconf c-ares libev libsodium mbedtls pcre
->> +SHADOWSOCKS_LIBEV_DEPENDENCIES = host-pkgconf c-ares libev libsodium mbedtls pcre \
->> + $(if $(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),libnetfilter_conntrack)
-> The _OPTS and _DEPENDENCIES additions are usually grouped together. The
-> squid case is spacial because there is no _OPTS change there.
+> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> ---
+
+Ping?
+
+>  .../0001-mips-Remove-default-endiannes.patch  | 66 +++++++++++++++++++
+>  configs/ci20_defconfig                        |  1 +
+>  2 files changed, 67 insertions(+)
+>  create mode 100644 board/ci20/patches/uboot/0001-mips-Remove-default-endiannes.patch
 >
->>>> +endif
->>> You should also add --disable-connmarktos (or the equivalent option) in
->>> the 'else' part of this condition.
->> Unfortunately there is no such option.
-> The AC_ARG_ENABLE macro in configure.ac automatically provides
-> --enable-foo and --disable-foo.
-
-The AC_ARG_ENABLE statement in shadowsocks looks broken, neither --disable-connmarktos
-nor --enable-connmarktos=no are working. In fact, it activates the feature.
-
-ifeq ($(BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS),y)
-SHADOWSOCKS_LIBEV_DEPENDENCIES += libnetfilter_conntrack
-SHADOWSOCKS_LIBEV_CONF_OPTS += --enable-connmarktos
-else
-SHADOWSOCKS_LIBEV_CONF_OPTS += --disable-connmarktos
-endif
-
-seb at compile:src/buildroot ?shadowsocks?$ cat .config | grep CONNMARK
-# BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS is not set
-seb at compile:src/buildroot ?shadowsocks*?$ ldd ./output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/bin/ss-server | grep libnetfilter_conntrack.so.3
-	libnetfilter_conntrack.so.3 => /home/seb/src/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/libnetfilter_conntrack.so.3 (0x00006f816dde4000)
-
-Best regards,
-DUPONCHEEL S?bastien.
-
-> baruch
->
+> diff --git a/board/ci20/patches/uboot/0001-mips-Remove-default-endiannes.patch b/board/ci20/patches/uboot/0001-mips-Remove-default-endiannes.patch
+> new file mode 100644
+> index 000000000000..a6191804f1e3
+> --- /dev/null
+> +++ b/board/ci20/patches/uboot/0001-mips-Remove-default-endiannes.patch
+> @@ -0,0 +1,66 @@
+> +From b3a1e97498e7987073775d49a703932c20f2df1d Mon Sep 17 00:00:00 2001
+> +From: Ezequiel Garcia <ezequiel@collabora.com>
+> +Date: Mon, 12 Nov 2018 14:04:46 -0300
+> +Subject: [PATCH] mips: Remove default endiannes
+> +
+> +Currently, trying to build ci20_mmc fails on little-endian
+> +toolchains. The problem seems to be that some targets don't
+> +have CONFIG_SYS_LITTLE_ENDIAN properly set, and therefore
+> +the default -EB switch is selected.
+> +
+> +Let's get rid of the default switch entirely, and fix this problem.
+> +While this may be a hack, it is a quick solution until
+> +U-Boot gets CI20 proper support.
+> +
+> +make ARCH=mips CROSS_COMPILE=mips-linux-gnu- ci20_mmc
+> +Configuring for ci20_mmc - Board: ci20, Options: SPL_MMC_SUPPORT,ENV_IS_IN_MMC
+> +make
+> +make[1]: Entering directory '/home/zeta/repos/u-boot-ci20'
+> +Generating include/autoconf.mk
+> +Generating include/autoconf.mk.dep
+> +mips-linux-gnu-gcc: error: may not use both -EB and -EL
+> +mips-linux-gnu-gcc: error: may not use both -EB and -EL
+> +Generating include/spl-autoconf.mk
+> +mips-linux-gnu-gcc: error: may not use both -EB and -EL
+> +Generating include/tpl-autoconf.mk
+> +mips-linux-gnu-gcc: error: may not use both -EB and -EL
+> +mips-linux-gnu-gcc -DDO_DEPS_ONLY \
+> +       -g  -Os   -ffunction-sections -fdata-sections -D__KERNEL__ -I/home/zeta/repos/u-boot-ci20/include -fno-builtin -ffreestanding -nostdinc -isystem /home/zeta/repos/buildroot/mips/output/host/opt/ext-toolchain/bin/../lib/gcc/mips-linux-gnu/5.3.0/include -pipe  -DCONFIG_MIPS -D__MIPS__ -G 0 -EB -msoft-float -fpic -mabicalls -march=mips32 -mabi=32 -DCONFIG_32BIT -mno-branch-likely -Wall -Wstrict-prototypes       \
+> +       -o lib/asm-offsets.s lib/asm-offsets.c -c -S
+> +if [ -f arch/mips/cpu/xburst/jz4780/asm-offsets.c ];then \
+> +       mips-linux-gnu-gcc -DDO_DEPS_ONLY \
+> +       -g  -Os   -ffunction-sections -fdata-sections -D__KERNEL__ -I/home/zeta/repos/u-boot-ci20/include -fno-builtin -ffreestanding -nostdinc -isystem /home/zeta/repos/buildroot/mips/output/host/opt/ext-toolchain/bin/../lib/gcc/mips-linux-gnu/5.3.0/include -pipe  -DCONFIG_MIPS -D__MIPS__ -G 0 -EB -msoft-float -fpic -mabicalls -march=mips32 -mabi=32 -DCONFIG_32BIT -mno-branch-likely -Wall -Wstrict-prototypes       \
+> +               -o arch/mips/cpu/xburst/jz4780/asm-offsets.s arch/mips/cpu/xburst/jz4780/asm-offsets.c -c -S; \
+> +else \
+> +       touch arch/mips/cpu/xburst/jz4780/asm-offsets.s; \
+> +fi
+> +mips-linux-gnu-gcc: error: may not use both -EB and -EL
+> +make[1]: *** [Makefile:747: lib/asm-offsets.s] Error 1
+> +make[1]: *** Waiting for unfinished jobs....
+> +make[1]: Leaving directory '/home/zeta/repos/u-boot-ci20'
+> +make: *** [.boards.depend:463: ci20_mmc] Error 2
+> +
+> +Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> +---
+> +https://github.com/MIPS/CI20_u-boot/pull/19
+> +
+> + arch/mips/config.mk | 3 ---
+> + 1 file changed, 3 deletions(-)
+> +
+> +diff --git a/arch/mips/config.mk b/arch/mips/config.mk
+> +index c89279025507..43560abbc0e1 100644
+> +--- a/arch/mips/config.mk
+> ++++ b/arch/mips/config.mk
+> +@@ -20,9 +20,6 @@ ifdef CONFIG_SYS_BIG_ENDIAN
+> + ENDIANNESS := -EB
+> + endif
+> +
+> +-# Default to EB if no endianess is configured
+> +-ENDIANNESS ?= -EB
+> +-
+> + PLATFORM_CPPFLAGS += -DCONFIG_MIPS -D__MIPS__
+> +
+> + #
+> +--
+> +2.19.1
+> +
+> diff --git a/configs/ci20_defconfig b/configs/ci20_defconfig
+> index 6e860b1e7e19..8f2604b07c8e 100644
+> --- a/configs/ci20_defconfig
+> +++ b/configs/ci20_defconfig
+> @@ -27,6 +27,7 @@ BR2_TARGET_UBOOT_BOARDNAME="ci20_mmc"
+>  BR2_TARGET_UBOOT_CUSTOM_GIT=y
+>  BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/MIPS/CI20_u-boot"
+>  BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa"
+> +BR2_TARGET_UBOOT_PATCH="board/ci20/patches/uboot"
+>  BR2_TARGET_UBOOT_FORMAT_IMG=y
+>  BR2_TARGET_UBOOT_SPL=y
+>  BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.bin"
 > --
->       http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->     - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181120/04ab28d9/attachment.html>
+> 2.19.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
+-- 
+Ezequiel Garc?a, VanguardiaSur
+www.vanguardiasur.com.ar
