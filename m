@@ -1,117 +1,87 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 20 Nov 2018 08:46:07 +0100
-Subject: [Buildroot] [PATCH 1/1] python-aiohttp: new package
-In-Reply-To: <1542657158-9559-1-git-send-email-james.hilliard1@gmail.com>
-References: <1542657158-9559-1-git-send-email-james.hilliard1@gmail.com>
-Message-ID: <CAGm1_kuNHBwyt78tX6sUkSWwW3Vu=0vW5nJHQtjNRw4DKwRD-A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 20 Nov 2018 08:54:35 +0100
+Subject: [Buildroot] [git commit branch/next]
+ configs/olimex_a20_olinuxino_lime*: bump Linux/U-Boot versions
+Message-ID: <20181120075153.41F8183C62@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi James,
-On Mon, Nov 19, 2018 at 8:53 PM <james.hilliard1@gmail.com> wrote:
->
-> From: James Hilliard <james.hilliard1@gmail.com>
->
-> Async http client/server framework (asyncio).
->
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  DEVELOPERS                                 |  1 +
->  package/Config.in                          |  1 +
->  package/python-aiohttp/Config.in           | 14 ++++++++++++++
->  package/python-aiohttp/python-aiohttp.hash |  5 +++++
->  package/python-aiohttp/python-aiohttp.mk   | 14 ++++++++++++++
->  5 files changed, 35 insertions(+)
->  create mode 100644 package/python-aiohttp/Config.in
->  create mode 100644 package/python-aiohttp/python-aiohttp.hash
->  create mode 100644 package/python-aiohttp/python-aiohttp.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index f4d98d9..cfc076b 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -985,6 +985,7 @@ F:  configs/pine64_sopine_defconfig
->
->  N:     James Hilliard <james.hilliard1@gmail.com>
->  F:     package/python-aiodns/
-> +F:     package/python-aiohttp/
->  F:     package/python-async-timeout/
->  F:     package/python-cchardet/
->  F:     package/python-multidict/
-> diff --git a/package/Config.in b/package/Config.in
-> index 5a5d840..776691b 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -795,6 +795,7 @@ if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
->  menu "External python modules"
->         source "package/python-aiocoap/Config.in"
->         source "package/python-aiodns/Config.in"
-> +       source "package/python-aiohttp/Config.in"
->         source "package/python-alsaaudio/Config.in"
->         source "package/python-argh/Config.in"
->         source "package/python-arrow/Config.in"
-> diff --git a/package/python-aiohttp/Config.in b/package/python-aiohttp/Config.in
-> new file mode 100644
-> index 0000000..81862c9
-> --- /dev/null
-> +++ b/package/python-aiohttp/Config.in
-> @@ -0,0 +1,14 @@
-> +config BR2_PACKAGE_PYTHON_AIOHTTP
-> +       bool "python-aiohttp"
-> +       depends on BR2_PACKAGE_PYTHON3
-> +       select BR2_PACKAGE_PYTHON_ATTRS # runtime
-> +       select BR2_PACKAGE_PYTHON_CCHARDET if BR2_INSTALL_LIBSTDCPP # runtime
-> +       select BR2_PACKAGE_PYTHON_CHARDET if !BR2_INSTALL_LIBSTDCPP # runtime
+commit: https://git.buildroot.net/buildroot/commit/?id=bac251bee158ce390547a55eadd6df3aaebda37d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-According to [1] chardet is required anyway. So should
-BR2_INSTALL_LIBSTDCPP be a global dependency for the package?
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/olimex_a20_olinuxino_lime2_defconfig | 8 ++++----
+ configs/olimex_a20_olinuxino_lime_defconfig  | 8 ++++----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-[1] https://github.com/aio-libs/aiohttp/blob/master/setup.py#L88
-
-Yegor
-
-> +       select BR2_PACKAGE_PYTHON_MULTIDICT # runtime
-> +       select BR2_PACKAGE_PYTHON_ASYNC_TIMEOUT # runtime
-> +       select BR2_PACKAGE_PYTHON_YARL # runtime
-> +       select BR2_PACKAGE_PYTHON_AIODNS # runtime
-> +       help
-> +         Async http client/server framework (asyncio).
-> +
-> +         https://github.com/aio-libs/aiohttp
-> diff --git a/package/python-aiohttp/python-aiohttp.hash b/package/python-aiohttp/python-aiohttp.hash
-> new file mode 100644
-> index 0000000..8f158af
-> --- /dev/null
-> +++ b/package/python-aiohttp/python-aiohttp.hash
-> @@ -0,0 +1,5 @@
-> +# md5, sha256 from https://pypi.org/pypi/aiohttp/json
-> +md5    80a6e0c6c452d511d1d37755d6f0995a  aiohttp-3.4.4.tar.gz
-> +sha256 51afec6ffa50a9da4cdef188971a802beb1ca8e8edb40fa429e5e529db3475fa  aiohttp-3.4.4.tar.gz
-> +# Locally computed sha256 checksums
-> +sha256 bb0c0eeae85492ebfa03442b7784d4c42a623e15346df54ae85f55df972a82af  LICENSE.txt
-> diff --git a/package/python-aiohttp/python-aiohttp.mk b/package/python-aiohttp/python-aiohttp.mk
-> new file mode 100644
-> index 0000000..df8bdfb
-> --- /dev/null
-> +++ b/package/python-aiohttp/python-aiohttp.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-aiohttp
-> +#
-> +################################################################################
-> +
-> +PYTHON_AIOHTTP_VERSION = 3.4.4
-> +PYTHON_AIOHTTP_SOURCE = aiohttp-$(PYTHON_AIOHTTP_VERSION).tar.gz
-> +PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/70/27/6098b4b60a3302a97f8ec97eb85d42f55a2fa904da4a369235a8e3b84352
-> +PYTHON_AIOHTTP_SETUP_TYPE = setuptools
-> +PYTHON_AIOHTTP_LICENSE = Apache-2.0
-> +PYTHON_AIOHTTP_LICENSE_FILES = LICENSE.txt
-> +
-> +$(eval $(python-package))
-> --
-> 2.7.4
->
+diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
+index 716995aa7a..d846f4fedd 100644
+--- a/configs/olimex_a20_olinuxino_lime2_defconfig
++++ b/configs/olimex_a20_olinuxino_lime2_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_EABIHF=y
+ 
+-# Linux headers same as kernel, a 4.18 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
++# Linux headers same as kernel, a 4.19 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ 
+ # System configuration
+ BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
+@@ -18,7 +18,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.7"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.2"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -34,7 +34,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.09"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.11"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index ed8ea86233..e60bf0882d 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_EABIHF=y
+ 
+-# Linux headers same as kernel, a 4.18 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
++# Linux headers same as kernel, a 4.19 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ 
+ # System configuration
+ BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
+@@ -18,7 +18,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.7"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.2"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -34,7 +34,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.09"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.11"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
