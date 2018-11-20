@@ -1,38 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Nov 2018 09:01:34 +0100
-Subject: [Buildroot] [next] test_rust: use standard defconfig fragment
- style
-In-Reply-To: <20181116222147.13887-1-ricardo.martincoski@gmail.com>
-References: <20181116222147.13887-1-ricardo.martincoski@gmail.com>
-Message-ID: <20181120090134.477ce99e@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 20 Nov 2018 10:10:42 +0100
+Subject: [Buildroot] [git commit branch/next]
+ configs/olimex_a20_olinuxino_lime*: bump Linux/U-Boot versions
+In-Reply-To: <20181120075153.41F8183C62@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Tue, 20 Nov 2018 08:54:35 +0100")
+References: <20181120075153.41F8183C62@busybox.osuosl.org>
+Message-ID: <87d0r0p10t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-On Fri, 16 Nov 2018 20:21:47 -0200, Ricardo Martincoski wrote:
-> Since commit "2927f412be support/testing: standardize defconfig
-> fragments style" all other test cases use the same style for defconfig
-> fragments:
->  - start after a backslash;
->  - be declared as a multi-line string literal;
->  - be indented one level more than the variable that contains it.
-> 
-> Do the same here for consistency.
-> 
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-> ---
->  support/testing/tests/package/test_rust.py | 78 +++++++++++-----------
->  1 file changed, 39 insertions(+), 39 deletions(-)
+ > commit: https://git.buildroot.net/buildroot/commit/?id=bac251bee158ce390547a55eadd6df3aaebda37d
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Applied to next, thanks.
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > ---
+ >  configs/olimex_a20_olinuxino_lime2_defconfig | 8 ++++----
+ >  configs/olimex_a20_olinuxino_lime_defconfig  | 8 ++++----
+ >  2 files changed, 8 insertions(+), 8 deletions(-)
 
-Thomas
+ > diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
+ > index 716995aa7a..d846f4fedd 100644
+ > --- a/configs/olimex_a20_olinuxino_lime2_defconfig
+ > +++ b/configs/olimex_a20_olinuxino_lime2_defconfig
+ > @@ -3,8 +3,8 @@ BR2_arm=y
+ >  BR2_cortex_a7=y
+ >  BR2_ARM_EABIHF=y
+ 
+ > -# Linux headers same as kernel, a 4.18 series
+ > -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
+ > +# Linux headers same as kernel, a 4.19 series
+ > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+
+Notice: We haven't merged 4.19 support yet, so this doesn't actually
+work.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
