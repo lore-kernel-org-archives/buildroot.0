@@ -1,32 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Nov 2018 08:21:31 +0100
-Subject: [Buildroot] [PATCH] package/sconeserver: Gzipstream requires
- zlib
-In-Reply-To: <1542681775-28857-1-git-send-email-matthew.weber@rockwellcollins.com>
- (Matt Weber's message of "Mon, 19 Nov 2018 20:42:55 -0600")
-References: <1542681775-28857-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <87h8gcp62s.fsf@dell.be.48ers.dk>
+Date: Tue, 20 Nov 2018 08:17:34 +0100
+Subject: [Buildroot] [git commit] glibc: ensure BR2_MAKE is also used for
+ subdirs
+Message-ID: <20181120071904.90B3483C3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=fb80f71d9472f9067cc1560eb265355c06e82f60
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > checking pkg-config is at least version 0.9.0... yes
- > checking for dlopen in -ldl... (cached) yes
- > checking for deflate in -lz... no
- > configure: error: library 'libz' is required
+The configure script contains logic to figure out what make program to
+invoke for subdirectories (trying gnumake, gmake, make).  Explicitly force
+it to use our BR2_MAKE to ensure the right make version is used.
 
- > Resolves
- > http://autobuild.buildroot.net/results/b5e2b8635b37e6f2803a6031b154cf67685a4221
+As GLIBC_CONF_ENV is only initialized below, move this section below it.
 
- > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/glibc/glibc.mk | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-This has already been fixed by:
-
-https://git.buildroot.net/buildroot/commit/?id=a18eb7f785e0a92ac6245591d3dd738571533d26
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 708c22f723..762c040688 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -31,10 +31,6 @@ GLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
+ GLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-bison host-gawk \
+ 	$(BR2_MAKE_HOST_DEPENDENCY)
+ 
+-# glibc requires make >= 4.0 since 2.28 release.
+-# https://www.sourceware.org/ml/libc-alpha/2018-08/msg00003.html
+-GLIBC_MAKE = $(BR2_MAKE)
+-
+ GLIBC_SUBDIR = build
+ 
+ GLIBC_INSTALL_STAGING = YES
+@@ -82,6 +78,11 @@ ifeq ($(BR2_riscv),y)
+ GLIBC_CONF_ENV += libc_cv_slibdir=/lib64 libc_cv_rtlddir=/lib
+ endif
+ 
++# glibc requires make >= 4.0 since 2.28 release.
++# https://www.sourceware.org/ml/libc-alpha/2018-08/msg00003.html
++GLIBC_MAKE = $(BR2_MAKE)
++GLIBC_CONF_ENV += ac_cv_prog_MAKE="$(BR2_MAKE)"
++
+ # Even though we use the autotools-package infrastructure, we have to
+ # override the default configure commands for several reasons:
+ #
