@@ -1,118 +1,63 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 20 Nov 2018 15:30:09 +0200
-Subject: [Buildroot] [PATCH next 4/5]
- configs/solidrun_macchiatobin_mainline: bump kernel and U-Boot
+Date: Tue, 20 Nov 2018 15:30:07 +0200
+Subject: [Buildroot] [PATCH next 2/5] linux-headers: bump to kernel version
+ 4.19.2
 In-Reply-To: <fb495883400fc9180b163358cf5c17d2f2c2e7d5.1542720610.git.baruch@tkos.co.il>
 References: <fb495883400fc9180b163358cf5c17d2f2c2e7d5.1542720610.git.baruch@tkos.co.il>
-Message-ID: <2ef4e9d2b5fff465da879d99e412437ea7109b66.1542720610.git.baruch@tkos.co.il>
+Message-ID: <92a6e6b55b9deb073d6aae08490a5820964eb69b.1542720610.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump U-Boot to version 2018.11. This version supports autodetection of
-SD/eMMC boot source, so we can now enable environment load from SD card.
-Add a U-Boot kconfig fragment that sets SD/eMMC as environment load/save
-device. This avoids stale environment values from the SPI flash. That in
-turn, allows to use the more convenient distro boot which is enabled in
-the default environment.
-
-Bump kernel to version 4.19.2. This version enables
-CONFIG_PHY_MVEBU_CP110_COMPHY in the arm64 defconfig, so remove it from
-the kernel kconfig fragment. Enable support for SFP modules detection
-and configuration. Leave the PHY drivers for now to keep them built into
-the kernel. The kernel defconfig builds these drivers as modules. But
-that does not work as expected in the default configuration.
-
-Cc: Sergey Matyukevich <geomatsi@gmail.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- board/solidrun/macchiatobin/extlinux.conf          |  4 ++++
- board/solidrun/macchiatobin/linux-extras.config    |  2 +-
- board/solidrun/macchiatobin/post-build-mainline.sh |  5 +++++
- board/solidrun/macchiatobin/uboot-fragment.config  |  2 ++
- configs/solidrun_macchiatobin_mainline_defconfig   | 13 ++++++++-----
- 5 files changed, 20 insertions(+), 6 deletions(-)
- create mode 100644 board/solidrun/macchiatobin/extlinux.conf
- create mode 100755 board/solidrun/macchiatobin/post-build-mainline.sh
- create mode 100644 board/solidrun/macchiatobin/uboot-fragment.config
+ package/linux-headers/Config.in.host | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/board/solidrun/macchiatobin/extlinux.conf b/board/solidrun/macchiatobin/extlinux.conf
-new file mode 100644
-index 000000000000..1008af1af078
---- /dev/null
-+++ b/board/solidrun/macchiatobin/extlinux.conf
-@@ -0,0 +1,4 @@
-+label Macchiatobin Linux
-+  kernel /boot/Image
-+  devicetree /boot/armada-8040-mcbin.dtb
-+  append console=ttyS0,115200n8 root=/dev/mmcblk1p1 rootwait
-diff --git a/board/solidrun/macchiatobin/linux-extras.config b/board/solidrun/macchiatobin/linux-extras.config
-index 11267d2f801e..29fd63062664 100644
---- a/board/solidrun/macchiatobin/linux-extras.config
-+++ b/board/solidrun/macchiatobin/linux-extras.config
-@@ -1,3 +1,3 @@
- CONFIG_MARVELL_PHY=y
- CONFIG_MARVELL_10G_PHY=y
--CONFIG_PHY_MVEBU_CP110_COMPHY=y
-+CONFIG_SFP=y
-diff --git a/board/solidrun/macchiatobin/post-build-mainline.sh b/board/solidrun/macchiatobin/post-build-mainline.sh
-new file mode 100755
-index 000000000000..1f5ff6a6113d
---- /dev/null
-+++ b/board/solidrun/macchiatobin/post-build-mainline.sh
-@@ -0,0 +1,5 @@
-+#!/bin/sh
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index cdf639ab3a8e..7b4babe96dbd 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
+ choice
+ 	prompt "Kernel Headers"
+ 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
+-	default BR2_KERNEL_HEADERS_4_18
++	default BR2_KERNEL_HEADERS_4_19
+ 	help
+ 	  Select the kernel version to get headers from.
+ 
+@@ -60,6 +60,10 @@ config BR2_KERNEL_HEADERS_4_18
+ 	bool "Linux 4.18.x kernel headers"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
+ 
++config BR2_KERNEL_HEADERS_4_19
++	bool "Linux 4.19.x kernel headers"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
 +
-+BOARD_DIR="$(dirname $0)"
+ config BR2_KERNEL_HEADERS_VERSION
+ 	bool "Manually specified Linux version"
+ 	help
+@@ -125,6 +129,10 @@ choice
+ 	  This is used to hide/show some packages that have strict
+ 	  requirements on the version of kernel headers.
+ 
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19
++	bool "4.19.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
 +
-+install -m 0644 -D $BOARD_DIR/extlinux.conf $TARGET_DIR/boot/extlinux/extlinux.conf
-diff --git a/board/solidrun/macchiatobin/uboot-fragment.config b/board/solidrun/macchiatobin/uboot-fragment.config
-new file mode 100644
-index 000000000000..717a0942477a
---- /dev/null
-+++ b/board/solidrun/macchiatobin/uboot-fragment.config
-@@ -0,0 +1,2 @@
-+CONFIG_ENV_IS_IN_MMC=y
-+# CONFIG_ENV_IS_IN_SPI_FLASH is not set
-diff --git a/configs/solidrun_macchiatobin_mainline_defconfig b/configs/solidrun_macchiatobin_mainline_defconfig
-index d303b2f75ec8..8e5fbfa4e879 100644
---- a/configs/solidrun_macchiatobin_mainline_defconfig
-+++ b/configs/solidrun_macchiatobin_mainline_defconfig
-@@ -1,5 +1,5 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- BR2_TARGET_GENERIC_HOSTNAME="mcbin"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for Marvell MacchiatoBin"
- 
-@@ -19,14 +19,17 @@ BR2_TARGET_MV_DDR_MARVELL=y
- 
- # U-Boot
- BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="mvebu_mcbin-88f8040"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.09"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.11"
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_USE_DEFCONFIG=y
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mvebu_mcbin-88f8040"
-+BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/solidrun/macchiatobin/uboot-fragment.config"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.2"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-8040-mcbin"
-@@ -41,4 +44,4 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/solidrun/macchiatobin/genimage.cfg"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/solidrun/macchiatobin/post-build.sh"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/solidrun/macchiatobin/post-build-mainline.sh"
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18
+ 	bool "4.18.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
+@@ -295,6 +303,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.14.76"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
+ 	default "4.18.14"	if BR2_KERNEL_HEADERS_4_18
++	default "4.19.2"	if BR2_KERNEL_HEADERS_4_19
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 -- 
 2.19.1
