@@ -1,66 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 23 Nov 2018 22:05:46 +0100
-Subject: [Buildroot] [git commit] support/testing: add python-subprocess32
- test
-Message-ID: <20181202071558.2769582855@busybox.osuosl.org>
+Date: Tue, 20 Nov 2018 08:54:35 +0100
+Subject: [Buildroot] [git commit] configs/olimex_a20_olinuxino_lime*: bump
+ Linux/U-Boot versions
+Message-ID: <20181202071556.BB1C98843B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac010beec5c904d27495fced006ac37f6e95c71b
+commit: https://git.buildroot.net/buildroot/commit/?id=bac251bee158ce390547a55eadd6df3aaebda37d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a simple test case to check the basic usage by calling 'ls' and
-checking the output.
-
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .gitlab-ci.yml                                              |  1 +
- support/testing/tests/package/sample_python_subprocess32.py |  6 ++++++
- support/testing/tests/package/test_python_subprocess32.py   | 11 +++++++++++
- 3 files changed, 18 insertions(+)
+ configs/olimex_a20_olinuxino_lime2_defconfig | 8 ++++----
+ configs/olimex_a20_olinuxino_lime_defconfig  | 8 ++++----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 4166412df3..743f4edc06 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -347,6 +347,7 @@ tests.package.test_python_pyyaml.TestPythonPy2Pyyaml: *runtime_test
- tests.package.test_python_pyyaml.TestPythonPy3Pyyaml: *runtime_test
- tests.package.test_python_service_identity.TestPythonPy2ServiceIdentity: *runtime_test
- tests.package.test_python_service_identity.TestPythonPy3ServiceIdentity: *runtime_test
-+tests.package.test_python_subprocess32.TestPythonPy2Subprocess32: *runtime_test
- tests.package.test_python_twisted.TestPythonPy2Twisted: *runtime_test
- tests.package.test_python_twisted.TestPythonPy3Twisted: *runtime_test
- tests.package.test_python_txaio.TestPythonPy2Txaio: *runtime_test
-diff --git a/support/testing/tests/package/sample_python_subprocess32.py b/support/testing/tests/package/sample_python_subprocess32.py
-new file mode 100644
-index 0000000000..8579745cc8
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_subprocess32.py
-@@ -0,0 +1,6 @@
-+import subprocess32
-+
-+output = subprocess32.check_output(["ls", "-l", "/dev/null"])
-+print(output)
-+assert("/dev/null" in output)
-+assert("No such" not in output)
-diff --git a/support/testing/tests/package/test_python_subprocess32.py b/support/testing/tests/package/test_python_subprocess32.py
-new file mode 100644
-index 0000000000..d2878046d1
---- /dev/null
-+++ b/support/testing/tests/package/test_python_subprocess32.py
-@@ -0,0 +1,11 @@
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonPy2Subprocess32(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON=y
-+        BR2_PACKAGE_PYTHON_SUBPROCESS32=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_subprocess32.py"]
+diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
+index 716995aa7a..d846f4fedd 100644
+--- a/configs/olimex_a20_olinuxino_lime2_defconfig
++++ b/configs/olimex_a20_olinuxino_lime2_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_EABIHF=y
+ 
+-# Linux headers same as kernel, a 4.18 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
++# Linux headers same as kernel, a 4.19 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ 
+ # System configuration
+ BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
+@@ -18,7 +18,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.7"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.2"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -34,7 +34,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.09"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.11"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index ed8ea86233..e60bf0882d 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_EABIHF=y
+ 
+-# Linux headers same as kernel, a 4.18 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
++# Linux headers same as kernel, a 4.19 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ 
+ # System configuration
+ BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
+@@ -18,7 +18,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.7"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.2"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -34,7 +34,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.09"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.11"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
