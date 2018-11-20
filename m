@@ -1,92 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Nov 2018 17:38:53 +0100
-Subject: [Buildroot] [PATCH next v2 2/2] package/apache: add patch to fix
- per-package folder build
-In-Reply-To: <20181120163853.5040-1-thomas.petazzoni@bootlin.com>
-References: <20181120163853.5040-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181120163853.5040-3-thomas.petazzoni@bootlin.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 20 Nov 2018 18:57:40 +0200
+Subject: [Buildroot] [PATCH next 4/5]
+ configs/solidrun_macchiatobin_mainline: bump kernel and U-Boot
+In-Reply-To: <20181120163104.wxmaqro2yukllssf@bars>
+References: <fb495883400fc9180b163358cf5c17d2f2c2e7d5.1542720610.git.baruch@tkos.co.il>
+ <2ef4e9d2b5fff465da879d99e412437ea7109b66.1542720610.git.baruch@tkos.co.il>
+ <20181120163104.wxmaqro2yukllssf@bars>
+Message-ID: <87h8gbfzzv.fsf@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When APR_INCLUDEDIR and APU_INCLUDEDIR point to the same directory,
-Apache builds properly. However, with per-package folder support, they
-point to different directories, and APU_INCLUDEDIR contains both the
-APR headers and the APU headers.
+Hi Sergey,
 
-Due to this, the Apache Makefile logic to generate its exports.c file
-leads to duplicate definitions, because the APR headers are considered
-twice: once from APR_INCLUDEDIR, once from APU_INCLUDEDIR.
+Sergey Matyukevich writes:
+>> Bump U-Boot to version 2018.11. This version supports autodetection of
+>> SD/eMMC boot source, so we can now enable environment load from SD card.
+>> Add a U-Boot kconfig fragment that sets SD/eMMC as environment load/save
+>> device. This avoids stale environment values from the SPI flash. That in
+>> turn, allows to use the more convenient distro boot which is enabled in
+>> the default environment.
+>> 
+>> Bump kernel to version 4.19.2. This version enables
+>> CONFIG_PHY_MVEBU_CP110_COMPHY in the arm64 defconfig, so remove it from
+>> the kernel kconfig fragment. Enable support for SFP modules detection
+>> and configuration. Leave the PHY drivers for now to keep them built into
+>> the kernel. The kernel defconfig builds these drivers as modules. But
+>> that does not work as expected in the default configuration.
+>> 
+>> Cc: Sergey Matyukevich <geomatsi@gmail.com>
+>> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+>> ---
+>>  board/solidrun/macchiatobin/extlinux.conf          |  4 ++++
+>>  board/solidrun/macchiatobin/linux-extras.config    |  2 +-
+>>  board/solidrun/macchiatobin/post-build-mainline.sh |  5 +++++
+>>  board/solidrun/macchiatobin/uboot-fragment.config  |  2 ++
+>>  configs/solidrun_macchiatobin_mainline_defconfig   | 13 ++++++++-----
+>>  5 files changed, 20 insertions(+), 6 deletions(-)
+>>  create mode 100644 board/solidrun/macchiatobin/extlinux.conf
+>>  create mode 100755 board/solidrun/macchiatobin/post-build-mainline.sh
+>>  create mode 100644 board/solidrun/macchiatobin/uboot-fragment.config
+>  
+> Thanks! Verified the changes on MacchiatoBin v2 board:
+>
+> Tested-by: Sergey Matyukevich <geomatsi@gmail.com>
 
-We fix this by introducing a patch to the Apache build system.
+Thanks.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
-Changes since v1:
- - As suggested by Yann E. morin, the patch has been submitted
-   upstream, upstream information have been added to the patch itself.
- - Reviewed-by from Yann E. Morin added.
----
- ...in-handle-separate-APR_INCLUDE_DIR-A.patch | 48 +++++++++++++++++++
- 1 file changed, 48 insertions(+)
- create mode 100644 package/apache/0003-server-Makefile.in-handle-separate-APR_INCLUDE_DIR-A.patch
+> By the way, it looks like mainline U-Boot v2018.11 still detects only 2GiB
+> of DRAM on my boards. Meanwhile vendor U-Boot provided by alternative
+> config solidrun_macchiatobin_marvell_defconfig detects 4GiB.
 
-diff --git a/package/apache/0003-server-Makefile.in-handle-separate-APR_INCLUDE_DIR-A.patch b/package/apache/0003-server-Makefile.in-handle-separate-APR_INCLUDE_DIR-A.patch
-new file mode 100644
-index 0000000000..b4ad128677
---- /dev/null
-+++ b/package/apache/0003-server-Makefile.in-handle-separate-APR_INCLUDE_DIR-A.patch
-@@ -0,0 +1,48 @@
-+From 00281390e82db18fe0de4033be4045f9391a8ee5 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Thu, 15 Nov 2018 14:04:29 +0100
-+Subject: [PATCH] server/Makefile.in: handle separate
-+ APR_INCLUDE_DIR/APU_INCLUDE_DIR
-+
-+If APR_INCLUDEDIR and APU_INCLUDEDIR point to different directories,
-+but for example APU_INCLUDEDIR contains both the apr headers and apu
-+headers, the "export_files" file will contain duplicate header files,
-+causing the exports.c file to contain duplicate definitions, making
-+the build fail.
-+
-+This commit fixes that by making sure we only use the apr headers from
-+APR_INCLUDEDIR and the apu headers from the APU_INCLUDEDIR.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Upstream: https://bz.apache.org/bugzilla/show_bug.cgi?id=62930
-+---
-+ server/Makefile.in | 6 ++----
-+ 1 file changed, 2 insertions(+), 4 deletions(-)
-+
-+diff --git a/server/Makefile.in b/server/Makefile.in
-+index 1fa334467d..2258f0bdf2 100644
-+--- a/server/Makefile.in
-++++ b/server/Makefile.in
-+@@ -34,7 +34,6 @@ test_char.h: gen_test_char
-+ util.lo: test_char.h
-+ 
-+ EXPORT_DIRS = $(top_srcdir)/include $(top_srcdir)/os/$(OS_DIR)
-+-EXPORT_DIRS_APR = $(APR_INCLUDEDIR) $(APU_INCLUDEDIR)
-+ 
-+ # If export_files is a dependency here, but we remove it during this stage,
-+ # when exports.c is generated, make will not detect that export_files is no
-+@@ -60,9 +59,8 @@ export_files:
-+ 	      ls $$dir/*.h ; \
-+ 	  done; \
-+ 	  echo "$(top_srcdir)/server/mpm_fdqueue.h"; \
-+-	  for dir in $(EXPORT_DIRS_APR); do \
-+-	      ls $$dir/ap[ru].h $$dir/ap[ru]_*.h 2>/dev/null; \
-+-	  done; \
-++	  ls $(APR_INCLUDE_DIR)/{apr.h,apr_*.h} 2>/dev/null; \
-++	  ls $(APU_INCLUDE_DIR)/{apu.h,apu_*.h} 2>/dev/null; \
-+ 	) | sed -e s,//,/,g | sort -u > $@
-+ 
-+ exports.c: export_files
-+-- 
-+2.19.1
-+
+Support for RAM size detection on Armada 8K platforms is pending:
+
+  http://git.denx.de/?p=u-boot/u-boot-marvell.git;a=commitdiff;h=2b4d964718c0e78a24f3a5e051e7dd9bc0e547c2
+
+The next U-Boot release should have this support.
+
+baruch
+
 -- 
-2.19.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
