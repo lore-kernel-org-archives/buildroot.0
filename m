@@ -1,52 +1,101 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 20 Nov 2018 21:39:50 +0100
-Subject: [Buildroot] [PATCH/next 1/1] weston: drop libunwind optional
- dependency
-In-Reply-To: <20181120201925.21004-1-fontaine.fabrice@gmail.com>
-References: <20181120201925.21004-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181120203950.GJ2601@scaer>
+Date: Tue, 20 Nov 2018 21:53:57 +0100
+Subject: [Buildroot] [PATCH next v5 6/9] package/pkg-generic: adjust
+ config scripts tweaks for per-package folders
+In-Reply-To: <20181120163522.4281-7-thomas.petazzoni@bootlin.com>
+References: <20181120163522.4281-1-thomas.petazzoni@bootlin.com>
+ <20181120163522.4281-7-thomas.petazzoni@bootlin.com>
+Message-ID: <20181120205357.GK2601@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Thomas, All,
 
-On 2018-11-20 21:19 +0100, Fabrice Fontaine spake thusly:
-> libunwind was dropped since 3.0.91, see:
-> https://github.com/wayland-project/weston/commit/bb707dc0fe331c9af112a0552b7aa6fde755dd83
+On 2018-11-20 17:35 +0100, Thomas Petazzoni spake thusly:
+> This commit adjusts the logic in pkg-generic.mk that tweaks the
+> *-config shell scripts installed by various libraries to make it
+> compatible with per-package folders.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> This requires two fixes:
+> 
+>  - replacing $(STAGING_DIR) with a relative path from the config script
+>    to the staging directory, rather than using an absolute path of the
+>    staging directory.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Note [0], see below...
+
+[--SNIP--]
+>  - Some *-config scripts, such as the apr-1-config script, contain
+>    references to host tools:
+> 
+>    CC=".../output/per-package/apr/hosr/bin/arm-linux-gcc"
+>    CCP=".../output/per-package/apr/hosr/bin/arm-linux-cpp"
+> 
+>    We also want to replace those with proper relative paths. To
+
+Note [1], see below...
+
+>    achieve this, we need to also replace $(HOST_DIR) with a relative
+>    path. Since $(STAGING_DIR) is inside $(HOST_DIR), the first
+>    replacement of $(STAGING_DIR) by @STAGING_DIR@ is no longer needed:
+>    replacing $(HOST_DIR) by @HOST_DIR@ is sufficient. We still need to
+>    replace @STAGING_DIR@ by the proper path though, as we introduce
+>    @STAGING_DIR@ references in exec_prefix and prefix variables, as
+>    well as -I and -L flags.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  package/pkg-generic.mk | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 309fd8cd48..9b4db845b6 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -275,12 +275,13 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
+>  	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
+>  	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
+>  		$(call MESSAGE,"Fixing package configuration files") ;\
+> -			$(SED)  "s,$(BASE_DIR), at BASE_DIR@,g" \
+> -				-e "s,$(STAGING_DIR), at STAGING_DIR@,g" \
+> +			$(SED)  "s,$(HOST_DIR), at HOST_DIR@,g" \
+> +				-e "s,$(BASE_DIR), at BASE_DIR@,g" \
+
+Previously, BASE_DIR was the very first thing replaced, but now it no
+longer is.
+
+I'm not sure if I follow it all, but is the reason for that inversion
+hidden behhinde notes [0] and [1], being the need to create relative
+symlinks?
+
+As far as I understand, if BASE_DIR is kept as the first replacement,
+then we lose HOST_DIR as it (usually) is a subdir of BASE_DIR, so we end
+up with just @BASE_DIR@/host and thus can't easily replace it with
+relative paths anymore.
+
+Right?
+
+If so, then:
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/weston/weston.mk | 6 ------
->  1 file changed, 6 deletions(-)
-> 
-> diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-> index efe12bc01e..66f5d5d792 100644
-> --- a/package/weston/weston.mk
-> +++ b/package/weston/weston.mk
-> @@ -60,12 +60,6 @@ WESTON_CONF_OPTS += \
->  	--disable-simple-egl-clients
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
-> -WESTON_DEPENDENCIES += libunwind
-> -else
-> -WESTON_CONF_OPTS += --disable-libunwind
-> -endif
-> -
->  ifeq ($(BR2_PACKAGE_WESTON_RDP),y)
->  WESTON_DEPENDENCIES += freerdp
->  WESTON_CONF_OPTS += --enable-rdp-compositor
+>  				-e "s,^\(exec_\)\?prefix=.*,\1prefix=@STAGING_DIR@/usr,g" \
+>  				-e "s,-I/usr/,-I at STAGING_DIR@/usr/,g" \
+>  				-e "s,-L/usr/,-L at STAGING_DIR@/usr/,g" \
+> -				-e "s, at STAGING_DIR@,$(STAGING_DIR),g" \
+> +				-e 's, at STAGING_DIR@,$$(dirname $$0)/../..,g' \
+> +				-e 's, at HOST_DIR@,$$(dirname $$0)/../../../..,g' \
+>  				-e "s, at BASE_DIR@,$(BASE_DIR),g" \
+>  				$(addprefix $(STAGING_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ;\
+>  	fi
 > -- 
-> 2.14.1
+> 2.19.1
 > 
 
 -- 
