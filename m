@@ -1,67 +1,136 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 20 Nov 2018 18:57:40 +0200
-Subject: [Buildroot] [PATCH next 4/5]
- configs/solidrun_macchiatobin_mainline: bump kernel and U-Boot
-In-Reply-To: <20181120163104.wxmaqro2yukllssf@bars>
-References: <fb495883400fc9180b163358cf5c17d2f2c2e7d5.1542720610.git.baruch@tkos.co.il>
- <2ef4e9d2b5fff465da879d99e412437ea7109b66.1542720610.git.baruch@tkos.co.il>
- <20181120163104.wxmaqro2yukllssf@bars>
-Message-ID: <87h8gbfzzv.fsf@tkos.co.il>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Tue, 20 Nov 2018 18:07:32 +0100
+Subject: [Buildroot] [PATCH 1/1] python-aiohttp: new package
+In-Reply-To: <CADvTj4pYDMO149H3w57TaS1YujPqiS8b27k64MOxCKo-LQBq7Q@mail.gmail.com>
+References: <1542657158-9559-1-git-send-email-james.hilliard1@gmail.com>
+ <CAGm1_kuNHBwyt78tX6sUkSWwW3Vu=0vW5nJHQtjNRw4DKwRD-A@mail.gmail.com>
+ <CADvTj4pYDMO149H3w57TaS1YujPqiS8b27k64MOxCKo-LQBq7Q@mail.gmail.com>
+Message-ID: <CAGm1_kt9wawquuH=YNLG=KaGsFqmeN3gSer2Vdd2Cf3dzaKPTg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sergey,
-
-Sergey Matyukevich writes:
->> Bump U-Boot to version 2018.11. This version supports autodetection of
->> SD/eMMC boot source, so we can now enable environment load from SD card.
->> Add a U-Boot kconfig fragment that sets SD/eMMC as environment load/save
->> device. This avoids stale environment values from the SPI flash. That in
->> turn, allows to use the more convenient distro boot which is enabled in
->> the default environment.
->> 
->> Bump kernel to version 4.19.2. This version enables
->> CONFIG_PHY_MVEBU_CP110_COMPHY in the arm64 defconfig, so remove it from
->> the kernel kconfig fragment. Enable support for SFP modules detection
->> and configuration. Leave the PHY drivers for now to keep them built into
->> the kernel. The kernel defconfig builds these drivers as modules. But
->> that does not work as expected in the default configuration.
->> 
->> Cc: Sergey Matyukevich <geomatsi@gmail.com>
->> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
->> ---
->>  board/solidrun/macchiatobin/extlinux.conf          |  4 ++++
->>  board/solidrun/macchiatobin/linux-extras.config    |  2 +-
->>  board/solidrun/macchiatobin/post-build-mainline.sh |  5 +++++
->>  board/solidrun/macchiatobin/uboot-fragment.config  |  2 ++
->>  configs/solidrun_macchiatobin_mainline_defconfig   | 13 ++++++++-----
->>  5 files changed, 20 insertions(+), 6 deletions(-)
->>  create mode 100644 board/solidrun/macchiatobin/extlinux.conf
->>  create mode 100755 board/solidrun/macchiatobin/post-build-mainline.sh
->>  create mode 100644 board/solidrun/macchiatobin/uboot-fragment.config
->  
-> Thanks! Verified the changes on MacchiatoBin v2 board:
+On Tue, Nov 20, 2018 at 5:12 PM James Hilliard
+<james.hilliard1@gmail.com> wrote:
 >
-> Tested-by: Sergey Matyukevich <geomatsi@gmail.com>
+> chardet is not used if cchardet is present, see here
+> https://github.com/aio-libs/aiohttp/blob/76268e31630bb8615999ec40984706745f7f82d1/aiohttp/client_reqrep.py#L40-L43
+
+OK. I see now.
+
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 Thanks.
 
-> By the way, it looks like mainline U-Boot v2018.11 still detects only 2GiB
-> of DRAM on my boards. Meanwhile vendor U-Boot provided by alternative
-> config solidrun_macchiatobin_marvell_defconfig detects 4GiB.
+Yegor
 
-Support for RAM size detection on Armada 8K platforms is pending:
-
-  http://git.denx.de/?p=u-boot/u-boot-marvell.git;a=commitdiff;h=2b4d964718c0e78a24f3a5e051e7dd9bc0e547c2
-
-The next U-Boot release should have this support.
-
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+> On Tue, Nov 20, 2018 at 12:46 AM Yegor Yefremov
+> <yegorslists@googlemail.com> wrote:
+> >
+> > Hi James,
+> > On Mon, Nov 19, 2018 at 8:53 PM <james.hilliard1@gmail.com> wrote:
+> > >
+> > > From: James Hilliard <james.hilliard1@gmail.com>
+> > >
+> > > Async http client/server framework (asyncio).
+> > >
+> > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > > ---
+> > >  DEVELOPERS                                 |  1 +
+> > >  package/Config.in                          |  1 +
+> > >  package/python-aiohttp/Config.in           | 14 ++++++++++++++
+> > >  package/python-aiohttp/python-aiohttp.hash |  5 +++++
+> > >  package/python-aiohttp/python-aiohttp.mk   | 14 ++++++++++++++
+> > >  5 files changed, 35 insertions(+)
+> > >  create mode 100644 package/python-aiohttp/Config.in
+> > >  create mode 100644 package/python-aiohttp/python-aiohttp.hash
+> > >  create mode 100644 package/python-aiohttp/python-aiohttp.mk
+> > >
+> > > diff --git a/DEVELOPERS b/DEVELOPERS
+> > > index f4d98d9..cfc076b 100644
+> > > --- a/DEVELOPERS
+> > > +++ b/DEVELOPERS
+> > > @@ -985,6 +985,7 @@ F:  configs/pine64_sopine_defconfig
+> > >
+> > >  N:     James Hilliard <james.hilliard1@gmail.com>
+> > >  F:     package/python-aiodns/
+> > > +F:     package/python-aiohttp/
+> > >  F:     package/python-async-timeout/
+> > >  F:     package/python-cchardet/
+> > >  F:     package/python-multidict/
+> > > diff --git a/package/Config.in b/package/Config.in
+> > > index 5a5d840..776691b 100644
+> > > --- a/package/Config.in
+> > > +++ b/package/Config.in
+> > > @@ -795,6 +795,7 @@ if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+> > >  menu "External python modules"
+> > >         source "package/python-aiocoap/Config.in"
+> > >         source "package/python-aiodns/Config.in"
+> > > +       source "package/python-aiohttp/Config.in"
+> > >         source "package/python-alsaaudio/Config.in"
+> > >         source "package/python-argh/Config.in"
+> > >         source "package/python-arrow/Config.in"
+> > > diff --git a/package/python-aiohttp/Config.in b/package/python-aiohttp/Config.in
+> > > new file mode 100644
+> > > index 0000000..81862c9
+> > > --- /dev/null
+> > > +++ b/package/python-aiohttp/Config.in
+> > > @@ -0,0 +1,14 @@
+> > > +config BR2_PACKAGE_PYTHON_AIOHTTP
+> > > +       bool "python-aiohttp"
+> > > +       depends on BR2_PACKAGE_PYTHON3
+> > > +       select BR2_PACKAGE_PYTHON_ATTRS # runtime
+> > > +       select BR2_PACKAGE_PYTHON_CCHARDET if BR2_INSTALL_LIBSTDCPP # runtime
+> > > +       select BR2_PACKAGE_PYTHON_CHARDET if !BR2_INSTALL_LIBSTDCPP # runtime
+> >
+> > According to [1] chardet is required anyway. So should
+> > BR2_INSTALL_LIBSTDCPP be a global dependency for the package?
+> >
+> > [1] https://github.com/aio-libs/aiohttp/blob/master/setup.py#L88
+> >
+> > Yegor
+> >
+> > > +       select BR2_PACKAGE_PYTHON_MULTIDICT # runtime
+> > > +       select BR2_PACKAGE_PYTHON_ASYNC_TIMEOUT # runtime
+> > > +       select BR2_PACKAGE_PYTHON_YARL # runtime
+> > > +       select BR2_PACKAGE_PYTHON_AIODNS # runtime
+> > > +       help
+> > > +         Async http client/server framework (asyncio).
+> > > +
+> > > +         https://github.com/aio-libs/aiohttp
+> > > diff --git a/package/python-aiohttp/python-aiohttp.hash b/package/python-aiohttp/python-aiohttp.hash
+> > > new file mode 100644
+> > > index 0000000..8f158af
+> > > --- /dev/null
+> > > +++ b/package/python-aiohttp/python-aiohttp.hash
+> > > @@ -0,0 +1,5 @@
+> > > +# md5, sha256 from https://pypi.org/pypi/aiohttp/json
+> > > +md5    80a6e0c6c452d511d1d37755d6f0995a  aiohttp-3.4.4.tar.gz
+> > > +sha256 51afec6ffa50a9da4cdef188971a802beb1ca8e8edb40fa429e5e529db3475fa  aiohttp-3.4.4.tar.gz
+> > > +# Locally computed sha256 checksums
+> > > +sha256 bb0c0eeae85492ebfa03442b7784d4c42a623e15346df54ae85f55df972a82af  LICENSE.txt
+> > > diff --git a/package/python-aiohttp/python-aiohttp.mk b/package/python-aiohttp/python-aiohttp.mk
+> > > new file mode 100644
+> > > index 0000000..df8bdfb
+> > > --- /dev/null
+> > > +++ b/package/python-aiohttp/python-aiohttp.mk
+> > > @@ -0,0 +1,14 @@
+> > > +################################################################################
+> > > +#
+> > > +# python-aiohttp
+> > > +#
+> > > +################################################################################
+> > > +
+> > > +PYTHON_AIOHTTP_VERSION = 3.4.4
+> > > +PYTHON_AIOHTTP_SOURCE = aiohttp-$(PYTHON_AIOHTTP_VERSION).tar.gz
+> > > +PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/70/27/6098b4b60a3302a97f8ec97eb85d42f55a2fa904da4a369235a8e3b84352
+> > > +PYTHON_AIOHTTP_SETUP_TYPE = setuptools
+> > > +PYTHON_AIOHTTP_LICENSE = Apache-2.0
+> > > +PYTHON_AIOHTTP_LICENSE_FILES = LICENSE.txt
+> > > +
+> > > +$(eval $(python-package))
+> > > --
+> > > 2.7.4
+> > >
