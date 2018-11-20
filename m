@@ -1,100 +1,171 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Nov 2018 17:35:19 +0100
-Subject: [Buildroot] [PATCH next v5 6/9] package/pkg-generic: adjust config
- scripts tweaks for per-package folders
+Date: Tue, 20 Nov 2018 17:35:16 +0100
+Subject: [Buildroot] [PATCH next v5 3/9] Makefile: rework main directory
+ creation logic
 In-Reply-To: <20181120163522.4281-1-thomas.petazzoni@bootlin.com>
 References: <20181120163522.4281-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181120163522.4281-7-thomas.petazzoni@bootlin.com>
+Message-ID: <20181120163522.4281-4-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adjusts the logic in pkg-generic.mk that tweaks the
-*-config shell scripts installed by various libraries to make it
-compatible with per-package folders.
+In the current code, the creation of the main output folders
+(BUILD_DIR, STAGING_DIR, HOST_DIR, TARGET_DIR, etc.) is done by a
+global "dirs" target. While this works fine in the current situation,
+it doesn't work well in a context where per-package host and target
+directories are used.
 
-This requires two fixes:
+For example, with the current code and per-package host directories,
+the output/staging symbolic link ends up being created as a link to
+the per-package package sysroot directory of the first package being
+built, instead of the global sysroot.
 
- - replacing $(STAGING_DIR) with a relative path from the config script
-   to the staging directory, rather than using an absolute path of the
-   staging directory.
+This commit reworks the creation of those directories by having the
+package/pkg-generic.mk code ensure that the build directory, target
+directory, host directory, staging directory and binaries directory
+exist before they are needed.
 
-   Without this, a *-config script provided by package A, but called
-   from package B per-package folder will return paths from package A
-   per-package folder:
+Two new targets, host-finalize and staging-finalize are added in the
+main Makefile to create the compatibility symlinks for host and
+staging directories. They will be extended later with additional logic
+for per-package directories.
 
-   $ ./output/per-package/mcrypt/host/usr/<tuple>/sysroot/usr/bin/libmcrypt-config --libs
-   -L..../output/per-package/libmcrypt/host/usr/<tuple>/sysroot/usr/lib/
-
-   The libmcrypt-config script is installed by the libmcrypt package,
-   and mcrypt is a package that depends on libmcrypt. When we call the
-   libmcrypt-config script from the mcrypt per-package folder, it
-   returns a -L flag that points to the libmcrypt per-package folder.
-
-   One might say: but this is OK, since the sysroot of the libmcrypt
-   per-package folder also contains the libmcrypt library. This is
-   true, but we encounter a more subtle issue: because -L paths are
-   considered before standard paths, ld ends up finding libc.so in the
-   libmcrypt per-package folder. This libc.so file is a linker script
-   that looks like this:
-
-   GROUP ( /lib/libc.so.6 /usr/lib/libc_nonshared.a  AS_NEEDED ( /lib/ld-linux.so.3 ) )
-
-   Normally, thanks to ld sysroot awareness, /lib/libc.so.6 in this
-   script is re-interpreted according to the sysroot. But in this
-   case, the library is *outside* the compiler sysroot. Remember: we
-   are using the compiler/linker from the "mcrypt" per-package folder,
-   but we found "libc.so.6" in the "libmcrypt" per-package folder.
-
-   This causes the linker to really use the /lib/libc.so.6 from the
-   host machine, obvisouly leading to a build failure such as:
-
-   output/per-package/libgcrypt/host/opt/ext-toolchain/bin/../lib/gcc/nios2-linux-gnu/7.3.1/../../../../nios2-linux-gnu/bin/ld: cannot find /lib/libc.so.6
-   output/per-package/libgcrypt/host/opt/ext-toolchain/bin/../lib/gcc/nios2-linux-gnu/7.3.1/../../../../nios2-linux-gnu/bin/ld: cannot find /usr/lib/libc_nonshared.a
-   output/per-package/libgcrypt/host/opt/ext-toolchain/bin/../lib/gcc/nios2-linux-gnu/7.3.1/../../../../nios2-linux-gnu/bin/ld: cannot find /lib/ld-linux-nios2.so.1
-
- - Some *-config scripts, such as the apr-1-config script, contain
-   references to host tools:
-
-   CC=".../output/per-package/apr/hosr/bin/arm-linux-gcc"
-   CCP=".../output/per-package/apr/hosr/bin/arm-linux-cpp"
-
-   We also want to replace those with proper relative paths. To
-   achieve this, we need to also replace $(HOST_DIR) with a relative
-   path. Since $(STAGING_DIR) is inside $(HOST_DIR), the first
-   replacement of $(STAGING_DIR) by @STAGING_DIR@ is no longer needed:
-   replacing $(HOST_DIR) by @HOST_DIR@ is sufficient. We still need to
-   replace @STAGING_DIR@ by the proper path though, as we introduce
-   @STAGING_DIR@ references in exec_prefix and prefix variables, as
-   well as -I and -L flags.
+Thanks to those changes, the global "dirs" target is entirely removed.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pkg-generic.mk | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ Makefile               | 21 +++++++++------------
+ fs/common.mk           |  1 +
+ package/pkg-generic.mk |  7 ++++++-
+ 3 files changed, 16 insertions(+), 13 deletions(-)
 
+diff --git a/Makefile b/Makefile
+index 2819d44124..e675ac26aa 100644
+--- a/Makefile
++++ b/Makefile
+@@ -572,10 +572,6 @@ $(foreach pkg,$(call UPPERCASE,$(PACKAGES)),\
+ 
+ endif
+ 
+-.PHONY: dirs
+-dirs: $(BUILD_DIR) $(STAGING_DIR) $(BASE_TARGET_DIR) \
+-	$(HOST_DIR) $(HOST_DIR_SYMLINK) $(BINARIES_DIR)
+-
+ $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
+ 	$(MAKE1) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" syncconfig
+ 
+@@ -605,11 +601,6 @@ sdk: prepare-sdk $(BR2_TAR_HOST_DEPENDENCY)
+ 		--transform='s#^\.#$(BR2_SDK_PREFIX)#' \
+ 		-C $(HOST_DIR) "."
+ 
+-# Populating the staging with the base directories is handled by the skeleton package
+-$(STAGING_DIR):
+-	@mkdir -p $(STAGING_DIR)
+-	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
+-
+ RSYNC_VCS_EXCLUSIONS = \
+ 	--exclude .svn --exclude .git --exclude .hg --exclude .bzr \
+ 	--exclude CVS
+@@ -710,8 +701,14 @@ $(TARGETS_ROOTFS): target-finalize
+ # Avoid the rootfs name leaking down the dependency chain
+ target-finalize: ROOTFS=
+ 
++host-finalize: $(HOST_DIR_SYMLINK)
++
++.PHONY: staging-finalize
++staging-finalize:
++	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
++
+ .PHONY: target-finalize
+-target-finalize: $(PACKAGES)
++target-finalize: $(PACKAGES) host-finalize
+ 	@$(call MESSAGE,"Finalizing target directory")
+ 	# Check files that are touched by more than one package
+ 	./support/scripts/check-uniq-files -t target $(BUILD_DIR)/packages-file-list.txt
+@@ -782,7 +779,7 @@ endif
+ 	touch $(TARGET_DIR)/usr
+ 
+ .PHONY: target-post-image
+-target-post-image: $(TARGETS_ROOTFS) target-finalize
++target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize
+ 	@rm -f $(ROOTFS_COMMON_TAR)
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
+ 		$(call MESSAGE,"Executing post-image script $(s)"); \
+@@ -811,7 +808,7 @@ legal-info-prepare: $(LEGAL_INFO_DIR)
+ 	@cp $(BR2_CONFIG) $(LEGAL_INFO_DIR)/buildroot.config
+ 
+ .PHONY: legal-info
+-legal-info: dirs legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p)-all-legal-info) \
++legal-info: legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p)-all-legal-info) \
+ 		$(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST)
+ 	@cat support/legal-info/README.header >>$(LEGAL_REPORT)
+ 	@if [ -r $(LEGAL_WARNINGS) ]; then \
+diff --git a/fs/common.mk b/fs/common.mk
+index 2a5a202a89..96658428ba 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -145,6 +145,7 @@ $$(BINARIES_DIR)/rootfs.$(1): ROOTFS=$(2)
+ $$(BINARIES_DIR)/rootfs.$(1): FAKEROOT_SCRIPT=$$(ROOTFS_$(2)_DIR)/fakeroot
+ $$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
+ 	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
++	mkdir -p $$(@D)
+ 	rm -rf $$(ROOTFS_$(2)_DIR)
+ 	mkdir -p $$(ROOTFS_$(2)_DIR)
+ 	echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 309fd8cd48..9b4db845b6 100644
+index f34f46afc8..309fd8cd48 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -275,12 +275,13 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
+@@ -173,6 +173,7 @@ $(BUILD_DIR)/%/.stamp_extracted:
+ $(BUILD_DIR)/%/.stamp_rsynced:
+ 	@$(call step_start,rsync)
+ 	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
++	@mkdir -p $(@D)
+ 	$(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
+ 	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
+ 	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $($(PKG)_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
+@@ -238,6 +239,7 @@ $(BUILD_DIR)/%/.stamp_built::
+ $(BUILD_DIR)/%/.stamp_host_installed:
+ 	@$(call step_start,install-host)
+ 	@$(call MESSAGE,"Installing to host directory")
++	@mkdir -p $(HOST_DIR)
+ 	$(foreach hook,$($(PKG)_PRE_INSTALL_HOOKS),$(call $(hook))$(sep))
+ 	+$($(PKG)_INSTALL_CMDS)
+ 	$(foreach hook,$($(PKG)_POST_INSTALL_HOOKS),$(call $(hook))$(sep))
+@@ -267,6 +269,7 @@ $(BUILD_DIR)/%/.stamp_host_installed:
+ $(BUILD_DIR)/%/.stamp_staging_installed:
+ 	@$(call step_start,install-staging)
+ 	@$(call MESSAGE,"Installing to staging directory")
++	@mkdir -p $(STAGING_DIR)
+ 	$(foreach hook,$($(PKG)_PRE_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
+ 	+$($(PKG)_INSTALL_STAGING_CMDS)
  	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
- 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
- 		$(call MESSAGE,"Fixing package configuration files") ;\
--			$(SED)  "s,$(BASE_DIR), at BASE_DIR@,g" \
--				-e "s,$(STAGING_DIR), at STAGING_DIR@,g" \
-+			$(SED)  "s,$(HOST_DIR), at HOST_DIR@,g" \
-+				-e "s,$(BASE_DIR), at BASE_DIR@,g" \
- 				-e "s,^\(exec_\)\?prefix=.*,\1prefix=@STAGING_DIR@/usr,g" \
- 				-e "s,-I/usr/,-I at STAGING_DIR@/usr/,g" \
- 				-e "s,-L/usr/,-L at STAGING_DIR@/usr/,g" \
--				-e "s, at STAGING_DIR@,$(STAGING_DIR),g" \
-+				-e 's, at STAGING_DIR@,$$(dirname $$0)/../..,g' \
-+				-e 's, at HOST_DIR@,$$(dirname $$0)/../../../..,g' \
- 				-e "s, at BASE_DIR@,$(BASE_DIR),g" \
- 				$(addprefix $(STAGING_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ;\
- 	fi
+@@ -298,6 +301,7 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
+ # Install to images dir
+ $(BUILD_DIR)/%/.stamp_images_installed:
+ 	@$(call step_start,install-image)
++	@mkdir -p $(BINARIES_DIR)
+ 	$(foreach hook,$($(PKG)_PRE_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
+ 	@$(call MESSAGE,"Installing to images directory")
+ 	+$($(PKG)_INSTALL_IMAGES_CMDS)
+@@ -309,6 +313,7 @@ $(BUILD_DIR)/%/.stamp_images_installed:
+ $(BUILD_DIR)/%/.stamp_target_installed:
+ 	@$(call step_start,install-target)
+ 	@$(call MESSAGE,"Installing to target")
++	@mkdir -p $(TARGET_DIR)
+ 	$(foreach hook,$($(PKG)_PRE_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
+ 	+$($(PKG)_INSTALL_TARGET_CMDS)
+ 	$(if $(BR2_INIT_SYSTEMD),\
+@@ -735,7 +740,7 @@ $$($(2)_TARGET_BUILD):	$$($(2)_TARGET_CONFIGURE)
+ $(1)-configure:			$$($(2)_TARGET_CONFIGURE)
+ $$($(2)_TARGET_CONFIGURE):	| $$($(2)_FINAL_DEPENDENCIES)
+ 
+-$$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dirs prepare
++$$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | prepare
+ $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dependencies
+ 
+ ifeq ($$($(2)_OVERRIDE_SRCDIR),)
 -- 
 2.19.1
