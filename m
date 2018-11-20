@@ -1,74 +1,114 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Nov 2018 11:29:00 +0100
-Subject: [Buildroot] [PATCH next v4 6/6] core: implement per-package SDK
- and target
-In-Reply-To: <7f195412-448e-400f-0ba6-d710246c7656@mind.be>
-References: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
- <20181114105557.12599-7-thomas.petazzoni@bootlin.com>
- <de9da9af-71f4-cfe2-f691-5aae17e3ca0a@andin.de>
- <20181116144735.19585727@windsurf>
- <CAAXf6LWM0dcCJSVTSerox320PWKkpPcOXORF2cTaWfHitgRguQ@mail.gmail.com>
- <20181116195741.GV10271@scaer>
- <10c54101-3264-eefb-58d0-4770ef723717@mind.be>
- <20181119114806.4fb9d98b@windsurf.home>
- <20181119194905.GC2601@scaer>
- <7f195412-448e-400f-0ba6-d710246c7656@mind.be>
-Message-ID: <20181120112900.747747c8@windsurf>
+Date: Tue, 20 Nov 2018 11:33:50 +0100
+Subject: [Buildroot] [PATCH next] package/pkg-meson: support per-package
+ folders and per-package cflags
+Message-ID: <20181120103350.5818-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Peter Seiderer <ps.report@gmx.net>
 
-On Tue, 20 Nov 2018 11:22:00 +0100, Arnout Vandecappelle wrote:
+Currently, package/meson/meson.mk generates a single global
+cross-compilation.conf file, with the path to the compiler, cflags,
+ldflags, and various other details. This file is then used when
+building all meson-based packages.
 
-> >> I personally find it OK, even though it's a bit annoying to introduce
-> >> yet another step just for the sake of pkg-kconfig.  
-> 
->  Me too. And I'm not even sure if it really solves the pkg-kconfig problem. I
-> have a hard time remembering what all the issues were there.
-> 
->  Perhaps, though, we should have a more general strategy of a per-infra
-> definition of what the steps are, instead of having a fixed sequence of steps.
-> I.e., have a pattern that should be followed by an infra-specific step to make
-> sure things are done correctly. So, for the kconfig case we would have an extra
-> kconfig_fixup step (we already have the stamp file, but it's not a real step
-> with hooks and the KCONFIG_DEPENDENCIES were strapped on as an afterthought),
-> and for the autoreconf case we would have an extra autoreconf step (instead of a
-> hook).
+This causes two problems:
 
-And so those "injected" steps should take care of preparing the
-per-package folder with whatever dependencies they need ?
+ - It is not possible to define per package CFLAGS. Indeed, when
+   cross-compiling, meson doesn't support passing CFLAGS through the
+   environment, only the CFLAGS from cross-compilation.conf are taken
+   into account.
 
-This is probably something that can be done to fix the pkg-kconfig
-stuff without having to create a new "prepare" step in the generic
-infrastructure.
+ - It is not compatible with per-package folders, because with
+   per-package folders, we need to use a different compiler, and
+   possibly CFLAGS/LDFLAGS for each package.
 
->  But the problem is, for pkg-kconfig, we actually need the prepare stuff to be
-> done in the build directory, not the source directory... So it *still* doesn't
-> match.
+For this reason, this commit:
 
-Right.
+ - Introduces a per-package cross-compilation.conf, which is generated
+   by the pkg-meson infrastructure in the "configure" step right
+   before calling meson. The file is generated in $(@D)/build/, and
+   because it is generated within a given package "configure" step,
+   the compiler path, CFLAGS and LDFLAGS are the ones of this package.
 
-> > above, because autoreconf will also require the same dependencies as the
-> > configure step.  
-> 
->  ... not because of this. Most dependencies are only really needed in the
-> configure step, it's only some of them (host-automake etc. obviously, but also
-> host-autoconf-archive and host-pkg-config for the .m4 files) that are needed for
-> the autoreconf. So if it is split, we would need to move some dependencies to
-> _PREPARE_DEPENDENCIES.
+ - Keeps the global cross-compilation.conf in $(HOST_DIR)/etc/meson/,
+   for the SDK use-case of Buildroot. Since we want the final and
+   global values of the compiler path, CFLAGS and LDFLAGS, generating
+   this global cross-compilation.conf is moved to a
+   TARGET_FINALIZE_HOOKS. If we were keeping this as a
+   HOST_MESON_POST_INSTALL_HOOKS, it would contain values specific to
+   the host-meson package.
 
-At this point, I don't want to change anything for autoreconf. It is
-part of the configure step, it works as it is. I'd like to fix just the
-pkg-kconfig situation. I'll try to do that within pkg-kconfig.mk.
+This commit has been tested by building all Buildroot packages that
+use meson: json-glib, systemd, enlightenment, at-spi2-core, ncmpc,
+libmpdclient and ncmpc.
 
-Best regards,
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+[Thomas:
+ - add extended commit log
+ - in pkg-meson.mk, re-use variables defined in meson.mk to do the
+   replacement of CFLAGS/LDFLAGS/CXXFLAGS
+ - move the generation of the global cross-compilation.conf to a
+   TARGET_FINALIZE_HOOKS
+ - testing with per-package folders]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/meson/meson.mk |  4 +++-
+ package/pkg-meson.mk   | 12 +++++++++++-
+ 2 files changed, 14 insertions(+), 2 deletions(-)
 
-Thomas
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index e1675c21b8..7d33e0f0d6 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -20,6 +20,8 @@ HOST_MESON_SED_CFLAGS = $(if $(TARGET_CFLAGS),`printf '"%s"$(comma) ' $(TARGET_C
+ HOST_MESON_SED_LDFLAGS = $(if $(TARGET_LDFLAGS),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
+ HOST_MESON_SED_CXXFLAGS = $(if $(TARGET_CXXFLAGS),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
+ 
++# Generate a Meson cross-compilation.conf suitable for use with the
++# SDK
+ define HOST_MESON_INSTALL_CROSS_CONF
+ 	mkdir -p $(HOST_DIR)/etc/meson
+ 	sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
+@@ -34,6 +36,6 @@ define HOST_MESON_INSTALL_CROSS_CONF
+ 	    > $(HOST_DIR)/etc/meson/cross-compilation.conf
+ endef
+ 
+-HOST_MESON_POST_INSTALL_HOOKS += HOST_MESON_INSTALL_CROSS_CONF
++TARGET_FINALIZE_HOOKS += HOST_MESON_INSTALL_CROSS_CONF
+ 
+ $(eval $(host-python-package))
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index 507e686068..6c883041d0 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -64,12 +64,22 @@ ifeq ($(4),target)
+ define $(2)_CONFIGURE_CMDS
+ 	rm -rf $$($$(PKG)_SRCDIR)/build
+ 	mkdir -p $$($$(PKG)_SRCDIR)/build
++	sed -e "s%@TARGET_CROSS@%$$(TARGET_CROSS)%g" \
++	    -e "s%@TARGET_ARCH@%$$(ARCH)%g" \
++	    -e "s%@TARGET_CPU@%$$(GCC_TARGET_CPU)%g" \
++	    -e "s%@TARGET_ENDIAN@%$$(call LOWERCASE,$$(BR2_ENDIAN))%g" \
++	    -e "s%@TARGET_CFLAGS@%$$(HOST_MESON_SED_CFLAGS)%g" \
++	    -e "s%@TARGET_LDFLAGS@%$$(HOST_MESON_SED_LDFLAGS)%g" \
++	    -e "s%@TARGET_CXXFLAGS@%$$(HOST_MESON_SED_CXXFLAGS)%g" \
++	    -e "s%@HOST_DIR@%$$(HOST_DIR)%g" \
++	    package/meson/cross-compilation.conf.in \
++	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
+ 	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
+ 		--prefix=/usr \
+ 		--libdir=lib \
+ 		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
+ 		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
+-		--cross-file=$(HOST_DIR)/etc/meson/cross-compilation.conf \
++		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
+ 		$$($$(PKG)_CONF_OPTS) \
+ 		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
+ endef
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.19.1
