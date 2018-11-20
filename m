@@ -1,52 +1,94 @@
-From: =?UTF-8?Q?DUPONCHEEL_S=c3=a9bastien?= <sebastien.duponcheel@corp.ovh.com>
-Date: Tue, 20 Nov 2018 10:59:42 +0100
-Subject: [Buildroot] [PATCH 1/1] shadowsocks-libev: add connmarktos
- build option
-In-Reply-To: <20181120090026.0091891c@windsurf.home>
-References: <1542300189-12939-1-git-send-email-sebastien.duponcheel@corp.ovh.com>
- <87o9aq5hcb.fsf@tkos.co.il>
- <25f6955b-c3f1-28a1-2a51-6ad90f391c9c@corp.ovh.com>
- <871s7jh1jd.fsf@tkos.co.il> <20181120090026.0091891c@windsurf.home>
-Message-ID: <afd4825c-e58e-48ae-5562-b6ca221bec7c@corp.ovh.com>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Tue, 20 Nov 2018 08:14:02 -0200
+Subject: [Buildroot] [PATCH next v2] tpm2-tss: depend on shared libraries
+Message-ID: <20181120101402.4123-1-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yes, i am doing this ASAP.
+The code includes dlfcn.h even if --enable-static and --disable-shared
+are passed to configure. There is an "#ifndef NO_DL ... #endif" wrapper
+but NO_DL is never defined and adding "-DNO_DL" to CFLAGS causes other
+compilation errors.
 
-Best regards,
-DUPONCHEEL S?bastien.
+Fixes:
+  http://autobuild.buildroot.net/results/cfc3bfef5e93329bf944a57947086d9ddc4fece3
 
-Le 20/11/2018 ? 09:00, Thomas Petazzoni a ?crit?:
-> Hello,
->
-> On Sat, 17 Nov 2018 22:49:58 +0200, Baruch Siach wrote:
->
->>> config BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS
->>> - bool "enable connmarktos feature"
->>> + bool "ss-server: enable connmarktos feature"
->>>   depends on BR2_PACKAGE_SHADOWSOCKS_LIBEV
->>>   select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
->>>   help
->>> - Build with the connmark to TOS feature
->>> + Build ss-server with the connmark to TOS feature.
->>> + This feature require advanced tc, iptables and conntrac
->>> + rules to perform QoS on the server side.
->>> + if unsure say N.
->> Sounds reasonable to me. Let's see what others think.
-> Yes, soon reasonable to me as well. Perhaps the option title should be:
->
-> 	bool "conmarktos support in ss-server"
->
-> or
->
-> 	bool "ss-server conmarktos support"
->
-> S?bastien, could you take into account the various comments received
-> from Baruch, and send an updated version ?
->
-> Thanks!
->
-> Thomas
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+---
+Supersedes: https://patchwork.ozlabs.org/patch/999631/
+---
+Changes v1->v2:
+- propagate this dependency to the reverse dependencies of tpm2-tss.
+---
+ package/tpm2-abrmd/Config.in | 6 ++++--
+ package/tpm2-tools/Config.in | 6 ++++--
+ package/tpm2-tss/Config.in   | 4 ++++
+ 3 files changed, 12 insertions(+), 4 deletions(-)
+
+diff --git a/package/tpm2-abrmd/Config.in b/package/tpm2-abrmd/Config.in
+index 31c5ae7d6b..d18f736182 100644
+--- a/package/tpm2-abrmd/Config.in
++++ b/package/tpm2-abrmd/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_TPM2_ABRMD
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+ 	depends on BR2_USE_MMU # dbus, libglib2
++	depends on !BR2_STATIC_LIBS # tpm2-tss
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_TPM2_TSS
+@@ -20,6 +21,7 @@ config BR2_PACKAGE_TPM2_ABRMD
+ 
+ 	  https://github.com/tpm2-software/tpm2-abrmd
+ 
+-comment "tpm2-abrmd needs a toolchain w/ wchar, threads"
++comment "tpm2-abrmd needs a toolchain w/ dynamic library, wchar, threads"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
+diff --git a/package/tpm2-tools/Config.in b/package/tpm2-tools/Config.in
+index 24cd4b8f9a..cc87e2a1bf 100644
+--- a/package/tpm2-tools/Config.in
++++ b/package/tpm2-tools/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_TPM2_TOOLS
+ 	depends on BR2_USE_MMU # dbus, libglib
+ 	depends on BR2_USE_WCHAR # libglib -> gettext
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib
++	depends on !BR2_STATIC_LIBS # tpm2-tss
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_LIBCURL
+ 	select BR2_PACKAGE_LIBGLIB2
+@@ -18,6 +19,7 @@ config BR2_PACKAGE_TPM2_TOOLS
+ 
+ 	  https://github.com/tpm2-software/tpm2-tools
+ 
+-comment "tpm2-tools needs a toolchain w/ wchar, threads"
++comment "tpm2-tools needs a toolchain w/ dynamic library, wchar, threads"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
+diff --git a/package/tpm2-tss/Config.in b/package/tpm2-tss/Config.in
+index 4e299eccc1..933adb4b2a 100644
+--- a/package/tpm2-tss/Config.in
++++ b/package/tpm2-tss/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_TPM2_TSS
+ 	bool "tpm2-tss"
++	depends on !BR2_STATIC_LIBS # dlfcn.h
+ 	select BR2_PACKAGE_LIBURIPARSER
+ 	select BR2_PACKAGE_OPENSSL
+ 	help
+@@ -30,3 +31,6 @@ config BR2_PACKAGE_TPM2_TSS
+ 	    Microsoft software TPM2 simulator.
+ 
+ 	  https://github.com/tpm2-software/tpm2-tss
++
++comment "tpm2-tss needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+-- 
+2.14.5
