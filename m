@@ -1,136 +1,58 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 20 Nov 2018 18:07:32 +0100
-Subject: [Buildroot] [PATCH 1/1] python-aiohttp: new package
-In-Reply-To: <CADvTj4pYDMO149H3w57TaS1YujPqiS8b27k64MOxCKo-LQBq7Q@mail.gmail.com>
-References: <1542657158-9559-1-git-send-email-james.hilliard1@gmail.com>
- <CAGm1_kuNHBwyt78tX6sUkSWwW3Vu=0vW5nJHQtjNRw4DKwRD-A@mail.gmail.com>
- <CADvTj4pYDMO149H3w57TaS1YujPqiS8b27k64MOxCKo-LQBq7Q@mail.gmail.com>
-Message-ID: <CAGm1_kt9wawquuH=YNLG=KaGsFqmeN3gSer2Vdd2Cf3dzaKPTg@mail.gmail.com>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Tue, 20 Nov 2018 15:38:01 -0200
+Subject: [Buildroot] [PATCH] package/wolfssl: bump to version 3.15.5
+Message-ID: <20181120173801.15024-1-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Nov 20, 2018 at 5:12 PM James Hilliard
-<james.hilliard1@gmail.com> wrote:
->
-> chardet is not used if cchardet is present, see here
-> https://github.com/aio-libs/aiohttp/blob/76268e31630bb8615999ec40984706745f7f82d1/aiohttp/client_reqrep.py#L40-L43
+Also enable ARMv8 hardware acceleration (tested with
+qemu_aarch64_virt_defconfig).
 
-OK. I see now.
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+---
+ package/wolfssl/wolfssl.hash | 2 +-
+ package/wolfssl/wolfssl.mk   | 8 ++++++--
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-
-Thanks.
-
-Yegor
-
-> On Tue, Nov 20, 2018 at 12:46 AM Yegor Yefremov
-> <yegorslists@googlemail.com> wrote:
-> >
-> > Hi James,
-> > On Mon, Nov 19, 2018 at 8:53 PM <james.hilliard1@gmail.com> wrote:
-> > >
-> > > From: James Hilliard <james.hilliard1@gmail.com>
-> > >
-> > > Async http client/server framework (asyncio).
-> > >
-> > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > > ---
-> > >  DEVELOPERS                                 |  1 +
-> > >  package/Config.in                          |  1 +
-> > >  package/python-aiohttp/Config.in           | 14 ++++++++++++++
-> > >  package/python-aiohttp/python-aiohttp.hash |  5 +++++
-> > >  package/python-aiohttp/python-aiohttp.mk   | 14 ++++++++++++++
-> > >  5 files changed, 35 insertions(+)
-> > >  create mode 100644 package/python-aiohttp/Config.in
-> > >  create mode 100644 package/python-aiohttp/python-aiohttp.hash
-> > >  create mode 100644 package/python-aiohttp/python-aiohttp.mk
-> > >
-> > > diff --git a/DEVELOPERS b/DEVELOPERS
-> > > index f4d98d9..cfc076b 100644
-> > > --- a/DEVELOPERS
-> > > +++ b/DEVELOPERS
-> > > @@ -985,6 +985,7 @@ F:  configs/pine64_sopine_defconfig
-> > >
-> > >  N:     James Hilliard <james.hilliard1@gmail.com>
-> > >  F:     package/python-aiodns/
-> > > +F:     package/python-aiohttp/
-> > >  F:     package/python-async-timeout/
-> > >  F:     package/python-cchardet/
-> > >  F:     package/python-multidict/
-> > > diff --git a/package/Config.in b/package/Config.in
-> > > index 5a5d840..776691b 100644
-> > > --- a/package/Config.in
-> > > +++ b/package/Config.in
-> > > @@ -795,6 +795,7 @@ if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
-> > >  menu "External python modules"
-> > >         source "package/python-aiocoap/Config.in"
-> > >         source "package/python-aiodns/Config.in"
-> > > +       source "package/python-aiohttp/Config.in"
-> > >         source "package/python-alsaaudio/Config.in"
-> > >         source "package/python-argh/Config.in"
-> > >         source "package/python-arrow/Config.in"
-> > > diff --git a/package/python-aiohttp/Config.in b/package/python-aiohttp/Config.in
-> > > new file mode 100644
-> > > index 0000000..81862c9
-> > > --- /dev/null
-> > > +++ b/package/python-aiohttp/Config.in
-> > > @@ -0,0 +1,14 @@
-> > > +config BR2_PACKAGE_PYTHON_AIOHTTP
-> > > +       bool "python-aiohttp"
-> > > +       depends on BR2_PACKAGE_PYTHON3
-> > > +       select BR2_PACKAGE_PYTHON_ATTRS # runtime
-> > > +       select BR2_PACKAGE_PYTHON_CCHARDET if BR2_INSTALL_LIBSTDCPP # runtime
-> > > +       select BR2_PACKAGE_PYTHON_CHARDET if !BR2_INSTALL_LIBSTDCPP # runtime
-> >
-> > According to [1] chardet is required anyway. So should
-> > BR2_INSTALL_LIBSTDCPP be a global dependency for the package?
-> >
-> > [1] https://github.com/aio-libs/aiohttp/blob/master/setup.py#L88
-> >
-> > Yegor
-> >
-> > > +       select BR2_PACKAGE_PYTHON_MULTIDICT # runtime
-> > > +       select BR2_PACKAGE_PYTHON_ASYNC_TIMEOUT # runtime
-> > > +       select BR2_PACKAGE_PYTHON_YARL # runtime
-> > > +       select BR2_PACKAGE_PYTHON_AIODNS # runtime
-> > > +       help
-> > > +         Async http client/server framework (asyncio).
-> > > +
-> > > +         https://github.com/aio-libs/aiohttp
-> > > diff --git a/package/python-aiohttp/python-aiohttp.hash b/package/python-aiohttp/python-aiohttp.hash
-> > > new file mode 100644
-> > > index 0000000..8f158af
-> > > --- /dev/null
-> > > +++ b/package/python-aiohttp/python-aiohttp.hash
-> > > @@ -0,0 +1,5 @@
-> > > +# md5, sha256 from https://pypi.org/pypi/aiohttp/json
-> > > +md5    80a6e0c6c452d511d1d37755d6f0995a  aiohttp-3.4.4.tar.gz
-> > > +sha256 51afec6ffa50a9da4cdef188971a802beb1ca8e8edb40fa429e5e529db3475fa  aiohttp-3.4.4.tar.gz
-> > > +# Locally computed sha256 checksums
-> > > +sha256 bb0c0eeae85492ebfa03442b7784d4c42a623e15346df54ae85f55df972a82af  LICENSE.txt
-> > > diff --git a/package/python-aiohttp/python-aiohttp.mk b/package/python-aiohttp/python-aiohttp.mk
-> > > new file mode 100644
-> > > index 0000000..df8bdfb
-> > > --- /dev/null
-> > > +++ b/package/python-aiohttp/python-aiohttp.mk
-> > > @@ -0,0 +1,14 @@
-> > > +################################################################################
-> > > +#
-> > > +# python-aiohttp
-> > > +#
-> > > +################################################################################
-> > > +
-> > > +PYTHON_AIOHTTP_VERSION = 3.4.4
-> > > +PYTHON_AIOHTTP_SOURCE = aiohttp-$(PYTHON_AIOHTTP_VERSION).tar.gz
-> > > +PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/70/27/6098b4b60a3302a97f8ec97eb85d42f55a2fa904da4a369235a8e3b84352
-> > > +PYTHON_AIOHTTP_SETUP_TYPE = setuptools
-> > > +PYTHON_AIOHTTP_LICENSE = Apache-2.0
-> > > +PYTHON_AIOHTTP_LICENSE_FILES = LICENSE.txt
-> > > +
-> > > +$(eval $(python-package))
-> > > --
-> > > 2.7.4
-> > >
+diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
+index 76c7db25a844..2fdaa5762b6a 100644
+--- a/package/wolfssl/wolfssl.hash
++++ b/package/wolfssl/wolfssl.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256 4ab543c869a65a77dc5d0bc934b9d4852aa3d5834bd2f707a74a936602bd3687  v3.14.0-stable.tar.gz
++sha256 4e15f494604e41725499f8b708798f8ddc2fcaa8f39b4369bcd000b3cab482d8  v3.15.5-stable.tar.gz
+ 
+ # Hash for license files:
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
+index c246b085131d..aec613321619 100644
+--- a/package/wolfssl/wolfssl.mk
++++ b/package/wolfssl/wolfssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WOLFSSL_VERSION = 3.14.0
++WOLFSSL_VERSION = 3.15.5
+ WOLFSSL_SITE = https://github.com/wolfSSL/wolfssl/archive
+ WOLFSSL_SOURCE = v$(WOLFSSL_VERSION)-stable.tar.gz
+ WOLFSSL_INSTALL_STAGING = YES
+@@ -30,7 +30,11 @@ else
+ WOLFSSL_CONF_OPTS += --disable-sslv3
+ endif
+ 
+-# build fails when ARMv8 hardware acceleration is enabled
++# enable ARMv8 hardware acceleration
++ifeq ($(BR2_ARM_CPU_ARMV8A),y)
++WOLFSSL_CONF_OPTS += --enable-armasm CPPFLAGS=-mstrict-align
++else
+ WOLFSSL_CONF_OPTS += --disable-armasm
++endif
+ 
+ $(eval $(autotools-package))
+-- 
+2.17.1
