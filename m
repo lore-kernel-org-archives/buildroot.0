@@ -1,67 +1,49 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 20 Nov 2018 18:59:06 +0100
-Subject: [Buildroot] [PATCH v2,1/1] libcorrect: fix debug build
-Message-ID: <20181120175906.24665-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 20 Nov 2018 19:35:09 +0100
+Subject: [Buildroot] [PATCH 1/1] package/postgresql: needs wchar
+In-Reply-To: <20181116092424.79d94e4b@windsurf>
+References: <20181023160931.16417-1-bernd.kuhls@t-online.de>
+ <CAFSsvmqEdPu2V3j=d55j6cUVmNeC0MSjTmA5HM1R5HcWh1LzwA@mail.gmail.com>
+ <643ca3d2-1825-4707-5fbb-0817229188f9@mind.be>
+ <20181101223046.72222a3c@windsurf> <20181115165903.GL10271@scaer>
+ <20181116092424.79d94e4b@windsurf>
+Message-ID: <20181120183509.GD2601@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch to use -fsanitize=address only when available
+Thomas, All,
 
-Fixes:
- - http://autobuild.buildroot.net/results/221d6a418e75b39fe645c3a56cee676518d2cff6
+On 2018-11-16 09:24 +0100, Thomas Petazzoni spake thusly:
+> On Thu, 15 Nov 2018 17:59:03 +0100, Yann E. MORIN wrote:
+> > And in retrospect, I think it *is* better that we do drop them. If the
+> > top-level option loses that dependency, then it is 'easy' to detect it
+> > has become mandatory for a sub-option, because the autobuilders will
+> > fail.
+> > 
+> > However, if we repeat the dependency and the top-level option lses it
+> > and we forget to remove it, we will never realise that the sub-option
+> > shouldalso lose it.
+> 
+> That is indeed a good argument. Should we settle on the idea that we
+> should not uselessly replicate such dependencies ?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Add a patch instead of using Release target
+Yes, let's not replicate them.
 
- ...s.txt-conditionally-use-fsanitize-address.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 package/libcorrect/0002-CMakeLists.txt-conditionally-use-fsanitize-address.patch
+And accept patches that removes them.
 
-diff --git a/package/libcorrect/0002-CMakeLists.txt-conditionally-use-fsanitize-address.patch b/package/libcorrect/0002-CMakeLists.txt-conditionally-use-fsanitize-address.patch
-new file mode 100644
-index 0000000000..82e4f13e66
---- /dev/null
-+++ b/package/libcorrect/0002-CMakeLists.txt-conditionally-use-fsanitize-address.patch
-@@ -0,0 +1,35 @@
-+From 1a3bb66608b2f96407d14fe13b782626990060f1 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 20 Nov 2018 08:20:13 +0100
-+Subject: [PATCH] CMakeLists.txt: conditionally use -fsanitize=address
-+
-+Check that compiler supports -fsanitize=address before using it
-+
-+Fixes:
-+ - http://autobuild.buildroot.net/results/221d6a418e75b39fe645c3a56cee676518d2cff6
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ CMakeLists.txt | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 2e8e07e..c3f71ce 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -17,7 +17,11 @@ if(COMPILER_SUPPORTS_WPEDANTIC)
-+ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wpedantic")
-+ endif()
-+ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-+-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g3 -O0 -fsanitize=address")
-++    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g3 -O0")
-++    check_c_compiler_flag("-fsanitize=address -Werror" COMPILER_SUPPORTS_SANITIZE_ADDRESS)
-++    if(COMPILER_SUPPORTS_SANITIZE_ADDRESS)
-++        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address")
-++    endif()
-+     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-no_pie,")
-+ else()
-+   if("${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
-+-- 
-+2.14.1
-+
+And accept a patch that updates the manual accordnigly, of course! ;-)
+(I'll see what I can do...)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.14.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
