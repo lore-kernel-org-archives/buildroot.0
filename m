@@ -1,69 +1,52 @@
-From: =?GBK?B?wO7Rp778?= <lixuejun@vip.163.com>
-Date: Tue, 20 Nov 2018 17:24:17 +0800 (CST)
-Subject: [Buildroot] buildroot error: No hash found for gcc-7.3.0.tar.xz
-Message-ID: <2776276a.afc0d.167306f454d.Coremail.lixuejun@vip.163.com>
+From: =?UTF-8?Q?DUPONCHEEL_S=c3=a9bastien?= <sebastien.duponcheel@corp.ovh.com>
+Date: Tue, 20 Nov 2018 10:59:42 +0100
+Subject: [Buildroot] [PATCH 1/1] shadowsocks-libev: add connmarktos
+ build option
+In-Reply-To: <20181120090026.0091891c@windsurf.home>
+References: <1542300189-12939-1-git-send-email-sebastien.duponcheel@corp.ovh.com>
+ <87o9aq5hcb.fsf@tkos.co.il>
+ <25f6955b-c3f1-28a1-2a51-6ad90f391c9c@corp.ovh.com>
+ <871s7jh1jd.fsf@tkos.co.il> <20181120090026.0091891c@windsurf.home>
+Message-ID: <afd4825c-e58e-48ae-5562-b6ca221bec7c@corp.ovh.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Buildroot developers
+Yes, i am doing this ASAP.
 
- 
+Best regards,
+DUPONCHEEL S?bastien.
 
-As a beginner, I?m looking for some advices on the issue : No hash found for gcc-7.3.0.tar.xz.
-
- My platform is ubantu 18.04(64 bit) on VirtualBox(X86), buildroot 2018.08. The .config file is attached.
-
-The following is a copy of the log from running buildroot make command:
-
- 
-
-ERROR: No hash found for gcc-7.3.0.tar.xz
-
-package/pkg-generic.mk:135: recipe for target '/home/lxj/buildroot-2018.08.2/output/build/host-gcc-initial-7.3.0/.stamp_downloaded' failed
-
-make: *** [/home/lxj/buildroot-2018.08.2/output/build/host-gcc-initial-7.3.0/.stamp_downloaded] Error 1
-
-root at lxj-VirtualBox:/home/lxj/buildroot-2018.08.2#
-
- 
-
-There is a file ?gcc-7.3.0.tar.xz? at path /home/lxj/buildroot-2018.08.2/dl/gcc, and its sha256sum is: 
-ad41a7e4584e40e92cdf860bc0288500fbaf5dfb7e8c3fcabe9eba809c87bcfa85b46c19c19921b0cdf6d05483faede8287bb9ea120c0d1559449a70e602c8d4  gcc-7.3.0.tar.xz
-
- 
-
-There is a file ?gcc.hash? at path /home/lxj/buildroot-2018.08.2/package/gcc, include the foloowing lines:
-
-# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-7.3.0/sha512.sum
-
-sha512  ad41a7e4584e40e92cdf860bc0288500fbaf5dfb7e8c3fcabe9eba809c87bcfa85b46c19c19921b0cdf6d05483faede8287bb9ea120c0d1559449a70e602c8d4  gcc-7.3.0.tar.xz
-
- 
-
-Thank you for your consideration in advance.
-
- Xuejun Li
-
-
-
-
-
-
---
-
-??VIP????????????????????????????????????????????????????????????????????????
-Alert message of Netease Vipmail?Never provide your password, security questions, verification codes, or any other personal important information details to anyone else.
-You can identify mail message by telephone,video-chat or other ways.You should make sure that your email address, bank account and other confidential information as secure as possible. Thank you for keeping your email account secure.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181120/66a4a60d/attachment-0001.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: config
-Type: application/octet-stream
-Size: 88103 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181120/66a4a60d/attachment-0001.obj>
+Le 20/11/2018 ? 09:00, Thomas Petazzoni a ?crit?:
+> Hello,
+>
+> On Sat, 17 Nov 2018 22:49:58 +0200, Baruch Siach wrote:
+>
+>>> config BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS
+>>> - bool "enable connmarktos feature"
+>>> + bool "ss-server: enable connmarktos feature"
+>>>   depends on BR2_PACKAGE_SHADOWSOCKS_LIBEV
+>>>   select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
+>>>   help
+>>> - Build with the connmark to TOS feature
+>>> + Build ss-server with the connmark to TOS feature.
+>>> + This feature require advanced tc, iptables and conntrac
+>>> + rules to perform QoS on the server side.
+>>> + if unsure say N.
+>> Sounds reasonable to me. Let's see what others think.
+> Yes, soon reasonable to me as well. Perhaps the option title should be:
+>
+> 	bool "conmarktos support in ss-server"
+>
+> or
+>
+> 	bool "ss-server conmarktos support"
+>
+> S?bastien, could you take into account the various comments received
+> from Baruch, and send an updated version ?
+>
+> Thanks!
+>
+> Thomas
