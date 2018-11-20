@@ -1,38 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Nov 2018 11:39:22 +0100
-Subject: [Buildroot] qemu-aarch64 applications misbehaving
-In-Reply-To: <5bf36d417679f_75483ff1fa07b04437757@ultri5.mail>
-References: <CAKAbLo9SzmvsEGfhRyZRYLgRSocJUEgEbR=a9v2cBUsdqeKVig@mail.gmail.com>
- <5bf36d417679f_75483ff1fa07b04437757@ultri5.mail>
-Message-ID: <20181120113922.59b446f7@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 20 Nov 2018 11:40:36 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] xproto_inputproto: also
+ disable asciidoc documentation for host builds
+Message-ID: <20181120103834.2DC0B83CB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=dbd4966edf6900a11556b9cf2d30749a7c94ff68
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-On Tue, 20 Nov 2018 00:11:13 -0200, Ricardo Martincoski wrote:
+Fixes:
+http://autobuild.buildroot.net/results/0ff/0ff9a3a27984ad91aa33079143bb87ed71bfe7c4/
 
-> I confirm 'df' printing silly numbers with both these images:
-> 2018.08.2 : https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/122632959
-> 2018.11-rc1 : https://gitlab.com/buildroot.org/buildroot/-/jobs/118747268
-> 
-> On 2018.08.2 I also did this:
-> make qemu_aarch64_virt_defconfig
-> make menuconfig # and enable BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE
-> make host-qemu # to build qemu 2.12.1
-> output/host/bin/qemu-system-aarch64 ...
-> and the issue with 'df' still occurs.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/x11r7/xproto_inputproto/xproto_inputproto.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-So you tested with the default C library, uClibc ? Could you test with
-glibc ?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/x11r7/xproto_inputproto/xproto_inputproto.mk b/package/x11r7/xproto_inputproto/xproto_inputproto.mk
+index 5b3c63a588..9e45e2d30a 100644
+--- a/package/x11r7/xproto_inputproto/xproto_inputproto.mk
++++ b/package/x11r7/xproto_inputproto/xproto_inputproto.mk
+@@ -12,6 +12,7 @@ XPROTO_INPUTPROTO_LICENSE_FILES = COPYING
+ XPROTO_INPUTPROTO_INSTALL_STAGING = YES
+ XPROTO_INPUTPROTO_INSTALL_TARGET = NO
+ XPROTO_INPUTPROTO_CONF_ENV = ac_cv_path_ASCIIDOC=""
++HOST_XPROTO_INPUTPROTO_CONF_ENV = ac_cv_path_ASCIIDOC=""
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
