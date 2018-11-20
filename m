@@ -1,52 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Nov 2018 08:17:34 +0100
-Subject: [Buildroot] [git commit] glibc: ensure BR2_MAKE is also used for
- subdirs
-Message-ID: <20181120071904.90B3483C3F@busybox.osuosl.org>
+Date: Tue, 20 Nov 2018 08:17:43 +0100
+Subject: [Buildroot] [git commit] make: configure host-make with host- prefix
+Message-ID: <20181120071904.9E94A8104C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb80f71d9472f9067cc1560eb265355c06e82f60
+commit: https://git.buildroot.net/buildroot/commit/?id=446a6f91b236ad48f01caa357f530699f443460f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The configure script contains logic to figure out what make program to
-invoke for subdirectories (trying gnumake, gmake, make).  Explicitly force
-it to use our BR2_MAKE to ensure the right make version is used.
+Fixes:
+http://autobuild.buildroot.net/results/e29/e293aadc692d2ed337881ef2172ddf66a60bc05c/
 
-As GLIBC_CONF_ENV is only initialized below, move this section below it.
+And many more.
+
+Install as 'host-make' rather than just 'make', as that otherwise confuses a
+number of packages when they invoke recursive / sub-make.  The internal job
+control logic of GNU make is version dependant, so mixing versions may lead
+to issues like:
+
+make[1]: Entering directory `/home/peko/autobuild/instance-0/output/build/boa-0.94.14rc21'
+(cd src && make -w --jobserver-fds=5,6 -j)
+make: unrecognized option '--jobserver-fds=5,6'
+
+With this rename, only packages explicitly opting in for our host-make
+(using the BR2_MAKE / BR2_MAKE_HOST_DEPENDENCY logic) will use it.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/glibc/glibc.mk | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ package/make/make.mk                    | 4 ++++
+ support/dependencies/check-host-make.mk | 4 ++--
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 708c22f723..762c040688 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -31,10 +31,6 @@ GLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
- GLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-bison host-gawk \
- 	$(BR2_MAKE_HOST_DEPENDENCY)
+diff --git a/package/make/make.mk b/package/make/make.mk
+index 1471576850..10082353a2 100644
+--- a/package/make/make.mk
++++ b/package/make/make.mk
+@@ -23,5 +23,9 @@ endif
+ HOST_MAKE_DEPENDENCIES = host-pkgconf
+ HOST_MAKE_CONF_OPTS = --without-guile
  
--# glibc requires make >= 4.0 since 2.28 release.
--# https://www.sourceware.org/ml/libc-alpha/2018-08/msg00003.html
--GLIBC_MAKE = $(BR2_MAKE)
--
- GLIBC_SUBDIR = build
- 
- GLIBC_INSTALL_STAGING = YES
-@@ -82,6 +78,11 @@ ifeq ($(BR2_riscv),y)
- GLIBC_CONF_ENV += libc_cv_slibdir=/lib64 libc_cv_rtlddir=/lib
- endif
- 
-+# glibc requires make >= 4.0 since 2.28 release.
-+# https://www.sourceware.org/ml/libc-alpha/2018-08/msg00003.html
-+GLIBC_MAKE = $(BR2_MAKE)
-+GLIBC_CONF_ENV += ac_cv_prog_MAKE="$(BR2_MAKE)"
++# Configure host-make binary to be 'host-make' to ensure it isn't
++# accidently used by packages when they invoke recursive / sub-make.
++HOST_MAKE_CONF_OPTS += --program-prefix=host-
 +
- # Even though we use the autotools-package infrastructure, we have to
- # override the default configure commands for several reasons:
- #
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/support/dependencies/check-host-make.mk b/support/dependencies/check-host-make.mk
+index 4235a393fd..66560ee85c 100644
+--- a/support/dependencies/check-host-make.mk
++++ b/support/dependencies/check-host-make.mk
+@@ -12,8 +12,8 @@ BR2_MAKE ?= $(call suitable-host-package,make,\
+ 	$(BR2_MAKE_VERSION_MIN) $(MAKE))
+ 
+ ifeq ($(BR2_MAKE),)
+-BR2_MAKE = $(HOST_DIR)/bin/make -j$(PARALLEL_JOBS)
+-BR2_MAKE1 = $(HOST_DIR)/bin/make -j1
++BR2_MAKE = $(HOST_DIR)/bin/host-make -j$(PARALLEL_JOBS)
++BR2_MAKE1 = $(HOST_DIR)/bin/host-make -j1
+ BR2_MAKE_HOST_DEPENDENCY = host-make
+ else
+ BR2_MAKE = $(MAKE)
