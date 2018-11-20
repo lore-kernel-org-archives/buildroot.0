@@ -1,56 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Nov 2018 17:35:21 +0100
-Subject: [Buildroot] [PATCH next v5 8/9] package/pkg-generic: make libtool
- .la files compatible with per-package folders
+Date: Tue, 20 Nov 2018 17:35:22 +0100
+Subject: [Buildroot] [PATCH next v5 9/9] package/pkg-kconfig: handle
+ KCONFIG_DEPENDENCIES with per-package folders
 In-Reply-To: <20181120163522.4281-1-thomas.petazzoni@bootlin.com>
 References: <20181120163522.4281-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181120163522.4281-9-thomas.petazzoni@bootlin.com>
+Message-ID: <20181120163522.4281-10-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Libtool .la files unfortunately contain a number of absolute paths,
-which now refer to per-package folders. Due to this, when building
-package A, .la files may contain absolute paths referring to folders
-in package B per-package sysroot. This causes some -L flags referring
-to other sysroot from being added, which doesn't work as the linker no
-longer realizes that such paths are within its sysroot.
+The pkg-kconfig infrastructure hijacks the regular chain of build
+steps to insert its own step to prepare the configuration of kconfig
+packages. This additional step may have dependencies of its own, such
+as host-flex, host-bison or toolchain.
 
-To fix this, we introduce a replacement step of .la files in the
-configure step, to make sure all paths refer to this package
-per-package folder.
+In the context of per-package folder support, those dependencies must
+be copied to the per-package folder of the current package prior to
+doing the config preparation. This commit implements this logic by
+adding a call to prepare-per-package-folder at the right spot.
 
+Reported-by: Andreas Naumann <anaumann@ultratronik.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pkg-generic.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/pkg-kconfig.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 884b868a9a..b2da97712b 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -237,6 +237,12 @@ $(BUILD_DIR)/%/.stamp_configured:
- 	@$(call step_start,configure)
- 	@$(call MESSAGE,"Configuring")
- 	$(call prepare-per-package-folder,$($(PKG)_FINAL_DEPENDENCIES))
-+ifeq ($(BR2_PER_PACKAGE_FOLDERS),y)
-+	# Make sure .la files only reference the current per-package
-+	# folder.
-+	$(Q)find $(STAGING_DIR)/usr/lib* -name "*.la" | xargs --no-run-if-empty \
-+		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]*/:$(PER_PACKAGE_DIR)/$(NAME)/:g"
-+endif
- 	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
- 	$($(PKG)_CONFIGURE_CMDS)
- 	$(foreach hook,$($(PKG)_POST_CONFIGURE_HOOKS),$(call $(hook))$(sep))
-@@ -890,6 +896,7 @@ $$($(2)_TARGET_INSTALL_IMAGES):		PKG=$(2)
- $$($(2)_TARGET_INSTALL_HOST):		PKG=$(2)
- $$($(2)_TARGET_BUILD):			PKG=$(2)
- $$($(2)_TARGET_CONFIGURE):		PKG=$(2)
-+$$($(2)_TARGET_CONFIGURE):		NAME=$(1)
- $$($(2)_TARGET_RSYNC):			SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
- $$($(2)_TARGET_RSYNC):			PKG=$(2)
- $$($(2)_TARGET_PATCH):			PKG=$(2)
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index d6c95b897e..bf43632adc 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -113,6 +113,7 @@ endef
+ # Since the file could be a defconfig file it needs to be expanded to a
+ # full .config first.
+ $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG): $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
++	$$(call prepare-per-package-folder,$$($(2)_KCONFIG_DEPENDENCIES))
+ 	$$(Q)$$(if $$($(2)_KCONFIG_DEFCONFIG), \
+ 		$$($(2)_KCONFIG_MAKE) $$($(2)_KCONFIG_DEFCONFIG), \
+ 		$$(INSTALL) -m 0644 -D $$($(2)_KCONFIG_FILE) $$(@))
 -- 
 2.19.1
