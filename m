@@ -1,8 +1,8 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Mon, 19 Nov 2018 20:57:32 -0200
-Subject: [Buildroot] [RFC 2/4] support/testing: add perl-time-hires test
-References: <CAB0FRsuRPxXBA80jCnj8WLvNHvZEujWY+CA5-AqVG6q_u5RkTg@mail.gmail.com>
-Message-ID: <5bf33fdc45405_133b3fef2209088448826@ultri5.mail>
+Date: Tue, 20 Nov 2018 00:11:13 -0200
+Subject: [Buildroot] qemu-aarch64 applications misbehaving
+References: <CAKAbLo9SzmvsEGfhRyZRYLgRSocJUEgEbR=a9v2cBUsdqeKVig@mail.gmail.com>
+Message-ID: <5bf36d417679f_75483ff1fa07b04437757@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,52 +11,53 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, Nov 19, 2018 at 05:29 PM, Fran?ois Perrad wrote:
+On Mon, Nov 19, 2018 at 02:04 PM, Zeno Endemann wrote:
 
-> Le lun. 19 nov. 2018 ? 02:14, Ricardo Martincoski <
-> ricardo.martincoski at gmail.com> a ?crit :
-[snip]
->> Another way to test a perl package would be to have an script added to the
->> image
->> in build time, something like this:
->> sample_perl_time_hires.pl:
->> |use Time::HiRes;
->> |
->> |Time::HiRes::usleep(1_000_000)
->>
->> And call:
->> perl sample_perl_time_hires.pl
->>
->> This way we could test scripts with a few lines of code and keep it
->> readable in
->> the tree.
->>
->>
-> With the current TestPerl class, this test could be written as:
->         self.module_test("Time::HiRes", "Time::HiRes::usleep(1_000_000);")
-> A long oneliner script could be written with a multiline layout, like this:
->         self.module_test("Time::HiRes", "use strict;" +
->                                         "use warnings;" +
->                                         "Time::HiRes::usleep(1_000_000);")
-> So, we don't need to handle sample_perl_*.pl scripts.
-> Same thing with Lua.
+> Applications run under qemu-aarch64 are misbehaving for me. For example,
+> minimal (console only) Qt application are crashing on startup, and also the
+> BusyBox's "df" (disk usage) is printing out silly numbers. While I'm not
+> positive I suspect these are bugs in qemu.
+> 
+> I build the guest os using buildroot 2018.08.2,
+> qemu_aarch64_virt_defconfig, and running it as instructed (minus network,
+> don't need it):
+> 
+> qemu-system-aarch64 -M virt -cpu cortex-a57 -nographic -smp 1 -kernel
+> output/images/Image -append "root=/dev/vda console=ttyAMA0" -drive
+> file=output/images/rootfs.ext4,if=none,format=raw,id=hd0 -device
+> virtio-blk-device,drive=hd0
+> 
+> (Host os is Ubuntu 18.04, QEMU emulator version 2.11.1(Debian
+> 1:2.11+dfsg-1ubuntu7.7))
 
-This is (kind of) how we were handling the tests for python packages before.
+I have exactly the same host OS and qemu version.
 
-But you have a point.
+> 
+> Can someone confirm this? Any hints would be much appreciated.
 
-Testing python packages got really messy when a class was needed in the script
-because of the indentation. In those cases a oneliner was not enough.
-Lua and Perl packages can always be tested with oneliners AFAIK.
+I confirm 'df' printing silly numbers with both these images:
+2018.08.2 : https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/122632959
+2018.11-rc1 : https://gitlab.com/buildroot.org/buildroot/-/jobs/118747268
 
-Another issue that made python scripts less readable was the escaping for string
-delimiters.
-I guess that for lua and perl scripts we can always use those fancy quotes
-([[string]], q{string}) when needed.
+On 2018.08.2 I also did this:
+make qemu_aarch64_virt_defconfig
+make menuconfig # and enable BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE
+make host-qemu # to build qemu 2.12.1
+output/host/bin/qemu-system-aarch64 ...
+and the issue with 'df' still occurs.
 
-If Thomas and Arnout don't disagree, let's keep using oneliners to test lua and
-perl packages, as you originally proposed.
+On current master (00d63a153d) I did this:
+make qemu_aarch64_virt_defconfig
+make menuconfig # and enable BR2_TOOLCHAIN_EXTERNAL
+make clean
+make
+qemu-system-aarch64 ... # using the system-provided qemu 2.11.1
+and the issue with 'df' does not occur.
 
+> 
+> While at it, another side question: Is there a reason why the
+> qemu_aarch64_virt_defconfig built kernel does not include the drivers for
+> qemu graphics emulation?
 
 Regards,
 Ricardo
