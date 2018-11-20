@@ -1,52 +1,127 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Nov 2018 09:00:26 +0100
-Subject: [Buildroot] [PATCH 1/1] shadowsocks-libev: add connmarktos
- build option
-In-Reply-To: <871s7jh1jd.fsf@tkos.co.il>
-References: <1542300189-12939-1-git-send-email-sebastien.duponcheel@corp.ovh.com>
- <87o9aq5hcb.fsf@tkos.co.il>
- <25f6955b-c3f1-28a1-2a51-6ad90f391c9c@corp.ovh.com>
- <871s7jh1jd.fsf@tkos.co.il>
-Message-ID: <20181120090026.0091891c@windsurf.home>
+Date: Tue, 20 Nov 2018 09:01:08 +0100
+Subject: [Buildroot] [git commit branch/next] support/testing/test_rust: use
+ standard defconfig fragment style
+Message-ID: <20181120075825.E92CC83C6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=adec30e4f0abc12ec5ca0b2710e4b0e3be867e83
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 17 Nov 2018 22:49:58 +0200, Baruch Siach wrote:
+Since commit "2927f412be support/testing: standardize defconfig
+fragments style" all other test cases use the same style for defconfig
+fragments:
+ - start after a backslash;
+ - be declared as a multi-line string literal;
+ - be indented one level more than the variable that contains it.
 
-> > config BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS
-> > - bool "enable connmarktos feature"
-> > + bool "ss-server: enable connmarktos feature"
-> >  depends on BR2_PACKAGE_SHADOWSOCKS_LIBEV
-> >  select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
-> >  help
-> > - Build with the connmark to TOS feature
-> > + Build ss-server with the connmark to TOS feature.
-> > + This feature require advanced tc, iptables and conntrac
-> > + rules to perform QoS on the server side.
-> > + if unsure say N.  
-> 
-> Sounds reasonable to me. Let's see what others think.
+Do the same here for consistency.
 
-Yes, soon reasonable to me as well. Perhaps the option title should be:
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/testing/tests/package/test_rust.py | 78 +++++++++++++++---------------
+ 1 file changed, 39 insertions(+), 39 deletions(-)
 
-	bool "conmarktos support in ss-server"
-
-or
-
-	bool "ss-server conmarktos support"
-
-S?bastien, could you take into account the various comments received
-from Baruch, and send an updated version ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/support/testing/tests/package/test_rust.py b/support/testing/tests/package/test_rust.py
+index 2dc814f99d..9854c3692e 100644
+--- a/support/testing/tests/package/test_rust.py
++++ b/support/testing/tests/package/test_rust.py
+@@ -57,25 +57,25 @@ class TestRustBase(infra.basetest.BRTest):
+ 
+ class TestRustBin(TestRustBase):
+     config = \
+-             """
+-             BR2_arm=y
+-             BR2_cortex_a9=y
+-             BR2_ARM_ENABLE_NEON=y
+-             BR2_ARM_ENABLE_VFP=y
+-             BR2_TOOLCHAIN_EXTERNAL=y
+-             BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+-             BR2_SYSTEM_DHCP="eth0"
+-             BR2_LINUX_KERNEL=y
+-             BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-             BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.3"
+-             BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+-             BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-             BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
+-             BR2_TARGET_ROOTFS_CPIO=y
+-             # BR2_TARGET_ROOTFS_TAR is not set
+-             BR2_PACKAGE_HOST_CARGO=y
+-             BR2_PACKAGE_HOST_RUSTC=y
+-             """
++        """
++        BR2_arm=y
++        BR2_cortex_a9=y
++        BR2_ARM_ENABLE_NEON=y
++        BR2_ARM_ENABLE_VFP=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_SYSTEM_DHCP="eth0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.3"
++        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
++        BR2_LINUX_KERNEL_DTS_SUPPORT=y
++        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        BR2_PACKAGE_HOST_CARGO=y
++        BR2_PACKAGE_HOST_RUSTC=y
++        """
+ 
+     def test_run(self):
+         self.build_test_prog()
+@@ -86,26 +86,26 @@ class TestRustBin(TestRustBase):
+ 
+ class TestRust(TestRustBase):
+     config = \
+-             """
+-             BR2_arm=y
+-             BR2_cortex_a9=y
+-             BR2_ARM_ENABLE_NEON=y
+-             BR2_ARM_ENABLE_VFP=y
+-             BR2_TOOLCHAIN_EXTERNAL=y
+-             BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+-             BR2_SYSTEM_DHCP="eth0"
+-             BR2_LINUX_KERNEL=y
+-             BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-             BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.3"
+-             BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+-             BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-             BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
+-             BR2_TARGET_ROOTFS_CPIO=y
+-             # BR2_TARGET_ROOTFS_TAR is not set
+-             BR2_PACKAGE_HOST_CARGO=y
+-             BR2_PACKAGE_HOST_RUSTC=y
+-             BR2_PACKAGE_HOST_RUST=y
+-             """
++        """
++        BR2_arm=y
++        BR2_cortex_a9=y
++        BR2_ARM_ENABLE_NEON=y
++        BR2_ARM_ENABLE_VFP=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_SYSTEM_DHCP="eth0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.3"
++        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
++        BR2_LINUX_KERNEL_DTS_SUPPORT=y
++        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        BR2_PACKAGE_HOST_CARGO=y
++        BR2_PACKAGE_HOST_RUSTC=y
++        BR2_PACKAGE_HOST_RUST=y
++        """
+ 
+     def test_run(self):
+         self.build_test_prog()
