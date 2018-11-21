@@ -1,58 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 21 Nov 2018 08:46:39 +0100
-Subject: [Buildroot] [PATCH next v2] package/luarocks: rework
- configuration file for per-package folders
-In-Reply-To: <9e4b3242-76ad-2e6e-ba3d-5dabde0ffd91@mind.be>
-References: <20181120130110.30425-1-thomas.petazzoni@bootlin.com>
- <9e4b3242-76ad-2e6e-ba3d-5dabde0ffd91@mind.be>
-Message-ID: <20181121084639.7ad59570@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 21 Nov 2018 09:11:49 +0100
+Subject: [Buildroot] Buildroot 2018.11-rc2 released
+Message-ID: <877eh6onne.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-On Tue, 20 Nov 2018 23:11:28 +0100, Arnout Vandecappelle wrote:
-> On 20/11/2018 14:01, Thomas Petazzoni wrote:
-> > +LUAROCKS_RUN_ENV = \
-> > +	LUA_PATH="$(HOST_DIR)/share/lua/$(LUAINTERPRETER_ABIVER)/?.lua" \
-> > +	STAGING_DIR="$(STAGING_DIR)" \
-> > +	TARGET_DIR="$(TARGET_DIR)" \  
-> 
->  These two are already exported in top-level Makefile, so it shouldn't be needed
-> (note that when a variable is exported, it will get its value from the context
-> where the shell is started, not from where the 'export' statement is put, so it
-> does exactly what we need it to).
+Buildroot 2018.11-rc2 is released - Go download it at:
 
-ACK.
+http://buildroot.net/downloads/buildroot-2018.11-rc2.tar.gz
 
-> > +	TARGET_CC="$(TARGET_CC)" \
-> > +	TARGET_CFLAGS="$(LUAROCKS_CFLAGS)" \
-> > +	TARGET_LDFLAGS="$(TARGET_LDFLAGS)"  
-> 
->  For these three, I expect other package infras will need it as well, so it
-> would make sense to export them too.
+or
 
-Generally speaking, I am not a big fan of things exported in the
-environment. One thing I very often do when debugging build issues is
-copy/paste the command line that Buildroot ran, to run it again on my
-own, sometimes doing additional tweaks. When there's more and more
-stuff "hidden" (i.e exported in the environment), it makes that more
-and more difficult.
+http://buildroot.net/downloads/buildroot-2018.11-rc2.tar.bz2
 
-In addition, as you can see here, the TARGET_CFLAGS we use are *NOT*
-the global TARGET_CFLAGS that Buildroot defines. It's LUAROCKS_CFLAGS,
-which is TARGET_CFLAGS + a few additional luarocks specific CFLAGS.
+Or get it from Git:
 
-So no, exporting TARGET_CFLAGS globally doesn't solve that particularly
-case.
+git://git.buildroot.net/buildroot
 
-Best regards,
+Another week, another release candidate.
 
-Thomas
+Please give it a spin and report any problems to the mailing list or
+bug tracker. Many thanks to the people contributing to this release:
+
+git shortlog -sn 2018.11-rc1..
+    24  Fabrice Fontaine
+     8  Peter Korsgaard
+     7  Thomas Petazzoni
+     3  Yann E. MORIN
+     2  Alexander Sverdlin
+     2  Baruch Siach
+     2  J?rg Krause
+     2  Peter Seiderer
+     2  Serj Kalichev
+     1  Alexey Brodkin
+     1  Alistair Francis
+     1  Carlos Santos
+     1  Gary Bisson
+     1  Grzegorz Blach
+     1  Petr Vorel
+     1  Thomas Claveirole
+
+For more details, see the CHANGES file:
+
+http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.11-rc2
+
+Expect the final 2018.11 release by the end of the month.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
