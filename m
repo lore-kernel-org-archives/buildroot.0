@@ -1,111 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Nov 2018 10:11:11 +0100
-Subject: [Buildroot] [git commit] support/kconfig/merge_config.sh: fix
- merging buildroot config files
-Message-ID: <20181202071558.5104D82855@busybox.osuosl.org>
+Date: Wed, 21 Nov 2018 22:31:28 +0100
+Subject: [Buildroot] [git commit] libostree: bump to version 2018.9.1
+Message-ID: <20181202071557.29D9181583@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f069a665c862b6c4890d0802e7835d0ba62e27a
+commit: https://git.buildroot.net/buildroot/commit/?id=45708b0dbe60fc580834ac39f9b7c843548fe1ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch allows us to define config prefix with CONFIG_ environment
-variable.
+Bump to v2018.9 added ostree-finalize-staged.path through
+https://github.com/ostreedev/ostree/commit/ac1a919ffd4fe944d06c4f4510604baa73d1bf8e
 
-By setting the proper config prefix, we will have proper 'redundant
-configuration warnings' when we use '-r -m' options.
+However, this file was not added in the tarball until commit:
+https://github.com/ostreedev/ostree/commit/62594765b2fae72e332ffb21fbd11085d911ef83
 
-This is actually already in mainline for v4.20-rc1:
-2cd3faf87d2d8f6123adf34741b9a7b98828a76f
-("merge_config.sh: Allow to define config prefix")
+So use the new 2018.9.1 tarball to get this file otherwise build with
+systemd will fail
 
-Signed-off-by: Nasser Afshin <afshin.nasser@gmail.com>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Fixes:
+ - http://autobuild.buildroot.org/results/fc6435282630e60927f88bf5954805ebbaa60cb3
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/kconfig/merge_config.sh                    |  7 ++++-
- ...e_config.sh-Allow-to-define-config-prefix.patch | 31 ++++++++++++++++++++++
- support/kconfig/patches/series                     |  1 +
- 3 files changed, 38 insertions(+), 1 deletion(-)
+ package/libostree/libostree.hash | 2 +-
+ package/libostree/libostree.mk   | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/support/kconfig/merge_config.sh b/support/kconfig/merge_config.sh
-index 50de5114dc..404ca3864f 100755
---- a/support/kconfig/merge_config.sh
-+++ b/support/kconfig/merge_config.sh
-@@ -34,12 +34,16 @@ usage() {
- 	echo "  -r    list redundant entries when merging fragments"
- 	echo "  -O    dir to put generated output files.  Consider setting \$KCONFIG_CONFIG instead."
- 	echo "  -e    colon-separated list of br2-external trees to use (optional)"
-+	echo
-+	echo "Used prefix: '$CONFIG_PREFIX'. You can redefine it with \$CONFIG_
-+	environment variable."
- }
+diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
+index 35bf2caf0a..ddd15b5099 100644
+--- a/package/libostree/libostree.hash
++++ b/package/libostree/libostree.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 9a3c17af133e6d381bb997473c6371ef8f048c1cfb6bd0acdb5662ede712aa5a  libostree-2018.9.tar.xz
++sha256 f263cfed75dcc9e312a874d28241e7143d8a0d8c774938f2165327bae67dbe06  libostree-2018.9.1.tar.xz
+ sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index 8538cdc69c..e8cdd64d6e 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
+@@ -4,9 +4,10 @@
+ #
+ ################################################################################
  
- RUNMAKE=true
- ALLTARGET=alldefconfig
- WARNREDUN=false
- OUTPUT=.
-+CONFIG_PREFIX=${CONFIG_-CONFIG_}
+-LIBOSTREE_VERSION = 2018.9
++LIBOSTREE_VERSION_MAJOR = 2018.9
++LIBOSTREE_VERSION= $(LIBOSTREE_VERSION_MAJOR).1
+ LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
+-LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
++LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION_MAJOR)
  
- while true; do
- 	case $1 in
-@@ -105,7 +109,8 @@ if [ ! -r "$INITFILE" ]; then
- fi
- 
- MERGE_LIST=$*
--SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(CONFIG_[a-zA-Z0-9_]*\)[= ].*/\2/p"
-+SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(${CONFIG_PREFIX}[a-zA-Z0-9_]*\)[= ].*/\2/p"
-+
- TMP_FILE=$(mktemp -t .tmp.config.XXXXXXXXXX)
- 
- echo "Using $INITFILE as base"
-diff --git a/support/kconfig/patches/20-merge_config.sh-Allow-to-define-config-prefix.patch b/support/kconfig/patches/20-merge_config.sh-Allow-to-define-config-prefix.patch
-new file mode 100644
-index 0000000000..645043b163
---- /dev/null
-+++ b/support/kconfig/patches/20-merge_config.sh-Allow-to-define-config-prefix.patch
-@@ -0,0 +1,31 @@
-+Index: kconfig/merge_config.sh
-+===================================================================
-+--- kconfig.orig/merge_config.sh
-++++ kconfig/merge_config.sh
-+@@ -34,12 +34,16 @@ usage() {
-+ 	echo "  -r    list redundant entries when merging fragments"
-+ 	echo "  -O    dir to put generated output files.  Consider setting \$KCONFIG_CONFIG instead."
-+ 	echo "  -e    colon-separated list of br2-external trees to use (optional)"
-++	echo
-++	echo "Used prefix: '$CONFIG_PREFIX'. You can redefine it with \$CONFIG_
-++	environment variable."
-+ }
-+ 
-+ RUNMAKE=true
-+ ALLTARGET=alldefconfig
-+ WARNREDUN=false
-+ OUTPUT=.
-++CONFIG_PREFIX=${CONFIG_-CONFIG_}
-+ 
-+ while true; do
-+ 	case $1 in
-+@@ -105,7 +109,8 @@ if [ ! -r "$INITFILE" ]; then
-+ fi
-+ 
-+ MERGE_LIST=$*
-+-SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(CONFIG_[a-zA-Z0-9_]*\)[= ].*/\2/p"
-++SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(${CONFIG_PREFIX}[a-zA-Z0-9_]*\)[= ].*/\2/p"
-++
-+ TMP_FILE=$(mktemp -t .tmp.config.XXXXXXXXXX)
-+ 
-+ echo "Using $INITFILE as base"
-diff --git a/support/kconfig/patches/series b/support/kconfig/patches/series
-index e136de7937..be8627db13 100644
---- a/support/kconfig/patches/series
-+++ b/support/kconfig/patches/series
-@@ -8,3 +8,4 @@
- 17-backport-kecho.patch
- 18-merge-config.sh-create-temporary-files-in-tmp.patch
- 19-merge_config.sh-add-br2-external-support.patch
-+20-merge_config.sh-Allow-to-define-config-prefix.patch
+ LIBOSTREE_LICENSE = LGPL-2.0+
+ LIBOSTREE_LICENSE_FILES = COPYING
