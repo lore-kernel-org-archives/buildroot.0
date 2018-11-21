@@ -1,60 +1,32 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 21 Nov 2018 20:58:22 +0100
-Subject: [Buildroot] [PATCH 8/8] support/testing: add perl-xml-libxml test
-In-Reply-To: <20181121195822.15379-1-francois.perrad@gadz.org>
-References: <20181121195822.15379-1-francois.perrad@gadz.org>
-Message-ID: <20181121195822.15379-9-francois.perrad@gadz.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 21 Nov 2018 20:59:07 +0100
+Subject: [Buildroot] [PATCH 1/1] mtd: fix build on riscv
+In-Reply-To: <20181120185237.31403-1-fontaine.fabrice@gmail.com>
+References: <20181120185237.31403-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181121205907.1ccefbd6@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- .gitlab-ci.yml                                |  1 +
- .../tests/package/test_perl_xml_libxml.py     | 21 +++++++++++++++++++
- 2 files changed, 22 insertions(+)
- create mode 100644 support/testing/tests/package/test_perl_xml_libxml.py
+Hello,
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index af643fa10..8ca50f045 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -318,6 +318,7 @@ tests.package.test_perl_gdgraph.TestPerlGDGraph: *runtime_test
- tests.package.test_perl_libwww_perl.TestPerllibwwwperl: *runtime_test
- tests.package.test_perl_mail_dkim.TestPerlMailDKIM: *runtime_test
- tests.package.test_perl_x10.TestPerlX10: *runtime_test
-+tests.package.test_perl_xml_libxml.TestPerlXMLLibXML: *runtime_test
- tests.package.test_python.TestPython2: *runtime_test
- tests.package.test_python.TestPython3: *runtime_test
- tests.package.test_python_autobahn.TestPythonPy2Autobahn: *runtime_test
-diff --git a/support/testing/tests/package/test_perl_xml_libxml.py b/support/testing/tests/package/test_perl_xml_libxml.py
-new file mode 100644
-index 000000000..6a2daaf72
---- /dev/null
-+++ b/support/testing/tests/package/test_perl_xml_libxml.py
-@@ -0,0 +1,21 @@
-+from tests.package.test_perl import TestPerl
-+
-+
-+class TestPerlXMLLibXML(TestPerl):
-+    """
-+    package:
-+        XML-LibXML
-+    direct dependencies:
-+        XML-NamespaceSupport
-+        XML-SAX
-+        XML-SAX-Base
-+    """
-+
-+    config = TestPerl.config + \
-+        """
-+        BR2_PACKAGE_PERL_XML_LIBXML=y
-+        """
-+
-+    def test_run(self):
-+        self.login()
-+        self.module_test("XML::LibXML")
+On Tue, 20 Nov 2018 19:52:37 +0100, Fabrice Fontaine wrote:
+> Define _REENTRANT otherwise pthread detection will fail
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/b0e7978a997a2aae383161455b5d898b8c28e2e1
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/mtd/mtd.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
+
+Applied to master, thanks.
+
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
