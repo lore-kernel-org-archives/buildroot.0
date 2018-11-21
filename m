@@ -1,103 +1,92 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Wed, 21 Nov 2018 00:44:37 -0200
-Subject: [Buildroot] [PATCH next] tpm2-tss: force libopenssl as openssl
- provider
-Message-ID: <20181121024437.21553-1-casantos@datacom.com.br>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 20 Nov 2018 21:12:45 -0600
+Subject: [Buildroot] [PATCH v2 2/6] package/llvm: install target
+ binary/debug tools
+In-Reply-To: <6b1c1219-de01-1012-09a8-eb33181cc2bc@gmail.com>
+References: <1542426982-54683-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <1542426982-54683-2-git-send-email-matthew.weber@rockwellcollins.com>
+ <50862e38-68c7-e166-a719-82ab28f7aad9@smile.fr>
+ <CANQCQpbU9jTkv9L8B80o+k2x_sAtDVOhhE9KFjUXA_nVuV=ang@mail.gmail.com>
+ <CANLo3Ji5+U+2OkL8pMD=8B-iQL29AZLDGXWdcijjzgzSqc3hzQ@mail.gmail.com>
+ <CANQCQpbdA1O5sRxpxax3ZQepzsA7WPhinB=oW8dVYYweQrbTOQ@mail.gmail.com>
+ <6b1c1219-de01-1012-09a8-eb33181cc2bc@gmail.com>
+Message-ID: <CANQCQpbmLGK955=w74NOM5A67k_rJtUF3domF_+==zpTaHVOvw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL and drop the patch to
-compile with libressl.
+On Tue, Nov 20, 2018 at 4:37 PM Romain Naour <romain.naour@gmail.com> wrote:
+>
+> Hi Matt,
+>
+> Le 19/11/2018 ? 14:04, Matthew Weber a ?crit :
+> > Romain,
+> >
+> > On Mon, Nov 19, 2018 at 2:10 AM Romain Naour <romain.naour@gmail.com> wrote:
+> >>
+> >> Hi Matt,
+> >>
+> >> Le lun. 19 nov. 2018 ? 02:48, Matthew Weber <matthew.weber@rockwellcollins.com> a ?crit :
+> >>>
+> >>> Romain,
+> >>>
+> >>> On Sun, Nov 18, 2018 at 1:14 PM Romain Naour <romain.naour@smile.fr> wrote:
+> >>>>
+> >>>> Hi Matt,
+> >>>>
+> >>>> Le 17/11/2018 ? 04:56, Matt Weber a ?crit :
+> >>>>> The compiler-rt fuzzer and address sanitizer tools require additional
+> >>>>> LLVM binary tools installed to allow stack trace decoding actively during
+> >>>>> executable analysis.
+> >>>>>
+> >>>>> https://github.com/google/sanitizers/wiki/AddressSanitizerCallStack
+> >>>>>
+> >>>>> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> >>>>> Reviewed-by: Romain Naour <romain.naour@smile.fr>
+> >>>>
+> >>>> For some reason I get an error while building llvm package tools.
+> >>>>
+> >>>> x86_64-linux-g++: WARNING: unsafe header/library path used in cross-compilation:
+> >>>> '-I/usr/include/libxml2'
+> >>>>
+> >>>> Can you have a look?
+> >>>
+> >>> I went back and checked my logs on the clang compiler-rt run-test
+> >>> build for that warning and didn't find it.  I then checked and my
+> >>> config and it has the unsafe header/library as error.  Was your build
+> >>> test just applying my patches and doing an explicit 'make llvm'?
+> >>
+> >>
+> >> Indeed,
+> >> Some tools use libxml2, so you have to add target libxml2 package as build dependency.
+> >>
+> >
+> > Would you mind sharing your verbose output and equivalent of cmake
+> > config guess/status?
+> >
+>
+> I need to rebuild from scratch since I've fixed the build locally.
+> I'll restart a new one next week-end.
+>
 
-The discussion with the tpm2-tss developers led to the conclusion that
-libressl lacks some required functionalities. Quoting Andreas Fuchs[1]:
-"LibreSSL does not support OAEP-mode with labels at all, even though the
-internal OAEP-padding-function includes the parameters already. [...]
-Further, the internal OAEP-padding-function does not support variable
-hash algs, but staticly uses SHA1."
+Something like the following added to package/llvm/llvm.mk?  (Still
+haven't see this on my end.  I messed with my host system a bit to get
+libxml2 support and headers in place, no luck.)
 
-Notice that there will NOT be an option to use libgcrypt. OpenSSL will
-soon become the default ESAPI crypto backend to prevent the problem of
-forcing applications to link against both libgcrypt and libssl[2].
+# LLVM requires libxml2
+HOST_LLVM_CONF_OPTS += \
+       -DLIBXML2_LIBRARIES=$(HOST_DIR)/lib \
+       -DLIBXML2_INCLUDE_DIR=$(HOST_DIR)/include/libxml2
+HOST_LLVM_DEPENDENCIES += host-libxml2
+LLVM_CONF_OPTS += \
+       -DLIBXML2_LIBRARIES=$(STAGING_DIR)/usr/lib \
+       -DLIBXML2_INCLUDE_DIR=$(STAGING_DIR)/usr/include/libxml2
+LLVM_DEPENDENCIES += libxml2
 
-1. https://github.com/tpm2-software/tpm2-tss/pull/1207#issuecomment-440217659
-2. https://github.com/tpm2-software/tpm2-tss/issues/1169
+The interesting thing is that it looks like just a windows manifest
+manager source file uses the libxml2.  Unsure of it's role....
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
----
- .../0001-ESYS-Fix-build-with-LibreSSL.patch   | 48 -------------------
- package/tpm2-tss/Config.in                    |  1 +
- 2 files changed, 1 insertion(+), 48 deletions(-)
- delete mode 100644 package/tpm2-tss/0001-ESYS-Fix-build-with-LibreSSL.patch
 
-diff --git a/package/tpm2-tss/0001-ESYS-Fix-build-with-LibreSSL.patch b/package/tpm2-tss/0001-ESYS-Fix-build-with-LibreSSL.patch
-deleted file mode 100644
-index d8bf2a665c..0000000000
---- a/package/tpm2-tss/0001-ESYS-Fix-build-with-LibreSSL.patch
-+++ /dev/null
-@@ -1,48 +0,0 @@
--From e8b8ecd2f761430dd2e2c74505974b429fe6b40f Mon Sep 17 00:00:00 2001
--From: Carlos Santos <casantos@datacom.com.br>
--Date: Wed, 14 Nov 2018 23:31:25 -0200
--Subject: [PATCH] ESYS: Fix build with LibreSSL
--
--RAND_bytes() is declared in rand.h. Also, LibreSSL does not provide OAEP
--macros EVP_PKEY_CTX_set0_rsa_oaep_label and EVP_PKEY_CTX_set_rsa_oaep_md
--so use them conditionally.
--
--Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-----
-- src/tss2-esys/esys_crypto_ossl.c | 6 ++++++
-- 1 file changed, 6 insertions(+)
--
--diff --git a/src/tss2-esys/esys_crypto_ossl.c b/src/tss2-esys/esys_crypto_ossl.c
--index 43088f4a..6c0c76fe 100644
----- a/src/tss2-esys/esys_crypto_ossl.c
--+++ b/src/tss2-esys/esys_crypto_ossl.c
--@@ -10,6 +10,7 @@
-- #include <openssl/aes.h>
-- #include <openssl/rsa.h>
-- #include <openssl/engine.h>
--+#include <openssl/rand.h>
-- #include <stdio.h>
-- 
-- #include "tss2_esys.h"
--@@ -660,6 +661,8 @@ iesys_cryptossl_pk_encrypt(TPM2B_PUBLIC * pub_tpm_key,
--                    "Could not set RSA passing.", cleanup);
--     }
-- 
--+/* LibreSSL does not provide these OAEP functions */
--+#ifdef EVP_PKEY_CTX_set0_rsa_oaep_label
--     if (1 != EVP_PKEY_CTX_set0_rsa_oaep_label(ctx, label, strlen(label)+1)) {
--         goto_error(r, TSS2_ESYS_RC_GENERAL_FAILURE,
--                    "Could not set RSA label.", cleanup);
--@@ -669,6 +672,9 @@ iesys_cryptossl_pk_encrypt(TPM2B_PUBLIC * pub_tpm_key,
--         goto_error(r, TSS2_ESYS_RC_GENERAL_FAILURE,
--                    "Could not set hash algorithm.", cleanup);
--     }
--+#else
--+    (void) label;
--+#endif
-- 
--     /* Determine out size */
--     if (1 != EVP_PKEY_encrypt(ctx, NULL, out_size, in_buffer, in_size)) {
---- 
--2.19.1
--
-diff --git a/package/tpm2-tss/Config.in b/package/tpm2-tss/Config.in
-index 933adb4b2a..2fb5b0f213 100644
---- a/package/tpm2-tss/Config.in
-+++ b/package/tpm2-tss/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_TPM2_TSS
- 	depends on !BR2_STATIC_LIBS # dlfcn.h
- 	select BR2_PACKAGE_LIBURIPARSER
- 	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
- 	help
- 	  OSS implementation of the Trusted Computing Group's (TCG) TPM2
- 	  Software Stack (TSS). This stack consists of the following
--- 
-2.19.1
+Matt
