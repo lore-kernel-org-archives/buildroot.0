@@ -1,38 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 21 Nov 2018 22:39:39 +0100
-Subject: [Buildroot] [PATCH 1/1] python-aiohttp: new package
-In-Reply-To: <1542657158-9559-1-git-send-email-james.hilliard1@gmail.com>
-References: <1542657158-9559-1-git-send-email-james.hilliard1@gmail.com>
-Message-ID: <20181121223939.198b81e0@windsurf>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 21 Nov 2018 22:55:33 +0100
+Subject: [Buildroot] [PATCH 1/1] libv4l: v4l2-compliance needs fork
+In-Reply-To: <87in0unti1.fsf@dell.be.48ers.dk>
+References: <20181117205222.17636-1-fontaine.fabrice@gmail.com>
+ <87in0unti1.fsf@dell.be.48ers.dk>
+Message-ID: <20181121225533.7ca0f4f0@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Fabrice,
 
-On Tue, 20 Nov 2018 03:52:38 +0800, james.hilliard1 at gmail.com wrote:
-> From: James Hilliard <james.hilliard1@gmail.com>
+On Sun, 18 Nov 2018 19:13:58 +0100, Peter Korsgaard <peter@korsgaard.com> wrote:
+
+> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:  
 > 
-> Async http client/server framework (asyncio).
+>  > Since bump to 1.16.2, v4l2-compliance uses fork, see:
+>  > https://git.linuxtv.org/v4l-utils.git/commit/utils/v4l2-compliance/?id=79d98edd1a27233667a6bc38d3d7f8958c2ec02c  
 > 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  DEVELOPERS                                 |  1 +
->  package/Config.in                          |  1 +
->  package/python-aiohttp/Config.in           | 14 ++++++++++++++
->  package/python-aiohttp/python-aiohttp.hash |  5 +++++
->  package/python-aiohttp/python-aiohttp.mk   | 14 ++++++++++++++
->  5 files changed, 35 insertions(+)
->  create mode 100644 package/python-aiohttp/Config.in
->  create mode 100644 package/python-aiohttp/python-aiohttp.hash
->  create mode 100644 package/python-aiohttp/python-aiohttp.mk
+>  > So add a patch to disable v4l2-compliance if fork is unavailable  
 
-Applied to next, thanks.
+Did you send the patch upstream?
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards,
+Peter
+
+> 
+>  > Fixes:
+>  >  - http://autobuild.buildroot.org/results/447d792ce21c0e33a36ca9384fee46e099435ed8  
+> 
+>  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>  
+> 
+> Committed, thanks.
+> 
