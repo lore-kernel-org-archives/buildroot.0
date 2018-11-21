@@ -1,36 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 21 Nov 2018 09:40:48 +0100
-Subject: [Buildroot] [PATCH] package/wolfssl: bump to version 3.15.5
-In-Reply-To: <20181120173801.15024-1-sergio.prado@e-labworks.com>
-References: <20181120173801.15024-1-sergio.prado@e-labworks.com>
-Message-ID: <20181121094048.4fc2e0c6@windsurf>
+Date: Wed, 21 Nov 2018 09:42:49 +0100
+Subject: [Buildroot] [PATCH next v2 1/2] package/apr-util: fix build
+ with per-package folders
+In-Reply-To: <20181120200944.GF2601@scaer>
+References: <20181120163853.5040-1-thomas.petazzoni@bootlin.com>
+ <20181120163853.5040-2-thomas.petazzoni@bootlin.com>
+ <20181120200944.GF2601@scaer>
+Message-ID: <20181121094249.065020c5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Sergio,
+Hello,
 
-On Tue, 20 Nov 2018 15:38:01 -0200, Sergio Prado wrote:
-> Also enable ARMv8 hardware acceleration (tested with
-> qemu_aarch64_virt_defconfig).
+On Tue, 20 Nov 2018 21:09:44 +0100, Yann E. MORIN wrote:
 
-Could be done in two separate patches (bump and ARMv8 HW acceleration
-enabling).
+> > +define APR_UTIL_FIX_RULES_MK_LIBTOOL
+> > +	$(SED) 's,$(PER_PACKAGE_DIR)/apr/,$(PER_PACKAGE_DIR)/apr-util/,g' $(@D)/build/rules.mk
+> > +	$(SED) 's,$(PER_PACKAGE_DIR)/apr/,$(PER_PACKAGE_DIR)/apr-util/,g' \  
+> 
+> I know we do not have a strong policy on this, but can you use '@' as
+> the separator, instead of the comma ',' as we are sure that the build
+> directory will not contain any '@':
+>     https://git.buildroot.org/buildroot/commit/Makefile?id=7007dc2bc99ad191c418c468707cdc3980273cda
 
-> -# build fails when ARMv8 hardware acceleration is enabled
-> +# enable ARMv8 hardware acceleration
-> +ifeq ($(BR2_ARM_CPU_ARMV8A),y)
-> +WOLFSSL_CONF_OPTS += --enable-armasm CPPFLAGS=-mstrict-align
+ACK.
 
-Why is -mstrict-align needed ? A comment above, or at least in the
-commit log would be useful. Also, don't override CPPFLAGS like this,
-something like that would be preferred:
+> > +		$(STAGING_DIR)/usr/build-1/libtool  
+> 
+> So, you're patching a file in STAGING_DIR in a post-configure hook?
 
-WOLFSSL_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -mstrict-align"
+Yes. With per-package folder, we are preparing the target and host
+(including staging) folders with the package dependencies during the
+configure step. It is what we copy that contains references to other
+per-package folders that should be fixed up before the build. Hence,
+this needs to be done during the configure step.
 
-Thanks!
+> Also, PER_PACKAGE_DIR does yet exist in master (or next, for that
+> matters), so this patch will have to leave in your branch for a little
+> while still, I'm afraid.. :-/
+
+Perhaps I should include this logic inside a BR2_PER_PACKAGE_FOLDERS
+condition.
+
+Best regards,
 
 Thomas
 -- 
