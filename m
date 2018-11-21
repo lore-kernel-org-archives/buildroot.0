@@ -1,54 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 21 Nov 2018 09:42:49 +0100
-Subject: [Buildroot] [PATCH next v2 1/2] package/apr-util: fix build
- with per-package folders
-In-Reply-To: <20181120200944.GF2601@scaer>
-References: <20181120163853.5040-1-thomas.petazzoni@bootlin.com>
- <20181120163853.5040-2-thomas.petazzoni@bootlin.com>
- <20181120200944.GF2601@scaer>
-Message-ID: <20181121094249.065020c5@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 21 Nov 2018 10:22:02 +0100
+Subject: [Buildroot] [PATCH next] package/glibc: update hash of LICENSES
+ file for ARC version
+In-Reply-To: <20181121081845.23739-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Wed, 21 Nov 2018 09:18:45 +0100")
+References: <20181121081845.23739-1-thomas.petazzoni@bootlin.com>
+Message-ID: <8736ruoked.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-On Tue, 20 Nov 2018 21:09:44 +0100, Yann E. MORIN wrote:
+ > In commit 5d4f23cbe65c79826b1b2071e972803a453934cb ("toolchain: Bump
+ > ARC tools to arc-2018.09-rc1"), the glibc version for the ARC
+ > architecture was bumped, but the hashes of the license files were not
+ > updated accordingly, causing a build failure during "legal-info":
 
-> > +define APR_UTIL_FIX_RULES_MK_LIBTOOL
-> > +	$(SED) 's,$(PER_PACKAGE_DIR)/apr/,$(PER_PACKAGE_DIR)/apr-util/,g' $(@D)/build/rules.mk
-> > +	$(SED) 's,$(PER_PACKAGE_DIR)/apr/,$(PER_PACKAGE_DIR)/apr-util/,g' \  
-> 
-> I know we do not have a strong policy on this, but can you use '@' as
-> the separator, instead of the comma ',' as we are sure that the build
-> directory will not contain any '@':
->     https://git.buildroot.org/buildroot/commit/Makefile?id=7007dc2bc99ad191c418c468707cdc3980273cda
+ > ERROR: LICENSES has wrong sha256 hash:
+ > ERROR: expected: 61abdd6930c9c599062d89e916b3e7968783879b6be0ee1c6229dd6169def431
+ > ERROR: got     : 35bdb41dc0bcb10702ddacbd51ec4c0fe6fb3129f734e8c85fc02e4d3eb0ce3f
 
-ACK.
+ > The changes between the previous LICENSES file and the new one are:
 
-> > +		$(STAGING_DIR)/usr/build-1/libtool  
-> 
-> So, you're patching a file in STAGING_DIR in a post-configure hook?
+ >  - The text related to libidn has been removed from the LICENSES file,
+ >    following the switch to libidn2:
 
-Yes. With per-package folder, we are preparing the target and host
-(including staging) folders with the package dependencies during the
-configure step. It is what we copy that contains references to other
-per-package folders that should be fixed up before the build. Hence,
-this needs to be done during the configure step.
+ >    https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=7f9f1ecb710eac4d65bb02785ddf288cac098323#patch2
 
-> Also, PER_PACKAGE_DIR does yet exist in master (or next, for that
-> matters), so this patch will have to leave in your branch for a little
-> while still, I'm afraid.. :-/
+ >  - The text related to stdio-common/tst-printf.c has been removed from
+ >    the LICENSES file, following the removal of this non-free code from
+ >    glibc:
 
-Perhaps I should include this logic inside a BR2_PER_PACKAGE_FOLDERS
-condition.
+ >    https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=5a357506659f9a00fcf5bc9c5d8fc676175c89a7#patch2
 
-Best regards,
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Thomas
+Committed to next, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
