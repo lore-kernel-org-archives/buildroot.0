@@ -1,49 +1,66 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Nov 2018 23:28:07 +0100
-Subject: [Buildroot] [git commit] fs/tar: add support for xattrs (thus
- capabilties)
-Message-ID: <20181121061300.DAE3A83DEA@busybox.osuosl.org>
+From: Valentin Korenblit <valentinkorenblit@gmail.com>
+Date: Wed, 21 Nov 2018 07:48:03 +0100
+Subject: [Buildroot] [PATCH v3 1/6] package/compiler-rt: new package
+In-Reply-To: <1542595067-45972-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1542595067-45972-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <7d364b6a-3c2a-735d-0f6e-5108b99a9767@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d688e2132f9feb63e325c2456d23edfc53f79a8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Matt,
 
-By default, tar will not include any extended attribute (xattr) when
-creating archives, and thus will not store capabilties either (as they
-are stored in the xattr 'security.capability').
+> This patch adds support for the compiler-rt (CLANG runtime) library.
+> It builds a set of static libraries and installs them into the
+> CLANG/LLVM toolchain resource folder.
+>
+> Signed-off-by: Matthew Weber<matthew.weber@rockwellcollins.com>
+> Cc: Romain Naour<romain.naour@smile.fr>
+> Cc: Ricardo Martincoski<ricardo.martincoski@gmail.com>
+> ---
+> Changes
+> v1 -> v2
+> [Romain
+>   - Removed unnecessary host-cmake dependency
+>
+> v2 -> v3
+> [Romain
+>   - Update to use COMPILER_RT_INSTALL_PATH for library install
+> [Ricardo
+>   - Fixed check-package extra line
+>   - Spelling in commit message
+> ---
 
-Using option --xattrs is enough to create a tarball with all the xattrs
-attached to a file. However, extracting all xattrs from a tarball
-requires that --xattrs-include='*' be used. This is not symetric (but on
-purpose, as per the documentation), and so is confusing to some.
+I've just tried to build compiler-rt for arm with uclibc and got the following:
 
-So, we use --xattrs-include='*' to create the archive, so as to be
-explicit that we want all xattrs to be stored.
+buildroot/test/build/compiler-rt-7.0.0/lib/interception/interception_linux.cc:
+In function ?void* __interception::GetFuncAddrVer(const char*, const char*)?:
+buildroot/test/build/compiler-rt-7.0.0/lib/interception/interception_linux.cc:48:10: error:
+?dlvsym? was not declared in this scope
+  return dlvsym(RTLD_NEXT, func_name, ver);
+           ^~~~~~
+buildroot/test/build/compiler-rt-7.0.0/lib/interception/interception_linux.cc:48:10: note:
+suggested alternative: ?dlsym?
+return dlvsym(RTLD_NEXT, func_name, ver);
+        ^~~~~~
+        dlsym
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- fs/tar/tar.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/tar/tar.mk b/fs/tar/tar.mk
-index 68149e9eb7..4c6327ace8 100644
---- a/fs/tar/tar.mk
-+++ b/fs/tar/tar.mk
-@@ -10,7 +10,7 @@ ROOTFS_TAR_DEPENDENCIES = $(BR2_TAR_HOST_DEPENDENCY)
- 
- define ROOTFS_TAR_CMD
- 	(cd $(TARGET_DIR); find -print0 | LC_ALL=C sort -z | \
--		tar $(TAR_OPTS) -cf $@ --null --no-recursion -T - --numeric-owner)
-+		tar $(TAR_OPTS) -cf $@ --null --xattrs-include='*' --no-recursion -T - --numeric-owner)
- endef
- 
- $(eval $(rootfs))
+buildroot/test/build/compiler-rt-7.0.0/lib/sanitizer_common/sanitizer_platform_limits_posix.cc:141:10:
+fatal error: obstack.h: No such file or directory
+  #include <obstack.h>
+           ^~~~~~~~~~~
+compilation terminated.
+
+
+It seems we depend on glibc, haven't tried with musl yet.
+
+Best regards,
+
+Valentin
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181121/1cf3e183/attachment.html>
