@@ -1,93 +1,101 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 21 Nov 2018 23:03:03 +0100
-Subject: [Buildroot] [PATCH v2] alsa-utils: install systemd sevice files
-In-Reply-To: <20181121173514.GM2601@scaer>
-References: <20181030224139.5140-1-ps.report@gmx.net>
- <20181121173514.GM2601@scaer>
-Message-ID: <20181121230303.44b6579f@gmx.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 21 Nov 2018 23:09:23 +0100
+Subject: [Buildroot] [PATCH/next 1/1] sdl2: fix build with --disable-threads
+Message-ID: <20181121220923.24849-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+SDL_LinuxSetThreadPriority() has been added since version 2.0.9 and
+https://github.com/SDL-mirror/SDL/commit/f25a7fa870bdceb339e5105973f689606bcb9086
 
-On Wed, 21 Nov 2018 18:35:14 +0100, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+However, this function is used in src/dynapi/SDL_dynapi_procs.h even
+when SDL_THREADS_DISABLED
 
-> Peter, All,
-> 
-> On 2018-10-30 23:41 +0100, Peter Seiderer spake thusly:
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> > Changes v1 -> v2:
-> >   - fix symlinks (reported by ????? ??????????)
-> > ---
-> >  package/alsa-utils/alsa-utils.mk | 14 ++++++++++++++
-> >  1 file changed, 14 insertions(+)
-> > 
-> > diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
-> > index e9a45c675f..0c65082a14 100644
-> > --- a/package/alsa-utils/alsa-utils.mk
-> > +++ b/package/alsa-utils/alsa-utils.mk
-> > @@ -82,4 +82,18 @@ define ALSA_UTILS_INSTALL_TARGET_CMDS
-> >  	fi
-> >  endef
-> >  
-> > +ifeq ($(BR2_PACKAGE_ALSA_UTILS_ALSACTL),y)
-> > +define ALSA_UTILS_INSTALL_INIT_SYSTEMD
-> > +	$(INSTALL) -D -m 0644 $(@D)/alsactl/alsa-restore.service \
-> > +		$(TARGET_DIR)/usr/lib/systemd/system/alsa-restore.service
-> > +	$(INSTALL) -D -m 0644 $(@D)/alsactl/alsa-state.service \
-> > +		$(TARGET_DIR)/usr/lib/systemd/system/alsa-state.service
-> > +	mkdir -p $(TARGET_DIR)/etc/systemd/system/sound.target.wants
-> > +	ln -sf ../../../../lib/systemd/system/alsa-restore.service \
-> > +		$(TARGET_DIR)/etc/systemd/system/sound.target.wants/alsa-restore.service
-> > +	ln -sf ../../../../lib/systemd/system/alsa-state.service \
-> > +		$(TARGET_DIR)/etc/systemd/system/sound.target.wants/alsa-state.service
-> > +endef
-> > +endif  
-> 
-> This does not works with that defconfig:
-> 
-> BR2_arm=y
-> BR2_cortex_a53=y
-> BR2_ARM_FPU_NEON_VFPV4=y
-> BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-> BR2_TOOLCHAIN_BUILDROOT_USE_SSP=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_INIT_SYSTEMD=y
-> BR2_PACKAGE_ALSA_UTILS=y
-> BR2_PACKAGE_ALSA_UTILS_ALSACONF=y
-> BR2_PACKAGE_ALSA_UTILS_AMIXER=y
-> BR2_PACKAGE_ALSA_UTILS_APLAY=y
-> BR2_PACKAGE_ALSA_UTILS_SPEAKER_TEST=y
-> # BR2_TARGET_ROOTFS_TAR is not set
-> 
-> And fails with this error:
-> 
-> /usr/bin/install -D -m 0644 /home/ymorin/dev/buildroot/O2/build/alsa-utils-1.1.6/alsactl/alsa-restore.service /home/ymorin/dev/buildroot/O2/target/usr/lib/systemd/system/alsa-restore.service
-> /usr/bin/install: cannot stat '/home/ymorin/dev/buildroot/O2/build/alsa-utils-1.1.6/alsactl/alsa-restore.service': No such file or directory
-> 
-> Care to have a look, please?
+However, when SDL_THREADS_DISABLED is set, SDL_LinuxSetThreadPriority is
+not defined because thread/pthread/SDL_systhread.c is not built
 
-Should be fixed (besides the systemd/uclibc problems) with:
+So check SDL_THREADS_DISABLED in addition to __LINUX__
 
-	https://patchwork.ozlabs.org/patch/1001417
+Fixes:
+ - http://autobuild.buildroot.org/results/539cb9ab6c605dc6be73ebe90debab1a998f2451
 
-Regards,
-Peter
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0001-fix-build-with-disable-threads.patch | 63 +++++++++++++++++++
+ 1 file changed, 63 insertions(+)
+ create mode 100644 package/sdl2/0001-fix-build-with-disable-threads.patch
 
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> >  $(eval $(autotools-package))
-> > -- 
-> > 2.19.1
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot  
-> 
+diff --git a/package/sdl2/0001-fix-build-with-disable-threads.patch b/package/sdl2/0001-fix-build-with-disable-threads.patch
+new file mode 100644
+index 0000000000..81f7d7446f
+--- /dev/null
++++ b/package/sdl2/0001-fix-build-with-disable-threads.patch
+@@ -0,0 +1,63 @@
++From 26646028f79d7f3d857df9b46cd6d0285796c699 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 21 Nov 2018 22:31:09 +0100
++Subject: [PATCH] fix build with --disable-threads
++
++SDL_LinuxSetThreadPriority() has been added since version 2.0.9 and
++https://github.com/SDL-mirror/SDL/commit/f25a7fa870bdceb339e5105973f689606bcb9086
++
++However, this function is used in src/dynapi/SDL_dynapi_procs.h even
++when SDL_THREADS_DISABLED
++
++However, when SDL_THREADS_DISABLED is set, SDL_LinuxSetThreadPriority is
++not defined because thread/pthread/SDL_systhread.c is not built
++
++So check SDL_THREADS_DISABLED in addition to __LINUX__
++
++Fixes:
++ - http://autobuild.buildroot.org/results/539cb9ab6c605dc6be73ebe90debab1a998f2451
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ include/SDL_system.h          | 4 ++--
++ src/dynapi/SDL_dynapi_procs.h | 2 +-
++ 2 files changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/include/SDL_system.h b/include/SDL_system.h
++index 4dc372d6b..0513d7fa5 100644
++--- a/include/SDL_system.h
+++++ b/include/SDL_system.h
++@@ -77,7 +77,7 @@ extern DECLSPEC SDL_bool SDLCALL SDL_DXGIGetOutputInfo( int displayIndex, int *a
++ 
++ 
++ /* Platform specific functions for Linux */
++-#ifdef __LINUX__
+++#if defined(__LINUX__) && !defined(SDL_THREADS_DISABLED)
++ 
++ /**
++    \brief Sets the UNIX nice value for a thread, using setpriority() if possible, and RealtimeKit if available.
++@@ -86,7 +86,7 @@ extern DECLSPEC SDL_bool SDLCALL SDL_DXGIGetOutputInfo( int displayIndex, int *a
++  */
++ extern DECLSPEC int SDLCALL SDL_LinuxSetThreadPriority(Sint64 threadID, int priority);
++  
++-#endif /* __LINUX__ */
+++#endif /* defined(__LINUX__) && !defined(SDL_THREADS_DISABLED) */
++ 	
++ /* Platform specific functions for iOS */
++ #if defined(__IPHONEOS__) && __IPHONEOS__
++diff --git a/src/dynapi/SDL_dynapi_procs.h b/src/dynapi/SDL_dynapi_procs.h
++index c95cf708b..ee9bf60a6 100644
++--- a/src/dynapi/SDL_dynapi_procs.h
+++++ b/src/dynapi/SDL_dynapi_procs.h
++@@ -708,7 +708,7 @@ SDL_DYNAPI_PROC(SDL_bool,SDL_IsAndroidTV,(void),(),return)
++ SDL_DYNAPI_PROC(double,SDL_log10,(double a),(a),return)
++ SDL_DYNAPI_PROC(float,SDL_log10f,(float a),(a),return)
++ SDL_DYNAPI_PROC(char*,SDL_GameControllerMappingForDeviceIndex,(int a),(a),return)
++-#ifdef __LINUX__
+++#if defined(__LINUX__) && !defined(SDL_THREADS_DISABLED)
++ SDL_DYNAPI_PROC(int,SDL_LinuxSetThreadPriority,(Sint64 a, int b),(a,b),return)
++ #endif
++ SDL_DYNAPI_PROC(SDL_bool,SDL_HasAVX512F,(void),(),return)
++-- 
++2.17.1
++
+-- 
+2.17.1
