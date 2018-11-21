@@ -1,44 +1,84 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 21 Nov 2018 11:18:27 +0100
-Subject: [Buildroot] buildroot error: No hash found for gcc-7.3.0.tar.xz
-In-Reply-To: <6322632.7631b.167337b2f9d.Coremail.lixuejun@vip.163.com>
-References: <2776276a.afc0d.167306f454d.Coremail.lixuejun@vip.163.com>
- <05e7b91c-7801-8985-8a83-38d53193aa84@mind.be>
- <6322632.7631b.167337b2f9d.Coremail.lixuejun@vip.163.com>
-Message-ID: <4a43fe84-a4e2-cb16-f321-870075f07213@mind.be>
+From: =?UTF-8?Q?DUPONCHEEL_S=c3=a9bastien?= <sebastien.duponcheel@corp.ovh.com>
+Date: Wed, 21 Nov 2018 11:59:33 +0100
+Subject: [Buildroot] [PATCH 1/1] shadowsocks-libev: add connmarktos
+ build option
+In-Reply-To: <cb8d9edb-ac71-c5b6-15dc-8c89ea712c6c@mind.be>
+References: <1542300189-12939-1-git-send-email-sebastien.duponcheel@corp.ovh.com>
+ <87o9aq5hcb.fsf@tkos.co.il>
+ <25f6955b-c3f1-28a1-2a51-6ad90f391c9c@corp.ovh.com>
+ <871s7jh1jd.fsf@tkos.co.il>
+ <da5a2951-731f-d529-f32d-a7437041ca30@corp.ovh.com>
+ <cb8d9edb-ac71-c5b6-15dc-8c89ea712c6c@mind.be>
+Message-ID: <405020aa-8c2e-461a-6b55-df3c41c4b2ce@corp.ovh.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Please keep the mailing list in Cc, others may benefit from your solution and
-other people may be able to respond more quickly than me.
+Pull request opened upstream, thank you.
 
-On 21/11/2018 00:36, ??? wrote:
->>> There is a file ?gcc.hash??at path /home/lxj/buildroot-2018.08.2/package/gcc,
+Best regards,
+DUPONCHEEL S?bastien
+
+Le 20/11/2018 ? 23:25, Arnout Vandecappelle a ?crit?:
+>
+> On 20/11/2018 14:56, DUPONCHEEL S?bastien wrote:
+>> Hi Baruch,
 >>
->> There should be a symlink from package/gcc/gcc-initial/gcc-initial.hash to this
->>file. Is that symlink present, and is it pointing to the correct file?
+>> Please see my feedback below :
 >>
-> 
-> The symlink file is present, and the content of the file is:
-> ../gcc.hash
-> The following is a copy of the file's infomation:
-> root at lxj-VirtualBox:/home/lxj/buildroot-2018.08.2/package/gcc# cd gcc-initial
-> root at lxj-VirtualBox:/home/lxj/buildroot-2018.08.2/package/gcc/gcc-initial# ls -ltotal 8
-> -rwxrwxrwx 1 root root   11 10? 25 20:40 gcc-initial.hash
-> -rwxrwxrwx 1 root root 2083 10? 25 20:40 gcc-initial.mk
-> root at lxj-VirtualBox:/home/lxj/buildroot-2018.08.2/package/gcc/gcc-initial# cat gcc-initial.hash
-> ../gcc.hashroot at lxj-VirtualBox:/home/lxj/buildroot-2018.08.2/package/gcc/gcc-initial# 
-> Thanks.
-
- So that's not a symlink... I guess you're using some filesystem that doesn't
-support symlinks, or doesn't have proper support for symlinks in your kernel.
-Virtualbox shared folder maybe?
-
- That will not work. You need to extract the tarball on a filesystem that
-supports symlinks.
-
- Regards,
- Arnout
+>> Le 17/11/2018 ? 21:49, Baruch Siach a ?crit?:
+> [snip]
+>>> The AC_ARG_ENABLE macro in configure.ac automatically provides
+>>> --enable-foo and --disable-foo.
+>> The AC_ARG_ENABLE statement in shadowsocks looks broken, neither --disable-connmarktos
+>> nor --enable-connmarktos=no are working. In fact, it activates the feature.
+>   Yes, that's a classic problem - people refuse to read documentation so they
+> don't notice that the third argument is not "code to run when the option is yes"
+> but actually it is "code to run when the option is given".
+>
+>   So, either you fix this by patching shadowsocks-libev's configure.ac and replacing
+>
+> -  enable_connmarktos="yes"
+> +  enable_connmarktos="$enableval"
+>
+> and sending the patch upstream, or you do
+>
+> ifeq ($(BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS),y)
+> SHADOWSOCKS_LIBEV_DEPENDENCIES += libnetfilter_conntrack
+> SHADOWSOCKS_LIBEV_CONF_OPTS += --enable-connmarktos
+> # --disable-connmarktos *enables* it.
+> endif
+>
+>   Obviously, the first option is preferred.
+>
+>   Regards,
+>   Arnout
+>
+>> ifeq ($(BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS),y)
+>> SHADOWSOCKS_LIBEV_DEPENDENCIES += libnetfilter_conntrack
+>> SHADOWSOCKS_LIBEV_CONF_OPTS += --enable-connmarktos
+>> else
+>> SHADOWSOCKS_LIBEV_CONF_OPTS += --disable-connmarktos
+>> endif
+>>
+>> seb at compile:src/buildroot ?shadowsocks?$ cat .config | grep CONNMARK
+>> # BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS is not set
+>> seb at compile:src/buildroot ?shadowsocks*?$ ldd ./output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/bin/ss-server | grep libnetfilter_conntrack.so.3
+>> 	libnetfilter_conntrack.so.3 => /home/seb/src/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/libnetfilter_conntrack.so.3 (0x00006f816dde4000)
+>>
+>> Best regards,
+>> DUPONCHEEL S?bastien.
+>>
+>>> baruch
+>>>
+>>> --
+>>>       http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+>>> =}------------------------------------------------ooO--U--Ooo------------{=
+>>>     - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
