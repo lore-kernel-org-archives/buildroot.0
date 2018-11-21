@@ -1,59 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 21 Nov 2018 22:29:15 +0100
-Subject: [Buildroot] [git commit branch/next] shadowsocks-libev: add
- connmarktos build option
-Message-ID: <20181121212629.DFDEA83FFD@busybox.osuosl.org>
+Date: Wed, 21 Nov 2018 21:09:01 +0100
+Subject: [Buildroot] [git commit branch/next] shadowsocks-libev: bump to
+ version 3.2.1
+Message-ID: <20181121212629.D9273841F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73962d34498f8570a465a8fe5771c05daa4414d5
+commit: https://git.buildroot.net/buildroot/commit/?id=7ec56c1e12b9e79ab55aad63dab377f15bc8d248
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: DUPONCHEEL S??bastien <sebastien.duponcheel@corp.ovh.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/shadowsocks-libev/Config.in            | 12 ++++++++++++
- package/shadowsocks-libev/shadowsocks-libev.mk |  6 ++++++
- 2 files changed, 18 insertions(+)
+ package/shadowsocks-libev/shadowsocks-libev.hash | 2 +-
+ package/shadowsocks-libev/shadowsocks-libev.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/shadowsocks-libev/Config.in b/package/shadowsocks-libev/Config.in
-index f58abdbcb1..5ad79ad9cf 100644
---- a/package/shadowsocks-libev/Config.in
-+++ b/package/shadowsocks-libev/Config.in
-@@ -15,6 +15,18 @@ config BR2_PACKAGE_SHADOWSOCKS_LIBEV
+diff --git a/package/shadowsocks-libev/shadowsocks-libev.hash b/package/shadowsocks-libev/shadowsocks-libev.hash
+index fffe9fddf0..00b112297c 100644
+--- a/package/shadowsocks-libev/shadowsocks-libev.hash
++++ b/package/shadowsocks-libev/shadowsocks-libev.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256 5521cf623a07fd1e393528516a83acd2b66c5d4bb4535a52662806a6a060c606 shadowsocks-libev-3.2.0.tar.gz
++sha256 988fc151474d0d2fb7a6005621949656e7a7f79400b4514624e09fd4b22969f6 shadowsocks-libev-3.2.1.tar.gz
  
- 	  https://github.com/shadowsocks/shadowsocks-libev
- 
-+config BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS
-+	bool "conmarktos support in ss-server"
-+	depends on BR2_PACKAGE_SHADOWSOCKS_LIBEV
-+	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
-+	help
-+	  Build ss-server with the connmark to TOS feature.
-+
-+	  This feature requires advanced tc, iptables and conntrack
-+	  rules to perform QoS on the server side.
-+
-+	  If unsure, don't enable this option
-+
- comment "shadowsocks-libev needs a toolchain w/ threads"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_8 || !BR2_ARCH_IS_64
+ # License files, locally calculated
+ sha256 736883f97d44dbec288bb82819f18f4f86d02ae3192f6a9abefa00db76bace41  COPYING
 diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
-index 2280a45a9c..368cb24a9a 100644
+index caae2176b4..2280a45a9c 100644
 --- a/package/shadowsocks-libev/shadowsocks-libev.mk
 +++ b/package/shadowsocks-libev/shadowsocks-libev.mk
-@@ -14,4 +14,10 @@ SHADOWSOCKS_LIBEV_CONF_OPTS = \
- 	--with-pcre=$(STAGING_DIR)/usr \
- 	--disable-ssp
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# --disable option was broken in 3.2.1, it will be fixed in 3.2.2
-+ifeq ($(BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS),y)
-+SHADOWSOCKS_LIBEV_DEPENDENCIES += libnetfilter_conntrack
-+SHADOWSOCKS_LIBEV_CONF_OPTS += --enable-connmarktos
-+endif
-+
- $(eval $(autotools-package))
+-SHADOWSOCKS_LIBEV_VERSION = 3.2.0
++SHADOWSOCKS_LIBEV_VERSION = 3.2.1
+ SHADOWSOCKS_LIBEV_SITE = https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$(SHADOWSOCKS_LIBEV_VERSION)
+ SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, BSD-2-Clause (libbloom), BSD-3-Clause (libcork, libipset)
+ SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING libbloom/LICENSE libcork/COPYING
