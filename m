@@ -1,32 +1,117 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Wed, 21 Nov 2018 22:01:54 +0100
-Subject: [Buildroot] [PATCH] configs/liteboard: remove explicit getty port
-Message-ID: <20181121210154.21841-1-m.niestroj@grinn-global.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 21 Nov 2018 22:05:56 +0100
+Subject: [Buildroot] [PATCH] package/systemd: needs glibc
+Message-ID: <20181121210556.18619-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Using default value (console) works well, so there is no reason to set
-tty explicitly.
+Since version v239, systemd-nspawn unconditioanlly uses prlimit(2),
+which is not implemented in uClibc-ng. systemd-nspawn can not be
+disabled.
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+This makes systemd glibc-only again.
+
+After a bit of discussion with upstream (om IRC), it looks very
+improbable that they accept a patch making systemd-nspawn optional.
+They would probably consider a patch that provides that syscall wrapper
+if it is missing, though, but that's less trivial...
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Waldemar Brodkorb <wbx@openadk.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/grinn_liteboard_defconfig | 1 -
- 1 file changed, 1 deletion(-)
+ package/systemd/Config.in  |  3 ---
+ package/systemd/systemd.mk | 11 +----------
+ system/Config.in           | 11 +++--------
+ 3 files changed, 4 insertions(+), 21 deletions(-)
 
-diff --git a/configs/grinn_liteboard_defconfig b/configs/grinn_liteboard_defconfig
-index 5f3ca07552..84f1735e22 100644
---- a/configs/grinn_liteboard_defconfig
-+++ b/configs/grinn_liteboard_defconfig
-@@ -1,7 +1,6 @@
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
--BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_SYSTEM_DHCP="eth0"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/grinn/liteboard/post-image.sh"
- BR2_LINUX_KERNEL=y
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index c858d89c05..25f322e8f3 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -192,7 +192,6 @@ config BR2_PACKAGE_SYSTEMD_MACHINED
+ config BR2_PACKAGE_SYSTEMD_MYHOSTNAME
+ 	bool "enable myhostname NSS plugin"
+ 	default y
+-	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs nss.h
+ 	help
+ 	  nss-myhostname is a plug-in module for the GNU Name Service
+ 	  Switch (NSS) functionality of the GNU C Library (glibc),
+@@ -252,7 +251,6 @@ config BR2_PACKAGE_SYSTEMD_RANDOMSEED
+ config BR2_PACKAGE_SYSTEMD_RESOLVED
+ 	bool "enable resolve daemon"
+ 	default y
+-	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs nss.h
+ 	help
+ 	  systemd-resolved is a system service that provides network
+ 	  name resolution to local applications. It implements a
+@@ -285,7 +283,6 @@ config BR2_PACKAGE_SYSTEMD_SMACK_SUPPORT
+ 
+ config BR2_PACKAGE_SYSTEMD_SYSUSERS
+ 	bool "enable sysusers support"
+-	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs gshadow.h
+ 	help
+ 	  systemd-sysusers creates system users and groups, based on
+ 	  the file format and location specified in sysusers.d(5).
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index ecbf7e97ff..e53f0b699a 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -40,18 +40,9 @@ SYSTEMD_CONF_OPTS += \
+ 	-Dsulogin-path=/usr/sbin/sulogin \
+ 	-Dmount-path=/usr/bin/mount \
+ 	-Dumount-path=/usr/bin/umount \
+-	-Dnobody-group=nogroup
+-
+-# disable unsupported features for non-glibc toolchains
+-ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
+-SYSTEMD_CONF_OPTS += \
++	-Dnobody-group=nogroup \
+ 	-Didn=true \
+ 	-Dnss-systemd=true
+-else
+-SYSTEMD_CONF_OPTS += \
+-	-Didn=false \
+-	-Dnss-systemd=false
+-endif
+ 
+ ifeq ($(BR2_PACKAGE_ACL),y)
+ SYSTEMD_DEPENDENCIES += acl
+diff --git a/system/Config.in b/system/Config.in
+index f63f27b126..9e34f11b6c 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -127,9 +127,7 @@ config BR2_INIT_SYSV
+ config BR2_INIT_SYSTEMD
+ 	bool "systemd"
+ 	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC
+-	depends on BR2_USE_WCHAR
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on BR2_TOOLCHAIN_HAS_SSP
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_STATIC_LIBS
+@@ -137,14 +135,11 @@ config BR2_INIT_SYSTEMD
+ 	select BR2_ROOTFS_MERGED_USR
+ 	select BR2_PACKAGE_SYSTEMD
+ 
+-comment "systemd needs a glibc or uClibc toolchain w/ wchar, threads, SSP, dynamic library, headers >= 3.10"
++comment "systemd needs a glibc toolchain w/ SSP, headers >= 3.10"
+ 	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+-	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC) || \
+-		!BR2_USE_WCHAR || \
+-		!BR2_TOOLCHAIN_HAS_THREADS || \
++	depends on !BR2_TOOLCHAIN_USES_GLIBC || \
+ 		!BR2_TOOLCHAIN_HAS_SSP || \
+-		BR2_STATIC_LIBS || \
+ 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+ 
+ config BR2_INIT_NONE
 -- 
-2.19.1
+2.14.1
