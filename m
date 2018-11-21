@@ -1,90 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 23 Nov 2018 22:05:46 +0100
-Subject: [Buildroot] [git commit] support/testing: add python-constantly
- tests
-Message-ID: <20181202071557.EB0FE815BC@busybox.osuosl.org>
+Date: Wed, 21 Nov 2018 21:09:01 +0100
+Subject: [Buildroot] [git commit] shadowsocks-libev: bump to version 3.2.1
+Message-ID: <20181202071557.0F1F68843B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ee9566640ddb38f835d2424d140780172bc8cf9
+commit: https://git.buildroot.net/buildroot/commit/?id=7ec56c1e12b9e79ab55aad63dab377f15bc8d248
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a simple test case to check the basic usage by creating a class with
-two constants.
-
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: DUPONCHEEL S??bastien <sebastien.duponcheel@corp.ovh.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .gitlab-ci.yml                                      |  2 ++
- .../tests/package/sample_python_constantly.py       | 19 +++++++++++++++++++
- .../testing/tests/package/test_python_constantly.py | 21 +++++++++++++++++++++
- 3 files changed, 42 insertions(+)
+ package/shadowsocks-libev/shadowsocks-libev.hash | 2 +-
+ package/shadowsocks-libev/shadowsocks-libev.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index eb6a187615..5133affa25 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -330,6 +330,8 @@ tests.package.test_python_cbor.TestPythonPy2Cbor: *runtime_test
- tests.package.test_python_cbor.TestPythonPy3Cbor: *runtime_test
- tests.package.test_python_click.TestPythonPy2Click: *runtime_test
- tests.package.test_python_click.TestPythonPy3Click: *runtime_test
-+tests.package.test_python_constantly.TestPythonPy2Constantly: *runtime_test
-+tests.package.test_python_constantly.TestPythonPy3Constantly: *runtime_test
- tests.package.test_python_crossbar.TestPythonPy3Crossbar: *runtime_test
- tests.package.test_python_cryptography.TestPythonPy2Cryptography: *runtime_test
- tests.package.test_python_cryptography.TestPythonPy3Cryptography: *runtime_test
-diff --git a/support/testing/tests/package/sample_python_constantly.py b/support/testing/tests/package/sample_python_constantly.py
-new file mode 100644
-index 0000000000..570cf85b23
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_constantly.py
-@@ -0,0 +1,19 @@
-+from constantly import ValueConstant, Values
-+
-+
-+class RESULT(Values):
-+    OK = ValueConstant(0)
-+    FAIL = ValueConstant(-1)
-+
-+    @classmethod
-+    def get(cls, rc):
-+        if rc == 0:
-+            return cls.OK
-+        else:
-+            return cls.FAIL
-+
-+
-+print(list(RESULT.iterconstants()))
-+assert(RESULT.OK < RESULT.FAIL)
-+assert(RESULT.OK.value > RESULT.FAIL.value)
-+assert(RESULT.get(-5) == RESULT.FAIL)
-diff --git a/support/testing/tests/package/test_python_constantly.py b/support/testing/tests/package/test_python_constantly.py
-new file mode 100644
-index 0000000000..5be01c4f8c
---- /dev/null
-+++ b/support/testing/tests/package/test_python_constantly.py
-@@ -0,0 +1,21 @@
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonPy2Constantly(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON=y
-+        BR2_PACKAGE_PYTHON_CONSTANTLY=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_constantly.py"]
-+
-+
-+class TestPythonPy3Constantly(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_CONSTANTLY=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_constantly.py"]
+diff --git a/package/shadowsocks-libev/shadowsocks-libev.hash b/package/shadowsocks-libev/shadowsocks-libev.hash
+index fffe9fddf0..00b112297c 100644
+--- a/package/shadowsocks-libev/shadowsocks-libev.hash
++++ b/package/shadowsocks-libev/shadowsocks-libev.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256 5521cf623a07fd1e393528516a83acd2b66c5d4bb4535a52662806a6a060c606 shadowsocks-libev-3.2.0.tar.gz
++sha256 988fc151474d0d2fb7a6005621949656e7a7f79400b4514624e09fd4b22969f6 shadowsocks-libev-3.2.1.tar.gz
+ 
+ # License files, locally calculated
+ sha256 736883f97d44dbec288bb82819f18f4f86d02ae3192f6a9abefa00db76bace41  COPYING
+diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
+index caae2176b4..2280a45a9c 100644
+--- a/package/shadowsocks-libev/shadowsocks-libev.mk
++++ b/package/shadowsocks-libev/shadowsocks-libev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SHADOWSOCKS_LIBEV_VERSION = 3.2.0
++SHADOWSOCKS_LIBEV_VERSION = 3.2.1
+ SHADOWSOCKS_LIBEV_SITE = https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$(SHADOWSOCKS_LIBEV_VERSION)
+ SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, BSD-2-Clause (libbloom), BSD-3-Clause (libcork, libipset)
+ SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING libbloom/LICENSE libcork/COPYING
