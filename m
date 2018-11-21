@@ -1,64 +1,48 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 21 Nov 2018 18:49:44 +0100
-Subject: [Buildroot] [PATCH 1/1] gauche: fix parallel build
-Message-ID: <20181121174944.24084-1-fontaine.fabrice@gmail.com>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Wed, 21 Nov 2018 16:20:51 -0200 (BRST)
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2018-11-20
+In-Reply-To: <20181121070023.D4AD220DC4@mail.bootlin.com>
+References: <20181121070023.D4AD220DC4@mail.bootlin.com>
+Message-ID: <73098303.3075424.1542824451507.JavaMail.zimbra@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch to fix parallel build issue on ext/rfc
+> From: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+> To: "DATACOM" <casantos@datacom.com.br>
+> Sent: Quarta-feira, 21 de novembro de 2018 5:00:23
+> Subject: [autobuild.buildroot.net] Your build results for 2018-11-20
 
-Fixes:
- - http://autobuild.buildroot.org/results/f4935e29ce6aaebdaa47d46c56120b7e97145d1b
+> Hello,
+> 
+> This is the list of Buildroot build failures that occured on
+> 2018-11-20, and for which you are a registered architecture developer
+> or package developer. Please help us improving the quality of
+> Buildroot by investigating those build failures and sending patches to
+> fix them. Thanks!
+> 
+> Results for the 'next' branch
+> =============================
+> 
+> Build failures related to your packages:
+> 
+>     powerpc |               tpm2-abrmd-2.0.3 |
+>     http://autobuild.buildroot.net/results/bd9005eeb24678aa530179a80bbc99b2176f8559
+>     powerpc |               tpm2-abrmd-2.0.3 |
+>     http://autobuild.buildroot.net/results/feff61dcb481a94f5f030117830984c5e09727ea
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/gauche/0004-rfc-needs-srfi.patch | 35 ++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 package/gauche/0004-rfc-needs-srfi.patch
+Patch submitted: https://patchwork.ozlabs.org/patch/1001280/
 
-diff --git a/package/gauche/0004-rfc-needs-srfi.patch b/package/gauche/0004-rfc-needs-srfi.patch
-new file mode 100644
-index 0000000000..8b83b7872b
---- /dev/null
-+++ b/package/gauche/0004-rfc-needs-srfi.patch
-@@ -0,0 +1,35 @@
-+From 33ba5e73ec09f1308f897128334e955debd9ea43 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 21 Nov 2018 08:58:25 +0100
-+Subject: [PATCH] rfc: needs srfi
-+
-+ext/rfc needs srfi-19 since version 0.9.5 and
-+https://github.com/shirok/Gauche/commit/bd22bc82361c5eeb5d3b58c3836236566746bb96
-+
-+So add a dependency on srfi for rfc target in Makefile.in
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/f4935e29ce6aaebdaa47d46c56120b7e97145d1b
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/shirok/Gauche/pull/397]
-+---
-+ ext/Makefile.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/ext/Makefile.in b/ext/Makefile.in
-+index 57ddf457e..de8d59a4d 100644
-+--- a/ext/Makefile.in
-++++ b/ext/Makefile.in
-+@@ -54,7 +54,7 @@ bcrypt: mt-random
-+ 
-+ dbm : threads
-+ 
-+-rfc: gauche util
-++rfc: gauche srfi util
-+ 
-+ test : check
-+ 
-+-- 
-+2.14.1
-+
+>     sparc64 |                util-linux-2.33 |
+>     http://autobuild.buildroot.net/results/44d0538332499cea691a381048562a09cda23624
+
+This is due to a bug in util-linux v2.33 already reported on the project
+mailing list.
+
 -- 
-2.14.1
+Carlos Santos (Casantos) - DATACOM, P&D
+?Marched towards the enemy, spear upright, armed with the certainty
+that only the ignorant can have.? ? Epitaph of a volunteer
