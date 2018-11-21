@@ -1,117 +1,104 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 21 Nov 2018 22:05:56 +0100
-Subject: [Buildroot] [PATCH] package/systemd: needs glibc
-Message-ID: <20181121210556.18619-1-yann.morin.1998@free.fr>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 21 Nov 2018 22:16:10 +0100
+Subject: [Buildroot] [PATCH/next 1/2] keepalived: bump to version 2.0.10
+Message-ID: <20181121211611.8521-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since version v239, systemd-nspawn unconditioanlly uses prlimit(2),
-which is not implemented in uClibc-ng. systemd-nspawn can not be
-disabled.
+- This version adds support for ipset version 7, see:
+  https://github.com/acassen/keepalived/commit/b7a98f9265ffb5927c4d54c9a30726c76e65bb52
+- Remove patch and AUTORECONF = YES, an alternative solution has been
+  implemented, see:
+  https://github.com/acassen/keepalived/commit/9bd10d8168b8e3c14bca61e504e64ed8c2b1eb8d
+- Disable hardening option (enabled by default):
+  https://github.com/acassen/keepalived/commit/5a65e1eb552bd973da35d7153b922682360a5ad2
 
-This makes systemd glibc-only again.
+Fixes:
+ - http://autobuild.buildroot.org/results/b730e8b25c1d3343b7a6d73f6d3b82b13692578b
 
-After a bit of discussion with upstream (om IRC), it looks very
-improbable that they accept a patch making systemd-nspawn optional.
-They would probably consider a patch that provides that syscall wrapper
-if it is missing, though, but that's less trivial...
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Waldemar Brodkorb <wbx@openadk.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/systemd/Config.in  |  3 ---
- package/systemd/systemd.mk | 11 +----------
- system/Config.in           | 11 +++--------
- 3 files changed, 4 insertions(+), 21 deletions(-)
+ .../0001-configure.ac-do-not-force-PIE.patch  | 38 -------------------
+ package/keepalived/keepalived.hash            |  2 +-
+ package/keepalived/keepalived.mk              |  5 +--
+ 3 files changed, 3 insertions(+), 42 deletions(-)
+ delete mode 100644 package/keepalived/0001-configure.ac-do-not-force-PIE.patch
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index c858d89c05..25f322e8f3 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -192,7 +192,6 @@ config BR2_PACKAGE_SYSTEMD_MACHINED
- config BR2_PACKAGE_SYSTEMD_MYHOSTNAME
- 	bool "enable myhostname NSS plugin"
- 	default y
--	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs nss.h
- 	help
- 	  nss-myhostname is a plug-in module for the GNU Name Service
- 	  Switch (NSS) functionality of the GNU C Library (glibc),
-@@ -252,7 +251,6 @@ config BR2_PACKAGE_SYSTEMD_RANDOMSEED
- config BR2_PACKAGE_SYSTEMD_RESOLVED
- 	bool "enable resolve daemon"
- 	default y
--	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs nss.h
- 	help
- 	  systemd-resolved is a system service that provides network
- 	  name resolution to local applications. It implements a
-@@ -285,7 +283,6 @@ config BR2_PACKAGE_SYSTEMD_SMACK_SUPPORT
- 
- config BR2_PACKAGE_SYSTEMD_SYSUSERS
- 	bool "enable sysusers support"
--	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs gshadow.h
- 	help
- 	  systemd-sysusers creates system users and groups, based on
- 	  the file format and location specified in sysusers.d(5).
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index ecbf7e97ff..e53f0b699a 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -40,18 +40,9 @@ SYSTEMD_CONF_OPTS += \
- 	-Dsulogin-path=/usr/sbin/sulogin \
- 	-Dmount-path=/usr/bin/mount \
- 	-Dumount-path=/usr/bin/umount \
--	-Dnobody-group=nogroup
+diff --git a/package/keepalived/0001-configure.ac-do-not-force-PIE.patch b/package/keepalived/0001-configure.ac-do-not-force-PIE.patch
+deleted file mode 100644
+index b51a4e334b..0000000000
+--- a/package/keepalived/0001-configure.ac-do-not-force-PIE.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 4da31a615412e15f7658d21770708e8084be149c Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Wed, 4 Apr 2018 22:29:45 +0200
+-Subject: [PATCH] configure.ac: do not force PIE
 -
--# disable unsupported features for non-glibc toolchains
--ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
--SYSTEMD_CONF_OPTS += \
-+	-Dnobody-group=nogroup \
- 	-Didn=true \
- 	-Dnss-systemd=true
--else
--SYSTEMD_CONF_OPTS += \
--	-Didn=false \
--	-Dnss-systemd=false
--endif
+-PIE is not necessarily supported on all architectures, so leave it up
+-to the user to pass the appropriate CFLAGS/LDFLAGS if he wants to use
+-PIE.
+-
+-This fixes the build on the m68k and Microblaze architecture:
+-
+-  http://autobuild.buildroot.net/results/a536f5947b3b70fdaecad1af5542572c504ad046/
+-  http://autobuild.buildroot.net/results/0ffbf1e8d181c9463847a5b2be6f9baa18face24/
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Upstream-status: https://github.com/acassen/keepalived/pull/830
+----
+- configure.ac | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index c344f07e..06545c91 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -233,8 +233,8 @@ AC_SUBST(ARFLAGS)
+- # AC_PROG_LIBTOOL
+- 
+- KA_CPPFLAGS="$kernelinc"
+--KA_CFLAGS="-Wall -Wunused -Wstrict-prototypes -Wextra -g -O2 -fPIE -D_GNU_SOURCE"
+--KA_LDFLAGS="-pie"
+-+KA_CFLAGS="-Wall -Wunused -Wstrict-prototypes -Wextra -g -O2 -D_GNU_SOURCE"
+-+KA_LDFLAGS=""
+- KA_LIBS=
+- NEED_LIBDL=No
+- #KA_LIBTOOLFLAGS =
+--- 
+-2.14.3
+-
+diff --git a/package/keepalived/keepalived.hash b/package/keepalived/keepalived.hash
+index ed7d2fb0a0..3ad3e6e6ac 100644
+--- a/package/keepalived/keepalived.hash
++++ b/package/keepalived/keepalived.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	4e2d7cc01a6ee29a3955f5c622d47704ba7d9dd758189f15e9def016a2d1faa3  keepalived-1.4.2.tar.gz
++sha256	40e0e55afed9ca313d621a9c5878579696fafb5504dab521aadaf20ba6e7f597  keepalived-2.0.10.tar.gz
+ sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/keepalived/keepalived.mk b/package/keepalived/keepalived.mk
+index ed80a79f8a..584da6bb48 100644
+--- a/package/keepalived/keepalived.mk
++++ b/package/keepalived/keepalived.mk
+@@ -4,13 +4,12 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_ACL),y)
- SYSTEMD_DEPENDENCIES += acl
-diff --git a/system/Config.in b/system/Config.in
-index f63f27b126..9e34f11b6c 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -127,9 +127,7 @@ config BR2_INIT_SYSV
- config BR2_INIT_SYSTEMD
- 	bool "systemd"
- 	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC
--	depends on BR2_USE_WCHAR
--	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_TOOLCHAIN_HAS_SSP
- 	depends on BR2_USE_MMU
- 	depends on !BR2_STATIC_LIBS
-@@ -137,14 +135,11 @@ config BR2_INIT_SYSTEMD
- 	select BR2_ROOTFS_MERGED_USR
- 	select BR2_PACKAGE_SYSTEMD
+-KEEPALIVED_VERSION = 1.4.2
++KEEPALIVED_VERSION = 2.0.10
+ KEEPALIVED_SITE = http://www.keepalived.org/software
+ KEEPALIVED_DEPENDENCIES = host-pkgconf openssl
+ KEEPALIVED_LICENSE = GPL-2.0+
+ KEEPALIVED_LICENSE_FILES = COPYING
+-# 0001-configure.ac-do-not-force-PIE.patch
+-KEEPALIVED_AUTORECONF = YES
++KEEPALIVED_CONF_OPTS = --disable-hardening
  
--comment "systemd needs a glibc or uClibc toolchain w/ wchar, threads, SSP, dynamic library, headers >= 3.10"
-+comment "systemd needs a glibc toolchain w/ SSP, headers >= 3.10"
- 	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
--	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC) || \
--		!BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_HAS_THREADS || \
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || \
- 		!BR2_TOOLCHAIN_HAS_SSP || \
--		BR2_STATIC_LIBS || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
- 
- config BR2_INIT_NONE
+ ifeq ($(BR2_PACKAGE_JSON_C),y)
+ KEEPALIVED_DEPENDENCIES += json-c
 -- 
-2.14.1
+2.17.1
