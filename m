@@ -1,95 +1,87 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Wed, 21 Nov 2018 17:26:11 +0100
-Subject: [Buildroot] [RFC 1/4] support/testing: add perl test
-In-Reply-To: <5bf20dd5ecdd5_3eca3f95580c57882082e@ultri5.mail>
-References: <20181117175244.23594-2-francois.perrad@gadz.org>
- <5bf20dd5ecdd5_3eca3f95580c57882082e@ultri5.mail>
-Message-ID: <CAB0FRsuJV2wv8QqtFdZQkgdbOWQqE0=6pjvAXHmca30zc9Xd4A@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 21 Nov 2018 18:35:14 +0100
+Subject: [Buildroot] [PATCH v2] alsa-utils: install systemd sevice files
+In-Reply-To: <20181030224139.5140-1-ps.report@gmx.net>
+References: <20181030224139.5140-1-ps.report@gmx.net>
+Message-ID: <20181121173514.GM2601@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le lun. 19 nov. 2018 ? 02:11, Ricardo Martincoski <
-ricardo.martincoski@gmail.com> a ?crit :
+Peter, All,
 
-> Hello,
->
-> In overall, the series looks good.
-> Except for the general discussion in the cover letter about which path we
-> want
-> to follow (add the infra to add a .pl to the image in build time or not),
-> I have
-> only nits.
->
-> On Sat, Nov 17, 2018 at 03:52 PM, Francois Perrad wrote:
->
-> [snip]
-> > +class TestPerl(infra.basetest.BRTest):
-> > +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-> > +        """
-> > +        BR2_TARGET_ROOTFS_CPIO=y
-> > +        # BR2_TARGET_ROOTFS_TAR is not set
-> > +        BR2_PACKAGE_PERL=y
->
-> nit: this is not the order after 'make savedefconfig'
->
-> > +        """
-> > +
-> [snip]
-> > +    def version_test(self, timeout=-1):
->
-> This timeout is always used with its default value, you can remove from
-> here and
-> from the call to emulator.run 2 lines below.
->
-> > +        cmd = "perl -v"
->
-> What about using this instead?
->         cmd = "perl -v | grep 'This is perl 5'"
->
+On 2018-10-30 23:41 +0100, Peter Seiderer spake thusly:
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+> Changes v1 -> v2:
+>   - fix symlinks (reported by ????? ??????????)
+> ---
+>  package/alsa-utils/alsa-utils.mk | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
+> index e9a45c675f..0c65082a14 100644
+> --- a/package/alsa-utils/alsa-utils.mk
+> +++ b/package/alsa-utils/alsa-utils.mk
+> @@ -82,4 +82,18 @@ define ALSA_UTILS_INSTALL_TARGET_CMDS
+>  	fi
+>  endef
+>  
+> +ifeq ($(BR2_PACKAGE_ALSA_UTILS_ALSACTL),y)
+> +define ALSA_UTILS_INSTALL_INIT_SYSTEMD
+> +	$(INSTALL) -D -m 0644 $(@D)/alsactl/alsa-restore.service \
+> +		$(TARGET_DIR)/usr/lib/systemd/system/alsa-restore.service
+> +	$(INSTALL) -D -m 0644 $(@D)/alsactl/alsa-state.service \
+> +		$(TARGET_DIR)/usr/lib/systemd/system/alsa-state.service
+> +	mkdir -p $(TARGET_DIR)/etc/systemd/system/sound.target.wants
+> +	ln -sf ../../../../lib/systemd/system/alsa-restore.service \
+> +		$(TARGET_DIR)/etc/systemd/system/sound.target.wants/alsa-restore.service
+> +	ln -sf ../../../../lib/systemd/system/alsa-state.service \
+> +		$(TARGET_DIR)/etc/systemd/system/sound.target.wants/alsa-state.service
+> +endef
+> +endif
 
-As tester, I don't like this kind of code, because I never know which exit
-code is available, the one from perl or the one from grep.
-Code written for test must be obvious.
-See the following example:
+This does not works with that defconfig:
 
-#!/usr/bin/env python
-import unittest
-import subprocess
+BR2_arm=y
+BR2_cortex_a53=y
+BR2_ARM_FPU_NEON_VFPV4=y
+BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+BR2_TOOLCHAIN_BUILDROOT_USE_SSP=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_INIT_SYSTEMD=y
+BR2_PACKAGE_ALSA_UTILS=y
+BR2_PACKAGE_ALSA_UTILS_ALSACONF=y
+BR2_PACKAGE_ALSA_UTILS_AMIXER=y
+BR2_PACKAGE_ALSA_UTILS_APLAY=y
+BR2_PACKAGE_ALSA_UTILS_SPEAKER_TEST=y
+# BR2_TARGET_ROOTFS_TAR is not set
 
-class DeveloperWay(unittest.TestCase):
-    def testPerl(self):
-        retcode = subprocess.call("perl -v | grep 'This is perl 5'",
-shell=True)
-        self.assertEqual(retcode, 0)
+And fails with this error:
 
-class TesterWay(unittest.TestCase):
-    def testPerl(self):
-        retcode = subprocess.call('perl -v', shell=True)
-        self.assertEqual(retcode, 0)
-        output = subprocess.check_output('perl -v', shell=True)
-        self.assert_('This is perl 5' in output)
+/usr/bin/install -D -m 0644 /home/ymorin/dev/buildroot/O2/build/alsa-utils-1.1.6/alsactl/alsa-restore.service /home/ymorin/dev/buildroot/O2/target/usr/lib/systemd/system/alsa-restore.service
+/usr/bin/install: cannot stat '/home/ymorin/dev/buildroot/O2/build/alsa-utils-1.1.6/alsactl/alsa-restore.service': No such file or directory
 
-unittest.main()
+Care to have a look, please?
 
-Fran?ois
+Regards,
+Yann E. MORIN.
 
-I guess Perl 6 will take a long time to be supported in Buildroot.
->
-> > +        _, exit_code = self.emulator.run(cmd, timeout)
-> > +        self.assertEqual(exit_code, 0)
-> > +
-> > +    def module_test(self, module, script="1", timeout=-1):
->
-> If we end up using the extra logic (basically copied from
-> TestPythonPackageBase)
-> and having the .pl file added to the tree, this method would not be needed.
->
->
-> Regards,
-> Ricardo
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181121/13a37a58/attachment.html>
+>  $(eval $(autotools-package))
+> -- 
+> 2.19.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
