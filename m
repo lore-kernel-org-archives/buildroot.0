@@ -1,30 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 21 Nov 2018 22:30:53 +0100
-Subject: [Buildroot] [PATCH v2 1/2] shadowsocks-libev: Bump to version
- 3.2.1
-In-Reply-To: <1542813158-17776-2-git-send-email-sebastien.duponcheel@corp.ovh.com>
-References: <1542813158-17776-1-git-send-email-sebastien.duponcheel@corp.ovh.com>
- <1542813158-17776-2-git-send-email-sebastien.duponcheel@corp.ovh.com>
-Message-ID: <20181121223053.5c23563b@windsurf>
+Date: Wed, 21 Nov 2018 22:31:14 +0100
+Subject: [Buildroot] [git commit branch/next] libostree: add systemd
+ optional dependency
+Message-ID: <20181121212831.376C68424B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=5f7db7d07458a9a5dae313c2b2002b91c24c53b2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Wed, 21 Nov 2018 16:12:37 +0100, DUPONCHEEL S?bastien wrote:
-> Signed-off-by: DUPONCHEEL S?bastien <sebastien.duponcheel@corp.ovh.com>
-> ---
->  package/shadowsocks-libev/shadowsocks-libev.hash | 2 +-
->  package/shadowsocks-libev/shadowsocks-libev.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+This option is available since v2018.3:
+https://github.com/ostreedev/ostree/commit/17db0f15a79835b76ede6785120d237066c57d32
 
-Series applied to next. Thanks!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libostree/libostree.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index 4c841dbe4d..8538cdc69c 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
+@@ -68,4 +68,13 @@ else
+ LIBOSTREE_CONF_OPTS += --without-selinux
+ endif
+ 
++ifeq ($(BR2_INIT_SYSTEMD),y)
++LIBOSTREE_CONF_OPTS += \
++	--with-libsystemd \
++	--with-systemdsystemunitdir=/usr/lib/systemd/system
++LIBOSTREE_DEPENDENCIES += systemd
++else
++LIBOSTREE_CONF_OPTS += --without-libsystemd
++endif
++
+ $(eval $(autotools-package))
