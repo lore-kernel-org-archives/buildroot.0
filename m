@@ -1,50 +1,42 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 21 Nov 2018 20:58:14 +0100
-Subject: [Buildroot] [PATCH 0/8] suppport/testing: Perl interpreter and CPAN
- modules
-Message-ID: <20181121195822.15379-1-francois.perrad@gadz.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 21 Nov 2018 20:58:51 +0100
+Subject: [Buildroot] [git commit] mtd: fix build on riscv
+Message-ID: <20181121195554.3CB6C83FC0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-test_perl.py allows to test the Perl interpreter and some of its core modules,
-and it is used as base class for testing CPAN modules.
+commit: https://git.buildroot.net/buildroot/commit/?id=9ea1179eb5eece404a17cf5d313b05f303ae18e2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now, scancpan could generate test for CPAN modules.
-Currently, there are more than 100 CPAN modules, 25 of them are XS modules.
-In order to limit the number of tests (and the execution time),
-a test is generated only if the module have more than one direct dependencies
-and have at least one XS dependencies.
+Define _REENTRANT otherwise pthread detection will fail
 
-Francois Perrad (8):
-  support/testing: add perl test
-  scancpan: add generation of test
-  support/testing: add perl-class-load test
-  support/testing: add perl-gdgraph test
-  support/testing: add perl-libwww-perl test
-  support/testing: add perl-mail-dkim test
-  support/testing: add perl-x10 test
-  support/testing: add perl-xml-libxml test
+Fixes:
+ - http://autobuild.buildroot.org/results/b0e7978a997a2aae383161455b5d898b8c28e2e1
 
- .gitlab-ci.yml                                |  7 ++
- support/testing/tests/package/test_perl.py    | 59 +++++++++++++++++
- .../tests/package/test_perl_class_load.py     | 27 ++++++++
- .../tests/package/test_perl_gdgraph.py        | 21 ++++++
- .../tests/package/test_perl_libwww_perl.py    | 40 +++++++++++
- .../tests/package/test_perl_mail_dkim.py      | 27 ++++++++
- .../testing/tests/package/test_perl_x10.py    | 21 ++++++
- .../tests/package/test_perl_xml_libxml.py     | 21 ++++++
- utils/scancpan                                | 66 +++++++++++++++++++
- 9 files changed, 289 insertions(+)
- create mode 100644 support/testing/tests/package/test_perl.py
- create mode 100644 support/testing/tests/package/test_perl_class_load.py
- create mode 100644 support/testing/tests/package/test_perl_gdgraph.py
- create mode 100644 support/testing/tests/package/test_perl_libwww_perl.py
- create mode 100644 support/testing/tests/package/test_perl_mail_dkim.py
- create mode 100644 support/testing/tests/package/test_perl_x10.py
- create mode 100644 support/testing/tests/package/test_perl_xml_libxml.py
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mtd/mtd.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
--- 
-2.17.1
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 13e501fc33..2d627ffa3d 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -11,6 +11,13 @@ MTD_LICENSE = GPL-2.0
+ MTD_LICENSE_FILES = COPYING
+ MTD_INSTALL_STAGING = YES
+ 
++# gcc on riscv doesn't define _REENTRANT when -pthread is passed while
++# it should. Compensate this deficiency here otherwise mtd configure
++# script doesn't find that thread support is enabled.
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS):$(BR2_riscv),y:y)
++MTD_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_REENTRANT"
++endif
++
+ ifeq ($(BR2_PACKAGE_MTD_JFFS_UTILS),y)
+ MTD_DEPENDENCIES += zlib lzo host-pkgconf
+ MTD_CONF_OPTS += --with-jffs
