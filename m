@@ -1,202 +1,82 @@
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Date: Thu, 22 Nov 2018 19:36:09 +0100
-Subject: [Buildroot] [PATCH v2] package/mini-snmpd: New package
-Message-ID: <20181122183609.7125-1-alexander.sverdlin@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 22 Nov 2018 19:38:26 +0100
+Subject: [Buildroot] [PATCH v1] alsa-utils: add optional systemd
+ dependency
+In-Reply-To: <20181121220102.10580-1-ps.report@gmx.net>
+References: <20181121220102.10580-1-ps.report@gmx.net>
+Message-ID: <20181122183826.GO2601@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mini SNMPd is a minimal implementation targeted at small or embedded UNIX
-systems with limited resources.
+Peter, All,
 
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
----
-Changelog:
-v2:
-- New commit title
-- DEVELOPERS entry
-- "Signed-off-by:" in the .patch files
+On 2018-11-21 23:01 +0100, Peter Seiderer spake thusly:
+> Fixes (reported by Yann E. MORIN, [1]):
+> 
+> /usr/bin/install -D -m 0644 .../build/alsa-utils-1.1.6/alsactl/alsa-restore.service .../target/usr/lib/systemd/system/alsa-restore.service
+> /usr/bin/install: cannot stat '.../build/alsa-utils-1.1.6/alsactl/alsa-restore.service': No such file or directory
+> 
+> [1] http://lists.busybox.net/pipermail/buildroot/2018-November/236355.html
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-utils/test-pkg -c mini-snmpd.config -p mini-snmpd
-                             br-arm-full [1/6]: OK
-                  br-arm-cortex-a9-glibc [2/6]: OK
-                   br-arm-cortex-m4-full [3/6]: OK
-                          br-x86-64-musl [4/6]: OK
-                      br-arm-full-static [5/6]: OK
-                armv5-ctng-linux-gnueabi [6/6]: OK
-6 builds, 0 skipped, 0 build failed, 0 legal-info failed
+Thanks for the quick fix! :-)
 
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- DEVELOPERS                                    |  3 ++
- package/Config.in                             |  1 +
- ...d-zero-byte-before-unsigned-integers.patch | 31 +++++++++++++++++++
- ...igned-integers-to-have-an-extra-byte.patch | 28 +++++++++++++++++
- package/mini-snmpd/Config.in                  |  7 +++++
- package/mini-snmpd/mini-snmpd.mk              | 21 +++++++++++++
- package/mini-snmpd/mini-snmpd.service         | 12 +++++++
- 7 files changed, 103 insertions(+)
- create mode 100644 package/mini-snmpd/0001-Prepend-zero-byte-before-unsigned-integers.patch
- create mode 100644 package/mini-snmpd/0002-mib.c-allow-unsigned-integers-to-have-an-extra-byte.patch
- create mode 100644 package/mini-snmpd/Config.in
- create mode 100644 package/mini-snmpd/mini-snmpd.mk
- create mode 100644 package/mini-snmpd/mini-snmpd.service
+Still one comment, see below...
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 53467da489..0930484f91 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -98,6 +98,9 @@ F:	package/openpgm/
- N:	Alexander Mukhin <alexander.i.mukhin@gmail.com>
- F:	package/hostapd/
- 
-+N:	Alexander Sverdlin <alexander.sverdlin@gmail.com>
-+F:	package/mini-snmpd/
-+
- N:	Alexander Varnin <fenixk19@mail.ru>
- F:	package/liblog4c-localtime/
- 
-diff --git a/package/Config.in b/package/Config.in
-index b60e7700ad..9804574ae5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1885,6 +1885,7 @@ menu "Networking applications"
- 	source "package/macchanger/Config.in"
- 	source "package/memcached/Config.in"
- 	source "package/mii-diag/Config.in"
-+	source "package/mini-snmpd/Config.in"
- 	source "package/minidlna/Config.in"
- 	source "package/minissdpd/Config.in"
- 	source "package/mjpg-streamer/Config.in"
-diff --git a/package/mini-snmpd/0001-Prepend-zero-byte-before-unsigned-integers.patch b/package/mini-snmpd/0001-Prepend-zero-byte-before-unsigned-integers.patch
-new file mode 100644
-index 0000000000..36ddee422f
---- /dev/null
-+++ b/package/mini-snmpd/0001-Prepend-zero-byte-before-unsigned-integers.patch
-@@ -0,0 +1,31 @@
-+From 949ae648bf7c654b8fae607a0988bfa672607156 Mon Sep 17 00:00:00 2001
-+From: Patrick Rauscher <prauscher@prauscher.de>
-+Date: Fri, 18 Aug 2017 17:31:23 +0200
-+Subject: [PATCH] Prepend zero-byte before unsigned integers
-+
-+fixes #8
-+
-+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-+---
-+ mib.c | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/mib.c b/mib.c
-+index 7d2e513..a9ffbe2 100644
-+--- a/mib.c
-++++ b/mib.c
-+@@ -207,6 +207,11 @@ static int encode_unsigned(data_t *data, int type, unsigned int ticks_value)
-+ 	else
-+ 		length = 1;
-+ 
-++	/* check if the integer could be interpreted negative during a signed decode and prepend a zero-byte if necessary */
-++	if ((ticks_value >> (8 * (length - 1))) & 0x80) {
-++		length++;
-++	}
-++
-+ 	*buffer++ = type;
-+ 	*buffer++ = length;
-+ 	while (length--)
-+-- 
-+2.13.2
-+
-diff --git a/package/mini-snmpd/0002-mib.c-allow-unsigned-integers-to-have-an-extra-byte.patch b/package/mini-snmpd/0002-mib.c-allow-unsigned-integers-to-have-an-extra-byte.patch
-new file mode 100644
-index 0000000000..045d296913
---- /dev/null
-+++ b/package/mini-snmpd/0002-mib.c-allow-unsigned-integers-to-have-an-extra-byte.patch
-@@ -0,0 +1,28 @@
-+From 556c8a406c9e08dd9444222e072f7eb9c82a81e8 Mon Sep 17 00:00:00 2001
-+From: Patrick Rauscher <prauscher@prauscher.de>
-+Date: Fri, 18 Aug 2017 17:44:32 +0200
-+Subject: [PATCH] mib.c: allow unsigned integers to have an extra byte
-+
-+The extra byte can be needed when encoding huge unsigned numbers (i.e. 0x80000000 or higher). In this case, during encoding we need an extra byte to make sure clients decoding as signed int do not get negative numbers. For further details, see commit 949ae648
-+
-+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-+---
-+ mib.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/mib.c b/mib.c
-+index a9ffbe2..83cc20d 100644
-+--- a/mib.c
-++++ b/mib.c
-+@@ -372,7 +372,7 @@ static int data_alloc(data_t *data, int type)
-+ 		case BER_TYPE_COUNTER:
-+ 		case BER_TYPE_GAUGE:
-+ 		case BER_TYPE_TIME_TICKS:
-+-			data->max_length = sizeof(unsigned int) + 2;
-++			data->max_length = sizeof(unsigned int) + 3;
-+ 			data->encoded_length = 0;
-+ 			data->buffer = allocate(data->max_length);
-+ 			break;
-+-- 
-+2.13.2
-+
-diff --git a/package/mini-snmpd/Config.in b/package/mini-snmpd/Config.in
-new file mode 100644
-index 0000000000..1f61cddbcf
---- /dev/null
-+++ b/package/mini-snmpd/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_MINI_SNMPD
-+	bool "mini-snmpd"
-+	help
-+	  Mini SNMPd is a minimal implementation targeted at small or
-+	  embedded UNIX systems with limited resources
-+
-+	  http://troglobit.com/mini-snmpd.html
-diff --git a/package/mini-snmpd/mini-snmpd.mk b/package/mini-snmpd/mini-snmpd.mk
-new file mode 100644
-index 0000000000..ebcbcce1ce
---- /dev/null
-+++ b/package/mini-snmpd/mini-snmpd.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# mini-snmpd
-+#
-+################################################################################
-+
-+MINI_SNMPD_VERSION = v1.4
-+MINI_SNMPD_SITE = $(call github,troglobit,mini-snmpd,$(MINI_SNMPD_VERSION))
-+MINI_SNMPD_LICENSE = GPL-2.0
-+MINI_SNMPD_LICENSE_FILES = COPYING
-+MINI_SNMPD_AUTORECONF = YES
-+
-+define MINI_SNMPD_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/mini-snmpd/mini-snmpd.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/mini-snmpd.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf ../../../../usr/lib/systemd/system/mini-snmpd.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/mini-snmpd.service
-+endef
-+
-+$(eval $(autotools-package))
-diff --git a/package/mini-snmpd/mini-snmpd.service b/package/mini-snmpd/mini-snmpd.service
-new file mode 100644
-index 0000000000..8a15585e6e
---- /dev/null
-+++ b/package/mini-snmpd/mini-snmpd.service
-@@ -0,0 +1,12 @@
-+[Unit]
-+Description=Mini SNMP Daemon
-+StartLimitIntervalSec=0
-+
-+[Service]
-+Environment='COMMUNITY=public'
-+ExecStart=/sbin/mini_snmpd -a -n -c ${COMMUNITY} $EXTRA_PARAMS
-+Restart=always
-+RestartSec=1
-+
-+[Install]
-+WantedBy=multi-user.target
+> ---
+>  package/alsa-utils/alsa-utils.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
+> index 0c65082a14..986a745399 100644
+> --- a/package/alsa-utils/alsa-utils.mk
+> +++ b/package/alsa-utils/alsa-utils.mk
+> @@ -82,7 +82,8 @@ define ALSA_UTILS_INSTALL_TARGET_CMDS
+>  	fi
+>  endef
+>  
+> -ifeq ($(BR2_PACKAGE_ALSA_UTILS_ALSACTL),y)
+> +ifeq ($(BR2_PACKAGE_ALSA_UTILS_ALSACTL)$(BR2_INIT_SYSTEMD),yy)
+
+I was going to argue that I'd prefer the dependency to be on
+BR2_PACKAGE_SYSTEMD instead, as I seemed to recall that's what we do
+elsewhere.
+
+So I grepped the code, and we have 22 instances where the dependencies
+is on the package, and 20 where it is on the init system.
+
+And in the end, it does make sense that this is done on the init sytem,
+not the package, so I'm OK with the patch as is, and I would even argue
+that the others should be changed (when they install unit files).
+
+So:
+
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+(Yeah, I'm putting two tags at different places in the reply, just to
+see how patchwork handles that. Niark! ;-) )
+
+Regards,
+Yann E. MORIN.
+
+> +ALSA_UTILS_DEPENDENCIES += systemd
+>  define ALSA_UTILS_INSTALL_INIT_SYSTEMD
+>  	$(INSTALL) -D -m 0644 $(@D)/alsactl/alsa-restore.service \
+>  		$(TARGET_DIR)/usr/lib/systemd/system/alsa-restore.service
+> -- 
+> 2.19.1
+> 
+
 -- 
-2.19.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
