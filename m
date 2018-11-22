@@ -1,144 +1,58 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 21 Nov 2018 22:26:11 -0600
-Subject: [Buildroot] [PATCH v4 1/7] package/compiler-rt: new package
-Message-ID: <1542860777-57909-1-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Wed, 21 Nov 2018 22:26:12 -0600
+Subject: [Buildroot] [PATCH v4 2/7] package/llvm: install target
+ binary/debug tools
+In-Reply-To: <1542860777-57909-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1542860777-57909-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1542860777-57909-2-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds support for the compiler-rt (CLANG runtime) library.
-It builds a set of static libraries and installs them into the
-CLANG/LLVM toolchain resource folder.
+The compiler-rt fuzzer and address sanitizer tools require additional
+LLVM binary tools installed to allow stack trace decoding actively during
+executable analysis.
+
+https://github.com/google/sanitizers/wiki/AddressSanitizerCallStack
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Cc: Romain Naour <romain.naour@smile.fr>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
 ---
 Changes
-v1 -> v2
-[Romain
- - Removed unnecessary host-cmake dependency
+v1 -> v3
+ - None
 
-v2 -> v3
-[Romain
- - Update to use COMPILER_RT_INSTALL_PATH for library install
-[Ricardo
- - Fixed check-package extra line
- - Spelling in commit message
-
-v3 -> v4
-[Valentin
- - Pointed out that non-glibc libraries won't build. Further
-   investigation shows that the lib asan support in compiler-rt
-   doesn't have the libc checks yet to support multiple libraries.
-   (https://patchwork.ozlabs.org/patch/339938/ was the best example
-    I could find and it doesn't look like anything has changed in the
-    recent codebase)
+v4
+ - Added new patch for llvm dependency on libxml2 which was noticed
+   during testing
 ---
- DEVELOPERS                           |  1 +
- package/Config.in                    |  1 +
- package/compiler-rt/Config.in        | 14 ++++++++++++++
- package/compiler-rt/compiler-rt.hash |  3 +++
- package/compiler-rt/compiler-rt.mk   | 33 +++++++++++++++++++++++++++++++++
- 5 files changed, 52 insertions(+)
- create mode 100644 package/compiler-rt/Config.in
- create mode 100644 package/compiler-rt/compiler-rt.hash
- create mode 100644 package/compiler-rt/compiler-rt.mk
+ package/llvm/llvm.mk | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 53467da..e78d649 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1360,6 +1360,7 @@ F:	package/bridge-utils/
- F:	package/checkpolicy/
- F:	package/checksec/
- F:	package/cgroupfs-mount/
-+F:	package/compiler-rt/
- F:	package/crda/
- F:	package/devmem2/
- F:	package/dnsmasq/
-diff --git a/package/Config.in b/package/Config.in
-index b60e770..73ddc2d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1602,6 +1602,7 @@ menu "Other"
- 	source "package/clapack/Config.in"
- 	source "package/classpath/Config.in"
- 	source "package/cmocka/Config.in"
-+	source "package/compiler-rt/Config.in"
- 	source "package/cppcms/Config.in"
- 	source "package/cracklib/Config.in"
- 	source "package/dawgdic/Config.in"
-diff --git a/package/compiler-rt/Config.in b/package/compiler-rt/Config.in
-new file mode 100644
-index 0000000..9afc0d9
---- /dev/null
-+++ b/package/compiler-rt/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_COMPILER_RT
-+	bool "compiler-rt"
-+	depends on BR2_PACKAGE_LLVM
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # asan lib requires
-+	help
-+	  A collection of runtime libraries primarily used by clang and
-+	  llvm to provide builtins, sanitizer runtimes, and profiling
-+	  at runtime.
+diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+index 1f9bd44..79477f0 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm/llvm.mk
+@@ -197,8 +197,17 @@ HOST_LLVM_CONF_OPTS += \
+ # We need to activate LLVM_INCLUDE_TOOLS, otherwise it does not generate
+ # libLLVM.so
+ LLVM_CONF_OPTS += \
+-	-DLLVM_INCLUDE_TOOLS=ON \
++	-DLLVM_INCLUDE_TOOLS=ON
 +
-+	  https://compiler-rt.llvm.org/
-+
-+comment "compiler-rt requires llvm to be enabled and a glibc toolchain"
-+	depends on !BR2_PACKAGE_LLVM
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC
-diff --git a/package/compiler-rt/compiler-rt.hash b/package/compiler-rt/compiler-rt.hash
-new file mode 100644
-index 0000000..df6ed19
---- /dev/null
-+++ b/package/compiler-rt/compiler-rt.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256 bdec7fe3cf2c85f55656c07dfb0bd93ae46f2b3dd8f33ff3ad6e7586f4c670d6  compiler-rt-7.0.0.src.tar.xz
-+sha256 417541d990edb3f96327ac03cb67e52eac80fc5c3e7afc69213cd04d7c3b9b27  LICENSE.TXT
-diff --git a/package/compiler-rt/compiler-rt.mk b/package/compiler-rt/compiler-rt.mk
-new file mode 100644
-index 0000000..fc64707
---- /dev/null
-+++ b/package/compiler-rt/compiler-rt.mk
-@@ -0,0 +1,33 @@
-+################################################################################
-+#
-+# compiler-rt
-+#
-+################################################################################
-+
-+# Compiler-RT should be bumped together with LLVM and Clang as the run-time is
-+# tied to the version of those tools
-+COMPILER_RT_VERSION = 7.0.0
-+COMPILER_RT_SOURCE = compiler-rt-$(COMPILER_RT_VERSION).src.tar.xz
-+COMPILER_RT_SITE = http://llvm.org/releases/$(COMPILER_RT_VERSION)
-+COMPILER_RT_LICENSE = NCSA MIT
-+COMPILER_RT_LICENSE_FILES = LICENSE.TXT
-+COMPILER_RT_DEPENDENCIES = host-clang llvm
-+
-+COMPILER_RT_INSTALL_STAGING = YES
-+COMPILER_RT_INSTALL_TARGET = NO
-+
-+# The installation of the target runtime libraries is currently into the
-+# host-{clang,llvm} resources directory. The "resources" directory is loosely
-+# document and this location will probably need revisited when making the
-+# llvm/clang tools SDK relocatable.
-+COMPILER_RT_CONF_OPTS=-DCOMPILER_RT_INCLUDE_TESTS=ON \
-+	-DCOMPILER_RT_STANDALONE_BUILD=ON \
-+	-DCOMPILER_RT_DEFAULT_TARGET_TRIPLE=$(GNU_TARGET_NAME) \
-+	-DLLVM_CONFIG_PATH=$(HOST_DIR)/usr/bin/llvm-config \
-+	-DCOMPILER_RT_INSTALL_PATH=$(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/
-+
-+define COMPILER_RT_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install/fast
-+endef
-+
-+$(eval $(cmake-package))
++# The llvm-symbolizer binary is used by the Compiler-RT Fuzzer
++# and AddressSanitizer tools for stack traces.
++ifeq ($(BR2_PACKAGE_COMPILER_RT),y)
++LLVM_CONF_OPTS += \
++	-DLLVM_BUILD_TOOLS=ON
++else
++LLVM_CONF_OPTS += \
+ 	-DLLVM_BUILD_TOOLS=OFF
++endif
+ 
+ # Compiler-rt not in the source tree.
+ # llvm runtime libraries are not in the source tree.
 -- 
 1.9.1
