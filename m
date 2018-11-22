@@ -1,56 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 22 Nov 2018 18:12:52 +0100
-Subject: [Buildroot] [PATCH] package/systemd: needs glibc
-In-Reply-To: <20181122174417.7e101a15@windsurf>
-References: <20181121210556.18619-1-yann.morin.1998@free.fr>
- <87y39lm6e8.fsf@dell.be.48ers.dk>
- <20181122174417.7e101a15@windsurf>
-Message-ID: <20181122171252.GN2601@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 22 Nov 2018 18:49:13 +0100
+Subject: [Buildroot] [PATCH 1/2] dante: disable pam
+Message-ID: <20181122174914.20300-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, Thomas, All,
+Fixes:
+ - http://autobuild.buildroot.org/results/5222592f2052e18c184fae42214c112e7f39be6e
 
-On 2018-11-22 17:44 +0100, Thomas Petazzoni spake thusly:
-> On Thu, 22 Nov 2018 17:19:43 +0100, Peter Korsgaard wrote:
-> 
-> >  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> >  > Cc: Waldemar Brodkorb <wbx@openadk.org>
-> >  > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> >  > Cc: Peter Korsgaard <peter@korsgaard.com>  
-> > 
-> > So this has been broken since end of June? How come we don't have any
-> > autobuilder failures?
-> 
-> Yes, this is really weird. Even with the issue fixed
-> https://git.buildroot.org/buildroot/commit/utils/genrandconfig?id=3eb49f59d6804c452e784759d9b3869215a8098f,
-> we should have had some systemd/uclibc configurations. I'll try to do
-> some research in the DB, but my SQL is rusty and gives requests that
-> are very slow to execute :/
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/dante/dante.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yeah, that's strange... But it sure as hell does not build at all.
-
-Besides the prlimit() issue, it also unconditionally #include <gshadow.h>
-which does not exist in uclibc-ng either. That one has been fixed upstream
-now:
-    https://github.com/systemd/systemd/commit/66a5b5ce9b991327d594f7b635de16999ca54093
-
-(we don't need to backport it, now that we can't build on uClibc).
-
-I may be looking into making a workaround by providing a missing.h
-wrapper to prlimit() as they suggested, but that is definitely not
-release material for us.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/dante/dante.mk b/package/dante/dante.mk
+index 687567e100..a147aa36dc 100644
+--- a/package/dante/dante.mk
++++ b/package/dante/dante.mk
+@@ -12,7 +12,7 @@ DANTE_LICENSE_FILES = LICENSE
+ # Dante uses a *VERY* old configure.ac
+ DANTE_LIBTOOL_PATCH = NO
+ 
+-DANTE_CONF_OPTS += --disable-client --disable-preload
++DANTE_CONF_OPTS += --disable-client --disable-preload --without-pam
+ 
+ define DANTE_INSTALL_CONFIG_FILE
+ 	$(INSTALL) -D -m 644 $(@D)/example/sockd.conf \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
