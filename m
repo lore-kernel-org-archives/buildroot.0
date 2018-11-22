@@ -1,79 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 22 Nov 2018 17:40:33 +0100
-Subject: [Buildroot] [git commit branch/next] board: macchiatobin: update
- readme.txt
-Message-ID: <20181122163752.D0B0C83C66@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 22 Nov 2018 17:44:17 +0100
+Subject: [Buildroot] [PATCH] package/systemd: needs glibc
+In-Reply-To: <87y39lm6e8.fsf@dell.be.48ers.dk>
+References: <20181121210556.18619-1-yann.morin.1998@free.fr>
+ <87y39lm6e8.fsf@dell.be.48ers.dk>
+Message-ID: <20181122174417.7e101a15@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ffdcbe0a5304a865e4486e7de0a7e6d983e2ce2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Update the kernel and U-Boot versions to the actual versions in use.
-Update the description of supported hardware features.
+On Thu, 22 Nov 2018 17:19:43 +0100, Peter Korsgaard wrote:
 
-Add a note that the stale SPI flash environment issue only affects the
-vendor BSP.
+>  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  > Cc: Waldemar Brodkorb <wbx@openadk.org>
+>  > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>  > Cc: Peter Korsgaard <peter@korsgaard.com>  
+> 
+> So this has been broken since end of June? How come we don't have any
+> autobuilder failures?
 
-Cc: Sergey Matyukevich <geomatsi@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- board/solidrun/macchiatobin/readme.txt | 30 +++++++++++++++++-------------
- 1 file changed, 17 insertions(+), 13 deletions(-)
+Yes, this is really weird. Even with the issue fixed
+https://git.buildroot.org/buildroot/commit/utils/genrandconfig?id=3eb49f59d6804c452e784759d9b3869215a8098f,
+we should have had some systemd/uclibc configurations. I'll try to do
+some research in the DB, but my SQL is rusty and gives requests that
+are very slow to execute :/
 
-diff --git a/board/solidrun/macchiatobin/readme.txt b/board/solidrun/macchiatobin/readme.txt
-index dfbd6e793b..dc5d6c794d 100644
---- a/board/solidrun/macchiatobin/readme.txt
-+++ b/board/solidrun/macchiatobin/readme.txt
-@@ -15,19 +15,20 @@ How to build
- There are two build options: mainline support and vendor support.
- 
- For the mainline BSP, we use:
-- - Linux v4.15
-- - U-Boot v2018.01
-+ - Linux v4.19.2
-+ - U-Boot v2018.11
- 
- For the vendor BSP, we use the sources available from Marvell Github
- page at https://github.com/MarvellEmbeddedProcessors, which uses:
-- - Linux v4.4.52
-- - U-Boot v2017.03
-+ - Linux v4.4.120
-+ - U-Boot v2018.03
- 
--At the moment mainline support for the board is a work in progress.
--Mainline kernel 4.15 enables eth2 in 1Gb (RJ45 connector J5) and
--eth0 in 10Gb (SFP connector CON15 and RJ45 connector CON16).
--The vendor BSP enables more hardware features out of the box,
--e.g. all the network interfaces.
-+At the moment mainline support for the board is a work in
-+progress. Mainline kernel 4.19 enables eth2 in 1Gb (RJ45 connector J5),
-+copper 10Gb interfaces, and automatic configuration of select SFP
-+modules on the SFP cages. The vendor BSP enables more hardware features
-+out of the box, but lacks support for SFP detection and automatic
-+configuration.
- 
- To use the mainline BSP run the following commands:
- 
-@@ -73,10 +74,13 @@ Insert the micro SDcard in the MacchiatoBin board and power it up.
- The serial console is accessible at the micro-USB Type-B connector
- marked CON9. The serial line settings are 115200 8N1.
- 
--By default U-Boot will load its environment from the SPI flash. On the
--first boot SPI flash may be empty or it may contain a legacy
--environment incompatible with up-to-date mainline U-Boot and
--kernel. Then the following commands can be used to boot the board:
-+Note: the following text only applies to the vendor BSP from
-+solidrun_macchiatobin_marvell_defconfig.
-+
-+By default Marvell provided U-Boot will load its environment from the
-+SPI flash. On the first boot SPI flash may be empty or it may contain a
-+legacy environment that prevents proper boot. Then the following
-+commands can be used to boot the board:
- 
- => ext4load mmc 1:1 0x01700000 /boot/uEnv-example.txt
- => env import -t 0x01700000 $filesize
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
