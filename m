@@ -1,114 +1,32 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Thu, 22 Nov 2018 09:59:30 -0200
-Subject: [Buildroot] [PATCH next] util-linux: fix build for SPARC
-Message-ID: <20181122115930.21278-1-casantos@datacom.com.br>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 22 Nov 2018 13:43:45 +0100
+Subject: [Buildroot] Issues with Freescale defconfigs
+In-Reply-To: <CAOMZO5BGHXYKGrWyPsE6o9HZ=iBu86pKSbhXMpwitNXVu15yAA@mail.gmail.com>
+References: <20181122104556.1d89c074@windsurf>
+ <CAOMZO5BGHXYKGrWyPsE6o9HZ=iBu86pKSbhXMpwitNXVu15yAA@mail.gmail.com>
+Message-ID: <20181122134345.10f011c1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pull a patch already applied upstream that fixes the build of setarch
-for SPARC processors.
+Hello Fabio,
 
-Fixes:
-  http://autobuild.buildroot.net/results/44d0538332499cea691a381048562a09cda23624
-  http://autobuild.buildroot.net/results/e7e3469717ab27d66d2528087fd7c3a41477ae05
+Thanks for your feedback!
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
----
- ...-setarch-fix-obscure-sparc32bash-use-case.patch | 83 ++++++++++++++++++++++
- 1 file changed, 83 insertions(+)
- create mode 100644 package/util-linux/0003-setarch-fix-obscure-sparc32bash-use-case.patch
+On Thu, 22 Nov 2018 09:05:30 -0200, Fabio Estevam wrote:
 
-diff --git a/package/util-linux/0003-setarch-fix-obscure-sparc32bash-use-case.patch b/package/util-linux/0003-setarch-fix-obscure-sparc32bash-use-case.patch
-new file mode 100644
-index 0000000000..f52421618f
---- /dev/null
-+++ b/package/util-linux/0003-setarch-fix-obscure-sparc32bash-use-case.patch
-@@ -0,0 +1,83 @@
-+From 3fa06e049012218d883d0e1251df86bafbc446bf Mon Sep 17 00:00:00 2001
-+From: Karel Zak <kzak@redhat.com>
-+Date: Thu, 22 Nov 2018 11:03:35 +0100
-+Subject: [PATCH] setarch: fix obscure sparc32bash use-case
-+
-+Reported-by: Carlos Santos <casantos@datacom.com.br>
-+Signed-off-by: Karel Zak <kzak@redhat.com>
-+---
-+ sys-utils/setarch.c | 28 ++++++++++++++++++----------
-+ 1 file changed, 18 insertions(+), 10 deletions(-)
-+
-+diff --git a/sys-utils/setarch.c b/sys-utils/setarch.c
-+index a733f7b3c..7c0a63fbb 100644
-+--- a/sys-utils/setarch.c
-++++ b/sys-utils/setarch.c
-+@@ -268,6 +268,7 @@ int main(int argc, char *argv[])
-+ 	int c;
-+ 	struct arch_domain *doms, *target;
-+ 	unsigned long pers_value = 0;
-++	char *shell = NULL, *shell_arg = NULL;
-+ 
-+ 	/* Options without equivalent short options */
-+ 	enum {
-+@@ -310,14 +311,14 @@ int main(int argc, char *argv[])
-+ 	archwrapper = strcmp(program_invocation_short_name, "setarch") != 0;
-+ 	if (archwrapper) {
-+ 		arch = program_invocation_short_name;	/* symlinks to setarch */
-+-#if defined(__sparc64__) || defined(__sparc__)
-++
-++		/* Don't use ifdef sparc here, we get "Unrecognized architecture"
-++		 * error message later if necessary */
-+ 		if (strcmp(arch, "sparc32bash") == 0) {
-+-			if (set_arch(arch, 0L, 0))
-+-				err(EXIT_FAILURE, _("Failed to set personality to %s"), arch);
-+-			execl("/bin/bash", "", NULL);
-+-			errexec("/bin/bash");
-++			shell = "/bin/bash";
-++			shell_arg = "";
-++			goto set_arch;
-+ 		}
-+-#endif
-+ 	} else {
-+ 		if (1 < argc && *argv[1] != '-') {
-+ 			arch = argv[1];
-+@@ -391,6 +392,7 @@ int main(int argc, char *argv[])
-+ 	argc -= optind;
-+ 	argv += optind;
-+ 
-++set_arch:
-+ 	/* get execution domain (architecture) */
-+ 	if (arch) {
-+ 		doms = init_arch_domains();
-+@@ -422,17 +424,23 @@ int main(int argc, char *argv[])
-+ 	if (arch)
-+ 		verify_arch_domain(target, arch);
-+ 
-++	if (!argc) {
-++		shell = "/bin/sh";
-++		shell_arg = "-sh";
-++	}
-+ 	if (verbose) {
-+-		printf(_("Execute command `%s'.\n"), argc ? argv[0] : "/bin/sh");
-++		printf(_("Execute command `%s'.\n"), shell ? shell : argv[0]);
-+ 		/* flush all output streams before exec */
-+ 		fflush(NULL);
-+ 	}
-+ 
-+-	if (!argc) {
-+-		execl("/bin/sh", "-sh", NULL);
-+-		errexec("/bin/sh");
-++	/* Execute shell */
-++	if (shell) {
-++		execl(shell, shell_arg, NULL);
-++		errexec(shell);
-+ 	}
-+ 
-++	/* Execute on command line specified command */
-+ 	execvp(argv[0], argv);
-+ 	errexec(argv[0]);
-+ }
-+-- 
-+2.14.5
-+
+> So the proper fix is to apply either Trent's official fix or my
+> workaround to all rel_imx_4.9.x_1.0.0_ga NXP U-Boot users.
+
+The fix from Trent looks like the right thing to do. Can we backport it
+for the few boards that are affected, and add the patch in Buildroot ?
+
+Thanks a lot!
+
+Thomas
 -- 
-2.14.5
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
