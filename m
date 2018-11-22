@@ -1,7 +1,10 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Thu, 22 Nov 2018 21:14:29 +0200
-Subject: [Buildroot] [PATCH 1/1] python-autobahn: bump to version 18.11.2
-Message-ID: <20181122191430.30884-1-asafka7@gmail.com>
+Date: Thu, 22 Nov 2018 21:14:30 +0200
+Subject: [Buildroot] [PATCH 1/1] python-sortedcontainers: bump to version
+ 2.1.0
+In-Reply-To: <20181122191430.30884-1-asafka7@gmail.com>
+References: <20181122191430.30884-1-asafka7@gmail.com>
+Message-ID: <20181122191430.30884-2-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,37 +13,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-autobahn/python-autobahn.hash | 4 ++--
- package/python-autobahn/python-autobahn.mk   | 4 ++--
+ package/python-sortedcontainers/python-sortedcontainers.hash | 4 ++--
+ package/python-sortedcontainers/python-sortedcontainers.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
-index 522e28b5e5..024617fd81 100644
---- a/package/python-autobahn/python-autobahn.hash
-+++ b/package/python-autobahn/python-autobahn.hash
+diff --git a/package/python-sortedcontainers/python-sortedcontainers.hash b/package/python-sortedcontainers/python-sortedcontainers.hash
+index c68d78a176..311bb77e17 100644
+--- a/package/python-sortedcontainers/python-sortedcontainers.hash
++++ b/package/python-sortedcontainers/python-sortedcontainers.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/autobahn/json
--md5	a3a0648371b41328282a9ab7fe48ccbe  autobahn-18.11.1.tar.gz
--sha256	c7e775e46fc033160fa89942de4953ca739f26167f74431dc2c8a3cd165b8755  autobahn-18.11.1.tar.gz
-+md5	4a63c94ea306e07602eaca6befd86751  autobahn-18.11.2.tar.gz
-+sha256	43262e500aaf8b89fb5f0b60ab13163500ee877908cdd6861208546d95c6dba0  autobahn-18.11.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/sortedcontainers/json
+-md5	5f079b1131d8b1a3ed025e7e679b1497  sortedcontainers-2.0.5.tar.gz
+-sha256	b74f2756fb5e23512572cc76f0fe0832fd86310f77dfee54335a35fb33f6b950  sortedcontainers-2.0.5.tar.gz
++md5	41a4a1eaf7b85e6b3beb14cfb160bc27  sortedcontainers-2.1.0.tar.gz
++sha256	974e9a32f56b17c1bac2aebd9dcf197f3eb9cd30553c5852a3187ad162e1a03a  sortedcontainers-2.1.0.tar.gz
  # Locally computed sha256 checksums
- sha256	0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
-diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
-index c5faacf965..d175244fc0 100644
---- a/package/python-autobahn/python-autobahn.mk
-+++ b/package/python-autobahn/python-autobahn.mk
+ sha256	7dcf4a5137118a925727b8a1690bc6ea70b156ee6739dbb51fd4d386718d6ce5  LICENSE
+diff --git a/package/python-sortedcontainers/python-sortedcontainers.mk b/package/python-sortedcontainers/python-sortedcontainers.mk
+index c32f9e4047..43f662a89f 100644
+--- a/package/python-sortedcontainers/python-sortedcontainers.mk
++++ b/package/python-sortedcontainers/python-sortedcontainers.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AUTOBAHN_VERSION = 18.11.1
-+PYTHON_AUTOBAHN_VERSION = 18.11.2
- PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
--PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/01/ee/d401d58dc7732fadf4fd12d7fb87dd2f3e5e2d0ba65865495565f97c2c31
-+PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/3a/9f/9552ce8fec2703370f63eedbedffa1151865f1265fbfc5c3bbd1029710cc
- PYTHON_AUTOBAHN_LICENSE = MIT
- PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
- PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
+-PYTHON_SORTEDCONTAINERS_VERSION = 2.0.5
++PYTHON_SORTEDCONTAINERS_VERSION = 2.1.0
+ PYTHON_SORTEDCONTAINERS_SOURCE = sortedcontainers-$(PYTHON_SORTEDCONTAINERS_VERSION).tar.gz
+-PYTHON_SORTEDCONTAINERS_SITE = https://files.pythonhosted.org/packages/b9/30/accbf5c09c5fa25a3d5f762761e0d7ece6fdb12f2a9c43b840f73cef43ef
++PYTHON_SORTEDCONTAINERS_SITE = https://files.pythonhosted.org/packages/29/e0/135df2e733790a3d3bcda970fd080617be8cea3bd98f411e76e6847c17ef
+ PYTHON_SORTEDCONTAINERS_SETUP_TYPE = setuptools
+ PYTHON_SORTEDCONTAINERS_LICENSE = Apache-2.0
+ PYTHON_SORTEDCONTAINERS_LICENSE_FILES = LICENSE
 -- 
 2.19.1
