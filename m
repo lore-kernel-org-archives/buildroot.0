@@ -1,9 +1,8 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Thu, 22 Nov 2018 00:42:47 -0200
-Subject: [Buildroot] [PATCH 3/8] support/testing: add perl-class-load
- test
-References: <20181121195822.15379-4-francois.perrad@gadz.org>
-Message-ID: <5bf617a7c511c_17c33fb41a13eb84711cb@ultri5.mail>
+Date: Thu, 22 Nov 2018 00:45:48 -0200
+Subject: [Buildroot] [PATCH 1/8] support/testing: add perl test
+References: <20181121195822.15379-2-francois.perrad@gadz.org>
+Message-ID: <5bf6185cb9c1d_17c33fb41a10213471364@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,94 +13,57 @@ Hello,
 
 On Wed, Nov 21, 2018 at 05:58 PM, Francois Perrad wrote:
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
+[snip]
+> +class TestPerl(infra.basetest.BRTest):
 
-If you send another iteration, it would be good to add the changelog here, and
-add to the patch header the iteration of the series and also the branch name
-(with git format-patch -v3 --subject-prefix "PATCH/next").
+To avoid the problem I mention in patch 3 (TestPerl being collected many times
+by nose2), here we could have:
 
->  .gitlab-ci.yml                                |  1 +
->  .../tests/package/test_perl_class_load.py     | 27 +++++++++++++++++++
->  2 files changed, 28 insertions(+)
->  create mode 100644 support/testing/tests/package/test_perl_class_load.py
-> 
-> diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-> index ae5d57026..16eb134c3 100644
-> --- a/.gitlab-ci.yml
-> +++ b/.gitlab-ci.yml
-> @@ -313,6 +313,7 @@ tests.package.test_dropbear.TestDropbear: *runtime_test
->  tests.package.test_ipython.TestIPythonPy2: *runtime_test
->  tests.package.test_ipython.TestIPythonPy3: *runtime_test
->  tests.package.test_perl.TestPerl: *runtime_test
-> +tests.package.test_perl_class_load.TestPerlClassLoad: *runtime_test
->  tests.package.test_python.TestPython2: *runtime_test
->  tests.package.test_python.TestPython3: *runtime_test
->  tests.package.test_python_autobahn.TestPythonPy2Autobahn: *runtime_test
+class TestPerlBase(infra.basetest.BRTest):
 
-If you run 'make .gitlab-ci.yml' the diff will be:
- tests.package.test_perl.TestPerl: *runtime_test
-+tests.package.test_perl.TestPerl: *runtime_test
-+tests.package.test_perl_class_load.TestPerlClassLoad: *runtime_test
- tests.package.test_python.TestPython2: *runtime_test
+without BR2_PACKAGE_PERL=y and containing login and module_test, and ...
 
-With one extra TestPerl for each test case of perl package.
-This happens because of how nose2 collects test cases, it looks at the context
-of the module and since ...
+> +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+> +        """
+> +        BR2_TARGET_ROOTFS_CPIO=y
+> +        # BR2_TARGET_ROOTFS_TAR is not set
+> +        BR2_PACKAGE_PERL=y
+> +        """
+> +
+> +    def login(self):
+> +        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
+> +        self.emulator.boot(arch="armv5",
+> +                           kernel="builtin",
+> +                           options=["-initrd", cpio_file])
+> +        self.emulator.login()
+> +
+> +    def version_test(self):
+> +        cmd = "perl -v"
+> +        _, exit_code = self.emulator.run(cmd)
+> +        self.assertEqual(exit_code, 0)
 
-> diff --git a/support/testing/tests/package/test_perl_class_load.py b/support/testing/tests/package/test_perl_class_load.py
-> new file mode 100644
-> index 000000000..488719482
-> --- /dev/null
-> +++ b/support/testing/tests/package/test_perl_class_load.py
-> @@ -0,0 +1,27 @@
-> +from tests.package.test_perl import TestPerl
+To do the tester way you mentioned in reply to v1, here you could:
 
-... here you import TestPerl nose2 finds it, with a test_run method, at this
-module too.
-One way to solve this is by using the same pattern found in test_python and a
-few others: change test_perl to have 2 classes: TestPerlBase declaring the
-common stuff and TestPerl that actually tests the interpreter. And here use only
-TestPerlBase (4 changes below):
+        output, exit_code = self.emulator.run(cmd)
+        self.assertEqual(exit_code, 0)
+        self.assertIn("This is perl 5", output[1])
 
-from tests.package.test_perl import TestPerlBase
+Perhaps even name the class TestPerl below as TestPerl5 to be more specific.
 
 > +
-> +
-> +class TestPerlClassLoad(TestPerl):
+> +    def module_test(self, module, script="1"):
+> +        cmd = "perl -M{} -e '{}'".format(module, script)
+> +        _, exit_code = self.emulator.run(cmd)
+> +        self.assertEqual(exit_code, 0)
 
-class TestPerlClassLoad(TestPerlBase):
+... here the test for the interpreter containing BR2_PACKAGE_PERL=y,
+version_test, core_modules_test and test_run:
 
-> +    """
-> +    package:
-> +        Class-Load
-> +    direct dependencies:
-> +        Data-OptList *
-> +        Module-Implementation
-> +        Module-Runtime
-> +        Package-Stash
-> +        Try-Tiny
-> +    indirect dependencies:
-> +        Dist-CheckConflicts
-> +        Params-Util
-> +        Sub-Install
-> +    """
-> +
-> +    config = TestPerl.config + \
-
+class TestPerl(TestPerlBase):
     config = TestPerlBase.config + \
-
-> +        """
-
+        """
         BR2_PACKAGE_PERL=y
-
-> +        BR2_PACKAGE_PERL_CLASS_LOAD=y
-> +        """
-> +
-> +    def test_run(self):
-> +        self.login()
-> +        self.module_test("Class::Load")
-> -- 
+        """
 
 
 Regards,
