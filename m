@@ -1,37 +1,46 @@
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Date: Thu, 22 Nov 2018 18:55:24 +0100
-Subject: [Buildroot] [PATCH] Add mini-snmpd package
-In-Reply-To: <20181113225227.32ee1b8e@windsurf>
-References: <20181111150652.17459-1-alexander.sverdlin@gmail.com>
- <20181111150652.17459-4-alexander.sverdlin@gmail.com>
- <20181113225227.32ee1b8e@windsurf>
-Message-ID: <24587aac-c3c0-dc1e-fab4-43d165f1b46a@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 22 Nov 2018 19:07:46 +0100
+Subject: [Buildroot] [PATCH 1/1] usb_modeswitch: disable parallel build
+Message-ID: <20181122180746.24616-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Build of package will sometime fails because of the following issue:
+install-static target has two dependencies: dispatcher-static and
+install-common
 
-On 13/11/2018 22:52, Thomas Petazzoni wrote:
-> mini-snmpd has an optional dependency on libconfuse, when --with-config
-> is passed, or by default. So, you should either pass --without-config
-> and not bother with this dependency, or handle it explicitly with
-> something like this:
-> 
-> ifeq ($(BR2_PACKAGE_LIBCONFUSE),y)
-> MINI_SNMPD_DEPENDENCIES += host-pkgconf libconfuse
-> MINI_SNMPD_CONF_OPTS += --with-config
-> else
-> MINI_SNMPD_CONF_OPTS += --without-config
-> endif
+Because dispatcher-static is not a file but only a target, it will
+always be called to build usb_modeswitch_dispatcher.
+So, even if install-common depends on usb_modeswitch_dispatcher, in some
+rare cases, install-static won't be able to install
+usb_modeswitch_dispatcher because it is being rebuild by
+dispatcher-static
 
-I believe, we can ignore this for now until the new feature with config file is released.
-Current latest release package (1.4) doesn't have such an option.
+To fix this issue, disable parallel build
 
-But thanks for heads-up, one updating the version should not forget to add the
-above handling.
+Fixes:
+ - http://autobuild.buildroot.org/results/8297be35725b816ff5afaf909605ceb41223efb6
 
---
-Alex.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/usb_modeswitch/usb_modeswitch.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
+index d0c33cc187..bb0d6ab1bf 100644
+--- a/package/usb_modeswitch/usb_modeswitch.mk
++++ b/package/usb_modeswitch/usb_modeswitch.mk
+@@ -10,6 +10,8 @@ USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
+ USB_MODESWITCH_DEPENDENCIES = libusb
+ USB_MODESWITCH_LICENSE = GPL-2.0+
+ USB_MODESWITCH_LICENSE_FILES = COPYING
++#?Package does not build in parallel due to improper make rules
++USB_MODESWITCH_MAKE = $(MAKE1)
+ 
+ USB_MODESWITCH_BUILD_TARGETS = static
+ USB_MODESWITCH_INSTALL_TARGETS = install-static
+-- 
+2.14.1
