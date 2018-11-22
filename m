@@ -1,53 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 22 Nov 2018 10:41:46 +0100
-Subject: [Buildroot] [PATCH 3/6] configs/armadeus_apf27: fix U-Boot
- configuration
+Date: Thu, 22 Nov 2018 10:41:48 +0100
+Subject: [Buildroot] [PATCH 5/6] configs/orangepi_zero_plus2: U-Boot needs
+ pylibfdt
 In-Reply-To: <20181122094150.10403-1-thomas.petazzoni@bootlin.com>
 References: <20181122094150.10403-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181122094150.10403-3-thomas.petazzoni@bootlin.com>
+Message-ID: <20181122094150.10403-5-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The U-Boot part of the defconfig was not specifying explicitly any
-U-Boot version. Since commit 21e3ae8a18bb77943c0a2492ab9ebf14cab333f9
-("boot/uboot: default to kconfig buildsystem for latest version"), we
-default to using the kconfig build system when the default U-Boot
-version is used. Following this change, the apf27 defconfig therefore
-started using kconfig, for which the BR2_TARGET_UBOOT_BOARDNAME
-Config.in option is not used. Due to this, the build fails with:
+When building U-Boot for this platform:
 
-boot/uboot/uboot.mk:411: *** No board defconfig name specified, check your BR2_TARGET_UBOOT_BOARD_DEFCONFIG setting.  Stop.
-
-Indeed, when Kconfig is used, the board defconfig must be specified
-with BR2_TARGET_UBOOT_BOARD_DEFCONFIG.
-
-As part of fixing this, we also set a fixed U-Boot version for this
-defconfig, like we do in all other defconfigs.
+unable to execute 'swig': No such file or directory
+error: command 'swig' failed with exit status 1
+scripts/dtc/pylibfdt/Makefile:26: recipe for target 'scripts/dtc/pylibfdt/_libfdt.so' failed
 
 Fixes:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/123771003
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/123771103
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/armadeus_apf27_defconfig | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ configs/orangepi_zero_plus2_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/configs/armadeus_apf27_defconfig b/configs/armadeus_apf27_defconfig
-index 6f78b74d3a..457a14b02d 100644
---- a/configs/armadeus_apf27_defconfig
-+++ b/configs/armadeus_apf27_defconfig
-@@ -28,4 +28,7 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx27-apf27dev"
- 
- # U-boot
- BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="apf27"
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.09"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="apf27"
+diff --git a/configs/orangepi_zero_plus2_defconfig b/configs/orangepi_zero_plus2_defconfig
+index 8c83b3acd1..618104ff5e 100644
+--- a/configs/orangepi_zero_plus2_defconfig
++++ b/configs/orangepi_zero_plus2_defconfig
+@@ -21,6 +21,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_zero_plus2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
 -- 
 2.19.1
