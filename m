@@ -1,49 +1,78 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 22 Nov 2018 20:42:12 +0100
-Subject: [Buildroot] [PATCH 1/1] popt: add libiconv to popt.pc.in
-Message-ID: <20181122194212.5967-1-fontaine.fabrice@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 22 Nov 2018 22:18:35 +0200
+Subject: [Buildroot] [PATCH 1/5] boot/optee-os: OP-TEE secure world
+In-Reply-To: <1542900177-17343-1-git-send-email-etienne.carriere@linaro.org>
+References: <1542900177-17343-1-git-send-email-etienne.carriere@linaro.org>
+Message-ID: <87tvk8euhw.fsf@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add ${LTLIBICONV} to popt.pc.in so applications such as shairport-sync
-will know that they must link with -liconv when building statically
+Hi Etienne,
 
-Fixes:
- - http://autobuild.buildroot.org/results/c5b0d1d2867e49c022a2ad971dd9f358ff0f3865
+Thanks for your contribution. I have a few comments below.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/popt/0004-add-libiconv-to-popt.pc.patch | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
- create mode 100644 package/popt/0004-add-libiconv-to-popt.pc.patch
+Etienne Carriere writes:
+> OP-TEE OS is maintained by the OP-TEE project. It provides an
+> open source solution for development and integration of secure
+> services for Armv7-A and Armv8-A CPU based platforms supporting
+> the TrustZone technology. This technology enables CPUs to
+> concurrently host a secure world as the OP-TEE OS and a non-secure
+> world as a Linux based OS.
+>
+> The OP-TEE project maintains other packages to leverage OP-TEE on
+> Linux kernel based OSes. An OP-TEE interface driver is available
+> in the Linux kernel since 4.12 upon CONFIG_OPTEE.
+>
+> https://www.op-tee.org/
+> https://github.com/OP-TEE/optee_os
+>
+> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 
-diff --git a/package/popt/0004-add-libiconv-to-popt.pc.patch b/package/popt/0004-add-libiconv-to-popt.pc.patch
-new file mode 100644
-index 0000000000..087a30bb7a
---- /dev/null
-+++ b/package/popt/0004-add-libiconv-to-popt.pc.patch
-@@ -0,0 +1,19 @@
-+Add LTLIBICONV to popt.pc.in
-+
-+Add ${LTLIBICONV} to popt.pc.in so applications such as shairport-sync
-+will know that they must link with -liconv when building statically
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/c5b0d1d2867e49c022a2ad971dd9f358ff0f3865
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+
-+diff -Naurp popt-1.16-vanilla/popt.pc.in popt-1.16/popt.pc.in
-+--- popt-1.16-vanilla/popt.pc.in	2018-11-22 20:26:55.735211662 +0100
-++++ popt-1.16/popt.pc.in	2018-11-22 20:34:11.371303724 +0100
-+@@ -7,4 +7,5 @@ Name: popt
-+ Version: @VERSION@
-+ Description: popt library.
-+ Libs: @POPT_PKGCONFIG_LIBS@
-++Libs.private: @LTLIBICONV@
-+ Cflags: -I${includedir}
--- 
-2.14.1
+...
+
+> diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
+> new file mode 100644
+> index 0000000..5968531
+> --- /dev/null
+> +++ b/boot/optee-os/Config.in
+> @@ -0,0 +1,102 @@
+> +config BR2_TARGET_OPTEE_OS
+> +	bool "optee_os"
+> +	depends on BR2_aarch64 || BR2_arm
+> +	select BR2_PACKAGE_OPENSSL # host tool
+
+Which host? Is that the host below which OPTEE OS runs? This is usually
+called target in the Buildroot lingo. Please clarify in a comment.
+
+Is that a build time dependency? If so you need to add openssl to
+_DEPENDENCIES.
+
+> +	help
+> +	  OP-TEE OS provides the secure world boot image and the trust
+> +	  application development kit of the OP-TEE project. OP-TEE OS
+> +	  also provides generic trusted application one can embedded
+> +	  into its system.
+> +
+> +	  http://github.org/OP-TEE/optee_os
+> +
+> +if BR2_TARGET_OPTEE_OS
+> +
+> +choice
+> +	prompt "OP-TEE OS version"
+> +	default BR2_TARGET_OPTEE_OS_LATEST
+> +	help
+> +	  Select the version of OP-TEE OS you want to use
+
+Is there a practical need to support selection separate version
+selection for each OPTEE component? If not then I think this version
+selection should apply to all other components.
+
+baruch
+
+--
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
