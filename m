@@ -1,144 +1,104 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 21 Nov 2018 20:53:38 -0600
-Subject: [Buildroot] [PATCH] package/systemd: needs glibc
-In-Reply-To: <20181121210556.18619-1-yann.morin.1998@free.fr>
-References: <20181121210556.18619-1-yann.morin.1998@free.fr>
-Message-ID: <CANQCQpaUjTcyRjUHMamy0DDq3uowSxb-LpaRzWiLOPMf_bJA1Q@mail.gmail.com>
+Date: Wed, 21 Nov 2018 21:14:11 -0600
+Subject: [Buildroot] [PATCH v2 2/6] package/llvm: install target
+ binary/debug tools
+In-Reply-To: <ae5caeb6-f258-4d00-bbb4-12726fa5d4f3@gmail.com>
+References: <1542426982-54683-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <1542426982-54683-2-git-send-email-matthew.weber@rockwellcollins.com>
+ <50862e38-68c7-e166-a719-82ab28f7aad9@smile.fr>
+ <CANQCQpbU9jTkv9L8B80o+k2x_sAtDVOhhE9KFjUXA_nVuV=ang@mail.gmail.com>
+ <CANLo3Ji5+U+2OkL8pMD=8B-iQL29AZLDGXWdcijjzgzSqc3hzQ@mail.gmail.com>
+ <CANQCQpbdA1O5sRxpxax3ZQepzsA7WPhinB=oW8dVYYweQrbTOQ@mail.gmail.com>
+ <6b1c1219-de01-1012-09a8-eb33181cc2bc@gmail.com>
+ <CANQCQpbmLGK955=w74NOM5A67k_rJtUF3domF_+==zpTaHVOvw@mail.gmail.com>
+ <ae5caeb6-f258-4d00-bbb4-12726fa5d4f3@gmail.com>
+Message-ID: <CANQCQpZQdVcA3f+Deh8-Hb_1AhYjKntzAHHfONFz5ngCVxKJWQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Romain,
 
-On Wed, Nov 21, 2018 at 3:06 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+On Wed, Nov 21, 2018 at 3:19 PM Romain Naour <romain.naour@gmail.com> wrote:
 >
-> Since version v239, systemd-nspawn unconditioanlly uses prlimit(2),
-> which is not implemented in uClibc-ng. systemd-nspawn can not be
-> disabled.
+> Hi Matt,
 >
-> This makes systemd glibc-only again.
+> Le 21/11/2018 ? 04:12, Matthew Weber a ?crit :
+> > On Tue, Nov 20, 2018 at 4:37 PM Romain Naour <romain.naour@gmail.com> wrote:
+> >>
+> >> Hi Matt,
+> >>
+> >> Le 19/11/2018 ? 14:04, Matthew Weber a ?crit :
+> >>> Romain,
+> >>>
+> >>> On Mon, Nov 19, 2018 at 2:10 AM Romain Naour <romain.naour@gmail.com> wrote:
+> >>>>
+> >>>> Hi Matt,
+> >>>>
+> >>>> Le lun. 19 nov. 2018 ? 02:48, Matthew Weber <matthew.weber@rockwellcollins.com> a ?crit :
+> >>>>>
+> >>>>> Romain,
+> >>>>>
+> >>>>> On Sun, Nov 18, 2018 at 1:14 PM Romain Naour <romain.naour@smile.fr> wrote:
+> >>>>>>
+> >>>>>> Hi Matt,
+> >>>>>>
+> >>>>>> Le 17/11/2018 ? 04:56, Matt Weber a ?crit :
+> >>>>>>> The compiler-rt fuzzer and address sanitizer tools require additional
+> >>>>>>> LLVM binary tools installed to allow stack trace decoding actively during
+> >>>>>>> executable analysis.
+> >>>>>>>
+> >>>>>>> https://github.com/google/sanitizers/wiki/AddressSanitizerCallStack
+> >>>>>>>
+> >>>>>>> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> >>>>>>> Reviewed-by: Romain Naour <romain.naour@smile.fr>
+> >>>>>>
+> >>>>>> For some reason I get an error while building llvm package tools.
+> >>>>>>
+> >>>>>> x86_64-linux-g++: WARNING: unsafe header/library path used in cross-compilation:
+> >>>>>> '-I/usr/include/libxml2'
+> >>>>>>
+> >>>>>> Can you have a look?
+> >>>>>
+> >>>>> I went back and checked my logs on the clang compiler-rt run-test
+> >>>>> build for that warning and didn't find it.  I then checked and my
+> >>>>> config and it has the unsafe header/library as error.  Was your build
+> >>>>> test just applying my patches and doing an explicit 'make llvm'?
+> >>>>
+> >>>>
+> >>>> Indeed,
+> >>>> Some tools use libxml2, so you have to add target libxml2 package as build dependency.
+> >>>>
+> >>>
+> >>> Would you mind sharing your verbose output and equivalent of cmake
+> >>> config guess/status?
+> >>>
+> >>
+> >> I need to rebuild from scratch since I've fixed the build locally.
+> >> I'll restart a new one next week-end.
+> >>
+> >
+> > Something like the following added to package/llvm/llvm.mk?  (Still
+> > haven't see this on my end.  I messed with my host system a bit to get
+> > libxml2 support and headers in place, no luck.)
+> >
+> > # LLVM requires libxml2
+> > HOST_LLVM_CONF_OPTS += \
+> >        -DLIBXML2_LIBRARIES=$(HOST_DIR)/lib \
+> >        -DLIBXML2_INCLUDE_DIR=$(HOST_DIR)/include/libxml2
+> > HOST_LLVM_DEPENDENCIES += host-libxml2
+> > LLVM_CONF_OPTS += \
+> >        -DLIBXML2_LIBRARIES=$(STAGING_DIR)/usr/lib \
+> >        -DLIBXML2_INCLUDE_DIR=$(STAGING_DIR)/usr/include/libxml2
+> > LLVM_DEPENDENCIES += libxml2
 >
-> After a bit of discussion with upstream (om IRC), it looks very
-> improbable that they accept a patch making systemd-nspawn optional.
-> They would probably consider a patch that provides that syscall wrapper
-> if it is missing, though, but that's less trivial...
+> I reproduced the issue: https://pastebin.com/s8PZvuGt
 >
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Waldemar Brodkorb <wbx@openadk.org>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
 
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
-(Went back and reviewed Waldemar's original patch and this revert)
+Ah ok, I see you have the AMD GPU stuff enabled.  I'll enable that and
+see if I can reproduce the path poisoning.  Then do some builds
+with/without explicitly disabling via -DLLVM_ENABLE_LIBXML2.
 
-> ---
->  package/systemd/Config.in  |  3 ---
->  package/systemd/systemd.mk | 11 +----------
->  system/Config.in           | 11 +++--------
->  3 files changed, 4 insertions(+), 21 deletions(-)
->
-> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-> index c858d89c05..25f322e8f3 100644
-> --- a/package/systemd/Config.in
-> +++ b/package/systemd/Config.in
-> @@ -192,7 +192,6 @@ config BR2_PACKAGE_SYSTEMD_MACHINED
->  config BR2_PACKAGE_SYSTEMD_MYHOSTNAME
->         bool "enable myhostname NSS plugin"
->         default y
-> -       depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs nss.h
->         help
->           nss-myhostname is a plug-in module for the GNU Name Service
->           Switch (NSS) functionality of the GNU C Library (glibc),
-> @@ -252,7 +251,6 @@ config BR2_PACKAGE_SYSTEMD_RANDOMSEED
->  config BR2_PACKAGE_SYSTEMD_RESOLVED
->         bool "enable resolve daemon"
->         default y
-> -       depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs nss.h
->         help
->           systemd-resolved is a system service that provides network
->           name resolution to local applications. It implements a
-> @@ -285,7 +283,6 @@ config BR2_PACKAGE_SYSTEMD_SMACK_SUPPORT
->
->  config BR2_PACKAGE_SYSTEMD_SYSUSERS
->         bool "enable sysusers support"
-> -       depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs gshadow.h
->         help
->           systemd-sysusers creates system users and groups, based on
->           the file format and location specified in sysusers.d(5).
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index ecbf7e97ff..e53f0b699a 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -40,18 +40,9 @@ SYSTEMD_CONF_OPTS += \
->         -Dsulogin-path=/usr/sbin/sulogin \
->         -Dmount-path=/usr/bin/mount \
->         -Dumount-path=/usr/bin/umount \
-> -       -Dnobody-group=nogroup
-> -
-> -# disable unsupported features for non-glibc toolchains
-> -ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
-> -SYSTEMD_CONF_OPTS += \
-> +       -Dnobody-group=nogroup \
->         -Didn=true \
->         -Dnss-systemd=true
-> -else
-> -SYSTEMD_CONF_OPTS += \
-> -       -Didn=false \
-> -       -Dnss-systemd=false
-> -endif
->
->  ifeq ($(BR2_PACKAGE_ACL),y)
->  SYSTEMD_DEPENDENCIES += acl
-> diff --git a/system/Config.in b/system/Config.in
-> index f63f27b126..9e34f11b6c 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -127,9 +127,7 @@ config BR2_INIT_SYSV
->  config BR2_INIT_SYSTEMD
->         bool "systemd"
->         depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
-> -       depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC
-> -       depends on BR2_USE_WCHAR
-> -       depends on BR2_TOOLCHAIN_HAS_THREADS
-> +       depends on BR2_TOOLCHAIN_USES_GLIBC
->         depends on BR2_TOOLCHAIN_HAS_SSP
->         depends on BR2_USE_MMU
->         depends on !BR2_STATIC_LIBS
-> @@ -137,14 +135,11 @@ config BR2_INIT_SYSTEMD
->         select BR2_ROOTFS_MERGED_USR
->         select BR2_PACKAGE_SYSTEMD
->
-> -comment "systemd needs a glibc or uClibc toolchain w/ wchar, threads, SSP, dynamic library, headers >= 3.10"
-> +comment "systemd needs a glibc toolchain w/ SSP, headers >= 3.10"
->         depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
->         depends on BR2_USE_MMU
-> -       depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC) || \
-> -               !BR2_USE_WCHAR || \
-> -               !BR2_TOOLCHAIN_HAS_THREADS || \
-> +       depends on !BR2_TOOLCHAIN_USES_GLIBC || \
->                 !BR2_TOOLCHAIN_HAS_SSP || \
-> -               BR2_STATIC_LIBS || \
->                 !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
->
->  config BR2_INIT_NONE
-> --
-> 2.14.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-
--- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / RC Linux Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+Matt
