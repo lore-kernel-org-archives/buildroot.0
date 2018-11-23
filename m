@@ -1,103 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 23 Nov 2018 22:01:09 +0100
-Subject: [Buildroot] [git commit branch/next] sdl2: fix build with
+Date: Fri, 23 Nov 2018 22:02:04 +0100
+Subject: [Buildroot] [PATCH/next 1/1] sdl2: fix build with
  --disable-threads
-Message-ID: <20181123205805.AEBE287F8A@busybox.osuosl.org>
+In-Reply-To: <20181121220923.24849-1-fontaine.fabrice@gmail.com>
+References: <20181121220923.24849-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181123220204.26d38eb5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d896cf007920e01fc9104f98c8f4d3734a6f245
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-SDL_LinuxSetThreadPriority() has been added since version 2.0.9 and
-https://github.com/SDL-mirror/SDL/commit/f25a7fa870bdceb339e5105973f689606bcb9086
+On Wed, 21 Nov 2018 23:09:23 +0100, Fabrice Fontaine wrote:
+> SDL_LinuxSetThreadPriority() has been added since version 2.0.9 and
+> https://github.com/SDL-mirror/SDL/commit/f25a7fa870bdceb339e5105973f689606bcb9086
+> 
+> However, this function is used in src/dynapi/SDL_dynapi_procs.h even
+> when SDL_THREADS_DISABLED
+> 
+> However, when SDL_THREADS_DISABLED is set, SDL_LinuxSetThreadPriority is
+> not defined because thread/pthread/SDL_systhread.c is not built
+> 
+> So check SDL_THREADS_DISABLED in addition to __LINUX__
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/539cb9ab6c605dc6be73ebe90debab1a998f2451
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  .../0001-fix-build-with-disable-threads.patch | 63 +++++++++++++++++++
+>  1 file changed, 63 insertions(+)
+>  create mode 100644 package/sdl2/0001-fix-build-with-disable-threads.patch
 
-However, this function is used in src/dynapi/SDL_dynapi_procs.h even
-when SDL_THREADS_DISABLED
+I like how the inverted SDL_THREADS_DISABLED macro makes the code
+readable. !SDL_THREADS_DISABLED means thread support is enabled...
 
-However, when SDL_THREADS_DISABLED is set, SDL_LinuxSetThreadPriority is
-not defined because thread/pthread/SDL_systhread.c is not built
+But anyway, that's not your fault, that's how the existing SDL2 code
+is. So applied to next, thanks! Please make sure you submit this
+upstream.
 
-So check SDL_THREADS_DISABLED in addition to __LINUX__
+Thanks,
 
-Fixes:
- - http://autobuild.buildroot.org/results/539cb9ab6c605dc6be73ebe90debab1a998f2451
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../sdl2/0001-fix-build-with-disable-threads.patch | 63 ++++++++++++++++++++++
- 1 file changed, 63 insertions(+)
-
-diff --git a/package/sdl2/0001-fix-build-with-disable-threads.patch b/package/sdl2/0001-fix-build-with-disable-threads.patch
-new file mode 100644
-index 0000000000..81f7d7446f
---- /dev/null
-+++ b/package/sdl2/0001-fix-build-with-disable-threads.patch
-@@ -0,0 +1,63 @@
-+From 26646028f79d7f3d857df9b46cd6d0285796c699 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 21 Nov 2018 22:31:09 +0100
-+Subject: [PATCH] fix build with --disable-threads
-+
-+SDL_LinuxSetThreadPriority() has been added since version 2.0.9 and
-+https://github.com/SDL-mirror/SDL/commit/f25a7fa870bdceb339e5105973f689606bcb9086
-+
-+However, this function is used in src/dynapi/SDL_dynapi_procs.h even
-+when SDL_THREADS_DISABLED
-+
-+However, when SDL_THREADS_DISABLED is set, SDL_LinuxSetThreadPriority is
-+not defined because thread/pthread/SDL_systhread.c is not built
-+
-+So check SDL_THREADS_DISABLED in addition to __LINUX__
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/539cb9ab6c605dc6be73ebe90debab1a998f2451
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ include/SDL_system.h          | 4 ++--
-+ src/dynapi/SDL_dynapi_procs.h | 2 +-
-+ 2 files changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/include/SDL_system.h b/include/SDL_system.h
-+index 4dc372d6b..0513d7fa5 100644
-+--- a/include/SDL_system.h
-++++ b/include/SDL_system.h
-+@@ -77,7 +77,7 @@ extern DECLSPEC SDL_bool SDLCALL SDL_DXGIGetOutputInfo( int displayIndex, int *a
-+ 
-+ 
-+ /* Platform specific functions for Linux */
-+-#ifdef __LINUX__
-++#if defined(__LINUX__) && !defined(SDL_THREADS_DISABLED)
-+ 
-+ /**
-+    \brief Sets the UNIX nice value for a thread, using setpriority() if possible, and RealtimeKit if available.
-+@@ -86,7 +86,7 @@ extern DECLSPEC SDL_bool SDLCALL SDL_DXGIGetOutputInfo( int displayIndex, int *a
-+  */
-+ extern DECLSPEC int SDLCALL SDL_LinuxSetThreadPriority(Sint64 threadID, int priority);
-+  
-+-#endif /* __LINUX__ */
-++#endif /* defined(__LINUX__) && !defined(SDL_THREADS_DISABLED) */
-+ 	
-+ /* Platform specific functions for iOS */
-+ #if defined(__IPHONEOS__) && __IPHONEOS__
-+diff --git a/src/dynapi/SDL_dynapi_procs.h b/src/dynapi/SDL_dynapi_procs.h
-+index c95cf708b..ee9bf60a6 100644
-+--- a/src/dynapi/SDL_dynapi_procs.h
-++++ b/src/dynapi/SDL_dynapi_procs.h
-+@@ -708,7 +708,7 @@ SDL_DYNAPI_PROC(SDL_bool,SDL_IsAndroidTV,(void),(),return)
-+ SDL_DYNAPI_PROC(double,SDL_log10,(double a),(a),return)
-+ SDL_DYNAPI_PROC(float,SDL_log10f,(float a),(a),return)
-+ SDL_DYNAPI_PROC(char*,SDL_GameControllerMappingForDeviceIndex,(int a),(a),return)
-+-#ifdef __LINUX__
-++#if defined(__LINUX__) && !defined(SDL_THREADS_DISABLED)
-+ SDL_DYNAPI_PROC(int,SDL_LinuxSetThreadPriority,(Sint64 a, int b),(a,b),return)
-+ #endif
-+ SDL_DYNAPI_PROC(SDL_bool,SDL_HasAVX512F,(void),(),return)
-+-- 
-+2.17.1
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
