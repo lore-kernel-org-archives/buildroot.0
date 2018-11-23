@@ -1,9 +1,10 @@
 From: Carlos Santos <casantos@datacom.com.br>
-Date: Fri, 23 Nov 2018 01:01:07 -0200 (BRST)
-Subject: [Buildroot] [PATCH 1/5] boot/optee-os: OP-TEE secure world
-In-Reply-To: <1542900177-17343-1-git-send-email-etienne.carriere@linaro.org>
+Date: Fri, 23 Nov 2018 01:06:49 -0200 (BRST)
+Subject: [Buildroot] [PATCH 5/5] optee-test: new package
+In-Reply-To: <1542900177-17343-5-git-send-email-etienne.carriere@linaro.org>
 References: <1542900177-17343-1-git-send-email-etienne.carriere@linaro.org>
-Message-ID: <1606136172.3322721.1542942067336.JavaMail.zimbra@datacom.com.br>
+ <1542900177-17343-5-git-send-email-etienne.carriere@linaro.org>
+Message-ID: <790904575.3322760.1542942409059.JavaMail.zimbra@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +14,31 @@ To: buildroot@busybox.net
 > From: "Etienne Carriere" <etienne.carriere@linaro.org>
 > To: "buildroot" <buildroot@buildroot.org>
 > Cc: "etienne carriere" <etienne.carriere@linaro.org>
-> Sent: Quinta-feira, 22 de novembro de 2018 13:22:53
-> Subject: [Buildroot] [PATCH 1/5] boot/optee-os: OP-TEE secure world
+> Sent: Quinta-feira, 22 de novembro de 2018 13:22:57
+> Subject: [Buildroot] [PATCH 5/5] optee-test: new package
 
 [...]
 > --- /dev/null
-> +++ b/boot/optee-os/Config.in
-> @@ -0,0 +1,102 @@
-> +config BR2_TARGET_OPTEE_OS
-> +	bool "optee_os"
+> +++ b/package/optee-test/Config.in
+> @@ -0,0 +1,64 @@
+> +config BR2_PACKAGE_OPTEE_TEST
+> +	bool "optee_test"
 > +	depends on BR2_aarch64 || BR2_arm
-> +	select BR2_PACKAGE_OPENSSL # host tool
 > +	help
-> +	  OP-TEE OS provides the secure world boot image and the trust
-> +	  application development kit of the OP-TEE project. OP-TEE OS
-> +	  also provides generic trusted application one can embedded
-> +	  into its system.
+> +	  This build option enables OP-TEE test package from the
+> +	  OP-TEE project. It helps platforms to verify the OP-TEE
+> +	  installation against a set of regression and performance
+> +	  tests.
 > +
-> +	  http://github.org/OP-TEE/optee_os
+> +	  The package generates userspace test applications and
+> +	  data files for the Linux userland. It also generates
+> +	  OP-TEE trusted applications embedded in the target
+> +	  directory /lib/optee-armtz. These are loaded into the
+> +	  secure world at runtime.
+> +
+> +	  http://github.org/OP-TEE/optee_test
 
-Must be https://github.com/OP-TEE/optee_os
+Must be https://github.com/OP-TEE/optee_test
 
 -- 
 Carlos Santos (Casantos) - DATACOM, P&D
