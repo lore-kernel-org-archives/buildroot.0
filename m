@@ -1,242 +1,195 @@
-From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Fri, 23 Nov 2018 17:33:37 +0100
-Subject: [Buildroot] [PATCH v2 5/5] optee-test: new package
-In-Reply-To: <1542990817-28362-1-git-send-email-etienne.carriere@linaro.org>
-References: <1542900177-17343>
- <1542990817-28362-1-git-send-email-etienne.carriere@linaro.org>
-Message-ID: <1542990817-28362-5-git-send-email-etienne.carriere@linaro.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 23 Nov 2018 19:07:27 +0100
+Subject: [Buildroot] [PATCH next v6 03/10] Makefile: rework main
+ directory creation logic
+In-Reply-To: <20181123145815.13008-4-thomas.petazzoni@bootlin.com>
+References: <20181123145815.13008-1-thomas.petazzoni@bootlin.com>
+ <20181123145815.13008-4-thomas.petazzoni@bootlin.com>
+Message-ID: <20181123180727.GB14050@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OP-TEE test package provide test materials as part of the OP-TEE
-project helping platforms to verify their OP-TEE components
-against a set of regression and performance tests.
+Thomas, All,
 
-Package is added in the BR package configuration next to the
-OP-TEE client package.
+On 2018-11-23 15:58 +0100, Thomas Petazzoni spake thusly:
+> In the current code, the creation of the main output directories
+> (BUILD_DIR, STAGING_DIR, HOST_DIR, TARGET_DIR, etc.) is done by a
+> global "dirs" target. While this works fine in the current situation,
+> it doesn't work well in a context where per-package host and target
+> directories are used.
+> 
+> For example, with the current code and per-package host directories,
+> the output/staging symbolic link ends up being created as a link to
+> the per-package package sysroot directory of the first package being
+> built, instead of the global sysroot.
+> 
+> This commit reworks the creation of those directories by having the
+> package/pkg-generic.mk code ensure that the build directory, target
+> directory, host directory, staging directory and binaries directory
+> exist before they are needed.
+> 
+> Two new targets, host-finalize and staging-finalize are added in the
+> main Makefile to create the compatibility symlinks for host and
+> staging directories. They will be extended later with additional logic
+> for per-package directories.
+> 
+> Thanks to those changes, the global "dirs" target is entirely removed.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
----
-Changes v1 -> v2:
-  - Replace BR2_arm with BR2_ARM_CPU_ARMV7 as OP-TEE supports only
-    BR2_ARM_CPU_ARMV7 architectures among the 32bit Arm machines.
-  - Add missing dependency on BR2_TARGET_OPTEE_OS and select
-    BR2_PACKAGE_OPTEE_CLIENT when enabled.
-  - Add option BR2_PACKAGE_OPTEE_TEST_SYNCED_VERSION to ensure
-    OP-TEE test version is synced with OP-TEE OS version.
-  - Fix official repo URL in Config.in package description.
-  - Remove useless OPTEE_TEST_INSTALL_STAGING=YES.
-  - Do not force output build directory and rely on native one: out/.
+Since I don't have strong arguments to make for the suggestions in my
+previous review, after your reply, that's OK for me:
 
----
- package/Config.in                                  |  1 +
- .../optee-test/3.3.0/0001-cmake-rely-on-C.patch    | 32 +++++++++
- package/optee-test/Config.in                       | 75 ++++++++++++++++++++++
- package/optee-test/optee-test.hash                 |  4 ++
- package/optee-test/optee-test.mk                   | 48 ++++++++++++++
- 5 files changed, 160 insertions(+)
- create mode 100644 package/optee-test/3.3.0/0001-cmake-rely-on-C.patch
- create mode 100644 package/optee-test/Config.in
- create mode 100644 package/optee-test/optee-test.hash
- create mode 100644 package/optee-test/optee-test.mk
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/Config.in b/package/Config.in
-index 35870d0..ff53a75 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2050,6 +2050,7 @@ menu "Security"
- 	source "package/optee-benchmark/Config.in"
- 	source "package/optee-client/Config.in"
- 	source "package/optee-examples/Config.in"
-+	source "package/optee-test/Config.in"
- 	source "package/paxtest/Config.in"
- 	source "package/policycoreutils/Config.in"
- 	source "package/refpolicy/Config.in"
-diff --git a/package/optee-test/3.3.0/0001-cmake-rely-on-C.patch b/package/optee-test/3.3.0/0001-cmake-rely-on-C.patch
-new file mode 100644
-index 0000000..ea7b966
---- /dev/null
-+++ b/package/optee-test/3.3.0/0001-cmake-rely-on-C.patch
-@@ -0,0 +1,32 @@
-+cmake: component rely on C support
-+
-+Without specifing optee_client source expects only C source file
-+support cmake may attempt to look for resources as g++. When
-+building with environments that do not provide such tools as when
-+building from native buildroot ofr a qemu target, optee_client
-+fails to build. This change ensure a minimal C support allows to
-+build optee_client with cmake.
-+
-+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-+Acked-by: Jerome Forissier <jerome.forissier@linaro.org>
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 0290205..a3fd269 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -1,4 +1,5 @@
-+ cmake_minimum_required (VERSION 3.2)
-++project (optee_test C)
-+ 
-+ # Default cross compile settings
-+ set (CMAKE_TOOLCHAIN_FILE CMakeToolchain.txt)
-+diff --git a/ta/CMakeLists.txt b/ta/CMakeLists.txt
-+index 22d7727..795237e 100644
-+--- a/ta/CMakeLists.txt
-++++ b/ta/CMakeLists.txt
-+@@ -1,4 +1,4 @@
-+-project (xtest-ta-headers)
-++project (xtest-ta-headers C)
-+ 
-+ add_library(${PROJECT_NAME} INTERFACE)
-+ 
-diff --git a/package/optee-test/Config.in b/package/optee-test/Config.in
-new file mode 100644
-index 0000000..545db03
---- /dev/null
-+++ b/package/optee-test/Config.in
-@@ -0,0 +1,75 @@
-+config BR2_PACKAGE_OPTEE_TEST
-+	bool "optee_test"
-+	depends on BR2_aarch64 || BR2_ARM_CPU_ARMV7A
-+	depends on BR2_TARGET_OPTEE_OS
-+	select BR2_PACKAGE_OPTEE_CLIENT
-+	help
-+	  This build option enables OP-TEE test package from the
-+	  OP-TEE project. It helps platforms to verify the OP-TEE
-+	  installation against a set of regression and performance
-+	  tests.
-+
-+	  The package generates userspace test applications and
-+	  data files for the Linux userland. It also generates
-+	  OP-TEE trusted applications embedded in the target
-+	  directory /lib/optee-armtz. These are loaded into the
-+	  secure world at runtime.
-+
-+	  http://github.com/OP-TEE/optee_test
-+
-+if BR2_PACKAGE_OPTEE_TEST
-+
-+choice
-+	prompt "OP-TEE test version"
-+	default BR2_PACKAGE_OPTEE_TEST_LATEST
-+	help
-+	  Select the version of OP-TEE test you want to use
-+
-+config BR2_PACKAGE_OPTEE_TEST_LATEST
-+	bool "sync with latest release tag"
-+	help
-+	  This fetches the latest registered release tag from
-+	  the OP-TEE test official Git repository.
-+
-+config BR2_PACKAGE_OPTEE_TEST_CUSTOM_GIT
-+	bool "sync with a specific Git"
-+	help
-+	  Sync with a specific OP-TEE Git repository.
-+
-+endchoice
-+
-+config BR2_PACKAGE_OPTEE_TEST_SYNCED_VERSION
-+	bool "use same version ref for OP-TEE components"
-+	depends on BR2_PACKAGE_OPTEE_TEST_LATEST
-+	help
-+	  When enabled, OP-TEE examples version must match the version
-+	  set for the other OP-TEE components.
-+
-+config BR2_PACKAGE_OPTEE_TEST_VERSION
-+	string
-+	default BR2_TARGET_OPTEE_OS_VERSION \
-+			if BR2_PACKAGE_OPTEE_TEST_SYNCED_VERSION
-+	default "3.3.0"	if BR2_PACKAGE_OPTEE_TEST_LATEST
-+	default BR2_PACKAGE_OPTEE_TEST_CUSTOM_REPO_VERSION \
-+			if BR2_PACKAGE_OPTEE_TEST_CUSTOM_GIT
-+	help
-+	  Reference in the target Git repository to sync with.
-+
-+if BR2_PACKAGE_OPTEE_TEST_CUSTOM_GIT
-+
-+config BR2_PACKAGE_OPTEE_TEST_CUSTOM_REPO_URL
-+	string "Git repository site"
-+	help
-+	  Specific location of the reference source tree Git
-+	  repository.
-+
-+config BR2_PACKAGE_OPTEE_TEST_CUSTOM_REPO_VERSION
-+	string "target reference to pull in the Git repository"
-+	help
-+	  Package version reference to sync with. As source file
-+	  reference is a Git repository, the version reference can
-+	  be any Git reference as a tag or a sha1.
-+
-+endif
-+
-+endif #BR2_PACKAGE_OPTEE_TEST
-diff --git a/package/optee-test/optee-test.hash b/package/optee-test/optee-test.hash
-new file mode 100644
-index 0000000..0da2212
---- /dev/null
-+++ b/package/optee-test/optee-test.hash
-@@ -0,0 +1,4 @@
-+# From https://github.com/OP-TEE/optee_test/archive/3.3.0.tar.gz
-+sha256 9651d5db0d28856e45d6bc25ce603bfcf641435bd3264d95b449f093665c8521  optee-test-3.3.0.tar.gz
-+# Locally computed
-+sha256 6e6810981f0ddab9e0d44399d0700a15d9f760a3c2843cc866659c2074139ae7  LICENSE.md
-diff --git a/package/optee-test/optee-test.mk b/package/optee-test/optee-test.mk
-new file mode 100644
-index 0000000..8040ee5
---- /dev/null
-+++ b/package/optee-test/optee-test.mk
-@@ -0,0 +1,48 @@
-+################################################################################
-+#
-+# optee-test
-+#
-+################################################################################
-+
-+OPTEE_TEST_VERSION = $(call qstrip,$(BR2_PACKAGE_OPTEE_TEST_VERSION))
-+OPTEE_TEST_LICENSE = GPL-2.0, BSD-2-Clause,
-+OPTEE_TEST_LICENSE_FILES = LICENSE.md
-+
-+ifeq ($(BR2_PACKAGE_OPTEE_TEST_CUSTOM_GIT),y)
-+OPTEE_TEST_SITE = $(call qstrip,$(BR2_PACKAGE_OPTEE_TEST_CUSTOM_REPO_URL))
-+OPTEE_TEST_SITE_METHOD = git
-+BR_NO_CHECK_HASH_FOR += $(OPTEE_TEST_SOURCE)
-+else
-+OPTEE_TEST_SITE = $(call github,OP-TEE,optee_test,$(OPTEE_TEST_VERSION))
-+endif
-+
-+OPTEE_TEST_DEPENDENCIES = optee-client optee-os
-+
-+ifeq ($(BR2_aarch64),y)
-+OPTEE_TEST_SDK = $(STAGING_DIR)/lib/optee/export-ta_arm64
-+endif
-+ifeq ($(BR2_arm),y)
-+OPTEE_TEST_SDK = $(STAGING_DIR)/lib/optee/export-ta_arm32
-+endif
-+OPTEE_TEST_CONF_OPTS = -DOPTEE_TEST_SDK=$(OPTEE_TEST_SDK)
-+
-+define OPTEE_TEST_BUILD_TAS
-+	@$(foreach f,$(wildcard $(@D)/ta/*/Makefile), \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) \
-+			TA_DEV_KIT_DIR=$(OPTEE_TEST_SDK) \
-+			-C $(dir $f) all &&) true
-+endef
-+
-+define OPTEE_TEST_INSTALL_TAS
-+	@$(foreach f,$(wildcard $(@D)/ta/*/out/*.ta), \
-+		mkdir -p $(TARGET_DIR)/lib/optee_armtz && \
-+		$(INSTALL) -v -p --mode=444 \
-+			--target-directory=$(TARGET_DIR)/lib/optee_armtz $f \
-+			&&) true
-+endef
-+
-+OPTEE_TEST_POST_BUILD_HOOKS += OPTEE_TEST_BUILD_TAS
-+OPTEE_TEST_POST_INSTALL_TARGET_HOOKS += OPTEE_TEST_INSTALL_TAS
-+
-+$(eval $(cmake-package))
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  Makefile               | 21 +++++++++------------
+>  fs/common.mk           |  1 +
+>  package/pkg-generic.mk |  7 ++++++-
+>  3 files changed, 16 insertions(+), 13 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 2819d44124..e675ac26aa 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -572,10 +572,6 @@ $(foreach pkg,$(call UPPERCASE,$(PACKAGES)),\
+>  
+>  endif
+>  
+> -.PHONY: dirs
+> -dirs: $(BUILD_DIR) $(STAGING_DIR) $(BASE_TARGET_DIR) \
+> -	$(HOST_DIR) $(HOST_DIR_SYMLINK) $(BINARIES_DIR)
+> -
+>  $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
+>  	$(MAKE1) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" syncconfig
+>  
+> @@ -605,11 +601,6 @@ sdk: prepare-sdk $(BR2_TAR_HOST_DEPENDENCY)
+>  		--transform='s#^\.#$(BR2_SDK_PREFIX)#' \
+>  		-C $(HOST_DIR) "."
+>  
+> -# Populating the staging with the base directories is handled by the skeleton package
+> -$(STAGING_DIR):
+> -	@mkdir -p $(STAGING_DIR)
+> -	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
+> -
+>  RSYNC_VCS_EXCLUSIONS = \
+>  	--exclude .svn --exclude .git --exclude .hg --exclude .bzr \
+>  	--exclude CVS
+> @@ -710,8 +701,14 @@ $(TARGETS_ROOTFS): target-finalize
+>  # Avoid the rootfs name leaking down the dependency chain
+>  target-finalize: ROOTFS=
+>  
+> +host-finalize: $(HOST_DIR_SYMLINK)
+> +
+> +.PHONY: staging-finalize
+> +staging-finalize:
+> +	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
+> +
+>  .PHONY: target-finalize
+> -target-finalize: $(PACKAGES)
+> +target-finalize: $(PACKAGES) host-finalize
+>  	@$(call MESSAGE,"Finalizing target directory")
+>  	# Check files that are touched by more than one package
+>  	./support/scripts/check-uniq-files -t target $(BUILD_DIR)/packages-file-list.txt
+> @@ -782,7 +779,7 @@ endif
+>  	touch $(TARGET_DIR)/usr
+>  
+>  .PHONY: target-post-image
+> -target-post-image: $(TARGETS_ROOTFS) target-finalize
+> +target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize
+>  	@rm -f $(ROOTFS_COMMON_TAR)
+>  	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
+>  		$(call MESSAGE,"Executing post-image script $(s)"); \
+> @@ -811,7 +808,7 @@ legal-info-prepare: $(LEGAL_INFO_DIR)
+>  	@cp $(BR2_CONFIG) $(LEGAL_INFO_DIR)/buildroot.config
+>  
+>  .PHONY: legal-info
+> -legal-info: dirs legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p)-all-legal-info) \
+> +legal-info: legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p)-all-legal-info) \
+>  		$(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST)
+>  	@cat support/legal-info/README.header >>$(LEGAL_REPORT)
+>  	@if [ -r $(LEGAL_WARNINGS) ]; then \
+> diff --git a/fs/common.mk b/fs/common.mk
+> index 2a5a202a89..96658428ba 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -145,6 +145,7 @@ $$(BINARIES_DIR)/rootfs.$(1): ROOTFS=$(2)
+>  $$(BINARIES_DIR)/rootfs.$(1): FAKEROOT_SCRIPT=$$(ROOTFS_$(2)_DIR)/fakeroot
+>  $$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
+>  	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
+> +	mkdir -p $$(@D)
+>  	rm -rf $$(ROOTFS_$(2)_DIR)
+>  	mkdir -p $$(ROOTFS_$(2)_DIR)
+>  	echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index f34f46afc8..309fd8cd48 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -173,6 +173,7 @@ $(BUILD_DIR)/%/.stamp_extracted:
+>  $(BUILD_DIR)/%/.stamp_rsynced:
+>  	@$(call step_start,rsync)
+>  	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
+> +	@mkdir -p $(@D)
+>  	$(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
+>  	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
+>  	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $($(PKG)_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
+> @@ -238,6 +239,7 @@ $(BUILD_DIR)/%/.stamp_built::
+>  $(BUILD_DIR)/%/.stamp_host_installed:
+>  	@$(call step_start,install-host)
+>  	@$(call MESSAGE,"Installing to host directory")
+> +	@mkdir -p $(HOST_DIR)
+>  	$(foreach hook,$($(PKG)_PRE_INSTALL_HOOKS),$(call $(hook))$(sep))
+>  	+$($(PKG)_INSTALL_CMDS)
+>  	$(foreach hook,$($(PKG)_POST_INSTALL_HOOKS),$(call $(hook))$(sep))
+> @@ -267,6 +269,7 @@ $(BUILD_DIR)/%/.stamp_host_installed:
+>  $(BUILD_DIR)/%/.stamp_staging_installed:
+>  	@$(call step_start,install-staging)
+>  	@$(call MESSAGE,"Installing to staging directory")
+> +	@mkdir -p $(STAGING_DIR)
+>  	$(foreach hook,$($(PKG)_PRE_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
+>  	+$($(PKG)_INSTALL_STAGING_CMDS)
+>  	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
+> @@ -298,6 +301,7 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
+>  # Install to images dir
+>  $(BUILD_DIR)/%/.stamp_images_installed:
+>  	@$(call step_start,install-image)
+> +	@mkdir -p $(BINARIES_DIR)
+>  	$(foreach hook,$($(PKG)_PRE_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
+>  	@$(call MESSAGE,"Installing to images directory")
+>  	+$($(PKG)_INSTALL_IMAGES_CMDS)
+> @@ -309,6 +313,7 @@ $(BUILD_DIR)/%/.stamp_images_installed:
+>  $(BUILD_DIR)/%/.stamp_target_installed:
+>  	@$(call step_start,install-target)
+>  	@$(call MESSAGE,"Installing to target")
+> +	@mkdir -p $(TARGET_DIR)
+>  	$(foreach hook,$($(PKG)_PRE_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
+>  	+$($(PKG)_INSTALL_TARGET_CMDS)
+>  	$(if $(BR2_INIT_SYSTEMD),\
+> @@ -735,7 +740,7 @@ $$($(2)_TARGET_BUILD):	$$($(2)_TARGET_CONFIGURE)
+>  $(1)-configure:			$$($(2)_TARGET_CONFIGURE)
+>  $$($(2)_TARGET_CONFIGURE):	| $$($(2)_FINAL_DEPENDENCIES)
+>  
+> -$$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dirs prepare
+> +$$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | prepare
+>  $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dependencies
+>  
+>  ifeq ($$($(2)_OVERRIDE_SRCDIR),)
+> -- 
+> 2.19.1
+> 
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
