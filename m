@@ -1,116 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 23 Nov 2018 10:46:54 +0100
-Subject: [Buildroot] [git commit] util-linux: fix build for SPARC
-Message-ID: <20181202071557.6616881583@busybox.osuosl.org>
+Date: Fri, 23 Nov 2018 22:05:46 +0100
+Subject: [Buildroot] [git commit] support/testing: add python-passlib tests
+Message-ID: <20181202071557.F280B815BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb8bfdaf6eb1c871ceddb2e52a6ded7ff94d597d
+commit: https://git.buildroot.net/buildroot/commit/?id=756dd5f132ffe75b727e32df8648b95672e5493a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Pull a patch already applied upstream that fixes the build of setarch
-for SPARC processors.
+Add a simple test case that creates a hash for a password and verifies
+it against an incorrect and a correct password.
 
-Fixes:
-  http://autobuild.buildroot.net/results/44d0538332499cea691a381048562a09cda23624
-  http://autobuild.buildroot.net/results/e7e3469717ab27d66d2528087fd7c3a41477ae05
-
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...-setarch-fix-obscure-sparc32bash-use-case.patch | 84 ++++++++++++++++++++++
- 1 file changed, 84 insertions(+)
+ .gitlab-ci.yml                                     |  2 ++
+ .../testing/tests/package/sample_python_passlib.py |  5 +++++
+ .../testing/tests/package/test_python_passlib.py   | 23 ++++++++++++++++++++++
+ 3 files changed, 30 insertions(+)
 
-diff --git a/package/util-linux/0003-setarch-fix-obscure-sparc32bash-use-case.patch b/package/util-linux/0003-setarch-fix-obscure-sparc32bash-use-case.patch
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 5133affa25..61c44412b3 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -337,6 +337,8 @@ tests.package.test_python_cryptography.TestPythonPy2Cryptography: *runtime_test
+ tests.package.test_python_cryptography.TestPythonPy3Cryptography: *runtime_test
+ tests.package.test_python_incremental.TestPythonPy2Incremental: *runtime_test
+ tests.package.test_python_incremental.TestPythonPy3Incremental: *runtime_test
++tests.package.test_python_passlib.TestPythonPy2Passlib: *runtime_test
++tests.package.test_python_passlib.TestPythonPy3Passlib: *runtime_test
+ tests.package.test_python_twisted.TestPythonPy2Twisted: *runtime_test
+ tests.package.test_python_twisted.TestPythonPy3Twisted: *runtime_test
+ tests.package.test_python_txaio.TestPythonPy2Txaio: *runtime_test
+diff --git a/support/testing/tests/package/sample_python_passlib.py b/support/testing/tests/package/sample_python_passlib.py
 new file mode 100644
-index 0000000000..70588b863e
+index 0000000000..3ab348b9e4
 --- /dev/null
-+++ b/package/util-linux/0003-setarch-fix-obscure-sparc32bash-use-case.patch
-@@ -0,0 +1,84 @@
-+From 3fa06e049012218d883d0e1251df86bafbc446bf Mon Sep 17 00:00:00 2001
-+From: Karel Zak <kzak@redhat.com>
-+Date: Thu, 22 Nov 2018 11:03:35 +0100
-+Subject: [PATCH] setarch: fix obscure sparc32bash use-case
++++ b/support/testing/tests/package/sample_python_passlib.py
+@@ -0,0 +1,5 @@
++from passlib.hash import pbkdf2_sha256
 +
-+Reported-by: Carlos Santos <casantos@datacom.com.br>
-+Signed-off-by: Karel Zak <kzak@redhat.com>
-+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-+---
-+ sys-utils/setarch.c | 28 ++++++++++++++++++----------
-+ 1 file changed, 18 insertions(+), 10 deletions(-)
++hash = pbkdf2_sha256.hash("password")
++assert(pbkdf2_sha256.verify("passWord", hash) is False)
++assert(pbkdf2_sha256.verify("password", hash) is True)
+diff --git a/support/testing/tests/package/test_python_passlib.py b/support/testing/tests/package/test_python_passlib.py
+new file mode 100644
+index 0000000000..7c85882bf8
+--- /dev/null
++++ b/support/testing/tests/package/test_python_passlib.py
+@@ -0,0 +1,23 @@
++from tests.package.test_python import TestPythonPackageBase
 +
-+diff --git a/sys-utils/setarch.c b/sys-utils/setarch.c
-+index a733f7b3c..7c0a63fbb 100644
-+--- a/sys-utils/setarch.c
-++++ b/sys-utils/setarch.c
-+@@ -268,6 +268,7 @@ int main(int argc, char *argv[])
-+ 	int c;
-+ 	struct arch_domain *doms, *target;
-+ 	unsigned long pers_value = 0;
-++	char *shell = NULL, *shell_arg = NULL;
-+ 
-+ 	/* Options without equivalent short options */
-+ 	enum {
-+@@ -310,14 +311,14 @@ int main(int argc, char *argv[])
-+ 	archwrapper = strcmp(program_invocation_short_name, "setarch") != 0;
-+ 	if (archwrapper) {
-+ 		arch = program_invocation_short_name;	/* symlinks to setarch */
-+-#if defined(__sparc64__) || defined(__sparc__)
-++
-++		/* Don't use ifdef sparc here, we get "Unrecognized architecture"
-++		 * error message later if necessary */
-+ 		if (strcmp(arch, "sparc32bash") == 0) {
-+-			if (set_arch(arch, 0L, 0))
-+-				err(EXIT_FAILURE, _("Failed to set personality to %s"), arch);
-+-			execl("/bin/bash", "", NULL);
-+-			errexec("/bin/bash");
-++			shell = "/bin/bash";
-++			shell_arg = "";
-++			goto set_arch;
-+ 		}
-+-#endif
-+ 	} else {
-+ 		if (1 < argc && *argv[1] != '-') {
-+ 			arch = argv[1];
-+@@ -391,6 +392,7 @@ int main(int argc, char *argv[])
-+ 	argc -= optind;
-+ 	argv += optind;
-+ 
-++set_arch:
-+ 	/* get execution domain (architecture) */
-+ 	if (arch) {
-+ 		doms = init_arch_domains();
-+@@ -422,17 +424,23 @@ int main(int argc, char *argv[])
-+ 	if (arch)
-+ 		verify_arch_domain(target, arch);
-+ 
-++	if (!argc) {
-++		shell = "/bin/sh";
-++		shell_arg = "-sh";
-++	}
-+ 	if (verbose) {
-+-		printf(_("Execute command `%s'.\n"), argc ? argv[0] : "/bin/sh");
-++		printf(_("Execute command `%s'.\n"), shell ? shell : argv[0]);
-+ 		/* flush all output streams before exec */
-+ 		fflush(NULL);
-+ 	}
-+ 
-+-	if (!argc) {
-+-		execl("/bin/sh", "-sh", NULL);
-+-		errexec("/bin/sh");
-++	/* Execute shell */
-++	if (shell) {
-++		execl(shell, shell_arg, NULL);
-++		errexec(shell);
-+ 	}
-+ 
-++	/* Execute on command line specified command */
-+ 	execvp(argv[0], argv);
-+ 	errexec(argv[0]);
-+ }
-+-- 
-+2.14.5
 +
++class TestPythonPy2Passlib(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON=y
++        BR2_PACKAGE_PYTHON_PASSLIB=y
++        """
++    sample_scripts = ["tests/package/sample_python_passlib.py"]
++    timeout = 30
++
++
++class TestPythonPy3Passlib(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_PASSLIB=y
++        """
++    sample_scripts = ["tests/package/sample_python_passlib.py"]
++    timeout = 30
