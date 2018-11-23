@@ -1,63 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 23 Nov 2018 22:04:03 +0100
-Subject: [Buildroot] [PATCH] qemu: add an option to enable seccomp
-In-Reply-To: <20181120131042.6468-1-casantos@datacom.com.br>
-References: <20181120131042.6468-1-casantos@datacom.com.br>
-Message-ID: <20181123220403.059e1442@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 23 Nov 2018 22:04:25 +0100
+Subject: [Buildroot] [PATCH/next v2,1/1] linuxptp: bump to version 2.0
+Message-ID: <20181123210425.28008-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Add hash for license file
 
-On Tue, 20 Nov 2018 11:10:42 -0200, Carlos Santos wrote:
-> It is required to resume working on the forthcoming libvirt package
-> after a long test period (https://patchwork.ozlabs.org/patch/841613).
-> 
-> Leave it disabled by default, for backward compatibility.
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-> ---
->  package/qemu/Config.in | 13 +++++++++++++
->  package/qemu/qemu.mk   |  8 +++++++-
->  2 files changed, 20 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-> index 33d4cccd7b..032d2ccafe 100644
-> --- a/package/qemu/Config.in
-> +++ b/package/qemu/Config.in
-> @@ -137,6 +137,19 @@ config BR2_PACKAGE_QEMU_FDT
->  	  Say 'y' here to have QEMU capable of constructing Device
->  	  Trees, and passing them to the VMs.
->  
-> +config BR2_PACKAGE_QEMU_SECCOMP
-> +	bool "Enable seccomp"
-> +	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-> +	select BR2_PACKAGE_LIBSECCOMP
-> +	help
-> +	  Enable support for the Linux Kernel's syscall filtering
-> +	  mechanism.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Thomas Petazonni):
+ - Update patch so it correctly applies on current buildroot version
+   instead of using 1.9.2
 
-I don't think we want to introduce an explicit option for this, just
-enable seccomp support when BR2_PACKAGE_LIBSSECOMP=y.
+ package/linuxptp/linuxptp.hash | 9 ++++++++-
+ package/linuxptp/linuxptp.mk   | 6 +++---
+ 2 files changed, 11 insertions(+), 4 deletions(-)
 
-> +comment "seccomp needs a toolchain w/ headers >= 3.12"
-> +	depends on !BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS || \
-> +		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-> +
->  comment "FDT support needs a toolchain w/ dynamic library"
->  	depends on BR2_STATIC_LIBS
-
-This comment should anyway have remained close to the
-BR2_PACKAGE_QEMU_FDT option.
-
-Thanks!
-
-Thomas
+diff --git a/package/linuxptp/linuxptp.hash b/package/linuxptp/linuxptp.hash
+index ef2db56226..5e6c7741cd 100644
+--- a/package/linuxptp/linuxptp.hash
++++ b/package/linuxptp/linuxptp.hash
+@@ -1,2 +1,9 @@
++# From https://sourceforge.net/projects/linuxptp/files/v2.0/
++sha1 592ca42c6146a79c1fcabed7c19fa7af4803d4f6  linuxptp-2.0.tgz
++md5 d8bb7374943bb747db7786ac26f17f11  linuxptp-2.0.tgz
++
+ # Locally computed:
+-sha256 d0ccc4591966e21819cdc248765ebbe02456bc8ca37845eb7c23c2d1ff9bcf6b  linuxptp-303b08cbf55096aba55bd08a314e0701e5c33482.tar.gz
++sha256 0a24d9401e87d4af023d201e234d91127d82c350daad93432106284aa9459c7d  linuxptp-2.0.tgz
++
++# Hash for license file:
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/linuxptp/linuxptp.mk b/package/linuxptp/linuxptp.mk
+index f43fee6f69..c304ff6d6e 100644
+--- a/package/linuxptp/linuxptp.mk
++++ b/package/linuxptp/linuxptp.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-LINUXPTP_VERSION = 303b08cbf55096aba55bd08a314e0701e5c33482
+-LINUXPTP_SITE_METHOD = git
+-LINUXPTP_SITE = git://git.code.sf.net/p/linuxptp/code
++LINUXPTP_VERSION = 2.0
++LINUXPTP_SOURCE = linuxptp-$(LINUXPTP_VERSION).tgz
++LINUXPTP_SITE = http://downloads.sourceforge.net/linuxptp
+ LINUXPTP_LICENSE = GPL-2.0+
+ LINUXPTP_LICENSE_FILES = COPYING
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.1
