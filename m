@@ -1,61 +1,263 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 23 Nov 2018 09:27:54 +0100
-Subject: [Buildroot] [PATCH] package/systemd: needs glibc
-In-Reply-To: <20181122174417.7e101a15@windsurf>
-References: <20181121210556.18619-1-yann.morin.1998@free.fr>
- <87y39lm6e8.fsf@dell.be.48ers.dk>
- <20181122174417.7e101a15@windsurf>
-Message-ID: <20181123092754.4dd189cc@windsurf>
+From: Shyam Saini <shyam@amarulasolutions.com>
+Date: Fri, 23 Nov 2018 14:05:16 +0530
+Subject: [Buildroot] [PATCH 1/5] boot/optee-os: OP-TEE secure world
+In-Reply-To: <1542900177-17343-1-git-send-email-etienne.carriere@linaro.org>
+References: <1542900177-17343-1-git-send-email-etienne.carriere@linaro.org>
+Message-ID: <CA+drQ_PwioA0hqiPCnQD=+FwuxuEfyDGd=_A2tfAGhG-Rt-fFw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Etienne,
 
-On Thu, 22 Nov 2018 17:44:17 +0100, Thomas Petazzoni wrote:
 
-> Yes, this is really weird. Even with the issue fixed
-> https://git.buildroot.org/buildroot/commit/utils/genrandconfig?id=3eb49f59d6804c452e784759d9b3869215a8098f,
-> we should have had some systemd/uclibc configurations. I'll try to do
-> some research in the DB, but my SQL is rusty and gives requests that
-> are very slow to execute :/
+>
+> OP-TEE OS is maintained by the OP-TEE project. It provides an
+> open source solution for development and integration of secure
+> services for Armv7-A and Armv8-A CPU based platforms supporting
+> the TrustZone technology. This technology enables CPUs to
+> concurrently host a secure world as the OP-TEE OS and a non-secure
+> world as a Linux based OS.
+>
+> The OP-TEE project maintains other packages to leverage OP-TEE on
+> Linux kernel based OSes. An OP-TEE interface driver is available
+> in the Linux kernel since 4.12 upon CONFIG_OPTEE.
+>
+> https://www.op-tee.org/
+> https://github.com/OP-TEE/optee_os
+>
+> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+> ---
+>  boot/Config.in                                     |   1 +
+>  .../3.3.0/0001-move-python-to-python3.patch        |  26 ++++++
+>  boot/optee-os/Config.in                            | 102 ++++++++++++++++++++
+>  boot/optee-os/optee-os.hash                        |   4 +
+>  boot/optee-os/optee-os.mk                          | 103 +++++++++++++++++++++
+>  5 files changed, 236 insertions(+)
+>  create mode 100644 boot/optee-os/3.3.0/0001-move-python-to-python3.patch
+>  create mode 100644 boot/optee-os/Config.in
+>  create mode 100644 boot/optee-os/optee-os.hash
+>  create mode 100644 boot/optee-os/optee-os.mk
+>
+> diff --git a/boot/Config.in b/boot/Config.in
+> index 8e0c8e5..cd14731 100644
+> --- a/boot/Config.in
+> +++ b/boot/Config.in
+> @@ -13,6 +13,7 @@ source "boot/gummiboot/Config.in"
+>  source "boot/lpc32xxcdl/Config.in"
+>  source "boot/mv-ddr-marvell/Config.in"
+>  source "boot/mxs-bootlets/Config.in"
+> +source "boot/optee-os/Config.in"
+>  source "boot/riscv-pk/Config.in"
+>  source "boot/s500-bootloader/Config.in"
+>  source "boot/syslinux/Config.in"
+> diff --git a/boot/optee-os/3.3.0/0001-move-python-to-python3.patch b/boot/optee-os/3.3.0/0001-move-python-to-python3.patch
+> new file mode 100644
+> index 0000000..b0ed5b5
+> --- /dev/null
+> +++ b/boot/optee-os/3.3.0/0001-move-python-to-python3.patch
+> @@ -0,0 +1,26 @@
+> +move python scripts to pyhton3
+> +
+> +Use python3 for scripts depending on module Crypto.
+> +
+> +Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+> +
+> +diff --git a/scripts/pem_to_pub_c.py b/scripts/pem_to_pub_c.py
+> +index 6b8fa36..0b03d62 100755
+> +--- a/scripts/pem_to_pub_c.py
+> ++++ b/scripts/pem_to_pub_c.py
+> +@@ -1,4 +1,4 @@
+> +-#!/usr/bin/env python
+> ++#!/usr/bin/env python3
+> + # SPDX-License-Identifier: BSD-2-Clause
+> + #
+> + # Copyright (c) 2015, Linaro Limited
+> +diff --git a/scripts/sign.py b/scripts/sign.py
+> +index ad47479..348b40a 100755
+> +--- a/scripts/sign.py
+> ++++ b/scripts/sign.py
+> +@@ -1,4 +1,4 @@
+> +-#!/usr/bin/env python
+> ++#!/usr/bin/env python3
+> + #
+> + # Copyright (c) 2015, 2017, Linaro Limited
+> + #
+> diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
+> new file mode 100644
+> index 0000000..5968531
+> --- /dev/null
+> +++ b/boot/optee-os/Config.in
+> @@ -0,0 +1,102 @@
+> +config BR2_TARGET_OPTEE_OS
+> +       bool "optee_os"
+> +       depends on BR2_aarch64 || BR2_arm
+> +       select BR2_PACKAGE_OPENSSL # host tool
+> +       help
+> +         OP-TEE OS provides the secure world boot image and the trust
+> +         application development kit of the OP-TEE project. OP-TEE OS
+> +         also provides generic trusted application one can embedded
+> +         into its system.
+> +
+> +         http://github.org/OP-TEE/optee_os
+> +
+> +if BR2_TARGET_OPTEE_OS
+> +
+> +choice
+> +       prompt "OP-TEE OS version"
+> +       default BR2_TARGET_OPTEE_OS_LATEST
+> +       help
+> +         Select the version of OP-TEE OS you want to use
+> +
+> +config BR2_TARGET_OPTEE_OS_LATEST
+> +       bool "sync with latest registered release tag"
+> +       help
+> +         This fetches the latest registered release tag from
+> +         the OP-TEE OS official Git repository.
+> +
+> +config BR2_TARGET_OPTEE_OS_CUSTOM_GIT
+> +       bool "sync on custom OP-TEE OS Git repository"
+> +       help
+> +         Sync with a specific OP-TEE Git repository.
+> +
+> +endchoice
+> +
+> +config BR2_TARGET_OPTEE_OS_VERSION
+> +       string
+> +       default "3.3.0"         if BR2_TARGET_OPTEE_OS_LATEST
+> +       default BR2_TARGET_OPTEE_OS_CUSTOM_REPO_VERSION \
+> +                               if BR2_TARGET_OPTEE_OS_CUSTOM_GIT
+> +
+> +if BR2_TARGET_OPTEE_OS_CUSTOM_GIT
+> +
+> +config BR2_TARGET_OPTEE_OS_CUSTOM_REPO_URL
+> +       string "sourcetree-site"
+> +       help
+> +         Specific location of the reference source tree Git
+> +         repository.
+> +
+> +config BR2_TARGET_OPTEE_OS_CUSTOM_REPO_VERSION
+> +       string "git reference to pull"
+> +       help
+> +         Reference in the target git repository to sync with.
+> +
+> +endif
+> +
+> +# Building core, TA libraries/devkit and/or generic TA services
+> +
+> +config BR2_TARGET_OPTEE_OS_CORE
+> +       bool "Build core"
+> +       default y
+> +       help
+> +         This option will build and install the OP-TEE core
+> +         boot images.
+> +
+> +config BR2_TARGET_OPTEE_OS_SDK
+> +       bool "Build TA devkit"
+> +       default y
+> +       help
+> +         This option will build and install the OP-TEE development
+> +         kit for building OP-TEE trusted application images. It is
+> +          installed in the staging filetree in /lib/optee directory.
+> +
+> +config BR2_TARGET_OPTEE_OS_SERVICES
+> +       bool "Build service TAs"
+> +       default y
+> +       help
+> +         This option will build and install the generic trusted
+> +         applications in the OP-TEE OS source tree and install
+> +         them in the target /lib/optee_armtz directory. At runtime
+> +         OP-TEE OS can load trusted applications from a non secure
+> +         filesystem into the secure world for execution.
+> +
+> +# Building TA libraries and/or core images require target platform info
+> +
+> +config BR2_TARGET_OPTEE_OS_PLATFORM
+> +       string "mandatory target PLATFORM"
+> +       help
+> +         Value for the mandated PLATFORM build directive provided to
+> +         OP-TEE OS.
+> +
+> +config BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR
+> +       string "optional target PLATFORM_FLAVOR"
+> +       help
+> +         Value for the optional PLATFORM_FLAVOR build directive
+> +         provided to OP-TEE OS.
+> +
+> +config BR2_TARGET_OPTEE_OS_ADDITIONAL_VARIABLES
+> +       string "Additional OP-TEE OS build variables"
+> +       help
+> +         Additional parameters for the OP-TEE OS build
+> +         E.g. 'CFG_TEE_CORE_LOG_LEVEL=3 CFG_UNWIND=y'
+> +
+> +endif # BR2_TARGET_OPTEE_OS
+> diff --git a/boot/optee-os/optee-os.hash b/boot/optee-os/optee-os.hash
+> new file mode 100644
+> index 0000000..f68d72f
+> --- /dev/null
+> +++ b/boot/optee-os/optee-os.hash
+> @@ -0,0 +1,4 @@
+> +# From https://github.com/OP-TEE/optee_test/archive/3.3.0.tar.gz
+> +sha256 f0c9572d3a341ea37bb8e89cfd511e96d6ca3b2b714b536564e8fedb93b0f44a  optee-os-3.3.0.tar.gz
+> +# Locally computed
+> +sha256 fda8385993f112d7ca61b88b54ba5b4cbeec7e43a0f9b317d5186703c1985e8f  LICENSE
+> diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
+> new file mode 100644
+> index 0000000..2e04ce0
+> --- /dev/null
+> +++ b/boot/optee-os/optee-os.mk
+> @@ -0,0 +1,103 @@
+> +################################################################################
+> +#
+> +# optee-os
+> +#
+> +################################################################################
+> +
+> +OPTEE_OS_VERSION = $(call qstrip,$(BR2_TARGET_OPTEE_OS_VERSION))
+> +OPTEE_OS_LICENSE = BSD-2-Clause
+> +OPTEE_OS_LICENSE_FILES = LICENSE
+> +
+> +ifeq ($(BR2_TARGET_OPTEE_OS_CUSTOM_GIT),y)
+> +OPTEE_OS_SITE = $(call qstrip,$(BR2_TARGET_OPTEE_OS_CUSTOM_REPO_URL))
+> +OPTEE_OS_SITE_METHOD = git
+> +BR_NO_CHECK_HASH_FOR += $(OPTEE_OS_SOURCE)
+> +else
+> +OPTEE_OS_SITE = $(call github,OP-TEE,optee_os,OPTEE_OS_VERSION)
+> +endif
+> +
+> +# On 64bit targets, OP-TEE OS can be built in 32bit mode, or
+> +# can be built in 64bit mode and support 32bit and 64bit
+> +# trusted applications. Since buildroot currently references
+> +# a single cross compiler, build exclusively in 32bit
+> +# or 64bit mode.
+> +OPTEE_OS_MAKE_OPTS = CROSS_COMPILE="$(TARGET_CROSS)"
+> +OPTEE_OS_MAKE_OPTS += CROSS_COMPILE_core="$(TARGET_CROSS)"
+> +ifeq ($(BR2_aarch64),y)
+> +OPTEE_OS_MAKE_OPTS += CROSS_COMPILE_ta_arm64="$(TARGET_CROSS)"
+> +endif
+> +ifeq ($(BR2_arm),y)
+> +OPTEE_OS_MAKE_OPTS += CROSS_COMPILE_ta_arm32="$(TARGET_CROSS)"
+> +endif
+> +
+> +# Get mandatory PLAFORM and optional PLATFORM_FLAVOR
+> +OPTEE_OS_MAKE_OPTS += PLATFORM=$(call qstrip,$(BR2_TARGET_OPTEE_OS_PLATFORM))
+> +ifneq ($(BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR),)
+> +OPTEE_OS_MAKE_OPTS += PLATFORM_FLAVOR=$(call qstrip,$(BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR))
+> +endif
+> +OPTEE_OS_MAKE_OPTS += $(call qstrip,$(BR2_TARGET_OPTEE_OS_ADDITIONAL_VARIABLES))
 
-No uclibc/systemd configuration tested apparently, at least since
-September 1st:
+minor nit, please see below
+> +
+> +# OP-TEE OS builds from subdirectory build/ of its synced sourcetree root path
 
-mysql> select * from (select * from results where builddate > '2018-09-01') as foo inner join symbol_per_result on symbol_per_result.result_id=foo.id where symbol_per_result.symbol_id=(select id from config_symbol where name="BR2_INIT_SYSTEMD" and value="y");
-+--------+--------+---------------------+---------------------------------------------+------------------------------------------+------------------------------------------+-------------+-------------------------------+-------+--------+------------+----------+-----------+----------+-----------+-----------+
-| id     | status | builddate           | submitter                                   | commitid                                 | identifier                               | arch        | reason                        | libc  | static | subarch    | duration | branch    | id       | result_id | symbol_id |
-+--------+--------+---------------------+---------------------------------------------+------------------------------------------+------------------------------------------+-------------+-------------------------------+-------+--------+------------+----------+-----------+----------+-----------+-----------+
-|  87855 |      1 | 2018-09-19 01:03:03 | Romain Naour (Smile)                        | 0760e6ba8cae4fb9c646bd1be54857f48319df76 | 5b4a7a9ae7d4918ba7caab42ae9a3699e2509246 | mipsel      | Makefile:708: target-finalize | glibc |      0 | mips32r6   |    13255 | master    | 45730830 |     87855 |     26766 |
-|  89347 |      0 | 2018-09-23 08:05:20 | Giulio Benetti (Micronova srl Server)       | f8f8ff33472641f9192a5e1ca65ebc614821665a | 1222d15f3fd623948cb464a50b38b4eee253f8bd | arm         | none                          | glibc |      0 | cortex-a8  |     2230 | master    | 46553162 |     89347 |     26766 |
-|  92804 |      0 | 2018-10-03 22:57:02 | Romain Naour (Smile)                        | 5daeca2d5379a1c4a3d87d7f20bea743ad8388f9 | eb0928e364d426f84db10fa3d1672e8165ae7813 | arm         | none                          | glibc |      0 | cortex-a8  |     7766 | 2018.05.x | 48442941 |     92804 |     26766 |
-|  93003 |      1 | 2018-10-04 18:33:10 | Romain Naour (Smile)                        | 51e17496cc403c49bc20d3a81f9c71a8a20edd0f | 93b28a2397e30ea4c2f7b4b29419f9e71eaa25a3 | arm         | dt-utils-v2018.05.0           | glibc |      0 | arm926ej-s |     2630 | master    | 48557905 |     93003 |     26766 |
-|  94915 |      1 | 2018-10-11 10:38:44 | Peter Korsgaard (gcc20)                     | 45e5d2ce68650b075468c02f5c9c43b40c1ab81d | c71a16b33e42fef2995c3b6fab69497b9d8fa953 | x86_64      | samba4-4.8.4                  | glibc |      0 | bdver3     |     8714 | 2018.02.x | 49609560 |     94915 |     26766 |
-|  95539 |      0 | 2018-10-13 17:33:49 | Peter Korsgaard (gcc112/ppc64le)            | 0d1a6f152f3185e128fd122f05b81f8d0fb9e6fe | c2b820940f2cdbf6572c638834e9c4d7bc7b07ef | arm         | none                          | glibc |      0 | cortex-a8  |     6439 | master    | 49951359 |     95539 |     26766 |
-|  97631 |      0 | 2018-10-21 23:37:27 | Giulio Benetti (Micronova srl House Server) | bef30a9f4b58194e02ff5b2b6b78a3095c72c72c | 593899dc629e1e4b23fbc07ff2c6f1a36959698d | powerpc64   | none                          | glibc |      0 | power7     |    25716 | master    | 51128306 |     97631 |     26766 |
-| 103550 |      0 | 2018-11-14 13:25:34 | Giulio Benetti (Micronova srl Server)       | ebffca8ba483610478f33cdc52a24a165e4da87e | d1901f74833c9dfa025e9f85043002cafc1e8341 | powerpc64   | none                          | glibc |      0 | power7     |     6060 | master    | 54498910 |    103550 |     26766 |
-| 105139 |      0 | 2018-11-20 06:09:07 | Julien Boibessot (Armadeus systems server)  | 00d63a153decb668d67547600ca9032de7205c8b | ae5284383ded4e264991f5c3d6f724c0ca4688c0 | powerpc64   | none                          | glibc |      0 | power7     |    21588 | master    | 55402960 |    105139 |     26766 |
-| 105151 |      0 | 2018-11-20 06:48:21 | Matt Weber (U14.04 Sandboxed)               | 00d63a153decb668d67547600ca9032de7205c8b | 1cf7e10ced759d02f052cc697e1b8773e3f10630 | arm         | none                          | glibc |      0 | arm926ej-s |     4507 | master    | 55409615 |    105151 |     26766 |
-| 105239 |      1 | 2018-11-20 09:34:25 | Matt Weber (U16.04 THOR)                    | 5682ba9363d262a67567ed9b0531a414e6aae1bb | fc6435282630e60927f88bf5954805ebbaa60cb3 | aarch64     | libostree-2018.9              | glibc |      0 | cortex-a53 |     3040 | master    | 55464556 |    105239 |     26766 |
-| 105268 |      0 | 2018-11-20 16:52:42 | Giulio Benetti (Micronova srl Server)       | 5682ba9363d262a67567ed9b0531a414e6aae1bb | 85b585eb9c8b9c4aeb9fe0346ce2d7aed6abfb6b | powerpc64le | none                          | glibc |      0 | power8     |     5651 | master    | 55480443 |    105268 |     26766 |
-| 105325 |      0 | 2018-11-20 22:41:52 | Peter Korsgaard (gcc68/Debian 9/gcc 6.3.0)  | 5682ba9363d262a67567ed9b0531a414e6aae1bb | 278fc24b91305cbc7d219c027f625087a67b7e63 | powerpc64   | none                          | glibc |      0 | power7     |     4463 | master    | 55511692 |    105325 |     26766 |
-| 105593 |      0 | 2018-11-21 20:38:34 | Julien Boibessot (Armadeus systems server)  | bc89c1a834cd8a1a74e71522029ec827bf0aec92 | 2d0cfff8a3632bca096f933552d126b923d2a3a1 | aarch64     | none                          | glibc |      0 | cortex-a53 |     3665 | master    | 55663453 |    105593 |     26766 |
-| 105696 |      0 | 2018-11-22 05:50:26 | Julien Boibessot (Armadeus systems server)  | bc89c1a834cd8a1a74e71522029ec827bf0aec92 | 22afb0278b8443cfbce3425e93d0fa0bfc55dfc3 | arm         | none                          | glibc |      0 | arm926ej-s |    35777 | master    | 55722233 |    105696 |     26766 |
-| 106023 |      0 | 2018-11-23 07:52:17 | Julien Boibessot (Armadeus systems server)  | 2ffdcbe0a5304a865e4486e7de0a7e6d983e2ce2 | ef4bf75f1429790f49a1b632faa8b00ffafcd459 | aarch64     | none                          | glibc |      0 | cortex-a53 |    31948 | next      | 55909269 |    106023 |     26766 |
-+--------+--------+---------------------+---------------------------------------------+------------------------------------------+------------------------------------------+-------------+-------------------------------+-------+--------+------------+----------+-----------+----------+-----------+-----------+
-16 rows in set (1 min 51.23 sec)
+optee_os by default uses [1] "out" as build directory, Shouldn't  we
+use the same for consistency. We can provide option
+and let the user decide?
 
-If anybody knows how to speed up this SQL query and/or adjust the SQL
-database schema to make it faster, it would be nice. I can provide a
-dump of the SQL database.
+[1] https://github.com/OP-TEE/optee_os/blob/master/Makefile#L44
 
-Best regards,
+other than that,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Tested-by: Shyam Saini <shyam.saini@amarulasolutions.com>
