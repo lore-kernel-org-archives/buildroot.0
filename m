@@ -1,103 +1,88 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 23 Nov 2018 16:44:32 +0100
-Subject: [Buildroot] [PATCH next v5 7/9] core: implement per-package SDK
- and target
-In-Reply-To: <20181123142554.3b42fb0a@windsurf>
-References: <20181120163522.4281-1-thomas.petazzoni@bootlin.com>
- <20181120163522.4281-8-thomas.petazzoni@bootlin.com>
- <20181120213612.GL2601@scaer> <af66d76c-06c6-3e01-257c-9e263d724639@mind.be>
- <20181123142554.3b42fb0a@windsurf>
-Message-ID: <6cd54988-55ee-eeb2-8241-47095a91fc81@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 23 Nov 2018 17:14:49 +0100
+Subject: [Buildroot] [PATCH/next 1/1] trinity: fix build with kernel headers
+ >= 4.19
+Message-ID: <20181123161449.24504-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Retrieve patch from upstream to fix build with kernel headers >= 4.19
+because VIDIOC_RESERVED has been removed since
+https://github.com/torvalds/linux/commit/ea8532daee31bc72abfbc9ca7a43cbec0f6c05af
 
+Fixes:
+ - http://autobuild.buildroot.org/results/ddf6b1cf4e4727928ffba7387953c4cc9719df49
 
-On 23/11/2018 14:25, Thomas Petazzoni wrote:
-> Hello Arnout,
-> 
-> Thanks for the review!
-> 
-> On Wed, 21 Nov 2018 00:32:11 +0100, Arnout Vandecappelle wrote:
-> 
->>>>   output/per-package/busybox/target
->>>>   output/per-package/busybox/host
->>>>   output/per-package/host-fakeroot/target
->>>>   output/per-package/host-fakeroot/host  
->>> I'm not fond of the naming here...  
->>  Yay bikeshedding!
->  :-)
-> 
->>> In the end, can we expect to have a layout that would look like:
->>>
->>>     output/build/busybox/host/
->>>     output/build/busybox/target/
->>>     output/build/busybox/busybox-1.2.3/     # Source tree, and
->>>                                             # currently, build dir  
->>  If we're changing the world anyway, what about:
->>
->> output/work/busybox-1.2.3/source
->> output/work/busybox-1.2.3/host
->> output/work/busybox-1.2.3/target
->> output/work/busybox-1.2.3/build
->
-> You need two build folders: one for the target variant and one for the
-> host variant.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0004-Check-if-VIDIOC_RESERVED-is-defined.patch | 56 ++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
+ create mode 100644 package/trinity/0004-Check-if-VIDIOC_RESERVED-is-defined.patch
 
- Clearly not a good name then, because with "host" I meant the per-package host
-directory, i.e. the target package's host directory. There would also be a
-
-output/work/host-busybox-1.2.3/source
-output/work/host-busybox-1.2.3/host
-output/work/host-busybox-1.2.3/target
-output/work/host-busybox-1.2.3/build
-
- Oh, but that would defeat the point of the source/build directory split...
-Never mind then :-)
-
-
->>  Or maybe even:
->>
->> output/work/busybox-1.2.3/source
->> output/work/busybox-1.2.3/dependencies/host
->> output/work/busybox-1.2.3/dependencies/staging -> host/tuple/sysroot
->> output/work/busybox-1.2.3/dependencies/target
->> output/work/busybox-1.2.3/build
-> Also, I don't really like the word "work", that's what is used in OE
-> and I find it very fuzzy.
-
- That was the whole point, we should become OE! :-) BTW, OE also uses "tmp",
-that's a lot better of course.
-
- But I see that in the end you kept the per-package directory. Reviewing all the
-options, I agree that that is still the best one.
-
-[snip]
-
->>  More importantly, however: should we also sync the target directory for host
->> packages? We *are* syncing the staging directory, of course...
-> 
-> Does it really matter ? A host package will only have other host
-> packages as its dependencies, so its per-package target directory will
-> always be empty. I did a test build, and all
-> output/per-package/host-*/target/ folders were empty.
-> 
-> So I am not sure it is really worth adding more conditionals in the
-> code just to avoid those empty target directories. But if you really
-> want that, I'll do it.
-
- No, let's keep it as it is, it's not worth it.
-
- In fact, host packages may install stuff in target (e.g. host-gcc-final
-installs libstdc++.so I think). So if a target package depends indirectly on
-such a package through a different host package, we should still have its target
-populated.
-
-
- Regards,
- Arnout
-
-[snip]
+diff --git a/package/trinity/0004-Check-if-VIDIOC_RESERVED-is-defined.patch b/package/trinity/0004-Check-if-VIDIOC_RESERVED-is-defined.patch
+new file mode 100644
+index 0000000000..54f8bea63c
+--- /dev/null
++++ b/package/trinity/0004-Check-if-VIDIOC_RESERVED-is-defined.patch
+@@ -0,0 +1,56 @@
++From a5f32b9714613404e9f4699aaaad720f2bb033b4 Mon Sep 17 00:00:00 2001
++From: Vinson Lee <vlee@freedesktop.org>
++Date: Thu, 23 Aug 2018 22:28:49 +0000
++Subject: [PATCH] Check if VIDIOC_RESERVED is defined.
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++VIDIOC_RESERVED was removed in Linux 4.19.
++
++commit ea8532daee31bc72abfbc9ca7a43cbec0f6c05af
++Author: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
++Date:   Wed May 30 11:07:05 2018 -0400
++
++    media: videodev2: get rid of VIDIOC_RESERVED
++
++    While this ioctl is there at least since Kernel 2.6.12-rc2, it
++    was never used by any upstream driver.
++
++    Get rid of it.
++
++    Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
++
++This patch fixes this build error.
++
++  CC	ioctls/videodev2.o
++In file included from ioctls/videodev2.c:4:
++ioctls/videodev2.c:8:8: error: ?VIDIOC_RESERVED? undeclared here (not in a function); did you mean ?VIDIOC_G_STD??
++  IOCTL(VIDIOC_RESERVED),
++        ^~~~~~~~~~~~~~~
++include/ioctls.h:53:15: note: in definition of macro ?IOCTL?
++  { .request = _request, .name = #_request, }
++               ^~~~~~~~
++
++Signed-off-by: Vinson Lee <vlee@freedesktop.org>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/kernelslacker/trinity/commit/a5f32b9714613404e9f4699aaaad720f2bb033b4]
++---
++ ioctls/videodev2.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/ioctls/videodev2.c b/ioctls/videodev2.c
++index f7183f29..67089abf 100644
++--- a/ioctls/videodev2.c
+++++ b/ioctls/videodev2.c
++@@ -5,7 +5,9 @@
++ 
++ static const struct ioctl videodev2_ioctls[] = {
++ 	IOCTL(VIDIOC_QUERYCAP),
+++#ifdef VIDIOC_RESERVED
++ 	IOCTL(VIDIOC_RESERVED),
+++#endif
++ 	IOCTL(VIDIOC_ENUM_FMT),
++ 	IOCTL(VIDIOC_G_FMT),
++ 	IOCTL(VIDIOC_S_FMT),
+-- 
+2.14.1
