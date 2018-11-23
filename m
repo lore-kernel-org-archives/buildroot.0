@@ -1,57 +1,102 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Nov 2018 17:22:33 +0100
-Subject: [Buildroot] [git commit] package/netsnmp: drop our custom config
- script fixups
-Message-ID: <20181202071600.BEADB803E1@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 23 Nov 2018 22:01:09 +0100
+Subject: [Buildroot] [git commit] sdl2: fix build with --disable-threads
+Message-ID: <20181202071557.B5C7A815BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48ea9fa4a43a8eef3306dd6091e04ba3812df57b
+commit: https://git.buildroot.net/buildroot/commit/?id=0d896cf007920e01fc9104f98c8f4d3734a6f245
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Those custom fixups were added in 2011 with commit d1b42b24b88
-(net-snmp: fixup paths in net-snmp-config) before we add generic config
-scripts fixups in 2013 with commit 834f9311aac (pkg-infra: add
-<pkg>_CONFIG_FIXUP to fix *-config files)
+SDL_LinuxSetThreadPriority() has been added since version 2.0.9 and
+https://github.com/SDL-mirror/SDL/commit/f25a7fa870bdceb339e5105973f689606bcb9086
 
-These custom fixups enclose the includes and libraries paths in single
-quotes (presumably to protect them from further expnasion by the shell,
-in case there are spaces for example).
+However, this function is used in src/dynapi/SDL_dynapi_procs.h even
+when SDL_THREADS_DISABLED
 
-It turns out that this breaks now that we replace the staging dir with
-$(dirname $0), as it is between single quotes.
+However, when SDL_THREADS_DISABLED is set, SDL_LinuxSetThreadPriority is
+not defined because thread/pthread/SDL_systhread.c is not built
 
-It looks like these fixups are really no longer needed anymore, since
-the generic fixups do the job just fine (and better).
+So check SDL_THREADS_DISABLED in addition to __LINUX__
 
 Fixes:
-    http://autobuild.buildroot.org/results/2c5/2c5e379a06825bf8588bf070d733d2e1f98dab66/
-    http://autobuild.buildroot.org/results/eea/eea704463c3f14dbb9bd7f8aa23d4b61c25987f4/
+ - http://autobuild.buildroot.org/results/539cb9ab6c605dc6be73ebe90debab1a998f2451
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/netsnmp/netsnmp.mk | 8 --------
- 1 file changed, 8 deletions(-)
+ .../sdl2/0001-fix-build-with-disable-threads.patch | 63 ++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
 
-diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-index 65a3f16a4d..4bd65ef17a 100644
---- a/package/netsnmp/netsnmp.mk
-+++ b/package/netsnmp/netsnmp.mk
-@@ -106,12 +106,4 @@ define NETSNMP_INSTALL_INIT_SYSV
- endef
- endif
- 
--define NETSNMP_STAGING_NETSNMP_CONFIG_FIXUP
--	$(SED)	"s,^includedir=.*,includedir=\'$(STAGING_DIR)/usr/include\',g" \
--		-e "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" \
--		$(STAGING_DIR)/usr/bin/net-snmp-config
--endef
--
--NETSNMP_POST_INSTALL_STAGING_HOOKS += NETSNMP_STAGING_NETSNMP_CONFIG_FIXUP
--
- $(eval $(autotools-package))
+diff --git a/package/sdl2/0001-fix-build-with-disable-threads.patch b/package/sdl2/0001-fix-build-with-disable-threads.patch
+new file mode 100644
+index 0000000000..81f7d7446f
+--- /dev/null
++++ b/package/sdl2/0001-fix-build-with-disable-threads.patch
+@@ -0,0 +1,63 @@
++From 26646028f79d7f3d857df9b46cd6d0285796c699 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 21 Nov 2018 22:31:09 +0100
++Subject: [PATCH] fix build with --disable-threads
++
++SDL_LinuxSetThreadPriority() has been added since version 2.0.9 and
++https://github.com/SDL-mirror/SDL/commit/f25a7fa870bdceb339e5105973f689606bcb9086
++
++However, this function is used in src/dynapi/SDL_dynapi_procs.h even
++when SDL_THREADS_DISABLED
++
++However, when SDL_THREADS_DISABLED is set, SDL_LinuxSetThreadPriority is
++not defined because thread/pthread/SDL_systhread.c is not built
++
++So check SDL_THREADS_DISABLED in addition to __LINUX__
++
++Fixes:
++ - http://autobuild.buildroot.org/results/539cb9ab6c605dc6be73ebe90debab1a998f2451
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ include/SDL_system.h          | 4 ++--
++ src/dynapi/SDL_dynapi_procs.h | 2 +-
++ 2 files changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/include/SDL_system.h b/include/SDL_system.h
++index 4dc372d6b..0513d7fa5 100644
++--- a/include/SDL_system.h
+++++ b/include/SDL_system.h
++@@ -77,7 +77,7 @@ extern DECLSPEC SDL_bool SDLCALL SDL_DXGIGetOutputInfo( int displayIndex, int *a
++ 
++ 
++ /* Platform specific functions for Linux */
++-#ifdef __LINUX__
+++#if defined(__LINUX__) && !defined(SDL_THREADS_DISABLED)
++ 
++ /**
++    \brief Sets the UNIX nice value for a thread, using setpriority() if possible, and RealtimeKit if available.
++@@ -86,7 +86,7 @@ extern DECLSPEC SDL_bool SDLCALL SDL_DXGIGetOutputInfo( int displayIndex, int *a
++  */
++ extern DECLSPEC int SDLCALL SDL_LinuxSetThreadPriority(Sint64 threadID, int priority);
++  
++-#endif /* __LINUX__ */
+++#endif /* defined(__LINUX__) && !defined(SDL_THREADS_DISABLED) */
++ 	
++ /* Platform specific functions for iOS */
++ #if defined(__IPHONEOS__) && __IPHONEOS__
++diff --git a/src/dynapi/SDL_dynapi_procs.h b/src/dynapi/SDL_dynapi_procs.h
++index c95cf708b..ee9bf60a6 100644
++--- a/src/dynapi/SDL_dynapi_procs.h
+++++ b/src/dynapi/SDL_dynapi_procs.h
++@@ -708,7 +708,7 @@ SDL_DYNAPI_PROC(SDL_bool,SDL_IsAndroidTV,(void),(),return)
++ SDL_DYNAPI_PROC(double,SDL_log10,(double a),(a),return)
++ SDL_DYNAPI_PROC(float,SDL_log10f,(float a),(a),return)
++ SDL_DYNAPI_PROC(char*,SDL_GameControllerMappingForDeviceIndex,(int a),(a),return)
++-#ifdef __LINUX__
+++#if defined(__LINUX__) && !defined(SDL_THREADS_DISABLED)
++ SDL_DYNAPI_PROC(int,SDL_LinuxSetThreadPriority,(Sint64 a, int b),(a,b),return)
++ #endif
++ SDL_DYNAPI_PROC(SDL_bool,SDL_HasAVX512F,(void),(),return)
++-- 
++2.17.1
++
