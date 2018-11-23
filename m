@@ -1,138 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 23 Nov 2018 22:16:25 +0100
-Subject: [Buildroot] [PATCH v3 3/3] merge_config.sh: Avoid false
- positive matches from comment lines
-In-Reply-To: <20181114071156.10453-4-afshin.nasser@gmail.com>
-References: <20181114071156.10453-1-afshin.nasser@gmail.com>
- <20181114071156.10453-4-afshin.nasser@gmail.com>
-Message-ID: <20181123211625.GG14050@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 23 Nov 2018 22:10:10 +0100
+Subject: [Buildroot] [git commit branch/next] linux-firmware: bump version
+ to latest 1baa348
+Message-ID: <20181123211401.B4B6387FB2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nasser, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=7cff663be8e1fac8e4c20be729a9cbd1fa327721
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2018-11-14 10:41 +0330, Nasser Afshin spake thusly:
-> From: Nasser Afshin <Afshin.Nasser@gmail.com>
-> 
-> We are using empty CONFIG_PREFIX_. This results in false positive match
-> for comment lines when merging config fragments.
-> 
-> To avoid false positive reports, we use separate sed expressions and
-> address comment lines explicitly.
-> 
-> This is actually is in the Linux kernel mainline (v4.20-rc2):
-> 6bbe4385d035c6fac56f840a59861a0310ce137b
-> ("kconfig: merge_config: avoid false positive matches from comment lines")
-> 
-> Signed-off-by: Nasser Afshin <Afshin.Nasser@gmail.com>
-> Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+Brief license changes:
+ * ath10k/QCA6174/hw3.0/notice_ath10k_firmware-6.txt: mainly cleanups
+   and s/Qualcomm Atheros/Qualcomm Technologies/
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/linux-firmware/linux-firmware.hash | 6 +++---
+ package/linux-firmware/linux-firmware.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  support/kconfig/merge_config.sh                    |  7 +++--
->  ...false-positive-matches-from-comment-lines.patch | 32 ++++++++++++++++++++++
->  support/kconfig/patches/series                     |  1 +
->  3 files changed, 37 insertions(+), 3 deletions(-)
->  create mode 100644 support/kconfig/patches/21-Avoid-false-positive-matches-from-comment-lines.patch
-> 
-> diff --git a/support/kconfig/merge_config.sh b/support/kconfig/merge_config.sh
-> index 404ca3864f..14917806a3 100755
-> --- a/support/kconfig/merge_config.sh
-> +++ b/support/kconfig/merge_config.sh
-> @@ -109,7 +109,8 @@ if [ ! -r "$INITFILE" ]; then
->  fi
->  
->  MERGE_LIST=$*
-> -SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(${CONFIG_PREFIX}[a-zA-Z0-9_]*\)[= ].*/\2/p"
-> +SED_CONFIG_EXP1="s/^\(${CONFIG_PREFIX}[a-zA-Z0-9_]*\)=.*/\1/p"
-> +SED_CONFIG_EXP2="s/^# \(${CONFIG_PREFIX}[a-zA-Z0-9_]*\) is not set$/\1/p"
->  
->  TMP_FILE=$(mktemp -t .tmp.config.XXXXXXXXXX)
->  
-> @@ -123,7 +124,7 @@ for MERGE_FILE in $MERGE_LIST ; do
->  		echo "The merge file '$MERGE_FILE' does not exist.  Exit." >&2
->  		exit 1
->  	fi
-> -	CFG_LIST=$(sed -n "$SED_CONFIG_EXP" $MERGE_FILE)
-> +	CFG_LIST=$(sed -n -e "$SED_CONFIG_EXP1" -e "$SED_CONFIG_EXP2" $MERGE_FILE)
->  
->  	for CFG in $CFG_LIST ; do
->  		grep -q -w $CFG $TMP_FILE || continue
-> @@ -166,7 +167,7 @@ make KCONFIG_ALLCONFIG=$TMP_FILE $EXTERNAL_ARG $OUTPUT_ARG $ALLTARGET
->  
->  
->  # Check all specified config values took (might have missed-dependency issues)
-> -for CFG in $(sed -n "$SED_CONFIG_EXP" $TMP_FILE); do
-> +for CFG in $(sed -n -e "$SED_CONFIG_EXP1" -e "$SED_CONFIG_EXP2" $TMP_FILE); do
->  
->  	REQUESTED_VAL=$(grep -w -e "$CFG" $TMP_FILE)
->  	ACTUAL_VAL=$(grep -w -e "$CFG" "$KCONFIG_CONFIG")
-> diff --git a/support/kconfig/patches/21-Avoid-false-positive-matches-from-comment-lines.patch b/support/kconfig/patches/21-Avoid-false-positive-matches-from-comment-lines.patch
-> new file mode 100644
-> index 0000000000..c11144e47e
-> --- /dev/null
-> +++ b/support/kconfig/patches/21-Avoid-false-positive-matches-from-comment-lines.patch
-> @@ -0,0 +1,32 @@
-> +Index: kconfig/merge_config.sh
-> +===================================================================
-> +--- kconfig.orig/merge_config.sh
-> ++++ kconfig/merge_config.sh
-> +@@ -109,7 +109,8 @@ if [ ! -r "$INITFILE" ]; then
-> + fi
-> + 
-> + MERGE_LIST=$*
-> +-SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(${CONFIG_PREFIX}[a-zA-Z0-9_]*\)[= ].*/\2/p"
-> ++SED_CONFIG_EXP1="s/^\(${CONFIG_PREFIX}[a-zA-Z0-9_]*\)=.*/\1/p"
-> ++SED_CONFIG_EXP2="s/^# \(${CONFIG_PREFIX}[a-zA-Z0-9_]*\) is not set$/\1/p"
-> + 
-> + TMP_FILE=$(mktemp -t .tmp.config.XXXXXXXXXX)
-> + 
-> +@@ -123,7 +124,7 @@ for MERGE_FILE in $MERGE_LIST ; do
-> + 		echo "The merge file '$MERGE_FILE' does not exist.  Exit." >&2
-> + 		exit 1
-> + 	fi
-> +-	CFG_LIST=$(sed -n "$SED_CONFIG_EXP" $MERGE_FILE)
-> ++	CFG_LIST=$(sed -n -e "$SED_CONFIG_EXP1" -e "$SED_CONFIG_EXP2" $MERGE_FILE)
-> + 
-> + 	for CFG in $CFG_LIST ; do
-> + 		grep -q -w $CFG $TMP_FILE || continue
-> +@@ -166,7 +167,7 @@ make KCONFIG_ALLCONFIG=$TMP_FILE $EXTERN
-> + 
-> + 
-> + # Check all specified config values took (might have missed-dependency issues)
-> +-for CFG in $(sed -n "$SED_CONFIG_EXP" $TMP_FILE); do
-> ++for CFG in $(sed -n -e "$SED_CONFIG_EXP1" -e "$SED_CONFIG_EXP2" $TMP_FILE); do
-> + 
-> + 	REQUESTED_VAL=$(grep -w -e "$CFG" $TMP_FILE)
-> + 	ACTUAL_VAL=$(grep -w -e "$CFG" "$KCONFIG_CONFIG")
-> diff --git a/support/kconfig/patches/series b/support/kconfig/patches/series
-> index be8627db13..e5a6f69d8f 100644
-> --- a/support/kconfig/patches/series
-> +++ b/support/kconfig/patches/series
-> @@ -9,3 +9,4 @@
->  18-merge-config.sh-create-temporary-files-in-tmp.patch
->  19-merge_config.sh-add-br2-external-support.patch
->  20-merge_config.sh-Allow-to-define-config-prefix.patch
-> +21-Avoid-false-positive-matches-from-comment-lines.patch
-> -- 
-> 2.15.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
+index ca6ad8f59d..12310d55ed 100644
+--- a/package/linux-firmware/linux-firmware.hash
++++ b/package/linux-firmware/linux-firmware.hash
+@@ -1,11 +1,11 @@
+ # Locally calculated
+-sha256 b279ca4d086887c2efab13e28a7ca36e409410d3df38a62d7c7b5799ee3de916 linux-firmware-44d4fca9922a252a0bd81f6307bcc072a78da54a.tar.gz
++sha256 5c636765fd1ac638176893feccfd4a4854f59fc3d01b38f3ccdbb89bd5bb6ef1 linux-firmware-1baa34868b2c0a004dc595b20678145e3fff83e7.tar.gz
+ sha256 8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9 LICENCE.Abilis
+ sha256 4b3ea5d5a03c0db81bee0bcb14b30d75b30ef568597bb5be7d4dee57f434265f LICENSE.amdgpu
+ sha256 38f2037aa14631b4b29826d7a99379613c41a97064d1defdee30a7a022138b20 LICENCE.Marvell
+ sha256 802b7014b26c606cf6248ae8b0ab1ce6d2d1b0db236d38dd269e676cd70710f2 LICENCE.atheros_firmware
+ sha256 3b5eb392b2d9d8c46d6aae26d06c187e5ea3029b12d13bc2b8deb8b3ce6bfa53 ath10k/QCA6174/hw3.0/notice_ath10k_firmware-4.txt
+-sha256 c565861ff7c42f5df98e15239241f1f42614e5e15f362094a2d3e8da724dc842 ath10k/QCA6174/hw3.0/notice_ath10k_firmware-6.txt
++sha256 8ce5c6ea0542bf4aac31fc3ae16a39792ad22d0eae4543063fac56fb3380f021 ath10k/QCA6174/hw3.0/notice_ath10k_firmware-6.txt
+ sha256 b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d LICENCE.broadcom_bcm43xx
+ sha256 a5777f9e80aca0603b0648454de996168b1c530322550ccda94d6d78bcf6c061 LICENCE.chelsio_firmware
+ sha256 60fbc9cccb455e1a3306c97db942d6f24fa93664be61d54c497637e6d0e2ae83 LICENCE.fw_sst_0f28
+@@ -27,5 +27,5 @@ sha256 8542aeabf2761935122d693561e16766ce1bcc2b0d003204f9040b7d6d929f2e LICENSE.
+ sha256 be904cd28cb292b80cdb6cf412ab0d9159d431671e987ad433c1f62e0988a9bc LICENSE.qcom
+ sha256 fc6223d4bfe9f2f9e2eddc44b9fe5721d0caf49f01cb08d602906add686d8c6f LICENSE.radeon
+ sha256 2bdd2e716f05d9737d3f9a20f9a3a3c0caee0e866100ddb0673f1178e42f92b9 LICENSE.sdma_firmware
+-sha256 ef38a9a8bb4b0f72b369d337426eea63ef8fc9d48453f127028d935f7dbc5820 WHENCE
++sha256 9b873499a822762177a7a02d2a3ead9fdf0d514c0f9899fb16a2d22ed99f4acc WHENCE
+ sha256 fa43e1b9a13b341a07adca9dbe73d0f9072d7966fdfe811c01f0dd2872d7309a qcom/NOTICE.txt
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 4eba57434b..60f39804a2 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LINUX_FIRMWARE_VERSION = 44d4fca9922a252a0bd81f6307bcc072a78da54a
++LINUX_FIRMWARE_VERSION = 1baa34868b2c0a004dc595b20678145e3fff83e7
+ LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
+ LINUX_FIRMWARE_SITE_METHOD = git
+ 
