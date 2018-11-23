@@ -1,79 +1,104 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 23 Nov 2018 22:05:46 +0100
 Subject: [Buildroot] [git commit branch/next] support/testing: add
- python-pexpect tests
-Message-ID: <20181123210506.CFFF687F88@busybox.osuosl.org>
+ python-cbor tests
+Message-ID: <20181123210506.B61B887F88@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cdad4bf6aa58b50182e3ae3e61e1550dd7769090
+commit: https://git.buildroot.net/buildroot/commit/?id=61b4b81c44028910ebfe111b70454b8e193bf85b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add a simple test case to check the basic usage. Call 'login' and try
-wrong user/password, expecting the 'Login incorrect' message.
+Add a simple test case to check the basic usage, storing a dict into a
+file and then retrieving the dict from the file.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .gitlab-ci.yml                                      |  2 ++
- .../testing/tests/package/sample_python_pexpect.py  |  8 ++++++++
- .../testing/tests/package/test_python_pexpect.py    | 21 +++++++++++++++++++++
- 3 files changed, 31 insertions(+)
+ .gitlab-ci.yml                                     |  2 ++
+ .../tests/package/sample_python_cbor_dec.py        | 10 ++++++++++
+ .../tests/package/sample_python_cbor_enc.py        | 14 +++++++++++++
+ support/testing/tests/package/test_python_cbor.py  | 23 ++++++++++++++++++++++
+ 4 files changed, 49 insertions(+)
 
 diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 61c44412b3..99df1f85e2 100644
+index 2fc0fe7e6a..d6f2e6595f 100644
 --- a/.gitlab-ci.yml
 +++ b/.gitlab-ci.yml
-@@ -339,6 +339,8 @@ tests.package.test_python_incremental.TestPythonPy2Incremental: *runtime_test
- tests.package.test_python_incremental.TestPythonPy3Incremental: *runtime_test
- tests.package.test_python_passlib.TestPythonPy2Passlib: *runtime_test
- tests.package.test_python_passlib.TestPythonPy3Passlib: *runtime_test
-+tests.package.test_python_pexpect.TestPythonPy2Pexpect: *runtime_test
-+tests.package.test_python_pexpect.TestPythonPy3Pexpect: *runtime_test
- tests.package.test_python_twisted.TestPythonPy2Twisted: *runtime_test
- tests.package.test_python_twisted.TestPythonPy3Twisted: *runtime_test
- tests.package.test_python_txaio.TestPythonPy2Txaio: *runtime_test
-diff --git a/support/testing/tests/package/sample_python_pexpect.py b/support/testing/tests/package/sample_python_pexpect.py
+@@ -326,6 +326,8 @@ tests.package.test_python_automat.TestPythonPy2Automat: *runtime_test
+ tests.package.test_python_automat.TestPythonPy3Automat: *runtime_test
+ tests.package.test_python_bitstring.TestPythonPy2Bitstring: *runtime_test
+ tests.package.test_python_bitstring.TestPythonPy3Bitstring: *runtime_test
++tests.package.test_python_cbor.TestPythonPy2Cbor: *runtime_test
++tests.package.test_python_cbor.TestPythonPy3Cbor: *runtime_test
+ tests.package.test_python_crossbar.TestPythonPy3Crossbar: *runtime_test
+ tests.package.test_python_cryptography.TestPythonPy2Cryptography: *runtime_test
+ tests.package.test_python_cryptography.TestPythonPy3Cryptography: *runtime_test
+diff --git a/support/testing/tests/package/sample_python_cbor_dec.py b/support/testing/tests/package/sample_python_cbor_dec.py
 new file mode 100644
-index 0000000000..cfe395fc29
+index 0000000000..5ca5e3aa7c
 --- /dev/null
-+++ b/support/testing/tests/package/sample_python_pexpect.py
-@@ -0,0 +1,8 @@
-+import pexpect
++++ b/support/testing/tests/package/sample_python_cbor_dec.py
+@@ -0,0 +1,10 @@
++import cbor
 +
-+p = pexpect.spawn(["login"])
-+p.expect("login:")
-+p.sendline("wrong")
-+p.expect("Password:")
-+p.sendline("wrong")
-+p.expect("Login incorrect")
-diff --git a/support/testing/tests/package/test_python_pexpect.py b/support/testing/tests/package/test_python_pexpect.py
++with open("/tmp/data.cbor", "rb") as f:
++    serialized = f.read()
++data = cbor.loads(serialized)
++print(data)
++assert(data["name"] == "python-cbor")
++assert(data["versions"] == ["1", "2"])
++assert(data["group"]["is_a_package"] is True)
++assert(data["group"]["value"] == 42)
+diff --git a/support/testing/tests/package/sample_python_cbor_enc.py b/support/testing/tests/package/sample_python_cbor_enc.py
 new file mode 100644
-index 0000000000..ba31cdbdbe
+index 0000000000..1bde92bb9f
 --- /dev/null
-+++ b/support/testing/tests/package/test_python_pexpect.py
-@@ -0,0 +1,21 @@
++++ b/support/testing/tests/package/sample_python_cbor_enc.py
+@@ -0,0 +1,14 @@
++import cbor
++
++data = {
++    "name": "python-cbor",
++    "versions": ["1", "2"],
++    "group": {
++        "is_a_package": True,
++        "value": 42
++    }
++}
++serialized = cbor.dumps(data)
++print(serialized)
++with open("/tmp/data.cbor", "wb") as f:
++    f.write(serialized)
+diff --git a/support/testing/tests/package/test_python_cbor.py b/support/testing/tests/package/test_python_cbor.py
+new file mode 100644
+index 0000000000..9da3503763
+--- /dev/null
++++ b/support/testing/tests/package/test_python_cbor.py
+@@ -0,0 +1,23 @@
 +from tests.package.test_python import TestPythonPackageBase
 +
 +
-+class TestPythonPy2Pexpect(TestPythonPackageBase):
++class TestPythonPy2Cbor(TestPythonPackageBase):
 +    __test__ = True
 +    config = TestPythonPackageBase.config + \
 +        """
 +        BR2_PACKAGE_PYTHON=y
-+        BR2_PACKAGE_PYTHON_PEXPECT=y
++        BR2_PACKAGE_PYTHON_CBOR=y
 +        """
-+    sample_scripts = ["tests/package/sample_python_pexpect.py"]
++    sample_scripts = ["tests/package/sample_python_cbor_enc.py",
++                      "tests/package/sample_python_cbor_dec.py"]
 +
 +
-+class TestPythonPy3Pexpect(TestPythonPackageBase):
++class TestPythonPy3Cbor(TestPythonPackageBase):
 +    __test__ = True
 +    config = TestPythonPackageBase.config + \
 +        """
 +        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_PEXPECT=y
++        BR2_PACKAGE_PYTHON_CBOR=y
 +        """
-+    sample_scripts = ["tests/package/sample_python_pexpect.py"]
++    sample_scripts = ["tests/package/sample_python_cbor_enc.py",
++                      "tests/package/sample_python_cbor_dec.py"]
