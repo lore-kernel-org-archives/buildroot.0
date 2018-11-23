@@ -1,33 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 23 Nov 2018 22:17:25 +0100
-Subject: [Buildroot] [PATCH v3] linux-firmware: bump version to latest
- 1baa348
-In-Reply-To: <20181113220719.10729-1-m.niestroj@grinn-global.com>
-References: <20181113220719.10729-1-m.niestroj@grinn-global.com>
-Message-ID: <20181123221725.0c00a863@windsurf>
+Date: Fri, 23 Nov 2018 22:18:57 +0100
+Subject: [Buildroot] [git commit] linux: Make dtc install step more reliable
+Message-ID: <20181123212512.1457187FCE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=860906ee05fad3fe503786ec7c656ea0f25851fc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 13 Nov 2018 23:07:19 +0100, Marcin Niestroj wrote:
-> Brief license changes:
->  * ath10k/QCA6174/hw3.0/notice_ath10k_firmware-6.txt: mainly cleanups
->    and s/Qualcomm Atheros/Qualcomm Technologies/
-> 
-> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-> ---
-> Chanes v2 -> v3:
->  * update hash of linux-firmware-*
->  * add brief license file changes in commit log
+Checking for the existence of the dtc binary built by the
+non-dependent dtc package may cause instable behaviour when giving more
+freedom on the order of how the packages are built (parallelization).
 
-Applied to next, thanks.
+In addidion, when moving to per-package host/target method, the check
+would always trigger in the isolated host, leading to linux-dtc always
+being installed as dtc.
+This in turn may lead to undesired overwriting of the real host-dtc binary
+when finally assembling the global host dir.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Thus rework the linux-dtc install condition to be defined by configuration
+rather than compile time order.
+
+Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ linux/linux.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 476ff16329..864fa772bb 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -461,9 +461,7 @@ define LINUX_INSTALL_HOST_TOOLS
+ 	# Installing dtc (device tree compiler) as host tool, if selected
+ 	if grep -q "CONFIG_DTC=y" $(@D)/.config; then \
+ 		$(INSTALL) -D -m 0755 $(@D)/scripts/dtc/dtc $(HOST_DIR)/bin/linux-dtc ; \
+-		if [ ! -e $(HOST_DIR)/bin/dtc ]; then \
+-			ln -sf linux-dtc $(HOST_DIR)/bin/dtc ; \
+-		fi \
++		$(if $(BR2_PACKAGE_HOST_DTC),,ln -sf linux-dtc $(HOST_DIR)/bin/dtc;) \
+ 	fi
+ endef
+ 
