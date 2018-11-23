@@ -1,44 +1,80 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Nov 2018 21:50:46 +0100
-Subject: [Buildroot] [git commit] tpm2-tss: fix build without stack smashing
- protection (SSP)
-Message-ID: <20181202071556.8E9DE8843B@busybox.osuosl.org>
+Date: Fri, 23 Nov 2018 22:05:46 +0100
+Subject: [Buildroot] [git commit] support/testing: add python-pynacl tests
+Message-ID: <20181202071558.0ED8A82855@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d81767c98857869d46012189ea97c078ee211bad
+commit: https://git.buildroot.net/buildroot/commit/?id=7e69ddc9e7182bdd11135612267604a2264a7229
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Restore a configuration environment setup that was incorrectly removed
-along with the upgrade to version 2.1.0.
+Add a simple test case that minimally uses the module.
+Add haveged to the target to generate enough entropy so pynacl ->
+libsodium don't hang waiting for /dev/random.
 
-Fixes:
-  http://autobuild.buildroot.net/results/44221140fb8e2ddcb7d624e657b92a59375c02dd
-  http://autobuild.buildroot.net/results/08b2a8a4bdd1c38703626a4fc37dab31dce98f49
-  http://autobuild.buildroot.net/results/e469b47a6c8f1e8812325fd2860345105052316c
-  http://autobuild.buildroot.net/results/f230fe6bbeb8b22d2b5b7cfb3f0ac4b3b936dc37
-  http://autobuild.buildroot.net/results/ceb824033888086f6dde22c66d5b5f692a253c7e
-  http://autobuild.buildroot.net/results/f863947a7384cb754706e6c346d222be59ad4136
-
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/tpm2-tss/tpm2-tss.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ .gitlab-ci.yml                                     |  2 ++
+ .../testing/tests/package/sample_python_pynacl.py  |  3 +++
+ .../testing/tests/package/test_python_pynacl.py    | 27 ++++++++++++++++++++++
+ 3 files changed, 32 insertions(+)
 
-diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
-index 3bb0702916..f005e5d6b8 100644
---- a/package/tpm2-tss/tpm2-tss.mk
-+++ b/package/tpm2-tss/tpm2-tss.mk
-@@ -12,4 +12,8 @@ TPM2_TSS_INSTALL_STAGING = YES
- TPM2_TSS_DEPENDENCIES = liburiparser openssl host-pkgconf
- TPM2_TSS_CONF_OPTS = --with-crypto=ossl --disable-doxygen-doc
- 
-+# configure.ac doesn't contain a link test, so it doesn't detect when
-+# libssp is missing.
-+TPM2_TSS_CONF_ENV = ax_cv_check_cflags___________Wall__Werror_______fstack_protector_all=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 99df1f85e2..2a68e6485d 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -341,6 +341,8 @@ tests.package.test_python_passlib.TestPythonPy2Passlib: *runtime_test
+ tests.package.test_python_passlib.TestPythonPy3Passlib: *runtime_test
+ tests.package.test_python_pexpect.TestPythonPy2Pexpect: *runtime_test
+ tests.package.test_python_pexpect.TestPythonPy3Pexpect: *runtime_test
++tests.package.test_python_pynacl.TestPythonPy2Pynacl: *runtime_test
++tests.package.test_python_pynacl.TestPythonPy3Pynacl: *runtime_test
+ tests.package.test_python_twisted.TestPythonPy2Twisted: *runtime_test
+ tests.package.test_python_twisted.TestPythonPy3Twisted: *runtime_test
+ tests.package.test_python_txaio.TestPythonPy2Txaio: *runtime_test
+diff --git a/support/testing/tests/package/sample_python_pynacl.py b/support/testing/tests/package/sample_python_pynacl.py
+new file mode 100644
+index 0000000000..d17c50ebe5
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_pynacl.py
+@@ -0,0 +1,3 @@
++import nacl.utils
 +
- $(eval $(autotools-package))
++nonce = nacl.utils.random(16)
+diff --git a/support/testing/tests/package/test_python_pynacl.py b/support/testing/tests/package/test_python_pynacl.py
+new file mode 100644
+index 0000000000..729a887552
+--- /dev/null
++++ b/support/testing/tests/package/test_python_pynacl.py
+@@ -0,0 +1,27 @@
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonPy2Pynacl(TestPythonPackageBase):
++    __test__ = True
++    # use haveged to generate enough entropy so pynacl -> libsodium don't hang waiting for /dev/random
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON=y
++        BR2_PACKAGE_PYTHON_PYNACL=y
++        BR2_PACKAGE_HAVEGED=y
++        """
++    sample_scripts = ["tests/package/sample_python_pynacl.py"]
++    timeout = 10
++
++
++class TestPythonPy3Pynacl(TestPythonPackageBase):
++    __test__ = True
++    # use haveged to generate enough entropy so pynacl -> libsodium don't hang waiting for /dev/random
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_PYNACL=y
++        BR2_PACKAGE_HAVEGED=y
++        """
++    sample_scripts = ["tests/package/sample_python_pynacl.py"]
++    timeout = 10
