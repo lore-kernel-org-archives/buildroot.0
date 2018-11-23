@@ -1,81 +1,107 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 23 Nov 2018 22:05:46 +0100
 Subject: [Buildroot] [git commit branch/next] support/testing: add
- python-pynacl tests
-Message-ID: <20181123210506.D5D6287F88@busybox.osuosl.org>
+ python-click tests
+Message-ID: <20181123210506.BD44087F88@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7e69ddc9e7182bdd11135612267604a2264a7229
+commit: https://git.buildroot.net/buildroot/commit/?id=887248d3545bdec263e2fe3013a83939111d3a02
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add a simple test case that minimally uses the module.
-Add haveged to the target to generate enough entropy so pynacl ->
-libsodium don't hang waiting for /dev/random.
+Use a simple script to check the basic usage. Since this package
+provides command line arguments, override run_sample_scripts to call the
+script with arguments and check the expected output.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .gitlab-ci.yml                                     |  2 ++
- .../testing/tests/package/sample_python_pynacl.py  |  3 +++
- .../testing/tests/package/test_python_pynacl.py    | 27 ++++++++++++++++++++++
- 3 files changed, 32 insertions(+)
+ .gitlab-ci.yml                                     |  2 +
+ .../testing/tests/package/sample_python_click.py   | 12 ++++++
+ support/testing/tests/package/test_python_click.py | 44 ++++++++++++++++++++++
+ 3 files changed, 58 insertions(+)
 
 diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 99df1f85e2..2a68e6485d 100644
+index d6f2e6595f..eb6a187615 100644
 --- a/.gitlab-ci.yml
 +++ b/.gitlab-ci.yml
-@@ -341,6 +341,8 @@ tests.package.test_python_passlib.TestPythonPy2Passlib: *runtime_test
- tests.package.test_python_passlib.TestPythonPy3Passlib: *runtime_test
- tests.package.test_python_pexpect.TestPythonPy2Pexpect: *runtime_test
- tests.package.test_python_pexpect.TestPythonPy3Pexpect: *runtime_test
-+tests.package.test_python_pynacl.TestPythonPy2Pynacl: *runtime_test
-+tests.package.test_python_pynacl.TestPythonPy3Pynacl: *runtime_test
- tests.package.test_python_twisted.TestPythonPy2Twisted: *runtime_test
- tests.package.test_python_twisted.TestPythonPy3Twisted: *runtime_test
- tests.package.test_python_txaio.TestPythonPy2Txaio: *runtime_test
-diff --git a/support/testing/tests/package/sample_python_pynacl.py b/support/testing/tests/package/sample_python_pynacl.py
+@@ -328,6 +328,8 @@ tests.package.test_python_bitstring.TestPythonPy2Bitstring: *runtime_test
+ tests.package.test_python_bitstring.TestPythonPy3Bitstring: *runtime_test
+ tests.package.test_python_cbor.TestPythonPy2Cbor: *runtime_test
+ tests.package.test_python_cbor.TestPythonPy3Cbor: *runtime_test
++tests.package.test_python_click.TestPythonPy2Click: *runtime_test
++tests.package.test_python_click.TestPythonPy3Click: *runtime_test
+ tests.package.test_python_crossbar.TestPythonPy3Crossbar: *runtime_test
+ tests.package.test_python_cryptography.TestPythonPy2Cryptography: *runtime_test
+ tests.package.test_python_cryptography.TestPythonPy3Cryptography: *runtime_test
+diff --git a/support/testing/tests/package/sample_python_click.py b/support/testing/tests/package/sample_python_click.py
 new file mode 100644
-index 0000000000..d17c50ebe5
+index 0000000000..759868d087
 --- /dev/null
-+++ b/support/testing/tests/package/sample_python_pynacl.py
-@@ -0,0 +1,3 @@
-+import nacl.utils
++++ b/support/testing/tests/package/sample_python_click.py
+@@ -0,0 +1,12 @@
++import click
 +
-+nonce = nacl.utils.random(16)
-diff --git a/support/testing/tests/package/test_python_pynacl.py b/support/testing/tests/package/test_python_pynacl.py
++
++ at click.command()
++ at click.argument("foo")
++ at click.option("--bar", is_flag=True, help="help for bar")
++def main(foo, bar):
++    click.echo("{}, {}".format(foo, bar))
++
++
++if __name__ == '__main__':
++    main()
+diff --git a/support/testing/tests/package/test_python_click.py b/support/testing/tests/package/test_python_click.py
 new file mode 100644
-index 0000000000..729a887552
+index 0000000000..db57d3aa9f
 --- /dev/null
-+++ b/support/testing/tests/package/test_python_pynacl.py
-@@ -0,0 +1,27 @@
++++ b/support/testing/tests/package/test_python_click.py
+@@ -0,0 +1,44 @@
 +from tests.package.test_python import TestPythonPackageBase
 +
 +
-+class TestPythonPy2Pynacl(TestPythonPackageBase):
++class TestPythonClick(TestPythonPackageBase):
++    sample_scripts = ["tests/package/sample_python_click.py"]
++
++    def run_sample_scripts(self):
++        cmd = self.interpreter + " sample_python_click.py --help"
++        output, exit_code = self.emulator.run(cmd)
++        self.assertIn("Usage:", output[0])
++        self.assertEqual(exit_code, 0)
++
++        cmd = self.interpreter + " sample_python_click.py 123"
++        output, exit_code = self.emulator.run(cmd)
++        self.assertEqual(output[0], "123, False")
++        self.assertEqual(exit_code, 0)
++
++        cmd = self.interpreter + " sample_python_click.py --bar 456"
++        output, exit_code = self.emulator.run(cmd)
++        self.assertEqual(output[0], "456, True")
++        self.assertEqual(exit_code, 0)
++
++        cmd = self.interpreter + " sample_python_click.py"
++        output, exit_code = self.emulator.run(cmd)
++        self.assertIn("Usage:", output[0])
++        self.assertEqual(exit_code, 2)
++
++
++class TestPythonPy2Click(TestPythonClick):
 +    __test__ = True
-+    # use haveged to generate enough entropy so pynacl -> libsodium don't hang waiting for /dev/random
-+    config = TestPythonPackageBase.config + \
++    config = TestPythonClick.config + \
 +        """
 +        BR2_PACKAGE_PYTHON=y
-+        BR2_PACKAGE_PYTHON_PYNACL=y
-+        BR2_PACKAGE_HAVEGED=y
++        BR2_PACKAGE_PYTHON_CLICK=y
 +        """
-+    sample_scripts = ["tests/package/sample_python_pynacl.py"]
-+    timeout = 10
 +
 +
-+class TestPythonPy3Pynacl(TestPythonPackageBase):
++class TestPythonPy3Click(TestPythonClick):
 +    __test__ = True
-+    # use haveged to generate enough entropy so pynacl -> libsodium don't hang waiting for /dev/random
-+    config = TestPythonPackageBase.config + \
++    config = TestPythonClick.config + \
 +        """
 +        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_PYNACL=y
-+        BR2_PACKAGE_HAVEGED=y
++        BR2_PACKAGE_PYTHON_CLICK=y
 +        """
-+    sample_scripts = ["tests/package/sample_python_pynacl.py"]
-+    timeout = 10
