@@ -1,79 +1,103 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 26 Nov 2018 20:59:33 +0100
-Subject: [Buildroot] [git commit] boot/grub2: add option to install tools
-Message-ID: <20181202071559.B6A83803E1@busybox.osuosl.org>
+Date: Fri, 23 Nov 2018 22:05:46 +0100
+Subject: [Buildroot] [git commit] support/testing: add python-cbor tests
+Message-ID: <20181202071557.DCEC1814B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d9566b7b7a6d34a37e88426e483e8ceb8568c8d
+commit: https://git.buildroot.net/buildroot/commit/?id=61b4b81c44028910ebfe111b70454b8e193bf85b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add an option to install grub2 support tools to the target.
+Add a simple test case to check the basic usage, storing a dict into a
+file and then retrieving the dict from the file.
 
-In the context of Buildroot, some useful target tools provided are
-grub2-editenv, grub2-reboot, which provide means to manage the grub2,
-environment, boot order, and others.
-
-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- boot/grub2/Config.in           | 9 +++++++++
- boot/grub2/grub2.mk            | 5 +++++
- support/scripts/check-bin-arch | 4 ++++
- 3 files changed, 18 insertions(+)
+ .gitlab-ci.yml                                     |  2 ++
+ .../tests/package/sample_python_cbor_dec.py        | 10 ++++++++++
+ .../tests/package/sample_python_cbor_enc.py        | 14 +++++++++++++
+ support/testing/tests/package/test_python_cbor.py  | 23 ++++++++++++++++++++++
+ 4 files changed, 49 insertions(+)
 
-diff --git a/boot/grub2/Config.in b/boot/grub2/Config.in
-index 9a61b3b633..e33d24f62f 100644
---- a/boot/grub2/Config.in
-+++ b/boot/grub2/Config.in
-@@ -76,6 +76,15 @@ config BR2_TARGET_GRUB2_BUILTIN_CONFIG
- 	  device and other configuration parameters, but however menu
- 	  entries cannot be described in this embedded configuration.
- 
-+config BR2_TARGET_GRUB2_INSTALL_TOOLS
-+	bool "install tools"
-+	help
-+	  Install support tools to interact with GNU GRUB Multiboot
-+	  boot loader.
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 2fc0fe7e6a..d6f2e6595f 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -326,6 +326,8 @@ tests.package.test_python_automat.TestPythonPy2Automat: *runtime_test
+ tests.package.test_python_automat.TestPythonPy3Automat: *runtime_test
+ tests.package.test_python_bitstring.TestPythonPy2Bitstring: *runtime_test
+ tests.package.test_python_bitstring.TestPythonPy3Bitstring: *runtime_test
++tests.package.test_python_cbor.TestPythonPy2Cbor: *runtime_test
++tests.package.test_python_cbor.TestPythonPy3Cbor: *runtime_test
+ tests.package.test_python_crossbar.TestPythonPy3Crossbar: *runtime_test
+ tests.package.test_python_cryptography.TestPythonPy2Cryptography: *runtime_test
+ tests.package.test_python_cryptography.TestPythonPy3Cryptography: *runtime_test
+diff --git a/support/testing/tests/package/sample_python_cbor_dec.py b/support/testing/tests/package/sample_python_cbor_dec.py
+new file mode 100644
+index 0000000000..5ca5e3aa7c
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_cbor_dec.py
+@@ -0,0 +1,10 @@
++import cbor
 +
-+	  This will also install the Grub 2 loadable modules to the
-+	  target.
++with open("/tmp/data.cbor", "rb") as f:
++    serialized = f.read()
++data = cbor.loads(serialized)
++print(data)
++assert(data["name"] == "python-cbor")
++assert(data["versions"] == ["1", "2"])
++assert(data["group"]["is_a_package"] is True)
++assert(data["group"]["value"] == 42)
+diff --git a/support/testing/tests/package/sample_python_cbor_enc.py b/support/testing/tests/package/sample_python_cbor_enc.py
+new file mode 100644
+index 0000000000..1bde92bb9f
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_cbor_enc.py
+@@ -0,0 +1,14 @@
++import cbor
 +
- endif # BR2_TARGET_GRUB2
- 
- comment "grub2 needs a toolchain w/ wchar"
-diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
-index 1b366d0407..bb678ef5de 100644
---- a/boot/grub2/grub2.mk
-+++ b/boot/grub2/grub2.mk
-@@ -12,7 +12,12 @@ GRUB2_LICENSE_FILES = COPYING
- GRUB2_DEPENDENCIES = host-bison host-flex host-grub2
- HOST_GRUB2_DEPENDENCIES = host-bison host-flex
- GRUB2_INSTALL_IMAGES = YES
++data = {
++    "name": "python-cbor",
++    "versions": ["1", "2"],
++    "group": {
++        "is_a_package": True,
++        "value": 42
++    }
++}
++serialized = cbor.dumps(data)
++print(serialized)
++with open("/tmp/data.cbor", "wb") as f:
++    f.write(serialized)
+diff --git a/support/testing/tests/package/test_python_cbor.py b/support/testing/tests/package/test_python_cbor.py
+new file mode 100644
+index 0000000000..9da3503763
+--- /dev/null
++++ b/support/testing/tests/package/test_python_cbor.py
+@@ -0,0 +1,23 @@
++from tests.package.test_python import TestPythonPackageBase
 +
-+ifeq ($(BR2_TARGET_GRUB2_INSTALL_TOOLS),y)
-+GRUB2_INSTALL_TARGET = YES
-+else
- GRUB2_INSTALL_TARGET = NO
-+endif
- 
- GRUB2_BUILTIN_MODULES = $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES))
- GRUB2_BUILTIN_CONFIG = $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_CONFIG))
-diff --git a/support/scripts/check-bin-arch b/support/scripts/check-bin-arch
-index 7f97696735..66b8d89932 100755
---- a/support/scripts/check-bin-arch
-+++ b/support/scripts/check-bin-arch
-@@ -20,6 +20,10 @@ declare -a IGNORES=(
- 	# pru-software-support) legitimately install ELF binaries that
- 	# are not for the target architecture
- 	"/usr/share"
 +
-+	# Skip files in /lib/grub, since it is possible to have it
-+	# for a different architecture (e.g. i386 grub on x86_64).
-+	"/lib/grub"
- )
- 
- while getopts p:l:r:a:i: OPT ; do
++class TestPythonPy2Cbor(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON=y
++        BR2_PACKAGE_PYTHON_CBOR=y
++        """
++    sample_scripts = ["tests/package/sample_python_cbor_enc.py",
++                      "tests/package/sample_python_cbor_dec.py"]
++
++
++class TestPythonPy3Cbor(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_CBOR=y
++        """
++    sample_scripts = ["tests/package/sample_python_cbor_enc.py",
++                      "tests/package/sample_python_cbor_dec.py"]
