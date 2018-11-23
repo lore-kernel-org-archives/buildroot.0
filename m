@@ -1,52 +1,238 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 23 Nov 2018 15:58:06 +0100
-Subject: [Buildroot] [PATCH next v6 01/10] Makefile: evaluate CCACHE and
- HOST{CC, CXX} at time of use
-In-Reply-To: <20181123145815.13008-1-thomas.petazzoni@bootlin.com>
-References: <20181123145815.13008-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181123145815.13008-2-thomas.petazzoni@bootlin.com>
+Date: Fri, 23 Nov 2018 15:58:05 +0100
+Subject: [Buildroot] [PATCH next v6 00/10] Per-package host/target directory
+ support
+Message-ID: <20181123145815.13008-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As we are going to move to per-package SDK, the location of CCACHE and
-therefore the definitions of HOSTCC and HOSTCXX need to be evaluated
-at the time of use and not at the time of assignment. Indeed, the
-value of HOST_DIR changes from one package to the other.
+Hello,
 
-Therefore, we need to change from := to =.
+Here is a fifth iteration of the per-package SDK and target directory
+implementation.
 
-In addition, while doing A := $(something) $(A) is possible, doing A =
-$(something) $(A) is not legal. So, instead of defining HOSTCC in
-terms of the current HOSTCC variable, we re-use HOSTCC_NOCCACHE
-instead.
+If you're interested in testing it, you can find the patch series at:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- Makefile | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+  http://git.bootlin.com/users/thomas-petazzoni/buildroot/log/?h=ppsh-v6
 
-diff --git a/Makefile b/Makefile
-index 94adff3406..2819d44124 100644
---- a/Makefile
-+++ b/Makefile
-@@ -471,11 +471,11 @@ BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(PATH)"
- TARGET_DIR_WARNING_FILE = $(BASE_TARGET_DIR)/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
- 
- ifeq ($(BR2_CCACHE),y)
--CCACHE := $(HOST_DIR)/bin/ccache
-+CCACHE = $(HOST_DIR)/bin/ccache
- BR_CACHE_DIR ?= $(call qstrip,$(BR2_CCACHE_DIR))
- export BR_CACHE_DIR
--HOSTCC := $(CCACHE) $(HOSTCC)
--HOSTCXX := $(CCACHE) $(HOSTCXX)
-+HOSTCC = $(CCACHE) $(HOSTCC_NOCCACHE)
-+HOSTCXX = $(CCACHE) $(HOSTCXX_NOCCACHE)
- else
- export BR_NO_CCACHE
- endif
+However, if you want the full set of PPSH related patches, including
+the package-specific fixes, and work on the Luarocks and Meson
+infrastructure, you can pick up the following branch:
+
+  http://git.bootlin.com/users/thomas-petazzoni/buildroot/log/?h=ppsh-v6-work
+
+I.e the ppsh-v6 branch is more for reviewing, while ppsh-v6-work is
+more for testing the whole PPSH functionality.
+
+Changes since v6
+================
+
+ - Add Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr> on patch
+   "Makefile: move .NOTPARALLEL statement after including .config
+   file"
+
+ - Add Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr> on patch
+   Makefile: define TARGET_DIR_WARNING_FILE relative to TARGET_DIR
+
+ - Add Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr> on patch
+   "package/pkg-generic: adjust config scripts tweaks for per-package
+   directories"
+
+ - Move the change that really allows top-level parallel build (by
+   making .NOTPARALLEL conditional) into a separate commit, as
+   suggested by Yann E. Morin.
+
+ - Sort $(PACKAGES) in host-finalize and target-finalize when creating
+   the global HOST_DIR and global TARGET_DIR. Suggested by Yann
+   E. Morin.
+
+ - Split too long line in the main Makefile listing all the top-level
+   directories as targets. Suggested by Yann E. Morin.
+
+ - Drop change in fs/common.mk adding ROOTFS_COMMON_DEPENDENCIES to
+   PACKAGES, since a similar change has already been merged in
+   master. Noticed by Yann E. Morin.
+
+ - Use "directory/directories" instead of "folder/folders", as
+   suggested by Arnout Vandecappelle.
+
+ - Move prepare-per-package-folder (now named
+   prepare-per-package-directory) to pkg-utils.mk. Suggested by both
+   Yann E. Morin and Arnout Vandecappelle.
+
+ - Add a comment above prepare-per-package-directory, as suggested by
+   Yann E. Morin.
+
+ - Update the commit log of "core: implement per-package SDK and
+   target" to explain why we are modifying the check-host-rpath
+   script. Suggested by Arnout Vandecappelle.
+
+Changes since v5
+================
+
+ - Add patch "package/pkg-generic: adjust config scripts tweaks for
+   per-package folders" that adjusts how pkg-generic.mk fixes *-config
+   scripts, to use relative paths instead of absolute paths.
+
+ - Add patch "package/pkg-generic: make libtool .la files compatible
+   with per-package folders" that fixes libtool.la files for
+   per-package folders.
+
+ - Add patch "package/pkg-kconfig: handle KCONFIG_DEPENDENCIES with
+   per-package folders" that properly handles KCONFIG_DEPENDENCIES in
+   the pkg-kconfig infrastructure for per-package folders.
+
+ - Added Acked-by from Yann E. Morin on the following patches:
+
+   support/scripts/check-host-rpath: split condition on two statements
+   Makefile: evaluate CCACHE and HOST{CC,CXX} at time of use
+
+ - It is not included in this series, but since the v4 was sent, the
+   case of the Luarocks and Meson based packages have been fixed, and
+   I have sent separate series for these, because they can be merged
+   separately. Many thanks to Fran?ois Perrad and Peter Seiderer for
+   providing very useful insights on Luarocks and Meson.
+
+Changes since v4
+================
+
+ - Dropped patches that have been merged upstream, mainly the "extract
+   dependency" patches, but also a few other preparation patches.
+
+ - Dropped the change of the RPATH handling. As discussed during
+   previous Buildroot Developers meeting, it is not a big problem if
+   during the build, the RPATH of a binary points to the library
+   folder of another package per-package folder. Therefore, instead of
+   fixing up RPATH at the end of each package installation, we keep
+   what Buildroot does today: fix them at the very end of the build.
+
+ - Made the support for per-package folders optional. Indeed, we
+   realized there was no way to make sure it would be perfect from day
+   1. Even if the principle works, there are lots of package-specific
+   details to solve, and solving all of them before merging the base
+   per-package folder support is not reasonable. So for now, an option
+   BR2_PER_PACKAGE_FOLDERS is introduced, which defaults to off. When
+   this option is enabled, the .NOTPARALLEL statement of the main
+   Makefile goes away, which allows to do top-level parallel build.
+
+ - Addition of a commit that reworks how the top-level directories are
+   created.
+
+ - Introduction of a prepare-per-package-folder function in
+   pkg-generic.mk to encapsulate the logic to create the per-package
+   folders from the dependencies of a package.
+
+ - Rebased on top of the latest master.
+
+Changes since v3
+================
+
+ - Dropped patches that have been merged upstream:
+   pkgconf: use relative path to  STAGING_DIR instead of absolute path
+   toolchain: post-pone evaluation of  TOOLCHAIN_EXTERNAL_BIN
+
+ - For now, removed the most controversial/complicated patches
+   (changing the rpath strategy, and switching to per-package
+   host/target directories). The goal for now is to merge only the
+   preparation patches.
+
+Changes since v2
+================
+
+ - Solved the problem of all DEPENDENCIES_HOST_PREREQ targets:
+   host-ccache, host-tar, host-lzip, host-xz, host-fakedate.
+
+   To achieve this, introduced <pkg>_EXTRACT_DEPENDENCIES and used
+   that to handle the dependencies on host-tar, host-lzip and host-xz.
+
+   Used regular dependencies for host-ccache and host-fakedate.
+
+   See below for more details.
+
+Changes since v1
+================
+
+ - Rebased on the latest Buildroot next branch
+
+ - The pkg-config changes are reworked according to Arnout's comments:
+   only @STAGING_SUBDIR@ is replaced in pkg-config.in to generate
+   pkg-config, the rest of the logic is internal to the script.
+
+ - New patch to move the "host skeleton" logic into a proper
+   host-skeleton package.
+
+ - New patch to have the CMake related files generated as part of the
+   toolchain package.
+
+ - New patch to add a new "install" step that depends on the different
+   install steps (target, staging, images, host). This is needed to
+   later add some logic that is executed once all install steps of a
+   package have been done.
+
+ - Fix the approach to solve the RPATH logic: instead of using
+   LD_LIBRARY_PATH, we actually fix with patchelf the RPATH of host
+   binaries right after their installation.
+
+ - Misc other improvements in the per-package SDK implementation.
+
+What is this all about ?
+========================
+
+See the cover letter of v3 for details:
+http://lists.busybox.net/pipermail/buildroot/2017-December/208384.html
+
+What remains to be done?
+========================
+
+Known issues:
+
+ - The qt5 stack is entirely broken, because qmake hardcodes the
+   installation path to be $(STAGING_DIR), so all qt5 packages install
+   to the per-package $(STAGING_DIR) of qt5base.
+
+   See
+   http://lists.busybox.net/pipermail/buildroot/2018-November/235942.html
+
+ - The Python external modules that need native libraries currently do
+   not build. This is due to the Python module building logic reading
+   a Makefile that hardcodes the path to the compiler. Investigation
+   is underway.
+
+ - The host-cargo package doesn't build, it fails to find the
+   http_parser library at link time.
+
+Best regards,
+
+Thomas
+
+
+Thomas Petazzoni (10):
+  Makefile: evaluate CCACHE and HOST{CC,CXX} at time of use
+  support/scripts/check-host-rpath: split condition on two statements
+  Makefile: rework main directory creation logic
+  Makefile: move .NOTPARALLEL statement after including .config file
+  Makefile: define TARGET_DIR_WARNING_FILE relative to TARGET_DIR
+  package/pkg-generic: adjust config scripts tweaks for per-package
+    directories
+  core: implement per-package SDK and target
+  Makefile: allow top-level parallel build with
+    BR2_PER_PACKAGE_DIRECTORIES=y
+  package/pkg-generic: make libtool .la files compatible with
+    per-package directories
+  package/pkg-kconfig: handle KCONFIG_DEPENDENCIES with per-package
+    directories
+
+ Config.in                        | 18 ++++++
+ Makefile                         | 95 ++++++++++++++++++++------------
+ fs/common.mk                     |  1 +
+ package/pkg-generic.mk           | 26 +++++++--
+ package/pkg-kconfig.mk           |  1 +
+ package/pkg-utils.mk             | 21 +++++++
+ support/scripts/check-host-rpath |  8 ++-
+ 7 files changed, 128 insertions(+), 42 deletions(-)
+
 -- 
 2.19.1
