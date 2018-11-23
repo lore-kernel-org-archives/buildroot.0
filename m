@@ -1,104 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 23 Nov 2018 22:05:46 +0100
 Subject: [Buildroot] [git commit branch/next] support/testing: add
- python-pyyaml tests
-Message-ID: <20181123210506.DC4C687F88@busybox.osuosl.org>
+ python-pynacl tests
+Message-ID: <20181123210506.D5D6287F88@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=74d61681f18b8e4113c7939bb54b1663b00e9c09
+commit: https://git.buildroot.net/buildroot/commit/?id=7e69ddc9e7182bdd11135612267604a2264a7229
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add a simple test case to check the basic usage, storing a dict into a
-file and then retrieving the dict from the file.
+Add a simple test case that minimally uses the module.
+Add haveged to the target to generate enough entropy so pynacl ->
+libsodium don't hang waiting for /dev/random.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
  .gitlab-ci.yml                                     |  2 ++
- .../tests/package/sample_python_pyyaml_dec.py      | 10 ++++++++++
- .../tests/package/sample_python_pyyaml_enc.py      | 14 +++++++++++++
- .../testing/tests/package/test_python_pyyaml.py    | 23 ++++++++++++++++++++++
- 4 files changed, 49 insertions(+)
+ .../testing/tests/package/sample_python_pynacl.py  |  3 +++
+ .../testing/tests/package/test_python_pynacl.py    | 27 ++++++++++++++++++++++
+ 3 files changed, 32 insertions(+)
 
 diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 2a68e6485d..a0659d6bfb 100644
+index 99df1f85e2..2a68e6485d 100644
 --- a/.gitlab-ci.yml
 +++ b/.gitlab-ci.yml
-@@ -343,6 +343,8 @@ tests.package.test_python_pexpect.TestPythonPy2Pexpect: *runtime_test
+@@ -341,6 +341,8 @@ tests.package.test_python_passlib.TestPythonPy2Passlib: *runtime_test
+ tests.package.test_python_passlib.TestPythonPy3Passlib: *runtime_test
+ tests.package.test_python_pexpect.TestPythonPy2Pexpect: *runtime_test
  tests.package.test_python_pexpect.TestPythonPy3Pexpect: *runtime_test
- tests.package.test_python_pynacl.TestPythonPy2Pynacl: *runtime_test
- tests.package.test_python_pynacl.TestPythonPy3Pynacl: *runtime_test
-+tests.package.test_python_pyyaml.TestPythonPy2Pyyaml: *runtime_test
-+tests.package.test_python_pyyaml.TestPythonPy3Pyyaml: *runtime_test
++tests.package.test_python_pynacl.TestPythonPy2Pynacl: *runtime_test
++tests.package.test_python_pynacl.TestPythonPy3Pynacl: *runtime_test
  tests.package.test_python_twisted.TestPythonPy2Twisted: *runtime_test
  tests.package.test_python_twisted.TestPythonPy3Twisted: *runtime_test
  tests.package.test_python_txaio.TestPythonPy2Txaio: *runtime_test
-diff --git a/support/testing/tests/package/sample_python_pyyaml_dec.py b/support/testing/tests/package/sample_python_pyyaml_dec.py
+diff --git a/support/testing/tests/package/sample_python_pynacl.py b/support/testing/tests/package/sample_python_pynacl.py
 new file mode 100644
-index 0000000000..9ab8931197
+index 0000000000..d17c50ebe5
 --- /dev/null
-+++ b/support/testing/tests/package/sample_python_pyyaml_dec.py
-@@ -0,0 +1,10 @@
-+import yaml
++++ b/support/testing/tests/package/sample_python_pynacl.py
+@@ -0,0 +1,3 @@
++import nacl.utils
 +
-+with open("/tmp/data.yml", "rb") as f:
-+    serialized = f.read()
-+data = yaml.load(serialized)
-+print(data)
-+assert(data["name"] == "python-pyyaml")
-+assert(data["versions"] == ["1", "2"])
-+assert(data["group"]["is_a_package"] is True)
-+assert(data["group"]["value"] == 42)
-diff --git a/support/testing/tests/package/sample_python_pyyaml_enc.py b/support/testing/tests/package/sample_python_pyyaml_enc.py
++nonce = nacl.utils.random(16)
+diff --git a/support/testing/tests/package/test_python_pynacl.py b/support/testing/tests/package/test_python_pynacl.py
 new file mode 100644
-index 0000000000..30759949e2
+index 0000000000..729a887552
 --- /dev/null
-+++ b/support/testing/tests/package/sample_python_pyyaml_enc.py
-@@ -0,0 +1,14 @@
-+import yaml
-+
-+data = {
-+    "name": "python-pyyaml",
-+    "versions": ["1", "2"],
-+    "group": {
-+        "is_a_package": True,
-+        "value": 42
-+    }
-+}
-+serialized = yaml.dump(data, default_flow_style=False)
-+print(serialized)
-+with open("/tmp/data.yml", "w") as f:
-+    f.write(serialized)
-diff --git a/support/testing/tests/package/test_python_pyyaml.py b/support/testing/tests/package/test_python_pyyaml.py
-new file mode 100644
-index 0000000000..cd45a57b86
---- /dev/null
-+++ b/support/testing/tests/package/test_python_pyyaml.py
-@@ -0,0 +1,23 @@
++++ b/support/testing/tests/package/test_python_pynacl.py
+@@ -0,0 +1,27 @@
 +from tests.package.test_python import TestPythonPackageBase
 +
 +
-+class TestPythonPy2Pyyaml(TestPythonPackageBase):
++class TestPythonPy2Pynacl(TestPythonPackageBase):
 +    __test__ = True
++    # use haveged to generate enough entropy so pynacl -> libsodium don't hang waiting for /dev/random
 +    config = TestPythonPackageBase.config + \
 +        """
 +        BR2_PACKAGE_PYTHON=y
-+        BR2_PACKAGE_PYTHON_PYYAML=y
++        BR2_PACKAGE_PYTHON_PYNACL=y
++        BR2_PACKAGE_HAVEGED=y
 +        """
-+    sample_scripts = ["tests/package/sample_python_pyyaml_enc.py",
-+                      "tests/package/sample_python_pyyaml_dec.py"]
++    sample_scripts = ["tests/package/sample_python_pynacl.py"]
++    timeout = 10
 +
 +
-+class TestPythonPy3Pyyaml(TestPythonPackageBase):
++class TestPythonPy3Pynacl(TestPythonPackageBase):
 +    __test__ = True
++    # use haveged to generate enough entropy so pynacl -> libsodium don't hang waiting for /dev/random
 +    config = TestPythonPackageBase.config + \
 +        """
 +        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_PYYAML=y
++        BR2_PACKAGE_PYTHON_PYNACL=y
++        BR2_PACKAGE_HAVEGED=y
 +        """
-+    sample_scripts = ["tests/package/sample_python_pyyaml_enc.py",
-+                      "tests/package/sample_python_pyyaml_dec.py"]
++    sample_scripts = ["tests/package/sample_python_pynacl.py"]
++    timeout = 10
