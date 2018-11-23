@@ -1,294 +1,209 @@
 From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Fri, 23 Nov 2018 17:33:33 +0100
-Subject: [Buildroot] [PATCH v2 1/5] boot/optee-os: new package
-In-Reply-To: <1542900177-17343>
+Date: Fri, 23 Nov 2018 17:33:34 +0100
+Subject: [Buildroot] [PATCH v2 2/5] optee-client: new package
+In-Reply-To: <1542990817-28362-1-git-send-email-etienne.carriere@linaro.org>
 References: <1542900177-17343>
-Message-ID: <1542990817-28362-1-git-send-email-etienne.carriere@linaro.org>
+ <1542990817-28362-1-git-send-email-etienne.carriere@linaro.org>
+Message-ID: <1542990817-28362-2-git-send-email-etienne.carriere@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OP-TEE OS is maintained by the OP-TEE project. It provides an
-open source solution for development and integration of secure
-services for Armv7-A and Armv8-A CPU based platforms supporting
-the TrustZone technology. This technology enables CPUs to
-concurrently host a secure world as the OP-TEE OS and a non-secure
-world as a Linux based OS.
+OP-TEE client API library and supplicant daemon from the
+OP-TEE project.
 
-The OP-TEE project maintains other packages to leverage OP-TEE on
-Linux kernel based OSes. An OP-TEE interface driver is available
-in the Linux kernel since 4.12 upon CONFIG_OPTEE.
-
-https://www.op-tee.org/
-https://github.com/OP-TEE/optee_os
+The package is added to the Security menu of BR configuration.
 
 Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 ---
 Changes v1 -> v2:
-  - Replace dependency on BR2_arm with BR2_ARM_CPU_ARMV7 as BR2_arm
-    is enabled for non Armv7 targets.
-  - Correct build dependencies on OpenSSL and pycrypto.
-    Remove patch on package python scripts since pycrypto dependency
-    is now handled.
-  - Correct location of in-tree services TAs (s/ta_services/ta/).
-    Remvoe OPTEE_OS_BUILD_SERVICES as service TAs are already built built when OP-TEE OS core is built.
-    Correct BR2_TARGET_OPTEE_OS_SERVICES options: it only installs the
-  - Fix bad reference in Config.in package description.
-  - Fix wrong hash for the optee-os v3.3.0 tarball.
-  - Fix bad use of OPTEE_OS_VERSION where it is the value content that
-    is expected: $(OPTEE_OS_VERSION).
-  - Clarify output build directory name: use out/.
-  - Minor replace use if/endif with use of depends on in Config.mk.
-  - Add missing dependency of BR2_TARGET_OPTEE_OS_SERVICES
-    on BR2_TARGET_OPTEE_OS_SDK.
-  - Change commit header comment to "boot/optee-os: new package".
+  - Add option BR2_PACKAGE_OPTEE_CLIENT_SYNCED_VERSION to ensure
+    OP-TEE client version is synced with OP-TEE OS version when
+    the later if enabled.  
+  - Remove useless OPTEE_CLIENT_INSTALL_IMAGE=YES.
 
 ---
- boot/Config.in              |   1 +
- boot/optee-os/Config.in     | 100 +++++++++++++++++++++++++++++++++++++++++++
- boot/optee-os/optee-os.hash |   4 ++
- boot/optee-os/optee-os.mk   | 101 ++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 206 insertions(+)
- create mode 100644 boot/optee-os/Config.in
- create mode 100644 boot/optee-os/optee-os.hash
- create mode 100644 boot/optee-os/optee-os.mk
+ package/Config.in                      |  1 +
+ package/optee-client/Config.in         | 73 ++++++++++++++++++++++++++++++++++
+ package/optee-client/S30optee          | 26 ++++++++++++
+ package/optee-client/optee-client.hash |  4 ++
+ package/optee-client/optee-client.mk   | 30 ++++++++++++++
+ 5 files changed, 134 insertions(+)
+ create mode 100644 package/optee-client/Config.in
+ create mode 100644 package/optee-client/S30optee
+ create mode 100644 package/optee-client/optee-client.hash
+ create mode 100644 package/optee-client/optee-client.mk
 
-diff --git a/boot/Config.in b/boot/Config.in
-index 8e0c8e5..cd14731 100644
---- a/boot/Config.in
-+++ b/boot/Config.in
-@@ -13,6 +13,7 @@ source "boot/gummiboot/Config.in"
- source "boot/lpc32xxcdl/Config.in"
- source "boot/mv-ddr-marvell/Config.in"
- source "boot/mxs-bootlets/Config.in"
-+source "boot/optee-os/Config.in"
- source "boot/riscv-pk/Config.in"
- source "boot/s500-bootloader/Config.in"
- source "boot/syslinux/Config.in"
-diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
+diff --git a/package/Config.in b/package/Config.in
+index b60e770..8c3b1bf 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2047,6 +2047,7 @@ endmenu
+ 
+ menu "Security"
+ 	source "package/checkpolicy/Config.in"
++	source "package/optee-client/Config.in"
+ 	source "package/paxtest/Config.in"
+ 	source "package/policycoreutils/Config.in"
+ 	source "package/refpolicy/Config.in"
+diff --git a/package/optee-client/Config.in b/package/optee-client/Config.in
 new file mode 100644
-index 0000000..7a598c6
+index 0000000..cff452b
 --- /dev/null
-+++ b/boot/optee-os/Config.in
-@@ -0,0 +1,100 @@
-+config BR2_TARGET_OPTEE_OS
-+	bool "optee_os"
-+	depends on BR2_aarch64 || BR2_ARM_CPU_ARMV7A
++++ b/package/optee-client/Config.in
+@@ -0,0 +1,73 @@
++config BR2_PACKAGE_OPTEE_CLIENT
++	bool "Embed OP-TEE client"
 +	help
-+	  OP-TEE OS provides the secure world boot image and the trust
-+	  application development kit of the OP-TEE project. OP-TEE OS
-+	  also provides generic trusted application one can embedded
-+	  into its system.
++	  Enable the OP-TEE client package that brings non-secure
++	  client application resources for OP-TEE support. OP-TEE
++	  client is a component delivered by the OP-TEE project.
 +
-+	  http://github.com/OP-TEE/optee_os
++	  https://github.com/OP-TEE/optee_client
 +
-+if BR2_TARGET_OPTEE_OS
++	  The client API library allows application to invoke
++	  trusted applications hosted in the OP-TEE OS secure world.
++	  The supplicant provides services hosted by the non-secure
++	  world and invoked by the secure world.
++
++if BR2_PACKAGE_OPTEE_CLIENT
 +
 +choice
-+	prompt "OP-TEE OS version"
-+	default BR2_TARGET_OPTEE_OS_LATEST
++	prompt "OP-TEE client version"
++	default BR2_PACKAGE_OPTEE_CLIENT_LATEST
 +	help
-+	  Select the version of OP-TEE OS you want to use
++	  Select the version of OP-TEE client you want to use
 +
-+config BR2_TARGET_OPTEE_OS_LATEST
++config BR2_PACKAGE_OPTEE_CLIENT_LATEST
 +	bool "sync with latest registered release tag"
 +	help
-+	  This fetches the latest registered release tag from
-+	  the OP-TEE OS official Git repository.
++	  Sync on latest release tag. This currently fetches the
++	  latest registered release tag from the OP-TEE official
++	  Git repository.
 +
-+config BR2_TARGET_OPTEE_OS_CUSTOM_GIT
-+	bool "sync on custom OP-TEE OS Git repository"
++config BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_GIT
++	bool "sync with a specific Git"
 +	help
 +	  Sync with a specific OP-TEE Git repository.
 +
 +endchoice
 +
-+config BR2_TARGET_OPTEE_OS_VERSION
-+	string
-+	default "3.3.0"		if BR2_TARGET_OPTEE_OS_LATEST
-+	default BR2_TARGET_OPTEE_OS_CUSTOM_REPO_VERSION \
-+				if BR2_TARGET_OPTEE_OS_CUSTOM_GIT
++config BR2_PACKAGE_OPTEE_CLIENT_SYNCED_VERSION
++	bool "use same version ref for OP-TEE components"
++	depends on BR2_PACKAGE_OPTEE_CLIENT_LATEST
++	default true
++	help
++	  When enabled, OP-TEE client version must match the version
++	  set for the other OP-TEE components.
 +
-+config BR2_TARGET_OPTEE_OS_CUSTOM_REPO_URL
-+	string "sourcetree-site"
-+	depends on BR2_TARGET_OPTEE_OS_CUSTOM_GIT
++config BR2_PACKAGE_OPTEE_CLIENT_VERSION
++	string
++	default BR2_TARGET_OPTEE_OS_VERSION \
++			if BR2_PACKAGE_OPTEE_CLIENT_SYNCED_VERSION && \
++			   BR2_TARGET_OPTEE_OS
++	default "3.3.0"	if BR2_PACKAGE_OPTEE_CLIENT_LATEST
++	default BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_REPO_VERSION \
++			if BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_GIT
++	help
++	  Reference in the target Git repository to sync with.
++
++if BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_GIT
++
++config BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_REPO_URL
++	string "Git repository site"
 +	help
 +	  Specific location of the reference source tree Git
 +	  repository.
 +
-+config BR2_TARGET_OPTEE_OS_CUSTOM_REPO_VERSION
-+	string "git reference to pull"
-+	depends on BR2_TARGET_OPTEE_OS_CUSTOM_GIT
++config BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_REPO_VERSION
++	string "target reference to pull in the Git repository"
 +	help
-+	  Reference in the target git repository to sync with.
++	  Package version reference to sync with. As source file
++	  reference is a Git repository, the version reference can
++	  be any Git reference as a tag or a sha1.
 +
-+# Building core, TA libraries/devkit and/or generic TA services
++endif
 +
-+config BR2_TARGET_OPTEE_OS_CORE
-+	bool "Build core"
-+	default y
-+	help
-+	  This option will build and install the OP-TEE core
-+	  boot images.
-+
-+config BR2_TARGET_OPTEE_OS_SDK
-+	bool "Build TA devkit"
-+	default y
-+	help
-+	  This option will build and install the OP-TEE development
-+	  kit for building OP-TEE trusted application images. It is
-+          installed in the staging filetree in /lib/optee directory.
-+
-+config BR2_TARGET_OPTEE_OS_SERVICES
-+	bool "Build service TAs"
-+	depends on BR2_TARGET_OPTEE_OS_SDK
-+	default y
-+	help
-+	  This option install the generic trusted applications built
-+	  from OP-TEE OS source tree. These are installed in the target
-+	  /lib/optee_armtz directory. At runtime OP-TEE OS can load
-+	  trusted applications from a non secure filesystem into the
-+	  secure world for execution.
-+
-+# Building TA libraries and/or core images require target platform info
-+
-+config BR2_TARGET_OPTEE_OS_PLATFORM
-+	string "mandatory target PLATFORM"
-+	help
-+	  Value for the mandated PLATFORM build directive provided to
-+	  OP-TEE OS.
-+
-+config BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR
-+	string "optional target PLATFORM_FLAVOR"
-+	help
-+	  Value for the optional PLATFORM_FLAVOR build directive
-+	  provided to OP-TEE OS.
-+
-+config BR2_TARGET_OPTEE_OS_ADDITIONAL_VARIABLES
-+	string "Additional OP-TEE OS build variables"
-+	help
-+	  Additional parameters for the OP-TEE OS build
-+	  E.g. 'CFG_TEE_CORE_LOG_LEVEL=3 CFG_UNWIND=y'
-+
-+endif # BR2_TARGET_OPTEE_OS
-diff --git a/boot/optee-os/optee-os.hash b/boot/optee-os/optee-os.hash
++endif #BR2_PACKAGE_OPTEE_CLIENT
+diff --git a/package/optee-client/S30optee b/package/optee-client/S30optee
 new file mode 100644
-index 0000000..02828a3
+index 0000000..c893243
 --- /dev/null
-+++ b/boot/optee-os/optee-os.hash
++++ b/package/optee-client/S30optee
+@@ -0,0 +1,26 @@
++#!/bin/sh
++#
++# /etc/init.d/optee
++#
++# Start/stop tee-supplicant (OP-TEE normal world daemon)
++#
++case "$1" in
++    start)
++	if [ -e /usr/sbin/tee-supplicant -a -e /dev/teepriv0 ]; then
++		echo "Starting tee-supplicant..."
++		/usr/sbin/tee-supplicant &
++		exit 0
++	else
++		echo "tee-supplicant or TEE device not found"
++		exit 1
++	fi
++
++        ;;
++    stop)
++	killall tee-supplicant
++	;;
++    status)
++	cat /dev/teepriv0 2>&1 | grep -q "Device or resource busy" || not="not "
++	echo "tee-supplicant is ${not}active"
++	;;
++esac
+diff --git a/package/optee-client/optee-client.hash b/package/optee-client/optee-client.hash
+new file mode 100644
+index 0000000..ed7bf4e
+--- /dev/null
++++ b/package/optee-client/optee-client.hash
 @@ -0,0 +1,4 @@
-+# From https://github.com/OP-TEE/optee_os/archive/3.3.0.tar.gz
-+sha256 7b62e9fe650e197473eb2f4dc35c09d1e6395eb48dc1c16cc139d401b359ac6f  optee-os-3.3.0.tar.gz
++# From https://github.com/OP-TEE/optee_client/archive/3.3.0.tar.gz
++sha256 63af1567fdcdbe28b45be274266a89aa81bef3d0fd8ec5a6eb680046a92e1177  optee-client-3.3.0.tar.gz
 +# Locally computed
 +sha256 fda8385993f112d7ca61b88b54ba5b4cbeec7e43a0f9b317d5186703c1985e8f  LICENSE
-diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
+diff --git a/package/optee-client/optee-client.mk b/package/optee-client/optee-client.mk
 new file mode 100644
-index 0000000..14ad143
+index 0000000..ccc5d12
 --- /dev/null
-+++ b/boot/optee-os/optee-os.mk
-@@ -0,0 +1,101 @@
++++ b/package/optee-client/optee-client.mk
+@@ -0,0 +1,30 @@
 +################################################################################
 +#
-+# optee-os
++# optee-client
 +#
 +################################################################################
 +
-+OPTEE_OS_VERSION = $(call qstrip,$(BR2_TARGET_OPTEE_OS_VERSION))
-+OPTEE_OS_LICENSE = BSD-2-Clause
-+OPTEE_OS_LICENSE_FILES = LICENSE
++OPTEE_CLIENT_VERSION = $(call qstrip,$(BR2_PACKAGE_OPTEE_CLIENT_VERSION))
++OPTEE_CLIENT_LICENSE = BSD-3-Clause
++OPTEE_CLIENT_LICENSE_FILES = LICENSE
 +
-+ifeq ($(BR2_TARGET_OPTEE_OS_CUSTOM_GIT),y)
-+OPTEE_OS_SITE = $(call qstrip,$(BR2_TARGET_OPTEE_OS_CUSTOM_REPO_URL))
-+OPTEE_OS_SITE_METHOD = git
-+BR_NO_CHECK_HASH_FOR += $(OPTEE_OS_SOURCE)
++ifeq ($(BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_GIT),y)
++OPTEE_CLIENT_SITE = $(call qstrip,$(BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_REPO_URL))
++OPTEE_CLIENT_SITE_METHOD = git
++BR_NO_CHECK_HASH_FOR += $(OPTEE_CLIENT_SOURCE)
 +else
-+OPTEE_OS_SITE = $(call github,OP-TEE,optee_os,$(OPTEE_OS_VERSION))
++OPTEE_CLIENT_SITE = $(call github,OP-TEE,optee_client,$(OPTEE_CLIENT_VERSION))
 +endif
 +
-+OPTEE_OS_DEPENDENCIES = openssl host-python-pycrypto
-+
-+# On 64bit targets, OP-TEE OS can be built in 32bit mode, or
-+# can be built in 64bit mode and support 32bit and 64bit
-+# trusted applications. Since buildroot currently references
-+# a single cross compiler, build exclusively in 32bit
-+# or 64bit mode.
-+OPTEE_OS_MAKE_OPTS = CROSS_COMPILE="$(TARGET_CROSS)"
-+OPTEE_OS_MAKE_OPTS += CROSS_COMPILE_core="$(TARGET_CROSS)"
-+ifeq ($(BR2_aarch64),y)
-+OPTEE_OS_MAKE_OPTS += CROSS_COMPILE_ta_arm64="$(TARGET_CROSS)"
-+endif
-+ifeq ($(BR2_arm),y)
-+OPTEE_OS_MAKE_OPTS += CROSS_COMPILE_ta_arm32="$(TARGET_CROSS)"
-+endif
-+
-+# Get mandatory PLAFORM and optional PLATFORM_FLAVOR
-+OPTEE_OS_MAKE_OPTS += PLATFORM=$(call qstrip,$(BR2_TARGET_OPTEE_OS_PLATFORM))
-+ifneq ($(BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR),)
-+OPTEE_OS_MAKE_OPTS += PLATFORM_FLAVOR=$(call qstrip,$(BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR))
-+endif
-+OPTEE_OS_MAKE_OPTS += $(call qstrip,$(BR2_TARGET_OPTEE_OS_ADDITIONAL_VARIABLES))
-+
-+# Requests OP-TEE OS to build from subdirectory out/ of its synced sourcetree root path
-+# otherwise the output directory path depends on the target platform name.
-+OPTEE_OS_BUILDDIR_OUT = out
-+
-+ifeq ($(BR2_aarch64),y)
-+OPTEE_OS_LOCAL_SDK = $(OPTEE_OS_BUILDDIR_OUT)/export-ta_arm64
-+endif
-+ifeq ($(BR2_arm),y)
-+OPTEE_OS_LOCAL_SDK = $(OPTEE_OS_BUILDDIR_OUT)/export-ta_arm32
-+endif
-+
-+ifeq ($(BR2_TARGET_OPTEE_OS_CORE),y)
-+define OPTEE_OS_BUILD_CORE
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) O=$(OPTEE_OS_BUILDDIR_OUT) \
-+		$(TARGET_CONFIGURE_OPTS) $(OPTEE_OS_MAKE_OPTS) all
-+endef
-+define OPTEE_OS_INSTALL_CORE
-+	mkdir -p $(BINARIES_DIR)
-+	cp -dpf $(@D)/$(OPTEE_OS_BUILDDIR_OUT)/core/tee.bin $(BINARIES_DIR)
-+	cp -dpf $(@D)/$(OPTEE_OS_BUILDDIR_OUT)/core/tee-*_v2.bin $(BINARIES_DIR)
-+endef
-+endif
-+
-+ifeq ($(BR2_TARGET_OPTEE_OS_SDK),y)
-+define OPTEE_OS_BUILD_SDK
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) O=$(OPTEE_OS_BUILDDIR_OUT) \
-+		 $(TARGET_CONFIGURE_OPTS) $(OPTEE_OS_MAKE_OPTS) ta_dev_kit
-+endef
-+define OPTEE_OS_INSTALL_SDK
-+	mkdir -p $(STAGING_DIR)/lib/optee
-+	cp -ardpf $(@D)/$(OPTEE_OS_LOCAL_SDK) $(STAGING_DIR)/lib/optee
-+endef
-+endif
-+
-+ifeq ($(BR2_TARGET_OPTEE_OS_SERVICES),y)
-+# Core build already generates the TA services binaries. Install them.
-+define OPTEE_OS_INSTALL_SERVICES
-+	mkdir -p $(TARGET_DIR)/lib/optee_armtz
-+	$(foreach f,$(wildcard $(@D)/ta/*/$(OPTEE_OS_BUILDDIR_OUT)/*.ta), \
-+		$(INSTALL) -v -p --mode=444 \
-+			--target-directory=$(TARGET_DIR)/lib/optee_armtz \
-+			 $f &&) true
-+endef
-+endif
-+
-+define OPTEE_OS_BUILD_CMDS
-+	$(OPTEE_OS_BUILD_CORE)
-+	$(OPTEE_OS_BUILD_SDK)
++define OPTEE_CLIENT_INSTALL_SUPPLICANT_SCRIPT
++	$(INSTALL) -m 0755 -D $(OPTEE_CLIENT_PKGDIR)/S30optee \
++		$(TARGET_DIR)/etc/init.d/S30optee
 +endef
 +
-+define OPTEE_OS_INSTALL_IMAGES_CMDS
-+	$(OPTEE_OS_INSTALL_CORE)
-+	$(OPTEE_OS_INSTALL_SDK)
-+	$(OPTEE_OS_INSTALL_SERVICES)
++define OPTEE_CLIENT_INSTALL_INIT_SYSV
++	$(OPTEE_CLIENT_INSTALL_SUPPLICANT_SCRIPT)
 +endef
 +
-+OPTEE_OS_INSTALL_STAGING = YES
-+OPTEE_OS_INSTALL_IMAGES = YES
++OPTEE_CLIENT_INSTALL_STAGING = YES
 +
-+$(eval $(generic-package))
++$(eval $(cmake-package))
 -- 
 1.9.1
