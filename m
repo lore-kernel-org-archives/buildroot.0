@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 23 Nov 2018 13:46:53 +0100
-Subject: [Buildroot] [PATCH next v5 6/9] package/pkg-generic: adjust
- config scripts tweaks for per-package folders
-In-Reply-To: <20181120205357.GK2601@scaer>
+Date: Fri, 23 Nov 2018 14:14:09 +0100
+Subject: [Buildroot] [PATCH next v5 7/9] core: implement per-package SDK
+ and target
+In-Reply-To: <20181120213612.GL2601@scaer>
 References: <20181120163522.4281-1-thomas.petazzoni@bootlin.com>
- <20181120163522.4281-7-thomas.petazzoni@bootlin.com>
- <20181120205357.GK2601@scaer>
-Message-ID: <20181123134653.2097fa9b@windsurf>
+ <20181120163522.4281-8-thomas.petazzoni@bootlin.com>
+ <20181120213612.GL2601@scaer>
+Message-ID: <20181123141409.6a473dba@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,69 +15,180 @@ To: buildroot@busybox.net
 
 Hello Yann,
 
-On Tue, 20 Nov 2018 21:53:57 +0100, Yann E. MORIN wrote:
+Thanks a lot for your extensive review!
 
-> > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> > index 309fd8cd48..9b4db845b6 100644
-> > --- a/package/pkg-generic.mk
-> > +++ b/package/pkg-generic.mk
-> > @@ -275,12 +275,13 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
-> >  	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
-> >  	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
-> >  		$(call MESSAGE,"Fixing package configuration files") ;\
-> > -			$(SED)  "s,$(BASE_DIR), at BASE_DIR@,g" \
-> > -				-e "s,$(STAGING_DIR), at STAGING_DIR@,g" \
-> > +			$(SED)  "s,$(HOST_DIR), at HOST_DIR@,g" \
-> > +				-e "s,$(BASE_DIR), at BASE_DIR@,g" \  
+On Tue, 20 Nov 2018 22:36:12 +0100, Yann E. MORIN wrote:
+
+> I'm not fond of the naming here...
 > 
-> Previously, BASE_DIR was the very first thing replaced, but now it no
-> longer is.
+> In the end, can we expect to have a layout that would look like:
+> 
+>     output/build/busybox/host/
+>     output/build/busybox/target/
+>     output/build/busybox/busybox-1.2.3/     # Source tree, and
+>                                             # currently, build dir
+> And then we can add for OOT:
+>     output/build/busybox/build-dir/
 
-Correct.
+It would be nice indeed, but it's quite a radical change, as it moves
+the location of the build directory of each package. I am not sure I
+want to do that as part of this series, which is already complicated by
+itself.
 
-> I'm not sure if I follow it all, but is the reason for that inversion
-> hidden behhinde notes [0] and [1], being the need to create relative
-> symlinks?
+Also for OOT, your scheme doesn't yet make sense for package that have
+both a target and a host variant: the goal is to share the source
+directory between the host and the target variant. Starting from your
+example, how would it work for libglib2 and host-libglib2 ?
 
-We're not creating symlinks here, we replacing absolute paths with
-relative paths using the $(dirname $0) trick. But I guess that's what
-you meant.
+	output/build/libglib2/libglib2-1.2.3/
 
-> As far as I understand, if BASE_DIR is kept as the first replacement,
-> then we lose HOST_DIR as it (usually) is a subdir of BASE_DIR, so we end
-> up with just @BASE_DIR@/host and thus can't easily replace it with
-> relative paths anymore.
+for the libglib2 source code ? Where would be the build directories for
+the target and host variants ?
 
-Exactly: if we replace $(BASE_DIR) by @BASE_DIR@, we can't easily
-replace $(HOST_DIR) by @HOST_DIR@ anymore and then do the necessary
-fixup.
+I think a scheme that would maybe make more sense is:
 
-The reason why the $(BASE_DIR) -> @BASE_DIR@ and then @BASE_DIR@ ->
-$(BASE_DIR) replacement was added in commit
-7701fc53d19be7cab8bddba72046a39e8421fd9e was to support the case where
-build takes place in /usr.
+	output/src/libglib2-1.2.3/
+	output/build/libglib2/
+	output/build/host-libglib2/
+	output/per-package/libglib2/{target,host}/
+	output/per-package/host-libglib2/{target,host}/
 
-The problem was that:
+or something like that.
 
-	s,-L/usr,-L at STAGING_DIR@/usr,g
+Since for now there is no consensus on what the scheme would be, I'm
+keeping my proposal as-is, but I can adapt it to whatever we decide.
+However, what I would like is that we find a path where this series can
+remain limited to per-package directory support. It's already
+complicated enough that I don't want to be drowned into reworking other
+aspects at the same time.
 
-would continuously re-add @STAGING_DIR@ if the build happens in a
-sub-dir of /usr, because -L/usr will always match, even if the path has
-already been fixed up.
+> >+PER_PACKAGE_DIR := $(BASE_DIR)/per-package  
+> 
+> As I said above, I'm not too fond of that naming.... I have nothing
+> better to suggest for now, except that we can change that later (enough
+> bike-shedding).
 
-The replacement of $(HOST_DIR) to @HOST_DIR@ before the $(BASE_DIR) to
-@BASE_DIR@ replacement doesn't break this logic. If the path is in
-$(HOST_DIR), it will have been replaced by @HOST_DIR@ and will not
-match -L/usr, and then if the path is somewhere else in $(BASE_DIR), it
-will be replaced by @BASE_DIR@, and the existing logic will continue to
-work.
+You don't like the PER_PACKAGE_DIR variable name, or the "per-package"
+directory name ? Or both ?
 
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+The variable name is easy to change any time. The directory name can be
+changed, but it's a bit more annoying: once users are going to become
+used to such a name/organization, changing it is going to make things
+harder for users.
 
-So, I'll take your Reviewed-by, but let me know if you're still
-unconvinced for some reason.
+However, keep in mind that the BR2_PER_PACKAGE_DIRECTORIES option
+(formerly BR2_PER_PACKAGE_FOLDERS) is still experimental, so whatever
+it does can still be changed until we remove the "experimental" mark.
 
-Thanks!
+> > +ifeq ($(BR2_PER_PACKAGE_FOLDERS),)
+> >  # Parallel execution of this Makefile is disabled because it changes
+> >  # the packages building order, that can be a problem for two reasons:
+> >  # - If a package has an unspecified optional dependency and that
+> > @@ -245,6 +247,13 @@ endif
+> >  # use the -j<jobs> option when building, e.g:
+> >  #      make -j$((`getconf _NPROCESSORS_ONLN`+1))
+> >  .NOTPARALLEL:
+> > +endif  
+> 
+> I would have postponed parallel build activation to a separate commit.
+
+Indeed, I've split that into a separate commit.
+
+> > @@ -455,7 +464,11 @@ LZCAT := $(call qstrip,$(BR2_LZCAT))
+> >  TAR_OPTIONS = $(call qstrip,$(BR2_TAR_OPTIONS)) -xf
+> >  
+> >  # packages compiled for the host go here
+> > +ifeq ($(BR2_PER_PACKAGE_FOLDERS),y)
+> > +HOST_DIR = $(if $(PKG),$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/host,$(call qstrip,$(BR2_HOST_DIR)))
+> > +else
+> >  HOST_DIR := $(call qstrip,$(BR2_HOST_DIR))  
+> 
+> Why do we still have HOST_DIR as immediately-defined?
+> 
+> Since HOST_DIR is simply defined in the per-package case, I see no
+> reason to have immediately-defined in the standard case either.
+
+As Arnout explained: this definition was already like this. In the
+!BR2_PER_PACKAGE_FOLDERS case, there is no need for it to be
+recursively-expanded. However, in the BR2_PER_PACKAGE_FOLDERS case it
+*must* be recursively expanded.
+
+> Please, sort PACKAGES, so that:
+> 
+>   - the copy is always done in the same order (sort always sort in the
+>     ascii order);
+> 
+>   - duplicates get removed.
+
+Done.
+
+> > +	@$(call MESSAGE,"Creating global target directory")
+> > +	$(foreach pkg,$(PACKAGES),\  
+> 
+> Ditto, sort PACKAGES.
+
+Done.
+
+> >  # staging and target directories do NOT list these as
+> >  # dependencies anywhere else
+> > -$(BUILD_DIR) $(BASE_TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
+> > +$(BUILD_DIR) $(BASE_TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST) $(PER_PACKAGE_DIR):  
+> 
+> Can we now split this long line, please? ;-)
+
+True, done.
+
+> >  ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
+> >  TARGETS_ROOTFS += rootfs-$(1)
+> > -PACKAGES += $$(filter-out rootfs-%,$$(ROOTFS_$(2)_DEPENDENCIES))
+> > +PACKAGES += $$(filter-out rootfs-%,$$(ROOTFS_$(2)_DEPENDENCIES)) $(ROOTFS_COMMON_DEPENDENCIES)  
+> 
+> If I am not mistaken, this is now in master:
+>     https://git.buildroot.org/buildroot/commit/?id=305e4487e5c18ed89bf2aa106b2068f9dce686fb
+> 
+> But that's missing from next, indeed.
+
+Correct, I've dropped this change from my commit, and simply added the
+existing commit to my branch in the mean time.
+
+> > +# $1: deps
+> > +ifeq ($(BR2_PER_PACKAGE_FOLDERS),y)
+> > +define prepare-per-package-folder  
+> 
+> The location where you define this macro, in the instrumentation hooks,
+> is not optimum I think. You even did not provide a help-comment for it.
+
+I moved it to pkg-utils.mk, which is a better place since another
+commit in my series uses this macro from pkg-kconfig.mk. I have also
+added a help comment to it.
+
+> 
+> > +	mkdir -p $(HOST_DIR) $(TARGET_DIR)
+> > +	$(foreach pkg,$(1),\
+> > +		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/host/ \
+> > +		$(PER_PACKAGE_DIR)/$(pkg)/host/ \
+> > +		$(HOST_DIR)$(sep))
+> > +	$(foreach pkg,$(1),\
+> > +		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/target/ \
+> > +		$(PER_PACKAGE_DIR)/$(pkg)/target/ \
+> > +		$(TARGET_DIR)$(sep))  
+> 
+> Why do you need two 'foreach' calls? Can't the following work?
+> 
+>     $(foreach pkg,$(1),\
+>         rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/host/ \
+>             $(PER_PACKAGE_DIR)/$(pkg)/host/ \
+>             $(HOST_DIR)$(sep) \
+>         rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/target/ \
+>             $(PER_PACKAGE_DIR)/$(pkg)/target/ \
+>             $(TARGET_DIR)$(sep))
+
+As Arnout explained, it looked pretty nice to see the host directory
+being populated first, then the target one. Having a single loop really
+doesn't change anything in terms of the operation cost: we still have
+the same number of rsync's. So I can of side with Arnout here, I like
+the two loops. But if you disagree strongly, I can change it, it's not
+a big/strong feeling on my side.
 
 Thomas
 -- 
