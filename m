@@ -1,182 +1,137 @@
 From: Philipp Richter <richterphilipp.pops@gmail.com>
-Date: Fri, 23 Nov 2018 19:14:26 +0100
-Subject: [Buildroot] [PATCH 2/2] package/qbittorrent: new package
+Date: Fri, 23 Nov 2018 19:37:31 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libtorrent-rasterbar: new
+ package
 In-Reply-To: <20181123181426.16116-1-richterphilipp.pops@gmail.com>
 References: <20181123181426.16116-1-richterphilipp.pops@gmail.com>
-Message-ID: <20181123181426.16116-2-richterphilipp.pops@gmail.com>
+Message-ID: <CA+Vb7hr+CxCZ41E-Jwyad5HZZr=18-duK6nrDnvyFt5w8XBCkw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The qBittorrent project aims to provide
-an open-source software alternative to ?Torrent.
+Hello,
 
-https://www.qbittorrent.org/
+I'm really sorry that I only now get back to you, got distracted and
+forgot to send the revised patch series as promised.
+I followed your recommendations and comments and got rid of the all
+the unneeded options and switches.
+Style check passes and the tests too.
 
-Signed-off-by: Philipp Richter <richterphilipp.pops@gmail.com>
----
- DEVELOPERS                           |  1 +
- package/Config.in                    |  1 +
- package/qbittorrent/Config.in        | 63 ++++++++++++++++++++++++++++
- package/qbittorrent/qbittorrent.hash |  5 +++
- package/qbittorrent/qbittorrent.mk   | 41 ++++++++++++++++++
- 5 files changed, 111 insertions(+)
- create mode 100644 package/qbittorrent/Config.in
- create mode 100644 package/qbittorrent/qbittorrent.hash
- create mode 100644 package/qbittorrent/qbittorrent.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e2bca31f7b..136d689d9d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1700,6 +1700,7 @@ F:	package/zsh/
- 
- N:	Philipp Richter <richterphilipp.pops@gmail.com>
- F:	package/libtorrent-rasterbar/
-+F:	package/qbittorrent/
- 
- N:	Philippe Proulx <eeppeliteloop@gmail.com>
- F:	package/lttng-babeltrace/
-diff --git a/package/Config.in b/package/Config.in
-index fb32ace8e7..50bfa65302 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1951,6 +1951,7 @@ endif
- 	source "package/ptpd2/Config.in"
- 	source "package/pure-ftpd/Config.in"
- 	source "package/putty/Config.in"
-+	source "package/qbittorrent/Config.in"
- 	source "package/quagga/Config.in"
- 	source "package/rabbitmq-server/Config.in"
- 	source "package/radvd/Config.in"
-diff --git a/package/qbittorrent/Config.in b/package/qbittorrent/Config.in
-new file mode 100644
-index 0000000000..c4bdf3a22e
---- /dev/null
-+++ b/package/qbittorrent/Config.in
-@@ -0,0 +1,63 @@
-+comment "qbittorrent needs a toolchain w/ C++, threads, wchar, NPTL, dynamic library, gcc >= 4.8"
-+	depends on !BR2_PACKAGE_QT
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
-+		!BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
-+		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-+
-+config BR2_PACKAGE_QBITTORRENT
-+	bool "qbittorrent"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on BR2_USE_WCHAR
-+	depends on !BR2_STATIC_LIBS
-+	depends on !BR2_PACKAGE_QT
-+	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_BOOST_SYSTEM
-+	select BR2_PACKAGE_BOOST_THREAD
-+	select BR2_PACKAGE_LIBTORRENT_RASTERBAR
-+	select BR2_PACKAGE_QT5
-+	select BR2_PACKAGE_QT5BASE
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  The qBittorrent project aims to provide
-+	  an open-source software alternative to ?Torrent.
-+
-+	  https://www.qbittorrent.org/
-+
-+if BR2_PACKAGE_QBITTORRENT
-+
-+config BR2_PACKAGE_QBITTORRENT_GUI
-+	bool "GUI"
-+	select BR2_PACKAGE_HICOLOR_ICON_THEME
-+	select BR2_PACKAGE_QT5BASE_GUI
-+	select BR2_PACKAGE_QT5BASE_WIDGETS
-+	select BR2_PACKAGE_QT5SVG
-+	help
-+	  Disable for headless mode.
-+	  The target binary will be called qbittorrent-nox.
-+
-+if BR2_PACKAGE_QBITTORRENT_GUI
-+
-+config BR2_PACKAGE_QBITTORRENT_QTDBUS
-+	bool "D-Bus support"
-+	default y
-+	select BR2_PACKAGE_QT5BASE_DBUS
-+	help
-+	  Enable D-Bus support.
-+
-+endif
-+
-+if !BR2_PACKAGE_QBITTORRENT_GUI
-+
-+config BR2_PACKAGE_QBITTORRENT_WEBUI
-+	bool "WebUI"
-+	default y
-+	help
-+	  Enable the WebUI.
-+
-+endif
-+
-+endif
-diff --git a/package/qbittorrent/qbittorrent.hash b/package/qbittorrent/qbittorrent.hash
-new file mode 100644
-index 0000000000..6cc24d2796
---- /dev/null
-+++ b/package/qbittorrent/qbittorrent.hash
-@@ -0,0 +1,5 @@
-+# Locally checked with PGP signature from https://downloads.sourceforge.net/sourceforge/qbittorrent/qbittorrent-4.1.4.tar.xz.asc
-+sha256 5f7b4c5ae891ce7fbab880ff322764a0d433fccf655164f6b98ef08f1ae52386 qbittorrent-4.1.4.tar.xz
-+
-+# Locally calculated
-+sha256 fc68233a17d308ee633aefedbd761c7582ec48557539aca310b4162e54212fe5 COPYING
-diff --git a/package/qbittorrent/qbittorrent.mk b/package/qbittorrent/qbittorrent.mk
-new file mode 100644
-index 0000000000..11523efdbb
---- /dev/null
-+++ b/package/qbittorrent/qbittorrent.mk
-@@ -0,0 +1,41 @@
-+################################################################################
-+#
-+# qbittorrent
-+#
-+################################################################################
-+
-+QBITTORRENT_VERSION = 4.1.4
-+QBITTORRENT_SOURCE = qbittorrent-$(QBITTORRENT_VERSION).tar.xz
-+QBITTORRENT_SITE = https://downloads.sourceforge.net/sourceforge/qbittorrent
-+QBITTORRENT_LICENSE = GPL-2.0
-+QBITTORRENT_LICENSE_FILES = COPYING
-+QBITTORRENT_DEPENDENCIES = host-pkgconf boost libtorrent-rasterbar qt5base zlib
-+QBITTORRENT_CONF_OPTS += --with-boost-libdir=$(STAGING_DIR)/usr/lib
-+QBITTORRENT_INSTALL_TARGET_OPTS = INSTALL_ROOT="$(TARGET_DIR)" install
-+
-+ifeq ($(BR2_PACKAGE_QBITTORRENT_GUI),y)
-+QBITTORRENT_CONF_OPTS += --enable-gui
-+QBITTORRENT_DEPENDENCIES += hicolor-icon-theme qt5svg
-+else
-+QBITTORRENT_CONF_OPTS += --disable-gui
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QBITTORRENT_QTDBUS),y)
-+QBITTORRENT_CONF_OPTS += --enable-qt-dbus
-+else
-+QBITTORRENT_CONF_OPTS += --disable-qt-dbus
-+endif
-+
-+ifeq ($(BR2_INIT_SYSTEMD),y)
-+QBITTORRENT_CONF_OPTS += --enable-systemd
-+else
-+QBITTORRENT_CONF_OPTS += --disable-systemd
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QBITTORRENT_WEBUI),y)
-+QBITTORRENT_CONF_OPTS += --enable-webui
-+else
-+QBITTORRENT_CONF_OPTS += --disable-webui
-+endif
-+
-+$(eval $(autotools-package))
--- 
-2.19.1
+Best Regards,
+Philipp Richter
+On Fri, 23 Nov 2018 at 19:14, Philipp Richter
+<richterphilipp.pops@gmail.com> wrote:
+>
+> libtorrent is a feature complete C++ bittorrent implementation
+> focusing on efficiency and scalability.
+>
+> https://www.libtorrent.org/
+>
+> Signed-off-by: Philipp Richter <richterphilipp.pops@gmail.com>
+> ---
+>  DEVELOPERS                                    |  3 +++
+>  package/Config.in                             |  1 +
+>  package/libtorrent-rasterbar/Config.in        | 21 +++++++++++++++++
+>  .../libtorrent-rasterbar.hash                 |  3 +++
+>  .../libtorrent-rasterbar.mk                   | 23 +++++++++++++++++++
+>  5 files changed, 51 insertions(+)
+>  create mode 100644 package/libtorrent-rasterbar/Config.in
+>  create mode 100644 package/libtorrent-rasterbar/libtorrent-rasterbar.hash
+>  create mode 100644 package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 53467da489..e2bca31f7b 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1698,6 +1698,9 @@ F:        package/psplash/
+>  F:     package/sispmctl/
+>  F:     package/zsh/
+>
+> +N:     Philipp Richter <richterphilipp.pops@gmail.com>
+> +F:     package/libtorrent-rasterbar/
+> +
+>  N:     Philippe Proulx <eeppeliteloop@gmail.com>
+>  F:     package/lttng-babeltrace/
+>  F:     package/lttng-libust/
+> diff --git a/package/Config.in b/package/Config.in
+> index b60e7700ad..fb32ace8e7 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1550,6 +1550,7 @@ menu "Networking"
+>         source "package/libstrophe/Config.in"
+>         source "package/libtirpc/Config.in"
+>         source "package/libtorrent/Config.in"
+> +       source "package/libtorrent-rasterbar/Config.in"
+>         source "package/libupnp/Config.in"
+>         source "package/libupnp18/Config.in"
+>         source "package/libupnpp/Config.in"
+> diff --git a/package/libtorrent-rasterbar/Config.in b/package/libtorrent-rasterbar/Config.in
+> new file mode 100644
+> index 0000000000..30f7726d4a
+> --- /dev/null
+> +++ b/package/libtorrent-rasterbar/Config.in
+> @@ -0,0 +1,21 @@
+> +comment "libtorrent-rasterbar needs a toolchain w/ C++, threads, wchar, gcc >= 4.8"
+> +       depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
+> +               !BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+> +
+> +config BR2_PACKAGE_LIBTORRENT_RASTERBAR
+> +       bool "libtorrent-rasterbar"
+> +       depends on BR2_INSTALL_LIBSTDCPP
+> +       depends on BR2_HOST_GCC_AT_LEAST_4_8
+> +       depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS
+> +       depends on BR2_USE_WCHAR
+> +       select BR2_PACKAGE_BOOST
+> +       select BR2_PACKAGE_BOOST_CHRONO
+> +       select BR2_PACKAGE_BOOST_SYSTEM
+> +       select BR2_PACKAGE_BOOST_RANDOM
+> +       select BR2_PACKAGE_OPENSSL
+> +       help
+> +         libtorrent is a feature complete C++ bittorrent implementation
+> +         focusing on efficiency and scalability.
+> +
+> +         https://www.libtorrent.org/
+> diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.hash b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
+> new file mode 100644
+> index 0000000000..e38c0f4f1d
+> --- /dev/null
+> +++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
+> @@ -0,0 +1,3 @@
+> +# Locally calculated
+> +sha256 7c23deba7fa279825642307587609d51c9935ac7606e0ef2f2d0ba10728b5847 libtorrent-rasterbar-1.1.11.tar.gz
+> +sha256 f3a5dd1558cce616b12edad521427ec8976ce2bb0af33f7f359cfa648bf55ad8 COPYING
+> diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+> new file mode 100644
+> index 0000000000..ee65cc5146
+> --- /dev/null
+> +++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+> @@ -0,0 +1,23 @@
+> +################################################################################
+> +#
+> +# libtorrent-rasterbar
+> +#
+> +################################################################################
+> +
+> +LIBTORRENT_RASTERBAR_VERSION = 1.1.11
+> +LIBTORRENT_RASTERBAR_SITE = https://github.com/arvidn/libtorrent/releases/download/libtorrent_$(subst .,_,$(LIBTORRENT_RASTERBAR_VERSION))
+> +LIBTORRENT_RASTERBAR_LICENSE = BSD-2-Clause
+> +LIBTORRENT_RASTERBAR_LICENSE_FILES = COPYING
+> +LIBTORRENT_RASTERBAR_DEPENDENCIES = host-pkgconf boost openssl
+> +LIBTORRENT_RASTERBAR_INSTALL_STAGING = YES
+> +LIBTORRENT_RASTERBAR_CONF_OPTS += --with-boost-libdir=$(STAGING_DIR)/usr/lib --disable-invariant-checks
+> +LIBTORRENT_RASTERBAR_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
+> +
+> +ifeq ($(BR2_ENABLE_LOCALE)$(BR2_PACKAGE_LIBICONV),y)
+> +LIBTORRENT_RASTERBAR_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+> +LIBTORRENT_RASTERBAR_CONF_OPTS += --with-libiconv
+> +else
+> +LIBTORRENT_RASTERBAR_CONF_OPTS += --without-libiconv
+> +endif
+> +
+> +$(eval $(autotools-package))
+> --
+> 2.19.1
+>
