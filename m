@@ -1,88 +1,49 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 23 Nov 2018 17:14:49 +0100
-Subject: [Buildroot] [PATCH/next 1/1] trinity: fix build with kernel headers
- >= 4.19
-Message-ID: <20181123161449.24504-1-fontaine.fabrice@gmail.com>
+Date: Fri, 23 Nov 2018 17:24:48 +0100
+Subject: [Buildroot] [PATCH/next 1/1] linuxptp: bump to version 2.0
+Message-ID: <20181123162448.26875-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Retrieve patch from upstream to fix build with kernel headers >= 4.19
-because VIDIOC_RESERVED has been removed since
-https://github.com/torvalds/linux/commit/ea8532daee31bc72abfbc9ca7a43cbec0f6c05af
-
-Fixes:
- - http://autobuild.buildroot.org/results/ddf6b1cf4e4727928ffba7387953c4cc9719df49
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0004-Check-if-VIDIOC_RESERVED-is-defined.patch | 56 ++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
- create mode 100644 package/trinity/0004-Check-if-VIDIOC_RESERVED-is-defined.patch
+ package/linuxptp/linuxptp.hash | 8 ++++----
+ package/linuxptp/linuxptp.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/trinity/0004-Check-if-VIDIOC_RESERVED-is-defined.patch b/package/trinity/0004-Check-if-VIDIOC_RESERVED-is-defined.patch
-new file mode 100644
-index 0000000000..54f8bea63c
---- /dev/null
-+++ b/package/trinity/0004-Check-if-VIDIOC_RESERVED-is-defined.patch
-@@ -0,0 +1,56 @@
-+From a5f32b9714613404e9f4699aaaad720f2bb033b4 Mon Sep 17 00:00:00 2001
-+From: Vinson Lee <vlee@freedesktop.org>
-+Date: Thu, 23 Aug 2018 22:28:49 +0000
-+Subject: [PATCH] Check if VIDIOC_RESERVED is defined.
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+VIDIOC_RESERVED was removed in Linux 4.19.
-+
-+commit ea8532daee31bc72abfbc9ca7a43cbec0f6c05af
-+Author: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-+Date:   Wed May 30 11:07:05 2018 -0400
-+
-+    media: videodev2: get rid of VIDIOC_RESERVED
-+
-+    While this ioctl is there at least since Kernel 2.6.12-rc2, it
-+    was never used by any upstream driver.
-+
-+    Get rid of it.
-+
-+    Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-+
-+This patch fixes this build error.
-+
-+  CC	ioctls/videodev2.o
-+In file included from ioctls/videodev2.c:4:
-+ioctls/videodev2.c:8:8: error: ?VIDIOC_RESERVED? undeclared here (not in a function); did you mean ?VIDIOC_G_STD??
-+  IOCTL(VIDIOC_RESERVED),
-+        ^~~~~~~~~~~~~~~
-+include/ioctls.h:53:15: note: in definition of macro ?IOCTL?
-+  { .request = _request, .name = #_request, }
-+               ^~~~~~~~
-+
-+Signed-off-by: Vinson Lee <vlee@freedesktop.org>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/kernelslacker/trinity/commit/a5f32b9714613404e9f4699aaaad720f2bb033b4]
-+---
-+ ioctls/videodev2.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/ioctls/videodev2.c b/ioctls/videodev2.c
-+index f7183f29..67089abf 100644
-+--- a/ioctls/videodev2.c
-++++ b/ioctls/videodev2.c
-+@@ -5,7 +5,9 @@
-+ 
-+ static const struct ioctl videodev2_ioctls[] = {
-+ 	IOCTL(VIDIOC_QUERYCAP),
-++#ifdef VIDIOC_RESERVED
-+ 	IOCTL(VIDIOC_RESERVED),
-++#endif
-+ 	IOCTL(VIDIOC_ENUM_FMT),
-+ 	IOCTL(VIDIOC_G_FMT),
-+ 	IOCTL(VIDIOC_S_FMT),
+diff --git a/package/linuxptp/linuxptp.hash b/package/linuxptp/linuxptp.hash
+index 9e738323d2..5e6c7741cd 100644
+--- a/package/linuxptp/linuxptp.hash
++++ b/package/linuxptp/linuxptp.hash
+@@ -1,9 +1,9 @@
+-# From https://sourceforge.net/projects/linuxptp/files/v1.9/
+-sha1 6eb9dddfa54ce3154a6f2035a1b18fe66459b50f  linuxptp-1.9.2.tgz
+-md5 7c6672c59b888fa92ffd31398221b243  linuxptp-1.9.2.tgz
++# From https://sourceforge.net/projects/linuxptp/files/v2.0/
++sha1 592ca42c6146a79c1fcabed7c19fa7af4803d4f6  linuxptp-2.0.tgz
++md5 d8bb7374943bb747db7786ac26f17f11  linuxptp-2.0.tgz
+ 
+ # Locally computed:
+-sha256 7f662e65c66c37ff211dc525476626875c2b74162ded05c8a25d036fb963b8d0  linuxptp-1.9.2.tgz
++sha256 0a24d9401e87d4af023d201e234d91127d82c350daad93432106284aa9459c7d  linuxptp-2.0.tgz
+ 
+ # Hash for license file:
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/linuxptp/linuxptp.mk b/package/linuxptp/linuxptp.mk
+index 7086c47093..c304ff6d6e 100644
+--- a/package/linuxptp/linuxptp.mk
++++ b/package/linuxptp/linuxptp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LINUXPTP_VERSION = 1.9.2
++LINUXPTP_VERSION = 2.0
+ LINUXPTP_SOURCE = linuxptp-$(LINUXPTP_VERSION).tgz
+ LINUXPTP_SITE = http://downloads.sourceforge.net/linuxptp
+ LINUXPTP_LICENSE = GPL-2.0+
 -- 
 2.14.1
