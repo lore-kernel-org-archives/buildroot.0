@@ -1,51 +1,127 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 23 Nov 2018 10:56:31 +0100
-Subject: [Buildroot] [PATCH v1] imx-usb-loader: bump version to 4aa9809
-In-Reply-To: <20181122193635.8550-1-ps.report@gmx.net>
-References: <20181122193635.8550-1-ps.report@gmx.net>
-Message-ID: <20181123105631.33936202@windsurf>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 23 Nov 2018 12:05:45 +0200
+Subject: [Buildroot] [PATCH 1/5] boot/optee-os: OP-TEE secure world
+In-Reply-To: <CAN5uoS_NmE9yup0vd-39aqbF9BoCkPE-LZ+=NAmeWkef_n-wpA@mail.gmail.com>
+References: <1542900177-17343-1-git-send-email-etienne.carriere@linaro.org>
+ <87tvk8euhw.fsf@tkos.co.il>
+ <CAN5uoS_NmE9yup0vd-39aqbF9BoCkPE-LZ+=NAmeWkef_n-wpA@mail.gmail.com>
+Message-ID: <87r2fcds7a.fsf@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Etienne,
 
-On Thu, 22 Nov 2018 20:36:35 +0100, Peter Seiderer wrote:
-> Fixes imx-usb-loader usability for i.MX6 QP (failes with the current
-> version/patch stack).
-> 
-> Changes since e539461:
-> 
->   9a88413 portable.h: fix build with gcc older than 4.8
->   bf25425 add mx6ull_usb_work.conf
->   1041959 correct commit "portable.h: fix build with gcc older than 4.8"
->   f000130 mx6ull_usb_work.conf: fix copy/paste error in comment
->   e99a093 portable: fix typo s/&&/&/ in BE16 fix
->   eed0280 portable: use __builtin_bswap16 for BE16 if >= 4.8 GNUC
->   95fe112 imx_usb: fix type on imx_usb help
->   4aa9809 imx_uart: fix type on help
-> 
-> Remove upstream applied patch ([1]):
-> 
->  - 0001-portable.h-fix-build-with-gcc-older-than-4.8.patch
-> 
-> [1] https://github.com/boundarydevices/imx_usb_loader/commit/9a88413996c6cfa8b903641f2f52b3fe487595cc
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  ....h-fix-build-with-gcc-older-than-4.8.patch | 47 -------------------
->  package/imx-usb-loader/imx-usb-loader.hash    |  2 +-
->  package/imx-usb-loader/imx-usb-loader.mk      |  3 +-
->  3 files changed, 3 insertions(+), 49 deletions(-)
->  delete mode 100644 package/imx-usb-loader/0001-portable.h-fix-build-with-gcc-older-than-4.8.patch
+Etienne Carriere writes:
+> On Thu, 22 Nov 2018 at 21:18, Baruch Siach <baruch@tkos.co.il> wrote:
+>> Thanks for your contribution. I have a few comments below.
+>>
+>> Etienne Carriere writes:
+>> > OP-TEE OS is maintained by the OP-TEE project. It provides an
+>> > open source solution for development and integration of secure
+>> > services for Armv7-A and Armv8-A CPU based platforms supporting
+>> > the TrustZone technology. This technology enables CPUs to
+>> > concurrently host a secure world as the OP-TEE OS and a non-secure
+>> > world as a Linux based OS.
+>> >
+>> > The OP-TEE project maintains other packages to leverage OP-TEE on
+>> > Linux kernel based OSes. An OP-TEE interface driver is available
+>> > in the Linux kernel since 4.12 upon CONFIG_OPTEE.
+>> >
+>> > https://www.op-tee.org/
+>> > https://github.com/OP-TEE/optee_os
+>> >
+>> > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+>>
+>> ...
+>>
+>> > diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
+>> > new file mode 100644
+>> > index 0000000..5968531
+>> > --- /dev/null
+>> > +++ b/boot/optee-os/Config.in
+>> > @@ -0,0 +1,102 @@
+>> > +config BR2_TARGET_OPTEE_OS
+>> > +     bool "optee_os"
+>> > +     depends on BR2_aarch64 || BR2_arm
+>> > +     select BR2_PACKAGE_OPENSSL # host tool
+>>
+>> Which host? Is that the host below which OPTEE OS runs? This is usually
+>> called target in the Buildroot lingo. Please clarify in a comment.
+>
+> I see. Well, it is really the host here: OpenSSL is required to build
+> the OPTEE OS binaries, it is not required in the target.
+> I found such "# host tool" comment in some packages and though it was
+> the shortest explicit way to highlight the deps.
 
-Since this fixes some actual runtime issues, and the number of commits
-upstream is very limited, I've applied to master. Thanks!
+Your 'select' enables the target OpenSSL, which is not what you
+need. You only need to add host-openssl to the _DEPENDENCIES of your
+package. No need to 'select' the host package.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Make sure to test on a host that has no openssl tools installed by the
+distro. Your build test succeeds because your package is actually using
+your distro installed tools. That didn't work for your other dependency
+...
+
+> By the way, I have a questions on
+> optee-os also requires the Crypto module from python to build the
+> optee-os target binaries.
+> It failed with trace:
+>      File "scripts/pem_to_pub_c.py", line 23, in main
+>        from Crypto.PublicKey import RSA
+>    ImportError: No module named Crypto.PublicKey
+>
+> I tried to resolve this by adding "select BR2_PACKAGE_PYTHON_PYCRYPTO"
+> here but it did not solve the issue.
+> Moreover, I had to also enable some configs to get pycrypto to build:
+>  BR2_PACKAGE_PYTHON=y
+>  BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+>  BR2_USE_WCHAR=y
+> Finally, i worked around the issue by patching optee-os filetree: port
+> related scripts to python3
+>
+> How do you think should have I done to get Crypto module supported for
+> optee-os build?
+
+Here again BR2_PACKAGE_PYTHON_PYCRYPTO enables the target package, while
+you need the host package. The solutions is the same. Add
+host-python-pycrypto to your _DEPENDENCIES.
+
+>> Is that a build time dependency? If so you need to add openssl to
+>> _DEPENDENCIES.
+>
+> Ok. I understand I need both: BR2_<dep>=y  + add
+> <package>_DEPENDENCIES+= <dep>.
+
+For target package you need both. For host packages you don't need BR2_<dep>.
+
+>> > +     help
+>> > +       OP-TEE OS provides the secure world boot image and the trust
+>> > +       application development kit of the OP-TEE project. OP-TEE OS
+>> > +       also provides generic trusted application one can embedded
+>> > +       into its system.
+>> > +
+>> > +       http://github.org/OP-TEE/optee_os
+>> > +
+>> > +if BR2_TARGET_OPTEE_OS
+>> > +
+>> > +choice
+>> > +     prompt "OP-TEE OS version"
+>> > +     default BR2_TARGET_OPTEE_OS_LATEST
+>> > +     help
+>> > +       Select the version of OP-TEE OS you want to use
+>>
+>> Is there a practical need to support selection separate version
+>> selection for each OPTEE component? If not then I think this version
+>> selection should apply to all other components.
+>
+> Your absolutely right. I will see how to handle that.
+
+baruch
+
+--
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
