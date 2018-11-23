@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 23 Nov 2018 22:02:04 +0100
-Subject: [Buildroot] [PATCH/next 1/1] sdl2: fix build with
- --disable-threads
-In-Reply-To: <20181121220923.24849-1-fontaine.fabrice@gmail.com>
-References: <20181121220923.24849-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181123220204.26d38eb5@windsurf>
+Date: Fri, 23 Nov 2018 22:04:03 +0100
+Subject: [Buildroot] [PATCH] qemu: add an option to enable seccomp
+In-Reply-To: <20181120131042.6468-1-casantos@datacom.com.br>
+References: <20181120131042.6468-1-casantos@datacom.com.br>
+Message-ID: <20181123220403.059e1442@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,35 +12,49 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 21 Nov 2018 23:09:23 +0100, Fabrice Fontaine wrote:
-> SDL_LinuxSetThreadPriority() has been added since version 2.0.9 and
-> https://github.com/SDL-mirror/SDL/commit/f25a7fa870bdceb339e5105973f689606bcb9086
+On Tue, 20 Nov 2018 11:10:42 -0200, Carlos Santos wrote:
+> It is required to resume working on the forthcoming libvirt package
+> after a long test period (https://patchwork.ozlabs.org/patch/841613).
 > 
-> However, this function is used in src/dynapi/SDL_dynapi_procs.h even
-> when SDL_THREADS_DISABLED
+> Leave it disabled by default, for backward compatibility.
 > 
-> However, when SDL_THREADS_DISABLED is set, SDL_LinuxSetThreadPriority is
-> not defined because thread/pthread/SDL_systhread.c is not built
-> 
-> So check SDL_THREADS_DISABLED in addition to __LINUX__
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/539cb9ab6c605dc6be73ebe90debab1a998f2451
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 > ---
->  .../0001-fix-build-with-disable-threads.patch | 63 +++++++++++++++++++
->  1 file changed, 63 insertions(+)
->  create mode 100644 package/sdl2/0001-fix-build-with-disable-threads.patch
+>  package/qemu/Config.in | 13 +++++++++++++
+>  package/qemu/qemu.mk   |  8 +++++++-
+>  2 files changed, 20 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+> index 33d4cccd7b..032d2ccafe 100644
+> --- a/package/qemu/Config.in
+> +++ b/package/qemu/Config.in
+> @@ -137,6 +137,19 @@ config BR2_PACKAGE_QEMU_FDT
+>  	  Say 'y' here to have QEMU capable of constructing Device
+>  	  Trees, and passing them to the VMs.
+>  
+> +config BR2_PACKAGE_QEMU_SECCOMP
+> +	bool "Enable seccomp"
+> +	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
+> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+> +	select BR2_PACKAGE_LIBSECCOMP
+> +	help
+> +	  Enable support for the Linux Kernel's syscall filtering
+> +	  mechanism.
 
-I like how the inverted SDL_THREADS_DISABLED macro makes the code
-readable. !SDL_THREADS_DISABLED means thread support is enabled...
+I don't think we want to introduce an explicit option for this, just
+enable seccomp support when BR2_PACKAGE_LIBSSECOMP=y.
 
-But anyway, that's not your fault, that's how the existing SDL2 code
-is. So applied to next, thanks! Please make sure you submit this
-upstream.
+> +comment "seccomp needs a toolchain w/ headers >= 3.12"
+> +	depends on !BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS || \
+> +		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+> +
+>  comment "FDT support needs a toolchain w/ dynamic library"
+>  	depends on BR2_STATIC_LIBS
 
-Thanks,
+This comment should anyway have remained close to the
+BR2_PACKAGE_QEMU_FDT option.
+
+Thanks!
 
 Thomas
 -- 
