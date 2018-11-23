@@ -1,67 +1,136 @@
-From: Marcin =?utf-8?Q?Niestr=C3=B3j?= <m.niestroj@grinn-global.com>
-Date: Fri, 23 Nov 2018 11:12:57 +0100
-Subject: [Buildroot] [PATCH] configs/chiliboard: remove explicit getty
- port
-In-Reply-To: <66d34c66-c928-e00a-d59a-e09553fc7638@mind.be>
-References: <20181121210142.21769-1-m.niestroj@grinn-global.com>
- <66d34c66-c928-e00a-d59a-e09553fc7638@mind.be>
-Message-ID: <87wop4w192.fsf@grinn-global.com>
+From: Etienne Carriere <etienne.carriere@linaro.org>
+Date: Fri, 23 Nov 2018 11:13:56 +0100
+Subject: [Buildroot] [PATCH 1/5] boot/optee-os: OP-TEE secure world
+In-Reply-To: <87r2fcds7a.fsf@tkos.co.il>
+References: <1542900177-17343-1-git-send-email-etienne.carriere@linaro.org>
+ <87tvk8euhw.fsf@tkos.co.il>
+ <CAN5uoS_NmE9yup0vd-39aqbF9BoCkPE-LZ+=NAmeWkef_n-wpA@mail.gmail.com>
+ <87r2fcds7a.fsf@tkos.co.il>
+Message-ID: <CAN5uoS9rfxSg0QvWn37c2b6rk7847n0E7G-yC-PYSJfx46iWtw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
-
-Arnout Vandecappelle <arnout@mind.be> writes:
-
-> On 21/11/2018 22:01, Marcin Niestroj wrote:
->> Using default value (console) works well, so there is no reason to set
->> tty explicitly. Additionally after selecting newer kernels (tested
->> with 4.19 and 4.20-rc3) ttyO0 no longer works due to missing device
->> node.
+On Fri, 23 Nov 2018 at 11:05, Baruch Siach <baruch@tkos.co.il> wrote:
 >
->  Actually, does it still work with the 4.16 kernel? IIRC the ttyO were replaced
-> by the standard ttyS ages ago (like, 3.18 or something like that). If it doesn't
-> work with the 4.16 kernel, it should be applied to master.
+> Hi Etienne,
 >
-
-Yes, it still works with 4.16. There are /dev/ttyS[0-5] and /dev/ttyO0
-nodes. In case of 4.19 and 4.20 there is no /dev/ttyO0 anymore, but I
-did not get into the exact reason what changed. I just checked how other
-boards configure getty in Buildroot and it turns out most of them leave
-the default value.
-
->  Anyway,
+> Etienne Carriere writes:
+> > On Thu, 22 Nov 2018 at 21:18, Baruch Siach <baruch@tkos.co.il> wrote:
+> >> Thanks for your contribution. I have a few comments below.
+> >>
+> >> Etienne Carriere writes:
+> >> > OP-TEE OS is maintained by the OP-TEE project. It provides an
+> >> > open source solution for development and integration of secure
+> >> > services for Armv7-A and Armv8-A CPU based platforms supporting
+> >> > the TrustZone technology. This technology enables CPUs to
+> >> > concurrently host a secure world as the OP-TEE OS and a non-secure
+> >> > world as a Linux based OS.
+> >> >
+> >> > The OP-TEE project maintains other packages to leverage OP-TEE on
+> >> > Linux kernel based OSes. An OP-TEE interface driver is available
+> >> > in the Linux kernel since 4.12 upon CONFIG_OPTEE.
+> >> >
+> >> > https://www.op-tee.org/
+> >> > https://github.com/OP-TEE/optee_os
+> >> >
+> >> > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+> >>
+> >> ...
+> >>
+> >> > diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
+> >> > new file mode 100644
+> >> > index 0000000..5968531
+> >> > --- /dev/null
+> >> > +++ b/boot/optee-os/Config.in
+> >> > @@ -0,0 +1,102 @@
+> >> > +config BR2_TARGET_OPTEE_OS
+> >> > +     bool "optee_os"
+> >> > +     depends on BR2_aarch64 || BR2_arm
+> >> > +     select BR2_PACKAGE_OPENSSL # host tool
+> >>
+> >> Which host? Is that the host below which OPTEE OS runs? This is usually
+> >> called target in the Buildroot lingo. Please clarify in a comment.
+> >
+> > I see. Well, it is really the host here: OpenSSL is required to build
+> > the OPTEE OS binaries, it is not required in the target.
+> > I found such "# host tool" comment in some packages and though it was
+> > the shortest explicit way to highlight the deps.
 >
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Your 'select' enables the target OpenSSL, which is not what you
+> need. You only need to add host-openssl to the _DEPENDENCIES of your
+> package. No need to 'select' the host package.
+>
+> Make sure to test on a host that has no openssl tools installed by the
+> distro. Your build test succeeds because your package is actually using
+> your distro installed tools. That didn't work for your other dependency
+> ...
+>
+> > By the way, I have a questions on
+> > optee-os also requires the Crypto module from python to build the
+> > optee-os target binaries.
+> > It failed with trace:
+> >      File "scripts/pem_to_pub_c.py", line 23, in main
+> >        from Crypto.PublicKey import RSA
+> >    ImportError: No module named Crypto.PublicKey
+> >
+> > I tried to resolve this by adding "select BR2_PACKAGE_PYTHON_PYCRYPTO"
+> > here but it did not solve the issue.
+> > Moreover, I had to also enable some configs to get pycrypto to build:
+> >  BR2_PACKAGE_PYTHON=y
+> >  BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> >  BR2_USE_WCHAR=y
+> > Finally, i worked around the issue by patching optee-os filetree: port
+> > related scripts to python3
+> >
+> > How do you think should have I done to get Crypto module supported for
+> > optee-os build?
+>
+> Here again BR2_PACKAGE_PYTHON_PYCRYPTO enables the target package, while
+> you need the host package. The solutions is the same. Add
+> host-python-pycrypto to your _DEPENDENCIES.
+>
+> >> Is that a build time dependency? If so you need to add openssl to
+> >> _DEPENDENCIES.
+> >
+> > Ok. I understand I need both: BR2_<dep>=y  + add
+> > <package>_DEPENDENCIES+= <dep>.
+>
+> For target package you need both. For host packages you don't need BR2_<dep>.
 
-Thanks!
+Ok Baruch,
+Thanks a lot for the details.
 
-Regards,
-Marcin
+etienne
 
 >
->  Regards,
->  Arnout
+> >> > +     help
+> >> > +       OP-TEE OS provides the secure world boot image and the trust
+> >> > +       application development kit of the OP-TEE project. OP-TEE OS
+> >> > +       also provides generic trusted application one can embedded
+> >> > +       into its system.
+> >> > +
+> >> > +       http://github.org/OP-TEE/optee_os
+> >> > +
+> >> > +if BR2_TARGET_OPTEE_OS
+> >> > +
+> >> > +choice
+> >> > +     prompt "OP-TEE OS version"
+> >> > +     default BR2_TARGET_OPTEE_OS_LATEST
+> >> > +     help
+> >> > +       Select the version of OP-TEE OS you want to use
+> >>
+> >> Is there a practical need to support selection separate version
+> >> selection for each OPTEE component? If not then I think this version
+> >> selection should apply to all other components.
+> >
+> > Your absolutely right. I will see how to handle that.
 >
->>
->> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
->> ---
->>  configs/grinn_chiliboard_defconfig | 1 -
->>  1 file changed, 1 deletion(-)
->>
->> diff --git a/configs/grinn_chiliboard_defconfig b/configs/grinn_chiliboard_defconfig
->> index 81d7bae911..84f24e1cc4 100644
->> --- a/configs/grinn_chiliboard_defconfig
->> +++ b/configs/grinn_chiliboard_defconfig
->> @@ -1,7 +1,6 @@
->>  BR2_arm=y
->>  BR2_cortex_a8=y
->>  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
->> -BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
->>  BR2_SYSTEM_DHCP="eth0"
->>  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/grinn/chiliboard/post-image.sh"
->>  BR2_LINUX_KERNEL=y
->>
+> baruch
+>
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
