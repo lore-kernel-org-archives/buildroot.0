@@ -1,136 +1,195 @@
-From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Fri, 23 Nov 2018 11:13:56 +0100
-Subject: [Buildroot] [PATCH 1/5] boot/optee-os: OP-TEE secure world
-In-Reply-To: <87r2fcds7a.fsf@tkos.co.il>
+From: Shyam Saini <shyam@amarulasolutions.com>
+Date: Fri, 23 Nov 2018 17:18:03 +0530
+Subject: [Buildroot] [PATCH 2/5] optee-client: new package
+In-Reply-To: <1542900177-17343-2-git-send-email-etienne.carriere@linaro.org>
 References: <1542900177-17343-1-git-send-email-etienne.carriere@linaro.org>
- <87tvk8euhw.fsf@tkos.co.il>
- <CAN5uoS_NmE9yup0vd-39aqbF9BoCkPE-LZ+=NAmeWkef_n-wpA@mail.gmail.com>
- <87r2fcds7a.fsf@tkos.co.il>
-Message-ID: <CAN5uoS9rfxSg0QvWn37c2b6rk7847n0E7G-yC-PYSJfx46iWtw@mail.gmail.com>
+ <1542900177-17343-2-git-send-email-etienne.carriere@linaro.org>
+Message-ID: <CA+drQ_OFmiAffJO_7ZqeNNvjE75ZJ5zOEH1BCYANAr5vpTqZ2w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 23 Nov 2018 at 11:05, Baruch Siach <baruch@tkos.co.il> wrote:
+On Thu, Nov 22, 2018 at 8:53 PM Etienne Carriere
+<etienne.carriere@linaro.org> wrote:
 >
-> Hi Etienne,
+> OP-TEE client API library and supplicant daemon from the
+> OP-TEE project.
 >
-> Etienne Carriere writes:
-> > On Thu, 22 Nov 2018 at 21:18, Baruch Siach <baruch@tkos.co.il> wrote:
-> >> Thanks for your contribution. I have a few comments below.
-> >>
-> >> Etienne Carriere writes:
-> >> > OP-TEE OS is maintained by the OP-TEE project. It provides an
-> >> > open source solution for development and integration of secure
-> >> > services for Armv7-A and Armv8-A CPU based platforms supporting
-> >> > the TrustZone technology. This technology enables CPUs to
-> >> > concurrently host a secure world as the OP-TEE OS and a non-secure
-> >> > world as a Linux based OS.
-> >> >
-> >> > The OP-TEE project maintains other packages to leverage OP-TEE on
-> >> > Linux kernel based OSes. An OP-TEE interface driver is available
-> >> > in the Linux kernel since 4.12 upon CONFIG_OPTEE.
-> >> >
-> >> > https://www.op-tee.org/
-> >> > https://github.com/OP-TEE/optee_os
-> >> >
-> >> > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-> >>
-> >> ...
-> >>
-> >> > diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
-> >> > new file mode 100644
-> >> > index 0000000..5968531
-> >> > --- /dev/null
-> >> > +++ b/boot/optee-os/Config.in
-> >> > @@ -0,0 +1,102 @@
-> >> > +config BR2_TARGET_OPTEE_OS
-> >> > +     bool "optee_os"
-> >> > +     depends on BR2_aarch64 || BR2_arm
-> >> > +     select BR2_PACKAGE_OPENSSL # host tool
-> >>
-> >> Which host? Is that the host below which OPTEE OS runs? This is usually
-> >> called target in the Buildroot lingo. Please clarify in a comment.
-> >
-> > I see. Well, it is really the host here: OpenSSL is required to build
-> > the OPTEE OS binaries, it is not required in the target.
-> > I found such "# host tool" comment in some packages and though it was
-> > the shortest explicit way to highlight the deps.
+> The package is added to the Security menu of BR configuration.
 >
-> Your 'select' enables the target OpenSSL, which is not what you
-> need. You only need to add host-openssl to the _DEPENDENCIES of your
-> package. No need to 'select' the host package.
+> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+> ---
+>  package/Config.in                      |  1 +
+>  package/optee-client/Config.in         | 62 ++++++++++++++++++++++++++++++++++
+>  package/optee-client/S30optee          | 26 ++++++++++++++
+>  package/optee-client/optee-client.hash |  4 +++
+>  package/optee-client/optee-client.mk   | 31 +++++++++++++++++
+>  5 files changed, 124 insertions(+)
+>  create mode 100644 package/optee-client/Config.in
+>  create mode 100644 package/optee-client/S30optee
+>  create mode 100644 package/optee-client/optee-client.hash
+>  create mode 100644 package/optee-client/optee-client.mk
 >
-> Make sure to test on a host that has no openssl tools installed by the
-> distro. Your build test succeeds because your package is actually using
-> your distro installed tools. That didn't work for your other dependency
-> ...
+> diff --git a/package/Config.in b/package/Config.in
+> index b60e770..8c3b1bf 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -2047,6 +2047,7 @@ endmenu
 >
-> > By the way, I have a questions on
-> > optee-os also requires the Crypto module from python to build the
-> > optee-os target binaries.
-> > It failed with trace:
-> >      File "scripts/pem_to_pub_c.py", line 23, in main
-> >        from Crypto.PublicKey import RSA
-> >    ImportError: No module named Crypto.PublicKey
-> >
-> > I tried to resolve this by adding "select BR2_PACKAGE_PYTHON_PYCRYPTO"
-> > here but it did not solve the issue.
-> > Moreover, I had to also enable some configs to get pycrypto to build:
-> >  BR2_PACKAGE_PYTHON=y
-> >  BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-> >  BR2_USE_WCHAR=y
-> > Finally, i worked around the issue by patching optee-os filetree: port
-> > related scripts to python3
-> >
-> > How do you think should have I done to get Crypto module supported for
-> > optee-os build?
->
-> Here again BR2_PACKAGE_PYTHON_PYCRYPTO enables the target package, while
-> you need the host package. The solutions is the same. Add
-> host-python-pycrypto to your _DEPENDENCIES.
->
-> >> Is that a build time dependency? If so you need to add openssl to
-> >> _DEPENDENCIES.
-> >
-> > Ok. I understand I need both: BR2_<dep>=y  + add
-> > <package>_DEPENDENCIES+= <dep>.
->
-> For target package you need both. For host packages you don't need BR2_<dep>.
+>  menu "Security"
+>         source "package/checkpolicy/Config.in"
+> +       source "package/optee-client/Config.in"
+>         source "package/paxtest/Config.in"
+>         source "package/policycoreutils/Config.in"
+>         source "package/refpolicy/Config.in"
+> diff --git a/package/optee-client/Config.in b/package/optee-client/Config.in
+> new file mode 100644
+> index 0000000..c3f28c1
+> --- /dev/null
+> +++ b/package/optee-client/Config.in
+> @@ -0,0 +1,62 @@
+> +config BR2_PACKAGE_OPTEE_CLIENT
+> +       bool "Embed OP-TEE client"
+> +       help
+> +         Enable the OP-TEE client package that brings non-secure
+> +         client application resources for OP-TEE support. OP-TEE
+> +         client is a component delivered by the OP-TEE project.
+> +
+> +         https://github.com/OP-TEE/optee_client
+> +
+> +         The client API library allows application to invoke
+> +         trusted applications hosted in the OP-TEE OS secure world.
+> +         The supplicant provides services hosted by the non-secure
+> +         world and invoked by the secure world.
+> +
+> +if BR2_PACKAGE_OPTEE_CLIENT
+> +
+> +choice
+> +       prompt "OP-TEE client version"
+> +       default BR2_PACKAGE_OPTEE_CLIENT_LATEST
+> +       help
+> +         Select the version of OP-TEE client you want to use
+> +
+> +config BR2_PACKAGE_OPTEE_CLIENT_LATEST
+> +       bool "sync with latest registered release tag"
+> +       help
+> +         Sync on latest release tag. This currently fetches the
+> +         latest registered release tag from the OP-TEE official
+> +         Git repository.
+> +
+> +config BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_GIT
+> +       bool "sync with a specific Git"
+> +       help
+> +         Sync with a specific OP-TEE Git repository.
+> +
+> +endchoice
+> +
+> +config BR2_PACKAGE_OPTEE_CLIENT_VERSION
+> +       string
+> +       default "3.3.0"         if BR2_PACKAGE_OPTEE_CLIENT_LATEST
+> +       default BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_REPO_VERSION \
+> +                               if BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_GIT
+> +       help
+> +         Reference in the target Git repository to sync with.
+> +
+> +if BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_GIT
+> +
+> +config BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_REPO_URL
+> +       string "Git repository site"
+> +       help
+> +         Specific location of the reference source tree Git
+> +         repository.
+> +
+> +config BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_REPO_VERSION
+> +       string "target reference to pull in the Git repository"
+> +       help
+> +         Package version reference to sync with. As source file
+> +         reference is a Git repository, the version reference can
+> +         be any Git reference as a tag or a sha1.
+> +
+> +endif
+> +
+> +endif #BR2_PACKAGE_OPTEE_CLIENT
+> diff --git a/package/optee-client/S30optee b/package/optee-client/S30optee
+> new file mode 100644
+> index 0000000..c893243
+> --- /dev/null
+> +++ b/package/optee-client/S30optee
+> @@ -0,0 +1,26 @@
+> +#!/bin/sh
+> +#
+> +# /etc/init.d/optee
+> +#
+> +# Start/stop tee-supplicant (OP-TEE normal world daemon)
+> +#
+> +case "$1" in
+> +    start)
+> +       if [ -e /usr/sbin/tee-supplicant -a -e /dev/teepriv0 ]; then
+> +               echo "Starting tee-supplicant..."
+> +               /usr/sbin/tee-supplicant &
+> +               exit 0
+> +       else
+> +               echo "tee-supplicant or TEE device not found"
+> +               exit 1
+> +       fi
+> +
+> +        ;;
+> +    stop)
+> +       killall tee-supplicant
+> +       ;;
+> +    status)
+> +       cat /dev/teepriv0 2>&1 | grep -q "Device or resource busy" || not="not "
+> +       echo "tee-supplicant is ${not}active"
+> +       ;;
+> +esac
+> diff --git a/package/optee-client/optee-client.hash b/package/optee-client/optee-client.hash
+> new file mode 100644
+> index 0000000..ed7bf4e
+> --- /dev/null
+> +++ b/package/optee-client/optee-client.hash
+> @@ -0,0 +1,4 @@
+> +# From https://github.com/OP-TEE/optee_client/archive/3.3.0.tar.gz
+> +sha256 63af1567fdcdbe28b45be274266a89aa81bef3d0fd8ec5a6eb680046a92e1177  optee-client-3.3.0.tar.gz
+> +# Locally computed
+> +sha256 fda8385993f112d7ca61b88b54ba5b4cbeec7e43a0f9b317d5186703c1985e8f  LICENSE
+> diff --git a/package/optee-client/optee-client.mk b/package/optee-client/optee-client.mk
+> new file mode 100644
+> index 0000000..e856ca5
+> --- /dev/null
+> +++ b/package/optee-client/optee-client.mk
+> @@ -0,0 +1,31 @@
+> +################################################################################
+> +#
+> +# optee-client
+> +#
+> +################################################################################
+> +
+> +OPTEE_CLIENT_VERSION = $(call qstrip,$(BR2_PACKAGE_OPTEE_CLIENT_VERSION))
+> +OPTEE_CLIENT_LICENSE = BSD-3-Clause
+> +OPTEE_CLIENT_LICENSE_FILES = LICENSE
+> +
+> +ifeq ($(BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_GIT),y)
+> +OPTEE_CLIENT_SITE = $(call qstrip,$(BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_REPO_URL))
+> +OPTEE_CLIENT_SITE_METHOD = git
+> +BR_NO_CHECK_HASH_FOR += $(OPTEE_CLIENT_SOURCE)
+> +else
+> +OPTEE_CLIENT_SITE = $(call github,OP-TEE,optee_client,$(OPTEE_CLIENT_VERSION))
+> +endif
+> +
+> +define OPTEE_CLIENT_INSTALL_SUPPLICANT_SCRIPT
+> +       $(INSTALL) -m 0755 -D $(OPTEE_CLIENT_PKGDIR)/S30optee \
+> +               $(TARGET_DIR)/etc/init.d/S30optee
+> +endef
+> +
+> +define OPTEE_CLIENT_INSTALL_INIT_SYSV
+> +       $(OPTEE_CLIENT_INSTALL_SUPPLICANT_SCRIPT)
+> +endef
+> +
+> +OPTEE_CLIENT_INSTALL_STAGING = YES
+> +OPTEE_CLIENT_INSTALL_IMAGES = YES
+> +
+> +$(eval $(cmake-package))
 
-Ok Baruch,
-Thanks a lot for the details.
-
-etienne
-
->
-> >> > +     help
-> >> > +       OP-TEE OS provides the secure world boot image and the trust
-> >> > +       application development kit of the OP-TEE project. OP-TEE OS
-> >> > +       also provides generic trusted application one can embedded
-> >> > +       into its system.
-> >> > +
-> >> > +       http://github.org/OP-TEE/optee_os
-> >> > +
-> >> > +if BR2_TARGET_OPTEE_OS
-> >> > +
-> >> > +choice
-> >> > +     prompt "OP-TEE OS version"
-> >> > +     default BR2_TARGET_OPTEE_OS_LATEST
-> >> > +     help
-> >> > +       Select the version of OP-TEE OS you want to use
-> >>
-> >> Is there a practical need to support selection separate version
-> >> selection for each OPTEE component? If not then I think this version
-> >> selection should apply to all other components.
-> >
-> > Your absolutely right. I will see how to handle that.
->
-> baruch
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Tested-by: Shyam Saini <shyam.saini@amarulasolutions.com>
