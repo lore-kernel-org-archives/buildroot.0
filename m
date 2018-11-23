@@ -1,65 +1,85 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 27 Nov 2018 23:33:13 +0100
-Subject: [Buildroot] [git commit] package/libid3tag: add .pc file and
- install to staging hook
-Message-ID: <20181202071559.F3478803E1@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 23 Nov 2018 22:05:46 +0100
+Subject: [Buildroot] [git commit] support/testing: add python-attrs tests
+Message-ID: <20181202071557.C4896815BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6b68e6b6a81985ff5bcb9836d0d02c1fbed3e47
+commit: https://git.buildroot.net/buildroot/commit/?id=367c0455129ae2b496858884b2432bb5d6ec2e48
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The MPD project dropped autotools support in version 0.21.x in favor of
-meson. While adapting the package to the meson build infrastructure, the
-recognition of libid3tag failed, as only pkg-config is used to detect
-the library. Note, that the version bump of the mpd package to 0.21.x is
-not submitted, yet.
+Use a minimal script to check the basic usage creating a class with 2
+attributes.
 
-To help finding the build system to detect libid3tag with pkg-config
-properly, add a .pc file and install it to staging.
-
-This is exactly what Debian and Fedora do as well.
-
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libid3tag/id3tag.pc    | 11 +++++++++++
- package/libid3tag/libid3tag.mk |  7 +++++++
- 2 files changed, 18 insertions(+)
+ .gitlab-ci.yml                                      |  2 ++
+ .../testing/tests/package/sample_python_attrs.py    | 15 +++++++++++++++
+ support/testing/tests/package/test_python_attrs.py  | 21 +++++++++++++++++++++
+ 3 files changed, 38 insertions(+)
 
-diff --git a/package/libid3tag/id3tag.pc b/package/libid3tag/id3tag.pc
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 62f3768d3d..494894a782 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -318,6 +318,8 @@ tests.package.test_python.TestPython2: *runtime_test
+ tests.package.test_python.TestPython3: *runtime_test
+ tests.package.test_python_argh.TestPythonPy2Argh: *runtime_test
+ tests.package.test_python_argh.TestPythonPy3Argh: *runtime_test
++tests.package.test_python_attrs.TestPythonPy2Attrs: *runtime_test
++tests.package.test_python_attrs.TestPythonPy3Attrs: *runtime_test
+ tests.package.test_python_autobahn.TestPythonPy2Autobahn: *runtime_test
+ tests.package.test_python_autobahn.TestPythonPy3Autobahn: *runtime_test
+ tests.package.test_python_crossbar.TestPythonPy3Crossbar: *runtime_test
+diff --git a/support/testing/tests/package/sample_python_attrs.py b/support/testing/tests/package/sample_python_attrs.py
 new file mode 100644
-index 0000000000..845eb3276b
+index 0000000000..f224944914
 --- /dev/null
-+++ b/package/libid3tag/id3tag.pc
-@@ -0,0 +1,11 @@
-+prefix=/usr
-+exec_prefix=${prefix}
-+libdir=${exec_prefix}/lib
-+includedir=${prefix}/include
++++ b/support/testing/tests/package/sample_python_attrs.py
+@@ -0,0 +1,15 @@
++import attr
 +
-+Name: id3tag
-+Description: ID3 tag reading library
-+Version: 0.15.1b
-+Requires:
-+Libs: -L${libdir} -lid3tag
-+Cflags: -I${includedir}
-diff --git a/package/libid3tag/libid3tag.mk b/package/libid3tag/libid3tag.mk
-index 951ae09c77..24342186cc 100644
---- a/package/libid3tag/libid3tag.mk
-+++ b/package/libid3tag/libid3tag.mk
-@@ -12,4 +12,11 @@ LIBID3TAG_INSTALL_STAGING = YES
- LIBID3TAG_DEPENDENCIES = zlib
- LIBID3TAG_LIBTOOL_PATCH = NO
- 
-+define LIBID3TAG_INSTALL_STAGING_PC
-+	$(INSTALL) -D package/libid3tag/id3tag.pc \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/id3tag.pc
-+endef
 +
-+LIBID3TAG_POST_INSTALL_STAGING_HOOKS += LIBID3TAG_INSTALL_STAGING_PC
++ at attr.s
++class Obj(object):
++    x = attr.ib()
++    y = attr.ib(default=1)
 +
- $(eval $(autotools-package))
++
++obj1 = Obj(2)
++assert(obj1.x == 2)
++assert(obj1.y == 1)
++obj2 = Obj(3, 4)
++assert(obj2.x == 3)
++assert(obj2.y == 4)
+diff --git a/support/testing/tests/package/test_python_attrs.py b/support/testing/tests/package/test_python_attrs.py
+new file mode 100644
+index 0000000000..9f597034ae
+--- /dev/null
++++ b/support/testing/tests/package/test_python_attrs.py
+@@ -0,0 +1,21 @@
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonPy2Attrs(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON=y
++        BR2_PACKAGE_PYTHON_ATTRS=y
++        """
++    sample_scripts = ["tests/package/sample_python_attrs.py"]
++
++
++class TestPythonPy3Attrs(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_ATTRS=y
++        """
++    sample_scripts = ["tests/package/sample_python_attrs.py"]
