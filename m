@@ -1,59 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 21 Nov 2018 22:31:28 +0100
-Subject: [Buildroot] [git commit] libostree: bump to version 2018.9.1
-Message-ID: <20181202071557.29D9181583@busybox.osuosl.org>
+Date: Fri, 23 Nov 2018 10:47:25 +0100
+Subject: [Buildroot] [git commit] wireguard: bump version to 0.0.20181119
+Message-ID: <20181202071557.6EF7E81583@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45708b0dbe60fc580834ac39f9b7c843548fe1ad
+commit: https://git.buildroot.net/buildroot/commit/?id=1352ad412647f5b255a10d1ad0d71084e8833f79
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump to v2018.9 added ostree-finalize-staged.path through
-https://github.com/ostreedev/ostree/commit/ac1a919ffd4fe944d06c4f4510604baa73d1bf8e
-
-However, this file was not added in the tarball until commit:
-https://github.com/ostreedev/ostree/commit/62594765b2fae72e332ffb21fbd11085d911ef83
-
-So use the new 2018.9.1 tarball to get this file otherwise build with
-systemd will fail
-
-Fixes:
- - http://autobuild.buildroot.org/results/fc6435282630e60927f88bf5954805ebbaa60cb3
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libostree/libostree.hash | 2 +-
- package/libostree/libostree.mk   | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/wireguard/wireguard.hash | 4 ++--
+ package/wireguard/wireguard.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
-index 35bf2caf0a..ddd15b5099 100644
---- a/package/libostree/libostree.hash
-+++ b/package/libostree/libostree.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
+index 737f7b49c2..f757a86630 100644
+--- a/package/wireguard/wireguard.hash
++++ b/package/wireguard/wireguard.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.zx2c4.com/pipermail/wireguard/2018-October/003479.html
+-sha256 af05824211b27cbeeea2b8d6b76be29552c0d80bfe716471215e4e43d259e327  WireGuard-0.0.20181018.tar.xz
++# From https://lists.zx2c4.com/pipermail/wireguard/2018-November/003572.html
++sha256 7d47f7996dd291069de4efb3097c42f769f60dc3ac6f850a4d5705f321e4406b  WireGuard-0.0.20181119.tar.xz
  # Locally calculated
--sha256 9a3c17af133e6d381bb997473c6371ef8f048c1cfb6bd0acdb5662ede712aa5a  libostree-2018.9.tar.xz
-+sha256 f263cfed75dcc9e312a874d28241e7143d8a0d8c774938f2165327bae67dbe06  libostree-2018.9.1.tar.xz
- sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-index 8538cdc69c..e8cdd64d6e 100644
---- a/package/libostree/libostree.mk
-+++ b/package/libostree/libostree.mk
-@@ -4,9 +4,10 @@
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
+index f3ea1bccf2..93373d8538 100644
+--- a/package/wireguard/wireguard.mk
++++ b/package/wireguard/wireguard.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBOSTREE_VERSION = 2018.9
-+LIBOSTREE_VERSION_MAJOR = 2018.9
-+LIBOSTREE_VERSION= $(LIBOSTREE_VERSION_MAJOR).1
- LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
--LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
-+LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION_MAJOR)
- 
- LIBOSTREE_LICENSE = LGPL-2.0+
- LIBOSTREE_LICENSE_FILES = COPYING
+-WIREGUARD_VERSION = 0.0.20181018
++WIREGUARD_VERSION = 0.0.20181119
+ WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
+ WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
+ WIREGUARD_LICENSE = GPL-2.0
