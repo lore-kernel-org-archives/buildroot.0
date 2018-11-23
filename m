@@ -1,105 +1,116 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 23 Nov 2018 22:05:46 +0100
-Subject: [Buildroot] [git commit] support/testing: add python-argh tests
-Message-ID: <20181202071557.BD360815BC@busybox.osuosl.org>
+Date: Fri, 23 Nov 2018 10:46:54 +0100
+Subject: [Buildroot] [git commit] util-linux: fix build for SPARC
+Message-ID: <20181202071557.6616881583@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1bd9e9c199a334a035e9b4690135fdaf849b3d76
+commit: https://git.buildroot.net/buildroot/commit/?id=eb8bfdaf6eb1c871ceddb2e52a6ded7ff94d597d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use a simple script to check the basic usage. Since this package
-provides command line arguments, override run_sample_scripts to call the
-script with arguments and check the expected output.
+Pull a patch already applied upstream that fixes the build of setarch
+for SPARC processors.
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Fixes:
+  http://autobuild.buildroot.net/results/44d0538332499cea691a381048562a09cda23624
+  http://autobuild.buildroot.net/results/e7e3469717ab27d66d2528087fd7c3a41477ae05
+
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .gitlab-ci.yml                                     |  2 +
- .../testing/tests/package/sample_python_argh.py    | 10 +++++
- support/testing/tests/package/test_python_argh.py  | 45 ++++++++++++++++++++++
- 3 files changed, 57 insertions(+)
+ ...-setarch-fix-obscure-sparc32bash-use-case.patch | 84 ++++++++++++++++++++++
+ 1 file changed, 84 insertions(+)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 98f9463928..62f3768d3d 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -316,6 +316,8 @@ tests.package.test_ipython.TestIPythonPy2: *runtime_test
- tests.package.test_ipython.TestIPythonPy3: *runtime_test
- tests.package.test_python.TestPython2: *runtime_test
- tests.package.test_python.TestPython3: *runtime_test
-+tests.package.test_python_argh.TestPythonPy2Argh: *runtime_test
-+tests.package.test_python_argh.TestPythonPy3Argh: *runtime_test
- tests.package.test_python_autobahn.TestPythonPy2Autobahn: *runtime_test
- tests.package.test_python_autobahn.TestPythonPy3Autobahn: *runtime_test
- tests.package.test_python_crossbar.TestPythonPy3Crossbar: *runtime_test
-diff --git a/support/testing/tests/package/sample_python_argh.py b/support/testing/tests/package/sample_python_argh.py
+diff --git a/package/util-linux/0003-setarch-fix-obscure-sparc32bash-use-case.patch b/package/util-linux/0003-setarch-fix-obscure-sparc32bash-use-case.patch
 new file mode 100644
-index 0000000000..48247bf604
+index 0000000000..70588b863e
 --- /dev/null
-+++ b/support/testing/tests/package/sample_python_argh.py
-@@ -0,0 +1,10 @@
-+import argh
++++ b/package/util-linux/0003-setarch-fix-obscure-sparc32bash-use-case.patch
+@@ -0,0 +1,84 @@
++From 3fa06e049012218d883d0e1251df86bafbc446bf Mon Sep 17 00:00:00 2001
++From: Karel Zak <kzak@redhat.com>
++Date: Thu, 22 Nov 2018 11:03:35 +0100
++Subject: [PATCH] setarch: fix obscure sparc32bash use-case
 +
++Reported-by: Carlos Santos <casantos@datacom.com.br>
++Signed-off-by: Karel Zak <kzak@redhat.com>
++Signed-off-by: Carlos Santos <casantos@datacom.com.br>
++---
++ sys-utils/setarch.c | 28 ++++++++++++++++++----------
++ 1 file changed, 18 insertions(+), 10 deletions(-)
 +
-+ at argh.arg("foo", help="help for foo")
-+ at argh.arg("--bar", help="help for bar")
-+def main(foo, bar=False):
-+    print("{}, {}".format(foo, bar))
++diff --git a/sys-utils/setarch.c b/sys-utils/setarch.c
++index a733f7b3c..7c0a63fbb 100644
++--- a/sys-utils/setarch.c
+++++ b/sys-utils/setarch.c
++@@ -268,6 +268,7 @@ int main(int argc, char *argv[])
++ 	int c;
++ 	struct arch_domain *doms, *target;
++ 	unsigned long pers_value = 0;
+++	char *shell = NULL, *shell_arg = NULL;
++ 
++ 	/* Options without equivalent short options */
++ 	enum {
++@@ -310,14 +311,14 @@ int main(int argc, char *argv[])
++ 	archwrapper = strcmp(program_invocation_short_name, "setarch") != 0;
++ 	if (archwrapper) {
++ 		arch = program_invocation_short_name;	/* symlinks to setarch */
++-#if defined(__sparc64__) || defined(__sparc__)
+++
+++		/* Don't use ifdef sparc here, we get "Unrecognized architecture"
+++		 * error message later if necessary */
++ 		if (strcmp(arch, "sparc32bash") == 0) {
++-			if (set_arch(arch, 0L, 0))
++-				err(EXIT_FAILURE, _("Failed to set personality to %s"), arch);
++-			execl("/bin/bash", "", NULL);
++-			errexec("/bin/bash");
+++			shell = "/bin/bash";
+++			shell_arg = "";
+++			goto set_arch;
++ 		}
++-#endif
++ 	} else {
++ 		if (1 < argc && *argv[1] != '-') {
++ 			arch = argv[1];
++@@ -391,6 +392,7 @@ int main(int argc, char *argv[])
++ 	argc -= optind;
++ 	argv += optind;
++ 
+++set_arch:
++ 	/* get execution domain (architecture) */
++ 	if (arch) {
++ 		doms = init_arch_domains();
++@@ -422,17 +424,23 @@ int main(int argc, char *argv[])
++ 	if (arch)
++ 		verify_arch_domain(target, arch);
++ 
+++	if (!argc) {
+++		shell = "/bin/sh";
+++		shell_arg = "-sh";
+++	}
++ 	if (verbose) {
++-		printf(_("Execute command `%s'.\n"), argc ? argv[0] : "/bin/sh");
+++		printf(_("Execute command `%s'.\n"), shell ? shell : argv[0]);
++ 		/* flush all output streams before exec */
++ 		fflush(NULL);
++ 	}
++ 
++-	if (!argc) {
++-		execl("/bin/sh", "-sh", NULL);
++-		errexec("/bin/sh");
+++	/* Execute shell */
+++	if (shell) {
+++		execl(shell, shell_arg, NULL);
+++		errexec(shell);
++ 	}
++ 
+++	/* Execute on command line specified command */
++ 	execvp(argv[0], argv);
++ 	errexec(argv[0]);
++ }
++-- 
++2.14.5
 +
-+
-+argh.dispatch_command(main)
-diff --git a/support/testing/tests/package/test_python_argh.py b/support/testing/tests/package/test_python_argh.py
-new file mode 100644
-index 0000000000..de4b4cbe74
---- /dev/null
-+++ b/support/testing/tests/package/test_python_argh.py
-@@ -0,0 +1,45 @@
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonArgh(TestPythonPackageBase):
-+    config = TestPythonPackageBase.config
-+    sample_scripts = ["tests/package/sample_python_argh.py"]
-+
-+    def run_sample_scripts(self):
-+        cmd = self.interpreter + " sample_python_argh.py -h"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertIn("usage:", output[0])
-+        self.assertEqual(exit_code, 0)
-+
-+        cmd = self.interpreter + " sample_python_argh.py 123"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(output[0], "123, False")
-+        self.assertEqual(exit_code, 0)
-+
-+        cmd = self.interpreter + " sample_python_argh.py --bar 456"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(output[0], "456, True")
-+        self.assertEqual(exit_code, 0)
-+
-+        cmd = self.interpreter + " sample_python_argh.py"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertIn("usage:", output[0])
-+        self.assertEqual(exit_code, 2)
-+
-+
-+class TestPythonPy2Argh(TestPythonArgh):
-+    __test__ = True
-+    config = TestPythonArgh.config + \
-+        """
-+        BR2_PACKAGE_PYTHON=y
-+        BR2_PACKAGE_PYTHON_ARGH=y
-+        """
-+
-+
-+class TestPythonPy3Argh(TestPythonArgh):
-+    __test__ = True
-+    config = TestPythonArgh.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_ARGH=y
-+        """
