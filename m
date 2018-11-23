@@ -1,46 +1,54 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Fri, 23 Nov 2018 01:06:49 -0200 (BRST)
-Subject: [Buildroot] [PATCH 5/5] optee-test: new package
-In-Reply-To: <1542900177-17343-5-git-send-email-etienne.carriere@linaro.org>
-References: <1542900177-17343-1-git-send-email-etienne.carriere@linaro.org>
- <1542900177-17343-5-git-send-email-etienne.carriere@linaro.org>
-Message-ID: <790904575.3322760.1542942409059.JavaMail.zimbra@datacom.com.br>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Fri, 23 Nov 2018 05:31:02 +0100
+Subject: [Buildroot] [PATCH/next v2 0/8] suppport/testing: Perl interpreter
+ and CPAN modules
+Message-ID: <20181123043110.5353-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Etienne Carriere" <etienne.carriere@linaro.org>
-> To: "buildroot" <buildroot@buildroot.org>
-> Cc: "etienne carriere" <etienne.carriere@linaro.org>
-> Sent: Quinta-feira, 22 de novembro de 2018 13:22:57
-> Subject: [Buildroot] [PATCH 5/5] optee-test: new package
+test_perl.py allows to test the Perl interpreter and some of its core modules,
+and it is used as base class for testing CPAN modules.
 
-[...]
-> --- /dev/null
-> +++ b/package/optee-test/Config.in
-> @@ -0,0 +1,64 @@
-> +config BR2_PACKAGE_OPTEE_TEST
-> +	bool "optee_test"
-> +	depends on BR2_aarch64 || BR2_arm
-> +	help
-> +	  This build option enables OP-TEE test package from the
-> +	  OP-TEE project. It helps platforms to verify the OP-TEE
-> +	  installation against a set of regression and performance
-> +	  tests.
-> +
-> +	  The package generates userspace test applications and
-> +	  data files for the Linux userland. It also generates
-> +	  OP-TEE trusted applications embedded in the target
-> +	  directory /lib/optee-armtz. These are loaded into the
-> +	  secure world at runtime.
-> +
-> +	  http://github.org/OP-TEE/optee_test
+Now, scancpan could generate test for CPAN modules.
+Currently, there are more than 100 CPAN modules, 25 of them are XS modules.
+In order to limit the number of tests (and the execution time),
+a test is generated only if the module have more than one direct dependencies
+and have at least one XS dependencies.
 
-Must be https://github.com/OP-TEE/optee_test
+V1 -> V2
+  - refactor with TestPerlBase class
+  - check "This is perl 5"
+
+Francois Perrad (8):
+  support/testing: add perl test
+  scancpan: add generation of test
+  support/testing: add perl-class-load test
+  support/testing: add perl-gdgraph test
+  support/testing: add perl-libwww-perl test
+  support/testing: add perl-mail-dkim test
+  support/testing: add perl-x10 test
+  support/testing: add perl-xml-libxml test
+
+ .gitlab-ci.yml                                |  7 ++
+ support/testing/tests/package/test_perl.py    | 66 ++++++++++++++++++
+ .../tests/package/test_perl_class_load.py     | 28 ++++++++
+ .../tests/package/test_perl_gdgraph.py        | 22 ++++++
+ .../tests/package/test_perl_libwww_perl.py    | 41 ++++++++++++
+ .../tests/package/test_perl_mail_dkim.py      | 28 ++++++++
+ .../testing/tests/package/test_perl_x10.py    | 22 ++++++
+ .../tests/package/test_perl_xml_libxml.py     | 22 ++++++
+ utils/scancpan                                | 67 +++++++++++++++++++
+ 9 files changed, 303 insertions(+)
+ create mode 100644 support/testing/tests/package/test_perl.py
+ create mode 100644 support/testing/tests/package/test_perl_class_load.py
+ create mode 100644 support/testing/tests/package/test_perl_gdgraph.py
+ create mode 100644 support/testing/tests/package/test_perl_libwww_perl.py
+ create mode 100644 support/testing/tests/package/test_perl_mail_dkim.py
+ create mode 100644 support/testing/tests/package/test_perl_x10.py
+ create mode 100644 support/testing/tests/package/test_perl_xml_libxml.py
 
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?Marched towards the enemy, spear upright, armed with the certainty
-that only the ignorant can have.? ? Epitaph of a volunteer
+2.17.1
