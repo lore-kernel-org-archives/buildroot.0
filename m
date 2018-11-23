@@ -1,171 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 23 Nov 2018 15:58:08 +0100
-Subject: [Buildroot] [PATCH next v6 03/10] Makefile: rework main directory
- creation logic
+Date: Fri, 23 Nov 2018 15:58:10 +0100
+Subject: [Buildroot] [PATCH next v6 05/10] Makefile: define
+ TARGET_DIR_WARNING_FILE relative to TARGET_DIR
 In-Reply-To: <20181123145815.13008-1-thomas.petazzoni@bootlin.com>
 References: <20181123145815.13008-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181123145815.13008-4-thomas.petazzoni@bootlin.com>
+Message-ID: <20181123145815.13008-6-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In the current code, the creation of the main output directories
-(BUILD_DIR, STAGING_DIR, HOST_DIR, TARGET_DIR, etc.) is done by a
-global "dirs" target. While this works fine in the current situation,
-it doesn't work well in a context where per-package host and target
-directories are used.
+In commit 7e9870ce32d6329d9e3d602247fbe1709a2275a4 ("core: introduce
+intermediate BASE_TARGET_DIR variable"), the definition of
+TARGET_DIR_WARNING_FILE was changed to use $(BASE_TARGET_DIR) instead
+of $(TARGET_DIR).
 
-For example, with the current code and per-package host directories,
-the output/staging symbolic link ends up being created as a link to
-the per-package package sysroot directory of the first package being
-built, instead of the global sysroot.
+However, this change is incompatible with per-package directories, and
+is in fact not needed.
 
-This commit reworks the creation of those directories by having the
-package/pkg-generic.mk code ensure that the build directory, target
-directory, host directory, staging directory and binaries directory
-exist before they are needed.
+With per-package directories, using $(BASE_TARGET_DIR) means that
+TARGET_DIR_WARNING_FILE is
+output/target/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM. Due to this, when
+skeleton-init-common or skeleton-custom attempt to install it, it
+fails, because it should be installed to their package per-package
+target directory, and not the global output/target directory that doesn't
+exist yet. The failure looks like this:
 
-Two new targets, host-finalize and staging-finalize are added in the
-main Makefile to create the compatibility symlinks for host and
-staging directories. They will be extended later with additional logic
-for per-package directories.
+/usr/bin/install -m 0644 support/misc/target-dir-warning.txt /home/thomas/projets/buildroot/output/target/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
+/usr/bin/install: cannot create regular file '/home/thomas/projets/buildroot/output/target/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM': No such file or directory
+make[1]: *** [package/pkg-generic.mk:336: /home/thomas/projets/buildroot/output/build/skeleton-init-common/.stamp_target_installed] Error 1
 
-Thanks to those changes, the global "dirs" target is entirely removed.
+TARGET_DIR_WARNING_FILE is used in three places:
+
+ - In skeleton-custom.mk and skeleton-init-common.mk, where as
+   explained above, using $(TARGET_DIR) fixes the use of
+   $(TARGET_DIR_WARNING_FILE) in the context of per-package target
+   directories.
+
+ - In fs/common.mk, where it is used as argument to $(notdir ...) to
+   retrieve just the name of the warning file. So in this case, we
+   really don't care about the path of the file, just its name.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- Makefile               | 21 +++++++++------------
- fs/common.mk           |  1 +
- package/pkg-generic.mk |  7 ++++++-
- 3 files changed, 16 insertions(+), 13 deletions(-)
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/Makefile b/Makefile
-index 2819d44124..e675ac26aa 100644
+index 24c803872d..23032988a5 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -572,10 +572,6 @@ $(foreach pkg,$(call UPPERCASE,$(PACKAGES)),\
+@@ -468,7 +468,7 @@ BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(PATH)"
  
- endif
+ # Location of a file giving a big fat warning that output/target
+ # should not be used as the root filesystem.
+-TARGET_DIR_WARNING_FILE = $(BASE_TARGET_DIR)/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
++TARGET_DIR_WARNING_FILE = $(TARGET_DIR)/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
  
--.PHONY: dirs
--dirs: $(BUILD_DIR) $(STAGING_DIR) $(BASE_TARGET_DIR) \
--	$(HOST_DIR) $(HOST_DIR_SYMLINK) $(BINARIES_DIR)
--
- $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
- 	$(MAKE1) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" syncconfig
- 
-@@ -605,11 +601,6 @@ sdk: prepare-sdk $(BR2_TAR_HOST_DEPENDENCY)
- 		--transform='s#^\.#$(BR2_SDK_PREFIX)#' \
- 		-C $(HOST_DIR) "."
- 
--# Populating the staging with the base directories is handled by the skeleton package
--$(STAGING_DIR):
--	@mkdir -p $(STAGING_DIR)
--	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
--
- RSYNC_VCS_EXCLUSIONS = \
- 	--exclude .svn --exclude .git --exclude .hg --exclude .bzr \
- 	--exclude CVS
-@@ -710,8 +701,14 @@ $(TARGETS_ROOTFS): target-finalize
- # Avoid the rootfs name leaking down the dependency chain
- target-finalize: ROOTFS=
- 
-+host-finalize: $(HOST_DIR_SYMLINK)
-+
-+.PHONY: staging-finalize
-+staging-finalize:
-+	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
-+
- .PHONY: target-finalize
--target-finalize: $(PACKAGES)
-+target-finalize: $(PACKAGES) host-finalize
- 	@$(call MESSAGE,"Finalizing target directory")
- 	# Check files that are touched by more than one package
- 	./support/scripts/check-uniq-files -t target $(BUILD_DIR)/packages-file-list.txt
-@@ -782,7 +779,7 @@ endif
- 	touch $(TARGET_DIR)/usr
- 
- .PHONY: target-post-image
--target-post-image: $(TARGETS_ROOTFS) target-finalize
-+target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize
- 	@rm -f $(ROOTFS_COMMON_TAR)
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
- 		$(call MESSAGE,"Executing post-image script $(s)"); \
-@@ -811,7 +808,7 @@ legal-info-prepare: $(LEGAL_INFO_DIR)
- 	@cp $(BR2_CONFIG) $(LEGAL_INFO_DIR)/buildroot.config
- 
- .PHONY: legal-info
--legal-info: dirs legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p)-all-legal-info) \
-+legal-info: legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p)-all-legal-info) \
- 		$(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST)
- 	@cat support/legal-info/README.header >>$(LEGAL_REPORT)
- 	@if [ -r $(LEGAL_WARNINGS) ]; then \
-diff --git a/fs/common.mk b/fs/common.mk
-index 2a5a202a89..96658428ba 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -145,6 +145,7 @@ $$(BINARIES_DIR)/rootfs.$(1): ROOTFS=$(2)
- $$(BINARIES_DIR)/rootfs.$(1): FAKEROOT_SCRIPT=$$(ROOTFS_$(2)_DIR)/fakeroot
- $$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
- 	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
-+	mkdir -p $$(@D)
- 	rm -rf $$(ROOTFS_$(2)_DIR)
- 	mkdir -p $$(ROOTFS_$(2)_DIR)
- 	echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index f34f46afc8..309fd8cd48 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -173,6 +173,7 @@ $(BUILD_DIR)/%/.stamp_extracted:
- $(BUILD_DIR)/%/.stamp_rsynced:
- 	@$(call step_start,rsync)
- 	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
-+	@mkdir -p $(@D)
- 	$(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
- 	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
- 	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $($(PKG)_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
-@@ -238,6 +239,7 @@ $(BUILD_DIR)/%/.stamp_built::
- $(BUILD_DIR)/%/.stamp_host_installed:
- 	@$(call step_start,install-host)
- 	@$(call MESSAGE,"Installing to host directory")
-+	@mkdir -p $(HOST_DIR)
- 	$(foreach hook,$($(PKG)_PRE_INSTALL_HOOKS),$(call $(hook))$(sep))
- 	+$($(PKG)_INSTALL_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_HOOKS),$(call $(hook))$(sep))
-@@ -267,6 +269,7 @@ $(BUILD_DIR)/%/.stamp_host_installed:
- $(BUILD_DIR)/%/.stamp_staging_installed:
- 	@$(call step_start,install-staging)
- 	@$(call MESSAGE,"Installing to staging directory")
-+	@mkdir -p $(STAGING_DIR)
- 	$(foreach hook,$($(PKG)_PRE_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
- 	+$($(PKG)_INSTALL_STAGING_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
-@@ -298,6 +301,7 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
- # Install to images dir
- $(BUILD_DIR)/%/.stamp_images_installed:
- 	@$(call step_start,install-image)
-+	@mkdir -p $(BINARIES_DIR)
- 	$(foreach hook,$($(PKG)_PRE_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
- 	@$(call MESSAGE,"Installing to images directory")
- 	+$($(PKG)_INSTALL_IMAGES_CMDS)
-@@ -309,6 +313,7 @@ $(BUILD_DIR)/%/.stamp_images_installed:
- $(BUILD_DIR)/%/.stamp_target_installed:
- 	@$(call step_start,install-target)
- 	@$(call MESSAGE,"Installing to target")
-+	@mkdir -p $(TARGET_DIR)
- 	$(foreach hook,$($(PKG)_PRE_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
- 	+$($(PKG)_INSTALL_TARGET_CMDS)
- 	$(if $(BR2_INIT_SYSTEMD),\
-@@ -735,7 +740,7 @@ $$($(2)_TARGET_BUILD):	$$($(2)_TARGET_CONFIGURE)
- $(1)-configure:			$$($(2)_TARGET_CONFIGURE)
- $$($(2)_TARGET_CONFIGURE):	| $$($(2)_FINAL_DEPENDENCIES)
- 
--$$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dirs prepare
-+$$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | prepare
- $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dependencies
- 
- ifeq ($$($(2)_OVERRIDE_SRCDIR),)
+ ifeq ($(BR2_CCACHE),y)
+ CCACHE = $(HOST_DIR)/bin/ccache
 -- 
 2.19.1
