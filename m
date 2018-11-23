@@ -1,97 +1,105 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 23 Nov 2018 11:10:56 +0100
-Subject: [Buildroot] [git commit] package/luvi: add patch to fix build issue
-Message-ID: <20181202071557.8DDB681583@busybox.osuosl.org>
+Date: Fri, 23 Nov 2018 22:05:46 +0100
+Subject: [Buildroot] [git commit] support/testing: add python-argh tests
+Message-ID: <20181202071557.BD360815BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9293fd786eb19e3bcb10bef2d2249c4832d3e91
+commit: https://git.buildroot.net/buildroot/commit/?id=1bd9e9c199a334a035e9b4690135fdaf849b3d76
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since bumping luv from version 1.9.1 to 1.22.0, building luvi fails, as
-"luv.h" now includes "compat-5.3.h", which is locally shipped as a
-dependency to lua-compat-5.3.
+Use a simple script to check the basic usage. Since this package
+provides command line arguments, override run_sample_scripts to call the
+script with arguments and check the expected output.
 
-Fixing the issue reveals, that luvi is using `luaL_newlib` which is not
-available in the Lua 5.1 API. Building luvi with luv 1.9.1 was not an
-issue before, because luv 1.9.1 defined `luaL_newlib` in luv.h, which
-was removed in 1.22.0 in favour of using lua-compat-5.3.
-
-Therefore, add a patch which defines `luaL_newlib` in luvi.h.
-
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...issing-define-for-luaL_newlib-for-Lua-5.1.patch | 61 ++++++++++++++++++++++
- 1 file changed, 61 insertions(+)
+ .gitlab-ci.yml                                     |  2 +
+ .../testing/tests/package/sample_python_argh.py    | 10 +++++
+ support/testing/tests/package/test_python_argh.py  | 45 ++++++++++++++++++++++
+ 3 files changed, 57 insertions(+)
 
-diff --git a/package/luvi/0001-Add-missing-define-for-luaL_newlib-for-Lua-5.1.patch b/package/luvi/0001-Add-missing-define-for-luaL_newlib-for-Lua-5.1.patch
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 98f9463928..62f3768d3d 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -316,6 +316,8 @@ tests.package.test_ipython.TestIPythonPy2: *runtime_test
+ tests.package.test_ipython.TestIPythonPy3: *runtime_test
+ tests.package.test_python.TestPython2: *runtime_test
+ tests.package.test_python.TestPython3: *runtime_test
++tests.package.test_python_argh.TestPythonPy2Argh: *runtime_test
++tests.package.test_python_argh.TestPythonPy3Argh: *runtime_test
+ tests.package.test_python_autobahn.TestPythonPy2Autobahn: *runtime_test
+ tests.package.test_python_autobahn.TestPythonPy3Autobahn: *runtime_test
+ tests.package.test_python_crossbar.TestPythonPy3Crossbar: *runtime_test
+diff --git a/support/testing/tests/package/sample_python_argh.py b/support/testing/tests/package/sample_python_argh.py
 new file mode 100644
-index 0000000000..903b9d6a69
+index 0000000000..48247bf604
 --- /dev/null
-+++ b/package/luvi/0001-Add-missing-define-for-luaL_newlib-for-Lua-5.1.patch
-@@ -0,0 +1,61 @@
-+From 7f9fcbd827295df72b15466fd3c47589d52117b9 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Wed, 31 Oct 2018 18:22:31 +0100
-+Subject: [PATCH] Add missing define for luaL_newlib for Lua 5.1
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++++ b/support/testing/tests/package/sample_python_argh.py
+@@ -0,0 +1,10 @@
++import argh
 +
-+Since commit c286f3b741d0968fd1c49c28da83bc723468ecba, which bumped the
-+library luv to version 1.22.0-1, building luvi fails.
 +
-+The reason for this error is, that instead of defining Lua 5.3 API itself,
-+luv now [1] uses lua-compat-5.3 [1,2] for providing a Lua 5.3 API.
++ at argh.arg("foo", help="help for foo")
++ at argh.arg("--bar", help="help for bar")
++def main(foo, bar=False):
++    print("{}, {}".format(foo, bar))
 +
-+Unfortunately, upstreams "luv.h" now exposes "compat-5.3.h" directly, causing
-+redefinition errors when building luvi 2.7.6 (as well as latest release 2.8.0)
-+with luv 1.22.0-1. Instead, "compat-5.3.h" should only be included in "luv.c",
-+which is addressed in patching luv (Patch: "Do not include compat-5.3.h in luv
-+header file").
 +
-+Patching luv reveals an issue in luvi itself, as it is using the Lua 5.3 API,
-+without defining the Lua 5.3 itself, nor using lua-compat-5.3. Instead, it was
-+using the definition provided by the "luv.h" file in luv versions before 1.22.0.
++argh.dispatch_command(main)
+diff --git a/support/testing/tests/package/test_python_argh.py b/support/testing/tests/package/test_python_argh.py
+new file mode 100644
+index 0000000000..de4b4cbe74
+--- /dev/null
++++ b/support/testing/tests/package/test_python_argh.py
+@@ -0,0 +1,45 @@
++from tests.package.test_python import TestPythonPackageBase
 +
-+Correctly, luvi should define the necessary Lua 5.3 itself, which is done by
-+this patch, by providing a definition for `luaL_newlib`.
 +
-+Note, that this patch is not upstreamable, as upstream already switched to
-+using lua-compat-5.3 [3,4]. However, backporting this patch set is to much of a
-+burden, so we keep it simple, by just defining `luaL_newlib`.
++class TestPythonArgh(TestPythonPackageBase):
++    config = TestPythonPackageBase.config
++    sample_scripts = ["tests/package/sample_python_argh.py"]
 +
-+[1] https://github.com/luvit/luv/commit/34ada3e1d75796d2295ec54f3f20b3e2abf93406
-+[2] https://github.com/keplerproject/lua-compat-5.3
-+[3] https://github.com/luvit/luvi/commit/3a444d183d2fde91b6c2f3798b37881cdaa29691
-+[4] https://github.com/luvit/luvi/commit/0376894bae7c1c3bee42ddad65e824da9cccdada
++    def run_sample_scripts(self):
++        cmd = self.interpreter + " sample_python_argh.py -h"
++        output, exit_code = self.emulator.run(cmd)
++        self.assertIn("usage:", output[0])
++        self.assertEqual(exit_code, 0)
 +
-+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-+---
-+ src/luvi.h | 6 ++++++
-+ 1 file changed, 6 insertions(+)
++        cmd = self.interpreter + " sample_python_argh.py 123"
++        output, exit_code = self.emulator.run(cmd)
++        self.assertEqual(output[0], "123, False")
++        self.assertEqual(exit_code, 0)
 +
-+diff --git a/src/luvi.h b/src/luvi.h
-+index e7558b3..ceca2b9 100644
-+--- a/src/luvi.h
-++++ b/src/luvi.h
-+@@ -52,6 +52,12 @@ int luaopen_lpeg(lua_State* L);
-+ #endif
-+ #endif
-+ 
-++#if LUA_VERSION_NUM < 502
-++#ifndef luaL_newlib
-++# define luaL_newlib(L,l) (lua_newtable(L), luaL_register(L,NULL,l))
-++#endif
-++#endif
-++
-+ #if (LUA_VERSION_NUM >= 502)
-+ # undef luaL_register
-+ # define luaL_register(L,n,f) \
-+-- 
-+2.19.1
++        cmd = self.interpreter + " sample_python_argh.py --bar 456"
++        output, exit_code = self.emulator.run(cmd)
++        self.assertEqual(output[0], "456, True")
++        self.assertEqual(exit_code, 0)
 +
++        cmd = self.interpreter + " sample_python_argh.py"
++        output, exit_code = self.emulator.run(cmd)
++        self.assertIn("usage:", output[0])
++        self.assertEqual(exit_code, 2)
++
++
++class TestPythonPy2Argh(TestPythonArgh):
++    __test__ = True
++    config = TestPythonArgh.config + \
++        """
++        BR2_PACKAGE_PYTHON=y
++        BR2_PACKAGE_PYTHON_ARGH=y
++        """
++
++
++class TestPythonPy3Argh(TestPythonArgh):
++    __test__ = True
++    config = TestPythonArgh.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_ARGH=y
++        """
