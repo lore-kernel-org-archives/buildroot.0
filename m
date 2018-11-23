@@ -1,37 +1,119 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 23 Nov 2018 09:07:42 +0100
-Subject: [Buildroot] [PATCH] perl-time-hires: remove it
-In-Reply-To: <20181122182215.17910-1-francois.perrad@gadz.org>
-References: <20181122182215.17910-1-francois.perrad@gadz.org>
-Message-ID: <20181123090742.68155c7c@windsurf>
+From: Etienne Carriere <etienne.carriere@linaro.org>
+Date: Fri, 23 Nov 2018 09:21:05 +0100
+Subject: [Buildroot] [PATCH 1/5] boot/optee-os: OP-TEE secure world
+In-Reply-To: <87tvk8euhw.fsf@tkos.co.il>
+References: <1542900177-17343-1-git-send-email-etienne.carriere@linaro.org>
+ <87tvk8euhw.fsf@tkos.co.il>
+Message-ID: <CAN5uoS_NmE9yup0vd-39aqbF9BoCkPE-LZ+=NAmeWkef_n-wpA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Thu, 22 Nov 2018 at 21:18, Baruch Siach <baruch@tkos.co.il> wrote:
+>
+> Hi Etienne,
+>
+> Thanks for your contribution. I have a few comments below.
+>
+> Etienne Carriere writes:
+> > OP-TEE OS is maintained by the OP-TEE project. It provides an
+> > open source solution for development and integration of secure
+> > services for Armv7-A and Armv8-A CPU based platforms supporting
+> > the TrustZone technology. This technology enables CPUs to
+> > concurrently host a secure world as the OP-TEE OS and a non-secure
+> > world as a Linux based OS.
+> >
+> > The OP-TEE project maintains other packages to leverage OP-TEE on
+> > Linux kernel based OSes. An OP-TEE interface driver is available
+> > in the Linux kernel since 4.12 upon CONFIG_OPTEE.
+> >
+> > https://www.op-tee.org/
+> > https://github.com/OP-TEE/optee_os
+> >
+> > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+>
+> ...
+>
+> > diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
+> > new file mode 100644
+> > index 0000000..5968531
+> > --- /dev/null
+> > +++ b/boot/optee-os/Config.in
+> > @@ -0,0 +1,102 @@
+> > +config BR2_TARGET_OPTEE_OS
+> > +     bool "optee_os"
+> > +     depends on BR2_aarch64 || BR2_arm
+> > +     select BR2_PACKAGE_OPENSSL # host tool
+>
+> Which host? Is that the host below which OPTEE OS runs? This is usually
+> called target in the Buildroot lingo. Please clarify in a comment.
 
-On Thu, 22 Nov 2018 19:22:15 +0100, Francois Perrad wrote:
-> this is a core module (ie. included in the Perl distribution)
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  DEVELOPERS                                   |  1 -
->  package/Config.in                            |  1 -
->  package/perl-time-hires/Config.in            | 10 ----------
->  package/perl-time-hires/perl-time-hires.hash |  6 ------
->  package/perl-time-hires/perl-time-hires.mk   | 14 --------------
->  5 files changed, 32 deletions(-)
->  delete mode 100644 package/perl-time-hires/Config.in
->  delete mode 100644 package/perl-time-hires/perl-time-hires.hash
->  delete mode 100644 package/perl-time-hires/perl-time-hires.mk
+I see. Well, it is really the host here: OpenSSL is required to build
+the OPTEE OS binaries, it is not required in the target.
+I found such "# host tool" comment in some packages and though it was
+the shortest explicit way to highlight the deps.
 
-We need Config.in.legacy handling when removing packages/options.
-Thanks!
+By the way, I have a questions on
+optee-os also requires the Crypto module from python to build the
+optee-os target binaries.
+It failed with trace:
+     File "scripts/pem_to_pub_c.py", line 23, in main
+       from Crypto.PublicKey import RSA
+   ImportError: No module named Crypto.PublicKey
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+I tried to resolve this by adding "select BR2_PACKAGE_PYTHON_PYCRYPTO"
+here but it did not solve the issue.
+Moreover, I had to also enable some configs to get pycrypto to build:
+ BR2_PACKAGE_PYTHON=y
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ BR2_USE_WCHAR=y
+Finally, i worked around the issue by patching optee-os filetree: port
+related scripts to python3
+
+How do you think should have I done to get Crypto module supported for
+optee-os build?
+
+
+>
+> Is that a build time dependency? If so you need to add openssl to
+> _DEPENDENCIES.
+
+Ok. I understand I need both: BR2_<dep>=y  + add <package>_DEPENDENCIES+= <dep>.
+
+thanks.
+
+>
+> > +     help
+> > +       OP-TEE OS provides the secure world boot image and the trust
+> > +       application development kit of the OP-TEE project. OP-TEE OS
+> > +       also provides generic trusted application one can embedded
+> > +       into its system.
+> > +
+> > +       http://github.org/OP-TEE/optee_os
+> > +
+> > +if BR2_TARGET_OPTEE_OS
+> > +
+> > +choice
+> > +     prompt "OP-TEE OS version"
+> > +     default BR2_TARGET_OPTEE_OS_LATEST
+> > +     help
+> > +       Select the version of OP-TEE OS you want to use
+>
+> Is there a practical need to support selection separate version
+> selection for each OPTEE component? If not then I think this version
+> selection should apply to all other components.
+
+Your absolutely right. I will see how to handle that.
+
+regards,
+etienne
+
+>
+> baruch
+>
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
