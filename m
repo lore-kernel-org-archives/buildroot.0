@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Nov 2018 14:52:01 +0100
-Subject: [Buildroot] [PATCH 1/1] package/samba4: fix systemd support
-In-Reply-To: <20181124131526.30319-1-bernd.kuhls@t-online.de>
-References: <20181124131526.30319-1-bernd.kuhls@t-online.de>
-Message-ID: <20181124145201.22630d19@windsurf>
+Date: Sat, 24 Nov 2018 14:54:35 +0100
+Subject: [Buildroot] [PATCH 1/1] package/qemu: allow enabling virtual
+ filesystem
+In-Reply-To: <1542900100-13157-1-git-send-email-etienne.carriere@linaro.org>
+References: <1542900100-13157-1-git-send-email-etienne.carriere@linaro.org>
+Message-ID: <20181124145435.04b963a4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,15 +13,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 24 Nov 2018 14:15:26 +0100, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/a09/a09a065c523931c1892e81a99c57521fbe095d8b/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Thu, 22 Nov 2018 16:21:40 +0100, Etienne Carriere wrote:
 
-Just curious: since when is this broken ?
+> +config BR2_PACKAGE_HOST_QEMU_VIRTFS
+> +	bool "Enable virtual filesystem in Qemu emulator"
 
-Thanks,
+I've reworded this to:
+
+	bool "Virtual filesystem support"
+
+to be more consistent with the existing VDE2 option. Indeed, indicating
+"Enable" in an option is not very useful: it's pretty obvious than an
+option is here to "Enable" something. Also the "in Qemu emulator" is
+not very useful either, since the option being added is already a
+sub-option of the main host-qemu option.
+
+I've applied to next after this minor change. Thanks!
 
 Thomas
 -- 
