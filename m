@@ -1,99 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Nov 2018 15:12:56 +0100
-Subject: [Buildroot] [PATCH v2 2/2] grpc: new package
-In-Reply-To: <20181118211942.28839-2-robertroyrose@gmail.com>
-References: <20181118211942.28839-1-robertroyrose@gmail.com>
- <20181118211942.28839-2-robertroyrose@gmail.com>
-Message-ID: <20181124151256.5b786338@windsurf>
+Date: Sat, 24 Nov 2018 15:14:53 +0100
+Subject: [Buildroot] [git commit branch/next] package/gzip: add host variant
+Message-ID: <20181124144253.799B388154@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Robert,
+commit: https://git.buildroot.net/buildroot/commit/?id=170160633efbf25b356c094d9e136b435d3142f1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Thanks for this contribution!
+In case someone is building on a musl-based distro (Alpine), we do as
+for the target variant, and force the fflush_stdin detection.
 
-On Sun, 18 Nov 2018 13:19:42 -0800, Robert Rose wrote:
-> Signed-off-by: Robert Rose <robertroyrose@gmail.com>
-> ---
->  DEVELOPERS                                    |  3 ++
->  package/Config.in                             |  1 +
->  .../0001-target-build-using-host-plugin.patch | 26 ++++++++++++++
->  package/grpc/Config.in                        | 11 ++++++
->  package/grpc/grpc.hash                        |  3 ++
->  package/grpc/grpc.mk                          | 36 +++++++++++++++++++
->  6 files changed, 80 insertions(+)
->  create mode 100644 package/grpc/0001-target-build-using-host-plugin.patch
->  create mode 100644 package/grpc/Config.in
->  create mode 100644 package/grpc/grpc.hash
->  create mode 100644 package/grpc/grpc.mk
+We however do not do the /bin/sh trick, because we are building
+natively, so the shell check is working.
 
-I wanted to apply your patch, but unfortunately, it fails to build for
-me in host-grpc:
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gzip/gzip.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
--- Configuring done
-CMake Error at CMakeLists.txt:193 (add_custom_command):
-  Error evaluating generator expression:
-
-    $<IF:$<BOOL:>,,$<TARGET_FILE:grpc_cpp_plugin>>
-
-  Expression did not evaluate to a known generator expression
-Call Stack (most recent call first):
-  CMakeLists.txt:3852 (protobuf_generate_grpc_cpp)
-
-
-CMake Error at CMakeLists.txt:193 (add_custom_command):
-  Error evaluating generator expression:
-
-    $<IF:$<BOOL:>,,$<TARGET_FILE:grpc_cpp_plugin>>
-
-  Expression did not evaluate to a known generator expression
-Call Stack (most recent call first):
-  CMakeLists.txt:4811 (protobuf_generate_grpc_cpp)
-
-
-CMake Error at CMakeLists.txt:193 (add_custom_command):
-  Error evaluating generator expression:
-
-    $<IF:$<BOOL:>,,$<TARGET_FILE:grpc_cpp_plugin>>
-
-  Expression did not evaluate to a known generator expression
-Call Stack (most recent call first):
-  CMakeLists.txt:3722 (protobuf_generate_grpc_cpp)
-
-
--- Generating done
-CMake Warning:
-  Manually-specified variables were not used by the project:
-
-    BUILD_DOC
-    BUILD_DOCS
-    BUILD_EXAMPLE
-    BUILD_EXAMPLES
-    BUILD_TEST
-    BUILD_TESTING
-    BUILD_TESTS
-    CMAKE_ASM_COMPILER
-
-
--- Build files have been written to: /home/thomas/buildroot/buildroot/output/build/host-grpc-v1.16.0
-package/pkg-generic.mk:219: recipe for target '/home/thomas/buildroot/buildroot/output/build/host-grpc-v1.16.0/.stamp_configured' failed
-make[1]: *** [/home/thomas/buildroot/buildroot/output/build/host-grpc-v1.16.0/.stamp_configured] Error 1
-Makefile:84: recipe for target '_all' failed
-make: *** [_all] Error 2
-
-Could you have a look into this ?
-
-Note that I did a number of fixes/cleanups in your patches, so it would
-be nice if you could restart from the two patches I have pushed at
-https://git.bootlin.com/users/thomas-petazzoni/buildroot/log/?h=grpc.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/gzip/gzip.mk b/package/gzip/gzip.mk
+index d48cb1aa15..8ac6ddd6ed 100644
+--- a/package/gzip/gzip.mk
++++ b/package/gzip/gzip.mk
+@@ -12,6 +12,7 @@ GZIP_CONF_OPTS = --exec-prefix=/
+ GZIP_LICENSE = GPL-3.0+
+ GZIP_LICENSE_FILES = COPYING
+ GZIP_CONF_ENV += gl_cv_func_fflush_stdin=yes
++HOST_GZIP_CONF_ENV += gl_cv_func_fflush_stdin=yes
+ # configure substitutes $(SHELL) for the shell shebang in scripts like
+ # gzexe. Unfortunately, the same $(SHELL) variable will also be used by
+ # make to run its commands. Fortunately, /bin/sh is always a POSIX shell
+@@ -21,3 +22,4 @@ GZIP_CONF_ENV += gl_cv_func_fflush_stdin=yes
+ GZIP_CONF_ENV += ac_cv_path_shell=/bin/sh
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
