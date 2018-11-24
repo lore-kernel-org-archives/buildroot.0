@@ -1,65 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 23 Nov 2018 22:50:40 +0100
-Subject: [Buildroot] [PATCH next v6 07/10] core: implement per-package
- SDK and target
-In-Reply-To: <20181123145815.13008-8-thomas.petazzoni@bootlin.com>
-References: <20181123145815.13008-1-thomas.petazzoni@bootlin.com>
- <20181123145815.13008-8-thomas.petazzoni@bootlin.com>
-Message-ID: <20181123215040.GA5528@scaer>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sat, 24 Nov 2018 00:00:06 -0200
+Subject: [Buildroot] [PATCH/next v2 1/8] support/testing: add perl test
+References: <20181123043110.5353-2-francois.perrad@gadz.org>
+Message-ID: <5bf8b0a668e09_35e13fa1a212dbc0547b7@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-On 2018-11-23 15:58 +0100, Thomas Petazzoni spake thusly:
-> This commit implements the core of the move to per-package SDK and
-> target directories. The main idea is that instead of having a global
-> output/host and output/target in which all packages install files, we
-> switch to per-package host and target directories, that only contain
-> their explicit dependencies.
-[--SNIP--]
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+On Fri, Nov 23, 2018 at 02:31 AM, Francois Perrad wrote:
+
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+
+Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+[https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/124872328
+ and also I tested that calling module_test with a module that is not in the
+ built image fails the test case as expected]
+Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+
 > ---
-[--SNIP--]
-> diff --git a/Makefile b/Makefile
-> index 23032988a5..35fe1b3644 100644
-> --- a/Makefile
-> +++ b/Makefile
-[--SNIP--]
-> @@ -701,14 +712,28 @@ $(TARGETS_ROOTFS): target-finalize
->  # Avoid the rootfs name leaking down the dependency chain
->  target-finalize: ROOTFS=
->  
-> -host-finalize: $(HOST_DIR_SYMLINK)
-> +host-finalize: $(PACKAGES) $(HOST_DIR) $(HOST_DIR_SYMLINK)
-> +ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
-> +	@$(call MESSAGE,"Creating global host directory")
-> +	$(foreach pkg,$(sort $(PACKAGES)),\
-> +		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/host/ \
-> +		$(PER_PACKAGE_DIR)/$(pkg)/host/ \
-> +		$(HOST_DIR)$(sep))
-> +endif
+[snip]
+> +        self.module_test("IO")
 
-Up until now, host-finalize had no command, so it was de facto a phony
-target. But with this patch, it gains commands in its recipe.o
+This is the only one that generates a warning.
 
-So it now has to be explicitly marke .PHONY, if at least for consistency
-with target-finalize and staging-finalize.
+# perl -MIO -e '1'
+Parameterless "use IO" deprecated at -e line 0.
+# echo $?
+0
 
-Also, as you noticed on IRC, and so you don't forget: foo-dirclean
-should also remove the PPD for that package, while foo-reconfigure
-should not remove it.
+But the warning is harmless. This usage is marked as deprecated but still works
+(command below succeeds) and therefore the core module *is* being tested.
+perl -MIO:Dir -e 'IO::Dir->new(".");'
+
+So my tags above stand.
+
 
 Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Ricardo
