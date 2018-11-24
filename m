@@ -1,64 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Nov 2018 11:19:03 +0100
-Subject: [Buildroot] [PATCH] docs/manual: standardize a bit more the
- formatting of commit titles
-Message-ID: <20181124101903.18138-1-thomas.petazzoni@bootlin.com>
+Date: Sat, 24 Nov 2018 11:12:47 +0100
+Subject: [Buildroot] [git commit branch/next] package/linuxptp: bump to
+ version 2.0
+Message-ID: <20181124101608.581AA87F40@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, our commit titles are not very well standardized, and it
-would be great to standardize them a little bit more. A number of
-people use "<pkg>: " as prefix, others use "package/<pkg>: ". Some
-people start the rest of the commit title (after the prefix) with an
-upper-case letter, some with a lower-case letter.
+commit: https://git.buildroot.net/buildroot/commit/?id=9226efda7621c400c8932d5428dabc20e2552a50
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-In an attempt to standardize this, this commit updates the manual with
-some examples of good commit titles.
+Add hash for license file
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- docs/manual/contribute.txt | 21 ++++++++++++++++++---
- 1 file changed, 18 insertions(+), 3 deletions(-)
+ package/linuxptp/linuxptp.hash | 9 ++++++++-
+ package/linuxptp/linuxptp.mk   | 6 +++---
+ 2 files changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index 60bfb961f0..5530ce1546 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -194,14 +194,29 @@ bisect+ to locate the origin of a problem.
+diff --git a/package/linuxptp/linuxptp.hash b/package/linuxptp/linuxptp.hash
+index ef2db56226..5e6c7741cd 100644
+--- a/package/linuxptp/linuxptp.hash
++++ b/package/linuxptp/linuxptp.hash
+@@ -1,2 +1,9 @@
++# From https://sourceforge.net/projects/linuxptp/files/v2.0/
++sha1 592ca42c6146a79c1fcabed7c19fa7af4803d4f6  linuxptp-2.0.tgz
++md5 d8bb7374943bb747db7786ac26f17f11  linuxptp-2.0.tgz
++
+ # Locally computed:
+-sha256 d0ccc4591966e21819cdc248765ebbe02456bc8ca37845eb7c23c2d1ff9bcf6b  linuxptp-303b08cbf55096aba55bd08a314e0701e5c33482.tar.gz
++sha256 0a24d9401e87d4af023d201e234d91127d82c350daad93432106284aa9459c7d  linuxptp-2.0.tgz
++
++# Hash for license file:
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/linuxptp/linuxptp.mk b/package/linuxptp/linuxptp.mk
+index f43fee6f69..c304ff6d6e 100644
+--- a/package/linuxptp/linuxptp.mk
++++ b/package/linuxptp/linuxptp.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- First of all, it is essential that the patch has a good commit
- message. The commit message should start with a separate line with a
--brief summary of the change, starting with the name of the affected
--package. The body of the commit message should describe _why_ this
-+brief summary of the change, prefixed by the area touched by the
-+patch. A few examples of good commit titles:
-+
-+* +package/linuxptp: bump version to 2.0+
-+
-+* +configs/imx23evk: bump Linux version to 4.19+
-+
-+* +package/pkg-generic: postpone evaluation of dependency conditions+
-+
-+* +boot/uboot: needs host-{flex,bison}+
-+
-+* +support/testing: add python-ubjson tests+
-+
-+The description that follows the prefix should start with a lower case
-+letter (i.e "bump", "needs", "postpone", "add" in the above examples).
-+
-+Second, the body of the commit message should describe _why_ this
- change is needed, and if necessary also give details about _how_ it
- was done. When writing the commit message, think of how the reviewers
- will read it, but also think about how you will read it when you look
- at this change again a few years down the line.
+-LINUXPTP_VERSION = 303b08cbf55096aba55bd08a314e0701e5c33482
+-LINUXPTP_SITE_METHOD = git
+-LINUXPTP_SITE = git://git.code.sf.net/p/linuxptp/code
++LINUXPTP_VERSION = 2.0
++LINUXPTP_SOURCE = linuxptp-$(LINUXPTP_VERSION).tgz
++LINUXPTP_SITE = http://downloads.sourceforge.net/linuxptp
+ LINUXPTP_LICENSE = GPL-2.0+
+ LINUXPTP_LICENSE_FILES = COPYING
  
--Second, the patch itself should do only one change, but do it
-+Third, the patch itself should do only one change, but do it
- completely. Two unrelated or weakly related changes should usually be
- done in two separate patches. This usually means that a patch affects
- only a single package. If several changes are related, it is often
--- 
-2.19.1
