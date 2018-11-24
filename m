@@ -1,39 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Nov 2018 11:25:25 +0100
-Subject: [Buildroot] [git commit] Revert "libmicrohttpd: fix build on riscv"
-Message-ID: <20181124104553.B6579880BC@busybox.osuosl.org>
+Date: Sat, 24 Nov 2018 11:21:39 +0100
+Subject: [Buildroot] [git commit] Revert "mtd: fix build on riscv"
+Message-ID: <20181124104553.A253B880BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1133df5c96eb7d78951d0021fc402ccd8c919e23
+commit: https://git.buildroot.net/buildroot/commit/?id=c2cad590dae2b05bd3a698b8a6835b98348c8a5c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit 2e57e835bf26a8f554033f8c1998d1a34fce16a5, which is
+This reverts commit 9ea1179eb5eece404a17cf5d313b05f303ae18e2, which is
 no longer needed now that the RISC-V gcc has been patched to define
 _REENTRANT when -pthread is passed.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libmicrohttpd/libmicrohttpd.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/mtd/mtd.mk | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index c22ad08478..1cda434819 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
-@@ -11,10 +11,10 @@ LIBMICROHTTPD_INSTALL_STAGING = YES
- LIBMICROHTTPD_CONF_OPTS = --disable-curl --disable-examples
- LIBMICROHTTPD_CFLAGS = $(TARGET_CFLAGS) -std=c99
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 2d627ffa3d..13e501fc33 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -11,13 +11,6 @@ MTD_LICENSE = GPL-2.0
+ MTD_LICENSE_FILES = COPYING
+ MTD_INSTALL_STAGING = YES
  
--# gcc on arc and riscv doesn't define _REENTRANT when -pthread is passed while
-+# gcc on arc doesn't define _REENTRANT when -pthread is passed while
- # it should. Compensate this deficiency here otherwise libmicrohttpd
- # configure script doesn't find that thread support is enabled.
--ifeq ($(BR2_arc)$(BR2_riscv),y)
-+ifeq ($(BR2_arc),y)
- LIBMICROHTTPD_CFLAGS += -D_REENTRANT
- endif
- 
+-# gcc on riscv doesn't define _REENTRANT when -pthread is passed while
+-# it should. Compensate this deficiency here otherwise mtd configure
+-# script doesn't find that thread support is enabled.
+-ifeq ($(BR2_TOOLCHAIN_HAS_THREADS):$(BR2_riscv),y:y)
+-MTD_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_REENTRANT"
+-endif
+-
+ ifeq ($(BR2_PACKAGE_MTD_JFFS_UTILS),y)
+ MTD_DEPENDENCIES += zlib lzo host-pkgconf
+ MTD_CONF_OPTS += --with-jffs
