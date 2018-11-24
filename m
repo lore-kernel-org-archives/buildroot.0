@@ -1,49 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Nov 2018 12:59:33 +0100
-Subject: [Buildroot] [git commit] python-sortedcontainers: bump to version
- 2.1.0
-Message-ID: <20181202071558.9C44582855@busybox.osuosl.org>
+Date: Sat, 24 Nov 2018 15:14:53 +0100
+Subject: [Buildroot] [git commit] package/gzip: add host variant
+Message-ID: <20181202071558.CBC0382855@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=87a5937a88de130ea9bf0c8a8b59086238b2c362
+commit: https://git.buildroot.net/buildroot/commit/?id=170160633efbf25b356c094d9e136b435d3142f1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+In case someone is building on a musl-based distro (Alpine), we do as
+for the target variant, and force the fflush_stdin detection.
+
+We however do not do the /bin/sh trick, because we are building
+natively, so the shell check is working.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-sortedcontainers/python-sortedcontainers.hash | 4 ++--
- package/python-sortedcontainers/python-sortedcontainers.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/gzip/gzip.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/python-sortedcontainers/python-sortedcontainers.hash b/package/python-sortedcontainers/python-sortedcontainers.hash
-index c68d78a176..311bb77e17 100644
---- a/package/python-sortedcontainers/python-sortedcontainers.hash
-+++ b/package/python-sortedcontainers/python-sortedcontainers.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/sortedcontainers/json
--md5	5f079b1131d8b1a3ed025e7e679b1497  sortedcontainers-2.0.5.tar.gz
--sha256	b74f2756fb5e23512572cc76f0fe0832fd86310f77dfee54335a35fb33f6b950  sortedcontainers-2.0.5.tar.gz
-+md5	41a4a1eaf7b85e6b3beb14cfb160bc27  sortedcontainers-2.1.0.tar.gz
-+sha256	974e9a32f56b17c1bac2aebd9dcf197f3eb9cd30553c5852a3187ad162e1a03a  sortedcontainers-2.1.0.tar.gz
- # Locally computed sha256 checksums
- sha256	7dcf4a5137118a925727b8a1690bc6ea70b156ee6739dbb51fd4d386718d6ce5  LICENSE
-diff --git a/package/python-sortedcontainers/python-sortedcontainers.mk b/package/python-sortedcontainers/python-sortedcontainers.mk
-index c32f9e4047..43f662a89f 100644
---- a/package/python-sortedcontainers/python-sortedcontainers.mk
-+++ b/package/python-sortedcontainers/python-sortedcontainers.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/gzip/gzip.mk b/package/gzip/gzip.mk
+index d48cb1aa15..8ac6ddd6ed 100644
+--- a/package/gzip/gzip.mk
++++ b/package/gzip/gzip.mk
+@@ -12,6 +12,7 @@ GZIP_CONF_OPTS = --exec-prefix=/
+ GZIP_LICENSE = GPL-3.0+
+ GZIP_LICENSE_FILES = COPYING
+ GZIP_CONF_ENV += gl_cv_func_fflush_stdin=yes
++HOST_GZIP_CONF_ENV += gl_cv_func_fflush_stdin=yes
+ # configure substitutes $(SHELL) for the shell shebang in scripts like
+ # gzexe. Unfortunately, the same $(SHELL) variable will also be used by
+ # make to run its commands. Fortunately, /bin/sh is always a POSIX shell
+@@ -21,3 +22,4 @@ GZIP_CONF_ENV += gl_cv_func_fflush_stdin=yes
+ GZIP_CONF_ENV += ac_cv_path_shell=/bin/sh
  
--PYTHON_SORTEDCONTAINERS_VERSION = 2.0.5
-+PYTHON_SORTEDCONTAINERS_VERSION = 2.1.0
- PYTHON_SORTEDCONTAINERS_SOURCE = sortedcontainers-$(PYTHON_SORTEDCONTAINERS_VERSION).tar.gz
--PYTHON_SORTEDCONTAINERS_SITE = https://files.pythonhosted.org/packages/b9/30/accbf5c09c5fa25a3d5f762761e0d7ece6fdb12f2a9c43b840f73cef43ef
-+PYTHON_SORTEDCONTAINERS_SITE = https://files.pythonhosted.org/packages/29/e0/135df2e733790a3d3bcda970fd080617be8cea3bd98f411e76e6847c17ef
- PYTHON_SORTEDCONTAINERS_SETUP_TYPE = setuptools
- PYTHON_SORTEDCONTAINERS_LICENSE = Apache-2.0
- PYTHON_SORTEDCONTAINERS_LICENSE_FILES = LICENSE
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
