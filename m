@@ -1,47 +1,64 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 24 Nov 2018 12:14:41 +0200
-Subject: [Buildroot] [PATCH 1/1] python-cython: bump to version 0.29.1
-Message-ID: <20181124101441.14686-1-asafka7@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 24 Nov 2018 11:19:03 +0100
+Subject: [Buildroot] [PATCH] docs/manual: standardize a bit more the
+ formatting of commit titles
+Message-ID: <20181124101903.18138-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-cython/python-cython.hash | 4 ++--
- package/python-cython/python-cython.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Currently, our commit titles are not very well standardized, and it
+would be great to standardize them a little bit more. A number of
+people use "<pkg>: " as prefix, others use "package/<pkg>: ". Some
+people start the rest of the commit title (after the prefix) with an
+upper-case letter, some with a lower-case letter.
 
-diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
-index 8326dfe132..4ce7b3cd55 100644
---- a/package/python-cython/python-cython.hash
-+++ b/package/python-cython/python-cython.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/cython/json
--md5	5cb227772fbb0318be3c73b532d249ac  Cython-0.29.tar.gz
--sha256	94916d1ede67682638d3cc0feb10648ff14dc51fb7a7f147f4fedce78eaaea97  Cython-0.29.tar.gz
-+md5    3cf61c7ef8e5daa47e469cf7ba2e598c  Cython-0.29.1.tar.gz
-+sha256 18ab7646985a97e02cee72e1ddba2e732d4931d4e1732494ff30c5aa084bfb97  Cython-0.29.1.tar.gz
- # Locally computed sha256 checksums
- sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
- sha256 e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
-diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
-index f4cff975f1..852146406a 100644
---- a/package/python-cython/python-cython.mk
-+++ b/package/python-cython/python-cython.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+In an attempt to standardize this, this commit updates the manual with
+some examples of good commit titles.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ docs/manual/contribute.txt | 21 ++++++++++++++++++---
+ 1 file changed, 18 insertions(+), 3 deletions(-)
+
+diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+index 60bfb961f0..5530ce1546 100644
+--- a/docs/manual/contribute.txt
++++ b/docs/manual/contribute.txt
+@@ -194,14 +194,29 @@ bisect+ to locate the origin of a problem.
  
--PYTHON_CYTHON_VERSION = 0.29
-+PYTHON_CYTHON_VERSION = 0.29.1
- PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
--PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/f0/66/6309291b19b498b672817bd237caec787d1b18013ee659f17b1ec5844887
-+PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/f0/f8/7f406aac4c6919d5a4ce16509bbe059cd256e9ad94bae5ccac14094b7c51
- PYTHON_CYTHON_SETUP_TYPE = setuptools
- PYTHON_CYTHON_LICENSE = Apache-2.0
- PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
+ First of all, it is essential that the patch has a good commit
+ message. The commit message should start with a separate line with a
+-brief summary of the change, starting with the name of the affected
+-package. The body of the commit message should describe _why_ this
++brief summary of the change, prefixed by the area touched by the
++patch. A few examples of good commit titles:
++
++* +package/linuxptp: bump version to 2.0+
++
++* +configs/imx23evk: bump Linux version to 4.19+
++
++* +package/pkg-generic: postpone evaluation of dependency conditions+
++
++* +boot/uboot: needs host-{flex,bison}+
++
++* +support/testing: add python-ubjson tests+
++
++The description that follows the prefix should start with a lower case
++letter (i.e "bump", "needs", "postpone", "add" in the above examples).
++
++Second, the body of the commit message should describe _why_ this
+ change is needed, and if necessary also give details about _how_ it
+ was done. When writing the commit message, think of how the reviewers
+ will read it, but also think about how you will read it when you look
+ at this change again a few years down the line.
+ 
+-Second, the patch itself should do only one change, but do it
++Third, the patch itself should do only one change, but do it
+ completely. Two unrelated or weakly related changes should usually be
+ done in two separate patches. This usually means that a patch affects
+ only a single package. If several changes are related, it is often
 -- 
 2.19.1
