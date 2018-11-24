@@ -1,43 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 28 Nov 2018 22:38:22 +0100
-Subject: [Buildroot] [git commit] package/ejabberd: bump to version 18.09
-Message-ID: <20181202071600.B686F803E1@busybox.osuosl.org>
+Date: Sat, 24 Nov 2018 12:59:33 +0100
+Subject: [Buildroot] [git commit] python-sortedcontainers: bump to version
+ 2.1.0
+Message-ID: <20181202071558.9C44582855@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1a43490e9ab24a3a249ab1224e236db47c53145
+commit: https://git.buildroot.net/buildroot/commit/?id=87a5937a88de130ea9bf0c8a8b59086238b2c362
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This version requires much less patches than the previous one packaged
-in Buildroot. It is compatible with Erlang OTP 21.
-There are two remainning patches to:
-- change the Makefile rules so dependencies are not downloaded/compiled;
-- fix ejabberd user and load a default file in ejabberdctl script.
-
-The patch 0006-fix-install-permissions has been replaced by setting
-permissions on /etc/ejabberd directory via EJABBERD_PERMISSIONS.
-
-The patch 0009-disable-mod_avatar has been removed because eimp is
-a mandatory dependency since 0f86559d.
-
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...n-do-not-download-or-compile-dependencies.patch |   35 +
- .../0001-remove-make-targets-for-deps.patch        |   43 -
- ...jabberdctl.patch => 0002-fix-ejabberdctl.patch} |    0
- .../0003-remove-checking-erlang-version.patch      |   32 -
- package/ejabberd/0004-correct-includes.patch       | 1919 --------------------
- .../0005-disable-ERLANG_DEPRECATED_CHECK.patch     |   29 -
- .../ejabberd/0006-fix-install-permissions.patch    |   84 -
- .../0008-handle-error-case-from-lib_dir.patch      |   32 -
- package/ejabberd/0009-disable-mod_avatar.patch     |   32 -
- package/ejabberd/Config.in                         |    1 +
- package/ejabberd/ejabberd.hash                     |    2 +-
- package/ejabberd/ejabberd.mk                       |   12 +-
- 12 files changed, 45 insertions(+), 2176 deletions(-)
+ package/python-sortedcontainers/python-sortedcontainers.hash | 4 ++--
+ package/python-sortedcontainers/python-sortedcontainers.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/python-sortedcontainers/python-sortedcontainers.hash b/package/python-sortedcontainers/python-sortedcontainers.hash
+index c68d78a176..311bb77e17 100644
+--- a/package/python-sortedcontainers/python-sortedcontainers.hash
++++ b/package/python-sortedcontainers/python-sortedcontainers.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/sortedcontainers/json
+-md5	5f079b1131d8b1a3ed025e7e679b1497  sortedcontainers-2.0.5.tar.gz
+-sha256	b74f2756fb5e23512572cc76f0fe0832fd86310f77dfee54335a35fb33f6b950  sortedcontainers-2.0.5.tar.gz
++md5	41a4a1eaf7b85e6b3beb14cfb160bc27  sortedcontainers-2.1.0.tar.gz
++sha256	974e9a32f56b17c1bac2aebd9dcf197f3eb9cd30553c5852a3187ad162e1a03a  sortedcontainers-2.1.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	7dcf4a5137118a925727b8a1690bc6ea70b156ee6739dbb51fd4d386718d6ce5  LICENSE
+diff --git a/package/python-sortedcontainers/python-sortedcontainers.mk b/package/python-sortedcontainers/python-sortedcontainers.mk
+index c32f9e4047..43f662a89f 100644
+--- a/package/python-sortedcontainers/python-sortedcontainers.mk
++++ b/package/python-sortedcontainers/python-sortedcontainers.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SORTEDCONTAINERS_VERSION = 2.0.5
++PYTHON_SORTEDCONTAINERS_VERSION = 2.1.0
+ PYTHON_SORTEDCONTAINERS_SOURCE = sortedcontainers-$(PYTHON_SORTEDCONTAINERS_VERSION).tar.gz
+-PYTHON_SORTEDCONTAINERS_SITE = https://files.pythonhosted.org/packages/b9/30/accbf5c09c5fa25a3d5f762761e0d7ece6fdb12f2a9c43b840f73cef43ef
++PYTHON_SORTEDCONTAINERS_SITE = https://files.pythonhosted.org/packages/29/e0/135df2e733790a3d3bcda970fd080617be8cea3bd98f411e76e6847c17ef
+ PYTHON_SORTEDCONTAINERS_SETUP_TYPE = setuptools
+ PYTHON_SORTEDCONTAINERS_LICENSE = Apache-2.0
+ PYTHON_SORTEDCONTAINERS_LICENSE_FILES = LICENSE
