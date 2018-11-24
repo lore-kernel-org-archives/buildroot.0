@@ -1,65 +1,33 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 24 Nov 2018 10:07:22 +0100
-Subject: [Buildroot] [PATCH/next v3 8/8] support/testing: add
- perl-xml-libxml test
-In-Reply-To: <20181124090723.14722-1-francois.perrad@gadz.org>
-References: <20181124090723.14722-1-francois.perrad@gadz.org>
-Message-ID: <20181124090723.14722-9-francois.perrad@gadz.org>
+Date: Sat, 24 Nov 2018 10:07:51 +0100
+Subject: [Buildroot] [PATCH/next 0/3] suppport/testing: Lua and friends
+Message-ID: <20181124090754.14775-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-[https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/124872335]
-Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
----
- .gitlab-ci.yml                                |  1 +
- .../tests/package/test_perl_xml_libxml.py     | 22 +++++++++++++++++++
- 2 files changed, 23 insertions(+)
- create mode 100644 support/testing/tests/package/test_perl_xml_libxml.py
+test_lua.py allows to test the Lua interpreters,
+and it is used as base class for testing Lua modules.
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 55938a0dc..b7114f5dc 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -318,6 +318,7 @@ tests.package.test_perl_gdgraph.TestPerlGDGraph: *runtime_test
- tests.package.test_perl_libwww_perl.TestPerllibwwwperl: *runtime_test
- tests.package.test_perl_mail_dkim.TestPerlMailDKIM: *runtime_test
- tests.package.test_perl_x10.TestPerlX10: *runtime_test
-+tests.package.test_perl_xml_libxml.TestPerlXMLLibXML: *runtime_test
- tests.package.test_python.TestPython2: *runtime_test
- tests.package.test_python.TestPython3: *runtime_test
- tests.package.test_python_argh.TestPythonPy2Argh: *runtime_test
-diff --git a/support/testing/tests/package/test_perl_xml_libxml.py b/support/testing/tests/package/test_perl_xml_libxml.py
-new file mode 100644
-index 000000000..76eacfaea
---- /dev/null
-+++ b/support/testing/tests/package/test_perl_xml_libxml.py
-@@ -0,0 +1,22 @@
-+from tests.package.test_perl import TestPerlBase
-+
-+
-+class TestPerlXMLLibXML(TestPerlBase):
-+    """
-+    package:
-+        XML-LibXML
-+    direct dependencies:
-+        XML-NamespaceSupport
-+        XML-SAX
-+        XML-SAX-Base
-+    """
-+
-+    config = TestPerlBase.config + \
-+        """
-+        BR2_PACKAGE_PERL=y
-+        BR2_PACKAGE_PERL_XML_LIBXML=y
-+        """
-+
-+    def test_run(self):
-+        self.login()
-+        self.module_test("XML::LibXML")
+note1: Prosody is not a Lua module, but an application using Lua and some Lua modules.
+
+note2: the patch 3/3 is a fix, and must be applied also in master
+
+
+Francois Perrad (3):
+  support/testing: add lua test
+  support/testing; add prosody test
+  prosody: fix runtime dependencies
+
+ .gitlab-ci.yml                                |  4 ++
+ package/prosody/Config.in                     |  5 ++
+ support/testing/tests/package/test_lua.py     | 59 +++++++++++++++++++
+ support/testing/tests/package/test_prosody.py | 48 +++++++++++++++
+ 4 files changed, 116 insertions(+)
+ create mode 100644 support/testing/tests/package/test_lua.py
+ create mode 100644 support/testing/tests/package/test_prosody.py
+
 -- 
 2.17.1
