@@ -1,97 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Nov 2018 08:00:58 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-11-23
-Message-ID: <20181124070058.7F95920DC4@mail.bootlin.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 24 Nov 2018 09:38:25 +0100
+Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 4.{4, 9, 14,
+ 18}.x series
+Message-ID: <20181124083826.11818-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ linux/Config.in                      | 2 +-
+ linux/linux.hash                     | 8 ++++----
+ package/linux-headers/Config.in.host | 8 ++++----
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-Build statistics for 2018-11-23
-===============================
-
-      branch |  OK | NOK | TIM | TOT |
-   2018.02.x |  22 |   0 |   0 |  22 |
-   2018.08.x |  19 |   1 |   0 |  20 |
-      master | 206 |  10 |   0 | 216 |
-        next |  35 |  10 |   0 |  45 |
-
-Results for branch '2018.08.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-                  boost-1.67.0 | 1 
-
-
-Detail of failures
-------------------
-
-         arm |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/1e2c63363150095f1306dd58643421aaa956b17f |     
-
-Results for branch 'master'
-===========================
-
-Classification of failures by reason
-------------------------------------
-
-                   dante-1.4.1 | 3 
-                  mender-1.4.0 | 2 
-                libmpeg2-0.5.1 | 1 
-                    php-7.2.12 | 1 
-                qt5base-5.11.2 | 1 
-                  samba4-4.9.2 | 1 
-               valgrind-3.14.0 | 1 
-
-
-Detail of failures
-------------------
-
-         arm |                    dante-1.4.1 | NOK | http://autobuild.buildroot.net/results/1b1fce0b360c7743f4aad40f54d0fb16e3728082 |     
-   powerpc64 |                    dante-1.4.1 | NOK | http://autobuild.buildroot.net/results/76083fe45423ba878ee3dc99a7810a93e374a68c |     
-         sh4 |                    dante-1.4.1 | NOK | http://autobuild.buildroot.net/results/f969718402cae71446d6280ec1f66d357a155293 |     
-     powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/20fa4280492486c58845116c2b438d6f146f1182 | ORPH
-      x86_64 |                   mender-1.4.0 | NOK | http://autobuild.buildroot.net/results/a4bf4f7cef8baf100f12a0fe18719f0c0d6dcd47 |     
-      x86_64 |                   mender-1.4.0 | NOK | http://autobuild.buildroot.net/results/7659be08598a04c43c1eaa36245dd652f9448deb |     
-         sh4 |                     php-7.2.12 | NOK | http://autobuild.buildroot.net/results/3b6da316282e7733b377ecef8cca6a4e00d181d6 | ORPH
-  aarch64_be |                 qt5base-5.11.2 | NOK | http://autobuild.buildroot.net/results/b09f8f136db659a5a9e2b1e9748fe88146c4118b |     
-     aarch64 |                   samba4-4.9.2 | NOK | http://autobuild.buildroot.net/results/a09a065c523931c1892e81a99c57521fbe095d8b |     
-    mips64el |                valgrind-3.14.0 | NOK | http://autobuild.buildroot.net/results/1df4d557966b2bf8b4e597c99f19a44af342cc24 | ORPH
-
-Results for branch 'next'
-=========================
-
-Classification of failures by reason
-------------------------------------
-
-                   luvi-v2.7.6 | 2 
-                   trinity-1.8 | 2 
-     docker-engine-v17.05.0-ce | 1 
-               libiscsi-1.18.0 | 1 
-linuxptp-303b08cbf55096aba5... | 1 
-              tpm2-abrmd-2.0.3 | 1 
-uclibc-ng-test-c6d62cbc6050... | 1 
-               valgrind-3.14.0 | 1 
-
-
-Detail of failures
-------------------
-
-      x86_64 |      docker-engine-v17.05.0-ce | NOK | http://autobuild.buildroot.net/results/e9528b06b350ef84c1e2cb59fba87b4db77b4660 |     
-         arc |                libiscsi-1.18.0 | NOK | http://autobuild.buildroot.net/results/72cc1622f3913ef90def64e5f5e8036f50ed2467 |     
-      xtensa | linuxptp-303b08cbf55096aba5... | NOK | http://autobuild.buildroot.net/results/f6699ccd01a9677672a5f381c32df24d38d242ca |     
-         arm |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/c9606905862f0333db9befdf28eccbe6a23be637 |     
-         arm |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/10d8fbfd5dfcbe697ae6cb3ef550f65d32bcce7d |     
-       sparc |               tpm2-abrmd-2.0.3 | NOK | http://autobuild.buildroot.net/results/471ea1946e68c01d5ea1d426fdbf59864e98215d |     
-         arm |                    trinity-1.8 | NOK | http://autobuild.buildroot.net/results/ddf6b1cf4e4727928ffba7387953c4cc9719df49 |     
-         arm |                    trinity-1.8 | NOK | http://autobuild.buildroot.net/results/c3e51f4c54960a6eb6dc5106429295860b44f8dd |     
-     aarch64 | uclibc-ng-test-c6d62cbc6050... | NOK | http://autobuild.buildroot.net/results/62101e3a4e13e28e71affbf677370a2b311d2eba |     
-      mipsel |                valgrind-3.14.0 | NOK | http://autobuild.buildroot.net/results/0069cffea05fccede75d4c0b726327b22f61cf7d | ORPH
-
-
+diff --git a/linux/Config.in b/linux/Config.in
+index c782dc2aed..85e540754a 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -120,7 +120,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.18.18" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.18.20" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.138-cip25" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 8c85b18cd1..12da19e043 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,9 +1,9 @@
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256 34b361f815ad501268b6289dbb9b835dca1b1b470ad51cb8bc0f7c105588033d  linux-4.18.18.tar.xz
++sha256 68ac319e0fb7edd6b6051541d9cf112cd4f77a29e16a69ae1e133ff51117f653  linux-4.18.20.tar.xz
+ sha256 41026d713ba4f7a5e9d514b876ce4ed28a1d993c0c58b42b2a2597d6a0e83021  linux-4.16.18.tar.xz
+-sha256 9ddc7bc11cbea6475ac5abf18e01a143d7d506bece591e0dcb15c9452d3ed7d2  linux-4.14.80.tar.xz
+-sha256 d39531e2df13cec1f998a5273d86f10db977409a778c0c7e56ef3d50c7262ec8  linux-4.9.136.tar.xz
+-sha256 61b3d63a960a55046a7324d5724c262831952b223fe9ca02be0607f26d8f2ef4  linux-4.4.163.tar.xz
++sha256 701728de924e0ec4a6b7cf59252011f8268a1b70aaf02b8487c1b2190feb3f20  linux-4.14.83.tar.xz
++sha256 f888aef58c2c4d82c81511ad6a4528ee9a8241bb96c05c65e71224988782f943  linux-4.9.140.tar.xz
++sha256 9bb4a1757e67dbd0923dbdf7e7e0baa9baa53ac942471d8fbb8d35dd5b313c10  linux-4.4.164.tar.xz
+ sha256 6ad9389e55e0ea57768eae173747058a4487fa3630e10a7999cfec9f945e559c  linux-4.1.52.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v3.x/sha256sums.asc
+ sha256 ad96d797571496c969aa71bf5d08e9d2a8c84458090d29a120f1b2981185a99e  linux-3.2.102.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 93eb54f733..756fe81a57 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -290,11 +290,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.163"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.136"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.80"	if BR2_KERNEL_HEADERS_4_14
++	default "4.4.164"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.140"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.83"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
+-	default "4.18.18"	if BR2_KERNEL_HEADERS_4_18
++	default "4.18.20"	if BR2_KERNEL_HEADERS_4_18
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 -- 
-http://autobuild.buildroot.net
+2.19.1
