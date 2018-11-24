@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 24 Nov 2018 10:07:15 +0100
-Subject: [Buildroot] [PATCH/next v3 1/8] support/testing: add perl test
+Date: Sat, 24 Nov 2018 10:07:16 +0100
+Subject: [Buildroot] [PATCH/next v3 2/8] scancpan: add generation of test
 In-Reply-To: <20181124090723.14722-1-francois.perrad@gadz.org>
 References: <20181124090723.14722-1-francois.perrad@gadz.org>
-Message-ID: <20181124090723.14722-2-francois.perrad@gadz.org>
+Message-ID: <20181124090723.14722-3-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,94 +12,100 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- .gitlab-ci.yml                             |  1 +
- support/testing/tests/package/test_perl.py | 66 ++++++++++++++++++++++
- 2 files changed, 67 insertions(+)
- create mode 100644 support/testing/tests/package/test_perl.py
+ utils/scancpan | 67 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 67 insertions(+)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index bb488e1fc..3a8ba1109 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -312,6 +312,7 @@ tests.init.test_systemd.TestInitSystemSystemdRwNetworkd: *runtime_test
- tests.package.test_dropbear.TestDropbear: *runtime_test
- tests.package.test_ipython.TestIPythonPy2: *runtime_test
- tests.package.test_ipython.TestIPythonPy3: *runtime_test
-+tests.package.test_perl.TestPerl: *runtime_test
- tests.package.test_python.TestPython2: *runtime_test
- tests.package.test_python.TestPython3: *runtime_test
- tests.package.test_python_argh.TestPythonPy2Argh: *runtime_test
-diff --git a/support/testing/tests/package/test_perl.py b/support/testing/tests/package/test_perl.py
-new file mode 100644
-index 000000000..033b7cf34
---- /dev/null
-+++ b/support/testing/tests/package/test_perl.py
-@@ -0,0 +1,66 @@
-+import os
+diff --git a/utils/scancpan b/utils/scancpan
+index 78ea08c6e..2a58591e5 100755
+--- a/utils/scancpan
++++ b/utils/scancpan
+@@ -575,6 +575,32 @@ sub find_license_files {
+     return @license_files;
+ }
+ 
++sub want_test {
++    my ($distname) = @_;
++    return 1 if $need_dlopen{$distname} && scalar @{$deps_runtime{$distname}} > 1;
++}
 +
-+import infra.basetest
++sub get_dependencies {
++    my ($distname) = @_;
++    my %dep = map { $_ => 1 } @{$deps_runtime{$distname}};
++    for my $direct (@{$deps_runtime{$distname}}) {
++        for (get_dependencies( $direct )) {
++            $dep{$_} = 1;
++        }
++    }
++    return keys %dep;
++}
 +
++sub get_indirect_dependencies {
++    my ($distname) = @_;
++    my %indirect;
++    my %direct = map { $_ => 1 } @{$deps_runtime{$distname}};
++    for my $dep (get_dependencies( $distname )) {
++        $indirect{$dep} = 1 unless exists $direct{$dep};
++    }
++    return keys %indirect;
++}
 +
-+class TestPerlBase(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def login(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv7",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+    def module_test(self, module, script="1"):
-+        cmd = "perl -M{} -e '{}'".format(module, script)
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+
-+
-+class TestPerl(TestPerlBase):
-+    config = TestPerlBase.config + \
-+        """
-+        BR2_PACKAGE_PERL=y
-+        """
-+
-+    def version_test(self):
-+        cmd = "perl -v"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+        self.assertIn("This is perl 5", output[1])
-+
-+    def core_modules_test(self):
-+        self.module_test("Cwd")
-+        self.module_test("Data::Dumper")
-+        self.module_test("Devel::Peek")
-+        self.module_test("Digest::MD5")
-+        self.module_test("Digest::SHA")
-+        self.module_test("Encode")
-+        self.module_test("Fcntl")
-+        self.module_test("File::Glob")
-+        self.module_test("Hash::Util")
-+        self.module_test("I18N::Langinfo")
-+        self.module_test("IO::Handle")
-+        self.module_test("IPC::SysV")
-+        self.module_test("List::Util")
-+        self.module_test("MIME::Base64")
-+        self.module_test("POSIX")
-+        self.module_test("Socket")
-+        self.module_test("Storable")
-+        self.module_test("Sys::Hostname")
-+        self.module_test("Sys::Syslog")
-+        self.module_test("Time::HiRes")
-+        self.module_test("Time::Piece")
-+        self.module_test("Unicode::Collate")
-+        self.module_test("Unicode::Normalize")
-+
-+    def test_run(self):
-+        self.login()
-+        self.version_test()
-+        self.core_modules_test()
+ sub fetch {
+     my ($name, $need_target, $need_host, $top) = @_;
+     $need_target{$name} = $need_target if $need_target;
+@@ -688,6 +714,7 @@ while (my ($distname, $dist) = each %dist) {
+     my $mkname = $dirname . q{/} . $fsname . q{.mk};
+     my $hashname = $dirname . q{/} . $fsname . q{.hash};
+     my $brname = brname( $fsname );
++    my $testname = q{support/testing/tests/package/test_} . lc $brname . q{.py};
+     unless (-d $dirname) {
+         mkdir $dirname;
+         $new_pkgs = 1;
+@@ -779,6 +806,46 @@ while (my ($distname, $dist) = each %dist) {
+         }
+         close $fh;
+     }
++    if (want_test( $distname ) && ($force || !-f $testname)) {
++        my $classname = $distname;
++        $classname =~ s|-||g;
++        my $modname = $distname;
++        $modname =~ s|-|::|g;
++        my @indirect = (get_indirect_dependencies( $distname ));
++        say qq{write ${testname}} unless $quiet;
++        open my $fh, q{>}, $testname;
++        say {$fh} qq{from tests.package.test_perl import TestPerlBase};
++        say {$fh} qq{};
++        say {$fh} qq{};
++        say {$fh} qq{class TestPerl${classname}(TestPerlBase):};
++        say {$fh} qq{    """};
++        say {$fh} qq{    package:};
++        say {$fh} qq{        ${distname}};
++        say {$fh} qq{    direct dependencies:};
++        foreach my $dep (sort @{$deps_runtime{$distname}}) {
++            my $mark = want_test( $dep ) ? q{ *} : q{};
++            say {$fh} qq{        ${dep}${mark}};
++        }
++        if (scalar @indirect > 0) {
++            say {$fh} qq{    indirect dependencies:};
++            foreach my $dep (sort @indirect) {
++                my $mark = want_test( $dep ) ? q{ *} : q{};
++                say {$fh} qq{        ${dep}${mark}};
++            }
++        }
++        say {$fh} qq{    """};
++        say {$fh} qq{};
++        say {$fh} qq{    config = TestPerlBase.config + \\};
++        say {$fh} qq{        """};
++        say {$fh} qq{        BR2_PACKAGE_PERL=y};
++        say {$fh} qq{        BR2_PACKAGE_${brname}=y};
++        say {$fh} qq{        """};
++        say {$fh} qq{};
++        say {$fh} qq{    def test_run(self):};
++        say {$fh} qq{        self.login()};
++        say {$fh} qq{        self.module_test("${modname}")};
++        close $fh;
++    }
+ }
+ 
+ if ($new_pkgs) {
 -- 
 2.17.1
