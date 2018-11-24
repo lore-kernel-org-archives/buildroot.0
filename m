@@ -1,10 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 24 Nov 2018 10:07:17 +0100
-Subject: [Buildroot] [PATCH/next v3 3/8] support/testing: add
- perl-class-load test
+Date: Sat, 24 Nov 2018 10:07:18 +0100
+Subject: [Buildroot] [PATCH/next v3 4/8] support/testing: add perl-gdgraph
+ test
 In-Reply-To: <20181124090723.14722-1-francois.perrad@gadz.org>
 References: <20181124090723.14722-1-francois.perrad@gadz.org>
-Message-ID: <20181124090723.14722-4-francois.perrad@gadz.org>
+Message-ID: <20181124090723.14722-5-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,59 +13,53 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-[https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/124872329]
+[https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/124872330]
 Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
  .gitlab-ci.yml                                |  1 +
- .../tests/package/test_perl_class_load.py     | 28 +++++++++++++++++++
- 2 files changed, 29 insertions(+)
- create mode 100644 support/testing/tests/package/test_perl_class_load.py
+ .../tests/package/test_perl_gdgraph.py        | 22 +++++++++++++++++++
+ 2 files changed, 23 insertions(+)
+ create mode 100644 support/testing/tests/package/test_perl_gdgraph.py
 
 diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 3a8ba1109..e315e78f0 100644
+index e315e78f0..00cdb3576 100644
 --- a/.gitlab-ci.yml
 +++ b/.gitlab-ci.yml
-@@ -313,6 +313,7 @@ tests.package.test_dropbear.TestDropbear: *runtime_test
- tests.package.test_ipython.TestIPythonPy2: *runtime_test
+@@ -314,6 +314,7 @@ tests.package.test_ipython.TestIPythonPy2: *runtime_test
  tests.package.test_ipython.TestIPythonPy3: *runtime_test
  tests.package.test_perl.TestPerl: *runtime_test
-+tests.package.test_perl_class_load.TestPerlClassLoad: *runtime_test
+ tests.package.test_perl_class_load.TestPerlClassLoad: *runtime_test
++tests.package.test_perl_gdgraph.TestPerlGDGraph: *runtime_test
  tests.package.test_python.TestPython2: *runtime_test
  tests.package.test_python.TestPython3: *runtime_test
  tests.package.test_python_argh.TestPythonPy2Argh: *runtime_test
-diff --git a/support/testing/tests/package/test_perl_class_load.py b/support/testing/tests/package/test_perl_class_load.py
+diff --git a/support/testing/tests/package/test_perl_gdgraph.py b/support/testing/tests/package/test_perl_gdgraph.py
 new file mode 100644
-index 000000000..1e86c0374
+index 000000000..16cd8cb8e
 --- /dev/null
-+++ b/support/testing/tests/package/test_perl_class_load.py
-@@ -0,0 +1,28 @@
++++ b/support/testing/tests/package/test_perl_gdgraph.py
+@@ -0,0 +1,22 @@
 +from tests.package.test_perl import TestPerlBase
 +
 +
-+class TestPerlClassLoad(TestPerlBase):
++class TestPerlGDGraph(TestPerlBase):
 +    """
 +    package:
-+        Class-Load
++        GDGraph
 +    direct dependencies:
-+        Data-OptList *
-+        Module-Implementation
-+        Module-Runtime
-+        Package-Stash
-+        Try-Tiny
-+    indirect dependencies:
-+        Dist-CheckConflicts
-+        Params-Util
-+        Sub-Install
++        GD
++        GDTextUtil
 +    """
 +
 +    config = TestPerlBase.config + \
 +        """
 +        BR2_PACKAGE_PERL=y
-+        BR2_PACKAGE_PERL_CLASS_LOAD=y
++        BR2_PACKAGE_PERL_GDGRAPH=y
 +        """
 +
 +    def test_run(self):
 +        self.login()
-+        self.module_test("Class::Load")
++        self.module_test("GD")
++        self.module_test("GD::Graph")
 -- 
 2.17.1
