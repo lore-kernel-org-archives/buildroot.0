@@ -1,70 +1,54 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 24 Nov 2018 15:54:50 +0100
-Subject: [Buildroot] [PATCH/next 2/2] squid: needs atomic
-In-Reply-To: <20181124145450.5623-1-fontaine.fabrice@gmail.com>
-References: <20181124145450.5623-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181124145450.5623-2-fontaine.fabrice@gmail.com>
+From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Date: Sat, 24 Nov 2018 17:54:34 +0100
+Subject: [Buildroot] [PATCH v2] package/libtool: Reduce target package to
+ libltdl only
+Message-ID: <20181124165434.31651-1-alexander.sverdlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since https://github.com/squid-cache/squid/commit/4b0f89121135aae68fbaf2aa33b5fb2e0da66d3e
-squid tries to find if latomic is needed through:
-AC_SEARCH_LIBS([__atomic_load_8],[atomic],[ATOMICLIB="-latomic"],[])
+This will save 1700K on target filesystem (as tested on ARM, i686).
 
-However, this can fails on:
-configure:21147: /home/fabrice/buildroot/output/host/bin/arc-buildroot-linux-gnu-g++ -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -matomic -Os   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -g conftest.cpp -latomic   >&5
-conftest.cpp:55:6: error: new declaration 'char __atomic_load_8()' ambiguates built-in declaration 'long long unsigned int __atomic_load_8(const volatile void*, int)' [-fpermissive]
- char __atomic_load_8 ();
-      ^~~~~~~~~~~~~~~
-conftest.cpp: In function 'int main()':
-conftest.cpp:59:25: error: too few arguments to function 'long long unsigned int __atomic_load_8(const volatile void*, int)'
- return __atomic_load_8 ();
-
-So add -latomic to LIBS if BR2_TOOLCHAIN_HAS_LIBATOMIC is set
-
-Fixes:
- - http://autobuild.buildroot.org/results/13082cea836a12ac8bf85cbdb53a56a5d30c70b1
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 ---
- package/squid/Config.in | 2 ++
- package/squid/squid.mk  | 4 ++++
- 2 files changed, 6 insertions(+)
+Changelog:
+v2:
+- rework target libtool instead of new package/libltdl
 
-diff --git a/package/squid/Config.in b/package/squid/Config.in
-index 50f65de433..726160b01d 100644
---- a/package/squid/Config.in
-+++ b/package/squid/Config.in
-@@ -1,10 +1,12 @@
- comment "squid needs a toolchain w/ C++, gcc >= 4.8 not affected by bug 64735"
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735 || \
- 		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 
- config BR2_PACKAGE_SQUID
- 	bool "squid"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::current_exception
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 2b6c830a62..4a3318b40b 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -38,6 +38,10 @@ SQUID_CONF_OPTS = \
- 	--with-swapdir=/var/cache/squid/ \
- 	--with-default-user=squid
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+SQUID_CONF_ENV += LIBS=-latomic
-+endif
+ package/libtool/libtool.mk | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/package/libtool/libtool.mk b/package/libtool/libtool.mk
+index bf97ee12b5..b25e058bf4 100644
+--- a/package/libtool/libtool.mk
++++ b/package/libtool/libtool.mk
+@@ -7,12 +7,22 @@
+ LIBTOOL_VERSION = 2.4.6
+ LIBTOOL_SOURCE = libtool-$(LIBTOOL_VERSION).tar.xz
+ LIBTOOL_SITE = $(BR2_GNU_MIRROR)/libtool
 +
- ifeq ($(BR2_PACKAGE_LIBKRB5),y)
- SQUID_CONF_OPTS += --with-mit-krb5
- SQUID_DEPENDENCIES += libkrb5
++LIBTOOL_SUBDIR = libltdl
++HOST_LIBTOOL_SUBDIR = .
++
+ LIBTOOL_INSTALL_STAGING = YES
+-LIBTOOL_CONF_ENV = HELP2MAN=true
++
++LIBTOOL_CONF_OPTS = --enable-ltdl-install
++HOST_LIBTOOL_CONF_OPTS =
++
+ LIBTOOL_DEPENDENCIES = host-m4
+ HOST_LIBTOOL_DEPENDENCIES = host-m4
+-LIBTOOL_LICENSE = GPL-2.0+
+-LIBTOOL_LICENSE_FILES = COPYING
++
++LIBTOOL_LICENSE = LGPLv2.1
++LIBTOOL_LICENSE_FILES = $(LIBTOOL_SUBDIR)/COPYING.LIB
++HOST_LIBTOOL_LICENSE = GPL-2.0+
++HOST_LIBTOOL_LICENSE_FILES = COPYING
+ 
+ HOST_LIBTOOL_CONF_ENV = MAKEINFO=true
+ HOST_LIBTOOL_LIBTOOL_PATCH = NO
 -- 
-2.17.1
+2.19.1
