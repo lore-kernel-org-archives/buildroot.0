@@ -1,98 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 29 Nov 2018 22:15:04 +0100
-Subject: [Buildroot] [git commit] package/perl-time-hires: remove package
-Message-ID: <20181202071600.F2806803E1@busybox.osuosl.org>
+Date: Sat, 24 Nov 2018 10:13:10 +0100
+Subject: [Buildroot] [git commit] package/{dovecot,
+ dovecot-pigeonhole}: bump version to 2.3.4, 0.5.4
+Message-ID: <20181202071558.722FF82855@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba5b8c467ca4097f8666da59a92415e2bca28364
+commit: https://git.buildroot.net/buildroot/commit/?id=5c47cabd179579c681df86f37db4bfb9ee70c41f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is a core Perl module (ie. included in the Perl distribution), so
-there is no point in having a separate package for it.
+We need to bump both packages in one commit:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+https://dovecot.org/pipermail/dovecot-news/2018-November/000392.html
+
+ Adjustments to several changes in Dovecot v2.3.4 make this Pigeonhole
+ release dependent on that Dovecot release; it will not compile against
+ older Dovecot versions. And, conversely, you need to upgrade
+ Pigeonhole when upgrading Dovecot to v2.3.4.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                   |  1 -
- package/Config.in                            |  1 -
- package/perl-time-hires/Config.in            | 10 ----------
- package/perl-time-hires/perl-time-hires.hash |  6 ------
- package/perl-time-hires/perl-time-hires.mk   | 14 --------------
- 5 files changed, 32 deletions(-)
+ package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 2 +-
+ package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 2 +-
+ package/dovecot/dovecot.hash                       | 2 +-
+ package/dovecot/dovecot.mk                         | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c1ec1866ea..455f2e2b9d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -352,7 +352,6 @@ F:	package/perl-mime-base64/
- F:	package/perl-net-dns/
- F:	package/perl-net-http/
- F:	package/perl-netaddr-ip/
--F:	package/perl-time-hires/
- F:	package/perl-timedate/
- F:	package/perl-uri/
- F:	package/perl-www-robotrules/
-diff --git a/package/Config.in b/package/Config.in
-index ff07986a50..38c2654c69 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -758,7 +758,6 @@ menu "Perl libraries/modules"
- 	source "package/perl-sys-cpu/Config.in"
- 	source "package/perl-sys-meminfo/Config.in"
- 	source "package/perl-sys-mmap/Config.in"
--	source "package/perl-time-hires/Config.in"
- 	source "package/perl-time-parsedate/Config.in"
- 	source "package/perl-timedate/Config.in"
- 	source "package/perl-try-tiny/Config.in"
-diff --git a/package/perl-time-hires/Config.in b/package/perl-time-hires/Config.in
-deleted file mode 100644
-index db2ca039cb..0000000000
---- a/package/perl-time-hires/Config.in
-+++ /dev/null
-@@ -1,10 +0,0 @@
--config BR2_PACKAGE_PERL_TIME_HIRES
--	bool "perl-time-hires"
--	depends on !BR2_STATIC_LIBS
--	help
--	  High resolution alarm, sleep, gettimeofday, interval timers.
--
--	  https://metacpan.org/release/Time-HiRes
--
--comment "perl-time-hires needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
-diff --git a/package/perl-time-hires/perl-time-hires.hash b/package/perl-time-hires/perl-time-hires.hash
-deleted file mode 100644
-index 4260766681..0000000000
---- a/package/perl-time-hires/perl-time-hires.hash
-+++ /dev/null
-@@ -1,6 +0,0 @@
--# retrieved by scancpan from http://cpan.metacpan.org/
--md5    8f998cb60966c86e24c500016e4d1ce8 Time-HiRes-1.9758.tar.gz
--sha256 5bfa145bc11e70a8e337543b1084a293743a690691b568493455dedf58f34b1e Time-HiRes-1.9758.tar.gz
--
--# computed by scancpan
--sha256 ecc20782bd6c34d2d632356020f9ad0150c7ae1803ae9560258d76d4533030da README
-diff --git a/package/perl-time-hires/perl-time-hires.mk b/package/perl-time-hires/perl-time-hires.mk
-deleted file mode 100644
-index 03322c3fb0..0000000000
---- a/package/perl-time-hires/perl-time-hires.mk
-+++ /dev/null
-@@ -1,14 +0,0 @@
--################################################################################
--#
--# perl-time-hires
--#
--################################################################################
--
--PERL_TIME_HIRES_VERSION = 1.9758
--PERL_TIME_HIRES_SOURCE = Time-HiRes-$(PERL_TIME_HIRES_VERSION).tar.gz
--PERL_TIME_HIRES_SITE = $(BR2_CPAN_MIRROR)/authors/id/J/JH/JHI
--PERL_TIME_HIRES_LICENSE = Artistic or GPL-1.0+
--PERL_TIME_HIRES_LICENSE_FILES = README
--PERL_TIME_HIRES_DISTNAME = Time-HiRes
--
--$(eval $(perl-package))
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+index b20ab0dcf4..5ad9406ad2 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+@@ -1,3 +1,3 @@
+ # Locally computed after checking signature
+-sha256 e02f2741c05f9e2af1c5f46da35efb74997f9d4b941ba68936206d310ddf2622  dovecot-2.3-pigeonhole-0.5.3.tar.gz
++sha256 547999e67a001abc5e654c7e35653d3fe057fa9a47a24257e39a79c41ef08516  dovecot-2.3-pigeonhole-0.5.4.tar.gz
+ sha256 fc9e9522216f2a9a28b31300e3c73c1df56acc27dfae951bf516e7995366b51a  COPYING
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+index 2647426e36..184204673b 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOVECOT_PIGEONHOLE_VERSION = 0.5.3
++DOVECOT_PIGEONHOLE_VERSION = 0.5.4
+ DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.3-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
+ DOVECOT_PIGEONHOLE_SITE = https://pigeonhole.dovecot.org/releases/2.3
+ DOVECOT_PIGEONHOLE_LICENSE = LGPL-2.1
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index 5f982a7943..c4abc18bea 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
+@@ -1,5 +1,5 @@
+ # Locally computed after checking signature
+-sha256 15af27ee25258afb4ad9581f8df681be998b763597086bbae54ca7d77a066d8e  dovecot-2.3.3.tar.gz
++sha256 d91b76eff8df6185c1799f1b279f780105bdeeea27e3286b42f4cab18efbef05  dovecot-2.3.4.tar.gz
+ sha256 a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+ sha256 52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index 17cdc22e53..45c9f67c3c 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ DOVECOT_VERSION_MAJOR = 2.3
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).3
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).4
+ DOVECOT_SITE = https://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
