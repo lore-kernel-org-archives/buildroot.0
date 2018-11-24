@@ -1,13 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Nov 2018 12:37:25 +0100
-Subject: [Buildroot] [PATCH/next v3 5/8] support/testing: add
- perl-libwww-perl test
-In-Reply-To: <CAB0FRstu85RTQ1tQm=fSkYOouLRZgxvkCq8VkXF+y0J82_o-xA@mail.gmail.com>
-References: <20181124090723.14722-1-francois.perrad@gadz.org>
- <20181124090723.14722-6-francois.perrad@gadz.org>
- <20181124110608.681120b2@windsurf>
- <CAB0FRstu85RTQ1tQm=fSkYOouLRZgxvkCq8VkXF+y0J82_o-xA@mail.gmail.com>
-Message-ID: <20181124123725.7c17ef1a@windsurf>
+Date: Sat, 24 Nov 2018 12:58:36 +0100
+Subject: [Buildroot] [PATCH 1/1] python-cython: bump to version 0.29.1
+In-Reply-To: <20181124101441.14686-1-asafka7@gmail.com>
+References: <20181124101441.14686-1-asafka7@gmail.com>
+Message-ID: <20181124125836.16239732@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,52 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 24 Nov 2018 11:56:30 +0100, Fran?ois Perrad wrote:
+On Sat, 24 Nov 2018 12:14:41 +0200, Asaf Kahlon wrote:
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> ---
+>  package/python-cython/python-cython.hash | 4 ++--
+>  package/python-cython/python-cython.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-> > Sorry if I haven't followed the previous discussion, but why do we have
-> > this docstring ? Is it just for information ?
-> >  
-> Yes, this is for information.
-
-OK.
-
-> By this way, we know that we don't need to write another test for HTTP-Date
-> or IO-HTML.
-
-This is not really true. Indeed, if you test HTTP-Date with plenty of
-other packages installed, how are you sure that HTTP-Date has all the
-necessary runtime dependencies it needs ?
-
-Only a test with only HTTP-Date installed and its dependencies will
-allow to verify this.
-
-> > > +    def test_run(self):
-> > > +        self.login()
-> > > +        self.module_test("LWP")
-> > > +        self.module_test("LWP::UserAgent")
-> > > +        self.module_test("LWP::Authen::Basic")
-> > > +        self.module_test("LWP::Authen::Digest")
-> > > +        self.module_test("HTTP::Message")
-> > > +        self.module_test("HTTP::Daemon")
-> > > +        self.module_test("WWW::RobotRules")  
-> >
-> > Why are you testing specifically those modules ? What is the rule to
-> > decide what modules are tested here ?
-> >
-> >  
-> libwww-perl is a special package/distribution from the beginning of the WWW
-> history
-> (started in 1995, see https://metacpan.org/changes/distribution/libwww-perl
-> ).
-> In fact, libwww-perl collection is a set of Perl modules.
-> LWP (Lib World-Wide Web Perl) is just a name space for some of them, and
-> doesn't match with the distribution name libwww.
-> So, we need load most of them.
-
-OK, so all those modules are the ones part of libwww-perl, i.e we are
-not testing modules installed by other packages, correct ?
-
-Thanks,
+Applied to next, thanks.
 
 Thomas
 -- 
