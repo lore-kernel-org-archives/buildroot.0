@@ -1,46 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Nov 2018 21:45:19 +0100
-Subject: [Buildroot] [PATCH v2 2/2] grpc: new package
-In-Reply-To: <CALxq1w45Krr6E8Ri7rxrDN9USkbPdLbqmmK2x-XiH3AmHHeqpg@mail.gmail.com>
-References: <20181118211942.28839-1-robertroyrose@gmail.com>
- <20181118211942.28839-2-robertroyrose@gmail.com>
- <20181124151256.5b786338@windsurf>
- <CALxq1w45Krr6E8Ri7rxrDN9USkbPdLbqmmK2x-XiH3AmHHeqpg@mail.gmail.com>
-Message-ID: <20181124214519.5d168fd8@windsurf>
+From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Date: Sat, 24 Nov 2018 22:03:08 +0100
+Subject: [Buildroot] [PATCH v2] package/libtool: Reduce target package
+ to libltdl only
+In-Reply-To: <20181124200631.03099f939ead1a2cf50cb714@gmail.com>
+References: <20181124165434.31651-1-alexander.sverdlin@gmail.com>
+ <20181124184708.GB20308@scaer>
+ <20181124200631.03099f939ead1a2cf50cb714@gmail.com>
+Message-ID: <20181124220308.9f8200aa4cdf67f106153e97@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Robert,
+Hi!
 
-On Sat, 24 Nov 2018 12:09:36 -0800, robert rose wrote:
+On Sat, 24 Nov 2018 20:06:31 +0100
+Alexander Sverdlin <alexander.sverdlin@gmail.com> wrote:
 
-> tar xf ~/Downloads/buildroot-2018.08.2.tar.gz
-> cd buildroot-2018.08.2
-> patch -p1 < ~/buildroot/outgoing/v2-0001-c-ares-support-host-build.patch
-> patch -p1 < ~/buildroot/outgoing/v2-0002-grpc-new-package.patch
-> make raspberrypi3_defconfig
-> make
+> > So, the host presumably also builds libltdl, no? Thus, we should include
+> > its licensing information too;
+> > 
+> >     HOST_LIBTOOL_LICENSE = GPL-2.0+, LGPLv2.1 (libltdl)
+> >     HOST_LIBTOOL_LICENSE_FILES = COPYING $(LIBTOOL_SUBDIR)/COPYING.LIB
+> > 
+> > Not sure about that one, wait a bit for others to confirm before
+> > respinning the patch.
+> 
+> If others agree that there is a licensing issue, this would
+> be totally unrelated to libltdl conversion, so I can do it in
+> a separate patch.
 
-If you do just this, you don't build gprc, you at least need to do
-"make menuconfig" and enable gprc.
+OK, tried to make a separate patch and understood that it
+was wrong idea...
 
-> And it worked.  I don't have cmake on my machine, so buildroot
-> built cmake-3.8.2
-> What version of cmake do you use?
-
-I have a cmake installed system-wide, so I'm not using the one built by
-Buildroot. My cmake version is:
-
-$ cmake --version
-cmake version 3.12.1
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Alexander Sverdlin.
