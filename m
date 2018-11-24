@@ -1,90 +1,60 @@
 From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sat, 24 Nov 2018 14:42:28 +0100
-Subject: [Buildroot] [PATCH/next v3 5/8] support/testing: add
- perl-libwww-perl test
-In-Reply-To: <20181124123725.7c17ef1a@windsurf>
-References: <20181124090723.14722-1-francois.perrad@gadz.org>
- <20181124090723.14722-6-francois.perrad@gadz.org>
- <20181124110608.681120b2@windsurf>
- <CAB0FRstu85RTQ1tQm=fSkYOouLRZgxvkCq8VkXF+y0J82_o-xA@mail.gmail.com>
- <20181124123725.7c17ef1a@windsurf>
-Message-ID: <CAB0FRst=r3OG4PgN9pztTvZmQ6bCu8Ev8BVyaNSyhJkJ+irqVg@mail.gmail.com>
+Date: Sat, 24 Nov 2018 14:50:41 +0100
+Subject: [Buildroot] [PATCH 4/6]
+ configs/olimex_a20_olinuxino_lime_legacy: use gcc 6.x and not the default
+ version
+In-Reply-To: <df6acac2-f862-d153-155c-826132591520@lucaceresoli.net>
+References: <20181122094150.10403-1-thomas.petazzoni@bootlin.com>
+ <20181122094150.10403-4-thomas.petazzoni@bootlin.com>
+ <df6acac2-f862-d153-155c-826132591520@lucaceresoli.net>
+Message-ID: <CAB0FRstukk+O5Dx1k4GXUJ=bPOL_czKkUn6NHeY0psvWeqG=Dg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le sam. 24 nov. 2018 ? 12:44, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-a ?crit :
+Le ven. 23 nov. 2018 ? 14:57, Luca Ceresoli <luca@lucaceresoli.net> a
+?crit :
 
-> Hello,
+> Hi Thomas,
 >
-> On Sat, 24 Nov 2018 11:56:30 +0100, Fran?ois Perrad wrote:
+> On 22/11/18 10:41, Thomas Petazzoni wrote:
+> > The old 3.4 Linux kernel used by this defconfig doesn't build with gcc
+> 7.x:
+> >
+> > include/linux/compiler-gcc.h:106:1: fatal error: linux/compiler-gcc7.h:
+> No such file or directory
+> >
+> > So let's use gcc 6.x for the time being.
+> >
+> > Long term, we should use a newer or different kernel source for this
+> > defconfig, or get rid of the defconfig entirely if there's no updated
+> > kernel with a fix.
 >
-> > > Sorry if I haven't followed the previous discussion, but why do we have
-> > > this docstring ? Is it just for information ?
-> > >
-> > Yes, this is for information.
->
-> OK.
->
-> > By this way, we know that we don't need to write another test for
-> HTTP-Date
-> > or IO-HTML.
->
-> This is not really true. Indeed, if you test HTTP-Date with plenty of
-> other packages installed, how are you sure that HTTP-Date has all the
-> necessary runtime dependencies it needs ?
->
-> Only a test with only HTTP-Date installed and its dependencies will
-> allow to verify this.
+> Adding the author of the Lime legacy support to the recipients.
 >
 >
-I want also to limit the number of test, see cover letter.
+After the release of BR 2019.02, I will remove:
+ - configs/olimex_a20_olinuxino_lime_legacy_defconfig
+ - package/sunxi-mali
 
-> > > +    def test_run(self):
-> > > > +        self.login()
-> > > > +        self.module_test("LWP")
-> > > > +        self.module_test("LWP::UserAgent")
-> > > > +        self.module_test("LWP::Authen::Basic")
-> > > > +        self.module_test("LWP::Authen::Digest")
-> > > > +        self.module_test("HTTP::Message")
-> > > > +        self.module_test("HTTP::Daemon")
-> > > > +        self.module_test("WWW::RobotRules")
-> > >
-> > > Why are you testing specifically those modules ? What is the rule to
-> > > decide what modules are tested here ?
-> > >
-> > >
-> > libwww-perl is a special package/distribution from the beginning of the
-> WWW
-> > history
-> > (started in 1995, see
-> https://metacpan.org/changes/distribution/libwww-perl
-> > ).
-> > In fact, libwww-perl collection is a set of Perl modules.
-> > LWP (Lib World-Wide Web Perl) is just a name space for some of them, and
-> > doesn't match with the distribution name libwww.
-> > So, we need load most of them.
->
-> OK, so all those modules are the ones part of libwww-perl, i.e we are
-> not testing modules installed by other packages, correct ?
->
->
-Correct.
+Now, we have package/sunxi-mali-mainline.
 
 Fran?ois
 
 
-> Thanks,
+> Fran?ois, if memory serves, the old kernel was needed for GPU support.
+> Is it still the case?
 >
-> Thomas
+> Thanks,
 > --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> Luca
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181124/3607940e/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181124/ae79fe36/attachment.html>
