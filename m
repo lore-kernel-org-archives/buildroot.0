@@ -1,34 +1,28 @@
 From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Date: Sat, 24 Nov 2018 20:06:31 +0100
+Date: Sat, 24 Nov 2018 20:24:49 +0100
 Subject: [Buildroot] [PATCH v2] package/libtool: Reduce target package
  to libltdl only
 In-Reply-To: <20181124184708.GB20308@scaer>
 References: <20181124165434.31651-1-alexander.sverdlin@gmail.com>
  <20181124184708.GB20308@scaer>
-Message-ID: <20181124200631.03099f939ead1a2cf50cb714@gmail.com>
+Message-ID: <20181124202449.f5e76e6ac1ae0bf88d997a8a@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Hello!
 
 On Sat, 24 Nov 2018 19:47:08 +0100
 "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-> So, the host presumably also builds libltdl, no? Thus, we should include
-> its licensing information too;
+> > -LIBTOOL_CONF_ENV = HELP2MAN=true
 > 
->     HOST_LIBTOOL_LICENSE = GPL-2.0+, LGPLv2.1 (libltdl)
->     HOST_LIBTOOL_LICENSE_FILES = COPYING $(LIBTOOL_SUBDIR)/COPYING.LIB
-> 
-> Not sure about that one, wait a bit for others to confirm before
-> respinning the patch.
+> I guess HELP2MAN is no longer needed because there is no doc to build in
+> the libltdl subdir, right?
 
-If others agree that there is a licensing issue, this would
-be totally unrelated to libltdl conversion, so I can do it in
-a separate patch.
+Correct.
 
 -- 
 Alexander Sverdlin.
