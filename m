@@ -1,153 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Nov 2018 10:29:26 +0100
-Subject: [Buildroot] [git commit] package/android-tools: add option to build
- ext4 utils for the host
-Message-ID: <20181202071558.7B56682855@busybox.osuosl.org>
+Date: Sat, 24 Nov 2018 10:13:05 +0100
+Subject: [Buildroot] [git commit] package/{mesa3d,
+ mesa3d-headers}: bump version to 18.2.5
+Message-ID: <20181202071558.686488A3F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=567928e5ada28552cfa9c228aba4f275df05008e
+commit: https://git.buildroot.net/buildroot/commit/?id=cf7338c9034474fc9e64c238879bb0ca308a020b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch adds an option to build and install the ext4_utils for the
-host, i.e. make_ext4fs, ext4fixup, ext2simg, img2simg, simg2img and
-simg2simg.
-
-Signed-off-by: Alex Kaplan <kaplan2539@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[Thomas:
- - simplify a bit the installation logic by using a single
-   HOST_ANDROID_TOOLS_INSTALL_TARGETS variable, instead of having one
-   specific for ext4 tools
- - drop "default n" from Config.in.host]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...akefiles-for-out-of-tree-ext4_utils-build.patch | 48 ++++++++++++++++++++++
- package/android-tools/Config.in.host               |  7 ++++
- package/android-tools/android-tools.mk             | 19 ++++++---
- 3 files changed, 69 insertions(+), 5 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk |  2 +-
+ package/mesa3d/mesa3d.hash               | 10 +++++-----
+ package/mesa3d/mesa3d.mk                 |  2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/android-tools/0009-Fix-makefiles-for-out-of-tree-ext4_utils-build.patch b/package/android-tools/0009-Fix-makefiles-for-out-of-tree-ext4_utils-build.patch
-new file mode 100644
-index 0000000000..80ea1ec1fe
---- /dev/null
-+++ b/package/android-tools/0009-Fix-makefiles-for-out-of-tree-ext4_utils-build.patch
-@@ -0,0 +1,48 @@
-+From d24abbec201975a5eb7f8589614cfb424b8c80b6 Mon Sep 17 00:00:00 2001
-+From: Alex Kaplan <kaplan2539@gmail.com>
-+Date: Sat, 10 Nov 2018 19:50:51 -0800
-+Subject: [PATCH] Fix makefiles for out-of-tree ext4_utils build
-+
-+Signed-off-by: Alex Kaplan <kaplan2539@gmail.com>
-+---
-+ debian/makefiles/ext4_utils.mk | 10 +++++-----
-+ 1 file changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/debian/makefiles/ext4_utils.mk b/debian/makefiles/ext4_utils.mk
-+index cb64916..c5904bf 100644
-+--- a/debian/makefiles/ext4_utils.mk
-++++ b/debian/makefiles/ext4_utils.mk
-+@@ -1,6 +1,7 @@
-+ # Makefile for ext4_utils; based on https://heiher.info/2227.html
-+ # Author: Dmitrijs Ledkovs <xnox@ubuntu.com>
-+ 
-++VPATH+=$(SRCDIR)/extras/ext4_utils
-+ SRCS+=make_ext4fs.c
-+ SRCS+=ext4fixup.c
-+ SRCS+=ext4_utils.c
-+@@ -13,7 +14,7 @@ SRCS+=sha1.c
-+ SRCS+=wipe.c
-+ SRCS+=crc16.c
-+ 
-+-VPATH+=../../core/libsparse
-++VPATH+=$(SRCDIR)/core/libsparse
-+ SRCS+= backed_block.c
-+ SRCS+= sparse_crc32.c
-+ SRCS+= sparse.c
-+@@ -31,10 +32,9 @@ SRCS+=img2simg.c
-+ SRCS+=simg2img.c
-+ SRCS+=simg2simg.c
-+ 
-+-CPPFLAGS+= -I.
-+-CPPFLAGS+= -I/usr/include
-+-CPPFLAGS+= -I../../core/include
-+-CPPFLAGS+= -I../../core/libsparse/include/
-++CPPFLAGS+= -I$(SRCDIR)
-++CPPFLAGS+= -I$(SRCDIR)/core/include
-++CPPFLAGS+= -I$(SRCDIR)/core/libsparse/include/
-+ 
-+ LIBS+= -lz -lselinux
-+ 
-+-- 
-+2.7.4
-+
-diff --git a/package/android-tools/Config.in.host b/package/android-tools/Config.in.host
-index 993c4c9fdc..433f4e384f 100644
---- a/package/android-tools/Config.in.host
-+++ b/package/android-tools/Config.in.host
-@@ -23,4 +23,11 @@ config BR2_PACKAGE_HOST_ANDROID_TOOLS_ADB
- 	  host, which can be used to interact with target devices
- 	  implementing the ADB protocol.
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 99dfb431a9..d1a836b145 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
  
-+config BR2_PACKAGE_HOST_ANDROID_TOOLS_EXT4_UTILS
-+	bool "ext4 utils"
-+	help
-+	  This option will build and install the ext4 utils for the
-+	  host, i.e. make_ext4fs, ext4fixup, ext2simg, img2simg,
-+	  simg2img and simg2simg.
-+
- endif
-diff --git a/package/android-tools/android-tools.mk b/package/android-tools/android-tools.mk
-index 879d788e3a..6f6ca7729b 100644
---- a/package/android-tools/android-tools.mk
-+++ b/package/android-tools/android-tools.mk
-@@ -31,15 +31,24 @@ HOST_ANDROID_TOOLS_PRE_PATCH_HOOKS += ANDROID_TOOLS_DEBIAN_PATCH
- ANDROID_TOOLS_PRE_PATCH_HOOKS += ANDROID_TOOLS_DEBIAN_PATCH
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 18.2.4
++MESA3D_HEADERS_VERSION = 18.2.5
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 9ee353ee15..c3464c3d0c 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2018-October/000471.html
+-md5  33c4b4ad2f33d4faedec3206da7853d3  mesa-18.2.4.tar.xz
+-sha1 9ebe58bdf03a1ff5e671de75f92c3c739edd3c4e  mesa-18.2.4.tar.xz
+-sha256 621d1aebb57876d5b6a5d2dcf4eb7e0620e650c6fe5cf3655c65e243adc9cb4e  mesa-18.2.4.tar.xz
+-sha512 088d43b087f4005752e4db75eaa6897e0fcb6de7b9a1f2d2b2ce3b5557d1dff829022e0092e8b1038ff01182c863ca0f26c97b9adde34bca462d3fa24502bfde  mesa-18.2.4.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2018-November/000475.html
++md5 b31a43ebb8b37fb704a9a75c90bbd71b  mesa-18.2.5.tar.xz
++sha1 1ada7d5fc5fabca63c78396b5afa587b94b9f2e0  mesa-18.2.5.tar.xz
++sha256 b12c32872832e5353155e1e8026e1f1ab75bba9dc5b178d712045684d26c2b73  mesa-18.2.5.tar.xz
++sha512 dd454c720241dffa61f3380be62479979a43004b2a52293b817bd3ea95f75960edee680e7380a13fae09b67a90dc0393e4a022d543db91b2f142f2468a9661f0  mesa-18.2.5.tar.xz
+ # License
+ sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 1a1fb17c72..1651b5f260 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_HOST_ANDROID_TOOLS_FASTBOOT),y)
--HOST_ANDROID_TOOLS_TARGETS += fastboot
-+HOST_ANDROID_TOOLS_BUILD_TARGETS += fastboot
-+HOST_ANDROID_TOOLS_INSTALL_TARGETS += build-fastboot/fastboot
- HOST_ANDROID_TOOLS_DEPENDENCIES += host-zlib host-libselinux
- endif
- 
- ifeq ($(BR2_PACKAGE_HOST_ANDROID_TOOLS_ADB),y)
--HOST_ANDROID_TOOLS_TARGETS += adb
-+HOST_ANDROID_TOOLS_BUILD_TARGETS += adb
-+HOST_ANDROID_TOOLS_INSTALL_TARGETS += build-adb/adb
- HOST_ANDROID_TOOLS_DEPENDENCIES += host-zlib host-openssl
- endif
- 
-+ifeq ($(BR2_PACKAGE_HOST_ANDROID_TOOLS_EXT4_UTILS),y)
-+HOST_ANDROID_TOOLS_BUILD_TARGETS += ext4_utils
-+HOST_ANDROID_TOOLS_INSTALL_TARGETS += \
-+	$(addprefix build-ext4_utils/,make_ext4fs ext4fixup ext2simg img2simg simg2img simg2simg)
-+HOST_ANDROID_TOOLS_DEPENDENCIES += host-libselinux
-+endif
-+
- ifeq ($(BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT),y)
- ANDROID_TOOLS_TARGETS += fastboot
- ANDROID_TOOLS_DEPENDENCIES += zlib libselinux
-@@ -58,7 +67,7 @@ endif
- # Build each tool in its own directory not to share object files
- 
- define HOST_ANDROID_TOOLS_BUILD_CMDS
--	$(foreach t,$(HOST_ANDROID_TOOLS_TARGETS),\
-+	$(foreach t,$(HOST_ANDROID_TOOLS_BUILD_TARGETS),\
- 		mkdir -p $(@D)/build-$(t) && \
- 		$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) SRCDIR=$(@D) \
- 			-C $(@D)/build-$(t) -f $(@D)/debian/makefiles/$(t).mk$(sep))
-@@ -72,8 +81,8 @@ define ANDROID_TOOLS_BUILD_CMDS
- endef
- 
- define HOST_ANDROID_TOOLS_INSTALL_CMDS
--	$(foreach t,$(HOST_ANDROID_TOOLS_TARGETS),\
--		$(INSTALL) -D -m 0755 $(@D)/build-$(t)/$(t) $(HOST_DIR)/bin/$(t)$(sep))
-+	$(foreach t,$(HOST_ANDROID_TOOLS_INSTALL_TARGETS),\
-+		$(INSTALL) -D -m 0755 $(@D)/$(t) $(HOST_DIR)/bin/$(notdir $(t))$(sep))
- endef
- 
- define ANDROID_TOOLS_INSTALL_TARGET_CMDS
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 18.2.4
++MESA3D_VERSION = 18.2.5
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
