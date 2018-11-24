@@ -1,71 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Nov 2018 22:56:01 +0100
-Subject: [Buildroot] [PATCH 3/3] package: hide golang packages for
- toolchains with binutils bug 20006
-In-Reply-To: <3eaf225466a426cf89218531a5c9d685c2224a18.1543096295.git.yann.morin.1998@free.fr>
-References: <cover.1543096295.git.yann.morin.1998@free.fr>
- <3eaf225466a426cf89218531a5c9d685c2224a18.1543096295.git.yann.morin.1998@free.fr>
-Message-ID: <20181124225601.4e592936@windsurf>
+From: robert rose <robertroyrose@gmail.com>
+Date: Sat, 24 Nov 2018 14:00:40 -0800
+Subject: [Buildroot] [PATCH v2 2/2] grpc: new package
+In-Reply-To: <20181124214519.5d168fd8@windsurf>
+References: <20181118211942.28839-1-robertroyrose@gmail.com>
+ <20181118211942.28839-2-robertroyrose@gmail.com>
+ <20181124151256.5b786338@windsurf>
+ <CALxq1w45Krr6E8Ri7rxrDN9USkbPdLbqmmK2x-XiH3AmHHeqpg@mail.gmail.com>
+ <20181124214519.5d168fd8@windsurf>
+Message-ID: <CALxq1w6H6h3BY6R=PyuTAqHh6JtJyjVWg7F8DUnChMhyMaP1yw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+I just did the make menuconfig, added grpc and it still worked.  I just
+installed cmake 3.12.1 and doing a build from scratch (with grpc :)
+Let you know in a couple hours how it works.
+Try doing
+make V=1
+and see if you can find anything wrong.
 
-On Sat, 24 Nov 2018 22:52:01 +0100, Yann E. MORIN wrote:
-> Fixes:
->     http://autobuild.buildroot.org/results/020/02039969b16534d4020ecd4574bae71b91c1e6b8/ (flannel)
->     http://autobuild.buildroot.org/results/e95/e9528b06b350ef84c1e2cb59fba87b4db77b4660/ (docker-engine)
->     [...]
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/docker-containerd/Config.in | 4 ++++
->  package/docker-engine/Config.in     | 4 ++++
->  package/docker-proxy/Config.in      | 4 ++++
->  package/flannel/Config.in           | 4 ++++
->  package/mender/Config.in            | 4 ++++
->  package/runc/Config.in              | 4 ++++
->  6 files changed, 24 insertions(+)
-> 
-> diff --git a/package/docker-containerd/Config.in b/package/docker-containerd/Config.in
-> index 851345f73e..39f6ea8ee8 100644
-> --- a/package/docker-containerd/Config.in
-> +++ b/package/docker-containerd/Config.in
-> @@ -4,6 +4,7 @@ config BR2_PACKAGE_DOCKER_CONTAINERD
->  	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on BR2_USE_MMU # util-linux
-> +	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_20006
->  	select BR2_PACKAGE_RUNC # runtime dependency
->  	select BR2_PACKAGE_UTIL_LINUX # runtime dependency
->  	select BR2_PACKAGE_UTIL_LINUX_BINARIES
-> @@ -32,3 +33,6 @@ comment "docker-containerd needs a toolchain w/ threads"
->  	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
->  	depends on BR2_USE_MMU
->  	depends on !BR2_TOOLCHAIN_HAS_THREADS
-> +
-> +comment "docker-containerd needs a toolchain not affected by binutils bug 20006"
-> +	depends on BR2_TOOLCHAIN_HAS_BINUTILS_BUG_20006
+-robert
 
-This comment should not appear on architecture not supported by go, so
-you should replicate at least:
+On Sat, Nov 24, 2018 at 12:45 PM Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
 
-  	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-  	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-
-However, overall, I'm wondering if we shouldn't keep it simple and
-stupid, and simply make BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS depend on
-BR2_TOOLCHAIN_HAS_BINUTILS_BUG_20006. Yes, there won't be comments in
-each and every package, but do we really need that for such a corner
-case ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Hello Robert,
+>
+> On Sat, 24 Nov 2018 12:09:36 -0800, robert rose wrote:
+>
+> > tar xf ~/Downloads/buildroot-2018.08.2.tar.gz
+> > cd buildroot-2018.08.2
+> > patch -p1 < ~/buildroot/outgoing/v2-0001-c-ares-support-host-build.patch
+> > patch -p1 < ~/buildroot/outgoing/v2-0002-grpc-new-package.patch
+> > make raspberrypi3_defconfig
+> > make
+>
+> If you do just this, you don't build gprc, you at least need to do
+> "make menuconfig" and enable gprc.
+>
+> > And it worked.  I don't have cmake on my machine, so buildroot
+> > built cmake-3.8.2
+> > What version of cmake do you use?
+>
+> I have a cmake installed system-wide, so I'm not using the one built by
+> Buildroot. My cmake version is:
+>
+> $ cmake --version
+> cmake version 3.12.1
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181124/e923eec1/attachment.html>
