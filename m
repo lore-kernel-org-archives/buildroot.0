@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Nov 2018 10:12:13 +0100
-Subject: [Buildroot] [PATCH v3 1/3] merge_config.sh: Fix merging
- buildroot config files
-In-Reply-To: <20181114071156.10453-2-afshin.nasser@gmail.com>
+Date: Sat, 24 Nov 2018 10:12:20 +0100
+Subject: [Buildroot] [PATCH v3 3/3] merge_config.sh: Avoid false
+ positive matches from comment lines
+In-Reply-To: <20181114071156.10453-4-afshin.nasser@gmail.com>
 References: <20181114071156.10453-1-afshin.nasser@gmail.com>
- <20181114071156.10453-2-afshin.nasser@gmail.com>
-Message-ID: <20181124101213.4483fd5b@windsurf>
+ <20181114071156.10453-4-afshin.nasser@gmail.com>
+Message-ID: <20181124101220.572bfe0d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +14,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 14 Nov 2018 10:41:54 +0330, Nasser Afshin wrote:
-> This patch allows us to define config prefix with CONFIG_ environment
-> variable.
+On Wed, 14 Nov 2018 10:41:56 +0330, Nasser Afshin wrote:
+> From: Nasser Afshin <Afshin.Nasser@gmail.com>
 > 
-> By setting the proper config prefix, we will have proper 'redundant
-> configuration warnings' when we use '-r -m' options.
+> We are using empty CONFIG_PREFIX_. This results in false positive match
+> for comment lines when merging config fragments.
 > 
-> This is actually already in mainline for v4.20-rc1:
-> 2cd3faf87d2d8f6123adf34741b9a7b98828a76f
-> ("merge_config.sh: Allow to define config prefix")
+> To avoid false positive reports, we use separate sed expressions and
+> address comment lines explicitly.
 > 
-> Signed-off-by: Nasser Afshin <afshin.nasser@gmail.com>
+> This is actually is in the Linux kernel mainline (v4.20-rc2):
+> 6bbe4385d035c6fac56f840a59861a0310ce137b
+> ("kconfig: merge_config: avoid false positive matches from comment lines")
+> 
+> Signed-off-by: Nasser Afshin <Afshin.Nasser@gmail.com>
 > Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 > ---
->  support/kconfig/merge_config.sh                    |  7 ++++-
->  ...e_config.sh-Allow-to-define-config-prefix.patch | 31 ++++++++++++++++++++++
+>  support/kconfig/merge_config.sh                    |  7 +++--
+>  ...false-positive-matches-from-comment-lines.patch | 32 ++++++++++++++++++++++
 >  support/kconfig/patches/series                     |  1 +
->  3 files changed, 38 insertions(+), 1 deletion(-)
->  create mode 100644 support/kconfig/patches/20-merge_config.sh-Allow-to-define-config-prefix.patch
+>  3 files changed, 37 insertions(+), 3 deletions(-)
+>  create mode 100644 support/kconfig/patches/21-Avoid-false-positive-matches-from-comment-lines.patch
 
 Applied to next, thanks.
 
