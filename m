@@ -1,64 +1,153 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sun, 25 Nov 2018 00:21:39 +0100
-Subject: [Buildroot] [PATCH] package/pkg-python: fixing wrong root an prefix
-Message-ID: <20181124232139.14782-1-angelo@amarulasolutions.com>
+Date: Sun, 25 Nov 2018 00:24:22 +0100
+Subject: [Buildroot] [PATCH v3] package/fail2ban: new package
+Message-ID: <20181124232422.16914-1-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some python software refers to setuptool/distutils options
-to install files in python root directory (like data_files option).
-To use this type of option, python root should point to the real python
-root in buildroot folder and not to the guest os /.
-Prefix path is always built starting from the python root, so it should
-be simply /usr.
+Fail2ban scans log files (e.g. /var/log/apache/error_log)
+and bans IPs that show malicious behaviours.
 
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- package/pkg-python.mk | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+Changes:
+v1->v2:
+* Adding sha256 for license file
+* getting service file for systemd from source directory
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index f57e486dad..38c5941777 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -42,10 +42,12 @@ PKG_PYTHON_DISTUTILS_BUILD_OPTS = \
- 	--executable=/usr/bin/python
+v2->v3:
+* Fixing suggestions made by Thomas Petazzoni
+
+ DEVELOPERS                     |  1 +
+ package/Config.in              |  1 +
+ package/fail2ban/Config.in     | 15 +++++++++++++++
+ package/fail2ban/S60fail2ban   | 23 +++++++++++++++++++++++
+ package/fail2ban/fail2ban.hash |  3 +++
+ package/fail2ban/fail2ban.mk   | 27 +++++++++++++++++++++++++++
+ 6 files changed, 70 insertions(+)
+ create mode 100644 package/fail2ban/Config.in
+ create mode 100644 package/fail2ban/S60fail2ban
+ create mode 100644 package/fail2ban/fail2ban.hash
+ create mode 100644 package/fail2ban/fail2ban.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 53467da489..277bbab21e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -146,6 +146,7 @@ F:	package/libunwind/
  
- PKG_PYTHON_DISTUTILS_INSTALL_TARGET_OPTS = \
--	--prefix=$(TARGET_DIR)/usr
-+	--prefix=/usr \
-+	--root=$(TARGET_DIR) \
- 
- PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS = \
--	--prefix=$(STAGING_DIR)/usr
-+	--prefix=/usr \
-+	--root=$(STAGING_DIR)
- 
- # Host distutils-based packages
- HOST_PKG_PYTHON_DISTUTILS_ENV = \
-@@ -66,16 +68,16 @@ PKG_PYTHON_SETUPTOOLS_ENV = \
- 	_python_exec_prefix=/usr
- 
- PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS = \
--	--prefix=$(TARGET_DIR)/usr \
-+	--prefix=/usr \
- 	--executable=/usr/bin/python \
- 	--single-version-externally-managed \
--	--root=/
-+	--root=$(TARGET_DIR)
- 
- PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS = \
--	--prefix=$(STAGING_DIR)/usr \
-+	--prefix=/usr \
- 	--executable=/usr/bin/python \
- 	--single-version-externally-managed \
--	--root=/
-+	--root=$(STAGING_DIR)
- 
- # Host setuptools-based packages
- HOST_PKG_PYTHON_SETUPTOOLS_ENV = \
+ N:	Angelo Compagnucci <angelo.compagnucci@gmail.com>
+ F:	package/corkscrew/
++F:	package/fail2ban/
+ F:	package/i2c-tools/
+ F:	package/mender/
+ F:	package/mono/
+diff --git a/package/Config.in b/package/Config.in
+index b60e7700ad..88b35cd9f8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1826,6 +1826,7 @@ menu "Networking applications"
+ 	source "package/ejabberd/Config.in"
+ 	source "package/ethtool/Config.in"
+ 	source "package/faifa/Config.in"
++	source "package/fail2ban/Config.in"
+ 	source "package/fastd/Config.in"
+ 	source "package/fcgiwrap/Config.in"
+ 	source "package/flannel/Config.in"
+diff --git a/package/fail2ban/Config.in b/package/fail2ban/Config.in
+new file mode 100644
+index 0000000000..8fa63bfdcb
+--- /dev/null
++++ b/package/fail2ban/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_FAIL2BAN
++	bool "fail2ban"
++	depends on BR2_PACKAGE_PYTHON
++	help
++	  Fail2ban scans log files (e.g. /var/log/apache/error_log) and
++	  bans IPs that show the malicious signs -- too many password
++	  failures, seeking for exploits, etc. Out of the box Fail2Ban
++	  comes with filters for various services (apache, courier,
++	  ssh, etc).
++
++	  Fail2Ban is able to reduce the rate of incorrect
++	  authentications attempts however it cannot eliminate the risk
++	  that weak authentication presents.
++
++	  https://www.fail2ban.org
+diff --git a/package/fail2ban/S60fail2ban b/package/fail2ban/S60fail2ban
+new file mode 100644
+index 0000000000..b181ecde2c
+--- /dev/null
++++ b/package/fail2ban/S60fail2ban
+@@ -0,0 +1,23 @@
++#!/bin/sh
++
++case "$1" in
++	start)
++		printf "Starting fail2ban: "
++		start-stop-daemon -S -q -m -p /var/run/fail2ban.pid \
++			-b -x fail2ban-server -- -xf start
++		[ $? = 0 ] && echo "OK" || echo "FAIL"
++		;;
++	stop)
++		printf "Stopping fail2ban: "
++		start-stop-daemon -K -q -p /var/run/fail2ban.pid
++		[ $? = 0 ] && echo "OK" || echo "FAIL"
++		;;
++	restart)
++		"$0" stop
++		sleep 1
++		"$0" start
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart}"
++		;;
++esac
+diff --git a/package/fail2ban/fail2ban.hash b/package/fail2ban/fail2ban.hash
+new file mode 100644
+index 0000000000..25d120c115
+--- /dev/null
++++ b/package/fail2ban/fail2ban.hash
+@@ -0,0 +1,3 @@
++# sha256 locally computed
++sha256  d6ca1bbc7e7944f7acb2ba7c1065953cd9837680bc4d175f30ed155c6a372449  fail2ban-0.10.4.tar.gz
++sha256  a75fec0260742fe6275d63ff6a5d97b924b28766558306b3fa4069763096929b  COPYING
+diff --git a/package/fail2ban/fail2ban.mk b/package/fail2ban/fail2ban.mk
+new file mode 100644
+index 0000000000..99c614e076
+--- /dev/null
++++ b/package/fail2ban/fail2ban.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# fail2ban
++#
++################################################################################
++
++FAIL2BAN_VERSION = 0.10.4
++FAIL2BAN_SITE = $(call github,fail2ban,fail2ban,$(FAIL2BAN_VERSION))
++FAIL2BAN_LICENSE = GPL-2.0+
++FAIL2BAN_LICENSE_FILES = COPYING
++FAIL2BAN_SETUP_TYPE = distutils
++
++define FAIL2BAN_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 755 package/fail2ban/S60fail2ban \
++		$(TARGET_DIR)/etc/init.d/S60fail2ban
++endef
++
++define FAIL2BAN_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0644 $(@D)/files/fail2ban.service.in \
++		$(TARGET_DIR)/usr/lib/systemd/system/fail2ban.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -fs ../../../../usr/lib//systemd/system/fail2ban.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/fail2ban.service
++	$(SED) 's/@BINDIR@/\/usr\/bin/g' $(TARGET_DIR)/usr/lib/systemd/system/fail2ban.service
++endef
++
++$(eval $(python-package))
 -- 
 2.17.1
