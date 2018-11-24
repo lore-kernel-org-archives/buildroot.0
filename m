@@ -1,83 +1,97 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 29 Nov 2018 22:12:38 +0100
-Subject: [Buildroot] [git commit] package/gcc: enable __cxa_atexit
-Message-ID: <20181202071600.E8CBC803E1@busybox.osuosl.org>
+Date: Sat, 24 Nov 2018 15:14:58 +0100
+Subject: [Buildroot] [git commit] support/dependencies: add a check for a
+ suitable gzip
+Message-ID: <20181202071558.D40BD82855@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e53b5198349c4d31f59c95aefece14ed6543933
+commit: https://git.buildroot.net/buildroot/commit/?id=2218dc85bef9bb1c9d27788e5ac69593144fe268
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is what GCC manual says [1]:
--------------------------->8----------------------
---enable-__cxa_atexit
+Recently, some hash mismatch have been reported, both by users as well
+as autobuilder failures, about tarballs generated from git repositories.
 
-    Define if you want to use __cxa_atexit, rather than atexit,
-    to register C++ destructors for local statics and global objects.
+This turned out to be caused by users having the 'gzip' command somehow
+aliased to 'pigz' (which stand for: parallel implementation of gzip,
+which takes advantage of multi-processor system to parallelise the
+compression).
 
-    This is essential for fully standards-compliant handling of destructors,
-    but requires __cxa_atexit in libc.
+Unfortunately, the output of pigz-compressed archives differ from that
+of gzip (even though they *are* valid gzip-compressed streams).
 
-    This option is currently only available on systems with GNU libc
-    ...
--------------------------->8----------------------
+Add a dependency check that ensures that gzip is not pigz. If that is
+the case, define a conditional dependency to host-gzip, that is used as
+a download dependency for packages that will generate compressed files,
+i.e. cvs, git, and svn.
 
-Important disadvantages of a simple atexit() are that [2]:
--------------------------->8----------------------
-1999 C Standard only requires that the implementation support 32
-registered functions, although most implementations support many more.
+Fixes:
+    http://autobuild.buildroot.org/results/330/3308271fc641cadb59dbf1b5ee529a84f79e6d5c/
 
-More important it does not deal at all with the ability in most implementations
-to remove DSOs from a running program image by calling dlclose
-prior to program termination.
--------------------------->8----------------------
-
-Also it seems like all libc's we support in Buildroot (Glibc, uClibc and musl)
-support __cxa_at_exit() so enable it unconditionally.
-
-FWIW if we look around we'll see:
- 1. In OpenEmbedded it is enabled for everything except gcc-cross-initial: [3], [4]
- 2. In Crosstool-NG it is enabled by default: [5]
- 3. In OpenWrt it is disabled only for uClibc, otherwise enabled: [6]
-
-So I think we should be good with it as well.
-
-[1] https://gcc.gnu.org/install/configure.html
-[2] https://itanium-cxx-abi.github.io/cxx-abi/abi.html#dso-dtor-motivation
-[3] https://github.com/openembedded/openembedded-core/blob/master/meta/recipes-devtools/gcc/gcc-configure-common.inc#L59
-[4] https://github.com/openembedded/openembedded-core/blob/master/meta/recipes-devtools/gcc/gcc-cross-initial.inc#L23
-[5] https://github.com/crosstool-ng/crosstool-ng/blob/master/config/cc/gcc.in#L270
-[6] https://github.com/openwrt/openwrt/blob/master/toolchain/gcc/common.mk#L170
-
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Mark Corbin <mark.corbin@embecosm.com>
-Cc: Romain Naour <romain.naour@gmail.com>
 Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Cc: Claudiu Zissulescu <claziss@synopsys.com>
-Cc: Cupertino Miranda <cmiranda@synopsys.com>
-Cc: Vineet Gupta <vgupta@synopsys.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Marcin Niestr??j <m.niestroj@grinn-global.com>
+Cc: Erico Nunes <nunes.erico@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gcc/gcc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/pkg-generic.mk                  |  4 +++-
+ support/dependencies/check-host-gzip.mk |  3 +++
+ support/dependencies/check-host-gzip.sh | 21 +++++++++++++++++++++
+ 3 files changed, 27 insertions(+), 1 deletion(-)
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index e47435677e..5901624ea5 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -87,7 +87,7 @@ HOST_GCC_COMMON_DEPENDENCIES = \
- HOST_GCC_COMMON_CONF_OPTS = \
- 	--target=$(GNU_TARGET_NAME) \
- 	--with-sysroot=$(STAGING_DIR) \
--	--disable-__cxa_atexit \
-+	--enable-__cxa_atexit \
- 	--with-gnu-ld \
- 	--disable-libssp \
- 	--disable-multilib \
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index f34f46afc8..ef890981bb 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -583,7 +583,9 @@ $(2)_DEPENDENCIES += host-skeleton
+ endif
+ 
+ ifneq ($$(filter cvs git svn,$$($(2)_SITE_METHOD)),)
+-$(2)_DOWNLOAD_DEPENDENCIES += $(BR2_TAR_HOST_DEPENDENCY)
++$(2)_DOWNLOAD_DEPENDENCIES += \
++	$(BR2_GZIP_HOST_DEPENDENCY) \
++	$(BR2_TAR_HOST_DEPENDENCY)
+ endif
+ 
+ ifeq ($$(filter host-tar host-skeleton host-fakedate,$(1)),)
+diff --git a/support/dependencies/check-host-gzip.mk b/support/dependencies/check-host-gzip.mk
+new file mode 100644
+index 0000000000..bf9a369a7d
+--- /dev/null
++++ b/support/dependencies/check-host-gzip.mk
+@@ -0,0 +1,3 @@
++ifeq (,$(call suitable-host-package,gzip))
++BR2_GZIP_HOST_DEPENDENCY = host-gzip
++endif
+diff --git a/support/dependencies/check-host-gzip.sh b/support/dependencies/check-host-gzip.sh
+new file mode 100755
+index 0000000000..5f344c5f9b
+--- /dev/null
++++ b/support/dependencies/check-host-gzip.sh
+@@ -0,0 +1,21 @@
++#!/bin/sh
++
++candidate="$1" # ignored
++
++gzip="$(which gzip)"
++if [ ! -x "${gzip}" ]; then
++    # echo nothing: no suitable gzip found
++    exit 1
++fi
++
++# gzip displays its version string on stdout
++# pigz displays its version string on stderr
++version="$("${gzip}" --version 2>&1)"
++case "${version}" in
++  (*pigz*)
++    # echo nothing: no suitable gzip found
++    exit 1
++    ;;
++esac
++
++printf "%s" "${gzip}"
