@@ -1,63 +1,64 @@
-From: robert rose <robertroyrose@gmail.com>
-Date: Sat, 24 Nov 2018 14:00:40 -0800
-Subject: [Buildroot] [PATCH v2 2/2] grpc: new package
-In-Reply-To: <20181124214519.5d168fd8@windsurf>
-References: <20181118211942.28839-1-robertroyrose@gmail.com>
- <20181118211942.28839-2-robertroyrose@gmail.com>
- <20181124151256.5b786338@windsurf>
- <CALxq1w45Krr6E8Ri7rxrDN9USkbPdLbqmmK2x-XiH3AmHHeqpg@mail.gmail.com>
- <20181124214519.5d168fd8@windsurf>
-Message-ID: <CALxq1w6H6h3BY6R=PyuTAqHh6JtJyjVWg7F8DUnChMhyMaP1yw@mail.gmail.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Sun, 25 Nov 2018 00:21:39 +0100
+Subject: [Buildroot] [PATCH] package/pkg-python: fixing wrong root an prefix
+Message-ID: <20181124232139.14782-1-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I just did the make menuconfig, added grpc and it still worked.  I just
-installed cmake 3.12.1 and doing a build from scratch (with grpc :)
-Let you know in a couple hours how it works.
-Try doing
-make V=1
-and see if you can find anything wrong.
+Some python software refers to setuptool/distutils options
+to install files in python root directory (like data_files option).
+To use this type of option, python root should point to the real python
+root in buildroot folder and not to the guest os /.
+Prefix path is always built starting from the python root, so it should
+be simply /usr.
 
--robert
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+ package/pkg-python.mk | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-On Sat, Nov 24, 2018 at 12:45 PM Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> wrote:
-
-> Hello Robert,
->
-> On Sat, 24 Nov 2018 12:09:36 -0800, robert rose wrote:
->
-> > tar xf ~/Downloads/buildroot-2018.08.2.tar.gz
-> > cd buildroot-2018.08.2
-> > patch -p1 < ~/buildroot/outgoing/v2-0001-c-ares-support-host-build.patch
-> > patch -p1 < ~/buildroot/outgoing/v2-0002-grpc-new-package.patch
-> > make raspberrypi3_defconfig
-> > make
->
-> If you do just this, you don't build gprc, you at least need to do
-> "make menuconfig" and enable gprc.
->
-> > And it worked.  I don't have cmake on my machine, so buildroot
-> > built cmake-3.8.2
-> > What version of cmake do you use?
->
-> I have a cmake installed system-wide, so I'm not using the one built by
-> Buildroot. My cmake version is:
->
-> $ cmake --version
-> cmake version 3.12.1
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181124/e923eec1/attachment.html>
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index f57e486dad..38c5941777 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -42,10 +42,12 @@ PKG_PYTHON_DISTUTILS_BUILD_OPTS = \
+ 	--executable=/usr/bin/python
+ 
+ PKG_PYTHON_DISTUTILS_INSTALL_TARGET_OPTS = \
+-	--prefix=$(TARGET_DIR)/usr
++	--prefix=/usr \
++	--root=$(TARGET_DIR) \
+ 
+ PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS = \
+-	--prefix=$(STAGING_DIR)/usr
++	--prefix=/usr \
++	--root=$(STAGING_DIR)
+ 
+ # Host distutils-based packages
+ HOST_PKG_PYTHON_DISTUTILS_ENV = \
+@@ -66,16 +68,16 @@ PKG_PYTHON_SETUPTOOLS_ENV = \
+ 	_python_exec_prefix=/usr
+ 
+ PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS = \
+-	--prefix=$(TARGET_DIR)/usr \
++	--prefix=/usr \
+ 	--executable=/usr/bin/python \
+ 	--single-version-externally-managed \
+-	--root=/
++	--root=$(TARGET_DIR)
+ 
+ PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS = \
+-	--prefix=$(STAGING_DIR)/usr \
++	--prefix=/usr \
+ 	--executable=/usr/bin/python \
+ 	--single-version-externally-managed \
+-	--root=/
++	--root=$(STAGING_DIR)
+ 
+ # Host setuptools-based packages
+ HOST_PKG_PYTHON_SETUPTOOLS_ENV = \
+-- 
+2.17.1
