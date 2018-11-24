@@ -1,38 +1,90 @@
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Date: Sat, 24 Nov 2018 22:03:08 +0100
-Subject: [Buildroot] [PATCH v2] package/libtool: Reduce target package
- to libltdl only
-In-Reply-To: <20181124200631.03099f939ead1a2cf50cb714@gmail.com>
-References: <20181124165434.31651-1-alexander.sverdlin@gmail.com>
- <20181124184708.GB20308@scaer>
- <20181124200631.03099f939ead1a2cf50cb714@gmail.com>
-Message-ID: <20181124220308.9f8200aa4cdf67f106153e97@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 24 Nov 2018 22:27:22 +0100
+Subject: [Buildroot] [PATCH/next 1/1] keepalived: fix build with uclibc
+Message-ID: <20181124212722.21388-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Retrieve patch from upstream to fix build on uclibc
 
-On Sat, 24 Nov 2018 20:06:31 +0100
-Alexander Sverdlin <alexander.sverdlin@gmail.com> wrote:
+Fixes:
+ - http://autobuild.buildroot.org/results/067ef9ae106b3e0740a70f6f9591b9da00d3da6a
 
-> > So, the host presumably also builds libltdl, no? Thus, we should include
-> > its licensing information too;
-> > 
-> >     HOST_LIBTOOL_LICENSE = GPL-2.0+, LGPLv2.1 (libltdl)
-> >     HOST_LIBTOOL_LICENSE_FILES = COPYING $(LIBTOOL_SUBDIR)/COPYING.LIB
-> > 
-> > Not sure about that one, wait a bit for others to confirm before
-> > respinning the patch.
-> 
-> If others agree that there is a licensing issue, this would
-> be totally unrelated to libltdl conversion, so I can do it in
-> a separate patch.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...01-Rename-TIMER_MAX-to-TIMER_MAXIMUM.patch | 61 +++++++++++++++++++
+ 1 file changed, 61 insertions(+)
+ create mode 100644 package/keepalived/0001-Rename-TIMER_MAX-to-TIMER_MAXIMUM.patch
 
-OK, tried to make a separate patch and understood that it
-was wrong idea...
-
+diff --git a/package/keepalived/0001-Rename-TIMER_MAX-to-TIMER_MAXIMUM.patch b/package/keepalived/0001-Rename-TIMER_MAX-to-TIMER_MAXIMUM.patch
+new file mode 100644
+index 0000000000..4402b48a8b
+--- /dev/null
++++ b/package/keepalived/0001-Rename-TIMER_MAX-to-TIMER_MAXIMUM.patch
+@@ -0,0 +1,61 @@
++From 7d4856e213f349bcd97b3644b01d6170b226de16 Mon Sep 17 00:00:00 2001
++From: Quentin Armitage <quentin@armitage.org.uk>
++Date: Tue, 20 Nov 2018 17:24:58 +0000
++Subject: [PATCH] Rename TIMER_MAX to TIMER_MAXIMUM
++
++ulibC defines TIMER_MAX, so to avoid naming conflict rename it.
++
++This issue was reported by Paul Gildea <gildeap@tcd.ie> who also
++provided the patch.
++
++Signed-off-by: Quentin Armitage <quentin@armitage.org.uk>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/acassen/keepalived/commit/7d4856e213f349bcd97b3644b01d6170b226de16]
++---
++ lib/parser.c | 8 ++++----
++ lib/parser.h | 2 +-
++ 2 files changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/lib/parser.c b/lib/parser.c
++index 1d53595c0..cc9b644e2 100644
++--- a/lib/parser.c
+++++ b/lib/parser.c
++@@ -1915,20 +1915,20 @@ read_timer(vector_t *strvec, size_t index, unsigned long *res, unsigned long min
++ #endif
++ 
++ 	if (!max_time)
++-		max_time = TIMER_MAX;
+++		max_time = TIMER_MAXIMUM;
++ 
++ 	errno = 0;
++ 	timer = strtoul(vector_slot(strvec, index), &endptr, 10);
++-	*res = (timer > TIMER_MAX ? TIMER_MAX : timer) * TIMER_HZ;
+++	*res = (timer > TIMER_MAXIMUM ? TIMER_MAXIMUM : timer) * TIMER_HZ;
++ 
++ 	if (FMT_STR_VSLOT(strvec, index)[0] == '-')
++ 		report_config_error(CONFIG_INVALID_NUMBER, "%snegative number '%s'", warn, FMT_STR_VSLOT(strvec, index));
++ 	else if (*endptr)
++ 		report_config_error(CONFIG_INVALID_NUMBER, "%sinvalid number '%s'", warn, FMT_STR_VSLOT(strvec, index));
++-	else if (errno == ERANGE || timer > TIMER_MAX)
+++	else if (errno == ERANGE || timer > TIMER_MAXIMUM)
++ 		report_config_error(CONFIG_INVALID_NUMBER, "%snumber '%s' outside timer range", warn, FMT_STR_VSLOT(strvec, index));
++ 	else if (timer < min_time || timer > max_time)
++-		report_config_error(CONFIG_INVALID_NUMBER, "number '%s' outside range [%ld, %ld]", FMT_STR_VSLOT(strvec, index), min_time, max_time ? max_time : TIMER_MAX);
+++		report_config_error(CONFIG_INVALID_NUMBER, "number '%s' outside range [%ld, %ld]", FMT_STR_VSLOT(strvec, index), min_time, max_time ? max_time : TIMER_MAXIMUM);
++ 	else
++ 		return true;
++ 
++diff --git a/lib/parser.h b/lib/parser.h
++index 88a74474a..291aa8ffe 100644
++--- a/lib/parser.h
+++++ b/lib/parser.h
++@@ -38,7 +38,7 @@
++ #define MAXBUF	1024
++ 
++ /* Maximum time read_timer can return */
++-#define TIMER_MAX (ULONG_MAX / TIMER_HZ)
+++#define TIMER_MAXIMUM (ULONG_MAX / TIMER_HZ)
++ 
++ /* Configuration test errors. These should be in decreasing order of severity */
++ typedef enum {
 -- 
-Alexander Sverdlin.
+2.17.1
