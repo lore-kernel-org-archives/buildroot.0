@@ -1,60 +1,52 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sat, 24 Nov 2018 14:50:41 +0100
-Subject: [Buildroot] [PATCH 4/6]
- configs/olimex_a20_olinuxino_lime_legacy: use gcc 6.x and not the default
- version
-In-Reply-To: <df6acac2-f862-d153-155c-826132591520@lucaceresoli.net>
-References: <20181122094150.10403-1-thomas.petazzoni@bootlin.com>
- <20181122094150.10403-4-thomas.petazzoni@bootlin.com>
- <df6acac2-f862-d153-155c-826132591520@lucaceresoli.net>
-Message-ID: <CAB0FRstukk+O5Dx1k4GXUJ=bPOL_czKkUn6NHeY0psvWeqG=Dg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 24 Nov 2018 14:50:42 +0100
+Subject: [Buildroot] [git commit branch/next] package/qemu: add option to
+ enable virtual filesystem in host qemu
+Message-ID: <20181124134816.40ED388150@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le ven. 23 nov. 2018 ? 14:57, Luca Ceresoli <luca@lucaceresoli.net> a
-?crit :
+commit: https://git.buildroot.net/buildroot/commit/?id=e0f49e6484015351f697ab843da25b5421c23fd6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Hi Thomas,
->
-> On 22/11/18 10:41, Thomas Petazzoni wrote:
-> > The old 3.4 Linux kernel used by this defconfig doesn't build with gcc
-> 7.x:
-> >
-> > include/linux/compiler-gcc.h:106:1: fatal error: linux/compiler-gcc7.h:
-> No such file or directory
-> >
-> > So let's use gcc 6.x for the time being.
-> >
-> > Long term, we should use a newer or different kernel source for this
-> > defconfig, or get rid of the defconfig entirely if there's no updated
-> > kernel with a fix.
->
-> Adding the author of the Lime legacy support to the recipients.
->
->
-After the release of BR 2019.02, I will remove:
- - configs/olimex_a20_olinuxino_lime_legacy_defconfig
- - package/sunxi-mali
+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+[Thomas: tweak option prompt]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qemu/Config.in.host | 6 ++++++
+ package/qemu/qemu.mk        | 4 ++++
+ 2 files changed, 10 insertions(+)
 
-Now, we have package/sunxi-mali-mainline.
-
-Fran?ois
-
-
-> Fran?ois, if memory serves, the old kernel was needed for GPU support.
-> Is it still the case?
->
-> Thanks,
-> --
-> Luca
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181124/ae79fe36/attachment.html>
+diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+index 957c7d2ae1..f99f3e05cf 100644
+--- a/package/qemu/Config.in.host
++++ b/package/qemu/Config.in.host
+@@ -67,4 +67,10 @@ config BR2_PACKAGE_HOST_QEMU_VDE2
+ 	  Ethernet and can be used to create virtual switches to
+ 	  "plug" both physical and virtual machines in them.
+ 
++config BR2_PACKAGE_HOST_QEMU_VIRTFS
++	bool "Virtual filesystem support"
++	help
++	  Enables support for virtual filesystem in Qemu allowing
++	  shared filesystem between Qemu and its emulated target.
++
+ endif
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 5bdf390bc9..5ee6abf731 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -253,6 +253,10 @@ HOST_QEMU_OPTS += --enable-vde
+ HOST_QEMU_DEPENDENCIES += host-vde2
+ endif
+ 
++ifdef ($(BR2_PACKAGE_HOST_QEMU_VIRTFS),y)
++HOST_QEMU_OPTS += --enable-virtfs
++endif
++
+ # Override CPP, as it expects to be able to call it like it'd
+ # call the compiler.
+ define HOST_QEMU_CONFIGURE_CMDS
