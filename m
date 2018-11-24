@@ -1,44 +1,96 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Nov 2018 15:10:40 +0100
-Subject: [Buildroot] [PATCH next] tpm2-tss: force libopenssl as openssl
- provider
-In-Reply-To: <20181121024437.21553-1-casantos@datacom.com.br>
-References: <20181121024437.21553-1-casantos@datacom.com.br>
-Message-ID: <20181124151040.76327f87@windsurf>
+Date: Sat, 24 Nov 2018 15:12:56 +0100
+Subject: [Buildroot] [PATCH v2 2/2] grpc: new package
+In-Reply-To: <20181118211942.28839-2-robertroyrose@gmail.com>
+References: <20181118211942.28839-1-robertroyrose@gmail.com>
+ <20181118211942.28839-2-robertroyrose@gmail.com>
+Message-ID: <20181124151256.5b786338@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Robert,
 
-On Wed, 21 Nov 2018 00:44:37 -0200, Carlos Santos wrote:
-> Select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL and drop the patch to
-> compile with libressl.
-> 
-> The discussion with the tpm2-tss developers led to the conclusion that
-> libressl lacks some required functionalities. Quoting Andreas Fuchs[1]:
-> "LibreSSL does not support OAEP-mode with labels at all, even though the
-> internal OAEP-padding-function includes the parameters already. [...]
-> Further, the internal OAEP-padding-function does not support variable
-> hash algs, but staticly uses SHA1."
-> 
-> Notice that there will NOT be an option to use libgcrypt. OpenSSL will
-> soon become the default ESAPI crypto backend to prevent the problem of
-> forcing applications to link against both libgcrypt and libssl[2].
-> 
-> 1. https://github.com/tpm2-software/tpm2-tss/pull/1207#issuecomment-440217659
-> 2. https://github.com/tpm2-software/tpm2-tss/issues/1169
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+Thanks for this contribution!
+
+On Sun, 18 Nov 2018 13:19:42 -0800, Robert Rose wrote:
+> Signed-off-by: Robert Rose <robertroyrose@gmail.com>
 > ---
->  .../0001-ESYS-Fix-build-with-LibreSSL.patch   | 48 -------------------
->  package/tpm2-tss/Config.in                    |  1 +
->  2 files changed, 1 insertion(+), 48 deletions(-)
->  delete mode 100644 package/tpm2-tss/0001-ESYS-Fix-build-with-LibreSSL.patch
+>  DEVELOPERS                                    |  3 ++
+>  package/Config.in                             |  1 +
+>  .../0001-target-build-using-host-plugin.patch | 26 ++++++++++++++
+>  package/grpc/Config.in                        | 11 ++++++
+>  package/grpc/grpc.hash                        |  3 ++
+>  package/grpc/grpc.mk                          | 36 +++++++++++++++++++
+>  6 files changed, 80 insertions(+)
+>  create mode 100644 package/grpc/0001-target-build-using-host-plugin.patch
+>  create mode 100644 package/grpc/Config.in
+>  create mode 100644 package/grpc/grpc.hash
+>  create mode 100644 package/grpc/grpc.mk
 
-Applied to next, thanks.
+I wanted to apply your patch, but unfortunately, it fails to build for
+me in host-grpc:
+
+-- Configuring done
+CMake Error at CMakeLists.txt:193 (add_custom_command):
+  Error evaluating generator expression:
+
+    $<IF:$<BOOL:>,,$<TARGET_FILE:grpc_cpp_plugin>>
+
+  Expression did not evaluate to a known generator expression
+Call Stack (most recent call first):
+  CMakeLists.txt:3852 (protobuf_generate_grpc_cpp)
+
+
+CMake Error at CMakeLists.txt:193 (add_custom_command):
+  Error evaluating generator expression:
+
+    $<IF:$<BOOL:>,,$<TARGET_FILE:grpc_cpp_plugin>>
+
+  Expression did not evaluate to a known generator expression
+Call Stack (most recent call first):
+  CMakeLists.txt:4811 (protobuf_generate_grpc_cpp)
+
+
+CMake Error at CMakeLists.txt:193 (add_custom_command):
+  Error evaluating generator expression:
+
+    $<IF:$<BOOL:>,,$<TARGET_FILE:grpc_cpp_plugin>>
+
+  Expression did not evaluate to a known generator expression
+Call Stack (most recent call first):
+  CMakeLists.txt:3722 (protobuf_generate_grpc_cpp)
+
+
+-- Generating done
+CMake Warning:
+  Manually-specified variables were not used by the project:
+
+    BUILD_DOC
+    BUILD_DOCS
+    BUILD_EXAMPLE
+    BUILD_EXAMPLES
+    BUILD_TEST
+    BUILD_TESTING
+    BUILD_TESTS
+    CMAKE_ASM_COMPILER
+
+
+-- Build files have been written to: /home/thomas/buildroot/buildroot/output/build/host-grpc-v1.16.0
+package/pkg-generic.mk:219: recipe for target '/home/thomas/buildroot/buildroot/output/build/host-grpc-v1.16.0/.stamp_configured' failed
+make[1]: *** [/home/thomas/buildroot/buildroot/output/build/host-grpc-v1.16.0/.stamp_configured] Error 1
+Makefile:84: recipe for target '_all' failed
+make: *** [_all] Error 2
+
+Could you have a look into this ?
+
+Note that I did a number of fixes/cleanups in your patches, so it would
+be nice if you could restart from the two patches I have pushed at
+https://git.bootlin.com/users/thomas-petazzoni/buildroot/log/?h=grpc.
+
+Thanks!
 
 Thomas
 -- 
