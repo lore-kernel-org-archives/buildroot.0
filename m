@@ -1,49 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 28 Nov 2018 21:54:22 +0100
-Subject: [Buildroot] [git commit] package/strace: bump to version 4.25
-Message-ID: <20181202071600.10B4B803E1@busybox.osuosl.org>
+Date: Sat, 24 Nov 2018 12:59:27 +0100
+Subject: [Buildroot] [git commit] python-autobahn: bump to version 18.11.2
+Message-ID: <20181202071558.93EFF82855@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f45964196227609045df4f56eaf284ca214d9bf0
+commit: https://git.buildroot.net/buildroot/commit/?id=4c40968e0508772f505fa03c689f423d6908f406
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This release also fixes compatibility with kernel 4.19 headers.
-
-Fixes:
-http://autobuild.buildroot.net/results/0763988c35a1de7d51c7094b5b002ed369f1a25f/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/strace/strace.hash | 4 ++--
- package/strace/strace.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-autobahn/python-autobahn.hash | 4 ++--
+ package/python-autobahn/python-autobahn.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/strace/strace.hash b/package/strace/strace.hash
-index c6450b1c51..f7d652faaa 100644
---- a/package/strace/strace.hash
-+++ b/package/strace/strace.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
--# https://strace.io/files/4.23/strace-4.23.tar.xz
--sha256	7860a6965f1dd832747bd8281a04738274398d32c56e9fbd0a68b1bb9ec09aad	strace-4.23.tar.xz
-+# https://strace.io/files/4.25/strace-4.25.tar.xz.asc
-+sha256	d685f8e65470b7832c3aff60c57ab4459f26ff89f07c10f92bd70ee89efac701	strace-4.25.tar.xz
- sha256	df862ba273812c589fd69acc74197a25d38c5295baccab00a62d39d1894c0253	COPYING
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index 6efe9c5174..fe7acff1e0 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
+index 522e28b5e5..024617fd81 100644
+--- a/package/python-autobahn/python-autobahn.hash
++++ b/package/python-autobahn/python-autobahn.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/autobahn/json
+-md5	a3a0648371b41328282a9ab7fe48ccbe  autobahn-18.11.1.tar.gz
+-sha256	c7e775e46fc033160fa89942de4953ca739f26167f74431dc2c8a3cd165b8755  autobahn-18.11.1.tar.gz
++md5	4a63c94ea306e07602eaca6befd86751  autobahn-18.11.2.tar.gz
++sha256	43262e500aaf8b89fb5f0b60ab13163500ee877908cdd6861208546d95c6dba0  autobahn-18.11.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256	0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
+diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
+index c5faacf965..d175244fc0 100644
+--- a/package/python-autobahn/python-autobahn.mk
++++ b/package/python-autobahn/python-autobahn.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--STRACE_VERSION = 4.23
-+STRACE_VERSION = 4.25
- STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
- STRACE_SITE = https://strace.io/files/$(STRACE_VERSION)
- STRACE_LICENSE = BSD-3-Clause
+-PYTHON_AUTOBAHN_VERSION = 18.11.1
++PYTHON_AUTOBAHN_VERSION = 18.11.2
+ PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
+-PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/01/ee/d401d58dc7732fadf4fd12d7fb87dd2f3e5e2d0ba65865495565f97c2c31
++PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/3a/9f/9552ce8fec2703370f63eedbedffa1151865f1265fbfc5c3bbd1029710cc
+ PYTHON_AUTOBAHN_LICENSE = MIT
+ PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
+ PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
