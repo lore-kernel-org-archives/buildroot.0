@@ -1,69 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Nov 2018 09:21:16 +0100
-Subject: [Buildroot] [git commit branch/next] iptables: fix build with
- kernel headers < 3.12
-Message-ID: <20181125081814.05BC4881FD@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 25 Nov 2018 09:21:43 +0100
+Subject: [Buildroot] [PATCH 4/4 v2] support/dependencies: add a check
+ for a suitable gzip
+In-Reply-To: <CANQCQpYSBb27wxgtaJMHLguWO1crNuThsJ5Ys8+6gWhZ5tMstQ@mail.gmail.com>
+ (Matthew Weber's message of "Sun, 18 Nov 2018 08:41:38 -0600")
+References: <cover.1542474939.git.yann.morin.1998@free.fr>
+ <ba548d03f79279b7f02605006a709ffc630e8639.1542474939.git.yann.morin.1998@free.fr>
+ <CANQCQpY9KckNd=VjAu7AHuUeURoCRhY=5gP-wfOf_-Kog0e-sg@mail.gmail.com>
+ <20181118134403.GB2601@scaer>
+ <CANQCQpYSBb27wxgtaJMHLguWO1crNuThsJ5Ys8+6gWhZ5tMstQ@mail.gmail.com>
+Message-ID: <87pnut5zzc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=23146fe674d6268a7ef52f1e27f7d7ba3510dd26
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
 
-Extend the workaround that was added in patch 0003 to cover ipv6
-definitions.
+Hi,
 
-Fixes:
-http://autobuild.buildroot.net/results/23f/23ff396a568a865751471bf1f9e5dff2b73c8ab0/
+ >> So, we really don't want to build it if the host provides it.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...end-the-headers-conflict-workaround-to-in.patch | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ > Agree.  What about adding the option that if only the reproducible
+ > option is enabled, then we build all host tools we have a version
+ > dependency on (ie. all those we'd normally just conditionally build)?
 
-diff --git a/package/iptables/0005-include-extend-the-headers-conflict-workaround-to-in.patch b/package/iptables/0005-include-extend-the-headers-conflict-workaround-to-in.patch
-new file mode 100644
-index 0000000000..6b1ffbd639
---- /dev/null
-+++ b/package/iptables/0005-include-extend-the-headers-conflict-workaround-to-in.patch
-@@ -0,0 +1,37 @@
-+From 23dee088cd54aae94f1b71046f2ab2b206eedd42 Mon Sep 17 00:00:00 2001
-+Message-Id: <23dee088cd54aae94f1b71046f2ab2b206eedd42.1543092537.git.baruch@tkos.co.il>
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Sat, 24 Nov 2018 22:33:37 +0200
-+Subject: [PATCH] include: extend the headers conflict workaround to in6.h
-+
-+Commit 8d9d7e4b9ef ("include: fix build with kernel headers before 4.2")
-+introduced a kernel/user headers conflict workaround that allows build
-+of iptables with kernel headers older than 4.2. This minor extension
-+allows build with kernel headers older than 3.12, which is the version
-+that introduced explicit IP headers synchronization.
-+
-+Cc: Florian Westphal <fw@strlen.de>
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: https://www.spinics.net/lists/netfilter-devel/msg57029.html
-+
-+ include/linux/netfilter.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/include/linux/netfilter.h b/include/linux/netfilter.h
-+index bacf8cd92116..042d8b1478e0 100644
-+--- a/include/linux/netfilter.h
-++++ b/include/linux/netfilter.h
-+@@ -5,8 +5,8 @@
-+ 
-+ #ifndef _NETINET_IN_H
-+ #include <linux/in.h>
-+-#endif
-+ #include <linux/in6.h>
-++#endif
-+ #include <limits.h>
-+ 
-+ /* Responses from hook functions. */
-+-- 
-+2.19.1
-+
+I think there are a number of use cases where BR2_REPRODUCIBLE would be
+interesting (E.G. we have discussed turning it on by default), but you
+do no want to pay the extra build time for building these host
+utilities.
+
+So I'm open to an option to force building all host dependencies, but it
+should be keyed from a separate configuration option and not
+BR2_REPRODUCIBLE.
+
+-- 
+Bye, Peter Korsgaard
