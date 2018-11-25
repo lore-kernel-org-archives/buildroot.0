@@ -1,30 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 22:07:43 +0100
-Subject: [Buildroot] [PATCH 1/1] qt: disable static build for qt-zlib
-In-Reply-To: <20181108192829.17014-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 8 Nov 2018 20:28:29 +0100")
-References: <20181108192829.17014-1-fontaine.fabrice@gmail.com>
-Message-ID: <87a7lw50io.fsf@dell.be.48ers.dk>
+Date: Sun, 25 Nov 2018 22:07:28 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] qt: disable static build
+ for qt-zlib
+Message-ID: <20181125210531.D167583AFB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1b03e57bbecc75a9df71f6fbcb01d5f57900ec1b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > Static build of applications using qt-zlib and zlib (such as mpv) will
- > fail because zlib and qt-zlib defines the same functions (inflateReset,
- > inflatePrime ...)
+Static build of applications using qt-zlib and zlib (such as mpv) will
+fail because zlib and qt-zlib defines the same functions (inflateReset,
+inflatePrime ...)
 
- > So add a dependency on !BR2_STATIC_LIBS on BR2_PACKAGE_QT_QTZLIB
+So add a dependency on !BR2_STATIC_LIBS on BR2_PACKAGE_QT_QTZLIB
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/0be6e359d46a8a701006305c32b514687854b035
+Fixes:
+ - http://autobuild.buildroot.org/results/0be6e359d46a8a701006305c32b514687854b035
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 112667fd120d136bcacef7e4a78f16a4ac92178a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qt/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Committed to 2018.02.x and 2018.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index 0ecfafada5..a1218ecf39 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -309,9 +309,13 @@ choice
+ 
+ config BR2_PACKAGE_QT_QTZLIB
+ 	bool "Qt zlib"
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  Use the zlib bundled with Qt.
+ 
++comment "Qt zlib needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
++
+ config BR2_PACKAGE_QT_SYSTEMZLIB
+ 	bool "System zlib"
+ 	select BR2_PACKAGE_ZLIB
