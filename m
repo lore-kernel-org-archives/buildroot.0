@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 22:02:44 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] bind: security bump to
+Date: Sun, 25 Nov 2018 22:02:52 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] bind: security bump to
  version 9.11.5
-Message-ID: <20181125205935.4DA5E88342@busybox.osuosl.org>
+Message-ID: <20181125205942.5989188346@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=837bae2539a69fc78f805eb8cd30d7d2852e4083
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=55f0e06abfd512bb378c09638cc99fa711bbf7e4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 Fixes the following security issues:
 
@@ -134,7 +134,7 @@ index 19d5f61f6d..ea76108cc0 100644
 +sha256 a4cae11dad954bdd4eb592178f875bfec09fcc7e29fe0f6b7a4e5b5c6bc61322 bind-9.11.5.tar.gz
  sha256 336f3c40e37a1a13690efb4c63e20908faa4c40498cc02f3579fb67d3a1933a5 COPYRIGHT
 diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 4b80eaf04f..b5424a99f0 100644
+index 95f615bf81..19d9d1cf5c 100644
 --- a/package/bind/bind.mk
 +++ b/package/bind/bind.mk
 @@ -4,7 +4,7 @@
