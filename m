@@ -1,49 +1,124 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 22:28:18 +0100
-Subject: [Buildroot] [PATCH 1/1] attr: Add a patch to fix an
- unconditional infinite recursion.
-In-Reply-To: <20181109111050.11260-1-nicolas.cavallari@green-communications.fr>
- (Nicolas Cavallari's message of "Fri, 9 Nov 2018 12:10:50 +0100")
-References: <20181109111050.11260-1-nicolas.cavallari@green-communications.fr>
-Message-ID: <87sgzo3kzx.fsf@dell.be.48ers.dk>
+Date: Sun, 25 Nov 2018 22:30:26 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/gcc: fix xtensa
+ uclinux code generation
+Message-ID: <20181125212733.47754883BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Nicolas" == Nicolas Cavallari <nicolas.cavallari@green-communications.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d3e731f7b0ea0bf46de82636a749a449438cfae2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > The bump to 2.4.48 introduced a bug that, according to the author,
- > only happen in certain cases on glibc. But under uclibc-ng, it happens
- > every time.
+xtensa-uclinux uses bFLT executable file format that cannot relocate
+fields representing offsets from data to code. C++ objects built as PIC
+use offsets to encode FDE structures. As a result C++ exception handling
+doesn't work correctly on xtensa-uclinux. Don't use PIC by default on
+xtensa-uclinux.
 
- > The bug essentially cause any program calling any libattr.so function
- > to enter an infinite recursion, because of a symbol conflict between
- > uclibc-ng and libattr wrappers, that causes the libattr wrappers to
- > call themselves.
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[Peter: drop gcc-8.x patch]
+(cherry picked from commit 4debb2fbb7d60ed7f81ddab82d8b48ac9c4c3055)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...xtensa-don-t-force-PIC-for-uclinux-target.patch | 41 ++++++++++++++++++++++
+ ...xtensa-don-t-force-PIC-for-uclinux-target.patch | 41 ++++++++++++++++++++++
+ 2 files changed, 82 insertions(+)
 
- > This infinite recursion does not consume the stack, so programs
- > basically behave like they enter an infinite loop.
-
- > It is easy to reproduce with qemu_arm_versatile_defconfig +
- > BR2_PACKAGE_ATTR: "getfattr ." never returns and takes 100% CPU.
-
- > Upstream fixed it, but the patch is not part of a release yet,
- > so take the patch.
-
- > Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-
- > --
- > An alternative is to bump the version to this commit in the master
- > branch.  The other changes[1] are mostly related to tests or
- > documentation, except for one patch[2] that tries more aggressively to
- > enable large file support.
-
- > [1] http://git.savannah.nongnu.org/cgit/attr.git/log/
- > [2] http://git.savannah.nongnu.org/cgit/attr.git/commit/?id=fd1d8ee21df8d11460baa858ae5c5d20e38fb70e
-
-Committed to 2018.02.x and 2018.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gcc/6.4.0/0004-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch b/package/gcc/6.4.0/0004-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch
+new file mode 100644
+index 0000000000..360947cbb1
+--- /dev/null
++++ b/package/gcc/6.4.0/0004-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch
+@@ -0,0 +1,41 @@
++From 960a2552f7b418134cdf7a31e96023a3811b98dd Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Sun, 4 Nov 2018 23:55:59 -0800
++Subject: [PATCH] gcc: xtensa: don't force PIC for uclinux target
++
++xtensa-uclinux uses bFLT executable file format that cannot relocate
++fields representing offsets from data to code. C++ objects built as PIC
++use offsets to encode FDE structures. As a result C++ exception handling
++doesn't work correctly on xtensa-uclinux. Don't use PIC by default on
++xtensa-uclinux.
++
++gcc/
++2018-11-05  Max Filippov  <jcmvbkbc@gmail.com>
++
++	* config/xtensa/uclinux.h (XTENSA_ALWAYS_PIC): Change to 0.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: r265823
++
++ gcc/config/xtensa/uclinux.h | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/gcc/config/xtensa/uclinux.h b/gcc/config/xtensa/uclinux.h
++index ba26187c8f7a..c7743df9d97c 100644
++--- a/gcc/config/xtensa/uclinux.h
+++++ b/gcc/config/xtensa/uclinux.h
++@@ -59,8 +59,8 @@ along with GCC; see the file COPYING3.  If not see
++ #undef LOCAL_LABEL_PREFIX
++ #define LOCAL_LABEL_PREFIX	"."
++ 
++-/* Always enable "-fpic" for Xtensa Linux.  */
++-#define XTENSA_ALWAYS_PIC 1
+++/* Don't enable "-fpic" for Xtensa uclinux.  */
+++#define XTENSA_ALWAYS_PIC 0
++ 
++ #undef TARGET_LIBC_HAS_FUNCTION
++ #define TARGET_LIBC_HAS_FUNCTION no_c99_libc_has_function
++-- 
++2.11.0
++
+diff --git a/package/gcc/7.3.0/0005-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch b/package/gcc/7.3.0/0005-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch
+new file mode 100644
+index 0000000000..360947cbb1
+--- /dev/null
++++ b/package/gcc/7.3.0/0005-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch
+@@ -0,0 +1,41 @@
++From 960a2552f7b418134cdf7a31e96023a3811b98dd Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Sun, 4 Nov 2018 23:55:59 -0800
++Subject: [PATCH] gcc: xtensa: don't force PIC for uclinux target
++
++xtensa-uclinux uses bFLT executable file format that cannot relocate
++fields representing offsets from data to code. C++ objects built as PIC
++use offsets to encode FDE structures. As a result C++ exception handling
++doesn't work correctly on xtensa-uclinux. Don't use PIC by default on
++xtensa-uclinux.
++
++gcc/
++2018-11-05  Max Filippov  <jcmvbkbc@gmail.com>
++
++	* config/xtensa/uclinux.h (XTENSA_ALWAYS_PIC): Change to 0.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: r265823
++
++ gcc/config/xtensa/uclinux.h | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/gcc/config/xtensa/uclinux.h b/gcc/config/xtensa/uclinux.h
++index ba26187c8f7a..c7743df9d97c 100644
++--- a/gcc/config/xtensa/uclinux.h
+++++ b/gcc/config/xtensa/uclinux.h
++@@ -59,8 +59,8 @@ along with GCC; see the file COPYING3.  If not see
++ #undef LOCAL_LABEL_PREFIX
++ #define LOCAL_LABEL_PREFIX	"."
++ 
++-/* Always enable "-fpic" for Xtensa Linux.  */
++-#define XTENSA_ALWAYS_PIC 1
+++/* Don't enable "-fpic" for Xtensa uclinux.  */
+++#define XTENSA_ALWAYS_PIC 0
++ 
++ #undef TARGET_LIBC_HAS_FUNCTION
++ #define TARGET_LIBC_HAS_FUNCTION no_c99_libc_has_function
++-- 
++2.11.0
++
