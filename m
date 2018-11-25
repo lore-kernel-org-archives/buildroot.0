@@ -1,42 +1,46 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sun, 25 Nov 2018 15:53:28 +0100
-Subject: [Buildroot] [PATCH] package/python-web2py: bump to version R-2.17.2
-Message-ID: <20181125145328.27439-1-angelo@amarulasolutions.com>
+Date: Sun, 25 Nov 2018 16:32:31 +0100
+Subject: [Buildroot] [PATCH] package/python-pydal: bump to version v18.09
+Message-ID: <20181125153231.10967-1-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bumps web2py to version R-2.17.2
+This patch bumps pydal to version v18.09 and moves its download location
+to github cause the version on pypi is not updated anymore.
 
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- package/python-web2py/python-web2py.hash | 3 ++-
- package/python-web2py/python-web2py.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/python-pydal/python-pydal.hash | 3 ++-
+ package/python-pydal/python-pydal.mk   | 5 ++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-web2py/python-web2py.hash b/package/python-web2py/python-web2py.hash
-index d23da1ea6e..9a1df0c2a1 100644
---- a/package/python-web2py/python-web2py.hash
-+++ b/package/python-web2py/python-web2py.hash
+diff --git a/package/python-pydal/python-pydal.hash b/package/python-pydal/python-pydal.hash
+index 8e6fa90e6a..27f2e6c7a2 100644
+--- a/package/python-pydal/python-pydal.hash
++++ b/package/python-pydal/python-pydal.hash
 @@ -1,2 +1,3 @@
- # sha256 locally computed
--sha256 d9ed52676e9becd53d2d73a849dea3d55b8b61231abf3428cf516dcc0083d451  python-web2py-R-2.16.1.tar.gz
-+sha256 8205a7a08595ca1a41919750a8dc4e431258966cb46c8021564b25003cf90863  python-web2py-R-2.17.2.tar.gz
-+sha256 2aae96826184a492bc799add49aed7b29036e7aba2d2294fb65053bd30fe55fe  LICENSE
-diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
-index 1e02fb7ca5..922b267b8b 100644
---- a/package/python-web2py/python-web2py.mk
-+++ b/package/python-web2py/python-web2py.mk
-@@ -4,7 +4,7 @@
+ # sha256 from https://pypi.org/project/pyDAL/#files
+-sha256 59b28cbad92743c76134fc078b62f49d5c02b86c55cbdee527f75995d2681735  pyDAL-17.11.tar.gz
++sha256 763ed017f431fc3d9fa9243f6be2519ff49b8a260d15763c4733762d9c086904  python-pydal-v18.09.tar.gz
++sha256 ae7d7b6888bb72f26af2bcbee69ae6f8a49e12f66c99e78f2a8b806effc5219d  LICENSE
+diff --git a/package/python-pydal/python-pydal.mk b/package/python-pydal/python-pydal.mk
+index 9de56bff61..4ff58def69 100644
+--- a/package/python-pydal/python-pydal.mk
++++ b/package/python-pydal/python-pydal.mk
+@@ -4,9 +4,8 @@
  #
  ################################################################################
  
--PYTHON_WEB2PY_VERSION = R-2.16.1
-+PYTHON_WEB2PY_VERSION = R-2.17.2
- PYTHON_WEB2PY_SITE = $(call github,web2py,web2py,$(PYTHON_WEB2PY_VERSION))
- PYTHON_WEB2PY_LICENSE = LGPL-3.0
- PYTHON_WEB2PY_LICENSE_FILES = LICENSE
+-PYTHON_PYDAL_VERSION = 17.11
+-PYTHON_PYDAL_SOURCE = pyDAL-$(PYTHON_PYDAL_VERSION).tar.gz
+-PYTHON_PYDAL_SITE = https://files.pythonhosted.org/packages/d2/64/a119cb70ed91a6273aad811fd250b8a55d4bc8b0d900757723ec5a4f0ba9
++PYTHON_PYDAL_VERSION = v18.09
++PYTHON_PYDAL_SITE = $(call github,web2py,pydal,$(PYTHON_PYDAL_VERSION))
+ PYTHON_PYDAL_LICENSE = BSD-3-Clause
+ PYTHON_PYDAL_LICENSE_FILES = LICENSE
+ PYTHON_PYDAL_SETUP_TYPE = setuptools
 -- 
 2.17.1
