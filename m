@@ -1,84 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 25 Nov 2018 15:45:14 +0100
-Subject: [Buildroot] [PATCH] package/libid3tag: needs autoreconf
-Message-ID: <20181125144514.17611-1-yann.morin.1998@free.fr>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Sun, 25 Nov 2018 15:53:28 +0100
+Subject: [Buildroot] [PATCH] package/python-web2py: bump to version R-2.17.2
+Message-ID: <20181125145328.27439-1-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libid3tag uses a very old configure script.
+This patch bumps web2py to version R-2.17.2
 
-When the toolchain lacks C++ and the build machine lacks /lib/cpp, this
-old configure script fails because it can't find a C++ preprocessor that
-is valid:
-
-    checking for arm-buildroot-linux-uclibcgnueabi-g++... no
-    checking whether we are using the GNU C++ compiler... no
-    checking whether no accepts -g... no
-    checking dependency style of no... none
-    checking how to run the C++ preprocessor... /lib/cpp
-    configure: error: C++ preprocessor "/lib/cpp" fails sanity check
-    See `config.log' for more details.
-
-This is yet another case that was tentatively fixed by bd39d11d2e
-(core/infra: fix build on toolchain without C++), further amended by
-4cd1ab15886 (core: alternate solution to disable C++).
-
-However, this only works on libtool scripts that are recent enough, and
-thus we need to autoreconf to get it.
-
-We also need to patch configure.ac so that it does not fail on the
-missing, GNU-specific files: NEWS, AUTHORS, and Changelog.
-
-Fixes:
-    http://autobuild.buildroot.org/results/ac3/ac3870208aab6001db6b790b6c5dde64d08f7669/
-    http://autobuild.buildroot.org/results/cc1/cc18397f38dfd4f1e6605f7a6f58edab49b396ac/
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- package/libid3tag/0001-configure-automake-foreign.patch | 16 ++++++++++++++++
- package/libid3tag/libid3tag.mk                          |  5 ++++-
- 2 files changed, 20 insertions(+), 1 deletion(-)
- create mode 100644 package/libid3tag/0001-configure-automake-foreign.patch
+ package/python-web2py/python-web2py.hash | 3 ++-
+ package/python-web2py/python-web2py.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libid3tag/0001-configure-automake-foreign.patch b/package/libid3tag/0001-configure-automake-foreign.patch
-new file mode 100644
-index 0000000000..8521d559f2
---- /dev/null
-+++ b/package/libid3tag/0001-configure-automake-foreign.patch
-@@ -0,0 +1,16 @@
-+configure: don't require GNU-specific files when running automake
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN libid3tag-0.15.1b.orig/configure.ac libid3tag-0.15.1b/configure.ac
-+--- libid3tag-0.15.1b.orig/configure.ac	2004-01-24 00:22:46.000000000 +0100
-++++ libid3tag-0.15.1b/configure.ac	2018-11-25 15:31:04.184342212 +0100
-+@@ -26,7 +26,7 @@
-+ 
-+ AC_CONFIG_SRCDIR([id3tag.h])
-+ 
-+-AM_INIT_AUTOMAKE
-++AM_INIT_AUTOMAKE([foreign])
-+ 
-+ AM_CONFIG_HEADER([config.h])
-+ 
-diff --git a/package/libid3tag/libid3tag.mk b/package/libid3tag/libid3tag.mk
-index 951ae09c77..402e154ae1 100644
---- a/package/libid3tag/libid3tag.mk
-+++ b/package/libid3tag/libid3tag.mk
-@@ -10,6 +10,9 @@ LIBID3TAG_LICENSE = GPL-2.0+
- LIBID3TAG_LICENSE_FILES = COPYING COPYRIGHT
- LIBID3TAG_INSTALL_STAGING = YES
- LIBID3TAG_DEPENDENCIES = zlib
--LIBID3TAG_LIBTOOL_PATCH = NO
-+
-+# Force autoreconf to be able to use a more recent libtool script, that
-+# is able to properly behave in the face of a missing C++ compiler.
-+LIBID3TAG_AUTORECONF = YES
+diff --git a/package/python-web2py/python-web2py.hash b/package/python-web2py/python-web2py.hash
+index d23da1ea6e..9a1df0c2a1 100644
+--- a/package/python-web2py/python-web2py.hash
++++ b/package/python-web2py/python-web2py.hash
+@@ -1,2 +1,3 @@
+ # sha256 locally computed
+-sha256 d9ed52676e9becd53d2d73a849dea3d55b8b61231abf3428cf516dcc0083d451  python-web2py-R-2.16.1.tar.gz
++sha256 8205a7a08595ca1a41919750a8dc4e431258966cb46c8021564b25003cf90863  python-web2py-R-2.17.2.tar.gz
++sha256 2aae96826184a492bc799add49aed7b29036e7aba2d2294fb65053bd30fe55fe  LICENSE
+diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
+index 1e02fb7ca5..922b267b8b 100644
+--- a/package/python-web2py/python-web2py.mk
++++ b/package/python-web2py/python-web2py.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- $(eval $(autotools-package))
+-PYTHON_WEB2PY_VERSION = R-2.16.1
++PYTHON_WEB2PY_VERSION = R-2.17.2
+ PYTHON_WEB2PY_SITE = $(call github,web2py,web2py,$(PYTHON_WEB2PY_VERSION))
+ PYTHON_WEB2PY_LICENSE = LGPL-3.0
+ PYTHON_WEB2PY_LICENSE_FILES = LICENSE
 -- 
-2.14.1
+2.17.1
