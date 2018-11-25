@@ -1,37 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Nov 2018 09:23:31 +0100
-Subject: [Buildroot] [PATCH next] stress-ng: bump to version 0.09.47
-In-Reply-To: <20181125001408.6595-1-casantos@datacom.com.br>
-References: <20181125001408.6595-1-casantos@datacom.com.br>
-Message-ID: <20181125092331.0c5d6862@windsurf>
+Date: Sun, 25 Nov 2018 09:24:43 +0100
+Subject: [Buildroot] [git commit branch/next] package/pkg-python: use proper
+ --prefix and --root values
+Message-ID: <20181125082157.653D28820D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e94280e5a537b8b6bebc6df3e16c7922b8c63950
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 24 Nov 2018 22:14:08 -0200, Carlos Santos wrote:
-> - Enable for uClibc, which is supported now.
-> - Keep microblaze, nios2 and arc restrictions, since it was not possible
->   to test on those architectures (no hardware available).
-> - Keep musl restriction, since it was possible to compile the code (with
->   some patches) but it failed at run time with
-> 
->     Cannot set scheduler: errno=38 (Function not implemented)
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-> ---
->  package/stress-ng/Config.in      | 7 +++----
->  package/stress-ng/stress-ng.hash | 2 +-
->  package/stress-ng/stress-ng.mk   | 2 +-
->  3 files changed, 5 insertions(+), 6 deletions(-)
+Some python software refers to setuptool/distutils options
+to install files in python root directory (like data_files option).
+To use this type of option, python root should point to the real python
+root in buildroot folder and not to the guest os /.
+Prefix path is always built starting from the python root, so it should
+be simply /usr.
 
-Applied to next, thanks.
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pkg-python.mk | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index f57e486dad..1ee465ba5d 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -42,10 +42,12 @@ PKG_PYTHON_DISTUTILS_BUILD_OPTS = \
+ 	--executable=/usr/bin/python
+ 
+ PKG_PYTHON_DISTUTILS_INSTALL_TARGET_OPTS = \
+-	--prefix=$(TARGET_DIR)/usr
++	--prefix=/usr \
++	--root=$(TARGET_DIR)
+ 
+ PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS = \
+-	--prefix=$(STAGING_DIR)/usr
++	--prefix=/usr \
++	--root=$(STAGING_DIR)
+ 
+ # Host distutils-based packages
+ HOST_PKG_PYTHON_DISTUTILS_ENV = \
+@@ -66,16 +68,16 @@ PKG_PYTHON_SETUPTOOLS_ENV = \
+ 	_python_exec_prefix=/usr
+ 
+ PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS = \
+-	--prefix=$(TARGET_DIR)/usr \
++	--prefix=/usr \
+ 	--executable=/usr/bin/python \
+ 	--single-version-externally-managed \
+-	--root=/
++	--root=$(TARGET_DIR)
+ 
+ PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS = \
+-	--prefix=$(STAGING_DIR)/usr \
++	--prefix=/usr \
+ 	--executable=/usr/bin/python \
+ 	--single-version-externally-managed \
+-	--root=/
++	--root=$(STAGING_DIR)
+ 
+ # Host setuptools-based packages
+ HOST_PKG_PYTHON_SETUPTOOLS_ENV = \
