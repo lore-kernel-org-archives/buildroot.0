@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 21:51:24 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] traceroute: fix 'no rule
+Date: Sun, 25 Nov 2018 21:51:32 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] traceroute: fix 'no rule
  to make target -lm' error
-Message-ID: <20181125204815.665EB88316@busybox.osuosl.org>
+Message-ID: <20181125204822.BD69288331@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d25b7d630c1c06a46ebe98fb5603c06fa89b7ce2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=bc8ab5222d48f3af6e553306300d6aa033ae0cdc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 Fix the following build error:
 
@@ -54,11 +54,11 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/traceroute/traceroute.mk b/package/traceroute/traceroute.mk
-index d01c62d5ea..367e3c7ad2 100644
+index 192197498d..a02982a6b5 100644
 --- a/package/traceroute/traceroute.mk
 +++ b/package/traceroute/traceroute.mk
-@@ -16,7 +16,7 @@ TRACEROUTE_DEPENDENCIES += busybox
- endif
+@@ -11,7 +11,7 @@ TRACEROUTE_LICENSE = GPL-2.0+, LGPL-2.1+
+ TRACEROUTE_LICENSE_FILES = COPYING COPYING.LIB
  
  define TRACEROUTE_BUILD_CMDS
 -	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
