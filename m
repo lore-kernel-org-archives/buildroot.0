@@ -1,67 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 30 Nov 2018 09:02:32 +0100
-Subject: [Buildroot] [git commit] package/civetweb: fix lua build
-Message-ID: <20181202071601.8E09C81829@busybox.osuosl.org>
+Date: Sun, 25 Nov 2018 09:21:16 +0100
+Subject: [Buildroot] [git commit] iptables: fix build with kernel headers <
+ 3.12
+Message-ID: <20181202071559.091568A3F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a34e386dc6f69df239b5c43a2e0aaf64b890f29c
+commit: https://git.buildroot.net/buildroot/commit/?id=23146fe674d6268a7ef52f1e27f7d7ba3510dd26
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-dlfcn.h must be included in modlua.ini to be able to use dlopen
-otherwise build will fail on:
-src/mod_lua.inl:2845:41: error: 'RTLD_LAZY' undeclared (first use in this function)
-  lib_handle_uuid = dlopen("libuuid.so", RTLD_LAZY);
+Extend the workaround that was added in patch 0003 to cover ipv6
+definitions.
 
 Fixes:
- - http://autobuild.buildroot.org/results/7a189f49c5a8b6f7b3d4c57cda5982adc65dbc19
+http://autobuild.buildroot.net/results/23f/23ff396a568a865751471bf1f9e5dff2b73c8ab0/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../civetweb/0001-modlua.ini-include-dlfcn.h.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ ...end-the-headers-conflict-workaround-to-in.patch | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/package/civetweb/0001-modlua.ini-include-dlfcn.h.patch b/package/civetweb/0001-modlua.ini-include-dlfcn.h.patch
+diff --git a/package/iptables/0005-include-extend-the-headers-conflict-workaround-to-in.patch b/package/iptables/0005-include-extend-the-headers-conflict-workaround-to-in.patch
 new file mode 100644
-index 0000000000..bd1b06aedf
+index 0000000000..6b1ffbd639
 --- /dev/null
-+++ b/package/civetweb/0001-modlua.ini-include-dlfcn.h.patch
-@@ -0,0 +1,34 @@
-+From ca4325c6963e505d6fb628163abf2359427ea022 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 29 Nov 2018 21:43:28 +0100
-+Subject: [PATCH] modlua.ini: include dlfcn.h
++++ b/package/iptables/0005-include-extend-the-headers-conflict-workaround-to-in.patch
+@@ -0,0 +1,37 @@
++From 23dee088cd54aae94f1b71046f2ab2b206eedd42 Mon Sep 17 00:00:00 2001
++Message-Id: <23dee088cd54aae94f1b71046f2ab2b206eedd42.1543092537.git.baruch@tkos.co.il>
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Sat, 24 Nov 2018 22:33:37 +0200
++Subject: [PATCH] include: extend the headers conflict workaround to in6.h
 +
-+dlfcn.h must be included to be able to use dlopen otherwise build will
-+fail on:
-+src/mod_lua.inl:2845:41: error: 'RTLD_LAZY' undeclared (first use in this function)
-+  lib_handle_uuid = dlopen("libuuid.so", RTLD_LAZY);
++Commit 8d9d7e4b9ef ("include: fix build with kernel headers before 4.2")
++introduced a kernel/user headers conflict workaround that allows build
++of iptables with kernel headers older than 4.2. This minor extension
++allows build with kernel headers older than 3.12, which is the version
++that introduced explicit IP headers synchronization.
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/7a189f49c5a8b6f7b3d4c57cda5982adc65dbc19
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/civetweb/civetweb/pull/706]
++Cc: Florian Westphal <fw@strlen.de>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 +---
-+ src/mod_lua.inl | 1 +
-+ 1 file changed, 1 insertion(+)
++Upstream status: https://www.spinics.net/lists/netfilter-devel/msg57029.html
 +
-+diff --git a/src/mod_lua.inl b/src/mod_lua.inl
-+index 97a5de1e..ce7a4b2e 100644
-+--- a/src/mod_lua.inl
-++++ b/src/mod_lua.inl
-+@@ -2,6 +2,7 @@
-+  * See https://github.com/civetweb/civetweb/
-+  */
++ include/linux/netfilter.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/include/linux/netfilter.h b/include/linux/netfilter.h
++index bacf8cd92116..042d8b1478e0 100644
++--- a/include/linux/netfilter.h
+++++ b/include/linux/netfilter.h
++@@ -5,8 +5,8 @@
 + 
-++#include <dlfcn.h>
-+ #include "civetweb_lua.h"
-+ #include "civetweb_private_lua.h"
++ #ifndef _NETINET_IN_H
++ #include <linux/in.h>
++-#endif
++ #include <linux/in6.h>
+++#endif
++ #include <limits.h>
 + 
++ /* Responses from hook functions. */
 +-- 
-+2.14.1
++2.19.1
 +
