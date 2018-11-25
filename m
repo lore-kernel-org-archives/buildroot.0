@@ -1,36 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 22:03:10 +0100
-Subject: [Buildroot] [PATCH] bind: security bump to version 9.11.5
-In-Reply-To: <20181107143812.19611-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 7 Nov 2018 15:38:12 +0100")
-References: <20181107143812.19611-1-peter@korsgaard.com>
-Message-ID: <87efb850q9.fsf@dell.be.48ers.dk>
+Date: Sun, 25 Nov 2018 22:07:20 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] qt: disable static build
+ for qt-zlib
+Message-ID: <20181125210411.321BB8834D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=f227cd48004c2056d75b3bc8e3c3500f2ddd2ed3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
- > Fixes the following security issues:
- > - CVE-2018-5738: Some versions of BIND can improperly permit recursive query
- >   service to unauthorized clients
+Static build of applications using qt-zlib and zlib (such as mpv) will
+fail because zlib and qt-zlib defines the same functions (inflateReset,
+inflatePrime ...)
 
- > - CVE-2018-5740: A flaw in the "deny-answer-aliases" feature can cause an
- >   INSIST assertion failure in named
+So add a dependency on !BR2_STATIC_LIBS on BR2_PACKAGE_QT_QTZLIB
 
- > For more details, see the release notes:
+Fixes:
+ - http://autobuild.buildroot.org/results/0be6e359d46a8a701006305c32b514687854b035
 
- > https://ftp.isc.org/isc/bind9/9.11.5/RELEASE-NOTES-bind-9.11.5.html
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 112667fd120d136bcacef7e4a78f16a4ac92178a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qt/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- > Drop patch 0003-Rename-ptrsize-to-ptr_size.patch as the uClibc-ng issue was
- > fixed upstream in commit 931fd627f6195 (mips: fix clashing symbols), which
- > is included in uclibc-1.0.12 (January 2016).
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2018.02.x and 2018.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index 0ecfafada5..a1218ecf39 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -309,9 +309,13 @@ choice
+ 
+ config BR2_PACKAGE_QT_QTZLIB
+ 	bool "Qt zlib"
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  Use the zlib bundled with Qt.
+ 
++comment "Qt zlib needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
++
+ config BR2_PACKAGE_QT_SYSTEMZLIB
+ 	bool "System zlib"
+ 	select BR2_PACKAGE_ZLIB
