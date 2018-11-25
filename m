@@ -1,60 +1,170 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 21:48:40 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] Config.in: security
- hardening: disable FORTIFY_SOURCE for gcc < 6
-Message-ID: <20181125204534.0B0D78830A@busybox.osuosl.org>
+Date: Sun, 25 Nov 2018 21:43:39 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] toolchain: disable SSP
+ support if CFI support in binutils is missing
+Message-ID: <20181125204534.03E5D8830A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=25589148f7fccc8937439efac50b1e7ac3ea723f
+commit: https://git.buildroot.net/buildroot/commit/?id=dbe92b6d3375263c03904f19157e4dbb20f7e94c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-As reported in the bug report [1], gcc < 6 doesn't build when
-FORTIFY_SOURCE is set to 1 or 2. The issue is related to the
-upstream bug report [2] but the patch fixing the issue for gcc 6
-has not been backported to earlier gcc versions.
+As reported by [1], SSP support is missing in the Buildroot toolchain
+for microblaze even if it's requested by selecting
+BR2_TOOLCHAIN_HAS_SSP config option.
 
-Add a dependency on gcc at least version 6 to BR2_FORTIFY_SOURCE_1
-and BR2_FORTIFY_SOURCE_2.
+In Buildroot, we are using libssp provided by the C library (glibc,
+musl, uClibc-ng) when available. We are not using libssp from gcc.
 
-[1] https://bugs.busybox.net/show_bug.cgi?id=11476
-[2] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=61164
-[3] https://github.com/gcc-mirror/gcc/commit/55f12fce4ccf77513644a247f9c401a5b1fa2402
+So for a microblaze glibc based toolchain, the SSP support is enabled
+unconditionally by a select BR2_TOOLCHAIN_HAS_SSP.
+
+BR2_microblazeel=y
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_KERNEL_HEADERS_4_14=y
+BR2_BINUTILS_VERSION_2_30_X=y
+BR2_GCC_VERSION_8_X=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+
+While building the toolchain, we are building host-binutils which
+provide "as" (assembler) and host-gcc-initial wich provide a
+minimal cross gcc (C only cross-compiler without any C library).
+When SSP support is requested, gcc_cv_libc_provides_ssp=yes is
+added to the make command line (see [2] for full details)
+
+With this setting, the SSP support is requested but it's not available
+in the end and the toochain build succeed.
+
+When the microblaze toolchain is imported to Biuldroot (2018.05) as
+external toolchain with BR2_TOOLCHAIN_EXTERNAL_HAS_SSP set, the build
+stop with :
+"SSP support not available in this toolchain, please disable BR2_TOOLCHAIN_EXTERNAL_HAS_SSP"
+
+The test is doing the following command line:
+
+echo 'void main(){}' | [...]/host/bin/microblazeel-linux-gcc.br_real -Werror -fstack-protector -x c - -o [...]/build/.br-toolchain-test.tmp
+cc1: error: -fstack-protector not supported for this target [-Werror]
+
+When we look at the gcc-final log file (config.log) we can see this
+error several time when using the minimal gcc (from host-gcc-initial).
+So Why the minimal gcc doesn't support SSP?
+
+When we look at the gcc-initial log file (config.log) we can see an
+error with 'as':
+
+configure:23194: checking assembler for cfi directives
+configure:23209: [...]microblazeel-buildroot-linux-gnu/bin/as    -o conftest.o conftest.s >&5
+conftest.s: Assembler messages:
+conftest.s:2: Error: CFI is not supported for this target
+conftest.s:3: Error: CFI is not supported for this target
+conftest.s:4: Error: CFI is not supported for this target
+conftest.s:5: Error: CFI is not supported for this target
+conftest.s:6: Error: CFI is not supported for this target
+conftest.s:7: Error: CFI is not supported for this target
+configure:23212: $? = 1
+configure: failed program was
+    .text
+    .cfi_startproc
+    .cfi_offset 0, 0
+    .cfi_same_value 1
+    .cfi_def_cfa 1, 2
+    .cfi_escape 1, 2, 3, 4, 5
+    .cfi_endproc
+
+This is the only relevant difference compared to a nios2 toolchain where
+libssp is enabled and available (nios2 is an example).
+
+"CFI" stand for "Control Flow Integrity" and it seems that SSP support
+requires CFI target support (see [3] for some explanation).
+
+The SSP support seems to depends on CFI support, but the toolchain
+infrastructure is not detailed enough to handle the CFI dependency.
+
+The NiosII toolchains built with binutils < 2.30 are also affected by
+this issue.
+
+This patch improve the toolchain infrastructure by adding a new
+BR2_PACKAGE_HOST_BINUTILS_SUPPORTS_CFI blind option
+
+Disable SSP support for microblaze entirely.
+Disable SSP support for nios2 only with Binutils < 2.30.
+
+Fixes:
+https://gitlab.com/free-electrons/toolchains-builder/-/jobs/72006389
+
+[1] https://gitlab.com/free-electrons/toolchains-builder/issues/1
+[2] https://git.buildroot.net/buildroot/tree/package/gcc/gcc.mk?h=2018.05#n275
+[3] https://grsecurity.net/rap_faq.php
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-[Peter: only limit for internal toolchain as suggested by Matthew]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-(cherry picked from commit a75ee0e8124023185f4a05e95b2fcd29fa9449d8)
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[Thomas: adjust how the BR2_PACKAGE_HOST_BINUTILS_SUPPORTS_CFI option
+is expressed.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 435613ef298d49788d82f7bb2e06f944d69d890b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/binutils/Config.in.host | 6 ++++++
+ package/glibc/Config.in         | 5 +++--
+ package/musl/Config.in          | 3 ++-
+ package/uclibc/Config.in        | 1 +
+ 4 files changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index 584a1f087f..102c8010e5 100644
---- a/Config.in
-+++ b/Config.in
-@@ -798,6 +798,8 @@ config BR2_FORTIFY_SOURCE_NONE
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index bc0e223e9f..99f78fc373 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -1,5 +1,11 @@
+ comment "Binutils Options"
  
- config BR2_FORTIFY_SOURCE_1
- 	bool "Conservative"
-+	# gcc bug https://gcc.gnu.org/bugzilla/show_bug.cgi?id=61164
-+	depends on !BR2_TOOLCHAIN_BUILDROOT || BR2_TOOLCHAIN_GCC_AT_LEAST_6
- 	help
- 	  This option sets _FORTIFY_SOURCE to 1 and only introduces
- 	  checks that shouldn't change the behavior of conforming
-@@ -805,6 +807,8 @@ config BR2_FORTIFY_SOURCE_1
++config BR2_PACKAGE_HOST_BINUTILS_SUPPORTS_CFI
++	bool
++	default y
++	depends on !BR2_microblaze
++	depends on !(BR2_nios2 && (BR2_BINUTILS_VERSION_2_28_X || BR2_BINUTILS_VERSION_2_29_X))
++
+ choice
+ 	prompt "Binutils Version"
+ 	default BR2_BINUTILS_VERSION_2_28_X if BR2_ARM_INSTRUCTIONS_THUMB
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index 57a2e833d2..7821251087 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_GLIBC
+ 	bool
+ 	default y
+ 	select BR2_PACKAGE_LINUX_HEADERS
+-	select BR2_TOOLCHAIN_HAS_SSP
+-
++	select BR2_TOOLCHAIN_HAS_SSP if BR2_PACKAGE_HOST_BINUTILS_SUPPORTS_CFI
++	help
++	  https://www.gnu.org/software/libc/
+ endif
+diff --git a/package/musl/Config.in b/package/musl/Config.in
+index bedc50cd45..67e9e78a14 100644
+--- a/package/musl/Config.in
++++ b/package/musl/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_MUSL
+ 	depends on BR2_TOOLCHAIN_USES_MUSL
+ 	select BR2_PACKAGE_LINUX_HEADERS
+ 	# SSP broken on i386/ppc: http://www.openwall.com/lists/musl/2016/12/04/2
+-	select BR2_TOOLCHAIN_HAS_SSP if !(BR2_i386 || BR2_powerpc)
++	select BR2_TOOLCHAIN_HAS_SSP if BR2_PACKAGE_HOST_BINUTILS_SUPPORTS_CFI \
++		&& !(BR2_i386 || BR2_powerpc)
+ 	# Compatibility headers: cdefs.h, queue.h
+ 	select BR2_PACKAGE_MUSL_COMPAT_HEADERS
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 0e24b25441..ce56f277ad 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -70,6 +70,7 @@ config BR2_PTHREAD_DEBUG
  
- config BR2_FORTIFY_SOURCE_2
- 	bool "Aggressive"
-+	# gcc bug https://gcc.gnu.org/bugzilla/show_bug.cgi?id=61164
-+	depends on !BR2_TOOLCHAIN_BUILDROOT || BR2_TOOLCHAIN_GCC_AT_LEAST_6
+ config BR2_TOOLCHAIN_BUILDROOT_USE_SSP
+ 	bool "Enable stack protection support"
++	depends on BR2_PACKAGE_HOST_BINUTILS_SUPPORTS_CFI
+ 	select BR2_TOOLCHAIN_HAS_SSP
  	help
- 	  This option sets _FORTIFY_SOURCES to 2 and some more
- 	  checking is added, but some conforming programs might fail.
+ 	  Enable stack smashing protection support using GCCs
