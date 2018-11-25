@@ -1,57 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 23:18:59 +0100
-Subject: [Buildroot] [PATCH 1/1] qemu: disable opengl
-In-Reply-To: <20181110205141.11650-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 10 Nov 2018 21:51:41 +0100")
-References: <20181110205141.11650-1-fontaine.fabrice@gmail.com>
-Message-ID: <874lc43ing.fsf@dell.be.48ers.dk>
+Date: Sun, 25 Nov 2018 23:20:14 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] trace-cmd: fix site
+Message-ID: <20181125221707.5E2DA88417@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=bbceedcdfa35afa9baa073626a7a9a3929e3de79
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > Since version 0.15.0, qemu has an optional dependency to opengl:
- > https://github.com/qemu/qemu/commit/20ff075bb3340c5278a0da38ad1f4d602565aa06
+Replace $(BR2_KERNEL_MIRROR) by https://git.kernel.org/pub, which
+fixes the download of this package:
 
- > Since version 2.4, libepoxy is also needed to enable opengl:
- > https://github.com/qemu/qemu/commit/dcf30025c3e3d43140a687240433de1920adf8b0
+>>> trace-cmd trace-cmd-v2.6.1 Downloading
+Initialized empty Git repository in /home/thomas/dl/trace-cmd/git/.git/
+Fetching all references
+fatal: repository 'https://cdn.kernel.org/pub/scm/linux/kernel/git/rostedt/trace-cmd.git/' not found
+Detected a corrupted git cache.
+Removing it and starting afresh.
+Initialized empty Git repository in /home/thomas/dl/trace-cmd/git/.git/
+Fetching all references
+fatal: repository 'https://cdn.kernel.org/pub/scm/linux/kernel/git/rostedt/trace-cmd.git/' not found
+Detected a corrupted git cache.
+This is the second time in a row; bailing out
+--2018-11-11 21:08:00--  http://sources.buildroot.net/trace-cmd/trace-cmd-trace-cmd-v2.6.1.tar.gz
+Resolving sources.buildroot.net (sources.buildroot.net)... 104.25.210.19, 104.25.211.19, 2606:4700:20::6819:d313, ...
+Connecting to sources.buildroot.net (sources.buildroot.net)|104.25.210.19|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 1859835 (1.8M) [application/x-gtar-compressed]
 
- > As a result if libepoxy is built before qemu, opengl support will be
- > detected (see config.log):
- > OpenGL support    yes
- > OpenGL dmabufs    yes
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit e311d8387dc829d3f0dfe5508cfabc3458e0fa93)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/trace-cmd/trace-cmd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > This will raise the failures in milkymist-tmu2:
- > hw/display/milkymist-tmu2.c:35:22: fatal error: X11/Xlib.h: No such file or directory
-
- > or in sdl2:
- >   CC      /home/peko/autobuild/instance-0/output/targetui/sdl2-2d.o
- > In file included from /home/peko/autobuild/instance-0/output/build/qemu-2.12.1/include/ui/egl-context.h:5:0,
- >                  from ui/egl-context.c:3:
- > /home/peko/autobuild/instance-0/output/build/qemu-2.12.1/include/ui/egl-helpers.h:45:55: error: unknown type name 'Window'; did you mean 'minor'?
-
- > or in translate-a64:
- > /accts/mlweber1/scripts/instance-3/output/build/qemu-2.12.1/target/arm/translate-a64.c: In function 'handle_shri_with_rndacc':
- > /accts/mlweber1/scripts/instance-3/output/build/qemu-2.12.1/target/arm/translate-a64.c:7000:28: warning: 'tcg_src_hi' may be used uninitialized in this function [-Wmaybe-uninitialized]
- >              tcg_gen_mov_i64(tcg_src, tcg_src_hi);
- >                             ^
- > ../ui/gtk-egl.o: In function `gd_egl_init':
- > /accts/mlweber1/scripts/instance-3/output/build/qemu-2.12.1/ui/gtk-egl.c:52: undefined reference to `gdk_x11_window_get_xid'
-
- > So, for the time being, disable opengl as done in xen since commit
- > 13c6754f3c1d2a14516f641490e9dd6f4c183d7c.
-
- > Fixes:
- >  - http://autobuild.buildroot.org/results/656e45721c72197834462eb2bd8c762e520725a4
- >  - http://autobuild.buildroot.org/results/d4736a930144fc5e25b377bc1c0baf44fbf8718d
- >  - http://autobuild.buildroot.org/results/50e0d7d1b4f5c2b827b50bb82d8fbc066bf31118
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2018.02.x and 2018.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
+index 0dc145674f..578e9f124f 100644
+--- a/package/trace-cmd/trace-cmd.mk
++++ b/package/trace-cmd/trace-cmd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ TRACE_CMD_VERSION = trace-cmd-v2.6.1
+-TRACE_CMD_SITE = $(BR2_KERNEL_MIRROR)/scm/linux/kernel/git/rostedt/trace-cmd.git
++TRACE_CMD_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/trace-cmd.git
+ TRACE_CMD_SITE_METHOD = git
+ TRACE_CMD_INSTALL_STAGING = YES
+ TRACE_CMD_LICENSE = GPL-2.0, LGPL-2.1
