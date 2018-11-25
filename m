@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 22:27:53 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] attr: Add a patch to fix
+Date: Sun, 25 Nov 2018 22:28:01 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] attr: Add a patch to fix
  an unconditional infinite recursion
-Message-ID: <20181125212444.4DFB5883B4@busybox.osuosl.org>
+Message-ID: <20181125212452.4B0A4883B6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e84570a4af6d65da4948039f82e59e437392725f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=58d46327d901452c0aa7d46544ebea8d3c03d9bb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 The bump to 2.4.48 introduced a bug that, according to the author,
 only happen in certain cases on glibc. But under uclibc-ng, it happens
