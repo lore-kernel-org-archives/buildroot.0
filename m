@@ -1,65 +1,219 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 23:50:21 +0100
-Subject: [Buildroot] [git commit] package/webkitgtk: bump to version 2.22.4
-Message-ID: <20181125224747.BD79188520@busybox.osuosl.org>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Sun, 25 Nov 2018 16:56:01 -0600
+Subject: [Buildroot] [PATCH] netsurf: new package
+In-Reply-To: <CANQCQpaJ5FN0px7sfqvhcfJfGgLzmRK6rbww-Z7XwzATHL-E2w@mail.gmail.com>
+References: <20181125175832.26232-1-francois.perrad@gadz.org>
+ <CANQCQpaJ5FN0px7sfqvhcfJfGgLzmRK6rbww-Z7XwzATHL-E2w@mail.gmail.com>
+Message-ID: <CANQCQpb6TzN0BMbJiQcVyT7XC-fLMzS5qbVOzEftjoHB8M-tNw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a827a17dc03f2ab4affc63a27b32aa5ca573da3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Francois,
 
-This is a maintenance release of the current stable WebKitGTK+ version,
-which contains security fixes for  CVE-2018-4345, CVE-2018-4372,
-CVE-2018-4373, CVE-2018-4375, CVE-2018-4376, CVE-2018-4378,
-CVE-2018-4382, CVE-2018-4386, CVE-2018-4392, and CVE-2018-4416.
-Additionally, it fixes a few build failures, and a crash when using
-certain version of Cairo.
+On Sun, Nov 25, 2018 at 3:33 PM Matthew Weber
+<matthew.weber@rockwellcollins.com> wrote:
+>
+> Francois,
+>
+> On Sun, Nov 25, 2018 at 11:59 AM Francois Perrad <fperrad@gmail.com> wrote:
+> >
+> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-Release notes can be found in the announcement:
+Tested this patch in a glibc and uclibc build.  (uclibc with the
+suggested change below)
 
-  https://webkitgtk.org/2018/11/21/webkitgtk2.22.4-released.html
+> > ---
+> >  DEVELOPERS                                    |  1 +
+> >  package/Config.in                             |  1 +
+> >  .../0001-avoid-system-perl-dependencies.patch | 29 +++++++++
+> >  package/netsurf/Config.in                     | 15 +++++
+> >  package/netsurf/netsurf.hash                  |  2 +
+> >  package/netsurf/netsurf.mk                    | 61 +++++++++++++++++++
+> >  6 files changed, 109 insertions(+)
+> >  create mode 100644 package/netsurf/0001-avoid-system-perl-dependencies.patch
+> >  create mode 100644 package/netsurf/Config.in
+> >  create mode 100644 package/netsurf/netsurf.hash
+> >  create mode 100644 package/netsurf/netsurf.mk
+> >
+> > diff --git a/DEVELOPERS b/DEVELOPERS
+> > index 2a5c8dc78..4a9151a40 100644
+> > --- a/DEVELOPERS
+> > +++ b/DEVELOPERS
+> > @@ -784,6 +784,7 @@ F:  package/lua*
+> >  F:     package/lunit/
+> >  F:     package/lzlib/
+> >  F:     package/moarvm/
+> > +F:     package/netsurf/
+> >  F:     package/perl*
+> >  F:     package/pkg-perl.mk
+> >  F:     package/pkg-luarocks.mk
+> > diff --git a/package/Config.in b/package/Config.in
+> > index f5a17492c..1061d01df 100644
+> > --- a/package/Config.in
+> > +++ b/package/Config.in
+> > @@ -269,6 +269,7 @@ comment "Graphic applications"
+> >         source "package/kmscube/Config.in"
+> >         source "package/libva-utils/Config.in"
+> >         source "package/mesa3d-demos/Config.in"
+> > +       source "package/netsurf/Config.in"
+> >         source "package/pngquant/Config.in"
+> >         source "package/qt5cinex/Config.in"
+> >         source "package/rrdtool/Config.in"
+> > diff --git a/package/netsurf/0001-avoid-system-perl-dependencies.patch b/package/netsurf/0001-avoid-system-perl-dependencies.patch
+> > new file mode 100644
+> > index 000000000..979ddafc8
+> > --- /dev/null
+> > +++ b/package/netsurf/0001-avoid-system-perl-dependencies.patch
+> > @@ -0,0 +1,29 @@
+> > +From b42e4b5bfca030965dcfca993a47a6ddaa941287 Mon Sep 17 00:00:00 2001
+> > +From: Francois Perrad <francois.perrad@gadz.org>
+> > +Date: Sun, 25 Nov 2018 18:27:54 +0100
+> > +Subject: [PATCH] avoid system perl dependencies
+> > +
+> > +this subroutine format is used for android target.
+> > +with eval the load of HTML::Entities is deferred.
+> > +
+> > +Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> > +---
+> > + netsurf/utils/split-messages.pl | 2 +-
+> > + 1 file changed, 1 insertion(+), 1 deletion(-)
+> > +
+> > +diff --git a/netsurf/utils/split-messages.pl b/netsurf/utils/split-messages.pl
+> > +index 4b50dde..e47dded 100644
+> > +--- a/netsurf/utils/split-messages.pl
+> > ++++ b/netsurf/utils/split-messages.pl
+> > +@@ -311,7 +311,7 @@ TXT
+> > +     sub footer { qq|</resources>| }
+> > +     sub format
+> > +     {
+> > +-      use HTML::Entities qw(encode_entities);
+> > ++      eval q|use HTML::Entities qw(encode_entities);|;
+> > +       my $escaped = encode_entities( $_[1], '<>&"' );
+> > +       qq|  <string name="$_[0]">$escaped</string>\n|;
+> > +     }
+> > +--
+> > +2.17.1
+> > +
+> > diff --git a/package/netsurf/Config.in b/package/netsurf/Config.in
+> > new file mode 100644
+> > index 000000000..645036466
+> > --- /dev/null
+> > +++ b/package/netsurf/Config.in
+> > @@ -0,0 +1,15 @@
+> > +config BR2_PACKAGE_NETSURF
+> > +       bool "netsurf"
+> > +       select BR2_PACKAGE_EXPAT
+> > +       select BR2_PACKAGE_JPEG
+> > +       select BR2_PACKAGE_LIBCURL
+> > +       select BR2_PACKAGE_LIBGTK2 if BR2_PACKAGE_XORG7
+> > +       select BR2_PACKAGE_LIBPNG
+> > +       select BR2_PACKAGE_OPENSSL
+> > +       select BR2_PACKAGE_SDL if !BR2_PACKAGE_XORG7
+> > +       help
+> > +         NetSurf is a compact graphical web browser which aims for
+> > +         HTML5, CSS and JavaScript support.
+> > +         Frontends: GTK+ 2 (X11), SDL 1.2 (framebuffer)
+> > +
+> > +         http://www.netsurf-browser.org/
+> > diff --git a/package/netsurf/netsurf.hash b/package/netsurf/netsurf.hash
+> > new file mode 100644
+> > index 000000000..aa4602e76
+> > --- /dev/null
+> > +++ b/package/netsurf/netsurf.hash
+> > @@ -0,0 +1,2 @@
+> > +# Locally computed
+> > +sha256 eb4864d4459d6f9958dd10a3301c272ea7f5df72667a7db0aad5bc5ae06c0e10  netsurf-all-3.8.tar.gz
+>
+> Suggest adding the license file hash
+> (https://buildroot.org/downloads/manual/manual.html#adding-packages-hash)
+>
+> > diff --git a/package/netsurf/netsurf.mk b/package/netsurf/netsurf.mk
+> > new file mode 100644
+> > index 000000000..b165f1fbc
+> > --- /dev/null
+> > +++ b/package/netsurf/netsurf.mk
+> > @@ -0,0 +1,61 @@
+> > +################################################################################
+> > +#
+> > +# netsurf
+> > +#
+> > +################################################################################
+> > +
+> > +NETSURF_VERSION = 3.8
+> > +NETSURF_SOURCE = netsurf-all-$(NETSURF_VERSION).tar.gz
+> > +NETSURF_SITE = http://download.netsurf-browser.org/netsurf/releases/source-full
+> > +NETSURF_LICENSE = GPL-2.0
+> > +NETSURF_LICENSE_FILES = netsurf/COPYING
+> > +NETSURF_DEPENDENCIES = expat jpeg libcurl libpng openssl \
+> > +       host-bison host-flex host-gperf host-pkgconf
+> > +
+> > +ifeq ($(BR2_PACKAGE_XORG7),y)
+> > +NETSURF_DEPENDENCIES += libgtk2
+> > +NETSURF_FRONTEND = gtk
+> > +ifeq ($(BR2_PACKAGE_LIBRSVG),y)
+> > +NETSURF_DEPENDENCIES += librsvg
+> > +define NETSURF_SVG_CONFIGURE_CMDS
+> > +       echo "override NETSURF_USE_RSVG := YES"         >> $(@D)/netsurf/Makefile.config
+> > +       echo "override NETSURF_USE_NSSVG := NO"         >> $(@D)/netsurf/Makefile.config
+> > +endef
+> > +endif
+> > +else
+> > +NETSURF_DEPENDENCIES += sdl
+> > +NETSURF_FRONTEND = framebuffer
+> > +endif
+> > +
+> > +ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+>
+> This creates a dependency warning.  Suggest adding
+> BR2_PACKAGE_LIBICONV as a kconfig select if BR2_TOOLCHAIN_USES_UCLIBC
+> and then check here for ifeq ($(BR2_PACKAGE_LIBICONV),y)
+>
+> > +NETSURF_DEPENDENCIES += libiconv
+> > +define NETSURF_ICONV_CONFIGURE_CMDS
+> > +       echo "override NETSURF_USE_LIBICONV_PLUG := NO" >> $(@D)/netsurf/Makefile.config
+> > +endef
+> > +endif
+> > +
+> > +define NETSURF_CONFIGURE_CMDS
+> > +       echo "override NETSURF_USE_DUKTAPE := NO"       >  $(@D)/netsurf/Makefile.config
+> > +       echo "override NETSURF_USE_GRESOURCE := NO"     >> $(@D)/netsurf/Makefile.config
+> > +       echo "override NETSURF_USE_INLINE_PIXBUF := NO" >> $(@D)/netsurf/Makefile.config
+> > +       $(NETSURF_ICONV_CONFIGURE_CMDS)
+> > +       $(NETSURF_SVG_CONFIGURE_CMDS)
+> > +endef
+> > +
+> > +NETSURF_MAKE_OPTS = \
+> > +       TARGET=$(NETSURF_FRONTEND) \
+> > +       TMP_PREFIX=$(STAGING_DIR)/usr \
+> > +       V=0 \
+>
+> Does it default to V=1?  If so, maybe set to this instead to follow
+> the overall Buildroot verbosity.
+>
+> > +       PREFIX=/usr
+> > +
+> > +define NETSURF_BUILD_CMDS
+> > +       $(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D) $(NETSURF_MAKE_OPTS) \
+>
+> Suggest adding a comment above this line or in the commit description
+> as to the need for MAKE1.
+>
+> uclibc build is going now, I'll let you know if I see anything else.
+>
+> Thanks!
+> Matt
 
-More details on the issues covered by security fixes can be found
-in the corresponding security advisory:
 
-  https://webkitgtk.org/security/WSA-2018-0008.html
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+-- 
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / RC Linux Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 19f0c487dd..15b1b56681 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.22.3.tar.xz.sums
--md5 6dae6837c884a25413fb1d4527c9894a webkitgtk-2.22.3.tar.xz
--sha1 c16129f4098b35597457255e63e60126ff3e6daa webkitgtk-2.22.3.tar.xz
--sha256 9dfd542902953be9af8ff32bd37fe662ca3d75f7348514ebac15c6252a6ccd72 webkitgtk-2.22.3.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.22.4.tar.xz.sums
-+md5 9f08d09cfc21c761a431a545549f301a webkitgtk-2.22.4.tar.xz
-+sha1 adf857c8a8b8fb79ba9b01bbe4b454956e633952 webkitgtk-2.22.4.tar.xz
-+sha256 fab5be2883802352ae0e735dd1eff4bc18abaff7ac78689cec72eb2f611943b8 webkitgtk-2.22.4.tar.xz
- 
- # Hashes for license files:
- sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 16644f0e93..4cfddd1eb5 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.22.3
-+WEBKITGTK_VERSION = 2.22.4
- WEBKITGTK_SITE = http://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
