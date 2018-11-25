@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Nov 2018 09:20:54 +0100
-Subject: [Buildroot] [PATCH next] uclibc: bump to version 1.0.31
-In-Reply-To: <20181124234929.30984-1-casantos@datacom.com.br>
-References: <20181124234929.30984-1-casantos@datacom.com.br>
-Message-ID: <20181125092054.3555703d@windsurf>
+Date: Sun, 25 Nov 2018 09:21:03 +0100
+Subject: [Buildroot] [PATCH next v2] qemu: enable seccomp if libseccomp
+ is selected
+In-Reply-To: <20181125012122.24316-1-casantos@datacom.com.br>
+References: <20181125012122.24316-1-casantos@datacom.com.br>
+Message-ID: <20181125092103.111d320e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +13,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 24 Nov 2018 21:49:29 -0200, Carlos Santos wrote:
-> Remove all patches, since they were already applied upstream.
-> Add license file hash.
+On Sat, 24 Nov 2018 23:21:22 -0200, Carlos Santos wrote:
+> It is required to use qemu with libvirt and allows us to resume working
+> on the libvirt package (https://patchwork.ozlabs.org/patch/841613).
 > 
 > Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 > ---
->  ...ldconfig-add-glibc-compatibility-fix.patch | 54 -------------------
->  ...ock_nanosleep-independent-of-thread-.patch | 34 ------------
->  ..._DEBUG-segv-when-printing-R_ARC_NONE.patch | 45 ----------------
->  ...stemp64-clear-flags-as-mkostemp-does.patch | 38 -------------
->  package/uclibc/uclibc.hash                    |  6 ++-
->  package/uclibc/uclibc.mk                      |  4 +-
->  6 files changed, 6 insertions(+), 175 deletions(-)
->  delete mode 100644 package/uclibc/0001-Revert-ldconfig-add-glibc-compatibility-fix.patch
->  delete mode 100644 package/uclibc/0002-librt-declare-clock_nanosleep-independent-of-thread-.patch
->  delete mode 100644 package/uclibc/0003-ldso-arc-fix-LD_DEBUG-segv-when-printing-R_ARC_NONE.patch
->  delete mode 100644 package/uclibc/0004-mkostemp64-clear-flags-as-mkostemp-does.patch
+> Supersedes: https://patchwork.ozlabs.org/patch/1000481/
+> ---
+> Changes v1->v2:
+> - Do not introduce an explicit option, just enable seccomp support when
+>   BR2_PACKAGE_LIBSECCOMP=y.
+> ---
+>  package/qemu/qemu.mk | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 
 Applied to next, thanks.
 
