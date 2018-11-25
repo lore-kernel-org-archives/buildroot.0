@@ -1,63 +1,47 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 25 Nov 2018 10:19:47 +0100
-Subject: [Buildroot] [PATCH 0/3 v2] golang: fix build with oldish
- codesourcery amd64 toolchain (branch yem/go-west)
-Message-ID: <cover.1543137559.git.yann.morin.1998@free.fr>
+Date: Sun, 25 Nov 2018 10:19:48 +0100
+Subject: [Buildroot] [PATCH 1/3 v2] infra/pkg-golang: enforce number of
+ parallel jobs
+In-Reply-To: <cover.1543137559.git.yann.morin.1998@free.fr>
+References: <cover.1543137559.git.yann.morin.1998@free.fr>
+Message-ID: <951dd893ccaa0d4a894bfcac76dc04e28d9acafb.1543137559.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+By default, the go compiler will spawn as many jobs as there are CPUs
+available, thus possibily over-shooting the limits set by the user.
 
-That toolchain seems to suffer from bug #20006
-    https://sourceware.org/bugzilla/show_bug.cgi?id=20006
+Make it abide by the user's wish, and specify the number of jobs allowed
+to run.
 
-So, like bug 19615, introduce a config option for 20006, and mask away
-all golang packages.
+We can do so without fear of a package failing to build in parallel,
+because they were already all building in parallel, as that is the
+default for the go compiler.
 
-Additionally, make golang packages abide by the number of CPUs to use.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/pkg-golang.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Changes v1 -> v2:
-  - drop per-package dependency, move it to BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-    (Thomas)
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit ea5280b889782e28b6bdf43e28b0e6a3a610f921
-
-  package/samba4: fix install of systemd files (2018-11-25 09:37:07 +0100)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to d64c03d07584a8f48ab309fff66d2ee5661d5ee3
-
-  package: hide golang packages for toolchains with binutils bug 20006 (2018-11-25 09:54:23 +0100)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (3):
-      infra/pkg-golang: enforce number of parallel jobs
-      toolchain: CodeSourcery AMD64 affected by PR20006
-      package: hide golang packages for toolchains with binutils bug 20006
-
- package/go/Config.in.host                                           | 1 +
- package/pkg-golang.mk                                               | 6 ++++--
- toolchain/Config.in                                                 | 5 +++++
- .../toolchain-external-codesourcery-amd64/Config.in                 | 1 +
- 4 files changed, 11 insertions(+), 2 deletions(-)
-
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+index 6eacd14180..4f2c7e77e1 100644
+--- a/package/pkg-golang.mk
++++ b/package/pkg-golang.mk
+@@ -55,8 +55,10 @@ ifeq ($(BR2_STATIC_LIBS),y)
+ $(2)_LDFLAGS += -extldflags '-static'
+ endif
+ 
+-$(2)_BUILD_OPTS += -ldflags "$$($(2)_LDFLAGS)"
+-$(2)_BUILD_OPTS += -tags "$$($(2)_TAGS)"
++$(2)_BUILD_OPTS += \
++	-ldflags "$$($(2)_LDFLAGS)" \
++	-tags "$$($(2)_TAGS)" \
++	-p $(PARALLEL_JOBS)
+ 
+ # Target packages need the Go compiler on the host.
+ $(2)_DEPENDENCIES += host-go
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
