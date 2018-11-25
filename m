@@ -1,38 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 23:50:53 +0100
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: bump to version
- 2.22.4
-In-Reply-To: <20181125223818.40680-1-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Mon, 26 Nov 2018 00:38:18 +0200")
-References: <20181125223818.40680-1-aperez@igalia.com>
-Message-ID: <87y39gzs8i.fsf@dell.be.48ers.dk>
+Date: Sun, 25 Nov 2018 23:50:21 +0100
+Subject: [Buildroot] [git commit] package/webkitgtk: bump to version 2.22.4
+Message-ID: <20181125224747.BD79188520@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7a827a17dc03f2ab4affc63a27b32aa5ca573da3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This is a maintenance release of the current stable WebKitGTK+ version,
- > which contains security fixes for  CVE-2018-4345, CVE-2018-4372,
- > CVE-2018-4373, CVE-2018-4375, CVE-2018-4376, CVE-2018-4378,
- > CVE-2018-4382, CVE-2018-4386, CVE-2018-4392, and CVE-2018-4416.
- > Additionally, it fixes a few build failures, and a crash when using
- > certain version of Cairo.
+This is a maintenance release of the current stable WebKitGTK+ version,
+which contains security fixes for  CVE-2018-4345, CVE-2018-4372,
+CVE-2018-4373, CVE-2018-4375, CVE-2018-4376, CVE-2018-4378,
+CVE-2018-4382, CVE-2018-4386, CVE-2018-4392, and CVE-2018-4416.
+Additionally, it fixes a few build failures, and a crash when using
+certain version of Cairo.
 
- > Release notes can be found in the announcement:
+Release notes can be found in the announcement:
 
- >   https://webkitgtk.org/2018/11/21/webkitgtk2.22.4-released.html
+  https://webkitgtk.org/2018/11/21/webkitgtk2.22.4-released.html
 
- > More details on the issues covered by security fixes can be found
- > in the corresponding security advisory:
+More details on the issues covered by security fixes can be found
+in the corresponding security advisory:
 
- >   https://webkitgtk.org/security/WSA-2018-0008.html
+  https://webkitgtk.org/security/WSA-2018-0008.html
 
- > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Great, this was still on my todo list - Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 19f0c487dd..15b1b56681 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.22.3.tar.xz.sums
+-md5 6dae6837c884a25413fb1d4527c9894a webkitgtk-2.22.3.tar.xz
+-sha1 c16129f4098b35597457255e63e60126ff3e6daa webkitgtk-2.22.3.tar.xz
+-sha256 9dfd542902953be9af8ff32bd37fe662ca3d75f7348514ebac15c6252a6ccd72 webkitgtk-2.22.3.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.22.4.tar.xz.sums
++md5 9f08d09cfc21c761a431a545549f301a webkitgtk-2.22.4.tar.xz
++sha1 adf857c8a8b8fb79ba9b01bbe4b454956e633952 webkitgtk-2.22.4.tar.xz
++sha256 fab5be2883802352ae0e735dd1eff4bc18abaff7ac78689cec72eb2f611943b8 webkitgtk-2.22.4.tar.xz
+ 
+ # Hashes for license files:
+ sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 16644f0e93..4cfddd1eb5 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBKITGTK_VERSION = 2.22.3
++WEBKITGTK_VERSION = 2.22.4
+ WEBKITGTK_SITE = http://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
