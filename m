@@ -1,109 +1,91 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 23 Nov 2018 11:10:51 +0100
-Subject: [Buildroot] [git commit] package/luv: add patch to fix build issue
- with luvi
-Message-ID: <20181202071557.85F5C81583@busybox.osuosl.org>
+Date: Sun, 25 Nov 2018 09:39:20 +0100
+Subject: [Buildroot] [git commit] package/keepalived: fix build with uclibc
+Message-ID: <20181202071559.49316815BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6239dee485aceacdbb9937da126bf71bf1293495
+commit: https://git.buildroot.net/buildroot/commit/?id=6b0176cc7d5a407a750b6f3886e4889632367129
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a patch to fix a build issue with luvi after bumping luv from
-version 1.9.1 to 1.22.0.
-
-The problem is that luv now uses lua-compat-5.3 instead of defining the
-Lua 5.3 API itself. Unfortunately, luv.h now includes compat-5.3.h in the
-header file, which causes the build issue with luvi, as luvi does not
-find this local header file. Note, that luv ships lua-compat-5.3 as a
-dependency.
-
-Therefore, the patch includes compat-5.3.h in the source file luv.c, so
-it isn't exposed to external programs.
+Retrieve patch from upstream to fix build on uclibc
 
 Fixes:
-http://autobuild.buildroot.net/results/2244cd30986aff29b763fb7183f6fc27a82bd7fa
-http://autobuild.buildroot.net/results/01938f7f018dc69d564c22489933647b1daf62f3
-http://autobuild.buildroot.net/results/8217e863c2776d299cb90b90f1a2ed8233ec82ba
-.. and many more
+ - http://autobuild.buildroot.org/results/067ef9ae106b3e0740a70f6f9591b9da00d3da6a
 
-Note, that fixing this issue reveals another issue in luvi, which is
-fixed by the follow up patch.
-
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...t-include-compat-5.3.h-in-luv-header-file.patch | 62 ++++++++++++++++++++++
- 1 file changed, 62 insertions(+)
+ .../0001-Rename-TIMER_MAX-to-TIMER_MAXIMUM.patch   | 61 ++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
 
-diff --git a/package/luv/0001-Do-not-include-compat-5.3.h-in-luv-header-file.patch b/package/luv/0001-Do-not-include-compat-5.3.h-in-luv-header-file.patch
+diff --git a/package/keepalived/0001-Rename-TIMER_MAX-to-TIMER_MAXIMUM.patch b/package/keepalived/0001-Rename-TIMER_MAX-to-TIMER_MAXIMUM.patch
 new file mode 100644
-index 0000000000..22428c98f7
+index 0000000000..4402b48a8b
 --- /dev/null
-+++ b/package/luv/0001-Do-not-include-compat-5.3.h-in-luv-header-file.patch
-@@ -0,0 +1,62 @@
-+From 0b541b828142dab6c23b0f4415dd2fd052d69ff1 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Wed, 31 Oct 2018 18:14:18 +0100
-+Subject: [PATCH] Do not include compat-5.3.h in luv header file
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++++ b/package/keepalived/0001-Rename-TIMER_MAX-to-TIMER_MAXIMUM.patch
+@@ -0,0 +1,61 @@
++From 7d4856e213f349bcd97b3644b01d6170b226de16 Mon Sep 17 00:00:00 2001
++From: Quentin Armitage <quentin@armitage.org.uk>
++Date: Tue, 20 Nov 2018 17:24:58 +0000
++Subject: [PATCH] Rename TIMER_MAX to TIMER_MAXIMUM
 +
-+Do not include compat-5.3.h in luv header file
++ulibC defines TIMER_MAX, so to avoid naming conflict rename it.
 +
-+Exposing the compat-5.3.h header file directly in the luv.h header file
-+is not a good idea, because it causes redefinition errors when building,
-+for example latest luvi version 2.8.0, with a shared luv library and
-+LuaJIT 2.0.5.
++This issue was reported by Paul Gildea <gildeap@tcd.ie> who also
++provided the patch.
 +
-+Therefore, include the compat header file in the luv.c source file.
-+
-+Note, that luvi version 2.8.0 (and 2.7.6) still fails to build against the
-+shared luv library using LuaJIT 2.0.5, as it does use `luaL_newlib` which is
-+not available in Lua 5.1. However, this is unrelated to the luv library as
-+luvi itself should define the macro for Lua 5.1.
-+
-+Upstream status: https://github.com/luvit/luv/pull/310
-+
-+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
++Signed-off-by: Quentin Armitage <quentin@armitage.org.uk>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/acassen/keepalived/commit/7d4856e213f349bcd97b3644b01d6170b226de16]
 +---
-+ src/luv.c | 3 +++
-+ src/luv.h | 4 ----
-+ 2 files changed, 3 insertions(+), 4 deletions(-)
++ lib/parser.c | 8 ++++----
++ lib/parser.h | 2 +-
++ 2 files changed, 5 insertions(+), 5 deletions(-)
 +
-+diff --git a/src/luv.c b/src/luv.c
-+index c4c7cb7..4af7582 100644
-+--- a/src/luv.c
-++++ b/src/luv.c
-+@@ -15,6 +15,9 @@
-+  *
-+  */
-+ 
-++#if (LUA_VERSION_NUM != 503)
-++#include "c-api/compat-5.3.h"
-++#endif
-+ #include "luv.h"
-+ #include "util.c"
-+ #include "lhandle.c"
-+diff --git a/src/luv.h b/src/luv.h
-+index 27c8c94..4fedd3f 100644
-+--- a/src/luv.h
-++++ b/src/luv.h
-+@@ -50,10 +50,6 @@
-+ #define MAX_TITLE_LENGTH (8192)
++diff --git a/lib/parser.c b/lib/parser.c
++index 1d53595c0..cc9b644e2 100644
++--- a/lib/parser.c
+++++ b/lib/parser.c
++@@ -1915,20 +1915,20 @@ read_timer(vector_t *strvec, size_t index, unsigned long *res, unsigned long min
 + #endif
 + 
-+-#if (LUA_VERSION_NUM != 503)
-+-#include "c-api/compat-5.3.h"
-+-#endif
-+-
-+ #if defined(__clang__)
-+ #pragma clang diagnostic push
-+ #pragma clang diagnostic ignored "-Wunused-function"
-+-- 
-+2.19.1
-+
++ 	if (!max_time)
++-		max_time = TIMER_MAX;
+++		max_time = TIMER_MAXIMUM;
++ 
++ 	errno = 0;
++ 	timer = strtoul(vector_slot(strvec, index), &endptr, 10);
++-	*res = (timer > TIMER_MAX ? TIMER_MAX : timer) * TIMER_HZ;
+++	*res = (timer > TIMER_MAXIMUM ? TIMER_MAXIMUM : timer) * TIMER_HZ;
++ 
++ 	if (FMT_STR_VSLOT(strvec, index)[0] == '-')
++ 		report_config_error(CONFIG_INVALID_NUMBER, "%snegative number '%s'", warn, FMT_STR_VSLOT(strvec, index));
++ 	else if (*endptr)
++ 		report_config_error(CONFIG_INVALID_NUMBER, "%sinvalid number '%s'", warn, FMT_STR_VSLOT(strvec, index));
++-	else if (errno == ERANGE || timer > TIMER_MAX)
+++	else if (errno == ERANGE || timer > TIMER_MAXIMUM)
++ 		report_config_error(CONFIG_INVALID_NUMBER, "%snumber '%s' outside timer range", warn, FMT_STR_VSLOT(strvec, index));
++ 	else if (timer < min_time || timer > max_time)
++-		report_config_error(CONFIG_INVALID_NUMBER, "number '%s' outside range [%ld, %ld]", FMT_STR_VSLOT(strvec, index), min_time, max_time ? max_time : TIMER_MAX);
+++		report_config_error(CONFIG_INVALID_NUMBER, "number '%s' outside range [%ld, %ld]", FMT_STR_VSLOT(strvec, index), min_time, max_time ? max_time : TIMER_MAXIMUM);
++ 	else
++ 		return true;
++ 
++diff --git a/lib/parser.h b/lib/parser.h
++index 88a74474a..291aa8ffe 100644
++--- a/lib/parser.h
+++++ b/lib/parser.h
++@@ -38,7 +38,7 @@
++ #define MAXBUF	1024
++ 
++ /* Maximum time read_timer can return */
++-#define TIMER_MAX (ULONG_MAX / TIMER_HZ)
+++#define TIMER_MAXIMUM (ULONG_MAX / TIMER_HZ)
++ 
++ /* Configuration test errors. These should be in decreasing order of severity */
++ typedef enum {
