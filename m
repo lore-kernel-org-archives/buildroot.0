@@ -1,94 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 23:16:53 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] libiscsi: fix build
- failures due to warnings
-Message-ID: <20181125221413.D86EB883F4@busybox.osuosl.org>
+Date: Sun, 25 Nov 2018 23:18:34 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] qemu: disable opengl
+Message-ID: <20181125221525.99AF6838AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d52b161f9e2939a5aa5ab3c021043eeb542bea2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=843c1bb0bd0dfe94c219ae9320574e6d7abb0c31
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-Retrieve two upstream patches to fix build failures due to warnings
+Since version 0.15.0, qemu has an optional dependency to opengl:
+https://github.com/qemu/qemu/commit/20ff075bb3340c5278a0da38ad1f4d602565aa06
+
+Since version 2.4, libepoxy is also needed to enable opengl:
+https://github.com/qemu/qemu/commit/dcf30025c3e3d43140a687240433de1920adf8b0
+
+As a result if libepoxy is built before qemu, opengl support will be
+detected (see config.log):
+OpenGL support    yes
+OpenGL dmabufs    yes
+
+This will raise the failures in milkymist-tmu2:
+hw/display/milkymist-tmu2.c:35:22: fatal error: X11/Xlib.h: No such file or directory
+
+or in sdl2:
+  CC      /home/peko/autobuild/instance-0/output/targetui/sdl2-2d.o
+In file included from /home/peko/autobuild/instance-0/output/build/qemu-2.12.1/include/ui/egl-context.h:5:0,
+                 from ui/egl-context.c:3:
+/home/peko/autobuild/instance-0/output/build/qemu-2.12.1/include/ui/egl-helpers.h:45:55: error: unknown type name 'Window'; did you mean 'minor'?
+
+or in translate-a64:
+/accts/mlweber1/scripts/instance-3/output/build/qemu-2.12.1/target/arm/translate-a64.c: In function 'handle_shri_with_rndacc':
+/accts/mlweber1/scripts/instance-3/output/build/qemu-2.12.1/target/arm/translate-a64.c:7000:28: warning: 'tcg_src_hi' may be used uninitialized in this function [-Wmaybe-uninitialized]
+             tcg_gen_mov_i64(tcg_src, tcg_src_hi);
+                            ^
+../ui/gtk-egl.o: In function `gd_egl_init':
+/accts/mlweber1/scripts/instance-3/output/build/qemu-2.12.1/ui/gtk-egl.c:52: undefined reference to `gdk_x11_window_get_xid'
+
+So, for the time being, disable opengl as done in xen since commit
+13c6754f3c1d2a14516f641490e9dd6f4c183d7c.
 
 Fixes:
- - http://autobuild.buildroot.org/results/7ec1e1cc060bbdaaf758c0d55a053247b731e792
+ - http://autobuild.buildroot.org/results/656e45721c72197834462eb2bd8c762e520725a4
+ - http://autobuild.buildroot.org/results/d4736a930144fc5e25b377bc1c0baf44fbf8718d
+ - http://autobuild.buildroot.org/results/50e0d7d1b4f5c2b827b50bb82d8fbc066bf31118
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6a5e9a7ac6e20f8cb2251b61b09b54d51bedfa82)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit ce735b0c59c636b454056debacddcf77f9fb30fd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...logging-message-that-includes-target-name.patch | 29 ++++++++++++++++++++++
- package/libiscsi/0003-avoid-fallthrough.patch      | 24 ++++++++++++++++++
- 2 files changed, 53 insertions(+)
+ package/qemu/qemu.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libiscsi/0002-avoid-truncation-when-logging-message-that-includes-target-name.patch b/package/libiscsi/0002-avoid-truncation-when-logging-message-that-includes-target-name.patch
-new file mode 100644
-index 0000000000..1334a8352c
---- /dev/null
-+++ b/package/libiscsi/0002-avoid-truncation-when-logging-message-that-includes-target-name.patch
-@@ -0,0 +1,29 @@
-+From bffafc1c3003c2ee05d28eaa345e5854bc36014d Mon Sep 17 00:00:00 2001
-+From: Paolo Bonzini <pbonzini@redhat.com>
-+Date: Mon, 1 Oct 2018 14:16:14 +0200
-+Subject: [PATCH] avoid truncation when logging message that includes target
-+ name
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/sahlberg/libiscsi/commit/bffafc1c3003c2ee05d28eaa345e5854bc36014d]
-+---
-+ lib/logging.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/lib/logging.c b/lib/logging.c
-+index be518fc5..61c74407 100644
-+--- a/lib/logging.c
-++++ b/lib/logging.c
-+@@ -73,9 +73,9 @@ iscsi_log_message(struct iscsi_context *iscsi, int level, const char *format, ..
-+ 	}
-+ 
-+ 	if (iscsi->target_name[0]) {
-+-		static char message2[1024];
-++		static char message2[1282];
-+ 
-+-		snprintf(message2, 1024, "%s [%s]", message, iscsi->target_name);
-++		snprintf(message2, 1282, "%s [%s]", message, iscsi->target_name);
-+ 		iscsi->log_fn(level, message2);
-+ 	}
-+ 	else
-diff --git a/package/libiscsi/0003-avoid-fallthrough.patch b/package/libiscsi/0003-avoid-fallthrough.patch
-new file mode 100644
-index 0000000000..94f653a99c
---- /dev/null
-+++ b/package/libiscsi/0003-avoid-fallthrough.patch
-@@ -0,0 +1,24 @@
-+From 679d0abe7c142df178a907397551c4d9695cc667 Mon Sep 17 00:00:00 2001
-+From: Paolo Bonzini <pbonzini@redhat.com>
-+Date: Mon, 1 Oct 2018 14:14:24 +0200
-+Subject: [PATCH] avoid fallthrough
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/sahlberg/libiscsi/commit/679d0abe7c142df178a907397551c4d9695cc667]
-+---
-+ lib/scsi-lowlevel.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/lib/scsi-lowlevel.c b/lib/scsi-lowlevel.c
-+index 5ddd709c..747ce0c4 100644
-+--- a/lib/scsi-lowlevel.c
-++++ b/lib/scsi-lowlevel.c
-+@@ -1086,6 +1086,7 @@ scsi_maintenancein_datain_getfullsize(struct scsi_task *task)
-+ 				(task_get_uint8(task, 1) & 0x80) ? 12 : 0 +
-+ 				task_get_uint16(task, 2);
-+ 		}
-++		return -1;
-+ 	default:
-+ 		return -1;
-+ 	}
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 0b53d130af..cc5493fb2e 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -129,6 +129,7 @@ define QEMU_CONFIGURE_CMDS
+ 			--disable-libxml2 \
+ 			--disable-capstone \
+ 			--disable-git-update \
++			--disable-opengl \
+ 			$(QEMU_OPTS) \
+ 	)
+ endef
