@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 22:08:38 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] twolame: fix static
+Date: Sun, 25 Nov 2018 22:08:48 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] twolame: fix static
  linking with libmagic
-Message-ID: <20181125210531.D841C83AFB@busybox.osuosl.org>
+Message-ID: <20181125210539.4B7F48837B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=09860913c9b3388b4b83549008b92e6d42d418ba
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8ec828a0f8f0313361de61fe478e394c93e4aec8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 libmagic (from file package) already provides the buffer_init function
 so to avoid a build failure for applications wanting to statically link
