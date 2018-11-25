@@ -1,50 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 09:56:20 +0100
-Subject: [Buildroot] [PATCH] docs/manual: standardize a bit more the
- formatting of commit titles
-In-Reply-To: <87lg5h5ym2.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Sun, 25 Nov 2018 09:51:17 +0100")
-References: <20181124101903.18138-1-thomas.petazzoni@bootlin.com>
- <1442786873.3545705.1543108593942.JavaMail.zimbra@datacom.com.br>
- <87lg5h5ym2.fsf@dell.be.48ers.dk>
-Message-ID: <87h8g55ydn.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 25 Nov 2018 10:19:47 +0100
+Subject: [Buildroot] [PATCH 0/3 v2] golang: fix build with oldish
+ codesourcery amd64 toolchain (branch yem/go-west)
+Message-ID: <cover.1543137559.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Hello All!
 
->>>>> "Carlos" == Carlos Santos <casantos@datacom.com.br> writes:
- > Hi,
+That toolchain seems to suffer from bug #20006
+    https://sourceware.org/bugzilla/show_bug.cgi?id=20006
 
- >>> First of all, it is essential that the patch has a good commit
- >>> message. The commit message should start with a separate line with a
- >>> -brief summary of the change, starting with the name of the affected
- >>> -package. The body of the commit message should describe _why_ this
- >>> +brief summary of the change, prefixed by the area touched by the
- >>> +patch. A few examples of good commit titles:
- >>> +
- >>> +* +package/linuxptp: bump version to 2.0+
+So, like bug 19615, introduce a config option for 20006, and mask away
+all golang packages.
 
- >> Looks good, but isn't "package/" a bit superfluous, since Most of the
- >> commits are for packages? It also goes against the tradition:
+Additionally, make golang packages abide by the number of CPUs to use.
 
- >> $ git log --oneline origin/master | grep -i '^.......... [^ /]*: bump' |wc -l
- >> 7644
- >> $ git log --oneline origin/master | grep -i '^.......... [^ ]*/[^ ]*: bump' |wc -l
- >> 2296
+Changes v1 -> v2:
+  - drop per-package dependency, move it to BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+    (Thomas)
 
- > I also personally prefer without package/, but consistency and
- > documentation in the manual is nice, so Ok for me.
 
-Next to the purely subjective preference, there is also the issue of
-running into the max subject length with long package paths, E.G.:
+Regards,
+Yann E. MORIN.
 
-package/freescale-imx/kernel-module-imx-gpu-viv: <blah>
-package/x11r7/xfont_font-bh-lucidatypewriter-100dpi: <blih>
-package/python-backports-shutil-get-terminal-size: <bloh>
+
+The following changes since commit ea5280b889782e28b6bdf43e28b0e6a3a610f921
+
+  package/samba4: fix install of systemd files (2018-11-25 09:37:07 +0100)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to d64c03d07584a8f48ab309fff66d2ee5661d5ee3
+
+  package: hide golang packages for toolchains with binutils bug 20006 (2018-11-25 09:54:23 +0100)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (3):
+      infra/pkg-golang: enforce number of parallel jobs
+      toolchain: CodeSourcery AMD64 affected by PR20006
+      package: hide golang packages for toolchains with binutils bug 20006
+
+ package/go/Config.in.host                                           | 1 +
+ package/pkg-golang.mk                                               | 6 ++++--
+ toolchain/Config.in                                                 | 5 +++++
+ .../toolchain-external-codesourcery-amd64/Config.in                 | 1 +
+ 4 files changed, 11 insertions(+), 2 deletions(-)
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
