@@ -1,73 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 21:15:26 +0100
-Subject: [Buildroot] [PATCH-2018.02.x 2/2] mariadb: security bump to
- version 10.1.37
-In-Reply-To: <20181123204450.26813-2-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 23 Nov 2018 21:44:50 +0100")
-References: <20181123204450.26813-1-peter@korsgaard.com>
- <20181123204450.26813-2-peter@korsgaard.com>
-Message-ID: <874lc46hi9.fsf@dell.be.48ers.dk>
+Date: Sun, 25 Nov 2018 21:37:17 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] package/audit: fix
+ audispd path in auditd.conf
+Message-ID: <20181125203425.92D02882D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1bb61e32484f4e094425d874a01b449cb7530c5f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
- > Fixes the following security vulnerabilities:
- > CVE-2018-3282: Vulnerability in the MySQL Server component of Oracle MySQL
- > (subcomponent: Server: Storage Engines).  Supported versions that are
- > affected are 5.5.61 and prior, 5.6.41 and prior, 5.7.23 and prior and 8.0.12
- > and prior.  Easily exploitable vulnerability allows high privileged attacker
- > with network access via multiple protocols to compromise MySQL Server.
- > Successful attacks of this vulnerability can result in unauthorized ability
- > to cause a hang or frequently repeatable crash (complete DOS) of MySQL
- > Server.
+audispd is installed at /usr/sbin but the configuration file pointed
+to /sbin, causing auditd to fail on startup.
 
- > CVE-2016-9843: The crc32_big function in crc32.c in zlib 1.2.8 might allow
- > context-dependent attackers to have unspecified impact via vectors involving
- > big-endian CRC calculation.
+This patch cannot be sent upstream because audispd does not exist
+anymore on the master branch (it was merged to auditd).
 
- > CVE-2018-3174: Vulnerability in the MySQL Server component of Oracle MySQL
- > (subcomponent: Client programs).  Supported versions that are affected are
- > 5.5.61 and prior, 5.6.41 and prior, 5.7.23 and prior and 8.0.12 and prior.
- > Difficult to exploit vulnerability allows high privileged attacker with
- > logon to the infrastructure where MySQL Server executes to compromise MySQL
- > Server.  While the vulnerability is in MySQL Server, attacks may
- > significantly impact additional products.  Successful attacks of this
- > vulnerability can result in unauthorized ability to cause a hang or
- > frequently repeatable crash (complete DOS) of MySQL Server.
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 4be494b8045b51ddc41cec370950a95bc72fba55)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0001-Fix-audispd-path-in-auditd.conf.patch     | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
- > CVE-2018-3143: Vulnerability in the MySQL Server component of Oracle MySQL
- > (subcomponent: InnoDB).  Supported versions that are affected are 5.6.41 and
- > prior, 5.7.23 and prior and 8.0.12 and prior.  Easily exploitable
- > vulnerability allows low privileged attacker with network access via
- > multiple protocols to compromise MySQL Server.  Successful attacks of this
- > vulnerability can result in unauthorized ability to cause a hang or
- > frequently repeatable crash (complete DOS) of MySQL Server.
-
- > CVE-2018-3156: Vulnerability in the MySQL Server component of Oracle MySQL
- > (subcomponent: InnoDB).  Supported versions that are affected are 5.6.41 and
- > prior, 5.7.23 and prior and 8.0.12 and prior.  Easily exploitable
- > vulnerability allows low privileged attacker with network access via
- > multiple protocols to compromise MySQL Server.  Successful attacks of this
- > vulnerability can result in unauthorized ability to cause a hang or
- > frequently repeatable crash (complete DOS) of MySQL Server.
-
- > CVE-2018-3251: Vulnerability in the MySQL Server component of Oracle MySQL
- > (subcomponent: InnoDB).  Supported versions that are affected are 5.6.41 and
- > prior, 5.7.23 and prior and 8.0.12 and prior.  Easily exploitable
- > vulnerability allows low privileged attacker with network access via
- > multiple protocols to compromise MySQL Server.  Successful attacks of this
- > vulnerability can result in unauthorized ability to cause a hang or
- > frequently repeatable crash (complete DOS) of MySQL Server.
-
- > The README has gotten a few extra URLs added, so update the sha256 to match.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2018.02.x and 2018.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/audit/0001-Fix-audispd-path-in-auditd.conf.patch b/package/audit/0001-Fix-audispd-path-in-auditd.conf.patch
+new file mode 100644
+index 0000000000..ccf45db911
+--- /dev/null
++++ b/package/audit/0001-Fix-audispd-path-in-auditd.conf.patch
+@@ -0,0 +1,32 @@
++From 6e1fd09f7bc131c8f16d9cc43e2455ba4650c651 Mon Sep 17 00:00:00 2001
++From: Carlos Santos <casantos@datacom.com.br>
++Date: Sat, 3 Nov 2018 08:25:58 -0300
++Subject: [PATCH] Fix audispd path in auditd.conf
++
++audispd is installed at /usr/sbin but the configuration file pointed
++to /sbin, causing auditd to fail on startup.
++
++This patch cannot be sent upstream because audispd does not exist
++anymore on the master branch (it was merged to auditd).
++
++Signed-off-by: Carlos Santos <casantos@datacom.com.br>
++---
++ init.d/auditd.conf | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/init.d/auditd.conf b/init.d/auditd.conf
++index 4dcda83..998904f 100644
++--- a/init.d/auditd.conf
+++++ b/init.d/auditd.conf
++@@ -13,7 +13,7 @@ max_log_file = 8
++ num_logs = 5
++ priority_boost = 4
++ disp_qos = lossy
++-dispatcher = /sbin/audispd
+++dispatcher = /usr/sbin/audispd
++ name_format = NONE
++ ##name = mydomain
++ max_log_file_action = ROTATE
++-- 
++2.17.1
++
