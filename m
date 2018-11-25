@@ -1,35 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Nov 2018 09:21:36 +0100
-Subject: [Buildroot] [PATCH next] iptables: fix build with kernel
- headers < 3.12
-In-Reply-To: <790ee9a3bbc8d37f4a812af831308bc65f128985.1543124799.git.baruch@tkos.co.il>
-References: <790ee9a3bbc8d37f4a812af831308bc65f128985.1543124799.git.baruch@tkos.co.il>
-Message-ID: <20181125092136.08b21896@windsurf>
+Date: Sun, 25 Nov 2018 09:21:54 +0100
+Subject: [Buildroot] [git commit branch/next] package/stress-ng: really
+ remove patch merged upstream
+Message-ID: <20181125082007.8DAD6881FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4d8e9643c676ba246bed0529222cc6fb2dc74ee6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 25 Nov 2018 07:46:39 +0200, Baruch Siach wrote:
-> Extend the workaround that was added in patch 0003 to cover ipv6
-> definitions.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/23f/23ff396a568a865751471bf1f9e5dff2b73c8ab0/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  ...he-headers-conflict-workaround-to-in.patch | 37 +++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100644 package/iptables/0005-include-extend-the-headers-conflict-workaround-to-in.patch
+Should have been removed in commit 27bce5fc8e (package/stress-ng: bump
+to version 0.09.39) but was left as an empty file.
 
-Applied to next, thanks.
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../stress-ng/0001-stress-netlink-proc-fix-build-with-kernel-v3.9.patch   | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/stress-ng/0001-stress-netlink-proc-fix-build-with-kernel-v3.9.patch b/package/stress-ng/0001-stress-netlink-proc-fix-build-with-kernel-v3.9.patch
+deleted file mode 100644
+index e69de29bb2..0000000000
