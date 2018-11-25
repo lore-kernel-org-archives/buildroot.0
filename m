@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 25 Nov 2018 17:17:22 +0100
-Subject: [Buildroot] [PATCH] docs/manual: standardize a bit more the
- formatting of commit titles
-In-Reply-To: <20181124101903.18138-1-thomas.petazzoni@bootlin.com>
-References: <20181124101903.18138-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181125161722.GC28830@scaer>
+Date: Sun, 25 Nov 2018 18:57:02 +0100
+Subject: [Buildroot] [PATCH next v6 09/10] package/pkg-generic: make
+ libtool .la files compatible with per-package directories
+In-Reply-To: <20181123145815.13008-10-thomas.petazzoni@bootlin.com>
+References: <20181123145815.13008-1-thomas.petazzoni@bootlin.com>
+ <20181123145815.13008-10-thomas.petazzoni@bootlin.com>
+Message-ID: <20181125175702.GD28830@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,93 +14,122 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2018-11-24 11:19 +0100, Thomas Petazzoni spake thusly:
-> Currently, our commit titles are not very well standardized, and it
-> would be great to standardize them a little bit more. A number of
-> people use "<pkg>: " as prefix, others use "package/<pkg>: ". Some
-> people start the rest of the commit title (after the prefix) with an
-> upper-case letter, some with a lower-case letter.
+On 2018-11-23 15:58 +0100, Thomas Petazzoni spake thusly:
+> Libtool .la files unfortunately contain a number of absolute paths,
+> which now refer to per-package directories. Due to this, when building
+> package A, .la files may contain absolute paths referring to
+> directories in package B per-package sysroot. This causes some -L
+> flags referring to other sysroot from being added, which doesn't work
+> as the linker no longer realizes that such paths are within its
+> sysroot.
 > 
-> In an attempt to standardize this, this commit updates the manual with
-> some examples of good commit titles.
+> To fix this, we introduce a replacement step of .la files in the
+> configure step, to make sure all paths refer to this package
+> per-package directory.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Since I really want this topic to come to a conclusion sooner than
+later, and since the solution is good-enough for now:
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Howerver, see below...
+
 > ---
->  docs/manual/contribute.txt | 21 ++++++++++++++++++---
->  1 file changed, 18 insertions(+), 3 deletions(-)
+>  package/pkg-generic.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
-> diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-> index 60bfb961f0..5530ce1546 100644
-> --- a/docs/manual/contribute.txt
-> +++ b/docs/manual/contribute.txt
-> @@ -194,14 +194,29 @@ bisect+ to locate the origin of a problem.
->  
->  First of all, it is essential that the patch has a good commit
->  message. The commit message should start with a separate line with a
-> -brief summary of the change, starting with the name of the affected
-> -package. The body of the commit message should describe _why_ this
-> +brief summary of the change, prefixed by the area touched by the
-> +patch. A few examples of good commit titles:
-> +
-> +* +package/linuxptp: bump version to 2.0+
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index b1f0cdf34a..17909f4a61 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -222,6 +222,12 @@ $(BUILD_DIR)/%/.stamp_configured:
+>  	@$(call step_start,configure)
+>  	@$(call MESSAGE,"Configuring")
+>  	$(call prepare-per-package-directory,$($(PKG)_FINAL_DEPENDENCIES))
+> +ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+> +	# Make sure .la files only reference the current per-package
+> +	# directory
+> +	$(Q)find $(STAGING_DIR)/usr/lib* -name "*.la" | xargs --no-run-if-empty \
+> +		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]*/:$(PER_PACKAGE_DIR)/$(NAME)/:g"
+> +endif
 
-Aha, so you finally saw the light! ;-)
+I don't find it very clean that we shoe-horn such preparation in the
+generic rules; I'd rather we use a hook mechanism, which we can define
+for the prepare-per-package-directory macro to call.
 
-When I add 'package/' as a prefix, it is not because it is in the
-package subdirectory, but because it is touching a package, as opposed
-to something else, like core stuff or package infrastructures.
+For example:
 
-The prefix is a 'semantic' prefix, not a path prefix. A path prefix
-serves no purpose in and of itself.
+    define PER_PKG_CONFIGURE_FIXUP_LA_FILES
+        Blabla your big find command
+    endef
+    PER_PACKAGE_CONFIGURE_PREPARE_HOOKS += PER_PKG_CONFIGURE_FIXUP_LA_FILES
 
-> +* +configs/imx23evk: bump Linux version to 4.19+
-> +
-> +* +package/pkg-generic: postpone evaluation of dependency conditions+
+And then:
 
-There, I would have sued 'infra/' as a prefix, because it is touching
-the pkg0generic infrastructure, not a package.
+    # $(1): step to prepare for
+    # $(2): space-separated list of dependencies to grab
+    define prepare-per-package-directory
+        mkdir -p $(HOST_DIR) $(TARGET_DIR)
+        $(foreach pkg,$(2),\
+            rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/host/ \
+                $(PER_PACKAGE_DIR)/$(pkg)/host/ \
+                $(HOST_DIR)$(sep))
+        $(foreach pkg,$(2),\
+            rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/target/ \
+            $(PER_PACKAGE_DIR)/$(pkg)/target/ \
+            $(TARGET_DIR)$(sep))
+        $(foreach hook,$(PER_PACKAGE_$(call UPPER,$(1))_PREPARE_HOOKS),$(call $(hook))$(sep))
+    endef
 
-> +* +boot/uboot: needs host-{flex,bison}+
+And then you'd just have to call prepare-per-package-directory with one
+of:
 
-And there, I would have used 'package'/'.
+    $(call prepare-per-package-directory,source,$($(PKG)_FINAL_DOWNLOAD_DEPENDENCIES))
+    $(call prepare-per-package-directory,extract,$($(PKG)_FINAL_EXTRACT_DEPENDENCIES))
+    $(call prepare-per-package-directory,patch,$($(PKG)_FINAL_PATCH_DEPENDENCIES))
+    $(call prepare-per-package-directory,configure,$($(PKG)_FINAL_DEPENDENCIES))
 
-> +* +support/testing: add python-ubjson tests+
+>  	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
 
-Yes.
+ternatively, we could change this line to be able to run hooks before
+the package-registered hooks:
 
-> +The description that follows the prefix should start with a lower case
-> +letter (i.e "bump", "needs", "postpone", "add" in the above examples).
+    $(foreach hook,\
+        $($(PKG)_EARLY_PRE_CONFIGURE_HOOKS) $($(PKG)_PRE_CONFIGURE_HOOKS),\
+        $(call $(hook))$(sep))
 
-    The description that follows the prefix should be all in lower case,
-    and start with a verb, if possible in the imperative form ("add",
-    "postpone", "bump"), or in the third person of the present ("needs",
-    "should be")
+and earlier:
 
-Otherwise, OK.
+    $(2)_EARLY_PRE_CONFIGURE_HOOKS += \
+        PER_PKG_PREPARE_DIRECTORY_FOR_CONFIGURE \
+        PER_PKG_CONFIGURE_FIXUP_LA_FILES
 
-Oh, by the way, the shed ought to be blue. ;-)
+And so on for each steps, no?
+
+But again: I'm pretty much OK with the patch as is, because it is better
+than nothing, and it would be awesome to have that in early December, so
+it is part of the next LTS.
+
+(Unrelated note: why do we $(call $(hook)) instead of just $($(hook)) ?)
 
 Regards,
 Yann E. MORIN.
 
-> +Second, the body of the commit message should describe _why_ this
->  change is needed, and if necessary also give details about _how_ it
->  was done. When writing the commit message, think of how the reviewers
->  will read it, but also think about how you will read it when you look
->  at this change again a few years down the line.
->  
-> -Second, the patch itself should do only one change, but do it
-> +Third, the patch itself should do only one change, but do it
->  completely. Two unrelated or weakly related changes should usually be
->  done in two separate patches. This usually means that a patch affects
->  only a single package. If several changes are related, it is often
+>  	$($(PKG)_CONFIGURE_CMDS)
+>  	$(foreach hook,$($(PKG)_POST_CONFIGURE_HOOKS),$(call $(hook))$(sep))
+> @@ -875,6 +881,7 @@ $$($(2)_TARGET_INSTALL_IMAGES):		PKG=$(2)
+>  $$($(2)_TARGET_INSTALL_HOST):		PKG=$(2)
+>  $$($(2)_TARGET_BUILD):			PKG=$(2)
+>  $$($(2)_TARGET_CONFIGURE):		PKG=$(2)
+> +$$($(2)_TARGET_CONFIGURE):		NAME=$(1)
+>  $$($(2)_TARGET_RSYNC):			SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
+>  $$($(2)_TARGET_RSYNC):			PKG=$(2)
+>  $$($(2)_TARGET_PATCH):			PKG=$(2)
 > -- 
 > 2.19.1
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
