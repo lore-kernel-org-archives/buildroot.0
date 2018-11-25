@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 21:10:47 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] mariadb: drop
+Date: Sun, 25 Nov 2018 21:14:44 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] mariadb: drop
  my-small.cnf handling
-Message-ID: <20181125200814.11F1D882AC@busybox.osuosl.org>
+Message-ID: <20181125201150.05918882B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a189aefcec4c9b395b7c147e61f6c7b20d5803bb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0095ea78b91f1be4af91f517fe57d5928b126332
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 Unbreaks builds without BR2_PACKAGE_MARIADB_SERVER as this only gets
 installed if the server is enabled.
