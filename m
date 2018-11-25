@@ -1,68 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 25 Nov 2018 20:39:10 +0100
-Subject: [Buildroot] [PATCH/next 1/1] msgpack: bump to version 3.1.1
-In-Reply-To: <20181125192145.2519-1-fontaine.fabrice@gmail.com>
-References: <20181125192145.2519-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181125193910.GF28830@scaer>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sun, 25 Nov 2018 21:55:22 +0200
+Subject: [Buildroot] [PATCH 1/1] python-engineio: bump to version 3.0.0
+Message-ID: <20181125195523.21976-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/python-engineio/python-engineio.hash | 4 ++--
+ package/python-engineio/python-engineio.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On 2018-11-25 20:21 +0100, Fabrice Fontaine spake thusly:
-> Add hash for license files
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/msgpack/msgpack.hash | 4 +++-
->  package/msgpack/msgpack.mk   | 2 +-
->  2 files changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/msgpack/msgpack.hash b/package/msgpack/msgpack.hash
-> index f1033ade42..df4e54b181 100644
-> --- a/package/msgpack/msgpack.hash
-> +++ b/package/msgpack/msgpack.hash
-> @@ -1,2 +1,4 @@
->  # Locally computed:
-> -sha256  9c87f80fc651b900772deaef0ab154b63160c74d292529b5be6d06d6485d4640  msgpack-2.1.5.tar.gz
-> +sha256  bda49f996a73d2c6080ff0523e7b535917cd28c8a79c3a5da54fc29332d61d1e  msgpack-3.1.1.tar.gz
-> +sha256  664550b43996452a5a2c7471bb0ff77185a58c69ccafa60f983dc4c162e1ee22  COPYING
-> +sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
-> diff --git a/package/msgpack/msgpack.mk b/package/msgpack/msgpack.mk
-> index abb6e2e214..781e67e37a 100644
-> --- a/package/msgpack/msgpack.mk
-> +++ b/package/msgpack/msgpack.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -MSGPACK_VERSION = 2.1.5
-> +MSGPACK_VERSION = 3.1.1
-
-Did you check if that still requires your previous fix:
-    https://patchwork.ozlabs.org/patch/1002781/
-
-Regards,
-Yann E. MORIN.
-
->  MSGPACK_SITE = $(call github,msgpack,msgpack-c,cpp-$(MSGPACK_VERSION))
->  MSGPACK_LICENSE = BSL-1.0
->  MSGPACK_LICENSE_FILES = COPYING LICENSE_1_0.txt
-> -- 
-> 2.14.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/python-engineio/python-engineio.hash b/package/python-engineio/python-engineio.hash
+index 7bf1a49410..7a9a1fdad0 100644
+--- a/package/python-engineio/python-engineio.hash
++++ b/package/python-engineio/python-engineio.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/python-engineio/json
+-md5	92d2e1b62083ce8f0dcd8fd905b0dd9d  python-engineio-2.3.2.tar.gz
+-sha256	871f4d022eb9171e380281266ba2aef0759b264ba862350bc94e7a597a98a443  python-engineio-2.3.2.tar.gz
++md5	a7930cb8bf957f1b12e1a21ae5b57982  python-engineio-3.0.0.tar.gz
++sha256	bb8b5888adb852614b4b1861586ee7d89145cbd2ebba03ed7043e64c029bbb3b  python-engineio-3.0.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
+diff --git a/package/python-engineio/python-engineio.mk b/package/python-engineio/python-engineio.mk
+index e730c39cd2..9bda632661 100644
+--- a/package/python-engineio/python-engineio.mk
++++ b/package/python-engineio/python-engineio.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-PYTHON_ENGINEIO_VERSION = 2.3.2
+-PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/66/18/09516793c68e0f7fb759d54c109a09a86e31c3e685eb77884613a1c1a7b3
++PYTHON_ENGINEIO_VERSION = 3.0.0
++PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/51/a4/1642a75f1206a14e9a75f286d38b1794b13e9ee3169f57cb939cb99ffea3
+ PYTHON_ENGINEIO_SETUP_TYPE = setuptools
+ PYTHON_ENGINEIO_LICENSE = MIT
+ PYTHON_ENGINEIO_LICENSE_FILES = LICENSE
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.19.1
