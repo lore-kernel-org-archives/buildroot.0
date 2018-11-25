@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 23:18:34 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] qemu: disable opengl
-Message-ID: <20181125221525.99AF6838AF@busybox.osuosl.org>
+Date: Sun, 25 Nov 2018 23:18:42 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] qemu: disable opengl
+Message-ID: <20181125221532.A667680406@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=843c1bb0bd0dfe94c219ae9320574e6d7abb0c31
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2c73a56a82b51c79422b2ee6404a2be9b9fa31e4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Since version 0.15.0, qemu has an optional dependency to opengl:
 https://github.com/qemu/qemu/commit/20ff075bb3340c5278a0da38ad1f4d602565aa06
@@ -56,7 +56,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 0b53d130af..cc5493fb2e 100644
+index 5496a5f025..758c22396c 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
 @@ -129,6 +129,7 @@ define QEMU_CONFIGURE_CMDS
