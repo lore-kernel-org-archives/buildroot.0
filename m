@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 22:32:42 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] package/libnfs: add patch
+Date: Sun, 25 Nov 2018 22:33:18 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/libnfs: add patch
  to fix musl build issue
-Message-ID: <20181125212937.85C43883D2@busybox.osuosl.org>
+Message-ID: <20181125213010.B7F85883DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11c3b3c07ab8689ed265532b284ed694139dd0fa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7926f3e0f2b2111920e4d9a2153951fbb7ba20b7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Add a patch to fix build issues with the musl C library.
 
