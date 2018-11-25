@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Nov 2018 09:37:23 +0100
-Subject: [Buildroot] [PATCH 1/1] samba4: fix install of systemd files
-In-Reply-To: <20181124201241.31036-1-fontaine.fabrice@gmail.com>
-References: <20181124201241.31036-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181125093723.12cc140c@windsurf>
+Date: Sun, 25 Nov 2018 09:38:33 +0100
+Subject: [Buildroot] [PATCH 1/1] package/samba4: fix systemd support
+In-Reply-To: <20181124131526.30319-1-bernd.kuhls@t-online.de>
+References: <20181124131526.30319-1-bernd.kuhls@t-online.de>
+Message-ID: <20181125093833.11be4355@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +12,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 24 Nov 2018 21:12:41 +0100, Fabrice Fontaine wrote:
-> Since version 4.8.0 and
-> https://github.com/samba-team/samba/commit/080d590de1ff9f8ebc55aeffaea8d41991466549,
-> the systemd files (nmd.service, ...) are not available in packaging/systemd
+On Sat, 24 Nov 2018 14:15:26 +0100, Bernd Kuhls wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/a09/a09a065c523931c1892e81a99c57521fbe095d8b/
 > 
-> Indeed, they are built in bin/default/packaging/systemd
-> 
-> So use the new --systemd-install-services configure option to install
-> these files
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/a09a065c523931c1892e81a99c57521fbe095d8b
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/samba4/samba4.mk | 11 +++++------
->  1 file changed, 5 insertions(+), 6 deletions(-)
+>  package/samba4/samba4.mk | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
+Fabrice Fontaine has contributed an improved version of this patch,
+with a better implementation and commit log, so I've applied Fabrice's
+solution: https://patchwork.ozlabs.org/patch/1002712/. Let me now if
+you see any problem with Fabrice's patch.
+
+Thanks,
 
 Thomas
 -- 
