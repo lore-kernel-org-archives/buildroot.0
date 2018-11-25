@@ -1,54 +1,94 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 23:13:23 +0100
-Subject: [Buildroot] [PATCH-2018.02.x v2 3/3] squid: add upstream security
- fix for SQUID-2018_5 / CVE-2018-19132
-In-Reply-To: <20181125221323.16881-1-peter@korsgaard.com>
-References: <20181125221323.16881-1-peter@korsgaard.com>
-Message-ID: <20181125221323.16881-3-peter@korsgaard.com>
+Date: Sun, 25 Nov 2018 23:16:14 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] libiscsi: fix build
+ failures due to warnings
+Message-ID: <20181125221307.D54D3883E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From the advisory:
+commit: https://git.buildroot.net/buildroot/commit/?id=bed9ee0050b9a78c2ce84959dac3a03efc62e66b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
- Due to a memory leak in SNMP query rejection code, Squid is
- vulnerable to a denial of service attack.
+Retrieve two upstream patches to fix build failures due to warnings
 
-http://www.squid-cache.org/Advisories/SQUID-2018_5.txt
+Fixes:
+ - http://autobuild.buildroot.org/results/7ec1e1cc060bbdaaf758c0d55a053247b731e792
 
-Add the patch from the 3.5 branch fixing this issue.
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 6a5e9a7ac6e20f8cb2251b61b09b54d51bedfa82)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/squid/squid.hash | 1 +
- package/squid/squid.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ ...logging-message-that-includes-target-name.patch | 29 ++++++++++++++++++++++
+ package/libiscsi/0003-avoid-fallthrough.patch      | 24 ++++++++++++++++++
+ 2 files changed, 53 insertions(+)
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index 6fd29b0dcc..74637ca063 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -3,4 +3,5 @@ md5 9367e0375ea53ba0e99f77054d4402c5 squid-3.5.28.tar.xz
- sha1 721241a270ec27d629d65ae17a50be56510e8441 squid-3.5.28.tar.xz
- # Locally calculated
- sha256 de5ea6fa5711aaa6d209de9e9e715c2702ff3597f009562ee1e571cc101670c7 squid-3.5-f1657a9decc820f748fa3aff68168d3145258031.patch
-+sha256 8f2518b5e9840e119c493f6ed793e773675e2f768de2bf1bd637fced27e4d527 squid-3.5-bc9786119f058a76ddf0625424bc33d36460b9a2.patch
- sha256 58f5d05257af1fb964fde20e134d660fac9afa86b6fd8c70d63ead63068378fa COPYING
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index f49b3604cf..8be4135719 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -9,7 +9,8 @@ SQUID_VERSION = $(SQUID_VERSION_MAJOR).28
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
- SQUID_PATCH = \
--	http://www.squid-cache.org/Versions/v3/3.5/changesets/squid-3.5-f1657a9decc820f748fa3aff68168d3145258031.patch
-+	http://www.squid-cache.org/Versions/v3/3.5/changesets/squid-3.5-f1657a9decc820f748fa3aff68168d3145258031.patch \
-+	http://www.squid-cache.org/Versions/v3/3.5/changesets/squid-3.5-bc9786119f058a76ddf0625424bc33d36460b9a2.patch
- SQUID_LICENSE = GPL-2.0+
- SQUID_LICENSE_FILES = COPYING
- # For 0001-assume-get-certificate-ok.patch
--- 
-2.11.0
+diff --git a/package/libiscsi/0002-avoid-truncation-when-logging-message-that-includes-target-name.patch b/package/libiscsi/0002-avoid-truncation-when-logging-message-that-includes-target-name.patch
+new file mode 100644
+index 0000000000..1334a8352c
+--- /dev/null
++++ b/package/libiscsi/0002-avoid-truncation-when-logging-message-that-includes-target-name.patch
+@@ -0,0 +1,29 @@
++From bffafc1c3003c2ee05d28eaa345e5854bc36014d Mon Sep 17 00:00:00 2001
++From: Paolo Bonzini <pbonzini@redhat.com>
++Date: Mon, 1 Oct 2018 14:16:14 +0200
++Subject: [PATCH] avoid truncation when logging message that includes target
++ name
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/sahlberg/libiscsi/commit/bffafc1c3003c2ee05d28eaa345e5854bc36014d]
++---
++ lib/logging.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/lib/logging.c b/lib/logging.c
++index be518fc5..61c74407 100644
++--- a/lib/logging.c
+++++ b/lib/logging.c
++@@ -73,9 +73,9 @@ iscsi_log_message(struct iscsi_context *iscsi, int level, const char *format, ..
++ 	}
++ 
++ 	if (iscsi->target_name[0]) {
++-		static char message2[1024];
+++		static char message2[1282];
++ 
++-		snprintf(message2, 1024, "%s [%s]", message, iscsi->target_name);
+++		snprintf(message2, 1282, "%s [%s]", message, iscsi->target_name);
++ 		iscsi->log_fn(level, message2);
++ 	}
++ 	else
+diff --git a/package/libiscsi/0003-avoid-fallthrough.patch b/package/libiscsi/0003-avoid-fallthrough.patch
+new file mode 100644
+index 0000000000..94f653a99c
+--- /dev/null
++++ b/package/libiscsi/0003-avoid-fallthrough.patch
+@@ -0,0 +1,24 @@
++From 679d0abe7c142df178a907397551c4d9695cc667 Mon Sep 17 00:00:00 2001
++From: Paolo Bonzini <pbonzini@redhat.com>
++Date: Mon, 1 Oct 2018 14:14:24 +0200
++Subject: [PATCH] avoid fallthrough
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/sahlberg/libiscsi/commit/679d0abe7c142df178a907397551c4d9695cc667]
++---
++ lib/scsi-lowlevel.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/lib/scsi-lowlevel.c b/lib/scsi-lowlevel.c
++index 5ddd709c..747ce0c4 100644
++--- a/lib/scsi-lowlevel.c
+++++ b/lib/scsi-lowlevel.c
++@@ -1086,6 +1086,7 @@ scsi_maintenancein_datain_getfullsize(struct scsi_task *task)
++ 				(task_get_uint8(task, 1) & 0x80) ? 12 : 0 +
++ 				task_get_uint16(task, 2);
++ 		}
+++		return -1;
++ 	default:
++ 		return -1;
++ 	}
