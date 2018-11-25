@@ -1,51 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 25 Nov 2018 10:19:49 +0100
-Subject: [Buildroot] [PATCH 2/3 v2] toolchain: CodeSourcery AMD64 affected
- by PR20006
+Date: Sun, 25 Nov 2018 10:19:50 +0100
+Subject: [Buildroot] [PATCH 3/3 v2] package: hide golang packages for
+ toolchains with binutils bug 20006
 In-Reply-To: <cover.1543137559.git.yann.morin.1998@free.fr>
 References: <cover.1543137559.git.yann.morin.1998@free.fr>
-Message-ID: <4b28f2b3e6bfa73cdb334bcf153ea414878d6697.1543137559.git.yann.morin.1998@free.fr>
+Message-ID: <d64c03d07584a8f48ab309fff66d2ee5661d5ee3.1543137559.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- toolchain/Config.in                                                  | 5 +++++
- .../toolchain-external-codesourcery-amd64/Config.in                  | 1 +
- 2 files changed, 6 insertions(+)
+Fixes:
+    http://autobuild.buildroot.org/results/020/02039969b16534d4020ecd4574bae71b91c1e6b8/ (flannel)
+    http://autobuild.buildroot.org/results/e95/e9528b06b350ef84c1e2cb59fba87b4db77b4660/ (docker-engine)
+    [...]
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index c2192a52b1..196612b8b0 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -69,6 +69,11 @@ comment "Toolchain Generic Options"
- config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19615
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Romain Naour <romain.naour@gmail.com>
+
+---
+Changes v1 -> v2:
+  - drop per-package dependency, move it to BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+    (Thomas)
+---
+ package/go/Config.in.host | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/go/Config.in.host b/package/go/Config.in.host
+index c871ac4196..f619ca0073 100644
+--- a/package/go/Config.in.host
++++ b/package/go/Config.in.host
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
  	bool
- 
-+# https://sourceware.org/bugzilla/show_bug.cgi?id=20006
-+# Affect toolchains built with binutils 2.26 (fixed in binutils 2.26.1).
-+config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_20006
-+	bool
-+
- # Atomic types can be:
- #  - never lock-free
- #  - sometimes lock-free
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in
-index 50c5a20019..9187333b95 100644
---- a/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in
-@@ -13,6 +13,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
- 	select BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19615 # based-on binutils-2.26
-+	select BR2_TOOLCHAIN_HAS_BINUTILS_BUG_20006 # based-on binutils-2.26
- 	help
- 	  Sourcery CodeBench toolchain for the amd64 (x86_64)
- 	  architectures, from Mentor Graphics. It uses gcc 6.2,
+ 	default y
++	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_20006
+ 	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
+ 	depends on (BR2_arm && BR2_TOOLCHAIN_SUPPORTS_PIE) || BR2_aarch64 \
+ 		|| BR2_i386 || BR2_x86_64 || BR2_powerpc64le \
 -- 
 2.14.1
