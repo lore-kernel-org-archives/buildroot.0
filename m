@@ -1,52 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Nov 2018 15:14:50 +0100
-Subject: [Buildroot] [git commit] support/dependencies: treat BSD-tar like
- the other cases
-Message-ID: <20181202071558.C3DD382855@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 25 Nov 2018 22:01:28 +0100
+Subject: [Buildroot] [git commit] mmc-utils: drop 1/1 from [PATCH] header in
+ 0002-fix-overlapping-with-strncpy.patch
+Message-ID: <20181202071559.50814815BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c3af08639505ca826f0d005eedc863d73c95daff
+commit: https://git.buildroot.net/buildroot/commit/?id=897f84f262de6582568fb91ecf22e068564cb1f0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, when we detect that tar is BSD-tar, we fake an unsupported
-version (major, minor) and rely on the version check to reject BSD-tar.
+check-package (rightly so) complains about it:
 
-There is no reason to use such shenanigans, when we can simply reject it
-from the onset.
+package/mmc-utils/0002-fix-overlapping-with-strncpy.patch:4: generate your
+patches with 'git format-patch -N'
 
-Simplify the logic:
-  - use positive logic in the condition
-  - directly exit in error
-
-Also, comment that case like the other cases are commented.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/dependencies/check-host-tar.sh | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ package/mmc-utils/0002-fix-overlapping-with-strncpy.patch | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/dependencies/check-host-tar.sh b/support/dependencies/check-host-tar.sh
-index 0857307396..934cb61299 100755
---- a/support/dependencies/check-host-tar.sh
-+++ b/support/dependencies/check-host-tar.sh
-@@ -20,10 +20,11 @@ major=`echo "$version" | cut -d. -f1`
- minor=`echo "$version" | cut -d. -f2`
- bugfix=`echo "$version" | cut -d. -f3`
- version_bsd=`$tar --version | grep 'bsdtar'`
--if [ ! -z "${version_bsd}" ] ; then 
--  # mark as invalid version - not all command line options are available
--  major=0
--  minor=0
-+
-+# BSD tar does not have all the command-line options
-+if [ -n "${version_bsd}" ] ; then
-+    # echo nothing: no suitable tar found
-+    exit 1
- fi
- 
- # Minimal version = 1.27 (previous versions do not correctly unpack archives
+diff --git a/package/mmc-utils/0002-fix-overlapping-with-strncpy.patch b/package/mmc-utils/0002-fix-overlapping-with-strncpy.patch
+index a134dd3c5a..a562845ffa 100644
+--- a/package/mmc-utils/0002-fix-overlapping-with-strncpy.patch
++++ b/package/mmc-utils/0002-fix-overlapping-with-strncpy.patch
+@@ -1,7 +1,7 @@
+ From 1c90a7534658056b884d71ef82dc7ca8bad4271b Mon Sep 17 00:00:00 2001
+ From: =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
+ Date: Wed, 24 Oct 2018 13:00:47 +0200
+-Subject: [PATCH 1/1] mmc-utils: fix overlapping with strncpy
++Subject: [PATCH] mmc-utils: fix overlapping with strncpy
+ MIME-Version: 1.0
+ Content-Type: text/plain; charset=UTF-8
+ Content-Transfer-Encoding: 8bit
