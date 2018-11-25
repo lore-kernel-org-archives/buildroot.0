@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 21:48:26 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] Config.in: security
+Date: Sun, 25 Nov 2018 21:48:40 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] Config.in: security
  hardening: disable FORTIFY_SOURCE for gcc < 6
-Message-ID: <20181125204522.0970F88300@busybox.osuosl.org>
+Message-ID: <20181125204534.0B0D78830A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=106e7eeaff2eca7bfb8ff02787eedf42a2507ffd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=25589148f7fccc8937439efac50b1e7ac3ea723f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 As reported in the bug report [1], gcc < 6 doesn't build when
 FORTIFY_SOURCE is set to 1 or 2. The issue is related to the
@@ -37,10 +37,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 4 insertions(+)
 
 diff --git a/Config.in b/Config.in
-index 42cdf7a3eb..03e4eb3928 100644
+index 584a1f087f..102c8010e5 100644
 --- a/Config.in
 +++ b/Config.in
-@@ -812,6 +812,8 @@ config BR2_FORTIFY_SOURCE_NONE
+@@ -798,6 +798,8 @@ config BR2_FORTIFY_SOURCE_NONE
  
  config BR2_FORTIFY_SOURCE_1
  	bool "Conservative"
@@ -49,7 +49,7 @@ index 42cdf7a3eb..03e4eb3928 100644
  	help
  	  This option sets _FORTIFY_SOURCE to 1 and only introduces
  	  checks that shouldn't change the behavior of conforming
-@@ -819,6 +821,8 @@ config BR2_FORTIFY_SOURCE_1
+@@ -805,6 +807,8 @@ config BR2_FORTIFY_SOURCE_1
  
  config BR2_FORTIFY_SOURCE_2
  	bool "Aggressive"
