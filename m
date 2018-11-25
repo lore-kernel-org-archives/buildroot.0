@@ -1,44 +1,60 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 25 Nov 2018 10:19:50 +0100
-Subject: [Buildroot] [PATCH 3/3 v2] package: hide golang packages for
- toolchains with binutils bug 20006
-In-Reply-To: <cover.1543137559.git.yann.morin.1998@free.fr>
-References: <cover.1543137559.git.yann.morin.1998@free.fr>
-Message-ID: <d64c03d07584a8f48ab309fff66d2ee5661d5ee3.1543137559.git.yann.morin.1998@free.fr>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Sun, 25 Nov 2018 07:20:27 -0200
+Subject: [Buildroot] [PATCH] package/wolfssl: enable ARMv8 hardware
+ acceleration
+Message-ID: <20181125092027.5824-1-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-    http://autobuild.buildroot.org/results/020/02039969b16534d4020ecd4574bae71b91c1e6b8/ (flannel)
-    http://autobuild.buildroot.org/results/e95/e9528b06b350ef84c1e2cb59fba87b4db77b4660/ (docker-engine)
-    [...]
+Enable hardware acceleration for ARMv8 targets.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>
+When ARMv8 hardware acceleration is enabled without any additional flags,
+the build fails with the following messages:
 
+/tmp/cciv7Oei.s: Assembler messages:
+/tmp/cciv7Oei.s:580: Error: invalid addressing mode at operand 2 -- `ld1 {v0.2d},[x0,256]'
+/tmp/cciv7Oei.s:616: Error: invalid addressing mode at operand 2 -- `st1 {v0.2d},[x0,256]'
+/tmp/cciv7Oei.s:629: Error: invalid addressing mode at operand 2 -- `ld1 {v0.2d},[x0,256]'
+/tmp/cciv7Oei.s:669: Error: invalid addressing mode at operand 2 -- `st1 {v0.2d},[x0,256]'
+/tmp/cciv7Oei.s:1211: Error: invalid addressing mode at operand 2 -- `ld1 {v16.2d},[x0,304]'
+/tmp/cciv7Oei.s:1368: Error: invalid addressing mode at operand 2 -- `ld1 {v17.16b},[x19,304]'
+/tmp/cciv7Oei.s:1554: Error: invalid addressing mode at operand 2 -- `ld1 {v16.2d},[x0,304]'
+/tmp/cciv7Oei.s:1719: Error: invalid addressing mode at operand 2 -- `ld1 {v17.16b},[x19,304]'
+/tmp/cciv7Oei.s:1870: Error: invalid addressing mode at operand 2 -- `ld1 {v16.2d},[x0,304]'
+/tmp/cciv7Oei.s:2043: Error: invalid addressing mode at operand 2 -- `ld1 {v17.16b},[x19,304]'
+make[3]: *** [Makefile:3801: wolfcrypt/src/port/arm/src_libwolfssl_la-armv8-aes.lo] Error 1
+
+This is because of some inline assembly in parts of the AES structure using the "m" constraint.
+
+So lets use the flag -mstrict-align to prevent this error.
+
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 ---
-Changes v1 -> v2:
-  - drop per-package dependency, move it to BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-    (Thomas)
----
- package/go/Config.in.host | 1 +
- 1 file changed, 1 insertion(+)
+ package/wolfssl/wolfssl.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/package/go/Config.in.host b/package/go/Config.in.host
-index c871ac4196..f619ca0073 100644
---- a/package/go/Config.in.host
-+++ b/package/go/Config.in.host
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
- 	bool
- 	default y
-+	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_20006
- 	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
- 	depends on (BR2_arm && BR2_TOOLCHAIN_SUPPORTS_PIE) || BR2_aarch64 \
- 		|| BR2_i386 || BR2_x86_64 || BR2_powerpc64le \
+diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
+index 68b638c3e2a8..ab5f5ea4550c 100644
+--- a/package/wolfssl/wolfssl.mk
++++ b/package/wolfssl/wolfssl.mk
+@@ -30,7 +30,14 @@ else
+ WOLFSSL_CONF_OPTS += --disable-sslv3
+ endif
+ 
+-# build fails when ARMv8 hardware acceleration is enabled
++# enable ARMv8 hardware acceleration (the flag -mstrict-align is
++# needed to prevent build errors caused by some inline assembly
++# in parts of the AES structure using the "m" constraint)
++ifeq ($(BR2_ARM_CPU_ARMV8A),y)
++WOLFSSL_CONF_OPTS += --enable-armasm
++WOLFSSL_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -mstrict-align"
++else
+ WOLFSSL_CONF_OPTS += --disable-armasm
++endif
+ 
+ $(eval $(autotools-package))
 -- 
-2.14.1
+2.17.1
