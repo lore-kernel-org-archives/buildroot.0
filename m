@@ -1,171 +1,89 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 22:31:06 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] package/gcc: fix xtensa
- uclinux code generation
-Message-ID: <20181125212845.3E598883CE@busybox.osuosl.org>
+Date: Sun, 25 Nov 2018 22:32:42 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] package/libnfs: add patch
+ to fix musl build issue
+Message-ID: <20181125212937.85C43883D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e0467f5e2c0a02042bd493f1700bd2e435f75a5
+commit: https://git.buildroot.net/buildroot/commit/?id=11c3b3c07ab8689ed265532b284ed694139dd0fa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-xtensa-uclinux uses bFLT executable file format that cannot relocate
-fields representing offsets from data to code. C++ objects built as PIC
-use offsets to encode FDE structures. As a result C++ exception handling
-doesn't work correctly on xtensa-uclinux. Don't use PIC by default on
-xtensa-uclinux.
+Add a patch to fix build issues with the musl C library.
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+This patch fixes an autobuild issue when linking the mpd package
+against libnfs. The header file libnfs.h uses `struct timeval` which is
+defined in `<sys/time.h>` for POSIX systems. Unfortunately, upstream
+only includes it conditionally, based on the system. Therefore, we
+remove the check in the first patch.
+
+Reported upstream:
+https://github.com/sahlberg/libnfs/issues/272
+
+Fixes:
+http://autobuild.buildroot.org/results/452/4522014698b9fe50720a71b663e47a75805bcf54
+http://autobuild.buildroot.org/results/b0a/b0a0c20ad1705e9fa7ba4a12eb9c182e8077ab0c
+http://autobuild.buildroot.org/results/53c/53c87361923cc177de7889523b3d16ba6b1d3d0f
+.. and more.
+
+Previous patch: Changes requested
+http://patchwork.ozlabs.org/patch/973605/
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4debb2fbb7d60ed7f81ddab82d8b48ac9c4c3055)
+(cherry picked from commit 582fd7c094c697a3408c054b87406fcf249bcf72)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...xtensa-don-t-force-PIC-for-uclinux-target.patch | 41 ++++++++++++++++++++++
- ...xtensa-don-t-force-PIC-for-uclinux-target.patch | 41 ++++++++++++++++++++++
- ...xtensa-don-t-force-PIC-for-uclinux-target.patch | 41 ++++++++++++++++++++++
- 3 files changed, 123 insertions(+)
+ package/libnfs/0001-Fix-include-sys-time.h.patch | 41 ++++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-diff --git a/package/gcc/6.4.0/0004-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch b/package/gcc/6.4.0/0004-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch
+diff --git a/package/libnfs/0001-Fix-include-sys-time.h.patch b/package/libnfs/0001-Fix-include-sys-time.h.patch
 new file mode 100644
-index 0000000000..360947cbb1
+index 0000000000..15b281672a
 --- /dev/null
-+++ b/package/gcc/6.4.0/0004-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch
++++ b/package/libnfs/0001-Fix-include-sys-time.h.patch
 @@ -0,0 +1,41 @@
-+From 960a2552f7b418134cdf7a31e96023a3811b98dd Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Sun, 4 Nov 2018 23:55:59 -0800
-+Subject: [PATCH] gcc: xtensa: don't force PIC for uclinux target
++From 9df082012cba1dc32d83e5e8b0bdc0892f250058 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Mon, 5 Nov 2018 00:43:07 +0100
++Subject: [PATCH] Fix include sys/time.h
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+xtensa-uclinux uses bFLT executable file format that cannot relocate
-+fields representing offsets from data to code. C++ objects built as PIC
-+use offsets to encode FDE structures. As a result C++ exception handling
-+doesn't work correctly on xtensa-uclinux. Don't use PIC by default on
-+xtensa-uclinux.
++POSIX says `struct timeval` is defined if <sys/time.h> is included.
 +
-+gcc/
-+2018-11-05  Max Filippov  <jcmvbkbc@gmail.com>
++Instead of the mess that is currently done based on the system on which
++the stuff is being compiled, include it unconditionally.
 +
-+	* config/xtensa/uclinux.h (XTENSA_ALWAYS_PIC): Change to 0.
++Reported upstream:
++https://github.com/sahlberg/libnfs/issues/272
 +
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 +---
-+Backported from: r265823
++ include/nfsc/libnfs.h | 5 -----
++ 1 file changed, 5 deletions(-)
 +
-+ gcc/config/xtensa/uclinux.h | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/gcc/config/xtensa/uclinux.h b/gcc/config/xtensa/uclinux.h
-+index ba26187c8f7a..c7743df9d97c 100644
-+--- a/gcc/config/xtensa/uclinux.h
-++++ b/gcc/config/xtensa/uclinux.h
-+@@ -59,8 +59,8 @@ along with GCC; see the file COPYING3.  If not see
-+ #undef LOCAL_LABEL_PREFIX
-+ #define LOCAL_LABEL_PREFIX	"."
++diff --git a/include/nfsc/libnfs.h b/include/nfsc/libnfs.h
++index 09dcf1c..b6db58c 100755
++--- a/include/nfsc/libnfs.h
+++++ b/include/nfsc/libnfs.h
++@@ -24,12 +24,7 @@
++ #define _LIBNFS_H_
 + 
-+-/* Always enable "-fpic" for Xtensa Linux.  */
-+-#define XTENSA_ALWAYS_PIC 1
-++/* Don't enable "-fpic" for Xtensa uclinux.  */
-++#define XTENSA_ALWAYS_PIC 0
++ #include <stdint.h>
++-#if defined(__ANDROID__) || defined(AROS) \
++- || ( defined(__APPLE__) && defined(__MACH__) )
++ #include <sys/time.h>
++-#else
++-#include <time.h>
++-#endif
 + 
-+ #undef TARGET_LIBC_HAS_FUNCTION
-+ #define TARGET_LIBC_HAS_FUNCTION no_c99_libc_has_function
++ #ifdef __cplusplus
++ extern "C" {
 +-- 
-+2.11.0
-+
-diff --git a/package/gcc/7.3.0/0005-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch b/package/gcc/7.3.0/0005-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch
-new file mode 100644
-index 0000000000..360947cbb1
---- /dev/null
-+++ b/package/gcc/7.3.0/0005-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch
-@@ -0,0 +1,41 @@
-+From 960a2552f7b418134cdf7a31e96023a3811b98dd Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Sun, 4 Nov 2018 23:55:59 -0800
-+Subject: [PATCH] gcc: xtensa: don't force PIC for uclinux target
-+
-+xtensa-uclinux uses bFLT executable file format that cannot relocate
-+fields representing offsets from data to code. C++ objects built as PIC
-+use offsets to encode FDE structures. As a result C++ exception handling
-+doesn't work correctly on xtensa-uclinux. Don't use PIC by default on
-+xtensa-uclinux.
-+
-+gcc/
-+2018-11-05  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+	* config/xtensa/uclinux.h (XTENSA_ALWAYS_PIC): Change to 0.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+Backported from: r265823
-+
-+ gcc/config/xtensa/uclinux.h | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/gcc/config/xtensa/uclinux.h b/gcc/config/xtensa/uclinux.h
-+index ba26187c8f7a..c7743df9d97c 100644
-+--- a/gcc/config/xtensa/uclinux.h
-++++ b/gcc/config/xtensa/uclinux.h
-+@@ -59,8 +59,8 @@ along with GCC; see the file COPYING3.  If not see
-+ #undef LOCAL_LABEL_PREFIX
-+ #define LOCAL_LABEL_PREFIX	"."
-+ 
-+-/* Always enable "-fpic" for Xtensa Linux.  */
-+-#define XTENSA_ALWAYS_PIC 1
-++/* Don't enable "-fpic" for Xtensa uclinux.  */
-++#define XTENSA_ALWAYS_PIC 0
-+ 
-+ #undef TARGET_LIBC_HAS_FUNCTION
-+ #define TARGET_LIBC_HAS_FUNCTION no_c99_libc_has_function
-+-- 
-+2.11.0
-+
-diff --git a/package/gcc/8.2.0/0005-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch b/package/gcc/8.2.0/0005-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch
-new file mode 100644
-index 0000000000..360947cbb1
---- /dev/null
-+++ b/package/gcc/8.2.0/0005-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch
-@@ -0,0 +1,41 @@
-+From 960a2552f7b418134cdf7a31e96023a3811b98dd Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Sun, 4 Nov 2018 23:55:59 -0800
-+Subject: [PATCH] gcc: xtensa: don't force PIC for uclinux target
-+
-+xtensa-uclinux uses bFLT executable file format that cannot relocate
-+fields representing offsets from data to code. C++ objects built as PIC
-+use offsets to encode FDE structures. As a result C++ exception handling
-+doesn't work correctly on xtensa-uclinux. Don't use PIC by default on
-+xtensa-uclinux.
-+
-+gcc/
-+2018-11-05  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+	* config/xtensa/uclinux.h (XTENSA_ALWAYS_PIC): Change to 0.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+Backported from: r265823
-+
-+ gcc/config/xtensa/uclinux.h | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/gcc/config/xtensa/uclinux.h b/gcc/config/xtensa/uclinux.h
-+index ba26187c8f7a..c7743df9d97c 100644
-+--- a/gcc/config/xtensa/uclinux.h
-++++ b/gcc/config/xtensa/uclinux.h
-+@@ -59,8 +59,8 @@ along with GCC; see the file COPYING3.  If not see
-+ #undef LOCAL_LABEL_PREFIX
-+ #define LOCAL_LABEL_PREFIX	"."
-+ 
-+-/* Always enable "-fpic" for Xtensa Linux.  */
-+-#define XTENSA_ALWAYS_PIC 1
-++/* Don't enable "-fpic" for Xtensa uclinux.  */
-++#define XTENSA_ALWAYS_PIC 0
-+ 
-+ #undef TARGET_LIBC_HAS_FUNCTION
-+ #define TARGET_LIBC_HAS_FUNCTION no_c99_libc_has_function
-+-- 
-+2.11.0
++2.19.1
 +
