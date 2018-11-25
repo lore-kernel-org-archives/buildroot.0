@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 23:20:14 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] trace-cmd: fix site
-Message-ID: <20181125221707.5E2DA88417@busybox.osuosl.org>
+Date: Sun, 25 Nov 2018 23:20:25 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] trace-cmd: fix site
+Message-ID: <20181125221714.5A5B28841A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bbceedcdfa35afa9baa073626a7a9a3929e3de79
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=31916a38d72b36e93ff2d34edd1938b050579ea3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 Replace $(BR2_KERNEL_MIRROR) by https://git.kernel.org/pub, which
 fixes the download of this package:
