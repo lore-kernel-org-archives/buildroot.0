@@ -1,62 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 23:33:00 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] libnspr: fix nios2 and
- microblaze support patches
-Message-ID: <20181125223015.F3954884AC@busybox.osuosl.org>
+Date: Sun, 25 Nov 2018 23:33:10 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] libnss: security bump to
+ version 3.39
+Message-ID: <20181125223016.06FD9884AC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18aa6efebfa8d3503c94bcfb299fa565e54eebd3
+commit: https://git.buildroot.net/buildroot/commit/?id=0d0094e26bfcf2a7d0d1b35be15be7068df3bdb0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-Commit c9e3d5b6c57 (libnspr: bump to version 4.20) did not refresh the
-hunks touching the _linux.cfg file. As a result, these hunk were applied
-to the wrong (x86 specific) place in that file, rendering them
-ineffective. Refresh the patches to fix that.
+Fixes the following security issue:
 
-Fixes:
-http://autobuild.buildroot.net/results/2d1/2d1288e98a6459d84c2599c99b5617a2fde81f62/
+CVE-2018-12384: NSS responded to an SSLv2-compatible ClientHello with a
+ServerHello that had an all-zero random.
 
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 56825a6518e46af5e0845760e20652426d6fe3b2)
+(cherry picked from commit 1c32e4c298d02ce7ca3c3551be8c31051dde7801)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnspr/0001-nios2.patch      | 6 +++---
- package/libnspr/0002-microblaze.patch | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libnspr/0001-nios2.patch b/package/libnspr/0001-nios2.patch
-index c08fbb272b..2a967c4593 100644
---- a/package/libnspr/0001-nios2.patch
-+++ b/package/libnspr/0001-nios2.patch
-@@ -9,9 +9,9 @@ Index: b/nspr/pr/include/md/_linux.cfg
- ===================================================================
- --- a/nspr/pr/include/md/_linux.cfg
- +++ b/nspr/pr/include/md/_linux.cfg
--@@ -1017,6 +1017,51 @@
-- #define PR_BYTES_PER_WORD_LOG2   2
-- #define PR_BYTES_PER_DWORD_LOG2  3
-+@@ -1112,6 +1112,51 @@
-+ #define PR_BYTES_PER_WORD_LOG2  3
-+ #define PR_BYTES_PER_DWORD_LOG2 3
-  
- +#elif defined(__nios2__)
- +
-diff --git a/package/libnspr/0002-microblaze.patch b/package/libnspr/0002-microblaze.patch
-index 46a4485277..4c23259d58 100644
---- a/package/libnspr/0002-microblaze.patch
-+++ b/package/libnspr/0002-microblaze.patch
-@@ -9,7 +9,7 @@ Index: b/nspr/pr/include/md/_linux.cfg
- ===================================================================
- --- a/nspr/pr/include/md/_linux.cfg
- +++ b/nspr/pr/include/md/_linux.cfg
--@@ -1062,6 +1062,56 @@
-+@@ -1157,6 +1157,56 @@
-  #define PR_BYTES_PER_WORD_LOG2   2
-  #define PR_BYTES_PER_DWORD_LOG2  3
-  
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 2a7ca2b065..9c3cefd818 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_38_RTM/src/SHA256SUMS
+-sha256	2c643d3c08d6935f4d325f40743719b6990aa25a79ec2f8f712c99d086672f62  nss-3.38.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_39_RTM/src/SHA256SUMS
++sha256	6be64dd76f212415cc8bc34343ac1e7389048db4db9a023a84873c411dc5864b  nss-3.39.tar.gz
+ # Locally calculated
+ sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 0693f71ee6..73c9b08fd2 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.38
++LIBNSS_VERSION = 3.39
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
