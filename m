@@ -1,51 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 23:43:15 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] libnss: security bump to
- version 3.39
-Message-ID: <20181125224646.2654A88517@busybox.osuosl.org>
+Date: Sun, 25 Nov 2018 23:42:52 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/libnss: fix
+ aarch64_be build
+Message-ID: <20181125224646.1EC9888517@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=073b82751dbb6c36b524ee480a440cbb74625b97
+commit: https://git.buildroot.net/buildroot/commit/?id=0c70a9fd4248a038e67229c028a1abdd7422c532
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Fixes the following security issue:
+libnss does not treat aarch64_be the same way as aarch64:
+https://hg.mozilla.org/projects/nss/file/fb3585458ac3/lib/freebl/Makefile#l523
 
-CVE-2018-12384: NSS responded to an SSLv2-compatible ClientHello with a
-ServerHello that had an all-zero random.
+Add code to translate "aarch64_be" into "aarch64" to fix
+http://autobuild.buildroot.net/results/4fca771980f9b049ce2690971ddd856652cd5b43/
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1c32e4c298d02ce7ca3c3551be8c31051dde7801)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 826981d45ddbb85a92c01869cb2eccc2fb260475)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libnss/libnss.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 2a7ca2b065..9c3cefd818 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_38_RTM/src/SHA256SUMS
--sha256	2c643d3c08d6935f4d325f40743719b6990aa25a79ec2f8f712c99d086672f62  nss-3.38.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_39_RTM/src/SHA256SUMS
-+sha256	6be64dd76f212415cc8bc34343ac1e7389048db4db9a023a84873c411dc5864b  nss-3.39.tar.gz
- # Locally calculated
- sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
 diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 52a17d3b72..e3558718a5 100644
+index 0fc55785a8..52a17d3b72 100644
 --- a/package/libnss/libnss.mk
 +++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -23,6 +23,12 @@ endef
+ LIBNSS_PRE_CONFIGURE_HOOKS += LIBNSS_DROP_GC_SECTIONS
+ endif
  
--LIBNSS_VERSION = 3.38
-+LIBNSS_VERSION = 3.39
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
++ifeq ($(BR2_aarch64_be),y)
++LIBNSS_ARCH = aarch64
++else
++LIBNSS_ARCH = $(ARCH)
++endif
++
+ LIBNSS_BUILD_VARS = \
+ 	MOZILLA_CLIENT=1 \
+ 	NSPR_INCLUDE_DIR=$(STAGING_DIR)/usr/include/nspr \
+@@ -35,7 +41,7 @@ LIBNSS_BUILD_VARS = \
+ 	NATIVE_CC="$(HOSTCC)" \
+ 	OS_ARCH="Linux" \
+ 	OS_RELEASE="2.6" \
+-	OS_TEST="$(ARCH)"
++	OS_TEST="$(LIBNSS_ARCH)"
+ 
+ # #pragma usage needs gcc >= 4.8
+ # See https://bugzilla.mozilla.org/show_bug.cgi?id=1226179
