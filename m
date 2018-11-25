@@ -1,41 +1,95 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 23:23:21 +0100
-Subject: [Buildroot] [git commit] package/systemd: explicitly configure
- split-usr=false and split-bin=true
-In-Reply-To: <20181111205241.3D835825C3@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Sun, 11 Nov 2018 21:55:10 +0100")
-References: <20181111205241.3D835825C3@busybox.osuosl.org>
-Message-ID: <87r2f823vq.fsf@dell.be.48ers.dk>
+Date: Sun, 25 Nov 2018 23:23:50 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] supertuxkart: fix build
+ on bdver3
+Message-ID: <20181125222047.2CDCA88426@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=45ea5b2f65278e93b329b206d5825b0b4e27034f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=e9b70f96e8200956c871810d7b7a60017b9b974d
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Retrieve upstream patch to fix build failure in
+lib/graphics_utils/mipmap/cpusimd.h due to direct inclusion of
+intrinsics headers:
+https://github.com/supertuxkart/stk-code/issues/3091
 
- > meson-based build of systemd runs a couple of checks on the structure
- > of the *host* system which will incorrectly configure systemd if build
- > host configuration doesn't match Buildroot target.
+Fixes:
+ - http://autobuild.buildroot.org/results/52bd5c45b0d04a863a2530d388899b3e46494ee9
 
- > One can also find the following in the NEWS file:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 236a7d5d786ba332154d770bc434c5f4e978d539)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/supertuxkart/0001-Fix-3091.patch | 59 ++++++++++++++++++++++++++++++++
+ 1 file changed, 59 insertions(+)
 
- > * A new -Dsplit-bin= build configuration switch may be used to specify
- >   whether bin and sbin directories are merged, or if they should be
- >   included separately in $PATH and various listings of executable
- >   directories. The build configuration scripts will try to autodetect
- >   the proper values of -Dsplit-usr= and -Dsplit-bin= based on build
- >   system, but distributions are encouraged to configure this
- >   explicitly.
-
- > Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
- > Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2018.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/supertuxkart/0001-Fix-3091.patch b/package/supertuxkart/0001-Fix-3091.patch
+new file mode 100644
+index 0000000000..dae2a37ce1
+--- /dev/null
++++ b/package/supertuxkart/0001-Fix-3091.patch
+@@ -0,0 +1,59 @@
++From 813b08bc73e4e93714b972ee56c64b4771735e01 Mon Sep 17 00:00:00 2001
++From: Benau <Benau@users.noreply.github.com>
++Date: Sun, 14 Jan 2018 10:19:37 +0800
++Subject: [PATCH] Fix #3091
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com
++[Retrieved from:
++https://github.com/supertuxkart/stk-code/commit/813b08bc73e4e93714b972ee56c64b4771735e01]
++---
++ lib/graphics_utils/mipmap/cpusimd.h | 14 +++++++-------
++ 1 file changed, 7 insertions(+), 7 deletions(-)
++
++diff --git a/lib/graphics_utils/mipmap/cpusimd.h b/lib/graphics_utils/mipmap/cpusimd.h
++index 1dc2c730b2..5e2cf30e5f 100644
++--- a/lib/graphics_utils/mipmap/cpusimd.h
+++++ b/lib/graphics_utils/mipmap/cpusimd.h
++@@ -38,11 +38,11 @@
++  #include <mmintrin.h>
++  #define CPU_MMX_SUPPORT (1)
++ #endif
++-#if __SSE__ || _M_X64 || _M_IX86_FP >= 1  || CPU_ENABLE_SSE
+++#if __SSE__ || defined(_M_X64) || ( defined(_M_IX86_FP) && ( _M_IX86_FP >= 1 ) ) || CPU_ENABLE_SSE
++  #include <xmmintrin.h>
++  #define CPU_SSE_SUPPORT (1)
++ #endif
++-#if __SSE2__ || _M_X64 || _M_IX86_FP >= 2  || CPU_ENABLE_SSE2
+++#if __SSE2__ || defined(_M_X64) || ( defined(_M_IX86_FP) && ( _M_IX86_FP >= 2 ) ) || CPU_ENABLE_SSE2
++  #include <emmintrin.h>
++  #define CPU_SSE2_SUPPORT (1)
++ #endif
++@@ -95,23 +95,23 @@
++  #define CPU_POPCNT_SUPPORT (1)
++ #endif
++ #if __LZCNT__ || CPU_ENABLE_LZCNT
++- #include <lzcntintrin.h>
+++ #include <x86intrin.h>
++  #define CPU_LZCNT_SUPPORT (1)
++ #endif
++ #if __F16C__ || CPU_ENABLE_F16C
++- #include <f16cintrin.h>
+++ #include <x86intrin.h>
++  #define CPU_F16C_SUPPORT (1)
++ #endif
++ #if __BMI__ || CPU_ENABLE_BMI
++- #include <bmiintrin.h>
+++ #include <x86intrin.h>
++  #define CPU_BMI_SUPPORT (1)
++ #endif
++ #if __BMI2__ || CPU_ENABLE_BMI2
++- #include <bmi2intrin.h>
+++ #include <x86intrin.h>
++  #define CPU_BMI2_SUPPORT (1)
++ #endif
++ #if __TBM__ || CPU_ENABLE_TBM
++- #include <tbmintrin.h>
+++ #include <x86intrin.h>
++  #define CPU_TBM_SUPPORT (1)
++ #endif
++ 
