@@ -1,60 +1,43 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Sun, 25 Nov 2018 07:20:27 -0200
-Subject: [Buildroot] [PATCH] package/wolfssl: enable ARMv8 hardware
- acceleration
-Message-ID: <20181125092027.5824-1-sergio.prado@e-labworks.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 25 Nov 2018 10:45:53 +0100
+Subject: [Buildroot] [PATCH] docs/manual: standardize a bit more the
+ formatting of commit titles
+In-Reply-To: <1442786873.3545705.1543108593942.JavaMail.zimbra@datacom.com.br>
+References: <20181124101903.18138-1-thomas.petazzoni@bootlin.com>
+ <1442786873.3545705.1543108593942.JavaMail.zimbra@datacom.com.br>
+Message-ID: <20181125104553.3f24be17@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enable hardware acceleration for ARMv8 targets.
+Hello,
 
-When ARMv8 hardware acceleration is enabled without any additional flags,
-the build fails with the following messages:
+On Sat, 24 Nov 2018 23:16:33 -0200 (BRST), Carlos Santos wrote:
 
-/tmp/cciv7Oei.s: Assembler messages:
-/tmp/cciv7Oei.s:580: Error: invalid addressing mode at operand 2 -- `ld1 {v0.2d},[x0,256]'
-/tmp/cciv7Oei.s:616: Error: invalid addressing mode at operand 2 -- `st1 {v0.2d},[x0,256]'
-/tmp/cciv7Oei.s:629: Error: invalid addressing mode at operand 2 -- `ld1 {v0.2d},[x0,256]'
-/tmp/cciv7Oei.s:669: Error: invalid addressing mode at operand 2 -- `st1 {v0.2d},[x0,256]'
-/tmp/cciv7Oei.s:1211: Error: invalid addressing mode at operand 2 -- `ld1 {v16.2d},[x0,304]'
-/tmp/cciv7Oei.s:1368: Error: invalid addressing mode at operand 2 -- `ld1 {v17.16b},[x19,304]'
-/tmp/cciv7Oei.s:1554: Error: invalid addressing mode at operand 2 -- `ld1 {v16.2d},[x0,304]'
-/tmp/cciv7Oei.s:1719: Error: invalid addressing mode at operand 2 -- `ld1 {v17.16b},[x19,304]'
-/tmp/cciv7Oei.s:1870: Error: invalid addressing mode at operand 2 -- `ld1 {v16.2d},[x0,304]'
-/tmp/cciv7Oei.s:2043: Error: invalid addressing mode at operand 2 -- `ld1 {v17.16b},[x19,304]'
-make[3]: *** [Makefile:3801: wolfcrypt/src/port/arm/src_libwolfssl_la-armv8-aes.lo] Error 1
+> Looks good, but isn't "package/" a bit superfluous, since Most of the
+> commits are for packages? It also goes against the tradition:
+> 
+> $ git log --oneline origin/master | grep -i '^.......... [^ /]*: bump' |wc -l
+> 7644
+> $ git log --oneline origin/master | grep -i '^.......... [^ ]*/[^ ]*: bump' |wc -l
+> 2296
 
-This is because of some inline assembly in parts of the AES structure using the "m" constraint.
+Yes, I agree the tradition has been without package/. I myself used to
+prefer without package/. However, it is not very consistent, as then
+when we have boot/uboot, is it about package/boot/uboot ? Or when we
+have core: <something>, is it about the package "core" ?
 
-So lets use the flag -mstrict-align to prevent this error.
+While I was personally not adding package/, I saw others doing it, and
+ultimately found it more consistent.
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
----
- package/wolfssl/wolfssl.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+> BTW, I want the bike shed red.
 
-diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-index 68b638c3e2a8..ab5f5ea4550c 100644
---- a/package/wolfssl/wolfssl.mk
-+++ b/package/wolfssl/wolfssl.mk
-@@ -30,7 +30,14 @@ else
- WOLFSSL_CONF_OPTS += --disable-sslv3
- endif
- 
--# build fails when ARMv8 hardware acceleration is enabled
-+# enable ARMv8 hardware acceleration (the flag -mstrict-align is
-+# needed to prevent build errors caused by some inline assembly
-+# in parts of the AES structure using the "m" constraint)
-+ifeq ($(BR2_ARM_CPU_ARMV8A),y)
-+WOLFSSL_CONF_OPTS += --enable-armasm
-+WOLFSSL_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -mstrict-align"
-+else
- WOLFSSL_CONF_OPTS += --disable-armasm
-+endif
- 
- $(eval $(autotools-package))
+Red is not too bad :-)
+
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
