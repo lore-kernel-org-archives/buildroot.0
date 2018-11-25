@@ -1,45 +1,55 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Sun, 25 Nov 2018 06:36:19 -0200
-Subject: [Buildroot] [PATCH v2] package/wolfssl: bump to version 3.15.5
-Message-ID: <20181125083619.17033-1-sergio.prado@e-labworks.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 25 Nov 2018 09:37:07 +0100
+Subject: [Buildroot] [git commit] package/samba4: fix install of systemd
+ files
+Message-ID: <20181125083406.BCEC988260@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
----
-Changes v1 -> v2:
-  - Enable ARMv8 HW acceleration in a separate patch.
----
- package/wolfssl/wolfssl.hash | 2 +-
- package/wolfssl/wolfssl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=ea5280b889782e28b6bdf43e28b0e6a3a610f921
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
-index 76c7db25a844..2fdaa5762b6a 100644
---- a/package/wolfssl/wolfssl.hash
-+++ b/package/wolfssl/wolfssl.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256 4ab543c869a65a77dc5d0bc934b9d4852aa3d5834bd2f707a74a936602bd3687  v3.14.0-stable.tar.gz
-+sha256 4e15f494604e41725499f8b708798f8ddc2fcaa8f39b4369bcd000b3cab482d8  v3.15.5-stable.tar.gz
+Since version 4.8.0 and
+https://github.com/samba-team/samba/commit/080d590de1ff9f8ebc55aeffaea8d41991466549,
+the systemd files (nmd.service, ...) are not available in packaging/systemd
+
+Indeed, they are built in bin/default/packaging/systemd
+
+So use the new --systemd-install-services configure option to install
+these files
+
+Fixes:
+ - http://autobuild.buildroot.org/results/a09a065c523931c1892e81a99c57521fbe095d8b
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/samba4/samba4.mk | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index d95b4edfa4..e2f8e7de2f 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -161,13 +161,12 @@ define SAMBA4_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S91smb
+ endef
  
- # Hash for license files:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-index c246b085131d..68b638c3e2a8 100644
---- a/package/wolfssl/wolfssl.mk
-+++ b/package/wolfssl/wolfssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WOLFSSL_VERSION = 3.14.0
-+WOLFSSL_VERSION = 3.15.5
- WOLFSSL_SITE = https://github.com/wolfSSL/wolfssl/archive
- WOLFSSL_SOURCE = v$(WOLFSSL_VERSION)-stable.tar.gz
- WOLFSSL_INSTALL_STAGING = YES
--- 
-2.17.1
++ifeq ($(BR2_INIT_SYSTEMD),y)
++SAMBA4_CONF_OPTS += --systemd-install-services
++SAMBA4_DEPENDENCIES += systemd
++endif
++
+ define SAMBA4_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -D -m 644 $(@D)/packaging/systemd/nmb.service \
+-		$(TARGET_DIR)/usr/lib/systemd/system/nmb.service
+-	$(INSTALL) -D -m 644 $(@D)/packaging/systemd/smb.service \
+-		$(TARGET_DIR)/usr/lib/systemd/system/smb.service
+-	$(INSTALL) -D -m 644 $(@D)/packaging/systemd/winbind.service \
+-		$(TARGET_DIR)/usr/lib/systemd/system/winbind.service
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+ 	ln -sf ../../../../usr/lib/systemd/system/nmb.service \
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/nmb.service
