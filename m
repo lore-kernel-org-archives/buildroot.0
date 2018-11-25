@@ -1,69 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 23:40:00 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] libnss: remove upstream
- patch
-Message-ID: <20181125224645.E7A4788517@busybox.osuosl.org>
+Date: Sun, 25 Nov 2018 23:35:22 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] libnss: add upstream
+ patch fixing build on aarch64
+Message-ID: <20181125224645.D68CB88517@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d6fa812119b0649446bfdaee7ff54c3f0259b09
+commit: https://git.buildroot.net/buildroot/commit/?id=088d4b73a14ac703531c9103588b445d5dd9cecf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-The merge of the next branch failed to remove an upstream applied patch.
-
 Fixes:
-http://autobuild.buildroot.net/results/31f/31fe428584ada680f30d11e5d1abfbc533c0a70e/
-http://autobuild.buildroot.net/results/bb2/bb25363497dfd7fd5f8a81c28110fab87d5c2dc8/
-http://autobuild.buildroot.net/results/70a/70adacf85154d2a663808cf0db69849b6a490457/
+http://autobuild.buildroot.net/results/037/037c772a36762df8febd529b329743d18ffbf66a/
 
-Cc: Joseph Kogut <joseph.kogut@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 800aefb1822f8d9a30b5a116f523cd573744ea2d)
+Build system forgets to compile a file on aarch64, breaking the build.
+
+For details, see the upstream bugreport:
+https://bugzilla.mozilla.org/show_bug.cgi?id=1432455
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 306242a47492439b493dabb5387f73aa43b08efc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-Avoid-stringop-truncation-warning-r-fran.patch | 33 ----------------------
- 1 file changed, 33 deletions(-)
+ .../0003-Build-Hacl_Poly1305_64_o_on_Aarch64.patch | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-diff --git a/package/libnss/0004-Bug-1438426-Avoid-stringop-truncation-warning-r-fran.patch b/package/libnss/0004-Bug-1438426-Avoid-stringop-truncation-warning-r-fran.patch
-deleted file mode 100644
-index c14880b117..0000000000
---- a/package/libnss/0004-Bug-1438426-Avoid-stringop-truncation-warning-r-fran.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From f0ce70989526fc9a0223398c99ea0d09777ea5df Mon Sep 17 00:00:00 2001
--From: Martin Thomson <martin.thomson@gmail.com>
--Date: Thu, 15 Feb 2018 16:34:02 +1100
--Subject: [PATCH] Bug 1438426 - Avoid stringop-truncation warning, r=franziskus
--
----HG--
--extra : rebase_source : 4ea1630d0da0ce3523309e3da33ee50961682242
--
--Upstream-commit: https://github.com/nss-dev/nss/commit/f0ce70989526fc9a0223398c99ea0d09777ea5df
--[Thomas: edited after git format-patch to add the nss/ prefix needed
--for the patch to apply properly on the source code extracted by the
--tarball.]
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- nss/coreconf/nsinstall/pathsub.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/nss/coreconf/nsinstall/pathsub.c b/nss/coreconf/nsinstall/pathsub.c
--index a42a9f30a..c31a946f0 100644
----- a/nss/coreconf/nsinstall/pathsub.c
--+++ b/nss/coreconf/nsinstall/pathsub.c
--@@ -212,7 +212,7 @@ reversepath(char *inpath, char *name, int len, char *outpath)
-- 	    xchdir("..");
-- 	} else {
-- 	    cp -= 3;
---	    strncpy(cp, "../", 3);
--+	    memcpy(cp, "../", 3);
-- 	    xchdir(buf);
-- 	}
--     }
---- 
--2.14.3
--
+diff --git a/package/libnss/0003-Build-Hacl_Poly1305_64_o_on_Aarch64.patch b/package/libnss/0003-Build-Hacl_Poly1305_64_o_on_Aarch64.patch
+new file mode 100644
+index 0000000000..94f1a65273
+--- /dev/null
++++ b/package/libnss/0003-Build-Hacl_Poly1305_64_o_on_Aarch64.patch
+@@ -0,0 +1,38 @@
++# HG changeset patch
++# User Daiki Ueno <dueno@redhat.com>
++# Date 1516710574 -3600
++# Node ID 1668fafc1db4f739d5d15fbc94283858f842deb5
++# Parent  c3702e37a048e386f88e7c50a228d27669332725
++Bug 1432455, Build Hacl_Poly1305_64.o on AArch64 even with make, r=fkiefer
++
++[Upstream: https://hg.mozilla.org/projects/nss/rev/1668fafc1db4
++ Peter: adjust paths for tarball]
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++diff --git a/nss/lib/freebl/Makefile b/nss/lib/freebl/Makefile
++--- a/nss/lib/freebl/Makefile
+++++ b/nss/lib/freebl/Makefile
++@@ -522,17 +522,22 @@ ifndef NSS_DISABLE_CHACHAPOLY
++ 
++         ifneq (1,$(CC_IS_GCC))
++             EXTRA_SRCS += chacha20.c
++             VERIFIED_SRCS += Hacl_Chacha20.c
++         else
++             EXTRA_SRCS += chacha20_vec.c
++         endif
++     else
++-        EXTRA_SRCS += poly1305.c
+++        ifeq ($(CPU_ARCH),aarch64)
+++            EXTRA_SRCS += Hacl_Poly1305_64.c
+++        else
+++            EXTRA_SRCS += poly1305.c
+++        endif
+++
++         EXTRA_SRCS += chacha20.c
++         VERIFIED_SRCS += Hacl_Chacha20.c
++     endif # x86_64
++ endif # NSS_DISABLE_CHACHAPOLY
++ 
++ ifeq (,$(filter-out i386 x386 x86 x86_64 aarch64,$(CPU_ARCH)))
++     # All intel architectures get the 64 bit version
++     # With custom uint128 if necessary (faster than generic 32 bit version).
++
