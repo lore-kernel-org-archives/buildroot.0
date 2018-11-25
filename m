@@ -1,53 +1,27 @@
 From: Carlos Santos <casantos@datacom.com.br>
-Date: Sat, 24 Nov 2018 23:21:22 -0200
-Subject: [Buildroot] [PATCH next v2] qemu: enable seccomp if libseccomp is
- selected
-Message-ID: <20181125012122.24316-1-casantos@datacom.com.br>
+Date: Sat, 24 Nov 2018 23:59:36 -0200
+Subject: [Buildroot] [PATCH] stress-ng: really remove patch merged upstream
+Message-ID: <20181125015936.25145-1-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It is required to use qemu with libvirt and allows us to resume working
-on the libvirt package (https://patchwork.ozlabs.org/patch/841613).
+Should have been removed in commit 27bce5fc8e (package/stress-ng: bump
+to version 0.09.39) but was left as an empty file.
 
 Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 ---
-Supersedes: https://patchwork.ozlabs.org/patch/1000481/
+This should be applied on master to remove the empty patch before
+releasing Buildroot 2018.11.
 ---
-Changes v1->v2:
-- Do not introduce an explicit option, just enable seccomp support when
-  BR2_PACKAGE_LIBSECCOMP=y.
----
- package/qemu/qemu.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ .../0001-stress-netlink-proc-fix-build-with-kernel-v3.9.patch     | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ delete mode 100644 package/stress-ng/0001-stress-netlink-proc-fix-build-with-kernel-v3.9.patch
 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 5ee6abf731..66b74467b9 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -81,6 +81,13 @@ else
- QEMU_OPTS += --disable-tools
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
-+QEMU_OPTS += --enable-seccomp
-+QEMU_DEPENDENCIES += libseccomp
-+else
-+QEMU_OPTS += --disable-seccomp
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBSSH2),y)
- QEMU_OPTS += --enable-libssh2
- QEMU_DEPENDENCIES += libssh2
-@@ -121,7 +128,6 @@ define QEMU_CONFIGURE_CMDS
- 			--disable-libiscsi \
- 			--disable-usb-redir \
- 			--disable-strip \
--			--disable-seccomp \
- 			--disable-sparse \
- 			--disable-mpath \
- 			--disable-sanitizers \
+diff --git a/package/stress-ng/0001-stress-netlink-proc-fix-build-with-kernel-v3.9.patch b/package/stress-ng/0001-stress-netlink-proc-fix-build-with-kernel-v3.9.patch
+deleted file mode 100644
+index e69de29bb2..0000000000
 -- 
 2.19.1
