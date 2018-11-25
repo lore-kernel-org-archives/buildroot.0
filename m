@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 21:58:14 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/mmc-utils: add
+Date: Sun, 25 Nov 2018 21:57:23 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] package/mmc-utils: add
  patch to fix build failure
-Message-ID: <20181125205530.5B58388336@busybox.osuosl.org>
+Message-ID: <20181125205536.D2B6588339@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8af9cc1e027e8bdffa7de5d6b5693a5b728deb07
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ff7d2b87a280f391f17b551d2672f59b824cc701
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 Patch taken from:
  - https://patchwork.kernel.org/patch/10654531/
