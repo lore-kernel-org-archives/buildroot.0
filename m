@@ -1,68 +1,92 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 25 Nov 2018 07:46:39 +0200
-Subject: [Buildroot] [PATCH next] iptables: fix build with kernel headers <
- 3.12
-Message-ID: <790ee9a3bbc8d37f4a812af831308bc65f128985.1543124799.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 25 Nov 2018 08:00:48 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-11-24
+Message-ID: <20181125070048.E2A7E20DBF@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Extend the workaround that was added in patch 0003 to cover ipv6
-definitions.
+Hello,
 
-Fixes:
-http://autobuild.buildroot.net/results/23f/23ff396a568a865751471bf1f9e5dff2b73c8ab0/
+Build statistics for 2018-11-24
+===============================
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...he-headers-conflict-workaround-to-in.patch | 37 +++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/iptables/0005-include-extend-the-headers-conflict-workaround-to-in.patch
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  20 |   1 |   0 |  21 |
+   2018.08.x |  23 |   1 |   0 |  24 |
+      master | 213 |   2 |   0 | 215 |
+        next |  26 |   6 |   0 |  32 |
 
-diff --git a/package/iptables/0005-include-extend-the-headers-conflict-workaround-to-in.patch b/package/iptables/0005-include-extend-the-headers-conflict-workaround-to-in.patch
-new file mode 100644
-index 000000000000..6b1ffbd639ca
---- /dev/null
-+++ b/package/iptables/0005-include-extend-the-headers-conflict-workaround-to-in.patch
-@@ -0,0 +1,37 @@
-+From 23dee088cd54aae94f1b71046f2ab2b206eedd42 Mon Sep 17 00:00:00 2001
-+Message-Id: <23dee088cd54aae94f1b71046f2ab2b206eedd42.1543092537.git.baruch@tkos.co.il>
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Sat, 24 Nov 2018 22:33:37 +0200
-+Subject: [PATCH] include: extend the headers conflict workaround to in6.h
-+
-+Commit 8d9d7e4b9ef ("include: fix build with kernel headers before 4.2")
-+introduced a kernel/user headers conflict workaround that allows build
-+of iptables with kernel headers older than 4.2. This minor extension
-+allows build with kernel headers older than 3.12, which is the version
-+that introduced explicit IP headers synchronization.
-+
-+Cc: Florian Westphal <fw@strlen.de>
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: https://www.spinics.net/lists/netfilter-devel/msg57029.html
-+
-+ include/linux/netfilter.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/include/linux/netfilter.h b/include/linux/netfilter.h
-+index bacf8cd92116..042d8b1478e0 100644
-+--- a/include/linux/netfilter.h
-++++ b/include/linux/netfilter.h
-+@@ -5,8 +5,8 @@
-+ 
-+ #ifndef _NETINET_IN_H
-+ #include <linux/in.h>
-+-#endif
-+ #include <linux/in6.h>
-++#endif
-+ #include <limits.h>
-+ 
-+ /* Responses from hook functions. */
-+-- 
-+2.19.1
-+
+Results for branch '2018.02.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                 rings-1.3.0-1 | 1 
+
+
+Detail of failures
+------------------
+
+      x86_64 |                  rings-1.3.0-1 | NOK | http://autobuild.buildroot.net/results/97ddc2db1c809b9e6f7ebe8cfe2858aa991b0481 | ORPH
+
+Results for branch '2018.08.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                qt5base-5.11.1 | 1 
+
+
+Detail of failures
+------------------
+
+    mips64el |                 qt5base-5.11.1 | NOK | http://autobuild.buildroot.net/results/5b6f5cb5e3c108a59ee0ae7e6de360e0aec1abca |     
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                libmpeg2-0.5.1 | 1 
+                  mender-1.4.0 | 1 
+
+
+Detail of failures
+------------------
+
+     powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/dbb725e6a576da2600a258615ad48ff771b8c7e0 | ORPH
+      x86_64 |                   mender-1.4.0 | NOK | http://autobuild.buildroot.net/results/b1e1299914dd501124302cebb1cbf2f37d5b24e9 |     
+
+Results for branch 'next'
+=========================
+
+Classification of failures by reason
+------------------------------------
+
+               boa-0.94.14rc21 | 1 
+                iptables-1.8.2 | 1 
+             keepalived-2.0.10 | 1 
+                 libv4l-1.16.1 | 1 
+                     squid-4.4 | 1 
+              tpm2-abrmd-2.0.3 | 1 
+
+
+Detail of failures
+------------------
+
+     riscv64 |                boa-0.94.14rc21 | NOK | http://autobuild.buildroot.net/results/fa071a8e1e6e5433f02c77c411122adb048532be | ORPH
+        i686 |                 iptables-1.8.2 | NOK | http://autobuild.buildroot.net/results/23ff396a568a865751471bf1f9e5dff2b73c8ab0 | ORPH
+      mipsel |              keepalived-2.0.10 | NOK | http://autobuild.buildroot.net/results/067ef9ae106b3e0740a70f6f9591b9da00d3da6a |     
+         arm |                  libv4l-1.16.1 | NOK | http://autobuild.buildroot.net/results/8ac6d271dda370e59fc8e627c82de7f9d8f82447 |     
+         arc |                      squid-4.4 | NOK | http://autobuild.buildroot.net/results/13082cea836a12ac8bf85cbdb53a56a5d30c70b1 | ORPH
+        i586 |               tpm2-abrmd-2.0.3 | NOK | http://autobuild.buildroot.net/results/7c4a25a1eac8b614e24aed0d1244310911ab3d31 |     
+
+
 -- 
-2.19.1
+http://autobuild.buildroot.net
