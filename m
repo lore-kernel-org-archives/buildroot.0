@@ -1,95 +1,86 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 23:24:10 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] supertuxkart: fix build
- on bdver3
-Message-ID: <20181125222117.EAA9C8842F@busybox.osuosl.org>
+Date: Sun, 25 Nov 2018 23:30:50 +0100
+Subject: [Buildroot] [git commit] fs: don't use an intermediate tarball
+In-Reply-To: <20181112234504.546AF82767@busybox.osuosl.org> (Arnout
+ Vandecappelle's message of "Tue, 13 Nov 2018 00:47:36 +0100")
+References: <20181112234504.546AF82767@busybox.osuosl.org>
+Message-ID: <87in0k23j9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e43f9631d7f20bfac1dea0e2beabf822f5b97458
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Retrieve upstream patch to fix build failure in
-lib/graphics_utils/mipmap/cpusimd.h due to direct inclusion of
-intrinsics headers:
-https://github.com/supertuxkart/stk-code/issues/3091
+ > commit: https://git.buildroot.net/buildroot/commit/?id=409d4c3fe9949f01b009712a1a731baf597e0f8d
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/52bd5c45b0d04a863a2530d388899b3e46494ee9
+ > Since 118534fe54b (fs: use a common tarball as base for the other
+ > filesystems), the filesystem creation is split in two steps, using an
+ > intermediate tarball to carry the generic, common finalisations to the
+ > per-filesystem finalisation and image creation.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 236a7d5d786ba332154d770bc434c5f4e978d539)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/supertuxkart/0001-Fix-3091.patch | 59 ++++++++++++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
+ > However, this intermediate tarball causes an issue with capabilities:
+ > they are entirely missing in the generated filesystems.
 
-diff --git a/package/supertuxkart/0001-Fix-3091.patch b/package/supertuxkart/0001-Fix-3091.patch
-new file mode 100644
-index 0000000000..dae2a37ce1
---- /dev/null
-+++ b/package/supertuxkart/0001-Fix-3091.patch
-@@ -0,0 +1,59 @@
-+From 813b08bc73e4e93714b972ee56c64b4771735e01 Mon Sep 17 00:00:00 2001
-+From: Benau <Benau@users.noreply.github.com>
-+Date: Sun, 14 Jan 2018 10:19:37 +0800
-+Subject: [PATCH] Fix #3091
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com
-+[Retrieved from:
-+https://github.com/supertuxkart/stk-code/commit/813b08bc73e4e93714b972ee56c64b4771735e01]
-+---
-+ lib/graphics_utils/mipmap/cpusimd.h | 14 +++++++-------
-+ 1 file changed, 7 insertions(+), 7 deletions(-)
-+
-+diff --git a/lib/graphics_utils/mipmap/cpusimd.h b/lib/graphics_utils/mipmap/cpusimd.h
-+index 1dc2c730b2..5e2cf30e5f 100644
-+--- a/lib/graphics_utils/mipmap/cpusimd.h
-++++ b/lib/graphics_utils/mipmap/cpusimd.h
-+@@ -38,11 +38,11 @@
-+  #include <mmintrin.h>
-+  #define CPU_MMX_SUPPORT (1)
-+ #endif
-+-#if __SSE__ || _M_X64 || _M_IX86_FP >= 1  || CPU_ENABLE_SSE
-++#if __SSE__ || defined(_M_X64) || ( defined(_M_IX86_FP) && ( _M_IX86_FP >= 1 ) ) || CPU_ENABLE_SSE
-+  #include <xmmintrin.h>
-+  #define CPU_SSE_SUPPORT (1)
-+ #endif
-+-#if __SSE2__ || _M_X64 || _M_IX86_FP >= 2  || CPU_ENABLE_SSE2
-++#if __SSE2__ || defined(_M_X64) || ( defined(_M_IX86_FP) && ( _M_IX86_FP >= 2 ) ) || CPU_ENABLE_SSE2
-+  #include <emmintrin.h>
-+  #define CPU_SSE2_SUPPORT (1)
-+ #endif
-+@@ -95,23 +95,23 @@
-+  #define CPU_POPCNT_SUPPORT (1)
-+ #endif
-+ #if __LZCNT__ || CPU_ENABLE_LZCNT
-+- #include <lzcntintrin.h>
-++ #include <x86intrin.h>
-+  #define CPU_LZCNT_SUPPORT (1)
-+ #endif
-+ #if __F16C__ || CPU_ENABLE_F16C
-+- #include <f16cintrin.h>
-++ #include <x86intrin.h>
-+  #define CPU_F16C_SUPPORT (1)
-+ #endif
-+ #if __BMI__ || CPU_ENABLE_BMI
-+- #include <bmiintrin.h>
-++ #include <x86intrin.h>
-+  #define CPU_BMI_SUPPORT (1)
-+ #endif
-+ #if __BMI2__ || CPU_ENABLE_BMI2
-+- #include <bmi2intrin.h>
-++ #include <x86intrin.h>
-+  #define CPU_BMI2_SUPPORT (1)
-+ #endif
-+ #if __TBM__ || CPU_ENABLE_TBM
-+- #include <tbmintrin.h>
-++ #include <x86intrin.h>
-+  #define CPU_TBM_SUPPORT (1)
-+ #endif
-+ 
+ > Capabilities are stored in the extended attribute security.capability,
+ > which tar by default will not store/restore, unless explicitly told to,
+ > e.g. with --xattrs-include='*', which we don't pass.
+
+ > Now, passing this option when creating and extracting the intermediate
+ > tarball, both done under fakeroot, will cause fakeroot to report an
+ > invalid filetype for files with capabilities. mksquashfs would report
+ > such unknown files as a warning, while mkfs.ext2 would fail (with a
+ > similar error message), e.g.:
+
+ >     File [...]/usr/sbin/getcap has unrecognised filetype 0, ignoring
+
+ > This is due to a poor interaction between tar and fakeroot; running as
+ > root the exact same commands we run under fakeroot, works as expected.
+ > Unfortunately, short of fixing fakeroot (which would first require
+ > understanding the problem in there), we don't have much options.
+
+ > The intermediate tarball was made to avoid redoing the same actions over
+ > and over again for each filesystem to build. However, most of the time,
+ > only one or two such filesystems would be enabled [0], and those actions
+ > are usually pretty lightweight. So, using an intermediate tarball does
+ > not provide a big optimisation.
+
+ > The main reason to introduce the intermediate tarball, however, is that
+ > it allows to postpone per-filesystem finalisations to be applied only
+ > for the corresponding filesystem, not for all of them.
+
+ > So, we get rid of the intermediate tarball, and simply move all of the
+ > code to run under fakeroot to the per-filesystem fakeroot script.
+ > Instead of extracting the intermediate tarball, we just rsync the
+ > original target/ directory, and apply the filesystem finalisations on
+ > that copy. The only thing still done in the rootfs-common step is to
+ > generate the intermediate files (users file, devices file) that are used
+ > in the fakeroot script.
+
+ > Fixes: https://bugs.busybox.net/show_bug.cgi?id=11216
+
+ > Note: an alternate solution would have been to keep the intermediate
+ > tarball to keep most of the common finalisations, and move only the
+ > permissions to each filesystem, but that was getting a bit more complex
+ > and changed the ordering of permissions and post-fakeroot scripts. Once
+ > we bite the bullet of having some common finalisation done in each
+ > filesystem, it's easier to just move all of them.
+
+ > [0] Most probsably, users would enable the real filesystem to put on
+ > their device, plus the 'tar' filesystem, to be able to easily inspect
+ > the content on their development machine.
+
+ > Reported-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Cc: Arnout Vandecappelle <arnout@mind.be>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+Committed to 2018.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
