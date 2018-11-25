@@ -1,60 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 23:42:32 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] libnss: fix build with
- uClibc
-Message-ID: <20181125224646.1756588517@busybox.osuosl.org>
+Date: Sun, 25 Nov 2018 23:43:15 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] libnss: security bump to
+ version 3.39
+Message-ID: <20181125224646.2654A88517@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=258a8399762a3444c9ebd7cad2deb7737f7a4297
+commit: https://git.buildroot.net/buildroot/commit/?id=073b82751dbb6c36b524ee480a440cbb74625b97
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Add a patch defining AT_HWCAP2 locally since uClibc is missing this
-macro. Once uClibc updates its elf.h copy we can remove this patch.
+Fixes the following security issue:
 
-Fixes:
+CVE-2018-12384: NSS responded to an SSLv2-compatible ClientHello with a
+ServerHello that had an all-zero random.
 
-  http://autobuild.buildroot.net/results/06f/06f5ee4bc9e623fa08d77278acdcb447148ae997/
-  http://autobuild.buildroot.net/results/7cd/7cd7586f5854f9447c37adeedb9c113ba37ebea4/
-  http://autobuild.buildroot.net/results/335/335bee755fbec45a6d5336c2501dc2687859ec0e/
-
-Cc: Joseph Kogut <joseph.kogut@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1a9f539d97850ef1a53a3c64a31c24330a2bcd8f)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 1c32e4c298d02ce7ca3c3551be8c31051dde7801)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnss/0001-fix-uclibc-build.patch | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libnss/0001-fix-uclibc-build.patch b/package/libnss/0001-fix-uclibc-build.patch
-new file mode 100644
-index 0000000000..a9e84c264b
---- /dev/null
-+++ b/package/libnss/0001-fix-uclibc-build.patch
-@@ -0,0 +1,22 @@
-+Fix build with uClibc-ng
-+
-+The elf.h header in uClibc-ng is missing the AT_HWCAP2 definition. Add it in
-+the code.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: Not upstreamable; uClibc needs to update elf.h
-+
-+diff -Nuar nss-3.38.orig/nss/lib/freebl/blinit.c nss-3.38/nss/lib/freebl/blinit.c
-+--- nss-3.38.orig/nss/lib/freebl/blinit.c	2018-06-21 12:24:45.000000000 +0300
-++++ nss-3.38/nss/lib/freebl/blinit.c	2018-06-26 13:13:55.636434720 +0300
-+@@ -100,6 +100,9 @@
-+     defined(__GNUC__) && __GNUC__ >= 2 && defined(__ELF__)
-+ #include <sys/auxv.h>
-+ extern unsigned long getauxval(unsigned long type) __attribute__((weak));
-++#ifndef AT_HWCAP2
-++#define AT_HWCAP2	26
-++#endif
-+ #else
-+ static unsigned long (*getauxval)(unsigned long) = NULL;
-+ #define AT_HWCAP2 0
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 2a7ca2b065..9c3cefd818 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_38_RTM/src/SHA256SUMS
+-sha256	2c643d3c08d6935f4d325f40743719b6990aa25a79ec2f8f712c99d086672f62  nss-3.38.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_39_RTM/src/SHA256SUMS
++sha256	6be64dd76f212415cc8bc34343ac1e7389048db4db9a023a84873c411dc5864b  nss-3.39.tar.gz
+ # Locally calculated
+ sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 52a17d3b72..e3558718a5 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.38
++LIBNSS_VERSION = 3.39
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
