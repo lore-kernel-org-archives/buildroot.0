@@ -1,43 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Nov 2018 10:45:53 +0100
-Subject: [Buildroot] [PATCH] docs/manual: standardize a bit more the
- formatting of commit titles
-In-Reply-To: <1442786873.3545705.1543108593942.JavaMail.zimbra@datacom.com.br>
-References: <20181124101903.18138-1-thomas.petazzoni@bootlin.com>
- <1442786873.3545705.1543108593942.JavaMail.zimbra@datacom.com.br>
-Message-ID: <20181125104553.3f24be17@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 25 Nov 2018 10:50:25 +0100
+Subject: [Buildroot] [PATCH 1/1] msgpack: disables tests
+Message-ID: <20181125095025.7542-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+tests are enabled if gperf and zlib are found and they fail on:
+/home/buildroot/autobuild/run/instance-0/output/build/msgpack-2.1.5/include/msgpack/v1/object.hpp:652:34:
+error: 'void* memcpy(void*, const void*, size_t)' copying an object of non-trivial type 'struct msgpack::v2::object' from an array of 'const msgpack_object' {aka 'const struct msgpack_object'} [-Werror=class-memaccess]
+     std::memcpy(&o, &v, sizeof(v));
 
-On Sat, 24 Nov 2018 23:16:33 -0200 (BRST), Carlos Santos wrote:
+So disable them.
 
-> Looks good, but isn't "package/" a bit superfluous, since Most of the
-> commits are for packages? It also goes against the tradition:
-> 
-> $ git log --oneline origin/master | grep -i '^.......... [^ /]*: bump' |wc -l
-> 7644
-> $ git log --oneline origin/master | grep -i '^.......... [^ ]*/[^ ]*: bump' |wc -l
-> 2296
+Fixes:
+ - http://autobuild.buildroot.org/results/7d7aa9723f02f9bc78dbf6248674be4d402199bf
 
-Yes, I agree the tradition has been without package/. I myself used to
-prefer without package/. However, it is not very consistent, as then
-when we have boot/uboot, is it about package/boot/uboot ? Or when we
-have core: <something>, is it about the package "core" ?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/msgpack/msgpack.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-While I was personally not adding package/, I saw others doing it, and
-ultimately found it more consistent.
-
-> BTW, I want the bike shed red.
-
-Red is not too bad :-)
-
-Thomas
+diff --git a/package/msgpack/msgpack.mk b/package/msgpack/msgpack.mk
+index 38df8f53af..abb6e2e214 100644
+--- a/package/msgpack/msgpack.mk
++++ b/package/msgpack/msgpack.mk
+@@ -9,7 +9,7 @@ MSGPACK_SITE = $(call github,msgpack,msgpack-c,cpp-$(MSGPACK_VERSION))
+ MSGPACK_LICENSE = BSL-1.0
+ MSGPACK_LICENSE_FILES = COPYING LICENSE_1_0.txt
+ MSGPACK_INSTALL_STAGING = YES
+-MSGPACK_CONF_OPTS = -DMSGPACK_BUILD_EXAMPLES=OFF
++MSGPACK_CONF_OPTS = -DMSGPACK_BUILD_EXAMPLES=OFF -DMSGPACK_BUILD_TESTS=OFF
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+ MSGPACK_CONF_OPTS += -DMSGPACK_ENABLE_SHARED=OFF
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.1
