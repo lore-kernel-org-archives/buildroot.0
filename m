@@ -1,25 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 23:45:19 +0100
-Subject: [Buildroot] [PATCH] libnss: security bump to version 3.39
-In-Reply-To: <20181112230241.8435-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 13 Nov 2018 00:02:41 +0100")
-References: <20181112230241.8435-1-peter@korsgaard.com>
-Message-ID: <8736ro22v4.fsf@dell.be.48ers.dk>
+Date: Sun, 25 Nov 2018 23:35:11 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] libnss: bump version to
+ 3.35
+Message-ID: <20181125224645.D039988517@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5dfd60c6150547210f45631e9fcbf680eef38b3d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > Fixes the following security issue:
- > CVE-2018-12384: NSS responded to an SSLv2-compatible ClientHello with a
- > ServerHello that had an all-zero random.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 0ccab9b0edaf6455b909f2f381790e9620f17354)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2018.02.x and 2018.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 6c8ce83784..775ef4868c 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_33_RTM/src/SHA256SUMS
+-sha256	98f0dabd36408e83dd3a11727336cc3cdfee4cbdd9aede2b2831eb2389c284e4  nss-3.33.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_35_RTM/src/SHA256SUMS
++sha256	f4127de09bede39f5fd0f789d33c3504c5d261e69ea03022d46b319b3e32f6fa  nss-3.35.tar.gz
+ # Locally calculated
+ sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 27d305cc34..2bef2bcc66 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.33
++LIBNSS_VERSION = 3.35
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
