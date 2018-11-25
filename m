@@ -1,134 +1,172 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 22:23:35 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] nginx: security bump to
- 1.15.6
-Message-ID: <20181125212316.C077E883B0@busybox.osuosl.org>
+Date: Sun, 25 Nov 2018 22:27:53 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] attr: Add a patch to fix
+ an unconditional infinite recursion
+Message-ID: <20181125212444.4DFB5883B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3de9f8d6295488c6daa3b02accdd1ffd15b6693c
+commit: https://git.buildroot.net/buildroot/commit/?id=e84570a4af6d65da4948039f82e59e437392725f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-Fixes the following security issues:
+The bump to 2.4.48 introduced a bug that, according to the author,
+only happen in certain cases on glibc. But under uclibc-ng, it happens
+every time.
 
-CVE-2018-16843: Excessive memory usage in HTTP/2
+The bug essentially cause any program calling any libattr.so function
+to enter an infinite recursion, because of a symbol conflict between
+uclibc-ng and libattr wrappers, that causes the libattr wrappers to
+call themselves.
 
-CVE-2018-16844: Excessive CPU usage in HTTP/2
+This infinite recursion does not consume the stack, so programs
+basically behave like they enter an infinite loop.
 
-CVE-2018-16845: Memory disclosure in the ngx_http_mp4_module
+It is easy to reproduce with qemu_arm_versatile_defconfig +
+BR2_PACKAGE_ATTR: "getfattr ." never returns and takes 100% CPU.
 
-Refreshed patch 0004 + 0007 as they no longer applied cleanly.
+Upstream fixed it, but the patch is not part of a release yet,
+so take the patch.
 
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit c2f5b3a3a866859528747edc191fb9c241343e88)
+(cherry picked from commit 99989d3b91ef6cadc0c8d1a73203178da9ac6af7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../nginx/0004-auto-lib-libxslt-conf-use-pkg-config.patch  | 14 ++++++++------
- .../nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch    | 12 +++++++-----
- package/nginx/nginx.hash                                   |  2 +-
- package/nginx/nginx.mk                                     |  2 +-
- 4 files changed, 17 insertions(+), 13 deletions(-)
+ package/attr/0002-Switch-back-to-syscall.patch | 126 +++++++++++++++++++++++++
+ 1 file changed, 126 insertions(+)
 
-diff --git a/package/nginx/0004-auto-lib-libxslt-conf-use-pkg-config.patch b/package/nginx/0004-auto-lib-libxslt-conf-use-pkg-config.patch
-index 103f90b305..09e708b73c 100644
---- a/package/nginx/0004-auto-lib-libxslt-conf-use-pkg-config.patch
-+++ b/package/nginx/0004-auto-lib-libxslt-conf-use-pkg-config.patch
-@@ -1,4 +1,4 @@
--From 211b9f19a3a62826fadef55d2f89d6f66fbf4aa6 Mon Sep 17 00:00:00 2001
-+From 7783d63c87f94797aa134786214b0a84c000be75 Mon Sep 17 00:00:00 2001
- From: Samuel Martin <s.martin49@gmail.com>
- Date: Thu, 29 May 2014 19:22:27 +0200
- Subject: [PATCH] auto/lib/libxslt/conf: use pkg-config
-@@ -7,12 +7,14 @@ Change to using pkg-config to find the path to libxslt and its
- dependencies.
- 
- Signed-off-by: Martin Bark <martin@barkynet.com>
-+[Peter: updated for 1.15.6]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- ---
-- auto/lib/libxslt/conf | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
-+ auto/lib/libxslt/conf | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
- 
- diff --git a/auto/lib/libxslt/conf b/auto/lib/libxslt/conf
--index 3a0f37b..3c2a60e 100644
-+index 3063ac7c..3209e364 100644
- --- a/auto/lib/libxslt/conf
- +++ b/auto/lib/libxslt/conf
- @@ -12,8 +12,9 @@
-@@ -26,7 +28,7 @@ index 3a0f37b..3c2a60e 100644
- +    ngx_feature_libs="$(${PKG_CONFIG:=pkg-config} --libs libxslt)"
-      ngx_feature_test="xmlParserCtxtPtr    ctxt = NULL;
-                        xsltStylesheetPtr   sheet = NULL;
--                       xmlDocPtr           doc;
-+                       xmlDocPtr           doc = NULL;
- -- 
--2.8.2
-+2.11.0
- 
-diff --git a/package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch b/package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch
-index 34e7981c8f..cea68035e1 100644
---- a/package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch
-+++ b/package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch
-@@ -1,4 +1,4 @@
--From fd9885fe5fef5826034547ca6be7299863f99769 Mon Sep 17 00:00:00 2001
-+From 0551f2e5eb4143be0aacc0185cdc4afc9ca80204 Mon Sep 17 00:00:00 2001
- From: Martin Bark <martin@barkynet.com>
- Date: Fri, 6 May 2016 14:48:49 +0100
- Subject: [PATCH] auto/lib/libgd/conf: use pkg-config
-@@ -7,12 +7,14 @@ Change to using pkg-config to find the path to libgd and its
- dependencies.
- 
- Signed-off-by: Martin Bark <martin@barkynet.com>
-+[Peter: updated for 1.15.6]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- ---
-  auto/lib/libgd/conf | 4 ++--
-  1 file changed, 2 insertions(+), 2 deletions(-)
- 
- diff --git a/auto/lib/libgd/conf b/auto/lib/libgd/conf
--index 6e4e91c..1c536a2 100644
-+index 67863976..1a4379a5 100644
- --- a/auto/lib/libgd/conf
- +++ b/auto/lib/libgd/conf
- @@ -7,8 +7,8 @@
-@@ -23,9 +25,9 @@ index 6e4e91c..1c536a2 100644
- -    ngx_feature_libs="-lgd"
- +    ngx_feature_path="$(${GDLIB_CONFIG:=gdlib-config} --includedir)"
- +    ngx_feature_libs="$(${GDLIB_CONFIG:=gdlib-config} --libs)"
--     ngx_feature_test="gdImagePtr img = gdImageCreateFromGifPtr(1, NULL);"
-+     ngx_feature_test="gdImagePtr img = gdImageCreateFromGifPtr(1, NULL);
-+                       (void) img"
-      . auto/feature
-- 
- -- 
--2.8.2
-+2.11.0
- 
-diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
-index 51284aefbe..c3e6b6a720 100644
---- a/package/nginx/nginx.hash
-+++ b/package/nginx/nginx.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	b0b58c9a3fd73aa8b89edf5cfadc6641a352e0e6d3071db1eb3215d72b7fb516	nginx-1.15.0.tar.gz
-+sha256	a3d8c67c2035808c7c0d475fffe263db8c353b11521aa7ade468b780ed826cc6	nginx-1.15.6.tar.gz
- # License files, locally calculated
- sha256	e18f05bcaad47528f8b21861d4a0fb9815ca1bbb4be946c51a51d36623758bcc	LICENSE
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 23cf2b46d5..5253174478 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NGINX_VERSION = 1.15.0
-+NGINX_VERSION = 1.15.6
- NGINX_SITE = http://nginx.org/download
- NGINX_LICENSE = BSD-2-Clause
- NGINX_LICENSE_FILES = LICENSE
+diff --git a/package/attr/0002-Switch-back-to-syscall.patch b/package/attr/0002-Switch-back-to-syscall.patch
+new file mode 100644
+index 0000000000..de879e23ab
+--- /dev/null
++++ b/package/attr/0002-Switch-back-to-syscall.patch
+@@ -0,0 +1,126 @@
++From 14adc898a36948267bfe5c63b399996879e94c98 Mon Sep 17 00:00:00 2001
++From: Andreas Gruenbacher <agruenba@redhat.com>
++Date: Fri, 17 Aug 2018 14:07:31 +0200
++Subject: Switch back to syscall()
++
++Switch back to syscall() for the *xattr system calls.  The current
++mechanism of forwarding those calls to glibc breaks libraries like
++libfakeroot (fakeroot) and libasan (the gcc address sanitizer; gcc
++-fsanitize=address).
++
++Those libraries provide wrappers for functions defined in other shared
++libraries, usually glibc, do their own processing, and forward calls to
++the original symbols looke dup via dlsym(RTLD_NEXT, "symbol_name").  In
++our case, dlsym returns the libattr_*xattr wrappers.  However, when our
++wrappers try calling glibc, they end up calling the libfakeroot /
++libasan wrappers instead because those override the original symbols =>
++recursion.
++
++The libattr_*xattr wrappers will only be used when symbols are looked up
++at runtime (dlopen / dlsym).  Programs linking against libattr will
++directly use the glibc provided symbols.  Therefore, the slightly worse
++performance of syscall() won't affect any of the "normal" users of
++libattr.
++
++[nicolas.cavallari: with uclibc-ng, the recursion always happen]
++Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
++---
++ libattr/syscalls.c | 26 ++++++++++++++------------
++ 1 file changed, 14 insertions(+), 12 deletions(-)
++
++diff --git a/libattr/syscalls.c b/libattr/syscalls.c
++index 3013aa0..721ad7f 100644
++--- a/libattr/syscalls.c
+++++ b/libattr/syscalls.c
++@@ -22,6 +22,8 @@
++ 
++ #include "config.h"
++ 
+++#include <unistd.h>
+++#include <sys/syscall.h>
++ #include <sys/xattr.h>
++ 
++ #ifdef HAVE_VISIBILITY_ATTRIBUTE
++@@ -31,67 +33,67 @@
++ int libattr_setxattr(const char *path, const char *name,
++ 		     void *value, size_t size, int flags)
++ {
++-	return setxattr(path, name, value, size, flags);
+++	return syscall(__NR_setxattr, path, name, value, size, flags);
++ }
++ 
++ int libattr_lsetxattr(const char *path, const char *name,
++ 		      void *value, size_t size, int flags)
++ {
++-	return lsetxattr(path, name, value, size, flags);
+++	return syscall(__NR_lsetxattr, path, name, value, size, flags);
++ }
++ 
++ int libattr_fsetxattr(int filedes, const char *name,
++ 		      void *value, size_t size, int flags)
++ {
++-	return fsetxattr(filedes, name, value, size, flags);
+++	return syscall(__NR_fsetxattr, filedes, name, value, size, flags);
++ }
++ 
++ ssize_t libattr_getxattr(const char *path, const char *name,
++ 			 void *value, size_t size)
++ {
++-	return getxattr(path, name, value, size);
+++	return syscall(__NR_getxattr, path, name, value, size);
++ }
++ 
++ ssize_t libattr_lgetxattr(const char *path, const char *name,
++ 			  void *value, size_t size)
++ {
++-	return lgetxattr(path, name, value, size);
+++	return syscall(__NR_lgetxattr, path, name, value, size);
++ }
++ 
++ ssize_t libattr_fgetxattr(int filedes, const char *name,
++ 			  void *value, size_t size)
++ {
++-	return fgetxattr(filedes, name, value, size);
+++	return syscall(__NR_fgetxattr, filedes, name, value, size);
++ }
++ 
++ ssize_t libattr_listxattr(const char *path, char *list, size_t size)
++ {
++-	return listxattr(path, list, size);
+++	return syscall(__NR_listxattr, path, list, size);
++ }
++ 
++ ssize_t libattr_llistxattr(const char *path, char *list, size_t size)
++ {
++-	return llistxattr(path, list, size);
+++	return syscall(__NR_llistxattr, path, list, size);
++ }
++ 
++ ssize_t libattr_flistxattr(int filedes, char *list, size_t size)
++ {
++-	return flistxattr(filedes, list, size);
+++	return syscall(__NR_flistxattr, filedes, list, size);
++ }
++ 
++ int libattr_removexattr(const char *path, const char *name)
++ {
++-	return removexattr(path, name);
+++	return syscall(__NR_removexattr, path, name);
++ }
++ 
++ int libattr_lremovexattr(const char *path, const char *name)
++ {
++-	return lremovexattr(path, name);
+++	return syscall(__NR_lremovexattr, path, name);
++ }
++ 
++ int libattr_fremovexattr(int filedes, const char *name)
++ {
++-	return fremovexattr(filedes, name);
+++	return syscall(__NR_fremovexattr, filedes, name);
++ }
++ 
++ #ifdef HAVE_VISIBILITY_ATTRIBUTE
++-- 
++cgit v1.0-41-gc330
++
