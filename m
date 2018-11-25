@@ -1,106 +1,91 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Nov 2018 23:34:06 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] libnspr: bump to version
- 4.20
-Message-ID: <20181125224645.C1D4088519@busybox.osuosl.org>
+Date: Sun, 25 Nov 2018 23:36:10 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] libnss: bump to version
+ 3.37
+Message-ID: <20181125224645.DE3AE88517@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32701537bb043488ea335280015c8431963187dd
+commit: https://git.buildroot.net/buildroot/commit/?id=9896f1163fbfa418cfad1f167fdf38997506372d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Support for riscv was added in this version
-
-Fixes:
- - http://autobuild.buildroot.org/results/a98db13ea105d627f2a4770969b31550926c2791
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit c9e3d5b6c578010ca8dfba0a43cc842519658d43)
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit f36d4be02c262b4706ed05e0303feb3fbac3b435)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnspr/0001-nios2.patch      | 8 +++++---
- package/libnspr/0002-microblaze.patch | 8 +++++---
- package/libnspr/libnspr.hash          | 4 ++--
- package/libnspr/libnspr.mk            | 2 +-
- 4 files changed, 13 insertions(+), 9 deletions(-)
+ .../0003-Build-Hacl_Poly1305_64_o_on_Aarch64.patch | 38 ----------------------
+ package/libnss/libnss.hash                         |  2 +-
+ package/libnss/libnss.mk                           |  2 +-
+ 3 files changed, 2 insertions(+), 40 deletions(-)
 
-diff --git a/package/libnspr/0001-nios2.patch b/package/libnspr/0001-nios2.patch
-index e10e7e9a66..c08fbb272b 100644
---- a/package/libnspr/0001-nios2.patch
-+++ b/package/libnspr/0001-nios2.patch
-@@ -2,6 +2,8 @@ Add Nios-II support
- 
- [Gustavo: update for nspr 4.10.9]
- Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-+[Fabrice: update for nspr 4.20]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- 
- Index: b/nspr/pr/include/md/_linux.cfg
- ===================================================================
-@@ -64,9 +66,9 @@ Index: b/nspr/pr/include/md/_linux.h
- --- a/nspr/pr/include/md/_linux.h
- +++ b/nspr/pr/include/md/_linux.h
- @@ -57,6 +57,8 @@
-- #define _PR_SI_ARCHITECTURE "m32r"
-- #elif defined(__or1k__)
-- #define _PR_SI_ARCHITECTURE "or1k"
-+ #define _PR_SI_ARCHITECTURE "riscv32"
-+ #elif defined(__riscv) && (__riscv_xlen == 64)
-+ #define _PR_SI_ARCHITECTURE "riscv64"
- +#elif defined(__nios2__)
- +#define _PR_SI_ARCHITECTURE "nios2"
-  #else
-diff --git a/package/libnspr/0002-microblaze.patch b/package/libnspr/0002-microblaze.patch
-index 7cf1f0dfac..46a4485277 100644
---- a/package/libnspr/0002-microblaze.patch
-+++ b/package/libnspr/0002-microblaze.patch
-@@ -2,6 +2,8 @@ Add Microblaze support
- 
- [Gustavo: update for nspr 4.10.9]
- Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-+[Fabrice: update for nspr 4.20]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- 
- Index: b/nspr/pr/include/md/_linux.cfg
- ===================================================================
-@@ -69,9 +71,9 @@ Index: b/nspr/pr/include/md/_linux.h
- --- a/nspr/pr/include/md/_linux.h
- +++ b/nspr/pr/include/md/_linux.h
- @@ -57,6 +57,8 @@
-- #define _PR_SI_ARCHITECTURE "m32r"
-- #elif defined(__or1k__)
-- #define _PR_SI_ARCHITECTURE "or1k"
-+ #define _PR_SI_ARCHITECTURE "riscv32"
-+ #elif defined(__riscv) && (__riscv_xlen == 64)
-+ #define _PR_SI_ARCHITECTURE "riscv64"
- +#elif defined(__microblaze__)
- +#define _PR_SI_ARCHITECTURE "microblaze"
-  #elif defined(__nios2__)
-diff --git a/package/libnspr/libnspr.hash b/package/libnspr/libnspr.hash
-index 3067afd720..33710b65a9 100644
---- a/package/libnspr/libnspr.hash
-+++ b/package/libnspr/libnspr.hash
+diff --git a/package/libnss/0003-Build-Hacl_Poly1305_64_o_on_Aarch64.patch b/package/libnss/0003-Build-Hacl_Poly1305_64_o_on_Aarch64.patch
+deleted file mode 100644
+index 94f1a65273..0000000000
+--- a/package/libnss/0003-Build-Hacl_Poly1305_64_o_on_Aarch64.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-# HG changeset patch
+-# User Daiki Ueno <dueno@redhat.com>
+-# Date 1516710574 -3600
+-# Node ID 1668fafc1db4f739d5d15fbc94283858f842deb5
+-# Parent  c3702e37a048e386f88e7c50a228d27669332725
+-Bug 1432455, Build Hacl_Poly1305_64.o on AArch64 even with make, r=fkiefer
+-
+-[Upstream: https://hg.mozilla.org/projects/nss/rev/1668fafc1db4
+- Peter: adjust paths for tarball]
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+-diff --git a/nss/lib/freebl/Makefile b/nss/lib/freebl/Makefile
+---- a/nss/lib/freebl/Makefile
+-+++ b/nss/lib/freebl/Makefile
+-@@ -522,17 +522,22 @@ ifndef NSS_DISABLE_CHACHAPOLY
+- 
+-         ifneq (1,$(CC_IS_GCC))
+-             EXTRA_SRCS += chacha20.c
+-             VERIFIED_SRCS += Hacl_Chacha20.c
+-         else
+-             EXTRA_SRCS += chacha20_vec.c
+-         endif
+-     else
+--        EXTRA_SRCS += poly1305.c
+-+        ifeq ($(CPU_ARCH),aarch64)
+-+            EXTRA_SRCS += Hacl_Poly1305_64.c
+-+        else
+-+            EXTRA_SRCS += poly1305.c
+-+        endif
+-+
+-         EXTRA_SRCS += chacha20.c
+-         VERIFIED_SRCS += Hacl_Chacha20.c
+-     endif # x86_64
+- endif # NSS_DISABLE_CHACHAPOLY
+- 
+- ifeq (,$(filter-out i386 x386 x86 x86_64 aarch64,$(CPU_ARCH)))
+-     # All intel architectures get the 64 bit version
+-     # With custom uint128 if necessary (faster than generic 32 bit version).
+-
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 775ef4868c..fa145c91f2 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
 @@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/nspr/releases/v4.19/src/SHA256SUMS
--sha256	2ed95917fa2277910d1d1cf36030607dccc0ba522bba08e2af13c113dcd8f729  nspr-4.19.tar.gz
-+# From https://ftp.mozilla.org/pub/nspr/releases/v4.20/src/SHA256SUMS
-+sha256	2c8964913da89ffbaf464d49ce44d79e8804e1794ef9a8c52a7bff7224d1556e  nspr-4.20.tar.gz
+ # From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_35_RTM/src/SHA256SUMS
+-sha256	f4127de09bede39f5fd0f789d33c3504c5d261e69ea03022d46b319b3e32f6fa  nss-3.35.tar.gz
++sha256	5821969e85d241833e96cb82bd4211ddea6d87003f2cccce25e0eab4aefa6268  nss-3.37.tar.gz
  # Locally calculated
- sha256	fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  nspr/LICENSE
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index 14381bb5e8..c87947e5fb 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
+ sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 2bef2bcc66..95ebe337d0 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNSPR_VERSION = 4.19
-+LIBNSPR_VERSION = 4.20
- LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
- LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src
- LIBNSPR_SUBDIR = nspr
+-LIBNSS_VERSION = 3.35
++LIBNSS_VERSION = 3.37
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
