@@ -1,74 +1,89 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 26 Nov 2018 22:26:08 +0100
-Subject: [Buildroot] [PATCH 1/1] civetweb: bump version to 1.11
-In-Reply-To: <20180925232917.24591-1-jfaith@impinj.com>
-References: <20180925232917.24591-1-jfaith@impinj.com>
-Message-ID: <20181126222608.1c378e62@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 26 Nov 2018 22:50:27 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] Update for 2018.08.3
+Message-ID: <20181126214722.6508D88953@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0b4ccaef6cc159cb8dfcee482060315c4e8a40b4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-Thanks a lot for your contribution, and sorry for the very slow
-feedback. See below.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES  | 46 ++++++++++++++++++++++++++++++++++++++++++++++
+ Makefile |  4 ++--
+ 2 files changed, 48 insertions(+), 2 deletions(-)
 
-On Tue, 25 Sep 2018 23:29:42 +0000, John Faith wrote:
-> v1.11 now has library and header install targets for use by apps
-> that serve pages.  The config changes allow enabling the civetweb
-> webserver app binary and/or libs and headers.
-> 
-> If the civetweb lib is enabled, the static lib will always be built
-> and if BR2_STATIC_LIBS is not on, also build the shared object.
-> The C++ interface option is automatic based on available C++ support.
-> If both the library and server options are disabled, don't do a
-> target install.
-> 
-> The civetweb Makefile sets -fPIC in CFLAGS when linking shared
-> objects, but not when compiling the objects used in the library
-> resulting in a link failure, so add -fPIC to COPT which is added
-> to CFLAGS in its Makefile.
-> 
-> The typo patch has already been incorporated upstream, so it was
-> removed.
-> 
-> Signed-off-by: John Faith <jfaith@impinj.com>
-> ---
->  ...ua-fix-a-typo-changing-LFS_DIR-to-LFS_DIR.patch | 27 -----------------
->  package/civetweb/Config.in                         | 25 +++++++++++++++-
->  package/civetweb/civetweb.hash                     |  2 +-
->  package/civetweb/civetweb.mk                       | 34 +++++++++++++++++++---
->  4 files changed, 55 insertions(+), 33 deletions(-)
->  delete mode 100644 package/civetweb/0001-Lua-fix-a-typo-changing-LFS_DIR-to-LFS_DIR.patch
-
-I have applied to next, after doing the following changes:
-
-    [Thomas:
-     - keep using "config", a "menuconfig" for just three sub-options is
-       not relevant
-     - move the BR2_PACKAGE_CIVETWEB_LIB option near the existing
-       BR2_PACKAGE_CIVETWEB_SERVER option, since both allow to select what
-       should be built/installed
-     - remove BR2_PACKAGE_CIVETWEB_SHARED_LIB, the .mk file will use
-       BR2_STATIC_LIBS/BR2_SHARED_LIBS/BR2_STATIC_SHARED_LIBS to know what
-       to do
-     - select BR2_PACKAGE_CIVETWEB_SERVER if BR2_PACKAGE_CIVETWEB_LIB is
-       not enabled to ensure at least the server *or* the library is
-       selected
-     - introduce CIVETWEB_BUILD_TARGETS in the .mk file to properly use
-       the appropriate make targets to build the server, static library
-       and/or shared library
-     - cleanup the use of CIVETWEB_INSTALL_TARGETS, and use it for both
-       target and staging installation
-     - factorize common installation options into a CIVETWEB_INSTALL_OPTS
-       variable that is used for both the target and staging installation]
-
-Thanks again!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/CHANGES b/CHANGES
+index 303ff8f7f4..46b2b43732 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,49 @@
++2018.08.3, Released November 26th, 2018
++
++	Important / security related fixes.
++
++	fs: Drop intermediate tarball from the filesystem handling to
++	fix an issue with xattrs handling related to fakeroot. Ensure
++	tarball target includes xattrs.
++
++	download: Fix confusion in git submodule handling if dl/ is a
++	symlink.
++
++	toolchain: Only allow enabling stack protection on
++	architectures with control flow integrity (CFI) support. Only
++	allow FORTIFY_SOURCE support on gcc >= 6.
++
++	genrandconfig: Fix missing newline in BR2_WGET handling,
++	causing the following line to be ignored. This would affect
++	BR2_ENABLE_DEBUG, BR2_INIT_BUSYBOX, BR2_INIT_SYSTEMD,
++	BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV, BR2_STATIC_LIBS or
++	BR2_PACKAGE_PYTHON_PY_ONLY depending on the randomization.
++
++	show-build-order: Also include the dependencies of
++	rootfs-common.
++
++	Defconfigs: Fixes for Armadeus APF27, imx6sabre, Olimex A20
++	olinuxino lime legacy, Orangepi zero plus 2.
++
++	graph-depends: Fix for package names starting with a non-alpha
++	character.
++
++	Updated/fixed packages: attr, audit, bind, brotli, busybox,
++	dtc, easydbus, elfutils, flare-engine, flatcc, gauche, gcc,
++	giflib, gpsd, lcdproc, libcurl, libiscsi, libkcapi, libnfs,
++	libnspr, libnss, libsemanage, liburiparser, lighttpd,
++	lua-curl, mariadb, mmc, mosquitto, mysql, ncmpc, neardal,
++	netplug, network-manager, nfs-utils, nginx, openocd, openswan,
++	p11-kit, postgresql, prosody, qemu, qt, rpm, ruby, samba4,
++	squid, supertuxkart, systemd, tar, trace-cmd, traceroute,
++	twolame, uclibc, usb_modeswitch, vtun, webkitgtk, weston,
++	xdriver_xf86-video-geode, xlib_libfontenc, xserver_xorg-server
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#11086: download/git submodule breaks on symlinked dl folder
++	#11481: Docs: Is external.desc required?
++
+ 2018.08.2, Released October 25th, 2018
+ 
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index 3179ee759b..ef0a8ab5ed 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2018.08.2
++export BR2_VERSION := 2018.08.3
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1540470000
++BR2_VERSION_EPOCH = 1543269000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
