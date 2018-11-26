@@ -1,45 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 28 Nov 2018 22:05:50 +0100
-Subject: [Buildroot] [git commit] package/msgpack: bump to version 3.1.1
-Message-ID: <20181202071600.21A7A803E1@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 26 Nov 2018 19:11:19 +0100
+Subject: [Buildroot] [git commit] Makefile: define TARGET_DIR_WARNING_FILE
+ relative to TARGET_DIR
+Message-ID: <20181202071559.9BBCF815BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5fe3edaf497e3bc370fd959c564fd788dc6a44f6
+commit: https://git.buildroot.net/buildroot/commit/?id=beef2b4ab8be2c79a9e6267f72461358ab936734
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add hash for license files
+In commit 7e9870ce32d6329d9e3d602247fbe1709a2275a4 ("core: introduce
+intermediate BASE_TARGET_DIR variable"), the definition of
+TARGET_DIR_WARNING_FILE was changed to use $(BASE_TARGET_DIR) instead
+of $(TARGET_DIR).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+However, this change is incompatible with per-package directories, and
+is in fact not needed.
+
+With per-package directories, using $(BASE_TARGET_DIR) means that
+TARGET_DIR_WARNING_FILE is
+output/target/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM. Due to this, when
+skeleton-init-common or skeleton-custom attempt to install it, it
+fails, because it should be installed to their package per-package
+target directory, and not the global output/target directory that doesn't
+exist yet. The failure looks like this:
+
+/usr/bin/install -m 0644 support/misc/target-dir-warning.txt /home/thomas/projets/buildroot/output/target/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
+/usr/bin/install: cannot create regular file '/home/thomas/projets/buildroot/output/target/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM': No such file or directory
+make[1]: *** [package/pkg-generic.mk:336: /home/thomas/projets/buildroot/output/build/skeleton-init-common/.stamp_target_installed] Error 1
+
+TARGET_DIR_WARNING_FILE is used in three places:
+
+ - In skeleton-custom.mk and skeleton-init-common.mk, where as
+   explained above, using $(TARGET_DIR) fixes the use of
+   $(TARGET_DIR_WARNING_FILE) in the context of per-package target
+   directories.
+
+ - In fs/common.mk, where it is used as argument to $(notdir ...) to
+   retrieve just the name of the warning file. So in this case, we
+   really don't care about the path of the file, just its name.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/msgpack/msgpack.hash | 4 +++-
- package/msgpack/msgpack.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/msgpack/msgpack.hash b/package/msgpack/msgpack.hash
-index f1033ade42..df4e54b181 100644
---- a/package/msgpack/msgpack.hash
-+++ b/package/msgpack/msgpack.hash
-@@ -1,2 +1,4 @@
- # Locally computed:
--sha256  9c87f80fc651b900772deaef0ab154b63160c74d292529b5be6d06d6485d4640  msgpack-2.1.5.tar.gz
-+sha256  bda49f996a73d2c6080ff0523e7b535917cd28c8a79c3a5da54fc29332d61d1e  msgpack-3.1.1.tar.gz
-+sha256  664550b43996452a5a2c7471bb0ff77185a58c69ccafa60f983dc4c162e1ee22  COPYING
-+sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
-diff --git a/package/msgpack/msgpack.mk b/package/msgpack/msgpack.mk
-index 38df8f53af..2b02a4d7f7 100644
---- a/package/msgpack/msgpack.mk
-+++ b/package/msgpack/msgpack.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Makefile b/Makefile
+index 24c803872d..23032988a5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -468,7 +468,7 @@ BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(PATH)"
  
--MSGPACK_VERSION = 2.1.5
-+MSGPACK_VERSION = 3.1.1
- MSGPACK_SITE = $(call github,msgpack,msgpack-c,cpp-$(MSGPACK_VERSION))
- MSGPACK_LICENSE = BSL-1.0
- MSGPACK_LICENSE_FILES = COPYING LICENSE_1_0.txt
+ # Location of a file giving a big fat warning that output/target
+ # should not be used as the root filesystem.
+-TARGET_DIR_WARNING_FILE = $(BASE_TARGET_DIR)/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
++TARGET_DIR_WARNING_FILE = $(TARGET_DIR)/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
+ 
+ ifeq ($(BR2_CCACHE),y)
+ CCACHE = $(HOST_DIR)/bin/ccache
