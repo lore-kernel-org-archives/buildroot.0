@@ -1,33 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 17:19:35 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pkg-generic.mk: Fix
- show-build-order stdout pollution
-In-Reply-To: <20181115154542.29277-1-serj.kalichev@gmail.com> (Serj Kalichev's
- message of "Thu, 15 Nov 2018 18:45:42 +0300")
-References: <20181115154542.29277-1-serj.kalichev@gmail.com>
-Message-ID: <87woozx148.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Nov 2018 17:21:08 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] package/netplug: fix
+ quoting of ${NETWORKING} in init script
+Message-ID: <20181126161759.779C788710@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Serj" == Serj Kalichev <serj.kalichev@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1b0dfb76037c303e4b6474d1f82f0674d5a329ca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
- > The commands like  "make show-build-order" or "make <package>-show-build-order" show
- > the build order and then print "make[1]: Nothing to be done for 'show-build-order'" to
- > stdout. It pollutes output. Technically this message is true but it's not true for user
- > because he gets an information.
+Since 4adaa581b27dc27298eb7cc421ee8f530f88e18e, S29netplug looks for
+/etc/default/network instead of /etc/sysconfig/network.  When this
+file exists but does not define $NETWORKING, the script fails on line
+29 with something like:
 
- > The <package>-show-build-order targets use $(info) for package name printing.
- > The make utility doesn't consider the internal directive as a command so it
- > think that it's "Nothing to be done". The patch adds the empty command to
- > <package>-show-build-order to inform make utility that taget makes some real
- > actions.
+/etc/init.d/S29netplug: 29: [: =: unexpected operator
 
- > Signed-off-by: Serj Kalichev <serj.kalichev@gmail.com>
+Fix quoting so this error no longer happens.
 
-Committed to 2018.02.x and 2018.08.x, thanks.
+Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+[Thomas: keep double quotes around "no", keep curly braces when
+referencing the variable.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
--- 
-Bye, Peter Korsgaard
+(cherry picked from commit 5682ba9363d262a67567ed9b0531a414e6aae1bb)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/netplug/S29netplug | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/netplug/S29netplug b/package/netplug/S29netplug
+index 66459061b3..cef0e6a945 100755
+--- a/package/netplug/S29netplug
++++ b/package/netplug/S29netplug
+@@ -26,7 +26,7 @@ if [ -f /etc/default/network ]; then
+ 	. /etc/default/network
+ 
+ 	# Check that networking is up.
+-	[ ${NETWORKING} = "no" ] && exit 0
++	[ "${NETWORKING}" = "no" ] && exit 0
+ elif [ ! -f /etc/network/interfaces ]; then
+ 	# No network support
+ 	exit 0
