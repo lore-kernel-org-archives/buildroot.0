@@ -1,46 +1,27 @@
-From: Mark Corbin <mark.corbin@embecosm.com>
-Date: Mon, 26 Nov 2018 11:12:26 +0000
-Subject: [Buildroot] Status of gdb/gdbserver support for RISC-V 64 ?
-In-Reply-To: <20181124224432.2f3721f5@windsurf>
-References: <20181124224432.2f3721f5@windsurf>
-Message-ID: <b0c0ae1c-d1d6-b980-a345-16dbedefc158@embecosm.com>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Mon, 26 Nov 2018 12:14:08 +0100
+Subject: [Buildroot] [PATCH 11/15] erlang-p1-stun: Bump to version 1.0.25
+In-Reply-To: <20181126110807.31431-12-johan.oudinet@gmail.com>
+References: <20181126110807.31431-1-johan.oudinet@gmail.com>
+ <20181126110807.31431-12-johan.oudinet@gmail.com>
+Message-ID: <CAJtjsKazq1tWKb7oOAczgG4JDaybiCGS192rkEoNK0fr=UWFBg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas
-
-On 24/11/2018 21:44, Thomas Petazzoni wrote:
-> Hello Mark,
+On Mon, Nov 26, 2018 at 12:09 PM Johan Oudinet <johan.oudinet@gmail.com> wrote:
 >
-> I'm curious to know what is the status of RISC-V 64 support in
-> gdb/gdbserver ?
->
-> Just tried building gdbserver with gdb 8.1.1, and it says:
->
->   Error: target not supported by gdbserver.
->
-> Is the support on its way upstream ? We probably need to add a few more
-> dependencies in package/gdb/Config.in.host to prevent people from
-> trying to build gdb versions that don't have RISC-V 64 support.
+> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+> ---
+>  ...-remove-dependencies-from-rebar-config.patch# | 16 ++++++++++++++++
 
-RISC-V gdb support is upstream already, but gdbserver for RISC-V doesn't
-exist yet.
+Sorry this file is not supposed to be there. I'll fix that in a V2.
 
-I guess that for RISC-V we should prevent gdbserver
-(BR2_PACKAGE_GDB_SERVER) and cross gdb (BR2_PACKAGE_HOST_GDB) from being
-built and select 'full debugger' (BR2_PACKAGE_GDB_DEBUGGER) for native
-RISC-V gdb builds.
-
-I'll take a look at the configuration options.
-
-Regards
-
-Mark
+>  package/erlang-p1-stun/erlang-p1-stun.hash       |  2 +-
+>  package/erlang-p1-stun/erlang-p1-stun.mk         |  2 +-
+>  3 files changed, 18 insertions(+), 2 deletions(-)
 
 -- 
-Mark Corbin
-Embecosm Ltd.
-https://www.embecosm.com
+Johan
