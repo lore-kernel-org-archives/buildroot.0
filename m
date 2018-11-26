@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 12:48:13 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] utils/genrandconfig: add
+Date: Mon, 26 Nov 2018 12:48:27 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] utils/genrandconfig: add
  missing new line when creating the configuration
-Message-ID: <20181126114508.6B5887F908@busybox.osuosl.org>
+Message-ID: <20181126114516.CFDEA803C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd7fa21864132bef9d8f62a8b0d45451d5868b6c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=42059badee264705accfee636d6e5501228bdbac
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 When adding the custom BR2_WGET value in the configuration,
 genrandconfig forgets to add a newline. Due to this, the next option
@@ -34,10 +34,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 8a6bdb6a0c..fa2c0f7f21 100755
+index 27f84ea555..1d6ff990f5 100755
 --- a/utils/genrandconfig
 +++ b/utils/genrandconfig
-@@ -348,7 +348,7 @@ def gen_config(args):
+@@ -351,7 +351,7 @@ def gen_config(args):
          configlines += minimalf.readlines()
  
      # Allow hosts with old certificates to download over https
