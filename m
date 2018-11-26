@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 19:01:23 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] package/samba4: fix
+Date: Mon, 26 Nov 2018 19:01:39 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/samba4: fix
  install of systemd files
-Message-ID: <20181126175815.258A988865@busybox.osuosl.org>
+Message-ID: <20181126175829.699E788867@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cca4624e76063d8de44e308db9aefe77b8d63574
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e718e4241fe59ddf65038c833e2a60b275bbdeea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Since version 4.8.0 and
 https://github.com/samba-team/samba/commit/080d590de1ff9f8ebc55aeffaea8d41991466549,
