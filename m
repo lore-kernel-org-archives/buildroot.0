@@ -1,27 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 12:47:57 +0100
-Subject: [Buildroot] [PATCH 1/1] easydbus: fix build without C++
-In-Reply-To: <20181117130054.21752-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 17 Nov 2018 14:00:54 +0100")
-References: <20181117130054.21752-1-fontaine.fabrice@gmail.com>
-Message-ID: <878t1gys9e.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Nov 2018 12:48:13 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] utils/genrandconfig: add
+ missing new line when creating the configuration
+Message-ID: <20181126114508.6B5887F908@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=cd7fa21864132bef9d8f62a8b0d45451d5868b6c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > Specify that easydbus is a C project file otherwise build will fail if
- > no C++ compiler is found by cmake
+When adding the custom BR2_WGET value in the configuration,
+genrandconfig forgets to add a newline. Due to this, the next option
+that is added is printed on the same line as BR2_WGET="", which causes
+it to be ignored.
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/486c3cd98124e7415dee2fd1463bd5e0fcc9ba91
+Due to this, in all builds, the line right after BR2_WGET was
+ignored. It could have been BR2_ENABLE_DEBUG, BR2_INIT_BUSYBOX,
+BR2_INIT_SYSTEMD, BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV,
+BR2_STATIC_LIBS or BR2_PACKAGE_PYTHON_PY_ONLY depending on the
+randomization.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fix that by adding a proper newline at the end of the BR2_WGET option.
 
-Committed to 2018.02.x and 2018.08.x, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 3eb49f59d6804c452e784759d9b3869215a8098f)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ utils/genrandconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 8a6bdb6a0c..fa2c0f7f21 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -348,7 +348,7 @@ def gen_config(args):
+         configlines += minimalf.readlines()
+ 
+     # Allow hosts with old certificates to download over https
+-    configlines.append("BR2_WGET=\"wget --passive-ftp -nd -t 3 --no-check-certificate\"")
++    configlines.append("BR2_WGET=\"wget --passive-ftp -nd -t 3 --no-check-certificate\"\n")
+ 
+     # Amend the configuration with a few things.
+     if randint(0, 20) == 0:
