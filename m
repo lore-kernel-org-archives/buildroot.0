@@ -1,234 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 18:55:31 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] package/weston: fix build
- with newer freerdp
-Message-ID: <20181126175243.D21E888857@busybox.osuosl.org>
+Date: Mon, 26 Nov 2018 18:56:07 +0100
+Subject: [Buildroot] [PATCH] package/weston: fix build with newer freerdp
+In-Reply-To: <20181124104107.29147-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Sat, 24 Nov 2018 11:41:07 +0100")
+References: <20181124104107.29147-1-yann.morin.1998@free.fr>
+Message-ID: <87va4ju3ig.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac29d47d93bf71390677de4ec914145cfff75201
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Commit a63aad66d3 (package/freerdp: bump version to 2.0.0-rc2)
-introduced a FreeRDP that has a different API, and this breaks
-weston.
+ > Commit a63aad66d3 (package/freerdp: bump version to 2.0.0-rc2)
+ > introduced a FreeRDP that has a different API, and this breaks
+ > weston.
 
-Backport a patch from upstream weston to fix the issue.
+ > Backport a patch from upstream weston to fix the issue.
 
-Fixes:
-    http://autobuild.buildroot.org/results/c0b4f7c4cee2c11715ecc2ef0cfb42f80dbf81b0/
+ > Fixes:
+ >     http://autobuild.buildroot.org/results/c0b4f7c4cee2c11715ecc2ef0cfb42f80dbf81b0/
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c3540f1ccb2730346a1078d43dbc6c9935482f6f)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...tor-fix-compilation-against-FreeRDP-2.0.0.patch | 181 +++++++++++++++++++++
- package/weston/weston.mk                           |   3 +
- 2 files changed, 184 insertions(+)
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-diff --git a/package/weston/0002-rdp-compositor-fix-compilation-against-FreeRDP-2.0.0.patch b/package/weston/0002-rdp-compositor-fix-compilation-against-FreeRDP-2.0.0.patch
-new file mode 100644
-index 0000000000..1d02e0c0dc
---- /dev/null
-+++ b/package/weston/0002-rdp-compositor-fix-compilation-against-FreeRDP-2.0.0.patch
-@@ -0,0 +1,181 @@
-+From 029583e56e6eaad4139e39b4cf908158ab8cc91a Mon Sep 17 00:00:00 2001
-+From: David Fort <rdp.effort@gmail.com>
-+Date: Sun, 27 May 2018 23:56:43 +0200
-+Subject: [PATCH] rdp-compositor: fix compilation against FreeRDP 2.0.0 rc2
-+
-+The SURFACE_BITS_COMMAND struct has changed and some members have been moved in the
-+bmp field.
-+
-+Reviewed-by: Pekka Paalanen <pekka.paalanen@collabora.co.uk>
-+Tested-by: Pekka Paalanen <pekka.paalanen@collabora.co.uk>
-+[yann.morin.1998 at free.fr: backported from upstream]
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+---
-+ configure.ac               |  9 +++++-
-+ libweston/compositor-rdp.c | 69 +++++++++++++++++++++++++++++-----------------
-+ 2 files changed, 52 insertions(+), 26 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index da3f7342..1dce05fa 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -264,10 +264,17 @@ if test x$enable_rdp_compositor = xyes; then
-+     [],
-+     [PKG_CHECK_MODULES(RDP_COMPOSITOR, [freerdp >= 1.1.0],[])]
-+   )
-+-
-+   SAVED_CPPFLAGS="$CPPFLAGS"
-+   CPPFLAGS="$CPPFLAGS $RDP_COMPOSITOR_CFLAGS"
-++
-+   AC_CHECK_HEADERS([freerdp/version.h])
-++  AC_CHECK_MEMBER([SURFACE_BITS_COMMAND.bmp],
-++	[AC_DEFINE([HAVE_SURFACE_BITS_BMP], [1], [SURFACE_BITS_CMD has bmp field])],
-++	[],
-++	[[#include <freerdp/update.h>]]
-++  )
-++
-++
-+   CPPFLAGS="$SAVED_CPPFLAGS"
-+ fi
-+ 
-+diff --git a/libweston/compositor-rdp.c b/libweston/compositor-rdp.c
-+index fd0651af..134e7298 100644
-+--- a/libweston/compositor-rdp.c
-++++ b/libweston/compositor-rdp.c
-+@@ -66,6 +66,22 @@
-+ #define FREERDP_CB_RETURN(V) return TRUE
-+ #endif
-+ 
-++#ifdef HAVE_SURFACE_BITS_BMP
-++#define SURFACE_BPP(cmd) cmd->bmp.bpp
-++#define SURFACE_CODECID(cmd) cmd->bmp.codecID
-++#define SURFACE_WIDTH(cmd) cmd->bmp.width
-++#define SURFACE_HEIGHT(cmd) cmd->bmp.height
-++#define SURFACE_BITMAP_DATA(cmd) cmd->bmp.bitmapData
-++#define SURFACE_BITMAP_DATA_LEN(cmd) cmd->bmp.bitmapDataLength
-++#else
-++#define SURFACE_BPP(cmd) cmd->bpp
-++#define SURFACE_CODECID(cmd) cmd->codecID
-++#define SURFACE_WIDTH(cmd) cmd->width
-++#define SURFACE_HEIGHT(cmd) cmd->height
-++#define SURFACE_BITMAP_DATA(cmd) cmd->bitmapData
-++#define SURFACE_BITMAP_DATA_LEN(cmd) cmd->bitmapDataLength
-++#endif
-++
-+ #include <freerdp/freerdp.h>
-+ #include <freerdp/listener.h>
-+ #include <freerdp/update.h>
-+@@ -200,10 +216,10 @@ rdp_peer_refresh_rfx(pixman_region32_t *damage, pixman_image_t *image, freerdp_p
-+ 	cmd->destTop = damage->extents.y1;
-+ 	cmd->destRight = damage->extents.x2;
-+ 	cmd->destBottom = damage->extents.y2;
-+-	cmd->bpp = 32;
-+-	cmd->codecID = peer->settings->RemoteFxCodecId;
-+-	cmd->width = width;
-+-	cmd->height = height;
-++	SURFACE_BPP(cmd) = 32;
-++	SURFACE_CODECID(cmd) = peer->settings->RemoteFxCodecId;
-++	SURFACE_WIDTH(cmd) = width;
-++	SURFACE_HEIGHT(cmd) = height;
-+ 
-+ 	ptr = pixman_image_get_data(image) + damage->extents.x1 +
-+ 				damage->extents.y1 * (pixman_image_get_stride(image) / sizeof(uint32_t));
-+@@ -226,8 +242,8 @@ rdp_peer_refresh_rfx(pixman_region32_t *damage, pixman_image_t *image, freerdp_p
-+ 			pixman_image_get_stride(image)
-+ 	);
-+ 
-+-	cmd->bitmapDataLength = Stream_GetPosition(context->encode_stream);
-+-	cmd->bitmapData = Stream_Buffer(context->encode_stream);
-++	SURFACE_BITMAP_DATA_LEN(cmd) = Stream_GetPosition(context->encode_stream);
-++	SURFACE_BITMAP_DATA(cmd) = Stream_Buffer(context->encode_stream);
-+ 
-+ 	update->SurfaceBits(update->context, cmd);
-+ }
-+@@ -253,23 +269,26 @@ rdp_peer_refresh_nsc(pixman_region32_t *damage, pixman_image_t *image, freerdp_p
-+ #else
-+ 	memset(cmd, 0, sizeof(*cmd));
-+ #endif
-++
-+ 	cmd->destLeft = damage->extents.x1;
-+ 	cmd->destTop = damage->extents.y1;
-+ 	cmd->destRight = damage->extents.x2;
-+ 	cmd->destBottom = damage->extents.y2;
-+-	cmd->bpp = 32;
-+-	cmd->codecID = peer->settings->NSCodecId;
-+-	cmd->width = width;
-+-	cmd->height = height;
-++	SURFACE_BPP(cmd) = 32;
-++	SURFACE_CODECID(cmd) = peer->settings->NSCodecId;
-++	SURFACE_WIDTH(cmd) = width;
-++	SURFACE_HEIGHT(cmd) = height;
-+ 
-+ 	ptr = pixman_image_get_data(image) + damage->extents.x1 +
-+ 				damage->extents.y1 * (pixman_image_get_stride(image) / sizeof(uint32_t));
-+ 
-+ 	nsc_compose_message(context->nsc_context, context->encode_stream, (BYTE *)ptr,
-+-			cmd->width,	cmd->height,
-++			width, height,
-+ 			pixman_image_get_stride(image));
-+-	cmd->bitmapDataLength = Stream_GetPosition(context->encode_stream);
-+-	cmd->bitmapData = Stream_Buffer(context->encode_stream);
-++
-++	SURFACE_BITMAP_DATA_LEN(cmd) = Stream_GetPosition(context->encode_stream);
-++	SURFACE_BITMAP_DATA(cmd) = Stream_Buffer(context->encode_stream);
-++
-+ 	update->SurfaceBits(update->context, cmd);
-+ }
-+ 
-+@@ -306,16 +325,16 @@ rdp_peer_refresh_raw(pixman_region32_t *region, pixman_image_t *image, freerdp_p
-+ 	update->SurfaceFrameMarker(peer->context, marker);
-+ 
-+ 	memset(cmd, 0, sizeof(*cmd));
-+-	cmd->bpp = 32;
-+-	cmd->codecID = 0;
-++	SURFACE_BPP(cmd) = 32;
-++	SURFACE_CODECID(cmd) = 0;
-+ 
-+ 	for (i = 0; i < nrects; i++, rect++) {
-+ 		/*weston_log("rect(%d,%d, %d,%d)\n", rect->x1, rect->y1, rect->x2, rect->y2);*/
-+ 		cmd->destLeft = rect->x1;
-+ 		cmd->destRight = rect->x2;
-+-		cmd->width = rect->x2 - rect->x1;
-++		SURFACE_WIDTH(cmd) = rect->x2 - rect->x1;
-+ 
-+-		heightIncrement = peer->settings->MultifragMaxRequestSize / (16 + cmd->width * 4);
-++		heightIncrement = peer->settings->MultifragMaxRequestSize / (16 + SURFACE_WIDTH(cmd) * 4);
-+ 		remainingHeight = rect->y2 - rect->y1;
-+ 		top = rect->y1;
-+ 
-+@@ -323,21 +342,21 @@ rdp_peer_refresh_raw(pixman_region32_t *region, pixman_image_t *image, freerdp_p
-+ 		subrect.x2 = rect->x2;
-+ 
-+ 		while (remainingHeight) {
-+-			   cmd->height = (remainingHeight > heightIncrement) ? heightIncrement : remainingHeight;
-++			   SURFACE_HEIGHT(cmd) = (remainingHeight > heightIncrement) ? heightIncrement : remainingHeight;
-+ 			   cmd->destTop = top;
-+-			   cmd->destBottom = top + cmd->height;
-+-			   cmd->bitmapDataLength = cmd->width * cmd->height * 4;
-+-			   cmd->bitmapData = (BYTE *)realloc(cmd->bitmapData, cmd->bitmapDataLength);
-++			   cmd->destBottom = top + SURFACE_HEIGHT(cmd);
-++			   SURFACE_BITMAP_DATA_LEN(cmd) = SURFACE_WIDTH(cmd) * SURFACE_HEIGHT(cmd) * 4;
-++			   SURFACE_BITMAP_DATA(cmd) = (BYTE *)realloc(SURFACE_BITMAP_DATA(cmd), SURFACE_BITMAP_DATA_LEN(cmd));
-+ 
-+ 			   subrect.y1 = top;
-+-			   subrect.y2 = top + cmd->height;
-+-			   pixman_image_flipped_subrect(&subrect, image, cmd->bitmapData);
-++			   subrect.y2 = top + SURFACE_HEIGHT(cmd);
-++			   pixman_image_flipped_subrect(&subrect, image, SURFACE_BITMAP_DATA(cmd));
-+ 
-+ 			   /*weston_log("*  sending (%d,%d, %d,%d)\n", subrect.x1, subrect.y1, subrect.x2, subrect.y2); */
-+ 			   update->SurfaceBits(peer->context, cmd);
-+ 
-+-			   remainingHeight -= cmd->height;
-+-			   top += cmd->height;
-++			   remainingHeight -= SURFACE_HEIGHT(cmd);
-++			   top += SURFACE_HEIGHT(cmd);
-+ 		}
-+ 	}
-+ 
-+-- 
-+2.14.1
-+
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 57d6df4b2d..71211fe5ea 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -10,6 +10,9 @@ WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
- WESTON_LICENSE = MIT
- WESTON_LICENSE_FILES = COPYING
- 
-+# 0002-rdp-compositor-fix-compilation-against-FreeRDP-2.0.0.patch
-+WESTON_AUTORECONF = YES
-+
- WESTON_DEPENDENCIES = host-pkgconf wayland wayland-protocols \
- 	libxkbcommon pixman libpng jpeg udev cairo libinput libdrm \
- 	$(if $(BR2_PACKAGE_WEBP),webp)
+Committed to 2018.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
