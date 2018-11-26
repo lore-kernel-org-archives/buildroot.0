@@ -1,195 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 17:13:34 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] flatcc: bump to version
- 0.5.2
-Message-ID: <20181126161037.9C628886CD@busybox.osuosl.org>
+Date: Mon, 26 Nov 2018 17:13:57 +0100
+Subject: [Buildroot] [PATCH 1/1] flatcc: fix debug build
+In-Reply-To: <20181118165848.2111-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 18 Nov 2018 17:58:48 +0100")
+References: <20181118165848.2111-1-fontaine.fabrice@gmail.com>
+Message-ID: <87mupvyfy2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=37c06ca68f6fc196617aee8cd6dc0a032050ed3a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Drop upstream patch.
+ > flatcc is named flatcc_d if BR2_ENABLE_DEBUG is set because of the
+ > following line in CMakeLists.txt: set(CMAKE_DEBUG_POSTFIX "_d")
 
-Add license file hash.
+ > So update FLATCC_TARGET_REMOVE_FLATCC_COMPILER hook to replace flatcc
+ > by flatcc*
 
-Cc: Joel Carlson <JoelsonCarl@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 64b8f4e6bb867c5f38f32ef89f363e580c570b1a)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...cpy-gcc-8-warning-add-flatbuffers_type_ha.patch | 138 ---------------------
- package/flatcc/flatcc.hash                         |   3 +-
- package/flatcc/flatcc.mk                           |   2 +-
- 3 files changed, 3 insertions(+), 140 deletions(-)
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/a47f49cd2fdd809257bd7e83dca620f2e6aac85b
 
-diff --git a/package/flatcc/0001-Remove-strncpy-gcc-8-warning-add-flatbuffers_type_ha.patch b/package/flatcc/0001-Remove-strncpy-gcc-8-warning-add-flatbuffers_type_ha.patch
-deleted file mode 100644
-index 28c0208891..0000000000
---- a/package/flatcc/0001-Remove-strncpy-gcc-8-warning-add-flatbuffers_type_ha.patch
-+++ /dev/null
-@@ -1,138 +0,0 @@
--From c0df0b6fca4fa6bca114bba4df74f1b4e53124c0 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Mikkel=20Fahn=C3=B8e=20J=C3=B8rgensen?= <mikkel@dvide.com>
--Date: Sat, 9 Jun 2018 11:10:24 +0200
--Subject: [PATCH] Remove strncpy gcc-8 warning, add
-- flatbuffers_type_hash_from_string
--
--[baruch: drop CHANGELOG hunk]
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: commit c0df0b6fca4
--
-- include/flatcc/flatcc_identifier.h            | 21 +++++++++++++++++++
-- .../reflection/flatbuffers_common_reader.h    |  4 +---
-- src/compiler/codegen_c_reader.c               |  4 +---
-- src/runtime/json_printer.c                    |  7 +++++--
-- src/runtime/verifier.c                        |  5 ++---
-- 6 files changed, 32 insertions(+), 11 deletions(-)
--
--diff --git a/include/flatcc/flatcc_identifier.h b/include/flatcc/flatcc_identifier.h
--index cd918cb42b48..31af3074f4db 100644
----- a/include/flatcc/flatcc_identifier.h
--+++ b/include/flatcc/flatcc_identifier.h
--@@ -77,6 +77,27 @@ static inline flatbuffers_thash_t flatbuffers_type_hash_from_identifier(const fl
--         (uint32_t)p[0] + (((uint32_t)p[1]) << 8) + (((uint32_t)p[2]) << 16) + (((uint32_t)p[3]) << 24) : 0;
-- }
-- 
--+/*
--+ * Convert a null terminated string identifier like "MONS" or "X" into a
--+ * native type hash identifier, usually for comparison. This will not
--+ * work with type hash strings because they can contain null bytes.
--+ */
--+static inline flatbuffers_thash_t flatbuffers_type_hash_from_string(const char *identifier)
--+{
--+    flatbuffers_thash_t h = 0;
--+    const uint8_t *p = (const uint8_t *)identifier;
--+
--+    if (!p[0]) return h;
--+    h += p[0];
--+    if (!p[1]) return h;
--+    h += p[1] << 8;
--+    if (!p[2]) return h;
--+    h += p[2] << 16;
--+    /* No need to test for termination here. */
--+    h += p[3] << 24;
--+    return h;
--+}
--+
-- /*
--  * Computes the little endian wire format of the type hash. It can be
--  * used as a file identifer argument to various flatcc buffer calls.
--diff --git a/include/flatcc/reflection/flatbuffers_common_reader.h b/include/flatcc/reflection/flatbuffers_common_reader.h
--index dee44ad653f1..9604052685f6 100644
----- a/include/flatcc/reflection/flatbuffers_common_reader.h
--+++ b/include/flatcc/reflection/flatbuffers_common_reader.h
--@@ -464,9 +464,7 @@ static inline T N ## _ ## NK (N ## _struct_t t__tmp) { return t__tmp ? &(t__tmp-
-- /* If fid is null, the function returns true without testing as buffer is not expected to have any id. */
-- static inline int flatbuffers_has_identifier(const void *buffer, const char *fid)
-- { flatbuffers_thash_t id, id2 = 0; if (fid == 0) { return 1; };
---  strncpy((char *)&id2, fid, sizeof(id2));
---  /* Identifier strings are always considered little endian. */
---  id2 = __flatbuffers_thash_cast_from_le(id2);
--+  id2 = flatbuffers_type_hash_from_string(fid);
--   id = __flatbuffers_thash_read_from_pe(((flatbuffers_uoffset_t *)buffer) + 1);
--   return id2 == 0 || id == id2; }
-- static inline int flatbuffers_has_type_hash(const void *buffer, flatbuffers_thash_t thash)
--diff --git a/src/compiler/codegen_c_reader.c b/src/compiler/codegen_c_reader.c
--index e3df74754344..559731050a15 100644
----- a/src/compiler/codegen_c_reader.c
--+++ b/src/compiler/codegen_c_reader.c
--@@ -748,9 +748,7 @@ static void gen_helpers(fb_output_t *out)
--             "/* If fid is null, the function returns true without testing as buffer is not expected to have any id. */\n"
--             "static inline int %shas_identifier(const void *buffer, const char *fid)\n"
--             "{ %sthash_t id, id2 = 0; if (fid == 0) { return 1; };\n"
---            "  strncpy((char *)&id2, fid, sizeof(id2));\n"
---            "  /* Identifier strings are always considered little endian. */\n"
---            "  id2 = __%sthash_cast_from_le(id2);\n"
--+            "  id2 = %stype_hash_from_string(fid);\n"
--             "  id = __%sthash_read_from_pe(((%suoffset_t *)buffer) + 1);\n"
--             "  return id2 == 0 || id == id2; }\n"
--             "static inline int %shas_type_hash(const void *buffer, %sthash_t thash)\n"
--diff --git a/src/runtime/json_printer.c b/src/runtime/json_printer.c
--index 8fe248331f43..bc86d21f8f9d 100644
----- a/src/runtime/json_printer.c
--+++ b/src/runtime/json_printer.c
--@@ -20,6 +20,7 @@
-- 
-- #include "flatcc/flatcc_flatbuffers.h"
-- #include "flatcc/flatcc_json_printer.h"
--+#include "flatcc/flatcc_identifier.h"
-- 
-- #include "flatcc/portable/pprintint.h"
-- #include "flatcc/portable/pprintfp.h"
--@@ -1008,6 +1009,9 @@ void flatcc_json_printer_struct_field(flatcc_json_printer_t *ctx,
-- /*
--  * Make sure the buffer identifier is valid before assuming the rest of
--  * the buffer is sane.
--+ * NOTE: this won't work with type hashes because these can contain
--+ * nulls in the fid string. In this case use null as fid to disable
--+ * check.
--  */
-- static int accept_header(flatcc_json_printer_t * ctx,
--         const void *buf, size_t bufsiz, const char *fid)
--@@ -1020,8 +1024,7 @@ static int accept_header(flatcc_json_printer_t * ctx,
--         return 0;
--     }
--     if (fid != 0) {
---        strncpy((char *)&id2, fid, FLATBUFFERS_IDENTIFIER_SIZE);
---        id2 = __flatbuffers_thash_cast_from_le(id2);
--+        id2 = flatbuffers_type_hash_from_string(fid);
--         id = __flatbuffers_thash_read_from_pe((uint8_t *)buf + offset_size);
--         if (!(id2 == 0 || id == id2)) {
--             RAISE_ERROR(bad_input);
--diff --git a/src/runtime/verifier.c b/src/runtime/verifier.c
--index 68dbc1b6fb0b..3b7c68cca4d7 100644
----- a/src/runtime/verifier.c
--+++ b/src/runtime/verifier.c
--@@ -10,6 +10,7 @@
-- #include "flatcc/flatcc_rtconfig.h"
-- #include "flatcc/flatcc_flatbuffers.h"
-- #include "flatcc/flatcc_verifier.h"
--+#include "flatcc/flatcc_identifier.h"
-- 
-- /* Customization for testing. */
-- #if FLATCC_DEBUG_VERIFY
--@@ -110,9 +111,7 @@ static inline uoffset_t read_uoffset(const void *p, uoffset_t base)
-- 
-- static inline thash_t read_thash_identifier(const char *identifier)
-- {
---    flatbuffers_thash_t id = 0;
---    strncpy((char *)&id, identifier, sizeof(id));
---    return __flatbuffers_thash_cast_from_le(id);
--+    return flatbuffers_type_hash_from_string(identifier);
-- }
-- 
-- static inline thash_t read_thash(const void *p, uoffset_t base)
---- 
--2.17.1
--
-diff --git a/package/flatcc/flatcc.hash b/package/flatcc/flatcc.hash
-index 357d8b707d..b517250472 100644
---- a/package/flatcc/flatcc.hash
-+++ b/package/flatcc/flatcc.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	8c4560ca32e3c555716d9363bed469e2c60e0f443ec32bc08e7abfe681e25ca9  flatcc-v0.5.1.tar.gz
-+sha256	02dac93d3daf8d0a290aa8711a9b8a53f047436ec5331adb1972389061ec6615  flatcc-v0.5.2.tar.gz
-+sha256	c8f0d9c1f92c658d87ebd854ee7447a3d3912d2c3a5c78c117787be5d5da8af3  LICENSE
-diff --git a/package/flatcc/flatcc.mk b/package/flatcc/flatcc.mk
-index 55356445a2..9f961a37b1 100644
---- a/package/flatcc/flatcc.mk
-+++ b/package/flatcc/flatcc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FLATCC_VERSION = v0.5.1
-+FLATCC_VERSION = v0.5.2
- FLATCC_SITE = $(call github,dvidelabs,flatcc,$(FLATCC_VERSION))
- FLATCC_LICENSE = Apache-2.0
- FLATCC_LICENSE_FILES = LICENSE
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2018.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
