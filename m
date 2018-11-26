@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 09:30:32 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] squid: security bump to
+Date: Mon, 26 Nov 2018 09:31:38 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] squid: security bump to
  version 3.5.28
-Message-ID: <20181126082806.3F716885A1@busybox.osuosl.org>
+Message-ID: <20181126082833.CAA8C8104B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=23f0f12b8164afd7383b731178382d08fd0f4d6a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8405ef9d0dcbb313a84db260dada69a0b854bba5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 Fixes SQUID-2018:3 / CVE-2018-1172: Crash in ESI Response processing
 
@@ -120,7 +120,7 @@ index 8787cb25ef..3c0a2734e5 100644
  # Locally calculated
  sha256 58f5d05257af1fb964fde20e134d660fac9afa86b6fd8c70d63ead63068378fa COPYING
 diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 8ade55ee37..a921c634bd 100644
+index 2d21ad8858..fd09e916a8 100644
 --- a/package/squid/squid.mk
 +++ b/package/squid/squid.mk
 @@ -5,7 +5,7 @@
