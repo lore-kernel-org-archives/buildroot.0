@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 17:56:13 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] configs/imx6sabre: Create
+Date: Mon, 26 Nov 2018 17:57:09 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] configs/imx6sabre: Create
  distinct pre-processed mkimage config files
-Message-ID: <20181126165335.68DDB887CA@busybox.osuosl.org>
+Message-ID: <20181126165357.B331D887CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f3d5c056e518bb5c9f2927822dc064457c978cb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=cc0bc0f913b68492f2b6d52694d5cafc9328a163
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Commit 0c4bccf9e882 ("configs/imxsabre: Fix U-Boot parallel build issue")
 tried to fix the parallel build issue, but the real fix was developed
