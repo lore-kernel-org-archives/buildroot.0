@@ -1,10 +1,9 @@
 From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Mon, 26 Nov 2018 12:07:57 +0100
-Subject: [Buildroot] [PATCH 05/15] erlang-p1-stringprep: Bump to version
- 1.0.14
+Date: Mon, 26 Nov 2018 12:08:02 +0100
+Subject: [Buildroot] [PATCH 10/15] erlang-p1-oauth2: Bump to version 0.6.3
 In-Reply-To: <20181126110807.31431-1-johan.oudinet@gmail.com>
 References: <20181126110807.31431-1-johan.oudinet@gmail.com>
-Message-ID: <20181126110807.31431-6-johan.oudinet@gmail.com>
+Message-ID: <20181126110807.31431-11-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- package/erlang-p1-stringprep/erlang-p1-stringprep.hash | 2 +-
- package/erlang-p1-stringprep/erlang-p1-stringprep.mk   | 2 +-
+ package/erlang-p1-oauth2/erlang-p1-oauth2.hash | 2 +-
+ package/erlang-p1-oauth2/erlang-p1-oauth2.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/erlang-p1-stringprep/erlang-p1-stringprep.hash b/package/erlang-p1-stringprep/erlang-p1-stringprep.hash
-index 769e2180d6..5200d661a8 100644
---- a/package/erlang-p1-stringprep/erlang-p1-stringprep.hash
-+++ b/package/erlang-p1-stringprep/erlang-p1-stringprep.hash
+diff --git a/package/erlang-p1-oauth2/erlang-p1-oauth2.hash b/package/erlang-p1-oauth2/erlang-p1-oauth2.hash
+index 29fae12636..58756c6fd7 100644
+--- a/package/erlang-p1-oauth2/erlang-p1-oauth2.hash
++++ b/package/erlang-p1-oauth2/erlang-p1-oauth2.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256 baef9e6bd59e00c9d2600e8db87078c19d76cbf66d5068efeaf1df740ee306ce erlang-p1-stringprep-1.0.10.tar.gz
-+sha256 32245561f84b03b9024c8768ad2ac8d67f285a032a7f36ff35a74c77fc701f96 erlang-p1-stringprep-1.0.14.tar.gz
-diff --git a/package/erlang-p1-stringprep/erlang-p1-stringprep.mk b/package/erlang-p1-stringprep/erlang-p1-stringprep.mk
-index f104a2ce87..a05752508c 100644
---- a/package/erlang-p1-stringprep/erlang-p1-stringprep.mk
-+++ b/package/erlang-p1-stringprep/erlang-p1-stringprep.mk
+-sha256 aea823ccc49b20f7e27f1893c7edf231339f56b16ba21ce78a60f735b6211718 erlang-p1-oauth2-0.6.2.tar.gz
++sha256 d7d954376ae7c131a0884c7c80b0b9e8270b6f574182df59ce4f2fbbae322854 erlang-p1-oauth2-0.6.3.tar.gz
+diff --git a/package/erlang-p1-oauth2/erlang-p1-oauth2.mk b/package/erlang-p1-oauth2/erlang-p1-oauth2.mk
+index 5c27393ae2..444bc8971b 100644
+--- a/package/erlang-p1-oauth2/erlang-p1-oauth2.mk
++++ b/package/erlang-p1-oauth2/erlang-p1-oauth2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_P1_STRINGPREP_VERSION = 1.0.10
-+ERLANG_P1_STRINGPREP_VERSION = 1.0.14
- ERLANG_P1_STRINGPREP_SITE = $(call github,processone,stringprep,$(ERLANG_P1_STRINGPREP_VERSION))
- ERLANG_P1_STRINGPREP_LICENSE = TCL (tools/*.tcl), Apache-2.0 (rest)
- ERLANG_P1_STRINGPREP_LICENSE_FILES = LICENSE.ALL LICENSE.TCL LICENSE.txt
+-ERLANG_P1_OAUTH2_VERSION = 0.6.2
++ERLANG_P1_OAUTH2_VERSION = 0.6.3
+ ERLANG_P1_OAUTH2_SITE = $(call github,processone,p1_oauth2,$(ERLANG_P1_OAUTH2_VERSION))
+ ERLANG_P1_OAUTH2_LICENSE = MIT
+ ERLANG_P1_OAUTH2_LICENSE_FILES = LICENSE
 -- 
 2.17.1
