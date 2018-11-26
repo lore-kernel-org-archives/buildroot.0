@@ -1,57 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 17:10:11 +0100
-Subject: [Buildroot] [PATCH-2018.02.x] prosody: security bump to version
- 0.9.14
-Message-ID: <20181126161011.31770-1-peter@korsgaard.com>
+Date: Mon, 26 Nov 2018 12:49:18 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] fs/common.mk: Fix
+ show-build-order
+Message-ID: <20181126160750.EBF8B886BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This fixes a cross-host authentication vulnerability, CVE-2018-10847.
-The issue affects Prosody instances that have multiple virtual hosts
-(including anonymous authenticated hosts):
-https://blog.prosody.im/prosody-0-10-2-security-release
+commit: https://git.buildroot.net/buildroot/commit/?id=517c2250ecd64c41d3d50202d055874e5d97ed17
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-A full security advisory is available at
-https://prosody.im/security/advisory_20180531
+The command "make show-build-order" doesn't show dependencies of rootfs-common target.
 
-Compute hashes locally as they are no more available on
-https://prosody.im/downloads/source/{MD5,SHA1,SHA256,SHA512}SUMS
+This patch adds $(ROOTFS_COMMON_DEPENDENCIES) to PACKAGES variable.
 
+Signed-off-by: Serj Kalichev <serj.kalichev@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 305e4487e5c18ed89bf2aa106b2068f9dce686fb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/prosody/prosody.hash | 9 ++++-----
- package/prosody/prosody.mk   | 2 +-
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ fs/common.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/prosody/prosody.hash b/package/prosody/prosody.hash
-index 38942ea7ff..a8648491e3 100644
---- a/package/prosody/prosody.hash
-+++ b/package/prosody/prosody.hash
-@@ -1,5 +1,4 @@
--# Hashes from: https://prosody.im/downloads/source/{MD5,SHA1,SHA256,SHA512}SUMS
--md5    d743adea6cfbaacc3a24cc0c3928bb1b  prosody-0.9.12.tar.gz
--sha1   1ee224263a5b3d67960e12edbbe6b2f16b95d147  prosody-0.9.12.tar.gz
--sha256 1a59a322b71928a21985522aa00d0eab3552208d7bf9ecb318542a1b2fee3e8d  prosody-0.9.12.tar.gz
--sha512 e87b5f3b3e327722cec9d8d0470684e2ec2788a1c5ae623c4f505a00572ef21f65afe84cd5b7de47d6a65fe8872506fe34e5e8886e20979ff84710669857ca76  prosody-0.9.12.tar.gz
-+# Locally calculated
-+sha256 27d1388acd79eaa453f2b194bd23c25121fe0a704d0dd940457caf1874ea1123  prosody-0.9.14.tar.gz
-+
-+
-diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
-index d19653503d..ab50cc88dc 100644
---- a/package/prosody/prosody.mk
-+++ b/package/prosody/prosody.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/fs/common.mk b/fs/common.mk
+index 54979d7b07..9c79d6b426 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -147,7 +147,7 @@ rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1)
  
--PROSODY_VERSION = 0.9.12
-+PROSODY_VERSION = 0.9.14
- PROSODY_SITE = https://prosody.im/downloads/source
- PROSODY_LICENSE = MIT
- PROSODY_LICENSE_FILES = COPYING
--- 
-2.11.0
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
+ TARGETS_ROOTFS += rootfs-$(1)
+-PACKAGES += $$(filter-out rootfs-%,$$(ROOTFS_$(2)_DEPENDENCIES))
++PACKAGES += $$(filter-out rootfs-%,$$(ROOTFS_$(2)_DEPENDENCIES) $$(ROOTFS_COMMON_DEPENDENCIES))
+ endif
+ 
+ # Check for legacy POST_TARGETS rules
