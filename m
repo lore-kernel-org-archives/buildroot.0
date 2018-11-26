@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 17:19:02 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/pkg-generic.mk:
+Date: Mon, 26 Nov 2018 17:19:12 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] package/pkg-generic.mk:
  fix show-build-order stdout pollution
-Message-ID: <20181126161553.6808188709@busybox.osuosl.org>
+Message-ID: <20181126161600.2A9F48870E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a039dd082dd40aecfbfd3562727508748ceab68d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=af1027fa524249b34d46e09dfba4c0363d3e98ab
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 The commands like "make show-build-order" or "make
 <package>-show-build-order" show the build order and then print
@@ -36,11 +36,11 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index a689dde4d2..d25f0f9afe 100644
+index 91b61c6de0..f89b9ff4c7 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -736,6 +736,7 @@ $(1)-show-rdepends:
- 			@echo $$($(2)_RDEPENDENCIES)
+@@ -797,6 +797,7 @@ $(1)-show-recursive-rdepends:
+ 			$$(TOPDIR)/support/scripts/graph-depends -p $(1) --reverse -f -q
  
  $(1)-show-build-order: $$(patsubst %,%-show-build-order,$$($(2)_FINAL_ALL_DEPENDENCIES))
 +	@:
