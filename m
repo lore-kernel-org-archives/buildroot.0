@@ -1,24 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 12:49:56 +0100
-Subject: [Buildroot] [PATCH 1/1] fs/common.mk: Fix show-build-order
-In-Reply-To: <20181115152541.27596-1-serj.kalichev@gmail.com> (Serj Kalichev's
- message of "Thu, 15 Nov 2018 18:25:41 +0300")
-References: <20181115152541.27596-1-serj.kalichev@gmail.com>
-Message-ID: <87zhtwxdln.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Nov 2018 12:51:26 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] mosquitto: fix build on
+ uClibc
+Message-ID: <20181126114828.4BBAC88671@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Serj" == Serj Kalichev <serj.kalichev@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=387a72cc169c664936b32fa4e3397224170cd525
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > The command "make show-build-order" doesn't show dependencies of rootfs-common target.
- > This patch adds $(ROOTFS_COMMON_DEPENDENCIES) to PACKAGES variable.
+Fixes:
+http://autobuild.buildroot.net/results/c42/c425eb496cc5422ff1e2e51e59d4baf377bcbeed/
 
- > Signed-off-by: Serj Kalichev <serj.kalichev@gmail.com>
+The memory tracking feature of mosquitto (which is enabled by default on
+systems defining __GLIBC__) uses malloc_usable_size() which was only added
+to uClibc-ng in 1.0.29.
 
-Committed to 2018.02.x and 2018.08.x, thanks.
+2018.02.x still uses 1.0.28, so disable this feature when building on
+uClibc.
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mosquitto/mosquitto.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index fcce0535cb..d01811e5aa 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -17,6 +17,13 @@ MOSQUITTO_MAKE_OPTS = \
+ 	WITH_WRAP=no \
+ 	WITH_DOCS=no
+ 
++# uses malloc_usable_size which was only added in uClibc-ng 1.0.29
++ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
++MOSQUITTO_MAKE_OPTS += WITH_MEMORY_TRACKING=no
++else
++MOSQUITTO_MAKE_OPTS += WITH_MEMORY_TRACKING=yes
++endif
++
+ # adns uses getaddrinfo_a
+ ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
+ MOSQUITTO_MAKE_OPTS += WITH_ADNS=yes
