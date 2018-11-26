@@ -1,42 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 12:44:02 +0100
-Subject: [Buildroot] [PATCH] libsemanage: define installation location
- of semanage.conf for host
-In-Reply-To: <20181109215730.30795-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Fri, 9 Nov 2018 22:57:30 +0100")
-References: <20181109215730.30795-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87h8g4ysfx.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Nov 2018 12:45:43 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/openocd: add
+ missing host-pkgconf dependency
+Message-ID: <20181126114234.3655C88650@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a57968c88082252d2c3915d9e9c2f9351b5b5ba5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > When /etc/selinux/semanage.conf does not exist, libsemanage tries to
- > overwrite it. For the target package, it works fine because $(DESTDIR)
- > is taken into account.
+The configure.ac script uses PKG_CHECK_MODULES(), and we autoreconf
+the package, so host-pkgconf should be listed in the dependencies.
 
- > However, for the host package, $(DESTDIR) is empty, and the location
- > used for /etc/selinux/semanage.conf is not affected by $(PREFIX). This
- > causes host-libsemanage to try to install /etc/selinux/semanage.conf,
- > which obviously fails with:
+This issue is seen either with per-package folders, or by doing a
+clean build with just "make openocd":
 
- >   test -f /etc/selinux/semanage.conf || install -m 644 -D semanage.conf /etc/selinux/semanage.conf
- >   install: cannot create directory '/etc/selinux': Permission denied
+>>> openocd 0.10.0 Configuring
+>>> openocd 0.10.0 Autoreconfiguring
+[...]
+configure.ac:12: error: possibly undefined macro: AC_MSG_WARN
+      If this token and others are legitimate, please use m4_pattern_allow.
+      See the Autoconf documentation.
+configure.ac:201: error: possibly undefined macro: AC_DEFINE
+configure.ac:582: error: possibly undefined macro: AC_MSG_NOTICE
 
- > To fix this, this commit passes DEFAULT_SEMANAGE_CONF_LOCATION in the
- > make options when building/installing host-libsemanage, providing a
- > path to semanage.conf that Buildroot can write to.
+Even if the message seems unrelated, it's really the lack of pkg.m4
+from host-pkgconf that causes the issue.
 
- > Fixes:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 915c136c5c9abeb683b59fad4a0e05a25c1a1cc2)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/openocd/openocd.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
- >   http://autobuild.buildroot.net/results/cd27e3c66274622d0c3dd5a601a36efb1bc45011/
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2018.02.x and 2018.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
+index 548d8b81a0..ca13d99366 100644
+--- a/package/openocd/openocd.mk
++++ b/package/openocd/openocd.mk
+@@ -31,6 +31,7 @@ OPENOCD_CONF_OPTS = \
+ # the dependencies they need.
+ 
+ OPENOCD_DEPENDENCIES = \
++	host-pkgconf \
+ 	$(if $(BR2_PACKAGE_LIBFTDI1),libftdi1) \
+ 	$(if $(BR2_PACKAGE_LIBUSB),libusb) \
+ 	$(if $(BR2_PACKAGE_LIBUSB_COMPAT),libusb-compat) \
