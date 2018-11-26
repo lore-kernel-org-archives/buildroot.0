@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 12:42:04 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] libsemanage: define
+Date: Mon, 26 Nov 2018 12:41:58 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] libsemanage: define
  installation location of semanage.conf for host
-Message-ID: <20181126113853.763DA88649@busybox.osuosl.org>
+Message-ID: <20181126113857.EEE838864E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=28dd4f924e01dbe8a92a2af983fa012572f0c554
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1d54e2138125057d57b9d58079a64696858fefe4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 When /etc/selinux/semanage.conf does not exist, libsemanage tries to
 overwrite it. For the target package, it works fine because $(DESTDIR)
