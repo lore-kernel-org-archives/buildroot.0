@@ -1,111 +1,70 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 26 Nov 2018 20:46:47 +0100
-Subject: [Buildroot] [PATCH 2/2] dante: fix --without-pam
-In-Reply-To: <20181126182248.24817-2-fontaine.fabrice@gmail.com>
-References: <20181126182248.24817-1-fontaine.fabrice@gmail.com>
- <20181126182248.24817-2-fontaine.fabrice@gmail.com>
-Message-ID: <20181126194647.GK28830@scaer>
+Date: Mon, 26 Nov 2018 20:50:48 +0100
+Subject: [Buildroot] [PATCH v3] package/libtool: Reduce target package
+ to libltdl only
+In-Reply-To: <20181126193746.32026-1-alexander.sverdlin@gmail.com>
+References: <20181126193746.32026-1-alexander.sverdlin@gmail.com>
+Message-ID: <20181126195048.GL28830@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Alexander, All,
 
-On 2018-11-26 19:22 +0100, Fabrice Fontaine spake thusly:
-> Don't call AC_CHECK_HEADERS(security/pam_appl.h) and
-> AC_SEARCH_LIBS(pam_start, pam) if pam is disabled through --without-pam
-> otherwise cross-compilation could fail if a pam library is found on host
+On 2018-11-26 20:37 +0100, Alexander Sverdlin spake thusly:
+> This will save 1700K on target filesystem (as tested on ARM, i686).
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/e37e61bae1d81a7956e2843be70fea84b0bbb64b
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 
-That build failure occured on Xogium's autobuilder. When I asked, they
-tested my autoreconf patch and it was enough to not tirgger the libpam
-issue anymore.
-
-Now, maybe it still makes sense to have that patch, but it would be
-better if that was upstreamed first...
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  .../dante/0003-sharedopt.m4-fix-without-pam.patch  | 42 ++++++++++++++++++++++
->  package/dante/dante.mk                             |  2 +-
->  2 files changed, 43 insertions(+), 1 deletion(-)
->  create mode 100644 package/dante/0003-sharedopt.m4-fix-without-pam.patch
+> Changelog:
+> v3:
+> - removed redundant empty HOST_LIBTOOL_CONF_OPTS
+> - dual HOST_LIBTOOL_LICENSE from Yann&Arnout
+> v2:
+> - rework target libtool instead of new package/libltdl
+>  package/libtool/libtool.mk | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/dante/0003-sharedopt.m4-fix-without-pam.patch b/package/dante/0003-sharedopt.m4-fix-without-pam.patch
-> new file mode 100644
-> index 0000000000..75ef07c134
-> --- /dev/null
-> +++ b/package/dante/0003-sharedopt.m4-fix-without-pam.patch
-> @@ -0,0 +1,42 @@
-> +From 0cb78bcb81664a6507b37252ae28818bd1b7de23 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Sun, 25 Nov 2018 19:07:39 +0100
-> +Subject: [PATCH] sharedopt.m4: fix --without-pam
+> diff --git a/package/libtool/libtool.mk b/package/libtool/libtool.mk
+> index bf97ee12b5..52597283f0 100644
+> --- a/package/libtool/libtool.mk
+> +++ b/package/libtool/libtool.mk
+> @@ -7,12 +7,21 @@
+>  LIBTOOL_VERSION = 2.4.6
+>  LIBTOOL_SOURCE = libtool-$(LIBTOOL_VERSION).tar.xz
+>  LIBTOOL_SITE = $(BR2_GNU_MIRROR)/libtool
 > +
-> +Don't call AC_CHECK_HEADERS(security/pam_appl.h) and
-> +AC_SEARCH_LIBS(pam_start, pam) if pam is disabled through --without-pam
-> +otherwise cross-compilation could fail if a pam library is found on host
+> +LIBTOOL_SUBDIR = libltdl
+> +HOST_LIBTOOL_SUBDIR = .
 > +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/e37e61bae1d81a7956e2843be70fea84b0bbb64b
+>  LIBTOOL_INSTALL_STAGING = YES
+> -LIBTOOL_CONF_ENV = HELP2MAN=true
 > +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + sharedopt.m4 | 4 ++--
-> + 1 file changed, 2 insertions(+), 2 deletions(-)
+> +LIBTOOL_CONF_OPTS = --enable-ltdl-install
 > +
-> +diff --git a/sharedopt.m4 b/sharedopt.m4
-> +index c0492a6..e8053d0 100644
-> +--- a/sharedopt.m4
-> ++++ b/sharedopt.m4
-> +@@ -115,8 +115,6 @@ int deny_severity;
-> + fi
-> + 
-> + unset NOPAM
-> +-AC_CHECK_HEADERS(security/pam_appl.h)
-> +-AC_SEARCH_LIBS(pam_start, pam)
-> + AC_MSG_CHECKING([for pam])
-> + AC_ARG_WITH(pam,
-> + [  --without-pam           disable pam support @<:@default=detect@:>@],
-> +@@ -128,6 +126,8 @@ if test x"$NOPAM" != x; then
-> +     AC_MSG_RESULT([disabled])
-> + else
-> +     #look for PAM header and lib
-> ++    AC_CHECK_HEADERS(security/pam_appl.h)
-> ++    AC_SEARCH_LIBS(pam_start, pam)
-> +     if test x"${ac_cv_header_security_pam_appl_h}" = xno; then
-> + 	NOPAM="Disabled, security/pam_appl.h missing"
-> + 	AC_MSG_RESULT([no, usable security/pam_appl.h not found])
-> +-- 
-> +2.17.1
+>  LIBTOOL_DEPENDENCIES = host-m4
+>  HOST_LIBTOOL_DEPENDENCIES = host-m4
+> -LIBTOOL_LICENSE = GPL-2.0+
+> -LIBTOOL_LICENSE_FILES = COPYING
 > +
-> diff --git a/package/dante/dante.mk b/package/dante/dante.mk
-> index ff42e7432b..2d448cfc0a 100644
-> --- a/package/dante/dante.mk
-> +++ b/package/dante/dante.mk
-> @@ -9,7 +9,7 @@ DANTE_SITE = http://www.inet.no/dante/files
->  DANTE_LICENSE = BSD-3-Clause
->  DANTE_LICENSE_FILES = LICENSE
+> +LIBTOOL_LICENSE = LGPL-2.1+
+> +LIBTOOL_LICENSE_FILES = $(LIBTOOL_SUBDIR)/COPYING.LIB
+> +HOST_LIBTOOL_LICENSE = GPL-2.0+ (libtool), LGPL-2.1+ (libltdl)
+> +HOST_LIBTOOL_LICENSE_FILES = COPYING $(LIBTOOL_SUBDIR)/COPYING.LIB
 >  
-> -# We're patching compiler.m4
-> +# We're patching compiler.m4 and sharedopt.m4
->  DANTE_AUTORECONF = YES
->  
->  DANTE_CONF_OPTS += --disable-client --disable-preload --without-pam
+>  HOST_LIBTOOL_CONF_ENV = MAKEINFO=true
+>  HOST_LIBTOOL_LIBTOOL_PATCH = NO
 > -- 
-> 2.14.1
+> 2.19.1
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
