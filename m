@@ -1,48 +1,33 @@
-From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Mon, 26 Nov 2018 08:13:29 +0100
-Subject: [Buildroot] [PATCH 1/1] package/qemu: allow enabling virtual
- filesystem
-In-Reply-To: <20181124145435.04b963a4@windsurf>
-References: <1542900100-13157-1-git-send-email-etienne.carriere@linaro.org>
- <20181124145435.04b963a4@windsurf>
-Message-ID: <CAN5uoS9LF2keQeAk8_udu+dN4Zhyi48usBYFjfX4J_yLnh=kOA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 26 Nov 2018 08:49:32 +0100
+Subject: [Buildroot] [PATCH 1/2] dante: disable pam
+In-Reply-To: <20181122174914.20300-1-fontaine.fabrice@gmail.com>
+References: <20181122174914.20300-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181126084932.356ce473@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 24 Nov 2018 at 14:54, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Thu, 22 Nov 2018 16:21:40 +0100, Etienne Carriere wrote:
->
-> > +config BR2_PACKAGE_HOST_QEMU_VIRTFS
-> > +     bool "Enable virtual filesystem in Qemu emulator"
->
-> I've reworded this to:
->
->         bool "Virtual filesystem support"
->
-> to be more consistent with the existing VDE2 option. Indeed, indicating
-> "Enable" in an option is not very useful: it's pretty obvious than an
-> option is here to "Enable" something. Also the "in Qemu emulator" is
-> not very useful either, since the option being added is already a
-> sub-option of the main host-qemu option.
->
-> I've applied to next after this minor change. Thanks!
+Hello Fabrice,
 
-Hello Thomas,
+On Thu, 22 Nov 2018 18:49:13 +0100, Fabrice Fontaine wrote:
+> Fixes:
+>  - http://autobuild.buildroot.org/results/5222592f2052e18c184fae42214c112e7f39be6e
 
-Ok, thanks a lot.
+It seems like it doesn't fix the problem. The following build result:
 
-etienne
+  http://autobuild.buildroot.net/results/e37e61bae1d81a7956e2843be70fea84b0bbb64b/
 
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+has been built from the master branch at commit
+d81870ae8129389a62df80c9c8c9165d334b6921, which includes your fix, and
+still the same libpam related failure happened.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
