@@ -1,113 +1,135 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Nov 2018 10:11:15 +0100
-Subject: [Buildroot] [git commit] support/kconfig/merge_config.sh: avoid
- false positive matches from comment lines
-Message-ID: <20181202071558.601558A3F5@busybox.osuosl.org>
+Date: Mon, 26 Nov 2018 20:58:37 +0100
+Subject: [Buildroot] [git commit] boot/grub2: separate target and host builds
+Message-ID: <20181202071559.AEA02815BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b87c2ae816c1395154779a3b907ad660c18dd35
+commit: https://git.buildroot.net/buildroot/commit/?id=ac0719e0869a18537b059b12fcbb3c05399e80fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We are using empty CONFIG_PREFIX_. This results in false positive match
-for comment lines when merging config fragments.
+grub2 requires the host grub2-mkimage tool to build some of its target
+images. The current way of building this tool in the grub2 package is
+to perform a simultaneous host-tools/target-bootloader build during
+the grub2 build step.
 
-To avoid false positive reports, we use separate sed expressions and
-address comment lines explicitly.
+This method makes the recipe complex to understand, and proved to be a
+complication during the work to enable grub2 support for architectures
+other than x86.
 
-This is actually is in the Linux kernel mainline (v4.20-rc2):
-6bbe4385d035c6fac56f840a59861a0310ce137b
-("kconfig: merge_config: avoid false positive matches from comment lines")
+This patch tries to do a better separation between the build of grub2
+host tools and target boot loader image, as a partial step to enable
+grub2 to build for other architectures.
 
-Signed-off-by: Nasser Afshin <Afshin.Nasser@gmail.com>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/kconfig/merge_config.sh                    |  7 +++--
- ...false-positive-matches-from-comment-lines.patch | 32 ++++++++++++++++++++++
- support/kconfig/patches/series                     |  1 +
- 3 files changed, 37 insertions(+), 3 deletions(-)
+ boot/grub2/grub2.mk | 48 +++++++++++++++++++++++++-----------------------
+ 1 file changed, 25 insertions(+), 23 deletions(-)
 
-diff --git a/support/kconfig/merge_config.sh b/support/kconfig/merge_config.sh
-index 404ca3864f..14917806a3 100755
---- a/support/kconfig/merge_config.sh
-+++ b/support/kconfig/merge_config.sh
-@@ -109,7 +109,8 @@ if [ ! -r "$INITFILE" ]; then
- fi
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index 35aea41287..1b366d0407 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -9,7 +9,10 @@ GRUB2_SITE = http://ftp.gnu.org/gnu/grub
+ GRUB2_SOURCE = grub-$(GRUB2_VERSION).tar.xz
+ GRUB2_LICENSE = GPL-3.0+
+ GRUB2_LICENSE_FILES = COPYING
+-GRUB2_DEPENDENCIES = host-bison host-flex
++GRUB2_DEPENDENCIES = host-bison host-flex host-grub2
++HOST_GRUB2_DEPENDENCIES = host-bison host-flex
++GRUB2_INSTALL_IMAGES = YES
++GRUB2_INSTALL_TARGET = NO
  
- MERGE_LIST=$*
--SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(${CONFIG_PREFIX}[a-zA-Z0-9_]*\)[= ].*/\2/p"
-+SED_CONFIG_EXP1="s/^\(${CONFIG_PREFIX}[a-zA-Z0-9_]*\)=.*/\1/p"
-+SED_CONFIG_EXP2="s/^# \(${CONFIG_PREFIX}[a-zA-Z0-9_]*\) is not set$/\1/p"
+ GRUB2_BUILTIN_MODULES = $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES))
+ GRUB2_BUILTIN_CONFIG = $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_CONFIG))
+@@ -39,26 +42,24 @@ GRUB2_PLATFORM = efi
+ endif
  
- TMP_FILE=$(mktemp -t .tmp.config.XXXXXXXXXX)
+ # Grub2 is kind of special: it considers CC, LD and so on to be the
+-# tools to build the native tools (i.e to be executed on the build
+-# machine), and uses TARGET_CC, TARGET_CFLAGS, TARGET_CPPFLAGS,
+-# TARGET_LDFLAGS to build the bootloader itself. However, to add to
+-# the confusion, it also uses NM, OBJCOPY and STRIP to build the
+-# bootloader itself; none of these are used to build the native
+-# tools.
++# tools to build the host programs and uses TARGET_CC, TARGET_CFLAGS,
++# TARGET_CPPFLAGS, TARGET_LDFLAGS to build the bootloader itself.
+ #
+ # NOTE: TARGET_STRIP is overridden by !BR2_STRIP_strip, so always
+ # use the cross compile variant to ensure grub2 builds
  
-@@ -123,7 +124,7 @@ for MERGE_FILE in $MERGE_LIST ; do
- 		echo "The merge file '$MERGE_FILE' does not exist.  Exit." >&2
- 		exit 1
- 	fi
--	CFG_LIST=$(sed -n "$SED_CONFIG_EXP" $MERGE_FILE)
-+	CFG_LIST=$(sed -n -e "$SED_CONFIG_EXP1" -e "$SED_CONFIG_EXP2" $MERGE_FILE)
++HOST_GRUB2_CONF_ENV = \
++	CPP="$(HOSTCC) -E"
++
+ GRUB2_CONF_ENV = \
+-	$(HOST_CONFIGURE_OPTS) \
+-	CPP="$(HOSTCC) -E" \
++	CPP="$(TARGET_CC) -E" \
+ 	TARGET_CC="$(TARGET_CC)" \
+ 	TARGET_CFLAGS="$(TARGET_CFLAGS)" \
+ 	TARGET_CPPFLAGS="$(TARGET_CPPFLAGS) -fno-stack-protector" \
+ 	TARGET_LDFLAGS="$(TARGET_LDFLAGS)" \
+-	NM="$(TARGET_NM)" \
+-	OBJCOPY="$(TARGET_OBJCOPY)" \
+-	STRIP="$(TARGET_CROSS)strip"
++	TARGET_NM="$(TARGET_NM)" \
++	TARGET_OBJCOPY="$(TARGET_OBJCOPY)" \
++	TARGET_STRIP="$(TARGET_CROSS)strip"
  
- 	for CFG in $CFG_LIST ; do
- 		grep -q -w $CFG $TMP_FILE || continue
-@@ -166,7 +167,7 @@ make KCONFIG_ALLCONFIG=$TMP_FILE $EXTERNAL_ARG $OUTPUT_ARG $ALLTARGET
+ GRUB2_CONF_OPTS = \
+ 	--target=$(GRUB2_TARGET) \
+@@ -72,12 +73,13 @@ GRUB2_CONF_OPTS = \
+ 	--enable-libzfs=no \
+ 	--disable-werror
  
+-# We don't want all the native tools and Grub2 modules to be installed
+-# in the target. So we in fact install everything into the host
+-# directory, and the image generation process (below) will use the
+-# grub-mkimage tool and Grub2 modules from the host directory.
+-
+-GRUB2_INSTALL_TARGET_OPTS = DESTDIR=$(HOST_DIR) install
++HOST_GRUB2_CONF_OPTS = \
++	--disable-grub-mkfont \
++	--enable-efiemu=no \
++	ac_cv_lib_lzma_lzma_code=no \
++	--enable-device-mapper=no \
++	--enable-libzfs=no \
++	--disable-werror
  
- # Check all specified config values took (might have missed-dependency issues)
--for CFG in $(sed -n "$SED_CONFIG_EXP" $TMP_FILE); do
-+for CFG in $(sed -n -e "$SED_CONFIG_EXP1" -e "$SED_CONFIG_EXP2" $TMP_FILE); do
+ ifeq ($(BR2_TARGET_GRUB2_I386_PC),y)
+ define GRUB2_IMAGE_INSTALL_ELTORITO
+@@ -86,10 +88,10 @@ define GRUB2_IMAGE_INSTALL_ELTORITO
+ endef
+ endif
  
- 	REQUESTED_VAL=$(grep -w -e "$CFG" $TMP_FILE)
- 	ACTUAL_VAL=$(grep -w -e "$CFG" "$KCONFIG_CONFIG")
-diff --git a/support/kconfig/patches/21-Avoid-false-positive-matches-from-comment-lines.patch b/support/kconfig/patches/21-Avoid-false-positive-matches-from-comment-lines.patch
-new file mode 100644
-index 0000000000..c11144e47e
---- /dev/null
-+++ b/support/kconfig/patches/21-Avoid-false-positive-matches-from-comment-lines.patch
-@@ -0,0 +1,32 @@
-+Index: kconfig/merge_config.sh
-+===================================================================
-+--- kconfig.orig/merge_config.sh
-++++ kconfig/merge_config.sh
-+@@ -109,7 +109,8 @@ if [ ! -r "$INITFILE" ]; then
-+ fi
-+ 
-+ MERGE_LIST=$*
-+-SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(${CONFIG_PREFIX}[a-zA-Z0-9_]*\)[= ].*/\2/p"
-++SED_CONFIG_EXP1="s/^\(${CONFIG_PREFIX}[a-zA-Z0-9_]*\)=.*/\1/p"
-++SED_CONFIG_EXP2="s/^# \(${CONFIG_PREFIX}[a-zA-Z0-9_]*\) is not set$/\1/p"
-+ 
-+ TMP_FILE=$(mktemp -t .tmp.config.XXXXXXXXXX)
-+ 
-+@@ -123,7 +124,7 @@ for MERGE_FILE in $MERGE_LIST ; do
-+ 		echo "The merge file '$MERGE_FILE' does not exist.  Exit." >&2
-+ 		exit 1
-+ 	fi
-+-	CFG_LIST=$(sed -n "$SED_CONFIG_EXP" $MERGE_FILE)
-++	CFG_LIST=$(sed -n -e "$SED_CONFIG_EXP1" -e "$SED_CONFIG_EXP2" $MERGE_FILE)
-+ 
-+ 	for CFG in $CFG_LIST ; do
-+ 		grep -q -w $CFG $TMP_FILE || continue
-+@@ -166,7 +167,7 @@ make KCONFIG_ALLCONFIG=$TMP_FILE $EXTERN
-+ 
-+ 
-+ # Check all specified config values took (might have missed-dependency issues)
-+-for CFG in $(sed -n "$SED_CONFIG_EXP" $TMP_FILE); do
-++for CFG in $(sed -n -e "$SED_CONFIG_EXP1" -e "$SED_CONFIG_EXP2" $TMP_FILE); do
-+ 
-+ 	REQUESTED_VAL=$(grep -w -e "$CFG" $TMP_FILE)
-+ 	ACTUAL_VAL=$(grep -w -e "$CFG" "$KCONFIG_CONFIG")
-diff --git a/support/kconfig/patches/series b/support/kconfig/patches/series
-index be8627db13..e5a6f69d8f 100644
---- a/support/kconfig/patches/series
-+++ b/support/kconfig/patches/series
-@@ -9,3 +9,4 @@
- 18-merge-config.sh-create-temporary-files-in-tmp.patch
- 19-merge_config.sh-add-br2-external-support.patch
- 20-merge_config.sh-Allow-to-define-config-prefix.patch
-+21-Avoid-false-positive-matches-from-comment-lines.patch
+-define GRUB2_IMAGE_INSTALLATION
++define GRUB2_INSTALL_IMAGES_CMDS
+ 	mkdir -p $(dir $(GRUB2_IMAGE))
+-	$(HOST_DIR)/bin/grub-mkimage \
+-		-d $(HOST_DIR)/lib/grub/$(GRUB2_TUPLE) \
++	$(HOST_DIR)/usr/bin/grub-mkimage \
++		-d $(@D)/grub-core/ \
+ 		-O $(GRUB2_TUPLE) \
+ 		-o $(GRUB2_IMAGE) \
+ 		-p "$(GRUB2_PREFIX)" \
+@@ -99,14 +101,14 @@ define GRUB2_IMAGE_INSTALLATION
+ 	$(INSTALL) -D -m 0644 boot/grub2/grub.cfg $(GRUB2_CFG)
+ 	$(GRUB2_IMAGE_INSTALL_ELTORITO)
+ endef
+-GRUB2_POST_INSTALL_TARGET_HOOKS += GRUB2_IMAGE_INSTALLATION
+ 
+ ifeq ($(GRUB2_PLATFORM),efi)
+ define GRUB2_EFI_STARTUP_NSH
+ 	echo $(notdir $(GRUB2_IMAGE)) > \
+ 		$(BINARIES_DIR)/efi-part/startup.nsh
+ endef
+-GRUB2_POST_INSTALL_TARGET_HOOKS += GRUB2_EFI_STARTUP_NSH
++GRUB2_POST_INSTALL_IMAGES_HOOKS += GRUB2_EFI_STARTUP_NSH
+ endif
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
