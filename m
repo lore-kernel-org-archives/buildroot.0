@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 17:17:19 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/webkitgtk: use
+Date: Mon, 26 Nov 2018 17:17:28 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] package/webkitgtk: use
  proper USE_WOFF2 flag instead of ENABLE_WOFF2
-Message-ID: <20181126161408.1F309886F4@busybox.osuosl.org>
+Message-ID: <20181126161415.E6A71886F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8771409fa87d3bc76b7ef081e3f5b598810d30f4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c4465fc794f8203eca04f054c65e4ed5f6e4dd59
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
