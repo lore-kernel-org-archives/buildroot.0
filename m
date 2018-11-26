@@ -1,219 +1,79 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Sun, 25 Nov 2018 16:56:01 -0600
-Subject: [Buildroot] [PATCH] netsurf: new package
-In-Reply-To: <CANQCQpaJ5FN0px7sfqvhcfJfGgLzmRK6rbww-Z7XwzATHL-E2w@mail.gmail.com>
-References: <20181125175832.26232-1-francois.perrad@gadz.org>
- <CANQCQpaJ5FN0px7sfqvhcfJfGgLzmRK6rbww-Z7XwzATHL-E2w@mail.gmail.com>
-Message-ID: <CANQCQpb6TzN0BMbJiQcVyT7XC-fLMzS5qbVOzEftjoHB8M-tNw@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 26 Nov 2018 07:41:28 +0100
+Subject: [Buildroot] [PATCH/next 1/1] msgpack: bump to version 3.1.1
+In-Reply-To: <20181125193910.GF28830@scaer>
+References: <20181125192145.2519-1-fontaine.fabrice@gmail.com>
+ <20181125193910.GF28830@scaer>
+Message-ID: <CAPi7W80rEqNtrWNmBhgdNJaviuzGuVB+PTsCgu8ry7Ski5KENQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Francois,
-
-On Sun, Nov 25, 2018 at 3:33 PM Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
+Dear Yann,
+Le dim. 25 nov. 2018 ? 20:39, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
 >
-> Francois,
+> Fabrice, All,
 >
-> On Sun, Nov 25, 2018 at 11:59 AM Francois Perrad <fperrad@gmail.com> wrote:
+> On 2018-11-25 20:21 +0100, Fabrice Fontaine spake thusly:
+> > Add hash for license files
 > >
-> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-
-Tested this patch in a glibc and uclibc build.  (uclibc with the
-suggested change below)
-
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > > ---
-> >  DEVELOPERS                                    |  1 +
-> >  package/Config.in                             |  1 +
-> >  .../0001-avoid-system-perl-dependencies.patch | 29 +++++++++
-> >  package/netsurf/Config.in                     | 15 +++++
-> >  package/netsurf/netsurf.hash                  |  2 +
-> >  package/netsurf/netsurf.mk                    | 61 +++++++++++++++++++
-> >  6 files changed, 109 insertions(+)
-> >  create mode 100644 package/netsurf/0001-avoid-system-perl-dependencies.patch
-> >  create mode 100644 package/netsurf/Config.in
-> >  create mode 100644 package/netsurf/netsurf.hash
-> >  create mode 100644 package/netsurf/netsurf.mk
+> >  package/msgpack/msgpack.hash | 4 +++-
+> >  package/msgpack/msgpack.mk   | 2 +-
+> >  2 files changed, 4 insertions(+), 2 deletions(-)
 > >
-> > diff --git a/DEVELOPERS b/DEVELOPERS
-> > index 2a5c8dc78..4a9151a40 100644
-> > --- a/DEVELOPERS
-> > +++ b/DEVELOPERS
-> > @@ -784,6 +784,7 @@ F:  package/lua*
-> >  F:     package/lunit/
-> >  F:     package/lzlib/
-> >  F:     package/moarvm/
-> > +F:     package/netsurf/
-> >  F:     package/perl*
-> >  F:     package/pkg-perl.mk
-> >  F:     package/pkg-luarocks.mk
-> > diff --git a/package/Config.in b/package/Config.in
-> > index f5a17492c..1061d01df 100644
-> > --- a/package/Config.in
-> > +++ b/package/Config.in
-> > @@ -269,6 +269,7 @@ comment "Graphic applications"
-> >         source "package/kmscube/Config.in"
-> >         source "package/libva-utils/Config.in"
-> >         source "package/mesa3d-demos/Config.in"
-> > +       source "package/netsurf/Config.in"
-> >         source "package/pngquant/Config.in"
-> >         source "package/qt5cinex/Config.in"
-> >         source "package/rrdtool/Config.in"
-> > diff --git a/package/netsurf/0001-avoid-system-perl-dependencies.patch b/package/netsurf/0001-avoid-system-perl-dependencies.patch
-> > new file mode 100644
-> > index 000000000..979ddafc8
-> > --- /dev/null
-> > +++ b/package/netsurf/0001-avoid-system-perl-dependencies.patch
-> > @@ -0,0 +1,29 @@
-> > +From b42e4b5bfca030965dcfca993a47a6ddaa941287 Mon Sep 17 00:00:00 2001
-> > +From: Francois Perrad <francois.perrad@gadz.org>
-> > +Date: Sun, 25 Nov 2018 18:27:54 +0100
-> > +Subject: [PATCH] avoid system perl dependencies
-> > +
-> > +this subroutine format is used for android target.
-> > +with eval the load of HTML::Entities is deferred.
-> > +
-> > +Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> > +---
-> > + netsurf/utils/split-messages.pl | 2 +-
-> > + 1 file changed, 1 insertion(+), 1 deletion(-)
-> > +
-> > +diff --git a/netsurf/utils/split-messages.pl b/netsurf/utils/split-messages.pl
-> > +index 4b50dde..e47dded 100644
-> > +--- a/netsurf/utils/split-messages.pl
-> > ++++ b/netsurf/utils/split-messages.pl
-> > +@@ -311,7 +311,7 @@ TXT
-> > +     sub footer { qq|</resources>| }
-> > +     sub format
-> > +     {
-> > +-      use HTML::Entities qw(encode_entities);
-> > ++      eval q|use HTML::Entities qw(encode_entities);|;
-> > +       my $escaped = encode_entities( $_[1], '<>&"' );
-> > +       qq|  <string name="$_[0]">$escaped</string>\n|;
-> > +     }
-> > +--
-> > +2.17.1
-> > +
-> > diff --git a/package/netsurf/Config.in b/package/netsurf/Config.in
-> > new file mode 100644
-> > index 000000000..645036466
-> > --- /dev/null
-> > +++ b/package/netsurf/Config.in
-> > @@ -0,0 +1,15 @@
-> > +config BR2_PACKAGE_NETSURF
-> > +       bool "netsurf"
-> > +       select BR2_PACKAGE_EXPAT
-> > +       select BR2_PACKAGE_JPEG
-> > +       select BR2_PACKAGE_LIBCURL
-> > +       select BR2_PACKAGE_LIBGTK2 if BR2_PACKAGE_XORG7
-> > +       select BR2_PACKAGE_LIBPNG
-> > +       select BR2_PACKAGE_OPENSSL
-> > +       select BR2_PACKAGE_SDL if !BR2_PACKAGE_XORG7
-> > +       help
-> > +         NetSurf is a compact graphical web browser which aims for
-> > +         HTML5, CSS and JavaScript support.
-> > +         Frontends: GTK+ 2 (X11), SDL 1.2 (framebuffer)
-> > +
-> > +         http://www.netsurf-browser.org/
-> > diff --git a/package/netsurf/netsurf.hash b/package/netsurf/netsurf.hash
-> > new file mode 100644
-> > index 000000000..aa4602e76
-> > --- /dev/null
-> > +++ b/package/netsurf/netsurf.hash
-> > @@ -0,0 +1,2 @@
-> > +# Locally computed
-> > +sha256 eb4864d4459d6f9958dd10a3301c272ea7f5df72667a7db0aad5bc5ae06c0e10  netsurf-all-3.8.tar.gz
+> > diff --git a/package/msgpack/msgpack.hash b/package/msgpack/msgpack.hash
+> > index f1033ade42..df4e54b181 100644
+> > --- a/package/msgpack/msgpack.hash
+> > +++ b/package/msgpack/msgpack.hash
+> > @@ -1,2 +1,4 @@
+> >  # Locally computed:
+> > -sha256  9c87f80fc651b900772deaef0ab154b63160c74d292529b5be6d06d6485d4640  msgpack-2.1.5.tar.gz
+> > +sha256  bda49f996a73d2c6080ff0523e7b535917cd28c8a79c3a5da54fc29332d61d1e  msgpack-3.1.1.tar.gz
+> > +sha256  664550b43996452a5a2c7471bb0ff77185a58c69ccafa60f983dc4c162e1ee22  COPYING
+> > +sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
+> > diff --git a/package/msgpack/msgpack.mk b/package/msgpack/msgpack.mk
+> > index abb6e2e214..781e67e37a 100644
+> > --- a/package/msgpack/msgpack.mk
+> > +++ b/package/msgpack/msgpack.mk
+> > @@ -4,7 +4,7 @@
+> >  #
+> >  ################################################################################
+> >
+> > -MSGPACK_VERSION = 2.1.5
+> > +MSGPACK_VERSION = 3.1.1
 >
-> Suggest adding the license file hash
-> (https://buildroot.org/downloads/manual/manual.html#adding-packages-hash)
+> Did you check if that still requires your previous fix:
+>     https://patchwork.ozlabs.org/patch/1002781/
+Tests are building fine with this new version so the previous fix is
+not mandatory. However for reproducibility, I think we should still
+always disable tests (they are enabled by default) or enable/disable
+them depending on the availability of zlib and gtest.
 >
-> > diff --git a/package/netsurf/netsurf.mk b/package/netsurf/netsurf.mk
-> > new file mode 100644
-> > index 000000000..b165f1fbc
-> > --- /dev/null
-> > +++ b/package/netsurf/netsurf.mk
-> > @@ -0,0 +1,61 @@
-> > +################################################################################
-> > +#
-> > +# netsurf
-> > +#
-> > +################################################################################
-> > +
-> > +NETSURF_VERSION = 3.8
-> > +NETSURF_SOURCE = netsurf-all-$(NETSURF_VERSION).tar.gz
-> > +NETSURF_SITE = http://download.netsurf-browser.org/netsurf/releases/source-full
-> > +NETSURF_LICENSE = GPL-2.0
-> > +NETSURF_LICENSE_FILES = netsurf/COPYING
-> > +NETSURF_DEPENDENCIES = expat jpeg libcurl libpng openssl \
-> > +       host-bison host-flex host-gperf host-pkgconf
-> > +
-> > +ifeq ($(BR2_PACKAGE_XORG7),y)
-> > +NETSURF_DEPENDENCIES += libgtk2
-> > +NETSURF_FRONTEND = gtk
-> > +ifeq ($(BR2_PACKAGE_LIBRSVG),y)
-> > +NETSURF_DEPENDENCIES += librsvg
-> > +define NETSURF_SVG_CONFIGURE_CMDS
-> > +       echo "override NETSURF_USE_RSVG := YES"         >> $(@D)/netsurf/Makefile.config
-> > +       echo "override NETSURF_USE_NSSVG := NO"         >> $(@D)/netsurf/Makefile.config
-> > +endef
-> > +endif
-> > +else
-> > +NETSURF_DEPENDENCIES += sdl
-> > +NETSURF_FRONTEND = framebuffer
-> > +endif
-> > +
-> > +ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+> Regards,
+> Yann E. MORIN.
 >
-> This creates a dependency warning.  Suggest adding
-> BR2_PACKAGE_LIBICONV as a kconfig select if BR2_TOOLCHAIN_USES_UCLIBC
-> and then check here for ifeq ($(BR2_PACKAGE_LIBICONV),y)
+> >  MSGPACK_SITE = $(call github,msgpack,msgpack-c,cpp-$(MSGPACK_VERSION))
+> >  MSGPACK_LICENSE = BSL-1.0
+> >  MSGPACK_LICENSE_FILES = COPYING LICENSE_1_0.txt
+> > --
+> > 2.14.1
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
 >
-> > +NETSURF_DEPENDENCIES += libiconv
-> > +define NETSURF_ICONV_CONFIGURE_CMDS
-> > +       echo "override NETSURF_USE_LIBICONV_PLUG := NO" >> $(@D)/netsurf/Makefile.config
-> > +endef
-> > +endif
-> > +
-> > +define NETSURF_CONFIGURE_CMDS
-> > +       echo "override NETSURF_USE_DUKTAPE := NO"       >  $(@D)/netsurf/Makefile.config
-> > +       echo "override NETSURF_USE_GRESOURCE := NO"     >> $(@D)/netsurf/Makefile.config
-> > +       echo "override NETSURF_USE_INLINE_PIXBUF := NO" >> $(@D)/netsurf/Makefile.config
-> > +       $(NETSURF_ICONV_CONFIGURE_CMDS)
-> > +       $(NETSURF_SVG_CONFIGURE_CMDS)
-> > +endef
-> > +
-> > +NETSURF_MAKE_OPTS = \
-> > +       TARGET=$(NETSURF_FRONTEND) \
-> > +       TMP_PREFIX=$(STAGING_DIR)/usr \
-> > +       V=0 \
->
-> Does it default to V=1?  If so, maybe set to this instead to follow
-> the overall Buildroot verbosity.
->
-> > +       PREFIX=/usr
-> > +
-> > +define NETSURF_BUILD_CMDS
-> > +       $(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D) $(NETSURF_MAKE_OPTS) \
->
-> Suggest adding a comment above this line or in the commit description
-> as to the need for MAKE1.
->
-> uclibc build is going now, I'll let you know if I see anything else.
->
-> Thanks!
-> Matt
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+Best Regards,
 
-
-
--- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / RC Linux Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+Fabrice
