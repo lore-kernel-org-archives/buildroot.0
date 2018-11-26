@@ -1,55 +1,57 @@
-From: Jared Bents <jared.bents@rockwellcollins.com>
-Date: Mon, 26 Nov 2018 08:56:41 -0600
-Subject: [Buildroot] [PATCH v1 1/1] package/proftpd: add mod_sql_sqlite
-Message-ID: <20181126145641.3606-1-jared.bents@rockwellcollins.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 26 Nov 2018 17:10:11 +0100
+Subject: [Buildroot] [PATCH-2018.02.x] prosody: security bump to version
+ 0.9.14
+Message-ID: <20181126161011.31770-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enable mod_sql_sqlite as a compile time option
+This fixes a cross-host authentication vulnerability, CVE-2018-10847.
+The issue affects Prosody instances that have multiple virtual hosts
+(including anonymous authenticated hosts):
+https://blog.prosody.im/prosody-0-10-2-security-release
 
-Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+A full security advisory is available at
+https://prosody.im/security/advisory_20180531
+
+Compute hashes locally as they are no more available on
+https://prosody.im/downloads/source/{MD5,SHA1,SHA256,SHA512}SUMS
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/proftpd/Config.in  | 9 +++++++++
- package/proftpd/proftpd.mk | 4 ++++
- 2 files changed, 13 insertions(+)
+ package/prosody/prosody.hash | 9 ++++-----
+ package/prosody/prosody.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
-index b615a5ff4c..6ddb50e4c8 100644
---- a/package/proftpd/Config.in
-+++ b/package/proftpd/Config.in
-@@ -31,6 +31,15 @@ config BR2_PACKAGE_PROFTPD_MOD_SQL
- 	help
- 	  Compile ProFTPD with mode_sql support.
+diff --git a/package/prosody/prosody.hash b/package/prosody/prosody.hash
+index 38942ea7ff..a8648491e3 100644
+--- a/package/prosody/prosody.hash
++++ b/package/prosody/prosody.hash
+@@ -1,5 +1,4 @@
+-# Hashes from: https://prosody.im/downloads/source/{MD5,SHA1,SHA256,SHA512}SUMS
+-md5    d743adea6cfbaacc3a24cc0c3928bb1b  prosody-0.9.12.tar.gz
+-sha1   1ee224263a5b3d67960e12edbbe6b2f16b95d147  prosody-0.9.12.tar.gz
+-sha256 1a59a322b71928a21985522aa00d0eab3552208d7bf9ecb318542a1b2fee3e8d  prosody-0.9.12.tar.gz
+-sha512 e87b5f3b3e327722cec9d8d0470684e2ec2788a1c5ae623c4f505a00572ef21f65afe84cd5b7de47d6a65fe8872506fe34e5e8886e20979ff84710669857ca76  prosody-0.9.12.tar.gz
++# Locally calculated
++sha256 27d1388acd79eaa453f2b194bd23c25121fe0a704d0dd940457caf1874ea1123  prosody-0.9.14.tar.gz
++
++
+diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
+index d19653503d..ab50cc88dc 100644
+--- a/package/prosody/prosody.mk
++++ b/package/prosody/prosody.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+if BR2_PACKAGE_PROFTPD_MOD_SQL
-+
-+config BR2_PACKAGE_PROFTPD_MOD_SQL_SQLITE
-+	bool "mod_sql_sqlite support"
-+	help
-+	  Compile ProFTPD with mode_sql_sqlite support.
-+
-+endif
-+
- config BR2_PACKAGE_PROFTPD_MOD_QUOTATAB
- 	bool "mod_quotatab support"
- 	help
-diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
-index 8f3ff5088e..878dfd7460 100644
---- a/package/proftpd/proftpd.mk
-+++ b/package/proftpd/proftpd.mk
-@@ -46,6 +46,10 @@ ifeq ($(BR2_PACKAGE_PROFTPD_MOD_SQL),y)
- PROFTPD_MODULES += mod_sql
- endif
- 
-+ifeq ($(BR2_PACKAGE_PROFTPD_MOD_SQL_SQLITE),y)
-+PROFTPD_MODULES += mod_sql_sqlite
-+endif
-+
- ifeq ($(BR2_PACKAGE_PROFTPD_MOD_QUOTATAB),y)
- PROFTPD_MODULES += mod_quotatab
- endif
+-PROSODY_VERSION = 0.9.12
++PROSODY_VERSION = 0.9.14
+ PROSODY_SITE = https://prosody.im/downloads/source
+ PROSODY_LICENSE = MIT
+ PROSODY_LICENSE_FILES = COPYING
 -- 
-2.18.0
+2.11.0
