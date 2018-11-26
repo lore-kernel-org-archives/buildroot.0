@@ -1,31 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 18:56:07 +0100
-Subject: [Buildroot] [PATCH] package/weston: fix build with newer freerdp
-In-Reply-To: <20181124104107.29147-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Sat, 24 Nov 2018 11:41:07 +0100")
-References: <20181124104107.29147-1-yann.morin.1998@free.fr>
-Message-ID: <87va4ju3ig.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Nov 2018 18:57:16 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/usb_modeswitch:
+ disable parallel build
+Message-ID: <20181126175406.162798885C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=aa8d13d70e42c283e72fb34fb625bfcf7fccc315
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > Commit a63aad66d3 (package/freerdp: bump version to 2.0.0-rc2)
- > introduced a FreeRDP that has a different API, and this breaks
- > weston.
+Build of package will sometime fails because of the following issue:
+install-static target has two dependencies: dispatcher-static and
+install-common
 
- > Backport a patch from upstream weston to fix the issue.
+Because dispatcher-static is not a file but only a target, it will
+always be called to build usb_modeswitch_dispatcher.
+So, even if install-common depends on usb_modeswitch_dispatcher, in some
+rare cases, install-static won't be able to install
+usb_modeswitch_dispatcher because it is being rebuild by
+dispatcher-static
 
- > Fixes:
- >     http://autobuild.buildroot.org/results/c0b4f7c4cee2c11715ecc2ef0cfb42f80dbf81b0/
+To fix this issue, disable parallel build
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes:
+ - http://autobuild.buildroot.org/results/8297be35725b816ff5afaf909605ceb41223efb6
 
-Committed to 2018.08.x, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit a554109af857b7b53598c5a9e0ee1d2729da73df)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/usb_modeswitch/usb_modeswitch.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
+index 8dd712f264..719e4fe33b 100644
+--- a/package/usb_modeswitch/usb_modeswitch.mk
++++ b/package/usb_modeswitch/usb_modeswitch.mk
+@@ -10,6 +10,8 @@ USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
+ USB_MODESWITCH_DEPENDENCIES = libusb
+ USB_MODESWITCH_LICENSE = GPL-2.0+
+ USB_MODESWITCH_LICENSE_FILES = COPYING
++#??Package does not build in parallel due to improper make rules
++USB_MODESWITCH_MAKE = $(MAKE1)
+ 
+ USB_MODESWITCH_BUILD_TARGETS = static
+ USB_MODESWITCH_INSTALL_TARGETS = install-static
