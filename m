@@ -1,40 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 12:46:06 +0100
-Subject: [Buildroot] [PATCH] package/openocd: add missing host-pkgconf
- dependency
-In-Reply-To: <20181115164655.9978-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Thu, 15 Nov 2018 17:46:55 +0100")
-References: <20181115164655.9978-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87d0qsysch.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Nov 2018 12:47:33 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] easydbus: fix build
+ without C++
+Message-ID: <20181126114426.0A98B8865C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=12b71af28e14093bc141b9f465c204bbda3e35cc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
- > The configure.ac script uses PKG_CHECK_MODULES(), and we autoreconf
- > the package, so host-pkgconf should be listed in the dependencies.
+Specify that easydbus is a C project file otherwise build will fail if
+no C++ compiler is found by cmake
 
- > This issue is seen either with per-package folders, or by doing a
- > clean build with just "make openocd":
+Fixes:
+ - http://autobuild.buildroot.org/results/486c3cd98124e7415dee2fd1463bd5e0fcc9ba91
 
- >>>> openocd 0.10.0 Configuring
- >>>> openocd 0.10.0 Autoreconfiguring
- > [...]
- > configure.ac:12: error: possibly undefined macro: AC_MSG_WARN
- >       If this token and others are legitimate, please use m4_pattern_allow.
- >       See the Autoconf documentation.
- > configure.ac:201: error: possibly undefined macro: AC_DEFINE
- > configure.ac:582: error: possibly undefined macro: AC_MSG_NOTICE
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit e8fc4364a40a518fa21fe5c830675c7f30ede8ff)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0001-easydbus-is-a-C-project-file.patch        | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
- > Even if the message seems unrelated, it's really the lack of pkg.m4
- > from host-pkgconf that causes the issue.
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2018.02.x and 2018.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/easydbus/0001-easydbus-is-a-C-project-file.patch b/package/easydbus/0001-easydbus-is-a-C-project-file.patch
+new file mode 100644
+index 0000000000..1c149c582c
+--- /dev/null
++++ b/package/easydbus/0001-easydbus-is-a-C-project-file.patch
+@@ -0,0 +1,33 @@
++From a4bd47f593fbe55bd3ab17532e64be74aff5b29d Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 17 Nov 2018 11:38:05 +0100
++Subject: [PATCH] easydbus is a C project file
++
++Specify that easydbus is a C project file otherwise build will fail if
++no C++ compiler is found by cmake
++
++Fixes:
++ - http://autobuild.buildroot.org/results/486c3cd98124e7415dee2fd1463bd5e0fcc9ba91
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/mniestroj/easydbus/pull/2]
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 58ccb2d..575eb24 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -5,7 +5,7 @@
++ #
++ 
++ cmake_minimum_required(VERSION 2.6)
++-project(easydbus)
+++project(easydbus C)
++ 
++ add_definitions("-Wall -Wextra -Wno-unused-parameter")
++ set(CMAKE_C_FLAGS_RELEASE "-O2")
++-- 
++2.17.1
++
