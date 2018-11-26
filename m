@@ -1,91 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 17:13:41 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] flatcc: conditionally
- require c++ in cmake
-Message-ID: <20181126161037.A2F6D886CE@busybox.osuosl.org>
+Date: Mon, 26 Nov 2018 17:13:49 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] flatcc: fix debug build
+Message-ID: <20181126161037.AA2DF886CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=692c9fbef868cb3aac468d551fcb92c31f66d9ef
+commit: https://git.buildroot.net/buildroot/commit/?id=93d98bce66eed4159663e3fb0d5bfab5627557fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-Patches CMake files in flatcc to conditionally set c++ as a required
-language depending on if FLATCC_TEST option is set, as only the tests
-include a c++ file.
+flatcc is named flatcc_d if BR2_ENABLE_DEBUG is set because of the
+following line in CMakeLists.txt: set(CMAKE_DEBUG_POSTFIX "_d")
 
-Fixes
-http://autobuild.buildroot.net/results/8fb0447eed1d55b7687f657530e31695cf77ce5c/
+So update FLATCC_TARGET_REMOVE_FLATCC_COMPILER hook to replace flatcc
+by flatcc*
 
-Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 56296d51bef2ad97487602150871541c25107b8b)
+Fixes:
+ - http://autobuild.buildroot.org/results/a47f49cd2fdd809257bd7e83dca620f2e6aac85b
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit f7abb6250282d3860e2330d5412e25606d78efe6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...txt-conditionally-require-C-based-on-FLAT.patch | 56 ++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
+ package/flatcc/flatcc.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/flatcc/0001-CMakeLists.txt-conditionally-require-C-based-on-FLAT.patch b/package/flatcc/0001-CMakeLists.txt-conditionally-require-C-based-on-FLAT.patch
-new file mode 100644
-index 0000000000..7d76d6caf1
---- /dev/null
-+++ b/package/flatcc/0001-CMakeLists.txt-conditionally-require-C-based-on-FLAT.patch
-@@ -0,0 +1,56 @@
-+From 878d51187bbc1ad490b4cd15e3741bc0bd11b6b2 Mon Sep 17 00:00:00 2001
-+From: Joel Carlson <JoelsonCarl@gmail.com>
-+Date: Thu, 6 Sep 2018 14:53:20 -0600
-+Subject: [PATCH] CMakeLists.txt: conditionally require C++ based on
-+ FLATCC_TEST (#94)
-+
-+C++ is only used when building the tests, so only include it as a
-+language via project() when FLATCC_TEST is enabled. This allows
-+toolchains that don't have C++ to build flatcc.
-+
-+Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
-+---
-+Upstream commit 878d51187bbc1ad490b4cd15e3741bc0bd11b6b2
-+---
-+ CMakeLists.txt | 18 ++++++++++++------
-+ 1 file changed, 12 insertions(+), 6 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index b39a3d1..5df5161 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -4,7 +4,18 @@
-+ #cmake_minimum_required (VERSION 2.8.11)
-+ cmake_minimum_required (VERSION 2.8)
-+ 
-+-project (FlatCC C CXX)
-++# Disable build of tests and samples. Due to custom build step
-++# dependency on flatcc tool, some custom build configurations may
-++# experience issues, and this option can then help.
-++option(FLATCC_TEST "enable tests" ON)
-++
-++# Conditionally set project languages based on FLATCC_TEST, as C++ is
-++# only necessary if building the tests.
-++if (FLATCC_TEST)
-++    project (FlatCC C CXX)
-++else()
-++    project (FlatCC C)
-++endif()
-+ 
-+ #
-+ # NOTE: when changing build options, clean the build using on of:
-+@@ -35,11 +46,6 @@ option(FLATCC_RTONLY "enable build of runtime library only" OFF)
-+ # cmake -DBUILD_SHARED_LIBS=on can override.
-+ option(FLATCC_INSTALL "enable build of runtime library only" OFF)
-+ 
-+-# Disable build of tests and samples. Due to custom build step
-+-# dependency on flatcc tool, some custom build configurations may
-+-# experience issues, and this option can then help.
-+-option(FLATCC_TEST "enable tests" ON)
-+-
-+ # Use with debug build with testing enabled only. Enables generation
-+ # of coverage information during build and run. Adds target "coverage"
-+ # which collects data and makes HTML report in build directory
-+-- 
-+2.7.4
-+
+diff --git a/package/flatcc/flatcc.mk b/package/flatcc/flatcc.mk
+index 9f961a37b1..1c8d0ec7fb 100644
+--- a/package/flatcc/flatcc.mk
++++ b/package/flatcc/flatcc.mk
+@@ -19,8 +19,9 @@ HOST_FLATCC_CONF_OPTS += -DFLATCC_TEST=OFF
+ FLATCC_CONF_OPTS += -DFLATCC_INSTALL=ON
+ HOST_FLATCC_CONF_OPTS += -DFLATCC_INSTALL=ON
+ 
++# compiler is named flatcc or flatcc_d depending on BR2_ENABLE_DEBUG value
+ define FLATCC_TARGET_REMOVE_FLATCC_COMPILER
+-	rm $(TARGET_DIR)/usr/bin/flatcc
++	rm $(TARGET_DIR)/usr/bin/flatcc*
+ endef
+ 
+ FLATCC_POST_INSTALL_TARGET_HOOKS += FLATCC_TARGET_REMOVE_FLATCC_COMPILER
