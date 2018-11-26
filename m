@@ -1,9 +1,9 @@
 From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Mon, 26 Nov 2018 12:08:05 +0100
-Subject: [Buildroot] [PATCH 13/15] erlang-p1-iconv: Bump to version 1.0.10
+Date: Mon, 26 Nov 2018 12:08:06 +0100
+Subject: [Buildroot] [PATCH 14/15] erlang-p1-eimp: New package
 In-Reply-To: <20181126110807.31431-1-johan.oudinet@gmail.com>
 References: <20181126110807.31431-1-johan.oudinet@gmail.com>
-Message-ID: <20181126110807.31431-14-johan.oudinet@gmail.com>
+Message-ID: <20181126110807.31431-15-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,61 @@ To: buildroot@busybox.net
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- package/erlang-p1-iconv/erlang-p1-iconv.hash | 2 +-
- package/erlang-p1-iconv/erlang-p1-iconv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/Config.in                  |  1 +
+ package/erlang-eimp/Config.in      | 12 ++++++++++++
+ package/erlang-eimp/erlang-eimp.mk | 13 +++++++++++++
+ 3 files changed, 26 insertions(+)
+ create mode 100644 package/erlang-eimp/Config.in
+ create mode 100644 package/erlang-eimp/erlang-eimp.mk
 
-diff --git a/package/erlang-p1-iconv/erlang-p1-iconv.hash b/package/erlang-p1-iconv/erlang-p1-iconv.hash
-index 0f0a23161a..31bcf40731 100644
---- a/package/erlang-p1-iconv/erlang-p1-iconv.hash
-+++ b/package/erlang-p1-iconv/erlang-p1-iconv.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 c7214ea7503c3de1edf3bdd72b37187aa3a9a36d7cf7f5945a067ae8d262d3fb erlang-p1-iconv-1.0.6.tar.gz
-+sha256 8a9ff8a3dd983284caa964f118b5782ef1c0c662995608b2ca4f4a5f285605a9 erlang-p1-iconv-1.0.10.tar.gz
-diff --git a/package/erlang-p1-iconv/erlang-p1-iconv.mk b/package/erlang-p1-iconv/erlang-p1-iconv.mk
-index 6b22431cce..79d8efe16f 100644
---- a/package/erlang-p1-iconv/erlang-p1-iconv.mk
-+++ b/package/erlang-p1-iconv/erlang-p1-iconv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ERLANG_P1_ICONV_VERSION = 1.0.6
-+ERLANG_P1_ICONV_VERSION = 1.0.10
- ERLANG_P1_ICONV_SITE = $(call github,processone,iconv,$(ERLANG_P1_ICONV_VERSION))
- ERLANG_P1_ICONV_LICENSE = Apache-2.0
- ERLANG_P1_ICONV_LICENSE_FILES = LICENSE.txt
+diff --git a/package/Config.in b/package/Config.in
+index b60e7700ad..e15ab513f9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -550,6 +550,7 @@ menu "Interpreter languages and scripting"
+ 	source "package/erlang/Config.in"
+ if BR2_PACKAGE_ERLANG
+ menu "Erlang libraries/modules"
++	source "package/erlang-eimp/Config.in"
+ 	source "package/erlang-goldrush/Config.in"
+ 	source "package/erlang-jiffy/Config.in"
+ 	source "package/erlang-lager/Config.in"
+diff --git a/package/erlang-eimp/Config.in b/package/erlang-eimp/Config.in
+new file mode 100644
+index 0000000000..5c207e9c23
+--- /dev/null
++++ b/package/erlang-eimp/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_ERLANG_EIMP
++	bool "erlang-eimp"
++	select BR2_PACKAGE_ERLANG_P1_UTILS
++	select BR2_PACKAGE_GD
++	select BR2_PACKAGE_GD_WEBPNG
++	select BR2_PACKAGE_JPEG
++	select BR2_PACKAGE_LIBPNG
++	select BR2_PACKAGE_WEBP
++	help
++	  Erlang Image Manipulation Process
++
++	  https://github.com/processone/eimp
+diff --git a/package/erlang-eimp/erlang-eimp.mk b/package/erlang-eimp/erlang-eimp.mk
+new file mode 100644
+index 0000000000..83d34cd5e0
+--- /dev/null
++++ b/package/erlang-eimp/erlang-eimp.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# erlang-eimp
++#
++################################################################################
++
++ERLANG_EIMP_VERSION = 1.0.8
++ERLANG_EIMP_SITE = $(call github,processone,eimp,$(ERLANG_EIMP_VERSION))
++ERLANG_EIMP_LICENSE = Apache-2.0
++ERLANG_EIMP_LICENSE_FILES = LICENSE.txt
++ERLANG_EIMP_DEPENDENCIES = erlang-p1-utils gd jpeg libpng webp
++
++$(eval $(rebar-package))
 -- 
 2.17.1
