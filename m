@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 17:18:31 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] vtun: remove reference to
+Date: Mon, 26 Nov 2018 17:18:39 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] vtun: remove reference to
  start-stop-daemon from package help
-Message-ID: <20181126161520.6F21D81125@busybox.osuosl.org>
+Message-ID: <20181126161527.6201088701@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4394d4ed7c2019f89c74c44f4e85bc7c10ade4c7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5edb7ab4e4c51229719650a705d6d23b17f0cdd6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 None of the other 82 packages that use start-stop-daemon does this.
 
