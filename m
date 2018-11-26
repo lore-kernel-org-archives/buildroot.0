@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 17:14:17 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] core: ensure we use the
+Date: Mon, 26 Nov 2018 17:14:36 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] core: ensure we use the
  realpath(3) of DL_DIR
-Message-ID: <20181126161114.DCBBE886D4@busybox.osuosl.org>
+Message-ID: <20181126161124.506D4886DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a4bb2ef5ea3dfcfc70b9786e6d2c7bae68fa2fdb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3f14fed1ded7a8b5a0bb6f3604f8390a87e4c7f1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 When $(TOPDIR)/dl is a symlink, checking out git submodules can fail,
 as reported by Michael in #11086.
@@ -57,10 +57,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index bf93b9a08e..6a50c920d8 100644
+index 6f15deba28..f398d16871 100644
 --- a/package/pkg-download.mk
 +++ b/package/pkg-download.mk
-@@ -32,8 +32,8 @@ else
+@@ -31,8 +31,8 @@ else
  BR2_DL_DIR = $(DL_DIR)
  endif
  
