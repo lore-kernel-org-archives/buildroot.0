@@ -1,159 +1,103 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 26 Nov 2018 22:11:07 +0100
-Subject: [Buildroot] [git commit] grub2: add usage notes for grub2 arm and
- aarch64
-Message-ID: <20181202071559.D4CC9803E1@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 26 Nov 2018 19:12:18 +0100
+Subject: [Buildroot] [git commit] package/pkg-generic: adjust config scripts
+ tweaks for per-package directories
+Message-ID: <20181202071559.A6EE27F917@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9112389a1b50ccad51dc3982d35951e9e97a2c03
+commit: https://git.buildroot.net/buildroot/commit/?id=a18c828bed99d7e0db5128224ffcda4897cd8e80
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add notes to test grub2 running on ARM using qemu. The arm section
-describes how to run it using u-boot and aarch64 shows how to do it
-using efi, which is similar to what has to be done for x86_64.
+This commit adjusts the logic in pkg-generic.mk that tweaks the
+*-config shell scripts installed by various libraries to make it
+compatible with per-package directories.
 
-The source for OVMF builds is also changed to
-https://www.kraxel.org/repos/jenkins/edk2/ which is the source for
-nightly builds (as rpms but which can be extracted in any distribution),
-as the sourceforge link provided only very old builds.
+This requires two fixes:
 
-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
-[Thomas:
- - formatting fixes
- - simplify the AArch64/EFI example by using the aarch64_efi_defconfig]
+ - replacing $(STAGING_DIR) with a relative path from the config script
+   to the staging directory, rather than using an absolute path of the
+   staging directory.
+
+   Without this, a *-config script provided by package A, but called
+   from package B per-package directory will return paths from package A
+   per-package directory:
+
+   $ ./output/per-package/mcrypt/host/usr/<tuple>/sysroot/usr/bin/libmcrypt-config --libs
+   -L..../output/per-package/libmcrypt/host/usr/<tuple>/sysroot/usr/lib/
+
+   The libmcrypt-config script is installed by the libmcrypt package,
+   and mcrypt is a package that depends on libmcrypt. When we call the
+   libmcrypt-config script from the mcrypt per-package directory, it
+   returns a -L flag that points to the libmcrypt per-package
+   directory.
+
+   One might say: but this is OK, since the sysroot of the libmcrypt
+   per-package directory also contains the libmcrypt library. This is
+   true, but we encounter a more subtle issue: because -L paths are
+   considered before standard paths, ld ends up finding libc.so in the
+   libmcrypt per-package directory. This libc.so file is a linker
+   script that looks like this:
+
+   GROUP ( /lib/libc.so.6 /usr/lib/libc_nonshared.a  AS_NEEDED ( /lib/ld-linux.so.3 ) )
+
+   Normally, thanks to ld sysroot awareness, /lib/libc.so.6 in this
+   script is re-interpreted according to the sysroot. But in this
+   case, the library is *outside* the compiler sysroot. Remember: we
+   are using the compiler/linker from the "mcrypt" per-package
+   directory, but we found "libc.so.6" in the "libmcrypt" per-package
+   directory.
+
+   This causes the linker to really use the /lib/libc.so.6 from the
+   host machine, obvisouly leading to a build failure such as:
+
+   output/per-package/libgcrypt/host/opt/ext-toolchain/bin/../lib/gcc/nios2-linux-gnu/7.3.1/../../../../nios2-linux-gnu/bin/ld: cannot find /lib/libc.so.6
+   output/per-package/libgcrypt/host/opt/ext-toolchain/bin/../lib/gcc/nios2-linux-gnu/7.3.1/../../../../nios2-linux-gnu/bin/ld: cannot find /usr/lib/libc_nonshared.a
+   output/per-package/libgcrypt/host/opt/ext-toolchain/bin/../lib/gcc/nios2-linux-gnu/7.3.1/../../../../nios2-linux-gnu/bin/ld: cannot find /lib/ld-linux-nios2.so.1
+
+ - Some *-config scripts, such as the apr-1-config script, contain
+   references to host tools:
+
+   CC=".../output/per-package/apr/hosr/bin/arm-linux-gcc"
+   CCP=".../output/per-package/apr/hosr/bin/arm-linux-cpp"
+
+   We also want to replace those with proper relative paths. To
+   achieve this, we need to also replace $(HOST_DIR) with a relative
+   path. Since $(STAGING_DIR) is inside $(HOST_DIR), the first
+   replacement of $(STAGING_DIR) by @STAGING_DIR@ is no longer needed:
+   replacing $(HOST_DIR) by @HOST_DIR@ is sufficient. We still need to
+   replace @STAGING_DIR@ by the proper path though, as we introduce
+   @STAGING_DIR@ references in exec_prefix and prefix variables, as
+   well as -I and -L flags.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/grub2/readme.txt | 102 +++++++++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 97 insertions(+), 5 deletions(-)
+ package/pkg-generic.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/boot/grub2/readme.txt b/boot/grub2/readme.txt
-index f6fd4566fe..0282fbdd13 100644
---- a/boot/grub2/readme.txt
-+++ b/boot/grub2/readme.txt
-@@ -53,8 +53,8 @@ To test your BIOS image in Qemu
- 
- qemu-system-{i386,x86-64} -hda disk.img
- 
--Notes on using Grub2 for EFI-based platforms
--============================================
-+Notes on using Grub2 for x86/x86_64 EFI-based platforms
-+=======================================================
- 
- 1. Create a disk image
-    dd if=/dev/zero of=disk.img bs=1M count=32
-@@ -83,16 +83,108 @@ Notes on using Grub2 for EFI-based platforms
-    sudo losetup -d /dev/loop0
- 7. Your disk.img is ready!
- 
--To test your EFI image in Qemu
--------------------------------
-+To test your i386/x86-64 EFI image in Qemu
-+------------------------------------------
- 
- 1. Download the EFI BIOS for Qemu
-    Version IA32 or X64 depending on the chosen Grub2
-    platform (i386-efi vs. x86-64-efi)
--   http://sourceforge.net/projects/edk2/files/OVMF/
-+   https://www.kraxel.org/repos/jenkins/edk2/
-+   (or use one provided by your distribution as OVMF)
- 2. Extract, and rename OVMF.fd to bios.bin and
-    CirrusLogic5446.rom to vgabios-cirrus.bin.
- 3. qemu-system-{i386,x86-64} -L ovmf-dir/ -hda disk.img
- 4. Make sure to pass pci=nocrs to the kernel command line,
-    to workaround a bug in the EFI BIOS regarding the
-    EFI framebuffer.
-+
-+Notes on using Grub2 for ARM u-boot-based platforms
-+===================================================
-+
-+The following steps show how to use the Grub2 arm-uboot platform
-+support in the simplest way possible and with a single
-+buildroot-generated filesystem.
-+
-+ 1. Load qemu_arm_vexpress_defconfig
-+
-+ 2. Enable u-boot with the vexpress_ca9x4 board name and with
-+    u-boot.elf image format.
-+
-+ 3. Enable grub2 for the arm-uboot platform.
-+
-+ 4. Enable "Install kernel image to /boot in target" in the kernel
-+    menu to populate a /boot directory with zImage in it.
-+
-+ 5. The upstream u-boot vexpress_ca9x4 doesn't have CONFIG_API enabled
-+    by default, which is required.
-+
-+    Before building, patch u-boot (for example, make u-boot-extract to
-+    edit the source before building) file
-+    include/configs/vexpress_common.h to define:
-+
-+    #define CONFIG_API
-+    #define CONFIG_SYS_MMC_MAX_DEVICE   1
-+
-+ 6. Create a custom grub2 config file with the following contents and
-+    set its path in BR2_TARGET_GRUB2_CFG:
-+
-+    set default="0"
-+    set timeout="5"
-+
-+    menuentry "Buildroot" {
-+        set root='(hd0)'
-+        linux /boot/zImage root=/dev/mmcblk0 console=ttyAMA0
-+        devicetree /boot/vexpress-v2p-ca9.dtb
-+    }
-+
-+ 7. Create a custom builtin config file with the following contents
-+    and set its path in BR2_TARGET_GRUB2_BUILTIN_CONFIG:
-+
-+    set root=(hd0)
-+    set prefix=/boot/grub
-+
-+ 8. Create a custom post-build script which copies files from
-+    ${BINARIES_DIR}/boot-part to $(TARGET_DIR)/boot (set its path in
-+    BR2_ROOTFS_POST_BUILD_SCRIPT):
-+
-+    #!/bin/sh
-+    cp -r ${BINARIES_DIR}/boot-part/* ${TARGET_DIR}/boot/
-+
-+ 9. make
-+
-+10. Run qemu with:
-+
-+    qemu-system-arm -M vexpress-a9 -kernel output/images/u-boot -m 1024 \
-+    -nographic -sd output/images/rootfs.ext2
-+
-+11. In u-boot, stop at the prompt and run grub2 with:
-+
-+  => ext2load mmc 0:0 ${loadaddr} /boot/grub/grub.img
-+  => bootm
-+
-+12. This should bring the grub2 menu, upon which selecting the "Buildroot"
-+    entry should boot Linux.
-+
-+
-+Notes on using Grub2 for Aarch64 EFI-based platforms
-+====================================================
-+
-+The following steps show how to use the Grub2 arm64-efi platform,
-+using qemu and EFI firmware built for qemu.
-+
-+ 1. Load aarch64_efi_defconfig
-+
-+ 2. make
-+
-+ 3. Download the EFI firmware for qemu aarch64
-+    https://www.kraxel.org/repos/jenkins/edk2/
-+    (or use one provided by your distribution as OVMF-aarch64 or AAVMF)
-+
-+ 4. Run qemu with:
-+
-+    qemu-system-aarch64 -M virt -cpu cortex-a57 -m 512 -nographic \
-+    -bios <path/to/EDK2>/QEMU_EFI.fd -hda output/images/disk.img \
-+    -netdev user,id=eth0 -device virtio-net-device,netdev=eth0
-+
-+ 5. This should bring the grub2 menu, upon which selecting the
-+    "Buildroot" entry should boot Linux.
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 90b3b42731..887dc838a4 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -275,12 +275,13 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
+ 	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
+ 		$(call MESSAGE,"Fixing package configuration files") ;\
+-			$(SED)  "s,$(BASE_DIR), at BASE_DIR@,g" \
+-				-e "s,$(STAGING_DIR), at STAGING_DIR@,g" \
++			$(SED)  "s,$(HOST_DIR), at HOST_DIR@,g" \
++				-e "s,$(BASE_DIR), at BASE_DIR@,g" \
+ 				-e "s,^\(exec_\)\?prefix=.*,\1prefix=@STAGING_DIR@/usr,g" \
+ 				-e "s,-I/usr/,-I at STAGING_DIR@/usr/,g" \
+ 				-e "s,-L/usr/,-L at STAGING_DIR@/usr/,g" \
+-				-e "s, at STAGING_DIR@,$(STAGING_DIR),g" \
++				-e 's, at STAGING_DIR@,$$(dirname $$0)/../..,g' \
++				-e 's, at HOST_DIR@,$$(dirname $$0)/../../../..,g' \
+ 				-e "s, at BASE_DIR@,$(BASE_DIR),g" \
+ 				$(addprefix $(STAGING_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ;\
+ 	fi
