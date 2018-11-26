@@ -1,78 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 22 Nov 2018 17:40:33 +0100
-Subject: [Buildroot] [git commit] board: macchiatobin: update readme.txt
-Message-ID: <20181202071557.5E4CA81583@busybox.osuosl.org>
+Date: Mon, 26 Nov 2018 19:08:13 +0100
+Subject: [Buildroot] [git commit] Makefile: evaluate CCACHE and HOST{CC,
+ CXX} at time of use
+Message-ID: <20181202071559.5C2BD815BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ffdcbe0a5304a865e4486e7de0a7e6d983e2ce2
+commit: https://git.buildroot.net/buildroot/commit/?id=11e8c900ff085f3f9aad462f0369be5f801e1668
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update the kernel and U-Boot versions to the actual versions in use.
-Update the description of supported hardware features.
+As we are going to move to per-package SDK, the location of CCACHE and
+therefore the definitions of HOSTCC and HOSTCXX need to be evaluated
+at the time of use and not at the time of assignment. Indeed, the
+value of HOST_DIR changes from one package to the other.
 
-Add a note that the stale SPI flash environment issue only affects the
-vendor BSP.
+Therefore, we need to change from := to =.
 
-Cc: Sergey Matyukevich <geomatsi@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+In addition, while doing A := $(something) $(A) is possible, doing A =
+$(something) $(A) is not legal. So, instead of defining HOSTCC in
+terms of the current HOSTCC variable, we re-use HOSTCC_NOCCACHE
+instead.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/solidrun/macchiatobin/readme.txt | 30 +++++++++++++++++-------------
- 1 file changed, 17 insertions(+), 13 deletions(-)
+ Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/board/solidrun/macchiatobin/readme.txt b/board/solidrun/macchiatobin/readme.txt
-index dfbd6e793b..dc5d6c794d 100644
---- a/board/solidrun/macchiatobin/readme.txt
-+++ b/board/solidrun/macchiatobin/readme.txt
-@@ -15,19 +15,20 @@ How to build
- There are two build options: mainline support and vendor support.
+diff --git a/Makefile b/Makefile
+index 94adff3406..2819d44124 100644
+--- a/Makefile
++++ b/Makefile
+@@ -471,11 +471,11 @@ BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(PATH)"
+ TARGET_DIR_WARNING_FILE = $(BASE_TARGET_DIR)/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
  
- For the mainline BSP, we use:
-- - Linux v4.15
-- - U-Boot v2018.01
-+ - Linux v4.19.2
-+ - U-Boot v2018.11
- 
- For the vendor BSP, we use the sources available from Marvell Github
- page at https://github.com/MarvellEmbeddedProcessors, which uses:
-- - Linux v4.4.52
-- - U-Boot v2017.03
-+ - Linux v4.4.120
-+ - U-Boot v2018.03
- 
--At the moment mainline support for the board is a work in progress.
--Mainline kernel 4.15 enables eth2 in 1Gb (RJ45 connector J5) and
--eth0 in 10Gb (SFP connector CON15 and RJ45 connector CON16).
--The vendor BSP enables more hardware features out of the box,
--e.g. all the network interfaces.
-+At the moment mainline support for the board is a work in
-+progress. Mainline kernel 4.19 enables eth2 in 1Gb (RJ45 connector J5),
-+copper 10Gb interfaces, and automatic configuration of select SFP
-+modules on the SFP cages. The vendor BSP enables more hardware features
-+out of the box, but lacks support for SFP detection and automatic
-+configuration.
- 
- To use the mainline BSP run the following commands:
- 
-@@ -73,10 +74,13 @@ Insert the micro SDcard in the MacchiatoBin board and power it up.
- The serial console is accessible at the micro-USB Type-B connector
- marked CON9. The serial line settings are 115200 8N1.
- 
--By default U-Boot will load its environment from the SPI flash. On the
--first boot SPI flash may be empty or it may contain a legacy
--environment incompatible with up-to-date mainline U-Boot and
--kernel. Then the following commands can be used to boot the board:
-+Note: the following text only applies to the vendor BSP from
-+solidrun_macchiatobin_marvell_defconfig.
-+
-+By default Marvell provided U-Boot will load its environment from the
-+SPI flash. On the first boot SPI flash may be empty or it may contain a
-+legacy environment that prevents proper boot. Then the following
-+commands can be used to boot the board:
- 
- => ext4load mmc 1:1 0x01700000 /boot/uEnv-example.txt
- => env import -t 0x01700000 $filesize
+ ifeq ($(BR2_CCACHE),y)
+-CCACHE := $(HOST_DIR)/bin/ccache
++CCACHE = $(HOST_DIR)/bin/ccache
+ BR_CACHE_DIR ?= $(call qstrip,$(BR2_CCACHE_DIR))
+ export BR_CACHE_DIR
+-HOSTCC := $(CCACHE) $(HOSTCC)
+-HOSTCXX := $(CCACHE) $(HOSTCXX)
++HOSTCC = $(CCACHE) $(HOSTCC_NOCCACHE)
++HOSTCXX = $(CCACHE) $(HOSTCXX_NOCCACHE)
+ else
+ export BR_NO_CCACHE
+ endif
