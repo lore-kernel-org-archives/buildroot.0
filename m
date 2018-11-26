@@ -1,45 +1,74 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 19:08:57 +0100
-Subject: [Buildroot] [git commit branch/next]
- support/scripts/check-host-rpath: split condition on two statements
-Message-ID: <20181126181451.19C19803EB@busybox.osuosl.org>
+Date: Mon, 26 Nov 2018 19:10:57 +0100
+Subject: [Buildroot] [git commit branch/next] Makefile: move .NOTPARALLEL
+ statement after including .config file
+Message-ID: <20181126181451.2EA57803EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eeb6341410b5168f97d4ed747c9537244477ec42
+commit: https://git.buildroot.net/buildroot/commit/?id=052fec0c08f6515055187c7d209663681bdf8144
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Inside the check_elf_has_rpath(), we check if the host binary has a
-correct RPATH, which should be either an absolute path to
-$(HOST_DIR)/lib, or a relative path using $ORIGIN. Those two
-conditions are checked in a single statements, but as we are going to
-add a third condition, let's split this up a bit:
-
- - If we have a RPATH to $(HOST_DIR)/lib -> we're good, return 0
- - If we have a RPATH to $ORIGIN/../lib -> we're good, return 0
- - Otherwise, we will exit the loop, and return 1
+In a follow-up commit, we will make the .NOTPARALLEL statement
+conditional on a Config.in option, so we need to move it further down.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/check-host-rpath | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ Makefile | 32 ++++++++++++++++----------------
+ 1 file changed, 16 insertions(+), 16 deletions(-)
 
-diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
-index 169628decb..6c5767da05 100755
---- a/support/scripts/check-host-rpath
-+++ b/support/scripts/check-host-rpath
-@@ -63,7 +63,8 @@ check_elf_has_rpath() {
-         for dir in ${rpath//:/ }; do
-             # Remove duplicate and trailing '/' for proper match
-             dir="$( sed -r -e 's:/+:/:g; s:/$::;' <<<"${dir}" )"
--            [ "${dir}" = "${hostdir}/lib" -o "${dir}" = "\$ORIGIN/../lib" ] && return 0
-+            [ "${dir}" = "${hostdir}/lib" ] && return 0
-+            [ "${dir}" = "\$ORIGIN/../lib" ] && return 0
-         done
-     done < <( readelf -d "${file}"                                              \
-               |sed -r -e '/.* \(R(UN)?PATH\) +Library r(un)?path: \[(.+)\]$/!d' \
+diff --git a/Makefile b/Makefile
+index e675ac26aa..24c803872d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -105,22 +105,6 @@ ifneq ($(firstword $(sort $(RUNNING_MAKE_VERSION) $(MIN_MAKE_VERSION))),$(MIN_MA
+ $(error You have make '$(RUNNING_MAKE_VERSION)' installed. GNU make >= $(MIN_MAKE_VERSION) is required)
+ endif
+ 
+-# Parallel execution of this Makefile is disabled because it changes
+-# the packages building order, that can be a problem for two reasons:
+-# - If a package has an unspecified optional dependency and that
+-#   dependency is present when the package is built, it is used,
+-#   otherwise it isn't (but compilation happily proceeds) so the end
+-#   result will differ if the order is swapped due to parallel
+-#   building.
+-# - Also changing the building order can be a problem if two packages
+-#   manipulate the same file in the target directory.
+-#
+-# Taking into account the above considerations, if you still want to execute
+-# this top-level Makefile in parallel comment the ".NOTPARALLEL" line and
+-# use the -j<jobs> option when building, e.g:
+-#      make -j$((`getconf _NPROCESSORS_ONLN`+1))
+-.NOTPARALLEL:
+-
+ # absolute path
+ TOPDIR := $(CURDIR)
+ CONFIG_CONFIG_IN = Config.in
+@@ -246,6 +230,22 @@ ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
+ -include $(BR2_CONFIG)
+ endif
+ 
++# Parallel execution of this Makefile is disabled because it changes
++# the packages building order, that can be a problem for two reasons:
++# - If a package has an unspecified optional dependency and that
++#   dependency is present when the package is built, it is used,
++#   otherwise it isn't (but compilation happily proceeds) so the end
++#   result will differ if the order is swapped due to parallel
++#   building.
++# - Also changing the building order can be a problem if two packages
++#   manipulate the same file in the target directory.
++#
++# Taking into account the above considerations, if you still want to execute
++# this top-level Makefile in parallel comment the ".NOTPARALLEL" line and
++# use the -j<jobs> option when building, e.g:
++#      make -j$((`getconf _NPROCESSORS_ONLN`+1))
++.NOTPARALLEL:
++
+ # timezone and locale may affect build output
+ ifeq ($(BR2_REPRODUCIBLE),y)
+ export TZ = UTC
