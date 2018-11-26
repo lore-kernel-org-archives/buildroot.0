@@ -1,31 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 26 Nov 2018 22:01:44 +0100
-Subject: [Buildroot] [git commit branch/next] .gitlab-ci.yml: refresh with
- aarch64_efi_defconfig
-Message-ID: <20181126205840.E565588913@busybox.osuosl.org>
+Date: Mon, 26 Nov 2018 22:02:09 +0100
+Subject: [Buildroot] [PATCH v3 1/5] grub2: separate target and host
+ builds
+In-Reply-To: <20180926223719.12604-2-nunes.erico@gmail.com>
+References: <20180926223719.12604-1-nunes.erico@gmail.com>
+ <20180926223719.12604-2-nunes.erico@gmail.com>
+Message-ID: <20181126220209.196ddbe6@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ebdf82153f9c6eed401f29a0fd6d8190ec82051
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .gitlab-ci.yml | 1 +
- 1 file changed, 1 insertion(+)
+On Thu, 27 Sep 2018 00:37:15 +0200, Erico Nunes wrote:
+> grub2 requires the host grub2-mkimage tool to build some of its target
+> images. The current way of building this tool in the grub2 package is to
+> perform a simultaneous host-tools/target-bootloader build during the
+> grub2 build step.
+> This method makes the recipe complex to understand, and proved to be a
+> complication during work to enable grub2 support for other architectures
+> than x86.
+> This patch tries to do a better separation between the build of grub2
+> host tools and target boot loader image, as a partial step to enable
+> grub2 to build for other architectures.
+> 
+> Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+> ---
+>  boot/grub2/grub2.mk | 48 +++++++++++++++++++++++----------------------
+>  1 file changed, 25 insertions(+), 23 deletions(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 5a100884f6..bd2d5ecad7 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -81,6 +81,7 @@ check-package:
-             - test-output/*.log
-             - test-output/*/.config
-             - test-output/*/images/*
-+aarch64_efi_defconfig: *defconfig
- acmesystems_aria_g25_128mb_defconfig: *defconfig
- acmesystems_aria_g25_256mb_defconfig: *defconfig
- acmesystems_arietta_g25_128mb_defconfig: *defconfig
+Applied to next, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
