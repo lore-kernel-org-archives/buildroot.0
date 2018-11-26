@@ -1,79 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 26 Nov 2018 18:31:20 +0100
-Subject: [Buildroot] Buildroot Developers Meeting @ FOSDEM 2019
-In-Reply-To: <20181101143113.201a6704@windsurf>
-References: <20181101143113.201a6704@windsurf>
-Message-ID: <20181126173120.GI28830@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 26 Nov 2018 18:43:20 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] linux: Make dtc install
+ step more reliable
+Message-ID: <20181126174009.8FBAC8883D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+commit: https://git.buildroot.net/buildroot/commit/?id=b04ea081494c0ace6d91bad069a249a022c0f2d3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-I would like to emphasize the importance of Thomas' message, below.
+Checking for the existence of the dtc binary built by the
+non-dependent dtc package may cause instable behaviour when giving more
+freedom on the order of how the packages are built (parallelization).
 
-We're in dicussion with the sponsor for hosting the event, and we need
-to be able to decide where and how long we ask for them to host us.
+In addidion, when moving to per-package host/target method, the check
+would always trigger in the isolated host, leading to linux-dtc always
+being installed as dtc.
+This in turn may lead to undesired overwriting of the real host-dtc binary
+when finally assembling the global host dir.
 
-So, if you intend to come to the developers days, then please fill in
-this poll quickly (before the end of November if at all possible):
+Thus rework the linux-dtc install condition to be defined by configuration
+rather than compile time order.
 
-    https://framadate.org/3Ve43stIV6Wvebum
+Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 860906ee05fad3fe503786ec7c656ea0f25851fc)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/linux.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Thank you!
-
-Regards,
-Yann E. MORIN.
-
-On 2018-11-01 14:31 +0100, Thomas Petazzoni spake thusly:
-> The Buildroot Developers Meeting @ ELCE 2018 took place a bit less
-> than two weeks, and therefore it's already time to organize the next
-> Buildroot Developers Meeting, which traditionally takes place around
-> the FOSDEM conference.
-> 
-> Usually, the meeting takes place during two days *after* FOSDEM, i.e on
-> Monday and Tuesday. But before doing the exact same thing, I wanted to
-> start a poll and see:
-> 
->  * who is interested ;
-> 
->  * whether we should do the meeting before/after FOSDEM ;
-> 
->  * whether we should keep the 2-day format or extend to a 3-day format.
-> 
-> If you think you will be attending this Buildroot Developers meeting,
-> it would be useful if you could fill in the poll below:
-> 
->   https://framadate.org/3Ve43stIV6Wvebum
-> 
-> Notes:
-> 
->  - If you are a regular Buildroot contributor, but unable to attend due
->    to lack of travel funding, we may be able to cover travel costs for
->    some attendees. Please contact me if you are in such a situation.
-> 
->  - The FOSDEM this year will not have the usual Embedded and IoT
->    Devrooms. Perhaps this will affect the usefulness/interest of the
->    FOSDEM conference for some embedded developers.
-> 
-> Best regards,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 24669d32f9..85c75ee63e 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -446,9 +446,7 @@ define LINUX_INSTALL_HOST_TOOLS
+ 	# Installing dtc (device tree compiler) as host tool, if selected
+ 	if grep -q "CONFIG_DTC=y" $(@D)/.config; then \
+ 		$(INSTALL) -D -m 0755 $(@D)/scripts/dtc/dtc $(HOST_DIR)/bin/linux-dtc ; \
+-		if [ ! -e $(HOST_DIR)/bin/dtc ]; then \
+-			ln -sf linux-dtc $(HOST_DIR)/bin/dtc ; \
+-		fi \
++		$(if $(BR2_PACKAGE_HOST_DTC),,ln -sf linux-dtc $(HOST_DIR)/bin/dtc;) \
+ 	fi
+ endef
+ 
