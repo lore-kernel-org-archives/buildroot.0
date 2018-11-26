@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 19:15:19 +0100
-Subject: [Buildroot] [PATCH next v6 05/10] Makefile: define
- TARGET_DIR_WARNING_FILE relative to TARGET_DIR
-In-Reply-To: <20181123145815.13008-6-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Fri, 23 Nov 2018 15:58:10 +0100")
+Date: Mon, 26 Nov 2018 19:15:36 +0100
+Subject: [Buildroot] [PATCH next v6 06/10] package/pkg-generic: adjust
+ config scripts tweaks for per-package directories
+In-Reply-To: <20181123145815.13008-7-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Fri, 23 Nov 2018 15:58:11 +0100")
 References: <20181123145815.13008-1-thomas.petazzoni@bootlin.com>
- <20181123145815.13008-6-thomas.petazzoni@bootlin.com>
-Message-ID: <87o9abso20.fsf@dell.be.48ers.dk>
+ <20181123145815.13008-7-thomas.petazzoni@bootlin.com>
+Message-ID: <87k1kzso1j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,39 +15,69 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > In commit 7e9870ce32d6329d9e3d602247fbe1709a2275a4 ("core: introduce
- > intermediate BASE_TARGET_DIR variable"), the definition of
- > TARGET_DIR_WARNING_FILE was changed to use $(BASE_TARGET_DIR) instead
- > of $(TARGET_DIR).
+ > This commit adjusts the logic in pkg-generic.mk that tweaks the
+ > *-config shell scripts installed by various libraries to make it
+ > compatible with per-package directories.
 
- > However, this change is incompatible with per-package directories, and
- > is in fact not needed.
+ > This requires two fixes:
 
- > With per-package directories, using $(BASE_TARGET_DIR) means that
- > TARGET_DIR_WARNING_FILE is
- > output/target/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM. Due to this, when
- > skeleton-init-common or skeleton-custom attempt to install it, it
- > fails, because it should be installed to their package per-package
- > target directory, and not the global output/target directory that doesn't
- > exist yet. The failure looks like this:
+ >  - replacing $(STAGING_DIR) with a relative path from the config script
+ >    to the staging directory, rather than using an absolute path of the
+ >    staging directory.
 
- > /usr/bin/install -m 0644 support/misc/target-dir-warning.txt /home/thomas/projets/buildroot/output/target/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
- > /usr/bin/install: cannot create regular file '/home/thomas/projets/buildroot/output/target/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM': No such file or directory
- > make[1]: *** [package/pkg-generic.mk:336: /home/thomas/projets/buildroot/output/build/skeleton-init-common/.stamp_target_installed] Error 1
+ >    Without this, a *-config script provided by package A, but called
+ >    from package B per-package directory will return paths from package A
+ >    per-package directory:
 
- > TARGET_DIR_WARNING_FILE is used in three places:
+ >    $ ./output/per-package/mcrypt/host/usr/<tuple>/sysroot/usr/bin/libmcrypt-config --libs
+ >    -L..../output/per-package/libmcrypt/host/usr/<tuple>/sysroot/usr/lib/
 
- >  - In skeleton-custom.mk and skeleton-init-common.mk, where as
- >    explained above, using $(TARGET_DIR) fixes the use of
- >    $(TARGET_DIR_WARNING_FILE) in the context of per-package target
- >    directories.
+ >    The libmcrypt-config script is installed by the libmcrypt package,
+ >    and mcrypt is a package that depends on libmcrypt. When we call the
+ >    libmcrypt-config script from the mcrypt per-package directory, it
+ >    returns a -L flag that points to the libmcrypt per-package
+ >    directory.
 
- >  - In fs/common.mk, where it is used as argument to $(notdir ...) to
- >    retrieve just the name of the warning file. So in this case, we
- >    really don't care about the path of the file, just its name.
+ >    One might say: but this is OK, since the sysroot of the libmcrypt
+ >    per-package directory also contains the libmcrypt library. This is
+ >    true, but we encounter a more subtle issue: because -L paths are
+ >    considered before standard paths, ld ends up finding libc.so in the
+ >    libmcrypt per-package directory. This libc.so file is a linker
+ >    script that looks like this:
+
+ >    GROUP ( /lib/libc.so.6 /usr/lib/libc_nonshared.a  AS_NEEDED ( /lib/ld-linux.so.3 ) )
+
+ >    Normally, thanks to ld sysroot awareness, /lib/libc.so.6 in this
+ >    script is re-interpreted according to the sysroot. But in this
+ >    case, the library is *outside* the compiler sysroot. Remember: we
+ >    are using the compiler/linker from the "mcrypt" per-package
+ >    directory, but we found "libc.so.6" in the "libmcrypt" per-package
+ >    directory.
+
+ >    This causes the linker to really use the /lib/libc.so.6 from the
+ >    host machine, obvisouly leading to a build failure such as:
+
+ >    output/per-package/libgcrypt/host/opt/ext-toolchain/bin/../lib/gcc/nios2-linux-gnu/7.3.1/../../../../nios2-linux-gnu/bin/ld: cannot find /lib/libc.so.6
+ >    output/per-package/libgcrypt/host/opt/ext-toolchain/bin/../lib/gcc/nios2-linux-gnu/7.3.1/../../../../nios2-linux-gnu/bin/ld: cannot find /usr/lib/libc_nonshared.a
+ >    output/per-package/libgcrypt/host/opt/ext-toolchain/bin/../lib/gcc/nios2-linux-gnu/7.3.1/../../../../nios2-linux-gnu/bin/ld: cannot find /lib/ld-linux-nios2.so.1
+
+ >  - Some *-config scripts, such as the apr-1-config script, contain
+ >    references to host tools:
+
+ >    CC=".../output/per-package/apr/hosr/bin/arm-linux-gcc"
+ >    CCP=".../output/per-package/apr/hosr/bin/arm-linux-cpp"
+
+ >    We also want to replace those with proper relative paths. To
+ >    achieve this, we need to also replace $(HOST_DIR) with a relative
+ >    path. Since $(STAGING_DIR) is inside $(HOST_DIR), the first
+ >    replacement of $(STAGING_DIR) by @STAGING_DIR@ is no longer needed:
+ >    replacing $(HOST_DIR) by @HOST_DIR@ is sufficient. We still need to
+ >    replace @STAGING_DIR@ by the proper path though, as we introduce
+ >    @STAGING_DIR@ references in exec_prefix and prefix variables, as
+ >    well as -I and -L flags.
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Committed to next, thanks.
 
