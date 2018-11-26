@@ -1,58 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 17:15:06 +0100
-Subject: [Buildroot] [PATCH] core: ensure we use the realpath(3) of
- DL_DIR
-In-Reply-To: <20181115170348.15731-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Thu, 15 Nov 2018 18:03:48 +0100")
-References: <20181115170348.15731-1-yann.morin.1998@free.fr>
-Message-ID: <87in0jyfw5.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Nov 2018 17:15:49 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] rpm: really take
+ DEPENDENCIES into account
+Message-ID: <20181126161237.77F70886E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=54f7565eb2426ca43ea90a6dd56368d9a96290d9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > When $(TOPDIR)/dl is a symlink, checking out git submodules can fail,
- > as reported by Michael in #11086.
+Commit e7af4033c32560594ddbd457b68f6d3713662a26 ("rpm: use the new
+gettext logic") introduced a really nasty bug: by adding
+$(TARGET_NLS_DEPENDENCIES) to RPM_DEPENDENCIES, it completely
+overwrote the existing value of RPM_DEPENDENCIES, entirely masking all
+mandatory RPM dependencies.
 
- > To reproduce a similarly-related mis-behaviour:
+rpm is fairly towards the end of the alphabet, and most other
+mandatory dependencies (berkeleydb, host-pkgconf, file and popt)
+appear earlier by alphabetic ordering. Only zlib was afterwards, but
+since file depends on zlib, it was always built before. This probably
+explains why our autobuilders haven't encountered a single build
+failure.
 
- >     $ mkdir -p foo/bar foo/buz
- >     $ cd foo/bar
- >     $ ln -s ../buz meh
- >     $ cd meh
- >     $ cd ../../foo
+However, a simple "make rpm" clearly exhibits the failure, and
+obviously the upcoming per-package folder mechanism makes such bugs
+even more obvious.
 
- > The last command should not succeed, because, relative to meh, there is
- > no ../../foo directory; we would expect it to be ../../../foo, instead.
- > But since meh is a symlink to a directory, then a relative path from that
- > symlink is interpreted as relative to the derefrenced directory, i.e.
- > from buz in this case.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 36385f87f38e5efd9d678ce10d59bfe442277eb9)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rpm/rpm.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- > But where this gine even werider, is that, if the last command is
- > replaced by:
-
- >     $ cd ../../../foo
-
- > then it still works, too.
-
- > And that is the root of Michael's issue: the dl directory in Buildroot's
- > TOPDIR is a symlink to a similarly-named directory one directory higher,
- > which then confuses relative paths, which gets especially and noticeably
- > bad for git submodules.
-
- > Avoid this strangeness, and just use so-called "physical" path, i.e. a
- > path where all symlinks to directories have been dereferenced.
-
- > Fixes: #11086
-
- > Reported-by: Michael Nosthoff <posted@heine.so>
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Michael Nosthoff <posted@heine.so>
-
-Committed to 2018.02.x and 2018.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
+index 159ae72aa8..87c2059e71 100644
+--- a/package/rpm/rpm.mk
++++ b/package/rpm/rpm.mk
+@@ -8,10 +8,10 @@ RPM_VERSION_MAJOR = 4.13
+ RPM_VERSION = $(RPM_VERSION_MAJOR).0.1
+ RPM_SOURCE = rpm-$(RPM_VERSION).tar.bz2
+ RPM_SITE = http://ftp.rpm.org/releases/rpm-$(RPM_VERSION_MAJOR).x
+-RPM_DEPENDENCIES = host-pkgconf berkeleydb file popt zlib
++RPM_DEPENDENCIES = host-pkgconf berkeleydb file popt zlib \
++	$(TARGET_NLS_DEPENDENCIES)
+ RPM_LICENSE = GPL-2.0 or LGPL-2.0 (library only)
+ RPM_LICENSE_FILES = COPYING
+-RPM_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ 
+ # 0001-configure-ac-use-link-instead-of-compile-for-gcc-flags-test.patch
+ # 0002-configure-ac-correct-stack-protector-check.patch
