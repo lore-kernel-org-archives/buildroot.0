@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 17:15:49 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] rpm: really take
+Date: Mon, 26 Nov 2018 17:15:56 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] rpm: really take
  DEPENDENCIES into account
-Message-ID: <20181126161237.77F70886E0@busybox.osuosl.org>
+Message-ID: <20181126161243.6D5CE886ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=54f7565eb2426ca43ea90a6dd56368d9a96290d9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a3f02eefc4ba0e97131bd67d56c4e33dafff07c6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 Commit e7af4033c32560594ddbd457b68f6d3713662a26 ("rpm: use the new
 gettext logic") introduced a really nasty bug: by adding
