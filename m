@@ -1,106 +1,44 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 26 Nov 2018 11:50:38 -0600
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-11-25
-In-Reply-To: <20181126070051.E6F2920D29@mail.bootlin.com>
-References: <20181126070051.E6F2920D29@mail.bootlin.com>
-Message-ID: <CANQCQpbODU5sFSaewz3R0z69ZbxxpNrgHPPzQFKd8mHUTj87BA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 26 Nov 2018 18:54:37 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] {linux,
+ linux-headers}: bump 4.{4, 9, 14, 18}.x series
+Message-ID: <20181126175135.3A3078884F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+commit: https://git.buildroot.net/buildroot/commit/?id=72ccee302a2694e121bfacb4ee51c1208e510f86
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 0021a2a49f68a1405a8ba132dc9466c771ffc46e)
+[Peter: drop 4.18.x, linux / hash changes]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-On Mon, Nov 26, 2018 at 1:01 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> Build statistics for 2018-11-25
-> ===============================
->
->       branch |  OK | NOK | TIM | TOT |
->    2018.02.x |  22 |   1 |   0 |  23 |
->    2018.08.x |  21 |   1 |   0 |  22 |
->       master | 213 |   5 |   0 | 218 |
->         next |  30 |   7 |   0 |  37 |
->
-> Results for branch '2018.02.x'
-> ==============================
->
-> Classification of failures by reason
-> ------------------------------------
->
->                    audit-2.8.2 | 1
->
->
-> Detail of failures
-> ------------------
->
->         i686 |                    audit-2.8.2 | NOK | http://autobuild.buildroot.net/results/8de651c8b390ba443cc3b0584c0095409d31e71f |
->
-> Results for branch '2018.08.x'
-> ==============================
->
-> Classification of failures by reason
-> ------------------------------------
->
->                 libmpeg2-0.5.1 | 1
->
->
-> Detail of failures
-> ------------------
->
->      powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/964e1356e17677de7eedf959fc005c1a594e1314 | ORPH
->
-> Results for branch 'master'
-> ===========================
->
-> Classification of failures by reason
-> ------------------------------------
->
->                    dante-1.4.1 | 1
->                 libmpeg2-0.5.1 | 1
->                  msgpack-2.1.5 | 1
->            uboot-tools-2018.07 | 1
->                valgrind-3.14.0 | 1
->
->
-> Detail of failures
-> ------------------
->
->     mips64el |                    dante-1.4.1 | NOK | http://autobuild.buildroot.net/results/e37e61bae1d81a7956e2843be70fea84b0bbb64b |
->      powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/8e4d25e2d91409833a92cafdc688b55d4c91b5c8 | ORPH
->      aarch64 |                  msgpack-2.1.5 | NOK | http://autobuild.buildroot.net/results/7d7aa9723f02f9bc78dbf6248674be4d402199bf |
->          arm |            uboot-tools-2018.07 | NOK | http://autobuild.buildroot.net/results/0729a7739a7dc8dee46b63e81045b7d6bce34d09 |
->     mips64el |                valgrind-3.14.0 | NOK | http://autobuild.buildroot.net/results/418443386731f12686cabc2e719ef667ad7b9338 | ORPH
->
-> Results for branch 'next'
-> =========================
->
-> Classification of failures by reason
-> ------------------------------------
->
->               tpm2-abrmd-2.0.3 | 3
->                   mender-1.4.0 | 2
->                    qemu-2.12.1 | 1
->                  setools-4.1.1 | 1
->
->
-> Detail of failures
-> ------------------
->
->       x86_64 |                   mender-1.4.0 | NOK | http://autobuild.buildroot.net/results/c933f3398126f12091cc6be68ebcc7de47e8ee41 |
->       x86_64 |                   mender-1.4.0 | NOK | http://autobuild.buildroot.net/results/475b41fe938bec3e2515e9a0389a23aa89d952b4 |
->       mipsel |                    qemu-2.12.1 | NOK | http://autobuild.buildroot.net/results/c255e0e6a9054a3e11416e950d1459ccb8572413 |
->  powerpc64le |                  setools-4.1.1 | NOK | http://autobuild.buildroot.net/results/e214e1a539cdac07028fb58c3822f89886d86f1f |
-
-setools package is installing man pages and were caught using a bad
-path by 'step_check_build_dir'.  To stop the install of the man pages,
-is the preference a 'sed' to remove a line in setup.py or a 'rm' as a
-hook to cleanup the install of the files to staging/target?
-
-Matt
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index c3c43ce83a..1c693dbc87 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -266,13 +266,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.163"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.136"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.164"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.140"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+ 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
+-	default "4.14.80"	if BR2_KERNEL_HEADERS_4_14
++	default "4.14.83"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
+ 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
+ 	default "4.17.19"	if BR2_KERNEL_HEADERS_4_17
