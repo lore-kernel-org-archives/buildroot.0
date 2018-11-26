@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 12:47:33 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] easydbus: fix build
+Date: Mon, 26 Nov 2018 12:47:44 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] easydbus: fix build
  without C++
-Message-ID: <20181126114426.0A98B8865C@busybox.osuosl.org>
+Message-ID: <20181126114432.D079B7F92F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12b71af28e14093bc141b9f465c204bbda3e35cc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=353477440b06b052c6c93f569e287ae5530cfe7b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Specify that easydbus is a C project file otherwise build will fail if
 no C++ compiler is found by cmake
