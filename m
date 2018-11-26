@@ -1,23 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 17:18:52 +0100
-Subject: [Buildroot] [PATCH] vtun: remove reference to start-stop-daemon
- from package help
-In-Reply-To: <20181116031647.29084-1-casantos@datacom.com.br> (Carlos Santos's
- message of "Fri, 16 Nov 2018 01:16:47 -0200")
-References: <20181116031647.29084-1-casantos@datacom.com.br>
-Message-ID: <871s77yfpv.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Nov 2018 17:19:02 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/pkg-generic.mk:
+ fix show-build-order stdout pollution
+Message-ID: <20181126161553.6808188709@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Carlos" == Carlos Santos <casantos@datacom.com.br> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a039dd082dd40aecfbfd3562727508748ceab68d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > None of the other 82 packages that use start-stop-daemon does this.
- > Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+The commands like "make show-build-order" or "make
+<package>-show-build-order" show the build order and then print
+"make[1]: Nothing to be done for 'show-build-order'" to stdout. It
+pollutes output. Technically this message is true but it's not true
+for user because he gets an information.
 
-Committed to 2018.02.x and 2018.08.x, thanks.
+The <package>-show-build-order targets use $(info) for package name
+printing.  The make utility doesn't consider the internal directive as
+a command so it think that it's "Nothing to be done". The patch adds
+the empty command to <package>-show-build-order to inform make utility
+that taget makes some real actions.
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Serj Kalichev <serj.kalichev@gmail.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[Thomas: invert $(info) and @:, as suggested by Yann.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+(cherry picked from commit 75c81a12f68f943af2966e737f882b3f4fc7a909)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pkg-generic.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index a689dde4d2..d25f0f9afe 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -736,6 +736,7 @@ $(1)-show-rdepends:
+ 			@echo $$($(2)_RDEPENDENCIES)
+ 
+ $(1)-show-build-order: $$(patsubst %,%-show-build-order,$$($(2)_FINAL_ALL_DEPENDENCIES))
++	@:
+ 	$$(info $(1))
+ 
+ $(1)-graph-depends: graph-depends-requirements
