@@ -1,9 +1,9 @@
 From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Mon, 26 Nov 2018 12:07:56 +0100
-Subject: [Buildroot] [PATCH 04/15] erlang-p1-tls: Bump to version 1.0.25
+Date: Mon, 26 Nov 2018 12:07:59 +0100
+Subject: [Buildroot] [PATCH 07/15] erlang-p1-zlib: Bump to version 1.0.4
 In-Reply-To: <20181126110807.31431-1-johan.oudinet@gmail.com>
 References: <20181126110807.31431-1-johan.oudinet@gmail.com>
-Message-ID: <20181126110807.31431-5-johan.oudinet@gmail.com>
+Message-ID: <20181126110807.31431-8-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- package/erlang-p1-tls/erlang-p1-tls.hash | 2 +-
- package/erlang-p1-tls/erlang-p1-tls.mk   | 2 +-
+ package/erlang-p1-zlib/erlang-p1-zlib.hash | 2 +-
+ package/erlang-p1-zlib/erlang-p1-zlib.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/erlang-p1-tls/erlang-p1-tls.hash b/package/erlang-p1-tls/erlang-p1-tls.hash
-index b5b800b202..af635e5221 100644
---- a/package/erlang-p1-tls/erlang-p1-tls.hash
-+++ b/package/erlang-p1-tls/erlang-p1-tls.hash
+diff --git a/package/erlang-p1-zlib/erlang-p1-zlib.hash b/package/erlang-p1-zlib/erlang-p1-zlib.hash
+index dc14dd0707..6717abdde0 100644
+--- a/package/erlang-p1-zlib/erlang-p1-zlib.hash
++++ b/package/erlang-p1-zlib/erlang-p1-zlib.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256 ca9670b7f78a025b101e3fee6255d7472d6b52abc46444cc45616c3d1bd75b9b erlang-p1-tls-1.0.17.tar.gz
-+sha256 5bb883b03514999876c750cdb08a5e4cf80a9eb89319037b612e1265c43f6f6d erlang-p1-tls-1.0.25.tar.gz
-diff --git a/package/erlang-p1-tls/erlang-p1-tls.mk b/package/erlang-p1-tls/erlang-p1-tls.mk
-index ad7317dc8c..b569664465 100644
---- a/package/erlang-p1-tls/erlang-p1-tls.mk
-+++ b/package/erlang-p1-tls/erlang-p1-tls.mk
+-sha256 8396f9cb17fdb195d9a2537ad76327bf930d66118b87b7108f27e5ed28b7cde6 erlang-p1-zlib-1.0.3.tar.gz
++sha256 3328661c512c28e68db69b82202b8d6c4127f31f2aefc5b0040ba9bce6abe9b3 erlang-p1-zlib-1.0.4.tar.gz
+diff --git a/package/erlang-p1-zlib/erlang-p1-zlib.mk b/package/erlang-p1-zlib/erlang-p1-zlib.mk
+index bc53efccd7..f62eff6377 100644
+--- a/package/erlang-p1-zlib/erlang-p1-zlib.mk
++++ b/package/erlang-p1-zlib/erlang-p1-zlib.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_P1_TLS_VERSION = 1.0.17
-+ERLANG_P1_TLS_VERSION = 1.0.25
- ERLANG_P1_TLS_SITE = $(call github,processone,fast_tls,$(ERLANG_P1_TLS_VERSION))
- ERLANG_P1_TLS_LICENSE = Apache-2.0
- ERLANG_P1_TLS_LICENSE_FILES = LICENSE.txt
+-ERLANG_P1_ZLIB_VERSION = 1.0.3
++ERLANG_P1_ZLIB_VERSION = 1.0.4
+ ERLANG_P1_ZLIB_SITE = $(call github,processone,ezlib,$(ERLANG_P1_ZLIB_VERSION))
+ ERLANG_P1_ZLIB_LICENSE = Apache-2.0
+ ERLANG_P1_ZLIB_LICENSE_FILES = LICENSE.txt
 -- 
 2.17.1
