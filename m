@@ -1,49 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 26 Nov 2018 22:58:00 +0100
-Subject: [Buildroot] [PATCH v2 2/2] grpc: new package
-In-Reply-To: <CALxq1w5ZqCiG3CMZ1VRO25=mf3mWhJJ2+_+oArteVk7GzUQADw@mail.gmail.com>
-References: <20181118211942.28839-1-robertroyrose@gmail.com>
- <20181118211942.28839-2-robertroyrose@gmail.com>
- <20181124151256.5b786338@windsurf>
- <CALxq1w45Krr6E8Ri7rxrDN9USkbPdLbqmmK2x-XiH3AmHHeqpg@mail.gmail.com>
- <20181124214519.5d168fd8@windsurf>
- <CALxq1w6H6h3BY6R=PyuTAqHh6JtJyjVWg7F8DUnChMhyMaP1yw@mail.gmail.com>
- <CALxq1w5ZqCiG3CMZ1VRO25=mf3mWhJJ2+_+oArteVk7GzUQADw@mail.gmail.com>
-Message-ID: <20181126225800.40584f11@windsurf.home>
+Date: Mon, 26 Nov 2018 22:21:13 +0100
+Subject: [Buildroot] [git commit branch/next] package/civetweb: add hash for
+ license file
+Message-ID: <20181126215731.3039888918@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Robert,
+commit: https://git.buildroot.net/buildroot/commit/?id=06a2d67c2dc4898c00ff311596282e314e48c4b4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 24 Nov 2018 15:57:07 -0800, robert rose wrote:
-> I just ran with native cmake 3.12.1.
-> Everything worked and yes I did build grpc.
-> I am using Fedora 29 and everything is up to date.
-> After the make fails, do make V=1 and send me the output.  I will try and
-> help you debug it.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/civetweb/civetweb.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-So in fact, I was wrong: I told you the CMake version that my Fedora 29
-system uses, but on this system, it builds fine. The build failure
-occurred on an older Ubuntu system, which has:
-
-$ cmake --version
-cmake version 3.5.1
-
-The full build log is at:
-
-  http://code.bulix.org/h552dy-513207
-
-And the host-grpc build with make V=1 is at:
-
-  http://code.bulix.org/qy4r3g-513210
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/civetweb/civetweb.hash b/package/civetweb/civetweb.hash
+index b3cbaad71d..23f7c4acac 100644
+--- a/package/civetweb/civetweb.hash
++++ b/package/civetweb/civetweb.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256 de7d5e7a2d9551d325898c71e41d437d5f7b51e754b242af897f7be96e713a42  civetweb-v1.11.tar.gz
++sha256 1cd00da00b8649b4005757f4019acfd3102ecd407f47998081697e8e9086f706  LICENSE.md
