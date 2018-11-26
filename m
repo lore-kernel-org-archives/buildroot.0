@@ -1,44 +1,57 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Mon, 26 Nov 2018 14:41:05 +0100
-Subject: [Buildroot] [PATCH v2 11/15] erlang-p1-stun: Bump to version 1.0.25
-In-Reply-To: <20181126110807.31431-12-johan.oudinet@gmail.com>
-References: <20181126110807.31431-12-johan.oudinet@gmail.com>
-Message-ID: <20181126134105.2809-1-johan.oudinet@gmail.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Mon, 26 Nov 2018 15:49:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: bump to version
+ 2.22.4
+In-Reply-To: <87y39gzs8i.fsf@dell.be.48ers.dk>
+References: <20181125223818.40680-1-aperez@igalia.com>
+ <87y39gzs8i.fsf@dell.be.48ers.dk>
+Message-ID: <20181126154910.GB18222@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
----
-Changes v1 -> v2:
- - Remove emacs backup file
----
- package/erlang-p1-stun/erlang-p1-stun.hash | 2 +-
- package/erlang-p1-stun/erlang-p1-stun.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/package/erlang-p1-stun/erlang-p1-stun.hash b/package/erlang-p1-stun/erlang-p1-stun.hash
-index ee32834e34..7400a276a0 100644
---- a/package/erlang-p1-stun/erlang-p1-stun.hash
-+++ b/package/erlang-p1-stun/erlang-p1-stun.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 8efe2f47c2460b1e0d68a680dcfcd938a2bc98c85abb5b100c15246fe6a25506 erlang-p1-stun-1.0.16.tar.gz
-+sha256 a5a59ae3c75290029aa062ef19ecd52b8377959a8eb7352bd2a62c4ff1dd0613 erlang-p1-stun-1.0.25.tar.gz
-diff --git a/package/erlang-p1-stun/erlang-p1-stun.mk b/package/erlang-p1-stun/erlang-p1-stun.mk
-index 42bbc758e5..32bdd4f245 100644
---- a/package/erlang-p1-stun/erlang-p1-stun.mk
-+++ b/package/erlang-p1-stun/erlang-p1-stun.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ERLANG_P1_STUN_VERSION = 1.0.16
-+ERLANG_P1_STUN_VERSION = 1.0.25
- ERLANG_P1_STUN_SITE = $(call github,processone,stun,$(ERLANG_P1_STUN_VERSION))
- ERLANG_P1_STUN_LICENSE = Apache-2.0
- ERLANG_P1_STUN_LICENSE_FILES = LICENSE.txt
--- 
-2.17.1
+On Sun, 25 Nov 2018 23:50:53 +0100, Peter Korsgaard <peter@korsgaard.com> wrote:
+> >>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+> 
+>  > This is a maintenance release of the current stable WebKitGTK+ version,
+>  > which contains security fixes for  CVE-2018-4345, CVE-2018-4372,
+>  > CVE-2018-4373, CVE-2018-4375, CVE-2018-4376, CVE-2018-4378,
+>  > CVE-2018-4382, CVE-2018-4386, CVE-2018-4392, and CVE-2018-4416.
+>  > Additionally, it fixes a few build failures, and a crash when using
+>  > certain version of Cairo.
+> 
+>  > Release notes can be found in the announcement:
+> 
+>  >   https://webkitgtk.org/2018/11/21/webkitgtk2.22.4-released.html
+> 
+>  > More details on the issues covered by security fixes can be found
+>  > in the corresponding security advisory:
+> 
+>  >   https://webkitgtk.org/security/WSA-2018-0008.html
+> 
+>  > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> 
+> Great, this was still on my todo list - Committed, thanks.
+
+Thanks! My intention was precisely getting it merged before the next Buildroot
+release... which reminds me that a while ago I also sent an update to libepoxy
+that has not yet been merged:
+
+   https://patchwork.ozlabs.org/patch/981531/
+
+It would be nice to sneak that in as well ;-)
+
+Cheers,
+
+-Adri?n
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181126/52d1f5a7/attachment.asc>
