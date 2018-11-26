@@ -1,22 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 17:17:41 +0100
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: Use proper USE_WOFF2
- flag instead of ENABLE_WOFF2
-In-Reply-To: <20181118224943.9686-1-grzegorz@blach.pl> (Grzegorz Blach's
- message of "Sun, 18 Nov 2018 23:49:43 +0100")
-References: <20181118224943.9686-1-grzegorz@blach.pl>
-Message-ID: <875zwjyfru.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Nov 2018 17:18:31 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] vtun: remove reference to
+ start-stop-daemon from package help
+Message-ID: <20181126161520.6F21D81125@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Grzegorz" == Grzegorz Blach <grzegorz@blach.pl> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=4394d4ed7c2019f89c74c44f4e85bc7c10ade4c7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
- > Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+None of the other 82 packages that use start-stop-daemon does this.
 
-Committed to 2018.02.x and 2018.08.x, thanks.
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 11d96cdeb9d59e81973c49fb713fb5982f196110)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/vtun/Config.in | 3 ---
+ 1 file changed, 3 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/vtun/Config.in b/package/vtun/Config.in
+index bb8919c3d0..d63e7c76ef 100644
+--- a/package/vtun/Config.in
++++ b/package/vtun/Config.in
+@@ -10,7 +10,4 @@ config BR2_PACKAGE_VTUN
+ 
+ 	  It supports IP, PPP, SLIP, Ethernet and other tunnel types.
+ 
+-	  NOTE: It uses start-stop-daemon in init script, so be sure
+-	  to enable that within busybox
+-
+ 	  http://vtun.sourceforge.net/
