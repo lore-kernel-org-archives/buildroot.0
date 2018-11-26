@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 26 Nov 2018 22:02:09 +0100
-Subject: [Buildroot] [PATCH v3 1/5] grub2: separate target and host
- builds
-In-Reply-To: <20180926223719.12604-2-nunes.erico@gmail.com>
+Date: Mon, 26 Nov 2018 22:02:18 +0100
+Subject: [Buildroot] [PATCH v3 2/5] grub2: add option to install tools
+In-Reply-To: <20180926223719.12604-3-nunes.erico@gmail.com>
 References: <20180926223719.12604-1-nunes.erico@gmail.com>
- <20180926223719.12604-2-nunes.erico@gmail.com>
-Message-ID: <20181126220209.196ddbe6@windsurf.home>
+ <20180926223719.12604-3-nunes.erico@gmail.com>
+Message-ID: <20181126220218.35624d11@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +13,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 27 Sep 2018 00:37:15 +0200, Erico Nunes wrote:
-> grub2 requires the host grub2-mkimage tool to build some of its target
-> images. The current way of building this tool in the grub2 package is to
-> perform a simultaneous host-tools/target-bootloader build during the
-> grub2 build step.
-> This method makes the recipe complex to understand, and proved to be a
-> complication during work to enable grub2 support for other architectures
-> than x86.
-> This patch tries to do a better separation between the build of grub2
-> host tools and target boot loader image, as a partial step to enable
-> grub2 to build for other architectures.
+On Thu, 27 Sep 2018 00:37:16 +0200, Erico Nunes wrote:
+> Add an option to install grub2 support tools to the target.
+> 
+> In the context of Buildroot, some useful target tools provided are
+> grub2-editenv, grub2-reboot, which provide means to manage the grub2,
+> environment, boot order, and others.
 > 
 > Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
 > ---
->  boot/grub2/grub2.mk | 48 +++++++++++++++++++++++----------------------
->  1 file changed, 25 insertions(+), 23 deletions(-)
+>  boot/grub2/Config.in           | 8 ++++++++
+>  boot/grub2/grub2.mk            | 5 +++++
+>  support/scripts/check-bin-arch | 4 ++++
+>  3 files changed, 17 insertions(+)
 
 Applied to next, thanks.
 
