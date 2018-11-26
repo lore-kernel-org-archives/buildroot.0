@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 17:21:08 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] package/netplug: fix
+Date: Mon, 26 Nov 2018 17:21:27 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/netplug: fix
  quoting of ${NETWORKING} in init script
-Message-ID: <20181126161759.779C788710@busybox.osuosl.org>
+Message-ID: <20181126161818.786CD88714@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b0dfb76037c303e4b6474d1f82f0674d5a329ca
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8603656ec8c88bd499e27b5465679b4922241fc0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Since 4adaa581b27dc27298eb7cc421ee8f530f88e18e, S29netplug looks for
 /etc/default/network instead of /etc/sysconfig/network.  When this
