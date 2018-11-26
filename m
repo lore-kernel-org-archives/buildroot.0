@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 12:45:43 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/openocd: add
+Date: Mon, 26 Nov 2018 12:45:52 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] package/openocd: add
  missing host-pkgconf dependency
-Message-ID: <20181126114234.3655C88650@busybox.osuosl.org>
+Message-ID: <20181126114241.06B9488656@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a57968c88082252d2c3915d9e9c2f9351b5b5ba5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=89792d69a7e9d97528259c9962eb9f6888ec124c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 The configure.ac script uses PKG_CHECK_MODULES(), and we autoreconf
 the package, so host-pkgconf should be listed in the dependencies.
