@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 18:43:20 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] linux: Make dtc install
+Date: Mon, 26 Nov 2018 18:46:54 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] linux: Make dtc install
  step more reliable
-Message-ID: <20181126174009.8FBAC8883D@busybox.osuosl.org>
+Message-ID: <20181126174520.4A80680067@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b04ea081494c0ace6d91bad069a249a022c0f2d3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1353c0c8e26a190c27238360d7a917b945f02d52
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Checking for the existence of the dtc binary built by the
 non-dependent dtc package may cause instable behaviour when giving more
@@ -34,16 +34,16 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/linux/linux.mk b/linux/linux.mk
-index 24669d32f9..85c75ee63e 100644
+index f69aeb48bb..38a67edcd1 100644
 --- a/linux/linux.mk
 +++ b/linux/linux.mk
-@@ -446,9 +446,7 @@ define LINUX_INSTALL_HOST_TOOLS
+@@ -416,9 +416,7 @@ define LINUX_INSTALL_HOST_TOOLS
  	# Installing dtc (device tree compiler) as host tool, if selected
- 	if grep -q "CONFIG_DTC=y" $(@D)/.config; then \
- 		$(INSTALL) -D -m 0755 $(@D)/scripts/dtc/dtc $(HOST_DIR)/bin/linux-dtc ; \
--		if [ ! -e $(HOST_DIR)/bin/dtc ]; then \
--			ln -sf linux-dtc $(HOST_DIR)/bin/dtc ; \
--		fi \
+ 	if grep -q "CONFIG_DTC=y" $(@D)/.config; then	\
+ 		$(INSTALL) -D -m 0755 $(@D)/scripts/dtc/dtc $(HOST_DIR)/bin/linux-dtc ;	\
+-		if [ ! -e $(HOST_DIR)/bin/dtc ]; then	\
+-			ln -sf linux-dtc $(HOST_DIR)/bin/dtc ;	\
+-		fi	\
 +		$(if $(BR2_PACKAGE_HOST_DTC),,ln -sf linux-dtc $(HOST_DIR)/bin/dtc;) \
  	fi
  endef
