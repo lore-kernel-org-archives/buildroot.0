@@ -1,33 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 17:57:28 +0100
-Subject: [Buildroot] [PATCH] configs/imx6sabre: Create distinct
- pre-processed mkimage config files
-In-Reply-To: <1542912921-28407-1-git-send-email-festevam@gmail.com> (Fabio
- Estevam's message of "Thu, 22 Nov 2018 16:55:21 -0200")
-References: <1542912921-28407-1-git-send-email-festevam@gmail.com>
-Message-ID: <87y39fvksn.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Nov 2018 17:59:04 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] configs/imx6-sabresd_qt5:
+ add missing dependency on host-openssl
+Message-ID: <20181126165602.05C15887D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=17a5b5b61d3ccc6dde708140c75243034d14998e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
- > Commit 0c4bccf9e882 ("configs/imxsabre: Fix U-Boot parallel build issue")
- > tried to fix the parallel build issue, but the real fix was developed
- > later by Trent Piepho later, so add such commit to fix Buildroot
- > build failures on rel_imx_4.9.x_1.0.0_ga NXP branch.
+host-openssl is needed to build the Linux kernel. This is the same
+issue that was fixed in commit
+5dac3b9b8d72ea2b4aa264bfaa54e41f32595009 ("configs/imx6-sabresd: needs
+host-openssl for the Linux kernel build") for the minimal defconfig
+for the same board.
 
- > Fixes:
- > https://gitlab.com/buildroot.org/buildroot/-/jobs/123771053
- > https://gitlab.com/buildroot.org/buildroot/-/jobs/123771054
- > https://gitlab.com/buildroot.org/buildroot/-/jobs/123771055
+Fixes:
 
- > Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Signed-off-by: Fabio Estevam <festevam@gmail.com>
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/123771070
 
-Committed to 2018.02.x and 2018.08.x, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit c32608ba39ebd07dc992bde1380077d5c65a9870)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/imx6-sabresd_qt5_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
+index 7457af3135..2534d5cb87 100644
+--- a/configs/imx6-sabresd_qt5_defconfig
++++ b/configs/imx6-sabresd_qt5_defconfig
+@@ -43,6 +43,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/freescale/imx6-sabresd/linux_qt5.fragment"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+ # GL driver
+ BR2_PACKAGE_MESA3D=y
