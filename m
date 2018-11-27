@@ -1,32 +1,50 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Tue, 27 Nov 2018 23:54:25 +0100
-Subject: [Buildroot] [PATCH] perl-net-ssleay: fix dependency
-Message-ID: <20181127225425.14311-1-francois.perrad@gadz.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 28 Nov 2018 00:08:20 +0100
+Subject: [Buildroot] [git commit] popt: add libiconv to popt.pc.in
+Message-ID: <20181127230753.A4D1688D12@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-this dependency was accidentally removed
-by https://git.busybox.net/buildroot/commit/package/perl-net-ssleay?id=da9e06cabc578bf9138e100d1492a2d5f2038415
+commit: https://git.buildroot.net/buildroot/commit/?id=1209eb2dca71fe43e3742f81b43591f6b24ed51a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Add ${LTLIBICONV} to popt.pc.in so applications such as shairport-sync
+will know that they must link with -liconv when building statically
+
+Fixes:
+ - http://autobuild.buildroot.org/results/c5b0d1d2867e49c022a2ad971dd9f358ff0f3865
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/perl-net-ssleay/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/popt/0004-add-libiconv-to-popt.pc.patch | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/package/perl-net-ssleay/Config.in b/package/perl-net-ssleay/Config.in
-index 16b18c45d..6998553ef 100644
---- a/package/perl-net-ssleay/Config.in
-+++ b/package/perl-net-ssleay/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PERL_NET_SSLEAY
- 	bool "perl-net-ssleay"
- 	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_OPENSSL
- 	help
- 	  Perl extension for using OpenSSL.
- 
--- 
-2.17.1
+diff --git a/package/popt/0004-add-libiconv-to-popt.pc.patch b/package/popt/0004-add-libiconv-to-popt.pc.patch
+new file mode 100644
+index 0000000000..087a30bb7a
+--- /dev/null
++++ b/package/popt/0004-add-libiconv-to-popt.pc.patch
+@@ -0,0 +1,19 @@
++Add LTLIBICONV to popt.pc.in
++
++Add ${LTLIBICONV} to popt.pc.in so applications such as shairport-sync
++will know that they must link with -liconv when building statically
++
++Fixes:
++ - http://autobuild.buildroot.org/results/c5b0d1d2867e49c022a2ad971dd9f358ff0f3865
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++
++diff -Naurp popt-1.16-vanilla/popt.pc.in popt-1.16/popt.pc.in
++--- popt-1.16-vanilla/popt.pc.in	2018-11-22 20:26:55.735211662 +0100
+++++ popt-1.16/popt.pc.in	2018-11-22 20:34:11.371303724 +0100
++@@ -7,4 +7,5 @@ Name: popt
++ Version: @VERSION@
++ Description: popt library.
++ Libs: @POPT_PKGCONFIG_LIBS@
+++Libs.private: @LTLIBICONV@
++ Cflags: -I${includedir}
