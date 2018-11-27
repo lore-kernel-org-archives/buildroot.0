@@ -1,46 +1,25 @@
-From: Martin Kepplinger <martink@posteo.de>
-Date: Tue, 27 Nov 2018 09:37:14 +0100
-Subject: [Buildroot] [PATCH] tslib: update to 1.18
-Message-ID: <20181127083714.13509-1-martink@posteo.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 27 Nov 2018 09:54:05 +0100
+Subject: [Buildroot] [PATCH 1/3] configs/pc_x86_64_bios: needs
+ host-openssl to build Linux
+In-Reply-To: <20181127080840.19434-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Tue, 27 Nov 2018 09:08:38 +0100")
+References: <20181127080840.19434-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87zhturjde.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For the curious, there's the changelog summary:
-https://github.com/kergoth/tslib/releases
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Signed-off-by: Martin Kepplinger <martink@posteo.de>
----
- package/tslib/tslib.hash | 4 ++--
- package/tslib/tslib.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Fixes:
+ >   https://gitlab.com/buildroot.org/buildroot/-/jobs/125631915
 
-diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
-index c5fc836d64..a758702e74 100644
---- a/package/tslib/tslib.hash
-+++ b/package/tslib/tslib.hash
-@@ -1,5 +1,5 @@
--# https://github.com/kergoth/tslib/releases/download/1.17/tslib-1.17.tar.xz.sha256
--sha256  9fdd33e66976bf9cc799be33824ba66672f892826e9b22de12b14df15cb0fddc  tslib-1.17.tar.xz
-+# https://github.com/kergoth/tslib/releases/download/1.18/tslib-1.18.tar.xz.sha256
-+sha256  986cce6d8ed896c0eba68d78acd788c7860ffe8a2165a9f631954e7f2889958b  tslib-1.18.tar.xz
- 
- # Locally computed
- sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  COPYING
-diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-index bd5311b93b..f5c4cd7997 100644
---- a/package/tslib/tslib.mk
-+++ b/package/tslib/tslib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TSLIB_VERSION = 1.17
-+TSLIB_VERSION = 1.18
- TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
- TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
- TSLIB_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed all 3, thanks!
+
 -- 
-2.19.1
+Bye, Peter Korsgaard
