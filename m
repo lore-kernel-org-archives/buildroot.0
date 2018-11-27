@@ -1,44 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 Nov 2018 11:30:05 +0100
-Subject: [Buildroot] [git commit] package/dante: needs autoreconf
-Message-ID: <20181127102803.21DAC88C95@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 27 Nov 2018 11:35:57 +0100
+Subject: [Buildroot] [PATCH] strace: don't remove strace-graph
+ unconditionally
+In-Reply-To: <e86fb4b00011e29c62871b0386b09af09939badd.1543313816.git.baruch@tkos.co.il>
+References: <e86fb4b00011e29c62871b0386b09af09939badd.1543313816.git.baruch@tkos.co.il>
+Message-ID: <20181127113557.2299b963@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83d19028126ffcad91913dd62d862809f743fd64
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-We have a patch that touches a .m4 file, so we need to regenerate the
-configure script. Otherwise, this is done during the build step, and
-some environment variables are thus missing and the build may fail when
-the host machine does not have the expected autostuff tools.
+On Tue, 27 Nov 2018 12:16:56 +0200, Baruch Siach wrote:
+> strace-graph is a perl script. This script is removed unconditionally
+> since commit 720c0ca5ba7 ("strace: convert to makefile.autotools.in
+> format") from 2008. Since then Buildroot added support for perl on
+> target. Don't remove strace-graph when perl is built for target.
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-Fixes:
-    http://autobuild.buildroot.org/results/e37/e37e61bae1d81a7956e2843be70fea84b0bbb64b/
-    http://autobuild.buildroot.org/results/f96/f969718402cae71446d6280ec1f66d357a155293/
-    ...
+Would be nice to enclose the STRACE_REMOVE_STRACE_GRAPH function into
+the condition. No need to resend just for that, it can be fixed when
+applying.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dante/dante.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Best regards,
 
-diff --git a/package/dante/dante.mk b/package/dante/dante.mk
-index a147aa36dc..9471acc692 100644
---- a/package/dante/dante.mk
-+++ b/package/dante/dante.mk
-@@ -9,8 +9,8 @@ DANTE_SITE = http://www.inet.no/dante/files
- DANTE_LICENSE = BSD-3-Clause
- DANTE_LICENSE_FILES = LICENSE
- 
--# Dante uses a *VERY* old configure.ac
--DANTE_LIBTOOL_PATCH = NO
-+# 0002-compiler.m4-do-not-remove-g-flag.patch touches a m4 file
-+DANTE_AUTORECONF = YES
- 
- DANTE_CONF_OPTS += --disable-client --disable-preload --without-pam
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
