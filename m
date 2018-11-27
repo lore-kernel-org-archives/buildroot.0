@@ -1,54 +1,48 @@
-From: Matthew Weber <Matthew.Weber@collins.com>
-Date: Tue, 27 Nov 2018 08:27:02 -0600
-Subject: [Buildroot] [PATCH] tslib: update to 1.18
-In-Reply-To: <20181127083714.13509-1-martink@posteo.de>
-References: <20181127083714.13509-1-martink@posteo.de>
-Message-ID: <CANQCQpZzXhoc5xBfhhchCYEukodr4UZsmguv8tNMuQNypKnFvQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 27 Nov 2018 17:33:11 +0100
+Subject: [Buildroot] [PATCH 1/2] dante: add AUTORECONF=YES
+In-Reply-To: <CAPi7W824aKm=wYcmBrjZqVCq6FtDiGxroGJoyZS_dROB95Fcew@mail.gmail.com>
+References: <20181126182248.24817-1-fontaine.fabrice@gmail.com>
+ <20181126194323.GJ28830@scaer>
+ <CAPi7W824aKm=wYcmBrjZqVCq6FtDiGxroGJoyZS_dROB95Fcew@mail.gmail.com>
+Message-ID: <20181127163311.GN28830@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Martin,
+Fabrice, All,
 
-On Tue, Nov 27, 2018 at 2:37 AM Martin Kepplinger <martink@posteo.de> wrote:
->
-> For the curious, there's the changelog summary:
-> https://github.com/kergoth/tslib/releases
->
-> Signed-off-by: Martin Kepplinger <martink@posteo.de>
-> ---
->  package/tslib/tslib.hash | 4 ++--
->  package/tslib/tslib.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
-> index c5fc836d64..a758702e74 100644
-> --- a/package/tslib/tslib.hash
-> +++ b/package/tslib/tslib.hash
-> @@ -1,5 +1,5 @@
-> -# https://github.com/kergoth/tslib/releases/download/1.17/tslib-1.17.tar.xz.sha256
-> -sha256  9fdd33e66976bf9cc799be33824ba66672f892826e9b22de12b14df15cb0fddc  tslib-1.17.tar.xz
-> +# https://github.com/kergoth/tslib/releases/download/1.18/tslib-1.18.tar.xz.sha256
-> +sha256  986cce6d8ed896c0eba68d78acd788c7860ffe8a2165a9f631954e7f2889958b  tslib-1.18.tar.xz
->
->  # Locally computed
->  sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  COPYING
-> diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-> index bd5311b93b..f5c4cd7997 100644
-> --- a/package/tslib/tslib.mk
-> +++ b/package/tslib/tslib.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->
-> -TSLIB_VERSION = 1.17
-> +TSLIB_VERSION = 1.18
->  TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
->  TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
->  TSLIB_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+On 2018-11-27 08:17 +0100, Fabrice Fontaine spake thusly:
+> Le lun. 26 nov. 2018 ? 20:43, Yann E. MORIN < [1]yann.morin.1998@free.fr> a ?crit?:
+>   On 2018-11-26 19:22 +0100, Fabrice Fontaine spake thusly:
+>   > We're patching compiler.m4
+>   Duh? Already submitted:
+>   ? ? [2]https://patchwork.ozlabs.org/patch/1002784/
+> I know but I wanted to send the second patch of the serie without waiting for your first patch to be applied.
 
-TSLIB_LICENSE_FILES = COPYING
+In that case, you could do that in one of three ways:
 
-Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+  - say so in a post-commit comment (after the --- line) of your own
+    patch, or
+
+  - send your patch as a reply to the existing one (using 'git send-email
+    --in-reply-to=MSG-ID', where MSG_ID is the message ID of the mail
+    that the previous patch was sent as), or
+
+  - 'git am' the existing patch, and send the series, marking the whole
+    series as 'v2'.
+
+I would favour the last solution, as I've already used it myself.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
