@@ -1,40 +1,52 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Tue, 27 Nov 2018 00:42:55 -0200
-Subject: [Buildroot] [PATCH/next 2/3] support/testing; add prosody test
-References: <20181124090754.14775-3-francois.perrad@gadz.org>
-Message-ID: <5bfcaf2f1383c_36673f995613474457487@ultri5.mail>
+From: Christian Stewart <christian@paral.in>
+Date: Mon, 26 Nov 2018 19:30:15 -0800
+Subject: [Buildroot] [PATCH v8 1/1] docker-engine: split docker-{cli,
+ engine}, bump to v18.06.1-ce
+In-Reply-To: <CANQCQpYM2E_+rMfDQ7svB05V4TfJKpgHCOpoPN49uLLqRZ30Hw@mail.gmail.com>
+References: <20181108032458.1028-1-christian@paral.in>
+ <CANQCQpa0SGdEHVFxn_wmKnktat18iAJ2YLXYQd+4Uqzq5GzG4A@mail.gmail.com>
+ <874lcki4rw.fsf@paral.in>
+ <CANQCQpaK4m3iqadyDAzuypV2Ze3LdhedHhn50AxF41buOMrTDQ@mail.gmail.com>
+ <871s7liu5e.fsf@paral.in>
+ <CANQCQpYM2E_+rMfDQ7svB05V4TfJKpgHCOpoPN49uLLqRZ30Hw@mail.gmail.com>
+Message-ID: <87ftvnyz7c.fsf@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Matthew,
 
-On Sat, Nov 24, 2018 at 07:07 AM, Francois Perrad wrote:
+Matthew Weber <Matthew.Weber@collins.com> writes:
+> I haven't got back to doing more evaluation of docker, but when I
+> stopped working on things, I was able to narrow the hang down to be
+> related to the initialization of random.
 
-> +    def prosody_test(self):
-> +        # prosody was launched as service
-> +        cmd = "prosodyctl status"
-> +        output, exit_code = self.emulator.run(cmd)
-> +        self.assertEqual(exit_code, 0)
-> +        self.assertIn("Prosody is running", output[0])
+I have found the same. My laptop boot up would be blocked for minutes,
+and it was quite annoying / concerning, but I found that when I pressed
+some keys / moved the mouse the hang would go away. That would match
+with a starvation of entropy in the kernel.
 
-I get an error message before the expected string:
+> The one use case I have been thinking about for new projects is
+> building the most basic possible hosting environment to manage the
+> security footprint.  Maybe a LXC system container hosting environment
+> or a non-systemd dockerd.  Then inside of that run a systemd based
+> docker deployment which would be easier to swap out and do a true
+> shared filesystem approach vs a system container......
 
-# prosodyctl status
-certmanager         error       SSL/TLS: Error initialising for client_https port 0: unknown elliptic curve in "X25519:P-384:P-256:P-521"
-Prosody is running with PID 727
-#
+I think the most minimum environment would be base Buildroot with either
+the docker-containerd / runc stack, or something like cri-o (a
+Kubernetes minimal container runtime I am examining for use with
+Buildroot). One thing to consider is that the Go dependencies could be
+compiled together into a single binary, which would reduce binary
+footprint quite a bit I think. Much of Docker / dockerd features are
+unnecessary and can be removed as well / mapped to Buildroot options.
 
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/125808115
+Docker 2018.09 has been released, and I'm testing it now / will update
+the next docker-engine build series submission to target v18.09.0.
 
-I don't know if this message is expected in this minimal config or not.
-If it is expected, we could add a comment and run something like this:
-        self.assertIn("Prosody is running", output[1])
+https://github.com/paralin/buildroot/commit/8ac79e55d9495627c891b50dadf8fbde8352c282
 
-Any ideas?
-
-
-Regards,
-Ricardo
+Best,
+Christian
