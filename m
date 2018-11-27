@@ -1,70 +1,79 @@
-From: Matt Weber <Matthew.Weber@collins.com>
-Date: Mon, 26 Nov 2018 22:10:09 -0600
-Subject: [Buildroot] [NEXT] infra: add force build flag for host dependencies
-Message-ID: <20181127041009.11728-1-matthew.weber@rockwellcollins.com>
+From: Matthew Weber <Matthew.Weber@collins.com>
+Date: Mon, 26 Nov 2018 21:14:15 -0600
+Subject: [Buildroot] [PATCH v8 1/1] docker-engine: split docker-{cli,
+ engine}, bump to v18.06.1-ce
+In-Reply-To: <871s7liu5e.fsf@paral.in>
+References: <20181108032458.1028-1-christian@paral.in>
+ <CANQCQpa0SGdEHVFxn_wmKnktat18iAJ2YLXYQd+4Uqzq5GzG4A@mail.gmail.com>
+ <874lcki4rw.fsf@paral.in>
+ <CANQCQpaK4m3iqadyDAzuypV2Ze3LdhedHhn50AxF41buOMrTDQ@mail.gmail.com>
+ <871s7liu5e.fsf@paral.in>
+Message-ID: <CANQCQpYM2E_+rMfDQ7svB05V4TfJKpgHCOpoPN49uLLqRZ30Hw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
+Christian,
 
-This commit adds a config option which will force buildroot to
-build all host dependencies even if they are already present on the
-host system. This may be a desirable option if different hosts are
-used to build the same source. In this case, some packages will be
-built on one host that are not built on another. This is problematic
-if build source archives are cached afterwards for offline builds.
+On Thu, Nov 15, 2018 at 9:22 PM Christian Stewart <christian@paral.in> wrote:
+>
+> Hi Matthew,
+>
+> Matthew Weber <matthew.weber@rockwellcollins.com> writes:
+> > I did find that the dockercli just hangs when I call it, however I
+> > check and the daemon is running.  I'll see if I can get more debug
+> > (strace, etc).
+>
+> The CLI itself is fine, but the daemon sometimes hangs on startup. I
+> have noticed this problem on my laptop as well (x86) so it's not
+> specific to this build or environment, it seems.
+>
+> The daemon will be called, but will not log anything, and basically hang
+> for sometimes minutes. I try restarting it a few times, but that doesn't
+> seem to work. If I wait, it usually starts up eventually.
+>
+> Most of the time the daemon starts immediately, but something seems to
+> trigger this hang.
+>
+> Once the daemon is running and logging messages, the CLI is responsive.
+>
+> It will probably require a strace to figure out why Docker is hanging on
+> startup like this.
 
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
----
- Config.in                            | 10 ++++++++++
- support/dependencies/dependencies.mk |  6 ++++++
- 2 files changed, 16 insertions(+)
+I haven't got back to doing more evaluation of docker, but when I
+stopped working on things, I was able to narrow the hang down to be
+related to the initialization of random.
 
-diff --git a/Config.in b/Config.in
-index 6b5b2b043c..0096ef389f 100644
---- a/Config.in
-+++ b/Config.in
-@@ -678,6 +678,16 @@ config BR2_COMPILER_PARANOID_UNSAFE_PATH
- 	  and external toolchain backends (through the toolchain
- 	  wrapper).
- 
-+config BR2_FORCE_HOST_BUILD
-+	bool "Force the building of host dependencies"
-+	help
-+	  This option forces Buildroot to build all available host
-+	  dependencies, even if they are already installed on the
-+	  system.
-+	  This option can be used to ensure that the download cache of
-+	  source archives for packages remain consistent between
-+	  different build hosts. This option will increase build time.
-+
- config BR2_REPRODUCIBLE
- 	bool "Make the build reproducible (experimental)"
- 	# SOURCE_DATE_EPOCH support in toolchain-wrapper requires GCC 4.4
-diff --git a/support/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
-index 563574d6ad..a0d857ce6b 100644
---- a/support/dependencies/dependencies.mk
-+++ b/support/dependencies/dependencies.mk
-@@ -9,9 +9,15 @@
- # can be the candidate to be checked. If not present, the check-host-$(1).sh
- # script should use 'which' to find a candidate. The script should return
- # the path to the suitable host tool, or nothing if no suitable tool was found.
-+ifeq ($(BR2_FORCE_HOST_BUILD),y)
-+define suitable-host-package
-+$(shell exit 1)
-+endef
-+else
- define suitable-host-package
- $(shell support/dependencies/check-host-$(1).sh $(2))
- endef
-+endif
- # host utilities needs host-tar to extract the source code tarballs, so
- # ensure check-host-tar.mk is included before the rest
- include support/dependencies/check-host-tar.mk
--- 
-2.18.0
+>
+> >> Some alternatives:
+> >>
+> >>  - http://cri-o.io/ - container runtime interface, will add to BR
+> >>  - runc - can be used independently of Docker
+> >>  - docker-containerd - separate daemon for managing container basics
+> >>  - rkt - coreos container manager
+> >>  - libpod/podman: https://github.com/containers/libpod
+> >>
+> >> I hope to add at least cri-o, rkt, and podman support to Buildroot in
+> >> the near future.
+
+Cool.
+
+The one use case I have been thinking about for new projects is
+building the most basic possible hosting environment to manage the
+security footprint.  Maybe a LXC system container hosting environment
+or a non-systemd dockerd.  Then inside of that run a systemd based
+docker deployment which would be easier to swap out and do a true
+shared filesystem approach vs a system container......
+
+> >
+> > Are any of those OCI compliant and not written in GO? :-)
+>
+> I haven't seen a OCI compliant runtime that is not Go, yet.
+>
+> Best,
+> Christian
+>
+
+Matt
