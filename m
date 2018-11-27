@@ -1,34 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 27 Nov 2018 09:08:38 +0100
-Subject: [Buildroot] [PATCH 1/3] configs/pc_x86_64_bios: needs host-openssl
- to build Linux
-Message-ID: <20181127080840.19434-1-thomas.petazzoni@bootlin.com>
+From: Martin Kepplinger <martink@posteo.de>
+Date: Tue, 27 Nov 2018 09:37:14 +0100
+Subject: [Buildroot] [PATCH] tslib: update to 1.18
+Message-ID: <20181127083714.13509-1-martink@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+For the curious, there's the changelog summary:
+https://github.com/kergoth/tslib/releases
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/125631915
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Martin Kepplinger <martink@posteo.de>
 ---
- configs/pc_x86_64_bios_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ package/tslib/tslib.hash | 4 ++--
+ package/tslib/tslib.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/pc_x86_64_bios_defconfig b/configs/pc_x86_64_bios_defconfig
-index 1cfc0e424f..6e9220bb31 100644
---- a/configs/pc_x86_64_bios_defconfig
-+++ b/configs/pc_x86_64_bios_defconfig
-@@ -32,6 +32,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.10"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
+index c5fc836d64..a758702e74 100644
+--- a/package/tslib/tslib.hash
++++ b/package/tslib/tslib.hash
+@@ -1,5 +1,5 @@
+-# https://github.com/kergoth/tslib/releases/download/1.17/tslib-1.17.tar.xz.sha256
+-sha256  9fdd33e66976bf9cc799be33824ba66672f892826e9b22de12b14df15cb0fddc  tslib-1.17.tar.xz
++# https://github.com/kergoth/tslib/releases/download/1.18/tslib-1.18.tar.xz.sha256
++sha256  986cce6d8ed896c0eba68d78acd788c7860ffe8a2165a9f631954e7f2889958b  tslib-1.18.tar.xz
  
- # Firmware
- BR2_PACKAGE_LINUX_FIRMWARE=y
+ # Locally computed
+ sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  COPYING
+diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+index bd5311b93b..f5c4cd7997 100644
+--- a/package/tslib/tslib.mk
++++ b/package/tslib/tslib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TSLIB_VERSION = 1.17
++TSLIB_VERSION = 1.18
+ TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
+ TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
+ TSLIB_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
 -- 
 2.19.1
