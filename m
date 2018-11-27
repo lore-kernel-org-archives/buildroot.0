@@ -1,92 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 27 Nov 2018 18:55:31 +0100
-Subject: [Buildroot] [PATCH 1/3 v2] infra/pkg-golang: enforce number of
- parallel jobs
-In-Reply-To: <7099f806-10ab-0538-ccbc-563a792b121d@mind.be>
-References: <cover.1543137559.git.yann.morin.1998@free.fr>
- <951dd893ccaa0d4a894bfcac76dc04e28d9acafb.1543137559.git.yann.morin.1998@free.fr>
- <7099f806-10ab-0538-ccbc-563a792b121d@mind.be>
-Message-ID: <20181127175531.GO28830@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 27 Nov 2018 22:20:37 +0100
+Subject: [Buildroot] [PATCH] package/systemd: needs glibc
+In-Reply-To: <20181123092754.4dd189cc@windsurf>
+References: <20181121210556.18619-1-yann.morin.1998@free.fr>
+ <87y39lm6e8.fsf@dell.be.48ers.dk> <20181122174417.7e101a15@windsurf>
+ <20181123092754.4dd189cc@windsurf>
+Message-ID: <d1142785-90ff-2a41-b95a-263e10eb120d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
 
-On 2018-11-27 18:42 +0100, Arnout Vandecappelle spake thusly:
-> On 25/11/2018 10:19, Yann E. MORIN wrote:
-> > By default, the go compiler will spawn as many jobs as there are CPUs
-> > available, thus possibily over-shooting the limits set by the user.
-> > 
-> > Make it abide by the user's wish, and specify the number of jobs allowed
-> > to run.
-> > 
-> > We can do so without fear of a package failing to build in parallel,
-> > because they were already all building in parallel, as that is the
-> > default for the go compiler.
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > ---
-> >  package/pkg-golang.mk | 6 ++++--
-> >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-> > index 6eacd14180..4f2c7e77e1 100644
-> > --- a/package/pkg-golang.mk
-> > +++ b/package/pkg-golang.mk
-> > @@ -55,8 +55,10 @@ ifeq ($(BR2_STATIC_LIBS),y)
-> >  $(2)_LDFLAGS += -extldflags '-static'
-> >  endif
-> >  
-> > -$(2)_BUILD_OPTS += -ldflags "$$($(2)_LDFLAGS)"
-> > -$(2)_BUILD_OPTS += -tags "$$($(2)_TAGS)"
-> > +$(2)_BUILD_OPTS += \
-> > +	-ldflags "$$($(2)_LDFLAGS)" \
-> > +	-tags "$$($(2)_TAGS)" \
-> > +	-p $(PARALLEL_JOBS)
-> 
->  I wonder, if BR2_LEVEL == 0, if it wouldn't be more appropriate to not pass any
-> option. That said, it probably needlessly complicates things.
 
-Well, I'd rather we be consistent: anything that want to be parallel
-uses $(PARALLEL_JOBS), which is always the correct value.
+On 23/11/2018 09:27, Thomas Petazzoni wrote:
+[snip]
+> mysql> select * from (select * from results where builddate > '2018-09-01') as foo inner join symbol_per_result on symbol_per_result.result_id=foo.id where symbol_per_result.symbol_id=(select id from config_symbol where name="BR2_INIT_SYSTEMD" and value="y");
+[snip]
+> If anybody knows how to speed up this SQL query and/or adjust the SQL
+> database schema to make it faster, it would be nice. I can provide a
+> dump of the SQL database.
 
->  [I also wonder but don't want to think about: what will happen in top-level
-> parallel build...]
+ It's hard to predict the efficiency of SQL statements, but I would expect
+something like this to be more efficient:
 
-I think it would go smoothly, in fact, given the direction we're going.
-AFAIR, Thomas suggested we decorelate the top-level parallelism from the
-package-level parallelism, i.e. two config options: one to specify the
-number of simultaneous package to build in parallel, and one to specify
-the number of jobs per package [0].
+select * from results
+  inner join (select result_id from symbol_per_result A, symbol_per_result B
+              where A.result_id = B.result_id
+                and A.symbol_id = (select id from config_symbol
+                                   where name = "BR2_INIT_SYSTEMD")
+                and A.value = "y"
+                and B.symbol_id = (select id from config_symbol
+                                   where name = "BR2_TOOLCHAIN_USES_UCLIBC")
+                and B.value = "y")
+    as foo
+  on foo.result_id = results.id
+where builddate > '2018-09-01';
 
-That does not allow to parallelise as much as it sould be, but allows to
-not overload the system too much, especially for those buildsystems that
-do not know how to talk to a make-jobserver, like guess what, go, or
-ninja [1] or such.
+ I do assume that symbol_per_result is indexed or keyed on symbol_id so lookups
+are fast, right?
 
-So, in the end, the existig PARALLEL_JOBS will be the package-level
-paralelism, with the user specifying the top-level parallelism with
-'make -j N'
+ The filtering on builddate could of course be made a lot faster if the
+builddate was also added to the symbol_per_result table. But the again, you
+could add all of results to the symbol_per_result table...
 
-Not that this is ideal, I know, but that's the best we can do...
-
-[0] AFAIUI, that's what is done in The Other buildsystem. Or so I was
-told...
-
-[1] there is a MR pending for ninja, and they seem to be amenable to
-merge it sooner or later. But there will always be outliers that don;t
-know how to (or want to) play by the rules.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+ Regards,
+ Arnout
