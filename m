@@ -1,31 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 Nov 2018 11:30:38 +0100
-Subject: [Buildroot] [PATCH] package/dante: needs autoreconf
-In-Reply-To: <20181125112612.8170-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Sun, 25 Nov 2018 12:26:12 +0100")
-References: <20181125112612.8170-1-yann.morin.1998@free.fr>
-Message-ID: <87va4irewh.fsf@dell.be.48ers.dk>
+Date: Tue, 27 Nov 2018 11:30:05 +0100
+Subject: [Buildroot] [git commit] package/dante: needs autoreconf
+Message-ID: <20181127102803.21DAC88C95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=83d19028126ffcad91913dd62d862809f743fd64
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > We have a patch that touches a .m4 file, so we need to regenerate the
- > configure script. Otherwise, this is done during the build step, and
- > some environment variables are thus missing and the build may fail when
- > the host machine does not have the expected autostuff tools.
+We have a patch that touches a .m4 file, so we need to regenerate the
+configure script. Otherwise, this is done during the build step, and
+some environment variables are thus missing and the build may fail when
+the host machine does not have the expected autostuff tools.
 
- > Fixes:
- >     http://autobuild.buildroot.org/results/e37/e37e61bae1d81a7956e2843be70fea84b0bbb64b/
- >     http://autobuild.buildroot.org/results/f96/f969718402cae71446d6280ec1f66d357a155293/
- >     ...
+Fixes:
+    http://autobuild.buildroot.org/results/e37/e37e61bae1d81a7956e2843be70fea84b0bbb64b/
+    http://autobuild.buildroot.org/results/f96/f969718402cae71446d6280ec1f66d357a155293/
+    ...
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/dante/dante.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/dante/dante.mk b/package/dante/dante.mk
+index a147aa36dc..9471acc692 100644
+--- a/package/dante/dante.mk
++++ b/package/dante/dante.mk
+@@ -9,8 +9,8 @@ DANTE_SITE = http://www.inet.no/dante/files
+ DANTE_LICENSE = BSD-3-Clause
+ DANTE_LICENSE_FILES = LICENSE
+ 
+-# Dante uses a *VERY* old configure.ac
+-DANTE_LIBTOOL_PATCH = NO
++# 0002-compiler.m4-do-not-remove-g-flag.patch touches a m4 file
++DANTE_AUTORECONF = YES
+ 
+ DANTE_CONF_OPTS += --disable-client --disable-preload --without-pam
+ 
