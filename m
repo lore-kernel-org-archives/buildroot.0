@@ -1,52 +1,70 @@
-From: Christian Stewart <christian@paral.in>
-Date: Mon, 26 Nov 2018 19:30:15 -0800
-Subject: [Buildroot] [PATCH v8 1/1] docker-engine: split docker-{cli,
- engine}, bump to v18.06.1-ce
-In-Reply-To: <CANQCQpYM2E_+rMfDQ7svB05V4TfJKpgHCOpoPN49uLLqRZ30Hw@mail.gmail.com>
-References: <20181108032458.1028-1-christian@paral.in>
- <CANQCQpa0SGdEHVFxn_wmKnktat18iAJ2YLXYQd+4Uqzq5GzG4A@mail.gmail.com>
- <874lcki4rw.fsf@paral.in>
- <CANQCQpaK4m3iqadyDAzuypV2Ze3LdhedHhn50AxF41buOMrTDQ@mail.gmail.com>
- <871s7liu5e.fsf@paral.in>
- <CANQCQpYM2E_+rMfDQ7svB05V4TfJKpgHCOpoPN49uLLqRZ30Hw@mail.gmail.com>
-Message-ID: <87ftvnyz7c.fsf@paral.in>
+From: Matt Weber <Matthew.Weber@collins.com>
+Date: Mon, 26 Nov 2018 22:10:09 -0600
+Subject: [Buildroot] [NEXT] infra: add force build flag for host dependencies
+Message-ID: <20181127041009.11728-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matthew,
+From: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
 
-Matthew Weber <Matthew.Weber@collins.com> writes:
-> I haven't got back to doing more evaluation of docker, but when I
-> stopped working on things, I was able to narrow the hang down to be
-> related to the initialization of random.
+This commit adds a config option which will force buildroot to
+build all host dependencies even if they are already present on the
+host system. This may be a desirable option if different hosts are
+used to build the same source. In this case, some packages will be
+built on one host that are not built on another. This is problematic
+if build source archives are cached afterwards for offline builds.
 
-I have found the same. My laptop boot up would be blocked for minutes,
-and it was quite annoying / concerning, but I found that when I pressed
-some keys / moved the mouse the hang would go away. That would match
-with a starvation of entropy in the kernel.
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+---
+ Config.in                            | 10 ++++++++++
+ support/dependencies/dependencies.mk |  6 ++++++
+ 2 files changed, 16 insertions(+)
 
-> The one use case I have been thinking about for new projects is
-> building the most basic possible hosting environment to manage the
-> security footprint.  Maybe a LXC system container hosting environment
-> or a non-systemd dockerd.  Then inside of that run a systemd based
-> docker deployment which would be easier to swap out and do a true
-> shared filesystem approach vs a system container......
-
-I think the most minimum environment would be base Buildroot with either
-the docker-containerd / runc stack, or something like cri-o (a
-Kubernetes minimal container runtime I am examining for use with
-Buildroot). One thing to consider is that the Go dependencies could be
-compiled together into a single binary, which would reduce binary
-footprint quite a bit I think. Much of Docker / dockerd features are
-unnecessary and can be removed as well / mapped to Buildroot options.
-
-Docker 2018.09 has been released, and I'm testing it now / will update
-the next docker-engine build series submission to target v18.09.0.
-
-https://github.com/paralin/buildroot/commit/8ac79e55d9495627c891b50dadf8fbde8352c282
-
-Best,
-Christian
+diff --git a/Config.in b/Config.in
+index 6b5b2b043c..0096ef389f 100644
+--- a/Config.in
++++ b/Config.in
+@@ -678,6 +678,16 @@ config BR2_COMPILER_PARANOID_UNSAFE_PATH
+ 	  and external toolchain backends (through the toolchain
+ 	  wrapper).
+ 
++config BR2_FORCE_HOST_BUILD
++	bool "Force the building of host dependencies"
++	help
++	  This option forces Buildroot to build all available host
++	  dependencies, even if they are already installed on the
++	  system.
++	  This option can be used to ensure that the download cache of
++	  source archives for packages remain consistent between
++	  different build hosts. This option will increase build time.
++
+ config BR2_REPRODUCIBLE
+ 	bool "Make the build reproducible (experimental)"
+ 	# SOURCE_DATE_EPOCH support in toolchain-wrapper requires GCC 4.4
+diff --git a/support/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
+index 563574d6ad..a0d857ce6b 100644
+--- a/support/dependencies/dependencies.mk
++++ b/support/dependencies/dependencies.mk
+@@ -9,9 +9,15 @@
+ # can be the candidate to be checked. If not present, the check-host-$(1).sh
+ # script should use 'which' to find a candidate. The script should return
+ # the path to the suitable host tool, or nothing if no suitable tool was found.
++ifeq ($(BR2_FORCE_HOST_BUILD),y)
++define suitable-host-package
++$(shell exit 1)
++endef
++else
+ define suitable-host-package
+ $(shell support/dependencies/check-host-$(1).sh $(2))
+ endef
++endif
+ # host utilities needs host-tar to extract the source code tarballs, so
+ # ensure check-host-tar.mk is included before the rest
+ include support/dependencies/check-host-tar.mk
+-- 
+2.18.0
