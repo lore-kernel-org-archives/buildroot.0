@@ -1,48 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 27 Nov 2018 17:33:11 +0100
-Subject: [Buildroot] [PATCH 1/2] dante: add AUTORECONF=YES
-In-Reply-To: <CAPi7W824aKm=wYcmBrjZqVCq6FtDiGxroGJoyZS_dROB95Fcew@mail.gmail.com>
-References: <20181126182248.24817-1-fontaine.fabrice@gmail.com>
- <20181126194323.GJ28830@scaer>
- <CAPi7W824aKm=wYcmBrjZqVCq6FtDiGxroGJoyZS_dROB95Fcew@mail.gmail.com>
-Message-ID: <20181127163311.GN28830@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 27 Nov 2018 17:54:18 +0100
+Subject: [Buildroot] [PATCH] perl-time-hires: remove it
+In-Reply-To: <20181123090742.68155c7c@windsurf>
+References: <20181122182215.17910-1-francois.perrad@gadz.org>
+ <20181123090742.68155c7c@windsurf>
+Message-ID: <68d8e298-7309-c2b0-4002-0d1a4581b3e4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
 
-On 2018-11-27 08:17 +0100, Fabrice Fontaine spake thusly:
-> Le lun. 26 nov. 2018 ? 20:43, Yann E. MORIN < [1]yann.morin.1998@free.fr> a ?crit?:
->   On 2018-11-26 19:22 +0100, Fabrice Fontaine spake thusly:
->   > We're patching compiler.m4
->   Duh? Already submitted:
->   ? ? [2]https://patchwork.ozlabs.org/patch/1002784/
-> I know but I wanted to send the second patch of the serie without waiting for your first patch to be applied.
 
-In that case, you could do that in one of three ways:
+On 23/11/2018 09:07, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Thu, 22 Nov 2018 19:22:15 +0100, Francois Perrad wrote:
+>> this is a core module (ie. included in the Perl distribution)
+>>
+>> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>> ---
+>>  DEVELOPERS                                   |  1 -
+>>  package/Config.in                            |  1 -
+>>  package/perl-time-hires/Config.in            | 10 ----------
+>>  package/perl-time-hires/perl-time-hires.hash |  6 ------
+>>  package/perl-time-hires/perl-time-hires.mk   | 14 --------------
+>>  5 files changed, 32 deletions(-)
+>>  delete mode 100644 package/perl-time-hires/Config.in
+>>  delete mode 100644 package/perl-time-hires/perl-time-hires.hash
+>>  delete mode 100644 package/perl-time-hires/perl-time-hires.mk
+> 
+> We need Config.in.legacy handling when removing packages/options.
 
-  - say so in a post-commit comment (after the --- line) of your own
-    patch, or
+ No we don't. Config.in.legacy handling is there to make sure that the user
+after upgrading Buildroot still has everything that she had enabled before. In
+this case, the Time::HiRes module *is* there because it is part of perl. So no
+legacy handling needed.
 
-  - send your patch as a reply to the existing one (using 'git send-email
-    --in-reply-to=MSG-ID', where MSG_ID is the message ID of the mail
-    that the previous patch was sent as), or
-
-  - 'git am' the existing patch, and send the series, marking the whole
-    series as 'v2'.
-
-I would favour the last solution, as I've already used it myself.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+ Regards,
+ Arnout
