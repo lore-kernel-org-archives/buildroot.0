@@ -1,64 +1,44 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Tue, 27 Nov 2018 05:52:47 +0100
-Subject: [Buildroot] [PATCH/next 2/3] support/testing; add prosody test
-In-Reply-To: <5bfcaf2f1383c_36673f995613474457487@ultri5.mail>
-References: <20181124090754.14775-3-francois.perrad@gadz.org>
- <5bfcaf2f1383c_36673f995613474457487@ultri5.mail>
-Message-ID: <CAB0FRsvw_HD0ruuK5jMwVd+Oi5C7yYWGQFYcVyK6cS4V=J9dNg@mail.gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Mon, 26 Nov 2018 22:24:56 -0800
+Subject: [Buildroot] [PATCH next v4 3/6] Makefile: rework main directory
+ creation logic
+In-Reply-To: <CANQCQpZ=nfbSoOYi9anZhQ8_y51qM1q2f3Uwvr0TQGaSOgh-QQ@mail.gmail.com>
+References: <20181114105557.12599-1-thomas.petazzoni@bootlin.com>
+ <20181114105557.12599-4-thomas.petazzoni@bootlin.com>
+ <CANQCQpaBS+vSiDngcmfBEJ4GCCKEqt0hXR=4upA2A=++-n-Bpg@mail.gmail.com>
+ <20181116151536.666d593a@windsurf> <20181116161447.7632d0bd@windsurf>
+ <CANQCQpZ=nfbSoOYi9anZhQ8_y51qM1q2f3Uwvr0TQGaSOgh-QQ@mail.gmail.com>
+Message-ID: <878t1fqbpj.fsf@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le mar. 27 nov. 2018 ? 03:43, Ricardo Martincoski <
-ricardo.martincoski@gmail.com> a ?crit :
+Hi Thomas, Matthew,
 
-> Hello,
+Matthew Weber <matthew.weber@rockwellcollins.com> writes:
+> BR2_aarch64=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_INIT_SYSTEMD=y
+> BR2_PACKAGE_DOCKER_ENGINE=y
+> BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT=y
+> # BR2_TARGET_ROOTFS_TAR is not set
 >
-> On Sat, Nov 24, 2018 at 07:07 AM, Francois Perrad wrote:
->
-> > +    def prosody_test(self):
-> > +        # prosody was launched as service
-> > +        cmd = "prosodyctl status"
-> > +        output, exit_code = self.emulator.run(cmd)
-> > +        self.assertEqual(exit_code, 0)
-> > +        self.assertIn("Prosody is running", output[0])
->
-> I get an error message before the expected string:
->
-> # prosodyctl status
-> certmanager         error       SSL/TLS: Error initialising for
-> client_https port 0: unknown elliptic curve in "X25519:P-384:P-256:P-521"
-> Prosody is running with PID 727
-> #
->
-> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/125808115
->
-> I don't know if this message is expected in this minimal config or not.
-> If it is expected, we could add a comment and run something like this:
->         self.assertIn("Prosody is running", output[1])
->
-> Any ideas?
->
->
-We use the same "minimal" config.
-We have a reproductibility issue.
-I run test_prosody on my local box : "Prosody is running" is in output[0]
-You run the same test in Gitlab CI : "Prosody is running" is in output[1]
+> Looking at it a bit further, the  "go build" linking fails when the
+> BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT is set.  Since there is a
+> pending patch for the docker package, I built with the current "next"
+> that doesn't have [1] and also with it applied.  I observed that [1]
+> fixed the static client build.  When they broke out the client from
+> the daemon the linking approach must have changed.
 
-Could you try to run the test locally ?
+The CLI is linked statically correctly with the new patch applied, which
+also splits the CLI and daemon into separate patches and upgrades Docker
+to the latest stable.
 
-Fran?ois
+I'll submit the most recent revision of the patch tonight, after
+finishing testing the new release with an odroid xu4, bananapi m1+, and
+a pi 0.
 
-
->
-> Regards,
-> Ricardo_______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181127/b999f5fb/attachment.html>
+Best,
+Christian
