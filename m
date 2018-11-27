@@ -1,79 +1,64 @@
-From: Matthew Weber <Matthew.Weber@collins.com>
-Date: Mon, 26 Nov 2018 21:14:15 -0600
-Subject: [Buildroot] [PATCH v8 1/1] docker-engine: split docker-{cli,
- engine}, bump to v18.06.1-ce
-In-Reply-To: <871s7liu5e.fsf@paral.in>
-References: <20181108032458.1028-1-christian@paral.in>
- <CANQCQpa0SGdEHVFxn_wmKnktat18iAJ2YLXYQd+4Uqzq5GzG4A@mail.gmail.com>
- <874lcki4rw.fsf@paral.in>
- <CANQCQpaK4m3iqadyDAzuypV2Ze3LdhedHhn50AxF41buOMrTDQ@mail.gmail.com>
- <871s7liu5e.fsf@paral.in>
-Message-ID: <CANQCQpYM2E_+rMfDQ7svB05V4TfJKpgHCOpoPN49uLLqRZ30Hw@mail.gmail.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Tue, 27 Nov 2018 05:52:47 +0100
+Subject: [Buildroot] [PATCH/next 2/3] support/testing; add prosody test
+In-Reply-To: <5bfcaf2f1383c_36673f995613474457487@ultri5.mail>
+References: <20181124090754.14775-3-francois.perrad@gadz.org>
+ <5bfcaf2f1383c_36673f995613474457487@ultri5.mail>
+Message-ID: <CAB0FRsvw_HD0ruuK5jMwVd+Oi5C7yYWGQFYcVyK6cS4V=J9dNg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Christian,
+Le mar. 27 nov. 2018 ? 03:43, Ricardo Martincoski <
+ricardo.martincoski@gmail.com> a ?crit :
 
-On Thu, Nov 15, 2018 at 9:22 PM Christian Stewart <christian@paral.in> wrote:
+> Hello,
 >
-> Hi Matthew,
+> On Sat, Nov 24, 2018 at 07:07 AM, Francois Perrad wrote:
 >
-> Matthew Weber <matthew.weber@rockwellcollins.com> writes:
-> > I did find that the dockercli just hangs when I call it, however I
-> > check and the daemon is running.  I'll see if I can get more debug
-> > (strace, etc).
+> > +    def prosody_test(self):
+> > +        # prosody was launched as service
+> > +        cmd = "prosodyctl status"
+> > +        output, exit_code = self.emulator.run(cmd)
+> > +        self.assertEqual(exit_code, 0)
+> > +        self.assertIn("Prosody is running", output[0])
 >
-> The CLI itself is fine, but the daemon sometimes hangs on startup. I
-> have noticed this problem on my laptop as well (x86) so it's not
-> specific to this build or environment, it seems.
+> I get an error message before the expected string:
 >
-> The daemon will be called, but will not log anything, and basically hang
-> for sometimes minutes. I try restarting it a few times, but that doesn't
-> seem to work. If I wait, it usually starts up eventually.
+> # prosodyctl status
+> certmanager         error       SSL/TLS: Error initialising for
+> client_https port 0: unknown elliptic curve in "X25519:P-384:P-256:P-521"
+> Prosody is running with PID 727
+> #
 >
-> Most of the time the daemon starts immediately, but something seems to
-> trigger this hang.
+> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/125808115
 >
-> Once the daemon is running and logging messages, the CLI is responsive.
+> I don't know if this message is expected in this minimal config or not.
+> If it is expected, we could add a comment and run something like this:
+>         self.assertIn("Prosody is running", output[1])
 >
-> It will probably require a strace to figure out why Docker is hanging on
-> startup like this.
+> Any ideas?
+>
+>
+We use the same "minimal" config.
+We have a reproductibility issue.
+I run test_prosody on my local box : "Prosody is running" is in output[0]
+You run the same test in Gitlab CI : "Prosody is running" is in output[1]
 
-I haven't got back to doing more evaluation of docker, but when I
-stopped working on things, I was able to narrow the hang down to be
-related to the initialization of random.
+Could you try to run the test locally ?
+
+Fran?ois
+
 
 >
-> >> Some alternatives:
-> >>
-> >>  - http://cri-o.io/ - container runtime interface, will add to BR
-> >>  - runc - can be used independently of Docker
-> >>  - docker-containerd - separate daemon for managing container basics
-> >>  - rkt - coreos container manager
-> >>  - libpod/podman: https://github.com/containers/libpod
-> >>
-> >> I hope to add at least cri-o, rkt, and podman support to Buildroot in
-> >> the near future.
-
-Cool.
-
-The one use case I have been thinking about for new projects is
-building the most basic possible hosting environment to manage the
-security footprint.  Maybe a LXC system container hosting environment
-or a non-systemd dockerd.  Then inside of that run a systemd based
-docker deployment which would be easier to swap out and do a true
-shared filesystem approach vs a system container......
-
-> >
-> > Are any of those OCI compliant and not written in GO? :-)
+> Regards,
+> Ricardo_______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 >
-> I haven't seen a OCI compliant runtime that is not Go, yet.
->
-> Best,
-> Christian
->
-
-Matt
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181127/b999f5fb/attachment.html>
