@@ -1,47 +1,31 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 27 Nov 2018 12:17:45 +0200
-Subject: [Buildroot] [PATCH next] strace: bump to version 4.25
-Message-ID: <daeb6e28d7b1375a361162c2e4b9daf001afcd03.1543313865.git.baruch@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 27 Nov 2018 11:30:38 +0100
+Subject: [Buildroot] [PATCH] package/dante: needs autoreconf
+In-Reply-To: <20181125112612.8170-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Sun, 25 Nov 2018 12:26:12 +0100")
+References: <20181125112612.8170-1-yann.morin.1998@free.fr>
+Message-ID: <87va4irewh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This release also fixes compatibility with kernel 4.19 headers.
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/0763988c35a1de7d51c7094b5b002ed369f1a25f/
+ > We have a patch that touches a .m4 file, so we need to regenerate the
+ > configure script. Otherwise, this is done during the build step, and
+ > some environment variables are thus missing and the build may fail when
+ > the host machine does not have the expected autostuff tools.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/strace/strace.hash | 4 ++--
- package/strace/strace.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Fixes:
+ >     http://autobuild.buildroot.org/results/e37/e37e61bae1d81a7956e2843be70fea84b0bbb64b/
+ >     http://autobuild.buildroot.org/results/f96/f969718402cae71446d6280ec1f66d357a155293/
+ >     ...
 
-diff --git a/package/strace/strace.hash b/package/strace/strace.hash
-index c6450b1c5186..f7d652faaaec 100644
---- a/package/strace/strace.hash
-+++ b/package/strace/strace.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
--# https://strace.io/files/4.23/strace-4.23.tar.xz
--sha256	7860a6965f1dd832747bd8281a04738274398d32c56e9fbd0a68b1bb9ec09aad	strace-4.23.tar.xz
-+# https://strace.io/files/4.25/strace-4.25.tar.xz.asc
-+sha256	d685f8e65470b7832c3aff60c57ab4459f26ff89f07c10f92bd70ee89efac701	strace-4.25.tar.xz
- sha256	df862ba273812c589fd69acc74197a25d38c5295baccab00a62d39d1894c0253	COPYING
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index 10869453d146..d663a6123d2d 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--STRACE_VERSION = 4.23
-+STRACE_VERSION = 4.25
- STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
- STRACE_SITE = https://strace.io/files/$(STRACE_VERSION)
- STRACE_LICENSE = BSD-3-Clause
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Committed, thanks.
+
 -- 
-2.19.2
+Bye, Peter Korsgaard
