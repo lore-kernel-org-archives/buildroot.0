@@ -1,42 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 28 Nov 2018 22:37:45 +0100
-Subject: [Buildroot] [git commit branch/next] package/erlang-p1-cache-tab:
- bump to version 1.0.16
-Message-ID: <20181128213521.96EF088E3D@busybox.osuosl.org>
+Date: Wed, 28 Nov 2018 22:38:05 +0100
+Subject: [Buildroot] [git commit branch/next] package/erlang-p1-yaml: bump
+ to version 1.0.17
+Message-ID: <20181128213521.BE4CD88E3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b38e0b6dc9b436adb3ca062119a7727e96dbfd0
+commit: https://git.buildroot.net/buildroot/commit/?id=bdaf54e2224d0257aa57a4029c471985afaf33ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/erlang-p1-cache-tab/erlang-p1-cache-tab.hash | 2 +-
- package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk   | 2 +-
+ package/erlang-p1-yaml/erlang-p1-yaml.hash | 2 +-
+ package/erlang-p1-yaml/erlang-p1-yaml.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/erlang-p1-cache-tab/erlang-p1-cache-tab.hash b/package/erlang-p1-cache-tab/erlang-p1-cache-tab.hash
-index 9425bcda8b..841410292f 100644
---- a/package/erlang-p1-cache-tab/erlang-p1-cache-tab.hash
-+++ b/package/erlang-p1-cache-tab/erlang-p1-cache-tab.hash
+diff --git a/package/erlang-p1-yaml/erlang-p1-yaml.hash b/package/erlang-p1-yaml/erlang-p1-yaml.hash
+index 24282e6c37..2f3b181f6a 100644
+--- a/package/erlang-p1-yaml/erlang-p1-yaml.hash
++++ b/package/erlang-p1-yaml/erlang-p1-yaml.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256 5ef27d3be0ef2e8dc06468ec39dc3a43506d6f85af0edc21b9c14db860669d38 erlang-p1-cache-tab-1.0.12.tar.gz
-+sha256 169c3ca82b99c482e5914b616d594fed25cf34a4c995e37bfe1651d70bbaea55 erlang-p1-cache-tab-1.0.16.tar.gz
-diff --git a/package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk b/package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk
-index ae96103ead..a25f0a1e6e 100644
---- a/package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk
-+++ b/package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk
+-sha256 5a6499a47cdd1f753a527cb8b79074312354063535adc0ca0fd7f72c2a015e3a erlang-p1-yaml-1.0.12.tar.gz
++sha256 d2675ec9b2f64eba6c3437597e3abe3bfaae2172560784456a2763d1d1a50b08 erlang-p1-yaml-1.0.17.tar.gz
+diff --git a/package/erlang-p1-yaml/erlang-p1-yaml.mk b/package/erlang-p1-yaml/erlang-p1-yaml.mk
+index de138a9f93..d4173988f3 100644
+--- a/package/erlang-p1-yaml/erlang-p1-yaml.mk
++++ b/package/erlang-p1-yaml/erlang-p1-yaml.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_P1_CACHE_TAB_VERSION = 1.0.12
-+ERLANG_P1_CACHE_TAB_VERSION = 1.0.16
- ERLANG_P1_CACHE_TAB_SITE = $(call github,processone,cache_tab,$(ERLANG_P1_CACHE_TAB_VERSION))
- ERLANG_P1_CACHE_TAB_LICENSE = Apache-2.0
- ERLANG_P1_CACHE_TAB_LICENSE_FILES = LICENSE.txt
+-ERLANG_P1_YAML_VERSION = 1.0.12
++ERLANG_P1_YAML_VERSION = 1.0.17
+ ERLANG_P1_YAML_SITE = $(call github,processone,fast_yaml,$(ERLANG_P1_YAML_VERSION))
+ ERLANG_P1_YAML_LICENSE = Apache-2.0
+ ERLANG_P1_YAML_LICENSE_FILES = LICENSE.txt
