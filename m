@@ -1,85 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 23 Nov 2018 22:05:46 +0100
-Subject: [Buildroot] [git commit] support/testing: add python-attrs tests
-Message-ID: <20181202071557.C4896815BC@busybox.osuosl.org>
+Date: Wed, 28 Nov 2018 21:54:22 +0100
+Subject: [Buildroot] [git commit] package/strace: bump to version 4.25
+Message-ID: <20181202071600.10B4B803E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=367c0455129ae2b496858884b2432bb5d6ec2e48
+commit: https://git.buildroot.net/buildroot/commit/?id=f45964196227609045df4f56eaf284ca214d9bf0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use a minimal script to check the basic usage creating a class with 2
-attributes.
+This release also fixes compatibility with kernel 4.19 headers.
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Fixes:
+http://autobuild.buildroot.net/results/0763988c35a1de7d51c7094b5b002ed369f1a25f/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .gitlab-ci.yml                                      |  2 ++
- .../testing/tests/package/sample_python_attrs.py    | 15 +++++++++++++++
- support/testing/tests/package/test_python_attrs.py  | 21 +++++++++++++++++++++
- 3 files changed, 38 insertions(+)
+ package/strace/strace.hash | 4 ++--
+ package/strace/strace.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 62f3768d3d..494894a782 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -318,6 +318,8 @@ tests.package.test_python.TestPython2: *runtime_test
- tests.package.test_python.TestPython3: *runtime_test
- tests.package.test_python_argh.TestPythonPy2Argh: *runtime_test
- tests.package.test_python_argh.TestPythonPy3Argh: *runtime_test
-+tests.package.test_python_attrs.TestPythonPy2Attrs: *runtime_test
-+tests.package.test_python_attrs.TestPythonPy3Attrs: *runtime_test
- tests.package.test_python_autobahn.TestPythonPy2Autobahn: *runtime_test
- tests.package.test_python_autobahn.TestPythonPy3Autobahn: *runtime_test
- tests.package.test_python_crossbar.TestPythonPy3Crossbar: *runtime_test
-diff --git a/support/testing/tests/package/sample_python_attrs.py b/support/testing/tests/package/sample_python_attrs.py
-new file mode 100644
-index 0000000000..f224944914
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_attrs.py
-@@ -0,0 +1,15 @@
-+import attr
-+
-+
-+ at attr.s
-+class Obj(object):
-+    x = attr.ib()
-+    y = attr.ib(default=1)
-+
-+
-+obj1 = Obj(2)
-+assert(obj1.x == 2)
-+assert(obj1.y == 1)
-+obj2 = Obj(3, 4)
-+assert(obj2.x == 3)
-+assert(obj2.y == 4)
-diff --git a/support/testing/tests/package/test_python_attrs.py b/support/testing/tests/package/test_python_attrs.py
-new file mode 100644
-index 0000000000..9f597034ae
---- /dev/null
-+++ b/support/testing/tests/package/test_python_attrs.py
-@@ -0,0 +1,21 @@
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonPy2Attrs(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON=y
-+        BR2_PACKAGE_PYTHON_ATTRS=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_attrs.py"]
-+
-+
-+class TestPythonPy3Attrs(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_ATTRS=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_attrs.py"]
+diff --git a/package/strace/strace.hash b/package/strace/strace.hash
+index c6450b1c51..f7d652faaa 100644
+--- a/package/strace/strace.hash
++++ b/package/strace/strace.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
+-# https://strace.io/files/4.23/strace-4.23.tar.xz
+-sha256	7860a6965f1dd832747bd8281a04738274398d32c56e9fbd0a68b1bb9ec09aad	strace-4.23.tar.xz
++# https://strace.io/files/4.25/strace-4.25.tar.xz.asc
++sha256	d685f8e65470b7832c3aff60c57ab4459f26ff89f07c10f92bd70ee89efac701	strace-4.25.tar.xz
+ sha256	df862ba273812c589fd69acc74197a25d38c5295baccab00a62d39d1894c0253	COPYING
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index 6efe9c5174..fe7acff1e0 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-STRACE_VERSION = 4.23
++STRACE_VERSION = 4.25
+ STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
+ STRACE_SITE = https://strace.io/files/$(STRACE_VERSION)
+ STRACE_LICENSE = BSD-3-Clause
