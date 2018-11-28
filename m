@@ -1,84 +1,79 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu, 29 Nov 2018 00:06:55 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-11-25
-In-Reply-To: <3d046613-d734-5ffc-9ce1-07b0ec113edd@mind.be>
-References: <20181126070051.E6F2920D29@mail.bootlin.com>
- <CANQCQpbODU5sFSaewz3R0z69ZbxxpNrgHPPzQFKd8mHUTj87BA@mail.gmail.com>
- <3d046613-d734-5ffc-9ce1-07b0ec113edd@mind.be>
-Message-ID: <CA+TH9VkwQpWMfjWRL0DDLBv=uzLQke2sVAkFNdcMrVAdRx5GFg@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 29 Nov 2018 00:56:33 +0100
+Subject: [Buildroot] [PATCH 1/1] domoticz: fix build with python and cmake
+ <= 3.7
+Message-ID: <20181128235633.10449-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+domoticz will fail to build with python and older cmake
+Indeed, find_package(PythonLibs 3.4) will not recognize python 3.7 until
+cmake 3.7 and the following commit:
+https://github.com/Kitware/CMake/commit/c31573b9641e0f1bc7a34149506db51f3494323b
 
-Il giorno mer 28 nov 2018 alle ore 23:52 Arnout Vandecappelle
-<arnout@mind.be> ha scritto:
->
->
->
-> On 26/11/2018 18:50, Matthew Weber wrote:
-> > All,
-> >
-> >
-> > On Mon, Nov 26, 2018 at 1:01 AM Thomas Petazzoni
-> > <thomas.petazzoni@bootlin.com> wrote:
-> [snip]
-> >>  powerpc64le |                  setools-4.1.1 | NOK | http://autobuild.buildroot.net/results/e214e1a539cdac07028fb58c3822f89886d86f1f |
-> >
-> > setools package is installing man pages and were caught using a bad
-> > path by 'step_check_build_dir'.  To stop the install of the man pages,
-> > is the preference a 'sed' to remove a line in setup.py or a 'rm' as a
-> > hook to cleanup the install of the files to staging/target?
->
->  Well, fix setup.py of course :-)
->
->  This is caused by e94280e5a537b "package/pkg-python: use proper --prefix and
-> --root values". It changed:
->
-> -       --prefix=$(TARGET_DIR)/usr
-> +       --prefix=/usr \
-> +       --root=$(TARGET_DIR)
->
->  setools setup.py does:
->
-> data_files=[(join(sys.prefix, 'share/man/man1'), glob.glob("man/*.1"))],
->
->  To me, that actually looks like the right thing to do...
->
->  Angelo, maybe you have an idea?
+To fix this, add a call to find_package(PythonInterp). Indeed, if
+FindPythonInterp has already found the major and minor version, that
+version will be inserted between the user supplied versions and the
+stock version list since cmake in version 3.1 and
+https://github.com/Kitware/CMake/commit/3816cd2dc7a7cc220e4f1b1e87fee986545b9cb3
 
+Fixes:
+ - http://autobuild.buildroot.org/results/8e82501a7b49da628ec026132ffca44c0c813040
 
-For me is wrong, [1] says:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...s.txt-fix-build-with-python-and-cmake-3.7.patch | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 package/domoticz/0002-CMakeLists.txt-fix-build-with-python-and-cmake-3.7.patch
 
-" If directory is a relative path, it is interpreted relative to the
-installation prefix (Python?s sys.prefix for pure-Python packages,
-sys.exec_prefix for packages that contain extension modules)"
-
-So the sys.prefix should not be joined because the correct one will be
-added regardless. The reason why a relative path is going to work is
-because the installation path is built internally joining python root
-with python prefix, thus forming the correct path $(TARGET_DIR)/usr.
-
-Joining the sys.prefix makes the path absolute: this was previously
-working by accident.
-
-So that should be
-
-data_files=[('share/man/man1', glob.glob("man/*.1"),],
-
-[1] https://docs.python.org/3/distutils/setupscript.html#installing-additional-files
-
->
->  Regards,
->  Arnout
-
-Sincerely, Angelo
-
-
-
---
-Profile: http://it.linkedin.com/in/compagnucciangelo
+diff --git a/package/domoticz/0002-CMakeLists.txt-fix-build-with-python-and-cmake-3.7.patch b/package/domoticz/0002-CMakeLists.txt-fix-build-with-python-and-cmake-3.7.patch
+new file mode 100644
+index 0000000000..a0adbdfed9
+--- /dev/null
++++ b/package/domoticz/0002-CMakeLists.txt-fix-build-with-python-and-cmake-3.7.patch
+@@ -0,0 +1,40 @@
++From 4b77662232c806b8aba7680405144ad51ac3671b Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 29 Nov 2018 00:36:00 +0100
++Subject: [PATCH] CMakeLists.txt: fix build with python and cmake <= 3.7
++
++domoticz will fail to build with python and older cmake
++Indeed, find_package(PythonLibs 3.4) will not recognize python 3.7 until
++cmake 3.7 and the following commit:
++https://github.com/Kitware/CMake/commit/c31573b9641e0f1bc7a34149506db51f3494323b
++
++To fix this, add a call to find_package(PythonInterp 3.4). Indeed, if
++FindPythonInterp has already found the major and minor version, that
++version will be inserted between the user supplied versions and the
++stock version list since cmake in version 3.1 and
++https://github.com/Kitware/CMake/commit/3816cd2dc7a7cc220e4f1b1e87fee986545b9cb3
++
++Fixes:
++ - http://autobuild.buildroot.org/results/8e82501a7b49da628ec026132ffca44c0c813040
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/domoticz/domoticz/pull/2889]
++---
++ CMakeLists.txt | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index f4e38b88..41003a0c 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -125,6 +125,7 @@ ENDIF(USE_BUILTIN_SQLITE)
++ 
++ option(USE_PYTHON "Use Python for Plugins and Event-Scripts" YES)
++ IF(USE_PYTHON)
+++  find_package(PythonInterp 3.4)
++   find_package(PythonLibs 3.4)
++   IF(PYTHONLIBS_FOUND)
++     MESSAGE(STATUS "Python3 includes found at: ${PYTHON_INCLUDE_PATH}")
++-- 
++2.14.1
++
+-- 
+2.14.1
