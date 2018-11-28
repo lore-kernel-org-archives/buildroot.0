@@ -1,66 +1,46 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 28 Nov 2018 20:15:17 +0100
-Subject: [Buildroot] [PATCH v1] freetype: bump version to 2.9.1
-Message-ID: <20181128191517.24636-1-ps.report@gmx.net>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Wed, 28 Nov 2018 21:33:27 +0200
+Subject: [Buildroot] [PATCH 1/1] python-multidict: bump to version 4.5.2
+Message-ID: <20181128193327.13213-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-According to [1]:
-
-- fixes CVE-2018-6942
-- needs '--enable-freetype-config' for freetype-config installation
-
-[1] https://git.savannah.gnu.org/cgit/freetype/freetype2.git/tree/docs/CHANGES?id=86bc8a95056c97a810986434a3f268cbe67f2902
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/freetype/freetype.hash | 8 ++++----
- package/freetype/freetype.mk   | 5 ++++-
- 2 files changed, 8 insertions(+), 5 deletions(-)
+ package/python-multidict/python-multidict.hash | 4 ++--
+ package/python-multidict/python-multidict.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
-index 806375c058..c98674c7c2 100644
---- a/package/freetype/freetype.hash
-+++ b/package/freetype/freetype.hash
-@@ -1,9 +1,9 @@
--# From https://sourceforge.net/projects/freetype/files/freetype2/2.9/
--md5	513c403c110016fdc7e537216a642b1d		freetype-2.9.tar.bz2
--sha1	94c4399b1a55c5892812e732843fcb4a7c2fe657	freetype-2.9.tar.bz2
-+# From https://sourceforge.net/projects/freetype/files/freetype2/2.9.1/
-+md5 60ef7d8160cd4bf8cb118ee9d65367ca freetype-2.9.1.tar.bz2
-+sha1 220c82062171c513e4017c523d196933c9de4a7d freetype-2.9.1.tar.bz2
- 
- # Locally calculated
--sha256	e6ffba3c8cef93f557d1f767d7bc3dee860ac7a3aaff588a521e081bc36f4c8a	freetype-2.9.tar.bz2
-+sha256	db8d87ea720ea9d5edc5388fc7a0497bb11ba9fe972245e0f7f4c7e8b1e1e84d	freetype-2.9.1.tar.bz2
- sha256	fd056de4196903a676208ef58cfddafc7d583d1f28fa2e44c309cf84a59e62fb	docs/LICENSE.TXT
- sha256	08c135755dd589039470f1fdbb400daaabaaa50d0b366d19cebff4d22986baa1	docs/FTL.TXT
- sha256	c4120c6752c910c299e3bd9cb3a46ff262c268303ca2069b61f92f10a5656c18	docs/GPLv2.TXT
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index 1b3a9d1755..c9ea960798 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-multidict/python-multidict.hash b/package/python-multidict/python-multidict.hash
+index 18f12271ab..a98c4553d4 100644
+--- a/package/python-multidict/python-multidict.hash
++++ b/package/python-multidict/python-multidict.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/multidict/json
+-md5	c3d21070fa87a15a1e3388dc5cf47ad5  multidict-4.5.0.tar.gz
+-sha256	3fa7944194cc96319cbbd53a1e0fb6dfe1e437efb75117828c35ce5b30d9d0c9  multidict-4.5.0.tar.gz
++md5	5e9d8f7e1ada9a22932aed6a72f88e43  multidict-4.5.2.tar.gz
++sha256	024b8129695a952ebd93373e45b5d341dbb87c17ce49637b34000093f243dd4f  multidict-4.5.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256	a1c5825513279d3085a0ba46880e148ea3710c149bbaedcf2d11605a5ed3c4ad  LICENSE
+diff --git a/package/python-multidict/python-multidict.mk b/package/python-multidict/python-multidict.mk
+index d25a51f8ad..7b9cd39283 100644
+--- a/package/python-multidict/python-multidict.mk
++++ b/package/python-multidict/python-multidict.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--FREETYPE_VERSION = 2.9
-+FREETYPE_VERSION = 2.9.1
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
- FREETYPE_SITE = http://download.savannah.gnu.org/releases/freetype
- FREETYPE_INSTALL_STAGING = YES
-@@ -14,6 +14,9 @@ FREETYPE_LICENSE_FILES = docs/LICENSE.TXT docs/FTL.TXT docs/GPLv2.TXT
- FREETYPE_DEPENDENCIES = host-pkgconf
- FREETYPE_CONFIG_SCRIPTS = freetype-config
- 
-+# since 2.9.1 needed for freetyep-config install
-+FREETYPE_CONF_OPTS = --enable-freetype-config
-+
- HOST_FREETYPE_DEPENDENCIES = host-pkgconf
- HOST_FREETYPE_CONF_OPTS = --without-zlib --without-bzip2 --without-png
- 
+-PYTHON_MULTIDICT_VERSION = 4.5.0
++PYTHON_MULTIDICT_VERSION = 4.5.2
+ PYTHON_MULTIDICT_SOURCE = multidict-$(PYTHON_MULTIDICT_VERSION).tar.gz
+-PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/70/b0/f6ce77f952b773eea2926ffacd031f9e95eeabd531dce999dceb8841fffc
++PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/7f/8f/b3c8c5b062309e854ce5b726fc101195fbaa881d306ffa5c2ba19efa3af2
+ PYTHON_MULTIDICT_SETUP_TYPE = setuptools
+ PYTHON_MULTIDICT_LICENSE = Apache-2.0
+ PYTHON_MULTIDICT_LICENSE_FILES = LICENSE
 -- 
 2.19.1
