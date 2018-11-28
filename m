@@ -1,7 +1,7 @@
 From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Wed, 28 Nov 2018 10:08:32 -0800
-Subject: [Buildroot] [PATCH 1/1] python-networkmanager: bump to version 2.1
-Message-ID: <20181128180832.78708-1-joseph.kogut@gmail.com>
+Date: Wed, 28 Nov 2018 10:17:47 -0800
+Subject: [Buildroot] [PATCH 1/1] dbus-python: bump to version 1.2.8
+Message-ID: <20181128181747.96117-1-joseph.kogut@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,35 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 ---
- package/python-networkmanager/python-networkmanager.hash | 6 +++---
- package/python-networkmanager/python-networkmanager.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/dbus-python/dbus-python.hash | 2 +-
+ package/dbus-python/dbus-python.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-networkmanager/python-networkmanager.hash b/package/python-networkmanager/python-networkmanager.hash
-index 1fed4befb7..83621761cd 100644
---- a/package/python-networkmanager/python-networkmanager.hash
-+++ b/package/python-networkmanager/python-networkmanager.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi/python-networkmanager/json, sha256 locally computed
--md5	5fc644a65463031295c6b7dd51a0f1bd  python-networkmanager-2.0.1.tar.gz
--sha256	bc36507506ad29bfdac941b0987ebd1cc9633c9a9291d7378e229e4515a0a517  python-networkmanager-2.0.1.tar.gz
-+# md5 and sha256 from https://pypi.python.org/pypi/python-networkmanager/json
-+md5	f638d854a3639fb37c0e06d1092a771e  python-networkmanager-2.1.tar.gz
-+sha256	aef1e34d98d7bec7cc368e0ca0f2e97493f9b5ebe6d7103f8f6460cfca3dc6fc  python-networkmanager-2.1.tar.gz
-diff --git a/package/python-networkmanager/python-networkmanager.mk b/package/python-networkmanager/python-networkmanager.mk
-index 29afb5e564..de893f757a 100644
---- a/package/python-networkmanager/python-networkmanager.mk
-+++ b/package/python-networkmanager/python-networkmanager.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/dbus-python/dbus-python.hash b/package/dbus-python/dbus-python.hash
+index 080aada081..991bb42787 100644
+--- a/package/dbus-python/dbus-python.hash
++++ b/package/dbus-python/dbus-python.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	e2f1d6871f74fba23652e51d10873e54f71adab0525833c19bad9e99b1b2f9cc	dbus-python-1.2.4.tar.gz
++sha256	abf12bbb765e300bf8e2a1b2f32f85949eab06998dbda127952c31cb63957b6f	dbus-python-1.2.8.tar.gz
+diff --git a/package/dbus-python/dbus-python.mk b/package/dbus-python/dbus-python.mk
+index da04b7404f..d6af7454af 100644
+--- a/package/dbus-python/dbus-python.mk
++++ b/package/dbus-python/dbus-python.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_NETWORKMANAGER_VERSION = 2.0.1
--PYTHON_NETWORKMANAGER_SITE = https://pypi.python.org/packages/d7/f9/5cbd99fd24a072875ce048e48d1754285f137aab447de8fee63b6cba990a
-+PYTHON_NETWORKMANAGER_VERSION = 2.1
-+PYTHON_NETWORKMANAGER_SITE = https://files.pythonhosted.org/packages/73/ec/2cc46290cedc99f59df3633d428dfa91d95946ca49af96fdb53514ee195f
- PYTHON_NETWORKMANAGER_SETUP_TYPE = setuptools
- PYTHON_NETWORKMANAGER_LICENSE = Zlib
- PYTHON_NETWORKMANAGER_LICENSE_FILES = COPYING
+-DBUS_PYTHON_VERSION = 1.2.4
++DBUS_PYTHON_VERSION = 1.2.8
+ DBUS_PYTHON_SITE = http://dbus.freedesktop.org/releases/dbus-python
+ DBUS_PYTHON_INSTALL_STAGING = YES
+ DBUS_PYTHON_LICENSE = MIT
 -- 
 2.19.2
