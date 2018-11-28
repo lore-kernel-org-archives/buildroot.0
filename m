@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 28 Nov 2018 11:55:47 +0100
-Subject: [Buildroot] [PATCH 2/3] arch: add support for Andes 32-bit
- (nds32) architecture
-In-Reply-To: <20181128101542.9561-3-nylon7@andestech.com>
+Date: Wed, 28 Nov 2018 15:06:35 +0100
+Subject: [Buildroot] [PATCH 3/3] configs/andes_nds32_ae3xx: new defconfig
+In-Reply-To: <20181128101542.9561-4-nylon7@andestech.com>
 References: <20181128101542.9561-1-nylon7@andestech.com>
- <20181128101542.9561-3-nylon7@andestech.com>
-Message-ID: <20181128115547.62591827@windsurf.home>
+ <20181128101542.9561-4-nylon7@andestech.com>
+Message-ID: <20181128150635.5e0bb8c7@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,75 +13,73 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 28 Nov 2018 18:15:41 +0800, Nylon Chen wrote:
-> This enables a nds32 system to be built with a Buildroot generated
-> toolchain (gcc >= 8.0.1, binutils >= 2.30, glibc only).
+Note: I just realized that none of your patches made it to the
+Buildroot mailing list. Please make sure to subscribe to the mailing
+list before sending patches.
 
-Ah, so there is upstream support for NDS, good!
+Please see some comments below about this specific patch.
 
-This patch should be the first in the series.
+On Wed, 28 Nov 2018 18:15:42 +0800, Nylon Chen wrote:
 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 7cc5b0fe6e..a2bcaeb035 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2267,3 +2267,7 @@ N:	Greentime Hu <greentime@andestech.com>
->  N:	Nylon Chen <nylon7@andestech.com>
->  F:	toolchain/toolchain-external/toolchain-external-andes-nds32
->  F:	toolchain/toolchain-external
-> +F:	toolchain/toolchain-buildroot
-> +F:	arch/Config.in
-> +F:	arch/Config.in.nds32
 
-Again, one entry per person, I don't think the get-developers script
-supports having multiple names in the same entry (or at least, verify
-if it does).
-
-> diff --git a/arch/Config.in.nds32 b/arch/Config.in.nds32
+> diff --git a/configs/andes_ae3xx_defconfig b/configs/andes_ae3xx_defconfig
 > new file mode 100644
-> index 0000000000..5803568337
+> index 0000000000..c93041246e
 > --- /dev/null
-> +++ b/arch/Config.in.nds32
-> @@ -0,0 +1,13 @@
-> +config BR2_ARCH
-> +	default "nds32"
+> +++ b/configs/andes_ae3xx_defconfig
+
+This file should be the output of "make savedefconfig". It clearly
+isn't the case here, with some fairly random options listed.
+
+> +BR2_READELF_ARCH_NAME="Andes Technology compact code size embedded RISC processor family"
+
+This clearly has no reason to be here, it's a blind Config.in option.
+
+> +BR2_nds32=y
+> +BR2_TOOLCHAIN=y
+> +BR2_TOOLCHAIN_EXTERNAL=y
+> +BR2_TOOLCHAIN_EXTERNAL_ANDES_NDS32=y
+> +BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> +BR2_TOOLCHAIN_EXTERNAL_URL="https://github.com/vincentzwc/prebuilt-nds32-toolchain/releases/download/20180521/nds32le-linux-glibc-v3-upstream.tar.gz"
+> +BR2_TOOLCHAIN_EXTERNAL_PREFIX="nds32le-linux"
+> +BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL="toolchain-external-andes-nds32"
+> +BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+> +BR2_TOOLCHAIN_GCC_AT_LEAST_8=y
+> +BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+> +BR2_TOOLCHAIN_EXTERNAL_HAS_SSP=y
+
+All of this will change once you had a proper package for your external
+toolchain.
+
+> +#Kernel
+> +BR2_LINUX_KERNEL_PATCH="board/andes/patches/linux/0001-nds32-Fix-boot-messages-garbled.patch"
+
+Please instead use:
+
+BR2_GLOBAL_PATCH_DIR="board/andes/patches/"
+
+> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/andes/ae3xx.fragment"
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="ca9eb48fe01fa7fa60ff9f2196b1bd0d84dc81af"
+
+Any reason to use this specific commit instead of a proper tag ?
+
+> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> +BR2_LINUX_KERNEL_VMLINUX=y
 > +
-> +config BR2_ENDIAN
-> +	default "LITTLE"
+> +#Target packages
 > +
-> +config BR2_READELF_ARCH_NAME
-> +	default "Andes Technology compact code size embedded RISC processor family"
+> +BR2_PACKAGE_BUSYBOX=y
+> +BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox.config"
 
-Do you have several variants of the CPU architecture, which correspond
-to some gcc march/mcpu flags ? If so they should be listed here, as a
-Config.in choice..endchoice block.
+not needed, this is already the default.
 
-> +config BR2_TOOLCHAIN_HAS_NATIVE_RPC
-> +	bool
+> +# Filesystem
+> +BR2_TARGET_ROOTFS_INITRAMFS=y
 
-This should not be here, this Config.in option already exists elsewhere.
-
-Also, in this patch introducing the architecture you need to:
-
- - Restrict the gcc version that can be used for NDS32, so that people
-   cannot try to build with a gcc version that didn't had NDS32
-   support. This must be done in package/gcc/Config.in.host
-
- - Allow glibc to be selected for the NDS32 architecture by changing
-   BR2_TOOLCHAIN_BUILDROOT_GLIBC in
-   toolchain/toolchain-buildroot/Config.in.
-
- - Restrict the binutils version that can be used for NDS32, which must
-   be done in package/binutils/Config.in.host
-
- - Restrict the kernel headers version that can be used, which msut be
-   done in package/linux-headers/Config.in.host
-
-As a separate patch, could you add a snippet of configuration in
-support/config-fragments/autobuild/ for your architecture, so that it
-gets tested by our autobuilder infrastructure ?
-
-Thanks a lot!
+Thanks!
 
 Thomas
 -- 
