@@ -1,66 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 28 Nov 2018 22:38:02 +0100
-Subject: [Buildroot] [git commit branch/next] package/erlang-p1-xmpp: bump
- to version 1.2.5
-Message-ID: <20181128213521.B795688E3D@busybox.osuosl.org>
+Date: Wed, 28 Nov 2018 22:38:22 +0100
+Subject: [Buildroot] [git commit branch/next] package/ejabberd: bump to
+ version 18.09
+Message-ID: <20181128213521.ECBC588D9B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8a1e424bf6227ea1b20b7588a39a3201a94c8c3
+commit: https://git.buildroot.net/buildroot/commit/?id=e1a43490e9ab24a3a249ab1224e236db47c53145
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This package now depends also on erlang-p1-tls and erlang-p1-zlib.
+This version requires much less patches than the previous one packaged
+in Buildroot. It is compatible with Erlang OTP 21.
+There are two remainning patches to:
+- change the Makefile rules so dependencies are not downloaded/compiled;
+- fix ejabberd user and load a default file in ejabberdctl script.
+
+The patch 0006-fix-install-permissions has been replaced by setting
+permissions on /etc/ejabberd directory via EJABBERD_PERMISSIONS.
+
+The patch 0009-disable-mod_avatar has been removed because eimp is
+a mandatory dependency since 0f86559d.
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/erlang-p1-xmpp/Config.in           | 2 ++
- package/erlang-p1-xmpp/erlang-p1-xmpp.hash | 2 +-
- package/erlang-p1-xmpp/erlang-p1-xmpp.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 3 deletions(-)
+ ...n-do-not-download-or-compile-dependencies.patch |   35 +
+ .../0001-remove-make-targets-for-deps.patch        |   43 -
+ ...jabberdctl.patch => 0002-fix-ejabberdctl.patch} |    0
+ .../0003-remove-checking-erlang-version.patch      |   32 -
+ package/ejabberd/0004-correct-includes.patch       | 1919 --------------------
+ .../0005-disable-ERLANG_DEPRECATED_CHECK.patch     |   29 -
+ .../ejabberd/0006-fix-install-permissions.patch    |   84 -
+ .../0008-handle-error-case-from-lib_dir.patch      |   32 -
+ package/ejabberd/0009-disable-mod_avatar.patch     |   32 -
+ package/ejabberd/Config.in                         |    1 +
+ package/ejabberd/ejabberd.hash                     |    2 +-
+ package/ejabberd/ejabberd.mk                       |   12 +-
+ 12 files changed, 45 insertions(+), 2176 deletions(-)
 
-diff --git a/package/erlang-p1-xmpp/Config.in b/package/erlang-p1-xmpp/Config.in
-index 9b33e0c609..6e40fed10a 100644
---- a/package/erlang-p1-xmpp/Config.in
-+++ b/package/erlang-p1-xmpp/Config.in
-@@ -6,7 +6,9 @@ config BR2_PACKAGE_ERLANG_P1_XMPP
- 	depends on BR2_INSTALL_LIBSTDCPP # erlang-p1-stringprep
- 	select BR2_PACKAGE_ERLANG_P1_XML
- 	select BR2_PACKAGE_ERLANG_P1_STRINGPREP
-+	select BR2_PACKAGE_ERLANG_P1_TLS
- 	select BR2_PACKAGE_ERLANG_P1_UTILS
-+	select BR2_PACKAGE_ERLANG_P1_ZLIB
- 	help
- 	  XMPP library for Erlang.
- 
-diff --git a/package/erlang-p1-xmpp/erlang-p1-xmpp.hash b/package/erlang-p1-xmpp/erlang-p1-xmpp.hash
-index d3d2dafb9e..e1c63a6065 100644
---- a/package/erlang-p1-xmpp/erlang-p1-xmpp.hash
-+++ b/package/erlang-p1-xmpp/erlang-p1-xmpp.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 558e8d8734052bdbe679cf10165a63944c208940ab84be78c97ba661dfcf3cb2 erlang-p1-xmpp-1.1.16.tar.gz
-+sha256 699f50d50850272e67160b022fd27f3ccc46570e48968d8ee30d491bf926794d erlang-p1-xmpp-1.2.5.tar.gz
-diff --git a/package/erlang-p1-xmpp/erlang-p1-xmpp.mk b/package/erlang-p1-xmpp/erlang-p1-xmpp.mk
-index 096876ca34..e20a84f4a3 100644
---- a/package/erlang-p1-xmpp/erlang-p1-xmpp.mk
-+++ b/package/erlang-p1-xmpp/erlang-p1-xmpp.mk
-@@ -4,13 +4,13 @@
- #
- ################################################################################
- 
--ERLANG_P1_XMPP_VERSION = 1.1.16
-+ERLANG_P1_XMPP_VERSION = 1.2.5
- ERLANG_P1_XMPP_SITE = $(call github,processone,xmpp,$(ERLANG_P1_XMPP_VERSION))
- ERLANG_P1_XMPP_LICENSE = Apache-2.0
- ERLANG_P1_XMPP_LICENSE_FILES = LICENSE.txt
- ERLANG_P1_XMPP_INSTALL_STAGING = YES
- ERLANG_P1_XMPP_DEPENDENCIES = erlang-p1-xml erlang-p1-stringprep \
--	erlang-p1-utils host-erlang-p1-xml
-+	erlang-p1-tls erlang-p1-utils erlang-p1-zlib host-erlang-p1-xml
- 
- $(eval $(rebar-package))
- $(eval $(host-rebar-package))
+Patch is too large, so refusing to show it
