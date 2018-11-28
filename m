@@ -1,84 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 28 Nov 2018 22:38:20 +0100
-Subject: [Buildroot] [git commit] package/erlang-p1-eimp: new package
-Message-ID: <20181202071600.ABE94803E1@busybox.osuosl.org>
+Date: Wed, 28 Nov 2018 22:38:22 +0100
+Subject: [Buildroot] [git commit] package/ejabberd: bump to version 18.09
+Message-ID: <20181202071600.B686F803E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=091c950fb068209a2cff450cd56b48c053333208
+commit: https://git.buildroot.net/buildroot/commit/?id=e1a43490e9ab24a3a249ab1224e236db47c53145
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+This version requires much less patches than the previous one packaged
+in Buildroot. It is compatible with Erlang OTP 21.
+There are two remainning patches to:
+- change the Makefile rules so dependencies are not downloaded/compiled;
+- fix ejabberd user and load a default file in ejabberdctl script.
+
+The patch 0006-fix-install-permissions has been replaced by setting
+permissions on /etc/ejabberd directory via EJABBERD_PERMISSIONS.
+
+The patch 0009-disable-mod_avatar has been removed because eimp is
+a mandatory dependency since 0f86559d.
+
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
-[Thomas: add entry in DEVELOPERS file.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                         |  1 +
- package/Config.in                  |  1 +
- package/erlang-eimp/Config.in      | 12 ++++++++++++
- package/erlang-eimp/erlang-eimp.mk | 13 +++++++++++++
- 4 files changed, 27 insertions(+)
+ ...n-do-not-download-or-compile-dependencies.patch |   35 +
+ .../0001-remove-make-targets-for-deps.patch        |   43 -
+ ...jabberdctl.patch => 0002-fix-ejabberdctl.patch} |    0
+ .../0003-remove-checking-erlang-version.patch      |   32 -
+ package/ejabberd/0004-correct-includes.patch       | 1919 --------------------
+ .../0005-disable-ERLANG_DEPRECATED_CHECK.patch     |   29 -
+ .../ejabberd/0006-fix-install-permissions.patch    |   84 -
+ .../0008-handle-error-case-from-lib_dir.patch      |   32 -
+ package/ejabberd/0009-disable-mod_avatar.patch     |   32 -
+ package/ejabberd/Config.in                         |    1 +
+ package/ejabberd/ejabberd.hash                     |    2 +-
+ package/ejabberd/ejabberd.mk                       |   12 +-
+ 12 files changed, 45 insertions(+), 2176 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1ed266eafc..a597d8d875 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1074,6 +1074,7 @@ F:	package/python-libconfig/
- 
- N:	Johan Oudinet <johan.oudinet@gmail.com>
- F:	package/ejabberd/
-+F:	package/erlang-eimp/
- F:	package/erlang-goldrush/
- F:	package/erlang-jiffy/
- F:	package/erlang-lager/
-diff --git a/package/Config.in b/package/Config.in
-index 6e0f3c9a92..e19964dc2b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -551,6 +551,7 @@ menu "Interpreter languages and scripting"
- 	source "package/erlang/Config.in"
- if BR2_PACKAGE_ERLANG
- menu "Erlang libraries/modules"
-+	source "package/erlang-eimp/Config.in"
- 	source "package/erlang-goldrush/Config.in"
- 	source "package/erlang-jiffy/Config.in"
- 	source "package/erlang-lager/Config.in"
-diff --git a/package/erlang-eimp/Config.in b/package/erlang-eimp/Config.in
-new file mode 100644
-index 0000000000..5c207e9c23
---- /dev/null
-+++ b/package/erlang-eimp/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_ERLANG_EIMP
-+	bool "erlang-eimp"
-+	select BR2_PACKAGE_ERLANG_P1_UTILS
-+	select BR2_PACKAGE_GD
-+	select BR2_PACKAGE_GD_WEBPNG
-+	select BR2_PACKAGE_JPEG
-+	select BR2_PACKAGE_LIBPNG
-+	select BR2_PACKAGE_WEBP
-+	help
-+	  Erlang Image Manipulation Process
-+
-+	  https://github.com/processone/eimp
-diff --git a/package/erlang-eimp/erlang-eimp.mk b/package/erlang-eimp/erlang-eimp.mk
-new file mode 100644
-index 0000000000..83d34cd5e0
---- /dev/null
-+++ b/package/erlang-eimp/erlang-eimp.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# erlang-eimp
-+#
-+################################################################################
-+
-+ERLANG_EIMP_VERSION = 1.0.8
-+ERLANG_EIMP_SITE = $(call github,processone,eimp,$(ERLANG_EIMP_VERSION))
-+ERLANG_EIMP_LICENSE = Apache-2.0
-+ERLANG_EIMP_LICENSE_FILES = LICENSE.txt
-+ERLANG_EIMP_DEPENDENCIES = erlang-p1-utils gd jpeg libpng webp
-+
-+$(eval $(rebar-package))
+Patch is too large, so refusing to show it
