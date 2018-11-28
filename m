@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 28 Nov 2018 11:51:23 +0100
-Subject: [Buildroot] [PATCH 1/3] toolchain-external-andes-nds32: new
- package
-In-Reply-To: <20181128101542.9561-2-nylon7@andestech.com>
+Date: Wed, 28 Nov 2018 11:55:47 +0100
+Subject: [Buildroot] [PATCH 2/3] arch: add support for Andes 32-bit
+ (nds32) architecture
+In-Reply-To: <20181128101542.9561-3-nylon7@andestech.com>
 References: <20181128101542.9561-1-nylon7@andestech.com>
- <20181128101542.9561-2-nylon7@andestech.com>
-Message-ID: <20181128115123.7a48eec6@windsurf.home>
+ <20181128101542.9561-3-nylon7@andestech.com>
+Message-ID: <20181128115547.62591827@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,67 +14,75 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 28 Nov 2018 18:15:40 +0800, Nylon Chen wrote:
-> This commit adds a new package for the nds32 external
-> toolchain for the nds32 architecture.
-> 
-> Signed-off-by: Che-Wei Chuang <cnoize@andestech.com>
-> Signed-off-by: Greentime Hu <greentime@andestech.com>
-> Signed-off-by: Nylon Chen <nylon7@andestech.com>
-> ---
->  DEVELOPERS                                    |   6 +
->  toolchain/toolchain-external/Config.in        |   6 +
->  .../toolchain-external-andes-nds32/Config.in  |   9 ++
->  .../Config.in.options                         | 145 ++++++++++++++++++
->  .../toolchain-external-andes.hash             |   2 +
->  .../toolchain-external-andes.mk               |   9 ++
->  6 files changed, 177 insertions(+)
->  create mode 100644 toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in
->  create mode 100644 toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in.options
->  create mode 100644 toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes.hash
->  create mode 100644 toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes.mk
+On Wed, 28 Nov 2018 18:15:41 +0800, Nylon Chen wrote:
+> This enables a nds32 system to be built with a Buildroot generated
+> toolchain (gcc >= 8.0.1, binutils >= 2.30, glibc only).
 
-It is not clear what you are trying to do in this patch. It seems like
-you are simply duplicating the "toolchain-external-custom" package,
-which doesn't make a lot of sense.
+Ah, so there is upstream support for NDS, good!
 
-You have two options:
-
- - You want to add a new pre-defined external toolchain, like we
-   already have for the Linaro toolchains, ARM toolchains, ARC
-   toolchains, and more.
-
-   In this case, your package should reference a tarball of the
-   pre-built toolchain, and tell Buildroot what is the configuration of
-   this toolchain.
-
-   See toolchain/toolchain-external/toolchain-external-arm-arm/ for an
-   example.
-
- - You don't have such a pre-defined external toolchain publicly/easily
-   available. In this case, just use the existing
-   toolchain-external-custom package.
-
-What you're doing in your patch is add another
-"toolchain-external-custom" package, just named differently.
+This patch should be the first in the series.
 
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index 53467da489..7cc5b0fe6e 100644
+> index 7cc5b0fe6e..a2bcaeb035 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
-> @@ -2261,3 +2261,9 @@ F:	package/qjson/
->  F:	package/quazip/
->  F:	package/shapelib/
->  F:	package/tinc/
+> @@ -2267,3 +2267,7 @@ N:	Greentime Hu <greentime@andestech.com>
+>  N:	Nylon Chen <nylon7@andestech.com>
+>  F:	toolchain/toolchain-external/toolchain-external-andes-nds32
+>  F:	toolchain/toolchain-external
+> +F:	toolchain/toolchain-buildroot
+> +F:	arch/Config.in
+> +F:	arch/Config.in.nds32
+
+Again, one entry per person, I don't think the get-developers script
+supports having multiple names in the same entry (or at least, verify
+if it does).
+
+> diff --git a/arch/Config.in.nds32 b/arch/Config.in.nds32
+> new file mode 100644
+> index 0000000000..5803568337
+> --- /dev/null
+> +++ b/arch/Config.in.nds32
+> @@ -0,0 +1,13 @@
+> +config BR2_ARCH
+> +	default "nds32"
 > +
-> +N:	Che-Wei Chuang <cnoize@andestech.com>
-> +N:	Greentime Hu <greentime@andestech.com>
-> +N:	Nylon Chen <nylon7@andestech.com>
+> +config BR2_ENDIAN
+> +	default "LITTLE"
+> +
+> +config BR2_READELF_ARCH_NAME
+> +	default "Andes Technology compact code size embedded RISC processor family"
 
-I don't think we support having multiple names like this, there should
-be a separate entry for each person.
+Do you have several variants of the CPU architecture, which correspond
+to some gcc march/mcpu flags ? If so they should be listed here, as a
+Config.in choice..endchoice block.
 
-Best regards,
+> +config BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> +	bool
+
+This should not be here, this Config.in option already exists elsewhere.
+
+Also, in this patch introducing the architecture you need to:
+
+ - Restrict the gcc version that can be used for NDS32, so that people
+   cannot try to build with a gcc version that didn't had NDS32
+   support. This must be done in package/gcc/Config.in.host
+
+ - Allow glibc to be selected for the NDS32 architecture by changing
+   BR2_TOOLCHAIN_BUILDROOT_GLIBC in
+   toolchain/toolchain-buildroot/Config.in.
+
+ - Restrict the binutils version that can be used for NDS32, which must
+   be done in package/binutils/Config.in.host
+
+ - Restrict the kernel headers version that can be used, which msut be
+   done in package/linux-headers/Config.in.host
+
+As a separate patch, could you add a snippet of configuration in
+support/config-fragments/autobuild/ for your architecture, so that it
+gets tested by our autobuilder infrastructure ?
+
+Thanks a lot!
 
 Thomas
 -- 
