@@ -1,46 +1,46 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Wed, 28 Nov 2018 21:33:27 +0200
-Subject: [Buildroot] [PATCH 1/1] python-multidict: bump to version 4.5.2
-Message-ID: <20181128193327.13213-1-asafka7@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 28 Nov 2018 21:44:04 +0100
+Subject: [Buildroot] [PATCH] infra/pkg-generic: ensure absolute paths in
+ config-script fixups
+Message-ID: <20181128204404.12402-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-multidict/python-multidict.hash | 4 ++--
- package/python-multidict/python-multidict.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+In case a config script is called from a relative path, the $(dirnale
+$0) would return a relative path too.
 
-diff --git a/package/python-multidict/python-multidict.hash b/package/python-multidict/python-multidict.hash
-index 18f12271ab..a98c4553d4 100644
---- a/package/python-multidict/python-multidict.hash
-+++ b/package/python-multidict/python-multidict.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/multidict/json
--md5	c3d21070fa87a15a1e3388dc5cf47ad5  multidict-4.5.0.tar.gz
--sha256	3fa7944194cc96319cbbd53a1e0fb6dfe1e437efb75117828c35ce5b30d9d0c9  multidict-4.5.0.tar.gz
-+md5	5e9d8f7e1ada9a22932aed6a72f88e43  multidict-4.5.2.tar.gz
-+sha256	024b8129695a952ebd93373e45b5d341dbb87c17ce49637b34000093f243dd4f  multidict-4.5.2.tar.gz
- # Locally computed sha256 checksums
- sha256	a1c5825513279d3085a0ba46880e148ea3710c149bbaedcf2d11605a5ed3c4ad  LICENSE
-diff --git a/package/python-multidict/python-multidict.mk b/package/python-multidict/python-multidict.mk
-index d25a51f8ad..7b9cd39283 100644
---- a/package/python-multidict/python-multidict.mk
-+++ b/package/python-multidict/python-multidict.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_MULTIDICT_VERSION = 4.5.0
-+PYTHON_MULTIDICT_VERSION = 4.5.2
- PYTHON_MULTIDICT_SOURCE = multidict-$(PYTHON_MULTIDICT_VERSION).tar.gz
--PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/70/b0/f6ce77f952b773eea2926ffacd031f9e95eeabd531dce999dceb8841fffc
-+PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/7f/8f/b3c8c5b062309e854ce5b726fc101195fbaa881d306ffa5c2ba19efa3af2
- PYTHON_MULTIDICT_SETUP_TYPE = setuptools
- PYTHON_MULTIDICT_LICENSE = Apache-2.0
- PYTHON_MULTIDICT_LICENSE_FILES = LICENSE
+Those paths are usually parts of includes or libraries search
+directories, and the packagfes buildsystems may chdir() anywhere, and
+thus the relative path will no longer be valid. For example:
+
+  $ ./host/powerpc-buildroot-linux-uclibc/sysroot/usr/bin/net-snmp-config --cflags
+  [...] -I./host/powerpc-buildroot-linux-uclibc/sysroot/usr/bin/../../.././bin/../powerpc-buildroot-linux-uclibc/sysroot/usr/include/libnl3 [...]
+
+Canonicalise the path to be sure we use absolute paths.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pkg-generic.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 887dc838a4..649a7ad187 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -280,8 +280,8 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
+ 				-e "s,^\(exec_\)\?prefix=.*,\1prefix=@STAGING_DIR@/usr,g" \
+ 				-e "s,-I/usr/,-I at STAGING_DIR@/usr/,g" \
+ 				-e "s,-L/usr/,-L at STAGING_DIR@/usr/,g" \
+-				-e 's, at STAGING_DIR@,$$(dirname $$0)/../..,g' \
+-				-e 's, at HOST_DIR@,$$(dirname $$0)/../../../..,g' \
++				-e 's, at STAGING_DIR@,$$(dirname $$(realpath -e $$0))/../..,g' \
++				-e 's, at HOST_DIR@,$$(dirname $$(realpath -e $$0))/../../../..,g' \
+ 				-e "s, at BASE_DIR@,$(BASE_DIR),g" \
+ 				$(addprefix $(STAGING_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ;\
+ 	fi
 -- 
-2.19.1
+2.14.1
