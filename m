@@ -1,51 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 28 Nov 2018 22:43:22 +0100
-Subject: [Buildroot] [PATCH 15/15] ejabberd: Bump to version 18.09
-In-Reply-To: <20181126110807.31431-16-johan.oudinet@gmail.com>
-References: <20181126110807.31431-1-johan.oudinet@gmail.com>
- <20181126110807.31431-16-johan.oudinet@gmail.com>
-Message-ID: <20181128224322.42641f73@windsurf.home>
+From: Matthew Weber <Matthew.Weber@collins.com>
+Date: Wed, 28 Nov 2018 16:35:04 -0600
+Subject: [Buildroot] [External] Re: [PATCH v8 1/1] docker-engine: split
+ docker-{cli, engine}, bump to v18.06.1-ce
+In-Reply-To: <87ftvnyz7c.fsf@paral.in>
+References: <20181108032458.1028-1-christian@paral.in>
+ <CANQCQpa0SGdEHVFxn_wmKnktat18iAJ2YLXYQd+4Uqzq5GzG4A@mail.gmail.com>
+ <874lcki4rw.fsf@paral.in>
+ <CANQCQpaK4m3iqadyDAzuypV2Ze3LdhedHhn50AxF41buOMrTDQ@mail.gmail.com>
+ <871s7liu5e.fsf@paral.in>
+ <CANQCQpYM2E_+rMfDQ7svB05V4TfJKpgHCOpoPN49uLLqRZ30Hw@mail.gmail.com>
+ <87ftvnyz7c.fsf@paral.in>
+Message-ID: <CANQCQpaF3LGyTkGZ29JhbgXgQzcd5UMCTkSo_mKmcav-iW0Hag@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Christian,
 
-On Mon, 26 Nov 2018 12:08:07 +0100, Johan Oudinet wrote:
-> This version requires much less patches than the previous one packaged
-> in Buildroot. It is compatible with Erlang OTP 21.
-> There are two remainning patches to:
-> - change the Makefile rules so dependencies are not downloaded/compiled;
-> - fix ejabberd user and load a default file in ejabberdctl script.
-> 
-> The patch 0006-fix-install-permissions has been replaced by setting
-> permissions on /etc/ejabberd directory via EJABBERD_PERMISSIONS.
-> 
-> The patch 0009-disable-mod_avatar has been removed because eimp is
-> a mandatory dependency since 0f86559d.
-> 
-> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 
-I don't have a specific issue with that patch, but when doing a build,
-I realized that some dependencies of ejabberd are built *after*
-ejabberd itself.
+On Mon, Nov 26, 2018 at 9:30 PM Christian Stewart <christian@paral.in> wrote:
+>
+> Hi Matthew,
+>
+> Matthew Weber <Matthew.Weber@collins.com> writes:
+> > I haven't got back to doing more evaluation of docker, but when I
+> > stopped working on things, I was able to narrow the hang down to be
+> > related to the initialization of random.
+>
+> I have found the same. My laptop boot up would be blocked for minutes,
+> and it was quite annoying / concerning, but I found that when I pressed
+> some keys / moved the mouse the hang would go away. That would match
+> with a starvation of entropy in the kernel.
+>
+> > The one use case I have been thinking about for new projects is
+> > building the most basic possible hosting environment to manage the
+> > security footprint.  Maybe a LXC system container hosting environment
+> > or a non-systemd dockerd.  Then inside of that run a systemd based
+> > docker deployment which would be easier to swap out and do a true
+> > shared filesystem approach vs a system container......
+>
+> I think the most minimum environment would be base Buildroot with either
+> the docker-containerd / runc stack, or something like cri-o (a
+> Kubernetes minimal container runtime I am examining for use with
+> Buildroot). One thing to consider is that the Go dependencies could be
+> compiled together into a single binary, which would reduce binary
+> footprint quite a bit I think. Much of Docker / dockerd features are
+> unnecessary and can be removed as well / mapped to Buildroot options.
+>
 
-Comparing ejabberd/Config.in selects and ejabberd/ejabberd.mk
-DEPENDENCIES variable, I found that erlang-jiffy and erlang-p1-oauth2
-were selected by ejabberd/Config.in, but not mentioned in
-EJABBERD_DEPENDENCIES. In my build, they ended up being built after
-ejabberd, so they are clearly not build dependencies.
+I noticed that flatpak now has OCI format support.  That could be an
+interesting way to go light weight without a GO dependency.....
 
-The question is: are these runtime dependencies (in which case a #
-runtime comment in the Config.in file would be nice), or are they
-stale/useless dependencies ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Matt
