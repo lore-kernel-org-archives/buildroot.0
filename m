@@ -1,90 +1,44 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 28 Nov 2018 18:05:10 +0100
-Subject: [Buildroot] [PATCH 1/1] libbsd: needs __register_atfork
-Message-ID: <20181128170510.5565-1-fontaine.fabrice@gmail.com>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Wed, 28 Nov 2018 10:08:32 -0800
+Subject: [Buildroot] [PATCH 1/1] python-networkmanager: bump to version 2.1
+Message-ID: <20181128180832.78708-1-joseph.kogut@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following error is raised by minizip:
-
-[100%] Linking C executable minizip
-/home/peko/autobuild/instance-0/output/host/m68k-buildroot-uclinux-uclibc/sysroot/usr/lib/libbsd.a(arc4random.o):
-In function `_rs_init.part.1':
-arc4random.c:(.text+0xaa): undefined reference to `__register_atfork'
-collect2: error: ld returned 1 exit status
-
-As specified in openssl/Config.in, uClibc on noMMU doesn't provide
-__register_atfork() so add a dependency on
-!(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU) on libbsd and minizip
-
-Don't add this dependency to netcat-opensd as it already depends on
-glibc
-Don't add this dependency to BR2_PACKAGE_BLUEZ_ALSA_HCITOP because
-bluez-alsa already depends on BR2_USE_MMU
-Concerning fwts, just update comment on BR2_USE_MMU
-
-Fixes:
- - http://autobuild.buildroot.org/results/df2dcbdceaa01a2ae37bf09140e4dbef0a5b9489
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 ---
- package/fwts/Config.in    | 2 +-
- package/libbsd/Config.in  | 3 +++
- package/minizip/Config.in | 2 ++
- 3 files changed, 6 insertions(+), 1 deletion(-)
+ package/python-networkmanager/python-networkmanager.hash | 6 +++---
+ package/python-networkmanager/python-networkmanager.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/fwts/Config.in b/package/fwts/Config.in
-index 269f065fd5..94ac606366 100644
---- a/package/fwts/Config.in
-+++ b/package/fwts/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_FWTS
- 	depends on BR2_i386 || BR2_x86_64 || BR2_aarch64
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS # libbsd
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
--	depends on BR2_USE_MMU # libglib2
-+	depends on BR2_USE_MMU # libglib2, libbsd
- 	depends on BR2_USE_WCHAR # libglib2, libbsd
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libbsd
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h
-diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
-index a163ce9b6f..ba5e5cbcfa 100644
---- a/package/libbsd/Config.in
-+++ b/package/libbsd/Config.in
-@@ -9,6 +9,8 @@ config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
- config BR2_PACKAGE_LIBBSD
- 	bool "libbsd"
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
-+	# uClibc on noMMU doesn't provide __register_atfork()
-+	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU)
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_WCHAR
- 	help
-@@ -22,4 +24,5 @@ config BR2_PACKAGE_LIBBSD
+diff --git a/package/python-networkmanager/python-networkmanager.hash b/package/python-networkmanager/python-networkmanager.hash
+index 1fed4befb7..83621761cd 100644
+--- a/package/python-networkmanager/python-networkmanager.hash
++++ b/package/python-networkmanager/python-networkmanager.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi/python-networkmanager/json, sha256 locally computed
+-md5	5fc644a65463031295c6b7dd51a0f1bd  python-networkmanager-2.0.1.tar.gz
+-sha256	bc36507506ad29bfdac941b0987ebd1cc9633c9a9291d7378e229e4515a0a517  python-networkmanager-2.0.1.tar.gz
++# md5 and sha256 from https://pypi.python.org/pypi/python-networkmanager/json
++md5	f638d854a3639fb37c0e06d1092a771e  python-networkmanager-2.1.tar.gz
++sha256	aef1e34d98d7bec7cc368e0ca0f2e97493f9b5ebe6d7103f8f6460cfca3dc6fc  python-networkmanager-2.1.tar.gz
+diff --git a/package/python-networkmanager/python-networkmanager.mk b/package/python-networkmanager/python-networkmanager.mk
+index 29afb5e564..de893f757a 100644
+--- a/package/python-networkmanager/python-networkmanager.mk
++++ b/package/python-networkmanager/python-networkmanager.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- comment "libbsd needs a toolchain w/ threads, wchar"
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-diff --git a/package/minizip/Config.in b/package/minizip/Config.in
-index 68fa1d7118..4bc12a0d7e 100644
---- a/package/minizip/Config.in
-+++ b/package/minizip/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_MINIZIP
- 	bool "minizip"
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
-+	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU) # libbsd
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libbsd
- 	depends on BR2_USE_WCHAR # libbsd
- 	select BR2_PACKAGE_LIBBSD
-@@ -19,4 +20,5 @@ config BR2_PACKAGE_MINIZIP_DEMOS
- 
- comment "minizip needs a toolchain w/ threads, wchar"
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+-PYTHON_NETWORKMANAGER_VERSION = 2.0.1
+-PYTHON_NETWORKMANAGER_SITE = https://pypi.python.org/packages/d7/f9/5cbd99fd24a072875ce048e48d1754285f137aab447de8fee63b6cba990a
++PYTHON_NETWORKMANAGER_VERSION = 2.1
++PYTHON_NETWORKMANAGER_SITE = https://files.pythonhosted.org/packages/73/ec/2cc46290cedc99f59df3633d428dfa91d95946ca49af96fdb53514ee195f
+ PYTHON_NETWORKMANAGER_SETUP_TYPE = setuptools
+ PYTHON_NETWORKMANAGER_LICENSE = Zlib
+ PYTHON_NETWORKMANAGER_LICENSE_FILES = COPYING
 -- 
-2.14.1
+2.19.2
