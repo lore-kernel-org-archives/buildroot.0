@@ -1,45 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 28 Nov 2018 22:28:48 +0100
-Subject: [Buildroot] [PATCH 01/15] package/pkg-rebar.mk: Remove
- dependencies from rebar.config
-In-Reply-To: <20181126110807.31431-2-johan.oudinet@gmail.com>
-References: <20181126110807.31431-1-johan.oudinet@gmail.com>
- <20181126110807.31431-2-johan.oudinet@gmail.com>
-Message-ID: <20181128222848.27df2a6a@windsurf.home>
+Date: Wed, 28 Nov 2018 22:37:41 +0100
+Subject: [Buildroot] [git commit branch/next] package/erlang-p1-utils: bump
+ to version 1.0.13
+Message-ID: <20181128213521.90E6988E3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Johan,
+commit: https://git.buildroot.net/buildroot/commit/?id=27ee4f20b88c41e3c818cfb55bbb53696ee3dca1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 26 Nov 2018 12:07:53 +0100, Johan Oudinet wrote:
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/erlang-p1-utils/erlang-p1-utils.hash | 2 +-
+ package/erlang-p1-utils/erlang-p1-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> +# Remove dependencies listed in rebar.config unless the package says
-> +# otherwise
-> +ifeq ($$($(2)_KEEP_DEPENDENCIES),)
-> +define remove_dependencies_from_rebar_config
-> +	$(SED) '/^{deps/,/}\.$$$$/d' $$($$(PKG)_DIR)/rebar.config
-
-I renamed this macro:
-
-	remove-rebar-config-dependencies
-
-and moved it outside of the inner-rebar-package macro, so that it is
-declared together with the other macros in pkg-rebar.mk.
-
-Also, an added benefit is that we can avoid the double escaping so $$$$
-becomes just $$, and $$ becomes just $.
-
-I've applied to next, but could you please send a follow-up patch that
-documents this <pkg>_KEEP_DEPENDENCIES variable in the Buildroot
-manual in the rebar package infrastructure section ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/erlang-p1-utils/erlang-p1-utils.hash b/package/erlang-p1-utils/erlang-p1-utils.hash
+index 950a5540d7..db925bddd1 100644
+--- a/package/erlang-p1-utils/erlang-p1-utils.hash
++++ b/package/erlang-p1-utils/erlang-p1-utils.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 57bfc575179733a723717f4fecb65b9f7fd056595f798b52e7bc0206e8a9333f erlang-p1-utils-1.0.10.tar.gz
++sha256 8f21fc0472c314572ebb066d624cb5463cf5b016e18b7fd7dca9dca2a4589382 erlang-p1-utils-1.0.13.tar.gz
+diff --git a/package/erlang-p1-utils/erlang-p1-utils.mk b/package/erlang-p1-utils/erlang-p1-utils.mk
+index 6a4920738c..6025e3f56c 100644
+--- a/package/erlang-p1-utils/erlang-p1-utils.mk
++++ b/package/erlang-p1-utils/erlang-p1-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ERLANG_P1_UTILS_VERSION = 1.0.10
++ERLANG_P1_UTILS_VERSION = 1.0.13
+ ERLANG_P1_UTILS_SITE = $(call github,processone,p1_utils,$(ERLANG_P1_UTILS_VERSION))
+ ERLANG_P1_UTILS_LICENSE = Apache-2.0
+ ERLANG_P1_UTILS_LICENSE_FILES = LICENSE.txt
