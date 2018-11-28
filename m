@@ -1,55 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 28 Nov 2018 21:44:23 +0100
-Subject: [Buildroot] [PATCH] package/netsnmp: drop our custom config script
- fixups
-Message-ID: <20181128204423.13058-1-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 28 Nov 2018 21:53:22 +0100
+Subject: [Buildroot] [git commit branch/next] package/strace: don't remove
+ strace-graph unconditionally
+Message-ID: <20181128205019.0570988D49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Those custom fixups were added in 2011 with commit d1b42b24b88
-(net-snmp: fixup paths in net-snmp-config) before we add generic config
-scripts fixups in 2013 with commit 834f9311aac (pkg-infra: add
-<pkg>_CONFIG_FIXUP to fix *-config files)
+commit: https://git.buildroot.net/buildroot/commit/?id=fe3d60edf292a3c4609ccda5527f113297ac9d44
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-These custom fixups enclose the includes and libraries paths in single
-quotes (presumably to protect them from further expnasion by the shell,
-in case there are spaces for example).
+strace-graph is a perl script. This script is removed unconditionally
+since commit 720c0ca5ba7 ("strace: convert to makefile.autotools.in
+format") from 2008. Since then Buildroot added support for perl on
+target. Don't remove strace-graph when perl is built for target.
 
-It turns out that this breaks now that we replace the staging dir with
-$(dirname $0), as it is between single quotes.
-
-It looks like these fixups are really no longer needed anymore, since
-the generic fixups do the job just fine (and better).
-
-Fixes:
-    http://autobuild.buildroot.org/results/2c5/2c5e379a06825bf8588bf070d733d2e1f98dab66/
-    http://autobuild.buildroot.org/results/eea/eea704463c3f14dbb9bd7f8aa23d4b61c25987f4/
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+[Thomas: move the hook definition inside the condition.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/netsnmp/netsnmp.mk | 8 --------
- 1 file changed, 8 deletions(-)
+ package/strace/strace.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-index 65a3f16a4d..4bd65ef17a 100644
---- a/package/netsnmp/netsnmp.mk
-+++ b/package/netsnmp/netsnmp.mk
-@@ -106,12 +106,4 @@ define NETSNMP_INSTALL_INIT_SYSV
- endef
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index 471dbc2e1d..6efe9c5174 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -34,10 +34,12 @@ else
+ STRACE_CONF_OPTS += --without-libiberty
  endif
  
--define NETSNMP_STAGING_NETSNMP_CONFIG_FIXUP
--	$(SED)	"s,^includedir=.*,includedir=\'$(STAGING_DIR)/usr/include\',g" \
--		-e "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" \
--		$(STAGING_DIR)/usr/bin/net-snmp-config
--endef
--
--NETSNMP_POST_INSTALL_STAGING_HOOKS += NETSNMP_STAGING_NETSNMP_CONFIG_FIXUP
--
++ifeq ($(BR2_PACKAGE_PERL),)
+ define STRACE_REMOVE_STRACE_GRAPH
+ 	rm -f $(TARGET_DIR)/usr/bin/strace-graph
+ endef
+ 
+ STRACE_POST_INSTALL_TARGET_HOOKS += STRACE_REMOVE_STRACE_GRAPH
++endif
+ 
  $(eval $(autotools-package))
--- 
-2.14.1
