@@ -1,74 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Nov 2018 19:10:57 +0100
-Subject: [Buildroot] [git commit] Makefile: move .NOTPARALLEL statement
- after including .config file
-Message-ID: <20181202071559.877E87F917@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 28 Nov 2018 22:38:17 +0100
+Subject: [Buildroot] [git commit] package/erlang-p1-iconv: bump to version
+ 1.0.10
+Message-ID: <20181202071600.A3870803E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=052fec0c08f6515055187c7d209663681bdf8144
+commit: https://git.buildroot.net/buildroot/commit/?id=790805c9e27968089bbe29f7966dc868fc21562e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In a follow-up commit, we will make the .NOTPARALLEL statement
-conditional on a Config.in option, so we need to move it further down.
-
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile | 32 ++++++++++++++++----------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
+ package/erlang-p1-iconv/erlang-p1-iconv.hash | 2 +-
+ package/erlang-p1-iconv/erlang-p1-iconv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index e675ac26aa..24c803872d 100644
---- a/Makefile
-+++ b/Makefile
-@@ -105,22 +105,6 @@ ifneq ($(firstword $(sort $(RUNNING_MAKE_VERSION) $(MIN_MAKE_VERSION))),$(MIN_MA
- $(error You have make '$(RUNNING_MAKE_VERSION)' installed. GNU make >= $(MIN_MAKE_VERSION) is required)
- endif
+diff --git a/package/erlang-p1-iconv/erlang-p1-iconv.hash b/package/erlang-p1-iconv/erlang-p1-iconv.hash
+index 0f0a23161a..31bcf40731 100644
+--- a/package/erlang-p1-iconv/erlang-p1-iconv.hash
++++ b/package/erlang-p1-iconv/erlang-p1-iconv.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 c7214ea7503c3de1edf3bdd72b37187aa3a9a36d7cf7f5945a067ae8d262d3fb erlang-p1-iconv-1.0.6.tar.gz
++sha256 8a9ff8a3dd983284caa964f118b5782ef1c0c662995608b2ca4f4a5f285605a9 erlang-p1-iconv-1.0.10.tar.gz
+diff --git a/package/erlang-p1-iconv/erlang-p1-iconv.mk b/package/erlang-p1-iconv/erlang-p1-iconv.mk
+index 6b22431cce..79d8efe16f 100644
+--- a/package/erlang-p1-iconv/erlang-p1-iconv.mk
++++ b/package/erlang-p1-iconv/erlang-p1-iconv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# Parallel execution of this Makefile is disabled because it changes
--# the packages building order, that can be a problem for two reasons:
--# - If a package has an unspecified optional dependency and that
--#   dependency is present when the package is built, it is used,
--#   otherwise it isn't (but compilation happily proceeds) so the end
--#   result will differ if the order is swapped due to parallel
--#   building.
--# - Also changing the building order can be a problem if two packages
--#   manipulate the same file in the target directory.
--#
--# Taking into account the above considerations, if you still want to execute
--# this top-level Makefile in parallel comment the ".NOTPARALLEL" line and
--# use the -j<jobs> option when building, e.g:
--#      make -j$((`getconf _NPROCESSORS_ONLN`+1))
--.NOTPARALLEL:
--
- # absolute path
- TOPDIR := $(CURDIR)
- CONFIG_CONFIG_IN = Config.in
-@@ -246,6 +230,22 @@ ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
- -include $(BR2_CONFIG)
- endif
- 
-+# Parallel execution of this Makefile is disabled because it changes
-+# the packages building order, that can be a problem for two reasons:
-+# - If a package has an unspecified optional dependency and that
-+#   dependency is present when the package is built, it is used,
-+#   otherwise it isn't (but compilation happily proceeds) so the end
-+#   result will differ if the order is swapped due to parallel
-+#   building.
-+# - Also changing the building order can be a problem if two packages
-+#   manipulate the same file in the target directory.
-+#
-+# Taking into account the above considerations, if you still want to execute
-+# this top-level Makefile in parallel comment the ".NOTPARALLEL" line and
-+# use the -j<jobs> option when building, e.g:
-+#      make -j$((`getconf _NPROCESSORS_ONLN`+1))
-+.NOTPARALLEL:
-+
- # timezone and locale may affect build output
- ifeq ($(BR2_REPRODUCIBLE),y)
- export TZ = UTC
+-ERLANG_P1_ICONV_VERSION = 1.0.6
++ERLANG_P1_ICONV_VERSION = 1.0.10
+ ERLANG_P1_ICONV_SITE = $(call github,processone,iconv,$(ERLANG_P1_ICONV_VERSION))
+ ERLANG_P1_ICONV_LICENSE = Apache-2.0
+ ERLANG_P1_ICONV_LICENSE_FILES = LICENSE.txt
