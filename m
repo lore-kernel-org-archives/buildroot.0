@@ -1,15 +1,10 @@
 From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Wed, 28 Nov 2018 17:12:37 +0100
-Subject: [Buildroot] [PATCH 07/11] httping: update package to use new fftw
- structure
-In-Reply-To: <1543421561-37355-6-git-send-email-gwenj@trabucayre.com>
+Date: Wed, 28 Nov 2018 17:12:32 +0100
+Subject: [Buildroot] [PATCH 02/11] alsa-utils: update DEPENDENCIES to
+ fft-single and add select in Config.in
+In-Reply-To: <1543421561-37355-1-git-send-email-gwenj@trabucayre.com>
 References: <1543421561-37355-1-git-send-email-gwenj@trabucayre.com>
- <1543421561-37355-2-git-send-email-gwenj@trabucayre.com>
- <1543421561-37355-3-git-send-email-gwenj@trabucayre.com>
- <1543421561-37355-4-git-send-email-gwenj@trabucayre.com>
- <1543421561-37355-5-git-send-email-gwenj@trabucayre.com>
- <1543421561-37355-6-git-send-email-gwenj@trabucayre.com>
-Message-ID: <1543421561-37355-7-git-send-email-gwenj@trabucayre.com>
+Message-ID: <1543421561-37355-2-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,24 +15,44 @@ From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
 Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
- package/httping/httping.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/alsa-utils/Config.in     | 5 ++---
+ package/alsa-utils/alsa-utils.mk | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/httping/httping.mk b/package/httping/httping.mk
-index 955ee3131b..9b44a8fca3 100644
---- a/package/httping/httping.mk
-+++ b/package/httping/httping.mk
-@@ -17,9 +17,9 @@ HTTPING_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
- 	$(if $(BR2_PACKAGE_NCURSES_WCHAR),ncurses) \
- 	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
--	$(if $(BR2_PACKAGE_FFTW),fftw)
-+	$(if $(BR2_PACKAGE_FFTW),fftw-double)
- HTTPING_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) \
--	FW=$(if $(BR2_PACKAGE_FFTW),yes,no) \
-+	FW=$(if $(BR2_PACKAGE_FFTW_PRECISION_DOUBLE),yes,no) \
- 	NC=$(if $(BR2_PACKAGE_NCURSES_WCHAR),yes,no) \
- 	SSL=$(if $(BR2_PACKAGE_OPENSSL),yes,no) \
- 	TFO=$(if $(BR2_PACKAGE_HTTPING_TFO),yes,no) \
+diff --git a/package/alsa-utils/Config.in b/package/alsa-utils/Config.in
+index 012f28aef4..950278d173 100644
+--- a/package/alsa-utils/Config.in
++++ b/package/alsa-utils/Config.in
+@@ -74,15 +74,14 @@ config BR2_PACKAGE_ALSA_UTILS_ASEQNET
+ 	select BR2_PACKAGE_ALSA_LIB_SEQ
+ 
+ config BR2_PACKAGE_ALSA_UTILS_BAT
++	select BR2_PACKAGE_FFTW
++	select BR2_PACKAGE_FFTW_PRECISION_SINGLE
+ 	bool "bat"
+ 	help
+ 	  ALSABAT (ALSA Basic Audio Tester) is a simple command-line
+ 	  utility intended to help automate audio driver and sound
+ 	  server testing with little human interaction.
+ 
+-	  Note that analysis support in alsabat requires fftw single
+-	  precision.
+-
+ config BR2_PACKAGE_ALSA_UTILS_IECSET
+ 	bool "iecset"
+ 	select BR2_PACKAGE_ALSA_LIB_PCM
+diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
+index 986a745399..9e0094f343 100644
+--- a/package/alsa-utils/alsa-utils.mk
++++ b/package/alsa-utils/alsa-utils.mk
+@@ -41,7 +41,7 @@ endif
+ ifeq ($(BR2_PACKAGE_ALSA_UTILS_BAT),y)
+ ALSA_UTILS_CONF_OPTS += --enable-bat
+ # Analysis support requires fftw single precision
+-ALSA_UTILS_DEPENDENCIES += $(if $(BR2_PACKAGE_FFTW_PRECISION_SINGLE),fftw)
++ALSA_UTILS_DEPENDENCIES += fftw-single
+ else
+ ALSA_UTILS_CONF_OPTS += --disable-bat
+ endif
 -- 
 2.19.2
