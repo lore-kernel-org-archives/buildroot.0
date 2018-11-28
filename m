@@ -1,103 +1,103 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 28 Nov 2018 08:01:08 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-11-27
-Message-ID: <20181128070108.D7EE7209A7@mail.bootlin.com>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Wed, 28 Nov 2018 08:43:50 -0200 (BRST)
+Subject: [Buildroot] [PATCH next] tpm2-abrmd: fix build without stack
+ smashing protection (SSP)
+In-Reply-To: <1736816953.3407907.1542981684876.JavaMail.zimbra@datacom.com.br>
+References: <20181121174337.341-1-casantos@datacom.com.br>
+ <20181121210652.5c083b7b@windsurf>
+ <864064258.3113009.1542851218627.JavaMail.zimbra@datacom.com.br>
+ <1736816953.3407907.1542981684876.JavaMail.zimbra@datacom.com.br>
+Message-ID: <1951917496.561443.1543401830342.JavaMail.zimbra@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+> From: "DATACOM" <casantos@datacom.com.br>
+> To: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+> Cc: "buildroot" <buildroot@buildroot.org>
+> Sent: Sexta-feira, 23 de novembro de 2018 12:01:24
+> Subject: Re: [Buildroot] [PATCH next] tpm2-abrmd: fix build without stack smashing protection (SSP)
 
-Build statistics for 2018-11-27
-===============================
+>> From: "DATACOM" <casantos@datacom.com.br>
+>> To: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+>> Cc: "buildroot" <buildroot@buildroot.org>
+>> Sent: Quarta-feira, 21 de novembro de 2018 23:46:58
+>> Subject: Re: [Buildroot] [PATCH next] tpm2-abrmd: fix build without stack
+>> smashing protection (SSP)
+> 
+>>> From: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+>>> To: "DATACOM" <casantos@datacom.com.br>
+>>> Cc: "buildroot" <buildroot@buildroot.org>
+>>> Sent: Quarta-feira, 21 de novembro de 2018 18:06:52
+>>> Subject: Re: [Buildroot] [PATCH next] tpm2-abrmd: fix build without stack
+>>> smashing protection (SSP)
+>> 
+>>> Hello,
+>>> 
+>>> On Wed, 21 Nov 2018 15:43:37 -0200, Carlos Santos wrote:
+>>>> The configuration environment setup that disables SSP if the toolchain
+>>>> does not support it must be updated after the bump to version 2.0.3.
+>>>> 
+>>>> Fixes:
+>>>>   http://autobuild.buildroot.net/results/bd9005eeb24678aa530179a80bbc99b2176f8559
+>>>>   http://autobuild.buildroot.net/results/feff61dcb481a94f5f030117830984c5e09727ea
+>>>> 
+>>>> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+>>>> ---
+>>>>  package/tpm2-abrmd/tpm2-abrmd.mk | 2 +-
+>>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>> 
+>>>> diff --git a/package/tpm2-abrmd/tpm2-abrmd.mk b/package/tpm2-abrmd/tpm2-abrmd.mk
+>>>> index a4d9cfb384..74cc66ba20 100644
+>>>> --- a/package/tpm2-abrmd/tpm2-abrmd.mk
+>>>> +++ b/package/tpm2-abrmd/tpm2-abrmd.mk
+>>>> @@ -13,7 +13,7 @@ TPM2_ABRMD_DEPENDENCIES = dbus libglib2 tpm2-tss host-pkgconf
+>>>>  
+>>>>  # configure.ac doesn't contain a link test, so it doesn't detect when
+>>>>  # libssp is missing.
+>>>> -TPM2_ABRMD_CONF_ENV = ax_cv_check_cflags___fstack_protector_all=$(if
+>>>> $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
+>>>> +TPM2_ABRMD_CONF_ENV =
+>>>> ax_cv_check_cflags___________Werror_______fstack_protector_all=$(if
+>>>> $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
+>>> 
+>>> It's a bit annoying to fix this once in a while, what about the
+>>> following change instead:
+>>> 
+>>> diff --git a/m4/flags.m4 b/m4/flags.m4
+>>> index 1b01198..59b6d5b 100644
+>>> --- a/m4/flags.m4
+>>> +++ b/m4/flags.m4
+>>> @@ -5,7 +5,7 @@ dnl   mandatory (configure will fail).
+>>> dnl $1: C compiler flag to add to EXTRA_CFLAGS.
+>>> dnl $2: Set to "required" to cause configure failure if flag not supported..
+>>> AC_DEFUN([AX_ADD_COMPILER_FLAG],[
+>>> -    AX_CHECK_COMPILE_FLAG([$1],[
+>>> +    AX_CHECK_LINK_FLAG([$1],[
+>>>         EXTRA_CFLAGS="$EXTRA_CFLAGS $1"
+>>>         AC_SUBST([EXTRA_CFLAGS])],[
+>>>         AS_IF([test x$2 != xrequired],[
+>>> 
+>>> (entirely untested). It could be submitted upstream.
+>> 
+>> I can forward your suggestion upstream but for the moment I'd keep
+>> the CONF_ENV approach.
+>> 
+>> Patching flags.m4 would require AUTORECONF, which in its turn would
+>> require adding host-autoconf-archive as a build dependency. So more
+>> dependencies, a larger build to time and exactly the same result.
+> 
+> Pull request created:
+> 
+>    https://github.com/tpm2-software/tpm2-abrmd/pull/556
 
-      branch |  OK | NOK | TIM | TOT |
-   2018.02.x |  24 |   0 |   0 |  24 |
-   2018.08.x |  23 |   1 |   0 |  24 |
-      master | 191 |   8 |   0 | 199 |
-        next |  22 |  13 |   0 |  35 |
+Thomas, could you please accept this patch while we wait for a verdict
+from upstream on my PR? It is currently blocked by a build error whose
+solution depends on a subsequent PR:
 
-Results for branch '2018.08.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-                  boost-1.67.0 | 1 
-
-
-Detail of failures
-------------------
-
-        i686 |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/fdd92d9841f3eec299d7359aa22d01016ce4bd79 |     
-
-Results for branch 'master'
-===========================
-
-Classification of failures by reason
-------------------------------------
-
-                   dante-1.4.1 | 1 
-               domoticz-4.9700 | 1 
-      gst-plugins-good-0.10.31 | 1 
-                  mender-1.4.0 | 1 
-                 minizip-2.5.3 | 1 
-           python-numpy-1.15.1 | 1 
-            qt5location-5.11.2 | 1 
-    trace-cmd-trace-cmd-v2.6.1 | 1 
-
-
-Detail of failures
-------------------
-
-      xtensa |                    dante-1.4.1 | NOK | http://autobuild.buildroot.net/results/546d53121e6a1501e96606a1542ee3de650aed10 |     
-      xtensa |                domoticz-4.9700 | NOK | http://autobuild.buildroot.net/results/70a2acc91ccab8e623c0419b5bf37eae3a824ee0 |     
-     riscv64 |       gst-plugins-good-0.10.31 | NOK | http://autobuild.buildroot.net/results/57c0add9386c52504834b9fc9527cc69b4304e05 | ORPH
-      x86_64 |                   mender-1.4.0 | NOK | http://autobuild.buildroot.net/results/05f0e202ecffafa46de3539f5ca75e6f2dd759d0 |     
-        m68k |                  minizip-2.5.3 | NOK | http://autobuild.buildroot.net/results/f4fc2c1c7af37ab654c7906a2a32844b5ae744b5 |     
-     aarch64 |            python-numpy-1.15.1 | NOK | http://autobuild.buildroot.net/results/41671976c7be7883f31ee5f51ca0eb90b81262fd |     
-         arm |             qt5location-5.11.2 | NOK | http://autobuild.buildroot.net/results/3a0affb73de831478a1fed6d5a726bcb5d0896e5 |     
-       sparc |     trace-cmd-trace-cmd-v2.6.1 | NOK | http://autobuild.buildroot.net/results/f22212ccfdbb6b9b189fade905ab79c9dc5864f3 |     
-
-Results for branch 'next'
-=========================
-
-Classification of failures by reason
-------------------------------------
-
-                  quagga-1.1.1 | 2 
-               asterisk-14.7.8 | 1 
-               boa-0.94.14rc21 | 1 
-                flannel-v0.5.5 | 1 
-     intel-microcode-20180807a | 1 
-               libiscsi-1.18.0 | 1 
-                libmpeg2-0.5.1 | 1 
-                 libv4l-1.16.1 | 1 
-                  linuxptp-2.0 | 1 
-                     nut-2.7.4 | 1 
-                   strace-4.23 | 1 
-              tpm2-abrmd-2.0.3 | 1 
-
-
-Detail of failures
-------------------
-
-         arm |                asterisk-14.7.8 | NOK | http://autobuild.buildroot.net/results/3fe3b1d6fba76e73fba1a3a89ca3dbf3ca9585f2 |     
-         arm |                boa-0.94.14rc21 | NOK | http://autobuild.buildroot.net/results/5c6b24048016598aec6047b00a26e25ecd44af09 | ORPH
-      x86_64 |                 flannel-v0.5.5 | NOK | http://autobuild.buildroot.net/results/e79bd816c5812ad3cab5aeaca65393eb3221039e |     
-        i586 |      intel-microcode-20180807a | NOK | http://autobuild.buildroot.net/results/8a9476fad803c92e06be996ff860842b61ff08d6 |     
-         arc |                libiscsi-1.18.0 | NOK | http://autobuild.buildroot.net/results/58565bd8cc49262c5b10709d9ed0384f94520878 |     
-     powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/f2409dae374bba6f092548b55213e0ff5cf252cc | ORPH
-         arm |                  libv4l-1.16.1 | NOK | http://autobuild.buildroot.net/results/9d1e33afb55edbaa63d84dc81339796f644f8e40 |     
-     powerpc |                   linuxptp-2.0 | NOK | http://autobuild.buildroot.net/results/028a7906218ca962948194d7a4f9a07cbb6eac8e |     
-     powerpc |                      nut-2.7.4 | NOK | http://autobuild.buildroot.net/results/2c5e379a06825bf8588bf070d733d2e1f98dab66 |     
-    mips64el |                   quagga-1.1.1 | NOK | http://autobuild.buildroot.net/results/d2da01d3f1a6e68445914956603ea5c965fc1ade | ORPH
-    mips64el |                   quagga-1.1.1 | NOK | http://autobuild.buildroot.net/results/7e607e3c1394054542e9c9c400d6b6a9d1f9b94c | ORPH
-microblazeel |                    strace-4.23 | NOK | http://autobuild.buildroot.net/results/c97ac9b4c83fe0681eb44fd376b8e6266e25922e |     
-       sparc |               tpm2-abrmd-2.0.3 | NOK | http://autobuild.buildroot.net/results/76e74c9b3d24c61b93522f0cbee88fb7548f9860 |     
-
+  https://github.com/tpm2-software/tpm2-abrmd/pull/557
 
 -- 
-http://autobuild.buildroot.net
+Carlos Santos (Casantos) - DATACOM, P&D
