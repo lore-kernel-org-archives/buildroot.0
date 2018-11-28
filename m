@@ -1,11 +1,15 @@
 From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Wed, 28 Nov 2018 17:12:33 +0100
-Subject: [Buildroot] [PATCH 03/11] aubio: update DEPENDENCIES to fft-single
- or fft-double depending on enabled option
-In-Reply-To: <1543421561-37355-2-git-send-email-gwenj@trabucayre.com>
+Date: Wed, 28 Nov 2018 17:12:37 +0100
+Subject: [Buildroot] [PATCH 07/11] httping: update package to use new fftw
+ structure
+In-Reply-To: <1543421561-37355-6-git-send-email-gwenj@trabucayre.com>
 References: <1543421561-37355-1-git-send-email-gwenj@trabucayre.com>
  <1543421561-37355-2-git-send-email-gwenj@trabucayre.com>
-Message-ID: <1543421561-37355-3-git-send-email-gwenj@trabucayre.com>
+ <1543421561-37355-3-git-send-email-gwenj@trabucayre.com>
+ <1543421561-37355-4-git-send-email-gwenj@trabucayre.com>
+ <1543421561-37355-5-git-send-email-gwenj@trabucayre.com>
+ <1543421561-37355-6-git-send-email-gwenj@trabucayre.com>
+Message-ID: <1543421561-37355-7-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,36 +20,24 @@ From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
 Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
- package/aubio/aubio.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/httping/httping.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/aubio/aubio.mk b/package/aubio/aubio.mk
-index b0cc8b899e..20dd8c13cb 100644
---- a/package/aubio/aubio.mk
-+++ b/package/aubio/aubio.mk
-@@ -28,7 +28,7 @@ endif
- 
- # Could not compile aubio in double precision mode with libsamplerate
- ifeq ($(BR2_PACKAGE_LIBSAMPLERATE)$(BR2_PACKAGE_FFTW_PRECISION_SINGLE),yy)
--AUBIO_DEPENDENCIES += libsamplerate
-+AUBIO_DEPENDENCIES += libsamplerate fftw-single
- AUBIO_CONF_OPTS += --enable-samplerate
- else
- AUBIO_CONF_OPTS += --disable-samplerate
-@@ -42,12 +42,13 @@ AUBIO_CONF_OPTS += --disable-jack
- endif
- 
- ifeq ($(BR2_PACKAGE_FFTW),y)
--AUBIO_DEPENDENCIES += fftw
- # fftw3 require double otherwise it will look for fftw3f
- ifeq ($(BR2_PACKAGE_FFTW_PRECISION_DOUBLE),y)
- AUBIO_CONF_OPTS += --enable-fftw3 --enable-double
-+AUBIO_DEPENDENCIES += fftw-double
- else ifeq ($(BR2_PACKAGE_FFTW_PRECISION_SINGLE),y)
- AUBIO_CONF_OPTS += --enable-fftw3f --disable-double
-+AUBIO_DEPENDENCIES += fftw-single
- endif
- else  # !BR2_PACKAGE_FFTW
- AUBIO_CONF_OPTS += --disable-fftw3
+diff --git a/package/httping/httping.mk b/package/httping/httping.mk
+index 955ee3131b..9b44a8fca3 100644
+--- a/package/httping/httping.mk
++++ b/package/httping/httping.mk
+@@ -17,9 +17,9 @@ HTTPING_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
+ 	$(if $(BR2_PACKAGE_NCURSES_WCHAR),ncurses) \
+ 	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
+-	$(if $(BR2_PACKAGE_FFTW),fftw)
++	$(if $(BR2_PACKAGE_FFTW),fftw-double)
+ HTTPING_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) \
+-	FW=$(if $(BR2_PACKAGE_FFTW),yes,no) \
++	FW=$(if $(BR2_PACKAGE_FFTW_PRECISION_DOUBLE),yes,no) \
+ 	NC=$(if $(BR2_PACKAGE_NCURSES_WCHAR),yes,no) \
+ 	SSL=$(if $(BR2_PACKAGE_OPENSSL),yes,no) \
+ 	TFO=$(if $(BR2_PACKAGE_HTTPING_TFO),yes,no) \
 -- 
 2.19.2
