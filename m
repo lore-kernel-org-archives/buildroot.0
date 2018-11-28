@@ -1,48 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Nov 2018 09:35:34 +0100
-Subject: [Buildroot] [git commit] python-crossbar: bump to version 18.11.2
-Message-ID: <20181202071559.40540815BC@busybox.osuosl.org>
+Date: Wed, 28 Nov 2018 22:37:48 +0100
+Subject: [Buildroot] [git commit] package/erlang-p1-tls: bump to version
+ 1.0.25
+Message-ID: <20181202071600.5EB43815BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=79c3f5c88fd6076e48cf04d24b7b20a62d1a91ea
+commit: https://git.buildroot.net/buildroot/commit/?id=2c4290c3860747eeb423e83a52b7f7bd973d0b10
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-crossbar/python-crossbar.hash | 4 ++--
- package/python-crossbar/python-crossbar.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/erlang-p1-tls/erlang-p1-tls.hash | 2 +-
+ package/erlang-p1-tls/erlang-p1-tls.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-crossbar/python-crossbar.hash b/package/python-crossbar/python-crossbar.hash
-index aee07a7382..4b73f81338 100644
---- a/package/python-crossbar/python-crossbar.hash
-+++ b/package/python-crossbar/python-crossbar.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/crossbar/json
--md5	e3f0c51c6c496a3d7f1c62d7f64f23db  crossbar-18.11.1.tar.gz
--sha256	ab24031f40077ee283469aab5f270bdc223b29b1e6f45d69cf38bf4cad80df2a  crossbar-18.11.1.tar.gz
-+md5	2f48f40f7a43eced7cb74353a303c3db  crossbar-18.11.2.tar.gz
-+sha256	8236f207222167747de006784a431cfa546f98b51f47e82cd71e7008f5a09690  crossbar-18.11.2.tar.gz
- # Locally computed
- sha256  57c8ff33c9c0cfc3ef00e650a1cc910d7ee479a8bc509f6c9209a7c2a11399d6  LICENSE
-diff --git a/package/python-crossbar/python-crossbar.mk b/package/python-crossbar/python-crossbar.mk
-index de5dcea931..2a796f201f 100644
---- a/package/python-crossbar/python-crossbar.mk
-+++ b/package/python-crossbar/python-crossbar.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/erlang-p1-tls/erlang-p1-tls.hash b/package/erlang-p1-tls/erlang-p1-tls.hash
+index b5b800b202..af635e5221 100644
+--- a/package/erlang-p1-tls/erlang-p1-tls.hash
++++ b/package/erlang-p1-tls/erlang-p1-tls.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 ca9670b7f78a025b101e3fee6255d7472d6b52abc46444cc45616c3d1bd75b9b erlang-p1-tls-1.0.17.tar.gz
++sha256 5bb883b03514999876c750cdb08a5e4cf80a9eb89319037b612e1265c43f6f6d erlang-p1-tls-1.0.25.tar.gz
+diff --git a/package/erlang-p1-tls/erlang-p1-tls.mk b/package/erlang-p1-tls/erlang-p1-tls.mk
+index ad7317dc8c..b569664465 100644
+--- a/package/erlang-p1-tls/erlang-p1-tls.mk
++++ b/package/erlang-p1-tls/erlang-p1-tls.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_CROSSBAR_VERSION = 18.11.1
-+PYTHON_CROSSBAR_VERSION = 18.11.2
- PYTHON_CROSSBAR_SOURCE = crossbar-$(PYTHON_CROSSBAR_VERSION).tar.gz
--PYTHON_CROSSBAR_SITE = https://files.pythonhosted.org/packages/99/02/7f7f7dee3e8787e44d9452cc1d712183e5903d8a76455693b15a900385eb
-+PYTHON_CROSSBAR_SITE = https://files.pythonhosted.org/packages/f8/c7/1388883cb64db073c4878e0c83afedf785fd22e4cebc96523e105a000088
- PYTHON_CROSSBAR_LICENSE = AGPL-3.0
- PYTHON_CROSSBAR_LICENSE_FILES = LICENSE
- PYTHON_CROSSBAR_SETUP_TYPE = setuptools
+-ERLANG_P1_TLS_VERSION = 1.0.17
++ERLANG_P1_TLS_VERSION = 1.0.25
+ ERLANG_P1_TLS_SITE = $(call github,processone,fast_tls,$(ERLANG_P1_TLS_VERSION))
+ ERLANG_P1_TLS_LICENSE = Apache-2.0
+ ERLANG_P1_TLS_LICENSE_FILES = LICENSE.txt
