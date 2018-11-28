@@ -1,16 +1,11 @@
 From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Wed, 28 Nov 2018 17:12:39 +0100
-Subject: [Buildroot] [PATCH 09/11] libvips: reference explicitly fftw double
-In-Reply-To: <1543421561-37355-8-git-send-email-gwenj@trabucayre.com>
+Date: Wed, 28 Nov 2018 17:12:33 +0100
+Subject: [Buildroot] [PATCH 03/11] aubio: update DEPENDENCIES to fft-single
+ or fft-double depending on enabled option
+In-Reply-To: <1543421561-37355-2-git-send-email-gwenj@trabucayre.com>
 References: <1543421561-37355-1-git-send-email-gwenj@trabucayre.com>
  <1543421561-37355-2-git-send-email-gwenj@trabucayre.com>
- <1543421561-37355-3-git-send-email-gwenj@trabucayre.com>
- <1543421561-37355-4-git-send-email-gwenj@trabucayre.com>
- <1543421561-37355-5-git-send-email-gwenj@trabucayre.com>
- <1543421561-37355-6-git-send-email-gwenj@trabucayre.com>
- <1543421561-37355-7-git-send-email-gwenj@trabucayre.com>
- <1543421561-37355-8-git-send-email-gwenj@trabucayre.com>
-Message-ID: <1543421561-37355-9-git-send-email-gwenj@trabucayre.com>
+Message-ID: <1543421561-37355-3-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,24 +16,36 @@ From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
 Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
- package/libvips/libvips.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/aubio/aubio.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
-index 8078e046d1..ac566f85b7 100644
---- a/package/libvips/libvips.mk
-+++ b/package/libvips/libvips.mk
-@@ -68,9 +68,9 @@ else
- LIBVIPS_CONF_OPTS += --without-tiff
+diff --git a/package/aubio/aubio.mk b/package/aubio/aubio.mk
+index b0cc8b899e..20dd8c13cb 100644
+--- a/package/aubio/aubio.mk
++++ b/package/aubio/aubio.mk
+@@ -28,7 +28,7 @@ endif
+ 
+ # Could not compile aubio in double precision mode with libsamplerate
+ ifeq ($(BR2_PACKAGE_LIBSAMPLERATE)$(BR2_PACKAGE_FFTW_PRECISION_SINGLE),yy)
+-AUBIO_DEPENDENCIES += libsamplerate
++AUBIO_DEPENDENCIES += libsamplerate fftw-single
+ AUBIO_CONF_OPTS += --enable-samplerate
+ else
+ AUBIO_CONF_OPTS += --disable-samplerate
+@@ -42,12 +42,13 @@ AUBIO_CONF_OPTS += --disable-jack
  endif
  
--ifeq ($(BR2_PACKAGE_FFTW),y)
-+ifeq ($(BR2_PACKAGE_FFTW_PRECISION_DOUBLE),y)
- LIBVIPS_CONF_OPTS += --with-fftw
--LIBVIPS_DEPENDENCIES += fftw
-+LIBVIPS_DEPENDENCIES += fftw-double
- else
- LIBVIPS_CONF_OPTS += --without-fftw
+ ifeq ($(BR2_PACKAGE_FFTW),y)
+-AUBIO_DEPENDENCIES += fftw
+ # fftw3 require double otherwise it will look for fftw3f
+ ifeq ($(BR2_PACKAGE_FFTW_PRECISION_DOUBLE),y)
+ AUBIO_CONF_OPTS += --enable-fftw3 --enable-double
++AUBIO_DEPENDENCIES += fftw-double
+ else ifeq ($(BR2_PACKAGE_FFTW_PRECISION_SINGLE),y)
+ AUBIO_CONF_OPTS += --enable-fftw3f --disable-double
++AUBIO_DEPENDENCIES += fftw-single
  endif
+ else  # !BR2_PACKAGE_FFTW
+ AUBIO_CONF_OPTS += --disable-fftw3
 -- 
 2.19.2
