@@ -1,41 +1,49 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed, 28 Nov 2018 23:44:12 +0100
-Subject: [Buildroot] [PATCH] linux: bump CIP to version v4.4.154-cip28
-Message-ID: <20181128224412.11676-1-angelo@amarulasolutions.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 28 Nov 2018 23:52:14 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-11-25
+In-Reply-To: <CANQCQpbODU5sFSaewz3R0z69ZbxxpNrgHPPzQFKd8mHUTj87BA@mail.gmail.com>
+References: <20181126070051.E6F2920D29@mail.bootlin.com>
+ <CANQCQpbODU5sFSaewz3R0z69ZbxxpNrgHPPzQFKd8mHUTj87BA@mail.gmail.com>
+Message-ID: <3d046613-d734-5ffc-9ce1-07b0ec113edd@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bumps the Linux CIP kernel to version v4.4.154-cip28
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 85e540754a..efce31c7e1 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -33,7 +33,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
- 	bool "Latest version (4.18)"
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
--	bool "Latest CIP SLTS version (v4.4.138-cip25)"
-+	bool "Latest CIP SLTS version (v4.4.154-cip28)"
- 	help
- 	  CIP launched in the spring of 2016 to address the needs of
- 	  organizations in industries such as power generation and
-@@ -121,7 +121,7 @@ endif
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "4.18.20" if BR2_LINUX_KERNEL_LATEST_VERSION
--	default "v4.4.138-cip25" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-+	default "v4.4.154-cip28" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
--- 
-2.17.1
+On 26/11/2018 18:50, Matthew Weber wrote:
+> All,
+> 
+> 
+> On Mon, Nov 26, 2018 at 1:01 AM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+[snip]
+>>  powerpc64le |                  setools-4.1.1 | NOK | http://autobuild.buildroot.net/results/e214e1a539cdac07028fb58c3822f89886d86f1f |
+> 
+> setools package is installing man pages and were caught using a bad
+> path by 'step_check_build_dir'.  To stop the install of the man pages,
+> is the preference a 'sed' to remove a line in setup.py or a 'rm' as a
+> hook to cleanup the install of the files to staging/target?
+
+ Well, fix setup.py of course :-)
+
+ This is caused by e94280e5a537b "package/pkg-python: use proper --prefix and
+--root values". It changed:
+
+-       --prefix=$(TARGET_DIR)/usr
++       --prefix=/usr \
++       --root=$(TARGET_DIR)
+
+ setools setup.py does:
+
+data_files=[(join(sys.prefix, 'share/man/man1'), glob.glob("man/*.1"))],
+
+ To me, that actually looks like the right thing to do...
+
+ Angelo, maybe you have an idea?
+
+ Regards,
+ Arnout
