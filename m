@@ -1,40 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 29 Nov 2018 22:58:44 +0100
-Subject: [Buildroot] [PATCH/next 2/2] squid: needs atomic
-In-Reply-To: <20181124145450.5623-2-fontaine.fabrice@gmail.com>
-References: <20181124145450.5623-1-fontaine.fabrice@gmail.com>
- <20181124145450.5623-2-fontaine.fabrice@gmail.com>
-Message-ID: <20181129225844.2e72e404@windsurf>
+Date: Thu, 29 Nov 2018 22:59:00 +0100
+Subject: [Buildroot] [git commit branch/next] package/setools: drop path
+ prefix from man install
+Message-ID: <20181129215554.A6BF289054@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d68f3ba156074c5dc4bd96a19cb85ae8c5ae2754
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 24 Nov 2018 15:54:50 +0100, Fabrice Fontaine wrote:
-> Since https://github.com/squid-cache/squid/commit/4b0f89121135aae68fbaf2aa33b5fb2e0da66d3e
-> squid tries to find if latomic is needed through:
-> AC_SEARCH_LIBS([__atomic_load_8],[atomic],[ATOMICLIB="-latomic"],[])
-> 
-> However, this can fails on:
-> configure:21147: /home/fabrice/buildroot/output/host/bin/arc-buildroot-linux-gnu-g++ -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -matomic -Os   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -g conftest.cpp -latomic   >&5
-> conftest.cpp:55:6: error: new declaration 'char __atomic_load_8()' ambiguates built-in declaration 'long long unsigned int __atomic_load_8(const volatile void*, int)' [-fpermissive]
->  char __atomic_load_8 ();
->       ^~~~~~~~~~~~~~~
-> conftest.cpp: In function 'int main()':
-> conftest.cpp:59:25: error: too few arguments to function 'long long unsigned int __atomic_load_8(const volatile void*, int)'
->  return __atomic_load_8 ();
+For this man file install scenario, joining the sys.prefix makes the
+path absolute (this was previously working by accident).  It was
+found when e94280e5a537b "package/pkg-python: use proper --prefix
+and --root values" was merged.
 
-I've applied to next, but could you fix the upstream code so that the
--latomic detection works correctly, and we can drop the workaround in
-Buildroot at some point in the future ?
+Fixes:
+http://autobuild.buildroot.net/results/e214e1a539cdac07028fb58c3822f89886d86f1f
 
-Thanks a lot!
+Upstream:
+https://github.com/SELinuxProject/setools/pull/13/commits/bc36cba1393120e65bfe4d0f642fd8d38010c0f7
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...etup.py-drop-path-prefix-from-man-install.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+
+diff --git a/package/setools/0003-setup.py-drop-path-prefix-from-man-install.patch b/package/setools/0003-setup.py-drop-path-prefix-from-man-install.patch
+new file mode 100644
+index 0000000000..63344506b2
+--- /dev/null
++++ b/package/setools/0003-setup.py-drop-path-prefix-from-man-install.patch
+@@ -0,0 +1,42 @@
++From bc36cba1393120e65bfe4d0f642fd8d38010c0f7 Mon Sep 17 00:00:00 2001
++From: Matt Weber <matthew.weber@rockwellcollins.com>
++Date: Wed, 28 Nov 2018 20:49:00 -0600
++Subject: [PATCH] setup.py: drop path prefix from man install
++
++If the directory is a relative path, it is interpreted relative to the
++installation prefix (Python's sys.prefix for pure-Python packages,
++sys.exec_prefix for packages that contain extension modules).
++So the sys.prefix should not be joined because the correct one will be
++added regardless. The reason why a relative path is going to work is
++because the installation path is built internally joining python root
++with python prefix, thus forming the correct path $(TARGET_DIR)/usr.
++(https://docs.python.org/3/distutils/setupscript.html#installing-additional-files)
++
++For this man file install scenario, joining the sys.prefix makes the
++path absolute (this was previously working by accident).
++
++Upstream: https://github.com/SELinuxProject/setools/pull/13/commits/bc36cba1393120e65bfe4d0f642fd8d38010c0f7
++
++Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
++Cc: Arnout Vandecappelle <arnout@mind.be>
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++---
++ setup.py | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/setup.py b/setup.py
++index 3767fbc..80e0400 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -136,7 +136,7 @@ setup(name='setools',
++       cmdclass={'build_qhc': QtHelpCommand, 'clean': CleanCommand},
++       packages=['setools', 'setools.diff', 'setoolsgui', 'setoolsgui.apol'],
++       scripts=['apol', 'sediff', 'seinfo', 'seinfoflow', 'sesearch', 'sedta'],
++-      data_files=[(join(sys.prefix, 'share/man/man1'), glob.glob("man/*.1"))],
+++      data_files=[('share/man/man1', glob.glob("man/*.1"))],
++       package_data={'': ['*.ui', '*.qhc', '*.qch'], 'setools': ['perm_map']},
++       ext_modules=cythonize(ext_py_mods, include_path=['setools/policyrep'],
++                             annotate=cython_annotate,
++-- 
++1.9.1
++
