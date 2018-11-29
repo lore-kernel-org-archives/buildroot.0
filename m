@@ -1,32 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 29 Nov 2018 22:15:55 +0100
-Subject: [Buildroot] [PATCH] perl-time-hires: remove it
-In-Reply-To: <68d8e298-7309-c2b0-4002-0d1a4581b3e4@mind.be>
-References: <20181122182215.17910-1-francois.perrad@gadz.org>
- <20181123090742.68155c7c@windsurf>
- <68d8e298-7309-c2b0-4002-0d1a4581b3e4@mind.be>
-Message-ID: <20181129221555.208ac4e0@windsurf>
+Date: Thu, 29 Nov 2018 22:16:02 +0100
+Subject: [Buildroot] [git commit branch/next] package/wolfssl: bump to
+ version 3.15.5
+Message-ID: <20181129211741.151CF88FC5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d9adaa15f96862cc1dd8beddf4a777cecedef2df
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 27 Nov 2018 17:54:18 +0100, Arnout Vandecappelle wrote:
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/wolfssl/wolfssl.hash | 2 +-
+ package/wolfssl/wolfssl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
->  No we don't. Config.in.legacy handling is there to make sure that the user
-> after upgrading Buildroot still has everything that she had enabled before. In
-> this case, the Time::HiRes module *is* there because it is part of perl. So no
-> legacy handling needed.
-
-Indeed, thanks for pointing this out. I've applied the patch as-is.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
+index 76c7db25a8..2fdaa5762b 100644
+--- a/package/wolfssl/wolfssl.hash
++++ b/package/wolfssl/wolfssl.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256 4ab543c869a65a77dc5d0bc934b9d4852aa3d5834bd2f707a74a936602bd3687  v3.14.0-stable.tar.gz
++sha256 4e15f494604e41725499f8b708798f8ddc2fcaa8f39b4369bcd000b3cab482d8  v3.15.5-stable.tar.gz
+ 
+ # Hash for license files:
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
+index c246b08513..68b638c3e2 100644
+--- a/package/wolfssl/wolfssl.mk
++++ b/package/wolfssl/wolfssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WOLFSSL_VERSION = 3.14.0
++WOLFSSL_VERSION = 3.15.5
+ WOLFSSL_SITE = https://github.com/wolfSSL/wolfssl/archive
+ WOLFSSL_SOURCE = v$(WOLFSSL_VERSION)-stable.tar.gz
+ WOLFSSL_INSTALL_STAGING = YES
