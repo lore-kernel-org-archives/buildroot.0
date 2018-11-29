@@ -1,43 +1,28 @@
-From: Florian Fainelli <f.fainelli@gmail.com>
-Date: Wed, 28 Nov 2018 21:05:40 -0800
-Subject: [Buildroot] [PATCH] xfsprogs: Define PLATFORM to linux
-Message-ID: <1543467940-5231-1-git-send-email-f.fainelli@gmail.com>
+From: Robert Rose <robertroyrose@gmail.com>
+Date: Wed, 28 Nov 2018 21:47:12 -0800
+Subject: [Buildroot] [PATCH v3 1/2] c-ares: support host build
+Message-ID: <20181129054713.9643-1-robertroyrose@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-PLATFORM is an environment variable used by xfsprogs' configure script
-to determine the platform for which the applications are being built. If
-we set some incorrect/unsupported value through e.g: export, this will
-be picked up by xfsprogs' configure script and used as-is and assigned
-to PKG_PLATFORM, which will lead to build failures.
+From: Robert Rose <robertroyrose@google.com>
 
-If PLATFORM was empty/unset, then uname on the host building xfsprogs
-gets used to determine the build platform, which again could be
-incorrect if we e.g: built xfsprogs on a Darwin system.
-
-Since we are obviously building for Linux, let's just make sure we
-define it that way which solves both issues.
-
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Robert Rose <robertroyrose@google.com>
 ---
- package/xfsprogs/xfsprogs.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/c-ares/c-ares.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
-index b5975d29e1a1..bbb888707b20 100644
---- a/package/xfsprogs/xfsprogs.mk
-+++ b/package/xfsprogs/xfsprogs.mk
-@@ -12,7 +12,7 @@ XFSPROGS_LICENSE_FILES = LICENSES/GPL-2.0 LICENSES/LGPL-2.1
+diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
+index 67254244a1..76e9687b37 100644
+--- a/package/c-ares/c-ares.mk
++++ b/package/c-ares/c-ares.mk
+@@ -15,3 +15,4 @@ C_ARES_LICENSE = MIT
+ C_ARES_LICENSE_FILES = ares_mkquery.c
  
- XFSPROGS_DEPENDENCIES = util-linux
- 
--XFSPROGS_CONF_ENV = ac_cv_header_aio_h=yes ac_cv_lib_rt_lio_listio=yes
-+XFSPROGS_CONF_ENV = ac_cv_header_aio_h=yes ac_cv_lib_rt_lio_listio=yes PLATFORM="linux"
- XFSPROGS_CONF_OPTS = \
- 	--enable-lib64=no \
- 	--enable-gettext=no \
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
-2.7.4
+2.20.0.rc0.387.gc7a69e6b6c-goog
