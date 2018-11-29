@@ -1,42 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Nov 2018 21:29:30 +0100
-Subject: [Buildroot] [git commit] python-numpy: fix build with lapack
-Message-ID: <20181129202654.4E67388F57@busybox.osuosl.org>
+Date: Thu, 29 Nov 2018 21:38:51 +0100
+Subject: [Buildroot] [PATCH 1/1] libbsd: needs __register_atfork
+In-Reply-To: <20181128170510.5565-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 28 Nov 2018 18:05:10 +0100")
+References: <20181128170510.5565-1-fontaine.fabrice@gmail.com>
+Message-ID: <87tvjz62lg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=76815cd1e556816f885d817576d83df67f579612
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-If BR2_PACKAGE_LAPACK is enabled (without BR2_PACKAGE_CLAPACK), build of
-python-numpy will fail if lapack is built before python-numpy because
-lapack does not provide blas library
+ > The following error is raised by minizip:
+ > [100%] Linking C executable minizip
+ > /home/peko/autobuild/instance-0/output/host/m68k-buildroot-uclinux-uclibc/sysroot/usr/lib/libbsd.a(arc4random.o):
+ > In function `_rs_init.part.1':
+ > arc4random.c:(.text+0xaa): undefined reference to `__register_atfork'
+ > collect2: error: ld returned 1 exit status
 
-So disable BLAS and LAPACK through PYTHON_NUMPTY_ENV if
-BR2_PACKAGE_CLAPACK is not set
+ > As specified in openssl/Config.in, uClibc on noMMU doesn't provide
+ > __register_atfork()
 
-Fixes:
- - http://autobuild.buildroot.org/results/41671976c7be7883f31ee5f51ca0eb90b81262fd
+I guess that is inherent to nommu as there is no fork() to get notified
+about.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-numpy/python-numpy.mk | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
-index c454888288..26a10c377b 100644
---- a/package/python-numpy/python-numpy.mk
-+++ b/package/python-numpy/python-numpy.mk
-@@ -14,6 +14,8 @@ PYTHON_NUMPY_SETUP_TYPE = setuptools
- ifeq ($(BR2_PACKAGE_CLAPACK),y)
- PYTHON_NUMPY_DEPENDENCIES += clapack
- PYTHON_NUMPY_SITE_CFG_LIBS += blas lapack
-+else
-+PYTHON_NUMPY_ENV += BLAS=None LAPACK=None
- endif
- 
- PYTHON_NUMPY_BUILD_OPTS = --fcompiler=None
+ > so add a dependency on !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU)
+ > on libbsd and minizip
+
+Ok, fine by me. If someone wants to use any of these on nommu then
+fixing libbsd to simply drop this call for those cases looks fairly
+simple.
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
