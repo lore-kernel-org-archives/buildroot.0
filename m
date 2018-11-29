@@ -1,58 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Nov 2018 21:24:26 +0100
-Subject: [Buildroot] [PATCH 0/3 v2] golang: fix build with oldish
- codesourcery amd64 toolchain (branch yem/go-west)
-In-Reply-To: <cover.1543137559.git.yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Sun, 25 Nov 2018 10:19:47 +0100")
-References: <cover.1543137559.git.yann.morin.1998@free.fr>
-Message-ID: <8736rj7htx.fsf@dell.be.48ers.dk>
+Date: Thu, 29 Nov 2018 21:21:36 +0100
+Subject: [Buildroot] [git commit] infra/pkg-golang: enforce number of
+ parallel jobs
+Message-ID: <20181129202131.B27A788F4D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5af65f65570de0d5cdd704fa120a80d12a51c1ae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hello All!
- > That toolchain seems to suffer from bug #20006
- >     https://sourceware.org/bugzilla/show_bug.cgi?id=20006
+By default, the go compiler will spawn as many jobs as there are CPUs
+available, thus possibily over-shooting the limits set by the user.
 
- > So, like bug 19615, introduce a config option for 20006, and mask away
- > all golang packages.
+Make it abide by the user's wish, and specify the number of jobs allowed
+to run.
 
- > Additionally, make golang packages abide by the number of CPUs to use.
+We can do so without fear of a package failing to build in parallel,
+because they were already all building in parallel, as that is the
+default for the go compiler.
 
- > Changes v1 -> v2:
- >   - drop per-package dependency, move it to BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
- >     (Thomas)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pkg-golang.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-
- > Regards,
- > Yann E. MORIN.
-
-
- > The following changes since commit ea5280b889782e28b6bdf43e28b0e6a3a610f921
-
- >   package/samba4: fix install of systemd files (2018-11-25 09:37:07 +0100)
-
-
- > are available in the git repository at:
-
- >   git://git.buildroot.org/~ymorin/git/buildroot.git
-
- > for you to fetch changes up to d64c03d07584a8f48ab309fff66d2ee5661d5ee3
-
- >   package: hide golang packages for toolchains with binutils bug 20006 (2018-11-25 09:54:23 +0100)
-
-
- > ----------------------------------------------------------------
- > Yann E. MORIN (3):
- >       infra/pkg-golang: enforce number of parallel jobs
- >       toolchain: CodeSourcery AMD64 affected by PR20006
- >       package: hide golang packages for toolchains with binutils bug 20006
-
-Committed all 3, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+index 6eacd14180..4f2c7e77e1 100644
+--- a/package/pkg-golang.mk
++++ b/package/pkg-golang.mk
+@@ -55,8 +55,10 @@ ifeq ($(BR2_STATIC_LIBS),y)
+ $(2)_LDFLAGS += -extldflags '-static'
+ endif
+ 
+-$(2)_BUILD_OPTS += -ldflags "$$($(2)_LDFLAGS)"
+-$(2)_BUILD_OPTS += -tags "$$($(2)_TAGS)"
++$(2)_BUILD_OPTS += \
++	-ldflags "$$($(2)_LDFLAGS)" \
++	-tags "$$($(2)_TAGS)" \
++	-p $(PARALLEL_JOBS)
+ 
+ # Target packages need the Go compiler on the host.
+ $(2)_DEPENDENCIES += host-go
