@@ -1,102 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 23 Nov 2018 22:01:09 +0100
-Subject: [Buildroot] [git commit] sdl2: fix build with --disable-threads
-Message-ID: <20181202071557.B5C7A815BC@busybox.osuosl.org>
+Date: Thu, 29 Nov 2018 22:31:06 +0100
+Subject: [Buildroot] [git commit] package/wolfssl: enable ARMv8 hardware
+ acceleration
+Message-ID: <20181202071601.0D468803E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d896cf007920e01fc9104f98c8f4d3734a6f245
+commit: https://git.buildroot.net/buildroot/commit/?id=630a87907fa580f668d7159a5e84398419d6b3fd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-SDL_LinuxSetThreadPriority() has been added since version 2.0.9 and
-https://github.com/SDL-mirror/SDL/commit/f25a7fa870bdceb339e5105973f689606bcb9086
+Enable hardware acceleration for ARMv8 targets.
 
-However, this function is used in src/dynapi/SDL_dynapi_procs.h even
-when SDL_THREADS_DISABLED
+When ARMv8 hardware acceleration is enabled on AArch64 without any
+additional flags, the build fails with the following messages:
 
-However, when SDL_THREADS_DISABLED is set, SDL_LinuxSetThreadPriority is
-not defined because thread/pthread/SDL_systhread.c is not built
+/tmp/cciv7Oei.s: Assembler messages:
+/tmp/cciv7Oei.s:580: Error: invalid addressing mode at operand 2 -- `ld1 {v0.2d},[x0,256]'
+/tmp/cciv7Oei.s:616: Error: invalid addressing mode at operand 2 -- `st1 {v0.2d},[x0,256]'
+/tmp/cciv7Oei.s:629: Error: invalid addressing mode at operand 2 -- `ld1 {v0.2d},[x0,256]'
+/tmp/cciv7Oei.s:669: Error: invalid addressing mode at operand 2 -- `st1 {v0.2d},[x0,256]'
+/tmp/cciv7Oei.s:1211: Error: invalid addressing mode at operand 2 -- `ld1 {v16.2d},[x0,304]'
+/tmp/cciv7Oei.s:1368: Error: invalid addressing mode at operand 2 -- `ld1 {v17.16b},[x19,304]'
+/tmp/cciv7Oei.s:1554: Error: invalid addressing mode at operand 2 -- `ld1 {v16.2d},[x0,304]'
+/tmp/cciv7Oei.s:1719: Error: invalid addressing mode at operand 2 -- `ld1 {v17.16b},[x19,304]'
+/tmp/cciv7Oei.s:1870: Error: invalid addressing mode at operand 2 -- `ld1 {v16.2d},[x0,304]'
+/tmp/cciv7Oei.s:2043: Error: invalid addressing mode at operand 2 -- `ld1 {v17.16b},[x19,304]'
+make[3]: *** [Makefile:3801: wolfcrypt/src/port/arm/src_libwolfssl_la-armv8-aes.lo] Error 1
 
-So check SDL_THREADS_DISABLED in addition to __LINUX__
+This is because of some inline assembly in parts of the AES structure
+using the "m" constraint.
 
-Fixes:
- - http://autobuild.buildroot.org/results/539cb9ab6c605dc6be73ebe90debab1a998f2451
+So lets use the flag -mstrict-align to prevent this error.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+[Thomas: restrict the -mstrict-align workaround to AArch64, as ARMv8-A
+can also be used in an AArch32 build, and in this case, gcc doesn't
+support the -mstrict-align flag]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../sdl2/0001-fix-build-with-disable-threads.patch | 63 ++++++++++++++++++++++
- 1 file changed, 63 insertions(+)
+ package/wolfssl/wolfssl.mk | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/package/sdl2/0001-fix-build-with-disable-threads.patch b/package/sdl2/0001-fix-build-with-disable-threads.patch
-new file mode 100644
-index 0000000000..81f7d7446f
---- /dev/null
-+++ b/package/sdl2/0001-fix-build-with-disable-threads.patch
-@@ -0,0 +1,63 @@
-+From 26646028f79d7f3d857df9b46cd6d0285796c699 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 21 Nov 2018 22:31:09 +0100
-+Subject: [PATCH] fix build with --disable-threads
-+
-+SDL_LinuxSetThreadPriority() has been added since version 2.0.9 and
-+https://github.com/SDL-mirror/SDL/commit/f25a7fa870bdceb339e5105973f689606bcb9086
-+
-+However, this function is used in src/dynapi/SDL_dynapi_procs.h even
-+when SDL_THREADS_DISABLED
-+
-+However, when SDL_THREADS_DISABLED is set, SDL_LinuxSetThreadPriority is
-+not defined because thread/pthread/SDL_systhread.c is not built
-+
-+So check SDL_THREADS_DISABLED in addition to __LINUX__
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/539cb9ab6c605dc6be73ebe90debab1a998f2451
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ include/SDL_system.h          | 4 ++--
-+ src/dynapi/SDL_dynapi_procs.h | 2 +-
-+ 2 files changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/include/SDL_system.h b/include/SDL_system.h
-+index 4dc372d6b..0513d7fa5 100644
-+--- a/include/SDL_system.h
-++++ b/include/SDL_system.h
-+@@ -77,7 +77,7 @@ extern DECLSPEC SDL_bool SDLCALL SDL_DXGIGetOutputInfo( int displayIndex, int *a
-+ 
-+ 
-+ /* Platform specific functions for Linux */
-+-#ifdef __LINUX__
-++#if defined(__LINUX__) && !defined(SDL_THREADS_DISABLED)
-+ 
-+ /**
-+    \brief Sets the UNIX nice value for a thread, using setpriority() if possible, and RealtimeKit if available.
-+@@ -86,7 +86,7 @@ extern DECLSPEC SDL_bool SDLCALL SDL_DXGIGetOutputInfo( int displayIndex, int *a
-+  */
-+ extern DECLSPEC int SDLCALL SDL_LinuxSetThreadPriority(Sint64 threadID, int priority);
-+  
-+-#endif /* __LINUX__ */
-++#endif /* defined(__LINUX__) && !defined(SDL_THREADS_DISABLED) */
-+ 	
-+ /* Platform specific functions for iOS */
-+ #if defined(__IPHONEOS__) && __IPHONEOS__
-+diff --git a/src/dynapi/SDL_dynapi_procs.h b/src/dynapi/SDL_dynapi_procs.h
-+index c95cf708b..ee9bf60a6 100644
-+--- a/src/dynapi/SDL_dynapi_procs.h
-++++ b/src/dynapi/SDL_dynapi_procs.h
-+@@ -708,7 +708,7 @@ SDL_DYNAPI_PROC(SDL_bool,SDL_IsAndroidTV,(void),(),return)
-+ SDL_DYNAPI_PROC(double,SDL_log10,(double a),(a),return)
-+ SDL_DYNAPI_PROC(float,SDL_log10f,(float a),(a),return)
-+ SDL_DYNAPI_PROC(char*,SDL_GameControllerMappingForDeviceIndex,(int a),(a),return)
-+-#ifdef __LINUX__
-++#if defined(__LINUX__) && !defined(SDL_THREADS_DISABLED)
-+ SDL_DYNAPI_PROC(int,SDL_LinuxSetThreadPriority,(Sint64 a, int b),(a,b),return)
-+ #endif
-+ SDL_DYNAPI_PROC(SDL_bool,SDL_HasAVX512F,(void),(),return)
-+-- 
-+2.17.1
-+
+diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
+index 68b638c3e2..aefcea33d0 100644
+--- a/package/wolfssl/wolfssl.mk
++++ b/package/wolfssl/wolfssl.mk
+@@ -30,7 +30,17 @@ else
+ WOLFSSL_CONF_OPTS += --disable-sslv3
+ endif
+ 
+-# build fails when ARMv8 hardware acceleration is enabled
++# enable ARMv8 hardware acceleration
++ifeq ($(BR2_ARM_CPU_ARMV8A),y)
++WOLFSSL_CONF_OPTS += --enable-armasm
++# the flag -mstrict-align is needed to prevent build errors caused by
++# some inline assembly in parts of the AES structure using the "m"
++# constraint
++ifeq ($(BR2_aarch64),y)
++WOLFSSL_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -mstrict-align"
++endif
++else
+ WOLFSSL_CONF_OPTS += --disable-armasm
++endif
+ 
+ $(eval $(autotools-package))
