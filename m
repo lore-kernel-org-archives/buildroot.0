@@ -1,170 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 26 Nov 2018 21:11:08 +0100
-Subject: [Buildroot] [git commit] configs/aarch64_efi_defconfig: new
- defconfig
-Message-ID: <20181202071559.C6CA1803E1@busybox.osuosl.org>
+Date: Thu, 29 Nov 2018 21:39:44 +0100
+Subject: [Buildroot] [git commit] toolchain: bump ARC prebuild toolchain to
+ arc-2018.09
+Message-ID: <20181202071600.CD2EE803E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9fb2a489598e82497f79f144b2374241e4912575
+commit: https://git.buildroot.net/buildroot/commit/?id=375e6dd5d1913dfef977564415898dd053a6e920
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-New generic defconfig for aarch64, to run on aarch64 servers compliant
-with EFI firmware and ACPI.
+Lets update prebuilt ARC toolchain to the most recent arc-2018.09.
 
-This can also be tested with qemu, and is useful so that we have an
-arm defconfig with grub enabled. Tested with qemu 2.11.2 and AAVMF,
-the aarch64 virtual machine UEFI firmware.
-
-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
-[Thomas: extend readme.txt with more details]
+Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: arc-buildroot at synopsys.com
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/aarch64-efi/genimage-efi.cfg | 30 ++++++++++++++++++++++++++++++
- board/aarch64-efi/grub.cfg         |  6 ++++++
- board/aarch64-efi/post-image.sh    |  5 +++++
- board/aarch64-efi/readme.txt       | 34 ++++++++++++++++++++++++++++++++++
- configs/aarch64_efi_defconfig      | 33 +++++++++++++++++++++++++++++++++
- 5 files changed, 108 insertions(+)
+ .../toolchain-external-synopsys-arc/Config.in                  |  6 +++---
+ .../toolchain-external-synopsys-arc.hash                       | 10 +++++-----
+ .../toolchain-external-synopsys-arc.mk                         |  2 +-
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/board/aarch64-efi/genimage-efi.cfg b/board/aarch64-efi/genimage-efi.cfg
-new file mode 100644
-index 0000000000..f93ab9d64f
---- /dev/null
-+++ b/board/aarch64-efi/genimage-efi.cfg
-@@ -0,0 +1,30 @@
-+image efi-part.vfat {
-+  vfat {
-+    file startup.nsh {
-+      image = "efi-part/startup.nsh"
-+    }
-+    file EFI {
-+      image = "efi-part/EFI"
-+    }
-+    file Image {
-+      image = "Image"
-+    }
-+  }
-+  size = 32M
-+}
-+
-+image disk.img {
-+
-+  hdimage {
-+  }
-+
-+  partition boot {
-+    partition-type = 0xEF
-+    image = "efi-part.vfat"
-+  }
-+
-+  partition root {
-+    partition-type = 0x83
-+    image = "rootfs.ext2"
-+  }
-+}
-diff --git a/board/aarch64-efi/grub.cfg b/board/aarch64-efi/grub.cfg
-new file mode 100644
-index 0000000000..ab88da91b9
---- /dev/null
-+++ b/board/aarch64-efi/grub.cfg
-@@ -0,0 +1,6 @@
-+set default="0"
-+set timeout="5"
-+
-+menuentry "Buildroot" {
-+	linux /Image root=/dev/vda2 rootwait console=ttyAMA0
-+}
-diff --git a/board/aarch64-efi/post-image.sh b/board/aarch64-efi/post-image.sh
-new file mode 100755
-index 0000000000..f0214dc866
---- /dev/null
-+++ b/board/aarch64-efi/post-image.sh
-@@ -0,0 +1,5 @@
-+#!/bin/sh
-+
-+BOARD_DIR="$(dirname $0)"
-+
-+cp -f ${BOARD_DIR}/grub.cfg ${BINARIES_DIR}/efi-part/EFI/BOOT/grub.cfg
-diff --git a/board/aarch64-efi/readme.txt b/board/aarch64-efi/readme.txt
-new file mode 100644
-index 0000000000..65a6345b6c
---- /dev/null
-+++ b/board/aarch64-efi/readme.txt
-@@ -0,0 +1,34 @@
-+
-+The aarch64_efi_defconfig allows to build a minimal Linux system that
-+can boot on all AArch64 servers providing an EFI firmware and ACPI.
-+
-+Building and booting
-+====================
-+
-+$ make aarch64_efi_defconfig
-+$ make
-+
-+The file output/images/disk.img is a complete disk image that can be
-+booted, it includes the grub2 bootloader, Linux kernel and root
-+filesystem.
-+
-+Testing under Qemu
-+==================
-+
-+This image can also be tested using Qemu:
-+
-+qemu-system-aarch64 \
-+	-M virt \
-+	-cpu cortex-a57 \
-+	-m 512 \
-+	-nographic \
-+	-bios </path/to/QEMU_EFI.fd> \
-+	-drive file=output/images/disk.img,if=none,format=raw,id=hd0 \
-+	-device virtio-blk-device,drive=hd0 \
-+	-netdev user,id=eth0 \
-+	-device virtio-net-device,netdev=eth0
-+
-+Note that </path/to/QEMU_EFI.fd> needs to point to a valid aarch64 UEFI
-+firmware image for qemu.
-+It may be provided by your distribution as a edk2-aarch64 or AAVMF
-+package, in path such as /usr/share/edk2/aarch64/QEMU_EFI.fd .
-diff --git a/configs/aarch64_efi_defconfig b/configs/aarch64_efi_defconfig
-new file mode 100644
-index 0000000000..e4e20b09ba
---- /dev/null
-+++ b/configs/aarch64_efi_defconfig
-@@ -0,0 +1,33 @@
-+# Architecture
-+BR2_aarch64=y
-+
-+# Toolchain, required for eudev and grub
-+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-+
-+# System
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+
-+## Required tools to create bootable media
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+
-+# Bootloader
-+BR2_TARGET_GRUB2=y
-+BR2_TARGET_GRUB2_AARCH64_EFI=y
-+
-+# Filesystem / image
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="200M"
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/aarch64-efi/post-image.sh support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/aarch64-efi/genimage-efi.cfg"
-+
-+# Linux headers same as kernel, a 4.18 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.10"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
+index 423e4c7db3..5cb0ce2a3e 100644
+--- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
+-	bool "Synopsys ARC 2018.03 toolchain"
++	bool "Synopsys ARC 2018.09 toolchain"
+ 	depends on BR2_arc
+-	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+ 	depends on BR2_HOSTARCH = "x86_64"
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+@@ -12,7 +12,7 @@ config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 	help
+ 	  Toolchain for the ARC cores, from
+ 	  https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases
+diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
+index df95897e41..20eac19caa 100644
+--- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
++++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2018.03-release
+-sha256 32e8500b65737b51058d84f443d7919d5b33c43f7dc5b8562e08d4e92c53a77f  arc_gnu_2018.03_prebuilt_uclibc_le_arc700_linux_install.tar.gz
+-sha256 722e3656f60bafd632b6f2ae2c6efa6b9d3eae1bc1840f4d004aa30f5cb419ff  arc_gnu_2018.03_prebuilt_uclibc_be_arc700_linux_install.tar.gz
+-sha256 8e736178343cea9a6cbe63a7d86fa9e81db6671f27fc8a9a7cea98cc6183bbcc  arc_gnu_2018.03_prebuilt_uclibc_le_archs_linux_install.tar.gz
+-sha256 14024daa36f6ae7cf1e474780687e79af5aaa35d374b077f7036685d7eab3d72  arc_gnu_2018.03_prebuilt_uclibc_be_archs_linux_install.tar.gz
++# From https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2018.09-release
++sha256 324b422eec3b9b36ea64c9e13167a4467fc13ab230eff34f2fa785039b460c16  arc_gnu_2018.09_prebuilt_uclibc_le_arc700_linux_install.tar.gz
++sha256 b0299ad9be0c300237789e5bf8e45d72bf040aab00c3718fbdb4160b75d2ed8f  arc_gnu_2018.09_prebuilt_uclibc_be_arc700_linux_install.tar.gz
++sha256 d1a4c039416b3da4d94ea066f861cc96ec60afec9c2bab1b2e937555b5e05238  arc_gnu_2018.09_prebuilt_uclibc_le_archs_linux_install.tar.gz
++sha256 a519ed3686dc8e3c5f86646988d38647aa039f4af3204d9b7e84efa26cd37221  arc_gnu_2018.09_prebuilt_uclibc_be_archs_linux_install.tar.gz
+diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
+index c60f296a89..e3ff17ff7b 100644
+--- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
++++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION = 2018.03
++TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION = 2018.09
+ TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_SITE = https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/download/arc-$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION)-release
+ 
+ ifeq ($(BR2_arc750d)$(BR2_arc770d),y)
