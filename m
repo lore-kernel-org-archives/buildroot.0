@@ -1,50 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Nov 2018 19:58:03 +0100
-Subject: [Buildroot] [PATCH] ghostscript: security bump to version 9.26
-In-Reply-To: <20181129155049.14068-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 29 Nov 2018 16:50:49 +0100")
-References: <20181129155049.14068-1-peter@korsgaard.com>
-Message-ID: <87bm677ltw.fsf@dell.be.48ers.dk>
+Date: Thu, 29 Nov 2018 19:55:32 +0100
+Subject: [Buildroot] [git commit] perl-net-ssleay: fix dependency
+Message-ID: <20181129185455.9E0B57FEF2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1514da371f83ddc3345d688671f1a1c36bb74594
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes the following security vulnerabilities:
- >  - CVE-2018-17961: Artifex Ghostscript 9.25 and earlier allows attackers to
- >    bypass a sandbox protection mechanism via vectors involving errorhandler
- >    setup.  NOTE: this issue exists because of an incomplete fix for
- >    CVE-2018-17183.
+this dependency was accidentally removed
+by https://git.busybox.net/buildroot/commit/package/perl-net-ssleay?id=da9e06cabc578bf9138e100d1492a2d5f2038415
 
- > - CVE-2018-18284: Artifex Ghostscript 9.25 and earlier allows attackers to
- >   bypass a sandbox protection mechanism via vectors involving the 1Policy
- >   operator.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/perl-net-ssleay/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
- > - CVE-2018-19409: An issue was discovered in Artifex Ghostscript before
- >   9.26.  LockSafetyParams is not checked correctly if another device is
- >   used.
-
- > - CVE-2018-19475: psi/zdevice2.c in Artifex Ghostscript before 9.26 allows
- >   remote attackers to bypass intended access restrictions because available
- >   stack space is not checked when the device remains the same.
-
- > - CVE-2018-19476: psi/zicc.c in Artifex Ghostscript before 9.26 allows
- >   remote attackers to bypass intended access restrictions because of a
- >   setcolorspace type confusion.
-
- > - CVE-2018-19477: psi/zfjbig2.c in Artifex Ghostscript before 9.26 allows
- >   remote attackers to bypass intended access restrictions because of a
- >   JBIG2Decode type confusion.
-
- > For more details, see the release notes:
- > https://www.ghostscript.com/doc/9.26/History9.htm#Version9.26
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/perl-net-ssleay/Config.in b/package/perl-net-ssleay/Config.in
+index 16b18c45d6..6998553ef8 100644
+--- a/package/perl-net-ssleay/Config.in
++++ b/package/perl-net-ssleay/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_PERL_NET_SSLEAY
+ 	bool "perl-net-ssleay"
+ 	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  Perl extension for using OpenSSL.
+ 
