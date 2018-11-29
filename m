@@ -1,40 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 29 Nov 2018 23:04:01 +0100
-Subject: [Buildroot] [PATCH 1/1] boot/arm-trusted-firmware: use prebuilt
- BL33 images
-In-Reply-To: <1542900148-17204-1-git-send-email-etienne.carriere@linaro.org>
-References: <1542900148-17204-1-git-send-email-etienne.carriere@linaro.org>
-Message-ID: <20181129230401.510c62a0@windsurf>
+Date: Thu, 29 Nov 2018 23:05:54 +0100
+Subject: [Buildroot] [PATCH 1/1] boot/arm-trusted-firmware: support
+ debug mode
+In-Reply-To: <1542900158-17272-1-git-send-email-etienne.carriere@linaro.org>
+References: <1542900158-17272-1-git-send-email-etienne.carriere@linaro.org>
+Message-ID: <20181129230554.079f209a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Etienne,
+Hello,
 
-On Thu, 22 Nov 2018 16:22:28 +0100, Etienne Carriere wrote:
-> This change allows one to build ATF with an externally built
-> BL33 image or with the U-boot as BL33 boot stage.
+On Thu, 22 Nov 2018 16:22:38 +0100, Etienne Carriere wrote:
+> When the trusted firmware is built with debug support (DEBUG defined),
+> the generated images are located at a specific path. The non debug
+> images are located in generated directory build/<platform>/release/
+> while the debug images are located in generated directory
+> build/<platform>/debug/.
 > 
-> This change introduces a new configuration directive for TF-A to
-> specify when BL33 stage is provided as a prebuilt image:
-> BR2_TARGET_ARM_TRUSTED_FIRMWARE_PREBUILT_BL33.
-> 
-> If BR2_TARGET_ARM_TRUSTED_FIRMWARE_PREBUILT_BL33 is enabled, the
-> buildroot configuration shall specify the BL33 binary image location:
-> BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL33_IMAGE.
+> This change introduces boolean BR2_TARGET_ARM_TRUSTED_FIRMWARE_DEBUG
+> to define whether the release or debug configuration is used to build
+> trusted firmware. Note that enabling trusted firmware debug support, i.e
+> BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="... DEBUG=1 ..."
+> without enabling BR2_TARGET_ARM_TRUSTED_FIRMWARE_DEBUG will fail since
+> buildroot will get generated files from the wrong path.
 > 
 > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-> ---
->  boot/arm-trusted-firmware/Config.in               | 22 +++++++++++++++++++++-
->  boot/arm-trusted-firmware/arm-trusted-firmware.mk |  4 ++++
->  2 files changed, 25 insertions(+), 1 deletion(-)
 
-Thanks for this contribution. Could you explain the use case/rationale
-for this change ? In which situation do you want to use prebuilt BL33
-images, as opposed to having another Buildroot package that builds (or
-downloads) them ?
+What is this debug mode doing exactly ?
+
+We already have a global BR2_ENABLE_DEBUG option to enable building
+with debugging symbols. I am wondering if we should use that option as
+well, or like you did, introduce a separate option. Perhaps for
+something like ATF, that is very low-level and HW-specific, a separate
+debug option is OK.
+
+> +config BR2_TARGET_ARM_TRUSTED_FIRMWARE_DEBUG
+> +	bool "Debug mode of the trusted firmware"
+> +	default n
+
+"default n" is not needed, since it's the default. Not need to resend
+just for that, we can fixup when applying.
 
 Best regards,
 
