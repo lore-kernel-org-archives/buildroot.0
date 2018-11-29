@@ -1,72 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Nov 2018 17:18:31 +0100
-Subject: [Buildroot] [git commit] freetype: bump version to 2.9.1
-Message-ID: <20181129161748.104A488409@busybox.osuosl.org>
+Date: Thu, 29 Nov 2018 17:23:07 +0100
+Subject: [Buildroot] [PATCH] package/netsnmp: drop our custom config
+ script fixups
+In-Reply-To: <20181128204423.13058-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Wed, 28 Nov 2018 21:44:23 +0100")
+References: <20181128204423.13058-1-yann.morin.1998@free.fr>
+Message-ID: <87k1kv7t04.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=750d43ae14e935f08ea3d39a5081306295d83bb2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-According to [1]:
+ > Those custom fixups were added in 2011 with commit d1b42b24b88
+ > (net-snmp: fixup paths in net-snmp-config) before we add generic config
+ > scripts fixups in 2013 with commit 834f9311aac (pkg-infra: add
+ > <pkg>_CONFIG_FIXUP to fix *-config files)
 
-- fixes CVE-2018-6942: A NULL pointer dereference in the Ins_GETVARIATION()
-  function within ttinterp.c could lead to DoS via a crafted font file
+ > These custom fixups enclose the includes and libraries paths in single
+ > quotes (presumably to protect them from further expnasion by the shell,
+ > in case there are spaces for example).
 
-- needs '--enable-freetype-config' for freetype-config installation
+ > It turns out that this breaks now that we replace the staging dir with
+ > $(dirname $0), as it is between single quotes.
 
-[1] https://git.savannah.gnu.org/cgit/freetype/freetype2.git/tree/docs/CHANGES?id=86bc8a95056c97a810986434a3f268cbe67f2902
+ > It looks like these fixups are really no longer needed anymore, since
+ > the generic fixups do the job just fine (and better).
 
-[Peter: also pass --enable-freetype-config for host variant]
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/freetype/freetype.hash | 8 ++++----
- package/freetype/freetype.mk   | 6 +++++-
- 2 files changed, 9 insertions(+), 5 deletions(-)
+ > Fixes:
+ >     http://autobuild.buildroot.org/results/2c5/2c5e379a06825bf8588bf070d733d2e1f98dab66/
+ >     http://autobuild.buildroot.org/results/eea/eea704463c3f14dbb9bd7f8aa23d4b61c25987f4/
 
-diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
-index 806375c058..c98674c7c2 100644
---- a/package/freetype/freetype.hash
-+++ b/package/freetype/freetype.hash
-@@ -1,9 +1,9 @@
--# From https://sourceforge.net/projects/freetype/files/freetype2/2.9/
--md5	513c403c110016fdc7e537216a642b1d		freetype-2.9.tar.bz2
--sha1	94c4399b1a55c5892812e732843fcb4a7c2fe657	freetype-2.9.tar.bz2
-+# From https://sourceforge.net/projects/freetype/files/freetype2/2.9.1/
-+md5 60ef7d8160cd4bf8cb118ee9d65367ca freetype-2.9.1.tar.bz2
-+sha1 220c82062171c513e4017c523d196933c9de4a7d freetype-2.9.1.tar.bz2
- 
- # Locally calculated
--sha256	e6ffba3c8cef93f557d1f767d7bc3dee860ac7a3aaff588a521e081bc36f4c8a	freetype-2.9.tar.bz2
-+sha256	db8d87ea720ea9d5edc5388fc7a0497bb11ba9fe972245e0f7f4c7e8b1e1e84d	freetype-2.9.1.tar.bz2
- sha256	fd056de4196903a676208ef58cfddafc7d583d1f28fa2e44c309cf84a59e62fb	docs/LICENSE.TXT
- sha256	08c135755dd589039470f1fdbb400daaabaaa50d0b366d19cebff4d22986baa1	docs/FTL.TXT
- sha256	c4120c6752c910c299e3bd9cb3a46ff262c268303ca2069b61f92f10a5656c18	docs/GPLv2.TXT
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index 1b3a9d1755..7167061568 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FREETYPE_VERSION = 2.9
-+FREETYPE_VERSION = 2.9.1
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
- FREETYPE_SITE = http://download.savannah.gnu.org/releases/freetype
- FREETYPE_INSTALL_STAGING = YES
-@@ -17,6 +17,10 @@ FREETYPE_CONFIG_SCRIPTS = freetype-config
- HOST_FREETYPE_DEPENDENCIES = host-pkgconf
- HOST_FREETYPE_CONF_OPTS = --without-zlib --without-bzip2 --without-png
- 
-+# since 2.9.1 needed for freetype-config install
-+FREETYPE_CONF_OPTS += --enable-freetype-config
-+HOST_FREETYPE_CONF_OPTS += --enable-freetype-config
-+
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- FREETYPE_DEPENDENCIES += zlib
- FREETYPE_CONF_OPTS += --with-zlib
+These are both on next, so I assume this is meant for next?
+
+Committed to next, thanks.
+
+-- 
+Bye, Peter Korsgaard
