@@ -1,42 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 28 Nov 2018 22:38:17 +0100
-Subject: [Buildroot] [git commit] package/erlang-p1-iconv: bump to version
- 1.0.10
-Message-ID: <20181202071600.A3870803E1@busybox.osuosl.org>
+Date: Thu, 29 Nov 2018 22:16:02 +0100
+Subject: [Buildroot] [git commit] package/wolfssl: bump to version 3.15.5
+Message-ID: <20181202071601.067AC803E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=790805c9e27968089bbe29f7966dc868fc21562e
+commit: https://git.buildroot.net/buildroot/commit/?id=d9adaa15f96862cc1dd8beddf4a777cecedef2df
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/erlang-p1-iconv/erlang-p1-iconv.hash | 2 +-
- package/erlang-p1-iconv/erlang-p1-iconv.mk   | 2 +-
+ package/wolfssl/wolfssl.hash | 2 +-
+ package/wolfssl/wolfssl.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/erlang-p1-iconv/erlang-p1-iconv.hash b/package/erlang-p1-iconv/erlang-p1-iconv.hash
-index 0f0a23161a..31bcf40731 100644
---- a/package/erlang-p1-iconv/erlang-p1-iconv.hash
-+++ b/package/erlang-p1-iconv/erlang-p1-iconv.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 c7214ea7503c3de1edf3bdd72b37187aa3a9a36d7cf7f5945a067ae8d262d3fb erlang-p1-iconv-1.0.6.tar.gz
-+sha256 8a9ff8a3dd983284caa964f118b5782ef1c0c662995608b2ca4f4a5f285605a9 erlang-p1-iconv-1.0.10.tar.gz
-diff --git a/package/erlang-p1-iconv/erlang-p1-iconv.mk b/package/erlang-p1-iconv/erlang-p1-iconv.mk
-index 6b22431cce..79d8efe16f 100644
---- a/package/erlang-p1-iconv/erlang-p1-iconv.mk
-+++ b/package/erlang-p1-iconv/erlang-p1-iconv.mk
+diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
+index 76c7db25a8..2fdaa5762b 100644
+--- a/package/wolfssl/wolfssl.hash
++++ b/package/wolfssl/wolfssl.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256 4ab543c869a65a77dc5d0bc934b9d4852aa3d5834bd2f707a74a936602bd3687  v3.14.0-stable.tar.gz
++sha256 4e15f494604e41725499f8b708798f8ddc2fcaa8f39b4369bcd000b3cab482d8  v3.15.5-stable.tar.gz
+ 
+ # Hash for license files:
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
+index c246b08513..68b638c3e2 100644
+--- a/package/wolfssl/wolfssl.mk
++++ b/package/wolfssl/wolfssl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_P1_ICONV_VERSION = 1.0.6
-+ERLANG_P1_ICONV_VERSION = 1.0.10
- ERLANG_P1_ICONV_SITE = $(call github,processone,iconv,$(ERLANG_P1_ICONV_VERSION))
- ERLANG_P1_ICONV_LICENSE = Apache-2.0
- ERLANG_P1_ICONV_LICENSE_FILES = LICENSE.txt
+-WOLFSSL_VERSION = 3.14.0
++WOLFSSL_VERSION = 3.15.5
+ WOLFSSL_SITE = https://github.com/wolfSSL/wolfssl/archive
+ WOLFSSL_SOURCE = v$(WOLFSSL_VERSION)-stable.tar.gz
+ WOLFSSL_INSTALL_STAGING = YES
