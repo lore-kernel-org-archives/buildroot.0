@@ -1,57 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Nov 2018 17:22:33 +0100
-Subject: [Buildroot] [git commit branch/next] package/netsnmp: drop our
- custom config script fixups
-Message-ID: <20181129161957.14D9B7FAC4@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 29 Nov 2018 17:41:02 +0100
+Subject: [Buildroot] [PATCH] package/netsnmp: drop our custom config
+ script fixups
+In-Reply-To: <87k1kv7t04.fsf@dell.be.48ers.dk>
+References: <20181128204423.13058-1-yann.morin.1998@free.fr>
+ <87k1kv7t04.fsf@dell.be.48ers.dk>
+Message-ID: <20181129164102.GB18074@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48ea9fa4a43a8eef3306dd6091e04ba3812df57b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+\Peter, All,
 
-Those custom fixups were added in 2011 with commit d1b42b24b88
-(net-snmp: fixup paths in net-snmp-config) before we add generic config
-scripts fixups in 2013 with commit 834f9311aac (pkg-infra: add
-<pkg>_CONFIG_FIXUP to fix *-config files)
+On 2018-11-29 17:23 +0100, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>  > Fixes:
+>  >     http://autobuild.buildroot.org/results/2c5/2c5e379a06825bf8588bf070d733d2e1f98dab66/
+>  >     http://autobuild.buildroot.org/results/eea/eea704463c3f14dbb9bd7f8aa23d4b61c25987f4/
+> These are both on next, so I assume this is meant for next?
+> Committed to next, thanks.
 
-These custom fixups enclose the includes and libraries paths in single
-quotes (presumably to protect them from further expnasion by the shell,
-in case there are spaces for example).
+Yes, the patch was meant for next, thanks.
 
-It turns out that this breaks now that we replace the staging dir with
-$(dirname $0), as it is between single quotes.
+In theory, it should also apply to master, for the reasons explained in
+the commit log. However, we don't have the rror on master, because we do
+not have the triggerring change due to PPD preparation patches.
 
-It looks like these fixups are really no longer needed anymore, since
-the generic fixups do the job just fine (and better).
+So, to be safe, don't apply on master.
 
-Fixes:
-    http://autobuild.buildroot.org/results/2c5/2c5e379a06825bf8588bf070d733d2e1f98dab66/
-    http://autobuild.buildroot.org/results/eea/eea704463c3f14dbb9bd7f8aa23d4b61c25987f4/
+Thanks! ;-)
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/netsnmp/netsnmp.mk | 8 --------
- 1 file changed, 8 deletions(-)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-index 65a3f16a4d..4bd65ef17a 100644
---- a/package/netsnmp/netsnmp.mk
-+++ b/package/netsnmp/netsnmp.mk
-@@ -106,12 +106,4 @@ define NETSNMP_INSTALL_INIT_SYSV
- endef
- endif
- 
--define NETSNMP_STAGING_NETSNMP_CONFIG_FIXUP
--	$(SED)	"s,^includedir=.*,includedir=\'$(STAGING_DIR)/usr/include\',g" \
--		-e "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" \
--		$(STAGING_DIR)/usr/bin/net-snmp-config
--endef
--
--NETSNMP_POST_INSTALL_STAGING_HOOKS += NETSNMP_STAGING_NETSNMP_CONFIG_FIXUP
--
- $(eval $(autotools-package))
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
