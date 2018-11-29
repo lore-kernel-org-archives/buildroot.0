@@ -1,31 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 29 Nov 2018 22:21:14 +0100
-Subject: [Buildroot] [PATCH v2] package/wolfssl: bump to version 3.15.5
-In-Reply-To: <20181125083619.17033-1-sergio.prado@e-labworks.com>
-References: <20181125083619.17033-1-sergio.prado@e-labworks.com>
-Message-ID: <20181129222114.10cd82cb@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 29 Nov 2018 22:25:32 +0100
+Subject: [Buildroot] [PATCH 1/1] php: intl support needs dynamic library
+In-Reply-To: <20181110215930.10530-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 10 Nov 2018 22:59:30 +0100")
+References: <20181110215930.10530-1-fontaine.fabrice@gmail.com>
+Message-ID: <87lg5b60fn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-On Sun, 25 Nov 2018 06:36:19 -0200, Sergio Prado wrote:
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-> ---
-> Changes v1 -> v2:
->   - Enable ARMv8 HW acceleration in a separate patch.
-> ---
->  package/wolfssl/wolfssl.hash | 2 +-
->  package/wolfssl/wolfssl.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+ > getArgTypeList is defined in ext/intl/msgformat/msgformat_helpers.cpp
 
-Applied to next, thanks.
+s/in/in both/
 
-Thomas
+> and icu library so add a !BR2_STATIC_LIBS dependency to
+ > BR2_PACKAGE_PHP_EXT_INTL
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/628b677d1ceb8b404265d89357225e0a1dce1407
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed with that changed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
