@@ -1,42 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 29 Nov 2018 22:59:25 +0100
-Subject: [Buildroot] [PATCH] package/setools: drop path prefix from man
- install
-In-Reply-To: <1543461118-61712-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1543461118-61712-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20181129225925.3419a785@windsurf>
+Date: Thu, 29 Nov 2018 23:00:26 +0100
+Subject: [Buildroot] [git commit branch/next] package/pkg-generic: ensure
+ absolute paths in config-script fixups
+Message-ID: <20181129215723.2B4B489052@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9c43f28de450adeae998d0e0d974777441510c76
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Wed, 28 Nov 2018 21:11:58 -0600, Matt Weber wrote:
-> For this man file install scenario, joining the sys.prefix makes the
-> path absolute (this was previously working by accident).  It was
-> found when e94280e5a537b "package/pkg-python: use proper --prefix
-> and --root values" was merged.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/e214e1a539cdac07028fb58c3822f89886d86f1f
-> 
-> Upstream:
-> https://github.com/SELinuxProject/setools/pull/13/commits/bc36cba1393120e65bfe4d0f642fd8d38010c0f7
-> 
-> Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
->  ...etup.py-drop-path-prefix-from-man-install.patch | 42 ++++++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 package/setools/0003-setup.py-drop-path-prefix-from-man-install.patch
+In case a config script is called from a relative path, the $(dirname
+$0) would return a relative path too.
 
-Applied to next, thanks.
+Those paths are usually parts of includes or libraries search
+directories, and the packagfes buildsystems may chdir() anywhere, and
+thus the relative path will no longer be valid. For example:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+  $ ./host/powerpc-buildroot-linux-uclibc/sysroot/usr/bin/net-snmp-config --cflags
+  [...] -I./host/powerpc-buildroot-linux-uclibc/sysroot/usr/bin/../../.././bin/../powerpc-buildroot-linux-uclibc/sysroot/usr/include/libnl3 [...]
+
+Canonicalise the path to be sure we use absolute paths.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pkg-generic.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 887dc838a4..649a7ad187 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -280,8 +280,8 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
+ 				-e "s,^\(exec_\)\?prefix=.*,\1prefix=@STAGING_DIR@/usr,g" \
+ 				-e "s,-I/usr/,-I at STAGING_DIR@/usr/,g" \
+ 				-e "s,-L/usr/,-L at STAGING_DIR@/usr/,g" \
+-				-e 's, at STAGING_DIR@,$$(dirname $$0)/../..,g' \
+-				-e 's, at HOST_DIR@,$$(dirname $$0)/../../../..,g' \
++				-e 's, at STAGING_DIR@,$$(dirname $$(realpath -e $$0))/../..,g' \
++				-e 's, at HOST_DIR@,$$(dirname $$(realpath -e $$0))/../../../..,g' \
+ 				-e "s, at BASE_DIR@,$(BASE_DIR),g" \
+ 				$(addprefix $(STAGING_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ;\
+ 	fi
