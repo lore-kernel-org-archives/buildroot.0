@@ -1,44 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 29 Nov 2018 22:57:34 +0100
-Subject: [Buildroot] [git commit branch/next] package/squid: remove gnu
- atomics handling
-Message-ID: <20181129215428.C30498904D@busybox.osuosl.org>
+Date: Thu, 29 Nov 2018 22:57:44 +0100
+Subject: [Buildroot] [git commit branch/next] package/squid: needs atomic
+Message-ID: <20181129215428.D4BEE8903A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c9da6746e1f14acfca6cb104f550981876e5472f
+commit: https://git.buildroot.net/buildroot/commit/?id=1008c507cdf20bfb16bcf9f6d9d898976db60989
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-gnu atomics has been removed since version 3.5.27:
-https://github.com/squid-cache/squid/commit/ddd4edb743d82be97fc651d529e04bf55329a50d
-So remove squid_cv_gnu_atomics handling
+Since https://github.com/squid-cache/squid/commit/4b0f89121135aae68fbaf2aa33b5fb2e0da66d3e
+squid tries to find if latomic is needed through:
+AC_SEARCH_LIBS([__atomic_load_8],[atomic],[ATOMICLIB="-latomic"],[])
+
+However, this can fails on:
+configure:21147: /home/fabrice/buildroot/output/host/bin/arc-buildroot-linux-gnu-g++ -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -matomic -Os   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -g conftest.cpp -latomic   >&5
+conftest.cpp:55:6: error: new declaration 'char __atomic_load_8()' ambiguates built-in declaration 'long long unsigned int __atomic_load_8(const volatile void*, int)' [-fpermissive]
+ char __atomic_load_8 ();
+      ^~~~~~~~~~~~~~~
+conftest.cpp: In function 'int main()':
+conftest.cpp:59:25: error: too few arguments to function 'long long unsigned int __atomic_load_8(const volatile void*, int)'
+ return __atomic_load_8 ();
+
+So add -latomic to LIBS if BR2_TOOLCHAIN_HAS_LIBATOMIC is set
+
+Fixes:
+ - http://autobuild.buildroot.org/results/13082cea836a12ac8bf85cbdb53a56a5d30c70b1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/squid/squid.mk | 9 ---------
- 1 file changed, 9 deletions(-)
+ package/squid/Config.in | 2 ++
+ package/squid/squid.mk  | 4 ++++
+ 2 files changed, 6 insertions(+)
 
+diff --git a/package/squid/Config.in b/package/squid/Config.in
+index 50f65de433..726160b01d 100644
+--- a/package/squid/Config.in
++++ b/package/squid/Config.in
+@@ -1,10 +1,12 @@
+ comment "squid needs a toolchain w/ C++, gcc >= 4.8 not affected by bug 64735"
+ 	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735 || \
+ 		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 
+ config BR2_PACKAGE_SQUID
+ 	bool "squid"
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::current_exception
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
 diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index b661d5d133..2b6c830a62 100644
+index 2b6c830a62..4a3318b40b 100644
 --- a/package/squid/squid.mk
 +++ b/package/squid/squid.mk
-@@ -38,15 +38,6 @@ SQUID_CONF_OPTS = \
+@@ -38,6 +38,10 @@ SQUID_CONF_OPTS = \
  	--with-swapdir=/var/cache/squid/ \
  	--with-default-user=squid
  
--# Atomics in Squid use __sync built-ins on 4 and 8 bytes. However, the
--# configure script tests them using AC_TRY_RUN, so we have to give
--# some hints.
--ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_4)$(BR2_TOOLCHAIN_HAS_SYNC_8),yy)
--SQUID_CONF_ENV += squid_cv_gnu_atomics=yes
--else
--SQUID_CONF_ENV += squid_cv_gnu_atomics=no
--endif
--
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++SQUID_CONF_ENV += LIBS=-latomic
++endif
++
  ifeq ($(BR2_PACKAGE_LIBKRB5),y)
  SQUID_CONF_OPTS += --with-mit-krb5
  SQUID_DEPENDENCIES += libkrb5
