@@ -1,76 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Nov 2018 16:29:46 +0100
-Subject: [Buildroot] [git commit] libopenssl: security bump to version 1.0.2q
-Message-ID: <20181129152643.3271688EDC@busybox.osuosl.org>
+Date: Thu, 29 Nov 2018 16:50:49 +0100
+Subject: [Buildroot] [PATCH] ghostscript: security bump to version 9.26
+Message-ID: <20181129155049.14068-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3301b6e1b2e8b22f6caef58ce9289f1ada147f67
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
 Fixes the following security vulnerabilities:
 
-  *) Microarchitecture timing vulnerability in ECC scalar multiplication
+ - CVE-2018-17961: Artifex Ghostscript 9.25 and earlier allows attackers to
+   bypass a sandbox protection mechanism via vectors involving errorhandler
+   setup.  NOTE: this issue exists because of an incomplete fix for
+   CVE-2018-17183.
 
-     OpenSSL ECC scalar multiplication, used in e.g. ECDSA and ECDH, has been
-     shown to be vulnerable to a microarchitecture timing side channel attack.
-     An attacker with sufficient access to mount local timing attacks during
-     ECDSA signature generation could recover the private key.
+- CVE-2018-18284: Artifex Ghostscript 9.25 and earlier allows attackers to
+  bypass a sandbox protection mechanism via vectors involving the 1Policy
+  operator.
 
-     This issue was reported to OpenSSL on 26th October 2018 by Alejandro
-     Cabrera Aldaya, Billy Brumley, Sohaib ul Hassan, Cesar Pereida Garcia and
-     Nicola Tuveri.
-     (CVE-2018-5407)
-     [Billy Brumley]
+- CVE-2018-19409: An issue was discovered in Artifex Ghostscript before
+  9.26.  LockSafetyParams is not checked correctly if another device is
+  used.
 
-  *) Timing vulnerability in DSA signature generation
+- CVE-2018-19475: psi/zdevice2.c in Artifex Ghostscript before 9.26 allows
+  remote attackers to bypass intended access restrictions because available
+  stack space is not checked when the device remains the same.
 
-     The OpenSSL DSA signature algorithm has been shown to be vulnerable to a
-     timing side channel attack. An attacker could use variations in the signing
-     algorithm to recover the private key.
+- CVE-2018-19476: psi/zicc.c in Artifex Ghostscript before 9.26 allows
+  remote attackers to bypass intended access restrictions because of a
+  setcolorspace type confusion.
 
-     This issue was reported to OpenSSL on 16th October 2018 by Samuel Weiser.
-     (CVE-2018-0734)
-     [Paul Dale]
+- CVE-2018-19477: psi/zfjbig2.c in Artifex Ghostscript before 9.26 allows
+  remote attackers to bypass intended access restrictions because of a
+  JBIG2Decode type confusion.
 
-For more information, see the changelog:
-https://www.openssl.org/news/cl102.txt
+For more details, see the release notes:
+https://www.ghostscript.com/doc/9.26/History9.htm#Version9.26
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libopenssl/libopenssl.hash | 8 ++++----
- package/libopenssl/libopenssl.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/ghostscript/ghostscript.hash | 4 ++--
+ package/ghostscript/ghostscript.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index 2b1e048751..83fb8bd513 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
-@@ -1,7 +1,7 @@
--# From https://www.openssl.org/source/openssl-1.0.2p.tar.gz.sha256
--sha256	50a98e07b1a89eb8f6a99477f262df71c6fa7bef77df4dc83025a2845c827d00	openssl-1.0.2p.tar.gz
--# From https://www.openssl.org/source/openssl-1.0.2p.tar.gz.sha1
--sha1	f34b5322e92415755c7d58bf5d0d5cf37666382c				openssl-1.0.2p.tar.gz
-+# From https://www.openssl.org/source/openssl-1.0.2q.tar.gz.sha256
-+sha256	5744cfcbcec2b1b48629f7354203bc1e5e9b5466998bbccc5b5fcde3b18eb684	openssl-1.0.2q.tar.gz
-+# From https://www.openssl.org/source/openssl-1.0.2q.tar.gz.sha1
-+sha1	692f5f2f1b114f8adaadaa3e7be8cce1907f38c5				openssl-1.0.2q.tar.gz
- # Locally computed
- sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
- sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index d8e3dd8b56..ca0521b229 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
+index f8ca6c8d4e..15ef95e77a 100644
+--- a/package/ghostscript/ghostscript.hash
++++ b/package/ghostscript/ghostscript.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs925/SHA512SUMS
+-sha512 7a1c0b7546ed523f50c1452d4a1c13fcf043d6060fc9708bbc4b543f66ecb1b619b6e71998094ac702ef44a2fd159b6523271de19b1cae352981ef51fb637651  ghostscript-9.25.tar.xz
++# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs926/SHA512SUMS
++sha512 3ddb83029edf32282357bf606f4045a9ac73df6543cd423cfad09158ec12ada083a0dbb5aac3b73ae24cbc6c1e9d7574257a5c1fae63ba8776fbb00150ef2a3e  ghostscript-9.26.tar.xz
+ 
+ # Hash for license file:
+ sha256 6f852249f975287b3efd43a5883875e47fa9f3125e2f1b18b5c09517ac30ecf2  LICENSE
+diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+index b1f5e1edb1..357fd08c32 100644
+--- a/package/ghostscript/ghostscript.mk
++++ b/package/ghostscript/ghostscript.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBOPENSSL_VERSION = 1.0.2p
-+LIBOPENSSL_VERSION = 1.0.2q
- LIBOPENSSL_SITE = http://www.openssl.org/source
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = OpenSSL or SSLeay
+-GHOSTSCRIPT_VERSION = 9.25
+-GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs925
++GHOSTSCRIPT_VERSION = 9.26
++GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs926
+ GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
+ GHOSTSCRIPT_LICENSE = AGPL-3.0
+ GHOSTSCRIPT_LICENSE_FILES = LICENSE
+-- 
+2.11.0
