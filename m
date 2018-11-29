@@ -1,41 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 29 Nov 2018 23:00:53 +0100
-Subject: [Buildroot] [PATCH] infra/pkg-generic: ensure absolute paths in
- config-script fixups
-In-Reply-To: <20181128204404.12402-1-yann.morin.1998@free.fr>
-References: <20181128204404.12402-1-yann.morin.1998@free.fr>
-Message-ID: <20181129230053.7eae7905@windsurf>
+Date: Thu, 29 Nov 2018 23:01:36 +0100
+Subject: [Buildroot] [git commit branch/next] package/python-pydal: bump to
+ version v18.09
+Message-ID: <20181129215842.6F40A89067@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9cf1b1cc0d8b958eee7b4f582d95578e8f3c3e5d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Wed, 28 Nov 2018 21:44:04 +0100, Yann E. MORIN wrote:
-> In case a config script is called from a relative path, the $(dirnale
-> $0) would return a relative path too.
-> 
-> Those paths are usually parts of includes or libraries search
-> directories, and the packagfes buildsystems may chdir() anywhere, and
-> thus the relative path will no longer be valid. For example:
-> 
->   $ ./host/powerpc-buildroot-linux-uclibc/sysroot/usr/bin/net-snmp-config --cflags
->   [...] -I./host/powerpc-buildroot-linux-uclibc/sysroot/usr/bin/../../.././bin/../powerpc-buildroot-linux-uclibc/sysroot/usr/include/libnl3 [...]
-> 
-> Canonicalise the path to be sure we use absolute paths.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/pkg-generic.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+This patch bumps pydal to version v18.09 and moves its download location
+to github cause the version on pypi is not updated anymore.
 
-Applied to next, thanks.
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-pydal/python-pydal.hash | 3 ++-
+ package/python-pydal/python-pydal.mk   | 5 ++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-pydal/python-pydal.hash b/package/python-pydal/python-pydal.hash
+index 8e6fa90e6a..27f2e6c7a2 100644
+--- a/package/python-pydal/python-pydal.hash
++++ b/package/python-pydal/python-pydal.hash
+@@ -1,2 +1,3 @@
+ # sha256 from https://pypi.org/project/pyDAL/#files
+-sha256 59b28cbad92743c76134fc078b62f49d5c02b86c55cbdee527f75995d2681735  pyDAL-17.11.tar.gz
++sha256 763ed017f431fc3d9fa9243f6be2519ff49b8a260d15763c4733762d9c086904  python-pydal-v18.09.tar.gz
++sha256 ae7d7b6888bb72f26af2bcbee69ae6f8a49e12f66c99e78f2a8b806effc5219d  LICENSE
+diff --git a/package/python-pydal/python-pydal.mk b/package/python-pydal/python-pydal.mk
+index 9de56bff61..4ff58def69 100644
+--- a/package/python-pydal/python-pydal.mk
++++ b/package/python-pydal/python-pydal.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PYDAL_VERSION = 17.11
+-PYTHON_PYDAL_SOURCE = pyDAL-$(PYTHON_PYDAL_VERSION).tar.gz
+-PYTHON_PYDAL_SITE = https://files.pythonhosted.org/packages/d2/64/a119cb70ed91a6273aad811fd250b8a55d4bc8b0d900757723ec5a4f0ba9
++PYTHON_PYDAL_VERSION = v18.09
++PYTHON_PYDAL_SITE = $(call github,web2py,pydal,$(PYTHON_PYDAL_VERSION))
+ PYTHON_PYDAL_LICENSE = BSD-3-Clause
+ PYTHON_PYDAL_LICENSE_FILES = LICENSE
+ PYTHON_PYDAL_SETUP_TYPE = setuptools
