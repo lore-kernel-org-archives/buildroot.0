@@ -1,72 +1,43 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 29 Nov 2018 06:24:15 +0200
-Subject: [Buildroot] [PATCH 02/11] alsa-utils: update DEPENDENCIES to
- fft-single and add select in Config.in
-In-Reply-To: <1543421561-37355-2-git-send-email-gwenj@trabucayre.com>
-References: <1543421561-37355-1-git-send-email-gwenj@trabucayre.com>
- <1543421561-37355-2-git-send-email-gwenj@trabucayre.com>
-Message-ID: <87zhts7bps.fsf@tkos.co.il>
+From: Florian Fainelli <f.fainelli@gmail.com>
+Date: Wed, 28 Nov 2018 21:05:40 -0800
+Subject: [Buildroot] [PATCH] xfsprogs: Define PLATFORM to linux
+Message-ID: <1543467940-5231-1-git-send-email-f.fainelli@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gwenhael Goavec-Merou,
+PLATFORM is an environment variable used by xfsprogs' configure script
+to determine the platform for which the applications are being built. If
+we set some incorrect/unsupported value through e.g: export, this will
+be picked up by xfsprogs' configure script and used as-is and assigned
+to PKG_PLATFORM, which will lead to build failures.
 
-Gwenhael Goavec-Merou writes:
+If PLATFORM was empty/unset, then uname on the host building xfsprogs
+gets used to determine the build platform, which again could be
+incorrect if we e.g: built xfsprogs on a Darwin system.
 
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
->
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> ---
->  package/alsa-utils/Config.in     | 5 ++---
->  package/alsa-utils/alsa-utils.mk | 2 +-
->  2 files changed, 3 insertions(+), 4 deletions(-)
->
-> diff --git a/package/alsa-utils/Config.in b/package/alsa-utils/Config.in
-> index 012f28aef4..950278d173 100644
-> --- a/package/alsa-utils/Config.in
-> +++ b/package/alsa-utils/Config.in
-> @@ -74,15 +74,14 @@ config BR2_PACKAGE_ALSA_UTILS_ASEQNET
->  	select BR2_PACKAGE_ALSA_LIB_SEQ
->  
->  config BR2_PACKAGE_ALSA_UTILS_BAT
-> +	select BR2_PACKAGE_FFTW
-> +	select BR2_PACKAGE_FFTW_PRECISION_SINGLE
->  	bool "bat"
->  	help
->  	  ALSABAT (ALSA Basic Audio Tester) is a simple command-line
->  	  utility intended to help automate audio driver and sound
->  	  server testing with little human interaction.
->  
-> -	  Note that analysis support in alsabat requires fftw single
-> -	  precision.
-> -
->  config BR2_PACKAGE_ALSA_UTILS_IECSET
->  	bool "iecset"
->  	select BR2_PACKAGE_ALSA_LIB_PCM
-> diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
-> index 986a745399..9e0094f343 100644
-> --- a/package/alsa-utils/alsa-utils.mk
-> +++ b/package/alsa-utils/alsa-utils.mk
-> @@ -41,7 +41,7 @@ endif
->  ifeq ($(BR2_PACKAGE_ALSA_UTILS_BAT),y)
->  ALSA_UTILS_CONF_OPTS += --enable-bat
->  # Analysis support requires fftw single precision
-> -ALSA_UTILS_DEPENDENCIES += $(if $(BR2_PACKAGE_FFTW_PRECISION_SINGLE),fftw)
-> +ALSA_UTILS_DEPENDENCIES += fftw-single
+Since we are obviously building for Linux, let's just make sure we
+define it that way which solves both issues.
 
-This turns the optional fftw dependency into a mandatory one. Is there a
-reason for that?
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ package/xfsprogs/xfsprogs.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->  else
->  ALSA_UTILS_CONF_OPTS += --disable-bat
->  endif
-
-baruch
-
+diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
+index b5975d29e1a1..bbb888707b20 100644
+--- a/package/xfsprogs/xfsprogs.mk
++++ b/package/xfsprogs/xfsprogs.mk
+@@ -12,7 +12,7 @@ XFSPROGS_LICENSE_FILES = LICENSES/GPL-2.0 LICENSES/LGPL-2.1
+ 
+ XFSPROGS_DEPENDENCIES = util-linux
+ 
+-XFSPROGS_CONF_ENV = ac_cv_header_aio_h=yes ac_cv_lib_rt_lio_listio=yes
++XFSPROGS_CONF_ENV = ac_cv_header_aio_h=yes ac_cv_lib_rt_lio_listio=yes PLATFORM="linux"
+ XFSPROGS_CONF_OPTS = \
+ 	--enable-lib64=no \
+ 	--enable-gettext=no \
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.7.4
