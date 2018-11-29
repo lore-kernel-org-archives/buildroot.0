@@ -1,10 +1,7 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Nov 2018 15:31:13 +0100
-Subject: [Buildroot] [PATCH-2018.02.x 2/2] samba4: security bump to version
- 4.8.7
-In-Reply-To: <20181129143113.19270-1-peter@korsgaard.com>
-References: <20181129143113.19270-1-peter@korsgaard.com>
-Message-ID: <20181129143113.19270-2-peter@korsgaard.com>
+Date: Thu, 29 Nov 2018 15:47:40 +0100
+Subject: [Buildroot] [PATCH] libopenssl: security bump to version 1.0.2q
+Message-ID: <20181129144740.29999-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,76 +10,66 @@ To: buildroot@busybox.net
 
 Fixes the following security vulnerabilities:
 
- - CVE-2018-14629:
-   All versions of Samba from 4.0.0 onwards are vulnerable to infinite
-   query recursion caused by CNAME loops. Any dns record can be added via
-   ldap by an unprivileged user using the ldbadd tool, so this is a
-   security issue.
+  *) Microarchitecture timing vulnerability in ECC scalar multiplication
 
- - CVE-2018-16841:
-   When configured to accept smart-card authentication, Samba's KDC will call
-   talloc_free() twice on the same memory if the principal in a validly signed
-   certificate does not match the principal in the AS-REQ.
+     OpenSSL ECC scalar multiplication, used in e.g. ECDSA and ECDH, has been
+     shown to be vulnerable to a microarchitecture timing side channel attack.
+     An attacker with sufficient access to mount local timing attacks during
+     ECDSA signature generation could recover the private key.
 
-   This is only possible after authentication with a trusted certificate.
+     This issue was reported to OpenSSL on 26th October 2018 by Alejandro
+     Cabrera Aldaya, Billy Brumley, Sohaib ul Hassan, Cesar Pereida Garcia and
+     Nicola Tuveri.
+     (CVE-2018-5407)
+     [Billy Brumley]
 
-   talloc is robust against further corruption from a double-free with
-   talloc_free() and directly calls abort(), terminating the KDC process.
+  *) Timing vulnerability in DSA signature generation
 
-   There is no further vulnerability associated with this issue, merely a
-   denial of service.
+     The OpenSSL DSA signature algorithm has been shown to be vulnerable to a
+     timing side channel attack. An attacker could use variations in the signing
+     algorithm to recover the private key.
 
- - CVE-2018-16851:
-   During the processing of an LDAP search before Samba's AD DC returns
-   the LDAP entries to the client, the entries are cached in a single
-   memory object with a maximum size of 256MB.  When this size is
-   reached, the Samba process providing the LDAP service will follow the
-   NULL pointer, terminating the process.
+     This issue was reported to OpenSSL on 16th October 2018 by Samuel Weiser.
+     (CVE-2018-0734)
+     [Paul Dale]
 
-   There is no further vulnerability associated with this issue, merely a
-   denial of service.
-
- - CVE-2018-16853:
-   A user in a Samba AD domain can crash the KDC when Samba is built in the
-   non-default MIT Kerberos configuration.
-
-   With this advisory we clarify that the MIT Kerberos build of the Samba
-   AD DC is considered experimental.  Therefore the Samba Team will not
-   issue security patches for this configuration.
-
-For more details, see the release notes:
-
-https://www.samba.org/samba/history/samba-4.8.7.html
+For more information, see the changelog:
+https://www.openssl.org/news/cl102.txt
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libopenssl/libopenssl.hash | 8 ++++----
+ package/libopenssl/libopenssl.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 9594c7a932..2ecea7fa5a 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.8.5.tar.asc
--sha256 e58ee6b1262d4128b8932ceee59d5f0b0a9bbe00547eb3cc4c41552de1a65155  samba-4.8.5.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.8.7.tar.asc
-+sha256 0f6f67932e8bb23ab83b43070037ac452f9fc5f20763857d2b67e209ee7cd362  samba-4.8.7.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index a257af75fc..ed860fbda2 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index 2b1e048751..83fb8bd513 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
+@@ -1,7 +1,7 @@
+-# From https://www.openssl.org/source/openssl-1.0.2p.tar.gz.sha256
+-sha256	50a98e07b1a89eb8f6a99477f262df71c6fa7bef77df4dc83025a2845c827d00	openssl-1.0.2p.tar.gz
+-# From https://www.openssl.org/source/openssl-1.0.2p.tar.gz.sha1
+-sha1	f34b5322e92415755c7d58bf5d0d5cf37666382c				openssl-1.0.2p.tar.gz
++# From https://www.openssl.org/source/openssl-1.0.2q.tar.gz.sha256
++sha256	5744cfcbcec2b1b48629f7354203bc1e5e9b5466998bbccc5b5fcde3b18eb684	openssl-1.0.2q.tar.gz
++# From https://www.openssl.org/source/openssl-1.0.2q.tar.gz.sha1
++sha1	692f5f2f1b114f8adaadaa3e7be8cce1907f38c5				openssl-1.0.2q.tar.gz
+ # Locally computed
+ sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+ sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index d8e3dd8b56..ca0521b229 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SAMBA4_VERSION = 4.8.5
-+SAMBA4_VERSION = 4.8.7
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+-LIBOPENSSL_VERSION = 1.0.2p
++LIBOPENSSL_VERSION = 1.0.2q
+ LIBOPENSSL_SITE = http://www.openssl.org/source
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = OpenSSL or SSLeay
 -- 
 2.11.0
