@@ -1,42 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 29 Nov 2018 22:50:47 +0100
-Subject: [Buildroot] [git commit] package/libdrm: add optional cunit
- dependency
-Message-ID: <20181202071601.328F9815BC@busybox.osuosl.org>
+Date: Thu, 29 Nov 2018 22:55:27 +0100
+Subject: [Buildroot] [git commit] package/dbus-python: bump to version 1.2.8
+Message-ID: <20181202071601.3CE28815BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1705f775e90895d6fba522444355eadbe2b0be93
+commit: https://git.buildroot.net/buildroot/commit/?id=f2fd9e87b7cefd67c33b6651f4c19e99095dbc57
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Previously the option to install tests would result in the test cases
-that don't have a cunit dependency, to build and be installed.
-
-This patch adds an optional dependency on cunit so that all test cases
-can be built and installed to target.
-
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-[Thomas: keep as an optional dependency, as cunit is only useful for
-additional tests specific to the amdgpu backend]
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libdrm/libdrm.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/dbus-python/dbus-python.hash | 2 +-
+ package/dbus-python/dbus-python.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 18ef9cdd2e..06efa20195 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -115,6 +115,9 @@ endif
+diff --git a/package/dbus-python/dbus-python.hash b/package/dbus-python/dbus-python.hash
+index 080aada081..991bb42787 100644
+--- a/package/dbus-python/dbus-python.hash
++++ b/package/dbus-python/dbus-python.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	e2f1d6871f74fba23652e51d10873e54f71adab0525833c19bad9e99b1b2f9cc	dbus-python-1.2.4.tar.gz
++sha256	abf12bbb765e300bf8e2a1b2f32f85949eab06998dbda127952c31cb63957b6f	dbus-python-1.2.8.tar.gz
+diff --git a/package/dbus-python/dbus-python.mk b/package/dbus-python/dbus-python.mk
+index da04b7404f..d6af7454af 100644
+--- a/package/dbus-python/dbus-python.mk
++++ b/package/dbus-python/dbus-python.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_LIBDRM_INSTALL_TESTS),y)
- LIBDRM_CONF_OPTS += --enable-install-test-programs
-+ifeq ($(BR2_PACKAGE_CUNIT),y)
-+LIBDRM_DEPENDENCIES += cunit
-+endif
- endif
- 
- $(eval $(autotools-package))
+-DBUS_PYTHON_VERSION = 1.2.4
++DBUS_PYTHON_VERSION = 1.2.8
+ DBUS_PYTHON_SITE = http://dbus.freedesktop.org/releases/dbus-python
+ DBUS_PYTHON_INSTALL_STAGING = YES
+ DBUS_PYTHON_LICENSE = MIT
