@@ -1,45 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Nov 2018 16:29:24 +0100
-Subject: [Buildroot] [git commit] xfsprogs: Define PLATFORM to linux
-Message-ID: <20181129152615.D243188ED3@busybox.osuosl.org>
+Date: Thu, 29 Nov 2018 16:29:54 +0100
+Subject: [Buildroot] [PATCH] libopenssl: security bump to version 1.0.2q
+In-Reply-To: <20181129144740.29999-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 29 Nov 2018 15:47:40 +0100")
+References: <20181129144740.29999-1-peter@korsgaard.com>
+Message-ID: <87woov7vgt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=257a2118be2b0664e2b8dbda344a74443f70db86
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-PLATFORM is an environment variable used by xfsprogs' configure script
-to determine the platform for which the applications are being built. If
-we set some incorrect/unsupported value through e.g: export, this will
-be picked up by xfsprogs' configure script and used as-is and assigned
-to PKG_PLATFORM, which will lead to build failures.
+ > Fixes the following security vulnerabilities:
+ >   *) Microarchitecture timing vulnerability in ECC scalar multiplication
 
-If PLATFORM was empty/unset, then uname on the host building xfsprogs
-gets used to determine the build platform, which again could be
-incorrect if we e.g: built xfsprogs on a Darwin system.
+ >      OpenSSL ECC scalar multiplication, used in e.g. ECDSA and ECDH, has been
+ >      shown to be vulnerable to a microarchitecture timing side channel attack.
+ >      An attacker with sufficient access to mount local timing attacks during
+ >      ECDSA signature generation could recover the private key.
 
-Since we are obviously building for Linux, let's just make sure we
-define it that way which solves both issues.
+ >      This issue was reported to OpenSSL on 26th October 2018 by Alejandro
+ >      Cabrera Aldaya, Billy Brumley, Sohaib ul Hassan, Cesar Pereida Garcia and
+ >      Nicola Tuveri.
+ >      (CVE-2018-5407)
+ >      [Billy Brumley]
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/xfsprogs/xfsprogs.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ >   *) Timing vulnerability in DSA signature generation
 
-diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
-index b5975d29e1..bbb888707b 100644
---- a/package/xfsprogs/xfsprogs.mk
-+++ b/package/xfsprogs/xfsprogs.mk
-@@ -12,7 +12,7 @@ XFSPROGS_LICENSE_FILES = LICENSES/GPL-2.0 LICENSES/LGPL-2.1
- 
- XFSPROGS_DEPENDENCIES = util-linux
- 
--XFSPROGS_CONF_ENV = ac_cv_header_aio_h=yes ac_cv_lib_rt_lio_listio=yes
-+XFSPROGS_CONF_ENV = ac_cv_header_aio_h=yes ac_cv_lib_rt_lio_listio=yes PLATFORM="linux"
- XFSPROGS_CONF_OPTS = \
- 	--enable-lib64=no \
- 	--enable-gettext=no \
+ >      The OpenSSL DSA signature algorithm has been shown to be vulnerable to a
+ >      timing side channel attack. An attacker could use variations in the signing
+ >      algorithm to recover the private key.
+
+ >      This issue was reported to OpenSSL on 16th October 2018 by Samuel Weiser.
+ >      (CVE-2018-0734)
+ >      [Paul Dale]
+
+ > For more information, see the changelog:
+ > https://www.openssl.org/news/cl102.txt
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
