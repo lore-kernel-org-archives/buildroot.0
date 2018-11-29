@@ -1,48 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 29 Nov 2018 23:00:26 +0100
-Subject: [Buildroot] [git commit] package/pkg-generic: ensure absolute paths
- in config-script fixups
-Message-ID: <20181202071601.6578F7F917@busybox.osuosl.org>
+Date: Thu, 29 Nov 2018 23:01:26 +0100
+Subject: [Buildroot] [git commit] package/python-web2py: bump to version
+ R-2.17.2
+Message-ID: <20181202071601.6CD4A7F917@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9c43f28de450adeae998d0e0d974777441510c76
+commit: https://git.buildroot.net/buildroot/commit/?id=26b9536420baea7eb7ba6e0b044c512b8be5a226
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In case a config script is called from a relative path, the $(dirname
-$0) would return a relative path too.
+This patch bumps web2py to version R-2.17.2
 
-Those paths are usually parts of includes or libraries search
-directories, and the packagfes buildsystems may chdir() anywhere, and
-thus the relative path will no longer be valid. For example:
-
-  $ ./host/powerpc-buildroot-linux-uclibc/sysroot/usr/bin/net-snmp-config --cflags
-  [...] -I./host/powerpc-buildroot-linux-uclibc/sysroot/usr/bin/../../.././bin/../powerpc-buildroot-linux-uclibc/sysroot/usr/include/libnl3 [...]
-
-Canonicalise the path to be sure we use absolute paths.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pkg-generic.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/python-web2py/python-web2py.hash | 3 ++-
+ package/python-web2py/python-web2py.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 887dc838a4..649a7ad187 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -280,8 +280,8 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
- 				-e "s,^\(exec_\)\?prefix=.*,\1prefix=@STAGING_DIR@/usr,g" \
- 				-e "s,-I/usr/,-I at STAGING_DIR@/usr/,g" \
- 				-e "s,-L/usr/,-L at STAGING_DIR@/usr/,g" \
--				-e 's, at STAGING_DIR@,$$(dirname $$0)/../..,g' \
--				-e 's, at HOST_DIR@,$$(dirname $$0)/../../../..,g' \
-+				-e 's, at STAGING_DIR@,$$(dirname $$(realpath -e $$0))/../..,g' \
-+				-e 's, at HOST_DIR@,$$(dirname $$(realpath -e $$0))/../../../..,g' \
- 				-e "s, at BASE_DIR@,$(BASE_DIR),g" \
- 				$(addprefix $(STAGING_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ;\
- 	fi
+diff --git a/package/python-web2py/python-web2py.hash b/package/python-web2py/python-web2py.hash
+index d23da1ea6e..9a1df0c2a1 100644
+--- a/package/python-web2py/python-web2py.hash
++++ b/package/python-web2py/python-web2py.hash
+@@ -1,2 +1,3 @@
+ # sha256 locally computed
+-sha256 d9ed52676e9becd53d2d73a849dea3d55b8b61231abf3428cf516dcc0083d451  python-web2py-R-2.16.1.tar.gz
++sha256 8205a7a08595ca1a41919750a8dc4e431258966cb46c8021564b25003cf90863  python-web2py-R-2.17.2.tar.gz
++sha256 2aae96826184a492bc799add49aed7b29036e7aba2d2294fb65053bd30fe55fe  LICENSE
+diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
+index 1e02fb7ca5..922b267b8b 100644
+--- a/package/python-web2py/python-web2py.mk
++++ b/package/python-web2py/python-web2py.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_WEB2PY_VERSION = R-2.16.1
++PYTHON_WEB2PY_VERSION = R-2.17.2
+ PYTHON_WEB2PY_SITE = $(call github,web2py,web2py,$(PYTHON_WEB2PY_VERSION))
+ PYTHON_WEB2PY_LICENSE = LGPL-3.0
+ PYTHON_WEB2PY_LICENSE_FILES = LICENSE
