@@ -1,56 +1,84 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 29 Nov 2018 22:12:26 +0100
-Subject: [Buildroot] [PATCH v4 2/2] grpc: new package
-In-Reply-To: <20181129062140.10474-2-robertroyrose@gmail.com>
-References: <20181129062140.10474-1-robertroyrose@gmail.com>
- <20181129062140.10474-2-robertroyrose@gmail.com>
-Message-ID: <20181129221226.2beef795@windsurf>
+Date: Thu, 29 Nov 2018 22:12:38 +0100
+Subject: [Buildroot] [git commit branch/next] package/gcc: enable
+ __cxa_atexit
+Message-ID: <20181129210933.394EA88FB6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=3e53b5198349c4d31f59c95aefece14ed6543933
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Wed, 28 Nov 2018 22:21:40 -0800, Robert Rose wrote:
-> Signed-off-by: Robert Rose <robertroyrose@gmail.com>
-> ---
->  DEVELOPERS                                    |  3 ++
->  package/Config.in                             |  1 +
->  .../0001-target-build-using-host-plugin.patch | 44 +++++++++++++++++++
->  package/grpc/Config.in                        | 11 +++++
->  package/grpc/grpc.hash                        |  5 +++
->  package/grpc/grpc.mk                          | 36 +++++++++++++++
->  6 files changed, 100 insertions(+)
->  create mode 100644 package/grpc/0001-target-build-using-host-plugin.patch
->  create mode 100644 package/grpc/Config.in
->  create mode 100644 package/grpc/grpc.hash
->  create mode 100644 package/grpc/grpc.mk
+This is what GCC manual says [1]:
+-------------------------->8----------------------
+--enable-__cxa_atexit
 
-Thanks for this new iteration. However, it's a pity that you didn't
-reuse any of the improvements I had, and which I suggested you to
-re-use for your next iteration.
+    Define if you want to use __cxa_atexit, rather than atexit,
+    to register C++ destructors for local statics and global objects.
 
-So, I redid the same changes, and also improved the description of
-0001-target-build-using-host-plugin.patch which was really not
-sufficient.
+    This is essential for fully standards-compliant handling of destructors,
+    but requires __cxa_atexit in libc.
 
-Here is the list of changes I did:
+    This option is currently only available on systems with GNU libc
+    ...
+-------------------------->8----------------------
 
-    [Thomas:
-     - add missing Config.in dependencies inherited from
-       BR2_PACKAGE_PROTOBUF, as well as the corresponding Config.in
-       comment
-     - replace spaces by tabs in grpc.mk indentation
-     - remove superfluous GRPC_SOURCE variable
-     - improved patch description.]
+Important disadvantages of a simple atexit() are that [2]:
+-------------------------->8----------------------
+1999 C Standard only requires that the implementation support 32
+registered functions, although most implementations support many more.
 
-After those changes, I applied this patch to next. Thanks for your
-contribution!
+More important it does not deal at all with the ability in most implementations
+to remove DSOs from a running program image by calling dlclose
+prior to program termination.
+-------------------------->8----------------------
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Also it seems like all libc's we support in Buildroot (Glibc, uClibc and musl)
+support __cxa_at_exit() so enable it unconditionally.
+
+FWIW if we look around we'll see:
+ 1. In OpenEmbedded it is enabled for everything except gcc-cross-initial: [3], [4]
+ 2. In Crosstool-NG it is enabled by default: [5]
+ 3. In OpenWrt it is disabled only for uClibc, otherwise enabled: [6]
+
+So I think we should be good with it as well.
+
+[1] https://gcc.gnu.org/install/configure.html
+[2] https://itanium-cxx-abi.github.io/cxx-abi/abi.html#dso-dtor-motivation
+[3] https://github.com/openembedded/openembedded-core/blob/master/meta/recipes-devtools/gcc/gcc-configure-common.inc#L59
+[4] https://github.com/openembedded/openembedded-core/blob/master/meta/recipes-devtools/gcc/gcc-cross-initial.inc#L23
+[5] https://github.com/crosstool-ng/crosstool-ng/blob/master/config/cc/gcc.in#L270
+[6] https://github.com/openwrt/openwrt/blob/master/toolchain/gcc/common.mk#L170
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Mark Corbin <mark.corbin@embecosm.com>
+Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Claudiu Zissulescu <claziss@synopsys.com>
+Cc: Cupertino Miranda <cmiranda@synopsys.com>
+Cc: Vineet Gupta <vgupta@synopsys.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gcc/gcc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index e47435677e..5901624ea5 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -87,7 +87,7 @@ HOST_GCC_COMMON_DEPENDENCIES = \
+ HOST_GCC_COMMON_CONF_OPTS = \
+ 	--target=$(GNU_TARGET_NAME) \
+ 	--with-sysroot=$(STAGING_DIR) \
+-	--disable-__cxa_atexit \
++	--enable-__cxa_atexit \
+ 	--with-gnu-ld \
+ 	--disable-libssp \
+ 	--disable-multilib \
