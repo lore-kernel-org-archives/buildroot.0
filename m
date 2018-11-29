@@ -1,64 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 30 Nov 2018 09:59:21 +0100
-Subject: [Buildroot] [git commit] package/qt5/qt5base: use ccache for
- building host code
-Message-ID: <20181202071601.C8FE28131E@busybox.osuosl.org>
+Date: Thu, 29 Nov 2018 22:12:38 +0100
+Subject: [Buildroot] [git commit] package/gcc: enable __cxa_atexit
+Message-ID: <20181202071600.E8CBC803E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2ea056a1b34fd1354100d08e603b9374e225968
+commit: https://git.buildroot.net/buildroot/commit/?id=3e53b5198349c4d31f59c95aefece14ed6543933
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-qt5 currently doesn't use HOSTCC/HOSTCXX, so it doesn't use ccache
-when building all its host code (especially qmake). This means that
-even with ccache enabled and a hot cache, it still takes a long time
-to build qt5base.
+This is what GCC manual says [1]:
+-------------------------->8----------------------
+--enable-__cxa_atexit
 
-Before this patch, building qt5base takes:
+    Define if you want to use __cxa_atexit, rather than atexit,
+    to register C++ destructors for local statics and global objects.
 
- - 446 seconds with a cold ccache
- - 185 seconds with a hot ccache
+    This is essential for fully standards-compliant handling of destructors,
+    but requires __cxa_atexit in libc.
 
-This is because the ccache is not used for host code.
+    This option is currently only available on systems with GNU libc
+    ...
+-------------------------->8----------------------
 
-After this patch, building qt5base takes:
+Important disadvantages of a simple atexit() are that [2]:
+-------------------------->8----------------------
+1999 C Standard only requires that the implementation support 32
+registered functions, although most implementations support many more.
 
- - 450 seconds with a cold ccache
- - 15 seconds with a hot ccache
+More important it does not deal at all with the ability in most implementations
+to remove DSOs from a running program image by calling dlclose
+prior to program termination.
+-------------------------->8----------------------
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Also it seems like all libc's we support in Buildroot (Glibc, uClibc and musl)
+support __cxa_at_exit() so enable it unconditionally.
+
+FWIW if we look around we'll see:
+ 1. In OpenEmbedded it is enabled for everything except gcc-cross-initial: [3], [4]
+ 2. In Crosstool-NG it is enabled by default: [5]
+ 3. In OpenWrt it is disabled only for uClibc, otherwise enabled: [6]
+
+So I think we should be good with it as well.
+
+[1] https://gcc.gnu.org/install/configure.html
+[2] https://itanium-cxx-abi.github.io/cxx-abi/abi.html#dso-dtor-motivation
+[3] https://github.com/openembedded/openembedded-core/blob/master/meta/recipes-devtools/gcc/gcc-configure-common.inc#L59
+[4] https://github.com/openembedded/openembedded-core/blob/master/meta/recipes-devtools/gcc/gcc-cross-initial.inc#L23
+[5] https://github.com/crosstool-ng/crosstool-ng/blob/master/config/cc/gcc.in#L270
+[6] https://github.com/openwrt/openwrt/blob/master/toolchain/gcc/common.mk#L170
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Mark Corbin <mark.corbin@embecosm.com>
+Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Claudiu Zissulescu <claziss@synopsys.com>
+Cc: Cupertino Miranda <cmiranda@synopsys.com>
+Cc: Vineet Gupta <vgupta@synopsys.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt5/qt5base/qt5base.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/gcc/gcc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 2b6fd39267..ec3d7042f1 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -271,6 +271,13 @@ define QT5BASE_CONFIGURE_ARCH_CONFIG
- endef
- endif
- 
-+# This allows to use ccache when available
-+define QT5BASE_CONFIGURE_HOSTCC
-+	$(SED) 's,^QMAKE_COMPILER\s*=.*,QMAKE_COMPILER=$(HOSTCC),' $(@D)/mkspecs/common/g++-base.conf
-+	$(SED) 's,^QMAKE_CC\s*=.*,QMAKE_CC=$(HOSTCC),' $(@D)/mkspecs/common/g++-base.conf
-+	$(SED) 's,^QMAKE_CXX\s*=.*,QMAKE_CXX=$(HOSTCXX),' $(@D)/mkspecs/common/g++-base.conf
-+endef
-+
- define QT5BASE_CONFIGURE_CMDS
- 	mkdir -p $(@D)/mkspecs/devices/linux-buildroot-g++/
- 	sed 's/@EGLFS_DEVICE@/$(QT5BASE_EGLFS_DEVICE)/g' \
-@@ -281,6 +288,7 @@ define QT5BASE_CONFIGURE_CMDS
- 	$(QT5BASE_CONFIGURE_CONFIG_FILE)
- 	touch $(QT5BASE_ARCH_CONFIG_FILE)
- 	$(QT5BASE_CONFIGURE_ARCH_CONFIG)
-+	$(QT5BASE_CONFIGURE_HOSTCC)
- 	(cd $(@D); \
- 		$(TARGET_MAKE_ENV) \
- 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index e47435677e..5901624ea5 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -87,7 +87,7 @@ HOST_GCC_COMMON_DEPENDENCIES = \
+ HOST_GCC_COMMON_CONF_OPTS = \
+ 	--target=$(GNU_TARGET_NAME) \
+ 	--with-sysroot=$(STAGING_DIR) \
+-	--disable-__cxa_atexit \
++	--enable-__cxa_atexit \
+ 	--with-gnu-ld \
+ 	--disable-libssp \
+ 	--disable-multilib \
