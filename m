@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 29 Nov 2018 22:53:10 +0100
-Subject: [Buildroot] [PATCH 1/2] package/cunit: new package
-In-Reply-To: <1541098696-25824-1-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Thu, 29 Nov 2018 22:54:56 +0100
+Subject: [Buildroot] [PATCH 2/2] package/libdrm: correct cunit test
+ dependency
+In-Reply-To: <1541098696-25824-2-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1541098696-25824-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20181129225310.3c413627@windsurf>
+ <1541098696-25824-2-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20181129225456.21d37e68@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +14,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  1 Nov 2018 13:58:15 -0500, Matt Weber wrote:
+On Thu,  1 Nov 2018 13:58:16 -0500, Matt Weber wrote:
+> Previously the option to install tests would result in the test
+> cases that don't have a cunit dependency, to build and be installed.
+> 
+> This patch adds the cunit dependency so all test cases are built and
+> installed to target when that is selected via kconfig.
 
-> +CUNIT_VERSION = 2.1-3
-> +CUNIT_SITE = http://downloads.sourceforge.net/project/cunit/CUnit/$(CUNIT_VERSION)
-> +CUNIT_SOURCE = CUnit-$(CUNIT_VERSION).tar.bz2
-> +CUNIT_INSTALL_STAGING = YES
-> +CUNIT_LICENSE = LGPL-2.0
+Looking at the libdrm build system, only the tests specific to  the
+amdgpu backend/driver need cunit. So when you say "By default most of
+the test cases will automatically be disabled if cunit is not present"
+doesn't seem really accurate. So I've changed this patch to make cunit
+an optional dependency: if it's there, we use it, otherwise, fine, we
+have some tests, but not the amdgpu tests.
 
-Actually the license is LGPL-2.0+.
+Did I miss something?
 
-I've applied to next after fixing this. Thanks!
+Anyway, I've applied the patch that adds it as an optional dependency
+to the next branch.
+
+Best regards,
 
 Thomas
 -- 
