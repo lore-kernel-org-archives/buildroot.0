@@ -1,33 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 29 Nov 2018 21:45:12 +0100
-Subject: [Buildroot] [git commit branch/next] package/c-ares: support host
- build
-Message-ID: <20181129210637.6933481285@busybox.osuosl.org>
+Date: Thu, 29 Nov 2018 22:10:58 +0100
+Subject: [Buildroot] [PATCH v4 1/2] c-ares: support host build
+In-Reply-To: <20181129062140.10474-1-robertroyrose@gmail.com>
+References: <20181129062140.10474-1-robertroyrose@gmail.com>
+Message-ID: <20181129221058.34424d09@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=740a9893816b5904c7f78dcfa9f6875a59b8eff1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-A host version of this package will be useful as a dependency of the
-host-grpc package.
+On Wed, 28 Nov 2018 22:21:39 -0800, Robert Rose wrote:
+> Signed-off-by: Robert Rose <robertroyrose@gmail.com>
+> ---
+>  package/c-ares/c-ares.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
-Signed-off-by: Robert Rose <robertroyrose@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/c-ares/c-ares.mk | 1 +
- 1 file changed, 1 insertion(+)
+Applied to next after extending the commit log, and re-adding Arnout
+Acked-by.
 
-diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
-index 67254244a1..76e9687b37 100644
---- a/package/c-ares/c-ares.mk
-+++ b/package/c-ares/c-ares.mk
-@@ -15,3 +15,4 @@ C_ARES_LICENSE = MIT
- C_ARES_LICENSE_FILES = ares_mkquery.c
- 
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
