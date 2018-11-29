@@ -1,36 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Nov 2018 16:57:12 +0100
-Subject: [Buildroot] [PATCH 1/1] domoticz: fix build with python and
- cmake <= 3.7
-In-Reply-To: <20181128235633.10449-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 29 Nov 2018 00:56:33 +0100")
-References: <20181128235633.10449-1-fontaine.fabrice@gmail.com>
-Message-ID: <87sgzj7u7b.fsf@dell.be.48ers.dk>
+Date: Thu, 29 Nov 2018 17:20:58 +0100
+Subject: [Buildroot] [PATCH v1] freetype: bump version to 2.9.1
+In-Reply-To: <20181128191517.24636-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Wed, 28 Nov 2018 20:15:17 +0100")
+References: <20181128191517.24636-1-ps.report@gmx.net>
+Message-ID: <87o9a77t3p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
- > domoticz will fail to build with python and older cmake
- > Indeed, find_package(PythonLibs 3.4) will not recognize python 3.7 until
- > cmake 3.7 and the following commit:
- > https://github.com/Kitware/CMake/commit/c31573b9641e0f1bc7a34149506db51f3494323b
+ > According to [1]:
+ > - fixes CVE-2018-6942
 
- > To fix this, add a call to find_package(PythonInterp). Indeed, if
- > FindPythonInterp has already found the major and minor version, that
- > version will be inserted between the user supplied versions and the
- > stock version list since cmake in version 3.1 and
- > https://github.com/Kitware/CMake/commit/3816cd2dc7a7cc220e4f1b1e87fee986545b9cb3
+It is always great to add a short description what this is about. I've
+added:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/8e82501a7b49da628ec026132ffca44c0c813040
+A NULL pointer dereference in the Ins_GETVARIATION() function within
+ttinterp.c could lead to DoS via a crafted font file.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+(from https://security-tracker.debian.org/tracker/CVE-2018-6942)
 
-Committed, thanks.
+
+> --- a/package/freetype/freetype.mk
+ > +++ b/package/freetype/freetype.mk
+ > @@ -4,7 +4,7 @@
+ >  #
+ >  ################################################################################
+ 
+ > -FREETYPE_VERSION = 2.9
+ > +FREETYPE_VERSION = 2.9.1
+ >  FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
+ >  FREETYPE_SITE = http://download.savannah.gnu.org/releases/freetype
+ >  FREETYPE_INSTALL_STAGING = YES
+ > @@ -14,6 +14,9 @@ FREETYPE_LICENSE_FILES = docs/LICENSE.TXT docs/FTL.TXT docs/GPLv2.TXT
+ >  FREETYPE_DEPENDENCIES = host-pkgconf
+ >  FREETYPE_CONFIG_SCRIPTS = freetype-config
+ 
+ > +# since 2.9.1 needed for freetyep-config install
+
+s/freetyep/freetype/
+
+> +FREETYPE_CONF_OPTS = --enable-freetype-config
+
+We probably also need this for the host variant. Committed after adding
+that, thanks.
 
 -- 
 Bye, Peter Korsgaard
