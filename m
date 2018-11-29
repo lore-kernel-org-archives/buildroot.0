@@ -1,40 +1,40 @@
-From: Matthew Weber <Matthew.Weber@collins.com>
-Date: Thu, 29 Nov 2018 16:19:02 -0600
-Subject: [Buildroot] [PATCH 2/2] package/libdrm: correct cunit test
- dependency
-In-Reply-To: <20181129225456.21d37e68@windsurf>
-References: <1541098696-25824-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1541098696-25824-2-git-send-email-matthew.weber@rockwellcollins.com>
- <20181129225456.21d37e68@windsurf>
-Message-ID: <CANQCQpb8-qrkXvbDw59+PpPu_ANfTBkR5tPeDqLjqHkVOcYTtA@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 29 Nov 2018 23:37:32 +0100
+Subject: [Buildroot] [PATCH v1] valgrind: disable for mips32r6/mips32elr6
+Message-ID: <20181129223732.25159-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Fixes [1]:
 
+  /tmp/ccD2Tule.s: Assembler messages:
+  /tmp/ccD2Tule.s:682: Error: opcode not supported on this processor: mips32r6 (mips32r6) `movn $2,$4,$7'
+  /tmp/ccD2Tule.s:2767: Error: opcode not supported on this processor: mips32r6 (mips32r6) `movn $2,$4,$7'
 
-On Thu, Nov 29, 2018 at 3:55 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Thu,  1 Nov 2018 13:58:16 -0500, Matt Weber wrote:
-> > Previously the option to install tests would result in the test
-> > cases that don't have a cunit dependency, to build and be installed.
-> >
-> > This patch adds the cunit dependency so all test cases are built and
-> > installed to target when that is selected via kconfig.
->
-> Looking at the libdrm build system, only the tests specific to  the
-> amdgpu backend/driver need cunit. So when you say "By default most of
-> the test cases will automatically be disabled if cunit is not present"
-> doesn't seem really accurate. So I've changed this patch to make cunit
-> an optional dependency: if it's there, we use it, otherwise, fine, we
-> have some tests, but not the amdgpu tests.
->
-> Did I miss something?
+[1] http://autobuild.buildroot.net/results/f0253d1ed11021d3e5914a5161360de3ef3d1641
 
-No, that should be ok.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/valgrind/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
+index 8fe7080cd7..c09be8629a 100644
+--- a/package/valgrind/Config.in
++++ b/package/valgrind/Config.in
+@@ -2,7 +2,9 @@ config BR2_PACKAGE_VALGRIND_ARCH_SUPPORTS
+ 	bool
+ 	default y if BR2_aarch64
+ 	default y if BR2_ARM_CPU_ARMV7A
+-	default y if BR2_mips || BR2_mipsel
++	# MIPS32 R6 is unsupported
++	default y if BR2_mips && !BR2_mips_32r6
++	default y if BR2_mipsel && !BR2_mips_32r6
+ 	# MIPS64 R6 is unsupported
+ 	default y if BR2_mips64 && !BR2_mips_64r6
+ 	default y if BR2_mips64el && !BR2_mips_64r6
+-- 
+2.19.1
