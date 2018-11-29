@@ -1,89 +1,81 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Thu, 29 Nov 2018 07:27:40 +0100
-Subject: [Buildroot] [PATCH 02/11] alsa-utils: update DEPENDENCIES to
- fft-single and add select in Config.in
-In-Reply-To: <87woow77fw.fsf@tkos.co.il>
-References: <1543421561-37355-1-git-send-email-gwenj@trabucayre.com>
- <1543421561-37355-2-git-send-email-gwenj@trabucayre.com>
- <87zhts7bps.fsf@tkos.co.il>
- <20181129063824.57b81964@x230.trabucayre.com>
- <87woow77fw.fsf@tkos.co.il>
-Message-ID: <20181129072740.68683a45@x230.trabucayre.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 29 Nov 2018 08:00:28 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-11-28
+Message-ID: <20181129070028.0EFA720741@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-On Thu, 29 Nov 2018 07:56:35 +0200
-Baruch Siach <baruch@tkos.co.il> wrote:
-> Gwenhael Goavec-Merou writes:
-> > On Thu, 29 Nov 2018 06:24:15 +0200
-> > Baruch Siach <baruch@tkos.co.il> wrote:  
-> >> Gwenhael Goavec-Merou writes:
-> >>  
-> >> > From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> >> >
-> >> > Signed-off-by: Gwenhael Goavec-Merou
-> >> > <gwenhael.goavec-merou@trabucayre.com> ---
-> >> >  package/alsa-utils/Config.in     | 5 ++---
-> >> >  package/alsa-utils/alsa-utils.mk | 2 +-
-> >> >  2 files changed, 3 insertions(+), 4 deletions(-)
-> >> >
-> >> > diff --git a/package/alsa-utils/Config.in b/package/alsa-utils/Config.in
-> >> > index 012f28aef4..950278d173 100644
-> >> > --- a/package/alsa-utils/Config.in
-> >> > +++ b/package/alsa-utils/Config.in
-> >> > @@ -74,15 +74,14 @@ config BR2_PACKAGE_ALSA_UTILS_ASEQNET
-> >> >  	select BR2_PACKAGE_ALSA_LIB_SEQ
-> >> >
-> >> >  config BR2_PACKAGE_ALSA_UTILS_BAT
-> >> > +	select BR2_PACKAGE_FFTW
-> >> > +	select BR2_PACKAGE_FFTW_PRECISION_SINGLE
-> >> >  	bool "bat"
-> >> >  	help
-> >> >  	  ALSABAT (ALSA Basic Audio Tester) is a simple command-line
-> >> >  	  utility intended to help automate audio driver and sound
-> >> >  	  server testing with little human interaction.
-> >> >
-> >> > -	  Note that analysis support in alsabat requires fftw single
-> >> > -	  precision.
-> >> > -
-> >> >  config BR2_PACKAGE_ALSA_UTILS_IECSET
-> >> >  	bool "iecset"
-> >> >  	select BR2_PACKAGE_ALSA_LIB_PCM
-> >> > diff --git a/package/alsa-utils/alsa-utils.mk
-> >> > b/package/alsa-utils/alsa-utils.mk index 986a745399..9e0094f343 100644
-> >> > --- a/package/alsa-utils/alsa-utils.mk
-> >> > +++ b/package/alsa-utils/alsa-utils.mk
-> >> > @@ -41,7 +41,7 @@ endif
-> >> >  ifeq ($(BR2_PACKAGE_ALSA_UTILS_BAT),y)
-> >> >  ALSA_UTILS_CONF_OPTS += --enable-bat
-> >> >  # Analysis support requires fftw single precision
-> >> > -ALSA_UTILS_DEPENDENCIES += $(if
-> >> > $(BR2_PACKAGE_FFTW_PRECISION_SINGLE),fftw) +ALSA_UTILS_DEPENDENCIES +=
-> >> > fftw-single  
-> >>
-> >> This turns the optional fftw dependency into a mandatory one. Is there a
-> >> reason for that?
-> >>  
-> > It may be a misunderstanding on my part but it is explicitly noted "Analysis
-> > support requires fftw single". This assumption is confirmed by my
-> > distribution (gentoo) where fftw is added as dependency when bat option is
-> > selected.  
-> 
-> fftw is required for analysis support. However analysis support itself
-> is optional. See the alsa-utils configure.ac:
-> 
-> if test x$bat = xtrue; then
->   ...
->   AC_CHECK_LIB([fftw3f], [fftwf_malloc], , [have_libfftw3="no"])
->   ...
-> if
-> 
-Ok. My fault, I've not seen the "analysis support". I must modify this patch
-but I will wait a little for others  potential reviews to avoid spamming the
-mailing-list with  long serie of patches.
+Hello,
 
-Gwen
+Build statistics for 2018-11-28
+===============================
+
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  15 |   0 |   0 |  15 |
+   2018.08.x |  19 |   0 |   0 |  19 |
+      master | 200 |   7 |   0 | 207 |
+        next |  24 |  11 |   0 |  35 |
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+               valgrind-3.14.0 | 2 
+               domoticz-4.9700 | 1 
+                libmpeg2-0.5.1 | 1 
+              libostree-2018.9 | 1 
+             qt5location-5.6.3 | 1 
+               wireshark-2.6.4 | 1 
+
+
+Detail of failures
+------------------
+
+      xtensa |                domoticz-4.9700 | NOK | http://autobuild.buildroot.net/results/8e82501a7b49da628ec026132ffca44c0c813040 |     
+     powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/0cfb9881f994ecfa9f817218d86df8a8d81a8afe | ORPH
+   powerpc64 |               libostree-2018.9 | NOK | http://autobuild.buildroot.net/results/4c909a85e23572fd97b5ea1df62a28ca27408897 |     
+     powerpc |              qt5location-5.6.3 | NOK | http://autobuild.buildroot.net/results/91d6c0df47d12d5eedf4a2413d23bf98e8506326 |     
+      mipsel |                valgrind-3.14.0 | NOK | http://autobuild.buildroot.net/results/f0253d1ed11021d3e5914a5161360de3ef3d1641 | ORPH
+    mips64el |                valgrind-3.14.0 | NOK | http://autobuild.buildroot.net/results/87354de3d8ec079792f07b6840ca708dc13e5cf6 | ORPH
+     sparc64 |                wireshark-2.6.4 | NOK | http://autobuild.buildroot.net/results/1a21415f93b0e4ee4ae041b9b42ab4ae28f70437 | ORPH
+
+Results for branch 'next'
+=========================
+
+Classification of failures by reason
+------------------------------------
+
+                    php-7.2.12 | 2 
+                 setools-4.1.1 | 2 
+               asterisk-14.7.8 | 1 
+                civetweb-v1.11 | 1 
+                  linuxptp-2.0 | 1 
+                     nut-2.7.4 | 1 
+               pulseview-0.4.1 | 1 
+                  quagga-1.1.1 | 1 
+                   strace-4.23 | 1 
+
+
+Detail of failures
+------------------
+
+         arm |                asterisk-14.7.8 | NOK | http://autobuild.buildroot.net/results/11449ab92ea2843c2f287cc7e0997d16f047af72 |     
+         arc |                 civetweb-v1.11 | NOK | http://autobuild.buildroot.net/results/7a189f49c5a8b6f7b3d4c57cda5982adc65dbc19 |     
+         arc |                   linuxptp-2.0 | NOK | http://autobuild.buildroot.net/results/4f53c0b6f3395f4d1ec0aa58f9df36c8145b1066 |     
+      xtensa |                      nut-2.7.4 | NOK | http://autobuild.buildroot.net/results/eea704463c3f14dbb9bd7f8aa23d4b61c25987f4 |     
+      xtensa |                     php-7.2.12 | NOK | http://autobuild.buildroot.net/results/ddf03b43691df42a7a74bda629694b33b52fee44 | ORPH
+   powerpc64 |                     php-7.2.12 | NOK | http://autobuild.buildroot.net/results/5d22ee40a7e08164c2fcb17ec116d7b413fdecd3 | ORPH
+microblazeel |                pulseview-0.4.1 | NOK | http://autobuild.buildroot.net/results/41437e1fe427ccc55e9e5d7a8d114b8665df0a5d |     
+      xtensa |                   quagga-1.1.1 | NOK | http://autobuild.buildroot.net/results/06dbe57ab70c532c07a56208d2e8268d9822148e | ORPH
+    mips64el |                  setools-4.1.1 | NOK | http://autobuild.buildroot.net/results/9b35ecb0edd751f17b7acdf0514b5ce0b6adf48e |     
+     powerpc |                  setools-4.1.1 | NOK | http://autobuild.buildroot.net/results/dd646e6f96259430926b921e20f1dd736ac35dc1 |     
+         arm |                    strace-4.23 | NOK | http://autobuild.buildroot.net/results/c8569d7be065561df505c74bbe841165b0b0763f |     
+
+
+-- 
+http://autobuild.buildroot.net
