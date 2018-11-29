@@ -1,66 +1,48 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 29 Nov 2018 21:52:13 +0100
-Subject: [Buildroot] [PATCH/next 1/1] civetweb: fix lua build
-Message-ID: <20181129205213.14830-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 29 Nov 2018 21:54:10 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gdb: prevent gdbserver being
+ selected for RISC-V builds
+In-Reply-To: <20181126142438.20337-1-mark.corbin@embecosm.com> (Mark Corbin's
+ message of "Mon, 26 Nov 2018 14:24:38 +0000")
+References: <20181126142438.20337-1-mark.corbin@embecosm.com>
+Message-ID: <87pnun61vx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-dlfcn.h must be included in modlua.ini to be able to use dlopen
-otherwise build will fail on:
-src/mod_lua.inl:2845:41: error: 'RTLD_LAZY' undeclared (first use in this function)
-  lib_handle_uuid = dlopen("libuuid.so", RTLD_LAZY);
+>>>>> "Mark" == Mark Corbin <mark.corbin@embecosm.com> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/7a189f49c5a8b6f7b3d4c57cda5982adc65dbc19
+ > There is currently no version of gdbserver for RISC-V. Until this
+ > is implemented we will prevent both the direct and indirect
+ > selection of gdbserver for RISC-V builds. In practice this means
+ > that 'cross gdb for the host' cannot be selected and that
+ > 'full debugger' must be automatically selected for the gdb target
+ > package.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../civetweb/0001-modlua.ini-include-dlfcn.h.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/civetweb/0001-modlua.ini-include-dlfcn.h.patch
+ > Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
+ > ---
+ >  package/gdb/Config.in      | 5 ++++-
+ >  package/gdb/Config.in.host | 1 +
+ >  2 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/civetweb/0001-modlua.ini-include-dlfcn.h.patch b/package/civetweb/0001-modlua.ini-include-dlfcn.h.patch
-new file mode 100644
-index 0000000000..bd1b06aedf
---- /dev/null
-+++ b/package/civetweb/0001-modlua.ini-include-dlfcn.h.patch
-@@ -0,0 +1,34 @@
-+From ca4325c6963e505d6fb628163abf2359427ea022 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 29 Nov 2018 21:43:28 +0100
-+Subject: [PATCH] modlua.ini: include dlfcn.h
-+
-+dlfcn.h must be included to be able to use dlopen otherwise build will
-+fail on:
-+src/mod_lua.inl:2845:41: error: 'RTLD_LAZY' undeclared (first use in this function)
-+  lib_handle_uuid = dlopen("libuuid.so", RTLD_LAZY);
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/7a189f49c5a8b6f7b3d4c57cda5982adc65dbc19
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/civetweb/civetweb/pull/706]
-+---
-+ src/mod_lua.inl | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/mod_lua.inl b/src/mod_lua.inl
-+index 97a5de1e..ce7a4b2e 100644
-+--- a/src/mod_lua.inl
-++++ b/src/mod_lua.inl
-+@@ -2,6 +2,7 @@
-+  * See https://github.com/civetweb/civetweb/
-+  */
-+ 
-++#include <dlfcn.h>
-+ #include "civetweb_lua.h"
-+ #include "civetweb_private_lua.h"
-+ 
-+-- 
-+2.14.1
-+
+ > diff --git a/package/gdb/Config.in b/package/gdb/Config.in
+ > index 55c1b194ce..b3668aeb24 100644
+ > --- a/package/gdb/Config.in
+ > +++ b/package/gdb/Config.in
+ > @@ -24,7 +24,9 @@ config BR2_PACKAGE_GDB
+ >  	# target, we don't allow building a separate gdbserver. The
+ >  	# one from the external toolchain should be used.
+ >  	select BR2_PACKAGE_GDB_SERVER if \
+ > -		(!BR2_PACKAGE_GDB_DEBUGGER && !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY)
+ > +		(!BR2_PACKAGE_GDB_DEBUGGER && !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY && \
+ > +		!BR2_riscv)
+ > +	select BR2_PACKAGE_GDB_DEBUGGER if BR2_riscv
+
+It is slightly simpler to just move this select above, then we don't
+need to change the BR2_PACKAGE_GDB_SERVER logic. I have also added a
+comment about no gdbserver on RISC-V and committed, thanks.
+
 -- 
-2.14.1
+Bye, Peter Korsgaard
