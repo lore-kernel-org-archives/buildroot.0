@@ -1,43 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Nov 2018 15:48:17 +0100
-Subject: [Buildroot] [git commit] linux: bump CIP to version v4.4.154-cip28
-Message-ID: <20181129144543.09A6D80368@busybox.osuosl.org>
+Date: Thu, 29 Nov 2018 15:48:30 +0100
+Subject: [Buildroot] [git commit] samba4: security bump to version 4.9.3
+Message-ID: <20181129144543.195D188D3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a91db4044feefc4512a3d0dafb711924a3c43237
+commit: https://git.buildroot.net/buildroot/commit/?id=0839e4a85e929c0faa30ee7a5e9d8ac74b9d04ab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch bumps the Linux CIP kernel to version v4.4.154-cip28
+Fixes the following security vulnerabilities:
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+ - CVE-2018-14629:
+   All versions of Samba from 4.0.0 onwards are vulnerable to infinite
+   query recursion caused by CNAME loops. Any dns record can be added via
+   ldap by an unprivileged user using the ldbadd tool, so this is a
+   security issue.
+
+ - CVE-2018-16841:
+   When configured to accept smart-card authentication, Samba's KDC will call
+   talloc_free() twice on the same memory if the principal in a validly signed
+   certificate does not match the principal in the AS-REQ.
+
+   This is only possible after authentication with a trusted certificate.
+
+   talloc is robust against further corruption from a double-free with
+   talloc_free() and directly calls abort(), terminating the KDC process.
+
+   There is no further vulnerability associated with this issue, merely a
+   denial of service.
+
+ - CVE-2018-16851:
+   During the processing of an LDAP search before Samba's AD DC returns
+   the LDAP entries to the client, the entries are cached in a single
+   memory object with a maximum size of 256MB.  When this size is
+   reached, the Samba process providing the LDAP service will follow the
+   NULL pointer, terminating the process.
+
+   There is no further vulnerability associated with this issue, merely a
+   denial of service.
+
+ - CVE-2018-16852:
+   During the processing of an DNS zone in the DNS management DCE/RPC server,
+   the internal DNS server or the Samba DLZ plugin for BIND9, if the
+   DSPROPERTY_ZONE_MASTER_SERVERS property or DSPROPERTY_ZONE_SCAVENGING_SERVERS
+   property is set, the server will follow a NULL pointer and terminate.
+
+   There is no further vulnerability associated with this issue, merely a
+   denial of service.
+
+ - CVE-2018-16853:
+   A user in a Samba AD domain can crash the KDC when Samba is built in the
+   non-default MIT Kerberos configuration.
+
+   With this advisory we clarify that the MIT Kerberos build of the Samba
+   AD DC is considered experimental.  Therefore the Samba Team will not
+   issue security patches for this configuration.
+
+ - CVE-2018-16857:
+   AD DC Configurations watching for bad passwords (to restrict brute forcing
+   of passwords) in a window of more than 3 minutes may not watch for bad
+   passwords at all.
+
+For more details, see the release notes:
+
+https://www.samba.org/samba/history/samba-4.9.3.html
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 85e540754a..efce31c7e1 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -33,7 +33,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
- 	bool "Latest version (4.18)"
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 4d210ca364..41c670059f 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.9.2.tar.asc
+-sha256 349c17b7bf1bf667167843470533da89ff1b2ca4a768b529aaacf5197af1efa2  samba-4.9.2.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.9.3.tar.asc
++sha256 cf8fd8707e9ad7bce7832006aac5644155165745ba371170661b3004fa2135cf  samba-4.9.3.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index e2f8e7de2f..89e39dab55 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
--	bool "Latest CIP SLTS version (v4.4.138-cip25)"
-+	bool "Latest CIP SLTS version (v4.4.154-cip28)"
- 	help
- 	  CIP launched in the spring of 2016 to address the needs of
- 	  organizations in industries such as power generation and
-@@ -121,7 +121,7 @@ endif
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "4.18.20" if BR2_LINUX_KERNEL_LATEST_VERSION
--	default "v4.4.138-cip25" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-+	default "v4.4.154-cip28" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+-SAMBA4_VERSION = 4.9.2
++SAMBA4_VERSION = 4.9.3
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
