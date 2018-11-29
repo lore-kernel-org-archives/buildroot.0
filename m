@@ -1,53 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 29 Nov 2018 23:05:54 +0100
-Subject: [Buildroot] [PATCH 1/1] boot/arm-trusted-firmware: support
- debug mode
-In-Reply-To: <1542900158-17272-1-git-send-email-etienne.carriere@linaro.org>
-References: <1542900158-17272-1-git-send-email-etienne.carriere@linaro.org>
-Message-ID: <20181129230554.079f209a@windsurf>
+From: Matthew Weber <Matthew.Weber@collins.com>
+Date: Thu, 29 Nov 2018 16:19:02 -0600
+Subject: [Buildroot] [PATCH 2/2] package/libdrm: correct cunit test
+ dependency
+In-Reply-To: <20181129225456.21d37e68@windsurf>
+References: <1541098696-25824-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <1541098696-25824-2-git-send-email-matthew.weber@rockwellcollins.com>
+ <20181129225456.21d37e68@windsurf>
+Message-ID: <CANQCQpb8-qrkXvbDw59+PpPu_ANfTBkR5tPeDqLjqHkVOcYTtA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas,
 
-On Thu, 22 Nov 2018 16:22:38 +0100, Etienne Carriere wrote:
-> When the trusted firmware is built with debug support (DEBUG defined),
-> the generated images are located at a specific path. The non debug
-> images are located in generated directory build/<platform>/release/
-> while the debug images are located in generated directory
-> build/<platform>/debug/.
-> 
-> This change introduces boolean BR2_TARGET_ARM_TRUSTED_FIRMWARE_DEBUG
-> to define whether the release or debug configuration is used to build
-> trusted firmware. Note that enabling trusted firmware debug support, i.e
-> BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="... DEBUG=1 ..."
-> without enabling BR2_TARGET_ARM_TRUSTED_FIRMWARE_DEBUG will fail since
-> buildroot will get generated files from the wrong path.
-> 
-> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 
-What is this debug mode doing exactly ?
+On Thu, Nov 29, 2018 at 3:55 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Thu,  1 Nov 2018 13:58:16 -0500, Matt Weber wrote:
+> > Previously the option to install tests would result in the test
+> > cases that don't have a cunit dependency, to build and be installed.
+> >
+> > This patch adds the cunit dependency so all test cases are built and
+> > installed to target when that is selected via kconfig.
+>
+> Looking at the libdrm build system, only the tests specific to  the
+> amdgpu backend/driver need cunit. So when you say "By default most of
+> the test cases will automatically be disabled if cunit is not present"
+> doesn't seem really accurate. So I've changed this patch to make cunit
+> an optional dependency: if it's there, we use it, otherwise, fine, we
+> have some tests, but not the amdgpu tests.
+>
+> Did I miss something?
 
-We already have a global BR2_ENABLE_DEBUG option to enable building
-with debugging symbols. I am wondering if we should use that option as
-well, or like you did, introduce a separate option. Perhaps for
-something like ATF, that is very low-level and HW-specific, a separate
-debug option is OK.
-
-> +config BR2_TARGET_ARM_TRUSTED_FIRMWARE_DEBUG
-> +	bool "Debug mode of the trusted firmware"
-> +	default n
-
-"default n" is not needed, since it's the default. Not need to resend
-just for that, we can fixup when applying.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+No, that should be ok.
