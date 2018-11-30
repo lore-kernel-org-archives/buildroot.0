@@ -4,7 +4,7 @@ Subject: [Buildroot] [PATCH/next 1/1] linuxptp: fix build with kernel
  headers >= 4.19
 In-Reply-To: <20181129214730.7225-1-fontaine.fabrice@gmail.com>
 References: <20181129214730.7225-1-fontaine.fabrice@gmail.com>
-Message-ID: <87bm676vhs.fsf@tkos.co.il>
+Message-ID: <n87bm676vhs.fsf@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,6 +12,8 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Hi Fabrice,
+
+[ Resending with the updated address of Richard ]
 
 Adding Richard Cochran who introduced this net_tstamp.h change in kernel
 commit 80b14dee2be.
