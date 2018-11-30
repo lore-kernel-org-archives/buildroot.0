@@ -1,56 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Nov 2018 13:35:17 +0100
-Subject: [Buildroot] Buildroot 2018.11-rc3 released
-Message-ID: <87d0qm68vu.fsf@dell.be.48ers.dk>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Fri, 30 Nov 2018 16:22:34 +0200
+Subject: [Buildroot] [PATCH 1/1] python-msgpack: bump to version 0.6.0
+Message-ID: <20181130142234.20373-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Archive file name changed from msgpack-python to msgpack
 
-Buildroot 2018.11-rc3 is released - Go download it at:
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/python-msgpack/python-msgpack.hash | 6 +++---
+ package/python-msgpack/python-msgpack.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-http://buildroot.net/downloads/buildroot-2018.11-rc3.tar.gz
-
-or
-
-http://buildroot.net/downloads/buildroot-2018.11-rc3.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-Another week, another release candidate.
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
-
-git shortlog -sn 2018.11-rc2..
-
-    17  Thomas Petazzoni
-    16  Fabrice Fontaine
-     9  Peter Korsgaard
-     8  Yann E. MORIN
-     5  Peter Seiderer
-     2  Mark Corbin
-     1  Adrian Perez de Castro
-     1  Andreas Naumann
-     1  Angelo Compagnucci
-     1  Bernd Kuhls
-     1  Carlos Santos
-     1  DUPONCHEEL S?bastien
-     1  Fabio Estevam
-     1  Florian Fainelli
-     1  Francois Perrad
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.11-rc3
-
-Expect the final 2018.11 release by a day or two, unless something
-critical shows up.
-
+diff --git a/package/python-msgpack/python-msgpack.hash b/package/python-msgpack/python-msgpack.hash
+index 74785837d8..98027009ad 100644
+--- a/package/python-msgpack/python-msgpack.hash
++++ b/package/python-msgpack/python-msgpack.hash
+@@ -1,5 +1,5 @@
+-# md5, sha256 from https://pypi.org/pypi/msgpack-python/json
+-md5	6d644c06a87a5a111bbbf5b34b4be440  msgpack-python-0.5.6.tar.gz
+-sha256	378cc8a6d3545b532dfd149da715abae4fda2a3adb6d74e525d0d5e51f46909b  msgpack-python-0.5.6.tar.gz
++# md5, sha256 from https://pypi.org/pypi/msgpack/json
++md5	be3043cc2c1e3b5ebf08463ffa71cf17  msgpack-0.6.0.tar.gz
++sha256	64abc6bf3a2ac301702f5760f4e6e227d0fd4d84d9014ef9a40faa9d43365259  msgpack-0.6.0.tar.gz
+ # Locally computed sha256
+ sha256  492dedba85da5872f78e6091bcd1fea474d660d35acb4dee964b8aab3f007427  COPYING
+diff --git a/package/python-msgpack/python-msgpack.mk b/package/python-msgpack/python-msgpack.mk
+index e0544f5d33..8bbae9283d 100644
+--- a/package/python-msgpack/python-msgpack.mk
++++ b/package/python-msgpack/python-msgpack.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_MSGPACK_VERSION = 0.5.6
+-PYTHON_MSGPACK_SOURCE = msgpack-python-$(PYTHON_MSGPACK_VERSION).tar.gz
+-PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/8a/20/6eca772d1a5830336f84aca1d8198e5a3f4715cd1c7fc36d3cc7f7185091
++PYTHON_MSGPACK_VERSION = 0.6.0
++PYTHON_MSGPACK_SOURCE = msgpack-$(PYTHON_MSGPACK_VERSION).tar.gz
++PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/3a/bb/dc3f9fc608a6c1c7a471c2bebc761d9c8dbb2f7179a4283a89b9451765b5
+ PYTHON_MSGPACK_LICENSE = Apache-2.0
+ PYTHON_MSGPACK_LICENSE_FILES = COPYING
+ PYTHON_MSGPACK_SETUP_TYPE = setuptools
 -- 
-Bye, Peter Korsgaard
+2.19.1
