@@ -1,39 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Nov 2018 13:01:34 +0100
-Subject: [Buildroot] [git commit] dante: add linux-pam optional dependency
-Message-ID: <20181202071558.AC0BC82855@busybox.osuosl.org>
+Date: Fri, 30 Nov 2018 09:43:41 +0100
+Subject: [Buildroot] [git commit] package/libtool: reduce target package to
+ libltdl only
+Message-ID: <20181202071601.9E48781829@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1f1bba4a2cdb9246216157773c8a03956b2cd73d
+commit: https://git.buildroot.net/buildroot/commit/?id=cf5d869a9f7951ff81cb9ed6c61a3176d17e3e72
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+This will save 1700K on target filesystem (as tested on ARM, i686).
+
+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dante/dante.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ package/libtool/libtool.mk | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-diff --git a/package/dante/dante.mk b/package/dante/dante.mk
-index a147aa36dc..9666ec54fd 100644
---- a/package/dante/dante.mk
-+++ b/package/dante/dante.mk
-@@ -12,7 +12,14 @@ DANTE_LICENSE_FILES = LICENSE
- # Dante uses a *VERY* old configure.ac
- DANTE_LIBTOOL_PATCH = NO
- 
--DANTE_CONF_OPTS += --disable-client --disable-preload --without-pam
-+DANTE_CONF_OPTS += --disable-client --disable-preload
+diff --git a/package/libtool/libtool.mk b/package/libtool/libtool.mk
+index bf97ee12b5..10af8cf715 100644
+--- a/package/libtool/libtool.mk
++++ b/package/libtool/libtool.mk
+@@ -7,12 +7,22 @@
+ LIBTOOL_VERSION = 2.4.6
+ LIBTOOL_SOURCE = libtool-$(LIBTOOL_VERSION).tar.xz
+ LIBTOOL_SITE = $(BR2_GNU_MIRROR)/libtool
 +
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+DANTE_DEPENDENCIES += linux-pam
-+DANTE_CONF_OPTS += --with-pam
-+else
-+DANTE_CONF_OPTS += --without-pam
-+endif
++# For the target variant, we only want to build/install libltdl
++LIBTOOL_SUBDIR = libltdl
++HOST_LIBTOOL_SUBDIR = .
++
+ LIBTOOL_INSTALL_STAGING = YES
+-LIBTOOL_CONF_ENV = HELP2MAN=true
++
++LIBTOOL_CONF_OPTS = --enable-ltdl-install
++
+ LIBTOOL_DEPENDENCIES = host-m4
+ HOST_LIBTOOL_DEPENDENCIES = host-m4
+-LIBTOOL_LICENSE = GPL-2.0+
+-LIBTOOL_LICENSE_FILES = COPYING
++
++LIBTOOL_LICENSE = LGPL-2.1+
++LIBTOOL_LICENSE_FILES = $(LIBTOOL_SUBDIR)/COPYING.LIB
++HOST_LIBTOOL_LICENSE = GPL-2.0+ (libtool), LGPL-2.1+ (libltdl)
++HOST_LIBTOOL_LICENSE_FILES = COPYING $(LIBTOOL_SUBDIR)/COPYING.LIB
  
- define DANTE_INSTALL_CONFIG_FILE
- 	$(INSTALL) -D -m 644 $(@D)/example/sockd.conf \
+ HOST_LIBTOOL_CONF_ENV = MAKEINFO=true
+ HOST_LIBTOOL_LIBTOOL_PATCH = NO
