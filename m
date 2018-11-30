@@ -1,86 +1,147 @@
-From: Einar Jon Gunnarsson <tolvupostur@gmail.com>
-Date: Fri, 30 Nov 2018 13:01:23 +0100
-Subject: [Buildroot] [PATCH 5/5] configs: libgbm defconfigs build qt5
-In-Reply-To: <1543579283-20496-1-git-send-email-tolvupostur@gmail.com>
-References: <1543579283-20496-1-git-send-email-tolvupostur@gmail.com>
-Message-ID: <1543579283-20496-6-git-send-email-tolvupostur@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 30 Nov 2018 13:27:09 +0100
+Subject: [Buildroot] [git commit] Update for 2018.11-rc3
+Message-ID: <20181130122425.23B2B8914D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-kmscube removed from ti_sgx and sunxi_mali,
-since it doesn't work
+commit: https://git.buildroot.net/buildroot/commit/?id=0031f521909a857d9781a3f0585766b49b31b63e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Einar Jon Gunnarsson <tolvupostur@gmail.com>
-----------------------
-Like before - can't test any of these, but they all build QT5
-with EGLFS GBM.
-The sunxi_mali was a bit of a shot in the dark, but I figured out
-that with -D__GBM__we do get a valid EGLFS for QT. I have no idea
-if I added that correctly.
-
-Signed-off-by: Einar Jon Gunnarsson <tolvupostur@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/libgbm_mesa3d_defconfig     | 5 +++++
- configs/libgbm_sunxi_mali_defconfig | 8 +++++++-
- configs/libgbm_ti_sgx_defconfig     | 9 +++++----
- 3 files changed, 17 insertions(+), 5 deletions(-)
+ CHANGES                    | 18 ++++++++++++++++++
+ Makefile                   |  4 ++--
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 22 ++++++++++++++++++++++
+ 4 files changed, 51 insertions(+), 11 deletions(-)
 
-diff --git a/configs/libgbm_mesa3d_defconfig b/configs/libgbm_mesa3d_defconfig
-index 9816680..9a9c391 100644
---- a/configs/libgbm_mesa3d_defconfig
-+++ b/configs/libgbm_mesa3d_defconfig
-@@ -16,4 +16,9 @@ BR2_PACKAGE_MESA3D=y
- BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
- BR2_PACKAGE_MESA3D_OPENGL_EGL=y
- BR2_PACKAGE_MESA3D_OPENGL_ES=y
-+BR2_PACKAGE_QT5=y
-+BR2_PACKAGE_QT5BASE_EXAMPLES=y
-+BR2_PACKAGE_QT5BASE_GUI=y
-+BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
-+BR2_PACKAGE_QT5BASE_EGLFS=y
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/libgbm_sunxi_mali_defconfig b/configs/libgbm_sunxi_mali_defconfig
-index c89a781..d83e792 100644
---- a/configs/libgbm_sunxi_mali_defconfig
-+++ b/configs/libgbm_sunxi_mali_defconfig
-@@ -3,9 +3,15 @@ BR2_cortex_a8=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y
- BR2_INIT_NONE=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
- BR2_SYSTEM_BIN_SH_NONE=y
- # BR2_PACKAGE_BUSYBOX is not set
--BR2_PACKAGE_KMSCUBE=y
-+BR2_PACKAGE_QT5=y
-+BR2_PACKAGE_QT5BASE_EXAMPLES=y
-+BR2_PACKAGE_QT5BASE_GUI=y
-+BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
-+BR2_PACKAGE_QT5BASE_EGLFS=y
- BR2_PACKAGE_SUNXI_MALI_MAINLINE=y
- BR2_PACKAGE_SUNXI_MALI_MAINLINE_OUTPUT_WAYLAND=y
-+BR2_PACKAGE_LIBDRM=y
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/libgbm_ti_sgx_defconfig b/configs/libgbm_ti_sgx_defconfig
-index 0226e2b..e70b9c7 100644
---- a/configs/libgbm_ti_sgx_defconfig
-+++ b/configs/libgbm_ti_sgx_defconfig
-@@ -6,9 +6,10 @@ BR2_INIT_NONE=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
- BR2_SYSTEM_BIN_SH_NONE=y
- # BR2_PACKAGE_BUSYBOX is not set
--BR2_PACKAGE_KMSCUBE=y
-+BR2_PACKAGE_QT5=y
-+BR2_PACKAGE_QT5BASE_EXAMPLES=y
-+BR2_PACKAGE_QT5BASE_GUI=y
-+BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
-+BR2_PACKAGE_QT5BASE_EGLFS=y
- BR2_PACKAGE_TI_SGX_UM=y
--BR2_PACKAGE_EXPAT=y
--BR2_PACKAGE_LIBXML2=y
--BR2_PACKAGE_LIBFFI=y
- # BR2_TARGET_ROOTFS_TAR is not set
--- 
-2.7.4
+diff --git a/CHANGES b/CHANGES
+index bfd9ff1524..e88f7258bb 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,21 @@
++2018.11-rc3, released November 30th, 2018
++
++	Fixes all over the tree.
++
++	Defconfigs: Fixes for Armadeus APF27, imx6sabre, Olimex A20
++	olinuxino lime legacy, Orangepi zero plus 2, PC, Riotboard.
++
++	graph-depends: Fix for package names starting with a non-alpha
++	character.
++
++	Updated/fixed packages: alsa-utils, botan, dante, domoticz,
++	dtc, freetype, gauche, gcc, gdb, ghostscript, glibc,
++	imx-usb-loader, libbsd, libid3tag, libkrb5, libmicrohttpd,
++	libopenssl, libsoxr, linux, motion, msgpack, mtd,
++	perl-net-ssleay, php, popt, python-numpy, qt5declarative,
++	samba4, shadowsocks-libev, stress-ng, systemd, usb_modeswitch,
++	webkitgtk, valgrind, weston, xfsprogs
++
+ 2018.11-rc2, released November 21th, 2018
+ 
+ 	Fixes all over the tree.
+diff --git a/Makefile b/Makefile
+index 69cbd7868d..ea44994c6e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2018.11-rc2
++export BR2_VERSION := 2018.11-rc3
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1542786000
++BR2_VERSION_EPOCH = 1543580000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 8ee433d80d..0662199e9e 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -76,37 +76,37 @@
+ 	</div>
+       </div>
+ 
+-      <h3 style="text-align: center;">Latest release candidate: <b>2018.11-rc2</b></h3>
++      <h3 style="text-align: center;">Latest release candidate: <b>2018.11-rc3</b></h3>
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2018.11-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.11-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2018.11-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.11-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2018.11-rc2.tar.gz">buildroot-2018.11-rc2.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2018.11-rc2.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2018.11-rc3.tar.gz">buildroot-2018.11-rc3.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2018.11-rc3.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2018.11-rc2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.11-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2018.11-rc2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.11-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2018.11-rc2.tar.bz2">buildroot-2018.11-rc2.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2018.11-rc2.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2018.11-rc3.tar.bz2">buildroot-2018.11-rc3.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2018.11-rc3.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 4aa5b57c02..5322b5723e 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,28 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2018.11-rc3 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>30 November 2018</small></p>
++      </div>
++      <div class="timeline-body">
++        <p>Another week, another release candidate with more cleanups
++          and build fixes. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.11-rc3">CHANGES</a>
++	  file for details.</p>
++
++	<p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2018.11-rc3.tar.bz2">2018.11-rc3
++	  release candidate</a>, and report any problems found to the
++	  <a href="support.html">mailing list</a> or
++	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
