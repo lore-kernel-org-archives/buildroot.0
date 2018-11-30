@@ -1,67 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 30 Nov 2018 09:02:32 +0100
-Subject: [Buildroot] [git commit branch/next] package/civetweb: fix lua build
-Message-ID: <20181130083449.CF040890F7@busybox.osuosl.org>
+Date: Fri, 30 Nov 2018 09:04:58 +0100
+Subject: [Buildroot] [git commit branch/next] package/fontconfig: bump
+ version to 2.13.1
+Message-ID: <20181130083449.D59C1890F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a34e386dc6f69df239b5c43a2e0aaf64b890f29c
+commit: https://git.buildroot.net/buildroot/commit/?id=c2408d11abf500ef4856ba0d9d6f23fbcde0df13
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-dlfcn.h must be included in modlua.ini to be able to use dlopen
-otherwise build will fail on:
-src/mod_lua.inl:2845:41: error: 'RTLD_LAZY' undeclared (first use in this function)
-  lib_handle_uuid = dlopen("libuuid.so", RTLD_LAZY);
-
-Fixes:
- - http://autobuild.buildroot.org/results/7a189f49c5a8b6f7b3d4c57cda5982adc65dbc19
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../civetweb/0001-modlua.ini-include-dlfcn.h.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ package/fontconfig/fontconfig.hash | 4 ++--
+ package/fontconfig/fontconfig.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/civetweb/0001-modlua.ini-include-dlfcn.h.patch b/package/civetweb/0001-modlua.ini-include-dlfcn.h.patch
-new file mode 100644
-index 0000000000..bd1b06aedf
---- /dev/null
-+++ b/package/civetweb/0001-modlua.ini-include-dlfcn.h.patch
-@@ -0,0 +1,34 @@
-+From ca4325c6963e505d6fb628163abf2359427ea022 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 29 Nov 2018 21:43:28 +0100
-+Subject: [PATCH] modlua.ini: include dlfcn.h
-+
-+dlfcn.h must be included to be able to use dlopen otherwise build will
-+fail on:
-+src/mod_lua.inl:2845:41: error: 'RTLD_LAZY' undeclared (first use in this function)
-+  lib_handle_uuid = dlopen("libuuid.so", RTLD_LAZY);
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/7a189f49c5a8b6f7b3d4c57cda5982adc65dbc19
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/civetweb/civetweb/pull/706]
-+---
-+ src/mod_lua.inl | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/mod_lua.inl b/src/mod_lua.inl
-+index 97a5de1e..ce7a4b2e 100644
-+--- a/src/mod_lua.inl
-++++ b/src/mod_lua.inl
-+@@ -2,6 +2,7 @@
-+  * See https://github.com/civetweb/civetweb/
-+  */
-+ 
-++#include <dlfcn.h>
-+ #include "civetweb_lua.h"
-+ #include "civetweb_private_lua.h"
-+ 
-+-- 
-+2.14.1
-+
+diff --git a/package/fontconfig/fontconfig.hash b/package/fontconfig/fontconfig.hash
+index e9963f6f3f..5243c09615 100644
+--- a/package/fontconfig/fontconfig.hash
++++ b/package/fontconfig/fontconfig.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/fontconfig/2017-July/005961.html
+-sha256 668293fcc4b3c59765cdee5cee05941091c0879edcc24dfec5455ef83912e45c  fontconfig-2.12.4.tar.bz2
++# From https://lists.freedesktop.org/archives/fontconfig/2018-August/006324.html
++sha256 f655dd2a986d7aa97e052261b36aa67b0a64989496361eca8d604e6414006741 fontconfig-2.13.1.tar.bz2
+diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
+index 71a0b4579c..9ac18886d3 100644
+--- a/package/fontconfig/fontconfig.mk
++++ b/package/fontconfig/fontconfig.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FONTCONFIG_VERSION = 2.12.4
++FONTCONFIG_VERSION = 2.13.1
+ FONTCONFIG_SITE = http://fontconfig.org/release
+ FONTCONFIG_SOURCE = fontconfig-$(FONTCONFIG_VERSION).tar.bz2
+ FONTCONFIG_INSTALL_STAGING = YES
