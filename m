@@ -1,49 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 30 Nov 2018 09:01:26 +0100
-Subject: [Buildroot] [git commit branch/next] package/python-pathlib2: bump
- to version 2.3.3
-Message-ID: <20181130075813.77229890D2@busybox.osuosl.org>
+Date: Fri, 30 Nov 2018 09:01:24 +0100
+Subject: [Buildroot] [git commit branch/next] package/python-certifi: bump
+ to version 2018.11.29
+Message-ID: <20181130075813.6FBD7890D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a9ad0d366b4e40edb8d5e6a77795fcb4d0badef
+commit: https://git.buildroot.net/buildroot/commit/?id=b5c9c3d3d5f911479878d99b10b25d64923e1d8f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pathlib2/python-pathlib2.hash | 4 ++--
- package/python-pathlib2/python-pathlib2.mk   | 4 ++--
+ package/python-certifi/python-certifi.hash | 4 ++--
+ package/python-certifi/python-certifi.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pathlib2/python-pathlib2.hash b/package/python-pathlib2/python-pathlib2.hash
-index 4d2b02f8d4..b17517b442 100644
---- a/package/python-pathlib2/python-pathlib2.hash
-+++ b/package/python-pathlib2/python-pathlib2.hash
+diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
+index 596475fc25..3d0e48f6c2 100644
+--- a/package/python-certifi/python-certifi.hash
++++ b/package/python-certifi/python-certifi.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pathlib2/json
--md5	fd76fb5d0baa798bfe12fb7965da97f8  pathlib2-2.3.2.tar.gz
--sha256	8eb170f8d0d61825e09a95b38be068299ddeda82f35e96c3301a8a5e7604cb83  pathlib2-2.3.2.tar.gz
-+md5	f9ede5c162ea6fc6a3b1d26db53bb6a2  pathlib2-2.3.3.tar.gz
-+sha256	25199318e8cc3c25dcb45cbe084cc061051336d5a9ea2a12448d3d8cb748f742  pathlib2-2.3.3.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/certifi/json
+-md5	3f4ca75a66bc65fea0693b8040f66d13  certifi-2018.10.15.tar.gz
+-sha256	6d58c986d22b038c8c0df30d639f23a3e6d172a05c3583e766f4c0b785c0986a  certifi-2018.10.15.tar.gz
++md5	8160cf662212bc731eccf1af8042c0af  certifi-2018.11.29.tar.gz
++sha256	47f9c83ef4c0c621eaef743f133f09fa8a74a9b75f037e8624f83bd1b6626cb7  certifi-2018.11.29.tar.gz
  # Locally computed sha256 checksums
- sha256	f8e02f1a07e4c6fc59a4bee831ddde26b97064105c423b9e24340f35aaa80262  LICENSE.rst
-diff --git a/package/python-pathlib2/python-pathlib2.mk b/package/python-pathlib2/python-pathlib2.mk
-index dadc97513b..256d9b81e1 100644
---- a/package/python-pathlib2/python-pathlib2.mk
-+++ b/package/python-pathlib2/python-pathlib2.mk
+ sha256	6a70a4bf6b010016d59a64b8ae4ad8dc7f5ef16f1fb453cc2ecd771c5a341131  LICENSE
+diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
+index addb52fc11..29b646922a 100644
+--- a/package/python-certifi/python-certifi.mk
++++ b/package/python-certifi/python-certifi.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PATHLIB2_VERSION = 2.3.2
-+PYTHON_PATHLIB2_VERSION = 2.3.3
- PYTHON_PATHLIB2_SOURCE = pathlib2-$(PYTHON_PATHLIB2_VERSION).tar.gz
--PYTHON_PATHLIB2_SITE = https://files.pythonhosted.org/packages/db/a8/7d6439c1aec525ed70810abee5b7d7f3aa35347f59bc28343e8f62019aa2
-+PYTHON_PATHLIB2_SITE = https://files.pythonhosted.org/packages/bf/d7/a2568f4596b75d2c6e2b4094a7e64f620decc7887f69a1f2811931ea15b9
- PYTHON_PATHLIB2_LICENSE = MIT
- PYTHON_PATHLIB2_LICENSE_FILES = LICENSE.rst
- PYTHON_PATHLIB2_SETUP_TYPE = setuptools
+-PYTHON_CERTIFI_VERSION = 2018.10.15
++PYTHON_CERTIFI_VERSION = 2018.11.29
+ PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
+-PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/41/b6/4f0cefba47656583217acd6cd797bc2db1fede0d53090fdc28ad2c8e0716
++PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/55/54/3ce77783acba5979ce16674fc98b1920d00b01d337cfaaf5db22543505ed
+ PYTHON_CERTIFI_SETUP_TYPE = setuptools
+ PYTHON_CERTIFI_LICENSE = ISC (Python code), MPL-2.0 (cacert.pem)
+ PYTHON_CERTIFI_LICENSE_FILES = LICENSE
