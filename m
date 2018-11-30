@@ -1,15 +1,19 @@
-From: =?UTF-8?q?DUPONCHEEL=20S=C3=A9bastien?= <sebastien.duponcheel@corp.ovh.com>
-Date: Fri, 30 Nov 2018 17:39:43 +0100
-Subject: [Buildroot] [PATCH next 1/1] package/shadowsocks-libev: bump to
- version 3.2.3
-Message-ID: <1543595983-25420-1-git-send-email-sebastien.duponcheel@corp.ovh.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 30 Nov 2018 17:54:40 +0100
+Subject: [Buildroot] [git commit branch/next] package/shadowsocks-libev:
+ bump to version 3.2.3
+Message-ID: <20181130165147.112848916E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: DUPONCHEEL S?bastien <sebastien.duponcheel@corp.ovh.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=8ab22b7d5c79c9bc84728db7c08556e5f83cdd5d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Signed-off-by: DUPONCHEEL S??bastien <sebastien.duponcheel@corp.ovh.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
  package/shadowsocks-libev/Config.in              | 2 +-
  package/shadowsocks-libev/shadowsocks-libev.hash | 2 +-
@@ -17,7 +21,7 @@ Signed-off-by: DUPONCHEEL S?bastien <sebastien.duponcheel@corp.ovh.com>
  3 files changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/package/shadowsocks-libev/Config.in b/package/shadowsocks-libev/Config.in
-index 5ad79ad..fefb27b 100644
+index 5ad79ad9cf..fefb27bcc1 100644
 --- a/package/shadowsocks-libev/Config.in
 +++ b/package/shadowsocks-libev/Config.in
 @@ -16,7 +16,7 @@ config BR2_PACKAGE_SHADOWSOCKS_LIBEV
@@ -30,7 +34,7 @@ index 5ad79ad..fefb27b 100644
  	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
  	help
 diff --git a/package/shadowsocks-libev/shadowsocks-libev.hash b/package/shadowsocks-libev/shadowsocks-libev.hash
-index 00b1122..a7c0dc0 100644
+index 00b112297c..a7c0dc0710 100644
 --- a/package/shadowsocks-libev/shadowsocks-libev.hash
 +++ b/package/shadowsocks-libev/shadowsocks-libev.hash
 @@ -1,5 +1,5 @@
@@ -41,7 +45,7 @@ index 00b1122..a7c0dc0 100644
  # License files, locally calculated
  sha256 736883f97d44dbec288bb82819f18f4f86d02ae3192f6a9abefa00db76bace41  COPYING
 diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
-index 368cb24..e8ca161 100644
+index 368cb24a9a..e8ca161477 100644
 --- a/package/shadowsocks-libev/shadowsocks-libev.mk
 +++ b/package/shadowsocks-libev/shadowsocks-libev.mk
 @@ -4,7 +4,7 @@
@@ -66,5 +70,3 @@ index 368cb24..e8ca161 100644
  endif
  
  $(eval $(autotools-package))
--- 
-2.7.4
