@@ -1,81 +1,126 @@
-From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Fri, 30 Nov 2018 10:53:28 +0100
-Subject: [Buildroot] [PATCH 1/1] boot/arm-trusted-firmware: use prebuilt
- BL33 images
-In-Reply-To: <20181129230401.510c62a0@windsurf>
-References: <1542900148-17204-1-git-send-email-etienne.carriere@linaro.org>
- <20181129230401.510c62a0@windsurf>
-Message-ID: <CAN5uoS-vx__YfV5MMrO4B7D7zn7Rd_KyE5FNHLkeTTRJEp2Rpw@mail.gmail.com>
+From: =?UTF-8?Q?Einar_J=C3=B3n?= <tolvupostur@gmail.com>
+Date: Fri, 30 Nov 2018 11:05:11 +0100
+Subject: [Buildroot] [PATCH 1/2] package/opengl/libgbm: new virtual
+ package
+In-Reply-To: <CABhNV20QpHnRCEi=Ky-AKCVByGkNLRxOXfMHK5H9PCr3eBeAXA@mail.gmail.com>
+References: <20180913194410.24077-1-bernd.kuhls@t-online.de>
+ <20181030221420.65c7aed3@windsurf> <20181105124735.3qbms4ymnrgpw3op@flea>
+ <CABhNV23smKagYKYME1Na=Cyz0+hn2BPOEpKumruu3OyAmLt1fw@mail.gmail.com>
+ <20181105164347.4bd8d103@windsurf>
+ <CABhNV20QpHnRCEi=Ky-AKCVByGkNLRxOXfMHK5H9PCr3eBeAXA@mail.gmail.com>
+Message-ID: <CABhNV207WB2Jt11iFeWroxn7K3EDKYSiz12mhr-2+wF2hM3yJQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 29 Nov 2018 at 23:04, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
+Hi Thomas,
+
+I finally had time to play with the gbm branch on
+https://git.bootlin.com/users/thomas-petazzoni/buildroot/log/
+I made 5 commits that add QT with EGLFS-GBM for all 2 setups.
+Can I make a pull request, or how do I share them with you?
+
+Overview of comments:
+* ca32516 - configs: libgbm defconfigs build qt5 (2018-11-30)<Einar
+Jon Gunnarsson>|
+|  configs/libgbm_mesa3d_defconfig     | 5 +++++
+|  configs/libgbm_sunxi_mali_defconfig | 8 +++++++-
+|  configs/libgbm_ti_sgx_defconfig     | 9 +++++----
+|  3 files changed, 17 insertions(+), 5 deletions(-)
+
+* f9fc93c - package/sunxi-mali-mainline: Fix QT5 build for EGLFS
+(2018-11-30)<Einar Jon Gunnarsson>|
+|  configs/libgbm_sunxi_mali_defconfig                | 1 -
+|  package/sunxi-mali-mainline/Config.in              | 3 ++-
+|  package/sunxi-mali-mainline/sunxi-mali-mainline.mk | 5 +++++
+|  3 files changed, 7 insertions(+), 2 deletions(-)
+
+* 4d7f6fb - package/qt5: fix EGLFS for embedded boards
+(2018-11-30)<Einar Jon Gunnarsson>|
+|  package/qt5/qt5base/qt5base.mk | 3 +++
+|  1 file changed, 3 insertions(+)
+
+* a7943f1 - package/qt5: Use any libgbm provider (2018-11-28)<Einar
+Jon Gunnarsson>|
+|  package/qt5/qt5base/qt5base.mk | 6 +++---
+|  1 file changed, 3 insertions(+), 3 deletions(-)
+
+* d964c09 - package/ti-sgx-um: Add dependency on wayland
+(2018-11-28)<Einar Jon Gunnarsson>|
+|  package/ti-sgx-um/Config.in    | 2 ++
+|  package/ti-sgx-um/ti-sgx-um.mk | 1 +
+|  2 files changed, 3 insertions(+)
+
+On Tue, 6 Nov 2018 at 14:48, Einar J?n <tolvupostur@gmail.com> wrote:
 >
-> Hello Etienne,
->
-> On Thu, 22 Nov 2018 16:22:28 +0100, Etienne Carriere wrote:
-> > This change allows one to build ATF with an externally built
-> > BL33 image or with the U-boot as BL33 boot stage.
+> On Mon, 5 Nov 2018 at 16:43, Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
 > >
-> > This change introduces a new configuration directive for TF-A to
-> > specify when BL33 stage is provided as a prebuilt image:
-> > BR2_TARGET_ARM_TRUSTED_FIRMWARE_PREBUILT_BL33.
+> > Hello,
 > >
-> > If BR2_TARGET_ARM_TRUSTED_FIRMWARE_PREBUILT_BL33 is enabled, the
-> > buildroot configuration shall specify the BL33 binary image location:
-> > BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL33_IMAGE.
+> > On Mon, 5 Nov 2018 16:35:02 +0100, Einar J?n wrote:
 > >
-> > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-> > ---
-> >  boot/arm-trusted-firmware/Config.in               | 22 +++++++++++++++++++++-
-> >  boot/arm-trusted-firmware/arm-trusted-firmware.mk |  4 ++++
-> >  2 files changed, 25 insertions(+), 1 deletion(-)
+> > > I'm not much help here.
+> > > My only concern was building QT5 on an embedded AM335x with ti-sgx-*
+> > > libraries and update the kernel to 4.9 (bumping TI SDK from 2.0 to
+> > > 4.0).
+> > > There is now a kernel 4.14 (TI SDK 5.0), with only minor changes to
+> > > the ti-sgx-* libraries (support gbm_bo and GCC7).
+> > > http://www.ti.com/tool/PROCESSOR-SDK-AM335X
+> > >
+> > > kmscube seems to depend heavily on the mesa3d implementation, so I
+> > > don't think it's easy to make it work with the other libgbm versions.
+> > > Would building a working QT be a valid test of the libgbm build?
+> >
+> > Yes, it would be. So what you're saying is that the libgbm
+> > implementation provided by TI SGX mimics well enough the libgbm
+> > implementation of Mesa3D that QT5 is happy with TI SGX libgbm
+> > implementation ?
 >
-> Thanks for this contribution. Could you explain the use case/rationale
-> for this change ? In which situation do you want to use prebuilt BL33
-> images, as opposed to having another Buildroot package that builds (or
-> downloads) them ?
-
-Rational is to relax the BR arm-trusted-firmware (ATF) package
-regarding support for alternate BL33 boot stages.
-Current package supports only U-boot as ATF BL33 and using an
-alternate boot stage mandates changes in boot Config.in and
-arm-trusted-firmware.mk.
-
-I understand that I did not setup this the right way as my proposal
-does not implies BR is the build/install of the alternate boot stage.
-
-Maybe I should discard BR2_TARGET_ARM_TRUSTED_FIRMWARE_PREBUILT_BL33
-an introduce something like ..._BL33_PACKAGE
-to specify the package BR shall build as a dependency for ATF  (i.e
-"uboot" if BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y).
-In this case ..._BL33_IMAGE would need to provide the BL33 binary
-image file name that is expected from directory $(BINARIES), i.e
-"u-boot.bin".
-
-Or maybe discard this change and if another boot stage shall be
-support, one need to propose specific changes in BR ATF for that BL33
-boot stage.
-
-Your though?
-
-For info: I have a former change regarding BL32 (instead of BL33) I
-have not yet pushed to the ML.
-I wait for OP-TEE OS package to land [1] before proposing change in
-ATF for OP-TEE as BL32 or an alternate BL32 with the same model as
-this alternate BL33.
-
-regards,
-etienne
-
-> Best regards,
+> That's exactly what I'm saying, but currently only with a big fat
+> "works for me" caveat.
+> My company has the same CPU as the beaglebone, but our boards have
+> considerable HW changes.
+> We're using an older 3.x kernel with ti-gfx, but I have a working
+> build with QT 5.9 on kernel 4.9/4.14 and ti-sgx.
 >
-> Thomas
+> I'll try to throw together a minimal working set with QT tomorrow, but
+> I'm not sure how useful it is without a rootfs
+> (busybox/kernel/udev/etc).
+>
+> > > Note that ti-sgx-um depends on wayland, due to a library dependency on
+> > > libwayland-server.so.0 and libwayland-client.so.0  (see ldd libpvrs_WAYLAND.so)
+> > > So the dropped dependency to wayland in ti-sgx-libgbm should have been
+> > > on ti-sgx-um.
+> > > Without it, QT5 will not find any EGL backend.
+> > >
+> > > So the ti-sgx-um should be adding
+> > > select BR2_PACKAGE_WAYLAND
+> > > select BR2_PACKAGE_HAS_LIBEGL_WAYLAND
+> >
+> > ACK.
+> >
+> > > That way Qt5 can build with a valid EGL backend, using ti-sgx instead
+> > > of the ancient ti-gfx.
+> > > But this does nothing to help build kmscube.
+> >
+> > Right. I'm still confused by this libgbm thing though, where everyone
+> > seems to have its own implementation, but there is no common API
+> > implemented by everybody.
+>
+> So am I. The ti-sgx-libgbm repo seems to be maintained by ti.com, but
+> there seems to be no real effort into making it more than just the
+> bare minimum to use ti-sgx-um.
+>
 > --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> Regards
+> Einar J?n
+
+
+
+-- 
+Regards
+Einar J?n
++31 610 957234
