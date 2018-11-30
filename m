@@ -1,122 +1,80 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Nov 2018 10:05:57 +0100
-Subject: [Buildroot] [PATCH] glibc: bump version for post-2.28 security fixes
-Message-ID: <20181130090557.14640-1-peter@korsgaard.com>
+From: Etienne Carriere <etienne.carriere@linaro.org>
+Date: Fri, 30 Nov 2018 10:07:49 +0100
+Subject: [Buildroot] [PATCH 1/1] boot/arm-trusted-firmware: support
+ debug mode
+In-Reply-To: <20181129230554.079f209a@windsurf>
+References: <1542900158-17272-1-git-send-email-etienne.carriere@linaro.org>
+ <20181129230554.079f209a@windsurf>
+Message-ID: <CAN5uoS_3rS7CL2b_3YhQoJTfX6r5ff13+Xkx4HAMYAUp=-qRZQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security vulnerability:
+On Thu, 29 Nov 2018 at 23:06, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Thu, 22 Nov 2018 16:22:38 +0100, Etienne Carriere wrote:
+> > When the trusted firmware is built with debug support (DEBUG defined),
+> > the generated images are located at a specific path. The non debug
+> > images are located in generated directory build/<platform>/release/
+> > while the debug images are located in generated directory
+> > build/<platform>/debug/.
+> >
+> > This change introduces boolean BR2_TARGET_ARM_TRUSTED_FIRMWARE_DEBUG
+> > to define whether the release or debug configuration is used to build
+> > trusted firmware. Note that enabling trusted firmware debug support, i.e
+> > BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="... DEBUG=1 ..."
+> > without enabling BR2_TARGET_ARM_TRUSTED_FIRMWARE_DEBUG will fail since
+> > buildroot will get generated files from the wrong path.
+> >
+> > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+>
+> What is this debug mode doing exactly ?
 
-  CVE-2018-19591: A file descriptor leak in if_nametoindex can lead to a
-  denial of service due to resource exhaustion when processing getaddrinfo
-  calls with crafted host names.  Reported by Guido Vranken.
+Hello Thomas,
 
-Adhemerval Zanella (2):
-      Fix misreported errno on preadv2/pwritev2 (BZ#23579)
-      x86: Fix Haswell CPU string flags (BZ#23709)
+This enable few debug support in ATF: disable compilation optims,
+generate debug symbols, enable assertions, increase trace level.
+... and it also makes the generates  boot binary images be located at
+a specific path (compared to when not in debug mode).
 
-Alexandra H?jkov? (1):
-      Add an additional test to resolv/tst-resolv-network.c
+> We already have a global BR2_ENABLE_DEBUG option to enable building
+> with debugging symbols. I am wondering if we should use that option as
+> well, or like you did, introduce a separate option. Perhaps for
+> something like ATF, that is very low-level and HW-specific, a separate
+> debug option is OK.
 
-Andreas Schwab (2):
-      Fix stack overflow in tst-setcontext9 (bug 23717)
-      libanl: properly cleanup if first helper thread creation failed (bug 22927)
+I think this feature is quite specific to people interested in want
+happens during the boot stages and/or the ATF specific runtime
+services.
+One may want specific ATF traces without forcing debug mode for the
+whole system.
 
-DJ Delorie (2):
-      malloc: tcache double free check
-      malloc: tcache double free check
+Yet I not that used the BR conventions and habits and I let you decide
+whether such debug should be driven from the BR generic  debug
+directive or not.
+I have no strong opinion on this.
 
-Florian Weimer (9):
-      conform: XFAIL siginfo_t si_band test on sparc64
-      stdlib/test-bz22786: Avoid spurious test failures using alias mappings
-      stdlib/test-bz22786: Avoid memory leaks in the test itself
-      support_blob_repeat: Call mkstemp directory for the backing file
-      stdlib/tst-strtod-overflow: Switch to support_blob_repeat
-      nscd: Fix use-after-free in addgetnetgrentX [BZ #23520]
-      support: Print timestamps in timeout handler
-      Revert "malloc: tcache double free check" [BZ #23907]
-      CVE-2018-19591: if_nametoindex: Fix descriptor for overlong name [BZ #23927]
+> > +config BR2_TARGET_ARM_TRUSTED_FIRMWARE_DEBUG
+> > +     bool "Debug mode of the trusted firmware"
+> > +     default n
+>
+> "default n" is not needed, since it's the default. Not need to resend
+> just for that, we can fixup when applying.
 
-H.J. Lu (2):
-      i386: Use _dl_runtime_[resolve|profile]_shstk for SHSTK [BZ #23716]
-      Check multiple NT_GNU_PROPERTY_TYPE_0 notes [BZ #23509]
+Ok. Feel free to fix straight if you agree with the other changes.
 
-Ilya Yu. Malakhov (1):
-      signal: Use correct type for si_band in siginfo_t [BZ #23562]
+regards,
+etienne
 
-Istvan Kurucsai (1):
-      malloc: Additional checks for unsorted bin integrity I.
-
-Joseph Myers (2):
-      Update syscall-names.list for Linux 4.18.
-      Update kernel version in syscall-names.list to 4.19.
-
-Moritz Eckert (1):
-      malloc: Mitigate null-byte overflow attacks
-
-Paul Eggert (1):
-      Fix tzfile low-memory assertion failure
-
-Paul Pluzhnikov (2):
-      Fix BZ#23400 (creating temporary files in source tree), and undefined behavior in test.
-      [BZ #20271] Add newlines in __libc_fatal calls.
-
-Pochang Chen (1):
-      malloc: Verify size of top chunk.
-
-Rafal Luzynski (1):
-      kl_GL: Fix spelling of Sunday, should be "sapaat" (bug 20209).
-
-Stefan Liebler (2):
-      Fix race in pthread_mutex_lock while promoting to PTHREAD_MUTEX_ELISION_NP [BZ #23275]
-      Test stdlib/test-bz22786 exits now with unsupported if malloc fails.
-
-Szabolcs Nagy (2):
-      i64: fix missing exp2f, log2f and powf symbols in libm.a [BZ #23822]
-      Increase timeout of libio/tst-readline
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0001-sysdeps-ieee754-soft-fp-ignore-maybe-uninitialized-w.patch     | 0
- .../glibc.hash                                                          | 2 +-
- package/glibc/glibc.mk                                                  | 2 +-
- 3 files changed, 2 insertions(+), 2 deletions(-)
- rename package/glibc/{glibc-2.28-18-g2339d6a55eb7a7e040ae888e906adc49eeb59eab => glibc-2.28-50-gb8dd0f42780a3133c02f064a2c0c5c4e7ab61aaa}/0001-sysdeps-ieee754-soft-fp-ignore-maybe-uninitialized-w.patch (100%)
- rename package/glibc/{glibc-2.28-18-g2339d6a55eb7a7e040ae888e906adc49eeb59eab => glibc-2.28-50-gb8dd0f42780a3133c02f064a2c0c5c4e7ab61aaa}/glibc.hash (69%)
-
-diff --git a/package/glibc/glibc-2.28-18-g2339d6a55eb7a7e040ae888e906adc49eeb59eab/0001-sysdeps-ieee754-soft-fp-ignore-maybe-uninitialized-w.patch b/package/glibc/glibc-2.28-50-gb8dd0f42780a3133c02f064a2c0c5c4e7ab61aaa/0001-sysdeps-ieee754-soft-fp-ignore-maybe-uninitialized-w.patch
-similarity index 100%
-rename from package/glibc/glibc-2.28-18-g2339d6a55eb7a7e040ae888e906adc49eeb59eab/0001-sysdeps-ieee754-soft-fp-ignore-maybe-uninitialized-w.patch
-rename to package/glibc/glibc-2.28-50-gb8dd0f42780a3133c02f064a2c0c5c4e7ab61aaa/0001-sysdeps-ieee754-soft-fp-ignore-maybe-uninitialized-w.patch
-diff --git a/package/glibc/glibc-2.28-18-g2339d6a55eb7a7e040ae888e906adc49eeb59eab/glibc.hash b/package/glibc/glibc-2.28-50-gb8dd0f42780a3133c02f064a2c0c5c4e7ab61aaa/glibc.hash
-similarity index 69%
-rename from package/glibc/glibc-2.28-18-g2339d6a55eb7a7e040ae888e906adc49eeb59eab/glibc.hash
-rename to package/glibc/glibc-2.28-50-gb8dd0f42780a3133c02f064a2c0c5c4e7ab61aaa/glibc.hash
-index a95c990c99..7429ab3809 100644
---- a/package/glibc/glibc-2.28-18-g2339d6a55eb7a7e040ae888e906adc49eeb59eab/glibc.hash
-+++ b/package/glibc/glibc-2.28-50-gb8dd0f42780a3133c02f064a2c0c5c4e7ab61aaa/glibc.hash
-@@ -1,5 +1,5 @@
- # Locally calculated (fetched from Github)
--sha256  6e88cea4002efa7f78d86ea5e98eb92ed423d5a35068751517c4f00f56b8666c  glibc-glibc-2.28-18-g2339d6a55eb7a7e040ae888e906adc49eeb59eab.tar.gz
-+sha256  b070f746f932cfce107bb9be2d59ded5b44b25ddafb480c9110c52b88cc2dec1  glibc-glibc-2.28-50-gb8dd0f42780a3133c02f064a2c0c5c4e7ab61aaa.tar.gz
- 
- # Hashes for license files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 762c040688..88178d7eb9 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -10,7 +10,7 @@ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VE
- else
- # Generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
--GLIBC_VERSION = glibc-2.28-18-g2339d6a55eb7a7e040ae888e906adc49eeb59eab
-+GLIBC_VERSION = glibc-2.28-50-gb8dd0f42780a3133c02f064a2c0c5c4e7ab61aaa
- # Upstream doesn't officially provide an https download link.
- # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
- # sometimes the connection times out. So use an unofficial github mirror.
--- 
-2.11.0
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
