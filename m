@@ -1,42 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 28 Nov 2018 22:37:55 +0100
-Subject: [Buildroot] [git commit] package/erlang-p1-xml: bump to version
- 1.1.34
-Message-ID: <20181202071600.6CEC4803E1@busybox.osuosl.org>
+Date: Fri, 30 Nov 2018 09:04:58 +0100
+Subject: [Buildroot] [git commit] package/fontconfig: bump version to 2.13.1
+Message-ID: <20181202071601.9574981829@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=746c81ae311a5c54d60ce3d49b8f2076f4b1a1db
+commit: https://git.buildroot.net/buildroot/commit/?id=c2408d11abf500ef4856ba0d9d6f23fbcde0df13
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/erlang-p1-xml/erlang-p1-xml.hash | 2 +-
- package/erlang-p1-xml/erlang-p1-xml.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/fontconfig/fontconfig.hash | 4 ++--
+ package/fontconfig/fontconfig.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/erlang-p1-xml/erlang-p1-xml.hash b/package/erlang-p1-xml/erlang-p1-xml.hash
-index ae3f3241c6..ac8042da64 100644
---- a/package/erlang-p1-xml/erlang-p1-xml.hash
-+++ b/package/erlang-p1-xml/erlang-p1-xml.hash
+diff --git a/package/fontconfig/fontconfig.hash b/package/fontconfig/fontconfig.hash
+index e9963f6f3f..5243c09615 100644
+--- a/package/fontconfig/fontconfig.hash
++++ b/package/fontconfig/fontconfig.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256 aeda4051c08b78e2f036d82705433a667d03736f07ff0054862e82105435e285 erlang-p1-xml-1.1.25.tar.gz
-+sha256 8615f77a1448e297af25f85261b6e4a84952af797da2e317c8ec71fe2fe779ac erlang-p1-xml-1.1.34.tar.gz
-diff --git a/package/erlang-p1-xml/erlang-p1-xml.mk b/package/erlang-p1-xml/erlang-p1-xml.mk
-index ff9999834d..c8c65ff423 100644
---- a/package/erlang-p1-xml/erlang-p1-xml.mk
-+++ b/package/erlang-p1-xml/erlang-p1-xml.mk
+-# From https://lists.freedesktop.org/archives/fontconfig/2017-July/005961.html
+-sha256 668293fcc4b3c59765cdee5cee05941091c0879edcc24dfec5455ef83912e45c  fontconfig-2.12.4.tar.bz2
++# From https://lists.freedesktop.org/archives/fontconfig/2018-August/006324.html
++sha256 f655dd2a986d7aa97e052261b36aa67b0a64989496361eca8d604e6414006741 fontconfig-2.13.1.tar.bz2
+diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
+index 71a0b4579c..9ac18886d3 100644
+--- a/package/fontconfig/fontconfig.mk
++++ b/package/fontconfig/fontconfig.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_P1_XML_VERSION = 1.1.25
-+ERLANG_P1_XML_VERSION = 1.1.34
- ERLANG_P1_XML_SITE = $(call github,processone,fast_xml,$(ERLANG_P1_XML_VERSION))
- ERLANG_P1_XML_LICENSE = Apache-2.0
- ERLANG_P1_XML_LICENSE_FILES = LICENSE.txt
+-FONTCONFIG_VERSION = 2.12.4
++FONTCONFIG_VERSION = 2.13.1
+ FONTCONFIG_SITE = http://fontconfig.org/release
+ FONTCONFIG_SOURCE = fontconfig-$(FONTCONFIG_VERSION).tar.bz2
+ FONTCONFIG_INSTALL_STAGING = YES
