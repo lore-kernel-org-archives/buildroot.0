@@ -1,50 +1,70 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 30 Nov 2018 16:22:34 +0200
-Subject: [Buildroot] [PATCH 1/1] python-msgpack: bump to version 0.6.0
-Message-ID: <20181130142234.20373-1-asafka7@gmail.com>
+From: =?UTF-8?q?DUPONCHEEL=20S=C3=A9bastien?= <sebastien.duponcheel@corp.ovh.com>
+Date: Fri, 30 Nov 2018 17:39:43 +0100
+Subject: [Buildroot] [PATCH next 1/1] package/shadowsocks-libev: bump to
+ version 3.2.3
+Message-ID: <1543595983-25420-1-git-send-email-sebastien.duponcheel@corp.ovh.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Archive file name changed from msgpack-python to msgpack
-
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: DUPONCHEEL S?bastien <sebastien.duponcheel@corp.ovh.com>
 ---
- package/python-msgpack/python-msgpack.hash | 6 +++---
- package/python-msgpack/python-msgpack.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/shadowsocks-libev/Config.in              | 2 +-
+ package/shadowsocks-libev/shadowsocks-libev.hash | 2 +-
+ package/shadowsocks-libev/shadowsocks-libev.mk   | 5 +++--
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-msgpack/python-msgpack.hash b/package/python-msgpack/python-msgpack.hash
-index 74785837d8..98027009ad 100644
---- a/package/python-msgpack/python-msgpack.hash
-+++ b/package/python-msgpack/python-msgpack.hash
+diff --git a/package/shadowsocks-libev/Config.in b/package/shadowsocks-libev/Config.in
+index 5ad79ad..fefb27b 100644
+--- a/package/shadowsocks-libev/Config.in
++++ b/package/shadowsocks-libev/Config.in
+@@ -16,7 +16,7 @@ config BR2_PACKAGE_SHADOWSOCKS_LIBEV
+ 	  https://github.com/shadowsocks/shadowsocks-libev
+ 
+ config BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS
+-	bool "conmarktos support in ss-server"
++	bool "connmarktos support in ss-server"
+ 	depends on BR2_PACKAGE_SHADOWSOCKS_LIBEV
+ 	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
+ 	help
+diff --git a/package/shadowsocks-libev/shadowsocks-libev.hash b/package/shadowsocks-libev/shadowsocks-libev.hash
+index 00b1122..a7c0dc0 100644
+--- a/package/shadowsocks-libev/shadowsocks-libev.hash
++++ b/package/shadowsocks-libev/shadowsocks-libev.hash
 @@ -1,5 +1,5 @@
--# md5, sha256 from https://pypi.org/pypi/msgpack-python/json
--md5	6d644c06a87a5a111bbbf5b34b4be440  msgpack-python-0.5.6.tar.gz
--sha256	378cc8a6d3545b532dfd149da715abae4fda2a3adb6d74e525d0d5e51f46909b  msgpack-python-0.5.6.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/msgpack/json
-+md5	be3043cc2c1e3b5ebf08463ffa71cf17  msgpack-0.6.0.tar.gz
-+sha256	64abc6bf3a2ac301702f5760f4e6e227d0fd4d84d9014ef9a40faa9d43365259  msgpack-0.6.0.tar.gz
- # Locally computed sha256
- sha256  492dedba85da5872f78e6091bcd1fea474d660d35acb4dee964b8aab3f007427  COPYING
-diff --git a/package/python-msgpack/python-msgpack.mk b/package/python-msgpack/python-msgpack.mk
-index e0544f5d33..8bbae9283d 100644
---- a/package/python-msgpack/python-msgpack.mk
-+++ b/package/python-msgpack/python-msgpack.mk
-@@ -4,9 +4,9 @@
+ # Locally computed
+-sha256 988fc151474d0d2fb7a6005621949656e7a7f79400b4514624e09fd4b22969f6 shadowsocks-libev-3.2.1.tar.gz
++sha256 2befc27b1cc62af0450702343d17e347936f0d4e3d4b04ba9246c4f9b409b742 shadowsocks-libev-3.2.3.tar.gz
+ 
+ # License files, locally calculated
+ sha256 736883f97d44dbec288bb82819f18f4f86d02ae3192f6a9abefa00db76bace41  COPYING
+diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
+index 368cb24..e8ca161 100644
+--- a/package/shadowsocks-libev/shadowsocks-libev.mk
++++ b/package/shadowsocks-libev/shadowsocks-libev.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_MSGPACK_VERSION = 0.5.6
--PYTHON_MSGPACK_SOURCE = msgpack-python-$(PYTHON_MSGPACK_VERSION).tar.gz
--PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/8a/20/6eca772d1a5830336f84aca1d8198e5a3f4715cd1c7fc36d3cc7f7185091
-+PYTHON_MSGPACK_VERSION = 0.6.0
-+PYTHON_MSGPACK_SOURCE = msgpack-$(PYTHON_MSGPACK_VERSION).tar.gz
-+PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/3a/bb/dc3f9fc608a6c1c7a471c2bebc761d9c8dbb2f7179a4283a89b9451765b5
- PYTHON_MSGPACK_LICENSE = Apache-2.0
- PYTHON_MSGPACK_LICENSE_FILES = COPYING
- PYTHON_MSGPACK_SETUP_TYPE = setuptools
+-SHADOWSOCKS_LIBEV_VERSION = 3.2.1
++SHADOWSOCKS_LIBEV_VERSION = 3.2.3
+ SHADOWSOCKS_LIBEV_SITE = https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$(SHADOWSOCKS_LIBEV_VERSION)
+ SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, BSD-2-Clause (libbloom), BSD-3-Clause (libcork, libipset)
+ SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING libbloom/LICENSE libcork/COPYING
+@@ -14,10 +14,11 @@ SHADOWSOCKS_LIBEV_CONF_OPTS = \
+ 	--with-pcre=$(STAGING_DIR)/usr \
+ 	--disable-ssp
+ 
+-# --disable option was broken in 3.2.1, it will be fixed in 3.2.2
+ ifeq ($(BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS),y)
+ SHADOWSOCKS_LIBEV_DEPENDENCIES += libnetfilter_conntrack
+ SHADOWSOCKS_LIBEV_CONF_OPTS += --enable-connmarktos
++else
++SHADOWSOCKS_LIBEV_CONF_OPTS += --disable-connmarktos
+ endif
+ 
+ $(eval $(autotools-package))
 -- 
-2.19.1
+2.7.4
