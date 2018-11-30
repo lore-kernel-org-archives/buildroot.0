@@ -1,45 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 29 Nov 2018 23:01:26 +0100
-Subject: [Buildroot] [git commit] package/python-web2py: bump to version
- R-2.17.2
-Message-ID: <20181202071601.6CD4A7F917@busybox.osuosl.org>
+Date: Fri, 30 Nov 2018 09:59:21 +0100
+Subject: [Buildroot] [git commit] package/qt5/qt5base: use ccache for
+ building host code
+Message-ID: <20181202071601.C8FE28131E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26b9536420baea7eb7ba6e0b044c512b8be5a226
+commit: https://git.buildroot.net/buildroot/commit/?id=c2ea056a1b34fd1354100d08e603b9374e225968
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch bumps web2py to version R-2.17.2
+qt5 currently doesn't use HOSTCC/HOSTCXX, so it doesn't use ccache
+when building all its host code (especially qmake). This means that
+even with ccache enabled and a hot cache, it still takes a long time
+to build qt5base.
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Before this patch, building qt5base takes:
+
+ - 446 seconds with a cold ccache
+ - 185 seconds with a hot ccache
+
+This is because the ccache is not used for host code.
+
+After this patch, building qt5base takes:
+
+ - 450 seconds with a cold ccache
+ - 15 seconds with a hot ccache
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-web2py/python-web2py.hash | 3 ++-
- package/python-web2py/python-web2py.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/qt5/qt5base/qt5base.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/python-web2py/python-web2py.hash b/package/python-web2py/python-web2py.hash
-index d23da1ea6e..9a1df0c2a1 100644
---- a/package/python-web2py/python-web2py.hash
-+++ b/package/python-web2py/python-web2py.hash
-@@ -1,2 +1,3 @@
- # sha256 locally computed
--sha256 d9ed52676e9becd53d2d73a849dea3d55b8b61231abf3428cf516dcc0083d451  python-web2py-R-2.16.1.tar.gz
-+sha256 8205a7a08595ca1a41919750a8dc4e431258966cb46c8021564b25003cf90863  python-web2py-R-2.17.2.tar.gz
-+sha256 2aae96826184a492bc799add49aed7b29036e7aba2d2294fb65053bd30fe55fe  LICENSE
-diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
-index 1e02fb7ca5..922b267b8b 100644
---- a/package/python-web2py/python-web2py.mk
-+++ b/package/python-web2py/python-web2py.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 2b6fd39267..ec3d7042f1 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -271,6 +271,13 @@ define QT5BASE_CONFIGURE_ARCH_CONFIG
+ endef
+ endif
  
--PYTHON_WEB2PY_VERSION = R-2.16.1
-+PYTHON_WEB2PY_VERSION = R-2.17.2
- PYTHON_WEB2PY_SITE = $(call github,web2py,web2py,$(PYTHON_WEB2PY_VERSION))
- PYTHON_WEB2PY_LICENSE = LGPL-3.0
- PYTHON_WEB2PY_LICENSE_FILES = LICENSE
++# This allows to use ccache when available
++define QT5BASE_CONFIGURE_HOSTCC
++	$(SED) 's,^QMAKE_COMPILER\s*=.*,QMAKE_COMPILER=$(HOSTCC),' $(@D)/mkspecs/common/g++-base.conf
++	$(SED) 's,^QMAKE_CC\s*=.*,QMAKE_CC=$(HOSTCC),' $(@D)/mkspecs/common/g++-base.conf
++	$(SED) 's,^QMAKE_CXX\s*=.*,QMAKE_CXX=$(HOSTCXX),' $(@D)/mkspecs/common/g++-base.conf
++endef
++
+ define QT5BASE_CONFIGURE_CMDS
+ 	mkdir -p $(@D)/mkspecs/devices/linux-buildroot-g++/
+ 	sed 's/@EGLFS_DEVICE@/$(QT5BASE_EGLFS_DEVICE)/g' \
+@@ -281,6 +288,7 @@ define QT5BASE_CONFIGURE_CMDS
+ 	$(QT5BASE_CONFIGURE_CONFIG_FILE)
+ 	touch $(QT5BASE_ARCH_CONFIG_FILE)
+ 	$(QT5BASE_CONFIGURE_ARCH_CONFIG)
++	$(QT5BASE_CONFIGURE_HOSTCC)
+ 	(cd $(@D); \
+ 		$(TARGET_MAKE_ENV) \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
