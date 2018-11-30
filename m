@@ -1,53 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 30 Nov 2018 09:00:07 +0100
-Subject: [Buildroot] [PATCH 1/1] qt5declarative: fix debug build with
- uclibc
-In-Reply-To: <20181130002016.7440-1-fontaine.fabrice@gmail.com>
-References: <20181130002016.7440-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181130090007.11a48750@windsurf>
+Date: Fri, 30 Nov 2018 09:00:21 +0100
+Subject: [Buildroot] [git commit] valgrind: disable for mips32r6/mips32elr6
+Message-ID: <20181130075704.4BF93890C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8f7efdbe592061af9cb0095df03bc136fecbf24a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 30 Nov 2018 01:20:16 +0100, Fabrice Fontaine wrote:
-> Debug build of qsgtexture fails on uclibc since version 5.11 and
-> https://github.com/qt/qtdeclarative/commit/7c507eaac3f848f92f2ebdafe8ded4a064d68351:
-> 
-> scenegraph/util/qsgtexture.cpp:69:22: fatal error: execinfo.h: No such file or directory
->  #include <execinfo.h>
-> 
-> Indeed, !defined(__UCLIBC__) has been replaced by defined(__GBLIBC__) to
-> fix build on musl but as a result, build fails on uclibc because uclibc
-> also defines __GLIBC__ (and it does not have execinfo like musl)
-> 
-> This error is raised only when building in debug mode because
-> CAN_BACKTRACE_EXECINFO is undefined if QT_NO_DEBUG is set
-> 
-> So keep defined(__GLIBC__), but put back !defined(__UCLIBC__)
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/6fce0ce5aea943e097532efbbc8d1e28f41e5866
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes [1]:
 
-Thanks applied to master.
+  /tmp/ccD2Tule.s: Assembler messages:
+  /tmp/ccD2Tule.s:682: Error: opcode not supported on this processor: mips32r6 (mips32r6) `movn $2,$4,$7'
+  /tmp/ccD2Tule.s:2767: Error: opcode not supported on this processor: mips32r6 (mips32r6) `movn $2,$4,$7'
 
-> +[Upstream status: https://github.com/qt/qtdeclarative/pull/4]
+[1] http://autobuild.buildroot.net/results/f0253d1ed11021d3e5914a5161360de3ef3d1641
 
-I don't think opening a pull request on Github is the right way to
-contribute to Qt upstream. They have a Gerrit, and you need to submit
-your contribution there, if I remember correctly. Peter Seiderer (in
-Cc) can probably help in this process, either by giving you additional
-details, or pushing the patch upstream for you perhaps.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/valgrind/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
+index 8fe7080cd7..c09be8629a 100644
+--- a/package/valgrind/Config.in
++++ b/package/valgrind/Config.in
+@@ -2,7 +2,9 @@ config BR2_PACKAGE_VALGRIND_ARCH_SUPPORTS
+ 	bool
+ 	default y if BR2_aarch64
+ 	default y if BR2_ARM_CPU_ARMV7A
+-	default y if BR2_mips || BR2_mipsel
++	# MIPS32 R6 is unsupported
++	default y if BR2_mips && !BR2_mips_32r6
++	default y if BR2_mipsel && !BR2_mips_32r6
+ 	# MIPS64 R6 is unsupported
+ 	default y if BR2_mips64 && !BR2_mips_64r6
+ 	default y if BR2_mips64el && !BR2_mips_64r6
