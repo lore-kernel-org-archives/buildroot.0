@@ -1,54 +1,102 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 30 Nov 2018 21:19:00 +0100
-Subject: [Buildroot] [PATCH/next 1/1] fontconfig: add util-linux mandatory
- dependency
-Message-ID: <20181130201900.6549-1-fontaine.fabrice@gmail.com>
+From: Paul Burton <paul.burton@mips.com>
+Date: Fri, 30 Nov 2018 04:44:01 +0000
+Subject: [Buildroot] [PATCH 2/2] toolchain: Bump Codescape MTI MIPS version
+ to 2018.09-02
+In-Reply-To: <20181130044338.5132-1-paul.burton@mips.com>
+References: <20181130044338.5132-1-paul.burton@mips.com>
+Message-ID: <20181130044338.5132-2-paul.burton@mips.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-uuid from util-linux is a mandatory dependency since version 2.12.91 and
-https://cgit.freedesktop.org/fontconfig/commit/configure.ac?id=7b48fd3dd406b926f0e5240b211f72197ed538a9
+The 2016.05-06 toolchain we've had support for is pretty outdated at
+this point, so update to the latest 2018.09-02 version.
 
-Fixes:
- - http://autobuild.buildroot.org/results/49fa1d2da97be979cbc2cb4f83b40f5c2ad8c764
+Of note besides the typical component version bumps:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ - The toolchains are now provided by MIPS Tech LLC after its departure
+   from Imagination Technologies.
+
+ - The download site changed as a result of that.
+
+ - The toolchains are now built targeting CentOS 6 rather than CentOS 5.
+
+Signed-off-by: Paul Burton <paul.burton@mips.com>
 ---
- package/fontconfig/Config.in     | 2 ++
- package/fontconfig/fontconfig.mk | 5 +++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ .../Config.in                                      | 14 +++++++-------
+ .../toolchain-external-codescape-mti-mips.hash     |  8 ++++----
+ .../toolchain-external-codescape-mti-mips.mk       |  8 ++++----
+ 3 files changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/package/fontconfig/Config.in b/package/fontconfig/Config.in
-index 218fdb2e7a..d274b06350 100644
---- a/package/fontconfig/Config.in
-+++ b/package/fontconfig/Config.in
-@@ -2,6 +2,8 @@ config BR2_PACKAGE_FONTCONFIG
- 	bool "fontconfig"
- 	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_EXPAT
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+diff --git a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
+index 5d466a58f4..c07a1b88b5 100644
+--- a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
+@@ -1,20 +1,20 @@
+ config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
+-	bool "Codescape MTI GNU Linux Toolchain 2016.05"
++	bool "Codescape MTI GNU Linux Toolchain 2018.09"
+ 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+-	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_5
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on BR2_MIPS_CPU_MIPS32R2 || (BR2_MIPS_CPU_MIPS64R2 && !BR2_MIPS_SOFT_FLOAT) || \
+ 		BR2_MIPS_CPU_MIPS32R5 || (BR2_MIPS_CPU_MIPS64R5 && !BR2_MIPS_SOFT_FLOAT)
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
  	help
- 	  Fontconfig is a library for configuring and customizing font
- 	  access.
-diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
-index 9ac18886d3..7387452b0f 100644
---- a/package/fontconfig/fontconfig.mk
-+++ b/package/fontconfig/fontconfig.mk
-@@ -8,8 +8,9 @@ FONTCONFIG_VERSION = 2.13.1
- FONTCONFIG_SITE = http://fontconfig.org/release
- FONTCONFIG_SOURCE = fontconfig-$(FONTCONFIG_VERSION).tar.bz2
- FONTCONFIG_INSTALL_STAGING = YES
--FONTCONFIG_DEPENDENCIES = freetype expat host-pkgconf host-gperf
--HOST_FONTCONFIG_DEPENDENCIES = host-freetype host-expat host-pkgconf host-gperf
-+FONTCONFIG_DEPENDENCIES = freetype expat host-pkgconf host-gperf util-linux
-+HOST_FONTCONFIG_DEPENDENCIES = \
-+	host-freetype host-expat host-pkgconf host-gperf host-util-linux
- FONTCONFIG_LICENSE = fontconfig license
- FONTCONFIG_LICENSE_FILES = COPYING
+-	  Codescape MTI GNU Linux Toolchain 2016.05 for the MIPS
+-	  architecture, from Imagination Technologies. It uses gcc
+-	  4.9.2, binutils 2.24.90, glibc 2.20, gdb 7.9.1 and kernel
+-	  headers 4.7. It has support for the following variants:
++	  Codescape MTI GNU Linux Toolchain 2018.09 for the MIPS architecture,
++	  from MIPS Tech LLC. It uses gcc 6.3.0, binutils 2.28.51, glibc 2.20,
++	  gdb 7.9.1 and kernel headers 4.7. It has support for the following
++	  variants:
+ 	    - MIPS32r2 - Big-Endian, Hard-Float, Legacy NaN, o32 ABI
+ 	      Select 'MIPS (big endian)' Target Architecture
+ 	      Select 'mips 32r2' Target Architecture Variant
+diff --git a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.hash b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.hash
+index d31f99803b..8e70af501f 100644
+--- a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.hash
++++ b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.hash
+@@ -1,4 +1,4 @@
+-# Codescape toolchains from Imagination Technologies
+-# From: http://codescape-mips-sdk.imgtec.com/components/toolchain/2016.05-06/downloads.html
+-sha256 3a7aba259beb05f0e3054b5a61a368a5085447f47361949a938ac9cc7de4227b  Codescape.GNU.Tools.Package.2016.05-06.for.MIPS.MTI.Linux.CentOS-5.x86.tar.gz
+-sha256 a676a8b3647c8c651fb8935a75db8f00b79d36ec55676f7c05bac12b550788f7  Codescape.GNU.Tools.Package.2016.05-06.for.MIPS.MTI.Linux.CentOS-5.x86_64.tar.gz
++# Codescape toolchains from MIPS Tech LLC
++# From: https://codescape.mips.com/components/toolchain/nanomips/2018.09-02/downloads.html
++sha256 c883a404fd7ea5718e2249a530802e223381f2be52265f88e9b1ce7035c232f3  Codescape.GNU.Tools.Package.2018.09-02.for.MIPS.MTI.Linux.CentOS-6.x86.tar.gz
++sha256 d6310a970b0a8a19ad8e0a2b3ead8c38ee90d0e284a9b2511200ce447f460d2c  Codescape.GNU.Tools.Package.2018.09-02.for.MIPS.MTI.Linux.CentOS-6.x86_64.tar.gz
+diff --git a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.mk b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.mk
+index d63a367578..9bee1ab87d 100644
+--- a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.mk
++++ b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.mk
+@@ -4,14 +4,14 @@
+ #
+ ################################################################################
  
+-TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_VERSION = 2016.05-06
+-TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_SITE = http://codescape-mips-sdk.imgtec.com/components/toolchain/$(TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_VERSION)
++TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_VERSION = 2018.09-02
++TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_SITE = https://codescape.mips.com/components/toolchain/$(TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_VERSION)
+ TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_STRIP_COMPONENTS = 2
+ 
+ ifeq ($(HOSTARCH),x86)
+-TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_SOURCE = Codescape.GNU.Tools.Package.$(TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_VERSION).for.MIPS.MTI.Linux.CentOS-5.x86.tar.gz
++TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_SOURCE = Codescape.GNU.Tools.Package.$(TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_VERSION).for.MIPS.MTI.Linux.CentOS-6.x86.tar.gz
+ else
+-TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_SOURCE = Codescape.GNU.Tools.Package.$(TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_VERSION).for.MIPS.MTI.Linux.CentOS-5.x86_64.tar.gz
++TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_SOURCE = Codescape.GNU.Tools.Package.$(TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_VERSION).for.MIPS.MTI.Linux.CentOS-6.x86_64.tar.gz
+ endif
+ 
+ # Special fixup for Codescape MIPS toolchains, that have bin-<abi> and
 -- 
-2.14.1
+2.19.1
