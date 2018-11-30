@@ -1,29 +1,44 @@
-From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
-Date: Fri, 30 Nov 2018 18:07:16 +0100
-Subject: [Buildroot] Buildroot with i.MX 8QuadXPlus
-Message-ID: <ba560a90-e57c-0ec7-76fa-3f9635979976@dawncrow.de>
+From: Ryan Barnett <Ryan.Barnett@collins.com>
+Date: Fri, 30 Nov 2018 11:23:27 -0600
+Subject: [Buildroot] [next v2 1/1] package/proftpd: add mod_sql_sqlite
+In-Reply-To: <20181128141402.11502-1-jared.bents@rockwellcollins.com>
+References: <20181128141402.11502-1-jared.bents@rockwellcollins.com>
+Message-ID: <CAMQcK5KwmS6psbzDqrQmaz=2Cq-Kx7qyPotCzCqAXZ7rJtUv9w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Erik,
+On Wed, Nov 28, 2018 at 8:14 AM Jared Bents <Jared.Bents@collins.com> wrote:
+>
+> Enable mod_sql_sqlite as a compile time option
+>
+> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+> --
+> [v1->v2]: Update for sqlite dependency
+> ---
+[...]
+> +if BR2_PACKAGE_PROFTPD_MOD_SQL
+> +
+> +config BR2_PACKAGE_PROFTPD_MOD_SQL_SQLITE
+> +       bool "mod_sql_sqlite support"
+> +       select BR2_PACKAGE_SQLITE
+> +       help
+> +         Compile ProFTPD with mode_sql_sqlite support.
 
-As your patches for imx8m already stated, at some point other imx8 
-variants will arrive.
-I meanwhile have a imx8qxpmek board, and I'm not really familiar with 
-i.MX8 yet (only i.MX6). That's why I have some questions.
+Minor typo: mode -> mod
 
-With upstreaming in mind I stumble across:
-IMX_MKIMAGE_VERSION = imx_4.9.51_imx8m_beta
-Should we use a common version here and move specific versions into the 
-defconfig?
+> +
+> +endif
+> +
 
-You said in https://patchwork.ozlabs.org/cover/882714/ that GPU and VPU 
-are not supported yet, so I wonder a bit about 
-https://patchwork.ozlabs.org/patch/882715/ which looks like that is the 
-case.
+[...]
 
-I never needed arm-trusted-firmware and thus have no clue yet what it is 
-about. Does it link to secureboot? Is it really needed to boot i.MX8?
+Reviewed-by: Ryan Barnett <ryan.barnett@collins.com>
+
+---
+Ryan Barnett | Sr Systems Engineer | Avionics
+COLLINS AEROSPACE
+400 Collins Rd NE, Cedar Rapids, IA 52498 USA
+ryan.barnett at collins.com | collinsaerospace.com
