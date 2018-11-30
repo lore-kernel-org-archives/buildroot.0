@@ -1,113 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 30 Nov 2018 08:00:28 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-11-29
-Message-ID: <20181130070028.54EB620D17@mail.bootlin.com>
+Date: Fri, 30 Nov 2018 08:58:24 +0100
+Subject: [Buildroot] [git commit] qt5declarative: fix debug build with uclibc
+Message-ID: <20181130075533.41CCF890BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4b1d9a861ecef50d974e5b376568bd66b29c05ca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Build statistics for 2018-11-29
-===============================
+Debug build of qsgtexture fails on uclibc since version 5.11 and
+https://github.com/qt/qtdeclarative/commit/7c507eaac3f848f92f2ebdafe8ded4a064d68351:
 
-      branch |  OK | NOK | TIM | TOT |
-   2018.02.x |  16 |   1 |   0 |  17 |
-   2018.08.x |  18 |   1 |   0 |  19 |
-      master | 175 |  11 |   2 | 188 |
-        next |  31 |   7 |   0 |  38 |
+scenegraph/util/qsgtexture.cpp:69:22: fatal error: execinfo.h: No such file or directory
+ #include <execinfo.h>
 
-Results for branch '2018.02.x'
-==============================
+Indeed, !defined(__UCLIBC__) has been replaced by defined(__GBLIBC__) to
+fix build on musl but as a result, build fails on uclibc because uclibc
+also defines __GLIBC__ (and it does not have execinfo like musl)
 
-Classification of failures by reason
-------------------------------------
+This error is raised only when building in debug mode because
+CAN_BACKTRACE_EXECINFO is undefined if QT_NO_DEBUG is set
 
-                    php-7.2.10 | 1 
+So keep defined(__GLIBC__), but put back !defined(__UCLIBC__)
 
+Fixes:
+ - http://autobuild.buildroot.org/results/6fce0ce5aea943e097532efbbc8d1e28f41e5866
 
-Detail of failures
-------------------
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...01-qsgtexture-fix-debug-build-with-uclibc.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-         arm |                     php-7.2.10 | NOK | http://autobuild.buildroot.net/results/282fb757f316f32362ed60a760b340d7105f8b6a | ORPH
-
-Results for branch '2018.08.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-                  boost-1.67.0 | 1 
-
-
-Detail of failures
-------------------
-
-      x86_64 |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/4e81cb628e28c6c227a5e873cbce34756a678b6e |     
-
-Results for branch 'master'
-===========================
-
-Classification of failures by reason
-------------------------------------
-
-      docker-containerd-v1.1.3 | 1 
-                    host-clang | 1 
-              host-clang-7.0.0 | 1 
-                host-libsodium | 1 
-                libmpeg2-0.5.1 | 1 
-              libostree-2018.9 | 1 
-                 minizip-2.5.3 | 1 
-                    php-7.2.12 | 1 
-         qt5declarative-5.11.2 | 1 
-runc-69663f0bd4b60df09991c0... | 1 
-                   systemd-239 | 1 
-    trace-cmd-trace-cmd-v2.6.1 | 1 
-               valgrind-3.14.0 | 1 
-
-
-Detail of failures
-------------------
-
-      x86_64 |       docker-containerd-v1.1.3 | NOK | http://autobuild.buildroot.net/results/cccd63f081a78d87cc7830f48981a383f81ead6e |     
-         arm |                     host-clang | TIM | http://autobuild.buildroot.net/results/35b8962be190c1b54ed041b38224c7d57b848f67 |     
-     aarch64 |               host-clang-7.0.0 | NOK | http://autobuild.buildroot.net/results/db3adbe0b66f706994db019a86dae7b61a773fe9 |     
-         arc |                 host-libsodium | TIM | http://autobuild.buildroot.net/results/b350b1ba237bcee95369e913a37c1dfefd5f4cb8 |     
-     powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/c61a455e37f240f874e67fda279748366787bae1 | ORPH
-     aarch64 |               libostree-2018.9 | NOK | http://autobuild.buildroot.net/results/7830c305682fc9aecf96c23a6b8bbb6e6e76ec24 |     
-         arm |                  minizip-2.5.3 | NOK | http://autobuild.buildroot.net/results/00dda26e26403e2648c2b9019e26ad49ae6ad901 |     
-       sparc |                     php-7.2.12 | NOK | http://autobuild.buildroot.net/results/763aecdb580fb0cb1ad8ec44b7d9ac98710a8932 | ORPH
-        i686 |          qt5declarative-5.11.2 | NOK | http://autobuild.buildroot.net/results/6fce0ce5aea943e097532efbbc8d1e28f41e5866 |     
-      x86_64 | runc-69663f0bd4b60df09991c0... | NOK | http://autobuild.buildroot.net/results/edc4e6bb2ae96dbaf8392ae6caafb7f08153144a |     
-     powerpc |                    systemd-239 | NOK | http://autobuild.buildroot.net/results/ffd71c473d3b29618c18cd2e04705370266696f2 |     
-       sparc |     trace-cmd-trace-cmd-v2.6.1 | NOK | http://autobuild.buildroot.net/results/c198d305f9542c681a663ef7270b6982f4cfec37 |     
-      mipsel |                valgrind-3.14.0 | NOK | http://autobuild.buildroot.net/results/8295ef33054ac9db0f3adb9f7541593b8c05f3af | ORPH
-
-Results for branch 'next'
-=========================
-
-Classification of failures by reason
-------------------------------------
-
-                  ntp-4.2.8p12 | 2 
-                    php-7.2.12 | 2 
-              tpm2-abrmd-2.0.3 | 2 
-       shadowsocks-libev-3.2.1 | 1 
-
-
-Detail of failures
-------------------
-
-         arm |                   ntp-4.2.8p12 | NOK | http://autobuild.buildroot.net/results/66c4e055692f8e058f7e6ac3572ef65dd7d7ee6a | ORPH
-         arc |                   ntp-4.2.8p12 | NOK | http://autobuild.buildroot.net/results/833c99af2ef9e252a0cf3e81972692d6451c0988 | ORPH
-         arm |                     php-7.2.12 | NOK | http://autobuild.buildroot.net/results/82d0430a4f9a14a6ba60441ca83444a3b9b136a0 | ORPH
-      xtensa |                     php-7.2.12 | NOK | http://autobuild.buildroot.net/results/4ca65a3f6cd79cde94e0db7fffbc4eeae451c525 | ORPH
-         arm |        shadowsocks-libev-3.2.1 | NOK | http://autobuild.buildroot.net/results/c413c460d73d8fafa05dfe7a1eb69a9e13c947ea |     
-        m68k |               tpm2-abrmd-2.0.3 | NOK | http://autobuild.buildroot.net/results/1fac8a8997cf42b37de5481a7904947d93bc4e29 |     
-         sh4 |               tpm2-abrmd-2.0.3 | NOK | http://autobuild.buildroot.net/results/34f21b36fdb5049bb8a127073cc8631b55e4df7b |     
-
-
--- 
-http://autobuild.buildroot.net
+diff --git a/package/qt5/qt5declarative/5.11.2/0001-qsgtexture-fix-debug-build-with-uclibc.patch b/package/qt5/qt5declarative/5.11.2/0001-qsgtexture-fix-debug-build-with-uclibc.patch
+new file mode 100644
+index 0000000000..1c0f6eccc5
+--- /dev/null
++++ b/package/qt5/qt5declarative/5.11.2/0001-qsgtexture-fix-debug-build-with-uclibc.patch
+@@ -0,0 +1,45 @@
++From 2a5711651bee9d021733da19126a71aeda45e646 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 29 Nov 2018 23:33:10 +0100
++Subject: [PATCH] qsgtexture: fix debug build with uclibc
++
++Debug build of gsgtexture fails on uclibc since version 5.11 and
++https://github.com/qt/qtdeclarative/commit/7c507eaac3f848f92f2ebdafe8ded4a064d68351:
++
++scenegraph/util/qsgtexture.cpp:69:22: fatal error: execinfo.h: No such file or directory
++ #include <execinfo.h>
++
++Indeed, !defined(__UCLIBC__) has been replaced by defined(__GBLIBC__) to
++fix build on musl but as a result, build fails on uclibc because uclibc
++also defines __GLIBC__ (and it does not have execinfo like musl)
++
++This error is raised only when building in debug mode because
++CAN_BACKTRACE_EXECINFO is undefined if QT_NO_DEBUG is set
++
++So keep defined(__GLIBC__), but put back !defined(__UCLIBC__)
++
++Fixes:
++ - http://autobuild.buildroot.org/results/6fce0ce5aea943e097532efbbc8d1e28f41e5866
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/qt/qtdeclarative/pull/4]
++---
++ src/quick/scenegraph/util/qsgtexture.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/quick/scenegraph/util/qsgtexture.cpp b/src/quick/scenegraph/util/qsgtexture.cpp
++index fea92a512..a26191006 100644
++--- a/src/quick/scenegraph/util/qsgtexture.cpp
+++++ b/src/quick/scenegraph/util/qsgtexture.cpp
++@@ -53,7 +53,7 @@
++ #endif
++ #include <private/qsgmaterialshader_p.h>
++ 
++-#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID) && defined(__GLIBC__)
+++#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID) && defined(__GLIBC__) && !defined(__UCLIBC__)
++ #define CAN_BACKTRACE_EXECINFO
++ #endif
++ 
++-- 
++2.14.1
++
