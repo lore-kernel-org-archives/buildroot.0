@@ -1,39 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 1 Dec 2018 21:15:44 +0100
-Subject: [Buildroot] [PATCH] docs/manual: standardize a bit more the
- formatting of commit titles
-In-Reply-To: <20181126212502.3b69f14c@windsurf.home>
-References: <20181124101903.18138-1-thomas.petazzoni@bootlin.com>
- <20181125161722.GC28830@scaer> <20181125210940.2d18852f@windsurf>
- <20181126202042.GM28830@scaer>
- <20181126212502.3b69f14c@windsurf.home>
-Message-ID: <20181201201544.GA2544@scaer>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Sat, 1 Dec 2018 23:18:34 +0300
+Subject: [Buildroot] [PATCH 1/1] boot/arm-trusted-firmware: use prebuilt
+ BL33 images
+In-Reply-To: <1542900148-17204-1-git-send-email-etienne.carriere@linaro.org>
+References: <1542900148-17204-1-git-send-email-etienne.carriere@linaro.org>
+Message-ID: <20181201201834.GA7451@speedy.hunter>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello Etienne,
 
-On 2018-11-26 21:25 +0100, Thomas Petazzoni spake thusly:
-> On Mon, 26 Nov 2018 21:20:42 +0100, Yann E. MORIN wrote:
-> > I'd be OK to use your proposal using the 'prefix: name: what" (even
-> > though I find it ugly, but that's probably because I haven't been
-> > totally tainted by the kernel yet ;-) )
+> This change allows one to build ATF with an externally built
+> BL33 image or with the U-boot as BL33 boot stage.
 > 
-> Actually, I wasn't proposing to use "foo: bar: what", but to keep
-> "path/to: what" :-)
+> This change introduces a new configuration directive for TF-A to
+> specify when BL33 stage is provided as a prebuilt image:
+> BR2_TARGET_ARM_TRUSTED_FIRMWARE_PREBUILT_BL33.
+> 
+> If BR2_TARGET_ARM_TRUSTED_FIRMWARE_PREBUILT_BL33 is enabled, the
+> buildroot configuration shall specify the BL33 binary image location:
+> BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL33_IMAGE.
 
-And I am arguing that usig prefixes is better than paths. ;-)
+...
+
+> --- a/boot/arm-trusted-firmware/Config.in
+> +++ b/boot/arm-trusted-firmware/Config.in
+> @@ -1,6 +1,6 @@
+>  config BR2_TARGET_ARM_TRUSTED_FIRMWARE
+>  	bool "ARM Trusted Firmware (ATF)"
+> -	depends on BR2_aarch64 && BR2_TARGET_UBOOT
+> +	depends on BR2_aarch64
+
+Could you please clarify why do you want to get rid of this dependency ?
+IIUC so far all the arm64/atf boards supported by BR make use of U-Boot.
+If you plan to use this feature for a board with any other type of
+bootloader, then maybe it makes sense to add board config as well. In this
+case other developers will be able at least build-test this particular
+config swtich when testing their own ATF changes.
 
 Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Sergey
