@@ -1,50 +1,101 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Dec 2018 21:49:34 +0100
-Subject: [Buildroot] [git commit] package/python-jsonmodels: bump to version
- 2.4
-Message-ID: <20181202071602.1D05F8131E@busybox.osuosl.org>
+Date: Sat, 1 Dec 2018 21:41:24 +0100
+Subject: [Buildroot] [git commit]
+ toolchain/toolchain-external-codescape-img-mips: bump to 2018.09-02
+Message-ID: <20181202071601.D89A78131E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63caccfe84e9a2b7d59e65874f4c76e8cfb410b2
+commit: https://git.buildroot.net/buildroot/commit/?id=75f832d079d22641cd9c0258700767b656866549
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+The 2016.05-06 toolchain we've had support for is pretty outdated at
+this point, so update to the latest 2018.09-02 version.
+
+Of note besides the typical component version bumps:
+
+ - The toolchains are now provided by MIPS Tech LLC after its departure
+   from Imagination Technologies.
+
+ - The download site changed as a result of that.
+
+ - The toolchains are now built targeting CentOS 6 rather than CentOS 5.
+
+Signed-off-by: Paul Burton <paul.burton@mips.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-jsonmodels/python-jsonmodels.hash | 7 ++++---
- package/python-jsonmodels/python-jsonmodels.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ .../toolchain-external-codescape-img-mips/Config.in        | 14 +++++++-------
+ .../toolchain-external-codescape-img-mips.hash             |  8 ++++----
+ .../toolchain-external-codescape-img-mips.mk               |  8 ++++----
+ 3 files changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/package/python-jsonmodels/python-jsonmodels.hash b/package/python-jsonmodels/python-jsonmodels.hash
-index f5b1ac5ef1..16e200b03f 100644
---- a/package/python-jsonmodels/python-jsonmodels.hash
-+++ b/package/python-jsonmodels/python-jsonmodels.hash
-@@ -1,4 +1,5 @@
--# md5 from https://pypi.python.org/pypi/jsonmodels/json, sha256 locally computed
--md5	e42b6c0078e731035ec3f1bf8a6cdc92  jsonmodels-2.3.tar.gz
--sha256	09e9639c85531e0f37991bb23a363494e37a2e89fb480dbc03d9556258f4ea47  jsonmodels-2.3.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/jsonmodels/json
-+md5	96132e252887f840d23792c03fad2039  jsonmodels-2.4.tar.gz
-+sha256	abc8dc334a1794513e511a75639f77c271ef6a2992b6793f3753c7335dd18775  jsonmodels-2.4.tar.gz
-+# Locally computed sha256 checksums
- sha256	3b1219763eec6924ddd4c4d61dee6a53c5fc9ab62707a9ad763ee363d3050cc5  LICENSE
-diff --git a/package/python-jsonmodels/python-jsonmodels.mk b/package/python-jsonmodels/python-jsonmodels.mk
-index 4d4da87969..4e4eecf233 100644
---- a/package/python-jsonmodels/python-jsonmodels.mk
-+++ b/package/python-jsonmodels/python-jsonmodels.mk
-@@ -4,9 +4,9 @@
+diff --git a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
+index 2bfa567672..2e705f2460 100644
+--- a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
+@@ -1,19 +1,19 @@
+ config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS
+-	bool "Codescape IMG GNU Linux Toolchain 2016.05"
++	bool "Codescape IMG GNU Linux Toolchain 2018.09"
+ 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+-	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_5
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on BR2_MIPS_CPU_MIPS32R6 || (BR2_MIPS_CPU_MIPS64R6 && !BR2_MIPS_SOFT_FLOAT)
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	help
+-	  Codescape IMG GNU Linux Toolchain 2016.05 for the MIPS
+-	  architecture, from Imagination Technologies. It uses gcc
+-	  4.9.2, binutils 2.24.90, glibc 2.20, gdb 7.9.1 and kernel
+-	  headers 4.7. It has support for the following variants:
++	  Codescape IMG GNU Linux Toolchain 2018.09 for the MIPS architecture,
++	  from MIPS Tech LLC. It uses gcc 6.3.0, binutils 2.28.51, glibc 2.20,
++	  gdb 7.9.1 and kernel headers 4.7. It has support for the following
++	  variants:
+ 	    - MIPS32r6 - Big-Endian, Hard-Float, 2008 NaN, o32 ABI
+ 	      Select 'MIPS (big endian)' Target Architecture
+ 	      Select 'mips 32r6' Target Architecture Variant
+diff --git a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.hash b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.hash
+index 6a12cfa078..b540164a29 100644
+--- a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.hash
++++ b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.hash
+@@ -1,4 +1,4 @@
+-# Codescape toolchains from Imagination Technologies
+-# From: http://codescape-mips-sdk.imgtec.com/components/toolchain/2016.05-06/downloads.html
+-sha256 8d9cdf711dd402d7bf82883d425c221038fe8ce9d0c91a3f6b30939d9d55476c  Codescape.GNU.Tools.Package.2016.05-06.for.MIPS.IMG.Linux.CentOS-5.x86.tar.gz
+-sha256 6e2784d6df962fe4db7510c8a62ce3947b73f54207b10e18b52da59d1bc487bd  Codescape.GNU.Tools.Package.2016.05-06.for.MIPS.IMG.Linux.CentOS-5.x86_64.tar.gz
++# Codescape toolchains from MIPS Tech LLC
++# From: https://codescape.mips.com/components/toolchain/nanomips/2018.09-02/downloads.html
++sha256 ac035f3b6a8767522977963d8e1490520d58bccca7956f4503a1eefff6492b71  Codescape.GNU.Tools.Package.2018.09-02.for.MIPS.IMG.Linux.CentOS-6.x86.tar.gz
++sha256 09280f4fcbb993607905bf9a43bf5f3db2beed85726f0675b8453e19a9ddc429  Codescape.GNU.Tools.Package.2018.09-02.for.MIPS.IMG.Linux.CentOS-6.x86_64.tar.gz
+diff --git a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.mk b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.mk
+index 49a7027dfb..55424918c7 100644
+--- a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.mk
++++ b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.mk
+@@ -4,14 +4,14 @@
  #
  ################################################################################
  
--PYTHON_JSONMODELS_VERSION = 2.3
-+PYTHON_JSONMODELS_VERSION = 2.4
- PYTHON_JSONMODELS_SOURCE = jsonmodels-$(PYTHON_JSONMODELS_VERSION).tar.gz
--PYTHON_JSONMODELS_SITE = https://pypi.python.org/packages/ab/0f/e214845b49881d3b2bebd1f387eedc5b26ac5580353a0a38074e94439957
-+PYTHON_JSONMODELS_SITE = https://files.pythonhosted.org/packages/68/00/524668dc751f9ef91e73c795b2073bf2ddb79728a474d1bcab9c6dc426d8
- PYTHON_JSONMODELS_SETUP_TYPE = setuptools
- PYTHON_JSONMODELS_LICENSE = BSD-3-Clause
- PYTHON_JSONMODELS_LICENSE_FILES = LICENSE
+-TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_VERSION = 2016.05-06
+-TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_SITE = http://codescape-mips-sdk.imgtec.com/components/toolchain/$(TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_VERSION)
++TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_VERSION = 2018.09-02
++TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_SITE = https://codescape.mips.com/components/toolchain/$(TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_VERSION)
+ TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_STRIP_COMPONENTS = 2
+ 
+ ifeq ($(HOSTARCH),x86)
+-TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_SOURCE = Codescape.GNU.Tools.Package.$(TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_VERSION).for.MIPS.IMG.Linux.CentOS-5.x86.tar.gz
++TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_SOURCE = Codescape.GNU.Tools.Package.$(TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_VERSION).for.MIPS.IMG.Linux.CentOS-6.x86.tar.gz
+ else
+-TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_SOURCE = Codescape.GNU.Tools.Package.$(TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_VERSION).for.MIPS.IMG.Linux.CentOS-5.x86_64.tar.gz
++TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_SOURCE = Codescape.GNU.Tools.Package.$(TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_VERSION).for.MIPS.IMG.Linux.CentOS-6.x86_64.tar.gz
+ endif
+ 
+ # Special fixup for Codescape MIPS toolchains, that have bin-<abi> and
