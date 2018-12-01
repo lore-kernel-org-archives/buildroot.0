@@ -1,41 +1,48 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 1 Dec 2018 22:12:24 +0100
-Subject: [Buildroot] [PATCH 2/2] quagga: zebra needs dynamic library
-In-Reply-To: <20181201214608.562738c2@windsurf.home>
-References: <20181201183151.3853-1-fontaine.fabrice@gmail.com>
- <20181201183151.3853-2-fontaine.fabrice@gmail.com>
- <20181201214608.562738c2@windsurf.home>
-Message-ID: <CAPi7W83WYWBnPV9q4SGzaqDyTsSO32D_pvYFsHvrHaBHeayryw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 1 Dec 2018 22:13:01 +0100
+Subject: [Buildroot] [git commit] package/c-ares: use LICENSE.md
+Message-ID: <20181201211104.29FE28910B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-Le sam. 1 d?c. 2018 ? 21:46, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> Hello,
->
-> On Sat,  1 Dec 2018 19:31:51 +0100, Fabrice Fontaine wrote:
-> > zebra library defines optind and opterr which are already defined in
-> > libc
-> >
-> > Fixes:
-> >  - http://autobuild.buildroot.org/results/32f93a73379d073abcaf8936ffbb8b5707583024
->
-> Meh, can't we just rename those variables ?
-Actually, they have just copy/pasted getopt.c from the libc. This code
-is enabled only on musl because musl does not defined __GLIBC__, I
-will find a way to disable it and send a new patch.
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+commit: https://git.buildroot.net/buildroot/commit/?id=c9dfcbd6ee4ed6878bb081e918c4b7e36955d67c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Best Regards,
+c-ares has a LICENSE.md file since version 1.12 and
+https://github.com/c-ares/c-ares/commit/4e861351d9deaef7b78aee50ce9229325f4fc59a
 
-Fabrice
+So use it instead of one of the source file and add its hash
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/c-ares/c-ares.hash | 3 +++
+ package/c-ares/c-ares.mk   | 3 +--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/package/c-ares/c-ares.hash b/package/c-ares/c-ares.hash
+index 832c4dfcfb..0c665574d8 100644
+--- a/package/c-ares/c-ares.hash
++++ b/package/c-ares/c-ares.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated after checking pgp signature
+ sha256 45d3c1fd29263ceec2afc8ff9cd06d5f8f889636eb4e80ce3cc7f0eaf7aadc6e c-ares-1.14.0.tar.gz
++
++# Hash for license file
++sha256 db4eb63fe09daebdf57d3f79b091bb5ee5070c0d761040e83264e648d307af4c LICENSE.md
+diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
+index 67254244a1..16536137a8 100644
+--- a/package/c-ares/c-ares.mk
++++ b/package/c-ares/c-ares.mk
+@@ -11,7 +11,6 @@ C_ARES_CONF_OPTS = --with-random=/dev/urandom
+ # Rebuild configure to avoid XC_CHECK_USER_CFLAGS
+ C_ARES_AUTORECONF = YES
+ C_ARES_LICENSE = MIT
+-# No standalone, use some source file
+-C_ARES_LICENSE_FILES = ares_mkquery.c
++C_ARES_LICENSE_FILES = LICENSE.md
+ 
+ $(eval $(autotools-package))
