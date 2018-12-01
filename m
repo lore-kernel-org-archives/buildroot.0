@@ -1,49 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Dec 2018 22:20:18 +0100
-Subject: [Buildroot] [git commit] package/c-ares: use LICENSE.md
-Message-ID: <20181202071602.33F3C8131E@busybox.osuosl.org>
+Date: Sat, 1 Dec 2018 22:53:45 +0100
+Subject: [Buildroot] [git commit] fs/common: allow filesystems to set the
+ name of their output file
+Message-ID: <20181202071602.556058131E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=736aabde4ab180cfcc18af8b04124382f1a412bb
+commit: https://git.buildroot.net/buildroot/commit/?id=21c6fb2589fb36d0d9367efe906c94da67cbf009
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-c-ares has a LICENSE.md file since version 1.12 and
-https://github.com/c-ares/c-ares/commit/4e861351d9deaef7b78aee50ce9229325f4fc59a
+Some filesystems may want to tweak their output names, rather than using
+the fixed "rootfs.foo" scheme. Add a ROOTFS_FOO_IMAGE_NAME variable for
+this purpose.
 
-So use it instead of one of the source file and add its hash
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+[yann.morin.1998 at free.fr: fix the patch]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/c-ares/c-ares.hash | 3 +++
- package/c-ares/c-ares.mk   | 3 +--
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ fs/common.mk | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/c-ares/c-ares.hash b/package/c-ares/c-ares.hash
-index 832c4dfcfb..0c665574d8 100644
---- a/package/c-ares/c-ares.hash
-+++ b/package/c-ares/c-ares.hash
-@@ -1,2 +1,5 @@
- # Locally calculated after checking pgp signature
- sha256 45d3c1fd29263ceec2afc8ff9cd06d5f8f889636eb4e80ce3cc7f0eaf7aadc6e c-ares-1.14.0.tar.gz
-+
-+# Hash for license file
-+sha256 db4eb63fe09daebdf57d3f79b091bb5ee5070c0d761040e83264e648d307af4c LICENSE.md
-diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
-index 76e9687b37..9f9835677f 100644
---- a/package/c-ares/c-ares.mk
-+++ b/package/c-ares/c-ares.mk
-@@ -11,8 +11,7 @@ C_ARES_CONF_OPTS = --with-random=/dev/urandom
- # Rebuild configure to avoid XC_CHECK_USER_CFLAGS
- C_ARES_AUTORECONF = YES
- C_ARES_LICENSE = MIT
--# No standalone, use some source file
--C_ARES_LICENSE_FILES = ares_mkquery.c
-+C_ARES_LICENSE_FILES = LICENSE.md
+diff --git a/fs/common.mk b/fs/common.mk
+index 96658428ba..d49e615447 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -107,6 +107,8 @@ rootfs-common-show-depends:
+ # all variable references except the arguments must be $$-quoted.
+ define inner-rootfs
  
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
++ROOTFS_$(2)_IMAGE_NAME ?= rootfs.$(1)
++ROOTFS_$(2)_FINAL_IMAGE_NAME = $$(strip $$(ROOTFS_$(2)_IMAGE_NAME))
+ ROOTFS_$(2)_DIR = $$(FS_DIR)/$(1)
+ ROOTFS_$(2)_TARGET_DIR = $$(ROOTFS_$(2)_DIR)/target
+ 
+@@ -141,10 +143,10 @@ ROOTFS_$(2)_COMPRESS_EXT = .xz
+ ROOTFS_$(2)_COMPRESS_CMD = xz -9 -C crc32 -c
+ endif
+ 
+-$$(BINARIES_DIR)/rootfs.$(1): ROOTFS=$(2)
+-$$(BINARIES_DIR)/rootfs.$(1): FAKEROOT_SCRIPT=$$(ROOTFS_$(2)_DIR)/fakeroot
+-$$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
+-	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
++$$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME): ROOTFS=$(2)
++$$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME): FAKEROOT_SCRIPT=$$(ROOTFS_$(2)_DIR)/fakeroot
++$$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME): $$(ROOTFS_$(2)_DEPENDENCIES)
++	@$$(call MESSAGE,"Generating filesystem image $$(ROOTFS_$(2)_FINAL_IMAGE_NAME)")
+ 	mkdir -p $$(@D)
+ 	rm -rf $$(ROOTFS_$(2)_DIR)
+ 	mkdir -p $$(ROOTFS_$(2)_DIR)
+@@ -166,7 +168,7 @@ endif
+ rootfs-$(1)-show-depends:
+ 	@echo $$(ROOTFS_$(2)_DEPENDENCIES)
+ 
+-rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1)
++rootfs-$(1): $$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME)
+ 
+ .PHONY: rootfs-$(1) rootfs-$(1)-show-depends
+ 
