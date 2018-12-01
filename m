@@ -1,65 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Dec 2018 22:47:13 +0100
-Subject: [Buildroot] [git commit] package/quagga: add nhrpd option
-Message-ID: <20181202071602.4B8918131E@busybox.osuosl.org>
+Date: Sat, 1 Dec 2018 21:49:34 +0100
+Subject: [Buildroot] [git commit] package/python-jsonmodels: bump to version
+ 2.4
+Message-ID: <20181202071602.1D05F8131E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ee0e2e17b7774a866e051dea37ef8dd5b7684af
+commit: https://git.buildroot.net/buildroot/commit/?id=63caccfe84e9a2b7d59e65874f4c76e8cfb410b2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/quagga/Config.in |  6 ++++++
- package/quagga/quagga.mk | 10 ++++++++--
- 2 files changed, 14 insertions(+), 2 deletions(-)
+ package/python-jsonmodels/python-jsonmodels.hash | 7 ++++---
+ package/python-jsonmodels/python-jsonmodels.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/quagga/Config.in b/package/quagga/Config.in
-index 98b9d3481e..9427475d03 100644
---- a/package/quagga/Config.in
-+++ b/package/quagga/Config.in
-@@ -38,6 +38,12 @@ config BR2_PACKAGE_QUAGGA_ISISD
- 	help
- 	  Enable isisd support in quagga.
+diff --git a/package/python-jsonmodels/python-jsonmodels.hash b/package/python-jsonmodels/python-jsonmodels.hash
+index f5b1ac5ef1..16e200b03f 100644
+--- a/package/python-jsonmodels/python-jsonmodels.hash
++++ b/package/python-jsonmodels/python-jsonmodels.hash
+@@ -1,4 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/jsonmodels/json, sha256 locally computed
+-md5	e42b6c0078e731035ec3f1bf8a6cdc92  jsonmodels-2.3.tar.gz
+-sha256	09e9639c85531e0f37991bb23a363494e37a2e89fb480dbc03d9556258f4ea47  jsonmodels-2.3.tar.gz
++# md5, sha256 from https://pypi.org/pypi/jsonmodels/json
++md5	96132e252887f840d23792c03fad2039  jsonmodels-2.4.tar.gz
++sha256	abc8dc334a1794513e511a75639f77c271ef6a2992b6793f3753c7335dd18775  jsonmodels-2.4.tar.gz
++# Locally computed sha256 checksums
+ sha256	3b1219763eec6924ddd4c4d61dee6a53c5fc9ab62707a9ad763ee363d3050cc5  LICENSE
+diff --git a/package/python-jsonmodels/python-jsonmodels.mk b/package/python-jsonmodels/python-jsonmodels.mk
+index 4d4da87969..4e4eecf233 100644
+--- a/package/python-jsonmodels/python-jsonmodels.mk
++++ b/package/python-jsonmodels/python-jsonmodels.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_QUAGGA_NHRPD
-+	bool "NHRPD protocol"
-+	select BR2_PACKAGE_C_ARES
-+	help
-+	  Build Next Hop Routing Protocol daemon.
-+
- config BR2_PACKAGE_QUAGGA_OSPFD
- 	bool "OSPFv2 protocol"
- 	help
-diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
-index 7049e968a9..017f3a82ff 100644
---- a/package/quagga/quagga.mk
-+++ b/package/quagga/quagga.mk
-@@ -16,8 +16,7 @@ QUAGGA_LICENSE_FILES = COPYING
- QUAGGA_CONF_OPTS = \
- 	--program-transform-name='' \
- 	--sysconfdir=/etc/quagga \
--	--localstatedir=/var/run/quagga \
--	--disable-nhrpd
-+	--localstatedir=/var/run/quagga
- 
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
- QUAGGA_CONF_OPTS += --enable-capabilities
-@@ -59,6 +58,13 @@ define QUAGGA_PERMISSIONS
- 	/etc/quagga d 755 quagga quagga - - - - -
- endef
- 
-+ifeq ($(BR2_PACKAGE_QUAGGA_NHRPD),y)
-+QUAGGA_CONF_OPTS += --enable-nhrpd
-+QUAGGA_DEPENDENCIES += c-ares
-+else
-+QUAGGA_CONF_OPTS += --disable-nhrpd
-+endif
-+
- ifeq ($(BR2_PACKAGE_QUAGGA_SNMP),y)
- QUAGGA_CONF_ENV += ac_cv_path_NETSNMP_CONFIG=$(STAGING_DIR)/usr/bin/net-snmp-config
- QUAGGA_CONF_OPTS += --enable-snmp=agentx
+-PYTHON_JSONMODELS_VERSION = 2.3
++PYTHON_JSONMODELS_VERSION = 2.4
+ PYTHON_JSONMODELS_SOURCE = jsonmodels-$(PYTHON_JSONMODELS_VERSION).tar.gz
+-PYTHON_JSONMODELS_SITE = https://pypi.python.org/packages/ab/0f/e214845b49881d3b2bebd1f387eedc5b26ac5580353a0a38074e94439957
++PYTHON_JSONMODELS_SITE = https://files.pythonhosted.org/packages/68/00/524668dc751f9ef91e73c795b2073bf2ddb79728a474d1bcab9c6dc426d8
+ PYTHON_JSONMODELS_SETUP_TYPE = setuptools
+ PYTHON_JSONMODELS_LICENSE = BSD-3-Clause
+ PYTHON_JSONMODELS_LICENSE_FILES = LICENSE
