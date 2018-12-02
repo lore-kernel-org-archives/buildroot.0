@@ -1,87 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sun, 02 Dec 2018 07:19:27 -0000
-Subject: [Buildroot] [git commit] support/testing: use TestPythonPackageBase
- for python-incremental
-Message-ID: <20181202071554.E3E3A8107F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] iucode-tool: rewrite init script
+Message-ID: <20181202071554.A47AC8A3F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee6b37cf87da13429ac222b5cb6c2a3429062593
+commit: https://git.buildroot.net/buildroot/commit/?id=9e323088cb179f6b3d8bcb9ec388eb41c1d018e4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Move the test script to be run on the target from inline in the test
-case to a separate file.
+- Indent with tabs.
+- Use a function for start.
+- Pass "-q" to iucode_tool to inhibit usual output that would otherwise
+  interfere with the operation status report.
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Asaf Kahlon <asafka7@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+[Peter: drop dummy function with sed invocation not compatible with busybox]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../tests/package/sample_python_incremental.py     |  3 ++
- .../tests/package/test_python_incremental.py       | 33 ++++++++--------------
- 2 files changed, 14 insertions(+), 22 deletions(-)
+ package/iucode-tool/S00iucode-tool | 33 +++++++++++++++++++--------------
+ 1 file changed, 19 insertions(+), 14 deletions(-)
 
-diff --git a/support/testing/tests/package/sample_python_incremental.py b/support/testing/tests/package/sample_python_incremental.py
-new file mode 100644
-index 0000000000..b6e2aa803c
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_incremental.py
-@@ -0,0 +1,3 @@
-+import incremental
-+v = incremental.Version("package", 1, 2, 3, release_candidate=4)
-+assert(str(v) == "[package, version 1.2.3rc4]")
-diff --git a/support/testing/tests/package/test_python_incremental.py b/support/testing/tests/package/test_python_incremental.py
-index acf743cdd2..49800d8937 100644
---- a/support/testing/tests/package/test_python_incremental.py
-+++ b/support/testing/tests/package/test_python_incremental.py
-@@ -1,34 +1,23 @@
--from tests.package.test_python import TestPythonBase
-+from tests.package.test_python import TestPythonPackageBase
+diff --git a/package/iucode-tool/S00iucode-tool b/package/iucode-tool/S00iucode-tool
+index a97b33c045..393c903b41 100644
+--- a/package/iucode-tool/S00iucode-tool
++++ b/package/iucode-tool/S00iucode-tool
+@@ -5,19 +5,24 @@
  
+ MICROCODE_DIR="/lib/firmware/intel-ucode"
  
--class TestPythonIncremental(TestPythonBase):
--    def str_test(self):
--        cmd = self.interpreter + " -c 'import incremental;"
--        cmd += "v = incremental.Version(\"package\", 1, 2, 3, release_candidate=4);"
--        cmd += "assert(str(v) == \"[package, version 1.2.3rc4]\")'"
--        _, exit_code = self.emulator.run(cmd, timeout=30)
--        self.assertEqual(exit_code, 0)
++start() {
++	printf 'Starting iucode-tool: '
++	/usr/sbin/iucode_tool -q -k "$MICROCODE_DIR"
++	status="$?"
++	if [ "$status" = 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
+ case "$1" in
+-  start)
+-	echo "Starting iucode-tool:"
+-	/usr/sbin/iucode_tool -k "$MICROCODE_DIR"
+-	echo "done"
+-	;;
+-  stop)
+-	;;
+-  restart|reload)
+-	;;
+-  *)
+-	echo "Usage: $0 {start|stop|restart}"
+-	exit 1
++	start)
++		start;;
++	stop|restart|reload)
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
+ esac
 -
--
--class TestPythonPy2Incremental(TestPythonIncremental):
--    config = TestPythonBase.config + \
-+class TestPythonPy2Incremental(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-         """
-         BR2_PACKAGE_PYTHON=y
-         BR2_PACKAGE_PYTHON_INCREMENTAL=y
-         """
-+    sample_scripts = ["tests/package/sample_python_incremental.py"]
-+    timeout = 30
- 
--    def test_run(self):
--        self.login()
--        self.str_test()
- 
--
--class TestPythonPy3Incremental(TestPythonIncremental):
--    config = TestPythonBase.config + \
-+class TestPythonPy3Incremental(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-         """
-         BR2_PACKAGE_PYTHON3=y
-         BR2_PACKAGE_PYTHON_INCREMENTAL=y
-         """
--
--    def test_run(self):
--        self.login()
--        self.str_test()
-+    sample_scripts = ["tests/package/sample_python_incremental.py"]
-+    timeout = 30
+-exit $?
