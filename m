@@ -1,58 +1,95 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 02 Dec 2018 07:19:27 -0000
-Subject: [Buildroot] [git commit] package/proftpd: add enable buffer size
-Message-ID: <20181202071555.5FA958A3F3@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 02 Dec 2018 07:19:28 -0000
+Subject: [Buildroot] [git commit] support/testing: use TestPythonPackageBase
+ for python-txaio
+Message-ID: <20181202071554.F07D78107F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39ec1ee783414fa4f0051447bb099477ff8a5013
+commit: https://git.buildroot.net/buildroot/commit/?id=ac4a0529681707a6c1ad19d7cc4b2e24d5d921ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Enable buffer size as a compile time option to change internal
-buffer size.
+Move the test scripts to be run on the target from inline in the test
+case to a separate file.
 
-Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Asaf Kahlon <asafka7@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/proftpd/Config.in  | 13 +++++++++++++
- package/proftpd/proftpd.mk |  4 ++++
- 2 files changed, 17 insertions(+)
+ .../tests/package/sample_python_txaio_asyncio.py   |  3 +++
+ .../tests/package/sample_python_txaio_twisted.py   |  3 +++
+ support/testing/tests/package/test_python_txaio.py | 30 +++++++---------------
+ 3 files changed, 15 insertions(+), 21 deletions(-)
 
-diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
-index b615a5ff4c..478a7e80e1 100644
---- a/package/proftpd/Config.in
-+++ b/package/proftpd/Config.in
-@@ -65,4 +65,17 @@ config BR2_PACKAGE_PROFTPD_MOD_QUOTATAB_SQL
- 	  Compile mod_quotatab with mod_quotatab_sql table.
+diff --git a/support/testing/tests/package/sample_python_txaio_asyncio.py b/support/testing/tests/package/sample_python_txaio_asyncio.py
+new file mode 100644
+index 0000000000..77f11ed807
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_txaio_asyncio.py
+@@ -0,0 +1,3 @@
++import txaio
++txaio.use_asyncio()
++f0 = txaio.create_future()
+diff --git a/support/testing/tests/package/sample_python_txaio_twisted.py b/support/testing/tests/package/sample_python_txaio_twisted.py
+new file mode 100644
+index 0000000000..13ea82a961
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_txaio_twisted.py
+@@ -0,0 +1,3 @@
++import txaio
++txaio.use_twisted()
++f0 = txaio.create_future()
+diff --git a/support/testing/tests/package/test_python_txaio.py b/support/testing/tests/package/test_python_txaio.py
+index af93e031b5..7bff1bc23c 100644
+--- a/support/testing/tests/package/test_python_txaio.py
++++ b/support/testing/tests/package/test_python_txaio.py
+@@ -1,34 +1,22 @@
+-from tests.package.test_python import TestPythonBase
++from tests.package.test_python import TestPythonPackageBase
  
- endif
-+
-+config BR2_PACKAGE_PROFTPD_BUFFER_SIZE
-+	int "buffer size in bytes (0 for default)"
-+	default "0"
-+	help
-+	  By increasing the buffer size above the default of 1K,
-+	  proftpd reads and writes data in larger chunks, and makes
-+	  fewer expensive system calls. Use of this option to set buffer
-+	  sizes of 8K or more has been reported to drastically increase
-+	  transfer speeds (depending on network configurations).
-+
-+	  0 uses the default size of 1024.
-+
- endif
-diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
-index 8f3ff5088e..324a602761 100644
---- a/package/proftpd/proftpd.mk
-+++ b/package/proftpd/proftpd.mk
-@@ -121,4 +121,8 @@ define PROFTPD_INSTALL_INIT_SYSTEMD
- 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/proftpd.service
- endef
  
-+ifneq ($(BR2_PACKAGE_PROFTPD_BUFFER_SIZE),0)
-+PROFTPD_CONF_OPTS += --enable-buffer-size=$(BR2_PACKAGE_PROFTPD_BUFFER_SIZE)
-+endif
-+
- $(eval $(autotools-package))
+-class TestPythonPy2Txaio(TestPythonBase):
+-    config = TestPythonBase.config + \
++class TestPythonPy2Txaio(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
+         """
+         BR2_PACKAGE_PYTHON=y
+         BR2_PACKAGE_PYTHON_TXAIO=y
+         BR2_PACKAGE_PYTHON_TWISTED=y
+         """
++    sample_scripts = ["tests/package/sample_python_txaio_twisted.py"]
+ 
+-    def test_run(self):
+-        self.login()
+-        cmd = self.interpreter + " -c 'import txaio;"
+-        cmd += "txaio.use_twisted();"
+-        cmd += "f0 = txaio.create_future()'"
+-        _, exit_code = self.emulator.run(cmd)
+-        self.assertEqual(exit_code, 0)
+ 
+-
+-class TestPythonPy3Txaio(TestPythonBase):
+-    config = TestPythonBase.config + \
++class TestPythonPy3Txaio(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
+         """
+         BR2_PACKAGE_PYTHON3=y
+         BR2_PACKAGE_PYTHON_TXAIO=y
+         """
+-
+-    def test_run(self):
+-        self.login()
+-        cmd = self.interpreter + " -c 'import txaio;"
+-        cmd += "txaio.use_asyncio();"
+-        cmd += "f0 = txaio.create_future()'"
+-        _, exit_code = self.emulator.run(cmd)
+-        self.assertEqual(exit_code, 0)
++    sample_scripts = ["tests/package/sample_python_txaio_asyncio.py"]
