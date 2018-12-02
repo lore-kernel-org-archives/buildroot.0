@@ -1,71 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sun, 02 Dec 2018 07:19:27 -0000
-Subject: [Buildroot] [git commit] support/testing: add python-crossbar tests
-Message-ID: <20181202071555.0C4148A3F3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/acpid: add systemd service
+Message-ID: <20181202071555.40E5788894@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad361c69f6003bc1e5df5bf6a6b64fe8d9b54645
+commit: https://git.buildroot.net/buildroot/commit/?id=a47c516e50dfb51c8da5bd0e8992779a3ac34115
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This test invokes "crossbar version" command, that checks all
-dependencies found in setup.py files and prints some system related
-information.
-Add haveged to the target to generate enough entropy so crossbar ->
-pynacl -> libsodium don't hang waiting for /dev/random.
+This one is based on Archlinux's service file.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-[Ricardo: move test script to a separate file, remove Python 2 variant,
- add haveged to target to add entropy and avoid hanging]
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .gitlab-ci.yml                                          |  1 +
- support/testing/tests/package/sample_python_crossbar.py |  3 +++
- support/testing/tests/package/test_python_crossbar.py   | 14 ++++++++++++++
- 3 files changed, 18 insertions(+)
+ package/acpid/acpid.mk      | 8 ++++++++
+ package/acpid/acpid.service | 9 +++++++++
+ 2 files changed, 17 insertions(+)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index c78f2ea581..0dfb3537c1 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -316,6 +316,7 @@ tests.package.test_python.TestPython2: *runtime_test
- tests.package.test_python.TestPython3: *runtime_test
- tests.package.test_python_autobahn.TestPythonPy2Autobahn: *runtime_test
- tests.package.test_python_autobahn.TestPythonPy3Autobahn: *runtime_test
-+tests.package.test_python_crossbar.TestPythonPy3Crossbar: *runtime_test
- tests.package.test_python_cryptography.TestPythonPy2Cryptography: *runtime_test
- tests.package.test_python_cryptography.TestPythonPy3Cryptography: *runtime_test
- tests.package.test_python_incremental.TestPythonPy2Incremental: *runtime_test
-diff --git a/support/testing/tests/package/sample_python_crossbar.py b/support/testing/tests/package/sample_python_crossbar.py
+diff --git a/package/acpid/acpid.mk b/package/acpid/acpid.mk
+index 48fe005e5e..514fd31fe6 100644
+--- a/package/acpid/acpid.mk
++++ b/package/acpid/acpid.mk
+@@ -10,6 +10,14 @@ ACPID_SITE = http://downloads.sourceforge.net/project/acpid2
+ ACPID_LICENSE = GPL-2.0+
+ ACPID_LICENSE_FILES = COPYING
+ 
++define ACPID_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0755 package/acpid/acpid.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/acpid.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -sf ../../../../usr/lib/systemd/system/acpid.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/acpid.service
++endef
++
+ define ACPID_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 package/acpid/S02acpid \
+ 		$(TARGET_DIR)/etc/init.d/S02acpid
+diff --git a/package/acpid/acpid.service b/package/acpid/acpid.service
 new file mode 100644
-index 0000000000..3695fe92c0
+index 0000000000..5252b52f5f
 --- /dev/null
-+++ b/support/testing/tests/package/sample_python_crossbar.py
-@@ -0,0 +1,3 @@
-+import crossbar
++++ b/package/acpid/acpid.service
+@@ -0,0 +1,9 @@
++[Unit]
++Description=ACPI event daemon
++Documentation=man:acpid(8)
 +
-+crossbar.run(["version"])
-diff --git a/support/testing/tests/package/test_python_crossbar.py b/support/testing/tests/package/test_python_crossbar.py
-new file mode 100644
-index 0000000000..2d7b739b5c
---- /dev/null
-+++ b/support/testing/tests/package/test_python_crossbar.py
-@@ -0,0 +1,14 @@
-+from tests.package.test_python import TestPythonPackageBase
++[Service]
++ExecStart=/usr/sbin/acpid --foreground --netlink
 +
-+
-+class TestPythonPy3Crossbar(TestPythonPackageBase):
-+    __test__ = True
-+    # use haveged to generate enough entropy so crossbar -> pynacl -> libsodium don't hang waiting for /dev/random
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_CROSSBAR=y
-+        BR2_PACKAGE_HAVEGED=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_crossbar.py"]
-+    timeout = 60
++[Install]
++WantedBy=multi-user.target
