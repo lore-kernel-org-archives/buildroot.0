@@ -1,78 +1,194 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  2 Dec 2018 10:08:38 +0100
-Subject: [Buildroot] [PATCH 1/1] lxc: security bump to version 3.0.3
-Message-ID: <20181202090838.15776-1-fontaine.fabrice@gmail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 2 Dec 2018 10:03:27 +0100
+Subject: [Buildroot] [PATCH] uclibc: add upstream patch to fix aarch64 issues
+Message-ID: <20181202090327.GA2749@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This bump also includes the fix for CVE-2018-6556 released in 3.0.2 via
-commit "CVE 2018-6556: verify netns fd in lxc-user-nic": lxc-user-nic
-when asked to delete a network interface will unconditionally open a
-user provided path:
-https://github.com/lxc/lxc/commit/c1cf54ebf251fdbad1e971679614e81649f1c032
+fstatfs/statfs on aarch64 seems broken, add a patch from uClibc-ng
+upstream git to fix it.
 
-This code path may be used by an unprivileged user to check for the
-existence of a path which they wouldn't otherwise be able to reach. It
-may also be used to trigger side effects by causing a (read-only) open
-of special kernel files (ptmx, proc, sys).
-
-Also add a dependency on gcc >= 4.7
-(https://github.com/lxc/lxc/issues/2592)
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/lxc/Config.in | 4 +++-
- package/lxc/lxc.hash  | 2 +-
- package/lxc/lxc.mk    | 2 +-
- 3 files changed, 5 insertions(+), 3 deletions(-)
+ ...1-statfs.h-sync-generic-header-with-glibc.patch | 167 +++++++++++++++++++++
+ 1 file changed, 167 insertions(+)
+ create mode 100644 package/uclibc/0001-statfs.h-sync-generic-header-with-glibc.patch
 
-diff --git a/package/lxc/Config.in b/package/lxc/Config.in
-index d90e78857a..d8d8f50c8e 100644
---- a/package/lxc/Config.in
-+++ b/package/lxc/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_LXC
- 	depends on BR2_USE_MMU # fork()
- 	# build system forcefully builds a shared library
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # setns() system call
- 	help
- 	  Linux Containers (LXC), provides the ability to group and
-@@ -13,8 +14,9 @@ config BR2_PACKAGE_LXC
- 
- 	  https://linuxcontainers.org/
- 
--comment "lxc needs a toolchain w/ threads, headers >= 3.0, dynamic library"
-+comment "lxc needs a toolchain w/ threads, headers >= 3.0, dynamic library, gcc >= 4.7"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 \
- 		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 \
- 		|| BR2_STATIC_LIBS
-diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
-index f46b1e1f5e..c741a5baba 100644
---- a/package/lxc/lxc.hash
-+++ b/package/lxc/lxc.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	45986c49be1c048fa127bd3e7ea1bd3347e25765c008a09a2e4c233151a2d5db	lxc-3.0.1.tar.gz
-+sha256	620cb832cc02c63bf4d330657bf6176544e145da281ee384a34d689635a19841	lxc-3.0.3.tar.gz
- sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index d1487e0e59..48d5b20329 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LXC_VERSION = 3.0.1
-+LXC_VERSION = 3.0.3
- LXC_SITE = https://linuxcontainers.org/downloads/lxc
- LXC_LICENSE = LGPL-2.1+
- LXC_LICENSE_FILES = COPYING
+diff --git a/package/uclibc/0001-statfs.h-sync-generic-header-with-glibc.patch b/package/uclibc/0001-statfs.h-sync-generic-header-with-glibc.patch
+new file mode 100644
+index 0000000..8888405
+--- /dev/null
++++ b/package/uclibc/0001-statfs.h-sync-generic-header-with-glibc.patch
+@@ -0,0 +1,167 @@
++From 8a73a967e18c55199785bae0f22dc94d9b2f8985 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbrodkorb@conet.de>
++Date: Tue, 27 Nov 2018 15:41:37 +0100
++Subject: [PATCH] statfs.h: sync generic header with glibc
++
++Fix issues with aarch64 and df with mismatching header between kernel
++and libc.
++---
++ .../linux/common-generic/bits/statfs.h        | 84 +++++++++----------
++ libc/sysdeps/linux/common/fstatfs.c           |  9 --
++ libc/sysdeps/linux/common/statfs.c            | 10 ---
++ 3 files changed, 40 insertions(+), 63 deletions(-)
++
++diff --git a/libc/sysdeps/linux/common-generic/bits/statfs.h b/libc/sysdeps/linux/common-generic/bits/statfs.h
++index a2767b49a..23519a57e 100644
++--- a/libc/sysdeps/linux/common-generic/bits/statfs.h
+++++ b/libc/sysdeps/linux/common-generic/bits/statfs.h
++@@ -11,65 +11,61 @@
++ #include <endian.h>
++ #include <bits/align64bit.h>
++ #include <bits/types.h>
+++#include <bits/wordsize.h>
++ 
+++/* 64-bit libc uses the kernel's 'struct statfs', accessed via the
+++   statfs() syscall; 32-bit libc uses the kernel's 'struct statfs64'
+++   and accesses it via the statfs64() syscall.  All the various
+++   APIs offered by libc use the kernel shape for their struct statfs
+++   structure; the only difference is that 32-bit programs not
+++   using __USE_FILE_OFFSET64 only see the low 32 bits of some
+++   of the fields (the __fsblkcnt_t and __fsfilcnt_t fields).  */
+++
+++#if defined __USE_FILE_OFFSET64
+++# define __field64(type, type64, name) type64 name
+++#elif __WORDSIZE == 64
+++# define __field64(type, type64, name) type name
+++#elif __BYTE_ORDER == __LITTLE_ENDIAN
+++# define __field64(type, type64, name) \
+++  type name __attribute__((__aligned__ (__alignof__ (type64)))); int __##name##_pad
+++#else
+++# define __field64(type, type64, name) \
+++  int __##name##_pad __attribute__((__aligned__ (__alignof__ (type64)))); type name
+++#endif
++ 
++ struct statfs
++   {
++-    __U32_TYPE f_type;
++-    __U32_TYPE f_bsize;
++-#ifndef __USE_FILE_OFFSET64
++-# if __BYTE_ORDER == __LITTLE_ENDIAN
++-    __U32_TYPE f_blocks;
++-    __U32_TYPE __pad1;
++-    __U32_TYPE f_bfree;
++-    __U32_TYPE __pad2;
++-    __U32_TYPE f_bavail;
++-    __U32_TYPE __pad3;
++-    __U32_TYPE f_files;
++-    __U32_TYPE __pad4;
++-    __U32_TYPE f_ffree;
++-    __U32_TYPE __pad5;
++-# else
++-    __U32_TYPE __pad1;
++-    __U32_TYPE f_blocks;
++-    __U32_TYPE __pad2;
++-    __U32_TYPE f_bfree;
++-    __U32_TYPE __pad3;
++-    __U32_TYPE f_bavail;
++-    __U32_TYPE __pad4;
++-    __U32_TYPE f_files;
++-    __U32_TYPE __pad5;
++-    __U32_TYPE f_ffree;
++-# endif /* __LITTLE_ENDIAN */
++-#else
++-    __U64_TYPE f_blocks;
++-    __U64_TYPE f_bfree;
++-    __U64_TYPE f_bavail;
++-    __U64_TYPE f_files;
++-    __U64_TYPE f_ffree;
++-#endif /* __USE_FILE_OFFSET64 */
+++    __SWORD_TYPE f_type;
+++    __SWORD_TYPE f_bsize;
+++    __field64(__fsblkcnt_t, __fsblkcnt64_t, f_blocks);
+++    __field64(__fsblkcnt_t, __fsblkcnt64_t, f_bfree);
+++    __field64(__fsblkcnt_t, __fsblkcnt64_t, f_bavail);
+++    __field64(__fsfilcnt_t, __fsfilcnt64_t, f_files);
+++    __field64(__fsfilcnt_t, __fsfilcnt64_t, f_ffree);
++     __fsid_t f_fsid;
++-    __U32_TYPE f_namelen;
++-    __U32_TYPE f_frsize;
++-    __U32_TYPE f_flags;
++-    __U32_TYPE f_spare[4];
++-  } __ARCH_64BIT_ALIGNMENT__;
+++    __SWORD_TYPE f_namelen;
+++    __SWORD_TYPE f_frsize;
+++    __SWORD_TYPE f_flags;
+++    __SWORD_TYPE f_spare[4];
+++  };
+++
+++#undef __field64
++ 
++ #ifdef __USE_LARGEFILE64
++ struct statfs64
++   {
++-    __U32_TYPE f_type;
++-    __U32_TYPE f_bsize;
+++    __SWORD_TYPE f_type;
+++    __SWORD_TYPE f_bsize;
++     __U64_TYPE f_blocks;
++     __U64_TYPE f_bfree;
++     __U64_TYPE f_bavail;
++     __U64_TYPE f_files;
++     __U64_TYPE f_ffree;
++     __fsid_t f_fsid;
++-    __U32_TYPE f_namelen;
++-    __U32_TYPE f_frsize;
++-    __U32_TYPE f_flags;
++-    __U32_TYPE f_spare[4];
+++    __SWORD_TYPE f_namelen;
+++    __SWORD_TYPE f_frsize;
+++    __SWORD_TYPE f_flags;
+++    __SWORD_TYPE f_spare[4];
++   };
++ #endif
++ 
++diff --git a/libc/sysdeps/linux/common/fstatfs.c b/libc/sysdeps/linux/common/fstatfs.c
++index fcb0820eb..0b2709ce3 100644
++--- a/libc/sysdeps/linux/common/fstatfs.c
+++++ b/libc/sysdeps/linux/common/fstatfs.c
++@@ -30,15 +30,6 @@ _syscall2(int, __libc_fstatfs, int, fd, struct statfs *, buf)
++ int __libc_fstatfs (int __fildes, struct statfs *__buf)
++ {
++ 	int err = INLINE_SYSCALL(fstatfs64, 3, __fildes, sizeof(*__buf), __buf);
++-
++-	if (err == 0) {
++-		/* Did we overflow? */
++-		if (__buf->__pad1 || __buf->__pad2 || __buf->__pad3 ||
++-		    __buf->__pad4 || __buf->__pad5) {
++-			__set_errno(EOVERFLOW);
++-			return -1;
++-		}
++-	}
++ 	return err;
++ };
++ /* Redefined fstatfs because we need it for backwards compatibility */
++diff --git a/libc/sysdeps/linux/common/statfs.c b/libc/sysdeps/linux/common/statfs.c
++index ab9ec0e56..2990ff3e2 100644
++--- a/libc/sysdeps/linux/common/statfs.c
+++++ b/libc/sysdeps/linux/common/statfs.c
++@@ -18,16 +18,6 @@ extern __typeof(statfs) __libc_statfs attribute_hidden;
++ int __libc_statfs(const char *path, struct statfs *buf)
++ {
++ 	int err = INLINE_SYSCALL(statfs64, 3, path, sizeof(*buf), buf);
++-
++-	if (err == 0) {
++-		/* Did we overflow? */
++-		if (buf->__pad1 || buf->__pad2 || buf->__pad3 ||
++-		    buf->__pad4 || buf->__pad5) {
++-			__set_errno(EOVERFLOW);
++-			return -1;
++-		}
++-	}
++-
++ 	return err;
++ }
++ # if defined __UCLIBC_LINUX_SPECIFIC__ || defined __UCLIBC_HAS_THREADS_NATIVE__
++-- 
++2.19.1
++
 -- 
-2.17.1
+2.1.4
