@@ -1,194 +1,109 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 2 Dec 2018 10:03:27 +0100
-Subject: [Buildroot] [PATCH] uclibc: add upstream patch to fix aarch64 issues
-Message-ID: <20181202090327.GA2749@waldemar-brodkorb.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  2 Dec 2018 10:37:28 +0100
+Subject: [Buildroot] [PATCH 1/1] fontconfig: fix static build
+Message-ID: <20181202093728.20636-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fstatfs/statfs on aarch64 seems broken, add a patch from uClibc-ng
-upstream git to fix it.
+Retrieved patch from upstream to fix static build
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Fixes:
+ - http://autobuild.buildroot.org/results/17e5f9ce5e7566f5a88abfd27b7db5614c1a3086
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...1-statfs.h-sync-generic-header-with-glibc.patch | 167 +++++++++++++++++++++
- 1 file changed, 167 insertions(+)
- create mode 100644 package/uclibc/0001-statfs.h-sync-generic-header-with-glibc.patch
+ ...x-the-build-issue-with-enable-static.patch | 80 +++++++++++++++++++
+ 1 file changed, 80 insertions(+)
+ create mode 100644 package/fontconfig/0001-Fix-the-build-issue-with-enable-static.patch
 
-diff --git a/package/uclibc/0001-statfs.h-sync-generic-header-with-glibc.patch b/package/uclibc/0001-statfs.h-sync-generic-header-with-glibc.patch
+diff --git a/package/fontconfig/0001-Fix-the-build-issue-with-enable-static.patch b/package/fontconfig/0001-Fix-the-build-issue-with-enable-static.patch
 new file mode 100644
-index 0000000..8888405
+index 0000000000..6104f1ed10
 --- /dev/null
-+++ b/package/uclibc/0001-statfs.h-sync-generic-header-with-glibc.patch
-@@ -0,0 +1,167 @@
-+From 8a73a967e18c55199785bae0f22dc94d9b2f8985 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbrodkorb@conet.de>
-+Date: Tue, 27 Nov 2018 15:41:37 +0100
-+Subject: [PATCH] statfs.h: sync generic header with glibc
++++ b/package/fontconfig/0001-Fix-the-build-issue-with-enable-static.patch
+@@ -0,0 +1,80 @@
++From 8208f99fa1676c42bfd8d74de3e9dac5366c150c Mon Sep 17 00:00:00 2001
++From: Akira TAGOH <akira@tagoh.org>
++Date: Mon, 3 Sep 2018 04:56:16 +0000
++Subject: Fix the build issue with --enable-static
 +
-+Fix issues with aarch64 and df with mismatching header between kernel
-+and libc.
++Fixes https://gitlab.freedesktop.org/fontconfig/fontconfig/issues/109
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://gitlab.freedesktop.org/fontconfig/fontconfig/issues/109]
 +---
-+ .../linux/common-generic/bits/statfs.h        | 84 +++++++++----------
-+ libc/sysdeps/linux/common/fstatfs.c           |  9 --
-+ libc/sysdeps/linux/common/statfs.c            | 10 ---
-+ 3 files changed, 40 insertions(+), 63 deletions(-)
++ test/test-bz106632.c | 35 ++++++++++++-----------------------
++ 1 file changed, 12 insertions(+), 23 deletions(-)
 +
-+diff --git a/libc/sysdeps/linux/common-generic/bits/statfs.h b/libc/sysdeps/linux/common-generic/bits/statfs.h
-+index a2767b49a..23519a57e 100644
-+--- a/libc/sysdeps/linux/common-generic/bits/statfs.h
-++++ b/libc/sysdeps/linux/common-generic/bits/statfs.h
-+@@ -11,65 +11,61 @@
-+ #include <endian.h>
-+ #include <bits/align64bit.h>
-+ #include <bits/types.h>
-++#include <bits/wordsize.h>
-+ 
-++/* 64-bit libc uses the kernel's 'struct statfs', accessed via the
-++   statfs() syscall; 32-bit libc uses the kernel's 'struct statfs64'
-++   and accesses it via the statfs64() syscall.  All the various
-++   APIs offered by libc use the kernel shape for their struct statfs
-++   structure; the only difference is that 32-bit programs not
-++   using __USE_FILE_OFFSET64 only see the low 32 bits of some
-++   of the fields (the __fsblkcnt_t and __fsfilcnt_t fields).  */
-++
-++#if defined __USE_FILE_OFFSET64
-++# define __field64(type, type64, name) type64 name
-++#elif __WORDSIZE == 64
-++# define __field64(type, type64, name) type name
-++#elif __BYTE_ORDER == __LITTLE_ENDIAN
-++# define __field64(type, type64, name) \
-++  type name __attribute__((__aligned__ (__alignof__ (type64)))); int __##name##_pad
-++#else
-++# define __field64(type, type64, name) \
-++  int __##name##_pad __attribute__((__aligned__ (__alignof__ (type64)))); type name
-++#endif
-+ 
-+ struct statfs
-+   {
-+-    __U32_TYPE f_type;
-+-    __U32_TYPE f_bsize;
-+-#ifndef __USE_FILE_OFFSET64
-+-# if __BYTE_ORDER == __LITTLE_ENDIAN
-+-    __U32_TYPE f_blocks;
-+-    __U32_TYPE __pad1;
-+-    __U32_TYPE f_bfree;
-+-    __U32_TYPE __pad2;
-+-    __U32_TYPE f_bavail;
-+-    __U32_TYPE __pad3;
-+-    __U32_TYPE f_files;
-+-    __U32_TYPE __pad4;
-+-    __U32_TYPE f_ffree;
-+-    __U32_TYPE __pad5;
-+-# else
-+-    __U32_TYPE __pad1;
-+-    __U32_TYPE f_blocks;
-+-    __U32_TYPE __pad2;
-+-    __U32_TYPE f_bfree;
-+-    __U32_TYPE __pad3;
-+-    __U32_TYPE f_bavail;
-+-    __U32_TYPE __pad4;
-+-    __U32_TYPE f_files;
-+-    __U32_TYPE __pad5;
-+-    __U32_TYPE f_ffree;
-+-# endif /* __LITTLE_ENDIAN */
-+-#else
-+-    __U64_TYPE f_blocks;
-+-    __U64_TYPE f_bfree;
-+-    __U64_TYPE f_bavail;
-+-    __U64_TYPE f_files;
-+-    __U64_TYPE f_ffree;
-+-#endif /* __USE_FILE_OFFSET64 */
-++    __SWORD_TYPE f_type;
-++    __SWORD_TYPE f_bsize;
-++    __field64(__fsblkcnt_t, __fsblkcnt64_t, f_blocks);
-++    __field64(__fsblkcnt_t, __fsblkcnt64_t, f_bfree);
-++    __field64(__fsblkcnt_t, __fsblkcnt64_t, f_bavail);
-++    __field64(__fsfilcnt_t, __fsfilcnt64_t, f_files);
-++    __field64(__fsfilcnt_t, __fsfilcnt64_t, f_ffree);
-+     __fsid_t f_fsid;
-+-    __U32_TYPE f_namelen;
-+-    __U32_TYPE f_frsize;
-+-    __U32_TYPE f_flags;
-+-    __U32_TYPE f_spare[4];
-+-  } __ARCH_64BIT_ALIGNMENT__;
-++    __SWORD_TYPE f_namelen;
-++    __SWORD_TYPE f_frsize;
-++    __SWORD_TYPE f_flags;
-++    __SWORD_TYPE f_spare[4];
-++  };
-++
-++#undef __field64
-+ 
-+ #ifdef __USE_LARGEFILE64
-+ struct statfs64
-+   {
-+-    __U32_TYPE f_type;
-+-    __U32_TYPE f_bsize;
-++    __SWORD_TYPE f_type;
-++    __SWORD_TYPE f_bsize;
-+     __U64_TYPE f_blocks;
-+     __U64_TYPE f_bfree;
-+     __U64_TYPE f_bavail;
-+     __U64_TYPE f_files;
-+     __U64_TYPE f_ffree;
-+     __fsid_t f_fsid;
-+-    __U32_TYPE f_namelen;
-+-    __U32_TYPE f_frsize;
-+-    __U32_TYPE f_flags;
-+-    __U32_TYPE f_spare[4];
-++    __SWORD_TYPE f_namelen;
-++    __SWORD_TYPE f_frsize;
-++    __SWORD_TYPE f_flags;
-++    __SWORD_TYPE f_spare[4];
-+   };
++(limited to 'test')
++
++diff --git a/test/test-bz106632.c b/test/test-bz106632.c
++index daa0c1e..2d67c2e 100644
++--- a/test/test-bz106632.c
+++++ b/test/test-bz106632.c
++@@ -25,25 +25,26 @@
++ #ifdef HAVE_CONFIG_H
++ #include "config.h"
 + #endif
+++#include <stdio.h>
++ #include <stdlib.h>
+++#include <string.h>
++ #include <dirent.h>
+++#include <unistd.h>
+++#include <errno.h>
++ #ifndef HAVE_STRUCT_DIRENT_D_TYPE
++ #include <sys/types.h>
++ #include <sys/stat.h>
++-#include <unistd.h>
++ #endif
++-#include "fcstr.c"
++-#undef FcConfigBuildFonts
++-#undef FcConfigCreate
++-#undef FcConfigGetCurrent
++-#undef FcConfigParseAndLoadFromMemory
++-#undef FcConfigUptoDate
++-#undef FcFontList
++-#undef FcInitReinitialize
++-#undef FcPatternCreate
++-#undef FcPatternDestroy
++ #include <fontconfig/fontconfig.h>
 + 
-+diff --git a/libc/sysdeps/linux/common/fstatfs.c b/libc/sysdeps/linux/common/fstatfs.c
-+index fcb0820eb..0b2709ce3 100644
-+--- a/libc/sysdeps/linux/common/fstatfs.c
-++++ b/libc/sysdeps/linux/common/fstatfs.c
-+@@ -30,15 +30,6 @@ _syscall2(int, __libc_fstatfs, int, fd, struct statfs *, buf)
-+ int __libc_fstatfs (int __fildes, struct statfs *__buf)
-+ {
-+ 	int err = INLINE_SYSCALL(fstatfs64, 3, __fildes, sizeof(*__buf), __buf);
-+-
-+-	if (err == 0) {
-+-		/* Did we overflow? */
-+-		if (__buf->__pad1 || __buf->__pad2 || __buf->__pad3 ||
-+-		    __buf->__pad4 || __buf->__pad5) {
-+-			__set_errno(EOVERFLOW);
-+-			return -1;
-+-		}
-+-	}
-+ 	return err;
-+ };
-+ /* Redefined fstatfs because we need it for backwards compatibility */
-+diff --git a/libc/sysdeps/linux/common/statfs.c b/libc/sysdeps/linux/common/statfs.c
-+index ab9ec0e56..2990ff3e2 100644
-+--- a/libc/sysdeps/linux/common/statfs.c
-++++ b/libc/sysdeps/linux/common/statfs.c
-+@@ -18,16 +18,6 @@ extern __typeof(statfs) __libc_statfs attribute_hidden;
-+ int __libc_statfs(const char *path, struct statfs *buf)
-+ {
-+ 	int err = INLINE_SYSCALL(statfs64, 3, path, sizeof(*buf), buf);
-+-
-+-	if (err == 0) {
-+-		/* Did we overflow? */
-+-		if (buf->__pad1 || buf->__pad2 || buf->__pad3 ||
-+-		    buf->__pad4 || buf->__pad5) {
-+-			__set_errno(EOVERFLOW);
-+-			return -1;
-+-		}
-+-	}
-+-
-+ 	return err;
+++#ifdef _WIN32
+++#  define FC_DIR_SEPARATOR         '\\'
+++#  define FC_DIR_SEPARATOR_S       "\\"
+++#else
+++#  define FC_DIR_SEPARATOR         '/'
+++#  define FC_DIR_SEPARATOR_S       "/"
+++#endif
+++
++ #ifdef HAVE_MKDTEMP
++ #define fc_mkdtemp	mkdtemp
++ #else
++@@ -154,18 +155,6 @@ unlink_dirs (const char *dir)
++     return ret;
 + }
-+ # if defined __UCLIBC_LINUX_SPECIFIC__ || defined __UCLIBC_HAS_THREADS_NATIVE__
++ 
++-FcChar8 *
++-FcLangNormalize (const FcChar8 *lang)
++-{
++-    return NULL;
++-}
++-
++-FcChar8 *
++-FcConfigHome (void)
++-{
++-    return NULL;
++-}
++-
++ int
++ main (void)
++ {
 +-- 
-+2.19.1
++cgit v1.1
 +
 -- 
-2.1.4
+2.17.1
