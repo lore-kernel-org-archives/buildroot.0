@@ -1,160 +1,411 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  2 Dec 2018 10:04:41 +0100
-Subject: [Buildroot] [PATCH 09/11] infra/pkg-generic: use pure
- Makefile-based recursive dependencies
+Date: Sun,  2 Dec 2018 10:04:43 +0100
+Subject: [Buildroot] [PATCH 11/11] supprt/graph-depends: use the new
+ make-based dependency tree
 In-Reply-To: <cover.1543741464.git.yann.morin.1998@free.fr>
 References: <cover.1543741464.git.yann.morin.1998@free.fr>
-Message-ID: <6c649fa55e0de3e23531f2852d7886657b667801.1543741464.git.yann.morin.1998@free.fr>
+Message-ID: <176c21d13a1e9af82e4801e5b43ea86dead4f007.1543741464.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Calling to the graph-depends script is very costly, as it calls back to
-'make' a lot of time.
+Now that we can get the whole dependency tree from make, use it to
+speed up things considerably.
 
-It turns out that we already have the list of recursive dependencies, so
-we can just print that.
+So far, we had three functions to get the dependencies information:
+get_depends(), get_rdepends(), and, somehow unrelated, get_version().
 
-As for the reverse dependencies, doing like the first-level reverse
-dependencies would be extremely costly (with n enabled packages, in
-O(n?)), so we instead add a new macro that recursively build that list
-only when expanded.
+Because of the way %-show-{,r}depends works, getting the dependency tree
+was expensive, the three functions all took a set of packages for which
+to get the dependencies, in an attempt to limit the time it took to get
+that tree.
 
-From defconfig, C++, wchar, locales, ssp, and allyespackageconfig,
-tweaked for even more packages (qt5 not qt4, luajit to avoid multi
-providers, etc...), the timings for X-show-recursive-rdepends are:
+Now, getting the tree is much, much less costly, and we can get the
+whole tree as cheaply as we previously got only the first-level
+dependencies.
 
-                    before      after       speedup     #rdeps
-    libnss          0m22.932s   0m5.796s     3.96x      3
-    qt5base         0m41.176s   0m5.709s     7.21x      61
-    libjpeg         0m56.185s   0m5.943s     9.45x      218
-    libxml2         0m54.964s   0m5.772s     9.52x      261
-    freetype        0m46.754s   0m6.140s     7.61x      271
-    libpng          0m53.577s   0m6.366s     8.41x      292
-    sqlite          1m15.222s   0m6.413s    11.73x      700
-    readline        1m13.805s   0m7.618s     9.69x      862
-    libopenssl      1m25.471s   0m6.585s    12.98x      869
-    libzlib         1m11.807s   0m9.829s     7.30x      1000
-    toolchain       1m23.712s   1m17.542s    1.08x      2050
-    skeleton        1m27.839s   3m32.565s    0.41x      2053 (+1)
-    host-skeleton   1m27.405s   14m12.237s   0.10x      2111 (+2)
+Furthemore, we can now also get the version information at the same
+time, and that also brings in whether the package is virtual or not,
+target or host.
 
-  - speedup: ratio before/after
-  - #rdeps: number of recursive reverse dependencies, with the extra
-            dependencies returned with this patch, see below for the
-            reason.
+So, we drop all three helper functions, and replace them with a single
+one that returns all that information in one go: full dependency tree,
+per-package type, and per-package version.
 
-So, for a low-level package with a lot of reverse dependencies, like
-libzlibz, libopenssl or readline are, the timings are already very much
-in favour of the change. This is less impressive with packages that
-have few dependencies (libnss), but still much faster.
-
-However, the extreme cases that skeleton and host-skeleton are, are
-horribly penalised by this change, with skeleton doubling in time, and
-host-skeleton being almost ten times slower. These two can be considered
-degenerate cases: even the toolchain virtual package, which is virtually
-a dependency of everything, is still (marginally) faster.
-
-These two degenerate skeletons cases are however really not the most
-interesting cases, most of the time: the underlying use-case for
-*-show-recursive-rdepends is to understand why a specific package comes
-into the build, and most of the time, such a package is more like
-libzlib or libopenssl or such, and thus with much less dependencies than
-the degenerate skeleton cases.
-
-Also, remember that the config tested has as much packages enabled as
-possible, so is in itself a degenerate case. With simpler and more
-realistic configurations, the gains would probably be a bit lower than
-reported above, but various tests still report good improvements
-overall. (note: coming up with a 'realistic' configuration is pretty
-hard, as everyone have their notion of what is realtistic in their
-context, so nothing displayed here; timings are left as an exercise for
-the interested parties to report aggravation in their cases).
-
-Note that, more recursive reverse dependencies may be displayed now,
-since we do not apply the exceptions applied in graph-depends. For
-example, host-skeleton gains two new recursive reverse dependencies:
-skeleton and toolchain, which are both exceptions in graph-depends.
-
-As for direct (not reverse) dependencies: the gain is not as fantastic
-as for reverse ones, but it is still noticeable, just a few examples for
-%-show-recursive-depends:
-
-                    before      after       speedup     #deps
-    libzlib         0m45.892s   0m5.845s     7.85x      1
-    qt5base         0m54.684s   0m35.877s    1.52x      178
-    sqlite          0m46.628s   0m5.799s     8.04x      23
-
-(PS. Thanks to Joseph for suggesting a list of interesting packages
-to test!))
+Note: since commit 2d29fd96a (pkg-virtual: remove VERSION/SOURCE),
+virtual packages are no longer reported as having a 'virtual' version,
+so have since been displayed as regular packages in the graphs. Although
+noone complained, this patch incidentally restores the initial
+behaviour, and virtual packages are now correctly displayed as such
+again.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>
 
 ---
-Note: in the following patches, we change the way graph-depends gets
-the dependency tree, and that does also speeds it up. However, that
-future speedup gets the recursive reverse dependencies only down to
-about 25s which, although faster than the previous timings, is till a
-tad slower than the new timings this patch brings. The only advantage
-would be that the 25s are about constant, whatever the package, so the
-degenerate cases above are normalised top 25s as well. Since they are
-not that important, it is better to really speed up the vast majority of
-packages.
----
- package/pkg-generic.mk |  6 ++----
- package/pkg-utils.mk   | 13 +++++++++++++
- 2 files changed, 15 insertions(+), 4 deletions(-)
+Note: as I rewrote brpkgutil.py almost entirely now, and as I also
+substantially modified graph-depends, I added my (C) to them. We don't
+usually have copyright information in our files (no .mk or no Config.in
+and such have that), so I think it would be OK to just drop the (C) in
+there as well, especially since the Berne convention does not require it
+for a work to be protected and recognised anyway:
+    https://en.wikipedia.org/wiki/Copyright_symbol
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index a27aa1f7fd..ae4bac509f 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -815,15 +815,13 @@ $(1)-show-depends:
- 			@echo $$($(2)_FINAL_ALL_DEPENDENCIES)
+Beside, the authorship information is already present in the git log,
+and it is much more accurate in there than it is in the files
+themselves.
+---
+ support/scripts/brpkgutil.py  | 106 ++++++++++++++++++--------------------
+ support/scripts/graph-depends | 117 +++++-------------------------------------
+ 2 files changed, 64 insertions(+), 159 deletions(-)
+
+diff --git a/support/scripts/brpkgutil.py b/support/scripts/brpkgutil.py
+index e70d525353..39e9c5ce7e 100644
+--- a/support/scripts/brpkgutil.py
++++ b/support/scripts/brpkgutil.py
+@@ -1,67 +1,61 @@
+ # Copyright (C) 2010-2013 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++# Copyright (C) 2018 Yann E. MORIN <yann.morin.1998@free.fr>
  
- $(1)-show-recursive-depends:
--			@cd "$$(CONFIG_DIR)" && \
--			$$(TOPDIR)/support/scripts/graph-depends -p $(1) -f -q
-+			@echo $$($(2)_FINAL_RECURSIVE_DEPENDENCIES)
+ import logging
+ import sys
++import os
+ import subprocess
  
- $(1)-show-rdepends:
- 			@echo $$($(2)_RDEPENDENCIES)
  
- $(1)-show-recursive-rdepends:
--			@cd "$$(CONFIG_DIR)" && \
--			$$(TOPDIR)/support/scripts/graph-depends -p $(1) --reverse -f -q
-+			@echo $$(call pkg-recursive-rdependencies,$(1))
+-# Execute the "make <pkg>-show-version" command to get the version of a given
+-# list of packages, and return the version formatted as a Python dictionary.
+-def get_version(pkgs):
+-    logging.info("Getting version for %s" % pkgs)
+-    cmd = ["make", "-s", "--no-print-directory"]
+-    for pkg in pkgs:
+-        cmd.append("%s-show-version" % pkg)
+-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
+-    output = p.communicate()[0]
+-    if p.returncode != 0:
+-        logging.error("Error getting version %s" % pkgs)
+-        sys.exit(1)
+-    output = output.split("\n")
+-    if len(output) != len(pkgs) + 1:
+-        logging.error("Error getting version")
+-        sys.exit(1)
+-    version = {}
+-    for i in range(0, len(pkgs)):
+-        pkg = pkgs[i]
+-        version[pkg] = output[i]
+-    return version
++# This function returns a tuple of three dictionaries, all using package
++# names as keys:
++# - a dictionary which values are the lists of packages that are the
++#   dependencies of the package used as key;
++# - a dictionary which values are the type of the package used as key;
++# - a dictionary which values are the version of the package used as key,
++#   'virtual' for a virtual package, or the empty string for a rootfs.
++#
++# 'direction' can be either 'direct' or 'forward' to get the direct (aka
++# forward) dependencies, or 'back' or 'reverse' to get the reverse (aka
++# backward) dependencies.
++def get_dependency_tree(direction="direct"):
++    logging.info("Getting dependency tree...")
  
- $(1)-show-build-order: $$(patsubst %,%-show-build-order,$$($(2)_FINAL_ALL_DEPENDENCIES))
- 	@:
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index bffd79dfb0..fb96d3e62e 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -53,6 +53,19 @@ suitable-extractor = $(INFLATE$(suffix $(1)))
- extractor-dependency = $(firstword $(INFLATE$(filter-out \
- 	$(EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS),$(suffix $(1)))))
- 
-+# Return all the reverse dependencies of a package list
-+# $(1): the space-separated list of packages (zero, one or more)
-+define pkg-recursive-rdependencies
-+	$(sort \
-+		$(foreach p,$(sort $(1)), \
-+			$(sort \
-+				$($(call UPPERCASE,$(p))_RDEPENDENCIES) \
-+				$(call pkg-recursive-rdependencies,$($(call UPPERCASE,$(p))_RDEPENDENCIES),$(2) .) \
-+			) \
-+		) \
-+	)
-+endef
+-
+-def _get_depends(pkgs, rule):
+-    logging.info("Getting dependencies for %s" % pkgs)
+-    cmd = ["make", "-s", "--no-print-directory"]
+-    for pkg in pkgs:
+-        cmd.append("%s-%s" % (pkg, rule))
+-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
+-    output = p.communicate()[0]
+-    if p.returncode != 0:
+-        logging.error("Error getting dependencies %s\n" % pkgs)
+-        sys.exit(1)
+-    output = output.split("\n")
+-    if len(output) != len(pkgs) + 1:
+-        logging.error("Error getting dependencies")
+-        sys.exit(1)
+     deps = {}
+-    for i in range(0, len(pkgs)):
+-        pkg = pkgs[i]
+-        pkg_deps = output[i].split(" ")
+-        if pkg_deps == ['']:
+-            deps[pkg] = []
++    types = {}
++    versions = {}
 +
- # check-deprecated-variable -- throw an error on deprecated variables
- # example:
- #   $(eval $(call check-deprecated-variable,FOO_MAKE_OPT,FOO_MAKE_OPTS))
++    # Special case for the 'all' top-level fake package
++    deps['all'] = []
++    types['all'] = 'target'
++    versions['all'] = ''
++
++    cmd = ["make", "-s", "--no-print-directory", "show-dependency-tree"]
++    with open(os.devnull, 'wb') as devnull:
++        p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=devnull, universal_newlines=True)
++        output = p.communicate()[0]
++
++    for l in output.splitlines():
++        if " -> " in l:
++            pkg = l.split(" -> ")[0]
++            if direction == "forward" or direction == "direct":
++                try:
++                    deps[pkg] += l.split(" -> ")[1].split()
++                except KeyError:
++                    deps[pkg] = l.split(" -> ")[1].split()
++            elif direction == "back" or direction == "reverse":
++                for p in l.split(" -> ")[1].split():
++                    try:
++                        deps[p].append(pkg)
++                    except KeyError:
++                        deps[p] = [pkg]
++            else:
++                raise ValueError('direction must be one of: direct, forward, reverse, back')
+         else:
+-            deps[pkg] = pkg_deps
+-    return deps
++            pkg, type_version = l.split(": ", 1)
++            t, v = "{} -".format(type_version).split(None, 2)[:2]
++            deps['all'].append(pkg)
++            types[pkg] = t
++            versions[pkg] = v
+ 
+-
+-# Execute the "make <pkg>-show-depends" command to get the list of
+-# dependencies of a given list of packages, and return the list of
+-# dependencies formatted as a Python dictionary.
+-def get_depends(pkgs):
+-    return _get_depends(pkgs, 'show-depends')
+-
+-
+-# Execute the "make <pkg>-show-rdepends" command to get the list of
+-# reverse dependencies of a given list of packages, and return the
+-# list of dependencies formatted as a Python dictionary.
+-def get_rdepends(pkgs):
+-    return _get_depends(pkgs, 'show-rdepends')
++    return (deps, types, versions)
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index 29134c8237..139a5dee80 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -20,10 +20,10 @@
+ #    configuration.
+ #
+ # Copyright (C) 2010-2013 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++# Copyright (C) 2018 Yann E. MORIN <yann.morin.1998@free.fr>
+ 
+ import logging
+ import sys
+-import subprocess
+ import argparse
+ from fnmatch import fnmatch
+ 
+@@ -36,63 +36,6 @@ MODE_PKG = 2    # draw dependency graph for a given package
+ allpkgs = []
+ 
+ 
+-# Execute the "make show-targets" command to get the list of the main
+-# Buildroot PACKAGES and return it formatted as a Python list. This
+-# list is used as the starting point for full dependency graphs
+-def get_targets():
+-    logging.info("Getting targets")
+-    cmd = ["make", "-s", "--no-print-directory", "show-targets"]
+-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
+-    output = p.communicate()[0].strip()
+-    if p.returncode != 0:
+-        return None
+-    if output == '':
+-        return []
+-    return output.split(' ')
+-
+-
+-# Recursive function that builds the tree of dependencies for a given
+-# list of packages. The dependencies are built in a list called
+-# 'dependencies', which contains tuples of the form (pkg1 ->
+-# pkg2_on_which_pkg1_depends, pkg3 -> pkg4_on_which_pkg3_depends) and
+-# the function finally returns this list.
+-def get_all_depends(pkgs, get_depends_func):
+-    dependencies = []
+-
+-    # Filter the packages for which we already have the dependencies
+-    filtered_pkgs = []
+-    for pkg in pkgs:
+-        if pkg in allpkgs:
+-            continue
+-        filtered_pkgs.append(pkg)
+-        allpkgs.append(pkg)
+-
+-    if len(filtered_pkgs) == 0:
+-        return []
+-
+-    depends = get_depends_func(filtered_pkgs)
+-
+-    deps = set()
+-    for pkg in filtered_pkgs:
+-        pkg_deps = depends[pkg]
+-
+-        # This package has no dependency.
+-        if pkg_deps == []:
+-            continue
+-
+-        # Add dependencies to the list of dependencies
+-        for dep in pkg_deps:
+-            dependencies.append((pkg, dep))
+-            deps.add(dep)
+-
+-    if len(deps) != 0:
+-        newdeps = get_all_depends(deps, get_depends_func)
+-        if newdeps is not None:
+-            dependencies += newdeps
+-
+-    return dependencies
+-
+-
+ # The Graphviz "dot" utility doesn't like dashes in node names. So for
+ # node names, we strip all dashes. Also, nodes can't start with a number,
+ # so we prepend an underscore.
+@@ -230,7 +173,7 @@ def remove_extra_deps(deps, rootpkg, transitive):
+ 
+ 
+ # Print the attributes of a node: label and fill-color
+-def print_attrs(outfile, pkg, version, depth, colors):
++def print_attrs(outfile, pkg, pkg_type, pkg_version, depth, colors):
+     name = pkg_node_name(pkg)
+     if pkg == 'all':
+         label = 'ALL'
+@@ -239,13 +182,11 @@ def print_attrs(outfile, pkg, version, depth, colors):
+     if depth == 0:
+         color = colors[0]
+     else:
+-        if pkg.startswith('host') \
+-                or pkg.startswith('toolchain') \
+-                or pkg.startswith('rootfs'):
++        if pkg_type == "host":
+             color = colors[2]
+         else:
+             color = colors[1]
+-    if version == "virtual":
++    if pkg_version == "virtual":
+         outfile.write("%s [label = <<I>%s</I>>]\n" % (name, label))
+     else:
+         outfile.write("%s [label = \"%s\"]\n" % (name, label))
+@@ -256,13 +197,13 @@ done_deps = []
+ 
+ 
+ # Print the dependency graph of a package
+-def print_pkg_deps(outfile, dict_deps, dict_version, stop_list, exclude_list,
++def print_pkg_deps(outfile, dict_deps, dict_types, dict_versions, stop_list, exclude_list,
+                    arrow_dir, draw_graph, depth, max_depth, pkg, colors):
+     if pkg in done_deps:
+         return
+     done_deps.append(pkg)
+     if draw_graph:
+-        print_attrs(outfile, pkg, dict_version.get(pkg), depth, colors)
++        print_attrs(outfile, pkg, dict_types[pkg], dict_versions[pkg], depth, colors)
+     elif depth != 0:
+         outfile.write("%s " % pkg)
+     if pkg not in dict_deps:
+@@ -270,17 +211,15 @@ def print_pkg_deps(outfile, dict_deps, dict_version, stop_list, exclude_list,
+     for p in stop_list:
+         if fnmatch(pkg, p):
+             return
+-    if dict_version.get(pkg) == "virtual" and "virtual" in stop_list:
++    if dict_versions[pkg] == "virtual" and "virtual" in stop_list:
+         return
+-    if pkg.startswith("host-") and "host" in stop_list:
++    if dict_types[pkg] == "host" and "host" in stop_list:
+         return
+     if max_depth == 0 or depth < max_depth:
+         for d in dict_deps[pkg]:
+-            if dict_version.get(d) == "virtual" \
+-               and "virtual" in exclude_list:
++            if dict_versions[d] == "virtual" and "virtual" in exclude_list:
+                 continue
+-            if d.startswith("host-") \
+-               and "host" in exclude_list:
++            if dict_types[d] == "host" and "host" in exclude_list:
+                 continue
+             add = True
+             for p in exclude_list:
+@@ -290,7 +229,7 @@ def print_pkg_deps(outfile, dict_deps, dict_version, stop_list, exclude_list,
+             if add:
+                 if draw_graph:
+                     outfile.write("%s -> %s [dir=%s]\n" % (pkg_node_name(pkg), pkg_node_name(d), arrow_dir))
+-                print_pkg_deps(outfile, dict_deps, dict_version, stop_list, exclude_list,
++                print_pkg_deps(outfile, dict_deps, dict_types, dict_versions, stop_list, exclude_list,
+                                arrow_dir, draw_graph, depth + 1, max_depth, d, colors)
+ 
+ 
+@@ -352,6 +291,7 @@ def main():
+ 
+     if args.package is None:
+         mode = MODE_FULL
++        rootpkg = 'all'
+     else:
+         mode = MODE_PKG
+         rootpkg = args.package
+@@ -370,13 +310,11 @@ def main():
+         exclude_list += MANDATORY_DEPS
+ 
+     if args.direct:
+-        get_depends_func = brpkgutil.get_depends
+         arrow_dir = "forward"
+     else:
+         if mode == MODE_FULL:
+             logging.error("--reverse needs a package")
+             sys.exit(1)
+-        get_depends_func = brpkgutil.get_rdepends
+         arrow_dir = "back"
+ 
+     draw_graph = not args.flat_list
+@@ -389,46 +327,19 @@ def main():
+         logging.error("Error: incorrect color list '%s'" % args.colors)
+         sys.exit(1)
+ 
+-    # In full mode, start with the result of get_targets() to get the main
+-    # targets and then use get_all_depends() for all targets
+-    if mode == MODE_FULL:
+-        targets = get_targets()
+-        dependencies = []
+-        allpkgs.append('all')
+-        filtered_targets = []
+-        for tg in targets:
+-            dependencies.append(('all', tg))
+-            filtered_targets.append(tg)
+-        deps = get_all_depends(filtered_targets, get_depends_func)
+-        if deps is not None:
+-            dependencies += deps
+-        rootpkg = 'all'
+-
+-    # In pkg mode, start directly with get_all_depends() on the requested
+-    # package
+-    elif mode == MODE_PKG:
+-        dependencies = get_all_depends([rootpkg], get_depends_func)
+-
+-    # Make the dependencies a dictionnary { 'pkg':[dep1, dep2, ...] }
+-    dict_deps = {}
+-    for dep in dependencies:
+-        if dep[0] not in dict_deps:
+-            dict_deps[dep[0]] = []
+-        dict_deps[dep[0]].append(dep[1])
++    dict_deps, dict_types, dict_versions = brpkgutil.get_dependency_tree(arrow_dir)
+ 
+     check_circular_deps(dict_deps)
+     if check_only:
+         sys.exit(0)
+ 
+     dict_deps = remove_extra_deps(dict_deps, rootpkg, args.transitive)
+-    dict_version = brpkgutil.get_version([pkg for pkg in allpkgs
+-                                          if pkg != "all" and not pkg.startswith("root")])
+ 
+     # Start printing the graph data
+     if draw_graph:
+         outfile.write("digraph G {\n")
+ 
+-    print_pkg_deps(outfile, dict_deps, dict_version, stop_list, exclude_list,
++    print_pkg_deps(outfile, dict_deps, dict_types, dict_versions, stop_list, exclude_list,
+                    arrow_dir, draw_graph, 0, args.depth, rootpkg, colors)
+ 
+     if draw_graph:
 -- 
 2.14.1
