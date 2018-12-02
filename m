@@ -1,33 +1,81 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sun, 02 Dec 2018 07:19:27 -0000
-Subject: [Buildroot] [git commit] util-linux: bump to version 2.33
-Message-ID: <20181202071554.578B98A3F3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: use TestPythonPackageBase
+ for python-autobahn
+Message-ID: <20181202071554.D79FB8107F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dbb68d79732d59a5c3687b20a86602ce0987aaf9
+commit: https://git.buildroot.net/buildroot/commit/?id=b5dd9364ee710ef036556dcda78f682ae27fefa0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Update "basic set" help to include the new "choom" utility.
-- Re-generate checksums for license files, whose names now follow the
-  SPDX License List.
-- Pull a patch already applied upstream that make rtcwake use poweroff
-  if shutdown is not found (e.g. Busybox, which the default init system
-  on Buldroot).
-- Pull a patch already submitted upstream to fix the output of escaped
-  characters by agetty.
+Move the test script to be run on the target from inline in the test
+case to a separate file.
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Asaf Kahlon <asafka7@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...ake-use-poweroff-if-shutdown-is-not-found.patch | 86 ++++++++++++++++++++++
- ...2-agetty-fix-output-of-escaped-characters.patch | 26 +++++++
- package/util-linux/Config.in                       |  2 +-
- package/util-linux/util-linux.hash                 | 14 ++--
- package/util-linux/util-linux.mk                   | 11 ++-
- 5 files changed, 128 insertions(+), 11 deletions(-)
+ .../tests/package/sample_python_autobahn.py        |  1 +
+ .../testing/tests/package/test_python_autobahn.py  | 29 +++++++---------------
+ 2 files changed, 10 insertions(+), 20 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/support/testing/tests/package/sample_python_autobahn.py b/support/testing/tests/package/sample_python_autobahn.py
+new file mode 100644
+index 0000000000..8189b6a6b3
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_autobahn.py
+@@ -0,0 +1 @@
++import autobahn.wamp  # noqa
+diff --git a/support/testing/tests/package/test_python_autobahn.py b/support/testing/tests/package/test_python_autobahn.py
+index 2bc0f0cccf..af1f617d6d 100644
+--- a/support/testing/tests/package/test_python_autobahn.py
++++ b/support/testing/tests/package/test_python_autobahn.py
+@@ -1,32 +1,21 @@
+-from tests.package.test_python import TestPythonBase
++from tests.package.test_python import TestPythonPackageBase
+ 
+ 
+-class TestPythonAutobahn(TestPythonBase):
+-    def import_test(self):
+-        cmd = self.interpreter + " -c 'import autobahn.wamp'"
+-        _, exit_code = self.emulator.run(cmd)
+-        self.assertEqual(exit_code, 0)
+-
+-
+-class TestPythonPy2Autobahn(TestPythonAutobahn):
+-    config = TestPythonBase.config + \
++class TestPythonPy2Autobahn(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
+         """
+         BR2_PACKAGE_PYTHON=y
+         BR2_PACKAGE_PYTHON_AUTOBAHN=y
+         """
++    sample_scripts = ["tests/package/sample_python_autobahn.py"]
+ 
+-    def test_run(self):
+-        self.login()
+-        self.import_test()
+ 
+-
+-class TestPythonPy3Autobahn(TestPythonAutobahn):
+-    config = TestPythonBase.config + \
++class TestPythonPy3Autobahn(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
+         """
+         BR2_PACKAGE_PYTHON3=y
+         BR2_PACKAGE_PYTHON_AUTOBAHN=y
+         """
+-
+-    def test_run(self):
+-        self.login()
+-        self.import_test()
++    sample_scripts = ["tests/package/sample_python_autobahn.py"]
