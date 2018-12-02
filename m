@@ -1,49 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Sun, 02 Dec 2018 07:19:27 -0000
-Subject: [Buildroot] [git commit] libressl: bump to version 2.8.2
-Message-ID: <20181202071555.8D2FD8A3F3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/proftpd: add enable buffer size
+Message-ID: <20181202071555.5FA958A3F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a6297368959902b6a6b868cba232fe2c17df22c
+commit: https://git.buildroot.net/buildroot/commit/?id=39ec1ee783414fa4f0051447bb099477ff8a5013
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-See release notes since 2.7.4 at
+Enable buffer size as a compile time option to change internal
+buffer size.
 
-  https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-2.8.0-relnotes.txt
-  https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-2.8.1-relnotes.txt
-  https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-2.8.2-relnotes.txt
-
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libressl/libressl.hash | 2 +-
- package/libressl/libressl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/proftpd/Config.in  | 13 +++++++++++++
+ package/proftpd/proftpd.mk |  4 ++++
+ 2 files changed, 17 insertions(+)
 
-diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
-index 111fe4feed..b0d1928e10 100644
---- a/package/libressl/libressl.hash
-+++ b/package/libressl/libressl.hash
-@@ -1,4 +1,4 @@
- # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
--sha256 1e3a9fada06c1c060011470ad0ff960de28f9a0515277d7336f7e09362517da6  libressl-2.7.4.tar.gz
-+sha256 b8cb31e59f1294557bfc80f2a662969bc064e83006ceef0574e2553a1c254fd5  libressl-2.8.2.tar.gz
- # Locally computed
- sha256 5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
-diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
-index 35494c8239..f035f9044e 100644
---- a/package/libressl/libressl.mk
-+++ b/package/libressl/libressl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
+index b615a5ff4c..478a7e80e1 100644
+--- a/package/proftpd/Config.in
++++ b/package/proftpd/Config.in
+@@ -65,4 +65,17 @@ config BR2_PACKAGE_PROFTPD_MOD_QUOTATAB_SQL
+ 	  Compile mod_quotatab with mod_quotatab_sql table.
  
--LIBRESSL_VERSION = 2.7.4
-+LIBRESSL_VERSION = 2.8.2
- LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
- LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
- LIBRESSL_LICENSE_FILES = COPYING
+ endif
++
++config BR2_PACKAGE_PROFTPD_BUFFER_SIZE
++	int "buffer size in bytes (0 for default)"
++	default "0"
++	help
++	  By increasing the buffer size above the default of 1K,
++	  proftpd reads and writes data in larger chunks, and makes
++	  fewer expensive system calls. Use of this option to set buffer
++	  sizes of 8K or more has been reported to drastically increase
++	  transfer speeds (depending on network configurations).
++
++	  0 uses the default size of 1024.
++
+ endif
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index 8f3ff5088e..324a602761 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -121,4 +121,8 @@ define PROFTPD_INSTALL_INIT_SYSTEMD
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/proftpd.service
+ endef
+ 
++ifneq ($(BR2_PACKAGE_PROFTPD_BUFFER_SIZE),0)
++PROFTPD_CONF_OPTS += --enable-buffer-size=$(BR2_PACKAGE_PROFTPD_BUFFER_SIZE)
++endif
++
+ $(eval $(autotools-package))
