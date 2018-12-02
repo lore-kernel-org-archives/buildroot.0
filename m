@@ -1,7 +1,7 @@
 From: David De Grave <david@ledav.net>
-Date: Sun,  2 Dec 2018 19:34:17 +0100
+Date: Sun,  2 Dec 2018 19:26:17 +0100
 Subject: [Buildroot] [PATCH 1/1] sgp30: New kernel module package
-Message-ID: <20181202183417.6562-1-david@ledav.net>
+Message-ID: <20181202182617.6397-1-david@ledav.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
