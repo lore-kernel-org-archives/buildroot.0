@@ -1,109 +1,43 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  2 Dec 2018 10:37:28 +0100
-Subject: [Buildroot] [PATCH 1/1] fontconfig: fix static build
-Message-ID: <20181202093728.20636-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 2 Dec 2018 11:22:11 +0100
+Subject: [Buildroot] [git commit] package/pkg-generic: use readlink instead
+ of realpath
+Message-ID: <20181202101918.7AA648A47D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Retrieved patch from upstream to fix static build
+commit: https://git.buildroot.net/buildroot/commit/?id=ba015cdf04a2ee33615f346448ac2e92aac3865a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/17e5f9ce5e7566f5a88abfd27b7db5614c1a3086
+realpath is missing on oldish distributions, like Debian 7, which is
+still used in the wild.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Use readlink instead; that has been available since the dawn of ages now
+(well, coreutils had it in 2003).
+
+Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...x-the-build-issue-with-enable-static.patch | 80 +++++++++++++++++++
- 1 file changed, 80 insertions(+)
- create mode 100644 package/fontconfig/0001-Fix-the-build-issue-with-enable-static.patch
+ package/pkg-generic.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/fontconfig/0001-Fix-the-build-issue-with-enable-static.patch b/package/fontconfig/0001-Fix-the-build-issue-with-enable-static.patch
-new file mode 100644
-index 0000000000..6104f1ed10
---- /dev/null
-+++ b/package/fontconfig/0001-Fix-the-build-issue-with-enable-static.patch
-@@ -0,0 +1,80 @@
-+From 8208f99fa1676c42bfd8d74de3e9dac5366c150c Mon Sep 17 00:00:00 2001
-+From: Akira TAGOH <akira@tagoh.org>
-+Date: Mon, 3 Sep 2018 04:56:16 +0000
-+Subject: Fix the build issue with --enable-static
-+
-+Fixes https://gitlab.freedesktop.org/fontconfig/fontconfig/issues/109
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://gitlab.freedesktop.org/fontconfig/fontconfig/issues/109]
-+---
-+ test/test-bz106632.c | 35 ++++++++++++-----------------------
-+ 1 file changed, 12 insertions(+), 23 deletions(-)
-+
-+(limited to 'test')
-+
-+diff --git a/test/test-bz106632.c b/test/test-bz106632.c
-+index daa0c1e..2d67c2e 100644
-+--- a/test/test-bz106632.c
-++++ b/test/test-bz106632.c
-+@@ -25,25 +25,26 @@
-+ #ifdef HAVE_CONFIG_H
-+ #include "config.h"
-+ #endif
-++#include <stdio.h>
-+ #include <stdlib.h>
-++#include <string.h>
-+ #include <dirent.h>
-++#include <unistd.h>
-++#include <errno.h>
-+ #ifndef HAVE_STRUCT_DIRENT_D_TYPE
-+ #include <sys/types.h>
-+ #include <sys/stat.h>
-+-#include <unistd.h>
-+ #endif
-+-#include "fcstr.c"
-+-#undef FcConfigBuildFonts
-+-#undef FcConfigCreate
-+-#undef FcConfigGetCurrent
-+-#undef FcConfigParseAndLoadFromMemory
-+-#undef FcConfigUptoDate
-+-#undef FcFontList
-+-#undef FcInitReinitialize
-+-#undef FcPatternCreate
-+-#undef FcPatternDestroy
-+ #include <fontconfig/fontconfig.h>
-+ 
-++#ifdef _WIN32
-++#  define FC_DIR_SEPARATOR         '\\'
-++#  define FC_DIR_SEPARATOR_S       "\\"
-++#else
-++#  define FC_DIR_SEPARATOR         '/'
-++#  define FC_DIR_SEPARATOR_S       "/"
-++#endif
-++
-+ #ifdef HAVE_MKDTEMP
-+ #define fc_mkdtemp	mkdtemp
-+ #else
-+@@ -154,18 +155,6 @@ unlink_dirs (const char *dir)
-+     return ret;
-+ }
-+ 
-+-FcChar8 *
-+-FcLangNormalize (const FcChar8 *lang)
-+-{
-+-    return NULL;
-+-}
-+-
-+-FcChar8 *
-+-FcConfigHome (void)
-+-{
-+-    return NULL;
-+-}
-+-
-+ int
-+ main (void)
-+ {
-+-- 
-+cgit v1.1
-+
--- 
-2.17.1
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index a27aa1f7fd..f5cab2b9c2 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -280,8 +280,8 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
+ 				-e "s,^\(exec_\)\?prefix=.*,\1prefix=@STAGING_DIR@/usr,g" \
+ 				-e "s,-I/usr/,-I at STAGING_DIR@/usr/,g" \
+ 				-e "s,-L/usr/,-L at STAGING_DIR@/usr/,g" \
+-				-e 's, at STAGING_DIR@,$$(dirname $$(realpath -e $$0))/../..,g' \
+-				-e 's, at HOST_DIR@,$$(dirname $$(realpath -e $$0))/../../../..,g' \
++				-e 's, at STAGING_DIR@,$$(dirname $$(readlink -e $$0))/../..,g' \
++				-e 's, at HOST_DIR@,$$(dirname $$(readlink -e $$0))/../../../..,g' \
+ 				-e "s, at BASE_DIR@,$(BASE_DIR),g" \
+ 				$(addprefix $(STAGING_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ;\
+ 	fi
