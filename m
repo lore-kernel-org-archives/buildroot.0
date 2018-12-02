@@ -1,47 +1,59 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  2 Dec 2018 10:04:35 +0100
-Subject: [Buildroot] [PATCH 03/11] support/scripts/graph-depends: introduce
- MANDATORY_DEPS array
+Date: Sun,  2 Dec 2018 10:04:36 +0100
+Subject: [Buildroot] [PATCH 04/11] support/graph-depends: add option to
+ exclude mandatory deps
 In-Reply-To: <cover.1543741464.git.yann.morin.1998@free.fr>
 References: <cover.1543741464.git.yann.morin.1998@free.fr>
-Message-ID: <370d36d0c5085f498bb16dedf8ac0a21becb4aa8.1543741464.git.yann.morin.1998@free.fr>
+Message-ID: <6581a18cbfdec59edd39dfdc20e989563a4f6a03.1543741464.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Some times, multiple dependency graphs for a set of packages (mostly
+the application-level packages for the project) are included in reports
+(e.g. delivery notes). Repeating the mandatory dependencies on all
+those graphs is useless and clutters the important dependencies.
 
-This array will be re-used in another function in a follow-up commit,
-so it makes sense to factor it out.
+When we had only two such mandatory dependencies (toolchain, skeleton),
+it was manageable to list them as manual exclusions:
+    -x toolchain -x skeleton
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+But we now have quite a few such dependencies, and it becomes a bit more
+cumbersome to manage, not counting the ones we may add in the future.
+
+Add an option to exclude all those mandatory dependencies, tio generate
+neat graphs.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/graph-depends | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ support/scripts/graph-depends | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index f1b6b142fb..d2b100f385 100755
+index d2b100f385..d17efe4cc0 100755
 --- a/support/scripts/graph-depends
 +++ b/support/scripts/graph-depends
-@@ -170,10 +170,15 @@ def remove_transitive_deps(pkg, deps):
-     return new_d
+@@ -302,6 +302,8 @@ def parse_args():
+                         "'host' to stop on host packages.")
+     parser.add_argument("--exclude", "-x", metavar="PACKAGE", dest="exclude_list", action="append",
+                         help="Like --stop-on, but do not add PACKAGE to the graph.")
++    parser.add_argument("--exclude-mandatory", "-X", action="store_true",
++                        help="Like if -x was passed for all mandatory dependencies.")
+     parser.add_argument("--colors", "-c", metavar="COLOR_LIST", dest="colors",
+                         default="lightblue,grey,gainsboro",
+                         help="Comma-separated list of the three colors to use" +
+@@ -355,6 +357,9 @@ def main():
+     else:
+         exclude_list = args.exclude_list
  
- 
-+# List of dependencies that all/many packages have, and that we want
-+# to trim when generating the dependency graph.
-+MANDATORY_DEPS = ['toolchain', 'skeleton']
++    if args.exclude_mandatory:
++        exclude_list += MANDATORY_DEPS
 +
-+
- # This function removes the dependency on some 'mandatory' package, like the
- # 'toolchain' package, or the 'skeleton' package
- def remove_mandatory_deps(pkg, deps):
--    return [p for p in deps[pkg] if p not in ['toolchain', 'skeleton']]
-+    return [p for p in deps[pkg] if p not in MANDATORY_DEPS]
- 
- 
- # This function will check that there is no loop in the dependency chain
+     if args.direct:
+         get_depends_func = brpkgutil.get_depends
+         arrow_dir = "forward"
 -- 
 2.14.1
