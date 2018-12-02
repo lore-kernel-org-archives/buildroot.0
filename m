@@ -1,179 +1,188 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sun, 02 Dec 2018 07:19:31 -0000
-Subject: [Buildroot] [git commit] tpm2-tss: bump to version 2.1.0
-Message-ID: <20181202071555.9563F8A3F3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] tpm2-tools: bump to version 3.1.3
+Message-ID: <20181202071555.A71DF8A3F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fcc9232b0c9759978a6928eec070d73ed6fb3922
+commit: https://git.buildroot.net/buildroot/commit/?id=e4076e407ac61d8d8df4dec154d62ba186ec003f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Drop C++ requirement (tmp2-tss is pure C now).
-- Add explicit dependency on openssl (gnutls can be used too but this
-  option will be added by a subsequent patch).
-- Drop the patch on tcti_socket.cpp, which is not applicable.
-- Add a patch already submitted upstream to support using libressl[1].
-- Update LICENSE hash. The terms are is still BSD-2-Clause but the file
-  now contains a SPDX license identifier.
-
-1. https://github.com/tpm2-software/tpm2-tss/pull/1207
+- Drop C++ requirement, which came from tpm2-tss.
+- Drop musl restriction.
+- Drop the patch to build with LibreSSL, which is not required anymore.
+- Update the patch for the "variable may be used uninitialized" error to
+  match tpm2-tss 2.1.0, which defines TPM2_ALG_ERROR, not TPM_ALG_ERROR.
 
 Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-ESYS-Fix-build-with-LibreSSL.patch        | 48 ++++++++++++++++++++++
- ...ocket.cpp-add-missing-inclusion-of-sys-se.patch | 33 ---------------
- package/tpm2-tss/Config.in                         |  5 +--
- package/tpm2-tss/tpm2-tss.hash                     |  4 +-
- package/tpm2-tss/tpm2-tss.mk                       |  9 ++--
- 5 files changed, 54 insertions(+), 45 deletions(-)
+ .../tpm2-tools/0001-Fix-build-with-LibreSSL.patch  | 64 ----------------------
+ ...y-fix-type-may-be-used-uninitialized-warn.patch | 14 ++---
+ package/tpm2-tools/Config.in                       |  7 +--
+ package/tpm2-tools/tpm2-tools.hash                 |  2 +-
+ package/tpm2-tools/tpm2-tools.mk                   |  2 +-
+ 5 files changed, 11 insertions(+), 78 deletions(-)
 
-diff --git a/package/tpm2-tss/0001-ESYS-Fix-build-with-LibreSSL.patch b/package/tpm2-tss/0001-ESYS-Fix-build-with-LibreSSL.patch
-new file mode 100644
-index 0000000000..d8bf2a665c
---- /dev/null
-+++ b/package/tpm2-tss/0001-ESYS-Fix-build-with-LibreSSL.patch
-@@ -0,0 +1,48 @@
-+From e8b8ecd2f761430dd2e2c74505974b429fe6b40f Mon Sep 17 00:00:00 2001
-+From: Carlos Santos <casantos@datacom.com.br>
-+Date: Wed, 14 Nov 2018 23:31:25 -0200
-+Subject: [PATCH] ESYS: Fix build with LibreSSL
-+
-+RAND_bytes() is declared in rand.h. Also, LibreSSL does not provide OAEP
-+macros EVP_PKEY_CTX_set0_rsa_oaep_label and EVP_PKEY_CTX_set_rsa_oaep_md
-+so use them conditionally.
-+
-+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-+---
-+ src/tss2-esys/esys_crypto_ossl.c | 6 ++++++
-+ 1 file changed, 6 insertions(+)
-+
-+diff --git a/src/tss2-esys/esys_crypto_ossl.c b/src/tss2-esys/esys_crypto_ossl.c
-+index 43088f4a..6c0c76fe 100644
-+--- a/src/tss2-esys/esys_crypto_ossl.c
-++++ b/src/tss2-esys/esys_crypto_ossl.c
-+@@ -10,6 +10,7 @@
-+ #include <openssl/aes.h>
-+ #include <openssl/rsa.h>
-+ #include <openssl/engine.h>
-++#include <openssl/rand.h>
-+ #include <stdio.h>
-+ 
-+ #include "tss2_esys.h"
-+@@ -660,6 +661,8 @@ iesys_cryptossl_pk_encrypt(TPM2B_PUBLIC * pub_tpm_key,
-+                    "Could not set RSA passing.", cleanup);
-+     }
-+ 
-++/* LibreSSL does not provide these OAEP functions */
-++#ifdef EVP_PKEY_CTX_set0_rsa_oaep_label
-+     if (1 != EVP_PKEY_CTX_set0_rsa_oaep_label(ctx, label, strlen(label)+1)) {
-+         goto_error(r, TSS2_ESYS_RC_GENERAL_FAILURE,
-+                    "Could not set RSA label.", cleanup);
-+@@ -669,6 +672,9 @@ iesys_cryptossl_pk_encrypt(TPM2B_PUBLIC * pub_tpm_key,
-+         goto_error(r, TSS2_ESYS_RC_GENERAL_FAILURE,
-+                    "Could not set hash algorithm.", cleanup);
-+     }
-++#else
-++    (void) label;
-++#endif
-+ 
-+     /* Determine out size */
-+     if (1 != EVP_PKEY_encrypt(ctx, NULL, out_size, in_buffer, in_size)) {
-+-- 
-+2.19.1
-+
-diff --git a/package/tpm2-tss/0001-tcti-tcti_socket.cpp-add-missing-inclusion-of-sys-se.patch b/package/tpm2-tss/0001-tcti-tcti_socket.cpp-add-missing-inclusion-of-sys-se.patch
+diff --git a/package/tpm2-tools/0001-Fix-build-with-LibreSSL.patch b/package/tpm2-tools/0001-Fix-build-with-LibreSSL.patch
 deleted file mode 100644
-index e8e0d842f2..0000000000
---- a/package/tpm2-tss/0001-tcti-tcti_socket.cpp-add-missing-inclusion-of-sys-se.patch
+index 0fdd2dc4dd..0000000000
+--- a/package/tpm2-tools/0001-Fix-build-with-LibreSSL.patch
 +++ /dev/null
-@@ -1,33 +0,0 @@
--From 2fdbf9f56bd6e7b00c695881a81c0df2f5088760 Mon Sep 17 00:00:00 2001
+@@ -1,64 +0,0 @@
+-From 7f8d9359dcf9edbb13bb447f70234397afa4fb05 Mon Sep 17 00:00:00 2001
 -From: Carlos Santos <casantos@datacom.ind.br>
--Date: Fri, 23 Mar 2018 09:15:44 -0300
--Subject: [PATCH] tcti/tcti_socket.cpp: add missing inclusion of sys/select.h
+-Date: Tue, 30 Jan 2018 11:21:14 -0200
+-Subject: [PATCH] Fix build with LibreSSL
 -
--Prevents compilation errors due to undeclared "fd_set" type.
+-OPENSSL_VERSION_NUMBER is used to test the version of OpenSSL but this
+-test alone breaks the build with LibreSSL due to implicit declarations
+-of functions 'RSA_set0_key' and 'HMAC_CTX_free'.
 -
--Fixes:
--  http://autobuild.buildroot.net/results/09e8b3b85d7113d60e8967a2d41a6aea8f8197c0
--  http://autobuild.buildroot.net/results/2e4c70f2f1239eb19235ae04a936a6492daf316d
--  http://autobuild.buildroot.net/results/bbd68f52781da735e983b1260de5b804787374b1
+-Test if OpenSSL < 1.1.0 or LIBRESSL_VERSION_NUMBER is defined, instead.
 -
 -Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 ----
-- tcti/tcti_socket.cpp | 2 ++
-- 1 file changed, 2 insertions(+)
+- lib/conversion.c | 2 +-
+- lib/tpm_kdfa.c   | 6 +++---
+- 2 files changed, 4 insertions(+), 4 deletions(-)
 -
--diff --git a/tcti/tcti_socket.cpp b/tcti/tcti_socket.cpp
--index e8982f1..b6e5874 100644
----- a/tcti/tcti_socket.cpp
--+++ b/tcti/tcti_socket.cpp
--@@ -28,6 +28,8 @@
-- #include <stdio.h>
-- #include <stdlib.h>   // Needed for _wtoi
+-diff --git a/lib/conversion.c b/lib/conversion.c
+-index 1d0a0b7..df02de4 100644
+---- a/lib/conversion.c
+-+++ b/lib/conversion.c
+-@@ -133,7 +133,7 @@ static bool tpm2_convert_pubkey_ssl(TPMT_PUBLIC *public, pubkey_format format, c
+-         goto error;
+-     }
 - 
--+#include <sys/select.h>   // for fd_set
--+
-- #include "sapi/tpm20.h"
-- #include "tcti/tcti_socket.h"
-- #include "sysapi_util.h"
+--#if OPENSSL_VERSION_NUMBER < 0x1010000fL /* OpenSSL 1.1.0 */
+-+#if OPENSSL_VERSION_NUMBER < 0x1010000fL || defined(LIBRESSL_VERSION_NUMBER) /* OpenSSL 1.1.0 */
+-     ssl_rsa_key->e = e;
+-     ssl_rsa_key->n = n;
+- #else
+-diff --git a/lib/tpm_kdfa.c b/lib/tpm_kdfa.c
+-index ee3cf8a..e43bdeb 100644
+---- a/lib/tpm_kdfa.c
+-+++ b/lib/tpm_kdfa.c
+-@@ -54,7 +54,7 @@ static const EVP_MD *tpm_algorithm_to_openssl_digest(TPMI_ALG_HASH algorithm) {
+- static HMAC_CTX *hmac_alloc()
+- {
+-     HMAC_CTX *ctx;
+--#if OPENSSL_VERSION_NUMBER < 0x1010000fL /* OpenSSL 1.1.0 */
+-+#if OPENSSL_VERSION_NUMBER < 0x1010000fL || defined(LIBRESSL_VERSION_NUMBER) /* OpenSSL 1.1.0 */
+-     ctx = malloc(sizeof(*ctx));
+- #else
+-     ctx = HMAC_CTX_new();
+-@@ -62,7 +62,7 @@ static HMAC_CTX *hmac_alloc()
+-     if (!ctx)
+-         return NULL;
+- 
+--#if OPENSSL_VERSION_NUMBER < 0x1010000fL
+-+#if OPENSSL_VERSION_NUMBER < 0x1010000fL || defined(LIBRESSL_VERSION_NUMBER)
+-     HMAC_CTX_init(ctx);
+- #endif
+- 
+-@@ -71,7 +71,7 @@ static HMAC_CTX *hmac_alloc()
+- 
+- static void hmac_del(HMAC_CTX *ctx)
+- {
+--#if OPENSSL_VERSION_NUMBER < 0x1010000fL
+-+#if OPENSSL_VERSION_NUMBER < 0x1010000fL || defined(LIBRESSL_VERSION_NUMBER)
+-     HMAC_CTX_cleanup(ctx);
+-     free(ctx);
+- #else
 --- 
 -2.14.3
 -
-diff --git a/package/tpm2-tss/Config.in b/package/tpm2-tss/Config.in
-index 7a757bd70a..4e299eccc1 100644
---- a/package/tpm2-tss/Config.in
-+++ b/package/tpm2-tss/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_TPM2_TSS
- 	bool "tpm2-tss"
--	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_LIBURIPARSER
-+	select BR2_PACKAGE_OPENSSL
- 	help
- 	  OSS implementation of the Trusted Computing Group's (TCG) TPM2
- 	  Software Stack (TSS). This stack consists of the following
-@@ -30,6 +30,3 @@ config BR2_PACKAGE_TPM2_TSS
- 	    Microsoft software TPM2 simulator.
+diff --git a/package/tpm2-tools/0001-tpm2_certify-fix-type-may-be-used-uninitialized-warn.patch b/package/tpm2-tools/0001-tpm2_certify-fix-type-may-be-used-uninitialized-warn.patch
+index b472666f46..327f5e403b 100644
+--- a/package/tpm2-tools/0001-tpm2_certify-fix-type-may-be-used-uninitialized-warn.patch
++++ b/package/tpm2-tools/0001-tpm2_certify-fix-type-may-be-used-uninitialized-warn.patch
+@@ -1,4 +1,4 @@
+-From e15b01a1eb27e31964308892fcaa9c7d4f17f181 Mon Sep 17 00:00:00 2001
++From 295cd8f7fb8e1a1ad8f64d981e99969a364d941e Mon Sep 17 00:00:00 2001
+ From: Carlos Santos <casantos@datacom.ind.br>
+ Date: Sat, 24 Mar 2018 22:46:46 -0300
+ Subject: [PATCH] tpm2_certify: fix "'type' may be used uninitialized" warning
+@@ -10,7 +10,7 @@ because set_scheme returns immediately if get_key_type retuns false but
+ the compiler does not understand that logic and fails because warnings
+ are treated as errors.
  
- 	  https://github.com/tpm2-software/tpm2-tss
--
--comment "tpm2-tss needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/tpm2-tss/tpm2-tss.hash b/package/tpm2-tss/tpm2-tss.hash
-index 67c5a85842..d6f65fa7de 100644
---- a/package/tpm2-tss/tpm2-tss.hash
-+++ b/package/tpm2-tss/tpm2-tss.hash
+-Adapted for version 3.0.3 from the change submitted upstream:
++Adapted for version 3.1.3 from the change submitted upstream:
+ 
+   https://github.com/tpm2-software/tpm2-tools/pull/954
+ 
+@@ -20,17 +20,17 @@ Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+  1 file changed, 1 insertion(+)
+ 
+ diff --git a/tools/tpm2_certify.c b/tools/tpm2_certify.c
+-index eaac02f..cbc42a9 100644
++index 0575072..e562586 100644
+ --- a/tools/tpm2_certify.c
+ +++ b/tools/tpm2_certify.c
+-@@ -107,6 +107,7 @@ static bool get_key_type(TSS2_SYS_CONTEXT *sapi_context, TPMI_DH_OBJECT object_h
++@@ -98,6 +98,7 @@ static bool get_key_type(TSS2_SYS_CONTEXT *sapi_context, TPMI_DH_OBJECT object_h
+              &out_public, &name, &qualified_name, &sessions_data_out));
+-     if (rval != TPM_RC_SUCCESS) {
++     if (rval != TPM2_RC_SUCCESS) {
+          LOG_ERR("TPM2_ReadPublic failed. Error Code: 0x%x", rval);
+-+        *type = TPM_ALG_ERROR;
+++        *type = TPM2_ALG_ERROR;
+          return false;
+      }
+  
+ -- 
+-2.14.3
++2.19.1
+ 
+diff --git a/package/tpm2-tools/Config.in b/package/tpm2-tools/Config.in
+index e5feb18786..24cd4b8f9a 100644
+--- a/package/tpm2-tools/Config.in
++++ b/package/tpm2-tools/Config.in
+@@ -1,10 +1,8 @@
+ config BR2_PACKAGE_TPM2_TOOLS
+ 	bool "tpm2-tools"
+-	depends on BR2_INSTALL_LIBSTDCPP # tpm2-tss
+ 	depends on BR2_USE_MMU # dbus, libglib
+ 	depends on BR2_USE_WCHAR # libglib -> gettext
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib
+-	depends on !BR2_TOOLCHAIN_USES_MUSL # tpm2-abrmd
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_LIBCURL
+ 	select BR2_PACKAGE_LIBGLIB2
+@@ -20,7 +18,6 @@ config BR2_PACKAGE_TPM2_TOOLS
+ 
+ 	  https://github.com/tpm2-software/tpm2-tools
+ 
+-comment "tpm2-tools needs a uClibc or glibc toolchain w/ C++, wchar, threads"
++comment "tpm2-tools needs a toolchain w/ wchar, threads"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
+-		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/tpm2-tools/tpm2-tools.hash b/package/tpm2-tools/tpm2-tools.hash
+index e33b3e5945..ae228c591c 100644
+--- a/package/tpm2-tools/tpm2-tools.hash
++++ b/package/tpm2-tools/tpm2-tools.hash
 @@ -1,3 +1,3 @@
  # Locally computed:
--sha256 cf8784cc536be16e6fba47f77033e093a6aeaed8420877ac9f42f77fb7b09031  tpm2-tss-1.4.0.tar.gz
--sha256 18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
-+sha256 a50b8dbd51f0c274cf874351786ed252c5024c952bf699fbd595ac292a27ab19  tpm2-tss-2.1.0.tar.gz
-+sha256 f7da3c2da12cec3348bb7ee9e2a9e651a241450b2efb67da29d5a75ef2da058a  LICENSE
-diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
-index dcc1e5d74d..3bb0702916 100644
---- a/package/tpm2-tss/tpm2-tss.mk
-+++ b/package/tpm2-tss/tpm2-tss.mk
-@@ -4,15 +4,12 @@
+-sha256 c990c0656165afef0fad61e1852a9a189a4b93b43d2a684b151a5dc0b3c6249d  tpm2-tools-3.0.3.tar.gz
++sha256 cc95576f49cf9bacf75772fd98dcb7edc5172a6a8dfa20c215fe3cc69b0a3a16  tpm2-tools-3.1.3.tar.gz
+ sha256 3d6b149c8b042bd5f3db678d587fbe55230d071ca084bd38dcae451679c6dd45  LICENSE
+diff --git a/package/tpm2-tools/tpm2-tools.mk b/package/tpm2-tools/tpm2-tools.mk
+index 13fdb163bb..9c224018ce 100644
+--- a/package/tpm2-tools/tpm2-tools.mk
++++ b/package/tpm2-tools/tpm2-tools.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TPM2_TSS_VERSION = 1.4.0
-+TPM2_TSS_VERSION = 2.1.0
- TPM2_TSS_SITE = https://github.com/tpm2-software/tpm2-tss/releases/download/$(TPM2_TSS_VERSION)
- TPM2_TSS_LICENSE = BSD-2-Clause
- TPM2_TSS_LICENSE_FILES = LICENSE
- TPM2_TSS_INSTALL_STAGING = YES
--TPM2_TSS_DEPENDENCIES = liburiparser host-pkgconf
--
--# configure.ac doesn't contain a link test, so it doesn't detect when
--# libssp is missing.
--TPM2_TSS_CONF_ENV = ax_cv_check_cflags___________Wall__Werror_______fstack_protector_all=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
-+TPM2_TSS_DEPENDENCIES = liburiparser openssl host-pkgconf
-+TPM2_TSS_CONF_OPTS = --with-crypto=ossl --disable-doxygen-doc
- 
- $(eval $(autotools-package))
+-TPM2_TOOLS_VERSION = 3.0.3
++TPM2_TOOLS_VERSION = 3.1.3
+ TPM2_TOOLS_SITE = https://github.com/tpm2-software/tpm2-tools/releases/download/$(TPM2_TOOLS_VERSION)
+ TPM2_TOOLS_LICENSE = BSD-2-Clause
+ TPM2_TOOLS_LICENSE_FILES = LICENSE
