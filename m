@@ -1,154 +1,61 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 2 Dec 2018 14:00:52 +0100
-Subject: [Buildroot] [PATCH 1/1] fontconfig: fix static build
-In-Reply-To: <CAPi7W82qQ6TvHoRrD0L4YXUi=gqUK0gzZO4v0FzTyA=aYTLe9Q@mail.gmail.com>
-References: <20181202093728.20636-1-fontaine.fabrice@gmail.com>
- <20181202124016.GD2544@scaer>
- <CAPi7W82qQ6TvHoRrD0L4YXUi=gqUK0gzZO4v0FzTyA=aYTLe9Q@mail.gmail.com>
-Message-ID: <20181202130052.GE2544@scaer>
+From: Philipp Richter <richterphilipp.pops@gmail.com>
+Date: Sun, 2 Dec 2018 14:37:24 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libtorrent-rasterbar: new
+ package
+In-Reply-To: <20181201232115.1ecf0e16@windsurf.home>
+References: <20181123181426.16116-1-richterphilipp.pops@gmail.com>
+ <20181201232115.1ecf0e16@windsurf.home>
+Message-ID: <CA+Vb7hrqixvT4go9emwOEhyNSw-xe0LGu-ad+Qk6wZgLS-B6dQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Hello,
 
-On 2018-12-02 13:50 +0100, Fabrice Fontaine spake thusly:
-> Le dim. 2 d?c. 2018 ? 13:40, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
-> > On 2018-12-02 10:37 +0100, Fabrice Fontaine spake thusly:
-> > > Retrieved patch from upstream to fix static build
-> > >
-> > > Fixes:
-> > >  - http://autobuild.buildroot.org/results/17e5f9ce5e7566f5a88abfd27b7db5614c1a3086
-> > >
-> > > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > > ---
-> > >  ...x-the-build-issue-with-enable-static.patch | 80 +++++++++++++++++++
-> > >  1 file changed, 80 insertions(+)
-> > >  create mode 100644 package/fontconfig/0001-Fix-the-build-issue-with-enable-static.patch
-> > >
-> > > diff --git a/package/fontconfig/0001-Fix-the-build-issue-with-enable-static.patch b/package/fontconfig/0001-Fix-the-build-issue-with-enable-static.patch
-> > > new file mode 100644
-> > > index 0000000000..6104f1ed10
-> > > --- /dev/null
-> > > +++ b/package/fontconfig/0001-Fix-the-build-issue-with-enable-static.patch
-> > > @@ -0,0 +1,80 @@
-> > > +From 8208f99fa1676c42bfd8d74de3e9dac5366c150c Mon Sep 17 00:00:00 2001
-> > > +From: Akira TAGOH <akira@tagoh.org>
-> > > +Date: Mon, 3 Sep 2018 04:56:16 +0000
-> > > +Subject: Fix the build issue with --enable-static
-> > > +
-> > > +Fixes https://gitlab.freedesktop.org/fontconfig/fontconfig/issues/109
-> > > +
-> > > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > > +[Retrieved from:
-> > > +https://gitlab.freedesktop.org/fontconfig/fontconfig/issues/109]
+oh right my bad, thank you for correcting this.
+
+Best Regards,
+Philipp Richter
+On Sat, 1 Dec 2018 at 23:21, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Fri, 23 Nov 2018 19:14:25 +0100, Philipp Richter wrote:
+> > libtorrent is a feature complete C++ bittorrent implementation
+> > focusing on efficiency and scalability.
 > >
-> > Is it not better to backport and reference the actual commit, instead:
-> >     https://gitlab.freedesktop.org/fontconfig/fontconfig/commit/8208f99fa1676c42bfd8d74de3e9dac5366c150c
-> OK, I will send a v2 with a link on the actual commit.
-
-Please, note that the patch you used is not exactly the same as the one
-in that commit.
-
-So, it's not just about pointing to the commit, but also using it.
-
-Regards,
-Yann E. MORIN.
-> > > +---
-> > > + test/test-bz106632.c | 35 ++++++++++++-----------------------
-> > > + 1 file changed, 12 insertions(+), 23 deletions(-)
-> > > +
-> > > +(limited to 'test')
-> > > +
-> > > +diff --git a/test/test-bz106632.c b/test/test-bz106632.c
-> > > +index daa0c1e..2d67c2e 100644
-> > > +--- a/test/test-bz106632.c
-> > > ++++ b/test/test-bz106632.c
-> > > +@@ -25,25 +25,26 @@
-> > > + #ifdef HAVE_CONFIG_H
-> > > + #include "config.h"
-> > > + #endif
-> > > ++#include <stdio.h>
-> > > + #include <stdlib.h>
-> > > ++#include <string.h>
-> > > + #include <dirent.h>
-> > > ++#include <unistd.h>
-> > > ++#include <errno.h>
-> > > + #ifndef HAVE_STRUCT_DIRENT_D_TYPE
-> > > + #include <sys/types.h>
-> > > + #include <sys/stat.h>
-> > > +-#include <unistd.h>
-> > > + #endif
-> > > +-#include "fcstr.c"
-> > > +-#undef FcConfigBuildFonts
-> > > +-#undef FcConfigCreate
-> > > +-#undef FcConfigGetCurrent
-> > > +-#undef FcConfigParseAndLoadFromMemory
-> > > +-#undef FcConfigUptoDate
-> > > +-#undef FcFontList
-> > > +-#undef FcInitReinitialize
-> > > +-#undef FcPatternCreate
-> > > +-#undef FcPatternDestroy
-> > > + #include <fontconfig/fontconfig.h>
-> > > +
-> > > ++#ifdef _WIN32
-> > > ++#  define FC_DIR_SEPARATOR         '\\'
-> > > ++#  define FC_DIR_SEPARATOR_S       "\\"
-> > > ++#else
-> > > ++#  define FC_DIR_SEPARATOR         '/'
-> > > ++#  define FC_DIR_SEPARATOR_S       "/"
-> > > ++#endif
-> > > ++
-> > > + #ifdef HAVE_MKDTEMP
-> > > + #define fc_mkdtemp  mkdtemp
-> > > + #else
-> > > +@@ -154,18 +155,6 @@ unlink_dirs (const char *dir)
-> > > +     return ret;
-> > > + }
-> > > +
-> > > +-FcChar8 *
-> > > +-FcLangNormalize (const FcChar8 *lang)
-> > > +-{
-> > > +-    return NULL;
-> > > +-}
-> > > +-
-> > > +-FcChar8 *
-> > > +-FcConfigHome (void)
-> > > +-{
-> > > +-    return NULL;
-> > > +-}
-> > > +-
-> > > + int
-> > > + main (void)
-> > > + {
-> > > +--
-> > > +cgit v1.1
-> > > +
-> > > --
-> > > 2.17.1
-> > >
-> > > _______________________________________________
-> > > buildroot mailing list
-> > > buildroot at busybox.net
-> > > http://lists.busybox.net/mailman/listinfo/buildroot
+> > https://www.libtorrent.org/
 > >
-> > --
-> > .-----------------.--------------------.------------------.--------------------.
-> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> > | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> > '------------------------------^-------^------------------^--------------------'
-> Best Regards,
-> 
-> Fabrice
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> > Signed-off-by: Philipp Richter <richterphilipp.pops@gmail.com>
+> > ---
+> >  DEVELOPERS                                    |  3 +++
+> >  package/Config.in                             |  1 +
+> >  package/libtorrent-rasterbar/Config.in        | 21 +++++++++++++++++
+> >  .../libtorrent-rasterbar.hash                 |  3 +++
+> >  .../libtorrent-rasterbar.mk                   | 23 +++++++++++++++++++
+> >  5 files changed, 51 insertions(+)
+> >  create mode 100644 package/libtorrent-rasterbar/Config.in
+> >  create mode 100644 package/libtorrent-rasterbar/libtorrent-rasterbar.hash
+> >  create mode 100644 package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+>
+> Thanks, I've applied to next, with one significant change (and a few
+> minor formatting fixes). See below.
+>
+>
+> > +LIBTORRENT_RASTERBAR_VERSION = 1.1.11
+> > +LIBTORRENT_RASTERBAR_SITE = https://github.com/arvidn/libtorrent/releases/download/libtorrent_$(subst .,_,$(LIBTORRENT_RASTERBAR_VERSION))
+> > +LIBTORRENT_RASTERBAR_LICENSE = BSD-2-Clause
+>
+> The license text says BSD-3-Clause, not BSD-2-Clause, so I fixed that
+> when applying.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
