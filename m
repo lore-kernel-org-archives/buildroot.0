@@ -1,44 +1,83 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sun, 02 Dec 2018 07:19:28 -0000
-Subject: [Buildroot] [git commit] eudev: bump to version 3.2.7
-Message-ID: <20181202071555.839668A3F3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: use TestPythonPackageBase
+ for python-txtorcon
+Message-ID: <20181202071555.04EFB8A3F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b9d92102b0a84c545758b603f6d5485c88e87c4
+commit: https://git.buildroot.net/buildroot/commit/?id=6a24761c72e164e776056b891532e8d6a276e37f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/eudev/eudev.hash | 4 ++--
- package/eudev/eudev.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Move the test script to be run on the target from inline in the test
+case to a separate file.
 
-diff --git a/package/eudev/eudev.hash b/package/eudev/eudev.hash
-index 3fa47980ec..33556a2d25 100644
---- a/package/eudev/eudev.hash
-+++ b/package/eudev/eudev.hash
-@@ -1,5 +1,5 @@
- # From http://dev.gentoo.org/~blueness/eudev/
--md5 6ca08c0e14380f87df8e8aceac123671  eudev-3.2.5.tar.gz
-+md5 c75d99910c1791dd9430d26ab76059c0  eudev-3.2.7.tar.gz
- # Locally calculated
--sha256 49c2d04105cad2526302627e040fa24b1916a9a3e059539bc8bb919b973890af  eudev-3.2.5.tar.gz
-+sha256 3004614bd253c1f98558460215027aaf60d7592c70be27fd384ec01db87bf062  eudev-3.2.7.tar.gz
- sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index 11dc93762b..d88e010c28 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Asaf Kahlon <asafka7@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../tests/package/sample_python_txtorcon.py        |  1 +
+ .../testing/tests/package/test_python_txtorcon.py  | 31 ++++++++--------------
+ 2 files changed, 12 insertions(+), 20 deletions(-)
+
+diff --git a/support/testing/tests/package/sample_python_txtorcon.py b/support/testing/tests/package/sample_python_txtorcon.py
+new file mode 100644
+index 0000000000..c4a2ae6f5b
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_txtorcon.py
+@@ -0,0 +1 @@
++import txtorcon  # noqa
+diff --git a/support/testing/tests/package/test_python_txtorcon.py b/support/testing/tests/package/test_python_txtorcon.py
+index 352ff67825..1ac2f6919a 100644
+--- a/support/testing/tests/package/test_python_txtorcon.py
++++ b/support/testing/tests/package/test_python_txtorcon.py
+@@ -1,32 +1,23 @@
+-from tests.package.test_python import TestPythonBase
++from tests.package.test_python import TestPythonPackageBase
  
--EUDEV_VERSION = 3.2.5
-+EUDEV_VERSION = 3.2.7
- EUDEV_SITE = http://dev.gentoo.org/~blueness/eudev
- EUDEV_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
- EUDEV_LICENSE_FILES = COPYING
+ 
+-class TestPythonTxtorcon(TestPythonBase):
+-    def import_test(self):
+-        cmd = self.interpreter + " -c 'import txtorcon'"
+-        _, exit_code = self.emulator.run(cmd, timeout=30)
+-        self.assertEqual(exit_code, 0)
+-
+-
+-class TestPythonPy2Txtorcon(TestPythonTxtorcon):
+-    config = TestPythonBase.config + \
++class TestPythonPy2Txtorcon(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
+         """
+         BR2_PACKAGE_PYTHON=y
+         BR2_PACKAGE_PYTHON_TXTORCON=y
+         """
++    sample_scripts = ["tests/package/sample_python_txtorcon.py"]
++    timeout = 30
+ 
+-    def test_run(self):
+-        self.login()
+-        self.import_test()
+ 
+-
+-class TestPythonPy3Txtorcon(TestPythonTxtorcon):
+-    config = TestPythonBase.config + \
++class TestPythonPy3Txtorcon(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
+         """
+         BR2_PACKAGE_PYTHON3=y
+         BR2_PACKAGE_PYTHON_TXTORCON=y
+         """
+-
+-    def test_run(self):
+-        self.login()
+-        self.import_test()
++    sample_scripts = ["tests/package/sample_python_txtorcon.py"]
++    timeout = 30
