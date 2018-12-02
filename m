@@ -1,104 +1,165 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 2 Dec 2018 14:44:08 +0100
-Subject: [Buildroot] [PATCH 1/1] minizip: fix display of comment
-In-Reply-To: <87zhtojbbi.fsf@tkos.co.il>
-References: <20181202102427.16747-1-fontaine.fabrice@gmail.com>
- <875zwckymo.fsf@tkos.co.il>
- <CAPi7W82Sj-M4=cd4gwv_6W99q9hFdj-uD7j3u+X9rLOmz3K=KQ@mail.gmail.com>
- <8736rgkuqr.fsf@tkos.co.il>
- <CAPi7W81z-ARirTK4wdQnvBY7FDTiLq1O+g7dvJ-XExwYGHMm8Q@mail.gmail.com>
- <87zhtojbbi.fsf@tkos.co.il>
-Message-ID: <CAPi7W83ukC6FsAM=ntd8A1TJ75TUcA=30sCeKesKDUoScup=og@mail.gmail.com>
+Date: Sun,  2 Dec 2018 14:53:10 +0100
+Subject: [Buildroot] [PATCH v2,1/1] fontconfig: fix static build
+Message-ID: <20181202135310.20988-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le dim. 2 d?c. 2018 ? 14:41, Baruch Siach <baruch@tkos.co.il> a ?crit :
->
-> Hi Fabrice,
->
-> Fabrice Fontaine writes:
-> > Le dim. 2 d?c. 2018 ? 12:56, Baruch Siach <baruch@tkos.co.il> a ?crit :
-> >> Fabrice Fontaine writes:
-> >> > Le dim. 2 d?c. 2018 ? 11:32, Baruch Siach <baruch@tkos.co.il> a ?crit :
-> >> >> Fabrice Fontaine writes:
-> >> >> > Commit e13855c48f21eaee07a81f8b02678839be274a45 wrongly added
-> >> >> > depends on BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU
-> >> >> > to display the comment "minizip needs a toolchain w/ threads, wchar"
-> >> >>
-> >> >> Why is it wrong? This dependency is meant to hide the comment in the
-> >> >> !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU) case.
-> >> > It is wrong because, in commit
-> >> > e13855c48f21eaee07a81f8b02678839be274a45, I added in minizip/Config.in
-> >> > (and in libbsd/Config.in):
-> >> > config BR2_PACKAGE_MINIZIP
-> >> >    depends on !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU) # libbsd
-> >> > [...]
-> >> > comment "minizip needs a toolchain w/ threads, wchar"
-> >> >     depends on BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU
-> >> >     depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-> >> >
-> >> > As a result, the comment is not displayed with an uclibc toolchain
-> >> > with MMU but without wchar.
-> >> > So, the user don't know that it has just to select wchar to be able to
-> >> > select minizip.
-> >>
-> >> I always find negative logic confusing, so let's do it one step at a
-> >> time.
-> >>
-> >> In the case of non wchar uClibc toolchain with MMU:
-> >>
-> >> The expression
-> >>
-> >>   depends on BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU
-> >>
-> >> is true because both conditions are true.
-> > Nope, in case of uClibc toolchain with MMU, BR2_USE_MMU is true and so
-> > !BR2_USE_MMU is false. So the latest condition is false.
->
-> You are right. Sorry for the noise.
-That's fine, I should have made it right the first time ;-)
->
-> baruch
->
-> >> The expression
-> >>
-> >>   depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-> >>
-> >> is also true because the right condition (!BR2_USE_WCHAR) is true.
-> >>
-> >> End result: the comment is displayed.
-> >>
-> >> What is the issue you are fixing here?
-> >>
-> >> The same question applies to your libbsd patch.
-> >>
-> >> baruch
-> >>
-> >> >> > Set the correct dependency:
-> >> >> > depends on !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU)
-> >> >> >
-> >> >> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> >> >> > ---
-> >> >> >  package/minizip/Config.in | 2 +-
-> >> >> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >> >> >
-> >> >> > diff --git a/package/minizip/Config.in b/package/minizip/Config.in
-> >> >> > index 4bc12a0d7e..ff8b5b209a 100644
-> >> >> > --- a/package/minizip/Config.in
-> >> >> > +++ b/package/minizip/Config.in
-> >> >> > @@ -20,5 +20,5 @@ config BR2_PACKAGE_MINIZIP_DEMOS
-> >> >> >
-> >> >> >  comment "minizip needs a toolchain w/ threads, wchar"
-> >> >> >       depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
-> >> >> > -     depends on BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU
-> >> >> > +     depends on !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU)
-> >> >> >       depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
-Fabrice
+Retrieved patch from upstream to fix static build
+
+Fixes:
+ - http://autobuild.buildroot.org/results/17e5f9ce5e7566f5a88abfd27b7db5614c1a3086
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Yann E. MORIN):
+ - Update patch: fix content and link
+
+ ...x-the-build-issue-with-enable-static.patch | 133 ++++++++++++++++++
+ 1 file changed, 133 insertions(+)
+ create mode 100644 package/fontconfig/0001-Fix-the-build-issue-with-enable-static.patch
+
+diff --git a/package/fontconfig/0001-Fix-the-build-issue-with-enable-static.patch b/package/fontconfig/0001-Fix-the-build-issue-with-enable-static.patch
+new file mode 100644
+index 0000000000..bf04bd95fc
+--- /dev/null
++++ b/package/fontconfig/0001-Fix-the-build-issue-with-enable-static.patch
+@@ -0,0 +1,133 @@
++From 8208f99fa1676c42bfd8d74de3e9dac5366c150c Mon Sep 17 00:00:00 2001
++From: Akira TAGOH <akira@tagoh.org>
++Date: Mon, 3 Sep 2018 04:56:16 +0000
++Subject: [PATCH] Fix the build issue with --enable-static
++
++Fixes https://gitlab.freedesktop.org/fontconfig/fontconfig/issues/109
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://gitlab.freedesktop.org/fontconfig/fontconfig/commit/8208f99fa1676c42bfd8d74de3e9dac5366c150c]
++---
++ doc/fcstring.fncs       | 12 ++++++++++++
++ fontconfig/fontconfig.h |  4 ++++
++ src/fcint.h             |  4 ----
++ test/test-bz106632.c    | 35 ++++++++++++-----------------------
++ 4 files changed, 28 insertions(+), 27 deletions(-)
++
++diff --git a/doc/fcstring.fncs b/doc/fcstring.fncs
++index 0412bbd..d5ec043 100644
++--- a/doc/fcstring.fncs
+++++ b/doc/fcstring.fncs
++@@ -223,6 +223,18 @@ This is just a wrapper around free(3) which helps track memory usage of
++ strings within the fontconfig library.
++ @@
++ 
+++ at RET@		FcChar8 *
+++ at FUNC@		FcStrBuildFilename
+++ at TYPE1@		const FcChar8 *			@ARG1@		path
+++ at TYPE2@		...
+++ at PURPOSE@	Concatenate strings as a file path
+++ at DESC@
+++Creates a filename from the given elements of strings as file paths
+++and concatenate them with the appropriate file separator.
+++Arguments must be null-terminated.
+++This returns a newly-allocated memory which should be freed when no longer needed.
+++@@
+++
++ @RET@		FcChar8 *
++ @FUNC@		FcStrDirname
++ @TYPE1@		const FcChar8 *			@ARG1@		file
++diff --git a/fontconfig/fontconfig.h b/fontconfig/fontconfig.h
++index bac1dda..af870d0 100644
++--- a/fontconfig/fontconfig.h
+++++ b/fontconfig/fontconfig.h
++@@ -1076,6 +1076,10 @@ FcUtf16Len (const FcChar8   *string,
++ 	    int		    *nchar,
++ 	    int		    *wchar);
++ 
+++FcPublic FcChar8 *
+++FcStrBuildFilename (const FcChar8 *path,
+++		    ...);
+++
++ FcPublic FcChar8 *
++ FcStrDirname (const FcChar8 *file);
++ 
++diff --git a/src/fcint.h b/src/fcint.h
++index de78cd8..a9d075a 100644
++--- a/src/fcint.h
+++++ b/src/fcint.h
++@@ -1282,10 +1282,6 @@ FcStrUsesHome (const FcChar8 *s);
++ FcPrivate FcBool
++ FcStrIsAbsoluteFilename (const FcChar8 *s);
++ 
++-FcPrivate FcChar8 *
++-FcStrBuildFilename (const FcChar8 *path,
++-		    ...);
++-
++ FcPrivate FcChar8 *
++ FcStrLastSlash (const FcChar8  *path);
++ 
++diff --git a/test/test-bz106632.c b/test/test-bz106632.c
++index daa0c1e..2d67c2e 100644
++--- a/test/test-bz106632.c
+++++ b/test/test-bz106632.c
++@@ -25,25 +25,26 @@
++ #ifdef HAVE_CONFIG_H
++ #include "config.h"
++ #endif
+++#include <stdio.h>
++ #include <stdlib.h>
+++#include <string.h>
++ #include <dirent.h>
+++#include <unistd.h>
+++#include <errno.h>
++ #ifndef HAVE_STRUCT_DIRENT_D_TYPE
++ #include <sys/types.h>
++ #include <sys/stat.h>
++-#include <unistd.h>
++ #endif
++-#include "fcstr.c"
++-#undef FcConfigBuildFonts
++-#undef FcConfigCreate
++-#undef FcConfigGetCurrent
++-#undef FcConfigParseAndLoadFromMemory
++-#undef FcConfigUptoDate
++-#undef FcFontList
++-#undef FcInitReinitialize
++-#undef FcPatternCreate
++-#undef FcPatternDestroy
++ #include <fontconfig/fontconfig.h>
++ 
+++#ifdef _WIN32
+++#  define FC_DIR_SEPARATOR         '\\'
+++#  define FC_DIR_SEPARATOR_S       "\\"
+++#else
+++#  define FC_DIR_SEPARATOR         '/'
+++#  define FC_DIR_SEPARATOR_S       "/"
+++#endif
+++
++ #ifdef HAVE_MKDTEMP
++ #define fc_mkdtemp	mkdtemp
++ #else
++@@ -154,18 +155,6 @@ unlink_dirs (const char *dir)
++     return ret;
++ }
++ 
++-FcChar8 *
++-FcLangNormalize (const FcChar8 *lang)
++-{
++-    return NULL;
++-}
++-
++-FcChar8 *
++-FcConfigHome (void)
++-{
++-    return NULL;
++-}
++-
++ int
++ main (void)
++ {
++-- 
++2.18.1
++
+-- 
+2.17.1
