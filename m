@@ -1,81 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sun, 02 Dec 2018 07:19:27 -0000
-Subject: [Buildroot] [git commit] support/testing: use TestPythonPackageBase
- for python-autobahn
-Message-ID: <20181202071554.D79FB8107F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] iucode-tool: bump to version 2.3.1
+Message-ID: <20181202071554.9CDBA80FDE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5dd9364ee710ef036556dcda78f682ae27fefa0
+commit: https://git.buildroot.net/buildroot/commit/?id=d6b61d1094c4f1dc533e2b6aeadf240647629278
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Move the test script to be run on the target from inline in the test
-case to a separate file.
+Brings several fixes and enhancements. Check the change log at
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Asaf Kahlon <asafka7@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+    https://gitlab.com/iucode-tool/iucode-tool/raw/v2.3.1/ChangeLog
+
+Tested on an equipment with Intel C3000 processor.
+
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../tests/package/sample_python_autobahn.py        |  1 +
- .../testing/tests/package/test_python_autobahn.py  | 29 +++++++---------------
- 2 files changed, 10 insertions(+), 20 deletions(-)
+ package/iucode-tool/iucode-tool.hash | 2 +-
+ package/iucode-tool/iucode-tool.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/testing/tests/package/sample_python_autobahn.py b/support/testing/tests/package/sample_python_autobahn.py
-new file mode 100644
-index 0000000000..8189b6a6b3
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_autobahn.py
-@@ -0,0 +1 @@
-+import autobahn.wamp  # noqa
-diff --git a/support/testing/tests/package/test_python_autobahn.py b/support/testing/tests/package/test_python_autobahn.py
-index 2bc0f0cccf..af1f617d6d 100644
---- a/support/testing/tests/package/test_python_autobahn.py
-+++ b/support/testing/tests/package/test_python_autobahn.py
-@@ -1,32 +1,21 @@
--from tests.package.test_python import TestPythonBase
-+from tests.package.test_python import TestPythonPackageBase
+diff --git a/package/iucode-tool/iucode-tool.hash b/package/iucode-tool/iucode-tool.hash
+index 1dab8de978..6d8fb635d0 100644
+--- a/package/iucode-tool/iucode-tool.hash
++++ b/package/iucode-tool/iucode-tool.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 9810daf925b8a9ca244adc4e1916bcab65601c9ebe87e91c2281f78055982971  iucode-tool_2.2.tar.xz
++sha256 12b88efa4d0d95af08db05a50b3dcb217c0eb2bfc67b483779e33d498ddb2f95  iucode-tool_2.3.1.tar.xz
+ sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/iucode-tool/iucode-tool.mk b/package/iucode-tool/iucode-tool.mk
+index 38f9da438e..e900888d7d 100644
+--- a/package/iucode-tool/iucode-tool.mk
++++ b/package/iucode-tool/iucode-tool.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 
--class TestPythonAutobahn(TestPythonBase):
--    def import_test(self):
--        cmd = self.interpreter + " -c 'import autobahn.wamp'"
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
--
--
--class TestPythonPy2Autobahn(TestPythonAutobahn):
--    config = TestPythonBase.config + \
-+class TestPythonPy2Autobahn(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-         """
-         BR2_PACKAGE_PYTHON=y
-         BR2_PACKAGE_PYTHON_AUTOBAHN=y
-         """
-+    sample_scripts = ["tests/package/sample_python_autobahn.py"]
- 
--    def test_run(self):
--        self.login()
--        self.import_test()
- 
--
--class TestPythonPy3Autobahn(TestPythonAutobahn):
--    config = TestPythonBase.config + \
-+class TestPythonPy3Autobahn(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-         """
-         BR2_PACKAGE_PYTHON3=y
-         BR2_PACKAGE_PYTHON_AUTOBAHN=y
-         """
--
--    def test_run(self):
--        self.login()
--        self.import_test()
-+    sample_scripts = ["tests/package/sample_python_autobahn.py"]
+-IUCODE_TOOL_VERSION = 2.2
++IUCODE_TOOL_VERSION = 2.3.1
+ IUCODE_TOOL_SOURCE = iucode-tool_$(IUCODE_TOOL_VERSION).tar.xz
+ IUCODE_TOOL_SITE = https://gitlab.com/iucode-tool/releases/raw/master
+ ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
