@@ -1,86 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 02 Dec 2018 07:19:28 -0000
-Subject: [Buildroot] [git commit] tpm2-abrmd: bump to version 2.0.3
-Message-ID: <20181202071555.9ECB98843B@busybox.osuosl.org>
+Date: Sun, 02 Dec 2018 07:19:29 -0000
+Subject: [Buildroot] [git commit] package/pkg-luarocks: use
+ <pkg>_EXTRACT_DEPENDENCIES
+Message-ID: <20181202071555.AF7968A3F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08cd849bee8fb5c77db9d12de9f78e91d2002646
+commit: https://git.buildroot.net/buildroot/commit/?id=7d47af583c742b66d3578642653a5b61b514bb6d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Drop C++ requirement, which came from tpm2-tss.
-- Drom musl restriction.
-- Update daemon command-line options in init script.
+The host luarocks tool is needed when *extracting* luarocks
+packages. Since regular dependencies are only available at the
+configure step, it caused the "luarocks" program to be available too
+late to be used to extract luarocks packages.
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+To work around this, host-luarocks was manually added as a dependency
+of the extract step of luarocks packages. While this worked fine until
+now, it breaks badly with per-package folders, because host-luarocks
+is not recorded as an extract dependency of luarocks packages, and
+therefore is not copied to the per-package host folder, causing a
+failure.
+
+In the mean time, the <pkg>_EXTRACT_DEPENDENCIES mechanism was added,
+which aims at fixing exactly this problem, so let's use it and
+simplify pkg-luarocks.mk.
+
+Cc: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni &lt;<a href="mailto:thomas.petazzoni@bootlin.com" target="_blank">thomas.petazzoni at bootlin.com</a>&gt;<br>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tpm2-abrmd/Config.in       | 7 ++-----
- package/tpm2-abrmd/S80tpm2-abrmd   | 2 +-
- package/tpm2-abrmd/tpm2-abrmd.hash | 2 +-
- package/tpm2-abrmd/tpm2-abrmd.mk   | 2 +-
- 4 files changed, 5 insertions(+), 8 deletions(-)
+ package/pkg-luarocks.mk | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/package/tpm2-abrmd/Config.in b/package/tpm2-abrmd/Config.in
-index 0cac754b3c..31c5ae7d6b 100644
---- a/package/tpm2-abrmd/Config.in
-+++ b/package/tpm2-abrmd/Config.in
-@@ -1,10 +1,8 @@
- config BR2_PACKAGE_TPM2_ABRMD
- 	bool "tpm2-abrmd"
--	depends on BR2_INSTALL_LIBSTDCPP # tpm2-tss
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
- 	depends on BR2_USE_MMU # dbus, libglib2
--	depends on !BR2_TOOLCHAIN_USES_MUSL # TEMP_FAILURE_RETRY(), etc
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_TPM2_TSS
-@@ -22,7 +20,6 @@ config BR2_PACKAGE_TPM2_ABRMD
+diff --git a/package/pkg-luarocks.mk b/package/pkg-luarocks.mk
+index e2b48cfb4c..29c5e66cd1 100644
+--- a/package/pkg-luarocks.mk
++++ b/package/pkg-luarocks.mk
+@@ -42,7 +42,8 @@ $(2)_SITE		?= $$(call qstrip,$$(BR2_LUAROCKS_MIRROR))
  
- 	  https://github.com/tpm2-software/tpm2-abrmd
+ # Since we do not support host-luarocks-package, we know this is
+ # a target package, and can just add the required dependencies
+-$(2)_DEPENDENCIES	+= host-luarocks luainterpreter
++$(2)_DEPENDENCIES	+= luainterpreter
++$(2)_EXTRACT_DEPENDENCIES += host-luarocks
  
--comment "tpm2-abrmd needs a uClibc or glibc toolchain w/ C++, wchar, threads"
-+comment "tpm2-abrmd needs a toolchain w/ wchar, threads"
- 	depends on BR2_USE_MMU
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
--		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/tpm2-abrmd/S80tpm2-abrmd b/package/tpm2-abrmd/S80tpm2-abrmd
-index d54c220c04..cfa9d44771 100755
---- a/package/tpm2-abrmd/S80tpm2-abrmd
-+++ b/package/tpm2-abrmd/S80tpm2-abrmd
-@@ -49,7 +49,7 @@ stop() {
- check_required_files /etc/dbus-1/system.d/tpm2-abrmd.conf
- 
- # defaults
--DAEMON_OPTS="--tcti=device --logger=syslog --max-connections=20 --max-transient-objects=20 --fail-on-loaded-trans"
-+DAEMON_OPTS="--tcti=device --logger=syslog --max-connections=20"
- 
- # Read configuration variable file if it is present
- [ -r /etc/default/tpm2-abrmd ] && . /etc/default/tpm2-abrmd
-diff --git a/package/tpm2-abrmd/tpm2-abrmd.hash b/package/tpm2-abrmd/tpm2-abrmd.hash
-index 6af991d469..61a75c0d1b 100644
---- a/package/tpm2-abrmd/tpm2-abrmd.hash
-+++ b/package/tpm2-abrmd/tpm2-abrmd.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 e32e19de93b539374a485d9df7fe9415ce147ec03c8d9ba6593e50f7a67a7a51  tpm2-abrmd-1.3.0.tar.gz
-+sha256 ff0ed283b0300cd784d6bf2b042e167020f8443602974e53b924e9fd98a4b515  tpm2-abrmd-2.0.3.tar.gz
- sha256 18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
-diff --git a/package/tpm2-abrmd/tpm2-abrmd.mk b/package/tpm2-abrmd/tpm2-abrmd.mk
-index b918ceaa4b..a4d9cfb384 100644
---- a/package/tpm2-abrmd/tpm2-abrmd.mk
-+++ b/package/tpm2-abrmd/tpm2-abrmd.mk
-@@ -4,7 +4,7 @@
  #
- ################################################################################
+ # Extract step. Extract into a temporary dir and move the relevant part to the
+@@ -71,10 +72,6 @@ endif
+ # make targets
+ $(call inner-generic-package,$(1),$(2),$(3),$(4))
  
--TPM2_ABRMD_VERSION = 1.3.0
-+TPM2_ABRMD_VERSION = 2.0.3
- TPM2_ABRMD_SITE = https://github.com/tpm2-software/tpm2-abrmd/releases/download/$(TPM2_ABRMD_VERSION)
- TPM2_ABRMD_LICENSE = BSD-2-Clause
- TPM2_ABRMD_LICENSE_FILES = LICENSE
+-# $(2)_DEPENDENCIES are handled for configure step (too late)
+-# but host-luarocks is required to do the extract
+-$$($(2)_TARGET_EXTRACT): | host-luarocks
+-
+ endef
+ 
+ ################################################################################
