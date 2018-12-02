@@ -1,165 +1,52 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  2 Dec 2018 14:53:10 +0100
-Subject: [Buildroot] [PATCH v2,1/1] fontconfig: fix static build
-Message-ID: <20181202135310.20988-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  2 Dec 2018 15:04:13 +0100
+Subject: [Buildroot] [PATCH 0/2] package/qt5base: disable for toolchains
+ with binutils bug 20765 (branch yem/fixes)
+Message-ID: <cover.1543759351.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Retrieved patch from upstream to fix static build
+Hello All!
 
-Fixes:
- - http://autobuild.buildroot.org/results/17e5f9ce5e7566f5a88abfd27b7db5614c1a3086
+This two-patch series is a porposal to disable the build of qt5 for
+those toolchains that have binutils bug 20765.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Yann E. MORIN):
- - Update patch: fix content and link
+Regards,
+Yann E. MORIN.
 
- ...x-the-build-issue-with-enable-static.patch | 133 ++++++++++++++++++
- 1 file changed, 133 insertions(+)
- create mode 100644 package/fontconfig/0001-Fix-the-build-issue-with-enable-static.patch
 
-diff --git a/package/fontconfig/0001-Fix-the-build-issue-with-enable-static.patch b/package/fontconfig/0001-Fix-the-build-issue-with-enable-static.patch
-new file mode 100644
-index 0000000000..bf04bd95fc
---- /dev/null
-+++ b/package/fontconfig/0001-Fix-the-build-issue-with-enable-static.patch
-@@ -0,0 +1,133 @@
-+From 8208f99fa1676c42bfd8d74de3e9dac5366c150c Mon Sep 17 00:00:00 2001
-+From: Akira TAGOH <akira@tagoh.org>
-+Date: Mon, 3 Sep 2018 04:56:16 +0000
-+Subject: [PATCH] Fix the build issue with --enable-static
-+
-+Fixes https://gitlab.freedesktop.org/fontconfig/fontconfig/issues/109
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://gitlab.freedesktop.org/fontconfig/fontconfig/commit/8208f99fa1676c42bfd8d74de3e9dac5366c150c]
-+---
-+ doc/fcstring.fncs       | 12 ++++++++++++
-+ fontconfig/fontconfig.h |  4 ++++
-+ src/fcint.h             |  4 ----
-+ test/test-bz106632.c    | 35 ++++++++++++-----------------------
-+ 4 files changed, 28 insertions(+), 27 deletions(-)
-+
-+diff --git a/doc/fcstring.fncs b/doc/fcstring.fncs
-+index 0412bbd..d5ec043 100644
-+--- a/doc/fcstring.fncs
-++++ b/doc/fcstring.fncs
-+@@ -223,6 +223,18 @@ This is just a wrapper around free(3) which helps track memory usage of
-+ strings within the fontconfig library.
-+ @@
-+ 
-++ at RET@		FcChar8 *
-++ at FUNC@		FcStrBuildFilename
-++ at TYPE1@		const FcChar8 *			@ARG1@		path
-++ at TYPE2@		...
-++ at PURPOSE@	Concatenate strings as a file path
-++ at DESC@
-++Creates a filename from the given elements of strings as file paths
-++and concatenate them with the appropriate file separator.
-++Arguments must be null-terminated.
-++This returns a newly-allocated memory which should be freed when no longer needed.
-++@@
-++
-+ @RET@		FcChar8 *
-+ @FUNC@		FcStrDirname
-+ @TYPE1@		const FcChar8 *			@ARG1@		file
-+diff --git a/fontconfig/fontconfig.h b/fontconfig/fontconfig.h
-+index bac1dda..af870d0 100644
-+--- a/fontconfig/fontconfig.h
-++++ b/fontconfig/fontconfig.h
-+@@ -1076,6 +1076,10 @@ FcUtf16Len (const FcChar8   *string,
-+ 	    int		    *nchar,
-+ 	    int		    *wchar);
-+ 
-++FcPublic FcChar8 *
-++FcStrBuildFilename (const FcChar8 *path,
-++		    ...);
-++
-+ FcPublic FcChar8 *
-+ FcStrDirname (const FcChar8 *file);
-+ 
-+diff --git a/src/fcint.h b/src/fcint.h
-+index de78cd8..a9d075a 100644
-+--- a/src/fcint.h
-++++ b/src/fcint.h
-+@@ -1282,10 +1282,6 @@ FcStrUsesHome (const FcChar8 *s);
-+ FcPrivate FcBool
-+ FcStrIsAbsoluteFilename (const FcChar8 *s);
-+ 
-+-FcPrivate FcChar8 *
-+-FcStrBuildFilename (const FcChar8 *path,
-+-		    ...);
-+-
-+ FcPrivate FcChar8 *
-+ FcStrLastSlash (const FcChar8  *path);
-+ 
-+diff --git a/test/test-bz106632.c b/test/test-bz106632.c
-+index daa0c1e..2d67c2e 100644
-+--- a/test/test-bz106632.c
-++++ b/test/test-bz106632.c
-+@@ -25,25 +25,26 @@
-+ #ifdef HAVE_CONFIG_H
-+ #include "config.h"
-+ #endif
-++#include <stdio.h>
-+ #include <stdlib.h>
-++#include <string.h>
-+ #include <dirent.h>
-++#include <unistd.h>
-++#include <errno.h>
-+ #ifndef HAVE_STRUCT_DIRENT_D_TYPE
-+ #include <sys/types.h>
-+ #include <sys/stat.h>
-+-#include <unistd.h>
-+ #endif
-+-#include "fcstr.c"
-+-#undef FcConfigBuildFonts
-+-#undef FcConfigCreate
-+-#undef FcConfigGetCurrent
-+-#undef FcConfigParseAndLoadFromMemory
-+-#undef FcConfigUptoDate
-+-#undef FcFontList
-+-#undef FcInitReinitialize
-+-#undef FcPatternCreate
-+-#undef FcPatternDestroy
-+ #include <fontconfig/fontconfig.h>
-+ 
-++#ifdef _WIN32
-++#  define FC_DIR_SEPARATOR         '\\'
-++#  define FC_DIR_SEPARATOR_S       "\\"
-++#else
-++#  define FC_DIR_SEPARATOR         '/'
-++#  define FC_DIR_SEPARATOR_S       "/"
-++#endif
-++
-+ #ifdef HAVE_MKDTEMP
-+ #define fc_mkdtemp	mkdtemp
-+ #else
-+@@ -154,18 +155,6 @@ unlink_dirs (const char *dir)
-+     return ret;
-+ }
-+ 
-+-FcChar8 *
-+-FcLangNormalize (const FcChar8 *lang)
-+-{
-+-    return NULL;
-+-}
-+-
-+-FcChar8 *
-+-FcConfigHome (void)
-+-{
-+-    return NULL;
-+-}
-+-
-+ int
-+ main (void)
-+ {
-+-- 
-+2.18.1
-+
+The following changes since commit ba015cdf04a2ee33615f346448ac2e92aac3865a
+
+  package/pkg-generic: use readlink instead of realpath (2018-12-02 11:22:11 +0100)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to acc8229480af3087d4df4da9b306ddc8e76be1ef
+
+  package/qt5: hide for toolchains with binutils bug 20765 (2018-12-02 14:49:24 +0100)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      toolchain: add binutils bug 20765 to linaro Aarch64be
+      package/qt5: hide for toolchains with binutils bug 20765
+
+ package/pinentry/Config.in                                           | 1 +
+ package/qt5/Config.in                                                | 1 +
+ toolchain/Config.in                                                  | 5 +++++
+ .../toolchain-external-linaro-aarch64-be/Config.in                   | 1 +
+ 4 files changed, 8 insertions(+)
+
 -- 
-2.17.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
