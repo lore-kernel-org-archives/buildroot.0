@@ -1,129 +1,86 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  2 Dec 2018 18:46:00 +0100
-Subject: [Buildroot] [PATCH] [RFC] package/dbus-glib: fix build with newer
- libglib2
-Message-ID: <20181202174600.7772-1-yann.morin.1998@free.fr>
+From: David De Grave <david@ledav.net>
+Date: Sun,  2 Dec 2018 19:34:17 +0100
+Subject: [Buildroot] [PATCH 1/1] sgp30: New kernel module package
+Message-ID: <20181202183417.6562-1-david@ledav.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix dbus-glib to use the AC_SUBSTituted variable that contains the path
-to glib-gen-marshal, so that we can override it from the command line.
+Kernel module for the Sensirion sgp30 / sgpc2 chemical sensors.
 
-Fixes:
-    http://autobuild.buildroot.org/results/2e4/2e4285d47f6295e1b9f9c05abe34df443cad7f9e/
-    ...
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: David De Grave <david@ledav.net>
 ---
- ...buildsys-use-variable-for-glib-genmarshal.patch | 60 ++++++++++++++++++++++
- package/dbus-glib/dbus-glib.mk                     |  9 ++++
- 2 files changed, 69 insertions(+)
- create mode 100644 package/dbus-glib/0001-buildsys-use-variable-for-glib-genmarshal.patch
+ package/Config.in        |  1 +
+ package/sgp30/Config.in  | 17 +++++++++++++++++
+ package/sgp30/sgp30.hash |  1 +
+ package/sgp30/sgp30.mk   | 13 +++++++++++++
+ 4 files changed, 32 insertions(+)
+ create mode 100644 package/sgp30/Config.in
+ create mode 100644 package/sgp30/sgp30.hash
+ create mode 100644 package/sgp30/sgp30.mk
 
-diff --git a/package/dbus-glib/0001-buildsys-use-variable-for-glib-genmarshal.patch b/package/dbus-glib/0001-buildsys-use-variable-for-glib-genmarshal.patch
+diff --git a/package/Config.in b/package/Config.in
+index 0339ec77d7..dd22e8983a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -507,6 +507,7 @@ endmenu
+ 	source "package/sedutil/Config.in"
+ 	source "package/setserial/Config.in"
+ 	source "package/sg3_utils/Config.in"
++	source "package/sgp30/Config.in"
+ 	source "package/sigrok-cli/Config.in"
+ 	source "package/sispmctl/Config.in"
+ 	source "package/smartmontools/Config.in"
+diff --git a/package/sgp30/Config.in b/package/sgp30/Config.in
 new file mode 100644
-index 0000000000..a6acb5edaf
+index 0000000000..8e08877f7b
 --- /dev/null
-+++ b/package/dbus-glib/0001-buildsys-use-variable-for-glib-genmarshal.patch
-@@ -0,0 +1,60 @@
-+From 259ee2897f7c9560e7df4451af59efd73be0951f Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Sun, 2 Dec 2018 16:26:07 +0100
-+Subject: [PATCH] buildsys: use variable for glib-genmarshal
++++ b/package/sgp30/Config.in
+@@ -0,0 +1,17 @@
 +
-+When doing cross-compilation, the path returned by pkg-config for
-+glib-genmarshal can be incorrect (because it is the runtime path,
-+not the build-time path).
++config BR2_PACKAGE_SGP30
++	bool "sgp30/sgpc3"
++	depends on BR2_LINUX_KERNEL
++	help
++          I2C interface support for the following
++          Sensirion SGP multi-pixel gas sensors:
 +
-+Rather than hard-code calls to @GLIB_GENMARSHAL@, let's use the variable
-+$(GLIB_GENMARSHAL) instead, as it is substituted with autoconf's
-+AC_SUBST(GLIB_GENMARSHAL).
++            * SGP30 gas sensor
++            * SGPC3 low power gas sensor
 +
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+---
-+Upstream status: pending
-+    https://gitlab.freedesktop.org/dbus/dbus-glib/merge_requests/2
-+---
-+ dbus/Makefile.am                       | 4 ++--
-+ dbus/examples/statemachine/Makefile.am | 4 ++--
-+ 2 files changed, 4 insertions(+), 4 deletions(-)
++          This module will be called sgp30.
 +
-+diff --git a/dbus/Makefile.am b/dbus/Makefile.am
-+index 37c6334..2e8cb27 100644
-+--- a/dbus/Makefile.am
-++++ b/dbus/Makefile.am
-+@@ -87,10 +87,10 @@ dbus_binding_tool_LDADD= $(builddir)/libdbus-gtool.la $(builddir)/libdbus-glib-1
-+ ## we just rebuilt these manually and check them into cvs; easier than
-+ ## convincing automake/make to do this properly
-+ regenerate-built-sources:
-+-	@GLIB_GENMARSHAL@ --prefix=_dbus_g_marshal dbus-gmarshal.list --header > dbus-gmarshal.h && \
-++	$(GLIB_GENMARSHAL) --prefix=_dbus_g_marshal dbus-gmarshal.list --header > dbus-gmarshal.h && \
-+ 	echo '#include <config.h>' > dbus-gmarshal.c &&						    \
-+ 	echo '#include "dbus-gmarshal.h"' >> dbus-gmarshal.c &&					    \
-+-        @GLIB_GENMARSHAL@ --prefix=_dbus_g_marshal dbus-gmarshal.list --body >> dbus-gmarshal.c
-++        $(GLIB_GENMARSHAL) --prefix=_dbus_g_marshal dbus-gmarshal.list --body >> dbus-gmarshal.c
-+ 
-+ 
-+ completiondir = $(sysconfdir)/bash_completion.d
-+diff --git a/dbus/examples/statemachine/Makefile.am b/dbus/examples/statemachine/Makefile.am
-+index 187b044..c8fe029 100644
-+--- a/dbus/examples/statemachine/Makefile.am
-++++ b/dbus/examples/statemachine/Makefile.am
-+@@ -35,11 +35,11 @@ statemachine-glue.h: statemachine.xml
-+ 
-+ sm-marshal.c: Makefile sm-marshal.list
-+ 	echo "#include <config.h>" > $@.tmp
-+-	@GLIB_GENMARSHAL@ --prefix=sm_marshal $(srcdir)/sm-marshal.list --header --body >> $@.tmp
-++	$(GLIB_GENMARSHAL) --prefix=sm_marshal $(srcdir)/sm-marshal.list --header --body >> $@.tmp
-+ 	mv $@.tmp $@
-+ 
-+ sm-marshal.h: Makefile sm-marshal.list
-+-	@GLIB_GENMARSHAL@ --prefix=sm_marshal $(srcdir)/sm-marshal.list --header > $@.tmp && mv $@.tmp $@
-++	$(GLIB_GENMARSHAL) --prefix=sm_marshal $(srcdir)/sm-marshal.list --header > $@.tmp && mv $@.tmp $@
-+ 
-+ BUILT_SOURCES += sm-marshal.c sm-marshal.h
-+ 
-+-- 
-+2.14.1
++	  Requires CONFIG_CRC8 & CONFIG_IIO
 +
-diff --git a/package/dbus-glib/dbus-glib.mk b/package/dbus-glib/dbus-glib.mk
-index 372942e1c3..611f194b81 100644
---- a/package/dbus-glib/dbus-glib.mk
-+++ b/package/dbus-glib/dbus-glib.mk
-@@ -10,6 +10,9 @@ DBUS_GLIB_INSTALL_STAGING = YES
- DBUS_GLIB_LICENSE = AFL-2.1 or GPL-2.0+
- DBUS_GLIB_LICENSE_FILES = COPYING
- 
-+# 0001-buildsys-use-variable-for-glib-genmarshal.patch
-+DBUS_GLIB_AUTORECONF = YES
++comment "sgp30/sgpc3 needs a Linux kernel to be built"
++        depends on !BR2_LINUX_KERNEL
+diff --git a/package/sgp30/sgp30.hash b/package/sgp30/sgp30.hash
+new file mode 100644
+index 0000000000..61fda409ed
+--- /dev/null
++++ b/package/sgp30/sgp30.hash
+@@ -0,0 +1 @@
++sha256 f8d619046589eee93dbce091be5dc3059a2e37513e50b3c61eada9c3b6fc7c0f  Sensirion_Gas_Sensors_SGP30_Linux_Driver.zip
+diff --git a/package/sgp30/sgp30.mk b/package/sgp30/sgp30.mk
+new file mode 100644
+index 0000000000..ec5bb25b23
+--- /dev/null
++++ b/package/sgp30/sgp30.mk
+@@ -0,0 +1,13 @@
 +
- DBUS_GLIB_CONF_ENV = \
- 	ac_cv_have_abstract_sockets=yes \
- 	ac_cv_func_posix_getpwnam_r=yes \
-@@ -24,6 +27,9 @@ DBUS_GLIB_CONF_OPTS = \
- 	--disable-doxygen-docs \
- 	--enable-asserts=yes
- 
-+DBUS_GLIB_MAKE_OPTS = \
-+	GLIB_GENMARSHAL=$(STAGING_DIR)/usr/bin/glib-genmarshal
++SGP30_SOURCE = Sensirion_Gas_Sensors_SGP30_Linux_Driver.zip
++SGP30_SITE = https://www.sensirion.com/fileadmin/user_upload/customers/sensirion/Dokumente/13_Sample_Codes_Software/Gas_Sensors
++SGP30_LICENSE = GPL-2.0+
++SGP30_LICENSE_FILE = LICENSE
++SGP30_MODULE_SUBDIRS = sgp30
 +
- DBUS_GLIB_DEPENDENCIES = host-pkgconf dbus host-dbus host-dbus-glib libglib2 expat
- 
- HOST_DBUS_GLIB_DEPENDENCIES = host-dbus host-expat host-libglib2
-@@ -35,6 +41,9 @@ HOST_DBUS_GLIB_CONF_OPTS = \
- 	--disable-doxygen-docs \
- 	--enable-asserts=yes
- 
-+HOST_DBUS_GLIB_MAKE_OPTS = \
-+	GLIB_GENMARSHAL=$(HOST_DIR)/bin/glib-genmarshal
++define SGP30_EXTRACT_CMDS
++        $(UNZIP) -d $(@D) $(SGP30_DL_DIR)/$(SGP30_SOURCE)
++endef
 +
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
- 
++$(eval $(kernel-module))
++$(eval $(generic-package))
 -- 
-2.14.1
+2.13.6
