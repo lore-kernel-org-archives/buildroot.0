@@ -1,95 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sun, 02 Dec 2018 07:19:28 -0000
-Subject: [Buildroot] [git commit] support/testing: use TestPythonPackageBase
- for python-txaio
-Message-ID: <20181202071554.F07D78107F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] python-setuptools: bump to version 40.6.2
+Message-ID: <20181202071555.C8BF68A3F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac4a0529681707a6c1ad19d7cc4b2e24d5d921ad
+commit: https://git.buildroot.net/buildroot/commit/?id=ff039a3257286c50e7b384f5f43d34ebaa314738
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Move the test scripts to be run on the target from inline in the test
-case to a separate file.
-
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Asaf Kahlon <asafka7@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../tests/package/sample_python_txaio_asyncio.py   |  3 +++
- .../tests/package/sample_python_txaio_twisted.py   |  3 +++
- support/testing/tests/package/test_python_txaio.py | 30 +++++++---------------
- 3 files changed, 15 insertions(+), 21 deletions(-)
+ package/python-setuptools/python-setuptools.hash | 4 ++--
+ package/python-setuptools/python-setuptools.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/support/testing/tests/package/sample_python_txaio_asyncio.py b/support/testing/tests/package/sample_python_txaio_asyncio.py
-new file mode 100644
-index 0000000000..77f11ed807
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_txaio_asyncio.py
-@@ -0,0 +1,3 @@
-+import txaio
-+txaio.use_asyncio()
-+f0 = txaio.create_future()
-diff --git a/support/testing/tests/package/sample_python_txaio_twisted.py b/support/testing/tests/package/sample_python_txaio_twisted.py
-new file mode 100644
-index 0000000000..13ea82a961
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_txaio_twisted.py
-@@ -0,0 +1,3 @@
-+import txaio
-+txaio.use_twisted()
-+f0 = txaio.create_future()
-diff --git a/support/testing/tests/package/test_python_txaio.py b/support/testing/tests/package/test_python_txaio.py
-index af93e031b5..7bff1bc23c 100644
---- a/support/testing/tests/package/test_python_txaio.py
-+++ b/support/testing/tests/package/test_python_txaio.py
-@@ -1,34 +1,22 @@
--from tests.package.test_python import TestPythonBase
-+from tests.package.test_python import TestPythonPackageBase
+diff --git a/package/python-setuptools/python-setuptools.hash b/package/python-setuptools/python-setuptools.hash
+index 05d9312c78..a034ee8015 100644
+--- a/package/python-setuptools/python-setuptools.hash
++++ b/package/python-setuptools/python-setuptools.hash
+@@ -1,4 +1,4 @@
+ # From https://pypi.org/pypi/setuptools/json
+-md5  12f8546ead968a0c237732d53fe7fcb1  setuptools-40.5.0.zip
+-sha256  2a2a200f4a760adbded23a091a00be2eca4e28efed65c6120ea275f7e89a1eab  setuptools-40.5.0.zip
++md5  1c45c7d66dc84ae4ee36581dc9e5359b  setuptools-40.6.2.zip
++sha256  86bb4d8e1b0fabad1f4642b64c335b673e53e7a381de03c9a89fe678152c4c64  setuptools-40.6.2.zip
+ sha256  c32a3ac395af6321efd28be73d06a00f0db6ab887d1c21d4fec46128d2056d5a  LICENSE
+diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
+index 3dca7094e8..0f28152e54 100644
+--- a/package/python-setuptools/python-setuptools.mk
++++ b/package/python-setuptools/python-setuptools.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- 
--class TestPythonPy2Txaio(TestPythonBase):
--    config = TestPythonBase.config + \
-+class TestPythonPy2Txaio(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-         """
-         BR2_PACKAGE_PYTHON=y
-         BR2_PACKAGE_PYTHON_TXAIO=y
-         BR2_PACKAGE_PYTHON_TWISTED=y
-         """
-+    sample_scripts = ["tests/package/sample_python_txaio_twisted.py"]
- 
--    def test_run(self):
--        self.login()
--        cmd = self.interpreter + " -c 'import txaio;"
--        cmd += "txaio.use_twisted();"
--        cmd += "f0 = txaio.create_future()'"
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
- 
--
--class TestPythonPy3Txaio(TestPythonBase):
--    config = TestPythonBase.config + \
-+class TestPythonPy3Txaio(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-         """
-         BR2_PACKAGE_PYTHON3=y
-         BR2_PACKAGE_PYTHON_TXAIO=y
-         """
--
--    def test_run(self):
--        self.login()
--        cmd = self.interpreter + " -c 'import txaio;"
--        cmd += "txaio.use_asyncio();"
--        cmd += "f0 = txaio.create_future()'"
--        _, exit_code = self.emulator.run(cmd)
--        self.assertEqual(exit_code, 0)
-+    sample_scripts = ["tests/package/sample_python_txaio_asyncio.py"]
+-PYTHON_SETUPTOOLS_VERSION = 40.5.0
++PYTHON_SETUPTOOLS_VERSION = 40.6.2
+ PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).zip
+-PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/26/e5/9897eee1100b166a61f91b68528cb692e8887300d9cbdaa1a349f6304b79
++PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/b0/d1/8acb42f391cba52e35b131e442e80deffbb8d0676b93261d761b1f0ef8fb
+ PYTHON_SETUPTOOLS_LICENSE = MIT
+ PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
+ PYTHON_SETUPTOOLS_SETUP_TYPE = setuptools
