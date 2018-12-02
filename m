@@ -1,66 +1,67 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  2 Dec 2018 10:04:33 +0100
-Subject: [Buildroot] [PATCH 01/11] support/graph-depends: drop legacy
- target-exceptions
+Date: Sun,  2 Dec 2018 10:04:34 +0100
+Subject: [Buildroot] [PATCH 02/11] support/scripts/graph-depends: use proper
+ rootpkg in remove_extra_deps()
 In-Reply-To: <cover.1543741464.git.yann.morin.1998@free.fr>
 References: <cover.1543741464.git.yann.morin.1998@free.fr>
-Message-ID: <4c3fd092071356256474df1e9b3f6cdb42c5dcf7.1543741464.git.yann.morin.1998@free.fr>
+Message-ID: <8730ab5253daddf6c5aaed9b4cc058e446faa624.1543741464.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, we avoid drawing the dependencies that we call 'target
-exceptions', becasue they initially were returned by 'show-targets',
-when they in fact were not really packages and thus should not be on
-the graph.
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-However, those two exceptions have no longer been reported in the output
-of show-targets since we merged very old initial top-level parallel
-build way back in 2014, with commit a24877586a56 (Makefile: add support
-for top-level parallel make), where they had been converted into purely
-internal rules.
+The remove_extra_deps() function removes dependencies that we are not
+interested in seeing in the dependency graph. It does this for all
+packages, except the 'all' package, which on full dependency graphs is
+the root of the tree.
 
-4 years have passed, we can now drop those exceptions from the
-graph-depends script.
+However, this doesn't take into account package-specific dependency
+graphs (i.e make <pkg>-graph-depends) where the root is not 'all', but
+'<pkg>'. Due to this, dependencies on "mandatory deps" were not
+visible at all, i.e the toolchain package (and its dependencies) and
+the skeleton package (and its dependencies) were not displayed in
+package-specific dependency graphs.
 
-This concludes the cleanup initiated three years ago with commit
-0b32791f0076 (graph-depends: remove absent targets from
-TARGET_EXCEPTIONS).
+To fix this, we use the existing rootpkg variable instead of
+hardcoding 'all'.
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/graph-depends | 9 ---------
- 1 file changed, 9 deletions(-)
+ support/scripts/graph-depends | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index 3c091da5e0..3526a51662 100755
+index 3526a51662..f1b6b142fb 100755
 --- a/support/scripts/graph-depends
 +++ b/support/scripts/graph-depends
-@@ -100,12 +100,6 @@ def pkg_node_name(pkg):
-     return "_" + pkg.replace("-", "")
+@@ -205,12 +205,12 @@ def check_circular_deps(deps):
  
+ # This functions trims down the dependency list of all packages.
+ # It applies in sequence all the dependency-elimination methods.
+-def remove_extra_deps(deps, transitive):
++def remove_extra_deps(deps, rootpkg, transitive):
+     for pkg in list(deps.keys()):
+-        if not pkg == 'all':
++        if not pkg == rootpkg:
+             deps[pkg] = remove_mandatory_deps(pkg, deps)
+     for pkg in list(deps.keys()):
+-        if not transitive or pkg == 'all':
++        if not transitive or pkg == rootpkg:
+             deps[pkg] = remove_transitive_deps(pkg, deps)
+     return deps
  
--TARGET_EXCEPTIONS = [
--    "target-finalize",
--    "target-post-image",
--]
--
--
- # Basic cache for the results of the is_dep() function, in order to
- # optimize the execution time. The cache is a dict of dict of boolean
- # values. The key to the primary dict is "pkg", and the key of the
-@@ -384,9 +378,6 @@ def main():
-         allpkgs.append('all')
-         filtered_targets = []
-         for tg in targets:
--            # Skip uninteresting targets
--            if tg in TARGET_EXCEPTIONS:
--                continue
-             dependencies.append(('all', tg))
-             filtered_targets.append(tg)
-         deps = get_all_depends(filtered_targets, get_depends_func)
+@@ -401,7 +401,7 @@ def main():
+     if check_only:
+         sys.exit(0)
+ 
+-    dict_deps = remove_extra_deps(dict_deps, args.transitive)
++    dict_deps = remove_extra_deps(dict_deps, rootpkg, args.transitive)
+     dict_version = brpkgutil.get_version([pkg for pkg in allpkgs
+                                           if pkg != "all" and not pkg.startswith("root")])
+ 
 -- 
 2.14.1
