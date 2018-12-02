@@ -1,78 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 02 Dec 2018 07:19:26 -0000
-Subject: [Buildroot] [git commit] package/linux-tools: add support for
- pcitest tool
-Message-ID: <20181202071555.1C1348A3F3@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 02 Dec 2018 07:19:27 -0000
+Subject: [Buildroot] [git commit] ethtool: bump to version 4.19
+Message-ID: <20181202071554.ABB038A3F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63e457639abb29781582320825496fece79a675e
+commit: https://git.buildroot.net/buildroot/commit/?id=090067fc69fdccc9b1f4a2547004f691586cb0bd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add support for selection and compiling the pcitest tool on buildroot.
-
-This tool is available to be compiled since kernel 4.20.
-
-Signed-off-by: Gustavo Pimentel <gustavo.pimentel@synopsys.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-tools/Config.in            |  9 +++++++++
- package/linux-tools/linux-tool-pci.mk.in | 27 +++++++++++++++++++++++++++
- 2 files changed, 36 insertions(+)
+ package/ethtool/ethtool.hash | 2 +-
+ package/ethtool/ethtool.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
-index 349dc6bf0d..f4199fd618 100644
---- a/package/linux-tools/Config.in
-+++ b/package/linux-tools/Config.in
-@@ -34,6 +34,15 @@ config BR2_PACKAGE_LINUX_TOOLS_IIO
+diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
+index bac7401d3c..b918dca308 100644
+--- a/package/ethtool/ethtool.hash
++++ b/package/ethtool/ethtool.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
+-sha256	fe967a6722db2099fa63d847b6628e3e31cf9f53571a37503347dcc3e4015a03	ethtool-4.16.tar.xz
++sha256	b18a6c364e42c29cdac057cf183c9674163db96b30848adfa8c2a90450f6d0c8	ethtool-4.19.tar.xz
+ # Locally calculated
+ sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
+ sha256	5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1	LICENSE
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index b974b5f76e..ae15800b19 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  These tools are available only from kernel version 4.7.
- 
-+config BR2_PACKAGE_LINUX_TOOLS_PCI
-+	bool "pci"
-+	select BR2_PACKAGE_LINUX_TOOLS
-+	help
-+	  pcitest is a tool for testing capabilities related to a
-+	  PCI Endpoint (only works with specific Endpoints).
-+
-+	  These tools are available only from kernel version 4.20.
-+
- config BR2_PACKAGE_LINUX_TOOLS_PERF
- 	bool "perf"
- 	select BR2_PACKAGE_LINUX_TOOLS
-diff --git a/package/linux-tools/linux-tool-pci.mk.in b/package/linux-tools/linux-tool-pci.mk.in
-new file mode 100644
-index 0000000000..4ef0368a32
---- /dev/null
-+++ b/package/linux-tools/linux-tool-pci.mk.in
-@@ -0,0 +1,27 @@
-+################################################################################
-+#
-+# pci
-+#
-+################################################################################
-+
-+LINUX_TOOLS += pci
-+
-+PCI_MAKE_OPTS = $(LINUX_MAKE_FLAGS)
-+
-+define PCI_BUILD_CMDS
-+	$(Q)if ! grep install $(LINUX_DIR)/tools/pci/Makefile >/dev/null 2>&1 ; then \
-+		echo "Your kernel version is too old and does not have install section in the pci tools." ; \
-+		echo "At least kernel 4.20 must be used." ; \
-+		exit 1 ; \
-+	fi
-+
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/pci \
-+		$(PCI_MAKE_OPTS)
-+endef
-+
-+define PCI_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/pci \
-+		$(PCI_MAKE_OPTS) \
-+		DESTDIR=$(TARGET_DIR) \
-+		install
-+endef
+-ETHTOOL_VERSION = 4.16
++ETHTOOL_VERSION = 4.19
+ ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPL-2.0
