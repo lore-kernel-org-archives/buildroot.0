@@ -1,155 +1,135 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sun, 02 Dec 2018 07:19:26 -0000
-Subject: [Buildroot] [git commit] libcurl: Allow selection of TLS package
- libcurl will use
-Message-ID: <20181202071554.8785D80FDE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: create default test case
+ for python packages
+Message-ID: <20181202071554.D13FE8107F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b8b78e7e6a1cc15ab085f157250ed1ca04277129
+commit: https://git.buildroot.net/buildroot/commit/?id=13e3c14ed277e7f53ed9cdc7d161a4435c2ddbe0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Instead of defaulting to OpenSSL, allow selection of package to use
-through a choice in libcurl's config.  The default will be to select the
-first enabled TLS provider in the same preference order as is used now,
-i.e. no change from current behavior.
+Test cases for python packages are very similar among each other: run a
+simple script in the target that minimally tests the package.
+So create a new helper class named TestPythonPackageBase that holds all
+the logic to run a script on the target.
 
-Some of the alternative libraries have advantages over OpenSSL in
-certain areas.
+TestPythonPackageBase adds in build time one or more sample scripts to
+be run on the target. The test case for the python package must
+explicitly list them in the "sample_scripts" property. The test case
+then automatically logins to the target, checks the scripts are really
+in the rootfs (it calls "md5sum" instead of "ls" or "test" in an attempt
+to make the logfile more friendly, since someone analysing a failure can
+easily check the expected script was executed) and then calls the python
+interpreter passing the sample script as parameter.
+An optional property "timeout" exists for the case the sample script
+needs more time to run than the default timeout from the test infra
+(currently 5 seconds).
 
-For example, gnutls has vastly superior PKCS11 support.  One can use
-client TLS private keys by supplying a PKCS11 URI instead of a private
-key file name.  The TLS server cert trust store can be a PKCS11 URI,
-e.g. configure libcurl with a ca-bundle of "pkcs11:model=p11-kit-trust".
-Now server certs can be stored in a software and/or hardware HSM(s).
-This doesn't work with OpenSSL.
+A simple test case for a package that only supports Python 2 will look
+like this:
 
-However, some software only supports OpenSSL for TLS or other crypto
-functions.  So it might be necessary to enable OpenSSL for that reason.
+|from tests.package.test_python import TestPythonPackageBase
+|
+|
+|class TestPythonPy2<Package>(TestPythonPackageBase):
+|    __test__ = True
+|    config = TestPythonPackageBase.config + \
+|        """
+|        BR2_PACKAGE_PYTHON=y
+|        BR2_PACKAGE_PYTHON_<PACKAGE>=y
+|        """
+|    sample_scripts = ["tests/package/sample_python_<package>.py"]
+|    timeout = 15
 
-Signed-off-by: Trent Piepho <tpiepho@impinj.com>
-[Peter: add BR2_PACKAGE_LIBCURL_TLS_SUPPORT and use it to hide choice &
-	comment, explitly pass --without-foo if option is not enabled,
-	only do .pc fixup if BR2_PACKAGE_LIBCURL_OPENSSL is enabled]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Asaf Kahlon <asafka7@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libcurl/Config.in  | 32 ++++++++++++++++++++++++++++++++
- package/libcurl/libcurl.mk | 35 ++++++++++++++++++++++++-----------
- 2 files changed, 56 insertions(+), 11 deletions(-)
+ .../tests/package/copy-sample-script-to-target.sh  |  7 +++
+ support/testing/tests/package/test_python.py       | 56 ++++++++++++++++++++++
+ 2 files changed, 63 insertions(+)
 
-diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
-index 21c2ee2b7f..9c62539e4d 100644
---- a/package/libcurl/Config.in
-+++ b/package/libcurl/Config.in
-@@ -19,4 +19,36 @@ config BR2_PACKAGE_LIBCURL_VERBOSE
- 	help
- 	  Enable verbose text strings
- 
-+config BR2_PACKAGE_LIBCURL_TLS_SUPPORT
-+	bool
-+	default y if BR2_PACKAGE_OPENSSL
-+	default y if BR2_PACKAGE_GNUTLS
-+	default y if BR2_PACKAGE_LIBNSS
-+	default y if BR2_PACKAGE_MBEDTLS
+diff --git a/support/testing/tests/package/copy-sample-script-to-target.sh b/support/testing/tests/package/copy-sample-script-to-target.sh
+new file mode 100755
+index 0000000000..6448a80d6d
+--- /dev/null
++++ b/support/testing/tests/package/copy-sample-script-to-target.sh
+@@ -0,0 +1,7 @@
++#!/bin/sh
++set -e
 +
-+choice
-+	prompt "SSL/TLS library to use"
-+	depends on BR2_PACKAGE_LIBCURL_TLS_SUPPORT
++shift
++for file in "$@"; do
++	cp -f "${file}" "${TARGET_DIR}/root/"
++done
+diff --git a/support/testing/tests/package/test_python.py b/support/testing/tests/package/test_python.py
+index 26cf49947b..c422bdbf50 100644
+--- a/support/testing/tests/package/test_python.py
++++ b/support/testing/tests/package/test_python.py
+@@ -68,3 +68,59 @@ class TestPython3(TestPythonBase):
+         self.math_floor_test()
+         self.libc_time_test()
+         self.zlib_test()
 +
-+config BR2_PACKAGE_LIBCURL_OPENSSL
-+	bool "OpenSSL"
-+	depends on BR2_PACKAGE_OPENSSL
 +
-+config BR2_PACKAGE_LIBCURL_GNUTLS
-+	bool "GnuTLS"
-+	depends on BR2_PACKAGE_GNUTLS
++class TestPythonPackageBase(TestPythonBase):
++    """Common class to test a python package.
 +
-+config BR2_PACKAGE_LIBCURL_LIBNSS
-+	bool "NSS"
-+	depends on BR2_PACKAGE_LIBNSS
++    Build an image containing the scripts listed in sample_scripts, start the
++    emulator, login to it and for each sample script in the image run the python
++    interpreter passing the name of the script and check the status code is 0.
 +
-+config BR2_PACKAGE_LIBCURL_MBEDTLS
-+	bool "mbed TLS"
-+	depends on BR2_PACKAGE_MBEDTLS
++    Each test case that inherits from this class must have:
++    __test__ = True  - to let nose2 know that it is a test case
++    config           - defconfig fragment with the packages to run the test
++    It also can have:
++    sample_scripts   - list of scripts to add to the image and run on the target
++    timeout          - timeout to the script to run when the default from the
++                       test infra is not enough
++    When custom commands need be issued on the target the method
++    run_sample_scripts can be overridden.
++    """
 +
-+endchoice
++    __test__ = False
++    config_sample_scripts = \
++        """
++        BR2_ROOTFS_POST_BUILD_SCRIPT="{}"
++        BR2_ROOTFS_POST_SCRIPT_ARGS="{}"
++        """.format(infra.filepath("tests/package/copy-sample-script-to-target.sh"),
++                   "{sample_scripts}")
++    sample_scripts = None
++    timeout = -1
 +
-+comment "A TLS library is needed for SSL/TLS support"
-+	depends on !BR2_PACKAGE_LIBCURL_TLS_SUPPORT
++    def __init__(self, names):
++        """Add the scripts to the target in build time."""
++        super(TestPythonPackageBase, self).__init__(names)
++        if self.sample_scripts:
++            scripts = [infra.filepath(s) for s in self.sample_scripts]
++            self.config += self.config_sample_scripts.format(sample_scripts=" ".join(scripts))
 +
- endif
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 99a451b636..b6b8e0abc8 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -19,7 +19,8 @@ LIBCURL_INSTALL_STAGING = YES
- # probably almost never used. See
- # http://curl.haxx.se/docs/manpage.html#--ntlm.
- LIBCURL_CONF_OPTS = --disable-manual --disable-ntlm-wb \
--	--enable-hidden-symbols --with-random=/dev/urandom --disable-curldebug
-+	--enable-hidden-symbols --with-random=/dev/urandom --disable-curldebug \
-+	--without-polarssl
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- LIBCURL_CONF_OPTS += --enable-threaded-resolver
-@@ -35,7 +36,7 @@ endif
- 
- LIBCURL_CONFIG_SCRIPTS = curl-config
- 
--ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+ifeq ($(BR2_PACKAGE_LIBCURL_OPENSSL),y)
- LIBCURL_DEPENDENCIES += openssl
- # configure adds the cross openssl dir to LD_LIBRARY_PATH which screws up
- # native stuff during the rest of configure when target == host.
-@@ -44,19 +45,31 @@ LIBCURL_DEPENDENCIES += openssl
- LIBCURL_CONF_ENV += LD_LIBRARY_PATH=$(if $(LD_LIBRARY_PATH),$(LD_LIBRARY_PATH):)/lib:/usr/lib
- LIBCURL_CONF_OPTS += --with-ssl=$(STAGING_DIR)/usr \
- 	--with-ca-path=/etc/ssl/certs
--else ifeq ($(BR2_PACKAGE_GNUTLS),y)
--LIBCURL_CONF_OPTS += --with-gnutls=$(STAGING_DIR)/usr
-+else
-+LIBCURL_CONF_OPTS += -without-ssl
-+endif
++    def check_sample_scripts_exist(self):
++        """Check the scripts were really added to the image."""
++        scripts = [os.path.basename(s) for s in self.sample_scripts]
++        cmd = "md5sum " + " ".join(scripts)
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
 +
-+ifeq ($(BR2_PACKAGE_LIBCURL_GNUTLS),y)
-+LIBCURL_CONF_OPTS += --with-gnutls=$(STAGING_DIR)/usr --without-ssl
- LIBCURL_DEPENDENCIES += gnutls
--else ifeq ($(BR2_PACKAGE_LIBNSS),y)
--LIBCURL_CONF_OPTS += --with-nss=$(STAGING_DIR)/usr
-+else
-+LIBCURL_CONF_OPTS += --without-gnutls
-+endif
++    def run_sample_scripts(self):
++        """Run each script previously added to the image."""
++        for script in self.sample_scripts:
++            cmd = self.interpreter + " " + os.path.basename(script)
++            _, exit_code = self.emulator.run(cmd, timeout=self.timeout)
++            self.assertEqual(exit_code, 0)
 +
-+ifeq ($(BR2_PACKAGE_LIBCURL_LIBNSS),y)
-+LIBCURL_CONF_OPTS += --with-nss=$(STAGING_DIR)/usr --without-ssl --without-gnutls
- LIBCURL_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) `$(PKG_CONFIG_HOST_BINARY) nspr nss --cflags`"
- LIBCURL_DEPENDENCIES += libnss
--else ifeq ($(BR2_PACKAGE_MBEDTLS),y)
--LIBCURL_CONF_OPTS += --with-mbedtls=$(STAGING_DIR)/usr
-+else
-+LIBCURL_CONF_OPTS += --without-nss
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBCURL_MBEDTLS),y)
-+LIBCURL_CONF_OPTS += --with-mbedtls=$(STAGING_DIR)/usr \
-+	--without-ssl --without-gnutls --without-nss
- LIBCURL_DEPENDENCIES += mbedtls
- else
--LIBCURL_CONF_OPTS += --without-ssl --without-gnutls \
--	--without-polarssl --without-nss --without-mbedtls
-+LIBCURL_CONF_OPTS += --without-mbedtls
- endif
- 
- ifeq ($(BR2_PACKAGE_C_ARES),y)
-@@ -98,7 +111,7 @@ endif
- define LIBCURL_FIX_DOT_PC
- 	printf 'Requires: openssl\n' >>$(@D)/libcurl.pc.in
- endef
--LIBCURL_POST_PATCH_HOOKS += $(if $(BR2_PACKAGE_OPENSSL),LIBCURL_FIX_DOT_PC)
-+LIBCURL_POST_PATCH_HOOKS += $(if $(BR2_PACKAGE_LIBCURL_OPENSSL),LIBCURL_FIX_DOT_PC)
- 
- ifeq ($(BR2_PACKAGE_CURL),)
- define LIBCURL_TARGET_CLEANUP
++    def test_run(self):
++        """Test a python package."""
++        self.login()
++        self.check_sample_scripts_exist()
++        self.run_sample_scripts()
