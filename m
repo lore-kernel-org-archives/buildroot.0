@@ -1,154 +1,115 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 3 Dec 2018 12:39:39 +0100
-Subject: [Buildroot] [PATCH] [RFC] package/dbus-glib: fix build with
- newer libglib2
-In-Reply-To: <20181202174600.7772-1-yann.morin.1998@free.fr>
-References: <20181202174600.7772-1-yann.morin.1998@free.fr>
-Message-ID: <20181203113939.GA2548@scaer>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon,  3 Dec 2018 14:07:34 +0200
+Subject: [Buildroot] [PATCH] keyutils: bump to version 1.6
+Message-ID: <6e85f490000f44ac712e4e9065abd38641b7ffd2.1543838854.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Refresh patch 0001.
 
-On 2018-12-02 18:46 +0100, Yann E. MORIN spake thusly:
-> Fix dbus-glib to use the AC_SUBSTituted variable that contains the path
-> to glib-gen-marshal, so that we can override it from the command line.
+Drop patch 0003; no longer needed after upstream headers rearrange.
 
-I may have to withdraw that patch, now:
+Add license hash.
 
-  - the libglib2 bump was reverted, so this fix is no longer needed, and
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/keyutils/0001-fix-install-rule.patch  | 10 +++---
+ .../0003-Add-missing-limits.h-include.patch   | 32 -------------------
+ package/keyutils/keyutils.hash                |  4 ++-
+ package/keyutils/keyutils.mk                  |  2 +-
+ 4 files changed, 10 insertions(+), 38 deletions(-)
+ delete mode 100644 package/keyutils/0003-Add-missing-limits.h-include.patch
 
-  - the pending pkgconf bump solves this issue.
-
-So I've marked this patch as N/A in patchwork.
-
-Regards,
-Yann E. MORIN.
-
-> Fixes:
->     http://autobuild.buildroot.org/results/2e4/2e4285d47f6295e1b9f9c05abe34df443cad7f9e/
->     ...
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  ...buildsys-use-variable-for-glib-genmarshal.patch | 60 ++++++++++++++++++++++
->  package/dbus-glib/dbus-glib.mk                     |  9 ++++
->  2 files changed, 69 insertions(+)
->  create mode 100644 package/dbus-glib/0001-buildsys-use-variable-for-glib-genmarshal.patch
-> 
-> diff --git a/package/dbus-glib/0001-buildsys-use-variable-for-glib-genmarshal.patch b/package/dbus-glib/0001-buildsys-use-variable-for-glib-genmarshal.patch
-> new file mode 100644
-> index 0000000000..a6acb5edaf
-> --- /dev/null
-> +++ b/package/dbus-glib/0001-buildsys-use-variable-for-glib-genmarshal.patch
-> @@ -0,0 +1,60 @@
-> +From 259ee2897f7c9560e7df4451af59efd73be0951f Mon Sep 17 00:00:00 2001
-> +From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> +Date: Sun, 2 Dec 2018 16:26:07 +0100
-> +Subject: [PATCH] buildsys: use variable for glib-genmarshal
-> +
-> +When doing cross-compilation, the path returned by pkg-config for
-> +glib-genmarshal can be incorrect (because it is the runtime path,
-> +not the build-time path).
-> +
-> +Rather than hard-code calls to @GLIB_GENMARSHAL@, let's use the variable
-> +$(GLIB_GENMARSHAL) instead, as it is substituted with autoconf's
-> +AC_SUBST(GLIB_GENMARSHAL).
-> +
-> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> +---
-> +Upstream status: pending
-> +    https://gitlab.freedesktop.org/dbus/dbus-glib/merge_requests/2
-> +---
-> + dbus/Makefile.am                       | 4 ++--
-> + dbus/examples/statemachine/Makefile.am | 4 ++--
-> + 2 files changed, 4 insertions(+), 4 deletions(-)
-> +
-> +diff --git a/dbus/Makefile.am b/dbus/Makefile.am
-> +index 37c6334..2e8cb27 100644
-> +--- a/dbus/Makefile.am
-> ++++ b/dbus/Makefile.am
-> +@@ -87,10 +87,10 @@ dbus_binding_tool_LDADD= $(builddir)/libdbus-gtool.la $(builddir)/libdbus-glib-1
-> + ## we just rebuilt these manually and check them into cvs; easier than
-> + ## convincing automake/make to do this properly
-> + regenerate-built-sources:
-> +-	@GLIB_GENMARSHAL@ --prefix=_dbus_g_marshal dbus-gmarshal.list --header > dbus-gmarshal.h && \
-> ++	$(GLIB_GENMARSHAL) --prefix=_dbus_g_marshal dbus-gmarshal.list --header > dbus-gmarshal.h && \
-> + 	echo '#include <config.h>' > dbus-gmarshal.c &&						    \
-> + 	echo '#include "dbus-gmarshal.h"' >> dbus-gmarshal.c &&					    \
-> +-        @GLIB_GENMARSHAL@ --prefix=_dbus_g_marshal dbus-gmarshal.list --body >> dbus-gmarshal.c
-> ++        $(GLIB_GENMARSHAL) --prefix=_dbus_g_marshal dbus-gmarshal.list --body >> dbus-gmarshal.c
-> + 
-> + 
-> + completiondir = $(sysconfdir)/bash_completion.d
-> +diff --git a/dbus/examples/statemachine/Makefile.am b/dbus/examples/statemachine/Makefile.am
-> +index 187b044..c8fe029 100644
-> +--- a/dbus/examples/statemachine/Makefile.am
-> ++++ b/dbus/examples/statemachine/Makefile.am
-> +@@ -35,11 +35,11 @@ statemachine-glue.h: statemachine.xml
-> + 
-> + sm-marshal.c: Makefile sm-marshal.list
-> + 	echo "#include <config.h>" > $@.tmp
-> +-	@GLIB_GENMARSHAL@ --prefix=sm_marshal $(srcdir)/sm-marshal.list --header --body >> $@.tmp
-> ++	$(GLIB_GENMARSHAL) --prefix=sm_marshal $(srcdir)/sm-marshal.list --header --body >> $@.tmp
-> + 	mv $@.tmp $@
-> + 
-> + sm-marshal.h: Makefile sm-marshal.list
-> +-	@GLIB_GENMARSHAL@ --prefix=sm_marshal $(srcdir)/sm-marshal.list --header > $@.tmp && mv $@.tmp $@
-> ++	$(GLIB_GENMARSHAL) --prefix=sm_marshal $(srcdir)/sm-marshal.list --header > $@.tmp && mv $@.tmp $@
-> + 
-> + BUILT_SOURCES += sm-marshal.c sm-marshal.h
-> + 
-> +-- 
-> +2.14.1
-> +
-> diff --git a/package/dbus-glib/dbus-glib.mk b/package/dbus-glib/dbus-glib.mk
-> index 372942e1c3..611f194b81 100644
-> --- a/package/dbus-glib/dbus-glib.mk
-> +++ b/package/dbus-glib/dbus-glib.mk
-> @@ -10,6 +10,9 @@ DBUS_GLIB_INSTALL_STAGING = YES
->  DBUS_GLIB_LICENSE = AFL-2.1 or GPL-2.0+
->  DBUS_GLIB_LICENSE_FILES = COPYING
->  
-> +# 0001-buildsys-use-variable-for-glib-genmarshal.patch
-> +DBUS_GLIB_AUTORECONF = YES
-> +
->  DBUS_GLIB_CONF_ENV = \
->  	ac_cv_have_abstract_sockets=yes \
->  	ac_cv_func_posix_getpwnam_r=yes \
-> @@ -24,6 +27,9 @@ DBUS_GLIB_CONF_OPTS = \
->  	--disable-doxygen-docs \
->  	--enable-asserts=yes
->  
-> +DBUS_GLIB_MAKE_OPTS = \
-> +	GLIB_GENMARSHAL=$(STAGING_DIR)/usr/bin/glib-genmarshal
-> +
->  DBUS_GLIB_DEPENDENCIES = host-pkgconf dbus host-dbus host-dbus-glib libglib2 expat
->  
->  HOST_DBUS_GLIB_DEPENDENCIES = host-dbus host-expat host-libglib2
-> @@ -35,6 +41,9 @@ HOST_DBUS_GLIB_CONF_OPTS = \
->  	--disable-doxygen-docs \
->  	--enable-asserts=yes
->  
-> +HOST_DBUS_GLIB_MAKE_OPTS = \
-> +	GLIB_GENMARSHAL=$(HOST_DIR)/bin/glib-genmarshal
-> +
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
->  
-> -- 
-> 2.14.1
-> 
-
+diff --git a/package/keyutils/0001-fix-install-rule.patch b/package/keyutils/0001-fix-install-rule.patch
+index 3670d28e6673..26545716cbfe 100644
+--- a/package/keyutils/0001-fix-install-rule.patch
++++ b/package/keyutils/0001-fix-install-rule.patch
+@@ -6,15 +6,17 @@ the host library.
+ Based on the former patch by Yann E. MORIN.
+ 
+ Signed-off-by: Vicente Olivert Riera <vincent.riera@imgtec.com>
++[baruch: update for 1.6]
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ 
+ --- keyutils-1.5.9/Makefile.orig	2014-09-22 16:13:41.593562765 +0100
+ +++ keyutils-1.5.9/Makefile	2014-09-22 16:14:05.377963952 +0100
+-@@ -168,7 +168,7 @@ ifeq ($(NO_SOLIB),0)
++@@ -184,7 +184,7 @@ ifeq ($(NO_SOLIB),0)
+  	$(INSTALL) -D $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(LIBNAME)
+  	$(LNS) $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SONAME)
+  	mkdir -p $(DESTDIR)$(USRLIBDIR)
+ -	$(LNS) $(LIBDIR)/$(SONAME) $(DESTDIR)$(USRLIBDIR)/$(DEVELLIB)
+ +	$(LNS) $(SONAME) $(DESTDIR)$(USRLIBDIR)/$(DEVELLIB)
+- endif
+- 	$(INSTALL) -D keyctl $(DESTDIR)$(BINDIR)/keyctl
+- 	$(INSTALL) -D request-key $(DESTDIR)$(SBINDIR)/request-key
++ 	sed \
++ 	-e 's, at VERSION\@,$(VERSION),g' \
++ 	-e 's, at prefix\@,$(PREFIX),g' \
+diff --git a/package/keyutils/0003-Add-missing-limits.h-include.patch b/package/keyutils/0003-Add-missing-limits.h-include.patch
+deleted file mode 100644
+index 45c84398f99f..000000000000
+--- a/package/keyutils/0003-Add-missing-limits.h-include.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From b2c6d3744dca029560d0d5e780f16561f8eeed53 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Sun, 12 Jul 2015 16:22:14 +0200
+-Subject: [PATCH] Add missing <limits.h> include
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-key.dns_resolver.c uses ?UINT_MAX? and ?ULONG_MAX?, but forgets to
+-include <limits.h>, which causes build failure with certain C
+-libraries (notably the musl C library).
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- key.dns_resolver.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/key.dns_resolver.c b/key.dns_resolver.c
+-index c2a9fe5..d41e219 100644
+---- a/key.dns_resolver.c
+-+++ b/key.dns_resolver.c
+-@@ -56,6 +56,7 @@
+- #include <stdlib.h>
+- #include <unistd.h>
+- #include <time.h>
+-+#include <limits.h>
+- 
+- static const char *DNS_PARSE_VERSION = "1.0";
+- static const char prog[] = "key.dns_resolver";
+--- 
+-2.4.5
+-
+diff --git a/package/keyutils/keyutils.hash b/package/keyutils/keyutils.hash
+index b14b7bec13c7..d6781628cd66 100644
+--- a/package/keyutils/keyutils.hash
++++ b/package/keyutils/keyutils.hash
+@@ -1,2 +1,4 @@
+ # Locally computed
+-sha256 115c3deae7f181778fd0e0ffaa2dad1bf1fe2f5677cf2e0e348cdb7a1c93afb6  keyutils-1.5.10.tar.bz2
++sha256 d3aef20cec0005c0fa6b4be40079885567473185b1a57b629b030e67942c7115  keyutils-1.6.tar.bz2
++sha256 f46409d4822b2457b39bbd0e7881eecb396130eb8320b7748fa7e9488970aa6d  LICENCE.GPL
++sha256 0d15593e3a8ad90917f8509b5ac1e4b5e5d196434a68029aa9dc0858a4a4c521  LICENCE.LGPL
+diff --git a/package/keyutils/keyutils.mk b/package/keyutils/keyutils.mk
+index 048b6894d31c..c8de3a0dfc3a 100644
+--- a/package/keyutils/keyutils.mk
++++ b/package/keyutils/keyutils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KEYUTILS_VERSION = 1.5.10
++KEYUTILS_VERSION = 1.6
+ KEYUTILS_SOURCE = keyutils-$(KEYUTILS_VERSION).tar.bz2
+ KEYUTILS_SITE = http://people.redhat.com/~dhowells/keyutils
+ KEYUTILS_LICENSE = GPL-2.0+, LGPL-2.1+
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.19.2
