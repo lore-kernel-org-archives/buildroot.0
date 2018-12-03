@@ -1,55 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 03 Dec 2018 23:27:07 +0100
-Subject: [Buildroot] [PATCH-2018.02.x] glibc: bump version for post-2.26
- security fixes
-In-Reply-To: <20181130095027.16587-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 30 Nov 2018 10:50:26 +0100")
-References: <20181130095027.16587-1-peter@korsgaard.com>
-Message-ID: <87lg561c1w.fsf@dell.be.48ers.dk>
+Date: Mon, 3 Dec 2018 23:27:31 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] package/c-ares: use
+ LICENSE.md
+Message-ID: <20181203222402.BD5FF8A68A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7c4b61f939fb53478eb180fbbe82fe65fa50df43
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
- > Fixes the following security vulnerability:
- >   CVE-2018-19591: A file descriptor leak in if_nametoindex can lead to a
- >   denial of service due to resource exhaustion when processing getaddrinfo
- >   calls with crafted host names.  Reported by Guido Vranken.
+c-ares has a LICENSE.md file since version 1.12 and
+https://github.com/c-ares/c-ares/commit/4e861351d9deaef7b78aee50ce9229325f4fc59a
 
- > Adhemerval Zanella (2):
- >       Fix misreported errno on preadv2/pwritev2 (BZ#23579)
- >       x86: Fix Haswell CPU string flags (BZ#23709)
+So use it instead of one of the source file and add its hash
 
- > Alexandra H?jkov? (1):
- >       Add an additional test to resolv/tst-resolv-network.c
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit c9dfcbd6ee4ed6878bb081e918c4b7e36955d67c)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/c-ares/c-ares.hash | 3 +++
+ package/c-ares/c-ares.mk   | 3 +--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
- > Andreas Schwab (1):
- >       libanl: properly cleanup if first helper thread creation failed (bug 22927)
-
- > Florian Weimer (3):
- >       preadv2/pwritev2: Handle offset == -1 [BZ #22753]
- >       conform: XFAIL siginfo_t si_band test on sparc64
- >       CVE-2018-19591: if_nametoindex: Fix descriptor for overlong name [BZ #23927]
-
- > Ilya Yu. Malakhov (1):
- >       signal: Use correct type for si_band in siginfo_t [BZ #23562]
-
- > Martin Kuchta (1):
- >       pthread_cond_broadcast: Fix waiters-after-spinning case [BZ #23538]
-
- > Stefan Liebler (2):
- >       Fix segfault in maybe_script_execute.
- >       Fix race in pthread_mutex_lock while promoting to PTHREAD_MUTEX_ELISION_NP [BZ #23275]
-
- > Szabolcs Nagy (1):
- >       i64: fix missing exp2f, log2f and powf symbols in libm.a [BZ #23822]
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2018.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/c-ares/c-ares.hash b/package/c-ares/c-ares.hash
+index 832c4dfcfb..0c665574d8 100644
+--- a/package/c-ares/c-ares.hash
++++ b/package/c-ares/c-ares.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated after checking pgp signature
+ sha256 45d3c1fd29263ceec2afc8ff9cd06d5f8f889636eb4e80ce3cc7f0eaf7aadc6e c-ares-1.14.0.tar.gz
++
++# Hash for license file
++sha256 db4eb63fe09daebdf57d3f79b091bb5ee5070c0d761040e83264e648d307af4c LICENSE.md
+diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
+index 67254244a1..16536137a8 100644
+--- a/package/c-ares/c-ares.mk
++++ b/package/c-ares/c-ares.mk
+@@ -11,7 +11,6 @@ C_ARES_CONF_OPTS = --with-random=/dev/urandom
+ # Rebuild configure to avoid XC_CHECK_USER_CFLAGS
+ C_ARES_AUTORECONF = YES
+ C_ARES_LICENSE = MIT
+-# No standalone, use some source file
+-C_ARES_LICENSE_FILES = ares_mkquery.c
++C_ARES_LICENSE_FILES = LICENSE.md
+ 
+ $(eval $(autotools-package))
