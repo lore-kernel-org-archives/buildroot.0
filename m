@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Dec 2018 22:45:44 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] package/dante: needs
+Date: Mon, 3 Dec 2018 22:46:51 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/dante: needs
  autoreconf
-Message-ID: <20181203215204.29B0581E8C@busybox.osuosl.org>
+Message-ID: <20181203215212.D89F388990@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=094ffdfdb598785296d50a37e07493d406db1c62
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1cef40d5c1e17ee5c83dcee6ed317aad84a6f128
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 We have a patch that touches a .m4 file, so we need to regenerate the
 configure script. Otherwise, this is done during the build step, and
