@@ -1,45 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon,  3 Dec 2018 22:05:07 +0100
-Subject: [Buildroot] [PATCH v4 2/3] fs/common.mk: allow user provided
- permissions to override packages permissions
+Date: Mon,  3 Dec 2018 22:05:08 +0100
+Subject: [Buildroot] [PATCH v4 3/3] fs/common.mk: make sure that static
+ devices from packages are created
 In-Reply-To: <20181203210508.27831-1-thomas.petazzoni@bootlin.com>
 References: <20181203210508.27831-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181203210508.27831-3-thomas.petazzoni@bootlin.com>
+Message-ID: <20181203210508.27831-4-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+The static devices defined by packages are currently added to the full
+device table when two conditions are met:
 
-Reported-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ (1) ROOTFS_DEVICE_TABLES is non-empty
+ (2) BR2_ROOTFS_DEVICE_CREATION_STATIC=y
+
+(2) is obviously correct. However, depending on (1) is not correct: if
+the user doesn't provide any custom permission table and custom device
+table, then ROOTFS_DEVICE_TABLES will be empty.
+
+So instead, move the addition of the package-defined static devices
+outside of condition (1), and have it only under condition (2).
+
+Reported-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- fs/common.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ fs/common.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/fs/common.mk b/fs/common.mk
-index 6ad4cd0b01..077ce8903e 100644
+index 077ce8903e..a560417c6c 100644
 --- a/fs/common.mk
 +++ b/fs/common.mk
-@@ -57,13 +57,14 @@ rootfs-common: $(ROOTFS_COMMON_DEPENDENCIES) target-finalize
- ifneq ($(ROOTFS_USERS_TABLES),)
- 	cat $(ROOTFS_USERS_TABLES) >> $(ROOTFS_FULL_USERS_TABLE)
- endif
-+
-+	$(call PRINTF,$(PACKAGES_PERMISSIONS_TABLE)) > $(ROOTFS_FULL_DEVICES_TABLE)
+@@ -61,10 +61,10 @@ endif
+ 	$(call PRINTF,$(PACKAGES_PERMISSIONS_TABLE)) > $(ROOTFS_FULL_DEVICES_TABLE)
  ifneq ($(ROOTFS_DEVICE_TABLES),)
--	cat $(ROOTFS_DEVICE_TABLES) > $(ROOTFS_FULL_DEVICES_TABLE)
-+	cat $(ROOTFS_DEVICE_TABLES) >> $(ROOTFS_FULL_DEVICES_TABLE)
+ 	cat $(ROOTFS_DEVICE_TABLES) >> $(ROOTFS_FULL_DEVICES_TABLE)
++endif
  ifeq ($(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
  	$(call PRINTF,$(PACKAGES_DEVICES_TABLE)) >> $(ROOTFS_FULL_DEVICES_TABLE)
  endif
- endif
--	$(call PRINTF,$(PACKAGES_PERMISSIONS_TABLE)) >> $(ROOTFS_FULL_DEVICES_TABLE)
+-endif
  
  rootfs-common-show-depends:
  	@echo $(ROOTFS_COMMON_DEPENDENCIES)
