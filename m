@@ -1,48 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 03 Dec 2018 23:03:44 +0100
-Subject: [Buildroot] [PATCH] libopenssl: security bump to version 1.0.2q
-In-Reply-To: <20181129144740.29999-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 29 Nov 2018 15:47:40 +0100")
-References: <20181129144740.29999-1-peter@korsgaard.com>
-Message-ID: <87sgze2rpb.fsf@dell.be.48ers.dk>
+Date: Mon, 3 Dec 2018 23:04:24 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] domoticz: fix build with
+ python and cmake <= 3.7
+Message-ID: <20181203220059.6E2668A626@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b6d413352f8c4b28b633f1901e9fc6ef16e05959
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
- > Fixes the following security vulnerabilities:
- >   *) Microarchitecture timing vulnerability in ECC scalar multiplication
+domoticz will fail to build with python and older cmake
+Indeed, find_package(PythonLibs 3.4) will not recognize python 3.7 until
+cmake 3.7 and the following commit:
+https://github.com/Kitware/CMake/commit/c31573b9641e0f1bc7a34149506db51f3494323b
 
- >      OpenSSL ECC scalar multiplication, used in e.g. ECDSA and ECDH, has been
- >      shown to be vulnerable to a microarchitecture timing side channel attack.
- >      An attacker with sufficient access to mount local timing attacks during
- >      ECDSA signature generation could recover the private key.
+To fix this, add a call to find_package(PythonInterp). Indeed, if
+FindPythonInterp has already found the major and minor version, that
+version will be inserted between the user supplied versions and the
+stock version list since cmake in version 3.1 and
+https://github.com/Kitware/CMake/commit/3816cd2dc7a7cc220e4f1b1e87fee986545b9cb3
 
- >      This issue was reported to OpenSSL on 26th October 2018 by Alejandro
- >      Cabrera Aldaya, Billy Brumley, Sohaib ul Hassan, Cesar Pereida Garcia and
- >      Nicola Tuveri.
- >      (CVE-2018-5407)
- >      [Billy Brumley]
+Fixes:
+ - http://autobuild.buildroot.org/results/8e82501a7b49da628ec026132ffca44c0c813040
 
- >   *) Timing vulnerability in DSA signature generation
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 7367a8cd59ccbb8565277ea6ba96052169f0e16b)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...s.txt-fix-build-with-python-and-cmake-3.7.patch | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
- >      The OpenSSL DSA signature algorithm has been shown to be vulnerable to a
- >      timing side channel attack. An attacker could use variations in the signing
- >      algorithm to recover the private key.
-
- >      This issue was reported to OpenSSL on 16th October 2018 by Samuel Weiser.
- >      (CVE-2018-0734)
- >      [Paul Dale]
-
- > For more information, see the changelog:
- > https://www.openssl.org/news/cl102.txt
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2018.02.x and 2018.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/domoticz/0002-CMakeLists.txt-fix-build-with-python-and-cmake-3.7.patch b/package/domoticz/0002-CMakeLists.txt-fix-build-with-python-and-cmake-3.7.patch
+new file mode 100644
+index 0000000000..a0adbdfed9
+--- /dev/null
++++ b/package/domoticz/0002-CMakeLists.txt-fix-build-with-python-and-cmake-3.7.patch
+@@ -0,0 +1,40 @@
++From 4b77662232c806b8aba7680405144ad51ac3671b Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 29 Nov 2018 00:36:00 +0100
++Subject: [PATCH] CMakeLists.txt: fix build with python and cmake <= 3.7
++
++domoticz will fail to build with python and older cmake
++Indeed, find_package(PythonLibs 3.4) will not recognize python 3.7 until
++cmake 3.7 and the following commit:
++https://github.com/Kitware/CMake/commit/c31573b9641e0f1bc7a34149506db51f3494323b
++
++To fix this, add a call to find_package(PythonInterp 3.4). Indeed, if
++FindPythonInterp has already found the major and minor version, that
++version will be inserted between the user supplied versions and the
++stock version list since cmake in version 3.1 and
++https://github.com/Kitware/CMake/commit/3816cd2dc7a7cc220e4f1b1e87fee986545b9cb3
++
++Fixes:
++ - http://autobuild.buildroot.org/results/8e82501a7b49da628ec026132ffca44c0c813040
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/domoticz/domoticz/pull/2889]
++---
++ CMakeLists.txt | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index f4e38b88..41003a0c 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -125,6 +125,7 @@ ENDIF(USE_BUILTIN_SQLITE)
++ 
++ option(USE_PYTHON "Use Python for Plugins and Event-Scripts" YES)
++ IF(USE_PYTHON)
+++  find_package(PythonInterp 3.4)
++   find_package(PythonLibs 3.4)
++   IF(PYTHONLIBS_FOUND)
++     MESSAGE(STATUS "Python3 includes found at: ${PYTHON_INCLUDE_PATH}")
++-- 
++2.14.1
++
