@@ -1,28 +1,104 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 3 Dec 2018 13:31:42 +0100
-Subject: [Buildroot] [PATCH] wine: Bump to version 3.0.4
-In-Reply-To: <20181202173250.663-1-nerv@dawncrow.de>
-References: <20181202173250.663-1-nerv@dawncrow.de>
-Message-ID: <20181203133142.527a0b10@windsurf.home>
+Date: Mon, 3 Dec 2018 13:38:00 +0100
+Subject: [Buildroot] [git commit] package/dt-utils: fix build with glibc 2.28
+Message-ID: <20181203123532.CBF1B8A497@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7e5094033df2efc88928071c6e7a2867c396ca68
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  2 Dec 2018 18:32:50 +0100, Andr? Hentschel wrote:
-> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
-> ---
->  package/wine/wine.hash | 2 +-
->  package/wine/wine.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+This commit backports an upstream patch that fixes the build of
+dt-utils with glibc 2.28+.
 
-Applied to master, thanks.
+Fixes bug #11536.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...pilation-for-glibc-version-2.27.9000-36.f.patch | 75 ++++++++++++++++++++++
+ 1 file changed, 75 insertions(+)
+
+diff --git a/package/dt-utils/0001-src-fix-compilation-for-glibc-version-2.27.9000-36.f.patch b/package/dt-utils/0001-src-fix-compilation-for-glibc-version-2.27.9000-36.f.patch
+new file mode 100644
+index 0000000000..8c2f585946
+--- /dev/null
++++ b/package/dt-utils/0001-src-fix-compilation-for-glibc-version-2.27.9000-36.f.patch
+@@ -0,0 +1,75 @@
++From 1c80e31872aec9f2ef7eca6a52aa89c0ea759d8f Mon Sep 17 00:00:00 2001
++From: Enrico Joerns <ejo@pengutronix.de>
++Date: Wed, 5 Sep 2018 12:28:28 +0200
++Subject: [PATCH] src: fix compilation for glibc version 2.27.9000-36.fc29 and
++ newer
++
++As recent glibc versions (>= 2.27.9000-36.fc29) also define 'struct
++statx' which is also defined in linux/stat.h, compilation fails with
++error:
++
++| In file included from ../dt-utils-2018.05.0/src/crypto/digest.c:24:
++| [..]/usr/include/linux/stat.h:56:8: error: redefinition of 'struct statx_timestamp'
++|  struct statx_timestamp {
++|         ^~~~~~~~~~~~~~~
++| In file included from [..]/usr/include/sys/stat.h:446,
++|                  from ../dt-utils-2018.05.0/src/dt/common.h:15,
++|                  from ../dt-utils-2018.05.0/src/crypto/digest.c:19:
++| [..]/usr/include/bits/statx.h:25:8: note: originally defined here
++|  struct statx_timestamp
++|         ^~~~~~~~~~~~~~~
++| In file included from ../dt-utils-2018.05.0/src/crypto/digest.c:24:
++| [..]/usr/include/linux/stat.h:99:8: error: redefinition of 'struct statx'
++|  struct statx {
++|         ^~~~~
++| In file included from [..]/usr/include/sys/stat.h:446,
++|                  from ../dt-utils-2018.05.0/src/dt/common.h:15,
++|                  from ../dt-utils-2018.05.0/src/crypto/digest.c:19:
++| [..]/usr/include/bits/statx.h:36:8: note: originally defined here
++|  struct statx
++|         ^~~~~
++
++The linux/stat.h originates from the code that was copied from barebox
++but is not explicitly required to be linux/stat.h instead of sys/stat.h
++and we do not actually use struct statx.
++
++Thus it is safe to simply replace occurrences of linux/stat.h by
++sys/stat.h to fix compilation.
++
++Signed-off-by: Enrico Joerns <ejo@pengutronix.de>
++[Thomas: backport from upstream.]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ src/barebox-state/backend_storage.c | 2 +-
++ src/crypto/digest.c                 | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/barebox-state/backend_storage.c b/src/barebox-state/backend_storage.c
++index 53fe829..1052656 100644
++--- a/src/barebox-state/backend_storage.c
+++++ b/src/barebox-state/backend_storage.c
++@@ -19,7 +19,7 @@
++ #include <linux/kernel.h>
++ #include <linux/list.h>
++ #include <linux/mtd/mtd-abi.h>
++-#include <linux/stat.h>
+++#include <sys/stat.h>
++ #include <linux/fs.h>
++ #include <malloc.h>
++ #include <printk.h>
++diff --git a/src/crypto/digest.c b/src/crypto/digest.c
++index 7a8c3c0..8353412 100644
++--- a/src/crypto/digest.c
+++++ b/src/crypto/digest.c
++@@ -21,7 +21,7 @@
++ #include <malloc.h>
++ #include <fs.h>
++ #include <fcntl.h>
++-#include <linux/stat.h>
+++#include <sys/stat.h>
++ #include <errno.h>
++ #include <module.h>
++ #include <linux/err.h>
++-- 
++2.19.2
++
