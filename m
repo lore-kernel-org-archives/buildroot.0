@@ -1,41 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Dec 2018 23:13:34 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] package: hide golang
- packages for toolchains with binutils bug 20006
-Message-ID: <20181203221533.395238A6B5@busybox.osuosl.org>
+Date: Mon, 3 Dec 2018 23:19:12 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] python-numpy: fix build
+ with lapack
+Message-ID: <20181203221545.19A2C8A6BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b0b69bba8237d4b40c9e8fa427fe7695c01b879f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e7daab236ead9f57a9e382709428eebb239d4d2c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+
+If BR2_PACKAGE_LAPACK is enabled (without BR2_PACKAGE_CLAPACK), build of
+python-numpy will fail if lapack is built before python-numpy because
+lapack does not provide blas library
+
+So disable BLAS and LAPACK through PYTHON_NUMPTY_ENV if
+BR2_PACKAGE_CLAPACK is not set
 
 Fixes:
-    http://autobuild.buildroot.org/results/020/02039969b16534d4020ecd4574bae71b91c1e6b8/ (flannel)
-    http://autobuild.buildroot.org/results/e95/e9528b06b350ef84c1e2cb59fba87b4db77b4660/ (docker-engine)
-    [...]
+ - http://autobuild.buildroot.org/results/41671976c7be7883f31ee5f51ca0eb90b81262fd
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit bcb8ef0fdcea6f60fefba8368b4c93048e837141)
+(cherry picked from commit 76815cd1e556816f885d817576d83df67f579612)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/Config.in.host | 1 +
- 1 file changed, 1 insertion(+)
+ package/python-numpy/python-numpy.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/go/Config.in.host b/package/go/Config.in.host
-index c871ac4196..f619ca0073 100644
---- a/package/go/Config.in.host
-+++ b/package/go/Config.in.host
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
- 	bool
- 	default y
-+	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_20006
- 	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
- 	depends on (BR2_arm && BR2_TOOLCHAIN_SUPPORTS_PIE) || BR2_aarch64 \
- 		|| BR2_i386 || BR2_x86_64 || BR2_powerpc64le \
+diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
+index d0d38371a3..14671ae2da 100644
+--- a/package/python-numpy/python-numpy.mk
++++ b/package/python-numpy/python-numpy.mk
+@@ -14,6 +14,8 @@ PYTHON_NUMPY_SETUP_TYPE = setuptools
+ ifeq ($(BR2_PACKAGE_CLAPACK),y)
+ PYTHON_NUMPY_DEPENDENCIES += clapack
+ PYTHON_NUMPY_SITE_CFG_LIBS += blas lapack
++else
++PYTHON_NUMPY_ENV += BLAS=None LAPACK=None
+ endif
+ 
+ PYTHON_NUMPY_BUILD_OPTS = --fcompiler=None
