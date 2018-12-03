@@ -1,75 +1,48 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 3 Dec 2018 17:32:15 +0100
-Subject: [Buildroot] [PATCH 01/11] package/fftw : Allow all precisions
- to be installed at the same time.
-In-Reply-To: <1543421561-37355-1-git-send-email-gwenj@trabucayre.com>
-References: <1543421561-37355-1-git-send-email-gwenj@trabucayre.com>
-Message-ID: <08ec2154-5bfb-e77d-7611-1d7662cc6070@mind.be>
+Date: Mon, 3 Dec 2018 17:40:04 +0100
+Subject: [Buildroot] Submodule granularity instead of LIB_GIT_SUBMODULES
+In-Reply-To: <ea-mime-5bfeb41d-7336-2fa4e677@www-6.netcourrier.com>
+References: <ea-mime-5bfeb41d-7336-2fa4e677@www-6.netcourrier.com>
+Message-ID: <8f33142c-71ad-24c6-bad4-deea26f05ce6@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Gwenhael,
 
-On 28/11/2018 17:12, Gwenhael Goavec-Merou wrote:
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+
+On 28/11/2018 16:28, lpdev at cordier.org wrote:
+> Hi there,
 > 
-> fftw's library name depends on the precision option. Consequently,
-> it's possible to install multiple flavor on the same target.
+> I have a repository that have few submodules:
+> - myLib
+> ? -> submodule1 (~10MB)
+> ? -> submodule2 (8GB)
 > 
-> This patch split current fftw in 5 part:
-> - 1 to provide common variables
-> - 4 to provide specificities for each precision.
+> Actually I don't need to initialize submodule2 because myLib does not request it
+> while compiling for my buildroot distro.
+> 
+> The option xxx_GIT_SUBMODULES is doing a recursive init on all submodules of the
+> project. As I am using Buildroot 2018.02, there is no support for the latest git
+> patches that improve the overall space overhead and avoid compressing the repo.
+> 
+> Each time I am updating the git hash of my package, buildroot is cloning the
+> repo, getting the subodules (from scratch), compress tar it, and then start the
+> compilation. I was wondering if there is a way to specify _GIT_SUBMODULES to no,
+> but still get the submodule1, without breaking buildroot's download philosophy.
 
- This is a huge change, and IIUC all patches should in fact be squashed since
-this change breaks all packages depending on fftw...
+ No, there's no simple way to do that. And adding the infrastructure to do that
+would lead us way too far.
 
- Maybe a more gradual approach would be to break out the individual packages one
-by one. E.g. start with adding the fftw-single package independently of the
-rest, then convert other packages to depend on fftw-single instead of fftw, then
-remove BR2_PACKAGE_FFTW_PRECISION_SINGLE.
+ However, what you can do is to leave _GIT_SUBMODULES to NO, add submodule1 as
+<PKG>_EXTRA_DOWNLOADS and extract it in a <PKG>_POST_EXTRACT_HOOK.  This does
+mean you have to manually
 
- Finally, you forgot legacy handling. When you remove
-BR2_PACKAGE_FFTW_PRECISION_SINGLE, there should be an entry added to
-Config.in.legacy that select BR2_PACKAGE_FFTW_SINGLE. Or you have to call the
-package fftw-precision-single, of course.
+ Unfortunately, I'm not sure if it is possible to use the git download method
+for extra downloads. You can add git+ in front of the URL, but I don't think
+there's a way to specify the ref to check out... So perhaps you'll instead have
+to define a post-download hook that calls dl-wrapper directly...
 
-[snip]
-> +++ b/package/fftw/fftw-double/fftw-double.mk
-> @@ -0,0 +1,23 @@
-> +################################################################################
-> +#
-> +# fft-double
-
- fftw-double
-
- Don't forget to run check-package!
-
-> +#
-> +################################################################################
-> +
-> +FFTW_PRECISION_DOUBLE_VERSION = $(FFTW_VERSION)
-> +FFTW_PRECISION_DOUBLE_SOURCE = fftw-$(FFTW_VERSION).tar.gz
-> +FFTW_PRECISION_DOUBLE_SITE = $(FFTW_SITE)
-> +FFTW_PRECISION_DOUBLE_INSTALL_STAGING = $(FFTW_INSTALL_STAGING)
-> +FFTW_PRECISION_DOUBLE_LICENSE = $(FFTW_LICENSE)
-> +FFTW_PRECISION_DOUBLE_LICENSE_FILES = $(FFTW_LICENSE_FILES)
-> +
-> +FFTW_PRECISION_DOUBLE_CONF_ENV = $(FFTW_CONF_ENV)
-> +
-> +FFTW_PRECISION_DOUBLE_CONF_OPTS= $(FFTW_CONF_OPTS)
-> +
-> +FFTW_PRECISION_DOUBLE_CFLAGS = $(FFTW_CFLAGS)
-> +
-> +# x86 optimisations
-> +FFTW_PRECISION_DOUBLE_CONF_OPTS += $(if $(BR2_X86_CPU_HAS_SSE2),--enable,--disable)-sse2
-> +
-> +$(eval $(autotools-package))
-
- This doesn't work: the package is actually called 'fftw-double', so it will use
-variables FFTW_DOUBLE_VERSION etc., not FFTW_PRECISION_DOUBLE_VERSION. I don't
-know how you tested this, but it can't possibly work...
-
-[snip]
+ Regards,
+ Arnout
