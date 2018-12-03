@@ -1,37 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon,  3 Dec 2018 14:10:58 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: drop Bryan Brinsko entry
-Message-ID: <20181203131058.16084-1-thomas.petazzoni@bootlin.com>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Mon, 3 Dec 2018 14:14:29 +0100
+Subject: [Buildroot] [PATCH 01/15] package/pkg-rebar.mk: Remove
+ dependencies from rebar.config
+In-Reply-To: <20181128222848.27df2a6a@windsurf.home>
+References: <20181126110807.31431-1-johan.oudinet@gmail.com>
+ <20181126110807.31431-2-johan.oudinet@gmail.com>
+ <20181128222848.27df2a6a@windsurf.home>
+Message-ID: <CAJtjsKaHzR35EuEcLq584vffGmOqAPK_sda0hxDRRH3HStE-hg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-His e-mail @rockwellcollins.com is bouncing:
+Hi Thomas,
 
-<bryan.brinsko@rockwellcollins.com>: host
-    mail05.rockwellcollins.com[205.175.227.28] said: 550 #5.1.0 Address
-    rejected. (in reply to RCPT TO command)
+On Wed, Nov 28, 2018 at 10:28 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> On Mon, 26 Nov 2018 12:07:53 +0100, Johan Oudinet wrote:
+>
+> > +# Remove dependencies listed in rebar.config unless the package says
+> > +# otherwise
+> > +ifeq ($$($(2)_KEEP_DEPENDENCIES),)
+> > +define remove_dependencies_from_rebar_config
+> > +     $(SED) '/^{deps/,/}\.$$$$/d' $$($$(PKG)_DIR)/rebar.config
+>
+> I renamed this macro:
+>
+>         remove-rebar-config-dependencies
+>
+> and moved it outside of the inner-rebar-package macro, so that it is
+> declared together with the other macros in pkg-rebar.mk.
+>
+> Also, an added benefit is that we can avoid the double escaping so $$$$
+> becomes just $$, and $$ becomes just $.
+>
+> I've applied to next, but could you please send a follow-up patch that
+> documents this <pkg>_KEEP_DEPENDENCIES variable in the Buildroot
+> manual in the rebar package infrastructure section ?
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS | 3 ---
- 1 file changed, 3 deletions(-)
+Thanks. I've just sent a patch to document this variable in the
+Buildroot manual.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ad80d365dd..36c0bc8578 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -412,9 +412,6 @@ F:	package/vmtouch/
- N:	Brock Williams <brock@cottonwoodcomputer.com>
- F:	package/pdmenu/
- 
--N:	Bryan Brinsko <bryan.brinsko@rockwellcollins.com>
--F:	package/pps-tools/
--
- N:	Carlo Caione <carlo.caione@gmail.com>
- F:	package/sunxi-boards/
- 
+Best,
 -- 
-2.19.2
+Johan
