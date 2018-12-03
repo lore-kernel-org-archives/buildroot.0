@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 03 Dec 2018 22:53:00 +0100
-Subject: [Buildroot] [PATCH 1/1] msgpack: disables tests
-In-Reply-To: <20181125095025.7542-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 25 Nov 2018 10:50:25 +0100")
-References: <20181125095025.7542-1-fontaine.fabrice@gmail.com>
-Message-ID: <87efay46rn.fsf@dell.be.48ers.dk>
+Date: Mon, 03 Dec 2018 22:53:53 +0100
+Subject: [Buildroot] [PATCH 1/1] popt: add libiconv to popt.pc.in
+In-Reply-To: <20181122194212.5967-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 22 Nov 2018 20:42:12 +0100")
+References: <20181122194212.5967-1-fontaine.fabrice@gmail.com>
+Message-ID: <87a7lm46q6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +13,11 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > tests are enabled if gperf and zlib are found and they fail on:
- > /home/buildroot/autobuild/run/instance-0/output/build/msgpack-2.1.5/include/msgpack/v1/object.hpp:652:34:
- > error: 'void* memcpy(void*, const void*, size_t)' copying an object of non-trivial type 'struct msgpack::v2::object' from an array of 'const msgpack_object' {aka 'const struct msgpack_object'} [-Werror=class-memaccess]
- >      std::memcpy(&o, &v, sizeof(v));
-
- > So disable them.
+ > Add ${LTLIBICONV} to popt.pc.in so applications such as shairport-sync
+ > will know that they must link with -liconv when building statically
 
  > Fixes:
- >  - http://autobuild.buildroot.org/results/7d7aa9723f02f9bc78dbf6248674be4d402199bf
+ >  - http://autobuild.buildroot.org/results/c5b0d1d2867e49c022a2ad971dd9f358ff0f3865
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
