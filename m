@@ -1,48 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 3 Dec 2018 09:03:53 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2018-12-01
-In-Reply-To: <20181202184408.GC13145@x1.vandijck-laurijssen.be>
-References: <20181202070028.CF00F20DB0@mail.bootlin.com>
- <20181202184408.GC13145@x1.vandijck-laurijssen.be>
-Message-ID: <20181203090353.08b86bf2@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 3 Dec 2018 09:06:17 +0100
+Subject: [Buildroot] [PATCH 1/1] libglib2: bump to version 2.58.1
+In-Reply-To: <20181203083811.019c0f5e@windsurf.home>
+References: <20181014075852.2976-1-fontaine.fabrice@gmail.com>
+ <20181202140053.6ed28a05@windsurf.home>
+ <20181202172323.GB2649@scaer>
+ <20181203083811.019c0f5e@windsurf.home>
+Message-ID: <20181203080617.GC2649@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, Fabrice, All,
 
-On Sun, 2 Dec 2018 19:44:08 +0100, Kurt Van Dijck wrote:
-
-> Correct me if I'm wrong, but the error
+On 2018-12-03 08:38 +0100, Thomas Petazzoni spake thusly:
+> On Sun, 2 Dec 2018 18:23:24 +0100, Yann E. MORIN wrote:
 > 
-> 	/tmp/ccVahWlI.s:135: Error: unknown mnemonic `rorw' -- `rorw $8,w3'
+> >  2- teach pkgconf to replace even more variables. This is not very
+> >     satisfying, and we won't be able to keep up in the long term. We
+> >     hould at least teach pkgconf to look for that list in an environment
+> >     variable, at least, to avoid tweaking the code over-and-over again.
 > 
-> that pops up after a year of silence makes me suspect the toolchain
-> rather than the package.
+> Note that we have a pkg-config bump in the pending patches:
+> http://patchwork.ozlabs.org/patch/967653/. The bump is quite major, and
+> potentially affects how pkg-config behaves with variables. It might be
+> worth testing what happens, and in any case, if a solution is designed,
+> it should be based on this newer version of pkg-config.
+> 
+> For now, I will revert this libglib2 bump. I'll wait a bit for the dust
+> to settle, and then I will apply this pkg-config bump, which is another
+> risky change. The kind of stuff that is good to do early in the
+> development cycle :-)
 
-It wasn't the toolchain, but a <foo>-config script providing bogus
-flags, leading to host headers being included. This has been fixed by:
+So, I tested your pkgconf bump, and indeed it solves this particular
+glib-genmarshal et al. issues, by now returning the sysrooted path:
 
-  https://git.buildroot.org/buildroot/commit/?id=ba015cdf04a2ee33615f346448ac2e92aac3865a
+    $ /home/ymorin/dev/buildroot/O/host/bin/pkg-config --variable=glib_genmarshal glib-2.0
+    /home/ymorin/dev/buildroot/O/host/bin/../m68k-buildroot-linux-uclibc/sysroot/usr/bin/glib-genmarshal
 
-Basically all the commits between:
+Wee! :-)
 
-  9c43f28de450adeae998d0e0d974777441510c76
+Of course, do not take that as a tested-by tag for the bump, it is too
+limited to be so.
 
-and
+I'll kick-start two biggish build this morning, with just the new pkgconf
+and see how it behaves across the tree, once without the libglib2,
+andother with.
 
-  ba015cdf04a2ee33615f346448ac2e92aac3865a
+Regards,
+Yann E. MORIN.
 
-are not worth looking at, on old build machines that do not have the
-"realpath" utility installed.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
