@@ -1,45 +1,36 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  3 Dec 2018 23:38:55 +0100
-Subject: [Buildroot] [PATCH v2,2/2] lxc: fix build without stack protector
-In-Reply-To: <20181203223855.10152-1-fontaine.fabrice@gmail.com>
-References: <20181203223855.10152-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181203223855.10152-2-fontaine.fabrice@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 03 Dec 2018 23:44:48 +0000
+Subject: [Buildroot] [Bug 11546] New: open-vm-tools with glibc 2.28
+Message-ID: <bug-11546-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stack protector has been added in version 3.0.3 by
-https://github.com/lxc/lxc/commit/2268c27754152aa538db2c9e3753d72d19bcd17a
+https://bugs.busybox.net/show_bug.cgi?id=11546
 
-Disable it through
-ax_cv_check_cflags__Werror__fstack_protector_strong=no
+            Bug ID: 11546
+           Summary: open-vm-tools with glibc 2.28
+           Product: buildroot
+           Version: 2018.11
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: pvizeli at syshack.ch
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Fixes:
- - http://autobuild.buildroot.org/results/0b90e7dca2984652842832a41abad93ac49a9b86
+open-vm-tools could not be building anymore with glibc 2.28. The bug is fixing
+in the upstream, and a version bump solves the issue.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Drop patch to add a new option, instead use 
-   ax_cv_check_cflags__Werror__fstack_protector_strong=no
+Patch:
+https://github.com/home-assistant/hassos/blob/fix-glibc/buildroot-patches/0012-openvmtools-bump-version-to-10.3.5.patch
 
- package/lxc/lxc.mk | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index 48d5b20329..0b7b03bcac 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -11,6 +11,8 @@ LXC_LICENSE_FILES = COPYING
- LXC_DEPENDENCIES = host-pkgconf
- LXC_INSTALL_STAGING = YES
- 
-+LXC_CONF_ENV = ax_cv_check_cflags__Werror__fstack_protector_strong=no
-+
- LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
- 	--disable-werror \
- 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
 -- 
-2.14.1
+You are receiving this mail because:
+You are on the CC list for the bug.
