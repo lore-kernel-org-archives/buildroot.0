@@ -1,22 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 03 Dec 2018 22:48:14 +0100
-Subject: [Buildroot] [PATCH 1/2] dante: disable pam
-In-Reply-To: <20181122174914.20300-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 22 Nov 2018 18:49:13 +0100")
-References: <20181122174914.20300-1-fontaine.fabrice@gmail.com>
-Message-ID: <87va4a46zl.fsf@dell.be.48ers.dk>
+Date: Mon, 03 Dec 2018 22:48:35 +0100
+Subject: [Buildroot] [PATCH] package/dante: needs autoreconf
+In-Reply-To: <20181125112612.8170-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Sun, 25 Nov 2018 12:26:12 +0100")
+References: <20181125112612.8170-1-yann.morin.1998@free.fr>
+Message-ID: <87r2ey46z0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+
+ > We have a patch that touches a .m4 file, so we need to regenerate the
+ > configure script. Otherwise, this is done during the build step, and
+ > some environment variables are thus missing and the build may fail when
+ > the host machine does not have the expected autostuff tools.
 
  > Fixes:
- >  - http://autobuild.buildroot.org/results/5222592f2052e18c184fae42214c112e7f39be6e
+ >     http://autobuild.buildroot.org/results/e37/e37e61bae1d81a7956e2843be70fea84b0bbb64b/
+ >     http://autobuild.buildroot.org/results/f96/f969718402cae71446d6280ec1f66d357a155293/
+ >     ...
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Committed to 2018.02.x and 2018.08.x, thanks.
 
