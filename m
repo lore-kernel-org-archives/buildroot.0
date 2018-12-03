@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Dec 2018 23:22:31 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] php: intl support needs
+Date: Mon, 3 Dec 2018 23:22:53 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] php: intl support needs
  dynamic library
-Message-ID: <20181203221906.6778A8A6B8@busybox.osuosl.org>
+Message-ID: <20181203221923.2B1BB8A6BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cfb19bd75fd4a6d68922770006b43983d7e751af
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=df2b72b67f97156c8711efdfa329ebcb5f70b895
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 getArgTypeList is defined both in ext/intl/msgformat/msgformat_helpers.cpp
 and icu library so add a !BR2_STATIC_LIBS dependency to
