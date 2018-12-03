@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Dec 2018 22:57:58 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/samba4: bump
+Date: Mon, 3 Dec 2018 22:58:38 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] package/samba4: bump
  version to 4.8.5
-Message-ID: <20181203215444.6759F88D6D@busybox.osuosl.org>
+Message-ID: <20181203215513.079248A5F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2614104752265a397f727d9922cab297cd2e4eae
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3857c10470af487862d94a2fd5ce7f75bf350d4b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 Release notes: https://www.samba.org/samba/history/samba-4.8.5.html
 
