@@ -1,39 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 3 Dec 2018 23:06:01 +0100
-Subject: [Buildroot] [PATCH 1/1] python-wtforms: new package
-In-Reply-To: <20181107155953.25020-1-grzegorz@blach.pl>
-References: <20181107155953.25020-1-grzegorz@blach.pl>
-Message-ID: <20181203230601.54f97842@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 03 Dec 2018 23:08:29 +0100
+Subject: [Buildroot] [PATCH v1] freetype: bump version to 2.9.1
+In-Reply-To: <20181128191517.24636-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Wed, 28 Nov 2018 20:15:17 +0100")
+References: <20181128191517.24636-1-ps.report@gmx.net>
+Message-ID: <87k1kq2rhe.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-On Wed,  7 Nov 2018 16:59:53 +0100, Grzegorz Blach wrote:
-> A flexible forms validation and rendering library for
-> Python web development.
-> 
-> https://wtforms.readthedocs.io/
-> 
-> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-> ---
->  DEVELOPERS                                 |  1 +
->  package/Config.in                          |  1 +
->  package/python-wtforms/Config.in           |  7 +++++++
->  package/python-wtforms/python-wtforms.hash |  5 +++++
->  package/python-wtforms/python-wtforms.mk   | 14 ++++++++++++++
->  5 files changed, 28 insertions(+)
->  create mode 100644 package/python-wtforms/Config.in
->  create mode 100644 package/python-wtforms/python-wtforms.hash
->  create mode 100644 package/python-wtforms/python-wtforms.mk
+ > According to [1]:
+ > - fixes CVE-2018-6942
+ > - needs '--enable-freetype-config' for freetype-config installation
 
-Applied to master, thanks.
+ > [1]
+ > https://git.savannah.gnu.org/cgit/freetype/freetype2.git/tree/docs/CHANGES?id=86bc8a95056c97a810986434a3f268cbe67f2902
 
-Thomas
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+Committed to 2018.02.x and 2018.08.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
