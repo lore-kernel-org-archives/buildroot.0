@@ -1,34 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 03 Dec 2018 23:02:29 +0100
-Subject: [Buildroot] [PATCH] xfsprogs: Define PLATFORM to linux
-In-Reply-To: <1543467940-5231-1-git-send-email-f.fainelli@gmail.com> (Florian
- Fainelli's message of "Wed, 28 Nov 2018 21:05:40 -0800")
-References: <1543467940-5231-1-git-send-email-f.fainelli@gmail.com>
-Message-ID: <87wooq2rre.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 3 Dec 2018 23:02:39 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sunxi-tools: additional build
+ options
+In-Reply-To: <1542092998-21977-1-git-send-email-kaplan2539@gmail.com>
+References: <1542092998-21977-1-git-send-email-kaplan2539@gmail.com>
+Message-ID: <20181203230239.2c7756a1@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Florian" == Florian Fainelli <f.fainelli@gmail.com> writes:
+Hello Alex,
 
- > PLATFORM is an environment variable used by xfsprogs' configure script
- > to determine the platform for which the applications are being built. If
- > we set some incorrect/unsupported value through e.g: export, this will
- > be picked up by xfsprogs' configure script and used as-is and assigned
- > to PKG_PLATFORM, which will lead to build failures.
+On Mon, 12 Nov 2018 23:09:58 -0800, kaplan2539 at gmail.com wrote:
+> From: Alex Kaplan <kaplan2539@gmail.com>
+> 
+> This patch allows to select the installation of additional commands
+> which are part of the sunxi-tools. It's now possible to e.g. install
+> sunxi-fel on the target device. The corresponding options have been
+> added to Config.in and sunxi-tools.mk has been modified respectively.
+> The default setting is to only build sunxi-nand-part.
+> 
+> On the host building of the misc-tools target is added, which provides
+> sunxi-nand-image-builder and phoenix_info.
+> 
+> Signed-off-by: Alex Kaplan <kaplan2539@gmail.com>
+> ---
+>  package/sunxi-tools/Config.in      | 67 +++++++++++++++++++++++++++++++++++---
+>  package/sunxi-tools/Config.in.host |  1 +
+>  package/sunxi-tools/sunxi-tools.mk | 45 ++++++++++++++++++++-----
+>  3 files changed, 100 insertions(+), 13 deletions(-)
 
- > If PLATFORM was empty/unset, then uname on the host building xfsprogs
- > gets used to determine the build platform, which again could be
- > incorrect if we e.g: built xfsprogs on a Darwin system.
+Applied to master with the following changes:
 
- > Since we are obviously building for Linux, let's just make sure we
- > define it that way which solves both issues.
+    [Thomas:
+     - properly format Config.in
+     - do not select BR2_PACKAGE_HOST_LIBUSB in Config.in.host, since this
+       option doesn't exist
+     - properly indent code in sunxi-tools.mk]
 
- > Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Thanks!
 
-Committed to 2018.02.x and 2018.08.x, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
