@@ -1,292 +1,101 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 3 Dec 2018 11:17:59 +0100
-Subject: [Buildroot] [PATCH] pkgconf: bump to 1.5.3, change upstream
-In-Reply-To: <20180908200507.23939-1-thomas.petazzoni@bootlin.com>
-References: <20180908200507.23939-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181203101759.GF2649@scaer>
+From: Etienne Carriere <etienne.carriere@linaro.org>
+Date: Mon, 3 Dec 2018 11:36:40 +0100
+Subject: [Buildroot] [PATCH 1/1] boot/arm-trusted-firmware: use prebuilt
+ BL33 images
+In-Reply-To: <20181201201834.GA7451@speedy.hunter>
+References: <1542900148-17204-1-git-send-email-etienne.carriere@linaro.org>
+ <20181201201834.GA7451@speedy.hunter>
+Message-ID: <CAN5uoS-q5p6eLgO5GrgR6LWb2oxy6Crb7w_7RAPrG=FA9QEbwA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2018-09-08 22:05 +0200, Thomas Petazzoni spake thusly:
-> pkgconf is bumped to 1.5.3.
-[--SNIP--]
-[--SNIP--]
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
-> Of course, updating pkgconf has the potential of breaking lots of
-> things, that's why I would suggest to update early in the development
-> cycle, to leave us enough time to resolve issues.
+On Sat, 1 Dec 2018 at 21:20, Sergey Matyukevich <geomatsi@gmail.com> wrote:
+>
+> Hello Etienne,
+>
+> > This change allows one to build ATF with an externally built
+> > BL33 image or with the U-boot as BL33 boot stage.
+> >
+> > This change introduces a new configuration directive for TF-A to
+> > specify when BL33 stage is provided as a prebuilt image:
+> > BR2_TARGET_ARM_TRUSTED_FIRMWARE_PREBUILT_BL33.
+> >
+> > If BR2_TARGET_ARM_TRUSTED_FIRMWARE_PREBUILT_BL33 is enabled, the
+> > buildroot configuration shall specify the BL33 binary image location:
+> > BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL33_IMAGE.
+>
+> ...
+>
+> > --- a/boot/arm-trusted-firmware/Config.in
+> > +++ b/boot/arm-trusted-firmware/Config.in
+> > @@ -1,6 +1,6 @@
+> >  config BR2_TARGET_ARM_TRUSTED_FIRMWARE
+> >       bool "ARM Trusted Firmware (ATF)"
+> > -     depends on BR2_aarch64 && BR2_TARGET_UBOOT
+> > +     depends on BR2_aarch64
+>
+> Could you please clarify why do you want to get rid of this dependency ?
+> IIUC so far all the arm64/atf boards supported by BR make use of U-Boot.
+> If you plan to use this feature for a board with any other type of
+> bootloader, then maybe it makes sense to add board config as well. In this
+> case other developers will be able at least build-test this particular
+> config swtich when testing their own ATF changes.
+>
 
-What's more, it does fix all the build failures seen with the
-(short-lived) bump of libglib2.
+Hello Sergey,
 
-I've done a pre tty big build with a random set of packages (15%), plus
-I explicitly enabled qt5 and a few qt5 packages, plus libglib2 and a few
-glib-based packages (those that were failign on the autobuilders: atk,
-dbus-glib...) and the build was succesful, so:
+Maybe I should start from the whole picture of my intentions (I tried
+to be short).
 
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+I would like to bring (at least ease) support for OP-TEE on ATF aware
+platforms in BR
+OP-TEE is a compliant BL32 image (secure OS) ATF is able to boot.
+This scheme covers arm64 platforms but also some 32bit arm platforms
+(since ATF v1.5), assuming OP-TEE support this platfrom.
+I have submitted patches to integrate OP-TEE components as BR packages
+[1], before I submit the changes in boot/arm-trusted_firmware to
+support this package.
+(in the end, I plan to submit a new Qemu/arm board that boots OP-TEE
+and a Linux OS through ATF + U-boot).
+
+Assuming OP-TEE package ([1]) is merged in BR, I saw 2 options for BR
+to build ATF with OP-TEE support:
+
+1/ Hard code OP-TEE support in BR package ATF on the same model as
+U-Boot as BL33 support in ATF.
+=> Config.mk defines a specific xxxx_OPTEE_AS_BL32.
+=> arm-trusted-firmware.mk defines the expected binary image filename(s).
+
+2/ Allow  ATF Config.mk & arm-trusted-firmware.mk to be more flexible
+for supporting alternate BL32 images, being OP-TEE or something else.
+One would set the build deps and BL32 image filename(s) from its board
+config, not from the BR ATF package.
+
+The patch reviewed in this thread proposes scheme 2/ above applied to
+BL33 stage.
+It is true that all boards currently supported in BR that uses ATF
+with a BL33 stage do use U-Boot as BL33. There is currently not
+specific need for alternate BL33 packages.
+From the same perspective, when i will submit OP-TEE support, there
+will be no specific need for alternate BL32 outside OPTEE.
+
+SO the question is: it interesting to allow a BR board config to
+define its BL32/BL33 stages or should these be tied to ATF config/make
+script in BR?
+
+To be clear on my expectations: I do not formerly need such a flexible
+support. I currently only use U-boot as BL33 and OP-TEE as BL32 in my
+BR setup. I would understand that the scheme proposed here is
+rejected.
 
 Regards,
-Yann E. MORIN.
+etienne
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
--------------- next part --------------
-BR2_arm=y
-BR2_cortex_a7=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES=y
-BR2_PACKAGE_DVDAUTHOR=y
-BR2_PACKAGE_ESPEAK=y
-BR2_PACKAGE_MOTION=y
-BR2_PACKAGE_MULTICAT=y
-BR2_PACKAGE_UPMPDCLI=y
-BR2_PACKAGE_LZOP=y
-BR2_PACKAGE_P7ZIP=y
-BR2_PACKAGE_LSOF=y
-BR2_PACKAGE_LTP_TESTSUITE=y
-BR2_PACKAGE_NMON=y
-BR2_PACKAGE_RAMSPEED=y
-BR2_PACKAGE_BINUTILS=y
-BR2_PACKAGE_DOS2UNIX=y
-BR2_PACKAGE_GIT=y
-BR2_PACKAGE_LIBTOOL=y
-# BR2_PACKAGE_E2FSPROGS_FSCK is not set
-BR2_PACKAGE_E2FSPROGS_FUSE2FS=y
-BR2_PACKAGE_E2TOOLS=y
-BR2_PACKAGE_GENROMFS=y
-BR2_PACKAGE_IMX_USB_LOADER=y
-BR2_PACKAGE_NTFS_3G=y
-BR2_PACKAGE_BITSTREAM_VERA=y
-BR2_PACKAGE_INCONSOLATA=y
-BR2_PACKAGE_FB_TEST_APP=y
-BR2_PACKAGE_FBV=y
-# BR2_PACKAGE_FBV_PNG is not set
-# BR2_PACKAGE_FBV_JPEG is not set
-# BR2_PACKAGE_FBV_GIF is not set
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL=y
-BR2_PACKAGE_MESA3D_OPENGL_ES=y
-BR2_PACKAGE_OCRAD=y
-BR2_PACKAGE_PSPLASH=y
-BR2_PACKAGE_SDL=y
-BR2_PACKAGE_QT5=y
-BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
-BR2_PACKAGE_QT5BASE_FONTCONFIG=y
-BR2_PACKAGE_QT5BASE_HARFBUZZ=y
-BR2_PACKAGE_QT5BASE_GIF=y
-BR2_PACKAGE_QT5BASE_JPEG=y
-BR2_PACKAGE_QT5BASE_PNG=y
-BR2_PACKAGE_QT5CONNECTIVITY=y
-BR2_PACKAGE_QT5DECLARATIVE=y
-BR2_PACKAGE_QT5DECLARATIVE_QUICK=y
-BR2_PACKAGE_WILC1000_FIRMWARE=y
-BR2_PACKAGE_ZD1211_FIRMWARE=y
-BR2_PACKAGE_AER_INJECT=y
-BR2_PACKAGE_DBUS_GLIB=y
-BR2_PACKAGE_DEVMEM2=y
-BR2_PACKAGE_DVB_APPS=y
-BR2_PACKAGE_FXLOAD=y
-BR2_PACKAGE_GPTFDISK=y
-BR2_PACKAGE_IPMITOOL=y
-BR2_PACKAGE_IPMITOOL_USB=y
-BR2_PACKAGE_KBD=y
-BR2_PACKAGE_LIRC_TOOLS=y
-BR2_PACKAGE_LUKSMETA=y
-# BR2_PACKAGE_LVM2_STANDARD_INSTALL is not set
-BR2_PACKAGE_MEMTOOL=y
-BR2_PACKAGE_POWERTOP=y
-BR2_PACKAGE_SIGROK_CLI=y
-BR2_PACKAGE_SYSSTAT=y
-BR2_PACKAGE_W_SCAN=y
-BR2_PACKAGE_GAUCHE=y
-BR2_PACKAGE_TCL=y
-# BR2_PACKAGE_TCL_DEL_ENCODINGS is not set
-BR2_PACKAGE_TCLLIB=y
-# BR2_PACKAGE_ALSA_LIB_ALOAD is not set
-# BR2_PACKAGE_ALSA_LIB_RAWMIDI is not set
-# BR2_PACKAGE_ALSA_LIB_HWDEP is not set
-# BR2_PACKAGE_ALSA_LIB_SEQ is not set
-# BR2_PACKAGE_ALSA_LIB_ALISP is not set
-# BR2_PACKAGE_ALSA_LIB_OLD_SYMBOLS is not set
-BR2_PACKAGE_AUBIO=y
-BR2_PACKAGE_LIBBROADVOICE=y
-BR2_PACKAGE_LIBSOXR=y
-BR2_PACKAGE_SPANDSP=y
-BR2_PACKAGE_VO_AACENC=y
-BR2_PACKAGE_LIBARCHIVE=y
-BR2_PACKAGE_LIBARCHIVE_BSDTAR=y
-BR2_PACKAGE_LIBSQUISH=y
-BR2_PACKAGE_BEECRYPT=y
-BR2_PACKAGE_LIBMHASH=y
-BR2_PACKAGE_TPM2_TSS=y
-BR2_PACKAGE_BERKELEYDB=y
-BR2_PACKAGE_KOMPEXSQLITE=y
-BR2_PACKAGE_LIBGIT2=y
-BR2_PACKAGE_SQLITE_ENABLE_COLUMN_METADATA=y
-BR2_PACKAGE_LIBNFS=y
-BR2_PACKAGE_ATK=y
-BR2_PACKAGE_CAIRO_TEE=y
-BR2_PACKAGE_CAIROMM=y
-BR2_PACKAGE_GDK_PIXBUF=y
-BR2_PACKAGE_LIBMEDIAART=y
-BR2_PACKAGE_LIBSVG=y
-BR2_PACKAGE_POPPLER=y
-# BR2_PACKAGE_TIFF_CCITT is not set
-# BR2_PACKAGE_TIFF_PACKBITS is not set
-# BR2_PACKAGE_TIFF_LZW is not set
-# BR2_PACKAGE_TIFF_NEXT is not set
-# BR2_PACKAGE_TIFF_LOGLUV is not set
-# BR2_PACKAGE_TIFF_MDI is not set
-# BR2_PACKAGE_TIFF_ZLIB is not set
-# BR2_PACKAGE_TIFF_PIXARLOG is not set
-# BR2_PACKAGE_TIFF_JPEG is not set
-# BR2_PACKAGE_TIFF_OLD_JPEG is not set
-# BR2_PACKAGE_TIFF_JBIG is not set
-BR2_PACKAGE_LIBCEC=y
-BR2_PACKAGE_LIBFREEFARE=y
-BR2_PACKAGE_LIBFTDI=y
-BR2_PACKAGE_LIBIIO=y
-# BR2_PACKAGE_LIBIIO_LOCAL_BACKEND is not set
-# BR2_PACKAGE_LIBIIO_NETWORK_BACKEND is not set
-# BR2_PACKAGE_LIBIIO_USB_BACKEND is not set
-# BR2_PACKAGE_LIBIIO_IIOD is not set
-BR2_PACKAGE_LIBIQRF=y
-BR2_PACKAGE_LIBLLCP=y
-BR2_PACKAGE_PCSC_LITE=y
-BR2_PACKAGE_JSON_JAVASCRIPT=y
-BR2_PACKAGE_JSON_FOR_MODERN_CPP=y
-BR2_PACKAGE_RAPIDJSON=y
-BR2_PACKAGE_TINYXML2=y
-BR2_PACKAGE_VALIJSON=y
-BR2_PACKAGE_YAML_CPP=y
-BR2_PACKAGE_LIBMATROSKA=y
-BR2_PACKAGE_LIBMMS=y
-BR2_PACKAGE_LIBMPEG2=y
-BR2_PACKAGE_LIBTHEORA=y
-BR2_PACKAGE_X264=y
-BR2_PACKAGE_X265=y
-BR2_PACKAGE_CPPZMQ=y
-BR2_PACKAGE_FILEMQ=y
-BR2_PACKAGE_LIBCGICC=y
-BR2_PACKAGE_LIBCOAP=y
-BR2_PACKAGE_CURL=y
-BR2_PACKAGE_LIBDNET=y
-BR2_PACKAGE_LIBGSASL=y
-BR2_PACKAGE_LIBHTTPPARSER=y
-BR2_PACKAGE_LIBLDNS=y
-BR2_PACKAGE_LIBNET=y
-BR2_PACKAGE_LIBNETFILTER_ACCT=y
-BR2_PACKAGE_LIBNETFILTER_QUEUE=y
-BR2_PACKAGE_LIBNFTNL=y
-BR2_PACKAGE_LIBSHAIRPLAY=y
-BR2_PACKAGE_MONGOOSE=y
-BR2_PACKAGE_NSS_MYHOSTNAME=y
-BR2_PACKAGE_PAHO_MQTT_C=y
-BR2_PACKAGE_BDWGC=y
-BR2_PACKAGE_BOOST_EXCEPTION=y
-BR2_PACKAGE_BOOST_GRAPH_PARALLEL=y
-BR2_PACKAGE_BOOST_STACKTRACE=y
-BR2_PACKAGE_BOOST_TEST=y
-BR2_PACKAGE_CLAPACK=y
-BR2_PACKAGE_CMOCKA=y
-BR2_PACKAGE_CPPCMS=y
-BR2_PACKAGE_ELL=y
-BR2_PACKAGE_FFTW=y
-BR2_PACKAGE_FFTW_FAST=y
-BR2_PACKAGE_GTEST=y
-BR2_PACKAGE_LIBPLIST=y
-BR2_PACKAGE_LIBURCU=y
-BR2_PACKAGE_LIQUID_DSP=y
-BR2_PACKAGE_MPIR=y
-BR2_PACKAGE_ORC=y
-BR2_PACKAGE_PROTOBUF=y
-BR2_PACKAGE_SAFECLIB=y
-BR2_PACKAGE_ENCHANT=y
-BR2_PACKAGE_LIBUNISTRING=y
-BR2_PACKAGE_NEWT=y
-BR2_PACKAGE_READLINE=y
-BR2_PACKAGE_DOVECOT=y
-BR2_PACKAGE_DOVECOT_SQLITE=y
-BR2_PACKAGE_FETCHMAIL=y
-BR2_PACKAGE_AESPIPE=y
-BR2_PACKAGE_XUTIL_UTIL_MACROS=y
-BR2_PACKAGE_ASTERISK=y
-# BR2_PACKAGE_AVAHI_AUTOIPD is not set
-BR2_PACKAGE_BCUSDK=y
-BR2_PACKAGE_BLUEZ_UTILS=y
-BR2_PACKAGE_BLUEZ_UTILS_COMPAT=y
-BR2_PACKAGE_BOINC=y
-BR2_PACKAGE_CAN_UTILS=y
-BR2_PACKAGE_CIVETWEB=y
-BR2_PACKAGE_CORKSCREW=y
-BR2_PACKAGE_IFENSLAVE=y
-BR2_PACKAGE_IPTABLES=y
-BR2_PACKAGE_IW=y
-BR2_PACKAGE_MACCHANGER=y
-BR2_PACKAGE_MINISSDPD=y
-BR2_PACKAGE_NETSTAT_NAT=y
-BR2_PACKAGE_PIMD=y
-# BR2_PACKAGE_PPPD_OVERWRITE_RESOLV_CONF is not set
-BR2_PACKAGE_PPTP_LINUX=y
-BR2_PACKAGE_PRIVOXY=y
-BR2_PACKAGE_PURE_FTPD=y
-BR2_PACKAGE_PURE_FTPD_QUOTAS=y
-BR2_PACKAGE_RP_PPPOE=y
-BR2_PACKAGE_S6_DNS=y
-BR2_PACKAGE_SER2NET=y
-BR2_PACKAGE_SHAIRPORT_SYNC=y
-BR2_PACKAGE_SMCROUTE=y
-BR2_PACKAGE_SPAWN_FCGI=y
-BR2_PACKAGE_SPICE_PROTOCOL=y
-BR2_PACKAGE_TCPDUMP=y
-BR2_PACKAGE_TCPDUMP_SMB=y
-BR2_PACKAGE_TINYHTTPD=y
-BR2_PACKAGE_VSFTPD=y
-BR2_PACKAGE_WAVEMON=y
-BR2_PACKAGE_WIRELESS_TOOLS=y
-BR2_PACKAGE_WPA_SUPPLICANT=y
-# BR2_PACKAGE_WPA_SUPPLICANT_NL80211 is not set
-BR2_PACKAGE_WPA_SUPPLICANT_DBUS_OLD=y
-BR2_PACKAGE_WPAN_TOOLS=y
-BR2_PACKAGE_REFPOLICY=y
-BR2_PACKAGE_CCRYPT=y
-BR2_PACKAGE_GNUPG_GPGSPLIT=y
-BR2_PACKAGE_ACL=y
-BR2_PACKAGE_DOCKER_PROXY=y
-BR2_PACKAGE_IPRUTILS=y
-BR2_PACKAGE_LIBOSTREE=y
-BR2_PACKAGE_PROCRANK_LINUX=y
-BR2_PACKAGE_QUOTATOOL=y
-BR2_PACKAGE_RUNC=y
-BR2_PACKAGE_SCRUB=y
-BR2_PACKAGE_START_STOP_DAEMON=y
-BR2_PACKAGE_TAR=y
-BR2_PACKAGE_UTIL_LINUX_IPCRM=y
-BR2_PACKAGE_UTIL_LINUX_LOSETUP=y
-BR2_PACKAGE_UTIL_LINUX_MOUNTPOINT=y
-BR2_PACKAGE_UTIL_LINUX_NOLOGIN=y
-BR2_PACKAGE_UTIL_LINUX_NSENTER=y
-BR2_PACKAGE_UTIL_LINUX_SETTERM=y
-BR2_PACKAGE_UTIL_LINUX_SU=y
-BR2_PACKAGE_UTIL_LINUX_WDCTL=y
-BR2_PACKAGE_ED=y
-BR2_PACKAGE_HOST_E2FSPROGS=y
-BR2_PACKAGE_HOST_FWUP=y
-BR2_PACKAGE_HOST_GENIMAGE=y
-BR2_PACKAGE_HOST_JQ=y
-BR2_PACKAGE_HOST_MXSLDR=y
-BR2_PACKAGE_HOST_OPKG_UTILS=y
-BR2_PACKAGE_HOST_SUNXI_TOOLS=y
-BR2_PACKAGE_HOST_TI_CGT_PRU=y
+[1] http://lists.busybox.net/pipermail/buildroot/2018-November/236558.html
+
+
+> Regards,
+> Sergey
