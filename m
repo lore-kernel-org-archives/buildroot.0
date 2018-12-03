@@ -1,36 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 3 Dec 2018 13:29:20 +0100
-Subject: [Buildroot] [git commit] package/atk: remove unrecognized configure
- options
-Message-ID: <20181203122553.D30D58A4ED@busybox.osuosl.org>
+Date: Mon, 3 Dec 2018 13:29:36 +0100
+Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{4, 9, 14,
+ 19}.x series
+In-Reply-To: <20181202195907.21925-1-peter@korsgaard.com>
+References: <20181202195907.21925-1-peter@korsgaard.com>
+Message-ID: <20181203132936.2d860aba@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa7ad9b7983ca0237499159c2f8774bbac35af60
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Remove --disable-glibtest and --enable-explicit-deps, these options are
-not recognized:
-configure: WARNING: unrecognized options: --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --enable-ipv6, --disable-glibtest, --enable-explicit-deps
+On Sun,  2 Dec 2018 20:59:07 +0100, Peter Korsgaard wrote:
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  linux/Config.in                      | 2 +-
+>  linux/linux.hash                     | 8 ++++----
+>  package/linux-headers/Config.in.host | 8 ++++----
+>  3 files changed, 9 insertions(+), 9 deletions(-)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/atk/atk.mk | 1 -
- 1 file changed, 1 deletion(-)
+Applied to master, thanks.
 
-diff --git a/package/atk/atk.mk b/package/atk/atk.mk
-index 64950bfd08..babb00d244 100644
---- a/package/atk/atk.mk
-+++ b/package/atk/atk.mk
-@@ -12,7 +12,6 @@ ATK_LICENSE = LGPL-2.0+
- ATK_LICENSE_FILES = COPYING
- ATK_INSTALL_STAGING = YES
- ATK_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
--ATK_CONF_OPTS = --disable-glibtest --enable-explicit-deps=no
- ATK_DEPENDENCIES = libglib2 host-pkgconf
- 
- $(eval $(autotools-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
