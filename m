@@ -1,88 +1,87 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Dec 2018 22:51:05 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/libid3tag: needs
- autoreconf
-Message-ID: <20181203215212.E99E48A5DC@busybox.osuosl.org>
+Date: Mon, 3 Dec 2018 22:58:05 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] samba4: security bump to
+ version 4.8.7
+Message-ID: <20181203215444.75BB78A5F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f00bc4994eed799a784bd481d1dae5e1924ace65
+commit: https://git.buildroot.net/buildroot/commit/?id=7d708397a94d252644993fc09957fe944413d668
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-libid3tag uses a very old configure script.
+Fixes the following security vulnerabilities:
 
-When the toolchain lacks C++ and the build machine lacks /lib/cpp, this
-old configure script fails because it can't find a C++ preprocessor that
-is valid:
+ - CVE-2018-14629:
+   All versions of Samba from 4.0.0 onwards are vulnerable to infinite
+   query recursion caused by CNAME loops. Any dns record can be added via
+   ldap by an unprivileged user using the ldbadd tool, so this is a
+   security issue.
 
-    checking for arm-buildroot-linux-uclibcgnueabi-g++... no
-    checking whether we are using the GNU C++ compiler... no
-    checking whether no accepts -g... no
-    checking dependency style of no... none
-    checking how to run the C++ preprocessor... /lib/cpp
-    configure: error: C++ preprocessor "/lib/cpp" fails sanity check
-    See `config.log' for more details.
+ - CVE-2018-16841:
+   When configured to accept smart-card authentication, Samba's KDC will call
+   talloc_free() twice on the same memory if the principal in a validly signed
+   certificate does not match the principal in the AS-REQ.
 
-This is yet another case that was tentatively fixed by bd39d11d2e
-(core/infra: fix build on toolchain without C++), further amended by
-4cd1ab15886 (core: alternate solution to disable C++).
+   This is only possible after authentication with a trusted certificate.
 
-However, this only works on libtool scripts that are recent enough, and
-thus we need to autoreconf to get it.
+   talloc is robust against further corruption from a double-free with
+   talloc_free() and directly calls abort(), terminating the KDC process.
 
-We also need to patch configure.ac so that it does not fail on the
-missing, GNU-specific files: NEWS, AUTHORS, and Changelog.
+   There is no further vulnerability associated with this issue, merely a
+   denial of service.
 
-Fixes:
-    http://autobuild.buildroot.org/results/ac3/ac3870208aab6001db6b790b6c5dde64d08f7669/
-    http://autobuild.buildroot.org/results/cc1/cc18397f38dfd4f1e6605f7a6f58edab49b396ac/
+ - CVE-2018-16851:
+   During the processing of an LDAP search before Samba's AD DC returns
+   the LDAP entries to the client, the entries are cached in a single
+   memory object with a maximum size of 256MB.  When this size is
+   reached, the Samba process providing the LDAP service will follow the
+   NULL pointer, terminating the process.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 43274dd3e0daa3de09d32828e63e6608e8db1e5b)
+   There is no further vulnerability associated with this issue, merely a
+   denial of service.
+
+ - CVE-2018-16853:
+   A user in a Samba AD domain can crash the KDC when Samba is built in the
+   non-default MIT Kerberos configuration.
+
+   With this advisory we clarify that the MIT Kerberos build of the Samba
+   AD DC is considered experimental.  Therefore the Samba Team will not
+   issue security patches for this configuration.
+
+For more details, see the release notes:
+
+https://www.samba.org/samba/history/samba-4.8.7.html
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libid3tag/0001-configure-automake-foreign.patch | 16 ++++++++++++++++
- package/libid3tag/libid3tag.mk                          |  5 ++++-
- 2 files changed, 20 insertions(+), 1 deletion(-)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libid3tag/0001-configure-automake-foreign.patch b/package/libid3tag/0001-configure-automake-foreign.patch
-new file mode 100644
-index 0000000000..8521d559f2
---- /dev/null
-+++ b/package/libid3tag/0001-configure-automake-foreign.patch
-@@ -0,0 +1,16 @@
-+configure: don't require GNU-specific files when running automake
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN libid3tag-0.15.1b.orig/configure.ac libid3tag-0.15.1b/configure.ac
-+--- libid3tag-0.15.1b.orig/configure.ac	2004-01-24 00:22:46.000000000 +0100
-++++ libid3tag-0.15.1b/configure.ac	2018-11-25 15:31:04.184342212 +0100
-+@@ -26,7 +26,7 @@
-+ 
-+ AC_CONFIG_SRCDIR([id3tag.h])
-+ 
-+-AM_INIT_AUTOMAKE
-++AM_INIT_AUTOMAKE([foreign])
-+ 
-+ AM_CONFIG_HEADER([config.h])
-+ 
-diff --git a/package/libid3tag/libid3tag.mk b/package/libid3tag/libid3tag.mk
-index 951ae09c77..402e154ae1 100644
---- a/package/libid3tag/libid3tag.mk
-+++ b/package/libid3tag/libid3tag.mk
-@@ -10,6 +10,9 @@ LIBID3TAG_LICENSE = GPL-2.0+
- LIBID3TAG_LICENSE_FILES = COPYING COPYRIGHT
- LIBID3TAG_INSTALL_STAGING = YES
- LIBID3TAG_DEPENDENCIES = zlib
--LIBID3TAG_LIBTOOL_PATCH = NO
-+
-+# Force autoreconf to be able to use a more recent libtool script, that
-+# is able to properly behave in the face of a missing C++ compiler.
-+LIBID3TAG_AUTORECONF = YES
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 9594c7a932..2ecea7fa5a 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.8.5.tar.asc
+-sha256 e58ee6b1262d4128b8932ceee59d5f0b0a9bbe00547eb3cc4c41552de1a65155  samba-4.8.5.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.8.7.tar.asc
++sha256 0f6f67932e8bb23ab83b43070037ac452f9fc5f20763857d2b67e209ee7cd362  samba-4.8.7.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index a257af75fc..ed860fbda2 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- $(eval $(autotools-package))
+-SAMBA4_VERSION = 4.8.5
++SAMBA4_VERSION = 4.8.7
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
