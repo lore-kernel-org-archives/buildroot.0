@@ -1,57 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon,  3 Dec 2018 22:05:05 +0100
-Subject: [Buildroot] [PATCH v4 0/3] Misc fs/common.mk improvements
-Message-ID: <20181203210508.27831-1-thomas.petazzoni@bootlin.com>
+Date: Mon,  3 Dec 2018 22:05:06 +0100
+Subject: [Buildroot] [PATCH v4 1/3] fs/common.mk: rename FULL_DEVICE_TABLE
+ to ROOTFS_FULL_DEVICES_TABLE
+In-Reply-To: <20181203210508.27831-1-thomas.petazzoni@bootlin.com>
+References: <20181203210508.27831-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20181203210508.27831-2-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+In commit 6b50f988ad0a6044530b30344d52139da2994237 ("fs/common.mk:
+rename internal variable"), USERS_TABLE was renamed to
+ROOTFS_FULL_USERS_TABLE.
 
-This small patch series is a new iteration of the few remaining
-patches from Yann's series "[PATCH 0/6 v2] fs: fix and better handle
-capabilities".
+This commit follows the same direction by renaming the
+FULL_DEVICE_TABLE variable to ROOTFS_FULL_DEVICE_TABLE.
 
-In Yann series, patches 1 to 3 have already been applied.
+In addition, for consistency, the file itself is renamed
+full_device_table.txt.
 
-Patch 4 was not liked by Arnout, with some good explanation.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ fs/common.mk | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-In this patch series, I propose:
-
- - An additional patch to rename FULL_DEVICE_TABLE to
-   ROOTFS_FULL_DEVICES_TABLE to be consistent with
-   ROOTFS_FULL_USERS_TABLE.
-
- - Yann's original PATCH 5/6, but reworked to apply without what was
-   his PATCH 4/6.
-
- - A patch that reimplements PATCH 6/6 from Yann, but in a different
-   way, due to the fact that his PATCH 4/6 was not taken, and
-   therefore there is no permisson/device table split.
-
-Changes since v3:
-
- - Reintegrate the idea of Yann's PATCH 6/6 (which was correct after
-   all!), but in a way that works without splitting permission/device
-   tables, since PATCH 4/6 from Yann was not accepted.
-
-Thanks,
-
-Thomas
-
-
-Thomas Petazzoni (2):
-  fs/common.mk: rename FULL_DEVICE_TABLE to ROOTFS_FULL_DEVICES_TABLE
-  fs/common.mk: make sure that static devices from packages are created
-
-Yann E. MORIN (1):
-  fs/common.mk: allow user provided permissions to override packages
-    permissions
-
- fs/common.mk | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
-
+diff --git a/fs/common.mk b/fs/common.mk
+index 6c67fbfbbd..6ad4cd0b01 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -28,12 +28,12 @@
+ # macro will automatically generate a compressed filesystem image.
+ 
+ FS_DIR = $(BUILD_DIR)/buildroot-fs
+-FULL_DEVICE_TABLE = $(FS_DIR)/device_table.txt
+ ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE) \
+ 	$(BR2_ROOTFS_STATIC_DEVICE_TABLE))
+ 
+ ROOTFS_USERS_TABLES = $(call qstrip,$(BR2_ROOTFS_USERS_TABLES))
+ 
++ROOTFS_FULL_DEVICES_TABLE = $(FS_DIR)/full_devices_table.txt
+ ROOTFS_FULL_USERS_TABLE = $(FS_DIR)/full_users_table.txt
+ 
+ ifeq ($(BR2_REPRODUCIBLE),y)
+@@ -58,12 +58,12 @@ ifneq ($(ROOTFS_USERS_TABLES),)
+ 	cat $(ROOTFS_USERS_TABLES) >> $(ROOTFS_FULL_USERS_TABLE)
+ endif
+ ifneq ($(ROOTFS_DEVICE_TABLES),)
+-	cat $(ROOTFS_DEVICE_TABLES) > $(FULL_DEVICE_TABLE)
++	cat $(ROOTFS_DEVICE_TABLES) > $(ROOTFS_FULL_DEVICES_TABLE)
+ ifeq ($(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
+-	$(call PRINTF,$(PACKAGES_DEVICES_TABLE)) >> $(FULL_DEVICE_TABLE)
++	$(call PRINTF,$(PACKAGES_DEVICES_TABLE)) >> $(ROOTFS_FULL_DEVICES_TABLE)
+ endif
+ endif
+-	$(call PRINTF,$(PACKAGES_PERMISSIONS_TABLE)) >> $(FULL_DEVICE_TABLE)
++	$(call PRINTF,$(PACKAGES_PERMISSIONS_TABLE)) >> $(ROOTFS_FULL_DEVICES_TABLE)
+ 
+ rootfs-common-show-depends:
+ 	@echo $(ROOTFS_COMMON_DEPENDENCIES)
+@@ -125,7 +125,7 @@ $$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME): $$(ROOTFS_$(2)_DEPENDENCIES)
+ 
+ 	echo "chown -h -R 0:0 $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+ 	PATH=$$(BR_PATH) $$(TOPDIR)/support/scripts/mkusers $$(ROOTFS_FULL_USERS_TABLE) $$(TARGET_DIR) >> $$(FAKEROOT_SCRIPT)
+-	echo "$$(HOST_DIR)/bin/makedevs -d $$(FULL_DEVICE_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
++	echo "$$(HOST_DIR)/bin/makedevs -d $$(ROOTFS_FULL_DEVICES_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+ 	$$(foreach s,$$(call qstrip,$$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
+ 		echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
+ 		echo $$(EXTRA_ENV) $$(s) $$(TARGET_DIR) $$(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $$(FAKEROOT_SCRIPT)$$(sep))
 -- 
 2.19.2
