@@ -1,43 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 3 Dec 2018 09:09:56 +0100
-Subject: [Buildroot] [PATCH 1/1] lxc: security bump to version 3.0.3
-In-Reply-To: <20181202090838.15776-1-fontaine.fabrice@gmail.com>
-References: <20181202090838.15776-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181203090956.1972a2f9@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 3 Dec 2018 09:11:24 +0100
+Subject: [Buildroot] [PATCH 1/1] libglib2: bump to version 2.58.1
+In-Reply-To: <CAPi7W802dzjZhNuw-07vtBvuoFRGnhc+qhZf=ZhH3Ra11GrHuw@mail.gmail.com>
+References: <20181014075852.2976-1-fontaine.fabrice@gmail.com>
+ <20181202140053.6ed28a05@windsurf.home>
+ <20181202172323.GB2649@scaer>
+ <CAPi7W802dzjZhNuw-07vtBvuoFRGnhc+qhZf=ZhH3Ra11GrHuw@mail.gmail.com>
+Message-ID: <20181203081124.GD2649@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fabrice, All,
 
-On Sun,  2 Dec 2018 10:08:38 +0100, Fabrice Fontaine wrote:
-> This bump also includes the fix for CVE-2018-6556 released in 3.0.2 via
-> commit "CVE 2018-6556: verify netns fd in lxc-user-nic": lxc-user-nic
-> when asked to delete a network interface will unconditionally open a
-> user provided path:
-> https://github.com/lxc/lxc/commit/c1cf54ebf251fdbad1e971679614e81649f1c032
-> 
-> This code path may be used by an unprivileged user to check for the
-> existence of a path which they wouldn't otherwise be able to reach. It
-> may also be used to trigger side effects by causing a (read-only) open
-> of special kernel files (ptmx, proc, sys).
-> 
-> Also add a dependency on gcc >= 4.7
-> (https://github.com/lxc/lxc/issues/2592)
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/lxc/Config.in | 4 +++-
->  package/lxc/lxc.hash  | 2 +-
->  package/lxc/lxc.mk    | 2 +-
->  3 files changed, 5 insertions(+), 3 deletions(-)
+On 2018-12-03 08:23 +0100, Fabrice Fontaine spake thusly:
+> Le dim. 2 d?c. 2018 ? 18:23, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
+> > On 2018-12-02 14:00 +0100, Thomas Petazzoni spake thusly:
+> > > On Sun, 14 Oct 2018 09:58:52 +0200, Fabrice Fontaine wrote:
+> > As you can see on the autobuilders, thius breaks all glib-using packages:
+[--SNIP--]
+> > So, the solutions I have for now are:
+> >
+> >  1- fix each package and pass them GLIB_GENMARSHAL=$(STAGING_DIR)/bin/glib-genmarshal
+> >     (similarly for the two other tools)
+> >
+> >  2- teach pkgconf to replace even more variables. This is not very
+> >     satisfying, and we won't be able to keep up in the long term. We
+> >     hould at least teach pkgconf to look for that list in an environment
+> >     variable, at least, to avoid tweaking the code over-and-over again.
+[--SNIP--]
+> Thanks a lot for investigating, I'm more in favor of (2) because most
+> of the glib packages don't have any environment variables.
+> However, it should be noted that a lot of glib packages (libsoup,
+> gdk-pixpuf, atk, pango) have switched to meson in their latest
+> upstream versions.
+> Meson has a gnome module to find and call genmarshal, mkenums, etc ...
+> and this module does not use the pkgconfig file to find the path of
+> these binaries.
 
-Applied to master, thanks.
+Well, dbus-glib is in maintenance-mode only, so it's not going to be
+updated to meson I am afraid (or should I say, relieved?). So we still
+have some fixing to do.
 
-Thomas
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
