@@ -1,40 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 3 Dec 2018 22:25:42 +0100
-Subject: [Buildroot] [git commit] utils/genrandconfig: fix flake8 warnings
-Message-ID: <20181203212232.215088A59F@busybox.osuosl.org>
+Date: Mon, 3 Dec 2018 22:28:08 +0100
+Subject: [Buildroot] [PATCH v3 1/1] lua: remove 5.2.x version
+In-Reply-To: <20181202102506.24699-1-francois.perrad@gadz.org>
+References: <20181202102506.24699-1-francois.perrad@gadz.org>
+Message-ID: <20181203222808.6dbfdecd@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e6a10b0284d746809330e2011df83e72491a45fa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Fran?ois,
 
-Fixes:
+On Sun,  2 Dec 2018 11:25:06 +0100, Francois Perrad wrote:
+> At this time :
+> - Lua 5.3.5 will be the last one of its serie.
+> - Lua 5.4 is up coming (lua-5.4.0-work2 is already available).
+> - Lua 5.2.4 was released on 2015.
+> For various reasons in the Lua ecosystem, the Lua 5.1 will stay.
+> On BR, Lua 5.3 is the default version since 2016.02.
+> 
+> So, the serie which could be removed is the 5.2.x.
+> We could wait some days for other user feedback.
+> 
+> Note: see discussion when 5.3.x was introduced : http://lists.busybox.net/pipermail/buildroot/2015-January/117638.html
 
-utils/genrandconfig:369:17: E231 missing whitespace after ','
-utils/genrandconfig:370:1: E101 indentation contains mixed spaces and tabs
-utils/genrandconfig:370:1: W191 indentation contains tabs
-utils/genrandconfig:372:1: E101 indentation contains mixed spaces and tabs
+One quick question: Prosody 0.11 has been released, and they say:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- utils/genrandconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+"""
+Prosody has traditionally used Lua 5.1. As we announced back when 0.10
+was released, we are on the path to updating to more recent Lua
+versions.
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 35c7cbd14c..047740a411 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -366,8 +366,8 @@ def gen_config(args):
-         configlines.append("BR2_STATIC_LIBS=y\n")
-     if randint(0, 20) == 0:
-         configlines.append("BR2_PACKAGE_PYTHON_PY_ONLY=y\n")
--    if randint(0,5) == 0:
--	configlines.append("BR2_OPTIMIZE_2=y\n")
-+    if randint(0, 5) == 0:
-+        configlines.append("BR2_OPTIMIZE_2=y\n")
- 
-     # Write out the configuration file
-     if not os.path.exists(args.outputdir):
+The recommended Lua version for 0.11 is Lua 5.2, while Lua 5.1 is still
+supported for the platforms that need it. 
+"""
+
+Should we keep Lua 5.2 for Prosody ?
+
+> v2 --> v3
+>   - rebase on top of BR 2018.11
+
+The changelog should go...
+
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+
+... here. Otherwise, it becomes part of the commit log when applying,
+which we don't want.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
