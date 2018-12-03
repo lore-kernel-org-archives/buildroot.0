@@ -1,103 +1,97 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 3 Dec 2018 19:31:45 +0100
-Subject: [Buildroot] [PATCH 01/11] package/fftw : Allow all precisions
- to be installed at the same time.
-In-Reply-To: <08ec2154-5bfb-e77d-7611-1d7662cc6070@mind.be>
-References: <1543421561-37355-1-git-send-email-gwenj@trabucayre.com>
- <08ec2154-5bfb-e77d-7611-1d7662cc6070@mind.be>
-Message-ID: <20181203183145.GC2548@scaer>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  3 Dec 2018 19:53:52 +0100
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 18.2.6
+Message-ID: <20181203185352.32400-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gwenhael, Arnout, All,
+Added manditory dependency to xlib_libXxf86vm
+https://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?h=18.2&id=f05ce9dc514427a661696bc6b908e30841b6eb9d
 
-On 2018-12-03 17:32 +0100, Arnout Vandecappelle spake thusly:
-> On 28/11/2018 17:12, Gwenhael Goavec-Merou wrote:
-> > From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> > 
-> > fftw's library name depends on the precision option. Consequently,
-> > it's possible to install multiple flavor on the same target.
-> > 
-> > This patch split current fftw in 5 part:
-> > - 1 to provide common variables
-> > - 4 to provide specificities for each precision.
-> 
->  This is a huge change, and IIUC all patches should in fact be squashed since
-> this change breaks all packages depending on fftw...
-> 
->  Maybe a more gradual approach would be to break out the individual packages one
-> by one. E.g. start with adding the fftw-single package independently of the
-> rest, then convert other packages to depend on fftw-single instead of fftw, then
-> remove BR2_PACKAGE_FFTW_PRECISION_SINGLE.
-> 
->  Finally, you forgot legacy handling. When you remove
-> BR2_PACKAGE_FFTW_PRECISION_SINGLE, there should be an entry added to
-> Config.in.legacy that select BR2_PACKAGE_FFTW_SINGLE. Or you have to call the
-> package fftw-precision-single, of course.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d-headers/mesa3d-headers.mk |  2 +-
+ package/mesa3d/Config.in                 |  1 +
+ package/mesa3d/mesa3d.hash               | 10 +++++-----
+ package/mesa3d/mesa3d.mk                 |  6 ++----
+ 4 files changed, 9 insertions(+), 10 deletions(-)
 
-What about another approach:
-
-  - add a new packages for each of fftw-{single,double,long-double,quad},
-  - make fftw depends on all of those that are actually enabled, but
-    fftw by itself does nothing,
-  - if fftw is enabled, ensure that at least one variant is enabled.
-
-Thus, packages that need any flavour of fftw can just select/depend on
-fftw, while those that require specific variant would select/depend what
-they need.
-
-Regards,
-Yann E. MORIN.
-
-> [snip]
-> > +++ b/package/fftw/fftw-double/fftw-double.mk
-> > @@ -0,0 +1,23 @@
-> > +################################################################################
-> > +#
-> > +# fft-double
-> 
->  fftw-double
-> 
->  Don't forget to run check-package!
-> 
-> > +#
-> > +################################################################################
-> > +
-> > +FFTW_PRECISION_DOUBLE_VERSION = $(FFTW_VERSION)
-> > +FFTW_PRECISION_DOUBLE_SOURCE = fftw-$(FFTW_VERSION).tar.gz
-> > +FFTW_PRECISION_DOUBLE_SITE = $(FFTW_SITE)
-> > +FFTW_PRECISION_DOUBLE_INSTALL_STAGING = $(FFTW_INSTALL_STAGING)
-> > +FFTW_PRECISION_DOUBLE_LICENSE = $(FFTW_LICENSE)
-> > +FFTW_PRECISION_DOUBLE_LICENSE_FILES = $(FFTW_LICENSE_FILES)
-> > +
-> > +FFTW_PRECISION_DOUBLE_CONF_ENV = $(FFTW_CONF_ENV)
-> > +
-> > +FFTW_PRECISION_DOUBLE_CONF_OPTS= $(FFTW_CONF_OPTS)
-> > +
-> > +FFTW_PRECISION_DOUBLE_CFLAGS = $(FFTW_CFLAGS)
-> > +
-> > +# x86 optimisations
-> > +FFTW_PRECISION_DOUBLE_CONF_OPTS += $(if $(BR2_X86_CPU_HAS_SSE2),--enable,--disable)-sse2
-> > +
-> > +$(eval $(autotools-package))
-> 
->  This doesn't work: the package is actually called 'fftw-double', so it will use
-> variables FFTW_DOUBLE_VERSION etc., not FFTW_PRECISION_DOUBLE_VERSION. I don't
-> know how you tested this, but it can't possibly work...
-> 
-> [snip]
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index d1a836b145..e80e222c65 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 18.2.5
++MESA3D_HEADERS_VERSION = 18.2.6
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 872859b693..c9e08af09f 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -14,6 +14,7 @@ menuconfig BR2_PACKAGE_MESA3D
+ 	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXRANDR if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXXF86VM if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index c3464c3d0c..083284adec 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2018-November/000475.html
+-md5 b31a43ebb8b37fb704a9a75c90bbd71b  mesa-18.2.5.tar.xz
+-sha1 1ada7d5fc5fabca63c78396b5afa587b94b9f2e0  mesa-18.2.5.tar.xz
+-sha256 b12c32872832e5353155e1e8026e1f1ab75bba9dc5b178d712045684d26c2b73  mesa-18.2.5.tar.xz
+-sha512 dd454c720241dffa61f3380be62479979a43004b2a52293b817bd3ea95f75960edee680e7380a13fae09b67a90dc0393e4a022d543db91b2f142f2468a9661f0  mesa-18.2.5.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2018-November/000479.html
++md5 7c61a801311fb8d2f7b3cceb7b5cf308  mesa-18.2.6.tar.xz
++sha1 435affd7a2c35782b21533ed2c65c487e40abcf8  mesa-18.2.6.tar.xz
++sha256 9ebafa4f8249df0c718e93b9ca155e3593a1239af303aa2a8b0f2056a7efdc12  mesa-18.2.6.tar.xz
++sha512 a7dd02f67384bb800dff70a0672a968ced96bb438605cdb39bde3e468d4dcf6162414a44e5da1abe7a1831fceb6f23e6c850eb5f80cfc5ee3861c14924c10ed4  mesa-18.2.6.tar.xz
+ # License
+ sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 1651b5f260..176997068a 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 18.2.5
++MESA3D_VERSION = 18.2.6
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
+@@ -66,6 +66,7 @@ MESA3D_DEPENDENCIES += \
+ 	xlib_libXdamage \
+ 	xlib_libXfixes \
+ 	xlib_libXrandr \
++	xlib_libXxf86vm \
+ 	xorgproto \
+ 	libxcb
+ MESA3D_CONF_OPTS += --enable-glx --disable-mangling
+@@ -122,9 +123,6 @@ MESA3D_CONF_OPTS += --enable-dri3
+ else
+ MESA3D_CONF_OPTS += --disable-dri3
+ endif
+-ifeq ($(BR2_PACKAGE_XLIB_LIBXXF86VM),y)
+-MESA3D_DEPENDENCIES += xlib_libXxf86vm
+-endif
+ MESA3D_CONF_OPTS += \
+ 	--enable-shared-glapi \
+ 	--enable-driglx-direct \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.19.2
