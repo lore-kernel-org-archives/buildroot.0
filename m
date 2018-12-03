@@ -1,47 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon,  3 Dec 2018 21:53:05 +0100
-Subject: [Buildroot] [PATCH v3 2/2] fs/common.mk: allow user provided
- permissions to override packages permissions
-In-Reply-To: <20181203205306.27361-1-thomas.petazzoni@bootlin.com>
-References: <20181203205306.27361-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181203205306.27361-3-thomas.petazzoni@bootlin.com>
+Date: Mon, 3 Dec 2018 21:55:29 +0100
+Subject: [Buildroot] [PATCH 6/6 v2] fs: make static device nodes
+ creation more logical
+In-Reply-To: <ae80646fbb9d0e7f40434b16ebe5173ee3a4654c.1542043922.git.yann.morin.1998@free.fr>
+References: <cover.1542043922.git.yann.morin.1998@free.fr>
+ <ae80646fbb9d0e7f40434b16ebe5173ee3a4654c.1542043922.git.yann.morin.1998@free.fr>
+Message-ID: <20181203215529.683151f0@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Hello,
 
-Reported-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- fs/common.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+On Mon, 12 Nov 2018 18:33:16 +0100, Yann E. MORIN wrote:
 
-diff --git a/fs/common.mk b/fs/common.mk
-index 6ad4cd0b01..077ce8903e 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -57,13 +57,14 @@ rootfs-common: $(ROOTFS_COMMON_DEPENDENCIES) target-finalize
- ifneq ($(ROOTFS_USERS_TABLES),)
- 	cat $(ROOTFS_USERS_TABLES) >> $(ROOTFS_FULL_USERS_TABLE)
- endif
-+
-+	$(call PRINTF,$(PACKAGES_PERMISSIONS_TABLE)) > $(ROOTFS_FULL_DEVICES_TABLE)
- ifneq ($(ROOTFS_DEVICE_TABLES),)
--	cat $(ROOTFS_DEVICE_TABLES) > $(ROOTFS_FULL_DEVICES_TABLE)
-+	cat $(ROOTFS_DEVICE_TABLES) >> $(ROOTFS_FULL_DEVICES_TABLE)
- ifeq ($(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
- 	$(call PRINTF,$(PACKAGES_DEVICES_TABLE)) >> $(ROOTFS_FULL_DEVICES_TABLE)
- endif
- endif
--	$(call PRINTF,$(PACKAGES_PERMISSIONS_TABLE)) >> $(ROOTFS_FULL_DEVICES_TABLE)
- 
- rootfs-common-show-depends:
- 	@echo $(ROOTFS_COMMON_DEPENDENCIES)
+>  	$(Q)touch $(ROOTFS_FINAL_STATIC_DEVICES_TABLE)
+> -ifneq ($(ROOTFS_STATIC_DEVICE_TABLES),)
+> -	cat $(ROOTFS_STATIC_DEVICE_TABLES) >> $(ROOTFS_FINAL_STATIC_DEVICES_TABLE)
+>  ifeq ($(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
+>  	$(call PRINTF,$(PACKAGES_DEVICES_TABLE)) >> $(ROOTFS_FINAL_STATIC_DEVICES_TABLE)
+> +ifneq ($(ROOTFS_STATIC_DEVICE_TABLES),)
+> +	cat $(ROOTFS_STATIC_DEVICE_TABLES) >> $(ROOTFS_FINAL_STATIC_DEVICES_TABLE)
+>  endif
+>  endif
+
+Ah, I thought this change was not correct. But in fact, it was correct
+in your series (sorry!). It was correct because you did split the
+permission table from the static device table, which was done in the
+patch that Arnout didn't like.
+
+In fact, there is a way to do the same without the split of
+permission/device table. Let me propose something.
+
+Best regards,
+
+Thomas
 -- 
-2.19.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
