@@ -1,50 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon,  3 Dec 2018 22:05:08 +0100
-Subject: [Buildroot] [PATCH v4 3/3] fs/common.mk: make sure that static
- devices from packages are created
-In-Reply-To: <20181203210508.27831-1-thomas.petazzoni@bootlin.com>
-References: <20181203210508.27831-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181203210508.27831-4-thomas.petazzoni@bootlin.com>
+Date: Mon, 3 Dec 2018 22:06:12 +0100
+Subject: [Buildroot] [git commit] utils/genrandconfig: test with
+ BR2_OPTIMIZE_2=y
+Message-ID: <20181203210405.863168A590@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The static devices defined by packages are currently added to the full
-device table when two conditions are met:
+commit: https://git.buildroot.net/buildroot/commit/?id=aa556e2035c023d4328185a46e15df532e566067
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- (1) ROOTFS_DEVICE_TABLES is non-empty
- (2) BR2_ROOTFS_DEVICE_CREATION_STATIC=y
+Currently all random defconfigs which are used in autobuilder use size
+optimizaion (-Os), since BR2_OPTIMIZE_S=y is the default.
 
-(2) is obviously correct. However, depending on (1) is not correct: if
-the user doesn't provide any custom permission table and custom device
-table, then ROOTFS_DEVICE_TABLES will be empty.
+Adding "-O2" optimization will give better test coverage.
 
-So instead, move the addition of the package-defined static devices
-outside of condition (1), and have it only under condition (2).
+In many cases software gets built with speed optimization rather than
+size optimization. So let's add Level 2 optimizaion option to be
+generated in random defconfigs, so we could be able to test how
+packages are built with "-O2" in autobuilder.
 
-Reported-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: arc-buildroot at synopsys.com
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- fs/common.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ utils/genrandconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index 077ce8903e..a560417c6c 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -61,10 +61,10 @@ endif
- 	$(call PRINTF,$(PACKAGES_PERMISSIONS_TABLE)) > $(ROOTFS_FULL_DEVICES_TABLE)
- ifneq ($(ROOTFS_DEVICE_TABLES),)
- 	cat $(ROOTFS_DEVICE_TABLES) >> $(ROOTFS_FULL_DEVICES_TABLE)
-+endif
- ifeq ($(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
- 	$(call PRINTF,$(PACKAGES_DEVICES_TABLE)) >> $(ROOTFS_FULL_DEVICES_TABLE)
- endif
--endif
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 1d6ff990f5..35c7cbd14c 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -366,6 +366,8 @@ def gen_config(args):
+         configlines.append("BR2_STATIC_LIBS=y\n")
+     if randint(0, 20) == 0:
+         configlines.append("BR2_PACKAGE_PYTHON_PY_ONLY=y\n")
++    if randint(0,5) == 0:
++	configlines.append("BR2_OPTIMIZE_2=y\n")
  
- rootfs-common-show-depends:
- 	@echo $(ROOTFS_COMMON_DEPENDENCIES)
--- 
-2.19.2
+     # Write out the configuration file
+     if not os.path.exists(args.outputdir):
