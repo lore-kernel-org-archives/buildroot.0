@@ -1,65 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 03 Dec 2018 22:59:13 +0100
-Subject: [Buildroot] [PATCH-2018.02.x 2/2] samba4: security bump to
- version 4.8.7
-In-Reply-To: <20181129143113.19270-2-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 29 Nov 2018 15:31:13 +0100")
-References: <20181129143113.19270-1-peter@korsgaard.com>
- <20181129143113.19270-2-peter@korsgaard.com>
-Message-ID: <871s6y46ha.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 3 Dec 2018 23:01:43 +0100
+Subject: [Buildroot] [PATCH 2/2] lxc: fix build without stack protector
+In-Reply-To: <20181203214637.6633-2-fontaine.fabrice@gmail.com>
+References: <20181203214637.6633-1-fontaine.fabrice@gmail.com>
+ <20181203214637.6633-2-fontaine.fabrice@gmail.com>
+Message-ID: <20181203230143.74e2ea17@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Hello,
 
- > Fixes the following security vulnerabilities:
- >  - CVE-2018-14629:
- >    All versions of Samba from 4.0.0 onwards are vulnerable to infinite
- >    query recursion caused by CNAME loops. Any dns record can be added via
- >    ldap by an unprivileged user using the ldbadd tool, so this is a
- >    security issue.
+On Mon,  3 Dec 2018 22:46:37 +0100, Fabrice Fontaine wrote:
+> Add an option to disable the stack protector flags added in version
+> 3.0.3 by
+> https://github.com/lxc/lxc/commit/2268c27754152aa538db2c9e3753d72d19bcd17a
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/0b90e7dca2984652842832a41abad93ac49a9b86
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- >  - CVE-2018-16841:
- >    When configured to accept smart-card authentication, Samba's KDC will call
- >    talloc_free() twice on the same memory if the principal in a validly signed
- >    certificate does not match the principal in the AS-REQ.
+Thanks for working on this!
 
- >    This is only possible after authentication with a trusted certificate.
 
- >    talloc is robust against further corruption from a double-free with
- >    talloc_free() and directly calls abort(), terminating the KDC process.
+> ++if test "x$enable_hardening" = "xyes"; then
+> ++	AX_CHECK_COMPILE_FLAG([-fstack-clash-protection], [CFLAGS="$CFLAGS -fstack-clash-protection"],,[-Werror])
+> ++	AX_CHECK_COMPILE_FLAG([-fstack-protector-strong], [CFLAGS="$CFLAGS -fstack-protector-strong"],,[-Werror])
+> ++	AX_CHECK_COMPILE_FLAG([-g], [CFLAGS="$CFLAGS -g"],,[-Werror])
 
- >    There is no further vulnerability associated with this issue, merely a
- >    denial of service.
+Why is -g handled as one of the hardening flags ? Building with
+debugging symbols can hardly be considered "hardening" :-)
 
- >  - CVE-2018-16851:
- >    During the processing of an LDAP search before Samba's AD DC returns
- >    the LDAP entries to the client, the entries are cached in a single
- >    memory object with a maximum size of 256MB.  When this size is
- >    reached, the Samba process providing the LDAP service will follow the
- >    NULL pointer, terminating the process.
+Also, is upstream going to accept this --enable/--disable option ?
+Should we instead use AX_CHECK_LINK_FLAG() ?
 
- >    There is no further vulnerability associated with this issue, merely a
- >    denial of service.
-
- >  - CVE-2018-16853:
- >    A user in a Samba AD domain can crash the KDC when Samba is built in the
- >    non-default MIT Kerberos configuration.
-
- >    With this advisory we clarify that the MIT Kerberos build of the Samba
- >    AD DC is considered experimental.  Therefore the Samba Team will not
- >    issue security patches for this configuration.
-
- > For more details, see the release notes:
-
- > https://www.samba.org/samba/history/samba-4.8.7.html
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2018.02.x and 2018.08.x, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
