@@ -1,46 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Dec 2018 22:52:19 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] msgpack: disables tests
-Message-ID: <20181203215213.04B3081300@busybox.osuosl.org>
+Date: Mon, 3 Dec 2018 22:53:25 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] popt: add libiconv to
+ popt.pc.in
+Message-ID: <20181203215213.13FC788990@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dca53990a0dd5a358a7840fe1d670dbb694e54e2
+commit: https://git.buildroot.net/buildroot/commit/?id=0172a94ac57991160da685b44e808c051be0132c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-tests are enabled if gperf and zlib are found and they fail on:
-/home/buildroot/autobuild/run/instance-0/output/build/msgpack-2.1.5/include/msgpack/v1/object.hpp:652:34:
-error: 'void* memcpy(void*, const void*, size_t)' copying an object of non-trivial type 'struct msgpack::v2::object' from an array of 'const msgpack_object' {aka 'const struct msgpack_object'} [-Werror=class-memaccess]
-     std::memcpy(&o, &v, sizeof(v));
-
-So disable them.
+Add ${LTLIBICONV} to popt.pc.in so applications such as shairport-sync
+will know that they must link with -liconv when building statically
 
 Fixes:
- - http://autobuild.buildroot.org/results/7d7aa9723f02f9bc78dbf6248674be4d402199bf
+ - http://autobuild.buildroot.org/results/c5b0d1d2867e49c022a2ad971dd9f358ff0f3865
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit d2d75e07dbac023bcba7eb5957ae1d003ca1c69f)
+(cherry picked from commit 1209eb2dca71fe43e3742f81b43591f6b24ed51a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/msgpack/msgpack.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/popt/0004-add-libiconv-to-popt.pc.patch | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/package/msgpack/msgpack.mk b/package/msgpack/msgpack.mk
-index 38df8f53af..abb6e2e214 100644
---- a/package/msgpack/msgpack.mk
-+++ b/package/msgpack/msgpack.mk
-@@ -9,7 +9,7 @@ MSGPACK_SITE = $(call github,msgpack,msgpack-c,cpp-$(MSGPACK_VERSION))
- MSGPACK_LICENSE = BSL-1.0
- MSGPACK_LICENSE_FILES = COPYING LICENSE_1_0.txt
- MSGPACK_INSTALL_STAGING = YES
--MSGPACK_CONF_OPTS = -DMSGPACK_BUILD_EXAMPLES=OFF
-+MSGPACK_CONF_OPTS = -DMSGPACK_BUILD_EXAMPLES=OFF -DMSGPACK_BUILD_TESTS=OFF
- 
- ifeq ($(BR2_STATIC_LIBS),y)
- MSGPACK_CONF_OPTS += -DMSGPACK_ENABLE_SHARED=OFF
+diff --git a/package/popt/0004-add-libiconv-to-popt.pc.patch b/package/popt/0004-add-libiconv-to-popt.pc.patch
+new file mode 100644
+index 0000000000..087a30bb7a
+--- /dev/null
++++ b/package/popt/0004-add-libiconv-to-popt.pc.patch
+@@ -0,0 +1,19 @@
++Add LTLIBICONV to popt.pc.in
++
++Add ${LTLIBICONV} to popt.pc.in so applications such as shairport-sync
++will know that they must link with -liconv when building statically
++
++Fixes:
++ - http://autobuild.buildroot.org/results/c5b0d1d2867e49c022a2ad971dd9f358ff0f3865
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++
++diff -Naurp popt-1.16-vanilla/popt.pc.in popt-1.16/popt.pc.in
++--- popt-1.16-vanilla/popt.pc.in	2018-11-22 20:26:55.735211662 +0100
+++++ popt-1.16/popt.pc.in	2018-11-22 20:34:11.371303724 +0100
++@@ -7,4 +7,5 @@ Name: popt
++ Version: @VERSION@
++ Description: popt library.
++ Libs: @POPT_PKGCONFIG_LIBS@
+++Libs.private: @LTLIBICONV@
++ Cflags: -I${includedir}
