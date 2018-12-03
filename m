@@ -1,51 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Dec 2018 23:27:31 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] package/c-ares: use
- LICENSE.md
-Message-ID: <20181203222402.BD5FF8A68A@busybox.osuosl.org>
+Date: Mon, 03 Dec 2018 23:28:27 +0100
+Subject: [Buildroot] [PATCH/next 1/2] c-ares: use LICENSE.md
+In-Reply-To: <20181201204246.9031-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 1 Dec 2018 21:42:45 +0100")
+References: <20181201204246.9031-1-fontaine.fabrice@gmail.com>
+Message-ID: <87h8fu1bzo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c4b61f939fb53478eb180fbbe82fe65fa50df43
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-c-ares has a LICENSE.md file since version 1.12 and
-https://github.com/c-ares/c-ares/commit/4e861351d9deaef7b78aee50ce9229325f4fc59a
+ > c-ares has a LICENSE.md file since version 1.12 and
+ > https://github.com/c-ares/c-ares/commit/4e861351d9deaef7b78aee50ce9229325f4fc59a
 
-So use it instead of one of the source file and add its hash
+ > So use it instead of one of the source file and add its hash
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c9dfcbd6ee4ed6878bb081e918c4b7e36955d67c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/c-ares/c-ares.hash | 3 +++
- package/c-ares/c-ares.mk   | 3 +--
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/c-ares/c-ares.hash b/package/c-ares/c-ares.hash
-index 832c4dfcfb..0c665574d8 100644
---- a/package/c-ares/c-ares.hash
-+++ b/package/c-ares/c-ares.hash
-@@ -1,2 +1,5 @@
- # Locally calculated after checking pgp signature
- sha256 45d3c1fd29263ceec2afc8ff9cd06d5f8f889636eb4e80ce3cc7f0eaf7aadc6e c-ares-1.14.0.tar.gz
-+
-+# Hash for license file
-+sha256 db4eb63fe09daebdf57d3f79b091bb5ee5070c0d761040e83264e648d307af4c LICENSE.md
-diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
-index 67254244a1..16536137a8 100644
---- a/package/c-ares/c-ares.mk
-+++ b/package/c-ares/c-ares.mk
-@@ -11,7 +11,6 @@ C_ARES_CONF_OPTS = --with-random=/dev/urandom
- # Rebuild configure to avoid XC_CHECK_USER_CFLAGS
- C_ARES_AUTORECONF = YES
- C_ARES_LICENSE = MIT
--# No standalone, use some source file
--C_ARES_LICENSE_FILES = ares_mkquery.c
-+C_ARES_LICENSE_FILES = LICENSE.md
- 
- $(eval $(autotools-package))
+Committed to 2018.02.x and 2018.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
