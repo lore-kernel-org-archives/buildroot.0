@@ -1,57 +1,45 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  3 Dec 2018 23:38:54 +0100
-Subject: [Buildroot] [PATCH v2,1/2] lxc: fix missing include for va_list
-Message-ID: <20181203223855.10152-1-fontaine.fabrice@gmail.com>
+Date: Mon,  3 Dec 2018 23:38:55 +0100
+Subject: [Buildroot] [PATCH v2,2/2] lxc: fix build without stack protector
+In-Reply-To: <20181203223855.10152-1-fontaine.fabrice@gmail.com>
+References: <20181203223855.10152-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181203223855.10152-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Stack protector has been added in version 3.0.3 by
+https://github.com/lxc/lxc/commit/2268c27754152aa538db2c9e3753d72d19bcd17a
+
+Disable it through
+ax_cv_check_cflags__Werror__fstack_protector_strong=no
+
 Fixes:
  - http://autobuild.buildroot.org/results/0b90e7dca2984652842832a41abad93ac49a9b86
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...01-stringutils-include-stdarg-for-va_list.patch | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 package/lxc/0001-stringutils-include-stdarg-for-va_list.patch
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Drop patch to add a new option, instead use 
+   ax_cv_check_cflags__Werror__fstack_protector_strong=no
 
-diff --git a/package/lxc/0001-stringutils-include-stdarg-for-va_list.patch b/package/lxc/0001-stringutils-include-stdarg-for-va_list.patch
-new file mode 100644
-index 0000000000..d0a450e8cf
---- /dev/null
-+++ b/package/lxc/0001-stringutils-include-stdarg-for-va_list.patch
-@@ -0,0 +1,30 @@
-+From b7df06ad14c04f18b7db5b64d5142b802bf64cb2 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 3 Dec 2018 22:18:16 +0100
-+Subject: [PATCH] stringutils: include stdarg for va_list
+ package/lxc/lxc.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index 48d5b20329..0b7b03bcac 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -11,6 +11,8 @@ LXC_LICENSE_FILES = COPYING
+ LXC_DEPENDENCIES = host-pkgconf
+ LXC_INSTALL_STAGING = YES
+ 
++LXC_CONF_ENV = ax_cv_check_cflags__Werror__fstack_protector_strong=no
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/0b90e7dca2984652842832a41abad93ac49a9b86
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/lxc/lxc/pull/2745]
-+---
-+ src/lxc/string_utils.h | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/lxc/string_utils.h b/src/lxc/string_utils.h
-+index 4065e4e6..d4e633cc 100644
-+--- a/src/lxc/string_utils.h
-++++ b/src/lxc/string_utils.h
-+@@ -20,6 +20,8 @@
-+ #ifndef __LXC_STRING_UTILS_H
-+ #define __LXC_STRING_UTILS_H
-+ 
-++#include <stdarg.h>
-++
-+ #include "config.h"
-+ 
-+ #include "initutils.h"
-+-- 
-+2.14.1
-+
+ LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
+ 	--disable-werror \
+ 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
 -- 
 2.14.1
