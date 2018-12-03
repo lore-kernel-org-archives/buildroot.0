@@ -1,75 +1,57 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  3 Dec 2018 22:03:20 +0100
-Subject: [Buildroot] [PATCH v2,1/1] libbsd: fix display of comment
-Message-ID: <20181203210320.20133-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon,  3 Dec 2018 22:05:05 +0100
+Subject: [Buildroot] [PATCH v4 0/3] Misc fs/common.mk improvements
+Message-ID: <20181203210508.27831-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit e13855c48f21eaee07a81f8b02678839be274a45 wrongly added
-depends on BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU
-to display the comment "libbsd needs a toolchain w/ threads, wchar"
-The same error has also been made for minizip
+Hello,
 
-To fix this issue, move dependency
-!(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU) under
-BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+This small patch series is a new iteration of the few remaining
+patches from Yann's series "[PATCH 0/6 v2] fs: fix and better handle
+capabilities".
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - move dependency
-   !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU) under
-   BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+In Yann series, patches 1 to 3 have already been applied.
 
- package/libbsd/Config.in  | 5 ++---
- package/minizip/Config.in | 2 --
- 2 files changed, 2 insertions(+), 5 deletions(-)
+Patch 4 was not liked by Arnout, with some good explanation.
 
-diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
-index ba5e5cbcfa..0f320302b9 100644
---- a/package/libbsd/Config.in
-+++ b/package/libbsd/Config.in
-@@ -5,12 +5,12 @@ config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
- 	depends on !BR2_microblaze
- 	depends on !BR2_arc
- 	depends on !BR2_xtensa
-+	# uClibc on noMMU doesn't provide __register_atfork()
-+	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU)
- 
- config BR2_PACKAGE_LIBBSD
- 	bool "libbsd"
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
--	# uClibc on noMMU doesn't provide __register_atfork()
--	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU)
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_WCHAR
- 	help
-@@ -24,5 +24,4 @@ config BR2_PACKAGE_LIBBSD
- 
- comment "libbsd needs a toolchain w/ threads, wchar"
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-diff --git a/package/minizip/Config.in b/package/minizip/Config.in
-index 4bc12a0d7e..68fa1d7118 100644
---- a/package/minizip/Config.in
-+++ b/package/minizip/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_MINIZIP
- 	bool "minizip"
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
--	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU) # libbsd
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libbsd
- 	depends on BR2_USE_WCHAR # libbsd
- 	select BR2_PACKAGE_LIBBSD
-@@ -20,5 +19,4 @@ config BR2_PACKAGE_MINIZIP_DEMOS
- 
- comment "minizip needs a toolchain w/ threads, wchar"
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+In this patch series, I propose:
+
+ - An additional patch to rename FULL_DEVICE_TABLE to
+   ROOTFS_FULL_DEVICES_TABLE to be consistent with
+   ROOTFS_FULL_USERS_TABLE.
+
+ - Yann's original PATCH 5/6, but reworked to apply without what was
+   his PATCH 4/6.
+
+ - A patch that reimplements PATCH 6/6 from Yann, but in a different
+   way, due to the fact that his PATCH 4/6 was not taken, and
+   therefore there is no permisson/device table split.
+
+Changes since v3:
+
+ - Reintegrate the idea of Yann's PATCH 6/6 (which was correct after
+   all!), but in a way that works without splitting permission/device
+   tables, since PATCH 4/6 from Yann was not accepted.
+
+Thanks,
+
+Thomas
+
+
+Thomas Petazzoni (2):
+  fs/common.mk: rename FULL_DEVICE_TABLE to ROOTFS_FULL_DEVICES_TABLE
+  fs/common.mk: make sure that static devices from packages are created
+
+Yann E. MORIN (1):
+  fs/common.mk: allow user provided permissions to override packages
+    permissions
+
+ fs/common.mk | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
+
 -- 
-2.14.1
+2.19.2
