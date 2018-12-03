@@ -1,49 +1,65 @@
 From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Mon, 3 Dec 2018 15:25:25 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2018-12-02
-In-Reply-To: <20181203145612.150037bc@windsurf.home>
-References: <20181203070035.5D6B220D2E@mail.bootlin.com>
- <CA+Vb7ho5wgKxatazqbL4sdmtiEXiwSH8zw+LdYGr5vySBa0QBw@mail.gmail.com>
- <20181203134517.40729dd9@windsurf.home>
- <CAMRc=MeGJzA7wdAKz7UXXwvDmnDE+mgPK+kNi_UxbXgfn+RFHQ@mail.gmail.com>
- <20181203144457.33a80c9d@windsurf.home>
- <CAMRc=MdwOpMmwhjvHMOfb_wBgwQAq4_TAdUUDRSi4eYReYTcZg@mail.gmail.com>
- <20181203145612.150037bc@windsurf.home>
-Message-ID: <CAMRc=Mc1SqoZKZ45xT7LS9g=0mpA7Av1AJF6qEZmeFeBgL+qrw@mail.gmail.com>
+Date: Mon,  3 Dec 2018 15:34:03 +0100
+Subject: [Buildroot] [PATCH] pulseview: fix a build error
+Message-ID: <20181203143403.18506-1-brgl@bgdev.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-pon., 3 gru 2018 o 14:56 Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> napisa?(a):
->
-> Hello,
->
-> On Mon, 3 Dec 2018 14:51:05 +0100, Bartosz Golaszewski wrote:
->
-> > > > this failure (and others in pulseview) are due to libsigrokdecode.h
-> > > > being included when libsigrokdecode is not built. It's a bug in
-> > > > pulseview. I already have a patch and will submit it later today both
-> > > > for buildroot as well as upstream.
-> > >
-> > > Well, the error that Philipp points to is in libtorrent-rasterbar,
-> > > which has nothing to do with libsigrokdecode, and quite probably
-> > > doesn't use it. Are you sure the issue is related ?
-> >
-> > What I meant was that I found the issue and it has nothing to do with
-> > libtorrent. I should have expressed myself clearer.
->
-> How can a bug in pulseview/libsigrokdecode after libttorrent-rasterbar ?
->
-> See the build failures we are talking about, they affect the
-> libtorrent-rasterbar package:
->
+Add a patch that fixes a build error occuring when libsigrokdecode is
+not selected.
 
-I'm not following you here I'm afraid. This has nothing to do with any
-other package - this is purely a pulseview bug. It appears after my
-previous version bump and is confined to pulseview.
+Fixes: http://autobuild.buildroot.net/results/79ed29bdd1eec9bf7cb5003202da5ceaeb8101b6/
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+---
+ ...ar-fix-build-without-libsigrokdecode.patch | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/pulseview/0001-mainbar-fix-build-without-libsigrokdecode.patch
 
-Bart
+diff --git a/package/pulseview/0001-mainbar-fix-build-without-libsigrokdecode.patch b/package/pulseview/0001-mainbar-fix-build-without-libsigrokdecode.patch
+new file mode 100644
+index 0000000000..5cf0c446a6
+--- /dev/null
++++ b/package/pulseview/0001-mainbar-fix-build-without-libsigrokdecode.patch
+@@ -0,0 +1,37 @@
++From da124df864dd7555733d6690eacf856435d55b2d Mon Sep 17 00:00:00 2001
++From: Bartosz Golaszewski <brgl@bgdev.pl>
++Date: Mon, 3 Dec 2018 13:14:16 +0100
++Subject: [PATCH] mainbar: fix build without libsigrokdecode
++
++We must not include decodesignal.hpp if we're not using libsigrokdecode
++or the build will fail due to libsigrokdecode.hpp not being present in
++the system.
++
++Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
++---
++ pv/toolbars/mainbar.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/pv/toolbars/mainbar.cpp b/pv/toolbars/mainbar.cpp
++index e6beb2b..7c4d0fb 100644
++--- a/pv/toolbars/mainbar.cpp
+++++ b/pv/toolbars/mainbar.cpp
++@@ -35,7 +35,6 @@
++ 
++ #include <boost/algorithm/string/join.hpp>
++ 
++-#include <pv/data/decodesignal.hpp>
++ #include <pv/devicemanager.hpp>
++ #include <pv/devices/hardwaredevice.hpp>
++ #include <pv/devices/inputfile.hpp>
++@@ -52,6 +51,7 @@
++ #include <pv/widgets/importmenu.hpp>
++ #ifdef ENABLE_DECODE
++ #include <pv/widgets/decodermenu.hpp>
+++#include <pv/data/decodesignal.hpp>
++ #endif
++ 
++ #include <libsigrokcxx/libsigrokcxx.hpp>
++-- 
++2.19.1
++
+-- 
+2.19.1
