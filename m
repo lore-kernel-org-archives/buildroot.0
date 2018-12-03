@@ -1,43 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 3 Dec 2018 21:55:29 +0100
-Subject: [Buildroot] [PATCH 6/6 v2] fs: make static device nodes
- creation more logical
-In-Reply-To: <ae80646fbb9d0e7f40434b16ebe5173ee3a4654c.1542043922.git.yann.morin.1998@free.fr>
-References: <cover.1542043922.git.yann.morin.1998@free.fr>
- <ae80646fbb9d0e7f40434b16ebe5173ee3a4654c.1542043922.git.yann.morin.1998@free.fr>
-Message-ID: <20181203215529.683151f0@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  3 Dec 2018 22:03:20 +0100
+Subject: [Buildroot] [PATCH v2,1/1] libbsd: fix display of comment
+Message-ID: <20181203210320.20133-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Commit e13855c48f21eaee07a81f8b02678839be274a45 wrongly added
+depends on BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU
+to display the comment "libbsd needs a toolchain w/ threads, wchar"
+The same error has also been made for minizip
 
-On Mon, 12 Nov 2018 18:33:16 +0100, Yann E. MORIN wrote:
+To fix this issue, move dependency
+!(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU) under
+BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
 
->  	$(Q)touch $(ROOTFS_FINAL_STATIC_DEVICES_TABLE)
-> -ifneq ($(ROOTFS_STATIC_DEVICE_TABLES),)
-> -	cat $(ROOTFS_STATIC_DEVICE_TABLES) >> $(ROOTFS_FINAL_STATIC_DEVICES_TABLE)
->  ifeq ($(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
->  	$(call PRINTF,$(PACKAGES_DEVICES_TABLE)) >> $(ROOTFS_FINAL_STATIC_DEVICES_TABLE)
-> +ifneq ($(ROOTFS_STATIC_DEVICE_TABLES),)
-> +	cat $(ROOTFS_STATIC_DEVICE_TABLES) >> $(ROOTFS_FINAL_STATIC_DEVICES_TABLE)
->  endif
->  endif
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - move dependency
+   !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU) under
+   BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
 
-Ah, I thought this change was not correct. But in fact, it was correct
-in your series (sorry!). It was correct because you did split the
-permission table from the static device table, which was done in the
-patch that Arnout didn't like.
+ package/libbsd/Config.in  | 5 ++---
+ package/minizip/Config.in | 2 --
+ 2 files changed, 2 insertions(+), 5 deletions(-)
 
-In fact, there is a way to do the same without the split of
-permission/device table. Let me propose something.
-
-Best regards,
-
-Thomas
+diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
+index ba5e5cbcfa..0f320302b9 100644
+--- a/package/libbsd/Config.in
++++ b/package/libbsd/Config.in
+@@ -5,12 +5,12 @@ config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+ 	depends on !BR2_microblaze
+ 	depends on !BR2_arc
+ 	depends on !BR2_xtensa
++	# uClibc on noMMU doesn't provide __register_atfork()
++	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU)
+ 
+ config BR2_PACKAGE_LIBBSD
+ 	bool "libbsd"
+ 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+-	# uClibc on noMMU doesn't provide __register_atfork()
+-	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU)
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_WCHAR
+ 	help
+@@ -24,5 +24,4 @@ config BR2_PACKAGE_LIBBSD
+ 
+ comment "libbsd needs a toolchain w/ threads, wchar"
+ 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+diff --git a/package/minizip/Config.in b/package/minizip/Config.in
+index 4bc12a0d7e..68fa1d7118 100644
+--- a/package/minizip/Config.in
++++ b/package/minizip/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_MINIZIP
+ 	bool "minizip"
+ 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+-	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU) # libbsd
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libbsd
+ 	depends on BR2_USE_WCHAR # libbsd
+ 	select BR2_PACKAGE_LIBBSD
+@@ -20,5 +19,4 @@ config BR2_PACKAGE_MINIZIP_DEMOS
+ 
+ comment "minizip needs a toolchain w/ threads, wchar"
+ 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.1
