@@ -1,67 +1,49 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Mon, 3 Dec 2018 15:00:55 +0100
-Subject: [Buildroot] [PATCH 15/15] ejabberd: Bump to version 18.09
-In-Reply-To: <20181128224322.42641f73@windsurf.home>
-References: <20181126110807.31431-1-johan.oudinet@gmail.com>
- <20181126110807.31431-16-johan.oudinet@gmail.com>
- <20181128224322.42641f73@windsurf.home>
-Message-ID: <CAJtjsKZ+FF0cHtTWVQN6b74R08XuLXvPP6ta1ObNtTbo5ckcJA@mail.gmail.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Mon, 3 Dec 2018 15:25:25 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2018-12-02
+In-Reply-To: <20181203145612.150037bc@windsurf.home>
+References: <20181203070035.5D6B220D2E@mail.bootlin.com>
+ <CA+Vb7ho5wgKxatazqbL4sdmtiEXiwSH8zw+LdYGr5vySBa0QBw@mail.gmail.com>
+ <20181203134517.40729dd9@windsurf.home>
+ <CAMRc=MeGJzA7wdAKz7UXXwvDmnDE+mgPK+kNi_UxbXgfn+RFHQ@mail.gmail.com>
+ <20181203144457.33a80c9d@windsurf.home>
+ <CAMRc=MdwOpMmwhjvHMOfb_wBgwQAq4_TAdUUDRSi4eYReYTcZg@mail.gmail.com>
+ <20181203145612.150037bc@windsurf.home>
+Message-ID: <CAMRc=Mc1SqoZKZ45xT7LS9g=0mpA7Av1AJF6qEZmeFeBgL+qrw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Christophe, All,
-
-On Wed, Nov 28, 2018 at 10:43 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
+pon., 3 gru 2018 o 14:56 Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> napisa?(a):
 >
-> Comparing ejabberd/Config.in selects and ejabberd/ejabberd.mk
-> DEPENDENCIES variable, I found that erlang-jiffy and erlang-p1-oauth2
-> were selected by ejabberd/Config.in, but not mentioned in
-> EJABBERD_DEPENDENCIES. In my build, they ended up being built after
-> ejabberd, so they are clearly not build dependencies.
+> Hello,
 >
-> The question is: are these runtime dependencies (in which case a #
-> runtime comment in the Config.in file would be nice), or are they
-> stale/useless dependencies ?
+> On Mon, 3 Dec 2018 14:51:05 +0100, Bartosz Golaszewski wrote:
+>
+> > > > this failure (and others in pulseview) are due to libsigrokdecode.h
+> > > > being included when libsigrokdecode is not built. It's a bug in
+> > > > pulseview. I already have a patch and will submit it later today both
+> > > > for buildroot as well as upstream.
+> > >
+> > > Well, the error that Philipp points to is in libtorrent-rasterbar,
+> > > which has nothing to do with libsigrokdecode, and quite probably
+> > > doesn't use it. Are you sure the issue is related ?
+> >
+> > What I meant was that I found the issue and it has nothing to do with
+> > libtorrent. I should have expressed myself clearer.
+>
+> How can a bug in pulseview/libsigrokdecode after libttorrent-rasterbar ?
+>
+> See the build failures we are talking about, they affect the
+> libtorrent-rasterbar package:
+>
 
-Hum, that's an interesting question. I followed mandatory dependencies
-listed in Ejabberd's rebar.config but I'm not sure if those two
-dependencies are runtime dependencies or if Ejabberd could run
-smoothly without them.
+I'm not following you here I'm afraid. This has nothing to do with any
+other package - this is purely a pulseview bug. It appears after my
+previous version bump and is confined to pulseview.
 
-I digged into Ejabberd's git repository to try to find out where
-p1_oauth2 and jiffy are used, but I'd like Christophe's opinion on
-this before taking any action.
-
-For p1_oauth2, it's hard to say from the git log as the dependency was
-there before the project moved to git. Still, there are calls to
-oauth2 functions in src/ejabberd_oauth.erl file, in particular in the
-oauth_issue_token function that can be called via the command line. So
-I would assume it is a runtime dependency. Christophe, can you
-confirm?
-
-For jiffy, it is a JSON parser which is used in several parts of Ejabberd.
-In mod_bosh, there is a function to deal with the case where it fails
-to load this component:
-start_jiffy(Opts) ->
-    case gen_mod:get_opt(json, Opts) of
-        false ->
-            ok;
-        true ->
-            case catch ejabberd:start_app(jiffy) of
-                ok ->
-                    ok;
-                Err ->
-                    ?WARNING_MSG("Failed to start JSON codec (jiffy): ~p. "
-                                 "JSON support will be disabled", [Err])
-            end
-    end.
-
-but other components seem less tolerant. I think it is a runtime
-dependency as well. Christophe, do you agree?
-
--- 
-Johan
+Bart
