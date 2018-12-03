@@ -1,41 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 3 Dec 2018 13:31:18 +0100
-Subject: [Buildroot] [git commit] package/wine: bump to version 3.0.4
-Message-ID: <20181203122752.EBE9B8A4E6@busybox.osuosl.org>
+Date: Mon, 3 Dec 2018 13:31:38 +0100
+Subject: [Buildroot] [PATCH] perl: bump to version 5.28.1
+In-Reply-To: <20181202165309.2806-1-francois.perrad@gadz.org>
+References: <20181202165309.2806-1-francois.perrad@gadz.org>
+Message-ID: <20181203133138.4b4f6fdb@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ec023b4fcb8dcae38afb76deaddf0f62aaeb52b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/wine/wine.hash | 2 +-
- package/wine/wine.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Sun,  2 Dec 2018 17:53:09 +0100, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  ...isting-files-before-overwriting-them.patch | 46 -------------------
+>  ...the-generated-subdirectory-Makefiles.patch |  2 +-
+>  package/perl/perl.hash                        | 12 ++---
+>  package/perl/perl.mk                          |  6 +--
+>  utils/scancpan                                | 12 ++---
+>  5 files changed, 16 insertions(+), 62 deletions(-)
+>  delete mode 100644 package/perl/0001-PATCH-Remove-existing-files-before-overwriting-them.patch
 
-diff --git a/package/wine/wine.hash b/package/wine/wine.hash
-index 855130c6fe..ba007142e8 100644
---- a/package/wine/wine.hash
-+++ b/package/wine/wine.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 eb645999ea6f6455a5275bf267e19a32497c8f5aac818ea40afe7c8c396a4da1 wine-3.0.3.tar.xz
-+sha256 d45a88edbe7db363e297cacedc94e66df3464504a01c2eccf04f518066a6fb0c wine-3.0.4.tar.xz
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index fa672f0c7a..dc559efd95 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WINE_VERSION = 3.0.3
-+WINE_VERSION = 3.0.4
- WINE_SOURCE = wine-$(WINE_VERSION).tar.xz
- WINE_SITE = https://dl.winehq.org/wine/source/3.0
- WINE_LICENSE = LGPL-2.1+
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
