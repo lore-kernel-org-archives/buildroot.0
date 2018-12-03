@@ -1,61 +1,163 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 3 Dec 2018 09:06:17 +0100
-Subject: [Buildroot] [PATCH 1/1] libglib2: bump to version 2.58.1
-In-Reply-To: <20181203083811.019c0f5e@windsurf.home>
-References: <20181014075852.2976-1-fontaine.fabrice@gmail.com>
- <20181202140053.6ed28a05@windsurf.home>
- <20181202172323.GB2649@scaer>
- <20181203083811.019c0f5e@windsurf.home>
-Message-ID: <20181203080617.GC2649@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 3 Dec 2018 09:08:57 +0100
+Subject: [Buildroot] [git commit] package/fontconfig: fix static build
+Message-ID: <20181203080529.3A44B8A4A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=29e77c070bfea2e1028ddb77d38374e83f8ac18f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2018-12-03 08:38 +0100, Thomas Petazzoni spake thusly:
-> On Sun, 2 Dec 2018 18:23:24 +0100, Yann E. MORIN wrote:
-> 
-> >  2- teach pkgconf to replace even more variables. This is not very
-> >     satisfying, and we won't be able to keep up in the long term. We
-> >     hould at least teach pkgconf to look for that list in an environment
-> >     variable, at least, to avoid tweaking the code over-and-over again.
-> 
-> Note that we have a pkg-config bump in the pending patches:
-> http://patchwork.ozlabs.org/patch/967653/. The bump is quite major, and
-> potentially affects how pkg-config behaves with variables. It might be
-> worth testing what happens, and in any case, if a solution is designed,
-> it should be based on this newer version of pkg-config.
-> 
-> For now, I will revert this libglib2 bump. I'll wait a bit for the dust
-> to settle, and then I will apply this pkg-config bump, which is another
-> risky change. The kind of stuff that is good to do early in the
-> development cycle :-)
+Retrieved patch from upstream to fix static build
 
-So, I tested your pkgconf bump, and indeed it solves this particular
-glib-genmarshal et al. issues, by now returning the sysrooted path:
+Fixes:
+ - http://autobuild.buildroot.org/results/17e5f9ce5e7566f5a88abfd27b7db5614c1a3086
 
-    $ /home/ymorin/dev/buildroot/O/host/bin/pkg-config --variable=glib_genmarshal glib-2.0
-    /home/ymorin/dev/buildroot/O/host/bin/../m68k-buildroot-linux-uclibc/sysroot/usr/bin/glib-genmarshal
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...01-Fix-the-build-issue-with-enable-static.patch | 133 +++++++++++++++++++++
+ 1 file changed, 133 insertions(+)
 
-Wee! :-)
-
-Of course, do not take that as a tested-by tag for the bump, it is too
-limited to be so.
-
-I'll kick-start two biggish build this morning, with just the new pkgconf
-and see how it behaves across the tree, once without the libglib2,
-andother with.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/fontconfig/0001-Fix-the-build-issue-with-enable-static.patch b/package/fontconfig/0001-Fix-the-build-issue-with-enable-static.patch
+new file mode 100644
+index 0000000000..bf04bd95fc
+--- /dev/null
++++ b/package/fontconfig/0001-Fix-the-build-issue-with-enable-static.patch
+@@ -0,0 +1,133 @@
++From 8208f99fa1676c42bfd8d74de3e9dac5366c150c Mon Sep 17 00:00:00 2001
++From: Akira TAGOH <akira@tagoh.org>
++Date: Mon, 3 Sep 2018 04:56:16 +0000
++Subject: [PATCH] Fix the build issue with --enable-static
++
++Fixes https://gitlab.freedesktop.org/fontconfig/fontconfig/issues/109
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://gitlab.freedesktop.org/fontconfig/fontconfig/commit/8208f99fa1676c42bfd8d74de3e9dac5366c150c]
++---
++ doc/fcstring.fncs       | 12 ++++++++++++
++ fontconfig/fontconfig.h |  4 ++++
++ src/fcint.h             |  4 ----
++ test/test-bz106632.c    | 35 ++++++++++++-----------------------
++ 4 files changed, 28 insertions(+), 27 deletions(-)
++
++diff --git a/doc/fcstring.fncs b/doc/fcstring.fncs
++index 0412bbd..d5ec043 100644
++--- a/doc/fcstring.fncs
+++++ b/doc/fcstring.fncs
++@@ -223,6 +223,18 @@ This is just a wrapper around free(3) which helps track memory usage of
++ strings within the fontconfig library.
++ @@
++ 
+++ at RET@		FcChar8 *
+++ at FUNC@		FcStrBuildFilename
+++ at TYPE1@		const FcChar8 *			@ARG1@		path
+++ at TYPE2@		...
+++ at PURPOSE@	Concatenate strings as a file path
+++ at DESC@
+++Creates a filename from the given elements of strings as file paths
+++and concatenate them with the appropriate file separator.
+++Arguments must be null-terminated.
+++This returns a newly-allocated memory which should be freed when no longer needed.
+++@@
+++
++ @RET@		FcChar8 *
++ @FUNC@		FcStrDirname
++ @TYPE1@		const FcChar8 *			@ARG1@		file
++diff --git a/fontconfig/fontconfig.h b/fontconfig/fontconfig.h
++index bac1dda..af870d0 100644
++--- a/fontconfig/fontconfig.h
+++++ b/fontconfig/fontconfig.h
++@@ -1076,6 +1076,10 @@ FcUtf16Len (const FcChar8   *string,
++ 	    int		    *nchar,
++ 	    int		    *wchar);
++ 
+++FcPublic FcChar8 *
+++FcStrBuildFilename (const FcChar8 *path,
+++		    ...);
+++
++ FcPublic FcChar8 *
++ FcStrDirname (const FcChar8 *file);
++ 
++diff --git a/src/fcint.h b/src/fcint.h
++index de78cd8..a9d075a 100644
++--- a/src/fcint.h
+++++ b/src/fcint.h
++@@ -1282,10 +1282,6 @@ FcStrUsesHome (const FcChar8 *s);
++ FcPrivate FcBool
++ FcStrIsAbsoluteFilename (const FcChar8 *s);
++ 
++-FcPrivate FcChar8 *
++-FcStrBuildFilename (const FcChar8 *path,
++-		    ...);
++-
++ FcPrivate FcChar8 *
++ FcStrLastSlash (const FcChar8  *path);
++ 
++diff --git a/test/test-bz106632.c b/test/test-bz106632.c
++index daa0c1e..2d67c2e 100644
++--- a/test/test-bz106632.c
+++++ b/test/test-bz106632.c
++@@ -25,25 +25,26 @@
++ #ifdef HAVE_CONFIG_H
++ #include "config.h"
++ #endif
+++#include <stdio.h>
++ #include <stdlib.h>
+++#include <string.h>
++ #include <dirent.h>
+++#include <unistd.h>
+++#include <errno.h>
++ #ifndef HAVE_STRUCT_DIRENT_D_TYPE
++ #include <sys/types.h>
++ #include <sys/stat.h>
++-#include <unistd.h>
++ #endif
++-#include "fcstr.c"
++-#undef FcConfigBuildFonts
++-#undef FcConfigCreate
++-#undef FcConfigGetCurrent
++-#undef FcConfigParseAndLoadFromMemory
++-#undef FcConfigUptoDate
++-#undef FcFontList
++-#undef FcInitReinitialize
++-#undef FcPatternCreate
++-#undef FcPatternDestroy
++ #include <fontconfig/fontconfig.h>
++ 
+++#ifdef _WIN32
+++#  define FC_DIR_SEPARATOR         '\\'
+++#  define FC_DIR_SEPARATOR_S       "\\"
+++#else
+++#  define FC_DIR_SEPARATOR         '/'
+++#  define FC_DIR_SEPARATOR_S       "/"
+++#endif
+++
++ #ifdef HAVE_MKDTEMP
++ #define fc_mkdtemp	mkdtemp
++ #else
++@@ -154,18 +155,6 @@ unlink_dirs (const char *dir)
++     return ret;
++ }
++ 
++-FcChar8 *
++-FcLangNormalize (const FcChar8 *lang)
++-{
++-    return NULL;
++-}
++-
++-FcChar8 *
++-FcConfigHome (void)
++-{
++-    return NULL;
++-}
++-
++ int
++ main (void)
++ {
++-- 
++2.18.1
++
