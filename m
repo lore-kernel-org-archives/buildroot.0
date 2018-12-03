@@ -1,65 +1,69 @@
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Mon,  3 Dec 2018 15:34:03 +0100
-Subject: [Buildroot] [PATCH] pulseview: fix a build error
-Message-ID: <20181203143403.18506-1-brgl@bgdev.pl>
+From: Jared Bents <Jared.Bents@collins.com>
+Date: Mon,  3 Dec 2018 08:34:18 -0600
+Subject: [Buildroot] [next v3 1/1] package/proftpd: add mod_sql_sqlite
+Message-ID: <20181203143418.5153-1-jared.bents@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch that fixes a build error occuring when libsigrokdecode is
-not selected.
+Enable mod_sql_sqlite as a compile time option
 
-Fixes: http://autobuild.buildroot.net/results/79ed29bdd1eec9bf7cb5003202da5ceaeb8101b6/
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+--
+[v1->v2]: Update for sqlite dependency
+[v2->v3]: Update help info from mode_* to mod_* per request
+          from <ryan.barnett@collins.com>
 ---
- ...ar-fix-build-without-libsigrokdecode.patch | 37 +++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/pulseview/0001-mainbar-fix-build-without-libsigrokdecode.patch
+ package/proftpd/Config.in  | 14 ++++++++++++--
+ package/proftpd/proftpd.mk |  5 +++++
+ 2 files changed, 17 insertions(+), 2 deletions(-)
 
-diff --git a/package/pulseview/0001-mainbar-fix-build-without-libsigrokdecode.patch b/package/pulseview/0001-mainbar-fix-build-without-libsigrokdecode.patch
-new file mode 100644
-index 0000000000..5cf0c446a6
---- /dev/null
-+++ b/package/pulseview/0001-mainbar-fix-build-without-libsigrokdecode.patch
-@@ -0,0 +1,37 @@
-+From da124df864dd7555733d6690eacf856435d55b2d Mon Sep 17 00:00:00 2001
-+From: Bartosz Golaszewski <brgl@bgdev.pl>
-+Date: Mon, 3 Dec 2018 13:14:16 +0100
-+Subject: [PATCH] mainbar: fix build without libsigrokdecode
+diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
+index b615a5ff4c..7c57fed35a 100644
+--- a/package/proftpd/Config.in
++++ b/package/proftpd/Config.in
+@@ -29,12 +29,22 @@ config BR2_PACKAGE_PROFTPD_MOD_SFTP
+ config BR2_PACKAGE_PROFTPD_MOD_SQL
+ 	bool "mod_sql support"
+ 	help
+-	  Compile ProFTPD with mode_sql support.
++	  Compile ProFTPD with mod_sql support.
 +
-+We must not include decodesignal.hpp if we're not using libsigrokdecode
-+or the build will fail due to libsigrokdecode.hpp not being present in
-+the system.
++if BR2_PACKAGE_PROFTPD_MOD_SQL
 +
-+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
-+---
-+ pv/toolbars/mainbar.cpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++config BR2_PACKAGE_PROFTPD_MOD_SQL_SQLITE
++	bool "mod_sql_sqlite support"
++	select BR2_PACKAGE_SQLITE
++	help
++	  Compile ProFTPD with mod_sql_sqlite support.
 +
-+diff --git a/pv/toolbars/mainbar.cpp b/pv/toolbars/mainbar.cpp
-+index e6beb2b..7c4d0fb 100644
-+--- a/pv/toolbars/mainbar.cpp
-++++ b/pv/toolbars/mainbar.cpp
-+@@ -35,7 +35,6 @@
-+ 
-+ #include <boost/algorithm/string/join.hpp>
-+ 
-+-#include <pv/data/decodesignal.hpp>
-+ #include <pv/devicemanager.hpp>
-+ #include <pv/devices/hardwaredevice.hpp>
-+ #include <pv/devices/inputfile.hpp>
-+@@ -52,6 +51,7 @@
-+ #include <pv/widgets/importmenu.hpp>
-+ #ifdef ENABLE_DECODE
-+ #include <pv/widgets/decodermenu.hpp>
-++#include <pv/data/decodesignal.hpp>
-+ #endif
-+ 
-+ #include <libsigrokcxx/libsigrokcxx.hpp>
-+-- 
-+2.19.1
++endif
+ 
+ config BR2_PACKAGE_PROFTPD_MOD_QUOTATAB
+ 	bool "mod_quotatab support"
+ 	help
+-	  Compile ProFTPD with mode_quotatab support. This module
++	  Compile ProFTPD with mod_quotatab support. This module
+ 	  is required in order to support quota tables:
+ 	        1. mod_quotatab_file
+ 	        2. mod_quotatab_ldap
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index 8f3ff5088e..dd71c51e7e 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -46,6 +46,11 @@ ifeq ($(BR2_PACKAGE_PROFTPD_MOD_SQL),y)
+ PROFTPD_MODULES += mod_sql
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PROFTPD_MOD_SQL_SQLITE),y)
++PROFTPD_MODULES += mod_sql_sqlite
++PROFTPD_DEPENDENCIES += sqlite
++endif
 +
+ ifeq ($(BR2_PACKAGE_PROFTPD_MOD_QUOTATAB),y)
+ PROFTPD_MODULES += mod_quotatab
+ endif
 -- 
-2.19.1
+2.18.0
