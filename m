@@ -1,46 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 03 Dec 2018 22:51:44 +0100
-Subject: [Buildroot] [PATCH] package/libid3tag: needs autoreconf
-In-Reply-To: <20181125144514.17611-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Sun, 25 Nov 2018 15:45:14 +0100")
-References: <20181125144514.17611-1-yann.morin.1998@free.fr>
-Message-ID: <87in0a46tr.fsf@dell.be.48ers.dk>
+Date: Mon, 03 Dec 2018 22:53:00 +0100
+Subject: [Buildroot] [PATCH 1/1] msgpack: disables tests
+In-Reply-To: <20181125095025.7542-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 25 Nov 2018 10:50:25 +0100")
+References: <20181125095025.7542-1-fontaine.fabrice@gmail.com>
+Message-ID: <87efay46rn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > libid3tag uses a very old configure script.
- > When the toolchain lacks C++ and the build machine lacks /lib/cpp, this
- > old configure script fails because it can't find a C++ preprocessor that
- > is valid:
+ > tests are enabled if gperf and zlib are found and they fail on:
+ > /home/buildroot/autobuild/run/instance-0/output/build/msgpack-2.1.5/include/msgpack/v1/object.hpp:652:34:
+ > error: 'void* memcpy(void*, const void*, size_t)' copying an object of non-trivial type 'struct msgpack::v2::object' from an array of 'const msgpack_object' {aka 'const struct msgpack_object'} [-Werror=class-memaccess]
+ >      std::memcpy(&o, &v, sizeof(v));
 
- >     checking for arm-buildroot-linux-uclibcgnueabi-g++... no
- >     checking whether we are using the GNU C++ compiler... no
- >     checking whether no accepts -g... no
- >     checking dependency style of no... none
- >     checking how to run the C++ preprocessor... /lib/cpp
- >     configure: error: C++ preprocessor "/lib/cpp" fails sanity check
- >     See `config.log' for more details.
-
- > This is yet another case that was tentatively fixed by bd39d11d2e
- > (core/infra: fix build on toolchain without C++), further amended by
- > 4cd1ab15886 (core: alternate solution to disable C++).
-
- > However, this only works on libtool scripts that are recent enough, and
- > thus we need to autoreconf to get it.
-
- > We also need to patch configure.ac so that it does not fail on the
- > missing, GNU-specific files: NEWS, AUTHORS, and Changelog.
+ > So disable them.
 
  > Fixes:
- >     http://autobuild.buildroot.org/results/ac3/ac3870208aab6001db6b790b6c5dde64d08f7669/
- >     http://autobuild.buildroot.org/results/cc1/cc18397f38dfd4f1e6605f7a6f58edab49b396ac/
+ >  - http://autobuild.buildroot.org/results/7d7aa9723f02f9bc78dbf6248674be4d402199bf
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2018.02.x and 2018.08.x, thanks.
 
