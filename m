@@ -1,59 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 3 Dec 2018 22:28:08 +0100
-Subject: [Buildroot] [PATCH v3 1/1] lua: remove 5.2.x version
-In-Reply-To: <20181202102506.24699-1-francois.perrad@gadz.org>
-References: <20181202102506.24699-1-francois.perrad@gadz.org>
-Message-ID: <20181203222808.6dbfdecd@windsurf.home>
+Date: Mon, 3 Dec 2018 22:28:38 +0100
+Subject: [Buildroot] [git commit] package/libbsd: fix display of Config.in
+ comment
+Message-ID: <20181203212523.853738A59A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fran?ois,
+commit: https://git.buildroot.net/buildroot/commit/?id=2261eb3a36562fba5eaae4231aadb900b49e8d58
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  2 Dec 2018 11:25:06 +0100, Francois Perrad wrote:
-> At this time :
-> - Lua 5.3.5 will be the last one of its serie.
-> - Lua 5.4 is up coming (lua-5.4.0-work2 is already available).
-> - Lua 5.2.4 was released on 2015.
-> For various reasons in the Lua ecosystem, the Lua 5.1 will stay.
-> On BR, Lua 5.3 is the default version since 2016.02.
-> 
-> So, the serie which could be removed is the 5.2.x.
-> We could wait some days for other user feedback.
-> 
-> Note: see discussion when 5.3.x was introduced : http://lists.busybox.net/pipermail/buildroot/2015-January/117638.html
+Commit e13855c48f21eaee07a81f8b02678839be274a45 wrongly added
+depends on BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU
+to display the comment "libbsd needs a toolchain w/ threads, wchar"
+The same error has also been made for minizip.
 
-One quick question: Prosody 0.11 has been released, and they say:
+To fix this issue, move dependency
+!(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU) under
+BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS.
 
-"""
-Prosody has traditionally used Lua 5.1. As we announced back when 0.10
-was released, we are on the path to updating to more recent Lua
-versions.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libbsd/Config.in  | 5 ++---
+ package/minizip/Config.in | 2 --
+ 2 files changed, 2 insertions(+), 5 deletions(-)
 
-The recommended Lua version for 0.11 is Lua 5.2, while Lua 5.1 is still
-supported for the platforms that need it. 
-"""
-
-Should we keep Lua 5.2 for Prosody ?
-
-> v2 --> v3
->   - rebase on top of BR 2018.11
-
-The changelog should go...
-
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
-
-... here. Otherwise, it becomes part of the commit log when applying,
-which we don't want.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
+index ba5e5cbcfa..0f320302b9 100644
+--- a/package/libbsd/Config.in
++++ b/package/libbsd/Config.in
+@@ -5,12 +5,12 @@ config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+ 	depends on !BR2_microblaze
+ 	depends on !BR2_arc
+ 	depends on !BR2_xtensa
++	# uClibc on noMMU doesn't provide __register_atfork()
++	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU)
+ 
+ config BR2_PACKAGE_LIBBSD
+ 	bool "libbsd"
+ 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+-	# uClibc on noMMU doesn't provide __register_atfork()
+-	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU)
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_WCHAR
+ 	help
+@@ -24,5 +24,4 @@ config BR2_PACKAGE_LIBBSD
+ 
+ comment "libbsd needs a toolchain w/ threads, wchar"
+ 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+diff --git a/package/minizip/Config.in b/package/minizip/Config.in
+index 4bc12a0d7e..68fa1d7118 100644
+--- a/package/minizip/Config.in
++++ b/package/minizip/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_MINIZIP
+ 	bool "minizip"
+ 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+-	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU) # libbsd
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libbsd
+ 	depends on BR2_USE_WCHAR # libbsd
+ 	select BR2_PACKAGE_LIBBSD
+@@ -20,5 +19,4 @@ config BR2_PACKAGE_MINIZIP_DEMOS
+ 
+ comment "minizip needs a toolchain w/ threads, wchar"
+ 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
