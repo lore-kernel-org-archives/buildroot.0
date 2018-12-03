@@ -1,88 +1,48 @@
-From: Philipp Richter <richterphilipp.pops@gmail.com>
-Date: Mon, 3 Dec 2018 19:59:16 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2018-12-02
-In-Reply-To: <CAMRc=MdGYNCPPPavGpcD=wz5v5rMbQc8RzKf8mqdVQ=wbqH-mw@mail.gmail.com>
-References: <20181203070035.5D6B220D2E@mail.bootlin.com>
- <CA+Vb7ho5wgKxatazqbL4sdmtiEXiwSH8zw+LdYGr5vySBa0QBw@mail.gmail.com>
- <20181203134517.40729dd9@windsurf.home>
- <CAMRc=MeGJzA7wdAKz7UXXwvDmnDE+mgPK+kNi_UxbXgfn+RFHQ@mail.gmail.com>
- <20181203144457.33a80c9d@windsurf.home>
- <CAMRc=MdwOpMmwhjvHMOfb_wBgwQAq4_TAdUUDRSi4eYReYTcZg@mail.gmail.com>
- <20181203145612.150037bc@windsurf.home>
- <CAMRc=Mc1SqoZKZ45xT7LS9g=0mpA7Av1AJF6qEZmeFeBgL+qrw@mail.gmail.com>
- <20181203153431.0c2a82f1@windsurf.home>
- <CAMRc=MdGYNCPPPavGpcD=wz5v5rMbQc8RzKf8mqdVQ=wbqH-mw@mail.gmail.com>
-Message-ID: <CA+Vb7hqeQ0Pwx+V02AhBmReBmY_aih=Dc5zve-Du4AdNg231uA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon,  3 Dec 2018 20:12:19 +0100
+Subject: [Buildroot] [PATCH] linux: ensure images/ exist before creatign
+ files there
+Message-ID: <20181203191219.18998-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 3 Dec 2018 at 13:45, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Philipp,
->
-> Thanks for taking a look at your autobuilder failures! Please try to
-> Cc: the Buildroot mailing list on such discussions.
+When using an initramfs, on the first-pass build, we create a dummy cpio
+so that the build succeeeds. The real cpio will come later, and we'll do
+a second-pass build to use the actual cpio.
 
-Right, I'll remember that, thank you again.
+However, when we touch that dummy cpio, the images/ directory may not
+yet exist, since commit d0f4f95e39 (Makefile: rework main directory
+creation logic) removed its creation at the begining of the build, to
+only at the moment we need it, i.e. during the *_INSTALL_IMAGES_CMDS
+steps.
 
-On these platforms it seems like gcc is missing something to support
-this ? I'm not sure how to fix this.
-There's the --disable-logging configuration flag that could be forced
-on those platforms I guess, not very subtle but compilation goes
-through.
+However, the linux build is not a _INSTALL_IMAGES_CMDS step, so there is
+no guarantee that images/ already exist at that time.
 
-Regards,
-Philipp Richter
+Fix that by explicitly creating images/ before touching the dummy cpio.
 
-On Mon, 3 Dec 2018 at 15:37, Bartosz Golaszewski <brgl@bgdev.pl> wrote:
->
-> pon., 3 gru 2018 o 15:34 Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> napisa?(a):
-> >
-> > Hello,
-> >
-> > On Mon, 3 Dec 2018 15:25:25 +0100, Bartosz Golaszewski wrote:
-> >
-> > > > How can a bug in pulseview/libsigrokdecode after libttorrent-rasterbar ?
-> > > >
-> > > > See the build failures we are talking about, they affect the
-> > > > libtorrent-rasterbar package:
-> > > >
-> > >
-> > > I'm not following you here I'm afraid. This has nothing to do with any
-> > > other package - this is purely a pulseview bug. It appears after my
-> > > previous version bump and is confined to pulseview.
-> >
-> > Are you looking at:
-> >
-> >   http://autobuild.buildroot.net/results/753/753059dd52da9ec2aa1b06f3b64b0ab5ee3e059a/build-end.log
-> >
-> > Let me paste the relevant part:
-> >
-> > In file included from peer_connection.cpp:56:0:
-> > ../include/libtorrent/peer_connection.hpp:550:8: error: generic thunk code fails for method 'virtual void libtorrent::peer_connection::_ZThn96_NK10libtorrent15peer_connection8peer_logENS_14peer_log_alert11direction_tEPKcS4_z(libtorrent::peer_log_alert::direction_t, const char*, const char*, ...) const' which uses '...'
-> >    void peer_log(peer_log_alert::direction_t direction
-> >         ^~~~~~~~
-> > make[2]: *** [peer_connection.lo] Error 1
-> > make[2]: *** Waiting for unfinished jobs....
-> > make[2]: Leaving directory `/home/dawncrow/buildroot-test/scripts/instance-0/output/build/libtorrent-rasterbar-1.1.11/src'
-> > make[1]: *** [all-recursive] Error 1
-> > make[1]: Leaving directory `/home/dawncrow/buildroot-test/scripts/instance-0/output/build/libtorrent-rasterbar-1.1.11'
-> > make: *** [/home/dawncrow/buildroot-test/scripts/instance-0/output/build/libtorrent-rasterbar-1.1.11/.stamp_built] Error 2
-> > make: Leaving directory `/home/dawncrow/buildroot-test/scripts/instance-0/buildroot'
-> >
-> > Where do you see a pulseview issue ?
-> >
->
-> Eek I was looking at
-> http://autobuild.buildroot.net/results/79ed29bdd1eec9bf7cb5003202da5ceaeb8101b6/
-> why am I responding here? I have no idea. :)
->
-> Anyway, patch for pulseview sent. Sorry for the confusion.
->
-> Bart
+Reported-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ linux/linux.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/linux/linux.mk b/linux/linux.mk
+index c00b326e8a..110260723b 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -311,6 +311,7 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 	# replaced later by the real cpio archive, and the kernel will be
+ 	# rebuilt using the linux-rebuild-with-initramfs target.
+ 	$(if $(BR2_TARGET_ROOTFS_INITRAMFS),
++		mkdir -p $(BINARIES_DIR)
+ 		touch $(BINARIES_DIR)/rootfs.cpio
+ 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"$${BR_BINARIES_DIR}/rootfs.cpio",$(@D)/.config)
+ 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,0,$(@D)/.config)
+-- 
+2.14.1
