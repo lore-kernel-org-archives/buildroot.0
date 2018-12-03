@@ -1,35 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 03 Dec 2018 23:13:50 +0100
-Subject: [Buildroot] [PATCH 3/3 v2] package: hide golang packages for
- toolchains with binutils bug 20006
-In-Reply-To: <d64c03d07584a8f48ab309fff66d2ee5661d5ee3.1543137559.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Sun, 25 Nov 2018 10:19:50 +0100")
-References: <cover.1543137559.git.yann.morin.1998@free.fr>
- <d64c03d07584a8f48ab309fff66d2ee5661d5ee3.1543137559.git.yann.morin.1998@free.fr>
-Message-ID: <87y3961co1.fsf@dell.be.48ers.dk>
+Date: Mon, 3 Dec 2018 23:18:53 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] python-numpy: fix build
+ with lapack
+Message-ID: <20181203221533.548568A58A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e36185ef3617fcb477ad3c3578598e789cfbe62b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
- > Fixes:
- >     http://autobuild.buildroot.org/results/020/02039969b16534d4020ecd4574bae71b91c1e6b8/ (flannel)
- >     http://autobuild.buildroot.org/results/e95/e9528b06b350ef84c1e2cb59fba87b4db77b4660/ (docker-engine)
- >     [...]
+If BR2_PACKAGE_LAPACK is enabled (without BR2_PACKAGE_CLAPACK), build of
+python-numpy will fail if lapack is built before python-numpy because
+lapack does not provide blas library
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Cc: Romain Naour <romain.naour@gmail.com>
+So disable BLAS and LAPACK through PYTHON_NUMPTY_ENV if
+BR2_PACKAGE_CLAPACK is not set
 
- > ---
- > Changes v1 -> v2:
- >   - drop per-package dependency, move it to BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
- >     (Thomas)
+Fixes:
+ - http://autobuild.buildroot.org/results/41671976c7be7883f31ee5f51ca0eb90b81262fd
 
-Committed to 2018.08.x, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 76815cd1e556816f885d817576d83df67f579612)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-numpy/python-numpy.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
+index d0d38371a3..14671ae2da 100644
+--- a/package/python-numpy/python-numpy.mk
++++ b/package/python-numpy/python-numpy.mk
+@@ -14,6 +14,8 @@ PYTHON_NUMPY_SETUP_TYPE = setuptools
+ ifeq ($(BR2_PACKAGE_CLAPACK),y)
+ PYTHON_NUMPY_DEPENDENCIES += clapack
+ PYTHON_NUMPY_SITE_CFG_LIBS += blas lapack
++else
++PYTHON_NUMPY_ENV += BLAS=None LAPACK=None
+ endif
+ 
+ PYTHON_NUMPY_BUILD_OPTS = --fcompiler=None
