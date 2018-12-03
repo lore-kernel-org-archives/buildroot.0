@@ -1,47 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Dec 2018 22:46:51 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/dante: needs
- autoreconf
-Message-ID: <20181203215212.D89F388990@busybox.osuosl.org>
+Date: Mon, 3 Dec 2018 22:52:19 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] msgpack: disables tests
+Message-ID: <20181203215213.04B3081300@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1cef40d5c1e17ee5c83dcee6ed317aad84a6f128
+commit: https://git.buildroot.net/buildroot/commit/?id=dca53990a0dd5a358a7840fe1d670dbb694e54e2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-We have a patch that touches a .m4 file, so we need to regenerate the
-configure script. Otherwise, this is done during the build step, and
-some environment variables are thus missing and the build may fail when
-the host machine does not have the expected autostuff tools.
+tests are enabled if gperf and zlib are found and they fail on:
+/home/buildroot/autobuild/run/instance-0/output/build/msgpack-2.1.5/include/msgpack/v1/object.hpp:652:34:
+error: 'void* memcpy(void*, const void*, size_t)' copying an object of non-trivial type 'struct msgpack::v2::object' from an array of 'const msgpack_object' {aka 'const struct msgpack_object'} [-Werror=class-memaccess]
+     std::memcpy(&o, &v, sizeof(v));
+
+So disable them.
 
 Fixes:
-    http://autobuild.buildroot.org/results/e37/e37e61bae1d81a7956e2843be70fea84b0bbb64b/
-    http://autobuild.buildroot.org/results/f96/f969718402cae71446d6280ec1f66d357a155293/
-    ...
+ - http://autobuild.buildroot.org/results/7d7aa9723f02f9bc78dbf6248674be4d402199bf
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 83d19028126ffcad91913dd62d862809f743fd64)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit d2d75e07dbac023bcba7eb5957ae1d003ca1c69f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dante/dante.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/msgpack/msgpack.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/dante/dante.mk b/package/dante/dante.mk
-index a147aa36dc..9471acc692 100644
---- a/package/dante/dante.mk
-+++ b/package/dante/dante.mk
-@@ -9,8 +9,8 @@ DANTE_SITE = http://www.inet.no/dante/files
- DANTE_LICENSE = BSD-3-Clause
- DANTE_LICENSE_FILES = LICENSE
+diff --git a/package/msgpack/msgpack.mk b/package/msgpack/msgpack.mk
+index 38df8f53af..abb6e2e214 100644
+--- a/package/msgpack/msgpack.mk
++++ b/package/msgpack/msgpack.mk
+@@ -9,7 +9,7 @@ MSGPACK_SITE = $(call github,msgpack,msgpack-c,cpp-$(MSGPACK_VERSION))
+ MSGPACK_LICENSE = BSL-1.0
+ MSGPACK_LICENSE_FILES = COPYING LICENSE_1_0.txt
+ MSGPACK_INSTALL_STAGING = YES
+-MSGPACK_CONF_OPTS = -DMSGPACK_BUILD_EXAMPLES=OFF
++MSGPACK_CONF_OPTS = -DMSGPACK_BUILD_EXAMPLES=OFF -DMSGPACK_BUILD_TESTS=OFF
  
--# Dante uses a *VERY* old configure.ac
--DANTE_LIBTOOL_PATCH = NO
-+# 0002-compiler.m4-do-not-remove-g-flag.patch touches a m4 file
-+DANTE_AUTORECONF = YES
- 
- DANTE_CONF_OPTS += --disable-client --disable-preload --without-pam
- 
+ ifeq ($(BR2_STATIC_LIBS),y)
+ MSGPACK_CONF_OPTS += -DMSGPACK_ENABLE_SHARED=OFF
