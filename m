@@ -1,97 +1,88 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  3 Dec 2018 19:53:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 18.2.6
-Message-ID: <20181203185352.32400-1-bernd.kuhls@t-online.de>
+From: Philipp Richter <richterphilipp.pops@gmail.com>
+Date: Mon, 3 Dec 2018 19:59:16 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2018-12-02
+In-Reply-To: <CAMRc=MdGYNCPPPavGpcD=wz5v5rMbQc8RzKf8mqdVQ=wbqH-mw@mail.gmail.com>
+References: <20181203070035.5D6B220D2E@mail.bootlin.com>
+ <CA+Vb7ho5wgKxatazqbL4sdmtiEXiwSH8zw+LdYGr5vySBa0QBw@mail.gmail.com>
+ <20181203134517.40729dd9@windsurf.home>
+ <CAMRc=MeGJzA7wdAKz7UXXwvDmnDE+mgPK+kNi_UxbXgfn+RFHQ@mail.gmail.com>
+ <20181203144457.33a80c9d@windsurf.home>
+ <CAMRc=MdwOpMmwhjvHMOfb_wBgwQAq4_TAdUUDRSi4eYReYTcZg@mail.gmail.com>
+ <20181203145612.150037bc@windsurf.home>
+ <CAMRc=Mc1SqoZKZ45xT7LS9g=0mpA7Av1AJF6qEZmeFeBgL+qrw@mail.gmail.com>
+ <20181203153431.0c2a82f1@windsurf.home>
+ <CAMRc=MdGYNCPPPavGpcD=wz5v5rMbQc8RzKf8mqdVQ=wbqH-mw@mail.gmail.com>
+Message-ID: <CA+Vb7hqeQ0Pwx+V02AhBmReBmY_aih=Dc5zve-Du4AdNg231uA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added manditory dependency to xlib_libXxf86vm
-https://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?h=18.2&id=f05ce9dc514427a661696bc6b908e30841b6eb9d
+On Mon, 3 Dec 2018 at 13:45, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Philipp,
+>
+> Thanks for taking a look at your autobuilder failures! Please try to
+> Cc: the Buildroot mailing list on such discussions.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mesa3d-headers/mesa3d-headers.mk |  2 +-
- package/mesa3d/Config.in                 |  1 +
- package/mesa3d/mesa3d.hash               | 10 +++++-----
- package/mesa3d/mesa3d.mk                 |  6 ++----
- 4 files changed, 9 insertions(+), 10 deletions(-)
+Right, I'll remember that, thank you again.
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index d1a836b145..e80e222c65 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 18.2.5
-+MESA3D_HEADERS_VERSION = 18.2.6
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 872859b693..c9e08af09f 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -14,6 +14,7 @@ menuconfig BR2_PACKAGE_MESA3D
- 	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBXRANDR if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXXF86VM if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_ZLIB
- 	help
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index c3464c3d0c..083284adec 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,7 +1,7 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2018-November/000475.html
--md5 b31a43ebb8b37fb704a9a75c90bbd71b  mesa-18.2.5.tar.xz
--sha1 1ada7d5fc5fabca63c78396b5afa587b94b9f2e0  mesa-18.2.5.tar.xz
--sha256 b12c32872832e5353155e1e8026e1f1ab75bba9dc5b178d712045684d26c2b73  mesa-18.2.5.tar.xz
--sha512 dd454c720241dffa61f3380be62479979a43004b2a52293b817bd3ea95f75960edee680e7380a13fae09b67a90dc0393e4a022d543db91b2f142f2468a9661f0  mesa-18.2.5.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2018-November/000479.html
-+md5 7c61a801311fb8d2f7b3cceb7b5cf308  mesa-18.2.6.tar.xz
-+sha1 435affd7a2c35782b21533ed2c65c487e40abcf8  mesa-18.2.6.tar.xz
-+sha256 9ebafa4f8249df0c718e93b9ca155e3593a1239af303aa2a8b0f2056a7efdc12  mesa-18.2.6.tar.xz
-+sha512 a7dd02f67384bb800dff70a0672a968ced96bb438605cdb39bde3e468d4dcf6162414a44e5da1abe7a1831fceb6f23e6c850eb5f80cfc5ee3861c14924c10ed4  mesa-18.2.6.tar.xz
- # License
- sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 1651b5f260..176997068a 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 18.2.5
-+MESA3D_VERSION = 18.2.6
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
-@@ -66,6 +66,7 @@ MESA3D_DEPENDENCIES += \
- 	xlib_libXdamage \
- 	xlib_libXfixes \
- 	xlib_libXrandr \
-+	xlib_libXxf86vm \
- 	xorgproto \
- 	libxcb
- MESA3D_CONF_OPTS += --enable-glx --disable-mangling
-@@ -122,9 +123,6 @@ MESA3D_CONF_OPTS += --enable-dri3
- else
- MESA3D_CONF_OPTS += --disable-dri3
- endif
--ifeq ($(BR2_PACKAGE_XLIB_LIBXXF86VM),y)
--MESA3D_DEPENDENCIES += xlib_libXxf86vm
--endif
- MESA3D_CONF_OPTS += \
- 	--enable-shared-glapi \
- 	--enable-driglx-direct \
--- 
-2.19.2
+On these platforms it seems like gcc is missing something to support
+this ? I'm not sure how to fix this.
+There's the --disable-logging configuration flag that could be forced
+on those platforms I guess, not very subtle but compilation goes
+through.
+
+Regards,
+Philipp Richter
+
+On Mon, 3 Dec 2018 at 15:37, Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+>
+> pon., 3 gru 2018 o 15:34 Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> napisa?(a):
+> >
+> > Hello,
+> >
+> > On Mon, 3 Dec 2018 15:25:25 +0100, Bartosz Golaszewski wrote:
+> >
+> > > > How can a bug in pulseview/libsigrokdecode after libttorrent-rasterbar ?
+> > > >
+> > > > See the build failures we are talking about, they affect the
+> > > > libtorrent-rasterbar package:
+> > > >
+> > >
+> > > I'm not following you here I'm afraid. This has nothing to do with any
+> > > other package - this is purely a pulseview bug. It appears after my
+> > > previous version bump and is confined to pulseview.
+> >
+> > Are you looking at:
+> >
+> >   http://autobuild.buildroot.net/results/753/753059dd52da9ec2aa1b06f3b64b0ab5ee3e059a/build-end.log
+> >
+> > Let me paste the relevant part:
+> >
+> > In file included from peer_connection.cpp:56:0:
+> > ../include/libtorrent/peer_connection.hpp:550:8: error: generic thunk code fails for method 'virtual void libtorrent::peer_connection::_ZThn96_NK10libtorrent15peer_connection8peer_logENS_14peer_log_alert11direction_tEPKcS4_z(libtorrent::peer_log_alert::direction_t, const char*, const char*, ...) const' which uses '...'
+> >    void peer_log(peer_log_alert::direction_t direction
+> >         ^~~~~~~~
+> > make[2]: *** [peer_connection.lo] Error 1
+> > make[2]: *** Waiting for unfinished jobs....
+> > make[2]: Leaving directory `/home/dawncrow/buildroot-test/scripts/instance-0/output/build/libtorrent-rasterbar-1.1.11/src'
+> > make[1]: *** [all-recursive] Error 1
+> > make[1]: Leaving directory `/home/dawncrow/buildroot-test/scripts/instance-0/output/build/libtorrent-rasterbar-1.1.11'
+> > make: *** [/home/dawncrow/buildroot-test/scripts/instance-0/output/build/libtorrent-rasterbar-1.1.11/.stamp_built] Error 2
+> > make: Leaving directory `/home/dawncrow/buildroot-test/scripts/instance-0/buildroot'
+> >
+> > Where do you see a pulseview issue ?
+> >
+>
+> Eek I was looking at
+> http://autobuild.buildroot.net/results/79ed29bdd1eec9bf7cb5003202da5ceaeb8101b6/
+> why am I responding here? I have no idea. :)
+>
+> Anyway, patch for pulseview sent. Sorry for the confusion.
+>
+> Bart
