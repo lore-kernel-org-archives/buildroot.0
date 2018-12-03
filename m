@@ -1,47 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 3 Dec 2018 21:26:22 +0100
-Subject: [Buildroot] [git commit] package/libcurl: use GnuTLS's default cert
- path
-Message-ID: <20181203202302.E320A8A586@busybox.osuosl.org>
+Date: Mon, 3 Dec 2018 21:27:17 +0100
+Subject: [Buildroot] [PATCH 1/2] gnutls: Give library a default trust
+ location
+In-Reply-To: <20181116201718.22455-1-tpiepho@impinj.com>
+References: <20181116201718.22455-1-tpiepho@impinj.com>
+Message-ID: <20181203212717.7ada5025@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43b4d3ae4557b97d84c06a8a79a4f40a31c67697
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-libcurl doesn't find any trust path for CA certs when it cross-compiles.
-When using OpenSSL, it is explicitly configured to use the SSL cert
-directory with OpenSSL style hash files in it.  But with GnuTLS, it gets
-nothing.
+On Fri, 16 Nov 2018 20:17:32 +0000, Trent Piepho wrote:
+> Gnutls is building with no default location to look for CA certs.  Since
+> there are buildroot packages to provide these, configure it to use them
+> by default.
+> 
+> Configure gnutls to find them using the bundle file which contains all
+> certs, rather than looking in the cert directory.  When gnutls is told
+> to use the directory, it loads *every* file in it.  This means it loads
+> the bundle with all certs, then loads each cert a second time using the
+> individual pem files, and then loads them all the third time via the
+> hash symlinks to the pem files.
+> 
+> When p11-kit is enabled, use its trust module instead of the bundle
+> file.  p11-kit can be configured to use the bundle (the default), but it
+> can do other things too, such as integrate with the "trust" command for
+> adding and removing trust anchors.
+> 
+> Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+> ---
+>  package/gnutls/gnutls.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
 
-Rather than configure libcurl to use the OpenSSL directory or a bundle
-file, configure it to use the GnuTLS default.  This way the CA certs
-path can be configured in one place (gnutls) and then libcurl and anyone
-else who uses gnutls can default to that.
+Both patches applied. Thanks!
 
-Also, when libcurl with gnutls is configured to use a directory, it ends
-up loading each cert three times.
-
-Signed-off-by: Trent Piepho <tpiepho@impinj.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libcurl/libcurl.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 5aa6d542ad..3bc5207951 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -50,7 +50,8 @@ LIBCURL_CONF_OPTS += -without-ssl
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBCURL_GNUTLS),y)
--LIBCURL_CONF_OPTS += --with-gnutls=$(STAGING_DIR)/usr
-+LIBCURL_CONF_OPTS += --with-gnutls=$(STAGING_DIR)/usr \
-+	--with-ca-fallback
- LIBCURL_DEPENDENCIES += gnutls
- else
- LIBCURL_CONF_OPTS += --without-gnutls
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
