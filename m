@@ -1,50 +1,38 @@
-From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
-Date: Mon,  3 Dec 2018 09:25:09 +0100
-Subject: [Buildroot] [PATCH 1/1] qt5virtualkeyboard: add arrow key
- navigation build option
-Message-ID: <20181203082509.25936-1-sebastien.szymanski@armadeus.com>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Mon,  3 Dec 2018 12:19:47 +0100
+Subject: [Buildroot] [PATCH] docs/manual: Document
+ ERLANG_FOOBAR_KEEP_DEPENDENCIES in rebar infra
+In-Reply-To: <20181126110807.31431-2-johan.oudinet@gmail.com>
+References: <20181126110807.31431-2-johan.oudinet@gmail.com>
+Message-ID: <20181203111947.32627-1-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It allows controlling the keyboard using the arrow and return keys.
-
-Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- package/qt5/qt5virtualkeyboard/Config.in             | 5 +++++
- package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk | 4 ++++
- 2 files changed, 9 insertions(+)
+ docs/manual/adding-packages-rebar.txt | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/qt5/qt5virtualkeyboard/Config.in b/package/qt5/qt5virtualkeyboard/Config.in
-index 57b0c703b0..c3f2f37604 100644
---- a/package/qt5/qt5virtualkeyboard/Config.in
-+++ b/package/qt5/qt5virtualkeyboard/Config.in
-@@ -53,4 +53,9 @@ config BR2_PACKAGE_QT5VIRTUALKEYBOARD_HANDWRITING
- 	  Lipi Toolkit (LipiTk) is an open source toolkit for online
- 	  Handwriting Recognition.
+diff --git a/docs/manual/adding-packages-rebar.txt b/docs/manual/adding-packages-rebar.txt
+index be9ede0113..b2028b1c5b 100644
+--- a/docs/manual/adding-packages-rebar.txt
++++ b/docs/manual/adding-packages-rebar.txt
+@@ -86,6 +86,13 @@ If the package bundles a _rebar_ utility, but can use the generic
+ * +ERLANG_FOOBAR_REBAR_ENV+, to specify additional environment
+   variables to pass to the _rebar_ utility.
  
-+config BR2_PACKAGE_QT5VIRTUALKEYBOARD_ARROW_KEY_NAVIGATION
-+	bool "Arrow key navigation"
-+	help
-+	  Allows controlling the keyboard using the arrow and return keys.
++* +ERLANG_FOOBAR_KEEP_DEPENDENCIES+, to keep the dependencies
++  described in the rebar.config file. By default, the _rebar_
++  infrastructure removes such dependencies as a post-patch hook to
++  ensure rebar does not download or compile them. Only set this
++  variable to a non-empty value if the _rebar_ infrastructure must not
++  modify the rebar.config file included in the package.
 +
- endif
-diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-index 4aa5fc9575..8ce3169774 100644
---- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-+++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-@@ -53,6 +53,10 @@ QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/lipi-toolkit/MI
- endif
- endif
- 
-+ifeq ($(BR2_PACKAGE_QT5VIRTUALKEYBOARD_ARROW_KEY_NAVIGATION),y)
-+QT5VIRTUALKEYBOARD_QMAKEFLAGS += CONFIG+=arrow-key-navigation
-+endif
-+
- ifdef QT5VIRTUALKEYBOARD_3RDPARTY_PARTS
- define QT5VIRTUALKEYBOARD_INSTALL_TARGET_3RDPARTY_PARTS
- 	cp -dpfr $(STAGING_DIR)/usr/qtvirtualkeyboard $(TARGET_DIR)/usr
+ With the rebar infrastructure, all the steps required to build
+ and install the packages are already defined, and they generally work
+ well for most rebar-based packages. However, when required, it is
 -- 
-2.16.4
+2.17.1
