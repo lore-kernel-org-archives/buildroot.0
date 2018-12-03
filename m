@@ -1,87 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 3 Dec 2018 17:22:33 +0100
-Subject: [Buildroot] Making the Qt5 packaging compatible with
- per-package folder
-In-Reply-To: <20181116171845.4bc2a936@windsurf>
-References: <20181116171845.4bc2a936@windsurf>
-Message-ID: <20181203172233.3dbc0867@windsurf.home>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 3 Dec 2018 17:32:15 +0100
+Subject: [Buildroot] [PATCH 01/11] package/fftw : Allow all precisions
+ to be installed at the same time.
+In-Reply-To: <1543421561-37355-1-git-send-email-gwenj@trabucayre.com>
+References: <1543421561-37355-1-git-send-email-gwenj@trabucayre.com>
+Message-ID: <08ec2154-5bfb-e77d-7611-1d7662cc6070@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, Ga?l,
+ Hi Gwenhael,
 
-I was wondering if you had any feedback/idea on the below
-questions/issues ?
+On 28/11/2018 17:12, Gwenhael Goavec-Merou wrote:
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> 
+> fftw's library name depends on the precision option. Consequently,
+> it's possible to install multiple flavor on the same target.
+> 
+> This patch split current fftw in 5 part:
+> - 1 to provide common variables
+> - 4 to provide specificities for each precision.
 
-Thanks!
+ This is a huge change, and IIUC all patches should in fact be squashed since
+this change breaks all packages depending on fftw...
 
-Thomas
+ Maybe a more gradual approach would be to break out the individual packages one
+by one. E.g. start with adding the fftw-single package independently of the
+rest, then convert other packages to depend on fftw-single instead of fftw, then
+remove BR2_PACKAGE_FFTW_PRECISION_SINGLE.
 
-On Fri, 16 Nov 2018 17:18:45 +0100, Thomas Petazzoni wrote:
-> Peter, Ga?l,
-> 
-> I don't know if you have followed the discussion, but I recently sent a
-> new iteration of the per-package folder series [1], which allows to
-> support top-level parallel build.
-> 
-> One issue is that the Qt5 packaging as done today in Buildroot is not
-> compatible with per-package folders.
-> 
-> If you remember well, the installation of each Qt5 module works like
-> this:
-> 
->  - Staging installation
-> 
->    Just "make install". No DESTDIR or INSTALL_ROOT is passed, because
->    the installation path is hardcoded in qmake itself. "make install"
->    will install stuff to both $(HOST_DIR) and $(STAGING_DIR).
-> 
->  - Target installation
-> 
->    We manually copy the shared libraries, QML files, fonts, and other
->    stuff. This is already annoying to maintain today, because we
->    sometimes forget to install something that is important, we need to
->    handle the LTS/latest Qt5 version difference, etc. It would be a lot
->    less maintenance if we could use "make install" also for the target
->    installation.
-> 
-> Even if the current packaging is not ideal, it worked fine. But it
-> breaks badly with per-package folders. As explained above, the paths in
-> qmake are hardcoded. So when you do "make install" in qt5location for
-> example, it ends up being installed in the per-package folder of
-> qt5base (both HOST_DIR and STAGING_DIR), as it's the qt5base
-> HOST_DIR/STAGING_DIR that are hardcoded inside the qmake binary.
-> 
-> I tried to fix this issue, but for the moment, I haven't found a
-> solution. I first tried to use the -extprefix ./configure option, but
-> it didn't behave as we needed. Then I tried to do some manual
-> replacement in the Qt5 Makefiles after they have been generated (like
-> OpenEmbedded is doing), but they unfortunately get re-generated because
-> we tweak the .prl files from Qt5, and the Qt5 Makefiles regenerates the
-> Mkaefiles if they are older than the .prl files.
-> 
-> The current status of my experiment is visible at
-> https://git.bootlin.com/users/thomas-petazzoni/buildroot/commit/?h=ppsh-qt5&id=676d26ab1ca3d8f8ee5788dbc06f4e0703188bf1,
-> with a very long commit that explains the problem, and what was tried
-> so far. At this point, I am considering cheating on the date of
-> the .prl file to avoid the Makefiles from being re-generated, but this
-> is really a hack on top of what is already a hack.
-> 
-> Do you have some other ideas to solve this ? Can we fix qmake to do the
-> right thing ?
-> 
-> Thanks a lot for your help,
-> 
-> Thomas
-> 
-> [1] http://patchwork.ozlabs.org/project/buildroot/list/?series=75909
+ Finally, you forgot legacy handling. When you remove
+BR2_PACKAGE_FFTW_PRECISION_SINGLE, there should be an entry added to
+Config.in.legacy that select BR2_PACKAGE_FFTW_SINGLE. Or you have to call the
+package fftw-precision-single, of course.
 
+[snip]
+> +++ b/package/fftw/fftw-double/fftw-double.mk
+> @@ -0,0 +1,23 @@
+> +################################################################################
+> +#
+> +# fft-double
 
+ fftw-double
 
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+ Don't forget to run check-package!
+
+> +#
+> +################################################################################
+> +
+> +FFTW_PRECISION_DOUBLE_VERSION = $(FFTW_VERSION)
+> +FFTW_PRECISION_DOUBLE_SOURCE = fftw-$(FFTW_VERSION).tar.gz
+> +FFTW_PRECISION_DOUBLE_SITE = $(FFTW_SITE)
+> +FFTW_PRECISION_DOUBLE_INSTALL_STAGING = $(FFTW_INSTALL_STAGING)
+> +FFTW_PRECISION_DOUBLE_LICENSE = $(FFTW_LICENSE)
+> +FFTW_PRECISION_DOUBLE_LICENSE_FILES = $(FFTW_LICENSE_FILES)
+> +
+> +FFTW_PRECISION_DOUBLE_CONF_ENV = $(FFTW_CONF_ENV)
+> +
+> +FFTW_PRECISION_DOUBLE_CONF_OPTS= $(FFTW_CONF_OPTS)
+> +
+> +FFTW_PRECISION_DOUBLE_CFLAGS = $(FFTW_CFLAGS)
+> +
+> +# x86 optimisations
+> +FFTW_PRECISION_DOUBLE_CONF_OPTS += $(if $(BR2_X86_CPU_HAS_SSE2),--enable,--disable)-sse2
+> +
+> +$(eval $(autotools-package))
+
+ This doesn't work: the package is actually called 'fftw-double', so it will use
+variables FFTW_DOUBLE_VERSION etc., not FFTW_PRECISION_DOUBLE_VERSION. I don't
+know how you tested this, but it can't possibly work...
+
+[snip]
