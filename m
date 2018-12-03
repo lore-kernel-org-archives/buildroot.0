@@ -1,28 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 03 Dec 2018 23:08:29 +0100
-Subject: [Buildroot] [PATCH v1] freetype: bump version to 2.9.1
-In-Reply-To: <20181128191517.24636-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Wed, 28 Nov 2018 20:15:17 +0100")
-References: <20181128191517.24636-1-ps.report@gmx.net>
-Message-ID: <87k1kq2rhe.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 3 Dec 2018 23:07:30 +0100
+Subject: [Buildroot] [git commit] package/mesa3d-headers: install OpenCL
+ headers when needed
+Message-ID: <20181203220540.DE6688A62B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2c1336533de82a39254eebe545f03aefa6708006
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > According to [1]:
- > - fixes CVE-2018-6942
- > - needs '--enable-freetype-config' for freetype-config installation
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mesa3d-headers/mesa3d-headers.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- > [1]
- > https://git.savannah.gnu.org/cgit/freetype/freetype2.git/tree/docs/CHANGES?id=86bc8a95056c97a810986434a3f268cbe67f2902
-
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-
-Committed to 2018.02.x and 2018.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index e80e222c65..55101b2201 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -63,6 +63,10 @@ ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
+ MESA3D_HEADERS_DIRS += GLES GLES2
+ endif
+ 
++ifeq ($(BR2_PACKAGE_HAS_LIBOPENCL),y)
++MESA3D_HEADERS_DIRS += CL
++endif
++
+ define MESA3D_HEADERS_BUILD_CMDS
+ 	$(MESA3D_HEADERS_BUILD_DRI_PC)
+ endef
