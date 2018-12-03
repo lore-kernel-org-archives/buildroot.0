@@ -1,21 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 03 Dec 2018 13:04:58 +0000
-Subject: [Buildroot] [Bug 11426] pps-tools bash dependency
-In-Reply-To: <bug-11426-163@https.bugs.busybox.net/>
-References: <bug-11426-163@https.bugs.busybox.net/>
-Message-ID: <bug-11426-163-orX7uRlcRF@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon,  3 Dec 2018 14:10:58 +0100
+Subject: [Buildroot] [PATCH] DEVELOPERS: drop Bryan Brinsko entry
+Message-ID: <20181203131058.16084-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11426
+His e-mail @rockwellcollins.com is bouncing:
 
---- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-I've submitted http://patchwork.ozlabs.org/patch/1006890/ which should fix this
-issue.
+<bryan.brinsko@rockwellcollins.com>: host
+    mail05.rockwellcollins.com[205.175.227.28] said: 550 #5.1.0 Address
+    rejected. (in reply to RCPT TO command)
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ad80d365dd..36c0bc8578 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -412,9 +412,6 @@ F:	package/vmtouch/
+ N:	Brock Williams <brock@cottonwoodcomputer.com>
+ F:	package/pdmenu/
+ 
+-N:	Bryan Brinsko <bryan.brinsko@rockwellcollins.com>
+-F:	package/pps-tools/
+-
+ N:	Carlo Caione <carlo.caione@gmail.com>
+ F:	package/sunxi-boards/
+ 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.19.2
