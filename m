@@ -1,119 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 3 Dec 2018 22:38:53 +0100
-Subject: [Buildroot] [PATCH v4] netsurf: new package
-In-Reply-To: <20181201152347.6646-1-francois.perrad@gadz.org>
-References: <20181201152347.6646-1-francois.perrad@gadz.org>
-Message-ID: <20181203223853.3c3c60db@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  3 Dec 2018 22:46:36 +0100
+Subject: [Buildroot] [PATCH 1/2] lxc: fix missing include for va_list
+Message-ID: <20181203214637.6633-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fran?ois,
+Fixes:
+ - http://autobuild.buildroot.org/results/0b90e7dca2984652842832a41abad93ac49a9b86
 
-On Sat,  1 Dec 2018 16:23:47 +0100, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...01-stringutils-include-stdarg-for-va_list.patch | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/lxc/0001-stringutils-include-stdarg-for-va_list.patch
 
-Thanks for this patch!
-
-> diff --git a/package/netsurf/Config.in b/package/netsurf/Config.in
-> new file mode 100644
-> index 000000000..7bd3dee41
-> --- /dev/null
-> +++ b/package/netsurf/Config.in
-> @@ -0,0 +1,16 @@
-> +config BR2_PACKAGE_NETSURF
-> +	bool "netsurf"
-> +	select BR2_PACKAGE_EXPAT
-> +	select BR2_PACKAGE_JPEG
-> +	select BR2_PACKAGE_LIBCURL
-> +	select BR2_PACKAGE_LIBGTK2 if BR2_PACKAGE_XORG7
-
-You can't select BR2_PACKAGE_LIBGTK2 just like this, you need to
-replicate its dependencies. Indeed, even if libgtk2 will only be
-selected if xorg7 is available, libgtk2 has more dependencies than
-xorg7. See:
-
-config BR2_PACKAGE_LIBGTK2
-        bool "libgtk2"
-        depends on BR2_PACKAGE_XORG7
-        depends on BR2_USE_WCHAR # glib2
-        depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
-        depends on BR2_USE_MMU # glib2
-        depends on BR2_INSTALL_LIBSTDCPP # pango
-        depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
-
-versus:
-
-menuconfig BR2_PACKAGE_XORG7
-        bool "X.org X Window System"
-        depends on BR2_USE_WCHAR
-        depends on BR2_TOOLCHAIN_HAS_THREADS
-        depends on !BR2_STATIC_LIBS # dlopen in xlib_libX11
-
-One solution would be to do this:
-
-	select BR2_PACKAGE_LIBGTK2 if (BR2_PACKAGE_XORG7 && BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS && BR2_USE_MMU && BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_SYNC_4)
-	select BR2_PACKAGE_SDL if !(BR2_PACKAGE_XORG7 && BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS && BR2_USE_MMU && BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_SYNC_4)
-
-Can also be written like this:
-
-config BR2_PACKAGE_NETSURF_SUPPORTS_GTK2
-	bool
-	default y
-        depends on BR2_PACKAGE_XORG7
-        depends on BR2_USE_WCHAR
-        depends on BR2_TOOLCHAIN_HAS_THREADS
-        depends on BR2_USE_MMU
-        depends on BR2_INSTALL_LIBSTDCPP
-        depends on BR2_TOOLCHAIN_HAS_SYNC_4
-
-and then:
-
-+config BR2_PACKAGE_NETSURF
-+	bool "netsurf"
-+	select BR2_PACKAGE_EXPAT
-+	select BR2_PACKAGE_JPEG
-+	select BR2_PACKAGE_LIBCURL
-+	select BR2_PACKAGE_LIBGTK2 if BR2_PACKAGE_NETSURF_SUPPORTS_GTK2
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-+	select BR2_PACKAGE_LIBPNG
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_SDL if !BR2_PACKAGE_NETSURF_SUPPORTS_GTK2
-
-But overall, perhaps the right solution is to have an explicit
-Config.in choice. Even if you have X.org, you may want to have the SDL
-version (SDL works under X) without gtk2.
-
-And then with a choice, it becomes a bit easier to express, while
-giving more freedom to the user. What do you think ?
-
-
-> +ifeq ($(BR2_PACKAGE_LIBICONV),y)
-> +NETSURF_DEPENDENCIES += libiconv
-> +define NETSURF_ICONV_CONFIGURE_CMDS
-> +	echo "CFLAGS += -DWITH_ICONV_FILTER"            >> $(@D)/libparserutils/Makefile.config.override
-> +	echo "override NETSURF_USE_LIBICONV_PLUG := NO" >> $(@D)/netsurf/Makefile.config
-> +endef
-> +endif
-
-I am not sure what those variables are doing, but it is worth
-mentioning that iconv support is available even if BR2_PACKAGE_LIBICONV
-is *not* enabled. Indeed, BR2_PACKAGE_LIBICON is just providing a
-replacement libicon library when the C library doesn't provide an iconv
-implementation. But all of uClibc with locale, glibc and musl provide
-an iconv implementation, even when BR2_PACKAGE_LIBICONV is disabled.
-
-> +define NETSURF_CONFIGURE_CMDS
-> +	echo "override NETSURF_USE_DUKTAPE := NO"       >  $(@D)/netsurf/Makefile.config
-
-I don't know if this matters, but we do have a duktape package in Buildroot.
-
-Thanks!
-
-Thomas
+diff --git a/package/lxc/0001-stringutils-include-stdarg-for-va_list.patch b/package/lxc/0001-stringutils-include-stdarg-for-va_list.patch
+new file mode 100644
+index 0000000000..d0a450e8cf
+--- /dev/null
++++ b/package/lxc/0001-stringutils-include-stdarg-for-va_list.patch
+@@ -0,0 +1,30 @@
++From b7df06ad14c04f18b7db5b64d5142b802bf64cb2 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 3 Dec 2018 22:18:16 +0100
++Subject: [PATCH] stringutils: include stdarg for va_list
++
++Fixes:
++ - http://autobuild.buildroot.org/results/0b90e7dca2984652842832a41abad93ac49a9b86
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/lxc/lxc/pull/2745]
++---
++ src/lxc/string_utils.h | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/lxc/string_utils.h b/src/lxc/string_utils.h
++index 4065e4e6..d4e633cc 100644
++--- a/src/lxc/string_utils.h
+++++ b/src/lxc/string_utils.h
++@@ -20,6 +20,8 @@
++ #ifndef __LXC_STRING_UTILS_H
++ #define __LXC_STRING_UTILS_H
++ 
+++#include <stdarg.h>
+++
++ #include "config.h"
++ 
++ #include "initutils.h"
++-- 
++2.14.1
++
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.1
