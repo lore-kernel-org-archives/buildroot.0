@@ -1,22 +1,50 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 03 Dec 2018 12:51:21 +0000
-Subject: [Buildroot] [Bug 11476] stdio2.h error invalid use of
- __builtin_va_arg_pack
-In-Reply-To: <bug-11476-163@https.bugs.busybox.net/>
-References: <bug-11476-163@https.bugs.busybox.net/>
-Message-ID: <bug-11476-163-P8gj1UFdDp@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon,  3 Dec 2018 14:03:54 +0100
+Subject: [Buildroot] [PATCH] package/pps-tools: bump version to fix usage
+ without bash
+Message-ID: <20181203130354.15752-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11476
+As report in bug #11426, the ppsfind shell script uses /bin/bash, but
+the Buildroot pps-tools package doesn't depend on bash. In fact,
+upstream has fixed the problem, and the script can now be used with a
+POSIX shell, and the shebang is /bin/sh.
 
---- Comment #8 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Romain: what do you suggest for this bug? Should we exclude gcc < 6 from using
-fortify source ? Should we backport a gcc fix ?
+This commit therefore bumps pps-tools to the latest upstream commit,
+which is precisely this fix.
 
+Fixes bug #11426.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pps-tools/pps-tools.hash | 2 +-
+ package/pps-tools/pps-tools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/pps-tools/pps-tools.hash b/package/pps-tools/pps-tools.hash
+index da7bce45bf..1e54c29463 100644
+--- a/package/pps-tools/pps-tools.hash
++++ b/package/pps-tools/pps-tools.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 eee0a76118cf11d94f575ee43804a6991379f2c734b400ba01ac4811d0498e97  pps-tools-47333f24af878f67ce48022e8af16419713aa1ac.tar.gz
++sha256 1168f1474235017af413afdb07288303ad7a7b12a0282f3bf9ed0e22fe0d7d2e  pps-tools-e2b25049df9a4da28168b7378016f1650d0dfa6b.tar.gz
+diff --git a/package/pps-tools/pps-tools.mk b/package/pps-tools/pps-tools.mk
+index 37bb7e1f8c..2d82cf7dad 100644
+--- a/package/pps-tools/pps-tools.mk
++++ b/package/pps-tools/pps-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PPS_TOOLS_VERSION = 47333f24af878f67ce48022e8af16419713aa1ac
++PPS_TOOLS_VERSION = e2b25049df9a4da28168b7378016f1650d0dfa6b
+ PPS_TOOLS_SITE = $(call github,ago,pps-tools,$(PPS_TOOLS_VERSION))
+ PPS_TOOLS_INSTALL_STAGING = YES
+ PPS_TOOLS_LICENSE = GPL-2.0+
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.19.2
