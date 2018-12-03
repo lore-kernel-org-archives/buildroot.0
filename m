@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Dec 2018 23:02:07 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] xfsprogs: Define PLATFORM
+Date: Mon, 3 Dec 2018 23:00:04 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] xfsprogs: Define PLATFORM
  to linux
-Message-ID: <20181203215837.04A888A613@busybox.osuosl.org>
+Message-ID: <20181203215842.3B2F78A61A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb2a89acb0266011267c9127a248cd048b0c0d6b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b61ec8029449a523998bf81423489f757f8ee700
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 PLATFORM is an environment variable used by xfsprogs' configure script
 to determine the platform for which the applications are being built. If
@@ -34,7 +34,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
-index e6e8493684..7346df5614 100644
+index 814e0cf218..79ca521c06 100644
 --- a/package/xfsprogs/xfsprogs.mk
 +++ b/package/xfsprogs/xfsprogs.mk
 @@ -12,7 +12,7 @@ XFSPROGS_LICENSE_FILES = doc/COPYING
