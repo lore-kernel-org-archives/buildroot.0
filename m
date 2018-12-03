@@ -1,82 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Dec 2018 23:04:24 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] domoticz: fix build with
- python and cmake <= 3.7
-Message-ID: <20181203220059.6E2668A626@busybox.osuosl.org>
+Date: Mon, 03 Dec 2018 23:05:09 +0100
+Subject: [Buildroot] [PATCH 1/1] domoticz: fix build with python and
+ cmake <= 3.7
+In-Reply-To: <20181128235633.10449-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 29 Nov 2018 00:56:33 +0100")
+References: <20181128235633.10449-1-fontaine.fabrice@gmail.com>
+Message-ID: <87o9a22rmy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6d413352f8c4b28b633f1901e9fc6ef16e05959
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-domoticz will fail to build with python and older cmake
-Indeed, find_package(PythonLibs 3.4) will not recognize python 3.7 until
-cmake 3.7 and the following commit:
-https://github.com/Kitware/CMake/commit/c31573b9641e0f1bc7a34149506db51f3494323b
+ > domoticz will fail to build with python and older cmake
+ > Indeed, find_package(PythonLibs 3.4) will not recognize python 3.7 until
+ > cmake 3.7 and the following commit:
+ > https://github.com/Kitware/CMake/commit/c31573b9641e0f1bc7a34149506db51f3494323b
 
-To fix this, add a call to find_package(PythonInterp). Indeed, if
-FindPythonInterp has already found the major and minor version, that
-version will be inserted between the user supplied versions and the
-stock version list since cmake in version 3.1 and
-https://github.com/Kitware/CMake/commit/3816cd2dc7a7cc220e4f1b1e87fee986545b9cb3
+ > To fix this, add a call to find_package(PythonInterp). Indeed, if
+ > FindPythonInterp has already found the major and minor version, that
+ > version will be inserted between the user supplied versions and the
+ > stock version list since cmake in version 3.1 and
+ > https://github.com/Kitware/CMake/commit/3816cd2dc7a7cc220e4f1b1e87fee986545b9cb3
 
-Fixes:
- - http://autobuild.buildroot.org/results/8e82501a7b49da628ec026132ffca44c0c813040
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/8e82501a7b49da628ec026132ffca44c0c813040
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7367a8cd59ccbb8565277ea6ba96052169f0e16b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...s.txt-fix-build-with-python-and-cmake-3.7.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/domoticz/0002-CMakeLists.txt-fix-build-with-python-and-cmake-3.7.patch b/package/domoticz/0002-CMakeLists.txt-fix-build-with-python-and-cmake-3.7.patch
-new file mode 100644
-index 0000000000..a0adbdfed9
---- /dev/null
-+++ b/package/domoticz/0002-CMakeLists.txt-fix-build-with-python-and-cmake-3.7.patch
-@@ -0,0 +1,40 @@
-+From 4b77662232c806b8aba7680405144ad51ac3671b Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 29 Nov 2018 00:36:00 +0100
-+Subject: [PATCH] CMakeLists.txt: fix build with python and cmake <= 3.7
-+
-+domoticz will fail to build with python and older cmake
-+Indeed, find_package(PythonLibs 3.4) will not recognize python 3.7 until
-+cmake 3.7 and the following commit:
-+https://github.com/Kitware/CMake/commit/c31573b9641e0f1bc7a34149506db51f3494323b
-+
-+To fix this, add a call to find_package(PythonInterp 3.4). Indeed, if
-+FindPythonInterp has already found the major and minor version, that
-+version will be inserted between the user supplied versions and the
-+stock version list since cmake in version 3.1 and
-+https://github.com/Kitware/CMake/commit/3816cd2dc7a7cc220e4f1b1e87fee986545b9cb3
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/8e82501a7b49da628ec026132ffca44c0c813040
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/domoticz/domoticz/pull/2889]
-+---
-+ CMakeLists.txt | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index f4e38b88..41003a0c 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -125,6 +125,7 @@ ENDIF(USE_BUILTIN_SQLITE)
-+ 
-+ option(USE_PYTHON "Use Python for Plugins and Event-Scripts" YES)
-+ IF(USE_PYTHON)
-++  find_package(PythonInterp 3.4)
-+   find_package(PythonLibs 3.4)
-+   IF(PYTHONLIBS_FOUND)
-+     MESSAGE(STATUS "Python3 includes found at: ${PYTHON_INCLUDE_PATH}")
-+-- 
-+2.14.1
-+
+Committed to 2018.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
