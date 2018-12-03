@@ -1,49 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Dec 2018 23:11:42 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] infra/pkg-golang: enforce
- number of parallel jobs
-Message-ID: <20181203220853.B82F58A626@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 3 Dec 2018 23:13:04 +0100
+Subject: [Buildroot] [PATCH 2/2] lxc: fix build without stack protector
+In-Reply-To: <20181203230143.74e2ea17@windsurf.home>
+References: <20181203214637.6633-1-fontaine.fabrice@gmail.com>
+ <20181203214637.6633-2-fontaine.fabrice@gmail.com>
+ <20181203230143.74e2ea17@windsurf.home>
+Message-ID: <CAPi7W83MkCBb7-t_8XjuGkSvQxTJa=8pGHcFnPVSe=aPucQSQg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64c939f4abd2a2c58f3f3772a6b813af4087fef9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+Dear Thomas,
+Le lun. 3 d?c. 2018 ? 23:01, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
+>
+> Hello,
+>
+> On Mon,  3 Dec 2018 22:46:37 +0100, Fabrice Fontaine wrote:
+> > Add an option to disable the stack protector flags added in version
+> > 3.0.3 by
+> > https://github.com/lxc/lxc/commit/2268c27754152aa538db2c9e3753d72d19bcd17a
+> >
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/0b90e7dca2984652842832a41abad93ac49a9b86
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+> Thanks for working on this!
+>
+>
+> > ++if test "x$enable_hardening" = "xyes"; then
+> > ++    AX_CHECK_COMPILE_FLAG([-fstack-clash-protection], [CFLAGS="$CFLAGS -fstack-clash-protection"],,[-Werror])
+> > ++    AX_CHECK_COMPILE_FLAG([-fstack-protector-strong], [CFLAGS="$CFLAGS -fstack-protector-strong"],,[-Werror])
+> > ++    AX_CHECK_COMPILE_FLAG([-g], [CFLAGS="$CFLAGS -g"],,[-Werror])
+>
+> Why is -g handled as one of the hardening flags ? Building with
+> debugging symbols can hardly be considered "hardening" :-)
+Indeed ...
+>
+> Also, is upstream going to accept this --enable/--disable option ?
+> Should we instead use AX_CHECK_LINK_FLAG() ?
+I didn't think about this solution and I have not send this second
+patch upstream yet. I will try it and send a v2.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+Best Regards,
 
-By default, the go compiler will spawn as many jobs as there are CPUs
-available, thus possibily over-shooting the limits set by the user.
-
-Make it abide by the user's wish, and specify the number of jobs allowed
-to run.
-
-We can do so without fear of a package failing to build in parallel,
-because they were already all building in parallel, as that is the
-default for the go compiler.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5af65f65570de0d5cdd704fa120a80d12a51c1ae)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pkg-golang.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-index 6eacd14180..4f2c7e77e1 100644
---- a/package/pkg-golang.mk
-+++ b/package/pkg-golang.mk
-@@ -55,8 +55,10 @@ ifeq ($(BR2_STATIC_LIBS),y)
- $(2)_LDFLAGS += -extldflags '-static'
- endif
- 
--$(2)_BUILD_OPTS += -ldflags "$$($(2)_LDFLAGS)"
--$(2)_BUILD_OPTS += -tags "$$($(2)_TAGS)"
-+$(2)_BUILD_OPTS += \
-+	-ldflags "$$($(2)_LDFLAGS)" \
-+	-tags "$$($(2)_TAGS)" \
-+	-p $(PARALLEL_JOBS)
- 
- # Target packages need the Go compiler on the host.
- $(2)_DEPENDENCIES += host-go
+Fabrice
