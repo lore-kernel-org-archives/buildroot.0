@@ -1,66 +1,37 @@
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Mon, 3 Dec 2018 15:36:53 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2018-12-02
-In-Reply-To: <20181203153431.0c2a82f1@windsurf.home>
-References: <20181203070035.5D6B220D2E@mail.bootlin.com>
- <CA+Vb7ho5wgKxatazqbL4sdmtiEXiwSH8zw+LdYGr5vySBa0QBw@mail.gmail.com>
- <20181203134517.40729dd9@windsurf.home>
- <CAMRc=MeGJzA7wdAKz7UXXwvDmnDE+mgPK+kNi_UxbXgfn+RFHQ@mail.gmail.com>
- <20181203144457.33a80c9d@windsurf.home>
- <CAMRc=MdwOpMmwhjvHMOfb_wBgwQAq4_TAdUUDRSi4eYReYTcZg@mail.gmail.com>
- <20181203145612.150037bc@windsurf.home>
- <CAMRc=Mc1SqoZKZ45xT7LS9g=0mpA7Av1AJF6qEZmeFeBgL+qrw@mail.gmail.com>
- <20181203153431.0c2a82f1@windsurf.home>
-Message-ID: <CAMRc=MdGYNCPPPavGpcD=wz5v5rMbQc8RzKf8mqdVQ=wbqH-mw@mail.gmail.com>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Mon, 3 Dec 2018 15:40:27 +0100
+Subject: [Buildroot] [PATCH 15/15] ejabberd: Bump to version 18.09
+In-Reply-To: <20181203140919.eep447v4yoykd5dr@localhost>
+References: <20181126110807.31431-1-johan.oudinet@gmail.com>
+ <20181126110807.31431-16-johan.oudinet@gmail.com>
+ <20181128224322.42641f73@windsurf.home>
+ <CAJtjsKZ+FF0cHtTWVQN6b74R08XuLXvPP6ta1ObNtTbo5ckcJA@mail.gmail.com>
+ <20181203140919.eep447v4yoykd5dr@localhost>
+Message-ID: <CAJtjsKYq_otg3-p6716bwyDJNPBbwLj9CrhwHQM4SPZHsorrRA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-pon., 3 gru 2018 o 15:34 Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> napisa?(a):
+On Mon, Dec 3, 2018 at 3:09 PM Christophe Romain
+<cromain@process-one.net> wrote:
 >
-> Hello,
+> -- Johan Oudinet [2018-12-03 15:00:55 +0100]:
 >
-> On Mon, 3 Dec 2018 15:25:25 +0100, Bartosz Golaszewski wrote:
+> >For p1_oauth2, [...]
+> >I would assume it is a runtime dependency. Christophe, can you
+> >confirm?
 >
-> > > How can a bug in pulseview/libsigrokdecode after libttorrent-rasterbar ?
-> > >
-> > > See the build failures we are talking about, they affect the
-> > > libtorrent-rasterbar package:
-> > >
-> >
-> > I'm not following you here I'm afraid. This has nothing to do with any
-> > other package - this is purely a pulseview bug. It appears after my
-> > previous version bump and is confined to pulseview.
+> Yes, it's runtime dependency
 >
-> Are you looking at:
+> >For jiffy, it is a JSON parser which is used in several parts of Ejabberd.
+> >I think it is a runtime dependency as well. Christophe, do you agree?
 >
->   http://autobuild.buildroot.net/results/753/753059dd52da9ec2aa1b06f3b64b0ab5ee3e059a/build-end.log
->
-> Let me paste the relevant part:
->
-> In file included from peer_connection.cpp:56:0:
-> ../include/libtorrent/peer_connection.hpp:550:8: error: generic thunk code fails for method 'virtual void libtorrent::peer_connection::_ZThn96_NK10libtorrent15peer_connection8peer_logENS_14peer_log_alert11direction_tEPKcS4_z(libtorrent::peer_log_alert::direction_t, const char*, const char*, ...) const' which uses '...'
->    void peer_log(peer_log_alert::direction_t direction
->         ^~~~~~~~
-> make[2]: *** [peer_connection.lo] Error 1
-> make[2]: *** Waiting for unfinished jobs....
-> make[2]: Leaving directory `/home/dawncrow/buildroot-test/scripts/instance-0/output/build/libtorrent-rasterbar-1.1.11/src'
-> make[1]: *** [all-recursive] Error 1
-> make[1]: Leaving directory `/home/dawncrow/buildroot-test/scripts/instance-0/output/build/libtorrent-rasterbar-1.1.11'
-> make: *** [/home/dawncrow/buildroot-test/scripts/instance-0/output/build/libtorrent-rasterbar-1.1.11/.stamp_built] Error 2
-> make: Leaving directory `/home/dawncrow/buildroot-test/scripts/instance-0/buildroot'
->
-> Where do you see a pulseview issue ?
->
+> Yes, it's used by BOSH, ACME and REST features as well
 
-Eek I was looking at
-http://autobuild.buildroot.net/results/79ed29bdd1eec9bf7cb5003202da5ceaeb8101b6/
-why am I responding here? I have no idea. :)
+Thanks Christophe. I'll add this information to Ejabberd's Config.in,
+as suggested by Thomas.
 
-Anyway, patch for pulseview sent. Sorry for the confusion.
-
-Bart
+-- 
+Johan
