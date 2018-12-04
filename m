@@ -1,94 +1,64 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue,  4 Dec 2018 21:15:53 +0100
-Subject: [Buildroot] [PATCH v3,2/2] lxc: fix build without stack protector
-In-Reply-To: <20181204201553.11463-1-fontaine.fabrice@gmail.com>
-References: <20181204201553.11463-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181204201553.11463-2-fontaine.fabrice@gmail.com>
+Date: Tue,  4 Dec 2018 21:47:59 +0100
+Subject: [Buildroot] [PATCH 1/1] stress-ng: fix build without threads
+Message-ID: <20181204204759.26767-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stack protector has been added in version 3.0.3 by
-https://github.com/lxc/lxc/commit/2268c27754152aa538db2c9e3753d72d19bcd17a
-
-However, some compilers could missed the needed library (-lssp or
--lssp_nonshared) at linking step so use ax_check_link_flag instead of
-ax_check_compile_flag
+semaphore.h is available only if HAVE_LIB_PTHREAD and
+HAVE_SEM_POSIX are defined
 
 Fixes:
- - http://autobuild.buildroot.org/results/0b90e7dca2984652842832a41abad93ac49a9b86
+ - http://autobuild.buildroot.org/results/1c95898b2833683a22bbe2ff8471fa08d94210e1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v2 -> v3 (after review of Baruch Siach):
- - Add patch to use ac_check_link_flag
+ ...01-stress-ng.h-fix-include-on-semaphore.h.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 package/stress-ng/0001-stress-ng.h-fix-include-on-semaphore.h.patch
 
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Drop patch to add a new option, instead use
-   ax_cv_check_cflags__Werror__fstack_protector_strong=no
-
- ...gure.ac-fix-build-without-stack-protector.patch | 37 ++++++++++++++++++++++
- package/lxc/lxc.mk                                 |  2 ++
- 2 files changed, 39 insertions(+)
- create mode 100644 package/lxc/0002-configure.ac-fix-build-without-stack-protector.patch
-
-diff --git a/package/lxc/0002-configure.ac-fix-build-without-stack-protector.patch b/package/lxc/0002-configure.ac-fix-build-without-stack-protector.patch
+diff --git a/package/stress-ng/0001-stress-ng.h-fix-include-on-semaphore.h.patch b/package/stress-ng/0001-stress-ng.h-fix-include-on-semaphore.h.patch
 new file mode 100644
-index 0000000000..744fcbbed3
+index 0000000000..f3c1cbc052
 --- /dev/null
-+++ b/package/lxc/0002-configure.ac-fix-build-without-stack-protector.patch
-@@ -0,0 +1,37 @@
-+From 3aa7271157d3c815a4426c1f8eaea2f3b6dafa6a Mon Sep 17 00:00:00 2001
++++ b/package/stress-ng/0001-stress-ng.h-fix-include-on-semaphore.h.patch
+@@ -0,0 +1,34 @@
++From 818ed67f67c487d519bb55ed5656cff2dd58375e Mon Sep 17 00:00:00 2001
 +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 4 Dec 2018 08:40:05 +0100
-+Subject: [PATCH] configure.ac: fix build without stack-protector
++Date: Tue, 4 Dec 2018 21:41:12 +0100
++Subject: [PATCH] stress-ng.h: fix include on semaphore.h
 +
-+Compiler based hardening (including -fstack-protector-strong) are
-+enabled since version 3.0.3 and
-+https://github.com/lxc/lxc/commit/2268c27754152aa538db2c9e3753d72d19bcd17a
-+
-+However, some compilers could missed the needed library (-lssp or
-+-lssp_nonshared) at linking step so use ax_check_link_flag instead of
-+ax_check_compile_flag
++semaphore.h is available only if HAVE_LIB_PTHREAD and
++HAVE_SEM_POSIX are defined
 +
 +Fixes:
-+ - http://autobuild.buildroot.org/results/0b90e7dca2984652842832a41abad93ac49a9b86
++ - http://autobuild.buildroot.org/results/1c95898b2833683a22bbe2ff8471fa08d94210e1
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/ColinIanKing/stress-ng/pull/32]
 +---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ stress-ng.h | 2 ++
++ 1 file changed, 2 insertions(+)
 +
-+diff --git a/configure.ac b/configure.ac
-+index 9a9adac3..032e4cfd 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -696,7 +696,7 @@ AX_CHECK_COMPILE_FLAG([-Wcast-align], [CFLAGS="$CFLAGS -Wcast-align"],,[-Werror]
-+ AX_CHECK_COMPILE_FLAG([-Wstrict-prototypes], [CFLAGS="$CFLAGS -Wstrict-prototypes"],,[-Werror])
-+ AX_CHECK_COMPILE_FLAG([-fno-strict-aliasing], [CFLAGS="$CFLAGS -fno-strict-aliasing"],,[-Werror])
-+ AX_CHECK_COMPILE_FLAG([-fstack-clash-protection], [CFLAGS="$CFLAGS -fstack-clash-protection"],,[-Werror])
-+-AX_CHECK_COMPILE_FLAG([-fstack-protector-strong], [CFLAGS="$CFLAGS -fstack-protector-strong"],,[-Werror])
-++AX_CHECK_LINK_FLAG([-fstack-protector-strong], [CFLAGS="$CFLAGS -fstack-protector-strong"],,[-Werror])
-+ AX_CHECK_COMPILE_FLAG([-g], [CFLAGS="$CFLAGS -g"],,[-Werror])
-+ AX_CHECK_COMPILE_FLAG([--mcet -fcf-protection], [CFLAGS="$CFLAGS --mcet -fcf-protection"],,[-Werror])
-+ AX_CHECK_COMPILE_FLAG([-Werror=implicit-function-declaration], [CFLAGS="$CFLAGS -Werror=implicit-function-declaration"],,[-Werror])
++diff --git a/stress-ng.h b/stress-ng.h
++index 0485dc1c..1bf2e207 100644
++--- a/stress-ng.h
+++++ b/stress-ng.h
++@@ -53,7 +53,9 @@
++ #include <dirent.h>
++ #include <limits.h>
++ #include <setjmp.h>
+++#if defined(HAVE_LIB_PTHREAD) && (HAVE_SEM_POSIX)
++ #include <semaphore.h>
+++#endif
++ #include <sched.h>
++ 
++ #if defined(__GNUC__) && defined(__linux__)
 +-- 
 +2.14.1
 +
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index 48d5b20329..c9838fb229 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -10,6 +10,8 @@ LXC_LICENSE = LGPL-2.1+
- LXC_LICENSE_FILES = COPYING
- LXC_DEPENDENCIES = host-pkgconf
- LXC_INSTALL_STAGING = YES
-+# We're patching configure.ac
-+LXC_AUTORECONF = YES
- 
- LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
- 	--disable-werror \
 -- 
 2.14.1
