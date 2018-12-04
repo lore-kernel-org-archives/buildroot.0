@@ -1,57 +1,94 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue,  4 Dec 2018 21:15:52 +0100
-Subject: [Buildroot] [PATCH v3,1/2] lxc: fix missing include for va_list
-Message-ID: <20181204201553.11463-1-fontaine.fabrice@gmail.com>
+Date: Tue,  4 Dec 2018 21:15:53 +0100
+Subject: [Buildroot] [PATCH v3,2/2] lxc: fix build without stack protector
+In-Reply-To: <20181204201553.11463-1-fontaine.fabrice@gmail.com>
+References: <20181204201553.11463-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181204201553.11463-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Stack protector has been added in version 3.0.3 by
+https://github.com/lxc/lxc/commit/2268c27754152aa538db2c9e3753d72d19bcd17a
+
+However, some compilers could missed the needed library (-lssp or
+-lssp_nonshared) at linking step so use ax_check_link_flag instead of
+ax_check_compile_flag
+
 Fixes:
  - http://autobuild.buildroot.org/results/0b90e7dca2984652842832a41abad93ac49a9b86
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...01-stringutils-include-stdarg-for-va_list.patch | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 package/lxc/0001-stringutils-include-stdarg-for-va_list.patch
+Changes v2 -> v3 (after review of Baruch Siach):
+ - Add patch to use ac_check_link_flag
 
-diff --git a/package/lxc/0001-stringutils-include-stdarg-for-va_list.patch b/package/lxc/0001-stringutils-include-stdarg-for-va_list.patch
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Drop patch to add a new option, instead use
+   ax_cv_check_cflags__Werror__fstack_protector_strong=no
+
+ ...gure.ac-fix-build-without-stack-protector.patch | 37 ++++++++++++++++++++++
+ package/lxc/lxc.mk                                 |  2 ++
+ 2 files changed, 39 insertions(+)
+ create mode 100644 package/lxc/0002-configure.ac-fix-build-without-stack-protector.patch
+
+diff --git a/package/lxc/0002-configure.ac-fix-build-without-stack-protector.patch b/package/lxc/0002-configure.ac-fix-build-without-stack-protector.patch
 new file mode 100644
-index 0000000000..d0a450e8cf
+index 0000000000..744fcbbed3
 --- /dev/null
-+++ b/package/lxc/0001-stringutils-include-stdarg-for-va_list.patch
-@@ -0,0 +1,30 @@
-+From b7df06ad14c04f18b7db5b64d5142b802bf64cb2 Mon Sep 17 00:00:00 2001
++++ b/package/lxc/0002-configure.ac-fix-build-without-stack-protector.patch
+@@ -0,0 +1,37 @@
++From 3aa7271157d3c815a4426c1f8eaea2f3b6dafa6a Mon Sep 17 00:00:00 2001
 +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 3 Dec 2018 22:18:16 +0100
-+Subject: [PATCH] stringutils: include stdarg for va_list
++Date: Tue, 4 Dec 2018 08:40:05 +0100
++Subject: [PATCH] configure.ac: fix build without stack-protector
++
++Compiler based hardening (including -fstack-protector-strong) are
++enabled since version 3.0.3 and
++https://github.com/lxc/lxc/commit/2268c27754152aa538db2c9e3753d72d19bcd17a
++
++However, some compilers could missed the needed library (-lssp or
++-lssp_nonshared) at linking step so use ax_check_link_flag instead of
++ax_check_compile_flag
 +
 +Fixes:
 + - http://autobuild.buildroot.org/results/0b90e7dca2984652842832a41abad93ac49a9b86
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/lxc/lxc/pull/2745]
 +---
-+ src/lxc/string_utils.h | 2 ++
-+ 1 file changed, 2 insertions(+)
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/src/lxc/string_utils.h b/src/lxc/string_utils.h
-+index 4065e4e6..d4e633cc 100644
-+--- a/src/lxc/string_utils.h
-++++ b/src/lxc/string_utils.h
-+@@ -20,6 +20,8 @@
-+ #ifndef __LXC_STRING_UTILS_H
-+ #define __LXC_STRING_UTILS_H
-+ 
-++#include <stdarg.h>
-++
-+ #include "config.h"
-+ 
-+ #include "initutils.h"
++diff --git a/configure.ac b/configure.ac
++index 9a9adac3..032e4cfd 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -696,7 +696,7 @@ AX_CHECK_COMPILE_FLAG([-Wcast-align], [CFLAGS="$CFLAGS -Wcast-align"],,[-Werror]
++ AX_CHECK_COMPILE_FLAG([-Wstrict-prototypes], [CFLAGS="$CFLAGS -Wstrict-prototypes"],,[-Werror])
++ AX_CHECK_COMPILE_FLAG([-fno-strict-aliasing], [CFLAGS="$CFLAGS -fno-strict-aliasing"],,[-Werror])
++ AX_CHECK_COMPILE_FLAG([-fstack-clash-protection], [CFLAGS="$CFLAGS -fstack-clash-protection"],,[-Werror])
++-AX_CHECK_COMPILE_FLAG([-fstack-protector-strong], [CFLAGS="$CFLAGS -fstack-protector-strong"],,[-Werror])
+++AX_CHECK_LINK_FLAG([-fstack-protector-strong], [CFLAGS="$CFLAGS -fstack-protector-strong"],,[-Werror])
++ AX_CHECK_COMPILE_FLAG([-g], [CFLAGS="$CFLAGS -g"],,[-Werror])
++ AX_CHECK_COMPILE_FLAG([--mcet -fcf-protection], [CFLAGS="$CFLAGS --mcet -fcf-protection"],,[-Werror])
++ AX_CHECK_COMPILE_FLAG([-Werror=implicit-function-declaration], [CFLAGS="$CFLAGS -Werror=implicit-function-declaration"],,[-Werror])
 +-- 
 +2.14.1
 +
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index 48d5b20329..c9838fb229 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -10,6 +10,8 @@ LXC_LICENSE = LGPL-2.1+
+ LXC_LICENSE_FILES = COPYING
+ LXC_DEPENDENCIES = host-pkgconf
+ LXC_INSTALL_STAGING = YES
++# We're patching configure.ac
++LXC_AUTORECONF = YES
+ 
+ LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
+ 	--disable-werror \
 -- 
 2.14.1
