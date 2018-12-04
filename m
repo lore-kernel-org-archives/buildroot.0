@@ -1,45 +1,67 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 4 Dec 2018 21:27:01 +0100
-Subject: [Buildroot] [git commit] fs/common.mk: allow user provided
- permissions to override packages permissions
-Message-ID: <20181204205452.DA6D98A62D@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 4 Dec 2018 21:59:30 +0100
+Subject: [Buildroot] [PATCH v4 0/3] Misc fs/common.mk improvements
+In-Reply-To: <20181203210508.27831-1-thomas.petazzoni@bootlin.com>
+References: <20181203210508.27831-1-thomas.petazzoni@bootlin.com>
+Message-ID: <519cd033-a04d-bfee-a12d-02b631e6b181@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b67f0a99a94876280c3f5413225576e9e40c2fc8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Reported-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- fs/common.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index 6ad4cd0b01..077ce8903e 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -57,13 +57,14 @@ rootfs-common: $(ROOTFS_COMMON_DEPENDENCIES) target-finalize
- ifneq ($(ROOTFS_USERS_TABLES),)
- 	cat $(ROOTFS_USERS_TABLES) >> $(ROOTFS_FULL_USERS_TABLE)
- endif
-+
-+	$(call PRINTF,$(PACKAGES_PERMISSIONS_TABLE)) > $(ROOTFS_FULL_DEVICES_TABLE)
- ifneq ($(ROOTFS_DEVICE_TABLES),)
--	cat $(ROOTFS_DEVICE_TABLES) > $(ROOTFS_FULL_DEVICES_TABLE)
-+	cat $(ROOTFS_DEVICE_TABLES) >> $(ROOTFS_FULL_DEVICES_TABLE)
- ifeq ($(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
- 	$(call PRINTF,$(PACKAGES_DEVICES_TABLE)) >> $(ROOTFS_FULL_DEVICES_TABLE)
- endif
- endif
--	$(call PRINTF,$(PACKAGES_PERMISSIONS_TABLE)) >> $(ROOTFS_FULL_DEVICES_TABLE)
- 
- rootfs-common-show-depends:
- 	@echo $(ROOTFS_COMMON_DEPENDENCIES)
+On 03/12/2018 22:05, Thomas Petazzoni wrote:
+> Hello,
+> 
+> This small patch series is a new iteration of the few remaining
+> patches from Yann's series "[PATCH 0/6 v2] fs: fix and better handle
+> capabilities".
+> 
+> In Yann series, patches 1 to 3 have already been applied.
+> 
+> Patch 4 was not liked by Arnout, with some good explanation.
+> 
+> In this patch series, I propose:
+> 
+>  - An additional patch to rename FULL_DEVICE_TABLE to
+>    ROOTFS_FULL_DEVICES_TABLE to be consistent with
+>    ROOTFS_FULL_USERS_TABLE.
+> 
+>  - Yann's original PATCH 5/6, but reworked to apply without what was
+>    his PATCH 4/6.
+> 
+>  - A patch that reimplements PATCH 6/6 from Yann, but in a different
+>    way, due to the fact that his PATCH 4/6 was not taken, and
+>    therefore there is no permisson/device table split.
+
+ Applied series to master, thanks.
+
+
+ Regards,
+ Arnout
+
+> 
+> Changes since v3:
+> 
+>  - Reintegrate the idea of Yann's PATCH 6/6 (which was correct after
+>    all!), but in a way that works without splitting permission/device
+>    tables, since PATCH 4/6 from Yann was not accepted.
+> 
+> Thanks,
+> 
+> Thomas
+> 
+> 
+> Thomas Petazzoni (2):
+>   fs/common.mk: rename FULL_DEVICE_TABLE to ROOTFS_FULL_DEVICES_TABLE
+>   fs/common.mk: make sure that static devices from packages are created
+> 
+> Yann E. MORIN (1):
+>   fs/common.mk: allow user provided permissions to override packages
+>     permissions
+> 
+>  fs/common.mk | 13 +++++++------
+>  1 file changed, 7 insertions(+), 6 deletions(-)
+> 
