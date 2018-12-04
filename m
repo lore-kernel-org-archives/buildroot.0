@@ -1,64 +1,74 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue,  4 Dec 2018 21:47:59 +0100
-Subject: [Buildroot] [PATCH 1/1] stress-ng: fix build without threads
-Message-ID: <20181204204759.26767-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 4 Dec 2018 21:26:39 +0100
+Subject: [Buildroot] [git commit] fs/common.mk: rename FULL_DEVICE_TABLE to
+ ROOTFS_FULL_DEVICES_TABLE
+Message-ID: <20181204205452.CE9CE8A62D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-semaphore.h is available only if HAVE_LIB_PTHREAD and
-HAVE_SEM_POSIX are defined
+commit: https://git.buildroot.net/buildroot/commit/?id=93434aedaaf30a6a6a1591975e62609f7d789758
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/1c95898b2833683a22bbe2ff8471fa08d94210e1
+In commit 6b50f988ad0a6044530b30344d52139da2994237 ("fs/common.mk:
+rename internal variable"), USERS_TABLE was renamed to
+ROOTFS_FULL_USERS_TABLE.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+This commit follows the same direction by renaming the
+FULL_DEVICE_TABLE variable to ROOTFS_FULL_DEVICE_TABLE.
+
+In addition, for consistency, the file itself is renamed
+full_device_table.txt.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...01-stress-ng.h-fix-include-on-semaphore.h.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/stress-ng/0001-stress-ng.h-fix-include-on-semaphore.h.patch
+ fs/common.mk | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/stress-ng/0001-stress-ng.h-fix-include-on-semaphore.h.patch b/package/stress-ng/0001-stress-ng.h-fix-include-on-semaphore.h.patch
-new file mode 100644
-index 0000000000..f3c1cbc052
---- /dev/null
-+++ b/package/stress-ng/0001-stress-ng.h-fix-include-on-semaphore.h.patch
-@@ -0,0 +1,34 @@
-+From 818ed67f67c487d519bb55ed5656cff2dd58375e Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 4 Dec 2018 21:41:12 +0100
-+Subject: [PATCH] stress-ng.h: fix include on semaphore.h
-+
-+semaphore.h is available only if HAVE_LIB_PTHREAD and
-+HAVE_SEM_POSIX are defined
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/1c95898b2833683a22bbe2ff8471fa08d94210e1
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/ColinIanKing/stress-ng/pull/32]
-+---
-+ stress-ng.h | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/stress-ng.h b/stress-ng.h
-+index 0485dc1c..1bf2e207 100644
-+--- a/stress-ng.h
-++++ b/stress-ng.h
-+@@ -53,7 +53,9 @@
-+ #include <dirent.h>
-+ #include <limits.h>
-+ #include <setjmp.h>
-++#if defined(HAVE_LIB_PTHREAD) && (HAVE_SEM_POSIX)
-+ #include <semaphore.h>
-++#endif
-+ #include <sched.h>
-+ 
-+ #if defined(__GNUC__) && defined(__linux__)
-+-- 
-+2.14.1
-+
--- 
-2.14.1
+diff --git a/fs/common.mk b/fs/common.mk
+index 6c67fbfbbd..6ad4cd0b01 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -28,12 +28,12 @@
+ # macro will automatically generate a compressed filesystem image.
+ 
+ FS_DIR = $(BUILD_DIR)/buildroot-fs
+-FULL_DEVICE_TABLE = $(FS_DIR)/device_table.txt
+ ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE) \
+ 	$(BR2_ROOTFS_STATIC_DEVICE_TABLE))
+ 
+ ROOTFS_USERS_TABLES = $(call qstrip,$(BR2_ROOTFS_USERS_TABLES))
+ 
++ROOTFS_FULL_DEVICES_TABLE = $(FS_DIR)/full_devices_table.txt
+ ROOTFS_FULL_USERS_TABLE = $(FS_DIR)/full_users_table.txt
+ 
+ ifeq ($(BR2_REPRODUCIBLE),y)
+@@ -58,12 +58,12 @@ ifneq ($(ROOTFS_USERS_TABLES),)
+ 	cat $(ROOTFS_USERS_TABLES) >> $(ROOTFS_FULL_USERS_TABLE)
+ endif
+ ifneq ($(ROOTFS_DEVICE_TABLES),)
+-	cat $(ROOTFS_DEVICE_TABLES) > $(FULL_DEVICE_TABLE)
++	cat $(ROOTFS_DEVICE_TABLES) > $(ROOTFS_FULL_DEVICES_TABLE)
+ ifeq ($(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
+-	$(call PRINTF,$(PACKAGES_DEVICES_TABLE)) >> $(FULL_DEVICE_TABLE)
++	$(call PRINTF,$(PACKAGES_DEVICES_TABLE)) >> $(ROOTFS_FULL_DEVICES_TABLE)
+ endif
+ endif
+-	$(call PRINTF,$(PACKAGES_PERMISSIONS_TABLE)) >> $(FULL_DEVICE_TABLE)
++	$(call PRINTF,$(PACKAGES_PERMISSIONS_TABLE)) >> $(ROOTFS_FULL_DEVICES_TABLE)
+ 
+ rootfs-common-show-depends:
+ 	@echo $(ROOTFS_COMMON_DEPENDENCIES)
+@@ -125,7 +125,7 @@ $$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME): $$(ROOTFS_$(2)_DEPENDENCIES)
+ 
+ 	echo "chown -h -R 0:0 $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+ 	PATH=$$(BR_PATH) $$(TOPDIR)/support/scripts/mkusers $$(ROOTFS_FULL_USERS_TABLE) $$(TARGET_DIR) >> $$(FAKEROOT_SCRIPT)
+-	echo "$$(HOST_DIR)/bin/makedevs -d $$(FULL_DEVICE_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
++	echo "$$(HOST_DIR)/bin/makedevs -d $$(ROOTFS_FULL_DEVICES_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+ 	$$(foreach s,$$(call qstrip,$$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
+ 		echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
+ 		echo $$(EXTRA_ENV) $$(s) $$(TARGET_DIR) $$(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $$(FAKEROOT_SCRIPT)$$(sep))
