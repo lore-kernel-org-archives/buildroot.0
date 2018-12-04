@@ -1,75 +1,233 @@
-From: Matthew Weber <Matthew.Weber@collins.com>
-Date: Tue, 4 Dec 2018 09:23:22 -0600
-Subject: [Buildroot] [External] Re: Stack protector choices [was: [PATCH
- v2, 2/2] lxc: fix build without stack protector]
-In-Reply-To: <20181204110854.17685bf4@windsurf>
-References: <20181203223855.10152-1-fontaine.fabrice@gmail.com>
- <20181203223855.10152-2-fontaine.fabrice@gmail.com>
- <20181204055439.rhfgmyb6w7ijykx6@sapphire.tkos.co.il>
- <20181204091029.01a78c0e@windsurf>
- <42790e46-35a7-299a-cbae-4b83383287a3@mind.be>
- <20181204110854.17685bf4@windsurf>
-Message-ID: <CANQCQpaihpM5fYC10YcSDbpeLEQUSsfbZd3ZGTyiZYeBJgw6YA@mail.gmail.com>
+From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@collabora.com>
+Date: Tue,  4 Dec 2018 11:02:54 -0500
+Subject: [Buildroot] [RFC] raspberrypi: post-image.sh arguments as
+ config.txt properties
+Message-ID: <20181204160254.15785-1-gael.portay@collabora.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+This patch improves the post-images script using the arguments given to
+the script as config.txt properties.
 
-On Tue, Dec 4, 2018 at 4:09 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Tue, 4 Dec 2018 10:35:05 +0100, Arnout Vandecappelle wrote:
->
-> >  If you look at it from a practical point of view, we can only do option (1), or
-> > "we sometimes enforce the system-level configuration options, but not
-> > consistently". Indeed, if a package does the stack protector detection
-> > correctly, chances are we'll never even notice that it enables stack protector.
->
-> I was going to say that the checksec tool could help us detect such
-> situations (i.e SSP is disabled at the Buildroot level, but some
-> binaries end up being built with SSP). However, it seems like checksec
-> is not checking SSP support, but PIE, RELRO and a few other things.
->
+As example, the arguments below:
 
-It can look for stack canaries (unsure if it would catch all types of
-SSP).  However, checksec takes a lot of time to run readelf on each
-executable.
+	--dtoverlay=pi3-miniuart-bt --dtparam=audio=on
 
-> >  So in practice, I think the policy should be (as it is for other policy
-> > options, e.g. debug):
-> >
-> > 1. If there is no configuration option for it, let the package decide.
-> >
-> > 2. If there is a configuration option that does the same as our option, disable
-> > it and let the toolchain wrapper apply the correct option.
+appends to:
 
-Some package level test/cfg logic may have issues with the toolchain
-wrapper enforcing it.  I ran into a case with FORTIFY_SOURCE and the
-Kernel toolchain feature test cases where a optimization level must be
-provided with the FORTIFY option.  Since they were dropping all flags
-and we set the FORTIFY_SOURCE, the build failed with a optimization
-level required error.  SSP at least doesn't have that sort of a
-dependency.
+	dtoverlay=pi3-miniuart-bt
+	dtparam=audio=on
 
-> >
-> > 3. If there is a configuration option and it does something more, enable it
-> > automatically based on the global Buildroot option.
-> >
-> > 4. In very exceptional cases where (3) is even more invasive, offer an option to
-> > the user (but only if the toolchain supports it, of course).
-> >
-> >  An example of (3) would be the kernel's stack protector which is a little more
-> > than just -fstack-protector so it needs to be enabled explicitly. An example of
-> > (4) would be -fsanitize=address vs. KASAN - KASAN is a way more invasive
-> > operation than gcc's address sanitizer. Note that specifically for the kernel,
-> > we of course always do (4) - kernel config is provided separately. But the
-> > kernel is just an easy example that everybody knows.
+Signed-off-by: Ga?l PORTAY <gael.portay@collabora.com>
+---
+Hi all,
 
-(Thomas, let me know if this email was rejected when set to gmail users)
+The goal of this patch is to simplify the customisation of the
+config.txt.
 
-Matt
+It takes arguments given to the post-image.sh (thanks to the config
+option BR2_ROOTFS_POST_SCRIPT_ARGS) and it appends them to the
+config.txt file.
+
+That way, it is easy to add device-tree overlays without making
+modification to the existing post-image.sh script.
+
+As examples:
+
+	BR2_ROOTFS_POST_SCRIPT_ARGS="--dtoverlay=pi3-miniuart-bt --dtparam=audio=on"
+
+Or [*]:
+	BR2_ROOTFS_PSOT_SCRIPT_ARGS="--kernel=Image --enable_uart=1" # to replace --aarch64
+
+Or [*]:
+
+	BR2_ROOTFS_POST_SCRIPT_ARGS="--kernel=u-boot.bin" # to boot u-boot instead of a linux kernel
+
+I also suggest also to start from a empty file config.txt (to avoid to
+run sed scripts) and to rewrite it at every invocations.
+
+What's your opinion?
+
+[*]: Sould not work as is as it script should starts with an empty
+config.txt file.
+
+Regards,
+Gael
+
+ board/raspberrypi/genimage-raspberrypi.cfg    |  2 +-
+ board/raspberrypi/genimage-raspberrypi0.cfg   |  2 +-
+ board/raspberrypi/genimage-raspberrypi0w.cfg  |  2 +-
+ board/raspberrypi/genimage-raspberrypi2.cfg   |  2 +-
+ .../raspberrypi/genimage-raspberrypi3-64.cfg  |  2 +-
+ board/raspberrypi/genimage-raspberrypi3.cfg   |  2 +-
+ board/raspberrypi/post-image.sh               | 27 +++++++++++--------
+ configs/raspberrypi3_defconfig                |  2 +-
+ configs/raspberrypi3_qt5we_defconfig          |  2 +-
+ 9 files changed, 24 insertions(+), 19 deletions(-)
+
+diff --git a/board/raspberrypi/genimage-raspberrypi.cfg b/board/raspberrypi/genimage-raspberrypi.cfg
+index bd5166a0f3..b659f717bf 100644
+--- a/board/raspberrypi/genimage-raspberrypi.cfg
++++ b/board/raspberrypi/genimage-raspberrypi.cfg
+@@ -6,7 +6,7 @@ image boot.vfat {
+       "bcm2708-rpi-cm.dtb",
+       "rpi-firmware/bootcode.bin",
+       "rpi-firmware/cmdline.txt",
+-      "rpi-firmware/config.txt",
++      "config.txt",
+       "rpi-firmware/fixup.dat",
+       "rpi-firmware/start.elf",
+       "zImage"
+diff --git a/board/raspberrypi/genimage-raspberrypi0.cfg b/board/raspberrypi/genimage-raspberrypi0.cfg
+index a9d4c4501f..cb0691839d 100644
+--- a/board/raspberrypi/genimage-raspberrypi0.cfg
++++ b/board/raspberrypi/genimage-raspberrypi0.cfg
+@@ -4,7 +4,7 @@ image boot.vfat {
+       "bcm2708-rpi-b-plus.dtb",
+       "rpi-firmware/bootcode.bin",
+       "rpi-firmware/cmdline.txt",
+-      "rpi-firmware/config.txt",
++      "config.txt",
+       "rpi-firmware/fixup.dat",
+       "rpi-firmware/start.elf",
+       "zImage"
+diff --git a/board/raspberrypi/genimage-raspberrypi0w.cfg b/board/raspberrypi/genimage-raspberrypi0w.cfg
+index 3aafd9b6fc..004307a997 100644
+--- a/board/raspberrypi/genimage-raspberrypi0w.cfg
++++ b/board/raspberrypi/genimage-raspberrypi0w.cfg
+@@ -4,7 +4,7 @@ image boot.vfat {
+       "bcm2708-rpi-0-w.dtb",
+       "rpi-firmware/bootcode.bin",
+       "rpi-firmware/cmdline.txt",
+-      "rpi-firmware/config.txt",
++      "config.txt",
+       "rpi-firmware/fixup.dat",
+       "rpi-firmware/start.elf",
+       "rpi-firmware/overlays",
+diff --git a/board/raspberrypi/genimage-raspberrypi2.cfg b/board/raspberrypi/genimage-raspberrypi2.cfg
+index a3be2a3442..65a6494066 100644
+--- a/board/raspberrypi/genimage-raspberrypi2.cfg
++++ b/board/raspberrypi/genimage-raspberrypi2.cfg
+@@ -4,7 +4,7 @@ image boot.vfat {
+       "bcm2709-rpi-2-b.dtb",
+       "rpi-firmware/bootcode.bin",
+       "rpi-firmware/cmdline.txt",
+-      "rpi-firmware/config.txt",
++      "config.txt",
+       "rpi-firmware/fixup.dat",
+       "rpi-firmware/start.elf",
+       "zImage"
+diff --git a/board/raspberrypi/genimage-raspberrypi3-64.cfg b/board/raspberrypi/genimage-raspberrypi3-64.cfg
+index 0d0ca750a7..5427df9816 100644
+--- a/board/raspberrypi/genimage-raspberrypi3-64.cfg
++++ b/board/raspberrypi/genimage-raspberrypi3-64.cfg
+@@ -6,7 +6,7 @@ image boot.vfat {
+       "bcm2837-rpi-3-b.dtb",
+       "rpi-firmware/bootcode.bin",
+       "rpi-firmware/cmdline.txt",
+-      "rpi-firmware/config.txt",
++      "config.txt",
+       "rpi-firmware/fixup.dat",
+       "rpi-firmware/start.elf",
+       "Image"
+diff --git a/board/raspberrypi/genimage-raspberrypi3.cfg b/board/raspberrypi/genimage-raspberrypi3.cfg
+index 0a547241f4..c9950631ae 100644
+--- a/board/raspberrypi/genimage-raspberrypi3.cfg
++++ b/board/raspberrypi/genimage-raspberrypi3.cfg
+@@ -6,7 +6,7 @@ image boot.vfat {
+       "bcm2710-rpi-cm3.dtb",
+       "rpi-firmware/bootcode.bin",
+       "rpi-firmware/cmdline.txt",
+-      "rpi-firmware/config.txt",
++      "config.txt",
+       "rpi-firmware/fixup.dat",
+       "rpi-firmware/start.elf",
+       "rpi-firmware/overlays",
+diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
+index 70447cd48b..fee19d1949 100755
+--- a/board/raspberrypi/post-image.sh
++++ b/board/raspberrypi/post-image.sh
+@@ -7,13 +7,16 @@ BOARD_NAME="$(basename ${BOARD_DIR})"
+ GENIMAGE_CFG="${BOARD_DIR}/genimage-${BOARD_NAME}.cfg"
+ GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+ 
++cp "${BINARIES_DIR}/rpi-firmware/config.txt" "${BINARIES_DIR}/config.txt"
++
+ for arg in "$@"
+ do
+ 	case "${arg}" in
++		# Leave as is for backward compatibility (same as --dtoverlay=pi3-miniuart-bt)
+ 		--add-pi3-miniuart-bt-overlay)
+-		if ! grep -qE '^dtoverlay=' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
++		if ! grep -qE '^dtoverlay=pi3-miniuart-bt' "${BINARIES_DIR}/config.txt"; then
+ 			echo "Adding 'dtoverlay=pi3-miniuart-bt' to config.txt (fixes ttyAMA0 serial console)."
+-			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
++			cat << __EOF__ >> "${BINARIES_DIR}/config.txt"
+ 
+ # fixes rpi3 ttyAMA0 serial console
+ dtoverlay=pi3-miniuart-bt
+@@ -22,9 +25,9 @@ __EOF__
+ 		;;
+ 		--aarch64)
+ 		# Run a 64bits kernel (armv8)
+-		sed -e '/^kernel=/s,=.*,=Image,' -i "${BINARIES_DIR}/rpi-firmware/config.txt"
+-		if ! grep -qE '^arm_64bit=1' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
+-			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
++		sed -e '/^kernel=/s,=.*,=Image,' -i "${BINARIES_DIR}/config.txt"
++		if ! grep -qE '^arm_64bit=1' "${BINARIES_DIR}/config.txt"; then
++			cat << __EOF__ >> "${BINARIES_DIR}/config.txt"
+ 
+ # enable 64bits support
+ arm_64bit=1
+@@ -32,18 +35,20 @@ __EOF__
+ 		fi
+ 
+ 		# Enable uart console
+-		if ! grep -qE '^enable_uart=1' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
+-			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
++		if ! grep -qE '^enable_uart=1' "${BINARIES_DIR}/config.txt"; then
++			cat << __EOF__ >> "${BINARIES_DIR}/config.txt"
+ 
+ # enable rpi3 ttyS0 serial console
+ enable_uart=1
+ __EOF__
+ 		fi
+ 		;;
+-		--gpu_mem_256=*|--gpu_mem_512=*|--gpu_mem_1024=*)
+-		# Set GPU memory
+-		gpu_mem="${arg:2}"
+-		sed -e "/^${gpu_mem%=*}=/s,=.*,=${gpu_mem##*=}," -i "${BINARIES_DIR}/rpi-firmware/config.txt"
++		--*=*)
++		# Set option=value
++		optval="${arg:2}"
++		cat << __EOF__ >> "${BINARIES_DIR}/config.txt"
++$optval
++__EOF__
+ 		;;
+ 	esac
+ 
+diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
+index 75f2dec9da..8356d0d794 100644
+--- a/configs/raspberrypi3_defconfig
++++ b/configs/raspberrypi3_defconfig
+@@ -32,4 +32,4 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay"
++BR2_ROOTFS_POST_SCRIPT_ARGS="--dtoverlay=pi3-miniuart-bt"
+diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
+index c8d0be8cba..74318a3dd8 100644
+--- a/configs/raspberrypi3_qt5we_defconfig
++++ b/configs/raspberrypi3_qt5we_defconfig
+@@ -46,4 +46,4 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="360M"
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay --gpu_mem_1024=200"
++BR2_ROOTFS_POST_SCRIPT_ARGS="--dtoverlay=pi3-miniuart-bt --gpu_mem_1024=200"
+-- 
+2.19.2
