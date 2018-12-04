@@ -1,41 +1,69 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Tue,  4 Dec 2018 05:37:47 +0100
-Subject: [Buildroot] [PATCH 0/7] suppport/testing: more Perl/CPAN modules
-Message-ID: <20181204043754.24556-1-francois.perrad@gadz.org>
+Date: Tue,  4 Dec 2018 05:37:48 +0100
+Subject: [Buildroot] [PATCH 1/7] scancpan: mark XS modules in docstring of
+ test
+In-Reply-To: <20181204043754.24556-1-francois.perrad@gadz.org>
+References: <20181204043754.24556-1-francois.perrad@gadz.org>
+Message-ID: <20181204043754.24556-2-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Testing pure Perl modules has few added value.
-So, it is important that XS modules are marked.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ utils/scancpan | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-Francois Perrad (7):
-  scancpan: mark XS modules in docstring of test
-  support/testing/tests/packages/test_perl_*: regeneration
-  scancpan: allow the generation of more tests
-  support/testing: add perl-dbd-mysql test
-  support/testing: add perl-encode-decode test
-  support/testing: add perl-io-socket-multicast test
-  support/testing: add perl-io-socket-ssl test
-
- .../tests/package/test_perl_class_load.py     |  4 ++--
- .../tests/package/test_perl_dbd_mysql.py      | 21 +++++++++++++++++++
- .../tests/package/test_perl_encode_detect.py  | 20 ++++++++++++++++++
- .../tests/package/test_perl_gdgraph.py        |  2 +-
- .../package/test_perl_io_socket_multicast.py  | 21 +++++++++++++++++++
- .../tests/package/test_perl_io_socket_ssl.py  | 21 +++++++++++++++++++
- .../tests/package/test_perl_libwww_perl.py    |  2 +-
- .../tests/package/test_perl_mail_dkim.py      |  6 +++---
- .../testing/tests/package/test_perl_x10.py    |  2 +-
- .../tests/package/test_perl_xml_libxml.py     |  2 +-
- utils/scancpan                                | 12 ++++++-----
- 11 files changed, 99 insertions(+), 14 deletions(-)
- create mode 100644 support/testing/tests/package/test_perl_dbd_mysql.py
- create mode 100644 support/testing/tests/package/test_perl_encode_detect.py
- create mode 100644 support/testing/tests/package/test_perl_io_socket_multicast.py
- create mode 100644 support/testing/tests/package/test_perl_io_socket_ssl.py
-
+diff --git a/utils/scancpan b/utils/scancpan
+index 2a58591e5..45709e166 100755
+--- a/utils/scancpan
++++ b/utils/scancpan
+@@ -519,6 +519,7 @@ my %dist;               # name -> metacpan data
+ my %need_target;        # name -> 1 if target package is needed
+ my %need_host;          # name -> 1 if host package is needed
+ my %need_dlopen;        # name -> 1 if requires dynamic library
++my %is_xs;              # name -> 1 if XS module
+ my %deps_build;         # name -> list of host dependencies
+ my %deps_runtime;       # name -> list of target dependencies
+ my %license_files;      # name -> hash of license files
+@@ -614,7 +615,7 @@ sub fetch {
+             my $author = $result->{author};
+             my $release = $name . q{-} . $result->{version};
+             my $manifest = $mcpan->source( author => $author, release => $release, path => 'MANIFEST' );
+-            $need_dlopen{$name} = is_xs( $manifest );
++            $need_dlopen{$name} = $is_xs{$name} = is_xs( $manifest );
+             foreach my $fname (find_license_files( $manifest )) {
+                 my $license = $mcpan->source( author => $author, release => $release, path => $fname );
+                 $license_files{$name}->{$fname} = sha256_hex( $license );
+@@ -811,6 +812,7 @@ while (my ($distname, $dist) = each %dist) {
+         $classname =~ s|-||g;
+         my $modname = $distname;
+         $modname =~ s|-|::|g;
++        my $mark = $is_xs{$distname} ? q{   XS} : q{};
+         my @indirect = (get_indirect_dependencies( $distname ));
+         say qq{write ${testname}} unless $quiet;
+         open my $fh, q{>}, $testname;
+@@ -820,16 +822,16 @@ while (my ($distname, $dist) = each %dist) {
+         say {$fh} qq{class TestPerl${classname}(TestPerlBase):};
+         say {$fh} qq{    """};
+         say {$fh} qq{    package:};
+-        say {$fh} qq{        ${distname}};
++        say {$fh} qq{        ${distname}${mark}};
+         say {$fh} qq{    direct dependencies:};
+         foreach my $dep (sort @{$deps_runtime{$distname}}) {
+-            my $mark = want_test( $dep ) ? q{ *} : q{};
++            $mark = $is_xs{$dep} ? q{   XS} : q{};
+             say {$fh} qq{        ${dep}${mark}};
+         }
+         if (scalar @indirect > 0) {
+             say {$fh} qq{    indirect dependencies:};
+             foreach my $dep (sort @indirect) {
+-                my $mark = want_test( $dep ) ? q{ *} : q{};
++                $mark = $is_xs{$dep} ? q{   XS} : q{};
+                 say {$fh} qq{        ${dep}${mark}};
+             }
+         }
 -- 
 2.17.1
