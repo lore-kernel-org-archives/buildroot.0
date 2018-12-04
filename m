@@ -1,58 +1,34 @@
-From: LP C <lpdev@cordier.org>
-Date: Tue, 4 Dec 2018 23:51:35 +0100
-Subject: [Buildroot] Submodule granularity instead of LIB_GIT_SUBMODULES
-In-Reply-To: <8f33142c-71ad-24c6-bad4-deea26f05ce6@mind.be>
-References: <8f33142c-71ad-24c6-bad4-deea26f05ce6@mind.be>
-Message-ID: <1543963868.local-1e36d9eb-f93e-v1.5.1-da141eaf@getmailspring.com>
+From: Joel Carlson <JoelsonCarl@gmail.com>
+Date: Tue, 4 Dec 2018 16:15:46 -0700
+Subject: [Buildroot] [bug] SDK with Arm AArch64 2018.08 toolchain can't find
+ ld-linux-aarch64.so.1
+Message-ID: <CA+1k=2ZwmYVLve3d7SJCXho7Un9aGLzNKNW3ztgyuTpQC92r4A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you for your reply, I will try this!
+I was upgrading from 2018.08.3 to 2018.11.  I did the build with "Arm
+AArch64 2018.08" as the toolchain.  I ran make sdk, extracted it, and
+ran relocate-sdk.sh.  Then I have a simple C program test.c that is
+just main() and returns 0.
 
-On Dec 3 2018, at 5:40 pm, Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 28/11/2018 16:28, lpdev at cordier.org wrote:
-> > Hi there,
-> >
-> > I have a repository that have few submodules:
-> > - myLib
-> > -> submodule1 (~10MB)
-> > -> submodule2 (8GB)
-> >
-> > Actually I don't need to initialize submodule2 because myLib does not request it
-> > while compiling for my buildroot distro.
-> >
-> > The option xxx_GIT_SUBMODULES is doing a recursive init on all submodules of the
-> > project. As I am using Buildroot 2018.02, there is no support for the latest git
-> > patches that improve the overall space overhead and avoid compressing the repo.
-> >
-> > Each time I am updating the git hash of my package, buildroot is cloning the
-> > repo, getting the subodules (from scratch), compress tar it, and then start the
-> > compilation. I was wondering if there is a way to specify _GIT_SUBMODULES to no,
-> > but still get the submodule1, without breaking buildroot's download philosophy.
->
->
-> No, there's no simple way to do that. And adding the infrastructure to do that
-> would lead us way too far.
->
-> However, what you can do is to leave _GIT_SUBMODULES to NO, add submodule1 as
-> <PKG>_EXTRA_DOWNLOADS and extract it in a <PKG>_POST_EXTRACT_HOOK. This does
-> mean you have to manually
->
-> Unfortunately, I'm not sure if it is possible to use the git download method
-> for extra downloads. You can add git+ in front of the URL, but I don't think
-> there's a way to specify the ref to check out... So perhaps you'll instead have
-> to define a post-download hook that calls dl-wrapper directly...
->
-> Regards,
-> Arnout
->
+When I run:
+$ ./tt_compute_sdk/bin/aarch64-linux-gnu-gcc
+--sysroot=/home/joelcarlson/work/sdks/tt_compute_sdk/aarch64-buildroot-linux-gnu/sysroot
+test.c
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181204/b9ca9683/attachment.html>
+I get:
+/home/joelcarlson/work/sdks/tt_compute_sdk/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.2.1/../../../../aarch64-linux-gnu/bin/ld:
+cannot find /lib/ld-linux-aarch64.so.1 inside
+/home/joelcarlson/work/sdks/tt_compute_sdk/aarch64-buildroot-linux-gnu/sysroot
+collect2: error: ld returned 1 exit status
+
+But ld-linux-aarch64.so.1 does exist at
+/home/joelcarlson/work/sdks/tt_compute_sdk/aarch64-buildroot-linux-gnu/sysroot/lib/ld-linux-aarch64.so.1
+
+I did a clean build with it configured to use the "Linaro AArch64
+2018.05" toolchain (which I believe is the same one that I had been
+using in 2018.08.3).  I made, extracted, and relocated the sdk, and I
+was able to compile test.c without any issue.
