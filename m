@@ -1,13 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 4 Dec 2018 09:28:48 +0100
-Subject: [Buildroot] [PATCH] package/systemd: needs glibc
-In-Reply-To: <d1142785-90ff-2a41-b95a-263e10eb120d@mind.be>
-References: <20181121210556.18619-1-yann.morin.1998@free.fr>
- <87y39lm6e8.fsf@dell.be.48ers.dk>
- <20181122174417.7e101a15@windsurf>
- <20181123092754.4dd189cc@windsurf>
- <d1142785-90ff-2a41-b95a-263e10eb120d@mind.be>
-Message-ID: <20181204092848.26551792@windsurf>
+Date: Tue, 4 Dec 2018 09:31:42 +0100
+Subject: [Buildroot] [PATCH v2,
+ 2/2] lxc: fix build without stack protector
+In-Reply-To: <20181204081511.3vxelx4rdxykqozt@sapphire.tkos.co.il>
+References: <20181203223855.10152-1-fontaine.fabrice@gmail.com>
+ <20181203223855.10152-2-fontaine.fabrice@gmail.com>
+ <20181204055439.rhfgmyb6w7ijykx6@sapphire.tkos.co.il>
+ <20181204091029.01a78c0e@windsurf>
+ <20181204081511.3vxelx4rdxykqozt@sapphire.tkos.co.il>
+Message-ID: <20181204093142.51b1f30d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,59 +17,38 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 27 Nov 2018 22:20:37 +0100, Arnout Vandecappelle wrote:
+On Tue, 4 Dec 2018 10:15:11 +0200, Baruch Siach wrote:
 
->  It's hard to predict the efficiency of SQL statements, but I would expect
-> something like this to be more efficient:
+> > The question is whether we want SSP support to be enabled as soon as
+> > the toolchain *has* SSP support, or only when the user explicitly
+> > request SSP support using BR2_SSP_{REGULAR,STRONG,ALL} ?
+> > 
+> > This is a real policy decision:
+> > 
+> >  - Do we let the packages default to what they think is good (of course
+> >    as long as the toolchain provides what's needed) ?
+> > 
+> >  - Or do we enforce the system-level configuration options that
+> >    Buildroot has ?  
 > 
-> select * from results
->   inner join (select result_id from symbol_per_result A, symbol_per_result B
->               where A.result_id = B.result_id
->                 and A.symbol_id = (select id from config_symbol
->                                    where name = "BR2_INIT_SYSTEMD")
->                 and A.value = "y"
->                 and B.symbol_id = (select id from config_symbol
->                                    where name = "BR2_TOOLCHAIN_USES_UCLIBC")
->                 and B.value = "y")
->     as foo
->   on foo.result_id = results.id
-> where builddate > '2018-09-01';
+> I think we should let upstream packages decide when to enable SSP. This patch, 
+> however, disables SSP unconditionally, AFAICS. I don't think we want to do 
+> that. So I suggest to force SSP disable only when BR2_TOOLCHAIN_HAS_SSP is 
+> disabled.
 
-This query doesn't work as-is. First:
+Well, Fabrice patch doesn't really disable SSP unconditionally: it
+tells the package to never enable SSP on its own.
 
-ERROR 1052 (23000): Column 'result_id' in field list is ambiguous
+However, if one of the global BR2_SSP_{REGULAR,STRONG,ALL} options are
+enabled, the compiler wrapper will properly build everything with SSP
+support, including lxc. So basically, Fabrice's patch is a correct
+implementation for the option (2) I described above.
 
-Because the "select result_id" in the inner query is ambiguous, using
-A.result_id gets passed that.
+I don't (yet?) have a strong opinion on which of the two options we
+want to chose, but Fabrice's solution does implement one of them
+correctly :)
 
-Then, the "value" field does not exist in the symbol_per_result table.
-It's the config_symbol table that associates a symbol name and its
-value, so I changed the inner query to:
-
-select A.result_id from symbol_per_result A, symbol_per_result B
-	where A.result_id = B.result_id and
-	A.symbol_id = (select id from config_symbol where name = "BR2_INIT_SYSTEMD" and value = "y") and
-	B.symbol_id = (select id from config_symbol where name = "BR2_TOOLCHAIN_USES_UCLIBC" and value = "y");
-
-but that query itself already takes a significant amount of time to
-complete:
-
-mysql> select A.result_id from symbol_per_result A, symbol_per_result B where A.result_id = B.result_id and A.symbol_id = (select id from config_symbol where name = "BR2_INIT_SYSTEMD" and value = "y") and B.symbol_id = (select id from config_symbol where name = "BR2_TOOLCHAIN_USES_UCLIBC" and value = "y");
-Empty set (3 min 52.15 sec)
-
-I think the issue is that this query is operating on the full set of
-results, and that the filtering on the build date to reduce the number
-of build results to consider happens afterwards in the outermost query.
-I'm really no SQL guru, but since we're interested only in querying the
-results for the last few weeks or months, I would assume it should be
-faster to first filter the results we're interested in by build date,
-and then only do this massive symbol/value research.
-
-If you (or anyone else) wants to play around with this, I've put online
-the dump of the database as of today at
-http://autobuild.buildroot.net/brautobuild.sql.gz.
-
-Thanks,
+Best regards,
 
 Thomas
 -- 
