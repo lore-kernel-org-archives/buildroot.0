@@ -1,48 +1,57 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Tue,  4 Dec 2018 20:43:47 +0200
-Subject: [Buildroot] [PATCH 1/1] python-idna: bump to version 2.8
-In-Reply-To: <20181204184347.15088-1-asafka7@gmail.com>
-References: <20181204184347.15088-1-asafka7@gmail.com>
-Message-ID: <20181204184347.15088-2-asafka7@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  4 Dec 2018 21:15:52 +0100
+Subject: [Buildroot] [PATCH v3,1/2] lxc: fix missing include for va_list
+Message-ID: <20181204201553.11463-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-idna/python-idna.hash | 4 ++--
- package/python-idna/python-idna.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Fixes:
+ - http://autobuild.buildroot.org/results/0b90e7dca2984652842832a41abad93ac49a9b86
 
-diff --git a/package/python-idna/python-idna.hash b/package/python-idna/python-idna.hash
-index 4b3c84e5d8..ddfd44e97c 100644
---- a/package/python-idna/python-idna.hash
-+++ b/package/python-idna/python-idna.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/idna/json
--md5	0e5bb69018ddef1b9d95f681182be82c  idna-2.7.tar.gz
--sha256	684a38a6f903c1d71d6d5fac066b58d7768af4de2b832e426ec79c30daa94a16  idna-2.7.tar.gz
-+md5    2e9ae0b4a0b26d1747c6127cdb060bc1  idna-2.8.tar.gz
-+sha256 c357b3f628cf53ae2c4c05627ecc484553142ca23264e593d327bcde5e9c3407  idna-2.8.tar.gz
- # Locally computed sha256 checksums
- sha256	0d4bc7abd48dcfb14e24254ee404066737ff0167144e222914a2113b8794683e  LICENSE.rst
-diff --git a/package/python-idna/python-idna.mk b/package/python-idna/python-idna.mk
-index d5c57955a3..1dae47bb2b 100644
---- a/package/python-idna/python-idna.mk
-+++ b/package/python-idna/python-idna.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_IDNA_VERSION = 2.7
-+PYTHON_IDNA_VERSION = 2.8
- PYTHON_IDNA_SOURCE = idna-$(PYTHON_IDNA_VERSION).tar.gz
--PYTHON_IDNA_SITE = https://files.pythonhosted.org/packages/65/c4/80f97e9c9628f3cac9b98bfca0402ede54e0563b56482e3e6e45c43c4935
-+PYTHON_IDNA_SITE = https://files.pythonhosted.org/packages/ad/13/eb56951b6f7950cadb579ca166e448ba77f9d24efc03edd7e55fa57d04b7
- PYTHON_IDNA_LICENSE =  BSD-3-Clause
- PYTHON_IDNA_LICENSE_FILES = LICENSE.rst
- PYTHON_IDNA_SETUP_TYPE = setuptools
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...01-stringutils-include-stdarg-for-va_list.patch | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/lxc/0001-stringutils-include-stdarg-for-va_list.patch
+
+diff --git a/package/lxc/0001-stringutils-include-stdarg-for-va_list.patch b/package/lxc/0001-stringutils-include-stdarg-for-va_list.patch
+new file mode 100644
+index 0000000000..d0a450e8cf
+--- /dev/null
++++ b/package/lxc/0001-stringutils-include-stdarg-for-va_list.patch
+@@ -0,0 +1,30 @@
++From b7df06ad14c04f18b7db5b64d5142b802bf64cb2 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 3 Dec 2018 22:18:16 +0100
++Subject: [PATCH] stringutils: include stdarg for va_list
++
++Fixes:
++ - http://autobuild.buildroot.org/results/0b90e7dca2984652842832a41abad93ac49a9b86
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/lxc/lxc/pull/2745]
++---
++ src/lxc/string_utils.h | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/lxc/string_utils.h b/src/lxc/string_utils.h
++index 4065e4e6..d4e633cc 100644
++--- a/src/lxc/string_utils.h
+++++ b/src/lxc/string_utils.h
++@@ -20,6 +20,8 @@
++ #ifndef __LXC_STRING_UTILS_H
++ #define __LXC_STRING_UTILS_H
++ 
+++#include <stdarg.h>
+++
++ #include "config.h"
++ 
++ #include "initutils.h"
++-- 
++2.14.1
++
 -- 
-2.19.1
+2.14.1
