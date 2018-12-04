@@ -1,10 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Tue,  4 Dec 2018 05:37:49 +0100
-Subject: [Buildroot] [PATCH 2/7] support/testing/tests/packages/test_perl_*:
- regeneration
+Date: Tue,  4 Dec 2018 05:37:50 +0100
+Subject: [Buildroot] [PATCH 3/7] scancpan: allow the generation of more tests
 In-Reply-To: <20181204043754.24556-1-francois.perrad@gadz.org>
 References: <20181204043754.24556-1-francois.perrad@gadz.org>
-Message-ID: <20181204043754.24556-3-francois.perrad@gadz.org>
+Message-ID: <20181204043754.24556-4-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,107 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- support/testing/tests/package/test_perl_class_load.py  | 4 ++--
- support/testing/tests/package/test_perl_gdgraph.py     | 2 +-
- support/testing/tests/package/test_perl_libwww_perl.py | 2 +-
- support/testing/tests/package/test_perl_mail_dkim.py   | 6 +++---
- support/testing/tests/package/test_perl_x10.py         | 2 +-
- support/testing/tests/package/test_perl_xml_libxml.py  | 2 +-
- 6 files changed, 9 insertions(+), 9 deletions(-)
+ utils/scancpan | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/package/test_perl_class_load.py b/support/testing/tests/package/test_perl_class_load.py
-index 1e86c0374..fbcd904aa 100644
---- a/support/testing/tests/package/test_perl_class_load.py
-+++ b/support/testing/tests/package/test_perl_class_load.py
-@@ -6,14 +6,14 @@ class TestPerlClassLoad(TestPerlBase):
-     package:
-         Class-Load
-     direct dependencies:
--        Data-OptList *
-+        Data-OptList
-         Module-Implementation
-         Module-Runtime
-         Package-Stash
-         Try-Tiny
-     indirect dependencies:
-         Dist-CheckConflicts
--        Params-Util
-+        Params-Util   XS
-         Sub-Install
-     """
+diff --git a/utils/scancpan b/utils/scancpan
+index 45709e166..229ca1056 100755
+--- a/utils/scancpan
++++ b/utils/scancpan
+@@ -578,7 +578,7 @@ sub find_license_files {
  
-diff --git a/support/testing/tests/package/test_perl_gdgraph.py b/support/testing/tests/package/test_perl_gdgraph.py
-index 16cd8cb8e..23ddbca4a 100644
---- a/support/testing/tests/package/test_perl_gdgraph.py
-+++ b/support/testing/tests/package/test_perl_gdgraph.py
-@@ -6,7 +6,7 @@ class TestPerlGDGraph(TestPerlBase):
-     package:
-         GDGraph
-     direct dependencies:
--        GD
-+        GD   XS
-         GDTextUtil
-     """
+ sub want_test {
+     my ($distname) = @_;
+-    return 1 if $need_dlopen{$distname} && scalar @{$deps_runtime{$distname}} > 1;
++    return 1 if $need_dlopen{$distname} && scalar @{$deps_runtime{$distname}} > 0;
+ }
  
-diff --git a/support/testing/tests/package/test_perl_libwww_perl.py b/support/testing/tests/package/test_perl_libwww_perl.py
-index e777071bb..af9f7c7ed 100644
---- a/support/testing/tests/package/test_perl_libwww_perl.py
-+++ b/support/testing/tests/package/test_perl_libwww_perl.py
-@@ -8,7 +8,7 @@ class TestPerllibwwwperl(TestPerlBase):
-     direct dependencies:
-         Encode-Locale
-         File-Listing
--        HTML-Parser
-+        HTML-Parser   XS
-         HTTP-Cookies
-         HTTP-Daemon
-         HTTP-Date
-diff --git a/support/testing/tests/package/test_perl_mail_dkim.py b/support/testing/tests/package/test_perl_mail_dkim.py
-index dc4d4bb3a..7affce82b 100644
---- a/support/testing/tests/package/test_perl_mail_dkim.py
-+++ b/support/testing/tests/package/test_perl_mail_dkim.py
-@@ -6,13 +6,13 @@ class TestPerlMailDKIM(TestPerlBase):
-     package:
-         Mail-DKIM
-     direct dependencies:
--        Crypt-OpenSSL-RSA
-+        Crypt-OpenSSL-RSA   XS
-         MailTools
-         Net-DNS
-         Net-DNS-Resolver-Mock
--        YAML-LibYAML
-+        YAML-LibYAML   XS
-     indirect dependencies:
--        Crypt-OpenSSL-Random
-+        Crypt-OpenSSL-Random   XS
-         Digest-HMAC
-         TimeDate
-     """
-diff --git a/support/testing/tests/package/test_perl_x10.py b/support/testing/tests/package/test_perl_x10.py
-index 46f247f2d..84feb74e6 100644
---- a/support/testing/tests/package/test_perl_x10.py
-+++ b/support/testing/tests/package/test_perl_x10.py
-@@ -7,7 +7,7 @@ class TestPerlX10(TestPerlBase):
-         X10
-     direct dependencies:
-         Astro-SunTime
--        Device-SerialPort
-+        Device-SerialPort   XS
-         Time-ParseDate
-     """
- 
-diff --git a/support/testing/tests/package/test_perl_xml_libxml.py b/support/testing/tests/package/test_perl_xml_libxml.py
-index 76eacfaea..faace5dd0 100644
---- a/support/testing/tests/package/test_perl_xml_libxml.py
-+++ b/support/testing/tests/package/test_perl_xml_libxml.py
-@@ -4,7 +4,7 @@ from tests.package.test_perl import TestPerlBase
- class TestPerlXMLLibXML(TestPerlBase):
-     """
-     package:
--        XML-LibXML
-+        XML-LibXML   XS
-     direct dependencies:
-         XML-NamespaceSupport
-         XML-SAX
+ sub get_dependencies {
 -- 
 2.17.1
