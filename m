@@ -1,59 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 4 Dec 2018 11:08:54 +0100
-Subject: [Buildroot] Stack protector choices [was: [PATCH v2,
- 2/2] lxc: fix build without stack protector]
-In-Reply-To: <42790e46-35a7-299a-cbae-4b83383287a3@mind.be>
-References: <20181203223855.10152-1-fontaine.fabrice@gmail.com>
- <20181203223855.10152-2-fontaine.fabrice@gmail.com>
- <20181204055439.rhfgmyb6w7ijykx6@sapphire.tkos.co.il>
- <20181204091029.01a78c0e@windsurf>
- <42790e46-35a7-299a-cbae-4b83383287a3@mind.be>
-Message-ID: <20181204110854.17685bf4@windsurf>
+From: =?utf-8?B?R2HDq2w=?= PORTAY <gael.portay@collabora.com>
+Date: Tue, 4 Dec 2018 05:14:43 -0500
+Subject: [Buildroot] [PATCH] igt-gpu-tools: add new package
+In-Reply-To: <20181204022701.28095-1-gael.portay@collabora.com>
+References: <20181204022701.28095-1-gael.portay@collabora.com>
+Message-ID: <20181204090832.2eu5q5kow5spwjgu@archlinux.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+All,
 
-On Tue, 4 Dec 2018 10:35:05 +0100, Arnout Vandecappelle wrote:
+I am responding to myself :/
 
->  If you look at it from a practical point of view, we can only do option (1), or
-> "we sometimes enforce the system-level configuration options, but not
-> consistently". Indeed, if a package does the stack protector detection
-> correctly, chances are we'll never even notice that it enables stack protector.
+On Mon, Dec 03, 2018 at 09:27:01PM -0500, Ga?l PORTAY wrote:
+> diff --git a/package/igt-gpu-tools/Config.in b/package/igt-gpu-tools/Config.in
+> new file mode 100644
+> index 0000000000..73e217e93c
+> --- /dev/null
+> +++ b/package/igt-gpu-tools/Config.in
+> @@ -0,0 +1,27 @@
+> +config BR2_PACKAGE_IGT_GPU_TOOLS
+> +	bool "igt-gpu-tools"
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm libunwind
+> +	depends on !BR2_STATIC_LIBS # kmod libunwind
+> +	depends on BR2_USE_MMU # procps-ng
+> +	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # procps-ng
+> +	depends on BR2_PACKAGE_HAS_OPENSSL
+> +	depends on BR2_PACKAGE_HAS_UDEV
+> +	depends on BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS # libunwind
+> +	select BR2_PACKAGE_CAIRO
+> +	select BR2_PACKAGE_CAIRO_PNG
+> +	select BR2_PACKAGE_KMOD
+> +	select BR2_PACKAGE_LIBDRM
 
-I was going to say that the checksec tool could help us detect such
-situations (i.e SSP is disabled at the Buildroot level, but some
-binaries end up being built with SSP). However, it seems like checksec
-is not checking SSP support, but PIE, RELRO and a few other things.
+select BR2_PACKAGE_LIBGLIB2 appears to be missing here.
 
->  So in practice, I think the policy should be (as it is for other policy
-> options, e.g. debug):
-> 
-> 1. If there is no configuration option for it, let the package decide.
-> 
-> 2. If there is a configuration option that does the same as our option, disable
-> it and let the toolchain wrapper apply the correct option.
-> 
-> 3. If there is a configuration option and it does something more, enable it
-> automatically based on the global Buildroot option.
-> 
-> 4. In very exceptional cases where (3) is even more invasive, offer an option to
-> the user (but only if the toolchain supports it, of course).
-> 
->  An example of (3) would be the kernel's stack protector which is a little more
-> than just -fstack-protector so it needs to be enabled explicitly. An example of
-> (4) would be -fsanitize=address vs. KASAN - KASAN is a way more invasive
-> operation than gcc's address sanitizer. Note that specifically for the kernel,
-> we of course always do (4) - kernel config is provided separately. But the
-> kernel is just an easy example that everybody knows.
+> +	select BR2_PACKAGE_LIBUNWIND
+> +	select BR2_PACKAGE_LIBPCIACCESS
 
-OK, works for me. Should we write this down somewhere ?
+The two selects above are not properly alphabetically sorted.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> +	select BR2_PACKAGE_PIXMAN
+> +	select BR2_PACKAGE_PROCPS_NG
+> +	select BR2_PACKAGE_ZLIB
+> +	help
+> +	  IGT GPU Tools is a collection of tools for development and
+> +	  testing of the DRM drivers.
+> +
+> +	  https://cgit.freedesktop.org/drm/igt-gpu-tools/
+> +
+> +comment "igt-gpu-tools needs udev /dev management and openssl library"
+> +        depends on !BR2_PACKAGE_IGT_GPU_TOOLS
+> +        depends on !BR2_PACKAGE_HAS_UDEV || !BR2_PACKAGE_HAS_OPENSSL
+
+Regards,
+Gael
