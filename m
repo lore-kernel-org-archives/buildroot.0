@@ -1,61 +1,98 @@
-From: David J. Fogle <Dave@exitstrategytech.com>
-Date: Wed, 5 Dec 2018 20:52:57 +0000
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2018-12-04
-In-Reply-To: <CAMRc=MeKx3DWa6DZs3h7MH2uuJusBr08+ycoOnX3Drsmw22JWQ@mail.gmail.com>
-References: <20181205070024.027E420A59@mail.bootlin.com>,
- <CAMRc=MeKx3DWa6DZs3h7MH2uuJusBr08+ycoOnX3Drsmw22JWQ@mail.gmail.com>
-Message-ID: <f3cpi33oica7lbub1hjw72x0.1544043243948@email.android.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 5 Dec 2018 22:54:41 +0100
+Subject: [Buildroot] [PATCH 1/2] system cfg: default mkpasswd to SHA
+In-Reply-To: <1544027592-35204-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1544027592-35204-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20181205215441.GA2561@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Is this patch going to be put into 2018.11, or is this going into 2019.02. I am rather new to your project, forgive me not knowing how your patch cycle works.
+Matt, All,
 
+On 2018-12-05 10:33 -0600, Matt Weber spake thusly:
+> This patch drops the comment about checking the C libraries version as
+> they now all support it by default
+>     glibc 2.7+
+>     uclibc (bdd8362a88 package/uclibc: defconfig: enable sha-256...)
+>     musl 1.1.14+
+> 
+> This patch updates the help text and changes the default mkpasswd
+> method to SHA256 from MD5
 
-Sent from Samsung Focus
+Really, this patch does two things:
 
+  - update my now-wrong comments,
 
--------- Original message --------
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: 12/5/18 2:50 PM (GMT-06:00)
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot at buildroot.org
-Subject: Re: [Buildroot] [autobuild.buildroot.net] Your build results for 2018-12-04
+  - switch to using sha256 as the default;
 
-?r., 5 gru 2018 o 08:00 Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> napisa?(a):
->
-> Hello,
->
-> This is the list of Buildroot build failures that occured on
-> 2018-12-04, and for which you are a registered architecture developer
-> or package developer. Please help us improving the quality of
-> Buildroot by investigating those build failures and sending patches to
-> fix them. Thanks!
->
-> Results for the 'master' branch
-> ===============================
->
-> Build failures related to your packages:
->
->  powerpc64le |                pulseview-0.4.1 | http://autobuild.buildroot.net/results/9a9e8d390941cbfde70c4b4033d7e68ce28e041e
->
-> --
-> http://autobuild.buildroot.net
+so it should be two patches.
 
-Pending patch[1] will fix it.
+Besides, more comments, below...
 
-Best regards,
-Bartosz Golaszewski
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> ---
+>  system/Config.in | 14 +++-----------
+>  1 file changed, 3 insertions(+), 11 deletions(-)
+> 
+> diff --git a/system/Config.in b/system/Config.in
+> index 9e34f11..2123d33 100644
+> --- a/system/Config.in
+> +++ b/system/Config.in
+> @@ -61,7 +61,7 @@ endif
+>  
+>  choice
+>  	bool "Passwords encoding"
+> -	default BR2_TARGET_GENERIC_PASSWD_MD5
+> +	default BR2_TARGET_GENERIC_PASSWD_SHA256
+>  	help
+>  	  Choose the password encoding scheme to use when Buildroot
+>  	  needs to encode a password (eg. the root password, below).
+> @@ -81,20 +81,12 @@ config BR2_TARGET_GENERIC_PASSWD_MD5
+>  config BR2_TARGET_GENERIC_PASSWD_SHA256
+>  	bool "sha-256"
+>  	help
+> -	  Use SHA256 to encode passwords.
+> -
+> -	  Very strong, but not ubiquitous, although available in glibc
+> -	  for some time now. Choose only if you are sure your C library
+> -	  understands SHA256 passwords.
+> +	  Use SHA256 to encode passwords which is stronger then MD5.
 
-[1] http://lists.busybox.net/pipermail/buildroot/2018-December/237718.html
-_______________________________________________
-buildroot mailing list
-buildroot at busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181205/9cd8ed04/attachment.html>
+s/then/than/
+
+>  config BR2_TARGET_GENERIC_PASSWD_SHA512
+>  	bool "sha-512"
+>  	help
+> -	  Use SHA512 to encode passwords.
+> -
+> -	  Extremely strong, but not ubiquitous, although available in
+> -	  glibc for some time now. Choose only if you are sure your C
+> -	  library understands SHA512 passwords.
+> +	  Use SHA512 to encode passwords which is stronger then SHA256
+
+s/then/than/
+
+With that fix, and the patch split in two, you can add, to each, my:
+
+    Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+>  endchoice # Passwd encoding
+>  
+> -- 
+> 1.9.1
+> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
