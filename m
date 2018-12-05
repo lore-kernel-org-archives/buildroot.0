@@ -1,51 +1,48 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Wed, 5 Dec 2018 17:17:12 +0100
-Subject: [Buildroot] [PATCH] docs/manual: Document
- ERLANG_FOOBAR_KEEP_DEPENDENCIES in rebar infra
-In-Reply-To: <20181203221418.5363aca7@windsurf.home>
-References: <20181126110807.31431-2-johan.oudinet@gmail.com>
- <20181203111947.32627-1-johan.oudinet@gmail.com>
- <20181203221418.5363aca7@windsurf.home>
-Message-ID: <CAJtjsKZY4sVapS=PPPNmD09Zs_ciiU1uoRYsZ2KYBFrPKcoK+A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 5 Dec 2018 17:31:03 +0100
+Subject: [Buildroot] [PATCH next v6 07/10] core: implement per-package
+ SDK and target
+In-Reply-To: <1f520844-5501-a60b-cf66-5bae57b9f420@andin.de>
+References: <20181123145815.13008-1-thomas.petazzoni@bootlin.com>
+ <20181123145815.13008-8-thomas.petazzoni@bootlin.com>
+ <1f520844-5501-a60b-cf66-5bae57b9f420@andin.de>
+Message-ID: <20181205173103.1eb30a7b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Dec 3, 2018 at 10:14 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-> On Mon,  3 Dec 2018 12:19:47 +0100, Johan Oudinet wrote:
->
-> > +* +ERLANG_FOOBAR_KEEP_DEPENDENCIES+, to keep the dependencies
-> > +  described in the rebar.config file. By default, the _rebar_
-> > +  infrastructure removes such dependencies as a post-patch hook to
->
->         as a post-patch hook -> *in* a post-patch hook
->
-> > +  ensure rebar does not download or compile them. Only set this
-> > +  variable to a non-empty value if the _rebar_ infrastructure must not
-> > +  modify the rebar.config file included in the package.
->
-> Now that you write down the semantic of the variable, I don't like it
-> anymore: setting to a non-empty value is clearly not what Buildroot
-> normally does for boolean variables. We use a YES/NO value.
->
-> So instead of this, could we change pkg-rebar.mk to do this:
->
-> $(2)_KEEP_DEPENDENCIES ?= NO
->
-> ifeq ($($(2)_KEEP_DEPENDENCIES),NO)
-> $(2)_POST_PATCH_HOOKS += remove-rebar-config-dependencies
-> endif
->
-> And then the document should say that the accepted values are "YES" and
-> "NO" and that the infrastructure defaults to "NO".
->
-> Could you have a look at doing this ?
+Hello Andreas,
 
-Done. I've also fixed a bug in remove-rebar-config-dependencies that
-took me days to figure out :-(
+On Wed, 5 Dec 2018 17:08:20 +0100, Andreas Naumann wrote:
 
+> In an answer to v4 of this series I mentioned the issue I had with empty 
+> RPATH in some host-lib. After digging some more I found this happens 
+> during the prepare-sdk step (which I call in my wrapper script). Before 
+> this step, your suggested readelf output reports the correct pathes, 
+> however after, RPATH is empty. I compared this to a "standard" SDK, 
+> there RPATH is set to $ORIGIN/../lib or something similar.
+
+So are you saying the issue still exists, and to reproduce, I simply
+need to do:
+
+ $ make
+ $ make prepare-sdk
+
+of a build with BR2_PER_PACKAGE_DIRECTORIES=y ?
+
+> Actually, an unrelated question arises: Why does the SDK need to build 
+> world, which includes all filesystem images, first? Should it not be 
+> sufficient to depend on $(PACKAGES) or now host-finalize only?
+
+Yes, it would be sufficient to build packages + host-finalization I
+believe.
+
+Best regards,
+
+Thomas
 -- 
-Johan
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
