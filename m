@@ -1,57 +1,149 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 5 Dec 2018 14:00:12 +0100
-Subject: [Buildroot] [PATCH] package/qt5base: fix build when system awk
- is mawk, not gawk
-In-Reply-To: <20181205110223.27310-1-yann.morin.1998@free.fr>
-References: <20181205110223.27310-1-yann.morin.1998@free.fr>
-Message-ID: <20181205140012.11bb4726@windsurf>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Wed, 5 Dec 2018 14:40:06 +0100
+Subject: [Buildroot] [PATCH v4] netsurf: new package
+In-Reply-To: <20181203223853.3c3c60db@windsurf.home>
+References: <20181201152347.6646-1-francois.perrad@gadz.org>
+ <20181203223853.3c3c60db@windsurf.home>
+Message-ID: <CAB0FRsv8b-bqFWhT+_Rw18qU71H9koXm9HeBSZGsah2VAPTNig@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Le lun. 3 d?c. 2018 ? 22:39, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+a ?crit :
 
-On Wed,  5 Dec 2018 12:02:23 +0100, Yann E. MORIN wrote:
-> Commit c2ea056a1b (package/qt5/qt5base: use ccache for building host
-> code) introduced a tweak to qt5's mkspec file, to define the compilers
-> (C and C++) to use to build qmake.
-> 
-> In doing so, it changed the variables in that file, from this layout:
->     VAR = value
-> 
-> to this:
->     VAR=value
-> 
-> During its configuration phase, qt5 will parse that file using the
-> system awk.
-> 
-> However, the system awk is not necessarily GNU awk; some systems,
-> especially Debian ones, use mawk as the default awk implementation.
-> 
-> mawk does not behave the same as GNU awk, and this causes qt5 to extract
-> empty values, and thus leads to build failures.
-> 
-> Fix that by replacing the variables with similar layout, keeping the
-> spaces around the equal signs.
-> 
-> Fixes:
->     http://autobuild.buildroot.org/results/cb5/cb555a124bb3bdb9c5a3465673c21022d94cf2ca/
-> 
-> Reported-by: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Hello Fran?ois,
+>
+> On Sat,  1 Dec 2018 16:23:47 +0100, Francois Perrad wrote:
+> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>
+> Thanks for this patch!
+>
+> > diff --git a/package/netsurf/Config.in b/package/netsurf/Config.in
+> > new file mode 100644
+> > index 000000000..7bd3dee41
+> > --- /dev/null
+> > +++ b/package/netsurf/Config.in
+> > @@ -0,0 +1,16 @@
+> > +config BR2_PACKAGE_NETSURF
+> > +     bool "netsurf"
+> > +     select BR2_PACKAGE_EXPAT
+> > +     select BR2_PACKAGE_JPEG
+> > +     select BR2_PACKAGE_LIBCURL
+> > +     select BR2_PACKAGE_LIBGTK2 if BR2_PACKAGE_XORG7
+>
+> You can't select BR2_PACKAGE_LIBGTK2 just like this, you need to
+> replicate its dependencies. Indeed, even if libgtk2 will only be
+> selected if xorg7 is available, libgtk2 has more dependencies than
+> xorg7. See:
+>
+> config BR2_PACKAGE_LIBGTK2
+>         bool "libgtk2"
+>         depends on BR2_PACKAGE_XORG7
+>         depends on BR2_USE_WCHAR # glib2
+>         depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+>         depends on BR2_USE_MMU # glib2
+>         depends on BR2_INSTALL_LIBSTDCPP # pango
+>         depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+>
+> versus:
+>
+> menuconfig BR2_PACKAGE_XORG7
+>         bool "X.org X Window System"
+>         depends on BR2_USE_WCHAR
+>         depends on BR2_TOOLCHAIN_HAS_THREADS
+>         depends on !BR2_STATIC_LIBS # dlopen in xlib_libX11
+>
+> One solution would be to do this:
+>
+>         select BR2_PACKAGE_LIBGTK2 if (BR2_PACKAGE_XORG7 && BR2_USE_WCHAR
+> && BR2_TOOLCHAIN_HAS_THREADS && BR2_USE_MMU && BR2_INSTALL_LIBSTDCPP &&
+> BR2_TOOLCHAIN_HAS_SYNC_4)
+>         select BR2_PACKAGE_SDL if !(BR2_PACKAGE_XORG7 && BR2_USE_WCHAR &&
+> BR2_TOOLCHAIN_HAS_THREADS && BR2_USE_MMU && BR2_INSTALL_LIBSTDCPP &&
+> BR2_TOOLCHAIN_HAS_SYNC_4)
+>
+> Can also be written like this:
+>
+> config BR2_PACKAGE_NETSURF_SUPPORTS_GTK2
+>         bool
+>         default y
+>         depends on BR2_PACKAGE_XORG7
+>         depends on BR2_USE_WCHAR
+>         depends on BR2_TOOLCHAIN_HAS_THREADS
+>         depends on BR2_USE_MMU
+>         depends on BR2_INSTALL_LIBSTDCPP
+>         depends on BR2_TOOLCHAIN_HAS_SYNC_4
+>
+> and then:
+>
+> +config BR2_PACKAGE_NETSURF
+> +       bool "netsurf"
+> +       select BR2_PACKAGE_EXPAT
+> +       select BR2_PACKAGE_JPEG
+> +       select BR2_PACKAGE_LIBCURL
+> +       select BR2_PACKAGE_LIBGTK2 if BR2_PACKAGE_NETSURF_SUPPORTS_GTK2
+> +       select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+> +       select BR2_PACKAGE_LIBPNG
+> +       select BR2_PACKAGE_OPENSSL
+> +       select BR2_PACKAGE_SDL if !BR2_PACKAGE_NETSURF_SUPPORTS_GTK2
+>
+> But overall, perhaps the right solution is to have an explicit
+> Config.in choice. Even if you have X.org, you may want to have the SDL
+> version (SDL works under X) without gtk2.
+>
+> And then with a choice, it becomes a bit easier to express, while
+> giving more freedom to the user. What do you think ?
+>
+>
+>
+An user choice in Config.in is the best solution.
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Thanks a lot Yann for the research/investigation!
 
-Best regards,
+> > +ifeq ($(BR2_PACKAGE_LIBICONV),y)
+> > +NETSURF_DEPENDENCIES += libiconv
+> > +define NETSURF_ICONV_CONFIGURE_CMDS
+> > +     echo "CFLAGS += -DWITH_ICONV_FILTER"            >>
+> $(@D)/libparserutils/Makefile.config.override
+> > +     echo "override NETSURF_USE_LIBICONV_PLUG := NO" >>
+> $(@D)/netsurf/Makefile.config
+> > +endef
+> > +endif
+>
+> I am not sure what those variables are doing, but it is worth
+> mentioning that iconv support is available even if BR2_PACKAGE_LIBICONV
+> is *not* enabled. Indeed, BR2_PACKAGE_LIBICON is just providing a
+> replacement libicon library when the C library doesn't provide an iconv
+> implementation. But all of uClibc with locale, glibc and musl provide
+> an iconv implementation, even when BR2_PACKAGE_LIBICONV is disabled.
+>
+> > +define NETSURF_CONFIGURE_CMDS
+> > +     echo "override NETSURF_USE_DUKTAPE := NO"       >
+> $(@D)/netsurf/Makefile.config
+>
+> I don't know if this matters, but we do have a duktape package in
+> Buildroot.
+>
+>
+Netsurf embeds its own duktape.
+I plan to enable this feature.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181205/ba52e8d2/attachment.html>
