@@ -1,53 +1,54 @@
-From: Alexey Brodkin <alexey.brodkin@synopsys.com>
-Date: Wed, 5 Dec 2018 07:29:05 +0000
-Subject: [Buildroot] Buildroot autobuilder: make[2]: c: Command not found
-Message-ID: <225065e1ea283f69952dae60f05daca8e93ebc27.camel@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 5 Dec 2018 08:53:11 +0100
+Subject: [Buildroot] [PATCH v4 3/3] fs/common.mk: make sure that static
+ devices from packages are created
+In-Reply-To: <606d6e8b-873c-2bb1-e3fb-861df79d819c@mind.be>
+References: <20181203210508.27831-1-thomas.petazzoni@bootlin.com>
+ <20181203210508.27831-4-thomas.petazzoni@bootlin.com>
+ <606d6e8b-873c-2bb1-e3fb-861df79d819c@mind.be>
+Message-ID: <20181205085311.6603a2b0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Hello,
 
-Just got a report about failed build, see
-http://autobuild.buildroot.net/results/cb5/cb555a124bb3bdb9c5a3465673c21022d94cf2ca/
+On Tue, 4 Dec 2018 22:05:19 +0100, Arnout Vandecappelle wrote:
 
-But there's definitely something strange there as instead of "gcc" command "c" gets executed,
-see http://autobuild.buildroot.net/results/cb5/cb555a124bb3bdb9c5a3465673c21022d94cf2ca//build-end.log:
------------------------->8-----------------------
-c -o option.o -pipe -ffunction-sections -O2 -g  -I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/qmake
--I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/qmake/library -I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-
-5.6.3/qmake/generators -I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/qmake/generators/unix
--I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/qmake/generators/win32 -I/home/buildroot/autobuild/run/instance-
-0/output/build/qt5base-5.6.3/qmake/generators/mac -I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/qmake/generators/integrity
--I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/include -I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-
-5.6.3/include/QtCore -I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/include/QtCore/5.6.3
--I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/include/QtCore/5.6.3/QtCore -I../src/corelib/global -DHAVE_QCONFIG_CPP
--I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/mkspecs/linux-g++ -I/home/buildroot/autobuild/run/instance-
-0/output/build/qt5base-5.6.3/tools/shared -DQT_VERSION_STR=\"5.6.3\" -DQT_VERSION_MAJOR=5 -DQT_VERSION_MINOR=6 -DQT_VERSION_PATCH=3 -DQT_BUILD_QMAKE
--DQT_BOOTSTRAPPED -DPROEVALUATOR_FULL -DQT_NO_TEXTCODEC -DQT_NO_UNICODETABLES -DQT_NO_COMPONENT -DQT_NO_COMPRESS -DQT_NO_THREAD -DQT_NO_QOBJECT
--DQT_NO_GEOM_VARIANT -DQT_NO_DATASTREAM -DQT_CRYPTOGRAPHICHASH_ONLY_SHA1 -DQT_JSON_READONLY -DQT_NO_STANDARDPATHS
-/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/qmake/option.cpp
-make[2]: c: Command not found
+> > diff --git a/fs/common.mk b/fs/common.mk
+> > index 077ce8903e..a560417c6c 100644
+> > --- a/fs/common.mk
+> > +++ b/fs/common.mk
+> > @@ -61,10 +61,10 @@ endif
+> >  	$(call PRINTF,$(PACKAGES_PERMISSIONS_TABLE)) > $(ROOTFS_FULL_DEVICES_TABLE)
+> >  ifneq ($(ROOTFS_DEVICE_TABLES),)
+> >  	cat $(ROOTFS_DEVICE_TABLES) >> $(ROOTFS_FULL_DEVICES_TABLE)
+> > +endif
+> >  ifeq ($(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
+> >  	$(call PRINTF,$(PACKAGES_DEVICES_TABLE)) >> $(ROOTFS_FULL_DEVICES_TABLE)
+> >  endif  
+> 
+>  This is still conflicting with the purpose of patch 2/3: the package device
+> tables are still overriding the user-specified global device table.
 
-make[2]: [option.o] Error 127 (ignored)
-c -o property.o -pipe -ffunction-sections -O2 -g  -I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/qmake
--I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/qmake/library -I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-
-5.6.3/qmake/generators -I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/qmake/generators/unix
--I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/qmake/generators/win32 -I/home/buildroot/autobuild/run/instance-
-0/output/build/qt5base-5.6.3/qmake/generators/mac -I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/qmake/generators/integrity
--I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/include -I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-
-5.6.3/include/QtCore -I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/include/QtCore/5.6.3
--I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/include/QtCore/5.6.3/QtCore -I../src/corelib/global -DHAVE_QCONFIG_CPP
--I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/mkspecs/linux-g++ -I/home/buildroot/autobuild/run/instance-
-0/output/build/qt5base-5.6.3/tools/shared -DQT_VERSION_STR=\"5.6.3\" -DQT_VERSION_MAJOR=5 -DQT_VERSION_MINOR=6 -DQT_VERSION_PATCH=3 -DQT_BUILD_QMAKE
--DQT_BOOTSTRAPPED -DPROEVALUATOR_FULL -DQT_NO_TEXTCODEC -DQT_NO_UNICODETABLES -DQT_NO_COMPONENT -DQT_NO_COMPRESS -DQT_NO_THREAD -DQT_NO_QOBJECT
--DQT_NO_GEOM_VARIANT -DQT_NO_DATASTREAM -DQT_CRYPTOGRAPHICHASH_ONLY_SHA1 -DQT_JSON_READONLY -DQT_NO_STANDARDPATHS
-/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/qmake/property.cpp
-make[2]: c: Command not found
------------------------->8-----------------------
+Fair point. Should we do:
 
-Any thoughts?
+	$(call PRINTF,$(PACKAGES_PERMISSIONS_TABLE)) > $(ROOTFS_FULL_DEVICES_TABLE)
+ifeq ($(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
+	$(call PRINTF,$(PACKAGES_DEVICES_TABLE)) >> $(ROOTFS_FULL_DEVICES_TABLE)
+endif
+ifneq ($(ROOTFS_DEVICE_TABLES),)
+	cat $(ROOTFS_DEVICE_TABLES) >> $(ROOTFS_FULL_DEVICES_TABLE)
+endif
 
--Alexey
+instead ?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
