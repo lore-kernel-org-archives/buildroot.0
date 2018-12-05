@@ -1,66 +1,53 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  5 Dec 2018 08:25:30 +0100
-Subject: [Buildroot] [PATCH 1/1] eudev: fix build with kernel < 4.8
-Message-ID: <20181205072530.23932-1-fontaine.fabrice@gmail.com>
+From: Alexey Brodkin <alexey.brodkin@synopsys.com>
+Date: Wed, 5 Dec 2018 07:29:05 +0000
+Subject: [Buildroot] Buildroot autobuilder: make[2]: c: Command not found
+Message-ID: <225065e1ea283f69952dae60f05daca8e93ebc27.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-KEY_ALS_TOGGLE has been added in kernel 4.8 with
-https://github.com/torvalds/linux/commit/9ee27487127461b5cf71670b708ed5b2b8da568c
+Hi Yann,
 
-So add it to missing.h to fix build with kernel older than 4.8
+Just got a report about failed build, see
+http://autobuild.buildroot.net/results/cb5/cb555a124bb3bdb9c5a3465673c21022d94cf2ca/
 
-Fixes:
- - http://autobuild.buildroot.org/results/0c0aff02df91cdb869efa01e397f7ccc0d9f69af
+But there's definitely something strange there as instead of "gcc" command "c" gets executed,
+see http://autobuild.buildroot.net/results/cb5/cb555a124bb3bdb9c5a3465673c21022d94cf2ca//build-end.log:
+------------------------>8-----------------------
+c -o option.o -pipe -ffunction-sections -O2 -g  -I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/qmake
+-I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/qmake/library -I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-
+5.6.3/qmake/generators -I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/qmake/generators/unix
+-I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/qmake/generators/win32 -I/home/buildroot/autobuild/run/instance-
+0/output/build/qt5base-5.6.3/qmake/generators/mac -I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/qmake/generators/integrity
+-I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/include -I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-
+5.6.3/include/QtCore -I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/include/QtCore/5.6.3
+-I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/include/QtCore/5.6.3/QtCore -I../src/corelib/global -DHAVE_QCONFIG_CPP
+-I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/mkspecs/linux-g++ -I/home/buildroot/autobuild/run/instance-
+0/output/build/qt5base-5.6.3/tools/shared -DQT_VERSION_STR=\"5.6.3\" -DQT_VERSION_MAJOR=5 -DQT_VERSION_MINOR=6 -DQT_VERSION_PATCH=3 -DQT_BUILD_QMAKE
+-DQT_BOOTSTRAPPED -DPROEVALUATOR_FULL -DQT_NO_TEXTCODEC -DQT_NO_UNICODETABLES -DQT_NO_COMPONENT -DQT_NO_COMPRESS -DQT_NO_THREAD -DQT_NO_QOBJECT
+-DQT_NO_GEOM_VARIANT -DQT_NO_DATASTREAM -DQT_CRYPTOGRAPHICHASH_ONLY_SHA1 -DQT_JSON_READONLY -DQT_NO_STANDARDPATHS
+/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/qmake/option.cpp
+make[2]: c: Command not found
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../eudev/0002-missing.h-add-KEY_ALS_TOGGLE.patch  | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/eudev/0002-missing.h-add-KEY_ALS_TOGGLE.patch
+make[2]: [option.o] Error 127 (ignored)
+c -o property.o -pipe -ffunction-sections -O2 -g  -I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/qmake
+-I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/qmake/library -I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-
+5.6.3/qmake/generators -I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/qmake/generators/unix
+-I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/qmake/generators/win32 -I/home/buildroot/autobuild/run/instance-
+0/output/build/qt5base-5.6.3/qmake/generators/mac -I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/qmake/generators/integrity
+-I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/include -I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-
+5.6.3/include/QtCore -I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/include/QtCore/5.6.3
+-I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/include/QtCore/5.6.3/QtCore -I../src/corelib/global -DHAVE_QCONFIG_CPP
+-I/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/mkspecs/linux-g++ -I/home/buildroot/autobuild/run/instance-
+0/output/build/qt5base-5.6.3/tools/shared -DQT_VERSION_STR=\"5.6.3\" -DQT_VERSION_MAJOR=5 -DQT_VERSION_MINOR=6 -DQT_VERSION_PATCH=3 -DQT_BUILD_QMAKE
+-DQT_BOOTSTRAPPED -DPROEVALUATOR_FULL -DQT_NO_TEXTCODEC -DQT_NO_UNICODETABLES -DQT_NO_COMPONENT -DQT_NO_COMPRESS -DQT_NO_THREAD -DQT_NO_QOBJECT
+-DQT_NO_GEOM_VARIANT -DQT_NO_DATASTREAM -DQT_CRYPTOGRAPHICHASH_ONLY_SHA1 -DQT_JSON_READONLY -DQT_NO_STANDARDPATHS
+/home/buildroot/autobuild/run/instance-0/output/build/qt5base-5.6.3/qmake/property.cpp
+make[2]: c: Command not found
+------------------------>8-----------------------
 
-diff --git a/package/eudev/0002-missing.h-add-KEY_ALS_TOGGLE.patch b/package/eudev/0002-missing.h-add-KEY_ALS_TOGGLE.patch
-new file mode 100644
-index 0000000000..93d3f6d696
---- /dev/null
-+++ b/package/eudev/0002-missing.h-add-KEY_ALS_TOGGLE.patch
-@@ -0,0 +1,34 @@
-+From cad87bd3d8aa9046af0872e8c22f4a3c8fafdc78 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 4 Dec 2018 22:38:37 +0100
-+Subject: [PATCH] missing.h: add KEY_ALS_TOGGLE
-+
-+KEY_ALS_TOGGLE has been added in kernel 4.8 with
-+https://github.com/torvalds/linux/commit/9ee27487127461b5cf71670b708ed5b2b8da568c
-+
-+So add it to missing.h to fix build with kernel older than 4.8
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/0c0aff02df91cdb869efa01e397f7ccc0d9f69af
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/gentoo/eudev/pull/162]
-+---
-+ src/shared/missing.h | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/src/shared/missing.h b/src/shared/missing.h
-+index bebbb42be..b5b2e1194 100644
-+--- a/src/shared/missing.h
-++++ b/src/shared/missing.h
-+@@ -179,3 +179,7 @@ static inline int name_to_handle_at(int fd, const char *name, struct file_handle
-+ #ifndef INPUT_PROP_MAX
-+ #define INPUT_PROP_MAX 0x1f
-+ #endif
-++
-++#ifndef KEY_ALS_TOGGLE
-++#define KEY_ALS_TOGGLE 0x7a
-++#endif
-+-- 
-+2.14.1
-+
--- 
-2.14.1
+Any thoughts?
+
+-Alexey
