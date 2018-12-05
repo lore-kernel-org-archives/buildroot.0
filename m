@@ -1,73 +1,61 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed,  5 Dec 2018 10:33:12 -0600
-Subject: [Buildroot] [PATCH 2/2] system cfg: remove passwd MD5 format
-In-Reply-To: <1544027592-35204-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1544027592-35204-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1544027592-35204-2-git-send-email-matthew.weber@rockwellcollins.com>
+From: Andreas Naumann <dev@andin.de>
+Date: Wed, 5 Dec 2018 17:52:00 +0100
+Subject: [Buildroot] [PATCH next v6 07/10] core: implement per-package
+ SDK and target
+In-Reply-To: <20181205173103.1eb30a7b@windsurf>
+References: <20181123145815.13008-1-thomas.petazzoni@bootlin.com>
+ <20181123145815.13008-8-thomas.petazzoni@bootlin.com>
+ <1f520844-5501-a60b-cf66-5bae57b9f420@andin.de>
+ <20181205173103.1eb30a7b@windsurf>
+Message-ID: <672791f3-4383-cad2-f31c-5362b94b94fb@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As SHA256 is now default, removing weak MD5 option.  C libraries now
-all support the SHA methods.
-    glibc 2.7+
-    uclibc (bdd8362a88 package/uclibc: defconfig: enable sha-256...)
-    musl 1.1.14+
+Hi,
 
-One issue this would prevent is a host tool issue with a FIPS enabled
-system where weak ciphers/methods are disabled. The crypt(3) call
-checks /proc/sys/crypto/fips_enabled and would result in mkpasswd
-returning "crypt failed."  Rather then create a host dependency check
-this patch removes the potential issue.
+Am 05.12.18 um 17:31 schrieb Thomas Petazzoni:
+> Hello Andreas,
+> 
+> On Wed, 5 Dec 2018 17:08:20 +0100, Andreas Naumann wrote:
+> 
+>> In an answer to v4 of this series I mentioned the issue I had with empty
+>> RPATH in some host-lib. After digging some more I found this happens
+>> during the prepare-sdk step (which I call in my wrapper script). Before
+>> this step, your suggested readelf output reports the correct pathes,
+>> however after, RPATH is empty. I compared this to a "standard" SDK,
+>> there RPATH is set to $ORIGIN/../lib or something similar.
+> 
+> So are you saying the issue still exists, and to reproduce, I simply
+> need to do:
+> 
+>   $ make
+>   $ make prepare-sdk
+> 
+> of a build with BR2_PER_PACKAGE_DIRECTORIES=y ?
 
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- Config.in.legacy |  8 ++++++++
- system/Config.in | 10 ----------
- 2 files changed, 8 insertions(+), 10 deletions(-)
+in an essence that's what I did. My setup has two externals and some 
+custom defconfig, but that shouldnt matter since without the ppsh 
+patches things work fine.
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 02321c8..d70654c 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -143,6 +143,14 @@ comment "----------------------------------------------------"
- endif
- 
- ###############################################################################
-+
-+config BR2_TARGET_GENERIC_PASSWD_MD5
-+	bool "target passwd md5 format support has been removed"
-+	select BR2_LEGACY
-+	help
-+	  The default has been moved to SHA256 and all C libraries
-+	  now support that method by default
-+
- comment "Legacy options removed in 2018.11"
- 
- config BR2_TARGET_XLOADER
-diff --git a/system/Config.in b/system/Config.in
-index 2123d33..9a87b1b 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -68,16 +68,6 @@ choice
- 
- 	  Note: this is used at build-time, and *not* at runtime.
- 
--config BR2_TARGET_GENERIC_PASSWD_MD5
--	bool "md5"
--	help
--	  Use MD5 to encode passwords.
--
--	  The default. Wildly available, and pretty good.
--	  Although pretty strong, MD5 is now an old hash function, and
--	  suffers from some weaknesses, which makes it susceptible to
--	  brute-force attacks.
--
- config BR2_TARGET_GENERIC_PASSWD_SHA256
- 	bool "sha-256"
- 	help
--- 
-1.9.1
+> 
+>> Actually, an unrelated question arises: Why does the SDK need to build
+>> world, which includes all filesystem images, first? Should it not be
+>> sufficient to depend on $(PACKAGES) or now host-finalize only?
+> 
+> Yes, it would be sufficient to build packages + host-finalization I
+> believe.
+
+Ok, I might submit a patch in this direction then..
+
+
+regards,
+Andreas
+
+> 
+> Best regards,
+> 
+> Thomas
+> 
