@@ -1,96 +1,47 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 5 Dec 2018 23:36:25 +0100
-Subject: [Buildroot] Making the Qt5 packaging compatible with
- per-package folder
-In-Reply-To: <20181203172233.3dbc0867@windsurf.home>
-References: <20181116171845.4bc2a936@windsurf>
- <20181203172233.3dbc0867@windsurf.home>
-Message-ID: <20181205233625.74c4b28b@gmx.net>
+From: Christian Stewart <christian@paral.in>
+Date: Wed, 5 Dec 2018 14:39:03 -0800
+Subject: [Buildroot] Docker client does not function correctly in 2018.11
+In-Reply-To: <8dcf0b32c7fe49e8b30b10a482f3f23a@exitstrategytech.com>
+References: <ac041379a2d04fbeb3900fae7bab51be@exitstrategytech.com>
+ <8dcf0b32c7fe49e8b30b10a482f3f23a@exitstrategytech.com>
+Message-ID: <CA+h8R2pH=BTTh+farCMfJOW8dzYsUhN_ompMtc=Aaz4tQVbVXg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+David,
 
-On Mon, 3 Dec 2018 17:22:33 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+On Wed, Dec 5, 2018, 2:04 PM David J. Fogle <Dave@exitstrategytech.com>
+wrote:
 
-> Peter, Ga?l,
-> 
-> I was wondering if you had any feedback/idea on the below
-> questions/issues ?
+> I have investigated further, and narrowed the issue down to the
+> containerd, not the client. The containerd is being passed an invalid flag
+> -metrics-interval, and is constantly looping through it's init process.
+>
 
-Sorry, did not find enough spare time (yet) to take a deeper look
-into the problem and/or do some experiments..., but still on my
-ToDo list...
+Thank you for looking into this. We are also aware of a hang in docker
+startup due to random data starvation.
 
-Regards,
-Peter
+Could you please try either the "skiff" branch of
+https://github.com/paralin/buildroot.git or apply this patch:
+https://patchwork.ozlabs.org/patch/1003677/
 
-> 
-> Thanks!
-> 
-> Thomas
-> 
-> On Fri, 16 Nov 2018 17:18:45 +0100, Thomas Petazzoni wrote:
-> > Peter, Ga?l,
-> > 
-> > I don't know if you have followed the discussion, but I recently sent a
-> > new iteration of the per-package folder series [1], which allows to
-> > support top-level parallel build.
-> > 
-> > One issue is that the Qt5 packaging as done today in Buildroot is not
-> > compatible with per-package folders.
-> > 
-> > If you remember well, the installation of each Qt5 module works like
-> > this:
-> > 
-> >  - Staging installation
-> > 
-> >    Just "make install". No DESTDIR or INSTALL_ROOT is passed, because
-> >    the installation path is hardcoded in qmake itself. "make install"
-> >    will install stuff to both $(HOST_DIR) and $(STAGING_DIR).
-> > 
-> >  - Target installation
-> > 
-> >    We manually copy the shared libraries, QML files, fonts, and other
-> >    stuff. This is already annoying to maintain today, because we
-> >    sometimes forget to install something that is important, we need to
-> >    handle the LTS/latest Qt5 version difference, etc. It would be a lot
-> >    less maintenance if we could use "make install" also for the target
-> >    installation.
-> > 
-> > Even if the current packaging is not ideal, it worked fine. But it
-> > breaks badly with per-package folders. As explained above, the paths in
-> > qmake are hardcoded. So when you do "make install" in qt5location for
-> > example, it ends up being installed in the per-package folder of
-> > qt5base (both HOST_DIR and STAGING_DIR), as it's the qt5base
-> > HOST_DIR/STAGING_DIR that are hardcoded inside the qmake binary.
-> > 
-> > I tried to fix this issue, but for the moment, I haven't found a
-> > solution. I first tried to use the -extprefix ./configure option, but
-> > it didn't behave as we needed. Then I tried to do some manual
-> > replacement in the Qt5 Makefiles after they have been generated (like
-> > OpenEmbedded is doing), but they unfortunately get re-generated because
-> > we tweak the .prl files from Qt5, and the Qt5 Makefiles regenerates the
-> > Mkaefiles if they are older than the .prl files.
-> > 
-> > The current status of my experiment is visible at
-> > https://git.bootlin.com/users/thomas-petazzoni/buildroot/commit/?h=ppsh-qt5&id=676d26ab1ca3d8f8ee5788dbc06f4e0703188bf1,
-> > with a very long commit that explains the problem, and what was tried
-> > so far. At this point, I am considering cheating on the date of
-> > the .prl file to avoid the Makefiles from being re-generated, but this
-> > is really a hack on top of what is already a hack.
-> > 
-> > Do you have some other ideas to solve this ? Can we fix qmake to do the
-> > right thing ?
-> > 
-> > Thanks a lot for your help,
-> > 
-> > Thomas
-> > 
-> > [1] http://patchwork.ozlabs.org/project/buildroot/list/?series=75909  
-> 
-> 
-> 
+There was a commit merged as part of that series to bump containerd to a
+newer version. However, the docker engine bump from that series did not get
+merged until after the 2018.11 release window (the series was originally
+intended to be merged all at once). It's likely there is some
+incompatibility in startup flags as you say between the two containerd and
+docker versions present.
+
+I recommend to revert the containerd bump in 2018.11 or backport the docker
+engine bump.
+
+Best regards,
+Christian
+
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181205/84b56138/attachment.html>
