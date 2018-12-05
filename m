@@ -1,48 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 5 Dec 2018 17:31:03 +0100
-Subject: [Buildroot] [PATCH next v6 07/10] core: implement per-package
- SDK and target
-In-Reply-To: <1f520844-5501-a60b-cf66-5bae57b9f420@andin.de>
-References: <20181123145815.13008-1-thomas.petazzoni@bootlin.com>
- <20181123145815.13008-8-thomas.petazzoni@bootlin.com>
- <1f520844-5501-a60b-cf66-5bae57b9f420@andin.de>
-Message-ID: <20181205173103.1eb30a7b@windsurf>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Wed,  5 Dec 2018 10:33:11 -0600
+Subject: [Buildroot] [PATCH 1/2] system cfg: default mkpasswd to SHA
+Message-ID: <1544027592-35204-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Andreas,
+This patch drops the comment about checking the C libraries version as
+they now all support it by default
+    glibc 2.7+
+    uclibc (bdd8362a88 package/uclibc: defconfig: enable sha-256...)
+    musl 1.1.14+
 
-On Wed, 5 Dec 2018 17:08:20 +0100, Andreas Naumann wrote:
+This patch updates the help text and changes the default mkpasswd
+method to SHA256 from MD5
 
-> In an answer to v4 of this series I mentioned the issue I had with empty 
-> RPATH in some host-lib. After digging some more I found this happens 
-> during the prepare-sdk step (which I call in my wrapper script). Before 
-> this step, your suggested readelf output reports the correct pathes, 
-> however after, RPATH is empty. I compared this to a "standard" SDK, 
-> there RPATH is set to $ORIGIN/../lib or something similar.
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ system/Config.in | 14 +++-----------
+ 1 file changed, 3 insertions(+), 11 deletions(-)
 
-So are you saying the issue still exists, and to reproduce, I simply
-need to do:
-
- $ make
- $ make prepare-sdk
-
-of a build with BR2_PER_PACKAGE_DIRECTORIES=y ?
-
-> Actually, an unrelated question arises: Why does the SDK need to build 
-> world, which includes all filesystem images, first? Should it not be 
-> sufficient to depend on $(PACKAGES) or now host-finalize only?
-
-Yes, it would be sufficient to build packages + host-finalization I
-believe.
-
-Best regards,
-
-Thomas
+diff --git a/system/Config.in b/system/Config.in
+index 9e34f11..2123d33 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -61,7 +61,7 @@ endif
+ 
+ choice
+ 	bool "Passwords encoding"
+-	default BR2_TARGET_GENERIC_PASSWD_MD5
++	default BR2_TARGET_GENERIC_PASSWD_SHA256
+ 	help
+ 	  Choose the password encoding scheme to use when Buildroot
+ 	  needs to encode a password (eg. the root password, below).
+@@ -81,20 +81,12 @@ config BR2_TARGET_GENERIC_PASSWD_MD5
+ config BR2_TARGET_GENERIC_PASSWD_SHA256
+ 	bool "sha-256"
+ 	help
+-	  Use SHA256 to encode passwords.
+-
+-	  Very strong, but not ubiquitous, although available in glibc
+-	  for some time now. Choose only if you are sure your C library
+-	  understands SHA256 passwords.
++	  Use SHA256 to encode passwords which is stronger then MD5.
+ 
+ config BR2_TARGET_GENERIC_PASSWD_SHA512
+ 	bool "sha-512"
+ 	help
+-	  Use SHA512 to encode passwords.
+-
+-	  Extremely strong, but not ubiquitous, although available in
+-	  glibc for some time now. Choose only if you are sure your C
+-	  library understands SHA512 passwords.
++	  Use SHA512 to encode passwords which is stronger then SHA256
+ 
+ endchoice # Passwd encoding
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+1.9.1
