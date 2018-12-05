@@ -1,49 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 05 Dec 2018 22:58:49 +0100
-Subject: [Buildroot] [PATCH 1/1] python-idna: bump to version 2.8
-In-Reply-To: <20181204184347.15088-2-asafka7@gmail.com> (Asaf Kahlon's message
- of "Tue, 4 Dec 2018 20:43:47 +0200")
-References: <20181204184347.15088-1-asafka7@gmail.com>
- <20181204184347.15088-2-asafka7@gmail.com>
-Message-ID: <87efavzld2.fsf@dell.be.48ers.dk>
+Date: Wed, 5 Dec 2018 22:57:44 +0100
+Subject: [Buildroot] [git commit] python-django: bump to version 2.1.4
+Message-ID: <20181205215531.91A7987A6D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Asaf" == Asaf Kahlon <asafka7@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=89829c4f112e673985c06d458308c962cf31fb11
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
- > ---
- >  package/python-idna/python-idna.hash | 4 ++--
- >  package/python-idna/python-idna.mk   | 4 ++--
- >  2 files changed, 4 insertions(+), 4 deletions(-)
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
- > diff --git a/package/python-idna/python-idna.hash b/package/python-idna/python-idna.hash
- > index 4b3c84e5d8..ddfd44e97c 100644
- > --- a/package/python-idna/python-idna.hash
- > +++ b/package/python-idna/python-idna.hash
- > @@ -1,5 +1,5 @@
- >  # md5, sha256 from https://pypi.org/pypi/idna/json
- > -md5	0e5bb69018ddef1b9d95f681182be82c  idna-2.7.tar.gz
- > -sha256	684a38a6f903c1d71d6d5fac066b58d7768af4de2b832e426ec79c30daa94a16  idna-2.7.tar.gz
- > +md5    2e9ae0b4a0b26d1747c6127cdb060bc1  idna-2.8.tar.gz
- > +sha256 c357b3f628cf53ae2c4c05627ecc484553142ca23264e593d327bcde5e9c3407  idna-2.8.tar.gz
- >  # Locally computed sha256 checksums
- >  sha256	0d4bc7abd48dcfb14e24254ee404066737ff0167144e222914a2113b8794683e  LICENSE.rst
- > diff --git a/package/python-idna/python-idna.mk b/package/python-idna/python-idna.mk
- > index d5c57955a3..1dae47bb2b 100644
- > --- a/package/python-idna/python-idna.mk
- > +++ b/package/python-idna/python-idna.mk
- > @@ -4,9 +4,9 @@
- >  #
- >  ################################################################################
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 1b8ee83682..b6c85922a5 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5	1a447e95c81e1c9b2a7ad61f4681f022  Django-2.1.3.tar.gz
+-sha256	1ffab268ada3d5684c05ba7ce776eaeedef360712358d6a6b340ae9f16486916  Django-2.1.3.tar.gz
++md5	3afc8bcec941e37221287f1a5323b1f1  Django-2.1.4.tar.gz
++sha256	068d51054083d06ceb32ce02b7203f1854256047a0d58682677dd4f81bceabd7  Django-2.1.4.tar.gz
+ # Locally computed sha256 checksums
+ sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 29eb0b616b..9ce74fbdc5 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
  
- > -PYTHON_IDNA_VERSION = 2.7
- > +PYTHON_IDNA_VERSION = 2.8
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+-PYTHON_DJANGO_VERSION = 2.1.3
++PYTHON_DJANGO_VERSION = 2.1.4
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/93/b1/0d6febb88712c39aced7df232d432fa22f5613c4bff246a1f4841248a60d
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/83/f7/4939b60c4127d5f49ccb570e34f4c59ecc222949220234a88e4f363f1456
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_SETUP_TYPE = setuptools
