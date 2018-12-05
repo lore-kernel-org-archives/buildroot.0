@@ -1,92 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 5 Dec 2018 22:55:42 +0100
-Subject: [Buildroot] [PATCH 2/2] system cfg: remove passwd MD5 format
-In-Reply-To: <1544027592-35204-2-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1544027592-35204-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1544027592-35204-2-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20181205215542.GB2561@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 05 Dec 2018 22:58:41 +0100
+Subject: [Buildroot] [PATCH 1/1] python-django: bump to version 2.1.4
+In-Reply-To: <20181204184347.15088-1-asafka7@gmail.com> (Asaf Kahlon's message
+ of "Tue, 4 Dec 2018 20:43:46 +0200")
+References: <20181204184347.15088-1-asafka7@gmail.com>
+Message-ID: <87in07zlda.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Matt, All,
+>>>>> "Asaf" == Asaf Kahlon <asafka7@gmail.com> writes:
 
-On 2018-12-05 10:33 -0600, Matt Weber spake thusly:
-> As SHA256 is now default, removing weak MD5 option.  C libraries now
-> all support the SHA methods.
->     glibc 2.7+
->     uclibc (bdd8362a88 package/uclibc: defconfig: enable sha-256...)
->     musl 1.1.14+
-> 
-> One issue this would prevent is a host tool issue with a FIPS enabled
-> system where weak ciphers/methods are disabled. The crypt(3) call
-> checks /proc/sys/crypto/fips_enabled and would result in mkpasswd
-> returning "crypt failed."  Rather then create a host dependency check
-> this patch removes the potential issue.
-> 
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+ > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+ > ---
+ >  package/python-django/python-django.hash | 4 ++--
+ >  package/python-django/python-django.mk   | 4 ++--
+ >  2 files changed, 4 insertions(+), 4 deletions(-)
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+ > index 1b8ee83682..b6c85922a5 100644
+ > --- a/package/python-django/python-django.hash
+ > +++ b/package/python-django/python-django.hash
+ > @@ -1,5 +1,5 @@
+ >  # md5, sha256 from https://pypi.org/pypi/django/json
+ > -md5	1a447e95c81e1c9b2a7ad61f4681f022  Django-2.1.3.tar.gz
+ > -sha256	1ffab268ada3d5684c05ba7ce776eaeedef360712358d6a6b340ae9f16486916  Django-2.1.3.tar.gz
+ > +md5	3afc8bcec941e37221287f1a5323b1f1  Django-2.1.4.tar.gz
+ > +sha256	068d51054083d06ceb32ce02b7203f1854256047a0d58682677dd4f81bceabd7  Django-2.1.4.tar.gz
+ >  # Locally computed sha256 checksums
+ >  sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+ > diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+ > index 29eb0b616b..9ce74fbdc5 100644
+ > --- a/package/python-django/python-django.mk
+ > +++ b/package/python-django/python-django.mk
+ > @@ -4,10 +4,10 @@
+ >  #
+ >  ################################################################################
+ 
+ > -PYTHON_DJANGO_VERSION = 2.1.3
+ > +PYTHON_DJANGO_VERSION = 2.1.4
 
-Regards,
-Yann E. MORIN.
+Committed, thanks.
 
-> ---
->  Config.in.legacy |  8 ++++++++
->  system/Config.in | 10 ----------
->  2 files changed, 8 insertions(+), 10 deletions(-)
-> 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 02321c8..d70654c 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -143,6 +143,14 @@ comment "----------------------------------------------------"
->  endif
->  
->  ###############################################################################
-> +
-> +config BR2_TARGET_GENERIC_PASSWD_MD5
-> +	bool "target passwd md5 format support has been removed"
-> +	select BR2_LEGACY
-> +	help
-> +	  The default has been moved to SHA256 and all C libraries
-> +	  now support that method by default
-> +
->  comment "Legacy options removed in 2018.11"
->  
->  config BR2_TARGET_XLOADER
-> diff --git a/system/Config.in b/system/Config.in
-> index 2123d33..9a87b1b 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -68,16 +68,6 @@ choice
->  
->  	  Note: this is used at build-time, and *not* at runtime.
->  
-> -config BR2_TARGET_GENERIC_PASSWD_MD5
-> -	bool "md5"
-> -	help
-> -	  Use MD5 to encode passwords.
-> -
-> -	  The default. Wildly available, and pretty good.
-> -	  Although pretty strong, MD5 is now an old hash function, and
-> -	  suffers from some weaknesses, which makes it susceptible to
-> -	  brute-force attacks.
-> -
->  config BR2_TARGET_GENERIC_PASSWD_SHA256
->  	bool "sha-256"
->  	help
-> -- 
-> 1.9.1
-> 
+Any important fixes, E.G. should this be backported for 2018.11.x?
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
