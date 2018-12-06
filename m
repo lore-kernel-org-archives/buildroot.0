@@ -1,35 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 6 Dec 2018 22:17:12 +0100
-Subject: [Buildroot] [PATCH 03/11] support/scripts/graph-depends:
- introduce MANDATORY_DEPS array
-In-Reply-To: <370d36d0c5085f498bb16dedf8ac0a21becb4aa8.1543741464.git.yann.morin.1998@free.fr>
-References: <cover.1543741464.git.yann.morin.1998@free.fr>
- <370d36d0c5085f498bb16dedf8ac0a21becb4aa8.1543741464.git.yann.morin.1998@free.fr>
-Message-ID: <20181206221712.179641c2@windsurf>
+Date: Thu, 6 Dec 2018 22:17:38 +0100
+Subject: [Buildroot] [git commit] package/pulseview: drop boost thread
+Message-ID: <20181206211401.549088886E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2d2b519e6291513571208b830bc8c9a97fb277c7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  2 Dec 2018 10:04:35 +0100, Yann E. MORIN wrote:
-> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> 
-> This array will be re-used in another function in a follow-up commit,
-> so it makes sense to factor it out.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  support/scripts/graph-depends | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
+Since bump to 0.4.0, boost thread is not needed anymore:
+https://sigrok.org/gitweb/?p=pulseview.git;a=commit;h=b8f1cdeba7cf6c2b749ff60102ce4e260fa1309e
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pulseview/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/pulseview/Config.in b/package/pulseview/Config.in
+index 301acf7d90..a42fdcd879 100644
+--- a/package/pulseview/Config.in
++++ b/package/pulseview/Config.in
+@@ -18,7 +18,6 @@ config BR2_PACKAGE_PULSEVIEW
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_BOOST_FILESYSTEM
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+-	select BR2_PACKAGE_BOOST_THREAD
+ 	select BR2_PACKAGE_BOOST_SERIALIZATION
+ 	help
+ 	  PulseView is a Qt based logic analyzer, oscilloscope
