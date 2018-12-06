@@ -1,100 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 6 Dec 2018 22:37:10 +0100
-Subject: [Buildroot] [git commit] support/testing: add lua test
-Message-ID: <20181206220522.D55EC85A8D@busybox.osuosl.org>
+Date: Thu, 6 Dec 2018 23:08:59 +0100
+Subject: [Buildroot] [git commit] support/testing: add prosody test
+Message-ID: <20181206220522.E51E885A8D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bcfbf6437a67199916af9098f3cd38bd5d6c453c
+commit: https://git.buildroot.net/buildroot/commit/?id=9d0863012862c751602c3f1e96faeea77272fc61
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .gitlab-ci.yml                            |  2 ++
- support/testing/tests/package/test_lua.py | 59 +++++++++++++++++++++++++++++++
- 2 files changed, 61 insertions(+)
+ .gitlab-ci.yml                                |  2 ++
+ support/testing/tests/package/test_prosody.py | 48 +++++++++++++++++++++++++++
+ 2 files changed, 50 insertions(+)
 
 diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 67f5da6839..a7edaddf3d 100644
+index a7edaddf3d..051439cc93 100644
 --- a/.gitlab-ci.yml
 +++ b/.gitlab-ci.yml
-@@ -315,6 +315,8 @@ tests.init.test_systemd.TestInitSystemSystemdRwNetworkd: *runtime_test
- tests.package.test_dropbear.TestDropbear: *runtime_test
- tests.package.test_ipython.TestIPythonPy2: *runtime_test
- tests.package.test_ipython.TestIPythonPy3: *runtime_test
-+tests.package.test_lua.TestLua: *runtime_test
-+tests.package.test_lua.TestLuajit: *runtime_test
- tests.package.test_perl.TestPerl: *runtime_test
- tests.package.test_perl_class_load.TestPerlClassLoad: *runtime_test
- tests.package.test_perl_dbd_mysql.TestPerlDBDmysql: *runtime_test
-diff --git a/support/testing/tests/package/test_lua.py b/support/testing/tests/package/test_lua.py
+@@ -328,6 +328,8 @@ tests.package.test_perl_libwww_perl.TestPerllibwwwperl: *runtime_test
+ tests.package.test_perl_mail_dkim.TestPerlMailDKIM: *runtime_test
+ tests.package.test_perl_x10.TestPerlX10: *runtime_test
+ tests.package.test_perl_xml_libxml.TestPerlXMLLibXML: *runtime_test
++tests.package.test_prosody.TestLua51Prosody: *runtime_test
++tests.package.test_prosody.TestLuajitProsody: *runtime_test
+ tests.package.test_python.TestPython2: *runtime_test
+ tests.package.test_python.TestPython3: *runtime_test
+ tests.package.test_python_argh.TestPythonPy2Argh: *runtime_test
+diff --git a/support/testing/tests/package/test_prosody.py b/support/testing/tests/package/test_prosody.py
 new file mode 100644
-index 0000000000..77358ba138
+index 0000000000..8ef8ff95ff
 --- /dev/null
-+++ b/support/testing/tests/package/test_lua.py
-@@ -0,0 +1,59 @@
-+import os
-+
-+import infra.basetest
++++ b/support/testing/tests/package/test_prosody.py
+@@ -0,0 +1,48 @@
++from tests.package.test_lua import TestLuaBase
 +
 +
-+class TestLuaBase(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
++class TestProsody(TestLuaBase):
++    def lua_dependencies_test(self):
++        self.module_test('bit')     # luabitop
++        self.module_test('lfs')     # luafilesystem
++        self.module_test('lxp')     # luaexpat
++        self.module_test('socket')  # luasocket
++        self.module_test('ssl')     # luasec
 +
-+    def login(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv7",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+    def version_test(self, version):
-+        cmd = "lua -v"
++    def prosody_test(self):
++        # prosody was launched as service
++        cmd = "prosodyctl status"
 +        output, exit_code = self.emulator.run(cmd)
 +        self.assertEqual(exit_code, 0)
-+        self.assertIn(version, output[0])
-+
-+    def g_version_test(self, expected):
-+        cmd = "lua -e 'print(_G._VERSION)'"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(output[0], expected)
-+
-+    def module_test(self, module, script="a=1"):
-+        cmd = "lua -l {} -e '{}'".format(module, script)
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
++        self.assertIn("Prosody is running", output[0])
 +
 +
-+class TestLua(TestLuaBase):
++class TestProsodyLua51(TestProsody):
 +    config = TestLuaBase.config + \
 +        """
 +        BR2_PACKAGE_LUA=y
++        BR2_PACKAGE_LUA_5_1=y
++        BR2_PACKAGE_PROSODY=y
 +        """
 +
 +    def test_run(self):
 +        self.login()
-+        self.version_test('Lua 5.3')
-+        self.g_version_test('Lua 5.3')
++        self.version_test('Lua 5.1')
++        self.g_version_test('Lua 5.1')
++        self.lua_dependencies_test()
++        self.prosody_test()
 +
 +
-+class TestLuajit(TestLuaBase):
++class TestProsodyLuajit(TestProsody):
 +    config = TestLuaBase.config + \
 +        """
 +        BR2_PACKAGE_LUAJIT=y
++        BR2_PACKAGE_PROSODY=y
 +        """
 +
 +    def test_run(self):
 +        self.login()
 +        self.version_test('LuaJIT 2')
 +        self.g_version_test('Lua 5.1')
++        self.lua_dependencies_test()
++        self.prosody_test()
