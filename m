@@ -1,7 +1,7 @@
 From: David J. Fogle <Dave@exitstrategytech.com>
-Date: Thu, 6 Dec 2018 02:24:20 +0000
+Date: Thu, 6 Dec 2018 02:36:06 +0000
 Subject: [Buildroot] Docker client does not function correctly in 2018.11
-In-Reply-To: <CA+h8R2odgbjQYv2CbQBGCn-6mPcw3_AJoPuXhBdATVtmb5HpcQ@mail.gmail.com>
+In-Reply-To: <d1afc122a10f4d4da893e5f9fc91bca3@exitstrategytech.com>
 References: <ac041379a2d04fbeb3900fae7bab51be@exitstrategytech.com>
  <8dcf0b32c7fe49e8b30b10a482f3f23a@exitstrategytech.com>
  <CA+h8R2pH=BTTh+farCMfJOW8dzYsUhN_ompMtc=Aaz4tQVbVXg@mail.gmail.com>
@@ -13,12 +13,21 @@ References: <ac041379a2d04fbeb3900fae7bab51be@exitstrategytech.com>
  <CA+h8R2oK2mPefnBQ9c-jd7m4Tc7=s-0nsCV965r9DpsVTULuaA@mail.gmail.com>
  <ec3f3d11856642d09f7a59f5d1fe3dbd@exitstrategytech.com>,
  <CA+h8R2odgbjQYv2CbQBGCn-6mPcw3_AJoPuXhBdATVtmb5HpcQ@mail.gmail.com>
-Message-ID: <d1afc122a10f4d4da893e5f9fc91bca3@exitstrategytech.com>
+ <d1afc122a10f4d4da893e5f9fc91bca3@exitstrategytech.com>
+Message-ID: <ff88c64bc71a4a3e816cf4c90a501ec3@exitstrategytech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+I think I have myself mostly sorted, I will try to replicate this working config in the morning on 2018.11 , but as far as I can tell, my original issue of the flag being passed when not defined is resolved in your skiff build. I assume your skiff isn't recommended for production use?
+
+From: David J. Fogle <Dave@exitstrategytech.com>
+Sent: Wednesday, December 5, 2018 8:24 PM
+To: Christian Stewart <christian@paral.in>
+Cc: Matthew Weber <matthew.weber@rockwellcollins.com>; Hamilton Southworth <hamilton@aperturerobotics.com>; buildroot at busybox.net
+Subject: Re: Re: Re: Docker client does not function correctly in 2018.11
 
 Well, as of now, I can start the docker-containerd without any flags, from the cli, and it works. The system unit hangs without output though.
 
@@ -50,4 +59,4 @@ Best regards,
 Christian
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181206/2ecfcc8a/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181206/4d757487/attachment.html>
