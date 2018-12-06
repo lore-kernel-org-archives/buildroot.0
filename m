@@ -1,80 +1,44 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed,  5 Dec 2018 20:06:29 -0600
-Subject: [Buildroot] [PATCH v2 3/3] system cfg: remove mkpasswd MD5 format
- option
-In-Reply-To: <1544061989-7450-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1544061989-7450-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1544061989-7450-3-git-send-email-matthew.weber@rockwellcollins.com>
+From: David J. Fogle <Dave@exitstrategytech.com>
+Date: Thu, 6 Dec 2018 02:16:43 +0000
+Subject: [Buildroot] Docker client does not function correctly in 2018.11
+In-Reply-To: <CA+h8R2oK2mPefnBQ9c-jd7m4Tc7=s-0nsCV965r9DpsVTULuaA@mail.gmail.com>
+References: <ac041379a2d04fbeb3900fae7bab51be@exitstrategytech.com>
+ <8dcf0b32c7fe49e8b30b10a482f3f23a@exitstrategytech.com>
+ <CA+h8R2pH=BTTh+farCMfJOW8dzYsUhN_ompMtc=Aaz4tQVbVXg@mail.gmail.com>
+ <5db9d4aa533e4e8590b5c33d2bb47665@exitstrategytech.com>
+ <p05ed2odjpa9vgdmd5cx9cew.1544054248971@email.android.com>
+ <CA+h8R2orLF5mjc6g8qDwG5Sh0WMXicnLb9DTB_qQiTBoJd45yA@mail.gmail.com>
+ <6e255ac5c09e4841ac67d6f383249556@exitstrategytech.com>
+ <99kkgapwmjckouvyyw5vo6pe.1544060571584@email.android.com>
+ <CA+h8R2oK2mPefnBQ9c-jd7m4Tc7=s-0nsCV965r9DpsVTULuaA@mail.gmail.com>
+Message-ID: <ec3f3d11856642d09f7a59f5d1fe3dbd@exitstrategytech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As SHA256 is now default, removing weak MD5 option.  C libraries now
-all support the SHA methods.
-    glibc 2.7+
-    uclibc (bdd8362a88 package/uclibc: defconfig: enable sha-256...)
-    musl 1.1.14+
+Thanks for the advice. I have to put my kernel builder hat on for the first time in a while it seems. I have configured the kernel according to the recommended settings in the Gentoo handbook, and am trying again. After a build with overlay enabled, I was able to get docker to run far enough along to complain about cgroup support lacking, so I think that the skiff builds are fixed, I will reply with verification as soon as I download the image from the build server.
 
-One issue this would prevent, is a host tool issue with a FIPS enabled
-system where weak ciphers/methods are disabled. It seems the crypt(3)
-call is impacted by /proc/sys/crypto/fips_enabled (per crypt(3) man
-page). It results in mkpasswd returning "(EPERM) crypt failed."
-Rather then create a Buildroot host dependency check, this patch
-removes the potential corner case from being selected.
+Thank you for your help, if you represent even 1 percent of the contributors to buildroot, I imagine this project is worth me investing time into it. So far, this has been an amazing journey.  
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
-Changes
-v1 -> v2
- - Updated description wording
----
- Config.in.legacy |  8 ++++++++
- system/Config.in | 10 ----------
- 2 files changed, 8 insertions(+), 10 deletions(-)
+-----Original Message-----
+From: Christian Stewart <christian@paral.in> 
+Sent: Wednesday, December 5, 2018 7:47 PM
+To: David J. Fogle <Dave@exitstrategytech.com>
+Cc: Christian Stewart <christian@paral.in>; Matthew Weber <matthew.weber@rockwellcollins.com>; Hamilton Southworth <hamilton@aperturerobotics.com>; buildroot at busybox.net
+Subject: Re: Re: Re: Docker client does not function correctly in 2018.11
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 02321c8..d70654c 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -143,6 +143,14 @@ comment "----------------------------------------------------"
- endif
- 
- ###############################################################################
-+
-+config BR2_TARGET_GENERIC_PASSWD_MD5
-+	bool "target passwd md5 format support has been removed"
-+	select BR2_LEGACY
-+	help
-+	  The default has been moved to SHA256 and all C libraries
-+	  now support that method by default
-+
- comment "Legacy options removed in 2018.11"
- 
- config BR2_TARGET_XLOADER
-diff --git a/system/Config.in b/system/Config.in
-index 65c92a8..0f77b9b 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -68,16 +68,6 @@ choice
- 
- 	  Note: this is used at build-time, and *not* at runtime.
- 
--config BR2_TARGET_GENERIC_PASSWD_MD5
--	bool "md5"
--	help
--	  Use MD5 to encode passwords.
--
--	  The default. Wildly available, and pretty good.
--	  Although pretty strong, MD5 is now an old hash function, and
--	  suffers from some weaknesses, which makes it susceptible to
--	  brute-force attacks.
--
- config BR2_TARGET_GENERIC_PASSWD_SHA256
- 	bool "sha-256"
- 	help
--- 
-1.9.1
+Hi David,
+
+On Wed, Dec 5, 2018 at 5:42 PM David J. Fogle <Dave@exitstrategytech.com> wrote:
+> Ok, after adding in overlay, I am closer I think. One more kernel build with cgroup support. Is there any form of official documentation on docker and buildroot, or is it shoot first ask questions later?
+
+There is no official documentation at this point, the Docker package exists as a "include the Docker binaries in my target system" minimal option in Buildroot, and developers are currently left to decide how to configure it themselves.
+
+If you want to see how I use Docker and Buildroot as a reference, see https://github.com/paralin/SkiffOS.git - feel free to open issues there as well if you have Docker related questions / other non-Buildroot specific topics to discuss.
+
+The minimal requirements for Docker are a kernel compiled with a specific set of features enabled (see the Docker documentation) as well as some init process to start the daemon at system startup.
+
+Best regards,
+Christian Stewart
