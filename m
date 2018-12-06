@@ -1,119 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 6 Dec 2018 22:19:59 +0100
-Subject: [Buildroot] [git commit]
- support/testing/tests/packages/test_perl_*: regeneration
-Message-ID: <20181206212822.E65DB8B4F6@busybox.osuosl.org>
+Date: Thu, 6 Dec 2018 22:19:48 +0100
+Subject: [Buildroot] [git commit] utils/scancpan: mark XS modules in
+ docstring of test
+Message-ID: <20181206212822.DFA9386DB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe4b91db57393e1577d5a9549fa9e059f8a8d8e1
+commit: https://git.buildroot.net/buildroot/commit/?id=1b9f4addbc62b34601a12f0daad51280c9321bd3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/testing/tests/package/test_perl_class_load.py  | 4 ++--
- support/testing/tests/package/test_perl_gdgraph.py     | 2 +-
- support/testing/tests/package/test_perl_libwww_perl.py | 2 +-
- support/testing/tests/package/test_perl_mail_dkim.py   | 6 +++---
- support/testing/tests/package/test_perl_x10.py         | 2 +-
- support/testing/tests/package/test_perl_xml_libxml.py  | 2 +-
- 6 files changed, 9 insertions(+), 9 deletions(-)
+ utils/scancpan | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/support/testing/tests/package/test_perl_class_load.py b/support/testing/tests/package/test_perl_class_load.py
-index 1e86c03743..fbcd904aaf 100644
---- a/support/testing/tests/package/test_perl_class_load.py
-+++ b/support/testing/tests/package/test_perl_class_load.py
-@@ -6,14 +6,14 @@ class TestPerlClassLoad(TestPerlBase):
-     package:
-         Class-Load
-     direct dependencies:
--        Data-OptList *
-+        Data-OptList
-         Module-Implementation
-         Module-Runtime
-         Package-Stash
-         Try-Tiny
-     indirect dependencies:
-         Dist-CheckConflicts
--        Params-Util
-+        Params-Util   XS
-         Sub-Install
-     """
- 
-diff --git a/support/testing/tests/package/test_perl_gdgraph.py b/support/testing/tests/package/test_perl_gdgraph.py
-index 16cd8cb8ec..23ddbca4ae 100644
---- a/support/testing/tests/package/test_perl_gdgraph.py
-+++ b/support/testing/tests/package/test_perl_gdgraph.py
-@@ -6,7 +6,7 @@ class TestPerlGDGraph(TestPerlBase):
-     package:
-         GDGraph
-     direct dependencies:
--        GD
-+        GD   XS
-         GDTextUtil
-     """
- 
-diff --git a/support/testing/tests/package/test_perl_libwww_perl.py b/support/testing/tests/package/test_perl_libwww_perl.py
-index e777071bb5..af9f7c7ed4 100644
---- a/support/testing/tests/package/test_perl_libwww_perl.py
-+++ b/support/testing/tests/package/test_perl_libwww_perl.py
-@@ -8,7 +8,7 @@ class TestPerllibwwwperl(TestPerlBase):
-     direct dependencies:
-         Encode-Locale
-         File-Listing
--        HTML-Parser
-+        HTML-Parser   XS
-         HTTP-Cookies
-         HTTP-Daemon
-         HTTP-Date
-diff --git a/support/testing/tests/package/test_perl_mail_dkim.py b/support/testing/tests/package/test_perl_mail_dkim.py
-index dc4d4bb3a7..7affce82b2 100644
---- a/support/testing/tests/package/test_perl_mail_dkim.py
-+++ b/support/testing/tests/package/test_perl_mail_dkim.py
-@@ -6,13 +6,13 @@ class TestPerlMailDKIM(TestPerlBase):
-     package:
-         Mail-DKIM
-     direct dependencies:
--        Crypt-OpenSSL-RSA
-+        Crypt-OpenSSL-RSA   XS
-         MailTools
-         Net-DNS
-         Net-DNS-Resolver-Mock
--        YAML-LibYAML
-+        YAML-LibYAML   XS
-     indirect dependencies:
--        Crypt-OpenSSL-Random
-+        Crypt-OpenSSL-Random   XS
-         Digest-HMAC
-         TimeDate
-     """
-diff --git a/support/testing/tests/package/test_perl_x10.py b/support/testing/tests/package/test_perl_x10.py
-index 46f247f2d4..84feb74e69 100644
---- a/support/testing/tests/package/test_perl_x10.py
-+++ b/support/testing/tests/package/test_perl_x10.py
-@@ -7,7 +7,7 @@ class TestPerlX10(TestPerlBase):
-         X10
-     direct dependencies:
-         Astro-SunTime
--        Device-SerialPort
-+        Device-SerialPort   XS
-         Time-ParseDate
-     """
- 
-diff --git a/support/testing/tests/package/test_perl_xml_libxml.py b/support/testing/tests/package/test_perl_xml_libxml.py
-index 76eacfaea1..faace5dd03 100644
---- a/support/testing/tests/package/test_perl_xml_libxml.py
-+++ b/support/testing/tests/package/test_perl_xml_libxml.py
-@@ -4,7 +4,7 @@ from tests.package.test_perl import TestPerlBase
- class TestPerlXMLLibXML(TestPerlBase):
-     """
-     package:
--        XML-LibXML
-+        XML-LibXML   XS
-     direct dependencies:
-         XML-NamespaceSupport
-         XML-SAX
+diff --git a/utils/scancpan b/utils/scancpan
+index 080e4b3562..6592afc2fd 100755
+--- a/utils/scancpan
++++ b/utils/scancpan
+@@ -519,6 +519,7 @@ my %dist;               # name -> metacpan data
+ my %need_target;        # name -> 1 if target package is needed
+ my %need_host;          # name -> 1 if host package is needed
+ my %need_dlopen;        # name -> 1 if requires dynamic library
++my %is_xs;              # name -> 1 if XS module
+ my %deps_build;         # name -> list of host dependencies
+ my %deps_runtime;       # name -> list of target dependencies
+ my %license_files;      # name -> hash of license files
+@@ -614,7 +615,7 @@ sub fetch {
+             my $author = $result->{author};
+             my $release = $name . q{-} . $result->{version};
+             my $manifest = $mcpan->source( author => $author, release => $release, path => 'MANIFEST' );
+-            $need_dlopen{$name} = is_xs( $manifest );
++            $need_dlopen{$name} = $is_xs{$name} = is_xs( $manifest );
+             foreach my $fname (find_license_files( $manifest )) {
+                 my $license = $mcpan->source( author => $author, release => $release, path => $fname );
+                 $license_files{$name}->{$fname} = sha256_hex( $license );
+@@ -811,6 +812,7 @@ while (my ($distname, $dist) = each %dist) {
+         $classname =~ s|-||g;
+         my $modname = $distname;
+         $modname =~ s|-|::|g;
++        my $mark = $is_xs{$distname} ? q{   XS} : q{};
+         my @indirect = (get_indirect_dependencies( $distname ));
+         say qq{write ${testname}} unless $quiet;
+         open my $fh, q{>}, $testname;
+@@ -820,16 +822,16 @@ while (my ($distname, $dist) = each %dist) {
+         say {$fh} qq{class TestPerl${classname}(TestPerlBase):};
+         say {$fh} qq{    """};
+         say {$fh} qq{    package:};
+-        say {$fh} qq{        ${distname}};
++        say {$fh} qq{        ${distname}${mark}};
+         say {$fh} qq{    direct dependencies:};
+         foreach my $dep (sort @{$deps_runtime{$distname}}) {
+-            my $mark = want_test( $dep ) ? q{ *} : q{};
++            $mark = $is_xs{$dep} ? q{   XS} : q{};
+             say {$fh} qq{        ${dep}${mark}};
+         }
+         if (scalar @indirect > 0) {
+             say {$fh} qq{    indirect dependencies:};
+             foreach my $dep (sort @indirect) {
+-                my $mark = want_test( $dep ) ? q{ *} : q{};
++                $mark = $is_xs{$dep} ? q{   XS} : q{};
+                 say {$fh} qq{        ${dep}${mark}};
+             }
+         }
