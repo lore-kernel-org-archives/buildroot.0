@@ -1,44 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 6 Dec 2018 21:21:03 +0100
-Subject: [Buildroot] [git commit] package/libiscsi: add optional dependency
- to cunit
-Message-ID: <20181206201730.7DA8484272@busybox.osuosl.org>
+Date: Thu, 6 Dec 2018 21:21:17 +0100
+Subject: [Buildroot] [PATCH] package/libiscsi: fix build due to warnings
+In-Reply-To: <20181204093152.10692-1-yann.morin.1998@free.fr>
+References: <20181204093152.10692-1-yann.morin.1998@free.fr>
+Message-ID: <20181206212117.18fc93c0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ddd006784c51887067c3d74319c41f0a7300df11
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-libiscsi uses cunit for its test suite, and autodetects its presence.
+On Tue,  4 Dec 2018 10:31:52 +0100, Yann E. MORIN wrote:
+> Fixes:
+>     http://autobuild.buildroot.org/results/55b/55bf50fc7dcd465b71b5757434887dd3d0b25abc/
+>     http://autobuild.buildroot.org/results/98d/98dcfe5c9fc3babd5c8d3116d5128d437715c44e/
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/libiscsi/libiscsi.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Usually, we just try to disable tests altogether, but there is no way to
-do so. So, ensure proper ordering.
+Applied to master, thanks.
 
-Note: there is an ac_cv_have_cunit variable, but it is not a true
-ac_cv* cache variable, and the value provided on the command line or
-environment is properly ignored.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libiscsi/libiscsi.mk | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/libiscsi/libiscsi.mk b/package/libiscsi/libiscsi.mk
-index a34069d7bf..2b26a1427c 100644
---- a/package/libiscsi/libiscsi.mk
-+++ b/package/libiscsi/libiscsi.mk
-@@ -11,6 +11,10 @@ LIBISCSI_LICENSE_FILES = COPYING LICENCE-GPL-2.txt LICENCE-LGPL-2.1.txt
- LIBISCSI_INSTALL_STAGING = YES
- LIBISCSI_AUTORECONF = YES
- 
-+ifeq ($(BR2_PACKAGE_CUNIT),y)
-+LIBISCSI_DEPENDENCIES += cunit
-+endif
-+
- LIBISCSI_CONF_OPTS = --disable-werror --disable-manpages
- 
- # We need to create the m4 directory to make autoreconf work properly.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
