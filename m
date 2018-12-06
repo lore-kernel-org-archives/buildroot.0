@@ -1,7 +1,7 @@
-From: Christian Stewart <christian@paral.in>
-Date: Wed, 5 Dec 2018 18:23:38 -0800
+From: David J. Fogle <Dave@exitstrategytech.com>
+Date: Thu, 6 Dec 2018 02:24:20 +0000
 Subject: [Buildroot] Docker client does not function correctly in 2018.11
-In-Reply-To: <ec3f3d11856642d09f7a59f5d1fe3dbd@exitstrategytech.com>
+In-Reply-To: <CA+h8R2odgbjQYv2CbQBGCn-6mPcw3_AJoPuXhBdATVtmb5HpcQ@mail.gmail.com>
 References: <ac041379a2d04fbeb3900fae7bab51be@exitstrategytech.com>
  <8dcf0b32c7fe49e8b30b10a482f3f23a@exitstrategytech.com>
  <CA+h8R2pH=BTTh+farCMfJOW8dzYsUhN_ompMtc=Aaz4tQVbVXg@mail.gmail.com>
@@ -11,13 +11,30 @@ References: <ac041379a2d04fbeb3900fae7bab51be@exitstrategytech.com>
  <6e255ac5c09e4841ac67d6f383249556@exitstrategytech.com>
  <99kkgapwmjckouvyyw5vo6pe.1544060571584@email.android.com>
  <CA+h8R2oK2mPefnBQ9c-jd7m4Tc7=s-0nsCV965r9DpsVTULuaA@mail.gmail.com>
- <ec3f3d11856642d09f7a59f5d1fe3dbd@exitstrategytech.com>
-Message-ID: <CA+h8R2odgbjQYv2CbQBGCn-6mPcw3_AJoPuXhBdATVtmb5HpcQ@mail.gmail.com>
+ <ec3f3d11856642d09f7a59f5d1fe3dbd@exitstrategytech.com>,
+ <CA+h8R2odgbjQYv2CbQBGCn-6mPcw3_AJoPuXhBdATVtmb5HpcQ@mail.gmail.com>
+Message-ID: <d1afc122a10f4d4da893e5f9fc91bca3@exitstrategytech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+Well, as of now, I can start the docker-containerd without any flags, from the cli, and it works. The system unit hangs without output though.
+
+
+
+David Fogle
+
+CTO - Exit Strategy
+
+
+-------- Original message --------
+From: Christian Stewart <christian@paral.in>
+Date: 12/5/18 8:22 PM (GMT-06:00)
+To: "David J. Fogle" <Dave@exitstrategytech.com>
+Cc: Christian Stewart <christian@paral.in>, Matthew Weber <matthew.weber@rockwellcollins.com>, Hamilton Southworth <hamilton@aperturerobotics.com>, buildroot at busybox.net
+Subject: Re: Re: Re: Docker client does not function correctly in 2018.11
 
 Hi David,
 
@@ -31,3 +48,6 @@ https://github.com/docker/engine/blob/master/contrib/check-config.sh
 
 Best regards,
 Christian
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181206/2ecfcc8a/attachment.html>
