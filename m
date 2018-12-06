@@ -1,5 +1,5 @@
 From: David J. Fogle <Dave@exitstrategytech.com>
-Date: Thu, 6 Dec 2018 00:38:22 +0000
+Date: Thu, 6 Dec 2018 00:41:26 +0000
 Subject: [Buildroot] Docker client does not function correctly in 2018.11
 In-Reply-To: <CA+h8R2orLF5mjc6g8qDwG5Sh0WMXicnLb9DTB_qQiTBoJd45yA@mail.gmail.com>
 References: <ac041379a2d04fbeb3900fae7bab51be@exitstrategytech.com>
@@ -8,14 +8,14 @@ References: <ac041379a2d04fbeb3900fae7bab51be@exitstrategytech.com>
  <5db9d4aa533e4e8590b5c33d2bb47665@exitstrategytech.com>
  <p05ed2odjpa9vgdmd5cx9cew.1544054248971@email.android.com>,
  <CA+h8R2orLF5mjc6g8qDwG5Sh0WMXicnLb9DTB_qQiTBoJd45yA@mail.gmail.com>
-Message-ID: <4c6a6d62303a4f6aabb5b0d7bbd8494c@exitstrategytech.com>
+Message-ID: <6e255ac5c09e4841ac67d6f383249556@exitstrategytech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I didn't have it enabled on the kernel config, I had assumed it was more or less a default, but it isn't. I am downloading my new build now, then picking up my other half, and I can report back after that. ETA 1 hr.
+I'm not seeing that behaviour though, it's the deamon starting, erroring out, then restarting again, a few times a second. Only message anywhere is the one about the invalid flag from the go error output, about -metrics-interval. Last time I ran into something like this was Debian had a mismatch between runc and docker at one point, and it did similar things.
 
 
 
@@ -61,4 +61,4 @@ Best,
 Christian
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181206/b67c451b/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181206/0f8ed036/attachment.html>
