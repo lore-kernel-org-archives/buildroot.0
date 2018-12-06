@@ -1,72 +1,99 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  6 Dec 2018 23:39:09 +0100
-Subject: [Buildroot] [PATCH 1/1] liboping: fix format-truncation error
-Message-ID: <20181206223909.23161-1-fontaine.fabrice@gmail.com>
+From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
+Date: Fri,  7 Dec 2018 06:58:42 +0800
+Subject: [Buildroot] [PATCH 1/1] package/python-aiohttp-jinja2: new package
+Message-ID: <1544137122-26766-1-git-send-email-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-liboping.c: In function 'ping_host_add':
-liboping.c:207:9: error: '%s' directive output may be truncated writing
-up to 255 bytes into a region of size 243 [-Werror=format-truncation=]
-    "%s: %s", function, message);
-         ^~
-liboping.c:1644:40:
-    ping_set_error (obj, "getaddrinfo", errmsg);
-                                        ~~~~~~
-liboping.c:206:2: note: 'snprintf' output between 14 and 269 bytes into
-a destination of size 256
-  snprintf (obj->errmsg, sizeof (obj->errmsg),
-  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    "%s: %s", function, message);
+From: James Hilliard <james.hilliard1@gmail.com>
 
-Fixes:
- - http://autobuild.buildroot.org/results/b12d86388b495a96194e0bcbb5c19a4e35cbc53d
+jinja2 template renderer for aiohttp.web
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- ...size-to-make-GCC-s-truncation-check-happy.patch | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/liboping/0001-ping_host_add-Decrease-buffer-size-to-make-GCC-s-truncation-check-happy.patch
+ DEVELOPERS                                               |  1 +
+ package/Config.in                                        |  1 +
+ package/python-aiohttp-jinja2/Config.in                  | 10 ++++++++++
+ package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash |  5 +++++
+ package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk   | 14 ++++++++++++++
+ 5 files changed, 31 insertions(+)
+ create mode 100644 package/python-aiohttp-jinja2/Config.in
+ create mode 100644 package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash
+ create mode 100644 package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk
 
-diff --git a/package/liboping/0001-ping_host_add-Decrease-buffer-size-to-make-GCC-s-truncation-check-happy.patch b/package/liboping/0001-ping_host_add-Decrease-buffer-size-to-make-GCC-s-truncation-check-happy.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c289b3f..cc60922 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -992,6 +992,7 @@ F:	configs/pine64_sopine_defconfig
+ N:	James Hilliard <james.hilliard1@gmail.com>
+ F:	package/python-aiodns/
+ F:	package/python-aiohttp/
++F:	package/python-aiohttp-jinja2/
+ F:	package/python-async-timeout/
+ F:	package/python-cchardet/
+ F:	package/python-multidict/
+diff --git a/package/Config.in b/package/Config.in
+index f6252f2..fe95f08 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -799,6 +799,7 @@ menu "External python modules"
+ 	source "package/python-aiocoap/Config.in"
+ 	source "package/python-aiodns/Config.in"
+ 	source "package/python-aiohttp/Config.in"
++	source "package/python-aiohttp-jinja2/Config.in"
+ 	source "package/python-alsaaudio/Config.in"
+ 	source "package/python-argh/Config.in"
+ 	source "package/python-arrow/Config.in"
+diff --git a/package/python-aiohttp-jinja2/Config.in b/package/python-aiohttp-jinja2/Config.in
 new file mode 100644
-index 0000000000..b0aca8a715
+index 0000000..4c356fe
 --- /dev/null
-+++ b/package/liboping/0001-ping_host_add-Decrease-buffer-size-to-make-GCC-s-truncation-check-happy.patch
-@@ -0,0 +1,31 @@
-+From 18ca43507b351f339ff23062541ee8d58e813a53 Mon Sep 17 00:00:00 2001
-+From: Florian Forster <ff@octo.it>
-+Date: Sun, 29 Jul 2018 14:34:19 +0200
-+Subject: [PATCH] ping_host_add: Decrease buffer size to make GCC's truncation
-+ check happy.
++++ b/package/python-aiohttp-jinja2/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PYTHON_AIOHTTP_JINJA2
++	bool "python-aiohttp-jinja2"
++	depends on BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON_AIOHTTP # runtime
++	select BR2_PACKAGE_PYTHON_JINJA2 # runtime
++	help
++	  jinja2 template renderer for aiohttp.web (http server for
++	  asyncio).
 +
-+Fixes: #38
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/octo/liboping/commit/18ca43507b351f339ff23062541ee8d58e813a53]
-+---
-+ src/liboping.c | 6 ++----
-+ 1 file changed, 2 insertions(+), 4 deletions(-)
++	  https://github.com/aio-libs/aiohttp_jinja2/
+diff --git a/package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash b/package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash
+new file mode 100644
+index 0000000..390b0e4
+--- /dev/null
++++ b/package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/aiohttp-jinja2/json
++md5	de5e02056d1b48dc2fa4fc0c1a8b0e08  aiohttp-jinja2-1.1.0.tar.gz
++sha256	aef9b6595f962182ad00c990095fb51d731c280e1d183e2b28cf0bdb5a942d0c  aiohttp-jinja2-1.1.0.tar.gz
++# Locally computed sha256 checksums
++sha256	2a86817fedf0c52baaa47d7dd975073639dfaaebd37312bd279de54d7f841791  LICENSE
+diff --git a/package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk b/package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk
+new file mode 100644
+index 0000000..3b5359a
+--- /dev/null
++++ b/package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-aiohttp-jinja2
++#
++################################################################################
 +
-+diff --git a/src/liboping.c b/src/liboping.c
-+index 5253e8c..2470988 100644
-+--- a/src/liboping.c
-++++ b/src/liboping.c
-+@@ -1636,10 +1636,8 @@ int ping_host_add (pingobj_t *obj, const char *host)
-+ 		}
-+ 		else
-+ 		{
-+-			char errmsg[PING_ERRMSG_LEN];
-+-
-+-			snprintf (errmsg, PING_ERRMSG_LEN, "Unknown `ai_family': %i", ai_ptr->ai_family);
-+-			errmsg[PING_ERRMSG_LEN - 1] = '\0';
-++			char errmsg[64];
-++			snprintf (errmsg, sizeof(errmsg), "Unknown `ai_family': %d", ai_ptr->ai_family);
-+ 
-+ 			dprintf ("%s", errmsg);
-+ 			ping_set_error (obj, "getaddrinfo", errmsg);
++PYTHON_AIOHTTP_JINJA2_VERSION = 1.1.0
++PYTHON_AIOHTTP_JINJA2_SOURCE = aiohttp-jinja2-$(PYTHON_AIOHTTP_JINJA2_VERSION).tar.gz
++PYTHON_AIOHTTP_JINJA2_SITE = https://files.pythonhosted.org/packages/76/9d/68fa1e9ec3bafba572772eb385023de54096663bd6e302a24d7344c6a711
++PYTHON_AIOHTTP_JINJA2_SETUP_TYPE = setuptools
++PYTHON_AIOHTTP_JINJA2_LICENSE = Apache-2.0
++PYTHON_AIOHTTP_JINJA2_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
 -- 
-2.14.1
+2.7.4
