@@ -1,34 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 6 Dec 2018 23:15:20 +0100
-Subject: [Buildroot] [git commit] .gitlab-ci.yml: regenerate after prosody
- tests addition
-Message-ID: <20181206221156.868CD83CFF@busybox.osuosl.org>
+Date: Thu, 6 Dec 2018 23:17:02 +0100
+Subject: [Buildroot] [PATCH v3 2/9] package/asterisk: libsrtp needs
+ openssl
+In-Reply-To: <20181014090202.31122-2-bernd.kuhls@t-online.de>
+References: <20181014090202.31122-1-bernd.kuhls@t-online.de>
+ <20181014090202.31122-2-bernd.kuhls@t-online.de>
+Message-ID: <20181206231702.3448b012@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=acb89c8d93952468fc9e24c7ddd9e361b8108e07
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .gitlab-ci.yml | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Sun, 14 Oct 2018 11:01:54 +0200, Bernd Kuhls wrote:
+> Fixes configure error
+> 
+> checking for the ability of -lsrtp2 to be linked in a shared object... yes
+> checking for srtp_crypto_policy_set_aes_cm_256_hmac_sha1_80 in -lsrtp2... yes
+> checking for srtp_crypto_policy_set_aes_cm_192_hmac_sha1_80 in -lsrtp2... no
+> checking for srtp_crypto_policy_set_aes_gcm_128_8_auth in -lsrtp2... no
+> checking for srtp_shutdown in -lsrtp2... yes
+> checking for srtp2/srtp.h... (cached) yes
+> configure: WARNING: ***
+> configure: WARNING: *** OpenSSL required when using libsrtp2, checking for libsrtp instead.
+> configure: WARNING: ***
+> 
+> using this defconfig:
+> 
+> BR2_PACKAGE_LIBSRTP=y
+> BR2_PACKAGE_ASTERISK=y
+> 
+> Please note that openssl support in libsrtp is not available for static
+> builds:
+> https://git.buildroot.net/buildroot/tree/package/libsrtp/libsrtp.mk#n27
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 051439cc93..1a78211823 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -328,8 +328,8 @@ tests.package.test_perl_libwww_perl.TestPerllibwwwperl: *runtime_test
- tests.package.test_perl_mail_dkim.TestPerlMailDKIM: *runtime_test
- tests.package.test_perl_x10.TestPerlX10: *runtime_test
- tests.package.test_perl_xml_libxml.TestPerlXMLLibXML: *runtime_test
--tests.package.test_prosody.TestLua51Prosody: *runtime_test
--tests.package.test_prosody.TestLuajitProsody: *runtime_test
-+tests.package.test_prosody.TestProsodyLua51: *runtime_test
-+tests.package.test_prosody.TestProsodyLuajit: *runtime_test
- tests.package.test_python.TestPython2: *runtime_test
- tests.package.test_python.TestPython3: *runtime_test
- tests.package.test_python_argh.TestPythonPy2Argh: *runtime_test
+I could indeed reproduce this build issue. One question that comes up
+is: why hasn't the autobuilder found this build problem ? It happens on
+a fairly basic/straightforward configuration, it's really strange that
+it has never popped up. Any idea about this?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
