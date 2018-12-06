@@ -1,45 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 6 Dec 2018 15:25:36 +0100
-Subject: [Buildroot] [PATCH next v6 10/10] package/pkg-kconfig: handle
- KCONFIG_DEPENDENCIES with per-package directories
-In-Reply-To: <a8dd7196-7542-24ee-7ca2-44318d33d626@andin.de>
-References: <20181123145815.13008-1-thomas.petazzoni@bootlin.com>
- <20181123145815.13008-11-thomas.petazzoni@bootlin.com>
- <64e9a50c-97d4-c90a-fac5-eae91cb8ae8e@andin.de>
- <a8dd7196-7542-24ee-7ca2-44318d33d626@andin.de>
-Message-ID: <20181206152536.1112255b@windsurf>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 06 Dec 2018 20:16:01 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2018-12-04
+In-Reply-To: <f3cpi33oica7lbub1hjw72x0.1544043243948@email.android.com>
+References: <20181205070024.027E420A59@mail.bootlin.com>
+ <CAMRc=MeKx3DWa6DZs3h7MH2uuJusBr08+ycoOnX3Drsmw22JWQ@mail.gmail.com>
+ <f3cpi33oica7lbub1hjw72x0.1544043243948@email.android.com>
+Message-ID: <87efaujzby.fsf@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi David,
 
-On Thu, 6 Dec 2018 15:07:53 +0100, Andreas Naumann wrote:
+David J. Fogle writes:
+> Is this patch going to be put into 2018.11, or is this going into
+> 2019.02. I am rather new to your project, forgive me not knowing how
+> your patch cycle works.
 
-> >> diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-> >> index d6c95b897e..bf43632adc 100644
-> >> --- a/package/pkg-kconfig.mk
-> >> +++ b/package/pkg-kconfig.mk
-> >> @@ -113,6 +113,7 @@ endef
-> >> ? # Since the file could be a defconfig file it needs to be expanded to a
-> >> ? # full .config first.
-> >> ? $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG): $$($(2)_KCONFIG_FILE) 
-> >> $$($(2)_KCONFIG_FRAGMENT_FILES)
-> >> +??? $$(call prepare-per-package-folder,$$($(2)_KCONFIG_DEPENDENCIES))  
-> 
-> just realized that this doesn't match the function definition in 
-> pkg-utils.mk in this series (prepare-per-package-directories), thus is 
-> not executed at all. With that fixed ccache is, as part of toolchain, 
-> properly prepared and I no longer see the issue below.
+This patch fixes an issue in the current master branch. So this patch
+(or a better one) will be applied to that branch. The master branch will
+be released as 2019.02.
 
-Gaah, indeed. Well-spotted. Will fix. Thanks!
+Patches fixing issues that affect stable branches (currently 2018.08.x
+and 2018.02.x are maintained) will be backported to these branches. In
+the case of this patch, stable branches seem not to be affected. The
+build failure trigger is the bump of pulseview to version 0.4.1. This
+bump is not in the stable branches.
 
-Best regards,
+Hope this helps,
+baruch
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> -------- Original message --------
+> From: Bartosz Golaszewski <brgl@bgdev.pl>
+> Date: 12/5/18 2:50 PM (GMT-06:00)
+> To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: buildroot at buildroot.org
+> Subject: Re: [Buildroot] [autobuild.buildroot.net] Your build results for 2018-12-04
+>
+> ?r., 5 gru 2018 o 08:00 Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> napisa?(a):
+>>
+>> Hello,
+>>
+>> This is the list of Buildroot build failures that occured on
+>> 2018-12-04, and for which you are a registered architecture developer
+>> or package developer. Please help us improving the quality of
+>> Buildroot by investigating those build failures and sending patches to
+>> fix them. Thanks!
+>>
+>> Results for the 'master' branch
+>> ===============================
+>>
+>> Build failures related to your packages:
+>>
+>>  powerpc64le |                pulseview-0.4.1 | http://autobuild.buildroot.net/results/9a9e8d390941cbfde70c4b4033d7e68ce28e041e
+>>
+>> --
+>> http://autobuild.buildroot.net
+>
+> Pending patch[1] will fix it.
+>
+> Best regards,
+> Bartosz Golaszewski
+>
+> [1] http://lists.busybox.net/pipermail/buildroot/2018-December/237718.html
+
+--
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
