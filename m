@@ -1,43 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 6 Dec 2018 21:51:54 +0100
-Subject: [Buildroot] [PATCH] linux: ensure images/ exist before creatign
- files there
-In-Reply-To: <20181203191219.18998-1-yann.morin.1998@free.fr>
-References: <20181203191219.18998-1-yann.morin.1998@free.fr>
-Message-ID: <20181206215154.6587226e@windsurf>
+Date: Thu, 6 Dec 2018 21:56:52 +0100
+Subject: [Buildroot] [PATCH] libglib2: fix configure issue without
+ libmount
+In-Reply-To: <20181203235118.7846-1-gael.portay@collabora.com>
+References: <20181203235118.7846-1-gael.portay@collabora.com>
+Message-ID: <20181206215652.5bc874a5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Ga?l,
 
-On Mon,  3 Dec 2018 20:12:19 +0100, Yann E. MORIN wrote:
-> When using an initramfs, on the first-pass build, we create a dummy cpio
-> so that the build succeeeds. The real cpio will come later, and we'll do
-> a second-pass build to use the actual cpio.
+On Mon,  3 Dec 2018 18:51:18 -0500, Ga?l PORTAY wrote:
+> The following configure error happens when the util-linux dependency
+> does not install libmount:
 > 
-> However, when we touch that dummy cpio, the images/ directory may not
-> yet exist, since commit d0f4f95e39 (Makefile: rework main directory
-> creation logic) removed its creation at the begining of the build, to
-> only at the moment we need it, i.e. during the *_INSTALL_IMAGES_CMDS
-> steps.
+> 	(...)
+> 	checking for LIBMOUNT... no
+> 	configure: error: *** Could not find libmount
+> 	make[1]: *** [package/pkg-generic.mk:222: /home/gportay/src/buildroot/output-rpi3-64-drm-kms/build/libglib2-2.56.1/.stamp_configured] Error 1
+> 	make: *** [Makefile:84: _all] Error 2
 > 
-> However, the linux build is not a _INSTALL_IMAGES_CMDS step, so there is
-> no guarantee that images/ already exist at that time.
+> If no enable/disable option is given through to configure, glib2 checks
+> for the libmount package (linux only) and fails if is not present[1].
 > 
-> Fix that by explicitly creating images/ before touching the dummy cpio.
+> To fix this configure issue, this path explicits the option at configure
+> to make sure to disable libmount if is is not installed.
 > 
-> Reported-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  linux/linux.mk | 1 +
->  1 file changed, 1 insertion(+)
+> [1]: https://github.com/GNOME/glib/blob/glib-2-56/configure.ac#L1856
+> 
+> Signed-off-by: Ga?l PORTAY <gael.portay@collabora.com>
 
-Applied to master, thanks.
+You must have done a partial rebuild to reach this issue, because:
+
+$ grep UTIL_LINUX package/libglib2/Config.in 
+	select BR2_PACKAGE_UTIL_LINUX
+	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+
+So there is no way for util-linux to not have libmount support.
+
+The issue you're seeing is typically what happens when util-linux is
+built first, without libmount support. Then later on you enable
+libglib2, but don't do a full rebuild. So util-linux is not rebuilt
+with libmount support, and you see this problem.
+
+>  LIBGLIB2_CONF_OPTS = \
+>  	--with-pcre=system \
+> +	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),--enable-libmount,--disable-libmount) \
+
+However, if libmount support is indeed optional in libglib2, should we
+also make it optional in Buildroot ? This mandatory dependency was
+added in:
+
+commit 4c7c010f9fae01399070844991252d3f5b9aae5f
+Author: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date:   Tue Sep 20 12:01:30 2016 -0300
+
+    libglib2: bump to version 2.50.0
+    
+    It now requires util-linux libmount so add the dependency/select.
+
+Perhaps we need to revisit this and make it optional again ? Could you
+have a look into this ?
+
+Thanks,
 
 Thomas
 -- 
