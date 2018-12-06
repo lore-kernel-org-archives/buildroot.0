@@ -1,37 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 6 Dec 2018 22:19:21 +0100
-Subject: [Buildroot] [PATCH] infra/pkg-generic: use readlink instead of
- realpath
-In-Reply-To: <20181201215155.29106-1-yann.morin.1998@free.fr>
-References: <20181201215155.29106-1-yann.morin.1998@free.fr>
-Message-ID: <20181206221921.59e38f32@windsurf>
+Date: Thu, 6 Dec 2018 22:31:05 +0100
+Subject: [Buildroot] [git commit] .gitlab-ci.yml: update with recently added
+ tests
+Message-ID: <20181206212823.1978586DB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=deff6a8fee9722d440e4f4ed86b8cb6eaa2631bc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  1 Dec 2018 22:51:55 +0100, Yann E. MORIN wrote:
-> realpath is missing on oldish distributions, like Debian 7, which is
-> still sued in the wild.
-> 
-> Use readlink instead; that has been available since the dawn of ages now
-> (well, coreutils had it in 2003).
-> 
-> Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/pkg-generic.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .gitlab-ci.yml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Seems like I forgot to say that I had applied this patch, on December
-2. So: applied, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 412ef49b75..67f5da6839 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -317,7 +317,11 @@ tests.package.test_ipython.TestIPythonPy2: *runtime_test
+ tests.package.test_ipython.TestIPythonPy3: *runtime_test
+ tests.package.test_perl.TestPerl: *runtime_test
+ tests.package.test_perl_class_load.TestPerlClassLoad: *runtime_test
++tests.package.test_perl_dbd_mysql.TestPerlDBDmysql: *runtime_test
++tests.package.test_perl_encode_detect.TestPerlEncodeDetect: *runtime_test
+ tests.package.test_perl_gdgraph.TestPerlGDGraph: *runtime_test
++tests.package.test_perl_io_socket_multicast.TestPerlIOSocketMulticast: *runtime_test
++tests.package.test_perl_io_socket_ssl.TestPerlIOSocketSSL: *runtime_test
+ tests.package.test_perl_libwww_perl.TestPerllibwwwperl: *runtime_test
+ tests.package.test_perl_mail_dkim.TestPerlMailDKIM: *runtime_test
+ tests.package.test_perl_x10.TestPerlX10: *runtime_test
