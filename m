@@ -1,54 +1,89 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 6 Dec 2018 09:49:24 +0100
-Subject: [Buildroot] Docker client does not function correctly in 2018.11
-In-Reply-To: <CA+h8R2oK2mPefnBQ9c-jd7m4Tc7=s-0nsCV965r9DpsVTULuaA@mail.gmail.com>
-References: <ac041379a2d04fbeb3900fae7bab51be@exitstrategytech.com>
- <8dcf0b32c7fe49e8b30b10a482f3f23a@exitstrategytech.com>
- <CA+h8R2pH=BTTh+farCMfJOW8dzYsUhN_ompMtc=Aaz4tQVbVXg@mail.gmail.com>
- <5db9d4aa533e4e8590b5c33d2bb47665@exitstrategytech.com>
- <p05ed2odjpa9vgdmd5cx9cew.1544054248971@email.android.com>
- <CA+h8R2orLF5mjc6g8qDwG5Sh0WMXicnLb9DTB_qQiTBoJd45yA@mail.gmail.com>
- <6e255ac5c09e4841ac67d6f383249556@exitstrategytech.com>
- <99kkgapwmjckouvyyw5vo6pe.1544060571584@email.android.com>
- <CA+h8R2oK2mPefnBQ9c-jd7m4Tc7=s-0nsCV965r9DpsVTULuaA@mail.gmail.com>
-Message-ID: <20181206094924.0c0737f5@windsurf>
+From: Andreas Naumann <dev@andin.de>
+Date: Thu, 6 Dec 2018 11:21:25 +0100
+Subject: [Buildroot] [PATCH next v6 07/10] core: implement per-package
+ SDK and target
+In-Reply-To: <672791f3-4383-cad2-f31c-5362b94b94fb@andin.de>
+References: <20181123145815.13008-1-thomas.petazzoni@bootlin.com>
+ <20181123145815.13008-8-thomas.petazzoni@bootlin.com>
+ <1f520844-5501-a60b-cf66-5bae57b9f420@andin.de>
+ <20181205173103.1eb30a7b@windsurf>
+ <672791f3-4383-cad2-f31c-5362b94b94fb@andin.de>
+Message-ID: <8a886731-26ee-ba33-f303-81d5bd0e7954@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Wed, 5 Dec 2018 17:47:05 -0800, Christian Stewart wrote:
-
-> There is no official documentation at this point, the Docker package
-> exists as a "include the Docker binaries in my target system" minimal
-> option in Buildroot, and developers are currently left to decide how
-> to configure it themselves.
+Am 05.12.18 um 17:52 schrieb Andreas Naumann:
+> Hi,
 > 
-> If you want to see how I use Docker and Buildroot as a reference, see
-> https://github.com/paralin/SkiffOS.git - feel free to open issues
-> there as well if you have Docker related questions / other
-> non-Buildroot specific topics to discuss.
+> Am 05.12.18 um 17:31 schrieb Thomas Petazzoni:
+>> Hello Andreas,
+>>
+>> On Wed, 5 Dec 2018 17:08:20 +0100, Andreas Naumann wrote:
+>>
+>>> In an answer to v4 of this series I mentioned the issue I had with empty
+>>> RPATH in some host-lib. After digging some more I found this happens
+>>> during the prepare-sdk step (which I call in my wrapper script). Before
+>>> this step, your suggested readelf output reports the correct pathes,
+>>> however after, RPATH is empty. I compared this to a "standard" SDK,
+>>> there RPATH is set to $ORIGIN/../lib or something similar.
+>>
+>> So are you saying the issue still exists, and to reproduce, I simply
+>> need to do:
+>>
+>> ? $ make
+>> ? $ make prepare-sdk
+>>
+>> of a build with BR2_PER_PACKAGE_DIRECTORIES=y ?
 > 
-> The minimal requirements for Docker are a kernel compiled with a
-> specific set of features enabled (see the Docker documentation) as
-> well as some init process to start the daemon at system startup.
+> in an essence that's what I did. My setup has two externals and some 
+> custom defconfig, but that shouldnt matter since without the ppsh 
+> patches things work fine.
 
-Perhaps we could try to improve things a little bit so that it works
-better out of the box ?
+Just to make sure I just did the above using your ppsh-v6 branch with 
+the wandboard_defconfig. The only additional change was to use the 
+external linaro toolchain. After 'make'
+   $ readelf -d output/host/sbin/mkfs.ext3
+shows
+   0x000000000000001d (RUNPATH)            Bibliothek runpath: 
+[/local/gsrc/buildroot.upstream/output/per-package/host-e2fsprogs/host/lib]
 
-If some kernel options are really absolutely needed for Docker to work,
-then maybe we should make sure they are enabled: linux/linux.mk already
-does that for a few packages.
+which is already unexpected, shouldn't it show .../output/host/lib?
+After 'make prepare-sdk'
+   $ readelf -d output/host/sbin/mkfs.ext3
+shows
+   0x000000000000001d (RUNPATH)            Bibliothek runpath: []
 
-Alternatively (or additionally), we can add a
-package/docker-engine/docker-engine.txt file that gives some
-details/suggestions on how to setup Docker in Buildroot.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+regards,
+Andreas
+
+> 
+>>
+>>> Actually, an unrelated question arises: Why does the SDK need to build
+>>> world, which includes all filesystem images, first? Should it not be
+>>> sufficient to depend on $(PACKAGES) or now host-finalize only?
+>>
+>> Yes, it would be sufficient to build packages + host-finalization I
+>> believe.
+> 
+> Ok, I might submit a patch in this direction then..
+> 
+> 
+> regards,
+> Andreas
+> 
+>>
+>> Best regards,
+>>
+>> Thomas
+>>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
