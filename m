@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 6 Dec 2018 21:22:27 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: update my e-mail
-In-Reply-To: <20181203235400.8597-1-gael.portay@collabora.com>
-References: <20181203235400.8597-1-gael.portay@collabora.com>
-Message-ID: <20181206212227.67a39eec@windsurf>
+Date: Thu, 6 Dec 2018 21:35:03 +0100
+Subject: [Buildroot] [PATCH 1/1] stress-ng: fix build without threads
+In-Reply-To: <20181204204759.26767-1-fontaine.fabrice@gmail.com>
+References: <20181204204759.26767-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181206213503.5106077e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +12,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  3 Dec 2018 18:54:00 -0500, Ga?l PORTAY wrote:
-> Signed-off-by: Ga?l PORTAY <gael.portay@collabora.com>
+On Tue,  4 Dec 2018 21:47:59 +0100, Fabrice Fontaine wrote:
+> semaphore.h is available only if HAVE_LIB_PTHREAD and
+> HAVE_SEM_POSIX are defined
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/1c95898b2833683a22bbe2ff8471fa08d94210e1
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  DEVELOPERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  ...01-stress-ng.h-fix-include-on-semaphore.h.patch | 34 ++++++++++++++++++++++
+>  1 file changed, 34 insertions(+)
+>  create mode 100644 package/stress-ng/0001-stress-ng.h-fix-include-on-semaphore.h.patch
 
-Applied to master, thanks. All the best for your new job at
-Collabora :-)
-
-Best regards,
+Applied to master after updating the patch upstream status (it was
+merged), thanks.
 
 Thomas
 -- 
