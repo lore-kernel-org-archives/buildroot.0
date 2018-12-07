@@ -1,108 +1,74 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 7 Dec 2018 09:57:45 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/python-aiohttp-jinja2: new
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 7 Dec 2018 09:59:06 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-aiohttp-security: new
  package
-In-Reply-To: <1544172777-30222-1-git-send-email-james.hilliard1@gmail.com>
-References: <1544172777-30222-1-git-send-email-james.hilliard1@gmail.com>
-Message-ID: <CAGm1_ktLwubpiXK_p9Uc+YE6oy9TWVCm7dAbFvbLC=8xbHA3Zg@mail.gmail.com>
+In-Reply-To: <CADvTj4qArP_W_5qb=RyYTnhRe0iyLXhR=vcAajGSx+aHUaarLQ@mail.gmail.com>
+References: <1544139188-28022-1-git-send-email-james.hilliard1@gmail.com>
+ <CAGm1_ktEWoZq4HLuf2jZVoLFE3JmVwKVb=_QLoX7DpQ3-YYB-A@mail.gmail.com>
+ <CADvTj4p0RkurDDaBQ5J2HFTshr6zZ7zMyHYC43R34BTSfqO_TA@mail.gmail.com>
+ <20181207094619.0f4bf1cd@windsurf>
+ <CADvTj4qArP_W_5qb=RyYTnhRe0iyLXhR=vcAajGSx+aHUaarLQ@mail.gmail.com>
+Message-ID: <20181207095906.7d21323e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Dec 7, 2018 at 9:53 AM <james.hilliard1@gmail.com> wrote:
->
-> From: James Hilliard <james.hilliard1@gmail.com>
->
-> Jinja2 template renderer for aiohttp.web
->
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Hello James,
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+On Fri, 7 Dec 2018 01:48:00 -0700, James Hilliard wrote:
 
-> ---
->  DEVELOPERS                                               |  1 +
->  package/Config.in                                        |  1 +
->  package/python-aiohttp-jinja2/Config.in                  | 10 ++++++++++
->  package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash |  5 +++++
->  package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk   | 14 ++++++++++++++
->  5 files changed, 31 insertions(+)
->  create mode 100644 package/python-aiohttp-jinja2/Config.in
->  create mode 100644 package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash
->  create mode 100644 package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index c289b3f..cc60922 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -992,6 +992,7 @@ F:  configs/pine64_sopine_defconfig
->  N:     James Hilliard <james.hilliard1@gmail.com>
->  F:     package/python-aiodns/
->  F:     package/python-aiohttp/
-> +F:     package/python-aiohttp-jinja2/
->  F:     package/python-async-timeout/
->  F:     package/python-cchardet/
->  F:     package/python-multidict/
-> diff --git a/package/Config.in b/package/Config.in
-> index f6252f2..fe95f08 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -799,6 +799,7 @@ menu "External python modules"
->         source "package/python-aiocoap/Config.in"
->         source "package/python-aiodns/Config.in"
->         source "package/python-aiohttp/Config.in"
-> +       source "package/python-aiohttp-jinja2/Config.in"
->         source "package/python-alsaaudio/Config.in"
->         source "package/python-argh/Config.in"
->         source "package/python-arrow/Config.in"
-> diff --git a/package/python-aiohttp-jinja2/Config.in b/package/python-aiohttp-jinja2/Config.in
-> new file mode 100644
-> index 0000000..dd4bb0d
-> --- /dev/null
-> +++ b/package/python-aiohttp-jinja2/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_PYTHON_AIOHTTP_JINJA2
-> +       bool "python-aiohttp-jinja2"
-> +       depends on BR2_PACKAGE_PYTHON3
-> +       select BR2_PACKAGE_PYTHON_AIOHTTP # runtime
-> +       select BR2_PACKAGE_PYTHON_JINJA2 # runtime
-> +       help
-> +         Jinja2 template renderer for aiohttp.web (http server for
-> +         asyncio).
-> +
-> +         https://github.com/aio-libs/aiohttp_jinja2/
-> diff --git a/package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash b/package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash
-> new file mode 100644
-> index 0000000..390b0e4
-> --- /dev/null
-> +++ b/package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash
-> @@ -0,0 +1,5 @@
-> +# md5, sha256 from https://pypi.org/pypi/aiohttp-jinja2/json
-> +md5    de5e02056d1b48dc2fa4fc0c1a8b0e08  aiohttp-jinja2-1.1.0.tar.gz
-> +sha256 aef9b6595f962182ad00c990095fb51d731c280e1d183e2b28cf0bdb5a942d0c  aiohttp-jinja2-1.1.0.tar.gz
-> +# Locally computed sha256 checksums
-> +sha256 2a86817fedf0c52baaa47d7dd975073639dfaaebd37312bd279de54d7f841791  LICENSE
-> diff --git a/package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk b/package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk
-> new file mode 100644
-> index 0000000..3b5359a
-> --- /dev/null
-> +++ b/package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-aiohttp-jinja2
-> +#
-> +################################################################################
-> +
-> +PYTHON_AIOHTTP_JINJA2_VERSION = 1.1.0
-> +PYTHON_AIOHTTP_JINJA2_SOURCE = aiohttp-jinja2-$(PYTHON_AIOHTTP_JINJA2_VERSION).tar.gz
-> +PYTHON_AIOHTTP_JINJA2_SITE = https://files.pythonhosted.org/packages/76/9d/68fa1e9ec3bafba572772eb385023de54096663bd6e302a24d7344c6a711
-> +PYTHON_AIOHTTP_JINJA2_SETUP_TYPE = setuptools
-> +PYTHON_AIOHTTP_JINJA2_LICENSE = Apache-2.0
-> +PYTHON_AIOHTTP_JINJA2_LICENSE_FILES = LICENSE
-> +
-> +$(eval $(python-package))
-> --
-> 2.7.4
->
+> Ok, will try and do that in the future. I was keeping them in separate
+> branches so that they are easier to amend.
+
+You can keep them in the same branch, and still amend them very easily.
+The magic thing is "interactive rebase".
+
+Let's explain quickly how it works:
+
+$ git checkout -b foo # create a new branch to work
+add package foo1
+$ git commit -as -m "foo1: new package"
+add package foo2
+$ git commit -as -m "foo2: new package"
+add package foo3
+$ git commit -as -m "foo3: new package"
+
+No, you want to do some changes. You can do them right there in your
+code base. Let's say you fixed one thing in package foo1 and one thing
+in package foo2. Then you do:
+
+$ git add package/foo1/
+$ git commit -m "merge this with foo1"
+$ git add package/foo2/
+$ git commit -m "merge this with foo2"
+
+And now, the magic:
+
+$ git rebase -i HEAD~5
+
+It opens up a text editor. You move the line "merge this with foo1"
+right after the "foo1: new package" line, and change the "pick" word by
+"fixup". You do the same with "merge this with foo2", and exit the text
+editor. And voila.
+
+Additional tips:
+
+ - With proper commit titles, you can actually have git rebase -i
+   automatically do the fixups.
+
+ - You can also directly edit commits by changing the "pick" by an
+   "edit".
+
+I encourage you to read about "interactive rebase" in general. It's
+going to change your life of patch preparation :-)
+
+Another unrelated tip: please don't top post. Always write your replies
+*below* the text you're replying to. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
