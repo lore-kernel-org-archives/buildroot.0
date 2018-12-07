@@ -1,54 +1,53 @@
-From: Christian Stewart <christian@paral.in>
-Date: Fri, 7 Dec 2018 14:06:05 -0800
-Subject: [Buildroot] [External] Re: [PATCH v8 1/1] docker-engine: split
- docker-{cli, engine}, bump to v18.06.1-ce
-In-Reply-To: <CANQCQpaF3LGyTkGZ29JhbgXgQzcd5UMCTkSo_mKmcav-iW0Hag@mail.gmail.com>
-References: <20181108032458.1028-1-christian@paral.in>
- <CANQCQpa0SGdEHVFxn_wmKnktat18iAJ2YLXYQd+4Uqzq5GzG4A@mail.gmail.com>
- <874lcki4rw.fsf@paral.in>
- <CANQCQpaK4m3iqadyDAzuypV2Ze3LdhedHhn50AxF41buOMrTDQ@mail.gmail.com>
- <871s7liu5e.fsf@paral.in>
- <CANQCQpYM2E_+rMfDQ7svB05V4TfJKpgHCOpoPN49uLLqRZ30Hw@mail.gmail.com>
- <87ftvnyz7c.fsf@paral.in>
- <CANQCQpaF3LGyTkGZ29JhbgXgQzcd5UMCTkSo_mKmcav-iW0Hag@mail.gmail.com>
-Message-ID: <CA+h8R2r_AAdmFXU0e4sA_=hdJ2g9n86F7UKJH6xDRf8AkKXxhw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat,  8 Dec 2018 00:09:14 +0100
+Subject: [Buildroot] [PATCH] php: security bump to version 7.2.13
+Message-ID: <20181207230914.30567-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matthew,
+Fixes CVE-2018-19518: University of Washington IMAP Toolkit 2007f on UNIX,
+as used in imap_open() in PHP and other products, launches an rsh command
+(by means of the imap_rimap function in c-client/imap4r1.c and the tcp_aopen
+function in osdep/unix/tcp_unix.c) without preventing argument injection,
+which might allow remote attackers to execute arbitrary OS commands if the
+IMAP server name is untrusted input (e.g., entered by a user of a web
+application) and if rsh has been replaced by a program with different
+argument semantics.  For example, if rsh is a link to ssh (as seen on Debian
+and Ubuntu systems), then the attack can use an IMAP server name containing
+a "-oProxyCommand" argument.
 
-On Wed, Nov 28, 2018 at 2:35 PM Matthew Weber <Matthew.Weber@collins.com> wrote:
-> > > The one use case I have been thinking about for new projects is
-> > > building the most basic possible hosting environment to manage the
-> > > security footprint.  Maybe a LXC system container hosting environment
-> > > or a non-systemd dockerd.  Then inside of that run a systemd based
-> > > docker deployment which would be easier to swap out and do a true
-> > > shared filesystem approach vs a system container......
-> >
-> > I think the most minimum environment would be base Buildroot with either
-> > the docker-containerd / runc stack, or something like cri-o (a
-> > Kubernetes minimal container runtime I am examining for use with
-> > Buildroot). One thing to consider is that the Go dependencies could be
-> > compiled together into a single binary, which would reduce binary
-> > footprint quite a bit I think. Much of Docker / dockerd features are
-> > unnecessary and can be removed as well / mapped to Buildroot options.
-> >
->
-> I noticed that flatpak now has OCI format support.  That could be an
-> interesting way to go light weight without a GO dependency.....
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I still think either the cri-o (your aversion to Go is noted) or
-Flatpak is the right approach.
-
-To that end I've implemented Flatpak and related dependencies in
-Buildroot and have a working patchset here:
-
-https://github.com/paralin/buildroot/commits/add-flatpak
-
-Will begin testing over the next week.
-
-Best regards,
-Christian
+diff --git a/package/php/php.hash b/package/php/php.hash
+index cea6997aa2..094977c548 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From http://php.net/downloads.php
+-sha256 989c04cc879ee71a5e1131db867f3c5102f1f7565f805e2bb8bde33f93147fe1  php-7.2.12.tar.xz
++sha256 14b0429abdb46b65c843e5882c9a8c46b31dfbf279c747293b8ab950c2644a4b  php-7.2.13.tar.xz
+ 
+ # License file
+ sha256 f689b8fa63bea7950ce6a21bf52ed88ea0d77673ee76e6de12f51191174d91b8  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index ae7e742b65..b95ceb5c9d 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.2.12
++PHP_VERSION = 7.2.13
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
+-- 
+2.11.0
