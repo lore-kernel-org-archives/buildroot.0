@@ -1,39 +1,26 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri,  7 Dec 2018 14:13:55 +0100
-Subject: [Buildroot] [PATCH] squashfs: do not force gzip support if
- lz4/xz/zstd is selected
-Message-ID: <20181207131356.14366-1-peter@korsgaard.com>
+From: Dhamodharan Loganathan <dhamo800@gmail.com>
+Date: Fri, 7 Dec 2018 13:31:40 +0000
+Subject: [Buildroot] Fwd: QEMU support for sabrelite board
+In-Reply-To: <CAObpi9H6n1Yk3MGdJy-Tx2hY73mHZUYt1XYnAxg3Vzcru4ePmg@mail.gmail.com>
+References: <CAObpi9H6n1Yk3MGdJy-Tx2hY73mHZUYt1XYnAxg3Vzcru4ePmg@mail.gmail.com>
+Message-ID: <CAObpi9HKgb8mu+CSV+2KzQDMQnF6+pr7CVeJOtq3no5FAwV7Bw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The logic to ensure at least one compression backend is selected was not
-updated when lz4, xz and zstd were introduced -  Fix that.
+Hi,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/squashfs/Config.in | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+I am trying to run the buildroot image for qemu sabrelite board. I could
+not see the configuration file for sabrelite under board/qemu. It has only
+for arm-versatile.
 
-diff --git a/package/squashfs/Config.in b/package/squashfs/Config.in
-index c16ebbf27f..fdd8833060 100644
---- a/package/squashfs/Config.in
-+++ b/package/squashfs/Config.in
-@@ -2,7 +2,12 @@ config BR2_PACKAGE_SQUASHFS
- 	bool "squashfs"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
--	select BR2_PACKAGE_SQUASHFS_GZIP if !(BR2_PACKAGE_SQUASHFS_LZMA || BR2_PACKAGE_SQUASHFS_LZO)
-+	select BR2_PACKAGE_SQUASHFS_GZIP if !( \
-+	       BR2_PACKAGE_SQUASHFS_LZ4 || \
-+	       BR2_PACKAGE_SQUASHFS_LZMA || \
-+	       BR2_PACKAGE_SQUASHFS_LZO || \
-+	       BR2_PACKAGE_SQUASHFS_XZ || \
-+	       BR2_PACKAGE_SQUASHFS_ZSTD)
- 	help
- 	  Tools to generate SquashFS filesystems.
- 
--- 
-2.11.0
+Can you please help to find the configuration file? or let me know how to
+bring up the images for sabrelite qemu.
+
+Thanks and regards,
+Dhamodharan
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181207/b105ea25/attachment.html>
