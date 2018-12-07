@@ -1,8 +1,7 @@
 From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
-Date: Fri,  7 Dec 2018 16:42:43 +0800
-Subject: [Buildroot] [PATCH v2 1/1] package/python-aiohttp-session: new
- package
-Message-ID: <1544172163-29670-1-git-send-email-james.hilliard1@gmail.com>
+Date: Fri,  7 Dec 2018 16:45:08 +0800
+Subject: [Buildroot] [PATCH v2 1/1] package/python-aiohttp-sse: new package
+Message-ID: <1544172308-29850-1-git-send-email-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,87 +10,87 @@ To: buildroot@busybox.net
 
 From: James Hilliard <james.hilliard1@gmail.com>
 
-Sessions for aiohttp.web.
+Server-sent events support for aiohttp.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- DEVELOPERS                                                 |  1 +
- package/Config.in                                          |  1 +
- package/python-aiohttp-session/Config.in                   |  8 ++++++++
- package/python-aiohttp-session/python-aiohttp-session.hash |  5 +++++
- package/python-aiohttp-session/python-aiohttp-session.mk   | 14 ++++++++++++++
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ package/python-aiohttp-sse/Config.in               |  8 ++++++++
+ package/python-aiohttp-sse/python-aiohttp-sse.hash |  5 +++++
+ package/python-aiohttp-sse/python-aiohttp-sse.mk   | 14 ++++++++++++++
  5 files changed, 29 insertions(+)
- create mode 100644 package/python-aiohttp-session/Config.in
- create mode 100644 package/python-aiohttp-session/python-aiohttp-session.hash
- create mode 100644 package/python-aiohttp-session/python-aiohttp-session.mk
+ create mode 100644 package/python-aiohttp-sse/Config.in
+ create mode 100644 package/python-aiohttp-sse/python-aiohttp-sse.hash
+ create mode 100644 package/python-aiohttp-sse/python-aiohttp-sse.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index c289b3f..ec71e6e 100644
+index c289b3f..290fc85 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
 @@ -992,6 +992,7 @@ F:	configs/pine64_sopine_defconfig
  N:	James Hilliard <james.hilliard1@gmail.com>
  F:	package/python-aiodns/
  F:	package/python-aiohttp/
-+F:	package/python-aiohttp-session/
++F:	package/python-aiohttp-sse/
  F:	package/python-async-timeout/
  F:	package/python-cchardet/
  F:	package/python-multidict/
 diff --git a/package/Config.in b/package/Config.in
-index f6252f2..f411d07 100644
+index f6252f2..6226209 100644
 --- a/package/Config.in
 +++ b/package/Config.in
 @@ -799,6 +799,7 @@ menu "External python modules"
  	source "package/python-aiocoap/Config.in"
  	source "package/python-aiodns/Config.in"
  	source "package/python-aiohttp/Config.in"
-+	source "package/python-aiohttp-session/Config.in"
++	source "package/python-aiohttp-sse/Config.in"
  	source "package/python-alsaaudio/Config.in"
  	source "package/python-argh/Config.in"
  	source "package/python-arrow/Config.in"
-diff --git a/package/python-aiohttp-session/Config.in b/package/python-aiohttp-session/Config.in
+diff --git a/package/python-aiohttp-sse/Config.in b/package/python-aiohttp-sse/Config.in
 new file mode 100644
-index 0000000..c148165
+index 0000000..781bbf4
 --- /dev/null
-+++ b/package/python-aiohttp-session/Config.in
++++ b/package/python-aiohttp-sse/Config.in
 @@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_AIOHTTP_SESSION
-+	bool "python-aiohttp-session"
++config BR2_PACKAGE_PYTHON_AIOHTTP_SSE
++	bool "python-aiohttp-sse"
 +	depends on BR2_PACKAGE_PYTHON3
 +	select BR2_PACKAGE_PYTHON_AIOHTTP # runtime
 +	help
-+	  Sessions for aiohttp.web.
++	  Server-sent events support for aiohttp.
 +
-+	  https://github.com/aio-libs/aiohttp_session/
-diff --git a/package/python-aiohttp-session/python-aiohttp-session.hash b/package/python-aiohttp-session/python-aiohttp-session.hash
++	  https://github.com/aio-libs/aiohttp_sse/
+diff --git a/package/python-aiohttp-sse/python-aiohttp-sse.hash b/package/python-aiohttp-sse/python-aiohttp-sse.hash
 new file mode 100644
-index 0000000..fdccb20
+index 0000000..2f21da4
 --- /dev/null
-+++ b/package/python-aiohttp-session/python-aiohttp-session.hash
++++ b/package/python-aiohttp-sse/python-aiohttp-sse.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/aiohttp-session/json
-+md5	a873141ee04ffc9fc948d9ee0ed47a8d  aiohttp-session-2.7.0.tar.gz
-+sha256	18ae740845214086f783574edfee1bac36862332bd11d561e048b079d8f6ad34  aiohttp-session-2.7.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/aiohttp-sse/json
++md5	d2f394fb75f591045b2c94fc17c8533d  aiohttp-sse-2.0.0.tar.gz
++sha256	547e1eaa129749f090d02b31956215edbcde74ce99721f5f0ac902a9ccb1202e  aiohttp-sse-2.0.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256	2a86817fedf0c52baaa47d7dd975073639dfaaebd37312bd279de54d7f841791  LICENSE
-diff --git a/package/python-aiohttp-session/python-aiohttp-session.mk b/package/python-aiohttp-session/python-aiohttp-session.mk
++sha256	cb5e8e7e5f4a3988e1063c142c60dc2df75605f4c46515e776e3aca6df976e14  LICENSE
+diff --git a/package/python-aiohttp-sse/python-aiohttp-sse.mk b/package/python-aiohttp-sse/python-aiohttp-sse.mk
 new file mode 100644
-index 0000000..36c3180
+index 0000000..7a7a0d0
 --- /dev/null
-+++ b/package/python-aiohttp-session/python-aiohttp-session.mk
++++ b/package/python-aiohttp-sse/python-aiohttp-sse.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-aiohttp-session
++# python-aiohttp-sse
 +#
 +################################################################################
 +
-+PYTHON_AIOHTTP_SESSION_VERSION = 2.7.0
-+PYTHON_AIOHTTP_SESSION_SOURCE = aiohttp-session-$(PYTHON_AIOHTTP_SESSION_VERSION).tar.gz
-+PYTHON_AIOHTTP_SESSION_SITE = https://files.pythonhosted.org/packages/b5/5f/3f78fd4de2f9b17ad8cfe6c189bfaee3d0a5d2fe954aedad743edd08c813
-+PYTHON_AIOHTTP_SESSION_SETUP_TYPE = setuptools
-+PYTHON_AIOHTTP_SESSION_LICENSE = Apache-2.0
-+PYTHON_AIOHTTP_SESSION_LICENSE_FILES = LICENSE
++PYTHON_AIOHTTP_SSE_VERSION = 2.0.0
++PYTHON_AIOHTTP_SSE_SOURCE = aiohttp-sse-$(PYTHON_AIOHTTP_SSE_VERSION).tar.gz
++PYTHON_AIOHTTP_SSE_SITE = https://files.pythonhosted.org/packages/2b/50/e127729f7df53c32c96b5c71932a7262cad40c83f1e19c218b068c816d51
++PYTHON_AIOHTTP_SSE_SETUP_TYPE = setuptools
++PYTHON_AIOHTTP_SSE_LICENSE = Apache-2.0
++PYTHON_AIOHTTP_SSE_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
 -- 
