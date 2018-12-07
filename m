@@ -1,45 +1,40 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri,  7 Dec 2018 10:40:41 +0100
-Subject: [Buildroot] [PATCH] scanpypi: import third party modules after the
- standard ones
-Message-ID: <20181207094041.20140-1-yegorslists@googlemail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 7 Dec 2018 12:15:59 +0100
+Subject: [Buildroot] [PATCH] pcm-tools: new package
+In-Reply-To: <1017622378.1606234.1544146335281.JavaMail.zimbra@datacom.com.br>
+References: <20180123140324.20801-1-casantos@datacom.ind.br>
+ <20180123140324.20801-2-casantos@datacom.ind.br>
+ <20180401161654.6412d152@windsurf>
+ <1919985279.1291627.1522720961448.JavaMail.zimbra@datacom.ind.br>
+ <1017622378.1606234.1544146335281.JavaMail.zimbra@datacom.com.br>
+Message-ID: <20181207121559.7e1b11e4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hello Carlos,
 
-Move imports from six package after the standard modules. Resolves
-pylint warnings.
----
- utils/scanpypi | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On Thu, 6 Dec 2018 23:32:15 -0200 (BRST), Carlos Santos wrote:
 
-diff --git a/utils/scanpypi b/utils/scanpypi
-index 3d3e604435..9335bedee4 100755
---- a/utils/scanpypi
-+++ b/utils/scanpypi
-@@ -10,9 +10,6 @@ from __future__ import print_function
- from __future__ import absolute_import
- import argparse
- import json
--import six.moves.urllib.request
--import six.moves.urllib.error
--import six.moves.urllib.parse
- import sys
- import os
- import shutil
-@@ -25,6 +22,9 @@ import textwrap
- import tempfile
- import imp
- from functools import wraps
-+import six.moves.urllib.request
-+import six.moves.urllib.error
-+import six.moves.urllib.parse
- from six.moves import map
- from six.moves import zip
- from six.moves import input
+> Superseded-by: https://patchwork.ozlabs.org/patch/1009149/
+
+I am wondering: is this Superseded-by really understood by patchwork to
+make a patch as Superseded? I don't see Superseded-by used in the
+patchwork code base.
+
+I see that the patch was marked as Superseded in patchwork, was it done
+manually by you, or automatically thanks to this e-mail ?
+
+If it was done manually by you, then I think it's not really useful to
+send this Superseded-by e-mail: we see in patchwork the latest version
+anyway, which is what is important.
+
+Thanks!
+
+Thomas
 -- 
-2.17.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
