@@ -1,59 +1,45 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 7 Dec 2018 20:28:48 +0100
-Subject: [Buildroot] [PATCH 1/1] qt5virtualkeyboard: add arrow key
- navigation build option
-In-Reply-To: <20181203082509.25936-1-sebastien.szymanski@armadeus.com>
-References: <20181203082509.25936-1-sebastien.szymanski@armadeus.com>
-Message-ID: <20181207202848.11e494aa@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 7 Dec 2018 20:31:05 +0100
+Subject: [Buildroot] [PATCH 1/1] core/sdk: don't mangle symlinks with
+ '.' or '..' at start
+In-Reply-To: <CA+1k=2aNtT59ZjhP_ZiUM6xC52xVCpB=rRWLf02L_LuFB=SRNQ@mail.gmail.com>
+References: <20181207035052.316-1-JoelsonCarl@gmail.com>
+ <20181207113055.GG2561@scaer>
+ <CA+1k=2aNtT59ZjhP_ZiUM6xC52xVCpB=rRWLf02L_LuFB=SRNQ@mail.gmail.com>
+Message-ID: <20181207193105.GI2561@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello S?bastien,
+Joel, All,
 
-On Mon,  3 Dec 2018 09:25:09 +0100, S?bastien Szymanski <sebastien.szymanski@armadeus.com> wrote:
-
-> It allows controlling the keyboard using the arrow and return keys.
+On 2018-12-07 11:08 -0700, Joel Carlson spake thusly:
+> On Fri, Dec 7, 2018 at 4:31 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+[--SNIP--]
+> >     $(patsubst /%,%,$(HOST_DIR))
+> I didn't read the documentation on patsubst close enough and didn't
+> realize you could make it replace only the first occurrence.  That
+> suggestion works and I'll use it.
 > 
-> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
-> ---
->  package/qt5/qt5virtualkeyboard/Config.in             | 5 +++++
->  package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk | 4 ++++
->  2 files changed, 9 insertions(+)
-> 
-> diff --git a/package/qt5/qt5virtualkeyboard/Config.in b/package/qt5/qt5virtualkeyboard/Config.in
-> index 57b0c703b0..c3f2f37604 100644
-> --- a/package/qt5/qt5virtualkeyboard/Config.in
-> +++ b/package/qt5/qt5virtualkeyboard/Config.in
-> @@ -53,4 +53,9 @@ config BR2_PACKAGE_QT5VIRTUALKEYBOARD_HANDWRITING
->  	  Lipi Toolkit (LipiTk) is an open source toolkit for online
->  	  Handwriting Recognition.
->  
-> +config BR2_PACKAGE_QT5VIRTUALKEYBOARD_ARROW_KEY_NAVIGATION
-> +	bool "Arrow key navigation"
-> +	help
-> +	  Allows controlling the keyboard using the arrow and return keys.
-> +
->  endif
-> diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-> index 4aa5fc9575..8ce3169774 100644
-> --- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-> +++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-> @@ -53,6 +53,10 @@ QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/lipi-toolkit/MI
->  endif
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_QT5VIRTUALKEYBOARD_ARROW_KEY_NAVIGATION),y)
-> +QT5VIRTUALKEYBOARD_QMAKEFLAGS += CONFIG+=arrow-key-navigation
-> +endif
-> +
->  ifdef QT5VIRTUALKEYBOARD_3RDPARTY_PARTS
->  define QT5VIRTUALKEYBOARD_INSTALL_TARGET_3RDPARTY_PARTS
->  	cp -dpfr $(STAGING_DIR)/usr/qtvirtualkeyboard $(TARGET_DIR)/usr
+> > Now, this fixup is not enough, in fact, because thisleaves symlinks to
+> > absolute paths borked, e.g.:
+[--SNIP--]
+> Symlinks with an absolute path is not a case I had considered.
+> I will work this further and submit a v2 patch.  Thanks!
 
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Note that I al ready sent a v2 with your patch ammended, and the
+absolute symlinks handled:
+    https://patchwork.ozlabs.org/project/buildroot/list/?series=80485
 
 Regards,
-Peter
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
