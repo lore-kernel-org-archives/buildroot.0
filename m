@@ -1,52 +1,57 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 7 Dec 2018 20:24:32 +0100
-Subject: [Buildroot] [PATCH] squashfs: do not force gzip support if
- lz4/xz/zstd is selected
-In-Reply-To: <20181207131356.14366-1-peter@korsgaard.com>
-References: <20181207131356.14366-1-peter@korsgaard.com>
-Message-ID: <20181207202432.76868c40@gmx.net>
+Date: Fri, 7 Dec 2018 20:28:48 +0100
+Subject: [Buildroot] [PATCH 1/1] qt5virtualkeyboard: add arrow key
+ navigation build option
+In-Reply-To: <20181203082509.25936-1-sebastien.szymanski@armadeus.com>
+References: <20181203082509.25936-1-sebastien.szymanski@armadeus.com>
+Message-ID: <20181207202848.11e494aa@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Hello S?bastien,
 
-On Fri,  7 Dec 2018 14:13:55 +0100, Peter Korsgaard <peter@korsgaard.com> wrote:
+On Mon,  3 Dec 2018 09:25:09 +0100, S?bastien Szymanski <sebastien.szymanski@armadeus.com> wrote:
 
-> The logic to ensure at least one compression backend is selected was not
-> updated when lz4, xz and zstd were introduced -  Fix that.
+> It allows controlling the keyboard using the arrow and return keys.
 > 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 > ---
->  package/squashfs/Config.in | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
+>  package/qt5/qt5virtualkeyboard/Config.in             | 5 +++++
+>  package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk | 4 ++++
+>  2 files changed, 9 insertions(+)
 > 
-> diff --git a/package/squashfs/Config.in b/package/squashfs/Config.in
-> index c16ebbf27f..fdd8833060 100644
-> --- a/package/squashfs/Config.in
-> +++ b/package/squashfs/Config.in
-> @@ -2,7 +2,12 @@ config BR2_PACKAGE_SQUASHFS
->  	bool "squashfs"
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on BR2_USE_MMU # fork()
-
-Nitpick: maybe a short comment here is helpful (I missed the line while
-adding zstd support)?
-
-  # ensure at least on compression backend (defaults to gzip)
-
-> -	select BR2_PACKAGE_SQUASHFS_GZIP if !(BR2_PACKAGE_SQUASHFS_LZMA || BR2_PACKAGE_SQUASHFS_LZO)
-> +	select BR2_PACKAGE_SQUASHFS_GZIP if !( \
-> +	       BR2_PACKAGE_SQUASHFS_LZ4 || \
-> +	       BR2_PACKAGE_SQUASHFS_LZMA || \
-> +	       BR2_PACKAGE_SQUASHFS_LZO || \
-> +	       BR2_PACKAGE_SQUASHFS_XZ || \
-> +	       BR2_PACKAGE_SQUASHFS_ZSTD)
->  	help
->  	  Tools to generate SquashFS filesystems.
+> diff --git a/package/qt5/qt5virtualkeyboard/Config.in b/package/qt5/qt5virtualkeyboard/Config.in
+> index 57b0c703b0..c3f2f37604 100644
+> --- a/package/qt5/qt5virtualkeyboard/Config.in
+> +++ b/package/qt5/qt5virtualkeyboard/Config.in
+> @@ -53,4 +53,9 @@ config BR2_PACKAGE_QT5VIRTUALKEYBOARD_HANDWRITING
+>  	  Lipi Toolkit (LipiTk) is an open source toolkit for online
+>  	  Handwriting Recognition.
 >  
+> +config BR2_PACKAGE_QT5VIRTUALKEYBOARD_ARROW_KEY_NAVIGATION
+> +	bool "Arrow key navigation"
+> +	help
+> +	  Allows controlling the keyboard using the arrow and return keys.
+> +
+>  endif
+> diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+> index 4aa5fc9575..8ce3169774 100644
+> --- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+> +++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+> @@ -53,6 +53,10 @@ QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/lipi-toolkit/MI
+>  endif
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_QT5VIRTUALKEYBOARD_ARROW_KEY_NAVIGATION),y)
+> +QT5VIRTUALKEYBOARD_QMAKEFLAGS += CONFIG+=arrow-key-navigation
+> +endif
+> +
+>  ifdef QT5VIRTUALKEYBOARD_3RDPARTY_PARTS
+>  define QT5VIRTUALKEYBOARD_INSTALL_TARGET_3RDPARTY_PARTS
+>  	cp -dpfr $(STAGING_DIR)/usr/qtvirtualkeyboard $(TARGET_DIR)/usr
 
 Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 
