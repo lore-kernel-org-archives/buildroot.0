@@ -1,11 +1,11 @@
 From: Joel Carlson <JoelsonCarl@gmail.com>
-Date: Fri, 7 Dec 2018 12:35:30 -0700
-Subject: [Buildroot] [PATCH 1/2] core: make symlinks relative when
- preparing the SDK
-In-Reply-To: <054c70a8ee5ddefc0e9592da3913cc54e24d2c35.1544206190.git.yann.morin.1998@free.fr>
+Date: Fri, 7 Dec 2018 12:39:45 -0700
+Subject: [Buildroot] [PATCH 2/2] core/sdk: don't mangle symlinks with
+ '.' or '..' at start
+In-Reply-To: <6ce3997e4824d41b50e13b8554e9f7e59e63a8af.1544206190.git.yann.morin.1998@free.fr>
 References: <cover.1544206190.git.yann.morin.1998@free.fr>
- <054c70a8ee5ddefc0e9592da3913cc54e24d2c35.1544206190.git.yann.morin.1998@free.fr>
-Message-ID: <CA+1k=2YBy8jnser2yL-mfjSo+fVVACpQZujLu1xp03Rm3Mt+4A@mail.gmail.com>
+ <6ce3997e4824d41b50e13b8554e9f7e59e63a8af.1544206190.git.yann.morin.1998@free.fr>
+Message-ID: <CA+1k=2ZVBqB3mi-7ZtR+9jkBE2hUoBDvQOEYA6jg87NFd9g3KQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,38 +14,50 @@ To: buildroot@busybox.net
 
 On Fri, Dec 7, 2018 at 11:10 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 >
-> The SDK is supposed to be relocatable, so symlinks must not be
-> absolute.
+> From: Joel Carlson <JoelsonCarl@gmail.com>
 >
-> Add a new helper script, that replaces all absolute symlinks with
-> relative ones.
+> The current transform changes any '.' at the start of a filename to
+> $(BR2_SDK_PREFIX). This also applies to the target of a symlink, when
+> it is relative.
 >
-> The ideal solution would use the shortest relative path for the
-> destination, but it is non-trivial to come up with. We just ensure
-> the relative path does not cross a common base directory, and compute
-> all the paths relative to that anchor.
+> We thus might end up with something like:
+>     $(BR2_SDK_PREFIX)/bin/aarch64-linux-gnu-ar ->
+>     $(BR2_SDK_PREFIX)./opt/ext-toolchain/bin/aarch64-linux-gnu-ar
 >
-> This can give non-optimum relative symlinks, like:
->     /base-dir/bin/foo -> ../bin/bar
+> when it should be:
+>     $(BR2_SDK_PREFIX)/bin/aarch64-linux-gnu-ar ->
+>     ../opt/ext-toolchain/bin/aarch64-linux-gnu-ar
 >
-> when the optimum would have been:
->     /base-dir/bin/foo -> bar
+> We fix that by making sure we always remove a known prefix, i.e. we
+> remove the path to host dir. The obvious solution would be to cd into
+> $(HOST_DIR)/.. , then tar ./host/ and finally use a --transfrom pattern
+> as 's,^\./$(notdir $(HOST_DIR)),$(BR2_SDK_PREFIX)'.
 >
-> Finally, as a sanity check, ensure there is not relative symlinl
-> pointing out of the base directory, because their targets would be
-> missing from the SDK.
+> Since $(HOST_DIR) can point to a user-supplied location, we don't know
+> very well how the pattern may patch.
 >
+> Instead, we cd into / and tar the full path to $(HOST_DIR).
+>
+> Since tar removes any leading '/', it would spurr a warning message,
+> which is annoying. So we explicitly remove the leading '/' from
+> $(HOST_DIR) when we tar it.
+>
+> Finally, we transform all filenames to replace a leading $(HOST_DIR)
+> (without a leading /) to the prefix to use.
+>
+> Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
+> [yann.morin.1998 at free.fr:
+>   - use a single transform pattern
+>   - use full HOST_DIR path as pattern to replace
+>   - update commit log accordingly
+> ]
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Joel Carlson <JoelsonCarl@gmail.com>
+>
 
+So not sure what protocol is on tags when this is essentially v2 of my
+own patch, but...
 Reviewed-by: Joel Carlson <JoelsonCarl@gmail.com>
 Tested-by: Joel Carlson <JoelsonCarl@gmail.com>
 
-Applied this patch and patch 2/2 to my branch and made sure the SDK
-generated and the symlinks I had seen fail before looked to be
-correct.
-I also added a few of my own symlinks into host/ with absolute paths
-pointing both inside and outside of host/ to test that the cases
-caught them.
-And I added some relative symlinks that crossed the boundary to make
-sure that case was caught as well.
+Applied this and the first patch to my branch and made sure my SDKs
+seemed to have the correct links.
