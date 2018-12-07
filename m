@@ -1,48 +1,39 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Fri, 7 Dec 2018 09:41:28 -0200 (BRST)
-Subject: [Buildroot] [PATCH] pcm-tools: new package
-In-Reply-To: <20181207121559.7e1b11e4@windsurf>
-References: <20180123140324.20801-1-casantos@datacom.ind.br>
- <20180123140324.20801-2-casantos@datacom.ind.br>
- <20180401161654.6412d152@windsurf>
- <1919985279.1291627.1522720961448.JavaMail.zimbra@datacom.ind.br>
- <1017622378.1606234.1544146335281.JavaMail.zimbra@datacom.com.br>
- <20181207121559.7e1b11e4@windsurf>
-Message-ID: <368276849.1649228.1544182888744.JavaMail.zimbra@datacom.com.br>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri,  7 Dec 2018 14:13:55 +0100
+Subject: [Buildroot] [PATCH] squashfs: do not force gzip support if
+ lz4/xz/zstd is selected
+Message-ID: <20181207131356.14366-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------ Original Message -----
-> From: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
-> To: "Carlos Santos" <casantos@datacom.com.br>
-> Cc: "buildroot" <buildroot@buildroot.org>, "Romain Naour" <romain.naour@smile.fr>
-> Sent: Sexta-feira, 7 de dezembro de 2018 9:15:59
-> Subject: Re: [Buildroot] [PATCH] pcm-tools: new package
+The logic to ensure at least one compression backend is selected was not
+updated when lz4, xz and zstd were introduced -  Fix that.
 
-> Hello Carlos,
-> 
-> On Thu, 6 Dec 2018 23:32:15 -0200 (BRST), Carlos Santos wrote:
-> 
->> Superseded-by: https://patchwork.ozlabs.org/patch/1009149/
-> 
-> I am wondering: is this Superseded-by really understood by patchwork to
-> make a patch as Superseded? I don't see Superseded-by used in the
-> patchwork code base.
-> 
-> I see that the patch was marked as Superseded in patchwork, was it done
-> manually by you, or automatically thanks to this e-mail ?
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/squashfs/Config.in | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Manually by me.
-
-> If it was done manually by you, then I think it's not really useful to
-> send this Superseded-by e-mail: we see in patchwork the latest version
-> anyway, which is what is important.
-
-I use them to leave a track of my patches, since patchwork does not help
-much (smells like 1980, in fact, even tough it was written much later).
-
+diff --git a/package/squashfs/Config.in b/package/squashfs/Config.in
+index c16ebbf27f..fdd8833060 100644
+--- a/package/squashfs/Config.in
++++ b/package/squashfs/Config.in
+@@ -2,7 +2,12 @@ config BR2_PACKAGE_SQUASHFS
+ 	bool "squashfs"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+-	select BR2_PACKAGE_SQUASHFS_GZIP if !(BR2_PACKAGE_SQUASHFS_LZMA || BR2_PACKAGE_SQUASHFS_LZO)
++	select BR2_PACKAGE_SQUASHFS_GZIP if !( \
++	       BR2_PACKAGE_SQUASHFS_LZ4 || \
++	       BR2_PACKAGE_SQUASHFS_LZMA || \
++	       BR2_PACKAGE_SQUASHFS_LZO || \
++	       BR2_PACKAGE_SQUASHFS_XZ || \
++	       BR2_PACKAGE_SQUASHFS_ZSTD)
+ 	help
+ 	  Tools to generate SquashFS filesystems.
+ 
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
+2.11.0
