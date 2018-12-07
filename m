@@ -1,50 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 7 Dec 2018 21:53:53 +0100
-Subject: [Buildroot] Submodule granularity instead of LIB_GIT_SUBMODULES
-In-Reply-To: <20181206083245.GC2561@scaer>
-References: <ea-mime-5bfeb41d-7336-2fa4e677@www-6.netcourrier.com>
- <8f33142c-71ad-24c6-bad4-deea26f05ce6@mind.be>
- <20181206083245.GC2561@scaer>
-Message-ID: <20181207205353.GK2561@scaer>
+From: Christian Stewart <christian@paral.in>
+Date: Fri, 7 Dec 2018 14:06:05 -0800
+Subject: [Buildroot] [External] Re: [PATCH v8 1/1] docker-engine: split
+ docker-{cli, engine}, bump to v18.06.1-ce
+In-Reply-To: <CANQCQpaF3LGyTkGZ29JhbgXgQzcd5UMCTkSo_mKmcav-iW0Hag@mail.gmail.com>
+References: <20181108032458.1028-1-christian@paral.in>
+ <CANQCQpa0SGdEHVFxn_wmKnktat18iAJ2YLXYQd+4Uqzq5GzG4A@mail.gmail.com>
+ <874lcki4rw.fsf@paral.in>
+ <CANQCQpaK4m3iqadyDAzuypV2Ze3LdhedHhn50AxF41buOMrTDQ@mail.gmail.com>
+ <871s7liu5e.fsf@paral.in>
+ <CANQCQpYM2E_+rMfDQ7svB05V4TfJKpgHCOpoPN49uLLqRZ30Hw@mail.gmail.com>
+ <87ftvnyz7c.fsf@paral.in>
+ <CANQCQpaF3LGyTkGZ29JhbgXgQzcd5UMCTkSo_mKmcav-iW0Hag@mail.gmail.com>
+Message-ID: <CA+h8R2r_AAdmFXU0e4sA_=hdJ2g9n86F7UKJH6xDRf8AkKXxhw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Louis-Paul, Arnout, All,
+Hi Matthew,
 
-On 2018-12-06 09:32 +0100, Yann E. MORIN spake thusly:
-> On 2018-12-03 17:40 +0100, Arnout Vandecappelle spake thusly:
-> > On 28/11/2018 16:28, lpdev at cordier.org wrote:
-> > > compilation. I was wondering if there is a way to specify _GIT_SUBMODULES to no,
-> > > but still get the submodule1, without breaking buildroot's download philosophy.
-> >  No, there's no simple way to do that. And adding the infrastructure to do that
-> > would lead us way too far.
-> Actually, it would be rather easy, as 'git submodule init' accepts a
-> list of paths to initialise (it has accepted that since submodules were
-> introduced in 2007).
-> See (totally untested):
->     https://git.buildroot.org/~ymorin/git/buildroot/commit/?h=yem/git-submodules&id=6a4f7c504e04dfe8dd6d5f8540a6cbc81e3758ae
-> Arnout, like you, I am not sure we would want such a feature. However,
-> I don't have a strong opinion against it either, as it's pretty easy to
-> do...
+On Wed, Nov 28, 2018 at 2:35 PM Matthew Weber <Matthew.Weber@collins.com> wrote:
+> > > The one use case I have been thinking about for new projects is
+> > > building the most basic possible hosting environment to manage the
+> > > security footprint.  Maybe a LXC system container hosting environment
+> > > or a non-systemd dockerd.  Then inside of that run a systemd based
+> > > docker deployment which would be easier to swap out and do a true
+> > > shared filesystem approach vs a system container......
+> >
+> > I think the most minimum environment would be base Buildroot with either
+> > the docker-containerd / runc stack, or something like cri-o (a
+> > Kubernetes minimal container runtime I am examining for use with
+> > Buildroot). One thing to consider is that the Go dependencies could be
+> > compiled together into a single binary, which would reduce binary
+> > footprint quite a bit I think. Much of Docker / dockerd features are
+> > unnecessary and can be removed as well / mapped to Buildroot options.
+> >
+>
+> I noticed that flatpak now has OCI format support.  That could be an
+> interesting way to go light weight without a GO dependency.....
 
-Well, I take that back. It is not easy, in fact.
+I still think either the cri-o (your aversion to Go is noted) or
+Flatpak is the right approach.
 
-My proposal only accounts for first-level submodules, and doers not
-works for sub-submodules and below. Handling them would not be trivial.
+To that end I've implemented Flatpak and related dependencies in
+Buildroot and have a working patchset here:
 
-So, I side with Arnout: we can't support that, as that would lead us way
-too far, especially since our git wrapper is already complex...
+https://github.com/paralin/buildroot/commits/add-flatpak
 
-Regards,
-Yann E. MORIN.
+Will begin testing over the next week.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Best regards,
+Christian
