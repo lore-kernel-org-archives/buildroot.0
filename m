@@ -1,111 +1,108 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 7 Dec 2018 09:09:12 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-aiohttp-jinja2: new
- package
-In-Reply-To: <1544137122-26766-1-git-send-email-james.hilliard1@gmail.com>
-References: <1544137122-26766-1-git-send-email-james.hilliard1@gmail.com>
-Message-ID: <CAGm1_ktuXHg-SBYJtSz0B+KLE3bbY12y42GY-9YH35E_Wu6ugQ@mail.gmail.com>
+Date: Fri, 7 Dec 2018 09:10:29 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-aiohttp-sse: new package
+In-Reply-To: <1544135085-25683-1-git-send-email-james.hilliard1@gmail.com>
+References: <1544135085-25683-1-git-send-email-james.hilliard1@gmail.com>
+Message-ID: <CAGm1_kt-02QGL4YJBrDQy-vFMNS-Sp=OQ3UtxNwzC8AGBVT74Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Dec 6, 2018 at 11:58 PM <james.hilliard1@gmail.com> wrote:
+On Thu, Dec 6, 2018 at 11:25 PM <james.hilliard1@gmail.com> wrote:
 >
 > From: James Hilliard <james.hilliard1@gmail.com>
 >
-> jinja2 template renderer for aiohttp.web
+> Server-sent events  support for aiohttp.
 >
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  DEVELOPERS                                               |  1 +
->  package/Config.in                                        |  1 +
->  package/python-aiohttp-jinja2/Config.in                  | 10 ++++++++++
->  package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash |  5 +++++
->  package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk   | 14 ++++++++++++++
->  5 files changed, 31 insertions(+)
->  create mode 100644 package/python-aiohttp-jinja2/Config.in
->  create mode 100644 package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash
->  create mode 100644 package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk
+>  DEVELOPERS                                         |  1 +
+>  package/Config.in                                  |  1 +
+>  package/python-aiohttp-sse/Config.in               |  8 ++++++++
+>  package/python-aiohttp-sse/python-aiohttp-sse.hash |  5 +++++
+>  package/python-aiohttp-sse/python-aiohttp-sse.mk   | 14 ++++++++++++++
+>  5 files changed, 29 insertions(+)
+>  create mode 100644 package/python-aiohttp-sse/Config.in
+>  create mode 100644 package/python-aiohttp-sse/python-aiohttp-sse.hash
+>  create mode 100644 package/python-aiohttp-sse/python-aiohttp-sse.mk
 >
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index c289b3f..cc60922 100644
+> index c289b3f..290fc85 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
 > @@ -992,6 +992,7 @@ F:  configs/pine64_sopine_defconfig
 >  N:     James Hilliard <james.hilliard1@gmail.com>
 >  F:     package/python-aiodns/
 >  F:     package/python-aiohttp/
-> +F:     package/python-aiohttp-jinja2/
+> +F:     package/python-aiohttp-sse/
 >  F:     package/python-async-timeout/
 >  F:     package/python-cchardet/
 >  F:     package/python-multidict/
 > diff --git a/package/Config.in b/package/Config.in
-> index f6252f2..fe95f08 100644
+> index f6252f2..6226209 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
 > @@ -799,6 +799,7 @@ menu "External python modules"
 >         source "package/python-aiocoap/Config.in"
 >         source "package/python-aiodns/Config.in"
 >         source "package/python-aiohttp/Config.in"
-> +       source "package/python-aiohttp-jinja2/Config.in"
+> +       source "package/python-aiohttp-sse/Config.in"
 >         source "package/python-alsaaudio/Config.in"
 >         source "package/python-argh/Config.in"
 >         source "package/python-arrow/Config.in"
-> diff --git a/package/python-aiohttp-jinja2/Config.in b/package/python-aiohttp-jinja2/Config.in
+> diff --git a/package/python-aiohttp-sse/Config.in b/package/python-aiohttp-sse/Config.in
 > new file mode 100644
-> index 0000000..4c356fe
+> index 0000000..dc4a025
 > --- /dev/null
-> +++ b/package/python-aiohttp-jinja2/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_PYTHON_AIOHTTP_JINJA2
-> +       bool "python-aiohttp-jinja2"
+> +++ b/package/python-aiohttp-sse/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_PYTHON_AIOHTTP_SSE
+> +       bool "python-aiohttp-sse"
 > +       depends on BR2_PACKAGE_PYTHON3
 > +       select BR2_PACKAGE_PYTHON_AIOHTTP # runtime
-> +       select BR2_PACKAGE_PYTHON_JINJA2 # runtime
 > +       help
-> +         jinja2 template renderer for aiohttp.web (http server for
+> +         Server-sent events  support for aiohttp.
 
-s/jinja2/Jinja2
+Two spaces between "events" and "support".
 
 Other than that you can add my Reviewed-by: Yegor Yefremov
 <yegorslists@googlemail.com> for v2.
 
 Yegor
 
-> +         asyncio).
 > +
-> +         https://github.com/aio-libs/aiohttp_jinja2/
-> diff --git a/package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash b/package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash
+> +         https://github.com/aio-libs/aiohttp_sse/
+> diff --git a/package/python-aiohttp-sse/python-aiohttp-sse.hash b/package/python-aiohttp-sse/python-aiohttp-sse.hash
 > new file mode 100644
-> index 0000000..390b0e4
+> index 0000000..2f21da4
 > --- /dev/null
-> +++ b/package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash
+> +++ b/package/python-aiohttp-sse/python-aiohttp-sse.hash
 > @@ -0,0 +1,5 @@
-> +# md5, sha256 from https://pypi.org/pypi/aiohttp-jinja2/json
-> +md5    de5e02056d1b48dc2fa4fc0c1a8b0e08  aiohttp-jinja2-1.1.0.tar.gz
-> +sha256 aef9b6595f962182ad00c990095fb51d731c280e1d183e2b28cf0bdb5a942d0c  aiohttp-jinja2-1.1.0.tar.gz
+> +# md5, sha256 from https://pypi.org/pypi/aiohttp-sse/json
+> +md5    d2f394fb75f591045b2c94fc17c8533d  aiohttp-sse-2.0.0.tar.gz
+> +sha256 547e1eaa129749f090d02b31956215edbcde74ce99721f5f0ac902a9ccb1202e  aiohttp-sse-2.0.0.tar.gz
 > +# Locally computed sha256 checksums
-> +sha256 2a86817fedf0c52baaa47d7dd975073639dfaaebd37312bd279de54d7f841791  LICENSE
-> diff --git a/package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk b/package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk
+> +sha256 cb5e8e7e5f4a3988e1063c142c60dc2df75605f4c46515e776e3aca6df976e14  LICENSE
+> diff --git a/package/python-aiohttp-sse/python-aiohttp-sse.mk b/package/python-aiohttp-sse/python-aiohttp-sse.mk
 > new file mode 100644
-> index 0000000..3b5359a
+> index 0000000..7a7a0d0
 > --- /dev/null
-> +++ b/package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk
+> +++ b/package/python-aiohttp-sse/python-aiohttp-sse.mk
 > @@ -0,0 +1,14 @@
 > +################################################################################
 > +#
-> +# python-aiohttp-jinja2
+> +# python-aiohttp-sse
 > +#
 > +################################################################################
 > +
-> +PYTHON_AIOHTTP_JINJA2_VERSION = 1.1.0
-> +PYTHON_AIOHTTP_JINJA2_SOURCE = aiohttp-jinja2-$(PYTHON_AIOHTTP_JINJA2_VERSION).tar.gz
-> +PYTHON_AIOHTTP_JINJA2_SITE = https://files.pythonhosted.org/packages/76/9d/68fa1e9ec3bafba572772eb385023de54096663bd6e302a24d7344c6a711
-> +PYTHON_AIOHTTP_JINJA2_SETUP_TYPE = setuptools
-> +PYTHON_AIOHTTP_JINJA2_LICENSE = Apache-2.0
-> +PYTHON_AIOHTTP_JINJA2_LICENSE_FILES = LICENSE
+> +PYTHON_AIOHTTP_SSE_VERSION = 2.0.0
+> +PYTHON_AIOHTTP_SSE_SOURCE = aiohttp-sse-$(PYTHON_AIOHTTP_SSE_VERSION).tar.gz
+> +PYTHON_AIOHTTP_SSE_SITE = https://files.pythonhosted.org/packages/2b/50/e127729f7df53c32c96b5c71932a7262cad40c83f1e19c218b068c816d51
+> +PYTHON_AIOHTTP_SSE_SETUP_TYPE = setuptools
+> +PYTHON_AIOHTTP_SSE_LICENSE = Apache-2.0
+> +PYTHON_AIOHTTP_SSE_LICENSE_FILES = LICENSE
 > +
 > +$(eval $(python-package))
 > --
