@@ -1,82 +1,103 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 7 Dec 2018 20:44:17 +0100
-Subject: [Buildroot] [PATCH 2/2] core/sdk: don't mangle symlinks with
- '.' or '..' at start
-In-Reply-To: <CA+1k=2ZVBqB3mi-7ZtR+9jkBE2hUoBDvQOEYA6jg87NFd9g3KQ@mail.gmail.com>
-References: <cover.1544206190.git.yann.morin.1998@free.fr>
- <6ce3997e4824d41b50e13b8554e9f7e59e63a8af.1544206190.git.yann.morin.1998@free.fr>
- <CA+1k=2ZVBqB3mi-7ZtR+9jkBE2hUoBDvQOEYA6jg87NFd9g3KQ@mail.gmail.com>
-Message-ID: <20181207194417.GJ2561@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 7 Dec 2018 21:50:29 +0100
+Subject: [Buildroot] Making the Qt5 packaging compatible with
+ per-package folder
+In-Reply-To: <20181116171845.4bc2a936@windsurf>
+References: <20181116171845.4bc2a936@windsurf>
+Message-ID: <20181207215029.120a52a4@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Joel, All,
+Hello Thomas,
 
-On 2018-12-07 12:39 -0700, Joel Carlson spake thusly:
-> On Fri, Dec 7, 2018 at 11:10 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > From: Joel Carlson <JoelsonCarl@gmail.com>
-> > The current transform changes any '.' at the start of a filename to
-> > $(BR2_SDK_PREFIX). This also applies to the target of a symlink, when
-> > it is relative.
-> >
-> > We thus might end up with something like:
-> >     $(BR2_SDK_PREFIX)/bin/aarch64-linux-gnu-ar ->
-> >     $(BR2_SDK_PREFIX)./opt/ext-toolchain/bin/aarch64-linux-gnu-ar
-> >
-> > when it should be:
-> >     $(BR2_SDK_PREFIX)/bin/aarch64-linux-gnu-ar ->
-> >     ../opt/ext-toolchain/bin/aarch64-linux-gnu-ar
-> >
-> > We fix that by making sure we always remove a known prefix, i.e. we
-> > remove the path to host dir. The obvious solution would be to cd into
-> > $(HOST_DIR)/.. , then tar ./host/ and finally use a --transfrom pattern
-> > as 's,^\./$(notdir $(HOST_DIR)),$(BR2_SDK_PREFIX)'.
-> >
-> > Since $(HOST_DIR) can point to a user-supplied location, we don't know
-> > very well how the pattern may patch.
-> >
-> > Instead, we cd into / and tar the full path to $(HOST_DIR).
-> >
-> > Since tar removes any leading '/', it would spurr a warning message,
-> > which is annoying. So we explicitly remove the leading '/' from
-> > $(HOST_DIR) when we tar it.
-> >
-> > Finally, we transform all filenames to replace a leading $(HOST_DIR)
-> > (without a leading /) to the prefix to use.
-> >
-> > Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
-> > [yann.morin.1998 at free.fr:
-> >   - use a single transform pattern
-> >   - use full HOST_DIR path as pattern to replace
-> >   - update commit log accordingly
-> > ]
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> >
+On Fri, 16 Nov 2018 17:18:45 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+
+> Peter, Ga?l,
 > 
-> So not sure what protocol is on tags when this is essentially v2 of my
-> own patch, but...
-> Reviewed-by: Joel Carlson <JoelsonCarl@gmail.com>
-> Tested-by: Joel Carlson <JoelsonCarl@gmail.com>
+> I don't know if you have followed the discussion, but I recently sent a
+> new iteration of the per-package folder series [1], which allows to
+> support top-level parallel build.
+> 
+> One issue is that the Qt5 packaging as done today in Buildroot is not
+> compatible with per-package folders.
+> 
+> If you remember well, the installation of each Qt5 module works like
+> this:
+> 
+>  - Staging installation
+> 
+>    Just "make install". No DESTDIR or INSTALL_ROOT is passed, because
+>    the installation path is hardcoded in qmake itself. "make install"
+>    will install stuff to both $(HOST_DIR) and $(STAGING_DIR).
+> 
+>  - Target installation
+> 
+>    We manually copy the shared libraries, QML files, fonts, and other
+>    stuff. This is already annoying to maintain today, because we
+>    sometimes forget to install something that is important, we need to
+>    handle the LTS/latest Qt5 version difference, etc. It would be a lot
+>    less maintenance if we could use "make install" also for the target
+>    installation.
+> 
+> Even if the current packaging is not ideal, it worked fine. But it
+> breaks badly with per-package folders. As explained above, the paths in
+> qmake are hardcoded. So when you do "make install" in qt5location for
+> example, it ends up being installed in the per-package folder of
+> qt5base (both HOST_DIR and STAGING_DIR), as it's the qt5base
+> HOST_DIR/STAGING_DIR that are hardcoded inside the qmake binary.
+> 
+> I tried to fix this issue, but for the moment, I haven't found a
+> solution. I first tried to use the -extprefix ./configure option, but
+> it didn't behave as we needed. Then I tried to do some manual
+> replacement in the Qt5 Makefiles after they have been generated (like
+> OpenEmbedded is doing), but they unfortunately get re-generated because
+> we tweak the .prl files from Qt5, and the Qt5 Makefiles regenerates the
+> Mkaefiles if they are older than the .prl files.
+> 
+> The current status of my experiment is visible at
+> https://git.bootlin.com/users/thomas-petazzoni/buildroot/commit/?h=ppsh-qt5&id=676d26ab1ca3d8f8ee5788dbc06f4e0703188bf1,
+> with a very long commit that explains the problem, and what was tried
+> so far. At this point, I am considering cheating on the date of
+> the .prl file to avoid the Makefiles from being re-generated, but this
+> is really a hack on top of what is already a hack.
+> 
+> Do you have some other ideas to solve this ? Can we fix qmake to do the
+> right thing ?
 
-Since my proposal is more than trivial tweaks of your proposal, your
-tags are welcome.
+Or with the following (hack?) at the build directory (/home/seiderer/Work/Buildroot/build-per-package-qt5-001):
 
-Thanks for reporting the issue, for your initial patch which got me
-kickstarted, and thanks for your review and tests! :-)
+	$ mkdir -p mkdir -p qt_install/home/seiderer/Work/Buildroot/build-per-package-qt5-001/host/arm-buildroot-linux-gnueabihf
+	$ ln -s /home/seiderer/Work/Buildroot/build-per-package-qt5-001/target qt_install/home/seiderer/Work/Buildroot/build-per-package-qt5-001/host/arm-buildroot-linux-gnueabihf/sysroot
+
+Now build/install qt5base with the following changes
+
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 98297d87db..d59265d0b6 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -364,10 +364,7 @@ define QT5BASE_INSTALL_TARGET_CMDS
+ endef
+ else
+ define QT5BASE_INSTALL_TARGET_CMDS
+-       $(QT5BASE_INSTALL_TARGET_LIBS)
+-       $(QT5BASE_INSTALL_TARGET_PLUGINS)
+-       $(QT5BASE_INSTALL_TARGET_FONTS)
+-       $(QT5BASE_INSTALL_TARGET_EXAMPLES)
++       $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install INSTALL_ROOT=/home/seiderer/Work/Buildroot/build-per-package-qt5-001/qt_install
+ endef
+ endif
+
+Or maybe use an relative INSTALL_ROOT=../../../../../../../target path (untested)?
 
 Regards,
-Yann E. MORIN.
+Peter
 
-> Applied this and the first patch to my branch and made sure my SDKs
-> seemed to have the correct links.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> 
+> Thanks a lot for your help,
+> 
+> Thomas
+> 
+> [1] http://patchwork.ozlabs.org/project/buildroot/list/?series=75909
