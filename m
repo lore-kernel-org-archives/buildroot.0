@@ -1,72 +1,45 @@
-From: David J. Fogle <Dave@exitstrategytech.com>
-Date: Fri, 7 Dec 2018 16:19:04 +0000
-Subject: [Buildroot] Docker client does not function correctly in 2018.11
-In-Reply-To: <ff88c64bc71a4a3e816cf4c90a501ec3@exitstrategytech.com>
-References: <ac041379a2d04fbeb3900fae7bab51be@exitstrategytech.com>
- <8dcf0b32c7fe49e8b30b10a482f3f23a@exitstrategytech.com>
- <CA+h8R2pH=BTTh+farCMfJOW8dzYsUhN_ompMtc=Aaz4tQVbVXg@mail.gmail.com>
- <5db9d4aa533e4e8590b5c33d2bb47665@exitstrategytech.com>
- <p05ed2odjpa9vgdmd5cx9cew.1544054248971@email.android.com>
- <CA+h8R2orLF5mjc6g8qDwG5Sh0WMXicnLb9DTB_qQiTBoJd45yA@mail.gmail.com>
- <6e255ac5c09e4841ac67d6f383249556@exitstrategytech.com>
- <99kkgapwmjckouvyyw5vo6pe.1544060571584@email.android.com>
- <CA+h8R2oK2mPefnBQ9c-jd7m4Tc7=s-0nsCV965r9DpsVTULuaA@mail.gmail.com>
- <ec3f3d11856642d09f7a59f5d1fe3dbd@exitstrategytech.com>,
- <CA+h8R2odgbjQYv2CbQBGCn-6mPcw3_AJoPuXhBdATVtmb5HpcQ@mail.gmail.com>
- <d1afc122a10f4d4da893e5f9fc91bca3@exitstrategytech.com>,
- <ff88c64bc71a4a3e816cf4c90a501ec3@exitstrategytech.com>
-Message-ID: <607d909eed104898b2e059e0326a4415@exitstrategytech.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Fri,  7 Dec 2018 17:59:12 +0100
+Subject: [Buildroot] [PATCH 1/1] libmbim: Bump to version 1.16.2
+Message-ID: <20181207165912.3675-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I have replicated the working configuration from Christian's skiff branch for his SkiffOS into 2018.11, and the issue is 100% a version mismatch in the docker components. Backporting the docker versions from his build into 2018.11 should be sufficient to resolve the issues. Is this something that I can assist in? If so, how would I go about it?
++ change website to https
 
-________________________________
-From: David J. Fogle
-Sent: Wednesday, December 5, 2018 8:36:06 PM
-To: Christian Stewart
-Cc: Matthew Weber; Hamilton Southworth; buildroot at busybox.net
-Subject: RE: Re: Re: Docker client does not function correctly in 2018.11
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+ package/libmbim/libmbim.hash | 2 +-
+ package/libmbim/libmbim.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I think I have myself mostly sorted, I will try to replicate this working config in the morning on 2018.11 , but as far as I can tell, my original issue of the flag being passed when not defined is resolved in your skiff build. I assume your skiff isn?t recommended for production use?
-
-From: David J. Fogle <Dave@exitstrategytech.com>
-Sent: Wednesday, December 5, 2018 8:24 PM
-To: Christian Stewart <christian@paral.in>
-Cc: Matthew Weber <matthew.weber@rockwellcollins.com>; Hamilton Southworth <hamilton@aperturerobotics.com>; buildroot at busybox.net
-Subject: Re: Re: Re: Docker client does not function correctly in 2018.11
-
-Well, as of now, I can start the docker-containerd without any flags, from the cli, and it works. The system unit hangs without output though.
-
-
-
-David Fogle
-
-CTO - Exit Strategy
-
-
--------- Original message --------
-From: Christian Stewart <christian@paral.in>
-Date: 12/5/18 8:22 PM (GMT-06:00)
-To: "David J. Fogle" <Dave@exitstrategytech.com>
-Cc: Christian Stewart <christian@paral.in>, Matthew Weber <matthew.weber@rockwellcollins.com>, Hamilton Southworth <hamilton@aperturerobotics.com>, buildroot at busybox.net
-Subject: Re: Re: Re: Docker client does not function correctly in 2018.11
-
-Hi David,
-
-On Wed, Dec 5, 2018 at 6:18 PM David J. Fogle <Dave@exitstrategytech.com> wrote:
-> I was able to get docker to run far enough along to complain about cgroup support lacking
-
-The Docker developers created a script to check a kernel .config file
-for the required options, you may find it useful.
-
-https://github.com/docker/engine/blob/master/contrib/check-config.sh
-
-Best regards,
-Christian
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181207/6f1c4678/attachment.html>
+diff --git a/package/libmbim/libmbim.hash b/package/libmbim/libmbim.hash
+index 9734181a34..9364183080 100644
+--- a/package/libmbim/libmbim.hash
++++ b/package/libmbim/libmbim.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  c8ca50beeddd4b43309df5b698917268303bf176cea58fe4fe53d5bf0e93fac2  libmbim-1.16.0.tar.xz
++sha256  eb494fee2c200daf4f5cc8a40061d24a3dfafe8c59151c95c6a826fd96dcb262  libmbim-1.16.2.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
+index 169cdc1dcd..9d74b108ca 100644
+--- a/package/libmbim/libmbim.mk
++++ b/package/libmbim/libmbim.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBMBIM_VERSION = 1.16.0
+-LIBMBIM_SITE = http://www.freedesktop.org/software/libmbim
++LIBMBIM_VERSION = 1.16.2
++LIBMBIM_SITE = https://www.freedesktop.org/software/libmbim
+ LIBMBIM_SOURCE = libmbim-$(LIBMBIM_VERSION).tar.xz
+ LIBMBIM_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
+ LIBMBIM_LICENSE_FILES = COPYING COPYING.LIB
+-- 
+2.19.2
