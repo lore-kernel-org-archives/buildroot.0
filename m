@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 7 Dec 2018 09:13:56 +0100
-Subject: [Buildroot] strace on xtensa/uclibc
-In-Reply-To: <20181207070029.CF0512073D@mail.bootlin.com>
-References: <20181207070029.CF0512073D@mail.bootlin.com>
-Message-ID: <20181207091356.605a9c69@windsurf>
+Date: Fri, 7 Dec 2018 09:15:39 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sunxi-tools: additional build
+ options
+In-Reply-To: <1542092998-21977-1-git-send-email-kaplan2539@gmail.com>
+References: <1542092998-21977-1-git-send-email-kaplan2539@gmail.com>
+Message-ID: <20181207091539.515fa3a4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,41 +13,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-+Baruch, Max Filipov for Xtensa and Waldemar for uClibc-ng.
+On Mon, 12 Nov 2018 23:09:58 -0800, kaplan2539 at gmail.com wrote:
+> From: Alex Kaplan <kaplan2539@gmail.com>
+> 
+> This patch allows to select the installation of additional commands
+> which are part of the sunxi-tools. It's now possible to e.g. install
+> sunxi-fel on the target device. The corresponding options have been
+> added to Config.in and sunxi-tools.mk has been modified respectively.
+> The default setting is to only build sunxi-nand-part.
+> 
+> On the host building of the misc-tools target is added, which provides
+> sunxi-nand-image-builder and phoenix_info.
+> 
+> Signed-off-by: Alex Kaplan <kaplan2539@gmail.com>
 
-On Fri,  7 Dec 2018 08:00:29 +0100 (CET), Thomas Petazzoni wrote:
+This patch seems to be causing some build issues:
 
->       xtensa |                    strace-4.25 | NOK | http://autobuild.buildroot.net/results/5a0112b7a2c81fa5253c9adc93efe415256cd811 |     
+  http://autobuild.buildroot.net/?reason=sunxi-tools-v1.4.1
 
-I had a look at those failures of strace on xtensa:
-
-  http://autobuild.buildroot.net/?reason=strace-4.25
-
-I.e, strace 4.25 only fails to build on Xtensa. The reason is that
-uClibc-ng doesn't have the correct values for some POLL* macros: they
-don't match the kernel values.
-
-Let's take POLLWRBAND as an example. The kernel defines it like this:
-
-arch/xtensa/include/uapi/asm/poll.h:#define POLLWRBAND  0x0100
-
-So strace 4.25 checks that it has the correct value:
-
-#if defined(__m68k__) || defined(__mips__) || defined(__sparc__) || defined(__xtensa__)
-#if defined(POLLWRBAND) || (defined(HAVE_DECL_POLLWRBAND) && HAVE_DECL_POLLWRBAND)
-DIAG_PUSH_IGNORE_TAUTOLOGICAL_COMPARE
-static_assert((POLLWRBAND) == (0x0100), "POLLWRBAND != 0x0100");
-
-But uClibc-ng doesn't have an arch-specific header to define POLLWRBAND
-on xtensa, so it falls back to the generic definition, which isn't
-correct for xtensa:
-
-libc/sysdeps/linux/common/bits/poll.h:# define POLLWRBAND       0x200           /* Priority data may be written.  */
-
-The same issue happens with POLLREMOVE.
-
-I think xtensa needs to have its own
-libc/sysdeps/linux/xtensa/bits/poll.h in uClibc-ng.
+Some new code that gets compiled uses inl/outl, which apparently aren't
+provided by musl on ARM ?
 
 Best regards,
 
