@@ -1,102 +1,104 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 7 Dec 2018 08:55:02 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-aiorwlock: new package
-In-Reply-To: <1544141284-28960-1-git-send-email-james.hilliard1@gmail.com>
-References: <1544141284-28960-1-git-send-email-james.hilliard1@gmail.com>
-Message-ID: <CAGm1_kuvjkD-UihTfiX9W0O_arAkem+AB3aKST-uDEkBZsYkMA@mail.gmail.com>
+Date: Fri, 7 Dec 2018 09:00:50 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-aiohttp-remotes: new
+ package
+In-Reply-To: <1544140170-28500-1-git-send-email-james.hilliard1@gmail.com>
+References: <1544140170-28500-1-git-send-email-james.hilliard1@gmail.com>
+Message-ID: <CAGm1_kv0OT1P=QTMCACBtUSOU3FKGZ3q8DpptojGh+n-GnneFA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Dec 7, 2018 at 1:08 AM <james.hilliard1@gmail.com> wrote:
+On Fri, Dec 7, 2018 at 12:50 AM <james.hilliard1@gmail.com> wrote:
 >
 > From: James Hilliard <james.hilliard1@gmail.com>
 >
-> Read write lock for asyncio.
+> Control remote side information.
 >
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 > ---
->  DEVELOPERS                                     |  1 +
->  package/Config.in                              |  1 +
->  package/python-aiorwlock/Config.in             |  7 +++++++
->  package/python-aiorwlock/python-aiorwlock.hash |  5 +++++
->  package/python-aiorwlock/python-aiorwlock.mk   | 14 ++++++++++++++
->  5 files changed, 28 insertions(+)
->  create mode 100644 package/python-aiorwlock/Config.in
->  create mode 100644 package/python-aiorwlock/python-aiorwlock.hash
->  create mode 100644 package/python-aiorwlock/python-aiorwlock.mk
+>  DEVELOPERS                                                 |  1 +
+>  package/Config.in                                          |  1 +
+>  package/python-aiohttp-remotes/Config.in                   |  8 ++++++++
+>  package/python-aiohttp-remotes/python-aiohttp-remotes.hash |  5 +++++
+>  package/python-aiohttp-remotes/python-aiohttp-remotes.mk   | 14 ++++++++++++++
+>  5 files changed, 29 insertions(+)
+>  create mode 100644 package/python-aiohttp-remotes/Config.in
+>  create mode 100644 package/python-aiohttp-remotes/python-aiohttp-remotes.hash
+>  create mode 100644 package/python-aiohttp-remotes/python-aiohttp-remotes.mk
 >
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index c289b3f..9248c79 100644
+> index c289b3f..811198e 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
 > @@ -992,6 +992,7 @@ F:  configs/pine64_sopine_defconfig
 >  N:     James Hilliard <james.hilliard1@gmail.com>
 >  F:     package/python-aiodns/
 >  F:     package/python-aiohttp/
-> +F:     package/python-aiorwlock/
+> +F:     package/python-aiohttp-remotes/
 >  F:     package/python-async-timeout/
 >  F:     package/python-cchardet/
 >  F:     package/python-multidict/
 > diff --git a/package/Config.in b/package/Config.in
-> index f6252f2..4acc4ba 100644
+> index f6252f2..caaa7da 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
 > @@ -799,6 +799,7 @@ menu "External python modules"
 >         source "package/python-aiocoap/Config.in"
 >         source "package/python-aiodns/Config.in"
 >         source "package/python-aiohttp/Config.in"
-> +       source "package/python-aiorwlock/Config.in"
+> +       source "package/python-aiohttp-remotes/Config.in"
 >         source "package/python-alsaaudio/Config.in"
 >         source "package/python-argh/Config.in"
 >         source "package/python-arrow/Config.in"
-> diff --git a/package/python-aiorwlock/Config.in b/package/python-aiorwlock/Config.in
+> diff --git a/package/python-aiohttp-remotes/Config.in b/package/python-aiohttp-remotes/Config.in
 > new file mode 100644
-> index 0000000..afdc27d
+> index 0000000..e44696b
 > --- /dev/null
-> +++ b/package/python-aiorwlock/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_AIORWLOCK
-> +       bool "python-aiorwlock"
+> +++ b/package/python-aiohttp-remotes/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_PYTHON_AIOHTTP_REMOTES
+> +       bool "python-aiohttp-remotes"
 > +       depends on BR2_PACKAGE_PYTHON3
+> +       select BR2_PACKAGE_PYTHON_AIOHTTP # runtime
 > +       help
-> +         Read write lock for asyncio.
+> +         Control remote side information.
 > +
-> +         https://github.com/aio-libs/aiorwlock
-> diff --git a/package/python-aiorwlock/python-aiorwlock.hash b/package/python-aiorwlock/python-aiorwlock.hash
+> +         https://github.com/aio-libs/aiohttp-remotes
+> diff --git a/package/python-aiohttp-remotes/python-aiohttp-remotes.hash b/package/python-aiohttp-remotes/python-aiohttp-remotes.hash
 > new file mode 100644
-> index 0000000..51d1a29
+> index 0000000..069cded
 > --- /dev/null
-> +++ b/package/python-aiorwlock/python-aiorwlock.hash
+> +++ b/package/python-aiohttp-remotes/python-aiohttp-remotes.hash
 > @@ -0,0 +1,5 @@
-> +# md5, sha256 from https://pypi.org/pypi/aiorwlock/json
-> +md5    ee741761e4c9b1612e9dccf7f8bccdd0  aiorwlock-0.5.0.tar.gz
-> +sha256 3cd892576d024934d72c3dd098033f276ace3495e71a1197daa8d21409a52174  aiorwlock-0.5.0.tar.gz
+> +# md5, sha256 from https://pypi.org/pypi/aiohttp-remotes/json
+> +md5    70213413433ece4e2110ae90a070d279  aiohttp_remotes-0.1.2.tar.gz
+> +sha256 43c3f7e1c5ba27f29fb4dbde5d43b900b5b5fc7e37bf7e35e6eaedabaec4a3fc  aiohttp_remotes-0.1.2.tar.gz
 > +# Locally computed sha256 checksums
-> +sha256 56fb2baf14d84c59c15abbfbb1fdf30a724017e2ce97894a8236764513d10397  LICENSE
-> diff --git a/package/python-aiorwlock/python-aiorwlock.mk b/package/python-aiorwlock/python-aiorwlock.mk
+> +sha256 5240758b8a5c34a46c166294eaae7dc7034ec45c727fce889c9abf7ef5afc158  LICENSE
+> diff --git a/package/python-aiohttp-remotes/python-aiohttp-remotes.mk b/package/python-aiohttp-remotes/python-aiohttp-remotes.mk
 > new file mode 100644
-> index 0000000..ca6aa25
+> index 0000000..5b38ae9
 > --- /dev/null
-> +++ b/package/python-aiorwlock/python-aiorwlock.mk
+> +++ b/package/python-aiohttp-remotes/python-aiohttp-remotes.mk
 > @@ -0,0 +1,14 @@
 > +################################################################################
 > +#
-> +# python-aiorwlock
+> +# python-aiohttp-remotes
 > +#
 > +################################################################################
 > +
-> +PYTHON_AIORWLOCK_VERSION = 0.5.0
-> +PYTHON_AIORWLOCK_SOURCE = aiorwlock-$(PYTHON_AIORWLOCK_VERSION).tar.gz
-> +PYTHON_AIORWLOCK_SITE = https://files.pythonhosted.org/packages/0c/20/d30f332e6ecb2be467ab5603e277b26e3a8eb2a72f75bf8d309bdd4c0c82
-> +PYTHON_AIORWLOCK_SETUP_TYPE = setuptools
-> +PYTHON_AIORWLOCK_LICENSE = Apache-2.0
-> +PYTHON_AIORWLOCK_LICENSE_FILES = LICENSE
+> +PYTHON_AIOHTTP_REMOTES_VERSION = 0.1.2
+> +PYTHON_AIOHTTP_REMOTES_SOURCE = aiohttp_remotes-$(PYTHON_AIOHTTP_REMOTES_VERSION).tar.gz
+> +PYTHON_AIOHTTP_REMOTES_SITE = https://files.pythonhosted.org/packages/cd/2f/93e9198a01485f588d12e19c87cd277542dc28d8b31dc8e1c09fa1c75548
+> +PYTHON_AIOHTTP_REMOTES_SETUP_TYPE = distutils
+> +PYTHON_AIOHTTP_REMOTES_LICENSE = MIT
+> +PYTHON_AIOHTTP_REMOTES_LICENSE_FILES = LICENSE
 > +
 > +$(eval $(python-package))
 > --
