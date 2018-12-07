@@ -1,61 +1,106 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 7 Dec 2018 09:56:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-aiohttp-security: new
+Date: Fri, 7 Dec 2018 09:57:13 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/python-aiohttp-session: new
  package
-In-Reply-To: <CADvTj4qArP_W_5qb=RyYTnhRe0iyLXhR=vcAajGSx+aHUaarLQ@mail.gmail.com>
-References: <1544139188-28022-1-git-send-email-james.hilliard1@gmail.com>
- <CAGm1_ktEWoZq4HLuf2jZVoLFE3JmVwKVb=_QLoX7DpQ3-YYB-A@mail.gmail.com>
- <CADvTj4p0RkurDDaBQ5J2HFTshr6zZ7zMyHYC43R34BTSfqO_TA@mail.gmail.com>
- <20181207094619.0f4bf1cd@windsurf>
- <CADvTj4qArP_W_5qb=RyYTnhRe0iyLXhR=vcAajGSx+aHUaarLQ@mail.gmail.com>
-Message-ID: <CAGm1_ktucxQPVnhH_YidiJ_GjA3baFQjV4jc+8+U3_=yg_hyPQ@mail.gmail.com>
+In-Reply-To: <1544172163-29670-1-git-send-email-james.hilliard1@gmail.com>
+References: <1544172163-29670-1-git-send-email-james.hilliard1@gmail.com>
+Message-ID: <CAGm1_ktEFi7PLgUf81CLZgGuWXr9nJYZ2NOxzg7fFNU2We+sqw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello James,
-
-On Fri, Dec 7, 2018 at 9:48 AM James Hilliard <james.hilliard1@gmail.com> wrote:
+On Fri, Dec 7, 2018 at 9:42 AM <james.hilliard1@gmail.com> wrote:
 >
-> Ok, will try and do that in the future. I was keeping them in separate
-> branches so that they are easier to amend.
+> From: James Hilliard <james.hilliard1@gmail.com>
+>
+> Sessions for aiohttp.web.
+>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-With this series applied you'll have more than 10 Python packages
-you're responsible for. I wonder whether it make sense to add
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-package/python*
-
-for your DEVELOPERS record. Especially if you're going to add more
-Python packages in the future.
-
-Yegor
-
-> On Fri, Dec 7, 2018 at 1:46 AM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> >
-> > Hello James,
-> >
-> > On Fri, 7 Dec 2018 01:16:34 -0700, James Hilliard wrote:
-> > > These are all independent patches which shouldn't depend on each
-> > > other, I have them all in separate branches.
-> >
-> > One issue is that since they touch packages with very close names, all
-> > of those patches will conflict on the DEVELOPERS file and
-> > package/Config.in files. I.e, if I apply your patch on
-> > package/python-aiohttp-session and then apply your patch on
-> > package/python-aiohttp-security, the latter will fail.
-> >
-> > Those conflicts are trivial, so we can resolve them when applying. But
-> > it's nicer when there are no conflicts at all, and in this case,
-> > posting as a series of patches, as suggested by Yegor, makes a lot of
-> > sense.
-> >
-> > Best regards,
-> >
-> > Thomas
-> > --
-> > Thomas Petazzoni, CTO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
+> ---
+>  DEVELOPERS                                                 |  1 +
+>  package/Config.in                                          |  1 +
+>  package/python-aiohttp-session/Config.in                   |  8 ++++++++
+>  package/python-aiohttp-session/python-aiohttp-session.hash |  5 +++++
+>  package/python-aiohttp-session/python-aiohttp-session.mk   | 14 ++++++++++++++
+>  5 files changed, 29 insertions(+)
+>  create mode 100644 package/python-aiohttp-session/Config.in
+>  create mode 100644 package/python-aiohttp-session/python-aiohttp-session.hash
+>  create mode 100644 package/python-aiohttp-session/python-aiohttp-session.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index c289b3f..ec71e6e 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -992,6 +992,7 @@ F:  configs/pine64_sopine_defconfig
+>  N:     James Hilliard <james.hilliard1@gmail.com>
+>  F:     package/python-aiodns/
+>  F:     package/python-aiohttp/
+> +F:     package/python-aiohttp-session/
+>  F:     package/python-async-timeout/
+>  F:     package/python-cchardet/
+>  F:     package/python-multidict/
+> diff --git a/package/Config.in b/package/Config.in
+> index f6252f2..f411d07 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -799,6 +799,7 @@ menu "External python modules"
+>         source "package/python-aiocoap/Config.in"
+>         source "package/python-aiodns/Config.in"
+>         source "package/python-aiohttp/Config.in"
+> +       source "package/python-aiohttp-session/Config.in"
+>         source "package/python-alsaaudio/Config.in"
+>         source "package/python-argh/Config.in"
+>         source "package/python-arrow/Config.in"
+> diff --git a/package/python-aiohttp-session/Config.in b/package/python-aiohttp-session/Config.in
+> new file mode 100644
+> index 0000000..c148165
+> --- /dev/null
+> +++ b/package/python-aiohttp-session/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_PYTHON_AIOHTTP_SESSION
+> +       bool "python-aiohttp-session"
+> +       depends on BR2_PACKAGE_PYTHON3
+> +       select BR2_PACKAGE_PYTHON_AIOHTTP # runtime
+> +       help
+> +         Sessions for aiohttp.web.
+> +
+> +         https://github.com/aio-libs/aiohttp_session/
+> diff --git a/package/python-aiohttp-session/python-aiohttp-session.hash b/package/python-aiohttp-session/python-aiohttp-session.hash
+> new file mode 100644
+> index 0000000..fdccb20
+> --- /dev/null
+> +++ b/package/python-aiohttp-session/python-aiohttp-session.hash
+> @@ -0,0 +1,5 @@
+> +# md5, sha256 from https://pypi.org/pypi/aiohttp-session/json
+> +md5    a873141ee04ffc9fc948d9ee0ed47a8d  aiohttp-session-2.7.0.tar.gz
+> +sha256 18ae740845214086f783574edfee1bac36862332bd11d561e048b079d8f6ad34  aiohttp-session-2.7.0.tar.gz
+> +# Locally computed sha256 checksums
+> +sha256 2a86817fedf0c52baaa47d7dd975073639dfaaebd37312bd279de54d7f841791  LICENSE
+> diff --git a/package/python-aiohttp-session/python-aiohttp-session.mk b/package/python-aiohttp-session/python-aiohttp-session.mk
+> new file mode 100644
+> index 0000000..36c3180
+> --- /dev/null
+> +++ b/package/python-aiohttp-session/python-aiohttp-session.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-aiohttp-session
+> +#
+> +################################################################################
+> +
+> +PYTHON_AIOHTTP_SESSION_VERSION = 2.7.0
+> +PYTHON_AIOHTTP_SESSION_SOURCE = aiohttp-session-$(PYTHON_AIOHTTP_SESSION_VERSION).tar.gz
+> +PYTHON_AIOHTTP_SESSION_SITE = https://files.pythonhosted.org/packages/b5/5f/3f78fd4de2f9b17ad8cfe6c189bfaee3d0a5d2fe954aedad743edd08c813
+> +PYTHON_AIOHTTP_SESSION_SETUP_TYPE = setuptools
+> +PYTHON_AIOHTTP_SESSION_LICENSE = Apache-2.0
+> +PYTHON_AIOHTTP_SESSION_LICENSE_FILES = LICENSE
+> +
+> +$(eval $(python-package))
+> --
+> 2.7.4
+>
