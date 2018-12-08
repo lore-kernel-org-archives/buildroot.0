@@ -1,514 +1,519 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Dec 2018 20:53:01 +0100
-Subject: [Buildroot] [git commit] package/gcc: bump to version 7.4.0
-Message-ID: <20181208200042.6DDA986C48@busybox.osuosl.org>
+Date: Sat, 8 Dec 2018 20:57:37 +0100
+Subject: [Buildroot] [git commit] qt5: bump latest version to 5.11.3
+Message-ID: <20181208200042.99DDF84339@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92bab9a23c4008302ad8c5634b4daa658ce3d6ba
+commit: https://git.buildroot.net/buildroot/commit/?id=85ecae213ae5d37c9ddb7390706c18b93035f63b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove upstream patches:
+qt5base: remove 0005-Export-qt_open64-from-QtCore.patch (taken from upstream [1])
 
-0002-fix-building-on-ppc64.patch
-https://github.com/gcc-mirror/gcc/commit/aa65a43516da1d48011ef621ed5988289711d99b
+[1] http://code.qt.io/cgit/qt/qtbase.git/commit/?id=4fc4f7b0ce0e6ee186a7d7fe9b5dd20e94efe432
 
-0003-gcc-xtensa-fix-NAND-code-in-xtensa_expand_atomic.patch
-https://github.com/gcc-mirror/gcc/commit/8709905244d50b9d81f85d534b21c29eb640078c
-
-0003-xtensa-fix-PR-target-65416.patch
-https://github.com/gcc-mirror/gcc/commit/5dcbd70ec0a97505d6153fcbc7ef899b5a2ec7fc
-
-0004-libsanitizer-Use-pre-computed-size.patch
-https://github.com/gcc-mirror/gcc/commit/61f38c64c01a15560026115a157b7021ec67bd3b
-
-0005-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch
-https://github.com/gcc-mirror/gcc/commit/6ef0a00dea2564f46a568b8681d8efccb4834cda
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gcc/7.3.0/0002-fix-building-on-ppc64.patch |  40 --------
- ...nsa-fix-NAND-code-in-xtensa_expand_atomic.patch |  39 --------
- .../7.3.0/0003-xtensa-fix-PR-target-65416.patch    | 101 ---------------------
- .../0004-libsanitizer-Use-pre-computed-size.patch  |  72 ---------------
- ...xtensa-don-t-force-PIC-for-uclinux-target.patch |  41 ---------
- .../0001-m68k-coldfire-pr68467.patch               |   2 +-
- .../gcc/{7.3.0 => 7.4.0}/0100-uclibc-conf.patch    |   0
- .../0810-arm-softfloat-libgcc.patch                |   0
- .../0860-cilk-fix-build-without-wchar.patch        |   0
- .../{7.3.0 => 7.4.0}/0892-microblaze-Revert.patch  |   1 +
- ...-arm-PR-target-81497-Fix-arm_acle.h-for-C.patch |  10 +-
- ..._REENTRANT-for-RISC-V-when-pthread-is-pas.patch |   1 +
- package/gcc/Config.in.host                         |   2 +-
- package/gcc/gcc.hash                               |   4 +-
- 14 files changed, 11 insertions(+), 302 deletions(-)
+ package/qt5/qt5.mk                                 |  2 +-
+ package/qt5/qt53d/qt53d.hash                       |  4 +--
+ .../5.11.2/0005-Export-qt_open64-from-QtCore.patch | 35 ----------------------
+ ...001-qtbase-Fix-build-error-when-using-EGL.patch |  0
+ ...2-double-conversion-enable-for-aarch64_be.patch |  0
+ .../0003-double-conversion-enable-for-or1k.patch   |  0
+ ...4-double-conversion-enable-for-microblaze.patch |  0
+ .../qt5/qt5base/{5.11.2 => 5.11.3}/qt5base.hash    |  4 +--
+ package/qt5/qt5canvas3d/qt5canvas3d.hash           |  4 +--
+ package/qt5/qt5charts/qt5charts.hash               |  4 +--
+ .../{5.11.2 => 5.11.3}/qt5connectivity.hash        |  4 +--
+ ...01-qsgtexture-fix-debug-build-with-uclibc.patch |  0
+ package/qt5/qt5declarative/qt5declarative.hash     |  4 +--
+ .../qt5graphicaleffects/qt5graphicaleffects.hash   |  4 +--
+ package/qt5/qt5imageformats/qt5imageformats.hash   |  4 +--
+ ...clarativegeomap-fix-building-with-GCC-5.x.patch |  0
+ package/qt5/qt5location/qt5location.hash           |  4 +--
+ package/qt5/qt5multimedia/qt5multimedia.hash       |  4 +--
+ package/qt5/qt5quickcontrols/qt5quickcontrols.hash |  6 ++--
+ .../{5.11.2 => 5.11.3}/qt5quickcontrols2.hash      |  4 +--
+ package/qt5/qt5script/qt5script.hash               |  4 +--
+ package/qt5/qt5scxml/qt5scxml.hash                 |  4 +--
+ package/qt5/qt5sensors/qt5sensors.hash             |  4 +--
+ .../{5.11.2 => 5.11.3}/qt5serialbus.hash           |  4 +--
+ .../{5.11.2 => 5.11.3}/qt5serialport.hash          |  4 +--
+ package/qt5/qt5svg/qt5svg.hash                     |  4 +--
+ package/qt5/qt5tools/qt5tools.hash                 |  4 +--
+ .../{5.11.2 => 5.11.3}/qt5virtualkeyboard.hash     |  4 +--
+ package/qt5/qt5wayland/qt5wayland.hash             |  4 +--
+ package/qt5/qt5webchannel/qt5webchannel.hash       |  4 +--
+ package/qt5/qt5webengine/qt5webengine.hash         |  4 +--
+ package/qt5/qt5websockets/qt5websockets.hash       |  4 +--
+ .../{5.11.2 => 5.11.3}/qt5x11extras.hash           |  4 +--
+ package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash     |  4 +--
+ 34 files changed, 54 insertions(+), 89 deletions(-)
 
-diff --git a/package/gcc/7.3.0/0002-fix-building-on-ppc64.patch b/package/gcc/7.3.0/0002-fix-building-on-ppc64.patch
+diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
+index 5b7a6d6973..88ba1958dd 100644
+--- a/package/qt5/qt5.mk
++++ b/package/qt5/qt5.mk
+@@ -6,7 +6,7 @@
+ 
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ QT5_VERSION_MAJOR = 5.11
+-QT5_VERSION = $(QT5_VERSION_MAJOR).2
++QT5_VERSION = $(QT5_VERSION_MAJOR).3
+ QT5_SOURCE_TARBALL_PREFIX = everywhere-src
+ else
+ QT5_VERSION_MAJOR = 5.6
+diff --git a/package/qt5/qt53d/qt53d.hash b/package/qt5/qt53d/qt53d.hash
+index 789ea29d9d..2da5500505 100644
+--- a/package/qt5/qt53d/qt53d.hash
++++ b/package/qt5/qt53d/qt53d.hash
+@@ -1,8 +1,8 @@
+ # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qt3d-opensource-src-5.6.3.tar.xz.mirrorlist
+ sha256 10d05a30e925fcad971126c7f47a5e32c39f007dab96b298b2094501f9607ffe qt3d-opensource-src-5.6.3.tar.xz
+ 
+-# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.2/submodules/qt3d-everywhere-src-5.11.2.tar.xz.mirrorlist
+-sha256 7f72c823ec10a2effba95d08d9439215472d2cb1e3229de50a6b3d2523c8f962 qt3d-everywhere-src-5.11.2.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qt3d-everywhere-src-5.11.3.tar.xz.sha256
++sha256 04a55c21f365d897ec75042ee83f9ad59a847992c6f55fae0763ad2701d99eab qt3d-everywhere-src-5.11.3.tar.xz
+ 
+ # Hashes for license files:
+ sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPL
+diff --git a/package/qt5/qt5base/5.11.2/0005-Export-qt_open64-from-QtCore.patch b/package/qt5/qt5base/5.11.2/0005-Export-qt_open64-from-QtCore.patch
 deleted file mode 100644
-index 78a028c29a..0000000000
---- a/package/gcc/7.3.0/0002-fix-building-on-ppc64.patch
+index 2fd14a282f..0000000000
+--- a/package/qt5/qt5base/5.11.2/0005-Export-qt_open64-from-QtCore.patch
 +++ /dev/null
-@@ -1,40 +0,0 @@
--From aa65a43516da1d48011ef621ed5988289711d99b Mon Sep 17 00:00:00 2001
--From: marxin <marxin@138bc75d-0d04-0410-961f-82ee72b054a4>
--Date: Fri, 29 Jun 2018 09:31:30 +0000
--Subject: [PATCH] Partial backport r256656
+@@ -1,35 +0,0 @@
+-From 4fc4f7b0ce0e6ee186a7d7fe9b5dd20e94efe432 Mon Sep 17 00:00:00 2001
+-From: Thiago Macieira <thiago.macieira@intel.com>
+-Date: Fri, 21 Sep 2018 09:04:24 -0700
+-Subject: [PATCH] Export qt_open64 from QtCore
 -
--2018-06-29  Martin Liska  <mliska@suse.cz>
+-Other libs use qcore_unix_p.h.
 -
--	Backport from mainline
--	2018-01-10  Kelvin Nilsen  <kelvin@gcc.gnu.org>
+-qopenglprogrambinarycache.cpp:function QOpenGLProgramBinaryCache::load(QByteArray const&, unsigned int): error: undefined reference to 'qt_open64(char const*, int, unsigned int)'
 -
--	* lex.c (search_line_fast): Remove illegal coercion of an
--	unaligned pointer value to vector pointer type and replace with
--	use of __builtin_vec_vsx_ld () built-in function, which operates
--	on unaligned pointer values.
+-Change-Id: I44e7d800c68141bdaae0fffd155675d15eded2e4
+-Reviewed-by: Simon Hausmann <simon.hausmann@qt.io>
+-Reviewed-by: Eric Lemanissier <eric.lemanissier@gmail.com>
 -
--git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-6-branch at 261621 138bc75d-0d04-0410-961f-82ee72b054a4
--
--
--git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-7-branch at 262243 138bc75d-0d04-0410-961f-82ee72b054a4
--Signed-off-by: Joel Stanley <joel@jms.id.au>
+-Upstream: http://code.qt.io/cgit/qt/qtbase.git/commit/?id=4fc4f7b0ce0e6ee186a7d7fe9b5dd20e94efe432
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ----
-- libcpp/lex.c | 2 +-
+- src/corelib/kernel/qcore_unix_p.h | 2 +-
 - 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/libcpp/lex.c b/libcpp/lex.c
--index 097c78002cbb..e0fb9e822c44 100644
----- a/libcpp/lex.c
--+++ b/libcpp/lex.c
--@@ -568,7 +568,7 @@ search_line_fast (const uchar *s, const uchar *end ATTRIBUTE_UNUSED)
--     {
--       vc m_nl, m_cr, m_bs, m_qm;
+-diff --git a/src/corelib/kernel/qcore_unix_p.h b/src/corelib/kernel/qcore_unix_p.h
+-index cb98bef347..5a2a29a327 100644
+---- a/src/corelib/kernel/qcore_unix_p.h
+-+++ b/src/corelib/kernel/qcore_unix_p.h
+-@@ -178,7 +178,7 @@ inline void qt_ignore_sigpipe()
 - 
---      data = *((const vc *)s);
--+      data = __builtin_vec_vsx_ld (0, s);
--       s += 16;
-- 
--       m_nl = (vc) __builtin_vec_cmpeq(data, repl_nl);
+- #if defined(Q_PROCESSOR_X86_32) && defined(__GLIBC__)
+- #  if !__GLIBC_PREREQ(2, 22)
+--int qt_open64(const char *pathname, int flags, mode_t);
+-+Q_CORE_EXPORT int qt_open64(const char *pathname, int flags, mode_t);
+- #    undef QT_OPEN
+- #    define QT_OPEN qt_open64
+- #  endif
 --- 
--2.17.1
+-2.19.0
 -
-diff --git a/package/gcc/7.3.0/0003-gcc-xtensa-fix-NAND-code-in-xtensa_expand_atomic.patch b/package/gcc/7.3.0/0003-gcc-xtensa-fix-NAND-code-in-xtensa_expand_atomic.patch
-deleted file mode 100644
-index d62d7c1566..0000000000
---- a/package/gcc/7.3.0/0003-gcc-xtensa-fix-NAND-code-in-xtensa_expand_atomic.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 6765eecde2ed8d4be0fc217408b9e9b92a840aff Mon Sep 17 00:00:00 2001
--From: Max Filippov <jcmvbkbc@gmail.com>
--Date: Tue, 4 Sep 2018 00:39:32 -0700
--Subject: [PATCH] gcc: xtensa: fix NAND code in xtensa_expand_atomic
--
--NAND is ~(a1 & a2), but xtensa_expand_atomic does ~a1 & a2.
--That fixes libatomic tests atomic-op-{1,2}.
--
--gcc/
--2018-09-04  Max Filippov  <jcmvbkbc@gmail.com>
--
--	* config/xtensa/xtensa.c (xtensa_expand_atomic): Reorder AND and
--	XOR operations in NAND case.
--
--Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
--Backported from: r264087
-----
-- gcc/config/xtensa/xtensa.c | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
--index 7cfe64d42895..080bb4ad765d 100644
----- a/gcc/config/xtensa/xtensa.c
--+++ b/gcc/config/xtensa/xtensa.c
--@@ -1614,9 +1614,9 @@ xtensa_expand_atomic (enum rtx_code code, rtx target, rtx mem, rtx val,
--       break;
-- 
--     case MULT: /* NAND */
---      tmp = expand_simple_binop (SImode, XOR, old, ac.modemask,
--+      tmp = expand_simple_binop (SImode, AND, old, val,
-- 				 NULL_RTX, 1, OPTAB_DIRECT);
---      tmp = expand_simple_binop (SImode, AND, tmp, val,
--+      tmp = expand_simple_binop (SImode, XOR, tmp, ac.modemask,
-- 				 new_rtx, 1, OPTAB_DIRECT);
--       break;
-- 
---- 
--2.11.0
--
-diff --git a/package/gcc/7.3.0/0003-xtensa-fix-PR-target-65416.patch b/package/gcc/7.3.0/0003-xtensa-fix-PR-target-65416.patch
-deleted file mode 100644
-index 7ead575439..0000000000
---- a/package/gcc/7.3.0/0003-xtensa-fix-PR-target-65416.patch
-+++ /dev/null
-@@ -1,101 +0,0 @@
--From 87fda0741d210727672cba5e54a37a189e8ac04e Mon Sep 17 00:00:00 2001
--From: Max Filippov <jcmvbkbc@gmail.com>
--Date: Sun, 17 Jun 2018 21:18:39 -0700
--Subject: [PATCH] xtensa: fix PR target/65416
--
--The issue is caused by reordering of stack pointer update after stack
--space allocation with instructions that write to the allocated stack
--space. In windowed ABI register spill area for the previous call frame
--is located just below the stack pointer and may be reloaded back into
--the register file on movsp.
--Implement allocate_stack pattern for windowed ABI configuration and
--insert an instruction that prevents reordering of frame memory access
--and stack pointer update.
--
--gcc/
--2018-06-19  Max Filippov  <jcmvbkbc@gmail.com>
--
--	* config/xtensa/xtensa.md (UNSPEC_FRAME_BLOCKAGE): New unspec
--	constant.
--	(allocate_stack, frame_blockage, *frame_blockage): New patterns.
--
--Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
--Backported from: r261755
-----
-- gcc/config/xtensa/xtensa.md | 46 +++++++++++++++++++++++++++++++++++++++++++++
-- 1 file changed, 46 insertions(+)
--
--diff --git a/gcc/config/xtensa/xtensa.md b/gcc/config/xtensa/xtensa.md
--index 84967dbedc08..209f839cfb0f 100644
----- a/gcc/config/xtensa/xtensa.md
--+++ b/gcc/config/xtensa/xtensa.md
--@@ -38,6 +38,7 @@
--   (UNSPEC_MEMW		11)
--   (UNSPEC_LSETUP_START  12)
--   (UNSPEC_LSETUP_END    13)
--+  (UNSPEC_FRAME_BLOCKAGE 14)
-- 
--   (UNSPECV_SET_FP	1)
--   (UNSPECV_ENTRY	2)
--@@ -1676,6 +1677,32 @@
-- 
-- ;; Miscellaneous instructions.
-- 
--+;; In windowed ABI stack pointer adjustment must happen before any access
--+;; to the space allocated on stack is allowed, otherwise register spill
--+;; area may be clobbered.  That's what frame blockage is supposed to enforce.
--+
--+(define_expand "allocate_stack"
--+  [(set (match_operand 0 "nonimmed_operand")
--+        (minus (reg A1_REG) (match_operand 1 "add_operand")))
--+   (set (reg A1_REG)
--+        (minus (reg A1_REG) (match_dup 1)))]
--+  "TARGET_WINDOWED_ABI"
--+{
--+  if (CONST_INT_P (operands[1]))
--+    {
--+      rtx neg_op0 = GEN_INT (-INTVAL (operands[1]));
--+      emit_insn (gen_addsi3 (stack_pointer_rtx, stack_pointer_rtx, neg_op0));
--+    }
--+  else
--+    {
--+      emit_insn (gen_subsi3 (stack_pointer_rtx, stack_pointer_rtx,
--+			     operands[1]));
--+    }
--+  emit_move_insn (operands[0], virtual_stack_dynamic_rtx);
--+  emit_insn (gen_frame_blockage ());
--+  DONE;
--+})
--+
-- (define_expand "prologue"
--   [(const_int 0)]
--   ""
--@@ -1767,6 +1794,25 @@
--   [(set_attr "length" "0")
--    (set_attr "type" "nop")])
-- 
--+;; Do not schedule instructions accessing memory before this point.
--+
--+(define_expand "frame_blockage"
--+  [(set (match_dup 0)
--+        (unspec:BLK [(match_dup 1)] UNSPEC_FRAME_BLOCKAGE))]
--+  ""
--+{
--+  operands[0] = gen_rtx_MEM (BLKmode, gen_rtx_SCRATCH (Pmode));
--+  MEM_VOLATILE_P (operands[0]) = 1;
--+  operands[1] = stack_pointer_rtx;
--+})
--+
--+(define_insn "*frame_blockage"
--+  [(set (match_operand:BLK 0 "" "")
--+        (unspec:BLK [(match_operand:SI 1 "" "")] UNSPEC_FRAME_BLOCKAGE))]
--+  ""
--+  ""
--+  [(set_attr "length" "0")])
--+
-- (define_insn "trap"
--   [(trap_if (const_int 1) (const_int 0))]
--   ""
---- 
--2.11.0
--
-diff --git a/package/gcc/7.3.0/0004-libsanitizer-Use-pre-computed-size.patch b/package/gcc/7.3.0/0004-libsanitizer-Use-pre-computed-size.patch
-deleted file mode 100644
-index 6e73331eae..0000000000
---- a/package/gcc/7.3.0/0004-libsanitizer-Use-pre-computed-size.patch
-+++ /dev/null
-@@ -1,72 +0,0 @@
--From 61f38c64c01a15560026115a157b7021ec67bd3b Mon Sep 17 00:00:00 2001
--From: hjl <hjl@138bc75d-0d04-0410-961f-82ee72b054a4>
--Date: Thu, 24 May 2018 20:21:54 +0000
--Subject: [PATCH] libsanitizer: Use pre-computed size of struct ustat for Linux
--
--Cherry-pick compiler-rt revision 333213:
--
--<sys/ustat.h> has been removed from glibc 2.28 by:
--
--commit cf2478d53ad7071e84c724a986b56fe17f4f4ca7
--Author: Adhemerval Zanella <adhemerval.zanella@linaro.org>
--Date:   Sun Mar 18 11:28:59 2018 +0800
--
--    Deprecate ustat syscall interface
--
--This patch uses pre-computed size of struct ustat for Linux.
--
--	PR sanitizer/85835
--	* sanitizer_common/sanitizer_platform_limits_posix.cc: Don't
--	include <sys/ustat.h> for Linux.
--	(SIZEOF_STRUCT_USTAT): New.
--	(struct_ustat_sz): Use SIZEOF_STRUCT_USTAT for Linux.
--
--
--
--git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-7-branch at 260688 138bc75d-0d04-0410-961f-82ee72b054a4
--
--Downloaded from upstream commit
--https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=61f38c64c01a15560026115a157b7021ec67bd3b
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- libsanitizer/ChangeLog                                    |  8 ++++++++
-- .../sanitizer_common/sanitizer_platform_limits_posix.cc   | 15 +++++++++++++--
-- 2 files changed, 21 insertions(+), 2 deletions(-)
--
--diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc
--index 31a5e69..8017afd 100644
----- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc
--+++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc
--@@ -154,7 +154,6 @@ typedef struct user_fpregs elf_fpregset_t;
-- # include <sys/procfs.h>
-- #endif
-- #include <sys/user.h>
---#include <sys/ustat.h>
-- #include <linux/cyclades.h>
-- #include <linux/if_eql.h>
-- #include <linux/if_plip.h>
--@@ -247,7 +246,19 @@ namespace __sanitizer {
-- #endif // SANITIZER_LINUX || SANITIZER_FREEBSD
-- 
-- #if SANITIZER_LINUX && !SANITIZER_ANDROID
---  unsigned struct_ustat_sz = sizeof(struct ustat);
--+  // Use pre-computed size of struct ustat to avoid <sys/ustat.h> which
--+  // has been removed from glibc 2.28.
--+#if defined(__aarch64__) || defined(__s390x__) || defined (__mips64) \
--+  || defined(__powerpc64__) || defined(__arch64__) || defined(__sparcv9) \
--+  || defined(__x86_64__)
--+#define SIZEOF_STRUCT_USTAT 32
--+#elif defined(__arm__) || defined(__i386__) || defined(__mips__) \
--+  || defined(__powerpc__) || defined(__s390__)
--+#define SIZEOF_STRUCT_USTAT 20
--+#else
--+#error Unknown size of struct ustat
--+#endif
--+  unsigned struct_ustat_sz = SIZEOF_STRUCT_USTAT;
--   unsigned struct_rlimit64_sz = sizeof(struct rlimit64);
--   unsigned struct_statvfs64_sz = sizeof(struct statvfs64);
-- #endif // SANITIZER_LINUX && !SANITIZER_ANDROID
---- 
--2.9.3
--
-diff --git a/package/gcc/7.3.0/0005-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch b/package/gcc/7.3.0/0005-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch
-deleted file mode 100644
-index 360947cbb1..0000000000
---- a/package/gcc/7.3.0/0005-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From 960a2552f7b418134cdf7a31e96023a3811b98dd Mon Sep 17 00:00:00 2001
--From: Max Filippov <jcmvbkbc@gmail.com>
--Date: Sun, 4 Nov 2018 23:55:59 -0800
--Subject: [PATCH] gcc: xtensa: don't force PIC for uclinux target
--
--xtensa-uclinux uses bFLT executable file format that cannot relocate
--fields representing offsets from data to code. C++ objects built as PIC
--use offsets to encode FDE structures. As a result C++ exception handling
--doesn't work correctly on xtensa-uclinux. Don't use PIC by default on
--xtensa-uclinux.
--
--gcc/
--2018-11-05  Max Filippov  <jcmvbkbc@gmail.com>
--
--	* config/xtensa/uclinux.h (XTENSA_ALWAYS_PIC): Change to 0.
--
--Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-----
--Backported from: r265823
--
-- gcc/config/xtensa/uclinux.h | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/gcc/config/xtensa/uclinux.h b/gcc/config/xtensa/uclinux.h
--index ba26187c8f7a..c7743df9d97c 100644
----- a/gcc/config/xtensa/uclinux.h
--+++ b/gcc/config/xtensa/uclinux.h
--@@ -59,8 +59,8 @@ along with GCC; see the file COPYING3.  If not see
-- #undef LOCAL_LABEL_PREFIX
-- #define LOCAL_LABEL_PREFIX	"."
-- 
---/* Always enable "-fpic" for Xtensa Linux.  */
---#define XTENSA_ALWAYS_PIC 1
--+/* Don't enable "-fpic" for Xtensa uclinux.  */
--+#define XTENSA_ALWAYS_PIC 0
-- 
-- #undef TARGET_LIBC_HAS_FUNCTION
-- #define TARGET_LIBC_HAS_FUNCTION no_c99_libc_has_function
---- 
--2.11.0
--
-diff --git a/package/gcc/7.3.0/0001-m68k-coldfire-pr68467.patch b/package/gcc/7.4.0/0001-m68k-coldfire-pr68467.patch
-similarity index 97%
-rename from package/gcc/7.3.0/0001-m68k-coldfire-pr68467.patch
-rename to package/gcc/7.4.0/0001-m68k-coldfire-pr68467.patch
-index 629c6496e5..0069b57134 100644
---- a/package/gcc/7.3.0/0001-m68k-coldfire-pr68467.patch
-+++ b/package/gcc/7.4.0/0001-m68k-coldfire-pr68467.patch
-@@ -2,7 +2,7 @@ Backport from upstream, see
- https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68467
- 
- Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
--
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
- diff -Nur gcc-7.2.0.orig/gcc/config/m68k/m68k.c gcc-7.2.0/gcc/config/m68k/m68k.c
- --- gcc-7.2.0.orig/gcc/config/m68k/m68k.c	2017-04-03 22:30:56.274463000 +0000
- +++ gcc-7.2.0/gcc/config/m68k/m68k.c	2018-01-27 02:16:53.779367849 +0000
-diff --git a/package/gcc/7.3.0/0100-uclibc-conf.patch b/package/gcc/7.4.0/0100-uclibc-conf.patch
+diff --git a/package/qt5/qt5base/5.11.2/0001-qtbase-Fix-build-error-when-using-EGL.patch b/package/qt5/qt5base/5.11.3/0001-qtbase-Fix-build-error-when-using-EGL.patch
 similarity index 100%
-rename from package/gcc/7.3.0/0100-uclibc-conf.patch
-rename to package/gcc/7.4.0/0100-uclibc-conf.patch
-diff --git a/package/gcc/7.3.0/0810-arm-softfloat-libgcc.patch b/package/gcc/7.4.0/0810-arm-softfloat-libgcc.patch
+rename from package/qt5/qt5base/5.11.2/0001-qtbase-Fix-build-error-when-using-EGL.patch
+rename to package/qt5/qt5base/5.11.3/0001-qtbase-Fix-build-error-when-using-EGL.patch
+diff --git a/package/qt5/qt5base/5.11.2/0002-double-conversion-enable-for-aarch64_be.patch b/package/qt5/qt5base/5.11.3/0002-double-conversion-enable-for-aarch64_be.patch
 similarity index 100%
-rename from package/gcc/7.3.0/0810-arm-softfloat-libgcc.patch
-rename to package/gcc/7.4.0/0810-arm-softfloat-libgcc.patch
-diff --git a/package/gcc/7.3.0/0860-cilk-fix-build-without-wchar.patch b/package/gcc/7.4.0/0860-cilk-fix-build-without-wchar.patch
+rename from package/qt5/qt5base/5.11.2/0002-double-conversion-enable-for-aarch64_be.patch
+rename to package/qt5/qt5base/5.11.3/0002-double-conversion-enable-for-aarch64_be.patch
+diff --git a/package/qt5/qt5base/5.11.2/0003-double-conversion-enable-for-or1k.patch b/package/qt5/qt5base/5.11.3/0003-double-conversion-enable-for-or1k.patch
 similarity index 100%
-rename from package/gcc/7.3.0/0860-cilk-fix-build-without-wchar.patch
-rename to package/gcc/7.4.0/0860-cilk-fix-build-without-wchar.patch
-diff --git a/package/gcc/7.3.0/0892-microblaze-Revert.patch b/package/gcc/7.4.0/0892-microblaze-Revert.patch
-similarity index 96%
-rename from package/gcc/7.3.0/0892-microblaze-Revert.patch
-rename to package/gcc/7.4.0/0892-microblaze-Revert.patch
-index 7026d0efe1..f7ea1e8382 100644
---- a/package/gcc/7.3.0/0892-microblaze-Revert.patch
-+++ b/package/gcc/7.4.0/0892-microblaze-Revert.patch
-@@ -14,6 +14,7 @@ Subject: [PATCH] 	Revert: 	2016-01-21  Ajit Agarwal
+rename from package/qt5/qt5base/5.11.2/0003-double-conversion-enable-for-or1k.patch
+rename to package/qt5/qt5base/5.11.3/0003-double-conversion-enable-for-or1k.patch
+diff --git a/package/qt5/qt5base/5.11.2/0004-double-conversion-enable-for-microblaze.patch b/package/qt5/qt5base/5.11.3/0004-double-conversion-enable-for-microblaze.patch
+similarity index 100%
+rename from package/qt5/qt5base/5.11.2/0004-double-conversion-enable-for-microblaze.patch
+rename to package/qt5/qt5base/5.11.3/0004-double-conversion-enable-for-microblaze.patch
+diff --git a/package/qt5/qt5base/5.11.2/qt5base.hash b/package/qt5/qt5base/5.11.3/qt5base.hash
+similarity index 80%
+rename from package/qt5/qt5base/5.11.2/qt5base.hash
+rename to package/qt5/qt5base/5.11.3/qt5base.hash
+index 1c11adba2d..964bcf1ab9 100644
+--- a/package/qt5/qt5base/5.11.2/qt5base.hash
++++ b/package/qt5/qt5base/5.11.3/qt5base.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.2/submodules/qtbase-everywhere-src-5.11.2.tar.xz.mirrorlist
+-sha256 6381e7c3468d5a1dcfe3683b29eeced192faa0f8a32434fec071a59b8bcd0107 qtbase-everywhere-src-5.11.2.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtbase-everywhere-src-5.11.3.tar.xz.sha256
++sha256 c6bf887732b83ce072eb72eddb7497bedcdf9ca794e7ed91261a93f063623e1c qtbase-everywhere-src-5.11.3.tar.xz
  
- git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 248540 138bc75d-0d04-0410-961f-82ee72b054a4
- Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
- diff --git a/gcc/config/microblaze/microblaze.h b/gcc/config/microblaze/microblaze.h
- index 66e4ef5..2c9ece1 100644
- --- a/gcc/config/microblaze/microblaze.h
-diff --git a/package/gcc/7.3.0/1000-arm-PR-target-81497-Fix-arm_acle.h-for-C.patch b/package/gcc/7.4.0/1000-arm-PR-target-81497-Fix-arm_acle.h-for-C.patch
-similarity index 97%
-rename from package/gcc/7.3.0/1000-arm-PR-target-81497-Fix-arm_acle.h-for-C.patch
-rename to package/gcc/7.4.0/1000-arm-PR-target-81497-Fix-arm_acle.h-for-C.patch
-index 37acc8b651..fb8509fae7 100644
---- a/package/gcc/7.3.0/1000-arm-PR-target-81497-Fix-arm_acle.h-for-C.patch
-+++ b/package/gcc/7.4.0/1000-arm-PR-target-81497-Fix-arm_acle.h-for-C.patch
-@@ -38,11 +38,11 @@ with the first arm-specific C++ tests (in that directory).
- 	* g++.target/arm/arm.exp: New file.
- 	* g++.target/arm/pr81497.C: Likewise.
+ # Hashes for license files:
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
+diff --git a/package/qt5/qt5canvas3d/qt5canvas3d.hash b/package/qt5/qt5canvas3d/qt5canvas3d.hash
+index 1fe8ecab17..4fc7c613b0 100644
+--- a/package/qt5/qt5canvas3d/qt5canvas3d.hash
++++ b/package/qt5/qt5canvas3d/qt5canvas3d.hash
+@@ -1,8 +1,8 @@
+ # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtcanvas3d-opensource-src-5.6.3.tar.xz.mirrorlist
+ sha256 e99e0e159f2fba539b7947a1921072f6807f20958d32809edbf12aac571f56ff qtcanvas3d-opensource-src-5.6.3.tar.xz
  
--
- git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 261191 138bc75d-0d04-0410-961f-82ee72b054a4
- Upstream-Status: Merged (gcc-8-branch)
- Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
- [gportay: drop gcc/{,testsuite/}ChangeLog changes]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
- ---
-  gcc/config/arm/arm-builtins.c          | 42 +++++++++++++---------
-  gcc/config/arm/arm_acle.h              | 28 +++++++--------
-@@ -56,7 +56,7 @@ diff --git a/gcc/config/arm/arm-builtins.c b/gcc/config/arm/arm-builtins.c
- index 7fde7a04672..183a7b907f6 100644
- --- a/gcc/config/arm/arm-builtins.c
- +++ b/gcc/config/arm/arm-builtins.c
--@@ -78,7 +78,11 @@ enum arm_type_qualifiers
-+@@ -75,7 +75,11 @@ enum arm_type_qualifiers
-    /* Lane indices - must be within range of previous argument = a vector.  */
-    qualifier_lane_index = 0x200,
-    /* Lane indices for single lane structure loads and stores.  */
-@@ -69,7 +69,7 @@ index 7fde7a04672..183a7b907f6 100644
-  };
-  
-  /*  The qualifier_internal allows generation of a unary builtin from
--@@ -202,7 +206,7 @@ arm_cdp_qualifiers[SIMD_MAX_BUILTIN_ARGS]
-+@@ -185,7 +189,7 @@ arm_cdp_qualifiers[SIMD_MAX_BUILTIN_ARGS]
-  static enum arm_type_qualifiers
-  arm_ldc_qualifiers[SIMD_MAX_BUILTIN_ARGS]
-    = { qualifier_void, qualifier_unsigned_immediate,
-@@ -78,7 +78,7 @@ index 7fde7a04672..183a7b907f6 100644
-  #define LDC_QUALIFIERS \
-    (arm_ldc_qualifiers)
-  
--@@ -210,7 +214,7 @@ arm_ldc_qualifiers[SIMD_MAX_BUILTIN_ARGS]
-+@@ -193,7 +197,7 @@ arm_ldc_qualifiers[SIMD_MAX_BUILTIN_ARGS]
-  static enum arm_type_qualifiers
-  arm_stc_qualifiers[SIMD_MAX_BUILTIN_ARGS]
-    = { qualifier_void, qualifier_unsigned_immediate,
-@@ -87,7 +87,7 @@ index 7fde7a04672..183a7b907f6 100644
-  #define STC_QUALIFIERS \
-    (arm_stc_qualifiers)
-  
--@@ -1095,19 +1099,25 @@ arm_init_builtin (unsigned int fcode, arm_builtin_datum *d,
-+@@ -1079,19 +1083,25 @@ arm_init_builtin (unsigned int fcode, arm_builtin_datum *d,
-        if (qualifiers & qualifier_pointer && VECTOR_MODE_P (op_mode))
-  	op_mode = GET_MODE_INNER (op_mode);
-  
-diff --git a/package/gcc/7.3.0/1001-gcc-define-_REENTRANT-for-RISC-V-when-pthread-is-pas.patch b/package/gcc/7.4.0/1001-gcc-define-_REENTRANT-for-RISC-V-when-pthread-is-pas.patch
-similarity index 94%
-rename from package/gcc/7.3.0/1001-gcc-define-_REENTRANT-for-RISC-V-when-pthread-is-pas.patch
-rename to package/gcc/7.4.0/1001-gcc-define-_REENTRANT-for-RISC-V-when-pthread-is-pas.patch
-index 1d4f8c015f..accaf0214d 100644
---- a/package/gcc/7.3.0/1001-gcc-define-_REENTRANT-for-RISC-V-when-pthread-is-pas.patch
-+++ b/package/gcc/7.4.0/1001-gcc-define-_REENTRANT-for-RISC-V-when-pthread-is-pas.patch
-@@ -8,6 +8,7 @@ is defined. Added the CPP_SPEC definition from gcc 8.1.0 to correct
- this.
+-# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.2/submodules/qtcanvas3d-everywhere-src-5.11.2.tar.xz.mirrorlist
+-sha256 fd9ca31268e81d4864da961de7635ef7316a815b8fc77910e512647eb4ceea40 qtcanvas3d-everywhere-src-5.11.2.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtcanvas3d-everywhere-src-5.11.3.tar.xz.sha256
++sha256 d5a004848588c1c53ea7ed9d36bb5bfe3a813ffc45290066d2f6cfcace072138 qtcanvas3d-everywhere-src-5.11.3.tar.xz
  
- Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
- ---
-  gcc/config/riscv/linux.h | 2 ++
-  1 file changed, 2 insertions(+)
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 55a9c8b69f..c2925cc6dc 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -83,7 +83,7 @@ config BR2_GCC_VERSION
- 	default "4.9.4"     if BR2_GCC_VERSION_4_9_X
- 	default "5.5.0"     if BR2_GCC_VERSION_5_X
- 	default "6.4.0"     if BR2_GCC_VERSION_6_X
--	default "7.3.0"     if BR2_GCC_VERSION_7_X
-+	default "7.4.0"     if BR2_GCC_VERSION_7_X
- 	default "8.2.0"     if BR2_GCC_VERSION_8_X
- 	default "arc-2018.09-release" if BR2_GCC_VERSION_ARC
- 	default "or1k-musl-5.4.0-20170218" if BR2_GCC_VERSION_OR1K
-diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-index 9f671b657a..9ae7e58f6b 100644
---- a/package/gcc/gcc.hash
-+++ b/package/gcc/gcc.hash
-@@ -4,8 +4,8 @@ sha512  93abb78e16277454f41a8e9810f41f66c0fdffdc539a762ff6b67d3037f78db971378683
- sha512  670ff52c2ae12c7852c12987e91798c5aa8bd6daf21f0d6e0cd57a4aa59cc4f06a837fe76426eaa1424cfddca937bed377680700eadc04d76b9180d462364fa1  gcc-5.5.0.tar.xz
- # From ftp://gcc.gnu.org/pub/gcc/releases/gcc-6.4.0/sha512.sum
- sha512  02c60e54527c7adf584798d5251f8a0b80c93d5deafce82501b2c28e6692e0bd783927bbfc4bc527a863c0cccc025150a34740a9e29badb02d4b48e56a8aba90  gcc-6.4.0.tar.xz
--# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-7.3.0/sha512.sum
--sha512  ad41a7e4584e40e92cdf860bc0288500fbaf5dfb7e8c3fcabe9eba809c87bcfa85b46c19c19921b0cdf6d05483faede8287bb9ea120c0d1559449a70e602c8d4  gcc-7.3.0.tar.xz
-+# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-7.4.0/sha512.sum
-+sha512  8864d8e4b97c2e1a4f17422f6e68120172ebefeab97b1757734f7185ca68a6b9a89011c6833c03fa454c17b0ac35b15e1d284881e6971035948ac6100f3aa45e  gcc-7.4.0.tar.xz
- # From ftp://gcc.gnu.org/pub/gcc/releases/gcc-8.2.0/sha512.sum
- sha512  64898a165f67e136d802a92e7633bf1b06c85266027e52127ea025bf5fc2291b5e858288aac0bdba246e6cdf7c6ec88bc8e0e7f3f6f1985f4297710cafde56ed  gcc-8.2.0.tar.xz
+ # Hashes for license files:
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
+diff --git a/package/qt5/qt5charts/qt5charts.hash b/package/qt5/qt5charts/qt5charts.hash
+index fa4e615cfd..2519b8f13c 100644
+--- a/package/qt5/qt5charts/qt5charts.hash
++++ b/package/qt5/qt5charts/qt5charts.hash
+@@ -1,8 +1,8 @@
+ # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtcharts-opensource-src-2.1.3.tar.xz.mirrorlist
+ sha256 f636a9b1c255f678f11b36cd73abc807d16dae0c31ecbc75c09524703aae7d2f  qtcharts-opensource-src-2.1.3.tar.xz
  
+-# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.2/submodules/qtcharts-everywhere-src-5.11.2.tar.xz.mirrorlist
+-sha256 f6a312c596bfffa5074a3a5606dff1ef197dac075b3c1bd6443e3a6db1c3a114 qtcharts-everywhere-src-5.11.2.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtcharts-everywhere-src-5.11.3.tar.xz.sha256
++sha256 4798f3ebc4d937d1c190db7ff718ad5affa907caa56b5557e593f6b5a60d95dc qtcharts-everywhere-src-5.11.3.tar.xz
+ 
+ # Hashes for license files:
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
+diff --git a/package/qt5/qt5connectivity/5.11.2/qt5connectivity.hash b/package/qt5/qt5connectivity/5.11.3/qt5connectivity.hash
+similarity index 73%
+rename from package/qt5/qt5connectivity/5.11.2/qt5connectivity.hash
+rename to package/qt5/qt5connectivity/5.11.3/qt5connectivity.hash
+index 921f2e80a8..54fda648cd 100644
+--- a/package/qt5/qt5connectivity/5.11.2/qt5connectivity.hash
++++ b/package/qt5/qt5connectivity/5.11.3/qt5connectivity.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.2/submodules/qtconnectivity-everywhere-src-5.11.2.tar.xz.mirrorlist
+-sha256 58901bbd14d3bc472f27fe305fd8dc33cffbd10da83616e9691c04c3290d42c5 qtconnectivity-everywhere-src-5.11.2.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtconnectivity-everywhere-src-5.11.3.tar.xz.sha256
++sha256 148cfcbceb3d0a70059f4d92fa069baf56babb627b16a4203b318ca6f0d0b32a qtconnectivity-everywhere-src-5.11.3.tar.xz
+ 
+ # Hashes for license files:
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
+diff --git a/package/qt5/qt5declarative/5.11.2/0001-qsgtexture-fix-debug-build-with-uclibc.patch b/package/qt5/qt5declarative/5.11.3/0001-qsgtexture-fix-debug-build-with-uclibc.patch
+similarity index 100%
+rename from package/qt5/qt5declarative/5.11.2/0001-qsgtexture-fix-debug-build-with-uclibc.patch
+rename to package/qt5/qt5declarative/5.11.3/0001-qsgtexture-fix-debug-build-with-uclibc.patch
+diff --git a/package/qt5/qt5declarative/qt5declarative.hash b/package/qt5/qt5declarative/qt5declarative.hash
+index e1af61fbe7..3ce4e50250 100644
+--- a/package/qt5/qt5declarative/qt5declarative.hash
++++ b/package/qt5/qt5declarative/qt5declarative.hash
+@@ -1,8 +1,8 @@
+ # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtdeclarative-opensource-src-5.6.3.tar.xz.mirrorlist
+ sha256 f63fc053d0d16b8a9ca9308f8ead77874b470ae31b66057e2bd336bf648191fc qtdeclarative-opensource-src-5.6.3.tar.xz
+ 
+-# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.2/submodules/qtdeclarative-everywhere-src-5.11.2.tar.xz.mirrorlist
+-sha256 220d86f8031e9d45f3c369c3fd517aaa4c5783ad62c843a21fa7cc3c0a36f2cd qtdeclarative-everywhere-src-5.11.2.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtdeclarative-everywhere-src-5.11.3.tar.xz.sha256
++sha256 8e263621d706f1c4def5d71212a6ae37b0d3c378da89d9e3e5fc0b5557721ae6 qtdeclarative-everywhere-src-5.11.3.tar.xz
+ 
+ # Hashes for license files:
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
+diff --git a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
+index f871e0b779..36dd345268 100644
+--- a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
++++ b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
+@@ -1,8 +1,8 @@
+ # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtgraphicaleffects-opensource-src-5.6.3.tar.xz.mirrorlist
+ sha256 c742592d5e45b122b29df60b69be23ba7c817f2dc471db86e054f6ea24a999ed qtgraphicaleffects-opensource-src-5.6.3.tar.xz
+ 
+-# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.2/submodules/qtgraphicaleffects-everywhere-src-5.11.2.tar.xz.mirrorlist
+-sha256 a9dcaaa3932f7b71717a393700e1387bcd6f9c03538d0ffca2a64128a0e4a9fd qtgraphicaleffects-everywhere-src-5.11.2.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtgraphicaleffects-everywhere-src-5.11.3.tar.xz.sha256
++sha256 14d86983fcdd119daefad235ffee7d8ca691e6074ef360cb6347b8aae66f57e2 qtgraphicaleffects-everywhere-src-5.11.3.tar.xz
+ 
+ # Hashes for license files:
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
+diff --git a/package/qt5/qt5imageformats/qt5imageformats.hash b/package/qt5/qt5imageformats/qt5imageformats.hash
+index b4684bb764..1c1f81bbed 100644
+--- a/package/qt5/qt5imageformats/qt5imageformats.hash
++++ b/package/qt5/qt5imageformats/qt5imageformats.hash
+@@ -1,8 +1,8 @@
+ # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtimageformats-opensource-src-5.6.3.tar.xz.mirrorlist
+ sha256 efe4da3c90c976c9b9a2eb6b081d2b8e1435935695104456276ce98e8a5848c3 qtimageformats-opensource-src-5.6.3.tar.xz
+ 
+-# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.2/submodules/qtimageformats-everywhere-src-5.11.2.tar.xz.mirrorlist
+-sha256 27e5d10551d0b5bf4799d09e5412ea2e6898b09aa1521ea24bce660ee6183a68 qtimageformats-everywhere-src-5.11.2.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtimageformats-everywhere-src-5.11.3.tar.xz.sha256
++sha256 04b261bc3d7a277fbe9ac8619ecd037d7089b356eaee41b2d41d7a2ff58b087f qtimageformats-everywhere-src-5.11.3.tar.xz
+ 
+ # Hashes for license files:
+ sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPLv2
+diff --git a/package/qt5/qt5location/5.11.2/0001-qdeclarativegeomap-fix-building-with-GCC-5.x.patch b/package/qt5/qt5location/5.11.3/0001-qdeclarativegeomap-fix-building-with-GCC-5.x.patch
+similarity index 100%
+rename from package/qt5/qt5location/5.11.2/0001-qdeclarativegeomap-fix-building-with-GCC-5.x.patch
+rename to package/qt5/qt5location/5.11.3/0001-qdeclarativegeomap-fix-building-with-GCC-5.x.patch
+diff --git a/package/qt5/qt5location/qt5location.hash b/package/qt5/qt5location/qt5location.hash
+index 7c7f007bc3..be0ac7c31f 100644
+--- a/package/qt5/qt5location/qt5location.hash
++++ b/package/qt5/qt5location/qt5location.hash
+@@ -1,8 +1,8 @@
+ # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtlocation-opensource-src-5.6.3.tar.xz.mirrorlist
+ sha256 b7a81c58cc331fb15bea8fba21d3c9a59f6dc6ad2e4855e30a14ce59a2af1466 qtlocation-opensource-src-5.6.3.tar.xz
+ 
+-# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.2/submodules/qtlocation-everywhere-src-5.11.2.tar.xz.mirrorlist
+-sha256 d698911edfb2d45b7adca6557b3de880e966cb8823a8adf1beb3a3079560024e qtlocation-everywhere-src-5.11.2.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtlocation-everywhere-src-5.11.3.tar.xz.sha256
++sha256 58e498a5b496e3a38925398b244bbd57ba68cbb482f2a0d2ae51572e037100eb qtlocation-everywhere-src-5.11.3.tar.xz
+ 
+ # Hashes for license files:
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
+diff --git a/package/qt5/qt5multimedia/qt5multimedia.hash b/package/qt5/qt5multimedia/qt5multimedia.hash
+index fb82851162..851cbc3539 100644
+--- a/package/qt5/qt5multimedia/qt5multimedia.hash
++++ b/package/qt5/qt5multimedia/qt5multimedia.hash
+@@ -1,8 +1,8 @@
+ # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtmultimedia-opensource-src-5.6.3.tar.xz.mirrorlist
+ sha256 ae36039ea8037742342f1615687e0ca2188f3ed0d700627a5e5be546c15e1b46 qtmultimedia-opensource-src-5.6.3.tar.xz
+ 
+-# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.2/submodules/qtmultimedia-everywhere-src-5.11.2.tar.xz.mirrorlist
+-sha256 25608f3d08636026387394956fe72cedcb78eb786fb32fd87deb41d574cf726d qtmultimedia-everywhere-src-5.11.2.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtmultimedia-everywhere-src-5.11.3.tar.xz.sha256
++sha256 728078eff7dc21495d704a7cd17c604d74604604b45a3c58271608f90dea3c41 qtmultimedia-everywhere-src-5.11.3.tar.xz
+ 
+ # Hashes for license files:
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
+diff --git a/package/qt5/qt5quickcontrols/qt5quickcontrols.hash b/package/qt5/qt5quickcontrols/qt5quickcontrols.hash
+index a4fc20ebcf..c4f8fa81dd 100644
+--- a/package/qt5/qt5quickcontrols/qt5quickcontrols.hash
++++ b/package/qt5/qt5quickcontrols/qt5quickcontrols.hash
+@@ -1,8 +1,8 @@
+-# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtquickcontrols-opensource-src-5.6.3.tar.xz.mirrorlist
++ed:   package/qt5/qt5script/qt5script.hash# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtquickcontrols-opensource-src-5.6.3.tar.xz.mirrorlist
+ sha256 31bb0fc8f21b855af6ff02c415be3246128b523d0ef7c05e248e92281ab0db8e qtquickcontrols-opensource-src-5.6.3.tar.xz
+ 
+-# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.2/submodules/qtquickcontrols-everywhere-src-5.11.2.tar.xz.mirrorlist
+-sha256 9c772e30fb1ba107168498328585063f4303c6562baf4a5cfedd0c5250b621e0 qtquickcontrols-everywhere-src-5.11.2.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtquickcontrols-everywhere-src-5.11.3.tar.xz.sha256
++sha256 4e4e5da02ab0b06d35b09356170013cfe36a773d15f92281f7e6d085c3f07537 qtquickcontrols-everywhere-src-5.11.3.tar.xz
+ 
+ # Hashes for license files:
+ sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPLv2
+diff --git a/package/qt5/qt5quickcontrols2/5.11.2/qt5quickcontrols2.hash b/package/qt5/qt5quickcontrols2/5.11.3/qt5quickcontrols2.hash
+similarity index 64%
+rename from package/qt5/qt5quickcontrols2/5.11.2/qt5quickcontrols2.hash
+rename to package/qt5/qt5quickcontrols2/5.11.3/qt5quickcontrols2.hash
+index bdf844eb91..b1caf464a1 100644
+--- a/package/qt5/qt5quickcontrols2/5.11.2/qt5quickcontrols2.hash
++++ b/package/qt5/qt5quickcontrols2/5.11.3/qt5quickcontrols2.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.2/submodules/qtquickcontrols2-everywhere-src-5.11.2.tar.xz.mirrorlist
+-sha256 aa0549f9a4135f9d600b57f53347ebf344e60d21f90c6d844109755da12dcb84 qtquickcontrols2-everywhere-src-5.11.2.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtquickcontrols2-everywhere-src-5.11.3.tar.xz.sha256
++sha256 f45630b652585b62204405b28432977e67c148ca5f1789a794654fd6c1bad086 qtquickcontrols2-everywhere-src-5.11.3.tar.xz
+ 
+ # Hashes for license files:
+ sha256 d2cfc059acb4abd8e513cd0a73cd8489f34cbafa7bc34d5d31fb3210821cf8ca LICENSE.GPLv3
+diff --git a/package/qt5/qt5script/qt5script.hash b/package/qt5/qt5script/qt5script.hash
+index 0efc40bb42..245d66be63 100644
+--- a/package/qt5/qt5script/qt5script.hash
++++ b/package/qt5/qt5script/qt5script.hash
+@@ -1,8 +1,8 @@
+ # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtscript-opensource-src-5.6.3.tar.xz.mirrorlist
+ sha256 f08720dd0e3a70377c1cb7fa3b129e24f4cdedade279e51b67c9271ab470b389 qtscript-opensource-src-5.6.3.tar.xz
+ 
+-# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.2/submodules/qtscript-everywhere-src-5.11.2.tar.xz.mirrorlist
+-sha256 b2c2466a83653a9473ea4810462d8a88e0fb1fb691f85d1c6e60d8bc4283f976 qtscript-everywhere-src-5.11.2.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtscript-everywhere-src-5.11.3.tar.xz.sha256
++sha256 bb84f3cc581078df4ff76705c5623cd88287f70f7405cbccf99e6fb6dedbec08 qtscript-everywhere-src-5.11.3.tar.xz
+ 
+ # Hashes for license files:
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
+diff --git a/package/qt5/qt5scxml/qt5scxml.hash b/package/qt5/qt5scxml/qt5scxml.hash
+index ecaf50745b..d2184c94e6 100644
+--- a/package/qt5/qt5scxml/qt5scxml.hash
++++ b/package/qt5/qt5scxml/qt5scxml.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.2/submodules/qtscxml-everywhere-src-5.11.2.tar.xz.mirrorlist
+-sha256 d625cb2149f5bfef5747b1d40b22327fd36132307c8b76d358f235d5422ff7a4 qtscxml-everywhere-src-5.11.2.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtscxml-everywhere-src-5.11.3.tar.xz.sha256
++sha256 13172767eda404f1b71ab35998a95af6633d700d2417fff3648d8c6dc6af68d7 qtscxml-everywhere-src-5.11.3.tar.xz
+ 
+ # Hashes for license files:
+ 
+diff --git a/package/qt5/qt5sensors/qt5sensors.hash b/package/qt5/qt5sensors/qt5sensors.hash
+index 4795356e68..a8d325d32a 100644
+--- a/package/qt5/qt5sensors/qt5sensors.hash
++++ b/package/qt5/qt5sensors/qt5sensors.hash
+@@ -1,8 +1,8 @@
+ # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtsensors-opensource-src-5.6.3.tar.xz.mirrorlist
+ sha256 7502d4dc5571865a7eea2a4180c3be396dfb8ce22df4c4f3d7e9ff32ab334973 qtsensors-opensource-src-5.6.3.tar.xz
+ 
+-# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.2/submodules/qtsensors-everywhere-src-5.11.2.tar.xz.mirrorlist
+-sha256 0e27c38824f7a1deb506f6195156eed79b80aa7034356272c3be0611667d63c7 qtsensors-everywhere-src-5.11.2.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtsensors-everywhere-src-5.11.3.tar.xz.sha256
++sha256 a75753d1d5607d4cb27b1849ea9612a65bb3a5271bb31bf0817edd143b620859 qtsensors-everywhere-src-5.11.3.tar.xz
+ 
+ # Hashes for license files:
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
+diff --git a/package/qt5/qt5serialbus/5.11.2/qt5serialbus.hash b/package/qt5/qt5serialbus/5.11.3/qt5serialbus.hash
+similarity index 70%
+rename from package/qt5/qt5serialbus/5.11.2/qt5serialbus.hash
+rename to package/qt5/qt5serialbus/5.11.3/qt5serialbus.hash
+index 9c4aa16fd2..7d8d9b3419 100644
+--- a/package/qt5/qt5serialbus/5.11.2/qt5serialbus.hash
++++ b/package/qt5/qt5serialbus/5.11.3/qt5serialbus.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.2/submodules/qtserialbus-everywhere-src-5.11.2.tar.xz.mirrorlist
+-sha256 1774c2c162f85f7cbcb2bdd2ef47507b110a01bc261627b46aa718e87079641e qtserialbus-everywhere-src-5.11.2.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtserialbus-everywhere-src-5.11.3.tar.xz.sha256
++sha256 5664def35d4ad4aedef14bc529679851450262ea81477a69031ba81aa614c16d qtserialbus-everywhere-src-5.11.3.tar.xz
+ 
+ # Hashes for license files:
+ sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPLv2
+diff --git a/package/qt5/qt5serialport/5.11.2/qt5serialport.hash b/package/qt5/qt5serialport/5.11.3/qt5serialport.hash
+similarity index 74%
+rename from package/qt5/qt5serialport/5.11.2/qt5serialport.hash
+rename to package/qt5/qt5serialport/5.11.3/qt5serialport.hash
+index 4dda77e44a..63e0cb61c1 100644
+--- a/package/qt5/qt5serialport/5.11.2/qt5serialport.hash
++++ b/package/qt5/qt5serialport/5.11.3/qt5serialport.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.2/submodules/qtserialport-everywhere-src-5.11.2.tar.xz.mirrorlist
+-sha256 b01b69ce421d449402363c0cf617fcc8856e39d6d2c28aa3d06d1f5359dc6f6e qtserialport-everywhere-src-5.11.2.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtserialport-everywhere-src-5.11.3.tar.xz.mirrorlist
++sha256 96c45e6d0d470626815f82b38ee48bf941e1bbfc10863087b69cc5f7bb766bda qtserialport-everywhere-src-5.11.3.tar.xz
+ 
+ # Hashes for license files:
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
+diff --git a/package/qt5/qt5svg/qt5svg.hash b/package/qt5/qt5svg/qt5svg.hash
+index fa4d6f4454..3c2f0fe474 100644
+--- a/package/qt5/qt5svg/qt5svg.hash
++++ b/package/qt5/qt5svg/qt5svg.hash
+@@ -1,8 +1,8 @@
+ # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtsvg-opensource-src-5.6.3.tar.xz.mirrorlist
+ sha256 100f183517b46554079beabd8d2cabe3070a74dd0a2e64b6a304eac71cfadcec qtsvg-opensource-src-5.6.3.tar.xz
+ 
+-# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.2/submodules/qtsvg-everywhere-src-5.11.2.tar.xz.mirrorlist
+-sha256 bc16bbf855b466e77dda996d8c91fa73db7fe14d3aa98ce6d92145ca1a1bd166 qtsvg-everywhere-src-5.11.2.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtsvg-everywhere-src-5.11.3.tar.xz.sha256
++sha256 21ea2c9c4e78101e98163bc19e463b8d8cdffa20e1ccd523ccc925b9f2cd4491 qtsvg-everywhere-src-5.11.3.tar.xz
+ 
+ # Hashes for license files:
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
+diff --git a/package/qt5/qt5tools/qt5tools.hash b/package/qt5/qt5tools/qt5tools.hash
+index 7c78866c8e..94f1254b03 100644
+--- a/package/qt5/qt5tools/qt5tools.hash
++++ b/package/qt5/qt5tools/qt5tools.hash
+@@ -1,8 +1,8 @@
+ # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qttools-opensource-src-5.6.3.tar.xz.mirrorlist
+ sha256 1a63ba838058d73cb540040589b235ded77f76402693decfd6d4d3c75ea67926 qttools-opensource-src-5.6.3.tar.xz
+ 
+-# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.2/submodules/qttools-everywhere-src-5.11.2.tar.xz.mirrorlist
+-sha256 f0e8332c771958b4aa373ac643d35e2fabb1a2dcdbaca756ebf3d1ace7c631b8 qttools-everywhere-src-5.11.2.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qttools-everywhere-src-5.11.3.tar.xz.sha256
++sha256 c205e81bba9b87c6186604a05ab48e4e6cac0cd511525749dfd00b107b6f9f8e qttools-everywhere-src-5.11.3.tar.xz
+ 
+ # Hashes for license files:
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
+diff --git a/package/qt5/qt5virtualkeyboard/5.11.2/qt5virtualkeyboard.hash b/package/qt5/qt5virtualkeyboard/5.11.3/qt5virtualkeyboard.hash
+similarity index 77%
+rename from package/qt5/qt5virtualkeyboard/5.11.2/qt5virtualkeyboard.hash
+rename to package/qt5/qt5virtualkeyboard/5.11.3/qt5virtualkeyboard.hash
+index c065a9e807..c7d27870b2 100644
+--- a/package/qt5/qt5virtualkeyboard/5.11.2/qt5virtualkeyboard.hash
++++ b/package/qt5/qt5virtualkeyboard/5.11.3/qt5virtualkeyboard.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.2/submodules/qtvirtualkeyboard-everywhere-src-5.11.2.tar.xz.mirrorlist
+-sha256 2709500071e7e98ca6f6eecef0f5c80d19ae22aba562293352debd516633b197 qtvirtualkeyboard-everywhere-src-5.11.2.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtvirtualkeyboard-everywhere-src-5.11.3.tar.xz.sha256
++sha256 8c5c40245a9dd2e9e504ce2d47d45079d8280436146797b24b8115ef163b4b9e qtvirtualkeyboard-everywhere-src-5.11.3.tar.xz
+ 
+ # Hashes for license files:
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
+diff --git a/package/qt5/qt5wayland/qt5wayland.hash b/package/qt5/qt5wayland/qt5wayland.hash
+index 01305c950e..40d1bb0b26 100644
+--- a/package/qt5/qt5wayland/qt5wayland.hash
++++ b/package/qt5/qt5wayland/qt5wayland.hash
+@@ -1,8 +1,8 @@
+ # hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtwayland-opensource-src-5.6.3.tar.xz.mirrorlist
+ sha256 5a475278b2db73aa7fa7f3ba6d98d8d72774f5c77e172495007d79f91d09daa3 qtwayland-opensource-src-5.6.3.tar.xz
+ 
+-# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.2/submodules/qtwayland-everywhere-src-5.11.2.tar.xz.mirrorlist
+-sha256 4e35e15da360480a5aef414246f70d29b0252b6a9c7e129e63afba3fb2ecb771 qtwayland-everywhere-src-5.11.2.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtwayland-everywhere-src-5.11.3.tar.xz.sha256
++sha256 62c94f29e461c849e479f39d21577b0c72f0f084250e126021edcf0719271fb2 qtwayland-everywhere-src-5.11.3.tar.xz
+ 
+ # Hashes for license files:
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
+diff --git a/package/qt5/qt5webchannel/qt5webchannel.hash b/package/qt5/qt5webchannel/qt5webchannel.hash
+index 1ed2bddb6f..7c87683ba8 100644
+--- a/package/qt5/qt5webchannel/qt5webchannel.hash
++++ b/package/qt5/qt5webchannel/qt5webchannel.hash
+@@ -1,8 +1,8 @@
+ # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtwebchannel-opensource-src-5.6.3.tar.xz.mirrorlist
+ sha256 8eb1b0ac2286653c7932758c21e7760788a5d7cfd6162da09afa926d5be50713 qtwebchannel-opensource-src-5.6.3.tar.xz
+ 
+-# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.2/submodules/qtwebchannel-everywhere-src-5.11.2.tar.xz.mirrorlist
+-sha256 945fdae8f1ea8dfc8e47a6d8421cef00690d6d4bfe26ce61bb59c0d0326c02fc qtwebchannel-everywhere-src-5.11.2.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtwebchannel-everywhere-src-5.11.3.tar.xz.sha256
++sha256 3c254fa41b1af09c1e951131f3a1336dee70a15cbb8a82112488b38d29572df3 qtwebchannel-everywhere-src-5.11.3.tar.xz
+ 
+ # Hashes for license files:
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
+diff --git a/package/qt5/qt5webengine/qt5webengine.hash b/package/qt5/qt5webengine/qt5webengine.hash
+index e8e57d5d91..730352611a 100644
+--- a/package/qt5/qt5webengine/qt5webengine.hash
++++ b/package/qt5/qt5webengine/qt5webengine.hash
+@@ -1,5 +1,5 @@
+ # Hash from https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtwebengine-opensource-src-5.6.3.tar.xz.mirrorlist
+ sha256 009d69fb39f6c0e2b0cd89a7e9302cd0ae1872d02c787d3a37f2cacca5ddb7a7 qtwebengine-opensource-src-5.6.3.tar.xz
+ 
+-# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.2/submodules/qtwebengine-everywhere-src-5.11.2.tar.xz.mirrorlist
+-sha256 3ff9bba5f631cfdd454ce298489360b3e2d9a2de4eb82bb121d838ef65f9b772 qtwebengine-everywhere-src-5.11.2.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtwebengine-everywhere-src-5.11.3.tar.xz.sha256
++sha256 5bb49ead71b851db4dc56f8fd97e0db72a268b22104129a06bac201d55d3b8fe qtwebengine-everywhere-src-5.11.3.tar.xz
+diff --git a/package/qt5/qt5websockets/qt5websockets.hash b/package/qt5/qt5websockets/qt5websockets.hash
+index 1b340b989e..0df4ac98fa 100644
+--- a/package/qt5/qt5websockets/qt5websockets.hash
++++ b/package/qt5/qt5websockets/qt5websockets.hash
+@@ -1,8 +1,8 @@
+ # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtwebsockets-opensource-src-5.6.3.tar.xz.mirrorlist
+ sha256 a2439045616c89dfe06333734ff4726075c92e01db6e6b6863bc138e39c028eb qtwebsockets-opensource-src-5.6.3.tar.xz
+ 
+-# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.2/submodules/qtwebsockets-everywhere-src-5.11.2.tar.xz.mirrorlist
+-sha256 ae6197619ce0c4104bdc43e097d79082f90ba6567fa286eae6306ce7aec88b8d qtwebsockets-everywhere-src-5.11.2.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtwebsockets-everywhere-src-5.11.3.tar.xz.sha256
++sha256 021090c1a92f11fcf2914168741c1364235896793685b7fae2bc23e3dd55d5b9 qtwebsockets-everywhere-src-5.11.3.tar.xz
+ 
+ # Hashes for license files:
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
+diff --git a/package/qt5/qt5x11extras/5.11.2/qt5x11extras.hash b/package/qt5/qt5x11extras/5.11.3/qt5x11extras.hash
+similarity index 74%
+rename from package/qt5/qt5x11extras/5.11.2/qt5x11extras.hash
+rename to package/qt5/qt5x11extras/5.11.3/qt5x11extras.hash
+index 21702b91fb..9a0e85d8fd 100644
+--- a/package/qt5/qt5x11extras/5.11.2/qt5x11extras.hash
++++ b/package/qt5/qt5x11extras/5.11.3/qt5x11extras.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.2/submodules/qtx11extras-everywhere-src-5.11.2.tar.xz.mirrorlist
+-sha256 f407ca61052d44bfb06e831fc6db7595bb2b64882b1f0af23f5db2d1ee519089 qtx11extras-everywhere-src-5.11.2.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtx11extras-everywhere-src-5.11.3.tar.xz.mirrorlist
++sha256 f99eebe685f7cdbb71cd62903c2b2511548345535841bcc3f6b662205815cd85 qtx11extras-everywhere-src-5.11.3.tar.xz
+ 
+ # Hashes for license files:
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
+diff --git a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
+index 61788dd3be..5c66a54eeb 100644
+--- a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
++++ b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
+@@ -1,8 +1,8 @@
+ # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtxmlpatterns-opensource-src-5.6.3.tar.xz.mirrorlist
+ sha256 a461ff9f0d7310de9b9904ff9cd34919e958bf4071a6fc7096450b8990ab51f6 qtxmlpatterns-opensource-src-5.6.3.tar.xz
+ 
+-# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.2/submodules/qtxmlpatterns-everywhere-src-5.11.2.tar.xz.mirrorlist
+-sha256 5fd5f680ba40dadf81665417501e1f3778982aea0e268bf4f75a420d54a86746 qtxmlpatterns-everywhere-src-5.11.2.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtxmlpatterns-everywhere-src-5.11.3.tar.xz.sha256
++sha256 8bd00be30722570d22382b99679d07787a2d62d4891d1c47d738d634e2db0eee qtxmlpatterns-everywhere-src-5.11.3.tar.xz
+ 
+ # Hashes for license files:
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
