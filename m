@@ -1,53 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Dec 2018 20:50:08 +0100
-Subject: [Buildroot] [git commit] support/testing: drop docstring in
- TestPythonPackageBase::test_run()
-Message-ID: <20181208200042.476E28B470@busybox.osuosl.org>
+Date: Sat, 8 Dec 2018 20:55:27 +0100
+Subject: [Buildroot] [git commit] configs: nexbox_a95x_defconfig: bump to
+ kernel 4.19.8
+Message-ID: <20181208200042.7FAE786C48@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba99ccaae428a2fefd10a25f6dfda2fa99acc667
+commit: https://git.buildroot.net/buildroot/commit/?id=9f5b07fc64cf0b4ffac720fa4fc87f8d7d5d1afd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Having a docstring in the test_run() method clutters the "run-tests
--l" output:
-
-test_run (tests.package.test_python_crossbar.TestPythonPy3Crossbar)
-Test a python package. ... ok
-[...]
-test_run (tests.package.test_python_pexpect.TestPythonPy2Pexpect)
-Test a python package. ... ok
-test_run (tests.package.test_python_pexpect.TestPythonPy3Pexpect)
-Test a python package. ... ok
-test_run (tests.package.test_python_twisted.TestPythonPy2Twisted)
-Test a python package. ... ok
-test_run (tests.package.test_python_twisted.TestPythonPy3Twisted)
-Test a python package. ... ok
-test_run (tests.package.test_python_pynacl.TestPythonPy2Pynacl)
-Test a python package. ... ok
-test_run (tests.package.test_python_pynacl.TestPythonPy3Pynacl)
-Test a python package. ... ok
-
-So let's simply drop this docstring that is not particularly useful.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/package/test_python.py | 1 -
- 1 file changed, 1 deletion(-)
+ configs/nexbox_a95x_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/testing/tests/package/test_python.py b/support/testing/tests/package/test_python.py
-index c422bdbf50..bcd363ad1e 100644
---- a/support/testing/tests/package/test_python.py
-+++ b/support/testing/tests/package/test_python.py
-@@ -120,7 +120,6 @@ class TestPythonPackageBase(TestPythonBase):
-             self.assertEqual(exit_code, 0)
- 
-     def test_run(self):
--        """Test a python package."""
-         self.login()
-         self.check_sample_scripts_exist()
-         self.run_sample_scripts()
+diff --git a/configs/nexbox_a95x_defconfig b/configs/nexbox_a95x_defconfig
+index 5fc009940f..4b0fc9cfba 100644
+--- a/configs/nexbox_a95x_defconfig
++++ b/configs/nexbox_a95x_defconfig
+@@ -1,13 +1,13 @@
+ BR2_aarch64=y
+ BR2_cortex_a53=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/nexbox/a95x/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/nexbox/a95x/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.8"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="amlogic/meson-gxbb-nexbox-a95x amlogic/meson-gxl-s905x-nexbox-a95x"
