@@ -1,63 +1,81 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat,  8 Dec 2018 20:06:18 +0100
-Subject: [Buildroot] [PATCH 1/2] package/gcc: remove uclibc-conf patch
-Message-ID: <20181208190619.9977-1-romain.naour@gmail.com>
+Date: Sat,  8 Dec 2018 20:06:19 +0100
+Subject: [Buildroot] [PATCH 2/2] package/gcc: remove arm soft patch
+In-Reply-To: <20181208190619.9977-1-romain.naour@gmail.com>
+References: <20181208190619.9977-1-romain.naour@gmail.com>
+Message-ID: <20181208190619.9977-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch is present in Buildroot since a long time and has been
-rebased onver several version of gcc without beeing upstreamed.
-Also it only concern contrib/regression, which is not used at all
-during the build...
+The patch refers to [1] which says "Unfortuantely, arm-gcc defaults to
+generating code for armv5t." Since we always explicitly pass the target
+CPU for ARM, the default CPU shouldn't matter.
 
-As suggested by Arnout [1], a test based on qemu_x86_defconfig has
-been done without this patch and there is no regression.
+As suggested by Arnout [2], a test based on qemu_arm_versatile_defconfig
+has been done without this patch and there is no regression.
 
-[1] http://lists.busybox.net/pipermail/buildroot/2018-May/222104.html
+[1] https://sourceware.org/ml/crossgcc/2008-05/msg00009.html
+[2] http://lists.busybox.net/pipermail/buildroot/2018-May/222104.html
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/gcc/8.2.0/0001-uclibc-conf.patch | 29 -----------------------------
- 1 file changed, 29 deletions(-)
- delete mode 100644 package/gcc/8.2.0/0001-uclibc-conf.patch
+ package/gcc/8.2.0/0002-arm-softfloat-libgcc.patch | 45 -----------------------
+ 1 file changed, 45 deletions(-)
+ delete mode 100644 package/gcc/8.2.0/0002-arm-softfloat-libgcc.patch
 
-diff --git a/package/gcc/8.2.0/0001-uclibc-conf.patch b/package/gcc/8.2.0/0001-uclibc-conf.patch
+diff --git a/package/gcc/8.2.0/0002-arm-softfloat-libgcc.patch b/package/gcc/8.2.0/0002-arm-softfloat-libgcc.patch
 deleted file mode 100644
-index dc223f9653..0000000000
---- a/package/gcc/8.2.0/0001-uclibc-conf.patch
+index a72e57dff4..0000000000
+--- a/package/gcc/8.2.0/0002-arm-softfloat-libgcc.patch
 +++ /dev/null
-@@ -1,29 +0,0 @@
--From 897881dfdf6a922957c40cbbe9f96bbbe5374770 Mon Sep 17 00:00:00 2001
+@@ -1,45 +0,0 @@
+-From b05e2b0942d49f9611a92fd2bb2b292f3d486285 Mon Sep 17 00:00:00 2001
 -From: Romain Naour <romain.naour@gmail.com>
--Date: Tue, 2 May 2017 22:36:15 +0200
--Subject: [PATCH] uclibc-conf
+-Date: Tue, 2 May 2017 22:46:18 +0200
+-Subject: [PATCH] arm softfloat libgcc
 -
 -[Romain: convert to git patch]
 -Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ----
-- contrib/regression/objs-gcc.sh | 4 ++++
-- 1 file changed, 4 insertions(+)
+- gcc/config/arm/linux-elf.h | 2 +-
+- libgcc/config/arm/t-linux  | 7 ++++++-
+- 2 files changed, 7 insertions(+), 2 deletions(-)
 -
--diff --git a/contrib/regression/objs-gcc.sh b/contrib/regression/objs-gcc.sh
--index 60b0497fea2..6dc7eadff36 100755
----- a/contrib/regression/objs-gcc.sh
--+++ b/contrib/regression/objs-gcc.sh
--@@ -106,6 +106,10 @@ if [ $H_REAL_TARGET = $H_REAL_HOST -a $H_REAL_TARGET = i686-pc-linux-gnu ]
--  then
--   make all-gdb all-dejagnu all-ld || exit 1
--   make install-gdb install-dejagnu install-ld || exit 1
--+elif [ $H_REAL_TARGET = $H_REAL_HOST -a $H_REAL_TARGET = i686-pc-linux-uclibc ]
--+ then
--+  make all-gdb all-dejagnu all-ld || exit 1
--+  make install-gdb install-dejagnu install-ld || exit 1
-- elif [ $H_REAL_TARGET = $H_REAL_HOST ] ; then
--   make bootstrap || exit 1
--   make install || exit 1
+-diff --git a/gcc/config/arm/linux-elf.h b/gcc/config/arm/linux-elf.h
+-index cfcd9cb1a5c..b8a9a9ca4ae 100644
+---- a/gcc/config/arm/linux-elf.h
+-+++ b/gcc/config/arm/linux-elf.h
+-@@ -58,7 +58,7 @@
+-    %{shared:-lc} \
+-    %{!shared:%{profile:-lc_p}%{!profile:-lc}}"
+- 
+--#define LIBGCC_SPEC "%{mfloat-abi=soft*:-lfloat} -lgcc"
+-+#define LIBGCC_SPEC "-lgcc"
+- 
+- #define GLIBC_DYNAMIC_LINKER "/lib/ld-linux.so.2"
+- 
+-diff --git a/libgcc/config/arm/t-linux b/libgcc/config/arm/t-linux
+-index 3d520decafb..e7bc042d4e4 100644
+---- a/libgcc/config/arm/t-linux
+-+++ b/libgcc/config/arm/t-linux
+-@@ -1,6 +1,11 @@
+- LIB1ASMSRC = arm/lib1funcs.S
+- LIB1ASMFUNCS = _udivsi3 _divsi3 _umodsi3 _modsi3 _dvmd_lnx _clzsi2 _clzdi2 \
+--	_ctzsi2 _arm_addsubdf3 _arm_addsubsf3
+-+	_ctzsi2 _arm_addsubdf3 _arm_addsubsf3 \
+-+	_arm_addsubdf3 _arm_addsubsf3 \
+-+	_arm_negdf2 _arm_muldivdf3 _arm_cmpdf2 _arm_unorddf2 \
+-+	_arm_fixdfsi _arm_fixunsdfsi _arm_truncdfsf2 \
+-+	_arm_negsf2 _arm_muldivsf3 _arm_cmpsf2 _arm_unordsf2 \
+-+	_arm_fixsfsi _arm_fixunssfsi
+- 
+- # Just for these, we omit the frame pointer since it makes such a big
+- # difference.
 --- 
 -2.14.3
 -
