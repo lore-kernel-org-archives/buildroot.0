@@ -1,39 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Dec 2018 20:55:27 +0100
-Subject: [Buildroot] [git commit] configs: nexbox_a95x_defconfig: bump to
- kernel 4.19.8
-Message-ID: <20181208200042.7FAE786C48@busybox.osuosl.org>
+Date: Sat, 8 Dec 2018 20:56:09 +0100
+Subject: [Buildroot] [git commit] package/gcc: remove uclibc-conf patch
+Message-ID: <20181208200042.86A8986C48@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f5b07fc64cf0b4ffac720fa4fc87f8d7d5d1afd
+commit: https://git.buildroot.net/buildroot/commit/?id=c7e43580f57001baa7e47de2438720b0b0019b15
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+This patch is present in Buildroot since a long time and has been rebased on
+several version of gcc without beqing upstreamed.  Also it only concern
+contrib/regression, which is not used at all during the build...
+
+As suggested by Arnout [1], a test based on qemu_x86_defconfig has
+been done without this patch and there is no regression.
+
+[1] http://lists.busybox.net/pipermail/buildroot/2018-May/222104.html
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/nexbox_a95x_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/gcc/8.2.0/0001-uclibc-conf.patch | 29 -----------------------------
+ 1 file changed, 29 deletions(-)
 
-diff --git a/configs/nexbox_a95x_defconfig b/configs/nexbox_a95x_defconfig
-index 5fc009940f..4b0fc9cfba 100644
---- a/configs/nexbox_a95x_defconfig
-+++ b/configs/nexbox_a95x_defconfig
-@@ -1,13 +1,13 @@
- BR2_aarch64=y
- BR2_cortex_a53=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
- BR2_SYSTEM_DHCP="eth0"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/nexbox/a95x/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/nexbox/a95x/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.8"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="amlogic/meson-gxbb-nexbox-a95x amlogic/meson-gxl-s905x-nexbox-a95x"
+diff --git a/package/gcc/8.2.0/0001-uclibc-conf.patch b/package/gcc/8.2.0/0001-uclibc-conf.patch
+deleted file mode 100644
+index dc223f9653..0000000000
+--- a/package/gcc/8.2.0/0001-uclibc-conf.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 897881dfdf6a922957c40cbbe9f96bbbe5374770 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@gmail.com>
+-Date: Tue, 2 May 2017 22:36:15 +0200
+-Subject: [PATCH] uclibc-conf
+-
+-[Romain: convert to git patch]
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- contrib/regression/objs-gcc.sh | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/contrib/regression/objs-gcc.sh b/contrib/regression/objs-gcc.sh
+-index 60b0497fea2..6dc7eadff36 100755
+---- a/contrib/regression/objs-gcc.sh
+-+++ b/contrib/regression/objs-gcc.sh
+-@@ -106,6 +106,10 @@ if [ $H_REAL_TARGET = $H_REAL_HOST -a $H_REAL_TARGET = i686-pc-linux-gnu ]
+-  then
+-   make all-gdb all-dejagnu all-ld || exit 1
+-   make install-gdb install-dejagnu install-ld || exit 1
+-+elif [ $H_REAL_TARGET = $H_REAL_HOST -a $H_REAL_TARGET = i686-pc-linux-uclibc ]
+-+ then
+-+  make all-gdb all-dejagnu all-ld || exit 1
+-+  make install-gdb install-dejagnu install-ld || exit 1
+- elif [ $H_REAL_TARGET = $H_REAL_HOST ] ; then
+-   make bootstrap || exit 1
+-   make install || exit 1
+--- 
+-2.14.3
+-
