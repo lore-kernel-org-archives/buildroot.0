@@ -1,67 +1,63 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 8 Dec 2018 17:25:18 +0100
-Subject: [Buildroot] [PATCH] configs/bananapi_m2_ultra: add kernel
- headers version option
-In-Reply-To: <20181208145015.3095-1-thomas.petazzoni@bootlin.com>
-References: <20181208145015.3095-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181208162518.GQ2561@scaer>
+Date: Sat,  8 Dec 2018 18:13:42 +0100
+Subject: [Buildroot] [PATCHv2] gitlab-ci: store .config files as artefacts
+ for defconfig tests
+Message-ID: <20181208171342.6266-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Add Buildroot's own .config file, as well as any package's .config file
+(uclibc, linux, and busybox), for later inspection should a build fails,
+notably due to changes in the kconfig-package infrastructure.
 
-On 2018-12-08 15:50 +0100, Thomas Petazzoni spake thusly:
-> The bananapi_m2_plus defconfig uses a 4.18 kernel, but doesn't specify
-> anything for the kernel headers version, so the Buildroot default gets
-> used, which currently is 4.19. Since 4.19 is newer than 4.18,
-> Buildroot rightfully whines:
-> 
->   Incorrect selection of kernel headers: expected 4.19.x, got 4.18.x
-> 
-> Let's fix this by telling this defconfig to use the headers from the
-> kernel, and that they are of version 4.18.
-> 
-> Fixes:
-> 
->   https://gitlab.com/buildroot.org/buildroot/-/jobs/131216938
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+Changes v1 -> v2:
+  - use correct path for packages' .config files
+---
+ .gitlab-ci.yml    | 2 ++
+ .gitlab-ci.yml.in | 2 ++
+ 2 files changed, 4 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  configs/bananapi_m2_ultra_defconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/configs/bananapi_m2_ultra_defconfig b/configs/bananapi_m2_ultra_defconfig
-> index 5dd3edd664..bc1d31a60a 100644
-> --- a/configs/bananapi_m2_ultra_defconfig
-> +++ b/configs/bananapi_m2_ultra_defconfig
-> @@ -1,5 +1,6 @@
->  BR2_arm=y
->  BR2_cortex_a7=y
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
->  BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M2 Ultra"
->  BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
->  BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/bananapi/bananapi-m2-ultra/genimage.cfg"
-> -- 
-> 2.19.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 1a78211823..9e2b111f53 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -57,10 +57,12 @@ check-package:
+         when: always
+         expire_in: 2 weeks
+         paths:
++            - .config
+             - build.log
+             - output/images/
+             - output/build/build-time.log
+             - output/build/packages-file-list.txt
++            - output/build/*/.config
+ 
+ .runtime_test: &runtime_test
+     # Running the runtime tests for every push is too much, so limit to
+diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
+index ebca29ca1f..d5eab91c70 100644
+--- a/.gitlab-ci.yml.in
++++ b/.gitlab-ci.yml.in
+@@ -57,10 +57,12 @@ check-package:
+         when: always
+         expire_in: 2 weeks
+         paths:
++            - .config
+             - build.log
+             - output/images/
+             - output/build/build-time.log
+             - output/build/packages-file-list.txt
++            - output/build/*/.config
+ 
+ .runtime_test: &runtime_test
+     # Running the runtime tests for every push is too much, so limit to
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
