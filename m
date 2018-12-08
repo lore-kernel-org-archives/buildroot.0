@@ -1,59 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Dec 2018 23:38:33 +0100
-Subject: [Buildroot] [git commit] libmpd: fix build with strndup
-Message-ID: <20181208224028.E44DF86996@busybox.osuosl.org>
+Date: Sat, 08 Dec 2018 23:48:55 +0100
+Subject: [Buildroot] [PATCH 1/1] stress-ng: fix build without swapcontext
+In-Reply-To: <20181206223730.23061-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 6 Dec 2018 23:37:30 +0100")
+References: <20181206223730.23061-1-fontaine.fabrice@gmail.com>
+Message-ID: <874lbn3a94.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b65c8e28ce19cee143db251d48482c3c7d2692c2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Retrieve a patch from upstream to include config.h otherwise build will
-fail when trying to redefine strndup:
-libmpd-internal.h:210:10: error: expected identifier or '(' before '__extension__'
- char *   strndup     (const char *s, size_t n);
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/f2d3b06afa6e31527a71c03671c8f08eb3f46c36
 
-Indeed, without an include on config.h, HAVE_STRNDUP won't be defined
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Fixes:
- - http://autobuild.buildroot.org/results/a174818fa768b029d19b033139f9c5e0aaaed149
+Committed, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...01-Fix-build-on-archlinux-missing-include.patch | 24 ++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
-
-diff --git a/package/libmpd/0001-Fix-build-on-archlinux-missing-include.patch b/package/libmpd/0001-Fix-build-on-archlinux-missing-include.patch
-new file mode 100644
-index 0000000000..be16eb9713
---- /dev/null
-+++ b/package/libmpd/0001-Fix-build-on-archlinux-missing-include.patch
-@@ -0,0 +1,24 @@
-+From 4f946c01000fd97100e4a534b47f9c7ace0403df Mon Sep 17 00:00:00 2001
-+From: QC <qball@gmpclient.org>
-+Date: Thu, 9 Oct 2014 19:51:50 +0200
-+Subject: [PATCH] Fix build on archlinux (missing include)
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/DaveDavenport/libmpd/commit/4f946c01000fd97100e4a534b47f9c7ace0403df]
-+---
-+ src/libmpd-internal.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/libmpd-internal.h b/src/libmpd-internal.h
-+index c84c3a4..30cdc85 100644
-+--- a/src/libmpd-internal.h
-++++ b/src/libmpd-internal.h
-+@@ -21,6 +21,7 @@
-+ #define __MPD_INTERNAL_LIB_
-+ 
-+ #include "libmpdclient.h"
-++#include <config.h>
-+ struct _MpdData_real;
-+ 
-+ typedef struct _MpdData_real {
+-- 
+Bye, Peter Korsgaard
