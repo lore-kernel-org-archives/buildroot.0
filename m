@@ -1,36 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Dec 2018 20:50:35 +0100
-Subject: [Buildroot] [git commit] DEVELOPERS: add entry for the
- bananapi_m2_ultra_defconfig
-Message-ID: <20181208200042.4E6DD86C48@busybox.osuosl.org>
+Date: Sat, 8 Dec 2018 20:52:25 +0100
+Subject: [Buildroot] [git commit] configs/aarch64_efi: Linux needs
+ host-openssl to build
+Message-ID: <20181208200042.6413B86C48@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cad6f1fabb6b67bb2c6b5222cd4d3cfd351b22fc
+commit: https://git.buildroot.net/buildroot/commit/?id=fb0a46901c6f0146dc0dae41e8bee8300043cd2c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Lothar contributed this board not long ago, so let's assume he is
-willing to take care of it.
+The Linux kernel builds fails with:
+
+scripts/extract-cert.c:21:25: fatal error: openssl/bio.h: No such file or directory
+ #include <openssl/bio.h>
+
+Because it needs host-openssl.
+
+Fixes:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/131216892
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 2 ++
- 1 file changed, 2 insertions(+)
+ configs/aarch64_efi_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c289b3f0c5..8dfe579061 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1233,6 +1233,8 @@ N:	Lionel Orry <lionel.orry@gmail.com>
- F:	package/mongrel2/
- 
- N:	Lothar Felten <lothar.felten@gmail.com>
-+F:	board/bananapi/bananapi-m2-ultra/
-+F:	configs/bananapi_m2_ultra_defconfig
- F:	package/ti-sgx-demos/
- F:	package/ti-sgx-km/
- F:	package/ti-sgx-um/
+diff --git a/configs/aarch64_efi_defconfig b/configs/aarch64_efi_defconfig
+index e4e20b09ba..ecc050fc5e 100644
+--- a/configs/aarch64_efi_defconfig
++++ b/configs/aarch64_efi_defconfig
+@@ -31,3 +31,4 @@ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.10"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
