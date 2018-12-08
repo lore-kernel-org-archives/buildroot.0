@@ -1,38 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat,  8 Dec 2018 16:01:30 +0100
-Subject: [Buildroot] [PATCH] configs/aarch64_efi: Linux needs host-openssl
- to build
-Message-ID: <20181208150130.4201-1-thomas.petazzoni@bootlin.com>
+From: Erico Nunes <nunes.erico@gmail.com>
+Date: Sat, 8 Dec 2018 16:10:57 +0100
+Subject: [Buildroot] [PATCH] DEVELOPERS: add entry for
+ aarch64_efi_defconfig
+In-Reply-To: <20181208150121.4146-1-thomas.petazzoni@bootlin.com>
+References: <20181208150121.4146-1-thomas.petazzoni@bootlin.com>
+Message-ID: <CAK4VdL0ZRQxOp0pj4YfiWVo26vzSco3yrDwEmNO2jk2TArc99w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Linux kernel builds fails with:
+On Sat, Dec 8, 2018 at 4:01 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Erico Nunes recently contributed this defconfig, we can safely assume
+> he is willing to maintain it.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-scripts/extract-cert.c:21:25: fatal error: openssl/bio.h: No such file or directory
- #include <openssl/bio.h>
+Fair enough :)
 
-Because it needs host-openssl.
+Acked-by: Erico Nunes <nunes.erico@gmail.com>
 
-Fixes:
-
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/131216892
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- configs/aarch64_efi_defconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/configs/aarch64_efi_defconfig b/configs/aarch64_efi_defconfig
-index e4e20b09ba..ecc050fc5e 100644
---- a/configs/aarch64_efi_defconfig
-+++ b/configs/aarch64_efi_defconfig
-@@ -31,3 +31,4 @@ BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.10"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
--- 
-2.19.2
+> ---
+>  DEVELOPERS | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index c289b3f0c5..2209346f0a 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -658,6 +658,8 @@ F:  package/pifmrds/
+>  F:     package/ympd/
+>
+>  N:     Erico Nunes <nunes.erico@gmail.com>
+> +F:     board/aarch64-efi/
+> +F:     configs/aarch64_efi_defconfig
+>  F:     package/acpica/
+>  F:     package/acpitool/
+>  F:     package/efibootmgr/
+> --
+> 2.19.2
+>
