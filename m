@@ -1,32 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 08 Dec 2018 10:56:07 +0100
-Subject: [Buildroot] [PATCH] php: security bump to version 7.2.13
-In-Reply-To: <20181207230914.30567-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sat, 8 Dec 2018 00:09:14 +0100")
-References: <20181207230914.30567-1-peter@korsgaard.com>
-Message-ID: <87a7lg5olk.fsf@dell.be.48ers.dk>
+Date: Sat, 08 Dec 2018 13:00:50 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2018-12-04
+In-Reply-To: <87efaujzby.fsf@tkos.co.il> (Baruch Siach's message of "Thu, 06
+ Dec 2018 20:16:01 +0200")
+References: <20181205070024.027E420A59@mail.bootlin.com>
+ <CAMRc=MeKx3DWa6DZs3h7MH2uuJusBr08+ycoOnX3Drsmw22JWQ@mail.gmail.com>
+ <f3cpi33oica7lbub1hjw72x0.1544043243948@email.android.com>
+ <87efaujzby.fsf@tkos.co.il>
+Message-ID: <875zw45itp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Fixes CVE-2018-19518: University of Washington IMAP Toolkit 2007f on UNIX,
- > as used in imap_open() in PHP and other products, launches an rsh command
- > (by means of the imap_rimap function in c-client/imap4r1.c and the tcp_aopen
- > function in osdep/unix/tcp_unix.c) without preventing argument injection,
- > which might allow remote attackers to execute arbitrary OS commands if the
- > IMAP server name is untrusted input (e.g., entered by a user of a web
- > application) and if rsh has been replaced by a program with different
- > argument semantics.  For example, if rsh is a link to ssh (as seen on Debian
- > and Ubuntu systems), then the attack can use an IMAP server name containing
- > a "-oProxyCommand" argument.
+ > Hi David,
+ > David J. Fogle writes:
+ >> Is this patch going to be put into 2018.11, or is this going into
+ >> 2019.02. I am rather new to your project, forgive me not knowing how
+ >> your patch cycle works.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > This patch fixes an issue in the current master branch. So this patch
+ > (or a better one) will be applied to that branch. The master branch will
+ > be released as 2019.02.
 
-Committed, thanks.
+ > Patches fixing issues that affect stable branches (currently 2018.08.x
+ > and 2018.02.x are maintained) will be backported to these branches. In
+ > the case of this patch, stable branches seem not to be affected. The
+ > build failure trigger is the bump of pulseview to version 0.4.1. This
+ > bump is not in the stable branches.
+
+Correct. Notice that I will create a 2018.11.x branch this weekend and
+start maintaining that instead of 2018.08.x.
 
 -- 
 Bye, Peter Korsgaard
