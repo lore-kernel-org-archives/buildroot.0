@@ -1,65 +1,40 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat,  8 Dec 2018 09:00:52 +0100
-Subject: [Buildroot] [PATCH] luajit: add option compat Lua 5.2
-Message-ID: <20181208080052.17618-1-francois.perrad@gadz.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 08 Dec 2018 09:24:49 +0100
+Subject: [Buildroot] [PATCH 1/1] liboping: fix format-truncation error
+In-Reply-To: <20181206223909.23161-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 6 Dec 2018 23:39:09 +0100")
+References: <20181206223909.23161-1-fontaine.fabrice@gmail.com>
+Message-ID: <87lg505stq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/luajit/Config.in | 5 +++++
- package/luajit/luajit.mk | 6 ++++++
- 2 files changed, 11 insertions(+)
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-diff --git a/package/luajit/Config.in b/package/luajit/Config.in
-index 7e792c53c..33e38e7d4 100644
---- a/package/luajit/Config.in
-+++ b/package/luajit/Config.in
-@@ -36,6 +36,11 @@ config BR2_PACKAGE_PROVIDES_LUAINTERPRETER
- config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION
- 	default "5.1"
- 
-+config BR2_PACKAGE_LUAJIT_COMPAT52
-+	bool "compat Lua 5.2"
-+	help
-+	  Compile with LUAJIT_ENABLE_LUA52COMPAT defined.
-+
- endif
- 
- comment "luajit needs a toolchain w/ dynamic library"
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index 939fa660d..1406fbf4c 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
-@@ -14,6 +14,10 @@ LUAJIT_INSTALL_STAGING = YES
- 
- LUAJIT_PROVIDES = luainterpreter
- 
-+ifeq ($(BR2_PACKAGE_LUAJIT_COMPAT52),y)
-+LUAJIT_XCFLAGS+=-DLUAJIT_ENABLE_LUA52COMPAT
-+endif
-+
- ifeq ($(BR2_STATIC_LIBS),y)
- LUAJIT_BUILDMODE = static
- else
-@@ -48,6 +52,7 @@ define LUAJIT_BUILD_CMDS
- 		HOST_CFLAGS="$(HOST_CFLAGS)" \
- 		HOST_LDFLAGS="$(HOST_LDFLAGS)" \
- 		BUILDMODE=$(LUAJIT_BUILDMODE) \
-+		XCFLAGS=$(LUAJIT_XCFLAGS) \
- 		-C $(@D) amalg
- endef
- 
-@@ -68,6 +73,7 @@ LUAJIT_POST_INSTALL_TARGET_HOOKS += LUAJIT_INSTALL_SYMLINK
- define HOST_LUAJIT_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) PREFIX="$(HOST_DIR)" BUILDMODE=dynamic \
- 		TARGET_LDFLAGS="$(HOST_LDFLAGS)" \
-+		XCFLAGS=$(LUAJIT_XCFLAGS) \
- 		-C $(@D) amalg
- endef
- 
+ > liboping.c: In function 'ping_host_add':
+ > liboping.c:207:9: error: '%s' directive output may be truncated writing
+ > up to 255 bytes into a region of size 243 [-Werror=format-truncation=]
+ >     "%s: %s", function, message);
+ >          ^~
+ > liboping.c:1644:40:
+ >     ping_set_error (obj, "getaddrinfo", errmsg);
+ >                                         ~~~~~~
+ > liboping.c:206:2: note: 'snprintf' output between 14 and 269 bytes into
+ > a destination of size 256
+ >   snprintf (obj->errmsg, sizeof (obj->errmsg),
+ >   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ >     "%s: %s", function, message);
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/b12d86388b495a96194e0bcbb5c19a4e35cbc53d
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
+I see it is built with -Werror. Is there any easy way to disable that?
+
 -- 
-2.17.1
+Bye, Peter Korsgaard
