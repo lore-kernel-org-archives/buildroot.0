@@ -1,57 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat,  8 Dec 2018 15:18:54 +0100
-Subject: [Buildroot] [PATCH] boot/afboot-stm32: create destination directory
- during installation
-Message-ID: <20181208141854.29144-1-thomas.petazzoni@bootlin.com>
+Date: Sat,  8 Dec 2018 15:36:15 +0100
+Subject: [Buildroot] [PATCH] support/testing: drop docstring in
+ TestPythonPackageBase::test_run()
+Message-ID: <20181208143615.31534-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Following d0f4f95e390bcb1c953efa125f5277a8a235396e ("Makefile: rework
-main directory creation logic"), BINARIES_DIR is not implicitly
-created by the main Makefile at the beginning of the build, leaving
-that up to whatever piece of code needs to install something in
-$(BINARIES_DIR).
+Having a docstring in the test_run() method clutters the "run-tests
+-l" output:
 
-The afboot-stm32 package didn't pay attention to this, which this
-commit fixes.
+test_run (tests.package.test_python_crossbar.TestPythonPy3Crossbar)
+Test a python package. ... ok
+[...]
+test_run (tests.package.test_python_pexpect.TestPythonPy2Pexpect)
+Test a python package. ... ok
+test_run (tests.package.test_python_pexpect.TestPythonPy3Pexpect)
+Test a python package. ... ok
+test_run (tests.package.test_python_twisted.TestPythonPy2Twisted)
+Test a python package. ... ok
+test_run (tests.package.test_python_twisted.TestPythonPy3Twisted)
+Test a python package. ... ok
+test_run (tests.package.test_python_pynacl.TestPythonPy2Pynacl)
+Test a python package. ... ok
+test_run (tests.package.test_python_pynacl.TestPythonPy3Pynacl)
+Test a python package. ... ok
 
-While at it, we move the afboot-stm32 installation into
-<pkg>_INSTALL_IMAGES_CMDS, because using <pkg>_INSTALL_TARGET_CMDS to
-install only files to BINARIES_DIR is a bit strange.
-
-Fixes:
-
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/131217111
+So let's simply drop this docstring that is not particularly useful.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- boot/afboot-stm32/afboot-stm32.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ support/testing/tests/package/test_python.py | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/boot/afboot-stm32/afboot-stm32.mk b/boot/afboot-stm32/afboot-stm32.mk
-index 042b21fa55..5e221cf364 100644
---- a/boot/afboot-stm32/afboot-stm32.mk
-+++ b/boot/afboot-stm32/afboot-stm32.mk
-@@ -6,13 +6,15 @@
+diff --git a/support/testing/tests/package/test_python.py b/support/testing/tests/package/test_python.py
+index c422bdbf50..bcd363ad1e 100644
+--- a/support/testing/tests/package/test_python.py
++++ b/support/testing/tests/package/test_python.py
+@@ -120,7 +120,6 @@ class TestPythonPackageBase(TestPythonBase):
+             self.assertEqual(exit_code, 0)
  
- AFBOOT_STM32_VERSION = v0.1
- AFBOOT_STM32_SITE = $(call github,mcoquelin-stm32,afboot-stm32,$(AFBOOT_STM32_VERSION))
-+AFBOOT_STM32_INSTALL_IMAGES = YES
-+AFBOOT_STM32_INSTALL_TARGET = NO
- 
- define AFBOOT_STM32_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CROSS_COMPILE=$(TARGET_CROSS) all
- endef
- 
--define AFBOOT_STM32_INSTALL_TARGET_CMDS
--	$(INSTALL) -m 0755 $(@D)/stm32*.bin $(BINARIES_DIR)
-+define AFBOOT_STM32_INSTALL_IMAGES_CMDS
-+	$(INSTALL) -m 0755 -t $(BINARIES_DIR) -D $(@D)/stm32*.bin
- endef
- 
- $(eval $(generic-package))
+     def test_run(self):
+-        """Test a python package."""
+         self.login()
+         self.check_sample_scripts_exist()
+         self.run_sample_scripts()
 -- 
 2.19.2
