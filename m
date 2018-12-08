@@ -1,49 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Dec 2018 23:00:33 +0100
-Subject: [Buildroot] [git commit] vte: needs gcc >= 4.8
-Message-ID: <20181208215848.B4F448B3CA@busybox.osuosl.org>
+Date: Sat, 8 Dec 2018 23:01:20 +0100
+Subject: [Buildroot] [git commit] openzwave: fix restrict error with gcc 8
+Message-ID: <20181208215848.BD3CC8B3CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d076e27238b23a25a2125a423cf42afa288b250
+commit: https://git.buildroot.net/buildroot/commit/?id=ed9a5b84eeaf03bbc267e25a35ea5718c32d29c3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
- - http://autobuild.buildroot.org/results/6dada849a87b68f6f69e3ed760995e86dfa25ad6
+ - http://autobuild.buildroot.org/results/2a8d2c67bcd1a7c228e9196d3bdb7f608c44c856
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vte/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ ...ation-error-in-regards-to-Werror-restrict.patch | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-diff --git a/package/vte/Config.in b/package/vte/Config.in
-index 7410624c0a..fa29de8c71 100644
---- a/package/vte/Config.in
-+++ b/package/vte/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_VTE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
- 		BR2_PACKAGE_HAS_LIBGL
-@@ -20,11 +21,12 @@ config BR2_PACKAGE_VTE
- 
- 	  http://github.com/GNOME/vte
- 
--comment "vte needs a toolchain w/ wchar, threads, C++"
-+comment "vte needs a toolchain w/ wchar, threads, C++, gcc >= 4.8"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_HAS_THREADS
-+		!BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 
- comment "vte needs an OpenGL or an OpenGL-EGL/wayland backend"
- 	depends on BR2_USE_MMU
+diff --git a/package/openzwave/0004-Fix-compilation-error-in-regards-to-Werror-restrict.patch b/package/openzwave/0004-Fix-compilation-error-in-regards-to-Werror-restrict.patch
+new file mode 100644
+index 0000000000..b3dbd8f88e
+--- /dev/null
++++ b/package/openzwave/0004-Fix-compilation-error-in-regards-to-Werror-restrict.patch
+@@ -0,0 +1,39 @@
++From 14164e9920ce3482747483fc16654c82d3ce445f Mon Sep 17 00:00:00 2001
++From: pipiche38 <pipiche38@users.noreply.github.com>
++Date: Fri, 8 Jun 2018 15:13:39 +0200
++Subject: [PATCH] Fix compilation error in regards to -Werror=restrict
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++/usr/share/domoticz/open-zwave/cpp/src/command_classes/DoorLockLogging.cpp: In member function ???virtual bool OpenZWave::DoorLockLogging::HandleMsg(const uint8*, uint32, uint32)???:
++/usr/share/domoticz/open-zwave/cpp/src/command_classes/DoorLockLogging.cpp:312:15: error: passing argument 1 to restrict-qualified parameter aliases with argument 4 [-Werror=restrict]
++      snprintf(usercode, sizeof(usercode), "%s %d", usercode, (int)_data[12+i]);
++               ^~~~~~~~                             ~~~~~~~~
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/OpenZWave/open-zwave/commit/14164e9920ce3482747483fc16654c82d3ce445f]
++---
++ cpp/src/command_classes/DoorLockLogging.cpp | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/cpp/src/command_classes/DoorLockLogging.cpp b/cpp/src/command_classes/DoorLockLogging.cpp
++index c235a8497..418f61b7d 100644
++--- a/cpp/src/command_classes/DoorLockLogging.cpp
+++++ b/cpp/src/command_classes/DoorLockLogging.cpp
++@@ -304,12 +304,13 @@ bool DoorLockLogging::HandleMsg
++ 			}
++ 			uint8 userid = (_data[10]);
++ 			uint8 usercodelength = (_data[11]);
++-			char usercode[254];
+++			char usercode[254], tmpusercode[254];
++ 			snprintf(usercode, sizeof(usercode), "UserCode:");
++ 			if (usercodelength > 0)
++ 				for (int i = 0; i < usercodelength; i++ )
++ 				{
++-					snprintf(usercode, sizeof(usercode), "%s %d", usercode, (int)_data[12+i]);
+++					strncpy(tmpusercode, usercode, sizeof(tmpusercode));
+++                                        snprintf(usercode, sizeof(usercode), "%s %d", tmpusercode, (int)_data[12+i]);
++ 				}
++ 
++ 			if (valid) {
