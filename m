@@ -1,68 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Dec 2018 23:42:23 +0100
-Subject: [Buildroot] [git commit] minnowboard-max: defconfigs: bump kernel
- to 4.19.8
-Message-ID: <20181208224028.EC4E086996@busybox.osuosl.org>
+Date: Sat, 8 Dec 2018 23:38:33 +0100
+Subject: [Buildroot] [git commit] libmpd: fix build with strndup
+Message-ID: <20181208224028.E44DF86996@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc0f5fc6937b67ccdb04ba291c54c74deec0373d
+commit: https://git.buildroot.net/buildroot/commit/?id=b65c8e28ce19cee143db251d48482c3c7d2692c2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Retrieve a patch from upstream to include config.h otherwise build will
+fail when trying to redefine strndup:
+libmpd-internal.h:210:10: error: expected identifier or '(' before '__extension__'
+ char *   strndup     (const char *s, size_t n);
+
+Indeed, without an include on config.h, HAVE_STRNDUP won't be defined
+
+Fixes:
+ - http://autobuild.buildroot.org/results/a174818fa768b029d19b033139f9c5e0aaaed149
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/minnowboard_max-graphical_defconfig | 4 ++--
- configs/minnowboard_max_defconfig           | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...01-Fix-build-on-archlinux-missing-include.patch | 24 ++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/configs/minnowboard_max-graphical_defconfig b/configs/minnowboard_max-graphical_defconfig
-index f05e791a65..921dae310f 100644
---- a/configs/minnowboard_max-graphical_defconfig
-+++ b/configs/minnowboard_max-graphical_defconfig
-@@ -3,7 +3,7 @@ BR2_x86_64=y
- BR2_x86_silvermont=y
- 
- # Toolchain
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- # needed for TARGET_GRUB2
-@@ -23,7 +23,7 @@ BR2_PACKAGE_HOST_MTOOLS=y
- # Linux
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.13"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.8"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/minnowboard/linux.config"
- 
-diff --git a/configs/minnowboard_max_defconfig b/configs/minnowboard_max_defconfig
-index 9495bf3769..523ddffd51 100644
---- a/configs/minnowboard_max_defconfig
-+++ b/configs/minnowboard_max_defconfig
-@@ -7,8 +7,8 @@ BR2_SYSTEM_DHCP="eth0"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/minnowboard/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/minnowboard/post-image.sh"
- 
--# Linux headers same as kernel, a 4.14 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- # Needed for grub2
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
- 
-@@ -23,7 +23,7 @@ BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=y
- # Linux kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.13"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.8"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/minnowboard/linux.config"
- 
+diff --git a/package/libmpd/0001-Fix-build-on-archlinux-missing-include.patch b/package/libmpd/0001-Fix-build-on-archlinux-missing-include.patch
+new file mode 100644
+index 0000000000..be16eb9713
+--- /dev/null
++++ b/package/libmpd/0001-Fix-build-on-archlinux-missing-include.patch
+@@ -0,0 +1,24 @@
++From 4f946c01000fd97100e4a534b47f9c7ace0403df Mon Sep 17 00:00:00 2001
++From: QC <qball@gmpclient.org>
++Date: Thu, 9 Oct 2014 19:51:50 +0200
++Subject: [PATCH] Fix build on archlinux (missing include)
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/DaveDavenport/libmpd/commit/4f946c01000fd97100e4a534b47f9c7ace0403df]
++---
++ src/libmpd-internal.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/libmpd-internal.h b/src/libmpd-internal.h
++index c84c3a4..30cdc85 100644
++--- a/src/libmpd-internal.h
+++++ b/src/libmpd-internal.h
++@@ -21,6 +21,7 @@
++ #define __MPD_INTERNAL_LIB_
++ 
++ #include "libmpdclient.h"
+++#include <config.h>
++ struct _MpdData_real;
++ 
++ typedef struct _MpdData_real {
