@@ -1,77 +1,76 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 8 Dec 2018 17:17:49 +0100
-Subject: [Buildroot] [PATCH] gitlab-ci: store .config files as artefacts
- for defconfig tests
-In-Reply-To: <20181208161128.20041-1-yann.morin.1998@free.fr>
-References: <20181208161128.20041-1-yann.morin.1998@free.fr>
-Message-ID: <20181208161749.GO2561@scaer>
+Date: Sat, 8 Dec 2018 17:23:09 +0100
+Subject: [Buildroot] [PATCH] boot/afboot-stm32: create destination
+ directory during installation
+In-Reply-To: <20181208141854.29144-1-thomas.petazzoni@bootlin.com>
+References: <20181208141854.29144-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20181208162309.GP2561@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Thomas, All,
 
-On 2018-12-08 17:11 +0100, Yann E. MORIN spake thusly:
-> Add Buildroot's own .config file, as well as any package's .config file
-> (uclibc, linux, and busybox), for later inspection should a build fails,
-> notably due to changes in the kconfig-package infrastructure.
+On 2018-12-08 15:18 +0100, Thomas Petazzoni spake thusly:
+> Following d0f4f95e390bcb1c953efa125f5277a8a235396e ("Makefile: rework
+> main directory creation logic"), BINARIES_DIR is not implicitly
+> created by the main Makefile at the beginning of the build, leaving
+> that up to whatever piece of code needs to install something in
+> $(BINARIES_DIR).
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  .gitlab-ci.yml    | 2 ++
->  .gitlab-ci.yml.in | 2 ++
->  2 files changed, 4 insertions(+)
+> The afboot-stm32 package didn't pay attention to this, which this
+> commit fixes.
 > 
-> diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-> index 1a78211823..7dda71248f 100644
-> --- a/.gitlab-ci.yml
-> +++ b/.gitlab-ci.yml
-> @@ -57,10 +57,12 @@ check-package:
->          when: always
->          expire_in: 2 weeks
->          paths:
-> +            - .config
->              - build.log
->              - output/images/
->              - output/build/build-time.log
->              - output/build/packages-file-list.txt
-> +            - output/*/.config
+> While at it, we move the afboot-stm32 installation into
+> <pkg>_INSTALL_IMAGES_CMDS, because using <pkg>_INSTALL_TARGET_CMDS to
+> install only files to BINARIES_DIR is a bit strange.
+> 
+> Fixes:
+> 
+>   https://gitlab.com/buildroot.org/buildroot/-/jobs/131217111
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Damn, I was too quick at sending that patch. It should've been
-output/build/*/.config
-
-I'll resend soonish, sorry for the noise...
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
->  
->  .runtime_test: &runtime_test
->      # Running the runtime tests for every push is too much, so limit to
-> diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
-> index ebca29ca1f..41a7589072 100644
-> --- a/.gitlab-ci.yml.in
-> +++ b/.gitlab-ci.yml.in
-> @@ -57,10 +57,12 @@ check-package:
->          when: always
->          expire_in: 2 weeks
->          paths:
-> +            - .config
->              - build.log
->              - output/images/
->              - output/build/build-time.log
->              - output/build/packages-file-list.txt
-> +            - output/*/.config
->  
->  .runtime_test: &runtime_test
->      # Running the runtime tests for every push is too much, so limit to
-> -- 
-> 2.14.1
+> ---
+>  boot/afboot-stm32/afboot-stm32.mk | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 > 
+> diff --git a/boot/afboot-stm32/afboot-stm32.mk b/boot/afboot-stm32/afboot-stm32.mk
+> index 042b21fa55..5e221cf364 100644
+> --- a/boot/afboot-stm32/afboot-stm32.mk
+> +++ b/boot/afboot-stm32/afboot-stm32.mk
+> @@ -6,13 +6,15 @@
+>  
+>  AFBOOT_STM32_VERSION = v0.1
+>  AFBOOT_STM32_SITE = $(call github,mcoquelin-stm32,afboot-stm32,$(AFBOOT_STM32_VERSION))
+> +AFBOOT_STM32_INSTALL_IMAGES = YES
+> +AFBOOT_STM32_INSTALL_TARGET = NO
+>  
+>  define AFBOOT_STM32_BUILD_CMDS
+>  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CROSS_COMPILE=$(TARGET_CROSS) all
+>  endef
+>  
+> -define AFBOOT_STM32_INSTALL_TARGET_CMDS
+> -	$(INSTALL) -m 0755 $(@D)/stm32*.bin $(BINARIES_DIR)
+> +define AFBOOT_STM32_INSTALL_IMAGES_CMDS
+> +	$(INSTALL) -m 0755 -t $(BINARIES_DIR) -D $(@D)/stm32*.bin
+>  endef
+>  
+>  $(eval $(generic-package))
+> -- 
+> 2.19.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
