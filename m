@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 08 Dec 2018 20:50:45 +0100
-Subject: [Buildroot] [PATCH] boot/afboot-stm32: create destination
- directory during installation
-In-Reply-To: <20181208141854.29144-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Sat, 8 Dec 2018 15:18:54 +0100")
-References: <20181208141854.29144-1-thomas.petazzoni@bootlin.com>
-Message-ID: <871s6r6bmy.fsf@dell.be.48ers.dk>
+Date: Sat, 08 Dec 2018 20:50:52 +0100
+Subject: [Buildroot] [PATCH] support/testing: drop docstring in
+ TestPythonPackageBase::test_run()
+In-Reply-To: <20181208143615.31534-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Sat, 8 Dec 2018 15:36:15 +0100")
+References: <20181208143615.31534-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87wooj4x2b.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +14,26 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Following d0f4f95e390bcb1c953efa125f5277a8a235396e ("Makefile: rework
- > main directory creation logic"), BINARIES_DIR is not implicitly
- > created by the main Makefile at the beginning of the build, leaving
- > that up to whatever piece of code needs to install something in
- > $(BINARIES_DIR).
+ > Having a docstring in the test_run() method clutters the "run-tests
+ > -l" output:
 
- > The afboot-stm32 package didn't pay attention to this, which this
- > commit fixes.
+ > test_run (tests.package.test_python_crossbar.TestPythonPy3Crossbar)
+ > Test a python package. ... ok
+ > [...]
+ > test_run (tests.package.test_python_pexpect.TestPythonPy2Pexpect)
+ > Test a python package. ... ok
+ > test_run (tests.package.test_python_pexpect.TestPythonPy3Pexpect)
+ > Test a python package. ... ok
+ > test_run (tests.package.test_python_twisted.TestPythonPy2Twisted)
+ > Test a python package. ... ok
+ > test_run (tests.package.test_python_twisted.TestPythonPy3Twisted)
+ > Test a python package. ... ok
+ > test_run (tests.package.test_python_pynacl.TestPythonPy2Pynacl)
+ > Test a python package. ... ok
+ > test_run (tests.package.test_python_pynacl.TestPythonPy3Pynacl)
+ > Test a python package. ... ok
 
- > While at it, we move the afboot-stm32 installation into
- > <pkg>_INSTALL_IMAGES_CMDS, because using <pkg>_INSTALL_TARGET_CMDS to
- > install only files to BINARIES_DIR is a bit strange.
-
- > Fixes:
-
- >   https://gitlab.com/buildroot.org/buildroot/-/jobs/131217111
+ > So let's simply drop this docstring that is not particularly useful.
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
