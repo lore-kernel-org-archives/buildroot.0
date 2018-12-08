@@ -1,37 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Dec 2018 20:52:20 +0100
-Subject: [Buildroot] [git commit] DEVELOPERS: add entry for
- aarch64_efi_defconfig
-Message-ID: <20181208200042.5DD4C86C48@busybox.osuosl.org>
+Date: Sat, 8 Dec 2018 20:50:35 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: add entry for the
+ bananapi_m2_ultra_defconfig
+Message-ID: <20181208200042.4E6DD86C48@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4700333c0f255254eff40886bf4c23f6440b26c3
+commit: https://git.buildroot.net/buildroot/commit/?id=cad6f1fabb6b67bb2c6b5222cd4d3cfd351b22fc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Erico Nunes recently contributed this defconfig, we can safely assume
-he is willing to maintain it.
+Lothar contributed this board not long ago, so let's assume he is
+willing to take care of it.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Acked-by: Erico Nunes <nunes.erico@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  DEVELOPERS | 2 ++
  1 file changed, 2 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 8dfe579061..5c45c8c1f3 100644
+index c289b3f0c5..8dfe579061 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -658,6 +658,8 @@ F:	package/pifmrds/
- F:	package/ympd/
+@@ -1233,6 +1233,8 @@ N:	Lionel Orry <lionel.orry@gmail.com>
+ F:	package/mongrel2/
  
- N:	Erico Nunes <nunes.erico@gmail.com>
-+F:	board/aarch64-efi/
-+F:	configs/aarch64_efi_defconfig
- F:	package/acpica/
- F:	package/acpitool/
- F:	package/efibootmgr/
+ N:	Lothar Felten <lothar.felten@gmail.com>
++F:	board/bananapi/bananapi-m2-ultra/
++F:	configs/bananapi_m2_ultra_defconfig
+ F:	package/ti-sgx-demos/
+ F:	package/ti-sgx-km/
+ F:	package/ti-sgx-um/
