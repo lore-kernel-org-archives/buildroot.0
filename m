@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 08 Dec 2018 20:50:52 +0100
-Subject: [Buildroot] [PATCH] support/testing: drop docstring in
- TestPythonPackageBase::test_run()
-In-Reply-To: <20181208143615.31534-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Sat, 8 Dec 2018 15:36:15 +0100")
-References: <20181208143615.31534-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87wooj4x2b.fsf@dell.be.48ers.dk>
+Date: Sat, 08 Dec 2018 20:51:06 +0100
+Subject: [Buildroot] [PATCH] DEVELOPERS: add entry for the
+ bananapi_m2_ultra_defconfig
+In-Reply-To: <20181208145008.3041-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Sat, 8 Dec 2018 15:50:08 +0100")
+References: <20181208145008.3041-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87sgz74x1x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,26 +14,8 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Having a docstring in the test_run() method clutters the "run-tests
- > -l" output:
-
- > test_run (tests.package.test_python_crossbar.TestPythonPy3Crossbar)
- > Test a python package. ... ok
- > [...]
- > test_run (tests.package.test_python_pexpect.TestPythonPy2Pexpect)
- > Test a python package. ... ok
- > test_run (tests.package.test_python_pexpect.TestPythonPy3Pexpect)
- > Test a python package. ... ok
- > test_run (tests.package.test_python_twisted.TestPythonPy2Twisted)
- > Test a python package. ... ok
- > test_run (tests.package.test_python_twisted.TestPythonPy3Twisted)
- > Test a python package. ... ok
- > test_run (tests.package.test_python_pynacl.TestPythonPy2Pynacl)
- > Test a python package. ... ok
- > test_run (tests.package.test_python_pynacl.TestPythonPy3Pynacl)
- > Test a python package. ... ok
-
- > So let's simply drop this docstring that is not particularly useful.
+ > Lothar contributed this board not long ago, so let's assume he is
+ > willing to take care of it.
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
