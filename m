@@ -1,83 +1,39 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat,  8 Dec 2018 20:06:19 +0100
-Subject: [Buildroot] [PATCH 2/2] package/gcc: remove arm soft patch
-In-Reply-To: <20181208190619.9977-1-romain.naour@gmail.com>
-References: <20181208190619.9977-1-romain.naour@gmail.com>
-Message-ID: <20181208190619.9977-2-romain.naour@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 08 Dec 2018 20:50:45 +0100
+Subject: [Buildroot] [PATCH] boot/afboot-stm32: create destination
+ directory during installation
+In-Reply-To: <20181208141854.29144-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Sat, 8 Dec 2018 15:18:54 +0100")
+References: <20181208141854.29144-1-thomas.petazzoni@bootlin.com>
+Message-ID: <871s6r6bmy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The patch refers to [1] which says "Unfortuantely, arm-gcc defaults to
-generating code for armv5t." Since we always explicitly pass the target
-CPU for ARM, the default CPU shouldn't matter.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-As suggested by Arnout [2], a test based on qemu_arm_versatile_defconfig
-has been done without this patch and there is no regression.
+ > Following d0f4f95e390bcb1c953efa125f5277a8a235396e ("Makefile: rework
+ > main directory creation logic"), BINARIES_DIR is not implicitly
+ > created by the main Makefile at the beginning of the build, leaving
+ > that up to whatever piece of code needs to install something in
+ > $(BINARIES_DIR).
 
-[1] https://sourceware.org/ml/crossgcc/2008-05/msg00009.html
-[2] http://lists.busybox.net/pipermail/buildroot/2018-May/222104.html
+ > The afboot-stm32 package didn't pay attention to this, which this
+ > commit fixes.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/gcc/8.2.0/0002-arm-softfloat-libgcc.patch | 45 -----------------------
- 1 file changed, 45 deletions(-)
- delete mode 100644 package/gcc/8.2.0/0002-arm-softfloat-libgcc.patch
+ > While at it, we move the afboot-stm32 installation into
+ > <pkg>_INSTALL_IMAGES_CMDS, because using <pkg>_INSTALL_TARGET_CMDS to
+ > install only files to BINARIES_DIR is a bit strange.
 
-diff --git a/package/gcc/8.2.0/0002-arm-softfloat-libgcc.patch b/package/gcc/8.2.0/0002-arm-softfloat-libgcc.patch
-deleted file mode 100644
-index a72e57dff4..0000000000
---- a/package/gcc/8.2.0/0002-arm-softfloat-libgcc.patch
-+++ /dev/null
-@@ -1,45 +0,0 @@
--From b05e2b0942d49f9611a92fd2bb2b292f3d486285 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Tue, 2 May 2017 22:46:18 +0200
--Subject: [PATCH] arm softfloat libgcc
--
--[Romain: convert to git patch]
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- gcc/config/arm/linux-elf.h | 2 +-
-- libgcc/config/arm/t-linux  | 7 ++++++-
-- 2 files changed, 7 insertions(+), 2 deletions(-)
--
--diff --git a/gcc/config/arm/linux-elf.h b/gcc/config/arm/linux-elf.h
--index cfcd9cb1a5c..b8a9a9ca4ae 100644
----- a/gcc/config/arm/linux-elf.h
--+++ b/gcc/config/arm/linux-elf.h
--@@ -58,7 +58,7 @@
--    %{shared:-lc} \
--    %{!shared:%{profile:-lc_p}%{!profile:-lc}}"
-- 
---#define LIBGCC_SPEC "%{mfloat-abi=soft*:-lfloat} -lgcc"
--+#define LIBGCC_SPEC "-lgcc"
-- 
-- #define GLIBC_DYNAMIC_LINKER "/lib/ld-linux.so.2"
-- 
--diff --git a/libgcc/config/arm/t-linux b/libgcc/config/arm/t-linux
--index 3d520decafb..e7bc042d4e4 100644
----- a/libgcc/config/arm/t-linux
--+++ b/libgcc/config/arm/t-linux
--@@ -1,6 +1,11 @@
-- LIB1ASMSRC = arm/lib1funcs.S
-- LIB1ASMFUNCS = _udivsi3 _divsi3 _umodsi3 _modsi3 _dvmd_lnx _clzsi2 _clzdi2 \
---	_ctzsi2 _arm_addsubdf3 _arm_addsubsf3
--+	_ctzsi2 _arm_addsubdf3 _arm_addsubsf3 \
--+	_arm_addsubdf3 _arm_addsubsf3 \
--+	_arm_negdf2 _arm_muldivdf3 _arm_cmpdf2 _arm_unorddf2 \
--+	_arm_fixdfsi _arm_fixunsdfsi _arm_truncdfsf2 \
--+	_arm_negsf2 _arm_muldivsf3 _arm_cmpsf2 _arm_unordsf2 \
--+	_arm_fixsfsi _arm_fixunssfsi
-- 
-- # Just for these, we omit the frame pointer since it makes such a big
-- # difference.
---- 
--2.14.3
--
+ > Fixes:
+
+ >   https://gitlab.com/buildroot.org/buildroot/-/jobs/131217111
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed, thanks.
+
 -- 
-2.14.5
+Bye, Peter Korsgaard
