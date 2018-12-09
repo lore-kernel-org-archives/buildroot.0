@@ -1,57 +1,74 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 10 Dec 2018 00:05:18 +0200
-Subject: [Buildroot] [PATCH/next 1/1] linuxptp: fix build with kernel
- headers >= 4.19
-In-Reply-To: <20181209224120.54c35b43@windsurf>
-References: <20181129214730.7225-1-fontaine.fabrice@gmail.com>
- <n87bm676vhs.fsf@tkos.co.il> <20181209224120.54c35b43@windsurf>
-Message-ID: <87va42mk4h.fsf@tkos.co.il>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 9 Dec 2018 23:17:07 +0100
+Subject: [Buildroot] raspberrypi3_qt5we_defconfig fails to build
+ qt5webengine
+In-Reply-To: <20181209165328.1d320e03@windsurf>
+References: <20181209165328.1d320e03@windsurf>
+Message-ID: <20181209231707.103f56f9@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello Thomas,
 
-Thomas Petazzoni writes:
-> On Fri, 30 Nov 2018 06:26:55 +0200, Baruch Siach wrote:
->
->> [ Resending with the updated address of Richard ]
->>
->> Adding Richard Cochran who introduced this net_tstamp.h change in kernel
->> commit 80b14dee2be.
->>
->> Fabrice Fontaine writes:
->> > clockid_t has been added in net_tstamp.h since kernel 4.19 and
->> > https://github.com/torvalds/linux/commit/80b14dee2bea128928537d61c333f24cb8cbb62f
->> >
->> > As a result, build fails on:
->> > In file included from clock.c:20:
->> > /home/peko/autobuild/instance-0/output/host/arc-buildroot-linux-uclibc/sysroot/usr/include/linux/net_tstamp.h:158:2: error: unknown type name 'clockid_t'
->> >   clockid_t clockid; /* reference clockid */
->> >
->> > To fix this error, add (or move) include on time.h before net_tstamp.h
->> > in clock.c, sk.c and timemaster.c
->>
->> I think this is a bug in the net_tstamp.h header. UAPI headers should
->> not reference userspace types. It should use __kernel_clockid_t instead.
->>
->> Richard, can you comment on that?
->
-> Any update on this? I agree with Baruch here, __kernel_clockid_t should
-> be used.
->
-> However, 4.19 is already released with this clockid_t reference, so I
-> guess we will anyway have to support that ?
+On Sun, 9 Dec 2018 16:53:28 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-A patch fixing that would be backported to 4.19.x I think. So unless
-some external toolchain sticks to older buggy header, we can get away
-with that.
+> Hello Peter and Ga?l,
+> 
+> According to
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/131217091, the
+> raspberrypi3_qt5we_defconfig fails to build qt5webengine:
+> 
+> [...]
+> Qt WebEngine on Linux requires clang or GCC.
+> QtWebEngine will not be built.
+> [...]
+> >>> qt5webengine 5.11.2 Installing to target  
+> cp -dpf /builds/buildroot.org/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5WebEngine*.so.* /builds/buildroot.org/buildroot/output/target/usr/lib
+> cp: cannot stat '/builds/buildroot.org/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5WebEngine*.so.*': No such file or directory
+> package/pkg-generic.mk:315: recipe for target '/builds/buildroot.org/buildroot/output/build/qt5webengine-5.11.2/.stamp_target_installed' failed
+> 
+> Do you have any idea?
 
-baruch
+Quick fix by:
 
---
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/package/qt5/qt5base/qmake.conf.in b/package/qt5/qt5base/qmake.conf.in
+index f14527aa7f..150f84e45d 100644
+--- a/package/qt5/qt5base/qmake.conf.in
++++ b/package/qt5/qt5base/qmake.conf.in
+@@ -9,6 +9,7 @@
+ include(../common/linux_device_pre.conf)
+ 
+ # modifications to g++-unix.conf
++QMAKE_COMPILER          = gcc
+ QMAKE_CC                = $${CROSS_COMPILE}gcc
+ QMAKE_CXX               = $${CROSS_COMPILE}g++
+
+
+But QMAKE_COMPILER should already be set in mkspecs/common/g++-base.conf, but
+is changed by buildroot package/qt5/qt5base/qt5base.mk from 'gcc' to
+'/usr/bin/gcc' by
+
+  # This allows to use ccache when available
+  define QT5BASE_CONFIGURE_HOSTCC
+          $(SED) 's,^QMAKE_COMPILER\s*=.*,QMAKE_COMPILER = $(HOSTCC),' $(@D)/mkspecs/common/g++-base.conf
+          $(SED) 's,^QMAKE_CC\s*=.*,QMAKE_CC = $(HOSTCC),' $(@D)/mkspecs/common/g++-base.conf
+          $(SED) 's,^QMAKE_CXX\s*=.*,QMAKE_CXX = $(HOSTCXX),' $(@D)/mkspecs/common/g++-base.conf
+  endef
+
+The rigth fix should be removing the first sed line, QMAKE_COMPILER is the
+compiler flavour and not a compiler path (see e.g. [1])...
+
+Will send a proper patch (after some testing) soon...
+
+Regards,
+Peter
+
+[1] http://code.qt.io/cgit/qt/qtbase.git/commit/?id=fff5a8f9c987e5e285b2665c4d0a1c5bbe3e6276
+
+> 
+> Best regards,
+> 
+> Thomas
