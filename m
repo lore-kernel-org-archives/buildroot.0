@@ -1,33 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 9 Dec 2018 17:18:28 +0100
-Subject: [Buildroot] [PATCH] dl-wrapper: Fix urlencode option never
- being sent to backend
-In-Reply-To: <b97d7c67314b9312d4a79aa1a40ec4bd55ed61ff.camel@vitec.com>
-References: <b97d7c67314b9312d4a79aa1a40ec4bd55ed61ff.camel@vitec.com>
-Message-ID: <20181209171828.341dbfe3@windsurf>
+Date: Sun, 9 Dec 2018 17:24:29 +0100
+Subject: [Buildroot] [git commit] docs/manual: document
+ <pkg>_KEEP_DEPENDENCIES in rebar-package infra
+Message-ID: <20181209162058.BA086883A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e16310c15a42cb5de409522dae104c41595738aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 7 Dec 2018 12:41:08 +0000, Damien Th?bault wrote:
-> The urlencode parameter is lost in dl-wrapper, because we try to get it
-> from backend instead of backend_urlencode.
-> 
-> We must get the urlencode information from backend_urlencode.
-> 
-> Signed-off-by: Damien Th?bault <damien.thebault@vitec.com>
-> ---
->  support/download/dl-wrapper | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ docs/manual/adding-packages-rebar.txt | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/docs/manual/adding-packages-rebar.txt b/docs/manual/adding-packages-rebar.txt
+index be9ede0113..d78b3171d8 100644
+--- a/docs/manual/adding-packages-rebar.txt
++++ b/docs/manual/adding-packages-rebar.txt
+@@ -86,6 +86,12 @@ If the package bundles a _rebar_ utility, but can use the generic
+ * +ERLANG_FOOBAR_REBAR_ENV+, to specify additional environment
+   variables to pass to the _rebar_ utility.
+ 
++* +ERLANG_FOOBAR_KEEP_DEPENDENCIES+, to keep the dependencies
++  described in the rebar.config file. Valid values are +YES+ or +NO+
++  (the default). Unless this variable is set to +YES+, the _rebar_
++  infrastructure removes such dependencies in a post-patch hook to
++  ensure rebar does not download nor compile them.
++
+ With the rebar infrastructure, all the steps required to build
+ and install the packages are already defined, and they generally work
+ well for most rebar-based packages. However, when required, it is
