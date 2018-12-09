@@ -1,40 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 09 Dec 2018 22:37:14 +0100
-Subject: [Buildroot] [PATCH v3,
- 2/2] lxc: fix build without stack protector
-In-Reply-To: <20181204201553.11463-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 4 Dec 2018 21:15:53 +0100")
-References: <20181204201553.11463-1-fontaine.fabrice@gmail.com>
- <20181204201553.11463-2-fontaine.fabrice@gmail.com>
-Message-ID: <87o99uz8j9.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 9 Dec 2018 22:41:20 +0100
+Subject: [Buildroot] [PATCH/next 1/1] linuxptp: fix build with kernel
+ headers >= 4.19
+In-Reply-To: <n87bm676vhs.fsf@tkos.co.il>
+References: <20181129214730.7225-1-fontaine.fabrice@gmail.com>
+ <n87bm676vhs.fsf@tkos.co.il>
+Message-ID: <20181209224120.54c35b43@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Hello,
 
- > Stack protector has been added in version 3.0.3 by
- > https://github.com/lxc/lxc/commit/2268c27754152aa538db2c9e3753d72d19bcd17a
+On Fri, 30 Nov 2018 06:26:55 +0200, Baruch Siach wrote:
 
- > However, some compilers could missed the needed library (-lssp or
- > -lssp_nonshared) at linking step so use ax_check_link_flag instead of
- > ax_check_compile_flag
+> [ Resending with the updated address of Richard ]
+> 
+> Adding Richard Cochran who introduced this net_tstamp.h change in kernel
+> commit 80b14dee2be.
+> 
+> Fabrice Fontaine writes:
+> > clockid_t has been added in net_tstamp.h since kernel 4.19 and
+> > https://github.com/torvalds/linux/commit/80b14dee2bea128928537d61c333f24cb8cbb62f
+> >
+> > As a result, build fails on:
+> > In file included from clock.c:20:
+> > /home/peko/autobuild/instance-0/output/host/arc-buildroot-linux-uclibc/sysroot/usr/include/linux/net_tstamp.h:158:2: error: unknown type name 'clockid_t'
+> >   clockid_t clockid; /* reference clockid */
+> >
+> > To fix this error, add (or move) include on time.h before net_tstamp.h
+> > in clock.c, sk.c and timemaster.c  
+> 
+> I think this is a bug in the net_tstamp.h header. UAPI headers should
+> not reference userspace types. It should use __kernel_clockid_t instead.
+> 
+> Richard, can you comment on that?
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/0b90e7dca2984652842832a41abad93ac49a9b86
+Any update on this? I agree with Baruch here, __kernel_clockid_t should
+be used.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v2 -> v3 (after review of Baruch Siach):
- >  - Add patch to use ac_check_link_flag
+However, 4.19 is already released with this clockid_t reference, so I
+guess we will anyway have to support that ?
 
- > Changes v1 -> v2 (after review of Thomas Petazzoni):
- >  - Drop patch to add a new option, instead use
- >    ax_cv_check_cflags__Werror__fstack_protector_strong=no
+Thanks,
 
-Committed to 2018.11.x, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
