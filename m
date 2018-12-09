@@ -1,47 +1,38 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun,  9 Dec 2018 22:43:48 +0100
-Subject: [Buildroot] [PATCH] package/gcc: remove unused
- HOST_GCC_FAKE_TESTSUITE
-Message-ID: <20181209214348.31564-1-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 9 Dec 2018 22:50:12 +0100
+Subject: [Buildroot] [git commit] package/qt5/qt5virtualkeyboard: rewrap
+ Config.in help text
+Message-ID: <20181209214700.8165C86BFD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-HOST_GCC_FAKE_TESTSUITE was removed since commit [1].
+commit: https://git.buildroot.net/buildroot/commit/?id=88b2e747dfa7e562001b0c959b3b1c1a2b3717ed
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[1] 545ca6a0f2f4e0d8b3812949476ac2856264b83c
+check-package complains with:
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+package/qt5/qt5virtualkeyboard/Config.in:59: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
+
+So let's rewrap the Config.in help text.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gcc/gcc-final/gcc-final.mk     | 1 -
- package/gcc/gcc-initial/gcc-initial.mk | 1 -
- 2 files changed, 2 deletions(-)
+ package/qt5/qt5virtualkeyboard/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index cbde56ce1c..37b645d252 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -15,7 +15,6 @@ HOST_GCC_FINAL_DEPENDENCIES = \
- 	$(BR_LIBC)
+diff --git a/package/qt5/qt5virtualkeyboard/Config.in b/package/qt5/qt5virtualkeyboard/Config.in
+index c3f2f37604..3a60c27332 100644
+--- a/package/qt5/qt5virtualkeyboard/Config.in
++++ b/package/qt5/qt5virtualkeyboard/Config.in
+@@ -56,6 +56,7 @@ config BR2_PACKAGE_QT5VIRTUALKEYBOARD_HANDWRITING
+ config BR2_PACKAGE_QT5VIRTUALKEYBOARD_ARROW_KEY_NAVIGATION
+ 	bool "Arrow key navigation"
+ 	help
+-	  Allows controlling the keyboard using the arrow and return keys.
++	  Allows controlling the keyboard using the arrow and return
++	  keys.
  
- HOST_GCC_FINAL_EXCLUDES = $(HOST_GCC_EXCLUDES)
--HOST_GCC_FINAL_POST_EXTRACT_HOOKS += HOST_GCC_FAKE_TESTSUITE
- 
- ifneq ($(ARCH_XTENSA_OVERLAY_FILE),)
- HOST_GCC_FINAL_POST_EXTRACT_HOOKS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
-diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-index d5d925a3d9..1decca8259 100644
---- a/package/gcc/gcc-initial/gcc-initial.mk
-+++ b/package/gcc/gcc-initial/gcc-initial.mk
-@@ -16,7 +16,6 @@ HOST_GCC_INITIAL_DL_SUBDIR = gcc
- HOST_GCC_INITIAL_DEPENDENCIES = $(HOST_GCC_COMMON_DEPENDENCIES)
- 
- HOST_GCC_INITIAL_EXCLUDES = $(HOST_GCC_EXCLUDES)
--HOST_GCC_INITIAL_POST_EXTRACT_HOOKS += HOST_GCC_FAKE_TESTSUITE
- 
- ifneq ($(ARCH_XTENSA_OVERLAY_FILE),)
- HOST_GCC_INITIAL_POST_EXTRACT_HOOKS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
--- 
-2.14.5
+ endif
