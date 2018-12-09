@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 9 Dec 2018 17:29:42 +0100
-Subject: [Buildroot] [PATCH 1/3] package/pkg-rebar.mk: Fix
- remove-rebar-config-dependencies
-In-Reply-To: <20181205160618.6884-1-johan.oudinet@gmail.com>
-References: <20181205160618.6884-1-johan.oudinet@gmail.com>
-Message-ID: <20181209172942.381068ad@windsurf>
+Date: Sun, 9 Dec 2018 17:30:46 +0100
+Subject: [Buildroot] [PATCH] configs/nexbox_a95x: kernel needs
+ host-openssl
+In-Reply-To: <20181209094146.26427-1-yann.morin.1998@free.fr>
+References: <20181209094146.26427-1-yann.morin.1998@free.fr>
+Message-ID: <20181209173046.19398bba@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +13,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  5 Dec 2018 17:06:16 +0100, Johan Oudinet wrote:
-> Handle the case where there is only one dependency described in
-> rebar.config, so when the line starts by '{deps' and ends by '}.'.
-> Before it was deleting this line but also all next lines until finding
-> a line that ends by '}.'.
+On Sun,  9 Dec 2018 10:41:46 +0100, Yann E. MORIN wrote:
+> Fixes: https://gitlab.com/ymorin/buildroot/-/jobs/131924236
 > 
-> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
 > ---
->  package/pkg-rebar.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  configs/nexbox_a95x_defconfig | 1 +
+>  1 file changed, 1 insertion(+)
 
-Series applied. Thanks!
+Applied to master with a slightly extended commit log. Thanks!
 
 Thomas
 -- 
