@@ -1,53 +1,59 @@
-From: Erico Nunes <nunes.erico@gmail.com>
-Date: Sun, 9 Dec 2018 18:36:56 +0100
-Subject: [Buildroot] [PATCHv2] configs/aarch64_efi: needs
- host-{dosfstools, mtools}
-In-Reply-To: <20181209170726.11543-1-yann.morin.1998@free.fr>
-References: <20181209170726.11543-1-yann.morin.1998@free.fr>
-Message-ID: <CAK4VdL1APK0=8FSm5S_LdJhruxyhxTmpL1uE7zsoyh3SdLf6MQ@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 09 Dec 2018 19:31:58 +0100
+Subject: [Buildroot] [PATCH] pkgconf: bump to 1.5.3, change upstream
+References: <20180908200507.23939-1-thomas.petazzoni@bootlin.com>
+Message-ID: <ul30efx8ue.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Dec 9, 2018 at 6:07 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Fixes:
->     https://gitlab.com/ymorin/buildroot/-/jobs/131924126
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Erico Nunes <nunes.erico@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Am Sat, 08 Sep 2018 22:05:07 +0200 schrieb Thomas Petazzoni:
 
-Thanks for these fixes. This defconfig should look and work pretty
-similar to pc_x86_64_efi_defconfig. With this patch the set of host
-tools is the same as pc_x86_64_efi_defconfig, so looks good now.
+> Of course, updating pkgconf has the potential of breaking lots of
+> things, that's why I would suggest to update early in the development
+> cycle, to leave us enough time to resolve issues.
 
-Reviewed-by: Erico Nunes <nunes.erico@gmail.com>
+Hi,
 
+libxcb got broken due to this bump:
+http://autobuild.buildroot.net/?reason=libxcb-1.13
 
+Libxcb configure checks for the variable xcbincludedir of the xcb-proto 
+package during configure:
+https://cgit.freedesktop.org/xcb/libxcb/tree/configure.ac#n75
 
->
-> ---
-> Changes v1 -> v2:
->   - add mtools too  (Thomas)
-> ---
->  configs/aarch64_efi_defconfig | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/configs/aarch64_efi_defconfig b/configs/aarch64_efi_defconfig
-> index ecc050fc5e..e87193218e 100644
-> --- a/configs/aarch64_efi_defconfig
-> +++ b/configs/aarch64_efi_defconfig
-> @@ -32,3 +32,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
->  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.10"
->  BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
->  BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-> +
-> +# Host tools for genimage
-> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
-> +BR2_PACKAGE_HOST_MTOOLS=y
-> --
-> 2.14.1
->
+This results in
+
+$ /home/bernd/buildroot/br8_ffmpeg3_kodi17_github/output/host/bin/pkg-
+config --variable=xcbincludedir xcb-proto
+
+/home/bernd/buildroot/br8_ffmpeg3_kodi17_github/output/host/x86_64-
+buildroot-linux-uclibc/sysroot/home/bernd/buildroot/
+br8_ffmpeg3_kodi17_github/output/host/bin/../x86_64-buildroot-linux-
+uclibc/sysroot/usr/share/xcb
+
+Please note that "/home/bernd/buildroot/..." is present twice in the 
+pkgconfig result.
+
+There seems to be an attempt to fix the problem
+https://patchwork.freedesktop.org/patch/179233/
+but it makes things even worse:
+
+checking XCBPROTO_XCBINCLUDEDIR... /home/bernd/buildroot/
+br8_ffmpeg3_kodi17_github/output/host/x86_64-buildroot-linux-uclibc/
+sysroot/home/bernd/buildroot/br8_ffmpeg3_kodi17_github/output/host/bin/../
+x86_64-buildroot-linux-uclibc/sysroot/home/bernd/buildroot/
+br8_ffmpeg3_kodi17_github/output/host/bin/../x86_64-buildroot-linux-
+uclibc/sysroot/usr/share/xcb
+checking XCBPROTO_XCBPYTHONDIR... /home/bernd/buildroot/
+br8_ffmpeg3_kodi17_github/output/host/x86_64-buildroot-linux-uclibc/
+sysroot/home/bernd/buildroot/br8_ffmpeg3_kodi17_github/output/host/bin/../
+x86_64-buildroot-linux-uclibc/sysroot/home/bernd/buildroot/
+br8_ffmpeg3_kodi17_github/output/host/bin/../x86_64-buildroot-linux-
+uclibc/sysroot/usr/lib/python2.7/site-packages
+
+Now "/home/bernd/buildroot/..." is present three times...
+
+Regards, Bernd
