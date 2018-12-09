@@ -1,68 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 9 Dec 2018 17:35:26 +0100
-Subject: [Buildroot] [next v3 1/1] package/proftpd: add mod_sql_sqlite
-In-Reply-To: <20181203143418.5153-1-jared.bents@rockwellcollins.com>
-References: <20181203143418.5153-1-jared.bents@rockwellcollins.com>
-Message-ID: <20181209173526.4e133c04@windsurf>
+Date: Sun, 9 Dec 2018 17:36:00 +0100
+Subject: [Buildroot] [git commit] package/qt5/qt5virtualkeyboard: add arrow
+ key navigation build option
+Message-ID: <20181209163247.5FEDA8B80E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=269fa3fa9fd286307424cbe36f259e8d6afb8dfd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  3 Dec 2018 08:34:18 -0600, Jared Bents wrote:
-> Enable mod_sql_sqlite as a compile time option
-> 
-> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
-> --
-> [v1->v2]: Update for sqlite dependency
-> [v2->v3]: Update help info from mode_* to mod_* per request
->           from <ryan.barnett@collins.com>
-> ---
->  package/proftpd/Config.in  | 14 ++++++++++++--
->  package/proftpd/proftpd.mk |  5 +++++
->  2 files changed, 17 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
-> index b615a5ff4c..7c57fed35a 100644
-> --- a/package/proftpd/Config.in
-> +++ b/package/proftpd/Config.in
-> @@ -29,12 +29,22 @@ config BR2_PACKAGE_PROFTPD_MOD_SFTP
->  config BR2_PACKAGE_PROFTPD_MOD_SQL
->  	bool "mod_sql support"
->  	help
-> -	  Compile ProFTPD with mode_sql support.
-> +	  Compile ProFTPD with mod_sql support.
+It allows controlling the keyboard using the arrow and return keys.
 
-This...
+Signed-off-by: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qt5/qt5virtualkeyboard/Config.in             | 5 +++++
+ package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk | 4 ++++
+ 2 files changed, 9 insertions(+)
 
-> +
-> +if BR2_PACKAGE_PROFTPD_MOD_SQL
-> +
-> +config BR2_PACKAGE_PROFTPD_MOD_SQL_SQLITE
-> +	bool "mod_sql_sqlite support"
-> +	select BR2_PACKAGE_SQLITE
-> +	help
-> +	  Compile ProFTPD with mod_sql_sqlite support.
-> +
-> +endif
->  
->  config BR2_PACKAGE_PROFTPD_MOD_QUOTATAB
->  	bool "mod_quotatab support"
->  	help
-> -	  Compile ProFTPD with mode_quotatab support. This module
-> +	  Compile ProFTPD with mod_quotatab support. This module
-
-.. and this are unrelated changes. They should have been made as part
-of a separate patch. So I did them in a separate preparatory commit,
-and then applied your change adding mod_sql_sqlite support. Thanks!
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/qt5/qt5virtualkeyboard/Config.in b/package/qt5/qt5virtualkeyboard/Config.in
+index 57b0c703b0..c3f2f37604 100644
+--- a/package/qt5/qt5virtualkeyboard/Config.in
++++ b/package/qt5/qt5virtualkeyboard/Config.in
+@@ -53,4 +53,9 @@ config BR2_PACKAGE_QT5VIRTUALKEYBOARD_HANDWRITING
+ 	  Lipi Toolkit (LipiTk) is an open source toolkit for online
+ 	  Handwriting Recognition.
+ 
++config BR2_PACKAGE_QT5VIRTUALKEYBOARD_ARROW_KEY_NAVIGATION
++	bool "Arrow key navigation"
++	help
++	  Allows controlling the keyboard using the arrow and return keys.
++
+ endif
+diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+index 4aa5fc9575..8ce3169774 100644
+--- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
++++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+@@ -53,6 +53,10 @@ QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/lipi-toolkit/MI
+ endif
+ endif
+ 
++ifeq ($(BR2_PACKAGE_QT5VIRTUALKEYBOARD_ARROW_KEY_NAVIGATION),y)
++QT5VIRTUALKEYBOARD_QMAKEFLAGS += CONFIG+=arrow-key-navigation
++endif
++
+ ifdef QT5VIRTUALKEYBOARD_3RDPARTY_PARTS
+ define QT5VIRTUALKEYBOARD_INSTALL_TARGET_3RDPARTY_PARTS
+ 	cp -dpfr $(STAGING_DIR)/usr/qtvirtualkeyboard $(TARGET_DIR)/usr
