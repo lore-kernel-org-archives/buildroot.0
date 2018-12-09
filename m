@@ -1,56 +1,38 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 9 Dec 2018 14:32:27 +0100
-Subject: [Buildroot] [PATCH 1/2] package/gcc: bump to version 7.4.0
-In-Reply-To: <20181209095348.GC3383@scaer>
-References: <20181208153735.12898-1-romain.naour@gmail.com>
- <20181209095348.GC3383@scaer>
-Message-ID: <166d263c-65fe-2285-2217-7d2370db9c1d@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 9 Dec 2018 14:35:25 +0100
+Subject: [Buildroot] [PATCH] configs/nexbox_a95x: kernel needs
+ host-openssl
+In-Reply-To: <20181209094146.26427-1-yann.morin.1998@free.fr>
+References: <20181209094146.26427-1-yann.morin.1998@free.fr>
+Message-ID: <20181209143525.53fc6c6c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 09/12/2018 ? 10:53, Yann E. MORIN a ?crit?:
-> Romain, All,
-> 
-> On 2018-12-08 16:37 +0100, Romain Naour spake thusly:
-> [--SNIP--]
->>  rename package/gcc/{7.3.0 => 7.4.0}/0001-m68k-coldfire-pr68467.patch (97%)
-> [--SNIP--]
->> diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
->> index 55a9c8b69f..c2925cc6dc 100644
->> --- a/package/gcc/Config.in.host
->> +++ b/package/gcc/Config.in.host
->> @@ -83,7 +83,7 @@ config BR2_GCC_VERSION
->>  	default "4.9.4"     if BR2_GCC_VERSION_4_9_X
->>  	default "5.5.0"     if BR2_GCC_VERSION_5_X
->>  	default "6.4.0"     if BR2_GCC_VERSION_6_X
->> -	default "7.3.0"     if BR2_GCC_VERSION_7_X
->> +	default "7.4.0"     if BR2_GCC_VERSION_7_X
-> 
-> It looks like patch 0001 breaks the build on m68k, because upstream
-> seems to have introducved a function by the same name:
-> 
->     https://gitlab.com/ymorin/buildroot/-/jobs/131924271
->     https://gitlab.com/ymorin/buildroot/-/jobs/131924272
-> 
-> ../../gcc/config/m68k/m68k.c: In function ?machine_mode m68k_promote_function_mode(const_tree, machine_mode, int*, const_tree, int)?:
-> ../../gcc/config/m68k/m68k.c:6603:1: error: redefinition of ?machine_mode m68k_promote_function_mode(const_tree, machine_mode, int*, const_tree, int)?
-> 
-> Care to have a look, please? ;-)
+Hello,
 
-Well, 0001-m68k-coldfire-pr68467.patch is already upstream [1].
+On Sun,  9 Dec 2018 10:41:46 +0100, Yann E. MORIN wrote:
+> Fixes: https://gitlab.com/ymorin/buildroot/-/jobs/131924236
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
 
-I'll send a patch to remove it.
+This defconfig didn't fail here:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/131217002
+
+I'm curious to know you have different results. Both builds are using
+the exact same Docker image, so it's a bit confusing what is going on
+here.
+
+Any idea ?
 
 Best regards,
-Romain
 
-[1]
-https://github.com/gcc-mirror/gcc/commit/2d1d94491cc66e240f9ca2845ec64e8ffe851c74
-
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
