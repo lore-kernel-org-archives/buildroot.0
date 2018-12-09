@@ -1,75 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 9 Dec 2018 16:57:08 +0100
-Subject: [Buildroot] [PATCH] pkgconf: bump to 1.5.3, change upstream
-In-Reply-To: <20180908200507.23939-1-thomas.petazzoni@bootlin.com>
-References: <20180908200507.23939-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181209165708.7f0475ad@windsurf>
+Date: Sun, 9 Dec 2018 17:06:35 +0100
+Subject: [Buildroot] [git commit] package/luajit: add option to enable Lua
+ 5.2 compatibility
+Message-ID: <20181209160252.DB3308434B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8c2bc94547db8737929794b39d61f8d0a3fd709e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  8 Sep 2018 22:05:07 +0200, Thomas Petazzoni wrote:
-> The pkgconf project now has a website at pkgconf.org, and hosts its
-> tarballs at https://distfiles.dereferenced.org/pkgconf/, so this
-> commit updates the upstream location, and uses the xz-compressed
-> tarball as well.
-> 
-> pkgconf is bumped to 1.5.3. What prompted this update is the fact that
-> GStreamer uses the --define-prefix option when calling pkg-config, and
-> this option didn't exist in pkgconf 0.9.2.
-> 
-> The patch 0001-Fix-all-variables-sysroot-prefix-problem.patch is
-> dropped, because pkgconf now behaves properly, by prefixing all paths
-> with the sysroot. This has been verified by testing libdir and
-> includedir in zlib.pc, and adding some dummy pkgdatadir, mapdir and
-> sdkdir variables:
-> 
-> $ cat staging/usr/lib/pkgconfig/zlib.pc
-> prefix=/usr
-> exec_prefix=${prefix}
-> libdir=${exec_prefix}/lib
-> sharedlibdir=${libdir}
-> includedir=${prefix}/include
-> pkgdatadir=${prefix}/pouet
-> mapdir=${prefix}/this/is/map/dir
-> sdkdir=${prefix}/this/is/sdk/dir
-> [...]
-> 
-> $ ./host/bin/pkg-config --variable=libdir zlib
-> ./host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib
-> $ ./host/bin/pkg-config --variable=includedir zlib
-> ./host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include
-> $ ./host/bin/pkg-config --variable=mapdir zlib
-> ./host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/this/is/map/dir
-> $ ./host/bin/pkg-config --variable=sdkdir zlib
-> ./host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/this/is/sdk/dir
-> $ ./host/bin/pkg-config --variable=pkgdatadir zlib
-> ./host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/pouet
-> 
-> So, the 0001-Fix-all-variables-sysroot-prefix-problem patch is no
-> longer necessary.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
-> Of course, updating pkgconf has the potential of breaking lots of
-> things, that's why I would suggest to update early in the development
-> cycle, to leave us enough time to resolve issues.
-> ---
->  ...-Fix-all-variables-sysroot-prefix-problem.patch | 64 ----------------------
->  package/pkgconf/Config.in                          |  2 +-
->  package/pkgconf/pkgconf.hash                       |  2 +-
->  package/pkgconf/pkgconf.mk                         |  6 +-
->  4 files changed, 5 insertions(+), 69 deletions(-)
->  delete mode 100644 package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[Thomas: formatting tweaks.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/luajit/Config.in | 5 +++++
+ package/luajit/luajit.mk | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/luajit/Config.in b/package/luajit/Config.in
+index 7e792c53c4..88c5bcbf28 100644
+--- a/package/luajit/Config.in
++++ b/package/luajit/Config.in
+@@ -36,6 +36,11 @@ config BR2_PACKAGE_PROVIDES_LUAINTERPRETER
+ config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION
+ 	default "5.1"
+ 
++config BR2_PACKAGE_LUAJIT_COMPAT52
++	bool "Lua 5.2 compatibility"
++	help
++	  Compile with Lua 5.2 compatibility.
++
+ endif
+ 
+ comment "luajit needs a toolchain w/ dynamic library"
+diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+index 939fa660d8..5b08a42d98 100644
+--- a/package/luajit/luajit.mk
++++ b/package/luajit/luajit.mk
+@@ -14,6 +14,10 @@ LUAJIT_INSTALL_STAGING = YES
+ 
+ LUAJIT_PROVIDES = luainterpreter
+ 
++ifeq ($(BR2_PACKAGE_LUAJIT_COMPAT52),y)
++LUAJIT_XCFLAGS += -DLUAJIT_ENABLE_LUA52COMPAT
++endif
++
+ ifeq ($(BR2_STATIC_LIBS),y)
+ LUAJIT_BUILDMODE = static
+ else
+@@ -48,6 +52,7 @@ define LUAJIT_BUILD_CMDS
+ 		HOST_CFLAGS="$(HOST_CFLAGS)" \
+ 		HOST_LDFLAGS="$(HOST_LDFLAGS)" \
+ 		BUILDMODE=$(LUAJIT_BUILDMODE) \
++		XCFLAGS=$(LUAJIT_XCFLAGS) \
+ 		-C $(@D) amalg
+ endef
+ 
+@@ -68,6 +73,7 @@ LUAJIT_POST_INSTALL_TARGET_HOOKS += LUAJIT_INSTALL_SYMLINK
+ define HOST_LUAJIT_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) PREFIX="$(HOST_DIR)" BUILDMODE=dynamic \
+ 		TARGET_LDFLAGS="$(HOST_LDFLAGS)" \
++		XCFLAGS=$(LUAJIT_XCFLAGS) \
+ 		-C $(@D) amalg
+ endef
+ 
