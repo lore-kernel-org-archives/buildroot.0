@@ -1,38 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 9 Dec 2018 17:12:31 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-aiorwlock: new package
-In-Reply-To: <1544141284-28960-1-git-send-email-james.hilliard1@gmail.com>
-References: <1544141284-28960-1-git-send-email-james.hilliard1@gmail.com>
-Message-ID: <20181209171231.567c653b@windsurf>
+Date: Sun, 9 Dec 2018 17:16:04 +0100
+Subject: [Buildroot] [git commit] support/download/dl-wrapper: fix urlencode
+ option never being sent to backend
+Message-ID: <20181209161317.A65F78B685@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=bb7c13273fbe2da0969e14ddfd61a46b78d79db2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  7 Dec 2018 08:08:04 +0800, james.hilliard1 at gmail.com wrote:
-> From: James Hilliard <james.hilliard1@gmail.com>
-> 
-> Read write lock for asyncio.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  DEVELOPERS                                     |  1 +
->  package/Config.in                              |  1 +
->  package/python-aiorwlock/Config.in             |  7 +++++++
->  package/python-aiorwlock/python-aiorwlock.hash |  5 +++++
->  package/python-aiorwlock/python-aiorwlock.mk   | 14 ++++++++++++++
->  5 files changed, 28 insertions(+)
->  create mode 100644 package/python-aiorwlock/Config.in
->  create mode 100644 package/python-aiorwlock/python-aiorwlock.hash
->  create mode 100644 package/python-aiorwlock/python-aiorwlock.mk
+Since commit 38de434123 ("download: fix file:// BR2_PRIMARY_SITE
+(download cache)"), the urlencode option is no longer passed to the
+download backend, because we use ${backend} instead of
+${backend_urlencode}.
 
-Applied to master, thanks.
+We must get the urlencode information from backend_urlencode.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Damien Th??bault <damien.thebault@vitec.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[Thomas: rework commit log]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/download/dl-wrapper | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+index bb70c98253..3315bd410e 100755
+--- a/support/download/dl-wrapper
++++ b/support/download/dl-wrapper
+@@ -93,7 +93,7 @@ main() {
+         esac
+         uri=${uri#*+}
+ 
+-        urlencode=${backend#*|}
++        urlencode=${backend_urlencode#*|}
+         # urlencode must be "urlencode"
+         [ "${urlencode}" != "urlencode" ] && urlencode=""
+ 
