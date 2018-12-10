@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Dec 2018 00:19:16 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] package/uclibc: add
+Date: Mon, 10 Dec 2018 23:07:32 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/uclibc: add
  upstream patch to fix aarch64 issues
-Message-ID: <20181210232050.6AE9D8A592@busybox.osuosl.org>
+Message-ID: <20181210232108.184558A6C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2416d0d4f6b6b4d6e354e90bd8bd36b0da7f1335
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5c5d972941976c5878151181d8efb91e3631cddf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 fstatfs/statfs on aarch64 seems broken, add a patch from uClibc-ng
 upstream git to fix it.
@@ -20,14 +20,14 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 (cherry picked from commit 2179ca4a61b4574854075e4cdc1e2b851fa0d5b3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...5-statfs.h-sync-generic-header-with-glibc.patch | 169 +++++++++++++++++++++
+ ...2-statfs.h-sync-generic-header-with-glibc.patch | 169 +++++++++++++++++++++
  1 file changed, 169 insertions(+)
 
-diff --git a/package/uclibc/0005-statfs.h-sync-generic-header-with-glibc.patch b/package/uclibc/0005-statfs.h-sync-generic-header-with-glibc.patch
+diff --git a/package/uclibc/0002-statfs.h-sync-generic-header-with-glibc.patch b/package/uclibc/0002-statfs.h-sync-generic-header-with-glibc.patch
 new file mode 100644
 index 0000000000..b8753ed879
 --- /dev/null
-+++ b/package/uclibc/0005-statfs.h-sync-generic-header-with-glibc.patch
++++ b/package/uclibc/0002-statfs.h-sync-generic-header-with-glibc.patch
 @@ -0,0 +1,169 @@
 +From 8a73a967e18c55199785bae0f22dc94d9b2f8985 Mon Sep 17 00:00:00 2001
 +From: Waldemar Brodkorb <wbrodkorb@conet.de>
