@@ -1,56 +1,48 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 10 Dec 2018 05:05:09 -0700
-Subject: [Buildroot] [PATCH 1/1] package/weston: bump to version 5.0.0
-In-Reply-To: <87in017g04.fsf@tkos.co.il>
-References: <1544439986-16889-1-git-send-email-james.hilliard1@gmail.com>
- <87k1kh7h74.fsf@tkos.co.il>
- <CADvTj4qZHeBQ=wpC6JKO4h+DsvZNkTGO5Jwcik2FO_TMi5FsPg@mail.gmail.com>
- <87in017g04.fsf@tkos.co.il>
-Message-ID: <CADvTj4ohfkAvC6AuwWU9jKe0xJzURsZNFr9ZUOQDuc1HypZqJQ@mail.gmail.com>
+From: Alexey Brodkin <alexey.brodkin@synopsys.com>
+Date: Mon, 10 Dec 2018 13:09:14 +0000
+Subject: [Buildroot] [PATCH] gdb: Fix compilation for arc-2018.09 in
+ some cases
+In-Reply-To: <20181210121517.6ab76211@windsurf>
+References: <20181210093526.29619-1-abrodkin@synopsys.com>
+ <20181210114726.7df0a5fa@windsurf>
+ <edb7c0f0a91fd30576c51df14f3b7f33a5c00460.camel@synopsys.com>
+ <20181210120340.112055e6@windsurf>
+ <bccaa89e46d7b185a8daa109545b656bbd7db049.camel@synopsys.com>
+ <20181210121517.6ab76211@windsurf>
+Message-ID: <cc13ed0ed94c1fa6b7462d9107d17a7c9c3f09df.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Dec 10, 2018 at 4:55 AM Baruch Siach <baruch@tkos.co.il> wrote:
->
-> Hi James,
->
-> James Hilliard writes:
-> > The patch I removed was just a backport of this
-> > https://github.com/wayland-project/weston/commit/029583e56e6eaad4139e39b4cf908158ab8cc91a
-> > which is now included in 5.0.0.
->
-> This is great (and should appear in the commit log). But besides that
-> there are these lines in weston.mk:
->
-> # 0002-rdp-compositor-fix-compilation-against-FreeRDP-2.0.0.patch
-> WESTON_AUTORECONF = YES
->
-> The comment is clearly wrong once you remove the patch. Moreover,
-> autoreconf itself might not be needed anymore. In that case you should
-> remove it.
-yeah, seems to build fine without that, removed it in my v2
->
-> baruch
->
-> > On Mon, Dec 10, 2018 at 4:29 AM Baruch Siach <baruch@tkos.co.il> wrote:
-> >> james.hilliard1 at gmail.com writes:
-> >> > From: James Hilliard <james.hilliard1@gmail.com>
-> >> >
-> >> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> >> > ---
-> >> >  ...tor-fix-compilation-against-FreeRDP-2.0.0.patch | 181 ---------------------
-> >> >  package/weston/weston.hash                         |  10 +-
-> >> >  package/weston/weston.mk                           |   2 +-
-> >> >  3 files changed, 6 insertions(+), 187 deletions(-)
-> >> >  delete mode 100644 package/weston/0002-rdp-compositor-fix-compilation-against-FreeRDP-2.0.0.patch
-> >>
-> >> As you remove the configure.ac patch, is autoreconf still needed? If it
-> >> is, please update the autoreconf comment.
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Hi Thomas,
+
+On Mon, 2018-12-10 at 12:15 +0100, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Mon, 10 Dec 2018 11:09:19 +0000, Alexey Brodkin wrote:
+> 
+> > > Under what exact situations is this build failure happening ?  
+> > 
+> > That's a good question.
+> > As I wrote in my commit message it has to do with some specifics of toolchain headers
+> > configuration. But I'm not really sure what triggers this.
+> > 
+> > I mean I spent quite some time looking at differences between very similar build trees
+> > in one of which this issue happens but not in another but didn't get to any
+> > conclusion.
+> > 
+> > And given there's an upstream fix for that issue I didn't want to invest more time into
+> > this investigation, sorry.
+> 
+> Do you have a defconfig that fails to build ? Or is it related to the
+> build machine environment ?
+
+I have one setup where this problem happens.
+
+If I rebuild everything from scratch with the same defconfig in the next folder
+I cannot reproduce this issue - maybe because I made extra changes compared to
+"problematic" defconfig.
+
+-Alexey
