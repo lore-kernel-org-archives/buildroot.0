@@ -1,40 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 10 Dec 2018 08:51:29 +0100
-Subject: [Buildroot] [PATCH/next 1/1] linuxptp: fix build with kernel
- headers >= 4.19
-In-Reply-To: <20181210015934.ts3hvqehn2qvnlxj@localhost>
-References: <20181129214730.7225-1-fontaine.fabrice@gmail.com>
- <n87bm676vhs.fsf@tkos.co.il> <20181209224120.54c35b43@windsurf>
- <20181210015934.ts3hvqehn2qvnlxj@localhost>
-Message-ID: <20181210085129.3653fb0c@windsurf>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Mon, 10 Dec 2018 08:52:34 +0100
+Subject: [Buildroot] [PATCH v2] utils/scanpypi: import third party modules
+ after the standard ones
+Message-ID: <20181210075234.9168-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Richard,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On Sun, 9 Dec 2018 17:59:34 -0800, Richard Cochran wrote:
+Move imports from six package after the standard modules. Resolves
+pylint warnings.
 
-> > However, 4.19 is already released with this clockid_t reference, so I
-> > guess we will anyway have to support that ?  
-> 
-> Please take this question up with Jesus Sanchez-Palencia on netdev
-> mailing list.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+Changes v1 -> v2:
+	- change prefix to utils/scanpypi and add SoB (Thomas Petazzoni)
 
-Yesterday, when I replied to this thread, which has Jesus in Cc, I got:
+ utils/scanpypi | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-<jesus.sanchez-palencia@intel.com>: host mga14.intel.com[192.55.52.115] said:
-    550 #5.1.0 Address rejected. (in reply to RCPT TO command)
-
-So I'm not sure what's going on, but Jesus is probably not receiving
-all his e-mails.
-
-Best regards,
-
-Thomas
+diff --git a/utils/scanpypi b/utils/scanpypi
+index 3d3e604435..9335bedee4 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -10,9 +10,6 @@ from __future__ import print_function
+ from __future__ import absolute_import
+ import argparse
+ import json
+-import six.moves.urllib.request
+-import six.moves.urllib.error
+-import six.moves.urllib.parse
+ import sys
+ import os
+ import shutil
+@@ -25,6 +22,9 @@ import textwrap
+ import tempfile
+ import imp
+ from functools import wraps
++import six.moves.urllib.request
++import six.moves.urllib.error
++import six.moves.urllib.parse
+ from six.moves import map
+ from six.moves import zip
+ from six.moves import input
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.0
