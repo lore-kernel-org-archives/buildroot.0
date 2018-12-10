@@ -1,11 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 10 Dec 2018 08:52:47 +0100
-Subject: [Buildroot] raspberrypi3_qt5we_defconfig fails to build
- qt5webengine
-In-Reply-To: <20181209231707.103f56f9@gmx.net>
-References: <20181209165328.1d320e03@windsurf>
- <20181209231707.103f56f9@gmx.net>
-Message-ID: <20181210085247.50b55d95@windsurf>
+Date: Mon, 10 Dec 2018 09:13:02 +0100
+Subject: [Buildroot] [PATCH] dl-wrapper: Fix urlencode option never
+ being sent to backend
+In-Reply-To: <671b136857f0b184e19f2f5452c1e764766bf912.camel@vitec.com>
+References: <b97d7c67314b9312d4a79aa1a40ec4bd55ed61ff.camel@vitec.com>
+ <20181207173522.GH2561@scaer>
+ <671b136857f0b184e19f2f5452c1e764766bf912.camel@vitec.com>
+Message-ID: <20181210091302.1ea7ef1b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,30 +15,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 9 Dec 2018 23:17:07 +0100, Peter Seiderer wrote:
+On Mon, 10 Dec 2018 08:03:27 +0000, Damien Th?bault wrote:
 
-> But QMAKE_COMPILER should already be set in mkspecs/common/g++-base.conf, but
-> is changed by buildroot package/qt5/qt5base/qt5base.mk from 'gcc' to
-> '/usr/bin/gcc' by
+> I have a build configured with a primary site and
+> BR2_PRIMARY_SITE_ONLY=y that failed to download libopenssl patches from
+> the mirror.
 > 
->   # This allows to use ccache when available
->   define QT5BASE_CONFIGURE_HOSTCC
->           $(SED) 's,^QMAKE_COMPILER\s*=.*,QMAKE_COMPILER = $(HOSTCC),' $(@D)/mkspecs/common/g++-base.conf
->           $(SED) 's,^QMAKE_CC\s*=.*,QMAKE_CC = $(HOSTCC),' $(@D)/mkspecs/common/g++-base.conf
->           $(SED) 's,^QMAKE_CXX\s*=.*,QMAKE_CXX = $(HOSTCXX),' $(@D)/mkspecs/common/g++-base.conf
->   endef
-> 
-> The rigth fix should be removing the first sed line, QMAKE_COMPILER is the
-> compiler flavour and not a compiler path (see e.g. [1])...
+> If the autobuilders are directly using the original URLs or are falling
+> back to the original URLs they should work fine.
 
-Ah, ok. Thanks for looking into this.
-
-> Will send a proper patch (after some testing) soon...
-
-Thanks a lot, and sorry for this breakage, I caused it when adding the
-ccache stuff for HOSTCC in qt5base.mk.
-
-Thanks,
+Thanks! We really need to add some test cases in support/testing/ for
+those "corner" cases, since they are not tested by the autobuilders or
+in the most usual situations, they tend to be forgotten, and therefore
+broken.
 
 Thomas
 -- 
