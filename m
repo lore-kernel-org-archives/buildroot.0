@@ -1,29 +1,200 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Dec 2018 00:24:35 +0100
-Subject: [Buildroot] [git commit] package/uclibc: add upstream patch to
- fix aarch64 issues
-In-Reply-To: <20181203081158.978847FD0C@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Mon, 3 Dec 2018 09:15:21 +0100")
-References: <20181203081158.978847FD0C@busybox.osuosl.org>
-Message-ID: <87mupdt170.fsf@dell.be.48ers.dk>
+Date: Tue, 11 Dec 2018 00:19:16 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] package/uclibc: add
+ upstream patch to fix aarch64 issues
+Message-ID: <20181210232050.6AE9D8A592@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2416d0d4f6b6b4d6e354e90bd8bd36b0da7f1335
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=2179ca4a61b4574854075e4cdc1e2b851fa0d5b3
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+fstatfs/statfs on aarch64 seems broken, add a patch from uClibc-ng
+upstream git to fix it.
 
- > fstatfs/statfs on aarch64 seems broken, add a patch from uClibc-ng
- > upstream git to fix it.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 2179ca4a61b4574854075e4cdc1e2b851fa0d5b3)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...5-statfs.h-sync-generic-header-with-glibc.patch | 169 +++++++++++++++++++++
+ 1 file changed, 169 insertions(+)
 
- > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2018.02.x, 2018.08.x and 2018.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/uclibc/0005-statfs.h-sync-generic-header-with-glibc.patch b/package/uclibc/0005-statfs.h-sync-generic-header-with-glibc.patch
+new file mode 100644
+index 0000000000..b8753ed879
+--- /dev/null
++++ b/package/uclibc/0005-statfs.h-sync-generic-header-with-glibc.patch
+@@ -0,0 +1,169 @@
++From 8a73a967e18c55199785bae0f22dc94d9b2f8985 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbrodkorb@conet.de>
++Date: Tue, 27 Nov 2018 15:41:37 +0100
++Subject: [PATCH] statfs.h: sync generic header with glibc
++
++Fix issues with aarch64 and df with mismatching header between kernel
++and libc.
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++---
++ .../linux/common-generic/bits/statfs.h        | 84 +++++++++----------
++ libc/sysdeps/linux/common/fstatfs.c           |  9 --
++ libc/sysdeps/linux/common/statfs.c            | 10 ---
++ 3 files changed, 40 insertions(+), 63 deletions(-)
++
++diff --git a/libc/sysdeps/linux/common-generic/bits/statfs.h b/libc/sysdeps/linux/common-generic/bits/statfs.h
++index a2767b49a..23519a57e 100644
++--- a/libc/sysdeps/linux/common-generic/bits/statfs.h
+++++ b/libc/sysdeps/linux/common-generic/bits/statfs.h
++@@ -11,65 +11,61 @@
++ #include <endian.h>
++ #include <bits/align64bit.h>
++ #include <bits/types.h>
+++#include <bits/wordsize.h>
++ 
+++/* 64-bit libc uses the kernel's 'struct statfs', accessed via the
+++   statfs() syscall; 32-bit libc uses the kernel's 'struct statfs64'
+++   and accesses it via the statfs64() syscall.  All the various
+++   APIs offered by libc use the kernel shape for their struct statfs
+++   structure; the only difference is that 32-bit programs not
+++   using __USE_FILE_OFFSET64 only see the low 32 bits of some
+++   of the fields (the __fsblkcnt_t and __fsfilcnt_t fields).  */
+++
+++#if defined __USE_FILE_OFFSET64
+++# define __field64(type, type64, name) type64 name
+++#elif __WORDSIZE == 64
+++# define __field64(type, type64, name) type name
+++#elif __BYTE_ORDER == __LITTLE_ENDIAN
+++# define __field64(type, type64, name) \
+++  type name __attribute__((__aligned__ (__alignof__ (type64)))); int __##name##_pad
+++#else
+++# define __field64(type, type64, name) \
+++  int __##name##_pad __attribute__((__aligned__ (__alignof__ (type64)))); type name
+++#endif
++ 
++ struct statfs
++   {
++-    __U32_TYPE f_type;
++-    __U32_TYPE f_bsize;
++-#ifndef __USE_FILE_OFFSET64
++-# if __BYTE_ORDER == __LITTLE_ENDIAN
++-    __U32_TYPE f_blocks;
++-    __U32_TYPE __pad1;
++-    __U32_TYPE f_bfree;
++-    __U32_TYPE __pad2;
++-    __U32_TYPE f_bavail;
++-    __U32_TYPE __pad3;
++-    __U32_TYPE f_files;
++-    __U32_TYPE __pad4;
++-    __U32_TYPE f_ffree;
++-    __U32_TYPE __pad5;
++-# else
++-    __U32_TYPE __pad1;
++-    __U32_TYPE f_blocks;
++-    __U32_TYPE __pad2;
++-    __U32_TYPE f_bfree;
++-    __U32_TYPE __pad3;
++-    __U32_TYPE f_bavail;
++-    __U32_TYPE __pad4;
++-    __U32_TYPE f_files;
++-    __U32_TYPE __pad5;
++-    __U32_TYPE f_ffree;
++-# endif /* __LITTLE_ENDIAN */
++-#else
++-    __U64_TYPE f_blocks;
++-    __U64_TYPE f_bfree;
++-    __U64_TYPE f_bavail;
++-    __U64_TYPE f_files;
++-    __U64_TYPE f_ffree;
++-#endif /* __USE_FILE_OFFSET64 */
+++    __SWORD_TYPE f_type;
+++    __SWORD_TYPE f_bsize;
+++    __field64(__fsblkcnt_t, __fsblkcnt64_t, f_blocks);
+++    __field64(__fsblkcnt_t, __fsblkcnt64_t, f_bfree);
+++    __field64(__fsblkcnt_t, __fsblkcnt64_t, f_bavail);
+++    __field64(__fsfilcnt_t, __fsfilcnt64_t, f_files);
+++    __field64(__fsfilcnt_t, __fsfilcnt64_t, f_ffree);
++     __fsid_t f_fsid;
++-    __U32_TYPE f_namelen;
++-    __U32_TYPE f_frsize;
++-    __U32_TYPE f_flags;
++-    __U32_TYPE f_spare[4];
++-  } __ARCH_64BIT_ALIGNMENT__;
+++    __SWORD_TYPE f_namelen;
+++    __SWORD_TYPE f_frsize;
+++    __SWORD_TYPE f_flags;
+++    __SWORD_TYPE f_spare[4];
+++  };
+++
+++#undef __field64
++ 
++ #ifdef __USE_LARGEFILE64
++ struct statfs64
++   {
++-    __U32_TYPE f_type;
++-    __U32_TYPE f_bsize;
+++    __SWORD_TYPE f_type;
+++    __SWORD_TYPE f_bsize;
++     __U64_TYPE f_blocks;
++     __U64_TYPE f_bfree;
++     __U64_TYPE f_bavail;
++     __U64_TYPE f_files;
++     __U64_TYPE f_ffree;
++     __fsid_t f_fsid;
++-    __U32_TYPE f_namelen;
++-    __U32_TYPE f_frsize;
++-    __U32_TYPE f_flags;
++-    __U32_TYPE f_spare[4];
+++    __SWORD_TYPE f_namelen;
+++    __SWORD_TYPE f_frsize;
+++    __SWORD_TYPE f_flags;
+++    __SWORD_TYPE f_spare[4];
++   };
++ #endif
++ 
++diff --git a/libc/sysdeps/linux/common/fstatfs.c b/libc/sysdeps/linux/common/fstatfs.c
++index fcb0820eb..0b2709ce3 100644
++--- a/libc/sysdeps/linux/common/fstatfs.c
+++++ b/libc/sysdeps/linux/common/fstatfs.c
++@@ -30,15 +30,6 @@ _syscall2(int, __libc_fstatfs, int, fd, struct statfs *, buf)
++ int __libc_fstatfs (int __fildes, struct statfs *__buf)
++ {
++ 	int err = INLINE_SYSCALL(fstatfs64, 3, __fildes, sizeof(*__buf), __buf);
++-
++-	if (err == 0) {
++-		/* Did we overflow? */
++-		if (__buf->__pad1 || __buf->__pad2 || __buf->__pad3 ||
++-		    __buf->__pad4 || __buf->__pad5) {
++-			__set_errno(EOVERFLOW);
++-			return -1;
++-		}
++-	}
++ 	return err;
++ };
++ /* Redefined fstatfs because we need it for backwards compatibility */
++diff --git a/libc/sysdeps/linux/common/statfs.c b/libc/sysdeps/linux/common/statfs.c
++index ab9ec0e56..2990ff3e2 100644
++--- a/libc/sysdeps/linux/common/statfs.c
+++++ b/libc/sysdeps/linux/common/statfs.c
++@@ -18,16 +18,6 @@ extern __typeof(statfs) __libc_statfs attribute_hidden;
++ int __libc_statfs(const char *path, struct statfs *buf)
++ {
++ 	int err = INLINE_SYSCALL(statfs64, 3, path, sizeof(*buf), buf);
++-
++-	if (err == 0) {
++-		/* Did we overflow? */
++-		if (buf->__pad1 || buf->__pad2 || buf->__pad3 ||
++-		    buf->__pad4 || buf->__pad5) {
++-			__set_errno(EOVERFLOW);
++-			return -1;
++-		}
++-	}
++-
++ 	return err;
++ }
++ # if defined __UCLIBC_LINUX_SPECIFIC__ || defined __UCLIBC_HAS_THREADS_NATIVE__
++-- 
++2.19.1
++
