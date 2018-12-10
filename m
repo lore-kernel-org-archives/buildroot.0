@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 10 Dec 2018 22:46:06 +0100
-Subject: [Buildroot] [PATCH v2 1/5] boot/optee-os: new package
-In-Reply-To: <1542990817-28362-1-git-send-email-etienne.carriere@linaro.org>
+Date: Mon, 10 Dec 2018 22:57:22 +0100
+Subject: [Buildroot] [PATCH v2 2/5] optee-client: new package
+In-Reply-To: <1542990817-28362-2-git-send-email-etienne.carriere@linaro.org>
 References: <1542900177-17343>
  <1542990817-28362-1-git-send-email-etienne.carriere@linaro.org>
-Message-ID: <20181210224606.36e6ad5e@windsurf>
+ <1542990817-28362-2-git-send-email-etienne.carriere@linaro.org>
+Message-ID: <20181210225722.01b691cb@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,411 +14,255 @@ To: buildroot@busybox.net
 
 Hello Etienne,
 
-Thanks for this second iteration, and thanks for submitting OPTEE to
-Buildroot, this would be a very useful addition. I now took the time to
-look into it, and I have a few questions.
+On Fri, 23 Nov 2018 17:33:34 +0100, Etienne Carriere wrote:
 
-On Fri, 23 Nov 2018 17:33:33 +0100, Etienne Carriere wrote:
-
-> diff --git a/boot/Config.in b/boot/Config.in
-> index 8e0c8e5..cd14731 100644
-> --- a/boot/Config.in
-> +++ b/boot/Config.in
-> @@ -13,6 +13,7 @@ source "boot/gummiboot/Config.in"
->  source "boot/lpc32xxcdl/Config.in"
->  source "boot/mv-ddr-marvell/Config.in"
->  source "boot/mxs-bootlets/Config.in"
-> +source "boot/optee-os/Config.in"
->  source "boot/riscv-pk/Config.in"
->  source "boot/s500-bootloader/Config.in"
->  source "boot/syslinux/Config.in"
-> diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
+> diff --git a/package/optee-client/Config.in b/package/optee-client/Config.in
 > new file mode 100644
-> index 0000000..7a598c6
+> index 0000000..cff452b
 > --- /dev/null
-> +++ b/boot/optee-os/Config.in
-> @@ -0,0 +1,100 @@
-> +config BR2_TARGET_OPTEE_OS
-> +	bool "optee_os"
-> +	depends on BR2_aarch64 || BR2_ARM_CPU_ARMV7A
+> +++ b/package/optee-client/Config.in
+> @@ -0,0 +1,73 @@
+> +config BR2_PACKAGE_OPTEE_CLIENT
+> +	bool "Embed OP-TEE client"
 
-Shouldn't this be:
+Just:
 
-	depends on BR2_ARM_CPU_ARMV8A || BR2_ARM_CPU_ARMV7A
-
-indeed, with depends on BR2_aarch64 || BR2_ARM_CPU_ARMV7A, you don't
-allow using OPTEE on a Cortex-A53/57/72 that would be used in 32-bit
-mode. Is this wanted ?
+	bool "optee-client"
 
 > +	help
-> +	  OP-TEE OS provides the secure world boot image and the trust
-> +	  application development kit of the OP-TEE project. OP-TEE OS
-> +	  also provides generic trusted application one can embedded
-> +	  into its system.
+> +	  Enable the OP-TEE client package that brings non-secure
+> +	  client application resources for OP-TEE support. OP-TEE
+> +	  client is a component delivered by the OP-TEE project.
 > +
-> +	  http://github.com/OP-TEE/optee_os
+> +	  https://github.com/OP-TEE/optee_client
+
+Please move this at the very end of the Config.in help text, i.e...
+
 > +
-> +if BR2_TARGET_OPTEE_OS
+> +	  The client API library allows application to invoke
+> +	  trusted applications hosted in the OP-TEE OS secure world.
+> +	  The supplicant provides services hosted by the non-secure
+> +	  world and invoked by the secure world.
+
+... here.
+
+> +
+> +if BR2_PACKAGE_OPTEE_CLIENT
 > +
 > +choice
-> +	prompt "OP-TEE OS version"
-> +	default BR2_TARGET_OPTEE_OS_LATEST
-> +	help
-> +	  Select the version of OP-TEE OS you want to use
-> +
-> +config BR2_TARGET_OPTEE_OS_LATEST
-> +	bool "sync with latest registered release tag"
+> +	prompt "OP-TEE client version"
 
-Please use:
+	prompt "version"
+
+> +	default BR2_PACKAGE_OPTEE_CLIENT_LATEST
+> +	help
+> +	  Select the version of OP-TEE client you want to use
+> +
+> +config BR2_PACKAGE_OPTEE_CLIENT_LATEST
+> +	bool "sync with latest registered release tag"
 
 	bool "3.3.0"
 
-so that it is similar with what we do in boot/uboot/Config.in for
-example.
-
 > +	help
-> +	  This fetches the latest registered release tag from
+> +	  Sync on latest release tag. This currently fetches the
 
-Don't say "latest", because it's not true: it's fetching one specific
-version.
+Don't say "latest", because it won't always be the latest.
 
-> +	  the OP-TEE OS official Git repository.
+> +	  latest registered release tag from the OP-TEE official
+> +	  Git repository.
 > +
-> +config BR2_TARGET_OPTEE_OS_CUSTOM_GIT
-> +	bool "sync on custom OP-TEE OS Git repository"
-
-Just:
+> +config BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_GIT
+> +	bool "sync with a specific Git"
 
 	bool "Custom Git repository"
 
 > +	help
 > +	  Sync with a specific OP-TEE Git repository.
 
-"Sync" is not really correct here. Actually, I think a help text is not
-really needed. See what boot/uboot/Config.in is doing, and follow that
-example.
+Is there actually a need to specify a custom version for this client
+library ? For the OS part, which is platform-specific, I understand,
+but for optee-client, is this really needed ?
 
 > +endchoice
 > +
-> +config BR2_TARGET_OPTEE_OS_VERSION
+> +config BR2_PACKAGE_OPTEE_CLIENT_SYNCED_VERSION
+> +	bool "use same version ref for OP-TEE components"
+
+I don't understand why you have this here. If you really want to do
+that, what about adding a third choice above:
+
+	bool "use same version as optee-os"
+
+> +	depends on BR2_PACKAGE_OPTEE_CLIENT_LATEST
+> +	default true
+
+default true doesn't mean anything, "default y" does. And it should
+depend on BR2_TARGET_OPTEE_OS being selected.
+
+But how can this make sense ? If the version for optee-os is a Git
+commit hash, how can optee-client use the same version, given that they
+are stored in two separate Git repositories, and that therefore it's
+impossible/unlikely that optee-os/optee-client will have the same Git
+commit hash. Or maybe this is only intended to work with Git tags? In
+this case, it should be clearly explained.
+
+> +	help
+> +	  When enabled, OP-TEE client version must match the version
+> +	  set for the other OP-TEE components.
+> +
+> +config BR2_PACKAGE_OPTEE_CLIENT_VERSION
 > +	string
-> +	default "3.3.0"		if BR2_TARGET_OPTEE_OS_LATEST
-> +	default BR2_TARGET_OPTEE_OS_CUSTOM_REPO_VERSION \
-> +				if BR2_TARGET_OPTEE_OS_CUSTOM_GIT
+> +	default BR2_TARGET_OPTEE_OS_VERSION \
+> +			if BR2_PACKAGE_OPTEE_CLIENT_SYNCED_VERSION && \
+> +			   BR2_TARGET_OPTEE_OS
 
-Please put this option after the REPO_URL/REPO_VERSION options.
+The dependency on BR2_TARGET_OPTEE_OS should not come here, but be on
+the BR2_PACKAGE_OPTEE_CLIENT_SYNCED_VERSION option.
 
-
-Put a:
-
-if BR2_TARGET_OPTEE_OS_CUSTOM_GIT
-
-here.
-
-> +config BR2_TARGET_OPTEE_OS_CUSTOM_REPO_URL
-> +	string "sourcetree-site"
+> +	default "3.3.0"	if BR2_PACKAGE_OPTEE_CLIENT_LATEST
+> +	default BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_REPO_VERSION \
+> +			if BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_GIT
+> +	help
+> +	  Reference in the target Git repository to sync with.
+> +
+> +if BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_GIT
+> +
+> +config BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_REPO_URL
+> +	string "Git repository site"
 
 	string "URL of custom repository"
-
-> +	depends on BR2_TARGET_OPTEE_OS_CUSTOM_GIT
-
-Drop this.
 
 > +	help
 > +	  Specific location of the reference source tree Git
 > +	  repository.
 > +
-> +config BR2_TARGET_OPTEE_OS_CUSTOM_REPO_VERSION
-> +	string "git reference to pull"
+> +config BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_REPO_VERSION
+> +	string "target reference to pull in the Git repository"
 
 	string "Custom repository version"
 
-> +	depends on BR2_TARGET_OPTEE_OS_CUSTOM_GIT
-
-And that
-
 > +	help
-> +	  Reference in the target git repository to sync with.
+> +	  Package version reference to sync with. As source file
 
-Finish with an
+Don't use "sync", you don't sync with Git.
 
-endif
-
-here.
-
-> +# Building core, TA libraries/devkit and/or generic TA services
-
-This comment is not really needed.
-
-> +config BR2_TARGET_OPTEE_OS_CORE
-> +	bool "Build core"
-> +	default y
-> +	help
-> +	  This option will build and install the OP-TEE core
-> +	  boot images.
+> +	  reference is a Git repository, the version reference can
+> +	  be any Git reference as a tag or a sha1.
 > +
-> +config BR2_TARGET_OPTEE_OS_SDK
-> +	bool "Build TA devkit"
-> +	default y
-> +	help
-> +	  This option will build and install the OP-TEE development
-> +	  kit for building OP-TEE trusted application images. It is
-> +          installed in the staging filetree in /lib/optee directory.
-
-Indentation of the last line is odd.
-
-filetree -> directory
-
-> +config BR2_TARGET_OPTEE_OS_SERVICES
-> +	bool "Build service TAs"
-> +	depends on BR2_TARGET_OPTEE_OS_SDK
-> +	default y
-> +	help
-> +	  This option install the generic trusted applications built
-> +	  from OP-TEE OS source tree. These are installed in the target
-> +	  /lib/optee_armtz directory. At runtime OP-TEE OS can load
-> +	  trusted applications from a non secure filesystem into the
-> +	  secure world for execution.
+> +endif
 > +
-> +# Building TA libraries and/or core images require target platform info
-
-This comment is also not very useful.
-
-> diff --git a/boot/optee-os/optee-os.hash b/boot/optee-os/optee-os.hash
+> +endif #BR2_PACKAGE_OPTEE_CLIENT
+> diff --git a/package/optee-client/S30optee b/package/optee-client/S30optee
 > new file mode 100644
-> index 0000000..02828a3
+> index 0000000..c893243
 > --- /dev/null
-> +++ b/boot/optee-os/optee-os.hash
+> +++ b/package/optee-client/S30optee
+> @@ -0,0 +1,26 @@
+> +#!/bin/sh
+> +#
+> +# /etc/init.d/optee
+
+Drop this comment, it is useless, and in fact wrong: the file will not
+have this name in a Buildroot filesystem.
+
+> +#
+> +# Start/stop tee-supplicant (OP-TEE normal world daemon)
+> +#
+> +case "$1" in
+> +    start)
+> +	if [ -e /usr/sbin/tee-supplicant -a -e /dev/teepriv0 ]; then
+
+Drop this test, just start tee-supplicatn.
+
+> +		echo "Starting tee-supplicant..."
+> +		/usr/sbin/tee-supplicant &
+
+Please use start-stop-daemon. See
+https://patchwork.ozlabs.org/patch/994013/ for the "right" way of
+writing an init script.
+
+> +		exit 0
+> +	else
+> +		echo "tee-supplicant or TEE device not found"
+> +		exit 1
+> +	fi
+> +
+> +        ;;
+> +    stop)
+> +	killall tee-supplicant
+
+Please use start-stop-daemon.
+
+> +	;;
+> +    status)
+> +	cat /dev/teepriv0 2>&1 | grep -q "Device or resource busy" || not="not "
+> +	echo "tee-supplicant is ${not}active"
+
+We don't provide a "status" target in other init scripts.
+
+> +	;;
+> +esac
+> diff --git a/package/optee-client/optee-client.hash b/package/optee-client/optee-client.hash
+> new file mode 100644
+> index 0000000..ed7bf4e
+> --- /dev/null
+> +++ b/package/optee-client/optee-client.hash
 > @@ -0,0 +1,4 @@
-> +# From https://github.com/OP-TEE/optee_os/archive/3.3.0.tar.gz
-> +sha256 7b62e9fe650e197473eb2f4dc35c09d1e6395eb48dc1c16cc139d401b359ac6f  optee-os-3.3.0.tar.gz
+> +# From https://github.com/OP-TEE/optee_client/archive/3.3.0.tar.gz
+> +sha256 63af1567fdcdbe28b45be274266a89aa81bef3d0fd8ec5a6eb680046a92e1177  optee-client-3.3.0.tar.gz
 > +# Locally computed
 > +sha256 fda8385993f112d7ca61b88b54ba5b4cbeec7e43a0f9b317d5186703c1985e8f  LICENSE
 
-Please put the license hash in boot/optee-os/3.3.0/optee-os.hash, so
-that it applies only to the 3.3.0 version and not to custom versions.
+Move the license hash in package/optee-client/3.3.0/optee-client.hash,
+as it is specific to this version.
 
-> diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
+> diff --git a/package/optee-client/optee-client.mk b/package/optee-client/optee-client.mk
 > new file mode 100644
-> index 0000000..14ad143
+> index 0000000..ccc5d12
 > --- /dev/null
-> +++ b/boot/optee-os/optee-os.mk
-> @@ -0,0 +1,101 @@
+> +++ b/package/optee-client/optee-client.mk
+> @@ -0,0 +1,30 @@
 > +################################################################################
 > +#
-> +# optee-os
+> +# optee-client
 > +#
 > +################################################################################
 > +
-> +OPTEE_OS_VERSION = $(call qstrip,$(BR2_TARGET_OPTEE_OS_VERSION))
-> +OPTEE_OS_LICENSE = BSD-2-Clause
-> +OPTEE_OS_LICENSE_FILES = LICENSE
+> +OPTEE_CLIENT_VERSION = $(call qstrip,$(BR2_PACKAGE_OPTEE_CLIENT_VERSION))
+> +OPTEE_CLIENT_LICENSE = BSD-3-Clause
 
-Move the OPTEE_OS_INSTALL_STAGING = YES and OPTEE_OS_INSTALL_IMAGES =
-YES here.
+The license text contains a BSD-2-Clause license.
 
-> +ifeq ($(BR2_TARGET_OPTEE_OS_CUSTOM_GIT),y)
-> +OPTEE_OS_SITE = $(call qstrip,$(BR2_TARGET_OPTEE_OS_CUSTOM_REPO_URL))
-> +OPTEE_OS_SITE_METHOD = git
-> +BR_NO_CHECK_HASH_FOR += $(OPTEE_OS_SOURCE)
+> +OPTEE_CLIENT_LICENSE_FILES = LICENSE
+> +
+> +ifeq ($(BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_GIT),y)
+> +OPTEE_CLIENT_SITE = $(call qstrip,$(BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_REPO_URL))
+> +OPTEE_CLIENT_SITE_METHOD = git
+> +BR_NO_CHECK_HASH_FOR += $(OPTEE_CLIENT_SOURCE)
 > +else
-> +OPTEE_OS_SITE = $(call github,OP-TEE,optee_os,$(OPTEE_OS_VERSION))
+> +OPTEE_CLIENT_SITE = $(call github,OP-TEE,optee_client,$(OPTEE_CLIENT_VERSION))
 > +endif
 > +
-> +OPTEE_OS_DEPENDENCIES = openssl host-python-pycrypto
-
-Are you sure these are needed? I could build for arm32 without them. If
-you really need openssl for the target, then the Config.in should
-select BR2_PACKAGE_OPENSSL.
-
-> +# On 64bit targets, OP-TEE OS can be built in 32bit mode, or
-> +# can be built in 64bit mode and support 32bit and 64bit
-> +# trusted applications. Since buildroot currently references
-> +# a single cross compiler, build exclusively in 32bit
-> +# or 64bit mode.
-> +OPTEE_OS_MAKE_OPTS = CROSS_COMPILE="$(TARGET_CROSS)"
-> +OPTEE_OS_MAKE_OPTS += CROSS_COMPILE_core="$(TARGET_CROSS)"
-
-OPTEE_OS_MAKE_OPTS = \
-	CROSS_COMPILE="$(TARGET_CROSS)" \
-	CROSS_COMPILE_core="$(TARGET_CROSS)"
-
-> +ifeq ($(BR2_aarch64),y)
-> +OPTEE_OS_MAKE_OPTS += CROSS_COMPILE_ta_arm64="$(TARGET_CROSS)"
-> +endif
-> +ifeq ($(BR2_arm),y)
-> +OPTEE_OS_MAKE_OPTS += CROSS_COMPILE_ta_arm32="$(TARGET_CROSS)"
-> +endif
-> +
-> +# Get mandatory PLAFORM and optional PLATFORM_FLAVOR
-> +OPTEE_OS_MAKE_OPTS += PLATFORM=$(call qstrip,$(BR2_TARGET_OPTEE_OS_PLATFORM))
-> +ifneq ($(BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR),)
-> +OPTEE_OS_MAKE_OPTS += PLATFORM_FLAVOR=$(call qstrip,$(BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR))
-> +endif
-> +OPTEE_OS_MAKE_OPTS += $(call qstrip,$(BR2_TARGET_OPTEE_OS_ADDITIONAL_VARIABLES))
-> +
-> +# Requests OP-TEE OS to build from subdirectory out/ of its synced sourcetree root path
-> +# otherwise the output directory path depends on the target platform name.
-> +OPTEE_OS_BUILDDIR_OUT = out
-> +
-> +ifeq ($(BR2_aarch64),y)
-> +OPTEE_OS_LOCAL_SDK = $(OPTEE_OS_BUILDDIR_OUT)/export-ta_arm64
-> +endif
-> +ifeq ($(BR2_arm),y)
-> +OPTEE_OS_LOCAL_SDK = $(OPTEE_OS_BUILDDIR_OUT)/export-ta_arm32
-> +endif
-> +
-> +ifeq ($(BR2_TARGET_OPTEE_OS_CORE),y)
-> +define OPTEE_OS_BUILD_CORE
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) O=$(OPTEE_OS_BUILDDIR_OUT) \
-> +		$(TARGET_CONFIGURE_OPTS) $(OPTEE_OS_MAKE_OPTS) all
-> +endef
-> +define OPTEE_OS_INSTALL_CORE
-
-This should be:
-
-define OPTEE_OS_INSTALL_IMAGES_CMDS
-
-> +	mkdir -p $(BINARIES_DIR)
-> +	cp -dpf $(@D)/$(OPTEE_OS_BUILDDIR_OUT)/core/tee.bin $(BINARIES_DIR)
-> +	cp -dpf $(@D)/$(OPTEE_OS_BUILDDIR_OUT)/core/tee-*_v2.bin $(BINARIES_DIR)
-> +endef
-> +endif
-> +
-> +ifeq ($(BR2_TARGET_OPTEE_OS_SDK),y)
-> +define OPTEE_OS_BUILD_SDK
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) O=$(OPTEE_OS_BUILDDIR_OUT) \
-> +		 $(TARGET_CONFIGURE_OPTS) $(OPTEE_OS_MAKE_OPTS) ta_dev_kit
-> +endef
-> +define OPTEE_OS_INSTALL_SDK
-
-This should be:
-
-define OPTEE_OS_INSTALL_STAGING_CMDS
-
-> +	mkdir -p $(STAGING_DIR)/lib/optee
-> +	cp -ardpf $(@D)/$(OPTEE_OS_LOCAL_SDK) $(STAGING_DIR)/lib/optee
-> +endef
-> +endif
-> +
-> +ifeq ($(BR2_TARGET_OPTEE_OS_SERVICES),y)
-> +# Core build already generates the TA services binaries. Install them.
-
-Is it the "core" that builds the TA services binaries? According to
-your Config.in dependencies, you can install the TA services binaries
-without building the Core, so it's not very consistent.
-
-Also, in my testing, building the zynq7k-zc702 platform, it never
-installed anything:
-
->>> optee-os 3.3.0 Installing to target
-mkdir -p /home/thomas/projets/buildroot/output/target/lib/optee_armtz
-true
-
-> +define OPTEE_OS_INSTALL_SERVICES
-
-This should be:
-
-define OPTEE_OS_INSTALL_TARGET_CMDS
-
-> +	mkdir -p $(TARGET_DIR)/lib/optee_armtz
-> +	$(foreach f,$(wildcard $(@D)/ta/*/$(OPTEE_OS_BUILDDIR_OUT)/*.ta), \
-> +		$(INSTALL) -v -p --mode=444 \
-> +			--target-directory=$(TARGET_DIR)/lib/optee_armtz \
-> +			 $f &&) true
-
-This seems more complicated that it needs to be. You could simplify this
-entire block this way:
-
-	$(INSTALL) -D -m 444 -t $(TARGET_DIR)/lib/optee_armtz $(@D)/ta/*/$(OPTEE_OS_BUILDDIR_OUT)/*.ta
-
-or if you really want to use a loop:
-
-	$(foreach f,$(wildcard $(@D)/ta/*/$(OPTEE_OS_BUILDDIR_OUT)/*.ta), \
-		$(INSTALL) -D -m 444 $(f) $(TARGET_DIR)/lib/optee_armtz/$(notdir $(f))
-	)
-
-> +define OPTEE_OS_BUILD_CMDS
-> +	$(OPTEE_OS_BUILD_CORE)
-> +	$(OPTEE_OS_BUILD_SDK)
+> +define OPTEE_CLIENT_INSTALL_SUPPLICANT_SCRIPT
+> +	$(INSTALL) -m 0755 -D $(OPTEE_CLIENT_PKGDIR)/S30optee \
+> +		$(TARGET_DIR)/etc/init.d/S30optee
 > +endef
 > +
-> +define OPTEE_OS_INSTALL_IMAGES_CMDS
-> +	$(OPTEE_OS_INSTALL_CORE)
-> +	$(OPTEE_OS_INSTALL_SDK)
-> +	$(OPTEE_OS_INSTALL_SERVICES)
+> +define OPTEE_CLIENT_INSTALL_INIT_SYSV
+> +	$(OPTEE_CLIENT_INSTALL_SUPPLICANT_SCRIPT)
 
-So, what is wrong here is to install everything within
-INSTALL_IMAGES_CMDS. That's why above, I suggest to use
-INSTALL_IMAGES_CMDS to install the core, INSTALL_STAGING_CMDS to
-install the SDK and INSTALL_TARGET_CMDS to install the services.
+Please do the $(INSTALL) right here, there is no reason to have an
+indirection through the OPTEE_CLIENT_INSTALL_SUPPLICANT_SCRIPT
+variable.
 
-> +endef
-> +
-> +OPTEE_OS_INSTALL_STAGING = YES
-> +OPTEE_OS_INSTALL_IMAGES = YES
+> +OPTEE_CLIENT_INSTALL_STAGING = YES
 
-As explained, this should move earlier in the file.
+Please move this a bit above in the .mk file. We generally have such
+statements before the build/installation commands.
 
-> +$(eval $(generic-package))
+Thanks!
 
-So, with the changes described above, I could build for
-PLATFORM=zynq7k-zc702 (with the issue that no services are installed).
-
-However, on ARM64 with PLATFORM=marvell-armada7k8k, it fails to build
-entirely. It tries to pass ARM32 gcc flags to an ARM64 compiler.
-
-Defconfig:
-
-BR2_aarch64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-# BR2_TARGET_ROOTFS_TAR is not set
-BR2_TARGET_OPTEE_OS=y
-BR2_TARGET_OPTEE_OS_PLATFORM="marvell-armada7k8k"
-
-Log:
-
-  CC      out/ta_arm32-lib/libmbedtls/mbedtls/library/aesni.o
-aarch64-linux-gnu-gcc: error: unrecognized command line option ?-mthumb?
-  CC      out/ta_arm32-lib/libmbedtls/mbedtls/library/arc4.o
-aarch64-linux-gnu-gcc: error: unrecognized command line option ?-mthumb-interwork?
-aarch64-linux-gnu-gcc: error: unrecognized command line option ?-mthumb?
-  CC      out/ta_arm32-lib/libmbedtls/mbedtls/library/asn1parse.o
-aarch64-linux-gnu-gcc: error: unrecognized command line option ?-mthumb-interwork?
-aarch64-linux-gnu-gcc: error: unrecognized command line option ?-mno-unaligned-access?; did you mean ?-Wno-aligned-new??
-aarch64-linux-gnu-gcc: error: unrecognized command line option ?-mthumb?
-aarch64-linux-gnu-gcc: error: unrecognized command line option ?-mfloat-abi=hard?
-make[2]: *** [mk/compile.mk:146: out/ta_arm32-lib/libmbedtls/mbedtls/library/aes.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-aarch64-linux-gnu-gcc: error: unrecognized command line option ?-mthumb-interwork?
-aarch64-linux-gnu-gcc: error: unrecognized command line option ?-mno-unaligned-access?; did you mean ?-Wno-aligned-new??
-aarch64-linux-gnu-gcc: error: unrecognized command line option ?-mfloat-abi=hard?
-make[2]: *** [mk/compile.mk:146: out/ta_arm32-lib/libmbedtls/mbedtls/library/arc4.o] Error 1
-aarch64-linux-gnu-gcc: error: unrecognized command line option ?-mno-unaligned-access?; did you mean ?-Wno-aligned-new??
-aarch64-linux-gnu-gcc: error: unrecognized command line option ?-mfloat-abi=hard?
-aarch64-linux-gnu-gcc: error: unrecognized command line option ?-mthumb?
-make[2]: *** [mk/compile.mk:146: out/ta_arm32-lib/libmbedtls/mbedtls/library/aesni.o] Error 1
-aarch64-linux-gnu-gcc: error: unrecognized command line option ?-mthumb-interwork?
-aarch64-linux-gnu-gcc: error: unrecognized command line option ?-mno-unaligned-access?; did you mean ?-Wno-aligned-new??
-aarch64-linux-gnu-gcc: error: unrecognized command line option ?-mfloat-abi=hard?
-make[2]: *** [mk/compile.mk:146: out/ta_arm32-lib/libmbedtls/mbedtls/library/asn1parse.o] Error 1
-
-Could you have a look at solving this issue and taking into account the
-above comments for a v3 ?
-
-Last, but not least, we would really need to have a test case for this
-in the support/testing/ infrastructure. At least one test for an ARM32
-platform and one test for an ARM64 platform. The minimal test would be
-to just do a build. A better test would use PLATFORM=vexpress-qemu_virt
-and PLATFORM=vexpress-qemu_armv8a and do some runtime testing.
-
-Best regards,
-
-Thomas Petazzoni
+Thomas
 -- 
 Thomas Petazzoni, CTO, Bootlin
 Embedded Linux and Kernel engineering
