@@ -1,50 +1,46 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon, 10 Dec 2018 08:52:34 +0100
-Subject: [Buildroot] [PATCH v2] utils/scanpypi: import third party modules
- after the standard ones
-Message-ID: <20181210075234.9168-1-yegorslists@googlemail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 10 Dec 2018 08:52:47 +0100
+Subject: [Buildroot] raspberrypi3_qt5we_defconfig fails to build
+ qt5webengine
+In-Reply-To: <20181209231707.103f56f9@gmx.net>
+References: <20181209165328.1d320e03@windsurf>
+ <20181209231707.103f56f9@gmx.net>
+Message-ID: <20181210085247.50b55d95@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hello,
 
-Move imports from six package after the standard modules. Resolves
-pylint warnings.
+On Sun, 9 Dec 2018 23:17:07 +0100, Peter Seiderer wrote:
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
-Changes v1 -> v2:
-	- change prefix to utils/scanpypi and add SoB (Thomas Petazzoni)
+> But QMAKE_COMPILER should already be set in mkspecs/common/g++-base.conf, but
+> is changed by buildroot package/qt5/qt5base/qt5base.mk from 'gcc' to
+> '/usr/bin/gcc' by
+> 
+>   # This allows to use ccache when available
+>   define QT5BASE_CONFIGURE_HOSTCC
+>           $(SED) 's,^QMAKE_COMPILER\s*=.*,QMAKE_COMPILER = $(HOSTCC),' $(@D)/mkspecs/common/g++-base.conf
+>           $(SED) 's,^QMAKE_CC\s*=.*,QMAKE_CC = $(HOSTCC),' $(@D)/mkspecs/common/g++-base.conf
+>           $(SED) 's,^QMAKE_CXX\s*=.*,QMAKE_CXX = $(HOSTCXX),' $(@D)/mkspecs/common/g++-base.conf
+>   endef
+> 
+> The rigth fix should be removing the first sed line, QMAKE_COMPILER is the
+> compiler flavour and not a compiler path (see e.g. [1])...
 
- utils/scanpypi | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Ah, ok. Thanks for looking into this.
 
-diff --git a/utils/scanpypi b/utils/scanpypi
-index 3d3e604435..9335bedee4 100755
---- a/utils/scanpypi
-+++ b/utils/scanpypi
-@@ -10,9 +10,6 @@ from __future__ import print_function
- from __future__ import absolute_import
- import argparse
- import json
--import six.moves.urllib.request
--import six.moves.urllib.error
--import six.moves.urllib.parse
- import sys
- import os
- import shutil
-@@ -25,6 +22,9 @@ import textwrap
- import tempfile
- import imp
- from functools import wraps
-+import six.moves.urllib.request
-+import six.moves.urllib.error
-+import six.moves.urllib.parse
- from six.moves import map
- from six.moves import zip
- from six.moves import input
+> Will send a proper patch (after some testing) soon...
+
+Thanks a lot, and sorry for this breakage, I caused it when adding the
+ccache stuff for HOSTCC in qt5base.mk.
+
+Thanks,
+
+Thomas
 -- 
-2.17.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
