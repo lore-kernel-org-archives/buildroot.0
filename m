@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 10 Dec 2018 11:47:26 +0100
-Subject: [Buildroot] [PATCH] gdb: Fix compilation for arc-2018.09 in
- some cases
-In-Reply-To: <20181210093526.29619-1-abrodkin@synopsys.com>
-References: <20181210093526.29619-1-abrodkin@synopsys.com>
-Message-ID: <20181210114726.7df0a5fa@windsurf>
+Date: Mon, 10 Dec 2018 11:47:30 +0100
+Subject: [Buildroot] [PATCH] libopenssl: Use HTTPS for URL
+In-Reply-To: <20181210100635.7611-1-joel@jms.id.au>
+References: <20181210100635.7611-1-joel@jms.id.au>
+Message-ID: <20181210114730.3035dac3@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,43 +12,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 10 Dec 2018 12:35:26 +0300, Alexey Brodkin wrote:
-> In some cases which seem to depend on how toolchain headers
-> got installed or configured we may face well-known by now failure
-> fixed in upstream with [1]:
-> ------------------------------>8----------------------------  
-> In file included from nat/linux-ptrace.c:20:
-> nat/linux-ptrace.h:175:22: error: expected identifier before numeric constant
->  # define TRAP_HWBKPT 4
->                       ^
-> nat/linux-ptrace.h:175:22: error: expected '}' before numeric constant
-> In file included from .../output/host/arc-buildroot-linux-gnu/sysroot/usr/include/signal.h:58,
->                  from build-gnulib/import/signal.h:52,
->                  from .../output/host/arc-buildroot-linux-gnu/sysroot/usr/include/sys/wait.h:36,
->                  from ./common/gdb_wait.h:23,
->                  from nat/linux-ptrace.c:24:
-> .../output/host/arc-buildroot-linux-gnu/sysroot/usr/include/bits/siginfo-consts.h:156:1: note: to match this '{'
->  {
->  ^
-> In file included from nat/linux-ptrace.c:20:
-> nat/linux-ptrace.h:175:22: error: expected unqualified-id before numeric constant
->  # define TRAP_HWBKPT 4
->                       ^
-> In file included from .../output/host/arc-buildroot-linux-gnu/sysroot/usr/include/features.h:428,
->                  from .../output/host/arc-buildroot-linux-gnu/sysroot/usr/include/bits/libc-header-start.h:33,
->                  from .../output/host/arc-buildroot-linux-gnu/sysroot/usr/include/stdio.h:27,
->                  from build-gnulib/import/stdio.h:43,
->                  from ./common/common-defs.h:52,
->                  from nat/linux-ptrace.c:19:
-> .../output/host/arc-buildroot-linux-gnu/sysroot/usr/include/sys/wait.h:158:1: error: expected declaration before '}' token
->  __END_DECLS
->  ^~~~~~~~~~~
-> ------------------------------>8----------------------------  
+On Mon, 10 Dec 2018 20:36:35 +1030, Joel Stanley wrote:
+> The host forces HTTPS regardless. This can be seen in the build logs:
+> 
+>  >>> host-libopenssl 1.0.2q Downloading  
+>  URL transformed to HTTPS due to an HSTS policy
+>  --2018-12-10 09:53:27--  https://www.openssl.org/source/openssl-1.0.2q.tar.gz
+> 
+> Signed-off-by: Joel Stanley <joel@jms.id.au>
+> ---
+>  package/libopenssl/libopenssl.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks. I see this patch is in gdb 8.2, so surely
-gdb 8.2 is not affected. What about previous gdb releases ?
-
-Best regards,
+Applied to master, thanks.
 
 Thomas
 -- 
