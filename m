@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 10 Dec 2018 22:01:32 +0100
-Subject: [Buildroot] [PATCH v5] netsurf: new package
-In-Reply-To: <20181205134040.20861-1-francois.perrad@gadz.org>
-References: <20181205134040.20861-1-francois.perrad@gadz.org>
-Message-ID: <20181210220132.1cbe0f96@windsurf>
+Date: Mon, 10 Dec 2018 22:02:04 +0100
+Subject: [Buildroot] [PATCH] package/waf: purge trailig '/' from WAF_SITE
+In-Reply-To: <8013501a-cffd-34e3-1fdd-1db64b51e4fe@mind.be>
+References: <20181210184559.13181-1-casantos@datacom.com.br>
+ <20181210204528.6cd1409d@windsurf>
+ <8013501a-cffd-34e3-1fdd-1db64b51e4fe@mind.be>
+Message-ID: <20181210220204.32874db6@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,33 +14,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  5 Dec 2018 14:40:40 +0100, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  DEVELOPERS                                    |  1 +
->  package/Config.in                             |  1 +
->  .../0001-avoid-system-perl-dependencies.patch | 29 ++++++++
->  package/netsurf/Config.in                     | 42 ++++++++++++
->  package/netsurf/netsurf.hash                  |  3 +
->  package/netsurf/netsurf.mk                    | 67 +++++++++++++++++++
->  6 files changed, 143 insertions(+)
->  create mode 100644 package/netsurf/0001-avoid-system-perl-dependencies.patch
->  create mode 100644 package/netsurf/Config.in
->  create mode 100644 package/netsurf/netsurf.hash
->  create mode 100644 package/netsurf/netsurf.mk
+On Mon, 10 Dec 2018 21:59:37 +0100, Arnout Vandecappelle wrote:
 
-Applied to master with the following changes:
+>  Because that check is within
+> 
+> ifeq ($$($$($(2)_KCONFIG_VAR)),y)
+> ...
+> endif
+> 
+> and these packages are host-only packages.
 
-    [Thomas:
-     - rename BR2_PACKAGE_NETSURF_FRAMEBUFFER to BR2_PACKAGE_NETSURF_SDL,
-       and use "sdl" everywhere instead of "framebuffer", since really SDL
-       can display on something else than the framebuffer
-     - use a "depends on BR2_PACKAGE_LIBGTK2" instead of a "depends on
-       BR2_PACKAGE_XORG7 + many other depends on + select
-       BR2_PACKAGE_LIBGTK2"
-     - use PKG_CONFIG_HOST_BINARY for the pkg-config path]
+Aah, indeed.
 
-Thanks!
+>  It has to be within that condition, since the _SITE may be set only or
+> differently based on kconfig options which are only set when the package is
+> selected. I tested and it fails for instance on arm-trusted-firmware if that
+> package is not selected.
+> 
+>  We need Config.in.host :-)
+
+Hehe, yes, we do :)
+
+Best regards,
 
 Thomas
 -- 
