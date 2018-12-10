@@ -1,49 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 10 Dec 2018 11:48:22 +0100
-Subject: [Buildroot] [git commit] package/gcc: remove unused
- HOST_GCC_FAKE_TESTSUITE
-Message-ID: <20181210104433.EEF3D86517@busybox.osuosl.org>
+Date: Mon, 10 Dec 2018 11:48:08 +0100
+Subject: [Buildroot] [PATCH] nodejs: security bump to version 8.14.0
+In-Reply-To: <20181209221830.13407-1-peter@korsgaard.com>
+References: <20181209221830.13407-1-peter@korsgaard.com>
+Message-ID: <20181210114808.466b3b05@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=469987b6d4517fbc29c769e3d2be4c5ed2a05841
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-HOST_GCC_FAKE_TESTSUITE was removed since commit [1].
+On Sun,  9 Dec 2018 23:18:30 +0100, Peter Korsgaard wrote:
+> Fixes the following security vulnerabilities:
+> 
+> - Node.js: Denial of Service with large HTTP headers (CVE-2018-12121)
+> - Node.js: Slowloris HTTP Denial of Service (CVE-2018-12122 / Node.js)
+> - Node.js: Hostname spoofing in URL parser for javascript protocol
+>   (CVE-2018-12123)
+> - Node.js: HTTP request splitting (CVE-2018-12116)
+> - OpenSSL: Timing vulnerability in DSA signature generation (CVE-2018-0734)
+> - OpenSSL: Microarchitecture timing vulnerability in ECC scalar
+>   multiplication (CVE-2018-5407)
+> 
+> For more details, see the announcement:
+> https://nodejs.org/en/blog/release/v8.14.0/
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/nodejs/nodejs.hash | 4 ++--
+>  package/nodejs/nodejs.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-[1] 545ca6a0f2f4e0d8b3812949476ac2856264b83c
+Applied to master, thanks.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gcc/gcc-final/gcc-final.mk     | 1 -
- package/gcc/gcc-initial/gcc-initial.mk | 1 -
- 2 files changed, 2 deletions(-)
-
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index cbde56ce1c..37b645d252 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -15,7 +15,6 @@ HOST_GCC_FINAL_DEPENDENCIES = \
- 	$(BR_LIBC)
- 
- HOST_GCC_FINAL_EXCLUDES = $(HOST_GCC_EXCLUDES)
--HOST_GCC_FINAL_POST_EXTRACT_HOOKS += HOST_GCC_FAKE_TESTSUITE
- 
- ifneq ($(ARCH_XTENSA_OVERLAY_FILE),)
- HOST_GCC_FINAL_POST_EXTRACT_HOOKS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
-diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-index d5d925a3d9..1decca8259 100644
---- a/package/gcc/gcc-initial/gcc-initial.mk
-+++ b/package/gcc/gcc-initial/gcc-initial.mk
-@@ -16,7 +16,6 @@ HOST_GCC_INITIAL_DL_SUBDIR = gcc
- HOST_GCC_INITIAL_DEPENDENCIES = $(HOST_GCC_COMMON_DEPENDENCIES)
- 
- HOST_GCC_INITIAL_EXCLUDES = $(HOST_GCC_EXCLUDES)
--HOST_GCC_INITIAL_POST_EXTRACT_HOOKS += HOST_GCC_FAKE_TESTSUITE
- 
- ifneq ($(ARCH_XTENSA_OVERLAY_FILE),)
- HOST_GCC_INITIAL_POST_EXTRACT_HOOKS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
