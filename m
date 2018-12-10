@@ -1,33 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 10 Dec 2018 11:47:38 +0100
-Subject: [Buildroot] [PATCH v2] utils/scanpypi: import third party
- modules after the standard ones
-In-Reply-To: <20181210075234.9168-1-yegorslists@googlemail.com>
-References: <20181210075234.9168-1-yegorslists@googlemail.com>
-Message-ID: <20181210114738.03478ee4@windsurf>
+Date: Mon, 10 Dec 2018 11:46:36 +0100
+Subject: [Buildroot] [git commit] utils/scanpypi: import third party modules
+ after the standard ones
+Message-ID: <20181210104410.53A0080404@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e273c36ad086189c081a41f2de7966348e085e37
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 10 Dec 2018 08:52:34 +0100, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Move imports from six package after the standard modules. Resolves
-> pylint warnings.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
-> Changes v1 -> v2:
-> 	- change prefix to utils/scanpypi and add SoB (Thomas Petazzoni)
+Move imports from six package after the standard modules. Resolves
+pylint warnings.
 
-Applied to master, thanks.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ utils/scanpypi | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/utils/scanpypi b/utils/scanpypi
+index 3d3e604435..9335bedee4 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -10,9 +10,6 @@ from __future__ import print_function
+ from __future__ import absolute_import
+ import argparse
+ import json
+-import six.moves.urllib.request
+-import six.moves.urllib.error
+-import six.moves.urllib.parse
+ import sys
+ import os
+ import shutil
+@@ -25,6 +22,9 @@ import textwrap
+ import tempfile
+ import imp
+ from functools import wraps
++import six.moves.urllib.request
++import six.moves.urllib.error
++import six.moves.urllib.parse
+ from six.moves import map
+ from six.moves import zip
+ from six.moves import input
