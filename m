@@ -1,12 +1,15 @@
-From: Joel Stanley <joel@jms.id.au>
-Date: Mon, 10 Dec 2018 20:36:35 +1030
-Subject: [Buildroot] [PATCH] libopenssl: Use HTTPS for URL
-Message-ID: <20181210100635.7611-1-joel@jms.id.au>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 10 Dec 2018 11:42:14 +0100
+Subject: [Buildroot] [git commit] package/libopenssl: use HTTPS for URL
+Message-ID: <20181210103829.D8EB68B686@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=4d6fa0376064dcd3bc2901402307d6730e7b4b8b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 The host forces HTTPS regardless. This can be seen in the build logs:
 
@@ -15,12 +18,13 @@ The host forces HTTPS regardless. This can be seen in the build logs:
  --2018-12-10 09:53:27--  https://www.openssl.org/source/openssl-1.0.2q.tar.gz
 
 Signed-off-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
  package/libopenssl/libopenssl.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index ca0521b2291e..dc15abf66a08 100644
+index ca0521b229..dc15abf66a 100644
 --- a/package/libopenssl/libopenssl.mk
 +++ b/package/libopenssl/libopenssl.mk
 @@ -5,7 +5,7 @@
@@ -32,5 +36,3 @@ index ca0521b2291e..dc15abf66a08 100644
  LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
  LIBOPENSSL_LICENSE = OpenSSL or SSLeay
  LIBOPENSSL_LICENSE_FILES = LICENSE
--- 
-2.19.1
