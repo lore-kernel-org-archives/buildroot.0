@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 10 Dec 2018 11:47:30 +0100
-Subject: [Buildroot] [PATCH] libopenssl: Use HTTPS for URL
-In-Reply-To: <20181210100635.7611-1-joel@jms.id.au>
-References: <20181210100635.7611-1-joel@jms.id.au>
-Message-ID: <20181210114730.3035dac3@windsurf>
+Date: Mon, 10 Dec 2018 11:47:38 +0100
+Subject: [Buildroot] [PATCH v2] utils/scanpypi: import third party
+ modules after the standard ones
+In-Reply-To: <20181210075234.9168-1-yegorslists@googlemail.com>
+References: <20181210075234.9168-1-yegorslists@googlemail.com>
+Message-ID: <20181210114738.03478ee4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +13,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 10 Dec 2018 20:36:35 +1030, Joel Stanley wrote:
-> The host forces HTTPS regardless. This can be seen in the build logs:
+On Mon, 10 Dec 2018 08:52:34 +0100, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
 > 
->  >>> host-libopenssl 1.0.2q Downloading  
->  URL transformed to HTTPS due to an HSTS policy
->  --2018-12-10 09:53:27--  https://www.openssl.org/source/openssl-1.0.2q.tar.gz
+> Move imports from six package after the standard modules. Resolves
+> pylint warnings.
 > 
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 > ---
->  package/libopenssl/libopenssl.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Changes v1 -> v2:
+> 	- change prefix to utils/scanpypi and add SoB (Thomas Petazzoni)
 
 Applied to master, thanks.
 
