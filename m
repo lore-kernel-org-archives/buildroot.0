@@ -1,200 +1,314 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 9 Dec 2018 23:48:36 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/uclibc: add
- upstream patch to fix aarch64 issues
-Message-ID: <20181210232122.54CC58B62D@busybox.osuosl.org>
+From: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+Date: Tue, 11 Dec 2018 14:49:01 +1100
+Subject: [Buildroot] [RFC v2] localedef: update to glibc-2.28 and
+ various fixes
+In-Reply-To: <20181206191009.3830-1-ps.report@gmx.net>
+References: <20181206191009.3830-1-ps.report@gmx.net>
+Message-ID: <a0bbfbe40541bfc99f07a9d3b1b99e2647e8c796.camel@mendozajonas.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31067b97c03f57ac944a207e2238ce334dafe862
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+On Thu, 2018-12-06 at 20:10 +0100, Peter Seiderer wrote:
+> Follow up on original patch [1], various fixes and update according
+> to the given comments:
+> 
+> - update to glibc-2.28
+> 
+> - add ptxdist patch 0001-HACK-only-build-and-install-localedef.patch,
+>   needed for make target locale/others
+> 
+> - use make target locale/others (like ptxdist does)
+> 
+> - add 0002-HACK-accept-old-toolchains.patch, fix configure for old
+>   host toolchains
+> 
+> - remove various target related options
+> 
+> - remove stubs.h header creation
+> 
+> - do not change '--prefix=/usr' to '--prefix=$(HOST_DIR)', otherwise
+>   leads to the following failure:
+> 
+>   Generating locale en_US.UTF-8
+>   cannot create temporary file: .../target/home/seiderer/Buildroot-2018-11/build_2018_11_002/host/lib/locale/locale-archive.wXbLbC: No such file or directory
+>   Makefile:715: recipe for target 'target-finalize' failed
+>   make[1]: *** [target-finalize] Error 1
+>   Makefile:23: recipe for target '_all' failed
+>   make: *** [_all] Error 2
+> 
+> - remove uselsess '$(eval $(autotools-package))'
+> 
+> [1] https://patchwork.ozlabs.org/patch/950717/
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-fstatfs/statfs on aarch64 seems broken, add a patch from uClibc-ng
-upstream git to fix it.
+Tested-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2179ca4a61b4574854075e4cdc1e2b851fa0d5b3)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...5-statfs.h-sync-generic-header-with-glibc.patch | 169 +++++++++++++++++++++
- 1 file changed, 169 insertions(+)
+Thanks for picking this up Peter. I asked briefly on the glibc mailing
+list as well if there is a nicer path to this but so far it doesn't sound
+promising; this may be the way we have to go.
+https://sourceware.org/ml/libc-help/2018-12/msg00000.html
 
-diff --git a/package/uclibc/0005-statfs.h-sync-generic-header-with-glibc.patch b/package/uclibc/0005-statfs.h-sync-generic-header-with-glibc.patch
-new file mode 100644
-index 0000000000..b8753ed879
---- /dev/null
-+++ b/package/uclibc/0005-statfs.h-sync-generic-header-with-glibc.patch
-@@ -0,0 +1,169 @@
-+From 8a73a967e18c55199785bae0f22dc94d9b2f8985 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbrodkorb@conet.de>
-+Date: Tue, 27 Nov 2018 15:41:37 +0100
-+Subject: [PATCH] statfs.h: sync generic header with glibc
-+
-+Fix issues with aarch64 and df with mismatching header between kernel
-+and libc.
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+---
-+ .../linux/common-generic/bits/statfs.h        | 84 +++++++++----------
-+ libc/sysdeps/linux/common/fstatfs.c           |  9 --
-+ libc/sysdeps/linux/common/statfs.c            | 10 ---
-+ 3 files changed, 40 insertions(+), 63 deletions(-)
-+
-+diff --git a/libc/sysdeps/linux/common-generic/bits/statfs.h b/libc/sysdeps/linux/common-generic/bits/statfs.h
-+index a2767b49a..23519a57e 100644
-+--- a/libc/sysdeps/linux/common-generic/bits/statfs.h
-++++ b/libc/sysdeps/linux/common-generic/bits/statfs.h
-+@@ -11,65 +11,61 @@
-+ #include <endian.h>
-+ #include <bits/align64bit.h>
-+ #include <bits/types.h>
-++#include <bits/wordsize.h>
-+ 
-++/* 64-bit libc uses the kernel's 'struct statfs', accessed via the
-++   statfs() syscall; 32-bit libc uses the kernel's 'struct statfs64'
-++   and accesses it via the statfs64() syscall.  All the various
-++   APIs offered by libc use the kernel shape for their struct statfs
-++   structure; the only difference is that 32-bit programs not
-++   using __USE_FILE_OFFSET64 only see the low 32 bits of some
-++   of the fields (the __fsblkcnt_t and __fsfilcnt_t fields).  */
-++
-++#if defined __USE_FILE_OFFSET64
-++# define __field64(type, type64, name) type64 name
-++#elif __WORDSIZE == 64
-++# define __field64(type, type64, name) type name
-++#elif __BYTE_ORDER == __LITTLE_ENDIAN
-++# define __field64(type, type64, name) \
-++  type name __attribute__((__aligned__ (__alignof__ (type64)))); int __##name##_pad
-++#else
-++# define __field64(type, type64, name) \
-++  int __##name##_pad __attribute__((__aligned__ (__alignof__ (type64)))); type name
-++#endif
-+ 
-+ struct statfs
-+   {
-+-    __U32_TYPE f_type;
-+-    __U32_TYPE f_bsize;
-+-#ifndef __USE_FILE_OFFSET64
-+-# if __BYTE_ORDER == __LITTLE_ENDIAN
-+-    __U32_TYPE f_blocks;
-+-    __U32_TYPE __pad1;
-+-    __U32_TYPE f_bfree;
-+-    __U32_TYPE __pad2;
-+-    __U32_TYPE f_bavail;
-+-    __U32_TYPE __pad3;
-+-    __U32_TYPE f_files;
-+-    __U32_TYPE __pad4;
-+-    __U32_TYPE f_ffree;
-+-    __U32_TYPE __pad5;
-+-# else
-+-    __U32_TYPE __pad1;
-+-    __U32_TYPE f_blocks;
-+-    __U32_TYPE __pad2;
-+-    __U32_TYPE f_bfree;
-+-    __U32_TYPE __pad3;
-+-    __U32_TYPE f_bavail;
-+-    __U32_TYPE __pad4;
-+-    __U32_TYPE f_files;
-+-    __U32_TYPE __pad5;
-+-    __U32_TYPE f_ffree;
-+-# endif /* __LITTLE_ENDIAN */
-+-#else
-+-    __U64_TYPE f_blocks;
-+-    __U64_TYPE f_bfree;
-+-    __U64_TYPE f_bavail;
-+-    __U64_TYPE f_files;
-+-    __U64_TYPE f_ffree;
-+-#endif /* __USE_FILE_OFFSET64 */
-++    __SWORD_TYPE f_type;
-++    __SWORD_TYPE f_bsize;
-++    __field64(__fsblkcnt_t, __fsblkcnt64_t, f_blocks);
-++    __field64(__fsblkcnt_t, __fsblkcnt64_t, f_bfree);
-++    __field64(__fsblkcnt_t, __fsblkcnt64_t, f_bavail);
-++    __field64(__fsfilcnt_t, __fsfilcnt64_t, f_files);
-++    __field64(__fsfilcnt_t, __fsfilcnt64_t, f_ffree);
-+     __fsid_t f_fsid;
-+-    __U32_TYPE f_namelen;
-+-    __U32_TYPE f_frsize;
-+-    __U32_TYPE f_flags;
-+-    __U32_TYPE f_spare[4];
-+-  } __ARCH_64BIT_ALIGNMENT__;
-++    __SWORD_TYPE f_namelen;
-++    __SWORD_TYPE f_frsize;
-++    __SWORD_TYPE f_flags;
-++    __SWORD_TYPE f_spare[4];
-++  };
-++
-++#undef __field64
-+ 
-+ #ifdef __USE_LARGEFILE64
-+ struct statfs64
-+   {
-+-    __U32_TYPE f_type;
-+-    __U32_TYPE f_bsize;
-++    __SWORD_TYPE f_type;
-++    __SWORD_TYPE f_bsize;
-+     __U64_TYPE f_blocks;
-+     __U64_TYPE f_bfree;
-+     __U64_TYPE f_bavail;
-+     __U64_TYPE f_files;
-+     __U64_TYPE f_ffree;
-+     __fsid_t f_fsid;
-+-    __U32_TYPE f_namelen;
-+-    __U32_TYPE f_frsize;
-+-    __U32_TYPE f_flags;
-+-    __U32_TYPE f_spare[4];
-++    __SWORD_TYPE f_namelen;
-++    __SWORD_TYPE f_frsize;
-++    __SWORD_TYPE f_flags;
-++    __SWORD_TYPE f_spare[4];
-+   };
-+ #endif
-+ 
-+diff --git a/libc/sysdeps/linux/common/fstatfs.c b/libc/sysdeps/linux/common/fstatfs.c
-+index fcb0820eb..0b2709ce3 100644
-+--- a/libc/sysdeps/linux/common/fstatfs.c
-++++ b/libc/sysdeps/linux/common/fstatfs.c
-+@@ -30,15 +30,6 @@ _syscall2(int, __libc_fstatfs, int, fd, struct statfs *, buf)
-+ int __libc_fstatfs (int __fildes, struct statfs *__buf)
-+ {
-+ 	int err = INLINE_SYSCALL(fstatfs64, 3, __fildes, sizeof(*__buf), __buf);
-+-
-+-	if (err == 0) {
-+-		/* Did we overflow? */
-+-		if (__buf->__pad1 || __buf->__pad2 || __buf->__pad3 ||
-+-		    __buf->__pad4 || __buf->__pad5) {
-+-			__set_errno(EOVERFLOW);
-+-			return -1;
-+-		}
-+-	}
-+ 	return err;
-+ };
-+ /* Redefined fstatfs because we need it for backwards compatibility */
-+diff --git a/libc/sysdeps/linux/common/statfs.c b/libc/sysdeps/linux/common/statfs.c
-+index ab9ec0e56..2990ff3e2 100644
-+--- a/libc/sysdeps/linux/common/statfs.c
-++++ b/libc/sysdeps/linux/common/statfs.c
-+@@ -18,16 +18,6 @@ extern __typeof(statfs) __libc_statfs attribute_hidden;
-+ int __libc_statfs(const char *path, struct statfs *buf)
-+ {
-+ 	int err = INLINE_SYSCALL(statfs64, 3, path, sizeof(*buf), buf);
-+-
-+-	if (err == 0) {
-+-		/* Did we overflow? */
-+-		if (buf->__pad1 || buf->__pad2 || buf->__pad3 ||
-+-		    buf->__pad4 || buf->__pad5) {
-+-			__set_errno(EOVERFLOW);
-+-			return -1;
-+-		}
-+-	}
-+-
-+ 	return err;
-+ }
-+ # if defined __UCLIBC_LINUX_SPECIFIC__ || defined __UCLIBC_HAS_THREADS_NATIVE__
-+-- 
-+2.19.1
-+
+> ---
+> Changes v1 -> v2:
+>   - remove patch duplicate 0001-accept-old-as.patch-001
+>   - fix LOCALEDEF_SITE (GLIBC_VERSION vs. LOCALEDEF_VERSION)
+>   - update 0001-HACK-only-build-and-install-localedef.patch (add upstream
+>     url and signed-of-by)
+>   - update 0002-HACK-accept-old-toolchains.patch (convert to git patch,
+>     add signed-of-by)
+> 
+> Notes:
+> 
+>     The following programs shows the failure with Buildroot-2018.11/glibc-2.28:
+> 
+>       #include <stdio.h>
+>       #include <string.h>
+>       #include <locale.h>
+> 
+>       int main(int argc, char *argv[])
+>       {
+>           const char* set_locale = setlocale(LC_ALL, "");
+>           printf("set_locale: %s\n", set_locale);
+> 
+>           int delta = strcoll("a", "A");
+>           printf("strcoll(a, A): %d\n", delta);
+> 
+>           delta = strcoll("A", "a");
+>           printf("strcoll(A, a): %d\n", delta);
+> 
+>           return 0;
+>       }
+> 
+>             $ ./test
+>     set_locale: C
+>     strcoll(a, A): 32
+>     strcoll(A, a): -32
+> 
+>     This one should give the same output as the one with LC_COLLATE=en_US.UTF-8, but failes to do so:
+>             $ LC_ALL=en_US.UTF-8 ./test
+>     set_locale: (null)
+>     strcoll(a, A): 32
+>     strcoll(A, a): -32
+> 
+>             $ LC_COLLATE=en_US.UTF-8 ./test
+>     set_locale: LC_CTYPE=C;LC_NUMERIC=C;LC_TIME=C;LC_COLLATE=en_US.UTF-8;LC_MONETARY=C;LC_MESSAGES=C;LC_PAPER=C;LC_NAME=C;LC_ADDRESS=C;LC_TELEPHONE=C;LC_MEASUREMENT=C;LC_IDENTIFICATION=C
+>     strcoll(a, A): -5
+>     strcoll(A, a): 5
+> ---
+>  ...ACK-only-build-and-install-localedef.patch | 63 +++++++++++++++++++
+>  .../0002-HACK-accept-old-toolchains.patch     | 44 +++++++++++++
+>  package/localedef/localedef.hash              |  2 +-
+>  package/localedef/localedef.mk                | 47 +++-----------
+>  4 files changed, 116 insertions(+), 40 deletions(-)
+>  create mode 100644 package/localedef/0001-HACK-only-build-and-install-localedef.patch
+>  create mode 100644 package/localedef/0002-HACK-accept-old-toolchains.patch
+> 
+> diff --git a/package/localedef/0001-HACK-only-build-and-install-localedef.patch b/package/localedef/0001-HACK-only-build-and-install-localedef.patch
+> new file mode 100644
+> index 0000000000..8d5fefbb82
+> --- /dev/null
+> +++ b/package/localedef/0001-HACK-only-build-and-install-localedef.patch
+> @@ -0,0 +1,63 @@
+> +From 3a32e5840048ef7db7858ce324731be7a82ddf90 Mon Sep 17 00:00:00 2001
+> +From: Michael Olbrich <m.olbrich@pengutronix.de>
+> +Date: Mon, 21 May 2018 16:45:02 +0200
+> +Subject: [PATCH] HACK: only build and install localedef
+> +
+> +Signed-off-by: Michael Olbrich <m.olbrich@pengutronix.de>
+> +
+> +Upstream: https://git.pengutronix.de/cgit/ptxdist/plain/patches/localedef-glibc-2.27/0001-HACK-only-build-and-install-localedef.patch?id=47116f66f411d4dadfce42c2fdd6d41b351ccfd4
+> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> +---
+> + Rules           | 14 ++++++++++----
+> + locale/Makefile |  6 +++---
+> + 2 files changed, 13 insertions(+), 7 deletions(-)
+> +
+> +diff --git a/Rules b/Rules
+> +index 706c8a74..04f3f333 100644
+> +--- a/Rules
+> ++++ b/Rules
+> +@@ -188,10 +188,16 @@ binaries-shared-notests = $(filter-out $(binaries-pie) $(binaries-static), \
+> + 				       $(binaries-all-notests))
+> + 
+> + ifneq "$(strip $(binaries-shared-notests))" ""
+> +-$(addprefix $(objpfx),$(binaries-shared-notests)): %: %.o \
+> +-  $(sort $(filter $(common-objpfx)lib%,$(link-libc))) \
+> +-  $(addprefix $(csu-objpfx),start.o) $(+preinit) $(+postinit)
+> +-	$(+link)
+> ++$(addprefix $(objpfx),$(binaries-shared-notests)): %: %.o
+> ++	$(CC) -o $@ \
+> ++	      $(sysdep-LDFLAGS) $(LDFLAGS) $(LDFLAGS-$(@F)) \
+> ++	      $(combreloc-LDFLAGS) $(relro-LDFLAGS) $(hashstyle-LDFLAGS) \
+> ++	      $(filter-out $(addprefix $(csu-objpfx),start.o \
+> ++						     $(start-installed-name))\
+> ++			   $(+preinit) \
+> ++			   $(link-extra-libs) \
+> ++			   $(common-objpfx)libc% $(+postinit),$^) \
+> ++	      $(link-extra-libs)
+> + endif
+> + 
+> + ifneq "$(strip $(binaries-shared-tests))" ""
+> +diff --git a/locale/Makefile b/locale/Makefile
+> +index fd997227..a8541593 100644
+> +--- a/locale/Makefile
+> ++++ b/locale/Makefile
+> +@@ -32,13 +32,13 @@ categories	= ctype messages monetary numeric time paper name \
+> + 		  address telephone measurement identification collate
+> + aux		= $(categories:%=lc-%) $(categories:%=C-%) SYS_libc C_name \
+> + 		  xlocale localename global-locale coll-lookup
+> +-others		= localedef locale
+> ++others		= localedef
+> + #others-static	= localedef locale
+> +-install-bin	= localedef locale
+> ++install-bin	= localedef
+> + extra-objs	= $(localedef-modules:=.o) $(localedef-aux:=.o) \
+> + 		  $(locale-modules:=.o) $(lib-modules:=.o)
+> + 
+> +-extra-libs	= libBrokenLocale
+> ++#extra-libs	= libBrokenLocale
+> + extra-libs-others = $(extra-libs)
+> + 
+> + libBrokenLocale-routines = broken_cur_max
+> +-- 
+> +2.19.2
+> +
+> diff --git a/package/localedef/0002-HACK-accept-old-toolchains.patch b/package/localedef/0002-HACK-accept-old-toolchains.patch
+> new file mode 100644
+> index 0000000000..93305093ad
+> --- /dev/null
+> +++ b/package/localedef/0002-HACK-accept-old-toolchains.patch
+> @@ -0,0 +1,44 @@
+> +From 3781bea6277974169cb64d676aad19d3ff358212 Mon Sep 17 00:00:00 2001
+> +From: Peter Seiderer <ps.report@gmx.net>
+> +Date: Thu, 6 Dec 2018 19:10:24 +0100
+> +Subject: [PATCH] HACK: accept old toolchains
+> +
+> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> +---
+> + configure | 6 +++---
+> + 1 file changed, 3 insertions(+), 3 deletions(-)
+> +
+> +diff --git a/configure b/configure
+> +index fde57d63..44082866 100755
+> +--- a/configure
+> ++++ b/configure
+> +@@ -4519,7 +4519,7 @@ $as_echo_n "checking version of $AS... " >&6; }
+> +   ac_prog_version=`$AS --version 2>&1 | sed -n 's/^.*GNU assembler.* \([0-9]*\.[0-9.]*\).*$/\1/p'`
+> +   case $ac_prog_version in
+> +     '') ac_prog_version="v. ?.??, bad"; ac_verc_fail=yes;;
+> +-    2.1[0-9][0-9]*|2.2[5-9]*|2.[3-9][0-9]*|[3-9].*|[1-9][0-9]*)
+> ++    2.1[0-9][0-9]*|2.2[4-9]*|2.[3-9][0-9]*|[3-9].*|[1-9][0-9]*)
+> +        ac_prog_version="$ac_prog_version, ok"; ac_verc_fail=no;;
+> +     *) ac_prog_version="$ac_prog_version, bad"; ac_verc_fail=yes;;
+> + 
+> +@@ -4649,7 +4649,7 @@ $as_echo_n "checking version of $LD... " >&6; }
+> +   ac_prog_version=`$LD --version 2>&1 | sed -n 's/^.*GNU ld.* \([0-9][0-9]*\.[0-9.]*\).*$/\1/p'`
+> +   case $ac_prog_version in
+> +     '') ac_prog_version="v. ?.??, bad"; ac_verc_fail=yes;;
+> +-    2.1[0-9][0-9]*|2.2[5-9]*|2.[3-9][0-9]*|[3-9].*|[1-9][0-9]*)
+> ++    2.1[0-9][0-9]*|2.2[4-9]*|2.[3-9][0-9]*|[3-9].*|[1-9][0-9]*)
+> +        ac_prog_version="$ac_prog_version, ok"; ac_verc_fail=no;;
+> +     *) ac_prog_version="$ac_prog_version, bad"; ac_verc_fail=yes;;
+> + 
+> +@@ -5058,7 +5058,7 @@ int
+> + main ()
+> + {
+> + 
+> +-#if !defined __GNUC__ || __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 9)
+> ++#if !defined __GNUC__ || __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 8)
+> + #error insufficient compiler
+> + #endif
+> +   ;
+> +-- 
+> +2.19.2
+> +
+> diff --git a/package/localedef/localedef.hash b/package/localedef/localedef.hash
+> index 6f2d6313b6..cfc8e984fa 100644
+> --- a/package/localedef/localedef.hash
+> +++ b/package/localedef/localedef.hash
+> @@ -1,2 +1,2 @@
+>  # Locally calculated
+> -sha256 33189b3f10c88730a1f686fac794bc01f31765f12ffd75bc5e8a0f2a690d217a  localedef-glibc-2.27-57-g6c99e37f6fb640a50a3113b2dbee5d5389843c1e.tar.gz
+> +sha256 877c7b4741501d1762af8ef1a2518bdf2d722947d2e8d48b203e2d83cc600bca glibc-glibc-2.28.tar.gz
+> diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+> index c93132cc3f..9928590b9e 100644
+> --- a/package/localedef/localedef.mk
+> +++ b/package/localedef/localedef.mk
+> @@ -5,47 +5,15 @@
+>  ################################################################################
+>  
+>  # Use the same VERSION and SITE as target glibc
+> -LOCALEDEF_VERSION = glibc-2.27-57-g6c99e37f6fb640a50a3113b2dbee5d5389843c1e
+> -LOCALEDEF_SITE = $(call github,bminor,glibc,$(GLIBC_VERSION))
+> +LOCALEDEF_VERSION = glibc-2.28
+> +LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
+> +LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
+>  
+>  HOST_LOCALEDEF_LICENSE = GPL-2.0+ (programs), LGPL-2.1+, BSD-3-Clause, MIT (library)
+>  HOST_LOCALEDEF_LICENSE_FILES = COPYING COPYING.LIB LICENSES
+>  
+> -# glibc is part of the toolchain so disable the toolchain dependency
+> -HOST_LOCALEDEF_ADD_TOOLCHAIN_DEPENDENCY = NO
+> -
+>  HOST_LOCALEDEF_SUBDIR = build
+>  
+> -# Thumb build is broken, build in ARM mode
+> -ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
+> -HOST_LOCALEDEF_EXTRA_CFLAGS += -marm
+> -endif
+> -
+> -# MIPS64 defaults to n32 so pass the correct -mabi if
+> -# we are using a different ABI. OABI32 is also used
+> -# in MIPS so we pass -mabi=32 in this case as well
+> -# even though it's not strictly necessary.
+> -ifeq ($(BR2_MIPS_NABI64),y)
+> -HOST_LOCALEDEF_EXTRA_CFLAGS += -mabi=64
+> -else ifeq ($(BR2_MIPS_OABI32),y)
+> -HOST_LOCALEDEF_EXTRA_CFLAGS += -mabi=32
+> -endif
+> -
+> -ifeq ($(BR2_ENABLE_DEBUG),y)
+> -HOST_LOCALEDEF_EXTRA_CFLAGS += -g
+> -endif
+> -
+> -# The stubs.h header is not installed by install-headers, but is
+> -# needed for the gcc build. An empty stubs.h will work, as explained
+> -# in http://gcc.gnu.org/ml/gcc/2002-01/msg00900.html. The same trick
+> -# is used by Crosstool-NG.
+> -ifeq ($(BR2_TOOLCHAIN_BUILDROOT_HOST_LOCALEDEF),y)
+> -define HOST_LOCALEDEF_ADD_MISSING_STUB_H
+> -	mkdir -p $(STAGING_DIR)/usr/include/gnu
+> -	touch $(STAGING_DIR)/usr/include/gnu/stubs.h
+> -endef
+> -endif
+> -
+>  # Even though we use the autotools-package infrastructure, we have to
+>  # override the default configure commands for several reasons:
+>  #
+> @@ -72,17 +40,18 @@ define HOST_LOCALEDEF_CONFIGURE_CMDS
+>  		--host=$(GNU_HOST_NAME) \
+>  		--build=$(GNU_HOST_NAME) \
+>  		--prefix=/usr \
+> -		$(if $(BR2_SOFT_FLOAT),--without-fp,--with-fp) \
+> -		$(if $(BR2_x86_64),--enable-lock-elision) \
+>  		--with-pkgversion="Buildroot" \
+>  		--without-cvs \
+>  		--disable-profile \
+>  		--without-gd \
+>  		--enable-obsolete-rpc)
+> -	$(HOST_LOCALEDEF_ADD_MISSING_STUB_H)
+>  endef
+>  
+> -$(eval $(autotools-package))
+> +define HOST_LOCALEDEF_BUILD_CMDS
+> +	$(HOST_MAKE_ENV) $(MAKE) $(HOST_LOCALEDEF_MAKE_OPTS) \
+> +		-C $(@D)/build locale/others
+> +endef
+> +
+>  # The makefile does not implement an install target for localedef
+>  define HOST_LOCALEDEF_INSTALL_CMDS
+>  	$(INSTALL) -D -m 0755 $(@D)/build/locale/localedef $(HOST_DIR)/bin/localedef
