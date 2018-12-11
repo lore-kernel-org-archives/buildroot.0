@@ -1,70 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 11 Dec 2018 19:55:14 +0100
-Subject: [Buildroot] [PATCH 1/1] ccid: fix build with pkgconf 1.5.3
-In-Reply-To: <d8aca54b-9283-d230-e3ba-7cbba7472ddd@mind.be>
-References: <20181211172124.30082-1-fontaine.fabrice@gmail.com>
- <d8aca54b-9283-d230-e3ba-7cbba7472ddd@mind.be>
-Message-ID: <20181211185514.GM3383@scaer>
+From: Jared Bents <jared.bents@rockwellcollins.com>
+Date: Tue, 11 Dec 2018 13:24:58 -0600
+Subject: [Buildroot] [PATCH v1 1/1] package/swupdate: Update to version
+ 2018.11
+Message-ID: <20181211192458.26400-1-jared.bents@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Fabrice,
+Update to version 2018.11 to resolve build errors due to the changes
+in libcurl at version 7.62.0
 
-On 2018-12-11 19:21 +0100, Arnout Vandecappelle spake thusly:
-> On 11/12/2018 18:21, Fabrice Fontaine wrote:
-> > Do not add DESTDIR before usbdropdir to install pcsc drivers in
-> > src/Makefile.am.
-> > 
-> > Indeed, usbdropdir is retrieved from libpcsc.pc and can be prefixed by
-> > sysroot, so it can can be set for example to:
-> > usbdropdir='/accts/mlweber1/rclinux/rc-buildroot-test/scripts/instance-3/output/host/bin/../microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/pcsc/drivers'
-> > 
-> > If DESTDIR is added before usbdropdir, files will be installed in a
-> > wrong directory and build will fail
-> 
->  I have the feeling this is not the right fix. I think the problem really is
-> that pkg-config should prefix usbdropdir with sysroot. To me it seems that the
-> right thing to do is to add the sysroot to -L and -I flags, but not to add it to
-> random variables...
-> 
->  Maybe other people who have a better understanding of how pkg-config is
-> supposed to work can shed some light?
+Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+---
+ package/swupdate/swupdate.hash | 2 +-
+ package/swupdate/swupdate.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Indeed, we must be careful with how we handle pkg-config.
-
-For this specific case, I agree with Arnout: installing a file should
-always be prefixed by DESTDIR. We should not change that part of a
-package installation.
-
-There are two conflicting needs: to know where the files are at build
-time, and to know where they are at runtime.
-
-With pkg-config, there is a mix of both concepts, and they are
-absolutely not differentiated. That's probably because pkg-config was
-initially made to be able to provide build-time-only files: headers and
-libs. But packages (ab)used it to also store and share arbitrary
-variables, and they expect those locations to be valid both at build
-time and runtime, which is wrong, as we can see in a lot of cases, such
-as this one...
-
-Before we bumped pkg-config, we had a patch that would make it prefix
-a set of carefully selected variables (instead of just -I and -L). But
-that was probably goign to be an endless whack-a-mole game, and upstream
-decided to now prefix all variables (again, instead of only -I and -L).
-
-However, I have no good idea on how to solve this situation in a generic
-way.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
+index efc637976a..7b49337ffd 100644
+--- a/package/swupdate/swupdate.hash
++++ b/package/swupdate/swupdate.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  19156bb30c3517a0ff9c918a38062df3cfa70f02f8162da4971a2f47d108688e  swupdate-2018.03.tar.gz
++sha256  a65884ca18523cde1b0744d952d6f91462dbd4ad07941305f5684c6d4ec833dc  swupdate-2018.11.tar.gz
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index abf46c9256..6285437aaa 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SWUPDATE_VERSION = 2018.03
++SWUPDATE_VERSION = 2018.11
+ SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
+ SWUPDATE_LICENSE = GPL-2.0+, LGPL-2.1+, MIT
+ SWUPDATE_LICENSE_FILES = COPYING
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.18.0
