@@ -1,72 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 11 Dec 2018 17:12:52 +0100
-Subject: [Buildroot] Building cargo with per-package directories
-Message-ID: <20181211171252.02ddb571@windsurf>
+Date: Tue, 11 Dec 2018 17:13:44 +0100
+Subject: [Buildroot] [PATCH] package/lua-cqueues: needs host-m4
+Message-ID: <20181211161344.1481-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello ?ric,
+The lua-cqueues build system uses m4 during the build:
 
-As you probably know, I'm working on support for per-package
-directories, which will allow to do top-level parallel in a reliable
-way. As part of this effort, I've started an autobuilder that uses
-per-package directories, and one of the package that is failing a lot
-is host-cargo.
+cd /home/test/autobuild/run/instance-1/output/build/lua-cqueues-rel-20161215/src && m4 /home/test/autobuild/run/instance-1/output/build/lua-cqueues-rel-20161215/src/errno.c.m4 >| /home/test/autobuild/run/instance-1/output/build/lua-cqueues-rel-20161215/src/errno.c.tmp
 
-It fails like this:
+Therefore, the package should depend on host-m4. This has been
+detected using per-package directory support, but a minimal defconfig
+with just lua and lua-cqueues on a system that doesn't have m4
+installed system-wide also exhibits the issue.
 
-  = note: /usr/bin/ld: cannot find -lhttp_parser
-          collect2: error: ld returned 1 exit status
-          
-error: aborting due to previous error
-error: Could not compile `cargo`.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/lua-cqueues/lua-cqueues.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The problem is that while libhttp_parser gets built properly, cargo is
-not passing the appropriate -L flag to cargo's per-package host/lib
-directory. So the linker doesn't find the libhttp_parser library, and
-bails out.
-
-I've tried to look into this, but really the cargo build system is very
-unique and weird, and I'm having a hard time finding my way. Do you
-think you could help me a bit on this topic ?
-
-To reproduce, you need a machine where libhttp_parser is not installed
-system-wide (so either remove it from your system, or build in a
-chroot/docker/VM). Then, take this branch:
-
-  https://git.bootlin.com/users/thomas-petazzoni/buildroot/log/?h=ppsh-v7-work
-
-And build the following defconfig:
-
-BR2_arm=y
-BR2_cortex_a9=y
-BR2_ARM_ENABLE_VFP=y
-BR2_PER_PACKAGE_DIRECTORIES=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-a9-glibc-2018.05.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_16=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-# BR2_TARGET_ROOTFS_TAR is not set
-BR2_PACKAGE_HOST_CARGO=y
-
-You should get this failure:
-
-  http://code.bulix.org/fxjgrv-520980?raw
-
-Thanks in advance for your support,
-
-Thomas
+diff --git a/package/lua-cqueues/lua-cqueues.mk b/package/lua-cqueues/lua-cqueues.mk
+index 4f4be1e049..4f31c3277f 100644
+--- a/package/lua-cqueues/lua-cqueues.mk
++++ b/package/lua-cqueues/lua-cqueues.mk
+@@ -8,7 +8,7 @@ LUA_CQUEUES_VERSION = rel-20161215
+ LUA_CQUEUES_SITE = $(call github,wahern,cqueues,$(LUA_CQUEUES_VERSION))
+ LUA_CQUEUES_LICENSE = MIT
+ LUA_CQUEUES_LICENSE_FILES = LICENSE
+-LUA_CQUEUES_DEPENDENCIES = luainterpreter openssl
++LUA_CQUEUES_DEPENDENCIES = luainterpreter openssl host-m4
+ 
+ define LUA_CQUEUES_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.19.2
