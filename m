@@ -1,98 +1,41 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 11 Dec 2018 22:57:39 +0100
-Subject: [Buildroot] [PATCH 1/1] ccid: fix build with pkgconf 1.5.3
-In-Reply-To: <20181211185514.GM3383@scaer>
-References: <20181211172124.30082-1-fontaine.fabrice@gmail.com>
- <d8aca54b-9283-d230-e3ba-7cbba7472ddd@mind.be> <20181211185514.GM3383@scaer>
-Message-ID: <8ff6fe47-bbcf-caeb-59cf-72db797cf00b@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 11 Dec 2018 23:08:03 +0100
+Subject: [Buildroot] [git commit] package/lua-cqueues: needs host-m4
+Message-ID: <20181211220459.A5BC68B5C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=1e5e1eac545c2c5abcfff4a6979913c42d17ad52
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+The lua-cqueues build system uses m4 during the build:
 
-On 11/12/2018 19:55, Yann E. MORIN wrote:
-> Arnout, Fabrice,
-> 
-> On 2018-12-11 19:21 +0100, Arnout Vandecappelle spake thusly:
->> On 11/12/2018 18:21, Fabrice Fontaine wrote:
->>> Do not add DESTDIR before usbdropdir to install pcsc drivers in
->>> src/Makefile.am.
->>>
->>> Indeed, usbdropdir is retrieved from libpcsc.pc and can be prefixed by
->>> sysroot, so it can can be set for example to:
->>> usbdropdir='/accts/mlweber1/rclinux/rc-buildroot-test/scripts/instance-3/output/host/bin/../microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/pcsc/drivers'
->>>
->>> If DESTDIR is added before usbdropdir, files will be installed in a
->>> wrong directory and build will fail
->>
->>  I have the feeling this is not the right fix. I think the problem really is
->> that pkg-config should prefix usbdropdir with sysroot. To me it seems that the
->> right thing to do is to add the sysroot to -L and -I flags, but not to add it to
->> random variables...
->>
->>  Maybe other people who have a better understanding of how pkg-config is
->> supposed to work can shed some light?
-> 
-> Indeed, we must be careful with how we handle pkg-config.
-> 
-> For this specific case, I agree with Arnout: installing a file should
-> always be prefixed by DESTDIR. We should not change that part of a
-> package installation.
+cd /home/test/autobuild/run/instance-1/output/build/lua-cqueues-rel-20161215/src && m4 /home/test/autobuild/run/instance-1/output/build/lua-cqueues-rel-20161215/src/errno.c.m4 >| /home/test/autobuild/run/instance-1/output/build/lua-cqueues-rel-20161215/src/errno.c.tmp
 
- Especially because it is *wrong*, because the files will not be installed in
-target...
+Therefore, the package should depend on host-m4. This has been
+detected using per-package directory support, but a minimal defconfig
+with just lua and lua-cqueues on a system that doesn't have m4
+installed system-wide also exhibits the issue.
 
-> 
-> There are two conflicting needs: to know where the files are at build
-> time, and to know where they are at runtime.
-> 
-> With pkg-config, there is a mix of both concepts, and they are
-> absolutely not differentiated. That's probably because pkg-config was
-> initially made to be able to provide build-time-only files: headers and
-> libs. But packages (ab)used it to also store and share arbitrary
-> variables, and they expect those locations to be valid both at build
-> time and runtime, which is wrong, as we can see in a lot of cases, such
-> as this one...
-> 
-> Before we bumped pkg-config, we had a patch that would make it prefix
-> a set of carefully selected variables (instead of just -I and -L). But
-> that was probably goign to be an endless whack-a-mole game, and upstream
-> decided to now prefix all variables (again, instead of only -I and -L).
-> 
-> However, I have no good idea on how to solve this situation in a generic
-> way.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/lua-cqueues/lua-cqueues.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- I don't even know how to do it in a specific way :-)
-
- I poked around a bit in pkgconf sources, and this is the fragment that adds the
-sysroot:
-
-         if (*value == '/' && client->sysroot_dir != NULL && strncmp(value,
-client->sysroot_dir, strlen(client->sysroot_dir)))
-                 bptr += pkgconf_strlcpy(buf, client->sysroot_dir, sizeof buf);
-
-
- This is done unconditionally as far as I can see...
-
- So I see a couple of possibilities...
-
-1. Patch pkgconf to add the sysroot only for a whitelisted set of keys.
-
-2. Mark the not-to-be-prefixed variables in the .pc file in some way, and
-interpret that mark in pkgconf.
-
-3. Make sure the value in the .pc file doesn't start with / - since there will
-always be a DESTDIR prefixed to it, we can just make DESTDIR end with /.
-
-4. Do some argument munging in the pkg-config wrapper script and don't set
-PKG_CONFIG_SYSROOT_DIR if some random variable is requested - probably we
-capture almost all broken cases by just matching --variable= in the argument list.
-
-
- I can't say I really like any of these solutions though...
-
- Regards,
- Arnout
+diff --git a/package/lua-cqueues/lua-cqueues.mk b/package/lua-cqueues/lua-cqueues.mk
+index 4f4be1e049..4f31c3277f 100644
+--- a/package/lua-cqueues/lua-cqueues.mk
++++ b/package/lua-cqueues/lua-cqueues.mk
+@@ -8,7 +8,7 @@ LUA_CQUEUES_VERSION = rel-20161215
+ LUA_CQUEUES_SITE = $(call github,wahern,cqueues,$(LUA_CQUEUES_VERSION))
+ LUA_CQUEUES_LICENSE = MIT
+ LUA_CQUEUES_LICENSE_FILES = LICENSE
+-LUA_CQUEUES_DEPENDENCIES = luainterpreter openssl
++LUA_CQUEUES_DEPENDENCIES = luainterpreter openssl host-m4
+ 
+ define LUA_CQUEUES_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
