@@ -1,64 +1,43 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 11 Dec 2018 23:24:37 +0100
-Subject: [Buildroot] [PATCH] netsurf: fix build error
-In-Reply-To: <20181211150209.26270-1-francois.perrad@gadz.org>
-References: <20181211150209.26270-1-francois.perrad@gadz.org>
-Message-ID: <cdb7c384-d631-cae4-f5a1-8a9803b89ba8@mind.be>
+Date: Tue, 11 Dec 2018 23:44:35 +0100
+Subject: [Buildroot] [RFC v3 1/3] libopenssl: bump version to 1.1.0h
+In-Reply-To: <20180819192358.58d6f31f@gmx.net>
+References: <20180508195431.19944-1-ps.report@gmx.net>
+ <0470f9f2-f90d-c19d-ee47-c97d393ced05@gmail.com>
+ <20180611220749.24b8d3c9@gmx.net>
+ <fnmm4fxjln.ln2@ID-313208.user.individual.net>
+ <20180819192358.58d6f31f@gmx.net>
+Message-ID: <3860dc03-4eb6-c7f1-f5ec-590f8f8d02f1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Francois,
+ Hi Peter, Bernd,
 
-On 11/12/2018 16:02, Francois Perrad wrote:
-> add missing host dependency
+On 19/08/2018 19:23, Peter Seiderer wrote:
+> Hello Bernd,
 > 
-> see http://autobuild.buildroot.net/results/d0b/d0bbd563fe5c9463316b2ba0d7ef5553be0563bc/build-end.log
+> On Sun, 19 Aug 2018 01:29:19 +0200, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 > 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>> Am Mon, 11 Jun 2018 22:07:49 +0200 schrieb Peter Seiderer:
+>>
+>>> Many thanks for testing and the mariadb version bump suggestion, will
+>>> add it to the next patch set iteration...  
+>>
+>> Hi Peter,
+>>
+>> just wanted to let you know that I am currently working on updating the 
+>> patch series, this includes build tests and, if necessary updates, of 
+>> nearly all buildroot packages using openssl.
+>>
+> 
+> Many thanks for taking over (did not find much time for additional work),
+> only started the mariadb update (not yet finished):
 
- Applied to master, thanks.
-
- I've rewritten the commit message as follows:
-
-    package/netsurf: add dependency on host-libpng for sdl
-
-    libpng is used by the convert_image host tool, which is built when SDL
-    is enabled.
-
-    Fixes:
-
-http://autobuild.buildroot.net/results/d0b/d0bbd563fe5c9463316b2ba0d7ef5553be0563bc/
-
- The important bits are:
-
-- package/netsurf instead of netsurf - we recently agreed on that formatting;
-
-- the subject line should describe what is done, not just "fix an error"
-
-- having "Fixes:" in the commit message makes sure that the F column in
-patchwork is tagged, that's convenient for locating the more urgent patches.
+ Any progress on the openssl bump? Now is a good time since we're at the
+beginning of the cycle, and it would be nice to have 1.1.0 in the 2019.02 release.
 
  Regards,
  Arnout
-
-> ---
->  package/netsurf/netsurf.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/netsurf/netsurf.mk b/package/netsurf/netsurf.mk
-> index 162ac5d79..3339b35c9 100644
-> --- a/package/netsurf/netsurf.mk
-> +++ b/package/netsurf/netsurf.mk
-> @@ -25,7 +25,7 @@ endif
->  endif
->  
->  ifeq ($(BR2_PACKAGE_NETSURF_SDL),y)
-> -NETSURF_DEPENDENCIES += sdl
-> +NETSURF_DEPENDENCIES += sdl host-libpng
->  NETSURF_FRONTEND = framebuffer
->  endif
->  
-> 
