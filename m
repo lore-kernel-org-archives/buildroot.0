@@ -1,44 +1,58 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 11 Dec 2018 15:21:22 +0200
-Subject: [Buildroot] [PATCH] libssh: bump to version 0.8.5
-Message-ID: <d339186411d307e9fb74ed53c19998a8fefbe324.1544534482.git.baruch@tkos.co.il>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Tue, 11 Dec 2018 11:22:26 -0200
+Subject: [Buildroot] [PATCH] configs/freescale_imx8mqevk: Bump packages to
+ imx_4.14.62_1.0.0_beta
+Message-ID: <1544534546-18007-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cc: Scott Fan <fancp2007@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/libssh/libssh.hash | 4 ++--
- package/libssh/libssh.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Bump kernel, U-Boot and ATF packages to the NXP imx_4.14.62_1.0.0_beta
+release.
 
-diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
-index 257b93cb6109..9ddada4a162e 100644
---- a/package/libssh/libssh.hash
-+++ b/package/libssh/libssh.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://www.libssh.org/files/0.8/libssh-0.8.4.tar.xz.asc
-+# https://www.libssh.org/files/0.8/libssh-0.8.5.tar.xz.asc
- # with key 8DFF53E18F2ABC8D8F3C92237EE0FC4DCC014E3D
--sha256 6bb07713021a8586ba2120b2c36c468dc9ac8096d043f9b1726639aa4275b81b  libssh-0.8.4.tar.xz
-+sha256 07d2c431240fc88f6b06bcb36ae267f9afeedce2e32f6c42f8844b205ab5a335  libssh-0.8.5.tar.xz
- sha256 468cf08f784ef6fd3b3705b60dd8111e2b70fbb8f6549cd503665a6bbb3bc625  COPYING
-diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-index 1ef09b3a211d..5d3b87aafc74 100644
---- a/package/libssh/libssh.mk
-+++ b/package/libssh/libssh.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBSSH_VERSION_MAJOR = 0.8
--LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).4
-+LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).5
- LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
- LIBSSH_SITE = https://www.libssh.org/files/$(LIBSSH_VERSION_MAJOR)
- LIBSSH_LICENSE = LGPL-2.1
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ configs/freescale_imx8mqevk_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/configs/freescale_imx8mqevk_defconfig b/configs/freescale_imx8mqevk_defconfig
+index a6e9b94..895713b 100644
+--- a/configs/freescale_imx8mqevk_defconfig
++++ b/configs/freescale_imx8mqevk_defconfig
+@@ -1,13 +1,13 @@
+ BR2_aarch64=y
+ BR2_ARM_FPU_VFPV3=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/fsl-imx8mq-evk.dtb"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.9.51_8mq_ga"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.14.62_1.0.0_beta"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-imx8mq-evk"
+@@ -20,14 +20,14 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_4.9.51_8mq_ga"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_4.14.62_1.0.0_beta"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mq"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.9.51_8mq_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.14.62_1.0.0_beta"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mq_evk"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
 -- 
-2.19.2
+2.7.4
