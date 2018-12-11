@@ -1,110 +1,76 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 11 Dec 2018 23:45:16 +0100
-Subject: [Buildroot] [PATCH 1/1] ccid: fix build with pkgconf 1.5.3
-In-Reply-To: <8ff6fe47-bbcf-caeb-59cf-72db797cf00b@mind.be>
-References: <20181211172124.30082-1-fontaine.fabrice@gmail.com>
- <d8aca54b-9283-d230-e3ba-7cbba7472ddd@mind.be> <20181211185514.GM3383@scaer>
- <8ff6fe47-bbcf-caeb-59cf-72db797cf00b@mind.be>
-Message-ID: <CAPi7W80JJVbLZXGYBbf-i65YCocoTPHp3k75dR-=3D53saMc9g@mail.gmail.com>
+From: Julien Olivain <juju@cotds.org>
+Date: Tue, 11 Dec 2018 23:43:12 +0100
+Subject: [Buildroot] [PATCH 1/1] csky_gx6605s_defconfig: bump gcc to 6.3.0,
+ kernel to 4.9.56
+Message-ID: <20181211224312.25814-1-juju@cotds.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-Le mar. 11 d?c. 2018 ? 22:57, Arnout Vandecappelle <arnout@mind.be> a ?crit :
->
->
->
-> On 11/12/2018 19:55, Yann E. MORIN wrote:
-> > Arnout, Fabrice,
-> >
-> > On 2018-12-11 19:21 +0100, Arnout Vandecappelle spake thusly:
-> >> On 11/12/2018 18:21, Fabrice Fontaine wrote:
-> >>> Do not add DESTDIR before usbdropdir to install pcsc drivers in
-> >>> src/Makefile.am.
-> >>>
-> >>> Indeed, usbdropdir is retrieved from libpcsc.pc and can be prefixed by
-> >>> sysroot, so it can can be set for example to:
-> >>> usbdropdir='/accts/mlweber1/rclinux/rc-buildroot-test/scripts/instance-3/output/host/bin/../microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/pcsc/drivers'
-> >>>
-> >>> If DESTDIR is added before usbdropdir, files will be installed in a
-> >>> wrong directory and build will fail
-> >>
-> >>  I have the feeling this is not the right fix. I think the problem really is
-> >> that pkg-config should prefix usbdropdir with sysroot. To me it seems that the
-> >> right thing to do is to add the sysroot to -L and -I flags, but not to add it to
-> >> random variables...
-> >>
-> >>  Maybe other people who have a better understanding of how pkg-config is
-> >> supposed to work can shed some light?
-> >
-> > Indeed, we must be careful with how we handle pkg-config.
-> >
-> > For this specific case, I agree with Arnout: installing a file should
-> > always be prefixed by DESTDIR. We should not change that part of a
-> > package installation.
->
->  Especially because it is *wrong*, because the files will not be installed in
-> target...
->
-> >
-> > There are two conflicting needs: to know where the files are at build
-> > time, and to know where they are at runtime.
-> >
-> > With pkg-config, there is a mix of both concepts, and they are
-> > absolutely not differentiated. That's probably because pkg-config was
-> > initially made to be able to provide build-time-only files: headers and
-> > libs. But packages (ab)used it to also store and share arbitrary
-> > variables, and they expect those locations to be valid both at build
-> > time and runtime, which is wrong, as we can see in a lot of cases, such
-> > as this one...
-> >
-> > Before we bumped pkg-config, we had a patch that would make it prefix
-> > a set of carefully selected variables (instead of just -I and -L). But
-> > that was probably goign to be an endless whack-a-mole game, and upstream
-> > decided to now prefix all variables (again, instead of only -I and -L).
-> >
-> > However, I have no good idea on how to solve this situation in a generic
-> > way.
->
->  I don't even know how to do it in a specific way :-)
->
->  I poked around a bit in pkgconf sources, and this is the fragment that adds the
-> sysroot:
->
->          if (*value == '/' && client->sysroot_dir != NULL && strncmp(value,
-> client->sysroot_dir, strlen(client->sysroot_dir)))
->                  bptr += pkgconf_strlcpy(buf, client->sysroot_dir, sizeof buf);
->
->
->  This is done unconditionally as far as I can see...
->
->  So I see a couple of possibilities...
->
-> 1. Patch pkgconf to add the sysroot only for a whitelisted set of keys.
->
-> 2. Mark the not-to-be-prefixed variables in the .pc file in some way, and
-> interpret that mark in pkgconf.
->
-> 3. Make sure the value in the .pc file doesn't start with / - since there will
-> always be a DESTDIR prefixed to it, we can just make DESTDIR end with /.
->
-> 4. Do some argument munging in the pkg-config wrapper script and don't set
-> PKG_CONFIG_SYSROOT_DIR if some random variable is requested - probably we
-> capture almost all broken cases by just matching --variable= in the argument list.
->
->
->  I can't say I really like any of these solutions though...
-An other option would be to ignore the value provided by pkgconfig.
-For example, we can pass
---enable-usbdropdir=$(TARGET_DIR)/usr/lib/pcsc/drivers to ccid's
-configure.
-Would it be acceptable?
->
->  Regards,
->  Arnout
-Best Regards,
+Signed-off-by: Julien Olivain <juju@cotds.org>
+---
+ ...ine-for-serial-console-and-rootfs-on.patch | 25 +++++++++++++++++++
+ configs/csky_gx6605s_defconfig                |  7 +++---
+ 2 files changed, 29 insertions(+), 3 deletions(-)
+ create mode 100644 board/csky/gx6605s/patches/linux/0001-csky-update-cmdline-for-serial-console-and-rootfs-on.patch
 
-Fabrice
+diff --git a/board/csky/gx6605s/patches/linux/0001-csky-update-cmdline-for-serial-console-and-rootfs-on.patch b/board/csky/gx6605s/patches/linux/0001-csky-update-cmdline-for-serial-console-and-rootfs-on.patch
+new file mode 100644
+index 0000000000..1da1a75400
+--- /dev/null
++++ b/board/csky/gx6605s/patches/linux/0001-csky-update-cmdline-for-serial-console-and-rootfs-on.patch
+@@ -0,0 +1,25 @@
++From 7e3f2c482bc16537a093e87a27f0d465804a88e4 Mon Sep 17 00:00:00 2001
++From: Julien Olivain <juju@cotds.org>
++Date: Tue, 11 Dec 2018 23:04:46 +0100
++Subject: [PATCH] csky: update cmdline for serial console and rootfs on sda1
++
++Signed-off-by: Julien Olivain <juju@cotds.org>
++---
++ arch/csky/boot/dts/gx6605s.dts | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/arch/csky/boot/dts/gx6605s.dts b/arch/csky/boot/dts/gx6605s.dts
++index ce56106af967..f5d60b21e6f9 100644
++--- a/arch/csky/boot/dts/gx6605s.dts
+++++ b/arch/csky/boot/dts/gx6605s.dts
++@@ -155,6 +155,6 @@
++ 	};
++ 
++ 	chosen {
++-		bootargs = "console=tty0 init=/sbin/init root=/dev/sda2 rw rootwait";
+++		bootargs = "console=ttyS0,115200 init=/sbin/init root=/dev/sda1 rw rootwait";
++ 	};
++ };
++-- 
++2.19.2
++
+diff --git a/configs/csky_gx6605s_defconfig b/configs/csky_gx6605s_defconfig
+index 5f39c536ac..d0a2aadc6d 100644
+--- a/configs/csky_gx6605s_defconfig
++++ b/configs/csky_gx6605s_defconfig
+@@ -1,8 +1,9 @@
+ BR2_csky=y
++BR2_GLOBAL_PATCH_DIR="board/csky/gx6605s/patches"
+ BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+-BR2_TOOLCHAIN_EXTERNAL_URL="https://github.com/c-sky/tools/raw/master/csky-linux-tools-x86_64-glibc-linux-4.9.2-20170227.tar.gz"
++BR2_TOOLCHAIN_EXTERNAL_URL="https://github.com/c-sky/tools/raw/master/csky-linux-tools-x86_64-glibc-linux-4.9.56-20180128.tar.gz"
+ BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="csky-linux"
+-BR2_TOOLCHAIN_EXTERNAL_GCC_4_5=y
++BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
+ BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9=y
+ BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+ BR2_TOOLCHAIN_EXTERNAL_CXX=y
+@@ -10,7 +11,7 @@ BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/c-sky/linux-4.9.y/archive/314c498ddc8c43a66ca96ff3af7da98e10fa1cc6.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/c-sky/linux-4.9.y/archive/6064a9bdf48cefbccc4f6472dd04251f0dec1931.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="gx66xx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="gx6605s"
+-- 
+2.19.2
