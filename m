@@ -1,81 +1,44 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue, 11 Dec 2018 22:27:05 +0100
-Subject: [Buildroot] Building cargo with per-package directories
-In-Reply-To: <20181211171252.02ddb571@windsurf>
-References: <20181211171252.02ddb571@windsurf>
-Message-ID: <20181211212705.GA13119@itchy>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 11 Dec 2018 23:00:22 +0100
+Subject: [Buildroot] [git commit] package/wine: host-wine also needs bison
+ and flex
+Message-ID: <20181211215709.E5FB28CA67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
-On 2018-12-11 17:12, Thomas Petazzoni wrote:
-> Hello ?ric,
->
-> As you probably know, I'm working on support for per-package
-> directories, which will allow to do top-level parallel in a reliable
-> way. As part of this effort, I've started an autobuilder that uses
-> per-package directories, and one of the package that is failing a lot
-> is host-cargo.
->
-> It fails like this:
->
->   = note: /usr/bin/ld: cannot find -lhttp_parser
->           collect2: error: ld returned 1 exit status
->
-> error: aborting due to previous error
-> error: Could not compile `cargo`.
->
-> The problem is that while libhttp_parser gets built properly, cargo is
-> not passing the appropriate -L flag to cargo's per-package host/lib
-> directory. So the linker doesn't find the libhttp_parser library, and
-> bails out.
->
-> I've tried to look into this, but really the cargo build system is very
-> unique and weird, and I'm having a hard time finding my way. Do you
-> think you could help me a bit on this topic ?
+commit: https://git.buildroot.net/buildroot/commit/?id=e4d153b16ac51df1e8294eaf2413e43131620a7f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Of course!
+Just like the build of the target wine, the build of host wine also
+needs bison and flex, otherwise the build fails with:
 
->
-> To reproduce, you need a machine where libhttp_parser is not installed
-> system-wide (so either remove it from your system, or build in a
-> chroot/docker/VM). Then, take this branch:
->
->   https://git.bootlin.com/users/thomas-petazzoni/buildroot/log/?h=ppsh-v7-work
->
-> And build the following defconfig:
->
-> BR2_arm=y
-> BR2_cortex_a9=y
-> BR2_ARM_ENABLE_VFP=y
-> BR2_PER_PACKAGE_DIRECTORIES=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-a9-glibc-2018.05.tar.bz2"
-> BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
-> BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_16=y
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-> BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> BR2_INIT_NONE=y
-> BR2_SYSTEM_BIN_SH_NONE=y
-> # BR2_PACKAGE_BUSYBOX is not set
-> # BR2_TARGET_ROOTFS_TAR is not set
-> BR2_PACKAGE_HOST_CARGO=y
->
-> You should get this failure:
->
->   http://code.bulix.org/fxjgrv-520980?raw
->
-> Thanks in advance for your support,
+checking for flex... no
+configure: error: no suitable flex found. Please install the 'flex' package.
 
-I added your clone as remote, checked out ppsh-v7-work branch and
-launched a Debian Stretch chroot. I'll keep you posted on the result.
+(and similarly for bison once host-flex is provided)
 
-Regards,
+This was detected using per-package directories. It used to "work"
+because host-wine comes alphabetically after host-flex and host-bison,
+which are dependencies of target wine.
 
---
-ELB
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/wine/wine.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index dc559efd95..78c8e6ab63 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -10,6 +10,7 @@ WINE_SITE = https://dl.winehq.org/wine/source/3.0
+ WINE_LICENSE = LGPL-2.1+
+ WINE_LICENSE_FILES = COPYING.LIB LICENSE
+ WINE_DEPENDENCIES = host-bison host-flex host-wine
++HOST_WINE_DEPENDENCIES = host-bison host-flex
+ 
+ # Wine needs its own directory structure and tools for cross compiling
+ WINE_CONF_OPTS = \
