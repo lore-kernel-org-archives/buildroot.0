@@ -1,47 +1,72 @@
-From: Alexey Brodkin <alexey.brodkin@synopsys.com>
-Date: Tue, 11 Dec 2018 10:37:50 +0000
-Subject: [Buildroot] [arc-buildroot] Buildroot autobuilder: ARC
- toolchain update
-In-Reply-To: <20181211113133.7929d083@windsurf>
-References: <6e005856992c28fbfadecb94ec17cd55f712a615.camel@synopsys.com>
- <20181211113133.7929d083@windsurf>
-Message-ID: <0aa0464092a9125f5eadbc9a2623ffeb1359cc56.camel@synopsys.com>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Tue, 11 Dec 2018 09:21:13 -0200
+Subject: [Buildroot] [PATCH] package/libpam-tacplus: fix compilation with
+ GCC 8
+Message-ID: <20181211112113.21648-1-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+GCC 8 demands that the size of the string copied by strncpy be smaller
+than the size of the destination to keep space for the trailibg '\0'.
+This causes a compilation error in pam_tacplus, so add a patch already
+sent uptream to fix it.
 
-On Tue, 2018-12-11 at 11:31 +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Tue, 11 Dec 2018 10:24:39 +0000, Alexey Brodkin wrote:
-> 
-> > Now with arc-2018.09 tools integrated in Buildroot may we
-> > have it packages in prebuilt tarball so autobuilder uses it
-> > instead of pretty old br-arcle-hs38-full-2018.05.tar.bz2?
-> 
-> I did a rebuild of all toolchains not long ago, but did not deploy it
-> yet. Also, it was before the bump of ARC tools to 2018.09.
+Fixes:
+  http://autobuild.buildroot.net/results/da6d150e470046c03c5f7463de045604e15e4a30/
 
-Indeed I noticed that looking at tarballs folder :)
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+---
+ ...0002-Fix-compilation-of-tacc.c-with-GCC-8.patch | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/libpam-tacplus/0002-Fix-compilation-of-tacc.c-with-GCC-8.patch
 
-> However, notice that the 2018.09 ARC tools are already tested in the
-> autobuilders, because we have a config fragment that uses the internal
-> toolchain backend for ARC:
-
-Sure that's good but what I meant we're still seeing quite some
-build that use old "prebult" ARC tools and some of them fail like
-http://autobuild.buildroot.net/results/39f8bd704e936f70911cccd14518b1bfbe303a65/
-and others.
-
-Some of those failures are known to be fixed by new toolchain thus
-asking you to update it.
-
-Note I'm not saying that toolchain bump will immediately fix all
-ARC failures. Quite in reverse we may start seeing more breakages due to move
-from GCC 7.3.1 to 8.2.1 but that's why we mess with all that here I guess :)
-
--Alexey
+diff --git a/package/libpam-tacplus/0002-Fix-compilation-of-tacc.c-with-GCC-8.patch b/package/libpam-tacplus/0002-Fix-compilation-of-tacc.c-with-GCC-8.patch
+new file mode 100644
+index 0000000000..2f87b92767
+--- /dev/null
++++ b/package/libpam-tacplus/0002-Fix-compilation-of-tacc.c-with-GCC-8.patch
+@@ -0,0 +1,39 @@
++From 4c9635b03d0acf140f65004be9d4822297ee5a35 Mon Sep 17 00:00:00 2001
++From: Carlos Santos <casantos@datacom.com.br>
++Date: Mon, 10 Dec 2018 17:27:16 -0200
++Subject: [PATCH] Fix compilation of tacc.c with GCC 8
++
++GCC 8 demands that the size of the string copied by strncpy be smaller
++than the size of the destination to keep space for the trailibg '\0':
++
++tacc.c:378:3: error: 'strncpy' specified bound 4 equals destination size [-Werror=stringop-truncation]
++   strncpy(utmpx.ut_id, tty + C_STRLEN("tty"), sizeof(utmpx.ut_id));
++
++Ensure that no more than sizeof(utmpx.ut_id) - 1 characters are copied
++and that a trailing '\0' is stored.
++
++Fixes:
++  http://autobuild.buildroot.net/results/da6d150e470046c03c5f7463de045604e15e4a30/
++
++Signed-off-by: Carlos Santos <casantos@datacom.com.br>
++---
++ tacc.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/tacc.c b/tacc.c
++index f61e2d7..3c1a40c 100644
++--- a/tacc.c
+++++ b/tacc.c
++@@ -375,7 +375,8 @@ int main(int argc, char **argv) {
++ 		utmpx.ut_type = USER_PROCESS;
++ 		utmpx.ut_pid = getpid();
++ 		xstrcpy(utmpx.ut_line, tty, sizeof(utmpx.ut_line));
++-		strncpy(utmpx.ut_id, tty + C_STRLEN("tty"), sizeof(utmpx.ut_id));
+++		strncpy(utmpx.ut_id, tty + C_STRLEN("tty"), sizeof(utmpx.ut_id) - 1);
+++		utmpx.ut_id[sizeof(utmpx.ut_id) - 1] = '\0';
++ 		xstrcpy(utmpx.ut_host, "dialup", sizeof(utmpx.ut_host));
++ 		utmpx.ut_tv.tv_sec = tv.tv_sec;
++ 		utmpx.ut_tv.tv_usec = tv.tv_usec;
++-- 
++2.14.5
++
+-- 
+2.14.5
