@@ -1,49 +1,58 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 11 Dec 2018 23:09:15 +0100
-Subject: [Buildroot] [PATCH] package/lua-cqueues: needs host-m4
-In-Reply-To: <20181211161344.1481-1-thomas.petazzoni@bootlin.com>
-References: <20181211161344.1481-1-thomas.petazzoni@bootlin.com>
-Message-ID: <831235cd-adea-733c-087f-c7b55b6508be@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 11 Dec 2018 23:09:33 +0100
+Subject: [Buildroot] [git commit] package/intel-microcode: don't use install
+ -D -t
+Message-ID: <20181211220603.2B85B8A3F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=ef78742b3e2e29d547409489263a311b601b7cd7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Commit 1f0beaf9a8e2b8f0bb6e53694b38d70900b9128f ("intel-microcode:
+bump to version 20180807a") introduced the use of "install -D -t" to
+the intel-microcode package. The intent is that install will create
+the full destination directory, including all components leading to
+it, before copying the files.
 
-On 11/12/2018 17:13, Thomas Petazzoni wrote:
-> The lua-cqueues build system uses m4 during the build:
-> 
-> cd /home/test/autobuild/run/instance-1/output/build/lua-cqueues-rel-20161215/src && m4 /home/test/autobuild/run/instance-1/output/build/lua-cqueues-rel-20161215/src/errno.c.m4 >| /home/test/autobuild/run/instance-1/output/build/lua-cqueues-rel-20161215/src/errno.c.tmp
-> 
-> Therefore, the package should depend on host-m4. This has been
-> detected using per-package directory support, but a minimal defconfig
-> with just lua and lua-cqueues on a system that doesn't have m4
-> installed system-wide also exhibits the issue.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Unfortunately, "install -D -t" is only supported since coreutils since
+v8.23. Several of the build systems we support have older coreutils
+versions, such as Debian 7, which uses coreutils 8.13. Ubuntu 14.04
+also doesn't have a recent enough coreutils.
 
- Applied to master, thanks.
+So let's create the directory explicitly first, and then use a more
+regular "install -t".
 
- Regards,
- Arnout
+Fixes:
 
-> ---
->  package/lua-cqueues/lua-cqueues.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/lua-cqueues/lua-cqueues.mk b/package/lua-cqueues/lua-cqueues.mk
-> index 4f4be1e049..4f31c3277f 100644
-> --- a/package/lua-cqueues/lua-cqueues.mk
-> +++ b/package/lua-cqueues/lua-cqueues.mk
-> @@ -8,7 +8,7 @@ LUA_CQUEUES_VERSION = rel-20161215
->  LUA_CQUEUES_SITE = $(call github,wahern,cqueues,$(LUA_CQUEUES_VERSION))
->  LUA_CQUEUES_LICENSE = MIT
->  LUA_CQUEUES_LICENSE_FILES = LICENSE
-> -LUA_CQUEUES_DEPENDENCIES = luainterpreter openssl
-> +LUA_CQUEUES_DEPENDENCIES = luainterpreter openssl host-m4
->  
->  define LUA_CQUEUES_BUILD_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
-> 
+  http://autobuild.buildroot.net/results/aa44f9ff90f296f886be6309b3355ed075494fb2/
+
+Note: the "gzip: stdout: Broken pipe" messages in those failures seem
+unrelated. We have been able to reproduce the installation failure
+without those "Broken pipe" issues, and we have not been able to
+reproduce those "Broken pipe" problems.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Tested-by: Carlos Santos <casantos@datacom.com.br>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/intel-microcode/intel-microcode.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+index 2113873509..ed4ad628dd 100644
+--- a/package/intel-microcode/intel-microcode.mk
++++ b/package/intel-microcode/intel-microcode.mk
+@@ -13,7 +13,8 @@ INTEL_MICROCODE_LICENSE_FILES = license
+ INTEL_MICROCODE_REDISTRIBUTE = NO
+ 
+ define INTEL_MICROCODE_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0644 -t $(TARGET_DIR)/lib/firmware/intel-ucode \
++	mkdir -p $(TARGET_DIR)/lib/firmware/intel-ucode
++	$(INSTALL) -m 0644 -t $(TARGET_DIR)/lib/firmware/intel-ucode \
+ 		$(@D)/intel-ucode/*
+ endef
+ 
