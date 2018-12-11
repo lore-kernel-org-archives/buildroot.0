@@ -1,72 +1,72 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Tue, 11 Dec 2018 13:35:33 -0200 (BRST)
-Subject: [Buildroot] [PATCH] package/intel-microcode: don't use install
- -D -t
-In-Reply-To: <20181211153005.300-1-thomas.petazzoni@bootlin.com>
-References: <20181211153005.300-1-thomas.petazzoni@bootlin.com>
-Message-ID: <2083794247.2296967.1544542533429.JavaMail.zimbra@datacom.com.br>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 11 Dec 2018 17:12:52 +0100
+Subject: [Buildroot] Building cargo with per-package directories
+Message-ID: <20181211171252.02ddb571@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
-> To: "buildroot" <buildroot@buildroot.org>
-> Cc: "Carlos Santos" <casantos@datacom.com.br>, "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>, "Maxime Hadjinlian"
-> <maxime.hadjinlian@gmail.com>
-> Sent: Ter?a-feira, 11 de dezembro de 2018 13:30:05
-> Subject: [PATCH] package/intel-microcode: don't use install -D -t
+Hello ?ric,
 
-> Commit 1f0beaf9a8e2b8f0bb6e53694b38d70900b9128f ("intel-microcode:
-> bump to version 20180807a") introduced the use of "install -D -t" to
-> the intel-microcode package. The intent is that install will create
-> the full destination directory, including all components leading to
-> it, before copying the files.
-> 
-> Unfortunately, "install -D -t" is only supported since coreutils since
-> v8.23. Several of the build systems we support have older coreutils
-> versions, such as Debian 7, which uses coreutils 8.13. Ubuntu 14.04
-> also doesn't have a recent enough coreutils.
-> 
-> So let's create the directory explicitly first, and then use a more
-> regular "install -t".
-> 
-> Fixes:
-> 
->  http://autobuild.buildroot.net/results/aa44f9ff90f296f886be6309b3355ed075494fb2/
-> 
-> Note: the "gzip: stdout: Broken pipe" messages in those failures seem
-> unrelated. We have been able to reproduce the installation failure
-> without those "Broken pipe" issues, and we have not been able to
-> reproduce those "Broken pipe" problems.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
-> package/intel-microcode/intel-microcode.mk | 3 ++-
-> 1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/intel-microcode/intel-microcode.mk
-> b/package/intel-microcode/intel-microcode.mk
-> index 2113873509..ed4ad628dd 100644
-> --- a/package/intel-microcode/intel-microcode.mk
-> +++ b/package/intel-microcode/intel-microcode.mk
-> @@ -13,7 +13,8 @@ INTEL_MICROCODE_LICENSE_FILES = license
-> INTEL_MICROCODE_REDISTRIBUTE = NO
-> 
-> define INTEL_MICROCODE_INSTALL_TARGET_CMDS
-> -	$(INSTALL) -D -m 0644 -t $(TARGET_DIR)/lib/firmware/intel-ucode \
-> +	mkdir -p $(TARGET_DIR)/lib/firmware/intel-ucode
-> +	$(INSTALL) -m 0644 -t $(TARGET_DIR)/lib/firmware/intel-ucode \
-> 		$(@D)/intel-ucode/*
-> endef
-> 
-> --
-> 2.19.2
+As you probably know, I'm working on support for per-package
+directories, which will allow to do top-level parallel in a reliable
+way. As part of this effort, I've started an autobuilder that uses
+per-package directories, and one of the package that is failing a lot
+is host-cargo.
 
-Tested-by: Carlos Santos <casantos@datacom.com.br>
+It fails like this:
 
-Tested on a DATACOM device with Intel C3000 processor.
+  = note: /usr/bin/ld: cannot find -lhttp_parser
+          collect2: error: ld returned 1 exit status
+          
+error: aborting due to previous error
+error: Could not compile `cargo`.
 
+The problem is that while libhttp_parser gets built properly, cargo is
+not passing the appropriate -L flag to cargo's per-package host/lib
+directory. So the linker doesn't find the libhttp_parser library, and
+bails out.
+
+I've tried to look into this, but really the cargo build system is very
+unique and weird, and I'm having a hard time finding my way. Do you
+think you could help me a bit on this topic ?
+
+To reproduce, you need a machine where libhttp_parser is not installed
+system-wide (so either remove it from your system, or build in a
+chroot/docker/VM). Then, take this branch:
+
+  https://git.bootlin.com/users/thomas-petazzoni/buildroot/log/?h=ppsh-v7-work
+
+And build the following defconfig:
+
+BR2_arm=y
+BR2_cortex_a9=y
+BR2_ARM_ENABLE_VFP=y
+BR2_PER_PACKAGE_DIRECTORIES=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-a9-glibc-2018.05.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_16=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+# BR2_TARGET_ROOTFS_TAR is not set
+BR2_PACKAGE_HOST_CARGO=y
+
+You should get this failure:
+
+  http://code.bulix.org/fxjgrv-520980?raw
+
+Thanks in advance for your support,
+
+Thomas
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
