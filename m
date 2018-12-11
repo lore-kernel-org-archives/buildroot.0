@@ -1,53 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 11 Dec 2018 15:28:51 +0100
-Subject: [Buildroot] [PATCH] package/libgtk3: don't use pkgconf directly for
- host build
-Message-ID: <20181211142851.27318-1-thomas.petazzoni@bootlin.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue, 11 Dec 2018 16:02:09 +0100
+Subject: [Buildroot] [PATCH] netsurf: fix build error
+Message-ID: <20181211150209.26270-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The build of host-libgtk3 calls $(HOST_DIR)/bin/pkgconf directly,
-assuming that it will return correct results when building host
-tools. It did work in practice without per-package directories, but is
-not how pkg-config is used for host build in general: we recommend to
-use $(HOST_DIR)/bin/pkg-config and we have in $(HOST_MAKE_ENV) a
-number of environment variables that tell pkg-config to return results
-relevant for host builds.
+add missing host dependency
 
-With per-package directories, calling $(HOST_DIR)/bin/pkgconf fails
-badly, because it searches for .pc files in the per-package directory
-of host-pkgconf itself, which obviously is empty.
+see http://autobuild.buildroot.net/results/d0b/d0bbd563fe5c9463316b2ba0d7ef5553be0563bc/build-end.log
 
-So, we switch to using $(HOST_MAKE_ENV) $(PKG_CONFIG_HOST_BINARY),
-which uses the regular pkg-config with the right environment
-variables.
-
-This allows the build of host-libgtk3 to find gdk-pixbuf-2.0 and
-gio-2.0 built for the host, even in the context of
-BR2_PER_PACKAGE_DIRECTORIES=y.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/libgtk3/libgtk3.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/netsurf/netsurf.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index 1b85d00aae..bdf820de37 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -151,8 +151,8 @@ HOST_LIBGTK3_DEPENDENCIES = \
- 	host-librsvg
+diff --git a/package/netsurf/netsurf.mk b/package/netsurf/netsurf.mk
+index 162ac5d79..3339b35c9 100644
+--- a/package/netsurf/netsurf.mk
++++ b/package/netsurf/netsurf.mk
+@@ -25,7 +25,7 @@ endif
+ endif
  
- HOST_LIBGTK3_CFLAGS = \
--	`$(HOST_DIR)/bin/pkgconf --cflags --libs gdk-pixbuf-2.0` \
--	`$(HOST_DIR)/bin/pkgconf --cflags --libs gio-2.0`
-+	`$(HOST_MAKE_ENV) $(PKG_CONFIG_HOST_BINARY) --cflags --libs gdk-pixbuf-2.0` \
-+	`$(HOST_MAKE_ENV) $(PKG_CONFIG_HOST_BINARY) --cflags --libs gio-2.0`
+ ifeq ($(BR2_PACKAGE_NETSURF_SDL),y)
+-NETSURF_DEPENDENCIES += sdl
++NETSURF_DEPENDENCIES += sdl host-libpng
+ NETSURF_FRONTEND = framebuffer
+ endif
  
- define HOST_LIBGTK3_CONFIGURE_CMDS
- 	echo "#define GETTEXT_PACKAGE \"gtk30\"" >> $(@D)/gtk/config.h
 -- 
-2.19.2
+2.17.1
