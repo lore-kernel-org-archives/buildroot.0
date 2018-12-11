@@ -1,58 +1,81 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 11 Dec 2018 13:56:07 -0600
-Subject: [Buildroot] [PATCH v1 1/1] package/swupdate: Update to version
- 2018.11
-In-Reply-To: <20181211192458.26400-1-jared.bents@rockwellcollins.com>
-References: <20181211192458.26400-1-jared.bents@rockwellcollins.com>
-Message-ID: <CANQCQpYPXhj5ywv8YAh1YjBgZy-J9JspviF+wX=RJaGTFgsLgg@mail.gmail.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Tue, 11 Dec 2018 22:27:05 +0100
+Subject: [Buildroot] Building cargo with per-package directories
+In-Reply-To: <20181211171252.02ddb571@windsurf>
+References: <20181211171252.02ddb571@windsurf>
+Message-ID: <20181211212705.GA13119@itchy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jared,
-
-
-On Tue, Dec 11, 2018 at 1:25 PM Jared Bents
-<jared.bents@rockwellcollins.com> wrote:
+Hi!
+On 2018-12-11 17:12, Thomas Petazzoni wrote:
+> Hello ?ric,
 >
-> Update to version 2018.11 to resolve build errors due to the changes
-> in libcurl at version 7.62.0
+> As you probably know, I'm working on support for per-package
+> directories, which will allow to do top-level parallel in a reliable
+> way. As part of this effort, I've started an autobuilder that uses
+> per-package directories, and one of the package that is failing a lot
+> is host-cargo.
 >
-> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
-> ---
->  package/swupdate/swupdate.hash | 2 +-
->  package/swupdate/swupdate.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> It fails like this:
 >
-> diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
-> index efc637976a..7b49337ffd 100644
-> --- a/package/swupdate/swupdate.hash
-> +++ b/package/swupdate/swupdate.hash
-> @@ -1,2 +1,2 @@
->  # Locally calculated
-> -sha256  19156bb30c3517a0ff9c918a38062df3cfa70f02f8162da4971a2f47d108688e  swupdate-2018.03.tar.gz
-> +sha256  a65884ca18523cde1b0744d952d6f91462dbd4ad07941305f5684c6d4ec833dc  swupdate-2018.11.tar.gz
+>   = note: /usr/bin/ld: cannot find -lhttp_parser
+>           collect2: error: ld returned 1 exit status
+>
+> error: aborting due to previous error
+> error: Could not compile `cargo`.
+>
+> The problem is that while libhttp_parser gets built properly, cargo is
+> not passing the appropriate -L flag to cargo's per-package host/lib
+> directory. So the linker doesn't find the libhttp_parser library, and
+> bails out.
+>
+> I've tried to look into this, but really the cargo build system is very
+> unique and weird, and I'm having a hard time finding my way. Do you
+> think you could help me a bit on this topic ?
 
-Please add a hash for the license file and double check the license
-type didn't change.
+Of course!
 
-> diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-> index abf46c9256..6285437aaa 100644
-> --- a/package/swupdate/swupdate.mk
-> +++ b/package/swupdate/swupdate.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
 >
-> -SWUPDATE_VERSION = 2018.03
-> +SWUPDATE_VERSION = 2018.11
->  SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
->  SWUPDATE_LICENSE = GPL-2.0+, LGPL-2.1+, MIT
->  SWUPDATE_LICENSE_FILES = COPYING
-> --
-> 2.18.0
+> To reproduce, you need a machine where libhttp_parser is not installed
+> system-wide (so either remove it from your system, or build in a
+> chroot/docker/VM). Then, take this branch:
 >
+>   https://git.bootlin.com/users/thomas-petazzoni/buildroot/log/?h=ppsh-v7-work
+>
+> And build the following defconfig:
+>
+> BR2_arm=y
+> BR2_cortex_a9=y
+> BR2_ARM_ENABLE_VFP=y
+> BR2_PER_PACKAGE_DIRECTORIES=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-a9-glibc-2018.05.tar.bz2"
+> BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
+> BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_16=y
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+> BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> BR2_INIT_NONE=y
+> BR2_SYSTEM_BIN_SH_NONE=y
+> # BR2_PACKAGE_BUSYBOX is not set
+> # BR2_TARGET_ROOTFS_TAR is not set
+> BR2_PACKAGE_HOST_CARGO=y
+>
+> You should get this failure:
+>
+>   http://code.bulix.org/fxjgrv-520980?raw
+>
+> Thanks in advance for your support,
 
-Matt
+I added your clone as remote, checked out ppsh-v7-work branch and
+launched a Debian Stretch chroot. I'll keep you posted on the result.
+
+Regards,
+
+--
+ELB
