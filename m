@@ -1,58 +1,35 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Tue, 11 Dec 2018 11:22:26 -0200
-Subject: [Buildroot] [PATCH] configs/freescale_imx8mqevk: Bump packages to
- imx_4.14.62_1.0.0_beta
-Message-ID: <1544534546-18007-1-git-send-email-festevam@gmail.com>
+From: Einar Jon Gunnarsson <tolvupostur@gmail.com>
+Date: Tue, 11 Dec 2018 15:05:44 +0100
+Subject: [Buildroot] [PATCH 1/1] support/scripts/check-uniq-files: Only
+ report each package once
+Message-ID: <1544537144-10197-1-git-send-email-tolvupostur@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump kernel, U-Boot and ATF packages to the NXP imx_4.14.62_1.0.0_beta
-release.
+Rebuilding the same package should not trigger
+a 'touched by more than one package' warning
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Einar Jon Gunnarsson <tolvupostur@gmail.com>
 ---
- configs/freescale_imx8mqevk_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ support/scripts/check-uniq-files | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/configs/freescale_imx8mqevk_defconfig b/configs/freescale_imx8mqevk_defconfig
-index a6e9b94..895713b 100644
---- a/configs/freescale_imx8mqevk_defconfig
-+++ b/configs/freescale_imx8mqevk_defconfig
-@@ -1,13 +1,13 @@
- BR2_aarch64=y
- BR2_ARM_FPU_VFPV3=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/fsl-imx8mq-evk.dtb"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.9.51_8mq_ga"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.14.62_1.0.0_beta"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-imx8mq-evk"
-@@ -20,14 +20,14 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_4.9.51_8mq_ga"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_4.14.62_1.0.0_beta"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mq"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.9.51_8mq_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.14.62_1.0.0_beta"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mq_evk"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_IMX=y
+diff --git a/support/scripts/check-uniq-files b/support/scripts/check-uniq-files
+index fbc6b5d..03faa71 100755
+--- a/support/scripts/check-uniq-files
++++ b/support/scripts/check-uniq-files
+@@ -28,7 +28,8 @@ def main():
+     with open(args.packages_file_list[0], 'rb') as pkg_file_list:
+         for line in pkg_file_list.readlines():
+             pkg, _, file = line.rstrip(b'\n').partition(b',')
+-            file_to_pkg[file].append(pkg)
++            if not pkg in file_to_pkg[file]:
++                file_to_pkg[file].append(pkg)
+ 
+     for file in file_to_pkg:
+         if len(file_to_pkg[file]) > 1:
 -- 
 2.7.4
