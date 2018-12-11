@@ -1,35 +1,53 @@
-From: Einar Jon Gunnarsson <tolvupostur@gmail.com>
-Date: Tue, 11 Dec 2018 15:05:44 +0100
-Subject: [Buildroot] [PATCH 1/1] support/scripts/check-uniq-files: Only
- report each package once
-Message-ID: <1544537144-10197-1-git-send-email-tolvupostur@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 11 Dec 2018 15:28:51 +0100
+Subject: [Buildroot] [PATCH] package/libgtk3: don't use pkgconf directly for
+ host build
+Message-ID: <20181211142851.27318-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rebuilding the same package should not trigger
-a 'touched by more than one package' warning
+The build of host-libgtk3 calls $(HOST_DIR)/bin/pkgconf directly,
+assuming that it will return correct results when building host
+tools. It did work in practice without per-package directories, but is
+not how pkg-config is used for host build in general: we recommend to
+use $(HOST_DIR)/bin/pkg-config and we have in $(HOST_MAKE_ENV) a
+number of environment variables that tell pkg-config to return results
+relevant for host builds.
 
-Signed-off-by: Einar Jon Gunnarsson <tolvupostur@gmail.com>
+With per-package directories, calling $(HOST_DIR)/bin/pkgconf fails
+badly, because it searches for .pc files in the per-package directory
+of host-pkgconf itself, which obviously is empty.
+
+So, we switch to using $(HOST_MAKE_ENV) $(PKG_CONFIG_HOST_BINARY),
+which uses the regular pkg-config with the right environment
+variables.
+
+This allows the build of host-libgtk3 to find gdk-pixbuf-2.0 and
+gio-2.0 built for the host, even in the context of
+BR2_PER_PACKAGE_DIRECTORIES=y.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/check-uniq-files | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/libgtk3/libgtk3.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/scripts/check-uniq-files b/support/scripts/check-uniq-files
-index fbc6b5d..03faa71 100755
---- a/support/scripts/check-uniq-files
-+++ b/support/scripts/check-uniq-files
-@@ -28,7 +28,8 @@ def main():
-     with open(args.packages_file_list[0], 'rb') as pkg_file_list:
-         for line in pkg_file_list.readlines():
-             pkg, _, file = line.rstrip(b'\n').partition(b',')
--            file_to_pkg[file].append(pkg)
-+            if not pkg in file_to_pkg[file]:
-+                file_to_pkg[file].append(pkg)
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index 1b85d00aae..bdf820de37 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -151,8 +151,8 @@ HOST_LIBGTK3_DEPENDENCIES = \
+ 	host-librsvg
  
-     for file in file_to_pkg:
-         if len(file_to_pkg[file]) > 1:
+ HOST_LIBGTK3_CFLAGS = \
+-	`$(HOST_DIR)/bin/pkgconf --cflags --libs gdk-pixbuf-2.0` \
+-	`$(HOST_DIR)/bin/pkgconf --cflags --libs gio-2.0`
++	`$(HOST_MAKE_ENV) $(PKG_CONFIG_HOST_BINARY) --cflags --libs gdk-pixbuf-2.0` \
++	`$(HOST_MAKE_ENV) $(PKG_CONFIG_HOST_BINARY) --cflags --libs gio-2.0`
+ 
+ define HOST_LIBGTK3_CONFIGURE_CMDS
+ 	echo "#define GETTEXT_PACKAGE \"gtk30\"" >> $(@D)/gtk/config.h
 -- 
-2.7.4
+2.19.2
