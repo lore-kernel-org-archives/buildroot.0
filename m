@@ -1,68 +1,44 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 11 Dec 2018 15:19:39 +0200
-Subject: [Buildroot] [PATCH] libssh: workaround -Werror=strict-overflow
- build failures
-Message-ID: <7d6e364ac220c937573e1d4d7717a72cc240f81b.1544534379.git.baruch@tkos.co.il>
+Date: Tue, 11 Dec 2018 15:21:22 +0200
+Subject: [Buildroot] [PATCH] libssh: bump to version 0.8.5
+Message-ID: <d339186411d307e9fb74ed53c19998a8fefbe324.1544534482.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch that disables -Werror=strict-overflow to fix the build with
-some versions of gcc.
-
-Fixes:
-http://autobuild.buildroot.net/results/414/41490ebb181762d14c565effb0155db7ac1e0db0/
-http://autobuild.buildroot.net/results/3a6/3a6395fd85f434ff855d602949166d5cec725c7e/
-http://autobuild.buildroot.net/results/224/22422145e7fc9a8ab4e766b174a916e599845f1c/
-
 Cc: Scott Fan <fancp2007@gmail.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- .../0001-Disable-Werror-strict-overflow.patch | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/libssh/0001-Disable-Werror-strict-overflow.patch
+ package/libssh/libssh.hash | 4 ++--
+ package/libssh/libssh.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libssh/0001-Disable-Werror-strict-overflow.patch b/package/libssh/0001-Disable-Werror-strict-overflow.patch
-new file mode 100644
-index 000000000000..8870fbf6d12c
---- /dev/null
-+++ b/package/libssh/0001-Disable-Werror-strict-overflow.patch
-@@ -0,0 +1,34 @@
-+From 0ab36988ff211eac2559546f87585ef5a3a14527 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Tue, 11 Dec 2018 15:04:29 +0200
-+Subject: [PATCH] Disable -Werror=strict-overflow
-+
-+This options causes build failures with gcc 5 and 6.
-+
-+The issue reported upstream:
-+
-+  https://www.libssh.org/archive/libssh/2018-12/0000004.html
-+
-+Patch CompilerChecks.cmake for that, since there is no way to override
-+the C flags in the cmake or make commands.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: not upstreamable; issue reported upstream
-+---
-+ CompilerChecks.cmake | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/CompilerChecks.cmake b/CompilerChecks.cmake
-+index 4d5ef0279c26..da70f4f38d37 100644
-+--- a/CompilerChecks.cmake
-++++ b/CompilerChecks.cmake
-+@@ -99,4 +99,5 @@ if (OSX)
-+     add_c_compiler_flag("-Wno-deprecated-declarations" SUPPORTED_COMPILER_FLAGS)
-+ endif()
-+ 
-++add_c_compiler_flag("-Wno-error=strict-overflow" SUPPORTED_COMPILER_FLAGS)
-+ set(DEFAULT_C_COMPILE_FLAGS ${SUPPORTED_COMPILER_FLAGS} CACHE INTERNAL "Default C Compiler Flags" FORCE)
-+-- 
-+2.19.2
-+
+diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
+index 257b93cb6109..9ddada4a162e 100644
+--- a/package/libssh/libssh.hash
++++ b/package/libssh/libssh.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://www.libssh.org/files/0.8/libssh-0.8.4.tar.xz.asc
++# https://www.libssh.org/files/0.8/libssh-0.8.5.tar.xz.asc
+ # with key 8DFF53E18F2ABC8D8F3C92237EE0FC4DCC014E3D
+-sha256 6bb07713021a8586ba2120b2c36c468dc9ac8096d043f9b1726639aa4275b81b  libssh-0.8.4.tar.xz
++sha256 07d2c431240fc88f6b06bcb36ae267f9afeedce2e32f6c42f8844b205ab5a335  libssh-0.8.5.tar.xz
+ sha256 468cf08f784ef6fd3b3705b60dd8111e2b70fbb8f6549cd503665a6bbb3bc625  COPYING
+diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
+index 1ef09b3a211d..5d3b87aafc74 100644
+--- a/package/libssh/libssh.mk
++++ b/package/libssh/libssh.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBSSH_VERSION_MAJOR = 0.8
+-LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).4
++LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).5
+ LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
+ LIBSSH_SITE = https://www.libssh.org/files/$(LIBSSH_VERSION_MAJOR)
+ LIBSSH_LICENSE = LGPL-2.1
 -- 
 2.19.2
