@@ -1,107 +1,116 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Dec 2018 08:44:02 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/dt-utils: fix
- build with glibc 2.28
-Message-ID: <20181211074054.C89CB8B445@busybox.osuosl.org>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Tue, 11 Dec 2018 10:21:06 +0100
+Subject: [Buildroot] [v3] package/mosquitto: installing the mosquitto broker
+ can be optional
+Message-ID: <20181211092107.23800-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=40b16157063f97afde0481e32a43ef42ccce56e5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+The mosquitto package provides both the MQTT client library and
+a broker, and the latter may be not needed (when connecting to
+a remote broker). It should be therefore possible to not install and
+start it on the target
 
-This commit backports an upstream patch that fixes the build of
-dt-utils with glibc 2.28+.
-
-Fixes bug #11536.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7e5094033df2efc88928071c6e7a2867c396ca68)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 ---
- ...pilation-for-glibc-version-2.27.9000-36.f.patch | 75 ++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
+Changes v1->v2:
+    * Remove a useless patch to modify mosquitto's Makefile
+    * Change the setting name from BR2_PACKAGE_MOSQUITTO_INSTALL_BROKER
+                                to BR2_PACKAGE_MOSQUITTO_BROKER
+    * Don't create a mosquitto user
+Changes v2-> v3:
+    * Require BR2_USE_MMU only for the broker
+        * However there seems to be no real world example of
+          (!MMU && STATIC_LIBS) in buildroot at the moment
+    * Remove the dependency on BR2_TOOLCHAIN_HAS_SYNC_4, tested on:
+        * br-m68k-5208-full.config   [SKIPPED]
+        * br-m68k-68040-full.config  [OK]
+        * br-sparc-uclibc.config     [OK]
+        * br-sparc-uclibc.config     [OK]
+    * Fix missing quotes around a variable in make invocation
+---
+ package/mosquitto/Config.in    | 15 +++++++++++----
+ package/mosquitto/mosquitto.mk | 13 ++++++++++---
+ 2 files changed, 21 insertions(+), 7 deletions(-)
 
-diff --git a/package/dt-utils/0001-src-fix-compilation-for-glibc-version-2.27.9000-36.f.patch b/package/dt-utils/0001-src-fix-compilation-for-glibc-version-2.27.9000-36.f.patch
-new file mode 100644
-index 0000000000..8c2f585946
---- /dev/null
-+++ b/package/dt-utils/0001-src-fix-compilation-for-glibc-version-2.27.9000-36.f.patch
-@@ -0,0 +1,75 @@
-+From 1c80e31872aec9f2ef7eca6a52aa89c0ea759d8f Mon Sep 17 00:00:00 2001
-+From: Enrico Joerns <ejo@pengutronix.de>
-+Date: Wed, 5 Sep 2018 12:28:28 +0200
-+Subject: [PATCH] src: fix compilation for glibc version 2.27.9000-36.fc29 and
-+ newer
+diff --git a/package/mosquitto/Config.in b/package/mosquitto/Config.in
+index 1e6418a4de..82bb83a8f4 100644
+--- a/package/mosquitto/Config.in
++++ b/package/mosquitto/Config.in
+@@ -1,7 +1,5 @@
+ config BR2_PACKAGE_MOSQUITTO
+ 	bool "mosquitto"
+-	depends on BR2_USE_MMU # fork()
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_STATIC_LIBS # builds .so
+ 	help
+ 	  Mosquitto is an open source message broker that implements
+@@ -15,6 +13,15 @@ config BR2_PACKAGE_MOSQUITTO
+ 	  http://mosquitto.org/
+ 
+ comment "mosquitto needs a toolchain w/ dynamic library"
+-	depends on BR2_USE_MMU
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_STATIC_LIBS
 +
-+As recent glibc versions (>= 2.27.9000-36.fc29) also define 'struct
-+statx' which is also defined in linux/stat.h, compilation fails with
-+error:
++config BR2_PACKAGE_MOSQUITTO_BROKER
++	bool "install the mosquitto broker"
++	default y
++	depends on BR2_USE_MMU # fork()
++	depends on BR2_PACKAGE_MOSQUITTO
++	help
++	  Build and install the mosquitto broker onto target.
 +
-+| In file included from ../dt-utils-2018.05.0/src/crypto/digest.c:24:
-+| [..]/usr/include/linux/stat.h:56:8: error: redefinition of 'struct statx_timestamp'
-+|  struct statx_timestamp {
-+|         ^~~~~~~~~~~~~~~
-+| In file included from [..]/usr/include/sys/stat.h:446,
-+|                  from ../dt-utils-2018.05.0/src/dt/common.h:15,
-+|                  from ../dt-utils-2018.05.0/src/crypto/digest.c:19:
-+| [..]/usr/include/bits/statx.h:25:8: note: originally defined here
-+|  struct statx_timestamp
-+|         ^~~~~~~~~~~~~~~
-+| In file included from ../dt-utils-2018.05.0/src/crypto/digest.c:24:
-+| [..]/usr/include/linux/stat.h:99:8: error: redefinition of 'struct statx'
-+|  struct statx {
-+|         ^~~~~
-+| In file included from [..]/usr/include/sys/stat.h:446,
-+|                  from ../dt-utils-2018.05.0/src/dt/common.h:15,
-+|                  from ../dt-utils-2018.05.0/src/crypto/digest.c:19:
-+| [..]/usr/include/bits/statx.h:36:8: note: originally defined here
-+|  struct statx
-+|         ^~~~~
++comment "the mosquitto broker needs a system with MMU"
++	depends on !BR2_USE_MMU
+\ No newline at end of file
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index fcce0535cb..fd36d4452e 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -67,24 +67,30 @@ endef
+ MOSQUITTO_POST_PATCH_HOOKS += MOSQUITTO_DISABLE_CPP
+ endif
+ 
++MOSQUITTO_MAKE_DIRS = lib client
++ifeq ($(BR2_PACKAGE_MOSQUITTO_BROKER),y)
++	MOSQUITTO_MAKE_DIRS += src
++endif
 +
-+The linux/stat.h originates from the code that was copied from barebox
-+but is not explicitly required to be linux/stat.h instead of sys/stat.h
-+and we do not actually use struct statx.
-+
-+Thus it is safe to simply replace occurrences of linux/stat.h by
-+sys/stat.h to fix compilation.
-+
-+Signed-off-by: Enrico Joerns <ejo@pengutronix.de>
-+[Thomas: backport from upstream.]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ src/barebox-state/backend_storage.c | 2 +-
-+ src/crypto/digest.c                 | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/barebox-state/backend_storage.c b/src/barebox-state/backend_storage.c
-+index 53fe829..1052656 100644
-+--- a/src/barebox-state/backend_storage.c
-++++ b/src/barebox-state/backend_storage.c
-+@@ -19,7 +19,7 @@
-+ #include <linux/kernel.h>
-+ #include <linux/list.h>
-+ #include <linux/mtd/mtd-abi.h>
-+-#include <linux/stat.h>
-++#include <sys/stat.h>
-+ #include <linux/fs.h>
-+ #include <malloc.h>
-+ #include <printk.h>
-+diff --git a/src/crypto/digest.c b/src/crypto/digest.c
-+index 7a8c3c0..8353412 100644
-+--- a/src/crypto/digest.c
-++++ b/src/crypto/digest.c
-+@@ -21,7 +21,7 @@
-+ #include <malloc.h>
-+ #include <fs.h>
-+ #include <fcntl.h>
-+-#include <linux/stat.h>
-++#include <sys/stat.h>
-+ #include <errno.h>
-+ #include <module.h>
-+ #include <linux/err.h>
-+-- 
-+2.19.2
-+
+ define MOSQUITTO_BUILD_CMDS
+-	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
++	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) DIRS="$(MOSQUITTO_MAKE_DIRS)" \
+ 		$(MOSQUITTO_MAKE_OPTS)
+ endef
+ 
+ define MOSQUITTO_INSTALL_STAGING_CMDS
+-	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
++	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) DIRS="$(MOSQUITTO_MAKE_DIRS)" \
+ 		$(MOSQUITTO_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
+ endef
+ 
+ define MOSQUITTO_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
++	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) DIRS="$(MOSQUITTO_MAKE_DIRS)" \
+ 		$(MOSQUITTO_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
+ 	rm -f $(TARGET_DIR)/etc/mosquitto/*.example
+ 	$(INSTALL) -D -m 0644 $(@D)/mosquitto.conf \
+ 		$(TARGET_DIR)/etc/mosquitto/mosquitto.conf
+ endef
+ 
++ifeq ($(BR2_PACKAGE_MOSQUITTO_BROKER),y)
+ define MOSQUITTO_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 package/mosquitto/S50mosquitto \
+ 		$(TARGET_DIR)/etc/init.d/S50mosquitto
+@@ -101,5 +107,6 @@ endef
+ define MOSQUITTO_USERS
+ 	mosquitto -1 nogroup -1 * - - - Mosquitto user
+ endef
++endif
+ 
+ $(eval $(generic-package))
+-- 
+2.19.2
