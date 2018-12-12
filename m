@@ -1,53 +1,41 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 12 Dec 2018 09:50:06 +0100
-Subject: [Buildroot] [PATCH 1/1] ccid: fix build with pkgconf 1.5.3
-In-Reply-To: <CAPi7W80JJVbLZXGYBbf-i65YCocoTPHp3k75dR-=3D53saMc9g@mail.gmail.com>
-References: <20181211172124.30082-1-fontaine.fabrice@gmail.com>
- <d8aca54b-9283-d230-e3ba-7cbba7472ddd@mind.be> <20181211185514.GM3383@scaer>
- <8ff6fe47-bbcf-caeb-59cf-72db797cf00b@mind.be>
- <CAPi7W80JJVbLZXGYBbf-i65YCocoTPHp3k75dR-=3D53saMc9g@mail.gmail.com>
-Message-ID: <317217fa-713a-dd3f-117d-aa49da4f13d3@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 12 Dec 2018 09:52:12 +0100
+Subject: [Buildroot] [PATCH] package/sdl2_net: add missing host-pkgconf
+ dependency
+Message-ID: <20181212085212.12149-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The sdl2_net configure script uses pkg-config to finx sdl2. If it
+doesn't find pkg-config, it tries to locate sdl2-config, and defaults
+to /usr/bin/sdl2-config, which causes the build to fail with:
 
+arm-linux-gcc: ERROR: unsafe header/library path used in cross-compilation: '-I/usr/include/SDL2'
 
-On 11/12/2018 23:45, Fabrice Fontaine wrote:
-> Hello,
-> Le mar. 11 d?c. 2018 ? 22:57, Arnout Vandecappelle <arnout@mind.be> a ?crit :
-[snip]
->>  I can't say I really like any of these solutions though...
-> An other option would be to ignore the value provided by pkgconfig.
-> For example, we can pass
-> --enable-usbdropdir=$(TARGET_DIR)/usr/lib/pcsc/drivers to ccid's
-> configure.
-> Would it be acceptable?
+Fix this by adding host-pkgconf to the dependencies of sdl2_net. We
+could have added the right autoconf cache variable to tell the
+configure script where sdl2-config is located, but since pkg-config is
+tried first, let's use that.
 
- Since a good fundamental solution will take some time to flesh out, and since
-the autobuilders are exploding because of this, it's a great proposal.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/sdl2_net/sdl2_net.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- However, shouldn't it be --enable-usbdropdir=/usr/lib/pcsc/drivers? DESTDIR is
-still prepended to it, no?
-
- Put something like this in the commit message:
-
-Since the bump to 1.5.3, pkgconf prepends the sysroot to all absolute paths
-found in the .pc file. This is correct when the paths refer to something in
-STAGING_DIR (e.g. libdir, includedir), but not when it refers to something used
-for the target.
-
-ccid uses the usbdropdir variable from libpcsclite.pc to decide where to install
-things. Since DESTDIR is prepended to the install destination, this will end up
-in the wrong location.
-
-Until a better solution is found in pkgconf, pass the usbdropdir to use
-explicitly instead of relying on libpcsclite.pc.
-
-
- BTW, is the libva issue similar?
-
- Regards,
- Arnout
+diff --git a/package/sdl2_net/sdl2_net.mk b/package/sdl2_net/sdl2_net.mk
+index 2fa4a8c2e0..93bf3a2eb3 100644
+--- a/package/sdl2_net/sdl2_net.mk
++++ b/package/sdl2_net/sdl2_net.mk
+@@ -10,6 +10,6 @@ SDL2_NET_SITE = http://www.libsdl.org/projects/SDL_net/release
+ SDL2_NET_LICENSE = Zlib
+ SDL2_NET_LICENSE_FILES = COPYING.txt
+ SDL2_NET_INSTALL_STAGING = YES
+-SDL2_NET_DEPENDENCIES = sdl2
++SDL2_NET_DEPENDENCIES = sdl2 host-pkgconf
+ 
+ $(eval $(autotools-package))
+-- 
+2.19.2
