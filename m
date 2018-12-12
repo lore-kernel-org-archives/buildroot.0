@@ -1,11 +1,11 @@
 From: Joel Carlson <JoelsonCarl@gmail.com>
-Date: Wed, 12 Dec 2018 12:33:00 -0700
-Subject: [Buildroot] [PATCH v2 09/14] use select instead of depend for
- fftw package and fix DEPENDENCIES
-In-Reply-To: <20181212074539.11656-9-gwenj@trabucayre.com>
+Date: Wed, 12 Dec 2018 12:33:46 -0700
+Subject: [Buildroot] [PATCH v2 10/14] httping: update package to use new
+ fftw structure
+In-Reply-To: <20181212074539.11656-10-gwenj@trabucayre.com>
 References: <20181212074539.11656-1-gwenj@trabucayre.com>
- <20181212074539.11656-9-gwenj@trabucayre.com>
-Message-ID: <CA+1k=2ZJc=-0qENyvAJPXVYJ56-0TirWYBQFquX4hF9U0UTptg@mail.gmail.com>
+ <20181212074539.11656-10-gwenj@trabucayre.com>
+Message-ID: <CA+1k=2b5soRYRVDn5iz9UEwaAE8CNDNzAA63JTKaL+1=knTPyQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -22,7 +22,6 @@ On Wed, Dec 12, 2018 at 12:45 AM Gwenhael Goavec-Merou
 Reviewed-by: Joel Carlson <JoelsonCarl@gmail.com>
 Tested-by: Joel Carlson <JoelsonCarl@gmail.com>
 
-Testing: compile-tested a build of hackrf with all the permutations of
-enabling/disabling fftw-single, fftw-double, and fftw-long-double on
-an aarch64 build (so no fftw-quad available). Only built hackrf with
-permutations where I wanted FFTW_SINGLE enabled, since it selects it.
+Testing: compile-tested a build of httping with all the permutations
+of enabling/disabling fftw-single, fftw-double, and fftw-long-double
+on an aarch64 build (so no fftw-quad available)
