@@ -1,10 +1,10 @@
 From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Wed, 12 Dec 2018 08:45:31 +0100
-Subject: [Buildroot] [PATCH v2 06/14] aubio: update DEPENDENCIES to
- ffw-single or fftw-double depending on enabled option
+Date: Wed, 12 Dec 2018 08:45:38 +0100
+Subject: [Buildroot] [PATCH v2 13/14] pulseaudio: update dependency to
+ fftw-single
 In-Reply-To: <20181212074539.11656-1-gwenj@trabucayre.com>
 References: <20181212074539.11656-1-gwenj@trabucayre.com>
-Message-ID: <20181212074539.11656-6-gwenj@trabucayre.com>
+Message-ID: <20181212074539.11656-13-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,38 +15,21 @@ From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
 Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
- package/aubio/aubio.mk | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ package/pulseaudio/pulseaudio.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/aubio/aubio.mk b/package/aubio/aubio.mk
-index b0cc8b899e..69d0815ab5 100644
---- a/package/aubio/aubio.mk
-+++ b/package/aubio/aubio.mk
-@@ -27,7 +27,7 @@ AUBIO_CONF_OPTS += --disable-sndfile
- endif
+diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
+index d1c35654cf..c91af22935 100644
+--- a/package/pulseaudio/pulseaudio.mk
++++ b/package/pulseaudio/pulseaudio.mk
+@@ -21,7 +21,7 @@ PULSEAUDIO_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_AVAHI_DAEMON),avahi) \
+ 	$(if $(BR2_PACKAGE_DBUS),dbus) \
+ 	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
+-	$(if $(BR2_PACKAGE_FFTW),fftw) \
++	$(if $(BR2_PACKAGE_FFTW_SINGLE),fftw-single) \
+ 	$(if $(BR2_PACKAGE_SYSTEMD),systemd)
  
- # Could not compile aubio in double precision mode with libsamplerate
--ifeq ($(BR2_PACKAGE_LIBSAMPLERATE)$(BR2_PACKAGE_FFTW_PRECISION_SINGLE),yy)
-+ifeq ($(BR2_PACKAGE_LIBSAMPLERATE)$(BR2_PACKAGE_FFTW_SINGLE),yy)
- AUBIO_DEPENDENCIES += libsamplerate
- AUBIO_CONF_OPTS += --enable-samplerate
- else
-@@ -42,12 +42,13 @@ AUBIO_CONF_OPTS += --disable-jack
- endif
- 
- ifeq ($(BR2_PACKAGE_FFTW),y)
--AUBIO_DEPENDENCIES += fftw
- # fftw3 require double otherwise it will look for fftw3f
--ifeq ($(BR2_PACKAGE_FFTW_PRECISION_DOUBLE),y)
-+ifeq ($(BR2_PACKAGE_FFTW_DOUBLE),y)
- AUBIO_CONF_OPTS += --enable-fftw3 --enable-double
--else ifeq ($(BR2_PACKAGE_FFTW_PRECISION_SINGLE),y)
-+AUBIO_DEPENDENCIES += fftw-double
-+else ifeq ($(BR2_PACKAGE_FFTW_SINGLE),y)
- AUBIO_CONF_OPTS += --enable-fftw3f --disable-double
-+AUBIO_DEPENDENCIES += fftw-single
- endif
- else  # !BR2_PACKAGE_FFTW
- AUBIO_CONF_OPTS += --disable-fftw3
+ ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
 -- 
 2.19.2
