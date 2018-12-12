@@ -1,7 +1,8 @@
 From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
-Date: Wed, 12 Dec 2018 08:33:49 +0800
-Subject: [Buildroot] [PATCH 1/1] package/wayland: bump to version 1.16.0
-Message-ID: <1544574829-21380-1-git-send-email-james.hilliard1@gmail.com>
+Date: Wed, 12 Dec 2018 08:37:28 +0800
+Subject: [Buildroot] [PATCH 1/1] package/wayland-protocols: bump to version
+ 1.17
+Message-ID: <1544575048-21624-1-git-send-email-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,37 +13,36 @@ From: James Hilliard <james.hilliard1@gmail.com>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/wayland/wayland.hash | 10 +++++-----
- package/wayland/wayland.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/wayland-protocols/wayland-protocols.hash | 8 ++++----
+ package/wayland-protocols/wayland-protocols.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/wayland/wayland.hash b/package/wayland/wayland.hash
-index 4fa83a4..3f28460 100644
---- a/package/wayland/wayland.hash
-+++ b/package/wayland/wayland.hash
+diff --git a/package/wayland-protocols/wayland-protocols.hash b/package/wayland-protocols/wayland-protocols.hash
+index 9cbb4fe..d62a433 100644
+--- a/package/wayland-protocols/wayland-protocols.hash
++++ b/package/wayland-protocols/wayland-protocols.hash
 @@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2018-April/037767.html
--md5  b7393c17fdce9a8d383edab656c92fd2  wayland-1.15.0.tar.xz
--sha1 374e07b4f3b7fdfa7c4206cdd48224ea00d69d68  wayland-1.15.0.tar.xz
--sha256 eb3fbebb8559d56a80ad3753ec3db800f587329067962dbf65e14488b4b7aeb0  wayland-1.15.0.tar.xz
--sha512 f908917f1b575d2dc4d9770d3303e2637e8744fcb5c81feb2af2fe82cc51f54e22beaddfbe775fcf9623584169b7a062c75076132abeb888717180bfab53b3a8  wayland-1.15.0.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2018-August/039358.html
-+md5  0c215e53de71d6fb26f7102cdc6432d3  wayland-1.16.0.tar.xz
-+sha1 24c63a5045c653dcfa24efd10fa7c7de89aca9ef  wayland-1.16.0.tar.xz
-+sha256 4e72c2b56109ccfb6610d776e465f4ca0af2280c9c2f7d5cc23f0ed2548752f5  wayland-1.16.0.tar.xz
-+sha512 64eca2b1c0bc7913508a5499dae87e2723c712d8024acbb4c77c3c4a6c20de78c10704ae9827fd034116ca540a547aeec28c5a1e3bd382b23f85231424b0f49c  wayland-1.16.0.tar.xz
-diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
-index 827924e..6c2997b 100644
---- a/package/wayland/wayland.mk
-+++ b/package/wayland/wayland.mk
+-# From https://lists.freedesktop.org/archives/wayland-devel/2018-February/036992.html
+-md5 29312149dafcd4a0e739ba94995a574d  wayland-protocols-1.13.tar.xz
+-sha1 1b4b3385e168c361b4d350668d92f3a90ceee189  wayland-protocols-1.13.tar.xz
+-sha256 0758bc8008d5332f431b2a84fea7de64d971ce270ed208206a098ff2ebc68f38  wayland-protocols-1.13.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2018-November/039662.html
++md5 55ddd5fdb02b73b9de9559aaec267315  wayland-protocols-1.17.tar.xz
++sha1 7d2569c838c776545e3eb1b1049b9c37178aae24  wayland-protocols-1.17.tar.xz
++sha256 df1319cf9705643aea9fd16f9056f4e5b2471bd10c0cc3713d4a4cdc23d6812f  wayland-protocols-1.17.tar.xz
+ sha256 f1a2b233e8a9a71c40f4aa885be08a0842ac85bb8588703c1dd7e6e6502e3124  COPYING
+diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
+index bba0979..5ed4c3b 100644
+--- a/package/wayland-protocols/wayland-protocols.mk
++++ b/package/wayland-protocols/wayland-protocols.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WAYLAND_VERSION = 1.15.0
-+WAYLAND_VERSION = 1.16.0
- WAYLAND_SITE = http://wayland.freedesktop.org/releases
- WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
- WAYLAND_LICENSE = MIT
+-WAYLAND_PROTOCOLS_VERSION = 1.13
++WAYLAND_PROTOCOLS_VERSION = 1.17
+ WAYLAND_PROTOCOLS_SITE = http://wayland.freedesktop.org/releases
+ WAYLAND_PROTOCOLS_SOURCE = wayland-protocols-$(WAYLAND_PROTOCOLS_VERSION).tar.xz
+ WAYLAND_PROTOCOLS_LICENSE = MIT
 -- 
 2.7.4
