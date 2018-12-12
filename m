@@ -1,161 +1,51 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 12 Dec 2018 17:55:38 +0200
-Subject: [Buildroot] [PATCH] package/uclibc: add custom bits/poll.h for
- xtensa
-In-Reply-To: <20181212151314.19556-1-jcmvbkbc@gmail.com>
-References: <20181212151314.19556-1-jcmvbkbc@gmail.com>
-Message-ID: <20181212155538.7co3zhnua7kivs7b@sapphire.tkos.co.il>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 12 Dec 2018 16:29:15 +0000
+Subject: [Buildroot] =?utf-8?q?=5BBug_11556=5D_Can_not_build_qt5base_5=2E?=
+ =?utf-8?q?11=2E2_with_weston_3=2E0=2E0_and_vivante_GPU=2E_error=3A_invali?=
+ =?utf-8?b?ZCBjb252ZXJzaW9uIGZyb20g4oCYdm9pZCrigJkgdG8g4oCYRUdMTmF0aXZl?=
+ =?utf-8?q?DisplayType_=7Baka_wl=5Fdisplay*=7D=E2=80=99_=5B-fpermissive=5D?=
+In-Reply-To: <bug-11556-163@https.bugs.busybox.net/>
+References: <bug-11556-163@https.bugs.busybox.net/>
+Message-ID: <bug-11556-163-xwrm64Bfn2@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Max,
+https://bugs.busybox.net/show_bug.cgi?id=11556
 
-On Wed, Dec 12, 2018 at 07:13:14AM -0800, Max Filippov wrote:
-> Definitions of POLLWRNORM, POLLWRBAND and POLLREMOVE in xtensa linux
-> kernel are non-standard. Provide bits/poll.h with correct values for
-> these constants for uclibc-ng.
-> 
-> This fixes the following strace build errors:
-> 
->   In file included from xlat/pollflags.h:4:0,
->                    from poll.c:34:
->   ./static_assert.h:40:24: error: static assertion failed: "POLLWRBAND != 0x0100"
->    # define static_assert _Static_assert
->                           ^
->   xlat/pollflags.h:75:1: note: in expansion of macro ?static_assert?
->    static_assert((POLLWRBAND) == (0x0100), "POLLWRBAND != 0x0100");
->    ^~~~~~~~~~~~~
->   ./static_assert.h:40:24: error: static assertion failed: "POLLREMOVE != 0x0800"
->    # define static_assert _Static_assert
->                           ^
->   xlat/pollflags.h:117:1: note: in expansion of macro ?static_assert?
->    static_assert((POLLREMOVE) == (0x0800), "POLLREMOVE != 0x0800");
->    ^~~~~~~~~~~~~
-> 
-> Fixes:
->  http://autobuild.buildroot.net/results/5a0112b7a2c81fa5253c9adc93efe415256cd811
-> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Patrick Koller <koller@stettbacher.ch> changed:
 
-Reviewed-by: Baruch Siach <baruch@tkos.co.il>
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+   Attachment #7896|0                           |1
+        is obsolete|                            |
 
-Fixing the autobuilder failures requires rebuild of the xtensa binary 
-toolchain with this patch.
+--- Comment #2 from Patrick Koller <koller@stettbacher.ch> ---
+Created attachment 7901
+  --> https://bugs.busybox.net/attachment.cgi?id=7901&action=edit
+Patch to reproduce the problem
 
-Thanks,
-baruch
+This patch provides the configuration to build my project with weston-imx
+successfully without Qt5. As soon as Qt5 is selected, the build fails as
+follows:
 
-> ---
->  .../0002-xtensa-add-custom-bits-poll.h.patch       | 93 ++++++++++++++++++++++
->  1 file changed, 93 insertions(+)
->  create mode 100644 package/uclibc/0002-xtensa-add-custom-bits-poll.h.patch
-> 
-> diff --git a/package/uclibc/0002-xtensa-add-custom-bits-poll.h.patch b/package/uclibc/0002-xtensa-add-custom-bits-poll.h.patch
-> new file mode 100644
-> index 000000000000..030938bbcd33
-> --- /dev/null
-> +++ b/package/uclibc/0002-xtensa-add-custom-bits-poll.h.patch
-> @@ -0,0 +1,93 @@
-> +From 0cae9700a4a421dc22c80d205fbae4d01fdd1356 Mon Sep 17 00:00:00 2001
-> +From: Max Filippov <jcmvbkbc@gmail.com>
-> +Date: Wed, 12 Dec 2018 06:58:01 -0800
-> +Subject: [PATCH] xtensa: add custom bits/poll.h
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +Definitions of POLLWRNORM, POLLWRBAND and POLLREMOVE in xtensa linux
-> +kernel are non-standard. Provide bits/poll.h with correct values for
-> +these constants.
-> +
-> +This fixes the following strace build errors:
-> +
-> +  In file included from xlat/pollflags.h:4:0,
-> +                   from poll.c:34:
-> +  ./static_assert.h:40:24: error: static assertion failed: "POLLWRBAND != 0x0100"
-> +   # define static_assert _Static_assert
-> +                          ^
-> +  xlat/pollflags.h:75:1: note: in expansion of macro ?static_assert?
-> +   static_assert((POLLWRBAND) == (0x0100), "POLLWRBAND != 0x0100");
-> +   ^~~~~~~~~~~~~
-> +  ./static_assert.h:40:24: error: static assertion failed: "POLLREMOVE != 0x0800"
-> +   # define static_assert _Static_assert
-> +                          ^
-> +  xlat/pollflags.h:117:1: note: in expansion of macro ?static_assert?
-> +   static_assert((POLLREMOVE) == (0x0800), "POLLREMOVE != 0x0800");
-> +   ^~~~~~~~~~~~~
-> +
-> +Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-> +---
-> + libc/sysdeps/linux/xtensa/bits/poll.h | 49 +++++++++++++++++++++++++++++++++++
-> + 1 file changed, 49 insertions(+)
-> + create mode 100644 libc/sysdeps/linux/xtensa/bits/poll.h
-> +
-> +diff --git a/libc/sysdeps/linux/xtensa/bits/poll.h b/libc/sysdeps/linux/xtensa/bits/poll.h
-> +new file mode 100644
-> +index 000000000000..4588cc326006
-> +--- /dev/null
-> ++++ b/libc/sysdeps/linux/xtensa/bits/poll.h
-> +@@ -0,0 +1,49 @@
-> ++/* Copyright (C) 1997, 2001, 2006 Free Software Foundation, Inc.
-> ++   This file is part of the GNU C Library.
-> ++
-> ++   The GNU C Library is free software; you can redistribute it and/or
-> ++   modify it under the terms of the GNU Lesser General Public
-> ++   License as published by the Free Software Foundation; either
-> ++   version 2.1 of the License, or (at your option) any later version.
-> ++
-> ++   The GNU C Library is distributed in the hope that it will be useful,
-> ++   but WITHOUT ANY WARRANTY; without even the implied warranty of
-> ++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-> ++   Lesser General Public License for more details.
-> ++
-> ++   You should have received a copy of the GNU Lesser General Public
-> ++   License along with the GNU C Library; if not, see
-> ++   <http://www.gnu.org/licenses/>.  */
-> ++
-> ++#ifndef _SYS_POLL_H
-> ++# error "Never use <bits/poll.h> directly; include <sys/poll.h> instead."
-> ++#endif
-> ++
-> ++/* Event types that can be polled for.  These bits may be set in `events'
-> ++   to indicate the interesting event types; they will appear in `revents'
-> ++   to indicate the status of the file descriptor.  */
-> ++#define POLLIN		0x001		/* There is data to read.  */
-> ++#define POLLPRI		0x002		/* There is urgent data to read.  */
-> ++#define POLLOUT		0x004		/* Writing now will not block.  */
-> ++
-> ++#ifdef __USE_XOPEN
-> ++/* These values are defined in XPG4.2.  */
-> ++# define POLLRDNORM	0x040		/* Normal data may be read.  */
-> ++# define POLLRDBAND	0x080		/* Priority data may be read.  */
-> ++# define POLLWRNORM	POLLOUT		/* Writing now will not block.  */
-> ++# define POLLWRBAND	0x100		/* Priority data may be written.  */
-> ++#endif
-> ++
-> ++#ifdef __USE_GNU
-> ++/* These are extensions for Linux.  */
-> ++# define POLLMSG	0x400
-> ++# define POLLREMOVE	0x800
-> ++# define POLLRDHUP	0x2000
-> ++#endif
-> ++
-> ++/* Event types always implicitly polled for.  These bits need not be set in
-> ++   `events', but they will appear in `revents' to indicate the status of
-> ++   the file descriptor.  */
-> ++#define POLLERR		0x008		/* Error condition.  */
-> ++#define POLLHUP		0x010		/* Hung up.  */
-> ++#define POLLNVAL	0x020		/* Invalid polling request.  */
-> +-- 
-> +2.11.0
-> +
-> -- 
-> 2.11.0
-> 
+*** Reproduce the Qt5 build error ***
+- Apply the attached patch to buildroot-2018.11
+- make polytab_defconfig
+- make
+- Get the error:
+qeglfsvivintegration.cpp:68:60: error: invalid conversion from ?void*? to
+?EGLNativeDisplayType {aka wl_display*}? [-fpermissive]
+
+*** Reproduce a successful build ***
+- Apply the attached patch to buildroot-2018.11
+- make polytab_defconfig
+- make xconfig
+- uncheck Qt5
+- make
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+You are receiving this mail because:
+You are on the CC list for the bug.
