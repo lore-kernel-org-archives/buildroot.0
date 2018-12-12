@@ -1,51 +1,27 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 12 Dec 2018 16:29:15 +0000
-Subject: [Buildroot] =?utf-8?q?=5BBug_11556=5D_Can_not_build_qt5base_5=2E?=
- =?utf-8?q?11=2E2_with_weston_3=2E0=2E0_and_vivante_GPU=2E_error=3A_invali?=
- =?utf-8?b?ZCBjb252ZXJzaW9uIGZyb20g4oCYdm9pZCrigJkgdG8g4oCYRUdMTmF0aXZl?=
- =?utf-8?q?DisplayType_=7Baka_wl=5Fdisplay*=7D=E2=80=99_=5B-fpermissive=5D?=
-In-Reply-To: <bug-11556-163@https.bugs.busybox.net/>
-References: <bug-11556-163@https.bugs.busybox.net/>
-Message-ID: <bug-11556-163-xwrm64Bfn2@https.bugs.busybox.net/>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Wed, 12 Dec 2018 20:01:11 +0100
+Subject: [Buildroot] <PKG>_SOURCE without a version?
+Message-ID: <CAJtjsKZ8j6x9cHEuCZVuYu0YVcYZjzxM4vYpbPek+PZ7cC7cvQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11556
+Hi,
 
-Patrick Koller <koller@stettbacher.ch> changed:
+I'm packaging a project which distributes its sources without a
+version number in the filename. The version is present in the URL, but
+I'm wondering if the download architecture can handle a version bump
+properly, or if it would stick to the file in <PKG>_DL_DIR from an
+older version?
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-   Attachment #7896|0                           |1
-        is obsolete|                            |
+Looking at the other packages, I found package/jquery-sparkline that
+has the same "issue".
+Its version has been bump several times. So either this is a bug and
+no one noticed it until now, or the download step can detect somehow
+when it has to download the file again?
 
---- Comment #2 from Patrick Koller <koller@stettbacher.ch> ---
-Created attachment 7901
-  --> https://bugs.busybox.net/attachment.cgi?id=7901&action=edit
-Patch to reproduce the problem
-
-This patch provides the configuration to build my project with weston-imx
-successfully without Qt5. As soon as Qt5 is selected, the build fails as
-follows:
-
-*** Reproduce the Qt5 build error ***
-- Apply the attached patch to buildroot-2018.11
-- make polytab_defconfig
-- make
-- Get the error:
-qeglfsvivintegration.cpp:68:60: error: invalid conversion from ?void*? to
-?EGLNativeDisplayType {aka wl_display*}? [-fpermissive]
-
-*** Reproduce a successful build ***
-- Apply the attached patch to buildroot-2018.11
-- make polytab_defconfig
-- make xconfig
-- uncheck Qt5
-- make
-
+Best,
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Johan
