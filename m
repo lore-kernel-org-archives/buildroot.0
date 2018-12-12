@@ -1,34 +1,32 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Tue, 11 Dec 2018 23:20:24 -0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: add intel-microcode and pcm-tools
- to my watch list
-Message-ID: <20181212012024.3082-1-casantos@datacom.com.br>
+From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
+Date: Wed, 12 Dec 2018 10:20:04 +0800
+Subject: [Buildroot] [PATCH 1/1] package/acpid: fix acpid.service permissions
+Message-ID: <1544581204-28402-1-git-send-email-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
----
- DEVELOPERS | 2 ++
- 1 file changed, 2 insertions(+)
+From: James Hilliard <james.hilliard1@gmail.com>
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 5fc611c4e4..4192681bf8 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -421,9 +421,11 @@ F:	package/aer-inject/
- F:	package/busybox/
- F:	package/gtest/
- F:	package/initscripts/
-+F:	package/intel-microcode/
- F:	package/libpam-radius-auth/
- F:	package/libpam-tacplus/
- F:	package/modem-manager/
-+F:	package/pcm-tools/
- F:	package/perl-file-util/
- F:	package/skeleton-custom/
- F:	package/skeleton-init-common/
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/acpid/acpid.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/acpid/acpid.mk b/package/acpid/acpid.mk
+index 514fd31..adcc175 100644
+--- a/package/acpid/acpid.mk
++++ b/package/acpid/acpid.mk
+@@ -11,7 +11,7 @@ ACPID_LICENSE = GPL-2.0+
+ ACPID_LICENSE_FILES = COPYING
+ 
+ define ACPID_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -D -m 0755 package/acpid/acpid.service \
++	$(INSTALL) -D -m 0644 package/acpid/acpid.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/acpid.service
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+ 	ln -sf ../../../../usr/lib/systemd/system/acpid.service \
 -- 
-2.19.2
+2.7.4
