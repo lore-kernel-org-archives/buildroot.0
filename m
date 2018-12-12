@@ -1,47 +1,68 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 12 Dec 2018 10:15:17 +0100
-Subject: [Buildroot] [PATCH v2,1/1] ccid: fix build with pkgconf 1.5.3
-Message-ID: <20181212091517.23861-1-fontaine.fabrice@gmail.com>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Wed, 12 Dec 2018 10:21:14 +0100
+Subject: [Buildroot] [PATCH] package/liquid-dsp: add missing dependency
+ on fftw
+In-Reply-To: <20181212090458.15747-1-thomas.petazzoni@bootlin.com>
+References: <20181212090458.15747-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20181212102114.7e1baf85@x230.trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the bump to 1.5.3, pkgconf prepends the sysroot to all absolute
-paths found in the .pc file. This is correct when the paths refer to
-something in STAGING_DIR (e.g. libdir, includedir), but not when it
-refers to something used for the target.
+Thomas,
+This issue is also fixed by http://patchwork.ozlabs.org/patch/1011657/
 
-ccid uses the usbdropdir variable from libpcsclite.pc to decide where to
-install things. Since DESTDIR is prepended to the install destination,
-this will end up in the wrong location.
+Regards,
+Gwen
 
-Until a better solution is found in pkgconf, pass the usbdropdir to use
-explicitly instead of relying on libpcsclite.pc.
+On Wed, 12 Dec 2018 10:04:58 +0100
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/4d4c1ba7f5d00d1b927ac01ef9851468abfbdff2
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Arnout Vandecappelle):
- - Drop patch to remove DESTDIR and use --enable-usbdropdir
-
- package/ccid/ccid.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/ccid/ccid.mk b/package/ccid/ccid.mk
-index c9b95a6234..73da9c4b8f 100644
---- a/package/ccid/ccid.mk
-+++ b/package/ccid/ccid.mk
-@@ -11,6 +11,7 @@ CCID_LICENSE = LGPL-2.1+
- CCID_LICENSE_FILES = COPYING
- CCID_INSTALL_STAGING = YES
- CCID_DEPENDENCIES = pcsc-lite host-pkgconf libusb
-+CCID_CONF_OPTS = --enable-usbdropdir=/usr/lib/pcsc/drivers
- 
- ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
- define CCID_INSTALL_UDEV_RULES
--- 
-2.14.1
+> When one of BR2_PACKAGE_FFTW_PRECISION_* is enabled, liquid-dsp links
+> against fftw3f, fftw3 or fftw3l, but forgets to add the fftw package
+> in its dependencies. It works fine in practice because "fftw" is
+> before "liquid-dsp" in the alphabetic ordering, but building with
+> "make liquid-dsp" or with per-package directory causes a build
+> failure.
+> 
+> Fix that by adding the missing dependencies.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  package/liquid-dsp/liquid-dsp.mk | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/liquid-dsp/liquid-dsp.mk
+> b/package/liquid-dsp/liquid-dsp.mk index e3114a2d15..db67893844 100644
+> --- a/package/liquid-dsp/liquid-dsp.mk
+> +++ b/package/liquid-dsp/liquid-dsp.mk
+> @@ -32,6 +32,7 @@ endif
+>  # use FFTW instead of built-in FFT
+>  ifeq ($(BR2_PACKAGE_FFTW_PRECISION_SINGLE),y)
+>  LIQUID_DSP_LDFLAGS += -lfftw3f
+> +LIQUID_DSP_DEPENDENCIES += fftw
+>  endif
+>  
+>  # disable altivec, it has build issues
+> @@ -41,10 +42,12 @@ endif
+>  
+>  ifeq ($(BR2_PACKAGE_FFTW_PRECISION_DOUBLE),y)
+>  LIQUID_DSP_LDFLAGS += -lfftw3
+> +LIQUID_DSP_DEPENDENCIES += fftw
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE),y)
+>  LIQUID_DSP_LDFLAGS += -lfftw3l
+> +LIQUID_DSP_DEPENDENCIES += fftw
+>  endif
+>  
+>  LIQUID_DSP_CONF_OPTS += \
+> -- 
+> 2.19.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
