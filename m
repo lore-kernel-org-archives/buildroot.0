@@ -1,76 +1,48 @@
-From: Julien Olivain <juju@cotds.org>
-Date: Tue, 11 Dec 2018 23:43:12 +0100
-Subject: [Buildroot] [PATCH 1/1] csky_gx6605s_defconfig: bump gcc to 6.3.0,
- kernel to 4.9.56
-Message-ID: <20181211224312.25814-1-juju@cotds.org>
+From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
+Date: Wed, 12 Dec 2018 08:33:49 +0800
+Subject: [Buildroot] [PATCH 1/1] package/wayland: bump to version 1.16.0
+Message-ID: <1544574829-21380-1-git-send-email-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Julien Olivain <juju@cotds.org>
----
- ...ine-for-serial-console-and-rootfs-on.patch | 25 +++++++++++++++++++
- configs/csky_gx6605s_defconfig                |  7 +++---
- 2 files changed, 29 insertions(+), 3 deletions(-)
- create mode 100644 board/csky/gx6605s/patches/linux/0001-csky-update-cmdline-for-serial-console-and-rootfs-on.patch
+From: James Hilliard <james.hilliard1@gmail.com>
 
-diff --git a/board/csky/gx6605s/patches/linux/0001-csky-update-cmdline-for-serial-console-and-rootfs-on.patch b/board/csky/gx6605s/patches/linux/0001-csky-update-cmdline-for-serial-console-and-rootfs-on.patch
-new file mode 100644
-index 0000000000..1da1a75400
---- /dev/null
-+++ b/board/csky/gx6605s/patches/linux/0001-csky-update-cmdline-for-serial-console-and-rootfs-on.patch
-@@ -0,0 +1,25 @@
-+From 7e3f2c482bc16537a093e87a27f0d465804a88e4 Mon Sep 17 00:00:00 2001
-+From: Julien Olivain <juju@cotds.org>
-+Date: Tue, 11 Dec 2018 23:04:46 +0100
-+Subject: [PATCH] csky: update cmdline for serial console and rootfs on sda1
-+
-+Signed-off-by: Julien Olivain <juju@cotds.org>
-+---
-+ arch/csky/boot/dts/gx6605s.dts | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/arch/csky/boot/dts/gx6605s.dts b/arch/csky/boot/dts/gx6605s.dts
-+index ce56106af967..f5d60b21e6f9 100644
-+--- a/arch/csky/boot/dts/gx6605s.dts
-++++ b/arch/csky/boot/dts/gx6605s.dts
-+@@ -155,6 +155,6 @@
-+ 	};
-+ 
-+ 	chosen {
-+-		bootargs = "console=tty0 init=/sbin/init root=/dev/sda2 rw rootwait";
-++		bootargs = "console=ttyS0,115200 init=/sbin/init root=/dev/sda1 rw rootwait";
-+ 	};
-+ };
-+-- 
-+2.19.2
-+
-diff --git a/configs/csky_gx6605s_defconfig b/configs/csky_gx6605s_defconfig
-index 5f39c536ac..d0a2aadc6d 100644
---- a/configs/csky_gx6605s_defconfig
-+++ b/configs/csky_gx6605s_defconfig
-@@ -1,8 +1,9 @@
- BR2_csky=y
-+BR2_GLOBAL_PATCH_DIR="board/csky/gx6605s/patches"
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="https://github.com/c-sky/tools/raw/master/csky-linux-tools-x86_64-glibc-linux-4.9.2-20170227.tar.gz"
-+BR2_TOOLCHAIN_EXTERNAL_URL="https://github.com/c-sky/tools/raw/master/csky-linux-tools-x86_64-glibc-linux-4.9.56-20180128.tar.gz"
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="csky-linux"
--BR2_TOOLCHAIN_EXTERNAL_GCC_4_5=y
-+BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
- BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
- BR2_TOOLCHAIN_EXTERNAL_CXX=y
-@@ -10,7 +11,7 @@ BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/c-sky/linux-4.9.y/archive/314c498ddc8c43a66ca96ff3af7da98e10fa1cc6.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/c-sky/linux-4.9.y/archive/6064a9bdf48cefbccc4f6472dd04251f0dec1931.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="gx66xx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="gx6605s"
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/wayland/wayland.hash | 10 +++++-----
+ package/wayland/wayland.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/package/wayland/wayland.hash b/package/wayland/wayland.hash
+index 4fa83a4..3f28460 100644
+--- a/package/wayland/wayland.hash
++++ b/package/wayland/wayland.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2018-April/037767.html
+-md5  b7393c17fdce9a8d383edab656c92fd2  wayland-1.15.0.tar.xz
+-sha1 374e07b4f3b7fdfa7c4206cdd48224ea00d69d68  wayland-1.15.0.tar.xz
+-sha256 eb3fbebb8559d56a80ad3753ec3db800f587329067962dbf65e14488b4b7aeb0  wayland-1.15.0.tar.xz
+-sha512 f908917f1b575d2dc4d9770d3303e2637e8744fcb5c81feb2af2fe82cc51f54e22beaddfbe775fcf9623584169b7a062c75076132abeb888717180bfab53b3a8  wayland-1.15.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2018-August/039358.html
++md5  0c215e53de71d6fb26f7102cdc6432d3  wayland-1.16.0.tar.xz
++sha1 24c63a5045c653dcfa24efd10fa7c7de89aca9ef  wayland-1.16.0.tar.xz
++sha256 4e72c2b56109ccfb6610d776e465f4ca0af2280c9c2f7d5cc23f0ed2548752f5  wayland-1.16.0.tar.xz
++sha512 64eca2b1c0bc7913508a5499dae87e2723c712d8024acbb4c77c3c4a6c20de78c10704ae9827fd034116ca540a547aeec28c5a1e3bd382b23f85231424b0f49c  wayland-1.16.0.tar.xz
+diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
+index 827924e..6c2997b 100644
+--- a/package/wayland/wayland.mk
++++ b/package/wayland/wayland.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WAYLAND_VERSION = 1.15.0
++WAYLAND_VERSION = 1.16.0
+ WAYLAND_SITE = http://wayland.freedesktop.org/releases
+ WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
+ WAYLAND_LICENSE = MIT
 -- 
-2.19.2
+2.7.4
