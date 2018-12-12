@@ -1,84 +1,116 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Wed, 12 Dec 2018 07:59:08 -0200 (BRST)
-Subject: [Buildroot] [PATCH 2/2] package/tegrarcm: select host-cryptopp
- and drop BR2_arm dependency
-In-Reply-To: <cef20847-8bd5-b6e6-5a74-5a5fc3b79365@mind.be>
-References: <20181212025605.19382-1-casantos@datacom.com.br>
- <20181212025605.19382-2-casantos@datacom.com.br>
- <20181212094647.57b4149d@windsurf>
- <cef20847-8bd5-b6e6-5a74-5a5fc3b79365@mind.be>
-Message-ID: <794738414.2421573.1544608748810.JavaMail.zimbra@datacom.com.br>
+From: Brenke, Maik <Maik.Brenke@continental-corporation.com>
+Date: Wed, 12 Dec 2018 07:53:11 +0000
+Subject: [Buildroot] WG: [PATCH] package/vsomeip: new package
+In-Reply-To: <20181211181825.5733-1-maik.brenke@mail.de>
+References: <20181211181825.5733-1-maik.brenke@mail.de>
+Message-ID: <AM6PR0302MB3349E33E85C8C02FD8BE1B31A0A70@AM6PR0302MB3349.eurprd03.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Arnout Vandecappelle" <arnout@mind.be>
-> To: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>, "Carlos Santos" <casantos@datacom.com.br>
-> Cc: "buildroot" <buildroot@buildroot.org>
-> Sent: Quarta-feira, 12 de dezembro de 2018 7:04:25
-> Subject: Re: [Buildroot] [PATCH 2/2] package/tegrarcm: select host-cryptopp and drop BR2_arm dependency
+From: Maik Brenke <maik.brenke@continental-corporation.com>
 
-> On 12/12/2018 09:46, Thomas Petazzoni wrote:
->> Hello,
->> 
->> On Wed, 12 Dec 2018 00:56:05 -0200, Carlos Santos wrote:
->>> - It is not be strictly necessary to select host-cryptopp but let's do
->>>   it like other host packages do.
->>>
->>> - There is no reason to depend on the target architecture, since it's a
->>>   host tool.
->>>
->>> Yes, we could have separate commits to select host-cryptopp and drop
->>> BR2_arm dependency but that would be overkill.
->>>
->>> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
->>> ---
->>>  package/tegrarcm/Config.in.host | 2 +-
->>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/package/tegrarcm/Config.in.host b/package/tegrarcm/Config.in.host
->>> index d8cbb947d6..3411501a72 100644
->>> --- a/package/tegrarcm/Config.in.host
->>> +++ b/package/tegrarcm/Config.in.host
->>> @@ -1,6 +1,6 @@
->>>  config BR2_PACKAGE_HOST_TEGRARCM
->>>  	bool "host tegrarcm"
->>> -	depends on BR2_arm || BR2_armeb
->> 
->> The idea of this dependency is that since tegracrm is only useful in
->> conjunction with a Tegra-based system, there is not reason to build it
->> if the target isn't ARM.
->> 
->>> +	select BR2_PACKAGE_HOST_CRYPTOPP
->> 
->> So we are starting to add Config.in.host options for all packages ? Why
->> are you doing this change ? What is the motivation ?
-> 
-> I think it's because I said "We need Config.in.host" :-)
+Signed-off-by: Maik Brenke <maik.brenke@continental-corporation.com>
+---
+ DEVELOPERS                   |  3 +++
+ package/Config.in            |  1 +
+ package/vsomeip/Config.in    | 22 ++++++++++++++++++++++
+ package/vsomeip/vsomeip.hash |  5 +++++
+ package/vsomeip/vsomeip.mk   | 13 +++++++++++++
+ 5 files changed, 44 insertions(+)
+ create mode 100644 package/vsomeip/Config.in
+ create mode 100644 package/vsomeip/vsomeip.hash
+ create mode 100644 package/vsomeip/vsomeip.mk
 
-Right. :-)
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8d5ed19..54a0331 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1258,6 +1258,9 @@ F:        package/mpv/
+ F:      package/rpi-firmware/
+ F:      package/rpi-userland/
 
-> Carlos, the move to Config.in.host is a bit more extensive. We not only need to
-> add Config.in.host files for all packages, we also need to add selects - which
-> you do here.
++N:     Maik Brenke, <maik.brenke@continental-corporation.com>
++F:     package/vsomeip/
++
+ N:      Mamatha Inamdar <mamatha4@linux.vnet.ibm.com>
+ F:      package/nvme/
 
-Yes, tegrarcm is the only package depending in host-cryptopp.
+diff --git a/package/Config.in b/package/Config.in
+index 712e360..7ebb739 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1582,6 +1582,7 @@ menu "Networking"
+         source "package/sofia-sip/Config.in"
+         source "package/thrift/Config.in"
+         source "package/usbredir/Config.in"
++       source "package/vsomeip/Config.in"
+         source "package/wampcc/Config.in"
+         source "package/zeromq/Config.in"
+         source "package/zmqpp/Config.in"
+diff --git a/package/vsomeip/Config.in b/package/vsomeip/Config.in
+new file mode 100644
+index 0000000..7244c26
+--- /dev/null
++++ b/package/vsomeip/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_VSOMEIP
++       bool "vsomeip"
++       depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++       depends on BR2_INSTALL_LIBSTDCPP
++       depends on BR2_TOOLCHAIN_HAS_THREADS # boost
++       depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
++       select BR2_PACKAGE_BOOST
++       select BR2_PACKAGE_BOOST_SYSTEM
++       select BR2_PACKAGE_BOOST_THREAD
++       select BR2_PACKAGE_BOOST_LOG
++       help
++         The vsomeip stack implements the Scalable service-Oriented
++         MiddlewarE over IP (SOME/IP)) protocol (http://some-ip.com/).
++         The stack consists out of:
++          * a shared library for SOME/IP (`libvsomeip.so`)
++          * a second shared library for SOME/IP's service discovery
++            (`libvsomeip-sd.so`) which is loaded during runtime if
++            the service discovery is enabled.
++         https://github.com/GENIVI/vsomeip
++comment "vsomeip needs a toolchain w/ C++, threads, gcc >= 4.8"
++       depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
++       depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+diff --git a/package/vsomeip/vsomeip.hash b/package/vsomeip/vsomeip.hash
+new file mode 100644
+index 0000000..c872c72
+--- /dev/null
++++ b/package/vsomeip/vsomeip.hash
+@@ -0,0 +1,5 @@
++# Copied from https://github.com/GENIVI/vsomeip/
++md5    72c81358a15eb32e28b6249efda0635e        vsomeip-2.10.21.tar.gz
++sha256 c0ce3a3cf135f5c1538f7a33f98a2d6febfdfe7dcba3f42fdb7bb20d5fd1d4e3        vsomeip-2.10.21.tar.gz
++# License files, locally calculated
++sha256 fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85        LICENSE
+diff --git a/package/vsomeip/vsomeip.mk b/package/vsomeip/vsomeip.mk
+new file mode 100644
+index 0000000..aebf707
+--- /dev/null
++++ b/package/vsomeip/vsomeip.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# vsomeip
++#
++################################################################################
++VSOMEIP_VERSION = 2.10.21
++VSOMEIP_SITE = $(call github,GENIVI,vsomeip,$(VSOMEIP_VERSION))
++VSOMEIP_LICENSE = MPL-2.0
++VSOMEIP_LICENSE_FILES = LICENSE
++
++VSOMEIP_DEPENDENCIES = boost
++
++$(eval $(cmake-package))
+--
+2.7.4
 
-> Of course we can't do it all in one big shot, but still it should probably be
-> approached in a somewhat more structured way. For example, when we add a
-> Config.in.host for a package, we also (perhaps in a separate commit) add the
-> select statements for it in all packages that depend on it.
-> 
-> 
-> Also note that the idea was to make these Config.in.host options blind (i.e.
-> promptless).
-
-Make sense if the host package exists only to support building another
-package (that selects and depends on it) but there are other reasons
-why a host package may be necessary, e.g. I need host-mtools for a
-post-image script.
-
--- 
-Carlos Santos (Casantos) - DATACOM, P&D
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181212/26cca9ac/attachment.html>
