@@ -1,53 +1,68 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 12 Dec 2018 02:00:04 -0700
-Subject: [Buildroot] [PATCH 1/1] package/acpid: fix acpid.service
- permissions
-In-Reply-To: <2afea5b8-3cbe-b67a-00a7-4e234caa37a1@mind.be>
-References: <1544581204-28402-1-git-send-email-james.hilliard1@gmail.com>
- <2afea5b8-3cbe-b67a-00a7-4e234caa37a1@mind.be>
-Message-ID: <CADvTj4rc_qTxi5qF7jWkEOFSdN-M9efL7xm9H5Q2rDek4HJKdw@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 12 Dec 2018 10:00:11 +0100
+Subject: [Buildroot] [PATCH 1/1] ccid: fix build with pkgconf 1.5.3
+In-Reply-To: <317217fa-713a-dd3f-117d-aa49da4f13d3@mind.be>
+References: <20181211172124.30082-1-fontaine.fabrice@gmail.com>
+ <d8aca54b-9283-d230-e3ba-7cbba7472ddd@mind.be> <20181211185514.GM3383@scaer>
+ <8ff6fe47-bbcf-caeb-59cf-72db797cf00b@mind.be>
+ <CAPi7W80JJVbLZXGYBbf-i65YCocoTPHp3k75dR-=3D53saMc9g@mail.gmail.com>
+ <317217fa-713a-dd3f-117d-aa49da4f13d3@mind.be>
+Message-ID: <CAPi7W81h-rNjWd1AJAE223E3JNNVNzop3CFjEfwrhonJ9+owAA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Dec 12, 2018 at 1:55 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+Dear Arnout,
+Le mer. 12 d?c. 2018 ? 09:50, Arnout Vandecappelle <arnout@mind.be> a ?crit :
 >
->  Hi James,
 >
-> On 12/12/2018 03:20, james.hilliard1 at gmail.com wrote:
-> > From: James Hilliard <james.hilliard1@gmail.com>
 >
->  Could you give a little more detail here? In particular: is it just because
-> it's not supposed to be executed, or does it in fact give some runtime problems
-> if it is executable? That information is important to decide if the patch should
-> be backported to the stable branches or not.
-It causes systemd to throw runtime warnings since systemd service
-files are essentially a type of configuration file and are not
-designed to be executed like init scripts. You should probably
-backport it to get rid of the noise in the logs it causes.
+> On 11/12/2018 23:45, Fabrice Fontaine wrote:
+> > Hello,
+> > Le mar. 11 d?c. 2018 ? 22:57, Arnout Vandecappelle <arnout@mind.be> a ?crit :
+> [snip]
+> >>  I can't say I really like any of these solutions though...
+> > An other option would be to ignore the value provided by pkgconfig.
+> > For example, we can pass
+> > --enable-usbdropdir=$(TARGET_DIR)/usr/lib/pcsc/drivers to ccid's
+> > configure.
+> > Would it be acceptable?
+>
+>  Since a good fundamental solution will take some time to flesh out, and since
+> the autobuilders are exploding because of this, it's a great proposal.
+>
+>  However, shouldn't it be --enable-usbdropdir=/usr/lib/pcsc/drivers? DESTDIR is
+> still prepended to it, no?
+Yes, you're right.
+>
+>  Put something like this in the commit message:
+>
+> Since the bump to 1.5.3, pkgconf prepends the sysroot to all absolute paths
+> found in the .pc file. This is correct when the paths refer to something in
+> STAGING_DIR (e.g. libdir, includedir), but not when it refers to something used
+> for the target.
+>
+> ccid uses the usbdropdir variable from libpcsclite.pc to decide where to install
+> things. Since DESTDIR is prepended to the install destination, this will end up
+> in the wrong location.
+>
+> Until a better solution is found in pkgconf, pass the usbdropdir to use
+> explicitly instead of relying on libpcsclite.pc.
+OK, I will do.
+>
+>
+>  BTW, is the libva issue similar?
+It is somewhat similar, the difference is that build won't fail on
+install step but in build step because pkgconfig is used to find
+wayland-scanner which is built for the target not the host:
+/accts/mlweber1/rclinux/rc-buildroot-test/scripts/instance-3/output/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/bin/wayland-scanner
+
+I will also try to fix the other packages: acsccid, iwd, ...
 >
 >  Regards,
 >  Arnout
->
-> >
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > ---
-> >  package/acpid/acpid.mk | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/package/acpid/acpid.mk b/package/acpid/acpid.mk
-> > index 514fd31..adcc175 100644
-> > --- a/package/acpid/acpid.mk
-> > +++ b/package/acpid/acpid.mk
-> > @@ -11,7 +11,7 @@ ACPID_LICENSE = GPL-2.0+
-> >  ACPID_LICENSE_FILES = COPYING
-> >
-> >  define ACPID_INSTALL_INIT_SYSTEMD
-> > -     $(INSTALL) -D -m 0755 package/acpid/acpid.service \
-> > +     $(INSTALL) -D -m 0644 package/acpid/acpid.service \
-> >               $(TARGET_DIR)/usr/lib/systemd/system/acpid.service
-> >       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> >       ln -sf ../../../../usr/lib/systemd/system/acpid.service \
-> >
+Best Regards,
+
+Fabrice
