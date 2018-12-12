@@ -1,56 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 12 Dec 2018 09:46:47 +0100
-Subject: [Buildroot] [PATCH 2/2] package/tegrarcm: select host-cryptopp
- and drop BR2_arm dependency
-In-Reply-To: <20181212025605.19382-2-casantos@datacom.com.br>
-References: <20181212025605.19382-1-casantos@datacom.com.br>
- <20181212025605.19382-2-casantos@datacom.com.br>
-Message-ID: <20181212094647.57b4149d@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 12 Dec 2018 09:50:06 +0100
+Subject: [Buildroot] [PATCH 1/1] ccid: fix build with pkgconf 1.5.3
+In-Reply-To: <CAPi7W80JJVbLZXGYBbf-i65YCocoTPHp3k75dR-=3D53saMc9g@mail.gmail.com>
+References: <20181211172124.30082-1-fontaine.fabrice@gmail.com>
+ <d8aca54b-9283-d230-e3ba-7cbba7472ddd@mind.be> <20181211185514.GM3383@scaer>
+ <8ff6fe47-bbcf-caeb-59cf-72db797cf00b@mind.be>
+ <CAPi7W80JJVbLZXGYBbf-i65YCocoTPHp3k75dR-=3D53saMc9g@mail.gmail.com>
+Message-ID: <317217fa-713a-dd3f-117d-aa49da4f13d3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Wed, 12 Dec 2018 00:56:05 -0200, Carlos Santos wrote:
-> - It is not be strictly necessary to select host-cryptopp but let's do
->   it like other host packages do.
-> 
-> - There is no reason to depend on the target architecture, since it's a
->   host tool.
-> 
-> Yes, we could have separate commits to select host-cryptopp and drop
-> BR2_arm dependency but that would be overkill.
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-> ---
->  package/tegrarcm/Config.in.host | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/tegrarcm/Config.in.host b/package/tegrarcm/Config.in.host
-> index d8cbb947d6..3411501a72 100644
-> --- a/package/tegrarcm/Config.in.host
-> +++ b/package/tegrarcm/Config.in.host
-> @@ -1,6 +1,6 @@
->  config BR2_PACKAGE_HOST_TEGRARCM
->  	bool "host tegrarcm"
-> -	depends on BR2_arm || BR2_armeb
 
-The idea of this dependency is that since tegracrm is only useful in
-conjunction with a Tegra-based system, there is not reason to build it
-if the target isn't ARM.
+On 11/12/2018 23:45, Fabrice Fontaine wrote:
+> Hello,
+> Le mar. 11 d?c. 2018 ? 22:57, Arnout Vandecappelle <arnout@mind.be> a ?crit :
+[snip]
+>>  I can't say I really like any of these solutions though...
+> An other option would be to ignore the value provided by pkgconfig.
+> For example, we can pass
+> --enable-usbdropdir=$(TARGET_DIR)/usr/lib/pcsc/drivers to ccid's
+> configure.
+> Would it be acceptable?
 
-> +	select BR2_PACKAGE_HOST_CRYPTOPP
+ Since a good fundamental solution will take some time to flesh out, and since
+the autobuilders are exploding because of this, it's a great proposal.
 
-So we are starting to add Config.in.host options for all packages ? Why
-are you doing this change ? What is the motivation ?
+ However, shouldn't it be --enable-usbdropdir=/usr/lib/pcsc/drivers? DESTDIR is
+still prepended to it, no?
 
-Best regards,
+ Put something like this in the commit message:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Since the bump to 1.5.3, pkgconf prepends the sysroot to all absolute paths
+found in the .pc file. This is correct when the paths refer to something in
+STAGING_DIR (e.g. libdir, includedir), but not when it refers to something used
+for the target.
+
+ccid uses the usbdropdir variable from libpcsclite.pc to decide where to install
+things. Since DESTDIR is prepended to the install destination, this will end up
+in the wrong location.
+
+Until a better solution is found in pkgconf, pass the usbdropdir to use
+explicitly instead of relying on libpcsclite.pc.
+
+
+ BTW, is the libva issue similar?
+
+ Regards,
+ Arnout
