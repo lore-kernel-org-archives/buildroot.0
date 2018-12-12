@@ -1,24 +1,34 @@
 From: Carlos Santos <casantos@datacom.com.br>
-Date: Tue, 11 Dec 2018 23:08:06 -0200 (BRST)
-Subject: [Buildroot] [PATCH] confifs/aarch64_efi: needs dosfstools
-In-Reply-To: <20181209103556.25979-1-yann.morin.1998@free.fr>
-References: <20181209103556.25979-1-yann.morin.1998@free.fr>
-Message-ID: <574371471.2404891.1544576886752.JavaMail.zimbra@datacom.com.br>
+Date: Tue, 11 Dec 2018 23:20:24 -0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: add intel-microcode and pcm-tools
+ to my watch list
+Message-ID: <20181212012024.3082-1-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Yann Morin" <yann.morin.1998@free.fr>
-> To: "buildroot" <buildroot@buildroot.org>
-> Cc: "Yann Morin" <yann.morin.1998@free.fr>, "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
-> Sent: Domingo, 9 de dezembro de 2018 8:35:56
-> Subject: [Buildroot] [PATCH] confifs/aarch64_efi: needs dosfstools
-                               ^^^^^^^
-                               configs
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+---
+ DEVELOPERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-[...]
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 5fc611c4e4..4192681bf8 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -421,9 +421,11 @@ F:	package/aer-inject/
+ F:	package/busybox/
+ F:	package/gtest/
+ F:	package/initscripts/
++F:	package/intel-microcode/
+ F:	package/libpam-radius-auth/
+ F:	package/libpam-tacplus/
+ F:	package/modem-manager/
++F:	package/pcm-tools/
+ F:	package/perl-file-util/
+ F:	package/skeleton-custom/
+ F:	package/skeleton-init-common/
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
+2.19.2
