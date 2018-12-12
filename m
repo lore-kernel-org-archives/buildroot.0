@@ -1,70 +1,52 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 12 Dec 2018 10:04:25 +0100
-Subject: [Buildroot] [PATCH 2/2] package/tegrarcm: select host-cryptopp
- and drop BR2_arm dependency
-In-Reply-To: <20181212094647.57b4149d@windsurf>
-References: <20181212025605.19382-1-casantos@datacom.com.br>
- <20181212025605.19382-2-casantos@datacom.com.br>
- <20181212094647.57b4149d@windsurf>
-Message-ID: <cef20847-8bd5-b6e6-5a74-5a5fc3b79365@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 12 Dec 2018 10:04:58 +0100
+Subject: [Buildroot] [PATCH] package/liquid-dsp: add missing dependency on
+ fftw
+Message-ID: <20181212090458.15747-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+When one of BR2_PACKAGE_FFTW_PRECISION_* is enabled, liquid-dsp links
+against fftw3f, fftw3 or fftw3l, but forgets to add the fftw package
+in its dependencies. It works fine in practice because "fftw" is
+before "liquid-dsp" in the alphabetic ordering, but building with
+"make liquid-dsp" or with per-package directory causes a build
+failure.
 
+Fix that by adding the missing dependencies.
 
-On 12/12/2018 09:46, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Wed, 12 Dec 2018 00:56:05 -0200, Carlos Santos wrote:
->> - It is not be strictly necessary to select host-cryptopp but let's do
->>   it like other host packages do.
->>
->> - There is no reason to depend on the target architecture, since it's a
->>   host tool.
->>
->> Yes, we could have separate commits to select host-cryptopp and drop
->> BR2_arm dependency but that would be overkill.
->>
->> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
->> ---
->>  package/tegrarcm/Config.in.host | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/package/tegrarcm/Config.in.host b/package/tegrarcm/Config.in.host
->> index d8cbb947d6..3411501a72 100644
->> --- a/package/tegrarcm/Config.in.host
->> +++ b/package/tegrarcm/Config.in.host
->> @@ -1,6 +1,6 @@
->>  config BR2_PACKAGE_HOST_TEGRARCM
->>  	bool "host tegrarcm"
->> -	depends on BR2_arm || BR2_armeb
-> 
-> The idea of this dependency is that since tegracrm is only useful in
-> conjunction with a Tegra-based system, there is not reason to build it
-> if the target isn't ARM.
-> 
->> +	select BR2_PACKAGE_HOST_CRYPTOPP
-> 
-> So we are starting to add Config.in.host options for all packages ? Why
-> are you doing this change ? What is the motivation ?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/liquid-dsp/liquid-dsp.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
- I think it's because I said "We need Config.in.host" :-)
-
- Carlos, the move to Config.in.host is a bit more extensive. We not only need to
-add Config.in.host files for all packages, we also need to add selects - which
-you do here.
-
- Of course we can't do it all in one big shot, but still it should probably be
-approached in a somewhat more structured way. For example, when we add a
-Config.in.host for a package, we also (perhaps in a separate commit) add the
-select statements for it in all packages that depend on it.
-
-
- Also note that the idea was to make these Config.in.host options blind (i.e.
-promptless).
-
- Regards,
- Arnout
+diff --git a/package/liquid-dsp/liquid-dsp.mk b/package/liquid-dsp/liquid-dsp.mk
+index e3114a2d15..db67893844 100644
+--- a/package/liquid-dsp/liquid-dsp.mk
++++ b/package/liquid-dsp/liquid-dsp.mk
+@@ -32,6 +32,7 @@ endif
+ # use FFTW instead of built-in FFT
+ ifeq ($(BR2_PACKAGE_FFTW_PRECISION_SINGLE),y)
+ LIQUID_DSP_LDFLAGS += -lfftw3f
++LIQUID_DSP_DEPENDENCIES += fftw
+ endif
+ 
+ # disable altivec, it has build issues
+@@ -41,10 +42,12 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_FFTW_PRECISION_DOUBLE),y)
+ LIQUID_DSP_LDFLAGS += -lfftw3
++LIQUID_DSP_DEPENDENCIES += fftw
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE),y)
+ LIQUID_DSP_LDFLAGS += -lfftw3l
++LIQUID_DSP_DEPENDENCIES += fftw
+ endif
+ 
+ LIQUID_DSP_CONF_OPTS += \
+-- 
+2.19.2
