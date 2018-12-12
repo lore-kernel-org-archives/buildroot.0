@@ -1,288 +1,161 @@
-From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Wed, 12 Dec 2018 16:49:19 +0100
-Subject: [Buildroot] [PATCH v2 2/5] optee-client: new package
-In-Reply-To: <20181210225722.01b691cb@windsurf>
-References: <1542990817-28362-1-git-send-email-etienne.carriere@linaro.org>
- <1542990817-28362-2-git-send-email-etienne.carriere@linaro.org>
- <20181210225722.01b691cb@windsurf>
-Message-ID: <CAN5uoS-_Fa66c3j_YoBTAO36Ug=V2FPV-GTb8z2+T_W0HqyPSA@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 12 Dec 2018 17:55:38 +0200
+Subject: [Buildroot] [PATCH] package/uclibc: add custom bits/poll.h for
+ xtensa
+In-Reply-To: <20181212151314.19556-1-jcmvbkbc@gmail.com>
+References: <20181212151314.19556-1-jcmvbkbc@gmail.com>
+Message-ID: <20181212155538.7co3zhnua7kivs7b@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Max,
 
-Just a word below specifically on the OP-TEE client version selection.
+On Wed, Dec 12, 2018 at 07:13:14AM -0800, Max Filippov wrote:
+> Definitions of POLLWRNORM, POLLWRBAND and POLLREMOVE in xtensa linux
+> kernel are non-standard. Provide bits/poll.h with correct values for
+> these constants for uclibc-ng.
+> 
+> This fixes the following strace build errors:
+> 
+>   In file included from xlat/pollflags.h:4:0,
+>                    from poll.c:34:
+>   ./static_assert.h:40:24: error: static assertion failed: "POLLWRBAND != 0x0100"
+>    # define static_assert _Static_assert
+>                           ^
+>   xlat/pollflags.h:75:1: note: in expansion of macro ?static_assert?
+>    static_assert((POLLWRBAND) == (0x0100), "POLLWRBAND != 0x0100");
+>    ^~~~~~~~~~~~~
+>   ./static_assert.h:40:24: error: static assertion failed: "POLLREMOVE != 0x0800"
+>    # define static_assert _Static_assert
+>                           ^
+>   xlat/pollflags.h:117:1: note: in expansion of macro ?static_assert?
+>    static_assert((POLLREMOVE) == (0x0800), "POLLREMOVE != 0x0800");
+>    ^~~~~~~~~~~~~
+> 
+> Fixes:
+>  http://autobuild.buildroot.net/results/5a0112b7a2c81fa5253c9adc93efe415256cd811
+> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 
+Reviewed-by: Baruch Siach <baruch@tkos.co.il>
 
-On Mon, 10 Dec 2018 at 22:57, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Etienne,
->
-> On Fri, 23 Nov 2018 17:33:34 +0100, Etienne Carriere wrote:
->
-> > diff --git a/package/optee-client/Config.in b/package/optee-client/Config.in
-> > new file mode 100644
-> > index 0000000..cff452b
-> > --- /dev/null
-> > +++ b/package/optee-client/Config.in
-> > @@ -0,0 +1,73 @@
-> > +config BR2_PACKAGE_OPTEE_CLIENT
-> > +     bool "Embed OP-TEE client"
->
-> Just:
->
->         bool "optee-client"
->
-> > +     help
-> > +       Enable the OP-TEE client package that brings non-secure
-> > +       client application resources for OP-TEE support. OP-TEE
-> > +       client is a component delivered by the OP-TEE project.
-> > +
-> > +       https://github.com/OP-TEE/optee_client
->
-> Please move this at the very end of the Config.in help text, i.e...
->
-> > +
-> > +       The client API library allows application to invoke
-> > +       trusted applications hosted in the OP-TEE OS secure world.
-> > +       The supplicant provides services hosted by the non-secure
-> > +       world and invoked by the secure world.
->
-> ... here.
->
-> > +
-> > +if BR2_PACKAGE_OPTEE_CLIENT
-> > +
-> > +choice
-> > +     prompt "OP-TEE client version"
->
->         prompt "version"
->
-> > +     default BR2_PACKAGE_OPTEE_CLIENT_LATEST
-> > +     help
-> > +       Select the version of OP-TEE client you want to use
-> > +
-> > +config BR2_PACKAGE_OPTEE_CLIENT_LATEST
-> > +     bool "sync with latest registered release tag"
->
->         bool "3.3.0"
->
-> > +     help
-> > +       Sync on latest release tag. This currently fetches the
->
-> Don't say "latest", because it won't always be the latest.
->
-> > +       latest registered release tag from the OP-TEE official
-> > +       Git repository.
-> > +
-> > +config BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_GIT
-> > +     bool "sync with a specific Git"
->
->         bool "Custom Git repository"
->
-> > +     help
-> > +       Sync with a specific OP-TEE Git repository.
->
-> Is there actually a need to specify a custom version for this client
-> library ? For the OS part, which is platform-specific, I understand,
-> but for optee-client, is this really needed ?
+Fixing the autobuilder failures requires rebuild of the xtensa binary 
+toolchain with this patch.
 
-Yes. This allows on to use an older specific OP-TEE version and due to
-backward compatibility issues, one should specify the target version
-for each OP-TEE components if one is not the "latest" registered in
-BR.
+Thanks,
+baruch
 
->
-> > +endchoice
-> > +
-> > +config BR2_PACKAGE_OPTEE_CLIENT_SYNCED_VERSION
-> > +     bool "use same version ref for OP-TEE components"
->
-> I don't understand why you have this here. If you really want to do
-> that, what about adding a third choice above:
->
->         bool "use same version as optee-os"
->
-> > +     depends on BR2_PACKAGE_OPTEE_CLIENT_LATEST
-> > +     default true
->
-> default true doesn't mean anything, "default y" does. And it should
-> depend on BR2_TARGET_OPTEE_OS being selected.
->
-> But how can this make sense ? If the version for optee-os is a Git
-> commit hash, how can optee-client use the same version, given that they
-> are stored in two separate Git repositories, and that therefore it's
-> impossible/unlikely that optee-os/optee-client will have the same Git
-> commit hash. Or maybe this is only intended to work with Git tags? In
-> this case, it should be clearly explained.
+> ---
+>  .../0002-xtensa-add-custom-bits-poll.h.patch       | 93 ++++++++++++++++++++++
+>  1 file changed, 93 insertions(+)
+>  create mode 100644 package/uclibc/0002-xtensa-add-custom-bits-poll.h.patch
+> 
+> diff --git a/package/uclibc/0002-xtensa-add-custom-bits-poll.h.patch b/package/uclibc/0002-xtensa-add-custom-bits-poll.h.patch
+> new file mode 100644
+> index 000000000000..030938bbcd33
+> --- /dev/null
+> +++ b/package/uclibc/0002-xtensa-add-custom-bits-poll.h.patch
+> @@ -0,0 +1,93 @@
+> +From 0cae9700a4a421dc22c80d205fbae4d01fdd1356 Mon Sep 17 00:00:00 2001
+> +From: Max Filippov <jcmvbkbc@gmail.com>
+> +Date: Wed, 12 Dec 2018 06:58:01 -0800
+> +Subject: [PATCH] xtensa: add custom bits/poll.h
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
+> +
+> +Definitions of POLLWRNORM, POLLWRBAND and POLLREMOVE in xtensa linux
+> +kernel are non-standard. Provide bits/poll.h with correct values for
+> +these constants.
+> +
+> +This fixes the following strace build errors:
+> +
+> +  In file included from xlat/pollflags.h:4:0,
+> +                   from poll.c:34:
+> +  ./static_assert.h:40:24: error: static assertion failed: "POLLWRBAND != 0x0100"
+> +   # define static_assert _Static_assert
+> +                          ^
+> +  xlat/pollflags.h:75:1: note: in expansion of macro ?static_assert?
+> +   static_assert((POLLWRBAND) == (0x0100), "POLLWRBAND != 0x0100");
+> +   ^~~~~~~~~~~~~
+> +  ./static_assert.h:40:24: error: static assertion failed: "POLLREMOVE != 0x0800"
+> +   # define static_assert _Static_assert
+> +                          ^
+> +  xlat/pollflags.h:117:1: note: in expansion of macro ?static_assert?
+> +   static_assert((POLLREMOVE) == (0x0800), "POLLREMOVE != 0x0800");
+> +   ^~~~~~~~~~~~~
+> +
+> +Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+> +---
+> + libc/sysdeps/linux/xtensa/bits/poll.h | 49 +++++++++++++++++++++++++++++++++++
+> + 1 file changed, 49 insertions(+)
+> + create mode 100644 libc/sysdeps/linux/xtensa/bits/poll.h
+> +
+> +diff --git a/libc/sysdeps/linux/xtensa/bits/poll.h b/libc/sysdeps/linux/xtensa/bits/poll.h
+> +new file mode 100644
+> +index 000000000000..4588cc326006
+> +--- /dev/null
+> ++++ b/libc/sysdeps/linux/xtensa/bits/poll.h
+> +@@ -0,0 +1,49 @@
+> ++/* Copyright (C) 1997, 2001, 2006 Free Software Foundation, Inc.
+> ++   This file is part of the GNU C Library.
+> ++
+> ++   The GNU C Library is free software; you can redistribute it and/or
+> ++   modify it under the terms of the GNU Lesser General Public
+> ++   License as published by the Free Software Foundation; either
+> ++   version 2.1 of the License, or (at your option) any later version.
+> ++
+> ++   The GNU C Library is distributed in the hope that it will be useful,
+> ++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+> ++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> ++   Lesser General Public License for more details.
+> ++
+> ++   You should have received a copy of the GNU Lesser General Public
+> ++   License along with the GNU C Library; if not, see
+> ++   <http://www.gnu.org/licenses/>.  */
+> ++
+> ++#ifndef _SYS_POLL_H
+> ++# error "Never use <bits/poll.h> directly; include <sys/poll.h> instead."
+> ++#endif
+> ++
+> ++/* Event types that can be polled for.  These bits may be set in `events'
+> ++   to indicate the interesting event types; they will appear in `revents'
+> ++   to indicate the status of the file descriptor.  */
+> ++#define POLLIN		0x001		/* There is data to read.  */
+> ++#define POLLPRI		0x002		/* There is urgent data to read.  */
+> ++#define POLLOUT		0x004		/* Writing now will not block.  */
+> ++
+> ++#ifdef __USE_XOPEN
+> ++/* These values are defined in XPG4.2.  */
+> ++# define POLLRDNORM	0x040		/* Normal data may be read.  */
+> ++# define POLLRDBAND	0x080		/* Priority data may be read.  */
+> ++# define POLLWRNORM	POLLOUT		/* Writing now will not block.  */
+> ++# define POLLWRBAND	0x100		/* Priority data may be written.  */
+> ++#endif
+> ++
+> ++#ifdef __USE_GNU
+> ++/* These are extensions for Linux.  */
+> ++# define POLLMSG	0x400
+> ++# define POLLREMOVE	0x800
+> ++# define POLLRDHUP	0x2000
+> ++#endif
+> ++
+> ++/* Event types always implicitly polled for.  These bits need not be set in
+> ++   `events', but they will appear in `revents' to indicate the status of
+> ++   the file descriptor.  */
+> ++#define POLLERR		0x008		/* Error condition.  */
+> ++#define POLLHUP		0x010		/* Hung up.  */
+> ++#define POLLNVAL	0x020		/* Invalid polling request.  */
+> +-- 
+> +2.11.0
+> +
+> -- 
+> 2.11.0
+> 
 
-Right. This attempts for synchro of the OP-TEE sources craps.
-I will remove the all and leave to the users to be consistent in their
-OP-TEE configuration when selecting specific package version.
-
->
-> > +     help
-> > +       When enabled, OP-TEE client version must match the version
-> > +       set for the other OP-TEE components.
-> > +
-> > +config BR2_PACKAGE_OPTEE_CLIENT_VERSION
-> > +     string
-> > +     default BR2_TARGET_OPTEE_OS_VERSION \
-> > +                     if BR2_PACKAGE_OPTEE_CLIENT_SYNCED_VERSION && \
-> > +                        BR2_TARGET_OPTEE_OS
->
-> The dependency on BR2_TARGET_OPTEE_OS should not come here, but be on
-> the BR2_PACKAGE_OPTEE_CLIENT_SYNCED_VERSION option.
->
-> > +     default "3.3.0" if BR2_PACKAGE_OPTEE_CLIENT_LATEST
-> > +     default BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_REPO_VERSION \
-> > +                     if BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_GIT
-> > +     help
-> > +       Reference in the target Git repository to sync with.
-> > +
-> > +if BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_GIT
-> > +
-> > +config BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_REPO_URL
-> > +     string "Git repository site"
->
->         string "URL of custom repository"
->
-> > +     help
-> > +       Specific location of the reference source tree Git
-> > +       repository.
-> > +
-> > +config BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_REPO_VERSION
-> > +     string "target reference to pull in the Git repository"
->
->         string "Custom repository version"
->
-> > +     help
-> > +       Package version reference to sync with. As source file
->
-> Don't use "sync", you don't sync with Git.
->
-> > +       reference is a Git repository, the version reference can
-> > +       be any Git reference as a tag or a sha1.
-> > +
-> > +endif
-> > +
-> > +endif #BR2_PACKAGE_OPTEE_CLIENT
-> > diff --git a/package/optee-client/S30optee b/package/optee-client/S30optee
-> > new file mode 100644
-> > index 0000000..c893243
-> > --- /dev/null
-> > +++ b/package/optee-client/S30optee
-> > @@ -0,0 +1,26 @@
-> > +#!/bin/sh
-> > +#
-> > +# /etc/init.d/optee
->
-> Drop this comment, it is useless, and in fact wrong: the file will not
-> have this name in a Buildroot filesystem.
->
-> > +#
-> > +# Start/stop tee-supplicant (OP-TEE normal world daemon)
-> > +#
-> > +case "$1" in
-> > +    start)
-> > +     if [ -e /usr/sbin/tee-supplicant -a -e /dev/teepriv0 ]; then
->
-> Drop this test, just start tee-supplicatn.
->
-> > +             echo "Starting tee-supplicant..."
-> > +             /usr/sbin/tee-supplicant &
->
-> Please use start-stop-daemon. See
-> https://patchwork.ozlabs.org/patch/994013/ for the "right" way of
-> writing an init script.
->
-> > +             exit 0
-> > +     else
-> > +             echo "tee-supplicant or TEE device not found"
-> > +             exit 1
-> > +     fi
-> > +
-> > +        ;;
-> > +    stop)
-> > +     killall tee-supplicant
->
-> Please use start-stop-daemon.
->
-> > +     ;;
-> > +    status)
-> > +     cat /dev/teepriv0 2>&1 | grep -q "Device or resource busy" || not="not "
-> > +     echo "tee-supplicant is ${not}active"
->
-> We don't provide a "status" target in other init scripts.
->
-> > +     ;;
-> > +esac
-> > diff --git a/package/optee-client/optee-client.hash b/package/optee-client/optee-client.hash
-> > new file mode 100644
-> > index 0000000..ed7bf4e
-> > --- /dev/null
-> > +++ b/package/optee-client/optee-client.hash
-> > @@ -0,0 +1,4 @@
-> > +# From https://github.com/OP-TEE/optee_client/archive/3.3.0.tar.gz
-> > +sha256 63af1567fdcdbe28b45be274266a89aa81bef3d0fd8ec5a6eb680046a92e1177  optee-client-3.3.0.tar.gz
-> > +# Locally computed
-> > +sha256 fda8385993f112d7ca61b88b54ba5b4cbeec7e43a0f9b317d5186703c1985e8f  LICENSE
->
-> Move the license hash in package/optee-client/3.3.0/optee-client.hash,
-> as it is specific to this version.
->
-> > diff --git a/package/optee-client/optee-client.mk b/package/optee-client/optee-client.mk
-> > new file mode 100644
-> > index 0000000..ccc5d12
-> > --- /dev/null
-> > +++ b/package/optee-client/optee-client.mk
-> > @@ -0,0 +1,30 @@
-> > +################################################################################
-> > +#
-> > +# optee-client
-> > +#
-> > +################################################################################
-> > +
-> > +OPTEE_CLIENT_VERSION = $(call qstrip,$(BR2_PACKAGE_OPTEE_CLIENT_VERSION))
-> > +OPTEE_CLIENT_LICENSE = BSD-3-Clause
->
-> The license text contains a BSD-2-Clause license.
->
-> > +OPTEE_CLIENT_LICENSE_FILES = LICENSE
-> > +
-> > +ifeq ($(BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_GIT),y)
-> > +OPTEE_CLIENT_SITE = $(call qstrip,$(BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_REPO_URL))
-> > +OPTEE_CLIENT_SITE_METHOD = git
-> > +BR_NO_CHECK_HASH_FOR += $(OPTEE_CLIENT_SOURCE)
-> > +else
-> > +OPTEE_CLIENT_SITE = $(call github,OP-TEE,optee_client,$(OPTEE_CLIENT_VERSION))
-> > +endif
-> > +
-> > +define OPTEE_CLIENT_INSTALL_SUPPLICANT_SCRIPT
-> > +     $(INSTALL) -m 0755 -D $(OPTEE_CLIENT_PKGDIR)/S30optee \
-> > +             $(TARGET_DIR)/etc/init.d/S30optee
-> > +endef
-> > +
-> > +define OPTEE_CLIENT_INSTALL_INIT_SYSV
-> > +     $(OPTEE_CLIENT_INSTALL_SUPPLICANT_SCRIPT)
->
-> Please do the $(INSTALL) right here, there is no reason to have an
-> indirection through the OPTEE_CLIENT_INSTALL_SUPPLICANT_SCRIPT
-> variable.
->
-> > +OPTEE_CLIENT_INSTALL_STAGING = YES
->
-> Please move this a bit above in the .mk file. We generally have such
-> statements before the build/installation commands.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
