@@ -1,41 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 12 Dec 2018 09:52:12 +0100
-Subject: [Buildroot] [PATCH] package/sdl2_net: add missing host-pkgconf
- dependency
-Message-ID: <20181212085212.12149-1-thomas.petazzoni@bootlin.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 12 Dec 2018 09:55:15 +0100
+Subject: [Buildroot] [PATCH 1/1] package/acpid: fix acpid.service
+ permissions
+In-Reply-To: <1544581204-28402-1-git-send-email-james.hilliard1@gmail.com>
+References: <1544581204-28402-1-git-send-email-james.hilliard1@gmail.com>
+Message-ID: <2afea5b8-3cbe-b67a-00a7-4e234caa37a1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The sdl2_net configure script uses pkg-config to finx sdl2. If it
-doesn't find pkg-config, it tries to locate sdl2-config, and defaults
-to /usr/bin/sdl2-config, which causes the build to fail with:
+ Hi James,
 
-arm-linux-gcc: ERROR: unsafe header/library path used in cross-compilation: '-I/usr/include/SDL2'
+On 12/12/2018 03:20, james.hilliard1 at gmail.com wrote:
+> From: James Hilliard <james.hilliard1@gmail.com>
 
-Fix this by adding host-pkgconf to the dependencies of sdl2_net. We
-could have added the right autoconf cache variable to tell the
-configure script where sdl2-config is located, but since pkg-config is
-tried first, let's use that.
+ Could you give a little more detail here? In particular: is it just because
+it's not supposed to be executed, or does it in fact give some runtime problems
+if it is executable? That information is important to decide if the patch should
+be backported to the stable branches or not.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/sdl2_net/sdl2_net.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Regards,
+ Arnout
 
-diff --git a/package/sdl2_net/sdl2_net.mk b/package/sdl2_net/sdl2_net.mk
-index 2fa4a8c2e0..93bf3a2eb3 100644
---- a/package/sdl2_net/sdl2_net.mk
-+++ b/package/sdl2_net/sdl2_net.mk
-@@ -10,6 +10,6 @@ SDL2_NET_SITE = http://www.libsdl.org/projects/SDL_net/release
- SDL2_NET_LICENSE = Zlib
- SDL2_NET_LICENSE_FILES = COPYING.txt
- SDL2_NET_INSTALL_STAGING = YES
--SDL2_NET_DEPENDENCIES = sdl2
-+SDL2_NET_DEPENDENCIES = sdl2 host-pkgconf
- 
- $(eval $(autotools-package))
--- 
-2.19.2
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/acpid/acpid.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/acpid/acpid.mk b/package/acpid/acpid.mk
+> index 514fd31..adcc175 100644
+> --- a/package/acpid/acpid.mk
+> +++ b/package/acpid/acpid.mk
+> @@ -11,7 +11,7 @@ ACPID_LICENSE = GPL-2.0+
+>  ACPID_LICENSE_FILES = COPYING
+>  
+>  define ACPID_INSTALL_INIT_SYSTEMD
+> -	$(INSTALL) -D -m 0755 package/acpid/acpid.service \
+> +	$(INSTALL) -D -m 0644 package/acpid/acpid.service \
+>  		$(TARGET_DIR)/usr/lib/systemd/system/acpid.service
+>  	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+>  	ln -sf ../../../../usr/lib/systemd/system/acpid.service \
+> 
