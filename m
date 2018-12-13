@@ -1,35 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 13 Dec 2018 21:48:51 +0100
-Subject: [Buildroot] [git commit] package/libgpgme: properly tweak
+Date: Thu, 13 Dec 2018 21:53:22 +0100
+Subject: [Buildroot] [PATCH] package/libgpgme: properly tweak
  gpgme-config
-Message-ID: <20181213204915.B21B08C5ED@busybox.osuosl.org>
+In-Reply-To: <20181211152425.32525-1-thomas.petazzoni@bootlin.com>
+References: <20181211152425.32525-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20181213215322.1ebeb286@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3df53aa11dce9f80a2f97709c3a7056af4d13439
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-libgpgme installs a gpgme-config script, it should be tweaked using
-the <pkg>_CONFIG_SCRIPTS mechanism. This is generally useful and is
-going to be particularly important with per-package directories.
+On Tue, 11 Dec 2018 16:24:25 +0100, Thomas Petazzoni wrote:
+> libgpgme installs a gpgme-config script, it should be tweaked using
+> the <pkg>_CONFIG_SCRIPTS mechanism. This is generally useful and is
+> going to be particularly important with per-package directories.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  package/libgpgme/libgpgme.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libgpgme/libgpgme.mk | 1 +
- 1 file changed, 1 insertion(+)
+Applied to master, thanks.
 
-diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
-index a70ffcf11d..85450c83d2 100644
---- a/package/libgpgme/libgpgme.mk
-+++ b/package/libgpgme/libgpgme.mk
-@@ -12,6 +12,7 @@ LIBGPGME_LICENSE_FILES = COPYING.LESSER
- LIBGPGME_INSTALL_STAGING = YES
- LIBGPGME_DEPENDENCIES = libassuan libgpg-error
- LIBGPGME_LANGUAGE_BINDINGS = cl
-+LIBGPGME_CONFIG_SCRIPTS = gpgme-config
- 
- LIBGPGME_CONF_OPTS = \
- 	--with-gpg-error-prefix=$(STAGING_DIR)/usr \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
