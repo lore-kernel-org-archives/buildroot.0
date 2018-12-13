@@ -1,43 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 13 Dec 2018 21:30:54 +0100
-Subject: [Buildroot] [PATCH 1/1] libv4l: fix udev build with pkgconf
- 1.5.3
-In-Reply-To: <20181212213444.4501-1-fontaine.fabrice@gmail.com>
-References: <20181212213444.4501-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181213213054.7f8c9f0b@windsurf>
+Date: Thu, 13 Dec 2018 21:31:26 +0100
+Subject: [Buildroot] [git commit] clamav: add optional systemd dependency
+Message-ID: <20181213202729.5DE5C8B40A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=70992f5b690516ff993068f5088d4fc4ae1fd7d9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 12 Dec 2018 22:34:44 +0100, Fabrice Fontaine wrote:
-> Since the bump to 1.5.3, pkgconf prepends the sysroot to all absolute
-> paths found in the .pc file. This is correct when the paths refer to
-> something in STAGING_DIR (e.g. libdir, includedir), but not when it
-> refers to something used for the target.
-> 
-> libv4l uses the udevdir variable from libudev.pc to decide where
-> to install things. Since DESTDIR is prepended to the install
-> destination, this will end up in the wrong location.
-> 
-> Until a better solution is found in pkgconf, pass the udevdir to use
-> explicitly instead of relying on libudev.pc.
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/597cd814225c2af9b896a1f25f98cdff33fd810a
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libv4l/libv4l.mk | 1 +
->  1 file changed, 1 insertion(+)
+clamav has an optional systemd dependency
 
-Applied to master, thanks.
+Moreover, since the bump to 1.5.3, pkgconf prepends the sysroot to all
+absolute paths found in the .pc file. This is correct when the paths
+refer to something in STAGING_DIR (e.g. libdir, includedir), but not
+when it refers to something used for the target.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+clamav uses the systemdsystemunitdir variable from systemd.pc to decide
+where to install things. Since DESTDIR is prepended to the install
+destination, this will end up in the wrong location.
+
+Until a better solution is found in pkgconf, pass the
+systemdsystemunitdir to use explicitly instead of relying on systemd.pc.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/fe526c60542527112e6441e453b4df5de49242d9
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/clamav/clamav.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index 50990abad6..25ae240545 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -85,4 +85,11 @@ else
+ CLAMAV_CONF_OPTS += --without-pcre
+ endif
+ 
++ifeq ($(BR2_INIT_SYSTEMD),y)
++CLAMAV_CONF_OPTS += --with-systemdsystemunitdir=/usr/lib/systemd/system
++CLAMAV_DEPENDENCIES += systemd
++else
++CLAMAV_CONF_OPTS += --with-systemdsystemunitdir=no
++endif
++
+ $(eval $(autotools-package))
