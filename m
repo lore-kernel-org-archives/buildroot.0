@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 13 Dec 2018 21:38:14 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libinput: bump to version 1.12.3
-In-Reply-To: <1544592921-10002-1-git-send-email-james.hilliard1@gmail.com>
-References: <1544592921-10002-1-git-send-email-james.hilliard1@gmail.com>
-Message-ID: <20181213213814.4fd15c06@windsurf>
+Date: Thu, 13 Dec 2018 21:45:05 +0100
+Subject: [Buildroot] [PATCH] package/cryptopp: change site to https to
+ avoid a redirection
+In-Reply-To: <20181212025511.19211-1-casantos@datacom.com.br>
+References: <20181212025511.19211-1-casantos@datacom.com.br>
+Message-ID: <20181213214505.246a8107@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +13,11 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 12 Dec 2018 13:35:21 +0800, james.hilliard1 at gmail.com wrote:
-> From: James Hilliard <james.hilliard1@gmail.com>
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+On Wed, 12 Dec 2018 00:55:11 -0200, Carlos Santos wrote:
+> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 > ---
->  package/libinput/libinput.hash | 10 +++++-----
->  package/libinput/libinput.mk   | 10 +++++-----
->  2 files changed, 10 insertions(+), 10 deletions(-)
+>  package/cryptopp/cryptopp.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied to master, thanks.
 
