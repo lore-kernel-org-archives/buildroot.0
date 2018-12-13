@@ -1,89 +1,60 @@
-From: Jared Bents <jared.bents@rockwellcollins.com>
-Date: Thu, 13 Dec 2018 14:47:26 -0600
-Subject: [Buildroot] [PATCH v2 1/1] package/swupdate: Update to version
- 2018.11
-In-Reply-To: <20181213211658.058e01cb@windsurf>
-References: <20181212142056.7722-1-jared.bents@rockwellcollins.com>
- <20181213211658.058e01cb@windsurf>
-Message-ID: <CAM=7fbdKpSYh-a4GMULf_177H+idSvGXN0AMzBvKcv7OFNW9BA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 13 Dec 2018 21:47:24 +0100
+Subject: [Buildroot] [git commit] configs/freescale_imx8mqevk: bump packages
+ to imx_4.14.62_1.0.0_beta
+Message-ID: <20181213204349.11C968CA67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=769ee2fc312d75204b6dded96cd62d90cfd106a7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, Dec 13, 2018 at 2:17 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Jared,
->
-> On Wed, 12 Dec 2018 08:20:56 -0600, Jared Bents wrote:
-> > Update to version 2018.11 to resolve build errors due to the changes
-> > in libcurl at version 7.62.0
->
-> Which build failure? I don't see any in the autobuilders. Why don't we
-> see any failure in the autobuilders?
+Bump kernel, U-Boot and ATF packages to the NXP imx_4.14.62_1.0.0_beta
+release.
 
-libcurl in version 7.62.0 updated CURLE_SSL_CACERT to share the same
-value as CURLE_PEER_FAILED_VERIFICATION so if you build with the
-kconfig option CONFIG_DOWNLOAD turned on and it detects that libcurl
-is included in the build, the build will fail on versions of swupdate
-that don't account for the 7.62.0 version of libcurl.  The default
-config used by swupdate does not have CONFIG_DOWNLOAD turned on.
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/freescale_imx8mqevk_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Here is the error:
-
->>> swupdate 2018.03 Building
-PATH="/accts/jmbents/rclinux/target_build/qoriq_t1042_fomax_factory_defconfig/host/bin:/accts/jmbents/rclinux/target_build/qoriq_t1042_fomax_factory_defconfig/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
-HAVE_JSON_C=n HAVE_LIBARCHIVE=y HAVE_LIBCONFIG=y HAVE_LIBCURL=y
-HAVE_LUA=n HAVE_LIBMTD=y HAVE_LIBUBI=y HAVE_LIBSSL=y HAVE_LIBCRYPTO=y
-HAVE_LIBUBOOTENV=y HAVE_LIBZEROMQ=n HAVE_ZLIB=y /usr/bin/make -j13 -C
-/accts/jmbents/rclinux/target_build/qoriq_t1042_fomax_factory_defconfig/build/swupdate-2018.03
-  CC      corelib/channel_curl.o
-  CC      corelib/installer.o
-  CC      corelib/mtd-interface.o
-  CC      corelib/network_thread.o
-  CC      corelib/parsing_library.o
-  CC      corelib/progress_thread.o
-  CC      corelib/stream_interface.o
-  CC      corelib/parsing_library_libconfig.o
-  CC      corelib/swupdate_dict.o
-  CC      corelib/swupdate_settings.o
-corelib/channel_curl.c: In function ?channel_map_curl_error?:
-corelib/channel_curl.c:298:2: error: duplicate case value
-  case CURLE_SSL_CACERT:
-  ^~~~
-corelib/channel_curl.c:297:2: error: previously used here
-  case CURLE_PEER_FAILED_VERIFICATION:
-  ^~~~
-corelib/channel_curl.c: In function ?channel_get_file?:
-corelib/channel_curl.c:864:16: warning: unused variable ?md_len?
-[-Wunused-variable]
-   unsigned int md_len;
-                ^~~~~~
-scripts/Makefile.build:168: recipe for target 'corelib/channel_curl.o' failed
-make[3]: *** [corelib/channel_curl.o] Error 1
-make[3]: *** Waiting for unfinished jobs....
-Makefile:437: recipe for target 'corelib' failed
-make[2]: *** [corelib] Error 2
-package/pkg-generic.mk:230: recipe for target
-'/accts/jmbents/rclinux/target_build/qoriq_t1042_fomax_factory_defconfig/build/swupdate-2018.03/.stamp_built'
-failed
-make[1]: *** [/accts/jmbents/rclinux/target_build/qoriq_t1042_fomax_factory_defconfig/build/swupdate-2018.03/.stamp_built]
-Error 2
-Makefile:23: recipe for target '_all' failed
-make: *** [_all] Error 2
-
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
-Thank you,
-Jared
+diff --git a/configs/freescale_imx8mqevk_defconfig b/configs/freescale_imx8mqevk_defconfig
+index a6e9b940b5..895713b1c1 100644
+--- a/configs/freescale_imx8mqevk_defconfig
++++ b/configs/freescale_imx8mqevk_defconfig
+@@ -1,13 +1,13 @@
+ BR2_aarch64=y
+ BR2_ARM_FPU_VFPV3=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/fsl-imx8mq-evk.dtb"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.9.51_8mq_ga"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.14.62_1.0.0_beta"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-imx8mq-evk"
+@@ -20,14 +20,14 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_4.9.51_8mq_ga"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_4.14.62_1.0.0_beta"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mq"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.9.51_8mq_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.14.62_1.0.0_beta"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mq_evk"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
