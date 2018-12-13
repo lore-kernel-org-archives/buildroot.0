@@ -1,48 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 13 Dec 2018 21:54:21 +0100
-Subject: [Buildroot] [git commit] package/wayland-protocols: bump to version
- 1.17
-Message-ID: <20181213205530.8D1768D293@busybox.osuosl.org>
+Date: Thu, 13 Dec 2018 21:59:56 +0100
+Subject: [Buildroot] [PATCH 1/1] package/acpid: fix acpid.service
+ permissions
+In-Reply-To: <1544581204-28402-1-git-send-email-james.hilliard1@gmail.com>
+References: <1544581204-28402-1-git-send-email-james.hilliard1@gmail.com>
+Message-ID: <20181213215956.0b5b2376@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f591f5826f58f5056985a998ccf01626c732ab5b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/wayland-protocols/wayland-protocols.hash | 8 ++++----
- package/wayland-protocols/wayland-protocols.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+On Wed, 12 Dec 2018 10:20:04 +0800, james.hilliard1 at gmail.com wrote:
+> From: James Hilliard <james.hilliard1@gmail.com>
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/acpid/acpid.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/wayland-protocols/wayland-protocols.hash b/package/wayland-protocols/wayland-protocols.hash
-index 9cbb4fef72..d62a433dfd 100644
---- a/package/wayland-protocols/wayland-protocols.hash
-+++ b/package/wayland-protocols/wayland-protocols.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2018-February/036992.html
--md5 29312149dafcd4a0e739ba94995a574d  wayland-protocols-1.13.tar.xz
--sha1 1b4b3385e168c361b4d350668d92f3a90ceee189  wayland-protocols-1.13.tar.xz
--sha256 0758bc8008d5332f431b2a84fea7de64d971ce270ed208206a098ff2ebc68f38  wayland-protocols-1.13.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2018-November/039662.html
-+md5 55ddd5fdb02b73b9de9559aaec267315  wayland-protocols-1.17.tar.xz
-+sha1 7d2569c838c776545e3eb1b1049b9c37178aae24  wayland-protocols-1.17.tar.xz
-+sha256 df1319cf9705643aea9fd16f9056f4e5b2471bd10c0cc3713d4a4cdc23d6812f  wayland-protocols-1.17.tar.xz
- sha256 f1a2b233e8a9a71c40f4aa885be08a0842ac85bb8588703c1dd7e6e6502e3124  COPYING
-diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
-index bba0979934..5ed4c3bc90 100644
---- a/package/wayland-protocols/wayland-protocols.mk
-+++ b/package/wayland-protocols/wayland-protocols.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WAYLAND_PROTOCOLS_VERSION = 1.13
-+WAYLAND_PROTOCOLS_VERSION = 1.17
- WAYLAND_PROTOCOLS_SITE = http://wayland.freedesktop.org/releases
- WAYLAND_PROTOCOLS_SOURCE = wayland-protocols-$(WAYLAND_PROTOCOLS_VERSION).tar.xz
- WAYLAND_PROTOCOLS_LICENSE = MIT
+Applied to master with an extended commit log. Thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
