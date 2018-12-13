@@ -1,60 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 13 Dec 2018 21:04:59 +0100
-Subject: [Buildroot] Building cargo with per-package directories
-In-Reply-To: <20181212225041.GA15035@itchy>
-References: <20181211171252.02ddb571@windsurf> <20181211212705.GA13119@itchy>
- <20181212225041.GA15035@itchy>
-Message-ID: <20181213210459.78bc90ce@windsurf>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 13 Dec 2018 21:11:08 +0100
+Subject: [Buildroot] [RFC v3 1/3] libopenssl: bump version to 1.1.0h
+In-Reply-To: <3860dc03-4eb6-c7f1-f5ec-590f8f8d02f1@mind.be>
+References: <20180508195431.19944-1-ps.report@gmx.net>
+ <0470f9f2-f90d-c19d-ee47-c97d393ced05@gmail.com>
+ <20180611220749.24b8d3c9@gmx.net>
+ <fnmm4fxjln.ln2@ID-313208.user.individual.net>
+ <20180819192358.58d6f31f@gmx.net>
+ <3860dc03-4eb6-c7f1-f5ec-590f8f8d02f1@mind.be>
+Message-ID: <20181213211108.6bd8c1c0@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Eric,
+Hello Arnout,
 
-On Wed, 12 Dec 2018 23:50:41 +0100, Eric Le Bihan wrote:
+On Tue, 11 Dec 2018 23:44:35 +0100, Arnout Vandecappelle <arnout@mind.be> wrote:
 
-> The build ended as expected.
+>  Hi Peter, Bernd,
 > 
-> ```
->   = note: /usr/bin/ld: cannot find -lhttp_parser
->           collect2: error: ld returned 1 exit status
-> ```
+> On 19/08/2018 19:23, Peter Seiderer wrote:
+> > Hello Bernd,
+> > 
+> > On Sun, 19 Aug 2018 01:29:19 +0200, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+> >   
+> >> Am Mon, 11 Jun 2018 22:07:49 +0200 schrieb Peter Seiderer:
+> >>  
+> >>> Many thanks for testing and the mariadb version bump suggestion, will
+> >>> add it to the next patch set iteration...    
+> >>
+> >> Hi Peter,
+> >>
+> >> just wanted to let you know that I am currently working on updating the 
+> >> patch series, this includes build tests and, if necessary updates, of 
+> >> nearly all buildroot packages using openssl.
+> >>  
+> > 
+> > Many thanks for taking over (did not find much time for additional work),
+> > only started the mariadb update (not yet finished):  
 > 
-> The library libhttp_parser.so is required by one of the dependencies of
-> cargo: libgit2-sys, which provides the Rust interface to libgit2.
-> 
-> There is trick in vendor/libgit2-sys/build.rs to handle
-> libhttp_parser.so: if the pkgconfig file of libgit2 contains -lhttp_parser,
-> then pass it to rustc via "cargo:rustc-link-lib=http_parser".
-> 
-> See "Outputs of the Build Script" in Cargo Book [1] for details.
-> 
-> We want to use per-package/host-cargo/host/lib/libhttp_parser.so. Adding
-> "-Clink-arg=-L$(HOST_DIR)/lib" to the RUSTFLAGS environment variable
-> solves the issue on my system:
-> 
-> ```
-> diff --git a/package/cargo/cargo.mk b/package/cargo/cargo.mk
-> index 1b1053ba41..891901578e 100644
-> --- a/package/cargo/cargo.mk
-> +++ b/package/cargo/cargo.mk
-> @@ -70,7 +70,7 @@ HOST_CARGO_SNAP_OPTS = \
->  	$(if $(VERBOSE),--verbose)
-> 
->  HOST_CARGO_ENV = \
-> -	RUSTFLAGS="-Clink-arg=-Wl,-rpath,$(HOST_DIR)/lib" \
-> +	RUSTFLAGS="-Clink-arg=-Wl,-rpath,$(HOST_DIR)/lib -Clink-arg=-L$(HOST_DIR)/lib" \
->  	CARGO_HOME=$(HOST_CARGO_HOME)
+>  Any progress on the openssl bump? Now is a good time since we're at the
+> beginning of the cycle, and it would be nice to have 1.1.0 in the 2019.02 release.
 
-Thanks a lot for this investigation and solution. I will definitely
-have a look and see how it goes. Many, many thanks!
+Sorry, no updates from my side...
 
-Best regards,
+Regards,
+Peter
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> 
+>  Regards,
+>  Arnout
