@@ -1,37 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 13 Dec 2018 22:12:12 +0100
-Subject: [Buildroot] [PATCH] package/libpam-tacplus: fix compilation
- with GCC 8
-In-Reply-To: <20181211112113.21648-1-casantos@datacom.com.br>
-References: <20181211112113.21648-1-casantos@datacom.com.br>
-Message-ID: <20181213221212.5dcafde0@windsurf>
+Date: Thu, 13 Dec 2018 22:14:37 +0100
+Subject: [Buildroot] [git commit] xapp_viewres: fix build with pkgconf 1.5.3
+Message-ID: <20181213211050.EDD298D3B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=3cd2c0971e2bcb25df5a998036ee740b215bbd39
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 11 Dec 2018 09:21:13 -0200, Carlos Santos wrote:
-> GCC 8 demands that the size of the string copied by strncpy be smaller
-> than the size of the destination to keep space for the trailibg '\0'.
-> This causes a compilation error in pam_tacplus, so add a patch already
-> sent uptream to fix it.
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/da6d150e470046c03c5f7463de045604e15e4a30/
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-> ---
->  ...0002-Fix-compilation-of-tacc.c-with-GCC-8.patch | 39 ++++++++++++++++++++++
->  1 file changed, 39 insertions(+)
->  create mode 100644 package/libpam-tacplus/0002-Fix-compilation-of-tacc.c-with-GCC-8.patch
+Since the bump to 1.5.3, pkgconf prepends the sysroot to all absolute
+paths found in the .pc file. This is correct when the paths refer to
+something in STAGING_DIR (e.g. libdir, includedir), but not when it
+refers to something used for the target.
 
-Applied to master, thanks. Please submit the patch upstream. Thanks!
+xapp_viewres uses the appdefaultdir variable from xt.pc to decide where
+to install things. Since DESTDIR is prepended to the install
+destination, this will end up in the wrong location.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Until a better solution is found in pkgconf, pass the appdefaultdir to
+use explicitly instead of relying on xt.pc.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/71b5fb2b5df30e25dacdef71f7aaddbecbf8bde6
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/x11r7/xapp_viewres/xapp_viewres.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/x11r7/xapp_viewres/xapp_viewres.mk b/package/x11r7/xapp_viewres/xapp_viewres.mk
+index 95205b4352..e32de0f732 100644
+--- a/package/x11r7/xapp_viewres/xapp_viewres.mk
++++ b/package/x11r7/xapp_viewres/xapp_viewres.mk
+@@ -10,5 +10,6 @@ XAPP_VIEWRES_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_VIEWRES_LICENSE = MIT
+ XAPP_VIEWRES_LICENSE_FILES = COPYING
+ XAPP_VIEWRES_DEPENDENCIES = xlib_libXaw
++XAPP_VIEWRES_CONF_OPTS = --with-appdefaultdir=/usr/share/X11/app-defaults
+ 
+ $(eval $(autotools-package))
