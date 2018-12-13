@@ -1,43 +1,30 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Thu, 13 Dec 2018 07:53:05 -0200 (BRST)
-Subject: [Buildroot] <PKG>_SOURCE without a version?
-In-Reply-To: <CAJtjsKZ8j6x9cHEuCZVuYu0YVcYZjzxM4vYpbPek+PZ7cC7cvQ@mail.gmail.com>
-References: <CAJtjsKZ8j6x9cHEuCZVuYu0YVcYZjzxM4vYpbPek+PZ7cC7cvQ@mail.gmail.com>
-Message-ID: <1575802942.2620821.1544694785908.JavaMail.zimbra@datacom.com.br>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 13 Dec 2018 10:43:26 +0000
+Subject: [Buildroot] =?utf-8?q?=5BBug_11556=5D_Can_not_build_qt5base_5=2E?=
+ =?utf-8?q?11=2E2_with_weston_3=2E0=2E0_and_vivante_GPU=2E_error=3A_invali?=
+ =?utf-8?b?ZCBjb252ZXJzaW9uIGZyb20g4oCYdm9pZCrigJkgdG8g4oCYRUdMTmF0aXZl?=
+ =?utf-8?q?DisplayType_=7Baka_wl=5Fdisplay*=7D=E2=80=99_=5B-fpermissive=5D?=
+In-Reply-To: <bug-11556-163@https.bugs.busybox.net/>
+References: <bug-11556-163@https.bugs.busybox.net/>
+Message-ID: <bug-11556-163-dzFSjQEQTi@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Johan Oudinet" <johan.oudinet@gmail.com>
-> To: "buildroot" <buildroot@buildroot.org>
-> Sent: Quarta-feira, 12 de dezembro de 2018 17:01:11
-> Subject: [Buildroot] <PKG>_SOURCE without a version?
+https://bugs.busybox.net/show_bug.cgi?id=11556
 
-> Hi,
-> 
-> I'm packaging a project which distributes its sources without a
-> version number in the filename. The version is present in the URL, but
-> I'm wondering if the download architecture can handle a version bump
-> properly, or if it would stick to the file in <PKG>_DL_DIR from an
-> older version?
-> 
-> Looking at the other packages, I found package/jquery-sparkline that
-> has the same "issue".
-> Its version has been bump several times. So either this is a bug and
-> no one noticed it until now, or the download step can detect somehow
-> when it has to download the file again?
-> 
-> Best,
-> --
-> Johan
+--- Comment #3 from Patrick Koller <koller@stettbacher.ch> ---
+Weston/Wayland without Qt is working fine. The vivante examples are working
+excellent, too.
 
-You can cheat, as in
-
-    https://patchwork.ozlabs.org/patch/849230/
-
-Notice that we use $(<PKG>_DL_DIR) now, instead of $(DL_DIR).
+@Peter:
+Thanks for your suggestions. I can not disable qt eglfs support completly,
+since I need the qt5webengine in my application, which requires eglfs support.
+So, my next step is to add the needed pointer casts and hope for success. I
+will report my progress here.
 
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
+You are receiving this mail because:
+You are on the CC list for the bug.
