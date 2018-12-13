@@ -1,34 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 13 Dec 2018 21:48:36 +0100
-Subject: [Buildroot] [PATCH 1/1] libva: fix build with pkgconf 1.5.3
-In-Reply-To: <20181211181943.14944-1-fontaine.fabrice@gmail.com>
-References: <20181211181943.14944-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181213214836.472bf753@windsurf>
+Date: Thu, 13 Dec 2018 21:48:51 +0100
+Subject: [Buildroot] [git commit] package/libgpgme: properly tweak
+ gpgme-config
+Message-ID: <20181213204915.B21B08C5ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=3df53aa11dce9f80a2f97709c3a7056af4d13439
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 11 Dec 2018 19:19:43 +0100, Fabrice Fontaine wrote:
-> Set ac_cv_path_WAYLAND_SCANNER to the wayland-scanner in the host
-> directory otherwise build will fail because libva will use pkgconfig to
-> find it
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/836d3a7085c576f607b1532d5204a54d6c2c1e66
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libva/libva.mk | 1 +
->  1 file changed, 1 insertion(+)
+libgpgme installs a gpgme-config script, it should be tweaked using
+the <pkg>_CONFIG_SCRIPTS mechanism. This is generally useful and is
+going to be particularly important with per-package directories.
 
-Applied to master, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libgpgme/libgpgme.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
+index a70ffcf11d..85450c83d2 100644
+--- a/package/libgpgme/libgpgme.mk
++++ b/package/libgpgme/libgpgme.mk
+@@ -12,6 +12,7 @@ LIBGPGME_LICENSE_FILES = COPYING.LESSER
+ LIBGPGME_INSTALL_STAGING = YES
+ LIBGPGME_DEPENDENCIES = libassuan libgpg-error
+ LIBGPGME_LANGUAGE_BINDINGS = cl
++LIBGPGME_CONFIG_SCRIPTS = gpgme-config
+ 
+ LIBGPGME_CONF_OPTS = \
+ 	--with-gpg-error-prefix=$(STAGING_DIR)/usr \
