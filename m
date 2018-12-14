@@ -1,49 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Dec 2018 21:28:48 +0100
-Subject: [Buildroot] [git commit] kmod: fix build with pkgconf 1.5.3
-Message-ID: <20181214202637.A260284659@busybox.osuosl.org>
+Date: Fri, 14 Dec 2018 21:29:24 +0100
+Subject: [Buildroot] [git commit] python-requests: bump to version 2.21.0
+Message-ID: <20181214202637.AF7C88D244@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=295379641007abb672398c9a32ce4bfaa1612d2a
+commit: https://git.buildroot.net/buildroot/commit/?id=19330a2b3cdc1fecc67158740cf93eb8515e2230
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since the bump to 1.5.3, pkgconf prepends the sysroot to all absolute
-paths found in the .pc file. This is correct when the paths refer to
-something in STAGING_DIR (e.g. libdir, includedir), but not when it
-refers to something used for the target.
-
-kmod uses the completionsdir variable from bash-completions.pc to decide
-where to install things. Since DESTDIR is prepended to the install
-destination, this will end up in the wrong location.
-
-Until a better solution is found in pkgconf, pass the appdefaultdir to
-use explicitly instead of relying on bash-completions.pc.
-
-Fixes:
- - http://autobuild.buildroot.org/results/f8a1f956333062027294e766ff0ddab5c35d5887
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kmod/kmod.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/python-requests/python-requests.hash | 4 ++--
+ package/python-requests/python-requests.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-index c165ea3020..ea5d291133 100644
---- a/package/kmod/kmod.mk
-+++ b/package/kmod/kmod.mk
-@@ -28,6 +28,10 @@ KMOD_CONF_OPTS = --disable-static --enable-shared
- KMOD_CONF_OPTS += --disable-manpages
- HOST_KMOD_CONF_OPTS = --disable-manpages
+diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
+index e3b77744af..46f62c75c5 100644
+--- a/package/python-requests/python-requests.hash
++++ b/package/python-requests/python-requests.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/requests/json
+-md5	2918817ea4688f4ea21cb4b11e353448  requests-2.20.1.tar.gz
+-sha256	ea881206e59f41dbd0bd445437d792e43906703fff75ca8ff43ccdb11f33f263  requests-2.20.1.tar.gz
++md5	1bcd0e0977c3f8db1848ba0e2b7ab904  requests-2.21.0.tar.gz
++sha256	502a824f31acdacb3a35b6690b5fbf0bc41d63a24a45c4004352b0242707598e  requests-2.21.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	be41abac2c40f8530307e8d172c590b476f4a488bc6a68f8de57b7cf64786687  LICENSE
+diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
+index 0c327759b0..3d8542fcdf 100644
+--- a/package/python-requests/python-requests.mk
++++ b/package/python-requests/python-requests.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
-+KMOD_CONF_OPTS += --with-bashcompletiondir=/usr/share/bash-completion/completions
-+endif
-+
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- KMOD_DEPENDENCIES += zlib
- KMOD_CONF_OPTS += --with-zlib
+-PYTHON_REQUESTS_VERSION = 2.20.1
++PYTHON_REQUESTS_VERSION = 2.21.0
+ PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
+-PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/40/35/298c36d839547b50822985a2cf0611b3b978a5ab7a5af5562b8ebe3e1369
++PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/52/2c/514e4ac25da2b08ca5a464c50463682126385c4272c18193876e91f4bc38
+ PYTHON_REQUESTS_SETUP_TYPE = setuptools
+ PYTHON_REQUESTS_LICENSE = Apache-2.0
+ PYTHON_REQUESTS_LICENSE_FILES = LICENSE
