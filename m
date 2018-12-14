@@ -1,36 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 14 Dec 2018 22:52:44 +0100
-Subject: [Buildroot] [PATCH] libssh: workaround -Werror=strict-overflow
- build failures
-In-Reply-To: <7d6e364ac220c937573e1d4d7717a72cc240f81b.1544534379.git.baruch@tkos.co.il>
-References: <7d6e364ac220c937573e1d4d7717a72cc240f81b.1544534379.git.baruch@tkos.co.il>
-Message-ID: <20181214225244.41e3b69c@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 14 Dec 2018 23:41:43 +0100
+Subject: [Buildroot] [PATCH 1/1] kmod: fix build with pkgconf 1.5.3
+In-Reply-To: <CAPi7W82C5KNdz6PONUfeAdn1R-H_TqcR29vz3FEsnjgOpe_pzQ@mail.gmail.com>
+ (Fabrice Fontaine's message of "Fri, 14 Dec 2018 22:08:49 +0100")
+References: <20181214154728.30189-1-fontaine.fabrice@gmail.com>
+ <87bm5nettd.fsf@dell.be.48ers.dk>
+ <CAPi7W82C5KNdz6PONUfeAdn1R-H_TqcR29vz3FEsnjgOpe_pzQ@mail.gmail.com>
+Message-ID: <87lg4rd93s.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-On Tue, 11 Dec 2018 15:19:39 +0200, Baruch Siach wrote:
-> Add a patch that disables -Werror=strict-overflow to fix the build with
-> some versions of gcc.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/414/41490ebb181762d14c565effb0155db7ac1e0db0/
-> http://autobuild.buildroot.net/results/3a6/3a6395fd85f434ff855d602949166d5cec725c7e/
-> http://autobuild.buildroot.net/results/224/22422145e7fc9a8ab4e766b174a916e599845f1c/
-> 
-> Cc: Scott Fan <fancp2007@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Hi,
 
-What about not using -Werror instead?
+ >> Hmm, how did this work before if there wasn't anything to ensure
+ >> bash-completion was built before kmod? Just the alphabetical order?
 
-Best regards,
+ > You're right, personally, I think that we should add a bash-completion
+ > dependency but bash-completion is not a "real" build time dependency,
+ > it's only needed to retrieve completionsdir.
+ > Because I was told to remove udev dependency from alsa-utils during
+ > review of https://patchwork.ozlabs.org/patch/1013180, I applied the
+ > same logic for kmod.
+ > Howerver if you want, I can send a new patch to add bash-completion dependency.
 
-Thomas
+OK. As we now explicitly pass --with-completiondir (and hence not rely
+on bash-completion.pc) and the install logic creates the destination
+directory if needed, I don't think we really _NEED_ it.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
