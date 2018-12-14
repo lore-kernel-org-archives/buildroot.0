@@ -1,45 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Dec 2018 21:24:14 +0100
-Subject: [Buildroot] [git commit] xapp_xditview: fix build with pkgconf 1.5.3
-Message-ID: <20181214202215.505CB86BFD@busybox.osuosl.org>
+Date: Fri, 14 Dec 2018 21:29:02 +0100
+Subject: [Buildroot] [PATCH 1/1] kmod: fix build with pkgconf 1.5.3
+In-Reply-To: <20181214154728.30189-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 14 Dec 2018 16:47:28 +0100")
+References: <20181214154728.30189-1-fontaine.fabrice@gmail.com>
+Message-ID: <87bm5nettd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ffa84c1b3f4a369d6a67e21f83427af1852ff5d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Since the bump to 1.5.3, pkgconf prepends the sysroot to all absolute
-paths found in the .pc file. This is correct when the paths refer to
-something in STAGING_DIR (e.g. libdir, includedir), but not when it
-refers to something used for the target.
+ > Since the bump to 1.5.3, pkgconf prepends the sysroot to all absolute
+ > paths found in the .pc file. This is correct when the paths refer to
+ > something in STAGING_DIR (e.g. libdir, includedir), but not when it
+ > refers to something used for the target.
 
-xapp_xditview uses the appdefaultdir variable from xt.pc to decide where
-to install things. Since DESTDIR is prepended to the install
-destination, this will end up in the wrong location.
+ > kmod uses the completionsdir variable from bash-completions.pc to decide
+ > where to install things. Since DESTDIR is prepended to the install
+ > destination, this will end up in the wrong location.
 
-Until a better solution is found in pkgconf, pass the appdefaultdir to
-use explicitly instead of relying on xt.pc.
+ > Until a better solution is found in pkgconf, pass the appdefaultdir to
+ > use explicitly instead of relying on bash-completions.pc.
 
-Fixes:
- - http://autobuild.buildroot.org/results/af70962c59ca3dd29d85207033125b2e7eda3e81
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/f8a1f956333062027294e766ff0ddab5c35d5887
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/x11r7/xapp_xditview/xapp_xditview.mk | 1 +
- 1 file changed, 1 insertion(+)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ >  package/kmod/kmod.mk | 4 ++++
+ >  1 file changed, 4 insertions(+)
 
-diff --git a/package/x11r7/xapp_xditview/xapp_xditview.mk b/package/x11r7/xapp_xditview/xapp_xditview.mk
-index 4744c1fefd..e8d72770ea 100644
---- a/package/x11r7/xapp_xditview/xapp_xditview.mk
-+++ b/package/x11r7/xapp_xditview/xapp_xditview.mk
-@@ -10,5 +10,6 @@ XAPP_XDITVIEW_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XDITVIEW_LICENSE = MIT
- XAPP_XDITVIEW_LICENSE_FILES = COPYING
- XAPP_XDITVIEW_DEPENDENCIES = xlib_libXaw
-+XAPP_XDITVIEW_CONF_OPTS = --with-appdefaultdir=/usr/share/X11/app-defaults
+ > diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+ > index c165ea3020..ea5d291133 100644
+ > --- a/package/kmod/kmod.mk
+ > +++ b/package/kmod/kmod.mk
+ > @@ -28,6 +28,10 @@ KMOD_CONF_OPTS = --disable-static --enable-shared
+ >  KMOD_CONF_OPTS += --disable-manpages
+ >  HOST_KMOD_CONF_OPTS = --disable-manpages
  
- $(eval $(autotools-package))
+ > +ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
+ > +KMOD_CONF_OPTS += --with-bashcompletiondir=/usr/share/bash-completion/completions
+ > +endif
+
+Hmm, how did this work before if there wasn't anything to ensure
+bash-completion was built before kmod? Just the alphabetical order?
+
+Anyway, committed - Thanks.
+
+-- 
+Bye, Peter Korsgaard
