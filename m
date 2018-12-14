@@ -1,55 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 14 Dec 2018 22:05:28 +0100
-Subject: [Buildroot] [PATCH] package/luvi: add upstream patch to fix
- runtime issue with CMake 3.12+
-In-Reply-To: <20181214063607.8372-1-joerg.krause@embedded.rocks>
-References: <20181214063607.8372-1-joerg.krause@embedded.rocks>
-Message-ID: <20181214220528.010f1c4c@windsurf.home>
+Date: Fri, 14 Dec 2018 22:05:45 +0100
+Subject: [Buildroot] [git commit] package/linux-firmware: install all Qlogic
+ QED binaries
+Message-ID: <20181214210152.D87E680304@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6a6f9306d8788829bcd1febc820c5b231f06fbb5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 14 Dec 2018 07:36:07 +0100, J?rg Krause wrote:
-> luvi fails to run when it was build with CMake 3.12+:
-> 
-> ```
-> [string "return require('init')(...)"]:1: module 'init' not found:
-> 	no field package.preload['init']
-> 	no file './init.lua'
-> 	no file '/usr/share/luajit-2.0.5/init.lua'
-> 	no file '/usr/local/share/lua/5.1/init.lua'
-> 	no file '/usr/local/share/lua/5.1/init/init.lua'
-> 	no file '/usr/share/lua/5.1/init.lua'
-> 	no file '/usr/share/lua/5.1/init/init.lua'
-> 	no file './init.so'
-> 	no file '/usr/local/lib/lua/5.1/init.so'
-> 	no file '/usr/lib/lua/5.1/init.so'
-> 	no file '/usr/local/lib/lua/5.1/loadall.so'
-> ```
-> 
-> Looking at link.txt for the luvi executable shows that `-rdynamic` is
-> not set anymore in CMake 3.12. This has the effect, that symbols are
-> missing in the `.dynsym` section in the binary.
-> 
-> The patch, sets `ENABLE_EXPORTS` to true in CMakeLists.txt to force setting
-> `-rdynamic` explicitly.
-> 
-> Upstream status: b8781653dcb8815a3019a77baf4f3b7f7a255ebe
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  ...i-executable-needs-to-export-symbols.patch | 53 +++++++++++++++++++
->  1 file changed, 53 insertions(+)
->  create mode 100644 package/luvi/0002-luvi-executable-needs-to-export-symbols.patch
+There are various versions shipped in linux-firmware. In the past we
+decided that it was up to the developer to filter out the ones they want
+for their specific kernel version, so install them all.
 
-Applied to master, thanks.
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/linux-firmware/linux-firmware.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 60f39804a2..e5cd56d9a5 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -383,7 +383,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QLOGIC_4X),y)
+ LINUX_FIRMWARE_FILES += \
+-	qed/qed_init_values_zipped-8.33.11.0.bin
++	qed/qed_init_values_zipped-*.bin
+ # No license file; the license is in the file WHENCE
+ # which is installed unconditionally
+ endif
