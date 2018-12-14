@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Dec 2018 21:23:17 +0100
-Subject: [Buildroot] [PATCH 1/1] xapp_xmap: fix build with pkgconf 1.5.3
-In-Reply-To: <20181214152517.7067-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 14 Dec 2018 16:25:17 +0100")
-References: <20181214152517.7067-1-fontaine.fabrice@gmail.com>
-Message-ID: <871s6jg8ne.fsf@dell.be.48ers.dk>
+Date: Fri, 14 Dec 2018 21:23:27 +0100
+Subject: [Buildroot] [PATCH 1/1] xapp_xedit: fix build with pkgconf 1.5.3
+In-Reply-To: <20181214152619.7169-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 14 Dec 2018 16:26:19 +0100")
+References: <20181214152619.7169-1-fontaine.fabrice@gmail.com>
+Message-ID: <87woobeu2o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,7 +18,7 @@ To: buildroot@busybox.net
  > something in STAGING_DIR (e.g. libdir, includedir), but not when it
  > refers to something used for the target.
 
- > xapp_xmap uses the appdefaultdir variable from xt.pc to decide where to
+ > xapp_xedit uses the appdefaultdir variable from xt.pc to decide where to
  > install things. Since DESTDIR is prepended to the install destination,
  > this will end up in the wrong location.
 
@@ -26,7 +26,7 @@ To: buildroot@busybox.net
  > use explicitly instead of relying on xt.pc.
 
  > Fixes:
- >  - http://autobuild.buildroot.org/results/725c20ec9621a9c2d4b94784785bb481ff74f0e7
+ >  - http://autobuild.buildroot.org/results/1b46f950fc0d957d04c0a60a24176d701ff16bd9
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
