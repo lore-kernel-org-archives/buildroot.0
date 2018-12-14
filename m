@@ -1,49 +1,104 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 14 Dec 2018 07:26:56 +0200
-Subject: [Buildroot] [PATCH 1/1] python-yarl: bump to version 1.3.0
-In-Reply-To: <20181214052656.27280-1-asafka7@gmail.com>
-References: <20181214052656.27280-1-asafka7@gmail.com>
-Message-ID: <20181214052656.27280-4-asafka7@gmail.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Fri, 14 Dec 2018 07:36:07 +0100
+Subject: [Buildroot] [PATCH] package/luvi: add upstream patch to fix runtime
+ issue with CMake 3.12+
+Message-ID: <20181214063607.8372-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-yarl/python-yarl.hash | 6 +++---
- package/python-yarl/python-yarl.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+luvi fails to run when it was build with CMake 3.12+:
 
-diff --git a/package/python-yarl/python-yarl.hash b/package/python-yarl/python-yarl.hash
-index 118c7225d8..1cb0708435 100644
---- a/package/python-yarl/python-yarl.hash
-+++ b/package/python-yarl/python-yarl.hash
-@@ -1,5 +1,5 @@
--# md5, sha256 from https://pypi.python.org/pypi/yarl/json
--md5	43380667129ebc52ac3c442daabb3f6d  yarl-1.2.6.tar.gz
--sha256	c8cbc21bbfa1dd7d5386d48cc814fe3d35b80f60299cdde9279046f399c3b0d8  yarl-1.2.6.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/yarl/json
-+md5	92889c31fce4c8f82b7ee9c2b2ed9cd1  yarl-1.3.0.tar.gz
-+sha256	024ecdc12bc02b321bc66b41327f930d1c2c543fa9a561b39861da9388ba7aa9  yarl-1.3.0.tar.gz
- # Locally computed sha256 checksums
- sha256	14c0820503ceef15e814a89b037d9efc066870087018294b6ae0f27163872cc5  LICENSE
-diff --git a/package/python-yarl/python-yarl.mk b/package/python-yarl/python-yarl.mk
-index 591131e4a2..f185724781 100644
---- a/package/python-yarl/python-yarl.mk
-+++ b/package/python-yarl/python-yarl.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_YARL_VERSION = 1.2.6
-+PYTHON_YARL_VERSION = 1.3.0
- PYTHON_YARL_SOURCE = yarl-$(PYTHON_YARL_VERSION).tar.gz
--PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/43/b8/057c3e5b546ff4b24263164ecda13f6962d85c9dc477fcc0bcdcb3adb658
-+PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/fb/84/6d82f6be218c50b547aa29d0315e430cf8a23c52064c92d0a8377d7b7357
- PYTHON_YARL_LICENSE = Apache-2.0
- PYTHON_YARL_LICENSE_FILES = LICENSE
- PYTHON_YARL_SETUP_TYPE = setuptools
+```
+[string "return require('init')(...)"]:1: module 'init' not found:
+	no field package.preload['init']
+	no file './init.lua'
+	no file '/usr/share/luajit-2.0.5/init.lua'
+	no file '/usr/local/share/lua/5.1/init.lua'
+	no file '/usr/local/share/lua/5.1/init/init.lua'
+	no file '/usr/share/lua/5.1/init.lua'
+	no file '/usr/share/lua/5.1/init/init.lua'
+	no file './init.so'
+	no file '/usr/local/lib/lua/5.1/init.so'
+	no file '/usr/lib/lua/5.1/init.so'
+	no file '/usr/local/lib/lua/5.1/loadall.so'
+```
+
+Looking at link.txt for the luvi executable shows that `-rdynamic` is
+not set anymore in CMake 3.12. This has the effect, that symbols are
+missing in the `.dynsym` section in the binary.
+
+The patch, sets `ENABLE_EXPORTS` to true in CMakeLists.txt to force setting
+`-rdynamic` explicitly.
+
+Upstream status: b8781653dcb8815a3019a77baf4f3b7f7a255ebe
+
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ ...i-executable-needs-to-export-symbols.patch | 53 +++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+ create mode 100644 package/luvi/0002-luvi-executable-needs-to-export-symbols.patch
+
+diff --git a/package/luvi/0002-luvi-executable-needs-to-export-symbols.patch b/package/luvi/0002-luvi-executable-needs-to-export-symbols.patch
+new file mode 100644
+index 0000000000..74b6537f9b
+--- /dev/null
++++ b/package/luvi/0002-luvi-executable-needs-to-export-symbols.patch
+@@ -0,0 +1,53 @@
++From 1ea2c1e372ab59b9a633a51f0dcefc24328528f1 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Mon, 10 Sep 2018 08:18:38 +0200
++Subject: [PATCH] luvi executable needs to export symbols
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Using CMake 3.12 running luvi fails with:
++
++```
++[string "return require('init')(...)"]:1: module 'init' not found:
++	no field package.preload['init']
++	no file './init.lua'
++	no file '/usr/share/luajit-2.0.5/init.lua'
++	no file '/usr/local/share/lua/5.1/init.lua'
++	no file '/usr/local/share/lua/5.1/init/init.lua'
++	no file '/usr/share/lua/5.1/init.lua'
++	no file '/usr/share/lua/5.1/init/init.lua'
++	no file './init.so'
++	no file '/usr/local/lib/lua/5.1/init.so'
++	no file '/usr/lib/lua/5.1/init.so'
++	no file '/usr/local/lib/lua/5.1/loadall.so'
++```
++
++Looking at link.txt for the luvi executable shows that `-rdynamic` is
++not set anymore in CMake 3.12. This has the effect, that symbols are
++missing in the `.dynsym` section.
++
++Therefore, set `ENABLE_EXPORTS` to true which set `-rdynamic` explicitly.
++
++Upstream status: b8781653dcb8815a3019a77baf4f3b7f7a255ebe
++
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
++---
++ CMakeLists.txt | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index e141f8e..8219d0b 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -158,6 +158,7 @@ if("${CMAKE_SYSTEM_NAME}" MATCHES "Linux")
++ endif()
++ 
++ target_link_libraries(luvi ${LUVI_LIBRARIES} ${EXTRA_LIBS} ${CMAKE_THREAD_LIBS_INIT})
+++set_target_properties(luvi PROPERTIES ENABLE_EXPORTS ON)
++ 
++ ###############################################################################
++ ## Installation Targets
++-- 
++2.19.1
++
 -- 
-2.19.1
+2.20.0
