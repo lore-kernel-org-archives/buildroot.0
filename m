@@ -1,47 +1,65 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 14 Dec 2018 18:57:27 +0200
-Subject: [Buildroot] [PATCH 1/1] python-cython: bump to version 0.29.2
-Message-ID: <20181214165727.31629-1-asafka7@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 14 Dec 2018 21:19:54 +0100
+Subject: [Buildroot] [git commit] package/webkitgtk: security bump to
+ version 2.22.5
+Message-ID: <20181214201641.41D52856A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-cython/python-cython.hash | 4 ++--
- package/python-cython/python-cython.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=6bbfaf1d400417b7555fd0c67617cc25c7cc7b68
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
-index 4ce7b3cd55..1fdb7e19cf 100644
---- a/package/python-cython/python-cython.hash
-+++ b/package/python-cython/python-cython.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/cython/json
--md5    3cf61c7ef8e5daa47e469cf7ba2e598c  Cython-0.29.1.tar.gz
--sha256 18ab7646985a97e02cee72e1ddba2e732d4931d4e1732494ff30c5aa084bfb97  Cython-0.29.1.tar.gz
-+md5	175af2d64f9ae09d25f5cf8181388559  Cython-0.29.2.tar.gz
-+sha256	2ac187ff998a95abb7fae452b5178f91e1a713698c9ced89836c94e6b1d3f41e  Cython-0.29.2.tar.gz
- # Locally computed sha256 checksums
- sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
- sha256 e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
-diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
-index 852146406a..8dd1469495 100644
---- a/package/python-cython/python-cython.mk
-+++ b/package/python-cython/python-cython.mk
-@@ -4,9 +4,9 @@
+This is a maintenance release of the current stable WebKitGTK+ version,
+which contains security fixes for CVE identifiers: CVE-2018-4437,
+CVE-2018-4438, CVE-2018-4441, CVE-2018-4442, CVE-2018-4443, and
+CVE-2018-4464. Additionally, it fixes a couple of build failures in
+unusual build configurations.
+
+Release notes can be found in the announcement:
+
+  https://webkitgtk.org/2018/12/13/webkitgtk2.22.5-released.html
+
+More details on the issues covered by security fixes can be found
+in the corresponding security advisory:
+
+  https://webkitgtk.org/security/WSA-2018-0009.html
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 15b1b56681..4cdefa75b7 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.22.4.tar.xz.sums
+-md5 9f08d09cfc21c761a431a545549f301a webkitgtk-2.22.4.tar.xz
+-sha1 adf857c8a8b8fb79ba9b01bbe4b454956e633952 webkitgtk-2.22.4.tar.xz
+-sha256 fab5be2883802352ae0e735dd1eff4bc18abaff7ac78689cec72eb2f611943b8 webkitgtk-2.22.4.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.22.5.tar.xz.sums
++md5 96a731522b800f38e70f85c22f8de477 webkitgtk-2.22.5.tar.xz
++sha1 809b067a1672a81a4ce31363a0872c668cc72953 webkitgtk-2.22.5.tar.xz
++sha256 99d3863f418a7c3a3e37e5062950dbf2d91fb106ec1633459b0ef6f2d5f6cb13 webkitgtk-2.22.5.tar.xz
+ 
+ # Hashes for license files:
+ sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 4cfddd1eb5..f86c073d65 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_CYTHON_VERSION = 0.29.1
-+PYTHON_CYTHON_VERSION = 0.29.2
- PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
--PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/f0/f8/7f406aac4c6919d5a4ce16509bbe059cd256e9ad94bae5ccac14094b7c51
-+PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/c1/f2/d1207fd0dfe5cb4dbb06a035eb127653821510d896ce952b5c66ca3dafa4
- PYTHON_CYTHON_SETUP_TYPE = setuptools
- PYTHON_CYTHON_LICENSE = Apache-2.0
- PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
--- 
-2.19.1
+-WEBKITGTK_VERSION = 2.22.4
++WEBKITGTK_VERSION = 2.22.5
+ WEBKITGTK_SITE = http://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
