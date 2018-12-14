@@ -1,9 +1,9 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 14 Dec 2018 07:26:55 +0200
-Subject: [Buildroot] [PATCH 1/1] python-setuptools: bump to version 40.6.3
+Date: Fri, 14 Dec 2018 07:26:56 +0200
+Subject: [Buildroot] [PATCH 1/1] python-yarl: bump to version 1.3.0
 In-Reply-To: <20181214052656.27280-1-asafka7@gmail.com>
 References: <20181214052656.27280-1-asafka7@gmail.com>
-Message-ID: <20181214052656.27280-3-asafka7@gmail.com>
+Message-ID: <20181214052656.27280-4-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,36 +12,38 @@ To: buildroot@busybox.net
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-setuptools/python-setuptools.hash | 4 ++--
- package/python-setuptools/python-setuptools.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-yarl/python-yarl.hash | 6 +++---
+ package/python-yarl/python-yarl.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-setuptools/python-setuptools.hash b/package/python-setuptools/python-setuptools.hash
-index a034ee8015..53d77f57d2 100644
---- a/package/python-setuptools/python-setuptools.hash
-+++ b/package/python-setuptools/python-setuptools.hash
-@@ -1,4 +1,4 @@
- # From https://pypi.org/pypi/setuptools/json
--md5  1c45c7d66dc84ae4ee36581dc9e5359b  setuptools-40.6.2.zip
--sha256  86bb4d8e1b0fabad1f4642b64c335b673e53e7a381de03c9a89fe678152c4c64  setuptools-40.6.2.zip
-+md5  1fbcbe45c7fb1d21041e676ba68d2dec  setuptools-40.6.3.zip
-+sha256  3b474dad69c49f0d2d86696b68105f3a6f195f7ab655af12ef9a9c326d2b08f8  setuptools-40.6.3.zip
- sha256  c32a3ac395af6321efd28be73d06a00f0db6ab887d1c21d4fec46128d2056d5a  LICENSE
-diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-index 0f28152e54..cc6f991cdd 100644
---- a/package/python-setuptools/python-setuptools.mk
-+++ b/package/python-setuptools/python-setuptools.mk
+diff --git a/package/python-yarl/python-yarl.hash b/package/python-yarl/python-yarl.hash
+index 118c7225d8..1cb0708435 100644
+--- a/package/python-yarl/python-yarl.hash
++++ b/package/python-yarl/python-yarl.hash
+@@ -1,5 +1,5 @@
+-# md5, sha256 from https://pypi.python.org/pypi/yarl/json
+-md5	43380667129ebc52ac3c442daabb3f6d  yarl-1.2.6.tar.gz
+-sha256	c8cbc21bbfa1dd7d5386d48cc814fe3d35b80f60299cdde9279046f399c3b0d8  yarl-1.2.6.tar.gz
++# md5, sha256 from https://pypi.org/pypi/yarl/json
++md5	92889c31fce4c8f82b7ee9c2b2ed9cd1  yarl-1.3.0.tar.gz
++sha256	024ecdc12bc02b321bc66b41327f930d1c2c543fa9a561b39861da9388ba7aa9  yarl-1.3.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	14c0820503ceef15e814a89b037d9efc066870087018294b6ae0f27163872cc5  LICENSE
+diff --git a/package/python-yarl/python-yarl.mk b/package/python-yarl/python-yarl.mk
+index 591131e4a2..f185724781 100644
+--- a/package/python-yarl/python-yarl.mk
++++ b/package/python-yarl/python-yarl.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SETUPTOOLS_VERSION = 40.6.2
-+PYTHON_SETUPTOOLS_VERSION = 40.6.3
- PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).zip
--PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/b0/d1/8acb42f391cba52e35b131e442e80deffbb8d0676b93261d761b1f0ef8fb
-+PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/37/1b/b25507861991beeade31473868463dad0e58b1978c209de27384ae541b0b
- PYTHON_SETUPTOOLS_LICENSE = MIT
- PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
- PYTHON_SETUPTOOLS_SETUP_TYPE = setuptools
+-PYTHON_YARL_VERSION = 1.2.6
++PYTHON_YARL_VERSION = 1.3.0
+ PYTHON_YARL_SOURCE = yarl-$(PYTHON_YARL_VERSION).tar.gz
+-PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/43/b8/057c3e5b546ff4b24263164ecda13f6962d85c9dc477fcc0bcdcb3adb658
++PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/fb/84/6d82f6be218c50b547aa29d0315e430cf8a23c52064c92d0a8377d7b7357
+ PYTHON_YARL_LICENSE = Apache-2.0
+ PYTHON_YARL_LICENSE_FILES = LICENSE
+ PYTHON_YARL_SETUP_TYPE = setuptools
 -- 
 2.19.1
