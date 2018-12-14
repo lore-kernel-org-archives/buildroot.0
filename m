@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Dec 2018 21:23:27 +0100
-Subject: [Buildroot] [PATCH 1/1] xapp_xedit: fix build with pkgconf 1.5.3
-In-Reply-To: <20181214152619.7169-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 14 Dec 2018 16:26:19 +0100")
-References: <20181214152619.7169-1-fontaine.fabrice@gmail.com>
-Message-ID: <87woobeu2o.fsf@dell.be.48ers.dk>
+Date: Fri, 14 Dec 2018 21:23:41 +0100
+Subject: [Buildroot] [PATCH 1/1] xapp_xclock: fix build with pkgconf
+ 1.5.3
+In-Reply-To: <20181214152716.7233-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 14 Dec 2018 16:27:16 +0100")
+References: <20181214152716.7233-1-fontaine.fabrice@gmail.com>
+Message-ID: <87sgyzeu2a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,15 +19,15 @@ To: buildroot@busybox.net
  > something in STAGING_DIR (e.g. libdir, includedir), but not when it
  > refers to something used for the target.
 
- > xapp_xedit uses the appdefaultdir variable from xt.pc to decide where to
- > install things. Since DESTDIR is prepended to the install destination,
- > this will end up in the wrong location.
+ > xapp_xclock uses the appdefaultdir variable from xt.pc to decide where
+ > to install things. Since DESTDIR is prepended to the install
+ > destination, this will end up in the wrong location.
 
  > Until a better solution is found in pkgconf, pass the appdefaultdir to
  > use explicitly instead of relying on xt.pc.
 
  > Fixes:
- >  - http://autobuild.buildroot.org/results/1b46f950fc0d957d04c0a60a24176d701ff16bd9
+ >  - http://autobuild.buildroot.org/results/ea028467a981f419c395158c55aa9a6d16e3f2c1
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
