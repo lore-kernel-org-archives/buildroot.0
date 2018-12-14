@@ -1,47 +1,47 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 14 Dec 2018 16:54:35 +0100
-Subject: [Buildroot] [PATCH v2,
- 2/2] alsa-utils: fix systemd build with pkgconf 1.5.3
-In-Reply-To: <20181214155435.31884-1-fontaine.fabrice@gmail.com>
-References: <20181214155435.31884-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181214155435.31884-2-fontaine.fabrice@gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Fri, 14 Dec 2018 18:57:27 +0200
+Subject: [Buildroot] [PATCH 1/1] python-cython: bump to version 0.29.2
+Message-ID: <20181214165727.31629-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the bump to 1.5.3, pkgconf prepends the sysroot to all absolute
-paths found in the .pc file. This is correct when the paths refer to
-something in STAGING_DIR (e.g. libdir, includedir), but not when it
-refers to something used for the target.
-
-alsa-utils uses the systemdsystemunitdir variable from systemd.pc to
-decide where to install things. Since DESTDIR is prepended to the
-install destination, this will end up in the wrong location.
-
-Until a better solution is found in pkgconf, pass the
-systemdsystemunitdir to use explicitly instead of relying on systemd.pc.
-
-Fixes:
- - http://autobuild.buildroot.org/results/d8ad140ae52b4fe8e153de3835f3f17e92b58e53
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/alsa-utils/alsa-utils.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/python-cython/python-cython.hash | 4 ++--
+ package/python-cython/python-cython.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
-index 8b2d335be4..4983283328 100644
---- a/package/alsa-utils/alsa-utils.mk
-+++ b/package/alsa-utils/alsa-utils.mk
-@@ -88,6 +88,7 @@ endef
+diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
+index 4ce7b3cd55..1fdb7e19cf 100644
+--- a/package/python-cython/python-cython.hash
++++ b/package/python-cython/python-cython.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/cython/json
+-md5    3cf61c7ef8e5daa47e469cf7ba2e598c  Cython-0.29.1.tar.gz
+-sha256 18ab7646985a97e02cee72e1ddba2e732d4931d4e1732494ff30c5aa084bfb97  Cython-0.29.1.tar.gz
++md5	175af2d64f9ae09d25f5cf8181388559  Cython-0.29.2.tar.gz
++sha256	2ac187ff998a95abb7fae452b5178f91e1a713698c9ced89836c94e6b1d3f41e  Cython-0.29.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
+ sha256 e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
+diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
+index 852146406a..8dd1469495 100644
+--- a/package/python-cython/python-cython.mk
++++ b/package/python-cython/python-cython.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_ALSA_UTILS_ALSACTL)$(BR2_INIT_SYSTEMD),yy)
- ALSA_UTILS_DEPENDENCIES += systemd
-+ALSA_UTILS_CONF_OPTS += --with-systemdsystemunitdir=/usr/lib/systemd/system
- define ALSA_UTILS_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 0644 $(@D)/alsactl/alsa-restore.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/alsa-restore.service
+-PYTHON_CYTHON_VERSION = 0.29.1
++PYTHON_CYTHON_VERSION = 0.29.2
+ PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
+-PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/f0/f8/7f406aac4c6919d5a4ce16509bbe059cd256e9ad94bae5ccac14094b7c51
++PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/c1/f2/d1207fd0dfe5cb4dbb06a035eb127653821510d896ce952b5c66ca3dafa4
+ PYTHON_CYTHON_SETUP_TYPE = setuptools
+ PYTHON_CYTHON_LICENSE = Apache-2.0
+ PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
 -- 
-2.14.1
+2.19.1
