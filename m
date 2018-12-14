@@ -1,62 +1,44 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Fri, 14 Dec 2018 18:51:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: bump to version 2.22.5
-Message-ID: <20181214165133.11700-1-aperez@igalia.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 14 Dec 2018 16:25:17 +0100
+Subject: [Buildroot] [PATCH 1/1] xapp_xmap: fix build with pkgconf 1.5.3
+Message-ID: <20181214152517.7067-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a maintenance release of the current stable WebKitGTK+ version,
-which contains security fixes for CVE identifiers: CVE-2018-4437,
-CVE-2018-4438, CVE-2018-4441, CVE-2018-4442, CVE-2018-4443, and
-CVE-2018-4464. Additionally, it fixes a couple of build failures in
-unusual build configurations.
+Since the bump to 1.5.3, pkgconf prepends the sysroot to all absolute
+paths found in the .pc file. This is correct when the paths refer to
+something in STAGING_DIR (e.g. libdir, includedir), but not when it
+refers to something used for the target.
 
-Release notes can be found in the announcement:
+xapp_xmap uses the appdefaultdir variable from xt.pc to decide where to
+install things. Since DESTDIR is prepended to the install destination,
+this will end up in the wrong location.
 
-  https://webkitgtk.org/2018/12/13/webkitgtk2.22.5-released.html
+Until a better solution is found in pkgconf, pass the appdefaultdir to
+use explicitly instead of relying on xt.pc.
 
-More details on the issues covered by security fixes can be found
-in the corresponding security advisory:
+Fixes:
+ - http://autobuild.buildroot.org/results/725c20ec9621a9c2d4b94784785bb481ff74f0e7
 
-  https://webkitgtk.org/security/WSA-2018-0009.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/x11r7/xapp_xman/xapp_xman.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 15b1b56681..4cdefa75b7 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.22.4.tar.xz.sums
--md5 9f08d09cfc21c761a431a545549f301a webkitgtk-2.22.4.tar.xz
--sha1 adf857c8a8b8fb79ba9b01bbe4b454956e633952 webkitgtk-2.22.4.tar.xz
--sha256 fab5be2883802352ae0e735dd1eff4bc18abaff7ac78689cec72eb2f611943b8 webkitgtk-2.22.4.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.22.5.tar.xz.sums
-+md5 96a731522b800f38e70f85c22f8de477 webkitgtk-2.22.5.tar.xz
-+sha1 809b067a1672a81a4ce31363a0872c668cc72953 webkitgtk-2.22.5.tar.xz
-+sha256 99d3863f418a7c3a3e37e5062950dbf2d91fb106ec1633459b0ef6f2d5f6cb13 webkitgtk-2.22.5.tar.xz
+diff --git a/package/x11r7/xapp_xman/xapp_xman.mk b/package/x11r7/xapp_xman/xapp_xman.mk
+index bca6bbff8d..0d744cc390 100644
+--- a/package/x11r7/xapp_xman/xapp_xman.mk
++++ b/package/x11r7/xapp_xman/xapp_xman.mk
+@@ -10,6 +10,7 @@ XAPP_XMAN_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XMAN_LICENSE = MIT
+ XAPP_XMAN_LICENSE_FILES = COPYING
+ XAPP_XMAN_DEPENDENCIES = xlib_libXaw
++XAPP_XMAN_CONF_OPTS = --with-appdefaultdir=/usr/share/X11/app-defaults
  
- # Hashes for license files:
- sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 4cfddd1eb5..f86c073d65 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.22.4
-+WEBKITGTK_VERSION = 2.22.5
- WEBKITGTK_SITE = http://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+ XAPP_XMAN_CONF_ENV = \
+ 	ac_cv_file__etc_man_conf=no \
 -- 
-2.20.0
+2.14.1
