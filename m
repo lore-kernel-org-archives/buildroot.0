@@ -1,47 +1,86 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Dec 2018 21:29:31 +0100
-Subject: [Buildroot] [git commit] python-setuptools: bump to version 40.6.3
-Message-ID: <20181214202637.B673584659@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 14 Dec 2018 21:52:53 +0100
+Subject: [Buildroot] [git commit] ell: bump version to 0.16
+Message-ID: <20181214205540.7A2B78D507@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34c5558e66a8675ffc07943dde433e5e0d672328
+commit: https://git.buildroot.net/buildroot/commit/?id=7ee77e960041dabf49796340773862de6a8f878f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-setuptools/python-setuptools.hash | 4 ++--
- package/python-setuptools/python-setuptools.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+- drop 0001-ell-ell.sym-add-missing-l_genl_family_set_unicast_ha.patch
+  (upstream applied [1])
 
-diff --git a/package/python-setuptools/python-setuptools.hash b/package/python-setuptools/python-setuptools.hash
-index a034ee8015..53d77f57d2 100644
---- a/package/python-setuptools/python-setuptools.hash
-+++ b/package/python-setuptools/python-setuptools.hash
-@@ -1,4 +1,4 @@
- # From https://pypi.org/pypi/setuptools/json
--md5  1c45c7d66dc84ae4ee36581dc9e5359b  setuptools-40.6.2.zip
--sha256  86bb4d8e1b0fabad1f4642b64c335b673e53e7a381de03c9a89fe678152c4c64  setuptools-40.6.2.zip
-+md5  1fbcbe45c7fb1d21041e676ba68d2dec  setuptools-40.6.3.zip
-+sha256  3b474dad69c49f0d2d86696b68105f3a6f195f7ab655af12ef9a9c326d2b08f8  setuptools-40.6.3.zip
- sha256  c32a3ac395af6321efd28be73d06a00f0db6ab887d1c21d4fec46128d2056d5a  LICENSE
-diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-index 0f28152e54..cc6f991cdd 100644
---- a/package/python-setuptools/python-setuptools.mk
-+++ b/package/python-setuptools/python-setuptools.mk
-@@ -4,9 +4,9 @@
+[1] https://git.kernel.org/pub/scm/libs/ell/ell.git/commit/?id=01254efa6f69078000da7e87e43c9f245df0cfc0
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...-add-missing-l_genl_family_set_unicast_ha.patch | 30 ----------------------
+ package/ell/ell.hash                               |  2 +-
+ package/ell/ell.mk                                 |  2 +-
+ 3 files changed, 2 insertions(+), 32 deletions(-)
+
+diff --git a/package/ell/0001-ell-ell.sym-add-missing-l_genl_family_set_unicast_ha.patch b/package/ell/0001-ell-ell.sym-add-missing-l_genl_family_set_unicast_ha.patch
+deleted file mode 100644
+index e521a93f7a..0000000000
+--- a/package/ell/0001-ell-ell.sym-add-missing-l_genl_family_set_unicast_ha.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From e68d797ffdfe768c1e4a356add5bb12c43f40a72 Mon Sep 17 00:00:00 2001
+-From: Peter Seiderer <ps.report@gmx.net>
+-Date: Fri, 9 Nov 2018 23:28:39 +0100
+-Subject: [PATCH] ell/ell.sym: add missing l_genl_family_set_unicast_handler
+-
+-Fixes iwd compile failure:
+-
+-  src/netdev.o: In function `netdev_set_nl80211':
+-  netdev.c:(.text+0x6f04): undefined reference to `l_genl_family_set_unicast_handler'
+-
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- ell/ell.sym | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/ell/ell.sym b/ell/ell.sym
+-index 614bc93..cdd2c21 100644
+---- a/ell/ell.sym
+-+++ b/ell/ell.sym
+-@@ -257,6 +257,7 @@ global:
+- 	l_genl_family_new;
+- 	l_genl_family_ref;
+- 	l_genl_family_unref;
+-+	l_genl_family_set_unicast_handler;
+- 	l_genl_family_set_watches;
+- 	l_genl_family_get_version;
+- 	l_genl_family_get_genl;
+--- 
+-2.19.1
+-
+diff --git a/package/ell/ell.hash b/package/ell/ell.hash
+index 84827437ec..dd6e90f3fc 100644
+--- a/package/ell/ell.hash
++++ b/package/ell/ell.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256 1791d2e18f0089af0d58a3d2f76a2846c2d9fa59eb2848124a713ce380561b0e ell-0.14.tar.gz
++sha256 bb7038340bfa4eed57700a42da235ba2efce19fe7ab6b976af3e69ee9597a4dd ell-0.16.tar.gz
+ 
+ # License files
+ sha256 ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5 COPYING
+diff --git a/package/ell/ell.mk b/package/ell/ell.mk
+index 56d53be868..9f610e7d23 100644
+--- a/package/ell/ell.mk
++++ b/package/ell/ell.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_SETUPTOOLS_VERSION = 40.6.2
-+PYTHON_SETUPTOOLS_VERSION = 40.6.3
- PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).zip
--PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/b0/d1/8acb42f391cba52e35b131e442e80deffbb8d0676b93261d761b1f0ef8fb
-+PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/37/1b/b25507861991beeade31473868463dad0e58b1978c209de27384ae541b0b
- PYTHON_SETUPTOOLS_LICENSE = MIT
- PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
- PYTHON_SETUPTOOLS_SETUP_TYPE = setuptools
+-ELL_VERSION = 0.14
++ELL_VERSION = 0.16
+ ELL_SITE = https://git.kernel.org/pub/scm/libs/ell/ell.git
+ ELL_SITE_METHOD = git
+ ELL_LICENSE = LGPL-2.1+
