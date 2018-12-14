@@ -1,49 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Dec 2018 21:30:21 +0100
-Subject: [Buildroot] [git commit] python-cython: bump to version 0.29.2
-Message-ID: <20181214202637.C40BC84659@busybox.osuosl.org>
+Date: Fri, 14 Dec 2018 21:29:43 +0100
+Subject: [Buildroot] [git commit] python-yarl: bump to version 1.3.0
+Message-ID: <20181214202637.BCFB984659@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9c6c561c15802b8bbb2e7245efd0408a080cd42
+commit: https://git.buildroot.net/buildroot/commit/?id=454f8963cf90551afd51737caec5d5f9c4433924
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-cython/python-cython.hash | 4 ++--
- package/python-cython/python-cython.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-yarl/python-yarl.hash | 6 +++---
+ package/python-yarl/python-yarl.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
-index 4ce7b3cd55..1fdb7e19cf 100644
---- a/package/python-cython/python-cython.hash
-+++ b/package/python-cython/python-cython.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/cython/json
--md5    3cf61c7ef8e5daa47e469cf7ba2e598c  Cython-0.29.1.tar.gz
--sha256 18ab7646985a97e02cee72e1ddba2e732d4931d4e1732494ff30c5aa084bfb97  Cython-0.29.1.tar.gz
-+md5	175af2d64f9ae09d25f5cf8181388559  Cython-0.29.2.tar.gz
-+sha256	2ac187ff998a95abb7fae452b5178f91e1a713698c9ced89836c94e6b1d3f41e  Cython-0.29.2.tar.gz
+diff --git a/package/python-yarl/python-yarl.hash b/package/python-yarl/python-yarl.hash
+index 118c7225d8..1cb0708435 100644
+--- a/package/python-yarl/python-yarl.hash
++++ b/package/python-yarl/python-yarl.hash
+@@ -1,5 +1,5 @@
+-# md5, sha256 from https://pypi.python.org/pypi/yarl/json
+-md5	43380667129ebc52ac3c442daabb3f6d  yarl-1.2.6.tar.gz
+-sha256	c8cbc21bbfa1dd7d5386d48cc814fe3d35b80f60299cdde9279046f399c3b0d8  yarl-1.2.6.tar.gz
++# md5, sha256 from https://pypi.org/pypi/yarl/json
++md5	92889c31fce4c8f82b7ee9c2b2ed9cd1  yarl-1.3.0.tar.gz
++sha256	024ecdc12bc02b321bc66b41327f930d1c2c543fa9a561b39861da9388ba7aa9  yarl-1.3.0.tar.gz
  # Locally computed sha256 checksums
- sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
- sha256 e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
-diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
-index 852146406a..8dd1469495 100644
---- a/package/python-cython/python-cython.mk
-+++ b/package/python-cython/python-cython.mk
+ sha256	14c0820503ceef15e814a89b037d9efc066870087018294b6ae0f27163872cc5  LICENSE
+diff --git a/package/python-yarl/python-yarl.mk b/package/python-yarl/python-yarl.mk
+index 591131e4a2..f185724781 100644
+--- a/package/python-yarl/python-yarl.mk
++++ b/package/python-yarl/python-yarl.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CYTHON_VERSION = 0.29.1
-+PYTHON_CYTHON_VERSION = 0.29.2
- PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
--PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/f0/f8/7f406aac4c6919d5a4ce16509bbe059cd256e9ad94bae5ccac14094b7c51
-+PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/c1/f2/d1207fd0dfe5cb4dbb06a035eb127653821510d896ce952b5c66ca3dafa4
- PYTHON_CYTHON_SETUP_TYPE = setuptools
- PYTHON_CYTHON_LICENSE = Apache-2.0
- PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
+-PYTHON_YARL_VERSION = 1.2.6
++PYTHON_YARL_VERSION = 1.3.0
+ PYTHON_YARL_SOURCE = yarl-$(PYTHON_YARL_VERSION).tar.gz
+-PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/43/b8/057c3e5b546ff4b24263164ecda13f6962d85c9dc477fcc0bcdcb3adb658
++PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/fb/84/6d82f6be218c50b547aa29d0315e430cf8a23c52064c92d0a8377d7b7357
+ PYTHON_YARL_LICENSE = Apache-2.0
+ PYTHON_YARL_LICENSE_FILES = LICENSE
+ PYTHON_YARL_SETUP_TYPE = setuptools
