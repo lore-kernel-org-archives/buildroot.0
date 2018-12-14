@@ -1,38 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Dec 2018 21:20:35 +0100
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: bump to version
- 2.22.5
-In-Reply-To: <20181214165133.11700-1-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Fri, 14 Dec 2018 18:51:33 +0200")
-References: <20181214165133.11700-1-aperez@igalia.com>
-Message-ID: <875zvvg8rw.fsf@dell.be.48ers.dk>
+Date: Fri, 14 Dec 2018 21:23:17 +0100
+Subject: [Buildroot] [PATCH 1/1] xapp_xmap: fix build with pkgconf 1.5.3
+In-Reply-To: <20181214152517.7067-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 14 Dec 2018 16:25:17 +0100")
+References: <20181214152517.7067-1-fontaine.fabrice@gmail.com>
+Message-ID: <871s6jg8ne.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > This is a maintenance release of the current stable WebKitGTK+ version,
- > which contains security fixes for CVE identifiers: CVE-2018-4437,
- > CVE-2018-4438, CVE-2018-4441, CVE-2018-4442, CVE-2018-4443, and
- > CVE-2018-4464. Additionally, it fixes a couple of build failures in
- > unusual build configurations.
+ > Since the bump to 1.5.3, pkgconf prepends the sysroot to all absolute
+ > paths found in the .pc file. This is correct when the paths refer to
+ > something in STAGING_DIR (e.g. libdir, includedir), but not when it
+ > refers to something used for the target.
 
- > Release notes can be found in the announcement:
+ > xapp_xmap uses the appdefaultdir variable from xt.pc to decide where to
+ > install things. Since DESTDIR is prepended to the install destination,
+ > this will end up in the wrong location.
 
- >   https://webkitgtk.org/2018/12/13/webkitgtk2.22.5-released.html
+ > Until a better solution is found in pkgconf, pass the appdefaultdir to
+ > use explicitly instead of relying on xt.pc.
 
- > More details on the issues covered by security fixes can be found
- > in the corresponding security advisory:
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/725c20ec9621a9c2d4b94784785bb481ff74f0e7
 
- >   https://webkitgtk.org/security/WSA-2018-0009.html
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-
-Committed after tweaking subject to make it clear this is a security
-bump, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
