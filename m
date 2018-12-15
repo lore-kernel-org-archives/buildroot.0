@@ -1,62 +1,61 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Sat, 15 Dec 2018 14:05:18 -0200 (BRST)
-Subject: [Buildroot] [PATCH 1/1] util-linux: fix build with pkgconf 1.5.3
-In-Reply-To: <20181215130613.18112-1-fontaine.fabrice@gmail.com>
-References: <20181215130613.18112-1-fontaine.fabrice@gmail.com>
-Message-ID: <634742303.3031620.1544889918254.JavaMail.zimbra@datacom.com.br>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 15 Dec 2018 18:22:00 +0100
+Subject: [Buildroot] [PATCH-2018.02.x] package/go: security bump to version
+ 1.9.7
+Message-ID: <20181215172200.8270-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Fabrice Fontaine" <fontaine.fabrice@gmail.com>
-> To: "buildroot" <buildroot@buildroot.org>
-> Cc: "Carlos Santos" <casantos@datacom.com.br>, "Fabrice Fontaine" <fontaine.fabrice@gmail.com>
-> Sent: S?bado, 15 de dezembro de 2018 11:06:13
-> Subject: [PATCH 1/1] util-linux: fix build with pkgconf 1.5.3
+go1.9.1 (released 2017/10/04) includes two security fixes.
 
-> Since the bump to 1.5.3, pkgconf prepends the sysroot to all absolute
-> paths found in the .pc file. This is correct when the paths refer to
-> something in STAGING_DIR (e.g. libdir, includedir), but not when it
-> refers to something used for the target.
-> 
-> fwts uses the completionsdir variable from bash-completions.pc to decide
-> where to install things. Since DESTDIR is prepended to the install
-> destination, this will end up in the wrong location.
-> 
-> Until a better solution is found in pkgconf, pass the appdefaultdir to
-> use explicitly instead of relying on bash-completions.pc.
-> 
-> Fixes:
-> -
-> http://autobuild.buildroot.org/results/caf352a66aa5bd94b93aac39a90b4fa33b39a708
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> package/util-linux/util-linux.mk | 4 ++++
-> 1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-> index c176d364ce..edbb10d1c8 100644
-> --- a/package/util-linux/util-linux.mk
-> +++ b/package/util-linux/util-linux.mk
-> @@ -229,6 +229,10 @@ else
-> UTIL_LINUX_CONF_OPTS += --without-audit
-> endif
-> 
-> +ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
-> +UTIL_LINUX_CONF_OPTS +=
-> --with-bashcompletiondir=/usr/share/bash-completion/completions
-> +endif
-> +
-> # Install PAM configuration files
-> ifeq ($(BR2_PACKAGE_UTIL_LINUX_SU)$(BR2_PACKAGE_LINUX_PAM),yy)
-> define UTIL_LINUX_INSTALL_PAMFILES
-> --
-> 2.14.1
+go1.9.2 (released 2017/10/25) includes fixes to the compiler, linker,
+runtime, documentation, go command, and the crypto/x509, database/sql, log,
+and net/smtp packages.  It includes a fix to a bug introduced in Go 1.9.1
+that broke go get of non-Git repositories under certain conditions.
 
-Reviewed-by: Carlos Santos <casantos@datacom.com.br>
+go1.9.3 (released 2018/01/22) includes fixes to the compiler, runtime, and
+the database/sql, math/big, net/http, and net/url packages.
 
+go1.9.4 (released 2018/02/07) includes a security fix to ?go get?.
+
+go1.9.5 (released 2018/03/28) includes fixes to the compiler, go command,
+and net/http/pprof package.
+
+go1.9.6 (released 2018/05/01) includes fixes to the compiler and go command.
+
+go1.9.7 (released 2018/06/05) includes fixes to the go command, and the
+crypto/x509, and strings packages.  In particular, it adds minimal support
+to the go command for the vgo transition.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 445a0b7c20..ad14cd6393 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,2 +1,2 @@
+ # From https://golang.org/dl/
+-sha256	a4ab229028ed167ba1986825751463605264e44868362ca8e7accc8be057e993	go1.9.src.tar.gz
++sha256	582814fa45e8ecb0859a208e517b48aa0ad951e3b36c7fff203d834e0ef27722	go1.9.7.src.tar.gz
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 23facbdd81..811e68fd49 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.9
++GO_VERSION = 1.9.7
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
+2.11.0
