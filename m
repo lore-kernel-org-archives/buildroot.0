@@ -1,24 +1,38 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 15 Dec 2018 09:26:27 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/mesa3d: bump to version
- 18.3.1
-References: <1544861438-11607-1-git-send-email-james.hilliard1@gmail.com>
-Message-ID: <jeqeefxd2m.ln2@ID-313208.user.individual.net>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sat, 15 Dec 2018 10:37:22 +0200
+Subject: [Buildroot] [PATCH 1/1] glib-networking: fix build with pkgconf
+ 1.5.3
+Message-ID: <20181215083723.25668-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sat, 15 Dec 2018 16:10:38 +0800 schrieb
-james.hilliard1-Re5JQEeQqe8AvxtiuMwx3w:
+CONF_OPTS has to be altered to contain only the prefix relative
+to STAGING_DIR, because the sysroot path is prepended since pkgconf
+bump to 1.5.3
 
-> From: James Hilliard <james.hilliard1@gmail.com>
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Fixes:
+http://autobuild.buildroot.org/results/3a0/3a0687911f9da25fb36497b7abb2adb7ea3ef695
 
-Hi,
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/glib-networking/glib-networking.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-you need to update package/mesa3d-headers as well.
-
-Regards, Bernd
+diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
+index 10a3b706b3..91def515cc 100644
+--- a/package/glib-networking/glib-networking.mk
++++ b/package/glib-networking/glib-networking.mk
+@@ -23,7 +23,7 @@ GLIB_NETWORKING_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) \
+ 
+ ifeq ($(BR2_PACKAGE_GNUTLS),y)
+ GLIB_NETWORKING_DEPENDENCIES += gnutls
+-GLIB_NETWORKING_CONF_OPTS += --with-libgcrypt-prefix=$(STAGING_DIR)/usr
++GLIB_NETWORKING_CONF_OPTS += --with-libgcrypt-prefix=/usr
+ else
+ GLIB_NETWORKING_CONF_OPTS += --without-gnutls
+ endif
+-- 
+2.19.1
