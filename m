@@ -1,8 +1,8 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 15 Dec 2018 15:39:54 +0100
-Subject: [Buildroot] [PATCH 1/1] xdata_xcursor-themes: fix build with
+Date: Sat, 15 Dec 2018 16:04:56 +0100
+Subject: [Buildroot] [PATCH 1/1] gstreamer1-edting-services: fix build with
  pkgconf 1.5.3
-Message-ID: <20181215143954.854-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181215150456.14240-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,31 +14,36 @@ paths found in the .pc file. This is correct when the paths refer to
 something in STAGING_DIR (e.g. libdir, includedir), but not when it
 refers to something used for the target.
 
-xdata_xcursor-themes uses the icondir variable from xcursor.pc to decide
-where to install things. Since DESTDIR is prepended to the install
-destination, this will end up in the wrong location.
+gstreamer-editing-services uses the completionsdir variable from
+bash-completions.pc to decide where to install things. Since DESTDIR is
+prepended to the install destination, this will end up in the wrong
+location.
 
-Until a better solution is found in pkgconf, pass the cursordir to use
-explicitly instead of relying on xcursor.pc.
+Until a better solution is found in pkgconf, pass the appdefaultdir to
+use explicitly instead of relying on bash-completions.pc.
 
 Fixes:
- - http://autobuild.buildroot.org/results/ddb6d634085e4e364b78b182c3c6ef9764420626
+ - http://autobuild.buildroot.org/results/095f75be81b93db0ab45ea60b0dd6c34c99212e0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk | 1 +
- 1 file changed, 1 insertion(+)
+ .../gstreamer1-editing-services/gstreamer1-editing-services.mk        | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk b/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
-index 048291008b..19cb67cc75 100644
---- a/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
-+++ b/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
-@@ -12,5 +12,6 @@ XDATA_XCURSOR_THEMES_LICENSE_FILES = COPYING
+diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
+index 74a36824ed..620dcd24eb 100644
+--- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
++++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
+@@ -20,6 +20,10 @@ GSTREAMER1_EDITING_SERVICES_DEPENDENCIES = \
  
- XDATA_XCURSOR_THEMES_INSTALL_STAGING = YES
- XDATA_XCURSOR_THEMES_DEPENDENCIES = xlib_libXcursor host-xapp_xcursorgen
-+XDATA_XCURSOR_THEMES_CONF_OPTS = --with-cursordir=/usr/share/icons
+ GSTREAMER1_EDITING_SERVICES_CONF_OPTS = --disable-benchmarks
  
- $(eval $(autotools-package))
++ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
++GSTREAMER1_EDITING_SERVICES_CONF_OPTS += --with-bash-completion-dir=/usr/share/bash-completion/completions
++endif
++
+ # examples need GTK2/3 with X11 backend
+ ifneq ($(BR2_PACKAGE_LIBGTK2)$(BR2_PACKAGE_LIBGTK3_X11),)
+ GSTREAMER1_EDITING_SERVICES_CONF_OPTS += --enable-examples
 -- 
 2.14.1
