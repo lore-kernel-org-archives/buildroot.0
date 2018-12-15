@@ -1,38 +1,32 @@
 From: Carlos Santos <casantos@datacom.com.br>
-Date: Fri, 14 Dec 2018 23:38:13 -0200
-Subject: [Buildroot] [PATCH] package/pcm-tools: fix build with GCC 4.8.2
-Message-ID: <20181215013813.451-1-casantos@datacom.com.br>
+Date: Fri, 14 Dec 2018 23:46:31 -0200 (BRST)
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2018-12-13
+In-Reply-To: <20181214070028.28AC620DDA@mail.bootlin.com>
+References: <20181214070028.28AC620DDA@mail.bootlin.com>
+Message-ID: <543443774.3025390.1544838391325.JavaMail.zimbra@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pass $(TARGET_CONFIGURE_OPTS) as arguments to make and add "-std=c++11"
-to CXXFLAGS, forcing C++ 2011 standard (it's experimental in GCC 4.8.2
-but goot enough to build pcm-tools).
 
-Fixes:
-  http://autobuild.buildroot.net/results/cf3c79f0c94be8a184d532570bdb1893090316a3/
+> From: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+> To: "Carlos Santos" <casantos@datacom.com.br>
+> Sent: Sexta-feira, 14 de dezembro de 2018 5:00:28
+> Subject: [autobuild.buildroot.net] Your build results for 2018-12-13
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
----
- package/pcm-tools/pcm-tools.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> Build failures related to your packages:
+> 
+>        i686 |               pcm-tools-201812 | http://autobuild.buildroot.net/results/cf3c79f0c94be8a184d532570bdb1893090316a3
 
-diff --git a/package/pcm-tools/pcm-tools.mk b/package/pcm-tools/pcm-tools.mk
-index c0d6d8bc52..98b562eac4 100644
---- a/package/pcm-tools/pcm-tools.mk
-+++ b/package/pcm-tools/pcm-tools.mk
-@@ -15,7 +15,8 @@ PCM_TOOLS_EXE_FILES = \
- 
- define PCM_TOOLS_BUILD_CMDS
- 	touch $(@D)/daemon-binaries
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
-+		CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11" \
- 		UNAME=Linux HOST=_LINUX
- endef
- 
+Fixed by https://patchwork.ozlabs.org/patch/1013797/
+
+>      xtensa |                util-linux-2.33 | http://autobuild.buildroot.net/results/12b108a6185ab96a0eb509ab0e6fe053e545c77b
+
+I can't reproduce it locally. Looks like a host glitch, since fails in
+the installation.
+
 -- 
-2.19.2
+Carlos Santos (Casantos) - DATACOM, P&D
