@@ -1,43 +1,84 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 15 Dec 2018 12:10:57 +0100
-Subject: [Buildroot] [PATCH 1/1] xapp_xmh: fix build with pkgconf 1.5.3
-Message-ID: <20181215111057.32433-1-fontaine.fabrice@gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sat, 15 Dec 2018 04:15:35 -0700
+Subject: [Buildroot] [PATCH v2 1/1] package/mesa3d: bump to version
+ 18.3.1
+In-Reply-To: <20181215110439.GF2625@scaer>
+References: <1544861438-11607-1-git-send-email-james.hilliard1@gmail.com>
+ <20181215103930.GC2625@scaer>
+ <CADvTj4pXxGg4uTWi2xevajAiUiv95V15uMDopsWd4j=4tnhZcQ@mail.gmail.com>
+ <20181215110439.GF2625@scaer>
+Message-ID: <CADvTj4qFBuK8QaRf_PJ34WsSVSVJNMLV8sq-QqUC2vte2OJrqQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the bump to 1.5.3, pkgconf prepends the sysroot to all absolute
-paths found in the .pc file. This is correct when the paths refer to
-something in STAGING_DIR (e.g. libdir, includedir), but not when it
-refers to something used for the target.
-
-xapp_xmh uses the appdefaultdir variable from xt.pc to decide where to
-install things. Since DESTDIR is prepended to the install destination,
-this will end up in the wrong location.
-
-Until a better solution is found in pkgconf, pass the appdefaultdir to
-use explicitly instead of relying on xt.pc.
-
-Fixes:
- - http://autobuild.buildroot.org/results/a90b228ed4afdc15d97196ee3688ddb2e75ca038
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/x11r7/xapp_xmh/xapp_xmh.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/x11r7/xapp_xmh/xapp_xmh.mk b/package/x11r7/xapp_xmh/xapp_xmh.mk
-index c18bbfe5da..12d3bd012f 100644
---- a/package/x11r7/xapp_xmh/xapp_xmh.mk
-+++ b/package/x11r7/xapp_xmh/xapp_xmh.mk
-@@ -10,5 +10,6 @@ XAPP_XMH_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XMH_LICENSE = MIT
- XAPP_XMH_LICENSE_FILES = COPYING
- XAPP_XMH_DEPENDENCIES = xlib_libXaw xdata_xbitmaps
-+XAPP_XMH_CONF_OPTS = --with-appdefaultdir=/usr/share/X11/app-defaults
- 
- $(eval $(autotools-package))
--- 
-2.14.1
+On Sat, Dec 15, 2018 at 4:04 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> James, All,
+>
+> On 2018-12-15 03:56 -0700, James Hilliard spake thusly:
+> > On Sat, Dec 15, 2018 at 3:39 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> [--SNIP--]
+> > > > diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> > > > index f3ee69b..2fe46bd 100644
+> > > > --- a/package/mesa3d/mesa3d.mk
+> > > > +++ b/package/mesa3d/mesa3d.mk
+> > > > @@ -5,7 +5,7 @@
+> > > >  ################################################################################
+> > > >
+> > > >  # When updating the version, please also update mesa3d-headers
+> > > > -MESA3D_VERSION = 18.3.0
+> > > > +MESA3D_VERSION = 18.3.1
+> > >
+> > > As Bernd already pointed out, you need to also update mesa3d-headers
+> > > too. What made you miss the notice just above? Do you have a suggestion
+> > > so that the next one who bumps either mesa3d or mesa3d-headers does not
+> > > miss it next time?
+> > It was 1am when I sent this
+>
+> Aha! :-)
+>
+> > and literally only looked for the version
+> > number to bump it when debugging a build failure. Wouldn't it make
+> > sense to have mesa3d and mesa3d-headers share the same package version
+> > so that only one needs to be bumped?
+>
+> That's unfortunately not possible, see the comment in mesa3d-headers...
+I think you could turn mesa3d-headers into a virtual/fake package
+similar to how I did it with my systemd-boot patch. Then you wouldn't
+have to refer to variables in mesa3d.
+>
+> Regards,
+> Yann E. MORIN.
+>
+> > > Regards,
+> > > Yann E. MORIN.
+> > >
+> > > >  MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+> > > >  MESA3D_SITE = https://mesa.freedesktop.org/archive
+> > > >  MESA3D_LICENSE = MIT, SGI, Khronos
+> > > > --
+> > > > 2.7.4
+> > > >
+> > > > _______________________________________________
+> > > > buildroot mailing list
+> > > > buildroot at busybox.net
+> > > > http://lists.busybox.net/mailman/listinfo/buildroot
+> > >
+> > > --
+> > > .-----------------.--------------------.------------------.--------------------.
+> > > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> > > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> > > | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> > > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> > > '------------------------------^-------^------------------^--------------------'
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
