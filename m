@@ -1,80 +1,65 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 15 Dec 2018 21:40:24 +0100
-Subject: [Buildroot] [PATCH 1/1] ffmpeg: fix static build with pkgconf 1.5.3
-Message-ID: <20181215204024.14016-1-fontaine.fabrice@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sat, 15 Dec 2018 22:42:09 +0200
+Subject: [Buildroot] [PATCH 1/1] dependencies.sh: Check for a host
+ python version >= 2.7
+In-Reply-To: <20181215202937.81372-1-aduskett@gmail.com>
+References: <20181215202937.81372-1-aduskett@gmail.com>
+Message-ID: <871s6ibjz2.fsf@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-pkg-config --version returns the following error:
-/home/fabrice/buildroot/output/host/bin/pkgconf: --version specified
-with other options or module names, assuming --modversion.
-Please specify at least one package name on the command line.
+Hi Adam,
 
-As a result, pkg_config will be set to false and the following warning
-will be displayed:
-WARNING: /home/fabrice/buildroot/output/host/bin/pkg-config not found,
-library detection may fail.
+aduskett at gmail.com writes:
+> From: Adam Duskett <Aduskett@gmail.com>
+>
+> Older distributions such as CentOS6 come with python2.6, which causes build
+> failures in packages such as host-libglib2 because they require python2.7 or
+> above.
 
-So replace pkg-config --version by pkg-config --about
+Any reference to glib requirements? autobuilder failures?
 
-Fixes:
- - http://autobuild.buildroot.org/results/bb3264661c182c124e89e9a2bcf41e556d40aeb8
+> CentOS6 does have the centos-release-scl which allows users to install
+> python2.7, making this transition reasonably easy.
+>
+> Debian 6 and 7 have reached EOL, and Debian 8 comes with Python 2.7, so
+> this patch should be relatively low impact.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...igure-fix-static-build-with-pkgconf-1.5.3.patch | 41 ++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 package/ffmpeg/0002-configure-fix-static-build-with-pkgconf-1.5.3.patch
+Please update the requirements documentation in a separate patch:
 
-diff --git a/package/ffmpeg/0002-configure-fix-static-build-with-pkgconf-1.5.3.patch b/package/ffmpeg/0002-configure-fix-static-build-with-pkgconf-1.5.3.patch
-new file mode 100644
-index 0000000000..93a4ebb345
---- /dev/null
-+++ b/package/ffmpeg/0002-configure-fix-static-build-with-pkgconf-1.5.3.patch
-@@ -0,0 +1,41 @@
-+From b3f6422a8a72e0ca5f8a1b1a6401db4088977f10 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 15 Dec 2018 21:33:16 +0100
-+Subject: [PATCH] configure: fix static build with pkgconf 1.5.3
-+
-+pkg-config --version returns the following error:
-+/home/fabrice/buildroot/output/host/bin/pkgconf: --version specified
-+with other options or module names, assuming --modversion.
-+Please specify at least one package name on the command line.
-+
-+As a result, pkg_config will be set to false and the following warning
-+will be displayed:
-+WARNING: /home/fabrice/buildroot/output/host/bin/pkg-config not found,
-+library detection may fail.
-+
-+So replace pkg-config --version by pkg-config --about
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/bb3264661c182c124e89e9a2bcf41e556d40aeb8
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure b/configure
-+index b062b6318e..b46ce00982 100755
-+--- a/configure
-++++ b/configure
-+@@ -4150,7 +4150,7 @@ enabled cross_compile || host_cc_default=$cc
-+ set_default host_cc
-+ 
-+ pkg_config_fail_message=""
-+-if ! $pkg_config --version >/dev/null 2>&1; then
-++if ! $pkg_config --about >/dev/null 2>&1; then
-+     warn "$pkg_config not found, library detection may fail."
-+     pkg_config=false
-+ elif is_in -static $cc $LDFLAGS && ! is_in --static $pkg_config $pkg_config_flags; then
-+-- 
-+2.14.1
-+
+  https://buildroot.org/downloads/manual/manual.html#requirement-mandatory
+
+baruch
+
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+>  support/dependencies/dependencies.sh | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+> index 58c34d880f..d0b6bdc23a 100755
+> --- a/support/dependencies/dependencies.sh
+> +++ b/support/dependencies/dependencies.sh
+> @@ -181,6 +181,14 @@ if test "${missing_progs}" = "yes" ; then
+>  	exit 1
+>  fi
+>  
+> +# Check that the python version is at least 2.7
+> +PYTHON_VERSION=$(python -V 2>&1 |awk '{print $2}')
+> +if [ $(echo $PYTHON_VERSION |sed -e 's/\.//g') -lt 2700 ]; then
+> +	echo
+> +	echo "You have python '$PYTHON_VERSION' installed.  Python >= 2.7 is required"
+> +	exit 1;
+> +fi
+> +
+>  if grep ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG > /dev/null; then
+>  	if ! which locale > /dev/null ; then
+>  		echo
+
 -- 
-2.14.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
