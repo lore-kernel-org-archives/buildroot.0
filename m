@@ -1,62 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Dec 2018 22:00:31 +0100
-Subject: [Buildroot] [PATCH] package/xen: security bump to version 4.11.1
-Message-ID: <20181215210032.436-1-peter@korsgaard.com>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Sat, 15 Dec 2018 16:13:05 -0500
+Subject: [Buildroot] [PATCH 1/1] qemu: bump to version 3.1.0
+Message-ID: <20181215211305.11492-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The 4.11.1 release brings a large number of fixes:
+From: Adam Duskett <Aduskett@gmail.com>
 
-https://xenproject.org/downloads/xen-archives/xen-project-411-series/xen-4111.html
-
-Including a number of security fixes:
-
-XSA-268: Use of v2 grant tables may cause crash on ARM (CVE-2018-15469)
-XSA-269: x86: Incorrect MSR_DEBUGCTL handling lets guests enable BTS
-	 (CVE-2018-15468)
-XSA-272: oxenstored does not apply quota-maxentity (CVE-2018-15470)
-XSA-273: L1 Terminal Fault speculative side channel (CVE-2018-3620,
-         CVE-2018-3646)
-XSA-275: insufficient TLB flushing / improper large page mappings with AMD
-         IOMMUs
-XSA-276: resource accounting issues in x86 IOREQ server handling
-XSA-277: x86: incorrect error handling for guest p2m page removals
-XSA-278: x86: Nested VT-x usable even when disabled (CVE-2018-18883)
-XSA-279: x86: DoS from attempting to use INVPCID with a non-canonical
-         addresses
-XSA-280: Fix for XSA-240 conflicts with shadow paging
-XSA-282: guest use of HLE constructs may lock up host
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/xen/xen.hash | 2 +-
- package/xen/xen.mk   | 2 +-
+ package/qemu/qemu.hash | 2 +-
+ package/qemu/qemu.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xen/xen.hash b/package/xen/xen.hash
-index 376013eb7a..7a52410954 100644
---- a/package/xen/xen.hash
-+++ b/package/xen/xen.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 826e3a9f6d0eac94a825d272cc2c1294e22640ae75af906eb13920f9ad667643 xen-4.11.0.tar.gz
-+sha256 be88cb2443761990efc1070d9718016561fe19066af232f9bfae572922897e59 xen-4.11.1.tar.gz
- sha256 dba0d79260259c013c52e5d4daeaea564a2fbb9ff7fc6778c377a401ec3898de COPYING
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index 8d7b92eadc..d6e6c91cfb 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
+diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
+index 2b27008b73..338d2ae503 100644
+--- a/package/qemu/qemu.hash
++++ b/package/qemu/qemu.hash
+@@ -1,4 +1,4 @@
+ # Locally computed, tarball verified with GPG signature
+-sha256 33583800e0006cd00b78226b85be5a27c8e3b156bed2e60e83ecbeb7b9b8364f  qemu-2.12.1.tar.xz
++sha256 6a0508df079a0a33c2487ca936a56c12122f105b8a96a44374704bef6c69abfc  qemu-3.1.0.tar.xz
+ sha256 6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
+ sha256 48ffe9fc7f1d5462dbd19340bc4dd1d8a9e37c61ed535813e614cbe4a5f0d4df  COPYING.LIB
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 99313234c1..a1bd7e5d6e 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XEN_VERSION = 4.11.0
-+XEN_VERSION = 4.11.1
- XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
- XEN_LICENSE = GPL-2.0
- XEN_LICENSE_FILES = COPYING
+-QEMU_VERSION = 2.12.1
++QEMU_VERSION = 3.1.0
+ QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
+ QEMU_SITE = http://download.qemu.org
+ QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
 -- 
-2.11.0
+2.19.2
