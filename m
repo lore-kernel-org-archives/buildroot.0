@@ -1,82 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Dec 2018 16:25:59 +0100
-Subject: [Buildroot] [PATCH] docker-compose: add patch to allow recent 2.x
- releases of python-requests
-Message-ID: <20181215152559.30518-1-peter@korsgaard.com>
+Date: Sat, 15 Dec 2018 16:50:10 +0100
+Subject: [Buildroot] [PATCH] package/go: security bump to version 1.11.4
+Message-ID: <20181215155010.2033-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-setup.py explicitly listed a maximum allowed version of python-requests,
-causing runtime failures with the python-requests version we have:
+go 1.11.3 fixes the following security issues:
 
-Loaded image: docker-enp.bin.cloud.barco.com/eis/baseos-docker-snmp:0.1.0
-Traceback (most recent call last):
-  File "/usr/bin/docker-compose", line 6, in <module>
-    from pkg_resources import load_entry_point
-  File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 3123, in <module>
-  File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 3107, in _call_aside
-  File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 3136, in _initialize_master_working_set
-  File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 580, in _build_master
-  File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 593, in _build_from_requirements
-  File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 781, in resolve
-pkg_resources.DistributionNotFound: The 'requests!=2.11.0,!=2.12.2,!=2.18.0,<2.19,>=2.6.1' distribution was not found and is required by docker-compose
-FAIL
+cmd/go: remote command execution during "go get -u"
+The issue is CVE-2018-16873 and Go issue golang.org/issue/29230. See the Go issue for details.
+Thanks to Etienne Stalmans from the Heroku platform security team for discovering and reporting this issue.
 
-Upstream regularly updates setup.py as new python-requests releases are
-made, but it is unknown why new python-requests releases (which are supposed
-to be backwards compatible) should not be allowed right away.
+cmd/go: directory traversal in "go get" via curly braces in import paths
+The issue is CVE-2018-16874 and Go issue golang.org/issue/29231. See the Go issue for details.
+Thanks to ztz of Tencent Security Platform for discovering and reporting this issue.
 
-Add a path submitted upstream to only disallow new major versions, similar
-to how the other dependencies are handled.
+crypto/x509: CPU denial of service in chain validation
+The issue is CVE-2018-16875 and Go issue golang.org/issue/29233. See the Go issue for details.
+Thanks to Netflix for discovering and reporting this issue.
+
+go 1.11.4 fixes issues, including regressions introduced by 1.11.3:
+
+1.11.4 includes fixes to cgo, the compiler, linker, runtime, documentation, go
+command, and the net/http and go/types packages.  It includes a fix to a bug
+introduced in Go 1.11.3 that broke go get for import path patterns
+containing "...".
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...py-allow-all-recent-2.x-requests-releases.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/docker-compose/0001-setup.py-allow-all-recent-2.x-requests-releases.patch
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-compose/0001-setup.py-allow-all-recent-2.x-requests-releases.patch b/package/docker-compose/0001-setup.py-allow-all-recent-2.x-requests-releases.patch
-new file mode 100644
-index 0000000000..1378c3b81a
---- /dev/null
-+++ b/package/docker-compose/0001-setup.py-allow-all-recent-2.x-requests-releases.patch
-@@ -0,0 +1,34 @@
-+From a79152d1d621ea9d477ecc6862a03cae80b2425b Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Sat, 15 Dec 2018 14:04:57 +0100
-+Subject: [PATCH] setup.py: allow all recent 2.x requests releases
-+
-+Instead of having to update this for each new requests release.
-+
-+It it not quite clear why the restriction was added in the first place in
-+commit b0480b4d04e (Bump SDK version to latest), but change it to simply
-+disallow the upcoming 3.0 release to match what is done for the other
-+modules.
-+
-+Submitted upstream: https://github.com/docker/compose/pull/6415
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ setup.py | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/setup.py b/setup.py
-+index 96530726..3c8c7d0e 100644
-+--- a/setup.py
-++++ b/setup.py
-+@@ -33,7 +33,7 @@ install_requires = [
-+     'cached-property >= 1.2.0, < 2',
-+     'docopt >= 0.6.1, < 0.7',
-+     'PyYAML >= 3.10, < 4',
-+-    'requests >= 2.6.1, != 2.11.0, != 2.12.2, != 2.18.0, < 2.19',
-++    'requests >= 2.6.1, != 2.11.0, != 2.12.2, != 2.18.0, < 3.0',
-+     'texttable >= 0.9.0, < 0.10',
-+     'websocket-client >= 0.32.0, < 1.0',
-+     'docker >= 3.1.4, < 4.0',
-+-- 
-+2.11.0
-+
+diff --git a/package/go/go.hash b/package/go/go.hash
+index bd6af0358f..ee1c881e6a 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256	042fba357210816160341f1002440550e952eb12678f7c9e7e9d389437942550  go1.11.2.src.tar.gz
++sha256	4cfd42720a6b1e79a8024895fa6607b69972e8e32446df76d6ce79801bbadb15  go1.11.4.src.tar.gz
+ sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 2e434f3bad..0d7b961dda 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.11.2
++GO_VERSION = 1.11.4
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 -- 
 2.11.0
