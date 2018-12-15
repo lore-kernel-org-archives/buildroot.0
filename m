@@ -1,40 +1,44 @@
-From: Grzegorz Blach <grzegorz@blach.pl>
-Date: Sat, 15 Dec 2018 01:19:22 +0100
-Subject: [Buildroot] [PATCH 1/3] package/pigpio: bump to version 68
-Message-ID: <20181215001924.1779-1-grzegorz@blach.pl>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Fri, 14 Dec 2018 22:53:50 -0200 (BRST)
+Subject: [Buildroot] [PATCH] package/libpam-tacplus: fix compilation
+ with GCC 8
+In-Reply-To: <20181213221212.5dcafde0@windsurf>
+References: <20181211112113.21648-1-casantos@datacom.com.br>
+ <20181213221212.5dcafde0@windsurf>
+Message-ID: <1184835993.3022523.1544835230237.JavaMail.zimbra@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
----
- package/pigpio/pigpio.hash | 2 +-
- package/pigpio/pigpio.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> From: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+> To: "Carlos Santos" <casantos@datacom.com.br>
+> Cc: "buildroot" <buildroot@buildroot.org>
+> Sent: Quinta-feira, 13 de dezembro de 2018 19:12:12
+> Subject: Re: [Buildroot] [PATCH] package/libpam-tacplus: fix compilation with GCC 8
 
-diff --git a/package/pigpio/pigpio.hash b/package/pigpio/pigpio.hash
-index db43901483..3df55fafff 100644
---- a/package/pigpio/pigpio.hash
-+++ b/package/pigpio/pigpio.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	4255310dd11ed81035b60711becad081a1eaad2905f704e3eb84e692ca7e4c3d  pigpio-V67.tar.gz
-+sha256	ec980f5e672e8e9395b801fecec3fbbbc5c04182b16ee72eb9ca25a453e38062  pigpio-V68.tar.gz
- sha256	6a90b88421a0d9b090e121daa11b3c6d55eed5eeb3281a2fcc454d6a28b5547c  UNLICENCE
-diff --git a/package/pigpio/pigpio.mk b/package/pigpio/pigpio.mk
-index 48628a9539..3071036db4 100644
---- a/package/pigpio/pigpio.mk
-+++ b/package/pigpio/pigpio.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PIGPIO_VERSION = V67
-+PIGPIO_VERSION = V68
- PIGPIO_SITE = $(call github,joan2937,pigpio,$(PIGPIO_VERSION))
- PIGPIO_LICENSE = Unlicense
- PIGPIO_LICENSE_FILES = UNLICENCE
+> Hello,
+> 
+> On Tue, 11 Dec 2018 09:21:13 -0200, Carlos Santos wrote:
+>> GCC 8 demands that the size of the string copied by strncpy be smaller
+>> than the size of the destination to keep space for the trailibg '\0'.
+>> This causes a compilation error in pam_tacplus, so add a patch already
+>> sent uptream to fix it.
+>> 
+>> Fixes:
+>>   http://autobuild.buildroot.net/results/da6d150e470046c03c5f7463de045604e15e4a30/
+>> 
+>> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+>> ---
+>>  ...0002-Fix-compilation-of-tacc.c-with-GCC-8.patch | 39 ++++++++++++++++++++++
+>>  1 file changed, 39 insertions(+)
+>>  create mode 100644
+>>  package/libpam-tacplus/0002-Fix-compilation-of-tacc.c-with-GCC-8.patch
+> 
+> Applied to master, thanks. Please submit the patch upstream. Thanks!
+
+It's already on master, upstream.
+
 -- 
-2.19.2
+Carlos Santos (Casantos) - DATACOM, P&D
