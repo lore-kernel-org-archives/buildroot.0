@@ -1,61 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Dec 2018 16:50:10 +0100
-Subject: [Buildroot] [PATCH] package/go: security bump to version 1.11.4
-Message-ID: <20181215155010.2033-1-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 15 Dec 2018 17:02:24 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/2] glib-networking: remove --with-libgcrypt-prefix
+In-Reply-To: <20181215141401.11112-1-fontaine.fabrice@gmail.com>
+References: <20181215141401.11112-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181215170224.008971f6@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-go 1.11.3 fixes the following security issues:
+Hello,
 
-cmd/go: remote command execution during "go get -u"
-The issue is CVE-2018-16873 and Go issue golang.org/issue/29230. See the Go issue for details.
-Thanks to Etienne Stalmans from the Heroku platform security team for discovering and reporting this issue.
++Asaf in Cc.
 
-cmd/go: directory traversal in "go get" via curly braces in import paths
-The issue is CVE-2018-16874 and Go issue golang.org/issue/29231. See the Go issue for details.
-Thanks to ztz of Tencent Security Platform for discovering and reporting this issue.
+On Sat, 15 Dec 2018 15:14:00 +0100, Fabrice Fontaine wrote:
+> --with-libgcrypt-prefix is not recognized (see
+> http://autobuild.buildroot.org/results/3a0/3a0687911f9da25fb36497b7abb2adb7ea3ef695/build-end.log):
+> configure: WARNING: unrecognized options: --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --enable-ipv6, --with-libgcrypt-prefix
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> Changes v1 -> v2:
+>  - Remove --with-libgcrypt-prefix in a dedicated patch
+> 
+>  package/glib-networking/glib-networking.mk | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
+> index 10a3b706b3..12caf86019 100644
+> --- a/package/glib-networking/glib-networking.mk
+> +++ b/package/glib-networking/glib-networking.mk
+> @@ -23,7 +23,6 @@ GLIB_NETWORKING_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) \
+>  
+>  ifeq ($(BR2_PACKAGE_GNUTLS),y)
+>  GLIB_NETWORKING_DEPENDENCIES += gnutls
+> -GLIB_NETWORKING_CONF_OPTS += --with-libgcrypt-prefix=$(STAGING_DIR)/usr
 
-crypto/x509: CPU denial of service in chain validation
-The issue is CVE-2018-16875 and Go issue golang.org/issue/29233. See the Go issue for details.
-Thanks to Netflix for discovering and reporting this issue.
+So how can http://patchwork.ozlabs.org/patch/1013864/ be working ?
 
-go 1.11.4 fixes issues, including regressions introduced by 1.11.3:
-
-1.11.4 includes fixes to cgo, the compiler, linker, runtime, documentation, go
-command, and the net/http and go/types packages.  It includes a fix to a bug
-introduced in Go 1.11.3 that broke go get for import path patterns
-containing "...".
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/go/go.hash b/package/go/go.hash
-index bd6af0358f..ee1c881e6a 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256	042fba357210816160341f1002440550e952eb12678f7c9e7e9d389437942550  go1.11.2.src.tar.gz
-+sha256	4cfd42720a6b1e79a8024895fa6607b69972e8e32446df76d6ce79801bbadb15  go1.11.4.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 2e434f3bad..0d7b961dda 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.11.2
-+GO_VERSION = 1.11.4
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
