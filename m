@@ -1,52 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 15 Dec 2018 11:49:31 +0100
-Subject: [Buildroot] [PATCH v2 1/1] boot/systemd-boot: new package
-In-Reply-To: <87imzvax4i.fsf@dell.be.48ers.dk>
-References: <1544787764-4537-1-git-send-email-james.hilliard1@gmail.com>
- <20181215085855.GA2625@scaer>
- <CADvTj4os44jtzrL=1uzQ83=xry2BJnJjKMPU-QgJaXi-tVNBoA@mail.gmail.com>
- <20181215102745.GB2625@scaer> <87imzvax4i.fsf@dell.be.48ers.dk>
-Message-ID: <20181215104931.GD2625@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 15 Dec 2018 11:53:37 +0100
+Subject: [Buildroot] [PATCH 1/1] keepalived: fix systemd build with pkgconf
+ 1.5.3
+Message-ID: <20181215105337.19589-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Since the bump to 1.5.3, pkgconf prepends the sysroot to all absolute
+paths found in the .pc file. This is correct when the paths refer to
+something in STAGING_DIR (e.g. libdir, includedir), but not when it
+refers to something used for the target.
 
-On 2018-12-15 11:43 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
->  > Also, I wonder if it ever makes sense to provide systemd-boot to
->  > non-systemd init systems to begin with.
-> One feature of systemd-boot that some people (E.G. me) might find
-> interesting even if they do not use systemd as init system is the fact
-> that it comes with an EFI stub loader that allows you to combine Linux
-> kernel, hardcoded command line and initramfs into a single (potentially
-> signed) EFI PE image with objcopy:
-> 
-> objcopy \
->   --add-section .cmdline=cmdline --change-section-vma .osrel=0x20000 \
->   --add-section .linux=linux --change-section-vma .linux=0x30000 \
->   --add-section .initrd=initrd --change-section-vma .initrd=0x3000000 \
->   stubx64.efi linux.efi
-> 
-> For some use cases (E.G. if these are not built by the same defconfigs
-> or for A/B boot with different Linux command line) this late binding may
-> be preferable to just building a Linux kernel with compile time
-> hardcoded command line and embedded initramfs.
+alsa-utils uses the systemdsystemunitdir variable from systemd.pc to
+decide where to install things. Since DESTDIR is prepended to the
+install destination, this will end up in the wrong location.
 
-Ok, then it makes sense we can have systemd-boot without systemd init.
+Until a better solution is found in pkgconf, pass the
+systemdsystemunitdir to use explicitly instead of relying on systemd.pc.
 
-Let's try to find a solution for that, then.
+Fixes:
+ - http://autobuild.buildroot.org/results/34690fd724332c154971d5363a4c84e97a5e9ae9
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/keepalived/keepalived.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
+diff --git a/package/keepalived/keepalived.mk b/package/keepalived/keepalived.mk
+index 584da6bb48..10711cac49 100644
+--- a/package/keepalived/keepalived.mk
++++ b/package/keepalived/keepalived.mk
+@@ -46,4 +46,10 @@ else
+ KEEPALIVED_CONF_OPTS += --disable-libiptc
+ endif
+ 
++ifeq ($(BR2_INIT_SYSTEMD),y)
++KEEPALIVED_CONF_OPTS += \
++	--with-init=systemd \
++	--with-systemdsystemunitdir=/usr/lib/systemd/system
++endif
++
+ $(eval $(autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
