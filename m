@@ -1,59 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Dec 2018 09:48:46 +0100
-Subject: [Buildroot] [PATCH 1/1] csky_gx6605s_defconfig: bump gcc to
- 6.3.0, kernel to 4.9.56
-In-Reply-To: <20181211224312.25814-1-juju@cotds.org> (Julien Olivain's message
- of "Tue, 11 Dec 2018 23:43:12 +0100")
-References: <20181211224312.25814-1-juju@cotds.org>
-Message-ID: <878t0rch01.fsf@dell.be.48ers.dk>
+Date: Sat, 15 Dec 2018 09:49:57 +0100
+Subject: [Buildroot] [git commit] package/libgtk3: don't use pkgconf
+ directly for host build
+Message-ID: <20181215084602.CC61885D8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Julien" == Julien Olivain <juju@cotds.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=faeed44e3febc1faeaee825a583e8cf47a31c0e6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Julien Olivain <juju@cotds.org>
- > ---
- >  ...ine-for-serial-console-and-rootfs-on.patch | 25 +++++++++++++++++++
- >  configs/csky_gx6605s_defconfig                |  7 +++---
- >  2 files changed, 29 insertions(+), 3 deletions(-)
- >  create mode 100644
- > board/csky/gx6605s/patches/linux/0001-csky-update-cmdline-for-serial-console-and-rootfs-on.patch
+The build of host-libgtk3 calls $(HOST_DIR)/bin/pkgconf directly,
+assuming that it will return correct results when building host
+tools. It did work in practice without per-package directories, but is
+not how pkg-config is used for host build in general: we recommend to
+use $(HOST_DIR)/bin/pkg-config and we have in $(HOST_MAKE_ENV) a
+number of environment variables that tell pkg-config to return results
+relevant for host builds.
 
- > diff --git
- > a/board/csky/gx6605s/patches/linux/0001-csky-update-cmdline-for-serial-console-and-rootfs-on.patch
- > b/board/csky/gx6605s/patches/linux/0001-csky-update-cmdline-for-serial-console-and-rootfs-on.patch
- > new file mode 100644
- > index 0000000000..1da1a75400
- > --- /dev/null
- > +++ b/board/csky/gx6605s/patches/linux/0001-csky-update-cmdline-for-serial-console-and-rootfs-on.patch
- > @@ -0,0 +1,25 @@
- > +From 7e3f2c482bc16537a093e87a27f0d465804a88e4 Mon Sep 17 00:00:00 2001
- > +From: Julien Olivain <juju@cotds.org>
- > +Date: Tue, 11 Dec 2018 23:04:46 +0100
- > +Subject: [PATCH] csky: update cmdline for serial console and rootfs on sda1
- > +
- > +Signed-off-by: Julien Olivain <juju@cotds.org>
- > +---
- > + arch/csky/boot/dts/gx6605s.dts | 2 +-
- > + 1 file changed, 1 insertion(+), 1 deletion(-)
- > +
- > +diff --git a/arch/csky/boot/dts/gx6605s.dts b/arch/csky/boot/dts/gx6605s.dts
- > +index ce56106af967..f5d60b21e6f9 100644
- > +--- a/arch/csky/boot/dts/gx6605s.dts
- > ++++ b/arch/csky/boot/dts/gx6605s.dts
- > +@@ -155,6 +155,6 @@
- > + 	};
- > + 
- > + 	chosen {
- > +-		bootargs = "console=tty0 init=/sbin/init root=/dev/sda2 rw rootwait";
- > ++		bootargs = "console=ttyS0,115200 init=/sbin/init root=/dev/sda1 rw rootwait";
+With per-package directories, calling $(HOST_DIR)/bin/pkgconf fails
+badly, because it searches for .pc files in the per-package directory
+of host-pkgconf itself, which obviously is empty.
 
-Please add something in the commit message explaining why this is
-needed? Is this related to the kernel bump? Are these bootargs not
-handled by the bootloader?
+So, we switch to using $(HOST_MAKE_ENV) $(PKG_CONFIG_HOST_BINARY),
+which uses the regular pkg-config with the right environment
+variables.
 
--- 
-Bye, Peter Korsgaard
+This allows the build of host-libgtk3 to find gdk-pixbuf-2.0 and
+gio-2.0 built for the host, even in the context of
+BR2_PER_PACKAGE_DIRECTORIES=y.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libgtk3/libgtk3.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index 1b85d00aae..bdf820de37 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -151,8 +151,8 @@ HOST_LIBGTK3_DEPENDENCIES = \
+ 	host-librsvg
+ 
+ HOST_LIBGTK3_CFLAGS = \
+-	`$(HOST_DIR)/bin/pkgconf --cflags --libs gdk-pixbuf-2.0` \
+-	`$(HOST_DIR)/bin/pkgconf --cflags --libs gio-2.0`
++	`$(HOST_MAKE_ENV) $(PKG_CONFIG_HOST_BINARY) --cflags --libs gdk-pixbuf-2.0` \
++	`$(HOST_MAKE_ENV) $(PKG_CONFIG_HOST_BINARY) --cflags --libs gio-2.0`
+ 
+ define HOST_LIBGTK3_CONFIGURE_CMDS
+ 	echo "#define GETTEXT_PACKAGE \"gtk30\"" >> $(@D)/gtk/config.h
