@@ -1,49 +1,82 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 15 Dec 2018 16:04:56 +0100
-Subject: [Buildroot] [PATCH 1/1] gstreamer1-edting-services: fix build with
- pkgconf 1.5.3
-Message-ID: <20181215150456.14240-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 15 Dec 2018 16:25:59 +0100
+Subject: [Buildroot] [PATCH] docker-compose: add patch to allow recent 2.x
+ releases of python-requests
+Message-ID: <20181215152559.30518-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the bump to 1.5.3, pkgconf prepends the sysroot to all absolute
-paths found in the .pc file. This is correct when the paths refer to
-something in STAGING_DIR (e.g. libdir, includedir), but not when it
-refers to something used for the target.
+setup.py explicitly listed a maximum allowed version of python-requests,
+causing runtime failures with the python-requests version we have:
 
-gstreamer-editing-services uses the completionsdir variable from
-bash-completions.pc to decide where to install things. Since DESTDIR is
-prepended to the install destination, this will end up in the wrong
-location.
+Loaded image: docker-enp.bin.cloud.barco.com/eis/baseos-docker-snmp:0.1.0
+Traceback (most recent call last):
+  File "/usr/bin/docker-compose", line 6, in <module>
+    from pkg_resources import load_entry_point
+  File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 3123, in <module>
+  File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 3107, in _call_aside
+  File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 3136, in _initialize_master_working_set
+  File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 580, in _build_master
+  File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 593, in _build_from_requirements
+  File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 781, in resolve
+pkg_resources.DistributionNotFound: The 'requests!=2.11.0,!=2.12.2,!=2.18.0,<2.19,>=2.6.1' distribution was not found and is required by docker-compose
+FAIL
 
-Until a better solution is found in pkgconf, pass the appdefaultdir to
-use explicitly instead of relying on bash-completions.pc.
+Upstream regularly updates setup.py as new python-requests releases are
+made, but it is unknown why new python-requests releases (which are supposed
+to be backwards compatible) should not be allowed right away.
 
-Fixes:
- - http://autobuild.buildroot.org/results/095f75be81b93db0ab45ea60b0dd6c34c99212e0
+Add a path submitted upstream to only disallow new major versions, similar
+to how the other dependencies are handled.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../gstreamer1-editing-services/gstreamer1-editing-services.mk        | 4 ++++
- 1 file changed, 4 insertions(+)
+ ...py-allow-all-recent-2.x-requests-releases.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 package/docker-compose/0001-setup.py-allow-all-recent-2.x-requests-releases.patch
 
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-index 74a36824ed..620dcd24eb 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-@@ -20,6 +20,10 @@ GSTREAMER1_EDITING_SERVICES_DEPENDENCIES = \
- 
- GSTREAMER1_EDITING_SERVICES_CONF_OPTS = --disable-benchmarks
- 
-+ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
-+GSTREAMER1_EDITING_SERVICES_CONF_OPTS += --with-bash-completion-dir=/usr/share/bash-completion/completions
-+endif
+diff --git a/package/docker-compose/0001-setup.py-allow-all-recent-2.x-requests-releases.patch b/package/docker-compose/0001-setup.py-allow-all-recent-2.x-requests-releases.patch
+new file mode 100644
+index 0000000000..1378c3b81a
+--- /dev/null
++++ b/package/docker-compose/0001-setup.py-allow-all-recent-2.x-requests-releases.patch
+@@ -0,0 +1,34 @@
++From a79152d1d621ea9d477ecc6862a03cae80b2425b Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Sat, 15 Dec 2018 14:04:57 +0100
++Subject: [PATCH] setup.py: allow all recent 2.x requests releases
 +
- # examples need GTK2/3 with X11 backend
- ifneq ($(BR2_PACKAGE_LIBGTK2)$(BR2_PACKAGE_LIBGTK3_X11),)
- GSTREAMER1_EDITING_SERVICES_CONF_OPTS += --enable-examples
++Instead of having to update this for each new requests release.
++
++It it not quite clear why the restriction was added in the first place in
++commit b0480b4d04e (Bump SDK version to latest), but change it to simply
++disallow the upcoming 3.0 release to match what is done for the other
++modules.
++
++Submitted upstream: https://github.com/docker/compose/pull/6415
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ setup.py | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/setup.py b/setup.py
++index 96530726..3c8c7d0e 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -33,7 +33,7 @@ install_requires = [
++     'cached-property >= 1.2.0, < 2',
++     'docopt >= 0.6.1, < 0.7',
++     'PyYAML >= 3.10, < 4',
++-    'requests >= 2.6.1, != 2.11.0, != 2.12.2, != 2.18.0, < 2.19',
+++    'requests >= 2.6.1, != 2.11.0, != 2.12.2, != 2.18.0, < 3.0',
++     'texttable >= 0.9.0, < 0.10',
++     'websocket-client >= 0.32.0, < 1.0',
++     'docker >= 3.1.4, < 4.0',
++-- 
++2.11.0
++
 -- 
-2.14.1
+2.11.0
