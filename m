@@ -1,40 +1,49 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat, 15 Dec 2018 21:51:48 +0200
-Subject: [Buildroot] [PATCH] libssh: workaround -Werror=strict-overflow
- build failures
-In-Reply-To: <20181214225244.41e3b69c@windsurf.home>
-References: <7d6e364ac220c937573e1d4d7717a72cc240f81b.1544534379.git.baruch@tkos.co.il>
- <20181214225244.41e3b69c@windsurf.home>
-Message-ID: <8736qybmaz.fsf@tkos.co.il>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Sat, 15 Dec 2018 15:29:37 -0500
+Subject: [Buildroot] [PATCH 1/1] dependencies.sh: Check for a host python
+ version >= 2.7
+Message-ID: <20181215202937.81372-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+From: Adam Duskett <Aduskett@gmail.com>
 
-Thomas Petazzoni writes:
-> On Tue, 11 Dec 2018 15:19:39 +0200, Baruch Siach wrote:
->> Add a patch that disables -Werror=strict-overflow to fix the build with
->> some versions of gcc.
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/414/41490ebb181762d14c565effb0155db7ac1e0db0/
->> http://autobuild.buildroot.net/results/3a6/3a6395fd85f434ff855d602949166d5cec725c7e/
->> http://autobuild.buildroot.net/results/224/22422145e7fc9a8ab4e766b174a916e599845f1c/
->>
->> Cc: Scott Fan <fancp2007@gmail.com>
->> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
->
-> What about not using -Werror instead?
+Older distributions such as CentOS6 come with python2.6, which causes build
+failures in packages such as host-libglib2 because they require python2.7 or
+above.
 
-The CompilerChecks.cmake files adds a long list of specific -Werror=xxx
-options. A removal of -Werror would not be enough.
+CentOS6 does have the centos-release-scl which allows users to install
+python2.7, making this transition reasonably easy.
 
-baruch
+Debian 6 and 7 have reached EOL, and Debian 8 comes with Python 2.7, so
+this patch should be relatively low impact.
 
---
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ support/dependencies/dependencies.sh | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 58c34d880f..d0b6bdc23a 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -181,6 +181,14 @@ if test "${missing_progs}" = "yes" ; then
+ 	exit 1
+ fi
+ 
++# Check that the python version is at least 2.7
++PYTHON_VERSION=$(python -V 2>&1 |awk '{print $2}')
++if [ $(echo $PYTHON_VERSION |sed -e 's/\.//g') -lt 2700 ]; then
++	echo
++	echo "You have python '$PYTHON_VERSION' installed.  Python >= 2.7 is required"
++	exit 1;
++fi
++
+ if grep ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG > /dev/null; then
+ 	if ! which locale > /dev/null ; then
+ 		echo
+-- 
+2.19.2
