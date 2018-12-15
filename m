@@ -1,36 +1,29 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Dec 2018 23:41:43 +0100
-Subject: [Buildroot] [PATCH 1/1] kmod: fix build with pkgconf 1.5.3
-In-Reply-To: <CAPi7W82C5KNdz6PONUfeAdn1R-H_TqcR29vz3FEsnjgOpe_pzQ@mail.gmail.com>
- (Fabrice Fontaine's message of "Fri, 14 Dec 2018 22:08:49 +0100")
-References: <20181214154728.30189-1-fontaine.fabrice@gmail.com>
- <87bm5nettd.fsf@dell.be.48ers.dk>
- <CAPi7W82C5KNdz6PONUfeAdn1R-H_TqcR29vz3FEsnjgOpe_pzQ@mail.gmail.com>
-Message-ID: <87lg4rd93s.fsf@dell.be.48ers.dk>
+From: Grzegorz Blach <grzegorz@blach.pl>
+Date: Sat, 15 Dec 2018 01:19:24 +0100
+Subject: [Buildroot] [PATCH 3/3] package/python-pigpio: fix WWW address
+In-Reply-To: <20181215001924.1779-1-grzegorz@blach.pl>
+References: <20181215001924.1779-1-grzegorz@blach.pl>
+Message-ID: <20181215001924.1779-3-grzegorz@blach.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+---
+ package/python-pigpio/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Hi,
-
- >> Hmm, how did this work before if there wasn't anything to ensure
- >> bash-completion was built before kmod? Just the alphabetical order?
-
- > You're right, personally, I think that we should add a bash-completion
- > dependency but bash-completion is not a "real" build time dependency,
- > it's only needed to retrieve completionsdir.
- > Because I was told to remove udev dependency from alsa-utils during
- > review of https://patchwork.ozlabs.org/patch/1013180, I applied the
- > same logic for kmod.
- > Howerver if you want, I can send a new patch to add bash-completion dependency.
-
-OK. As we now explicitly pass --with-completiondir (and hence not rely
-on bash-completion.pc) and the install logic creates the destination
-directory if needed, I don't think we really _NEED_ it.
-
+diff --git a/package/python-pigpio/Config.in b/package/python-pigpio/Config.in
+index 08c37cb9b2..4c9152a621 100644
+--- a/package/python-pigpio/Config.in
++++ b/package/python-pigpio/Config.in
+@@ -5,4 +5,4 @@ config BR2_PACKAGE_PYTHON_PIGPIO
+ 	  which talks to the pigpio daemon to allow control
+ 	  of the general purpose input outputs (GPIO).
+ 
+-	  http://abyz.co.uk/rpi/pigpio/python.html
++	  http://abyz.me.uk/rpi/pigpio/python.html
 -- 
-Bye, Peter Korsgaard
+2.19.2
