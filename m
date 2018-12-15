@@ -1,47 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 15 Dec 2018 17:02:24 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/2] glib-networking: remove --with-libgcrypt-prefix
-In-Reply-To: <20181215141401.11112-1-fontaine.fabrice@gmail.com>
-References: <20181215141401.11112-1-fontaine.fabrice@gmail.com>
-Message-ID: <20181215170224.008971f6@windsurf.home>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Sat, 15 Dec 2018 14:05:18 -0200 (BRST)
+Subject: [Buildroot] [PATCH 1/1] util-linux: fix build with pkgconf 1.5.3
+In-Reply-To: <20181215130613.18112-1-fontaine.fabrice@gmail.com>
+References: <20181215130613.18112-1-fontaine.fabrice@gmail.com>
+Message-ID: <634742303.3031620.1544889918254.JavaMail.zimbra@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+> From: "Fabrice Fontaine" <fontaine.fabrice@gmail.com>
+> To: "buildroot" <buildroot@buildroot.org>
+> Cc: "Carlos Santos" <casantos@datacom.com.br>, "Fabrice Fontaine" <fontaine.fabrice@gmail.com>
+> Sent: S?bado, 15 de dezembro de 2018 11:06:13
+> Subject: [PATCH 1/1] util-linux: fix build with pkgconf 1.5.3
 
-+Asaf in Cc.
-
-On Sat, 15 Dec 2018 15:14:00 +0100, Fabrice Fontaine wrote:
-> --with-libgcrypt-prefix is not recognized (see
-> http://autobuild.buildroot.org/results/3a0/3a0687911f9da25fb36497b7abb2adb7ea3ef695/build-end.log):
-> configure: WARNING: unrecognized options: --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --enable-ipv6, --with-libgcrypt-prefix
+> Since the bump to 1.5.3, pkgconf prepends the sysroot to all absolute
+> paths found in the .pc file. This is correct when the paths refer to
+> something in STAGING_DIR (e.g. libdir, includedir), but not when it
+> refers to something used for the target.
+> 
+> fwts uses the completionsdir variable from bash-completions.pc to decide
+> where to install things. Since DESTDIR is prepended to the install
+> destination, this will end up in the wrong location.
+> 
+> Until a better solution is found in pkgconf, pass the appdefaultdir to
+> use explicitly instead of relying on bash-completions.pc.
+> 
+> Fixes:
+> -
+> http://autobuild.buildroot.org/results/caf352a66aa5bd94b93aac39a90b4fa33b39a708
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
-> Changes v1 -> v2:
->  - Remove --with-libgcrypt-prefix in a dedicated patch
+> package/util-linux/util-linux.mk | 4 ++++
+> 1 file changed, 4 insertions(+)
 > 
->  package/glib-networking/glib-networking.mk | 1 -
->  1 file changed, 1 deletion(-)
+> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+> index c176d364ce..edbb10d1c8 100644
+> --- a/package/util-linux/util-linux.mk
+> +++ b/package/util-linux/util-linux.mk
+> @@ -229,6 +229,10 @@ else
+> UTIL_LINUX_CONF_OPTS += --without-audit
+> endif
 > 
-> diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
-> index 10a3b706b3..12caf86019 100644
-> --- a/package/glib-networking/glib-networking.mk
-> +++ b/package/glib-networking/glib-networking.mk
-> @@ -23,7 +23,6 @@ GLIB_NETWORKING_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) \
->  
->  ifeq ($(BR2_PACKAGE_GNUTLS),y)
->  GLIB_NETWORKING_DEPENDENCIES += gnutls
-> -GLIB_NETWORKING_CONF_OPTS += --with-libgcrypt-prefix=$(STAGING_DIR)/usr
+> +ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
+> +UTIL_LINUX_CONF_OPTS +=
+> --with-bashcompletiondir=/usr/share/bash-completion/completions
+> +endif
+> +
+> # Install PAM configuration files
+> ifeq ($(BR2_PACKAGE_UTIL_LINUX_SU)$(BR2_PACKAGE_LINUX_PAM),yy)
+> define UTIL_LINUX_INSTALL_PAMFILES
+> --
+> 2.14.1
 
-So how can http://patchwork.ozlabs.org/patch/1013864/ be working ?
+Reviewed-by: Carlos Santos <casantos@datacom.com.br>
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Carlos Santos (Casantos) - DATACOM, P&D
