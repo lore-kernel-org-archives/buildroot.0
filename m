@@ -1,43 +1,43 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Sat, 15 Dec 2018 16:13:05 -0500
-Subject: [Buildroot] [PATCH 1/1] qemu: bump to version 3.1.0
-Message-ID: <20181215211305.11492-1-aduskett@gmail.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Sat, 15 Dec 2018 22:29:23 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2018-12-14
+In-Reply-To: <20181215070019.5B30D20CE3@mail.bootlin.com>
+References: <20181215070019.5B30D20CE3@mail.bootlin.com>
+Message-ID: <CAMRc=MckU2reCdyzJb1cvNKmL71=o1KWHwoOrSzLvXh1193Bvg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+sob., 15 gru 2018 o 08:00 Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> napisa?(a):
+>
+> Hello,
+>
+> This is the list of Buildroot build failures that occured on
+> 2018-12-14, and for which you are a registered architecture developer
+> or package developer. Please help us improving the quality of
+> Buildroot by investigating those build failures and sending patches to
+> fix them. Thanks!
+>
+> Results for the 'master' branch
+> ===============================
+>
+> Build failures related to your packages:
+>
+>          arm |                pulseview-0.4.1 | http://autobuild.buildroot.net/results/71c46fac3bd30c7d30ac89ce43e411a9772665bb
+>
+> --
+> http://autobuild.buildroot.net
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
- package/qemu/qemu.hash | 2 +-
- package/qemu/qemu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+This is a different issue than the one I fixed before but I'm getting
+the following error when trying to build with the provided config:
 
-diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
-index 2b27008b73..338d2ae503 100644
---- a/package/qemu/qemu.hash
-+++ b/package/qemu/qemu.hash
-@@ -1,4 +1,4 @@
- # Locally computed, tarball verified with GPG signature
--sha256 33583800e0006cd00b78226b85be5a27c8e3b156bed2e60e83ecbeb7b9b8364f  qemu-2.12.1.tar.xz
-+sha256 6a0508df079a0a33c2487ca936a56c12122f105b8a96a44374704bef6c69abfc  qemu-3.1.0.tar.xz
- sha256 6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
- sha256 48ffe9fc7f1d5462dbd19340bc4dd1d8a9e37c61ed535813e614cbe4a5f0d4df  COPYING.LIB
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 99313234c1..a1bd7e5d6e 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--QEMU_VERSION = 2.12.1
-+QEMU_VERSION = 3.1.0
- QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
- QEMU_SITE = http://download.qemu.org
- QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
--- 
-2.19.2
+Makefile.legacy:9: *** "You have legacy configuration in your .config!
+Please check your configuration.".  Stop.
+Makefile:84: recipe for target '_all' failed
+make: *** [_all] Error 2
+
+Bart
