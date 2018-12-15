@@ -1,7 +1,7 @@
 From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
-Date: Sat, 15 Dec 2018 15:54:10 +0800
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d: bump to version 18.3.1
-Message-ID: <1544860450-31613-1-git-send-email-james.hilliard1@gmail.com>
+Date: Sat, 15 Dec 2018 16:10:38 +0800
+Subject: [Buildroot] [PATCH v2 1/1] package/mesa3d: bump to version 18.3.1
+Message-ID: <1544861438-11607-1-git-send-email-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,10 +12,63 @@ From: James Hilliard <james.hilliard1@gmail.com>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/mesa3d/mesa3d.hash | 10 +++++-----
- package/mesa3d/mesa3d.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ ...d-missing-include-stddef.h-in-egldevice.h.patch | 45 ++++++++++++++++++++++
+ package/mesa3d/mesa3d.hash                         | 10 ++---
+ package/mesa3d/mesa3d.mk                           |  2 +-
+ 3 files changed, 51 insertions(+), 6 deletions(-)
+ create mode 100644 package/mesa3d/0004-egl-add-missing-include-stddef.h-in-egldevice.h.patch
 
+diff --git a/package/mesa3d/0004-egl-add-missing-include-stddef.h-in-egldevice.h.patch b/package/mesa3d/0004-egl-add-missing-include-stddef.h-in-egldevice.h.patch
+new file mode 100644
+index 0000000..b47a642
+--- /dev/null
++++ b/package/mesa3d/0004-egl-add-missing-include-stddef.h-in-egldevice.h.patch
+@@ -0,0 +1,45 @@
++From eb44c36cf1729e7e200b77cf8ea755dff72d1639 Mon Sep 17 00:00:00 2001
++From: Gurchetan Singh <gurchetansingh@chromium.org>
++Date: Wed, 28 Nov 2018 08:39:34 -0800
++Subject: [PATCH] egl: add missing #include <stddef.h> in egldevice.h
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Otherwise, I get this error:
++
++main/egldevice.h:54:13: error: ?NULL? undeclared (first use in this function)
++       dev = NULL;
++             ^~~~
++with this config:
++
++./autogen.sh --enable-gles1 --enable-gles2 --with-platforms='surfaceless' --disable-glx
++             --with-dri-drivers="i965" --with-gallium-drivers="" --enable-gbm
++
++v3: Use stddef.h (Matt)
++v4: Modify commit message (Eric)
++
++Reviewed-by: Matt Turner <mattst88@gmail.com>
++Reviewed-by: Eric Engestrom <eric.engestrom@intel.com>
++---
++ src/egl/main/egldevice.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/egl/main/egldevice.h b/src/egl/main/egldevice.h
++index ddcdcd1..83a47d5 100644
++--- a/src/egl/main/egldevice.h
+++++ b/src/egl/main/egldevice.h
++@@ -31,9 +31,9 @@
++ 
++ 
++ #include <stdbool.h>
+++#include <stddef.h>
++ #include "egltypedefs.h"
++ 
++-
++ #ifdef __cplusplus
++ extern "C" {
++ #endif
++-- 
++2.7.4
++
 diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
 index 563ac62..68ec1ec 100644
 --- a/package/mesa3d/mesa3d.hash
