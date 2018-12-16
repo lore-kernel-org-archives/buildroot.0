@@ -1,58 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 22:36:25 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/swupdate: Update
- to version 2018.11
-Message-ID: <20181216213238.CED898D5B6@busybox.osuosl.org>
+Date: Sun, 16 Dec 2018 22:36:13 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/swupdate: default
+ website have a new API
+Message-ID: <20181216213238.C88D78D5B6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=874e1094fa7a53443c7b4d895586d31c7af4aa2f
+commit: https://git.buildroot.net/buildroot/commit/?id=7d2b9223563396bc84b57a7687c24e9592cf5b2a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Update to version 2018.11 to resolve the following build failure:
+2018.03 introduce a new website with Websocket asynchronous
+communication[1]
 
-corelib/channel_curl.c: In function ???channel_map_curl_error???:
-corelib/channel_curl.c:298:2: error: duplicate case value
-  case CURLE_SSL_CACERT:
-  ^
-corelib/channel_curl.c:297:2: error: previously used here
-  case CURLE_PEER_FAILED_VERIFICATION:
-  ^
+[1] https://github.com/sbabic/swupdate/blob/master/doc/source/mongoose.rst
 
-when building with CONFIG_DOWNLOAD=y. This issue is happening since
-the libcurl bump to 7.62.0.
-
-Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1040b1863404d8c35fb81912be68bd92f5c4a6a8)
+(cherry picked from commit 2d9e9d04d7e810e4c97f14dd84acfbdb43b9b3ea)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/swupdate/swupdate.hash | 3 ++-
- package/swupdate/swupdate.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/swupdate/swupdate.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
-index efc637976a..339f40e1bb 100644
---- a/package/swupdate/swupdate.hash
-+++ b/package/swupdate/swupdate.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256  19156bb30c3517a0ff9c918a38062df3cfa70f02f8162da4971a2f47d108688e  swupdate-2018.03.tar.gz
-+sha256  a65884ca18523cde1b0744d952d6f91462dbd4ad07941305f5684c6d4ec833dc  swupdate-2018.11.tar.gz
-+sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
 diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index abf46c9256..6285437aaa 100644
+index 8649931eb7..abf46c9256 100644
 --- a/package/swupdate/swupdate.mk
 +++ b/package/swupdate/swupdate.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -125,7 +125,7 @@ define SWUPDATE_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/swupdate $(TARGET_DIR)/usr/bin/swupdate
+ 	$(if $(BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE), \
+ 		mkdir -p $(TARGET_DIR)/var/www/swupdate; \
+-		cp -dpf $(@D)/www/* $(TARGET_DIR)/var/www/swupdate)
++		cp -dpfr $(@D)/examples/www/v2/* $(TARGET_DIR)/var/www/swupdate)
+ endef
  
--SWUPDATE_VERSION = 2018.03
-+SWUPDATE_VERSION = 2018.11
- SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
- SWUPDATE_LICENSE = GPL-2.0+, LGPL-2.1+, MIT
- SWUPDATE_LICENSE_FILES = COPYING
+ # Checks to give errors that the user can understand
