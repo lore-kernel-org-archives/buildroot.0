@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 16:02:35 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/lynx: add
+Date: Sun, 16 Dec 2018 16:02:28 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] package/lynx: add
  dependency on host-pkgconf
-Message-ID: <20181216145831.B65748B448@busybox.osuosl.org>
+Message-ID: <20181216145836.1BEBC8B448@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a76f2dceab6399d7a7bbd41fcd2eb6e9ab1336ac
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=dcd9adeddaa4b020e8c996c65017d0f0a90f80f8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 The Lynx configure script uses pkg-config when available:
 
