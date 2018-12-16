@@ -1,73 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 16 Dec 2018 12:50:22 +0100
-Subject: [Buildroot] [PATCH/next] libpagekite: new package
-In-Reply-To: <20180216152125.16975-1-arnout@mind.be>
-References: <20180216152125.16975-1-arnout@mind.be>
-Message-ID: <20181216125022.5af57eec@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 16 Dec 2018 13:38:23 +0100
+Subject: [Buildroot] [PATCH] docker-compose: add patch to allow recent
+ 2.x releases of python-requests
+In-Reply-To: <20181216122341.7f31297a@windsurf.home> (Thomas Petazzoni's
+ message of "Sun, 16 Dec 2018 12:23:41 +0100")
+References: <20181215152559.30518-1-peter@korsgaard.com>
+ <20181216122341.7f31297a@windsurf.home>
+Message-ID: <87efahbq9s.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-On Fri, 16 Feb 2018 16:21:25 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> libpagekite is a C implementation of the backend of the PageKite relay
-> protocol. It allows external access to embedded devices without public
-> IP address.
-> 
-> There is a bundled version of libev but we prefer to use the global
-> libev library.
-> 
-> Although the configure script has a --without-openssl option, it
-> doesn't actually build without openssl.
-> 
-> Patch 0001-configure.ac-fix-handling-of-with.patch is needed because
-> we want to explicitly pass --with and --without options, even if they
-> are the default. The way the AC_ARG_WITH macros were used, --with and
-> --without both had the effect of enabling the option.
-> 
-> Patch 0002-configure.ac-use-AS_HELP_STRING-for-with-openssl.patch is
-> not needed for Buildroot, but it is part of the same upstream PR and
-> would generate a conflict for the next patch.
-> 
-> Patch 0003-configure.ac-use-pkg-config-for-openssl.patch is needed to
-> pass -lz (needed by openssl) in static compilation.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  package/Config.in                                  |   1 +
->  .../0001-configure.ac-fix-handling-of-with.patch   |  76 ++++++++++++
->  ...re.ac-use-AS_HELP_STRING-for-with-openssl.patch |  28 +++++
->  ...3-configure.ac-use-pkg-config-for-openssl.patch | 137 +++++++++++++++++++++
->  package/libpagekite/Config.in                      |  26 ++++
->  package/libpagekite/libpagekite.hash               |   7 ++
->  package/libpagekite/libpagekite.mk                 |  29 +++++
->  7 files changed, 304 insertions(+)
->  create mode 100644 package/libpagekite/0001-configure.ac-fix-handling-of-with.patch
->  create mode 100644 package/libpagekite/0002-configure.ac-use-AS_HELP_STRING-for-with-openssl.patch
->  create mode 100644 package/libpagekite/0003-configure.ac-use-pkg-config-for-openssl.patch
->  create mode 100644 package/libpagekite/Config.in
->  create mode 100644 package/libpagekite/libpagekite.hash
->  create mode 100644 package/libpagekite/libpagekite.mk
+Hi,
 
-Applied with the following changes:
+ > Applied to master, thanks. Maybe there should be a runtime test for
+ > this in our runtime testing infrastrucure ?
 
-    [Thomas:
-     - As noticed by Romain Naour, fix the prompt of the package in the
-       Config.in
-     - Add entry to DEVELOPERS file
-     - Drop the dependency on BR2_bfin, since this architecture has been
-       dropped from Buildroot.]
+Yes, I was thinking about that as well. I'll try to find some time to
+cook up a patch one of the coming days.
 
-Please make sure to submit the various patches upstream! :-)
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
