@@ -1,29 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 22:14:30 +0100
-Subject: [Buildroot] [PATCH] package/lua-cqueues: needs host-m4
-In-Reply-To: <20181211161344.1481-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Tue, 11 Dec 2018 17:13:44 +0100")
-References: <20181211161344.1481-1-thomas.petazzoni@bootlin.com>
-Message-ID: <877eg96uo9.fsf@dell.be.48ers.dk>
+Date: Sun, 16 Dec 2018 22:15:41 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/sdl2_net: add
+ missing host-pkgconf dependency
+Message-ID: <20181216211138.2CA088E057@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1f16f16970391b8c9a9f2052c680791392e16948
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
- > The lua-cqueues build system uses m4 during the build:
- > cd /home/test/autobuild/run/instance-1/output/build/lua-cqueues-rel-20161215/src && m4 /home/test/autobuild/run/instance-1/output/build/lua-cqueues-rel-20161215/src/errno.c.m4 >| /home/test/autobuild/run/instance-1/output/build/lua-cqueues-rel-20161215/src/errno.c.tmp
+The sdl2_net configure script uses pkg-config to finx sdl2. If it
+doesn't find pkg-config, it tries to locate sdl2-config, and defaults
+to /usr/bin/sdl2-config, which causes the build to fail with:
 
- > Therefore, the package should depend on host-m4. This has been
- > detected using per-package directory support, but a minimal defconfig
- > with just lua and lua-cqueues on a system that doesn't have m4
- > installed system-wide also exhibits the issue.
+arm-linux-gcc: ERROR: unsafe header/library path used in cross-compilation: '-I/usr/include/SDL2'
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Fix this by adding host-pkgconf to the dependencies of sdl2_net. We
+could have added the right autoconf cache variable to tell the
+configure script where sdl2-config is located, but since pkg-config is
+tried first, let's use that.
 
-Committed to 2018.11.x, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit c2a1bcb1b3e56c16a8433a516646d4eb8581fd91)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/sdl2_net/sdl2_net.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/sdl2_net/sdl2_net.mk b/package/sdl2_net/sdl2_net.mk
+index 2fa4a8c2e0..93bf3a2eb3 100644
+--- a/package/sdl2_net/sdl2_net.mk
++++ b/package/sdl2_net/sdl2_net.mk
+@@ -10,6 +10,6 @@ SDL2_NET_SITE = http://www.libsdl.org/projects/SDL_net/release
+ SDL2_NET_LICENSE = Zlib
+ SDL2_NET_LICENSE_FILES = COPYING.txt
+ SDL2_NET_INSTALL_STAGING = YES
+-SDL2_NET_DEPENDENCIES = sdl2
++SDL2_NET_DEPENDENCIES = sdl2 host-pkgconf
+ 
+ $(eval $(autotools-package))
