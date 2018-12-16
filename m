@@ -1,20 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 19:57:26 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/php: bump version
+Date: Sun, 16 Dec 2018 19:28:57 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] package/php: bump version
  to 7.2.11
-Message-ID: <20181216185617.568EB8D2A6@busybox.osuosl.org>
+Message-ID: <20181216185627.542FB8D6AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6afe81999de9275b16f30e17f89cff27dbb6a5e6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=dabe63e7fbb4b4c502caead55f34a3c383ac3c6f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 Changelog: http://www.php.net/ChangeLog-7.php#7.2.11
 
-Removed patch 0008, applied upstream.
+Removed patch 0007, applied upstream.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
@@ -26,10 +26,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  package/php/php.mk                                 |  2 +-
  3 files changed, 2 insertions(+), 73 deletions(-)
 
-diff --git a/package/php/0008-ext-xml-expat_compat.h-add-missing-php.h-include.patch b/package/php/0008-ext-xml-expat_compat.h-add-missing-php.h-include.patch
+diff --git a/package/php/0007-ext-xml-expat_compat.h-add-missing-php.h-include.patch b/package/php/0007-ext-xml-expat_compat.h-add-missing-php.h-include.patch
 deleted file mode 100644
 index daf004dcf7..0000000000
---- a/package/php/0008-ext-xml-expat_compat.h-add-missing-php.h-include.patch
+--- a/package/php/0007-ext-xml-expat_compat.h-add-missing-php.h-include.patch
 +++ /dev/null
 @@ -1,71 +0,0 @@
 -From fb1f0e17eed729204a6d5caf590715d6257dceb3 Mon Sep 17 00:00:00 2001
