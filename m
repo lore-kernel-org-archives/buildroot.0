@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sun, 16 Dec 2018 12:07:05 +0100
-Subject: [Buildroot] [git commit] lua-stdlib: bump to version 41.2.2
-Message-ID: <20181216110337.CE9AF7FDF4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] coxpcall: bump to version 1.17.0
+Message-ID: <20181216110337.A30248D46F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff4b4bec67dd8241e8955de518c88ad754d1349a
+commit: https://git.buildroot.net/buildroot/commit/?id=40f0f3d0d25ad589f4eb2ba3881c3f8243620746
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lua-stdlib/lua-stdlib.hash | 2 +-
- package/lua-stdlib/lua-stdlib.mk   | 2 +-
+ package/coxpcall/coxpcall.hash | 2 +-
+ package/coxpcall/coxpcall.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lua-stdlib/lua-stdlib.hash b/package/lua-stdlib/lua-stdlib.hash
-index 4882bf1e7c..e0eadfb246 100644
---- a/package/lua-stdlib/lua-stdlib.hash
-+++ b/package/lua-stdlib/lua-stdlib.hash
+diff --git a/package/coxpcall/coxpcall.hash b/package/coxpcall/coxpcall.hash
+index e037af9e80..5676d47380 100644
+--- a/package/coxpcall/coxpcall.hash
++++ b/package/coxpcall/coxpcall.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256 b7302ecc8ea3992d3bad96c0c4d56272e38d786d16cc1ad5964fefa73fd7c10b  stdlib-41.2.1-1.src.rock
-+sha256 67eadaccbb2b6037ea70129f9616da49eaeeaf1477652a8e2cc77740286531cf  stdlib-41.2.2-1.src.rock
-diff --git a/package/lua-stdlib/lua-stdlib.mk b/package/lua-stdlib/lua-stdlib.mk
-index a7930be5df..bf90116e4a 100644
---- a/package/lua-stdlib/lua-stdlib.mk
-+++ b/package/lua-stdlib/lua-stdlib.mk
+-sha256 c1488ee08e5d25d59a11e19cb0322edae509202b246d0c93cb2de1676dbfdf2b  coxpcall-1.16.0-1.src.rock
++sha256 11feb07f08927c39b0b93e8c0bbaf15433f86155cba4820a31a09f4754ab3258  coxpcall-1.17.0-1.src.rock
+diff --git a/package/coxpcall/coxpcall.mk b/package/coxpcall/coxpcall.mk
+index 3af81f2ceb..6633b925c4 100644
+--- a/package/coxpcall/coxpcall.mk
++++ b/package/coxpcall/coxpcall.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUA_STDLIB_VERSION_UPSTREAM = 41.2.1
-+LUA_STDLIB_VERSION_UPSTREAM = 41.2.2
- LUA_STDLIB_VERSION = $(LUA_STDLIB_VERSION_UPSTREAM)-1
- LUA_STDLIB_NAME_UPSTREAM = stdlib
- LUA_STDLIB_SUBDIR = lua-stdlib-release-v$(LUA_STDLIB_VERSION_UPSTREAM)
+-COXPCALL_VERSION = 1.16.0-1
++COXPCALL_VERSION = 1.17.0-1
+ COXPCALL_SUBDIR = coxpcall
+ COXPCALL_LICENSE = MIT
+ COXPCALL_LICENSE_FILES = $(COXPCALL_SUBDIR)/doc/license.html
