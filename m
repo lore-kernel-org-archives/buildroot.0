@@ -1,75 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 15:29:18 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/libbsd: fix
- display of Config.in comment
-Message-ID: <20181216144013.435B08B433@busybox.osuosl.org>
+Date: Sun, 16 Dec 2018 15:37:47 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] {linux,
+ linux-headers}: bump 4.{9, 14, 19}.x series
+Message-ID: <20181216144013.48E5B8B433@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d63d5db7691689c0775018d0f37d7453e11b9155
+commit: https://git.buildroot.net/buildroot/commit/?id=f19dcd938d3332d4ba67dcdefc729623c5888327
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
-Commit e13855c48f21eaee07a81f8b02678839be274a45 wrongly added
-depends on BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU
-to display the comment "libbsd needs a toolchain w/ threads, wchar"
-The same error has also been made for minizip.
-
-To fix this issue, move dependency
-!(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU) under
-BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS.
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2261eb3a36562fba5eaae4231aadb900b49e8d58)
+(cherry picked from commit 177a8a5fd966c09c237dc93cc8e131dbb5dfadd2)
+[Peter: drop 4.19.x bump]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libbsd/Config.in  | 5 ++---
- package/minizip/Config.in | 2 --
- 2 files changed, 2 insertions(+), 5 deletions(-)
+ linux/linux.hash                     | 4 ++--
+ package/linux-headers/Config.in.host | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
-index ba5e5cbcfa..0f320302b9 100644
---- a/package/libbsd/Config.in
-+++ b/package/libbsd/Config.in
-@@ -5,12 +5,12 @@ config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
- 	depends on !BR2_microblaze
- 	depends on !BR2_arc
- 	depends on !BR2_xtensa
-+	# uClibc on noMMU doesn't provide __register_atfork()
-+	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU)
- 
- config BR2_PACKAGE_LIBBSD
- 	bool "libbsd"
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
--	# uClibc on noMMU doesn't provide __register_atfork()
--	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU)
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_WCHAR
- 	help
-@@ -24,5 +24,4 @@ config BR2_PACKAGE_LIBBSD
- 
- comment "libbsd needs a toolchain w/ threads, wchar"
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-diff --git a/package/minizip/Config.in b/package/minizip/Config.in
-index 4bc12a0d7e..68fa1d7118 100644
---- a/package/minizip/Config.in
-+++ b/package/minizip/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_MINIZIP
- 	bool "minizip"
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
--	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU) # libbsd
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libbsd
- 	depends on BR2_USE_WCHAR # libbsd
- 	select BR2_PACKAGE_LIBBSD
-@@ -20,5 +19,4 @@ config BR2_PACKAGE_MINIZIP_DEMOS
- 
- comment "minizip needs a toolchain w/ threads, wchar"
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+diff --git a/linux/linux.hash b/linux/linux.hash
+index d75ffd4217..2932aeba1b 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,8 +1,8 @@
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+ sha256 68ac319e0fb7edd6b6051541d9cf112cd4f77a29e16a69ae1e133ff51117f653  linux-4.18.20.tar.xz
+ sha256 41026d713ba4f7a5e9d514b876ce4ed28a1d993c0c58b42b2a2597d6a0e83021  linux-4.16.18.tar.xz
+-sha256 e41914f413dba0fa19bd4e68534e25e513b619372cc9e7da0889b38c1c6fefce  linux-4.14.85.tar.xz
+-sha256 344a7edafbf79fa5aabe1e11b16ffa56cda3a084151cf621fabe23771fd8c406  linux-4.9.142.tar.xz
++sha256 da9260a9022b917733201b89b5314847cb3332c31e70acb5e9b547956c266e28  linux-4.14.86.tar.xz
++sha256 0eb76464a696675fd4f8762e390328a377e973bfa263b00544ca1b5b10ac2cbf  linux-4.9.143.tar.xz
+ sha256 bf10effd995aa183b553cedd764c577137a9f97dc8709e2e1c04b1e0f4e6415a  linux-4.4.166.tar.xz
+ sha256 6ad9389e55e0ea57768eae173747058a4487fa3630e10a7999cfec9f945e559c  linux-4.1.52.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v3.x/sha256sums.asc
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index aff3e38922..7d7b93b898 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -291,8 +291,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.4.166"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.142"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.85"	if BR2_KERNEL_HEADERS_4_14
++	default "4.9.143"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.86"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
+ 	default "4.18.20"	if BR2_KERNEL_HEADERS_4_18
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
