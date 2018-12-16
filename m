@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 22:17:24 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/liquid-dsp: add
+Date: Sun, 16 Dec 2018 22:17:39 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] package/liquid-dsp: add
  missing dependency on fftw
-Message-ID: <20181216211326.F1B37864B6@busybox.osuosl.org>
+Message-ID: <20181216211337.515C58B433@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc36e5a3496ab115c28b429ab78be5b8264c3db1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8f5bd805cd9da67b887afc031e1c5b6091d10922
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 When one of BR2_PACKAGE_FFTW_PRECISION_* is enabled, liquid-dsp links
 against fftw3f, fftw3 or fftw3l, but forgets to add the fftw package
