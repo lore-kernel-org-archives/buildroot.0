@@ -1,39 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 15:51:03 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/libiscsi: fix
- build due to warnings
-Message-ID: <20181216144829.A86918D6F8@busybox.osuosl.org>
+Date: Sun, 16 Dec 2018 15:53:57 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/libiscsi: do not
+ built the manpages
+Message-ID: <20181216144953.713358D5AC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=503c4ac3d848bf929a951bfd8147c610b636c3c4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=46433b998a419566125b57e709ee0afa776ac585
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Fixes:
-    http://autobuild.buildroot.org/results/55b/55bf50fc7dcd465b71b5757434887dd3d0b25abc/
-    http://autobuild.buildroot.org/results/98d/98dcfe5c9fc3babd5c8d3116d5128d437715c44e/
+The pre-rendered, bundled ones are still installed, though, but they
+get removed in target-finalize anyway.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d2d81637ee6483aa23a2266154efd3d047bc0bb6)
+(cherry picked from commit 5b5c84a2a82407f7728d53ac79f0fde59f677fc3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libiscsi/libiscsi.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libiscsi/libiscsi.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/libiscsi/libiscsi.mk b/package/libiscsi/libiscsi.mk
-index 6c8600829c..c492865c51 100644
+index c492865c51..a34069d7bf 100644
 --- a/package/libiscsi/libiscsi.mk
 +++ b/package/libiscsi/libiscsi.mk
-@@ -11,6 +11,8 @@ LIBISCSI_LICENSE_FILES = COPYING LICENCE-GPL-2.txt LICENCE-LGPL-2.1.txt
+@@ -11,7 +11,7 @@ LIBISCSI_LICENSE_FILES = COPYING LICENCE-GPL-2.txt LICENCE-LGPL-2.1.txt
  LIBISCSI_INSTALL_STAGING = YES
  LIBISCSI_AUTORECONF = YES
  
-+LIBISCSI_CONF_OPTS = --disable-werror
-+
+-LIBISCSI_CONF_OPTS = --disable-werror
++LIBISCSI_CONF_OPTS = --disable-werror --disable-manpages
+ 
  # We need to create the m4 directory to make autoreconf work properly.
  define LIBISCSI_CREATE_M4_DIR
- 	mkdir -p $(@D)/m4
