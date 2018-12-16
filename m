@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 22:09:15 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] package/nodejs: bump
+Date: Sun, 16 Dec 2018 22:09:52 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/nodejs: bump
  version to 8.12.0
-Message-ID: <20181216210530.B25728B3C3@busybox.osuosl.org>
+Message-ID: <20181216210555.85B348D54D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e27eb86ea5cfc747a2b8449b4664e4fdc4c3a15b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7a13171e4e40c8c9e2b426f9b9d8524325427965
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 See https://nodejs.org/en/blog/release/v8.12.0/
 
