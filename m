@@ -1,46 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 16 Dec 2018 21:29:09 +0100
-Subject: [Buildroot] [PATCH v2] csky_gx6605s_defconfig: bump gcc to
- 6.3.0, kernel to 4.9.56
-In-Reply-To: <20181215181129.9218-1-juju@cotds.org>
-References: <20181211224312.25814-1-juju@cotds.org>
- <20181215181129.9218-1-juju@cotds.org>
-Message-ID: <20181216212909.23a7d7a1@windsurf.home>
+Date: Sun, 16 Dec 2018 21:33:15 +0100
+Subject: [Buildroot] [git commit] package/netsurf: enable javascript with
+ duktape
+Message-ID: <20181216204426.B38BC8B49B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4d8407091d882d20e438a6390660c2e4b1fe7fd0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 15 Dec 2018 19:11:29 +0100, Julien Olivain wrote:
-> This patch updates the csky custom external toolchain to fix a broken
-> host dependency of gdb on libexpat.so.0 (most hosts now ship
-> libexpat.so.1). gdb is required to copy and and boot the kernel
-> (see board/csky/readme.txt). The updated gdb does no longer have this
-> host dependency, which solve the issue.
-> 
-> Since this external toolchain was built and tested with csky kernel
-> 4.9.56, this patch also update to that kernel version.
-> 
-> Finally, this 4.9.56 csky kernel changed its default bootargs. So we
-> add a patch to preserve the same behavior as the previous version.
-> 
-> Signed-off-by: Julien Olivain <juju@cotds.org>
-> ---
-> Changes v1 -> v2:
-> - explain why the update is needed in the commit log
-> ---
->  ...ine-for-serial-console-and-rootfs-on.patch | 25 +++++++++++++++++++
->  configs/csky_gx6605s_defconfig                |  7 +++---
->  2 files changed, 29 insertions(+), 3 deletions(-)
->  create mode 100644 board/csky/gx6605s/patches/linux/0001-csky-update-cmdline-for-serial-console-and-rootfs-on.patch
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0003-do-not-cross-compile-nsgenbind.patch      | 30 ++++++++++++++++++++++
+ package/netsurf/netsurf.mk                         |  1 -
+ 2 files changed, 30 insertions(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/netsurf/0003-do-not-cross-compile-nsgenbind.patch b/package/netsurf/0003-do-not-cross-compile-nsgenbind.patch
+new file mode 100644
+index 0000000000..01e77e9774
+--- /dev/null
++++ b/package/netsurf/0003-do-not-cross-compile-nsgenbind.patch
+@@ -0,0 +1,30 @@
++From 2419ad79b25fcc1746178aba609fddbb0aa8c9e0 Mon Sep 17 00:00:00 2001
++From: Francois Perrad <francois.perrad@gadz.org>
++Date: Sat, 1 Dec 2018 16:10:13 +0100
++Subject: [PATCH] build nsgenbind for the build machine
++
++The nsgenbind tool is meant to be executed on the build machine during
++the build, so it should not be built with the cross-compiler, but with
++the native compiler.
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++---
++ Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile b/Makefile
++index f279f01..5698c87 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -109,7 +109,7 @@ endef
++ 
++ # prefixed install macro for each host sub target
++ define do_build_prefix_install
++-	$(MAKE) install --directory=$1 HOST=$(BUILD) PREFIX=$(TMP_PREFIX) Q=$(Q) DESTDIR=
+++	$(MAKE) install --directory=$1 HOST=$(BUILD) CC=$(BUILD_CC) PREFIX=$(TMP_PREFIX) Q=$(Q) DESTDIR=
++ 
++ endef
++ 
++-- 
++2.17.1
++
+diff --git a/package/netsurf/netsurf.mk b/package/netsurf/netsurf.mk
+index 23e4de6377..004d582562 100644
+--- a/package/netsurf/netsurf.mk
++++ b/package/netsurf/netsurf.mk
+@@ -44,7 +44,6 @@ endef
+ endif
+ 
+ define NETSURF_CONFIGURE_CMDS
+-	echo "override NETSURF_USE_DUKTAPE := NO"       >  $(@D)/netsurf/Makefile.config
+ 	$(NETSURF_ICONV_CONFIGURE_CMDS)
+ 	$(NETSURF_SVG_CONFIGURE_CMDS)
+ 	$(NETSURF_FONTLIB_CONFIGURE_CMDS)
