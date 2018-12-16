@@ -1,41 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 22:04:57 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/libopenssl: use
- HTTPS for URL
-Message-ID: <20181216210052.B5AF48DF8D@busybox.osuosl.org>
+Date: Sun, 16 Dec 2018 22:05:20 +0100
+Subject: [Buildroot] [PATCH] libopenssl: Use HTTPS for URL
+In-Reply-To: <20181210100635.7611-1-joel@jms.id.au> (Joel Stanley's message of
+ "Mon, 10 Dec 2018 20:36:35 +1030")
+References: <20181210100635.7611-1-joel@jms.id.au>
+Message-ID: <87k1k96v3j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=74680fc8bea10bbd788ba87a555dfec44c00196c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+>>>>> "Joel" == Joel Stanley <joel@jms.id.au> writes:
 
-The host forces HTTPS regardless. This can be seen in the build logs:
+ > The host forces HTTPS regardless. This can be seen in the build logs:
+ >>>> host-libopenssl 1.0.2q Downloading
+ >  URL transformed to HTTPS due to an HSTS policy
+ >  --2018-12-10 09:53:27--  https://www.openssl.org/source/openssl-1.0.2q.tar.gz
 
- >>> host-libopenssl 1.0.2q Downloading
- URL transformed to HTTPS due to an HSTS policy
- --2018-12-10 09:53:27--  https://www.openssl.org/source/openssl-1.0.2q.tar.gz
+ > Signed-off-by: Joel Stanley <joel@jms.id.au>
 
-Signed-off-by: Joel Stanley <joel@jms.id.au>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4d6fa0376064dcd3bc2901402307d6730e7b4b8b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libopenssl/libopenssl.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index ca0521b229..dc15abf66a 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBOPENSSL_VERSION = 1.0.2q
--LIBOPENSSL_SITE = http://www.openssl.org/source
-+LIBOPENSSL_SITE = https://www.openssl.org/source
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = OpenSSL or SSLeay
- LIBOPENSSL_LICENSE_FILES = LICENSE
+Committed to 2018.02.x, 2018.08.x and 2018.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
