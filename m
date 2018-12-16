@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 22:35:10 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] package/swupdate: Update
+Date: Sun, 16 Dec 2018 22:36:25 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/swupdate: Update
  to version 2018.11
-Message-ID: <20181216213115.1FC968DFC9@busybox.osuosl.org>
+Message-ID: <20181216213238.CED898D5B6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a8c65500bb6589d08e040966823159ed2faa152
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=874e1094fa7a53443c7b4d895586d31c7af4aa2f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Update to version 2018.11 to resolve the following build failure:
 
