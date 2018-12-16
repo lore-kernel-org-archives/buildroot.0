@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 22:53:10 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] ci20: Fix U-Boot build
+Date: Sun, 16 Dec 2018 22:53:17 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] ci20: Fix U-Boot build
  with codesourcery toolchain
-Message-ID: <20181216214905.9E7658B62D@busybox.osuosl.org>
+Message-ID: <20181216214912.7D39E8B62D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd4510c59d2a014d165132cb3a9cd1c5754a9fee
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b111168f769b57ab440e0e5232d1722db8f05d90
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 Currently, U-Boot is failing to build, due to some issues
 with the toolchain and the U-Boot port.
