@@ -1,93 +1,59 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Sat, 15 Dec 2018 20:38:02 -0600
-Subject: [Buildroot] [PATCH v2,
- 1/1] util-linux: fix build with pkgconf 1.5.3
-In-Reply-To: <20181215193756.1597-1-fontaine.fabrice@gmail.com>
-References: <20181215193756.1597-1-fontaine.fabrice@gmail.com>
-Message-ID: <CANQCQpY3T8Cypd_2hpMFTfOsnGU_6ivD2UBbWSX5DVxi010ENA@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 16 Dec 2018 06:22:55 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2018-12-14
+In-Reply-To: <CAMRc=MckU2reCdyzJb1cvNKmL71=o1KWHwoOrSzLvXh1193Bvg@mail.gmail.com>
+References: <20181215070019.5B30D20CE3@mail.bootlin.com>
+ <CAMRc=MckU2reCdyzJb1cvNKmL71=o1KWHwoOrSzLvXh1193Bvg@mail.gmail.com>
+Message-ID: <87zht69k2o.fsf@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice,
+Hi Bartosz,
 
-On Sat, Dec 15, 2018 at 1:38 PM Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
+Bartosz Golaszewski writes:
+> sob., 15 gru 2018 o 08:00 Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> napisa?(a):
+>>
+>> Hello,
+>>
+>> This is the list of Buildroot build failures that occured on
+>> 2018-12-14, and for which you are a registered architecture developer
+>> or package developer. Please help us improving the quality of
+>> Buildroot by investigating those build failures and sending patches to
+>> fix them. Thanks!
+>>
+>> Results for the 'master' branch
+>> ===============================
+>>
+>> Build failures related to your packages:
+>>
+>>          arm |                pulseview-0.4.1 | http://autobuild.buildroot.net/results/71c46fac3bd30c7d30ac89ce43e411a9772665bb
+>>
+>> --
+>> http://autobuild.buildroot.net
 >
-> Since the bump to 1.5.3, pkgconf prepends the sysroot to all absolute
-> paths found in the .pc file. This is correct when the paths refer to
-> something in STAGING_DIR (e.g. libdir, includedir), but not when it
-> refers to something used for the target.
+> This is a different issue than the one I fixed before but I'm getting
+> the following error when trying to build with the provided config:
 >
-> util-linux uses the completionsdir variable from bash-completions.pc to
-> decide where to install things. Since DESTDIR is prepended to the
-> install destination, this will end up in the wrong location.
->
-> Until a better solution is found in pkgconf, pass the appdefaultdir to
-> use explicitly instead of relying on bash-completions.pc.
->
-> Fixes:
->  - http://autobuild.buildroot.org/results/caf352a66aa5bd94b93aac39a90b4fa33b39a708
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Makefile.legacy:9: *** "You have legacy configuration in your .config!
+> Please check your configuration.".  Stop.
+> Makefile:84: recipe for target '_all' failed
+> make: *** [_all] Error 2
 
-Tested fix against similar failure
-http://autobuild.buildroot.org/results/12b108a6185ab96a0eb509ab0e6fe053e545c77b/
+This is most likely because of the BR2_TARGET_GENERIC_PASSWD_MD5 symbol
+that has recently been added to Config.in.legacy. You can use the
+defconfig instead. Here is what I usually do:
 
-Tested-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+  wget -O .config http://autobuild.buildroot.net/results/71c46fac3bd30c7d30ac89ce43e411a9772665bb/defconfig
+  make olddefconfig
 
-> ---
-> Changes v1 -> v2 (after review of Baruch Siach):
->  - Fix typo in commit log (fwts -> util-linux)
->
->  package/util-linux/util-linux.mk | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-> index c176d364ce..edbb10d1c8 100644
-> --- a/package/util-linux/util-linux.mk
-> +++ b/package/util-linux/util-linux.mk
-> @@ -229,6 +229,10 @@ else
->  UTIL_LINUX_CONF_OPTS += --without-audit
->  endif
->
-> +ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
-> +UTIL_LINUX_CONF_OPTS += --with-bashcompletiondir=/usr/share/bash-completion/completions
-> +endif
-> +
->  # Install PAM configuration files
->  ifeq ($(BR2_PACKAGE_UTIL_LINUX_SU)$(BR2_PACKAGE_LINUX_PAM),yy)
->  define UTIL_LINUX_INSTALL_PAMFILES
-> --
-> 2.14.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
+baruch
 
 -- 
-
-Matthew Weber | Pr. Software Engineer | Commercial Avionics
-
-COLLINS AEROSPACE
-
-400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
-
-Tel: +1 319 295 7349 | FAX: +1 319 263 6099
-
-matthew.weber at collins.com | collinsaerospace.com
-
-
-
-CONFIDENTIALITY WARNING: This message may contain proprietary and/or
-privileged information of Collins Aerospace and its affiliated
-companies. If you are not the intended recipient, please 1) Do not
-disclose, copy, distribute or use this message or its contents. 2)
-Advise the sender by return email. 3) Delete all copies (including all
-attachments) from your computer. Your cooperation is greatly
-appreciated.
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
