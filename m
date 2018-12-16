@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 20:42:27 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] libmpd: fix build with
+Date: Sun, 16 Dec 2018 20:42:14 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] libmpd: fix build with
  strndup
-Message-ID: <20181216193935.31B488D46F@busybox.osuosl.org>
+Message-ID: <20181216193940.139038DF7D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef59580140b126f0c7cb7aefae437a6114a2846d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1ce11955b81788f9c26c9ab218408b35ba812ebc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Retrieve a patch from upstream to include config.h otherwise build will
 fail when trying to redefine strndup:
