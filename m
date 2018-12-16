@@ -1,36 +1,41 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 16 Dec 2018 04:04:13 -0700
-Subject: [Buildroot] [PATCH 1/1] package/meson: fix cpu_family format
-In-Reply-To: <20181216115922.263866e0@windsurf.home>
-References: <1544944395-2049-1-git-send-email-james.hilliard1@gmail.com>
- <20181216115922.263866e0@windsurf.home>
-Message-ID: <CADvTj4qCbccUURtsqMKjkBmw8sn8we13hZMSwS30HZVEFNo3og@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 16 Dec 2018 12:07:05 +0100
+Subject: [Buildroot] [git commit] argparse: bump to version 0.6.0
+Message-ID: <20181216110337.97FD58D54D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Dec 16, 2018 at 3:59 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Sun, 16 Dec 2018 15:13:15 +0800, james.hilliard1 at gmail.com wrote:
->
-> > Meson expects the cpu_family to be in a specific format for
-> > cross compilation, otherwise packages that use cpu_family
-> > detection may fail to build.
-For example systemd-boot will fail to build due to
-https://github.com/systemd/systemd/blob/06da5c63dd697ea4087e76c6d809b60b5780b87c/meson.build#L1384-L1401
-requiring the correct meson cpu_family format.
->
-> Could you be more specific than "may fail to build" ?
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+commit: https://git.buildroot.net/buildroot/commit/?id=e2366be4943d77aa8b0c300c13cc0aa3a1d97f06
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/argparse/argparse.hash | 2 +-
+ package/argparse/argparse.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/argparse/argparse.hash b/package/argparse/argparse.hash
+index a4746bc6af..850de2f670 100644
+--- a/package/argparse/argparse.hash
++++ b/package/argparse/argparse.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	e00e5637c937d7bfca96025f2c598ba4fffe9eb818d69952e77b4c08167a6be3  argparse-0.5.0-1.src.rock
++sha256 e4029f42d61cbdde1540e0a098a24b1fed0bc8a2803efe2a0d0d3e7f2f2f2c82  argparse-0.6.0-1.src.rock
+diff --git a/package/argparse/argparse.mk b/package/argparse/argparse.mk
+index 095f0a315c..2b0094ddb3 100644
+--- a/package/argparse/argparse.mk
++++ b/package/argparse/argparse.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ARGPARSE_VERSION_UPSTREAM = 0.5.0
++ARGPARSE_VERSION_UPSTREAM = 0.6.0
+ ARGPARSE_VERSION = $(ARGPARSE_VERSION_UPSTREAM)-1
+ ARGPARSE_SUBDIR = argparse
+ ARGPARSE_LICENSE = MIT
