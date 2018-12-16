@@ -1,62 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 22:09:57 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/nodejs: security
- bump to version 8.14.0
-Message-ID: <20181216210555.8D9DF8D54D@busybox.osuosl.org>
+Date: Sun, 16 Dec 2018 22:10:18 +0100
+Subject: [Buildroot] [PATCH] nodejs: security bump to version 8.14.0
+In-Reply-To: <20181209221830.13407-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 9 Dec 2018 23:18:30 +0100")
+References: <20181209221830.13407-1-peter@korsgaard.com>
+Message-ID: <87ftux6uv9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=782598a884763f2b4934eb6a1118eb19c399c3f5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Fixes the following security vulnerabilities:
+ > Fixes the following security vulnerabilities:
+ > - Node.js: Denial of Service with large HTTP headers (CVE-2018-12121)
+ > - Node.js: Slowloris HTTP Denial of Service (CVE-2018-12122 / Node.js)
+ > - Node.js: Hostname spoofing in URL parser for javascript protocol
+ >   (CVE-2018-12123)
+ > - Node.js: HTTP request splitting (CVE-2018-12116)
+ > - OpenSSL: Timing vulnerability in DSA signature generation (CVE-2018-0734)
+ > - OpenSSL: Microarchitecture timing vulnerability in ECC scalar
+ >   multiplication (CVE-2018-5407)
 
-- Node.js: Denial of Service with large HTTP headers (CVE-2018-12121)
-- Node.js: Slowloris HTTP Denial of Service (CVE-2018-12122 / Node.js)
-- Node.js: Hostname spoofing in URL parser for javascript protocol
-  (CVE-2018-12123)
-- Node.js: HTTP request splitting (CVE-2018-12116)
-- OpenSSL: Timing vulnerability in DSA signature generation (CVE-2018-0734)
-- OpenSSL: Microarchitecture timing vulnerability in ECC scalar
-  multiplication (CVE-2018-5407)
+ > For more details, see the announcement:
+ > https://nodejs.org/en/blog/release/v8.14.0/
 
-For more details, see the announcement:
-https://nodejs.org/en/blog/release/v8.14.0/
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0de2c9c76cd0a522fc1eb4b8d63bb5070efaecd3)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/nodejs/nodejs.hash | 4 ++--
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Committed to 2018.02.x, 2018.08.x and 2018.11.x, thanks.
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 70d67730b1..13a5c2daa5 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
--# From https://nodejs.org/dist/v8.12.0/SHASUMS256.txt
--sha256 5a9dff58016c18fb4bf902d963b124ff058a550ebcd9840c677757387bce419a  node-v8.12.0.tar.xz
-+# From https://nodejs.org/dist/v8.14.0/SHASUMS256.txt
-+sha256 8ce252913c9f6aaa9871f2d9661b6e54858dae2f0064bd3c624676edb09083c4  node-v8.14.0.tar.xz
- 
- # Hash for license file
- sha256 b87be6c1479ed977481115869c2dd8b6d59e5ea55aa09939d6c898242121b2f5  LICENSE
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index e28a10851d..27751eef0b 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NODEJS_VERSION = 8.12.0
-+NODEJS_VERSION = 8.14.0
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+-- 
+Bye, Peter Korsgaard
