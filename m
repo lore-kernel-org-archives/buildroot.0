@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 22:21:25 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] package/uclibc: add
+Date: Sun, 16 Dec 2018 22:23:01 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/uclibc: add
  custom bits/poll.h for xtensa
-Message-ID: <20181216211748.E492A8D6AE@busybox.osuosl.org>
+Message-ID: <20181216211915.88EC88D46F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8949a2c1010dd05200b4b3d92f171a08efc1cf5e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=06a9fb8ac5163717d97ac66b27bc9c22a50d51ee
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Definitions of POLLWRNORM, POLLWRBAND and POLLREMOVE in xtensa linux
 kernel are non-standard. Provide bits/poll.h with correct values for
@@ -42,14 +42,14 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 (cherry picked from commit 95f11fb25d68a5b92426710eeeb0841771d151a4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0006-xtensa-add-custom-bits-poll.h.patch       | 93 ++++++++++++++++++++++
+ .../0003-xtensa-add-custom-bits-poll.h.patch       | 93 ++++++++++++++++++++++
  1 file changed, 93 insertions(+)
 
-diff --git a/package/uclibc/0006-xtensa-add-custom-bits-poll.h.patch b/package/uclibc/0006-xtensa-add-custom-bits-poll.h.patch
+diff --git a/package/uclibc/0003-xtensa-add-custom-bits-poll.h.patch b/package/uclibc/0003-xtensa-add-custom-bits-poll.h.patch
 new file mode 100644
 index 0000000000..030938bbcd
 --- /dev/null
-+++ b/package/uclibc/0006-xtensa-add-custom-bits-poll.h.patch
++++ b/package/uclibc/0003-xtensa-add-custom-bits-poll.h.patch
 @@ -0,0 +1,93 @@
 +From 0cae9700a4a421dc22c80d205fbae4d01fdd1356 Mon Sep 17 00:00:00 2001
 +From: Max Filippov <jcmvbkbc@gmail.com>
