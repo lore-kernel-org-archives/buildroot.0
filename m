@@ -1,44 +1,53 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 16 Dec 2018 11:29:09 +0100
-Subject: [Buildroot] [PATCH 1/1] connman: fix systemd build wih pkgconf 1.5.3
-Message-ID: <20181216102909.32124-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 16 Dec 2018 11:58:41 +0100
+Subject: [Buildroot] [PATCH 1/1] package/meson: fix cpu_family format
+In-Reply-To: <87pnu1an4d.fsf@tkos.co.il>
+References: <1544944395-2049-1-git-send-email-james.hilliard1@gmail.com>
+ <87tvjdapl8.fsf@tkos.co.il>
+ <CADvTj4o_UCq4xBgE9A_S+zN2uVduiCwmRxZ3BUBGeeOKROAmAQ@mail.gmail.com>
+ <87pnu1an4d.fsf@tkos.co.il>
+Message-ID: <20181216115841.0708cd69@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the bump to 1.5.3, pkgconf prepends the sysroot to all absolute
-paths found in the .pc file. This is correct when the paths refer to
-something in STAGING_DIR (e.g. libdir, includedir), but not when it
-refers to something used for the target.
+Hello,
 
-connman uses the tmpfilesdir variable from systemd.pc to decide where to
-install things. Since DESTDIR is prepended to the install destination,
-this will end up in the wrong location.
+On Sun, 16 Dec 2018 10:31:46 +0200, Baruch Siach wrote:
 
-Until a better solution is found in pkgconf, pass the tmpfilesdir to use
-explicitly instead of relying on systemd.pc.
+> So it seems:
+> 
+> git grep 'select BR2_ARCH_IS_64' -- arch/
+> arch/Config.in: select BR2_ARCH_IS_64
+> arch/Config.in: select BR2_ARCH_IS_64
+> arch/Config.in: select BR2_ARCH_IS_64
+> arch/Config.in: select BR2_ARCH_IS_64
+> arch/Config.in: select BR2_ARCH_IS_64
+> arch/Config.in: select BR2_ARCH_IS_64
+> arch/Config.in: select BR2_ARCH_IS_64
+> arch/Config.in: select BR2_ARCH_IS_64
+> arch/Config.in.riscv:   select BR2_ARCH_IS_64
 
-Fixes:
- - http://autobuild.buildroot.org/results/6a13e6dfc58b2b3f8fbad6d6d6462370a75a8ad4
+All other architectures have separate top-level options for their
+32-bit and 64-bit variants. I.e i386 vs x86-64, arm vs. arm64, mipsel
+vs. mipsel64, etc.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/connman/connman.mk | 1 +
- 1 file changed, 1 insertion(+)
+For RISC-V, since the kernel supports both 32-bit and 64-bit as a
+single architecture, we decided to do the same in Buildroot, and have a
+single top-level BR2_riscv option.
 
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index b67d1c4b86..ce73c5acc1 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -13,6 +13,7 @@ CONNMAN_LICENSE = GPL-2.0
- CONNMAN_LICENSE_FILES = COPYING
- CONNMAN_CONF_OPTS += \
- 	--with-dbusconfdir=/etc \
-+	--with-tmpfilesdir=/usr/lib/tmpfiles.d \
- 	$(if $(BR2_PACKAGE_CONNMAN_DEBUG),--enable-debug,--disable-debug) \
- 	$(if $(BR2_PACKAGE_CONNMAN_ETHERNET),--enable-ethernet,--disable-ethernet) \
- 	$(if $(BR2_PACKAGE_CONNMAN_WIFI),--enable-wifi,--disable-wifi) \
+> Not sure what the reason for that is. riscv is also special in that
+> there is no support for its 32bit variant in Buildroot.
+
+Mark has already sent patches adding support for RISC-V 32-bit, they
+are in patchwork, waiting for testing/review/merge.
+
+Best regards,
+
+Thomas
 -- 
-2.14.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
