@@ -1,38 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 15:53:39 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] package/libiscsi: do not
- built the manpages
-Message-ID: <20181216145001.9B03C8D5AC@busybox.osuosl.org>
+Date: Sun, 16 Dec 2018 15:54:35 +0100
+Subject: [Buildroot] [PATCH] package/libiscsi: do not built the manpages
+In-Reply-To: <20181204095712.7130-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Tue, 4 Dec 2018 10:57:12 +0100")
+References: <20181204093152.10692-1-yann.morin.1998@free.fr>
+ <20181204095712.7130-1-yann.morin.1998@free.fr>
+Message-ID: <87lg4pa5ec.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c6ac68371359062aa98ab0a866896f7b35dfc72
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-The pre-rendered, bundled ones are still installed, though, but they
-get removed in target-finalize anyway.
+ > The pre-rendered, bundled ones are still installed, though, but they
+ > get removed in target-finalize anyway.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5b5c84a2a82407f7728d53ac79f0fde59f677fc3)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libiscsi/libiscsi.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/libiscsi/libiscsi.mk b/package/libiscsi/libiscsi.mk
-index c492865c51..a34069d7bf 100644
---- a/package/libiscsi/libiscsi.mk
-+++ b/package/libiscsi/libiscsi.mk
-@@ -11,7 +11,7 @@ LIBISCSI_LICENSE_FILES = COPYING LICENCE-GPL-2.txt LICENCE-LGPL-2.1.txt
- LIBISCSI_INSTALL_STAGING = YES
- LIBISCSI_AUTORECONF = YES
- 
--LIBISCSI_CONF_OPTS = --disable-werror
-+LIBISCSI_CONF_OPTS = --disable-werror --disable-manpages
- 
- # We need to create the m4 directory to make autoreconf work properly.
- define LIBISCSI_CREATE_M4_DIR
+Committed to 2018.02.x, 2018.08.x and 2018.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
