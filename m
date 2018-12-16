@@ -1,70 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 20:41:40 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] openzwave: fix restrict
- error with gcc 8
-Message-ID: <20181216193737.7BDA5864B3@busybox.osuosl.org>
+Date: Sun, 16 Dec 2018 20:41:53 +0100
+Subject: [Buildroot] [PATCH 1/1] openzwave: fix restrict error with gcc 8
+In-Reply-To: <20181207153856.1091-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 7 Dec 2018 16:38:56 +0100")
+References: <20181207153856.1091-1-fontaine.fabrice@gmail.com>
+Message-ID: <87efah8dj2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b30859a1eaa09e6c3668f7d6214d81f597cf572
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/2a8d2c67bcd1a7c228e9196d3bdb7f608c44c856
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/2a8d2c67bcd1a7c228e9196d3bdb7f608c44c856
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ed9a5b84eeaf03bbc267e25a35ea5718c32d29c3)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...ation-error-in-regards-to-Werror-restrict.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/openzwave/0004-Fix-compilation-error-in-regards-to-Werror-restrict.patch b/package/openzwave/0004-Fix-compilation-error-in-regards-to-Werror-restrict.patch
-new file mode 100644
-index 0000000000..b3dbd8f88e
---- /dev/null
-+++ b/package/openzwave/0004-Fix-compilation-error-in-regards-to-Werror-restrict.patch
-@@ -0,0 +1,39 @@
-+From 14164e9920ce3482747483fc16654c82d3ce445f Mon Sep 17 00:00:00 2001
-+From: pipiche38 <pipiche38@users.noreply.github.com>
-+Date: Fri, 8 Jun 2018 15:13:39 +0200
-+Subject: [PATCH] Fix compilation error in regards to -Werror=restrict
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+/usr/share/domoticz/open-zwave/cpp/src/command_classes/DoorLockLogging.cpp: In member function ???virtual bool OpenZWave::DoorLockLogging::HandleMsg(const uint8*, uint32, uint32)???:
-+/usr/share/domoticz/open-zwave/cpp/src/command_classes/DoorLockLogging.cpp:312:15: error: passing argument 1 to restrict-qualified parameter aliases with argument 4 [-Werror=restrict]
-+      snprintf(usercode, sizeof(usercode), "%s %d", usercode, (int)_data[12+i]);
-+               ^~~~~~~~                             ~~~~~~~~
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/OpenZWave/open-zwave/commit/14164e9920ce3482747483fc16654c82d3ce445f]
-+---
-+ cpp/src/command_classes/DoorLockLogging.cpp | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/cpp/src/command_classes/DoorLockLogging.cpp b/cpp/src/command_classes/DoorLockLogging.cpp
-+index c235a8497..418f61b7d 100644
-+--- a/cpp/src/command_classes/DoorLockLogging.cpp
-++++ b/cpp/src/command_classes/DoorLockLogging.cpp
-+@@ -304,12 +304,13 @@ bool DoorLockLogging::HandleMsg
-+ 			}
-+ 			uint8 userid = (_data[10]);
-+ 			uint8 usercodelength = (_data[11]);
-+-			char usercode[254];
-++			char usercode[254], tmpusercode[254];
-+ 			snprintf(usercode, sizeof(usercode), "UserCode:");
-+ 			if (usercodelength > 0)
-+ 				for (int i = 0; i < usercodelength; i++ )
-+ 				{
-+-					snprintf(usercode, sizeof(usercode), "%s %d", usercode, (int)_data[12+i]);
-++					strncpy(tmpusercode, usercode, sizeof(tmpusercode));
-++                                        snprintf(usercode, sizeof(usercode), "%s %d", tmpusercode, (int)_data[12+i]);
-+ 				}
-+ 
-+ 			if (valid) {
+Committed to 2018.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
