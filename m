@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 16:01:21 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] linux: ensure images/
+Date: Sun, 16 Dec 2018 16:01:14 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] linux: ensure images/
  exist before creating files there
-Message-ID: <20181216145717.6AF958D58D@busybox.osuosl.org>
+Message-ID: <20181216145722.D30B88D58D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21a231e10425be0429643f904f9f441c92ed9fc0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ae49a2c3291bef86409abeeb48186167dbd2a81c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 When using an initramfs, on the first-pass build, we create a dummy cpio
 so that the build succeeeds. The real cpio will come later, and we'll do
@@ -40,10 +40,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/linux/linux.mk b/linux/linux.mk
-index 38a67edcd1..f1a34d4fe0 100644
+index 85c75ee63e..ef43f16ae1 100644
 --- a/linux/linux.mk
 +++ b/linux/linux.mk
-@@ -278,6 +278,7 @@ define LINUX_KCONFIG_FIXUP_CMDS
+@@ -300,6 +300,7 @@ define LINUX_KCONFIG_FIXUP_CMDS
  	# replaced later by the real cpio archive, and the kernel will be
  	# rebuilt using the linux-rebuild-with-initramfs target.
  	$(if $(BR2_TARGET_ROOTFS_INITRAMFS),
