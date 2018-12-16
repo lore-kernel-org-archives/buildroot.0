@@ -1,49 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 15:24:57 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] package/libcurl: use
- GnuTLS's default cert path
-Message-ID: <20181216142141.EF2C7867A5@busybox.osuosl.org>
+Date: Sun, 16 Dec 2018 15:17:52 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/docker-cli: fix
+ comment header
+Message-ID: <20181216142219.47DB580174@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c6194bc914653d4d19d444cf120abaf7d3295cf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=109b966d0e46b51940726897892587f414af7e25
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
-libcurl doesn't find any trust path for CA certs when it cross-compiles.
-When using OpenSSL, it is explicitly configured to use the SSL cert
-directory with OpenSSL style hash files in it.  But with GnuTLS, it gets
-nothing.
+Fixes the following check-package warning:
 
-Rather than configure libcurl to use the OpenSSL directory or a bundle
-file, configure it to use the GnuTLS default.  This way the CA certs
-path can be configured in one place (gnutls) and then libcurl and anyone
-else who uses gnutls can default to that.
+package/docker-cli/docker-cli.mk:1: should be 80 hashes (http://nightly.buildroot.org/#writing-rules-mk)
 
-Also, when libcurl with gnutls is configured to use a directory, it ends
-up loading each cert three times.
-
-Signed-off-by: Trent Piepho <tpiepho@impinj.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 43b4d3ae4557b97d84c06a8a79a4f40a31c67697)
+(cherry picked from commit b8941627371983ba7b74de9c540099ae9027ae18)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/docker-cli/docker-cli.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 99a451b636..8a5ab6dead 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -45,7 +45,8 @@ LIBCURL_CONF_ENV += LD_LIBRARY_PATH=$(if $(LD_LIBRARY_PATH),$(LD_LIBRARY_PATH):)
- LIBCURL_CONF_OPTS += --with-ssl=$(STAGING_DIR)/usr \
- 	--with-ca-path=/etc/ssl/certs
- else ifeq ($(BR2_PACKAGE_GNUTLS),y)
--LIBCURL_CONF_OPTS += --with-gnutls=$(STAGING_DIR)/usr
-+LIBCURL_CONF_OPTS += --with-gnutls=$(STAGING_DIR)/usr \
-+	--with-ca-fallback
- LIBCURL_DEPENDENCIES += gnutls
- else ifeq ($(BR2_PACKAGE_LIBNSS),y)
- LIBCURL_CONF_OPTS += --with-nss=$(STAGING_DIR)/usr
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index bb8ce41bf1..c73caa2652 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
+@@ -1,4 +1,4 @@
+-###############################################################################
++################################################################################
+ #
+ # docker-cli
+ #
