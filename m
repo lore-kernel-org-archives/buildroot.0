@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 22:53:17 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] ci20: Fix U-Boot build
+Date: Sun, 16 Dec 2018 22:53:25 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] ci20: Fix U-Boot build
  with codesourcery toolchain
-Message-ID: <20181216214912.7D39E8B62D@busybox.osuosl.org>
+Message-ID: <20181216214921.1ADA07F893@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b111168f769b57ab440e0e5232d1722db8f05d90
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=84e043b4af72154d495f62e1a70fee7ddfe13146
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Currently, U-Boot is failing to build, due to some issues
 with the toolchain and the U-Boot port.
@@ -99,10 +99,10 @@ index 0000000000..a6191804f1
 +2.19.1
 +
 diff --git a/configs/ci20_defconfig b/configs/ci20_defconfig
-index 6e860b1e7e..8f2604b07c 100644
+index f28dd4da10..b853b70f2d 100644
 --- a/configs/ci20_defconfig
 +++ b/configs/ci20_defconfig
-@@ -27,6 +27,7 @@ BR2_TARGET_UBOOT_BOARDNAME="ci20_mmc"
+@@ -28,6 +28,7 @@ BR2_TARGET_UBOOT_BOARDNAME="ci20_mmc"
  BR2_TARGET_UBOOT_CUSTOM_GIT=y
  BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/MIPS/CI20_u-boot"
  BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa"
