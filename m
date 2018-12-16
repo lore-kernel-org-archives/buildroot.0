@@ -1,83 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 16 Dec 2018 15:21:42 +0100
-Subject: [Buildroot] [PATCH] package/python-numpy: fix fenv build
- failure on ARCv2 with glibc
-In-Reply-To: <20180302141604.42489-1-Evgeniy.Didin@synopsys.com>
-References: <20180302141604.42489-1-Evgeniy.Didin@synopsys.com>
-Message-ID: <20181216152142.7f2c768e@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 16 Dec 2018 15:25:33 +0100
+Subject: [Buildroot] [PATCH 1/2] gnutls: Give library a default trust
+ location
+In-Reply-To: <20181116201718.22455-1-tpiepho@impinj.com> (Trent Piepho's
+ message of "Fri, 16 Nov 2018 20:17:32 +0000")
+References: <20181116201718.22455-1-tpiepho@impinj.com>
+Message-ID: <87y38pa6qq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Trent" == Trent Piepho <tpiepho@impinj.com> writes:
 
-On Fri,  2 Mar 2018 17:16:04 +0300, Evgeniy Didin wrote:
-> Building python-numpy on ARC HS with glibc fails due to missing FE_*
-> definitions in <fenv.h>. There exceptions are not supported by
-> ARCv2 architecture.
-> Let's add patch, which disables compilation of a part of the
-> code in which FE_* errors occur for ARC.
-> 
-> Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: arc-buildroot at synopsys.com
+ > Gnutls is building with no default location to look for CA certs.  Since
+ > there are buildroot packages to provide these, configure it to use them
+ > by default.
 
-Sorry for the slow feedback. I see two problem with this patch, see
-below.
+ > Configure gnutls to find them using the bundle file which contains all
+ > certs, rather than looking in the cert directory.  When gnutls is told
+ > to use the directory, it loads *every* file in it.  This means it loads
+ > the bundle with all certs, then loads each cert a second time using the
+ > individual pem files, and then loads them all the third time via the
+ > hash symlinks to the pem files.
 
+ > When p11-kit is enabled, use its trust module instead of the bundle
+ > file.  p11-kit can be configured to use the bundle (the default), but it
+ > can do other things too, such as integrate with the "trust" command for
+ > adding and removing trust anchors.
 
-> +diff --git a/numpy/core/src/npymath/ieee754.c.src b/numpy/core/src/npymath/ieee754.c.src
-> +index e63e409b6..944b2ea7c 100644
-> +--- a/numpy/core/src/npymath/ieee754.c.src
-> ++++ b/numpy/core/src/npymath/ieee754.c.src
-> +@@ -612,7 +612,7 @@ void npy_set_floatstatus_invalid(void)
-> + }
-> + 
-> + 
-> +-#elif (defined(__GLIBC__) && !defined(__UCLIBC__)) || defined(__APPLE__) || \
-> ++#elif (defined(__GLIBC__) && !defined(__UCLIBC__) && !defined(__arc__)) || defined(__APPLE__) || \
+ > Signed-off-by: Trent Piepho <tpiepho@impinj.com>
 
-You also need to adjust this in numpy/core/include/numpy/ufuncobject.h.
-See patch 0001-no-fenv-on-uclibc.patch in Buildroot, and the comment in
-numpy/core/include/numpy/ufuncobject.h that says:
+Committed both to 2018.02.x, 2018.08.x and 2018.11.x, thanks.
 
-"""
-/* keep in sync with ieee754.c.src */
-"""
-> diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
-> index 067085bf41..a1f31ef688 100644
-> --- a/package/python-numpy/Config.in
-> +++ b/package/python-numpy/Config.in
-> @@ -3,7 +3,7 @@ config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
->  	# Numpy has some CPU specific code
->  	# ARCompact build fails due to toolchain issue
->  	# ARC HS38 build fails on glibc due to missing FE_* definitions
-
-This comment is no longer accurate.
-
-> -	default y if BR2_arc && BR2_archs38 && !BR2_TOOLCHAIN_USES_GLIBC
-> +	default y if BR2_arc
-
-Here you are doing two things:
-
- - Enabling for glibc
-
- - Enabling on non-HS38 ARC variants
-
-While your commit log only mentions fixing the issue for glibc on ARC
-HS. Also, there is a comment in python-numpy/Config.in that says
-ARCompact build fails due to toolchain issue.
-
-Could you clarify this ? If ARcompact is now working, is it really
-related to the glibc exclusion ? If not, it should be a separate patch.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
