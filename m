@@ -1,44 +1,26 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 16 Dec 2018 21:19:06 +0100
-Subject: [Buildroot] [PATCH 4/4] wsapi-xavante: bump to version 1.7
-In-Reply-To: <20181216201906.25729-1-francois.perrad@gadz.org>
-References: <20181216201906.25729-1-francois.perrad@gadz.org>
-Message-ID: <20181216201906.25729-4-francois.perrad@gadz.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 16 Dec 2018 21:21:45 +0100
+Subject: [Buildroot] [git commit] package/libpjsip: disable build of
+ test binaries
+In-Reply-To: <20181209211922.2B91F8B759@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Sun, 9 Dec 2018 22:23:08 +0100")
+References: <20181209211922.2B91F8B759@busybox.osuosl.org>
+Message-ID: <87woo96x46.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/wsapi-xavante/wsapi-xavante.hash | 2 +-
- package/wsapi-xavante/wsapi-xavante.mk   | 5 ++---
- 2 files changed, 3 insertions(+), 4 deletions(-)
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-diff --git a/package/wsapi-xavante/wsapi-xavante.hash b/package/wsapi-xavante/wsapi-xavante.hash
-index 9e8132df5..7b8769fed 100644
---- a/package/wsapi-xavante/wsapi-xavante.hash
-+++ b/package/wsapi-xavante/wsapi-xavante.hash
-@@ -1,2 +1,2 @@
- # locally computed hash
--sha256 b30b171e3d4d6fd7e129f14576e1cfc5adf00c0780ef8350f2f9e6f1d4259346  wsapi-xavante-1.6.1-1.src.rock
-+sha256 01211bb80dab92f87cece6e31854d73ae4a2ce06af7c48423a54313d72adf9fb  wsapi-xavante-1.7-1.src.rock
-diff --git a/package/wsapi-xavante/wsapi-xavante.mk b/package/wsapi-xavante/wsapi-xavante.mk
-index 86f5dee50..cdf160bba 100644
---- a/package/wsapi-xavante/wsapi-xavante.mk
-+++ b/package/wsapi-xavante/wsapi-xavante.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
- 
--WSAPI_XAVANTE_VERSION_MAJOR = 1.6.1
--WSAPI_XAVANTE_VERSION = $(WSAPI_XAVANTE_VERSION_MAJOR)-1
--WSAPI_XAVANTE_SUBDIR = wsapi-$(WSAPI_XAVANTE_VERSION_MAJOR)
-+WSAPI_XAVANTE_VERSION = 1.7-1
-+WSAPI_XAVANTE_SUBDIR = wsapi
- WSAPI_XAVANTE_LICENSE = MIT
- WSAPI_XAVANTE_LICENSE_FILES = $(WSAPI_XAVANTE_SUBDIR)/doc/us/license.html
- 
+ > commit: https://git.buildroot.net/buildroot/commit/?id=8e50901517f8adf7c5b3a273a0876c836bd3292f
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed to 2018.02.x, 2018.08.x and 2018.11.x, thanks.
+
 -- 
-2.17.1
+Bye, Peter Korsgaard
