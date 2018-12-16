@@ -1,40 +1,46 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sun, 16 Dec 2018 21:46:32 +0200
-Subject: [Buildroot] [PATCH 1/1] libuv: bump to version 1.24.1
-Message-ID: <20181216194632.4784-1-asafka7@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 16 Dec 2018 20:45:42 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x]
+ support/download/dl-wrapper: fix urlencode option never being sent to
+ backend
+Message-ID: <20181216194333.B17638D4AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/libuv/libuv.hash | 2 +-
- package/libuv/libuv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=8e38dbeab1ae774fa048d87ae1d12ac4aa02841e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index c19aba9c9a..f4e9d53a86 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  55587c525196a7a550fa7e5eb61794c377ec23b44adb435fdded86e8f7f31a16  libuv-v1.24.0.tar.gz
-+sha256  0d026c8f68c4d7b7c59de8f485f262ac71c24e0f3a80d740a25d20edd2f2774e  libuv-v1.24.1.tar.gz
- sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index ddf6eb8112..40e6bd26d6 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Since commit 38de434123 ("download: fix file:// BR2_PRIMARY_SITE
+(download cache)"), the urlencode option is no longer passed to the
+download backend, because we use ${backend} instead of
+${backend_urlencode}.
+
+We must get the urlencode information from backend_urlencode.
+
+Signed-off-by: Damien Th??bault <damien.thebault@vitec.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[Thomas: rework commit log]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+(cherry picked from commit bb7c13273fbe2da0969e14ddfd61a46b78d79db2)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/download/dl-wrapper | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+index bb70c98253..3315bd410e 100755
+--- a/support/download/dl-wrapper
++++ b/support/download/dl-wrapper
+@@ -93,7 +93,7 @@ main() {
+         esac
+         uri=${uri#*+}
  
--LIBUV_VERSION = v1.24.0
-+LIBUV_VERSION = v1.24.1
- LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
--- 
-2.19.1
+-        urlencode=${backend#*|}
++        urlencode=${backend_urlencode#*|}
+         # urlencode must be "urlencode"
+         [ "${urlencode}" != "urlencode" ] && urlencode=""
+ 
