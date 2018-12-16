@@ -1,90 +1,62 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 16 Dec 2018 14:07:46 -0700
-Subject: [Buildroot] [PATCH v2 1/1] package/meson: fix cpu_family format
-In-Reply-To: <20181216215913.741c549f@windsurf.home>
-References: <1544948097-2389-1-git-send-email-james.hilliard1@gmail.com>
- <20181216215913.741c549f@windsurf.home>
-Message-ID: <CADvTj4o_RCtH3M34Wdr92L2V7koxr4mT0uPWZFfjGqWMZV8+Mg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 16 Dec 2018 22:09:35 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] package/nodejs: security
+ bump to version 8.14.0
+Message-ID: <20181216210530.BA20F8B3C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Dec 16, 2018 at 1:59 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello James,
->
-> I would really like to have some feedback/Acked-by from Eric on a patch
-> like this. Some comments below.
->
-> On Sun, 16 Dec 2018 16:14:57 +0800, james.hilliard1 at gmail.com wrote:
-> > From: James Hilliard <james.hilliard1@gmail.com>
-> >
-> > Meson expects the cpu_family to be in a specific format for
-> > cross compilation, otherwise packages that use cpu_family
-> > detection may fail to build.
-> >
-> > We also need to set needs_exe_wrapper = true to ensure that
-> > meson won't try and execute test binaries.
->
-> This needs_exe_wrapper change seems unrelated, it should be part of a
-> separate patch.
-It's related in that fixing cpu_family requires the needs_exe_wrapper fix.
->
-> > +# https://mesonbuild.com/Reference-tables.html#cpu-families
-> > +ifeq ($(BR2_arcle),y)
-> > +HOST_MESON_TARGET_CPU_FAMILY = arc
-> > +else ifeq ($(BR2_arceb),y)
-> > +HOST_MESON_TARGET_CPU_FAMILY = arc
->
-> This can be written like this:
->
-> ifeq ($(BR2_arcle)$(BR2_arceb),y)
-> HOST_MESON_TARGET_CPU_FAMILY = arc
->
->
-> > +else ifeq ($(BR2_arm),y)
-> > +HOST_MESON_TARGET_CPU_FAMILY = arm
-> > +else ifeq ($(BR2_armeb),y)
-> > +HOST_MESON_TARGET_CPU_FAMILY = arm
->
-> Ditto for arm/armeb
->
-> > +else ifeq ($(BR2_aarch64),y)
-> > +HOST_MESON_TARGET_CPU_FAMILY = aarch64
-> > +else ifeq ($(BR2_aarch64_be),y)
-> > +HOST_MESON_TARGET_CPU_FAMILY = aarch64
->
-> Ditto.
->
-> > +else ifeq ($(BR2_i386),y)
-> > +HOST_MESON_TARGET_CPU_FAMILY = x86
-> > +else ifeq ($(BR2_mips),y)
-> > +HOST_MESON_TARGET_CPU_FAMILY = mips
-> > +else ifeq ($(BR2_mipsel),y)
-> > +HOST_MESON_TARGET_CPU_FAMILY = mips
->
-> Ditto.
->
-> > +else ifeq ($(BR2_mips64),y)
-> > +HOST_MESON_TARGET_CPU_FAMILY = mips64
-> > +else ifeq ($(BR2_mips64el),y)
-> > +HOST_MESON_TARGET_CPU_FAMILY = mips64
-> > +else ifeq ($(BR2_powerpc),y)
-> > +HOST_MESON_TARGET_CPU_FAMILY = ppc
-> > +else ifeq ($(BR2_powerpc64),y)
-> > +HOST_MESON_TARGET_CPU_FAMILY = ppc64
-> > +else ifeq ($(BR2_powerpc64le),y)
-> > +HOST_MESON_TARGET_CPU_FAMILY = ppc64
->
-> Ditto.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+commit: https://git.buildroot.net/buildroot/commit/?id=8e887a4680cb943e83900dc0892260372c8e414a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+
+Fixes the following security vulnerabilities:
+
+- Node.js: Denial of Service with large HTTP headers (CVE-2018-12121)
+- Node.js: Slowloris HTTP Denial of Service (CVE-2018-12122 / Node.js)
+- Node.js: Hostname spoofing in URL parser for javascript protocol
+  (CVE-2018-12123)
+- Node.js: HTTP request splitting (CVE-2018-12116)
+- OpenSSL: Timing vulnerability in DSA signature generation (CVE-2018-0734)
+- OpenSSL: Microarchitecture timing vulnerability in ECC scalar
+  multiplication (CVE-2018-5407)
+
+For more details, see the announcement:
+https://nodejs.org/en/blog/release/v8.14.0/
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 0de2c9c76cd0a522fc1eb4b8d63bb5070efaecd3)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/nodejs/nodejs.hash | 4 ++--
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 70d67730b1..13a5c2daa5 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+-# From https://nodejs.org/dist/v8.12.0/SHASUMS256.txt
+-sha256 5a9dff58016c18fb4bf902d963b124ff058a550ebcd9840c677757387bce419a  node-v8.12.0.tar.xz
++# From https://nodejs.org/dist/v8.14.0/SHASUMS256.txt
++sha256 8ce252913c9f6aaa9871f2d9661b6e54858dae2f0064bd3c624676edb09083c4  node-v8.14.0.tar.xz
+ 
+ # Hash for license file
+ sha256 b87be6c1479ed977481115869c2dd8b6d59e5ea55aa09939d6c898242121b2f5  LICENSE
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index e28a10851d..27751eef0b 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NODEJS_VERSION = 8.12.0
++NODEJS_VERSION = 8.14.0
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
