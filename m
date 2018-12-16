@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 22:37:50 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/webkitgtk:
+Date: Sun, 16 Dec 2018 22:37:59 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] package/webkitgtk:
  security bump to version 2.22.5
-Message-ID: <20181216213346.D28108D5B6@busybox.osuosl.org>
+Message-ID: <20181216213355.4B81B8D5B6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=958b6cb1a8989148668792a9a42e80b0570b4533
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0ac948c8607b3a611077e989307b83b539afc16a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 This is a maintenance release of the current stable WebKitGTK+ version,
 which contains security fixes for CVE identifiers: CVE-2018-4437,
@@ -53,7 +53,7 @@ index 15b1b56681..4cdefa75b7 100644
  # Hashes for license files:
  sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
 diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 4cfddd1eb5..f86c073d65 100644
+index cade28f99b..17984be21c 100644
 --- a/package/webkitgtk/webkitgtk.mk
 +++ b/package/webkitgtk/webkitgtk.mk
 @@ -4,7 +4,7 @@
