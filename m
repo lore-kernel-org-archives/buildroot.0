@@ -1,46 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 22:12:16 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/wine: host-wine
- also needs bison and flex
-Message-ID: <20181216210811.102928B470@busybox.osuosl.org>
+Date: Sun, 16 Dec 2018 22:12:50 +0100
+Subject: [Buildroot] [PATCH] package/wine: host-wine also needs bison
+ and flex
+In-Reply-To: <20181211162830.1845-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Tue, 11 Dec 2018 17:28:30 +0100")
+References: <20181211162830.1845-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87bm5l6ur1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d59ecbbadfd0561d2efa46d4664ef8a299d5afab
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Just like the build of the target wine, the build of host wine also
-needs bison and flex, otherwise the build fails with:
+ > Just like the build of the target wine, the build of host wine also
+ > needs bison and flex, otherwise the build fails with:
 
-checking for flex... no
-configure: error: no suitable flex found. Please install the 'flex' package.
+ > checking for flex... no
+ > configure: error: no suitable flex found. Please install the 'flex' package.
 
-(and similarly for bison once host-flex is provided)
+ > (and similarly for bison once host-flex is provided)
 
-This was detected using per-package directories. It used to "work"
-because host-wine comes alphabetically after host-flex and host-bison,
-which are dependencies of target wine.
+ > This was detected using per-package directories.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit e4d153b16ac51df1e8294eaf2413e43131620a7f)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wine/wine.mk | 1 +
- 1 file changed, 1 insertion(+)
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index fa672f0c7a..06436cc175 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
-@@ -10,6 +10,7 @@ WINE_SITE = https://dl.winehq.org/wine/source/3.0
- WINE_LICENSE = LGPL-2.1+
- WINE_LICENSE_FILES = COPYING.LIB LICENSE
- WINE_DEPENDENCIES = host-bison host-flex host-wine
-+HOST_WINE_DEPENDENCIES = host-bison host-flex
- 
- # Wine needs its own directory structure and tools for cross compiling
- WINE_CONF_OPTS = \
+Committed to 2018.02.x, 2018.08.x and 2018.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
