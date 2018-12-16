@@ -1,42 +1,64 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Sun, 16 Dec 2018 17:41:29 +0100
-Subject: [Buildroot] [PATCH] package/augeas: bump to version 1.11.0
-Message-ID: <20181216164129.11893-1-joerg.krause@embedded.rocks>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 16 Dec 2018 19:47:25 +0100
+Subject: [Buildroot] [PATCH v2] package: dropbear: make PATH configurable
+In-Reply-To: <CAGt4E5v655G7xF0sXUx7gb9ecfDC6UE+Jbx8jEK1_roKzFNKng@mail.gmail.com>
+References: <20180309224149.20225-1-mmayer@broadcom.com>
+ <20181216152603.GD2384@scaer>
+ <CAGt4E5v655G7xF0sXUx7gb9ecfDC6UE+Jbx8jEK1_roKzFNKng@mail.gmail.com>
+Message-ID: <20181216184725.GA2951@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/augeas/augeas.hash | 4 ++--
- package/augeas/augeas.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Markus, All,
 
-diff --git a/package/augeas/augeas.hash b/package/augeas/augeas.hash
-index 46b99dd8fe..d69ef8577e 100644
---- a/package/augeas/augeas.hash
-+++ b/package/augeas/augeas.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature from
--# http://download.augeas.net/augeas-1.10.1.tar.gz.sig
--sha256  52db256afab261d31cc147eaa1a71795a5fec59e888dfd0b65a84c7aacd6364d  augeas-1.10.1.tar.gz
-+# http://download.augeas.net/augeas-1.11.0.tar.gz.sig
-+sha256  393ce8f4055af89cd4c20bf903eacbbd909cf427891f41b56dc2ba66243ea0b0  augeas-1.11.0.tar.gz
- sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING
-diff --git a/package/augeas/augeas.mk b/package/augeas/augeas.mk
-index c4b8b7e6c2..8cb4f74e41 100644
---- a/package/augeas/augeas.mk
-+++ b/package/augeas/augeas.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--AUGEAS_VERSION = 1.10.1
-+AUGEAS_VERSION = 1.11.0
- AUGEAS_SITE = http://download.augeas.net
- AUGEAS_INSTALL_STAGING = YES
- AUGEAS_LICENSE = LGPL-2.1+
+On 2018-12-16 09:04 -0800, Markus Mayer spake thusly:
+> On Sun, 16 Dec 2018 at 07:26, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > On 2018-03-09 14:41 -0800, Markus Mayer spake thusly:
+> > > Make the default PATH dropbear is using configurable.
+> > But pushing the thing even further, we think a generic solution is even
+> > better:
+> >   - in the "System configuration" sub-menu, add a new option that
+> >     basically is "Default PATH" and defaults to /bin:/sbin:/usr/bin:/usr/sbin
+> 
+> Would it make sense to use the order /bin:/usr/bin:/sbin:/usr/sbin?
+> Conceptually, that would make it pick up non-admin and non-system
+> tools first. In reality, it likely wouldn't make a difference, because
+> there won't be programs of the same name in a "bin" path and in an
+> "sbin" path. But if there are, for whatever reason, it's nicer if it
+> picks the one that will do "less damage" by default, unless explicitly
+> told otherwise.
+> Anyway, it's just a thought.
+
+Currently, system/skeleton/etc/profile contains /bin:/sbin:/usr/bin:/usr/sbin
+so I'd suggest we keep that as the default for this new option.
+
+Whether that value makes sense or not is a different topic. I had a look
+at POSIX, and they define a default value, nor suggest one. On my
+machine, /etc/environment exports a PATH with:
+    /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+while /etc/login.defs sets PATH to:
+    /usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
+
+So, I don;t really care, but if it is changed, it should be in its own
+patch.
+
+> > Care to have a look?
+> I like it. :-)
+
+Cool thanks! Don't forget to Cc me on the resulting series, so I'm sure
+not to miss it. (which does not mean you'll get a fast review, mind
+you! :-/)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.20.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
