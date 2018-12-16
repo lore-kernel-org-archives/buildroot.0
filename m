@@ -1,44 +1,83 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 15:15:14 +0100
-Subject: [Buildroot] [PATCH v8 1/1] docker-engine: split docker-{cli,
- engine}, bump to v18.06.1-ce
-In-Reply-To: <20181108032458.1028-1-christian@paral.in> (Christian Stewart's
- message of "Wed, 7 Nov 2018 19:24:58 -0800")
-References: <20181108032458.1028-1-christian@paral.in>
-Message-ID: <8736qxblsd.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 16 Dec 2018 15:21:42 +0100
+Subject: [Buildroot] [PATCH] package/python-numpy: fix fenv build
+ failure on ARCv2 with glibc
+In-Reply-To: <20180302141604.42489-1-Evgeniy.Didin@synopsys.com>
+References: <20180302141604.42489-1-Evgeniy.Didin@synopsys.com>
+Message-ID: <20181216152142.7f2c768e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+Hello,
 
- > Docker upstream has split the Docker daemon and CLI into separate codebases:
- >  - github.com/docker/engine: daemon, "dockerd" binary
- >  - github.com/docker/cli: "docker" command line interface
+On Fri,  2 Mar 2018 17:16:04 +0300, Evgeniy Didin wrote:
+> Building python-numpy on ARC HS with glibc fails due to missing FE_*
+> definitions in <fenv.h>. There exceptions are not supported by
+> ARCv2 architecture.
+> Let's add patch, which disables compilation of a part of the
+> code in which FE_* errors occur for ARC.
+> 
+> Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Alexey Brodkin <abrodkin@synopsys.com>
+> Cc: arc-buildroot at synopsys.com
 
- > This commit splits the docker-engine package into docker-engine and docker-cli.
- > Conveniently, the Docker project has begun maintaining two separate
- > release-tagged repositories for the CLI and daemon as of v18.06-ce-rc1. Previous
- > versions were tagged in a common "docker-ce" repository which makes compilation
- > awkward for Buildroot, especially due to some limitations in the new Go package
- > infrastructure.
+Sorry for the slow feedback. I see two problem with this patch, see
+below.
 
- > Docker repositories "engine" and "cli" recently started tagging releases as
- > recent as the latest stable v18.06.1.
 
- > The CLI is no longer automatically included with the engine. Users will need to
- > select BR2_PACKAGE_DOCKER_CLI to produce a both docker and dockerd target
- > binaries.
+> +diff --git a/numpy/core/src/npymath/ieee754.c.src b/numpy/core/src/npymath/ieee754.c.src
+> +index e63e409b6..944b2ea7c 100644
+> +--- a/numpy/core/src/npymath/ieee754.c.src
+> ++++ b/numpy/core/src/npymath/ieee754.c.src
+> +@@ -612,7 +612,7 @@ void npy_set_floatstatus_invalid(void)
+> + }
+> + 
+> + 
+> +-#elif (defined(__GLIBC__) && !defined(__UCLIBC__)) || defined(__APPLE__) || \
+> ++#elif (defined(__GLIBC__) && !defined(__UCLIBC__) && !defined(__arc__)) || defined(__APPLE__) || \
 
- > Docker CLI can be statically compiled. This enables usage of the system docker
- > client binary to access the parent daemon API from within containers, where
- > shared libraries are not available.
+You also need to adjust this in numpy/core/include/numpy/ufuncobject.h.
+See patch 0001-no-fenv-on-uclibc.patch in Buildroot, and the comment in
+numpy/core/include/numpy/ufuncobject.h that says:
 
- > Signed-off-by: Christian Stewart <christian@paral.in>
+"""
+/* keep in sync with ieee754.c.src */
+"""
+> diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
+> index 067085bf41..a1f31ef688 100644
+> --- a/package/python-numpy/Config.in
+> +++ b/package/python-numpy/Config.in
+> @@ -3,7 +3,7 @@ config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+>  	# Numpy has some CPU specific code
+>  	# ARCompact build fails due to toolchain issue
+>  	# ARC HS38 build fails on glibc due to missing FE_* definitions
 
-Committed to 2018.11.x, thanks.
+This comment is no longer accurate.
 
+> -	default y if BR2_arc && BR2_archs38 && !BR2_TOOLCHAIN_USES_GLIBC
+> +	default y if BR2_arc
+
+Here you are doing two things:
+
+ - Enabling for glibc
+
+ - Enabling on non-HS38 ARC variants
+
+While your commit log only mentions fixing the issue for glibc on ARC
+HS. Also, there is a comment in python-numpy/Config.in that says
+ARCompact build fails due to toolchain issue.
+
+Could you clarify this ? If ARcompact is now working, is it really
+related to the glibc exclusion ? If not, it should be a separate patch.
+
+Thanks,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
