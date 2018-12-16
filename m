@@ -1,12 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 16 Dec 2018 11:58:41 +0100
+Date: Sun, 16 Dec 2018 11:59:22 +0100
 Subject: [Buildroot] [PATCH 1/1] package/meson: fix cpu_family format
-In-Reply-To: <87pnu1an4d.fsf@tkos.co.il>
+In-Reply-To: <1544944395-2049-1-git-send-email-james.hilliard1@gmail.com>
 References: <1544944395-2049-1-git-send-email-james.hilliard1@gmail.com>
- <87tvjdapl8.fsf@tkos.co.il>
- <CADvTj4o_UCq4xBgE9A_S+zN2uVduiCwmRxZ3BUBGeeOKROAmAQ@mail.gmail.com>
- <87pnu1an4d.fsf@tkos.co.il>
-Message-ID: <20181216115841.0708cd69@windsurf.home>
+Message-ID: <20181216115922.263866e0@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +12,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 16 Dec 2018 10:31:46 +0200, Baruch Siach wrote:
+On Sun, 16 Dec 2018 15:13:15 +0800, james.hilliard1 at gmail.com wrote:
 
-> So it seems:
-> 
-> git grep 'select BR2_ARCH_IS_64' -- arch/
-> arch/Config.in: select BR2_ARCH_IS_64
-> arch/Config.in: select BR2_ARCH_IS_64
-> arch/Config.in: select BR2_ARCH_IS_64
-> arch/Config.in: select BR2_ARCH_IS_64
-> arch/Config.in: select BR2_ARCH_IS_64
-> arch/Config.in: select BR2_ARCH_IS_64
-> arch/Config.in: select BR2_ARCH_IS_64
-> arch/Config.in: select BR2_ARCH_IS_64
-> arch/Config.in.riscv:   select BR2_ARCH_IS_64
+> Meson expects the cpu_family to be in a specific format for
+> cross compilation, otherwise packages that use cpu_family
+> detection may fail to build.
 
-All other architectures have separate top-level options for their
-32-bit and 64-bit variants. I.e i386 vs x86-64, arm vs. arm64, mipsel
-vs. mipsel64, etc.
+Could you be more specific than "may fail to build" ?
 
-For RISC-V, since the kernel supports both 32-bit and 64-bit as a
-single architecture, we decided to do the same in Buildroot, and have a
-single top-level BR2_riscv option.
-
-> Not sure what the reason for that is. riscv is also special in that
-> there is no support for its 32bit variant in Buildroot.
-
-Mark has already sent patches adding support for RISC-V 32-bit, they
-are in patchwork, waiting for testing/review/merge.
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
