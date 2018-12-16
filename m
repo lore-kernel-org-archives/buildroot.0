@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 16:02:28 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] package/lynx: add
+Date: Sun, 16 Dec 2018 16:02:21 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/lynx: add
  dependency on host-pkgconf
-Message-ID: <20181216145836.1BEBC8B448@busybox.osuosl.org>
+Message-ID: <20181216145844.A22DA8B80E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dcd9adeddaa4b020e8c996c65017d0f0a90f80f8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=439065082a47f798985d2a0974e0ef7c8072ebd6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 The Lynx configure script uses pkg-config when available:
 
@@ -38,7 +38,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/lynx/lynx.mk b/package/lynx/lynx.mk
-index a95326a14a..253f1e6d7a 100644
+index 735d5b317f..174d741dd9 100644
 --- a/package/lynx/lynx.mk
 +++ b/package/lynx/lynx.mk
 @@ -10,7 +10,7 @@ LYNX_SITE = ftp://ftp.invisible-island.net/lynx/tarballs
