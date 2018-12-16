@@ -1,146 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 22:23:01 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/uclibc: add
- custom bits/poll.h for xtensa
-Message-ID: <20181216211915.88EC88D46F@busybox.osuosl.org>
+Date: Sun, 16 Dec 2018 22:23:52 +0100
+Subject: [Buildroot] [PATCH] package/uclibc: add custom bits/poll.h for
+ xtensa
+In-Reply-To: <20181212151314.19556-1-jcmvbkbc@gmail.com> (Max Filippov's
+ message of "Wed, 12 Dec 2018 07:13:14 -0800")
+References: <20181212151314.19556-1-jcmvbkbc@gmail.com>
+Message-ID: <87tvjd5fo7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06a9fb8ac5163717d97ac66b27bc9c22a50d51ee
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+>>>>> "Max" == Max Filippov <jcmvbkbc@gmail.com> writes:
 
-Definitions of POLLWRNORM, POLLWRBAND and POLLREMOVE in xtensa linux
-kernel are non-standard. Provide bits/poll.h with correct values for
-these constants for uclibc-ng.
+ > Definitions of POLLWRNORM, POLLWRBAND and POLLREMOVE in xtensa linux
+ > kernel are non-standard. Provide bits/poll.h with correct values for
+ > these constants for uclibc-ng.
 
-This fixes the following strace build errors:
+ > This fixes the following strace build errors:
 
-  In file included from xlat/pollflags.h:4:0,
-                   from poll.c:34:
-  ./static_assert.h:40:24: error: static assertion failed: "POLLWRBAND != 0x0100"
-   # define static_assert _Static_assert
-                          ^
-  xlat/pollflags.h:75:1: note: in expansion of macro ???static_assert???
-   static_assert((POLLWRBAND) == (0x0100), "POLLWRBAND != 0x0100");
-   ^~~~~~~~~~~~~
-  ./static_assert.h:40:24: error: static assertion failed: "POLLREMOVE != 0x0800"
-   # define static_assert _Static_assert
-                          ^
-  xlat/pollflags.h:117:1: note: in expansion of macro ???static_assert???
-   static_assert((POLLREMOVE) == (0x0800), "POLLREMOVE != 0x0800");
-   ^~~~~~~~~~~~~
+ >   In file included from xlat/pollflags.h:4:0,
+ >                    from poll.c:34:
+ >   ./static_assert.h:40:24: error: static assertion failed: "POLLWRBAND != 0x0100"
+ >    # define static_assert _Static_assert
+ >                           ^
+ >   xlat/pollflags.h:75:1: note: in expansion of macro ?static_assert?
+ >    static_assert((POLLWRBAND) == (0x0100), "POLLWRBAND != 0x0100");
+ >    ^~~~~~~~~~~~~
+ >   ./static_assert.h:40:24: error: static assertion failed: "POLLREMOVE != 0x0800"
+ >    # define static_assert _Static_assert
+ >                           ^
+ >   xlat/pollflags.h:117:1: note: in expansion of macro ?static_assert?
+ >    static_assert((POLLREMOVE) == (0x0800), "POLLREMOVE != 0x0800");
+ >    ^~~~~~~~~~~~~
 
-Fixes:
- http://autobuild.buildroot.net/results/5a0112b7a2c81fa5253c9adc93efe415256cd811
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-Reviewed-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Fixes:
+ >  http://autobuild.buildroot.net/results/5a0112b7a2c81fa5253c9adc93efe415256cd811
+ > Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 
-(cherry picked from commit 95f11fb25d68a5b92426710eeeb0841771d151a4)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0003-xtensa-add-custom-bits-poll.h.patch       | 93 ++++++++++++++++++++++
- 1 file changed, 93 insertions(+)
+Committed to 2018.02.x, 2018.08.x and 2018.11.x, thanks.
 
-diff --git a/package/uclibc/0003-xtensa-add-custom-bits-poll.h.patch b/package/uclibc/0003-xtensa-add-custom-bits-poll.h.patch
-new file mode 100644
-index 0000000000..030938bbcd
---- /dev/null
-+++ b/package/uclibc/0003-xtensa-add-custom-bits-poll.h.patch
-@@ -0,0 +1,93 @@
-+From 0cae9700a4a421dc22c80d205fbae4d01fdd1356 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Wed, 12 Dec 2018 06:58:01 -0800
-+Subject: [PATCH] xtensa: add custom bits/poll.h
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Definitions of POLLWRNORM, POLLWRBAND and POLLREMOVE in xtensa linux
-+kernel are non-standard. Provide bits/poll.h with correct values for
-+these constants.
-+
-+This fixes the following strace build errors:
-+
-+  In file included from xlat/pollflags.h:4:0,
-+                   from poll.c:34:
-+  ./static_assert.h:40:24: error: static assertion failed: "POLLWRBAND != 0x0100"
-+   # define static_assert _Static_assert
-+                          ^
-+  xlat/pollflags.h:75:1: note: in expansion of macro ???static_assert???
-+   static_assert((POLLWRBAND) == (0x0100), "POLLWRBAND != 0x0100");
-+   ^~~~~~~~~~~~~
-+  ./static_assert.h:40:24: error: static assertion failed: "POLLREMOVE != 0x0800"
-+   # define static_assert _Static_assert
-+                          ^
-+  xlat/pollflags.h:117:1: note: in expansion of macro ???static_assert???
-+   static_assert((POLLREMOVE) == (0x0800), "POLLREMOVE != 0x0800");
-+   ^~~~~~~~~~~~~
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+ libc/sysdeps/linux/xtensa/bits/poll.h | 49 +++++++++++++++++++++++++++++++++++
-+ 1 file changed, 49 insertions(+)
-+ create mode 100644 libc/sysdeps/linux/xtensa/bits/poll.h
-+
-+diff --git a/libc/sysdeps/linux/xtensa/bits/poll.h b/libc/sysdeps/linux/xtensa/bits/poll.h
-+new file mode 100644
-+index 000000000000..4588cc326006
-+--- /dev/null
-++++ b/libc/sysdeps/linux/xtensa/bits/poll.h
-+@@ -0,0 +1,49 @@
-++/* Copyright (C) 1997, 2001, 2006 Free Software Foundation, Inc.
-++   This file is part of the GNU C Library.
-++
-++   The GNU C Library is free software; you can redistribute it and/or
-++   modify it under the terms of the GNU Lesser General Public
-++   License as published by the Free Software Foundation; either
-++   version 2.1 of the License, or (at your option) any later version.
-++
-++   The GNU C Library is distributed in the hope that it will be useful,
-++   but WITHOUT ANY WARRANTY; without even the implied warranty of
-++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-++   Lesser General Public License for more details.
-++
-++   You should have received a copy of the GNU Lesser General Public
-++   License along with the GNU C Library; if not, see
-++   <http://www.gnu.org/licenses/>.  */
-++
-++#ifndef _SYS_POLL_H
-++# error "Never use <bits/poll.h> directly; include <sys/poll.h> instead."
-++#endif
-++
-++/* Event types that can be polled for.  These bits may be set in `events'
-++   to indicate the interesting event types; they will appear in `revents'
-++   to indicate the status of the file descriptor.  */
-++#define POLLIN		0x001		/* There is data to read.  */
-++#define POLLPRI		0x002		/* There is urgent data to read.  */
-++#define POLLOUT		0x004		/* Writing now will not block.  */
-++
-++#ifdef __USE_XOPEN
-++/* These values are defined in XPG4.2.  */
-++# define POLLRDNORM	0x040		/* Normal data may be read.  */
-++# define POLLRDBAND	0x080		/* Priority data may be read.  */
-++# define POLLWRNORM	POLLOUT		/* Writing now will not block.  */
-++# define POLLWRBAND	0x100		/* Priority data may be written.  */
-++#endif
-++
-++#ifdef __USE_GNU
-++/* These are extensions for Linux.  */
-++# define POLLMSG	0x400
-++# define POLLREMOVE	0x800
-++# define POLLRDHUP	0x2000
-++#endif
-++
-++/* Event types always implicitly polled for.  These bits need not be set in
-++   `events', but they will appear in `revents' to indicate the status of
-++   the file descriptor.  */
-++#define POLLERR		0x008		/* Error condition.  */
-++#define POLLHUP		0x010		/* Hung up.  */
-++#define POLLNVAL	0x020		/* Invalid polling request.  */
-+-- 
-+2.11.0
-+
+-- 
+Bye, Peter Korsgaard
