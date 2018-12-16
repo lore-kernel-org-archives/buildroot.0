@@ -1,48 +1,44 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 16 Dec 2018 10:37:32 +0100
-Subject: [Buildroot] [PATCH 1/1] php: fix curl build with pkgconf 1.5.3
-Message-ID: <20181216093732.30482-1-fontaine.fabrice@gmail.com>
+Date: Sun, 16 Dec 2018 11:29:09 +0100
+Subject: [Buildroot] [PATCH 1/1] connman: fix systemd build wih pkgconf 1.5.3
+Message-ID: <20181216102909.32124-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build fails because PKG_NAME is set to the full path of libcurl.pc:
-checking for libcurl.pc... using /home/dawncrow/buildroot-test/scripts/instance-0/output/host/mips64el-buildroot-linux-gnu/sysroot/usr/lib/pkgconfig/libcurl.pc
+Since the bump to 1.5.3, pkgconf prepends the sysroot to all absolute
+paths found in the .pc file. This is correct when the paths refer to
+something in STAGING_DIR (e.g. libdir, includedir), but not when it
+refers to something used for the target.
 
-Then, when checking version, pkg-config prepends $(sysroot), which will
-fails with the following error:
-checking for cURL 7.10.5 or greater... Package
-/home/dawncrow/buildroot-test/scripts/instance-0/output/host/bin/../mips64el-buildroot-linux-gnu/sysroot/home/dawncrow/buildroot-test/scripts/instance-0/output/host/mips64el-buildroot-linux-gnu/sysroot/usr/lib/pkgconfig/libcurl.pc was not found in the pkg-config search path.
-Perhaps you should add the directory containing `/home/dawncrow/buildroot-test/scripts/instance-0/output/host/bin/../mips64el-buildroot-linux-gnu/sysroot/home/dawncrow/buildroot-test/scripts/instance-0/output/host/mips64el-buildroot-linux-gnu/sysroot/usr/lib/pkgconfig/libcurl.pc.pc' to the PKG_CONFIG_PATH environment variable
+connman uses the tmpfilesdir variable from systemd.pc to decide where to
+install things. Since DESTDIR is prepended to the install destination,
+this will end up in the wrong location.
 
-To fix this error, remove curl directory path from --with-curl to use
-the default libcurl.pc name.
-It should be noted that the next php version will remove this
-possibility, see:
-https://github.com/php/php-src/commit/78e4f047525268278ffe497a162d0d279999c8c2
+Until a better solution is found in pkgconf, pass the tmpfilesdir to use
+explicitly instead of relying on systemd.pc.
 
 Fixes:
- - http://autobuild.buildroot.org/results/c80792f871f2c5f02fe3faa1fc654fef760b8e2b
+ - http://autobuild.buildroot.org/results/6a13e6dfc58b2b3f8fbad6d6d6462370a75a8ad4
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/php/php.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/connman/connman.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index b95ceb5c9d..338361f58a 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -259,7 +259,7 @@ endif
- endif
- 
- ifeq ($(BR2_PACKAGE_PHP_EXT_CURL),y)
--PHP_CONF_OPTS += --with-curl=$(STAGING_DIR)/usr
-+PHP_CONF_OPTS += --with-curl
- PHP_DEPENDENCIES += libcurl
- endif
- 
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index b67d1c4b86..ce73c5acc1 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -13,6 +13,7 @@ CONNMAN_LICENSE = GPL-2.0
+ CONNMAN_LICENSE_FILES = COPYING
+ CONNMAN_CONF_OPTS += \
+ 	--with-dbusconfdir=/etc \
++	--with-tmpfilesdir=/usr/lib/tmpfiles.d \
+ 	$(if $(BR2_PACKAGE_CONNMAN_DEBUG),--enable-debug,--disable-debug) \
+ 	$(if $(BR2_PACKAGE_CONNMAN_ETHERNET),--enable-ethernet,--disable-ethernet) \
+ 	$(if $(BR2_PACKAGE_CONNMAN_WIFI),--enable-wifi,--disable-wifi) \
 -- 
 2.14.1
