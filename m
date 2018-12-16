@@ -1,62 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 20:42:14 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] libmpd: fix build with
- strndup
-Message-ID: <20181216193940.139038DF7D@busybox.osuosl.org>
+Date: Sun, 16 Dec 2018 20:45:54 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x]
+ support/download/dl-wrapper: fix urlencode option never being sent to
+ backend
+Message-ID: <20181216194150.9768286C19@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ce11955b81788f9c26c9ab218408b35ba812ebc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c4dcb53bafc326fb6bf9c4ed83d478516e303e0b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-Retrieve a patch from upstream to include config.h otherwise build will
-fail when trying to redefine strndup:
-libmpd-internal.h:210:10: error: expected identifier or '(' before '__extension__'
- char *   strndup     (const char *s, size_t n);
+Since commit 38de434123 ("download: fix file:// BR2_PRIMARY_SITE
+(download cache)"), the urlencode option is no longer passed to the
+download backend, because we use ${backend} instead of
+${backend_urlencode}.
 
-Indeed, without an include on config.h, HAVE_STRNDUP won't be defined
+We must get the urlencode information from backend_urlencode.
 
-Fixes:
- - http://autobuild.buildroot.org/results/a174818fa768b029d19b033139f9c5e0aaaed149
+Signed-off-by: Damien Th??bault <damien.thebault@vitec.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[Thomas: rework commit log]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b65c8e28ce19cee143db251d48482c3c7d2692c2)
+(cherry picked from commit bb7c13273fbe2da0969e14ddfd61a46b78d79db2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...01-Fix-build-on-archlinux-missing-include.patch | 24 ++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ support/download/dl-wrapper | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libmpd/0001-Fix-build-on-archlinux-missing-include.patch b/package/libmpd/0001-Fix-build-on-archlinux-missing-include.patch
-new file mode 100644
-index 0000000000..be16eb9713
---- /dev/null
-+++ b/package/libmpd/0001-Fix-build-on-archlinux-missing-include.patch
-@@ -0,0 +1,24 @@
-+From 4f946c01000fd97100e4a534b47f9c7ace0403df Mon Sep 17 00:00:00 2001
-+From: QC <qball@gmpclient.org>
-+Date: Thu, 9 Oct 2014 19:51:50 +0200
-+Subject: [PATCH] Fix build on archlinux (missing include)
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/DaveDavenport/libmpd/commit/4f946c01000fd97100e4a534b47f9c7ace0403df]
-+---
-+ src/libmpd-internal.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/libmpd-internal.h b/src/libmpd-internal.h
-+index c84c3a4..30cdc85 100644
-+--- a/src/libmpd-internal.h
-++++ b/src/libmpd-internal.h
-+@@ -21,6 +21,7 @@
-+ #define __MPD_INTERNAL_LIB_
-+ 
-+ #include "libmpdclient.h"
-++#include <config.h>
-+ struct _MpdData_real;
-+ 
-+ typedef struct _MpdData_real {
+diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+index 490335c859..f8040b6649 100755
+--- a/support/download/dl-wrapper
++++ b/support/download/dl-wrapper
+@@ -96,7 +96,7 @@ main() {
+         esac
+         uri=${uri#*+}
+ 
+-        urlencode=${backend#*|}
++        urlencode=${backend_urlencode#*|}
+         # urlencode must be "urlencode"
+         [ "${urlencode}" != "urlencode" ] && urlencode=""
+ 
