@@ -1,61 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 16 Dec 2018 12:17:33 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 18.3.1
-In-Reply-To: <1544950714-19774-1-git-send-email-james.hilliard1@gmail.com>
-References: <1544950714-19774-1-git-send-email-james.hilliard1@gmail.com>
-Message-ID: <20181216121733.5013fbfe@windsurf.home>
+Date: Sun, 16 Dec 2018 12:17:47 +0100
+Subject: [Buildroot] [git commit] package/go: security bump to version 1.11.4
+Message-ID: <20181216111344.1F1428B453@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d810fee306e9a3b9c2408e2927288c1bc4c8d699
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 16 Dec 2018 16:58:34 +0800, james.hilliard1 at gmail.com wrote:
+go 1.11.3 fixes the following security issues:
 
-> diff --git a/package/mesa3d/0004-egl-add-missing-include-stddef.h-in-egldevice.h.patch b/package/mesa3d/0004-egl-add-missing-include-stddef.h-in-egldevice.h.patch
-> new file mode 100644
-> index 0000000..56f94bc
-> --- /dev/null
-> +++ b/package/mesa3d/0004-egl-add-missing-include-stddef.h-in-egldevice.h.patch
-> @@ -0,0 +1,48 @@
-> +From eb44c36cf1729e7e200b77cf8ea755dff72d1639 Mon Sep 17 00:00:00 2001
-> +From: Gurchetan Singh <gurchetansingh@chromium.org>
-> +Date: Wed, 28 Nov 2018 08:39:34 -0800
-> +Subject: [PATCH] egl: add missing #include <stddef.h> in egldevice.h
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +Otherwise, I get this error:
-> +
-> +main/egldevice.h:54:13: error: ?NULL? undeclared (first use in this function)
-> +       dev = NULL;
-> +             ^~~~
-> +with this config:
-> +
-> +./autogen.sh --enable-gles1 --enable-gles2 --with-platforms='surfaceless' --disable-glx
-> +             --with-dri-drivers="i965" --with-gallium-drivers="" --enable-gbm
-> +
-> +v3: Use stddef.h (Matt)
-> +v4: Modify commit message (Eric)
-> +
-> +Reviewed-by: Matt Turner <mattst88@gmail.com>
-> +Reviewed-by: Eric Engestrom <eric.engestrom@intel.com>
-> +---
+cmd/go: remote command execution during "go get -u"
+The issue is CVE-2018-16873 and Go issue golang.org/issue/29230. See the Go issue for details.
+Thanks to Etienne Stalmans from the Heroku platform security team for discovering and reporting this issue.
 
-This separator here shouldn't be there, i.e the following two lines,
-should be right after the two Reviewed-by.
+cmd/go: directory traversal in "go get" via curly braces in import paths
+The issue is CVE-2018-16874 and Go issue golang.org/issue/29231. See the Go issue for details.
+Thanks to ztz of Tencent Security Platform for discovering and reporting this issue.
 
-> +Backported from upstream commit eb44c36cf1729e7e200b77cf8ea755dff72d1639
-> +Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+crypto/x509: CPU denial of service in chain validation
+The issue is CVE-2018-16875 and Go issue golang.org/issue/29233. See the Go issue for details.
+Thanks to Netflix for discovering and reporting this issue.
 
-I fixed that and applied. Thanks!
+go 1.11.4 fixes issues, including regressions introduced by 1.11.3:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+1.11.4 includes fixes to cgo, the compiler, linker, runtime, documentation, go
+command, and the net/http and go/types packages.  It includes a fix to a bug
+introduced in Go 1.11.3 that broke go get for import path patterns
+containing "...".
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/go/go.hash b/package/go/go.hash
+index bd6af0358f..ee1c881e6a 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256	042fba357210816160341f1002440550e952eb12678f7c9e7e9d389437942550  go1.11.2.src.tar.gz
++sha256	4cfd42720a6b1e79a8024895fa6607b69972e8e32446df76d6ce79801bbadb15  go1.11.4.src.tar.gz
+ sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 2e434f3bad..0d7b961dda 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.11.2
++GO_VERSION = 1.11.4
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
