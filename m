@@ -1,53 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 16:01:06 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] linux: ensure images/
- exist before creating files there
-Message-ID: <20181216145810.0F0248B425@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 16 Dec 2018 16:02:25 +0100
+Subject: [Buildroot] [PATCH 1/1] dependencies.sh: Check for a host
+ python version >= 2.7
+In-Reply-To: <CAFSsvmr1ab-hTwE7XpExMJWbPL0MzQK+eebjX2wGk3kgRpwEyw@mail.gmail.com>
+References: <20181215202937.81372-1-aduskett@gmail.com>
+ <871s6ibjz2.fsf@tkos.co.il>
+ <CAFSsvmr1ab-hTwE7XpExMJWbPL0MzQK+eebjX2wGk3kgRpwEyw@mail.gmail.com>
+Message-ID: <20181216160225.77cfc7da@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c3cd1bd4346f7cba254044f9264323114abc6b8a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+Hello,
 
-When using an initramfs, on the first-pass build, we create a dummy cpio
-so that the build succeeeds. The real cpio will come later, and we'll do
-a second-pass build to use the actual cpio.
+On Sat, 15 Dec 2018 15:47:45 -0500, Adam Duskett wrote:
 
-However, when we touch that dummy cpio, the images/ directory may not
-yet exist, since commit d0f4f95e39 (Makefile: rework main directory
-creation logic) removed its creation at the begining of the build, to
-only at the moment we need it, i.e. during the *_INSTALL_IMAGES_CMDS
-steps.
+> On Sat, Dec 15, 2018 at 3:42 PM Baruch Siach <baruch@tkos.co.il> wrote:
+> >
+> > Hi Adam,
+> >
+> > aduskett at gmail.com writes:  
+> > > From: Adam Duskett <Aduskett@gmail.com>
+> > >
+> > > Older distributions such as CentOS6 come with python2.6, which causes build
+> > > failures in packages such as host-libglib2 because they require python2.7 or
+> > > above.  
+> >
+> > Any reference to glib requirements? autobuilder failures?
+> >  
+> Not that I can see. I am not sure if any of the autobuilders are using
+> CentOS6, however
+> I noticed the crash when I was using a CentOS6 Docker container and
+> decided to do some
+> due diligence. :)
 
-However, the linux build is not a _INSTALL_IMAGES_CMDS step, so there is
-no guarantee that images/ already exist at that time.
+Please explain in the commit log which glib version has this
+requirement, and which specific build failure you got.
 
-Fix that by explicitly creating images/ before touching the dummy cpio.
+Thanks,
 
-Reported-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 524fb10bbe2038ea7ca45493193073d31732d1de)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/linux.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 864fa772bb..7f6100cf31 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -311,6 +311,7 @@ define LINUX_KCONFIG_FIXUP_CMDS
- 	# replaced later by the real cpio archive, and the kernel will be
- 	# rebuilt using the linux-rebuild-with-initramfs target.
- 	$(if $(BR2_TARGET_ROOTFS_INITRAMFS),
-+		mkdir -p $(BINARIES_DIR)
- 		touch $(BINARIES_DIR)/rootfs.cpio
- 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"$${BR_BINARIES_DIR}/rootfs.cpio",$(@D)/.config)
- 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,0,$(@D)/.config)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
