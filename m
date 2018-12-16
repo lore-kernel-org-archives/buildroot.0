@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 19:29:57 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] php: security bump to
+Date: Sun, 16 Dec 2018 16:21:46 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] php: security bump to
  version 7.2.13
-Message-ID: <20181216185627.639878D6AF@busybox.osuosl.org>
+Message-ID: <20181216185645.8D7B68C952@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=44c0ede3105cfb094b081bb44df134f705e34809
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2f3fcb6f820f70216f8f816982039bb9f0e2a711
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Fixes CVE-2018-19518: University of Washington IMAP Toolkit 2007f on UNIX,
 as used in imap_open() in PHP and other products, launches an rsh command
@@ -43,7 +43,7 @@ index cea6997aa2..094977c548 100644
  # License file
  sha256 f689b8fa63bea7950ce6a21bf52ed88ea0d77673ee76e6de12f51191174d91b8  LICENSE
 diff --git a/package/php/php.mk b/package/php/php.mk
-index b6b6aea615..b11ee4cf4a 100644
+index ae7e742b65..b95ceb5c9d 100644
 --- a/package/php/php.mk
 +++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
