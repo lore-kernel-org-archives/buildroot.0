@@ -1,67 +1,103 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 16 Dec 2018 14:10:29 +0100
-Subject: [Buildroot] [PATCH 1/1] wpa_supplicant - Specify that old and
- new dbus are incompatible
-In-Reply-To: <877eqwjlik.fsf@dell.be.48ers.dk>
-References: <20180218215039.4811-1-pinaraf@pinaraf.info>
- <87fu5kkfy0.fsf@dell.be.48ers.dk> <3603330.UGTkN10abk@peanuts2>
- <877eqwjlik.fsf@dell.be.48ers.dk>
-Message-ID: <20181216141029.69962524@windsurf.home>
+Date: Sun, 16 Dec 2018 14:41:26 +0100
+Subject: [Buildroot] [PATCH 1/1] rust: make sure the cxx compiler is
+ also set for the target
+In-Reply-To: <20180403220132.GA20271@itchy>
+References: <20180228173852.66069-1-charles.hardin@storagecraft.com>
+ <20180402004857.7e7e46c1@windsurf>
+ <F8479AD1-B731-4235-A6C6-A517165DD553@storagecraft.com>
+ <20180402005738.1d603538@windsurf>
+ <1B48158D-B250-46BC-A4B8-7A2816D2573A@storagecraft.com>
+ <7E1DAB3C-F973-4E41-8E6F-E603021DCFF9@storagecraft.com>
+ <20180402083828.54d43b63@windsurf>
+ <911E1AE2-32AB-4DE4-89B2-49F68BFE20BF@storagecraft.com>
+ <20180403220132.GA20271@itchy>
+Message-ID: <20181216144126.325f6ad1@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Eric,
 
-On Thu, 01 Mar 2018 08:35:47 +0100, Peter Korsgaard wrote:
+Sorry for the very slow feedback.
 
->  > It generated a .service file with an empty BusName in the [Service] part of 
->  > the .service.
->  > Since enabling only one interface generated the proper file, I deduced both 
->  > could not be enabled together. Maybe something else in my configuration 
->  > impacted that, I will check that again if you can't reproduce.  
+On Wed, 4 Apr 2018 00:01:32 +0200, Eric Le Bihan wrote:
+
+> Building Rust for x86_64 on a x86_64 is indeed tricky!
 > 
-> Wait, are we talking about dbus service files (that afaik don't take a
-> BusName directive) or systemd files?
+> As seen in the build section of src/bootstrap/config.toml.example, Rust
+> manages "build", "host" and "target" parameters, which all default to
+> "x86_64-unknown-linux-gnu".
+> 
+> When building, the compiler is built for the host and the standard
+> library for the host and the target.
+> 
+> So when the target is the same as the host, only the compiler and the
+> standard library for the host should be built.
 
-I just did a build, with the following defconfig:
+When you are talking about "target" and "host", are you talking just
+about the CPU architecture, or about the full target and host
+definition, which includes the C library ?
 
-BR2_arm=y
-BR2_cortex_a8=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y
-BR2_INIT_SYSTEMD=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_WPA_SUPPLICANT=y
-BR2_PACKAGE_WPA_SUPPLICANT_DBUS_OLD=y
-BR2_PACKAGE_WPA_SUPPLICANT_DBUS_NEW=y
-# BR2_TARGET_ROOTFS_TAR is not set
+If you build on x86-64, targeting a x86-64 platform, you have host
+arch == target arch, but you still can't use the cross-compiler to
+build programs and expect them to run on the host:
 
-So, it has systemd enabled and both the old and new dbus interfaces in
-wpa-supplicant. And the BusName is definitely not empty:
+ - The C library might be different: uClibc or musl for the target,
+   glibc available on the host
 
-$ cat lib/systemd/system/wpa_supplicant.service 
-[Unit]
-Description=WPA supplicant
-Before=network.target
-Wants=network.target
+ - The kernel headers version may be different: the C library for the
+   target may be built to use very recent/modern kernel headers and
+   therefore meant to run on a system that uses a recent kernel, while
+   the host machine may be running an older kernel.
 
-[Service]
-Type=dbus
-BusName=fi.w1.wpa_supplicant1
-ExecStart=/usr/sbin/wpa_supplicant -u
+So basically, using the cross-compiler to build something that will be
+executed on the host machine is always wrong.
 
-[Install]
-WantedBy=multi-user.target
-Alias=dbus-fi.w1.wpa_supplicant1.service
+So the initial patch from Charles, that does this:
 
-Since we haven't heard from the original submitter since February, I'll
-mark this patch as Rejected in patchwork.
++		if [ "x$(RUSTC_HOST_NAME)" != "x$(RUSTC_TARGET_NAME)" ]; then \
++			echo 'cc = "$(TARGET_CROSS)gcc"'; \
++			echo 'cxx = "$(TARGET_CROSS)g++"'; \
++		fi; \
 
-Best regards,
+is clearly not good, because:
+
+RUSTC_HOST_NAME = $(RUSTC_HOST_ARCH)-unknown-linux-gnu
+RUSTC_TARGET_NAME = $(RUSTC_ARCH)-unknown-linux-gnu$(RUSTC_ABI)
+
+So when you target x86-64 and build on x86-64, RUSTC_HOST_NAME ==
+RUSTC_TARGET_NAME, and therefore it will continue to use the target
+compiler to build programs meant to run on the host, which is very
+wrong.
+
+> As the compiler is built on LLVM, coded in C++, a C++ compiler for the
+> host is indeed required. It happens that in the build of LLVM, a host
+> tool named FileCheck is built and run for test.
+> 
+> IIUC, the C compiler is only used for building the standard library
+> (this is what I've seen when cross-compiling for ARM).
+> 
+> So when the target is the same as the host, it might be sensible to
+> avoid defining c and cxx in the target configuration file, as suggested
+> by your patch.
+> 
+> I'll poke upstream for clarifications on this special case, though.
+
+Did you get some feedback ?
+
+I'll mark the patch as Changes Requested. We need at least the
+following things to be changed:
+
+ - Split into two patches the addition of "cxx" vs. the target != host condition
+
+ - A detailed and documented commit log
+
+Charles, ?ric, could you work on a new version of this patch ?
+
+Thanks,
 
 Thomas
 -- 
