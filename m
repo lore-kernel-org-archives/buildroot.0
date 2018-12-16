@@ -1,33 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 16 Dec 2018 16:14:56 +0100
-Subject: [Buildroot] [git commit] .gitlab-ci.yml: regenerate for proper
- defconfig ordering
-Message-ID: <20181216151105.D2F058B3C3@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 16 Dec 2018 16:16:23 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] squashfs: do not force
+ gzip support if lz4/xz/zstd is selected
+Message-ID: <20181216151221.7A07A864A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d42e51d37357f39570a832e0eecb9131f7f159e3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=4d22ade4707cd4c0936769788a47c8b9e6d781e1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+The logic to ensure at least one compression backend is selected was not
+updated when lz4, xz and zstd were introduced -  Fix that.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+[Peter: add comment as suggested by Peter Seiderer]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+(cherry picked from commit 84aeb4419f394b2eb11a22a962bc20e05b311b5f)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .gitlab-ci.yml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/squashfs/Config.in | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index d3ac5026da..f393cbbdfb 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -189,8 +189,8 @@ olimex_a20_olinuxino_micro_defconfig: *defconfig
- olimex_a64_olinuxino_defconfig: *defconfig
- olimex_imx233_olinuxino_defconfig: *defconfig
- openblocks_a6_defconfig: *defconfig
--orangepi_lite_defconfig: *defconfig
- orangepi_lite2_defconfig: *defconfig
-+orangepi_lite_defconfig: *defconfig
- orangepi_one_defconfig: *defconfig
- orangepi_one_plus_defconfig: *defconfig
- orangepi_pc2_defconfig: *defconfig
+diff --git a/package/squashfs/Config.in b/package/squashfs/Config.in
+index c16ebbf27f..f5ae5d9bec 100644
+--- a/package/squashfs/Config.in
++++ b/package/squashfs/Config.in
+@@ -2,7 +2,13 @@ config BR2_PACKAGE_SQUASHFS
+ 	bool "squashfs"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+-	select BR2_PACKAGE_SQUASHFS_GZIP if !(BR2_PACKAGE_SQUASHFS_LZMA || BR2_PACKAGE_SQUASHFS_LZO)
++	# ensure at least on compression backend (defaults to gzip)
++	select BR2_PACKAGE_SQUASHFS_GZIP if !( \
++	       BR2_PACKAGE_SQUASHFS_LZ4 || \
++	       BR2_PACKAGE_SQUASHFS_LZMA || \
++	       BR2_PACKAGE_SQUASHFS_LZO || \
++	       BR2_PACKAGE_SQUASHFS_XZ || \
++	       BR2_PACKAGE_SQUASHFS_ZSTD)
+ 	help
+ 	  Tools to generate SquashFS filesystems.
+ 
