@@ -1,48 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 20:36:39 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x]
- configs/bananapi_m2_ultra: add kernel headers version option
-Message-ID: <20181216193508.AB7938D5B2@busybox.osuosl.org>
+Date: Sun, 16 Dec 2018 20:38:16 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] vte: needs gcc >= 4.8
+Message-ID: <20181216193508.B349E8D5B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=701534891fd0af2db8457783148c087ff0a5f390
+commit: https://git.buildroot.net/buildroot/commit/?id=bf0096db7aaa368227822f1d37eb723f0375f6ea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
-The bananapi_m2_plus defconfig uses a 4.18 kernel, but doesn't specify
-anything for the kernel headers version, so the Buildroot default gets
-used, which currently is 4.19. Since 4.19 is newer than 4.18,
-Buildroot rightfully whines:
-
-  Incorrect selection of kernel headers: expected 4.19.x, got 4.18.x
-
-Let's fix this by telling this defconfig to use the headers from the
-kernel, and that they are of version 4.18.
-
 Fixes:
+ - http://autobuild.buildroot.org/results/6dada849a87b68f6f69e3ed760995e86dfa25ad6
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/131216938
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 3467aef18386068085f0848e245c8bd4ca1c9863)
+(cherry picked from commit 0d076e27238b23a25a2125a423cf42afa288b250)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/bananapi_m2_ultra_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ package/vte/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/configs/bananapi_m2_ultra_defconfig b/configs/bananapi_m2_ultra_defconfig
-index 5dd3edd664..bc1d31a60a 100644
---- a/configs/bananapi_m2_ultra_defconfig
-+++ b/configs/bananapi_m2_ultra_defconfig
-@@ -1,5 +1,6 @@
- BR2_arm=y
- BR2_cortex_a7=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
- BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M2 Ultra"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/bananapi/bananapi-m2-ultra/genimage.cfg"
+diff --git a/package/vte/Config.in b/package/vte/Config.in
+index 7410624c0a..fa29de8c71 100644
+--- a/package/vte/Config.in
++++ b/package/vte/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_VTE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
+ 		BR2_PACKAGE_HAS_LIBGL
+@@ -20,11 +21,12 @@ config BR2_PACKAGE_VTE
+ 
+ 	  http://github.com/GNOME/vte
+ 
+-comment "vte needs a toolchain w/ wchar, threads, C++"
++comment "vte needs a toolchain w/ wchar, threads, C++, gcc >= 4.8"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_HAS_THREADS
++		!BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 
+ comment "vte needs an OpenGL or an OpenGL-EGL/wayland backend"
+ 	depends on BR2_USE_MMU
