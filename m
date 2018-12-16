@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 15:53:57 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/libiscsi: do not
+Date: Sun, 16 Dec 2018 15:53:39 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] package/libiscsi: do not
  built the manpages
-Message-ID: <20181216144953.713358D5AC@busybox.osuosl.org>
+Message-ID: <20181216145001.9B03C8D5AC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46433b998a419566125b57e709ee0afa776ac585
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0c6ac68371359062aa98ab0a866896f7b35dfc72
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 The pre-rendered, bundled ones are still installed, though, but they
 get removed in target-finalize anyway.
