@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 16:16:33 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] squashfs: do not force
+Date: Sun, 16 Dec 2018 16:16:11 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] squashfs: do not force
  gzip support if lz4/xz/zstd is selected
-Message-ID: <20181216151231.011A08D65B@busybox.osuosl.org>
+Message-ID: <20181216151239.0807A8D65B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b844a51ab4fc37c9b496c82a2fbe3c8567d40498
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=59d54e178a68d8997e5eff4297f02cf1eb4f7fa1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 The logic to ensure at least one compression backend is selected was not
 updated when lz4, xz and zstd were introduced -  Fix that.
@@ -27,7 +27,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/squashfs/Config.in b/package/squashfs/Config.in
-index c16ebbf27f..f5ae5d9bec 100644
+index 70c0fc9808..b4d7becda3 100644
 --- a/package/squashfs/Config.in
 +++ b/package/squashfs/Config.in
 @@ -2,7 +2,13 @@ config BR2_PACKAGE_SQUASHFS
