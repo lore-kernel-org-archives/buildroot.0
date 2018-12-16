@@ -1,30 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 20:42:58 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] libmpd: add hash for
- license file
-Message-ID: <20181216193903.C500E84D2C@busybox.osuosl.org>
+Date: Sun, 16 Dec 2018 20:43:06 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] libmpd: fix build with
+ strndup
+Message-ID: <20181216193903.CCB5584D2C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a7779ef923fa7d1ba1ab772f5d313177f7ca38a
+commit: https://git.buildroot.net/buildroot/commit/?id=61ecf7556f39ad735179af7fb6c8e3ed06e52481
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
+Retrieve a patch from upstream to include config.h otherwise build will
+fail when trying to redefine strndup:
+libmpd-internal.h:210:10: error: expected identifier or '(' before '__extension__'
+ char *   strndup     (const char *s, size_t n);
+
+Indeed, without an include on config.h, HAVE_STRNDUP won't be defined
+
+Fixes:
+ - http://autobuild.buildroot.org/results/a174818fa768b029d19b033139f9c5e0aaaed149
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8e884ba02be77bd91ef2ffe067d4220ce06e9850)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit b65c8e28ce19cee143db251d48482c3c7d2692c2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmpd/libmpd.hash | 1 +
- 1 file changed, 1 insertion(+)
+ ...01-Fix-build-on-archlinux-missing-include.patch | 24 ++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/package/libmpd/libmpd.hash b/package/libmpd/libmpd.hash
-index ca06c754fb..c0e5c6b3c3 100644
---- a/package/libmpd/libmpd.hash
-+++ b/package/libmpd/libmpd.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256	fe20326b0d10641f71c4673fae637bf9222a96e1712f71f170fca2fc34bf7a83	libmpd-11.8.17.tar.gz
-+sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	COPYING
+diff --git a/package/libmpd/0001-Fix-build-on-archlinux-missing-include.patch b/package/libmpd/0001-Fix-build-on-archlinux-missing-include.patch
+new file mode 100644
+index 0000000000..be16eb9713
+--- /dev/null
++++ b/package/libmpd/0001-Fix-build-on-archlinux-missing-include.patch
+@@ -0,0 +1,24 @@
++From 4f946c01000fd97100e4a534b47f9c7ace0403df Mon Sep 17 00:00:00 2001
++From: QC <qball@gmpclient.org>
++Date: Thu, 9 Oct 2014 19:51:50 +0200
++Subject: [PATCH] Fix build on archlinux (missing include)
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/DaveDavenport/libmpd/commit/4f946c01000fd97100e4a534b47f9c7ace0403df]
++---
++ src/libmpd-internal.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/libmpd-internal.h b/src/libmpd-internal.h
++index c84c3a4..30cdc85 100644
++--- a/src/libmpd-internal.h
+++++ b/src/libmpd-internal.h
++@@ -21,6 +21,7 @@
++ #define __MPD_INTERNAL_LIB_
++ 
++ #include "libmpdclient.h"
+++#include <config.h>
++ struct _MpdData_real;
++ 
++ typedef struct _MpdData_real {
