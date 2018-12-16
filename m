@@ -1,34 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 22:10:18 +0100
-Subject: [Buildroot] [PATCH] nodejs: security bump to version 8.14.0
-In-Reply-To: <20181209221830.13407-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 9 Dec 2018 23:18:30 +0100")
-References: <20181209221830.13407-1-peter@korsgaard.com>
-Message-ID: <87ftux6uv9.fsf@dell.be.48ers.dk>
+Date: Sun, 16 Dec 2018 22:11:56 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/wine: host-wine
+ also needs bison and flex
+Message-ID: <20181216210756.3024E83CFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7f2f18ba0fd4383920125e6231a1b929b1ec8267
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > Fixes the following security vulnerabilities:
- > - Node.js: Denial of Service with large HTTP headers (CVE-2018-12121)
- > - Node.js: Slowloris HTTP Denial of Service (CVE-2018-12122 / Node.js)
- > - Node.js: Hostname spoofing in URL parser for javascript protocol
- >   (CVE-2018-12123)
- > - Node.js: HTTP request splitting (CVE-2018-12116)
- > - OpenSSL: Timing vulnerability in DSA signature generation (CVE-2018-0734)
- > - OpenSSL: Microarchitecture timing vulnerability in ECC scalar
- >   multiplication (CVE-2018-5407)
+Just like the build of the target wine, the build of host wine also
+needs bison and flex, otherwise the build fails with:
 
- > For more details, see the announcement:
- > https://nodejs.org/en/blog/release/v8.14.0/
+checking for flex... no
+configure: error: no suitable flex found. Please install the 'flex' package.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(and similarly for bison once host-flex is provided)
 
-Committed to 2018.02.x, 2018.08.x and 2018.11.x, thanks.
+This was detected using per-package directories. It used to "work"
+because host-wine comes alphabetically after host-flex and host-bison,
+which are dependencies of target wine.
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit e4d153b16ac51df1e8294eaf2413e43131620a7f)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wine/wine.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index 02c4c0f155..2728436671 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -10,6 +10,7 @@ WINE_SITE = https://dl.winehq.org/wine/source/3.0
+ WINE_LICENSE = LGPL-2.1+
+ WINE_LICENSE_FILES = COPYING.LIB LICENSE
+ WINE_DEPENDENCIES = host-bison host-flex host-wine
++HOST_WINE_DEPENDENCIES = host-bison host-flex
+ 
+ # Wine needs its own directory structure and tools for cross compiling
+ WINE_CONF_OPTS = \
