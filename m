@@ -1,40 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 16 Dec 2018 16:00:37 +0100
-Subject: [Buildroot] [PATCH 4/4] board: orangepi: lite2: Add WiFi support
-In-Reply-To: <20181103125608.2255-4-jagan@amarulasolutions.com>
-References: <20181103125608.2255-1-jagan@amarulasolutions.com>
- <20181103125608.2255-4-jagan@amarulasolutions.com>
-Message-ID: <20181216160037.1150c27e@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 16 Dec 2018 16:01:21 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] linux: ensure images/
+ exist before creating files there
+Message-ID: <20181216145717.6AF958D58D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=21a231e10425be0429643f904f9f441c92ed9fc0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-On Sat,  3 Nov 2018 18:26:08 +0530, Jagan Teki wrote:
-> Orangepi lite2 board has AP6356S WiFi/BT combo, but does
-> not have ethernet port. So it makes sense to enable wireless
-> networking by default:
-> - add broadcom wireless firmware package to image
-> - add basic wireless tools to image
-> - add rootfs overlay with proper NVRAM file for on-board AP6356S chip
-> - add mdev to image to enable module autoloading
-> - update readme.txt to test wifi
-> 
-> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-> ---
->  board/orangepi/orangepi-lite2/readme.txt      |  9 ++
->  .../lib/firmware/brcm/brcmfmac43455-sdio.txt  | 82 +++++++++++++++++++
->  configs/orangepi_lite2_defconfig              | 13 +++
->  3 files changed, 104 insertions(+)
->  create mode 100755 board/orangepi/orangepi-lite2/rootfs_overlay/lib/firmware/brcm/brcmfmac43455-sdio.txt
+When using an initramfs, on the first-pass build, we create a dummy cpio
+so that the build succeeeds. The real cpio will come later, and we'll do
+a second-pass build to use the actual cpio.
 
-Applied to master, thanks.
+However, when we touch that dummy cpio, the images/ directory may not
+yet exist, since commit d0f4f95e39 (Makefile: rework main directory
+creation logic) removed its creation at the begining of the build, to
+only at the moment we need it, i.e. during the *_INSTALL_IMAGES_CMDS
+steps.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+However, the linux build is not a _INSTALL_IMAGES_CMDS step, so there is
+no guarantee that images/ already exist at that time.
+
+Fix that by explicitly creating images/ before touching the dummy cpio.
+
+Reported-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 524fb10bbe2038ea7ca45493193073d31732d1de)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/linux.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 38a67edcd1..f1a34d4fe0 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -278,6 +278,7 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 	# replaced later by the real cpio archive, and the kernel will be
+ 	# rebuilt using the linux-rebuild-with-initramfs target.
+ 	$(if $(BR2_TARGET_ROOTFS_INITRAMFS),
++		mkdir -p $(BINARIES_DIR)
+ 		touch $(BINARIES_DIR)/rootfs.cpio
+ 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"$${BR_BINARIES_DIR}/rootfs.cpio",$(@D)/.config)
+ 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,0,$(@D)/.config)
