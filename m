@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 22:28:10 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/libgpgme:
+Date: Sun, 16 Dec 2018 22:28:27 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] package/libgpgme:
  properly tweak gpgme-config
-Message-ID: <20181216212408.05F8F8B5D4@busybox.osuosl.org>
+Message-ID: <20181216212424.48BD58B5D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10ee74f5e94f61a2ef53a35cf311debb53a99516
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e12b737cf28406da54d2714c483afcc47fed7cf4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 libgpgme installs a gpgme-config script, it should be tweaked using
 the <pkg>_CONFIG_SCRIPTS mechanism. This is generally useful and is
@@ -24,7 +24,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
-index a70ffcf11d..85450c83d2 100644
+index 03402cf382..4f9f9b0004 100644
 --- a/package/libgpgme/libgpgme.mk
 +++ b/package/libgpgme/libgpgme.mk
 @@ -12,6 +12,7 @@ LIBGPGME_LICENSE_FILES = COPYING.LESSER
