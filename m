@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 22:12:09 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] package/wine: host-wine
+Date: Sun, 16 Dec 2018 22:12:16 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/wine: host-wine
  also needs bison and flex
-Message-ID: <20181216210804.32F858B3C3@busybox.osuosl.org>
+Message-ID: <20181216210811.102928B470@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=da3092156ae35e93913de2f19b08f9a41dca452c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d59ecbbadfd0561d2efa46d4664ef8a299d5afab
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Just like the build of the target wine, the build of host wine also
 needs bison and flex, otherwise the build fails with:
@@ -33,7 +33,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index 36b3cfa7b3..2758ed73a5 100644
+index fa672f0c7a..06436cc175 100644
 --- a/package/wine/wine.mk
 +++ b/package/wine/wine.mk
 @@ -10,6 +10,7 @@ WINE_SITE = https://dl.winehq.org/wine/source/3.0
