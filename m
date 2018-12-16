@@ -1,105 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Dec 2018 15:09:32 +0100
-Subject: [Buildroot] [PATCH v3] package/openssh: Add tmpfiles.d snippet
- to create /var/empty
-In-Reply-To: <20180216181141.8893-1-chris.lesiak@licor.com>
-References: <20180206162102.4322-1-chris.lesiak@licor.com>
- <20180216181141.8893-1-chris.lesiak@licor.com>
-Message-ID: <20181216140932.GC2384@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 16 Dec 2018 15:13:38 +0100
+Subject: [Buildroot] Docker client does not function correctly in 2018.11
+In-Reply-To: <607d909eed104898b2e059e0326a4415@exitstrategytech.com> (David
+ J. Fogle's message of "Fri, 7 Dec 2018 16:19:04 +0000")
+References: <ac041379a2d04fbeb3900fae7bab51be@exitstrategytech.com>
+ <8dcf0b32c7fe49e8b30b10a482f3f23a@exitstrategytech.com>
+ <CA+h8R2pH=BTTh+farCMfJOW8dzYsUhN_ompMtc=Aaz4tQVbVXg@mail.gmail.com>
+ <5db9d4aa533e4e8590b5c33d2bb47665@exitstrategytech.com>
+ <p05ed2odjpa9vgdmd5cx9cew.1544054248971@email.android.com>
+ <CA+h8R2orLF5mjc6g8qDwG5Sh0WMXicnLb9DTB_qQiTBoJd45yA@mail.gmail.com>
+ <6e255ac5c09e4841ac67d6f383249556@exitstrategytech.com>
+ <99kkgapwmjckouvyyw5vo6pe.1544060571584@email.android.com>
+ <CA+h8R2oK2mPefnBQ9c-jd7m4Tc7=s-0nsCV965r9DpsVTULuaA@mail.gmail.com>
+ <ec3f3d11856642d09f7a59f5d1fe3dbd@exitstrategytech.com>
+ <CA+h8R2odgbjQYv2CbQBGCn-6mPcw3_AJoPuXhBdATVtmb5HpcQ@mail.gmail.com>
+ <d1afc122a10f4d4da893e5f9fc91bca3@exitstrategytech.com>
+ <ff88c64bc71a4a3e816cf4c90a501ec3@exitstrategytech.com>
+ <607d909eed104898b2e059e0326a4415@exitstrategytech.com>
+Message-ID: <877eg9blv1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Chris, All,
+>>>>> "David" == David J Fogle <Dave@exitstrategytech.com> writes:
 
-On 2018-02-16 12:11 -0600, Chris Lesiak spake thusly:
-> The openssh privilege separation feature, enabled by default,
-> requires that the path /var/empty exist; see README.privsep
-> included as part of the openssh distribution.
-> 
-> On a volatile or stateless system, that path might not exist.
-> Use systemd-tmpfiles (if enabled) to ensure that the path exists
-> and has the correct permissions.
-> 
-> Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
+ > I have replicated the working configuration from Christian's skiff
+ > branch for his SkiffOS into 2018.11, and the issue is 100% a version
+ > mismatch in the docker components. Backporting the docker versions
+ > from his build into 2018.11 should be sufficient to resolve the
+ > issues. Is this something that I can assist in? If so, how would I go
+ > about it?
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+I can reproduce it here as well. I have backported commit de336584d255bc
+(package/docker-engine: split docker-{cli, engine}, bump to v18.09.0) to
+2018.11.x, which fixes the issue for me.
 
-nd it does work currently, because openssh does create /var/empty at
-build time, except it may have incorrect rights). Care to add a
-follow-up patch that sets appropriate rights (with OPENSSH_PERMISSIONS),
-please?
-
-Note: currently, the rights *are* correct, because we enforce the umask,
-or because openssh' install procedure creates it correctly. But there is
-no guarantee that either will still be the case in the future (hint: the
-umask we may drop shortly!).
-
-Regards,
-Yann E. MORIN.
-
-> ---
-> Changes v2 --> v3
->   - Provide a more detailed explanation as suggested by
->     Arnout Vandecappelle<arnout@mind.be>.
->   - Only bother if BR2_PACKAGE_SYSTEMD_TMPFILES=y
-> Changes v1 --> v2
->   - Use 0755 as the permission of /var/empty as suggested by
->     Samual Martin <s.martin49@gmail.com> and the README.privsep
->     included with openssh-7.6p1.
-> ---
->  package/openssh/openssh.mk        | 8 ++++++++
->  package/openssh/ssh_tmpfiles.conf | 1 +
->  2 files changed, 9 insertions(+)
->  create mode 100644 package/openssh/ssh_tmpfiles.conf
-> 
-> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-> index 5d099ceb13..cdafdedae4 100644
-> --- a/package/openssh/openssh.mk
-> +++ b/package/openssh/openssh.mk
-> @@ -67,6 +67,13 @@ define OPENSSH_INSTALL_SYSTEMD_SYSUSERS
->  endef
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_SYSTEMD_TMPFILES),y)
-> +define OPENSSH_INSTALL_SYSTEMD_TMPFILES
-> +	$(INSTALL) -m 0644 -D package/openssh/ssh_tmpfiles.conf \
-> +		$(TARGET_DIR)/usr/lib/tmpfiles.d/ssh.conf
-> +endef
-> +endif
-> +
->  define OPENSSH_INSTALL_INIT_SYSTEMD
->  	$(INSTALL) -D -m 644 package/openssh/sshd.service \
->  		$(TARGET_DIR)/usr/lib/systemd/system/sshd.service
-> @@ -74,6 +81,7 @@ define OPENSSH_INSTALL_INIT_SYSTEMD
->  	ln -fs ../../../../usr/lib/systemd/system/sshd.service \
->  		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/sshd.service
->  	$(OPENSSH_INSTALL_SYSTEMD_SYSUSERS)
-> +	$(OPENSSH_INSTALL_SYSTEMD_TMPFILES)
->  endef
->  
->  define OPENSSH_INSTALL_INIT_SYSV
-> diff --git a/package/openssh/ssh_tmpfiles.conf b/package/openssh/ssh_tmpfiles.conf
-> new file mode 100644
-> index 0000000000..ca2a393542
-> --- /dev/null
-> +++ b/package/openssh/ssh_tmpfiles.conf
-> @@ -0,0 +1 @@
-> +d /var/empty 0755 root root
-> -- 
-> 2.14.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+This is be included in the upcoming 2018.11.1 release.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
