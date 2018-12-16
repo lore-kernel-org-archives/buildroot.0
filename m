@@ -1,55 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 16 Dec 2018 12:23:41 +0100
-Subject: [Buildroot] [PATCH] docker-compose: add patch to allow recent
- 2.x releases of python-requests
-In-Reply-To: <20181215152559.30518-1-peter@korsgaard.com>
-References: <20181215152559.30518-1-peter@korsgaard.com>
-Message-ID: <20181216122341.7f31297a@windsurf.home>
+Date: Sun, 16 Dec 2018 12:24:14 +0100
+Subject: [Buildroot] [git commit] package/hostapd: bump version to 2.7
+Message-ID: <20181216112350.1A343810D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=eb7489dc797e49a99563ffef02f5fd6de4b7d6af
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 15 Dec 2018 16:25:59 +0100, Peter Korsgaard wrote:
-> setup.py explicitly listed a maximum allowed version of python-requests,
-> causing runtime failures with the python-requests version we have:
-> 
-> Loaded image: docker-enp.bin.cloud.barco.com/eis/baseos-docker-snmp:0.1.0
-> Traceback (most recent call last):
->   File "/usr/bin/docker-compose", line 6, in <module>
->     from pkg_resources import load_entry_point
->   File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 3123, in <module>
->   File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 3107, in _call_aside
->   File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 3136, in _initialize_master_working_set
->   File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 580, in _build_master
->   File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 593, in _build_from_requirements
->   File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 781, in resolve
-> pkg_resources.DistributionNotFound: The 'requests!=2.11.0,!=2.12.2,!=2.18.0,<2.19,>=2.6.1' distribution was not found and is required by docker-compose
-> FAIL
-> 
-> Upstream regularly updates setup.py as new python-requests releases are
-> made, but it is unknown why new python-requests releases (which are supposed
-> to be backwards compatible) should not be allowed right away.
-> 
-> Add a path submitted upstream to only disallow new major versions, similar
-> to how the other dependencies are handled.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  ...py-allow-all-recent-2.x-requests-releases.patch | 34 ++++++++++++++++++++++
->  1 file changed, 34 insertions(+)
->  create mode 100644 package/docker-compose/0001-setup.py-allow-all-recent-2.x-requests-releases.patch
+Added license hash, removed patches included in new version.
 
-Applied to master, thanks. Maybe there should be a runtime test for
-this in our runtime testing infrastrucure ?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/hostapd/hostapd.hash | 5 ++---
+ package/hostapd/hostapd.mk   | 5 +----
+ 2 files changed, 3 insertions(+), 7 deletions(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/hostapd/hostapd.hash b/package/hostapd/hostapd.hash
+index 588879f65a..833c7aca02 100644
+--- a/package/hostapd/hostapd.hash
++++ b/package/hostapd/hostapd.hash
+@@ -1,5 +1,4 @@
+ # Locally calculated
+-sha256  01526b90c1d23bec4b0f052039cc4456c2fd19347b4d830d1d58a0a6aea7117d  hostapd-2.6.tar.gz
++sha256  21b0dda3cc3abe75849437f6b9746da461f88f0ea49dd621216936f87440a141  hostapd-2.7.tar.gz
+ sha256  e204da659d0583c71af23cb9b55536fe99598ee26a44104344f456e4d17350c6  rtlxdrv.patch
+-sha256  529113cc81256c6178f3c1cf25dd8d3f33e6d770e4a180bd31c6ab7e4917f40b  rebased-v2.6-0001-hostapd-Avoid-key-reinstallation-in-FT-handshake.patch
+-sha256  147c8abe07606905d16404fb2d2c8849796ca7c85ed8673c09bb50038bcdeb9e  rebased-v2.6-0005-Fix-PTK-rekeying-to-generate-a-new-ANonce.patch
++sha256  76eeecd8fc291a71f29189ea20e6a34387b8048a959cbc6a65c41b98194643a2  README
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index fa8226805d..0b3fa0646f 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -4,11 +4,8 @@
+ #
+ ################################################################################
+ 
+-HOSTAPD_VERSION = 2.6
++HOSTAPD_VERSION = 2.7
+ HOSTAPD_SITE = http://w1.fi/releases
+-HOSTAPD_PATCH = \
+-	http://w1.fi/security/2017-1/rebased-v2.6-0001-hostapd-Avoid-key-reinstallation-in-FT-handshake.patch \
+-	http://w1.fi/security/2017-1/rebased-v2.6-0005-Fix-PTK-rekeying-to-generate-a-new-ANonce.patch
+ HOSTAPD_SUBDIR = hostapd
+ HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
+ HOSTAPD_DEPENDENCIES = host-pkgconf
