@@ -1,54 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 21:19:48 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/libpjsip: add
- optional dependency on speex
-Message-ID: <20181216201831.644BC8651B@busybox.osuosl.org>
+Date: Sun, 16 Dec 2018 21:01:24 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/asterisk: libsrtp
+ needs openssl
+Message-ID: <20181216201831.56DAA8651B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00ad41c674380e3fa5159d876930423beb07a485
+commit: https://git.buildroot.net/buildroot/commit/?id=14a72e5ed3f69a82d139a438bdc3e5a08287bcf3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+
+Fixes configure error
+
+checking for the ability of -lsrtp2 to be linked in a shared object... yes
+checking for srtp_crypto_policy_set_aes_cm_256_hmac_sha1_80 in -lsrtp2... yes
+checking for srtp_crypto_policy_set_aes_cm_192_hmac_sha1_80 in -lsrtp2... no
+checking for srtp_crypto_policy_set_aes_gcm_128_8_auth in -lsrtp2... no
+checking for srtp_shutdown in -lsrtp2... yes
+checking for srtp2/srtp.h... (cached) yes
+configure: WARNING: ***
+configure: WARNING: *** OpenSSL required when using libsrtp2, checking for libsrtp instead.
+configure: WARNING: ***
+
+using this defconfig:
+
+BR2_PACKAGE_LIBSRTP=y
+BR2_PACKAGE_ASTERISK=y
+
+Please note that openssl support in libsrtp is not available for static
+builds:
+https://git.buildroot.net/buildroot/tree/package/libsrtp/libsrtp.mk#n27
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b9c6b38f2a2a43900d899af356415eea746157c8)
+(cherry picked from commit c48bff9da6101bff35ff420030e5ab2c430352b4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libpjsip/libpjsip.mk | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ package/asterisk/asterisk.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index b3c439d51c..f4a57965b8 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
-@@ -27,8 +27,6 @@ LIBPJSIP_CONF_ENV = \
- LIBPJSIP_CONF_OPTS = \
- 	--disable-sound \
- 	--disable-gsm-codec \
--	--disable-speex-codec \
--	--disable-speex-aec \
- 	--disable-resample \
- 	--disable-video \
- 	--disable-opencore-amr \
-@@ -63,6 +61,18 @@ else
- LIBPJSIP_CONF_OPTS += --disable-ssl
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index 4ed85743b0..6de498ed07 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -242,7 +242,8 @@ else
+ ASTERISK_CONF_OPTS += --without-speex  --without-speexdsp
  endif
  
-+ifeq ($(BR2_PACKAGE_SPEEX)$(BR2_PACKAGE_SPEEXDSP),yy)
-+LIBPJSIP_CONF_OPTS += \
-+	--enable-speex-aec \
-+	--enable-speex-codec \
-+	--with-external-speex
-+LIBPJSIP_DEPENDENCIES += speex speexdsp
-+else
-+LIBPJSIP_CONF_OPTS += \
-+	--disable-speex-aec \
-+	--disable-speex-codec
-+endif
-+
- ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
- LIBPJSIP_DEPENDENCIES += util-linux
- endif
+-ifeq ($(BR2_PACKAGE_LIBSRTP),y)
++# asterisk needs an openssl-enabled libsrtp
++ifeq ($(BR2_PACKAGE_LIBSRTP)$(BR2_PACKAGE_OPENSSL)x$(BR2_STATIC_LIBS),yyx)
+ ASTERISK_DEPENDENCIES += libsrtp
+ ASTERISK_CONF_OPTS += --with-srtp
+ else
