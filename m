@@ -1,128 +1,48 @@
-From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
-Date: Sun, 16 Dec 2018 16:58:34 +0800
-Subject: [Buildroot] [PATCH v2 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 18.3.1
-Message-ID: <1544950714-19774-1-git-send-email-james.hilliard1@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 16 Dec 2018 10:37:32 +0100
+Subject: [Buildroot] [PATCH 1/1] php: fix curl build with pkgconf 1.5.3
+Message-ID: <20181216093732.30482-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: James Hilliard <james.hilliard1@gmail.com>
+Build fails because PKG_NAME is set to the full path of libcurl.pc:
+checking for libcurl.pc... using /home/dawncrow/buildroot-test/scripts/instance-0/output/host/mips64el-buildroot-linux-gnu/sysroot/usr/lib/pkgconfig/libcurl.pc
 
-Backport patch needed to fix error: ?NULL? undeclared
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Then, when checking version, pkg-config prepends $(sysroot), which will
+fails with the following error:
+checking for cURL 7.10.5 or greater... Package
+/home/dawncrow/buildroot-test/scripts/instance-0/output/host/bin/../mips64el-buildroot-linux-gnu/sysroot/home/dawncrow/buildroot-test/scripts/instance-0/output/host/mips64el-buildroot-linux-gnu/sysroot/usr/lib/pkgconfig/libcurl.pc was not found in the pkg-config search path.
+Perhaps you should add the directory containing `/home/dawncrow/buildroot-test/scripts/instance-0/output/host/bin/../mips64el-buildroot-linux-gnu/sysroot/home/dawncrow/buildroot-test/scripts/instance-0/output/host/mips64el-buildroot-linux-gnu/sysroot/usr/lib/pkgconfig/libcurl.pc.pc' to the PKG_CONFIG_PATH environment variable
+
+To fix this error, remove curl directory path from --with-curl to use
+the default libcurl.pc name.
+It should be noted that the next php version will remove this
+possibility, see:
+https://github.com/php/php-src/commit/78e4f047525268278ffe497a162d0d279999c8c2
+
+Fixes:
+ - http://autobuild.buildroot.org/results/c80792f871f2c5f02fe3faa1fc654fef760b8e2b
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2:
-  - bump mesa3d-headers
-  - add notes to backported patch
+ package/php/php.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/mesa3d-headers/mesa3d-headers.mk           |  2 +-
- ...d-missing-include-stddef.h-in-egldevice.h.patch | 48 ++++++++++++++++++++++
- package/mesa3d/mesa3d.hash                         | 10 ++---
- package/mesa3d/mesa3d.mk                           |  2 +-
- 4 files changed, 55 insertions(+), 7 deletions(-)
- create mode 100644 package/mesa3d/0004-egl-add-missing-include-stddef.h-in-egldevice.h.patch
-
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index eba9ee6..710cebe 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
+diff --git a/package/php/php.mk b/package/php/php.mk
+index b95ceb5c9d..338361f58a 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -259,7 +259,7 @@ endif
+ endif
  
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 18.3.0
-+MESA3D_HEADERS_VERSION = 18.3.1
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/0004-egl-add-missing-include-stddef.h-in-egldevice.h.patch b/package/mesa3d/0004-egl-add-missing-include-stddef.h-in-egldevice.h.patch
-new file mode 100644
-index 0000000..56f94bc
---- /dev/null
-+++ b/package/mesa3d/0004-egl-add-missing-include-stddef.h-in-egldevice.h.patch
-@@ -0,0 +1,48 @@
-+From eb44c36cf1729e7e200b77cf8ea755dff72d1639 Mon Sep 17 00:00:00 2001
-+From: Gurchetan Singh <gurchetansingh@chromium.org>
-+Date: Wed, 28 Nov 2018 08:39:34 -0800
-+Subject: [PATCH] egl: add missing #include <stddef.h> in egldevice.h
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Otherwise, I get this error:
-+
-+main/egldevice.h:54:13: error: ?NULL? undeclared (first use in this function)
-+       dev = NULL;
-+             ^~~~
-+with this config:
-+
-+./autogen.sh --enable-gles1 --enable-gles2 --with-platforms='surfaceless' --disable-glx
-+             --with-dri-drivers="i965" --with-gallium-drivers="" --enable-gbm
-+
-+v3: Use stddef.h (Matt)
-+v4: Modify commit message (Eric)
-+
-+Reviewed-by: Matt Turner <mattst88@gmail.com>
-+Reviewed-by: Eric Engestrom <eric.engestrom@intel.com>
-+---
-+Backported from upstream commit eb44c36cf1729e7e200b77cf8ea755dff72d1639
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+---
-+ src/egl/main/egldevice.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/egl/main/egldevice.h b/src/egl/main/egldevice.h
-+index ddcdcd1..83a47d5 100644
-+--- a/src/egl/main/egldevice.h
-++++ b/src/egl/main/egldevice.h
-+@@ -31,9 +31,9 @@
-+ 
-+ 
-+ #include <stdbool.h>
-++#include <stddef.h>
-+ #include "egltypedefs.h"
-+ 
-+-
-+ #ifdef __cplusplus
-+ extern "C" {
-+ #endif
-+-- 
-+2.7.4
-+
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 563ac62..68ec1ec 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,7 +1,7 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2018-December/000482.html
--md5 2d69eff8fe0c6e89bb793d4fd69b750d  mesa-18.3.0.tar.xz
--sha1 d4ddc4e7aa8e11a41d35b5d51476f867e81056ca  mesa-18.3.0.tar.xz
--sha256 b63f947e735d6ef3dfaa30c789a9adfbae18aea671191eaacde95a18c17fc38a  mesa-18.3.0.tar.xz
--sha512 6643d8a100c50efee7178fe950e7cccad24c3a98538d3a13c7c6570add30a56776b4e5f279e2b0a20c4038e682e9461ca5a4fd4ac23a7f60d2f4a0c972525c42  mesa-18.3.0.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2018-December/000484.html
-+md5 d60828056d77bfdbae0970f9b15fb1be  mesa-18.3.1.tar.xz
-+sha1 50ba2d37647fea77ea19416e8a6ffed34c313330  mesa-18.3.1.tar.xz
-+sha256 5b1f827d28684a25f6657289f8b7d47ac56395988c7ac23e0ec9a62b644bdc63  mesa-18.3.1.tar.xz
-+sha512 a68d39158cf1e868d70730d0641a0cfe4c6e5b3cd1bc0c47f54022402aca03503933084f6ddc722bf88c9b6d1281ba5c847ec4fed8092a9b33f90527d08e12db  mesa-18.3.1.tar.xz
- # License
- sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index f3ee69b..2fe46bd 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+ ifeq ($(BR2_PACKAGE_PHP_EXT_CURL),y)
+-PHP_CONF_OPTS += --with-curl=$(STAGING_DIR)/usr
++PHP_CONF_OPTS += --with-curl
+ PHP_DEPENDENCIES += libcurl
+ endif
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 18.3.0
-+MESA3D_VERSION = 18.3.1
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-2.7.4
+2.14.1
