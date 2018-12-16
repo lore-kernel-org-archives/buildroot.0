@@ -1,53 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 16:05:35 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] package/pps-tools: bump
- version to fix usage without bash
-Message-ID: <20181216151019.381F3868F3@busybox.osuosl.org>
+Date: Sun, 16 Dec 2018 16:09:16 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] package/prosody: fix
+ runtime dependencies
+Message-ID: <20181216151019.3F23B868F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63aa30503edd7f78d54c3e8f75f8a718be20fdb8
+commit: https://git.buildroot.net/buildroot/commit/?id=a63484580afbe48eab3b77cef094b22930be28c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
-As reported in bug #11426, the ppsfind shell script uses /bin/bash,
-but the Buildroot pps-tools package doesn't depend on bash. In fact,
-upstream has fixed the problem, and the script can now be used with a
-POSIX shell, and the shebang is /bin/sh.
+prosody is not available for Lua 5.3, but only 5.1 & 5.2.
 
-This commit therefore bumps pps-tools to the latest upstream commit,
-which is precisely this fix.
+prosody needs the module BitOp which is included in LuaJIT
 
-Fixes bug #11426.
-
+note: the actual config is working only LuaJIT
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5c89726d9fe5072dc92bf2c407bd5aebff2703d2)
+(cherry picked from commit 768a9b9dd7ef0d2e1bc35e41352f0df6daf59d46)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pps-tools/pps-tools.hash | 2 +-
- package/pps-tools/pps-tools.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/prosody/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/pps-tools/pps-tools.hash b/package/pps-tools/pps-tools.hash
-index da7bce45bf..1e54c29463 100644
---- a/package/pps-tools/pps-tools.hash
-+++ b/package/pps-tools/pps-tools.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 eee0a76118cf11d94f575ee43804a6991379f2c734b400ba01ac4811d0498e97  pps-tools-47333f24af878f67ce48022e8af16419713aa1ac.tar.gz
-+sha256 1168f1474235017af413afdb07288303ad7a7b12a0282f3bf9ed0e22fe0d7d2e  pps-tools-e2b25049df9a4da28168b7378016f1650d0dfa6b.tar.gz
-diff --git a/package/pps-tools/pps-tools.mk b/package/pps-tools/pps-tools.mk
-index 37bb7e1f8c..2d82cf7dad 100644
---- a/package/pps-tools/pps-tools.mk
-+++ b/package/pps-tools/pps-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PPS_TOOLS_VERSION = 47333f24af878f67ce48022e8af16419713aa1ac
-+PPS_TOOLS_VERSION = e2b25049df9a4da28168b7378016f1650d0dfa6b
- PPS_TOOLS_SITE = $(call github,ago,pps-tools,$(PPS_TOOLS_VERSION))
- PPS_TOOLS_INSTALL_STAGING = YES
- PPS_TOOLS_LICENSE = GPL-2.0+
+diff --git a/package/prosody/Config.in b/package/prosody/Config.in
+index 133b0b1343..c32ca20e23 100644
+--- a/package/prosody/Config.in
++++ b/package/prosody/Config.in
+@@ -2,7 +2,9 @@ config BR2_PACKAGE_PROSODY
+ 	bool "prosody"
+ 	depends on BR2_USE_MMU # fork
+ 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
++	depends on !BR2_PACKAGE_LUA_5_3
+ 	depends on !BR2_STATIC_LIBS # luaexpat, luasec, luasocket, luafilesystem
++	select BR2_PACKAGE_LUABITOP if !BR2_PACKAGE_LUAJIT # runtime
+ 	select BR2_PACKAGE_LUAEXPAT # runtime
+ 	select BR2_PACKAGE_LUASEC # runtime
+ 	select BR2_PACKAGE_LUASOCKET # runtime
+@@ -19,3 +21,6 @@ config BR2_PACKAGE_PROSODY
+ comment "prosody needs the lua interpreter, dynamic library"
+ 	depends on !BR2_PACKAGE_HAS_LUAINTERPRETER || BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU
++
++comment "prosody needs a Lua 5.1/5.2 interpreter"
++	depends on BR2_PACKAGE_LUA_5_3
