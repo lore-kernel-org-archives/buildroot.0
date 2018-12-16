@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 15:51:19 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] package/libiscsi: fix
+Date: Sun, 16 Dec 2018 15:51:03 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/libiscsi: fix
  build due to warnings
-Message-ID: <20181216144805.E54E18CA71@busybox.osuosl.org>
+Message-ID: <20181216144829.A86918D6F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=69f332f270b1d47f8306198a4c54bdefc44eb169
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=503c4ac3d848bf929a951bfd8147c610b636c3c4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Fixes:
     http://autobuild.buildroot.org/results/55b/55bf50fc7dcd465b71b5757434887dd3d0b25abc/
