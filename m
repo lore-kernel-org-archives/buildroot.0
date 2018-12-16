@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 22:37:59 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] package/webkitgtk:
+Date: Sun, 16 Dec 2018 22:38:07 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/webkitgtk:
  security bump to version 2.22.5
-Message-ID: <20181216213355.4B81B8D5B6@busybox.osuosl.org>
+Message-ID: <20181216213405.C6BD08D5B6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ac948c8607b3a611077e989307b83b539afc16a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=cf13e303930488affdadb1a1736b127ef9232fc6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 This is a maintenance release of the current stable WebKitGTK+ version,
 which contains security fixes for CVE identifiers: CVE-2018-4437,
