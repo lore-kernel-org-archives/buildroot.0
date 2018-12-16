@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 21:20:34 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] package/libpjsip: add
+Date: Sun, 16 Dec 2018 21:20:16 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/libpjsip: add
  optional dependency on libgsm
-Message-ID: <20181216201824.3BD0085434@busybox.osuosl.org>
+Message-ID: <20181216201831.6B4C78B638@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0fcff1c6c8d92aa7d673b98260820f14d9ee4d46
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9c3d2fefdd0647bba403d6c6cfd72b6c2923693b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
