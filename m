@@ -1,32 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 22:27:14 +0100
-Subject: [Buildroot] [PATCH] boot/grub: fix grub-mkimage with binutils
- >= 2.31
-In-Reply-To: <1544694457-13704-1-git-send-email-romain.naour@smile.fr> (Romain
- Naour's message of "Thu, 13 Dec 2018 10:47:37 +0100")
-References: <1544694457-13704-1-git-send-email-romain.naour@smile.fr>
-Message-ID: <87pnu15fil.fsf@dell.be.48ers.dk>
+Date: Sun, 16 Dec 2018 22:28:10 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/libgpgme:
+ properly tweak gpgme-config
+Message-ID: <20181216212408.05F8F8B5D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=10ee74f5e94f61a2ef53a35cf311debb53a99516
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
- > While using pc_x86_64_efi_defconfig with a bleeding-edge x86_64 toolchain
- > based on binutils 2.31, the grub-mkimage command return this error:
+libgpgme installs a gpgme-config script, it should be tweaked using
+the <pkg>_CONFIG_SCRIPTS mechanism. This is generally useful and is
+going to be particularly important with per-package directories.
 
- > grub-mkimage: error: relocation 0x4 is not implemented yet.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 3df53aa11dce9f80a2f97709c3a7056af4d13439)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libgpgme/libgpgme.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
- > Backport an upstream patch [1] as suggested on openembedded mailing list [2].
-
- > [1] http://git.savannah.gnu.org/cgit/grub.git/commit/?id=842c390469e2c2e10b5aa36700324cd3bde25875
- > [2] http://lists.openembedded.org/pipermail/openembedded-core/2018-July/153054.html
-
- > Signed-off-by: Romain Naour <romain.naour@smile.fr>
-
-Committed to 2018.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
+index a70ffcf11d..85450c83d2 100644
+--- a/package/libgpgme/libgpgme.mk
++++ b/package/libgpgme/libgpgme.mk
+@@ -12,6 +12,7 @@ LIBGPGME_LICENSE_FILES = COPYING.LESSER
+ LIBGPGME_INSTALL_STAGING = YES
+ LIBGPGME_DEPENDENCIES = libassuan libgpg-error
+ LIBGPGME_LANGUAGE_BINDINGS = cl
++LIBGPGME_CONFIG_SCRIPTS = gpgme-config
+ 
+ LIBGPGME_CONF_OPTS = \
+ 	--with-gpg-error-prefix=$(STAGING_DIR)/usr \
