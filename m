@@ -1,94 +1,41 @@
-From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
-Date: Mon, 17 Dec 2018 07:14:22 +0800
-Subject: [Buildroot] [PATCH v3 1/1] package/meson: fix cpu_family format
-Message-ID: <1545002062-20630-1-git-send-email-james.hilliard1@gmail.com>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Sun, 16 Dec 2018 18:27:34 -0500
+Subject: [Buildroot] [PATCH v3 2/2] prerequisite.txt: Bump python dependency
+ to 2.7
+In-Reply-To: <20181216232734.100068-1-aduskett@gmail.com>
+References: <20181216232734.100068-1-aduskett@gmail.com>
+Message-ID: <20181216232734.100068-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: James Hilliard <james.hilliard1@gmail.com>
+From: Adam Duskett <Aduskett@gmail.com>
 
-Meson expects the cpu_family to be in a specific format for
-cross compilation, otherwise packages that use cpu_family
-detection may fail to build.
-
-We also need to set needs_exe_wrapper = true to ensure that
-meson won't try and execute test binaries.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
 Changes v1 -> v2:
-  - change riscv to 64 bit
+  - Added this patch to the patch series.
 
 Changes v2 -> v3:
-  - combine HOST_MESON_TARGET_CPU_FAMILY archs
----
- package/meson/cross-compilation.conf.in |  1 +
- package/meson/meson.mk                  | 31 ++++++++++++++++++++++++++++++-
- 2 files changed, 31 insertions(+), 1 deletion(-)
+  - None.
 
-diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
-index 0eec740..fc8e27f 100644
---- a/package/meson/cross-compilation.conf.in
-+++ b/package/meson/cross-compilation.conf.in
-@@ -11,6 +11,7 @@ strip = '@TARGET_CROSS at strip'
- pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
- 
- [properties]
-+needs_exe_wrapper = true
- c_args = [@TARGET_CFLAGS@]
- c_link_args = [@TARGET_LDFLAGS@]
- cpp_args = [@TARGET_CXXFLAGS@]
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index e1675c2..1113bf0 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -16,6 +16,35 @@ HOST_MESON_NEEDS_HOST_PYTHON = python3
- HOST_MESON_TARGET_ENDIAN = $(call LOWERCASE,$(BR2_ENDIAN))
- HOST_MESON_TARGET_CPU = $(GCC_TARGET_CPU)
- 
-+# https://mesonbuild.com/Reference-tables.html#cpu-families
-+ifeq ($(BR2_arcle)$(BR2_arceb),y)
-+HOST_MESON_TARGET_CPU_FAMILY = arc
-+else ifeq ($(BR2_arm)$(BR2_armeb),y)
-+HOST_MESON_TARGET_CPU_FAMILY = arm
-+else ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
-+HOST_MESON_TARGET_CPU_FAMILY = aarch64
-+else ifeq ($(BR2_i386),y)
-+HOST_MESON_TARGET_CPU_FAMILY = x86
-+else ifeq ($(BR2_mips)$(BR2_mipsel),y)
-+HOST_MESON_TARGET_CPU_FAMILY = mips
-+else ifeq ($(BR2_mips64)$(BR2_mips64el),y)
-+HOST_MESON_TARGET_CPU_FAMILY = mips64
-+else ifeq ($(BR2_powerpc),y)
-+HOST_MESON_TARGET_CPU_FAMILY = ppc
-+else ifeq ($(BR2_powerpc64)$(BR2_powerpc64le),y)
-+HOST_MESON_TARGET_CPU_FAMILY = ppc64
-+else ifeq ($(BR2_riscv),y)
-+HOST_MESON_TARGET_CPU_FAMILY = riscv64
-+else ifeq ($(BR2_sparc),y)
-+HOST_MESON_TARGET_CPU_FAMILY = sparc
-+else ifeq ($(BR2_sparc64),y)
-+HOST_MESON_TARGET_CPU_FAMILY = sparc64
-+else ifeq ($(BR2_x86_64),y)
-+HOST_MESON_TARGET_CPU_FAMILY = x86_64
-+else
-+HOST_MESON_TARGET_CPU_FAMILY = $(ARCH)
-+endif
-+
- HOST_MESON_SED_CFLAGS = $(if $(TARGET_CFLAGS),`printf '"%s"$(comma) ' $(TARGET_CFLAGS)`)
- HOST_MESON_SED_LDFLAGS = $(if $(TARGET_LDFLAGS),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
- HOST_MESON_SED_CXXFLAGS = $(if $(TARGET_CXXFLAGS),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
-@@ -23,7 +52,7 @@ HOST_MESON_SED_CXXFLAGS = $(if $(TARGET_CXXFLAGS),`printf '"%s"$(comma) ' $(TARG
- define HOST_MESON_INSTALL_CROSS_CONF
- 	mkdir -p $(HOST_DIR)/etc/meson
- 	sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
--	    -e "s%@TARGET_ARCH@%$(ARCH)%g" \
-+	    -e "s%@TARGET_ARCH@%$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
- 	    -e "s%@TARGET_CPU@%$(HOST_MESON_TARGET_CPU)%g" \
- 	    -e "s%@TARGET_ENDIAN@%$(HOST_MESON_TARGET_ENDIAN)%g" \
- 	    -e "s%@TARGET_CFLAGS@%$(HOST_MESON_SED_CFLAGS)%g" \
+ docs/manual/prerequisite.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
+index 66e1b88f16..dcd3fd255e 100644
+--- a/docs/manual/prerequisite.txt
++++ b/docs/manual/prerequisite.txt
+@@ -32,7 +32,7 @@ between distributions).
+ ** +perl+ (version 5.8.7 or any later)
+ ** +tar+
+ ** +cpio+
+-** +python+ (version 2.6 or any later)
++** +python+ (version 2.7 or any later)
+ ** +unzip+
+ ** +rsync+
+ ** +file+ (must be in +/usr/bin/file+)
 -- 
-2.7.4
+2.19.2
