@@ -1,85 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 16 Dec 2018 21:59:13 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/meson: fix cpu_family format
-In-Reply-To: <1544948097-2389-1-git-send-email-james.hilliard1@gmail.com>
-References: <1544948097-2389-1-git-send-email-james.hilliard1@gmail.com>
-Message-ID: <20181216215913.741c549f@windsurf.home>
+Date: Sun, 16 Dec 2018 21:59:37 +0100
+Subject: [Buildroot] [git commit] package/python-engineio: bump to version
+ 3.1.0
+Message-ID: <20181216205537.3C96F8D5AC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello James,
+commit: https://git.buildroot.net/buildroot/commit/?id=a729325e12d60951dd576ef862f71446541a2c55
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I would really like to have some feedback/Acked-by from Eric on a patch
-like this. Some comments below.
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-engineio/python-engineio.hash | 4 ++--
+ package/python-engineio/python-engineio.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On Sun, 16 Dec 2018 16:14:57 +0800, james.hilliard1 at gmail.com wrote:
-> From: James Hilliard <james.hilliard1@gmail.com>
-> 
-> Meson expects the cpu_family to be in a specific format for
-> cross compilation, otherwise packages that use cpu_family
-> detection may fail to build.
-> 
-> We also need to set needs_exe_wrapper = true to ensure that
-> meson won't try and execute test binaries.
-
-This needs_exe_wrapper change seems unrelated, it should be part of a
-separate patch.
-
-> +# https://mesonbuild.com/Reference-tables.html#cpu-families
-> +ifeq ($(BR2_arcle),y)
-> +HOST_MESON_TARGET_CPU_FAMILY = arc
-> +else ifeq ($(BR2_arceb),y)
-> +HOST_MESON_TARGET_CPU_FAMILY = arc
-
-This can be written like this:
-
-ifeq ($(BR2_arcle)$(BR2_arceb),y)
-HOST_MESON_TARGET_CPU_FAMILY = arc
-
-
-> +else ifeq ($(BR2_arm),y)
-> +HOST_MESON_TARGET_CPU_FAMILY = arm
-> +else ifeq ($(BR2_armeb),y)
-> +HOST_MESON_TARGET_CPU_FAMILY = arm
-
-Ditto for arm/armeb
-
-> +else ifeq ($(BR2_aarch64),y)
-> +HOST_MESON_TARGET_CPU_FAMILY = aarch64
-> +else ifeq ($(BR2_aarch64_be),y)
-> +HOST_MESON_TARGET_CPU_FAMILY = aarch64
-
-Ditto.
-
-> +else ifeq ($(BR2_i386),y)
-> +HOST_MESON_TARGET_CPU_FAMILY = x86
-> +else ifeq ($(BR2_mips),y)
-> +HOST_MESON_TARGET_CPU_FAMILY = mips
-> +else ifeq ($(BR2_mipsel),y)
-> +HOST_MESON_TARGET_CPU_FAMILY = mips
-
-Ditto.
-
-> +else ifeq ($(BR2_mips64),y)
-> +HOST_MESON_TARGET_CPU_FAMILY = mips64
-> +else ifeq ($(BR2_mips64el),y)
-> +HOST_MESON_TARGET_CPU_FAMILY = mips64
-> +else ifeq ($(BR2_powerpc),y)
-> +HOST_MESON_TARGET_CPU_FAMILY = ppc
-> +else ifeq ($(BR2_powerpc64),y)
-> +HOST_MESON_TARGET_CPU_FAMILY = ppc64
-> +else ifeq ($(BR2_powerpc64le),y)
-> +HOST_MESON_TARGET_CPU_FAMILY = ppc64
-
-Ditto.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-engineio/python-engineio.hash b/package/python-engineio/python-engineio.hash
+index 7a9a1fdad0..47e2333ecd 100644
+--- a/package/python-engineio/python-engineio.hash
++++ b/package/python-engineio/python-engineio.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/python-engineio/json
+-md5	a7930cb8bf957f1b12e1a21ae5b57982  python-engineio-3.0.0.tar.gz
+-sha256	bb8b5888adb852614b4b1861586ee7d89145cbd2ebba03ed7043e64c029bbb3b  python-engineio-3.0.0.tar.gz
++md5	3e2428aa3b9ba1d1ff5b6bff2c306e7e  python-engineio-3.1.0.tar.gz
++sha256	d7341725001afded65e42620e26adc54a450cf4082dd54a407480cb9a64fcdf9  python-engineio-3.1.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
+diff --git a/package/python-engineio/python-engineio.mk b/package/python-engineio/python-engineio.mk
+index 9bda632661..f31b948e3c 100644
+--- a/package/python-engineio/python-engineio.mk
++++ b/package/python-engineio/python-engineio.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-PYTHON_ENGINEIO_VERSION = 3.0.0
+-PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/51/a4/1642a75f1206a14e9a75f286d38b1794b13e9ee3169f57cb939cb99ffea3
++PYTHON_ENGINEIO_VERSION = 3.1.0
++PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/25/37/57dc050723f3e64a0a652711b3831263d99f5ade2e05e5d6038354be7eaa
+ PYTHON_ENGINEIO_SETUP_TYPE = setuptools
+ PYTHON_ENGINEIO_LICENSE = MIT
+ PYTHON_ENGINEIO_LICENSE_FILES = LICENSE
