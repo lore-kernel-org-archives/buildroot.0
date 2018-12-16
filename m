@@ -1,46 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 20:45:42 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x]
- support/download/dl-wrapper: fix urlencode option never being sent to
- backend
-Message-ID: <20181216194333.B17638D4AF@busybox.osuosl.org>
+Date: Sun, 16 Dec 2018 20:47:31 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/proftpd: fix
+ typoes in Config.in help texts
+Message-ID: <20181216194333.B81088D4AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e38dbeab1ae774fa048d87ae1d12ac4aa02841e
+commit: https://git.buildroot.net/buildroot/commit/?id=f8763f5b577388222af6b15d8da04f91fd3c6ee8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
-Since commit 38de434123 ("download: fix file:// BR2_PRIMARY_SITE
-(download cache)"), the urlencode option is no longer passed to the
-download backend, because we use ${backend} instead of
-${backend_urlencode}.
+mode_ -> mod_
 
-We must get the urlencode information from backend_urlencode.
-
-Signed-off-by: Damien Th??bault <damien.thebault@vitec.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[Thomas: rework commit log]
+Reported-by: Jared Bents <jared.bents@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-(cherry picked from commit bb7c13273fbe2da0969e14ddfd61a46b78d79db2)
+(cherry picked from commit 68a416f9a2b55a57638af0263eaa1faec0cb15ce)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/download/dl-wrapper | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/proftpd/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
-index bb70c98253..3315bd410e 100755
---- a/support/download/dl-wrapper
-+++ b/support/download/dl-wrapper
-@@ -93,7 +93,7 @@ main() {
-         esac
-         uri=${uri#*+}
+diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
+index b615a5ff4c..434dbb8bbf 100644
+--- a/package/proftpd/Config.in
++++ b/package/proftpd/Config.in
+@@ -29,12 +29,12 @@ config BR2_PACKAGE_PROFTPD_MOD_SFTP
+ config BR2_PACKAGE_PROFTPD_MOD_SQL
+ 	bool "mod_sql support"
+ 	help
+-	  Compile ProFTPD with mode_sql support.
++	  Compile ProFTPD with mod_sql support.
  
--        urlencode=${backend#*|}
-+        urlencode=${backend_urlencode#*|}
-         # urlencode must be "urlencode"
-         [ "${urlencode}" != "urlencode" ] && urlencode=""
- 
+ config BR2_PACKAGE_PROFTPD_MOD_QUOTATAB
+ 	bool "mod_quotatab support"
+ 	help
+-	  Compile ProFTPD with mode_quotatab support. This module
++	  Compile ProFTPD with mod_quotatab support. This module
+ 	  is required in order to support quota tables:
+ 	        1. mod_quotatab_file
+ 	        2. mod_quotatab_ldap
