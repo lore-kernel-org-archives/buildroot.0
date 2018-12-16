@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 15:25:08 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/gnutls: give
+Date: Sun, 16 Dec 2018 15:24:47 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] package/gnutls: give
  library a default trust location
-Message-ID: <20181216142136.80AF0867A5@busybox.osuosl.org>
+Message-ID: <20181216142141.E82D2867A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a32df40af6638e6bc5fb5d93db01539ac781290d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a0fb5aa397b8fac509f51cb008d0fd5cf4285d34
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 Gnutls is building with no default location to look for CA certs.  Since
 there are buildroot packages to provide these, configure it to use them
@@ -37,10 +37,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 7 insertions(+)
 
 diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 1cf1f281fa..1d8071a405 100644
+index 18af684376..7492254e8c 100644
 --- a/package/gnutls/gnutls.mk
 +++ b/package/gnutls/gnutls.mk
-@@ -82,4 +82,11 @@ else
+@@ -95,4 +95,11 @@ else
  GNUTLS_CONF_OPTS += --without-zlib
  endif
  
