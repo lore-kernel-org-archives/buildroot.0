@@ -1,43 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 20:47:31 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/proftpd: fix
- typoes in Config.in help texts
-Message-ID: <20181216194333.B81088D4AF@busybox.osuosl.org>
+Date: Sun, 16 Dec 2018 21:02:43 +0100
+Subject: [Buildroot] [PATCH v3 2/9] package/asterisk: libsrtp needs
+ openssl
+In-Reply-To: <20181209222449.3db04bd8@windsurf> (Thomas Petazzoni's message of
+ "Sun, 9 Dec 2018 22:24:49 +0100")
+References: <20181014090202.31122-1-bernd.kuhls@t-online.de>
+ <20181014090202.31122-2-bernd.kuhls@t-online.de>
+ <20181209222449.3db04bd8@windsurf>
+Message-ID: <871s6h8ckc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f8763f5b577388222af6b15d8da04f91fd3c6ee8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-mode_ -> mod_
+ > On Sun, 14 Oct 2018 11:01:54 +0200, Bernd Kuhls wrote:
+ >> Fixes configure error
+ >> 
+ >> checking for the ability of -lsrtp2 to be linked in a shared object... yes
+ >> checking for srtp_crypto_policy_set_aes_cm_256_hmac_sha1_80 in -lsrtp2... yes
+ >> checking for srtp_crypto_policy_set_aes_cm_192_hmac_sha1_80 in -lsrtp2... no
+ >> checking for srtp_crypto_policy_set_aes_gcm_128_8_auth in -lsrtp2... no
+ >> checking for srtp_shutdown in -lsrtp2... yes
+ >> checking for srtp2/srtp.h... (cached) yes
+ >> configure: WARNING: ***
+ >> configure: WARNING: *** OpenSSL required when using libsrtp2, checking for libsrtp instead.
+ >> configure: WARNING: ***
+ >> 
+ >> using this defconfig:
+ >> 
+ >> BR2_PACKAGE_LIBSRTP=y
+ >> BR2_PACKAGE_ASTERISK=y
+ >> 
+ >> Please note that openssl support in libsrtp is not available for static
+ >> builds:
+ >> https://git.buildroot.net/buildroot/tree/package/libsrtp/libsrtp.mk#n27
+ >> 
+ >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ >> ---
+ >> v3: no changes
+ >> v2: Added comment in commit log about libsrtp dependencies (Thomas)
 
-Reported-by: Jared Bents <jared.bents@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 68a416f9a2b55a57638af0263eaa1faec0cb15ce)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/proftpd/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Committed to 2018.11.x, thanks.
 
-diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
-index b615a5ff4c..434dbb8bbf 100644
---- a/package/proftpd/Config.in
-+++ b/package/proftpd/Config.in
-@@ -29,12 +29,12 @@ config BR2_PACKAGE_PROFTPD_MOD_SFTP
- config BR2_PACKAGE_PROFTPD_MOD_SQL
- 	bool "mod_sql support"
- 	help
--	  Compile ProFTPD with mode_sql support.
-+	  Compile ProFTPD with mod_sql support.
- 
- config BR2_PACKAGE_PROFTPD_MOD_QUOTATAB
- 	bool "mod_quotatab support"
- 	help
--	  Compile ProFTPD with mode_quotatab support. This module
-+	  Compile ProFTPD with mod_quotatab support. This module
- 	  is required in order to support quota tables:
- 	        1. mod_quotatab_file
- 	        2. mod_quotatab_ldap
+-- 
+Bye, Peter Korsgaard
