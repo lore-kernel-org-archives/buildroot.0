@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 22:15:57 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] package/sdl2_net: add
+Date: Sun, 16 Dec 2018 22:16:11 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/sdl2_net: add
  missing host-pkgconf dependency
-Message-ID: <20181216211152.919638E057@busybox.osuosl.org>
+Message-ID: <20181216211207.B55BA864B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9eace67f346af21e13b9aa0e81baa9c06fb2a0d1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b9350e3aa17b01182da56b5ed31956542e5f94ba
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 The sdl2_net configure script uses pkg-config to finx sdl2. If it
 doesn't find pkg-config, it tries to locate sdl2-config, and defaults
