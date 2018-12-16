@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 22:49:18 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/luvi: add
+Date: Sun, 16 Dec 2018 22:49:38 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] package/luvi: add
  upstream patch to fix runtime issue with CMake 3.12+
-Message-ID: <20181216214518.A42918B49B@busybox.osuosl.org>
+Message-ID: <20181216214535.59C038B49B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8cffd1416d33cc0e6acbe6ff36e8385c7f6c1312
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6d490efdbe841fc9c0a3e28b241becf4a42881cf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 luvi fails to run when it was build with CMake 3.12+:
 
