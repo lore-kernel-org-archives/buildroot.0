@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 22:58:06 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/docker-compose:
+Date: Sun, 16 Dec 2018 22:58:56 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] package/docker-compose:
  add patch to allow recent 2.x releases of python-requests
-Message-ID: <20181216215437.B9F1680294@busybox.osuosl.org>
+Message-ID: <20181216215452.1355F802B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f38ab949d607fb798d2241f2d5abf38b69487565
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5ed1ec9120f3f32e53c5ae80eb5290ecf4f1dc68
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 setup.py explicitly listed a maximum allowed version of python-requests,
 causing runtime failures with the python-requests version we have:
