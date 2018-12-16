@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 16:19:07 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] liboping: fix
+Date: Sun, 16 Dec 2018 16:19:39 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] liboping: fix
  format-truncation error
-Message-ID: <20181216151526.2D0688D6F8@busybox.osuosl.org>
+Message-ID: <20181216151535.68377864AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c93f75754640b678997ac2473ddfdd33bdb4a133
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b7002988eff36afb5d7464a6eed9063ba760f51c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 liboping.c: In function 'ping_host_add':
 liboping.c:207:9: error: '%s' directive output may be truncated writing
