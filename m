@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 16:04:08 +0100
-Subject: [Buildroot] [PATCH] package/lynx: add dependency on host-pkgconf
-In-Reply-To: <20181203145152.7945-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Mon, 3 Dec 2018 15:51:52 +0100")
-References: <20181203145152.7945-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87d0q1a4yf.fsf@dell.be.48ers.dk>
+Date: Sun, 16 Dec 2018 16:06:00 +0100
+Subject: [Buildroot] [PATCH] package/pps-tools: bump version to fix
+ usage without bash
+In-Reply-To: <20181203130354.15752-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Mon, 3 Dec 2018 14:03:54 +0100")
+References: <20181203130354.15752-1-thomas.petazzoni@bootlin.com>
+Message-ID: <878t0pa4vb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +14,15 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > The Lynx configure script uses pkg-config when available:
- > checking for nios2-buildroot-linux-gnu-pkg-config... /home/thomas/projets/buildroot/output/host/bin/pkg-config
- > checking pkg-config for openssl... yes
- > [...]
- > checking pkg-config for ncurses... yes
+ > As report in bug #11426, the ppsfind shell script uses /bin/bash, but
+ > the Buildroot pps-tools package doesn't depend on bash. In fact,
+ > upstream has fixed the problem, and the script can now be used with a
+ > POSIX shell, and the shebang is /bin/sh.
 
- > Using pkg-config avoids build failures such as:
+ > This commit therefore bumps pps-tools to the latest upstream commit,
+ > which is precisely this fix.
 
- > checking for _nc_freeall... no
- > configure: error: Configuration does not support color-styles
- > make: *** [/home/test/autobuild/run/instance-1/output/build/lynx-2.8.9rel.1/.stamp_configured] Error 1
-
- > When building with "make lynx", so that pkg-config is not built
- > before. The issue is that in this case, lynx configure script picks up
- > the ncurses6-config script for the host ncurses instead of the one in
- > staging. Using pkg-config solves that nicely.
+ > Fixes bug #11426.
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
