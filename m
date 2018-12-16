@@ -1,27 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 22:05:20 +0100
-Subject: [Buildroot] [PATCH] libopenssl: Use HTTPS for URL
-In-Reply-To: <20181210100635.7611-1-joel@jms.id.au> (Joel Stanley's message of
- "Mon, 10 Dec 2018 20:36:35 +1030")
-References: <20181210100635.7611-1-joel@jms.id.au>
-Message-ID: <87k1k96v3j.fsf@dell.be.48ers.dk>
+Date: Sun, 16 Dec 2018 22:07:03 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/nodejs: security
+ bump to version 8.14.0
+Message-ID: <20181216210258.9391E86D6E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Joel" == Joel Stanley <joel@jms.id.au> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5d3bccb31393beb980e1137d25b4ba6e22437a21
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
- > The host forces HTTPS regardless. This can be seen in the build logs:
- >>>> host-libopenssl 1.0.2q Downloading
- >  URL transformed to HTTPS due to an HSTS policy
- >  --2018-12-10 09:53:27--  https://www.openssl.org/source/openssl-1.0.2q.tar.gz
+Fixes the following security vulnerabilities:
 
- > Signed-off-by: Joel Stanley <joel@jms.id.au>
+- Node.js: Denial of Service with large HTTP headers (CVE-2018-12121)
+- Node.js: Slowloris HTTP Denial of Service (CVE-2018-12122 / Node.js)
+- Node.js: Hostname spoofing in URL parser for javascript protocol
+  (CVE-2018-12123)
+- Node.js: HTTP request splitting (CVE-2018-12116)
+- OpenSSL: Timing vulnerability in DSA signature generation (CVE-2018-0734)
+- OpenSSL: Microarchitecture timing vulnerability in ECC scalar
+  multiplication (CVE-2018-5407)
 
+For more details, see the announcement:
+https://nodejs.org/en/blog/release/v8.14.0/
 
-Committed to 2018.02.x, 2018.08.x and 2018.11.x, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 0de2c9c76cd0a522fc1eb4b8d63bb5070efaecd3)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/nodejs/nodejs.hash | 4 ++--
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 70d67730b1..13a5c2daa5 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+-# From https://nodejs.org/dist/v8.12.0/SHASUMS256.txt
+-sha256 5a9dff58016c18fb4bf902d963b124ff058a550ebcd9840c677757387bce419a  node-v8.12.0.tar.xz
++# From https://nodejs.org/dist/v8.14.0/SHASUMS256.txt
++sha256 8ce252913c9f6aaa9871f2d9661b6e54858dae2f0064bd3c624676edb09083c4  node-v8.14.0.tar.xz
+ 
+ # Hash for license file
+ sha256 b87be6c1479ed977481115869c2dd8b6d59e5ea55aa09939d6c898242121b2f5  LICENSE
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 429642b795..8c8afbc332 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NODEJS_VERSION = 8.12.0
++NODEJS_VERSION = 8.14.0
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
