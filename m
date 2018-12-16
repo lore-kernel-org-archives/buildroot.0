@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 22:04:28 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/libopenssl: use
+Date: Sun, 16 Dec 2018 22:04:38 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] package/libopenssl: use
  HTTPS for URL
-Message-ID: <20181216210024.764008DF8D@busybox.osuosl.org>
+Message-ID: <20181216210033.D81838DF8D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34784ab9e43f0bd14c2e02c1a1a11549916d35a9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=07480538db310b049ac417075791c718b6744db1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 The host forces HTTPS regardless. This can be seen in the build logs:
 
