@@ -1,48 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 16 Dec 2018 16:02:25 +0100
-Subject: [Buildroot] [PATCH 1/1] dependencies.sh: Check for a host
- python version >= 2.7
-In-Reply-To: <CAFSsvmr1ab-hTwE7XpExMJWbPL0MzQK+eebjX2wGk3kgRpwEyw@mail.gmail.com>
-References: <20181215202937.81372-1-aduskett@gmail.com>
- <871s6ibjz2.fsf@tkos.co.il>
- <CAFSsvmr1ab-hTwE7XpExMJWbPL0MzQK+eebjX2wGk3kgRpwEyw@mail.gmail.com>
-Message-ID: <20181216160225.77cfc7da@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 16 Dec 2018 16:02:35 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/lynx: add
+ dependency on host-pkgconf
+Message-ID: <20181216145831.B65748B448@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a76f2dceab6399d7a7bbd41fcd2eb6e9ab1336ac
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-On Sat, 15 Dec 2018 15:47:45 -0500, Adam Duskett wrote:
+The Lynx configure script uses pkg-config when available:
 
-> On Sat, Dec 15, 2018 at 3:42 PM Baruch Siach <baruch@tkos.co.il> wrote:
-> >
-> > Hi Adam,
-> >
-> > aduskett at gmail.com writes:  
-> > > From: Adam Duskett <Aduskett@gmail.com>
-> > >
-> > > Older distributions such as CentOS6 come with python2.6, which causes build
-> > > failures in packages such as host-libglib2 because they require python2.7 or
-> > > above.  
-> >
-> > Any reference to glib requirements? autobuilder failures?
-> >  
-> Not that I can see. I am not sure if any of the autobuilders are using
-> CentOS6, however
-> I noticed the crash when I was using a CentOS6 Docker container and
-> decided to do some
-> due diligence. :)
+checking for nios2-buildroot-linux-gnu-pkg-config... /home/thomas/projets/buildroot/output/host/bin/pkg-config
+checking pkg-config for openssl... yes
+[...]
+checking pkg-config for ncurses... yes
 
-Please explain in the commit log which glib version has this
-requirement, and which specific build failure you got.
+Using pkg-config avoids build failures such as:
 
-Thanks,
+checking for _nc_freeall... no
+configure: error: Configuration does not support color-styles
+make: *** [/home/test/autobuild/run/instance-1/output/build/lynx-2.8.9rel.1/.stamp_configured] Error 1
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+When building with "make lynx", so that pkg-config is not built
+before. The issue is that in this case, lynx configure script picks up
+the ncurses6-config script for the host ncurses instead of the one in
+staging. Using pkg-config solves that nicely.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 67ee7f9eb1bce1542e0a8845d492635151dce36e)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/lynx/lynx.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/lynx/lynx.mk b/package/lynx/lynx.mk
+index a95326a14a..253f1e6d7a 100644
+--- a/package/lynx/lynx.mk
++++ b/package/lynx/lynx.mk
+@@ -10,7 +10,7 @@ LYNX_SITE = ftp://ftp.invisible-island.net/lynx/tarballs
+ LYNX_LICENSE = GPL-2.0
+ LYNX_LICENSE_FILES = COPYING
+ 
+-LYNX_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
++LYNX_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+ 
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+ LYNX_DEPENDENCIES += ncurses
