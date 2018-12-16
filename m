@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 16 Dec 2018 09:56:46 +0100
-Subject: [Buildroot] [PATCH 02/12] cgilua: bump to version 5.2.1
+Date: Sun, 16 Dec 2018 09:56:48 +0100
+Subject: [Buildroot] [PATCH 04/12] lsqlite3: bump to version 0.9.5
 In-Reply-To: <20181216085656.30105-1-francois.perrad@gadz.org>
 References: <20181216085656.30105-1-francois.perrad@gadz.org>
-Message-ID: <20181216085656.30105-2-francois.perrad@gadz.org>
+Message-ID: <20181216085656.30105-4-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/cgilua/cgilua.hash | 2 +-
- package/cgilua/cgilua.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/lsqlite3/lsqlite3.hash | 2 +-
+ package/lsqlite3/lsqlite3.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/cgilua/cgilua.hash b/package/cgilua/cgilua.hash
-index b932e80cb..bf128a5fa 100644
---- a/package/cgilua/cgilua.hash
-+++ b/package/cgilua/cgilua.hash
+diff --git a/package/lsqlite3/lsqlite3.hash b/package/lsqlite3/lsqlite3.hash
+index 7cf0358d1..0f11dcb36 100644
+--- a/package/lsqlite3/lsqlite3.hash
++++ b/package/lsqlite3/lsqlite3.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256 7d4883e6a89b3463a1d35b8084a6e2afbbb584af7aca1169380e92af0f848413  cgilua-5.2.1-1.src.rock
-+sha256 8e9ef583f8e1c5b600ebc6bb04924a61f72320130410191a9c56d7295fb02be1  cgilua-5.1.4-2.src.rock
-diff --git a/package/cgilua/cgilua.mk b/package/cgilua/cgilua.mk
-index cd78841fd..17b396425 100644
---- a/package/cgilua/cgilua.mk
-+++ b/package/cgilua/cgilua.mk
-@@ -4,7 +4,7 @@
+-sha256	e6eb64a7ca3727c3093f3c37341d8ecadf9eac913e468eae413828476b19c225  lsqlite3-0.9.4-2.src.rock
++sha256 fdae3c03390ab4e4b7db3a13d09b79ffe19318739b752d17914adcdb3d2ef9ff  lsqlite3-0.9.5-1.src.rock
+diff --git a/package/lsqlite3/lsqlite3.mk b/package/lsqlite3/lsqlite3.mk
+index 6f6445d93..f5b91815f 100644
+--- a/package/lsqlite3/lsqlite3.mk
++++ b/package/lsqlite3/lsqlite3.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--CGILUA_VERSION = 5.2.1-1
-+CGILUA_VERSION = 5.1.4-2
- CGILUA_LICENSE = MIT
- CGILUA_LICENSE_FILES = $(CGILUA_SUBDIR)/doc/us/license.html
+-LSQLITE3_VERSION = 0.9.4-2
+-LSQLITE3_SUBDIR = lsqlite3_fsl09x
++LSQLITE3_VERSION = 0.9.5-1
++LSQLITE3_SUBDIR = lsqlite3_fsl09y
+ LSQLITE3_DEPENDENCIES = sqlite
+ LSQLITE3_LICENSE = MIT
  
 -- 
 2.17.1
