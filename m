@@ -1,86 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Dec 2018 14:45:02 +0100
-Subject: [Buildroot] [PATCH v2] package/openssh: Add sysusers.d snippet
-In-Reply-To: <20180216181016.8747-1-chris.lesiak@licor.com>
-References: <20180123232221.6106-1-chris.lesiak@licor.com>
- <20180216181016.8747-1-chris.lesiak@licor.com>
-Message-ID: <20181216134502.GB2384@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 16 Dec 2018 14:54:27 +0100
+Subject: [Buildroot] [PATCH RESEND] core: enhance printvars for
+ variables with newlines
+In-Reply-To: <CAOJ2eMc+3Bx40nWF=VALh6JzeaNVWPekyCGXAL2=a_YX4yJWug@mail.gmail.com>
+References: <CAOJ2eMdEHvZeJ6rECyRkzMZN0UYJ2CYK4yMgR9d89P%2B-tWYJYw@mail.gmail.com>
+ <20180416115855.26762-1-chemobejk@gmail.com>
+ <fc8f1cc6-e9ba-9cfe-df4a-4b80792d6434@mind.be>
+ <CAOJ2eMc+3Bx40nWF=VALh6JzeaNVWPekyCGXAL2=a_YX4yJWug@mail.gmail.com>
+Message-ID: <20181216145427.0274aed5@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Chris, All,
+Hello Stefan,
 
-Sorry for thr huge delay in replying to this patch of your...
+On Thu, 19 Apr 2018 10:14:40 +0300, Stefan Becker wrote:
 
-On 2018-02-16 12:10 -0600, Chris Lesiak spake thusly:
-> Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
-> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-> index 6b7ac22c19..5d099ceb13 100644
-> --- a/package/openssh/openssh.mk
-> +++ b/package/openssh/openssh.mk
-> @@ -60,12 +60,20 @@ else
->  OPENSSH_CONF_OPTS += --without-selinux
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_SYSTEMD_SYSUSERS),y)
-> +define OPENSSH_INSTALL_SYSTEMD_SYSUSERS
-> +	$(INSTALL) -m 0644 -D package/openssh/sshd_sysusers.conf \
-> +		$(TARGET_DIR)/usr/lib/sysusers.d/sshd.conf
-> +endef
-> +endif
-> +
->  define OPENSSH_INSTALL_INIT_SYSTEMD
->  	$(INSTALL) -D -m 644 package/openssh/sshd.service \
->  		$(TARGET_DIR)/usr/lib/systemd/system/sshd.service
->  	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
->  	ln -fs ../../../../usr/lib/systemd/system/sshd.service \
->  		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/sshd.service
-> +	$(OPENSSH_INSTALL_SYSTEMD_SYSUSERS)
->  endef
->  
->  define OPENSSH_INSTALL_INIT_SYSV
-> diff --git a/package/openssh/sshd_sysusers.conf b/package/openssh/sshd_sysusers.conf
-> new file mode 100644
-> index 0000000000..3ea46f65c6
-> --- /dev/null
-> +++ b/package/openssh/sshd_sysusers.conf
-> @@ -0,0 +1,5 @@
-> +# sysusers.d snippet for creating the sshd system user automatically
-> +# at boot on systemd-based systems that ship with an unpopulated
-> +# /etc. See sysusers.d(5) for details.
+> On Thu, Apr 19, 2018 at 1:27 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> >
+> >  I'm still not convinced that this is such a great idea.
+> >
+> > 1. As explained in reply to your first iteration, there shouldn't be a need for
+> > including Buildroot variables in a surrounding Makefile.  
+> 
+> There is nothing you can say that will change the fact that a
+> monolithic meta build system is too slow for the CI of our own
+> components. So let's just agree to disagree on this point.
 
-No need for this boilerplate (which ends up being much bigger than the
-actual content...)
+I'm jumping back to this very old thread. Could you explain (perhaps
+re-explain) what you're trying to do ?
 
-> +u sshd - "Privilege-separated SSH"
+If you need to just re-run a specific step of a specific package, why
+don't you use "make foo-build", "make foo-rebuild", etc. ?
 
-We've discussed this a bit with Thomas, and there is one thing that we
-did not like much, is that it is not integrated nicely in the existing
-users support in Buildroot.
+It seems very hackish to extract the commands that Buildroot executes
+to execute them outside the context of Buildroot. This doesn't really
+help to make a case for accepting a patch like you're proposing. Could
+you first convince us that there is a valid and reasonable use-case,
+and then we can discuss how to support this use-case with Buildroot.
 
-Shouldn't we have a generic mechanism, that takes all the FOO_USERS, and
-turns them into sysusers.d(%) entries? Maybe something like:
+Best regards,
 
-    define SYSTEMD_SYSUSERS
-        mkdir -p $(TARGET_DIR)/usr/lib/sysusers.d/
-        echo "$(PACKAGES_USERS)" \
-        |while read user uid group gid passwd home shell groups comment; do
-            printf "u %s %s %s\n" "${user}" "${uid}" "${comment}"
-        done >$(TARGET_DIR)/usr/lib/sysusers.d/buildroot.conf
-        # And similarly for groups...
-    endef
-    SYSTEMD_POST_TARGET_FINALIZE_HOOKS = SYSTEMD_SYSUSERS
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
