@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 16 Dec 2018 09:56:47 +0100
-Subject: [Buildroot] [PATCH 03/12] coxpcall: bump to version 1.17.0
+Date: Sun, 16 Dec 2018 09:56:46 +0100
+Subject: [Buildroot] [PATCH 02/12] cgilua: bump to version 5.2.1
 In-Reply-To: <20181216085656.30105-1-francois.perrad@gadz.org>
 References: <20181216085656.30105-1-francois.perrad@gadz.org>
-Message-ID: <20181216085656.30105-3-francois.perrad@gadz.org>
+Message-ID: <20181216085656.30105-2-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/coxpcall/coxpcall.hash | 2 +-
- package/coxpcall/coxpcall.mk   | 2 +-
+ package/cgilua/cgilua.hash | 2 +-
+ package/cgilua/cgilua.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/coxpcall/coxpcall.hash b/package/coxpcall/coxpcall.hash
-index e037af9e8..5676d4738 100644
---- a/package/coxpcall/coxpcall.hash
-+++ b/package/coxpcall/coxpcall.hash
+diff --git a/package/cgilua/cgilua.hash b/package/cgilua/cgilua.hash
+index b932e80cb..bf128a5fa 100644
+--- a/package/cgilua/cgilua.hash
++++ b/package/cgilua/cgilua.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256 c1488ee08e5d25d59a11e19cb0322edae509202b246d0c93cb2de1676dbfdf2b  coxpcall-1.16.0-1.src.rock
-+sha256 11feb07f08927c39b0b93e8c0bbaf15433f86155cba4820a31a09f4754ab3258  coxpcall-1.17.0-1.src.rock
-diff --git a/package/coxpcall/coxpcall.mk b/package/coxpcall/coxpcall.mk
-index 3af81f2ce..6633b925c 100644
---- a/package/coxpcall/coxpcall.mk
-+++ b/package/coxpcall/coxpcall.mk
+-sha256 7d4883e6a89b3463a1d35b8084a6e2afbbb584af7aca1169380e92af0f848413  cgilua-5.2.1-1.src.rock
++sha256 8e9ef583f8e1c5b600ebc6bb04924a61f72320130410191a9c56d7295fb02be1  cgilua-5.1.4-2.src.rock
+diff --git a/package/cgilua/cgilua.mk b/package/cgilua/cgilua.mk
+index cd78841fd..17b396425 100644
+--- a/package/cgilua/cgilua.mk
++++ b/package/cgilua/cgilua.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--COXPCALL_VERSION = 1.16.0-1
-+COXPCALL_VERSION = 1.17.0-1
- COXPCALL_SUBDIR = coxpcall
- COXPCALL_LICENSE = MIT
- COXPCALL_LICENSE_FILES = $(COXPCALL_SUBDIR)/doc/license.html
+-CGILUA_VERSION = 5.2.1-1
++CGILUA_VERSION = 5.1.4-2
+ CGILUA_LICENSE = MIT
+ CGILUA_LICENSE_FILES = $(CGILUA_SUBDIR)/doc/us/license.html
+ 
 -- 
 2.17.1
