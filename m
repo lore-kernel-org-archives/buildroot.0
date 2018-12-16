@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 16 Dec 2018 09:56:55 +0100
-Subject: [Buildroot] [PATCH 11/12] luaossl: bump to version 20181207
+Date: Sun, 16 Dec 2018 09:56:56 +0100
+Subject: [Buildroot] [PATCH 12/12] luasql-sqlite3: bump to version 2.4.0
 In-Reply-To: <20181216085656.30105-1-francois.perrad@gadz.org>
 References: <20181216085656.30105-1-francois.perrad@gadz.org>
-Message-ID: <20181216085656.30105-11-francois.perrad@gadz.org>
+Message-ID: <20181216085656.30105-12-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/luaossl/luaossl.hash | 2 +-
- package/luaossl/luaossl.mk   | 2 +-
+ package/luasql-sqlite3/luasql-sqlite3.hash | 2 +-
+ package/luasql-sqlite3/luasql-sqlite3.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/luaossl/luaossl.hash b/package/luaossl/luaossl.hash
-index 8c91a1fcf..736994b2e 100644
---- a/package/luaossl/luaossl.hash
-+++ b/package/luaossl/luaossl.hash
+diff --git a/package/luasql-sqlite3/luasql-sqlite3.hash b/package/luasql-sqlite3/luasql-sqlite3.hash
+index 5728c8db0..6af4fcec5 100644
+--- a/package/luasql-sqlite3/luasql-sqlite3.hash
++++ b/package/luasql-sqlite3/luasql-sqlite3.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256 f9c94c97579efddf8abad1e373e0fe0ecc93d00cd9d1bd49f48c5716c281a08b  luaossl-20171028-0.src.rock
-+sha256 b0af04a5ad83c12badaf0e988dbeddc98ad6d2cd9fc06baaf0c801290ae1a5bd  luaossl-20181207-0.src.rock
-diff --git a/package/luaossl/luaossl.mk b/package/luaossl/luaossl.mk
-index 26021a73a..aa3937bb0 100644
---- a/package/luaossl/luaossl.mk
-+++ b/package/luaossl/luaossl.mk
+-sha256	e98d4e997682097f5bc2859596b9615f4cb87438db23ceb4af5e36b4424524ab  luasql-sqlite3-2.3.0-1.src.rock
++sha256 502faabc5e06c1d7c1ddb9a0550eb19220020c86b9f1e26a2cc2001e1343b35d  luasql-sqlite3-2.4.0-1.src.rock
+diff --git a/package/luasql-sqlite3/luasql-sqlite3.mk b/package/luasql-sqlite3/luasql-sqlite3.mk
+index 51178db22..69fc956c9 100644
+--- a/package/luasql-sqlite3/luasql-sqlite3.mk
++++ b/package/luasql-sqlite3/luasql-sqlite3.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUAOSSL_VERSION_UPSTREAM = 20171028
-+LUAOSSL_VERSION_UPSTREAM = 20181207
- LUAOSSL_VERSION = $(LUAOSSL_VERSION_UPSTREAM)-0
- LUAOSSL_SUBDIR = luaossl-rel-$(LUAOSSL_VERSION_UPSTREAM)
- LUAOSSL_LICENSE = MIT
+-LUASQL_SQLITE3_VERSION = 2.3.0-1
++LUASQL_SQLITE3_VERSION = 2.4.0-1
+ LUASQL_SQLITE3_SUBDIR = luasql
+ LUASQL_SQLITE3_LICENSE = MIT
+ LUASQL_SQLITE3_LICENSE_FILES = $(LUASQL_SQLITE3_SUBDIR)/doc/us/license.html
 -- 
 2.17.1
