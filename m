@@ -1,45 +1,94 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 22:59:42 +0100
-Subject: [Buildroot] [PATCH] docker-compose: add patch to allow recent
- 2.x releases of python-requests
-In-Reply-To: <20181215152559.30518-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sat, 15 Dec 2018 16:25:59 +0100")
-References: <20181215152559.30518-1-peter@korsgaard.com>
-Message-ID: <87a7l53zg1.fsf@dell.be.48ers.dk>
+From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
+Date: Mon, 17 Dec 2018 07:14:22 +0800
+Subject: [Buildroot] [PATCH v3 1/1] package/meson: fix cpu_family format
+Message-ID: <1545002062-20630-1-git-send-email-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+From: James Hilliard <james.hilliard1@gmail.com>
 
- > setup.py explicitly listed a maximum allowed version of python-requests,
- > causing runtime failures with the python-requests version we have:
+Meson expects the cpu_family to be in a specific format for
+cross compilation, otherwise packages that use cpu_family
+detection may fail to build.
 
- > Loaded image: docker-enp.bin.cloud.barco.com/eis/baseos-docker-snmp:0.1.0
- > Traceback (most recent call last):
- >   File "/usr/bin/docker-compose", line 6, in <module>
- >     from pkg_resources import load_entry_point
- >   File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 3123, in <module>
- >   File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 3107, in _call_aside
- >   File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 3136, in _initialize_master_working_set
- >   File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 580, in _build_master
- >   File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 593, in _build_from_requirements
- >   File "usr/lib/python2.7/site-packages/pkg_resources/__init__.py", line 781, in resolve
- > pkg_resources.DistributionNotFound: The 'requests!=2.11.0,!=2.12.2,!=2.18.0,<2.19,>=2.6.1' distribution was not found and is required by docker-compose
- > FAIL
+We also need to set needs_exe_wrapper = true to ensure that
+meson won't try and execute test binaries.
 
- > Upstream regularly updates setup.py as new python-requests releases are
- > made, but it is unknown why new python-requests releases (which are supposed
- > to be backwards compatible) should not be allowed right away.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+Changes v1 -> v2:
+  - change riscv to 64 bit
 
- > Add a path submitted upstream to only disallow new major versions, similar
- > to how the other dependencies are handled.
+Changes v2 -> v3:
+  - combine HOST_MESON_TARGET_CPU_FAMILY archs
+---
+ package/meson/cross-compilation.conf.in |  1 +
+ package/meson/meson.mk                  | 31 ++++++++++++++++++++++++++++++-
+ 2 files changed, 31 insertions(+), 1 deletion(-)
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2018.08.x and 2018.11.x, thanks.
-
+diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
+index 0eec740..fc8e27f 100644
+--- a/package/meson/cross-compilation.conf.in
++++ b/package/meson/cross-compilation.conf.in
+@@ -11,6 +11,7 @@ strip = '@TARGET_CROSS at strip'
+ pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
+ 
+ [properties]
++needs_exe_wrapper = true
+ c_args = [@TARGET_CFLAGS@]
+ c_link_args = [@TARGET_LDFLAGS@]
+ cpp_args = [@TARGET_CXXFLAGS@]
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index e1675c2..1113bf0 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -16,6 +16,35 @@ HOST_MESON_NEEDS_HOST_PYTHON = python3
+ HOST_MESON_TARGET_ENDIAN = $(call LOWERCASE,$(BR2_ENDIAN))
+ HOST_MESON_TARGET_CPU = $(GCC_TARGET_CPU)
+ 
++# https://mesonbuild.com/Reference-tables.html#cpu-families
++ifeq ($(BR2_arcle)$(BR2_arceb),y)
++HOST_MESON_TARGET_CPU_FAMILY = arc
++else ifeq ($(BR2_arm)$(BR2_armeb),y)
++HOST_MESON_TARGET_CPU_FAMILY = arm
++else ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
++HOST_MESON_TARGET_CPU_FAMILY = aarch64
++else ifeq ($(BR2_i386),y)
++HOST_MESON_TARGET_CPU_FAMILY = x86
++else ifeq ($(BR2_mips)$(BR2_mipsel),y)
++HOST_MESON_TARGET_CPU_FAMILY = mips
++else ifeq ($(BR2_mips64)$(BR2_mips64el),y)
++HOST_MESON_TARGET_CPU_FAMILY = mips64
++else ifeq ($(BR2_powerpc),y)
++HOST_MESON_TARGET_CPU_FAMILY = ppc
++else ifeq ($(BR2_powerpc64)$(BR2_powerpc64le),y)
++HOST_MESON_TARGET_CPU_FAMILY = ppc64
++else ifeq ($(BR2_riscv),y)
++HOST_MESON_TARGET_CPU_FAMILY = riscv64
++else ifeq ($(BR2_sparc),y)
++HOST_MESON_TARGET_CPU_FAMILY = sparc
++else ifeq ($(BR2_sparc64),y)
++HOST_MESON_TARGET_CPU_FAMILY = sparc64
++else ifeq ($(BR2_x86_64),y)
++HOST_MESON_TARGET_CPU_FAMILY = x86_64
++else
++HOST_MESON_TARGET_CPU_FAMILY = $(ARCH)
++endif
++
+ HOST_MESON_SED_CFLAGS = $(if $(TARGET_CFLAGS),`printf '"%s"$(comma) ' $(TARGET_CFLAGS)`)
+ HOST_MESON_SED_LDFLAGS = $(if $(TARGET_LDFLAGS),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
+ HOST_MESON_SED_CXXFLAGS = $(if $(TARGET_CXXFLAGS),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
+@@ -23,7 +52,7 @@ HOST_MESON_SED_CXXFLAGS = $(if $(TARGET_CXXFLAGS),`printf '"%s"$(comma) ' $(TARG
+ define HOST_MESON_INSTALL_CROSS_CONF
+ 	mkdir -p $(HOST_DIR)/etc/meson
+ 	sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
+-	    -e "s%@TARGET_ARCH@%$(ARCH)%g" \
++	    -e "s%@TARGET_ARCH@%$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
+ 	    -e "s%@TARGET_CPU@%$(HOST_MESON_TARGET_CPU)%g" \
+ 	    -e "s%@TARGET_ENDIAN@%$(HOST_MESON_TARGET_ENDIAN)%g" \
+ 	    -e "s%@TARGET_CFLAGS@%$(HOST_MESON_SED_CFLAGS)%g" \
 -- 
-Bye, Peter Korsgaard
+2.7.4
