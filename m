@@ -1,52 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 16:02:21 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/lynx: add
- dependency on host-pkgconf
-Message-ID: <20181216145844.A22DA8B80E@busybox.osuosl.org>
+Date: Sun, 16 Dec 2018 16:04:08 +0100
+Subject: [Buildroot] [PATCH] package/lynx: add dependency on host-pkgconf
+In-Reply-To: <20181203145152.7945-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Mon, 3 Dec 2018 15:51:52 +0100")
+References: <20181203145152.7945-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87d0q1a4yf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=439065082a47f798985d2a0974e0ef7c8072ebd6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-The Lynx configure script uses pkg-config when available:
+ > The Lynx configure script uses pkg-config when available:
+ > checking for nios2-buildroot-linux-gnu-pkg-config... /home/thomas/projets/buildroot/output/host/bin/pkg-config
+ > checking pkg-config for openssl... yes
+ > [...]
+ > checking pkg-config for ncurses... yes
 
-checking for nios2-buildroot-linux-gnu-pkg-config... /home/thomas/projets/buildroot/output/host/bin/pkg-config
-checking pkg-config for openssl... yes
-[...]
-checking pkg-config for ncurses... yes
+ > Using pkg-config avoids build failures such as:
 
-Using pkg-config avoids build failures such as:
+ > checking for _nc_freeall... no
+ > configure: error: Configuration does not support color-styles
+ > make: *** [/home/test/autobuild/run/instance-1/output/build/lynx-2.8.9rel.1/.stamp_configured] Error 1
 
-checking for _nc_freeall... no
-configure: error: Configuration does not support color-styles
-make: *** [/home/test/autobuild/run/instance-1/output/build/lynx-2.8.9rel.1/.stamp_configured] Error 1
+ > When building with "make lynx", so that pkg-config is not built
+ > before. The issue is that in this case, lynx configure script picks up
+ > the ncurses6-config script for the host ncurses instead of the one in
+ > staging. Using pkg-config solves that nicely.
 
-When building with "make lynx", so that pkg-config is not built
-before. The issue is that in this case, lynx configure script picks up
-the ncurses6-config script for the host ncurses instead of the one in
-staging. Using pkg-config solves that nicely.
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 67ee7f9eb1bce1542e0a8845d492635151dce36e)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lynx/lynx.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Committed to 2018.02.x, 2018.08.x and 2018.11.x, thanks.
 
-diff --git a/package/lynx/lynx.mk b/package/lynx/lynx.mk
-index 735d5b317f..174d741dd9 100644
---- a/package/lynx/lynx.mk
-+++ b/package/lynx/lynx.mk
-@@ -10,7 +10,7 @@ LYNX_SITE = ftp://ftp.invisible-island.net/lynx/tarballs
- LYNX_LICENSE = GPL-2.0
- LYNX_LICENSE_FILES = COPYING
- 
--LYNX_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
-+LYNX_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
- 
- ifeq ($(BR2_PACKAGE_NCURSES),y)
- LYNX_DEPENDENCIES += ncurses
+-- 
+Bye, Peter Korsgaard
