@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Dec 2018 22:32:05 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] nginx: bump to version
+Date: Sun, 16 Dec 2018 22:32:25 +0100
+Subject: [Buildroot] [git commit branch/2018.08.x] nginx: bump to version
  1.15.7
-Message-ID: <20181216212809.EE2FA86AC8@busybox.osuosl.org>
+Message-ID: <20181216212821.C62CE8DF43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a411daeb477762a7edb4860667cae968c1b7338c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=bc344c13d2520b207e7fbb98b5bf6a4a1e4d3352
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
 
 1.15.7 contains a number of bugfixes. From the changes file:
 
