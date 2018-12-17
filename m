@@ -1,41 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 17 Dec 2018 09:47:10 +0100
-Subject: [Buildroot] [PATCH] package/netsurf: use TMP_PREFIX inside the
- build directory
-Message-ID: <20181217084710.16192-1-thomas.petazzoni@bootlin.com>
+Date: Mon, 17 Dec 2018 09:19:42 +0100
+Subject: [Buildroot] [git commit] package/netsurf: make sure host libpng can
+ be found
+Message-ID: <20181217084316.965FA81840@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The netsurf build system creates a stamp file inside TMP_PREFIX to
-know if the build was done, and if the stamp file exists, it doesn't
-do any build. Therefore, having this stamp file in STAGING_DIR
-prevents from rebuilding netsurf, even after removing its entire build
-directory: the stamp file exists in STAGING_DIR, and netsurf doesn't
-build anything, causing the installation to fail.
+commit: https://git.buildroot.net/buildroot/commit/?id=9b0ac875385e3bcb052fc2f376f45fa61e102673
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We fix this by putting this temporary directory inside the netsurf
-build directory.
+Commit 42c8f9f6b46e196a7c337c683a7df5ae6bd421b2 ("package/netsurf: add
+dependency on host-libpng for sdl") ensured host-libpng was built
+prior to netsurf when the SDL backend is selected. However, this is
+not sufficient for the netsurf build system to find libpng on the
+host, we need to help by providing the right HOST_CFLAGS and
+HOST_LDFLAGS.
 
+Fixes:
+
+  http://autobuild.buildroot.net/results/d0bbd563fe5c9463316b2ba0d7ef5553be0563bc/
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[Thomas: rewrite commit message.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/netsurf/netsurf.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/netsurf/netsurf.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/package/netsurf/netsurf.mk b/package/netsurf/netsurf.mk
-index e5a251b9c1..e4ed4fd1a7 100644
+index 692d2b770c..e5a251b9c1 100644
 --- a/package/netsurf/netsurf.mk
 +++ b/package/netsurf/netsurf.mk
-@@ -78,7 +78,7 @@ NETSURF_MAKE_OPTS = \
- 	BUILD_CC="$(HOSTCC)" \
+@@ -35,6 +35,9 @@ endif
+ ifeq ($(BR2_PACKAGE_NETSURF_SDL),y)
+ NETSURF_DEPENDENCIES += sdl host-libpng
+ NETSURF_FRONTEND = framebuffer
++NETSURF_CONFIG = \
++	HOST_CFLAGS=-I$(HOST_DIR)/include \
++	HOST_LDFLAGS='-lpng -L$(HOST_DIR)/lib'
+ ifeq ($(BR2_PACKAGE_FREETYPE),y)
+ NETSURF_DEPENDENCIES += freetype
+ define NETSURF_FONTLIB_CONFIGURE_CMDS
+@@ -76,6 +79,7 @@ NETSURF_MAKE_OPTS = \
  	CC="$(TARGET_CC)" \
  	AR="$(TARGET_AR)" \
--	TMP_PREFIX=$(STAGING_DIR)/usr \
-+	TMP_PREFIX=$(@D)/tmpusr \
- 	NETSURF_CONFIG="$(NETSURF_CONFIG)" \
+ 	TMP_PREFIX=$(STAGING_DIR)/usr \
++	NETSURF_CONFIG="$(NETSURF_CONFIG)" \
  	PREFIX=/usr
  
--- 
-2.19.2
+ define NETSURF_BUILD_CMDS
