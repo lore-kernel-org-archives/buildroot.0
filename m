@@ -1,75 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 17 Dec 2018 09:32:37 +0100
-Subject: [Buildroot] [PATCH 1/1] liblo: fix stringop-truncation error
- with gcc 8
-In-Reply-To: <20181215220050.32220-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 15 Dec 2018 23:00:50 +0100")
-References: <20181215220050.32220-1-fontaine.fabrice@gmail.com>
-Message-ID: <87woo83656.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 17 Dec 2018 09:47:10 +0100
+Subject: [Buildroot] [PATCH] package/netsurf: use TMP_PREFIX inside the
+ build directory
+Message-ID: <20181217084710.16192-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+The netsurf build system creates a stamp file inside TMP_PREFIX to
+know if the build was done, and if the stamp file exists, it doesn't
+do any build. Therefore, having this stamp file in STAGING_DIR
+prevents from rebuilding netsurf, even after removing its entire build
+directory: the stamp file exists in STAGING_DIR, and netsurf doesn't
+build anything, causing the installation to fail.
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/62896bd6a1a30facaffd07a7a763831996dc8ea0
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+We fix this by putting this temporary directory inside the netsurf
+build directory.
 
-Committed to 2018.11.x, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/netsurf/netsurf.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ---
- >  ...rc-server.c-fix-stringop-truncation-error.patch | 30 ++++++++++++++++++++++
- >  1 file changed, 30 insertions(+)
- >  create mode 100644 package/liblo/0002-src-server.c-fix-stringop-truncation-error.patch
-
- > diff --git
- > a/package/liblo/0002-src-server.c-fix-stringop-truncation-error.patch
- > b/package/liblo/0002-src-server.c-fix-stringop-truncation-error.patch
- > new file mode 100644
- > index 0000000000..3f3bf86cc3
- > --- /dev/null
- > +++ b/package/liblo/0002-src-server.c-fix-stringop-truncation-error.patch
- > @@ -0,0 +1,30 @@
- > +From c1b2fbd8d96d9b668a0b5e3c49c75c13cfe7d4ba Mon Sep 17 00:00:00 2001
- > +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > +Date: Sat, 15 Dec 2018 21:55:08 +0100
- > +Subject: [PATCH] src/server.c: fix stringop-truncation error
- > +
- > +Fixes:
- > + - http://autobuild.buildroot.org/results/62896bd6a1a30facaffd07a7a763831996dc8ea0
- > +
- > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > +[Upstream status: https://github.com/radarsat1/liblo/pull/70]
- > +---
- > + src/server.c | 2 +-
- > + 1 file changed, 1 insertion(+), 1 deletion(-)
- > +
- > +diff --git a/src/server.c b/src/server.c
- > +index 6d1a9de..72aecc9 100644
- > +--- a/src/server.c
- > ++++ b/src/server.c
- > +@@ -377,7 +377,7 @@ void lo_server_resolve_hostname(lo_server s)
- > +         gethostname(hostname, sizeof(hostname));
- > +         he = gethostbyname(hostname);
- > +         if (he) {
- > +-            strncpy(hostname, he->h_name, sizeof(hostname));
- > ++            strncpy(hostname, he->h_name, sizeof(hostname) - 1);
- > +         }
- > +     }
- > + 
- > +-- 
- > +2.14.1
- > +
- > -- 
- > 2.14.1
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/netsurf/netsurf.mk b/package/netsurf/netsurf.mk
+index e5a251b9c1..e4ed4fd1a7 100644
+--- a/package/netsurf/netsurf.mk
++++ b/package/netsurf/netsurf.mk
+@@ -78,7 +78,7 @@ NETSURF_MAKE_OPTS = \
+ 	BUILD_CC="$(HOSTCC)" \
+ 	CC="$(TARGET_CC)" \
+ 	AR="$(TARGET_AR)" \
+-	TMP_PREFIX=$(STAGING_DIR)/usr \
++	TMP_PREFIX=$(@D)/tmpusr \
+ 	NETSURF_CONFIG="$(NETSURF_CONFIG)" \
+ 	PREFIX=/usr
+ 
 -- 
-Bye, Peter Korsgaard
+2.19.2
