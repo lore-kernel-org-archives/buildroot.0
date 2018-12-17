@@ -1,71 +1,75 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Sun, 16 Dec 2018 18:27:33 -0500
-Subject: [Buildroot] [PATCH v3 1/2] dependencies.sh: Check for a host python
- version >= 2.7
-Message-ID: <20181216232734.100068-1-aduskett@gmail.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Mon, 17 Dec 2018 05:37:24 +0100
+Subject: [Buildroot] [PATCH 1/4] netsurf: add optional dependency
+ freetype
+In-Reply-To: <20181216215121.0280310e@windsurf.home>
+References: <20181212071455.29215-1-francois.perrad@gadz.org>
+ <20181216215121.0280310e@windsurf.home>
+Message-ID: <CAB0FRstLjfZjryf361dP+-bCq36Y9EeA8vW7f-7m-oaXaDFarw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+Le dim. 16 d?c. 2018 ? 21:51, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+a ?crit :
 
-Older distributions such as CentOS6 come with python2.6, which causes build
-failures in packages such as host-libglib2 because they require python2.7 and
-above.
+> Hello Fran?ois,
+>
+> Even though I applied the series, I have a few comments.
+>
+> On Wed, 12 Dec 2018 08:14:52 +0100, Francois Perrad wrote:
+> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> > ---
+> >  .../netsurf/0002-fix-freetype-detection.patch | 28 +++++++++++++++++++
+> >  package/netsurf/netsurf.mk                    |  7 +++++
+> >  2 files changed, 35 insertions(+)
+> >  create mode 100644 package/netsurf/0002-fix-freetype-detection.patch
+> >
+> > diff --git a/package/netsurf/0002-fix-freetype-detection.patch
+> b/package/netsurf/0002-fix-freetype-detection.patch
+> > new file mode 100644
+> > index 000000000..27c0440e1
+> > --- /dev/null
+> > +++ b/package/netsurf/0002-fix-freetype-detection.patch
+> > @@ -0,0 +1,28 @@
+> > +From 85336f2404b9583267019650ea0112ebf1bb571a Mon Sep 17 00:00:00 2001
+> > +From: Francois Perrad <francois.perrad@gadz.org>
+> > +Date: Wed, 28 Nov 2018 17:59:44 +0100
+> > +Subject: [PATCH 2/2] fix freetype detection
+>
+> When generating patches, use the -N option of git format-patch to avoid
+> the numbering: it provides patches that use [PATCH] instead of [PATCH
+> X/Y]. We prefer just [PATCH] because the X/Y often get invalid. Your
+> series is a good example: this patch adds a PATCH 2/2 patch, and the
+> next patch adds a 3/3 patch, and then another patch adds a 4/4 patch.
+>
+> Another comment: did you submit all those patches to the upstream
+> netsurf project ?
+>
 
-host-libglib2 will produce the error message:
-/bin/sh: python2.7: command not found
+I will do.
 
-Python2.7 is a hard-coded value in configure.ac. If one changes the value to
-just "python," the following stack trace is produced:
+note: this package still fail on autobuilders, see fix on
+https://patchwork.ozlabs.org/patch/1013055/
 
-Traceback (most recent call last):
-  File "./gdbus-2.0/codegen/gdbus-codegen.in", line 55, in <module>
-    self.outfile.write(LICENSE_STR.format(config.VERSION))
-ValueError    : sys.exit(codegen_main.codegen_main())
-zero length field name in format
+Fran?ois
 
-Instead of supporting an ancient version of Python that had its support ended
-in October os 2013, it would be more pragmatic only to support Python2.7 and
-above.
 
-Luckily; CentOS6 has the centos-release-scl repository, which allows users to
-install python2.7, and Debian 8 comes with Python2.7 already, making this patch
-relatively low impact.
-
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
-Changes v1 -> v2:
-  - Updated version requirement in prerequisite.txt
-
-Changes v2 -> v3:
-  - Added more precise language to the commit message.
-  - Added an example stack trace and error caused by python2.6 and
-    host-libglib2.
-
- support/dependencies/dependencies.sh | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 58c34d880f..d0b6bdc23a 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -181,6 +181,14 @@ if test "${missing_progs}" = "yes" ; then
- 	exit 1
- fi
- 
-+# Check that the python version is at least 2.7
-+PYTHON_VERSION=$(python -V 2>&1 |awk '{print $2}')
-+if [ $(echo $PYTHON_VERSION |sed -e 's/\.//g') -lt 2700 ]; then
-+	echo
-+	echo "You have python '$PYTHON_VERSION' installed.  Python >= 2.7 is required"
-+	exit 1;
-+fi
-+
- if grep ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG > /dev/null; then
- 	if ! which locale > /dev/null ; then
- 		echo
--- 
-2.19.2
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181217/012e8094/attachment-0001.html>
