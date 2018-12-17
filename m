@@ -1,44 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 17 Dec 2018 09:56:09 +0100
-Subject: [Buildroot] [git commit] package/wsapi-xavante: bump to version 1.7
-Message-ID: <20181217085210.703C4803BA@busybox.osuosl.org>
+Date: Mon, 17 Dec 2018 10:11:09 +0100
+Subject: [Buildroot] [PATCH] toolchain-external: download: add
+ <CROSS>-cc symlink if not present
+In-Reply-To: <20181217081934.24807-1-peter@korsgaard.com>
+References: <20181217081934.24807-1-peter@korsgaard.com>
+Message-ID: <20181217101109.6071e1f9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=44462aa16717bfe0c26216551973a8f3fb3bc881
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/wsapi-xavante/wsapi-xavante.hash | 2 +-
- package/wsapi-xavante/wsapi-xavante.mk   | 5 ++---
- 2 files changed, 3 insertions(+), 4 deletions(-)
+On Mon, 17 Dec 2018 09:19:34 +0100, Peter Korsgaard wrote:
+> Fixes:
+> http://autobuild.buildroot.net/results/dbb/dbb3c4634d5fc726ca0b27c2dac0befbbab70912
+> http://autobuild.buildroot.net/results/dbb/dbb69acadc20b4bb559311348eca276c1e6343f7
+> 
+> Some external toolchains do not have a <CROSS>-cc binary/symlink, which is
+> used by some packages.  As a workaround, add a symlink to <CROSS>-gcc.
+> 
+> Notice that we can only do this for external toolchains we download
+> ourselves, and not pre-installed ones as we might not have write access to
+> them.
 
-diff --git a/package/wsapi-xavante/wsapi-xavante.hash b/package/wsapi-xavante/wsapi-xavante.hash
-index 9e8132df5c..7b8769feda 100644
---- a/package/wsapi-xavante/wsapi-xavante.hash
-+++ b/package/wsapi-xavante/wsapi-xavante.hash
-@@ -1,2 +1,2 @@
- # locally computed hash
--sha256 b30b171e3d4d6fd7e129f14576e1cfc5adf00c0780ef8350f2f9e6f1d4259346  wsapi-xavante-1.6.1-1.src.rock
-+sha256 01211bb80dab92f87cece6e31854d73ae4a2ce06af7c48423a54313d72adf9fb  wsapi-xavante-1.7-1.src.rock
-diff --git a/package/wsapi-xavante/wsapi-xavante.mk b/package/wsapi-xavante/wsapi-xavante.mk
-index 86f5dee505..cdf160bba0 100644
---- a/package/wsapi-xavante/wsapi-xavante.mk
-+++ b/package/wsapi-xavante/wsapi-xavante.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
- 
--WSAPI_XAVANTE_VERSION_MAJOR = 1.6.1
--WSAPI_XAVANTE_VERSION = $(WSAPI_XAVANTE_VERSION_MAJOR)-1
--WSAPI_XAVANTE_SUBDIR = wsapi-$(WSAPI_XAVANTE_VERSION_MAJOR)
-+WSAPI_XAVANTE_VERSION = 1.7-1
-+WSAPI_XAVANTE_SUBDIR = wsapi
- WSAPI_XAVANTE_LICENSE = MIT
- WSAPI_XAVANTE_LICENSE_FILES = $(WSAPI_XAVANTE_SUBDIR)/doc/us/license.html
- 
+This is not great, as it doesn't fix the problem in all cases.
+
+What about doing this *after* the toolchain has been installed in
+$(HOST_DIR), where we have write access ?
+
+I.E:
+
+output/host/bin (master)$ ls -l
+total 108
+lrwxrwxrwx 1 thomas thomas   104 Dec 17 10:09 arm-linux-gnueabihf-addr2line -> /home/thomas/Downloads/gcc-arm-8.2-2018.08-x86_64-arm-linux-gnueabihf//bin/arm-linux-gnueabihf-addr2line
+lrwxrwxrwx 1 thomas thomas    97 Dec 17 10:09 arm-linux-gnueabihf-ar -> /home/thomas/Downloads/gcc-arm-8.2-2018.08-x86_64-arm-linux-gnueabihf//bin/arm-linux-gnueabihf-ar
+lrwxrwxrwx 1 thomas thomas    97 Dec 17 10:09 arm-linux-gnueabihf-as -> /home/thomas/Downloads/gcc-arm-8.2-2018.08-x86_64-arm-linux-gnueabihf//bin/arm-linux-gnueabihf-as
+lrwxrwxrwx 1 thomas thomas    17 Dec 17 10:09 arm-linux-gnueabihf-c++ -> toolchain-wrapper
+lrwxrwxrwx 1 thomas thomas   102 Dec 17 10:09 arm-linux-gnueabihf-c++filt -> /home/thomas/Downloads/gcc-arm-8.2-2018.08-x86_64-arm-linux-gnueabihf//bin/arm-linux-gnueabihf-c++filt
+lrwxrwxrwx 1 thomas thomas    17 Dec 17 10:09 arm-linux-gnueabihf-cpp -> toolchain-wrapper
+lrwxrwxrwx 1 thomas thomas   102 Dec 17 10:09 arm-linux-gnueabihf-elfedit -> /home/thomas/Downloads/gcc-arm-8.2-2018.08-x86_64-arm-linux-gnueabihf//bin/arm-linux-gnueabihf-elfedit
+lrwxrwxrwx 1 thomas thomas    17 Dec 17 10:09 arm-linux-gnueabihf-g++ -> toolchain-wrapper
+lrwxrwxrwx 1 thomas thomas    17 Dec 17 10:09 arm-linux-gnueabihf-gcc -> toolchain-wrapper
+lrwxrwxrwx 1 thomas thomas    17 Dec 17 10:09 arm-linux-gnueabihf-gcc-8.2.1 -> toolchain-wrapper
+lrwxrwxrwx 1 thomas thomas   101 Dec 17 10:09 arm-linux-gnueabihf-gcc-ar -> /home/thomas/Downloads/gcc-arm-8.2-2018.08-x86_64-arm-linux-gnueabihf//bin/arm-linux-gnueabihf-gcc-ar
+
+Add a -cc -> toolchain-wrapper symlink ?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
