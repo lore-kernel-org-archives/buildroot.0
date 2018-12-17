@@ -1,38 +1,47 @@
-From: Chris Lesiak <chris.lesiak@licor.com>
-Date: Mon, 17 Dec 2018 22:25:32 +0000
-Subject: [Buildroot] [PATCH] package/openssh: Set /var/empty permissions
-Message-ID: <20181217222522.13499-1-chris.lesiak@licor.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 17 Dec 2018 23:48:34 +0100
+Subject: [Buildroot] [PATCH] package/netsurf: use TMP_PREFIX inside the
+ build directory
+In-Reply-To: <20181217084710.16192-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Mon, 17 Dec 2018 09:47:10 +0100")
+References: <20181217084710.16192-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87ftuv3h31.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The openssh privilege separation feature, enabled by default,
-requires that the path /var/empty exist and have certain permission.
-See README.privsep included as part of the openssh distribution.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Use OPENSSH_PERMISSIONS to ensure this is done correctly.
+ > The netsurf build system creates a stamp file inside TMP_PREFIX to
+ > know if the build was done, and if the stamp file exists, it doesn't
+ > do any build. Therefore, having this stamp file in STAGING_DIR
+ > prevents from rebuilding netsurf, even after removing its entire build
+ > directory: the stamp file exists in STAGING_DIR, and netsurf doesn't
+ > build anything, causing the installation to fail.
 
-Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
----
- package/openssh/openssh.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ > We fix this by putting this temporary directory inside the netsurf
+ > build directory.
 
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 07f3e0d663..9175f9589d 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -22,6 +22,10 @@ define OPENSSH_USERS
- 	sshd -1 sshd -1 * - - - SSH drop priv user
- endef
- 
-+define OPENSSH_PERMISSIONS
-+	/var/empty d 755 root root - - - - -
-+endef
-+
- ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
- OPENSSH_CONF_OPTS += --without-pie
- endif
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > ---
+ >  package/netsurf/netsurf.mk | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
+
+ > diff --git a/package/netsurf/netsurf.mk b/package/netsurf/netsurf.mk
+ > index e5a251b9c1..e4ed4fd1a7 100644
+ > --- a/package/netsurf/netsurf.mk
+ > +++ b/package/netsurf/netsurf.mk
+ > @@ -78,7 +78,7 @@ NETSURF_MAKE_OPTS = \
+ >  	BUILD_CC="$(HOSTCC)" \
+ >  	CC="$(TARGET_CC)" \
+ >  	AR="$(TARGET_AR)" \
+ > -	TMP_PREFIX=$(STAGING_DIR)/usr \
+ > +	TMP_PREFIX=$(@D)/tmpusr \
+
+Why do we have to set it at all? It looks like it defaults to a
+directory under the build dir as well?
+
 -- 
-2.17.2
+Bye, Peter Korsgaard
