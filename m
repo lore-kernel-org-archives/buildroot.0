@@ -1,61 +1,47 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Dec 2018 00:43:07 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-12-16
-In-Reply-To: <871s6g4l29.fsf@dell.be.48ers.dk>
-References: <20181217070031.7A1922072F@mail.bootlin.com>
- <875zvs4lwp.fsf@dell.be.48ers.dk> <20181217090810.18bfe9d0@windsurf>
- <871s6g4l29.fsf@dell.be.48ers.dk>
-Message-ID: <e74aed1a-dec1-7774-2739-7d7c7f2ed999@mind.be>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Mon, 17 Dec 2018 21:44:16 -0200 (BRST)
+Subject: [Buildroot] [PATCH v2] package: dropbear: make PATH configurable
+In-Reply-To: <20181216152603.GD2384@scaer>
+References: <20180309224149.20225-1-mmayer@broadcom.com>
+ <20181216152603.GD2384@scaer>
+Message-ID: <533843879.18165671.1545090256285.JavaMail.zimbra@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+> From: "Yann Morin" <yann.morin.1998@free.fr>
+> To: "Markus Mayer" <mmayer@broadcom.com>
+> Cc: "buildroot" <buildroot@buildroot.org>
+> Sent: Domingo, 16 de dezembro de 2018 13:26:03
+> Subject: Re: [Buildroot] [PATCH v2] package: dropbear: make PATH configurable
 
+> Markus, All,
+> 
+> On 2018-03-09 14:41 -0800, Markus Mayer spake thusly:
+>> Make the default PATH dropbear is using configurable.
+> 
+> We've discussed this with Thomas, and as Carlos noticed, we woudl need a
+> similar solution for openssh.
+> 
+> But pushing the thing even further, we think a generic solution is even
+> better:
+> 
+>  - in the "System configuration" sub-menu, add a new option that
+>    basically is "Default PATH" and defaults to /bin:/sbin:/usr/bin:/usr/sbin
 
-On 17/12/2018 09:25, Peter Korsgaard wrote:
->>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
-> 
->  > Hello,
->  > On Mon, 17 Dec 2018 09:06:46 +0100, Peter Korsgaard wrote:
-> 
->  >> >      aarch64 | swupdate-2018.11 | NOK |
->  >> > http://autobuild.buildroot.net/results/e302d0edb59ff7617b5f2d21f06eb65ae04981fe
->  >> > |
->  >> >          arm | swupdate-2018.11 | NOK |
->  >> > http://autobuild.buildroot.net/results/dbb69acadc20b4bb559311348eca276c1e6343f7
->  >> > |
->  >> 
->  >> /bin/sh: /home/naourr/work/instance-0/output/host/bin/aarch64-linux-gnu-cc: No such file or directory
->  >> 
->  >> swupdate uses $CROSS-cc and not $CROSS-gcc, which not all external
->  >> toolchain have. I think it makes sense to add a cc -> gcc symlink for
->  >> external toolchains we download if not present. We cannot really do it
->  >> for pre-installed external toolchains as we might not have write access
->  >> to them.
+Notice that /bin and /sbin are redundant with their /usr counterparts for
+BR2_ROOTFS_MERGED_USR=y.
 
- So the symlink is then not a good solution IMO.
+>  - use that to set PATH in /etc/profile (from the skeleton-init-common
+>    package)
 
-> 
->  > Does it make sense for swupdate to use -cc instead of -gcc ?
-> 
-> Maybe not, but a number of packages use cc for compatibility (E.G. they
-> should work with other compilers than just gcc).
-> 
-> E.G. the default built in make rule for .c -> binary uses cc:
-> 
-> echo 'int main(void) { return 0; }' > test.c
-> make test
-> cc     test.c   -o test
-> 
-> So I think it makes sense to add the symlink for compatibility.
+In one of my current projects there is a /etc/profile.d/path.sh file in a
+rootfs overlay containing
 
- I disagree. We should always override CC, so the default 'cc' should never be used.
+   #!/bin/sh
+   PATH="$(test -L /bin || echo /bin:)$(test -L /sbin || echo /sbin:)/usr/bin:/usr/sbin"
 
- The problem here is that we forget to pass TARGET_CONFIGURE_OPTS in the
-environment of swupdate.
-
- Regards,
- Arnout
+-- 
+Carlos Santos (Casantos) - DATACOM, P&D
