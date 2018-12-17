@@ -1,57 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 17 Dec 2018 10:11:09 +0100
-Subject: [Buildroot] [PATCH] toolchain-external: download: add
- <CROSS>-cc symlink if not present
-In-Reply-To: <20181217081934.24807-1-peter@korsgaard.com>
-References: <20181217081934.24807-1-peter@korsgaard.com>
-Message-ID: <20181217101109.6071e1f9@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 17 Dec 2018 10:39:17 +0100
+Subject: [Buildroot] Alternate solution for the pkg-config mess ?
+In-Reply-To: <20181216120421.48937ad1@windsurf.home>
+References: <20181216120421.48937ad1@windsurf.home>
+Message-ID: <71c33923-587e-1a84-5c8b-0e27d050ea84@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Mon, 17 Dec 2018 09:19:34 +0100, Peter Korsgaard wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/dbb/dbb3c4634d5fc726ca0b27c2dac0befbbab70912
-> http://autobuild.buildroot.net/results/dbb/dbb69acadc20b4bb559311348eca276c1e6343f7
+
+On 16/12/2018 12:04, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Some external toolchains do not have a <CROSS>-cc binary/symlink, which is
-> used by some packages.  As a workaround, add a symlink to <CROSS>-gcc.
+> You'll find attached a patch that modifies pkgconf 1.5.3 to behave like
+> our older pkg-config used to, i.e only prefix by the sysroot a
+> specific subset of variables, and leave all others untouched.
 > 
-> Notice that we can only do this for external toolchains we download
-> ourselves, and not pre-installed ones as we might not have write access to
-> them.
+> I am clearly not familiar with all the internals of pkgconf, so I won't
+> pretend that the patch is perfect, but it seems to do the job.
+> 
+> If we decide that this is the right approach rather than adjusting
+> gazillions of packages for pkgconf 1.5.3, then let me know and I'll
+> submit as a proper patch.
+> 
+> Fabrice: I tested this with util-linux/bash-completion, and it does the
+> job. If you have the chance to test it on other situations where you
+> had to patch packages to work with pkgconf 1.5.3, it would be very
+> useful.
 
-This is not great, as it doesn't fix the problem in all cases.
+ This is exactly the approach I had in mind when I wrote about whitelisting some
+variables. So this patch gets my vote.
 
-What about doing this *after* the toolchain has been installed in
-$(HOST_DIR), where we have write access ?
+ I haven't looked at the details of the implementation though, just at the
+principle.
 
-I.E:
-
-output/host/bin (master)$ ls -l
-total 108
-lrwxrwxrwx 1 thomas thomas   104 Dec 17 10:09 arm-linux-gnueabihf-addr2line -> /home/thomas/Downloads/gcc-arm-8.2-2018.08-x86_64-arm-linux-gnueabihf//bin/arm-linux-gnueabihf-addr2line
-lrwxrwxrwx 1 thomas thomas    97 Dec 17 10:09 arm-linux-gnueabihf-ar -> /home/thomas/Downloads/gcc-arm-8.2-2018.08-x86_64-arm-linux-gnueabihf//bin/arm-linux-gnueabihf-ar
-lrwxrwxrwx 1 thomas thomas    97 Dec 17 10:09 arm-linux-gnueabihf-as -> /home/thomas/Downloads/gcc-arm-8.2-2018.08-x86_64-arm-linux-gnueabihf//bin/arm-linux-gnueabihf-as
-lrwxrwxrwx 1 thomas thomas    17 Dec 17 10:09 arm-linux-gnueabihf-c++ -> toolchain-wrapper
-lrwxrwxrwx 1 thomas thomas   102 Dec 17 10:09 arm-linux-gnueabihf-c++filt -> /home/thomas/Downloads/gcc-arm-8.2-2018.08-x86_64-arm-linux-gnueabihf//bin/arm-linux-gnueabihf-c++filt
-lrwxrwxrwx 1 thomas thomas    17 Dec 17 10:09 arm-linux-gnueabihf-cpp -> toolchain-wrapper
-lrwxrwxrwx 1 thomas thomas   102 Dec 17 10:09 arm-linux-gnueabihf-elfedit -> /home/thomas/Downloads/gcc-arm-8.2-2018.08-x86_64-arm-linux-gnueabihf//bin/arm-linux-gnueabihf-elfedit
-lrwxrwxrwx 1 thomas thomas    17 Dec 17 10:09 arm-linux-gnueabihf-g++ -> toolchain-wrapper
-lrwxrwxrwx 1 thomas thomas    17 Dec 17 10:09 arm-linux-gnueabihf-gcc -> toolchain-wrapper
-lrwxrwxrwx 1 thomas thomas    17 Dec 17 10:09 arm-linux-gnueabihf-gcc-8.2.1 -> toolchain-wrapper
-lrwxrwxrwx 1 thomas thomas   101 Dec 17 10:09 arm-linux-gnueabihf-gcc-ar -> /home/thomas/Downloads/gcc-arm-8.2-2018.08-x86_64-arm-linux-gnueabihf//bin/arm-linux-gnueabihf-gcc-ar
-
-Add a -cc -> toolchain-wrapper symlink ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+ Regards,
+ Arnout
