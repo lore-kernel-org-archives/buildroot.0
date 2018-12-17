@@ -1,75 +1,117 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 17 Dec 2018 10:58:57 +0100
-Subject: [Buildroot] [PATCH] toolchain-external: download: add
- <CROSS>-cc symlink if not present
-In-Reply-To: <20181217101109.6071e1f9@windsurf> (Thomas Petazzoni's message of
- "Mon, 17 Dec 2018 10:11:09 +0100")
-References: <20181217081934.24807-1-peter@korsgaard.com>
- <20181217101109.6071e1f9@windsurf>
-Message-ID: <87sgyw325a.fsf@dell.be.48ers.dk>
+From: Ola Oni <oniola@gmail.com>
+Date: Mon, 17 Dec 2018 10:20:16 +0000
+Subject: [Buildroot] Wifi not working - raspberrypi3_defconfig
+In-Reply-To: <CAFGQKxf_mop84DjTdhaMiyVPQQfBqrKyGY1Rk5Nf8N7sn-MGiQ@mail.gmail.com>
+References: <e0a0f4c9-5769-702c-9945-fbcbf7643793@gmail.com>
+ <20181217081650.3b16024c@gmx.net>
+ <CAPru4TVQx0p1vifynJcqHGdph8vXqWdAa2_p_NzTKyOW7YBX1g@mail.gmail.com>
+ <CAFGQKxf_mop84DjTdhaMiyVPQQfBqrKyGY1Rk5Nf8N7sn-MGiQ@mail.gmail.com>
+Message-ID: <CAPru4TVm-2eVUiN4sHHGmHsEUK8wtTph=WntEN45YxpF1rMmVQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Martin,
 
-Hi,
+Cool thanks. I will give a try later.
 
- > Hello,
- > On Mon, 17 Dec 2018 09:19:34 +0100, Peter Korsgaard wrote:
- >> Fixes:
- >> http://autobuild.buildroot.net/results/dbb/dbb3c4634d5fc726ca0b27c2dac0befbbab70912
- >> http://autobuild.buildroot.net/results/dbb/dbb69acadc20b4bb559311348eca276c1e6343f7
- >> 
- >> Some external toolchains do not have a <CROSS>-cc binary/symlink, which is
- >> used by some packages.  As a workaround, add a symlink to <CROSS>-gcc.
- >> 
- >> Notice that we can only do this for external toolchains we download
- >> ourselves, and not pre-installed ones as we might not have write access to
- >> them.
+Regards
+Ola
 
- > This is not great, as it doesn't fix the problem in all cases.
+On Mon, 17 Dec 2018, 10:18 Martin Bark <martin@barkynet.com wrote:
 
-Correct, but I don't really see how?
-
- > What about doing this *after* the toolchain has been installed in
- > $(HOST_DIR), where we have write access ?
-
-But we do not copy a pre-installed toolchain? We only setup symlinks.
-
- > I.E:
-
- > output/host/bin (master)$ ls -l
- > total 108
- > lrwxrwxrwx 1 thomas thomas 104 Dec 17 10:09
- > arm-linux-gnueabihf-addr2line ->
- > /home/thomas/Downloads/gcc-arm-8.2-2018.08-x86_64-arm-linux-gnueabihf//bin/arm-linux-gnueabihf-addr2line
- > lrwxrwxrwx 1 thomas thomas 97 Dec 17 10:09 arm-linux-gnueabihf-ar ->
- > /home/thomas/Downloads/gcc-arm-8.2-2018.08-x86_64-arm-linux-gnueabihf//bin/arm-linux-gnueabihf-ar
- > lrwxrwxrwx 1 thomas thomas 97 Dec 17 10:09 arm-linux-gnueabihf-as ->
- > /home/thomas/Downloads/gcc-arm-8.2-2018.08-x86_64-arm-linux-gnueabihf//bin/arm-linux-gnueabihf-as
- > lrwxrwxrwx 1 thomas thomas    17 Dec 17 10:09 arm-linux-gnueabihf-c++ -> toolchain-wrapper
- > lrwxrwxrwx 1 thomas thomas 102 Dec 17 10:09
- > arm-linux-gnueabihf-c++filt ->
- > /home/thomas/Downloads/gcc-arm-8.2-2018.08-x86_64-arm-linux-gnueabihf//bin/arm-linux-gnueabihf-c++filt
- > lrwxrwxrwx 1 thomas thomas    17 Dec 17 10:09 arm-linux-gnueabihf-cpp -> toolchain-wrapper
- > lrwxrwxrwx 1 thomas thomas 102 Dec 17 10:09
- > arm-linux-gnueabihf-elfedit ->
- > /home/thomas/Downloads/gcc-arm-8.2-2018.08-x86_64-arm-linux-gnueabihf//bin/arm-linux-gnueabihf-elfedit
- > lrwxrwxrwx 1 thomas thomas    17 Dec 17 10:09 arm-linux-gnueabihf-g++ -> toolchain-wrapper
- > lrwxrwxrwx 1 thomas thomas    17 Dec 17 10:09 arm-linux-gnueabihf-gcc -> toolchain-wrapper
- > lrwxrwxrwx 1 thomas thomas    17 Dec 17 10:09 arm-linux-gnueabihf-gcc-8.2.1 -> toolchain-wrapper
- > lrwxrwxrwx 1 thomas thomas 101 Dec 17 10:09 arm-linux-gnueabihf-gcc-ar
- -> 
- > /home/thomas/Downloads/gcc-arm-8.2-2018.08-x86_64-arm-linux-gnueabihf//bin/arm-linux-gnueabihf-gcc-ar
-
- > Add a -cc -> toolchain-wrapper symlink ?
-
-That will not work, as it will then try to execute 
-/home/thomas/Downloads/gcc-arm-8.2-2018.08-x86_64-arm-linux-gnueabihf//bin/arm-linux-gnueabihf-cc
-(which does not exist)
-
--- 
-Bye, Peter Korsgaard
+> Ola,
+>
+> You also need to include the rpi-wifi-firmware package (BR2_PACKAGE_RPI_WIFI_FIRMWARE)
+> and make sure the brcmfmac module is installed.  You should see messages
+> about brcmfmac in your logs
+>
+> Thanks
+>
+> Martin
+>
+> On Mon, 17 Dec 2018 at 07:50, Ola Oni <oniola@gmail.com> wrote:
+>
+>> Hi Peter,
+>>
+>> Thanks for your reply. I will try and configure later on today and report
+>> back.
+>>
+>> May I add that when I use "ps" command wpa_supplicant process seem to be
+>> listed as one of the process running so I assumed that "This is a giving"
+>>
+>> So I must have assumed wrong ?
+>>
+>> Regards
+>> Ola
+>>
+>> On Mon, 17 Dec 2018 at 07:16, Peter Seiderer <ps.report@gmx.net> wrote:
+>>
+>>> Hello Ola,
+>>>
+>>> On Sun, 16 Dec 2018 20:17:30 +0000, Ola Oni <oniola@gmail.com> wrote:
+>>>
+>>> > Hi Martin,
+>>> >
+>>> > I was advised to email you about my issue of not been able to get Wifi
+>>> > working on raspberry pi 3 using buildroot 2018.11
+>>> >
+>>> > Below are the entry in my two files [/etc/network/interfaces and
+>>> > /etc/wpa_supplicant.conf]
+>>> >
+>>> > # /etc/wpa_supplicant.conf <- filename
+>>> > ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=root
+>>> > ctrl_interface_group=0
+>>> > update_config=1
+>>> >
+>>> >      network={
+>>> >              ssid="myssid"
+>>> >              psk="mypassword"
+>>> >              proto=WPA
+>>> >              key_mgmt=WPA-PSK
+>>> >              pairwise=CCMP
+>>> >              auth_alg=OPEN
+>>> >      }
+>>> >
+>>> > ########################################
+>>> > # /etc/network/interfaces <- filename
+>>> > # interface file auto-generated by buildroot
+>>> >
+>>> > auto lo
+>>> > iface lo inet loopback
+>>> >
+>>> > auto eth0
+>>> > iface eth0 inet dhcp
+>>> >    pre-up /etc/network/nfs_check
+>>> >    wait-delay 15
+>>> >    hostname $(hostname)
+>>> >
+>>> > auto wlan0
+>>> > iface wlan0 inet dhcp
+>>> >          wireless-essid "myssid"
+>>> >          wireless-key "mypassword"
+>>> >          pre-up wpa_supplicant -i wlan0 -c /etc/wpa_supplicant.conf -B
+>>> >          post-down killall -q wpa_supplicant
+>>> >
+>>> > Attached to this is email is the output from dmesg.
+>>>
+>>> Not much info, Wifi will definitely not work with raspberrypi3_defconfig
+>>> out of the box (e.g. package BR2_PACKAGE_WPA_SUPPLICANT not enabled)...
+>>>
+>>> Regards,
+>>> Peter
+>>>
+>>> >
+>>> > Regards
+>>> >
+>>> > onio
+>>> >
+>>> >
+>>> >
+>>>
+>>>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181217/c51599a7/attachment.html>
